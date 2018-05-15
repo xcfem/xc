@@ -165,7 +165,7 @@ SET(nDarray utility/matrix/nDarray/basics utility/matrix/nDarray/BJtensor utilit
 
 SET(matrix utility/matrix/ID utility/matrix/IDVarSize utility/matrix/IntPtrWrapper utility/matrix/AuxMatrix utility/matrix/Matrix utility/matrix/DqMatrices utility/matrix/Vector utility/matrix/DqVectors utility/matrix/util_matrix ${nDarray})
 
-SET(med_xc utility/med_xc/MEDObject utility/med_xc/MEDMapIndices utility/med_xc/MEDMapNumCeldasPorTipo utility/med_xc/MEDMapConectividad utility/med_xc/MEDBaseInfo utility/med_xc/MEDVertexInfo utility/med_xc/MEDCellBaseInfo utility/med_xc/MEDCellInfo utility/med_xc/MEDGroupInfo utility/med_xc/MEDGaussModel utility/med_xc/MEDFieldInfo utility/med_xc/MEDDblFieldInfo utility/med_xc/MEDIntFieldInfo utility/med_xc/MEDMeshing utility/med_xc/MEDMesh)
+SET(med_xc utility/med_xc/MEDObject utility/med_xc/MEDMapIndices utility/med_xc/MEDMapNumCellsByType utility/med_xc/MEDMapConectividad utility/med_xc/MEDBaseInfo utility/med_xc/MEDVertexInfo utility/med_xc/MEDCellBaseInfo utility/med_xc/MEDCellInfo utility/med_xc/MEDGroupInfo utility/med_xc/MEDGaussModel utility/med_xc/MEDFieldInfo utility/med_xc/MEDDblFieldInfo utility/med_xc/MEDIntFieldInfo utility/med_xc/MEDMeshing utility/med_xc/MEDMesh)
 
 SET(utility ${actor} ${mpi}  ${database} ${handler} ${package} ${recorder} ${remote} ${tagged} ${matrix}  ${med_xc} utility/Timer)
 

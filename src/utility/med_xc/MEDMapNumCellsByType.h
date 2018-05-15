@@ -19,11 +19,11 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//MEDMapNumCeldasPorTipo.h
+//MEDMapNumCellsByType.h
 //Wrapper for the MESHING object of MED (to export files to «salome»).
 
-#ifndef MEDMAPNUMCELDASPORTIPO_H
-#define MEDMAPNUMCELDASPORTIPO_H
+#ifndef MEDMAPNUMCELLSBYTYPE_H
+#define MEDMAPNUMCELLSBYTYPE_H
 
 #include <map>
 #include <vector>
@@ -33,7 +33,7 @@ namespace XC {
 //! @ingroup MED
 //
 //!  @brief Number of cells de each tipo.
-class MEDMapNumCeldasPorTipo
+class MEDMapNumCellsByType
   {
     std::map<MED_EN::medGeometryElement,int> tipos;
   public:

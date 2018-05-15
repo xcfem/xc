@@ -263,7 +263,7 @@
 #include "utility/med_xc/MEDIntFieldInfo.h"
 #include "utility/med_xc/MEDMapConectividad.h"
 #include "utility/med_xc/MEDMapIndices.h"
-#include "utility/med_xc/MEDMapNumCeldasPorTipo.h"
+#include "utility/med_xc/MEDMapNumCellsByType.h"
 #include "utility/med_xc/MEDMesh.h"
 #include "utility/med_xc/MEDMeshing.h"
 #include "utility/med_xc/MEDObject.h"

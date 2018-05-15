@@ -27,7 +27,7 @@
 #include "MEDBaseInfo.h"
 #include "xc_basic/src/med_xc/MEDMEM_Meshing.hxx"
 #include "xc_basic/src/med_xc/MEDMEM_Support.hxx"
-#include "MEDMapNumCeldasPorTipo.h"
+#include "MEDMapNumCellsByType.h"
 #include <map>
 
 namespace XC {
@@ -39,12 +39,12 @@ class ID;
 class MEDCellBaseInfo: public MEDBaseInfo
   {
   protected:
-    MEDMapNumCeldasPorTipo cell_types; //!< Type and number of elements for each of those types.
+    MEDMapNumCellsByType cell_types; //!< Type and number of elements for each of those types.
   public:
     size_t getNumberOfElements(void) const;
     void new_cell(size_t i,const MED_EN::medGeometryElement &);
 
-    const MEDMapNumCeldasPorTipo &getMapCellTypes(void) const;
+    const MEDMapNumCellsByType &getMapCellTypes(void) const;
     void to_support_med(MEDMEM::SUPPORT &supp) const;
     void to_med_mesh(MEDMEM::MESHING &) const;
   };

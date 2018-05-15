@@ -112,14 +112,14 @@ typename MEDTFieldInfo<T>::ArrayGauss *MEDTFieldInfo<T>::getArrayGauss(void) con
   {
     ArrayGauss *retval= nullptr;
     const int numberOfComponents= getXCFieldInfo().getNumberOfComponents();
-    const MEDMapNumCeldasPorTipo &cell_types= getGrupo().getMapCellTypes();
+    const MEDMapNumCellsByType &cell_types= getGrupo().getMapCellTypes();
     const size_t numberOfTypes= cell_types.getNumberOfTypes();
     std::vector<int> numberOfElementsOfTypeC(numberOfTypes+1,0);
     std::vector<int> numberOfGaussPoint(numberOfTypes+1,1);
     numberOfElementsOfTypeC[0]= 1;
     numberOfGaussPoint[0]= 1;
     size_t conta= 1;
-    for(MEDMapNumCeldasPorTipo::const_iterator i= cell_types.begin();i!=cell_types.end();i++,conta++)
+    for(MEDMapNumCellsByType::const_iterator i= cell_types.begin();i!=cell_types.end();i++,conta++)
       {
         const MED_EN::medGeometryElement tipo= i->first;
         numberOfElementsOfTypeC[conta]= i->second+numberOfElementsOfTypeC[conta-1]; //Acumulados.
