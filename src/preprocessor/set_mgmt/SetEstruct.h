@@ -72,7 +72,7 @@ class SetEstruct: public SetBase
     bool isJConstantLayer(void) const;
     bool isKConstantLayer(void) const;
     size_t Dimension(void) const;
-    std::string GetStrTipo(void) const;
+    std::string getStrType(void) const;
 
     virtual Node *getNode(const size_t &i=1,const size_t &j=1,const size_t &k=1)= 0;
     virtual const Node *getNode(const size_t &i=1,const size_t &j=1,const size_t &k=1) const= 0;

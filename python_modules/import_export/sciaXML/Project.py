@@ -82,7 +82,7 @@ class Project:
 
     # Removendo os itens repetidos
     for peca in pecas:
-      pecasUnicas.append(peca.getTipo())
+      pecasUnicas.append(peca.getType())
 
 
     if(len(pecasUnicas) > 0):
@@ -116,7 +116,7 @@ class Project:
     retorno= list()
     for peca in pecas:
       o= Object()
-      pecaOrigem= RepositorioPecas.pecas.get(peca.getTipo())
+      pecaOrigem= RepositorioPecas.pecas.get(peca.getType())
 
       containerOrigem= None
       listaContainer= pecaOrigem.getContainers()

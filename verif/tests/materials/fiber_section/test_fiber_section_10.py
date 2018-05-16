@@ -98,8 +98,8 @@ epsSMax= fibraSEpsMax.getMaterial().getStrain() # Maximum steel strain
 
 from materials.sections import section_properties
 from materials.ehe import EHE_limit_state_checking
-tipoSolic= section_properties.solicitationType(epsCMin,epsSMax)
-strTipoSolic= section_properties.solicitationTypeString(tipoSolic)
+solicitationType= section_properties.solicitationType(epsCMin,epsSMax)
+solicitationTypeString= section_properties.solicitationTypeString(solicitationType)
 cumpleFT= EHE_materials.ReinforcedConcreteLimitStrainsEHE08.tensileBendingOK(epsSMax)
 aprovSecc= EHE_materials.ReinforcedConcreteLimitStrainsEHE08.getTensileBendingEfficiency(epsSMax)
 
@@ -121,9 +121,9 @@ print "ratio6= ",(ratio6)
 print "Minumum concrete strain: ",(epsCMin)
 print "Maximum concrete strain: ",(epsCMax)
 print "Maximum rebar strain: ",(epsSMax)
-print "Solicitation type: ",strTipoSolic," (",(tipoSolic),") \n"
-print "Cumple a ",strTipoSolic,": ",(cumpleFT)
-print "Aprovechamiento a ",strTipoSolic,": ",(aprovSecc)
+print "Solicitation type: ",solicitationTypeString," (",(solicitationType),") \n"
+print "Cumple a ",solicitationTypeString,": ",(cumpleFT)
+print "Aprovechamiento a ",solicitationTypeString,": ",(aprovSecc)
 print "RN= ",(RN/1e3)
 print "RN2= ",(RN2/1e3)
 print "N= ",(esfN/1e3)
@@ -134,7 +134,7 @@ print "defN= ",(defN)
  '''
 
 ratiosOk= (abs(ratio1)<1e-10) & (abs(ratio2)<1e-10) & (abs(ratio3)<1e-9) & (abs(ratio5)<1e-10) & (abs(ratio6)<0.01) & ratio4
-miscOk= (abs(RN2)<1e-9) & (abs(esfMy)<1e-10) & (tipoSolic == 1) & (analOk == 0.0)
+miscOk= (abs(RN2)<1e-9) & (abs(esfMy)<1e-10) & (solicitationType == 1) & (analOk == 0.0)
 
 #print "ratiosOk= ", ratiosOk
 #print "miscOk= ", miscOk

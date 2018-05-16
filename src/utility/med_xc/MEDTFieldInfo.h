@@ -43,9 +43,9 @@ class MEDTFieldInfo: public MEDFieldInfo
   {
   public:
     typedef typename MEDMEM::MEDMEM_ArrayInterface<T,MEDMEM::FullInterlace,MEDMEM::Gauss>::Array ArrayGauss;
-    typedef typename MEDMEM::FIELD<T> TipoCampo;
+    typedef typename MEDMEM::FIELD<T> fieldType;
   protected:
-    mutable TipoCampo *campo; //!< Field definition in MEDMEM.
+    mutable fieldType *field; //!< Field definition in MEDMEM.
     bool has_gauss_points;
     void free_mem(void) const;
     void alloc(void) const;
@@ -71,7 +71,7 @@ class MEDTFieldInfo: public MEDFieldInfo
 //! @brief Constructor.
 template <class T>
 MEDTFieldInfo<T>::MEDTFieldInfo(const FieldInfo &fi,MEDGroupInfo *grp)
-  : MEDFieldInfo(fi,grp), campo(nullptr), has_gauss_points(false) {}
+  : MEDFieldInfo(fi,grp), field(nullptr), has_gauss_points(false) {}
 
 //! @brief Destructor.
 template <class T>
@@ -82,10 +82,10 @@ MEDTFieldInfo<T>::~MEDTFieldInfo(void)
 template <class T>
 void MEDTFieldInfo<T>::free_mem(void) const
   {
-    if(campo)
+    if(field)
       {
-        delete campo;
-        campo= nullptr;
+        delete field;
+        field= nullptr;
       }
   }
 
@@ -99,10 +99,10 @@ void MEDTFieldInfo<T>::alloc(void) const
       {
         MEDMEM::GROUP *grupo= getGrupoMED();
         assert(grupo);
-        campo= new MEDMEM::FIELD<T>(grupo,nc);
+        field= new MEDMEM::FIELD<T>(grupo,nc);
       }
     else
-      std::cerr << "El campo: '" << getXCFieldInfo().getName() 
+      std::cerr << "El field: '" << getXCFieldInfo().getName() 
                 << "' tiene 0 componentes; se ignora." << std::endl;
   }
 
@@ -121,9 +121,9 @@ typename MEDTFieldInfo<T>::ArrayGauss *MEDTFieldInfo<T>::getArrayGauss(void) con
     size_t conta= 1;
     for(MEDMapNumCellsByType::const_iterator i= cell_types.begin();i!=cell_types.end();i++,conta++)
       {
-        const MED_EN::medGeometryElement tipo= i->first;
+        const MED_EN::medGeometryElement type= i->first;
         numberOfElementsOfTypeC[conta]= i->second+numberOfElementsOfTypeC[conta-1]; //Acumulados.
-        numberOfGaussPoint[conta]= campo->getGaussLocalization(tipo).getNbGauss();
+        numberOfGaussPoint[conta]= field->getGaussLocalization(type).getNbGauss();
       }
     retval= new ArrayGauss(numberOfComponents,numberOfElementsOfTypeC[numberOfTypes]-1,numberOfTypes, &numberOfElementsOfTypeC[0], &numberOfGaussPoint[0]);
     return retval;
@@ -144,10 +144,10 @@ template <class T>
 template <class T>
 void MEDTFieldInfo<T>::setGaussModel(const MEDGaussModel &gm)
   {
-    assert(campo);
+    assert(field);
     const MEDGaussModel::med_gauss_model *model= gm.getGaussModelMED();
     assert(model);
-    campo->setGaussLocalization(gm.getTipo(),*model);
+    field->setGaussLocalization(gm.getType(),*model);
     has_gauss_points= true;
   }
 
@@ -168,7 +168,7 @@ void MEDTFieldInfo<T>::defineGaussModels(const Set &set)
             }
        }
     if(has_gauss_points)
-      campo->setArray(getArrayGauss());
+      field->setArray(getArrayGauss());
   }
 
 //! @brief Value of the field at indexes i,j.
@@ -185,8 +185,8 @@ void MEDTFieldInfo<T>::setValueIJ(int i, int j,const T &value)
       std::cerr << "i index: " << i
                 << " out of range (1," << ne
                 << ").\n" << std::endl;
-    assert(campo);
-    campo->setValueIJ(i,j,value);
+    assert(field);
+    field->setValueIJ(i,j,value);
   }
 
 //! @brief Value of the field at indexes i,j y k (Gauss point).
@@ -203,13 +203,13 @@ void MEDTFieldInfo<T>::setValueIJK(int i, int j,int k,int t,const T &value)
       std::cerr << "i index: " << i
                 << " out of range (1," << ne
                 << ").\n" << std::endl;
-    assert(campo);
-    const int num_ptos_gauss= campo->getNumberOfGaussPoints(t);
+    assert(field);
+    const int num_ptos_gauss= field->getNumberOfGaussPoints(t);
     if(k>num_ptos_gauss)
       std::cerr << "k index: " << k
                 << " out of range (1," << num_ptos_gauss
                 << ").\n" << std::endl;
-    campo->setValueIJK(i,j,k,value);
+    field->setValueIJK(i,j,k,value);
   }
 
 //! @brief Dumps the field definition into MEDMEM.
@@ -217,25 +217,26 @@ template <class T>
 void MEDTFieldInfo<T>::to_med(void) const
   {
     alloc();
-    campo->setName(getXCFieldInfo().getName());
+    field->setName(getXCFieldInfo().getName());
     //Information about components.
-    campo->setComponentsNames(getComponentNamesPtr());
-    campo->setComponentsDescriptions(getComponentDescriptionsPtr());
-    campo->setMEDComponentsUnits(getComponentUnitsPtr());
+    field->setComponentsNames(getComponentNamesPtr());
+    field->setComponentsDescriptions(getComponentDescriptionsPtr());
+    field->setMEDComponentsUnits(getComponentUnitsPtr());
     //Information about iteration.
-    campo->setIterationNumber(getXCFieldInfo().getIterationNumber());
-    campo->setOrderNumber(getXCFieldInfo().getOrderNumber());
-    campo->setTime(getXCFieldInfo().getTime());
+    field->setIterationNumber(getXCFieldInfo().getIterationNumber());
+    field->setOrderNumber(getXCFieldInfo().getOrderNumber());
+    field->setTime(getXCFieldInfo().getTime());
   }
 
-//! @brief Escribe el campo en el archivo which name being passed as parameter.
+//! @brief Escribe el field en el archivo which name being passed as parameter.
 template <class T>
 void MEDTFieldInfo<T>::write(const std::string &filename) const
   {
-    if(campo)
-      campo->write(MEDMEM::MED_DRIVER,filename.c_str());
+    if(field)
+      field->write(MEDMEM::MED_DRIVER,filename.c_str());
     else
-      std::cerr << "the pointer al campo es nulo." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< ";field not set." << std::endl;
   }
 
 } // end of XC namespace

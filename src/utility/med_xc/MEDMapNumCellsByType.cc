@@ -25,49 +25,49 @@
 #include <iostream>
 
 //! @brief Adds a cell of the type being passed as parameter.
-void XC::MEDMapNumCellsByType::add_cell(const MED_EN::medGeometryElement &tipo)
+void XC::MEDMapNumCellsByType::add_cell(const MED_EN::medGeometryElement &type)
   {
-    iterator i= tipos.find(tipo);
-    if(i!=tipos.end())
+    iterator i= types.find(type);
+    if(i!=types.end())
       i->second++;
     else //new type.
-      tipos[tipo]= 1;
+      types[type]= 1;
   }
 
 //! Erases los indices.
 void XC::MEDMapNumCellsByType::clear(void)
-  { tipos.clear(); }
+  { types.clear(); }
 
 //! @brief Returns the number of cell types.
 size_t XC::MEDMapNumCellsByType::getNumberOfTypes(void) const
-  { return tipos.size(); }
+  { return types.size(); }
 
 //! @brief Returns the number of cells.
 size_t XC::MEDMapNumCellsByType::getNumCeldas(void) const
   {
     size_t retval= 0;
-    for(const_iterator i=tipos.begin();i!=tipos.end();i++)
+    for(const_iterator i=types.begin();i!=types.end();i++)
       retval+= i->second;
     return retval;
   }
 //! @brief Returns the number of elements for each cell type.
-std::vector<int> XC::MEDMapNumCellsByType::getNumCeldasPorTipo(void) const
+std::vector<int> XC::MEDMapNumCellsByType::getNumberOfCellsByType(void) const
   {
-    const int numTipos= getNumberOfTypes();
-    std::vector<int> retval(numTipos);
+    const int numberOfTypes= getNumberOfTypes();
+    std::vector<int> retval(numberOfTypes);
     size_t conta= 0;
-    for(const_iterator i= tipos.begin();i!= tipos.end();i++,conta++)
+    for(const_iterator i= types.begin();i!= types.end();i++,conta++)
       retval[conta]= i->second;
     return retval; 
   }
 
 //! @brief Returns elements types of the mesh.
-XC::MEDMapNumCellsByType::vector_tipos XC::MEDMapNumCellsByType::getTipos(void) const
+XC::MEDMapNumCellsByType::type_vector XC::MEDMapNumCellsByType::getTypes(void) const
   {
     const size_t sz= getNumberOfTypes();
-    vector_tipos retval(sz,0);
+    type_vector retval(sz,0);
     size_t conta= 0;
-    for(const_iterator i= tipos.begin();i!= tipos.end();i++,conta++)
+    for(const_iterator i= types.begin();i!= types.end();i++,conta++)
       retval[conta]= i->first;
     return retval;
   }

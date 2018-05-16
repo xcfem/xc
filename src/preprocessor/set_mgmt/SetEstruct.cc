@@ -91,7 +91,7 @@ bool XC::SetEstruct::isKConstantLayer(void) const
   { return (getNumNodeColumns()==1); }
 
 //! @brief Returns the set type i_row, j_row, k_row, capaICte,...
-std::string XC::SetEstruct::GetStrTipo(void) const
+std::string XC::SetEstruct::getStrType(void) const
   {
     if(isIRow()) return "i_row";
     if(isJRow()) return "j_row";

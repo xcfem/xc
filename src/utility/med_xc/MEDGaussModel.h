@@ -41,7 +41,7 @@ class MEDGaussModel: public MEDObject
     typedef MEDMEM::GAUSS_LOCALIZATION<> med_gauss_model;
   private:
     std::string nombre; //!< set name.
-    MED_EN::medGeometryElement tipo; //!< Tipo de celda (MED_TRIA3,MED_QUAD4,MED_POINT1,...).
+    MED_EN::medGeometryElement type; //!< Cell type (MED_TRIA3,MED_QUAD4,MED_POINT1,...).
     int num_nodes;
     std::vector<double> ref_nodes_coo; //!< Reference nodes coordinates.
     int num_gauss_pt;
@@ -52,7 +52,7 @@ class MEDGaussModel: public MEDObject
     MEDGaussModel(const std::string &,const MED_EN::medGeometryElement &, const GaussModel &);
 
     const std::string &getNombre(void) const;
-    const MED_EN::medGeometryElement &getTipo(void) const;
+    const MED_EN::medGeometryElement &getType(void) const;
     med_gauss_model *getGaussModelMED(void) const;
 
     void to_med(void) const;

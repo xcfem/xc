@@ -38,7 +38,7 @@ class MEDVertexInfo: public MEDBaseInfo
   {
     std::vector<double> coordenadas; //!< Coordinates of the vertices.
     size_t spaceDimension; //!< Mesh space dimension.
-    std::string tipoCoordenadas; //!< "CARTESIAN", "CYLINDRICAL" or "SPHERICAL"
+    std::string coordSystemType; //!< "CARTESIAN", "CYLINDRICAL" or "SPHERICAL"
     std::vector<std::string> nombresCoordenadas; //!< Names of the coordinate components ("X","Y","Z",...).
     std::vector<std::string> nombresUnidades; //!< Names of the units ("cm","cm","cm",...).
 
@@ -57,10 +57,10 @@ class MEDVertexInfo: public MEDBaseInfo
       { return spaceDimension; }
     inline void setSpaceDimension(const size_t &sz)
       { spaceDimension= sz; }
-    inline const std::string &getTipoCoordenadas(void) const
-      { return tipoCoordenadas; }
-    inline void setTipoCoordenadas(const std::string &str)
-      { tipoCoordenadas= str; }
+    inline const std::string &getCoordSystemType(void) const
+      { return coordSystemType; }
+    inline void setCoordSystemType(const std::string &str)
+      { coordSystemType= str; }
     inline const std::vector<std::string> &getCoordinateNames(void) const
       { return nombresCoordenadas; }
     void setCoordinateNames(const boost::python::list &);

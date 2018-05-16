@@ -32,27 +32,27 @@
 namespace XC {
 //! @ingroup MED
 //
-//!  @brief Number of cells de each tipo.
+//!  @brief Number of cells o each type.
 class MEDMapNumCellsByType
   {
-    std::map<MED_EN::medGeometryElement,int> tipos;
+    std::map<MED_EN::medGeometryElement,int> types;
   public:
     typedef std::map<MED_EN::medGeometryElement,int>::const_iterator const_iterator;
     typedef std::map<MED_EN::medGeometryElement,int>::iterator iterator;
-    typedef std::vector<MED_EN::medGeometryElement> vector_tipos;
+    typedef std::vector<MED_EN::medGeometryElement> type_vector;
 
     void add_cell(const MED_EN::medGeometryElement &);
 
     size_t getNumberOfTypes(void) const;
     size_t getNumCeldas(void) const;
-    std::vector<int> getNumCeldasPorTipo(void) const;
-    vector_tipos getTipos(void) const;
+    std::vector<int> getNumberOfCellsByType(void) const;
+    type_vector getTypes(void) const;
     inline const_iterator begin(void) const
-      { return tipos.begin(); } 
+      { return types.begin(); } 
     inline const_iterator end(void) const
-      { return tipos.end(); } 
+      { return types.end(); } 
     inline size_t size(void) const
-      { return tipos.size(); }
+      { return types.size(); }
 
     void clear(void);
 

@@ -27,9 +27,9 @@
 #include <iostream>
 
 //! @brief Adds cell connectivity.
-void XC::MEDMapConectividad::nueva_celda(const MED_EN::medGeometryElement &tipo,const ID &conex,const MEDMapIndices &map_indices_vertices)
+void XC::MEDMapConectividad::nueva_celda(const MED_EN::medGeometryElement &type,const ID &conex,const MEDMapIndices &map_indices_vertices)
   {
-    std::vector<int> &c= getConnectivity(tipo);
+    std::vector<int> &c= getConnectivity(type);
     const int sz= conex.Size();
     for(int i= 0;i<sz;i++)
       c.push_back(map_indices_vertices.getMEDIndice(conex(i)));
