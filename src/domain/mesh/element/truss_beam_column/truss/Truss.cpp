@@ -154,7 +154,8 @@ XC::Truss::Truss(int tag,int dim,const Material *ptr_mat)
     if(tmp)
       set_material(*tmp);
     else
-      std::cerr << "Truss::Truss; el material no es del tipo adecuado." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; not a suitable material." << std::endl;
     inicializa();
   }
 

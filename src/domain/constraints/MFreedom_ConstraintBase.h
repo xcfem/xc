@@ -36,7 +36,7 @@
 //
 // Purpose: This file contains the class definition for MFreedom_ConstraintBase.
 // MFreedom_ConstraintBase is a base clas for multi node constraints.
-// A multipoint constraint relates certain dofs at 
+// A multifreedom constraint relates certain dofs at 
 // a constrained node to be related to certain dosf at one or more
 // retained nodes
 

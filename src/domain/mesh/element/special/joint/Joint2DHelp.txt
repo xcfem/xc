@@ -69,7 +69,7 @@ Both commands construct a Joint2D element with tag 12 that is connected to nodes
 3 and 4. The element will generate a central node with tag 5, and it uses the uniaxial
 material object with tag 16 as the shear panel spring. The joint element introduced
 here will be a joint, without rotational springs at external nodes, i.e. fixed
-member-end rotations for all the external nodes. The generated multipoint constraint
+member-end rotations for all the external nodes. The generated multifreedom constraint
 matrices will not be time variant and they do not include large deformations effects.
 
 
@@ -81,7 +81,7 @@ The element will generate a central node with tag 10, and it uses the uniaxial m
 object with tag 17 as the shear panel spring. Nodes 6 and 8 will have rotations, ruled
 by uniaxial material 18, while node 7 and 9 are rotationally fixed. This element can be
 used to model a semi-rigid steel joint with member-end rotations at beam-ends. The
-generated multipoint constraint matrices will be time variant and they include large
+generated multifreedom constraint matrices will be time variant and they include large
 deformations effects, but it does not make use of the length correction.
 
 Example:
@@ -90,7 +90,7 @@ Example:
 Constructs a Joint2D element with tag 14 that is connected to nodes 11, 12, 13 and 14.
 The element will generate a center node with tag 15, and it uses the uniaxial material
 object with tag 20 for member-end rotational springs at external nodes and a material
-with tag 19 as the shear panel spring. The generated multipoint constraint matrices will
+with tag 19 as the shear panel spring. The generated multifreedom constraint matrices will
 be time varying to cover large deformations and if utilizes MP constraint length
 correction to correct the nodal positions and maintain the initial joint size.
 ######################################################################################

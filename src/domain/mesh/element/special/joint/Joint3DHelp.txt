@@ -54,7 +54,7 @@ Example:
                         element Joint3D  12  1  2  3  4  5  6  16  11  12  13  0
 
 This command constructs a Joint3D element with tag 12 that is connected to nodes 1, 2,
-3 , 4 ,5 and 6. The element will generate a central node with tag 16, and it uses the uniaxial material objects with tags 11 , 12 , and 13 alond x', y' and z' local axes. The joint element introduced. The generated multipoint constraint
+3 , 4 ,5 and 6. The element will generate a central node with tag 16, and it uses the uniaxial material objects with tags 11 , 12 , and 13 alond x', y' and z' local axes. The joint element introduced. The generated multifreedom constraint
 matrices will not be time variant and they do not include large deformations effects.
 
 ######################################################################################

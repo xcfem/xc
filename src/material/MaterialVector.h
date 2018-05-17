@@ -69,7 +69,7 @@ class MaterialVector: public std::vector<MAT *>, public EntCmd, public MovableOb
 
     void setMaterial(const MAT *);
     void setMaterial(size_t i,MAT *);
-    void setMaterial(const MAT *,const std::string &tipo);
+    void setMaterial(const MAT *,const std::string &);
     bool empty(void) const;
     int commitState(void);
     int revertToLastCommit(void);
@@ -166,14 +166,14 @@ void MaterialVector<MAT>::setMaterial(const MAT *new_mat)
   }
 
 template <class MAT>
-void MaterialVector<MAT>::setMaterial(const MAT *new_mat, const std::string &tipo)
+void MaterialVector<MAT>::setMaterial(const MAT *new_mat, const std::string &type)
   {
     clear_materials();
     if(new_mat)
       {
         for(iterator i= mat_vector::begin();i!=mat_vector::end();i++)
           {
-            (*i)= new_mat->getCopy(tipo.c_str());
+            (*i)= new_mat->getCopy(type.c_str());
             if(!(*i))
               std::cerr << getClassName() << "::" << __FUNCTION__
 		        << "; failed allocate material model pointer\n";

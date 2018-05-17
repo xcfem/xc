@@ -111,21 +111,21 @@ bool XC::EigenSOE::setSolver(EigenSolver *newSolver)
 int XC::EigenSOE::getNumEqn(void) const
   { return size; }
 
-XC::EigenSolver &XC::EigenSOE::newSolver(const std::string &tipo)
+XC::EigenSolver &XC::EigenSOE::newSolver(const std::string &type)
   {
-    if(tipo=="band_arpack_solver")
+    if(type=="band_arpack_solver")
       setSolver(new BandArpackSolver());
-    else if(tipo=="band_arpackpp_solver")
+    else if(type=="band_arpackpp_solver")
       setSolver(new BandArpackppSolver());
-    else if(tipo=="sym_band_eigen_solver")
+    else if(type=="sym_band_eigen_solver")
       setSolver(new SymBandEigenSolver());
-    else if(tipo=="full_gen_eigen_solver")
+    else if(type=="full_gen_eigen_solver")
       setSolver(new FullGenEigenSolver());
-    else if(tipo=="sym_arpack_solver")
+    else if(type=="sym_arpack_solver")
       setSolver(new SymArpackSolver());
     else
       std::cerr << "Solver of type: '"
-                << tipo << "' unknown." << std::endl;
+                << type << "' unknown." << std::endl;
     assert(theSolver);
     return *theSolver;
   }

@@ -56,7 +56,7 @@ class PhysicalProperties: public EntCmd, public MovableObject
   public:
     PhysicalProperties(const size_t &nMat= 0,const MAT *matModel= nullptr);
     void setMaterial(const MAT *);
-    void setMaterial(const MAT *,const std::string &tipo);
+    void setMaterial(const MAT *,const std::string &);
     void setMaterial(size_t i,const MAT *);
 
     // public methods to set the state of the properties
@@ -107,8 +107,8 @@ void PhysicalProperties<MAT>::setMaterial(const MAT *matModel)
   { theMaterial.setMaterial(matModel); }
 
 template <class MAT>
-void PhysicalProperties<MAT>::setMaterial(const MAT *matModel, const std::string &tipo)
-  { theMaterial.setMaterial(matModel,tipo); }
+void PhysicalProperties<MAT>::setMaterial(const MAT *matModel, const std::string &type)
+  { theMaterial.setMaterial(matModel,type); }
 
 //! @brief Returns a vector to store the dbTags
 //! of the class members.

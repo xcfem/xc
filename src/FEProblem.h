@@ -99,7 +99,7 @@ class FEProblem: public EntCmd
     static inline const std::string &getXCVersionShort(void)
       { return gVERSION_SHORT; }
     void clearAll(void);
-    FE_Datastore *defineDatabase(const std::string &tipo, const std::string &nombre);
+    FE_Datastore *defineDatabase(const std::string &, const std::string &);
     inline FE_Datastore *getDataBase(void)
       { return dataBase; }
     inline const Preprocessor &getPreprocessor(void) const

@@ -91,7 +91,7 @@ class DomainDecompositionAnalysis: public Analysis, public MovableObject
   {
   private:
     Subdomain *theSubdomain; //!< Pointer to subdomain. 
-    DomainSolver *theSolver; //!< Pointer to solver de tipo DomainSolver.
+    DomainSolver *theSolver; //!< Pointer to solver.
     Vector theResidual; //!< Residual load vector.
     int numEqn; //!< number of equations.
     int numExtEqn; //!< number of external equations.

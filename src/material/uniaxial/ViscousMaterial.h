@@ -65,7 +65,7 @@
 namespace XC {
 //! @ingroup MatUnx
 //
-//! @brief Material de tipo viscoso.
+//! @brief Viscous material.
 class ViscousMaterial : public UniaxialMaterial
   {
   private:

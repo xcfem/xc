@@ -243,7 +243,7 @@ bool XC::SymArpackSolver::setEigenSOE(EigenSOE *soe)
         retval= true;
       }
     else
-      std::cerr << getClassName() << "::setEigenSOE: the system of equations no es del tipo adecuado para este solver." << std::endl;
+      std::cerr << getClassName() << "::setEigenSOE: not a suitable system of equations." << std::endl;
     return retval;
   }
 

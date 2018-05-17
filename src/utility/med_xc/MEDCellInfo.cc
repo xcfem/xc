@@ -41,17 +41,17 @@ XC::MEDCellInfo::MEDCellInfo(const Mesh &mesh,const MEDMapIndices &map_indices)
     ElementIter &theElements = mesh_no_const.getElements();
     while((theElement = theElements()) != nullptr)
       {
-        MED_EN::medGeometryElement tipo= theElement->getMEDCellType();
+        MED_EN::medGeometryElement type= theElement->getMEDCellType();
         const ID conex= theElement->getNodePtrs().getExternalNodes();
-        nueva_celda(theElement->getTag(),tipo,conex,map_indices);
+        nueva_celda(theElement->getTag(),type,conex,map_indices);
       }
   }
 
 //! @brief Adds cell connectivity.
-void XC::MEDCellInfo::nueva_celda(size_t tag,const MED_EN::medGeometryElement &tipo,const ID &conex,const MEDMapIndices &map_indices_vertices)
+void XC::MEDCellInfo::nueva_celda(size_t tag,const MED_EN::medGeometryElement &type,const ID &conex,const MEDMapIndices &map_indices_vertices)
   {
-    MEDCellBaseInfo::new_cell(tag,tipo);
-    med_cell_connectivity.nueva_celda(tipo,conex,map_indices_vertices);
+    MEDCellBaseInfo::new_cell(tag,type);
+    med_cell_connectivity.nueva_celda(type,conex,map_indices_vertices);
   }
 
 //! @brief Dumps cells definition on MED mesh.

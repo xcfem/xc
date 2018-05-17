@@ -222,46 +222,46 @@ void XC::MapLoadPatterns::removeAllFromDomain(void)
 //! - rectangular_ts: Defines a rectangular time series (RectangularSeries).
 //! - triangular_ts: Defines a triangular time series (TriangleSeries).
 //! - trig_ts: Defines a trigonometric time series (TrigSeries).
-XC::TimeSeries *XC::MapLoadPatterns::newTimeSeries(const std::string &tipo, const std::string &cod_ts)
+XC::TimeSeries *XC::MapLoadPatterns::newTimeSeries(const std::string &type, const std::string &cod_ts)
   {
     TimeSeries *ts= nullptr;
-    if(tipo == "constant_ts")
+    if(type == "constant_ts")
       ts= create_time_series<ConstantSeries>(cod_ts);
-    else if(tipo == "linear_ts")
+    else if(type == "linear_ts")
       ts= create_time_series<LinearSeries>(cod_ts);
-    else if(tipo == "path_ts")
+    else if(type == "path_ts")
       ts= create_time_series<PathSeries>(cod_ts);
-    else if(tipo == "path_time_ts")
+    else if(type == "path_time_ts")
       ts= create_time_series<PathTimeSeries>(cod_ts);
-    else if(tipo == "pulse_ts")
+    else if(type == "pulse_ts")
       ts= create_time_series<PulseSeries>(cod_ts);
-    else if(tipo == "rectangular_ts")
+    else if(type == "rectangular_ts")
       ts= create_time_series<RectangularSeries>(cod_ts);
-    else if(tipo == "triangular_ts")
+    else if(type == "triangular_ts")
       ts= create_time_series<TriangleSeries>(cod_ts);
-    else if(tipo == "trig_ts")
+    else if(type == "trig_ts")
       ts= create_time_series<TrigSeries>(cod_ts);
     else
-      std::cerr << "Time series type: '" << tipo
+      std::cerr << "Time series type: '" << type
                 << "' unknown." << std::endl;
     if(!ts)
       std::cerr << "Error in time series definition of type: '" 
-                << tipo << "'." << std::endl;
+                << type << "'." << std::endl;
     return ts;
   }
 
 //! @brief Define a LoadPattern object withe the type and the
 //! name being passed as parameters.
-XC::LoadPattern *XC::MapLoadPatterns::newLoadPattern(const std::string &tipo,const std::string &cod_lp)
+XC::LoadPattern *XC::MapLoadPatterns::newLoadPattern(const std::string &type,const std::string &cod_lp)
   {
     LoadPattern *retval= nullptr;
-    if(tipo == "load_pattern" || tipo == "default" )
+    if(type == "load_pattern" || type == "default" )
       retval=  create_load_pattern<LoadPattern>(cod_lp);
-    else if(tipo == "uniform_excitation")
+    else if(type == "uniform_excitation")
       retval= create_load_pattern<UniformExcitation>(cod_lp);
-    else if(tipo == "multi_support_pattern")
+    else if(type == "multi_support_pattern")
       retval= create_load_pattern<MultiSupportPattern>(cod_lp);
-    else if(tipo == "pbowl_loading")
+    else if(type == "pbowl_loading")
       retval= create_load_pattern<PBowlLoading>(cod_lp);
     return retval;
   }
