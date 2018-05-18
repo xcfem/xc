@@ -147,14 +147,14 @@ void XC::ReinfLayer::getBarrasIn(const Semiplano2d &sp,ListReinfLayer &retval,bo
         retval.push_back(SingleBar(**i));
   }
 
-//! @brief Returns a vector con las barras de la capa de armadura.
+//! @brief Return a vector containing the bars of the layer.
 XC::VectorReinfBar &XC::ReinfLayer::getReinfBars(void)
   {
     //Evitamos duplicar el método.
     return const_cast<VectorReinfBar&>(const_cast<const ReinfLayer&>(*this).getReinfBars());
   } 
 
-//! @brief Returns the number of barras de la capa.
+//! @brief Returns the number of bars of the layer.
 int XC::ReinfLayer::getNumReinfBars(void) const
   { return nReinfBars; }
 

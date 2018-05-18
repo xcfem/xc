@@ -35,5 +35,5 @@
 XC::JRowSet::JRowSet(EntMdlr &e,const size_t &f,const size_t &c,const std::string &nmb,XC::Preprocessor *preprocessor)
   : RowSet<tNodeRow,tElemRow>(e.getTtzNodes().getVarRefJRow(f,c),e.getTtzElements().getVarRefJRow(f,c),nmb,preprocessor) {}
 
-XC::JRowSet::JRowSet(EntMdlr &e,const size_t &capa,const RangoIndice &row_range,const size_t &c,const std::string &nmb,Preprocessor *preprocessor)
-  : RowSet<tNodeRow,tElemRow>(e.getTtzNodes().getVarRefJRow(capa,row_range,c),e.getTtzElements().getVarRefJRow(capa,row_range,c),nmb,preprocessor) {}
+XC::JRowSet::JRowSet(EntMdlr &e,const size_t &layer,const RangoIndice &row_range,const size_t &c,const std::string &nmb,Preprocessor *preprocessor)
+  : RowSet<tNodeRow,tElemRow>(e.getTtzNodes().getVarRefJRow(layer,row_range,c),e.getTtzElements().getVarRefJRow(layer,row_range,c),nmb,preprocessor) {}

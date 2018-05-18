@@ -86,8 +86,8 @@ Pos3d XC::TritrizPtrPnt::getCentroide(void) const
     GEOM_FT x= 0.0, y= 0.0, z= 0.0;
     for(size_t i=1;i<=numberOfLayers;i++)
       {
-        const MatrizPtrPnt &capa= operator()(i);
-        Pos3d p= capa.getCentroide();
+        const MatrizPtrPnt &layer= operator()(i);
+        Pos3d p= layer.getCentroide();
         x+= p.x();
         y+= p.y();
         z+= p.z(); 
@@ -106,8 +106,8 @@ XC::Pnt *XC::TritrizPtrPnt::findPoint(const int &tag)
     const size_t numberOfLayers= getNumberOfLayers();
     for(size_t i=1;i<=numberOfLayers;i++)
       {
-        MatrizPtrPnt &capa= operator()(i);
-        retval= capa.findPoint(tag);
+        MatrizPtrPnt &layer= operator()(i);
+        retval= layer.findPoint(tag);
         if(retval) break;
       }
     return retval;
@@ -155,8 +155,8 @@ XC::Pnt *XC::TritrizPtrPnt::getNearestPnt(const Pos3d &p)
     double tmp;
     for(size_t i=1;i<=numberOfLayers;i++)
       {
-        MatrizPtrPnt &capa= operator()(i);
-        ptrPnt= capa.getNearestPnt(p);
+        MatrizPtrPnt &layer= operator()(i);
+        ptrPnt= layer.getNearestPnt(p);
         if(ptrPnt)
           {
             tmp= ptrPnt->DistanciaA2(p);
@@ -178,8 +178,8 @@ const XC::Pnt *XC::TritrizPtrPnt::findPoint(const int &tag) const
     const size_t numberOfLayers= getNumberOfLayers();
     for(size_t i=1;i<=numberOfLayers;i++)
       {
-        const MatrizPtrPnt &capa= operator()(i);
-        retval= capa.findPoint(tag);
+        const MatrizPtrPnt &layer= operator()(i);
+        retval= layer.findPoint(tag);
         if(retval) break;
       }
     return retval;

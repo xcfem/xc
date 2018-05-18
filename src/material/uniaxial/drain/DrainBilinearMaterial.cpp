@@ -57,6 +57,10 @@
 #include <material/uniaxial/drain/DrainBilinearMaterial.h>
 #include <utility/matrix/Vector.h>
 
+// 17 history variables and 16 material parameters
+const int numHistoryVariables= 17;
+const int numMaterialParameters= 16;
+
 XC::DrainBilinearMaterial::DrainBilinearMaterial(int tag,
 	double E, double fyp, double fyn, double alpha,
 	double ecaps, double ecapk, double ecapa, double ecapd,
@@ -64,7 +68,7 @@ XC::DrainBilinearMaterial::DrainBilinearMaterial(int tag,
 	double capSlope, double capDispP, double capDispN, double res,
 	double b):
 // 17 history variables and 16 material parameters
- XC::DrainMaterial(tag, MAT_TAG_DrainBilinear, 17, 16, b)
+ XC::DrainMaterial(tag, MAT_TAG_DrainBilinear, numHistoryVariables, numMaterialParameters, b)
 {
 	matParams[0]  = E;
 	matParams[1]  = fyp;
@@ -89,50 +93,50 @@ XC::DrainBilinearMaterial::DrainBilinearMaterial(int tag,
 
 XC::DrainBilinearMaterial::DrainBilinearMaterial(int tag, const XC::Vector &input, double b):
 // 17 history variables and 16 material parameters
- XC::DrainMaterial(tag, MAT_TAG_DrainBilinear, 17, 16, b)
-{
-	for (int i = 0; i < 16; i++)
-		matParams[i] = input(i);
+ XC::DrainMaterial(tag, MAT_TAG_DrainBilinear, numHistoryVariables, numMaterialParameters, b)
+  {
+    for(int i = 0; i < numMaterialParameters; i++)
+	    matParams[i] = input(i);
 
-	// Initialize history variables
-	this->revertToStart();
-}
+    // Initialize history variables
+    this->revertToStart();
+  }
 
 //! @brief Constructor.
 XC::DrainBilinearMaterial::DrainBilinearMaterial(int tag)
-  :XC::DrainMaterial(tag, MAT_TAG_DrainBilinear, 17, 16)
+  :XC::DrainMaterial(tag, MAT_TAG_DrainBilinear, numHistoryVariables, numMaterialParameters)
   {}
 
 XC::DrainBilinearMaterial::DrainBilinearMaterial(void)
-: XC::DrainMaterial(0, MAT_TAG_DrainBilinear, 17, 16)
+: XC::DrainMaterial(0, MAT_TAG_DrainBilinear, numHistoryVariables, numMaterialParameters)
 {}
 
 int XC::DrainBilinearMaterial::revertToStart(void)
-{
-	hstv[0]  = 0.0;
-	hstv[1]  = 0.0;
-	hstv[2]  = matParams[1];		// fyp
-	hstv[3]  = matParams[1];		// fyp
-	hstv[4]  = matParams[2];		// fyn
-	hstv[5]  = matParams[2];		// fyn
-	hstv[6]  = matParams[0];		// E
-	hstv[7]  = matParams[0];		// E
-	hstv[8]  = matParams[13];	// capDispP
-	hstv[9]  = matParams[13];	// capDispP
-	hstv[10] = matParams[14];	// capDispN
-	hstv[11] = matParams[14];	// capDispN
-	hstv[12] = 0.0;
-	hstv[13] = 0.0;
-	hstv[14] = 0.0;
-	hstv[15] = matParams[0];		// E
-	hstv[16] = matParams[15];	// res
+  {
+    hstv[0]  = 0.0;
+    hstv[1]  = 0.0;
+    hstv[2]  = matParams[1];		// fyp
+    hstv[3]  = matParams[1];		// fyp
+    hstv[4]  = matParams[2];		// fyn
+    hstv[5]  = matParams[2];		// fyn
+    hstv[6]  = matParams[0];		// E
+    hstv[7]  = matParams[0];		// E
+    hstv[8]  = matParams[13];	// capDispP
+    hstv[9]  = matParams[13];	// capDispP
+    hstv[10] = matParams[14];	// capDispN
+    hstv[11] = matParams[14];	// capDispN
+    hstv[12] = 0.0;
+    hstv[13] = 0.0;
+    hstv[14] = 0.0;
+    hstv[15] = matParams[0];		// E
+    hstv[16] = matParams[15];	// res
 
-	// Set trial history variables to committed values
-	for (int i = 0; i < 17; i++)
-		hstv[i+17] = hstv[i];
+    // Set trial history variables to committed values
+    for(int i = 0; i < numHistoryVariables; i++)
+      hstv[i+numHistoryVariables] = hstv[i];
+    return 0;
+  }
 
-	return 0;
-}
-
+//! @brief Virtual constructor.
 XC::UniaxialMaterial *XC::DrainBilinearMaterial::getCopy(void) const
   { return new DrainBilinearMaterial(*this); }

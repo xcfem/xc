@@ -53,7 +53,7 @@ class KRowSet: public RowSet<TritrizPtrNod::var_ref_k_row,TritrizPtrElem::var_re
     typedef TritrizPtrNod::var_ref_k_row tNodeRow;
     typedef TritrizPtrElem::var_ref_k_row tElemRow;
     KRowSet(EntMdlr &e,const size_t &f=1,const size_t &c=1,const std::string &nmb="",Preprocessor *preprocessor= nullptr);
-    KRowSet(EntMdlr &e,const size_t &capa,const size_t &f,const RangoIndice &,const std::string &nmb="",Preprocessor *preprocessor= nullptr);
+    KRowSet(EntMdlr &e,const size_t &layer,const size_t &f,const RangoIndice &,const std::string &nmb="",Preprocessor *preprocessor= nullptr);
   };
 } //end of XC namespace
 #endif

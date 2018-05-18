@@ -131,12 +131,12 @@ class EntMdlr: public SetEstruct
     IRowSet getVarRefIRow(const RangoIndice &layer_range,size_t f,size_t c,const std::string &nmb="tmp");
     IRowSet getVarRefIRow(const RangoTritriz &rango,const std::string &nmb="tmp");
 
-    JRowSet getVarRefJRow(size_t capa=1,size_t c=1,const std::string &nmb="tmp");
-    JRowSet getVarRefJRow(size_t capa,const RangoIndice &row_range,size_t c,const std::string &nmb="tmp");
+    JRowSet getVarRefJRow(size_t layer=1,size_t c=1,const std::string &nmb="tmp");
+    JRowSet getVarRefJRow(size_t layer,const RangoIndice &row_range,size_t c,const std::string &nmb="tmp");
     JRowSet getVarRefJRow(const RangoTritriz &rango,const std::string &nmb="tmp");
 
-    KRowSet getVarRefKRow(size_t capa=1,size_t f=1,const std::string &nmb="tmp");
-    KRowSet getVarRefKRow(size_t capa,size_t f,const RangoIndice &rango_cols,const std::string &nmb="tmp");
+    KRowSet getVarRefKRow(size_t layer=1,size_t f=1,const std::string &nmb="tmp");
+    KRowSet getVarRefKRow(size_t layer,size_t f,const RangoIndice &column_range,const std::string &nmb="tmp");
     KRowSet getVarRefKRow(const RangoTritriz &rango,const std::string &nmb="tmp");
 
     void fix(const SFreedom_Constraint &);

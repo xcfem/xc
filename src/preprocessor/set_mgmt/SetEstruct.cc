@@ -90,15 +90,15 @@ bool XC::SetEstruct::isJConstantLayer(void) const
 bool XC::SetEstruct::isKConstantLayer(void) const
   { return (getNumNodeColumns()==1); }
 
-//! @brief Returns the set type i_row, j_row, k_row, capaICte,...
+//! @brief Returns the set type i_row, j_row, k_row, constantILayer,...
 std::string XC::SetEstruct::getStrType(void) const
   {
     if(isIRow()) return "i_row";
     if(isJRow()) return "j_row";
     if(isKRow()) return "k_row";
-    if(isIConstantLayer()) return "capaICte";
-    if(isJConstantLayer()) return "capaJCte";
-    if(isKConstantLayer()) return "capaKCte";
+    if(isIConstantLayer()) return "constantILayer";
+    if(isJConstantLayer()) return "constantJLayer";
+    if(isKConstantLayer()) return "constantKLayer";
     return "bloqueIJK";
   }
 
