@@ -94,7 +94,7 @@ Pos3d XC::ComputePivots::getDPoint(void) const
 Pos3d XC::ComputePivots::calcPositionPivotA(void) const
   {
     Pos3d retval;
-    if(!SFibers.empty()) //Hay armadura.
+    if(!SFibers.empty()) //There are rebars.
       {
         const Fiber *t= getFiberSMinY();
         const Pos3d pos_t= getPos3d(t,agot_pivots.getUltimateStrainAPivot()); //Yield strain in A pivot.
@@ -104,7 +104,7 @@ Pos3d XC::ComputePivots::calcPositionPivotA(void) const
         else //Cell is in compression zone.
           retval= getDPoint();
       }
-    else //no hay armadura.
+    else //No rebars.
       retval= getDPoint();
     return retval;
   }

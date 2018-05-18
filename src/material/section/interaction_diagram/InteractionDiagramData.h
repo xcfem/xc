@@ -46,8 +46,8 @@ class InteractionDiagramData: public EntCmd
     PivotsUltimateStrains agot_pivots; //!< Ultimate strains at pivots.
     std::string concrete_set_name; //!< Concrete fibers set name.
     int concrete_tag; //!< Concrete material tag.
-    std::string nmb_set_armadura; //!< Steel fibers set name. 
-    int tag_armadura; //!< Steel material tag.
+    std::string reinforcement_set_name; //!< Steel fibers set name. 
+    int reinforcement_tag; //!< Steel material tag.
   public:
     InteractionDiagramData(void);
     InteractionDiagramData(const double &u,const double &inc_e,const double &inc_t= M_PI/4,const PivotsUltimateStrains &agot= PivotsUltimateStrains());
@@ -76,14 +76,14 @@ class InteractionDiagramData: public EntCmd
       { return concrete_tag; }
     inline void setConcreteTag(const int &v)
       { concrete_tag= v; }
-    inline const std::string &getNmbSetArmadura(void) const
-      { return nmb_set_armadura; }
-    inline void setNmbSetArmadura(const std::string &v)
-      { nmb_set_armadura= v; }
-    inline const int &getTagArmadura(void) const
-      { return tag_armadura; }
-    inline void setTagArmadura(const int &v)
-      { tag_armadura= v; }
+    inline const std::string &getRebarSetName(void) const
+      { return reinforcement_set_name; }
+    inline void setRebarSetName(const std::string &v)
+      { reinforcement_set_name= v; }
+    inline const int &getReinforcementTag(void) const
+      { return reinforcement_tag; }
+    inline void setReinforcementTag(const int &v)
+      { reinforcement_tag= v; }
   };
 
 } // end of XC namespace

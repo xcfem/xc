@@ -29,7 +29,7 @@ F= 5.5e4 # Load magnitude en N
 # Concrete shrinkage
 tS= 7 # Inicio del secado.
 
-# Armadura activa
+# active reinforcement
 Ep= 190e9 # Elastic modulus expressed in MPa
 Ap= 140e-6 # bar area expressed in square meters
 fMax= 1860e6 # Maximum unit load of the material expressed in MPa.
@@ -82,7 +82,7 @@ elem= elements.newElement("ShellMITC4",xc.ID([5,6,10,9]))
 elem= elements.newElement("ShellMITC4",xc.ID([6,7,11,10]))
 elem= elements.newElement("ShellMITC4",xc.ID([7,8,12,11]))
 
-# Armadura activa
+# active reinforcement
 elements.defaultMaterial= "prestressingSteel"
 elements.dimElem= 3 # Dimension of element space
 truss= elements.newElement("Truss",xc.ID([1,2]));

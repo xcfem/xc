@@ -41,9 +41,9 @@ class ReinfBar;
 class Vector;
 class Matrix;
 
-//! @ingroup MATSCCArmaduras
+//! @ingroup MATSCCReinforcement
 //
-//! @brief Vector de barras de armadura.
+//! @brief Reinforcement bars vector.
 class VectorReinfBar: public std::vector<ReinfBar *>, public SectionMassProperties
   {
   public:

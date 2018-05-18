@@ -46,12 +46,12 @@ reinforcement= geomSecHA.getReinfLayers
 reinforcementInf= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
 reinforcementInf.numReinfBars= 2
 reinforcementInf.barArea= areaFi16
-reinforcementInf.p1= geom.Pos2d(cover-depth/2.0,width/2.0-cover) # Armadura inferior.
+reinforcementInf.p1= geom.Pos2d(cover-depth/2.0,width/2.0-cover) # bottom layer.
 reinforcementInf.p2= geom.Pos2d(cover-depth/2.0,cover-width/2.0)
 reinforcementSup= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
 reinforcementSup.numReinfBars= 2
 reinforcementSup.barArea= areaFi16
-reinforcementSup.p1= geom.Pos2d(depth/2.0-cover,width/2.0-cover) # Armadura superior.
+reinforcementSup.p1= geom.Pos2d(depth/2.0-cover,width/2.0-cover) # top layer.
 reinforcementSup.p2= geom.Pos2d(depth/2.0-cover,cover-width/2.0)
 
 materiales= preprocessor.getMaterialHandler
@@ -63,7 +63,7 @@ fibras= secHA.getFibers()
 
 param= xc.InteractionDiagramParameters()
 param.concreteTag= EHE_materials.HA25.matTagD
-param.tagArmadura= EHE_materials.B500S.matTagD
+param.reinforcementTag= EHE_materials.B500S.matTagD
 diagIntsecHA= materiales.calcInteractionDiagram("secHA",param)
 
 diagIntsecHA.writeTo("/tmp/interaction_diagram_test_01.dat") # Se usa en test test_diag_interaccion03

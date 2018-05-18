@@ -65,7 +65,7 @@ class Segmento2d;
 namespace XC {
 class ReinfBar;
 
-//! @ingroup MATSCCArmaduras
+//! @ingroup MATSCCReinforcement
 //
 //! @brief Set of rebars distributed along a segment.
 class StraightReinfLayer : public ReinfLayer

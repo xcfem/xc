@@ -68,9 +68,9 @@ class Matrix;
 
 //! @ingroup MATSCCRepresGeom
 //
-//! @defgroup MATSCCArmaduras Reinforcing layers representation (rebars).
+//! @defgroup MATSCCReinforcement Reinforcing layers representation (rebars).
 //
-//! @ingroup MATSCCArmaduras
+//! @ingroup MATSCCReinforcement
 //
 //! @brief Reinforcing bar.
 class ReinfBar: public DiscretBase

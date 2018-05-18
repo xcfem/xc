@@ -47,8 +47,8 @@ class_<XC::InteractionDiagramData, bases<EntCmd>>("InteractionDiagramParameters"
   .add_property("pivotsUltimateStrains",make_function(&XC::InteractionDiagramData::getPivotsUltimateStrains,return_internal_reference<>()),&XC::InteractionDiagramData::setPivotsUltimateStrains)
   .add_property("concreteSetName",make_function(&XC::InteractionDiagramData::getConcreteSetName,return_internal_reference<>()),&XC::InteractionDiagramData::setConcreteSetName)
   .add_property("concreteTag",make_function(&XC::InteractionDiagramData::getConcreteTag,return_value_policy<copy_const_reference>()),&XC::InteractionDiagramData::setConcreteTag)
-  .add_property("nmbSetArmadura",make_function(&XC::InteractionDiagramData::getNmbSetArmadura,return_internal_reference<>()),&XC::InteractionDiagramData::setNmbSetArmadura)
-  .add_property("tagArmadura",make_function(&XC::InteractionDiagramData::getTagArmadura,return_value_policy<copy_const_reference>()),&XC::InteractionDiagramData::setTagArmadura)
+  .add_property("rebarSetName",make_function(&XC::InteractionDiagramData::getRebarSetName,return_internal_reference<>()),&XC::InteractionDiagramData::setRebarSetName)
+  .add_property("reinforcementTag",make_function(&XC::InteractionDiagramData::getReinforcementTag,return_value_policy<copy_const_reference>()),&XC::InteractionDiagramData::setReinforcementTag)
   ;
 
 class_<XC::ClosedTriangleMesh, bases<GeomObj3d>, boost::noncopyable >("ClosedTriangleMesh", no_init)

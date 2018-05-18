@@ -72,7 +72,7 @@ reinforcementB.p2= geom.Pos2d(width/2.0-cover,cover-depth/2.0)
 reinforcementC= reinforcement.newStraightReinfLayer(EHE_materials.B400S.nmbDiagK)
 reinforcementC.numReinfBars= 13
 reinforcementC.barArea= areaFi25
-reinforcementC.p1= geom.Pos2d(cover-width/2.0,depth/2.0-cover) # Armadura superior.
+reinforcementC.p1= geom.Pos2d(cover-width/2.0,depth/2.0-cover) # top layer.
 reinforcementC.p2= geom.Pos2d(width/2.0-cover,depth/2.0-cover)
 
 materiales= preprocessor.getMaterialHandler

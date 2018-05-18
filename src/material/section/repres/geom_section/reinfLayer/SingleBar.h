@@ -35,7 +35,7 @@
 namespace XC {
 class ReinfBar;
 
-//! @ingroup MATSCCArmaduras
+//! @ingroup MATSCCReinforcement
 //
 //! @brief Single rebar (not included in a reinforcement layer).
 class SingleBar : public ReinfLayer

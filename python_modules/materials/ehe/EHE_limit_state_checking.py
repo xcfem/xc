@@ -842,7 +842,7 @@ class ShearController(lscb.LimitStateControllerBase):
         self.eps1= concrFibers.getStrainMax()
         self.E0= concrFibers[0].getMaterial().getInitialTangent()
         self.concreteAxialForce= concrFibers.getCompressionResultant()
-        self.modElastArmadura= reinfFibers[0].getMaterial().getInitialTangent()
+        self.reinforcementElasticModulus= reinfFibers[0].getMaterial().getInitialTangent()
         self.strutWidth= scc.getCompressedStrutWidth() # b0
         self.depthUtil= scc.getEffectiveDepth() # d
         self.mechanicLeverArm= scc.getMechanicLeverArm() # z
@@ -850,8 +850,8 @@ class ShearController(lscb.LimitStateControllerBase):
           self.tensionedRebars.area= tensionedReinforcement.getArea(1)
         else:
           self.tensionedRebars.area= 0.0
-        self.thetaFisuras= getCrackAngleEHE08(Nd,Md,Vd,Td,self.mechanicLeverArm,self.tensionedRebars.area,0.0,self.modElastArmadura,0.0,0.0,self.VuAe,self.Vuue)
-        self.Vcu= getVcuEHE08(self.fckH,self.fcdH,self.gammaC,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.depthUtil,self.mechanicLeverArm,self.tensionedRebars.area,0.0,self.theta,Nd,Md,Vd,Td,self.modElastArmadura,0.0,0.0,self.VuAe,self.Vuue)
+        self.thetaFisuras= getCrackAngleEHE08(Nd,Md,Vd,Td,self.mechanicLeverArm,self.tensionedRebars.area,0.0,self.reinforcementElasticModulus,0.0,0.0,self.VuAe,self.Vuue)
+        self.Vcu= getVcuEHE08(self.fckH,self.fcdH,self.gammaC,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.depthUtil,self.mechanicLeverArm,self.tensionedRebars.area,0.0,self.theta,Nd,Md,Vd,Td,self.reinforcementElasticModulus,0.0,0.0,self.VuAe,self.Vuue)
         self.Vu1= getVu1EHE08(self.fckH,self.fcdH,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.depthUtil,self.alpha,self.theta)
         self.Vsu= getVsuEHE08(self.mechanicLeverArm,self.alpha,self.theta,self.AsTrsv,self.fydS)
         self.Vu2= self.Vcu+self.Vsu
@@ -903,7 +903,7 @@ class ShearController(lscb.LimitStateControllerBase):
       idSection= e.getProp("idSection")
       section= scc.getProp("datosSecc")
       concreteCode= section.concrType
-      codArmadura= section.reinfSteelType
+      reinforcementCode= section.reinfSteelType
       self.AsTrsv= section.shReinfY.getAs()
       self.alpha= section.shReinfY.angAlphaShReinf
       self.theta= section.shReinfY.angThetaConcrStruts
@@ -919,23 +919,23 @@ class ShearController(lscb.LimitStateControllerBase):
       #We calculate Vu for several values of theta and chose the highest Vu with its associated theta
 #      print '\n VTmp=',VTmp
       thetaVuTmp=list()
-      self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,codArmadura,NTmp,MTmp,VTmp,TTmp)
+      self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp)
       thetaVuTmp.append([self.theta,self.Vu])
       if(self.Vu<VTmp):
         self.theta= max(self.thetaMin,min(self.thetaMax,self.thetaFisuras))
-        self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,codArmadura,NTmp,MTmp,VTmp,TTmp)
+        self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp)
         thetaVuTmp.append([self.theta,self.Vu])
       if(self.Vu<VTmp):
         self.theta= (self.thetaMin+self.thetaMax)/2.0
-        self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,codArmadura,NTmp,MTmp,VTmp,TTmp)
+        self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp)
         thetaVuTmp.append([self.theta,self.Vu])
       if(self.Vu<VTmp):
         self.theta= 0.95*self.thetaMax
-        self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,codArmadura,NTmp,MTmp,VTmp,TTmp)
+        self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp)
         thetaVuTmp.append([self.theta,self.Vu])
       if(self.Vu<VTmp):
         self.theta= 1.05*self.thetaMin
-        self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,codArmadura,NTmp,MTmp,VTmp,TTmp)
+        self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp)
         thetaVuTmp.append([self.theta,self.Vu])
       self.theta,self.Vu=max(thetaVuTmp, key=lambda item: item[1])
 #      print 'thetaFisuras=',self.thetaFisuras
@@ -1205,13 +1205,13 @@ class CrackControl(lscb.CrackControlBaseParameters):
     concrete= materiales.getMaterial(concreteCode)
     concrTag= concrete.getProp("matTagK")
     concrFctm= concrete.getProp("fctm")
-    reinforcement= materiales.getMaterial(codArmadura)
+    reinforcement= materiales.getMaterial(reinforcementCode)
     for e in elements:
       scc= elements.getSeccion()
       Ntmp= scc.N
       MyTmp= scc.My
       MzTmp= scc.Mz
-      secHAParamsFisuracion= computeWk(concrTag,tagArmadura,concrFctm)
+      secHAParamsFisuracion= computeWk(concrTag,reinforcementTag,concrFctm)
       Wk= secHAParamsFisuracion.Wk
       if(Wk>WkCP):
         WkCP= Wk # Worst case

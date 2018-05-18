@@ -116,7 +116,7 @@ double XC::ReinfLayer::getCover(void) const
     return retval;
   }
 
-//! @brief Returns the centro de gravedad de las armaduras.
+//! @brief Returns the reinforcement layer centroid.
 XC::Vector XC::ReinfLayer::getCdg(void) const
   {
     const VectorReinfBar &barras= getReinfBars();

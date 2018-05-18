@@ -47,7 +47,7 @@ class Vector;
 class Matrix;
 class GeomSection;
 
-//! @ingroup MATSCCArmaduras
+//! @ingroup MATSCCReinforcement
 //
 //! @brief Reinf layer container (list).
 class ListReinfLayer: public std::list<ReinfLayer *>, public SectionMassProperties

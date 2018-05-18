@@ -6,7 +6,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-def getTracArmaduraInfEncepado(alpha,Nd):
+def getTensionOnPileCapBottomReinforcement(alpha,Nd):
     '''
     Returns the tension in the inferior reinforcement of the pile cap.
 
@@ -16,17 +16,17 @@ def getTracArmaduraInfEncepado(alpha,Nd):
     return Nd/math.tan(alpha)
   
 
-def getAreaNecArmaduraInfEncepado(alpha,Nd,fyd):
+def getPileCapBottomReinforcementReqArea(alpha,Nd,fyd):
     '''
     Devuelve el área necesaria para la reinforcement inferior del encepado.
 
     :param alpha: Angle between the concrete compressed struts and the horizontal.
     :param Nd: Axil de cálculo en el pilote.
     '''
-    return getTracArmaduraInfEncepado(alpha,Nd)/fyd
+    return getTensionOnPileCapBottomReinforcement(alpha,Nd)/fyd
   
 
-def getTracArmaduraInfEncepado2Pilotes(v,d,Nd):
+def getTensionOn2PileCapBottomReinforcement(v,d,Nd):
     '''
     Devuelve la traccion en la reinforcement inferior de un encepado
     de DOS pilotes (ver números gordos HC.9 page 32).
@@ -60,7 +60,7 @@ def getMinimalDistBetweenPileAxes(D):
         return 3*D
   
 
-def getAreaArmaduraCercosVertEncepado2Pilotes(b,h,L):
+def get2PileCapBottomReinforcementReqArea(b,h,L):
     '''
     Devuelve el área de reinforcement necesaria para los cercos
     verticales de un encepado de DOS pilotes (ver números gordos
@@ -73,7 +73,7 @@ def getAreaArmaduraCercosVertEncepado2Pilotes(b,h,L):
     return 4*min(b,h/2)*L/1000
   
 
-def getAreaArmaduraCercosHorizEncepado2Pilotes(b,h):
+def get2PileCapHorizontalStirrupsReqArea(b,h):
     '''
     Devuelve el área de reinforcement necesaria para los cercos
     horizontales de un encepado de DOS pilotes (ver números gordos

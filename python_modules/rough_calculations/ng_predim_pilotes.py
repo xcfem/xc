@@ -32,20 +32,20 @@ Rpil=(Apil*Spil)
 npil=math.ceil(Nk/Rpil)
 print "$$Resistencia\ de\ un\ pilote\ R=A\\cdot\\sigma = ", "%5.2f".format(Rpil),"\ kN$$"
 print "$$N^o\ pilotes\ n=\\cfrac{N_k}{R} = ", "%3.0f".format(npil),"\ pilotes$$"
-print "Armadura \\\\ \n "
+print "Reinforcement \\\\ \n "
 print "\\begin{itemize}"
 print "\\item{Axil de cálculo}"
 Nd=(1.5*Nk/npil)
 print "$$N_d = 1.5 \\cfrac{N_K}{n} = ", "%5.2f".format(Nd),"\ kN$$"
-print "\\item{Armadura}"
+print "\\item{Reinforcement}"
 As=((Nd-fck/1.5*Apil/1000)/fyk*1.15*10)
 print "$$N_d = f_{cd} A_c + f_{yd} A_s \\rightarrow $$"
 print "$$A_s = \\cfrac{N_d - f_{cd} A_c \\left[\\times \\cfrac{1}{1000}\\right]}{f_{yd}}[\\times 10] =", "%5.2f".format(As),"\ cm^2  $$"
-print "\\item{Armadura mínima}"
+print "\\item{Minimum reinforcement}"
 print "$$Min.\ geom.\ A_s \\ge 4\\permil A_c =", "%5.2f".format((Apil*40)),"\ cm^2 $$"
 Asmmec=(0.1*Apil*fck/1.5/fyk*1.15*10000)
 print "$$Min.\ mec.\ A_s \\ge\\cfrac{ 10\\% A_c f_{cd}}{f_{yd}}=", "%5.2f".format(Asmmec),"\ cm^2 $$"
-print "\\item{Armadura máxima}"
+print "\\item{Maximum reinforcement}"
 if(prefabricado=="si"):
   Asmmec=(0.6*Apil*fck/1.5/fyk*1.15*10000)
   print "$$Max.\ mec.\ A_s \\le\\cfrac{ 60\\% A_c f_{cd}}{f_{yd}}=", "%5.2f".format(Asmmec),"\ cm^2 $$"

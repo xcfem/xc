@@ -401,23 +401,23 @@ double XC::FiberSectionBase::getGrossEffectiveConcreteArea(const double &hEfMax)
   }
 
 //! @brief Returns the sum of the effective areas of rebars in tension.
-double XC::FiberSectionBase::getNetEffectiveConcreteArea(const double &hEfMax,const std::string &nmbSetArmaduras,const double &factor) const
+double XC::FiberSectionBase::getNetEffectiveConcreteArea(const double &hEfMax,const std::string &rebarSetName,const double &factor) const
   {
     double retval= 0.0;
     std::list<Poligono2d> grossEffectiveConcreteAreaContour= getGrossEffectiveConcreteAreaContour(hEfMax);
     if(!grossEffectiveConcreteAreaContour.empty())
       {
 	//Iterate over the rebar set.
-        fiber_set_const_iterator i= fiber_sets.find(nmbSetArmaduras);
+        fiber_set_const_iterator i= fiber_sets.find(rebarSetName);
         if(i!=fiber_sets.end())
           {
-            const FiberDeque &armaduras= (*i).second; //Rebar family.
-            retval+= armaduras.computeFibersEffectiveConcreteArea(grossEffectiveConcreteAreaContour,factor);
+            const FiberDeque &rebars= (*i).second; //Rebar family.
+            retval+= rebars.computeFibersEffectiveConcreteArea(grossEffectiveConcreteAreaContour,factor);
           }
         else
           std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; fiber set: "
-                    << nmbSetArmaduras << " not found." << std::endl;
+                    << rebarSetName << " not found." << std::endl;
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -426,22 +426,22 @@ double XC::FiberSectionBase::getNetEffectiveConcreteArea(const double &hEfMax,co
   }
 
 //! @brief Computes crack effective concrete areas around the fibers.
-double XC::FiberSectionBase::computeFibersEffectiveConcreteArea(const double &hEfMax,const std::string &nmbSetArmaduras,const double &factor) const
+double XC::FiberSectionBase::computeFibersEffectiveConcreteArea(const double &hEfMax,const std::string &rebarSetName,const double &factor) const
   {
     double retval= 0;
     std::list<Poligono2d> grossEffectiveConcreteAreaContour= getGrossEffectiveConcreteAreaContour(hEfMax);
     if(!grossEffectiveConcreteAreaContour.empty())
       {
-        fiber_set_const_iterator i= fiber_sets.find(nmbSetArmaduras);
+        fiber_set_const_iterator i= fiber_sets.find(rebarSetName);
         if(i!=fiber_sets.end())
           {
-            const FiberDeque &armaduras= (*i).second; //Armaduras.
-            retval= armaduras.computeFibersEffectiveConcreteArea(grossEffectiveConcreteAreaContour,factor);
+            const FiberDeque &rebars= (*i).second; //Rebars.
+            retval= rebars.computeFibersEffectiveConcreteArea(grossEffectiveConcreteAreaContour,factor);
           }
         else
           std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; fiber set: "
-                    << nmbSetArmaduras << " not found." << std::endl;
+                    << rebarSetName << " not found." << std::endl;
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -450,35 +450,35 @@ double XC::FiberSectionBase::computeFibersEffectiveConcreteArea(const double &hE
   }
 
 //! @brief Computes concrete cover of the fibers.
-void XC::FiberSectionBase::computeCovers(const std::string &nmbSetArmaduras) const
+void XC::FiberSectionBase::computeCovers(const std::string &rebarSetName) const
   {
-    fiber_set_const_iterator i= fiber_sets.find(nmbSetArmaduras);
+    fiber_set_const_iterator i= fiber_sets.find(rebarSetName);
     if(i!=fiber_sets.end())
       {
-        const FiberDeque &armaduras= (*i).second; //Armaduras.
+        const FiberDeque &rebars= (*i).second; //Rebars.
         const GeomSection *geom= getGeomSection();
         if(geom)
-          armaduras.computeCovers(*geom);
+          rebars.computeCovers(*geom);
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; fiber set: "
-                << nmbSetArmaduras << " not found." << std::endl;
+                << rebarSetName << " not found." << std::endl;
   }
 
 //! @brief Computes spacing of the fibers.
-void XC::FiberSectionBase::computeSpacement(const std::string &nmbSetArmaduras) const
+void XC::FiberSectionBase::computeSpacement(const std::string &rebarSetName) const
   {
-    fiber_set_const_iterator i= fiber_sets.find(nmbSetArmaduras);
+    fiber_set_const_iterator i= fiber_sets.find(rebarSetName);
     if(i!=fiber_sets.end())
       {
-        const FiberDeque &armaduras= (*i).second; //Armaduras.
-        armaduras.computeSpacement();
+        const FiberDeque &rebars= (*i).second; //Rebars.
+        rebars.computeSpacement();
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; fiber set: "
-                << nmbSetArmaduras << " not found." << std::endl;
+                << rebarSetName << " not found." << std::endl;
   }
 
 //! @brief Returns the signed distance from the neutral axis
@@ -622,11 +622,11 @@ const XC::NMPointCloud &XC::FiberSectionBase::getInteractionDiagramPointsForPlan
 		<< "; fibers for concrete material, identified by tag: "
 		<< diag_data.getConcreteTag()
                 << ", not found." << std::endl;
-    const FiberDeque &fsS= sel_mat_tag(diag_data.getNmbSetArmadura(),diag_data.getTagArmadura())->second;
+    const FiberDeque &fsS= sel_mat_tag(diag_data.getRebarSetName(),diag_data.getReinforcementTag())->second;
     if(fsS.empty())
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; fibers for steel material, identified by tag: "
-		<< diag_data.getTagArmadura()
+		<< diag_data.getReinforcementTag()
                 << ", not found." << std::endl;
     if(!fsC.empty() && !fsS.empty())
       {
@@ -656,11 +656,11 @@ const XC::NMyMzPointCloud &XC::FiberSectionBase::getInteractionDiagramPoints(con
 		<< "; fibers for concrete material, identified by tag: "
 		<< diag_data.getConcreteTag()
                 << ", not found." << std::endl;
-    const FiberDeque &fsS= sel_mat_tag(diag_data.getNmbSetArmadura(),diag_data.getTagArmadura())->second;
+    const FiberDeque &fsS= sel_mat_tag(diag_data.getRebarSetName(),diag_data.getReinforcementTag())->second;
     if(fsS.empty())
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; fibers for steel material, identified by tag: "
-		<< diag_data.getTagArmadura()
+		<< diag_data.getReinforcementTag()
                 << ", not found." << std::endl;
     if(!fsC.empty() && !fsS.empty())
       {

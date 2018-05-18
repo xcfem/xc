@@ -17,7 +17,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
 
-def plotArmaduras(reinforcement, ctx):
+def plotReinforcement(reinforcement, ctx):
     '''draw section rebars in a postcript file.'''
     for reinfLayer in reinforcement:
         barras= reinfLayer.getReinfBars
@@ -49,7 +49,7 @@ def plotGeomSeccion(geomSection, path):
     ctx.stroke()
     ctx.set_line_width(trf.scale/300000)
     reinforcement= geomSection.getReinfLayers
-    plotArmaduras(reinforcement,ctx)
+    plotReinforcement(reinforcement,ctx)
     trf.plotYZAxes(ctx)
     surface.set_eps(True)
     ctx.show_page()

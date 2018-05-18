@@ -67,7 +67,7 @@ class ReinfBar;
 class ListReinfLayer;
 class GeomSection;
 
-//! @ingroup MATSCCArmaduras
+//! @ingroup MATSCCReinforcement
 //
 //! @brief Rebar layer.
 class ReinfLayer: public DiscretBase
