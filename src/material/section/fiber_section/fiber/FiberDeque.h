@@ -57,7 +57,7 @@ class CrossSectionKR;
 class GeomSection;
 class DeformationPlane;
 
-enum ClaseEsfuerzo {TRACCION_SIMPLE,TRACCION_COMPUESTA,FLEXION_SIMPLE,FLEXION_COMPUESTA,COMPRESION_SIMPLE,COMPRESION_COMPUESTA,ERROR};
+enum ClaseEsfuerzo {SIMPLE_TENSION,COMPOSED_TENSION,FLEXION_SIMPLE,FLEXION_COMPUESTA,COMPRESION_SIMPLE,COMPRESION_COMPUESTA,ERROR};
 
 
 //! \ingroup MATSCCFibers
@@ -120,16 +120,16 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     Recta2d getNeutralAxis(void) const;
 
     double getCompressionResultant(void) const;
-    double getMzComp(const double &y0= 0.0) const;
-    double getMyComp(const double &z0= 0.0) const;
-    const Vector &baricentroCompresiones(void) const;
-    const Vector &baricentroDefMenores(const double &epsRef) const;
+    double getCompressedFibersMz(const double &y0= 0.0) const;
+    double getCompressedFibersMy(const double &z0= 0.0) const;
+    const Vector &getCompressedFibersCentroid(void) const;
+    const Vector &getCentroidFibersWithStrainSmallerThan(const double &epsRef) const;
 
     double getTensionResultant(void) const;
-    double getMzTracc(const double &y0= 0.0) const;
-    double getMyTracc(const double &z0= 0.0) const;
-    const Vector &baricentroTracciones(void) const;
-    const Vector &baricentroDefMayores(const double &epsRef) const;
+    double getTensionedFibersMz(const double &y0= 0.0) const;
+    double getTensionedFibersMy(const double &z0= 0.0) const;
+    const Vector &getTensionedFibersCentroid(void) const;
+    const Vector &getCentroidFibersWithStrainGreaterThan(const double &epsRef) const;
 
     int commitState(void);
 
@@ -142,8 +142,8 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     DeformationPlane getDeformationPlane(void) const;
     const Vector &getDeformation(void) const;
     ClaseEsfuerzo getClaseEsfuerzo(const double &tol= 1e-4) const;
-    bool enTraccion(void) const;
-    bool enFlexion(void) const;
+    bool isTensioned(void) const;
+    bool isBent(void) const;
     bool enCompresion(void) const;
     std::string getStrClaseEsfuerzo(const double &tol= 1e-4) const;
     double getNeutralAxisDepth(const FiberSectionBase &) const;

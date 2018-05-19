@@ -195,7 +195,7 @@ int XC::NewtonRaphson::solveCurrentStep(void)
           }
 
         result = theTest->test();
-        this->record(count++); //Llama al método record(...) de todos los recorders definidos.
+        this->record(count++); //Call the record(...) method of all recorders.
       }
     while(result == -1);
 

@@ -139,7 +139,7 @@ int XC::PeriodicNewton::solveCurrentStep(void)
             return -2;
           }
 
-        this->record(count++); //Llama al método record(...) de todos los recorders definidos.
+        this->record(count++); //Call the record(...) method of all the recorders.
         result = theTest->test();
 
         iter++;

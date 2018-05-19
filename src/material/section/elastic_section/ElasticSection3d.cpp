@@ -193,7 +193,7 @@ XC::SectionForceDeformation *XC::ElasticSection3d::getCopy(void) const
 const XC::ResponseId &XC::ElasticSection3d::getType(void) const
   { return RespElasticSection3d; }
 
-//! @brief Return 6.
+//! @brief Return 4.
 int XC::ElasticSection3d::getOrder(void) const
   { return 4; }
 

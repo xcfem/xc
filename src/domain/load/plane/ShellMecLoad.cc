@@ -48,7 +48,8 @@ XC::ShellMecLoad::ShellMecLoad(int tag,int classTag)
 //! @param p0 element load vector.
 void XC::ShellMecLoad::addReactionsInBasicSystem(const double &,const double &,FVectorShell &) const
   {
-    std::cerr << "addReactionsInBasicSystem no definida." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
   }
 
 //! @brief ??
@@ -57,7 +58,8 @@ void XC::ShellMecLoad::addReactionsInBasicSystem(const double &,const double &,F
 //! @param q0 
 void XC::ShellMecLoad::addFixedEndForcesInBasicSystem(const double &,const double &loadFactor,FVectorShell &) const
   {
-    std::cerr << "addFixedEndForcesInBasicSystem no definida." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
   }
 
 //! @brief Return the dimension of the force vector.

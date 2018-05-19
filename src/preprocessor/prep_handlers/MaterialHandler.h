@@ -54,12 +54,12 @@ class MaterialHandler: public PrepHandler
     typedef map_geom_secc::iterator geom_secc_iterator;
 
     typedef std::map<std::string,InteractionDiagram *> map_interaction_diagram;
-    typedef map_interaction_diagram::const_iterator const_diag_interacc_iterator;
-    typedef map_interaction_diagram::iterator diag_interacc_iterator;
+    typedef map_interaction_diagram::const_iterator const_interaction_diagram_iterator;
+    typedef map_interaction_diagram::iterator interaction_diagram_iterator;
 
     typedef std::map<std::string,InteractionDiagram2d *> map_interaction_diagram2d;
-    typedef map_interaction_diagram2d::const_iterator const_diag_interacc2d_iterator;
-    typedef map_interaction_diagram2d::iterator diag_interacc2d_iterator;
+    typedef map_interaction_diagram2d::const_iterator const_interaction_diagram2d_iterator;
+    typedef map_interaction_diagram2d::iterator interaction_diagram2d_iterator;
   private:
     map_materials materials; //!< Material definitions.
     int tag_mat; //!< Default material tag.

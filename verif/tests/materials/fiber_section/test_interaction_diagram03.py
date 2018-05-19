@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-''' Iteractio diagram computation. Home made test. Reads the interaction diagram obtained in test_diag_interaccion01. '''
+''' Iteractio diagram computation. Home made test. Reads the interaction diagram obtained in test_interaction_diagram01. '''
 from __future__ import division
 
 import xc_base
@@ -38,7 +38,7 @@ print "ratio4= ",(ratio4)
 ''' Como el método con el que se graba el interaction diagram no es exacto
    (las coordenadas de los vértices son «calculadas») se pierde precisión por lo
    que ha habido que aumentar la toleracia en el ratio3 respecto al test 01
-   (test_diag_interaccion01) '''
+   (test_interaction_diagram01) '''
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if((abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<2e-2) & (abs(ratio4)<1e-5)):

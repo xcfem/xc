@@ -28,8 +28,8 @@ def getPileCapBottomReinforcementReqArea(alpha,Nd,fyd):
 
 def getTensionOn2PileCapBottomReinforcement(v,d,Nd):
     '''
-    Devuelve la traccion en la reinforcement inferior de un encepado
-    de DOS pilotes (ver números gordos HC.9 page 32).
+    Return the tension in the bottom reinforcement of a pile cap with
+    TWO piles (see números gordos HC.9 page 32).
 
     :param v: Distancia entre la pila y el pilote.
     :param d: pile cap effective depth.

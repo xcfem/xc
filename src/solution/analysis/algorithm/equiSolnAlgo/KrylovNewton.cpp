@@ -202,7 +202,7 @@ int XC::KrylovNewton::solveCurrentStep(void)
         dim++;
 
         result = theTest->test();
-        this->record(k++); //Calss record(...) method de todos los recorders definidos.
+        this->record(k++); //Call the record(...) method of all the recorders.
       }
     while(result == -1);
 

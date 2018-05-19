@@ -223,7 +223,7 @@ int XC::BFGS::solveCurrentStep(void)
         while(result == -1 && nBFGS <= numberLoops );
 
         result = theTest->test();
-        this->record(count++); //Llama al método record(...) de todos los recorders definidos.
+        this->record(count++); //Calls the record(...) method of all recorders.
       }
     while(result == -1);
 

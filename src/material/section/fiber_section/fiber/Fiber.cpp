@@ -67,7 +67,7 @@
 
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
 
-//! @brief constructor.
+//! @brief Constructor.
 XC::Fiber::Fiber(int tag, int classTag)
   : TaggedObject(tag), MovableObject(classTag), dead(false) {}
 
@@ -101,7 +101,6 @@ int XC::Fiber::sendData(CommParameters &cp)
     setDbTagDataPos(1,dead);
     return 0;
   }
-
 
 //! @brief Receive data through the channel being passed as parameter.
 int XC::Fiber::recvData(const CommParameters &cp)

@@ -26,8 +26,8 @@
 //----------------------------------------------------------------------------
 //InteractionDiagramData
 
-#ifndef DATOSDIAGINTERACCION_H
-#define DATOSDIAGINTERACCION_H
+#ifndef INTERACTIONDIAGRAMDATA_H
+#define INTERACTIONDIAGRAMDATA_H
 
 
 #include "PivotsUltimateStrains.h"

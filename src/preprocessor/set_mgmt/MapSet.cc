@@ -393,7 +393,7 @@ int XC::MapSet::receiveSetsClassNames(int posDbTag,int size,const CommParameters
     return res;
   }
 
-//! @brief Envía the sets definidos through the channel being passed as parameter.
+//! @brief Send the sets through the channel being passed as parameter.
 int XC::MapSet::sendSets(int posDbTag1, int posDbTag2, int posDbTag3,CommParameters &cp)
   {
     std::deque<std::string> nombres;
@@ -410,7 +410,7 @@ int XC::MapSet::sendSets(int posDbTag1, int posDbTag2, int posDbTag3,CommParamet
     return res;
   }
 
-//! @brief Recibe the sets definidos through the channel being passed as parameter.
+//! @brief Receives the sets through the channel being passed as parameter.
 int XC::MapSet::receiveSets(int posDbTag1, int posDbTag2, int posDbTag3,const int &sz,const CommParameters &cp)
   {
     std::deque<std::string> nombres;

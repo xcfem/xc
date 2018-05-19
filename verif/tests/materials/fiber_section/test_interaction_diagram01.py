@@ -66,7 +66,7 @@ param.concreteTag= EHE_materials.HA25.matTagD
 param.reinforcementTag= EHE_materials.B500S.matTagD
 diagIntsecHA= materiales.calcInteractionDiagram("secHA",param)
 
-diagIntsecHA.writeTo("/tmp/interaction_diagram_test_01.dat") # Se usa en test test_diag_interaccion03
+diagIntsecHA.writeTo("/tmp/interaction_diagram_test_01.dat") # Used in interaction_diagram_test_03
 ratio1= diagIntsecHA.getCapacityFactor(geom.Pos3d(352877,0,0))-1
 ratio2= diagIntsecHA.getCapacityFactor(geom.Pos3d(352877/2.0,0,0))-0.5
 ratio3= diagIntsecHA.getCapacityFactor(geom.Pos3d(-574457,41505.4,2.00089e-11))-1.0

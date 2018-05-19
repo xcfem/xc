@@ -777,7 +777,7 @@ const XC::GeomSection *XC::MaterialHandler::find_ptr_geom_section(const std::str
 //! otherwise it returns nullptr.
 XC::InteractionDiagram *XC::MaterialHandler::find_ptr_interaction_diagram(const std::string &nmb)
   {
-    diag_interacc_iterator i= interaction_diagrams.find(nmb);
+    interaction_diagram_iterator i= interaction_diagrams.find(nmb);
     if(i!= interaction_diagrams.end())
       return (*i).second;
     else
@@ -788,7 +788,7 @@ XC::InteractionDiagram *XC::MaterialHandler::find_ptr_interaction_diagram(const 
 //! otherwise it returns nullptr.
 const XC::InteractionDiagram *XC::MaterialHandler::find_ptr_interaction_diagram(const std::string &nmb) const
   {
-    const_diag_interacc_iterator i= interaction_diagrams.find(nmb);
+    const_interaction_diagram_iterator i= interaction_diagrams.find(nmb);
     if(i!= interaction_diagrams.end())
       return (*i).second;
     else
@@ -799,7 +799,7 @@ const XC::InteractionDiagram *XC::MaterialHandler::find_ptr_interaction_diagram(
 //! otherwise it returns nullptr.
 XC::InteractionDiagram2d *XC::MaterialHandler::find_ptr_interaction_diagram2d(const std::string &nmb)
   {
-    diag_interacc2d_iterator i= interaction_diagrams2D.find(nmb);
+    interaction_diagram2d_iterator i= interaction_diagrams2D.find(nmb);
     if(i!= interaction_diagrams2D.end())
       return (*i).second;
     else
@@ -810,7 +810,7 @@ XC::InteractionDiagram2d *XC::MaterialHandler::find_ptr_interaction_diagram2d(co
 //! otherwise it returns nullptr.
 const XC::InteractionDiagram2d *XC::MaterialHandler::find_ptr_interaction_diagram2d(const std::string &nmb) const
   {
-    const_diag_interacc2d_iterator i= interaction_diagrams2D.find(nmb);
+    const_interaction_diagram2d_iterator i= interaction_diagrams2D.find(nmb);
     if(i!= interaction_diagrams2D.end())
       return (*i).second;
     else

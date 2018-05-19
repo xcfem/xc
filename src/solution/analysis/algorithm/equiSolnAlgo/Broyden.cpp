@@ -217,7 +217,7 @@ int XC::Broyden::solveCurrentStep(void)
         while(result == -1 && nBroyden <= numberLoops);
 
         result = theTest->test();
-        this->record(count++); //Llama al método record(...) de todos los recorders definidos.
+        this->record(count++); //Call the record(...) method of all the recorders.
       }
     while(result == -1);
 

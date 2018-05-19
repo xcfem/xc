@@ -18,8 +18,10 @@ from materials.xLamina import membranePlateRCSectionContainer as sc
 from solution import predefined_solutions
 
 prueba= xc.ProblemaEF()
-prueba.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
-#prueba.errFileName= "/tmp/borrar.err" # Para no imprimir mensajes de advertencia sobre error máximo en cálculo del diagrama de interacción.
+prueba.logFileName= "/tmp/borrar.log" # Don't print log messages
+#prueba.errFileName= "/tmp/borrar.err" # Don't print error messages
+                                       # about maximum error on interaction
+                                       # diagram computation.
 prep= prueba.getPreprocessor
 # Definimos el procedimiento de solución.
 analysis= predefined_solutions.simple_static_linear(prueba)

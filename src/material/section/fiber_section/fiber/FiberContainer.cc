@@ -46,6 +46,7 @@ void XC::FiberContainer::allocFibers(int numOfFibers,const Fiber *muestra)
       }
   }
 
+//! @brief Copy the fibers from te container into this object.
 void XC::FiberContainer::copy_fibers(const FiberContainer &otro)
   {
     free_mem();
@@ -58,6 +59,7 @@ void XC::FiberContainer::copy_fibers(const FiberContainer &otro)
       }
   }
 
+//! @brief frees memory
 void XC::FiberContainer::free_mem(void)
   {
     const size_t numFibers= getNumFibers();
@@ -132,6 +134,6 @@ void XC::FiberContainer::setup(FiberSectionGJ &SectionGJ,const fiber_list &fiber
       }
   }
 
-//! @brief Destructor:
+//! @brief Destructor.
 XC::FiberContainer::~FiberContainer(void)
   { free_mem(); }

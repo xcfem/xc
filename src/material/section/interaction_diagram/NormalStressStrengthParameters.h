@@ -45,7 +45,7 @@ class NormalStressStrengthParameters
     double eps_c_pC; //!< concrte strain at C pivot.
 
   private:
-    double fc_tracc(void) const;
+    double fc_tension(void) const;
     double fc_comp(void) const;
     double fc_pC(void) const;
     double fc_min(void) const;

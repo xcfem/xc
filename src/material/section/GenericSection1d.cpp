@@ -215,6 +215,7 @@ const XC::ResponseId &XC::GenericSection1d::getType(void) const
     return c;
   }
 
+//! @brief Return order.
 int XC::GenericSection1d::getOrder(void) const
   { return 1; }
 
