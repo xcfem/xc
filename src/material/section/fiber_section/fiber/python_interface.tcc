@@ -75,8 +75,8 @@ class_<XC::FiberDeque, bases<EntCmd,fiber_ptrs_dq>, boost::noncopyable >("FiberD
   .def("getCdgY",&XC::FiberDeque::getYCdg,return_value_policy<copy_const_reference>())
   .def("getCdgZ",&XC::FiberDeque::getZCdg,return_value_policy<copy_const_reference>())
   .def("getCdg",&XC::FiberDeque::getCdg)
-  .def("getYRelativa",&XC::FiberDeque::getYRelativa)
-  .def("getZRelativa",&XC::FiberDeque::getZRelativa)
+  .def("getRelativeY",&XC::FiberDeque::getRelativeY)
+  .def("getRelativeZ",&XC::FiberDeque::getRelativeZ)
 
 //.def("getPositions",&XC::FiberDeque::getPositions)
 
