@@ -71,8 +71,8 @@ fibers= quadFibers.getFibers()
 # sumAreas= fibers.getArea(1.0)
 # Iz= fibers.getIz(1.0,y0)
 # Iy= fibers.getIy(1.0,z0)
-# zCdg= fibers.getCdgZ()
-# yCdg= fibers.getCdgY()
+# centerOfMassZ= fibers.getCenterOfMassZ()
+# centerOfMassY= fibers.getCenterOfMassY()
 
 '''
 for_each_fiber
@@ -132,8 +132,8 @@ fibers= scc.getFibers()
 sumAreas= fibers.getArea(1.0)
 Iz= fibers.getIz(1.0,y0)
 Iy= fibers.getIy(1.0,z0)
-zCdg= fibers.getCdgZ()
-yCdg= fibers.getCdgY()
+centerOfMassZ= fibers.getCenterOfMassZ()
+centerOfMassY= fibers.getCenterOfMassY()
 
 avgStrain= 0.0
 for f in fibers:
@@ -146,8 +146,8 @@ avgStrain/= nfib
 
 ratio1= (nfib-nRebars)/nRebars
 ratio2= (sumAreas-areaTeor)/areaTeor
-ratio3= yCdg-y0
-ratio4= zCdg-z0
+ratio3= centerOfMassY-y0
+ratio4= centerOfMassZ-z0
 ratio5= (Iz-izTeor)/izTeor
 ratio6= (Iy-iyTeor)/iyTeor
 ratio7= (-R-F)/F

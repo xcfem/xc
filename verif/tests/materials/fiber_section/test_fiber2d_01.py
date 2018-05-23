@@ -51,7 +51,7 @@ fiberSectionTest= materiales.newMaterial("fiber_section_2d","fiberSectionTest")
 fiber= fiberSectionTest.addFiber("elast0",Area,xc.Vector([yF]))
 
 A= fiberSectionTest.getArea()
-yG= fiberSectionTest.getCdgY()
+yG= fiberSectionTest.getCenterOfMassY()
 initialTangent= fiberSectionTest.getInitialTangentStiffness()
 IEA= initialTangent.at(1,1)
 IK12= initialTangent.at(1,2)

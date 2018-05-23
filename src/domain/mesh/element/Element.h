@@ -261,8 +261,8 @@ class Element: public MeshComponent
     virtual SisCooRect3d3d getSisCoo(bool) const;    
     Pos3d getPosNode(const size_t &i,bool initialGeometry= true) const;
     std::list<Pos3d> getPosNodes(bool initialGeometry= true) const;
-    virtual Pos3d getPosCdg(bool initialGeometry= true) const;
-    Vector getCooCdg(bool initialGeometry= true) const;
+    virtual Pos3d getCenterOfMassPosition(bool initialGeometry= true) const;
+    Vector getCenterOfMassCoordinates(bool initialGeometry= true) const;
     TritrizPos3d getPoints(const size_t &ni,const size_t &nj,const size_t &nk,bool initialGeometry= true);
     bool In(const GeomObj3d &,const double &factor= 1.0, const double &tol= 0.0) const;
     bool Out(const GeomObj3d &,const double &factor= 1.0, const double &tol= 0.0) const;

@@ -102,7 +102,7 @@ class ReinfLayer: public DiscretBase
     
     const GeomSection *getGeomSection(void) const;
     double getCover(void) const;
-    Vector getCdg(void) const;
+    Vector getCenterOfMass(void) const;
 
     //! @brief Return the area of the bars.
     inline double getArea(void) const

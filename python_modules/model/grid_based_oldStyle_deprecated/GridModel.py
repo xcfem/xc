@@ -367,7 +367,7 @@ class ElasticFoundationRanges(IJKRangeList):
     s= self.getSet()
     self.elasticFoundation.generateSprings(s)
 
-  def getCDG(self):
+  def getCenterOfMass(self):
     '''return the geometric baricenter of the springs.'''
     return self.elasticFoundation.getCentroid()
 

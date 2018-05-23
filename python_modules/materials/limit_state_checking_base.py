@@ -121,8 +121,8 @@ class TensionedRebarsProperties(TensionedRebarsBasicProperties):
         '''
         self.spacing= tensionedReinforcement.getAverageDistanceBetweenFibers()
         self.area= tensionedReinforcement.getArea(1)
-        self.yCentroid= tensionedReinforcement.getCdgY()
-        self.zCentroid= tensionedReinforcement.getCdgZ()
+        self.yCentroid= tensionedReinforcement.getCenterOfMassY()
+        self.zCentroid= tensionedReinforcement.getCenterOfMassZ()
         self.averageStress= tensionedReinforcement.getStressMed()
         self.iAreaMaxima= fiber_sets.getIMaxPropFiber(tensionedReinforcement,"getArea")
         self.maxDiameter= 2*math.sqrt(tensionedReinforcement[self.iAreaMaxima].getArea()/math.pi) 

@@ -742,8 +742,8 @@ Segmento2d XC::FiberSectionBase::getSegmentoBrazoMecanico(void) const
       {
         //Lever arm as 0.8 times total depth.
         const Recta2d Xaxis= getInternalForcesAxis();
-        const Pos2d cdg= getCdg();
-        const Recta2d Yaxis= Xaxis.Perpendicular(cdg);
+        const Pos2d center_of_mass= getCenterOfMass();
+        const Recta2d Yaxis= Xaxis.Perpendicular(center_of_mass);
         const Poligono2d contour= getRegionsContour();
         retval= contour.Clip(Yaxis);
         Pos2d org= retval.Origen()+0.1*retval.GetVector();
@@ -774,8 +774,8 @@ Recta2d XC::FiberSectionBase::getBendingPlaneTrace(void) const
     if(!retval.exists())
       {
         Recta2d axis= getInternalForcesAxis();
-        Pos2d cdg= getCdg();
-        retval= axis.Perpendicular(cdg);
+        Pos2d center_of_mass= getCenterOfMass();
+        retval= axis.Perpendicular(center_of_mass);
       } 
     return retval;
   }

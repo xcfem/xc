@@ -35,7 +35,7 @@ reinforcementB.p2= geom.Pos2d(0.95,0.05)
 
 nRebars= reinforcement.getNumReinfBars
 area= sectionGeometryTest.getAreaHomogenizedSection(Ec)
-G= sectionGeometryTest.getCdgHomogenizedSection(Ec)
+G= sectionGeometryTest.getCenterOfMassHomogenizedSection(Ec)
 Iy= sectionGeometryTest.getIyHomogenizedSection(Ec)
 Iz= sectionGeometryTest.getIzHomogenizedSection(Ec)
 Pyz= sectionGeometryTest.getPyzHomogenizedSection(Ec)

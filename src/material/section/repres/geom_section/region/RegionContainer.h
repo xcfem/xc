@@ -95,12 +95,12 @@ class RegionContainer: protected std::list<RegionSecc *>, public SectionMassProp
     RegionContainer Intersection(const Semiplano2d &) const;
 
     double getAreaGrossSection(void) const;
-    Vector getCdgGrossSection(void) const;
+    Vector getCenterOfMassGrossSection(void) const;
     double getIyGrossSection(void) const;
     double getIzGrossSection(void) const;
     double getPyzGrossSection(void) const;
 
-    Vector getCdgHomogenizedSection(const double &E0) const;
+    Vector getCenterOfMassHomogenizedSection(const double &E0) const;
     double getAreaHomogenizedSection(const double &E0) const;
     double getIyHomogenizedSection(const double &E0) const;
     double getIzHomogenizedSection(const double &E0) const;

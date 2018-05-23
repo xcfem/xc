@@ -56,7 +56,7 @@ class ElemPlano : public ElemWithMaterial<NNODES, PhysProp>
 
     virtual Poligono3d getPolygon(bool initialGeometry= true) const;
     virtual Segmento3d getSide(const size_t &i,bool initialGeometry= true) const;
-    Pos3d getPosCdg(bool initialGeometry= true) const;
+    Pos3d getCenterOfMassPosition(bool initialGeometry= true) const;
     double getPerimetro(bool initialGeometry= true) const;
     double getArea(bool initialGeometry= true) const;
     virtual void computeTributaryAreas(bool initialGeometry= true) const;
@@ -114,8 +114,8 @@ void XC::ElemPlano<NNODES, PhysProp>::setDomain(Domain *theDomain)
 
 //! @brief Return the position of the element centroid.
 template <int NNODES,class PhysProp>
-Pos3d XC::ElemPlano<NNODES, PhysProp>::getPosCdg(bool initialGeometry) const
-  { return getPolygon(initialGeometry).Cdg(); }
+Pos3d XC::ElemPlano<NNODES, PhysProp>::getCenterOfMassPosition(bool initialGeometry) const
+  { return getPolygon(initialGeometry).getCenterOfMass(); }
 
 //! @brief Return the element dimension (0, 1, 2 o3 3).
 template <int NNODES,class PhysProp>

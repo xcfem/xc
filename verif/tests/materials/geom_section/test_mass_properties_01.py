@@ -30,7 +30,7 @@ concrete.pMin= geom.Pos2d(0.0,0.0)
 concrete.pMax= geom.Pos2d(1.0,1.0)
 
 area= sectionGeometryTest.getAreaHomogenizedSection(Ec)
-G= sectionGeometryTest.getCdgHomogenizedSection(Ec)
+G= sectionGeometryTest.getCenterOfMassHomogenizedSection(Ec)
 Iy= sectionGeometryTest.getIyHomogenizedSection(Ec)
 Iz= sectionGeometryTest.getIzHomogenizedSection(Ec)
 Pyz= sectionGeometryTest.getPyzHomogenizedSection(Ec)

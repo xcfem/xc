@@ -65,9 +65,9 @@ class PrismaticBarCrossSection: public SectionForceDeformation
     double getMy(void) const;
     double getMz(void) const;
 
-    virtual double getCdgY(void) const;
-    virtual double getCdgZ(void) const;
-    Pos2d getCdg(void) const;
+    virtual double getCenterOfMassY(void) const;
+    virtual double getCenterOfMassZ(void) const;
+    Pos2d getCenterOfMass(void) const;
     Recta2d getNeutralAxis(void) const;
     Recta2d getInternalForcesAxis(void) const;
     Pos2d getPointOnTensionedHalfPlane(void) const;

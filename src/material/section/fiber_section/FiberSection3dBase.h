@@ -91,8 +91,8 @@ class FiberSection3dBase : public FiberSectionBase
 
     int setParameter(const std::vector<std::string> &argv, Parameter &param);
     int updateParameter(int parameterID, Information &info);
-    inline virtual double getCdgZ(void) const
-      { return fibers.getZCdg(); }
+    inline virtual double getCenterOfMassZ(void) const
+      { return fibers.getCenterOfMassZ(); }
 
 
   };

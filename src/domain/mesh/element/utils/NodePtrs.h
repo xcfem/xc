@@ -97,7 +97,7 @@ class NodePtrs: public EntCmd, public std::vector<Node *>
     const Matrix &getCoordinates(void) const;
     Pos3d getPosNode(const size_t &i,bool initialGeometry= true) const;
     std::list<Pos3d> getPositions(bool initialGeometry= true) const;
-    Pos3d getPosCdg(bool initialGeometry= true) const;
+    Pos3d getCenterOfMassPosition(bool initialGeometry= true) const;
     Node *getNearestNode(const Pos3d &p,bool initialGeometry= true);
     const Node *getNearestNode(const Pos3d &p,bool initialGeometry= true) const;
     bool In(const GeomObj3d &,const double &factor= 1.0, const double &tol= 0.0) const;

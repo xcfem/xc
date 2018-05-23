@@ -100,16 +100,16 @@ double XC::PrismaticBarCrossSection::getStrain(const double &y,const double &z) 
   }
 
 //! @brief Returns the coordenada «y» del centro de gravedad of the cross-section.
-double XC::PrismaticBarCrossSection::getCdgY(void) const
+double XC::PrismaticBarCrossSection::getCenterOfMassY(void) const
   { return 0.0; }
 
 //! @brief Returns the coordenada «z» del centro de gravedad of the cross-section.
-double XC::PrismaticBarCrossSection::getCdgZ(void) const
+double XC::PrismaticBarCrossSection::getCenterOfMassZ(void) const
   { return 0.0; }
 
 //! @brief Returns the position of the cross-section centroid.
-Pos2d XC::PrismaticBarCrossSection::getCdg(void) const
-  { return Pos2d(getCdgY(),getCdgZ()); }
+Pos2d XC::PrismaticBarCrossSection::getCenterOfMass(void) const
+  { return Pos2d(getCenterOfMassY(),getCenterOfMassZ()); }
 
 //! @brief Returns true if the section is subjected to an axial force.
 bool XC::PrismaticBarCrossSection::hayAxil(const double &tol) const
@@ -163,7 +163,7 @@ double XC::PrismaticBarCrossSection::getEI2(void) const
 
 //! @brief Returns the principal axes of inertia of the cross-section.
 PrincipalAxesOfInertia2D XC::PrismaticBarCrossSection::getInertiaAxes(void) const
-  { return PrincipalAxesOfInertia2D(getCdg(),EIy(),EIz(),EIyz());  }
+  { return PrincipalAxesOfInertia2D(getCenterOfMass(),EIy(),EIz(),EIyz());  }
 //! @brief Returns the vector of the principal axis I.
 Vector2d XC::PrismaticBarCrossSection::getAxis1VDir(void) const
   { return getInertiaAxes().getAxis1VDir(); }
@@ -219,25 +219,25 @@ Recta2d XC::PrismaticBarCrossSection::getNeutralAxis(void) const
 //! cross-section internal forces.
 Recta2d XC::PrismaticBarCrossSection::getInternalForcesAxis(void) const
   {
-    Recta2d retval(getCdg(),Vector2d(1,0));
+    Recta2d retval(getCenterOfMass(),Vector2d(1,0));
     const ResponseId &code= getType();
     if(isSubjectedToBending()) //Direction of the bending moment.
       {
         if(code.hasResponse(SECTION_RESPONSE_MY) && code.hasResponse(SECTION_RESPONSE_MZ))
-          retval= Recta2d(getCdg(),Vector2d(getStressResultant(SECTION_RESPONSE_MY),getStressResultant(SECTION_RESPONSE_MZ)));
+          retval= Recta2d(getCenterOfMass(),Vector2d(getStressResultant(SECTION_RESPONSE_MY),getStressResultant(SECTION_RESPONSE_MZ)));
         else if(code.hasResponse(SECTION_RESPONSE_MY))
-          retval= Recta2d(getCdg(),Vector2d(1,0));
+          retval= Recta2d(getCenterOfMass(),Vector2d(1,0));
         else if(code.hasResponse(SECTION_RESPONSE_MZ))
-          retval= Recta2d(getCdg(),Vector2d(0,1));
+          retval= Recta2d(getCenterOfMass(),Vector2d(0,1));
       }
     else if(isSubjectedToShear()) //Direction normal to the shear force.
       {
         if(code.hasResponse(SECTION_RESPONSE_VY) && code.hasResponse(SECTION_RESPONSE_VZ))
-          retval= Recta2d(getCdg(),Vector2d(-getStressResultant(SECTION_RESPONSE_VZ),getStressResultant(SECTION_RESPONSE_VY)));
+          retval= Recta2d(getCenterOfMass(),Vector2d(-getStressResultant(SECTION_RESPONSE_VZ),getStressResultant(SECTION_RESPONSE_VY)));
         else if(code.hasResponse(SECTION_RESPONSE_VY))
-          retval= Recta2d(getCdg(),Vector2d(0,1));
+          retval= Recta2d(getCenterOfMass(),Vector2d(0,1));
         else if(code.hasResponse(SECTION_RESPONSE_VZ))
-          retval= Recta2d(getCdg(),Vector2d(1,0));
+          retval= Recta2d(getCenterOfMass(),Vector2d(1,0));
       }
     return retval;
   }

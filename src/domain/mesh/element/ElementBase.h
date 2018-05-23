@@ -66,7 +66,7 @@ class ElementBase: public Element
     int getNumExternalNodes(void) const;
     NodePtrsWithIDs &getNodePtrs(void);
     const NodePtrsWithIDs &getNodePtrs(void) const;
-    Pos3d getPosCdg(bool initialGeometry= true) const;
+    Pos3d getCenterOfMassPosition(bool initialGeometry= true) const;
   };
 
 
@@ -154,8 +154,8 @@ int XC::ElementBase<NNODES>::recvData(const CommParameters &cp)
 
 //! @brief Return position of the element centroid.
 template <int NNODES>
-Pos3d XC::ElementBase<NNODES>::getPosCdg(bool initialGeometry) const
-  { return theNodes.getPosCdg(initialGeometry); }
+Pos3d XC::ElementBase<NNODES>::getCenterOfMassPosition(bool initialGeometry) const
+  { return theNodes.getCenterOfMassPosition(initialGeometry); }
 
 } //end of XC namespace
 #endif

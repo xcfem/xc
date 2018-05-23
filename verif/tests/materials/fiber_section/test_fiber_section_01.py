@@ -69,11 +69,11 @@ rectang.setTrialSectionDeformation(xc.Vector([0.0,0.0,curvM]))
 rectang.commitState()
 Mp2= rectang.getStressResultantComponent("My")
 
-yCdgTeor= 0.0
-zCdgTeor= 0.0
+referenceCenterOfMassY= 0.0
+referenceCenterOfMassZ= 0.0
 ratio1= ((sumAreas-scc10x20.A())/scc10x20.A())
-ratio2= (yCdg-yCdgTeor)
-ratio3= (zCdg-zCdgTeor)
+ratio2= (centerOfMassY-referenceCenterOfMassY)
+ratio3= (centerOfMassZ-referenceCenterOfMassZ)
 ratio4= ((I1-scc10x20.Iz())/scc10x20.Iz())
 ratio5= ((I2-scc10x20.Iy())/scc10x20.Iy())
 ratio6= (i1-scc10x20.iz())/scc10x20.iz()

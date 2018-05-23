@@ -59,8 +59,8 @@ fiberSectionTest.addFiber("elast0",Area/4.0,xc.Vector([yF-sideLength/4,zF+sideLe
 fiberSectionTest.addFiber("elast0",Area/4.0,xc.Vector([yF-sideLength/4,zF-sideLength/4]))
 fiberSectionTest.addFiber("elast0",Area/4.0,xc.Vector([yF+sideLength/4,zF-sideLength/4]))
 A= fiberSectionTest.getArea
-yG= fiberSectionTest.getCdgY()
-zG= fiberSectionTest.getCdgZ()
+yG= fiberSectionTest.getCenterOfMassY()
+zG= fiberSectionTest.getCenterOfMassZ()
 initialTangentStiffness= fiberSectionTest.getInitialTangentStiffness()
 IEA= initialTangentStiffness.at(1,1);  IK12= initialTangentStiffness.at(1,2); IK13=  initialTangentStiffness.at(1,3)
 IK21= initialTangentStiffness.at(2,1); IEIy= initialTangentStiffness.at(2,2); IK23=  initialTangentStiffness.at(2,3)

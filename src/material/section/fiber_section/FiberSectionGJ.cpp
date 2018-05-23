@@ -86,7 +86,7 @@ void XC::FiberSectionGJ::setupFibers(void)
     if(section_repres)
       fibers.setup(*this,section_repres->get3DFibers(),kr);
     else
-      fibers.updateKRCDG(*this,kr);
+      fibers.updateKRCenterOfMass(*this,kr);
   }
 
 //! @brief Adds a fiber to the section.

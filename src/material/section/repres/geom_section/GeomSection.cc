@@ -276,7 +276,7 @@ Poligono2d XC::GeomSection::getCompressedZoneContour(const Semiplano2d &sp_compr
 double XC::GeomSection::getLeverArm(const Recta2d &PFtrace) const
   {
     Poligono2d contour= getRegionsContour();
-    Pos2d C= contour.Cdg();
+    Pos2d C= contour.getCenterOfMass();
     Semiplano2d sp(PFtrace.Perpendicular(C));
     const size_t num_vertices= contour.GetNumVertices();
     double d= 0.0,dpos= 0.0,dneg=0.0;    
@@ -432,16 +432,16 @@ double XC::GeomSection::getAreaHomogenizedSection(const double &E0) const
     return retval;
   }
 
-XC::Vector XC::GeomSection::getCdgHomogenizedSection(const double &E0) const
+XC::Vector XC::GeomSection::getCenterOfMassHomogenizedSection(const double &E0) const
   {
     Vector retval(2);
     double weight= 0.0;
     double divisor= 0.0;
     weight= regions.getAreaHomogenizedSection(E0);
-    retval+= weight*regions.getCdgHomogenizedSection(E0);
+    retval+= weight*regions.getCenterOfMassHomogenizedSection(E0);
     divisor+= weight;
     weight= reinforcement_layers.getAreaHomogenizedSection(E0);
-    retval+= weight*reinforcement_layers.getCdgHomogenizedSection(E0);
+    retval+= weight*reinforcement_layers.getCenterOfMassHomogenizedSection(E0);
     divisor+= weight;
     retval/= divisor;
     return retval;
@@ -453,16 +453,16 @@ double XC::GeomSection::getIyHomogenizedSection(const double &E0) const
   {
     double retval= 0.0;
     double d= 0.0;
-    const double zCdg= getCdgHomogenizedSection(E0)[1];
+    const double zCenterOfMass= getCenterOfMassHomogenizedSection(E0)[1];
 
     if(!regions.empty())
       {
-        d= regions.getCdgHomogenizedSection(E0)[1]-zCdg;
+        d= regions.getCenterOfMassHomogenizedSection(E0)[1]-zCenterOfMass;
         retval+= regions.getIyHomogenizedSection(E0)+regions.getAreaHomogenizedSection(E0)*sqr(d);
       }
     if(!reinforcement_layers.empty())
       {
-        d= reinforcement_layers.getCdgHomogenizedSection(E0)[1]-zCdg;
+        d= reinforcement_layers.getCenterOfMassHomogenizedSection(E0)[1]-zCenterOfMass;
         retval+= reinforcement_layers.getIyHomogenizedSection(E0)+reinforcement_layers.getAreaHomogenizedSection(E0)*sqr(d);
       }
     return retval;
@@ -474,16 +474,16 @@ double XC::GeomSection::getIzHomogenizedSection(const double &E0) const
   {
     double retval= 0.0;
     double d= 0.0;
-    const double yCdg= getCdgHomogenizedSection(E0)[0];
+    const double yCenterOfMass= getCenterOfMassHomogenizedSection(E0)[0];
 
     if(!regions.empty())
       {
-        d= regions.getCdgHomogenizedSection(E0)[0]-yCdg;
+        d= regions.getCenterOfMassHomogenizedSection(E0)[0]-yCenterOfMass;
         retval+= regions.getIzHomogenizedSection(E0)+regions.getAreaHomogenizedSection(E0)*sqr(d);
       }
     if(!reinforcement_layers.empty())
       {
-        d= reinforcement_layers.getCdgHomogenizedSection(E0)[0]-yCdg;
+        d= reinforcement_layers.getCenterOfMassHomogenizedSection(E0)[0]-yCenterOfMass;
         retval+= reinforcement_layers.getIzHomogenizedSection(E0)+reinforcement_layers.getAreaHomogenizedSection(E0)*sqr(d);
       }
     return retval;
@@ -495,17 +495,17 @@ double XC::GeomSection::getPyzHomogenizedSection(const double &E0) const
   {
     double retval= 0.0;
     double d2= 0.0;
-    const double zCdg= getCdgHomogenizedSection(E0)[0];
-    const double yCdg= getCdgHomogenizedSection(E0)[0];
+    const double zCenterOfMass= getCenterOfMassHomogenizedSection(E0)[0];
+    const double yCenterOfMass= getCenterOfMassHomogenizedSection(E0)[0];
 
     if(!regions.empty())
       {
-        d2= (regions.getCdgHomogenizedSection(E0)[0]-yCdg)*(regions.getCdgHomogenizedSection(E0)[1]-zCdg);
+        d2= (regions.getCenterOfMassHomogenizedSection(E0)[0]-yCenterOfMass)*(regions.getCenterOfMassHomogenizedSection(E0)[1]-zCenterOfMass);
         retval+= regions.getPyzHomogenizedSection(E0)+regions.getAreaHomogenizedSection(E0)*d2;
       }
     if(!reinforcement_layers.empty())
       {
-        d2= (reinforcement_layers.getCdgHomogenizedSection(E0)[0]-yCdg)*(reinforcement_layers.getCdgHomogenizedSection(E0)[1]-zCdg);
+        d2= (reinforcement_layers.getCenterOfMassHomogenizedSection(E0)[0]-yCenterOfMass)*(reinforcement_layers.getCenterOfMassHomogenizedSection(E0)[1]-zCenterOfMass);
         retval+= reinforcement_layers.getPyzHomogenizedSection(E0)+reinforcement_layers.getAreaHomogenizedSection(E0)*d2;
       }
     return retval;
@@ -523,24 +523,24 @@ double XC::GeomSection::getAreaGrossSection(void) const
   }
 
 //! @brief Returns gross section centroid position.
-XC::Vector XC::GeomSection::getCdgGrossSection(void) const
-  { return regions.getCdgGrossSection(); }
+XC::Vector XC::GeomSection::getCenterOfMassGrossSection(void) const
+  { return regions.getCenterOfMassGrossSection(); }
 
 //! @brief Inertia of the gross section about an axis parallel to y through its centroid.
 double XC::GeomSection::getIyGrossSection(void) const
   {
     double retval= 0.0;
     double d= 0.0;
-    const double zCdg= getCdgGrossSection()[1];
+    const double zCenterOfMass= getCenterOfMassGrossSection()[1];
 
     if(!regions.empty())
       {
-        d= regions.getCdgGrossSection()[1]-zCdg;
+        d= regions.getCenterOfMassGrossSection()[1]-zCenterOfMass;
         retval+= regions.getIyGrossSection()+regions.getAreaGrossSection()*sqr(d);
       }
     // if(!reinforcement_layers.empty())
     //   {
-    //     d= reinforcement_layers.getCdgGrossSection()[1]-zCdg;
+    //     d= reinforcement_layers.getCenterOfMassGrossSection()[1]-zCenterOfMass;
     //     retval+= reinforcement_layers.getIyGrossSection()+reinforcement_layers.getAreaGrossSection()*sqr(d);
     //   }
     return retval;
@@ -551,16 +551,16 @@ double XC::GeomSection::getIzGrossSection(void) const
   {
     double retval= 0.0;
     double d= 0.0;
-    const double yCdg= getCdgGrossSection()[0];
+    const double yCenterOfMass= getCenterOfMassGrossSection()[0];
 
     if(!regions.empty())
       {
-        d= regions.getCdgGrossSection()[0]-yCdg;
+        d= regions.getCenterOfMassGrossSection()[0]-yCenterOfMass;
         retval+= regions.getIzGrossSection()+regions.getAreaGrossSection()*sqr(d);
       }
     // if(!reinforcement_layers.empty())
     //   {
-    //     d= reinforcement_layers.getCdgGrossSection()[0]-yCdg;
+    //     d= reinforcement_layers.getCenterOfMassGrossSection()[0]-yCenterOfMass;
     //     retval+= reinforcement_layers.getIzGrossSection()+reinforcement_layers.getAreaGrossSection()*sqr(d);
     //   }
     return retval;
@@ -571,18 +571,18 @@ double XC::GeomSection::getPyzGrossSection(void) const
   {
     double retval= 0.0;
     double d2= 0.0;
-    const Vector posCdg= getCdgGrossSection();
-    const double zCdg= posCdg[1];
-    const double yCdg= posCdg[0];
+    const Vector centerOfMassPosition= getCenterOfMassGrossSection();
+    const double zCenterOfMass= centerOfMassPosition[1];
+    const double yCenterOfMass= centerOfMassPosition[0];
 
     if(!regions.empty())
       {
-        d2= (regions.getCdgGrossSection()[0]-yCdg)*(regions.getCdgGrossSection()[1]-zCdg);
+        d2= (regions.getCenterOfMassGrossSection()[0]-yCenterOfMass)*(regions.getCenterOfMassGrossSection()[1]-zCenterOfMass);
         retval+= regions.getPyzGrossSection()+regions.getAreaGrossSection()*d2;
       }
     // if(!reinforcement_layers.empty())
     //   {
-    //     d2= (reinforcement_layers.getCdgGrossSection()[0]-yCdg)*(reinforcement_layers.getCdgGrossSection()[1]-zCdg);
+    //     d2= (reinforcement_layers.getCenterOfMassGrossSection()[0]-yCenterOfMass)*(reinforcement_layers.getCenterOfMassGrossSection()[1]-zCenterOfMass);
     //     retval+= reinforcement_layers.getPyzGrossSection()+reinforcement_layers.getAreaGrossSection()*d2;
     //   }
     return retval;

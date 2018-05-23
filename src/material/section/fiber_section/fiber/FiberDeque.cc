@@ -55,12 +55,12 @@
 
 //! @brief Constructor.
 XC::FiberDeque::FiberDeque(const size_t &num)
-  : EntCmd(), fiber_ptrs_dq(num,static_cast<Fiber *>(nullptr)), yCDG(0.0), zCDG(0.0)
+  : EntCmd(), fiber_ptrs_dq(num,static_cast<Fiber *>(nullptr)), yCenterOfMass(0.0), zCenterOfMass(0.0)
   {}
 
 //! @brief Copy constructor.
 XC::FiberDeque::FiberDeque(const FiberDeque &otro)
-  : EntCmd(otro), fiber_ptrs_dq(otro), yCDG(otro.yCDG), zCDG(otro.zCDG)
+  : EntCmd(otro), fiber_ptrs_dq(otro), yCenterOfMass(otro.yCenterOfMass), zCenterOfMass(otro.zCenterOfMass)
   {}
 
 //! @brief Assignment operator.
@@ -68,8 +68,8 @@ XC::FiberDeque &XC::FiberDeque::operator=(const FiberDeque &otro)
   {
     EntCmd::operator=(otro);
     fiber_ptrs_dq::operator=(otro);
-    yCDG= otro.yCDG;
-    zCDG= otro.zCDG;
+    yCenterOfMass= otro.yCenterOfMass;
+    zCenterOfMass= otro.zCenterOfMass;
     return *this;
   }
 
@@ -306,7 +306,7 @@ double XC::FiberDeque::getAreaHomogenizedSection(const double &E0) const
   }
 
 //! @brief Return the coordinates of the homogenized section centroid.
-const XC::Vector &XC::FiberDeque::getCdgHomogenizedSection(const double &E0) const
+const XC::Vector &XC::FiberDeque::getCenterOfMassHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
       std::clog << getClassName() << "::" << __FUNCTION__
@@ -334,8 +334,8 @@ const XC::Vector &XC::FiberDeque::getCdgHomogenizedSection(const double &E0) con
 		    << "; null pointer to material." << std::endl;
       }
     static Vector retval(2);
-    retval[0]= -Qz/Atot; //Coordenada y del CDG  XXX ¿Signo menos?
-    retval[1]= Qy/Atot; //Coordenada z del CDG 
+    retval[0]= -Qz/Atot; //center of mass y coordinate  XXX ¿Signo menos?
+    retval[1]= Qy/Atot; //center of mass z coordinate 
     return retval;
   }
 
@@ -348,14 +348,14 @@ double XC::FiberDeque::getIyHomogenizedSection(const double &E0) const
 		<< "homogenization reference modulus too small; E0= "
 		<< E0 << std::endl; 
     double retval= 0.0;
-    const Vector &cdg= getCdgHomogenizedSection(E0);
+    const Vector &center_of_mass= getCenterOfMassHomogenizedSection(E0);
     register std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       if(*i)
         {
           const UniaxialMaterial *mat= (*i)->getMaterial();
           if(mat)
-            retval+= (*i)->getArea()*sqr((*i)->getLocZ()-cdg[1])*(mat->getTangent()/E0);
+            retval+= (*i)->getArea()*sqr((*i)->getLocZ()-center_of_mass[1])*(mat->getTangent()/E0);
           else
 	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; null pointer to material." << std::endl;
@@ -375,14 +375,14 @@ double XC::FiberDeque::getIzHomogenizedSection(const double &E0) const
 		<< "homogenization reference modulus too small; E0= "
 		<< E0 << std::endl; 
     double retval= 0.0;
-    const Vector &cdg= getCdgHomogenizedSection(E0);
+    const Vector &center_of_mass= getCenterOfMassHomogenizedSection(E0);
     register std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       if(*i)
         {
           const UniaxialMaterial *mat= (*i)->getMaterial();
           if(mat)
-            retval+= (*i)->getArea()*sqr((*i)->getLocY()-cdg[0])*(mat->getTangent()/E0);
+            retval+= (*i)->getArea()*sqr((*i)->getLocY()-center_of_mass[0])*(mat->getTangent()/E0);
           else
 	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; null pointer to material." << std::endl;
@@ -400,14 +400,14 @@ double XC::FiberDeque::getPyzHomogenizedSection(const double &E0) const
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     double retval= 0.0;
-    const Vector &cdg= getCdgHomogenizedSection(E0);
+    const Vector &center_of_mass= getCenterOfMassHomogenizedSection(E0);
     register std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       if(*i)
         {
           const UniaxialMaterial *mat= (*i)->getMaterial();
           if(mat)
-            retval+= (*i)->getArea()*((*i)->getLocZ()-cdg[1])*((*i)->getLocY()-cdg[0])*(mat->getTangent()/E0);
+            retval+= (*i)->getArea()*((*i)->getLocZ()-center_of_mass[1])*((*i)->getLocY()-center_of_mass[0])*(mat->getTangent()/E0);
           else
 	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "null pointer to material." << std::endl;
@@ -418,7 +418,7 @@ double XC::FiberDeque::getPyzHomogenizedSection(const double &E0) const
     return retval;
   }
 
-//! @brief Return the i,j component of the tensor of inertia calculado with respect to the CDG.
+//! @brief Return the i,j component of the tensor of inertia calculado with respect to the CENTER_OF_MASS.
 double XC::FiberDeque::getIHomogenizedSection(const double &E0,const unsigned short int &i,const unsigned short int &j) const
   {
     unsigned short int k= i + (j-1)*2;
@@ -454,7 +454,7 @@ XC::Matrix &XC::FiberDeque::getIHomogenizedSection(const double &E0,const Pos2d 
     static Matrix retval(2,2);
     const Matrix Ig= getIHomogenizedSection(E0);
     Vector O(2); O[0]= o.x(); O[1]= o.y();
-    const Vector og= getCdgHomogenizedSection(E0) - O;
+    const Vector og= getCenterOfMassHomogenizedSection(E0) - O;
     const double m= getAreaHomogenizedSection(E0);
     retval= Ig+m*(og.Norm2()*identity(Ig)-(og & og));
     return retval;
@@ -1202,8 +1202,8 @@ std::string XC::FiberDeque::getStrClaseEsfuerzo(const double &tol) const
   }
 
 //! @brief Return the position of the centroid.
-Pos2d XC::FiberDeque::getCdg(void) const
-  { return Pos2d(getYCdg(),getZCdg()); }
+Pos2d XC::FiberDeque::getCenterOfMass(void) const
+  { return Pos2d(getCenterOfMassY(),getCenterOfMassZ()); }
 
 //! @brief Returns neutral axisr depth, i. e. distance from neutral axis to
 //! the most compressed one.
@@ -1283,7 +1283,7 @@ Recta2d XC::FiberDeque::getBendingPlaneTrace(void) const
 Recta2d XC::FiberDeque::getTensionedPlaneTrace(void) const
   { 
     const Recta2d bendingTrace= getBendingPlaneTrace();
-    Pos2d pt(getYCdg(),getZCdg());
+    Pos2d pt(getCenterOfMassY(),getCenterOfMassZ());
     const double epsMax= getStrainMax();
     if(epsMax>0) //There are tractions.
       {
@@ -1299,7 +1299,7 @@ Recta2d XC::FiberDeque::getTensionedPlaneTrace(void) const
 Recta2d XC::FiberDeque::getCompressedPlaneTrace(void) const
   { 
     const Recta2d bendingTrace= getBendingPlaneTrace();
-    Pos2d pt(getYCdg(),getZCdg());
+    Pos2d pt(getCenterOfMassY(),getCenterOfMassZ());
     const double epsMin= getStrainMin();
     if(epsMin<0) //There are compresions.
       {
@@ -1486,7 +1486,7 @@ double XC::FiberDeque::getSigmaSRAtFiber(const size_t &i,const double &Ec,const 
   }
 
 //! @brief Updates the centroid position.
-int XC::FiberDeque::updateCDG(void)
+int XC::FiberDeque::updateCenterOfMass(void)
   {
     double Qy= 0.0,Qz= 0.0;
     double Atot= 0.0;
@@ -1503,13 +1503,13 @@ int XC::FiberDeque::updateCDG(void)
         Qz+= -yLoc*fiberArea; //Coordenada y cambiada de signo.
         Qy+= zLoc*fiberArea;
       }
-    yCDG= -Qz/Atot; //Coordenada y del CDG  XXX ¿Signo menos?
-    zCDG= Qy/Atot; //Coordenada z del CDG 
+    yCenterOfMass= -Qz/Atot; //center of mass y coordinate  XXX ¿Signo menos?
+    zCenterOfMass= Qy/Atot; //center of mass z coordinate 
     return 0;
   }
 
-//! @brief Update the parameters CDG, stiffness and resultant.
-int XC::FiberDeque::updateKRCDG(FiberSection2d &Section2d,CrossSectionKR &kr2)
+//! @brief Update the parameters center of mass, stiffness and resultant.
+int XC::FiberDeque::updateKRCenterOfMass(FiberSection2d &Section2d,CrossSectionKR &kr2)
   {
     kr2.zero();
     double Qz= 0.0;
@@ -1539,7 +1539,7 @@ int XC::FiberDeque::updateKRCDG(FiberSection2d &Section2d,CrossSectionKR &kr2)
             kr2.updateNMz(fs0,yLoc);
           }
       }
-    yCDG= -Qz/Atot; //Coordenada y del CDG 
+    yCenterOfMass= -Qz/Atot; //center or mass z coordinate 
     kr2.kData[2]= kr2.kData[1]; //Simetría.
     return 0;
   }
@@ -1548,7 +1548,7 @@ int XC::FiberDeque::updateKRCDG(FiberSection2d &Section2d,CrossSectionKR &kr2)
 XC::Fiber *XC::FiberDeque::addFiber(FiberSection2d &Section2d,Fiber &newFiber,CrossSectionKR &kr2)
   {
     Fiber *retval= insert(newFiber);
-    updateKRCDG(Section2d,kr2);
+    updateKRCenterOfMass(Section2d,kr2);
     return retval;
   }
 
@@ -1617,7 +1617,7 @@ int XC::FiberDeque::revertToLastCommit(FiberSection2d &Section2d,CrossSectionKR 
     std::deque<Fiber *>::iterator i= begin();
     for(;i!= end();i++)
       err+= (*i)->getMaterial()->revertToLastCommit();
-    err+= updateKRCDG(Section2d,kr2);
+    err+= updateKRCenterOfMass(Section2d,kr2);
     return err;
   }
 
@@ -1629,7 +1629,7 @@ int XC::FiberDeque::revertToStart(FiberSection2d &Section2d,CrossSectionKR &kr2)
     std::deque<Fiber *>::iterator i= begin();
     for(;i!= end();i++)
       err+= (*i)->getMaterial()->revertToStart();
-    err+= updateKRCDG(Section2d,kr2);
+    err+= updateKRCenterOfMass(Section2d,kr2);
     return err;
   }
 
@@ -1696,8 +1696,8 @@ int XC::FiberDeque::commitSensitivity(const XC::Vector& defSens, int gradNumber,
     return 0;
   }
 
-//! @brief Update the parameters CDG, stiffness matrix and resultant.
-int XC::FiberDeque::updateKRCDG(FiberSection3d &Section3d,CrossSectionKR &kr3)
+//! @brief Update the parameters center of mass, stiffness matrix and resultant.
+int XC::FiberDeque::updateKRCenterOfMass(FiberSection3d &Section3d,CrossSectionKR &kr3)
   {
     kr3.zero();
     double Qy= 0.0,Qz= 0.0;
@@ -1730,8 +1730,8 @@ int XC::FiberDeque::updateKRCDG(FiberSection3d &Section3d,CrossSectionKR &kr3)
             kr3.updateNMzMy(fs0,yLoc,zLoc);
 	  }
       }
-    yCDG= -Qz/Atot; //Coordenada y del CDG  XXX ¿Signo menos?
-    zCDG= Qy/Atot; //Coordenada z del CDG 
+    yCenterOfMass= -Qz/Atot; //center of mass y coordinate  XXX ¿Signo menos?
+    zCenterOfMass= Qy/Atot; //center of mass z coordinate 
     kr3.kData[3]= kr3.kData[1]; //Stiffness matrix symmetry.
     kr3.kData[6]= kr3.kData[2];
     kr3.kData[7]= kr3.kData[5];
@@ -1742,7 +1742,7 @@ int XC::FiberDeque::updateKRCDG(FiberSection3d &Section3d,CrossSectionKR &kr3)
 XC::Fiber *XC::FiberDeque::addFiber(FiberSection3d &Section3d,Fiber &newFiber,CrossSectionKR &kr3)
   {
     Fiber *retval= insert(newFiber);
-    updateKRCDG(Section3d,kr3);
+    updateKRCenterOfMass(Section3d,kr3);
     return retval;
   }
 
@@ -1806,7 +1806,7 @@ int XC::FiberDeque::revertToLastCommit(FiberSection3d &Section3d,CrossSectionKR 
     std::deque<Fiber *>::iterator i= begin();
     for(;i!= end();i++)
       err+= (*i)->getMaterial()->revertToLastCommit(); // invoke revertToLastCommit on the material
-    err+= updateKRCDG(Section3d,kr3);
+    err+= updateKRCenterOfMass(Section3d,kr3);
     return err;
   }
 
@@ -1819,7 +1819,7 @@ int XC::FiberDeque::revertToStart(FiberSection3d &Section3d,CrossSectionKR &kr3)
     std::deque<Fiber *>::iterator i= begin();
     for(;i!= end();i++)
       err+= (*i)->getMaterial()->revertToStart(); // invoke revertToStart on the material
-    err+= updateKRCDG(Section3d,kr3);
+    err+= updateKRCenterOfMass(Section3d,kr3);
     return err;
   }
 
@@ -1856,8 +1856,8 @@ const XC::Matrix &XC::FiberDeque::getInitialTangent(const FiberSection3d &Sectio
     return kInitial;
   }
 
-//! @brief Update the parameters CDG, stiffness and resultant.
-int XC::FiberDeque::updateKRCDG(FiberSectionGJ &SectionGJ,CrossSectionKR &krGJ)
+//! @brief Update the parameters center of mass, stiffness and resultant.
+int XC::FiberDeque::updateKRCenterOfMass(FiberSectionGJ &SectionGJ,CrossSectionKR &krGJ)
   {
     krGJ.zero();
     double Qy= 0.0,Qz= 0.0;
@@ -1890,8 +1890,8 @@ int XC::FiberDeque::updateKRCDG(FiberSectionGJ &SectionGJ,CrossSectionKR &krGJ)
             krGJ.updateNMzMy(fs0,yLoc,zLoc);
           }
       }
-    yCDG= -Qz/Atot; //Coordenada y del CDG  XXX ¿Signo menos?
-    zCDG= Qy/Atot; //Coordenada z del CDG 
+    yCenterOfMass= -Qz/Atot; //center of mass y coordinate  XXX ¿Signo menos?
+    zCenterOfMass= Qy/Atot; //center of mass z coordinate 
     krGJ.kData[4]= krGJ.kData[1]; //Stiffness matrix symmetry.
     krGJ.kData[8]= krGJ.kData[2];
     krGJ.kData[9]= krGJ.kData[6];
@@ -1905,7 +1905,7 @@ int XC::FiberDeque::updateKRCDG(FiberSectionGJ &SectionGJ,CrossSectionKR &krGJ)
 XC::Fiber *XC::FiberDeque::addFiber(FiberSectionGJ &SectionGJ,Fiber &newFiber,CrossSectionKR &krGJ)
   {
     Fiber *retval= insert(newFiber);
-    updateKRCDG(SectionGJ,krGJ);
+    updateKRCenterOfMass(SectionGJ,krGJ);
     return retval;
   }
 
@@ -1972,7 +1972,7 @@ int XC::FiberDeque::revertToLastCommit(FiberSectionGJ &SectionGJ,CrossSectionKR 
     std::deque<Fiber *>::iterator i= begin();
     for(;i!= end();i++)
       err+= (*i)->getMaterial()->revertToLastCommit(); // invoke revertToLastCommit on the material
-    err+= updateKRCDG(SectionGJ,krGJ);
+    err+= updateKRCenterOfMass(SectionGJ,krGJ);
     return err;
   }
 
@@ -1985,7 +1985,7 @@ int XC::FiberDeque::revertToStart(FiberSectionGJ &SectionGJ,CrossSectionKR &krGJ
     std::deque<Fiber *>::iterator i= begin();
     for(;i!= end();i++)
       err+= (*i)->getMaterial()->revertToStart(); // invoke revertToStart on the material
-    err+= updateKRCDG(SectionGJ,krGJ);
+    err+= updateKRCenterOfMass(SectionGJ,krGJ);
     return err;
   }
 
@@ -2327,7 +2327,7 @@ int XC::FiberDeque::activateParameter(int passedParameterID)
 void XC::FiberDeque::Print(std::ostream &s,const int &flag)
   {
     s << "\tNumber of Fibers: " << getNumFibers() << std::endl;
-    s << "\tCentroid: (" << -yCDG << ", " << zCDG << ')' << std::endl;
+    s << "\tCentroid: (" << -yCenterOfMass << ", " << zCenterOfMass << ')' << std::endl;
     std::deque<Fiber *>::const_iterator i= begin();
     if(flag == 2)
       for(;i!= end();i++)

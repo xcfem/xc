@@ -91,8 +91,8 @@ double XC::CrossSectionProperties3d::getI2(void) const
 //! @brief Returns the principal axis of inertia.
 PrincipalAxesOfInertia2D XC::CrossSectionProperties3d::getInertiaAxes(void) const
   {
-    const Pos2d cdg(0,0);
-    return PrincipalAxesOfInertia2D(cdg,Iy(),Iz(),Iyz());
+    const Pos2d center_of_mass(0,0);
+    return PrincipalAxesOfInertia2D(center_of_mass,Iy(),Iz(),Iyz());
   }
 //! @brief Returns principal axis I (strong).
 Vector2d XC::CrossSectionProperties3d::getAxis1VDir(void) const

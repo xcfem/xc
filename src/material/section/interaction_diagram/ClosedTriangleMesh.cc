@@ -142,7 +142,7 @@ double XC::ClosedTriangleMesh::GetMin(short unsigned int i) const
     return retval;
   }
 
-Pos3d XC::ClosedTriangleMesh::Cdg(void) const
+Pos3d XC::ClosedTriangleMesh::getCenterOfMass(void) const
   { return Pos3d(0,0,0); }
 double XC::ClosedTriangleMesh::Longitud(void) const
   { return 0.0; }

@@ -94,11 +94,11 @@ int XC::RgQuadCell::getNumCells (void) const
 
 
 //! @brief Return the centro de gravedad de la rejilla.
-XC::Vector XC::RgQuadCell::getCdgRejilla(void) const
+XC::Vector XC::RgQuadCell::getCenterOfMassRejilla(void) const
   {
     Vector retval(2);
     assert(rejilla);
-    Pos2d c= rejilla->Cdg();
+    Pos2d c= rejilla->getCenterOfMass();
     retval[0]= c.x();
     retval[1]= c.y();
     return retval;

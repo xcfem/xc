@@ -154,7 +154,7 @@ SVD3d XC::ShellUniformLoad::getResultant(const Pos3d &centro, bool initialGeomet
 	      {
   	        const double area= ptrShell->getArea();
 		const Vector3d force(area*pressures(i,0),area*pressures(i,1),area*pressures(i,2));
-		retval+= VDesliz3d(ptrShell->getPosCdg(),force);
+		retval+= VDesliz3d(ptrShell->getCenterOfMassPosition(),force);
               }
             else
 	      std::cerr << "ShellMecLoad::getResultant; the element: "

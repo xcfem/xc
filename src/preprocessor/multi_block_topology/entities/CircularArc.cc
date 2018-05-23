@@ -118,7 +118,7 @@ Pos3d XC::CircularArc::getCentroid(void) const
   {
     Pos3d retval(0.0,0.0,0.0);
     if(check_points())
-      retval= get_sector_circular3d().Cdg();
+      retval= get_sector_circular3d().getCenterOfMass();
     return retval;
   }
 

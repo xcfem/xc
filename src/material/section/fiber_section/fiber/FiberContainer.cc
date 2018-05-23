@@ -112,7 +112,7 @@ void XC::FiberContainer::setup(FiberSection2d &Section2d,const fiber_list &fiber
     if(!fibers.empty())
       {
         copy_fibers(fibers);
-        updateKRCDG(Section2d,kr2);
+        updateKRCenterOfMass(Section2d,kr2);
       }
   }
 
@@ -121,7 +121,7 @@ void XC::FiberContainer::setup(FiberSection3d &Section3d,const fiber_list &fiber
     if(!fibers.empty())
       {
         copy_fibers(fibers);
-        updateKRCDG(Section3d,kr3);
+        updateKRCenterOfMass(Section3d,kr3);
       }
   }
 
@@ -130,7 +130,7 @@ void XC::FiberContainer::setup(FiberSectionGJ &SectionGJ,const fiber_list &fiber
     if(!fibers.empty())
       {
         copy_fibers(fibers);
-        updateKRCDG(SectionGJ,krGJ);
+        updateKRCenterOfMass(SectionGJ,krGJ);
       }
   }
 

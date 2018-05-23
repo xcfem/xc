@@ -67,7 +67,7 @@ SVD3d XC::BeamUniformLoad::getResultant(const Pos3d &centro, bool initialGeometr
 		  {
                     const double l= ptrTransf->getLength(initialGeometry);
                     const Vector3d force(l*uniformLoads(i,0),l*uniformLoads(i,1),l*uniformLoads(i,2));
-		    retval+= VDesliz3d(ptrElem->getPosCdg(),force);
+		    retval+= VDesliz3d(ptrElem->getCenterOfMassPosition(),force);
 		  }
                 else
 		  std::cerr << getClassName() << "::getResultant; the element: "

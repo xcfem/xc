@@ -65,9 +65,9 @@ XC::RgSccPoligono XC::RegionSecc::Intersection(const Semiplano2d &sp) const
   }
 
 //! @brief Return the centroid coordinates.
-const XC::Vector &XC::RegionSecc::Cdg(void) const
+const XC::Vector &XC::RegionSecc::getCenterOfMass(void) const
   {
-    const Pos2d p= getPolygon().Cdg();
+    const Pos2d p= getPolygon().getCenterOfMass();
     static Vector retval(2);
     retval[0]= p.x();
     retval[1]= p.y();
@@ -144,7 +144,7 @@ double XC::RegionSecc::getI2(void) const
   { return getPolygon().I2(); }
 
 //     inline PrincipalAxesOfInertia2D Inercia(void)
-//       { return PrincipalAxesOfInertia2D(Cdg(),Iy(),Iz(),Pyz()); }
+//       { return PrincipalAxesOfInertia2D(getCenterOfMass(),Iy(),Iz(),Pyz()); }
 
 //! @brief Return the i,j component of the tensor of inertia computed with respect to centroid.
 double XC::RegionSecc::getI(const unsigned short int &i,const unsigned short int &j) const

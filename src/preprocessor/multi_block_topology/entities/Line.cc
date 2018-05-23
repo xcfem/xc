@@ -65,7 +65,7 @@ Pos3d XC::Line::getCentroid(void) const
   {
     Pos3d retval(0.0,0.0,0.0);
     if(check_points())
-      retval= getLineSegment().Cdg();
+      retval= getLineSegment().getCenterOfMass();
     return retval;
   }
 

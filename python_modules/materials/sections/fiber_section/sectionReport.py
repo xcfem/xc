@@ -34,7 +34,7 @@ class RecordFamMainReinforcement(object):
     self.rebarsDiam= reinfLayer.barDiameter # Rebars diameter
     self.areaRebar= reinfLayer.barArea # total area of reinforcement in the layer
     self.minEffCover= reinfLayer.getCover() # Minimum value of effective cover
-    self.barsCOG= reinfLayer.getCdg() # center of gravity of the bars
+    self.barsCOG= reinfLayer.getCenterOfMass() # center of gravity of the bars
 
   def texWrite(self,archTex,areaHorm):
     archTex.write(self.name+' & '+str(self.nRebars))
@@ -111,7 +111,7 @@ class SectionInfo(object):
     self.Es= self.rfSteel.Es
     self.regions= self.geomSection.getRegions
     self.tangConcr= self.concrDiag.getTangent()
-    self.GB= self.geomSection.getCdgGrossSection() 
+    self.GB= self.geomSection.getCenterOfMassGrossSection() 
     self.AB= self.geomSection.getAreaGrossSection() 
     self.IyB= self.geomSection.getIyGrossSection() 
     self.IzB= self.geomSection.getIzGrossSection()
@@ -124,7 +124,7 @@ class SectionInfo(object):
     for f in self.reinforcement:
       datosFam= RecordFamMainReinforcement(f)
       self.lista_fams_reinforcement.append(datosFam)
-    self.GH= self.geomSection.getCdgHomogenizedSection(self.tangConcr) # Center of gravity of the homogenized section
+    self.GH= self.geomSection.getCenterOfMassHomogenizedSection(self.tangConcr) # Center of gravity of the homogenized section
     self.AH= self.geomSection.getAreaHomogenizedSection(self.tangConcr) # Area of the homogenized section
     self.IyH= self.geomSection.getIyHomogenizedSection(self.tangConcr) # Inertia tensor of homogenized section.
     self.IzH=  self.geomSection.getIzHomogenizedSection(self.tangConcr)

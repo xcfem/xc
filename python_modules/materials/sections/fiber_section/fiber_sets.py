@@ -25,7 +25,7 @@ class FiberSet:
         for f in fibras:
             if(f.getMaterial().tag==matTag):
                 self.fSet.insert(f)
-        self.fSet.updateCDG()
+        self.fSet.updateCenterOfMass()
     def getFiberWithMinStrain(self):
         '''returns the fiber with the minimum strain from the set of fibers
         '''
@@ -78,7 +78,7 @@ class RCSets(object):
         for f in self.reinfFibers.fSet:
             if(f.getMaterial().getStress()>0.0):
                 self.tensionFibers.insert(f)
-        self.tensionFibers.updateCDG()
+        self.tensionFibers.updateCenterOfMass()
         return self.tensionFibers
     def getConcreteArea(self,factor):
         '''returns the cross section area of concrete in the set of fibers

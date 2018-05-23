@@ -57,8 +57,8 @@ fiberSectionTest= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d"
 fiberSectionTest.addFiber("elast0",Area,xc.Vector([yF,zF]))
 
 A= fiberSectionTest.getArea
-yG= fiberSectionTest.getCdgY()
-zG= fiberSectionTest.getCdgZ()
+yG= fiberSectionTest.getCenterOfMassY()
+zG= fiberSectionTest.getCenterOfMassZ()
 initialTangentStiffness= fiberSectionTest.getInitialTangentStiffness()
 IEA= initialTangentStiffness.at(1,1)
 IK12= initialTangentStiffness.at(1,2)

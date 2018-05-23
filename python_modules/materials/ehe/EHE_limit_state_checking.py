@@ -271,7 +271,7 @@ class ShearDesignParameters(object):
     self.tensionedRebarsArea= tensionedRebarsFiberSet.getArea
     # self.tensionedStrandsArea= 
 
-    self.sigmaXD= N/area+Mz/Iz*yCdg+My/Iy*zCdg
+    self.sigmaXD= N/area+Mz/Iz*centerOfMassY+My/Iy*centerOfMassZ
     self.ultimateShearStrength= getVu(fck,fcd,N,self.concreteArea,self.widthMin,self.depthUtil,self.mechanicLeverArm,self.angAlpha,self.angTheta,self.tensionedRebarsArea,fyd,self.tensionedStrandsArea,fpd,self.sigmaXD,self.sigmaYD,AsTrsv,self.areaShReinfBranchsTrsv,fydTrsv)
 
   def printParams(self):

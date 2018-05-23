@@ -47,7 +47,7 @@ reinforcementA.p2= geom.Pos2d(0.0,b/2+bw/2-0.05)
 
 
 area= sectionGeometryTest.getAreaHomogenizedSection(Ec)
-G= sectionGeometryTest.getCdgHomogenizedSection(Ec)
+G= sectionGeometryTest.getCenterOfMassHomogenizedSection(Ec)
 Iy= sectionGeometryTest.getIyHomogenizedSection(Ec)
 Iz= sectionGeometryTest.getIzHomogenizedSection(Ec)
 

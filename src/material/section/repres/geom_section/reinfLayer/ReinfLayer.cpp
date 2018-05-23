@@ -117,10 +117,10 @@ double XC::ReinfLayer::getCover(void) const
   }
 
 //! @brief Returns the reinforcement layer centroid.
-XC::Vector XC::ReinfLayer::getCdg(void) const
+XC::Vector XC::ReinfLayer::getCenterOfMass(void) const
   {
     const VectorReinfBar &barras= getReinfBars();
-    return barras.getCdgGrossSection();
+    return barras.getCenterOfMassGrossSection();
   }
 
 //! @brief Returns the barras contenidas total o parcialmente en el polígono.
