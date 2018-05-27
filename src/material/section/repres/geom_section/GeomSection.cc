@@ -331,7 +331,7 @@ double XC::GeomSection::getLongCorte(const Recta2d &r) const
     double retval= 0.0;
     Poligono2d contour= append_mid_points(getRegionsContour());
     if(contour.Overlap(r))
-      retval= contour.Clip(r).Longitud();
+      retval= contour.Clip(r).getLength();
     return retval;
   }
 
@@ -350,7 +350,7 @@ std::vector<double> XC::GeomSection::getLongsCorte(const std::list<Recta2d> &lr)
           {
             const Recta2d &r= *i;
             if(contour.Overlap(r))
-              retval[conta]= contour.Clip(r).Longitud();
+              retval[conta]= contour.Clip(r).getLength();
           }
       }
     return retval;
@@ -369,7 +369,7 @@ double XC::GeomSection::getAnchoMecanico(const Recta2d &bending_plane_trace) con
       {
         perp= bending_plane_trace.Perpendicular(contour.Vertice(i));
         ancho= contour.Clip(perp);
-        d= ancho.Longitud();
+        d= ancho.getLength();
         if(d>dmax)
           dmax= d;
       }

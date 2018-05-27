@@ -136,12 +136,12 @@ int XC::SmallDispCrdTransf3d::computeLocalAxis(void) const
     return 0;
   }
 
-//! @brief Return the longitud inicial of the element.
+//! @brief Return the initial length of the element.
 double  XC::SmallDispCrdTransf3d::getInitialLength(void) const
   { return L; }
 
 
-//! @brief Return the longitud of the element deformado.
+//! @brief Return the length of the deformed element.
 double XC::SmallDispCrdTransf3d::getDeformedLength(void) const
   { return L; }
 

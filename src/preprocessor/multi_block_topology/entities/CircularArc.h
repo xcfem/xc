@@ -56,7 +56,7 @@ class CircularArc: public LineBase
 
     void update_topology(void);
 
-    double getLongitud(void) const;
+    double getLength(void) const;
     Pos3d getCentroid(void) const;
     double getAnguloComprendido(void) const;
     double getTheta1(void) const;

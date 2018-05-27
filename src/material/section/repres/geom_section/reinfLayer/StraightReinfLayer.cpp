@@ -167,12 +167,12 @@ const XC::Vector &XC::StraightReinfLayer::getFinalPosition(void) const
 Segmento2d XC::StraightReinfLayer::getLineSegment(void) const
   { return Segmento2d(Pos2d(initPosit(0),initPosit(1)),Pos2d(finalPosit(0),finalPosit(1))); }
 
-double XC::StraightReinfLayer::getLongitud(void) const
-  { return getLineSegment().Longitud(); }
+double XC::StraightReinfLayer::getLength(void) const
+  { return getLineSegment().getLength(); }
 
 //! @brier Returns spacement between rebars.
 double XC::StraightReinfLayer::getSpacement(void) const
-  { return getLongitud()/getNumReinfBars(); }
+  { return getLength()/getNumReinfBars(); }
 
 XC::ReinfLayer *XC::StraightReinfLayer::getCopy (void) const
   { return new StraightReinfLayer(*this); }

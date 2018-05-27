@@ -115,7 +115,7 @@ double XC::InteractionDiagram2d::getCapacityFactor(const Pos2d &esf_d) const
       {
         const Pos2d C= get_intersection(esf_d);
         const Segmento2d sOC(O,C);
-        retval= d/sOC.Longitud();
+        retval= d/sOC.getLength();
       }
     return retval;
   }

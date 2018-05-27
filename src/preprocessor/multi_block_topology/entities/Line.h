@@ -49,7 +49,7 @@ class Line: public LineBase
     Line(const std::string &nombre= "",Preprocessor *m= nullptr,const size_t &ndiv= 4);
     virtual SetEstruct *getCopy(void) const;
 
-    double getLongitud(void) const;
+    double getLength(void) const;
     Pos3d getCentroid(void) const;
     Edge *splitAtPoint(Pnt *p);
     Edge *splitAtLambda(const double &);

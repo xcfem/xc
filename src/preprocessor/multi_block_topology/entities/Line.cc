@@ -52,7 +52,7 @@ XC::SetEstruct *XC::Line::getCopy(void) const
   { return new Line(*this); }
 
 //! @brief Return the line length.
-double XC::Line::getLongitud(void) const
+double XC::Line::getLength(void) const
   {
     double retval= 0;
     if(check_points())
@@ -93,13 +93,13 @@ double XC::Line::DistanciaA2(const Pos3d &pt) const
   { return getLineSegment().dist2(pt); }
 
 //! @brief Divides the line by the point being passed as parameter.
-XC::Edge *XC::Line::split_at(Pnt *p,const double &lambda,const double &longitud)
+XC::Edge *XC::Line::split_at(Pnt *p,const double &lambda,const double &length)
   {
     MultiBlockTopology &mbt= getPreprocessor()->getMultiBlockTopology();
     Edge *tmp= nullptr;
     if(lambda<0)
       tmp= mbt.getLines().createLine(p,P1());
-    else if(lambda>longitud)
+    else if(lambda>length)
       tmp= mbt.getLines().createLine(P2(),p);
     else
       {
@@ -110,9 +110,9 @@ XC::Edge *XC::Line::split_at(Pnt *p,const double &lambda,const double &longitud)
     assert(retval);
     //Settint the number of divisions so
     //the element size remains almost constant.
-    const double sz_elem= longitud/NDiv();
-    SetNDiv(ceil(getLongitud()/sz_elem));
-    retval->SetNDiv(ceil(retval->getLongitud()/sz_elem));
+    const double sz_elem= length/NDiv();
+    SetNDiv(ceil(getLength()/sz_elem));
+    retval->SetNDiv(ceil(retval->getLength()/sz_elem));
     //copying sets.
     std::set<SetBase *> sets= get_sets();
     retval->add_to_sets(sets);
@@ -128,7 +128,7 @@ XC::Edge *XC::Line::splitAtPoint(Pnt *p)
         const Pos3d pN= p->GetPos();
         const Segmento3d s= getLineSegment();
         const double lambda= s.getLambda(pN);
-        const double l= s.Longitud();
+        const double l= s.getLength();
         retval= split_at(p,lambda,l);
       }
     else
@@ -147,7 +147,7 @@ XC::Edge *XC::Line::splitAtLambda(const double &lambda)
     const Segmento3d s= getLineSegment();
     const Pos3d pN= s.PtoParametricas(lambda);
     Pnt *p= create_point(pN);
-    const double l= s.Longitud();
+    const double l= s.getLength();
     retval= split_at(p,lambda,l);
     return retval;
   }
@@ -159,7 +159,7 @@ XC::Edge *XC::Line::splitAtCooNatural(const double &chi)
     const Segmento3d s= getLineSegment();
     const Pos3d pN= s.PtoCooNatural(chi);
     Pnt *p= create_point(pN);
-    retval= split_at(p,s.getParamCooNatural(chi),s.Longitud());
+    retval= split_at(p,s.getParamCooNatural(chi),s.getLength());
     return retval;
   }
 

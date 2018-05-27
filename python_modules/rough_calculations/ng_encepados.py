@@ -66,9 +66,9 @@ def get2PileCapBottomReinforcementReqArea(b,h,L):
     verticales de un encepado de DOS pilotes (ver números gordos
     HC.9 page 33).
 
-    :param b: Ancho del encepado.
-    :param h: Canto del encepado.
-    :param L: Longitud del encepado.
+    :param b: pile cap width.
+    :param h: pile cap thickness.
+    :param L: pile cap length.
     '''
     return 4*min(b,h/2)*L/1000
   
@@ -79,8 +79,8 @@ def get2PileCapHorizontalStirrupsReqArea(b,h):
     horizontales de un encepado de DOS pilotes (ver números gordos
     HC.9 page 33).
 
-    :param b: Ancho del encepado.
-    :param L: Longitud del encepado.
+    :param b: pile cap width.
+    :param L: pile cap length.
     '''
     return 4*h*min(b,h/2)/1000
   

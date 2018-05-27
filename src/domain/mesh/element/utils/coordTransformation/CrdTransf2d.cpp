@@ -212,11 +212,14 @@ int XC::CrdTransf2d::computeElemtLengthAndOrient(void) const
     
         if(L == 0.0) 
           {
-            std::cerr << "CrdTransf2d::computeElemtLengthAndOrien: longitud nula. "
+            std::cerr << getClassName() << "::" << __FUNCTION__
+	              << ": zero length. "
                       << std::endl
-                      << " Node I: " << nodeIPtr->getTag() << " coords: " << ndICoords
+                      << " Node I: " << nodeIPtr->getTag()
+		      << " coords: " << ndICoords
                       << std::endl
-                      << " node J: " << nodeJPtr->getTag() << " coords: " << ndJCoords
+                      << " node J: " << nodeJPtr->getTag()
+		      << " coords: " << ndJCoords
                       << std::endl;
             return -2;  
           }

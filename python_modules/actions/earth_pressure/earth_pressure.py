@@ -164,7 +164,7 @@ class StripLoadOnBackfill(UniformLoadOnStem):
         length= 0.0
         for e in xcSet.getElements:
             z= e.getCooCentroid(False)[iZCoo]
-            l= e.getLineSegment(False).getLongitud()
+            l= e.getLineSegment(False).getLength()
             avgZCoo+=z*l
             length+= l
         avgZCoo/= length

@@ -105,11 +105,11 @@ const SectorCircular3d XC::CircularArc::get_sector_circular3d(void) const
   }
 
 //! @brief Return the arc length.
-double XC::CircularArc::getLongitud(void) const
+double XC::CircularArc::getLength(void) const
   {
     double retval= 0;
     if(check_points())
-      retval= get_sector_circular3d().LongitudArco();
+      retval= get_sector_circular3d().getArcLength();
     return retval;
   }
 

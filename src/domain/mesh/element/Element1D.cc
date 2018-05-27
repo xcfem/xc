@@ -711,7 +711,7 @@ int XC::Element1D::getMEDCellType(void) const
 //! node of the element
 void XC::Element1D::computeTributaryLengths(bool initialGeometry) const
   {
-    const double lt= getLineSegment(initialGeometry).Longitud()/2.0;
+    const double lt= getLineSegment(initialGeometry).getLength()/2.0;
     tributaryLengths[0]= lt;
     tributaryLengths[1]= lt;
     dumpTributaries(tributaryLengths);

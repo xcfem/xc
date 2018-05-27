@@ -195,7 +195,7 @@ const XC::Matrix &XC::SectionForceDeformation::getInitialFlexibility(void) const
     return *fDefault;
   }
 
-//! @brief Returns the densidad (masa por unidad de longitud/area/volumen)
+//! @brief Returns the densidad (masa per unit length/area/volumen)
 //! of the section.
 double XC::SectionForceDeformation::getRho(void) const
   { return 0.0; }
@@ -331,15 +331,15 @@ double XC::SectionForceDeformation::getStressResultant(const int &defID) const
 double XC::SectionForceDeformation::getStressResultantByName(const std::string &cod) const
   {
     double retval= 0.0;
-    if(cod == "n1") //Esfuerzo axil por unidad de longitud, parallel to the axis 1.
+    if(cod == "n1") //Esfuerzo axil per unit length, parallel to the axis 1.
       retval= getStressResultant(MEMBRANE_RESPONSE_n1);
-    else if(cod == "n2") //Esfuerzo axil por unidad de longitud, parallel to the axis 2.
+    else if(cod == "n2") //Esfuerzo axil per unit length, parallel to the axis 2.
       retval= getStressResultant(MEMBRANE_RESPONSE_n2);
     else if(cod == "n12")
       retval= getStressResultant(MEMBRANE_RESPONSE_n12);
-    else if(cod == "m1") //Flector por unidad de longitud, around the axis 1.
+    else if(cod == "m1") //Flector per unit length, around the axis 1.
       retval= getStressResultant(PLATE_RESPONSE_m1);
-    else if(cod == "m2") //Flector por unidad de longitud, around the axis 2.
+    else if(cod == "m2") //Flector per unit length, around the axis 2.
       retval= getStressResultant(PLATE_RESPONSE_m2);
     else if(cod == "m12")
       retval= getStressResultant(PLATE_RESPONSE_m12);

@@ -75,8 +75,8 @@ const XC::Vector &XC::RegionSecc::getCenterOfMass(void) const
   }
 
 //! @brief Return the region contour lenght.
-double XC::RegionSecc::Longitud(void) const
-  { return getPolygon().Longitud(); }
+double XC::RegionSecc::getLength(void) const
+  { return getPolygon().getLength(); }
 
 //! @brief Return the region area.
 double XC::RegionSecc::Area(void) const

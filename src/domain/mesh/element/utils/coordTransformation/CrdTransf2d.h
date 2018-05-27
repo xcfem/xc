@@ -99,10 +99,10 @@ class CrdTransf2d: public CrdTransf
 
     int initialize(Node *node1Pointer, Node *node2Pointer);    
     virtual CrdTransf2d *getCopy(void) const= 0;
-    //! @brief Return the longitud inicial of the element.
+    //! @brief Return the initial length of the element.
     inline double getInitialLength(void) const
       { return L; }
-    //! @brief Return the longitud of the element deformado.
+    //! @brief Return the length of the deformed element.
     inline double getDeformedLength(void) const
       { return L; }
     const Vector &getBasicTrialDisp(void) const;

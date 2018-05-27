@@ -27,7 +27,7 @@ class_<XC::ProtoTruss, bases<XC::Element1D>, boost::noncopyable >("ProtoTruss", 
   ;
 
 class_<XC::TrussBase, bases<XC::ProtoTruss>, boost::noncopyable >("TrussBase", no_init)
-  .def("getL", &XC::TrussBase::getL, return_value_policy<copy_const_reference>(),"Return the longitud of the element.")
+  .def("getL", &XC::TrussBase::getL, return_value_policy<copy_const_reference>(),"Return the length of the element.")
    ;
 
 class_<XC::TrussSection , bases<XC::TrussBase>, boost::noncopyable >("TrussSection", no_init);

@@ -276,7 +276,7 @@ double XC::InteractionDiagram::getCapacityFactor(const Pos3d &esf_d) const
           {
             const Pos3d C= *(lst_intersec.begin());
             const Segmento3d sOC(O,C);
-            retval= d/sOC.Longitud();
+            retval= d/sOC.getLength();
           }
         else
           {

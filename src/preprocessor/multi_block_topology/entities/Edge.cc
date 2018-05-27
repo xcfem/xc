@@ -203,7 +203,7 @@ void XC::Edge::SetNDiv(const size_t &nd)
 //! @param sz: size of the element.
 void XC::Edge::SetElemSize(const double &sz)
   {
-    const double l= getLongitud();
+    const double l= getLength();
     const size_t n= ceil(l/sz);
     SetNDiv(n);
   }

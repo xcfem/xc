@@ -81,7 +81,7 @@ class CmbEdge: public Edge
         std::vector<int> getTagsNodesReverse(void) const;
         MatrizPos3d getNodePosForward(void) const;
         MatrizPos3d getNodePosReverse(void) const;
-        double getLongitud(void) const;
+        double getLength(void) const;
         Pos3d getCentroid(void) const;	
         bool In(const GeomObj3d &, const double &tol= 0.0) const;
         bool Out(const GeomObj3d &, const double &tol= 0.0) const;
@@ -137,7 +137,7 @@ class CmbEdge: public Edge
     bool In(const GeomObj3d &, const double &tol= 0.0) const;
     bool Out(const GeomObj3d &, const double &tol= 0.0) const;
 
-    double getLongitud(void) const;
+    double getLength(void) const;
     Pos3d getCentroid(void) const;	
 
     //! @brief Return the number of vertices.

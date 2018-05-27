@@ -10,7 +10,7 @@ def getFlechaVigaBiapQUnif(l,EI,q):
     bajo carga uniforme
     l: Luz entre apoyos.
     EI: Rigidez a flexión.
-    q: Carga por unidad de longitud (uniforme).
+    q: Load per unit length (uniform).
     '''  
     return -5*q*l**3/384/EI
   
