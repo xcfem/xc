@@ -61,7 +61,7 @@
 #ifndef EIGHTNODEBRICK_U_P_U_H
 #define EIGHTNODEBRICK_U_P_U_H
 
-#include <domain/mesh/element/volumen/BrickBase.h>
+#include <domain/mesh/element/volumetric/BrickBase.h>
 #include "domain/mesh/element/utils/body_forces/BodyForces3D.h"
 
 namespace XC {

@@ -75,7 +75,7 @@ class ClosedTriangleMesh: public GeomObj3d, public MovableObject
     virtual Pos3d getCenterOfMass(void) const;
     virtual double getLength(void) const;
     virtual double Area(void) const;
-    virtual double Volumen(void) const;
+    virtual double getVolume(void) const;
     virtual double Ix(void) const; 
     virtual double Iy(void) const;
     virtual double Iz(void) const;

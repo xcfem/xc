@@ -148,7 +148,7 @@ double XC::ClosedTriangleMesh::getLength(void) const
   { return 0.0; }
 double XC::ClosedTriangleMesh::Area(void) const
   { return 0.0; }
-double XC::ClosedTriangleMesh::Volumen(void) const
+double XC::ClosedTriangleMesh::getVolume(void) const
   { return 0.0; }
 double XC::ClosedTriangleMesh::Ix(void) const
   { return 0.0; }

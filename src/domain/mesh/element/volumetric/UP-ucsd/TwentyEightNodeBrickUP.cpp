@@ -56,8 +56,8 @@
 #include <domain/mesh/element/Element.h>
 #include <domain/mesh/node/Node.h>
 #include <domain/domain/Domain.h>
-#include <domain/mesh/element/volumen/brick/shp3d.h>
-#include <domain/mesh/element/volumen/UP-ucsd/shp3dv.h>
+#include <domain/mesh/element/volumetric/brick/shp3d.h>
+#include <domain/mesh/element/volumetric/UP-ucsd/shp3dv.h>
 #include <utility/recorder/response/ElementResponse.h>
 #include "utility/actor/actor/MatrixCommMetaData.h"
 

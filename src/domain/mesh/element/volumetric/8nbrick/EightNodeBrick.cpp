@@ -60,7 +60,7 @@
 #ifndef EIGHTNODEBRICK_CPP
 #define EIGHTNODEBRICK_CPP
 
-#include <domain/mesh/element/volumen/8nbrick/EightNodeBrick.h>
+#include <domain/mesh/element/volumetric/8nbrick/EightNodeBrick.h>
 #include "domain/mesh/node/Node.h"
 
 #include <material/nD/Template3Dep/MatPoint3D.h>
@@ -71,7 +71,7 @@
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
 #include <domain/load/ElementalLoad.h>
-#include "domain/load/volumen/BrickSelfWeight.h"
+#include "domain/load/volumetric/BrickSelfWeight.h"
 #include <utility/matrix/nDarray/straint.h>
 #include <utility/matrix/nDarray/stresst.h>
 

@@ -55,7 +55,7 @@ class_<XC::ClosedTriangleMesh, bases<GeomObj3d>, boost::noncopyable >("ClosedTri
   .def("getMax",&XC::ClosedTriangleMesh::GetMax)
   .def("getMin",&XC::ClosedTriangleMesh::GetMin)
   .def("getArea",&XC::ClosedTriangleMesh::Area)
-  .def("getVolume",&XC::ClosedTriangleMesh::Volumen)
+  .def("getVolume",&XC::ClosedTriangleMesh::getVolume)
   .def("getIx",&XC::ClosedTriangleMesh::Ix)
   .def("getIy",&XC::ClosedTriangleMesh::Iy)
   .def("getIz",&XC::ClosedTriangleMesh::Iz)

@@ -53,7 +53,7 @@
 // Eight node Brick element 
 //
 
-#include <domain/mesh/element/volumen/BrickBase.h>
+#include <domain/mesh/element/volumetric/BrickBase.h>
 #include "domain/mesh/element/utils/body_forces/BodyForces3D.h"
 
 namespace XC {

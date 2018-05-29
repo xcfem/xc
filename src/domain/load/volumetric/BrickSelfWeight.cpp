@@ -56,7 +56,7 @@
 // Written: ZHYang UC Davis
 // Purpose: This file contains the class definition for 8 node brick self weigth load.
 
-#include <domain/load/volumen/BrickSelfWeight.h>
+#include <domain/load/volumetric/BrickSelfWeight.h>
 #include <utility/matrix/Vector.h>
 #include "utility/matrix/ID.h"
 

@@ -52,7 +52,7 @@
 //#                    Sept2005  Zhao shortens the codes
 //===============================================================================
 
-#include <domain/mesh/element/volumen/TotalLagrangianFD20NodeBrick/TotalLagrangianFD20NodeBrick.h>
+#include <domain/mesh/element/volumetric/TotalLagrangianFD20NodeBrick/TotalLagrangianFD20NodeBrick.h>
 #include <utility/matrix/nDarray/basics.h>
 #include <utility/matrix/nDarray/nDarray.h>
 #include <utility/matrix/Vector.h>
