@@ -65,7 +65,7 @@
 #include <material/section/SectionForceDeformation.h>
 
 namespace XC {
-//! \ingroup MATSCC
+//! @ingroup MATSCC
 //
 //! @brief ??
 class Bidirectional: public SectionForceDeformation

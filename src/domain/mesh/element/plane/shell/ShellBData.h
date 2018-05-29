@@ -36,7 +36,7 @@ namespace XC {
 
 class Matrix;
 
-//! \ingroup ElemPlanos
+//! @ingroup PlaneElements
 //
 //! @brief Auxiliary data for shell elements.
 class ShellBData

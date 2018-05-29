@@ -48,7 +48,7 @@ class Matrix;
 class Vector; 
 
 //! @ingroup Elem
-//
+//!
 //! @defgroup FEMisc Utilities for finite element calculations.
 //
 //! @ingroup FEMisc

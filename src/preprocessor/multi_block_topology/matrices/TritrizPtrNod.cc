@@ -333,7 +333,7 @@ std::vector<int> XC::getNodeIdsQuad4N(const XC::TritrizPtrNod::constant_i_layer_
     positions.push_back(p3);
     positions.push_back(p4);
     Poligono3d tmp(positions.begin(),positions.end());
-    const double area= tmp.Area();
+    const double area= tmp.getArea();
     if(area<1e-3)
       {
         std::cerr << "Area for (" << j << ',' << k

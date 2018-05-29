@@ -42,7 +42,7 @@ class BND3d;
 namespace XC {
 class TrfGeom;
 
-//!  \ingroup Set
+//!  @ingroup Set
 //! 
 //!  \brief Pointers to node container.
 //! 

@@ -34,7 +34,7 @@
 
 namespace XC {
 
-//! \ingroup Nod
+//! @ingroup Nod
 //
 //! @brief Vectores to store trial and commited values
 //! of node velocity.

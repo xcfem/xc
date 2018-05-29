@@ -63,7 +63,7 @@ namespace XC {
 
 class NDMaterial;
 
-//! \ingroup ElemPlanos
+//! @ingroup PlaneElements
 //
 //! @brief Nine node quad.
 class NineNodeMixedQuad : public ElemWithMaterial<9,NDMaterialPhysicalProperties>

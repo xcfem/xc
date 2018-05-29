@@ -24,7 +24,7 @@
 class_<XC::RegionSecc, XC::RegionSecc *, bases<XC::DiscretBase>, boost::noncopyable >("RegionSecc", no_init)
   .def("getNumCells",&XC::RegionSecc::getNumCells)
   .def("getPolygon",&XC::RegionSecc::getPolygon)
-  .def("getArea",&XC::RegionSecc::Area)
+  .def("getArea",&XC::RegionSecc::getArea)
   .def("getIy",&XC::RegionSecc::Iy)
   .def("getIz",&XC::RegionSecc::Iz)
   .def("getPyz",&XC::RegionSecc::Pyz)

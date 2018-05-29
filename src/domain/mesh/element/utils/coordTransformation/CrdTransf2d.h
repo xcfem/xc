@@ -71,7 +71,7 @@ class Pos2d;
 class Ref2d2d;
 
 namespace XC {
-//! \ingroup ElemCT
+//! @ingroup ElemCT
 //
 //! @brief Base class for 2D coordinate transformation.
 class CrdTransf2d: public CrdTransf

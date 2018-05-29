@@ -136,7 +136,7 @@ class Node;
 class Channel;
 class Response;
 
-//! \ingroup ElemZL
+//! @ingroup ElemZL
 //
 //! @brief Zero lenght element for 3D problems.
 class ZeroLengthContact3D: public ZeroLengthContact

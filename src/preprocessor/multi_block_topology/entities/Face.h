@@ -35,7 +35,7 @@
 namespace XC {
 class Body;
 
-//! \ingroup MultiBlockTopologyEnt
+//! @ingroup MultiBlockTopologyEnt
 //!
 //! @brief Surface.
 class Face: public CmbEdge

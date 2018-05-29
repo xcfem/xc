@@ -33,7 +33,7 @@ namespace XC {
 
 class DqPtrsElem;
   
-//! \ingroup Mesh
+//! @ingroup Mesh
 //
 //! @brief Mesh edge.
 class MeshEdge: public EntCmd

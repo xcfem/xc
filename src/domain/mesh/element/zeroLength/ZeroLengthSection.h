@@ -67,11 +67,11 @@ class Channel;
 class SectionForceDeformation;
 class Response;
 
-//! \ingroup Elem
-//
+//! @ingroup Elem
+//!
 //! @defgroup ElemZL Zero length elements.
 //
-//! \ingroup ElemZL
+//! @ingroup ElemZL
 //! @brief Zero length element with SectionForceDeformation material.
 //!
 //! The ZeroLengthSection class represents an element defined by two nodes at

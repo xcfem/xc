@@ -34,11 +34,11 @@
 
 namespace XC {
 
-//! \ingroup MATSCC
-//
+//! @ingroup MATSCC
+//!
 //! @defgroup MATSCCElastica Elastic material cross sections.
 //
-//! \ingroup MATSCCElastica
+//! @ingroup MATSCCElastica
 //
 //! @brief Base class for cross sections with linear elastic material.
 class BaseElasticSection: public PrismaticBarCrossSection

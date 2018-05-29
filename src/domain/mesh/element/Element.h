@@ -98,11 +98,11 @@ class GaussModel;
 class MEDGaussModel;
 class ParticlePos3d;
 
-//! \ingroup Mesh
-//
+//! @ingroup Mesh
+//!
 //! @defgroup Elem Finite elements.
 //
-//! \ingroup Elem
+//! @ingroup Elem
 //! @brief Base class for the finite elements.
 //!
 //! The element class provides the interface that all element

@@ -226,7 +226,7 @@ GeomObj::list_Pos3d XC::InteractionDiagram::get_intersection(const Pos3d &p) con
             
 	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; doesn't intersect. " << std::endl
-                      << " Triangle area: " << triang.Area() << std::endl
+                      << " Triangle area: " << triang.getArea() << std::endl
                       << " vertex 1: " << i->Vertice(1)
                       << " vertex 2: " << i->Vertice(2)
                       << " vertex 3: " << i->Vertice(3) << std::endl

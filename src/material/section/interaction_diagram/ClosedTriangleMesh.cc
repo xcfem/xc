@@ -146,7 +146,7 @@ Pos3d XC::ClosedTriangleMesh::getCenterOfMass(void) const
   { return Pos3d(0,0,0); }
 double XC::ClosedTriangleMesh::getLength(void) const
   { return 0.0; }
-double XC::ClosedTriangleMesh::Area(void) const
+double XC::ClosedTriangleMesh::getArea(void) const
   { return 0.0; }
 double XC::ClosedTriangleMesh::getVolume(void) const
   { return 0.0; }
@@ -305,7 +305,7 @@ GeomObj::list_Pos3d XC::ClosedTriangleMesh::get_intersection(const Pos3d &p) con
             
 	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; doesn't intersect. " << std::endl
-                      << " Triangle area: " << triang.Area() << std::endl
+                      << " Triangle area: " << triang.getArea() << std::endl
                       << " vertex 1: " << i->Vertice(1)
                       << " vertex 2: " << i->Vertice(2)
                       << " vertex 3: " << i->Vertice(3) << std::endl

@@ -79,8 +79,8 @@ double XC::RegionSecc::getLength(void) const
   { return getPolygon().getLength(); }
 
 //! @brief Return the region area.
-double XC::RegionSecc::Area(void) const
-  { return getPolygon().Area(); }
+double XC::RegionSecc::getArea(void) const
+  { return getPolygon().getArea(); }
 
 //! @brief Return the moment of inertia with respect to the axis paralelo al y por el centroid.
 double XC::RegionSecc::Iy(void) const

@@ -61,7 +61,7 @@ namespace XC {
 class BJtensor;
 class NDMaterial;
 
-//! \ingroup ElemVol
+//! @ingroup ElemVol
 //
 //! @brief Twenty node hexahedron with lagrangian formulation.
 class TotalLagrangianFD20NodeBrick: public ElemWithMaterial<20,NDMaterialPhysicalProperties>

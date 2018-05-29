@@ -40,10 +40,10 @@ namespace XC {
 
 
 //! @ingroup MultiBlockTopology
-//
+//!
 //! @defgroup MultiBlockTopologyTrf Geometric transformations.
 //
-//!  \ingroup MultiBlockTopologyTrf
+//!  @ingroup MultiBlockTopologyTrf
 //! 
 //!  Geometric transformation that can be applied to the components of a set.
 class TrfGeom: public EntMdlrBase

@@ -98,12 +98,12 @@ class TransformationConstraintHandler;
 class RayleighDampingFactors;
 class ModelWrapper;
 
-//!  @ingroup Solu
+//! @ingroup Solu
 //! 
 //! @defgroup Analysis Problem analysis procedures.
 //
 //! @ingroup Analysis
-//
+//!
 //! @defgroup AnalysisModel Model as seen by the analysis.
 //
 //! @ingroup AnalysisModel

@@ -70,7 +70,7 @@ class CrdTransf2d;
 class Response;
 class GaussQuadRule1d01;
 
-//! \ingroup OneDimensionalElem
+//! @ingroup OneDimensionalElem
 //
 //! @brief displacement based 2D beam element with PrismaticBarCrossSection type material.
 class DispBeamColumn2d : public BeamColumnWithSectionFDTrf2d

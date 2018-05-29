@@ -72,7 +72,7 @@ class Channel;
 class FEM_ObjectBroker;
 class Information;
 
-//! \ingroup MATSCCElastica
+//! @ingroup MATSCCElastica
 //
 //! @brief Cross section with linear elastic material
 //! for bi-dimensional problesm

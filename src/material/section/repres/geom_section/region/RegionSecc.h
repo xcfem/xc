@@ -48,7 +48,7 @@ class Matrix;
 class RgSccPoligono;
 
 //! @ingroup MATSCCRepresGeom
-//
+//!
 //! @defgroup MATSCCRegions Material filled regions of a section.
 //
 //! @ingroup MATSCCRegions
@@ -75,7 +75,7 @@ class RegionSecc: public DiscretBase
     RgSccPoligono Intersection(const Semiplano2d &sp) const;
     const Vector &getCenterOfMass(void) const;
     double getLength(void) const;
-    double Area(void) const;
+    double getArea(void) const;
     double Iy(void) const;
     double Iz(void) const;
     double Pyz(void) const;

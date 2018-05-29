@@ -65,7 +65,7 @@ namespace XC {
 
 class NDMaterial;
 
-//! \ingroup MATPLAC
+//! @ingroup MATPLAC
 //
 //! @brief Fiber model for plate/membrane materials.
 class MembranePlateFiberSection: public PlateBase

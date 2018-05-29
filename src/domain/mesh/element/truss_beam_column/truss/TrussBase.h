@@ -35,7 +35,7 @@ namespace XC {
 class Channel;
 class UniaxialMaterial;
 
-//! \ingroup TrussElem
+//! @ingroup TrussElem
 //
 //! @brief Base class for truss elements.
 class TrussBase : public ProtoTruss

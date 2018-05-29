@@ -48,7 +48,7 @@ class IRowSet;
 class JRowSet;
 class KRowSet;
 
-//!  \ingroup MultiBlockTopology
+//!  @ingroup MultiBlockTopology
 //! 
 //!  \brief Multiblock topology object (point, line, face, block,...).
 class EntMdlr: public SetEstruct

@@ -64,7 +64,7 @@ class Analysis;
 class FEM_ObjectBroker;
 class ID;
 
-//!  \ingroup Solu
+//!  @ingroup Solu
 //! 
 //! @brief Solution procedure for the finite element problem. The
 //! solution procedure is defined by specifiying:

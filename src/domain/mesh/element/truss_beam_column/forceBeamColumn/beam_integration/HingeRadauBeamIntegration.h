@@ -55,7 +55,7 @@
 
 namespace XC {
 
-//! \ingroup BeamInteg
+//! @ingroup BeamInteg
 //
 //! @brief Base class for Radau integration on beam with hinges.
 class HingeRadauBeamIntegration: public PlasticLengthsBeamIntegration

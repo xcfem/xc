@@ -34,7 +34,7 @@ namespace XC {
 
 class MeshEdge;
 
-//! \ingroup FEMisc
+//! @ingroup FEMisc
 //
 //! @brief Element edge (TO DEPRECATE?? LP 7.02.2017).
 class ElementEdge: public EntCmd

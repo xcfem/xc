@@ -60,8 +60,10 @@ class FiberData
       { return fibersPosition(i,j); }
     inline double &Position(const int &i,const int &j)
       { return fibersPosition(i,j); }
+    //! @brief Return a const reference to the area of the i-th fiber.
     inline const double &Area(const int &i) const
       { return fibersArea(i); }
+    //! @brief Return a reference to the area of the i-th fiber.
     inline double &Area(const int &i)
       { return fibersArea(i); }
 

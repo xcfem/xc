@@ -70,11 +70,11 @@ namespace XC {
 class Vector;
 class Matrix;
 
-//! \ingroup OneDimensionalElemNL
-//
+//! @ingroup OneDimensionalElemNL
+//!
 //! @defgroup Cuadratura Function integration over the element domain.
 //
-//! \ingroup Cuadratura
+//! @ingroup Cuadratura
 //! @brief Integration rule (quadrature).
 class QuadRule
   {

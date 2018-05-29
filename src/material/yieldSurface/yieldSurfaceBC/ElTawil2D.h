@@ -34,7 +34,7 @@
 #include "material/yieldSurface/yieldSurfaceBC/YieldSurface_BC2D.h"
 
 namespace XC {
-//! \ingroup MATYS
+//! @ingroup MATYS
 //! @brief El Tawil 2D yield surface.
 class ElTawil2D : public YieldSurface_BC2D
   {

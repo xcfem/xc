@@ -38,7 +38,7 @@
 namespace XC {
 class Node;
 
-//! \ingroup Elem
+//! @ingroup Elem
 //
 //! @brief Base class for finite element with
 //! pointer to nodes container

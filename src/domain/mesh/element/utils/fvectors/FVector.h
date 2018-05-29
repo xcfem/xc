@@ -35,11 +35,11 @@
 namespace XC {
 class Vector;
 
-//! \ingroup FEMisc
-//
+//! @ingroup FEMisc
+//!
 //! @defgroup ElemFV Element internal forces.
 //
-//! \ingroup ElemFV
+//! @ingroup ElemFV
 //! @brief Element internal forces.
 class FVector
   {

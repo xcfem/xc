@@ -59,7 +59,7 @@ class FEM_ObjectBroker;
 class Information;
 class Parameter;
 
-//! \ingroup MATSCCElastica
+//! @ingroup MATSCCElastica
 //
 //! @brief Base class for cross sections with linear elastic material
 //! and shear stiffness on a three-dimensional space

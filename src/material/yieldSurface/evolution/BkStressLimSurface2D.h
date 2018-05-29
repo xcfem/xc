@@ -35,7 +35,7 @@
 namespace XC {
 class YieldSurface_BC;
   
-//! \ingroup MATYS
+//! @ingroup MATYS
 //! @brief ??.
 class BkStressLimSurface2D : public YS_Evolution2D
   {

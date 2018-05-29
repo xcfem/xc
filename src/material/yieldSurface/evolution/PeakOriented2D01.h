@@ -34,7 +34,7 @@
 #include "material/yieldSurface/evolution/PlasticHardening2D.h"
 
 namespace XC {
-//! \ingroup MATYS
+//! @ingroup MATYS
 //!
 //! @brief ??
 class PeakOriented2D01: public PlasticHardening2D

@@ -72,7 +72,7 @@ class Graph;
 class TaggedObjectStorage;
 
 //! @ingroup Dom
-//
+//!
 //! @defgroup Partitioner Domain partitioners.
 //
 //! @ingroup Partitioner

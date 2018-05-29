@@ -39,7 +39,7 @@ class InteractionDiagram;
 class InteractionDiagram2d;
 class InteractionDiagramData;
 
-//!  \ingroup Ldrs
+//!  @ingroup Ldrs
 //! 
 //! @brief Material handler (definition, searching,...).
 class MaterialHandler: public PrepHandler

@@ -30,7 +30,7 @@
 
 namespace XC {
 //! @ingroup Utils
-//
+//!
 //! @defgroup MED MED-Fichier interface.
 //
 //! @ingroup MED

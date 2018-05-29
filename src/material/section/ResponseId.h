@@ -54,7 +54,7 @@ const int PLATE_RESPONSE_m12= 16; // Esfuerzo torsor per unit length.
 const int PLATE_RESPONSE_q13= 17; // Shear force per unit length, perpendicular to axis 1 and parallel to axis 3.
 const int PLATE_RESPONSE_q23= 18; // Shear force per unit length, perpendicular to axis 2 and parallel to axis 3.
 
-//! \ingroup MATSCC
+//! @ingroup MATSCC
 //
 //! @brief Stiffness material contribution response identifiers.
 class ResponseId: public ID

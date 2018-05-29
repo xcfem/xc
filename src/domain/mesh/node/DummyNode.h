@@ -74,7 +74,7 @@ namespace XC {
 class DOF_Group;
 class Element;
 
-//! \ingroup Nod
+//! @ingroup Nod
 //
 //! @brief DummyNodes are a type of node created and used by
 //! Subdomains for their exterior nodes. They reference a real

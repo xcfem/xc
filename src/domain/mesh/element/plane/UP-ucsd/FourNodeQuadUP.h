@@ -50,7 +50,7 @@ class Node;
 class NDMaterial;
 class Response;
 
-//! \ingroup ElemPlanos
+//! @ingroup PlaneElements
 //
 //! @brief Four-node plane-strain element using bilinear isoparametric formulation.
 //! This element is implemented for simulating dynamic response of solid-fluid fully

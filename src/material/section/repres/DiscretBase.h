@@ -36,7 +36,7 @@ namespace XC {
   class Material;
 
 //! @ingroup MATSCC
-//
+//!
 //! @defgroup MATSCCRepres Cross-section material representation.
 //
 //! @ingroup MATSCCRepres

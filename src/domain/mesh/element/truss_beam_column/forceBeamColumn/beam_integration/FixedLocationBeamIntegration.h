@@ -54,7 +54,7 @@
 #include "ParameterIDBeamIntegration.h"
 namespace XC {
 
-//! \ingroup BeamInteg
+//! @ingroup BeamInteg
 //
 //! @brief Integration points at fixed locations.
 class FixedLocationBeamIntegration : public ParameterIDBeamIntegration

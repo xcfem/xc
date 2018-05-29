@@ -39,7 +39,7 @@ namespace XC {
 class Vector;
 class Information;
 
-//! \ingroup FEMisc
+//! @ingroup FEMisc
 //
 //! @brief Rayleigh damping factors.
 //!

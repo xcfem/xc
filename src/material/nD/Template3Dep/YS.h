@@ -60,7 +60,7 @@ namespace XC {
   class BJtensor;
 
 //! @ingroup 3DEPMat
-//
+//!
 //! @defgroup MatNDYS Yield surface.
 //
 //! @ingroup MatNDYS

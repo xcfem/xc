@@ -76,7 +76,7 @@ class Information;
 class BJtensor;
 //class QuadRule1d;
 
-//! \ingroup ElemVol
+//! @ingroup ElemVol
 //
 //! @brief Eight node exahedron.
 class EightNodeBrick: public ElementBase<8>

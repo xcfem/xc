@@ -81,7 +81,7 @@ class TransientIntegrator;
 class Integrator;
 
 //! @ingroup Analysis
-//
+//!
 //! @defgroup AnalysisDOF DOF groups as seen by the analysis.
 //
 //! @ingroup AnalysisDOF

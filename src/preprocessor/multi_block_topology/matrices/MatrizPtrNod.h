@@ -40,7 +40,7 @@ namespace XC{
 class Node;
 class SFreedom_Constraint;
 
-//! \ingroup MultiBlockTopologyMR
+//! @ingroup MultiBlockTopologyMR
 //! 
 //! @brief Matriz de pointers to nodes.
 class MatrizPtrNod: public MatrizPtrBase<Node>

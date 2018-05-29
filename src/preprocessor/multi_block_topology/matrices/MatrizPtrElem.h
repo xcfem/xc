@@ -39,7 +39,7 @@ namespace XC{
 
   class Element;
 
-//! \ingroup MultiBlockTopology
+//! @ingroup MultiBlockTopology
 //! 
 //! \defgroup MultiBlockTopologyMR References to nodes and elements.
 //

@@ -35,7 +35,7 @@ namespace XC {
 
 class Matrix;
 
-//! \ingroup ElemPlanos
+//! @ingroup PlaneElements
 //
 //! @brief Base class for small displacement 3D coordinate transformations.
 class ShellLinearCrdTransf3d: public ShellCrdTransf3dBase

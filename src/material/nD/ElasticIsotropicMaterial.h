@@ -70,7 +70,7 @@
 
 namespace XC {
 //! @ingroup NDMat
-//
+//!
 //! @defgroup EINDMat Elastic isotropic n-dimensional material.
 //
 //! @ingroup EINDMat

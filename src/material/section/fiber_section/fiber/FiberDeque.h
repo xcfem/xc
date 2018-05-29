@@ -60,7 +60,7 @@ class DeformationPlane;
 enum ClaseEsfuerzo {SIMPLE_TENSION,COMPOSED_TENSION,FLEXION_SIMPLE,FLEXION_COMPUESTA,COMPRESION_SIMPLE,COMPRESION_COMPUESTA,ERROR};
 
 
-//! \ingroup MATSCCFibers
+//! @ingroup MATSCCFibers
 //
 //! @brief Fiber double ended queue.
 class FiberDeque : public EntCmd, public std::deque<Fiber *>

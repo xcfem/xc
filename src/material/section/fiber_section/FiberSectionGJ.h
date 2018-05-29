@@ -66,7 +66,7 @@ namespace XC {
 class MaterialHandler;
 class FiberSectionRepr;
 
-//! \ingroup MATSCCFiberModel
+//! @ingroup MATSCCFiberModel
 //
 //! @brief Fiber section with torsional stiffness.
 class FiberSectionGJ: public FiberSection3dBase

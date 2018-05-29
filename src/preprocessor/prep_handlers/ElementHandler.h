@@ -33,7 +33,7 @@
 
 namespace XC {
 
-//!  \ingroup Ldrs
+//!  @ingroup Ldrs
 //! 
 //! @brief Element creation manager.
 class ElementHandler: public ProtoElementHandler

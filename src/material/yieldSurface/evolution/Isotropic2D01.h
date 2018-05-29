@@ -34,7 +34,7 @@
 #include "PlasticHardening2D.h"
 
 namespace XC {
-//! \ingroup MATYS
+//! @ingroup MATYS
 //! @brief ??.
 class Isotropic2D01 : public PlasticHardening2D
   {

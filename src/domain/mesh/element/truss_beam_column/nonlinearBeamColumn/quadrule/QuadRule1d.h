@@ -70,7 +70,7 @@
 
 namespace XC {
 
-//! \ingroup Cuadratura
+//! @ingroup Cuadratura
 //
 //! @brief Base class for one-dimesional integrations rules (quadratures).
 class QuadRule1d: public QuadRule

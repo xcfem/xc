@@ -48,7 +48,7 @@ class NMPointCloud;
 class NMyMzPointCloud;
 
 //! @ingroup MATSCC
-//
+//!
 //! @defgroup MATSCCFiberModel Fiber model for cross-sections.
 //
 //! @ingroup MATSCCFiberModel

@@ -61,7 +61,7 @@
 
 namespace XC {
 //! @ingroup NDMat
-//
+//!
 //! @defgroup FeapNDMat Wrappers for FEAP material subroutine.
 //
 //! @ingroup FeapNDMat

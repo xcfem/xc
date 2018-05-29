@@ -61,7 +61,7 @@ namespace XC {
   class EPState;
 
 //! @ingroup 3DEPMat
-//
+//!
 //! @defgroup MatPS Potential surface.
 //
 //! @ingroup MatPS

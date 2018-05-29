@@ -34,7 +34,7 @@
 
 namespace XC {
 
-//! \ingroup MultiBlockTopologyTrf
+//! @ingroup MultiBlockTopologyTrf
 //!
 //! \brief Rotation transformation.
 class Rotation: public TrfGeom

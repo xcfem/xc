@@ -37,7 +37,7 @@
 
 
 namespace XC {
-//! \ingroup MATPLAC
+//! @ingroup MATPLAC
 //
 //! @brief ??.
 template <int SZ>

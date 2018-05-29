@@ -55,7 +55,7 @@ class SetEstruct;
 class ReferenceFrame;
 
 //! @ingroup Preprocessor
-//
+//!
 //! @defgroup MultiBlockTopology Model geometry (block topology).
 //
 //! @ingroup MultiBlockTopology

@@ -79,7 +79,7 @@ class Response;
 class SectionForceDeformation;
 
 //! @ingroup Mat
-//
+//!
 //! @defgroup MatUnx Uniaxial material models.
 //
 //! @ingroup MatUnx

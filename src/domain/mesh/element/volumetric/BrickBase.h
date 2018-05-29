@@ -35,11 +35,11 @@
 namespace XC {
 class NDMaterial;
 
-//! \ingroup Elem
-//
+//! @ingroup Elem
+//!
 //! @defgroup ElemVol Three-dimensional elements.
 //
-//! \ingroup ElemVol
+//! @ingroup ElemVol
 //! @brief Base class for hexahedra.
 class BrickBase : public ElemWithMaterial<8,NDMaterialPhysicalProperties>
   {

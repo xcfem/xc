@@ -45,7 +45,7 @@ namespace XC {
 class Response;
 
 //! @ingroup NDMat
-//
+//!
 //! @defgroup SoilNDMat Constitutive models for soil materials.
 //
 //! @ingroup SoilNDMat

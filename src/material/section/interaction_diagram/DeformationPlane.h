@@ -43,8 +43,8 @@ namespace XC {
 class Vector;
 class ResponseId;
 
-//! \ingroup MATSCC
-//
+//! @ingroup MATSCC
+//!
 //! @defgroup MATSCCDiagInt Iteraction diagram for a cross-section.
 //
 //! @ingroup MATSCCDiagInt

@@ -69,7 +69,7 @@
 namespace XC {
 class AnalysisModel;
 
-//!  \ingroup Solu
+//!  @ingroup Solu
 //! 
 //! \defgroup Graph Graph of the model degrees of freedom.
 //

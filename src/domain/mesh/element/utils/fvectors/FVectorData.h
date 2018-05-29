@@ -37,7 +37,7 @@
 namespace XC {
 
 template <size_t SZ>
-//! \ingroup ElemFV
+//! @ingroup ElemFV
 //
 //! @brief Auxiliary class for the internal forces in a beam-column element.
 class FVectorData: public FVector

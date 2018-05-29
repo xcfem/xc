@@ -67,7 +67,7 @@ namespace XC {
   class BJtensor;
   class NDMaterial;
 
-//! \ingroup ElemVol
+//! @ingroup ElemVol
 //
 //! @brief twenty node exahedron.
 class TwentyNodeBrick_u_p_U: public ElemWithMaterial<20,NDMaterialPhysicalProperties>

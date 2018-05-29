@@ -37,7 +37,7 @@ class SFreedom_Constraint;
 class MFreedom_Constraint;
 class MRMFreedom_Constraint;
 
-//! \ingroup Ldrs
+//! @ingroup Ldrs
 //! 
 //! @brief Constraint cration tools
 //!  

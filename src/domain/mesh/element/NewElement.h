@@ -69,7 +69,7 @@ class UniaxialMaterial;
 
 #define ELE_TAG_NewElement 100001
 
-//! \ingroup Elem
+//! @ingroup Elem
 //
 //! @brief Element prototype.
 class NewElement : public Element

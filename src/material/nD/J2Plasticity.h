@@ -81,7 +81,7 @@ namespace XC{
 
 //! @ingroup NDMat
 //
-//
+//!
 //! @defgroup J2NDMat J2 Isotropic hardening materials.
 //
 //! @ingroup J2NDMat

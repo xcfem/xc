@@ -33,7 +33,7 @@
 
 namespace XC {
 
-//! \ingroup PhysicalProperties
+//! @ingroup PhysicalProperties
 //
 //! @brief Physical properties for shells.
 class BeamColumnJointPhysicalProperties : public UniaxialMatPhysicalProperties

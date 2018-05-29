@@ -39,7 +39,7 @@
 #include "vtkCellType.h"
 
 namespace XC {
-//! \ingroup ElemPlanos
+//! @ingroup PlaneElements
 //
 //! @brief Base class for 3 node triangles.
 template <class PhysProp> //3 Gauss point by default.

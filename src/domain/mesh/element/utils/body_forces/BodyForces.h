@@ -34,7 +34,7 @@
 
 namespace XC {
 
-//! \ingroup FEMisc
+//! @ingroup FEMisc
 //
 //! @brief Body forces over an element.
 class BodyForces: public MovableObject

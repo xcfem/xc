@@ -66,7 +66,7 @@
 namespace XC {
 class FiberSectionRepr;
 
-//! \ingroup MATSCCFiberModel
+//! @ingroup MATSCCFiberModel
 //
 //! @brief Base class for fiber sections
 //! on three-dimensional problems.

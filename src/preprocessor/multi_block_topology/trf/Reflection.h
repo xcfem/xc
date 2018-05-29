@@ -34,7 +34,7 @@
 
 namespace XC {
 
-//! \ingroup MultiBlockTopologyTrf
+//! @ingroup MultiBlockTopologyTrf
 //!
 //! \brief Reflection transformation.
 class Reflection: public TrfGeom

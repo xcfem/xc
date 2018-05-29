@@ -57,7 +57,7 @@ namespace XC {
 class Channel;
 class FEM_ObjectBroker;
 
-//! \ingroup BeamInteg
+//! @ingroup BeamInteg
 //
 //! @brief Base class for hinge user defined integration.
 class UserDefinedHingeIntegrationBase : public UserDefinedBeamIntegrationBase

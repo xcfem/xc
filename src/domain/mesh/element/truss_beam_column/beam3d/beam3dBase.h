@@ -35,7 +35,7 @@
 
 namespace XC {
 
-//! \ingroup OneDimensionalElem
+//! @ingroup OneDimensionalElem
 //
 //! @brief Base class for 3D beam elements.
 class beam3dBase : public ProtoBeam3d

@@ -34,7 +34,7 @@
 namespace XC {
 
 
-//! \ingroup ElemFV
+//! @ingroup ElemFV
 //
 //! @brief Internal forces for a beam-column 2D element.
 class FVectorBeamColumn2d: public FVectorData<3>

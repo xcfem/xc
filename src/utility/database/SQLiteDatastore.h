@@ -34,7 +34,7 @@
 
 namespace XC {
 //! @ingroup Utils
-//
+//!
 //! @defgroup Database Database utilities.
 //
 //! @ingroup Database

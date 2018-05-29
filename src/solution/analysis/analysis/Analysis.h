@@ -99,8 +99,9 @@ class ID;
 
 class CommParameters;
 
+
 //! @ingroup Analysis
-//
+//!
 //! @defgroup AnalysisType Analysis type (static, dynamic, eigenvalues, modal, ...).
 //
 //! @ingroup AnalysisType

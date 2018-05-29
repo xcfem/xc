@@ -36,11 +36,8 @@ namespace XC {
 class Vector;
 class ID;
 
+//! @addtogroup NewmarkIntegrator Newmark method for the numerical integration of the equation.
 //! @ingroup TransientIntegrator
-//
-//! @defgroup NewmarkIntegrator Newmark method for the numerical integration of the equation.
-//
-//! @ingroup NewmarkIntegrator
 //
 //! @brief Base class for the two parameter time-stepping method developed by
 //! Nathan M. Newmark.

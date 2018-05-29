@@ -38,11 +38,11 @@
 #include "domain/mesh/node/Node.h"
 
 namespace XC {
-//! \ingroup Elem
+//! @ingroup Elem
+//!
+//! @defgroup PlaneElements Bidimensional elements (plane problems, shells,...).
 //
-//! @defgroup ElemPlanos Bidimensional elements (plane problems, shells,...).
-//
-//! \ingroup ElemPlanos
+//! @ingroup PlaneElements
 //! @brief Base class for plane elements.
 template <int NNODES,class PhysProp>
 class ElemPlano : public ElemWithMaterial<NNODES, PhysProp>
@@ -132,13 +132,13 @@ double XC::ElemPlano<NNODES, PhysProp>::getPerimetro(bool initialGeometry) const
 //! @param initialGeometry: if true returns the area of the undeformed geometry.
 template <int NNODES,class PhysProp>
 double XC::ElemPlano<NNODES, PhysProp>::getArea(bool initialGeometry) const
-  { return getPolygon(initialGeometry).Area(); }
+  { return getPolygon(initialGeometry).getArea(); }
 
 //! @brief Computes tributary areas that correspond to each node.
 template <int NNODES,class PhysProp>
 void XC::ElemPlano<NNODES, PhysProp>::computeTributaryAreas(bool initialGeometry) const
   {
-    tributaryAreas= getPolygon(initialGeometry).getAreasTributarias();
+    tributaryAreas= getPolygon(initialGeometry).getTributaryAreas();
     this->dumpTributaries(tributaryAreas);
   }
 

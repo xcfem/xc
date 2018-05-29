@@ -34,7 +34,7 @@ class Information;
 class Response;
 
 //! @ingroup Mat
-//
+//!
 //! @defgroup MATYS Yield surface materials.
 //!
 //

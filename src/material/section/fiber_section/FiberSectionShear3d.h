@@ -32,7 +32,7 @@
 #include "FiberSection3d.h"
 
 namespace XC {
-//! \ingroup MATSCC
+//! @ingroup MATSCC
 //
 //! @brief FiberSectionShear3d decorates an MP
 //! section (couple bending and axial) with an uncoupled shear

@@ -68,7 +68,7 @@ namespace XC {
   class BJtensor;
   class NDMaterial;
 
-//! \ingroup ElemVol
+//! @ingroup ElemVol
 //
 //! @brief Eight node exahedron.
 class EightNodeBrick_u_p_U: public BrickBase

@@ -66,7 +66,7 @@
 
 namespace XC {
 
-//! \ingroup ElemCT
+//! @ingroup ElemCT
 //
 //! @brief Linear coordinate transformation.
 //! Performs a linear transformation of element stiffness and responses

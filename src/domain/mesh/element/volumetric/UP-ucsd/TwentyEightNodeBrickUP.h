@@ -54,7 +54,7 @@
 #include "domain/mesh/element/utils/body_forces/BodyForces3D.h"
 
 namespace XC {
-//! \ingroup ElemVol
+//! @ingroup ElemVol
 //
 //! @brief Twenty eight node exahedron.
 class TwentyEightNodeBrickUP : public ElemWithMaterial<20,NDMaterialPhysicalProperties>

@@ -31,7 +31,7 @@
 
 namespace XC {
 
-//! \ingroup ElemPlanos
+//! @ingroup PlaneElements
 //
 //! @brief Lagrangian shell element with membrane and drill.
 class ShellNL : public QuadBase9N<SectionFDPhysicalProperties>

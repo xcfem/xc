@@ -59,7 +59,7 @@ class ElementalLoad;
 class Channel;
 class FEM_ObjectBroker;
 
-//! \ingroup BeamInteg
+//! @ingroup BeamInteg
 //
 //! @brief Base class for Lobatto integration on beams.
 class LobattoBeamIntegration : public BeamIntegration

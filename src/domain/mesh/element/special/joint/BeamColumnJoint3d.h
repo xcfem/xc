@@ -75,7 +75,7 @@ class Renderer;
 class UniaxialMaterial;
 
 
-//! \ingroup ElemJoint
+//! @ingroup ElemJoint
 //
 //! @brief 3D beam-column joint element.
 class BeamColumnJoint3d : public ElemWithMaterial<4,BeamColumnJointPhysicalProperties>

@@ -36,7 +36,7 @@
 
 //class YieldSurface_BC;
 namespace XC {
-//! \ingroup MATYS
+//! @ingroup MATYS
 //!
 //! @brief ??
 class Kinematic2D02 : public BkStressLimSurface2D

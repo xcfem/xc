@@ -54,11 +54,11 @@ class FEM_ObjectBroker;
 class TaggedObjectStorage;
 class RayleighDampingFactors;
 
-//! \ingroup Dom
+//! @ingroup Dom
 //
 //! \defgroup Mesh Finite element mesh.
 //
-//! \ingroup Mesh
+//! @ingroup Mesh
 //
 //! @brief Finite element mesh.
 class Mesh: public MeshComponentContainer

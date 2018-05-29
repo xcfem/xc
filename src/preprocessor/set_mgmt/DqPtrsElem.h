@@ -39,7 +39,7 @@ class GeomObj3d;
 namespace XC {
 class TrfGeom;
 
-//!  \ingroup Set
+//!  @ingroup Set
 //! 
 //!  \brief Pointer to element container.
 //! 

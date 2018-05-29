@@ -35,7 +35,7 @@ namespace XC {
 class UniaxialMaterial;
 class MaterialHandler;
 
-//! \ingroup MATSCCFibers
+//! @ingroup MATSCCFibers
 //
 //! @brief Fiber of uniaxial material.
 class UniaxialFiber: public Fiber

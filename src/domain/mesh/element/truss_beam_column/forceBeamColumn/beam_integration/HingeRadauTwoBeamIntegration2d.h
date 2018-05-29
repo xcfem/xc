@@ -55,7 +55,7 @@
 
 namespace XC {
 
-//! \ingroup BeamInteg
+//! @ingroup BeamInteg
 //
 //! @brief ??.
 class HingeRadauTwoBeamIntegration2d: public HingeBeamIntegration2d

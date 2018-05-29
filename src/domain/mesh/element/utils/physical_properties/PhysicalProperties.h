@@ -35,7 +35,7 @@
 namespace XC {
 
 //! @ingroup FEMisc
-//
+//!
 //! @defgroup PhysicalProperties Classes for dealing with element's physical properties (material,...).
 //
 //! @ingroup PhysProp

@@ -33,7 +33,7 @@
 
 namespace XC {
 
-//! \ingroup BeamInteg
+//! @ingroup BeamInteg
 //
 //! @brief ??.
 class PlasticLengthsBeamIntegration: public BeamIntegration

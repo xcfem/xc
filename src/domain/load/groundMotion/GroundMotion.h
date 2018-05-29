@@ -72,7 +72,7 @@ namespace XC {
   class TimeSeries;
   class Information;
 
-//! \ingroup Loads
+//! @ingroup Loads
 //!
 //!
 //! @defgroup GMotions Ground motions (earthquake simulation).

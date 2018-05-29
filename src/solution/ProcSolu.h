@@ -45,7 +45,7 @@ class FEProblem;
 
 //!  @defgroup Solu Solution of the finite element analysis problem.
 
-//!  \ingroup Solu
+//!  @ingroup Solu
 //! 
 //! @brief Solution procedure for the finite element problem.
 //!

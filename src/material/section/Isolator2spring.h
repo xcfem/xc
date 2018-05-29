@@ -67,7 +67,7 @@
 #include <utility/matrix/Vector.h>
 
 namespace XC {
-//! \ingroup MATSCC
+//! @ingroup MATSCC
 //
 //! @brief "two-spring isolator" material. This material is based on
 //! the two-spring model originally developed by Koh and Kelly to

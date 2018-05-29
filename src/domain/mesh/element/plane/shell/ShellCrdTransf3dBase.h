@@ -42,7 +42,7 @@ namespace XC {
 class Matrix;
 class NodePtrs;
 
-//! \ingroup ElemPlanos
+//! @ingroup PlaneElements
 //
 //! @brief Base class for 3D coordinate transformations.
 class ShellCrdTransf3dBase: public EntCmd, public MovableObject

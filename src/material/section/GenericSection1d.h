@@ -69,7 +69,7 @@ namespace XC {
 class Information;
 class UniaxialMaterial;
 
-//! \ingroup MATSCC
+//! @ingroup MATSCC
 //
 //! @brief Wrapper for an uniaxial material to behave like a section material.
 //!

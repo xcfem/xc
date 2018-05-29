@@ -36,7 +36,7 @@ namespace XC {
 class Node;
 class Material;
 
-//! \ingroup Elem
+//! @ingroup Elem
 //
 //! @brief Element of dimension 0 (both nodes have the
 //! same position).

@@ -59,7 +59,7 @@ class ElementalLoad;
 class Channel;
 class FEM_ObjectBroker;
 
-//! \ingroup BeamInteg
+//! @ingroup BeamInteg
 //
 //! @brief Base class for Radau integration on beam elements.
 class RadauBeamIntegration : public BeamIntegration

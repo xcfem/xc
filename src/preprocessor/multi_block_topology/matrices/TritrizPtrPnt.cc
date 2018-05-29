@@ -462,7 +462,7 @@ std::vector<size_t> XC::getIdPointsQuad(const TritrizPtrPnt::constant_i_layer_co
     positions.push_back(p3);
     positions.push_back(p4);
     Poligono3d tmp(positions.begin(),positions.end());
-    const double area= tmp.Area();
+    const double area= tmp.getArea();
     if(area<1e-3)
       {
         std::cerr << "When computing cell with indexes (" << j << ',' << k

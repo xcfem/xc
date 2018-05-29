@@ -54,7 +54,7 @@ class_<XC::InteractionDiagramData, bases<EntCmd>>("InteractionDiagramParameters"
 class_<XC::ClosedTriangleMesh, bases<GeomObj3d>, boost::noncopyable >("ClosedTriangleMesh", no_init)
   .def("getMax",&XC::ClosedTriangleMesh::GetMax)
   .def("getMin",&XC::ClosedTriangleMesh::GetMin)
-  .def("getArea",&XC::ClosedTriangleMesh::Area)
+  .def("getArea",&XC::ClosedTriangleMesh::getArea)
   .def("getVolume",&XC::ClosedTriangleMesh::getVolume)
   .def("getIx",&XC::ClosedTriangleMesh::Ix)
   .def("getIy",&XC::ClosedTriangleMesh::Iy)

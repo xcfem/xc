@@ -60,7 +60,7 @@ namespace XC {
   class FDEPState;
 
 //! @ingroup FDNDMat
-//
+//!
 //! @defgroup FDYieldNDMat Yield surface.
 //
 //! @ingroup FDYieldNDMat

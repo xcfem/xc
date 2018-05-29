@@ -33,9 +33,9 @@
 
 
 namespace XC {
-//! \ingroup Dom
+//! @ingroup Dom
 //
-//
+//!
 //! @defgroup BoundCond Boundary conditions.
 //
 //! @ingroup BoundCond

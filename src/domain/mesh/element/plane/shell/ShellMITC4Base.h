@@ -43,7 +43,7 @@ namespace XC {
 
 class ShellUniformLoad;
 
-//! \ingroup ElemPlanos
+//! @ingroup PlaneElements
 //
 //! @brief Base class for MIT C4 shell elements.
 class ShellMITC4Base : public QuadBase4N<SectionFDPhysicalProperties>

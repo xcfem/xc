@@ -34,7 +34,7 @@
 
 namespace XC {
 
-//! \ingroup Nod
+//! @ingroup Nod
 //
 //! @brief Vectors that store trial and commited values
 //! of the node acceleration.

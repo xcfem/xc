@@ -62,7 +62,7 @@
 
 namespace XC {
 
-//! \ingroup OneDimensionalElem
+//! @ingroup OneDimensionalElem
 //
 //! @brief 02 3D bar element.
 class beam3d02: public beam3dBase

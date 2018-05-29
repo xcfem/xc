@@ -323,7 +323,7 @@ int XC::ShellNL::addLoad(ElementalLoad *theLoad, double loadFactor)
                 << getTag() << std::endl;
     else
       {
-        const double area= getPolygon().Area();
+        const double area= getPolygon().getArea();
 
         // Accumulate elastic deformations in basic system
         if(ShellMecLoad *shellMecLoad= dynamic_cast<ShellMecLoad *>(theLoad))

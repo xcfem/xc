@@ -63,7 +63,7 @@ class MatPoint3D;
 class BJtensor;
 class stresstensor;
 
-//! \ingroup ElemVol
+//! @ingroup ElemVol
 //
 //! @brief Twenty seven node hexahedron with lagrangian formulation.
 class TwentySevenNodeBrick: public ElementBase<27>

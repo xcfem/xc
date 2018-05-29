@@ -40,7 +40,7 @@ class Information;
 class Response;
 class YieldSurface_BC;
 
-//! \ingroup MATYS
+//! @ingroup MATYS
 //!
 //! @brief Yield surface evolution.
 class YS_Evolution: public TaggedObject, public MovableObject

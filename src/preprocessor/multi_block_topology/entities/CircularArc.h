@@ -36,7 +36,7 @@ class SectorCircular3d;
 
 namespace XC {
 
-//! \ingroup MultiBlockTopologyEnt
+//! @ingroup MultiBlockTopologyEnt
 //!
 //! @brief Circumference arc.
   

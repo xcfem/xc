@@ -67,7 +67,7 @@
 namespace XC {
 class Node;
 
-//! \ingroup Nod
+//! @ingroup Nod
 //
 //! @brief Iterator over the nodes.
 class NodeIter

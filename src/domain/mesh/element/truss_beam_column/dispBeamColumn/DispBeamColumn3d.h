@@ -70,7 +70,7 @@ class PrismaticBarCrossSection;
 class CrdTransf3d;
 class Response;
 
-//! \ingroup OneDimensionalElem
+//! @ingroup OneDimensionalElem
 //
 //! @brief 3D beam element with PrismaticBarCrossSection type material.
 class DispBeamColumn3d : public BeamColumnWithSectionFDTrf3d

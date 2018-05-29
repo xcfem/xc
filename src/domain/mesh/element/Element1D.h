@@ -42,8 +42,8 @@ class CrdTransf2d;
 class CrdTransf3d;
 class DeformationPlane;
 
-//! \ingroup Elem
-//
+//! @ingroup Elem
+//!
 //! @defgroup OneDimensionalElem One-dimensional elements.
 //
 //! @ingroup OneDimensionalElem

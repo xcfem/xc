@@ -31,7 +31,7 @@
 #include <utility/actor/actor/MovableObject.h>
 
 namespace XC {
-//! \ingroup OneDimensionalElem
+//! @ingroup OneDimensionalElem
 //
 //! @brief ??.
 class CyclicModel : public TaggedObject, public MovableObject

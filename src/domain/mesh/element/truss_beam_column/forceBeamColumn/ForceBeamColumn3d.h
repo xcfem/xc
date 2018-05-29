@@ -61,7 +61,7 @@ class ElementalLoad;
 class CrdTransf3d;
 class BeamIntegration;
 
-//! \ingroup OneDimensionalElemF
+//! @ingroup OneDimensionalElemF
 //
 //! @brief 3D force based beam column element with nonlinear PrismaticBarCrossSection type material.
 class ForceBeamColumn3d: public NLForceBeamColumn3dBase

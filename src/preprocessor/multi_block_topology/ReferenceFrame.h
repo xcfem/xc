@@ -37,7 +37,7 @@ class Pos3d;
 namespace XC {
 
 //! @ingroup MultiBlockTopology
-//
+//!
 //! @defgroup MultiBlockTopologySR Reference systems.
 //
 //! @ingroup MultiBlockTopologySR

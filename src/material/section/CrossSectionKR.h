@@ -34,7 +34,7 @@
 
 namespace XC {
 
-//! \ingroup MATSCC
+//! @ingroup MATSCC
 //
 //! @brief Stiffness matrix and resultant vector for a section.
 class CrossSectionKR: public EntCmd

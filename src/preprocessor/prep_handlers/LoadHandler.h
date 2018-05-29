@@ -37,7 +37,7 @@ namespace XC {
 class GroundMotion;
 class LoadCombination;
 
-//!  \ingroup Ldrs
+//!  @ingroup Ldrs
 //! 
 //! @brief Lee load patterns desde archivo.
 //! Load definition manager.

@@ -71,7 +71,7 @@ class DomainPartitioner;
 class Graph;
 
 //! @ingroup Partitioner
-//
+//!
 //! @defgroup LoadBalancers Partitioned domains balancers.
 //
 //! A LoadBalancer is an object used to balance a

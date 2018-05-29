@@ -77,7 +77,7 @@ class Recorder;
 class AnalysisAggregation;
 
 //! @ingroup Analysis
-//
+//!
 //! @defgroup AnalAlgo Analysis algorithms.
 //
 //! @ingroup AnalAlgo

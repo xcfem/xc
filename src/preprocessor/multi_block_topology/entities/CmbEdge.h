@@ -36,7 +36,7 @@
 class Polilinea3d;
 
 namespace XC {
-//! \ingroup MultiBlockTopologyEnt
+//! @ingroup MultiBlockTopologyEnt
 //!
 //! @brief Compound line.
 class CmbEdge: public Edge
@@ -44,7 +44,7 @@ class CmbEdge: public Edge
 
   public:
 
-    //! \ingroup Geom
+    //! @ingroup Geom
     //!
     //! @brief Component of a compound line.
     //!

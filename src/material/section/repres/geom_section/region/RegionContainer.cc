@@ -190,7 +190,7 @@ double XC::RegionContainer::getAreaGrossSection(void) const
   {
     double retval= 0.0;
     for(const_iterator i= begin();i!=end();i++)
-      retval+= (*i)->Area();
+      retval+= (*i)->getArea();
     return retval;
   }
 
@@ -202,7 +202,7 @@ XC::Vector XC::RegionContainer::getCenterOfMassGrossSection(void) const
     double divisor= 0.0;
     for(const_iterator i= begin();i!=end();i++)
       {
-        weight= (*i)->Area();
+        weight= (*i)->getArea();
         if(weight>0)
           {
             retval+= weight*(*i)->getCenterOfMass();
@@ -227,7 +227,7 @@ double XC::RegionContainer::getIyGrossSection(void) const
     for(const_iterator i= begin();i!=end();i++)
       {
         d= (*i)->getCenterOfMass()[1]-zCenterOfMass;
-        retval+= (*i)->Iy()+(*i)->Area()*sqr(d);
+        retval+= (*i)->Iy()+(*i)->getArea()*sqr(d);
       }
     return retval;
   }
@@ -241,7 +241,7 @@ double XC::RegionContainer::getIzGrossSection(void) const
     for(const_iterator i= begin();i!=end();i++)
       {
         d= (*i)->getCenterOfMass()[0]-yCenterOfMass;
-        retval+= (*i)->Iz()+(*i)->Area()*sqr(d);
+        retval+= (*i)->Iz()+(*i)->getArea()*sqr(d);
       }
     return retval;
   }
@@ -257,7 +257,7 @@ double XC::RegionContainer::getPyzGrossSection(void) const
     for(const_iterator i= begin();i!=end();i++)
       {
         d2= ((*i)->getCenterOfMass()[0]-yCenterOfMass)*((*i)->getCenterOfMass()[1]-zCenterOfMass);
-        retval+= (*i)->Pyz()+(*i)->Area()*d2;
+        retval+= (*i)->Pyz()+(*i)->getArea()*d2;
       }
     return retval;
   }
@@ -276,7 +276,7 @@ double XC::RegionContainer::getAreaHomogenizedSection(const double &E0) const
         if(mat)
           {
             n= mat->getTangent()/E0;
-            retval+= n*(*i)->Area();
+            retval+= n*(*i)->getArea();
           }
         else
 	  std::cerr << getClassName() << __FUNCTION__
@@ -298,7 +298,7 @@ XC::Vector XC::RegionContainer::getCenterOfMassHomogenizedSection(const double &
         const UniaxialMaterial *mat= dynamic_cast<const UniaxialMaterial *>((*i)->getMaterialPtr());
         if(mat)
           {
-            weight= mat->getTangent()/E0*(*i)->Area();
+            weight= mat->getTangent()/E0*(*i)->getArea();
             if(weight>0)
               {
                 retval+= weight*(*i)->getCenterOfMass();
@@ -336,7 +336,7 @@ double XC::RegionContainer::getIyHomogenizedSection(const double &E0) const
           {
             n= mat->getTangent()/E0;
             d= (*i)->getCenterOfMass()[1]-zCenterOfMass;
-            retval+= n*((*i)->Iy()+(*i)->Area()*sqr(d));
+            retval+= n*((*i)->Iy()+(*i)->getArea()*sqr(d));
           }
         else
 	  std::cerr << getClassName() << __FUNCTION__
@@ -363,7 +363,7 @@ double XC::RegionContainer::getIzHomogenizedSection(const double &E0) const
           {
             n= mat->getTangent()/E0;
             d= (*i)->getCenterOfMass()[0]-yCenterOfMass;
-            retval+= n*((*i)->Iz()+(*i)->Area()*sqr(d));
+            retval+= n*((*i)->Iz()+(*i)->getArea()*sqr(d));
           }
         else
 	  std::cerr << getClassName() << __FUNCTION__
@@ -392,7 +392,7 @@ double XC::RegionContainer::getPyzHomogenizedSection(const double &E0) const
           {
             n= mat->getTangent()/E0;
             d2= ((*i)->getCenterOfMass()[0]-yCenterOfMass)*((*i)->getCenterOfMass()[1]-zCenterOfMass);
-            retval+= n*((*i)->Pyz()+(*i)->Area()*d2);
+            retval+= n*((*i)->Pyz()+(*i)->getArea()*d2);
           }
         else
 	  std::cerr << getClassName() << __FUNCTION__

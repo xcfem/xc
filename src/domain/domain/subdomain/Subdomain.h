@@ -82,9 +82,9 @@ class ConvergenceTest;
 class FE_Element;
 
 //! @ingroup Dom
-//
-//! @defgroup SubDom sub domains of the finite element model.
 //!
+//! @defgroup SubDom sub domains of the finite element model.
+//
 //! @ingroup SubDom
 //
 //! @brief Domain enclosed in another domain.

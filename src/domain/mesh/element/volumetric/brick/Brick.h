@@ -57,7 +57,7 @@
 #include "domain/mesh/element/utils/body_forces/BodyForces3D.h"
 
 namespace XC {
-//! \ingroup ElemVol
+//! @ingroup ElemVol
 //
 //! @brief Eight node exahedron.
 class Brick : public BrickBase

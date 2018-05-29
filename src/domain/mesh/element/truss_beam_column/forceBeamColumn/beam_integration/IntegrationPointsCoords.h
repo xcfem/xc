@@ -40,7 +40,7 @@ namespace XC {
 class BeamIntegration;
 class CrdTransf;
 
-//! \ingroup BeamInteg
+//! @ingroup BeamInteg
 //
 //! @brief Stores the coordinates of the integration points.
 class IntegrationPointsCoords

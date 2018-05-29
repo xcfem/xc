@@ -67,7 +67,7 @@ namespace XC {
 class Matrix;
 
 //! @ingroup MATSCCRepresGeom
-//
+//!
 //! @defgroup MATSCCReinforcement Reinforcing layers representation (rebars).
 //
 //! @ingroup MATSCCReinforcement

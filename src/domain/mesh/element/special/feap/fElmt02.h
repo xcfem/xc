@@ -67,7 +67,7 @@
 #include <domain/mesh/element/special/feap/fElement.h>
 
 namespace XC {
-//! \ingroup fElem
+//! @ingroup fElem
 //
 //! @brief Interface with FEAP elements.
 class fElmt02 : public fElement

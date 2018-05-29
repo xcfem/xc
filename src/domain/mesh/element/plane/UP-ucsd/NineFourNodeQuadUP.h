@@ -54,7 +54,7 @@ class Node;
 class NDMaterial;
 class Response;
 
-//! \ingroup ElemPlanos
+//! @ingroup PlaneElements
 //
 //! @brief 9-4-node (9 node for solid and 4 node for fluid)
 //! plane strain element for solid-fluid fully coupled analysis. This

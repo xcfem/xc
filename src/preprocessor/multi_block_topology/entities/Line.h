@@ -35,7 +35,7 @@ class Segmento3d;
 
 namespace XC {
 
-//! \ingroup MultiBlockTopologyEnt
+//! @ingroup MultiBlockTopologyEnt
 //!
 //! @brief Line: base class for 1D objects.
 class Line: public LineBase

@@ -40,7 +40,7 @@ class Pnt;
 class Face;
 class Body;
 
-//! \ingroup MultiBlockTopologyEnt
+//! @ingroup MultiBlockTopologyEnt
 //!
 //! @brief Base class for one-dimensional geometry objects.
 class Edge: public EntMdlr

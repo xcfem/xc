@@ -29,7 +29,7 @@
 #ifndef SETBASE_H
 #define SETBASE_H
 
-//!  \ingroup Preprocessor
+//!  @ingroup Preprocessor
 //! 
 //!  \defgroup Set Set management.
 
@@ -45,7 +45,7 @@ class Face;
 class Body;
 class UniformGrid;
 
-//!  \ingroup Set
+//!  @ingroup Set
 //! 
 //!  \brief Base de las clases Set y SetEstruct.
 class SetBase: public EntMdlrBase

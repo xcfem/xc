@@ -60,7 +60,7 @@
 
 
 namespace XC {
-//! \ingroup MATPLAC
+//! @ingroup MATPLAC
 //
 //! @brief Bidimensional elastic section for plate modellings.
 class ElasticPlateSection: public ElasticPlateProto<5>

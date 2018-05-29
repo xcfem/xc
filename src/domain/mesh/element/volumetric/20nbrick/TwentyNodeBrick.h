@@ -63,7 +63,7 @@ class Node;
  class BJtensor;
  class NDMaterial;
 
-//! \ingroup ElemVol
+//! @ingroup ElemVol
 //
 //! @brief Twenty node exahedron.
 class TwentyNodeBrick: public ElementBase<20>

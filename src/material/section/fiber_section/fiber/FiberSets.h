@@ -35,7 +35,7 @@ class Poligono2d;
 
 namespace XC {
 
-//! \ingroup MATSCCFibers
+//! @ingroup MATSCCFibers
 //
 //! @brief Fiber sets container.
 class FiberSets: public std::map<std::string,FiberDeque>, public EntCmd

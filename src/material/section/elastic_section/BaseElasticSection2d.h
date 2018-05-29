@@ -35,7 +35,7 @@
 
 namespace XC {
 
-//! \ingroup MATSCCElastica
+//! @ingroup MATSCCElastica
 //
 //! @brief Base class for cross sections with linear elastic material
 //! on a bi-dimensional problem (3 DOFs on each section).

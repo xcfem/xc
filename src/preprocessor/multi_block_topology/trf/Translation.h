@@ -34,7 +34,7 @@
 
 namespace XC {
 
-//! \ingroup MultiBlockTopologyTrf
+//! @ingroup MultiBlockTopologyTrf
 //!
 //! \brief Translation transformation.
 class Translation: public TrfGeom

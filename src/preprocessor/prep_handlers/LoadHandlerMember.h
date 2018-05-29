@@ -36,7 +36,7 @@ namespace XC {
 class LoadHandler;
 class Domain;
 
-//! \ingroup Ldrs
+//! @ingroup Ldrs
 //! 
 //! @brief ??.
 class LoadHandlerMember: public EntCmd, public MovableObject

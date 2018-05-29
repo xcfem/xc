@@ -34,7 +34,7 @@
 
 namespace XC {
 
-//! \ingroup PhysicalProperties
+//! @ingroup PhysicalProperties
 //
 //! @brief Physical properties for shells.
 class Joint3DPhysicalProperties : public UniaxialMatPhysicalProperties

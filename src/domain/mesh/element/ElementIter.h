@@ -67,7 +67,7 @@
 namespace XC {
 class Element;
 
-//! \ingroup Elem
+//! @ingroup Elem
 //
 //! @brief Iterator over an element container.
 class ElementIter

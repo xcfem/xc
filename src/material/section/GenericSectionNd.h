@@ -68,7 +68,7 @@ namespace XC {
 class Information;
 class NDMaterial;
 
-//! \ingroup MATSCC
+//! @ingroup MATSCC
 //
 //! @brief GenericSectionND provides a wrapper around a NDMaterial
 //!
