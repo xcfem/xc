@@ -161,7 +161,7 @@ class_<XC::SurfaceMap, bases<map_faces>, boost::noncopyable >("SurfaceMap", no_i
    .def("newQuadSurfaceGridPts", &XC::SurfaceMap::newQuadSurfaceGridPoints, return_internal_reference<>(),"Create a quadrilateral surface.")
    .def("get", &XC::SurfaceMap::get, return_internal_reference<>(),"Return the i-th face.")
    .def("conciliaNDivs", &XC::SurfaceMap::conciliaNDivs)
-.def("checkNDivs",&XC::SurfaceMap::checkNDivs,"Check the number of divisions.")
+   .def("checkNDivs",&XC::SurfaceMap::checkNDivs,"Check the number of divisions.")
    ;
 
 typedef XC::ModelComponentContainer<XC::Body> map_cm_bodies;
