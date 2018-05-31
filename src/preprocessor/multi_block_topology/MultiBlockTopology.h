@@ -44,7 +44,7 @@
 
 class Pos3d;
 class Recta3d;
-class Plano3d;
+class Plane;
 class Vector3d;
 
 namespace XC {

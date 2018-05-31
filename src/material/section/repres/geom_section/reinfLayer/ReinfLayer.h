@@ -59,7 +59,7 @@
 #include "material/section/repres/DiscretBase.h" 
 #include <material/section/repres/geom_section/reinfBar/VectorReinfBar.h>
 
-class Semiplano2d;
+class HalfPlane2d;
 class Poligono2d;
 
 namespace XC {
@@ -98,7 +98,7 @@ class ReinfLayer: public DiscretBase
 
     // reinforcing layer inquiring functions
     void getBarrasIn(const Poligono2d &,ListReinfLayer &,bool );
-    void getBarrasIn(const Semiplano2d &,ListReinfLayer &,bool );
+    void getBarrasIn(const HalfPlane2d &,ListReinfLayer &,bool );
     
     const GeomSection *getGeomSection(void) const;
     double getCover(void) const;

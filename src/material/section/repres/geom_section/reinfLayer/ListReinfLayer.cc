@@ -168,7 +168,7 @@ void XC::ListReinfLayer::getBarrasIn(const Poligono2d &plg,ListReinfLayer &retva
 //! Returns the rebar subset which center lies in the half plane.
 //! @param sp: Half plane.
 //! @param retval: rebars which centers lies inside the half plane.
-void XC::ListReinfLayer::getBarrasIn(const Semiplano2d &sp,ListReinfLayer &retval,bool clear)
+void XC::ListReinfLayer::getBarrasIn(const HalfPlane2d &sp,ListReinfLayer &retval,bool clear)
   {
     if(clear) retval.clear();
     const_iterator i= begin();

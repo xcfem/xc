@@ -21,9 +21,9 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::DeformationPlane, bases<Plano3d> >("DeformationPlane")
+class_<XC::DeformationPlane, bases<Plane> >("DeformationPlane")
   .def(init<const double&>())
-  .def(init<Plano3d>())
+  .def(init<Plane>())
   .def(init<Pos2d,double,Pos2d,double,Pos2d,double>())
   .def(init<Pos3d,Pos3d,Pos3d>())
   .def("constantStrain",&XC::DeformationPlane::ConstantStrain)

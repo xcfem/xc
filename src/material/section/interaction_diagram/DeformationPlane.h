@@ -30,13 +30,13 @@
 #define DEFORMATION_PLANE_H
 
 #include <iostream>
-#include "xc_utils/src/geom/d2/Plano3d.h"
+#include "xc_utils/src/geom/d2/Plane.h"
 #include "utility/actor/actor/MovableObject.h"
 
 class Pos2d;
 class Pos3d;
 class Recta2d;
-class Semiplano2d;
+class HalfPlane2d;
 
 namespace XC {
 
@@ -50,7 +50,7 @@ class ResponseId;
 //! @ingroup MATSCCDiagInt
 //
 //! @brief Deformation plane for a cross-section.
-class DeformationPlane: public Plano3d, public MovableObject
+class DeformationPlane: public Plane, public MovableObject
   {
   protected:
     bool check_positions(const Pos2d &,const Pos2d &, const Pos2d &);
@@ -63,7 +63,7 @@ class DeformationPlane: public Plano3d, public MovableObject
     const Vector &getDeformation(void) const;
   public:
     DeformationPlane( const Pos3d &p1,const Pos3d &p2, const Pos3d &p3);
-    explicit DeformationPlane(const Plano3d &);
+    explicit DeformationPlane(const Plane &);
     DeformationPlane( const Pos2d &yz1, const double &e_1, //Strains at three fiber sections.
                       const Pos2d &yz2, const double &e_2,
                       const Pos2d &yz3, const double &e_3);
@@ -78,10 +78,10 @@ class DeformationPlane: public Plano3d, public MovableObject
     Recta2d getNeutralAxis(void) const;
     Pos2d getPointOnTensionedHalfPlane(void) const;
     Pos2d getPointOnCompressedHalfPlane(void) const;
-    Semiplano2d getTensionedHalfPlane(void) const;
-    Semiplano2d getTensionedHalfPlane(const Recta2d &) const;
-    Semiplano2d getCompressedHalfPlane(void) const;
-    Semiplano2d getCompressedHalfPlane(const Recta2d &) const;
+    HalfPlane2d getTensionedHalfPlane(void) const;
+    HalfPlane2d getTensionedHalfPlane(const Recta2d &) const;
+    HalfPlane2d getCompressedHalfPlane(void) const;
+    HalfPlane2d getCompressedHalfPlane(const Recta2d &) const;
 
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);

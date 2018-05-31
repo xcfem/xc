@@ -42,7 +42,7 @@
 #include "utility/matrix/ID.h"
 
 #include "xc_utils/src/geom/pos_vec/SVD3d.h"
-#include "xc_utils/src/geom/d2/Plano3d.h"
+#include "xc_utils/src/geom/d2/Plane.h"
 #include "xc_utils/src/geom/d3/SemiEspacio3d.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
 
@@ -342,7 +342,7 @@ void XC::SetMeshComp::calc_resisting_force(void)
 
 //! @brief Return the resultant of the forces over the nodes
 //! near to the plane, of the elements behind the plane.
-SVD3d XC::SetMeshComp::getResistingSVD3d(const Plano3d &plano,const Pos3d &centro,const double &tol,const bool &inc_inertia) const
+SVD3d XC::SetMeshComp::getResistingSVD3d(const Plane &plano,const Pos3d &centro,const double &tol,const bool &inc_inertia) const
   {
     //XX Can be enhanced computing the resultant in the intersection of
     //the element edges with the plane and interpolating the value at this

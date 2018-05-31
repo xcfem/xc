@@ -34,7 +34,7 @@
 
 class Pos3d;
 class SemiEspacio3d;
-class Plano3d;
+class Plane;
 class GeomObj2d;
 class GeomObj3d;
 
@@ -104,7 +104,7 @@ class NodePtrs: public EntCmd, public std::vector<Node *>
     bool Out(const GeomObj3d &,const double &factor= 1.0, const double &tol= 0.0) const;
     bool In(const GeomObj2d &,const double &factor= 1.0, const double &tol= 0.0) const;
     bool Out(const GeomObj2d &,const double &factor= 1.0, const double &tol= 0.0) const;
-    bool Corta(const Plano3d &,bool initialGeometry= true) const;
+    bool Corta(const Plane &,bool initialGeometry= true) const;
 
     void resetTributaries(void) const;
     void dumpTributaries(const std::vector<double> &) const;

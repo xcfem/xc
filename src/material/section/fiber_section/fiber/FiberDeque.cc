@@ -48,7 +48,7 @@
 #include "xc_utils/src/geom/d2/Circulo2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/bool_op_poligono2d.h"
-#include "xc_utils/src/geom/d2/Semiplano2d.h"
+#include "xc_utils/src/geom/d2/HalfPlane2d.h"
 #include "xc_utils/src/geom/listas/utils_list_pos2d.h"
 #include "material/section/interaction_diagram/DeformationPlane.h"
 
@@ -568,7 +568,7 @@ double XC::FiberDeque::getSyNeg(const double &zf,const double &z0,const double &
 
 //! @brief Return the static moments of the fiber areas inside the halfplane
 //! being passed as parameter.
-double XC::FiberDeque::getSPosHomogenizedSection(const double &E0,const Semiplano2d &sp) const
+double XC::FiberDeque::getSPosHomogenizedSection(const double &E0,const HalfPlane2d &sp) const
   {
     if(fabs(E0)<1e-6)
       std::clog << getClassName() << "::" << __FUNCTION__
@@ -595,7 +595,7 @@ double XC::FiberDeque::getSPosHomogenizedSection(const double &E0,const Semiplan
 
 //! @brief Return the static moments of the fiber areas outside the halfplane
 //! being passed as parameter.
-double XC::FiberDeque::getSNegHomogenizedSection(const double &E0,const Semiplano2d &sp) const
+double XC::FiberDeque::getSNegHomogenizedSection(const double &E0,const HalfPlane2d &sp) const
   {
     if(fabs(E0)<1e-6)
       std::clog << getClassName() << "::" << __FUNCTION__

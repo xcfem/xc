@@ -41,7 +41,7 @@
 #include "material/section/interaction_diagram/InteractionDiagram.h"
 #include "xc_utils/src/geom/d1/Recta3d.h"
 #include "xc_utils/src/geom/d1/Recta2d.h"
-#include "xc_utils/src/geom/d2/Semiplano2d.h"
+#include "xc_utils/src/geom/d2/HalfPlane2d.h"
 #include "utility/actor/actor/MovableMatrix.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 #include "xc_utils/src/geom/sis_ref/PrincipalAxesOfInertia2D.h"
@@ -252,19 +252,19 @@ Pos2d XC::PrismaticBarCrossSection::getPointOnCompressedHalfPlane(void) const
 
 //! @brief Returns the tensioned half-plane defined by the edge
 //! being passed as parameter.
-Semiplano2d XC::PrismaticBarCrossSection::getTensionedHalfPlane(const Recta2d &r) const
+HalfPlane2d XC::PrismaticBarCrossSection::getTensionedHalfPlane(const Recta2d &r) const
   { return getDeformationPlane().getTensionedHalfPlane(r); }
 
 //! @brief Returns the tensioned half-plane.
-Semiplano2d XC::PrismaticBarCrossSection::getTensionedHalfPlane(void) const
+HalfPlane2d XC::PrismaticBarCrossSection::getTensionedHalfPlane(void) const
   { return getDeformationPlane().getTensionedHalfPlane(); }
 
 //! @brief Returns the compressed half-plane defined by the edge
 //! being passed as parameter.
-Semiplano2d XC::PrismaticBarCrossSection::getCompressedHalfPlane(const Recta2d &r) const
+HalfPlane2d XC::PrismaticBarCrossSection::getCompressedHalfPlane(const Recta2d &r) const
   { return getDeformationPlane().getCompressedHalfPlane(r); }
 
 //! @brief Returns the compressed half-plane.
-Semiplano2d XC::PrismaticBarCrossSection::getCompressedHalfPlane(void) const
+HalfPlane2d XC::PrismaticBarCrossSection::getCompressedHalfPlane(void) const
   { return getDeformationPlane().getCompressedHalfPlane(); }
 

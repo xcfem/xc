@@ -33,7 +33,7 @@
 #include "Edge.h"
 
 class Recta3d;
-class Plano3d;
+class Plane;
 
 namespace XC {
 
@@ -60,7 +60,7 @@ class LineMap: public EntityMap<Edge>
 
     Vector3d getVector(const Indice &i,const Indice &j) const;
     Recta3d getRecta(const Indice &i,const Indice &j) const;
-    Plano3d getPlano(const Indice &i,const Indice &j,const Indice &k) const;
+    Plane getPlano(const Indice &i,const Indice &j,const Indice &k) const;
 
     template <class E>
     Edge *New(void);

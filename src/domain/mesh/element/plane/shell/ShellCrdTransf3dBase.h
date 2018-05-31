@@ -34,7 +34,7 @@
 #include "utility/matrix/Vector.h"
 #include "domain/mesh/element/utils/ParticlePos3d.h"
 
-class Plano3d;
+class Plane;
 class Ref2d3d;
 
 namespace XC {
@@ -81,7 +81,7 @@ class ShellCrdTransf3dBase: public EntCmd, public MovableObject
     //! @brief Returns the element centroid.
     inline const Vector &getVPosCentroide(void) const
       { return vpos_centroide; }
-    Plano3d getPlane(void) const;
+    Plane getPlane(void) const;
     Pos3d getProj(const Pos3d &);
 
     virtual int initialize(const NodePtrs &)= 0;

@@ -28,7 +28,7 @@
 
 #include "InteractionDiagram.h"
 #include "xc_utils/src/geom/d2/Triang3dMesh.h"
-#include "xc_utils/src/geom/d2/Plano3d.h"
+#include "xc_utils/src/geom/d2/Plane.h"
 #include "xc_utils/src/geom/d2/Triangulo3d.h"
 #include "xc_basic/src/util/mchne_eps.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
@@ -191,7 +191,7 @@ GeomObj::list_Pos3d XC::InteractionDiagram::get_intersection(const Pos3d &p) con
       {
         Triangulo3d triang(i->Vertice(1),i->Vertice(2),i->Vertice(3));
         //Calculamos el plano que contiene al triangulo.
-        const Plano3d plano= triang.GetPlano();
+        const Plane plano= triang.GetPlano();
         SemiRecta3d Op(O,p);
         //Intersection of the half-line with the plane.
         lst_intersec= interseccion(plano,Op);

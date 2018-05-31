@@ -47,7 +47,7 @@
 #include "xc_utils/src/geom/d2/Triang3dMesh.h"
 #include "xc_utils/src/geom/d3/ConvexHull3d.h"
 #include "xc_utils/src/geom/d2/ConvexHull2d.h"
-#include "xc_utils/src/geom/d2/Semiplano2d.h"
+#include "xc_utils/src/geom/d2/HalfPlane2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/bool_op_poligono2d.h"
 #include "xc_utils/src/geom/d1/SemiRecta2d.h"
 #include "xc_utils/src/geom/d1/Segmento2d.h"
@@ -231,7 +231,7 @@ double XC::FiberSectionBase::getCompressedZoneDepth(const Recta2d &r) const
     const GeomSection *geom= getGeomSection();
     if(geom)
       {
-        const Semiplano2d comp= getCompressedHalfPlane(r);
+        const HalfPlane2d comp= getCompressedHalfPlane(r);
         if(comp.exists())
           retval= geom->getCompressedZoneDepth(comp);
         else
@@ -253,7 +253,7 @@ double XC::FiberSectionBase::getCompressedZoneDepth(void) const
     const GeomSection *geom= getGeomSection();
     if(geom)
       {
-        const Semiplano2d comp= getCompressedHalfPlane();
+        const HalfPlane2d comp= getCompressedHalfPlane();
         if(comp.exists())
           retval= geom->getCompressedZoneDepth(comp);
         else
@@ -275,7 +275,7 @@ double XC::FiberSectionBase::getTensionedZoneDepth(void) const
     const GeomSection *geom= getGeomSection();
     if(geom)
       {
-        const Semiplano2d comp= getCompressedHalfPlane();
+        const HalfPlane2d comp= getCompressedHalfPlane();
         if(comp.exists())
           retval= geom->getTensionedZoneDepth(comp);
         else //Full section is in tension.
@@ -292,7 +292,7 @@ double XC::FiberSectionBase::getTensionedZoneDepth(const Recta2d &r) const
     const GeomSection *geom= getGeomSection();
     if(geom)
       {
-        const Semiplano2d comp= getCompressedHalfPlane(r);
+        const HalfPlane2d comp= getCompressedHalfPlane(r);
         if(comp.exists())
           retval= geom->getTensionedZoneDepth(comp);
         else
@@ -374,7 +374,7 @@ std::list<Poligono2d> XC::FiberSectionBase::getGrossEffectiveConcreteAreaContour
             if(limit.exists())
               {
 		// Compute the half plane that is in tension.
-                const Semiplano2d tensionedArea= getTensionedHalfPlane(limit);
+                const HalfPlane2d tensionedArea= getTensionedHalfPlane(limit);
                 assert(tensionedArea.exists());
                 retval= contour.Interseccion(tensionedArea);
               }
@@ -486,7 +486,7 @@ void XC::FiberSectionBase::computeSpacement(const std::string &rebarSetName) con
 double XC::FiberSectionBase::get_dist_to_neutral_axis(const double &y,const double &z) const
   {
     double retval= 0;
-    const Semiplano2d comp= getCompressedHalfPlane();
+    const HalfPlane2d comp= getCompressedHalfPlane();
     if(comp.exists())
       retval= comp.DistSigno(Pos2d(y,z));
     else
@@ -864,7 +864,7 @@ double XC::FiberSectionBase::getSPosHomogeneizada(const double &E0) const
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     const Recta2d axis= getInternalForcesAxis();
-    return fibers.getSPosHomogenizedSection(E0,Semiplano2d(axis));
+    return fibers.getSPosHomogenizedSection(E0,HalfPlane2d(axis));
   }
 
 std::string XC::FiberSectionBase::getStrClaseEsfuerzo(const double &tol) const

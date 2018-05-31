@@ -36,7 +36,7 @@
 #include "Axis.h"
 #include "material/section/repres/SectionMassProperties.h"
 
-class Semiplano2d;
+class HalfPlane2d;
 class Segmento2d;
 
 namespace XC {
@@ -121,11 +121,11 @@ class GeomSection: public SectionMassProperties
     // Section inquiring functions
     double DistSpots(const size_t &i,const size_t &j) const;
     Poligono2d getRegionsContour(void) const;
-    Poligono2d getCompressedZoneContour(const Semiplano2d &) const;
+    Poligono2d getCompressedZoneContour(const HalfPlane2d &) const;
     double getLongCorte(const Recta2d &r) const;
     std::vector<double> getLongsCorte(const std::list<Recta2d> &lr) const;
-    double getCompressedZoneDepth(const Semiplano2d &) const;
-    double getTensionedZoneDepth(const Semiplano2d &) const;
+    double getCompressedZoneDepth(const HalfPlane2d &) const;
+    double getTensionedZoneDepth(const HalfPlane2d &) const;
     double getLeverArm(const Recta2d &) const;
     double getAnchoMecanico(const Recta2d &) const;
     double getCover(const Pos2d &) const;
@@ -142,7 +142,7 @@ class GeomSection: public SectionMassProperties
       { return reinforcement_layers; }
     GeomSection getGMRegions(void) const;
     GeomSection getGMReinforcementLayers(void) const;
-    GeomSection getCrackedSection(const Semiplano2d &) const;
+    GeomSection getCrackedSection(const HalfPlane2d &) const;
     size_t getNumFiberData(void) const;
 
     double getAreaGrossSection(void) const;

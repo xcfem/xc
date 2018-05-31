@@ -39,7 +39,7 @@ class Recta2d;
 class Segmento2d;
 class Poligono2d;
 class BND2d;
-class Semiplano2d;
+class HalfPlane2d;
 
 namespace XC {
 class Fiber;
@@ -237,8 +237,8 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     double getSzNeg(const double &yf,const double &y0,const double &factor= 1.0) const;
     double getSyPos(const double &zf,const double &z0,const double &factor= 1.0) const;
     double getSyNeg(const double &zf,const double &z0,const double &factor= 1.0) const;
-    double getSPosHomogenizedSection(const double &E0,const Semiplano2d &sp) const;
-    double getSNegHomogenizedSection(const double &E0,const Semiplano2d &sp) const;
+    double getSPosHomogenizedSection(const double &E0,const HalfPlane2d &sp) const;
+    double getSNegHomogenizedSection(const double &E0,const HalfPlane2d &sp) const;
     
     //! @brief Returns the polar moment of inertia with respect to G.
     inline double getIpolar(const double &factor= 1.0) const

@@ -37,7 +37,7 @@
 #include <material/section/repres/cell/VectorCells.h>
 
 class Poligono2d;
-class Semiplano2d;
+class HalfPlane2d;
 class Pos2d;
 
 namespace XC {
@@ -72,7 +72,7 @@ class RegionSecc: public DiscretBase
     virtual RegionSecc *getCopy(void) const= 0;
 
     virtual Poligono2d getPolygon(void) const;
-    RgSccPoligono Intersection(const Semiplano2d &sp) const;
+    RgSccPoligono Intersection(const HalfPlane2d &sp) const;
     const Vector &getCenterOfMass(void) const;
     double getLength(void) const;
     double getArea(void) const;

@@ -41,7 +41,7 @@
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector2d.h"
-#include "xc_utils/src/geom/d2/Plano3d.h"
+#include "xc_utils/src/geom/d2/Plane.h"
 #include "xc_utils/src/geom/sis_ref/Ref2d3d.h"
 
 //! @brief Default constructor
@@ -81,12 +81,12 @@ int XC::ShellCrdTransf3dBase::setup_nodal_local_coordinates(double xl[2][4]) con
   }
 
 //! @brief Returns element's plane.
-Plano3d XC::ShellCrdTransf3dBase::getPlane(void) const
+Plane XC::ShellCrdTransf3dBase::getPlane(void) const
   {
     const Vector &vO= getVPosCentroide();
     const Pos3d O(vO[0],vO[1],vO[2]);
     const Vector3d v= Vector3d(g3[0],g3[1],g3[2]);
-    return Plano3d(O,v);
+    return Plane(O,v);
   }
 
 //! @brief Returns point's projection over element's plane.

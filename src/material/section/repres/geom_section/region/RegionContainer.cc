@@ -177,7 +177,7 @@ BND2d XC::RegionContainer::getBnd(void) const
     return retval;
   }
 
-XC::RegionContainer XC::RegionContainer::Intersection(const Semiplano2d &sp) const
+XC::RegionContainer XC::RegionContainer::Intersection(const HalfPlane2d &sp) const
   {
     RegionContainer retval(material_handler);
     for(const_iterator i= begin();i!=end();i++)

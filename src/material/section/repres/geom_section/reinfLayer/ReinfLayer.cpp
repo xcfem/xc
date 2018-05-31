@@ -66,7 +66,7 @@
 #include "SingleBar.h"
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
-#include "xc_utils/src/geom/d2/Semiplano2d.h"
+#include "xc_utils/src/geom/d2/HalfPlane2d.h"
 
 
 #include "material/section/repres/geom_section/GeomSection.h"
@@ -136,7 +136,7 @@ void XC::ReinfLayer::getBarrasIn(const Poligono2d &plg,ListReinfLayer &retval,bo
   }
 
 //! @brief Returns the barras contenidas total o parcialmente en el half-plane.
-void XC::ReinfLayer::getBarrasIn(const Semiplano2d &sp,ListReinfLayer &retval,bool clear)
+void XC::ReinfLayer::getBarrasIn(const HalfPlane2d &sp,ListReinfLayer &retval,bool clear)
   {
     if(clear) retval.clear();
     const VectorReinfBar &barras= getReinfBars();
