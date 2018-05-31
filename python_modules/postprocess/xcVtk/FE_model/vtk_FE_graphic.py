@@ -183,7 +183,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
         self.VtkDefineNodesActor(nodeSize)
         self.VtkDefineElementsActor("surface",field,elemSet.color)
 
-    def displayMesh(self, xcSets, field= None, diagrams= None, fName= None, caption= '',defFScale=0.0,nodeSize=0.01,scaleConstr=0.2,viewName="XYZPos"):
+    def displayMesh(self, xcSets, field= None, diagrams= None, fName= None, caption= '',defFScale=0.0,nodeSize=0.01,scaleConstr=0.2):
         '''Display the finite element mesh 
 
         :param xcSets: set or list of sets to be displayed
@@ -199,13 +199,12 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
         :param nodeSize: size of the points that represent nodes (defaults to
                     0.01)
         :param scaleConstr: scale of SPConstraints symbols (defaults to 0.2)
-        :param viewName: name of the view that contains the renderer 
-                         (defaults to "XYZPos")
         '''
-        
+        # 31/05/2018 LCPT.
+        # I've deleted the viewName argument because viewName it's already
+        # a member of the object (see __init__)        
         self.renderer= vtk.vtkRenderer()
         self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
-        self.viewName=viewName
         if type(xcSets) ==list:
             for s in xcSets:
                 self.defineMeshActorsSet(s,field,defFScale,nodeSize)
