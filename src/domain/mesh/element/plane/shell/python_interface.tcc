@@ -54,7 +54,7 @@ class_<XC::ShellCorotCrdTransf3d, bases<XC::ShellCrdTransf3dBase>, boost::noncop
 
 
 typedef XC::QuadBase4N<XC::SectionFDPhysicalProperties> QuadBase4N_SFD;
-class_<QuadBase4N_SFD, bases<ElemPlano4N_SFD>, boost::noncopyable >("QuadBase4N_SFD", no_init)
+class_<QuadBase4N_SFD, bases<PlaneElement4N_SFD>, boost::noncopyable >("QuadBase4N_SFD", no_init)
   .def("getPerimeter", &QuadBase4N_SFD::getPerimetro, "Returns element's perimeter.")
   .def("getArea", &QuadBase4N_SFD::getArea, "Returns element's area.")
    ;

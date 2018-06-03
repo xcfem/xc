@@ -95,7 +95,7 @@ Recta3d XC::PntMap::getRecta(const Indice &i,const Indice &j) const
   }
 
 //! @brief Return the plane defined by the points which indices are being passed as parameters.
-Plane XC::PntMap::getPlano(const Indice &i,const Indice &j,const Indice &k) const
+Plane XC::PntMap::getPlane(const Indice &i,const Indice &j,const Indice &k) const
   {
     Plane retval;
     const Pnt *pA= busca(i);

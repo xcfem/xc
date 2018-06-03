@@ -61,7 +61,7 @@ class PntMap: public EntityMap<Pnt>
 
     Vector3d getVector(const Indice &i,const Indice &j) const;
     Recta3d getRecta(const Indice &i,const Indice &j) const;
-    Plane getPlano(const Indice &i,const Indice &j,const Indice &k) const;
+    Plane getPlane(const Indice &i,const Indice &j,const Indice &k) const;
 
     Pnt *New(void);
     Pnt *New(const Pos3d &);

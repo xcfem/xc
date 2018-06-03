@@ -296,7 +296,7 @@ GeomObj::list_Pos3d XC::ClosedTriangleMesh::get_intersection(const Pos3d &p) con
       {
         Triangulo3d triang(i->Vertice(1),i->Vertice(2),i->Vertice(3));
         //Plane of the triangle.
-        const Plane plano= triang.GetPlano();
+        const Plane plano= triang.getPlane();
         SemiRecta3d Op(O,p);
         //Itersection of the half-line and the plane.
         lst_intersec= interseccion(plano,Op);

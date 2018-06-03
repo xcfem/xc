@@ -26,7 +26,7 @@
 //----------------------------------------------------------------------------
 //QuadBase9N.h
                                                                         
-#include "ElemPlano.h"
+#include "PlaneElement.h"
 
 #ifndef QuadBase9N_h
 #define QuadBase9N_h
@@ -42,7 +42,7 @@ namespace XC {
 //! @ingroup PlaneElements
 //! @brief Base class for nine node quads.
 template <class PhysProp>
-class QuadBase9N : public ElemPlano<9,PhysProp>
+class QuadBase9N : public PlaneElement<9,PhysProp>
   {
   protected:
     TritrizPtrElem put_on_mesh(const TritrizPtrNod &,meshing_dir dm) const;
@@ -68,12 +68,12 @@ class QuadBase9N : public ElemPlano<9,PhysProp>
 //! @brief Constructor
 template <class PhysProp>
 XC::QuadBase9N<PhysProp>::QuadBase9N(int classTag)
-  : ElemPlano<9,PhysProp>(0,classTag) {}
+  : PlaneElement<9,PhysProp>(0,classTag) {}
 
 //! @brief Constructor.
 template <class PhysProp>
 XC::QuadBase9N<PhysProp>::QuadBase9N(int tag,int classTag,const PhysProp &pp)
-  :ElemPlano<9,PhysProp>(tag,classTag,pp) {}
+  :PlaneElement<9,PhysProp>(tag,classTag,pp) {}
 
 
 //! @brief Put the element on the mesh being passed as parameter.
@@ -136,7 +136,7 @@ ID XC::QuadBase9N<PhysProp>::getLocalIndexNodesEdge(const size_t &i) const
 template <class PhysProp>
 void XC::QuadBase9N<PhysProp>::zeroLoad(void)
   {
-    ElemPlano<9,PhysProp>::zeroLoad();
+    PlaneElement<9,PhysProp>::zeroLoad();
     this->physicalProperties.getMaterialsVector().zeroInitialGeneralizedStrains(); //Removes initial deformations.
     return;
   }

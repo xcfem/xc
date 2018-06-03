@@ -24,9 +24,9 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//ElemPlano.cc
+//PlaneElement.cc
 
-#include "ElemPlano.h"
+#include "PlaneElement.h"
 
 
 

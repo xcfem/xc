@@ -28,12 +28,12 @@ class_<ElemWithMaterial4N_Mech2D, bases<XC::ElementBase<4> >, boost::noncopyable
   .add_property("getPhysicalProperties", make_function(getMech2DPhysicalProp, return_internal_reference<>() ),"returns materials at integration points (gauss points).")
    ;
 
-class_<ElemPlano4N_Mech2D, bases<ElemWithMaterial4N_Mech2D>, boost::noncopyable >("ElemPlano4N_Mech2D", no_init)
-  .def("getPerimeter", &ElemPlano4N_Mech2D::getPerimetro, "Returns element's perimeter.")
-  .def("getArea", &ElemPlano4N_Mech2D::getArea, "getArea(initialGeometry): return element's area. If initialGeometry is True the returned area corresponds to its undeformed geometry.")
+class_<PlaneElement4N_Mech2D, bases<ElemWithMaterial4N_Mech2D>, boost::noncopyable >("PlaneElement4N_Mech2D", no_init)
+  .def("getPerimeter", &PlaneElement4N_Mech2D::getPerimetro, "Returns element's perimeter.")
+  .def("getArea", &PlaneElement4N_Mech2D::getArea, "getArea(initialGeometry): return element's area. If initialGeometry is True the returned area corresponds to its undeformed geometry.")
    ;
 
-class_<QuadBase4N_Mech2D, bases<ElemPlano4N_Mech2D>, boost::noncopyable >("QuadBase4N_Mech2D", no_init)
+class_<QuadBase4N_Mech2D, bases<PlaneElement4N_Mech2D>, boost::noncopyable >("QuadBase4N_Mech2D", no_init)
    ;
 
 #include "fourNodeQuad/python_interface.tcc"
@@ -43,12 +43,12 @@ class_<ElemWithMaterial3N_Mech2D, bases<XC::ElementBase<3> >, boost::noncopyable
   .add_property("getPhysicalProperties", make_function(getMech2D3NPhysicalProp, return_internal_reference<>() ),"returns materials at integration points (gauss points).")
    ;
 
-class_<ElemPlano3N_Mech2D, bases<ElemWithMaterial3N_Mech2D>, boost::noncopyable >("ElemPlano3N_Mech2D", no_init)
-  .def("getPerimeter", &ElemPlano3N_Mech2D::getPerimetro, "Returns element's perimeter.")
-  .def("getArea", &ElemPlano3N_Mech2D::getArea, "getArea(initialGeometry): return element's area. If initialGeometry is True the returned area corresponds to its undeformed geometry.")
+class_<PlaneElement3N_Mech2D, bases<ElemWithMaterial3N_Mech2D>, boost::noncopyable >("PlaneElement3N_Mech2D", no_init)
+  .def("getPerimeter", &PlaneElement3N_Mech2D::getPerimetro, "Returns element's perimeter.")
+  .def("getArea", &PlaneElement3N_Mech2D::getArea, "getArea(initialGeometry): return element's area. If initialGeometry is True the returned area corresponds to its undeformed geometry.")
    ;
 
-class_<TriBase3N_Mech2D, bases<ElemPlano3N_Mech2D>, boost::noncopyable >("TriBase3N_Mech2D", no_init)
+class_<TriBase3N_Mech2D, bases<PlaneElement3N_Mech2D>, boost::noncopyable >("TriBase3N_Mech2D", no_init)
    ;
 
 #include "triangle/python_interface.tcc"
@@ -58,9 +58,9 @@ class_<ElemWithMaterial4N_SFD, bases<XC::ElementBase<4> >, boost::noncopyable >(
   .add_property("getPhysicalProperties", make_function(getSectionFDPhysicalProp, return_internal_reference<>() ),"returns materials at integration points (gauss points).")
    ;
 
-class_<ElemPlano4N_SFD, bases<ElemWithMaterial4N_SFD>, boost::noncopyable >("ElemPlano4N_SFD", no_init)
-  .def("getPerimeter", &ElemPlano4N_SFD::getPerimetro, "Returns element's perimeter.")
-  .def("getArea", &ElemPlano4N_SFD::getArea, "getArea(initialGeometry): return element's area. If initialGeometry is True the returned area corresponds to its undeformed geometry.")
+class_<PlaneElement4N_SFD, bases<ElemWithMaterial4N_SFD>, boost::noncopyable >("PlaneElement4N_SFD", no_init)
+  .def("getPerimeter", &PlaneElement4N_SFD::getPerimetro, "Returns element's perimeter.")
+  .def("getArea", &PlaneElement4N_SFD::getArea, "getArea(initialGeometry): return element's area. If initialGeometry is True the returned area corresponds to its undeformed geometry.")
    ;
 
 
