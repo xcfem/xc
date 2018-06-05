@@ -416,12 +416,12 @@ bool XC::NodePtrs::Out(const GeomObj2d &obj,const double &factor,const double &t
   { return !In(obj,factor,tol); }
 
 //! @brief Returns true if there are nodes in both sides of the plane.
-bool XC::NodePtrs::Corta(const Plane &plano,bool initialGeometry) const
+bool XC::NodePtrs::Corta(const Plane &plane,bool initialGeometry) const
   {
     double factor= 1.0;
     if(initialGeometry)
       factor= 0.0;
-    SemiEspacio3d halfSpace(plano);
+    SemiEspacio3d halfSpace(plane);
     bool in= In(halfSpace,factor,0.0);
     SemiEspacio3d complementario(halfSpace);
     complementario.Swap();

@@ -189,7 +189,7 @@ XC::CorotCrdTransf3d::CorotCrdTransf3d(int tag)
   }
 
 
-//! @brief Asigna el value of the vector contenido en el plano XZ local.
+//! @brief Set the vector that defines the local XZ plane.
 void XC::CorotCrdTransf3d::set_xz_vector(const XC::Vector &vecInLocXZPlane)
   {
     CrdTransf3d::set_xz_vector(vecInLocXZPlane);

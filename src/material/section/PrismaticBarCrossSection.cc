@@ -63,12 +63,12 @@ XC::PrismaticBarCrossSection &XC::PrismaticBarCrossSection::operator=(const Pris
   }
 
 //! @brief Sets the deformation plane of the section.
-int XC::PrismaticBarCrossSection::setTrialDeformationPlane(const DeformationPlane &plano)
-  { return setTrialSectionDeformation(getGeneralizedStrainVector(plano)); }
+int XC::PrismaticBarCrossSection::setTrialDeformationPlane(const DeformationPlane &plane)
+  { return setTrialSectionDeformation(getGeneralizedStrainVector(plane)); }
 
-//! @brief Sets the plano de initial strains of the section.
-int XC::PrismaticBarCrossSection::setInitialDeformationPlane(const DeformationPlane &plano)
-  { return setInitialSectionDeformation(getGeneralizedStrainVector(plano)); }
+//! @brief Sets the plane that defines initial strains of the section.
+int XC::PrismaticBarCrossSection::setInitialDeformationPlane(const DeformationPlane &plane)
+  { return setInitialSectionDeformation(getGeneralizedStrainVector(plane)); }
 
 //! @brief Returns initial strain plane.
 XC::DeformationPlane XC::PrismaticBarCrossSection::getInitialDeformationPlane(void) const
@@ -77,11 +77,11 @@ XC::DeformationPlane XC::PrismaticBarCrossSection::getInitialDeformationPlane(vo
 
 //! @brief Return the generalized strains vector that corresponds
 //! to the deformation plane being passed as parameter.
-const XC::Vector &XC::PrismaticBarCrossSection::getGeneralizedStrainVector(const DeformationPlane &plano) const
+const XC::Vector &XC::PrismaticBarCrossSection::getGeneralizedStrainVector(const DeformationPlane &plane) const
   {
     const int order= getOrder();
     const ResponseId &code= getType();
-    return plano.getDeformation(order,code);
+    return plane.getDeformation(order,code);
   }
 
 //! @brief Returns the generalized strains vector of the cross-section.

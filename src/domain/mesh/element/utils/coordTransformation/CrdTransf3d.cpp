@@ -76,7 +76,7 @@ XC::Vector XC::CrdTransf3d::vectorJ(3);
 XC::Vector XC::CrdTransf3d::vectorK(3);
 XC::Vector XC::CrdTransf3d::vectorCoo(3);
 
-//! @brief Set el value of the vector contenido en el plano XZ local.
+//! @brief Set the vector that defines the local XZ plane.
 void XC::CrdTransf3d::set_xz_vector(const XC::Vector &vecInLocXZPlane)
   {
     for(register int i = 0; i < 2; i++)
@@ -87,7 +87,7 @@ void XC::CrdTransf3d::set_xz_vector(const XC::Vector &vecInLocXZPlane)
     R(2,2) = vecInLocXZPlane(2);
   }
 
-//! @brief Returns the vector contenido en el plano XZ local.
+//! @brief Returns the vector that defines the local XZ plane.
 XC::Vector XC::CrdTransf3d::get_xz_vector(void) const
   {
     Vector retval(3);

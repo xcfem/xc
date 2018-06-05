@@ -43,8 +43,8 @@ XC::BeamStrainLoad::BeamStrainLoad(int tag)
 int XC::BeamStrainLoad::sendData(CommParameters &cp)
   {
     int res= BeamLoad::sendData(cp);
-    res+= cp.sendMovable(planoDefDorsal,getDbTagData(),CommMetaData(5));
-    res+= cp.sendMovable(planoDefFrontal,getDbTagData(),CommMetaData(6));
+    res+= cp.sendMovable(backEndDeformationsPlane,getDbTagData(),CommMetaData(5));
+    res+= cp.sendMovable(frontEndDeformationPlane,getDbTagData(),CommMetaData(6));
     return res;
   }
 
@@ -52,8 +52,8 @@ int XC::BeamStrainLoad::sendData(CommParameters &cp)
 int XC::BeamStrainLoad::recvData(const CommParameters &cp)
   {
     int res= BeamLoad::recvData(cp);
-    res+= cp.receiveMovable(planoDefDorsal,getDbTagData(),CommMetaData(5));;
-    res+= cp.receiveMovable(planoDefFrontal,getDbTagData(),CommMetaData(6));;
+    res+= cp.receiveMovable(backEndDeformationsPlane,getDbTagData(),CommMetaData(5));;
+    res+= cp.receiveMovable(frontEndDeformationPlane,getDbTagData(),CommMetaData(6));;
     return res;
   }
 
@@ -81,7 +81,7 @@ int XC::BeamStrainLoad::recvSelf(const CommParameters &cp)
   }
 
 const XC::Vector &XC::BeamStrainLoad::getSection1Deformation(const size_t &order,const ResponseId &code) const
-  { return planoDefDorsal.getDeformation(order,code); }
+  { return backEndDeformationsPlane.getDeformation(order,code); }
 
 const XC::Vector &XC::BeamStrainLoad::getSection2Deformation(const size_t &order,const ResponseId &code) const
-  { return planoDefFrontal.getDeformation(order,code); }
+  { return frontEndDeformationPlane.getDeformation(order,code); }

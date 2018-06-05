@@ -607,9 +607,8 @@ for item in AU:
 # (strong axis parallel to z axis) in other words: values for Y and Z axis 
 # are swapped with respect to those in the catalog.
 
-# En este caso al ser secciones con tensor de inercia esférico en su 
-# plano los valores en
-# both axes are equal so no need to exchange.
+# In this case the inertia tensor is cylindrical so, in its plane, both
+# values are identical: no need to exchange.
 
 
 SHS={}

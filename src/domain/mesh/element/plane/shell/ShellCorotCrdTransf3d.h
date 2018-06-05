@@ -63,13 +63,13 @@ class ShellCorotCrdTransf3d: public ShellCrdTransf3dBase
     ShellCorotCrdTransf3d(const NodePtrs &t);
     virtual ShellCrdTransf3dBase *getCopy(void) const;
 
-    //! @brief Returns the local axis 1 (contenido in the plane of the element)
+    //! @brief Returns the local axis 1 (lies in the plane of the element)
     inline const Vector &G1trial(void) const
       { return g1trial; }
-    //! @brief Returns the local axis 2 (contenido in the plane of the element)
+    //! @brief Returns the local axis 2 (lies in the plane of the element)
     inline const Vector &G2trial(void) const
       { return g2trial; }
-    //! @brief Returns the local axis 3 (normal al plano of the element)
+    //! @brief Returns the local axis 3 (normal to the element plane)
     inline const Vector &G3trial(void) const
       { return g3trial; }
 

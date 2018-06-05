@@ -190,11 +190,11 @@ GeomObj::list_Pos3d XC::InteractionDiagram::get_intersection(const Pos3d &p) con
     else
       {
         Triangulo3d triang(i->Vertice(1),i->Vertice(2),i->Vertice(3));
-        //Calculamos el plano que contiene al triangulo.
-        const Plane plano= triang.getPlane();
+        //We compute the plane that contains the triangle.
+        const Plane plane= triang.getPlane();
         SemiRecta3d Op(O,p);
         //Intersection of the half-line with the plane.
-        lst_intersec= interseccion(plano,Op);
+        lst_intersec= interseccion(plane,Op);
         if(lst_intersec.empty())
           {
 	    Pos3d nearest= i->Vertice(1);

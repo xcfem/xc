@@ -150,13 +150,13 @@ def resuelveCombEstatLin(comb):
 o= geom.Pos3d(2,1,0) 
 p1= geom.Pos3d(2,2,0)
 p2= geom.Pos3d(2,1,1)
-plano= geom.Plane3d(o,p1,p2)
+plane= geom.Plane3d(o,p1,p2)
 
 def procesResultVerif(comb):
   tabComb= comb.tag
   nmbComb= comb.getName
   setTotal= preprocessor.getSets.getSet("total")
-  resultant= setTotal.getResistingSVD3d(plano,o,0.01,0)
+  resultant= setTotal.getResistingSVD3d(plane,o,0.01,0)
   global force
   force= resultant.getResultant()
   global moment
