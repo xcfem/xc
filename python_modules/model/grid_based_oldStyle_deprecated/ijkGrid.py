@@ -564,7 +564,7 @@ def lstNodesPLine(setBusq,lstPtsPLine):
         segmAux= geom.LineSegment3d(lstPtsPLine[i].getPos,lstPtsPLine[i+1].getPos)
         for n in nodAux:
             p= n.getInitialPos3d
-            d= p.distSegmento3d(segmAux)
+            d= p.distSegment3d(segmAux)
             if(d<0.01):
                 retval.append(n)
     retval= list(set(retval))       #elimina nudos repetidos

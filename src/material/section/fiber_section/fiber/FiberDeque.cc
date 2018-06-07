@@ -44,7 +44,7 @@
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
 #include "xc_utils/src/geom/d2/BND2d.h"
 #include "xc_utils/src/geom/d1/Recta2d.h"
-#include "xc_utils/src/geom/d1/Segmento2d.h"
+#include "xc_utils/src/geom/d1/Segment2d.h"
 #include "xc_utils/src/geom/d2/Circulo2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/bool_op_poligono2d.h"
@@ -1238,15 +1238,15 @@ double XC::FiberDeque::getNeutralAxisDepth(const FiberSectionBase &Section) cons
 //ª to the compression centroid.
 XC::Vector XC::FiberDeque::getVectorBrazoMecanico(void) const
   {
-    const Segmento2d &bm= getSegmentoBrazoMecanico();
+    const Segment2d &bm= getLeverArmSegment();
     return Vector(bm.GetVector());
   }
 
 //! @brief Returns a segment from the tension centroid to the compression
 //! centroid.
-Segmento2d XC::FiberDeque::getSegmentoBrazoMecanico(void) const
+Segment2d XC::FiberDeque::getLeverArmSegment(void) const
   {
-    Segmento2d retval;
+    Segment2d retval;
     retval.setExists(false);
     const double epsMin= getStrainMin();
     const double epsMax= getStrainMax();
@@ -1257,7 +1257,7 @@ Segmento2d XC::FiberDeque::getSegmentoBrazoMecanico(void) const
 	  {
             const Vector &T= getTensionedFibersCentroid();
 	    if(!std::isnan(T[0]) && !std::isnan(T[1]))
-	      retval= Segmento2d(Pos2d(T[0],T[1]),Pos2d(C[0],C[1]));
+	      retval= Segment2d(Pos2d(T[0],T[1]),Pos2d(C[0],C[1]));
 	  }
       }
     else if(std::abs(epsMax-epsMin)>1e-6)
@@ -1265,7 +1265,7 @@ Segmento2d XC::FiberDeque::getSegmentoBrazoMecanico(void) const
         const double defRef= (epsMin+epsMax)/2.0;
         const Vector &C= getCentroidFibersWithStrainSmallerThan(defRef);
         const Vector &T= getCentroidFibersWithStrainGreaterThan(defRef);
-        retval= Segmento2d(Pos2d(T[0],T[1]),Pos2d(C[0],C[1]));
+        retval= Segment2d(Pos2d(T[0],T[1]),Pos2d(C[0],C[1]));
       }
     else
       retval.setExists(false);
@@ -1275,7 +1275,7 @@ Segmento2d XC::FiberDeque::getSegmentoBrazoMecanico(void) const
 //! @brief Return the intercept of the bending plane with
 //! the plane that contains the section.
 Recta2d XC::FiberDeque::getBendingPlaneTrace(void) const
-  { return getSegmentoBrazoMecanico().RectaSoporte(); }
+  { return getLeverArmSegment().RectaSoporte(); }
 
 //! @brief Return the intercept of a plane perpendicular to the
 //! bending plane through the tensions centroid with the plane

@@ -104,11 +104,11 @@ class fibSectFeaturesToplot(object):
             ax2d.plot(y,z,self.colorIntForcAxis ,label='Internal forces axis')
         #Lever arm
         if self.colorLeverArm != None:
-            (y,z)= data_xcsegment_to_pyplot(self.fiberSection.getSegmentoBrazoMecanico())
+            (y,z)= data_xcsegment_to_pyplot(self.fiberSection.getLeverArmSegment())
             ax2d.plot(y,z,self.colorLeverArm,label='Lever arm')
         #Effective depth
         if self.colorEffDepth != None:
-            (y,z)= data_xcsegment_to_pyplot(self.fiberSection.getSegmentoCantoUtil())
+            (y,z)= data_xcsegment_to_pyplot(self.fiberSection.getEffectiveDepthSegment())
             ax2d.plot(y,z,self.colorEffDepth,label='Effective depth')
         #Limit of concrete effective area
         if self.colorEffConcrArea != None:
@@ -155,7 +155,7 @@ def data_axis_to_pyplot(axis,contour):
     of the start and end points of the segment of axis inside the fiberSect contour
     passed as parameters.
     '''
-    sg=contour.recortaRecta(axis)
+    sg=contour.clipRecta(axis)
     return data_xcsegment_to_pyplot(sg)
 
     

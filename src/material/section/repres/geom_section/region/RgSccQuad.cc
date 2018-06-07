@@ -34,7 +34,7 @@
 #include <material/section/repres/cell/QuadCell.h>
 
 #include "xc_basic/src/text/text_string.h"
-#include "xc_utils/src/geom/d1/Segmento2d.h"
+#include "xc_utils/src/geom/d1/Segment2d.h"
 #include "xc_utils/src/geom/d2/Rejilla2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Cuadrilatero2d.h"
 #include <utility/matrix/Matrix.h>
@@ -59,8 +59,8 @@ XC::RgSccQuad::RgSccQuad(Material *mat, int numSubdivIJ, int numSubdivJK,const X
 //! @brief Sets numbers of divisions to get a tile IJ side smaller than size.
 int XC::RgSccQuad::setTileSizeIJ(const double &size)
   {
-    const double longIJ= Segmento2d(getIVertex(),getJVertex()).getLength();
-    const double longKL= Segmento2d(getKVertex(),getLVertex()).getLength();
+    const double longIJ= Segment2d(getIVertex(),getJVertex()).getLength();
+    const double longKL= Segment2d(getKVertex(),getLVertex()).getLength();
     setNDivIJ(ceil(std::max(longIJ,longKL)/size));
     return getNDivIJ();
   }
@@ -68,8 +68,8 @@ int XC::RgSccQuad::setTileSizeIJ(const double &size)
 //! @brief Sets numbers of divisions to get a tile JK side smaller than size.
 int XC::RgSccQuad::setTileSizeJK(const double &size)
   {
-    const double longJK= Segmento2d(getJVertex(),getKVertex()).getLength();
-    const double longIL= Segmento2d(getIVertex(),getLVertex()).getLength();
+    const double longJK= Segment2d(getJVertex(),getKVertex()).getLength();
+    const double longIL= Segment2d(getIVertex(),getLVertex()).getLength();
     setNDivJK(ceil(std::max(longJK,longIL)/size));
     return getNDivJK();
   }

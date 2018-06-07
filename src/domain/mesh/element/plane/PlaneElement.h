@@ -31,7 +31,7 @@
                                                                         
 #include <domain/mesh/element/ElemWithMaterial.h>
 #include "xc_utils/src/geom/d2/Poligono3d.h"
-#include "xc_utils/src/geom/d1/Segmento3d.h"
+#include "xc_utils/src/geom/d1/Segment3d.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "preprocessor/Preprocessor.h"
 
@@ -55,7 +55,7 @@ class PlaneElement : public ElemWithMaterial<NNODES, PhysProp>
     void setDomain(Domain *theDomain);
 
     virtual Poligono3d getPolygon(bool initialGeometry= true) const;
-    virtual Segmento3d getSide(const size_t &i,bool initialGeometry= true) const;
+    virtual Segment3d getSide(const size_t &i,bool initialGeometry= true) const;
     Pos3d getCenterOfMassPosition(bool initialGeometry= true) const;
     double getPerimetro(bool initialGeometry= true) const;
     double getArea(bool initialGeometry= true) const;
@@ -164,18 +164,18 @@ Poligono3d XC::PlaneElement<NNODES, PhysProp>::getPolygon(bool initialGeometry) 
 //! @brief Returns a lado of the element. 
 // Redefine for elements with more than two nodes by face.
 template <int NNODES,class PhysProp>
-Segmento3d XC::PlaneElement<NNODES, PhysProp>::getSide(const size_t &i,bool initialGeometry) const
+Segment3d XC::PlaneElement<NNODES, PhysProp>::getSide(const size_t &i,bool initialGeometry) const
   {
-    Segmento3d retval;
+    Segment3d retval;
     const NodePtrsWithIDs &nodes= this->getNodePtrs();
     const size_t sz= nodes.size();
     if(i<sz)
       {
         const Pos3d p1= nodes.getPosNode(i,initialGeometry);
         if(i<(sz-1))
-          retval= Segmento3d(p1,nodes.getPosNode(i+1,initialGeometry));
+          retval= Segment3d(p1,nodes.getPosNode(i+1,initialGeometry));
         else
-          retval= Segmento3d(p1,nodes.getPosNode(0,initialGeometry));
+          retval= Segment3d(p1,nodes.getPosNode(0,initialGeometry));
       }
     return retval;
   }

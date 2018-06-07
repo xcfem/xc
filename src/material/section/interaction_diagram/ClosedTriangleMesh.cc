@@ -32,7 +32,7 @@
 #include "xc_utils/src/geom/d2/Triangulo3d.h"
 #include "xc_basic/src/util/mchne_eps.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
-#include "xc_utils/src/geom/d1/Segmento3d.h"
+#include "xc_utils/src/geom/d1/Segment3d.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
 #include "xc_utils/src/gnu_gts/TriangleMap.h"

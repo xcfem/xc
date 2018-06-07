@@ -30,7 +30,7 @@
 #include "preprocessor/Preprocessor.h"
 #include "Pnt.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
-#include "xc_utils/src/geom/d1/Segmento3d.h"
+#include "xc_utils/src/geom/d1/Segment3d.h"
 #include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
 #include "utility/matrix/util_matrix.h"
 
@@ -79,11 +79,11 @@ double XC::Line::getLambda(const Pos3d &p) const
   }
 
 //! @brief Returns the segment than links the line ends.
-Segmento3d XC::Line::getLineSegment(void) const
+Segment3d XC::Line::getLineSegment(void) const
   {
-    Segmento3d retval;
+    Segment3d retval;
     if(check_points())
-      retval= Segmento3d(p1->GetPos(),p2->GetPos());
+      retval= Segment3d(p1->GetPos(),p2->GetPos());
     return retval;
   }
 
@@ -126,7 +126,7 @@ XC::Edge *XC::Line::splitAtPoint(Pnt *p)
     if(p)
       {
         const Pos3d pN= p->GetPos();
-        const Segmento3d s= getLineSegment();
+        const Segment3d s= getLineSegment();
         const double lambda= s.getLambda(pN);
         const double l= s.getLength();
         retval= split_at(p,lambda,l);
@@ -144,7 +144,7 @@ XC::Edge *XC::Line::splitAtPoint(Pnt *p)
 XC::Edge *XC::Line::splitAtLambda(const double &lambda)
   {
     Edge *retval= nullptr;
-    const Segmento3d s= getLineSegment();
+    const Segment3d s= getLineSegment();
     const Pos3d pN= s.PtoParametricas(lambda);
     Pnt *p= create_point(pN);
     const double l= s.getLength();
@@ -156,7 +156,7 @@ XC::Edge *XC::Line::splitAtLambda(const double &lambda)
 XC::Edge *XC::Line::splitAtCooNatural(const double &chi)
   {
     Edge *retval= nullptr;
-    const Segmento3d s= getLineSegment();
+    const Segment3d s= getLineSegment();
     const Pos3d pN= s.PtoCooNatural(chi);
     Pnt *p= create_point(pN);
     retval= split_at(p,s.getParamCooNatural(chi),s.getLength());

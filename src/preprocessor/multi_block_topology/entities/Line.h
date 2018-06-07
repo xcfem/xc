@@ -31,7 +31,7 @@
 
 #include "LineBase.h"
 
-class Segmento3d;
+class Segment3d;
 
 namespace XC {
 
@@ -64,7 +64,7 @@ class Line: public LineBase
     double DistanciaA2(const Pos3d &pt) const;
 
     const Vector &getVector(void) const;
-    Segmento3d getLineSegment(void) const;
+    Segment3d getLineSegment(void) const;
     virtual const Vector &getTang(const double &) const;
     int getVtkCellType(void) const;
     int getMEDCellType(void) const;

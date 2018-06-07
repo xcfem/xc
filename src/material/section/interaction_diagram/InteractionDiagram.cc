@@ -32,7 +32,7 @@
 #include "xc_utils/src/geom/d2/Triangulo3d.h"
 #include "xc_basic/src/util/mchne_eps.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
-#include "xc_utils/src/geom/d1/Segmento3d.h"
+#include "xc_utils/src/geom/d1/Segment3d.h"
 #include "utility/matrix/Vector.h"
 
 #include "material/section/fiber_section/FiberSectionBase.h"
@@ -275,7 +275,7 @@ double XC::InteractionDiagram::getCapacityFactor(const Pos3d &esf_d) const
         if(!lst_intersec.empty())
           {
             const Pos3d C= *(lst_intersec.begin());
-            const Segmento3d sOC(O,C);
+            const Segment3d sOC(O,C);
             retval= d/sOC.getLength();
           }
         else

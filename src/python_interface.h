@@ -41,7 +41,7 @@
 #include "xc_utils/src/geom/d2/Rejilla2d.h"
 #include "xc_utils/src/geom/d2/BND2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Cuadrilatero2d.h"
-#include "xc_utils/src/geom/d1/Segmento2d.h"
+#include "xc_utils/src/geom/d1/Segment2d.h"
 #include "xc_utils/src/geom/d1/Polilinea3d.h"
 #include "xc_utils/src/geom/pos_vec/SVD3d.h"
 #include "xc_utils/src/geom/pos_vec/TritrizPos3d.h"

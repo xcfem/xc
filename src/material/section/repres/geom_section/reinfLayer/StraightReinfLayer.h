@@ -60,7 +60,7 @@
 #include <material/section/repres/geom_section/reinfLayer/ReinfLayer.h>
 #include <utility/matrix/Vector.h>
 
-class Segmento2d;
+class Segment2d;
 
 namespace XC {
 class ReinfBar;
@@ -102,7 +102,7 @@ class StraightReinfLayer : public ReinfLayer
     double getMaxZ(void) const;
     double getMinY(void) const;
     double getMinZ(void) const;
-    Segmento2d getLineSegment(void) const;
+    Segment2d getLineSegment(void) const;
     double getLength(void) const;
     double getSpacement(void) const;
 

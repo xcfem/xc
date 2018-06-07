@@ -215,7 +215,7 @@ class SolutionProcedure(object):
     self.analysis= self.solu.newAnalysis("direct_integration_analysis","analysisAggregation","")
     return self.analysis;
 
-  def frequencyAnalysis(self,prb):
+  def frequencyAnalysis(self,prb,systemPrefix= 'sym_band'):
     self.solu= prb.getSoluProc
     self.solCtrl= self.solu.getSoluControl
     solModels= self.solCtrl.getModelWrapperContainer
@@ -227,8 +227,10 @@ class SolutionProcedure(object):
     self.analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
     self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("frequency_soln_algo")
     self.integ= self.analysisAggregation.newIntegrator("eigen_integrator",xc.Vector([1.0,1,1.0,1.0]))
-    self.soe= self.analysisAggregation.newSystemOfEqn("sym_band_eigen_soe")
-    self.solver= self.soe.newSolver("sym_band_eigen_solver")
+    soe_string= systemPrefix+'_eigen_soe'
+    solver_string= systemPrefix+'_eigen_solver'
+    self.soe= self.analysisAggregation.newSystemOfEqn(soe_string)
+    self.solver= self.soe.newSolver(solver_string)
     self.analysis= self.solu.newAnalysis("modal_analysis","analysisAggregation","")
     return self.analysis
 

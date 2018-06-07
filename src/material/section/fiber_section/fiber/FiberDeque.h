@@ -36,7 +36,7 @@
 class Ref3d3d;
 class Pos2d;
 class Recta2d;
-class Segmento2d;
+class Segment2d;
 class Poligono2d;
 class BND2d;
 class HalfPlane2d;
@@ -148,7 +148,7 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     std::string getStrClaseEsfuerzo(const double &tol= 1e-4) const;
     double getNeutralAxisDepth(const FiberSectionBase &) const;
     Vector getVectorBrazoMecanico(void) const;
-    Segmento2d getSegmentoBrazoMecanico(void) const;
+    Segment2d getLeverArmSegment(void) const;
     double getMechanicLeverArm(void) const;
     Recta2d getBendingPlaneTrace(void) const;
     Recta2d getTensionedPlaneTrace(void) const;

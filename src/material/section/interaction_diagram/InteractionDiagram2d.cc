@@ -27,7 +27,7 @@
 //InteractionDiagram2d.cc
 
 #include "InteractionDiagram2d.h"
-#include "xc_utils/src/geom/d1/Segmento2d.h"
+#include "xc_utils/src/geom/d1/Segment2d.h"
 #include "utility/matrix/Vector.h"
 
 #include "material/section/fiber_section/FiberSectionBase.h"
@@ -68,7 +68,7 @@ Pos2d XC::InteractionDiagram2d::get_intersection(const Pos2d &p) const
     const Pos2d O= Pos2d(0.0,0.0);
     //Search for the trihedron that contains p.
     SemiRecta2d Op(O,p);
-    const Segmento2d sg= Clip(Op);
+    const Segment2d sg= Clip(Op);
     const Pos2d p1= sg.Origen();
     const Pos2d p2= sg.Destino();
     if(p1!=O)
@@ -114,7 +114,7 @@ double XC::InteractionDiagram2d::getCapacityFactor(const Pos2d &esf_d) const
     else
       {
         const Pos2d C= get_intersection(esf_d);
-        const Segmento2d sOC(O,C);
+        const Segment2d sOC(O,C);
         retval= d/sOC.getLength();
       }
     return retval;

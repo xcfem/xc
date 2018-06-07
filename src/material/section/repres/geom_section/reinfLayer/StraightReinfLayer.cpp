@@ -60,7 +60,7 @@
 #include <material/section/repres/geom_section/reinfBar/ReinfBar.h>
 
 #include "xc_basic/src/text/text_string.h"
-#include "xc_utils/src/geom/d1/Segmento2d.h"
+#include "xc_utils/src/geom/d1/Segment2d.h"
 
 
 XC::StraightReinfLayer::StraightReinfLayer(ListReinfLayer *owr,Material *mat)
@@ -163,9 +163,9 @@ const XC::Vector &XC::StraightReinfLayer::getInitialPosition(void) const
 const XC::Vector &XC::StraightReinfLayer::getFinalPosition(void) const
   { return finalPosit; }
 
-//! @brief Returns the segmento que une los extremos.
-Segmento2d XC::StraightReinfLayer::getLineSegment(void) const
-  { return Segmento2d(Pos2d(initPosit(0),initPosit(1)),Pos2d(finalPosit(0),finalPosit(1))); }
+//! @brief Returns the segment that lies both ends.
+Segment2d XC::StraightReinfLayer::getLineSegment(void) const
+  { return Segment2d(Pos2d(initPosit(0),initPosit(1)),Pos2d(finalPosit(0),finalPosit(1))); }
 
 double XC::StraightReinfLayer::getLength(void) const
   { return getLineSegment().getLength(); }

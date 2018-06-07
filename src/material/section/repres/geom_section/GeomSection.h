@@ -37,7 +37,7 @@
 #include "material/section/repres/SectionMassProperties.h"
 
 class HalfPlane2d;
-class Segmento2d;
+class Segment2d;
 
 namespace XC {
 class SectionReferenceFrame;
@@ -129,7 +129,7 @@ class GeomSection: public SectionMassProperties
     double getLeverArm(const Recta2d &) const;
     double getAnchoMecanico(const Recta2d &) const;
     double getCover(const Pos2d &) const;
-    double getCompressedStrutWidth(const Segmento2d &) const;
+    double getCompressedStrutWidth(const Segment2d &) const;
 
     //Access to containers.
     inline const RegionContainer &getRegions(void) const

@@ -50,7 +50,7 @@
 #include "xc_utils/src/geom/d2/HalfPlane2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/bool_op_poligono2d.h"
 #include "xc_utils/src/geom/d1/SemiRecta2d.h"
-#include "xc_utils/src/geom/d1/Segmento2d.h"
+#include "xc_utils/src/geom/d1/Segment2d.h"
 
 
 //! @brief Constructor.
@@ -725,7 +725,7 @@ XC::Vector XC::FiberSectionBase::getVectorBrazoMecanico(void) const
 XC::Vector XC::FiberSectionBase::getVectorCantoUtil(void) const
   {
     Vector retval(2);
-    const Segmento2d tmp= getSegmentoCantoUtil();
+    const Segment2d tmp= getEffectiveDepthSegment();
     const Pos2d p1= tmp.Origen();
     const Pos2d p2= tmp.Destino();
     retval(0)= p2.x()-p1.x();
@@ -735,9 +735,9 @@ XC::Vector XC::FiberSectionBase::getVectorCantoUtil(void) const
 
 //! @brief Returns a segment from the centroid of the tensioned area
 //! to the centroid of the compressed area.
-Segmento2d XC::FiberSectionBase::getSegmentoBrazoMecanico(void) const
+Segment2d XC::FiberSectionBase::getLeverArmSegment(void) const
   {
-    Segmento2d retval= fibers.getSegmentoBrazoMecanico();
+    Segment2d retval= fibers.getLeverArmSegment();
     if(!retval.exists())
       {
         //Lever arm as 0.8 times total depth.
@@ -748,7 +748,7 @@ Segmento2d XC::FiberSectionBase::getSegmentoBrazoMecanico(void) const
         retval= contour.Clip(Yaxis);
         Pos2d org= retval.Origen()+0.1*retval.GetVector();
         Pos2d dest= retval.Destino()-0.1*retval.GetVector();
-        retval= Segmento2d(org,dest);
+        retval= Segment2d(org,dest);
       }
     return retval;
   }
@@ -756,10 +756,10 @@ Segmento2d XC::FiberSectionBase::getSegmentoBrazoMecanico(void) const
 //! @brief Returns the segment defined by the current effective
 //! depth of the section. The segment is oriented from the centroid
 //! of the tensioned fibers to the most compressed fiber.
-Segmento2d XC::FiberSectionBase::getSegmentoCantoUtil(void) const
+Segment2d XC::FiberSectionBase::getEffectiveDepthSegment(void) const
   {
-    Segmento2d retval;
-    const Segmento2d bm= getSegmentoBrazoMecanico();
+    Segment2d retval;
+    const Segment2d bm= getLeverArmSegment();
     const SemiRecta2d sr(bm.Origen(),bm.Destino());
     const Poligono2d contour= getRegionsContour();
     retval= contour.Clip(sr);
@@ -822,7 +822,7 @@ double XC::FiberSectionBase::getCompressedStrutWidth(void) const
     double retval= 0.0;
     const GeomSection *geom= getGeomSection();
     if(geom)
-      retval= geom->getCompressedStrutWidth(getSegmentoBrazoMecanico());
+      retval= geom->getCompressedStrutWidth(getLeverArmSegment());
     return retval;
   }
 

@@ -35,7 +35,7 @@
 #include "xc_utils/src/geom/sis_ref/PrincipalAxesOfInertia2D.h"
 #include "material/section/repres/CrossSectionProperties3d.h"
 #include "material/section/repres/CrossSectionProperties2d.h"
-#include "xc_utils/src/geom/d1/Segmento2d.h"
+#include "xc_utils/src/geom/d1/Segment2d.h"
 
 //! @brief Constructor.
 XC::SectionMassProperties::SectionMassProperties(EntCmd *owr)

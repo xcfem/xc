@@ -49,7 +49,7 @@
 #include "xc_utils/src/geom/sis_ref/Ref2d2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
 #include "xc_utils/src/geom/d2/HalfPlane2d.h"
-#include "xc_utils/src/geom/d1/Segmento2d.h"
+#include "xc_utils/src/geom/d1/Segment2d.h"
 
 #include "boost/lexical_cast.hpp"
 
@@ -364,7 +364,7 @@ double XC::GeomSection::getAnchoMecanico(const Recta2d &bending_plane_trace) con
     const size_t num_vertices= contour.GetNumVertices();
     double d= 0.0,dmax= 0.0;
     Recta2d perp;
-    Segmento2d ancho;
+    Segment2d ancho;
     for(register size_t i=1;i<=num_vertices;i++)
       {
         perp= bending_plane_trace.Perpendicular(contour.Vertice(i));
@@ -379,12 +379,12 @@ double XC::GeomSection::getAnchoMecanico(const Recta2d &bending_plane_trace) con
 
 //! @brief Return the width «b0» of the compressed strut
 //! that corresponds to the arm lever represented by the segment being passed as parameter.
-double XC::GeomSection::getCompressedStrutWidth(const Segmento2d &brazo_mecanico) const
+double XC::GeomSection::getCompressedStrutWidth(const Segment2d &brazo_mecanico) const
   {
     const Poligono2d contour= append_mid_points(getRegionsContour());
     const size_t num_vertices= contour.GetNumVertices();
     Recta2d perp= brazo_mecanico.Mediatriz();
-    Segmento2d ancho= contour.Clip(perp);
+    Segment2d ancho= contour.Clip(perp);
     Pos2d p= intersection_point(ancho,brazo_mecanico);
     assert(p.exists());
     double b2= std::min(dist2(p,ancho.Origen()),dist2(p,ancho.Destino()));
