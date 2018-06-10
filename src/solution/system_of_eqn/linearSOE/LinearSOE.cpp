@@ -85,7 +85,7 @@
 #include <solution/system_of_eqn/linearSOE/profileSPD/ProfileSPDLinSolver.h>
 #include <solution/system_of_eqn/linearSOE/profileSPD/ProfileSPDLinDirectBlockSolver.h>
 //#include <solution/system_of_eqn/linearSOE/profileSPD/ProfileSPDLinDirectThreadSolver.h>
-//#include <solution/system_of_eqn/linearSOE/profileSPD/ProfileSPDLinDirectSkypackSolver.h>
+#include <solution/system_of_eqn/linearSOE/profileSPD/ProfileSPDLinDirectSkypackSolver.h>
 #include <solution/system_of_eqn/linearSOE/profileSPD/ProfileSPDLinDirectSolver.h>
 //#include <solution/system_of_eqn/linearSOE/profileSPD/ProfileSPDLinSubstrSolver.h>
 
@@ -184,8 +184,8 @@ XC::LinearSOESolver &XC::LinearSOE::newSolver(const std::string &type)
       setSolver(new ProfileSPDLinDirectSolver());
     else if(type=="profile_spd_lin_direct_block_solver")
       setSolver(new ProfileSPDLinDirectBlockSolver());
-//     else if(type=="profile_spd_lin_direct_skypack_solver")
-//      setSolver(new ProfileSPDLinDirectSkypackSolver());
+    else if(type=="profile_spd_lin_direct_skypack_solver")
+     setSolver(new ProfileSPDLinDirectSkypackSolver());
 //     else if(type=="profile_spd_lin_direct_thread_solver")
 //       setSolver(new ProfileSPDLinDirectThreadSolver());
 //     else if(type=="profile_spd_lin_substr_solver")

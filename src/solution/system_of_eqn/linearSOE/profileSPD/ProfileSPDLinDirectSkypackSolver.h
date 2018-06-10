@@ -98,10 +98,11 @@ class ProfileSPDLinDirectSkypackSolver : public ProfileSPDLinSolver
     Vector invD;
     int block[3];
 
+  public:
     ProfileSPDLinDirectSkypackSolver();    
     ProfileSPDLinDirectSkypackSolver(int mCols, int mRows);    
     virtual LinearSOESolver *getCopy(void) const;
-  public:
+
     virtual int solve(void);        
     virtual int setSize(void);    
 
