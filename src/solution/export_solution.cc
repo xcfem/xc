@@ -58,6 +58,7 @@ XC::ProcSoluControl &(XC::ProcSolu::*getSoluControlRef)(void)= &XC::ProcSolu::ge
    .add_property("getSoluControl", make_function( getSoluControlRef, return_internal_reference<>() )," \n"" Return a reference to the objects  that control the solution procedure.\n")
    .add_property("getAnalysis", make_function( &XC::ProcSolu::getAnalysis, return_internal_reference<>() )," \n"" Return a reference to the analysis object. \n")
     .def("newAnalysis", &XC::ProcSolu::newAnalysis,return_internal_reference<>()," \n""newAnalysis(nmb,analysis_aggregation_code,cod_solu_eigenM) \n""Definition of a new analysis.""Parameters: \n""nmb: name of the type of analysis. Available types: 'direct_integration_analysis', 'eigen_analysis', 'modal_analysis','linear_buckling_analysis', 'linear_buckling_eigen_analysis', 'static_analysis', 'variable_time_step_direct_integration_analysis' \n""analysis_aggregation_code: name of the solution method container \n""cod_solu_eigenM: name of the solution method (only when linear buckling analysis defined).\n")
+   .def("clear", &XC::ProcSolu::clearAll,"clear all previously defined analysis parameters.")
     ;
 
   }

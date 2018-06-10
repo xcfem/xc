@@ -61,6 +61,8 @@ class SolutionProcedure(object):
     self.convergenceTestTol= 1e-9
     self.maxNumIter= 10
     self.printFlag= 0
+  def clear(self):
+    self.solu.clear()
   def simpleStaticLinear(self,prb):
     self.solu= prb.getSoluProc
     self.solCtrl= self.solu.getSoluControl
@@ -78,6 +80,22 @@ class SolutionProcedure(object):
     self.soe= self.analysisAggregation.newSystemOfEqn("band_spd_lin_soe")
     self.solver= self.soe.newSolver("band_spd_lin_lapack_solver")
     self.analysis= self.solu.newAnalysis("static_analysis","analysisAggregation","")
+    return self.analysis;
+  def plainLinearNewmark(self,prb):
+    self.solu= prb.getSoluProc
+    self.solCtrl= self.solu.getSoluControl
+    solModels= self.solCtrl.getModelWrapperContainer
+    self.sm= solModels.newModelWrapper("sm")
+    self.numberer= self.sm.newNumberer("default_numberer")
+    self.numberer.useAlgorithm("simple")
+    self.cHandler= self.sm.newConstraintHandler("plain_handler")
+    analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
+    self.analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
+    self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("linear_soln_algo")
+    self.integ= self.analysisAggregation.newIntegrator("newmark_integrator",xc.Vector([0.5,0.25]))
+    self.soe= self.analysisAggregation.newSystemOfEqn("band_gen_lin_soe")
+    self.solver= self.soe.newSolver("band_gen_lin_lapack_solver")
+    self.analysis= self.solu.newAnalysis("direct_integration_analysis","analysisAggregation","")
     return self.analysis;
   def simpleLagrangeStaticLinear(self,prb):
     self.solu= prb.getSoluProc
@@ -215,6 +233,7 @@ class SolutionProcedure(object):
     self.analysis= self.solu.newAnalysis("direct_integration_analysis","analysisAggregation","")
     return self.analysis;
 
+  
   def frequencyAnalysis(self,prb,systemPrefix= 'sym_band'):
     self.solu= prb.getSoluProc
     self.solCtrl= self.solu.getSoluControl
