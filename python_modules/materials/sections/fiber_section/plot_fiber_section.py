@@ -50,7 +50,9 @@ def plotGeomSeccion(geomSection, path):
     ctx.set_line_width(trf.scale/300000)
     reinforcement= geomSection.getReinfLayers
     plotArmaduras(reinforcement,ctx)
-    trf.plotYZAxes(ctx)
+    #2010516  to check
+    # trf.plotYZAxes(ctx)
+    # 
     surface.set_eps(True)
     ctx.show_page()
     surface.finish()

@@ -919,6 +919,16 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/analysis_results.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/callback_controls.py
 /usr/local/lib/python2.7/dist-packages/postprocess/callback_controls.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/config/colors.py
+/usr/local/lib/python2.7/dist-packages/postprocess/config/colors.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/config/en_captions.py
+/usr/local/lib/python2.7/dist-packages/postprocess/config/en_captions.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/config/fr_captions.py
+/usr/local/lib/python2.7/dist-packages/postprocess/config/fr_captions.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/config/__init__.py
+/usr/local/lib/python2.7/dist-packages/postprocess/config/__init__.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/config/sp_captions.py
+/usr/local/lib/python2.7/dist-packages/postprocess/config/sp_captions.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/control_vars.py
 /usr/local/lib/python2.7/dist-packages/postprocess/ControlVars.py
 /usr/local/lib/python2.7/dist-packages/postprocess/control_vars.pyc
