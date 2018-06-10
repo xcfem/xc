@@ -60,17 +60,17 @@
 #include "domain/mesh/element/plane/UP-ucsd/FourNodeQuadUP.h"
 #include "domain/mesh/element/plane/UP-ucsd/NineFourNodeQuadUP.h"
 
-#include "domain/mesh/element/volumen/brick/BbarBrick.h"
-#include "domain/mesh/element/volumen/brick/Brick.h"
-#include "domain/mesh/element/volumen/8nbrick/EightNodeBrick.h"
-#include "domain/mesh/element/volumen/20nbrick/TwentyNodeBrick.h"
-#include "domain/mesh/element/volumen/20nbrick/Twenty_Node_Brick.h"
-#include "domain/mesh/element/volumen/27nbrick/TwentySevenNodeBrick.h"
-#include "domain/mesh/element/volumen/TotalLagrangianFD20NodeBrick/TotalLagrangianFD20NodeBrick.h"
-#include "domain/mesh/element/volumen/upU/EightNodeBrick_u_p_U.h"
-#include "domain/mesh/element/volumen/upU/TwentyNodeBrick_u_p_U.h"
-#include "domain/mesh/element/volumen/UP-ucsd/BrickUP.h"
-#include "domain/mesh/element/volumen/UP-ucsd/TwentyEightNodeBrickUP.h"
+#include "domain/mesh/element/volumetric/brick/BbarBrick.h"
+#include "domain/mesh/element/volumetric/brick/Brick.h"
+#include "domain/mesh/element/volumetric/8nbrick/EightNodeBrick.h"
+#include "domain/mesh/element/volumetric/20nbrick/TwentyNodeBrick.h"
+#include "domain/mesh/element/volumetric/20nbrick/Twenty_Node_Brick.h"
+#include "domain/mesh/element/volumetric/27nbrick/TwentySevenNodeBrick.h"
+#include "domain/mesh/element/volumetric/TotalLagrangianFD20NodeBrick/TotalLagrangianFD20NodeBrick.h"
+#include "domain/mesh/element/volumetric/upU/EightNodeBrick_u_p_U.h"
+#include "domain/mesh/element/volumetric/upU/TwentyNodeBrick_u_p_U.h"
+#include "domain/mesh/element/volumetric/UP-ucsd/BrickUP.h"
+#include "domain/mesh/element/volumetric/UP-ucsd/TwentyEightNodeBrickUP.h"
 
 #include "domain/mesh/element/special/joint/BeamColumnJoint2d.h"
 #include "domain/mesh/element/special/joint/BeamColumnJoint3d.h"
@@ -416,15 +416,15 @@ XC::Element *XC::ProtoElementHandler::create_element(const std::string &cmd,int 
   }
 
 //! @brief Create a new element.
-//! @param tipo: type of element. Available types:'Truss','TrussSection','CorotTruss','CorotTrussSection','Spring', 'Beam2d02', 'Beam2d03',  'Beam2d04', 'Beam3d01', 'Beam3d02', 'ElasticBeam2d', 'ElasticBeam3d', 'BeamWithHinges2d', 'BeamWithHinges3d', 'NlBeamColumn2d', 'NlBeamColumn3d','ForceBeamColumn2d', 'ForceBeamColumn3d', 'ShellMitc4', ' shellNl', 'Quad4n', 'Tri31', 'Brick', 'ZeroLength', 'ZeroLengthContact2d', 'ZeroLengthContact3d', 'ZeroLengthSection'.
+//! @param type: type of element. Available types:'Truss','TrussSection','CorotTruss','CorotTrussSection','Spring', 'Beam2d02', 'Beam2d03',  'Beam2d04', 'Beam3d01', 'Beam3d02', 'ElasticBeam2d', 'ElasticBeam3d', 'BeamWithHinges2d', 'BeamWithHinges3d', 'NlBeamColumn2d', 'NlBeamColumn3d','ForceBeamColumn2d', 'ForceBeamColumn3d', 'ShellMitc4', ' shellNl', 'Quad4n', 'Tri31', 'Brick', 'ZeroLength', 'ZeroLengthContact2d', 'ZeroLengthContact3d', 'ZeroLengthSection'.
 //! @param iNodes: nodes ID, e.g. xc.ID([1,2]) to create a linear element from node 1 to node 2.
-XC::Element *XC::ProtoElementHandler::newElement(const std::string &tipo,const ID &iNodes)
+XC::Element *XC::ProtoElementHandler::newElement(const std::string &type,const ID &iNodes)
   {
     const int tag_elem= getDefaultTag();
     Element *retval= getPreprocessor()->getDomain()->getElement(tag_elem);
     if(!retval) //It doesn't already exists.
       {
-        retval= create_element(tipo,tag_elem);
+        retval= create_element(type,tag_elem);
         if(retval)
           {
             retval->setIdNodes(iNodes);

@@ -117,8 +117,8 @@ size_t XC::FiberData::putReinforcementLayers(const size_t &offset,const ListRein
     for(ListReinfLayer::const_iterator i= reinforcement_layers.begin();i!=reinforcement_layers.end();i++)
       {
         matPtr= (*i)->getMaterialPtr();
-        const ReinfLayer *capa= *i;
-        const VectorReinfBar &bars= capa->getReinfBars();
+        const ReinfLayer *layer= *i;
+        const VectorReinfBar &bars= layer->getReinfBars();
         k= put_reinf_bars(k,bars,matPtr);
       }
     return k;

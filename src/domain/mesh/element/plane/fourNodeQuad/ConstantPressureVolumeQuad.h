@@ -57,7 +57,7 @@
 #include "domain/mesh/element/utils/physical_properties/NDMaterialPhysicalProperties.h"
 
 namespace XC{
-//! \ingroup ElemPlanos
+//! @ingroup PlaneElements
 //
 //! @brief ??.
 class ConstantPressureVolumeQuad: public QuadBase4N<NDMaterialPhysicalProperties>

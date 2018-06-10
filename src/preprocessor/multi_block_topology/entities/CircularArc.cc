@@ -105,11 +105,11 @@ const SectorCircular3d XC::CircularArc::get_sector_circular3d(void) const
   }
 
 //! @brief Return the arc length.
-double XC::CircularArc::getLongitud(void) const
+double XC::CircularArc::getLength(void) const
   {
     double retval= 0;
     if(check_points())
-      retval= get_sector_circular3d().LongitudArco();
+      retval= get_sector_circular3d().getArcLength();
     return retval;
   }
 
@@ -118,16 +118,16 @@ Pos3d XC::CircularArc::getCentroid(void) const
   {
     Pos3d retval(0.0,0.0,0.0);
     if(check_points())
-      retval= get_sector_circular3d().Cdg();
+      retval= get_sector_circular3d().getCenterOfMass();
     return retval;
   }
 
 //! @brief Return the angle subtended by the arc.
-double XC::CircularArc::getAnguloComprendido(void) const
+double XC::CircularArc::getIncludedAngle(void) const
   {
     double retval= 0;
     if(check_points())
-      retval= get_sector_circular3d().AnguloComprendido();
+      retval= get_sector_circular3d().getIncludedAngle();
     return retval;
   }
 

@@ -1037,7 +1037,7 @@ double XC::Element::getDist(const Pos3d &p,bool initialGeometry) const
   }
 
 //! @brief Returns the coordinates del centro de gravedad of the element.
-Pos3d XC::Element::getPosCdg(bool initialGeometry) const
+Pos3d XC::Element::getCenterOfMassPosition(bool initialGeometry) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
               << " is not implemented." << std::endl;
@@ -1046,13 +1046,13 @@ Pos3d XC::Element::getPosCdg(bool initialGeometry) const
   }
 
 //! @brief Returns the coordinates del centro de gravedad of the element.
-XC::Vector XC::Element::getCooCdg(bool initialGeometry) const
+XC::Vector XC::Element::getCenterOfMassCoordinates(bool initialGeometry) const
   {
-    const Pos3d cdg= getPosCdg(initialGeometry);
+    const Pos3d center_of_mass= getCenterOfMassPosition(initialGeometry);
     Vector retval(3);
-    retval(0)= cdg.x();
-    retval(1)= cdg.y();
-    retval(2)= cdg.z();
+    retval(0)= center_of_mass.x();
+    retval(1)= center_of_mass.y();
+    retval(2)= center_of_mass.z();
     return retval;
   }
 

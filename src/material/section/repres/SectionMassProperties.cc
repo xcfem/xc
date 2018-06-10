@@ -35,7 +35,7 @@
 #include "xc_utils/src/geom/sis_ref/PrincipalAxesOfInertia2D.h"
 #include "material/section/repres/CrossSectionProperties3d.h"
 #include "material/section/repres/CrossSectionProperties2d.h"
-#include "xc_utils/src/geom/d1/Segmento2d.h"
+#include "xc_utils/src/geom/d1/Segment2d.h"
 
 //! @brief Constructor.
 XC::SectionMassProperties::SectionMassProperties(EntCmd *owr)
@@ -99,9 +99,9 @@ double XC::SectionMassProperties::getI2HomogenizedSection(const double &E0) cons
 //! @brief Principal axis of inertia of the homogenized section.
 PrincipalAxesOfInertia2D XC::SectionMassProperties::getInertiaAxesHomogenizedSection(const double &E0) const
   {
-    const Vector v= getCdgHomogenizedSection(E0);
-    const Pos2d cdg(v[0],v[1]);
-    return PrincipalAxesOfInertia2D(cdg,getIyHomogenizedSection(E0),getIzHomogenizedSection(E0),getPyzHomogenizedSection(E0));
+    const Vector v= getCenterOfMassHomogenizedSection(E0);
+    const Pos2d center_of_mass(v[0],v[1]);
+    return PrincipalAxesOfInertia2D(center_of_mass,getIyHomogenizedSection(E0),getIzHomogenizedSection(E0),getPyzHomogenizedSection(E0));
   }
 //! @brief Direction of the major principal axis of inertia of the homogenized
 //! section.
@@ -159,9 +159,9 @@ double XC::SectionMassProperties::getIHomogenizedSection(const double &E0,const 
 double XC::SectionMassProperties::getIHomogenizedSection(const double &E0,const unsigned short int &i,const unsigned short int &j,const Pos2d &o) const
   {
     const double Iij= getIHomogenizedSection(E0,i,j);
-    const Vector cdg= getCdgHomogenizedSection(E0);
+    const Vector center_of_mass= getCenterOfMassHomogenizedSection(E0);
 
-    Pos2d pp(cdg[0],cdg[1]);
+    Pos2d pp(center_of_mass[0],center_of_mass[1]);
     Ref2d2d axes(pp);
     Pos2d pos_local= axes.GetPosLocal(o);
     return Iij + getAreaHomogenizedSection(E0) * pos_local(i) * pos_local(j);
@@ -188,7 +188,7 @@ XC::Matrix XC::SectionMassProperties::getIHomogenizedSection(const double &E0,co
     Matrix retval(2,2);
     const Matrix Ig= getIHomogenizedSection(E0);
     Vector O(2); O[0]= o.x(); O[1]= o.y();
-    const Vector og= getCdgHomogenizedSection(E0) - O;
+    const Vector og= getCenterOfMassHomogenizedSection(E0) - O;
     const double m= getAreaHomogenizedSection(E0);
     retval= Ig+m*(og.Norm2()*identity(Ig)-(og & og));
     return retval;
@@ -269,9 +269,9 @@ double XC::SectionMassProperties::getI2GrossSection(void) const
 //! @brief Principal axis of inertia of the gross section.
 PrincipalAxesOfInertia2D XC::SectionMassProperties::getInertiaAxesGrossSection(void) const
   {
-    const Vector v= getCdgGrossSection();
-    const Pos2d cdg(v[0],v[1]);
-    return PrincipalAxesOfInertia2D(cdg,getIyGrossSection(),getIzGrossSection(),getPyzGrossSection());
+    const Vector v= getCenterOfMassGrossSection();
+    const Pos2d center_of_mass(v[0],v[1]);
+    return PrincipalAxesOfInertia2D(center_of_mass,getIyGrossSection(),getIzGrossSection(),getPyzGrossSection());
   }
 //! @brief Direction of the major principal axis of inertia of the gross
 //! section.
@@ -330,9 +330,9 @@ double XC::SectionMassProperties::getIGrossSection(const Recta2d &r) const
 double XC::SectionMassProperties::getIGrossSection(const unsigned short int &i,const unsigned short int &j,const Pos2d &o) const
   {
     const double Iij= getIGrossSection(i,j);
-    const Vector cdg= getCdgGrossSection();
+    const Vector center_of_mass= getCenterOfMassGrossSection();
 
-    Pos2d pp(cdg[0],cdg[1]);
+    Pos2d pp(center_of_mass[0],center_of_mass[1]);
     Ref2d2d axes(pp);
     Pos2d pos_local= axes.GetPosLocal(o);
     return Iij + getAreaGrossSection() * pos_local(i) * pos_local(j);
@@ -359,7 +359,7 @@ XC::Matrix XC::SectionMassProperties::getIGrossSection(const Pos2d &o) const
     Matrix retval(2,2);
     const Matrix Ig= getIGrossSection();
     Vector O(2); O[0]= o.x(); O[1]= o.y();
-    const Vector og= getCdgGrossSection() - O;
+    const Vector og= getCenterOfMassGrossSection() - O;
     const double m= getAreaGrossSection();
     retval= Ig+m*(og.Norm2()*identity(Ig)-(og & og));
     return retval;

@@ -65,7 +65,7 @@ namespace XC {
 class MaterialHandler;
 class FiberSectionRepr;
 
-//! \ingroup MATSCCFiberModel
+//! @ingroup MATSCCFiberModel
 //
 //! @brief Fiber section model in a three-dimensional space. Sections stiffness
 //! and internal forces are obtained by addition of the fibers contribution.

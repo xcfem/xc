@@ -69,7 +69,7 @@
 
 namespace XC {
 //! @ingroup Utils
-//
+//!
 //! @defgroup Matrix Vector, matrix and tensors classes.
 //
 //! @ingroup Matrix

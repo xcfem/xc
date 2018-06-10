@@ -31,13 +31,13 @@
 #include "xc_basic/src/util/matem.h"
 
 
-//! @brief Factor de cumplimiento para la max strain.
-//! valid if greater than one.
-double XC::NormalStressStrengthParameters::fc_tracc(void) const
+//! @brief Factor de cumplimiento for the max strain.
+//! Valid if greater than one.
+double XC::NormalStressStrengthParameters::fc_tension(void) const
   { return agot_pivots.getUltimateStrainAPivot()/eps_c_max; }
 
-//! @brief Factor de cumplimiento para la min strain.
-//! valid if greater than one.
+//! @brief Factor de cumplimiento for the min strain.
+//! Valid if greater than one.
 double XC::NormalStressStrengthParameters::fc_comp(void) const
   { return agot_pivots.getUltimateStrainBPivot()/eps_c_min; }
 
@@ -53,7 +53,7 @@ double XC::NormalStressStrengthParameters::fc_pC(void) const
 
 //! @brief Minimal factor de cumplimiento.
 double XC::NormalStressStrengthParameters::fc_min(void) const
-  { return std::min(fabs(fc_tracc()),std::min(fabs(fc_comp()),fabs(fc_pC()))); }
+  { return std::min(fabs(fc_tension()),std::min(fabs(fc_comp()),fabs(fc_pC()))); }
 
 XC::NormalStressStrengthParameters::NormalStressStrengthParameters(const PivotsUltimateStrains &ap,const double &emx,const double &emn,const double &ec)
   : agot_pivots(ap), eps_c_max(emx), eps_c_min(emn), eps_c_pC(ec) {}

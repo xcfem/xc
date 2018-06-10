@@ -36,7 +36,7 @@ class SectorCircular3d;
 
 namespace XC {
 
-//! \ingroup MultiBlockTopologyEnt
+//! @ingroup MultiBlockTopologyEnt
 //!
 //! @brief Circumference arc.
   
@@ -56,9 +56,9 @@ class CircularArc: public LineBase
 
     void update_topology(void);
 
-    double getLongitud(void) const;
+    double getLength(void) const;
     Pos3d getCentroid(void) const;
-    double getAnguloComprendido(void) const;
+    double getIncludedAngle(void) const;
     double getTheta1(void) const;
     double getTheta2(void) const;
     Pos3d getCentro(void) const;

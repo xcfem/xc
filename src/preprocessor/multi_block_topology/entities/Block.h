@@ -33,7 +33,7 @@
 
 namespace XC {
 
-//! \ingroup MultiBlockTopologyEnt
+//! @ingroup MultiBlockTopologyEnt
 //!
 //! @brief Six-faced body.
 class Block: public Body

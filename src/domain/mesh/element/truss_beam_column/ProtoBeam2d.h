@@ -34,7 +34,7 @@
 namespace XC {
 class CrdTransf2d;
 
-//! \ingroup OneDimensionalElem
+//! @ingroup OneDimensionalElem
 //
 //! @brief Base class for 2D beam elements.
 class ProtoBeam2d : public Element1D

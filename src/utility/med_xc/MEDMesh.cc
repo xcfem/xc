@@ -44,7 +44,8 @@ void XC::MEDMesh::alloc(const std::string &fName) const
     free_mem();
     mesh= new MEDMEM::MESH(MEDMEM::MED_DRIVER,fName,meshName);
     if(!mesh)
-      std::cerr << "MEDMesh::alloc; error in mesh reading: "
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; error in mesh reading: "
                 << meshName << " on file: " << fName << std::endl;
   }
 
@@ -85,7 +86,8 @@ void XC::MEDMesh::read(const std::string &fileName)
     const std::string nmb= mesh->getName();
     if(nmb!=meshName)
       {
-        std::cerr << "Error in reading mesh name: Is asked for #"
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; error in reading mesh name: Is asked for #"
                   << meshName <<"# and obtained #"
                   << nmb <<"#" << std::endl ;
       }
@@ -97,7 +99,8 @@ size_t XC::MEDMesh::getSpaceDimension(void)
     if(mesh)
       retval= mesh->getSpaceDimension();
     else
-      std::cerr << "MEDMesh::getSpaceDimension(); mesh not readed." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; mesh not read." << std::endl;
     return retval;
   }
 
@@ -107,7 +110,8 @@ size_t XC::MEDMesh::getMeshDimension(void)
     if(mesh)
       retval= mesh->getMeshDimension();
     else
-      std::cerr << "MEDMesh::getMeshDimension(); mesh not readed." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; mesh not read." << std::endl;
     return retval;
   }
 
@@ -117,7 +121,8 @@ size_t XC::MEDMesh::getNumberOfNodes(void)
     if(mesh)
       retval= mesh->getNumberOfNodes();
     else
-      std::cerr << "MEDMesh::getNumberOfNodes(); mesh not readed." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; mesh not read." << std::endl;
     return retval;
   }
 
@@ -132,7 +137,8 @@ boost::python::list XC::MEDMesh::getCoordinatesNames(void)
           retval.append(std::string(coordinatesNames[i]));
       }
     else
-      std::cerr << "MEDMesh::getCoordinatesNames(); mesh not readed." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; mesh not read." << std::endl;
     return retval;
   }
 
@@ -147,7 +153,8 @@ boost::python::list XC::MEDMesh::getCoordinatesUnits(void)
           retval.append(std::string(unitsNames[i]));
       }
     else
-      std::cerr << "MEDMesh::getCoordinatesUnits(); mesh not readed." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; mesh not read." << std::endl;
     return retval;
   }
 
@@ -165,7 +172,8 @@ XC::Matrix XC::MEDMesh::getCoordinates(void)
             retval(i,j)= coordenadas[i*spaceDim+j];
       }
     else
-      std::cerr << "MEDMesh::getCoordinates(); mesh not readed." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; mesh not read." << std::endl;
     return retval;
   }
 
@@ -175,7 +183,8 @@ size_t XC::MEDMesh::getNumberOfCellTypes()
     if(mesh)
       retval= mesh->getNumberOfTypes(MED_EN::MED_CELL);
     else
-      std::cerr << "MEDMesh::getCoordinates(); mesh not readed." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; mesh not read." << std::endl;
     return retval;
   }
 
@@ -184,13 +193,14 @@ boost::python::list XC::MEDMesh::getCellTypes(void)
     boost::python::list retval;
     if(mesh)
       {
-        const MED_EN::medGeometryElement *tipos= mesh->getTypes(MED_EN::MED_CELL);
-        const size_t numTipos= mesh->getNumberOfTypes(MED_EN::MED_CELL);
-        for(size_t i=0;i<numTipos;i++)
-          retval.append(tipos[i]);
+        const MED_EN::medGeometryElement *types= mesh->getTypes(MED_EN::MED_CELL);
+        const size_t numTypes= mesh->getNumberOfTypes(MED_EN::MED_CELL);
+        for(size_t i=0;i<numTypes;i++)
+          retval.append(types[i]);
       }
     else
-      std::cerr << "MEDMesh::getCoordinates(); mesh not readed." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; mesh not read." << std::endl;
     return retval;
   }
 
@@ -199,62 +209,67 @@ boost::python::list XC::MEDMesh::getCellTypeNames(void)
     boost::python::list retval;
     if(mesh)
       {
-        const std::string *tipos= mesh->getCellTypeNames(MED_EN::MED_CELL);
-        const size_t numTipos= mesh->getNumberOfTypes(MED_EN::MED_CELL);
-        for(size_t i=0;i<numTipos;i++)
-          retval.append(std::string(tipos[i]));
+        const std::string *types= mesh->getCellTypeNames(MED_EN::MED_CELL);
+        const size_t numTypes= mesh->getNumberOfTypes(MED_EN::MED_CELL);
+        for(size_t i=0;i<numTypes;i++)
+          retval.append(std::string(types[i]));
       }
     else
-      std::cerr << "MEDMesh::getCellTypeNames(); mesh not readed." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; mesh not read." << std::endl;
     return retval;
   }
 
-size_t XC::MEDMesh::getNumCellsOfType(int tipo)
+size_t XC::MEDMesh::getNumCellsOfType(int type)
   {
     size_t retval= 0;
     if(mesh)
-      retval= mesh->getNumberOfElements(MED_EN::MED_CELL,tipo);
+      retval= mesh->getNumberOfElements(MED_EN::MED_CELL,type);
     else
-      std::cerr << "MEDMesh::getNumCellsOfType(); mesh not readed." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; mesh not read." << std::endl;
     return retval;
   }
 
-XC::Matrix XC::MEDMesh::getConnectivityCellsOfType(int tipo)
+XC::Matrix XC::MEDMesh::getConnectivityCellsOfType(int type)
   {
     Matrix retval;
-    size_t numNodesCellType= tipo%100;
-    size_t numCeldasTipo= 0;
+    size_t numNodesCellType= type%100;
+    size_t numCeldasType= 0;
     if(mesh)
       {
-        numCeldasTipo= mesh->getNumberOfElements(MED_EN::MED_CELL,tipo);
-        retval= Matrix(numCeldasTipo,numNodesCellType);
-        const int *conectividad= mesh->getConnectivity(MED_EN::MED_NODAL,MED_EN::MED_CELL,tipo);
-        for(size_t i= 0;i<numCeldasTipo;i++)
+        numCeldasType= mesh->getNumberOfElements(MED_EN::MED_CELL,type);
+        retval= Matrix(numCeldasType,numNodesCellType);
+        const int *conectividad= mesh->getConnectivity(MED_EN::MED_NODAL,MED_EN::MED_CELL,type);
+        for(size_t i= 0;i<numCeldasType;i++)
           for(size_t j= 0;j<numNodesCellType;j++)
             retval(i,j)= conectividad[i*numNodesCellType+j];
       }
     else
-      std::cerr << "MEDMesh::getConnectivityCellsOfType(); mesh not readed." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; mesh not read." << std::endl;
     return retval;
   }
 
-size_t XC::MEDMesh::getNumberOfGroups(int tipo_entidad)
+size_t XC::MEDMesh::getNumberOfGroups(int entity_type)
   {
     size_t retval= 0;
     if(mesh)
-      retval= mesh->getNumberOfGroups(tipo_entidad);
+      retval= mesh->getNumberOfGroups(entity_type);
     else
-      std::cerr << "MEDMesh::getNumberOfGroups(); mesh not readed." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; mesh not read." << std::endl;
     return retval;
   }
 
-size_t XC::MEDMesh::getNumberOfFamilies(int tipo_entidad)
+size_t XC::MEDMesh::getNumberOfFamilies(int entity_type)
   {
     size_t retval= 0;
     if(mesh)
-      retval= mesh->getNumberOfFamilies(tipo_entidad);
+      retval= mesh->getNumberOfFamilies(entity_type);
     else
-      std::cerr << "MEDMesh::getNumberOfFamilies(); mesh not readed." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; mesh not read." << std::endl;
     return retval;
   }
 

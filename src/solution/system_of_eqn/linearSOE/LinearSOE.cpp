@@ -85,7 +85,7 @@
 #include <solution/system_of_eqn/linearSOE/profileSPD/ProfileSPDLinSolver.h>
 #include <solution/system_of_eqn/linearSOE/profileSPD/ProfileSPDLinDirectBlockSolver.h>
 //#include <solution/system_of_eqn/linearSOE/profileSPD/ProfileSPDLinDirectThreadSolver.h>
-//#include <solution/system_of_eqn/linearSOE/profileSPD/ProfileSPDLinDirectSkypackSolver.h>
+#include <solution/system_of_eqn/linearSOE/profileSPD/ProfileSPDLinDirectSkypackSolver.h>
 #include <solution/system_of_eqn/linearSOE/profileSPD/ProfileSPDLinDirectSolver.h>
 //#include <solution/system_of_eqn/linearSOE/profileSPD/ProfileSPDLinSubstrSolver.h>
 
@@ -162,43 +162,43 @@ bool XC::LinearSOE::setSolver(LinearSOESolver *newSolver)
     return retval;
   }
 
-XC::LinearSOESolver &XC::LinearSOE::newSolver(const std::string &tipo)
+XC::LinearSOESolver &XC::LinearSOE::newSolver(const std::string &type)
   {
-    if(tipo=="band_gen_lin_lapack_solver")
+    if(type=="band_gen_lin_lapack_solver")
       setSolver(new BandGenLinLapackSolver());
-    else if(tipo=="band_spd_lin_lapack_solver")
+    else if(type=="band_spd_lin_lapack_solver")
       setSolver(new BandSPDLinLapackSolver());
-//     else if(tipo=="band_spd_lin_thread_solver")
+//     else if(type=="band_spd_lin_thread_solver")
 //       setSolver(new BandSPDLinThreadSolver());
-//     else if(tipo=="conjugate_gradient_solver")
+//     else if(type=="conjugate_gradient_solver")
 //       setSolver(new ConjugateGradientSolver());
-    else if(tipo=="diagonal_direct_solver")
+    else if(type=="diagonal_direct_solver")
       setSolver(new DiagonalDirectSolver());
-    else if(tipo=="distributed_diagonal_solver")
+    else if(type=="distributed_diagonal_solver")
       setSolver(new DistributedDiagonalSolver());
-    else if(tipo=="full_gen_lin_lapack_solver")
+    else if(type=="full_gen_lin_lapack_solver")
       setSolver(new FullGenLinLapackSolver());
-//     else if(tipo=="itpack_lin_solver")
+//     else if(type=="itpack_lin_solver")
 //       setSolver(new ItpackLinSolver());
-    else if(tipo=="profile_spd_lin_direct_solver")
+    else if(type=="profile_spd_lin_direct_solver")
       setSolver(new ProfileSPDLinDirectSolver());
-    else if(tipo=="profile_spd_lin_direct_block_solver")
+    else if(type=="profile_spd_lin_direct_block_solver")
       setSolver(new ProfileSPDLinDirectBlockSolver());
-//     else if(tipo=="profile_spd_lin_direct_skypack_solver")
-//      setSolver(new ProfileSPDLinDirectSkypackSolver());
-//     else if(tipo=="profile_spd_lin_direct_thread_solver")
+    else if(type=="profile_spd_lin_direct_skypack_solver")
+     setSolver(new ProfileSPDLinDirectSkypackSolver());
+//     else if(type=="profile_spd_lin_direct_thread_solver")
 //       setSolver(new ProfileSPDLinDirectThreadSolver());
-//     else if(tipo=="profile_spd_lin_substr_solver")
+//     else if(type=="profile_spd_lin_substr_solver")
 //       setSolver(new ProfileSPDLinSubstrSolver());
-    else if(tipo=="super_lu_solver")
+    else if(type=="super_lu_solver")
       setSolver(new SuperLU());
-    else if(tipo=="sym_sparse_lin_solver")
+    else if(type=="sym_sparse_lin_solver")
       setSolver(new SymSparseLinSolver());
-//     else if(tipo=="umfpack_gen_lin_solver")
+//     else if(type=="umfpack_gen_lin_solver")
 //       setSolver(new UmfpackGenLinSolver());
     else
       std::cerr << "Solver of type: '"
-                << tipo << "' unknown." << std::endl;
+                << type << "' unknown." << std::endl;
     assert(theSolver);
     return *theSolver;
   }

@@ -1,23 +1,23 @@
 # -*- coding: utf-8 -*-
-# Rutinas para elaborar el estadillo de cargas.
-def printCargas(nmbLst, nmbTipoCargas, ud):
-    print "    \\item ",nmbTipoCargas,"\n"
+# Routines to write the load tables.
+def printCargas(nmbLst, loadTypeName, ud):
+    print "    \\item ",loadTypeName,"\n"
     print "      \\begin{itemize}\n"
     tot= 0.0
     for l in nmbLst:
       print "      \\item ",l.descr," \\dotfill\\",format(l.pesoEsp/1e3,"%7.3f")," ",l.ud,"\n"
       tot+= l.pesoEsp
-    print "      \\item \\textbf{Total ",nmbTipoCargas,"} \\dotfill\\ \\textbf{",format(tot/1e3,"%7.3f"),"} ",ud,"\n"
+    print "      \\item \\textbf{Total ",loadTypeName,"} \\dotfill\\ \\textbf{",format(tot/1e3,"%7.3f"),"} ",ud,"\n"
 
     print "      \\end{itemize}"
     return tot
 
-def printCargasSup(nmbLst, nmbTipoCargas):
-    tot= printCargas(nmbLst,nmbTipoCargas,"$kN/m^2$")
+def printCargasSup(nmbLst, loadTypeName):
+    tot= printCargas(nmbLst,loadTypeName,"$kN/m^2$")
     return tot
 
-def printCargasLin(nmbLst, nmbTipoCargas):
-    tot= printCargas(nmbLst,nmbTipoCargas,"$kN/m$")
+def printCargasLin(nmbLst, loadTypeName):
+    tot= printCargas(nmbLst,loadTypeName,"$kN/m$")
     return tot
 
 def printCargasPlanta(nmbPlanta, nmbCP, nmbSC):

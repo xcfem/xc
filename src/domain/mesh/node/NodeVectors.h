@@ -40,7 +40,7 @@ class Vector;
 class Channel;
 class FEM_ObjectBroker;
 
-//! \ingroup Nod
+//! @ingroup Nod
 //
 //! @brief Vectores to store trial and commited
 //! values of node displacement, velocity, etc.

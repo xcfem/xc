@@ -48,7 +48,7 @@ class NMPointCloud;
 class NMyMzPointCloud;
 
 //! @ingroup MATSCC
-//
+//!
 //! @defgroup MATSCCFiberModel Fiber model for cross-sections.
 //
 //! @ingroup MATSCCFiberModel
@@ -120,8 +120,8 @@ class FiberSectionBase: public PrismaticBarCrossSection
     double getNeutralAxisDist(const double &y,const double &z) const;
     Vector getVectorBrazoMecanico(void) const;
     Vector getVectorCantoUtil(void) const;
-    Segmento2d getSegmentoBrazoMecanico(void) const;
-    Segmento2d getSegmentoCantoUtil(void) const;
+    Segment2d getLeverArmSegment(void) const;
+    Segment2d getEffectiveDepthSegment(void) const;
     double getMechanicLeverArm(void) const;
     double getEffectiveDepth(void) const;
     Recta2d getBendingPlaneTrace(void) const;
@@ -137,7 +137,7 @@ class FiberSectionBase: public PrismaticBarCrossSection
     std::list<Poligono2d> getGrossEffectiveConcreteAreaContour(const double &) const;
     void computeCovers(const std::string &) const;
     void computeSpacement(const std::string &) const;
-    int updateCDG(void);
+    int updateCenterOfMass(void);
     double getHomogenizedI(const double &E0) const;
     double getSPosHomogeneizada(const double &E0) const;
 
@@ -157,8 +157,8 @@ class FiberSectionBase: public PrismaticBarCrossSection
     fiber_set_iterator sel_mat_tag(const std::string &nmb_set,const int &matTag);
     //fiber_set_iterator resel(const std::string &nmb_set,const std::string &nmb_set_org,const std::string &cond);
     fiber_set_iterator resel_mat_tag(const std::string &nmb_set,const std::string &nmb_set_org,const int &matTag);
-    inline virtual double getCdgY(void) const
-      { return fibers.getYCdg(); }
+    inline virtual double getCenterOfMassY(void) const
+      { return fibers.getCenterOfMassY(); }
     double getArea(void) const;
 
     InteractionDiagram GetInteractionDiagram(const InteractionDiagramData &);

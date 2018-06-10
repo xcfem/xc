@@ -60,8 +60,8 @@ XC::Node *XC::TritrizPtrNod::findNode(const int &tag)
     const size_t numberOfLayers= getNumberOfLayers();
     for(size_t i=1;i<=numberOfLayers;i++)
       {
-        MatrizPtrNod &capa= operator()(i);
-        retval= capa.findNode(tag);
+        MatrizPtrNod &layer= operator()(i);
+        retval= layer.findNode(tag);
         if(retval) break;
       }
     return retval;
@@ -88,8 +88,8 @@ XC::Node *XC::TritrizPtrNod::getNearestNode(const Pos3d &p)
                 << std::endl;
     for(size_t i=1;i<=numberOfLayers;i++)
       {
-        MatrizPtrNod &capa= operator()(i);
-        ptrNod= capa.getNearestNode(p);
+        MatrizPtrNod &layer= operator()(i);
+        ptrNod= layer.getNearestNode(p);
         tmp= ptrNod->getDist2(p);
         if(tmp<d)
           {
@@ -132,8 +132,8 @@ const XC::Node *XC::TritrizPtrNod::findNode(const int &tag) const
     const size_t numberOfLayers= getNumberOfLayers();
     for(size_t i=1;i<=numberOfLayers;i++)
       {
-        const MatrizPtrNod &capa= operator()(i);
-        retval= capa.findNode(tag);
+        const MatrizPtrNod &layer= operator()(i);
+        retval= layer.findNode(tag);
         if(retval) break;
       }
     return retval;
@@ -152,9 +152,9 @@ XC::Vector XC::TritrizPtrNod::IRowSimpsonIntegration(const size_t &f,const size_
     return retval;
   }
 
-XC::Vector XC::TritrizPtrNod::JRowSimpsonIntegration(const size_t &capa, const size_t &c,const ExprAlgebra &e,const size_t &n) const
+XC::Vector XC::TritrizPtrNod::JRowSimpsonIntegration(const size_t &layer, const size_t &c,const ExprAlgebra &e,const size_t &n) const
   {
-    const_ref_j_row iRow= getJRowConstRef(capa,c);
+    const_ref_j_row iRow= getJRowConstRef(layer,c);
     const std::deque<double> dq_retval= RowSimpsonIntegration(iRow,"x",0,e,n);
     const size_t szr= dq_retval.size();
     Vector retval(szr);
@@ -163,9 +163,9 @@ XC::Vector XC::TritrizPtrNod::JRowSimpsonIntegration(const size_t &capa, const s
     return retval;
   }
 
-XC::Vector XC::TritrizPtrNod::KRowSimpsonIntegration(const size_t &capa,const size_t &f,const ExprAlgebra &e,const size_t &n) const
+XC::Vector XC::TritrizPtrNod::KRowSimpsonIntegration(const size_t &layer,const size_t &f,const ExprAlgebra &e,const size_t &n) const
   {
-    const_ref_k_row iRow= getKRowConstRef(capa,f);
+    const_ref_k_row iRow= getKRowConstRef(layer,f);
     const std::deque<double> dq_retval= RowSimpsonIntegration(iRow,"y",1,e,n);
     const size_t szr= dq_retval.size();
     Vector retval(szr);
@@ -181,8 +181,8 @@ void XC::TritrizPtrNod::fix(const SFreedom_Constraint &spc) const
     const size_t numberOfLayers= getNumberOfLayers();
     for(size_t i=1;i<=numberOfLayers;i++)
       {
-        const MatrizPtrNod &capa= operator()(i);
-        capa.fix(spc);
+        const MatrizPtrNod &layer= operator()(i);
+        layer.fix(spc);
       }
   }
 
@@ -333,7 +333,7 @@ std::vector<int> XC::getNodeIdsQuad4N(const XC::TritrizPtrNod::constant_i_layer_
     positions.push_back(p3);
     positions.push_back(p4);
     Poligono3d tmp(positions.begin(),positions.end());
-    const double area= tmp.Area();
+    const double area= tmp.getArea();
     if(area<1e-3)
       {
         std::cerr << "Area for (" << j << ',' << k

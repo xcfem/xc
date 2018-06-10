@@ -38,7 +38,7 @@ class Spot;
 class Axis;
 
 //! @ingroup MATSCCRepresGeom
-//
+//!
 //! @defgroup MATSCCEntGeom Geometric entities.
 //
 //! @ingroup MATSCCEntGeom

@@ -43,8 +43,8 @@ class CrossSectionProperties3d;
 //! @brief Load due to restricted material expansion or contraction on beam elements.
 class BeamStrainLoad : public BeamLoad
   {
-    DeformationPlane planoDefDorsal; //!< Restricted generalized strains at element first node.
-    DeformationPlane planoDefFrontal; //!< Restricted generalized strains at element last node.
+    DeformationPlane backEndDeformationsPlane; //!< Restricted generalized strains at element first node.
+    DeformationPlane frontEndDeformationPlane; //!< Restricted generalized strains at element last node.
   protected:
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
@@ -54,13 +54,13 @@ class BeamStrainLoad : public BeamLoad
     BeamStrainLoad(int tag= 0);
 
     inline const DeformationPlane &getDeformationPlane1(void) const
-      { return planoDefDorsal; }
+      { return backEndDeformationsPlane; }
     inline void setDeformationPlane1(const DeformationPlane &p)
-      { planoDefDorsal= p; }
+      { backEndDeformationsPlane= p; }
     inline const DeformationPlane &getDeformationPlane2(void) const
-      { return planoDefFrontal; }
+      { return frontEndDeformationPlane; }
     inline void setDeformationPlane2(const DeformationPlane &p)
-      { planoDefFrontal= p; }
+      { frontEndDeformationPlane= p; }
     const Vector &getSection1Deformation(const size_t &order,const ResponseId &code) const;
     const Vector &getSection2Deformation(const size_t &order,const ResponseId &code) const;
 

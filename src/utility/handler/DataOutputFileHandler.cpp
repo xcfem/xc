@@ -223,7 +223,7 @@ int XC::DataOutputFileHandler::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Send the object a través del canal definido en el argumento.
+//! @brief Send the object through the communicator argument.
 int XC::DataOutputFileHandler::sendSelf(CommParameters &cp)
   {
     inicComm(4);
@@ -238,7 +238,7 @@ int XC::DataOutputFileHandler::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Receive the object a través del canal definido en el argumento.
+//! @brief Receive the object through the communicator argument.
 int XC::DataOutputFileHandler::recvSelf(const CommParameters &cp)
   {
     inicComm(4);

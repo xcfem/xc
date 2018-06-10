@@ -28,11 +28,11 @@
 
 #include "InteractionDiagram.h"
 #include "xc_utils/src/geom/d2/Triang3dMesh.h"
-#include "xc_utils/src/geom/d2/Plano3d.h"
-#include "xc_utils/src/geom/d2/Triangulo3d.h"
+#include "xc_utils/src/geom/d2/Plane.h"
+#include "xc_utils/src/geom/d2/Triangle3d.h"
 #include "xc_basic/src/util/mchne_eps.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
-#include "xc_utils/src/geom/d1/Segmento3d.h"
+#include "xc_utils/src/geom/d1/Segment3d.h"
 #include "utility/matrix/Vector.h"
 
 #include "material/section/fiber_section/FiberSectionBase.h"
@@ -140,7 +140,7 @@ const Trihedron *XC::InteractionDiagram::findTrihedronPtr(const Pos3d &p) const
         const Trihedron *tr= &(*i);
         SemiRecta3d rayo(tr->Cuspide(),p);
         Recta3d axis= tr->Axis();
-        double angMin= angulo(axis,rayo);
+        double angMin= angle(axis,rayo);
         double angTmp= angMin;
         retval= tr;
         i++;
@@ -148,7 +148,7 @@ const Trihedron *XC::InteractionDiagram::findTrihedronPtr(const Pos3d &p) const
           {
             tr= &(*i);
             rayo= SemiRecta3d(tr->Cuspide(),p);
-            angTmp= angulo(tr->Axis(),rayo);
+            angTmp= angle(tr->Axis(),rayo);
             if(angTmp<angMin)
               {
                 angMin= angTmp;
@@ -189,12 +189,12 @@ GeomObj::list_Pos3d XC::InteractionDiagram::get_intersection(const Pos3d &p) con
       }
     else
       {
-        Triangulo3d triang(i->Vertice(1),i->Vertice(2),i->Vertice(3));
-        //Calculamos el plano que contiene al triangulo.
-        const Plano3d plano= triang.GetPlano();
+        Triangle3d triang(i->Vertice(1),i->Vertice(2),i->Vertice(3));
+        //We compute the plane that contains the triangle.
+        const Plane plane= triang.getPlane();
         SemiRecta3d Op(O,p);
         //Intersection of the half-line with the plane.
-        lst_intersec= interseccion(plano,Op);
+        lst_intersec= interseccion(plane,Op);
         if(lst_intersec.empty())
           {
 	    Pos3d nearest= i->Vertice(1);
@@ -226,7 +226,7 @@ GeomObj::list_Pos3d XC::InteractionDiagram::get_intersection(const Pos3d &p) con
             
 	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; doesn't intersect. " << std::endl
-                      << " Triangle area: " << triang.Area() << std::endl
+                      << " Triangle area: " << triang.getArea() << std::endl
                       << " vertex 1: " << i->Vertice(1)
                       << " vertex 2: " << i->Vertice(2)
                       << " vertex 3: " << i->Vertice(3) << std::endl
@@ -275,8 +275,8 @@ double XC::InteractionDiagram::getCapacityFactor(const Pos3d &esf_d) const
         if(!lst_intersec.empty())
           {
             const Pos3d C= *(lst_intersec.begin());
-            const Segmento3d sOC(O,C);
-            retval= d/sOC.Longitud();
+            const Segment3d sOC(O,C);
+            retval= d/sOC.getLength();
           }
         else
           {

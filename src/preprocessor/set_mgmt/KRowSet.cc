@@ -35,5 +35,5 @@
 XC::KRowSet::KRowSet(EntMdlr &e,const size_t &f,const size_t &c,const std::string &nmb,XC::Preprocessor *preprocessor)
   : RowSet<tNodeRow,tElemRow>(e.getTtzNodes().getVarRefKRow(f,c),e.getTtzElements().getVarRefKRow(f,c),nmb,preprocessor) {}
 
-XC::KRowSet::KRowSet(EntMdlr &e,const size_t &capa,const size_t &f,const RangoIndice &rango_cols,const std::string &nmb,Preprocessor *preprocessor)
-  : RowSet<tNodeRow,tElemRow>(e.getTtzNodes().getVarRefKRow(capa,f,rango_cols),e.getTtzElements().getVarRefKRow(capa,f,rango_cols),nmb,preprocessor) {}
+XC::KRowSet::KRowSet(EntMdlr &e,const size_t &layer,const size_t &f,const RangoIndice &column_range,const std::string &nmb,Preprocessor *preprocessor)
+  : RowSet<tNodeRow,tElemRow>(e.getTtzNodes().getVarRefKRow(layer,f,column_range),e.getTtzElements().getVarRefKRow(layer,f,column_range),nmb,preprocessor) {}

@@ -16,7 +16,7 @@ __email__= "l.pereztato@gmail.com"
 concrHA30= EHE_materials.HA30
 concrHA30.cemType='N'
 fckHA30= 30e6 # Concrete characteristic compressive strength HA-30.
-Hrel= 0.8 # Humedad relativa del aire.
+Hrel= 0.8 # Relative humidity of the air.
 Ec= 2e5*9.81/1e-4 # Concrete Young modulus (Pa).
 nuC= 0.2 # Concrete Poisson's ratio EHE-08.
 hLosa= 0.2 # Thickness.
@@ -32,7 +32,7 @@ F= 5.5e4 # Load magnitude en N
 # Concrete shrinkage
 tS= 7 # Inicio del secado.
 
-# Armadura activa
+# active reinforcement
 Ep= 190e9 # Elastic modulus expressed in MPa
 Ap= 140e-6 # bar area expressed in square meters
 fMax= 1860e6 # Maximum unit load of the material expressed in MPa.
@@ -84,7 +84,7 @@ elem= elements.newElement("ShellMITC4",xc.ID([5,6,10,9]))
 elem= elements.newElement("ShellMITC4",xc.ID([6,7,11,10]))
 elem= elements.newElement("ShellMITC4",xc.ID([7,8,12,11]))
 
-# Armadura activa
+# active reinforcement
 elements.defaultMaterial= "prestressingSteel"
 elements.dimElem= 3 # Dimension of element space
 truss= elements.newElement("Truss",xc.ID([1,2]));
@@ -121,7 +121,7 @@ casos= cargas.getLoadPatterns
 ts= casos.newTimeSeries("constant_ts","ts")
 casos.currentTimeSeries= "ts"
 
-lpRETRACC= casos.newLoadPattern("default","RETRACC")
+lpSHRINKAGE= casos.newLoadPattern("default","SHRINKAGE")
 lpFLU= casos.newLoadPattern("default","FLU")
 
 lpG= casos.newLoadPattern("default","G")
@@ -224,8 +224,8 @@ def procesResultVerif(tagComb, nmbComb):
   print "dXMax= ",(dXMax*1e3)," mm\n"
    '''
 import os
-os.system("rm -r -f /tmp/test_retraccion_02.db")
-db= feProblem.newDatabase("BerkeleyDB","/tmp/test_retraccion_02.db")
+os.system("rm -r -f /tmp/test_shrinkage_02.db")
+db= feProblem.newDatabase("BerkeleyDB","/tmp/test_shrinkage_02.db")
 
 # Fase 0: pretensado, shrinking
 # Fase 1: pretensado, shrinking and creep
@@ -251,27 +251,27 @@ for e in shellElems:
   espMedio= 2.0*Ac/u
   RH=Hrel*100
   h0mm=espMedio*1e3
-  epsRetracc= concrHA30.getShrEpscs(tFin,tS,RH,h0mm)
+  epsShrinkage= concrHA30.getShrEpscs(tFin,tS,RH,h0mm)
 
 
-#cargas.setCurrentLoadPattern("RETRACC")
+#cargas.setCurrentLoadPattern("SHRINKAGE")
 
 for e in shellElems:
-  eleLoad= lpRETRACC.newElementalLoad("shell_strain_load")
+  eleLoad= lpSHRINKAGE.newElementalLoad("shell_strain_load")
   eleLoad.elementTags= xc.ID([e.tag]) 
-  eleLoad.setStrainComp(0,0,epsRetracc) #(id of Gauss point, id of component, value)
-  eleLoad.setStrainComp(1,0,epsRetracc)
-  eleLoad.setStrainComp(2,0,epsRetracc)
-  eleLoad.setStrainComp(3,0,epsRetracc)
-  eleLoad.setStrainComp(0,1,epsRetracc) #(id of Gauss point, id of component, value)
-  eleLoad.setStrainComp(1,1,epsRetracc)
-  eleLoad.setStrainComp(2,1,epsRetracc)
-  eleLoad.setStrainComp(3,1,epsRetracc)
+  eleLoad.setStrainComp(0,0,epsShrinkage) #(id of Gauss point, id of component, value)
+  eleLoad.setStrainComp(1,0,epsShrinkage)
+  eleLoad.setStrainComp(2,0,epsShrinkage)
+  eleLoad.setStrainComp(3,0,epsShrinkage)
+  eleLoad.setStrainComp(0,1,epsShrinkage) #(id of Gauss point, id of component, value)
+  eleLoad.setStrainComp(1,1,epsShrinkage)
+  eleLoad.setStrainComp(2,1,epsShrinkage)
+  eleLoad.setStrainComp(3,1,epsShrinkage)
 
 
 preprocessor.resetLoadCase()
 
-comb= combs.newLoadCombination("FASE0","1.00*RETRACC")
+comb= combs.newLoadCombination("FASE0","1.00*SHRINKAGE")
 tagSaveFase0= comb.tag*100
 comb.addToDomain()
 result= analysis.analyze(1)
@@ -313,4 +313,4 @@ if (ratio1<1e-5) & (ratio2<1e-5) :
 else:
   lmsg.error(fname+' ERROR.')
 
-os.system("rm -r -f /tmp/test_retraccion_02.db") # Your garbage you clean it
+os.system("rm -r -f /tmp/test_shrinkage_02.db") # Your garbage you clean it

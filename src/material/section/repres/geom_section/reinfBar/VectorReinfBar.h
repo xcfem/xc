@@ -41,9 +41,9 @@ class ReinfBar;
 class Vector;
 class Matrix;
 
-//! @ingroup MATSCCArmaduras
+//! @ingroup MATSCCReinforcement
 //
-//! @brief Vector de barras de armadura.
+//! @brief Reinforcement bars vector.
 class VectorReinfBar: public std::vector<ReinfBar *>, public SectionMassProperties
   {
   public:
@@ -78,13 +78,13 @@ class VectorReinfBar: public std::vector<ReinfBar *>, public SectionMassProperti
       { return v_rfBar::end(); }
 
     double getAreaGrossSection(void) const;
-    Vector getCdgGrossSection(void) const;
+    Vector getCenterOfMassGrossSection(void) const;
     double getIyGrossSection(void) const;
     double getIzGrossSection(void) const;
     double getPyzGrossSection(void) const;
 
     double getAreaHomogenizedSection(const double &E0) const;
-    Vector getCdgHomogenizedSection(const double &E0) const;
+    Vector getCenterOfMassHomogenizedSection(const double &E0) const;
     double getIyHomogenizedSection(const double &E0) const;
     double getIzHomogenizedSection(const double &E0) const;
     double getPyzHomogenizedSection(const double &E0) const;

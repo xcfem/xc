@@ -30,7 +30,7 @@ class_<XC::Edge, bases<XC::EntMdlr>, boost::noncopyable >("Edge","Base class for
   .add_property("getIdxVertices",&XC::Edge::getIndicesVertices,"Return the IDs of the vertices")
   .add_property("firstNode",make_function(getFirstNodePtr, return_internal_reference<>()),"Return the first node of the edge")
   .add_property("lastNode",make_function(getLastNodePtr, return_internal_reference<>()),"Return the last node of the edge")
-  .def("getLong", &XC::Edge::getLongitud,"Return the length of the edge.")
+  .def("getLong", &XC::Edge::getLength,"Return the length of the edge.")
   .def("getCentroid", &XC::Edge::getCentroid,"Return the centroid of the edge.")
   .def("getTang", &XC::Edge::getTang, return_internal_reference<>(),"Return a vector tangent to the edge.")
   .def("divide",&XC::Edge::divide,"Create points along the line.")
@@ -54,7 +54,7 @@ class_<XC::DividedLine, bases<XC::Line>, boost::noncopyable >("DividedLine", "Li
   ;
 
 class_<XC::CircularArc, bases<XC::LineBase>, boost::noncopyable >("CircleArc", "Circumference arc.",no_init)
-  .def("getAngle", &XC::CircularArc::getAnguloComprendido,"Return the angle subtended by the arc.")
+  .def("getAngle", &XC::CircularArc::getIncludedAngle,"Return the angle subtended by the arc.")
   .def("getTheta1",&XC::CircularArc::getTheta1,"Return the start angle.")
   .def("getTheta2",&XC::CircularArc::getTheta2,"Return the end angle.")
   .def("getCentro",&XC::CircularArc::getCentro,"Return the center of the circumference.")
@@ -68,7 +68,7 @@ XC::Edge *(XC::CmbEdge::Side::*getEdge)(void)= &XC::CmbEdge::Side::getEdge;
 class_<XC::CmbEdge::Side,bases<EntCmd> >("Side", no_init)
   .add_property("isDirect", &XC::CmbEdge::Side::isDirect)
   .add_property("getEdge", make_function(getEdge, return_internal_reference<>()))
-  .def("getLong", &XC::CmbEdge::Side::getLongitud,"Return edge's length.")
+  .def("getLong", &XC::CmbEdge::Side::getLength,"Return edge's length.")
   .def("getCentroid", &XC::CmbEdge::Side::getCentroid,"Return edge's centroid.")
   .def("getTang", &XC::CmbEdge::Side::getTang, return_internal_reference<>(),"Return a vector tangent to the edge.")
   ;

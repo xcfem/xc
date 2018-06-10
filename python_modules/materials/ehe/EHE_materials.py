@@ -225,7 +225,7 @@ Factor that multiplies the characteristic value of concrete tensile strength fro
 '''
 x= [-1.0,0.0,3.0,7.0,28.0,90,360,361]
 y= [0.0,0.0,0.4,0.7,1.0,1.05,1.10,1.10]
-factorRTraccJDiasNormal= scipy.interpolate.interp1d(x,y)
+factorRTensionJDaysNormal= scipy.interpolate.interp1d(x,y)
 
 # ************* Reinforcing steel. ********************
 

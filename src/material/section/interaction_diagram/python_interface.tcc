@@ -21,9 +21,9 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::DeformationPlane, bases<Plano3d> >("DeformationPlane")
+class_<XC::DeformationPlane, bases<Plane> >("DeformationPlane")
   .def(init<const double&>())
-  .def(init<Plano3d>())
+  .def(init<Plane>())
   .def(init<Pos2d,double,Pos2d,double,Pos2d,double>())
   .def(init<Pos3d,Pos3d,Pos3d>())
   .def("constantStrain",&XC::DeformationPlane::ConstantStrain)
@@ -47,15 +47,15 @@ class_<XC::InteractionDiagramData, bases<EntCmd>>("InteractionDiagramParameters"
   .add_property("pivotsUltimateStrains",make_function(&XC::InteractionDiagramData::getPivotsUltimateStrains,return_internal_reference<>()),&XC::InteractionDiagramData::setPivotsUltimateStrains)
   .add_property("concreteSetName",make_function(&XC::InteractionDiagramData::getConcreteSetName,return_internal_reference<>()),&XC::InteractionDiagramData::setConcreteSetName)
   .add_property("concreteTag",make_function(&XC::InteractionDiagramData::getConcreteTag,return_value_policy<copy_const_reference>()),&XC::InteractionDiagramData::setConcreteTag)
-  .add_property("nmbSetArmadura",make_function(&XC::InteractionDiagramData::getNmbSetArmadura,return_internal_reference<>()),&XC::InteractionDiagramData::setNmbSetArmadura)
-  .add_property("tagArmadura",make_function(&XC::InteractionDiagramData::getTagArmadura,return_value_policy<copy_const_reference>()),&XC::InteractionDiagramData::setTagArmadura)
+  .add_property("rebarSetName",make_function(&XC::InteractionDiagramData::getRebarSetName,return_internal_reference<>()),&XC::InteractionDiagramData::setRebarSetName)
+  .add_property("reinforcementTag",make_function(&XC::InteractionDiagramData::getReinforcementTag,return_value_policy<copy_const_reference>()),&XC::InteractionDiagramData::setReinforcementTag)
   ;
 
 class_<XC::ClosedTriangleMesh, bases<GeomObj3d>, boost::noncopyable >("ClosedTriangleMesh", no_init)
   .def("getMax",&XC::ClosedTriangleMesh::GetMax)
   .def("getMin",&XC::ClosedTriangleMesh::GetMin)
-  .def("getArea",&XC::ClosedTriangleMesh::Area)
-  .def("getVolume",&XC::ClosedTriangleMesh::Volumen)
+  .def("getArea",&XC::ClosedTriangleMesh::getArea)
+  .def("getVolume",&XC::ClosedTriangleMesh::getVolume)
   .def("getIx",&XC::ClosedTriangleMesh::Ix)
   .def("getIy",&XC::ClosedTriangleMesh::Iy)
   .def("getIz",&XC::ClosedTriangleMesh::Iz)
@@ -66,8 +66,8 @@ class_<XC::ClosedTriangleMesh, bases<GeomObj3d>, boost::noncopyable >("ClosedTri
 
 double (XC::InteractionDiagram::*getCF)(const Pos3d &esf_d) const= &XC::InteractionDiagram::getCapacityFactor;
 class_<XC::InteractionDiagram, bases<XC::ClosedTriangleMesh>, boost::noncopyable >("InteractionDiagram", no_init)
-  .def("centroid",&XC::InteractionDiagram::Cdg)
-  .def("getLength",&XC::InteractionDiagram::Longitud)
+  .def("centroid",&XC::InteractionDiagram::getCenterOfMass)
+  .def("getLength",&XC::InteractionDiagram::getLength)
   .def("getIntersection",&XC::InteractionDiagram::getIntersection,"Returns the intersection of the ray O->point(N,My,Mz) with the interaction diagram.")
   .def("getCapacityFactor",getCF)
   .def("writeTo",&XC::InteractionDiagram::writeTo)

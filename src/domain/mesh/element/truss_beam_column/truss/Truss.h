@@ -68,7 +68,7 @@ namespace XC {
 class Channel;
 class UniaxialMaterial;
 
-//! \ingroup TrussElem
+//! @ingroup TrussElem
 //
 //! @brief Truss finite element.
 //!

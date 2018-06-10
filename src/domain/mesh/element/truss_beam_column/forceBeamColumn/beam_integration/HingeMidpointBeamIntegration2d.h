@@ -59,7 +59,7 @@ class ElementalLoad;
 class Channel;
 class FEM_ObjectBroker;
 
-//! \ingroup BeamInteg
+//! @ingroup BeamInteg
 //
 //! @brief ??.
 class HingeMidpointBeamIntegration2d: public HingeBeamIntegration2d

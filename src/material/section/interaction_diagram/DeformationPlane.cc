@@ -34,7 +34,7 @@
 #include "material/section/ResponseId.h"
 #include "xc_utils/src/geom/d1/Recta3d.h"
 #include "xc_utils/src/geom/d1/Recta2d.h"
-#include "xc_utils/src/geom/d2/Semiplano2d.h"
+#include "xc_utils/src/geom/d2/HalfPlane2d.h"
 #include "utility/actor/actor/MovableVector.h"
 
 bool XC::DeformationPlane::check_positions(const Pos3d &pA,const Pos3d &pB, const Pos3d &pC)
@@ -77,17 +77,17 @@ bool XC::DeformationPlane::check_positions(const Pos2d &p1,const Pos2d &p2, cons
   }
 
 XC::DeformationPlane::DeformationPlane(const Pos3d &p1,const Pos3d &p2, const Pos3d &p3)
-  : Plano3d(p1,p2,p3), MovableObject(0) { check_positions(p1,p2,p3); }
+  : Plane(p1,p2,p3), MovableObject(0) { check_positions(p1,p2,p3); }
 
-XC::DeformationPlane::DeformationPlane(const Plano3d &p)
-  : Plano3d(p), MovableObject(0) {}
+XC::DeformationPlane::DeformationPlane(const Plane &p)
+  : Plane(p), MovableObject(0) {}
 
 
 //! @brief Strains at three fibers.
 XC::DeformationPlane::DeformationPlane( const Pos2d &yz1, const double &e_1, 
                   const Pos2d &yz2, const double &e_2,
                   const Pos2d &yz3, const double &e_3)
-  : Plano3d(), MovableObject(0)
+  : Plane(), MovableObject(0)
   {
     const Pos3d p1(e_1,yz1.x(),yz1.y());
     const Pos3d p2(e_2,yz2.x(),yz2.y());
@@ -98,10 +98,10 @@ XC::DeformationPlane::DeformationPlane( const Pos2d &yz1, const double &e_1,
 
 //! Constant strain over the section.
 XC::DeformationPlane::DeformationPlane(const double &eps) 
-  :Plano3d(Pos3d(eps,100,0),Pos3d(eps,0,100),Pos3d(eps,100,100)), MovableObject(0) {}
+  :Plane(Pos3d(eps,100,0),Pos3d(eps,0,100),Pos3d(eps,100,100)), MovableObject(0) {}
 
 XC::DeformationPlane::DeformationPlane(const Vector &e)
-  : Plano3d(), MovableObject(0)
+  : Plane(), MovableObject(0)
   {
     const double e_1= e(0); //strain at (0,0)
     const double e_2= e(0)+e(1); //Strain at (1,0)
@@ -126,7 +126,7 @@ void XC::DeformationPlane::ConstantStrain(const double &e)
 //! @brief Return the strain of the fiber at the position
 //! being passed as parameter.
 double XC::DeformationPlane::Strain(const Pos2d &p) const
-  { return Plano3d::x(p); }
+  { return Plane::x(p); }
 
 //! @brief Returns the generalized strains vector.
 const XC::Vector &XC::DeformationPlane::getDeformation(void) const
@@ -160,7 +160,7 @@ const XC::Vector &XC::DeformationPlane::getDeformation(const size_t &order,const
 //! @brief Return the neutral axis.
 Recta2d XC::DeformationPlane::getNeutralAxis(void)const
   {
-    const double a= angulo(*this,PlanoYZ3d);
+    const double a= angle(*this,YZPlane3d);
     Recta2d retval;
     if(a>1e-4)
       {
@@ -181,7 +181,7 @@ Pos2d XC::DeformationPlane::getPointOnTensionedHalfPlane(void) const
     Pos2d retval(0,0);
     const Recta2d fn(getNeutralAxis());
     bool exists= fn.exists();
-    const double a= angulo(*this,PlanoYZ3d);
+    const double a= angle(*this,YZPlane3d);
     if(exists && (a>mchne_eps_dbl)) //Neutral axis exists.
       {
         const Pos2d p0(fn.Point());
@@ -202,7 +202,7 @@ Pos2d XC::DeformationPlane::getPointOnCompressedHalfPlane(void) const
     Pos2d retval(0,0);
     const Recta2d fn(getNeutralAxis());
     bool exists= fn.exists();
-    const double a= angulo(*this,PlanoYZ3d);
+    const double a= angle(*this,YZPlane3d);
     if(exists && (a>mchne_eps_dbl)) //Neutral axis exists.
       {
         const Pos2d p0(fn.Point());
@@ -219,22 +219,22 @@ Pos2d XC::DeformationPlane::getPointOnCompressedHalfPlane(void) const
 
 //! @brief Returns the half plane which border is the line being passed
 //! as parameter and is contained in the half plane in traction.
-Semiplano2d XC::DeformationPlane::getTensionedHalfPlane(const Recta2d &r) const
+HalfPlane2d XC::DeformationPlane::getTensionedHalfPlane(const Recta2d &r) const
   {
-    const Semiplano2d spt= getTensionedHalfPlane();
+    const HalfPlane2d spt= getTensionedHalfPlane();
     assert(spt.exists());
     const Pos2d p0(r.Point());
     const Vector2d v= r.VDir().Normal();
   
     Pos2d p(p0+1000*v);
-    Semiplano2d retval;
+    HalfPlane2d retval;
     if(spt.In(p))
-      retval= Semiplano2d(r,p);
+      retval= HalfPlane2d(r,p);
     else
       {
         p= p0-1000*v;
         if(spt.In(p))
-          retval= Semiplano2d(r,p);
+          retval= HalfPlane2d(r,p);
         else
 	  std::cerr << getClassName() << "::" << __FUNCTION__
 	            << " couldn't find the tensioned half-plane"
@@ -244,11 +244,11 @@ Semiplano2d XC::DeformationPlane::getTensionedHalfPlane(const Recta2d &r) const
   }
 
 //! @brief Returns the tensioned half-plane.
-Semiplano2d XC::DeformationPlane::getTensionedHalfPlane(void) const
+HalfPlane2d XC::DeformationPlane::getTensionedHalfPlane(void) const
   {
     const Recta2d fn= getNeutralAxis();
     bool exists= fn.exists();
-    const double a= angulo(*this,PlanoYZ3d);
+    const double a= angle(*this,YZPlane3d);
     Pos2d tmp(0,0);
     if(exists && (a>mchne_eps_dbl)) //Neutral axis exists.
       {
@@ -261,18 +261,18 @@ Semiplano2d XC::DeformationPlane::getTensionedHalfPlane(void) const
     else //Degenerated neutral axis.
       exists= (Strain(tmp)>0.0);
 
-    Semiplano2d retval;
+    HalfPlane2d retval;
     if(exists)
-      retval= Semiplano2d(fn,tmp);
+      retval= HalfPlane2d(fn,tmp);
     return retval;
   }
 
 //! @brief Returns the compressed half-plane.
-Semiplano2d XC::DeformationPlane::getCompressedHalfPlane(const Recta2d &r) const
+HalfPlane2d XC::DeformationPlane::getCompressedHalfPlane(const Recta2d &r) const
   {
     const Recta2d fn= getNeutralAxis();
     bool exists= fn.exists();
-    const double a= angulo(*this,PlanoYZ3d);
+    const double a= angle(*this,YZPlane3d);
     Pos2d tmp(0,0);
     if(exists && (a>mchne_eps_dbl)) //Neutral axis exists.
       {
@@ -285,18 +285,18 @@ Semiplano2d XC::DeformationPlane::getCompressedHalfPlane(const Recta2d &r) const
     else //Degenerated neutral axis.
       exists= (Strain(tmp)<0.0);
 
-    Semiplano2d retval;
+    HalfPlane2d retval;
     if(exists)
-      retval= Semiplano2d(fn,tmp);
+      retval= HalfPlane2d(fn,tmp);
     return retval;
   }
 
 //! @brief Returns the compressed half plane.
-Semiplano2d XC::DeformationPlane::getCompressedHalfPlane(void) const
+HalfPlane2d XC::DeformationPlane::getCompressedHalfPlane(void) const
   {
     const Recta2d fn= getNeutralAxis();
     bool exists= fn.exists();
-    Semiplano2d retval;
+    HalfPlane2d retval;
     if(exists)
       retval= getCompressedHalfPlane(fn);
     return retval;

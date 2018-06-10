@@ -42,7 +42,7 @@
 
 
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
-#include "xc_utils/src/geom/d2/Semiplano2d.h"
+#include "xc_utils/src/geom/d2/HalfPlane2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
 
 //! @brief Constructor.

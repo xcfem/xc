@@ -70,14 +70,14 @@ nfibras= fibras.getNumFibers()
 sumAreas= fibras.getArea(1.0)
 Iz= fibras.getIz(1.0,y0)
 Iy= fibras.getIy(1.0,z0)
-zCdg= fibras.getCdgZ()
-yCdg= fibras.getCdgY()
+centerOfMassZ= fibras.getCenterOfMassZ()
+centerOfMassY= fibras.getCenterOfMassY()
 
 
 ratio1= (nfibras-nFibTeor)/nFibTeor
 ratio2= (sumAreas-areaTeor)/areaTeor
-ratio3= (yCdg-y0)/max(1.0,y0)
-ratio4= (zCdg-z0)/max(1.0,z0)
+ratio3= (centerOfMassY-y0)/max(1.0,y0)
+ratio4= (centerOfMassZ-z0)/max(1.0,z0)
 ratio5= (Iz-izTeor)/izTeor
 ratio6= (Iy-iyTeor)/iyTeor
 
@@ -89,11 +89,11 @@ print "sum of areas: ",(sumAreas)
 print "theorethical area: ",(areaTeor)
 print "ratio2= ",(ratio2)
 
-print "yCdg= ",yCdg
+print "centerOfMassY= ",centerOfMassY
 print "y0= ",y0
 print "ratio3= ",ratio3
 
-print "zCdg= ",(zCdg)
+print "centerOfMassZ= ",(centerOfMassZ)
 print "z0= ",z0
 print "ratio4= ",ratio4
 

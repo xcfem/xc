@@ -22,7 +22,7 @@
 //python_interface.tcc
 
 class_<XC::LinearSOE, bases<XC::SystemOfEqn>, boost::noncopyable >("LinearSOE", no_init)
-.def("newSolver", &XC::LinearSOE::newSolver,return_internal_reference<>()," \n""newSolver(tipo)""Define the solver to be used.""Parameters: \n""tipo: type of solver. Available types: 'band_gen_lin_lapack_solver', 'band_spd_lin_lapack_solver', 'diagonal_direct_solver', 'distributed_diagonal_solver', 'full_gen_lin_lapack_solver', 'profile_spd_lin_direct_solver', 'profile_spd_lin_direct_block_solver', 'super_lu_solver', 'sym_sparse_lin_solver'" )
+.def("newSolver", &XC::LinearSOE::newSolver,return_internal_reference<>()," \n""newSolver(type)""Define the solver to be used.""Parameters: \n""type: type of solver. Available types: 'band_gen_lin_lapack_solver', 'band_spd_lin_lapack_solver', 'diagonal_direct_solver', 'distributed_diagonal_solver', 'full_gen_lin_lapack_solver', 'profile_spd_lin_direct_solver', 'profile_spd_lin_direct_block_solver', 'super_lu_solver', 'sym_sparse_lin_solver'" )
   ;
 
 class_<XC::LinearSOEData, bases<XC::LinearSOE>, boost::noncopyable >("LinearSOEData", no_init);

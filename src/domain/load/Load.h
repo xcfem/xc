@@ -69,7 +69,7 @@
 namespace XC {
 
 //! @ingroup BoundCond
-//
+//!
 //! @defgroup Loads Natural boundary conditions (forces).
 //
 //! @ingroup Loads

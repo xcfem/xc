@@ -31,13 +31,13 @@ def gmSecHA01(nmbGeomSecc,defSec,concrDiagName,reinfSteelDiagramName):
   reinforcementInf.numReinfBars= 2
   reinforcementInf.barDiam= 16e-3
   reinforcementInf.barArea= defSec['areaBarra']
-  reinforcementInf.p1= geom.Pos2d(defSec['cover']-defSec['depth']/2.0,defSec['cover']-defSec['width']/2.0) # Armadura inferior.
+  reinforcementInf.p1= geom.Pos2d(defSec['cover']-defSec['depth']/2.0,defSec['cover']-defSec['width']/2.0) # bottom layer.
   reinforcementInf.p2= geom.Pos2d(defSec['cover']-defSec['depth']/2.0,defSec['width']/2.0-defSec['cover'])
   reinforcementSup= reinforcement.newStraightReinfLayer(reinfSteelDiagramName)
   reinforcementSup.numReinfBars= 2
   reinforcementSup.barDiam= 16e-3
   reinforcementSup.barArea= defSec['areaBarra']
-  reinforcementSup.p1= geom.Pos2d(defSec['depth']/2.0-defSec['cover'],defSec['cover']-defSec['width']/2.0) # Armadura superior.
+  reinforcementSup.p1= geom.Pos2d(defSec['depth']/2.0-defSec['cover'],defSec['cover']-defSec['width']/2.0) # top layer.
   reinforcementSup.p2= geom.Pos2d(defSec['depth']/2.0-defSec['cover'],defSec['width']/2.0-defSec['cover'])
   return geomSecc
 

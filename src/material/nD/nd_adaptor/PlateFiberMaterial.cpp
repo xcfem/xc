@@ -59,7 +59,7 @@
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
 #include <utility/matrix/ID.h> 
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 //static vector and matrices
 XC::Vector  XC::PlateFiberMaterial::stress(5);
@@ -96,7 +96,7 @@ int XC::PlateFiberMaterial::getOrder() const
 
 
 const std::string &XC::PlateFiberMaterial::getType() const 
-  { return strTipoPlateFiber; }
+  { return strTypePlateFiber; }
 
 
 

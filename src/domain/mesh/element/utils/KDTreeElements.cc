@@ -32,7 +32,7 @@
 
 //! @brief Constructor.
 XC::ElemPos::ElemPos(const Element &e)
-  :  KDTreePos(e.getPosCdg()), elemPtr(&e){}
+  :  KDTreePos(e.getCenterOfMassPosition()), elemPtr(&e){}
 
 //! @brief Constructor.
 XC::ElemPos::ElemPos(const Pos3d &p)

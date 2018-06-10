@@ -57,7 +57,7 @@ namespace XC {
 class Matrix;
 class ElementalLoad;
 
-//! \ingroup BeamInteg
+//! @ingroup BeamInteg
 //
 //! @brief Radau integration.
 class HingeRadauTwoBeamIntegration: public PlasticLengthsBeamIntegration

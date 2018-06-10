@@ -25,17 +25,17 @@ def getDiagIntSection2(mdlr):
   concrete.nDivJK = 10
   concrete.pMin = geom.Pos2d(-ancho / 2, -canto / 2)
   concrete.pMax = geom.Pos2d(ancho / 2, canto / 2)
-  armaduras = geomSecHA1.getReinfLayers
-  armaduraInf = armaduras.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
-  armaduraInf.numReinfBars = 5
-  armaduraInf.barArea = areaFi12
-  armaduraInf.p1 = geom.Pos2d(-ancho / 2 + recneg, -canto / 2 + recneg)
-  armaduraInf.p2 = geom.Pos2d(ancho / 2 - recneg, -canto / 2 + recneg)
-  armaduraSup = armaduras.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
-  armaduraSup.numReinfBars = 5
-  armaduraSup.barArea = areaFi12
-  armaduraSup.p1 = geom.Pos2d(-ancho / 2 + recpos, canto / 2 - recpos)
-  armaduraSup.p2 = geom.Pos2d(ancho / 2 - recpos, canto / 2 - recpos)
+  reinforcement = geomSecHA1.getReinfLayers
+  bottomReinforcement = reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
+  bottomReinforcement.numReinfBars = 5
+  bottomReinforcement.barArea = areaFi12
+  bottomReinforcement.p1 = geom.Pos2d(-ancho / 2 + recneg, -canto / 2 + recneg)
+  bottomReinforcement.p2 = geom.Pos2d(ancho / 2 - recneg, -canto / 2 + recneg)
+  topReinforcement = reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
+  topReinforcement.numReinfBars = 5
+  topReinforcement.barArea = areaFi12
+  topReinforcement.p1 = geom.Pos2d(-ancho / 2 + recpos, canto / 2 - recpos)
+  topReinforcement.p2 = geom.Pos2d(ancho / 2 - recpos, canto / 2 - recpos)
   materiales = mdlr.getMaterialHandler
   secHA1 = materiales.newMaterial('fiber_section_3d', 'secHA1')
   fiberSectionRepr = secHA1.getFiberSectionRepr()
@@ -43,7 +43,7 @@ def getDiagIntSection2(mdlr):
   secHA1.setupFibers()
   param = xc.InteractionDiagramParameters()
   param.concreteTag = EHE_materials.HA30.tagDiagD
-  param.tagArmadura = EHE_materials.B500S.tagDiagD
+  param.reinforcementTag = EHE_materials.B500S.tagDiagD
   diagIntSecHA1 = materiales.calcInteractionDiagram('secHA1', param)
   return diagIntSecHA1
 
@@ -60,17 +60,17 @@ def getDiagIntSection1(mdlr):
   concrete.nDivJK = 10
   concrete.pMin = geom.Pos2d(-ancho / 2, -canto / 2)
   concrete.pMax = geom.Pos2d(ancho / 2, canto / 2)
-  armaduras = geomSecHA2.getReinfLayers
-  armaduraInf = armaduras.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
-  armaduraInf.numReinfBars = 7
-  armaduraInf.barArea = areaFi20
-  armaduraInf.p1 = geom.Pos2d(-ancho / 2 + recneg, -canto / 2 + recneg)
-  armaduraInf.p2 = geom.Pos2d(ancho / 2 - recneg, -canto / 2 + recneg)
-  armaduraSup = armaduras.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
-  armaduraSup.numReinfBars = 7
-  armaduraSup.barArea = areaFi20
-  armaduraSup.p1 = geom.Pos2d(-ancho / 2 + recpos, canto / 2 - recpos)
-  armaduraSup.p2 = geom.Pos2d(ancho / 2 - recpos, canto / 2 - recpos)
+  reinforcement = geomSecHA2.getReinfLayers
+  bottomReinforcement = reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
+  bottomReinforcement.numReinfBars = 7
+  bottomReinforcement.barArea = areaFi20
+  bottomReinforcement.p1 = geom.Pos2d(-ancho / 2 + recneg, -canto / 2 + recneg)
+  bottomReinforcement.p2 = geom.Pos2d(ancho / 2 - recneg, -canto / 2 + recneg)
+  topReinforcement = reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
+  topReinforcement.numReinfBars = 7
+  topReinforcement.barArea = areaFi20
+  topReinforcement.p1 = geom.Pos2d(-ancho / 2 + recpos, canto / 2 - recpos)
+  topReinforcement.p2 = geom.Pos2d(ancho / 2 - recpos, canto / 2 - recpos)
   materiales = mdlr.getMaterialHandler
   secHA2 = materiales.newMaterial('fiber_section_3d', 'secHA2')
   fiberSectionRepr = secHA2.getFiberSectionRepr()
@@ -78,7 +78,7 @@ def getDiagIntSection1(mdlr):
   secHA2.setupFibers()
   param = xc.InteractionDiagramParameters()
   param.concreteTag = EHE_materials.HA30.tagDiagD
-  param.tagArmadura = EHE_materials.B500S.tagDiagD
+  param.reinforcementTag = EHE_materials.B500S.tagDiagD
   diagIntSecHA2 = materiales.calcInteractionDiagram('secHA2', param)
   return diagIntSecHA2
 

@@ -34,7 +34,7 @@
 #include <utility/matrix/Vector.h>
 
 namespace XC {
-//! \ingroup TrussElem
+//! @ingroup TrussElem
 //
 //! @brief Base class for corotational truss elements.
 class CorotTrussBase: public ProtoTruss

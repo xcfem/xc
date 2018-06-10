@@ -28,7 +28,7 @@
 
 #include "ComputePivots.h"
 #include "material/section/fiber_section/fiber/FiberContainer.h"
-#include "xc_utils/src/geom/d1/Segmento3d.h"
+#include "xc_utils/src/geom/d1/Segment3d.h"
 #include "material/section/fiber_section/fiber/Fiber.h"
 #include "PivotsUltimateStrains.h"
 #include "utility/matrix/Vector.h"
@@ -42,13 +42,13 @@ inline Pos3d getPos3d(const XC::Fiber *f,const double &strain= 0.0)
   { return Pos3d(strain,f->getLocY(),f->getLocZ()); }
 
 //! @brief Center for the local reference system
-inline Pos3d getCDG(const XC::FiberDeque &fs)
-  { return Pos3d(0.0,fs.getYCdg(),fs.getZCdg()); }
+inline Pos3d getCenterOfMass(const XC::FiberDeque &fs)
+  { return Pos3d(0.0,fs.getCenterOfMassY(),fs.getCenterOfMassZ()); }
 
 //! @brief Local reference system.
 Ref3d3d getRef3d(const XC::FiberDeque &fs, const double &theta)
   {
-    const Pos3d g= getCDG(fs);
+    const Pos3d g= getCenterOfMass(fs);
     return Ref3d3d(g,Vector3d(1,0,0),Vector3d(0,cos(theta),sin(theta)));
   }
 
@@ -94,7 +94,7 @@ Pos3d XC::ComputePivots::getDPoint(void) const
 Pos3d XC::ComputePivots::calcPositionPivotA(void) const
   {
     Pos3d retval;
-    if(!SFibers.empty()) //Hay armadura.
+    if(!SFibers.empty()) //There are rebars.
       {
         const Fiber *t= getFiberSMinY();
         const Pos3d pos_t= getPos3d(t,agot_pivots.getUltimateStrainAPivot()); //Yield strain in A pivot.
@@ -104,7 +104,7 @@ Pos3d XC::ComputePivots::calcPositionPivotA(void) const
         else //Cell is in compression zone.
           retval= getDPoint();
       }
-    else //no hay armadura.
+    else //No rebars.
       retval= getDPoint();
     return retval;
   }

@@ -66,7 +66,7 @@
 
 namespace XC {
 //! @ingroup NDMat
-//
+//!
 //! @defgroup UWMat Elastic isotropic n-dimensional material.
 //
 //! @ingroup UWMat

@@ -76,7 +76,7 @@ class DOF_Group;
 class Vector;
 
 //! @ingroup AnalysisIntegrator
-//
+//!
 //! @defgroup EigenIntegrator Integrators for eigenproblems.
 //
 //! @ingroup EigenIntegrator

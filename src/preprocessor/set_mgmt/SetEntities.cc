@@ -39,7 +39,7 @@
 #include "utility/matrix/ID.h"
 
 #include "xc_utils/src/geom/pos_vec/SVD3d.h"
-#include "xc_utils/src/geom/d2/Plano3d.h"
+#include "xc_utils/src/geom/d2/Plane.h"
 #include "xc_utils/src/geom/d3/SemiEspacio3d.h"
 
 

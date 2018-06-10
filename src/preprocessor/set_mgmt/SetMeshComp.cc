@@ -42,7 +42,7 @@
 #include "utility/matrix/ID.h"
 
 #include "xc_utils/src/geom/pos_vec/SVD3d.h"
-#include "xc_utils/src/geom/d2/Plano3d.h"
+#include "xc_utils/src/geom/d2/Plane.h"
 #include "xc_utils/src/geom/d3/SemiEspacio3d.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
 
@@ -342,14 +342,14 @@ void XC::SetMeshComp::calc_resisting_force(void)
 
 //! @brief Return the resultant of the forces over the nodes
 //! near to the plane, of the elements behind the plane.
-SVD3d XC::SetMeshComp::getResistingSVD3d(const Plano3d &plano,const Pos3d &centro,const double &tol,const bool &inc_inertia) const
+SVD3d XC::SetMeshComp::getResistingSVD3d(const Plane &plane,const Pos3d &centro,const double &tol,const bool &inc_inertia) const
   {
     //XX Can be enhanced computing the resultant in the intersection of
     //the element edges with the plane and interpolating the value at this
     //point from the values in the nodes at the ends of the edge.
     const double tol2= tol*tol;
     const Node *ptrNod= nullptr;
-    const SemiEspacio3d se(plano);
+    const SemiEspacio3d se(plane);
     std::set<const Node *> nodes_on_plane;
     std::set<const Element *> connected_to_node;
     std::set<const Element *> connected_elements;
@@ -359,7 +359,7 @@ SVD3d XC::SetMeshComp::getResistingSVD3d(const Plano3d &plano,const Pos3d &centr
         if(ptrNod)
           if(ptrNod->isAlive())
             {
-              if(plano.dist2(ptrNod->getInitialPosition3d())<tol2)
+              if(plane.dist2(ptrNod->getInitialPosition3d())<tol2)
                 {
                   connected_to_node= ptrNod->getConnectedElements();
                   if(!connected_to_node.empty())
@@ -370,7 +370,7 @@ SVD3d XC::SetMeshComp::getResistingSVD3d(const Plano3d &plano,const Pos3d &centr
                         {
                           if((*j)->getNodePtrs().In(se)) //Element behind the plane.
                             connected_elements.insert(*j);
-                          else if((*j)->getNodePtrs().Corta(plano)) //Element in the plane.
+                          else if((*j)->getNodePtrs().Corta(plane)) //Element in the plane.
                             connected_elements.insert(*j);
                         }
                     }

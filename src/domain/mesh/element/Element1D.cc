@@ -47,7 +47,7 @@
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
 #include "xc_utils/src/geom/sis_coo/SisCooRect3d3d.h"
-#include "xc_utils/src/geom/d1/Segmento3d.h"
+#include "xc_utils/src/geom/d1/Segment3d.h"
 #include "utility/actor/objectBroker/FEM_ObjectBroker.h"
 #include "med.h"
 #include "vtkCellType.h"
@@ -581,12 +581,12 @@ const XC::Vector &XC::Element1D::getCooPoint(const double &xrel) const
   }
 
 //! @brief Return the segment defined by the element.
-Segmento3d XC::Element1D::getLineSegment(bool initialGeometry) const
+Segment3d XC::Element1D::getLineSegment(bool initialGeometry) const
   {
     if(initialGeometry)
-      return Segmento3d(theNodes[0]->getInitialPosition3d(),theNodes[1]->getInitialPosition3d());
+      return Segment3d(theNodes[0]->getInitialPosition3d(),theNodes[1]->getInitialPosition3d());
     else
-      return Segmento3d(theNodes[0]->getCurrentPosition3d(),theNodes[1]->getCurrentPosition3d());
+      return Segment3d(theNodes[0]->getCurrentPosition3d(),theNodes[1]->getCurrentPosition3d());
   }
 
 //! @brief Return the squared distance from the element to the point que
@@ -603,7 +603,7 @@ double XC::Element1D::getDist(const Pos2d &p,bool initialGeometry) const
 //! is being passed as parameter.
 double XC::Element1D::getDist2(const Pos3d &p,bool initialGeometry) const
   {
-    const Segmento3d sg(getLineSegment(initialGeometry));
+    const Segment3d sg(getLineSegment(initialGeometry));
     return sg.dist2(p);
   }
 
@@ -611,7 +611,7 @@ double XC::Element1D::getDist2(const Pos3d &p,bool initialGeometry) const
 //! being passed as parameter.
 double XC::Element1D::getDist(const Pos3d &p,bool initialGeometry) const
   {
-    const Segmento3d sg(getLineSegment(initialGeometry));
+    const Segment3d sg(getLineSegment(initialGeometry));
     return sg.dist(p);
   }
 
@@ -711,7 +711,7 @@ int XC::Element1D::getMEDCellType(void) const
 //! node of the element
 void XC::Element1D::computeTributaryLengths(bool initialGeometry) const
   {
-    const double lt= getLineSegment(initialGeometry).Longitud()/2.0;
+    const double lt= getLineSegment(initialGeometry).getLength()/2.0;
     tributaryLengths[0]= lt;
     tributaryLengths[1]= lt;
     dumpTributaries(tributaryLengths);

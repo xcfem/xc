@@ -393,7 +393,7 @@ bool XC::BandArpackSolver::setEigenSOE(EigenSOE *soe)
       }
     else
       std::cerr << getClassName() << __FUNCTION__
-                << ": the system of equations no es del tipo adecuado para este solver." << std::endl;
+                << ": not a suitable system of equations." << std::endl;
     return retval;
   }
 

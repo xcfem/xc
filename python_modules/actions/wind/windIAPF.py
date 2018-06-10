@@ -116,7 +116,7 @@ def CdTableroAlmaLlenaIAPF(B,h,angAlma):
 
 def FHkPorMetroIAPF(Cd,h,Vc):
     '''FHkPorMetroIAPF(Cd,h,Vc)
-    Empuje horizontal por unidad de longitud sobre el tablero
+    Empuje horizontal per unit length sobre el tablero
     de alma llena according to clause 2.3.7.3 IAPF.
     '''
     rhoAire=1.25
@@ -124,7 +124,7 @@ def FHkPorMetroIAPF(Cd,h,Vc):
   
 def FVkPorMetroIAPF(b,Vc):
   '''FVkPorMetroIAPF(b,Vc)
-  Empuje vertical por unidad de longitud sobre el tablero
+  Empuje vertical per unit length sobre el tablero
   de alma llena according to clause 2.3.7.5.2 IAPF.
   '''
   rhoAire= 1.25

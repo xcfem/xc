@@ -74,11 +74,11 @@ class Node;
 class TransfCooHandler;
 
 
-//! \ingroup FEMisc
-//
+//! @ingroup FEMisc
+//!
 //! @defgroup ElemCT Element coordinate transformations.
 //
-//! \ingroup ElemCT
+//! @ingroup ElemCT
 //
 //! @brief CrdTransf provides the abstraction of a frame 
 //! coordinate transformation. It is an abstract base class and 

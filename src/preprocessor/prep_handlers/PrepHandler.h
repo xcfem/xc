@@ -36,10 +36,10 @@
 namespace XC {
 
 //! @ingroup Preprocessor
-//
+//!
 //! @defgroup Ldrs Utilities for model definition.
 //
-//! \ingroup Ldrs
+//! @ingroup Ldrs
 //! 
 //! @brief Base class for the preprocessor objects that
 //! create model entities: nodes, elements, loads, etc.

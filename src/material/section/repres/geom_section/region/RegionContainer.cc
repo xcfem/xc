@@ -177,7 +177,7 @@ BND2d XC::RegionContainer::getBnd(void) const
     return retval;
   }
 
-XC::RegionContainer XC::RegionContainer::Intersection(const Semiplano2d &sp) const
+XC::RegionContainer XC::RegionContainer::Intersection(const HalfPlane2d &sp) const
   {
     RegionContainer retval(material_handler);
     for(const_iterator i= begin();i!=end();i++)
@@ -190,22 +190,22 @@ double XC::RegionContainer::getAreaGrossSection(void) const
   {
     double retval= 0.0;
     for(const_iterator i= begin();i!=end();i++)
-      retval+= (*i)->Area();
+      retval+= (*i)->getArea();
     return retval;
   }
 
 //! @brief Returns the centro de gravedad of the gross cross-section.
-XC::Vector XC::RegionContainer::getCdgGrossSection(void) const
+XC::Vector XC::RegionContainer::getCenterOfMassGrossSection(void) const
   {
     Vector retval(2);
     double weight= 0.0;
     double divisor= 0.0;
     for(const_iterator i= begin();i!=end();i++)
       {
-        weight= (*i)->Area();
+        weight= (*i)->getArea();
         if(weight>0)
           {
-            retval+= weight*(*i)->Cdg();
+            retval+= weight*(*i)->getCenterOfMass();
             divisor+= weight;
           }
         else
@@ -223,11 +223,11 @@ double XC::RegionContainer::getIyGrossSection(void) const
   {
     double retval= 0.0;
     double d= 0.0;
-    const double zCdg= getCdgGrossSection()[1];
+    const double zCenterOfMass= getCenterOfMassGrossSection()[1];
     for(const_iterator i= begin();i!=end();i++)
       {
-        d= (*i)->Cdg()[1]-zCdg;
-        retval+= (*i)->Iy()+(*i)->Area()*sqr(d);
+        d= (*i)->getCenterOfMass()[1]-zCenterOfMass;
+        retval+= (*i)->Iy()+(*i)->getArea()*sqr(d);
       }
     return retval;
   }
@@ -237,11 +237,11 @@ double XC::RegionContainer::getIzGrossSection(void) const
   {
     double retval= 0.0;
     double d= 0.0;
-    const double yCdg= getCdgGrossSection()[0];
+    const double yCenterOfMass= getCenterOfMassGrossSection()[0];
     for(const_iterator i= begin();i!=end();i++)
       {
-        d= (*i)->Cdg()[0]-yCdg;
-        retval+= (*i)->Iz()+(*i)->Area()*sqr(d);
+        d= (*i)->getCenterOfMass()[0]-yCenterOfMass;
+        retval+= (*i)->Iz()+(*i)->getArea()*sqr(d);
       }
     return retval;
   }
@@ -251,13 +251,13 @@ double XC::RegionContainer::getPyzGrossSection(void) const
   {
     double retval= 0.0;
     double d2= 0.0;
-    const Vector cooCdg= getCdgGrossSection();
-    const double zCdg= cooCdg[1];
-    const double yCdg= cooCdg[0];
+    const Vector center_of_mass_coordinates= getCenterOfMassGrossSection();
+    const double zCenterOfMass= center_of_mass_coordinates[1];
+    const double yCenterOfMass= center_of_mass_coordinates[0];
     for(const_iterator i= begin();i!=end();i++)
       {
-        d2= ((*i)->Cdg()[0]-yCdg)*((*i)->Cdg()[1]-zCdg);
-        retval+= (*i)->Pyz()+(*i)->Area()*d2;
+        d2= ((*i)->getCenterOfMass()[0]-yCenterOfMass)*((*i)->getCenterOfMass()[1]-zCenterOfMass);
+        retval+= (*i)->Pyz()+(*i)->getArea()*d2;
       }
     return retval;
   }
@@ -276,7 +276,7 @@ double XC::RegionContainer::getAreaHomogenizedSection(const double &E0) const
         if(mat)
           {
             n= mat->getTangent()/E0;
-            retval+= n*(*i)->Area();
+            retval+= n*(*i)->getArea();
           }
         else
 	  std::cerr << getClassName() << __FUNCTION__
@@ -285,7 +285,7 @@ double XC::RegionContainer::getAreaHomogenizedSection(const double &E0) const
     return retval;
   }
 
-XC::Vector XC::RegionContainer::getCdgHomogenizedSection(const double &E0) const
+XC::Vector XC::RegionContainer::getCenterOfMassHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= "
@@ -298,10 +298,10 @@ XC::Vector XC::RegionContainer::getCdgHomogenizedSection(const double &E0) const
         const UniaxialMaterial *mat= dynamic_cast<const UniaxialMaterial *>((*i)->getMaterialPtr());
         if(mat)
           {
-            weight= mat->getTangent()/E0*(*i)->Area();
+            weight= mat->getTangent()/E0*(*i)->getArea();
             if(weight>0)
               {
-                retval+= weight*(*i)->Cdg();
+                retval+= weight*(*i)->getCenterOfMass();
                 divisor+= weight;
               }
             else
@@ -328,15 +328,15 @@ double XC::RegionContainer::getIyHomogenizedSection(const double &E0) const
     double retval= 0.0;
     double n= 0.0;
     double d= 0.0;
-    const double zCdg= getCdgHomogenizedSection(E0)[1];
+    const double zCenterOfMass= getCenterOfMassHomogenizedSection(E0)[1];
     for(const_iterator i= begin();i!=end();i++)
       {
         const UniaxialMaterial *mat= dynamic_cast<const UniaxialMaterial *>((*i)->getMaterialPtr());
         if(mat)
           {
             n= mat->getTangent()/E0;
-            d= (*i)->Cdg()[1]-zCdg;
-            retval+= n*((*i)->Iy()+(*i)->Area()*sqr(d));
+            d= (*i)->getCenterOfMass()[1]-zCenterOfMass;
+            retval+= n*((*i)->Iy()+(*i)->getArea()*sqr(d));
           }
         else
 	  std::cerr << getClassName() << __FUNCTION__
@@ -355,15 +355,15 @@ double XC::RegionContainer::getIzHomogenizedSection(const double &E0) const
     double retval= 0.0;
     double n= 0.0;
     double d= 0.0;
-    const double yCdg= getCdgHomogenizedSection(E0)[0];
+    const double yCenterOfMass= getCenterOfMassHomogenizedSection(E0)[0];
     for(const_iterator i= begin();i!=end();i++)
       {
         const UniaxialMaterial *mat= dynamic_cast<const UniaxialMaterial *>((*i)->getMaterialPtr());
         if(mat)
           {
             n= mat->getTangent()/E0;
-            d= (*i)->Cdg()[0]-yCdg;
-            retval+= n*((*i)->Iz()+(*i)->Area()*sqr(d));
+            d= (*i)->getCenterOfMass()[0]-yCenterOfMass;
+            retval+= n*((*i)->Iz()+(*i)->getArea()*sqr(d));
           }
         else
 	  std::cerr << getClassName() << __FUNCTION__
@@ -382,17 +382,17 @@ double XC::RegionContainer::getPyzHomogenizedSection(const double &E0) const
     double retval= 0.0;
     double n= 0.0;
     double d2= 0.0;
-    const Vector cooCdg= getCdgHomogenizedSection(E0);
-    const double zCdg= cooCdg[1];
-    const double yCdg= cooCdg[0];
+    const Vector center_of_mass_coordinates= getCenterOfMassHomogenizedSection(E0);
+    const double zCenterOfMass= center_of_mass_coordinates[1];
+    const double yCenterOfMass= center_of_mass_coordinates[0];
     for(const_iterator i= begin();i!=end();i++)
       {
         const UniaxialMaterial *mat= dynamic_cast<const UniaxialMaterial *>((*i)->getMaterialPtr());
         if(mat)
           {
             n= mat->getTangent()/E0;
-            d2= ((*i)->Cdg()[0]-yCdg)*((*i)->Cdg()[1]-zCdg);
-            retval+= n*((*i)->Pyz()+(*i)->Area()*d2);
+            d2= ((*i)->getCenterOfMass()[0]-yCenterOfMass)*((*i)->getCenterOfMass()[1]-zCenterOfMass);
+            retval+= n*((*i)->Pyz()+(*i)->getArea()*d2);
           }
         else
 	  std::cerr << getClassName() << __FUNCTION__

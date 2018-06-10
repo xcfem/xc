@@ -33,7 +33,7 @@
 
 namespace XC {
 
-//! \ingroup Elem
+//! @ingroup Elem
 //
 //! @brief Element with material
 template <int NNODOS,class PhysProp>

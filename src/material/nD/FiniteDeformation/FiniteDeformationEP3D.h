@@ -61,7 +61,7 @@ namespace XC {
   class fdEvolution_S;
   class fdEvolution_T;
 //! @ingroup NDMat
-//
+//!
 //! @defgroup FDNDMat Finite deformation materials.
 //
 //! @ingroup FDNDMat

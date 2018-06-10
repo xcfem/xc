@@ -34,7 +34,7 @@
 
 namespace XC {
 
-//! \ingroup BeamInteg
+//! @ingroup BeamInteg
 //
 //! @brief Base class for user defined integration on beam elements.
 class UserDefinedBeamIntegrationBase : public BeamIntegration

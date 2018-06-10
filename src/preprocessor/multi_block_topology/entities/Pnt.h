@@ -40,7 +40,7 @@ class Body;
 class TrfGeom;
 
 //! @ingroup MultiBlockTopology
-//
+//!
 //! @defgroup MultiBlockTopologyEnt Geometric entities.
 //
 //! @ingroup MultiBlockTopologyEnt

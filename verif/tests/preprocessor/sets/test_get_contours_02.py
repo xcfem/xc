@@ -55,7 +55,7 @@ b= elements.newElement("FourNodeQuad",xc.ID([3,5,6,7]))
 totalSet= preprocessor.getSets.getSet('total')
 polygons= totalSet.getElements.getContours(True)
 
-length= polygons[0].getLongitud()+polygons[1].getLongitud()
+length= polygons[0].getLength()+polygons[1].getLength()
 
 ratio1= (length-8.0)/8.0
 

@@ -62,7 +62,7 @@
 namespace XC {
  
 
-//! \ingroup Loads
+//! @ingroup Loads
 //!
 //!
 //! @defgroup ElemLoads Loads over elements.

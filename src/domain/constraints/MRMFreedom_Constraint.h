@@ -36,7 +36,7 @@
 //
 // Purpose: This file contains the class definition for MRMFreedom_Constraint.
 // MRMFreedom_Constraint is a class which stores the information for a multiple
-// retained nodes constraint. A multipoint constraint relates certain dofs at 
+// retained nodes constraint. A multifreedom constraint relates certain dofs at 
 // a constrained node to be related to certains dofs at multiple retained nodes:
 
 // The MRMFreedom_Constraint class assumes time invariant constraints, i.e. the

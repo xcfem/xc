@@ -33,13 +33,20 @@
 #include <utility/matrix/Vector.h>
 
 
-
+//! @brief Constructor.
+//! @param tag: object identifer.
+//! @param classTag: class identifier.
 XC::BaseElasticSection2d::BaseElasticSection2d(int tag, int classTag, const size_t &dim, MaterialHandler *mat_ldr)
   : BaseElasticSection(tag, classTag,dim,mat_ldr), ctes_scc() {}
 
+//! @brief Constructor.
+//! @param classTag: class identifier.
 XC::BaseElasticSection2d::BaseElasticSection2d(int classTag,const size_t &dim)
   : BaseElasticSection(0, classTag,dim), ctes_scc() {}
 
+//! @brief Constructor.
+//! @param tag: object identifer.
+//! @param classTag: class identifier.
 XC::BaseElasticSection2d::BaseElasticSection2d(int tag, int classTag, const size_t &dim, const double &E, const double &A, const double &I,double G, const double &alpha)
   : BaseElasticSection(tag, classTag,dim ), ctes_scc(E,A,I,G,alpha) {}
 
@@ -52,15 +59,18 @@ void XC::BaseElasticSection2d::sectionGeometry(const std::string &cod_geom)
         if(geom)
           {
             if(ctes_scc.E()==0.0)
-               std::cerr << "Reference elastic modulus must not be zero." << std::endl;
+	      std::cerr << getClassName() << "::" << __FUNCTION__
+			<< "; reference elastic modulus must not be zero." << std::endl;
             ctes_scc= geom->getCrossSectionProperties2d(ctes_scc);
           }
         else
-          std::cerr << "Section geometry called: '"
-                        << cod_geom << "' not found." << std::endl;
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; section geometry called: '"
+                    << cod_geom << "' not found." << std::endl;
       }
     else
-      std::cerr << "Null pointer to matrix handler." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; material handler not set." << std::endl;
   }
 
 //! brief Returns strain at position being passed as parameter.
@@ -93,6 +103,7 @@ const XC::CrossSectionProperties2d &XC::BaseElasticSection2d::getCrossSectionPro
 void XC::BaseElasticSection2d::setCrossSectionProperties(const CrossSectionProperties2d &cs)  
   { ctes_scc= cs; }
 
+//! @brief Print stuff.
 void XC::BaseElasticSection2d::Print(std::ostream &s, int flag) const
   {
     s << "BaseElasticSection2d, tag: " << this->getTag() << std::endl;

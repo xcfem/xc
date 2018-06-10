@@ -61,7 +61,7 @@ namespace XC {
   class BJtensor;
 
 //! @ingroup FDNDMat
-//
+//!
 //! @defgroup FDFlowNDMat Flow.
 //
 //! @ingroup FDFlowNDMat

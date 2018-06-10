@@ -35,7 +35,7 @@ namespace XC {
 
 class ShellCorotCrdTransf3d;
 
-//! \ingroup ElemPlanos
+//! @ingroup PlaneElements
 //
 //! @brief MIT C4 shell element.
 class CorotShellMITC4 : public ShellMITC4Base

@@ -35,7 +35,7 @@
 namespace XC {
 class FVector;
 
-//! \ingroup BeamInteg
+//! @ingroup BeamInteg
 //
 //! @brief ??.
 class HingeBeamIntegration3d: public PlasticLengthsBeamIntegration

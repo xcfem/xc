@@ -91,12 +91,12 @@ class MeshEdge;
 class DOF_Group;
 class DqPtrsElem;
 
-//! \ingroup Mesh
+//! @ingroup Mesh
 //!
 //!
 //! @defgroup Nod Mesh nodes.
 //
-//! \ingroup Nod
+//! @ingroup Nod
 //! @brief Mesh node.
 //!
 //! Nodes are points in space connected by the elements. Nodes

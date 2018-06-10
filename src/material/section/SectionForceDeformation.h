@@ -76,11 +76,11 @@ class Matrix;
 class ResponseId;
 class MaterialHandler;
 
-//! \ingroup Mat
+//! @ingroup Mat
 //
 //! \defgroup MATSCC Force deformation section model.
 //
-//! \ingroup MATSCC
+//! @ingroup MATSCC
 //! @brief Base class for force deformation section models. Constitutive
 //! equations of the section.
 class SectionForceDeformation: public Material

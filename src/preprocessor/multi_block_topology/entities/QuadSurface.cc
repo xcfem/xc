@@ -197,8 +197,8 @@ bool XC::QuadSurface::checkNDivs(void) const
 //! size being passed as parameter.
 void XC::QuadSurface::SetElemSizeI(const double &sz)
   {
-    const double l1= lines[0].getLongitud();
-    const double l2= lines[2].getLongitud();
+    const double l1= lines[0].getLength();
+    const double l2= lines[2].getLength();
     const size_t n= ceil(std::max(l1,l2)/sz);
     SetNDivI(n);
   }
@@ -208,8 +208,8 @@ void XC::QuadSurface::SetElemSizeI(const double &sz)
 //! size being passed as parameter.
 void XC::QuadSurface::SetElemSizeJ(const double &sz)
   {
-    const double l1= lines[1].getLongitud();
-    const double l2= lines[3].getLongitud();
+    const double l1= lines[1].getLength();
+    const double l2= lines[3].getLength();
     const size_t n= ceil(std::max(l1,l2)/sz);
     SetNDivJ(n);
   }

@@ -54,7 +54,7 @@
 #include <utility/matrix/Matrix.h>
 
 namespace XC {
-//! \ingroup ElemPlanos
+//! @ingroup PlaneElements
 //
 //! @brief Four-node quadrilateral element, which uses a
 //! bilinear isoparametric formulation with enhanced strain modes.

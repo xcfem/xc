@@ -43,7 +43,7 @@ FCs.append(diagInteg.getCapacityFactor(geom.Pos3d(-7248.4e3,0,0.0)))
 
 
 import os
-os.system("rm -f /tmp/diag_interaccion02.dat")
+os.system("rm -f /tmp/interaction_diagram02.dat")
 
 szFCs= float(len(FCs))
 sumQuad= 0

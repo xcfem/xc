@@ -62,7 +62,7 @@ namespace XC {
 class Channel;
 class SectionForceDeformation;
 
-//! \ingroup TrussElem
+//! @ingroup TrussElem
 //
 //! @brief Truss element with corotatinal formulation and material
 //! of type SectionForceDeformation. Small strain, large displacement

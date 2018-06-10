@@ -38,7 +38,7 @@
 namespace XC {
 class Element;
 
-//!  \ingroup Ldrs
+//!  @ingroup Ldrs
 //! 
 //! @brief Finite element creation.
 //!

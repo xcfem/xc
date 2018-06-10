@@ -44,7 +44,7 @@
 
 class Pos3d;
 class Recta3d;
-class Plano3d;
+class Plane;
 class Vector3d;
 
 namespace XC {
@@ -55,7 +55,7 @@ class SetEstruct;
 class ReferenceFrame;
 
 //! @ingroup Preprocessor
-//
+//!
 //! @defgroup MultiBlockTopology Model geometry (block topology).
 //
 //! @ingroup MultiBlockTopology

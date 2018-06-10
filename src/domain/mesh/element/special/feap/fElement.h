@@ -71,12 +71,12 @@ class Node;
 class Channel;
 class UniaxialMaterial;
 
-//! \ingroup SpecialElem
+//! @ingroup SpecialElem
 //!
 //!
 //! @defgroup fElem Interface with FEAP elements.
 //
-//! \ingroup fElem
+//! @ingroup fElem
 //! @brief Wrapper used to call fortran element subroutines from FEAP.
 class fElement : public Element
   {

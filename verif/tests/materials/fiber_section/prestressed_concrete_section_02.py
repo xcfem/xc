@@ -54,43 +54,43 @@ def gmSecHP02(nmbGeomSecc,concrDiagName,reinfSteelDiagramName,prestressingSteelD
 
   reinforcement= geomSecc.getReinfLayers
 
-  # Armadura activa
-  armadura= reinforcement.newStraightReinfLayer(prestressingSteelDiagramName)
-  armadura.numReinfBars= 13 # Armadura activa inferior ala inferior.
-  armadura.barArea= areaCordones
-  armadura.p1= geom.Pos2d(-0.773,-0.31) 
-  armadura.p2= geom.Pos2d(-0.773,0.31)
+  # active reinforcement
+  rebarLayer= reinforcement.newStraightReinfLayer(prestressingSteelDiagramName)
+  rebarLayer.numReinfBars= 13 # Bottom flange; bottom active reinforcement.
+  rebarLayer.barArea= areaCordones
+  rebarLayer.p1= geom.Pos2d(-0.773,-0.31) 
+  rebarLayer.p2= geom.Pos2d(-0.773,0.31)
 
-  armadura= reinforcement.newStraightReinfLayer(prestressingSteelDiagramName)
-  armadura.numReinfBars= 13 # Armadura activa intermedia ala inferior.
-  armadura.barArea= areaCordones
-  armadura.p1= geom.Pos2d(-0.713,-0.31) 
-  armadura.p2= geom.Pos2d(-0.713,0.31)
+  rebarLayer= reinforcement.newStraightReinfLayer(prestressingSteelDiagramName)
+  rebarLayer.numReinfBars= 13 # Bottom flange; intermediate active reinforcement.
+  rebarLayer.barArea= areaCordones
+  rebarLayer.p1= geom.Pos2d(-0.713,-0.31) 
+  rebarLayer.p2= geom.Pos2d(-0.713,0.31)
 
-  armadura= reinforcement.newStraightReinfLayer(prestressingSteelDiagramName)
-  armadura.numReinfBars= 7
-  armadura.barArea= areaCordones
-  armadura.p1= geom.Pos2d(-0.653,-0.155) # Armadura activa superior ala inferior.
-  armadura.p2= geom.Pos2d(-0.653,0.155)
+  rebarLayer= reinforcement.newStraightReinfLayer(prestressingSteelDiagramName)
+  rebarLayer.numReinfBars= 7
+  rebarLayer.barArea= areaCordones
+  rebarLayer.p1= geom.Pos2d(-0.653,-0.155) # Bottom flange; top active reinforcement.
+  rebarLayer.p2= geom.Pos2d(-0.653,0.155)
 
-  armadura= reinforcement.newStraightReinfLayer(prestressingSteelDiagramName)
-  armadura.numReinfBars= 3
-  armadura.barArea= areaCordones
-  armadura.p1= geom.Pos2d(0.797,-0.478) # Armadura activa ala superior.
-  armadura.p2= geom.Pos2d(0.797,0.478)
+  rebarLayer= reinforcement.newStraightReinfLayer(prestressingSteelDiagramName)
+  rebarLayer.numReinfBars= 3
+  rebarLayer.barArea= areaCordones
+  rebarLayer.p1= geom.Pos2d(0.797,-0.478) # Top flange; active reinforcement.
+  rebarLayer.p2= geom.Pos2d(0.797,0.478)
 
-  # Armadura pasiva
-  armadura= reinforcement.newStraightReinfLayer(reinfSteelDiagramName)
-  armadura.numReinfBars= 5
-  armadura.barArea= areaFiLong
-  armadura.p1= geom.Pos2d(-0.413,-0.031)
-  armadura.p2= geom.Pos2d(0.587,-0.031)
+  # Passive reinforcement
+  rebarLayer= reinforcement.newStraightReinfLayer(reinfSteelDiagramName)
+  rebarLayer.numReinfBars= 5
+  rebarLayer.barArea= areaFiLong
+  rebarLayer.p1= geom.Pos2d(-0.413,-0.031)
+  rebarLayer.p2= geom.Pos2d(0.587,-0.031)
 
-  armadura= reinforcement.newStraightReinfLayer(reinfSteelDiagramName)
-  armadura.numReinfBars= 5
-  armadura.barArea= areaFiLong
-  armadura.p1= geom.Pos2d(-0.413,0.031)
-  armadura.p2= geom.Pos2d(0.587,0.031)
+  rebarLayer= reinforcement.newStraightReinfLayer(reinfSteelDiagramName)
+  rebarLayer.numReinfBars= 5
+  rebarLayer.barArea= areaFiLong
+  rebarLayer.p1= geom.Pos2d(-0.413,0.031)
+  rebarLayer.p2= geom.Pos2d(0.587,0.031)
 
   return geomSecc
 

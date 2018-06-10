@@ -56,7 +56,7 @@
 
 namespace XC {
 
-//! \ingroup BeamInteg
+//! @ingroup BeamInteg
 //
 //! @brief User defined integration.
 class UserDefinedHingeIntegration2d : public UserDefinedHingeIntegrationBase

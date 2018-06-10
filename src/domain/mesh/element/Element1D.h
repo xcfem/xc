@@ -31,7 +31,7 @@
 
 #include <domain/mesh/element/ElementBase.h>
 
-class Segmento3d;
+class Segment3d;
 
 namespace XC {
 class Node;
@@ -42,8 +42,8 @@ class CrdTransf2d;
 class CrdTransf3d;
 class DeformationPlane;
 
-//! \ingroup Elem
-//
+//! @ingroup Elem
+//!
 //! @defgroup OneDimensionalElem One-dimensional elements.
 //
 //! @ingroup OneDimensionalElem
@@ -74,7 +74,7 @@ class Element1D : public ElementBase<2>
     virtual const CrdTransf *checkCoordTransf(void) const;
     virtual const Matrix &getCooPoints(const size_t &ndiv) const;
     virtual const Vector &getCooPoint(const double &xrel) const;
-    Segmento3d getLineSegment(bool initialGeometry= true) const;
+    Segment3d getLineSegment(bool initialGeometry= true) const;
     double getDist2(const Pos2d &p,bool initialGeometry= true) const;
     double getDist(const Pos2d &p,bool initialGeometry= true) const;
     double getDist2(const Pos3d &p,bool initialGeometry= true) const;

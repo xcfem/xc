@@ -72,7 +72,7 @@ namespace XC {
 class Channel;
 class SectionForceDeformation;
 
-//! \ingroup TrussElem
+//! @ingroup TrussElem
 //
 //! @brief Truss element with SectionForceDeformation material.
 class TrussSection : public TrussBase

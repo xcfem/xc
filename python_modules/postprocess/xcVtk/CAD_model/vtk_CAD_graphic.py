@@ -33,7 +33,7 @@ class RecordDefDisplayCAD(vtk_grafico_base.RecordDefDisplay):
 
         #Implementar dibujo de etiquetas.
         # if(entToLabel=="cells"):
-        #   postprocess.xcVtk.cad_mesh.VtkDibujaIdsCells(self.gridRecord,setToDraw,nmbTipoCeldas,renderer)
+        #   postprocess.xcVtk.cad_mesh.VtkDibujaIdsCells(self.gridRecord,setToDraw,cellTypeName,renderer)
         # elif(entToLabel=="points"):
         #   postprocess.xcVtk.cad_mesh.VtkDibujaIdsKPts(self.gridRecord,setToDraw,renderer)
 

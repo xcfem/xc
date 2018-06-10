@@ -53,7 +53,7 @@
 #include <material/nD/FiniteDeformation/FDdecoupledElastic3D.h>
 #include <utility/matrix/Vector.h>
 #include "material/nD/FiniteDeformation/WEnergy/WEnergy.h"
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 
 void XC::FDdecoupledElastic3D::free_mem(void)
@@ -467,7 +467,7 @@ XC::NDMaterial *XC::FDdecoupledElastic3D::getCopy(const std::string &type) const
   }
 //! @brief 
 const std::string &XC::FDdecoupledElastic3D::getType(void) const
-  { return strTipoThreeDimensionalFD; }
+  { return strTypeThreeDimensionalFD; }
 //! @brief 
 int XC::FDdecoupledElastic3D::getOrder(void) const
   { return 6; }

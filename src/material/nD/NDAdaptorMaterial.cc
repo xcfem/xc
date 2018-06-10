@@ -28,7 +28,7 @@
 
 #include <material/nD/NDAdaptorMaterial.h>
 #include "utility/matrix/ID.h"
-#include <material/nD/TipoMaterialND.h>
+#include <material/nD/NDMaterialType.h>
 
 
 XC::NDAdaptorMaterial::NDAdaptorMaterial(int classTag, int strain_size)
@@ -44,7 +44,7 @@ XC::NDAdaptorMaterial::NDAdaptorMaterial(int classTag, int tag, XC::NDMaterial &
 
   {
     // Get a copy of the material
-    theMaterial = theMat.getCopy(strTipoThreeDimensional);
+    theMaterial = theMat.getCopy(strTypeThreeDimensional);
   
     if(!theMaterial)
       {

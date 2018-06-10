@@ -85,7 +85,7 @@ divsOk= divsOk & surfaces.conciliaNDivs()
 # print "s3 nDivI= ", s3.nDivI
 # print "s3 nDivJ= ", s3.nDivJ
 
-s2.nverborrea= 5
+#s2.setVerbosityLevel(5)
 total= preprocessor.getSets.getSet("total")
 feProblem.setVerbosityLevel(0) #Dont print warning messages about element seed.
 total.genMesh(xc.meshDir.I)

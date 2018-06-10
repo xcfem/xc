@@ -61,8 +61,8 @@ fibras= quadFibers.getFibers()
 nfibras= fibras.getNumFibers
 Iz= fibras.getIz
 Iy= fibras.getIy
-zCdg= fibras.getCdgZ()
-yCdg= fibras.getCdgY()
+centerOfMassZ= fibras.getCenterOfMassZ()
+centerOfMassY= fibras.getCenterOfMassY()
 '''
              \for_each_fiber
 

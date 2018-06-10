@@ -74,7 +74,7 @@ class EigenSOE;
 class EigenIntegrator;
 
 //! @ingroup AnalAlgo
-//
+//!
 //! @defgroup EigenAlgo Solution algorithms for eigenproblems.
 //
 //! @ingroup EigenAlgo

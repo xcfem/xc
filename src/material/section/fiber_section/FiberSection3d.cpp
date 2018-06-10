@@ -90,7 +90,7 @@ void XC::FiberSection3d::setupFibers(void)
     if(section_repres)
       fibers.setup(*this,section_repres->get3DFibers(),kr);
     else
-      fibers.updateKRCDG(*this,kr);
+      fibers.updateKRCenterOfMass(*this,kr);
   }
 
 //! @brief Adds a fiber to the section.
@@ -120,7 +120,7 @@ const XC::Matrix &XC::FiberSection3d::getInitialTangent(void) const
 XC::SectionForceDeformation *XC::FiberSection3d::getCopy(void) const
   { return new FiberSection3d(*this); }
 
-//! @brief Returns the tipo.
+//! @brief Returns the type.
 const XC::ResponseId &XC::FiberSection3d::getType(void) const
   { return RespFiberSection3d; }
 

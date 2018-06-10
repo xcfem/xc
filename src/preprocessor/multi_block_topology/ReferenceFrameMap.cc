@@ -42,12 +42,12 @@ XC::ReferenceFrameMap::ReferenceFrameMap(MultiBlockTopology *mbt)
   : ModelComponentContainer<ReferenceFrame>(mbt) {}
 
 //! @brief Creates a new reference system of the type passed as paramenter.
-XC::ReferenceFrame *XC::ReferenceFrameMap::New(const std::string &tipo)
+XC::ReferenceFrame *XC::ReferenceFrameMap::New(const std::string &type)
   {
     ReferenceFrame *retval= busca(getTag());
     if(!retval) //New reference system.
       {
-        if(tipo == "cartesianas")
+        if(type == "cartesianas")
           {
             Preprocessor *preprocessor= getPreprocessor();
             retval= new CartesianReferenceFrame3d("r"+boost::lexical_cast<std::string>(getTag()),preprocessor);
@@ -56,7 +56,7 @@ XC::ReferenceFrame *XC::ReferenceFrameMap::New(const std::string &tipo)
           }
         else
 	  std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; reference system type: '" << tipo
+	            << "; reference system type: '" << type
                     << "' unknown." << std::endl;
       }
     return retval;

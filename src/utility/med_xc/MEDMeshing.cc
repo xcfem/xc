@@ -192,14 +192,15 @@ void XC::MEDMeshing::defineMEDFields(void) const
             MEDGroupInfo *grupo= getGroupInfo(*set,fi);
             if(grupo)
               {
-                const std::string tipo_componentes= fi.getComponentsType();
-                if(tipo_componentes=="double")
+                const std::string type_of_components= fi.getComponentsType();
+                if(type_of_components=="double")
                   { defineMEDDblField(*set,fi,grupo); }
-                else if(tipo_componentes=="int")
+                else if(type_of_components=="int")
                   { defineMEDIntField(*set,fi,grupo); }
                 else
-                  std::cerr << "MEDMeshing::defineMEDFields; el tipo: " << tipo_componentes
-                            << " es desconocido." << std::endl;
+                  std::cerr << getClassName() << "::" << __FUNCTION__
+			    << "; unknown type: '" << type_of_components
+                            << "'." << std::endl;
 	      }
           }
         else

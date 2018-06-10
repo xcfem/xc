@@ -480,10 +480,10 @@ class RecordRCSimpleSection(BasicRecordRCSection):
     self.param= xc.InteractionDiagramParameters()
     if(self.diagType=="d"):
       self.param.concreteTag= self.concrType.matTagD
-      self.param.tagArmadura= self.reinfSteelType.matTagD
+      self.param.reinforcementTag= self.reinfSteelType.matTagD
     elif(self.diagType=="k"):
       self.param.concreteTag= self.concrType.matTagK
-      self.param.tagArmadura= self.reinfSteelType.matTagK
+      self.param.reinforcementTag= self.reinfSteelType.matTagK
     return self.param
 
   def defInteractionDiagram(self,preprocessor):

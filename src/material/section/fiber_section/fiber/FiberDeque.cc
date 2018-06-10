@@ -44,23 +44,23 @@
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
 #include "xc_utils/src/geom/d2/BND2d.h"
 #include "xc_utils/src/geom/d1/Recta2d.h"
-#include "xc_utils/src/geom/d1/Segmento2d.h"
+#include "xc_utils/src/geom/d1/Segment2d.h"
 #include "xc_utils/src/geom/d2/Circulo2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/bool_op_poligono2d.h"
-#include "xc_utils/src/geom/d2/Semiplano2d.h"
+#include "xc_utils/src/geom/d2/HalfPlane2d.h"
 #include "xc_utils/src/geom/listas/utils_list_pos2d.h"
 #include "material/section/interaction_diagram/DeformationPlane.h"
 
 
 //! @brief Constructor.
 XC::FiberDeque::FiberDeque(const size_t &num)
-  : EntCmd(), fiber_ptrs_dq(num,static_cast<Fiber *>(nullptr)), yCDG(0.0), zCDG(0.0)
+  : EntCmd(), fiber_ptrs_dq(num,static_cast<Fiber *>(nullptr)), yCenterOfMass(0.0), zCenterOfMass(0.0)
   {}
 
 //! @brief Copy constructor.
 XC::FiberDeque::FiberDeque(const FiberDeque &otro)
-  : EntCmd(otro), fiber_ptrs_dq(otro), yCDG(otro.yCDG), zCDG(otro.zCDG)
+  : EntCmd(otro), fiber_ptrs_dq(otro), yCenterOfMass(otro.yCenterOfMass), zCenterOfMass(otro.zCenterOfMass)
   {}
 
 //! @brief Assignment operator.
@@ -68,8 +68,8 @@ XC::FiberDeque &XC::FiberDeque::operator=(const FiberDeque &otro)
   {
     EntCmd::operator=(otro);
     fiber_ptrs_dq::operator=(otro);
-    yCDG= otro.yCDG;
-    zCDG= otro.zCDG;
+    yCenterOfMass= otro.yCenterOfMass;
+    zCenterOfMass= otro.zCenterOfMass;
     return *this;
   }
 
@@ -126,10 +126,12 @@ double XC::FiberDeque::GetYMin(void) const
           if(*i)
             retval= std::min(retval,(*i)->getLocY());
           else
-            std::cerr << "FiberDeque::GetYMin; Pointer to fiber is null." << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; null pointer to fiber." << std::endl;
       }
     else
-      std::cerr << "FiberDeque::GetYMin; fiber set is empty." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; fiber set is empty." << std::endl;
     return retval;
   }
 
@@ -145,10 +147,12 @@ double XC::FiberDeque::GetZMin(void) const
           if(*i)
             retval= std::min(retval,(*i)->getLocZ());
           else
-            std::cerr << "FiberDeque::GetZMin; Pointer to fiber is null." << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; null pointer to fiber." << std::endl;
       }
     else
-      std::cerr << "FiberDeque::GetZMin; fiber set is empty." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; fiber set is empty." << std::endl;
     return retval;
   }
 
@@ -164,10 +168,12 @@ double XC::FiberDeque::GetYMax(void) const
           if(*i)
             retval= std::max(retval,(*i)->getLocY());
           else
-            std::cerr << "FiberDeque::GetYMax; Pointer to fiber is null." << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; null pointer to fiber." << std::endl;
       }
     else
-      std::cerr << "FiberDeque::GetYMax; fiber set is empty." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; fiber set is empty." << std::endl;
     return retval;
   }
 
@@ -183,10 +189,12 @@ double XC::FiberDeque::GetZMax(void) const
           if(*i)
             retval= std::max(retval,(*i)->getLocZ());
           else
-            std::cerr << "FiberDeque::GetZMax; Pointer to fiber is null." << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; null pointer to fiber." << std::endl;
       }
     else
-      std::cerr << "FiberDeque::GetZMax; fiber set is empty." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; fiber set is empty." << std::endl;
     return retval;
   }
 
@@ -200,7 +208,8 @@ GeomObj::list_Pos2d XC::FiberDeque::getPositions(void) const
           if(*i)
             retval.push_back(Pos2d((*i)->getLocY(),(*i)->getLocZ()));
           else
-            std::cerr << "FiberDeque::GetYMax; Pointer to fiber is null." << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; null pointer to fiber." << std::endl;
       }
     return retval;
   }
@@ -237,7 +246,8 @@ double XC::FiberDeque::getIz(const double &factor,const double &y0) const
       if(*i)
         retval+= (*i)->getArea()*sqr((*i)->getLocY()-y0);
       else
-        std::cerr << "FiberDeque::getIz; Pointer to fiber is null." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; null pointer to fiber." << std::endl;
     retval*= factor;
     return retval;
   }
@@ -252,7 +262,8 @@ double XC::FiberDeque::getIy(const double &factor,const double &z0) const
       if(*i)
         retval+= (*i)->getArea()*sqr((*i)->getLocZ()-z0);
       else
-        std::cerr << "FiberDeque::getIy; Pointer to fiber is null." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; null pointer to fiber." << std::endl;
     retval*= factor;
     return retval;
   }
@@ -267,7 +278,8 @@ double XC::FiberDeque::getPyz(const double &factor,const double &y0,const double
       if(*i)
         retval+= (*i)->getArea()*((*i)->getLocZ()-z0)*((*i)->getLocY()-y0);
       else
-        std::cerr << "FiberDeque::getPyz; Pointer to fiber is null." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; null pointer to fiber." << std::endl;
     retval*= factor;
     return retval;
   }
@@ -276,7 +288,9 @@ double XC::FiberDeque::getPyz(const double &factor,const double &y0,const double
 double XC::FiberDeque::getAreaHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
-      std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
+      std::clog << getClassName() << "::" << __FUNCTION__
+		<< "; homogenization reference modulus too small; E0= "
+		<< E0 << std::endl; 
     double retval= 0.0;
 
     for(std::deque<Fiber *>::const_iterator i= begin();i!= end();i++)
@@ -285,13 +299,14 @@ double XC::FiberDeque::getAreaHomogenizedSection(const double &E0) const
         if(mat)
           retval+= (*i)->getArea()*(mat->getTangent()/E0);
         else
-          std::cerr << "FiberDeque::getIyHomogenizedSection; pointer to material nulo." << std::endl;
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; pointer to material nulo." << std::endl;
       }
     return retval;
   }
 
 //! @brief Return the coordinates of the homogenized section centroid.
-const XC::Vector &XC::FiberDeque::getCdgHomogenizedSection(const double &E0) const
+const XC::Vector &XC::FiberDeque::getCenterOfMassHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
       std::clog << getClassName() << "::" << __FUNCTION__
@@ -315,11 +330,12 @@ const XC::Vector &XC::FiberDeque::getCdgHomogenizedSection(const double &E0) con
             Qy+= zLoc*weightedFiberArea;
           }
         else
-          std::cerr << "FiberDeque::getIyHomogenizedSection; pointer to material nulo." << std::endl;
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; null pointer to material." << std::endl;
       }
     static Vector retval(2);
-    retval[0]= -Qz/Atot; //Coordenada y del CDG  XXX ¿Signo menos?
-    retval[1]= Qy/Atot; //Coordenada z del CDG 
+    retval[0]= -Qz/Atot; //center of mass y coordinate  XXX ¿Signo menos?
+    retval[1]= Qy/Atot; //center of mass z coordinate 
     return retval;
   }
 
@@ -328,16 +344,18 @@ const XC::Vector &XC::FiberDeque::getCdgHomogenizedSection(const double &E0) con
 double XC::FiberDeque::getIyHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
-      std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
+      std::clog << getClassName() << "::" << __FUNCTION__
+		<< "homogenization reference modulus too small; E0= "
+		<< E0 << std::endl; 
     double retval= 0.0;
-    const Vector &cdg= getCdgHomogenizedSection(E0);
+    const Vector &center_of_mass= getCenterOfMassHomogenizedSection(E0);
     register std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       if(*i)
         {
           const UniaxialMaterial *mat= (*i)->getMaterial();
           if(mat)
-            retval+= (*i)->getArea()*sqr((*i)->getLocZ()-cdg[1])*(mat->getTangent()/E0);
+            retval+= (*i)->getArea()*sqr((*i)->getLocZ()-center_of_mass[1])*(mat->getTangent()/E0);
           else
 	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; null pointer to material." << std::endl;
@@ -357,14 +375,14 @@ double XC::FiberDeque::getIzHomogenizedSection(const double &E0) const
 		<< "homogenization reference modulus too small; E0= "
 		<< E0 << std::endl; 
     double retval= 0.0;
-    const Vector &cdg= getCdgHomogenizedSection(E0);
+    const Vector &center_of_mass= getCenterOfMassHomogenizedSection(E0);
     register std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       if(*i)
         {
           const UniaxialMaterial *mat= (*i)->getMaterial();
           if(mat)
-            retval+= (*i)->getArea()*sqr((*i)->getLocY()-cdg[0])*(mat->getTangent()/E0);
+            retval+= (*i)->getArea()*sqr((*i)->getLocY()-center_of_mass[0])*(mat->getTangent()/E0);
           else
 	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; null pointer to material." << std::endl;
@@ -382,14 +400,14 @@ double XC::FiberDeque::getPyzHomogenizedSection(const double &E0) const
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     double retval= 0.0;
-    const Vector &cdg= getCdgHomogenizedSection(E0);
+    const Vector &center_of_mass= getCenterOfMassHomogenizedSection(E0);
     register std::deque<Fiber *>::const_iterator i= begin();
     for(;i!= end();i++)
       if(*i)
         {
           const UniaxialMaterial *mat= (*i)->getMaterial();
           if(mat)
-            retval+= (*i)->getArea()*((*i)->getLocZ()-cdg[1])*((*i)->getLocY()-cdg[0])*(mat->getTangent()/E0);
+            retval+= (*i)->getArea()*((*i)->getLocZ()-center_of_mass[1])*((*i)->getLocY()-center_of_mass[0])*(mat->getTangent()/E0);
           else
 	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "null pointer to material." << std::endl;
@@ -400,7 +418,7 @@ double XC::FiberDeque::getPyzHomogenizedSection(const double &E0) const
     return retval;
   }
 
-//! @brief Return the i,j component of the tensor of inertia calculado with respect to the CDG.
+//! @brief Return the i,j component of the tensor of inertia calculado with respect to the CENTER_OF_MASS.
 double XC::FiberDeque::getIHomogenizedSection(const double &E0,const unsigned short int &i,const unsigned short int &j) const
   {
     unsigned short int k= i + (j-1)*2;
@@ -436,7 +454,7 @@ XC::Matrix &XC::FiberDeque::getIHomogenizedSection(const double &E0,const Pos2d 
     static Matrix retval(2,2);
     const Matrix Ig= getIHomogenizedSection(E0);
     Vector O(2); O[0]= o.x(); O[1]= o.y();
-    const Vector og= getCdgHomogenizedSection(E0) - O;
+    const Vector og= getCenterOfMassHomogenizedSection(E0) - O;
     const double m= getAreaHomogenizedSection(E0);
     retval= Ig+m*(og.Norm2()*identity(Ig)-(og & og));
     return retval;
@@ -550,10 +568,12 @@ double XC::FiberDeque::getSyNeg(const double &zf,const double &z0,const double &
 
 //! @brief Return the static moments of the fiber areas inside the halfplane
 //! being passed as parameter.
-double XC::FiberDeque::getSPosHomogenizedSection(const double &E0,const Semiplano2d &sp) const
+double XC::FiberDeque::getSPosHomogenizedSection(const double &E0,const HalfPlane2d &sp) const
   {
     if(fabs(E0)<1e-6)
-      std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
+      std::clog << getClassName() << "::" << __FUNCTION__
+		<< "; homogenization reference modulus too small; E0= "
+		<< E0 << std::endl; 
     double retval= 0.0;
     double d= 0.0;
     for(std::deque<Fiber *>::const_iterator i= begin();i!= end();i++)
@@ -566,7 +586,8 @@ double XC::FiberDeque::getSPosHomogenizedSection(const double &E0,const Semiplan
               retval+= (*i)->getArea()*(mat->getTangent()/E0)*d;
           }
         else
-          std::cerr << "FiberDeque::getSPosHomogenizedSection; pointer to material nulo." << std::endl;
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; null pointer to material." << std::endl;
       }
     return retval;
   }
@@ -574,10 +595,12 @@ double XC::FiberDeque::getSPosHomogenizedSection(const double &E0,const Semiplan
 
 //! @brief Return the static moments of the fiber areas outside the halfplane
 //! being passed as parameter.
-double XC::FiberDeque::getSNegHomogenizedSection(const double &E0,const Semiplano2d &sp) const
+double XC::FiberDeque::getSNegHomogenizedSection(const double &E0,const HalfPlane2d &sp) const
   {
     if(fabs(E0)<1e-6)
-      std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
+      std::clog << getClassName() << "::" << __FUNCTION__
+		<< "homogenization reference modulus too small; E0= "
+		<< E0 << std::endl; 
     double retval= 0.0;
     double d= 0.0;
     for(std::deque<Fiber *>::const_iterator i= begin();i!= end();i++)
@@ -590,7 +613,9 @@ double XC::FiberDeque::getSNegHomogenizedSection(const double &E0,const Semiplan
               retval+= (*i)->getArea()*(mat->getTangent()/E0)*d;
           }
         else
-          std::cerr << "FiberDeque::getSNegHomogenizedSection; pointer to material nulo." << std::endl;
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; null pointer to material!."
+		    << std::endl;
       }
     return retval;
   }
@@ -754,13 +779,13 @@ double XC::FiberDeque::getCompressionResultant(void) const
         }
       else
         std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; pointer to fiber is null." << std::endl;
+	          << "; null pointer to fiber." << std::endl;
     return retval;
   }
 
 //! @brief Return the moment of the compressed fibers
 //! with respect to the z axis.
-double XC::FiberDeque::getMzComp(const double &y0) const
+double XC::FiberDeque::getCompressedFibersMz(const double &y0) const
   {
     double retval= 0.0;
     register std::deque<Fiber *>::const_iterator i= begin();
@@ -772,7 +797,7 @@ double XC::FiberDeque::getMzComp(const double &y0) const
 //! @brief Return the passing point of the stress resultant for stresses
 //! that are lower than «ref» (zero by default; compressions), if there are
 //! not such stresses it returns (0,0).
-const XC::Vector &XC::FiberDeque::baricentroCompresiones(void) const
+const XC::Vector &XC::FiberDeque::getCompressedFibersCentroid(void) const
   {
     static Vector retval(2);
     static double f,r;
@@ -797,7 +822,7 @@ const XC::Vector &XC::FiberDeque::baricentroCompresiones(void) const
 
 //! @brief Return the centroid of the fibers whose strain is less than
 //! the value passed as parameter.
-const XC::Vector &XC::FiberDeque::baricentroDefMenores(const double &defRef) const
+const XC::Vector &XC::FiberDeque::getCentroidFibersWithStrainSmallerThan(const double &defRef) const
   {
     static Vector retval(2);
     static double def,r;
@@ -822,7 +847,7 @@ const XC::Vector &XC::FiberDeque::baricentroDefMenores(const double &defRef) con
 
 //! @brief Return the moment of the compressed fibers
 //! with respect to the y axis.
-double XC::FiberDeque::getMyComp(const double &z0) const
+double XC::FiberDeque::getCompressedFibersMy(const double &z0) const
   {
     double retval= 0.0;
     register std::deque<Fiber *>::const_iterator i= begin();
@@ -845,13 +870,13 @@ double XC::FiberDeque::getTensionResultant(void) const
         }
       else
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; pointer to fiber is null." << std::endl;
+		  << "; null pointer to fiber." << std::endl;
     return retval;
   }
 
 //! @brief Return the moment of the tensioned fibers
 //! with respect to the z axis.
-double XC::FiberDeque::getMzTracc(const double &y0) const
+double XC::FiberDeque::getTensionedFibersMz(const double &y0) const
   {
     double retval= 0.0;
     register std::deque<Fiber *>::const_iterator i= begin();
@@ -862,7 +887,7 @@ double XC::FiberDeque::getMzTracc(const double &y0) const
 
 //! @brief Return the moment of the tensioned fibers
 //! with respect to the y axis.
-double XC::FiberDeque::getMyTracc(const double &z0) const
+double XC::FiberDeque::getTensionedFibersMy(const double &z0) const
   {
     double retval= 0.0;
     register std::deque<Fiber *>::const_iterator i= begin();
@@ -871,9 +896,9 @@ double XC::FiberDeque::getMyTracc(const double &z0) const
     return retval;
   }
 
-//! @brief Return the centroid of the tensioned fibers, si
-//! no hay tracciones returns (0,0).
-const XC::Vector &XC::FiberDeque::baricentroTracciones(void) const
+//! @brief Return the centroid of the tensioned fibers, if 
+//! there is no tensioned fibers returns (0,0).
+const XC::Vector &XC::FiberDeque::getTensionedFibersCentroid(void) const
   {
     static Vector retval(2);
     static double f,r;
@@ -898,7 +923,7 @@ const XC::Vector &XC::FiberDeque::baricentroTracciones(void) const
 
 //! @brief Return the centroid of the fibers whose strain is greater than
 //! the value being passed as parameter.
-const XC::Vector &XC::FiberDeque::baricentroDefMayores(const double &defRef) const
+const XC::Vector &XC::FiberDeque::getCentroidFibersWithStrainGreaterThan(const double &defRef) const
   {
     static Vector retval(2);
     static double def,r;
@@ -928,7 +953,8 @@ size_t XC::FiberDeque::nearest_fiber(const double &y,const double &z) const
     const size_t nf= getNumFibers();
     if(nf<1)
       {
-        std::cerr << "FiberDeque::nearest_fiber; fiber container empty." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; fiber container empty." << std::endl;
         return retval;
       }
     register size_t i= 0;
@@ -938,7 +964,8 @@ size_t XC::FiberDeque::nearest_fiber(const double &y,const double &z) const
     if(f)
       f->getFiberLocation(yf,zf);
     else
-      std::cerr << "FiberDeque::nearest_fiber; Pointer to fiber is null." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; null pointer to fiber." << std::endl;
     double d2= sqr(yf-y)+sqr(zf-z);
     i++;
     for(;i<nf;i++)
@@ -953,7 +980,8 @@ size_t XC::FiberDeque::nearest_fiber(const double &y,const double &z) const
             }
         }
       else
-        std::cerr << "FiberDeque::nearest_fiber; Pointer to fiber is null." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; null pointer to fiber." << std::endl;
     return retval;
   }
 
@@ -975,7 +1003,8 @@ void XC::FiberDeque::SelMatTag(const int &matTag,FiberDeque &retval,bool clear)
             }
         }
       else
-        std::cerr << "FiberDeque::SelMatTag; Pointer to fiber is null." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; null pointer to fiber." << std::endl;
   }
 
 //! @brief Return the min strain.
@@ -1036,7 +1065,7 @@ XC::DeformationPlane XC::FiberDeque::getDeformationPlane(void) const
             points.push_back(Pos3d((*i)->getMaterial()->getStrain(),(*i)->getLocY(),(*i)->getLocZ()));
           else
             std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; pointer to fiber is null." << std::endl;
+		      << "; null pointer to fiber." << std::endl;
       }
     DeformationPlane retval;
     retval.AjusteMinimosCuadrados(points);
@@ -1106,9 +1135,9 @@ XC::ClaseEsfuerzo XC::FiberDeque::getClaseEsfuerzo(const double &tol) const
       {
         const double r= (epsMax-epsMin)/epsMax;
         if(r<tol)
-          retval= TRACCION_SIMPLE;
+          retval= SIMPLE_TENSION;
         else
-          retval= TRACCION_COMPUESTA;
+          retval= COMPOSED_TENSION;
       }
     else if(epsMax>0) //Bending.
       {
@@ -1130,11 +1159,11 @@ XC::ClaseEsfuerzo XC::FiberDeque::getClaseEsfuerzo(const double &tol) const
   }
 
 //! @brief Returns true if all the fibers are tensioned.
-bool XC::FiberDeque::enTraccion(void) const
+bool XC::FiberDeque::isTensioned(void) const
   { return ((getStrainMin()>=0) && (getStrainMax()>0)); }
 
 //! @brief Returns true if some fibers are tensioned and other are compressed (bending with or without axial force).
-bool XC::FiberDeque::enFlexion(void) const
+bool XC::FiberDeque::isBent(void) const
   { return ((getStrainMin()<0) && (getStrainMax()>0)); }
 
 //! @brief Returns true if all the fibers are compressed.
@@ -1147,11 +1176,11 @@ std::string XC::FiberDeque::getStrClaseEsfuerzo(const double &tol) const
     const ClaseEsfuerzo clase= getClaseEsfuerzo(tol);
     switch(clase)
       {
-      case TRACCION_SIMPLE:
-	retval= "traccion_simple";
+      case SIMPLE_TENSION:
+	retval= "simple_tension";
         break;
-      case TRACCION_COMPUESTA:
-	retval= "traccion_compuesta";
+      case COMPOSED_TENSION:
+	retval= "composed_tension";
         break;
       case FLEXION_SIMPLE:
 	retval= "flexion_simple";
@@ -1173,8 +1202,8 @@ std::string XC::FiberDeque::getStrClaseEsfuerzo(const double &tol) const
   }
 
 //! @brief Return the position of the centroid.
-Pos2d XC::FiberDeque::getCdg(void) const
-  { return Pos2d(getYCdg(),getZCdg()); }
+Pos2d XC::FiberDeque::getCenterOfMass(void) const
+  { return Pos2d(getCenterOfMassY(),getCenterOfMassZ()); }
 
 //! @brief Returns neutral axisr depth, i. e. distance from neutral axis to
 //! the most compressed one.
@@ -1205,37 +1234,38 @@ double XC::FiberDeque::getNeutralAxisDepth(const FiberSectionBase &Section) cons
     return retval;
   }
 
-//! @brief Returns a vector orientado desde el centro de tracciones al de compresiones.
+//! @brief Returns a vector oriented from the tension centroid
+//ª to the compression centroid.
 XC::Vector XC::FiberDeque::getVectorBrazoMecanico(void) const
   {
-    const Segmento2d &bm= getSegmentoBrazoMecanico();
+    const Segment2d &bm= getLeverArmSegment();
     return Vector(bm.GetVector());
   }
 
 //! @brief Returns a segment from the tension centroid to the compression
 //! centroid.
-Segmento2d XC::FiberDeque::getSegmentoBrazoMecanico(void) const
+Segment2d XC::FiberDeque::getLeverArmSegment(void) const
   {
-    Segmento2d retval;
+    Segment2d retval;
     retval.setExists(false);
     const double epsMin= getStrainMin();
     const double epsMax= getStrainMax();
     if((epsMin<0) && (epsMax>0))
       {
-        const Vector &C= baricentroCompresiones();
+        const Vector &C= getCompressedFibersCentroid();
 	if(!std::isnan(C[0]) && !std::isnan(C[1]))
 	  {
-            const Vector &T= baricentroTracciones();
+            const Vector &T= getTensionedFibersCentroid();
 	    if(!std::isnan(T[0]) && !std::isnan(T[1]))
-	      retval= Segmento2d(Pos2d(T[0],T[1]),Pos2d(C[0],C[1]));
+	      retval= Segment2d(Pos2d(T[0],T[1]),Pos2d(C[0],C[1]));
 	  }
       }
     else if(std::abs(epsMax-epsMin)>1e-6)
       {
         const double defRef= (epsMin+epsMax)/2.0;
-        const Vector &C= baricentroDefMenores(defRef);
-        const Vector &T= baricentroDefMayores(defRef);
-        retval= Segmento2d(Pos2d(T[0],T[1]),Pos2d(C[0],C[1]));
+        const Vector &C= getCentroidFibersWithStrainSmallerThan(defRef);
+        const Vector &T= getCentroidFibersWithStrainGreaterThan(defRef);
+        retval= Segment2d(Pos2d(T[0],T[1]),Pos2d(C[0],C[1]));
       }
     else
       retval.setExists(false);
@@ -1245,7 +1275,7 @@ Segmento2d XC::FiberDeque::getSegmentoBrazoMecanico(void) const
 //! @brief Return the intercept of the bending plane with
 //! the plane that contains the section.
 Recta2d XC::FiberDeque::getBendingPlaneTrace(void) const
-  { return getSegmentoBrazoMecanico().RectaSoporte(); }
+  { return getLeverArmSegment().RectaSoporte(); }
 
 //! @brief Return the intercept of a plane perpendicular to the
 //! bending plane through the tensions centroid with the plane
@@ -1253,11 +1283,11 @@ Recta2d XC::FiberDeque::getBendingPlaneTrace(void) const
 Recta2d XC::FiberDeque::getTensionedPlaneTrace(void) const
   { 
     const Recta2d bendingTrace= getBendingPlaneTrace();
-    Pos2d pt(getYCdg(),getZCdg());
+    Pos2d pt(getCenterOfMassY(),getCenterOfMassZ());
     const double epsMax= getStrainMax();
     if(epsMax>0) //There are tractions.
       {
-        const Vector &T= baricentroTracciones();
+        const Vector &T= getTensionedFibersCentroid();
         pt= Pos2d(T[0],T[1]);
       }
     return bendingTrace.Perpendicular(pt);
@@ -1269,11 +1299,11 @@ Recta2d XC::FiberDeque::getTensionedPlaneTrace(void) const
 Recta2d XC::FiberDeque::getCompressedPlaneTrace(void) const
   { 
     const Recta2d bendingTrace= getBendingPlaneTrace();
-    Pos2d pt(getYCdg(),getZCdg());
+    Pos2d pt(getCenterOfMassY(),getCenterOfMassZ());
     const double epsMin= getStrainMin();
     if(epsMin<0) //There are compresions.
       {
-        const Vector &C= baricentroCompresiones();
+        const Vector &C= getCompressedFibersCentroid();
         pt= Pos2d(C[0],C[1]);
       }
     return bendingTrace.Perpendicular(pt);
@@ -1360,7 +1390,8 @@ double XC::FiberDeque::computeFibersEffectiveConcreteArea(const std::list<Poligo
     const double area_contour= area(grossEffectiveConcreteAreaContour.begin(),grossEffectiveConcreteAreaContour.end());
     if(retval>1.01*area_contour)
       std::cerr << "Effective area: " << retval
-                << " is greater than the theoretical maximum: " << area_contour << std::endl;
+                << " is greater than the theoretical maximum: "
+		<< area_contour << std::endl;
     return retval;
   }
 
@@ -1455,7 +1486,7 @@ double XC::FiberDeque::getSigmaSRAtFiber(const size_t &i,const double &Ec,const 
   }
 
 //! @brief Updates the centroid position.
-int XC::FiberDeque::updateCDG(void)
+int XC::FiberDeque::updateCenterOfMass(void)
   {
     double Qy= 0.0,Qz= 0.0;
     double Atot= 0.0;
@@ -1472,13 +1503,13 @@ int XC::FiberDeque::updateCDG(void)
         Qz+= -yLoc*fiberArea; //Coordenada y cambiada de signo.
         Qy+= zLoc*fiberArea;
       }
-    yCDG= -Qz/Atot; //Coordenada y del CDG  XXX ¿Signo menos?
-    zCDG= Qy/Atot; //Coordenada z del CDG 
+    yCenterOfMass= -Qz/Atot; //center of mass y coordinate  XXX ¿Signo menos?
+    zCenterOfMass= Qy/Atot; //center of mass z coordinate 
     return 0;
   }
 
-//! @brief Update the parameters CDG, stiffness and resultant.
-int XC::FiberDeque::updateKRCDG(FiberSection2d &Section2d,CrossSectionKR &kr2)
+//! @brief Update the parameters center of mass, stiffness and resultant.
+int XC::FiberDeque::updateKRCenterOfMass(FiberSection2d &Section2d,CrossSectionKR &kr2)
   {
     kr2.zero();
     double Qz= 0.0;
@@ -1508,7 +1539,7 @@ int XC::FiberDeque::updateKRCDG(FiberSection2d &Section2d,CrossSectionKR &kr2)
             kr2.updateNMz(fs0,yLoc);
           }
       }
-    yCDG= -Qz/Atot; //Coordenada y del CDG 
+    yCenterOfMass= -Qz/Atot; //center or mass z coordinate 
     kr2.kData[2]= kr2.kData[1]; //Simetría.
     return 0;
   }
@@ -1517,7 +1548,7 @@ int XC::FiberDeque::updateKRCDG(FiberSection2d &Section2d,CrossSectionKR &kr2)
 XC::Fiber *XC::FiberDeque::addFiber(FiberSection2d &Section2d,Fiber &newFiber,CrossSectionKR &kr2)
   {
     Fiber *retval= insert(newFiber);
-    updateKRCDG(Section2d,kr2);
+    updateKRCenterOfMass(Section2d,kr2);
     return retval;
   }
 
@@ -1586,7 +1617,7 @@ int XC::FiberDeque::revertToLastCommit(FiberSection2d &Section2d,CrossSectionKR 
     std::deque<Fiber *>::iterator i= begin();
     for(;i!= end();i++)
       err+= (*i)->getMaterial()->revertToLastCommit();
-    err+= updateKRCDG(Section2d,kr2);
+    err+= updateKRCenterOfMass(Section2d,kr2);
     return err;
   }
 
@@ -1598,7 +1629,7 @@ int XC::FiberDeque::revertToStart(FiberSection2d &Section2d,CrossSectionKR &kr2)
     std::deque<Fiber *>::iterator i= begin();
     for(;i!= end();i++)
       err+= (*i)->getMaterial()->revertToStart();
-    err+= updateKRCDG(Section2d,kr2);
+    err+= updateKRCenterOfMass(Section2d,kr2);
     return err;
   }
 
@@ -1665,8 +1696,8 @@ int XC::FiberDeque::commitSensitivity(const XC::Vector& defSens, int gradNumber,
     return 0;
   }
 
-//! @brief Update the parameters CDG, stiffness matrix and resultant.
-int XC::FiberDeque::updateKRCDG(FiberSection3d &Section3d,CrossSectionKR &kr3)
+//! @brief Update the parameters center of mass, stiffness matrix and resultant.
+int XC::FiberDeque::updateKRCenterOfMass(FiberSection3d &Section3d,CrossSectionKR &kr3)
   {
     kr3.zero();
     double Qy= 0.0,Qz= 0.0;
@@ -1699,8 +1730,8 @@ int XC::FiberDeque::updateKRCDG(FiberSection3d &Section3d,CrossSectionKR &kr3)
             kr3.updateNMzMy(fs0,yLoc,zLoc);
 	  }
       }
-    yCDG= -Qz/Atot; //Coordenada y del CDG  XXX ¿Signo menos?
-    zCDG= Qy/Atot; //Coordenada z del CDG 
+    yCenterOfMass= -Qz/Atot; //center of mass y coordinate  XXX ¿Signo menos?
+    zCenterOfMass= Qy/Atot; //center of mass z coordinate 
     kr3.kData[3]= kr3.kData[1]; //Stiffness matrix symmetry.
     kr3.kData[6]= kr3.kData[2];
     kr3.kData[7]= kr3.kData[5];
@@ -1711,7 +1742,7 @@ int XC::FiberDeque::updateKRCDG(FiberSection3d &Section3d,CrossSectionKR &kr3)
 XC::Fiber *XC::FiberDeque::addFiber(FiberSection3d &Section3d,Fiber &newFiber,CrossSectionKR &kr3)
   {
     Fiber *retval= insert(newFiber);
-    updateKRCDG(Section3d,kr3);
+    updateKRCenterOfMass(Section3d,kr3);
     return retval;
   }
 
@@ -1775,7 +1806,7 @@ int XC::FiberDeque::revertToLastCommit(FiberSection3d &Section3d,CrossSectionKR 
     std::deque<Fiber *>::iterator i= begin();
     for(;i!= end();i++)
       err+= (*i)->getMaterial()->revertToLastCommit(); // invoke revertToLastCommit on the material
-    err+= updateKRCDG(Section3d,kr3);
+    err+= updateKRCenterOfMass(Section3d,kr3);
     return err;
   }
 
@@ -1788,7 +1819,7 @@ int XC::FiberDeque::revertToStart(FiberSection3d &Section3d,CrossSectionKR &kr3)
     std::deque<Fiber *>::iterator i= begin();
     for(;i!= end();i++)
       err+= (*i)->getMaterial()->revertToStart(); // invoke revertToStart on the material
-    err+= updateKRCDG(Section3d,kr3);
+    err+= updateKRCenterOfMass(Section3d,kr3);
     return err;
   }
 
@@ -1825,8 +1856,8 @@ const XC::Matrix &XC::FiberDeque::getInitialTangent(const FiberSection3d &Sectio
     return kInitial;
   }
 
-//! @brief Update the parameters CDG, stiffness and resultant.
-int XC::FiberDeque::updateKRCDG(FiberSectionGJ &SectionGJ,CrossSectionKR &krGJ)
+//! @brief Update the parameters center of mass, stiffness and resultant.
+int XC::FiberDeque::updateKRCenterOfMass(FiberSectionGJ &SectionGJ,CrossSectionKR &krGJ)
   {
     krGJ.zero();
     double Qy= 0.0,Qz= 0.0;
@@ -1859,8 +1890,8 @@ int XC::FiberDeque::updateKRCDG(FiberSectionGJ &SectionGJ,CrossSectionKR &krGJ)
             krGJ.updateNMzMy(fs0,yLoc,zLoc);
           }
       }
-    yCDG= -Qz/Atot; //Coordenada y del CDG  XXX ¿Signo menos?
-    zCDG= Qy/Atot; //Coordenada z del CDG 
+    yCenterOfMass= -Qz/Atot; //center of mass y coordinate  XXX ¿Signo menos?
+    zCenterOfMass= Qy/Atot; //center of mass z coordinate 
     krGJ.kData[4]= krGJ.kData[1]; //Stiffness matrix symmetry.
     krGJ.kData[8]= krGJ.kData[2];
     krGJ.kData[9]= krGJ.kData[6];
@@ -1874,7 +1905,7 @@ int XC::FiberDeque::updateKRCDG(FiberSectionGJ &SectionGJ,CrossSectionKR &krGJ)
 XC::Fiber *XC::FiberDeque::addFiber(FiberSectionGJ &SectionGJ,Fiber &newFiber,CrossSectionKR &krGJ)
   {
     Fiber *retval= insert(newFiber);
-    updateKRCDG(SectionGJ,krGJ);
+    updateKRCenterOfMass(SectionGJ,krGJ);
     return retval;
   }
 
@@ -1941,7 +1972,7 @@ int XC::FiberDeque::revertToLastCommit(FiberSectionGJ &SectionGJ,CrossSectionKR 
     std::deque<Fiber *>::iterator i= begin();
     for(;i!= end();i++)
       err+= (*i)->getMaterial()->revertToLastCommit(); // invoke revertToLastCommit on the material
-    err+= updateKRCDG(SectionGJ,krGJ);
+    err+= updateKRCenterOfMass(SectionGJ,krGJ);
     return err;
   }
 
@@ -1954,7 +1985,7 @@ int XC::FiberDeque::revertToStart(FiberSectionGJ &SectionGJ,CrossSectionKR &krGJ
     std::deque<Fiber *>::iterator i= begin();
     for(;i!= end();i++)
       err+= (*i)->getMaterial()->revertToStart(); // invoke revertToStart on the material
-    err+= updateKRCDG(SectionGJ,krGJ);
+    err+= updateKRCenterOfMass(SectionGJ,krGJ);
     return err;
   }
 
@@ -2107,7 +2138,8 @@ XC::Response *XC::FiberDeque::setResponse(const std::vector<std::string> &argv, 
 //     const size_t nf= getNumFibers();
 //     if(nf<1)
 //       {
-//         std::cerr << "FiberDeque::IMaxProp; No hay fibers definidas." << std::endl;
+//         std::cerr << getClassName() << "::" << __FUNCTION__
+//                   << "; no fibers." << std::endl;
 //         return retval;
 //       }
 //     register size_t i= 0;
@@ -2136,7 +2168,8 @@ XC::Response *XC::FiberDeque::setResponse(const std::vector<std::string> &argv, 
 //             }
 //         }
 //       else
-//         std::cerr << "FiberDeque::IMaxProp; Pointer to fiber is null." << std::endl;
+//         std::cerr << getClassName() << "::" << __FUNCTION__
+//                   << "; null pointer to fiber." << std::endl;
 //     return retval;
 //   }
 
@@ -2149,7 +2182,8 @@ XC::Response *XC::FiberDeque::setResponse(const std::vector<std::string> &argv, 
 //     const size_t nf= getNumFibers();
 //     if(nf<1)
 //       {
-//         std::cerr << "FiberDeque::IMinProp; No hay fibers definidas." << std::endl;
+//         std::cerr << getClassName() << "::" << __FUNCTION__
+//                   << "; no fibers." << std::endl;
 //         return retval;
 //       }
 //     register size_t i= 0;
@@ -2178,7 +2212,8 @@ XC::Response *XC::FiberDeque::setResponse(const std::vector<std::string> &argv, 
 //             }
 //         }
 //       else
-//         std::cerr << "FiberDeque::IMinProp; Pointer to fiber is null." << std::endl;
+//         std::cerr << getClassName() << "::" << __FUNCTION__
+//                   << "; null pointer to fiber." << std::endl;
 //     return retval;
 //   }
 
@@ -2191,7 +2226,7 @@ size_t XC::FiberDeque::getFiberWithMaxCoord(const Ref3d3d &r,const size_t &iCoo)
     if(nf<1)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; there is no fibers defined." << std::endl;
+	          << "; there is no fibers." << std::endl;
         return retval;
       }
     register size_t i= 0;
@@ -2292,7 +2327,7 @@ int XC::FiberDeque::activateParameter(int passedParameterID)
 void XC::FiberDeque::Print(std::ostream &s,const int &flag)
   {
     s << "\tNumber of Fibers: " << getNumFibers() << std::endl;
-    s << "\tCentroid: (" << -yCDG << ", " << zCDG << ')' << std::endl;
+    s << "\tCentroid: (" << -yCenterOfMass << ", " << zCenterOfMass << ')' << std::endl;
     std::deque<Fiber *>::const_iterator i= begin();
     if(flag == 2)
       for(;i!= end();i++)

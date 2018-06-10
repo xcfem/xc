@@ -35,7 +35,7 @@
 class Pos2d;
 class BND2d;
 class Poligono2d;
-class Semiplano2d;
+class HalfPlane2d;
 
 namespace XC {
 
@@ -92,15 +92,15 @@ class RegionContainer: protected std::list<RegionSecc *>, public SectionMassProp
     std::list<Poligono2d> getRegionsContours(void) const;
     std::list<Poligono2d> getContours(void) const;
     BND2d getBnd(void) const;
-    RegionContainer Intersection(const Semiplano2d &) const;
+    RegionContainer Intersection(const HalfPlane2d &) const;
 
     double getAreaGrossSection(void) const;
-    Vector getCdgGrossSection(void) const;
+    Vector getCenterOfMassGrossSection(void) const;
     double getIyGrossSection(void) const;
     double getIzGrossSection(void) const;
     double getPyzGrossSection(void) const;
 
-    Vector getCdgHomogenizedSection(const double &E0) const;
+    Vector getCenterOfMassHomogenizedSection(const double &E0) const;
     double getAreaHomogenizedSection(const double &E0) const;
     double getIyHomogenizedSection(const double &E0) const;
     double getIzHomogenizedSection(const double &E0) const;

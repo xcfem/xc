@@ -122,7 +122,7 @@ double XC::VectorReinfBar::getAreaHomogenizedSection(const double &E0) const
     return retval;
   }
 
-XC::Vector XC::VectorReinfBar::getCdgHomogenizedSection(const double &E0) const
+XC::Vector XC::VectorReinfBar::getCenterOfMassHomogenizedSection(const double &E0) const
   {
     if(fabs(E0)<1e-6)
       std::clog << getClassName() << __FUNCTION__
@@ -156,14 +156,14 @@ double XC::VectorReinfBar::getIyHomogenizedSection(const double &E0) const
     double retval= 0.0;
     double n= 0.0;
     double d= 0.0;
-    const double zCdg= getCdgHomogenizedSection(E0)[1];
+    const double zCenterOfMass= getCenterOfMassHomogenizedSection(E0)[1];
     for(const_iterator i= begin();i!=end();i++)
       {
         const UniaxialMaterial *mat= dynamic_cast<const UniaxialMaterial *>((*i)->getMaterialPtr());
         if(mat)
           {
             n= mat->getTangent()/E0;
-            d= (*i)->getPosition()[1]-zCdg;
+            d= (*i)->getPosition()[1]-zCenterOfMass;
             retval+= n*((*i)->Iy()+(*i)->getArea()*sqr(d));
           }
         else
@@ -180,14 +180,14 @@ double XC::VectorReinfBar::getIzHomogenizedSection(const double &E0) const
     double retval= 0.0;
     double n= 0.0;
     double d= 0.0;
-    const double yCdg= getCdgHomogenizedSection(E0)[0];
+    const double yCenterOfMass= getCenterOfMassHomogenizedSection(E0)[0];
     for(const_iterator i= begin();i!=end();i++)
       {
         const UniaxialMaterial *mat= dynamic_cast<const UniaxialMaterial *>((*i)->getMaterialPtr());
         if(mat)
           {
             n= mat->getTangent()/E0;
-            d= (*i)->getPosition()[0]-yCdg;
+            d= (*i)->getPosition()[0]-yCenterOfMass;
             retval+= n*((*i)->Iz()+(*i)->getArea()*sqr(d));
           }
         else
@@ -204,15 +204,15 @@ double XC::VectorReinfBar::getPyzHomogenizedSection(const double &E0) const
     double retval= 0.0;
     double n= 0.0;
     double d2= 0.0;
-    const double zCdg= getCdgHomogenizedSection(E0)[0];
-    const double yCdg= getCdgHomogenizedSection(E0)[0];
+    const double zCenterOfMass= getCenterOfMassHomogenizedSection(E0)[0];
+    const double yCenterOfMass= getCenterOfMassHomogenizedSection(E0)[0];
     for(const_iterator i= begin();i!=end();i++)
       {
         const UniaxialMaterial *mat= dynamic_cast<const UniaxialMaterial *>((*i)->getMaterialPtr());
         if(mat)
           {
             n= mat->getTangent()/E0;
-            d2= ((*i)->getPosition()[0]-yCdg)*((*i)->getPosition()[1]-zCdg);
+            d2= ((*i)->getPosition()[0]-yCenterOfMass)*((*i)->getPosition()[1]-zCenterOfMass);
             retval+= n*((*i)->Pyz()+(*i)->getArea()*d2);
           }
         else
@@ -233,7 +233,7 @@ double XC::VectorReinfBar::getAreaGrossSection(void) const
   }
 
 //! @brief Returns gross section centroid.
-XC::Vector XC::VectorReinfBar::getCdgGrossSection(void) const
+XC::Vector XC::VectorReinfBar::getCenterOfMassGrossSection(void) const
   {
     Vector retval(2);
     double weight= 0.0;
@@ -253,10 +253,10 @@ double XC::VectorReinfBar::getIyGrossSection(void) const
   {
     double retval= 0.0;
     double d= 0.0;
-    const double zCdg= getCdgGrossSection()[1];
+    const double zCenterOfMass= getCenterOfMassGrossSection()[1];
     for(const_iterator i= begin();i!=end();i++)
       {
-        d= (*i)->getPosition()[1]-zCdg;
+        d= (*i)->getPosition()[1]-zCenterOfMass;
         retval+= (*i)->Iy()+(*i)->getArea()*sqr(d);
       }
     return retval;
@@ -267,10 +267,10 @@ double XC::VectorReinfBar::getIzGrossSection(void) const
   {
     double retval= 0.0;
     double d= 0.0;
-    const double yCdg= getCdgGrossSection()[0];
+    const double yCenterOfMass= getCenterOfMassGrossSection()[0];
     for(const_iterator i= begin();i!=end();i++)
       {
-        d= (*i)->getPosition()[0]-yCdg;
+        d= (*i)->getPosition()[0]-yCenterOfMass;
         retval+= (*i)->Iz()+(*i)->getArea()*sqr(d);
       }
     return retval;
@@ -281,12 +281,12 @@ double XC::VectorReinfBar::getPyzGrossSection(void) const
   {
     double retval= 0.0;
     double d2= 0.0;
-    const Vector posCdg= getCdgGrossSection();
-    const double zCdg= posCdg[1];
-    const double yCdg= posCdg[0];
+    const Vector centerOfMassPosition= getCenterOfMassGrossSection();
+    const double zCenterOfMass= centerOfMassPosition[1];
+    const double yCenterOfMass= centerOfMassPosition[0];
     for(const_iterator i= begin();i!=end();i++)
       {
-        d2= ((*i)->getPosition()[0]-yCdg)*((*i)->getPosition()[1]-zCdg);
+        d2= ((*i)->getPosition()[0]-yCenterOfMass)*((*i)->getPosition()[1]-zCenterOfMass);
         retval+= (*i)->Pyz()+(*i)->getArea()*d2;
       }
     return retval;

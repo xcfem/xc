@@ -57,7 +57,7 @@
 #include <material/nD/elastic_isotropic/ElasticIsotropicBeamFiber.h>           
 
 #include <utility/matrix/Matrix.h>
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 XC::Vector XC::ElasticIsotropicBeamFiber::sigma(3);
 XC::Matrix XC::ElasticIsotropicBeamFiber::D(3,3);
@@ -139,7 +139,7 @@ XC::NDMaterial *XC::ElasticIsotropicBeamFiber::getCopy(void) const
   { return new ElasticIsotropicBeamFiber(*this); }
 
 const std::string &XC::ElasticIsotropicBeamFiber::getType(void) const
-  { return strTipoBeamFiber; }
+  { return strTypeBeamFiber; }
 
 int XC::ElasticIsotropicBeamFiber::getOrder(void) const
   { return 3; }

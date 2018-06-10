@@ -92,7 +92,7 @@ result= analysis.analyze(Nstep)
 
 elements= preprocessor.getElementHandler
 ele1= elements.getElement(1)
-traccion= ele1.getN()
+tension= ele1.getN()
 sigma= ele1.getMaterial().getStress()
 
 
@@ -125,7 +125,7 @@ f3= math.sqrt(eig3)/(2*math.pi)
 
 
 ratio1= abs((sigma-162974)/162974)
-ratio2= abs((traccion-500)/500)
+ratio2= abs((tension-500)/500)
 
 ratio3= abs((f1-74.708)/74.708)
 ratio4= abs((f2-149.42)/149.42)
@@ -134,7 +134,7 @@ ratio5= abs((f3-224.12)/224.12)
 ''' 
 print "stress= ",sigma
 print "ratio1= ",(ratio1)
-print "tension= ",traccion
+print "tension= ",tension
 print "ratio2= ",(ratio2)
 
 print "eig1= ",eig1

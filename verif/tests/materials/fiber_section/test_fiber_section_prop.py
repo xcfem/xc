@@ -227,7 +227,7 @@ zIFA=sccEl1.getInternalForcesAxes().getParamB()
 zIFATeor=0.0
 ratio6=zIFA-zIFATeor
 #Lever arm
-levArm=sccEl1.getSegmentoBrazoMecanico().getLongitud()
+levArm=sccEl1.getLeverArmSegment().getLength()
 levArmTeor= 0.485277791614
 ratio7=(levArm-levArmTeor)/levArm
 #Lever arm
@@ -236,7 +236,7 @@ ratio8=(levArm-levArm2)/levArm
 #check lever arm
 ratio9=(levArm-(zCP-zTP))
 #Effective depth
-effDepth=sccEl1.getSegmentoCantoUtil().getLongitud()
+effDepth=sccEl1.getEffectiveDepthSegment().getLength()
 effDepthTeor=0.548
 ratio10=(effDepth-effDepthTeor)/effDepth
 #check effective depth

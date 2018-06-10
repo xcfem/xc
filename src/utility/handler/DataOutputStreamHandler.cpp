@@ -105,18 +105,19 @@ int XC::DataOutputStreamHandler::write(Vector &data)
   {
     if (data.Size() == numColumns)
       outputStream.stream() << data;
-  else {
-    std::cerr << "XC::DataOutputStreamHandler::write() - Vector not of correct size\n";
-    return -1;
+    else
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	  	  << "; vector not of correct size.\n";
+        return -1;
+      }
+    return 0;
   }
-  
-  return 0;
-}
 
-//! @brief Send the object a través del canal definido en el argumento.
+//! @brief Send the object through the communicator argument.
 int XC::DataOutputStreamHandler::sendSelf(CommParameters &cp)
   { return 0; }
 
-//! @brief Receive the object a través del canal definido en el argumento.
+//! @brief Receive the object through the communicator argument.
 int XC::DataOutputStreamHandler::recvSelf(const CommParameters &cp)
   { return 0; }

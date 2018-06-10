@@ -62,7 +62,7 @@ class EPState;
  class PotentialSurface;
 
 //! @ingroup 3DEPMat
-//
+//!
 //! @defgroup MatNDEL Evolution law.
 //
 //! @ingroup MatNDEL

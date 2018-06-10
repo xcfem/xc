@@ -104,8 +104,8 @@ class TritrizPtrBase: public std::vector<MatrizPtr>, public EntCmd
 
     void dim(const size_t &,const size_t &,const size_t &);
 
-    const MatrizPtr &operator()(const size_t &capa) const;
-    MatrizPtr &operator()(const size_t &capa);
+    const MatrizPtr &operator()(const size_t &layer) const;
+    MatrizPtr &operator()(const size_t &layer);
     inline const_reference operator()(const size_t &i,const size_t &j,const size_t &k) const
       { return ((*this)(i))(j,k); }
     inline reference operator()(const size_t &i,const size_t &j,const size_t &k)
@@ -116,41 +116,41 @@ class TritrizPtrBase: public std::vector<MatrizPtr>, public EntCmd
     const_reference getAtIJ(const size_t &,const size_t &) const;
     value_type getAtIJK(const size_t &,const size_t &,const size_t &);
 
-    const_ref_caja GetConstRefCaja(size_t capa=1,size_t f=1, size_t c=1) const;
+    const_ref_caja GetConstRefCaja(size_t layer=1,size_t f=1, size_t c=1) const;
     const_ref_caja GetConstRefCaja(const RangoTritriz &rango) const;
 
-    constant_i_layer_const_ref getConstantILayerConstRef(size_t capa=1,size_t f=1, size_t c=1) const;
-    constant_i_layer_const_ref getConstantILayerConstRef(size_t capa,const RangoIndice &,const RangoIndice &) const;
-    constant_j_layer_const_ref getConstantJLayerConstRef(size_t f=1,size_t capa=1, size_t c=1) const;
+    constant_i_layer_const_ref getConstantILayerConstRef(size_t layer=1,size_t f=1, size_t c=1) const;
+    constant_i_layer_const_ref getConstantILayerConstRef(size_t layer,const RangoIndice &,const RangoIndice &) const;
+    constant_j_layer_const_ref getConstantJLayerConstRef(size_t f=1,size_t layer=1, size_t c=1) const;
     constant_j_layer_const_ref getConstantJLayerConstRef(const RangoIndice &,const size_t &f,const RangoIndice &) const;
-    constant_k_layer_const_ref getConstantKLayerConstRef(size_t c=1,size_t capa=1, size_t f=1) const;
+    constant_k_layer_const_ref getConstantKLayerConstRef(size_t c=1,size_t layer=1, size_t f=1) const;
     constant_k_layer_const_ref getConstantKLayerConstRef(const RangoIndice &,const RangoIndice &,const size_t &) const;
 
     const_ref_i_row getIRowConstRef(size_t f=1,size_t c=1) const;
     const_ref_i_row getIRowConstRef(const RangoIndice &,const size_t &f,const size_t &c) const;
-    const_ref_j_row getJRowConstRef(size_t capa=1,size_t c=1) const;
-    const_ref_j_row getJRowConstRef(const size_t &capa,const RangoIndice &,const size_t &c) const;
-    const_ref_k_row getKRowConstRef(size_t capa=1,size_t f=1) const;
-    const_ref_k_row getKRowConstRef(const size_t &capa,const size_t &f,const RangoIndice &) const;
+    const_ref_j_row getJRowConstRef(size_t layer=1,size_t c=1) const;
+    const_ref_j_row getJRowConstRef(const size_t &layer,const RangoIndice &,const size_t &c) const;
+    const_ref_k_row getKRowConstRef(size_t layer=1,size_t f=1) const;
+    const_ref_k_row getKRowConstRef(const size_t &layer,const size_t &f,const RangoIndice &) const;
 
-    var_ref_caja GetVarRefCaja(size_t capa=1,size_t f=1, size_t c=1);
+    var_ref_caja GetVarRefCaja(size_t layer=1,size_t f=1, size_t c=1);
     var_ref_caja GetVarRefCaja(const RangoTritriz &);
 
-    constant_i_layer_variable_ref getConstantILayerVarRef(size_t capa=1,size_t f=1, size_t c=1);
-    constant_i_layer_variable_ref getConstantILayerVarRef(const size_t &capa,const RangoIndice &,const RangoIndice &);
-    constant_j_layer_variable_ref getConstantJLayerVarRef(size_t f=1,size_t capa=1, size_t c=1);
+    constant_i_layer_variable_ref getConstantILayerVarRef(size_t layer=1,size_t f=1, size_t c=1);
+    constant_i_layer_variable_ref getConstantILayerVarRef(const size_t &layer,const RangoIndice &,const RangoIndice &);
+    constant_j_layer_variable_ref getConstantJLayerVarRef(size_t f=1,size_t layer=1, size_t c=1);
     constant_j_layer_variable_ref getConstantJLayerVarRef(const RangoIndice &,const size_t &f,const RangoIndice &);
-    constant_k_layer_variable_ref getConstantKLayerVarRef(size_t c=1,size_t capa=1, size_t f=1);
+    constant_k_layer_variable_ref getConstantKLayerVarRef(size_t c=1,size_t layer=1, size_t f=1);
     constant_k_layer_variable_ref getConstantKLayerVarRef(const RangoIndice &,const RangoIndice &,const size_t &c);
 
     var_ref_i_row getVarRefIRow(size_t f=1,size_t c=1);
     var_ref_i_row getVarRefIRow(const RangoIndice &,const size_t &f,const size_t &c);
-    var_ref_j_row getVarRefJRow(size_t capa=1,size_t c=1);
-    var_ref_j_row getVarRefJRow(const size_t &capa,const RangoIndice &,const size_t &c);
-    var_ref_k_row getVarRefKRow(size_t capa=1,size_t f=1);
-    var_ref_k_row getVarRefKRow(const size_t &capa,const size_t &f,const RangoIndice &);
+    var_ref_j_row getVarRefJRow(size_t layer=1,size_t c=1);
+    var_ref_j_row getVarRefJRow(const size_t &layer,const RangoIndice &,const size_t &c);
+    var_ref_k_row getVarRefKRow(size_t layer=1,size_t f=1);
+    var_ref_k_row getVarRefKRow(const size_t &layer,const size_t &f,const RangoIndice &);
 
-    void PutCaja(size_t offset_capa,size_t row_offset,size_t offset_col,const TritrizPtrBase<MatrizPtr> &otra);
+    void PutCaja(size_t layer_offset,size_t row_offset,size_t offset_col,const TritrizPtrBase<MatrizPtr> &otra);
 
     std::vector<int> getLayerObjectsTags(const size_t &);
     std::vector<int> getRowObjectsTags(const size_t &,const size_t &);
@@ -219,10 +219,10 @@ void TritrizPtrBase<MatrizPtr>::resize(const size_t &n_layers,const size_t &n_ro
   }
 
 template <class MatrizPtr>
-bool TritrizPtrBase<MatrizPtr>::check_range(const size_t &capa,const size_t &iRow,const size_t &iCol) const
+bool TritrizPtrBase<MatrizPtr>::check_range(const size_t &layer,const size_t &iRow,const size_t &iCol) const
   {
-    if(capa<=getNumberOfLayers())
-      return TritrizPtrBase<MatrizPtr>::operator()(capa).CheckIndices(iRow,iCol);
+    if(layer<=getNumberOfLayers())
+      return TritrizPtrBase<MatrizPtr>::operator()(layer).CheckIndices(iRow,iCol);
     else
       return false;
   }
@@ -267,8 +267,8 @@ size_t TritrizPtrBase<MatrizPtr>::NumPtrs(void) const
       return 0;
     else
       {
-        const MatrizPtr &capa= (*this)(1); 
-        return sz*capa.getNumberOfRows()*capa.getNumberOfColumns();
+        const MatrizPtr &layer= (*this)(1); 
+        return sz*layer.getNumberOfRows()*layer.getNumberOfColumns();
       }
   }
 
@@ -350,15 +350,15 @@ template <class MatrizPtr>
 bool TritrizPtrBase<MatrizPtr>::isKConstantLayer(void) const
   { return (this->getNumberOfColumns()==1); }
 
-//! @brief Return the capa which index is being passed as parameter.
+//! @brief Return the i-th layer.
 template <class MatrizPtr>
-const MatrizPtr &TritrizPtrBase<MatrizPtr>::operator()(const size_t &capa) const
-  { return (*this)[capa-1]; }
+const MatrizPtr &TritrizPtrBase<MatrizPtr>::operator()(const size_t &i) const
+  { return (*this)[i-1]; }
 
-//! @brief Return the capa which index is being passed as parameter.
+//! @brief Return the i-th layer.
 template <class MatrizPtr>
-MatrizPtr &TritrizPtrBase<MatrizPtr>::operator()(const size_t &capa)
-  { return (*this)[capa-1]; }
+MatrizPtr &TritrizPtrBase<MatrizPtr>::operator()(const size_t &i)
+  { return (*this)[i-1]; }
 
 
 template <class MatrizPtr>
@@ -414,27 +414,27 @@ typename TritrizPtrBase<MatrizPtr>::const_reference TritrizPtrBase<MatrizPtr>::g
   }
 
 template <class MatrizPtr>
-typename TritrizPtrBase<MatrizPtr>::const_ref_caja TritrizPtrBase<MatrizPtr>::GetConstRefCaja(size_t capa,size_t f, size_t c) const
-  { return const_ref_caja(*this,capa,f,c); }
+typename TritrizPtrBase<MatrizPtr>::const_ref_caja TritrizPtrBase<MatrizPtr>::GetConstRefCaja(size_t layer,size_t f, size_t c) const
+  { return const_ref_caja(*this,layer,f,c); }
 template <class MatrizPtr>
 typename TritrizPtrBase<MatrizPtr>::const_ref_caja TritrizPtrBase<MatrizPtr>::GetConstRefCaja(const RangoTritriz &rango) const
   { return const_ref_caja(*this,rango); }
 
 template <class MatrizPtr>
-typename TritrizPtrBase<MatrizPtr>::constant_i_layer_const_ref TritrizPtrBase<MatrizPtr>::getConstantILayerConstRef(size_t capa,size_t f, size_t c) const
-  { return constant_i_layer_const_ref(*this,capa,f,c); }
+typename TritrizPtrBase<MatrizPtr>::constant_i_layer_const_ref TritrizPtrBase<MatrizPtr>::getConstantILayerConstRef(size_t layer,size_t f, size_t c) const
+  { return constant_i_layer_const_ref(*this,layer,f,c); }
 template <class MatrizPtr>
-typename TritrizPtrBase<MatrizPtr>::constant_i_layer_const_ref TritrizPtrBase<MatrizPtr>::getConstantILayerConstRef(size_t capa,const RangoIndice &row_range,const RangoIndice &column_range) const
-  { return constant_i_layer_const_ref(*this,capa,row_range,column_range); }
+typename TritrizPtrBase<MatrizPtr>::constant_i_layer_const_ref TritrizPtrBase<MatrizPtr>::getConstantILayerConstRef(size_t layer,const RangoIndice &row_range,const RangoIndice &column_range) const
+  { return constant_i_layer_const_ref(*this,layer,row_range,column_range); }
 template <class MatrizPtr>
-typename TritrizPtrBase<MatrizPtr>::constant_j_layer_const_ref TritrizPtrBase<MatrizPtr>::getConstantJLayerConstRef(size_t f,size_t capa, size_t c) const
-  { return constant_j_layer_const_ref(*this,capa,f,c); }
+typename TritrizPtrBase<MatrizPtr>::constant_j_layer_const_ref TritrizPtrBase<MatrizPtr>::getConstantJLayerConstRef(size_t f,size_t layer, size_t c) const
+  { return constant_j_layer_const_ref(*this,layer,f,c); }
 template <class MatrizPtr>
 typename TritrizPtrBase<MatrizPtr>::constant_j_layer_const_ref TritrizPtrBase<MatrizPtr>::getConstantJLayerConstRef(const RangoIndice &layer_range,const size_t &f,const RangoIndice &column_range) const
   { return constant_j_layer_const_ref(*this,layer_range,f,column_range); }
 template <class MatrizPtr>
-typename TritrizPtrBase<MatrizPtr>::constant_k_layer_const_ref TritrizPtrBase<MatrizPtr>::getConstantKLayerConstRef(size_t c,size_t capa, size_t f) const
-  { return constant_k_layer_const_ref(*this,c,capa,f); }
+typename TritrizPtrBase<MatrizPtr>::constant_k_layer_const_ref TritrizPtrBase<MatrizPtr>::getConstantKLayerConstRef(size_t c,size_t layer, size_t f) const
+  { return constant_k_layer_const_ref(*this,c,layer,f); }
 template <class MatrizPtr>
 typename TritrizPtrBase<MatrizPtr>::constant_k_layer_const_ref TritrizPtrBase<MatrizPtr>::getConstantKLayerConstRef(const RangoIndice &layer_range, const RangoIndice &row_range, const size_t &c) const
   { return constant_k_layer_const_ref(*this,layer_range,row_range,c); }
@@ -446,40 +446,40 @@ template <class MatrizPtr>
 typename TritrizPtrBase<MatrizPtr>::const_ref_i_row TritrizPtrBase<MatrizPtr>::getIRowConstRef(const RangoIndice &layer_range,const size_t &f,const size_t &c) const
   { return const_ref_i_row(*this,layer_range,f,c); }
 template <class MatrizPtr>
-typename TritrizPtrBase<MatrizPtr>::const_ref_j_row TritrizPtrBase<MatrizPtr>::getJRowConstRef(size_t capa,size_t c) const
-  { return const_ref_j_row(*this,capa,c); }
+typename TritrizPtrBase<MatrizPtr>::const_ref_j_row TritrizPtrBase<MatrizPtr>::getJRowConstRef(size_t layer,size_t c) const
+  { return const_ref_j_row(*this,layer,c); }
 template <class MatrizPtr>
-typename TritrizPtrBase<MatrizPtr>::const_ref_j_row TritrizPtrBase<MatrizPtr>::getJRowConstRef(const size_t &capa,const RangoIndice &row_range,const size_t &c) const
-  { return const_ref_j_row(*this,capa,row_range,c); }
+typename TritrizPtrBase<MatrizPtr>::const_ref_j_row TritrizPtrBase<MatrizPtr>::getJRowConstRef(const size_t &layer,const RangoIndice &row_range,const size_t &c) const
+  { return const_ref_j_row(*this,layer,row_range,c); }
 template <class MatrizPtr>
-typename TritrizPtrBase<MatrizPtr>::const_ref_k_row TritrizPtrBase<MatrizPtr>::getKRowConstRef(size_t capa,size_t f) const
-  { return const_ref_k_row(*this,capa,f); }
+typename TritrizPtrBase<MatrizPtr>::const_ref_k_row TritrizPtrBase<MatrizPtr>::getKRowConstRef(size_t layer,size_t f) const
+  { return const_ref_k_row(*this,layer,f); }
 template <class MatrizPtr>
-typename TritrizPtrBase<MatrizPtr>::const_ref_k_row TritrizPtrBase<MatrizPtr>::getKRowConstRef(const size_t &capa,const size_t &f,const RangoIndice &column_range) const
-  { return const_ref_k_row(*this,capa,f,column_range); }
+typename TritrizPtrBase<MatrizPtr>::const_ref_k_row TritrizPtrBase<MatrizPtr>::getKRowConstRef(const size_t &layer,const size_t &f,const RangoIndice &column_range) const
+  { return const_ref_k_row(*this,layer,f,column_range); }
 
 template <class MatrizPtr>
-typename TritrizPtrBase<MatrizPtr>::var_ref_caja TritrizPtrBase<MatrizPtr>::GetVarRefCaja(size_t capa,size_t f, size_t c)
-  { return var_ref_caja(*this,capa,f,c); }
+typename TritrizPtrBase<MatrizPtr>::var_ref_caja TritrizPtrBase<MatrizPtr>::GetVarRefCaja(size_t layer,size_t f, size_t c)
+  { return var_ref_caja(*this,layer,f,c); }
 template <class MatrizPtr>
 typename TritrizPtrBase<MatrizPtr>::var_ref_caja TritrizPtrBase<MatrizPtr>::GetVarRefCaja(const RangoTritriz &rango)
   { return var_ref_caja(*this,rango); }
 
 template <class MatrizPtr>
-typename TritrizPtrBase<MatrizPtr>::constant_i_layer_variable_ref TritrizPtrBase<MatrizPtr>::getConstantILayerVarRef(size_t capa,size_t f, size_t c)
-  { return constant_i_layer_variable_ref(*this,capa,f,c); }
+typename TritrizPtrBase<MatrizPtr>::constant_i_layer_variable_ref TritrizPtrBase<MatrizPtr>::getConstantILayerVarRef(size_t layer,size_t f, size_t c)
+  { return constant_i_layer_variable_ref(*this,layer,f,c); }
 template <class MatrizPtr>
-typename TritrizPtrBase<MatrizPtr>::constant_i_layer_variable_ref TritrizPtrBase<MatrizPtr>::getConstantILayerVarRef(const size_t &capa,const RangoIndice &row_range,const RangoIndice &rcols)
-  { return constant_i_layer_variable_ref(*this,capa,row_range,rcols); }
+typename TritrizPtrBase<MatrizPtr>::constant_i_layer_variable_ref TritrizPtrBase<MatrizPtr>::getConstantILayerVarRef(const size_t &layer,const RangoIndice &row_range,const RangoIndice &rcols)
+  { return constant_i_layer_variable_ref(*this,layer,row_range,rcols); }
 template <class MatrizPtr>
-typename TritrizPtrBase<MatrizPtr>::constant_j_layer_variable_ref TritrizPtrBase<MatrizPtr>::getConstantJLayerVarRef(size_t f,size_t capa, size_t c)
-  { return constant_j_layer_variable_ref(*this,capa,f,c); }
+typename TritrizPtrBase<MatrizPtr>::constant_j_layer_variable_ref TritrizPtrBase<MatrizPtr>::getConstantJLayerVarRef(size_t f,size_t layer, size_t c)
+  { return constant_j_layer_variable_ref(*this,layer,f,c); }
 template <class MatrizPtr>
 typename TritrizPtrBase<MatrizPtr>::constant_j_layer_variable_ref TritrizPtrBase<MatrizPtr>::getConstantJLayerVarRef(const RangoIndice &layer_range,const size_t &f,const RangoIndice &rcols)
   { return constant_j_layer_variable_ref(*this,layer_range,f,rcols); }
 template <class MatrizPtr>
-typename TritrizPtrBase<MatrizPtr>::constant_k_layer_variable_ref TritrizPtrBase<MatrizPtr>::getConstantKLayerVarRef(size_t c,size_t capa, size_t f)
-  { return constant_k_layer_variable_ref(*this,c,capa,f); }
+typename TritrizPtrBase<MatrizPtr>::constant_k_layer_variable_ref TritrizPtrBase<MatrizPtr>::getConstantKLayerVarRef(size_t c,size_t layer, size_t f)
+  { return constant_k_layer_variable_ref(*this,c,layer,f); }
 template <class MatrizPtr>
 typename TritrizPtrBase<MatrizPtr>::constant_k_layer_variable_ref TritrizPtrBase<MatrizPtr>::getConstantKLayerVarRef(const RangoIndice &layer_range, const RangoIndice &row_range,const size_t &c)
   { return constant_k_layer_variable_ref(*this,layer_range,row_range,c); }
@@ -491,26 +491,26 @@ template <class MatrizPtr>
 typename TritrizPtrBase<MatrizPtr>::var_ref_i_row TritrizPtrBase<MatrizPtr>::getVarRefIRow(const RangoIndice &layer_range,const size_t &f,const size_t &c)
   { return var_ref_i_row(*this,layer_range,f,c); }
 template <class MatrizPtr>
-typename TritrizPtrBase<MatrizPtr>::var_ref_j_row TritrizPtrBase<MatrizPtr>::getVarRefJRow(size_t capa,size_t c)
-  { return var_ref_j_row(*this,capa,c); }
+typename TritrizPtrBase<MatrizPtr>::var_ref_j_row TritrizPtrBase<MatrizPtr>::getVarRefJRow(size_t layer,size_t c)
+  { return var_ref_j_row(*this,layer,c); }
 template <class MatrizPtr>
-typename TritrizPtrBase<MatrizPtr>::var_ref_j_row TritrizPtrBase<MatrizPtr>::getVarRefJRow(const size_t &capa,const RangoIndice &row_range,const size_t &c)
-  { return var_ref_j_row(*this,capa,row_range,c); }
+typename TritrizPtrBase<MatrizPtr>::var_ref_j_row TritrizPtrBase<MatrizPtr>::getVarRefJRow(const size_t &layer,const RangoIndice &row_range,const size_t &c)
+  { return var_ref_j_row(*this,layer,row_range,c); }
 template <class MatrizPtr>
-typename TritrizPtrBase<MatrizPtr>::var_ref_k_row TritrizPtrBase<MatrizPtr>::getVarRefKRow(size_t capa,size_t f)
-  { return var_ref_k_row(*this,capa,f); }
+typename TritrizPtrBase<MatrizPtr>::var_ref_k_row TritrizPtrBase<MatrizPtr>::getVarRefKRow(size_t layer,size_t f)
+  { return var_ref_k_row(*this,layer,f); }
 template <class MatrizPtr>
-typename TritrizPtrBase<MatrizPtr>::var_ref_k_row TritrizPtrBase<MatrizPtr>::getVarRefKRow(const size_t &capa,const size_t &f,const RangoIndice &rcols)
-  { return var_ref_k_row(*this,capa,f,rcols); }
+typename TritrizPtrBase<MatrizPtr>::var_ref_k_row TritrizPtrBase<MatrizPtr>::getVarRefKRow(const size_t &layer,const size_t &f,const RangoIndice &rcols)
+  { return var_ref_k_row(*this,layer,f,rcols); }
 
 //! @brief Coloca en la tritriz la being passed as parameter.
 template <class MatrizPtr>
-void TritrizPtrBase<MatrizPtr>::PutCaja(size_t offset_capa,size_t row_offset,size_t offset_col,const TritrizPtrBase<MatrizPtr> &otra)
+void TritrizPtrBase<MatrizPtr>::PutCaja(size_t layer_offset,size_t row_offset,size_t offset_col,const TritrizPtrBase<MatrizPtr> &otra)
   {
     const size_t numberOfLayers= otra.getNumberOfLayers();
     const size_t numberOfRows= otra.getNumberOfRows();
     const size_t numberOfColumns= otra.getNumberOfColumns();
-    if((numberOfLayers+offset_capa)>getNumberOfLayers())
+    if((numberOfLayers+layer_offset)>getNumberOfLayers())
       {
         std::cerr << "TritrizPtrNod::PutCaja; layer index out of range." << std::endl;
         return;
@@ -528,7 +528,7 @@ void TritrizPtrBase<MatrizPtr>::PutCaja(size_t offset_capa,size_t row_offset,siz
     for(size_t i=1;i<=numberOfLayers;i++)
       for(size_t j=1;j<=numberOfRows;j++)
         for(size_t k=1;k<=numberOfColumns;k++)
-          (*this)(offset_capa+i,row_offset+j,offset_col+k)= otra(i,j,k);
+          (*this)(layer_offset+i,row_offset+j,offset_col+k)= otra(i,j,k);
   }
 
 
@@ -563,12 +563,12 @@ std::vector<int> TritrizPtrBase<MatrizPtr>::getRowsObjectsTags(const size_t &f)
 
 //! @brief Return the identifiers of the objects in the column.
 template <class MatrizPtr>
-std::vector<int> TritrizPtrBase<MatrizPtr>::getColumnObjectsTags(const size_t &capa,const size_t &c)
+std::vector<int> TritrizPtrBase<MatrizPtr>::getColumnObjectsTags(const size_t &layer,const size_t &c)
   {
     const size_t n_rows= this->getNumberOfRows();
     std::vector<int> retval(n_rows);
     for(size_t j= 1;j<=n_rows;j++)
-      retval[j-1]= (*this)(capa,j,c)->getTag();
+      retval[j-1]= (*this)(layer,j,c)->getTag();
     return retval;
   }
 
@@ -616,12 +616,12 @@ std::vector<int> TritrizPtrBase<MatrizPtr>::getRowsInteriorObjectsTags(const siz
 
 //! @brief Return the identifiers of the objects in the c-th column interior.
 template <class MatrizPtr>
-std::vector<int> TritrizPtrBase<MatrizPtr>::getColumnInteriorObjectsTags(const size_t &capa,const size_t &c)
+std::vector<int> TritrizPtrBase<MatrizPtr>::getColumnInteriorObjectsTags(const size_t &layer,const size_t &c)
   {
     const size_t n_rows= this->getNumberOfRows();
     std::vector<int> retval(n_rows-2);
     for(size_t j= 2;j<n_rows;j++)
-      retval[j-2]= (*this)(capa,j,c)->getTag();
+      retval[j-2]= (*this)(layer,j,c)->getTag();
     return retval;
   }
 

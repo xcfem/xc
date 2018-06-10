@@ -122,9 +122,9 @@ void XC::AnalysisAggregation::copy_soln_algo(SolutionAlgorithm *ptr)
   }
 
 //! @brief Creates a new solution algorithm with the name being passed as parameter.
-XC::SolutionAlgorithm &XC::AnalysisAggregation::newSolutionAlgorithm(const std::string &tipo)
+XC::SolutionAlgorithm &XC::AnalysisAggregation::newSolutionAlgorithm(const std::string &type)
   {
-    alloc_soln_algo(tipo);
+    alloc_soln_algo(type);
     assert(theSolnAlgo);
     return *theSolnAlgo;
   }
@@ -274,9 +274,9 @@ void XC::AnalysisAggregation::copy_integrator(Integrator *ptr)
   }
 
 //! @brief Defines a new integrator.
-XC::Integrator &XC::AnalysisAggregation::newIntegrator(const std::string &tipo, const Vector &params)
+XC::Integrator &XC::AnalysisAggregation::newIntegrator(const std::string &type, const Vector &params)
   {
-    if(alloc_integrator(tipo,params))
+    if(alloc_integrator(type,params))
       {
         DisplacementControl *dtmp= dynamic_cast<DisplacementControl *>(theIntegrator);
         if(dtmp)
@@ -368,13 +368,13 @@ void XC::AnalysisAggregation::copy_system_of_equations(SystemOfEqn *ptr)
   }
 
 //! @brief Sets the system of equations type to use.
-XC::SystemOfEqn &XC::AnalysisAggregation::newSystemOfEqn(const std::string &tipo)
+XC::SystemOfEqn &XC::AnalysisAggregation::newSystemOfEqn(const std::string &type)
   {
     AnalysisModel *theModel= nullptr;
     if(base)
       {
         theModel= base->getAnalysisModelPtr();
-        alloc_system_of_equations(tipo,theModel);
+        alloc_system_of_equations(type,theModel);
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__

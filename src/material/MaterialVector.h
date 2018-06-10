@@ -69,7 +69,7 @@ class MaterialVector: public std::vector<MAT *>, public EntCmd, public MovableOb
 
     void setMaterial(const MAT *);
     void setMaterial(size_t i,MAT *);
-    void setMaterial(const MAT *,const std::string &tipo);
+    void setMaterial(const MAT *,const std::string &);
     bool empty(void) const;
     int commitState(void);
     int revertToLastCommit(void);
@@ -166,14 +166,14 @@ void MaterialVector<MAT>::setMaterial(const MAT *new_mat)
   }
 
 template <class MAT>
-void MaterialVector<MAT>::setMaterial(const MAT *new_mat, const std::string &tipo)
+void MaterialVector<MAT>::setMaterial(const MAT *new_mat, const std::string &type)
   {
     clear_materials();
     if(new_mat)
       {
         for(iterator i= mat_vector::begin();i!=mat_vector::end();i++)
           {
-            (*i)= new_mat->getCopy(tipo.c_str());
+            (*i)= new_mat->getCopy(type.c_str());
             if(!(*i))
               std::cerr << getClassName() << "::" << __FUNCTION__
 		        << "; failed allocate material model pointer\n";
@@ -383,15 +383,15 @@ template <class MAT>
 double MaterialVector<MAT>::getMeanGeneralizedStressByName(const std::string &cod) const
   {
     double retval= 0.0;
-    if(cod == "n1") //Esfuerzo axil medio por unidad de longitud, parallel to the axis 1.
+    if(cod == "n1") //Esfuerzo axil medio per unit length, parallel to the axis 1.
       retval= this->getMeanGeneralizedStress(MEMBRANE_RESPONSE_n1);
-    else if(cod == "n2") //Esfuerzo axil medio por unidad de longitud, parallel to the axis 2.
+    else if(cod == "n2") //Esfuerzo axil medio per unit length, parallel to the axis 2.
       retval= this->getMeanGeneralizedStress(MEMBRANE_RESPONSE_n2);
     else if(cod == "n12")
       retval= this->getMeanGeneralizedStress(MEMBRANE_RESPONSE_n12);
-    else if(cod == "m1") //Flector medio por unidad de longitud, around the axis 1.
+    else if(cod == "m1") //Flector medio per unit length, around the axis 1.
       retval= this->getMeanGeneralizedStress(PLATE_RESPONSE_m1);
-    else if(cod == "m2") //Flector medio por unidad de longitud, around the axis 2.
+    else if(cod == "m2") //Flector medio per unit length, around the axis 2.
       retval= this->getMeanGeneralizedStress(PLATE_RESPONSE_m2);
     else if(cod == "m12")
       retval= this->getMeanGeneralizedStress(PLATE_RESPONSE_m12);

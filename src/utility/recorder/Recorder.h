@@ -69,7 +69,7 @@ namespace XC {
 class Domain;
 
 //! @ingroup Utils
-//
+//!
 //! @defgroup Recorder retrieving information at each commit.
 //
 //! @ingroup Recorder

@@ -32,11 +32,11 @@
 
 //! Constructor.
 XC::MEDVertexInfo::MEDVertexInfo(void)
-  : spaceDimension(3), tipoCoordenadas("CARTESIAN") {}
+  : spaceDimension(3), coordSystemType("CARTESIAN") {}
 
 //! Constructor.
 XC::MEDVertexInfo::MEDVertexInfo(const Mesh &mesh)
-  : spaceDimension(3), tipoCoordenadas("CARTESIAN"), nombresCoordenadas(mesh.getNombresCoordenadas())
+  : spaceDimension(3), coordSystemType("CARTESIAN"), nombresCoordenadas(mesh.getNombresCoordenadas())
   {
     nombresUnidades= std::vector<std::string>(spaceDimension, mesh.getNombreUnidades());
     const Node *theNode= nullptr;
@@ -115,9 +115,10 @@ void XC::MEDVertexInfo::to_med(MEDMEM::MESHING &mesh) const
     const size_t &sd= getSpaceDimension();
     if(sd>0)
       {
-        mesh.setCoordinates(getSpaceDimension(),numNodes,&coo[0],getTipoCoordenadas(),::MED_FULL_INTERLACE);
+        mesh.setCoordinates(getSpaceDimension(),numNodes,&coo[0],getCoordSystemType(),::MED_FULL_INTERLACE);
         if(nombresCoordenadas.size()<sd)
-          std::cerr << "No se han especificado los nombres de las coordenadas."
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; coordinate names not set."
                     << std::endl;
         else 
           mesh.setCoordinatesNames(&nombresCoordenadas[0]);

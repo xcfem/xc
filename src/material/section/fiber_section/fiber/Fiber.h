@@ -80,7 +80,7 @@ class Information;
 class Response;
 
 //! @ingroup MATSCCFiberModel
-//
+//!
 //! @defgroup MATSCCFibers Classes for fiber section representation.
 //
 //! @ingroup MATSCCFibers

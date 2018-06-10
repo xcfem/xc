@@ -36,7 +36,7 @@ class Pos3d;
 namespace XC {
 class Node;
 
-//! \ingroup Nod
+//! @ingroup Nod
 //
 //! @brief Node position for its use in the KDTree.
 class NodePos: public KDTreePos

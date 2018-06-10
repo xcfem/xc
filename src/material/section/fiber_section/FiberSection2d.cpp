@@ -122,7 +122,7 @@ void XC::FiberSection2d::setupFibers(void)
     if(section_repres)
       fibers.setup(*this,section_repres->get2DFibers(),kr);
     else
-      fibers.updateKRCDG(*this,kr);
+      fibers.updateKRCenterOfMass(*this,kr);
   }
 
 double XC::FiberSection2d::get_strain(const double &y) const

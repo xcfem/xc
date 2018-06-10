@@ -72,10 +72,10 @@ class ClosedTriangleMesh: public GeomObj3d, public MovableObject
 
     virtual double GetMax(short unsigned int i) const;
     virtual double GetMin(short unsigned int i) const;
-    virtual Pos3d Cdg(void) const;
-    virtual double Longitud(void) const;
-    virtual double Area(void) const;
-    virtual double Volumen(void) const;
+    virtual Pos3d getCenterOfMass(void) const;
+    virtual double getLength(void) const;
+    virtual double getArea(void) const;
+    virtual double getVolume(void) const;
     virtual double Ix(void) const; 
     virtual double Iy(void) const;
     virtual double Iz(void) const;

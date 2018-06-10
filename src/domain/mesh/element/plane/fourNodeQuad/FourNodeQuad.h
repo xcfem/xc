@@ -67,7 +67,7 @@ class Material;
 class Response;
 class GaussPoint;
 
-//! \ingroup ElemPlanos
+//! @ingroup PlaneElements
 //
 //! @brief Four node quad.
 class FourNodeQuad: public QuadBase4N<SolidMech2D>

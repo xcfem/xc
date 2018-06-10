@@ -62,7 +62,7 @@
 #define KK 1000.0
 
 #include "material/nD/Template3Dep/Template3Dep.h"
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 //#include <material/nD/Template3Dep/MD_YS.h>
 //#include <material/nD/Template3Dep/MD_PS.h>
@@ -1044,7 +1044,7 @@ XC::NDMaterial * XC::Template3Dep::getCopy(void) const
 XC::NDMaterial *XC::Template3Dep::getCopy(const std::string &code) const
   {
     Template3Dep *tmp= nullptr;
-    if((code==strTipoTemplate3Dep))
+    if((code==strTypeTemplate3Dep))
       {
         tmp= new Template3Dep(*this);
         tmp->getEPS()->setInit();
@@ -1057,7 +1057,7 @@ XC::NDMaterial *XC::Template3Dep::getCopy(const std::string &code) const
 
 //================================================================================
 const std::string &XC::Template3Dep::getType(void) const
-  { return strTipoTemplate3Dep; }
+  { return strTypeTemplate3Dep; }
 
 //================================================================================
 //??What is the Order????????? might be the

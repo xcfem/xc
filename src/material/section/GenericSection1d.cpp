@@ -215,6 +215,7 @@ const XC::ResponseId &XC::GenericSection1d::getType(void) const
     return c;
   }
 
+//! @brief Return order.
 int XC::GenericSection1d::getOrder(void) const
   { return 1; }
 
@@ -250,7 +251,8 @@ int XC::GenericSection1d::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data\n";
     return res;
   }
 
@@ -262,20 +264,22 @@ int XC::GenericSection1d::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }
 
 //! @brief Prints to the stream \p s the object's \p tag, then invokes
 //! Print() on the UniaxialMaterial.
-void XC::GenericSection1d::Print (std::ostream &s, int flag)
+void XC::GenericSection1d::Print(std::ostream &s, int flag)
   {
     s << "GenericSection1d (Uniaxial), tag: " << this->getTag() << std::endl
       << "\tResponse code: " << code << std::endl

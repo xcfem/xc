@@ -54,8 +54,8 @@ XC::Element *XC::TritrizPtrElem::findElement(const int &tag)
     const size_t numberOfLayers= getNumberOfLayers();
     for(size_t i=1;i<=numberOfLayers;i++)
       {
-        MatrizPtrElem &capa= operator()(i);
-        retval= capa.findElement(tag);
+        MatrizPtrElem &layer= operator()(i);
+        retval= layer.findElement(tag);
         if(retval) break;
       }
     return retval;
@@ -69,8 +69,8 @@ const XC::Element *XC::TritrizPtrElem::findElement(const int &tag) const
     const size_t numberOfLayers= getNumberOfLayers();
     for(size_t i=1;i<=numberOfLayers;i++)
       {
-        const MatrizPtrElem &capa= operator()(i);
-        retval= capa.findElement(tag);
+        const MatrizPtrElem &layer= operator()(i);
+        retval= layer.findElement(tag);
         if(retval) break;
       }
     return retval;
@@ -90,8 +90,8 @@ XC::Element *XC::TritrizPtrElem::getNearestElement(const Pos3d &p)
                 << std::endl;
     for(size_t i=1;i<=numberOfLayers;i++)
       {
-        MatrizPtrElem &capa= operator()(i);
-        ptrElem= capa.getNearestElement(p);
+        MatrizPtrElem &layer= operator()(i);
+        ptrElem= layer.getNearestElement(p);
         tmp= ptrElem->getDist2(p);
         if(tmp<d)
           {

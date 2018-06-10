@@ -34,7 +34,7 @@
 
 class Pos3d;
 class SemiEspacio3d;
-class Plano3d;
+class Plane;
 class GeomObj2d;
 class GeomObj3d;
 
@@ -48,7 +48,7 @@ class Matrix;
 class Vector; 
 
 //! @ingroup Elem
-//
+//!
 //! @defgroup FEMisc Utilities for finite element calculations.
 //
 //! @ingroup FEMisc
@@ -97,14 +97,14 @@ class NodePtrs: public EntCmd, public std::vector<Node *>
     const Matrix &getCoordinates(void) const;
     Pos3d getPosNode(const size_t &i,bool initialGeometry= true) const;
     std::list<Pos3d> getPositions(bool initialGeometry= true) const;
-    Pos3d getPosCdg(bool initialGeometry= true) const;
+    Pos3d getCenterOfMassPosition(bool initialGeometry= true) const;
     Node *getNearestNode(const Pos3d &p,bool initialGeometry= true);
     const Node *getNearestNode(const Pos3d &p,bool initialGeometry= true) const;
     bool In(const GeomObj3d &,const double &factor= 1.0, const double &tol= 0.0) const;
     bool Out(const GeomObj3d &,const double &factor= 1.0, const double &tol= 0.0) const;
     bool In(const GeomObj2d &,const double &factor= 1.0, const double &tol= 0.0) const;
     bool Out(const GeomObj2d &,const double &factor= 1.0, const double &tol= 0.0) const;
-    bool Corta(const Plano3d &,bool initialGeometry= true) const;
+    bool Corta(const Plane &,bool initialGeometry= true) const;
 
     void resetTributaries(void) const;
     void dumpTributaries(const std::vector<double> &) const;

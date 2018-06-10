@@ -66,7 +66,7 @@
 #include "SingleBar.h"
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
-#include "xc_utils/src/geom/d2/Semiplano2d.h"
+#include "xc_utils/src/geom/d2/HalfPlane2d.h"
 
 
 #include "material/section/repres/geom_section/GeomSection.h"
@@ -116,11 +116,11 @@ double XC::ReinfLayer::getCover(void) const
     return retval;
   }
 
-//! @brief Returns the centro de gravedad de las armaduras.
-XC::Vector XC::ReinfLayer::getCdg(void) const
+//! @brief Returns the reinforcement layer centroid.
+XC::Vector XC::ReinfLayer::getCenterOfMass(void) const
   {
     const VectorReinfBar &barras= getReinfBars();
-    return barras.getCdgGrossSection();
+    return barras.getCenterOfMassGrossSection();
   }
 
 //! @brief Returns the barras contenidas total o parcialmente en el polígono.
@@ -136,7 +136,7 @@ void XC::ReinfLayer::getBarrasIn(const Poligono2d &plg,ListReinfLayer &retval,bo
   }
 
 //! @brief Returns the barras contenidas total o parcialmente en el half-plane.
-void XC::ReinfLayer::getBarrasIn(const Semiplano2d &sp,ListReinfLayer &retval,bool clear)
+void XC::ReinfLayer::getBarrasIn(const HalfPlane2d &sp,ListReinfLayer &retval,bool clear)
   {
     if(clear) retval.clear();
     const VectorReinfBar &barras= getReinfBars();
@@ -147,14 +147,14 @@ void XC::ReinfLayer::getBarrasIn(const Semiplano2d &sp,ListReinfLayer &retval,bo
         retval.push_back(SingleBar(**i));
   }
 
-//! @brief Returns a vector con las barras de la capa de armadura.
+//! @brief Return a vector containing the bars of the layer.
 XC::VectorReinfBar &XC::ReinfLayer::getReinfBars(void)
   {
     //Evitamos duplicar el método.
     return const_cast<VectorReinfBar&>(const_cast<const ReinfLayer&>(*this).getReinfBars());
   } 
 
-//! @brief Returns the number of barras de la capa.
+//! @brief Returns the number of bars of the layer.
 int XC::ReinfLayer::getNumReinfBars(void) const
   { return nReinfBars; }
 

@@ -72,7 +72,7 @@ class Information;
 class Response;
 class CrossSectionProperties3d;
 
-//! \ingroup OneDimensionalElem
+//! @ingroup OneDimensionalElem
 //
 //! @brief 2D elastic beam element.
 class ElasticBeam2d: public ProtoBeam2d

@@ -61,7 +61,7 @@ namespace XC {
 
 class ShellLinearCrdTransf3d;
 
-//! \ingroup ElemPlanos
+//! @ingroup PlaneElements
 //
 //! @brief MIT C4 shell elements.
 class ShellMITC4 : public ShellMITC4Base

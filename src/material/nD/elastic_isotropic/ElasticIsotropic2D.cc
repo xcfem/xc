@@ -52,7 +52,7 @@
 #include <material/nD/elastic_isotropic/ElasticIsotropic2D.h>                                                                        
 
 #include <utility/matrix/Matrix.h>
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 XC::Matrix XC::ElasticIsotropic2D::D(3,3);
 

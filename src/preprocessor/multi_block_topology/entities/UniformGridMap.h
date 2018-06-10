@@ -32,7 +32,7 @@
 #include "EntityMap.h"
 
 class Recta3d;
-class Plano3d;
+class Plane;
 
 namespace XC {
 
@@ -54,7 +54,7 @@ class UniformGridMap: public EntityMap<UniformGrid>
 
     Vector3d getVector(const Indice &i,const Indice &j) const;
     Recta3d getRecta(const Indice &i,const Indice &j) const;
-    Plano3d getPlano(const Indice &i,const Indice &j,const Indice &k) const;
+    Plane getPlane(const Indice &i,const Indice &j,const Indice &k) const;
 
     UniformGrid *Nueva(void);
   };

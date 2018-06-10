@@ -8,7 +8,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-# nverborrea= 0
+# feProblem.setVerbosityLevel(0)
 NumDivI= 32
 NumDivJ= 32
 CooMaxX= 2

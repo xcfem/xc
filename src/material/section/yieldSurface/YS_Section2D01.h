@@ -33,7 +33,7 @@
 #define YS_Section2D01_h
 
 namespace XC {
-//! \ingroup MATSCCYS
+//! @ingroup MATSCCYS
 //
 //! @brief Cross section with yield surface on a bi-dimensional problem
 //! (three DOFs for each section).

@@ -28,11 +28,11 @@
 
 #include "ClosedTriangleMesh.h"
 #include "xc_utils/src/geom/d2/Triang3dMesh.h"
-#include "xc_utils/src/geom/d2/Plano3d.h"
-#include "xc_utils/src/geom/d2/Triangulo3d.h"
+#include "xc_utils/src/geom/d2/Plane.h"
+#include "xc_utils/src/geom/d2/Triangle3d.h"
 #include "xc_basic/src/util/mchne_eps.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
-#include "xc_utils/src/geom/d1/Segmento3d.h"
+#include "xc_utils/src/geom/d1/Segment3d.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
 #include "xc_utils/src/gnu_gts/TriangleMap.h"
@@ -67,7 +67,7 @@ XC::ClosedTriangleMesh::ClosedTriangleMesh(const Pos3d &org,const Triang3dMesh &
     size_t cont= 0;
     for(Triang3dMesh::Facet_const_iterator i= mll.facets_begin();i!=mll.facets_end();i++)
       {
-        const Triangulo3d tf= mll.GetTrianguloCara(i);
+        const Triangle3d tf= mll.getFaceTriangle(i);
         trihedrons[cont]= Trihedron(org,tf);
         cont++;
       }
@@ -142,13 +142,13 @@ double XC::ClosedTriangleMesh::GetMin(short unsigned int i) const
     return retval;
   }
 
-Pos3d XC::ClosedTriangleMesh::Cdg(void) const
+Pos3d XC::ClosedTriangleMesh::getCenterOfMass(void) const
   { return Pos3d(0,0,0); }
-double XC::ClosedTriangleMesh::Longitud(void) const
+double XC::ClosedTriangleMesh::getLength(void) const
   { return 0.0; }
-double XC::ClosedTriangleMesh::Area(void) const
+double XC::ClosedTriangleMesh::getArea(void) const
   { return 0.0; }
-double XC::ClosedTriangleMesh::Volumen(void) const
+double XC::ClosedTriangleMesh::getVolume(void) const
   { return 0.0; }
 double XC::ClosedTriangleMesh::Ix(void) const
   { return 0.0; }
@@ -244,7 +244,7 @@ const Trihedron *XC::ClosedTriangleMesh::findTrihedronPtr(const Pos3d &p) const
             const Trihedron *tr= &(*i);
             SemiRecta3d rayo(tr->Cuspide(),p);
             Recta3d axis= tr->Axis();
-            double rayAxisAngle= angulo(axis,rayo);
+            double rayAxisAngle= angle(axis,rayo);
             double angTmp= rayAxisAngle;
             retval= tr;
             i++;
@@ -252,7 +252,7 @@ const Trihedron *XC::ClosedTriangleMesh::findTrihedronPtr(const Pos3d &p) const
               {
                 tr= &(*i);
                 rayo= SemiRecta3d(tr->Cuspide(),p);
-                angTmp= angulo(tr->Axis(),rayo);
+                angTmp= angle(tr->Axis(),rayo);
                 if(angTmp<rayAxisAngle)
                   {
                     rayAxisAngle= angTmp;
@@ -294,18 +294,18 @@ GeomObj::list_Pos3d XC::ClosedTriangleMesh::get_intersection(const Pos3d &p) con
       }
     else
       {
-        Triangulo3d triang(i->Vertice(1),i->Vertice(2),i->Vertice(3));
+        Triangle3d triang(i->Vertice(1),i->Vertice(2),i->Vertice(3));
         //Plane of the triangle.
-        const Plano3d plano= triang.GetPlano();
+        const Plane plane= triang.getPlane();
         SemiRecta3d Op(O,p);
         //Itersection of the half-line and the plane.
-        lst_intersec= interseccion(plano,Op);
+        lst_intersec= interseccion(plane,Op);
         if(lst_intersec.empty())
           {
             
 	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; doesn't intersect. " << std::endl
-                      << " Triangle area: " << triang.Area() << std::endl
+                      << " Triangle area: " << triang.getArea() << std::endl
                       << " vertex 1: " << i->Vertice(1)
                       << " vertex 2: " << i->Vertice(2)
                       << " vertex 3: " << i->Vertice(3) << std::endl
@@ -334,7 +334,7 @@ void XC::ClosedTriangleMesh::getPositionsMatrix(Matrix &m)
       {
         const Trihedron &t= *i;
         const Pos3d &c= t.Cuspide();
-        const Triangulo3d &b= t.Base();
+        const Triangle3d &b= t.Base();
         const Pos3d p1= b.Vertice(1);
         const Pos3d p2= b.Vertice(2);
         const Pos3d p3= b.Vertice(3);

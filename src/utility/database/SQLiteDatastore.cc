@@ -55,9 +55,9 @@ int XC::SQLiteDatastore::recvMsg(int dataTag, int commitTag, Message &, ChannelA
   }
 
 //! @brief Inserts data on a BLOB field.
-bool XC::SQLiteDatastore::insertData(const std::string &tbName,const int &dbTag,const int &commitTag,const void *blobData,const int &sz,const int &szTipo)
+bool XC::SQLiteDatastore::insertData(const std::string &tbName,const int &dbTag,const int &commitTag,const void *blobData,const int &sz,const int &typeSize)
   {
-    const int numBytes= sz*szTipo;
+    const int numBytes= sz*typeSize;
     query= "INSERT INTO " + tbName + " VALUES (" + boost::lexical_cast<std::string>(dbTag) + ",";
     query+= boost::lexical_cast<std::string>(commitTag) + ",";
     query+= boost::lexical_cast<std::string>(sz) + ",?)";
@@ -65,9 +65,9 @@ bool XC::SQLiteDatastore::insertData(const std::string &tbName,const int &dbTag,
   }
 
 //! @brief Updates data o a BLOB field.
-bool XC::SQLiteDatastore::updateData(const std::string &tbName,const int &dbTag,const int &commitTag,const void *blobData,const int &sz,const int &szTipo)
+bool XC::SQLiteDatastore::updateData(const std::string &tbName,const int &dbTag,const int &commitTag,const void *blobData,const int &sz,const int &typeSize)
   {
-    const int numBytes= sz*szTipo;
+    const int numBytes= sz*typeSize;
     query= "UPDATE " + tbName + " SET data= ? WHERE dbTag= " + boost::lexical_cast<std::string>(dbTag);
     query+= " AND commitTag= " + boost::lexical_cast<std::string>(commitTag) + " AND size= ";
     query+= boost::lexical_cast<std::string>(sz);

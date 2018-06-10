@@ -63,7 +63,7 @@ namespace XC {
 class Channel;
 class UniaxialMaterial;
 
-//! \ingroup TrussElem
+//! @ingroup TrussElem
 //
 //! @brief Truss element with corotational formulation. A small strain,
 //! large displacement corotational space truss element,

@@ -47,7 +47,7 @@
 #include <utility/matrix/nDarray/Tensor.h>
 #include <utility/matrix/nDarray/stresst.h>
 
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 double* XC::PressureDependMultiYield02::contractParam2x=0;
 double* XC::PressureDependMultiYield02::contractParam3x=0;
@@ -393,8 +393,8 @@ XC::NDMaterial *XC::PressureDependMultiYield02::getCopy(void) const
 XC::NDMaterial * XC::PressureDependMultiYield02::getCopy(const std::string &code) const
   {
     PressureDependMultiYield02 *copy= nullptr;
-    if((code==strTipoPressureIndependMultiYield02) || (code==strTipoPlaneStrain)
-      || (code==strTipoThreeDimensional))
+    if((code==strTypePressureIndependMultiYield02) || (code==strTypePlaneStrain)
+      || (code==strTypeThreeDimensional))
       copy = new PressureDependMultiYield02(*this);
     return copy;
   }
@@ -403,7 +403,7 @@ XC::NDMaterial * XC::PressureDependMultiYield02::getCopy(const std::string &code
 const std::string &XC::PressureDependMultiYield02::getType(void) const
   {
     int ndm = ndmx[matN];
-    return (ndm == 2) ? strTipoPlaneStrain : strTipoThreeDimensional;
+    return (ndm == 2) ? strTypePlaneStrain : strTypeThreeDimensional;
   }
 
 //! @brief Send object members through the channel being passed as parameter.
@@ -462,7 +462,7 @@ int XC::PressureDependMultiYield02::recvSelf(const CommParameters &cp)
 
 void XC::PressureDependMultiYield02::Print(std::ostream &s, int flag )
 {
-  s << strTipoPressureIndependMultiYield02 << std::endl;
+  s << strTypePressureIndependMultiYield02 << std::endl;
 }
 
 

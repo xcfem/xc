@@ -10,6 +10,7 @@ __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 import xc_base
 import geom
 import math
+from miscUtils import LogMessages as lmsg
 
 def axialResistanceSteelFailure(As, fuk):
   '''Characteristic value of anchor bolt strength in tension
@@ -249,10 +250,12 @@ def psiEcVFactor(ev, c1):
 
 def psiAlphaVFactor(alphaV):
   '''
-  Coeficiente que introduce la influencia del ángulo entre la carga aplicada y la perpendicular al borde libre de la pieza de hormigón (menor de 90 grados) see figure 4.7c y expresión 5.8g del section f) of clause 5.2.3.4 of EOTA TR029.
+  Factor that takes account of the angle between the applied load and the direction perpendicular to the free edge of the concrete member (must be less than 90 degrees) see figure 4.7c and expression 5.8g on section f) of clause 5.2.3.4 of EOTA TR029.
 
-  :param alphaV: Ángulo entre la carga aplicada y la perpendicular al borde libre de la pieza de hormigón.
+  :param alphaV: angle between the applied load and the direction perpendicular to the free edge of the concrete member.
   '''
+  if(alphaV>(math.pi/2.0)):
+    lmsg.error('angle must be smaller than 90 degrees (see section f of clause 5.2.3.4 of EOTA TR029).')
   return max(sqrt(1.0/(cos(alphaV)^2+(sin(alphaV)/2.5)^2)),1.0)
 
 def psiHVFactor(h, c1):

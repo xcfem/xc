@@ -120,7 +120,7 @@ XC::Element* XC::EnhancedQuad::getCopy(void) const
 XC::EnhancedQuad::~EnhancedQuad(void)
   { if(Ki) delete Ki; }
 
-//! @brief Comprueba el tipo de material.
+//! @brief Check the material type.
 bool XC::EnhancedQuad::check_material_type(const std::string &type) const
   { return physicalProperties.check_material_elast_plana(type); }
 

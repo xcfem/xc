@@ -84,7 +84,7 @@ class RgQuadCell: public RegionSecc
     int getNumCells(void) const;
     void getDiscretization(int &numSubdivIJ, int &numSubdivJK) const;
     virtual const Rejilla2d &getMesh(void) const=0;
-    Vector getCdgRejilla(void) const;
+    Vector getCenterOfMassRejilla(void) const;
     Vector getVertCoords(const size_t &,const size_t &) const;
     Matrix getCellVertCoords(const size_t &,const size_t &) const;
     

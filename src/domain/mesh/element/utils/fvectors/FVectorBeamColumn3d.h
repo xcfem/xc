@@ -34,7 +34,7 @@
 namespace XC {
 class Vector;
 
-//! \ingroup ElemFV
+//! @ingroup ElemFV
 //
 //! @brief Internal forces for a beam column 3D element.
 class FVectorBeamColumn3d: public FVectorData<5>

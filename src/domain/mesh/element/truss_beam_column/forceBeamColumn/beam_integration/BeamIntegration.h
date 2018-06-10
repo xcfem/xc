@@ -64,11 +64,11 @@ class FVector;
 class CrdTransf;
 class Vector;
 
-//! \ingroup OneDimensionalElemF
-//
+//! @ingroup OneDimensionalElemF
+//!
 //! @defgroup BeamInteg Function integration over the element domain.
 //
-//! \ingroup BeamInteg
+//! @ingroup BeamInteg
 //! @brief Base class for integration on beam elements.
 class BeamIntegration: public MovableObject, public EntCmd
   {

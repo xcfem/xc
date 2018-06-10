@@ -64,7 +64,7 @@
 namespace XC {
 class ReinfBar;
 
-//! @ingroup MATSCCArmaduras
+//! @ingroup MATSCCReinforcement
 //
 //! @brief Arc of a circle shaped reinforcement layer.
 class CircReinfLayer : public ReinfLayer

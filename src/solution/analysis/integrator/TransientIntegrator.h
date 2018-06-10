@@ -74,11 +74,8 @@ class FE_Element;
 class DOF_Group;
 class Vector;
 
+//! @addtogroup TransientIntegrator Integration of the dynamic equations of motion.
 //! @ingroup AnalysisIntegrator
-//
-//! @defgroup TransientIntegrator Integration of the dynamic equations of motion.
-//
-//! @ingroup TransientIntegrator
 //
 //! @brief Base class for dynamic equations of motion integrators.
 //!

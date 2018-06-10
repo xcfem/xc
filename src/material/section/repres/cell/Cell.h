@@ -65,7 +65,7 @@
 namespace XC {
 
 //! @ingroup MATSCCRepres
-//
+//!
 //! @defgroup MATSCCCell Cells for cross-section discretization.
 //
 //! @ingroup MATSCCCell

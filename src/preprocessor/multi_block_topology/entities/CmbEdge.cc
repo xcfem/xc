@@ -32,7 +32,7 @@
 #include "CircularArc.h"
 #include "preprocessor/Preprocessor.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
-#include "xc_utils/src/geom/d1/Segmento3d.h"
+#include "xc_utils/src/geom/d1/Segment3d.h"
 #include "xc_utils/src/geom/d1/Polilinea3d.h"
 
 #include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
@@ -94,8 +94,8 @@ const std::string &XC::CmbEdge::Side::getName(void) const
   { return edge->getName(); }
 
 //! @brief Return the side length.
-double XC::CmbEdge::Side::getLongitud(void) const
-  { return edge->getLongitud(); }
+double XC::CmbEdge::Side::getLength(void) const
+  { return edge->getLength(); }
 
 //! @brief Returns true if this object lies inside the
 //! geometric object.
@@ -334,11 +334,11 @@ void XC::CmbEdge::reverse(void)
   }
 
 //! @brief Return the length of the line.
-double XC::CmbEdge::getLongitud(void) const
+double XC::CmbEdge::getLength(void) const
   {
     double retval= 0;
     for(std::deque<Side>::const_iterator i=lines.begin();i!=lines.end();i++)
-      retval+= (*i).getLongitud();
+      retval+= (*i).getLength();
     return retval;
   }
 
@@ -350,7 +350,7 @@ Pos3d XC::CmbEdge::getCentroid(void) const
     double totalLength= 0.0;
     for(std::deque<Side>::const_iterator i=lines.begin();i!=lines.end();i++)
       {
-	const double l= (*i).getLongitud();
+	const double l= (*i).getLength();
 	v+= l*(*i).getCentroid().VectorPos();
         totalLength+= l;
       }

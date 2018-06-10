@@ -36,7 +36,7 @@
 
 namespace XC {
 
-//! \ingroup OneDimensionalElem
+//! @ingroup OneDimensionalElem
 //
 //! @brief Beam-column element with PrismaticBarCrossSection material
 class BeamColumnWithSectionFD : public Element1D

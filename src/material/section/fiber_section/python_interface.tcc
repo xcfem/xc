@@ -47,8 +47,8 @@ class_<XC::FiberSectionBase, bases<XC::PrismaticBarCrossSection>, boost::noncopy
 .def("getNeutralAxisDist",&XC::FiberSectionBase::getNeutralAxisDist,"Return the distance from the point of coordinates (y,z) to the neutral axis. Syntax: getNeutralAxisDist(y,z)")
   .def("getVectorBrazoMecanico",&XC::FiberSectionBase::getVectorBrazoMecanico,"Return a vector from the centroid of tensions to the centroid of compressions.")
   .def("getVectorCantoUtil",&XC::FiberSectionBase::getVectorCantoUtil,"Return a vector from the centroid of the area in tension to the most compressed fiber.")
-  .def("getSegmentoBrazoMecanico",&XC::FiberSectionBase::getSegmentoBrazoMecanico)
-  .def("getSegmentoCantoUtil",&XC::FiberSectionBase::getSegmentoCantoUtil)
+  .def("getLeverArmSegment",&XC::FiberSectionBase::getLeverArmSegment)
+  .def("getEffectiveDepthSegment",&XC::FiberSectionBase::getEffectiveDepthSegment)
 .def("getMechanicLeverArm",&XC::FiberSectionBase::getMechanicLeverArm,"Return the distance between the centroid of the compressed fibers and the centroid of the tensioned fibers.")
   .def("getEffectiveDepth",&XC::FiberSectionBase::getEffectiveDepth)
 .def("getBendingPlaneTrace",&XC::FiberSectionBase::getBendingPlaneTrace,"Return the straight line intersection of the bending plane with the plane that contains the fiber section")
@@ -64,8 +64,8 @@ class_<XC::FiberSectionBase, bases<XC::PrismaticBarCrossSection>, boost::noncopy
   .def("getGrossEffectiveConcreteAreaContour",&XC::FiberSectionBase::getGrossEffectiveConcreteAreaContour)
   .def("getHomogenizedI",&XC::FiberSectionBase::getHomogenizedI,"Moment of inertia relative to bending axis.")
   .def("getSPosHomogeneizada",&XC::FiberSectionBase::getSPosHomogeneizada,"Static moment relative to bending axis of area that rests over this axis.")
-  .def("computeCovers",&XC::FiberSectionBase::computeCovers,"Return the concrete cover of the set of reinforcement fibers whose name is given as parameter. Syntax: computeCovers(nameSetArmaduras)")
-.def("computeSpacement",&XC::FiberSectionBase::computeSpacement,"Return the spacing between bars in the set of reinforcement fibers whose name is given as parameter. Syntax: computeSpacement(nameSetArmaduras)")
+  .def("computeCovers",&XC::FiberSectionBase::computeCovers,"Return the concrete cover of the set of reinforcement fibers whose name is given as parameter. Syntax: computeCovers(reinforcementSetName)")
+.def("computeSpacement",&XC::FiberSectionBase::computeSpacement,"Return the spacing between bars in the set of reinforcement fibers whose name is given as parameter. Syntax: computeSpacement(reinforcementSetName)")
   .def("getStrClaseEsfuerzo",&XC::FiberSectionBase::getStrClaseEsfuerzo,"Return the type of load acting at the cross-section('flexion_compuesta',...). Syntax: getStrClaseEsfuerzo(tolerance)")
   ;
 

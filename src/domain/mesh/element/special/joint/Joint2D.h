@@ -73,7 +73,7 @@ class UniaxialMaterial;
 class Response;
 class DamageModel;
 
-//! \ingroup ElemJoint
+//! @ingroup ElemJoint
 //
 //! @brief 2D joint element.
 class Joint2D : public ElemWithMaterial<5,Joint2DPhysicalProperties>

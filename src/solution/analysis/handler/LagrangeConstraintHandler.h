@@ -71,7 +71,7 @@ namespace XC {
 class FE_Element;
 class DOF_Group;
 
-//!
+//
 //! @ingroup AnalysisCH
 //!
 //! @brief Constraint handler for handling constraints using the Lagrange

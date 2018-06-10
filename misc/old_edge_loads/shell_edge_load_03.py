@@ -17,7 +17,7 @@ dens= 1.33 # Densidad kg/m2.
 L= 2
 p= 10
 
-# Tipo de problema
+# Problem type
 prueba= xc.ProblemaEF()
 prep= prueba.getPreprocessor
 nodos= prep.getNodeHandler

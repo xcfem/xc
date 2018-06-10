@@ -73,7 +73,7 @@ class IncrementalIntegrator;
 class LinearSOE;
 
 //! @ingroup AnalAlgo
-//
+//!
 //! @defgroup EQSolAlgo Algorithms for solving system of equations.
 //
 //! @ingroup EQSolAlgo

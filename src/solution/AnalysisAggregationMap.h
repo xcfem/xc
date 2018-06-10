@@ -38,7 +38,7 @@ namespace XC {
 class ProcSoluControl;
 class ModelWrapper;
 
-//!  \ingroup Solu
+//!  @ingroup Solu
 //! 
 //! @brief Solution methods container.
 class AnalysisAggregationMap: public EntCmd

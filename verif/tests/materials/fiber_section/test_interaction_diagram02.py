@@ -56,24 +56,24 @@ reinforcement= geomSecHA.getReinfLayers
 reinforcementInf= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
 reinforcementInf.numReinfBars= 6
 reinforcementInf.barArea= areaFi20
-reinforcementInf.p1= geom.Pos2d(cover-depth/2.0,width/2.0-cover) # Armadura inferior.
+reinforcementInf.p1= geom.Pos2d(cover-depth/2.0,width/2.0-cover) # bottom layer.
 reinforcementInf.p2= geom.Pos2d(cover-depth/2.0,cover-width/2.0)
 reinforcementPielInf= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
 reinforcementPielInf.numReinfBars= 2
 reinforcementPielInf.barArea= areaFi20
 y= (depth-2*cover)/3.0/2.0
-reinforcementPielInf.p1= geom.Pos2d(-y,width/2-cover) # # Armadura piel inferior.
+reinforcementPielInf.p1= geom.Pos2d(-y,width/2-cover) # Bottom skin reinforcement.
 reinforcementPielInf.p2= geom.Pos2d(-y,cover-width/2)
 reinforcementPielSup= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
 reinforcementPielSup.numReinfBars= 2
 reinforcementPielSup.barArea= areaFi20
 y= (depth-2*cover)/3.0/2.0
-reinforcementPielSup.p1= geom.Pos2d(y,width/2-cover) # # Armadura piel superior.
+reinforcementPielSup.p1= geom.Pos2d(y,width/2-cover) # Top skin reinforcement.
 reinforcementPielSup.p2= geom.Pos2d(y,cover-width/2)
 reinforcementSup= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
 reinforcementSup.numReinfBars= 6
 reinforcementSup.barArea= areaFi20
-reinforcementSup.p1= geom.Pos2d(depth/2.0-cover,width/2.0-cover) # Armadura superior.
+reinforcementSup.p1= geom.Pos2d(depth/2.0-cover,width/2.0-cover) # top layer.
 reinforcementSup.p2= geom.Pos2d(depth/2.0-cover,cover-width/2.0)
 
 materiales= preprocessor.getMaterialHandler
@@ -85,10 +85,10 @@ fibras= secHA.getFibers()
 
 param= xc.InteractionDiagramParameters()
 param.concreteTag= EHE_materials.HA25.matTagD
-param.tagArmadura= EHE_materials.B500S.matTagD
+param.reinforcementTag= EHE_materials.B500S.matTagD
 diagIntsecHA= materiales.calcInteractionDiagram("secHA",param)
 
-diagIntsecHA.writeTo("/tmp/interaction_diagram_test_02.dat")  # Se usa en test test_diag_interaccion04
+diagIntsecHA.writeTo("/tmp/interaction_diagram_test_02.dat")  # Used in test_interaction_diagram04
 FCs= []
 FCs.append(diagIntsecHA.getCapacityFactor(geom.Pos3d(2185.5e3,0,0)))
 FCs.append(diagIntsecHA.getCapacityFactor(geom.Pos3d(1595.8e3,0,186.5e3)))

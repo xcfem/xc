@@ -47,7 +47,8 @@ XC::BeamMecLoad::BeamMecLoad(int tag,int classTag)
 const XC::Matrix &XC::BeamMecLoad::getAppliedSectionForces(const double &L,const Matrix &xi,const double &loadFactor) const
   {
     static Matrix retval;
-    std::cerr << "getAppliedSectionForces no definida." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; not implemented yet." << std::endl;
     return retval;
   }
 
@@ -57,7 +58,8 @@ const XC::Matrix &XC::BeamMecLoad::getAppliedSectionForces(const double &L,const
 //! @param p0 element load vector.
 void XC::BeamMecLoad::addReactionsInBasicSystem(const double &,const double &,FVector &) const
   {
-    std::cerr << "addReactionsInBasicSystem no definida." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; not implemented yet." << std::endl;
   }
 
 //! @brief ??
@@ -66,7 +68,8 @@ void XC::BeamMecLoad::addReactionsInBasicSystem(const double &,const double &,FV
 //! @param q0 ??
 void XC::BeamMecLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &) const
   {
-    std::cerr << "addFixedEndForcesInBasicSystem no definida." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; not implemented yet." << std::endl;
   }
 
 void XC::BeamMecLoad::addElasticDeformations(const double &L,const CrossSectionProperties2d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0)

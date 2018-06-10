@@ -33,7 +33,7 @@
 #define NDMaterialPhysicalProperties_h
 
 namespace XC {
-//! \ingroup PysicalProperties
+//! @ingroup PysicalProperties
 //
 //! @brief Physical properties for solid mechanics.
 class NDMaterialPhysicalProperties: public PhysicalProperties<NDMaterial>

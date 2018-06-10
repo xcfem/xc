@@ -17,7 +17,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
 
-def plotArmaduras(reinforcement, ctx):
+def plotReinforcement(reinforcement, ctx):
     '''draw section rebars in a postcript file.'''
     for reinfLayer in reinforcement:
         barras= reinfLayer.getReinfBars
@@ -49,10 +49,8 @@ def plotGeomSeccion(geomSection, path):
     ctx.stroke()
     ctx.set_line_width(trf.scale/300000)
     reinforcement= geomSection.getReinfLayers
-    plotArmaduras(reinforcement,ctx)
-    #2010516  to check
-    # trf.plotYZAxes(ctx)
-    # 
+    plotReinforcement(reinforcement,ctx)
+    trf.plotYZAxes(ctx)
     surface.set_eps(True)
     ctx.show_page()
     surface.finish()
@@ -106,11 +104,11 @@ class fibSectFeaturesToplot(object):
             ax2d.plot(y,z,self.colorIntForcAxis ,label='Internal forces axis')
         #Lever arm
         if self.colorLeverArm != None:
-            (y,z)= data_xcsegment_to_pyplot(self.fiberSection.getSegmentoBrazoMecanico())
+            (y,z)= data_xcsegment_to_pyplot(self.fiberSection.getLeverArmSegment())
             ax2d.plot(y,z,self.colorLeverArm,label='Lever arm')
         #Effective depth
         if self.colorEffDepth != None:
-            (y,z)= data_xcsegment_to_pyplot(self.fiberSection.getSegmentoCantoUtil())
+            (y,z)= data_xcsegment_to_pyplot(self.fiberSection.getEffectiveDepthSegment())
             ax2d.plot(y,z,self.colorEffDepth,label='Effective depth')
         #Limit of concrete effective area
         if self.colorEffConcrArea != None:
@@ -157,7 +155,7 @@ def data_axis_to_pyplot(axis,contour):
     of the start and end points of the segment of axis inside the fiberSect contour
     passed as parameters.
     '''
-    sg=contour.recortaRecta(axis)
+    sg=contour.clipRecta(axis)
     return data_xcsegment_to_pyplot(sg)
 
     

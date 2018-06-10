@@ -195,7 +195,7 @@ int XC::MRMFreedom_Constraint::applyConstraint(double timeStamp)
 
 //! @brief Add to nodes the actions due to this constraint.
 //! See "Calculation within MSC/Nastran of the forces transmitted by
-//! multipoint constraints (MPC) and the forces generated in support
+//! multifreedom constraints (MFC) and the forces generated in support
 //! constraints" by E, de la Fuente and J. San Millán (INTA), Spain.
 int XC::MRMFreedom_Constraint::addResistingForceToNodalReaction(bool inclInertia)
   {

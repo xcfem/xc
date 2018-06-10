@@ -110,7 +110,7 @@ XC::SingleBar *XC::ListReinfLayer::newReinfBar(const std::string &cod_mat)
 XC::ListReinfLayer::~ListReinfLayer(void)
   { free_mem(); }
 
-//! @brief Erases las armaduras definidas.
+//! @brief Erases the reinforcement layers.
 void XC::ListReinfLayer::clear(void)
   { free_mem(); }
 
@@ -168,7 +168,7 @@ void XC::ListReinfLayer::getBarrasIn(const Poligono2d &plg,ListReinfLayer &retva
 //! Returns the rebar subset which center lies in the half plane.
 //! @param sp: Half plane.
 //! @param retval: rebars which centers lies inside the half plane.
-void XC::ListReinfLayer::getBarrasIn(const Semiplano2d &sp,ListReinfLayer &retval,bool clear)
+void XC::ListReinfLayer::getBarrasIn(const HalfPlane2d &sp,ListReinfLayer &retval,bool clear)
   {
     if(clear) retval.clear();
     const_iterator i= begin();
@@ -185,7 +185,7 @@ double XC::ListReinfLayer::getAreaHomogenizedSection(const double &E0) const
     return retval;
   }
 
-XC::Vector XC::ListReinfLayer::getCdgHomogenizedSection(const double &E0) const
+XC::Vector XC::ListReinfLayer::getCenterOfMassHomogenizedSection(const double &E0) const
   {
     Vector retval(2);
     double weight= 0.0;
@@ -193,7 +193,7 @@ XC::Vector XC::ListReinfLayer::getCdgHomogenizedSection(const double &E0) const
     for(const_iterator i= begin();i!=end();i++)
       {
         weight= (*i)->getReinfBars().getAreaHomogenizedSection(E0);
-        retval+= weight*(*i)->getReinfBars().getCdgHomogenizedSection(E0);
+        retval+= weight*(*i)->getReinfBars().getCenterOfMassHomogenizedSection(E0);
         divisor+= weight;
       }
     retval/= divisor;
@@ -206,10 +206,10 @@ double XC::ListReinfLayer::getIyHomogenizedSection(const double &E0) const
   {
     double retval= 0.0;
     double d= 0.0;
-    const double zCdg= getCdgHomogenizedSection(E0)[1];
+    const double zCenterOfMass= getCenterOfMassHomogenizedSection(E0)[1];
     for(const_iterator i= begin();i!=end();i++)
       {
-        d= (*i)->getReinfBars().getCdgHomogenizedSection(E0)[1]-zCdg;
+        d= (*i)->getReinfBars().getCenterOfMassHomogenizedSection(E0)[1]-zCenterOfMass;
         retval+= (*i)->getReinfBars().getIyHomogenizedSection(E0)+(*i)->getReinfBars().getAreaHomogenizedSection(E0)*sqr(d);
       }
     return retval;
@@ -221,10 +221,10 @@ double XC::ListReinfLayer::getIzHomogenizedSection(const double &E0) const
   {
     double retval= 0.0;
     double d= 0.0;
-    const double yCdg= getCdgHomogenizedSection(E0)[0];
+    const double yCenterOfMass= getCenterOfMassHomogenizedSection(E0)[0];
     for(const_iterator i= begin();i!=end();i++)
       {
-        d= (*i)->getReinfBars().getCdgHomogenizedSection(E0)[0]-yCdg;
+        d= (*i)->getReinfBars().getCenterOfMassHomogenizedSection(E0)[0]-yCenterOfMass;
         retval+= (*i)->getReinfBars().getIzHomogenizedSection(E0)+(*i)->getReinfBars().getAreaHomogenizedSection(E0)*sqr(d);
       }
     return retval;
@@ -236,11 +236,11 @@ double XC::ListReinfLayer::getPyzHomogenizedSection(const double &E0) const
   {
     double retval= 0.0;
     double d2= 0.0;
-    const double zCdg= getCdgHomogenizedSection(E0)[0];
-    const double yCdg= getCdgHomogenizedSection(E0)[0];
+    const double zCenterOfMass= getCenterOfMassHomogenizedSection(E0)[1];
+    const double yCenterOfMass= getCenterOfMassHomogenizedSection(E0)[0];
     for(const_iterator i= begin();i!=end();i++)
       {
-        d2= ((*i)->getReinfBars().getCdgHomogenizedSection(E0)[0]-yCdg)*((*i)->getReinfBars().getCdgHomogenizedSection(E0)[1]-zCdg);
+        d2= ((*i)->getReinfBars().getCenterOfMassHomogenizedSection(E0)[0]-yCenterOfMass)*((*i)->getReinfBars().getCenterOfMassHomogenizedSection(E0)[1]-zCenterOfMass);
         retval+= (*i)->getReinfBars().getPyzHomogenizedSection(E0)+(*i)->getReinfBars().getAreaHomogenizedSection(E0)*d2;
       }
     return retval;
@@ -256,7 +256,7 @@ double XC::ListReinfLayer::getAreaGrossSection(void) const
   }
 
 //! @brief Returns gross section centroid position.
-XC::Vector XC::ListReinfLayer::getCdgGrossSection(void) const
+XC::Vector XC::ListReinfLayer::getCenterOfMassGrossSection(void) const
   {
     Vector retval(2);
     double weight= 0.0;
@@ -264,7 +264,7 @@ XC::Vector XC::ListReinfLayer::getCdgGrossSection(void) const
     for(const_iterator i= begin();i!=end();i++)
       {
         weight= (*i)->getReinfBars().getAreaGrossSection();
-        retval+= weight*(*i)->getReinfBars().getCdgGrossSection();
+        retval+= weight*(*i)->getReinfBars().getCenterOfMassGrossSection();
         divisor+= weight;
       }
     retval/= divisor;
@@ -276,10 +276,10 @@ double XC::ListReinfLayer::getIyGrossSection(void) const
   {
     double retval= 0.0;
     double d= 0.0;
-    const double zCdg= getCdgGrossSection()[1];
+    const double zCenterOfMass= getCenterOfMassGrossSection()[1];
     for(const_iterator i= begin();i!=end();i++)
       {
-        d= (*i)->getReinfBars().getCdgGrossSection()[1]-zCdg;
+        d= (*i)->getReinfBars().getCenterOfMassGrossSection()[1]-zCenterOfMass;
         retval+= (*i)->getReinfBars().getIyGrossSection()+(*i)->getReinfBars().getAreaGrossSection()*sqr(d);
       }
     return retval;
@@ -290,10 +290,10 @@ double XC::ListReinfLayer::getIzGrossSection(void) const
   {
     double retval= 0.0;
     double d= 0.0;
-    const double yCdg= getCdgGrossSection()[0];
+    const double yCenterOfMass= getCenterOfMassGrossSection()[0];
     for(const_iterator i= begin();i!=end();i++)
       {
-        d= (*i)->getReinfBars().getCdgGrossSection()[0]-yCdg;
+        d= (*i)->getReinfBars().getCenterOfMassGrossSection()[0]-yCenterOfMass;
         retval+= (*i)->getReinfBars().getIzGrossSection()+(*i)->getReinfBars().getAreaGrossSection()*sqr(d);
       }
     return retval;
@@ -304,11 +304,11 @@ double XC::ListReinfLayer::getPyzGrossSection(void) const
   {
     double retval= 0.0;
     double d2= 0.0;
-    const double zCdg= getCdgGrossSection()[0];
-    const double yCdg= getCdgGrossSection()[0];
+    const double zCenterOfMass= getCenterOfMassGrossSection()[0];
+    const double yCenterOfMass= getCenterOfMassGrossSection()[0];
     for(const_iterator i= begin();i!=end();i++)
       {
-        d2= ((*i)->getReinfBars().getCdgGrossSection()[0]-yCdg)*((*i)->getReinfBars().getCdgGrossSection()[1]-zCdg);
+        d2= ((*i)->getReinfBars().getCenterOfMassGrossSection()[0]-yCenterOfMass)*((*i)->getReinfBars().getCenterOfMassGrossSection()[1]-zCenterOfMass);
         retval+= (*i)->getReinfBars().getPyzGrossSection()+(*i)->getReinfBars().getAreaGrossSection()*d2;
       }
     return retval;

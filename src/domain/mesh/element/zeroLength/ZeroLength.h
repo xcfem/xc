@@ -83,7 +83,7 @@ class Channel;
 class UniaxialMaterial;
 class Response;
 
-//! \ingroup ElemZL
+//! @ingroup ElemZL
 //
 //! @brief Zero length element.
 //!

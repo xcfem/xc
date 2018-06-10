@@ -38,7 +38,7 @@ class ExprAlgebra;
 namespace XC {
 class Constraint;
 
-//!  \ingroup Set
+//!  @ingroup Set
 //! 
 //!  \brief Constraint pointers deque.
 //! 

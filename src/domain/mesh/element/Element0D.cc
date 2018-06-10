@@ -77,7 +77,7 @@ bool XC::Element0D::Vxy::check(void) const
       {
         std::cerr << "Element0D::check; vector I= " << x
                   << " and J= " << y << " are almost parallel, angle: "
-                  << angulo(vx,vy) << " radians." << std::endl;
+                  << angle(vx,vy) << " radians." << std::endl;
         retval= false;
       }
     return retval;
@@ -239,13 +239,14 @@ void XC::Element0D::setUpVectors(const Vector &x, const Vector &yp)
 //! @param Nd1: Tag of the node dorsal.
 //! @param Nd2: Tag of the node frontal.
 //! @param x: Componentes del local x axis, expresadas en coordenadas globales.
-//! @param y: Componentes de un vector contenido en el plano xy local, expresadas en coordenadas globales.
+//! @param yp: the vector used to define the local xy plane of the local-coordinate system.
 void XC::Element0D::setUp(int Nd1, int Nd2, const Vector &x, const Vector &yp)
   { 
     // ensure the connectedExternalNode ID is of correct size & set values
     if(theNodes.size() != 2)
       {
-	std::cerr << "Element0D::setUp -- failed to create an ID of correct size\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed to create an ID of correct size\n";
         exit(-1);
       }
     

@@ -294,20 +294,20 @@ void XC::BerkeleyDbDatastore::setup_key(const int &dbTag,const int &commitTag,co
   }
 
 //! @brief set up the data structure
-void XC::BerkeleyDbDatastore::setup_data(const void *dat,const int &sz,const int &szTipo)
+void XC::BerkeleyDbDatastore::setup_data(const void *dat,const int &sz,const int &typeSize)
   {
     data.data= const_cast<void *>(dat);
-    data.size= sz * szTipo;
+    data.size= sz * typeSize;
     data.ulen= data.size;
     data.doff= 0;
     data.flags = DB_DBT_USERMEM;
   }
 
 //! @brief set up structures
-void XC::BerkeleyDbDatastore::setup_structures(const int &dbTag,const int &commitTag,const void *dat,const int &sz,const int &szTipo)
+void XC::BerkeleyDbDatastore::setup_structures(const int &dbTag,const int &commitTag,const void *dat,const int &sz,const int &typeSize)
   {
     setup_key(dbTag,commitTag,sz);
-    setup_data(dat,sz,szTipo);
+    setup_data(dat,sz,typeSize);
   }
 
 int XC::BerkeleyDbDatastore::sendMatrix(int dbTag, int commitTag, const Matrix &theMatrix, ChannelAddress *theAddress)

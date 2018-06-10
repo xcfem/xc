@@ -52,7 +52,7 @@ class SectionMassProperties: public EntCmd
     SectionMassProperties(EntCmd *owr= nullptr);
 
     virtual double getAreaGrossSection(void) const= 0;
-    virtual Vector getCdgGrossSection(void) const= 0;
+    virtual Vector getCenterOfMassGrossSection(void) const= 0;
     virtual double getIyGrossSection(void) const= 0;
     virtual double getIzGrossSection(void) const= 0;
     virtual double getPyzGrossSection(void) const= 0;
@@ -77,7 +77,7 @@ class SectionMassProperties: public EntCmd
     Matrix getIGrossSection(const Pos2d &) const;
 
     virtual double getAreaHomogenizedSection(const double &) const= 0;
-    virtual Vector getCdgHomogenizedSection(const double &) const= 0;
+    virtual Vector getCenterOfMassHomogenizedSection(const double &) const= 0;
     virtual double getIyHomogenizedSection(const double &) const= 0;
     virtual double getIzHomogenizedSection(const double &) const= 0;
     virtual double getPyzHomogenizedSection(const double &) const= 0;

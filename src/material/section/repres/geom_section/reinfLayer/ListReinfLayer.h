@@ -34,7 +34,7 @@
 
 class Pos2d;
 class Poligono2d;
-class Semiplano2d;
+class HalfPlane2d;
 
 namespace XC {
 
@@ -47,7 +47,7 @@ class Vector;
 class Matrix;
 class GeomSection;
 
-//! @ingroup MATSCCArmaduras
+//! @ingroup MATSCCReinforcement
 //
 //! @brief Reinf layer container (list).
 class ListReinfLayer: public std::list<ReinfLayer *>, public SectionMassProperties
@@ -88,15 +88,15 @@ class ListReinfLayer: public std::list<ReinfLayer *>, public SectionMassProperti
     size_t getNumReinfBars(void) const;
 
     void getBarrasIn(const Poligono2d &,ListReinfLayer &,bool );
-    void getBarrasIn(const Semiplano2d &,ListReinfLayer &,bool );
+    void getBarrasIn(const HalfPlane2d &,ListReinfLayer &,bool );
 
     double getAreaGrossSection(void) const;
-    Vector getCdgGrossSection(void) const;
+    Vector getCenterOfMassGrossSection(void) const;
     double getIyGrossSection(void) const;
     double getIzGrossSection(void) const;
     double getPyzGrossSection(void) const;
 
-    Vector getCdgHomogenizedSection(const double &E0) const;
+    Vector getCenterOfMassHomogenizedSection(const double &E0) const;
     double getAreaHomogenizedSection(const double &E0) const;
     double getIyHomogenizedSection(const double &E0) const;
     double getIzHomogenizedSection(const double &E0) const;

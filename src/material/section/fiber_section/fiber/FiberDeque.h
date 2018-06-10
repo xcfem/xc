@@ -36,10 +36,10 @@
 class Ref3d3d;
 class Pos2d;
 class Recta2d;
-class Segmento2d;
+class Segment2d;
 class Poligono2d;
 class BND2d;
-class Semiplano2d;
+class HalfPlane2d;
 
 namespace XC {
 class Fiber;
@@ -57,10 +57,10 @@ class CrossSectionKR;
 class GeomSection;
 class DeformationPlane;
 
-enum ClaseEsfuerzo {TRACCION_SIMPLE,TRACCION_COMPUESTA,FLEXION_SIMPLE,FLEXION_COMPUESTA,COMPRESION_SIMPLE,COMPRESION_COMPUESTA,ERROR};
+enum ClaseEsfuerzo {SIMPLE_TENSION,COMPOSED_TENSION,FLEXION_SIMPLE,FLEXION_COMPUESTA,COMPRESION_SIMPLE,COMPRESION_COMPUESTA,ERROR};
 
 
-//! \ingroup MATSCCFibers
+//! @ingroup MATSCCFibers
 //
 //! @brief Fiber double ended queue.
 class FiberDeque : public EntCmd, public std::deque<Fiber *>
@@ -69,8 +69,8 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     typedef std::deque<Fiber *> fiber_ptrs_dq;
   protected:
 
-    double yCDG; //!< Y coordinate of the centroid.
-    double zCDG; //!< Z coordinate of the centroid.
+    double yCenterOfMass; //!< Y coordinate of the centroid.
+    double zCenterOfMass; //!< Z coordinate of the centroid.
 
     mutable std::deque<std::list<Poligono2d> > dq_ac_effective; //!< (Where appropriate) effective concrete areas for each fiber.
     mutable std::deque<double> recubs; //! Cover for each fiber.
@@ -97,15 +97,15 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     const Fiber *findFiber(const int &tag) const;
     Fiber *findFiber(const int &tag);
 
-    inline const double &getYCdg(void) const
-      { return yCDG; }
-    inline const double &getZCdg(void) const
-      { return zCDG; }
-    Pos2d getCdg(void) const;
-    inline double getYRelativa(const double &y) const
-      { return y-yCDG; }
-    inline double getZRelativa(const double &z) const
-      { return z-zCDG; }
+    inline const double &getCenterOfMassY(void) const
+      { return yCenterOfMass; }
+    inline const double &getCenterOfMassZ(void) const
+      { return zCenterOfMass; }
+    Pos2d getCenterOfMass(void) const;
+    inline double getRelativeY(const double &y) const
+      { return y-yCenterOfMass; }
+    inline double getRelativeZ(const double &z) const
+      { return z-zCenterOfMass; }
 
     GeomObj::list_Pos2d getPositions(void) const;
 
@@ -120,16 +120,16 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     Recta2d getNeutralAxis(void) const;
 
     double getCompressionResultant(void) const;
-    double getMzComp(const double &y0= 0.0) const;
-    double getMyComp(const double &z0= 0.0) const;
-    const Vector &baricentroCompresiones(void) const;
-    const Vector &baricentroDefMenores(const double &epsRef) const;
+    double getCompressedFibersMz(const double &y0= 0.0) const;
+    double getCompressedFibersMy(const double &z0= 0.0) const;
+    const Vector &getCompressedFibersCentroid(void) const;
+    const Vector &getCentroidFibersWithStrainSmallerThan(const double &epsRef) const;
 
     double getTensionResultant(void) const;
-    double getMzTracc(const double &y0= 0.0) const;
-    double getMyTracc(const double &z0= 0.0) const;
-    const Vector &baricentroTracciones(void) const;
-    const Vector &baricentroDefMayores(const double &epsRef) const;
+    double getTensionedFibersMz(const double &y0= 0.0) const;
+    double getTensionedFibersMy(const double &z0= 0.0) const;
+    const Vector &getTensionedFibersCentroid(void) const;
+    const Vector &getCentroidFibersWithStrainGreaterThan(const double &epsRef) const;
 
     int commitState(void);
 
@@ -142,13 +142,13 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     DeformationPlane getDeformationPlane(void) const;
     const Vector &getDeformation(void) const;
     ClaseEsfuerzo getClaseEsfuerzo(const double &tol= 1e-4) const;
-    bool enTraccion(void) const;
-    bool enFlexion(void) const;
+    bool isTensioned(void) const;
+    bool isBent(void) const;
     bool enCompresion(void) const;
     std::string getStrClaseEsfuerzo(const double &tol= 1e-4) const;
     double getNeutralAxisDepth(const FiberSectionBase &) const;
     Vector getVectorBrazoMecanico(void) const;
-    Segmento2d getSegmentoBrazoMecanico(void) const;
+    Segment2d getLeverArmSegment(void) const;
     double getMechanicLeverArm(void) const;
     Recta2d getBendingPlaneTrace(void) const;
     Recta2d getTensionedPlaneTrace(void) const;
@@ -164,9 +164,9 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     double getEquivalentDiameterOfFiber(const size_t &i) const;
     double getSigmaSRAtFiber(const size_t &,const double &,const double &,const double &) const;
     double getAverageDistanceBetweenFibers(void) const;
-    int updateCDG(void);
+    int updateCenterOfMass(void);
     
-    int updateKRCDG(FiberSection2d &,CrossSectionKR &);
+    int updateKRCenterOfMass(FiberSection2d &,CrossSectionKR &);
     Fiber *addFiber(FiberSection2d &,Fiber &,CrossSectionKR &);
     int setInitialSectionDeformation(const FiberSection2d &);
     int setTrialSectionDeformation(const FiberSection2d &,CrossSectionKR &);
@@ -176,7 +176,7 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     const Vector &getStressResultantSensitivity(int gradNumber, bool conditional);
     int commitSensitivity(const XC::Vector& defSens, int gradNumber, int numGrads);
 
-    int updateKRCDG(FiberSection3d &,CrossSectionKR &);
+    int updateKRCenterOfMass(FiberSection3d &,CrossSectionKR &);
     Fiber *addFiber(FiberSection3d &,Fiber &,CrossSectionKR &);
     int setInitialSectionDeformation(const FiberSection3d &);
     int setTrialSectionDeformation(FiberSection3d &,CrossSectionKR &);
@@ -184,7 +184,7 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     int revertToStart(FiberSection3d &,CrossSectionKR &);
     const Matrix &getInitialTangent(const FiberSection3d &) const;
 
-    int updateKRCDG(FiberSectionGJ &,CrossSectionKR &);
+    int updateKRCenterOfMass(FiberSectionGJ &,CrossSectionKR &);
     Fiber *addFiber(FiberSectionGJ &,Fiber &,CrossSectionKR &);
     int setInitialSectionDeformation(const FiberSectionGJ &);
     int setTrialSectionDeformation(FiberSectionGJ &,CrossSectionKR &);
@@ -214,7 +214,7 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     BND2d Bnd(void) const;
     double getArea(const double &factor= 1.0) const;
     double getAreaHomogenizedSection(const double &E0) const;
-    const Vector &getCdgHomogenizedSection(const double &E0) const;
+    const Vector &getCenterOfMassHomogenizedSection(const double &E0) const;
     //Moments of inertia.
     double getIz(const double &factor= 1.0,const double &y0= 0.0) const;
     double getIy(const double &factor= 1.0,const double &z0= 0.0) const;
@@ -237,18 +237,18 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     double getSzNeg(const double &yf,const double &y0,const double &factor= 1.0) const;
     double getSyPos(const double &zf,const double &z0,const double &factor= 1.0) const;
     double getSyNeg(const double &zf,const double &z0,const double &factor= 1.0) const;
-    double getSPosHomogenizedSection(const double &E0,const Semiplano2d &sp) const;
-    double getSNegHomogenizedSection(const double &E0,const Semiplano2d &sp) const;
+    double getSPosHomogenizedSection(const double &E0,const HalfPlane2d &sp) const;
+    double getSNegHomogenizedSection(const double &E0,const HalfPlane2d &sp) const;
     
     //! @brief Returns the polar moment of inertia with respect to G.
     inline double getIpolar(const double &factor= 1.0) const
-      { return getIz(factor,yCDG)+getIy(factor,zCDG); }
+      { return getIz(factor,yCenterOfMass)+getIy(factor,zCenterOfMass); }
     //! @brief Returns the radio de giro with respect to the axis parallel to z que passes through the centroid.
     inline double getiz(const double factor= 1.0) const
-      { return getIz(factor,yCDG)/getArea(factor); }
+      { return getIz(factor,yCenterOfMass)/getArea(factor); }
     //! @brief Returns the radio de giro with respect to the axis parallel to y que passes through the centroid.
     inline double getiy(const double factor= 1.0) const
-      { return getIy(factor,zCDG)/getArea(factor); }
+      { return getIy(factor,zCenterOfMass)/getArea(factor); }
     size_t nearest_fiber(const double &y,const double &z) const;
 
     void Print(std::ostream &s,const int &flag);

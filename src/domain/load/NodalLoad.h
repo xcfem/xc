@@ -66,8 +66,8 @@ namespace XC {
 class Node;
 class Vector;
 
-//! \ingroup Loads
-//
+//! @ingroup Loads
+//!
 //! @defgroup NodeLoads Loads over nodes.
 //
 //! @ingroup NodeLoads

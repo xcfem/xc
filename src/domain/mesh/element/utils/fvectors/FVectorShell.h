@@ -34,7 +34,7 @@
 namespace XC {
 class Vector;
 
-//! \ingroup ElemFV
+//! @ingroup ElemFV
 //
 //! @brief Ingernal forces for a shell element.
 class FVectorShell: public FVectorData<24>

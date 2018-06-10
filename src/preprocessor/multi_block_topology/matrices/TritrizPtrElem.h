@@ -37,7 +37,7 @@
 
 namespace XC{
 
-//! \ingroup MultiBlockTopologyMR
+//! @ingroup MultiBlockTopologyMR
 //! 
 //! @brief "Tritriz" of pointers to elements.
 class TritrizPtrElem: public TritrizPtrBase<MatrizPtrElem>

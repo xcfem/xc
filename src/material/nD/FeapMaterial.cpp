@@ -63,7 +63,7 @@
 #include <cstring>
 #include <cstdlib>
 #include <cfloat>
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 double XC::FeapMaterial::d[200];
 double XC::FeapMaterial::sig[6];
@@ -306,11 +306,11 @@ XC::NDMaterial *XC::FeapMaterial::getCopy(const std::string &type) const
   {
     FeapMaterial *theCopy = (FeapMaterial*)this->getCopy();
   
-    if((type==strTipoThreeDimensional) || (type==strTipo3D))
+    if((type==strTypeThreeDimensional) || (type==strType3D))
       theCopy->myFormulation = ThreeDimensional;
-    else if((type==strTipoPlaneStrain) || (type==strTipoPlaneStrain2D))
+    else if((type==strTypePlaneStrain) || (type==strTypePlaneStrain2D))
       theCopy->myFormulation = PlaneStrain;
-    else if((type==strTipoAxiSymmetric) || (type==strTipoAxiSymmetric2D))
+    else if((type==strTypeAxiSymmetric) || (type==strTypeAxiSymmetric2D))
       theCopy->myFormulation = AxiSymmetric;
     else
       {
@@ -325,11 +325,11 @@ const std::string &XC::FeapMaterial::getType(void) const
     switch(myFormulation)
       {
       case ThreeDimensional:
-        return strTipoThreeDimensional;
+        return strTypeThreeDimensional;
       case PlaneStrain:
-        return strTipoPlaneStrain;
+        return strTypePlaneStrain;
       case AxiSymmetric:
-        return strTipoAxiSymmetric;
+        return strTypeAxiSymmetric;
       default:
         std::cerr << "FeapMaterial::getTYpe -- unknown material formulation\n";
         return "Unknown";

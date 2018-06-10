@@ -71,7 +71,7 @@
 
 namespace XC {
 
-//!  \ingroup SOE
+//!  @ingroup SOE
 //! 
 //! \defgroup Solver Equation solver.
 //

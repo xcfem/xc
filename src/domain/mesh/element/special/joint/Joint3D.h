@@ -72,15 +72,15 @@ class Node;
 class UniaxialMaterial;
 class Response;
 
-//! \ingroup Elem
-//
+//! @ingroup Elem
+//!
 //! @defgroup SpecialElem Special purpose elements.
 //
-//! \ingroup SpecialElem
-//
+//! @ingroup SpecialElem
+//!
 //! @defgroup ElemJoint Joint modelling elements.
 //
-//! \ingroup ElemJoint
+//! @ingroup ElemJoint
 //
 //! @brief Joint element for three-dimensional problems.
 class Joint3D: public ElemWithMaterial<7,Joint3DPhysicalProperties>  

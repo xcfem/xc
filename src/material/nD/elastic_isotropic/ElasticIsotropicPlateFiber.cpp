@@ -53,7 +53,7 @@
 #include <material/nD/elastic_isotropic/ElasticIsotropicPlateFiber.h>           
 
 #include "utility/matrix/Matrix.h"
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 XC::Vector XC::ElasticIsotropicPlateFiber::sigma(5);
 XC::Matrix XC::ElasticIsotropicPlateFiber::D(5,5);
@@ -152,7 +152,7 @@ XC::NDMaterial *XC::ElasticIsotropicPlateFiber::getCopy(void) const
   { return new ElasticIsotropicPlateFiber(*this); }
 
 const std::string &XC::ElasticIsotropicPlateFiber::getType(void) const
-  { return strTipoPlateFiber; }
+  { return strTypePlateFiber; }
 
 int XC::ElasticIsotropicPlateFiber::getOrder(void) const
   { return 5; }

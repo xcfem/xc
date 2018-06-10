@@ -38,7 +38,7 @@ namespace XC {
 
 class ResponseId;
 
-//! \ingroup MATSCC
+//! @ingroup MATSCC
 //
 //! @brief pointers to UniaxialMaterial with the degree
 //! of freedom associated to each of them (used in SectionAggregator).

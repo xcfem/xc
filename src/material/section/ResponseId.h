@@ -45,16 +45,16 @@ const int SECTION_RESPONSE_VZ= 5;
 const int SECTION_RESPONSE_T= 6; // Torsion.
 
 
-const int MEMBRANE_RESPONSE_n1= 11; // Axil por unidad de longitud, parallel to axis 1
-const int MEMBRANE_RESPONSE_n2= 12; // Axil por unidad de longitud, parallel to axis 2
-const int MEMBRANE_RESPONSE_n12= 13; // Esfuerzo rasante por unidad de longitud.
+const int MEMBRANE_RESPONSE_n1= 11; // Axil per unit length, parallel to axis 1
+const int MEMBRANE_RESPONSE_n2= 12; // Axil per unit length, parallel to axis 2
+const int MEMBRANE_RESPONSE_n12= 13; // Esfuerzo rasante per unit length.
 const int PLATE_RESPONSE_m1= 14; // Moment per unit length, parallel to axis 1.
 const int PLATE_RESPONSE_m2= 15; // Moment per unit length, parallel to axis 2.
-const int PLATE_RESPONSE_m12= 16; // Esfuerzo torsor por unidad de longitud.
+const int PLATE_RESPONSE_m12= 16; // Esfuerzo torsor per unit length.
 const int PLATE_RESPONSE_q13= 17; // Shear force per unit length, perpendicular to axis 1 and parallel to axis 3.
 const int PLATE_RESPONSE_q23= 18; // Shear force per unit length, perpendicular to axis 2 and parallel to axis 3.
 
-//! \ingroup MATSCC
+//! @ingroup MATSCC
 //
 //! @brief Stiffness material contribution response identifiers.
 class ResponseId: public ID

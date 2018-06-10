@@ -44,11 +44,11 @@ class_<XC::Bidirectional, bases<XC::SectionForceDeformation>, boost::noncopyable
 
 //class_<XC::Isolator2spring , bases<XC::SectionForceDeformation>, boost::noncopyable >("Isolator2spring", no_init);
 
-//Semiplano2d (XC::PrismaticBarCrossSection::*getTensionedHalfPlaneRecta)(const Recta2d &,bool &)= &XC::PrismaticBarCrossSection::getTensionedHalfPlane;
-//Semiplano2d (XC::PrismaticBarCrossSection::*getTensionedHalfPlane)(bool &)= &XC::PrismaticBarCrossSection::getTensionedHalfPlane;
+//HalfPlane2d (XC::PrismaticBarCrossSection::*getTensionedHalfPlaneRecta)(const Recta2d &,bool &)= &XC::PrismaticBarCrossSection::getTensionedHalfPlane;
+//HalfPlane2d (XC::PrismaticBarCrossSection::*getTensionedHalfPlane)(bool &)= &XC::PrismaticBarCrossSection::getTensionedHalfPlane;
 class_<XC::PrismaticBarCrossSection, XC::PrismaticBarCrossSection *, bases<XC::SectionForceDeformation>, boost::noncopyable >("PrismaticBarCrossSection", no_init)
-  .def("getCdgY",&XC::PrismaticBarCrossSection::getCdgY)
-  .def("getCdgZ",&XC::PrismaticBarCrossSection::getCdgZ)
+  .def("getCenterOfMassY",&XC::PrismaticBarCrossSection::getCenterOfMassY)
+  .def("getCenterOfMassZ",&XC::PrismaticBarCrossSection::getCenterOfMassZ)
   .def("isSubjectedToAxialLoad",&XC::PrismaticBarCrossSection::hayAxil,"True if section is in compression (or in tension).")
   .def("isSubjectedToBending",&XC::PrismaticBarCrossSection::isSubjectedToBending,"True if section is bended.")
   .def("isSubjectedToShear",&XC::PrismaticBarCrossSection::isSubjectedToShear,"True if section is subjected to shear.")
@@ -56,7 +56,7 @@ class_<XC::PrismaticBarCrossSection, XC::PrismaticBarCrossSection *, bases<XC::S
   .def("getN",&XC::PrismaticBarCrossSection::getN,"Returns internal axial force.")
   .def("getMy",&XC::PrismaticBarCrossSection::getMy,"Returns internal bending moment around 'y' axis.")
   .def("getMz",&XC::PrismaticBarCrossSection::getMz,"Returns internal bending moment around 'z' axis.")
-  .def("getCenterOfMass",&XC::PrismaticBarCrossSection::getCdg)
+  .def("getCenterOfMass",&XC::PrismaticBarCrossSection::getCenterOfMass)
   .def("getInternalForcesAxes",&XC::PrismaticBarCrossSection::getInternalForcesAxis)
   .def("getNeutralAxis",&XC::PrismaticBarCrossSection::getNeutralAxis,"Returns neutral axis.")
   .def("getPointOnTensionedHalfPlane",&XC::PrismaticBarCrossSection::getPointOnTensionedHalfPlane)

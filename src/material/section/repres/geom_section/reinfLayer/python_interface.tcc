@@ -27,7 +27,7 @@ class_<XC::ReinfLayer,XC::ReinfLayer *, bases<XC::DiscretBase>, boost::noncopyab
   .add_property("barArea",make_function(&XC::ReinfLayer::getReinfBarArea, return_value_policy<return_by_value>()),&XC::ReinfLayer::setReinfBarArea,"Area of bars.")
   .add_property("getReinfBars",make_function(getReinfBarsRef,return_internal_reference<>()),"Returns reinforcement bars.")
   .def("getCover",&XC::ReinfLayer::getCover,"returns concrete cover of the bars.")
-  .def("getCdg",&XC::ReinfLayer::getCdg,"Return the position of the centroid.")
+  .def("getCenterOfMass",&XC::ReinfLayer::getCenterOfMass,"Return the position of the centroid.")
   .def("getArea",&XC::ReinfLayer::getArea,"Return the reinforcement area.")
   ;
 

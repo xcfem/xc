@@ -34,7 +34,7 @@
 
 namespace XC {
 
-//! \ingroup MultiBlockTopologyEnt
+//! @ingroup MultiBlockTopologyEnt
 //!
 //! @brief Base class for 1D entities.
 class LineBase: public Edge

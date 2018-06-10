@@ -82,7 +82,7 @@ class CommParameters;
 class CommMetaData;
 
 //! @ingroup Utils
-//
+//!
 //! @defgroup IPComm Inter process communication.
 //
 //! @ingroup IPComm

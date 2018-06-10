@@ -34,7 +34,7 @@ class PrincipalAxesOfInertia2D;
 
 #include "material/section/SectionForceDeformation.h"
 
-class Semiplano2d;
+class HalfPlane2d;
 class Recta2d;
 class Pos2d;
 class Vector2d;
@@ -43,7 +43,7 @@ namespace XC {
 
 class DeformationPlane;
 
-//! \ingroup MATSCC
+//! @ingroup MATSCC
 //
 //! @brief Base class for beam-column cross sections.
 //! Constitutive equations of the section.
@@ -65,17 +65,17 @@ class PrismaticBarCrossSection: public SectionForceDeformation
     double getMy(void) const;
     double getMz(void) const;
 
-    virtual double getCdgY(void) const;
-    virtual double getCdgZ(void) const;
-    Pos2d getCdg(void) const;
+    virtual double getCenterOfMassY(void) const;
+    virtual double getCenterOfMassZ(void) const;
+    Pos2d getCenterOfMass(void) const;
     Recta2d getNeutralAxis(void) const;
     Recta2d getInternalForcesAxis(void) const;
     Pos2d getPointOnTensionedHalfPlane(void) const;
     Pos2d getPointOnCompressedHalfPlane(void) const;
-    Semiplano2d getTensionedHalfPlane(void) const;
-    Semiplano2d getTensionedHalfPlane(const Recta2d &) const;
-    Semiplano2d getCompressedHalfPlane(void) const;
-    Semiplano2d getCompressedHalfPlane(const Recta2d &) const;
+    HalfPlane2d getTensionedHalfPlane(void) const;
+    HalfPlane2d getTensionedHalfPlane(const Recta2d &) const;
+    HalfPlane2d getCompressedHalfPlane(void) const;
+    HalfPlane2d getCompressedHalfPlane(const Recta2d &) const;
 
     const double &EA(void) const;
     const double &EIz(void) const;

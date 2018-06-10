@@ -41,7 +41,7 @@
 #include "material/section/interaction_diagram/InteractionDiagram.h"
 #include "xc_utils/src/geom/d1/Recta3d.h"
 #include "xc_utils/src/geom/d1/Recta2d.h"
-#include "xc_utils/src/geom/d2/Semiplano2d.h"
+#include "xc_utils/src/geom/d2/HalfPlane2d.h"
 #include "utility/actor/actor/MovableMatrix.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 #include "xc_utils/src/geom/sis_ref/PrincipalAxesOfInertia2D.h"
@@ -63,12 +63,12 @@ XC::PrismaticBarCrossSection &XC::PrismaticBarCrossSection::operator=(const Pris
   }
 
 //! @brief Sets the deformation plane of the section.
-int XC::PrismaticBarCrossSection::setTrialDeformationPlane(const DeformationPlane &plano)
-  { return setTrialSectionDeformation(getGeneralizedStrainVector(plano)); }
+int XC::PrismaticBarCrossSection::setTrialDeformationPlane(const DeformationPlane &plane)
+  { return setTrialSectionDeformation(getGeneralizedStrainVector(plane)); }
 
-//! @brief Sets the plano de initial strains of the section.
-int XC::PrismaticBarCrossSection::setInitialDeformationPlane(const DeformationPlane &plano)
-  { return setInitialSectionDeformation(getGeneralizedStrainVector(plano)); }
+//! @brief Sets the plane that defines initial strains of the section.
+int XC::PrismaticBarCrossSection::setInitialDeformationPlane(const DeformationPlane &plane)
+  { return setInitialSectionDeformation(getGeneralizedStrainVector(plane)); }
 
 //! @brief Returns initial strain plane.
 XC::DeformationPlane XC::PrismaticBarCrossSection::getInitialDeformationPlane(void) const
@@ -77,11 +77,11 @@ XC::DeformationPlane XC::PrismaticBarCrossSection::getInitialDeformationPlane(vo
 
 //! @brief Return the generalized strains vector that corresponds
 //! to the deformation plane being passed as parameter.
-const XC::Vector &XC::PrismaticBarCrossSection::getGeneralizedStrainVector(const DeformationPlane &plano) const
+const XC::Vector &XC::PrismaticBarCrossSection::getGeneralizedStrainVector(const DeformationPlane &plane) const
   {
     const int order= getOrder();
     const ResponseId &code= getType();
-    return plano.getDeformation(order,code);
+    return plane.getDeformation(order,code);
   }
 
 //! @brief Returns the generalized strains vector of the cross-section.
@@ -100,16 +100,16 @@ double XC::PrismaticBarCrossSection::getStrain(const double &y,const double &z) 
   }
 
 //! @brief Returns the coordenada «y» del centro de gravedad of the cross-section.
-double XC::PrismaticBarCrossSection::getCdgY(void) const
+double XC::PrismaticBarCrossSection::getCenterOfMassY(void) const
   { return 0.0; }
 
 //! @brief Returns the coordenada «z» del centro de gravedad of the cross-section.
-double XC::PrismaticBarCrossSection::getCdgZ(void) const
+double XC::PrismaticBarCrossSection::getCenterOfMassZ(void) const
   { return 0.0; }
 
 //! @brief Returns the position of the cross-section centroid.
-Pos2d XC::PrismaticBarCrossSection::getCdg(void) const
-  { return Pos2d(getCdgY(),getCdgZ()); }
+Pos2d XC::PrismaticBarCrossSection::getCenterOfMass(void) const
+  { return Pos2d(getCenterOfMassY(),getCenterOfMassZ()); }
 
 //! @brief Returns true if the section is subjected to an axial force.
 bool XC::PrismaticBarCrossSection::hayAxil(const double &tol) const
@@ -163,7 +163,7 @@ double XC::PrismaticBarCrossSection::getEI2(void) const
 
 //! @brief Returns the principal axes of inertia of the cross-section.
 PrincipalAxesOfInertia2D XC::PrismaticBarCrossSection::getInertiaAxes(void) const
-  { return PrincipalAxesOfInertia2D(getCdg(),EIy(),EIz(),EIyz());  }
+  { return PrincipalAxesOfInertia2D(getCenterOfMass(),EIy(),EIz(),EIyz());  }
 //! @brief Returns the vector of the principal axis I.
 Vector2d XC::PrismaticBarCrossSection::getAxis1VDir(void) const
   { return getInertiaAxes().getAxis1VDir(); }
@@ -219,25 +219,25 @@ Recta2d XC::PrismaticBarCrossSection::getNeutralAxis(void) const
 //! cross-section internal forces.
 Recta2d XC::PrismaticBarCrossSection::getInternalForcesAxis(void) const
   {
-    Recta2d retval(getCdg(),Vector2d(1,0));
+    Recta2d retval(getCenterOfMass(),Vector2d(1,0));
     const ResponseId &code= getType();
     if(isSubjectedToBending()) //Direction of the bending moment.
       {
         if(code.hasResponse(SECTION_RESPONSE_MY) && code.hasResponse(SECTION_RESPONSE_MZ))
-          retval= Recta2d(getCdg(),Vector2d(getStressResultant(SECTION_RESPONSE_MY),getStressResultant(SECTION_RESPONSE_MZ)));
+          retval= Recta2d(getCenterOfMass(),Vector2d(getStressResultant(SECTION_RESPONSE_MY),getStressResultant(SECTION_RESPONSE_MZ)));
         else if(code.hasResponse(SECTION_RESPONSE_MY))
-          retval= Recta2d(getCdg(),Vector2d(1,0));
+          retval= Recta2d(getCenterOfMass(),Vector2d(1,0));
         else if(code.hasResponse(SECTION_RESPONSE_MZ))
-          retval= Recta2d(getCdg(),Vector2d(0,1));
+          retval= Recta2d(getCenterOfMass(),Vector2d(0,1));
       }
     else if(isSubjectedToShear()) //Direction normal to the shear force.
       {
         if(code.hasResponse(SECTION_RESPONSE_VY) && code.hasResponse(SECTION_RESPONSE_VZ))
-          retval= Recta2d(getCdg(),Vector2d(-getStressResultant(SECTION_RESPONSE_VZ),getStressResultant(SECTION_RESPONSE_VY)));
+          retval= Recta2d(getCenterOfMass(),Vector2d(-getStressResultant(SECTION_RESPONSE_VZ),getStressResultant(SECTION_RESPONSE_VY)));
         else if(code.hasResponse(SECTION_RESPONSE_VY))
-          retval= Recta2d(getCdg(),Vector2d(0,1));
+          retval= Recta2d(getCenterOfMass(),Vector2d(0,1));
         else if(code.hasResponse(SECTION_RESPONSE_VZ))
-          retval= Recta2d(getCdg(),Vector2d(1,0));
+          retval= Recta2d(getCenterOfMass(),Vector2d(1,0));
       }
     return retval;
   }
@@ -252,19 +252,19 @@ Pos2d XC::PrismaticBarCrossSection::getPointOnCompressedHalfPlane(void) const
 
 //! @brief Returns the tensioned half-plane defined by the edge
 //! being passed as parameter.
-Semiplano2d XC::PrismaticBarCrossSection::getTensionedHalfPlane(const Recta2d &r) const
+HalfPlane2d XC::PrismaticBarCrossSection::getTensionedHalfPlane(const Recta2d &r) const
   { return getDeformationPlane().getTensionedHalfPlane(r); }
 
 //! @brief Returns the tensioned half-plane.
-Semiplano2d XC::PrismaticBarCrossSection::getTensionedHalfPlane(void) const
+HalfPlane2d XC::PrismaticBarCrossSection::getTensionedHalfPlane(void) const
   { return getDeformationPlane().getTensionedHalfPlane(); }
 
 //! @brief Returns the compressed half-plane defined by the edge
 //! being passed as parameter.
-Semiplano2d XC::PrismaticBarCrossSection::getCompressedHalfPlane(const Recta2d &r) const
+HalfPlane2d XC::PrismaticBarCrossSection::getCompressedHalfPlane(const Recta2d &r) const
   { return getDeformationPlane().getCompressedHalfPlane(r); }
 
 //! @brief Returns the compressed half-plane.
-Semiplano2d XC::PrismaticBarCrossSection::getCompressedHalfPlane(void) const
+HalfPlane2d XC::PrismaticBarCrossSection::getCompressedHalfPlane(void) const
   { return getDeformationPlane().getCompressedHalfPlane(); }
 

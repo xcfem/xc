@@ -26,7 +26,7 @@
 //----------------------------------------------------------------------------
 //QuadBase9N.h
                                                                         
-#include "ElemPlano.h"
+#include "PlaneElement.h"
 
 #ifndef QuadBase9N_h
 #define QuadBase9N_h
@@ -39,14 +39,10 @@
 #include "vtkCellType.h"
 
 namespace XC {
-//! \ingroup Elem
-//
-//! @defgroup ElemPlanos bi-dimensional elements (2D problems, shells,...).
-//
-//! \ingroup ElemPlanos
+//! @ingroup PlaneElements
 //! @brief Base class for nine node quads.
 template <class PhysProp>
-class QuadBase9N : public ElemPlano<9,PhysProp>
+class QuadBase9N : public PlaneElement<9,PhysProp>
   {
   protected:
     TritrizPtrElem put_on_mesh(const TritrizPtrNod &,meshing_dir dm) const;
@@ -60,7 +56,7 @@ class QuadBase9N : public ElemPlano<9,PhysProp>
     ID getLocalIndexNodesEdge(const size_t &i) const;
     int getEdgeNodes(const Node *,const Node *) const;
     Poligono3d getPolygon(bool initialGeometry= true) const;
-    Segmento3d getSide(const size_t &i,bool initialGeometry= true) const;
+    Segment3d getSide(const size_t &i,bool initialGeometry= true) const;
 
     int getVtkCellType(void) const;
     int getMEDCellType(void) const;
@@ -72,12 +68,12 @@ class QuadBase9N : public ElemPlano<9,PhysProp>
 //! @brief Constructor
 template <class PhysProp>
 XC::QuadBase9N<PhysProp>::QuadBase9N(int classTag)
-  : ElemPlano<9,PhysProp>(0,classTag) {}
+  : PlaneElement<9,PhysProp>(0,classTag) {}
 
 //! @brief Constructor.
 template <class PhysProp>
 XC::QuadBase9N<PhysProp>::QuadBase9N(int tag,int classTag,const PhysProp &pp)
-  :ElemPlano<9,PhysProp>(tag,classTag,pp) {}
+  :PlaneElement<9,PhysProp>(tag,classTag,pp) {}
 
 
 //! @brief Put the element on the mesh being passed as parameter.
@@ -97,9 +93,9 @@ Poligono3d XC::QuadBase9N<PhysProp>::getPolygon(bool initialGeometry) const
 
 //! @brief Returns the element edge.
 template <class PhysProp>
-Segmento3d XC::QuadBase9N<PhysProp>::getSide(const size_t &i,bool initialGeometry) const
+Segment3d XC::QuadBase9N<PhysProp>::getSide(const size_t &i,bool initialGeometry) const
   {
-    Segmento3d retval;
+    Segment3d retval;
     std::cerr << this->getClassName() << "::" << __FUNCTION__
 	      << "; not implemented." << std::endl;
     return retval;
@@ -140,7 +136,7 @@ ID XC::QuadBase9N<PhysProp>::getLocalIndexNodesEdge(const size_t &i) const
 template <class PhysProp>
 void XC::QuadBase9N<PhysProp>::zeroLoad(void)
   {
-    ElemPlano<9,PhysProp>::zeroLoad();
+    PlaneElement<9,PhysProp>::zeroLoad();
     this->physicalProperties.getMaterialsVector().zeroInitialGeneralizedStrains(); //Removes initial deformations.
     return;
   }

@@ -34,7 +34,7 @@
 
 namespace XC {
 
-//! \ingroup MATSCCFibers
+//! @ingroup MATSCCFibers
 //
 //! @brief Fiber container.
 class FiberContainer : public FiberDeque

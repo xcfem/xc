@@ -31,11 +31,11 @@
 
 #include "LineBase.h"
 
-class Segmento3d;
+class Segment3d;
 
 namespace XC {
 
-//! \ingroup MultiBlockTopologyEnt
+//! @ingroup MultiBlockTopologyEnt
 //!
 //! @brief Line: base class for 1D objects.
 class Line: public LineBase
@@ -49,7 +49,7 @@ class Line: public LineBase
     Line(const std::string &nombre= "",Preprocessor *m= nullptr,const size_t &ndiv= 4);
     virtual SetEstruct *getCopy(void) const;
 
-    double getLongitud(void) const;
+    double getLength(void) const;
     Pos3d getCentroid(void) const;
     Edge *splitAtPoint(Pnt *p);
     Edge *splitAtLambda(const double &);
@@ -64,7 +64,7 @@ class Line: public LineBase
     double DistanciaA2(const Pos3d &pt) const;
 
     const Vector &getVector(void) const;
-    Segmento3d getLineSegment(void) const;
+    Segment3d getLineSegment(void) const;
     virtual const Vector &getTang(const double &) const;
     int getVtkCellType(void) const;
     int getMEDCellType(void) const;

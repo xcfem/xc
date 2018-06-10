@@ -41,7 +41,7 @@ Iz= steelRegion.getIz()
 Pyz= steelRegion.getPyz()
 
 
-G= geomTuberia.getCdgHomogenizedSection(Es)
+G= geomTuberia.getCenterOfMassHomogenizedSection(Es)
 
 
 

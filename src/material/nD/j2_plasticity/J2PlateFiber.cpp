@@ -83,7 +83,7 @@
 
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 XC::Vector XC::J2PlateFiber::strain_vec(5) ;
 XC::Vector XC::J2PlateFiber::stress_vec(5) ;
@@ -131,7 +131,7 @@ XC::NDMaterial *XC::J2PlateFiber::getCopy(void) const
 
 //send back type of material
 const std::string &XC::J2PlateFiber::getType(void) const 
-  { return strTipoPlateFiber ; }
+  { return strTypePlateFiber ; }
 
 
 //send back order of strain in vector form

@@ -65,7 +65,7 @@
 #include "SmallDispCrdTransf3d.h"
 
 namespace XC {
-//! \ingroup ElemCT
+//! @ingroup ElemCT
 //
 //! @brief PDeltaCrdTransf3d provides the
 //! abstraction of a linear transformation for a spatial frame

@@ -105,7 +105,7 @@
 #include <material/nD/soil/cyclicSoil/MultiaxialCyclicPlasticityAxiSymm.h>
 #include <material/nD/soil/cyclicSoil/MultiaxialCyclicPlasticityPlaneStrain.h>
 #include <domain/mesh/element/utils/Information.h>
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 //this is mike's problem
 XC::Tensor XC::MultiaxialCyclicPlasticity::rank2(2, def_dim_2, 0.0 );
@@ -479,18 +479,18 @@ XC::MultiaxialCyclicPlasticity::MultiaxialCyclicPlasticity(int    tag,
 XC::NDMaterial *XC::MultiaxialCyclicPlasticity::getCopy(const std::string &type) const
   {
     NDMaterial *retval= nullptr;
-    if((type==strTipoPlaneStress2D) || (type==strTipoPlaneStress))
+    if((type==strTypePlaneStress2D) || (type==strTypePlaneStress))
       std::cerr << "MultiaxialCyclicPlasticity type plane stress material is NOT available now....";
-    else if((type==strTipoPlaneStrain2D) || (type==strTipoPlaneStrain))
+    else if((type==strTypePlaneStrain2D) || (type==strTypePlaneStrain))
       retval= new MultiaxialCyclicPlasticityPlaneStrain(this->getTag(), density, bulk, shear, sqrt(3.0/8.0)*R,
                       Ho, h, m, beta, K0, eta); 
-    else if((type==strTipoAxiSymmetric2D) || (type==strTipoAxiSymmetric))
+    else if((type==strTypeAxiSymmetric2D) || (type==strTypeAxiSymmetric))
       retval= new MultiaxialCyclicPlasticityAxiSymm(this->getTag(), density, bulk, shear, sqrt(3.0/8.0)*R,
                       Ho, h, m, beta, K0, eta); 
-    else if(((type==strTipoThreeDimensional)) || ((type==strTipo3D)))
+    else if(((type==strTypeThreeDimensional)) || ((type==strType3D)))
       retval= new MultiaxialCyclicPlasticity3D(this->getTag(), density, bulk, shear, sqrt(3.0/8.0)*R,
                                              Ho, h, m, beta, K0, eta); 
-    else if( ((type==strTipoPlateFiber)) )
+    else if( ((type==strTypePlateFiber)) )
       std::cerr << "MultiaxialCyclicPlasticity type plate fiber material is NOT available now....";
     else // Handle other cases
       std::cerr << "MultiaxialCyclicPlasticity::getModel failed to get model: " << type << std::endl;
@@ -701,7 +701,7 @@ const std::string &XC::MultiaxialCyclicPlasticity::getType(void) const
   {
     std::cerr << "MultiaxialCyclicPlasticity::getType -- subclass responsibility\n";
     exit(-1);
-    return strTipoError;
+    return strTypeError;
   }
 
 int XC::MultiaxialCyclicPlasticity::getOrder(void) const

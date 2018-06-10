@@ -77,7 +77,7 @@
 //
 
 #include <material/nD/j2_plasticity/J2AxiSymm.h>
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 //static vectors and matrices
 XC::Vector XC::J2AxiSymm::strain_vec(4) ;
@@ -120,7 +120,7 @@ XC::NDMaterial *XC::J2AxiSymm::getCopy(void) const
 
 //send back type of material
 const std::string &XC::J2AxiSymm::getType(void) const 
-  { return strTipoAxiSymmetric2D ; }
+  { return strTypeAxiSymmetric2D ; }
 
 
 //send back order of strain in vector form

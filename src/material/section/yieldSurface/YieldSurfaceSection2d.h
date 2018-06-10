@@ -40,11 +40,11 @@ class FEM_ObjectBroker;
 class Information;
 class YieldSurface_BC;
 
-//! \ingroup MATSCC
+//! @ingroup MATSCC
 //
 //! @defroup MATSCCYS Cross sections with yield surface.
 //
-//! \ingroup MATSCCYS
+//! @ingroup MATSCCYS
 //
 //! @brief Base class for cross sections with yield surface
 //! on a bi-dimensional space (three DOFs for each section).

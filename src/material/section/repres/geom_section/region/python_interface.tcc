@@ -24,11 +24,11 @@
 class_<XC::RegionSecc, XC::RegionSecc *, bases<XC::DiscretBase>, boost::noncopyable >("RegionSecc", no_init)
   .def("getNumCells",&XC::RegionSecc::getNumCells)
   .def("getPolygon",&XC::RegionSecc::getPolygon)
-  .def("getArea",&XC::RegionSecc::Area)
+  .def("getArea",&XC::RegionSecc::getArea)
   .def("getIy",&XC::RegionSecc::Iy)
   .def("getIz",&XC::RegionSecc::Iz)
   .def("getPyz",&XC::RegionSecc::Pyz)
-  .def("getCdg",make_function(&XC::RegionSecc::Cdg,return_internal_reference<>()))
+  .def("getCenterOfMass",make_function(&XC::RegionSecc::getCenterOfMass,return_internal_reference<>()))
   ;
 
 
@@ -40,7 +40,7 @@ class_<XC::RgQuadCell, bases<XC::RegionSecc>, boost::noncopyable >("RgQuadCell",
   .add_property("nDivRad",&XC::RgQuadCell::getNDivJK,&XC::RgQuadCell::setNDivJK,"Number of divisions of J->K side.")
   .add_property("getNumCells",&XC::RgQuadCell::getNumCells)
   .def("genGrid",make_function(&XC::RgQuadCell::getMesh,return_internal_reference<>()))
-  .def("getCdgRejilla",&XC::RgQuadCell::getCdgRejilla)
+  .def("getCenterOfMassRejilla",&XC::RgQuadCell::getCenterOfMassRejilla)
   .def("getVertCoords",&XC::RgQuadCell::getVertCoords)
   .def("getCellVertCoords",&XC::RgQuadCell::getCellVertCoords)
   ;

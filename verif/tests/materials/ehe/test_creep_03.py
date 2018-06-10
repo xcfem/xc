@@ -14,7 +14,7 @@ __email__= "l.pereztato@gmail.com"
 concrHA30= EHE_materials.HA30
 concrHA30.cemType='N'
 fckHA30= 30e6 # Concrete characteristic compressive strength HA-30.
-Hrel= 0.8 # Humedad relativa del aire.
+Hrel= 0.8 # Relative humidity of the air.
 Ec= 2e5*9.81/1e-4 # Concrete Young modulus (Pa).
 nuC= 0.2 # Concrete Poisson's ratio EHE-08.
 hLosa= 0.2 # Thickness.
@@ -29,7 +29,7 @@ F= 5.5e4 # Load magnitude en N
 # Concrete shrinkage
 tS= 7 # Inicio del secado.
 
-# Armadura activa
+# active reinforcement
 Ep= 190e9 # Elastic modulus expressed in MPa
 Ap= 140e-6 # bar area expressed in square meters
 fMax= 1860e6 # Maximum unit load of the material expressed in MPa.
@@ -82,7 +82,7 @@ elem= elements.newElement("ShellMITC4",xc.ID([5,6,10,9]))
 elem= elements.newElement("ShellMITC4",xc.ID([6,7,11,10]))
 elem= elements.newElement("ShellMITC4",xc.ID([7,8,12,11]))
 
-# Armadura activa
+# active reinforcement
 elements.defaultMaterial= "prestressingSteel"
 elements.dimElem= 3 # Dimension of element space
 truss= elements.newElement("Truss",xc.ID([1,2]));
@@ -119,7 +119,7 @@ casos= cargas.getLoadPatterns
 ts= casos.newTimeSeries("constant_ts","ts")
 casos.currentTimeSeries= "ts"
 
-lpRETRACC= casos.newLoadPattern("default","RETRACC")
+lpSHRINKAGE= casos.newLoadPattern("default","SHRINKAGE")
 lpFLU= casos.newLoadPattern("default","FLU")
 
 lpG= casos.newLoadPattern("default","G")
@@ -259,29 +259,29 @@ for e in setShells.getElements:
   Ac= averageSideLength*grueso
   u= 2*averageSideLength+grueso
   espMedio= 2*Ac/u
-  e.setProp("epsRetracc",concrHA30.getShrEpscs(tFin,tS,Hrel*100,espMedio*1000))
+  e.setProp("epsShrinkage",concrHA30.getShrEpscs(tFin,tS,Hrel*100,espMedio*1000))
 
 cargas= preprocessor.getLoadHandler
 casos= cargas.getLoadPatterns
-#casos.setCurrentLoadPattern("RETRACC")
+#casos.setCurrentLoadPattern("SHRINKAGE")
 
 for e in setShells.getElements:
-  eleLoad= lpRETRACC.newElementalLoad("shell_strain_load")
+  eleLoad= lpSHRINKAGE.newElementalLoad("shell_strain_load")
   eleLoad.elementTags= xc.ID([e.tag])
-  epsRetracc= e.getProp("epsRetracc")
-  eleLoad.setStrainComp(0,0,epsRetracc) #(id of Gauss point, id of component, value)
-  eleLoad.setStrainComp(1,0,epsRetracc)
-  eleLoad.setStrainComp(2,0,epsRetracc)
-  eleLoad.setStrainComp(3,0,epsRetracc)
-  eleLoad.setStrainComp(0,1,epsRetracc)
-  eleLoad.setStrainComp(1,1,epsRetracc)
-  eleLoad.setStrainComp(2,1,epsRetracc)
-  eleLoad.setStrainComp(3,1,epsRetracc)
+  epsShrinkage= e.getProp("epsShrinkage")
+  eleLoad.setStrainComp(0,0,epsShrinkage) #(id of Gauss point, id of component, value)
+  eleLoad.setStrainComp(1,0,epsShrinkage)
+  eleLoad.setStrainComp(2,0,epsShrinkage)
+  eleLoad.setStrainComp(3,0,epsShrinkage)
+  eleLoad.setStrainComp(0,1,epsShrinkage)
+  eleLoad.setStrainComp(1,1,epsShrinkage)
+  eleLoad.setStrainComp(2,1,epsShrinkage)
+  eleLoad.setStrainComp(3,1,epsShrinkage)
 
 
 preprocessor.resetLoadCase()
 
-comb= combs.newLoadCombination("FASE0","1.00*RETRACC")
+comb= combs.newLoadCombination("FASE0","1.00*SHRINKAGE")
 tagSaveFase0= comb.tag*100
 comb.addToDomain()
 result= analysis.analyze(1)
@@ -295,7 +295,7 @@ db.save(tagSaveFase0)
 for e in setShells.getElements:
   tension1Media= e.getMeanInternalForce("n1")/Ac
   tension2Media= e.getMeanInternalForce("n2")/Ac
-#  fi1= retraccion_fluencia.getPhiFluencia(fckHA30,tFin,t0,Hrel,u,Ac)
+#  fi1= shrinkage_fluencia.getPhiFluencia(fckHA30,tFin,t0,Hrel,u,Ac)
   epsFluencia1=concrHA30.getCreepDeformation(tFin,t0,Hrel*100,espMedio*1000,tension1Media)
   epsFluencia2=concrHA30.getCreepDeformation(tFin,t0,Hrel*100,espMedio*1000,tension2Media)
 

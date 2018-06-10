@@ -6,7 +6,7 @@
 //
 //  XC is free software: you can redistribute it and/or modify 
 //  it under the terms of the GNU General Public License as published by
-//  the Free Software Foundation, either version 3 of the License, or 
+//  the Free Software Foundation, either version 3 of the License, o
 //  (at your option) any later version.
 //
 //  This software is distributed in the hope that it will be useful, but 
@@ -64,7 +64,7 @@ class_<XC::DiscretBase, bases<EntConNmb>, boost::noncopyable >("DiscretBase", no
 
 class_<XC::SectionMassProperties, bases<EntCmd>, boost::noncopyable >("SectionMassProperties", no_init)
   .def("getAreaGrossSection",&XC::SectionMassProperties::getAreaGrossSection,"Returns region's gross section.")
-  .def("getCdgGrossSection",&XC::SectionMassProperties::getCdgGrossSection,"Returns center of gravity of gross section.")
+  .def("getCenterOfMassGrossSection",&XC::SectionMassProperties::getCenterOfMassGrossSection,"Returns center of gravity of gross section.")
   .def("getIyGrossSection",&XC::SectionMassProperties::getIyGrossSection,"Inertia of the gross section about an axis parallel to y through his center of gravity.")
   .def("getIzGrossSection",&XC::SectionMassProperties::getIzGrossSection,"Inertia of the gross section about an axis parallel to z through his center of gravity.")
   .def("getPyzGrossSection",&XC::SectionMassProperties::getPyzGrossSection,"Product of inertia of the gross section about y and z axis through his center of gravity.")
@@ -89,7 +89,7 @@ class_<XC::SectionMassProperties, bases<EntCmd>, boost::noncopyable >("SectionMa
 //.def("getIGrossSection",&XC::SectionMassProperties::getIGrossSection)
 
   .def("getAreaHomogenizedSection",&XC::SectionMassProperties::getAreaHomogenizedSection,"Returns region's homogenized section.")
-  .def("getCdgHomogenizedSection",&XC::SectionMassProperties::getCdgHomogenizedSection,"Returns center of gravity of homogenized section.")
+  .def("getCenterOfMassHomogenizedSection",&XC::SectionMassProperties::getCenterOfMassHomogenizedSection,"Returns center of gravity of homogenized section.")
   .def("getIyHomogenizedSection",&XC::SectionMassProperties::getIyHomogenizedSection,"Inertia of the homogenized section about an axis parallel to y through his center of gravity.")
   .def("getIzHomogenizedSection",&XC::SectionMassProperties::getIzHomogenizedSection,"Inertia of the homogenized section about an axis parallel to z through his center of gravity.")
   .def("getPyzHomogenizedSection",&XC::SectionMassProperties::getPyzHomogenizedSection,"Product of inertia of the homogenized section about y and z axis through his center of gravity.")

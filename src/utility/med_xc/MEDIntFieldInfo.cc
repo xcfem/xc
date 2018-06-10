@@ -105,12 +105,12 @@ void XC::MEDIntFieldInfo::populateOnGaussPoints(const Set &set,const FieldInfo &
     // for(DqPtrsElem::const_iterator j= elements.begin();j!=elements.end();j++,conta++)
     //   {
     //     value= convert_to_m_int((*j)->GetPrp(nmb_prop));
-    //     const MED_EN::medGeometryElement tipo= (*j)->getMEDCellType();
+    //     const MED_EN::medGeometryElement type= (*j)->getMEDCellType();
     //     for(size_t k= 1;k<=dim;k++)
     //       {
     //         const size_t num_ptos= (*j)->getGaussModel().getNumGaussPoints();
     //         for(size_t l=1;l<=num_ptos;l++)
-    //           setValueIJK(conta,k,l,tipo,value(l,k));
+    //           setValueIJK(conta,k,l,type,value(l,k));
     //       }
     //   }
   }

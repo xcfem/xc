@@ -75,7 +75,7 @@ class ID;
 class ModelWrapper;
 
 //! @ingroup Analysis
-//
+//!
 //! @defgroup Numerador DOF numbering.
 //
 //! @ingroup Numerador

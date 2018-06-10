@@ -26,7 +26,7 @@
 //----------------------------------------------------------------------------
 //QuadBase4N.h
                                                                         
-#include "ElemPlano.h"
+#include "PlaneElement.h"
 
 #ifndef QuadBase4N_h
 #define QuadBase4N_h
@@ -39,10 +39,10 @@
 #include "vtkCellType.h"
 
 namespace XC {
-//! @ingroup ElemPlanos
+//! @ingroup PlaneElements
 //! @brief Base class for 4 node quads.
 template <class PhysProp>
-class QuadBase4N : public ElemPlano<4,PhysProp>
+class QuadBase4N : public PlaneElement<4,PhysProp>
   {
   protected:
     TritrizPtrElem put_on_mesh(const TritrizPtrNod &,meshing_dir dm) const;
@@ -67,17 +67,17 @@ class QuadBase4N : public ElemPlano<4,PhysProp>
 //! @brief Constructor
 template <class PhysProp>
   XC::QuadBase4N<PhysProp>::QuadBase4N(int classTag,const PhysProp &pp)
-  : ElemPlano<4,PhysProp>(0,classTag,pp) {}
+  : PlaneElement<4,PhysProp>(0,classTag,pp) {}
 
 //! @brief Constructor.
 template <class PhysProp>
 XC::QuadBase4N<PhysProp>::QuadBase4N(int tag,int classTag,const PhysProp &pp)
-  :ElemPlano<4,PhysProp>(tag,classTag,pp) {}
+  :PlaneElement<4,PhysProp>(tag,classTag,pp) {}
 
 //! @brief Constructor.
 template <class PhysProp>
 XC::QuadBase4N<PhysProp>::QuadBase4N(int tag, int classTag, int node1, int node2, int node3, int node4,const PhysProp &pp)
-  : ElemPlano<4,PhysProp>(tag,classTag,pp)
+  : PlaneElement<4,PhysProp>(tag,classTag,pp)
   {
     this->theNodes.set_id_nodes(node1,node2,node3,node4);
   }
@@ -93,7 +93,7 @@ template <class PhysProp>
 XC::Element::NodesEdge XC::QuadBase4N<PhysProp>::getNodesEdge(const size_t &i) const
   {
     Element::NodesEdge retval(2,static_cast<Node *>(nullptr));
-    const NodePtrsWithIDs &nodes= ElemPlano<4,PhysProp>::getNodePtrs();
+    const NodePtrsWithIDs &nodes= PlaneElement<4,PhysProp>::getNodePtrs();
     const size_t sz= nodes.size();
     if(i<sz)
       {
@@ -112,7 +112,7 @@ template <class PhysProp>
 int XC::QuadBase4N<PhysProp>::getEdgeNodes(const Node *n1,const Node *n2) const
   {
     int retval= -1;
-    const NodePtrsWithIDs &nodes= ElemPlano<4,PhysProp>::getNodePtrs();
+    const NodePtrsWithIDs &nodes= PlaneElement<4,PhysProp>::getNodePtrs();
     const int i1= nodes.find(n1);
     const int i2= nodes.find(n2);
     if((i1>=0) && (i2>=0))
@@ -135,7 +135,7 @@ template <class PhysProp>
 ID XC::QuadBase4N<PhysProp>::getLocalIndexNodesEdge(const size_t &i) const
   {
     ID retval(2);
-    const NodePtrsWithIDs &nodes= ElemPlano<4,PhysProp>::getNodePtrs();
+    const NodePtrsWithIDs &nodes= PlaneElement<4,PhysProp>::getNodePtrs();
     const size_t sz= nodes.size();
     if(i<sz)
       {
@@ -152,7 +152,7 @@ ID XC::QuadBase4N<PhysProp>::getLocalIndexNodesEdge(const size_t &i) const
 template <class PhysProp>
 void XC::QuadBase4N<PhysProp>::zeroLoad(void)
   {
-    ElemPlano<4,PhysProp>::zeroLoad();
+    PlaneElement<4,PhysProp>::zeroLoad();
     this->physicalProperties.getMaterialsVector().zeroInitialGeneralizedStrains(); //Removes initial deformations.
     return;
   }

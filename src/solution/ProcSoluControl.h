@@ -38,7 +38,7 @@ namespace XC {
 class ProcSolu;
 class Domain;
 
-//!  \ingroup Solu
+//!  @ingroup Solu
 //! 
 //! @brief Container for the objects that control the solution procedure.
 class ProcSoluControl: public EntCmd

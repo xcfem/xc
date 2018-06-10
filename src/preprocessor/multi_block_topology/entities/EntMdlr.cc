@@ -409,17 +409,17 @@ XC::IRowSet XC::EntMdlr::getVarRefIRow(const RangoIndice &layer_range,size_t f,s
 XC::IRowSet XC::EntMdlr::getVarRefIRow(const RangoTritriz &rango,const std::string &nmb)
   { return getVarRefIRow(rango.getLayerRange(),rango.getRowRange().Inf(),rango.getColumnRange().Inf(),nmb); }
 
-XC::JRowSet XC::EntMdlr::getVarRefJRow(size_t capa,size_t c,const std::string &nmb)
-  { return JRowSet(*this,capa,c,nmb,getPreprocessor()); }
-XC::JRowSet XC::EntMdlr::getVarRefJRow(size_t capa,const RangoIndice &row_range,size_t c,const std::string &nmb)
-  { return JRowSet(*this,capa,row_range,c,nmb,getPreprocessor()); }
+XC::JRowSet XC::EntMdlr::getVarRefJRow(size_t layer,size_t c,const std::string &nmb)
+  { return JRowSet(*this,layer,c,nmb,getPreprocessor()); }
+XC::JRowSet XC::EntMdlr::getVarRefJRow(size_t layer,const RangoIndice &row_range,size_t c,const std::string &nmb)
+  { return JRowSet(*this,layer,row_range,c,nmb,getPreprocessor()); }
 XC::JRowSet XC::EntMdlr::getVarRefJRow(const RangoTritriz &rango,const std::string &nmb)
   { return getVarRefJRow(rango.getLayerRange().Inf(),rango.getRowRange(),rango.getColumnRange().Inf(),nmb); }
 
-XC::KRowSet XC::EntMdlr::getVarRefKRow(size_t capa,size_t f,const std::string &nmb)
-  { return KRowSet(*this,capa,f,nmb,getPreprocessor()); }
-XC::KRowSet XC::EntMdlr::getVarRefKRow(size_t capa,size_t f,const RangoIndice &column_range,const std::string &nmb)
-  { return KRowSet(*this,capa,f,column_range,nmb,getPreprocessor()); }
+XC::KRowSet XC::EntMdlr::getVarRefKRow(size_t layer,size_t f,const std::string &nmb)
+  { return KRowSet(*this,layer,f,nmb,getPreprocessor()); }
+XC::KRowSet XC::EntMdlr::getVarRefKRow(size_t layer,size_t f,const RangoIndice &column_range,const std::string &nmb)
+  { return KRowSet(*this,layer,f,column_range,nmb,getPreprocessor()); }
 XC::KRowSet XC::EntMdlr::getVarRefKRow(const RangoTritriz &rango,const std::string &nmb)
   { return getVarRefKRow(rango.getLayerRange().Inf(),rango.getRowRange().Inf(),rango.getColumnRange(),nmb); }
 

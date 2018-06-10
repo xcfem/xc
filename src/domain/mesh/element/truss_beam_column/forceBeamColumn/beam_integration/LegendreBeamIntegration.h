@@ -59,7 +59,7 @@ class ElementalLoad;
 class Channel;
 class FEM_ObjectBroker;
 
-//! \ingroup BeamInteg
+//! @ingroup BeamInteg
 //
 //! @brief cuadratura Gauss-Legendre
 class LegendreBeamIntegration: public BeamIntegration

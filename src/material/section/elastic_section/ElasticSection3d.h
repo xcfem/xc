@@ -70,7 +70,7 @@ class Channel;
 class FEM_ObjectBroker;
 class Information;
 
-//! \ingroup MATSCCElastica
+//! @ingroup MATSCCElastica
 //
 //! @brief Cross section with linear elastic material
 //! in three-dimensional problems (6 degrees of freedom in each section).

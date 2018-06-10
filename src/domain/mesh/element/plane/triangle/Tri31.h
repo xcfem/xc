@@ -67,7 +67,7 @@ class Material;
 class Response;
 class GaussPoint;
 
-//! \ingroup ElemPlanos
+//! @ingroup PlaneElements
 //
 //! @brief 3 node triangle.
 class Tri31: public TriBase3N<SolidMech2D>

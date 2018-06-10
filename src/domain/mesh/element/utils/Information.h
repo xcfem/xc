@@ -74,7 +74,7 @@ class ID;
 enum InfoType {UnknownType, IntType, DoubleType, 
 	       IdType, VectorType, MatrixType, TensorType};
 		   
-//! \ingroup FEMisc
+//! @ingroup FEMisc
 //
 //! @brief Information about an element.
 class Information: public MovableObject

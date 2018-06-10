@@ -78,8 +78,8 @@ class FEM_ObjectBroker;
 class RayleighDampingFactors;
 class AnalysisAggregation ;
 
-//! @ingroup Analysis
-//
+//! @ingroup AnalysisType
+//!
 //! @defgroup AnalysisIntegrator Integration of physical properties over the domain to form the system matrices.
 //
 //! @ingroup AnalysisIntegrator

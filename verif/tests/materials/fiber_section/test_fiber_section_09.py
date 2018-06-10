@@ -103,8 +103,8 @@ epsSMax= fibraSEpsMax.getMaterial().getStrain() # Maximum steel strain.
 
 from materials.sections import section_properties
 from materials.ehe import EHE_limit_state_checking
-tipoSolic= section_properties.solicitationType(epsCMin,epsSMax)
-strTipoSolic= section_properties.solicitationTypeString(tipoSolic)
+solicitationType= section_properties.solicitationType(epsCMin,epsSMax)
+solicitationTypeString= section_properties.solicitationTypeString(solicitationType)
 cumpleFT= EHE_materials.ReinforcedConcreteLimitStrainsEHE08.compressiveBendingOK(epsCMin,epsCMax)
 aprovSecc= EHE_materials.ReinforcedConcreteLimitStrainsEHE08.getCompressiveBendingEfficiency(epsCMin,epsSMax)
 
@@ -126,9 +126,9 @@ print "ratio5= ", ratio5
 print "Minumum concrete strain: ",(epsCMin)
 print "Maximum concrete strain: ",(epsCMax)
 print "Maximum rebar strain: ",(epsSMax)
-print "Solicitation type: ",strTipoSolic," (",(tipoSolic),") \n"
-print "Cumple a ",strTipoSolic,": ",(cumpleFT)
-print "Aprovechamiento a ",strTipoSolic,": ",(aprovSecc)
+print "Solicitation type: ",solicitationTypeString," (",(solicitationType),") \n"
+print "Cumple a ",solicitationTypeString,": ",(cumpleFT)
+print "Aprovechamiento a ",solicitationTypeString,": ",(aprovSecc)
 print "RN= ",(RN/1e3)
 print "RN2= ",(RN2/1e3)
 print "N= ",(esfN/1e3)
@@ -144,7 +144,7 @@ print "               Cumple ratio4: ",abs(ratio4)<1e-6
 print "               Cumple ratio5: ",abs(ratio5)<1e-9
 print "               Cumple RN2: ",abs(RN2)<1e-9
 print "               Cumple esfMy: ",abs(esfMy)<1e-10
-print "               Cumple tipoSolic: ",(tipoSolic == 3)
+print "               Cumple solicitationType: ",(solicitationType == 3)
 print "epsSMax= ",epsSMax
 print "epsSMaxTeor= ",epsSMaxTeor
 print "ratio6= ", ratio6
@@ -154,7 +154,7 @@ print "               Cumple ratio6: ",abs(ratio6)<0.01
 import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<1e-9) & (abs(ratio2)<1e-9) & (abs(ratio3)<1e-9) & (abs(ratio5)<1e-9) & (abs(RN2)<1e-9) & (abs(esfMy)<1e-10) & (tipoSolic == 3) & (abs(ratio4)<1e-6) & (abs(ratio6)<0.01) & (analOk == 0.0) :
+if (abs(ratio1)<1e-9) & (abs(ratio2)<1e-9) & (abs(ratio3)<1e-9) & (abs(ratio5)<1e-9) & (abs(RN2)<1e-9) & (abs(esfMy)<1e-10) & (solicitationType == 3) & (abs(ratio4)<1e-6) & (abs(ratio6)<0.01) & (analOk == 0.0) :
   print "test ",fname,": ok."
 else:
   lmsg.error(fname+' ERROR.')

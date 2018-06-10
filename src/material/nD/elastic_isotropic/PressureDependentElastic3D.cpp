@@ -62,7 +62,7 @@
 #include <utility/matrix/nDarray/stresst.h>
 #include <utility/matrix/nDarray/Tensor.h>
 
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 XC::Matrix XC::PressureDependentElastic3D::D(6,6);   // global for XC::ElasticIsotropic3D only
 XC::Vector XC::PressureDependentElastic3D::sigma(6); // global for XC::ElasticIsotropic3D only
@@ -269,7 +269,7 @@ XC::NDMaterial* XC::PressureDependentElastic3D::getCopy(void) const
   { return new PressureDependentElastic3D(*this); }
 
 const std::string &XC::PressureDependentElastic3D::getType(void) const
-  { return strTipoThreeDimensional; }
+  { return strTypeThreeDimensional; }
 
 int XC::PressureDependentElastic3D::getOrder(void) const
   {

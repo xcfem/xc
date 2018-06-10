@@ -47,7 +47,7 @@ class_<XC::ElementBodyLoad, bases<XC::ElementalLoad>, boost::noncopyable >("Elem
 
 #include "beam_loads/python_interface.tcc"
 #include "plane/python_interface.tcc"
-#include "volumen/python_interface.tcc"
+#include "volumetric/python_interface.tcc"
 
 class_<XC::ForceReprComponent, bases<XC::DomainComponent>, boost::noncopyable >("ForceReprComponent", no_init);
 

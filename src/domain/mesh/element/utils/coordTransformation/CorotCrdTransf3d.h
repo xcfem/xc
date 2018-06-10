@@ -67,7 +67,7 @@
 #include <utility/matrix/Matrix.h>
 
 namespace XC {
-//! \ingroup ElemCT
+//! @ingroup ElemCT
 //
 //! @brief Coordinate transformation corrotacional en 3d.
 class CorotCrdTransf3d: public CrdTransf3d

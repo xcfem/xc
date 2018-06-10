@@ -72,7 +72,7 @@
 namespace XC {
 class LinearSOE;
 
-//!  \ingroup Solver
+//!  @ingroup Solver
 //! 
 //! \defgroup LinearSolver Solvers for linear system of equations.
 //

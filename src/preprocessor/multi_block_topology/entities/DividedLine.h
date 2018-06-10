@@ -33,7 +33,7 @@
 
 namespace XC {
 
-//! \ingroup MultiBlockTopologyEnt
+//! @ingroup MultiBlockTopologyEnt
 //!
 //! @brief Line segment between two points.
 class DividedLine: public Line

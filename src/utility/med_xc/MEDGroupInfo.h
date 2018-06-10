@@ -36,11 +36,11 @@ class MEDMeshing;
 class MEDGroupInfo: public MEDCellBaseInfo
   {
   public:
-    typedef std::map<int,std::vector<int> > map_indices_tipo;
+    typedef std::map<int,std::vector<int> > map_type_indexes;
   private:
     std::string nombre; //!< nombre of the set.
-    map_indices_tipo indices_tipo; //!< indexex of the elements by type. 
-    MED_EN::medEntityMesh tipo_entidad; //!< type of the entity stored by the set (node,cell,face,edge,...).
+    map_type_indexes type_indexes; //!< indexes of the elements by type. 
+    MED_EN::medEntityMesh entity_type; //!< type of the entity stored by the set (node,cell,face,edge,...).
     mutable MEDMEM::GROUP *med_group; //!< Group definition in MEDMEM.
   protected:
     friend class MEDMeshing;
@@ -49,7 +49,7 @@ class MEDGroupInfo: public MEDCellBaseInfo
     MEDGroupInfo(MEDMeshing *mesh,const Set &);
 
     std::vector<int> &getElementOfTypeIndices(const MED_EN::medGeometryElement &);
-    std::vector<int> getVectorIndicesTipos(void) const;
+    std::vector<int> getTypeIndexesVector(void) const;
     std::vector<int> getElementIndices(void) const;
 
     const MEDMeshing &getMesh(void) const;

@@ -36,8 +36,8 @@
 #include "Axis.h"
 #include "material/section/repres/SectionMassProperties.h"
 
-class Semiplano2d;
-class Segmento2d;
+class HalfPlane2d;
+class Segment2d;
 
 namespace XC {
 class SectionReferenceFrame;
@@ -53,7 +53,7 @@ class CrossSectionProperties3d;
 class CrossSectionProperties2d;
 
 //! @ingroup MATSCCRepres
-//
+//!
 //! @defgroup MATSCCRepresGeom Geometric representation of a cross-section.
 //
 //! @ingroup MATSCCRepresGeom
@@ -121,15 +121,15 @@ class GeomSection: public SectionMassProperties
     // Section inquiring functions
     double DistSpots(const size_t &i,const size_t &j) const;
     Poligono2d getRegionsContour(void) const;
-    Poligono2d getCompressedZoneContour(const Semiplano2d &) const;
+    Poligono2d getCompressedZoneContour(const HalfPlane2d &) const;
     double getLongCorte(const Recta2d &r) const;
     std::vector<double> getLongsCorte(const std::list<Recta2d> &lr) const;
-    double getCompressedZoneDepth(const Semiplano2d &) const;
-    double getTensionedZoneDepth(const Semiplano2d &) const;
+    double getCompressedZoneDepth(const HalfPlane2d &) const;
+    double getTensionedZoneDepth(const HalfPlane2d &) const;
     double getLeverArm(const Recta2d &) const;
     double getAnchoMecanico(const Recta2d &) const;
     double getCover(const Pos2d &) const;
-    double getCompressedStrutWidth(const Segmento2d &) const;
+    double getCompressedStrutWidth(const Segment2d &) const;
 
     //Access to containers.
     inline const RegionContainer &getRegions(void) const
@@ -142,16 +142,16 @@ class GeomSection: public SectionMassProperties
       { return reinforcement_layers; }
     GeomSection getGMRegions(void) const;
     GeomSection getGMReinforcementLayers(void) const;
-    GeomSection getCrackedSection(const Semiplano2d &) const;
+    GeomSection getCrackedSection(const HalfPlane2d &) const;
     size_t getNumFiberData(void) const;
 
     double getAreaGrossSection(void) const;
-    Vector getCdgGrossSection(void) const;
+    Vector getCenterOfMassGrossSection(void) const;
     double getIyGrossSection(void) const;
     double getIzGrossSection(void) const;
     double getPyzGrossSection(void) const;
 
-    Vector getCdgHomogenizedSection(const double &E0) const;
+    Vector getCenterOfMassHomogenizedSection(const double &E0) const;
     double getAreaHomogenizedSection(const double &E0) const;
     double getIyHomogenizedSection(const double &E0) const;
     double getIzHomogenizedSection(const double &E0) const;

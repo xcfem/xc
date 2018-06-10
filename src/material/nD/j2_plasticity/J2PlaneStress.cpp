@@ -81,7 +81,7 @@
 #include <cstdio> 
 #include <cstdlib> 
 #include <cmath> 
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 XC::Vector XC::J2PlaneStress::strain_vec(3) ;
 XC::Vector XC::J2PlaneStress::stress_vec(3) ;
@@ -130,7 +130,7 @@ XC::NDMaterial *XC::J2PlaneStress::getCopy(void) const
 
 //send back type of material
 const std::string &XC::J2PlaneStress::getType(void) const 
-  { return strTipoPlaneStress ;}
+  { return strTypePlaneStress ;}
 
 
 //send back order of strain in vector form

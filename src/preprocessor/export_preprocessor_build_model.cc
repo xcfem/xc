@@ -75,7 +75,7 @@ class_<XC::SetEstruct, bases<XC::SetBase>, boost::noncopyable >("SetEstruct", no
   .add_property("isJRow", &XC::SetEstruct::isJRow)
   .add_property("isKRow", &XC::SetEstruct::isKRow)
   .add_property("getDimension", &XC::SetEstruct::Dimension)
-  .add_property("getStrType", &XC::SetEstruct::GetStrTipo)
+  .add_property("getStrType", &XC::SetEstruct::getStrType,"Return a string describing the set type i_row, j_row, k_row,...")
   .def("getNodes", &XC::SetEstruct::getNodes, "Return entitie's nodes.")
   .def("getElements", &XC::SetEstruct::getElements, "Return entitie's elements.")
   .def("getNodeI", &XC::SetEstruct::getNodeI, return_internal_reference<>(), "Return node in position (i)." )

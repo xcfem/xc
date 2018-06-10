@@ -41,7 +41,7 @@ XC::NDMaterialPhysicalProperties::NDMaterialPhysicalProperties(const size_t &nMa
       theMaterial.setMaterial(&theMat,type);
   }
 
-//! @brief Comprueba el tipo de material, DEBE redefinirse en las clases derivadas.
+//! @brief Check the material type, MUST be redefined in derived classes.
 bool XC::NDMaterialPhysicalProperties::check_material_type(const std::string &type) const
   {
     std::cerr << "Error; se debe redefinir check_material_type en la clase: " << getClassName() << std::endl;

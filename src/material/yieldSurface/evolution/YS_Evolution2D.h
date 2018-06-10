@@ -35,7 +35,7 @@
 #include "material/yieldSurface/plasticHardeningMaterial/PlasticHardeningMaterial.h"
 
 namespace XC {
-//! \ingroup MATYS
+//! @ingroup MATYS
 //!
 //! @brief 2D yield surface evolution.
 class YS_Evolution2D: public YS_Evolution

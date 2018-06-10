@@ -32,7 +32,7 @@
 #define SolidMech2D_h
 
 namespace XC {
-//! \ingroup PysicalProperties
+//! @ingroup PysicalProperties
 //
 //! @brief Physical properties for solid mechanics.
 class SolidMech2D: public NDMaterialPhysicalProperties

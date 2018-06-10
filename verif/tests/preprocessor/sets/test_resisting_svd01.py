@@ -16,7 +16,7 @@ densLosa= 2500*hLosa # Deck density kg/m2.
 # Load
 F= 5.5e4 # Load magnitude in N
 
-# Armadura activa
+# active reinforcement
 Ep= 190e9 # Elastic modulus expressed in MPa
 Ap= 140e-6 # bar area expressed in square meters
 fMax= 1860e6 # Maximum unit load of the material expressed in MPa.
@@ -68,7 +68,7 @@ elem= elements.newElement("ShellMITC4",xc.ID([5,6,10,9]))
 elem= elements.newElement("ShellMITC4",xc.ID([6,7,11,10]))
 elem= elements.newElement("ShellMITC4",xc.ID([7,8,12,11]))
 
-# Armadura activa
+# active reinforcement
 elements.defaultMaterial= "prestressingSteel"
 elements.dimElem= 3 # Dimension of element space
 truss= elements.newElement("Truss",xc.ID([1,2]));
@@ -150,13 +150,13 @@ def resuelveCombEstatLin(comb):
 o= geom.Pos3d(2,1,0) 
 p1= geom.Pos3d(2,2,0)
 p2= geom.Pos3d(2,1,1)
-plano= geom.Plane3d(o,p1,p2)
+plane= geom.Plane3d(o,p1,p2)
 
 def procesResultVerif(comb):
   tabComb= comb.tag
   nmbComb= comb.getName
   setTotal= preprocessor.getSets.getSet("total")
-  resultant= setTotal.getResistingSVD3d(plano,o,0.01,0)
+  resultant= setTotal.getResistingSVD3d(plane,o,0.01,0)
   global force
   force= resultant.getResultant()
   global moment

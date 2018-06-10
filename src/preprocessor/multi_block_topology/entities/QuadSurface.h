@@ -34,7 +34,7 @@
 
 namespace XC {
 
-//! \ingroup MultiBlockTopologyEnt
+//! @ingroup MultiBlockTopologyEnt
 //!
 //! @brief Quadrangle defined by its four vertices.
 class QuadSurface: public Face

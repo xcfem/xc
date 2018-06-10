@@ -29,13 +29,13 @@ size_t XC::MEDCellBaseInfo::getNumberOfElements(void) const
   { return cell_types.getNumCeldas(); }
 
 //! @brief Adds cell connectivity.
-void XC::MEDCellBaseInfo::new_cell(size_t tag,const MED_EN::medGeometryElement &tipo)
+void XC::MEDCellBaseInfo::new_cell(size_t tag,const MED_EN::medGeometryElement &type)
   {
-    cell_types.add_cell(tipo);
+    cell_types.add_cell(type);
     MEDBaseInfo::new_tag(tag);
   }
 
-const XC::MEDMapNumCeldasPorTipo &XC::MEDCellBaseInfo::getMapCellTypes(void) const
+const XC::MEDMapNumCellsByType &XC::MEDCellBaseInfo::getMapCellTypes(void) const
   { return cell_types; }
 
 //! @brief Dump the cells into a SUPPORT object of MEDMEM.
@@ -43,9 +43,9 @@ void XC::MEDCellBaseInfo::to_support_med(MEDMEM::SUPPORT &supp) const
   {
     const int NumberOfTypes= cell_types.getNumberOfTypes();
     supp.setNumberOfGeometricType(NumberOfTypes);
-    XC::MEDMapNumCeldasPorTipo::vector_tipos tipos= cell_types.getTipos();
-    supp.setGeometricType(&tipos[0]);
-    const std::vector<int> numberOfElements= cell_types.getNumCeldasPorTipo();
+    XC::MEDMapNumCellsByType::type_vector types= cell_types.getTypes();
+    supp.setGeometricType(&types[0]);
+    const std::vector<int> numberOfElements= cell_types.getNumberOfCellsByType();
     supp.setNumberOfElements(&numberOfElements[0]);
   }
 
@@ -54,8 +54,8 @@ void XC::MEDCellBaseInfo::to_med_mesh(MEDMEM::MESHING &mesh) const
   {
     const int NumberOfTypes= cell_types.getNumberOfTypes();
     mesh.setNumberOfTypes(NumberOfTypes,MED_EN::MED_CELL);
-    XC::MEDMapNumCeldasPorTipo::vector_tipos tipos= cell_types.getTipos();
-    mesh.setTypes(&tipos[0],MED_EN::MED_CELL);
-    const std::vector<int> numberOfElements= cell_types.getNumCeldasPorTipo();
+    XC::MEDMapNumCellsByType::type_vector types= cell_types.getTypes();
+    mesh.setTypes(&types[0],MED_EN::MED_CELL);
+    const std::vector<int> numberOfElements= cell_types.getNumberOfCellsByType();
     mesh.setNumberOfElements(&numberOfElements[0],MED_EN::MED_CELL);
   }

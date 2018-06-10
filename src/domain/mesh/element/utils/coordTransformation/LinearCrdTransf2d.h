@@ -66,7 +66,7 @@
 
 
 namespace XC {
-//! \ingroup ElemCT
+//! @ingroup ElemCT
 //
 //! @brief LinearCrdTransf2d provides the
 //! abstraction of a linear transformation for a spatial frame

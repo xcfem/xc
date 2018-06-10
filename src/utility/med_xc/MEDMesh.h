@@ -61,10 +61,10 @@ class MEDMesh: public MEDObject
     size_t getNumberOfCellTypes();
     boost::python::list getCellTypes(void);
     boost::python::list getCellTypeNames(void);
-    size_t getNumCellsOfType(int tipo);
-    Matrix getConnectivityCellsOfType(int tipo);
-    size_t getNumberOfGroups(int tipo_entidad= MED_EN::MED_ALL_ENTITIES);
-    size_t getNumberOfFamilies(int tipo_entidad= MED_EN::MED_ALL_ENTITIES);
+    size_t getNumCellsOfType(int );
+    Matrix getConnectivityCellsOfType(int );
+    size_t getNumberOfGroups(int entityType= MED_EN::MED_ALL_ENTITIES);
+    size_t getNumberOfFamilies(int entityType= MED_EN::MED_ALL_ENTITIES);
 
     void read(const std::string &);
   };

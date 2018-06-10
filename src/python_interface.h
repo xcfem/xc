@@ -37,11 +37,11 @@
 #include <boost/python/implicit.hpp>
 #include "utility/actor/objectBroker/all_includes.h"
 #include "xc_utils/src/geom/d1/Recta2d.h"
-#include "xc_utils/src/geom/d2/Semiplano2d.h"
+#include "xc_utils/src/geom/d2/HalfPlane2d.h"
 #include "xc_utils/src/geom/d2/Rejilla2d.h"
 #include "xc_utils/src/geom/d2/BND2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Cuadrilatero2d.h"
-#include "xc_utils/src/geom/d1/Segmento2d.h"
+#include "xc_utils/src/geom/d1/Segment2d.h"
 #include "xc_utils/src/geom/d1/Polilinea3d.h"
 #include "xc_utils/src/geom/pos_vec/SVD3d.h"
 #include "xc_utils/src/geom/pos_vec/TritrizPos3d.h"
@@ -66,17 +66,17 @@ typedef PhysicalProperties_NDMat::material_vector material_vector_NDMat;
 //Elements.
 // Plane elements.
 typedef XC::ElemWithMaterial<3,XC::SolidMech2D> ElemWithMaterial3N_Mech2D;
-typedef XC::ElemPlano<3,XC::SolidMech2D> ElemPlano3N_Mech2D;
+typedef XC::PlaneElement<3,XC::SolidMech2D> PlaneElement3N_Mech2D;
 typedef XC::TriBase3N<XC::SolidMech2D> TriBase3N_Mech2D;
 
 
 typedef XC::ElemWithMaterial<4,XC::SolidMech2D> ElemWithMaterial4N_Mech2D;
-typedef XC::ElemPlano<4,XC::SolidMech2D> ElemPlano4N_Mech2D;
+typedef XC::PlaneElement<4,XC::SolidMech2D> PlaneElement4N_Mech2D;
 typedef XC::QuadBase4N<XC::SolidMech2D> QuadBase4N_Mech2D;
 
 //Shell
 typedef XC::ElemWithMaterial<4,XC::SectionFDPhysicalProperties> ElemWithMaterial4N_SFD;
-typedef XC::ElemPlano<4,XC::SectionFDPhysicalProperties> ElemPlano4N_SFD;
+typedef XC::PlaneElement<4,XC::SectionFDPhysicalProperties> PlaneElement4N_SFD;
 
 #endif
 

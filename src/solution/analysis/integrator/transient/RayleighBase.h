@@ -33,9 +33,8 @@
 
 namespace XC {
 
+//! @addtogroup RayleighIntegrator Integration of the equations of motion by means of the Rayleigh method.
 //! @ingroup TransientIntegrator
-//
-//! @defgroup RayleighIntegrator Integration of the equations of motion by means of the Rayleigh method.
 //
 //! @ingroup RayleighIntegrator
 //

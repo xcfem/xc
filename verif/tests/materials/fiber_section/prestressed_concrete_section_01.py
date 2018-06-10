@@ -20,7 +20,7 @@ def gmSecHP01(nmbGeomSecc,concrDiagName,prestressingSteelDiagramName):
   horm.nDivJK= 11
   horm.pMin= geom.Pos2d(-depth/2.0,-width/2.0)
   horm.pMax= geom.Pos2d(depth/2.0,width/2.0)
-  # Armadura
+  # Reinforcement
   reinforcement= geomSecc.getReinfLayers
   reinforcementInf= reinforcement.newStraightReinfLayer(prestressingSteelDiagramName)
   reinforcementInf.numReinfBars= 2

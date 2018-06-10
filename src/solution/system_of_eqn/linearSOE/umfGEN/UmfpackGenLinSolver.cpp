@@ -170,7 +170,7 @@ bool XC::UmfpackGenLinSolver::setLinearSOE(LinearSOE *soe)
         retval= true;
       }
     else
-      std::cerr << getClassName() << "::setLinearSOE: el system of equations no es del tipo adecuado para este solver." << std::endl;
+      std::cerr << getClassName() << "::setLinearSOE: not a suitable system of equations" << std::endl;
     return retval;
   }
 

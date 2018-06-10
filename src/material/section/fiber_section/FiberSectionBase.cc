@@ -47,10 +47,10 @@
 #include "xc_utils/src/geom/d2/Triang3dMesh.h"
 #include "xc_utils/src/geom/d3/ConvexHull3d.h"
 #include "xc_utils/src/geom/d2/ConvexHull2d.h"
-#include "xc_utils/src/geom/d2/Semiplano2d.h"
+#include "xc_utils/src/geom/d2/HalfPlane2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/bool_op_poligono2d.h"
 #include "xc_utils/src/geom/d1/SemiRecta2d.h"
-#include "xc_utils/src/geom/d1/Segmento2d.h"
+#include "xc_utils/src/geom/d1/Segment2d.h"
 
 
 //! @brief Constructor.
@@ -231,7 +231,7 @@ double XC::FiberSectionBase::getCompressedZoneDepth(const Recta2d &r) const
     const GeomSection *geom= getGeomSection();
     if(geom)
       {
-        const Semiplano2d comp= getCompressedHalfPlane(r);
+        const HalfPlane2d comp= getCompressedHalfPlane(r);
         if(comp.exists())
           retval= geom->getCompressedZoneDepth(comp);
         else
@@ -253,7 +253,7 @@ double XC::FiberSectionBase::getCompressedZoneDepth(void) const
     const GeomSection *geom= getGeomSection();
     if(geom)
       {
-        const Semiplano2d comp= getCompressedHalfPlane();
+        const HalfPlane2d comp= getCompressedHalfPlane();
         if(comp.exists())
           retval= geom->getCompressedZoneDepth(comp);
         else
@@ -275,7 +275,7 @@ double XC::FiberSectionBase::getTensionedZoneDepth(void) const
     const GeomSection *geom= getGeomSection();
     if(geom)
       {
-        const Semiplano2d comp= getCompressedHalfPlane();
+        const HalfPlane2d comp= getCompressedHalfPlane();
         if(comp.exists())
           retval= geom->getTensionedZoneDepth(comp);
         else //Full section is in tension.
@@ -292,7 +292,7 @@ double XC::FiberSectionBase::getTensionedZoneDepth(const Recta2d &r) const
     const GeomSection *geom= getGeomSection();
     if(geom)
       {
-        const Semiplano2d comp= getCompressedHalfPlane(r);
+        const HalfPlane2d comp= getCompressedHalfPlane(r);
         if(comp.exists())
           retval= geom->getTensionedZoneDepth(comp);
         else
@@ -374,7 +374,7 @@ std::list<Poligono2d> XC::FiberSectionBase::getGrossEffectiveConcreteAreaContour
             if(limit.exists())
               {
 		// Compute the half plane that is in tension.
-                const Semiplano2d tensionedArea= getTensionedHalfPlane(limit);
+                const HalfPlane2d tensionedArea= getTensionedHalfPlane(limit);
                 assert(tensionedArea.exists());
                 retval= contour.Interseccion(tensionedArea);
               }
@@ -401,23 +401,23 @@ double XC::FiberSectionBase::getGrossEffectiveConcreteArea(const double &hEfMax)
   }
 
 //! @brief Returns the sum of the effective areas of rebars in tension.
-double XC::FiberSectionBase::getNetEffectiveConcreteArea(const double &hEfMax,const std::string &nmbSetArmaduras,const double &factor) const
+double XC::FiberSectionBase::getNetEffectiveConcreteArea(const double &hEfMax,const std::string &rebarSetName,const double &factor) const
   {
     double retval= 0.0;
     std::list<Poligono2d> grossEffectiveConcreteAreaContour= getGrossEffectiveConcreteAreaContour(hEfMax);
     if(!grossEffectiveConcreteAreaContour.empty())
       {
 	//Iterate over the rebar set.
-        fiber_set_const_iterator i= fiber_sets.find(nmbSetArmaduras);
+        fiber_set_const_iterator i= fiber_sets.find(rebarSetName);
         if(i!=fiber_sets.end())
           {
-            const FiberDeque &armaduras= (*i).second; //Rebar family.
-            retval+= armaduras.computeFibersEffectiveConcreteArea(grossEffectiveConcreteAreaContour,factor);
+            const FiberDeque &rebars= (*i).second; //Rebar family.
+            retval+= rebars.computeFibersEffectiveConcreteArea(grossEffectiveConcreteAreaContour,factor);
           }
         else
           std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; fiber set: "
-                    << nmbSetArmaduras << " not found." << std::endl;
+                    << rebarSetName << " not found." << std::endl;
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -426,22 +426,22 @@ double XC::FiberSectionBase::getNetEffectiveConcreteArea(const double &hEfMax,co
   }
 
 //! @brief Computes crack effective concrete areas around the fibers.
-double XC::FiberSectionBase::computeFibersEffectiveConcreteArea(const double &hEfMax,const std::string &nmbSetArmaduras,const double &factor) const
+double XC::FiberSectionBase::computeFibersEffectiveConcreteArea(const double &hEfMax,const std::string &rebarSetName,const double &factor) const
   {
     double retval= 0;
     std::list<Poligono2d> grossEffectiveConcreteAreaContour= getGrossEffectiveConcreteAreaContour(hEfMax);
     if(!grossEffectiveConcreteAreaContour.empty())
       {
-        fiber_set_const_iterator i= fiber_sets.find(nmbSetArmaduras);
+        fiber_set_const_iterator i= fiber_sets.find(rebarSetName);
         if(i!=fiber_sets.end())
           {
-            const FiberDeque &armaduras= (*i).second; //Armaduras.
-            retval= armaduras.computeFibersEffectiveConcreteArea(grossEffectiveConcreteAreaContour,factor);
+            const FiberDeque &rebars= (*i).second; //Rebars.
+            retval= rebars.computeFibersEffectiveConcreteArea(grossEffectiveConcreteAreaContour,factor);
           }
         else
           std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; fiber set: "
-                    << nmbSetArmaduras << " not found." << std::endl;
+                    << rebarSetName << " not found." << std::endl;
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -450,35 +450,35 @@ double XC::FiberSectionBase::computeFibersEffectiveConcreteArea(const double &hE
   }
 
 //! @brief Computes concrete cover of the fibers.
-void XC::FiberSectionBase::computeCovers(const std::string &nmbSetArmaduras) const
+void XC::FiberSectionBase::computeCovers(const std::string &rebarSetName) const
   {
-    fiber_set_const_iterator i= fiber_sets.find(nmbSetArmaduras);
+    fiber_set_const_iterator i= fiber_sets.find(rebarSetName);
     if(i!=fiber_sets.end())
       {
-        const FiberDeque &armaduras= (*i).second; //Armaduras.
+        const FiberDeque &rebars= (*i).second; //Rebars.
         const GeomSection *geom= getGeomSection();
         if(geom)
-          armaduras.computeCovers(*geom);
+          rebars.computeCovers(*geom);
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; fiber set: "
-                << nmbSetArmaduras << " not found." << std::endl;
+                << rebarSetName << " not found." << std::endl;
   }
 
 //! @brief Computes spacing of the fibers.
-void XC::FiberSectionBase::computeSpacement(const std::string &nmbSetArmaduras) const
+void XC::FiberSectionBase::computeSpacement(const std::string &rebarSetName) const
   {
-    fiber_set_const_iterator i= fiber_sets.find(nmbSetArmaduras);
+    fiber_set_const_iterator i= fiber_sets.find(rebarSetName);
     if(i!=fiber_sets.end())
       {
-        const FiberDeque &armaduras= (*i).second; //Armaduras.
-        armaduras.computeSpacement();
+        const FiberDeque &rebars= (*i).second; //Rebars.
+        rebars.computeSpacement();
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; fiber set: "
-                << nmbSetArmaduras << " not found." << std::endl;
+                << rebarSetName << " not found." << std::endl;
   }
 
 //! @brief Returns the signed distance from the neutral axis
@@ -486,7 +486,7 @@ void XC::FiberSectionBase::computeSpacement(const std::string &nmbSetArmaduras) 
 double XC::FiberSectionBase::get_dist_to_neutral_axis(const double &y,const double &z) const
   {
     double retval= 0;
-    const Semiplano2d comp= getCompressedHalfPlane();
+    const HalfPlane2d comp= getCompressedHalfPlane();
     if(comp.exists())
       retval= comp.DistSigno(Pos2d(y,z));
     else
@@ -622,11 +622,11 @@ const XC::NMPointCloud &XC::FiberSectionBase::getInteractionDiagramPointsForPlan
 		<< "; fibers for concrete material, identified by tag: "
 		<< diag_data.getConcreteTag()
                 << ", not found." << std::endl;
-    const FiberDeque &fsS= sel_mat_tag(diag_data.getNmbSetArmadura(),diag_data.getTagArmadura())->second;
+    const FiberDeque &fsS= sel_mat_tag(diag_data.getRebarSetName(),diag_data.getReinforcementTag())->second;
     if(fsS.empty())
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; fibers for steel material, identified by tag: "
-		<< diag_data.getTagArmadura()
+		<< diag_data.getReinforcementTag()
                 << ", not found." << std::endl;
     if(!fsC.empty() && !fsS.empty())
       {
@@ -656,11 +656,11 @@ const XC::NMyMzPointCloud &XC::FiberSectionBase::getInteractionDiagramPoints(con
 		<< "; fibers for concrete material, identified by tag: "
 		<< diag_data.getConcreteTag()
                 << ", not found." << std::endl;
-    const FiberDeque &fsS= sel_mat_tag(diag_data.getNmbSetArmadura(),diag_data.getTagArmadura())->second;
+    const FiberDeque &fsS= sel_mat_tag(diag_data.getRebarSetName(),diag_data.getReinforcementTag())->second;
     if(fsS.empty())
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; fibers for steel material, identified by tag: "
-		<< diag_data.getTagArmadura()
+		<< diag_data.getReinforcementTag()
                 << ", not found." << std::endl;
     if(!fsC.empty() && !fsS.empty())
       {
@@ -725,7 +725,7 @@ XC::Vector XC::FiberSectionBase::getVectorBrazoMecanico(void) const
 XC::Vector XC::FiberSectionBase::getVectorCantoUtil(void) const
   {
     Vector retval(2);
-    const Segmento2d tmp= getSegmentoCantoUtil();
+    const Segment2d tmp= getEffectiveDepthSegment();
     const Pos2d p1= tmp.Origen();
     const Pos2d p2= tmp.Destino();
     retval(0)= p2.x()-p1.x();
@@ -735,20 +735,20 @@ XC::Vector XC::FiberSectionBase::getVectorCantoUtil(void) const
 
 //! @brief Returns a segment from the centroid of the tensioned area
 //! to the centroid of the compressed area.
-Segmento2d XC::FiberSectionBase::getSegmentoBrazoMecanico(void) const
+Segment2d XC::FiberSectionBase::getLeverArmSegment(void) const
   {
-    Segmento2d retval= fibers.getSegmentoBrazoMecanico();
+    Segment2d retval= fibers.getLeverArmSegment();
     if(!retval.exists())
       {
         //Lever arm as 0.8 times total depth.
         const Recta2d Xaxis= getInternalForcesAxis();
-        const Pos2d cdg= getCdg();
-        const Recta2d Yaxis= Xaxis.Perpendicular(cdg);
+        const Pos2d center_of_mass= getCenterOfMass();
+        const Recta2d Yaxis= Xaxis.Perpendicular(center_of_mass);
         const Poligono2d contour= getRegionsContour();
         retval= contour.Clip(Yaxis);
         Pos2d org= retval.Origen()+0.1*retval.GetVector();
         Pos2d dest= retval.Destino()-0.1*retval.GetVector();
-        retval= Segmento2d(org,dest);
+        retval= Segment2d(org,dest);
       }
     return retval;
   }
@@ -756,10 +756,10 @@ Segmento2d XC::FiberSectionBase::getSegmentoBrazoMecanico(void) const
 //! @brief Returns the segment defined by the current effective
 //! depth of the section. The segment is oriented from the centroid
 //! of the tensioned fibers to the most compressed fiber.
-Segmento2d XC::FiberSectionBase::getSegmentoCantoUtil(void) const
+Segment2d XC::FiberSectionBase::getEffectiveDepthSegment(void) const
   {
-    Segmento2d retval;
-    const Segmento2d bm= getSegmentoBrazoMecanico();
+    Segment2d retval;
+    const Segment2d bm= getLeverArmSegment();
     const SemiRecta2d sr(bm.Origen(),bm.Destino());
     const Poligono2d contour= getRegionsContour();
     retval= contour.Clip(sr);
@@ -774,8 +774,8 @@ Recta2d XC::FiberSectionBase::getBendingPlaneTrace(void) const
     if(!retval.exists())
       {
         Recta2d axis= getInternalForcesAxis();
-        Pos2d cdg= getCdg();
-        retval= axis.Perpendicular(cdg);
+        Pos2d center_of_mass= getCenterOfMass();
+        retval= axis.Perpendicular(center_of_mass);
       } 
     return retval;
   }
@@ -822,7 +822,7 @@ double XC::FiberSectionBase::getCompressedStrutWidth(void) const
     double retval= 0.0;
     const GeomSection *geom= getGeomSection();
     if(geom)
-      retval= geom->getCompressedStrutWidth(getSegmentoBrazoMecanico());
+      retval= geom->getCompressedStrutWidth(getLeverArmSegment());
     return retval;
   }
 
@@ -864,7 +864,7 @@ double XC::FiberSectionBase::getSPosHomogeneizada(const double &E0) const
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
     const Recta2d axis= getInternalForcesAxis();
-    return fibers.getSPosHomogenizedSection(E0,Semiplano2d(axis));
+    return fibers.getSPosHomogenizedSection(E0,HalfPlane2d(axis));
   }
 
 std::string XC::FiberSectionBase::getStrClaseEsfuerzo(const double &tol) const

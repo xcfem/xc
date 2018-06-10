@@ -53,6 +53,6 @@ class JRowSet: public RowSet<TritrizPtrNod::var_ref_j_row,TritrizPtrElem::var_re
     typedef TritrizPtrNod::var_ref_j_row tNodeRow;
     typedef TritrizPtrElem::var_ref_j_row tElemRow;
     JRowSet(EntMdlr &e,const size_t &f=1,const size_t &c=1,const std::string &nmb="",Preprocessor *preprocessor= nullptr);
-    JRowSet(EntMdlr &e,const size_t &capa,const RangoIndice &,const size_t &c,const std::string &nmb="",Preprocessor *preprocessor= nullptr);  };
+    JRowSet(EntMdlr &e,const size_t &layer,const RangoIndice &,const size_t &c,const std::string &nmb="",Preprocessor *preprocessor= nullptr);  };
 } //end of XC namespace
 #endif

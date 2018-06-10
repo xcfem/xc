@@ -160,7 +160,7 @@ double XC::ReinfBar::getI2(void) const
   { return Iz(); }
 
 //     inline PrincipalAxesOfInertia2D Inercia(void)
-//       { return PrincipalAxesOfInertia2D(Cdg(),Iy(),Iz(),Pyz()); }
+//       { return PrincipalAxesOfInertia2D(getCenterOfMass(),Iy(),Iz(),Pyz()); }
 
 //! @brief Return the (i,j) components of the inertia tensor computed with respect to the centroid.
 double XC::ReinfBar::getI(const unsigned short int &i,const unsigned short int &j) const
@@ -183,9 +183,9 @@ double XC::ReinfBar::getI(const Pos2d &O,const Vector &e) const
 double XC::ReinfBar::getI(const unsigned short int i,const unsigned short int j,const Pos2d &o) const
   {
     const double Iij= getI(i,j);
-    const Vector cdg= getPosition();
+    const Vector center_of_mass= getPosition();
 
-    Pos2d pp(cdg[0],cdg[1]);
+    Pos2d pp(center_of_mass[0],center_of_mass[1]);
     Ref2d2d axes(pp);
     Pos2d pos_local= axes.GetPosLocal(o);
     return Iij + getArea() * pos_local(i) * pos_local(j);

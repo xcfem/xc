@@ -41,7 +41,7 @@ class Matrix;
 class Material;
 class BeamStrainLoad;
 
-//! \ingroup MATSCC
+//! @ingroup MATSCC
 //
 //! @brief Vector of pointers to PrismaticBarCrossSectiones.
 //! used to store the sections for each integration point.

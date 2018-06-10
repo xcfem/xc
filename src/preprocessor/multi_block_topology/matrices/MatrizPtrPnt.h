@@ -43,7 +43,7 @@ class Pnt;
 class SFreedom_Constraint;
 class MultiBlockTopology;
 
-//! \ingroup MultiBlockTopologyMR
+//! @ingroup MultiBlockTopologyMR
 //! 
 //! @brief Pointers to points in a matrix structure.
 class MatrizPtrPnt: public MatrizPtrBase<Pnt>

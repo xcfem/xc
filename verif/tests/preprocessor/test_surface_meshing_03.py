@@ -17,7 +17,7 @@ __email__= "l.pereztato@gmail.com"
 E= 30e6 # Young modulus (psi)
 nu= 0.3 # Coeficiente de Poison
 rho= 0.0 # Densidad
-# nverborrea= 0
+# feProblem.setVerbosityLevel(0)
 
 numNodes= 0
 numElem= 0

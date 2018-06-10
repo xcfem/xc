@@ -59,13 +59,13 @@ class PySimple1: public PQyzBase
   {
   protected:
     // Material parameters
-    double drag; // ratio of max gap drag force to spring capacity
+    double drag; //!< ratio of max gap drag force to spring capacity
   private:
-    InternalParamsIn CDrag; // Committed internal parameters for the Drag component
-    InternalParamsIn TDrag; // Trial internal parameters for the Drag component
+    InternalParamsIn CDrag; //!< Committed internal parameters for the Drag component
+    InternalParamsIn TDrag; //!< Trial internal parameters for the Drag component
 
-    InternalParamsLR CClose; // Committed internal parameters for the Closure component
-    InternalParamsLR TClose; // Trial internal parameters for the Closure component
+    InternalParamsLR CClose; //!< Committed internal parameters for the Closure component
+    InternalParamsLR TClose; //!< Trial internal parameters for the Closure component
 
     // Functions to get p & y for each component individually
     void getGap(double ylast, double dy, double dy_old);

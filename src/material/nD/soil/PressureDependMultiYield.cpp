@@ -59,7 +59,7 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/nDarray/Tensor.h>
 #include <utility/matrix/nDarray/stresst.h>
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 double* XC::PressureDependMultiYield::liquefyParam4x=0;
 
@@ -352,7 +352,7 @@ XC::NDMaterial *XC::PressureDependMultiYield::getCopy(void) const
 XC::NDMaterial * XC::PressureDependMultiYield::getCopy(const std::string &code) const
   {
     PressureDependMultiYield *copy= nullptr;
-    if((code==strTipoPlaneStrain) || (code==strTipoThreeDimensional))
+    if((code==strTypePlaneStrain) || (code==strTypeThreeDimensional))
       copy = new PressureDependMultiYield(*this);
     return copy;
   }
@@ -361,7 +361,7 @@ XC::NDMaterial * XC::PressureDependMultiYield::getCopy(const std::string &code) 
 const std::string &XC::PressureDependMultiYield::getType(void) const
   {
     int ndm = ndmx[matN];
-    return (ndm == 2) ? strTipoPlaneStrain : strTipoThreeDimensional;
+    return (ndm == 2) ? strTypePlaneStrain : strTypeThreeDimensional;
   }
 
 //! @brief Send object members through the channel being passed as parameter.

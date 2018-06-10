@@ -48,7 +48,7 @@ class IsolatedFooting(object):
     aux=((15*self.FiArmPilar*self.FiArmPilar+10)/100)
     depth=max((max(vuelo/2,0.5)),aux)
     retval+= "$$h = max[v/2; (15\\Phi^2 +10)/100; 0.5] = " + fmt.Longs.format(depth) + "\\ m $$\n"
-    retval+= "Armadura de la zapata\n"
+    retval+= "Footing reinforcement\n"
     Md=(1.5*self.Sadm*(self.Lzapata)**2/8)
     As=(Md/0.8/depth/500*1.15*10)
     retval+= "$$M_d = 1.5 \\sigma_{adm} \\cfrac{a^2}{8}= " + fmt.Esf.format(Md) + "\\ kN \cdot m/m $$\n"

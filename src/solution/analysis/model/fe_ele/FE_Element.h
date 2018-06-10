@@ -75,7 +75,7 @@ class Integrator;
 class AnalysisModel;
 
 //! @ingroup AnalysisModel
-//
+//!
 //! @defgroup AnalysisFE Finite element and constraints as seen by the analysis.
 //
 //! @ingroup AnalysisFE

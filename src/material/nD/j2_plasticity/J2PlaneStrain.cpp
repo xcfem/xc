@@ -84,7 +84,7 @@
 #include <cmath> 
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 //static vectors and matrices
 XC::Vector XC::J2PlaneStrain::strain_vec(3) ;
@@ -137,7 +137,7 @@ XC::NDMaterial *XC::J2PlaneStrain::getCopy(void) const
 
 //send back type of material
 const std::string &XC::J2PlaneStrain::getType(void) const 
-  { return strTipoPlaneStrain; }
+  { return strTypePlaneStrain; }
 
 
 //send back order of strain in vector form

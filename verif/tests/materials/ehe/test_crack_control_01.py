@@ -45,7 +45,7 @@ reinforcement= geomSecHA.getReinfLayers
 reinforcementSup= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagK)
 reinforcementSup.numReinfBars= 7
 reinforcementSup.barArea= areaFi12
-reinforcementSup.p1= geom.Pos2d(cover-width/2.0,depth/2.0-cover) # Armadura superior (cara +).
+reinforcementSup.p1= geom.Pos2d(cover-width/2.0,depth/2.0-cover) # top layer (cara +).
 reinforcementSup.p2= geom.Pos2d(width/2.0-cover,depth/2.0-cover)
 
 materiales= preprocessor.getMaterialHandler

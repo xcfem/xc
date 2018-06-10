@@ -25,7 +25,7 @@ def gmHorizRowRebars(sectionGeom, fiberMatName, nRebars, areaRebar, depth, width
   reinfH= reinforcement.newStraightReinfLayer(fiberMatName)
   reinfH.numReinfBars= nRebars
   reinfH.barArea= areaRebar
-  reinfH.p1= geom.Pos2d(h,cover-width/2) # Armadura superior.
+  reinfH.p1= geom.Pos2d(h,cover-width/2) # top layer.
   reinfH.p2= geom.Pos2d(h-cover,width/2-cover)
   return reinfH
 

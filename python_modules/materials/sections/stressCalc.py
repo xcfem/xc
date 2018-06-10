@@ -133,18 +133,18 @@ class StressCalc(object):
 
   def elasticStressAs(self):
     n= self.Es/self.Ec
-    yCDGh= self.getYCentroidAh()
-    return n*(self.N/self.getAh()+self.M/self.getIh()*(self.getYs()-yCDGh))
+    centerOfMassYh= self.getYCentroidAh()
+    return n*(self.N/self.getAh()+self.M/self.getIh()*(self.getYs()-centerOfMassYh))
   def elasticStressAsp(self):
     n= self.Es/self.Ec
-    yCDGh= self.getYCentroidAh()
-    return n*(self.N/self.getAh()+self.M/self.getIh()*(self.getYsp()-yCDGh))
+    centerOfMassYh= self.getYCentroidAh()
+    return n*(self.N/self.getAh()+self.M/self.getIh()*(self.getYsp()-centerOfMassYh))
   def elasticStressAc(self):
-    yCDGh= self.getYCentroidAh()
-    return self.N/self.getAh()+self.M/self.getIh()*(yCDGh-self.h/2.0)
+    centerOfMassYh= self.getYCentroidAh()
+    return self.N/self.getAh()+self.M/self.getIh()*(centerOfMassYh-self.h/2.0)
   def elasticStressAc0(self):
-    yCDGh= self.getYCentroidAh()
-    return self.N/self.getAh()+self.M/self.getIh()*(self.h/2.0-yCDGh)
+    centerOfMassYh= self.getYCentroidAh()
+    return self.N/self.getAh()+self.M/self.getIh()*(self.h/2.0-centerOfMassYh)
 
   def inTraction(self):
     return (self.elasticStressAs()>0.0 and self.elasticStressAsp()>0.0)

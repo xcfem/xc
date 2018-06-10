@@ -56,7 +56,7 @@ isotropic:kinematic ratio = 0.5:0.5
   */
 
 namespace XC {
-//! \ingroup MATYS
+//! @ingroup MATYS
 //
 //! @brief Grows/shrinks one side while keeping the diametrically opposite end
 //! the same.  Kp_isoXPos = Kp_isoXNeg = (should be) Kp_kinX

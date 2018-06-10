@@ -84,13 +84,13 @@ reinforcementInf= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDia
 reinforcementInf.numReinfBars= 2
 reinforcementInf.barDiam= 16e-3
 reinforcementInf.barArea= areaFi16
-reinforcementInf.p1= geom.Pos2d(cover-depth/2,width/2-cover) # Armadura inferior.
+reinforcementInf.p1= geom.Pos2d(cover-depth/2,width/2-cover) # bottom layer.
 reinforcementInf.p2= geom.Pos2d(cover-depth/2,cover-width/2)
 reinforcementSup= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
 reinforcementSup.numReinfBars= 2
 reinforcementSup.barDiam= 16e-3
 reinforcementSup.barArea= areaFi16
-reinforcementSup.p1= geom.Pos2d(depth/2-cover,width/2-cover) # Armadura superior.
+reinforcementSup.p1= geom.Pos2d(depth/2-cover,width/2-cover) # top layer.
 reinforcementSup.p2= geom.Pos2d(depth/2-cover,cover-width/2)
 
 materiales= preprocessor.getMaterialHandler

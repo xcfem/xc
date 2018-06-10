@@ -39,7 +39,7 @@ class Domain;
 class Channel;
 class FEM_ObjectBroker;
 
-//! \ingroup FEMisc
+//! @ingroup FEMisc
 //
 //! @brief Node pointer container for elements
 class NodePtrsWithIDs: public NodePtrs, public MovableObject

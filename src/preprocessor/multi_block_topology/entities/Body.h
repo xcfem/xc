@@ -41,7 +41,7 @@ namespace XC {
 class Face;
 class Pnt;
 
-//! \ingroup MultiBlockTopologyEnt
+//! @ingroup MultiBlockTopologyEnt
 //!
 //! @brief Order in edges of an hexaedron face.
 struct SideSequence
@@ -58,13 +58,13 @@ struct SideSequence
       { return forward; }
   };
 
-//! \ingroup MultiBlockTopologyEnt
+//! @ingroup MultiBlockTopologyEnt
 //!
 //! @brief Six-faced solid.
 class Body: public EntMdlr
   {
   protected:
-    //! \ingroup Geom
+    //! @ingroup Geom
     //!
     //! @brief Surface that limits the body (face as seen by the body).
     class BodyFace: public EntCmd

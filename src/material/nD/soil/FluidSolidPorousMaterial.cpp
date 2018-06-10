@@ -45,7 +45,7 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/nDarray/Tensor.h>
 
-#include "material/nD/TipoMaterialND.h"
+#include "material/nD/NDMaterialType.h"
 
 int* XC::FluidSolidPorousMaterial::loadStagex = 0;
 int* XC::FluidSolidPorousMaterial::ndmx = 0;
@@ -363,8 +363,8 @@ XC::NDMaterial * XC::FluidSolidPorousMaterial::getCopy(void) const
 XC::NDMaterial * XC::FluidSolidPorousMaterial::getCopy(const std::string &code) const
   {
     NDMaterial *retval= nullptr;
-    if((code==strTipoFluidSolidPorous) || (code==strTipoPlaneStrain) ||
-            (code==strTipoThreeDimensional))
+    if((code==strTypeFluidSolidPorous) || (code==strTypePlaneStrain) ||
+            (code==strTypeThreeDimensional))
       retval= getCopy();
     return retval;
   }
@@ -373,7 +373,7 @@ XC::NDMaterial * XC::FluidSolidPorousMaterial::getCopy(const std::string &code) 
 const std::string &XC::FluidSolidPorousMaterial::getType(void) const
   {
     int ndm = ndmx[matN];
-    return (ndm == 2) ? strTipoPlaneStrain : strTipoThreeDimensional;
+    return (ndm == 2) ? strTypePlaneStrain : strTypeThreeDimensional;
   }
 
 

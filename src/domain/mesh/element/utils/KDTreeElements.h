@@ -36,7 +36,7 @@ class Pos3d;
 namespace XC {
 class Element;
 
-//! \ingroup FEMisc
+//! @ingroup FEMisc
 //
 //! @brief Element position for KDTree building.
 class ElemPos: public KDTreePos

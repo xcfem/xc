@@ -63,7 +63,7 @@ namespace XC {
 class Vector;
 class Matrix;
 
-//! \ingroup Cuadratura
+//! @ingroup Cuadratura
 //
 //! @brief One-dimensional Gauss-Lobatto quadrature.
 class GaussLobattoQuadRule1d01: public QuadRule1d

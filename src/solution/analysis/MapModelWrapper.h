@@ -38,7 +38,7 @@ class ProcSoluControl;
 class ModelWrapper;
 class Domain;
 
-//!  \ingroup Solu
+//!  @ingroup Solu
 //! 
 //! @brief Finite element model wrappers container.
 class MapModelWrapper: public EntCmd

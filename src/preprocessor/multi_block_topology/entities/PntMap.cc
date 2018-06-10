@@ -29,7 +29,7 @@
 #include "PntMap.h"
 #include "preprocessor/Preprocessor.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/d2/Plano3d.h"
+#include "xc_utils/src/geom/d2/Plane.h"
 #include "xc_utils/src/geom/d1/Recta3d.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
@@ -95,9 +95,9 @@ Recta3d XC::PntMap::getRecta(const Indice &i,const Indice &j) const
   }
 
 //! @brief Return the plane defined by the points which indices are being passed as parameters.
-Plano3d XC::PntMap::getPlano(const Indice &i,const Indice &j,const Indice &k) const
+Plane XC::PntMap::getPlane(const Indice &i,const Indice &j,const Indice &k) const
   {
-    Plano3d retval;
+    Plane retval;
     const Pnt *pA= busca(i);
     const Pnt *pB= busca(j);
     const Pnt *pC= busca(k);
@@ -111,7 +111,7 @@ Plano3d XC::PntMap::getPlano(const Indice &i,const Indice &j,const Indice &k) co
       std::cerr << getClassName() << "::" << __FUNCTION__ << "; point: " << k 
 		<< " not found." << std::endl;
     else
-      retval= Plano3d(pA->GetPos(),pB->GetPos(),pC->GetPos());
+      retval= Plane(pA->GetPos(),pB->GetPos(),pC->GetPos());
     return retval;
   }
 

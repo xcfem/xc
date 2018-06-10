@@ -53,7 +53,7 @@ Poligono2d XC::RegionSecc::getPolygon(void) const
 //! @brief Return the intersection of the region with the half-plane
 //!
 //! @param sp: Half-plane to intersect width.
-XC::RgSccPoligono XC::RegionSecc::Intersection(const Semiplano2d &sp) const
+XC::RgSccPoligono XC::RegionSecc::Intersection(const HalfPlane2d &sp) const
   {
     std::list<Poligono2d> tmpList= getPolygon().Interseccion(sp);
     if(tmpList.size()>1)
@@ -65,9 +65,9 @@ XC::RgSccPoligono XC::RegionSecc::Intersection(const Semiplano2d &sp) const
   }
 
 //! @brief Return the centroid coordinates.
-const XC::Vector &XC::RegionSecc::Cdg(void) const
+const XC::Vector &XC::RegionSecc::getCenterOfMass(void) const
   {
-    const Pos2d p= getPolygon().Cdg();
+    const Pos2d p= getPolygon().getCenterOfMass();
     static Vector retval(2);
     retval[0]= p.x();
     retval[1]= p.y();
@@ -75,12 +75,12 @@ const XC::Vector &XC::RegionSecc::Cdg(void) const
   }
 
 //! @brief Return the region contour lenght.
-double XC::RegionSecc::Longitud(void) const
-  { return getPolygon().Longitud(); }
+double XC::RegionSecc::getLength(void) const
+  { return getPolygon().getLength(); }
 
 //! @brief Return the region area.
-double XC::RegionSecc::Area(void) const
-  { return getPolygon().Area(); }
+double XC::RegionSecc::getArea(void) const
+  { return getPolygon().getArea(); }
 
 //! @brief Return the moment of inertia with respect to the axis paralelo al y por el centroid.
 double XC::RegionSecc::Iy(void) const
@@ -144,7 +144,7 @@ double XC::RegionSecc::getI2(void) const
   { return getPolygon().I2(); }
 
 //     inline PrincipalAxesOfInertia2D Inercia(void)
-//       { return PrincipalAxesOfInertia2D(Cdg(),Iy(),Iz(),Pyz()); }
+//       { return PrincipalAxesOfInertia2D(getCenterOfMass(),Iy(),Iz(),Pyz()); }
 
 //! @brief Return the i,j component of the tensor of inertia computed with respect to centroid.
 double XC::RegionSecc::getI(const unsigned short int &i,const unsigned short int &j) const

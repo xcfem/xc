@@ -74,7 +74,7 @@ class Ref3d3d;
 namespace XC {
 class Vector;
 
-//! \ingroup ElemCT
+//! @ingroup ElemCT
 //
 //! @brief Base class for 3D coordinate transformation.
 class CrdTransf3d: public CrdTransf

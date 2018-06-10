@@ -64,8 +64,8 @@ XC::DrainClough1Material::DrainClough1Material(int tag,
 	double capSlope, double capDispP, double capDispN, double res,
 	double b):
 // 15 history variables and 16 material parameters
- XC::DrainMaterial(tag, MAT_TAG_DrainClough1, 15, 16, b)
-{
+XC::DrainMaterial(tag, MAT_TAG_DrainClough1, 15, 16, b)
+  {
 	matParams[0]  = E;
 	matParams[1]  = fyp;
 	matParams[2]  = fyn;
@@ -85,7 +85,7 @@ XC::DrainClough1Material::DrainClough1Material(int tag,
 
 	// Initialize history variables
 	this->revertToStart();
-}
+  }
 
 XC::DrainClough1Material::DrainClough1Material(int tag, const XC::Vector &input, double b):
 // 15 history variables and 16 material parameters

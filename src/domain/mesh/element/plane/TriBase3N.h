@@ -26,7 +26,7 @@
 //----------------------------------------------------------------------------
 //TriBase3N.h
                                                                         
-#include "ElemPlano.h"
+#include "PlaneElement.h"
 
 #ifndef TriBase3N_h
 #define TriBase3N_h
@@ -39,11 +39,11 @@
 #include "vtkCellType.h"
 
 namespace XC {
-//! \ingroup ElemPlanos
+//! @ingroup PlaneElements
 //
 //! @brief Base class for 3 node triangles.
 template <class PhysProp> //3 Gauss point by default.
-class TriBase3N: public ElemPlano<3,PhysProp>
+class TriBase3N: public PlaneElement<3,PhysProp>
   {
   protected:
     TritrizPtrElem put_on_mesh(const TritrizPtrNod &,meshing_dir dm) const;
@@ -68,17 +68,17 @@ class TriBase3N: public ElemPlano<3,PhysProp>
 //! @brief Constructor
 template <class PhysProp>
 XC::TriBase3N<PhysProp>::TriBase3N(int classTag,const PhysProp &pp)
-  : ElemPlano<3,PhysProp>(0,classTag,pp) {}
+  : PlaneElement<3,PhysProp>(0,classTag,pp) {}
 
 //! @brief Constructor.
 template <class PhysProp>
 XC::TriBase3N<PhysProp>::TriBase3N(int tag,int classTag,const PhysProp &physProp)
-  :ElemPlano<3,PhysProp>(tag,classTag,physProp) {}
+  :PlaneElement<3,PhysProp>(tag,classTag,physProp) {}
 
 //! @brief Constructor.
 template <class PhysProp>
 XC::TriBase3N<PhysProp>::TriBase3N(int tag, int classTag, int node1, int node2, int node3,const PhysProp &pp)
-  : ElemPlano<3,PhysProp>(tag,classTag,pp)
+  : PlaneElement<3,PhysProp>(tag,classTag,pp)
   {
     this->theNodes.set_id_nodes(node1,node2,node3);
   }
@@ -97,7 +97,7 @@ template <class PhysProp>
 XC::Element::NodesEdge XC::TriBase3N<PhysProp>::getNodesEdge(const size_t &i) const
   {
     Element::NodesEdge retval(2,static_cast<Node *>(nullptr));
-    const NodePtrsWithIDs &nodes= ElemPlano<3,PhysProp>::getNodePtrs();
+    const NodePtrsWithIDs &nodes= PlaneElement<3,PhysProp>::getNodePtrs();
     const size_t sz= nodes.size();
     if(i<sz)
       {
@@ -116,7 +116,7 @@ template <class PhysProp>
 int XC::TriBase3N<PhysProp>::getEdgeNodes(const Node *n1,const Node *n2) const
   {
     int retval= -1;
-    const NodePtrsWithIDs &nodes= ElemPlano<3,PhysProp>::getNodePtrs();
+    const NodePtrsWithIDs &nodes= PlaneElement<3,PhysProp>::getNodePtrs();
     const int i1= nodes.find(n1);
     const int i2= nodes.find(n2);
     if((i1>=0) && (i2>=0))
@@ -139,7 +139,7 @@ template <class PhysProp>
 ID XC::TriBase3N<PhysProp>::getLocalIndexNodesEdge(const size_t &i) const
   {
     ID retval(2);
-    const NodePtrsWithIDs &nodes= ElemPlano<3,PhysProp>::getNodePtrs();
+    const NodePtrsWithIDs &nodes= PlaneElement<3,PhysProp>::getNodePtrs();
     const size_t sz= nodes.size();
     if(i<sz)
       {
@@ -156,7 +156,7 @@ ID XC::TriBase3N<PhysProp>::getLocalIndexNodesEdge(const size_t &i) const
 template <class PhysProp>
 void XC::TriBase3N<PhysProp>::zeroLoad(void)
   {
-    ElemPlano<3,PhysProp>::zeroLoad();
+    PlaneElement<3,PhysProp>::zeroLoad();
     this->physicalProperties.getMaterialsVector().zeroInitialGeneralizedStrains(); //Removes initial deformations.
     return;
   }

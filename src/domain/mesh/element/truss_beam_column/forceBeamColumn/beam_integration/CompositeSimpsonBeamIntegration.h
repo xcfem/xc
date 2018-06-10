@@ -54,7 +54,7 @@
 #include "BeamIntegration.h"
 namespace XC {
 
-//! \ingroup BeamInteg
+//! @ingroup BeamInteg
 //
 //! @brief Composite Simpson integration scheme.
 class CompositeSimpsonBeamIntegration : public BeamIntegration

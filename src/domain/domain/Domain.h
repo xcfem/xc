@@ -90,7 +90,7 @@ class ElementGraph;
 class FEM_ObjectBroker;
 class RayleighDampingFactors;
 
-//!  @defgroup Dom Domain for the finite element problem.
+//!  @defgroup Dom Domain of the finite element problem.
 //
 //! @ingroup Dom
 //

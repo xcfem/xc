@@ -2,7 +2,7 @@
 '''Verification test taken from example 2-005 of 
    the SAP 2000 verification manual.'''
 
-# nverborrea= 0
+# feProblem.setVerbosityLevel(0)
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"

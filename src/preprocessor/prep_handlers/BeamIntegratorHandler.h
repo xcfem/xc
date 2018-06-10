@@ -35,7 +35,7 @@
 namespace XC {
 class BeamIntegration;
 
-//! \ingroup Ldrs
+//! @ingroup Ldrs
 //! 
 //! @brief Beam integrators handler.
 class BeamIntegratorHandler: public PrepHandler

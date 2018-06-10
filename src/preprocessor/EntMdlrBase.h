@@ -39,7 +39,7 @@ class Pnt;
 class Edge;
 class Face;
 
-//!  \ingroup Preprocessor
+//!  @ingroup Preprocessor
 //! 
 //!  \brief Base class of the preprocessor objects.
 class EntMdlrBase: public EntConNmb, public MovableObject

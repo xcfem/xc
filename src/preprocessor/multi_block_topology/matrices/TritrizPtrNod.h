@@ -45,7 +45,7 @@ class RangoTritriz;
 
 namespace XC{
 
-//! \ingroup MultiBlockTopologyMR
+//! @ingroup MultiBlockTopologyMR
 //! 
 //! @brief "Tritriz" of pointers to elements.
 class TritrizPtrNod: public TritrizPtrBase<MatrizPtrNod>

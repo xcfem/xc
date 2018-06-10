@@ -37,7 +37,7 @@ class Node;
 class Channel;
 class Response;
 
-//! \ingroup ElemZL
+//! @ingroup ElemZL
 //
 //! @brief Zero length contact element.
 class ZeroLengthContact: public Element0D

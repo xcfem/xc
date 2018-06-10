@@ -36,7 +36,7 @@ namespace XC {
 
 class Node;
 
-//!  \ingroup Lodrs
+//!  @ingroup Lodrs
 //! 
 //! @brief Node creation manager.
 class NodeHandler: public PrepHandler
