@@ -236,8 +236,8 @@ double XC::FiberDeque::getArea(const double &factor) const
     return factor*retval;
   }
 
-//! @brief Return the moment of inertia with respect to the paralelo al z a una
-//! distancia y0 del origen.
+//! @brief Return the moment of inertia with respect to an axis parallel
+//! the z axis at a distance y0 from the origin.
 double XC::FiberDeque::getIz(const double &factor,const double &y0) const
   {
     double retval= 0.0;
@@ -252,8 +252,8 @@ double XC::FiberDeque::getIz(const double &factor,const double &y0) const
     return retval;
   }
 
-//! @brief Return the moment of inertia with respect to the axis parallel to y a una
-//! distancia z0 del origen.
+//! @brief Return the moment of inertia with respect to an axis parallel
+//! the y axis at a distance z0 from the origin.
 double XC::FiberDeque::getIy(const double &factor,const double &z0) const
   {
     double retval= 0.0;
@@ -269,7 +269,7 @@ double XC::FiberDeque::getIy(const double &factor,const double &z0) const
   }
 
 //! @brief Return the product of inertia with respect to the parallel axes
-//! a distancias (y0,z0) del origen.
+//! at distances (y0,z0) from origin.
 double XC::FiberDeque::getPyz(const double &factor,const double &y0,const double &z0) const
   {
     double retval= 0.0;
@@ -1313,7 +1313,7 @@ Recta2d XC::FiberDeque::getCompressedPlaneTrace(void) const
 double XC::FiberDeque::getMechanicLeverArm(void) const
   { return getVectorBrazoMecanico().Norm(); }
 
-//! @brief Return the distancia media entre fibers.
+//! @brief Return the average distance between fibers.
 double XC::FiberDeque::getAverageDistanceBetweenFibers(void) const
   {
     double retval= 0;

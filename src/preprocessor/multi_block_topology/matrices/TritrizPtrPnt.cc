@@ -159,7 +159,7 @@ XC::Pnt *XC::TritrizPtrPnt::getNearestPnt(const Pos3d &p)
         ptrPnt= layer.getNearestPnt(p);
         if(ptrPnt)
           {
-            tmp= ptrPnt->DistanciaA2(p);
+            tmp= ptrPnt->getSquaredDistanceTo(p);
             if(tmp<d)
               {
                 d= tmp;

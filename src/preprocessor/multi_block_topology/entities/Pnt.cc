@@ -140,7 +140,7 @@ bool XC::Pnt::isConnectedTo(const Body &b) const
 
 //! @brief Return the squared distance to the position
 //! being passed as parameter.
-double XC::Pnt::DistanciaA2(const Pos3d &pt) const
+double XC::Pnt::getSquaredDistanceTo(const Pos3d &pt) const
   { return dist2(p,pt);  }
 
 //! @brief Returns true if the point lies inside the

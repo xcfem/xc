@@ -425,7 +425,7 @@ XC::KRowSet XC::EntMdlr::getVarRefKRow(const RangoTritriz &rango,const std::stri
 
 //! @brief Return the squared distance to
 //! the position being passed as parameter.
-double XC::EntMdlr::DistanciaA2(const Pos3d &pt) const
+double XC::EntMdlr::getSquaredDistanceTo(const Pos3d &pt) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not implemented." << std::endl;
@@ -433,8 +433,8 @@ double XC::EntMdlr::DistanciaA2(const Pos3d &pt) const
   }
 
 //! @brief Return the distance to the position being passed as parameter.
-double XC::EntMdlr::DistanciaA(const Pos3d &pt) const
-  { return sqrt(DistanciaA2(pt)); }
+double XC::EntMdlr::getDistanceTo(const Pos3d &pt) const
+  { return sqrt(getSquaredDistanceTo(pt)); }
 
 //! @brief Fixes the nodes of the set.
 void XC::EntMdlr::fix(const SFreedom_Constraint &spc)

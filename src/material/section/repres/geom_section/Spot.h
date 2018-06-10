@@ -85,7 +85,7 @@ class Spot: public EntGeomSection
     inline size_t nLines(void) const
       { return pt_axes.size(); }
 
-    double DistanciaA(const Pos2d &pt) const;
+    double getDistanceTo(const Pos2d &pt) const;
 
 
   };

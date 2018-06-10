@@ -108,7 +108,7 @@ double XC::InteractionDiagram2d::getCapacityFactor(const Pos2d &esf_d) const
   {
     double retval= 1e6;
     static const Pos2d O= Pos2d(0.0,0.0);
-    const double d= dist(O,esf_d); //Distancia desde la terna de esfuerzos al origen.
+    const double d= dist(O,esf_d); //Distance from the internal forces triplet to the origin.
     if(d<mchne_eps_dbl) //If the point is almost at the origin.
       retval= 0.0;//Returns the maximum capactity factor.
     else

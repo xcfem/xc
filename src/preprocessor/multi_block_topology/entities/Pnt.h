@@ -100,7 +100,7 @@ class Pnt: public EntMdlr
     bool Extremo(const Edge &l) const;
     bool isConnectedTo(const Face &s) const;
     bool isConnectedTo(const Body &b) const;
-    double DistanciaA2(const Pos3d &pt) const;
+    double getSquaredDistanceTo(const Pos3d &pt) const;
 
     void Mueve(const Vector3d &);
     void Transforma(const TrfGeom &trf);

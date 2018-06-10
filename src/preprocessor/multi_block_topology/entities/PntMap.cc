@@ -253,6 +253,6 @@ double XC::PntMap::Dist(const Indice &i,const Indice &j) const
 	        << "; point identified by: " 
                 << j << " not found." << std::endl;
     else
-      retval= pA->DistanciaA(pB->GetPos());
+      retval= pA->getDistanceTo(pB->GetPos());
     return retval;
   }

@@ -31,7 +31,7 @@ def getTensionOn2PileCapBottomReinforcement(v,d,Nd):
     Return the tension in the bottom reinforcement of a pile cap with
     TWO piles (see números gordos HC.9 page 32).
 
-    :param v: Distancia entre la pila y el pilote.
+    :param v: distance between the column and the pile.
     :param d: pile cap effective depth.
     :param Nd: Axil de cálculo en la pila.
     '''
@@ -40,7 +40,7 @@ def getTensionOn2PileCapBottomReinforcement(v,d,Nd):
 
 def getCantoMinimoEncepado(diam,D):
     '''
-    Devuelve el depth mínimo del encepado.
+    Return the minimum depth of the pile cap.
 
     :param diam: Diámetro de la reinforcement del pilar o del pilote (la que sea mayor).
     :param D: Diámetro del pilote.

@@ -89,7 +89,7 @@ Segment3d XC::Line::getLineSegment(void) const
 
 //! @brief Returns the squared distance to the
 //! position being passed as parameter.
-double XC::Line::DistanciaA2(const Pos3d &pt) const
+double XC::Line::getSquaredDistanceTo(const Pos3d &pt) const
   { return getLineSegment().dist2(pt); }
 
 //! @brief Divides the line by the point being passed as parameter.

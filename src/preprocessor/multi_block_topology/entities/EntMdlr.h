@@ -149,8 +149,8 @@ class EntMdlr: public SetEstruct
 
     virtual std::set<SetBase *> get_sets(void) const= 0;
 
-    virtual double DistanciaA2(const Pos3d &pt) const;
-    virtual double DistanciaA(const Pos3d &pt) const;
+    virtual double getSquaredDistanceTo(const Pos3d &pt) const;
+    virtual double getDistanceTo(const Pos3d &pt) const;
 
     Vector getSimpsonWeights(const std::string &,const std::string &,const size_t &f=1,const size_t &c=1, const size_t &n= 10) const;
 
