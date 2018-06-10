@@ -2113,7 +2113,8 @@ bool XC::Node::checkReactionForce(const double &tol) const
     return retval;
   }
 
-//! @brief Calculate the reactions in this node (used in en Domain::calculateNodalReactions).
+//! @brief Calculate the reactions in this node
+//! (used in Domain::calculateNodalReactions).
 int XC::Node::resetReactionForce(bool inclInertia)
   {
     reaction.Zero();
