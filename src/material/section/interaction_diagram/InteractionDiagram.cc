@@ -29,7 +29,7 @@
 #include "InteractionDiagram.h"
 #include "xc_utils/src/geom/d2/Triang3dMesh.h"
 #include "xc_utils/src/geom/d2/Plane.h"
-#include "xc_utils/src/geom/d2/Triangulo3d.h"
+#include "xc_utils/src/geom/d2/Triangle3d.h"
 #include "xc_basic/src/util/mchne_eps.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
 #include "xc_utils/src/geom/d1/Segment3d.h"
@@ -140,7 +140,7 @@ const Trihedron *XC::InteractionDiagram::findTrihedronPtr(const Pos3d &p) const
         const Trihedron *tr= &(*i);
         SemiRecta3d rayo(tr->Cuspide(),p);
         Recta3d axis= tr->Axis();
-        double angMin= angulo(axis,rayo);
+        double angMin= angle(axis,rayo);
         double angTmp= angMin;
         retval= tr;
         i++;
@@ -148,7 +148,7 @@ const Trihedron *XC::InteractionDiagram::findTrihedronPtr(const Pos3d &p) const
           {
             tr= &(*i);
             rayo= SemiRecta3d(tr->Cuspide(),p);
-            angTmp= angulo(tr->Axis(),rayo);
+            angTmp= angle(tr->Axis(),rayo);
             if(angTmp<angMin)
               {
                 angMin= angTmp;
@@ -189,7 +189,7 @@ GeomObj::list_Pos3d XC::InteractionDiagram::get_intersection(const Pos3d &p) con
       }
     else
       {
-        Triangulo3d triang(i->Vertice(1),i->Vertice(2),i->Vertice(3));
+        Triangle3d triang(i->Vertice(1),i->Vertice(2),i->Vertice(3));
         //We compute the plane that contains the triangle.
         const Plane plane= triang.getPlane();
         SemiRecta3d Op(O,p);

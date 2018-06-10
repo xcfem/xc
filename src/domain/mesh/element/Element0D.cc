@@ -77,7 +77,7 @@ bool XC::Element0D::Vxy::check(void) const
       {
         std::cerr << "Element0D::check; vector I= " << x
                   << " and J= " << y << " are almost parallel, angle: "
-                  << angulo(vx,vy) << " radians." << std::endl;
+                  << angle(vx,vy) << " radians." << std::endl;
         retval= false;
       }
     return retval;

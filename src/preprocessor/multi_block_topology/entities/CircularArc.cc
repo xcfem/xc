@@ -123,11 +123,11 @@ Pos3d XC::CircularArc::getCentroid(void) const
   }
 
 //! @brief Return the angle subtended by the arc.
-double XC::CircularArc::getAnguloComprendido(void) const
+double XC::CircularArc::getIncludedAngle(void) const
   {
     double retval= 0;
     if(check_points())
-      retval= get_sector_circular3d().AnguloComprendido();
+      retval= get_sector_circular3d().getIncludedAngle();
     return retval;
   }
 

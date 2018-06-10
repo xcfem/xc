@@ -54,7 +54,7 @@ class_<XC::DividedLine, bases<XC::Line>, boost::noncopyable >("DividedLine", "Li
   ;
 
 class_<XC::CircularArc, bases<XC::LineBase>, boost::noncopyable >("CircleArc", "Circumference arc.",no_init)
-  .def("getAngle", &XC::CircularArc::getAnguloComprendido,"Return the angle subtended by the arc.")
+  .def("getAngle", &XC::CircularArc::getIncludedAngle,"Return the angle subtended by the arc.")
   .def("getTheta1",&XC::CircularArc::getTheta1,"Return the start angle.")
   .def("getTheta2",&XC::CircularArc::getTheta2,"Return the end angle.")
   .def("getCentro",&XC::CircularArc::getCentro,"Return the center of the circumference.")

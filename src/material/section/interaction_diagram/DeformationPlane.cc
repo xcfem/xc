@@ -160,7 +160,7 @@ const XC::Vector &XC::DeformationPlane::getDeformation(const size_t &order,const
 //! @brief Return the neutral axis.
 Recta2d XC::DeformationPlane::getNeutralAxis(void)const
   {
-    const double a= angulo(*this,YZPlane3d);
+    const double a= angle(*this,YZPlane3d);
     Recta2d retval;
     if(a>1e-4)
       {
@@ -181,7 +181,7 @@ Pos2d XC::DeformationPlane::getPointOnTensionedHalfPlane(void) const
     Pos2d retval(0,0);
     const Recta2d fn(getNeutralAxis());
     bool exists= fn.exists();
-    const double a= angulo(*this,YZPlane3d);
+    const double a= angle(*this,YZPlane3d);
     if(exists && (a>mchne_eps_dbl)) //Neutral axis exists.
       {
         const Pos2d p0(fn.Point());
@@ -202,7 +202,7 @@ Pos2d XC::DeformationPlane::getPointOnCompressedHalfPlane(void) const
     Pos2d retval(0,0);
     const Recta2d fn(getNeutralAxis());
     bool exists= fn.exists();
-    const double a= angulo(*this,YZPlane3d);
+    const double a= angle(*this,YZPlane3d);
     if(exists && (a>mchne_eps_dbl)) //Neutral axis exists.
       {
         const Pos2d p0(fn.Point());
@@ -248,7 +248,7 @@ HalfPlane2d XC::DeformationPlane::getTensionedHalfPlane(void) const
   {
     const Recta2d fn= getNeutralAxis();
     bool exists= fn.exists();
-    const double a= angulo(*this,YZPlane3d);
+    const double a= angle(*this,YZPlane3d);
     Pos2d tmp(0,0);
     if(exists && (a>mchne_eps_dbl)) //Neutral axis exists.
       {
@@ -272,7 +272,7 @@ HalfPlane2d XC::DeformationPlane::getCompressedHalfPlane(const Recta2d &r) const
   {
     const Recta2d fn= getNeutralAxis();
     bool exists= fn.exists();
-    const double a= angulo(*this,YZPlane3d);
+    const double a= angle(*this,YZPlane3d);
     Pos2d tmp(0,0);
     if(exists && (a>mchne_eps_dbl)) //Neutral axis exists.
       {

@@ -29,7 +29,7 @@
 #include "ClosedTriangleMesh.h"
 #include "xc_utils/src/geom/d2/Triang3dMesh.h"
 #include "xc_utils/src/geom/d2/Plane.h"
-#include "xc_utils/src/geom/d2/Triangulo3d.h"
+#include "xc_utils/src/geom/d2/Triangle3d.h"
 #include "xc_basic/src/util/mchne_eps.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
 #include "xc_utils/src/geom/d1/Segment3d.h"
@@ -67,7 +67,7 @@ XC::ClosedTriangleMesh::ClosedTriangleMesh(const Pos3d &org,const Triang3dMesh &
     size_t cont= 0;
     for(Triang3dMesh::Facet_const_iterator i= mll.facets_begin();i!=mll.facets_end();i++)
       {
-        const Triangulo3d tf= mll.GetTrianguloCara(i);
+        const Triangle3d tf= mll.getFaceTriangle(i);
         trihedrons[cont]= Trihedron(org,tf);
         cont++;
       }
@@ -244,7 +244,7 @@ const Trihedron *XC::ClosedTriangleMesh::findTrihedronPtr(const Pos3d &p) const
             const Trihedron *tr= &(*i);
             SemiRecta3d rayo(tr->Cuspide(),p);
             Recta3d axis= tr->Axis();
-            double rayAxisAngle= angulo(axis,rayo);
+            double rayAxisAngle= angle(axis,rayo);
             double angTmp= rayAxisAngle;
             retval= tr;
             i++;
@@ -252,7 +252,7 @@ const Trihedron *XC::ClosedTriangleMesh::findTrihedronPtr(const Pos3d &p) const
               {
                 tr= &(*i);
                 rayo= SemiRecta3d(tr->Cuspide(),p);
-                angTmp= angulo(tr->Axis(),rayo);
+                angTmp= angle(tr->Axis(),rayo);
                 if(angTmp<rayAxisAngle)
                   {
                     rayAxisAngle= angTmp;
@@ -294,7 +294,7 @@ GeomObj::list_Pos3d XC::ClosedTriangleMesh::get_intersection(const Pos3d &p) con
       }
     else
       {
-        Triangulo3d triang(i->Vertice(1),i->Vertice(2),i->Vertice(3));
+        Triangle3d triang(i->Vertice(1),i->Vertice(2),i->Vertice(3));
         //Plane of the triangle.
         const Plane plane= triang.getPlane();
         SemiRecta3d Op(O,p);
@@ -334,7 +334,7 @@ void XC::ClosedTriangleMesh::getPositionsMatrix(Matrix &m)
       {
         const Trihedron &t= *i;
         const Pos3d &c= t.Cuspide();
-        const Triangulo3d &b= t.Base();
+        const Triangle3d &b= t.Base();
         const Pos3d p1= b.Vertice(1);
         const Pos3d p2= b.Vertice(2);
         const Pos3d p3= b.Vertice(3);
