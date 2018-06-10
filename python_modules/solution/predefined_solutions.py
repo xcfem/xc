@@ -211,7 +211,7 @@ class SolutionProcedure(object):
     self.ctest.printFlag= self.printFlag
     self.integ= self.analysisAggregation.newIntegrator("newmark_integrator",xc.Vector([]))
     self.soe= self.analysisAggregation.newSystemOfEqn("profile_spd_lin_soe")
-    self.solver= self.soe.newSolver("profile_spd_lin_lapack_solver")
+    self.solver= self.soe.newSolver("profile_spd_lin_direct_solver")
     self.analysis= self.solu.newAnalysis("direct_integration_analysis","analysisAggregation","")
     return self.analysis;
 
