@@ -184,9 +184,7 @@ class Element: public MeshComponent
     //! To return the tangent stiffness matrix. The element is to compute its
     //! stiffness matrix based on the original location of the nodes and the
     //! current trial displacement at the nodes.
-    //! \f$[ 
-    //! K_e = {\frac{\partial \f_{R_i}}{\partial U} \vert}_{U_{trial}}
-    //! \f]
+    //! \f[ K_e = {\frac{\partial f_{R_i}}{\partial U} \vert}_{U_{trial}} \f]
     virtual const Matrix &getTangentStiff(void) const= 0;
     virtual const Matrix &getInitialStiff(void) const= 0;
     virtual const Matrix &getDamp(void) const;
@@ -205,9 +203,7 @@ class Element: public MeshComponent
     //! the applied load due to element loads minus the loads at the nodes due
     //! to internal stresses in the element due to the current trial
     //! displacement, i.e. 
-    //! \f[
-    //! R_e= P_{e} - {R_e}(U_{trial}) 
-    //! \f]
+    //! \f[ R_e= P_{e} - {R_e}(U_{trial}) \f]
     virtual const Vector &getResistingForce(void) const= 0;
     
     //! @brief Returns the resisting force vector including inertia forces.
@@ -217,9 +213,7 @@ class Element: public MeshComponent
     //! (loads set using addLoad(), minus the loads at the nodes due to
     //! internal stresses in the element due to the current trial response
     //! quantities, i.e.
-    //! \f$[
-    //! R_e = P_e -  I_e (\ddot U_{trial}) - R_e(\dot U_{trial}, U_{trial})
-    //! \f]
+    //! \f[ R_e = P_e -  I_e (\ddot U_{trial}) - R_e(\dot U_{trial}, U_{trial}) \f]
     virtual const Vector &getResistingForceIncInertia(void) const;
     const Vector &getNodeResistingComponents(const size_t &,const Vector &) const;
     const Vector &getNodeResistingForce(const size_t &iNod) const;
