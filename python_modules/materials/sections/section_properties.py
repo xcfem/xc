@@ -57,6 +57,47 @@ class SectionProperties(object):
     '''section modulus with respect to local z-axis (abstract method)'''
     raise "Abstract method, please override"
     return 0.0
+  def SteinerY(self,z):
+    '''Return the moment of inertia obtained by applying
+       the parallel axis theorem (or Huygens-Steiner theorem
+       or Steiner's theorem.
+
+      :param pos: position of the original section centroid
+    '''
+    A= self.A()
+    return self.Iy()+A*z**2
+  def SteinerZ(self,y):
+    '''Return the moment of inertia obtained by applying
+       the parallel axis theorem (or Huygens-Steiner theorem
+       or Steiner's theorem.
+
+      :param pos: position of the original section centroid
+    '''
+    A= self.A()
+    return self.Iz()+A*y**2
+  def Steiner(self,pos):
+    '''Return the moments of inertia obtained by applying
+       the parallel axis theorem (or Huygens-Steiner theorem
+       or Steiner's theorem.
+
+      :param pos: position of the original section centroid
+    '''
+    y= pos.x
+    z= pos.y
+    A= self.A()
+    newIy= self.Iy()+A*z**2
+    newIz= self.Iz()+A*y**2
+    return newIy,newIz
+  def SteinerJ(self,pos):
+    '''Return the moments of inertia obtained by applying
+       the parallel axis theorem (or Huygens-Steiner theorem
+       or Steiner's theorem.
+
+      :param pos: position of the original section centroid
+    '''
+    d2= pos.x**2+pos.y**2
+    A= self.A()
+    return self.J()+A*d2
   def getPlasticSectionModulusY(self):
     '''Returns the plastic section modulus around Y axis.
 
@@ -364,20 +405,6 @@ class GenericSection(SectionProperties):
     '''Return shear shape factor with respect to local z-axis'''
     return self.alphZ
 
-def Steiner(section,pos):
-  '''Return the moments of inertia obtained by applying
-     the parallel axis theorem (or Huygens-Steiner theorem
-     or Steiner's theorem.
-
-    :param section: original section
-    :param pos: position of the original section centroid
-  '''
-  y= pos.x
-  z= pos.y
-  A= section.A()
-  newIy= section.Iy()+A*z**2
-  newIz= section.Iz()+A*y**2
-  return newIy,newIz
 
 
 class ISection(SectionProperties):
@@ -594,3 +621,80 @@ def solicitationTypeString(tipoSol):
     return "simple or combined compression"
   else: 
     return "error"
+
+class CompoundSection(SectionProperties):
+  '''Compound section properties (area, moments of inertia,...)
+  
+  :ivar name:         name identifying the section
+  '''
+  def __init__(self,name, section_list):
+    super(CompoundSection,self).__init__(name)
+    self.sectionList= section_list
+  def A(self):
+    '''cross-sectional area'''
+    retval= 0.0
+    for s in self.sectionList:
+      retval+= s[1].A()
+    return retval
+  def yCenterOfMass(self):
+    '''y coordinate of the center of mass.'''
+    retval= 0.0
+    totalArea= 0.0
+    for s in self.sectionList:
+      area= s[1].A()
+      totalArea+=area 
+      retval+= s[0].x*area
+    retval/= totalArea
+    return retval
+  def zCenterOfMass(self):
+    '''y coordinate of the center of mass.'''
+    retval= 0.0
+    totalArea= 0.0
+    for s in self.sectionList:
+      area= s[1].A()
+      totalArea+=area 
+      retval+= s[0].y*area
+    retval/= totalArea
+    return retval
+  def Iy(self):
+    '''second moment of area about the local y-axis.'''
+    yCenter= self.yCenterOfMass()
+    retval= 0.0
+    for s in self.sectionList:
+      retval+= s[1].SteinerY(yCenter)
+    return retval    
+  def Iz(self):
+    '''second moment of area about the local z-axis (abstract method)'''
+    zCenter= self.zCenterOfMass()
+    retval= 0.0
+    for s in self.sectionList:
+      retval+= s[1].SteinerZ(zCenter)
+    return retval    
+  def J(self):
+    '''torsional constant of the section.'''
+    center= geom.Pos2d(self.yCenterOfMass(), self.zCenterOfMass())
+    retval= 0.0
+    for s in self.sectionList:
+      retval+= s[1].SteinerJ(center)
+    return retval
+  def alphaY(self):
+    '''return shear shape factor with respect to local y-axis'''
+    retval= 0.0
+    totalArea= 0.0
+    for s in self.sectionList:
+      area= s[1].A()
+      totalArea+=area 
+      retval+= s[1].alphaY()*area
+    retval/= totalArea
+    return retval
+  def alphaZ(self):
+    '''return shear shape factor with respect to local z-axis'''
+    retval= 0.0
+    totalArea= 0.0
+    for s in self.sectionList:
+      area= s[1].A()
+      totalArea+=area 
+      retval+= s[1].alphaZ()*area
+    retval/= totalArea
+    return retval
+
