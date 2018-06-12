@@ -363,3 +363,14 @@ class AUShape(EC3Shape,arcelor_metric_shapes.AUShape):
     '''
     EC3Shape.__init__(self,'rolled')
     arcelor_metric_shapes.AUShape.__init__(self,steel,name)
+
+class CHSShape(EC3Shape,arcelor_metric_shapes.CHSShape):
+  """CHS shape with Eurocode 3 verification routines."""
+  def __init__(self,steel,name):
+    ''' Constructor.
+
+    :param steel: steel material.
+    :param name: shape name (i.e. AU_23)
+    '''
+    EC3Shape.__init__(self,'rolled')
+    arcelor_metric_shapes.CHSShape.__init__(self,steel,name)
