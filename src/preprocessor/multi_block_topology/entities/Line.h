@@ -61,7 +61,7 @@ class Line: public LineBase
     inline virtual size_t getNumberOfVertices(void) const
       { return 2; }
     virtual BND3d Bnd(void) const;
-    double DistanciaA2(const Pos3d &pt) const;
+    double getSquaredDistanceTo(const Pos3d &pt) const;
 
     const Vector &getVector(void) const;
     Segment3d getLineSegment(void) const;

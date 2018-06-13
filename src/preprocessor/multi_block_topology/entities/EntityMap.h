@@ -71,12 +71,12 @@ Entity *EntityMap<Entity>::getNearest(const Pos3d &p)
     if(!this->empty())
       {
 	iterator i= this->begin();
-        double d2= (*i).second->DistanciaA2(p);
+        double d2= (*i).second->getSquaredDistanceTo(p);
         retval= (*i).second; i++;
         double tmp;
         for(;i!=this->end();i++)
           {
-            tmp= (*i).second->DistanciaA2(p);
+            tmp= (*i).second->getSquaredDistanceTo(p);
             if(tmp<d2)
               {
                 d2= tmp;
@@ -95,12 +95,12 @@ const Entity *EntityMap<Entity>::getNearest(const Pos3d &p) const
     if(!this->empty())
       {
 	const_iterator i= this->begin();
-        double d2= (*i).second->DistanciaA2(p);
+        double d2= (*i).second->getSquaredDistanceTo(p);
         retval= (*i).second; i++;
         double tmp;
         for(;i!=this->end();i++)
           {
-            tmp= (*i).second->DistanciaA2(p);
+            tmp= (*i).second->getSquaredDistanceTo(p);
             if(tmp<d2)
               {
                 d2= tmp;

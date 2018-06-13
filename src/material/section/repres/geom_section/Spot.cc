@@ -73,7 +73,7 @@ bool XC::Spot::isConnectedTo(const Axis &l) const
 
 
 //! @brief Return the distance to the position being passed as parameter.
-double XC::Spot::DistanciaA(const Pos2d &pt) const
+double XC::Spot::getDistanceTo(const Pos2d &pt) const
   { return dist(p,pt);  }
 
 

@@ -489,6 +489,7 @@ python tests/materials/prestressing/test_loss_prestress_units_01.py
 echo "$BLEU" "  Other materials tests." "$NORMAL"
 python tests/materials/test_elastomeric_bearing_stiffness.py
 python tests/materials/test_anchor_bolt01.py
+python tests/materials/test_compound_section.py
 python tests/materials/ehe/test_creep_01.py
 python tests/materials/ehe/test_creep_02.py
 python tests/materials/ehe/test_creep_03.py

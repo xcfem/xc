@@ -89,12 +89,12 @@ T *DqPtrsEntities<T>::getNearest(const Pos3d &p)
     if(!this->empty())
       {
         const_iterator i= this->begin();
-        double d2= (*i)->DistanciaA2(p);
+        double d2= (*i)->getSquaredDistanceTo(p);
         retval= *i; i++;
         double tmp;
         for(;i!=this->end();i++)
           {
-            tmp= (*i)->DistanciaA2(p);
+            tmp= (*i)->getSquaredDistanceTo(p);
             if(tmp<d2)
               {
                 d2= tmp;
@@ -113,12 +113,12 @@ const T *DqPtrsEntities<T>::getNearest(const Pos3d &p) const
     if(!this->empty())
       {
         const_iterator i= this->begin();
-        double d2= (*i)->DistanciaA2(p);
+        double d2= (*i)->getSquaredDistanceTo(p);
         retval= *i; i++;
         double tmp;
         for(;i!=this->end();i++)
           {
-            tmp= (*i)->DistanciaA2(p);
+            tmp= (*i)->getSquaredDistanceTo(p);
             if(tmp<d2)
               {
                 d2= tmp;

@@ -170,7 +170,7 @@ XC::Pnt *XC::MatrizPtrPnt::getNearestPnt(const Pos3d &p)
           ptrPnt= operator()(j,k);
           if(ptrPnt)
             {
-              tmp= ptrPnt->DistanciaA2(p);
+              tmp= ptrPnt->getSquaredDistanceTo(p);
               if(tmp<d)
                 {
                   d= tmp;

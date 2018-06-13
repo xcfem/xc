@@ -47,7 +47,7 @@ def getScrNp(d, hEf, tauRkUcr):
      of a single anchor without spacing and edge effects in case of pullout
      failure. Is equal to the side of the influence area of an individual 
      anchor (critical distance between anchors) according to clause 5.2.2.3 b)
-     (ecuación 5.2c) of EOTA TR029.
+     (equation 5.2c) of EOTA TR029.
 
    :param d: anchor diameter (m).
    :param hEf: effective anchorage depth (m).
@@ -56,17 +56,20 @@ def getScrNp(d, hEf, tauRkUcr):
   return min(20e3*d*math.sqrt(tauRkUcr/7.5e6),3*hEf)
 
 def getCcrNp(d, hEf, tauRkUcr):
-  '''  half-side del área de influencia (distancia crítica al borde) de un anclaje individual according to clause 5.2.2.3 b) (ecuación 5.2d) of EOTA TR029.
+  ''' Half-side of the influence area (critical distance to the edge) of an
+      individual anchor according to clause 5.2.2.3 b) (equation 5.2d) 
+      of EOTA TR029.
 
    :param d: anchor diameter (m).
    :param hEf: effective anchorage depth (m).
-   :param tauRkUcr: Characteristic bond resistance for non-craked concrete (must be taken from relevant ETA) (Pa).
+   :param tauRkUcr: Characteristic bond resistance for non-craked concrete 
+          (must be taken from relevant ETA) (Pa).
   '''   
   return getScrNp(d,hEf,tauRkUcr)/2
 
 def getA0pN(d,anchorPosition, hEf, tauRkUcr):
     '''
-     Polígono que representa el área de influencia de un anclaje individual according to clause 5.2.2.3 b) (figura 5.1) of EOTA TR029.
+     Polígono que representa el influence area of an individual anchor according to clause 5.2.2.3 b) (figura 5.1) of EOTA TR029.
 
      :param d: anchor diameter (m).
      :param anchorPosition: Posición del del perno.
@@ -83,26 +86,29 @@ def getA0pN(d,anchorPosition, hEf, tauRkUcr):
 
 def getFactor2pN(A0pN, ApN):
     '''
-    Factor que introduce en el cálculo la influencia de la distancia al borde de la pieza soporte according to clause 5.2.2.3 b).
+    Factor that takes into account the influence of the distance to the edge
+    of the support member according to clause 5.2.2.3 b).
 
-    :param A0pN: Área de influencia del anclaje (o grupo de anclajes).
+    :param A0pN: influence area of the anchor (or anchor group).
     :param ApN: Area of the intersection of the anchor influence area and the concrete support contour.
     '''
     return ApN/A0pN
 
 def getFactor1N(C, CcrN):
     '''
-    Factor que introduce en el cálculo la influencia en la distribución de tensiones de la distancia al borde de la pieza soporte, according to expression 5.2e of clause 5.2.2.3 c).
+    Factor that takes into account the influence of the distance to the edge
+    of the support member in the stress distribution, according to 
+    expression 5.2e of clause 5.2.2.3 c).
 
      :param C: edge distance.
-     :param CcrN: half-side del área de influencia (distancia crítica al borde).
+     :param CcrN: half-side del influence area (critical distance to the edge).
     '''
     return min(0.7+0.3*C/CcrN,1)
 
 def getScrN(hEf):
   '''
-  SideLength del área de influencia de un anclaje individual
-   according to clause 5.2.2.4 b) (ecuación 5.3b) del
+  SideLength del influence area of an individual anchor
+   according to clause 5.2.2.4 b) (equation 5.3b) del
    clause 5.2.2.4 b) of EOTA TR029.
 
    :param hEf: effective anchorage depth (m).
@@ -111,7 +117,7 @@ def getScrN(hEf):
 
 def getA0cN(anchorPosition, hEf):
     '''
-    Polígono que representa el área de influencia de un anclaje individual according to clause 5.2.2.4 b) (figura 5.4a) of EOTA TR029.
+    Polígono que representa el influence area of an individual anchor according to clause 5.2.2.4 b) (figura 5.4a) of EOTA TR029.
 
     :param anchorPosition: anchor position.
     :param hEf: effective anchorage depth (m).
@@ -126,10 +132,12 @@ def getA0cN(anchorPosition, hEf):
 
 def getFactor2cN(A0cN, AcN):
   '''
-  Factor que introduce en el cálculo la influencia de la distancia al borde de la pieza soporte according to clause 5.2.2.4.
+  Factor that takes into account the influence of the distance to the edge
+  of the support member according to clause 5.2.2.4.
 
-  :param A0cN: Área de influencia del anclaje (o grupo de anclajes).
-  :param AcN: Area of the intersection of the anchor influence area and the concrete support contour.
+  :param A0cN: influence area of the anchor (or anchor group).
+  :param AcN: area of the intersection of the anchor influence area and the 
+              concrete support contour.
   '''
   return AcN/A0cN
 
@@ -137,8 +145,8 @@ def getFactor2cN(A0cN, AcN):
 
 def getCcrSpHiltiHY150(h, hEf):
   '''
-  half-side del área de influencia (distancia crítica al borde)
-     de un anclaje individual according to 
+  half-side del influence area (critical distance to the edge)
+     of an individual anchor according to 
      table 7 of ETA-05/0051 (page 19).
 
    :param h: thickness of concrete member (m).
@@ -153,7 +161,7 @@ def getCcrSpHiltiHY150(h, hEf):
 
 def getA0spN(anchorPosition, CcrSp):
     '''
-    Polígono que representa el área de influencia de un anclaje individual
+    Polygon that represents the influence area of an individual anchor
     according to clause 5.2.2.6 b) of EOTA TR029.
 
     :param anchorPosition: anchor position.
@@ -170,10 +178,12 @@ def getA0spN(anchorPosition, CcrSp):
     return retval
 
 def getFactor2spN(A0spN, AspN):
-  ''' Factor que introduce en el cálculo la influencia de la distancia al borde de la pieza soporte according to clause 5.2.2.6 b).
+  ''' Factor that takes into account the influence of the distance to the edge
+       of the support member according to clause 5.2.2.6 b).
 
-   :param A0spN: Área de influencia del anclaje (o grupo de anclajes).
-   :param AspN: Area of the intersection of the anchor influence area and the concrete support contour.
+   :param A0spN: influence area of the anchor (or anchor group).
+   :param AspN: area of the intersection of the anchor influence area and the 
+                concrete support contour.
   '''
   return AspN/A0spN
 
