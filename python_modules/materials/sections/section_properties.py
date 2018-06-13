@@ -64,8 +64,7 @@ class SectionProperties(object):
 
       :param pos: position of the original section centroid
     '''
-    A= self.A()
-    return self.Iy()+A*z**2
+    return self.Iy()+self.A()*z**2
   def SteinerZ(self,y):
     '''Return the moment of inertia obtained by applying
        the parallel axis theorem (or Huygens-Steiner theorem
@@ -73,8 +72,7 @@ class SectionProperties(object):
 
       :param pos: position of the original section centroid
     '''
-    A= self.A()
-    return self.Iz()+A*y**2
+    return self.Iz()+self.A()*y**2
   def Steiner(self,pos):
     '''Return the moments of inertia obtained by applying
        the parallel axis theorem (or Huygens-Steiner theorem
@@ -658,24 +656,26 @@ class CompoundSection(SectionProperties):
     return retval
   def Iy(self):
     '''second moment of area about the local y-axis.'''
-    yCenter= self.yCenterOfMass()
-    retval= 0.0
-    for s in self.sectionList:
-      retval+= s[1].SteinerY(yCenter)
-    return retval    
-  def Iz(self):
-    '''second moment of area about the local z-axis (abstract method)'''
     zCenter= self.zCenterOfMass()
     retval= 0.0
     for s in self.sectionList:
-      retval+= s[1].SteinerZ(zCenter)
+      z= s[0].y
+      retval+= s[1].SteinerY(z-zCenter)
+    return retval    
+  def Iz(self):
+    '''second moment of area about the local z-axis (abstract method)'''
+    yCenter= self.yCenterOfMass()
+    retval= 0.0
+    for s in self.sectionList:
+      y= s[0].x
+      retval+= s[1].SteinerZ(y-yCenter)
     return retval    
   def J(self):
     '''torsional constant of the section.'''
     center= geom.Pos2d(self.yCenterOfMass(), self.zCenterOfMass())
     retval= 0.0
     for s in self.sectionList:
-      retval+= s[1].SteinerJ(center)
+      retval+= s[1].SteinerJ(s[0].distPos2d(center))
     return retval
   def alphaY(self):
     '''return shear shape factor with respect to local y-axis'''
