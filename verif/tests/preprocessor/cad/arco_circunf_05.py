@@ -60,7 +60,7 @@ zC= l1.getCentro().z
 xi= l1.getPInic().x
 yi= l1.getPInic().y
 zi= l1.getPInic().z
-r= l1.getRadio()
+r= l1.getRadius()
 
 l2= lines.newCircleArc(3,4,5)
 l2.nDiv= NumDiv

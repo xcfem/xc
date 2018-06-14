@@ -61,7 +61,7 @@ class_<XC::CircularArc, bases<XC::LineBase>, boost::noncopyable >("CircleArc", "
   .def("getPInic",&XC::CircularArc::getPInic,"Return start point of the arc.")
   .def("getPFin",&XC::CircularArc::getPFin,"Return end point of the arc.")
   .def("getPMed",&XC::CircularArc::getPMed,"Return the midpoint of the arc.")
-  .def("getRadio",&XC::CircularArc::getRadio,"Return the radius of the circumference.")
+  .def("getRadius",&XC::CircularArc::getRadius,"Return the radius of the circumference.")
    ;
 
 XC::Edge *(XC::CmbEdge::Side::*getEdge)(void)= &XC::CmbEdge::Side::getEdge;

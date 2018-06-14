@@ -53,7 +53,7 @@ zC= l.getCentro().z
 xi= l.getPInic().x
 yi= l.getPInic().y
 zi= l.getPInic().z
-r= l.getRadio()
+r= l.getRadius()
 
 l1= preprocessor.getSets.getSet("l1")
 l1.genMesh(xc.meshDir.I)

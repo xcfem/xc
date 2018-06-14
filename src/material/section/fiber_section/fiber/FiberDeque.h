@@ -243,10 +243,12 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     //! @brief Returns the polar moment of inertia with respect to G.
     inline double getIpolar(const double &factor= 1.0) const
       { return getIz(factor,yCenterOfMass)+getIy(factor,zCenterOfMass); }
-    //! @brief Returns the radio de giro with respect to the axis parallel to z que passes through the centroid.
+    //! @brief Returns the radius of gyration with respect to the axis
+    //! parallel to z que passes through the centroid.
     inline double getiz(const double factor= 1.0) const
       { return getIz(factor,yCenterOfMass)/getArea(factor); }
-    //! @brief Returns the radio de giro with respect to the axis parallel to y que passes through the centroid.
+    //! @brief Returns the radius of gyration with respect to the axis
+    //! parallel to y que passes through the centroid.
     inline double getiy(const double factor= 1.0) const
       { return getIy(factor,zCenterOfMass)/getArea(factor); }
     size_t nearest_fiber(const double &y,const double &z) const;

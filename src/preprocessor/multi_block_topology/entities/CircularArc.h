@@ -44,7 +44,6 @@ class CircularArc: public LineBase
   {
     Pnt *p3; //!< Midpoint of the arc.
   protected:
-
     const SectorCircular3d get_sector_circular3d(void) const;
     MatrizPos3d get_positions(void) const;
     bool check_points(void) const;
@@ -65,7 +64,7 @@ class CircularArc: public LineBase
     Pos3d getPInic(void) const;
     Pos3d getPFin(void) const;
     Pos3d getPMed(void) const;
-    double getRadio(void) const;
+    double getRadius(void) const;
     double getLambda(const Pos3d &) const;
 
     //! @brief Return the number of vertices.
@@ -77,8 +76,6 @@ class CircularArc: public LineBase
     int getVtkCellType(void) const;
     int getMEDCellType(void) const;
     virtual ID getKPoints(void) const;
-
-
   };
 
 } //end of XC namespace

@@ -64,7 +64,6 @@ const XC::Pnt *XC::CircularArc::getVertex(const size_t &i) const
       return p3;
   }
 
-
 //! @brief Set the i-th vertex.
 void XC::CircularArc::SetVertice(const size_t &i,Pnt *p)
   {
@@ -149,7 +148,8 @@ double XC::CircularArc::getTheta2(void) const
     return retval;
   }
 
-//! @brief Return the parameter of the point on the arc (distance to the arc's first point measured over the arc)
+//! @brief Return the parameter of the point on the arc (distance to the
+//! arc's first point measured over the arc)
 double XC::CircularArc::getLambda(const Pos3d &p) const
   {
     double retval= 0;
@@ -195,11 +195,11 @@ Pos3d XC::CircularArc::getPMed(void) const
   }
 
 //! @brief Return the radius.
-double XC::CircularArc::getRadio(void) const
+double XC::CircularArc::getRadius(void) const
   {
     double retval= 0;
     if(check_points())
-      retval= get_sector_circular3d().Radio();
+      retval= get_sector_circular3d().getRadius();
     return retval;
   }
 

@@ -41,7 +41,7 @@ class SectionProperties(object):
     raise "Abstract method, please override"
     return 0.0    
   def iz(self):
-    '''Return the radious of gyration of the section around
+    '''Return the radius of gyration of the section around
        the axis parallel to Z that passes through section centroid.
     '''
     return math.sqrt(self.Iz()/self.A())
