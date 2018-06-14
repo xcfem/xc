@@ -845,5 +845,12 @@ def loadMainRefPropertyIntoElements(elemSet, sectionContainer, code):
       sys.stderr.write("element: "+ str(e.tag) + " section undefined.\n")
       e.setProp(code,0.0)
 
+def rebLayer(fi,s,c):
+  '''Defines a layer of main reinforcement bars.
 
+  :param fi: bar diameter [mm]
+  :param s: spacing [mm]
+  :param c: cover [mm]
+  '''
+  return MainReinfLayer(rebarsDiam=fi*1e-3,areaRebar= math.pi*(fi*1e-3)**2/4.0,rebarsSpacing=s*1e-3,width=1.0,nominalCover=c*1e-3)
 
