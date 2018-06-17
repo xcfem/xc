@@ -117,7 +117,7 @@ class_<XC::FiberDeque, bases<EntCmd,fiber_ptrs_dq>, boost::noncopyable >("FiberD
   .def("enCompresion",&XC::FiberDeque::enCompresion)
   .def("getStrClaseEsfuerzo",&XC::FiberDeque::getStrClaseEsfuerzo)
   .def("getNeutralAxisDepth",&XC::FiberDeque::getNeutralAxisDepth)
-  .def("getVectorBrazoMecanico",&XC::FiberDeque::getVectorBrazoMecanico)
+  .def("getLeverArmVector",&XC::FiberDeque::getLeverArmVector)
   .def("getLeverArmSegment",&XC::FiberDeque::getLeverArmSegment)
   .def("getMechanicLeverArm",&XC::FiberDeque::getMechanicLeverArm)
   .def("getBendingPlaneTrace",&XC::FiberDeque::getBendingPlaneTrace)

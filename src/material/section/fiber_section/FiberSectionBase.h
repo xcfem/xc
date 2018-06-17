@@ -118,7 +118,7 @@ class FiberSectionBase: public PrismaticBarCrossSection
     double getLeverArm(void) const;
     double getNeutralAxisDepth(void) const;
     double getNeutralAxisDist(const double &y,const double &z) const;
-    Vector getVectorBrazoMecanico(void) const;
+    Vector getLeverArmVector(void) const;
     Vector getVectorCantoUtil(void) const;
     Segment2d getLeverArmSegment(void) const;
     Segment2d getEffectiveDepthSegment(void) const;

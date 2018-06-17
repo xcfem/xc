@@ -743,14 +743,17 @@ Pos2d XC::FiberDeque::getResultantPosition(const double &y0,const double &z0) co
     return Pos2d(getMz(y0)/R,getMy(z0)/R);
   }
 
-//! @brief Return the neutral axis.
+//! @brief Return an approximation of the neutral axis.
 Recta2d XC::FiberDeque::getNeutralAxis(void) const
   {
-    const double R= getResultant();
-    const double My= getMy();
-    const double Mz= getMz();
-    const Pos2d org(Mz/R,My/R);//Position of the resultant.
-    const Vector2d v(My,Mz); //Direction of the neutral axis.
+    const Segment2d las= getLeverArmSegment();
+    const double C= getCompressionResultant();
+    const Pos2d CPos= las.Destino(); //Compression centroid.
+    const double T= getTensionResultant();
+    const Pos2d TPos= las.Origen(); //Tension centroid.
+    const double a= las.getLength()*T/(T-C); //Similar triangles.
+    const Pos2d org= TPos+a*las.VDir().Normalizado();
+    const Vector2d v= las.Normal(); //Direction of the neutral axis.
     return Recta2d(org,v);
   }
 
@@ -1236,7 +1239,7 @@ double XC::FiberDeque::getNeutralAxisDepth(const FiberSectionBase &Section) cons
 
 //! @brief Returns a vector oriented from the tension centroid
 //ª to the compression centroid.
-XC::Vector XC::FiberDeque::getVectorBrazoMecanico(void) const
+XC::Vector XC::FiberDeque::getLeverArmVector(void) const
   {
     const Segment2d &bm= getLeverArmSegment();
     return Vector(bm.GetVector());
@@ -1311,7 +1314,7 @@ Recta2d XC::FiberDeque::getCompressedPlaneTrace(void) const
 
 //! @brief Return the lever arm of forces in the section.
 double XC::FiberDeque::getMechanicLeverArm(void) const
-  { return getVectorBrazoMecanico().Norm(); }
+  { return getLeverArmVector().Norm(); }
 
 //! @brief Return the average distance between fibers.
 double XC::FiberDeque::getAverageDistanceBetweenFibers(void) const

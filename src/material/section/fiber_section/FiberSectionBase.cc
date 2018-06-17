@@ -343,8 +343,10 @@ Recta2d XC::FiberSectionBase::getEffectiveConcreteAreaLimitLine(const double &hE
           {
 	    //Compute a parallel line at (hef-fEfMax) distance over the tensioned zone.
             const double d= -(hef-hEfMax); //Sign changed to move over tensioned zone.
-            const Vector v= normalize(getVectorBrazoMecanico())*d;
-            retval= fn.Offset(Vector2d(v[0],v[1]));
+	    const Vector lav= normalize(getLeverArmVector());
+            const Vector v= lav*d;
+	    const Vector2d v2d= Vector2d(v[0],v[1]);
+            retval= fn.Offset(v2d);
           }
       }
     return retval;
@@ -747,8 +749,8 @@ XC::InteractionDiagram2d XC::FiberSectionBase::GetNMzInteractionDiagram(const In
   { return GetInteractionDiagramForPlane(diag_data,0.0); }
 
 //! @brief Returns a vector from the centroid of tensions to the centroid of compressions.
-XC::Vector XC::FiberSectionBase::getVectorBrazoMecanico(void) const
-  { return fibers.getVectorBrazoMecanico(); }
+XC::Vector XC::FiberSectionBase::getLeverArmVector(void) const
+  { return fibers.getLeverArmVector(); }
 
 //! @brief Returns a vector oriented from the centroid of the area in tension
 //! to the most compressed fiber.

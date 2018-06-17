@@ -147,7 +147,7 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     bool enCompresion(void) const;
     std::string getStrClaseEsfuerzo(const double &tol= 1e-4) const;
     double getNeutralAxisDepth(const FiberSectionBase &) const;
-    Vector getVectorBrazoMecanico(void) const;
+    Vector getLeverArmVector(void) const;
     Segment2d getLeverArmSegment(void) const;
     double getMechanicLeverArm(void) const;
     Recta2d getBendingPlaneTrace(void) const;
@@ -228,10 +228,10 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     double getIzHomogenizedSection(const double &) const;
     double getPyzHomogenizedSection(const double &) const;
     double getIHomogenizedSection(const double &,const unsigned short int &,const unsigned short int &) const;
-    Matrix &getIHomogenizedSection(const double &E0) const;
-    Matrix &getIHomogenizedSection(const double &E0,const Pos2d &o) const;
-    double getIHomogenizedSection(const double &E0,const Pos2d &O,const Vector &e) const;
-    double getIHomogenizedSection(const double &E0,const Recta2d &r) const;
+    Matrix &getIHomogenizedSection(const double &) const;
+    Matrix &getIHomogenizedSection(const double &,const Pos2d &o) const;
+    double getIHomogenizedSection(const double &,const Pos2d &O,const Vector &e) const;
+    double getIHomogenizedSection(const double &,const Recta2d &r) const;
     //Static moments.
     double getSzPos(const double &yf,const double &y0,const double &factor= 1.0) const;
     double getSzNeg(const double &yf,const double &y0,const double &factor= 1.0) const;
