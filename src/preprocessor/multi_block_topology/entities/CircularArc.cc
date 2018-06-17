@@ -32,7 +32,7 @@
 #include "xc_utils/src/geom/d3/BND3d.h"
 #include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
 #include "xc_utils/src/geom/pos_vec/TritrizPos3d.h"
-#include "xc_utils/src/geom/d2/SectorCircular3d.h"
+#include "xc_utils/src/geom/d2/CircularSector3d.h"
 
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
@@ -95,11 +95,11 @@ bool XC::CircularArc::check_points(void) const
   }
   
 //! @brief Return the cirle sector correlated with the arc.
-const SectorCircular3d XC::CircularArc::get_sector_circular3d(void) const
+const CircularSector3d XC::CircularArc::get_sector_circular3d(void) const
   {
-    SectorCircular3d retval;
+    CircularSector3d retval;
     if(check_points())
-      retval= SectorCircular3d(p1->GetPos(),p3->GetPos(),p2->GetPos());
+      retval= CircularSector3d(p1->GetPos(),p3->GetPos(),p2->GetPos());
     return retval;
   }
 

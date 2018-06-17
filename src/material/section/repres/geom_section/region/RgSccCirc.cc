@@ -35,7 +35,7 @@
 
 #include "xc_basic/src/text/text_string.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
-#include "xc_utils/src/geom/d2/SectorAnilloCircular2d.h"
+#include "xc_utils/src/geom/d2/AnnulusSector2d.h"
 #include "xc_utils/src/geom/d2/Rejilla2d.h"
 
 const int I= 0, J=1, K= 2, L= 3; //Index of vertices.
@@ -133,17 +133,17 @@ double XC::RgSccCirc::getMinZ(void) const
 const XC::Vector &XC::RgSccCirc::getCenterPosition(void) const
   { return centerPosit; }
 
-//! @brief Returns a poligono inscrito en el sector del anillo circular.
+//! @brief Returns a polygon inscribed in the annulus sector.
 Poligono2d XC::RgSccCirc::getPolygon(void) const
   { return getSector().getPoligono2d(nDivCirc()); }
 
-SectorAnilloCircular2d &XC::RgSccCirc::getSector(void) const
+AnnulusSector2d &XC::RgSccCirc::getSector(void) const
   {
-    static SectorAnilloCircular2d retval;
+    static AnnulusSector2d retval;
     Pos2d O(centerPosit(0),centerPosit(1));
-    Circulo2d c(O,extRad);
-    SectorCircular2d sc(c,initAng,finalAng);
-    retval= SectorAnilloCircular2d(sc,intRad);
+    Circle2d c(O,extRad);
+    CircularSector2d sc(c,initAng,finalAng);
+    retval= AnnulusSector2d(sc,intRad);
     return retval;
   }
 

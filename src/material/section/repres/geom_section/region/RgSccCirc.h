@@ -34,7 +34,7 @@
 #include <material/section/repres/geom_section/region/RgQuadCell.h>
 #include <utility/matrix/Vector.h>
 
-class SectorAnilloCircular2d;
+class AnnulusSector2d;
 
 namespace XC {
 class Matrix;
@@ -103,7 +103,7 @@ class RgSccCirc: public RgQuadCell
     double getMinZ(void) const;
 
     Poligono2d getPolygon(void) const;
-    SectorAnilloCircular2d &getSector(void) const;
+    AnnulusSector2d &getSector(void) const;
 
 
     void Print(std::ostream &s, int flag =0) const;   

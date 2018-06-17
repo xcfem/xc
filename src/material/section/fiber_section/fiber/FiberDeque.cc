@@ -45,7 +45,7 @@
 #include "xc_utils/src/geom/d2/BND2d.h"
 #include "xc_utils/src/geom/d1/Recta2d.h"
 #include "xc_utils/src/geom/d1/Segment2d.h"
-#include "xc_utils/src/geom/d2/Circulo2d.h"
+#include "xc_utils/src/geom/d2/Circle2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/bool_op_poligono2d.h"
 #include "xc_utils/src/geom/d2/HalfPlane2d.h"
@@ -1351,7 +1351,7 @@ double XC::FiberDeque::computeFibersEffectiveConcreteArea(const std::list<Poligo
         L= factor*dm; //Side of the square prescribed by the standard.
         R= L*sqrt(2/(n*sin(2*M_PI/n)));
         const Pos2d pos= (*this)[i]->getPos();
-        tmp= Circulo2d(pos,R).getPoligonoInscrito(n);
+        tmp= Circle2d(pos,R).getPoligonoInscrito(n);
         if(tmp.Overlap(grossEffectiveConcreteAreaContour))
           for(std::list<Poligono2d>::const_iterator j= grossEffectiveConcreteAreaContour.begin();j!=grossEffectiveConcreteAreaContour.end();j++)
             {
