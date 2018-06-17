@@ -108,7 +108,8 @@ int XC::FiberSection3dBase::setParameter(const std::vector<std::string> &argv, P
         ok= fibers.setParameter(paramMatTag,argv2, param);
         if(ok<0)
           {
-            std::cerr << "FiberSection3dBase::setParameter() - could not set parameter. " << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+	              << "; could not set parameter. " << std::endl;
             return -1;
           }
         else
@@ -136,7 +137,8 @@ int XC::FiberSection3dBase::updateParameter(int parameterID, Information &info)
             ok= fibers.updateParameter(paramMatrTag,parameterID-100,info);
             if(ok<0)
               {
-                std::cerr << "XC::FiberSection3dBase::updateParameter() - could not update parameter. " << std::endl;
+                std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; could not update parameter. " << std::endl;
                 return ok;
               }
             else

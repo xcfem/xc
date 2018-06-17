@@ -55,7 +55,7 @@ Poligono2d XC::RegionSecc::getPolygon(void) const
 //! @param sp: Half-plane to intersect width.
 XC::RgSccPoligono XC::RegionSecc::Intersection(const HalfPlane2d &sp) const
   {
-    std::list<Poligono2d> tmpList= getPolygon().Interseccion(sp);
+    std::list<Poligono2d> tmpList= getPolygon().getIntersection(sp);
     if(tmpList.size()>1)
       std::cerr << getClassName() << __FUNCTION__
 	        << "; not a simply connected region."

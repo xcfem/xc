@@ -194,7 +194,7 @@ GeomObj::list_Pos3d XC::InteractionDiagram::get_intersection(const Pos3d &p) con
         const Plane plane= triang.getPlane();
         SemiRecta3d Op(O,p);
         //Intersection of the half-line with the plane.
-        lst_intersec= interseccion(plane,Op);
+        lst_intersec= intersection(plane,Op);
         if(lst_intersec.empty())
           {
 	    Pos3d nearest= i->Vertice(1);

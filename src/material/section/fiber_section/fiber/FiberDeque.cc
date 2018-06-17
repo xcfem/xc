@@ -1359,7 +1359,7 @@ double XC::FiberDeque::computeFibersEffectiveConcreteArea(const std::list<Poligo
                 dq_ac_effective[i].push_back(tmp);
               else if((*j).Overlap(tmp))
                 {
-                  std::list<Poligono2d> tmpLst= interseccion(tmp,*j);
+                  std::list<Poligono2d> tmpLst= intersection(tmp,*j);
                   assert(!tmpLst.empty());
                   dq_ac_effective[i].insert(dq_ac_effective[i].end(),tmpLst.begin(),tmpLst.end());
                 }

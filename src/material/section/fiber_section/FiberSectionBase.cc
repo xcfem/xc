@@ -364,7 +364,7 @@ std::list<Poligono2d> XC::FiberSectionBase::getGrossEffectiveConcreteAreaContour
     const double epsMin= fibers.getStrainMin(); //Minimal strain.
     const double epsMax= fibers.getStrainMax(); //Maximal strain.
     if(epsMin>0) //Full section is in tension.
-      retval.push_back(contour); //XXX This is an error.
+      retval.push_back(contour); //XXX Is this an error?.
     else if(epsMax>0) //Some (epsMin<=0) but not all the section is compressed.
       {
         if(hEfMax>1e-6)
@@ -373,10 +373,31 @@ std::list<Poligono2d> XC::FiberSectionBase::getGrossEffectiveConcreteAreaContour
             const Recta2d limit= getEffectiveConcreteAreaLimitLine(hEfMax);
             if(limit.exists())
               {
-		// Compute the half plane that is in tension.
-                const HalfPlane2d tensionedArea= getTensionedHalfPlane(limit);
-                assert(tensionedArea.exists());
-                retval= contour.Interseccion(tensionedArea);
+		if(contour.Overlap(limit))
+		  {
+		    // Compute the half plane that is in tension.
+		    const HalfPlane2d tensionedArea= getTensionedHalfPlane(limit);
+		    if(tensionedArea.exists())
+		      {
+			retval= contour.getIntersection(tensionedArea);
+			if(retval.empty())
+			  std::cerr << getClassName() << "::" << __FUNCTION__
+				    << "; intersection of section contour: "
+				    << contour << " with tensioned area: "
+				    << tensionedArea << std::endl;
+		      }
+		    else
+		      std::cerr << getClassName() << "::" << __FUNCTION__
+				<< "; can't compute tensioned area."
+				<< " epsMin= " << epsMin << " epsMax= " << epsMax
+				<< std::endl;
+		  }
+		else
+		  std::cerr << getClassName() << "::" << __FUNCTION__
+			    << "; effective concrete area limit line: "
+			    << limit << " outside section contour: " << contour
+			    << ";  hEfMax= " << hEfMax
+			    << std::endl;
               }
             else
               retval.push_back(contour);
@@ -389,6 +410,7 @@ std::list<Poligono2d> XC::FiberSectionBase::getGrossEffectiveConcreteAreaContour
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; can't get contour of gross effective concrete area."
+	          << " epsMin= " << epsMin << " epsMax= " << epsMax
                   << std::endl;
       }
     return retval;
@@ -396,8 +418,16 @@ std::list<Poligono2d> XC::FiberSectionBase::getGrossEffectiveConcreteAreaContour
 
 double XC::FiberSectionBase::getGrossEffectiveConcreteArea(const double &hEfMax) const
   {
+    double retval= 0.0;
     std::list<Poligono2d> tmp= getGrossEffectiveConcreteAreaContour(hEfMax);
-    return area(tmp.begin(),tmp.end());
+    if(!tmp.empty())
+      retval= area(tmp.begin(),tmp.end());
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; error when computing contour of"
+                  << " gross effective concrete area."
+                  << std::endl;
+    return retval;
   }
 
 //! @brief Returns the sum of the effective areas of rebars in tension.

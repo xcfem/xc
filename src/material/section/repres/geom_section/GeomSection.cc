@@ -259,7 +259,7 @@ Poligono2d XC::GeomSection::getCompressedZoneContour(const HalfPlane2d &sp_compr
     Poligono2d tmp= getRegionsContour();
     if(!tmp.empty())
       {
-	std::list<Poligono2d> tmpList= tmp.Interseccion(sp_compresiones);
+	std::list<Poligono2d> tmpList= tmp.getIntersection(sp_compresiones);
         if(tmpList.size()>1)
 	  std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; is not a simply connected region."
@@ -379,25 +379,25 @@ double XC::GeomSection::getAnchoMecanico(const Recta2d &bending_plane_trace) con
 
 //! @brief Return the width «b0» of the compressed strut
 //! that corresponds to the arm lever represented by the segment being passed as parameter.
-double XC::GeomSection::getCompressedStrutWidth(const Segment2d &brazo_mecanico) const
+double XC::GeomSection::getCompressedStrutWidth(const Segment2d &lever_arm) const
   {
     const Poligono2d contour= append_mid_points(getRegionsContour());
     const size_t num_vertices= contour.GetNumVertices();
-    Recta2d perp= brazo_mecanico.Mediatriz();
+    Recta2d perp= lever_arm.Mediatriz();
     Segment2d ancho= contour.Clip(perp);
-    Pos2d p= intersection_point(ancho,brazo_mecanico);
+    Pos2d p= intersection_point(ancho,lever_arm);
     assert(p.exists());
     double b2= std::min(dist2(p,ancho.Origen()),dist2(p,ancho.Destino()));
     double bmin2= b2;
     bool intersecaBrazo= false;
     for(register size_t i=1;i<=num_vertices;i++)
       {
-        perp= brazo_mecanico.Perpendicular(contour.Vertice(i));
-        intersecaBrazo= brazo_mecanico.Interseca(perp);
+        perp= lever_arm.Perpendicular(contour.Vertice(i));
+        intersecaBrazo= lever_arm.intersects(perp);
         if(intersecaBrazo)
           {
             ancho= contour.Clip(perp);
-            p= intersection_point(ancho,brazo_mecanico);
+            p= intersection_point(ancho,lever_arm);
             if(p.exists())
               {
                 b2= std::min(dist2(p,ancho.Origen()),dist2(p,ancho.Destino()));
