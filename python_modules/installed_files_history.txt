@@ -921,6 +921,8 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/callback_controls.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/config/colors.py
 /usr/local/lib/python2.7/dist-packages/postprocess/config/colors.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/config/default_config.py
+/usr/local/lib/python2.7/dist-packages/postprocess/config/default_config.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/config/en_captions.py
 /usr/local/lib/python2.7/dist-packages/postprocess/config/en_captions.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/config/fr_captions.py
