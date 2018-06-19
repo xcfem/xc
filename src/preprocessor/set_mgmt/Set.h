@@ -55,6 +55,8 @@ class Constraint;
 //!  - Uniform meshes.
 class Set: public SetMeshComp
   {
+  private:
+    Set *alloc_set(void);
   public:
     void numera(void);
 
@@ -159,9 +161,9 @@ class Set: public SetMeshComp
     Set &operator-=(const Set &);
     Set &operator*=(const Set &);
     
-    Set operator+(const Set &) const;
-    Set operator-(const Set &) const;
-    Set operator*(const Set &) const;
+    Set &operator+(const Set &) const;
+    Set &operator-(const Set &) const;
+    Set &operator*(const Set &) const;
 
     ~Set(void);
   };

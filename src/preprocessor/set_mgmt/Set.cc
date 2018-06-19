@@ -84,31 +84,34 @@ XC::Set &XC::Set::operator*=(const Set &other)
 //!
 //! Concatenates the name and description of the arguments and
 //! extend the lists of the first set with the objects from the argument.
-XC::Set XC::Set::operator+(const Set &b) const
+XC::Set &XC::Set::operator+(const Set &b) const
   {
     Set result(*this);
     result+= b;
-    return result;
+    Set *retval= result.alloc_set();
+    return *retval;
   }
 
 //! @brief Difference operator.
 //!
 //! Removes the objects that belong also to the argument.
-XC::Set XC::Set::operator-(const Set &b) const
+XC::Set &XC::Set::operator-(const Set &b) const
   {
     Set result(*this);
     result-= b;
-    return result;
+    Set *retval= result.alloc_set();
+    return *retval;
   }
 
 //! @brief Intersection operator.
 //!
 //! Return the set intersection.
-XC::Set XC::Set::operator*(const Set &b) const
+XC::Set &XC::Set::operator*(const Set &b) const
   {
     Set result(*this);
     result*= b;
-    return result;
+    Set *retval= result.alloc_set();
+    return *retval;
   }
 
 //! @brief Clears the set.
@@ -155,6 +158,18 @@ void XC::Set::Transforma(const size_t &indice_trf)
     TrfGeom *trf= getPreprocessor()->getMultiBlockTopology().getTransformacionesGeometricas().busca(indice_trf);
     if(trf)
       Transforma(*trf);
+  }
+
+//! @brief Tries to allocate a copy this set.
+XC::Set *XC::Set::alloc_set(void)
+  {
+    MapSet &map_set= getPreprocessor()->get_sets();
+    XC::Set *retval= map_set.alloc_set(*this);
+    if(!retval) //Can't allocate.
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; can't allocate this set."
+	        << std::endl;
+    return retval;
   }
 
 //! @brief Creates a copy of the elements of the set and put them in another

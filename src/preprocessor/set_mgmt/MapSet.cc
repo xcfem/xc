@@ -38,148 +38,132 @@
 #include "domain/mesh/node/Node.h"
 
 XC::ID XC::MapSet::setsDbTags;
-std::deque<std::string> XC::MapSet::setsClassNames;
-
-//! @brief Return true if the sets already exists.
-bool XC::MapSet::exists(const std::string &nmb) const
-  { return (sets.find(nmb)!=sets.end()); }
 
 //! @brief Returns a pointer to the set which name is being passed as parameter.
-XC::SetBase *XC::MapSet::busca_set(const std::string &nmb)
+XC::SetBase *XC::MapSet::busca_set(const std::string &name)
   {
-    if(exists(nmb))
-      return sets[nmb];
-    else if(entities.find(nmb)!=entities.end())
-      return entities[nmb];
+    if(exists(name))
+      return MapSetBase::find(name);
+    else if(entities.find(name)!=entities.end())
+      return entities[name];
     else
       return nullptr;
   }
 
 //! @brief Returns a pointer to the set which name is being passed as parameter.
-const XC::SetBase *XC::MapSet::busca_set(const std::string &nmb) const
+const XC::SetBase *XC::MapSet::busca_set(const std::string &name) const
   {
-    const_iterator i= sets.find(nmb);
-    if(i!=sets.end())
-      return (*i).second;
-    else
+    const XC::SetBase *retval= MapSetBase::find(name);
+    if(!retval)
       {
-    	map_ent_mdlr::const_iterator j= entities.find(nmb);
+    	map_ent_mdlr::const_iterator j= entities.find(name);
         if(j != entities.end())
-          return (*j).second;
+          retval= (*j).second;
         else
-          return nullptr;
+          retval= nullptr;
       }
+    return retval;
   }
 
 //! @brief Return the set which name is being passed as parameter.
-XC::SetBase &XC::MapSet::getSet(const std::string &nmb)
+XC::SetBase &XC::MapSet::getSet(const std::string &name)
   {
-    SetBase *retval= busca_set(nmb);
+    SetBase *retval= busca_set(name);
     if(!retval)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; set named '"
-                  << nmb << "' not found. Total set returned." << std::endl;
+                  << name << "' not found. Total set returned." << std::endl;
         retval= total;
       }
     return *retval;
   }
 
 
-XC::MapSet::const_iterator XC::MapSet::begin(void) const
-  { return sets.begin(); }
-
-XC::MapSet::const_iterator XC::MapSet::end(void) const
-  { return sets.end(); }
-
-XC::MapSet::iterator XC::MapSet::begin(void)
-  { return sets.begin(); }
-
-XC::MapSet::iterator XC::MapSet::end(void)
-  { return sets.end(); }
-
-//! @brief Creates a new set con el nombre que se le being passed as parameter.
-XC::Set *XC::MapSet::create_set(const std::string &nmb)
+//! @brief Creates a new set with the name being passed as parameter.
+XC::Set *XC::MapSet::create_set(const std::string &name)
   {
     Set *tmp =nullptr;
-    if(!exists(nmb)) //Set is new.
+    if(!exists(name)) //Set is new.
       {
-        tmp= new Set(nmb,getPreprocessor());
-        sets[nmb]= tmp;
+        tmp= new Set(name,getPreprocessor());
+	MapSetBase::operator[](name)= tmp;
       }
     else //Set already exists
-      tmp= dynamic_cast<Set *>(busca_set(nmb));
+      tmp= dynamic_cast<Set *>(busca_set(name));
     return tmp;
   }
 
-void XC::MapSet::abre_set(const std::string &nmb)
+//! @brief Allocates a copy of the set argument.
+XC::Set *XC::MapSet::alloc_set(const Set &s)
+  {
+    const std::string &name= s.getName();
+    Set *tmp =nullptr;
+    if(exists(name))
+      removeSet(name);
+    tmp= new Set(s);
+    MapSetBase::operator[](name)= tmp;
+    return tmp;
+  }
+
+bool XC::MapSet::is_open(const std::string &name) const
+  {
+    map_sets::const_iterator i= open_sets.find(name);
+    return (i!=open_sets.end());
+  }
+
+//! @brief Open the set.
+void XC::MapSet::abre_set(const std::string &name)
   {
     SetBase *tmp =nullptr;
-    if(!exists(nmb)) //Set doesn't exists.
+    if(!exists(name)) //Set doesn't exists.
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; the set: '"
-                << nmb << "' doesn't exists.\n";
+                << name << "' doesn't exists.\n";
     else //The set exists
       {
-        tmp= busca_set(nmb);
+        tmp= busca_set(name);
         assert(tmp);
-        abiertos[nmb]= tmp;
+        open_sets[name]= tmp;
       }
   }
-void XC::MapSet::cierra_set(const std::string &nmb)
+
+//! @brief Close set.
+void XC::MapSet::cierra_set(const std::string &name)
   {
-    if(!exists(nmb)) //Set doesn't exists.
+    if(!exists(name)) //Set doesn't exists.
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; the set: '"
-                << nmb << "' doesn't exists.\n";
+                << name << "' doesn't exists.\n";
     else //The set exists
       {
-	iterator i= abiertos.find(nmb);
-        if(i!= abiertos.end())
-          abiertos.erase(i);
+	iterator i= open_sets.find(name);
+        if(i!= open_sets.end())
+          open_sets.erase(i);
         else
           if(verbosity>1)
 	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; the set: '"
-                      << nmb << "' is already closed.\n";
-      }
-  }
-
-//! @bref Returns a copy of the argument.
-XC::SetEstruct *XC::MapSet::create_set_estruct(const SetEstruct &set_estruct)
-  {
-    const std::string nmb= set_estruct.getName();
-    if(exists(nmb)) //The set exists
-      {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; the set: " << nmb
-		  << " already exists. Doing nothing." << std::endl;
-        return nullptr;
-      }
-    else //the set is new.
-      {
-	SetEstruct *retval= set_estruct.getCopy();
-        if(retval) sets[nmb]= retval;
-        return retval;
+                      << name << "' is already closed.\n";
       }
   }
 
 //! @bref Creates a copy of the structured set being passed as parameter.
-XC::SetBase *XC::MapSet::broke_set(const std::string &nmb,const std::string &nmb_clase)
+XC::SetBase *XC::MapSet::broke_set(const std::string &name,const std::string &class_name)
   {
     SetBase *retval= nullptr;
-    if(exists(nmb)) //The set exists
-      retval= busca_set(nmb);
+    if(exists(name)) //The set exists
+      retval= busca_set(name);
     else //the set is new.
       {
-        if(nmb_clase == "XC::Set")
-          retval= new Set(nmb,getPreprocessor());
-//         else if(nmb_clase == "XC::SetEstruct")
-//           retval= new SetEstruct(nmb,getPreprocessor());
+        if(class_name == "XC::Set")
+          retval= new Set(name,getPreprocessor());
+//         else if(class_name == "XC::SetEstruct")
+//           retval= new SetEstruct(name,getPreprocessor());
         else
 	  std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; class name: '"
-                    << nmb_clase << "' unknown." << std::endl;
+                    << class_name << "' unknown." << std::endl;
       }
     return retval;
   }
@@ -188,32 +172,32 @@ XC::SetBase *XC::MapSet::broke_set(const std::string &nmb,const std::string &nmb
 XC::EntMdlr *XC::MapSet::insert_ent_mdlr(EntMdlr *ent_mdlr)
   {
     assert(ent_mdlr);
-    const std::string nmb= ent_mdlr->getName();
-    if(exists(nmb)) //The set exists
+    const std::string name= ent_mdlr->getName();
+    if(exists(name)) //The set exists
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "the set: " << nmb
+		  << "the set: " << name
 		  << " already exists. New set not inserted." << std::endl;
         return nullptr;
       }
     else //the set is new.
       {
-        entities[nmb]= ent_mdlr;
+        entities[name]= ent_mdlr;
         return ent_mdlr;
       }
   }
 
 //! @brief Returns a pointer to the set estructurado which name is being passed as parameter.
-XC::SetEstruct *XC::MapSet::busca_set_estruct(const std::string &nmb)
+XC::SetEstruct *XC::MapSet::busca_set_estruct(const std::string &name)
   {
-    SetBase *set= busca_set(nmb);
+    SetBase *set= busca_set(name);
     SetEstruct *retval= nullptr;
     if(set)
       retval= dynamic_cast<SetEstruct *>(set);
     return retval;
   }
 
-//! @brief Inicializa the set total.
+//! @brief Initialize total set.
 void XC::MapSet::setup_total(void)
   {
     const std::string str_tot= "total";
@@ -227,7 +211,8 @@ XC::MapSet::MapSet(Preprocessor *prep)
 
 //! @brief Copy constructor (DOESN'T COPY SETS).
 XC::MapSet::MapSet(const MapSet &otro)
-  : PreprocessorContainer(otro), MovableObject(otro), total(nullptr)
+  : PreprocessorContainer(otro), MovableObject(otro),
+    MapSetBase(otro), total(nullptr)
   { setup_total(); }
 
 //! @brief Assignment operator (DOESN'T COPY SETS).
@@ -235,40 +220,33 @@ XC::MapSet &XC::MapSet::operator=(const MapSet &otro)
   {
     PreprocessorContainer::operator=(otro);
     MovableObject::operator=(otro);
+    MapSetBase::operator=(otro);
     setup_total();
     return *this;
   }
 
 //! @brief Creates a new set with the name which is passed as a parameter.
-XC::Set *XC::MapSet::defSet(const std::string &nmb)
-  { return create_set(nmb); }
+XC::Set *XC::MapSet::defSet(const std::string &name)
+  { return create_set(name); }
 
 //! @brief Deletes the set and removes it from the sets map.
-void XC::MapSet::removeSet(const std::string &nmb)
+void XC::MapSet::removeSet(const std::string &name)
   {
-    Set *tmp= dynamic_cast<Set *>(sets[nmb]);
-    if(tmp) //Set exists.
+    if(is_open(name))
       {
-        sets[nmb]= nullptr;
-        delete tmp;
-        sets.erase(nmb);
+	std::clog << getClassName() << "::" << __FUNCTION__
+	          << "; warning! removing open set: '"
+	          << name << "'\n";
+        cierra_set(name);
       }
-    else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; ERROR set named: "
-                << nmb << " not found." << std::endl;
+    MapSetBase::removeSet(name);
   }
 
 //! @brief Clears all defined sets.
 void XC::MapSet::clearSets(void)
   {
-    for(iterator i= begin();i!=end();i++)
-      {
-        delete (*i).second;
-        (*i).second= nullptr;
-      }
+    MapSetBase::clearSets();
     total= nullptr;
-    sets.clear();
   }
 
 //! @brief Clears all.
@@ -290,43 +268,6 @@ void XC::MapSet::reset(void)
 XC::MapSet::~MapSet(void)
   { clearAll(); }
 
-//! @brief Return the DBTags of the sets.
-const XC::ID &XC::MapSet::getSetsDBTags(CommParameters &cp)
-  {
-    static ID retval;
-    const int size= sets.size();
-    if(size>0)
-      {
-        retval.resize(size);
-        int loc =0;
-        // loop over sets in map adding their dbTag to the ID
-        for(const_iterator i= begin();i!=end();i++)
-          {
-            retval[loc]= (*i).second->getDbTag(cp);
-            loc++;
-          }        
-      }
-    return retval;
-  }
-
-//! @brief Return the nombres de clase of the sets.
-const std::deque<std::string> &XC::MapSet::getSetsClassNames(void)
-  {
-    const int size= sets.size();
-    if(size>0)
-      {
-        setsClassNames.resize(size);
-        int loc =0;
-        // loop over sets in map adding their classTag to the ID
-        for(const_iterator i= begin();i!=end();i++)
-          {
-            setsClassNames[loc]= (*i).second->getClassName();
-            loc++;
-          }
-      }
-    return setsClassNames;
-  }
-
 //! @brief Returns a vector to store the dbTags
 //! of the class members.
 XC::DbTagData &XC::MapSet::getDbTagData(void) const
@@ -338,7 +279,7 @@ XC::DbTagData &XC::MapSet::getDbTagData(void) const
 //! @brief Envía los dbTags of the sets través del canal being passed as parameter.
 int XC::MapSet::sendSetsDbTags(int posDbTag,CommParameters &cp)
   {
-    const int size= sets.size();
+    const int size= MapSetBase::size();
     int res= 0;
     if(size>0)
       {
@@ -354,7 +295,7 @@ int XC::MapSet::sendSetsDbTags(int posDbTag,CommParameters &cp)
 //! @brief Envía los nombres de clase of the sets través del canal being passed as parameter.
 int XC::MapSet::sendSetsClassNames(int posDbTag,CommParameters &cp)
   {
-    const int size= sets.size();
+    const int size= MapSetBase::size();
     int res= 0;
     if(size>0)
       {
@@ -431,29 +372,29 @@ int XC::MapSet::receiveSets(int posDbTag1, int posDbTag2, int posDbTag3,const in
     return res;
   }
 //! @brief Send members through the channel being passed as parameter.
-int XC::MapSet::sendAbiertos(int posDbTag1, int posDbTag2,CommParameters &cp)
+int XC::MapSet::sendOpenSets(int posDbTag1, int posDbTag2,CommParameters &cp)
   {
-    const size_t sz= abiertos.size();
+    const size_t sz= open_sets.size();
     int res= cp.sendInt(sz,getDbTagData(),CommMetaData(posDbTag1));
-    if(!abiertos.empty())
+    if(!open_sets.empty())
       {
-        std::deque<std::string> nmb_abiertos;
-        for(const_iterator i= abiertos.begin();i!=abiertos.end();i++)
-          nmb_abiertos.push_back((*i).first);
-        res+= cp.sendStrings(nmb_abiertos,getDbTagData(),CommMetaData(posDbTag2));
+        std::deque<std::string> open_sets_names;
+        for(const_iterator i= open_sets.begin();i!=open_sets.end();i++)
+          open_sets_names.push_back((*i).first);
+        res+= cp.sendStrings(open_sets_names,getDbTagData(),CommMetaData(posDbTag2));
       }
     return res;
   }
 //! @brief Receives members through the channel being passed as parameter.
-int XC::MapSet::receiveAbiertos(int posDbTag1, int posDbTag2,const CommParameters &cp)
+int XC::MapSet::receiveOpenSets(int posDbTag1, int posDbTag2,const CommParameters &cp)
   {
-     int sz_abiertos= 0;
-     int res= cp.receiveInt(sz_abiertos,getDbTagData(),CommMetaData(posDbTag1));
-     if(sz_abiertos>0)
+     int sz_open_sets= 0;
+     int res= cp.receiveInt(sz_open_sets,getDbTagData(),CommMetaData(posDbTag1));
+     if(sz_open_sets>0)
        {
-         std::deque<std::string> nmb_abiertos;
-         res+= cp.receiveStrings(nmb_abiertos,getDbTagData(),CommMetaData(posDbTag2));
-         for(std::deque<std::string>::const_iterator i= nmb_abiertos.begin();i!=nmb_abiertos.end();i++)
+         std::deque<std::string> open_sets_names;
+         res+= cp.receiveStrings(open_sets_names,getDbTagData(),CommMetaData(posDbTag2));
+         for(std::deque<std::string>::const_iterator i= open_sets_names.begin();i!=open_sets_names.end();i++)
            abre_set(*i);
        }
     return res;
@@ -462,12 +403,12 @@ int XC::MapSet::receiveAbiertos(int posDbTag1, int posDbTag2,const CommParameter
 //! @brief Send members through the channel being passed as parameter.
 int XC::MapSet::sendData(CommParameters &cp)
   {
-    const size_t sz= sets.size();
+    const size_t sz= MapSetBase::size();
     int res= cp.sendInt(sz,getDbTagData(),CommMetaData(0)); //number of sets
     if(sz>0)
       {
         res+= sendSets(1,2,3,cp);
-        res+= sendAbiertos(4,5,cp);
+        res+= sendOpenSets(4,5,cp);
       }
     //XX Entities sending (points, lines, surfaces,...) pending.
     return res;
@@ -481,7 +422,7 @@ int XC::MapSet::recvData(const CommParameters &cp)
     if(sz>0)
       {
         res+= receiveSets(1,2,3,sz,cp);
-        res+= receiveAbiertos(4,5,cp);
+        res+= receiveOpenSets(4,5,cp);
       }
     //XX Entities receiving (points, lines, surfaces,...) pending.
     return res;
@@ -523,72 +464,3 @@ int XC::MapSet::recvSelf(const CommParameters &cp)
     return res;
   }
 
-//! @brief Return the sets que contienen the pointer to node
-//! being passed as parameter.
-std::set<XC::SetBase *> XC::MapSet::get_sets(const Node *n)
-  {
-    std::set<SetBase *> retval;
-    for(iterator i= begin();i!=end();i++)
-      if((*i).second->In(n)) retval.insert((*i).second);
-    return retval;
-  }
-
-//! @brief Return the sets that containt the element pointer
-//! being passed as parameter.
-std::set<XC::SetBase *> XC::MapSet::get_sets(const Element *e)
-  {
-    std::set<SetBase *> retval;
-    for(iterator i= begin();i!=end();i++)
-      if((*i).second->In(e)) retval.insert((*i).second);
-    return retval;
-  }
-
-//! @brief Return the sets that contain the pointer to the ponint
-//! being passed as parameter.
-std::set<XC::SetBase *> XC::MapSet::get_sets(const Pnt *p)
-  {
-    std::set<SetBase *> retval;
-    for(iterator i= begin();i!=end();i++)
-      if((*i).second->In(p)) retval.insert((*i).second);
-    return retval;
-  }
-
-//! @brief Return the sets que contienen the pointer a «edge»
-//! being passed as parameter.
-std::set<XC::SetBase *> XC::MapSet::get_sets(const Edge *e)
-  {
-    std::set<SetBase *> retval;
-    for(iterator i= begin();i!=end();i++)
-      if((*i).second->In(e)) retval.insert((*i).second);
-    return retval;
-  }
-
-//! @brief Return the sets than contain a pointer to the face
-//! being passed as parameter.
-std::set<XC::SetBase *> XC::MapSet::get_sets(const Face *f)
-  {
-    std::set<SetBase *> retval;
-    for(iterator i= begin();i!=end();i++)
-      if((*i).second->In(f)) retval.insert((*i).second);
-    return retval;
-  }
-
-//! @brief Return the sets que contienen the pointer a cuerpo
-//! being passed as parameter.
-std::set<XC::SetBase *> XC::MapSet::get_sets(const Body *b)
-  {
-    std::set<SetBase *> retval;
-    for(iterator i= begin();i!=end();i++)
-      if((*i).second->In(b)) retval.insert((*i).second);
-    return retval;
-  }
-
-//! @brief Return the sets que contienen the pointer a «uniform grid»
-//! being passed as parameter.
-std::set<XC::SetBase *> XC::MapSet::get_sets(const UniformGrid *ug)
-  {
-    std::set<SetBase *> retval;
-    for(iterator i= begin();i!=end();i++)
-      if((*i).second->In(ug)) retval.insert((*i).second);
-    return retval;
-  }

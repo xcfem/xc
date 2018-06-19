@@ -32,6 +32,7 @@
 
 #include "preprocessor/PreprocessorContainer.h"
 #include "utility/actor/actor/MovableObject.h"
+#include "MapSetBase.h"
 #include <map>
 #include <deque>
 
@@ -39,39 +40,26 @@
 namespace XC {
 
 class Domain;
-class SetBase;
-class Set;
-class SetEstruct;
-class EntMdlr;
-class Pnt;
-class Edge;
-class Face;
-class Body;
-class UniformGrid;
 
 //!  @ingroup Set
 //! 
 //!  @brief Sets container.
 //!  
-class MapSet: public PreprocessorContainer, public MovableObject
+ class MapSet: public PreprocessorContainer, public MovableObject, public MapSetBase
   {
     static ID setsDbTags;//! dbTags para the sets.
-    static std::deque<std::string> setsClassNames; //! sets class names.
   public:
-    typedef std::map<std::string,SetBase *> map_sets;
-    typedef map_sets::iterator iterator;
-    typedef map_sets::const_iterator const_iterator;
     typedef std::map<std::string,EntMdlr *> map_ent_mdlr;
   private:
-    map_sets sets; //!< Sets that contain pointers to entities.
     map_ent_mdlr entities; //! Geometric entities (points, lines, surfaces,...).
     Set *total; //!< Pointer to total set (Created in constructor).
-    map_sets abiertos; //!< Opened sets (those for wich each new entity will be added to).
+    map_sets open_sets; //!< Opened sets (those for wich each new entity will be added to).
 
     friend class EntMdlr;
 
+    bool is_open(const std::string &) const;
     Set *create_set(const std::string &);
-    SetEstruct *create_set_estruct(const SetEstruct &);
+    Set *alloc_set(const Set &);
     SetBase *broke_set(const std::string &,const std::string &);
 
     SetBase *busca_set(const std::string &nmb);
@@ -86,14 +74,10 @@ class MapSet: public PreprocessorContainer, public MovableObject
     friend class Set;
     void abre_set(const std::string &nmb);
     void cierra_set(const std::string &nmb);
-    iterator begin(void);
-    iterator end(void);
       
     MapSet(const MapSet &otro);
     MapSet &operator=(const MapSet &otro);
   protected:
-    const ID &getSetsDBTags(CommParameters &cp);
-    const std::deque<std::string> &getSetsClassNames(void);
     DbTagData &getDbTagData(void) const;
     int sendSetsDbTags(int posDbTag,CommParameters &cp);
     int sendSetsClassNames(int posDbTag,CommParameters &cp);
@@ -101,8 +85,8 @@ class MapSet: public PreprocessorContainer, public MovableObject
     int receiveSetsClassNames(int pDbTg,int sz,const CommParameters &cp);
     int sendSets(int posDbTag1, int posDbTag2, int posDbTag3,CommParameters &cp);
     int receiveSets(int posDbTag1, int posDbTag2, int posDbTag3,const int &,const CommParameters &cp);
-    int sendAbiertos(int posDbTag1, int posDbTag2,CommParameters &cp);
-    int receiveAbiertos(int posDbTag1, int posDbTag2,const CommParameters &cp);
+    int sendOpenSets(int posDbTag1, int posDbTag2,CommParameters &cp);
+    int receiveOpenSets(int posDbTag1, int posDbTag2,const CommParameters &cp);
 
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
@@ -115,29 +99,19 @@ class MapSet: public PreprocessorContainer, public MovableObject
 
     EntMdlr *insert_ent_mdlr(EntMdlr *ent_mdlr);
 
-    bool exists(const std::string &nmb) const;
     Set *get_set_total(void)
       { return total; }
     const Set *get_set_total(void) const
       { return total; }
-    inline const map_sets &get_sets_abiertos(void) const
-      { return abiertos; }
-    inline map_sets &get_sets_abiertos(void)
-      { return abiertos; }
+    inline const map_sets &get_open_sets(void) const
+      { return open_sets; }
+    inline map_sets &get_open_sets(void)
+      { return open_sets; }
     Set *defSet(const std::string &);
     void removeSet(const std::string &);
 
     const SetBase *busca_set(const std::string &nmb) const;
     SetBase &getSet(const std::string &nmb);
-    const_iterator begin(void) const;
-    const_iterator end(void) const;
-    std::set<SetBase *> get_sets(const Node *);
-    std::set<SetBase *> get_sets(const Element *);
-    std::set<SetBase *> get_sets(const Pnt *);
-    std::set<SetBase *> get_sets(const Edge *);
-    std::set<SetBase *> get_sets(const Face *);
-    std::set<SetBase *> get_sets(const Body *);
-    std::set<SetBase *> get_sets(const UniformGrid *);
 
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
