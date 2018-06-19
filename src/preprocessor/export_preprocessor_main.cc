@@ -28,9 +28,16 @@ void export_preprocessor_main(void)
     using namespace boost::python;
     docstring_options doc_options;
 
+    typedef std::map<std::string,XC::SetBase *> map_sets;
+    class_<map_sets, boost::noncopyable >("map_sets", no_init)
+      //.def(boost::python::map_indexing_suite<map_sets >())
+      ;
+    class_<XC::MapSetBase , bases<map_sets>, boost::noncopyable >("MapSetBase", no_init)
+      ;
+ 
     XC::MapSet::const_iterator (XC::MapSet::*cBegin)(void) const= &XC::MapSet::begin;
     XC::MapSet::const_iterator (XC::MapSet::*cEnd)(void) const= &XC::MapSet::end;
-    class_<XC::MapSet, bases<XC::PreprocessorContainer>, boost::noncopyable >("MapSet", no_init)
+    class_<XC::MapSet, bases<XC::PreprocessorContainer,XC::MapSetBase>, boost::noncopyable >("MapSet", no_init)
       .def("__iter__",range(cBegin, cEnd))
       .def("__getitem__",&XC::MapSet::getSet, return_internal_reference<>())
       .def("getSet", &XC::MapSet::getSet, return_internal_reference<>(),"Returns set by name.")
