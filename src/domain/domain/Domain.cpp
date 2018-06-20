@@ -465,10 +465,10 @@ bool XC::Domain::addLoadCombination(LoadCombination *comb)
         if(nmbCombActual!= "")
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << "; warning! "
-                    << "adding combination: " << comb->getNombre()
+                    << "adding combination: " << comb->getName()
                     << " without removing: " << nmbCombActual
                     << ".\n";
-        nmbCombActual= comb->getNombre();
+        nmbCombActual= comb->getName();
         if(comb->getDomain()!=this)
           comb->setDomain(this);
         retval= comb->addToDomain();
@@ -548,10 +548,10 @@ void XC::Domain::removeLoadCombination(LoadCombination *comb)
   {
     if(comb)
       {
-        if((nmbCombActual!= comb->getNombre())&& (!nmbCombActual.empty()))
+        if((nmbCombActual!= comb->getName())&& (!nmbCombActual.empty()))
 	  std::clog << getClassName() << "::" << __FUNCTION__
 		    << "; WARNING - "
-                    << "removing load combination: " << comb->getNombre()
+                    << "removing load combination: " << comb->getName()
                     << " without removing: " << nmbCombActual
                     << ".\n";
         nmbCombActual= "";

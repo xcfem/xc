@@ -52,7 +52,7 @@ XC::EntMdlrBase::EntMdlrBase(const std::string &nmb,Preprocessor *prep)
 //! @brief += operator.
 XC::EntMdlrBase &XC::EntMdlrBase::operator+=(const EntMdlrBase &otro)
   {
-    Nombre()+= '+' + otro.getName();
+    EntConNmb::operator+=(otro);
     labels+= otro.labels;
     return *this;
   }
@@ -60,7 +60,7 @@ XC::EntMdlrBase &XC::EntMdlrBase::operator+=(const EntMdlrBase &otro)
 //! @brief -= operator.
 XC::EntMdlrBase &XC::EntMdlrBase::operator-=(const EntMdlrBase &otro)
   {
-    Nombre()+= '-' + otro.getName();
+    EntConNmb::operator-=(otro);
     labels-= otro.labels;
     return *this;
   }
@@ -68,7 +68,7 @@ XC::EntMdlrBase &XC::EntMdlrBase::operator-=(const EntMdlrBase &otro)
 //! @brief *= operator (intersection).
 XC::EntMdlrBase &XC::EntMdlrBase::operator*=(const EntMdlrBase &otro)
   {
-    Nombre()+= '*' + otro.getName();
+    EntConNmb::operator*=(otro);
     labels*= otro.labels;
     return *this;
   }
@@ -225,7 +225,7 @@ int XC::EntMdlrBase::recvData(const CommParameters &cp)
   {
     std::string tmp;
     int res= cp.receiveString(tmp,getDbTagData(),CommMetaData(0));
-    Nombre()= tmp;
+    setName(tmp);
     res+= recvIdsEtiquetas(1,2,cp);
     return res;
   }

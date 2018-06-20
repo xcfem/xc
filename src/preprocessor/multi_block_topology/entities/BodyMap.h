@@ -67,7 +67,7 @@ Body *BodyMap::New(void)
         retval= new B(preprocessor);
         if(retval)
           {
-            retval->Nombre()= "f"+boost::lexical_cast<std::string>(getTag());
+            retval->Name()= "f"+boost::lexical_cast<std::string>(getTag());
             (*this)[getTag()]= retval;
             UpdateSets(retval);
             tag++;

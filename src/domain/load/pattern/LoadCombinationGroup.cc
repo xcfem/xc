@@ -149,7 +149,7 @@ XC::LoadCombination *XC::LoadCombinationGroup::newLoadCombination(const std::str
           {
             comb->setDomain(getDomain());
             comb->setDescomp(descomp);
-            (*this)[comb->getNombre()]= comb;
+            (*this)[comb->getName()]= comb;
           }
       }
     return comb;

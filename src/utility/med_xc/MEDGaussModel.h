@@ -51,7 +51,7 @@ class MEDGaussModel: public MEDObject
   public:
     MEDGaussModel(const std::string &,const MED_EN::medGeometryElement &, const GaussModel &);
 
-    const std::string &getNombre(void) const;
+    const std::string &getName(void) const;
     const MED_EN::medGeometryElement &getType(void) const;
     med_gauss_model *getGaussModelMED(void) const;
 

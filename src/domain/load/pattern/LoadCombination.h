@@ -116,7 +116,7 @@ class LoadCombination: public ForceReprComponent
     bool addToDomain(void);
     void removeFromDomain(void);
 
-    inline const std::string &getNombre(void) const
+    inline const std::string &getName(void) const
       { return nombre; }
 
     inline void setDescomp(const std::string &descomp)

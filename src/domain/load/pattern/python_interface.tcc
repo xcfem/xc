@@ -63,7 +63,7 @@ class_<XC::LoadPattern, bases<XC::NodeLocker>, boost::noncopyable >("LoadPattern
 XC::LoadCombination &(XC::LoadCombination::*add)(const std::string &)= &XC::LoadCombination::add;
 XC::LoadCombination &(XC::LoadCombination::*substract)(const std::string &)= &XC::LoadCombination::substract;
 class_<XC::LoadCombination, XC::LoadCombination *, bases<XC::ForceReprComponent>, boost::noncopyable >("LoadCombination", no_init)
-  .add_property("getName", make_function( &XC::LoadCombination::getNombre, return_value_policy<return_by_value>() ), "Returns combination's name.")
+  .add_property("getName", make_function( &XC::LoadCombination::getName, return_value_policy<return_by_value>() ), "Returns combination's name.")
   .def("addToDomain", &XC::LoadCombination::addToDomain,"Add combination to the domain.")
   .def("removeFromDomain", &XC::LoadCombination::removeFromDomain,"Remove combination from the domain.")
   .def("getCombPrevia", &XC::LoadCombination::getPtrCombPrevia,return_internal_reference<>(),"Returns previous load combination.")

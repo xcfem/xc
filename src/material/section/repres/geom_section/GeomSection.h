@@ -171,7 +171,7 @@ Axis *XC::GeomSection::createAxis(void)
         retval= new E(this);
         if(retval)
           {
-            retval->Nombre()= "l"+boost::lexical_cast<std::string>(axis_tag);
+            retval->Name()= "l"+boost::lexical_cast<std::string>(axis_tag);
             axes[axis_tag]= retval;
             axis_tag++;
 	  }

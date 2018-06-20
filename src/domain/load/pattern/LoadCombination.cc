@@ -197,7 +197,7 @@ bool XC::LoadCombination::addToDomain(void)
 	        std::cerr << "Can't add load case: '"
                           << i->getNombreCaso(casos)
                           << "' when activating combination: '"
-                          << getNombre() << "'\n";
+                          << getName() << "'\n";
               }
             retval= (retval && result);
           }
@@ -338,7 +338,7 @@ const std::string XC::LoadCombination::getNombreCombPrevia(void) const
     std::string retval;
     const LoadCombination *c= getPtrCombPrevia();
     if(c)
-      retval= c->getNombre();
+      retval= c->getName();
     return retval;
   }
 

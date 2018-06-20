@@ -93,11 +93,11 @@ void XC::MEDMeshing::defineMEDGroups(void)
               {
                 Set set_nodes(*set);
                 set_nodes.clearElements();
-                set_nodes.Nombre()= nmb+str_node_group;
+                set_nodes.setName(nmb+str_node_group);
                 med_groups.push_back(MEDGroupInfo(this,set_nodes));
                 Set set_elements(*set);
                 set_elements.clearNodes();
-                set_elements.Nombre()= nmb+str_element_group;
+                set_elements.setName(nmb+str_element_group);
                 med_groups.push_back(MEDGroupInfo(this,set_elements));
               }
           }
@@ -109,7 +109,7 @@ XC::MEDGroupInfo *XC::MEDMeshing::getGroupInfo(const std::string &nmb) const
     MEDGroupInfo *retval= nullptr;
     std::deque<MEDGroupInfo>::iterator i= med_groups.begin();
     for(;i!=med_groups.end();i++)
-      if(i->getNombre()==nmb)
+      if(i->getName()==nmb)
         break;
     if(i!=med_groups.end())
       retval= &(*i);
