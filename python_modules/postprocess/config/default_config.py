@@ -126,7 +126,9 @@ en_capTexts={
     'SLS_frequentLoadsCrackControl': 'SLS cracking, frequent actions',
     'SLS_quasiPermanentLoadsLoadsCrackControl': 'SLS cracking, quasi-permanent actions',
     'LocalAxes': 'local axes',
-    
+    'wk': 'crack width',
+    's_rmax': 'maximum crack distance',
+    'eps_sm': 'mean steel deformation over maximum crack distance',
 }
 
 #Caption texts in French
