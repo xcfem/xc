@@ -116,7 +116,7 @@ void XC::MEDGroupInfo::nueva_celda(size_t tag,const MED_EN::medGeometryElement &
   }
 
 //! @brief Returns the nombre del grupo.
-const std::string &XC::MEDGroupInfo::getNombre(void) const
+const std::string &XC::MEDGroupInfo::getName(void) const
   { return nombre; }
 
 //! @brief Returns the vector with the positions of the different element types

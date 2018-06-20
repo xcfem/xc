@@ -60,7 +60,7 @@ XC::TrfGeom *XC::MapTrfGeom::Nueva(void)
         retval= new T(preprocessor);
         if(retval)
           {
-            retval->Nombre()= "t"+boost::lexical_cast<std::string>(getTag());
+            retval->Name()= "t"+boost::lexical_cast<std::string>(getTag());
             (*this)[getTag()]= retval;
             tag++;
 	  }

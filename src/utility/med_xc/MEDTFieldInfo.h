@@ -160,7 +160,7 @@ void MEDTFieldInfo<T>::defineGaussModels(const Set &set)
      for(DqPtrsElem::const_iterator j= elements.begin();j!=elements.end();j++)
        {
           MEDGaussModel gm= (*j)->getMEDGaussModel();
-          const std::string nmb= gm.getNombre();
+          const std::string nmb= gm.getName();
           if(nombres.find(nmb)==nombres.end()) //Nuevo
             {
               nombres.insert(nmb);

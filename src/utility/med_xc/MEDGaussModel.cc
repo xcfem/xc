@@ -67,7 +67,7 @@ XC::MEDGaussModel::med_gauss_model *XC::MEDGaussModel::getGaussModelMED(void) co
   }
 
 //! @brief Returns the nombre del model.
-const std::string &XC::MEDGaussModel::getNombre(void) const
+const std::string &XC::MEDGaussModel::getName(void) const
   { return nombre; }
 
 //! @brief Returns the element type the model.

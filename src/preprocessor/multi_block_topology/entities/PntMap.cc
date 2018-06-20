@@ -195,7 +195,7 @@ XC::Pnt *XC::PntMap::Copy(const Pnt *p,const Vector3d &v= Vector3d())
           {
             if(!v.Nulo())
               retval->Pos()+= v;
-            retval->Nombre()= "p"+boost::lexical_cast<std::string>(getTag());
+            retval->Name()= "p"+boost::lexical_cast<std::string>(getTag());
             (*this)[getTag()]= retval;
             UpdateSets(retval);
             tag++;

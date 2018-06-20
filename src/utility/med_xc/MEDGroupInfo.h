@@ -56,7 +56,7 @@ class MEDGroupInfo: public MEDCellBaseInfo
     MEDMEM::GROUP *getGrupoMED(void) const;
   public:
     ~MEDGroupInfo(void);
-    const std::string &getNombre(void) const;
+    const std::string &getName(void) const;
 
     void new_vertice(size_t i,const MEDMapIndices &);
     void nueva_celda(size_t i,const MED_EN::medGeometryElement &);

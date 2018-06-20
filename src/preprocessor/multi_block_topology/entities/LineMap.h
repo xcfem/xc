@@ -83,7 +83,7 @@ Edge *XC::LineMap::Crea(void)
     Preprocessor *preprocessor= getPreprocessor();
     assert(preprocessor);
     Edge *retval= new E(preprocessor);
-    retval->Nombre()= "l"+boost::lexical_cast<std::string>(getTag());
+    retval->Name()= "l"+boost::lexical_cast<std::string>(getTag());
     (*this)[getTag()]= retval;
     UpdateSets(retval);
     tag++;

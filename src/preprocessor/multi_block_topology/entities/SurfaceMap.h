@@ -71,7 +71,7 @@ Face *SurfaceMap::Nueva(void)
         retval= new F(preprocessor);
         if(retval)
           {
-            retval->Nombre()= "f"+boost::lexical_cast<std::string>(getTag());
+            retval->Name()= "f"+boost::lexical_cast<std::string>(getTag());
             (*this)[getTag()]= retval;
             UpdateSets(retval);
             tag++;
