@@ -139,7 +139,7 @@ def rect2DPolygon(xCent,yCent,Lx,Ly):
     return pol
 
 def def_rg_cooLim(XYZLists,Xcoo,Ycoo,Zcoo):
-  '''Return an XYZ range given a the three lists of coordinates of the grid
+  '''Return an XYZ range given the three lists of coordinates of the grid
   and the limit coordinates.
 
   :param XYZList: (xList,yList,zList)

@@ -658,7 +658,7 @@ class RecordRCSlabBeamSection(setRCSections2SetElVerif):
   :ivar dir2ShReinfY: instance of class RecordShearReinforcement that represents                      the Y shear reinforcement in section 2
   :ivar dir2ShReinfZ: instance of class RecordShearReinforcement that represents                      the Z shear reinforcement in section 2
   :ivar elemSetName: name of the set with the elements to which to assign the 
-        section (defaults to 'total'. 
+        section (defaults to 'total'). 
 
   '''
   def __init__(self,name,sectionDescr,concrType,reinfSteelType,depth,width=1.0,elemSetName='total'):

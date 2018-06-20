@@ -100,6 +100,7 @@ sp_capTexts={
 
 #English caption texts
 en_capTexts={
+    'CF': 'efficiency',
     'uX':'displacement in global X direction',
     'uY':'displacement in global Y direction',
     'uZ':'displacement in global Z direction',
@@ -124,6 +125,8 @@ en_capTexts={
     'getMaxSteelStress': 'steel maximum stress',
     'SLS_frequentLoadsCrackControl': 'SLS cracking, frequent actions',
     'SLS_quasiPermanentLoadsLoadsCrackControl': 'SLS cracking, quasi-permanent actions',
+    'LocalAxes': 'local axes',
+    
 }
 
 #Caption texts in French
