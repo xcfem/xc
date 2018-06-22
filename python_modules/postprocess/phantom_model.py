@@ -49,13 +49,16 @@ class PhantomModel(object):
     self.preprocessor= preprocessor
     self.sectionsDistribution= sectionDistribution
 
-  def setupForElementsAndCombinations(self,intForcCombFileName):
+  def setupForElementsAndCombinations(self,intForcCombFileName,setCalc=None):
     '''Extracts element and combination identifiers from the internal
        forces listing file.
     
     :param   intForcCombFileName: name of the file containing the internal
                                   forces obtained for each element for 
                                   the combinations analyzed
+    :param setCalc: set of elements to be analyzed (defaults to None which 
+                    means that all the elements in the file of internal forces
+                    results are analyzed) 
     '''
     self.elementTags= set()
     self.idCombs= set()
@@ -63,19 +66,37 @@ class PhantomModel(object):
     self.internalForcesValues= defaultdict(list)
     internalForcesListing= csv.reader(f)
     internalForcesListing.next()    #skip first line (head)
-    for lst in internalForcesListing:    #lst: list of internal forces for each combination and element
-      if(len(lst)>0):
-        idComb= lst[0]
-        self.idCombs.add(idComb)
-        tagElem= eval(lst[1])
-        idSection= eval(lst[2])
-        self.elementTags.add(tagElem)
-        crossSectionInternalForces= internal_forces.CrossSectionInternalForces()
-        crossSectionInternalForces.setFromCSVString(lst,3)
-        crossSectionInternalForces.idComb= idComb
-        crossSectionInternalForces.tagElem= tagElem
-        crossSectionInternalForces.idSection= idSection
-        self.internalForcesValues[tagElem].append(crossSectionInternalForces)
+    if setCalc==None:
+      for lst in internalForcesListing:    #lst: list of internal forces for each combination and element
+        if(len(lst)>0):
+          idComb= lst[0]
+          self.idCombs.add(idComb)
+          tagElem= eval(lst[1])
+          idSection= eval(lst[2])
+          self.elementTags.add(tagElem)
+          crossSectionInternalForces= internal_forces.CrossSectionInternalForces()
+          crossSectionInternalForces.setFromCSVString(lst,3)
+          crossSectionInternalForces.idComb= idComb
+          crossSectionInternalForces.tagElem= tagElem
+          crossSectionInternalForces.idSection= idSection
+          self.internalForcesValues[tagElem].append(crossSectionInternalForces)
+    else:
+      setElTags=setCalc.getElementTags()
+      for lst in internalForcesListing:
+        if(len(lst)>0):
+          tagElem= eval(lst[1])
+          if tagElem in setElTags:
+            idComb= lst[0]
+            self.idCombs.add(idComb)
+            tagElem= eval(lst[1])
+            idSection= eval(lst[2])
+            self.elementTags.add(tagElem)
+            crossSectionInternalForces= internal_forces.CrossSectionInternalForces()
+            crossSectionInternalForces.setFromCSVString(lst,3)
+            crossSectionInternalForces.idComb= idComb
+            crossSectionInternalForces.tagElem= tagElem
+            crossSectionInternalForces.idSection= idSection
+            self.internalForcesValues[tagElem].append(crossSectionInternalForces)
     f.close()
 
   def createPhantomElement(self,idElem,sectionName,sectionDefinition,sectionIndex,interactionDiagram,fakeSection):
@@ -110,7 +131,7 @@ class PhantomModel(object):
     return phantomElement
       
 
-  def createElements(self,intForcCombFileName,controller):
+  def createElements(self,intForcCombFileName,controller,setCalc=None):
     '''Creates the phantom model elements from the data read on the file.
     
     :param   intForcCombFileName: name of the file containing the internal
@@ -118,8 +139,11 @@ class PhantomModel(object):
                                   the combinations analyzed
     :param   controller:   object that takes the internal forces and the
                            section definition and checks the limit state.
+    :param setCalc: set of elements to be analyzed (defaults to None which 
+                    means that all the elements in the file of internal forces
+                    results are analyzed) 
     '''
-    self.setupForElementsAndCombinations(intForcCombFileName)
+    self.setupForElementsAndCombinations(intForcCombFileName,setCalc)
 
     retval= []
     nodes= self.preprocessor.getNodeHandler
@@ -181,7 +205,7 @@ class PhantomModel(object):
         nodeTag= self.tagsNodesToLoad[iforce.tagElem][iforce.idSection]
         lp.newNodalLoad(nodeTag,xc.Vector(iforce.getComponents()))
 
-  def build(self,intForcCombFileName,controller):
+  def build(self,intForcCombFileName,controller,setCalc=None):
     '''Builds the phantom model from the data read from the file.
 
     :param intForcCombFileName: name of the file containing the forces and 
@@ -189,8 +213,11 @@ class PhantomModel(object):
                            the combinations analyzed
     :param controller:     object that takes the internal forces and the
                            section definition and checks the limit state.
+    :param setCalc: set of elements to be analyzed (defaults to None which 
+                    means that all the elements in the file of internal forces
+                    results are analyzed) 
     '''
-    retval= self.createElements(intForcCombFileName,controller)
+    retval= self.createElements(intForcCombFileName,controller,setCalc)
     self.createLoads(intForcCombFileName,controller)
     return retval
 
@@ -219,7 +246,7 @@ class PhantomModel(object):
     '''
     return cv.writeControlVarsFromElements(controller.limitStateLabel,self.preprocessor,outputFileName)
 
-  def runChecking(self,limitStateData):
+  def runChecking(self,limitStateData,setCalc=None):
     '''Run the analysis, check the results and write them into a file
 
     :param limitStateData: object that contains the name of the file
@@ -227,12 +254,15 @@ class PhantomModel(object):
                            obtained for each element 
                            for the combinations analyzed and the
                            controller to use for the checking.
-    '''
+    :param setCalc: set of elements to be analyzed (defaults to None which 
+                    means that all the elements in the file of internal forces
+                    results are analyzed) 
+     '''
     intForcCombFileName= limitStateData.getInternalForcesFileName()
     controller= limitStateData.controller
     meanCFs= -1.0
     if(controller):
-      self.build(intForcCombFileName,controller)
+      self.build(intForcCombFileName,controller,setCalc)
       self.check(controller)
       meanCFs= self.write(controller,limitStateData.getOutputDataBaseFileName())
     else:

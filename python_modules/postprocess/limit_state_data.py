@@ -112,13 +112,16 @@ class NormalStressesRCLimitStateData(LimitStateData):
     combContainer.ULS.perm.dumpCombinations(loadCombinations)
     return loadCombinations
 
-  def check(self,reinfConcreteSections):
+  def check(self,reinfConcreteSections,setCalc=None):
     '''Checking of normal stresses in ultimate limit states
     (see self.dumpCombinations).
      
     :param reinfConcreteSections: Reinforced concrete sections on each element.
-    '''
-    return reinfConcreteSections.internalForcesVerification3D(self, "d")
+    :param setCalc: set of elements to be analyzed (defaults to None which 
+                    means that all the elements in the file of internal forces
+                    results are analyzed) 
+     '''
+    return reinfConcreteSections.internalForcesVerification3D(self, "d",setCalc)
 
 class ShearResistanceRCLimitStateData(LimitStateData):
   ''' Reinforced concrete shear resistance limit state data.'''
@@ -136,13 +139,16 @@ class ShearResistanceRCLimitStateData(LimitStateData):
     loadCombinations.clear()
     combContainer.ULS.perm.dumpCombinations(loadCombinations)
     return loadCombinations
-  def check(self,reinfConcreteSections):
+  def check(self,reinfConcreteSections,setCalc=None):
     '''Checking of shear resistance in ultimate limit states 
     (see self.dumpCombinations).
      
     :param reinfConcreteSections: Reinforced concrete sections on each element.
+    :param setCalc: set of elements to be analyzed (defaults to None which 
+                    means that all the elements in the file of internal forces
+                    results are analyzed) 
     '''
-    return reinfConcreteSections.internalForcesVerification3D(self,"d")
+    return reinfConcreteSections.internalForcesVerification3D(self,"d",setCalc)
 
 class FreqLoadsCrackControlRCLimitStateData(LimitStateData):
   ''' Reinforced concrete crack control under frequent loads limit state data.'''
@@ -160,13 +166,16 @@ class FreqLoadsCrackControlRCLimitStateData(LimitStateData):
     loadCombinations.clear()
     combContainer.SLS.freq.dumpCombinations(loadCombinations)
     return loadCombinations
-  def check(self,reinfConcreteSections):
+  def check(self,reinfConcreteSections,setCalc=None):
     '''Checking of crack width under frequent loads in serviceability limit states 
        (see self.dumpCombinations).
      
     :param reinfConcreteSections: Reinforced concrete sections on each element.
+    :param setCalc: set of elements to be analyzed (defaults to None which 
+                    means that all the elements in the file of internal forces
+                    results are analyzed) 
     '''
-    return reinfConcreteSections.internalForcesVerification3D(self, "k")
+    return reinfConcreteSections.internalForcesVerification3D(self, "k",setCalc)
 
 class QPLoadsCrackControlRCLimitStateData(LimitStateData):
   ''' Reinforced concrete crack control under quasi-permanent loads limit state data.'''
@@ -185,13 +194,16 @@ class QPLoadsCrackControlRCLimitStateData(LimitStateData):
     combContainer.SLS.qp.dumpCombinations(loadCombinations)
     return loadCombinations
   
-  def check(self,reinfConcreteSections):
+  def check(self,reinfConcreteSections,setCalc=None):
     '''Checking of crack width under quasi-permanent loads in
     serviceability limit states (see self.dumpCombinations).
      
     :param reinfConcreteSections: Reinforced concrete sections on each element.
+    :param setCalc: set of elements to be analyzed (defaults to None which 
+                    means that all the elements in the file of internal forces
+                    results are analyzed) 
     '''
-    return reinfConcreteSections.internalForcesVerification3D(self,"k")
+    return reinfConcreteSections.internalForcesVerification3D(self,"k",setCalc)
 
 class FreqLoadsDisplacementControlLimitStateData(LimitStateData):
   ''' Displacement control under frequent loads limit state data.'''
@@ -234,13 +246,16 @@ class FatigueResistanceRCLimitStateData(LimitStateData):
     loadCombinations.clear()
     combContainer.ULS.fatigue.dumpCombinations(loadCombinations)
     return loadCombinations
-  def check(self,reinfConcreteSections):
+  def check(self,reinfConcreteSections,setCalc=None):
     '''Checking of fatigue under fatigue combinations loads in
     ultimate limit states (see self.dumpCombinations).
      
     :param reinfConcreteSections: Reinforced concrete sections on each element.
+    :param setCalc: set of elements to be analyzed (defaults to None which 
+                    means that all the elements in the file of internal forces
+                    results are analyzed) 
     '''
-    return reinfConcreteSections.internalForcesVerification3D(self, "d")
+    return reinfConcreteSections.internalForcesVerification3D(self, "d",setCalc)
 
 
 freqLoadsDisplacementControl= FreqLoadsDisplacementControlLimitStateData()
