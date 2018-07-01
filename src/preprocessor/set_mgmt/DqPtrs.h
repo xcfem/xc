@@ -72,7 +72,7 @@ class DqPtrs: public EntCmd, protected std::deque<T *>
     DqPtrs &operator=(const DqPtrs &);
     DqPtrs &operator+=(const DqPtrs &);
     void extend(const DqPtrs &);
-    //void extend_cond(const DqPtrs &otro,const std::string &cond);
+    //void extend_cond(const DqPtrs &,const std::string &cond);
     bool push_back(T *);
     bool push_front(T *);
     inline bool empty(void) const
@@ -115,8 +115,8 @@ DqPtrs<T>::DqPtrs(EntCmd *owr)
 
 //! @brief Copy constructor.
 template <class T>
-DqPtrs<T>::DqPtrs(const DqPtrs<T> &otro)
-  : EntCmd(otro), lst_ptr(otro)
+DqPtrs<T>::DqPtrs(const DqPtrs<T> &other)
+  : EntCmd(other), lst_ptr(other)
   {}
 
 //! @brief Copy from deque container.

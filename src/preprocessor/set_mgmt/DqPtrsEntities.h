@@ -191,17 +191,17 @@ void DqPtrsEntities<T>::intersect(const DqPtrsEntities<T> &other)
 
 //! @brief -= (difference) operator.
 template <class T>
-DqPtrsEntities<T> &DqPtrsEntities<T>::operator-=(const DqPtrsEntities &otro)
+DqPtrsEntities<T> &DqPtrsEntities<T>::operator-=(const DqPtrsEntities &other)
   {
-    remove(otro);
+    remove(other);
     return *this;
   }
 
 //! @brief *= (intersection) operator.
 template <class T>
-DqPtrsEntities<T> &DqPtrsEntities<T>::operator*=(const DqPtrsEntities &otro)
+DqPtrsEntities<T> &DqPtrsEntities<T>::operator*=(const DqPtrsEntities &other)
   {
-    intersect(otro);
+    intersect(other);
     return *this;
   }
 

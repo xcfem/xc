@@ -76,18 +76,18 @@ template <int NNODES>
 XC::ElementBase<NNODES>::ElementBase(int tag, int classTag)
   : Element(tag,classTag), theNodes(this,NNODES) {}
 
-//! @brief Constructor.
+//! @brief Copy constructor.
 template <int NNODES>
-XC::ElementBase<NNODES>::ElementBase(const ElementBase<NNODES> &otro)
-  : Element(otro), theNodes(otro.theNodes) 
+XC::ElementBase<NNODES>::ElementBase(const ElementBase<NNODES> &other)
+  : Element(other), theNodes(other.theNodes) 
   { theNodes.set_owner(this); }
 
 //! @brief Assignment operator.
 template <int NNODES>
-XC::ElementBase<NNODES> &XC::ElementBase<NNODES>::operator=(const ElementBase &otro)
+XC::ElementBase<NNODES> &XC::ElementBase<NNODES>::operator=(const ElementBase &other)
   {
-    Element::operator=(otro);
-    theNodes= otro.theNodes;
+    Element::operator=(other);
+    theNodes= other.theNodes;
     theNodes.set_owner(this);
     return *this;
   }

@@ -53,7 +53,7 @@ class AggregatorAdditions: public DqUniaxialMaterial
     AggregatorAdditions(EntCmd *owner= nullptr);
     AggregatorAdditions(EntCmd *owner,const UniaxialMaterial &,int c);
     AggregatorAdditions(const AggregatorAdditions &);
-    AggregatorAdditions(const AggregatorAdditions &otro,SectionForceDeformation *s);
+    AggregatorAdditions(const AggregatorAdditions &,SectionForceDeformation *s);
     ~AggregatorAdditions(void);
 
     inline bool check_ptrs(void) const

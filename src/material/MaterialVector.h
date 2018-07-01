@@ -137,15 +137,15 @@ void MaterialVector<MAT>::alloc(const std::vector<MAT *> &mats)
 
 //! @brief Copy constructor.
 template <class MAT>
-MaterialVector<MAT>::MaterialVector(const MaterialVector<MAT> &otro)
-  : std::vector<MAT *>(otro.size(),nullptr), MovableObject(MAT_VECTOR_TAG)
-  { alloc(otro); }
+MaterialVector<MAT>::MaterialVector(const MaterialVector<MAT> &other)
+  : std::vector<MAT *>(other.size(),nullptr), MovableObject(MAT_VECTOR_TAG)
+  { alloc(other); }
 
 //! @brief Assignment operator.
 template <class MAT>
-MaterialVector<MAT> &MaterialVector<MAT>::operator=(const MaterialVector<MAT> &otro)
+MaterialVector<MAT> &MaterialVector<MAT>::operator=(const MaterialVector<MAT> &other)
   { 
-    alloc(otro);
+    alloc(other);
     return *this;
   }
 

@@ -63,7 +63,7 @@ class DqUniaxialMaterial: public EntCmd, public MovableObject, public std::deque
     DqUniaxialMaterial(EntCmd *owner,const UniaxialMaterial &um,const size_t &sz);
     DqUniaxialMaterial(EntCmd *owner,const UniaxialMaterial *um,const size_t &sz);
     DqUniaxialMaterial(const DqUniaxialMaterial &);
-    DqUniaxialMaterial(const DqUniaxialMaterial &otro,SectionForceDeformation *s);
+    DqUniaxialMaterial(const DqUniaxialMaterial &,SectionForceDeformation *s);
     DqUniaxialMaterial &operator=(const DqUniaxialMaterial &);
     ~DqUniaxialMaterial(void);
     void push_back(const UniaxialMaterial *,SectionForceDeformation *s= nullptr);

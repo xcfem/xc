@@ -63,7 +63,7 @@ class DqPtrsKDTree: public DqPtrs<T>
     DqPtrsKDTree &operator=(const DqPtrsKDTree &);
     DqPtrsKDTree &operator+=(const DqPtrsKDTree &);
     void extend(const DqPtrsKDTree &);
-    //void extend_cond(const DqPtrsKDTree &otro,const std::string &cond);
+    //void extend_cond(const DqPtrsKDTree &,const std::string &cond);
     bool push_back(T *);
     bool push_front(T *);
     void clearAll(void);
@@ -92,8 +92,8 @@ DqPtrsKDTree<T,KDTree>::DqPtrsKDTree(EntCmd *owr)
 
 //! @brief Copy constructor.
 template <class T,class KDTree>
-DqPtrsKDTree<T,KDTree>::DqPtrsKDTree(const DqPtrsKDTree &otro)
-  : DqPtrs<T>(otro)
+DqPtrsKDTree<T,KDTree>::DqPtrsKDTree(const DqPtrsKDTree &other)
+  : DqPtrs<T>(other)
   { create_tree(); }
 
 //! @brief Copy constructor.
@@ -115,26 +115,26 @@ DqPtrsKDTree<T,KDTree>::DqPtrsKDTree(const std::set<const T *> &st)
 
 //! @brief Assignment operator.
 template <class T,class KDTree>
-DqPtrsKDTree<T,KDTree> &DqPtrsKDTree<T,KDTree>::operator=(const DqPtrsKDTree &otro)
+DqPtrsKDTree<T,KDTree> &DqPtrsKDTree<T,KDTree>::operator=(const DqPtrsKDTree &other)
   {
-    DqPtrs<T>::operator=(otro);
-    kdtree= otro.kdtree;
+    DqPtrs<T>::operator=(other);
+    kdtree= other.kdtree;
     return *this;
   }
 
 //! @brief Extend this container with the elements of
 //! the container being passed as parameter.
 template <class T,class KDTree>
-void DqPtrsKDTree<T,KDTree>::extend(const DqPtrsKDTree &otro)
+void DqPtrsKDTree<T,KDTree>::extend(const DqPtrsKDTree &other)
   {
-    for(register DqPtrsKDTree<T,KDTree>::const_iterator i= otro.begin();i!=otro.end();i++)
+    for(register DqPtrsKDTree<T,KDTree>::const_iterator i= other.begin();i!=other.end();i++)
       push_back(*i);
   }
 //! @brief += operator.
 template <class T,class KDTree>
-DqPtrsKDTree<T,KDTree> &DqPtrsKDTree<T,KDTree>::operator+=(const DqPtrsKDTree &otro)
+DqPtrsKDTree<T,KDTree> &DqPtrsKDTree<T,KDTree>::operator+=(const DqPtrsKDTree &other)
   {
-    extend(otro);
+    extend(other);
     return *this;
   }
 

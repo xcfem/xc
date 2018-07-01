@@ -105,16 +105,16 @@ RowSet<ROWTTZNOD,ROWTTZELEM>::RowSet(const ROWTTZNOD &fn,const ROWTTZELEM &fe,co
   : SetEstruct(nmb,preprocessor), node_row(fn), element_row(fe) {}
 
 template <class ROWTTZNOD,class ROWTTZELEM>
-RowSet<ROWTTZNOD,ROWTTZELEM>::RowSet(const RowSet &otro)
-  : SetEstruct(otro), node_row(otro.node_row), element_row(otro.element_row) {}
+RowSet<ROWTTZNOD,ROWTTZELEM>::RowSet(const RowSet &other)
+  : SetEstruct(other), node_row(other.node_row), element_row(other.element_row) {}
 
   //! @brief Assignment operator.
 template <class ROWTTZNOD,class ROWTTZELEM>
-RowSet<ROWTTZNOD,ROWTTZELEM> &XC::RowSet<ROWTTZNOD,ROWTTZELEM>::operator=(const RowSet &otro)
+RowSet<ROWTTZNOD,ROWTTZELEM> &XC::RowSet<ROWTTZNOD,ROWTTZELEM>::operator=(const RowSet &other)
   {
-    SetEstruct::operator=(otro);
-    node_row= otro.node_row;
-    element_row= otro.element_row;
+    SetEstruct::operator=(other);
+    node_row= other.node_row;
+    element_row= other.element_row;
     return *this;
   }
 
