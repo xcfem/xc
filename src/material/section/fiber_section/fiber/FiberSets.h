@@ -29,24 +29,23 @@
 #ifndef FiberSets_h
 #define FiberSets_h
 
-#include "FiberDeque.h"
-
-class Poligono2d;
+#include "FiberSet.h"
 
 namespace XC {
 
 //! @ingroup MATSCCFibers
 //
 //! @brief Fiber sets container.
-class FiberSets: public std::map<std::string,FiberDeque>, public EntCmd
+class FiberSets: public std::map<std::string,FiberSet>, public EntCmd
   {
   public:
     FiberSets(void); 
 
-    FiberDeque &create_fiber_set(const std::string &nombre);
-    iterator get_fiber_set(const std::string &nmb_set);
-    iterator sel_mat_tag(FiberDeque &fibers, const std::string &nmb_set,const int &matTag);
-    iterator resel_mat_tag(const std::string &nmb_set,const std::string &nmb_set_org,const int &matTag);
+    bool exists(const std::string &);
+    FiberSet &create_fiber_set(const std::string &);
+    iterator get_fiber_set(const std::string &);
+    iterator sel_mat_tag(FiberSet &, const std::string &,const int &);
+    iterator resel_mat_tag(const std::string &,const std::string &,const int &);
   };
 } // end of XC namespace
 

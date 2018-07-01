@@ -74,7 +74,7 @@ class FiberSection3dBase : public FiberSectionBase
   {
   protected:
 
-    friend class FiberDeque;
+    friend class FiberPtrDeque;
     friend class FiberContainer;
     double get_strain(const double &y,const double &z) const;
   public:

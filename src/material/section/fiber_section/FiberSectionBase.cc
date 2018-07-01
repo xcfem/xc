@@ -443,7 +443,7 @@ double XC::FiberSectionBase::getNetEffectiveConcreteArea(const double &hEfMax,co
         fiber_set_const_iterator i= fiber_sets.find(rebarSetName);
         if(i!=fiber_sets.end())
           {
-            const FiberDeque &rebars= (*i).second; //Rebar family.
+            const FiberPtrDeque &rebars= (*i).second; //Rebar family.
             retval+= rebars.computeFibersEffectiveConcreteArea(grossEffectiveConcreteAreaContour,factor);
           }
         else
@@ -467,7 +467,7 @@ double XC::FiberSectionBase::computeFibersEffectiveConcreteArea(const double &hE
         fiber_set_const_iterator i= fiber_sets.find(rebarSetName);
         if(i!=fiber_sets.end())
           {
-            const FiberDeque &rebars= (*i).second; //Rebars.
+            const FiberPtrDeque &rebars= (*i).second; //Rebars.
             retval= rebars.computeFibersEffectiveConcreteArea(grossEffectiveConcreteAreaContour,factor);
           }
         else
@@ -487,7 +487,7 @@ void XC::FiberSectionBase::computeCovers(const std::string &rebarSetName) const
     fiber_set_const_iterator i= fiber_sets.find(rebarSetName);
     if(i!=fiber_sets.end())
       {
-        const FiberDeque &rebars= (*i).second; //Rebars.
+        const FiberPtrDeque &rebars= (*i).second; //Rebars.
         const GeomSection *geom= getGeomSection();
         if(geom)
           rebars.computeCovers(*geom);
@@ -504,7 +504,7 @@ void XC::FiberSectionBase::computeSpacement(const std::string &rebarSetName) con
     fiber_set_const_iterator i= fiber_sets.find(rebarSetName);
     if(i!=fiber_sets.end())
       {
-        const FiberDeque &rebars= (*i).second; //Rebars.
+        const FiberPtrDeque &rebars= (*i).second; //Rebars.
         rebars.computeSpacement();
       }
     else
@@ -583,7 +583,7 @@ Pos3d XC::FiberSectionBase::getNMyMz(const DeformationPlane &def)
 //
 //! @brief Returns the points that define the interaction diagram
 //! of the section for an angle \f$\theta\f$ with respect to the z axis.
-void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &lista_esfuerzos,const InteractionDiagramData &diag_data,const FiberDeque &fsC,const FiberDeque &fsS,const double &theta)
+void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &lista_esfuerzos,const InteractionDiagramData &diag_data,const FiberPtrDeque &fsC,const FiberPtrDeque &fsS,const double &theta)
   {
     ComputePivots cp(diag_data.getPivotsUltimateStrains(),fibers,fsC,fsS,theta);
     Pivots pivots(cp);
@@ -648,13 +648,13 @@ const XC::NMPointCloud &XC::FiberSectionBase::getInteractionDiagramPointsForPlan
     static NMPointCloud retval;
     retval.clear();
     retval.setUmbral(diag_data.getUmbral());
-    const FiberDeque &fsC= sel_mat_tag(diag_data.getConcreteSetName(),diag_data.getConcreteTag())->second;
+    const FiberPtrDeque &fsC= sel_mat_tag(diag_data.getConcreteSetName(),diag_data.getConcreteTag())->second;
     if(fsC.empty())
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; fibers for concrete material, identified by tag: "
 		<< diag_data.getConcreteTag()
                 << ", not found." << std::endl;
-    const FiberDeque &fsS= sel_mat_tag(diag_data.getRebarSetName(),diag_data.getReinforcementTag())->second;
+    const FiberPtrDeque &fsS= sel_mat_tag(diag_data.getRebarSetName(),diag_data.getReinforcementTag())->second;
     if(fsS.empty())
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; fibers for steel material, identified by tag: "
@@ -682,13 +682,13 @@ const XC::NMyMzPointCloud &XC::FiberSectionBase::getInteractionDiagramPoints(con
     static NMyMzPointCloud lista_esfuerzos;
     lista_esfuerzos.clear();
     lista_esfuerzos.setUmbral(diag_data.getUmbral());
-    const FiberDeque &fsC= sel_mat_tag(diag_data.getConcreteSetName(),diag_data.getConcreteTag())->second;
+    const FiberPtrDeque &fsC= sel_mat_tag(diag_data.getConcreteSetName(),diag_data.getConcreteTag())->second;
     if(fsC.empty())
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; fibers for concrete material, identified by tag: "
 		<< diag_data.getConcreteTag()
                 << ", not found." << std::endl;
-    const FiberDeque &fsS= sel_mat_tag(diag_data.getRebarSetName(),diag_data.getReinforcementTag())->second;
+    const FiberPtrDeque &fsS= sel_mat_tag(diag_data.getRebarSetName(),diag_data.getReinforcementTag())->second;
     if(fsS.empty())
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; fibers for steel material, identified by tag: "

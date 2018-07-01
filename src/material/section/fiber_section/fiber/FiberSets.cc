@@ -31,58 +31,67 @@
 
 //! @brief Constructor.
 XC::FiberSets::FiberSets(void)
-  : std::map<std::string,FiberDeque>()
+  : std::map<std::string,FiberSet>()
   {}
 
-//! @brief Creates a new fiber set.
-XC::FiberDeque &XC::FiberSets::create_fiber_set(const std::string &nmb)
+//! @brief Return true if the set already exists.
+bool XC::FiberSets::exists(const std::string &name)
   {
-    if(find(nmb) == end()) //Set doesn't exists
-      (*this)[nmb]= FiberDeque();
+    bool retval= false;
+    if(find(name) != end()) //Set exists
+      retval= true;
+    return retval;
+  }
+
+//! @brief Creates a new fiber set.
+XC::FiberSet &XC::FiberSets::create_fiber_set(const std::string &name)
+  {
+    if(find(name) == end()) //Set doesn't exists
+      (*this)[name]= FiberSet();
     else
-      std::cerr << "Fiber set: '" << nmb
+      std::cerr << "Fiber set: '" << name
                 << "' already exists. Command ignored." << std::endl;
-    return (*this)[nmb];
+    return (*this)[name];
   }
 
 //! @brief Creates a fiber set which name is being passed as parameter.
-XC::FiberSets::iterator XC::FiberSets::get_fiber_set(const std::string &nmb_set)
+XC::FiberSets::iterator XC::FiberSets::get_fiber_set(const std::string &set_name)
   {
-    iterator i= find(nmb_set);
+    iterator i= find(set_name);
     if(i == end())
       {
         if(verbosity>1)
-          std::clog << "Fiber set: '" << nmb_set
+          std::clog << "Fiber set: '" << set_name
                     << "' doesn't exists; it is created." << std::endl;
-        create_fiber_set(nmb_set);
-        i= find(nmb_set);
+        create_fiber_set(set_name);
+        i= find(set_name);
       }
     return i;
   }
 
 //! @brief Creates a fiber set which material has the tag being passed as parameter.
-XC::FiberSets::iterator XC::FiberSets::sel_mat_tag(FiberDeque &fibers, const std::string &nmb_set,const int &matTag)
+XC::FiberSets::iterator XC::FiberSets::sel_mat_tag(FiberSet &fibers, const std::string &set_name,const int &matTag)
   {
-    iterator i= get_fiber_set(nmb_set);
+    iterator i= get_fiber_set(set_name);
     fibers.SelMatTag(matTag,(*i).second);
     return i;
   }
 
 //! @brief Creates a fiber set with the fibers that belongs to the set named
-//! nmb_set_org, and have the material identified with the tag being passed as parameter.
-//! @param nmb_set: name of the new set.
-//! @param nmb_set_org: name of the set that contains the fibers.
+//! origin_set_name, and have the material identified with the tag being passed as parameter.
+//! @param set_name: name of the new set.
+//! @param origin_set_name: name of the set that contains the fibers.
 //! @matTag: material tag.
-XC::FiberSets::iterator XC::FiberSets::resel_mat_tag(const std::string &nmb_set,const std::string &nmb_set_org,const int &matTag)
+XC::FiberSets::iterator XC::FiberSets::resel_mat_tag(const std::string &set_name,const std::string &origin_set_name,const int &matTag)
   {
     iterator i= end();
-    if(nmb_set != nmb_set_org)
+    if(set_name != origin_set_name)
       {
-        i= get_fiber_set(nmb_set);
-        iterator j= find(nmb_set_org);
+        i= get_fiber_set(set_name);
+        iterator j= find(origin_set_name);
         if(j == end())
           {
-            std::clog << "Origin fiber set: '" << nmb_set_org
+            std::clog << "Origin fiber set: '" << origin_set_name
                       << "' doesn't exists; command ignored." << std::endl;
           }
         else

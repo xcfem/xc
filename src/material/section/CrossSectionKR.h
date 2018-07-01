@@ -39,7 +39,7 @@ namespace XC {
 //! @brief Stiffness matrix and resultant vector for a section.
 class CrossSectionKR: public EntCmd
   {
-    friend class FiberDeque;
+    friend class FiberPtrDeque;
     double rData[4]; //!< stress resultant vector data.
     Vector *R; //!< stress resultant vector.
     double kData[16]; //!< Stiffness matrix vector.

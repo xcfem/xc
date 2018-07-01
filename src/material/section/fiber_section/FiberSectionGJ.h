@@ -74,7 +74,7 @@ class FiberSectionGJ: public FiberSection3dBase
   private:
     double GJ;
   protected:
-    friend class FiberDeque;
+    friend class FiberPtrDeque;
  
   public:
     FiberSectionGJ(MaterialHandler *mat_ldr= nullptr);

@@ -70,7 +70,7 @@
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
 
 // constructors:
-XC::FiberSection2d::FiberSection2d(int tag,const fiber_list &fiberList,XC::MaterialHandler *mat_ldr)
+XC::FiberSection2d::FiberSection2d(int tag,const fiber_list &fiberList,MaterialHandler *mat_ldr)
   : FiberSectionBase(tag, SEC_TAG_FiberSection2d,fibers.size(),mat_ldr)
   {
     fibers.setup(*this,fiberList,kr);

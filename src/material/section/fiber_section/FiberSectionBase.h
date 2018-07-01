@@ -68,7 +68,7 @@ class FiberSectionBase: public PrismaticBarCrossSection
     FiberContainer fibers; //!< Pointers to fibers container.
     int fiberTag; //!< Tag for next fiber.
     FiberSets fiber_sets;//!< Fibers sets.
-    friend class FiberDeque;
+    friend class FiberPtrDeque;
     friend class FiberContainer;
     FiberSectionRepr *section_repres; //! Section representation.
 
@@ -80,7 +80,7 @@ class FiberSectionBase: public PrismaticBarCrossSection
     virtual double get_dist_to_neutral_axis(const double &,const double &) const;
     Pos3d Esf2Pos3d(void) const;
     Pos3d getNMyMz(const DeformationPlane &);
-    void getInteractionDiagramPointsForTheta(NMyMzPointCloud &lista_esfuerzos,const InteractionDiagramData &,const FiberDeque &,const FiberDeque &,const double &);
+    void getInteractionDiagramPointsForTheta(NMyMzPointCloud &lista_esfuerzos,const InteractionDiagramData &,const FiberPtrDeque &,const FiberPtrDeque &,const double &);
     const NMyMzPointCloud &getInteractionDiagramPoints(const InteractionDiagramData &);
     const NMPointCloud &getInteractionDiagramPointsForPlane(const InteractionDiagramData &, const double &);
   public:

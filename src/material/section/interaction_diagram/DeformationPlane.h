@@ -58,7 +58,7 @@ class DeformationPlane: public Plane, public MovableObject
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
     friend class SectionForceDeformation;
-    friend class FiberDeque;
+    friend class FiberPtrDeque;
     friend class FiberSectionBase; //Erase this line.
     const Vector &getDeformation(void) const;
   public:

@@ -24,10 +24,10 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//FiberDeque.h
+//FiberPtrDeque.h
 
-#ifndef FiberDeque_h
-#define FiberDeque_h
+#ifndef FiberPtrDeque_h
+#define FiberPtrDeque_h
 
 #include "xc_utils/src/nucleo/EntCmd.h"
 #include "xc_utils/src/geom/GeomObj.h"
@@ -62,11 +62,12 @@ enum ClaseEsfuerzo {SIMPLE_TENSION,COMPOSED_TENSION,FLEXION_SIMPLE,FLEXION_COMPU
 
 //! @ingroup MATSCCFibers
 //
-//! @brief Fiber double ended queue.
-class FiberDeque : public EntCmd, public std::deque<Fiber *>
+//! @brief Fiber pointers container.
+class FiberPtrDeque: public EntCmd, public std::deque<Fiber *>
   {
   public:
     typedef std::deque<Fiber *> fiber_ptrs_dq;
+
   protected:
 
     double yCenterOfMass; //!< Y coordinate of the centroid.
@@ -76,26 +77,29 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     mutable std::deque<double> recubs; //! Cover for each fiber.
     mutable std::deque<double> seps; //! Spacing for each fiber.
 
-    Fiber *insert(const Fiber &f);
     inline void resize(const size_t &nf)
       { fiber_ptrs_dq::resize(nf,nullptr); }
 
+    inline reference operator[](const size_t &i)
+      { return fiber_ptrs_dq::operator[](i); }
 
+    FiberPtrDeque(const size_t &num= 0);
+    FiberPtrDeque(const FiberPtrDeque &otro);
+    FiberPtrDeque &operator=(const FiberPtrDeque &otro);
 
   private:
     friend class FiberSectionBase;
     
   public:
-    FiberDeque(const size_t &num= 0);
-    FiberDeque(const FiberDeque &otro);
-    FiberDeque &operator=(const FiberDeque &otro);
 
     void push_back(Fiber *f);
-     inline size_t getNumFibers(void) const
+    inline size_t getNumFibers(void) const
       { return size(); }
 
     const Fiber *findFiber(const int &tag) const;
     Fiber *findFiber(const int &tag);
+    inline const_reference operator[](const size_t &i) const
+      { return fiber_ptrs_dq::operator[](i); }
 
     inline const double &getCenterOfMassY(void) const
       { return yCenterOfMass; }
@@ -144,7 +148,7 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     ClaseEsfuerzo getClaseEsfuerzo(const double &tol= 1e-4) const;
     bool isTensioned(void) const;
     bool isBent(void) const;
-    bool enCompresion(void) const;
+    bool isCompressed(void) const;
     std::string getStrClaseEsfuerzo(const double &tol= 1e-4) const;
     double getNeutralAxisDepth(const FiberSectionBase &) const;
     Vector getLeverArmVector(void) const;
@@ -167,7 +171,6 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     int updateCenterOfMass(void);
     
     int updateKRCenterOfMass(FiberSection2d &,CrossSectionKR &);
-    Fiber *addFiber(FiberSection2d &,Fiber &,CrossSectionKR &);
     int setInitialSectionDeformation(const FiberSection2d &);
     int setTrialSectionDeformation(const FiberSection2d &,CrossSectionKR &);
     int revertToLastCommit(FiberSection2d &,CrossSectionKR &);
@@ -177,7 +180,6 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     int commitSensitivity(const XC::Vector& defSens, int gradNumber, int numGrads);
 
     int updateKRCenterOfMass(FiberSection3d &,CrossSectionKR &);
-    Fiber *addFiber(FiberSection3d &,Fiber &,CrossSectionKR &);
     int setInitialSectionDeformation(const FiberSection3d &);
     int setTrialSectionDeformation(FiberSection3d &,CrossSectionKR &);
     int revertToLastCommit(FiberSection3d &,CrossSectionKR &);
@@ -185,7 +187,6 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
     const Matrix &getInitialTangent(const FiberSection3d &) const;
 
     int updateKRCenterOfMass(FiberSectionGJ &,CrossSectionKR &);
-    Fiber *addFiber(FiberSectionGJ &,Fiber &,CrossSectionKR &);
     int setInitialSectionDeformation(const FiberSectionGJ &);
     int setTrialSectionDeformation(FiberSectionGJ &,CrossSectionKR &);
     int revertToLastCommit(FiberSectionGJ &,CrossSectionKR &);
@@ -194,7 +195,7 @@ class FiberDeque : public EntCmd, public std::deque<Fiber *>
 
     Response *setResponse(const std::vector<std::string> &argv, Information &sectInfo);
 
-    void SelMatTag(const int &matTag,FiberDeque &,bool clear= true);
+    void SelMatTag(const int &matTag,FiberPtrDeque &,bool clear= true);
 
     //size_t IMaxProp(const std::string &nmb_prop) const;
     //size_t IMinProp(const std::string &nmb_prop) const;

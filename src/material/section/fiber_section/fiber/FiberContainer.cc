@@ -69,23 +69,23 @@ void XC::FiberContainer::free_mem(void)
           delete (*this)[i];
           (*this)[i]= nullptr;
         }
-    resize(0);
+    clear();
   }
 
 //! @brief Default constructor.
 XC::FiberContainer::FiberContainer(const size_t &num)
-  : FiberDeque(num) {}
+  : FiberPtrDeque(num) {}
 
 //! @brief Copy constructor.
 XC::FiberContainer::FiberContainer(const FiberContainer &otro)
-  : FiberDeque()
+  : FiberPtrDeque() //Don't copy pointers
   { copy_fibers(otro); }
 
 //! @brief Assignment operator.
 XC::FiberContainer &XC::FiberContainer::operator=(const FiberContainer &otro)
   {
-    FiberDeque::operator=(otro);
-    copy_fibers(otro);
+    EntCmd::operator=(otro); //Don't copy pointers
+    copy_fibers(otro); //They are copied here.
     return *this;
   }
 
@@ -132,6 +132,39 @@ void XC::FiberContainer::setup(FiberSectionGJ &SectionGJ,const fiber_list &fiber
         copy_fibers(fibers);
         updateKRCenterOfMass(SectionGJ,krGJ);
       }
+  }
+
+//! @brief Adds the fiber to the container.
+XC::Fiber *XC::FiberContainer::insert(const Fiber &f)
+  {
+    Fiber *retval= f.getCopy();
+    push_back(retval);
+    return retval;
+  }
+
+//! @brief Adds a fiber XXX Enhance parameter updating.
+XC::Fiber *XC::FiberContainer::addFiber(FiberSection2d &Section2d,Fiber &newFiber,CrossSectionKR &kr2)
+  {
+    Fiber *retval= insert(newFiber);
+    updateKRCenterOfMass(Section2d,kr2);
+    return retval;
+  }
+
+//! @brief Adds a fiber to the section XXX Enhance parameter updating.
+XC::Fiber *XC::FiberContainer::addFiber(FiberSection3d &Section3d,Fiber &newFiber,CrossSectionKR &kr3)
+  {
+    Fiber *retval= insert(newFiber);
+    updateKRCenterOfMass(Section3d,kr3);
+    return retval;
+  }
+
+
+//! @brief Adds a fiber to the container. XXX Enhance parameter updating.
+XC::Fiber *XC::FiberContainer::addFiber(FiberSectionGJ &SectionGJ,Fiber &newFiber,CrossSectionKR &krGJ)
+  {
+    Fiber *retval= insert(newFiber);
+    updateKRCenterOfMass(SectionGJ,krGJ);
+    return retval;
   }
 
 //! @brief Destructor.

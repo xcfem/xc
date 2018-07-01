@@ -77,7 +77,7 @@ class FiberSection2d: public FiberSectionBase
 // AddingSensitivity:BEGIN //////////////////////////////////////////
     int parameterID;
 // AddingSensitivity:END ///////////////////////////////////////////
-    friend class FiberDeque;
+    friend class FiberPtrDeque;
     double get_strain(const double &y) const;
   protected:
 

@@ -42,18 +42,18 @@ inline Pos3d getPos3d(const XC::Fiber *f,const double &strain= 0.0)
   { return Pos3d(strain,f->getLocY(),f->getLocZ()); }
 
 //! @brief Center for the local reference system
-inline Pos3d getCenterOfMass(const XC::FiberDeque &fs)
+inline Pos3d getCenterOfMass(const XC::FiberPtrDeque &fs)
   { return Pos3d(0.0,fs.getCenterOfMassY(),fs.getCenterOfMassZ()); }
 
 //! @brief Local reference system.
-Ref3d3d getRef3d(const XC::FiberDeque &fs, const double &theta)
+Ref3d3d getRef3d(const XC::FiberPtrDeque &fs, const double &theta)
   {
     const Pos3d g= getCenterOfMass(fs);
     return Ref3d3d(g,Vector3d(1,0,0),Vector3d(0,cos(theta),sin(theta)));
   }
 
 //! @brief Constructor.
-XC::ComputePivots::ComputePivots(const PivotsUltimateStrains &ap,const FiberContainer &fs,const FiberDeque &fsC,const FiberDeque &fsS,const double &theta)
+XC::ComputePivots::ComputePivots(const PivotsUltimateStrains &ap,const FiberContainer &fs,const FiberPtrDeque &fsC,const FiberPtrDeque &fsS,const double &theta)
   : Ref3d3d(getRef3d(fs, theta)), agot_pivots(ap), fibers(fs),CFibers(fsC),SFibers(fsS) {}
 
 //! @brief Return a pointer to the fiber with the minimal y coordinate
