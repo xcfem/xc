@@ -104,7 +104,7 @@ class RCMaterialDistribution(object):
       self.sectionDefinition= pickle.load(f)
     f.close()
 
-  def runChecking(self,limitStateData,matDiagType,threeDim= True):
+  def runChecking(self,limitStateData,matDiagType,threeDim= True,setCalc=None):
     '''Creates the phantom model and runs the verification on it.
 
     :param limitStateData: object that contains the name of the file
@@ -116,6 +116,9 @@ class RCMaterialDistribution(object):
            k: characteristic).
     :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
            false if it's 2D (Fx,Fy,Mz).
+    :param setCalc: set of elements to be analyzed (defaults to None which 
+                    means that all the elements in the file of internal forces
+                    results are analyzed) 
     '''
     feProblem= xc.FEProblem()
     preprocessor= feProblem.getPreprocessor
@@ -131,10 +134,10 @@ class RCMaterialDistribution(object):
       self.sectionDefinition.calcInteractionDiagrams(preprocessor,matDiagType,'NMy')
     limitStateData.controller.analysis= limitStateData.controller.analysisToPerform(feProblem)
     phantomModel= phm.PhantomModel(preprocessor,self)
-    result= phantomModel.runChecking(limitStateData)
+    result= phantomModel.runChecking(limitStateData,setCalc)
     return (feProblem, result)
 
-  def internalForcesVerification3D(self,limitStateData,matDiagType):
+  def internalForcesVerification3D(self,limitStateData,matDiagType,setCalc=None):
     '''Limit state verification based on internal force (Fx,Fy,Fz,Mx,My,Mz) values.
 
     :param limitStateData: object that contains the name of the file
@@ -143,12 +146,15 @@ class RCMaterialDistribution(object):
                            for the combinations analyzed and the
                            controller to use for the checking.
     :param matDiagType: type of the material diagram (d: design, k: characteristic).
+    :param setCalc: set of elements to be analyzed (defaults to None which 
+                    means that all the elements in the file of internal forces
+                    results are analyzed) 
     '''
-    (tmp, retval)= self.runChecking(limitStateData, matDiagType,True)
+    (tmp, retval)= self.runChecking(limitStateData, matDiagType,True,setCalc)
     tmp.clearAll() #Free memory.
     return retval
 
-  def internalForcesVerification2D(self,limitStateData, matDiagType):
+  def internalForcesVerification2D(self,limitStateData, matDiagType,setCalc=None):
     '''Limit state verification based on internal force (Fx,Fy,Mz) values.
 
     :param limitStateData: object that contains the name of the file
@@ -158,8 +164,11 @@ class RCMaterialDistribution(object):
                            controller to use for the checking.
     :param matDiagType: type of the material diagram (d: design, 
            k: characteristic).
+    :param setCalc: set of elements to be analyzed (defaults to None which 
+                    means that all the elements in the file of internal forces
+                    results are analyzed) 
     '''
-    (tmp, retval)= self.runChecking(limitStateData,outputFileName, matDiagType,False)
+    (tmp, retval)= self.runChecking(limitStateData,outputFileName, matDiagType,False,setCalc)
     tmp.clearAll() #Free memory.
     return retval
 

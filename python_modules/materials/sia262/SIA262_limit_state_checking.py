@@ -246,7 +246,7 @@ class ShearController(lsc.LimitStateControllerBase):
         if(abs(MzTmp)>Mu):
           errMsg= 'Fictitious ultimate moment too low;'
           errMsg+= ' Mu= '+ str(Mu) + ' MzTmp= ' + str(MzTmp)
-          lsmg.error(errMsg)
+          lmsg.error(errMsg)
       #13.02.2018 right-justified in order to be run only if VyTmp>VuTmp/5.0
       if(VuTmp!=0.0):
         FCtmp= abs(VyTmp)/VuTmp
