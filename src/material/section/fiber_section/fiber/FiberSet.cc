@@ -46,3 +46,56 @@ XC::FiberSet &XC::FiberSet::operator=(const FiberSet &otro)
     return *this;
   }
 
+//! @brief Extend this container with the pointers from the container
+//! being passed as parameter.
+void XC::FiberSet::extend(const FiberSet &other)
+  {
+    for(const_iterator i= other.begin();i!=other.end();i++)
+      push_back(*i);
+  }
+
+//! @brief += (union) operator.
+XC::FiberSet &XC::FiberSet::operator+=(const FiberSet &other)
+  {
+    extend(other);
+    return *this;
+  }
+
+//! @brief Return the union of both containers.
+XC::FiberSet XC::operator+(const FiberSet &a,const FiberSet &b)
+  {
+    FiberSet retval(a);
+    retval+=b;
+    return retval;
+  }
+
+//! @brief Return the fibers in a that are not in b.
+XC::FiberSet XC::operator-(const FiberSet &a,const FiberSet &b)
+  {
+    FiberSet retval;
+    for(FiberSet::const_iterator i= a.begin();i!=a.end();i++)
+      {
+        Fiber *n= (*i);
+        assert(n);
+	if(!b.in(n)) //If not in b.
+	  retval.push_back(n);
+      }
+    return retval;
+  }
+
+//! @brief Return the fibers in a that are also in b.
+XC::FiberSet XC::operator*(const FiberSet &a,const FiberSet &b)
+  {
+    FiberSet retval;
+    for(FiberSet::const_iterator i= a.begin();i!=a.end();i++)
+      {
+        Fiber *n= (*i);
+        assert(n);
+	if(b.in(n)) //If also in b.
+	  retval.push_back(n);
+      }
+    return retval;    
+  }
+
+
+

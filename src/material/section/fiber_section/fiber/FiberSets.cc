@@ -46,12 +46,15 @@ bool XC::FiberSets::exists(const std::string &name)
 //! @brief Creates a new fiber set.
 XC::FiberSet &XC::FiberSets::create_fiber_set(const std::string &name)
   {
-    if(find(name) == end()) //Set doesn't exists
-      (*this)[name]= FiberSet();
+    FiberSet *retval= nullptr;
+    if(!exists(name)) //Set doesn't exists
+      retval= &((*this)[name]= FiberSet());
     else
-      std::cerr << "Fiber set: '" << name
-                << "' already exists. Command ignored." << std::endl;
-    return (*this)[name];
+      {
+	retval= &((*this)[name]);
+	retval->clear(); //Set redefinition.
+      }
+    return *retval;
   }
 
 //! @brief Creates a fiber set which name is being passed as parameter.

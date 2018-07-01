@@ -98,6 +98,7 @@ class FiberPtrDeque: public EntCmd, public std::deque<Fiber *>
 
     const Fiber *findFiber(const int &tag) const;
     Fiber *findFiber(const int &tag);
+    bool in(const Fiber *ptr) const;
     inline const_reference operator[](const size_t &i) const
       { return fiber_ptrs_dq::operator[](i); }
 

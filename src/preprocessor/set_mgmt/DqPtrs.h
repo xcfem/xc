@@ -138,18 +138,18 @@ DqPtrs<T>::DqPtrs(const std::set<const T *> &st)
 
 //! @brief Assignment operator.
 template <class T>
-DqPtrs<T> &DqPtrs<T>::operator=(const DqPtrs &otro)
+DqPtrs<T> &DqPtrs<T>::operator=(const DqPtrs &other)
   {
-    EntCmd::operator=(otro);
-    lst_ptr::operator=(otro);
+    EntCmd::operator=(other);
+    lst_ptr::operator=(other);
     return *this;
   }
 
 //! @brief += (union) operator.
 template <class T>
-DqPtrs<T> &DqPtrs<T>::operator+=(const DqPtrs &otro)
+DqPtrs<T> &DqPtrs<T>::operator+=(const DqPtrs &other)
   {
-    extend(otro);
+    extend(other);
     return *this;
   }
 
@@ -157,9 +157,9 @@ DqPtrs<T> &DqPtrs<T>::operator+=(const DqPtrs &otro)
 //! @brief Extend this container with the pointers from the container
 //! being passed as parameter.
 template <class T>
-void DqPtrs<T>::extend(const DqPtrs &otro)
+void DqPtrs<T>::extend(const DqPtrs &other)
   {
-    for(register const_iterator i= otro.begin();i!=otro.end();i++)
+    for(register const_iterator i= other.begin();i!=other.end();i++)
       push_back(*i);
   }
 

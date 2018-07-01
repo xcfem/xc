@@ -106,6 +106,19 @@ XC::Fiber *XC::FiberPtrDeque::findFiber(const int &tag)
     return retval;
   }
 
+//! @brief Returns true if the pointer is in the container.
+bool XC::FiberPtrDeque::in(const Fiber *ptr) const
+  {
+    bool retval= false;
+    for(const_iterator i= begin();i!= end();i++)
+      if(*i==ptr)
+        {
+          retval= true;
+          break;
+        }
+    return retval;
+  }
+
 //! @brief Returns minimal y coordinate value of the fibers.
 double XC::FiberPtrDeque::GetYMin(void) const
   {

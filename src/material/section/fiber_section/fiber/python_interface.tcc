@@ -176,6 +176,10 @@ class_<XC::FiberPtrDeque, bases<EntCmd,fiber_ptrs_dq>, boost::noncopyable >("Fib
    ;
 
 class_<XC::FiberSet, bases<XC::FiberPtrDeque>, boost::noncopyable >("FiberSet", no_init)
+  .def(self += self)
+  .def(self + self)
+  .def(self - self)
+  .def(self * self)
   ;
 
 class_<XC::FiberContainer , bases<XC::FiberPtrDeque>, boost::noncopyable >("FiberContainer", no_init)
