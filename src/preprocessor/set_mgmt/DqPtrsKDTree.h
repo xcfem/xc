@@ -62,7 +62,7 @@ class DqPtrsKDTree: public DqPtrs<T>
     explicit DqPtrsKDTree(const std::set<const T *> &);
     DqPtrsKDTree &operator=(const DqPtrsKDTree &);
     DqPtrsKDTree &operator+=(const DqPtrsKDTree &);
-    void extend(const DqPtrsKDTree &otro);
+    void extend(const DqPtrsKDTree &);
     //void extend_cond(const DqPtrsKDTree &otro,const std::string &cond);
     bool push_back(T *);
     bool push_front(T *);

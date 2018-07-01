@@ -108,8 +108,8 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     void mueve(const Vector3d &);
   public:
     SetEntities(Preprocessor *preprocessor= nullptr);
-    SetEntities(const SetEntities &otro);
-    SetEntities &operator=(const SetEntities &otro);
+    SetEntities(const SetEntities &);
+    SetEntities &operator=(const SetEntities &);
 
     void clear(void);
 

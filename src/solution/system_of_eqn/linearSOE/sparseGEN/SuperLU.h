@@ -114,8 +114,8 @@ class SuperLU : public SparseGenColLinSolver
     friend class LinearSOE;
     friend class FEM_ObjectBroker;
     SuperLU(int permSpec = 0, double drop_tol = 0.0, int panelSize = 6, int relax = 6,char symmetric = 'N');
-    SuperLU(const SuperLU &otro);
-    SuperLU &operator=(const SuperLU &otro);
+    SuperLU(const SuperLU &);
+    SuperLU &operator=(const SuperLU &);
     virtual LinearSOESolver *getCopy(void) const;
   public:
     ~SuperLU(void);

@@ -122,8 +122,8 @@ class ZeroLengthSection: public Element0D
     ZeroLengthSection(int tag, int dimension, int Nd1, int Nd2, const Vector& x, const Vector& yprime, SectionForceDeformation& theSection);
     ZeroLengthSection(int tag, int dimension,const Material *theSection);
     ZeroLengthSection(void);
-    ZeroLengthSection(const ZeroLengthSection &otro);
-    ZeroLengthSection &operator=(const ZeroLengthSection &otro);
+    ZeroLengthSection(const ZeroLengthSection &);
+    ZeroLengthSection &operator=(const ZeroLengthSection &);
     Element *getCopy(void) const;
     ~ZeroLengthSection(void);
 

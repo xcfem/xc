@@ -93,8 +93,8 @@ class SectionForceDeformation: public Material
     int recvData(const CommParameters &cp);
   public:
     SectionForceDeformation(int tag,int classTag,MaterialHandler *mat_ldr= nullptr);
-    SectionForceDeformation(const SectionForceDeformation &otro);
-    SectionForceDeformation &operator=(const SectionForceDeformation &otro);
+    SectionForceDeformation(const SectionForceDeformation &);
+    SectionForceDeformation &operator=(const SectionForceDeformation &);
     virtual ~SectionForceDeformation(void);
 
     inline MaterialHandler *getMaterialHandler(void)

@@ -72,8 +72,8 @@ class ProcSolu: public EntCmd
     const FEProblem *getFEProblem(void) const;
 
     ProcSolu(FEProblem *owr);
-    ProcSolu(const ProcSolu &otro);
-    ProcSolu &operator=(const ProcSolu &otro);
+    ProcSolu(const ProcSolu &);
+    ProcSolu &operator=(const ProcSolu &);
   public:
     ~ProcSolu(void);
     void clearAll(void);

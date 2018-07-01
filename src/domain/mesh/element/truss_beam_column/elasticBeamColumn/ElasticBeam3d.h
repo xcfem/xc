@@ -103,8 +103,8 @@ class ElasticBeam3d : public ProtoBeam3d
     ElasticBeam3d(int tag, double A, double E, double G, double Jx, double Iy, double Iz, int Nd1, int Nd2, CrdTransf3d &theTransf, double rho = 0.0, int sectionTag = 0);
 
     ElasticBeam3d(int tag, int Nd1, int Nd2, SectionForceDeformation *section, CrdTransf3d &theTransf, double rho = 0.0);
-    ElasticBeam3d(const ElasticBeam3d &otro);
-    ElasticBeam3d &operator=(const ElasticBeam3d &otro);
+    ElasticBeam3d(const ElasticBeam3d &);
+    ElasticBeam3d &operator=(const ElasticBeam3d &);
     Element *getCopy(void) const;
     ~ElasticBeam3d(void);
 

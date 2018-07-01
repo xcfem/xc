@@ -57,8 +57,8 @@ class TransfCooHandler: public PrepHandler
     int tag_trf; //!< Tag de la coordinate transformation.
   protected:
     void free_mem(void);
-    TransfCooHandler(const TransfCooHandler &otro);
-    TransfCooHandler &operator=(const TransfCooHandler &otro);
+    TransfCooHandler(const TransfCooHandler &);
+    TransfCooHandler &operator=(const TransfCooHandler &);
   public:
     TransfCooHandler(Preprocessor *owr);
     const map_transfcoo &Map(void) const;

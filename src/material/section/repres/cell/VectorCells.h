@@ -56,8 +56,8 @@ class VectorCells: protected std::vector<Cell *>
   public:
 
     VectorCells(const size_t &sz= 0);
-    VectorCells(const VectorCells  &otro);
-    VectorCells &operator=(const VectorCells  &otro);
+    VectorCells(const VectorCells  &);
+    VectorCells &operator=(const VectorCells  &);
     ~VectorCells(void);
 
     inline size_t size(void) const

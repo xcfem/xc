@@ -104,8 +104,8 @@ class MovableObject: public DistributedBase
   public:
     MovableObject(int classTag, int dbTag);        
     MovableObject(int classTag);   
-    MovableObject(const MovableObject &otro);   
-    MovableObject &operator=(const MovableObject &otro);   
+    MovableObject(const MovableObject &);   
+    MovableObject &operator=(const MovableObject &);   
 
     int getClassTag(void) const;
     int getDbTag(void) const;

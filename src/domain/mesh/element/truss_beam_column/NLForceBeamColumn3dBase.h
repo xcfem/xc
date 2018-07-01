@@ -89,7 +89,7 @@ class NLForceBeamColumn3dBase: public BeamColumnWithSectionFDTrf3d
   public:
     NLForceBeamColumn3dBase(int tag,int classTag,int numSec= 0);
     NLForceBeamColumn3dBase(int tag,int classTag,int numSec,const Material *theSection,const CrdTransf *coordTransf);
-    NLForceBeamColumn3dBase(const NLForceBeamColumn3dBase &otro);
+    NLForceBeamColumn3dBase(const NLForceBeamColumn3dBase &);
 
     void setSection(const PrismaticBarCrossSection *sccModel);
 

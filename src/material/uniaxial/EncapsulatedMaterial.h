@@ -44,8 +44,8 @@ class EncapsulatedMaterial: public UniaxialMaterial
   public:
     EncapsulatedMaterial(int tag, int classTag, UniaxialMaterial &material); 
     EncapsulatedMaterial(int tag= 0,int classTag= 0);
-    EncapsulatedMaterial(const EncapsulatedMaterial &otro);
-    EncapsulatedMaterial &operator=(const EncapsulatedMaterial &otro);
+    EncapsulatedMaterial(const EncapsulatedMaterial &);
+    EncapsulatedMaterial &operator=(const EncapsulatedMaterial &);
     ~EncapsulatedMaterial(void);
 
     double getStrain(void) const;          

@@ -81,8 +81,8 @@ class FiberSection3dBase : public FiberSectionBase
     FiberSection3dBase(int classTag, int dim,MaterialHandler *mat_ldr= nullptr);
     FiberSection3dBase(int tag, int classTag, int dim,MaterialHandler *mat_ldr= nullptr);
     FiberSection3dBase(int tag, int classTag, int dim,const fiber_list &fibers,MaterialHandler *mat_ldr= nullptr);
-    FiberSection3dBase(const FiberSection3dBase &otro);
-    FiberSection3dBase &operator=(const FiberSection3dBase &otro);
+    FiberSection3dBase(const FiberSection3dBase &);
+    FiberSection3dBase &operator=(const FiberSection3dBase &);
 
     Fiber *addFiber(Fiber &)= 0;
     Fiber *addFiber(int tag,const MaterialHandler &,const std::string &nmbMat,const double &, const Vector &position);

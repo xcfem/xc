@@ -68,8 +68,8 @@ class ListReinfLayer: public std::list<ReinfLayer *>, public SectionMassProperti
 
     friend class GeomSection;
     ListReinfLayer(GeomSection *,MaterialHandler *ml);
-    ListReinfLayer(const ListReinfLayer  &otro);
-    ListReinfLayer &operator=(const ListReinfLayer  &otro);
+    ListReinfLayer(const ListReinfLayer  &);
+    ListReinfLayer &operator=(const ListReinfLayer  &);
   public:
    ~ListReinfLayer(void);
 

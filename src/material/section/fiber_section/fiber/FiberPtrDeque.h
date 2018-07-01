@@ -84,8 +84,8 @@ class FiberPtrDeque: public EntCmd, public std::deque<Fiber *>
       { return fiber_ptrs_dq::operator[](i); }
 
     FiberPtrDeque(const size_t &num= 0);
-    FiberPtrDeque(const FiberPtrDeque &otro);
-    FiberPtrDeque &operator=(const FiberPtrDeque &otro);
+    FiberPtrDeque(const FiberPtrDeque &);
+    FiberPtrDeque &operator=(const FiberPtrDeque &);
 
   private:
     friend class FiberSectionBase;

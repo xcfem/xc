@@ -69,8 +69,8 @@ class DistHingeIntegration : public PlasticLengthsBeamIntegration
   public:
     DistHingeIntegration(double lpI, double lpJ,const BeamIntegration &bi);
     DistHingeIntegration(void);
-    DistHingeIntegration(const DistHingeIntegration &otro);
-    DistHingeIntegration &operator=(const DistHingeIntegration &otro);
+    DistHingeIntegration(const DistHingeIntegration &);
+    DistHingeIntegration &operator=(const DistHingeIntegration &);
     ~DistHingeIntegration();
   
     void getSectionLocations(int numSections, double L, double *xi) const;

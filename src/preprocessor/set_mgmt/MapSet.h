@@ -75,8 +75,8 @@ class Domain;
     void abre_set(const std::string &nmb);
     void cierra_set(const std::string &nmb);
       
-    MapSet(const MapSet &otro);
-    MapSet &operator=(const MapSet &otro);
+    MapSet(const MapSet &);
+    MapSet &operator=(const MapSet &);
   protected:
     DbTagData &getDbTagData(void) const;
     int sendSetsDbTags(int posDbTag,CommParameters &cp);

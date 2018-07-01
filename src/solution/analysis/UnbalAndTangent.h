@@ -46,12 +46,12 @@ class UnbalAndTangent
     UnbalAndTangentStorage &unbalAndTangentArray; //!< Reference to array of class wide vectors and matrices
     bool free_mem(void);
     void alloc(void);
-    void copy(const UnbalAndTangent &otro);
+    void copy(const UnbalAndTangent &);
 
   public:
     UnbalAndTangent(const size_t &,UnbalAndTangentStorage &);
-    UnbalAndTangent(const UnbalAndTangent &otro);
-    UnbalAndTangent &operator=(const UnbalAndTangent &otro);
+    UnbalAndTangent(const UnbalAndTangent &);
+    UnbalAndTangent &operator=(const UnbalAndTangent &);
     virtual ~UnbalAndTangent(void);
 
     inline const size_t &getNumDOF(void) const

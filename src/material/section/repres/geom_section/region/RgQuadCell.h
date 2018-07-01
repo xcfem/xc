@@ -58,8 +58,8 @@ class RgQuadCell: public RegionSecc
   public:
     RgQuadCell(Material *);
     RgQuadCell(Material *, int numSubdivIJ, int numSubdivJK);
-    RgQuadCell(const RgQuadCell &otro);
-    RgQuadCell &operator=(const RgQuadCell &otro);
+    RgQuadCell(const RgQuadCell &);
+    RgQuadCell &operator=(const RgQuadCell &);
     virtual ~RgQuadCell(void);
 
     void setDiscretization(int numSubdivIJ, int numSubdivJK);

@@ -62,8 +62,8 @@ class NodeVectors: public EntCmd, public MovableObject
   public:
     // constructors
     NodeVectors(const size_t &nv= 2);
-    NodeVectors(const NodeVectors &otro);        
-    NodeVectors &operator=(const NodeVectors &otro);
+    NodeVectors(const NodeVectors &);        
+    NodeVectors &operator=(const NodeVectors &);
     virtual ~NodeVectors(void);
 
     // public methods dealing with the DOF at the node

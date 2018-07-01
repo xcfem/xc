@@ -45,8 +45,8 @@ class NodeLocker: public ForceReprComponent
   {
     void alloc_containers(void);
     void alloc_iterators(void);
-    NodeLocker(const NodeLocker &otro);
-    NodeLocker &operator=(const NodeLocker &otro);
+    NodeLocker(const NodeLocker &);
+    NodeLocker &operator=(const NodeLocker &);
   protected:
     int nextTag; //!< Default tag for next node locker.
     int currentGeoTag;

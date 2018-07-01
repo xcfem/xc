@@ -56,8 +56,8 @@ class MotionHistory: public EntCmd
     void clearSeries(void);
   public:
     MotionHistory(const double &dt= 0.0);
-    MotionHistory(const MotionHistory &otro);
-    MotionHistory &operator=(const MotionHistory &otro);
+    MotionHistory(const MotionHistory &);
+    MotionHistory &operator=(const MotionHistory &);
     
     virtual ~MotionHistory(void);
 

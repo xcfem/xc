@@ -48,7 +48,7 @@ class DqPtrsElem: public DqPtrsKDTree<Element,KDTreeElements>
     KDTreeElements kdtreeElements; //!< space-partitioning data structure for organizing elements (element centroids).
   public:
     DqPtrsElem(EntCmd *owr= nullptr);
-    DqPtrsElem(const DqPtrsElem &otro);
+    DqPtrsElem(const DqPtrsElem &);
     explicit DqPtrsElem(const std::deque<Element *> &ts);
     explicit DqPtrsElem(const std::set<const Element *> &ts);
     DqPtrsElem &operator=(const DqPtrsElem &);

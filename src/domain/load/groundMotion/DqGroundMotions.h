@@ -60,8 +60,8 @@ namespace XC {
     
   public:
     DqGroundMotions(const size_t &num= 0);
-    DqGroundMotions(const DqGroundMotions &otro);
-    DqGroundMotions &operator=(const DqGroundMotions &otro);
+    DqGroundMotions(const DqGroundMotions &);
+    DqGroundMotions &operator=(const DqGroundMotions &);
     ~DqGroundMotions(void);
 
     inline bool empty(void) const

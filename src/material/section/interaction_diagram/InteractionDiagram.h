@@ -60,8 +60,8 @@ class InteractionDiagram: public ClosedTriangleMesh
   public:
     InteractionDiagram(void);
     InteractionDiagram(const Pos3d &org,const Triang3dMesh &mll);
-    InteractionDiagram(const InteractionDiagram &otro);
-    InteractionDiagram &operator=(const InteractionDiagram &otro);
+    InteractionDiagram(const InteractionDiagram &);
+    InteractionDiagram &operator=(const InteractionDiagram &);
     virtual InteractionDiagram *clon(void) const;
 
     const Trihedron *findTrihedronPtr(const Pos3d &p) const;

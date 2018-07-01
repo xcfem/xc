@@ -43,8 +43,8 @@ class ConnectedMaterial : public UniaxialMaterial
   public:
     ConnectedMaterial(int tag, int classTag,const DqUniaxialMaterial &theMaterials);
     ConnectedMaterial(int tag, int classTag);
-    ConnectedMaterial(const ConnectedMaterial &otro);
-    ConnectedMaterial &operator=(const ConnectedMaterial &otro);
+    ConnectedMaterial(const ConnectedMaterial &);
+    ConnectedMaterial &operator=(const ConnectedMaterial &);
 
     int sendData(CommParameters &);  
     int recvData(const CommParameters &);

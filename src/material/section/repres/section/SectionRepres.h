@@ -87,9 +87,9 @@ class SectionRepres: public TaggedObject
   public:
     //Constructores
     SectionRepres(int tag,MaterialHandler *ml);
-    SectionRepres(const SectionRepres &otro);
+    SectionRepres(const SectionRepres &);
 
-    SectionRepres &operator=(const SectionRepres &otro);
+    SectionRepres &operator=(const SectionRepres &);
 
     // Section inquiring functions
     virtual int getType(void) const = 0;

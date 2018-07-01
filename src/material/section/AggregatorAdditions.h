@@ -52,7 +52,7 @@ class AggregatorAdditions: public DqUniaxialMaterial
   public:
     AggregatorAdditions(EntCmd *owner= nullptr);
     AggregatorAdditions(EntCmd *owner,const UniaxialMaterial &,int c);
-    AggregatorAdditions(const AggregatorAdditions &otro);
+    AggregatorAdditions(const AggregatorAdditions &);
     AggregatorAdditions(const AggregatorAdditions &otro,SectionForceDeformation *s);
     ~AggregatorAdditions(void);
 

@@ -50,8 +50,8 @@ class NodeDispVectors: public NodeVectors
   public:
     // constructors
     NodeDispVectors(void);
-    NodeDispVectors(const NodeDispVectors &otro);
-    NodeDispVectors &operator=(const NodeDispVectors &otro);
+    NodeDispVectors(const NodeDispVectors &);
+    NodeDispVectors &operator=(const NodeDispVectors &);
     virtual ~NodeDispVectors(void);
 
     // public methods for obtaining committed and trial

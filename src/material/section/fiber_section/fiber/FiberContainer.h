@@ -40,7 +40,7 @@ namespace XC {
 class FiberContainer : public FiberPtrDeque
   {
     void free_mem(void);
-    void copy_fibers(const FiberContainer &otro);
+    void copy_fibers(const FiberContainer &);
     void copy_fibers(const fiber_list &);
 
   protected:

@@ -40,8 +40,8 @@ class FiberSet : public FiberPtrDeque
   {
   public:
     FiberSet(const size_t &num= 0);
-    FiberSet(const FiberSet &otro);
-    FiberSet &operator=(const FiberSet &otro);
+    FiberSet(const FiberSet &);
+    FiberSet &operator=(const FiberSet &);
 
   };
 } // end of XC namespace

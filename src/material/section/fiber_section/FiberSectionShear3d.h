@@ -63,8 +63,8 @@ class FiberSectionShear3d : public FiberSection3d
 
   public:
     FiberSectionShear3d(int tag= 0,MaterialHandler *mat_ldr= nullptr);
-    FiberSectionShear3d(const FiberSectionShear3d &otro);
-    XC::FiberSectionShear3d &operator=(const FiberSectionShear3d &otro);
+    FiberSectionShear3d(const FiberSectionShear3d &);
+    XC::FiberSectionShear3d &operator=(const FiberSectionShear3d &);
     ~FiberSectionShear3d(void);
 
     void setRespVyByName(const std::string &);

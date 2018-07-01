@@ -86,7 +86,7 @@ class EarthquakePattern : public EQBasePattern
 // AddingSensitivity:BEGIN //////////////////////////////////////////
     int parameterID;
 // AddingSensitivity:END ///////////////////////////////////////////
-    EarthquakePattern(const EarthquakePattern &otro);
+    EarthquakePattern(const EarthquakePattern &);
     EarthquakePattern &operator=(const EarthquakePattern &);
   protected:
     void copy(const Vector *,const Vector *);

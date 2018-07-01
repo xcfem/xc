@@ -41,8 +41,8 @@ class Vector;
 class DqVectors: public std::deque<Vector *>
   {
   private:
-    DqVectors(const DqVectors &otro);
-    DqVectors &operator=(const DqVectors &otro);
+    DqVectors(const DqVectors &);
+    DqVectors &operator=(const DqVectors &);
   protected:
     typedef std::deque<Vector *> dq_ptr_Vectors;
     typedef dq_ptr_Vectors::const_reference const_reference;

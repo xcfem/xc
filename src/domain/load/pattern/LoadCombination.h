@@ -58,10 +58,10 @@ class LoadCombination: public ForceReprComponent
 	const std::string &getNombreCaso(const MapLoadPatterns &lps) const;
 
         summand getNeg(void) const;
-        const summand &add(const summand &otro);
-        const summand &substract(const summand &otro);
-        const summand &multiplica(const float &otro);
-        const summand &divide(const float &otro);
+        const summand &add(const summand &);
+        const summand &substract(const summand &);
+        const summand &multiplica(const float &);
+        const summand &divide(const float &);
 
 	std::string getString(const MapLoadPatterns &,const std::string &fmt) const;
         void Print(std::ostream &os) const;
@@ -93,8 +93,8 @@ class LoadCombination: public ForceReprComponent
     iterator end(void)
       { return descomp.end(); }
 
-    LoadCombination &add(const LoadCombination &otro);
-    LoadCombination &substract(const LoadCombination &otro);
+    LoadCombination &add(const LoadCombination &);
+    LoadCombination &substract(const LoadCombination &);
 
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);
@@ -136,8 +136,8 @@ class LoadCombination: public ForceReprComponent
 
     float getCoefCaso(const LoadPattern *) const;
 
-    LoadCombination &multiplica(const float &otro);
-    LoadCombination &divide(const float &otro);
+    LoadCombination &multiplica(const float &);
+    LoadCombination &divide(const float &);
     LoadCombination &add(const std::string &);
     LoadCombination &substract(const std::string &);
     LoadCombination &asigna(const std::string &);

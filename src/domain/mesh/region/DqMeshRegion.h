@@ -52,8 +52,8 @@ class DqMeshRegion: protected std::deque<MeshRegion *>
   public:
 
     DqMeshRegion(void);
-    DqMeshRegion(const DqMeshRegion  &otro);
-    DqMeshRegion &operator=(const DqMeshRegion  &otro);
+    DqMeshRegion(const DqMeshRegion  &);
+    DqMeshRegion &operator=(const DqMeshRegion  &);
     ~DqMeshRegion(void);
 
     inline size_t size(void) const

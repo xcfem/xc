@@ -110,7 +110,7 @@ class Actor: public ShadowActorBase
     ChannelAddress *theRemoteShadowsAddress;
 
     void free_memory(void);
-    void alloc(const std::vector<ActorMethod *> &otro);
+    void alloc(const std::vector<ActorMethod *> &);
     int alloc_method(const ActorMethod &);
 
   public:

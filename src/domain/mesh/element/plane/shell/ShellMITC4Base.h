@@ -94,8 +94,8 @@ class ShellMITC4Base : public QuadBase4N<SectionFDPhysicalProperties>
     ShellMITC4Base(int tag,int classTag,const SectionForceDeformation *ptr_mat,const ShellCrdTransf3dBase *); 
     //full constructor
     ShellMITC4Base(int tag,int classTag, int node1, int node2, int node3, int node4, const SectionFDPhysicalProperties &,const ShellCrdTransf3dBase *);
-    ShellMITC4Base(const ShellMITC4Base &otro);
-    ShellMITC4Base &operator=(const ShellMITC4Base &otro);
+    ShellMITC4Base(const ShellMITC4Base &);
+    ShellMITC4Base &operator=(const ShellMITC4Base &);
     ~ShellMITC4Base(void);
 
     //set domain because frank is a dumb ass 

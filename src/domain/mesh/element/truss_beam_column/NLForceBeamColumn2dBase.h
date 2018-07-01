@@ -86,7 +86,7 @@ class NLForceBeamColumn2dBase: public BeamColumnWithSectionFDTrf2d
   public:
     NLForceBeamColumn2dBase(int tag,int classTag,int numSec= 0);
     NLForceBeamColumn2dBase(int tag,int classTag,int numSec,const Material *theSection,const CrdTransf *coordTransf);
-    NLForceBeamColumn2dBase(const NLForceBeamColumn2dBase &otro);
+    NLForceBeamColumn2dBase(const NLForceBeamColumn2dBase &);
     ~NLForceBeamColumn2dBase(void);
 
     int getNumDOF(void) const;

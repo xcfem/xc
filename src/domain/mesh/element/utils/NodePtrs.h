@@ -69,8 +69,8 @@ class NodePtrs: public EntCmd, public std::vector<Node *>
 
   public:
     NodePtrs(Element *owr,const size_t &sz);
-    NodePtrs(const NodePtrs &otro);
-    NodePtrs &operator=(const NodePtrs &otro);
+    NodePtrs(const NodePtrs &);
+    NodePtrs &operator=(const NodePtrs &);
     ~NodePtrs(void);
 
     void inic(void);

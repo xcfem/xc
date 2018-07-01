@@ -41,14 +41,14 @@ class FVectorShell: public FVectorData<24>
   {
   public:
     FVectorShell(void);
-    FVectorShell(const FVectorShell &otro);
+    FVectorShell(const FVectorShell &);
     explicit FVectorShell(const Vector &);
-    FVectorShell &operator=(const FVectorShell &otro);
+    FVectorShell &operator=(const FVectorShell &);
     void zero(void);
 
     FVectorShell &operator*=(const double &d);
-    FVectorShell &operator+=(const FVectorShell &otro);
-    FVectorShell &operator-=(const FVectorShell &otro);
+    FVectorShell &operator+=(const FVectorShell &);
+    FVectorShell &operator-=(const FVectorShell &);
 
     void addForce(const size_t &inod,const double &,const double &,const double &);
     void addMoment(const size_t &inod,const double &,const double &,const double &);

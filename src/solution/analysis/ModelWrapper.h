@@ -74,7 +74,7 @@ class ModelWrapper: public EntCmd
     bool alloc_numerador(const std::string &);
     void copy_numerador(const DOF_Numberer *);
 
-    void copy(const ModelWrapper &otro);
+    void copy(const ModelWrapper &);
     void free_mem(void);
 
     AnalysisAggregation *getAnalysisAggregation(void);

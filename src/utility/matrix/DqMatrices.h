@@ -42,8 +42,8 @@ class Matrix;
 class DqMatrices: public std::deque<Matrix *>
   {
   private:
-    DqMatrices(const DqMatrices &otro);
-    DqMatrices &operator=(const DqMatrices &otro);
+    DqMatrices(const DqMatrices &);
+    DqMatrices &operator=(const DqMatrices &);
   protected:
     typedef std::deque<Matrix *> dq_ptr_Matrices;
     typedef dq_ptr_Matrices::const_reference const_reference;

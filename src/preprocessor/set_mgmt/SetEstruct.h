@@ -51,8 +51,8 @@ class SetEstruct: public SetBase
     NodePtrSet getNodePtrSet(void);
   public:
     SetEstruct(const std::string &nmb="",Preprocessor *preprocessor= nullptr);
-    SetEstruct(const SetEstruct &otro);
-    SetEstruct &operator=(const SetEstruct &otro);
+    SetEstruct(const SetEstruct &);
+    SetEstruct &operator=(const SetEstruct &);
     virtual SetEstruct *getCopy(void) const= 0;
     virtual size_t getNumNodeLayers(void) const= 0;
     virtual size_t getNumNodeRows(void) const= 0;

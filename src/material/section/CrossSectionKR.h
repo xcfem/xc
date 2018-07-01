@@ -111,7 +111,7 @@ class CrossSectionKR: public EntCmd
   public:
     CrossSectionKR(const size_t &dim);
     CrossSectionKR(const CrossSectionKR &otra);
-    CrossSectionKR &operator=(const CrossSectionKR &otro);
+    CrossSectionKR &operator=(const CrossSectionKR &);
     virtual ~CrossSectionKR(void);
 
     void zero(void);

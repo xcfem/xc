@@ -106,8 +106,8 @@ class ElasticBeam2d: public ProtoBeam2d
     ElasticBeam2d(int tag, double A, double E, double I, 
 		  int Nd1, int Nd2, CrdTransf2d &theTransf, 
 		  double alpha = 0.0, double d = 0.0, double rho = 0.0);
-    ElasticBeam2d(const ElasticBeam2d &otro);
-    ElasticBeam2d &operator=(const ElasticBeam2d &otro);
+    ElasticBeam2d(const ElasticBeam2d &);
+    ElasticBeam2d &operator=(const ElasticBeam2d &);
     Element *getCopy(void) const;
     ~ElasticBeam2d(void);
 

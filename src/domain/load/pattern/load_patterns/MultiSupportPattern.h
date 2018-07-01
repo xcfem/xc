@@ -74,8 +74,8 @@ class MultiSupportPattern: public EQBasePattern
   private:
     ID theMotionTags;
     int dbMotions;
-    MultiSupportPattern(const MultiSupportPattern &otro);    
-    MultiSupportPattern &operator=(const MultiSupportPattern &otro);
+    MultiSupportPattern(const MultiSupportPattern &);    
+    MultiSupportPattern &operator=(const MultiSupportPattern &);
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
   public:

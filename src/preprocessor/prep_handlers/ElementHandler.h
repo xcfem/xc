@@ -42,8 +42,8 @@ class ElementHandler: public ProtoElementHandler
     class SeedElemHandler: public ProtoElementHandler
       {
         Element *semilla;
-        SeedElemHandler(const SeedElemHandler &otro);
-        SeedElemHandler &operator=(const SeedElemHandler &otro);
+        SeedElemHandler(const SeedElemHandler &);
+        SeedElemHandler &operator=(const SeedElemHandler &);
         void free_mem(void);
       protected:
         void add(Element *);

@@ -66,8 +66,8 @@ class ClosedTriangleMesh: public GeomObj3d, public MovableObject
   public:
     ClosedTriangleMesh(void);
     ClosedTriangleMesh(const Pos3d &org,const Triang3dMesh &mll);
-    ClosedTriangleMesh(const ClosedTriangleMesh &otro);
-    ClosedTriangleMesh &operator=(const ClosedTriangleMesh &otro);
+    ClosedTriangleMesh(const ClosedTriangleMesh &);
+    ClosedTriangleMesh &operator=(const ClosedTriangleMesh &);
     virtual ClosedTriangleMesh *clon(void) const;
 
     virtual double GetMax(short unsigned int i) const;

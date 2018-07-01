@@ -67,8 +67,8 @@ class MapSetBase: public std::map<std::string,SetBase *>
     void clearSets(void);
     friend class Set;
       
-    MapSetBase(const MapSetBase &otro);
-    MapSetBase &operator=(const MapSetBase &otro);
+    MapSetBase(const MapSetBase &);
+    MapSetBase &operator=(const MapSetBase &);
     const std::deque<std::string> &getSetsClassNames(void);
     const std::deque<std::string> &getSetsNames(void);
     DbTagData &getDbTagData(void) const;

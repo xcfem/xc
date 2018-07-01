@@ -54,8 +54,8 @@ class EntGeomSection: public EntConNmb
 
   public:
     EntGeomSection(const std::string &nmb="",GeomSection *sccGeom= nullptr);
-    EntGeomSection(const EntGeomSection &otro);
-    EntGeomSection &operator=(const EntGeomSection &otro);
+    EntGeomSection(const EntGeomSection &);
+    EntGeomSection &operator=(const EntGeomSection &);
     inline const GeomSection *GetGeomSection(void) const
       { return getGeomSection(); }
     inline GeomSection *GetGeomSection(void)

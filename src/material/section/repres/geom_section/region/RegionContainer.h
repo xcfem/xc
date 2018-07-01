@@ -67,8 +67,8 @@ class RegionContainer: protected std::list<RegionSecc *>, public SectionMassProp
   public:
 
     RegionContainer(MaterialHandler *ml);
-    RegionContainer(const RegionContainer  &otro);
-    RegionContainer &operator=(const RegionContainer  &otro);
+    RegionContainer(const RegionContainer  &);
+    RegionContainer &operator=(const RegionContainer  &);
     ~RegionContainer(void);
 
     XC::RegionSecc *push_back(const RegionSecc &reg);

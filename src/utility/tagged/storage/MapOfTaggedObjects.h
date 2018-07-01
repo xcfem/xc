@@ -102,8 +102,8 @@ class MapOfTaggedObjects : public TaggedObjectStorage
 
   public:
     MapOfTaggedObjects(EntCmd *owr,const std::string &containerName);
-    MapOfTaggedObjects(const MapOfTaggedObjects &otro);
-    MapOfTaggedObjects &operator=(const MapOfTaggedObjects &otro);
+    MapOfTaggedObjects(const MapOfTaggedObjects &);
+    MapOfTaggedObjects &operator=(const MapOfTaggedObjects &);
     ~MapOfTaggedObjects(void);
 
     inline const_iterator begin(void) const

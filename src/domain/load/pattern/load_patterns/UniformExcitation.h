@@ -83,8 +83,8 @@ class UniformExcitation: public EarthquakePattern
     double vel0; //!< the initial velocity, should be neg of ug dot(0)
     double fact; //!< factor that multiplies the signal.
 
-    UniformExcitation(const UniformExcitation &otro);
-    UniformExcitation &operator=(const UniformExcitation &otro);
+    UniformExcitation(const UniformExcitation &);
+    UniformExcitation &operator=(const UniformExcitation &);
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);

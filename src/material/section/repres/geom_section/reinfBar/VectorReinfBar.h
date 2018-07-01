@@ -60,8 +60,8 @@ class VectorReinfBar: public std::vector<ReinfBar *>, public SectionMassProperti
       { return v_rfBar::operator[](i); }
   public:
     VectorReinfBar(const size_t &sz= 0);
-    VectorReinfBar(const VectorReinfBar  &otro);
-    VectorReinfBar &operator=(const VectorReinfBar  &otro);
+    VectorReinfBar(const VectorReinfBar  &);
+    VectorReinfBar &operator=(const VectorReinfBar  &);
     ~VectorReinfBar(void);
 
     inline size_t size(void) const

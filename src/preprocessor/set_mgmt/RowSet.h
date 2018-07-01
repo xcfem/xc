@@ -57,8 +57,8 @@ class RowSet: public SetEstruct
     typedef typename ROWTTZELEM::const_reference const_reference_elem; 
   public:
     RowSet(const ROWTTZNOD &fn,const ROWTTZELEM &fe,const std::string &nmb="",Preprocessor *preprocessor= nullptr);
-    RowSet(const RowSet &otro);
-    RowSet &operator=(const RowSet &otro);
+    RowSet(const RowSet &);
+    RowSet &operator=(const RowSet &);
     virtual SetEstruct *getCopy(void) const;
     reference_nod Node(const size_t &i)
       { return node_row(i); }

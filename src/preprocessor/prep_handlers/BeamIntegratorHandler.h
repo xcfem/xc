@@ -47,8 +47,8 @@ class BeamIntegratorHandler: public PrepHandler
   private:
     map_beam_integrators beam_integrators;
     void free_mem(void);
-    BeamIntegratorHandler(const BeamIntegratorHandler &otro);
-    BeamIntegratorHandler &operator=(const BeamIntegratorHandler &otro);
+    BeamIntegratorHandler(const BeamIntegratorHandler &);
+    BeamIntegratorHandler &operator=(const BeamIntegratorHandler &);
   protected:
     friend class ElementHandler;
   public:

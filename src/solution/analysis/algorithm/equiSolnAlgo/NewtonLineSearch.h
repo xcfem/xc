@@ -82,8 +82,8 @@ class NewtonLineSearch: public EquiSolnAlgo
     friend class AnalysisAggregation;
     friend class FEM_ObjectBroker;
     NewtonLineSearch(AnalysisAggregation *);    
-    NewtonLineSearch(const NewtonLineSearch &otro);    
-    NewtonLineSearch &operator=(const NewtonLineSearch &otro);    
+    NewtonLineSearch(const NewtonLineSearch &);    
+    NewtonLineSearch &operator=(const NewtonLineSearch &);    
     virtual SolutionAlgorithm *getCopy(void) const;
   protected:
     ~NewtonLineSearch(void);

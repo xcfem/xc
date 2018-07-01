@@ -78,8 +78,8 @@ class Preprocessor: public EntCmd, public MovableObject
     friend class SetMeshComp;
     friend class Set;
 
-    Preprocessor(const Preprocessor &otro);
-    Preprocessor &operator=(const Preprocessor &otro);
+    Preprocessor(const Preprocessor &);
+    Preprocessor &operator=(const Preprocessor &);
   protected:
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &);

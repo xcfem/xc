@@ -56,8 +56,8 @@ class ElementBase: public Element
 
   public:
     ElementBase(int tag, int classTag);
-    ElementBase(const ElementBase &otro);
-    ElementBase &operator=(const ElementBase &otro);
+    ElementBase(const ElementBase &);
+    ElementBase &operator=(const ElementBase &);
 
     //! @brief Returns the element number of nodes.
     static inline const int numNodes(void)

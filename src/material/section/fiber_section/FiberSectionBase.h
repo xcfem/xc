@@ -87,8 +87,8 @@ class FiberSectionBase: public PrismaticBarCrossSection
     FiberSectionBase(int classTag,int dim,MaterialHandler *mat_ldr= nullptr); 
     FiberSectionBase(int tag, int classTag,int dim,MaterialHandler *mat_ldr= nullptr);
     FiberSectionBase(int tag, int classTag, int numFibers,int dim,MaterialHandler *mat_ldr= nullptr);
-    FiberSectionBase(const FiberSectionBase &otro);
-    FiberSectionBase &operator=(const FiberSectionBase &otro);
+    FiberSectionBase(const FiberSectionBase &);
+    FiberSectionBase &operator=(const FiberSectionBase &);
     ~FiberSectionBase(void);
 
     virtual void setupFibers(void) = 0;

@@ -66,7 +66,7 @@ class DqPtrs: public EntCmd, protected std::deque<T *>
     typedef boost::indirect_iterator<iterator> indIterator;
   public:
     DqPtrs(EntCmd *owr= nullptr);
-    DqPtrs(const DqPtrs &otro);
+    DqPtrs(const DqPtrs &);
     explicit DqPtrs(const std::deque<T *> &ts);
     explicit DqPtrs(const std::set<const T *> &ts);
     DqPtrs &operator=(const DqPtrs &);

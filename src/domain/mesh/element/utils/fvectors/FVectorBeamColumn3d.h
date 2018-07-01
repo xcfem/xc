@@ -41,14 +41,14 @@ class FVectorBeamColumn3d: public FVectorData<5>
   {
   public:
     FVectorBeamColumn3d(void);
-    FVectorBeamColumn3d(const FVectorBeamColumn3d &otro);
+    FVectorBeamColumn3d(const FVectorBeamColumn3d &);
     explicit FVectorBeamColumn3d(const Vector &);
-    FVectorBeamColumn3d &operator=(const FVectorBeamColumn3d &otro);
+    FVectorBeamColumn3d &operator=(const FVectorBeamColumn3d &);
     void zero(void);
 
     FVectorBeamColumn3d &operator*=(const double &d);
-    FVectorBeamColumn3d &operator+=(const FVectorBeamColumn3d &otro);
-    FVectorBeamColumn3d &operator-=(const FVectorBeamColumn3d &otro);
+    FVectorBeamColumn3d &operator+=(const FVectorBeamColumn3d &);
+    FVectorBeamColumn3d &operator-=(const FVectorBeamColumn3d &);
 
     void Print(std::ostream &os) const;
   };

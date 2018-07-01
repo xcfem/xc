@@ -47,8 +47,8 @@ class EsfBeamColumn3d: public Vector
   public:
     EsfBeamColumn3d(void);
     explicit EsfBeamColumn3d(const Vector &);
-    EsfBeamColumn3d(const EsfBeamColumn3d &otro);
-    EsfBeamColumn3d &operator=(const EsfBeamColumn3d &otro);
+    EsfBeamColumn3d(const EsfBeamColumn3d &);
+    EsfBeamColumn3d &operator=(const EsfBeamColumn3d &);
     //! @brief Returns the axil.
     inline const double &N(void) const
       { return (*this)[0]; }

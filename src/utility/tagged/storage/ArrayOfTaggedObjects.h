@@ -115,8 +115,8 @@ class ArrayOfTaggedObjects : public TaggedObjectStorage
 
   public:
     ArrayOfTaggedObjects(EntCmd *owr,int size,const std::string &containerName);
-    ArrayOfTaggedObjects(const ArrayOfTaggedObjects &otro);
-    ArrayOfTaggedObjects &operator=(const ArrayOfTaggedObjects &otro);
+    ArrayOfTaggedObjects(const ArrayOfTaggedObjects &);
+    ArrayOfTaggedObjects &operator=(const ArrayOfTaggedObjects &);
     ~ArrayOfTaggedObjects(void);
 
     // public methods to populate a domain
