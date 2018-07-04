@@ -65,15 +65,15 @@ XC::SectionRepres::SectionRepres(int tag,MaterialHandler *ml)
   : TaggedObject(tag), material_handler(ml), gmSecc(nullptr) {}
 
 //! @brief Copy constructor.
-XC::SectionRepres::SectionRepres(const SectionRepres &otro)
-  : TaggedObject(otro), material_handler(otro.material_handler), gmSecc(otro.gmSecc) {}
+XC::SectionRepres::SectionRepres(const SectionRepres &other)
+  : TaggedObject(other), material_handler(other.material_handler), gmSecc(other.gmSecc) {}
 
 //! @brief Assignment operator.
-XC::SectionRepres &XC::SectionRepres::operator=(const SectionRepres &otro)
+XC::SectionRepres &XC::SectionRepres::operator=(const SectionRepres &other)
   {
-    SectionRepres::operator=(otro);
-    material_handler= otro.material_handler;
-    gmSecc= otro.gmSecc;
+    SectionRepres::operator=(other);
+    material_handler= other.material_handler;
+    gmSecc= other.gmSecc;
     return *this;
   }
 

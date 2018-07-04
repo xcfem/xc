@@ -76,18 +76,18 @@ XC::ClosedTriangleMesh::ClosedTriangleMesh(const Pos3d &org,const Triang3dMesh &
   }
 
 //! @brief Copy constructor.
-XC::ClosedTriangleMesh::ClosedTriangleMesh(const ClosedTriangleMesh &otro)
-  : GeomObj3d(otro), MovableObject(otro), trihedrons(otro.trihedrons), tol(otro.tol), rMax(otro.rMax),rMin(otro.rMin)
+XC::ClosedTriangleMesh::ClosedTriangleMesh(const ClosedTriangleMesh &other)
+  : GeomObj3d(other), MovableObject(other), trihedrons(other.trihedrons), tol(other.tol), rMax(other.rMax),rMin(other.rMin)
   {}
 
 //! @brief Assignment operator.
-XC::ClosedTriangleMesh &XC::ClosedTriangleMesh::operator=(const ClosedTriangleMesh &otro)
+XC::ClosedTriangleMesh &XC::ClosedTriangleMesh::operator=(const ClosedTriangleMesh &other)
   {
-    GeomObj3d::operator=(otro);
-    trihedrons= otro.trihedrons;
-    tol= otro.tol;
-    rMax= otro.rMax;
-    rMin= otro.rMin;
+    GeomObj3d::operator=(other);
+    trihedrons= other.trihedrons;
+    tol= other.tol;
+    rMax= other.rMax;
+    rMin= other.rMin;
     return *this;
   }
 

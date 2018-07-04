@@ -59,17 +59,17 @@ XC::FiberPtrDeque::FiberPtrDeque(const size_t &num)
   {}
 
 //! @brief Copy constructor.
-XC::FiberPtrDeque::FiberPtrDeque(const FiberPtrDeque &otro)
-  : EntCmd(otro), fiber_ptrs_dq(otro), yCenterOfMass(otro.yCenterOfMass), zCenterOfMass(otro.zCenterOfMass)
+XC::FiberPtrDeque::FiberPtrDeque(const FiberPtrDeque &other)
+  : EntCmd(other), fiber_ptrs_dq(other), yCenterOfMass(other.yCenterOfMass), zCenterOfMass(other.zCenterOfMass)
   {}
 
 //! @brief Assignment operator.
-XC::FiberPtrDeque &XC::FiberPtrDeque::operator=(const FiberPtrDeque &otro)
+XC::FiberPtrDeque &XC::FiberPtrDeque::operator=(const FiberPtrDeque &other)
   {
-    EntCmd::operator=(otro);
-    fiber_ptrs_dq::operator=(otro);
-    yCenterOfMass= otro.yCenterOfMass;
-    zCenterOfMass= otro.zCenterOfMass;
+    EntCmd::operator=(other);
+    fiber_ptrs_dq::operator=(other);
+    yCenterOfMass= other.yCenterOfMass;
+    zCenterOfMass= other.zCenterOfMass;
     return *this;
   }
 

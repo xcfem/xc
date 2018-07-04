@@ -48,14 +48,14 @@ XC::TransfCooHandler::TransfCooHandler(Preprocessor *owr)
   : PrepHandler(owr), tag_trf(0) {}
 
 //! @brief Copy constructor.
-XC::TransfCooHandler::TransfCooHandler(const TransfCooHandler &otro)
- : PrepHandler(otro)
+XC::TransfCooHandler::TransfCooHandler(const TransfCooHandler &other)
+ : PrepHandler(other)
   { std::cerr << "This object must no be copied." << std::endl; }
 
 //! @brief Assignment operator.
-XC::TransfCooHandler &XC::TransfCooHandler::operator=(const TransfCooHandler &otro)
+XC::TransfCooHandler &XC::TransfCooHandler::operator=(const TransfCooHandler &other)
   {
-    PrepHandler::operator=(otro);
+    PrepHandler::operator=(other);
     std::cerr << "This object must not be assigned." << std::endl;
     return *this;
   }

@@ -105,30 +105,30 @@ XC::BeamWithHinges3d::BeamWithHinges3d(int tag, int nodeI, int nodeJ,
   }
 
 //! @brief Copy constructor.
-XC::BeamWithHinges3d::BeamWithHinges3d(const XC::BeamWithHinges3d &otro)
-  :BeamColumnWithSectionFDTrf3d(otro), ctes_scc(otro.ctes_scc), beta1(otro.beta1), beta2(otro.beta2), rho(otro.rho),
-   kb(otro.kb), q(otro.q), kbCommit(otro.kbCommit), qCommit(otro.qCommit),
-   initialFlag(otro.initialFlag), maxIter(otro.maxIter), tolerance(otro.tolerance),
-   applied_sf(nullptr), p0(otro.p0),v0(otro.v0)
+XC::BeamWithHinges3d::BeamWithHinges3d(const XC::BeamWithHinges3d &other)
+  :BeamColumnWithSectionFDTrf3d(other), ctes_scc(other.ctes_scc), beta1(other.beta1), beta2(other.beta2), rho(other.rho),
+   kb(other.kb), q(other.q), kbCommit(other.kbCommit), qCommit(other.qCommit),
+   initialFlag(other.initialFlag), maxIter(other.maxIter), tolerance(other.tolerance),
+   applied_sf(nullptr), p0(other.p0),v0(other.v0)
   {}
 
 // //! @brief Assignment operator.
-// XC::BeamWithHinges3d &XC::BeamWithHinges3d::operator=(const XC::BeamWithHinges3d &otro)
+// XC::BeamWithHinges3d &XC::BeamWithHinges3d::operator=(const XC::BeamWithHinges3d &other)
 //   {
-//     BeamColumnWithSectionFDTrf3d::operator=(otro);
-//     ctes_scc= otro.ctes_scc;
-//     beta1= otro.beta1;
-//     beta2= otro.beta2;
-//     rho= otro.rho;
-//     kb= otro.kb;
-//     q= otro.q;
-//     kbCommit= otro.kbCommit;
-//     qCommit= otro.qCommit;
-//     initialFlag= otro.initialFlag;
-//     maxIter= otro.maxIter;
-//     tolerance= otro.tolerance;
-//     p0= otro.p0;
-//     v0= otro.v0;
+//     BeamColumnWithSectionFDTrf3d::operator=(other);
+//     ctes_scc= other.ctes_scc;
+//     beta1= other.beta1;
+//     beta2= other.beta2;
+//     rho= other.rho;
+//     kb= other.kb;
+//     q= other.q;
+//     kbCommit= other.kbCommit;
+//     qCommit= other.qCommit;
+//     initialFlag= other.initialFlag;
+//     maxIter= other.maxIter;
+//     tolerance= other.tolerance;
+//     p0= other.p0;
+//     v0= other.v0;
 //     return *this;
 //   }
 

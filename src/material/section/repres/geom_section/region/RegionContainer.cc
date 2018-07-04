@@ -65,16 +65,16 @@ XC::RegionContainer::RegionContainer(MaterialHandler *ml)
   : l_reg(), material_handler(ml) {}
 
 //! @brief Copy constructor.
-XC::RegionContainer::RegionContainer(const RegionContainer  &otro)
-  : l_reg(), material_handler(otro.material_handler)
-  { copy(otro); }
+XC::RegionContainer::RegionContainer(const RegionContainer  &other)
+  : l_reg(), material_handler(other.material_handler)
+  { copy(other); }
 
 //! @brief Assignment operator.
-XC::RegionContainer &XC::RegionContainer::operator=(const RegionContainer &otro)
+XC::RegionContainer &XC::RegionContainer::operator=(const RegionContainer &other)
   {
-    SectionMassProperties::operator=(otro);
-    material_handler= otro.material_handler;
-    copy(otro);
+    SectionMassProperties::operator=(other);
+    material_handler= other.material_handler;
+    copy(other);
     return *this;
   }
 

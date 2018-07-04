@@ -191,11 +191,11 @@ void XC::ModelWrapper::free_mem(void)
     free_numerador();
   }
 
-void XC::ModelWrapper::copy(const ModelWrapper &otro)
+void XC::ModelWrapper::copy(const ModelWrapper &other)
   {
-    if(otro.theModel) copy_analysis_model(otro.theModel);
-    if(otro.theHandler) copy_constraint_handler(otro.theHandler);
-    if(otro.theDOFNumberer) copy_numerador(otro.theDOFNumberer);
+    if(other.theModel) copy_analysis_model(other.theModel);
+    if(other.theHandler) copy_constraint_handler(other.theHandler);
+    if(other.theDOFNumberer) copy_numerador(other.theDOFNumberer);
   }
 
 XC::AnalysisAggregation *XC::ModelWrapper::getAnalysisAggregation(void)
@@ -211,15 +211,15 @@ XC::ModelWrapper::ModelWrapper(AnalysisAggregation *owr)
   { alloc_analysis_model(); }
 
 //! @brief Copy constructor.
-XC::ModelWrapper::ModelWrapper(const ModelWrapper &otro)
-  : EntCmd(otro), theModel(nullptr), theHandler(nullptr),theDOFNumberer(nullptr)
-  { copy(otro); }
+XC::ModelWrapper::ModelWrapper(const ModelWrapper &other)
+  : EntCmd(other), theModel(nullptr), theHandler(nullptr),theDOFNumberer(nullptr)
+  { copy(other); }
 
 //! @brief Assignment operator.
-XC::ModelWrapper &XC::ModelWrapper::operator=(const ModelWrapper &otro)
+XC::ModelWrapper &XC::ModelWrapper::operator=(const ModelWrapper &other)
   {
-    EntCmd::operator=(otro);
-    copy(otro);
+    EntCmd::operator=(other);
+    copy(other);
     return *this;
   }
 

@@ -90,15 +90,15 @@ XC::PrismaticBarCrossSectionsVector::PrismaticBarCrossSectionsVector(const size_
   }
 
 //! @brief Copy constructor.
-XC::PrismaticBarCrossSectionsVector::PrismaticBarCrossSectionsVector(const PrismaticBarCrossSectionsVector &otro)
-  : EntCmd(otro), std::vector<PrismaticBarCrossSection *>(otro.size(),nullptr), MovableObject(otro)
+XC::PrismaticBarCrossSectionsVector::PrismaticBarCrossSectionsVector(const PrismaticBarCrossSectionsVector &other)
+  : EntCmd(other), std::vector<PrismaticBarCrossSection *>(other.size(),nullptr), MovableObject(other)
   {
-    const size_t sz= otro.size();
+    const size_t sz= other.size();
     for(size_t i= 0;i<sz;i++)
       {
-        if(otro[i])
+        if(other[i])
           {
-            (*this)[i]= copy_section(otro[i]);
+            (*this)[i]= copy_section(other[i]);
             if(!(*this)[i])
               std::cerr << getClassName() << "::" << __FUNCTION__
 		        << "; failed allocate material model pointer\n";

@@ -49,11 +49,11 @@ void XC::MEDMesh::alloc(const std::string &fName) const
                 << meshName << " on file: " << fName << std::endl;
   }
 
-void XC::MEDMesh::alloc(const MEDMesh &otro) const
+void XC::MEDMesh::alloc(const MEDMesh &other) const
   {
     free_mem();
-    if(otro.mesh)
-      mesh= new MEDMEM::MESH(*otro.mesh);
+    if(other.mesh)
+      mesh= new MEDMEM::MESH(*other.mesh);
   }
 
 //! Constructor.
@@ -61,19 +61,19 @@ XC::MEDMesh::MEDMesh(void)
   : mesh(nullptr) {}
 
 //! Constructor.
-XC::MEDMesh::MEDMesh(const MEDMesh &otro)
-  : MEDObject(otro), mesh(nullptr)
+XC::MEDMesh::MEDMesh(const MEDMesh &other)
+  : MEDObject(other), mesh(nullptr)
   {
-    meshName= otro.meshName;
-    alloc(otro);
+    meshName= other.meshName;
+    alloc(other);
   }
 
 //! Assignment operator.
-XC::MEDMesh &XC::MEDMesh::operator=(const MEDMesh &otro)
+XC::MEDMesh &XC::MEDMesh::operator=(const MEDMesh &other)
   {
-    MEDObject::operator=(otro);
-    meshName= otro.meshName;
-    alloc(otro);
+    MEDObject::operator=(other);
+    meshName= other.meshName;
+    alloc(other);
     return *this;
   }
 //! Destructor.

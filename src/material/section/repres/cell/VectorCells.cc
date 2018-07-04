@@ -57,26 +57,26 @@ XC::VectorCells::VectorCells(const size_t &sz)
   : v_cell(sz,nullptr) {}
 
 //! @brief Copy constructor.
-XC::VectorCells::VectorCells(const VectorCells  &otro)
-  : v_cell(otro.size(),nullptr)
+XC::VectorCells::VectorCells(const VectorCells  &other)
+  : v_cell(other.size(),nullptr)
   {
     const size_t sz= size();
     for(size_t i=0;i<sz;i++)
       {
-        const Cell *tmp= otro[i];
+        const Cell *tmp= other[i];
         if(tmp)
           (*this)[i]= tmp->getCopy();
       }
   }
 
 //! @brief Assignment operator.
-XC::VectorCells &XC::VectorCells::operator=(const VectorCells &otro)
+XC::VectorCells &XC::VectorCells::operator=(const VectorCells &other)
   {
-    resize(otro.size());
+    resize(other.size());
     const size_t sz= size();
     for(size_t i=0;i<sz;i++)
       {
-        const Cell *tmp= otro[i];
+        const Cell *tmp= other[i];
         if(tmp)
           (*this)[i]= tmp->getCopy();
       }

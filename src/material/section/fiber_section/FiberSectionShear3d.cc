@@ -122,16 +122,16 @@ XC::FiberSectionShear3d::FiberSectionShear3d(int tag, MaterialHandler *mat_ldr)
     respVy(nullptr), respVz(nullptr), respT(nullptr) {}
 
 //! @brief Copy constructor.
-XC::FiberSectionShear3d::FiberSectionShear3d(const FiberSectionShear3d &otro)
-  : FiberSection3d(otro), respVy(nullptr), respVz(nullptr), respT(nullptr)
-   { setRespVyVzT(otro.respVy,otro.respVz,otro.respT); }
+XC::FiberSectionShear3d::FiberSectionShear3d(const FiberSectionShear3d &other)
+  : FiberSection3d(other), respVy(nullptr), respVz(nullptr), respT(nullptr)
+   { setRespVyVzT(other.respVy,other.respVz,other.respT); }
 
 //! @brief Assignment operator.
-XC::FiberSectionShear3d &XC::FiberSectionShear3d::operator=(const FiberSectionShear3d &otro)
+XC::FiberSectionShear3d &XC::FiberSectionShear3d::operator=(const FiberSectionShear3d &other)
   {
     free_mem();
-    FiberSection3d::operator=(otro);
-    setRespVyVzT(otro.respVy,otro.respVz,otro.respT);
+    FiberSection3d::operator=(other);
+    setRespVyVzT(other.respVy,other.respVz,other.respT);
     respVy->set_owner(this); respVz->set_owner(this); respT->set_owner(this);
     return *this;
   }

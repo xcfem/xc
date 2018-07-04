@@ -108,22 +108,22 @@ XC::ArrayOfTaggedObjects::ArrayOfTaggedObjects(EntCmd *owr,int size,const std::s
   }
 
 //! @brief Copy constructor.
-XC::ArrayOfTaggedObjects::ArrayOfTaggedObjects(const ArrayOfTaggedObjects &otro)
-  : TaggedObjectStorage(otro), numComponents(otro.numComponents),sizeComponentArray(otro.sizeComponentArray), positionLastEntry(otro.positionLastEntry), positionLastNoFitEntry(otro.positionLastNoFitEntry),fitFlag(otro.fitFlag), theComponents(otro.theComponents.size(),nullptr), myIter(*this)
-  { copy(otro); }
+XC::ArrayOfTaggedObjects::ArrayOfTaggedObjects(const ArrayOfTaggedObjects &other)
+  : TaggedObjectStorage(other), numComponents(other.numComponents),sizeComponentArray(other.sizeComponentArray), positionLastEntry(other.positionLastEntry), positionLastNoFitEntry(other.positionLastNoFitEntry),fitFlag(other.fitFlag), theComponents(other.theComponents.size(),nullptr), myIter(*this)
+  { copy(other); }
 
 //! @brief Assignment operator.
-XC::ArrayOfTaggedObjects &XC::ArrayOfTaggedObjects::operator=(const ArrayOfTaggedObjects &otro)
+XC::ArrayOfTaggedObjects &XC::ArrayOfTaggedObjects::operator=(const ArrayOfTaggedObjects &other)
   {
-    TaggedObjectStorage::operator=(otro);
-    numComponents= otro.numComponents;
-    sizeComponentArray= otro.sizeComponentArray;
-    positionLastEntry= otro.positionLastEntry;
-    positionLastNoFitEntry= otro.positionLastNoFitEntry;
-    fitFlag= otro.fitFlag;
+    TaggedObjectStorage::operator=(other);
+    numComponents= other.numComponents;
+    sizeComponentArray= other.sizeComponentArray;
+    positionLastEntry= other.positionLastEntry;
+    positionLastNoFitEntry= other.positionLastNoFitEntry;
+    fitFlag= other.fitFlag;
     clearComponents();
-    theComponents= tagged_vector(otro.theComponents.size(),nullptr);
-    copy(otro);
+    theComponents= tagged_vector(other.theComponents.size(),nullptr);
+    copy(other);
     return *this;
   }
 

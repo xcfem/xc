@@ -75,17 +75,17 @@ XC::TrussBase::TrussBase(int classTag)
   { inicializa(); }
 
 //! @brief Copy constructor.
-XC::TrussBase::TrussBase(const TrussBase &otro)
-  :ProtoTruss(otro), L(otro.L) {}
+XC::TrussBase::TrussBase(const TrussBase &other)
+  :ProtoTruss(other), L(other.L) {}
 
 //! @brief Assignment operator.
-XC::TrussBase &XC::TrussBase::operator=(const TrussBase &otro)
+XC::TrussBase &XC::TrussBase::operator=(const TrussBase &other)
   {
-    ProtoTruss::operator=(otro);
-    L= otro.L;
-    cosX[0]= otro.cosX[0];
-    cosX[1]= otro.cosX[1];
-    cosX[2]= otro.cosX[2];
+    ProtoTruss::operator=(other);
+    L= other.L;
+    cosX[0]= other.cosX[0];
+    cosX[1]= other.cosX[1];
+    cosX[2]= other.cosX[2];
     return *this;
   }
 

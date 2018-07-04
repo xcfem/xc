@@ -120,18 +120,18 @@ XC::ShellMITC4Base::ShellMITC4Base(int tag, int classTag,int node1,int node2,int
   }
 
 //! @brief Copy constructor.
-XC::ShellMITC4Base::ShellMITC4Base(const ShellMITC4Base &otro)
-  : QuadBase4N<SectionFDPhysicalProperties>(otro), theCoordTransf(nullptr),
-    p0(otro.p0), inicDisp(otro.inicDisp)
-  { alloc(otro.theCoordTransf); }
+XC::ShellMITC4Base::ShellMITC4Base(const ShellMITC4Base &other)
+  : QuadBase4N<SectionFDPhysicalProperties>(other), theCoordTransf(nullptr),
+    p0(other.p0), inicDisp(other.inicDisp)
+  { alloc(other.theCoordTransf); }
 
 //! @brief Assignment operator.
-XC::ShellMITC4Base &XC::ShellMITC4Base::operator=(const ShellMITC4Base &otro)
+XC::ShellMITC4Base &XC::ShellMITC4Base::operator=(const ShellMITC4Base &other)
   {
-    QuadBase4N<SectionFDPhysicalProperties>::operator=(otro);
-    alloc(otro.theCoordTransf);
-    p0= otro.p0;
-    inicDisp= otro.inicDisp;
+    QuadBase4N<SectionFDPhysicalProperties>::operator=(other);
+    alloc(other.theCoordTransf);
+    p0= other.p0;
+    inicDisp= other.inicDisp;
     return *this;
   }
 

@@ -117,20 +117,20 @@ XC::DOF_Numberer::DOF_Numberer(ModelWrapper *owr, int clsTag)
   :MovableObject(clsTag), EntCmd(owr), theGraphNumberer(nullptr) {}
 
 //! @brief Copy constructor.
-XC::DOF_Numberer::DOF_Numberer(const DOF_Numberer &otro)
-  : MovableObject(otro), EntCmd(otro), theGraphNumberer(nullptr)
+XC::DOF_Numberer::DOF_Numberer(const DOF_Numberer &other)
+  : MovableObject(other), EntCmd(other), theGraphNumberer(nullptr)
   {
-    if(otro.theGraphNumberer)
-      copy(*otro.theGraphNumberer);
+    if(other.theGraphNumberer)
+      copy(*other.theGraphNumberer);
   }
   
 
-XC::DOF_Numberer &XC::DOF_Numberer::operator=(const DOF_Numberer &otro)
+XC::DOF_Numberer &XC::DOF_Numberer::operator=(const DOF_Numberer &other)
   {
-    MovableObject::operator=(otro);
-    EntCmd::operator=(otro);
-    if(otro.theGraphNumberer)
-      copy(*otro.theGraphNumberer);
+    MovableObject::operator=(other);
+    EntCmd::operator=(other);
+    if(other.theGraphNumberer)
+      copy(*other.theGraphNumberer);
     return *this;
   }
 

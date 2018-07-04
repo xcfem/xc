@@ -44,13 +44,13 @@ XC::AggregatorAdditions::AggregatorAdditions(EntCmd *owner,const UniaxialMateria
   }
 
 //! @brief Copy constructor.
-XC::AggregatorAdditions::AggregatorAdditions(const AggregatorAdditions &otro)
-  : DqUniaxialMaterial(otro), matCodes(otro.matCodes)
+XC::AggregatorAdditions::AggregatorAdditions(const AggregatorAdditions &other)
+  : DqUniaxialMaterial(other), matCodes(other.matCodes)
   {}
 
 //! @brief Copy constructor.
-XC::AggregatorAdditions::AggregatorAdditions(const AggregatorAdditions &otro,SectionForceDeformation *s)
-  : DqUniaxialMaterial(otro,s), matCodes(otro.matCodes)
+XC::AggregatorAdditions::AggregatorAdditions(const AggregatorAdditions &other,SectionForceDeformation *s)
+  : DqUniaxialMaterial(other,s), matCodes(other.matCodes)
   {}
 
 //! @brief Destructor.

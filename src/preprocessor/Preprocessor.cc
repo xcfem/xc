@@ -47,8 +47,8 @@ XC::Preprocessor::Preprocessor(EntCmd *owr,DataOutputHandler::map_output_handler
   { domain= new Domain(this,oh); }
 
 //! @brief Copy constructor (prohibited).
-XC::Preprocessor::Preprocessor(const Preprocessor &otro)
-  : EntCmd(otro), MovableObject(otro), domain(nullptr), materialHandler(this), transf(this), beamIntegrators(this),
+XC::Preprocessor::Preprocessor(const Preprocessor &other)
+  : EntCmd(other), MovableObject(other), domain(nullptr), materialHandler(this), transf(this), beamIntegrators(this),
     nodes(this), elements(this), loads(this), constraints(this),
     mbt(this),sets(this)
   {
@@ -56,7 +56,7 @@ XC::Preprocessor::Preprocessor(const Preprocessor &otro)
   }
 
 //! @brief Assignment operator (prohibited).
-XC::Preprocessor &XC::Preprocessor::operator=(const Preprocessor &otro)
+XC::Preprocessor &XC::Preprocessor::operator=(const Preprocessor &other)
   {
     std::cerr << "Can't assign a preprocessor object." << std::endl;
     return *this;

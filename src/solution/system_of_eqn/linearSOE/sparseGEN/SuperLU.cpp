@@ -161,8 +161,8 @@ void XC::SuperLU::alloc(const size_t &n)
   }
 
 //! @brief Copy constructor.
-XC::SuperLU::SuperLU(const SuperLU &otro)
-  : SparseGenColLinSolver(otro)
+XC::SuperLU::SuperLU(const SuperLU &other)
+  : SparseGenColLinSolver(other)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; ERROR copy constructor not implemented."
@@ -170,7 +170,7 @@ XC::SuperLU::SuperLU(const SuperLU &otro)
   }
 
 //! @brief Assignment operator.
-XC::SuperLU &XC::SuperLU::operator=(const SuperLU &otro)
+XC::SuperLU &XC::SuperLU::operator=(const SuperLU &other)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; ERROR assignment operator not implemented."

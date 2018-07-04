@@ -52,13 +52,13 @@ XC::PrismaticBarCrossSection::PrismaticBarCrossSection(int tag, int classTag,Mat
   : SectionForceDeformation(tag,classTag,mat_ldr) {}
 
 //! @brief Copy constructor.
-XC::PrismaticBarCrossSection::PrismaticBarCrossSection(const PrismaticBarCrossSection &otro)
-  : SectionForceDeformation(otro) {}
+XC::PrismaticBarCrossSection::PrismaticBarCrossSection(const PrismaticBarCrossSection &other)
+  : SectionForceDeformation(other) {}
 
 //! @brief Assignment operator.
-XC::PrismaticBarCrossSection &XC::PrismaticBarCrossSection::operator=(const PrismaticBarCrossSection &otro)
+XC::PrismaticBarCrossSection &XC::PrismaticBarCrossSection::operator=(const PrismaticBarCrossSection &other)
   {
-    SectionForceDeformation::operator=(otro);
+    SectionForceDeformation::operator=(other);
     return *this;
   }
 

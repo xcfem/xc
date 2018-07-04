@@ -65,15 +65,15 @@ XC::BeamColumnWithSectionFDTrf2d::BeamColumnWithSectionFDTrf2d(int tag, int clas
   { set_transf(&coordTransf); }
 
 //! @brief Copy constructor.
-XC::BeamColumnWithSectionFDTrf2d::BeamColumnWithSectionFDTrf2d(const BeamColumnWithSectionFDTrf2d &otro)
-  :BeamColumnWithSectionFD(otro), theCoordTransf(nullptr)
-  { set_transf(otro.theCoordTransf); }
+XC::BeamColumnWithSectionFDTrf2d::BeamColumnWithSectionFDTrf2d(const BeamColumnWithSectionFDTrf2d &other)
+  :BeamColumnWithSectionFD(other), theCoordTransf(nullptr)
+  { set_transf(other.theCoordTransf); }
 
 //! @brief Assignment operator.
-XC::BeamColumnWithSectionFDTrf2d &XC::BeamColumnWithSectionFDTrf2d::operator=(const BeamColumnWithSectionFDTrf2d &otro)
+XC::BeamColumnWithSectionFDTrf2d &XC::BeamColumnWithSectionFDTrf2d::operator=(const BeamColumnWithSectionFDTrf2d &other)
   {
-    //BeamColumnWithSectionFD::operator=(otro);
-    //set_transf(otro.theCoordTransf);
+    //BeamColumnWithSectionFD::operator=(other);
+    //set_transf(other.theCoordTransf);
     std::cerr << getClassName()
 	      << "; assignment operator not implemented." << std::endl;
     return *this;

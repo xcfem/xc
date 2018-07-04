@@ -69,25 +69,25 @@ XC::FiberSectionBase::FiberSectionBase(int classTag,int dim,MaterialHandler *mat
   {}
 
 //! @brief Copy constructor.
-XC::FiberSectionBase::FiberSectionBase(const FiberSectionBase &otro)
-  : PrismaticBarCrossSection(otro), eTrial(otro.eTrial), eInic(otro.eInic), eCommit(otro.eCommit), kr(otro.kr), fibers(otro.fibers), fiberTag(otro.fiberTag), section_repres(nullptr)
+XC::FiberSectionBase::FiberSectionBase(const FiberSectionBase &other)
+  : PrismaticBarCrossSection(other), eTrial(other.eTrial), eInic(other.eInic), eCommit(other.eCommit), kr(other.kr), fibers(other.fibers), fiberTag(other.fiberTag), section_repres(nullptr)
   {
-    if(otro.section_repres)
-      section_repres= otro.section_repres->getCopy();
+    if(other.section_repres)
+      section_repres= other.section_repres->getCopy();
   }
 
 //! @brief Assignment operator.
-XC::FiberSectionBase &XC::FiberSectionBase::operator=(const FiberSectionBase &otro)
+XC::FiberSectionBase &XC::FiberSectionBase::operator=(const FiberSectionBase &other)
   {
-    PrismaticBarCrossSection::operator=(otro);
-    eTrial= otro.eTrial;
-    eInic= otro.eInic;
-    eCommit= otro.eCommit;
-    kr= otro.kr;
-    fibers= otro.fibers;
-    fiberTag= otro.fiberTag;
-    if(otro.section_repres)
-      section_repres= otro.section_repres->getCopy();
+    PrismaticBarCrossSection::operator=(other);
+    eTrial= other.eTrial;
+    eInic= other.eInic;
+    eCommit= other.eCommit;
+    kr= other.kr;
+    fibers= other.fibers;
+    fiberTag= other.fiberTag;
+    if(other.section_repres)
+      section_repres= other.section_repres->getCopy();
     else
       {
         delete section_repres;

@@ -63,10 +63,10 @@ XC::NLForceBeamColumn2dBase::NLForceBeamColumn2dBase(int tag,int classTag,int nu
   {}
 
 //! @brief Copy constructor.
-XC::NLForceBeamColumn2dBase::NLForceBeamColumn2dBase(const NLForceBeamColumn2dBase &otro)
-  : BeamColumnWithSectionFDTrf2d(otro), rho(otro.rho), maxIters(otro.maxIters), tol(otro.tol), initialFlag(otro.initialFlag),
-    kv(otro.kv), Se(otro.Se), kvcommit(otro.kvcommit), Secommit(otro.Secommit),
-    fs(otro.fs), vs(otro.vs), Ssr(otro.Ssr), vscommit(otro.vscommit), sp(otro.sp), p0(otro.p0), Ki(otro.Ki)
+XC::NLForceBeamColumn2dBase::NLForceBeamColumn2dBase(const NLForceBeamColumn2dBase &other)
+  : BeamColumnWithSectionFDTrf2d(other), rho(other.rho), maxIters(other.maxIters), tol(other.tol), initialFlag(other.initialFlag),
+    kv(other.kv), Se(other.Se), kvcommit(other.kvcommit), Secommit(other.Secommit),
+    fs(other.fs), vs(other.vs), Ssr(other.Ssr), vscommit(other.vscommit), sp(other.sp), p0(other.p0), Ki(other.Ki)
   {}
 
 //! @brief Assignment operator.

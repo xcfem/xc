@@ -155,39 +155,39 @@ XC::ElasticBeam2d::ElasticBeam2d(int tag, double a, double e, double i, int Nd1,
   }
 
 //! @brief Copy constructor.
-XC::ElasticBeam2d::ElasticBeam2d(const ElasticBeam2d &otro)
-  :ProtoBeam2d(otro), eInic(otro.eInic), alpha(otro.alpha), d(otro.d), rho(otro.rho),
-  q(otro.q), theCoordTransf(nullptr)
+XC::ElasticBeam2d::ElasticBeam2d(const ElasticBeam2d &other)
+  :ProtoBeam2d(other), eInic(other.eInic), alpha(other.alpha), d(other.d), rho(other.rho),
+  q(other.q), theCoordTransf(nullptr)
   {
-    set_transf(otro.theCoordTransf);
+    set_transf(other.theCoordTransf);
 
-    q0[0] = otro.q0[0];
-    q0[1] = otro.q0[1];
-    q0[2] = otro.q0[2];
+    q0[0] = other.q0[0];
+    q0[1] = other.q0[1];
+    q0[2] = other.q0[2];
 
-    p0[0] = otro.p0[0];
-    p0[1] = otro.p0[1];
-    p0[2] = otro.p0[2];
+    p0[0] = other.p0[0];
+    p0[1] = other.p0[1];
+    p0[2] = other.p0[2];
   }
 
 //! @brief Assignment operator.
-XC::ElasticBeam2d &XC::ElasticBeam2d::operator=(const XC::ElasticBeam2d &otro)
+XC::ElasticBeam2d &XC::ElasticBeam2d::operator=(const XC::ElasticBeam2d &other)
   {
-    ProtoBeam2d::operator=(otro);
-    eInic= otro.eInic;
-    alpha= otro.alpha;
-    d= otro.d;
-    rho= otro.rho;
-    q= otro.q;
-    set_transf(otro.theCoordTransf);
+    ProtoBeam2d::operator=(other);
+    eInic= other.eInic;
+    alpha= other.alpha;
+    d= other.d;
+    rho= other.rho;
+    q= other.q;
+    set_transf(other.theCoordTransf);
 
-    q0[0] = otro.q0[0];
-    q0[1] = otro.q0[1];
-    q0[2] = otro.q0[2];
+    q0[0] = other.q0[0];
+    q0[1] = other.q0[1];
+    q0[2] = other.q0[2];
 
-    p0[0] = otro.p0[0];
-    p0[1] = otro.p0[1];
-    p0[2] = otro.p0[2];
+    p0[0] = other.p0[0];
+    p0[1] = other.p0[1];
+    p0[2] = other.p0[2];
     return *this;
   }
 

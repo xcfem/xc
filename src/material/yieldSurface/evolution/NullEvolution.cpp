@@ -45,21 +45,20 @@ XC::Vector XC::NullEvolution::vec_dim_3(3);
 
 XC::NullEvolution::NullEvolution(int tag, double isox)
 :YS_Evolution(tag, nullptr_EVOL_CLASS_TAG, 0.0, 0.0, 1, 0.0, 0.0)
-{
-	isotropicFactor(0) = isox;
-	isotropicFactor_hist(0) = isox;
-}
+  {
+    isotropicFactor(0) = isox;
+    isotropicFactor_hist(0) = isox;
+  }
 
 
 XC::NullEvolution::NullEvolution(int tag, double isox, double isoy)
 :YS_Evolution(tag, nullptr_EVOL_CLASS_TAG, 0.0, 0.0, 2, 0.0, 0.0)
-{
-	isotropicFactor(0) = isox;
-	isotropicFactor(1) = isoy;
-	isotropicFactor_hist(0) = isox;
-	isotropicFactor_hist(1) = isoy;
-
-}
+  {
+    isotropicFactor(0) = isox;
+    isotropicFactor(1) = isoy;
+    isotropicFactor_hist(0) = isox;
+    isotropicFactor_hist(1) = isoy;
+  }
 
 
 XC::NullEvolution::NullEvolution(int tag, double isox, double isoy, double isoz)

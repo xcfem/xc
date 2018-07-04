@@ -180,28 +180,28 @@ XC::ElasticBeam3d::ElasticBeam3d(int tag, int Nd1, int Nd2, SectionForceDeformat
   }
 
 //! @brief Copy constructor.
-XC::ElasticBeam3d::ElasticBeam3d(const XC::ElasticBeam3d &otro)
-  :ProtoBeam3d(otro), eInic(otro.eInic), rho(otro.rho),
-   sectionTag(otro.sectionTag), q(otro.q), theCoordTransf(nullptr)
+XC::ElasticBeam3d::ElasticBeam3d(const XC::ElasticBeam3d &other)
+  :ProtoBeam3d(other), eInic(other.eInic), rho(other.rho),
+   sectionTag(other.sectionTag), q(other.q), theCoordTransf(nullptr)
   {
-    set_transf(otro.theCoordTransf);
+    set_transf(other.theCoordTransf);
 
-    q0= otro.q0;
-    p0= otro.p0;
+    q0= other.q0;
+    p0= other.p0;
   }
 
 //! @brief Assignment operator.
-XC::ElasticBeam3d &XC::ElasticBeam3d::operator=(const XC::ElasticBeam3d &otro)
+XC::ElasticBeam3d &XC::ElasticBeam3d::operator=(const XC::ElasticBeam3d &other)
   {
-    ProtoBeam3d::operator=(otro);
-    eInic= otro.eInic;
-    rho= otro.rho;
-    sectionTag= otro.sectionTag;
-    q= otro.q;
-    set_transf(otro.theCoordTransf);
+    ProtoBeam3d::operator=(other);
+    eInic= other.eInic;
+    rho= other.rho;
+    sectionTag= other.sectionTag;
+    q= other.q;
+    set_transf(other.theCoordTransf);
 
-    q0= otro.q0;
-    p0= otro.p0;
+    q0= other.q0;
+    p0= other.p0;
     return *this;
   }
 

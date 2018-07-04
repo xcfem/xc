@@ -57,17 +57,17 @@ XC::EntMdlr::EntMdlr(const std::string &nombre,const size_t &i,Preprocessor *m)
 
 
 //! @brief Copy constructor.
-XC::EntMdlr::EntMdlr(const EntMdlr &otro)
-  : SetEstruct(otro), idx(otro.idx), doGenMesh(true), ttzNodes(otro.ttzNodes), ttzElements(otro.ttzElements) {}
+XC::EntMdlr::EntMdlr(const EntMdlr &other)
+  : SetEstruct(other), idx(other.idx), doGenMesh(true), ttzNodes(other.ttzNodes), ttzElements(other.ttzElements) {}
 
 //! @brief Assignment operator.
-XC::EntMdlr &XC::EntMdlr::operator=(const EntMdlr &otro)
+XC::EntMdlr &XC::EntMdlr::operator=(const EntMdlr &other)
   {
-    SetEstruct::operator=(otro);
-    idx= otro.idx;
-    doGenMesh= otro.doGenMesh;
-    ttzNodes= otro.ttzNodes;
-    ttzElements= otro.ttzElements;
+    SetEstruct::operator=(other);
+    idx= other.idx;
+    doGenMesh= other.doGenMesh;
+    ttzNodes= other.ttzNodes;
+    ttzElements= other.ttzElements;
     return *this;
   }
 

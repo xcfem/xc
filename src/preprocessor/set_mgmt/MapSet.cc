@@ -210,17 +210,17 @@ XC::MapSet::MapSet(Preprocessor *prep)
   { setup_total(); }
 
 //! @brief Copy constructor (DOESN'T COPY SETS).
-XC::MapSet::MapSet(const MapSet &otro)
-  : PreprocessorContainer(otro), MovableObject(otro),
-    MapSetBase(otro), total(nullptr)
+XC::MapSet::MapSet(const MapSet &other)
+  : PreprocessorContainer(other), MovableObject(other),
+    MapSetBase(other), total(nullptr)
   { setup_total(); }
 
 //! @brief Assignment operator (DOESN'T COPY SETS).
-XC::MapSet &XC::MapSet::operator=(const MapSet &otro)
+XC::MapSet &XC::MapSet::operator=(const MapSet &other)
   {
-    PreprocessorContainer::operator=(otro);
-    MovableObject::operator=(otro);
-    MapSetBase::operator=(otro);
+    PreprocessorContainer::operator=(other);
+    MovableObject::operator=(other);
+    MapSetBase::operator=(other);
     setup_total();
     return *this;
   }

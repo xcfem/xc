@@ -67,13 +67,13 @@ void XC::UnbalAndTangent::alloc(void)
   }
 
 //! @brief Copy data from the argeument.
-void XC::UnbalAndTangent::copy(const UnbalAndTangent &otro)
+void XC::UnbalAndTangent::copy(const UnbalAndTangent &other)
   {
     // create matrices and vectors for each object instance
     if(free_mem())
       {
-        if(otro.theResidual) theResidual=new Vector(*otro.theResidual);
-        if(otro.theTangent) theTangent=new Matrix(*otro.theTangent);
+        if(other.theResidual) theResidual=new Vector(*other.theResidual);
+        if(other.theTangent) theTangent=new Matrix(*other.theTangent);
         if(theResidual == 0 || theResidual->Size() ==0 ||  theTangent ==0 || theTangent->noRows() ==0)
           {       
             std::cerr << "UnbalAndTangent::" << __FUNCTION__
@@ -84,8 +84,8 @@ void XC::UnbalAndTangent::copy(const UnbalAndTangent &otro)
       }
     else
       {
-        theResidual= otro.theResidual;
-        theTangent= otro.theTangent;
+        theResidual= other.theResidual;
+        theTangent= other.theTangent;
       }             
   }
 
@@ -95,21 +95,21 @@ XC::UnbalAndTangent::UnbalAndTangent(const size_t &n,UnbalAndTangentStorage &a)
   { alloc(); }
 
 //! @brief Copy constructor.
-XC::UnbalAndTangent::UnbalAndTangent(const UnbalAndTangent &otro)
-  :nDOF(0), theResidual(nullptr), theTangent(nullptr), unbalAndTangentArray(otro.unbalAndTangentArray) 
+XC::UnbalAndTangent::UnbalAndTangent(const UnbalAndTangent &other)
+  :nDOF(0), theResidual(nullptr), theTangent(nullptr), unbalAndTangentArray(other.unbalAndTangentArray) 
   {
     free_mem();
-    nDOF= otro.nDOF;
-    copy(otro);
+    nDOF= other.nDOF;
+    copy(other);
   }
 
 //! @brief Assignment operator.
-XC::UnbalAndTangent &XC::UnbalAndTangent::operator=(const UnbalAndTangent &otro)
+XC::UnbalAndTangent &XC::UnbalAndTangent::operator=(const UnbalAndTangent &other)
   {
     free_mem();
-    unbalAndTangentArray= otro.unbalAndTangentArray;
-    nDOF= otro.nDOF;
-    copy(otro);
+    unbalAndTangentArray= other.unbalAndTangentArray;
+    nDOF= other.nDOF;
+    copy(other);
     return *this;
   }
 

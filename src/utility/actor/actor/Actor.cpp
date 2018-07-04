@@ -79,14 +79,14 @@ void XC::Actor::free_memory(void)
   }
 
 //! @brief Allocates memory for ActorMethod pointers.
-void XC::Actor::alloc(const std::vector<ActorMethod *> &otro)
+void XC::Actor::alloc(const std::vector<ActorMethod *> &other)
   {
     free_memory();
-    const size_t sz= otro.size();
+    const size_t sz= other.size();
     actorMethods= std::vector<ActorMethod *>(sz,nullptr);
     for(size_t i=0; i<sz;i++)
-      if(otro[i]!=nullptr)
-        actorMethods[i]=new ActorMethod(*otro[i]);
+      if(other[i]!=nullptr)
+        actorMethods[i]=new ActorMethod(*other[i]);
   }
 
 //! @brief Allocates memory for a copy of the argument.
@@ -134,22 +134,22 @@ XC::Actor::Actor(Channel &theChan,FEM_ObjectBroker &myBroker,int numActorMethods
   }
 
 //! @brief Copy constructor.
-XC::Actor::Actor(const Actor &otro)
-  : ShadowActorBase(otro), numMethods(otro.numMethods),
-    maxNumMethods(otro.maxNumMethods), actorMethods(), 
-   theRemoteShadowsAddress(otro.theRemoteShadowsAddress)
+XC::Actor::Actor(const Actor &other)
+  : ShadowActorBase(other), numMethods(other.numMethods),
+    maxNumMethods(other.maxNumMethods), actorMethods(), 
+   theRemoteShadowsAddress(other.theRemoteShadowsAddress)
   {
-    alloc(otro.actorMethods);
+    alloc(other.actorMethods);
   }
 
 //! @brief Assignment operator.
-XC::Actor &XC::Actor::operator=(const Actor &otro)
+XC::Actor &XC::Actor::operator=(const Actor &other)
   {
-    ShadowActorBase::operator=(otro);
-    numMethods= otro.numMethods;
-    maxNumMethods= otro.maxNumMethods;
-    alloc(otro.actorMethods);
-    theRemoteShadowsAddress= otro.theRemoteShadowsAddress;
+    ShadowActorBase::operator=(other);
+    numMethods= other.numMethods;
+    maxNumMethods= other.maxNumMethods;
+    alloc(other.actorMethods);
+    theRemoteShadowsAddress= other.theRemoteShadowsAddress;
     return *this;
   }
 

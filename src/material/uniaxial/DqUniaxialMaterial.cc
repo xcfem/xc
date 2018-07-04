@@ -35,25 +35,25 @@
 #include "utility/actor/actor/MovableID.h"
 
 //! @brief Copy the list being passed as parameter.
-void XC::DqUniaxialMaterial::copy_list(const DqUniaxialMaterial &otro,SectionForceDeformation *s)
+void XC::DqUniaxialMaterial::copy_list(const DqUniaxialMaterial &other,SectionForceDeformation *s)
   {
     free_mem();
-    const size_t numMats= otro.size();
+    const size_t numMats= other.size();
     if(numMats>0)
       {
         resize(numMats);
         for(register size_t i= 0;i<numMats;i++)
           {
-            if(!otro[i])
+            if(!other[i])
               {
 	        std::cerr << getClassName() << "::" << __FUNCTION__
 			  << "; null uniaxial material pointer.\n";
                 return;
               }
             if(s)
-              (*this)[i] = otro[i]->getCopy(s);
+              (*this)[i] = other[i]->getCopy(s);
             else
-              (*this)[i]= otro[i]->getCopy();
+              (*this)[i]= other[i]->getCopy();
             if(!(*this)[i])
               {
 	        std::cerr << "DqUniaxialMaterial::copy_list; failed to copy uniaxial material\n";
@@ -115,21 +115,21 @@ XC::DqUniaxialMaterial::DqUniaxialMaterial(EntCmd *owner,const UniaxialMaterial 
 
 
 //! @brief Copy constructor.
-XC::DqUniaxialMaterial::DqUniaxialMaterial(const DqUniaxialMaterial &otro)
-  : EntCmd(otro), MovableObject(otro), lst_ptr()
-  { copy_list(otro); }
+XC::DqUniaxialMaterial::DqUniaxialMaterial(const DqUniaxialMaterial &other)
+  : EntCmd(other), MovableObject(other), lst_ptr()
+  { copy_list(other); }
 
 //! @brief Copy constructor.
-XC::DqUniaxialMaterial::DqUniaxialMaterial(const DqUniaxialMaterial &otro,SectionForceDeformation *s)
-  : EntCmd(otro), MovableObject(0), lst_ptr()
-  { copy_list(otro,s); }
+XC::DqUniaxialMaterial::DqUniaxialMaterial(const DqUniaxialMaterial &other,SectionForceDeformation *s)
+  : EntCmd(other), MovableObject(0), lst_ptr()
+  { copy_list(other,s); }
 
 //! @brief Assignment operator.
-XC::DqUniaxialMaterial &XC::DqUniaxialMaterial::operator=(const DqUniaxialMaterial &otro)
+XC::DqUniaxialMaterial &XC::DqUniaxialMaterial::operator=(const DqUniaxialMaterial &other)
   {
-    EntCmd::operator=(otro);
-    MovableObject::operator=(otro);
-    copy_list(otro);
+    EntCmd::operator=(other);
+    MovableObject::operator=(other);
+    copy_list(other);
     return *this;
   }
 

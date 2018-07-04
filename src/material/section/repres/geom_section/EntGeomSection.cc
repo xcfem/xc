@@ -46,15 +46,15 @@ XC::EntGeomSection::EntGeomSection(const std::string &nmb,GeomSection *s)
   : EntConNmb(nmb),sccGeom(s) {}
 
 //! @brief Copy constructor.
-XC::EntGeomSection::EntGeomSection(const EntGeomSection &otro)
-  : EntConNmb(otro), sccGeom(otro.sccGeom)
+XC::EntGeomSection::EntGeomSection(const EntGeomSection &other)
+  : EntConNmb(other), sccGeom(other.sccGeom)
   {}
 
 //! @brief Assignment operator.
-XC::EntGeomSection &XC::EntGeomSection::operator=(const EntGeomSection &otro)
+XC::EntGeomSection &XC::EntGeomSection::operator=(const EntGeomSection &other)
   {
-    EntConNmb::operator=(otro);
-    sccGeom= otro.sccGeom;
+    EntConNmb::operator=(other);
+    sccGeom= other.sccGeom;
     return *this;
   }
 

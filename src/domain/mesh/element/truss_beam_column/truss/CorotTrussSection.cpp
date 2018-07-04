@@ -102,21 +102,21 @@ XC::CorotTrussSection::CorotTrussSection(void)
   {}
 
 //! @brief Copy constructor.
-XC::CorotTrussSection::CorotTrussSection(const CorotTrussSection &otro)
-  : CorotTrussBase(otro), theSection(nullptr)
+XC::CorotTrussSection::CorotTrussSection(const CorotTrussSection &other)
+  : CorotTrussBase(other), theSection(nullptr)
   {
-    if(otro.theSection)
-      theSection= otro.theSection->getCopy();
+    if(other.theSection)
+      theSection= other.theSection->getCopy();
   }
 
 //! @brief Assignment operator.
-XC::CorotTrussSection &XC::CorotTrussSection::operator=(const CorotTrussSection &otro)
+XC::CorotTrussSection &XC::CorotTrussSection::operator=(const CorotTrussSection &other)
   {
-    CorotTrussBase::operator=(otro);
+    CorotTrussBase::operator=(other);
     if(theSection) delete theSection;
     theSection= nullptr;
-    if(otro.theSection)
-      theSection= otro.theSection->getCopy();
+    if(other.theSection)
+      theSection= other.theSection->getCopy();
     return *this;
   }
 

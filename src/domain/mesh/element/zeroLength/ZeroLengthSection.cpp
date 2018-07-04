@@ -153,21 +153,21 @@ XC::ZeroLengthSection::ZeroLengthSection(int tag, int dim,const Material *sec)
   }
 
 //! @brief Copy constructor.
-XC::ZeroLengthSection::ZeroLengthSection(const ZeroLengthSection &otro)
-  : Element0D(otro), A(otro.A), v(otro.v), K(nullptr), P(nullptr), theSection(nullptr), order(0)
+XC::ZeroLengthSection::ZeroLengthSection(const ZeroLengthSection &other)
+  : Element0D(other), A(other.A), v(other.v), K(nullptr), P(nullptr), theSection(nullptr), order(0)
   {
-    if(otro.theSection)
-      setup_section(otro.theSection);
+    if(other.theSection)
+      setup_section(other.theSection);
   }
 
 //! @brief Assignment operator.
-XC::ZeroLengthSection &XC::ZeroLengthSection::operator=(const ZeroLengthSection &otro)
+XC::ZeroLengthSection &XC::ZeroLengthSection::operator=(const ZeroLengthSection &other)
   {
-    Element0D::operator=(otro);
-    if(otro.theSection)
-      setup_section(otro.theSection);
-    A= otro.A;
-    v= otro.v;
+    Element0D::operator=(other);
+    if(other.theSection)
+      setup_section(other.theSection);
+    A= other.A;
+    v= other.v;
     return *this;
   }
 

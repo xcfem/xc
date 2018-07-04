@@ -43,17 +43,17 @@ XC::CorotTrussBase::CorotTrussBase(int tag, int classTag,int dimension)
   {}
 
 //! @brief Copy constructor.
-XC::CorotTrussBase::CorotTrussBase(const CorotTrussBase &otro)
-  : ProtoTruss(otro), Lo(otro.Lo), Ln(otro.Ln), R(otro.R)
+XC::CorotTrussBase::CorotTrussBase(const CorotTrussBase &other)
+  : ProtoTruss(other), Lo(other.Lo), Ln(other.Ln), R(other.R)
   {}
 
 //! @brief Assignment operator.
-XC::CorotTrussBase &XC::CorotTrussBase::operator=(const CorotTrussBase &otro)
+XC::CorotTrussBase &XC::CorotTrussBase::operator=(const CorotTrussBase &other)
   {
-    ProtoTruss::operator=(otro);
-    Lo= otro.Lo;
-    Ln= otro.Ln;
-    R= otro.R;
+    ProtoTruss::operator=(other);
+    Lo= other.Lo;
+    Ln= other.Ln;
+    R= other.R;
     return *this;
   }
 

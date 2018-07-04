@@ -34,11 +34,11 @@ XC::FVectorBeamColumn2d::FVectorBeamColumn2d(void)
   { zero(); }
 
 //! @brief Copy constructor.
-XC::FVectorBeamColumn2d::FVectorBeamColumn2d(const XC::FVectorBeamColumn2d &otro)
+XC::FVectorBeamColumn2d::FVectorBeamColumn2d(const XC::FVectorBeamColumn2d &other)
   {
-    p[0] = otro.p[0];
-    p[1] = otro.p[1];
-    p[2] = otro.p[2];
+    p[0] = other.p[0];
+    p[1] = other.p[1];
+    p[2] = other.p[2];
   }
 
 //! @brief Constructor a partir de un vector.
@@ -56,11 +56,11 @@ XC::FVectorBeamColumn2d::FVectorBeamColumn2d(const XC::Vector &v)
   }
 
 //! @brief Assignment operator.
-XC::FVectorBeamColumn2d &XC::FVectorBeamColumn2d::operator=(const XC::FVectorBeamColumn2d &otro)
+XC::FVectorBeamColumn2d &XC::FVectorBeamColumn2d::operator=(const XC::FVectorBeamColumn2d &other)
   {
-    p[0] = otro.p[0];
-    p[1] = otro.p[1];
-    p[2] = otro.p[2];
+    p[0] = other.p[0];
+    p[1] = other.p[1];
+    p[2] = other.p[2];
     return *this;
   }
 
@@ -79,19 +79,19 @@ XC::FVectorBeamColumn2d &XC::FVectorBeamColumn2d::operator*=(const double &d)
     return *this;    
   }
 
-XC::FVectorBeamColumn2d &XC::FVectorBeamColumn2d::operator+=(const FVectorBeamColumn2d &otro)
+XC::FVectorBeamColumn2d &XC::FVectorBeamColumn2d::operator+=(const FVectorBeamColumn2d &other)
   {
-    p[0]+= otro.p[0];
-    p[1]+= otro.p[1];
-    p[2]+= otro.p[2];
+    p[0]+= other.p[0];
+    p[1]+= other.p[1];
+    p[2]+= other.p[2];
     return *this;    
   }
 
-XC::FVectorBeamColumn2d &XC::FVectorBeamColumn2d::operator-=(const FVectorBeamColumn2d &otro)
+XC::FVectorBeamColumn2d &XC::FVectorBeamColumn2d::operator-=(const FVectorBeamColumn2d &other)
   {
-    p[0]-= otro.p[0];
-    p[1]-= otro.p[1];
-    p[2]-= otro.p[2];
+    p[0]-= other.p[0];
+    p[1]-= other.p[1];
+    p[2]-= other.p[2];
     return *this;    
   }
 

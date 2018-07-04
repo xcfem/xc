@@ -86,20 +86,20 @@ XC::SectionForceDeformation::SectionForceDeformation(int tag, int classTag,Mater
   : Material(tag,classTag), fDefault(nullptr), material_handler(mat_ldr) {}
 
 //! @brief Copy constructor.
-XC::SectionForceDeformation::SectionForceDeformation(const SectionForceDeformation &otro)
-  : Material(otro), fDefault(nullptr), material_handler(otro.material_handler)
+XC::SectionForceDeformation::SectionForceDeformation(const SectionForceDeformation &other)
+  : Material(other), fDefault(nullptr), material_handler(other.material_handler)
   {
-    if(otro.fDefault)
-      fDefault= new Matrix(*otro.fDefault);
+    if(other.fDefault)
+      fDefault= new Matrix(*other.fDefault);
   }
 
 //! @brief Assignment operator.
-XC::SectionForceDeformation &XC::SectionForceDeformation::operator=(const SectionForceDeformation &otro)
+XC::SectionForceDeformation &XC::SectionForceDeformation::operator=(const SectionForceDeformation &other)
   {
-    Material::operator=(otro);
+    Material::operator=(other);
     if(fDefault) delete fDefault;
-    if(otro.fDefault) fDefault= new Matrix(*otro.fDefault);
-    material_handler= otro.material_handler;
+    if(other.fDefault) fDefault= new Matrix(*other.fDefault);
+    material_handler= other.material_handler;
     return *this;
   }
 

@@ -48,13 +48,13 @@ XC::NodeDispVectors::NodeDispVectors(void)
 
 
 //! @brief Copy constructor.
-XC::NodeDispVectors::NodeDispVectors(const NodeDispVectors &otro)
-  : NodeVectors(otro), incrDisp(nullptr), incrDeltaDisp(nullptr)
-  { copy(otro); }
+XC::NodeDispVectors::NodeDispVectors(const NodeDispVectors &other)
+  : NodeVectors(other), incrDisp(nullptr), incrDeltaDisp(nullptr)
+  { copy(other); }
 
-XC::NodeDispVectors &XC::NodeDispVectors::operator=(const NodeDispVectors &otro)
+XC::NodeDispVectors &XC::NodeDispVectors::operator=(const NodeDispVectors &other)
   {
-    NodeVectors::operator=(otro);
+    NodeVectors::operator=(other);
     return *this;
   }
 

@@ -70,10 +70,10 @@ XC::NLForceBeamColumn3dBase::NLForceBeamColumn3dBase(int tag,int classTag,int nu
   }
 
 //! @brief Copy constructor.
-XC::NLForceBeamColumn3dBase::NLForceBeamColumn3dBase(const NLForceBeamColumn3dBase &otro)
-  : BeamColumnWithSectionFDTrf3d(otro), rho(otro.rho), maxIters(otro.maxIters), tol(otro.tol), initialFlag(otro.initialFlag), isTorsion(otro.isTorsion),
-    kv(otro.kv), Se(otro.Se), kvcommit(otro.kvcommit), Secommit(otro.Secommit),
-    fs(otro.fs), vs(otro.vs), Ssr(otro.Ssr),vscommit(otro.vscommit), sp(otro.sp), p0(), Ki(otro.Ki)
+XC::NLForceBeamColumn3dBase::NLForceBeamColumn3dBase(const NLForceBeamColumn3dBase &other)
+  : BeamColumnWithSectionFDTrf3d(other), rho(other.rho), maxIters(other.maxIters), tol(other.tol), initialFlag(other.initialFlag), isTorsion(other.isTorsion),
+    kv(other.kv), Se(other.Se), kvcommit(other.kvcommit), Secommit(other.Secommit),
+    fs(other.fs), vs(other.vs), Ssr(other.Ssr),vscommit(other.vscommit), sp(other.sp), p0(), Ki(other.Ki)
   {}
 
 //! @brief Assignment operator.

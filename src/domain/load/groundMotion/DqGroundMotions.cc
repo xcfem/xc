@@ -37,14 +37,14 @@ XC::DqGroundMotions::DqGroundMotions(const size_t &num)
   : EntCmd(), MovableObject(0), gMotions(num,static_cast<GroundMotion *>(nullptr)) {}
 
 //! @brief Copy constructor.
-XC::DqGroundMotions::DqGroundMotions(const DqGroundMotions &otro)
-  : EntCmd(otro), MovableObject(0), gMotions(otro.gMotions) {}
+XC::DqGroundMotions::DqGroundMotions(const DqGroundMotions &other)
+  : EntCmd(other), MovableObject(0), gMotions(other.gMotions) {}
 
 //! @brief Assignment operator.
-XC::DqGroundMotions &XC::DqGroundMotions::operator=(const DqGroundMotions &otro)
+XC::DqGroundMotions &XC::DqGroundMotions::operator=(const DqGroundMotions &other)
   {
-    EntCmd::operator=(otro);
-    gMotions= otro.gMotions;
+    EntCmd::operator=(other);
+    gMotions= other.gMotions;
     return *this;
   }
 

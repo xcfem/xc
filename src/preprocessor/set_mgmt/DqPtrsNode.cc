@@ -37,8 +37,8 @@ XC::DqPtrsNode::DqPtrsNode(EntCmd *owr)
   : DqPtrsKDTree<Node,KDTreeNodes>(owr) {}
 
 //! @brief Copy constructor.
-XC::DqPtrsNode::DqPtrsNode(const DqPtrsNode &otro)
-  : DqPtrsKDTree<Node,KDTreeNodes>(otro)
+XC::DqPtrsNode::DqPtrsNode(const DqPtrsNode &other)
+  : DqPtrsKDTree<Node,KDTreeNodes>(other)
   { }
 
 //! @brief Copy constructor.
@@ -52,16 +52,16 @@ XC::DqPtrsNode::DqPtrsNode(const std::set<const Node *> &st)
   {}
 
 //! @brief Assignment operator.
-XC::DqPtrsNode &XC::DqPtrsNode::operator=(const DqPtrsNode &otro)
+XC::DqPtrsNode &XC::DqPtrsNode::operator=(const DqPtrsNode &other)
   {
-    DqPtrsKDTree<Node,KDTreeNodes>::operator=(otro);
+    DqPtrsKDTree<Node,KDTreeNodes>::operator=(other);
     return *this;
   }
 
 //! @brief += operator.
-XC::DqPtrsNode &XC::DqPtrsNode::operator+=(const DqPtrsNode &otro)
+XC::DqPtrsNode &XC::DqPtrsNode::operator+=(const DqPtrsNode &other)
   {
-    extend(otro);
+    extend(other);
     return *this;
   }
 

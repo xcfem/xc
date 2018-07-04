@@ -87,21 +87,21 @@ XC::Spring::Spring(void)
   }
 
 //! @brief Copy constructor.
-XC::Spring::Spring(const Spring &otro)
-  :ProtoTruss(otro), theMaterial(nullptr)
+XC::Spring::Spring(const Spring &other)
+  :ProtoTruss(other), theMaterial(nullptr)
   {
-    if(otro.theMaterial)
-      theMaterial= otro.theMaterial->getCopy();
+    if(other.theMaterial)
+      theMaterial= other.theMaterial->getCopy();
   }
 
 //! @brief Assignment operator.
-XC::Spring &XC::Spring::operator=(const Spring &otro)
+XC::Spring &XC::Spring::operator=(const Spring &other)
   {
-    ProtoTruss::operator=(otro);
+    ProtoTruss::operator=(other);
     if(theMaterial) delete theMaterial;
     theMaterial= nullptr;
-    if(otro.theMaterial)
-      theMaterial= otro.theMaterial->getCopy();
+    if(other.theMaterial)
+      theMaterial= other.theMaterial->getCopy();
     return *this;
   }
 

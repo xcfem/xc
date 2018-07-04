@@ -73,14 +73,14 @@ XC::ConnectedMaterial::ConnectedMaterial(int tag, int classTag,const DqUniaxialM
 XC::ConnectedMaterial::ConnectedMaterial(int tag, int classTag)
   :UniaxialMaterial(tag,classTag), theModels(this) {}
 
-XC::ConnectedMaterial::ConnectedMaterial(const ConnectedMaterial &otro)
-  :UniaxialMaterial(otro), theModels(otro.theModels)
+XC::ConnectedMaterial::ConnectedMaterial(const ConnectedMaterial &other)
+  :UniaxialMaterial(other), theModels(other.theModels)
   { theModels.set_owner(this); }
 
-XC::ConnectedMaterial &XC::ConnectedMaterial::operator=(const ConnectedMaterial &otro)
+XC::ConnectedMaterial &XC::ConnectedMaterial::operator=(const ConnectedMaterial &other)
   {
-    UniaxialMaterial::operator=(otro);
-    theModels= otro.theModels;
+    UniaxialMaterial::operator=(other);
+    theModels= other.theModels;
     theModels.set_owner(this);
     return *this;
   }

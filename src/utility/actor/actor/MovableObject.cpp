@@ -81,13 +81,13 @@ XC::MovableObject::MovableObject(int theTag)
   :classTag(theTag), dbTag(0) {}
 
 //! @brief Copy constructor. Doesn't copy the dbTag.
-XC::MovableObject::MovableObject(const MovableObject &otro)
-  :classTag(otro.classTag), dbTag(0) {}
+XC::MovableObject::MovableObject(const MovableObject &other)
+  :classTag(other.classTag), dbTag(0) {}
 
 //! @brief Assignment operator. Doesn't copy the dbTag.
-XC::MovableObject &XC::MovableObject::operator=(const MovableObject &otro)
+XC::MovableObject &XC::MovableObject::operator=(const MovableObject &other)
   {
-    classTag= otro.classTag;
+    classTag= other.classTag;
     return *this;
   }
 

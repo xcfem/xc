@@ -71,10 +71,10 @@ void XC::FiberSectionRepr::clear_fibers(void)
                                               // leave this to FiberSection destructor
   }
 
-void XC::FiberSectionRepr::copy_fibers(const FiberSectionRepr &otro)
+void XC::FiberSectionRepr::copy_fibers(const FiberSectionRepr &other)
   {
     clear_fibers();
-    for(fiber_list::const_iterator i= otro.fibers.begin();i!=otro.fibers.end();i++)
+    for(fiber_list::const_iterator i= other.fibers.begin();i!=other.fibers.end();i++)
       addFiber(*(*i)->getCopy());
   }
 
@@ -83,16 +83,16 @@ XC::FiberSectionRepr::FiberSectionRepr(int sectionID,MaterialHandler *ml)
   :SectionRepres(sectionID, ml), sectID(sectionID) {}
 
 //! @brief Copy constructor.
-XC::FiberSectionRepr::FiberSectionRepr(const FiberSectionRepr &otro)
-  :SectionRepres(otro), sectID(otro.sectID)
-  { copy_fibers(otro); }
+XC::FiberSectionRepr::FiberSectionRepr(const FiberSectionRepr &other)
+  :SectionRepres(other), sectID(other.sectID)
+  { copy_fibers(other); }
 
 //! @brief Assignment operator.
-XC::FiberSectionRepr &XC::FiberSectionRepr::operator=(const FiberSectionRepr &otro)
+XC::FiberSectionRepr &XC::FiberSectionRepr::operator=(const FiberSectionRepr &other)
   {
-    SectionRepres::operator=(otro);
-    sectID= otro.sectID;
-    copy_fibers(otro);
+    SectionRepres::operator=(other);
+    sectID= other.sectID;
+    copy_fibers(other);
     return *this;
   }
 

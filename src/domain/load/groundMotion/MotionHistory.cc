@@ -42,32 +42,32 @@ XC::MotionHistory::MotionHistory(const double &dt)
   :EntCmd(), theAccelSeries(nullptr), theVelSeries(nullptr), theDispSeries(nullptr),
   theIntegrator(nullptr), delta(dt) {}
 
-XC::MotionHistory::MotionHistory(const MotionHistory &otro)
-  : EntCmd(otro), theAccelSeries(nullptr), theVelSeries(nullptr), theDispSeries(nullptr),
-  theIntegrator(nullptr), delta(otro.delta)
+XC::MotionHistory::MotionHistory(const MotionHistory &other)
+  : EntCmd(other), theAccelSeries(nullptr), theVelSeries(nullptr), theDispSeries(nullptr),
+  theIntegrator(nullptr), delta(other.delta)
   {
-    if(otro.theAccelSeries)
-      theAccelSeries= otro.theAccelSeries->getCopy();
-    if(otro.theVelSeries)
-      theVelSeries= otro.theVelSeries->getCopy();
-    if(otro.theDispSeries)
-      theDispSeries= otro.theDispSeries->getCopy();
+    if(other.theAccelSeries)
+      theAccelSeries= other.theAccelSeries->getCopy();
+    if(other.theVelSeries)
+      theVelSeries= other.theVelSeries->getCopy();
+    if(other.theDispSeries)
+      theDispSeries= other.theDispSeries->getCopy();
     //Don't copy integrator.
   }
 
-XC::MotionHistory &XC::MotionHistory::operator=(const MotionHistory &otro)
+XC::MotionHistory &XC::MotionHistory::operator=(const MotionHistory &other)
   {
-    EntCmd::operator=(otro);
+    EntCmd::operator=(other);
     clearSeries();
     if(theIntegrator)
       delete(theIntegrator);
     theIntegrator= nullptr;
-    if(otro.theAccelSeries)
-      theAccelSeries= otro.theAccelSeries->getCopy();
-    if(otro.theVelSeries)
-      theVelSeries= otro.theVelSeries->getCopy();
-    if(otro.theDispSeries)
-      theDispSeries= otro.theDispSeries->getCopy();
+    if(other.theAccelSeries)
+      theAccelSeries= other.theAccelSeries->getCopy();
+    if(other.theVelSeries)
+      theVelSeries= other.theVelSeries->getCopy();
+    if(other.theDispSeries)
+      theDispSeries= other.theDispSeries->getCopy();
     //Don't copy integrator.
     return *this;
   }

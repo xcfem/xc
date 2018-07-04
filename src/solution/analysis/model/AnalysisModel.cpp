@@ -115,23 +115,23 @@ XC::AnalysisModel::AnalysisModel(int theClassTag,EntCmd *owr)
    myDOFGraph(*this), myGroupGraph(*this), updateGraphs(false) {}
 
 //! @brief Copy constructor.
-XC::AnalysisModel::AnalysisModel(const AnalysisModel &otro)
-  : MovableObject(otro), EntCmd(otro),
-   numFE_Ele(otro.numFE_Ele), numDOF_Grp(otro.numDOF_Grp), numEqn(otro.numEqn),
-   theFEs(otro.theFEs), theDOFGroups(otro.theDOFGroups),theFEiter(&theFEs), theDOFGroupiter(&theDOFGroups),
+XC::AnalysisModel::AnalysisModel(const AnalysisModel &other)
+  : MovableObject(other), EntCmd(other),
+   numFE_Ele(other.numFE_Ele), numDOF_Grp(other.numDOF_Grp), numEqn(other.numEqn),
+   theFEs(other.theFEs), theDOFGroups(other.theDOFGroups),theFEiter(&theFEs), theDOFGroupiter(&theDOFGroups),
    theFEconst_iter(&theFEs), theDOFGroupconst_iter(&theDOFGroups),
    myDOFGraph(*this), myGroupGraph(*this), updateGraphs(false) {}
 
 //! @brief Assignment operator.
-XC::AnalysisModel &XC::AnalysisModel::operator=(const AnalysisModel &otro)
+XC::AnalysisModel &XC::AnalysisModel::operator=(const AnalysisModel &other)
   { 
-    MovableObject::operator=(otro);
-    EntCmd::operator=(otro);
-    numFE_Ele= otro.numFE_Ele;
-    numDOF_Grp= otro.numDOF_Grp;
-    numEqn= otro.numEqn;
-    theFEs= otro.theFEs;
-    theDOFGroups= otro.theDOFGroups;
+    MovableObject::operator=(other);
+    EntCmd::operator=(other);
+    numFE_Ele= other.numFE_Ele;
+    numDOF_Grp= other.numDOF_Grp;
+    numEqn= other.numEqn;
+    theFEs= other.theFEs;
+    theDOFGroups= other.theDOFGroups;
     myDOFGraph= DOF_Graph(*this);
     myGroupGraph= DOF_GroupGraph(*this);
     updateGraphs= false; //Update just finished

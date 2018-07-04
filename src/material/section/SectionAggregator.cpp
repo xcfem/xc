@@ -201,11 +201,11 @@ XC::SectionAggregator::SectionAggregator(int tag, PrismaticBarCrossSection &theS
   }
 
 //! @brief Copy constructor.
-XC::SectionAggregator::SectionAggregator(const SectionAggregator &otro)
-  : PrismaticBarCrossSection(otro), theSection(nullptr), theAdditions(otro.theAdditions),
+XC::SectionAggregator::SectionAggregator(const SectionAggregator &other)
+  : PrismaticBarCrossSection(other), theSection(nullptr), theAdditions(other.theAdditions),
     def(nullptr), defzero(nullptr), s(nullptr), ks(nullptr), fs(nullptr), theCode(nullptr)
    {
-     copy_section(otro.theSection);
+     copy_section(other.theSection);
      alloc_storage_ptrs();
    }
 
@@ -233,22 +233,22 @@ XC::SectionAggregator::SectionAggregator(MaterialHandler *mat_ldr)
     def(nullptr), defzero(nullptr), s(nullptr), ks(nullptr), fs(nullptr), theCode(nullptr) {}
 
 //! @brief Assignment operator.
-XC::SectionAggregator &XC::SectionAggregator::operator=(const SectionAggregator &otro)
+XC::SectionAggregator &XC::SectionAggregator::operator=(const SectionAggregator &other)
   {
     free_mem();
-    PrismaticBarCrossSection::operator=(otro);
-    copy_section(otro.theSection);
-    theAdditions= otro.theAdditions;
+    PrismaticBarCrossSection::operator=(other);
+    copy_section(other.theSection);
+    theAdditions= other.theAdditions;
     theAdditions.set_owner(this);
-    if(otro.theAdditions.check_ptrs())
+    if(other.theAdditions.check_ptrs())
       {
         alloc_storage_ptrs();
-        (*def)= (*otro.def);
-        (*defzero)= (*otro.defzero);
-        (*s)= (*otro.s);
-        (*ks)= (*otro.ks);
-        (*fs)= (*otro.fs);
-        (*theCode)= (*otro.theCode);
+        (*def)= (*other.def);
+        (*defzero)= (*other.defzero);
+        (*s)= (*other.s);
+        (*ks)= (*other.ks);
+        (*fs)= (*other.fs);
+        (*theCode)= (*other.theCode);
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__

@@ -50,26 +50,26 @@ XC::EntMdlrBase::EntMdlrBase(const std::string &nmb,Preprocessor *prep)
   : EntConNmb(nmb,prep), MovableObject(0) {}
 
 //! @brief += operator.
-XC::EntMdlrBase &XC::EntMdlrBase::operator+=(const EntMdlrBase &otro)
+XC::EntMdlrBase &XC::EntMdlrBase::operator+=(const EntMdlrBase &other)
   {
-    EntConNmb::operator+=(otro);
-    labels+= otro.labels;
+    EntConNmb::operator+=(other);
+    labels+= other.labels;
     return *this;
   }
 
 //! @brief -= operator.
-XC::EntMdlrBase &XC::EntMdlrBase::operator-=(const EntMdlrBase &otro)
+XC::EntMdlrBase &XC::EntMdlrBase::operator-=(const EntMdlrBase &other)
   {
-    EntConNmb::operator-=(otro);
-    labels-= otro.labels;
+    EntConNmb::operator-=(other);
+    labels-= other.labels;
     return *this;
   }
 
 //! @brief *= operator (intersection).
-XC::EntMdlrBase &XC::EntMdlrBase::operator*=(const EntMdlrBase &otro)
+XC::EntMdlrBase &XC::EntMdlrBase::operator*=(const EntMdlrBase &other)
   {
-    EntConNmb::operator*=(otro);
-    labels*= otro.labels;
+    EntConNmb::operator*=(other);
+    labels*= other.labels;
     return *this;
   }
 

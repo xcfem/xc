@@ -35,14 +35,14 @@ XC::FiberSet::FiberSet(const size_t &num)
   {}
 
 //! @brief Copy constructor.
-XC::FiberSet::FiberSet(const FiberSet &otro)
-  : FiberPtrDeque(otro)
+XC::FiberSet::FiberSet(const FiberSet &other)
+  : FiberPtrDeque(other)
   {}
 
 //! @brief Assignment operator.
-XC::FiberSet &XC::FiberSet::operator=(const FiberSet &otro)
+XC::FiberSet &XC::FiberSet::operator=(const FiberSet &other)
   {
-    FiberPtrDeque::operator=(otro);
+    FiberPtrDeque::operator=(other);
     return *this;
   }
 

@@ -107,15 +107,15 @@ void XC::MeshEdge::print(std::ostream &os) const
   }
 
 //! @brief Equal operator
-bool XC::MeshEdge::operator==(const MeshEdge &otro) const
+bool XC::MeshEdge::operator==(const MeshEdge &other) const
   {
     bool retval= true;
     const size_t sz= size();
-    if(sz!= otro.size())
+    if(sz!= other.size())
       retval= false;
     else
       for(size_t i= 0;i<sz;i++)
-        if(nodes[i]!=otro.nodes[i])
+        if(nodes[i]!=other.nodes[i])
           {
             retval= false;
             break;

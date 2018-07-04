@@ -65,16 +65,16 @@
 void XC::Graph::inic(const size_t &sz)
   { myVertices= ArrayOfTaggedObjects(nullptr,sz,"vertice"); }
 
-void XC::Graph::copy(const Graph &otro)
+void XC::Graph::copy(const Graph &other)
   {
-    const size_t numVertex= otro.getNumVertex();
+    const size_t numVertex= other.getNumVertex();
     if(numVertex>0)
       {
         inic(numVertex);
 
-        Graph &otro_no_const= const_cast<Graph &>(otro);
+        Graph &other_no_const= const_cast<Graph &>(other);
 
-        VertexIter &otherVertices= otro_no_const.getVertices();
+        VertexIter &otherVertices= other_no_const.getVertices();
         Vertex *vertexPtr= nullptr;
 
         // loop through other creating vertices if tag not the same in this
@@ -87,7 +87,7 @@ void XC::Graph::copy(const Graph &otro)
           }
 
         // loop through other adding all the edges that exist in other
-        VertexIter &otherVertices2 = otro_no_const.getVertices();
+        VertexIter &otherVertices2 = other_no_const.getVertices();
         while((vertexPtr = otherVertices2()) != nullptr)
           {
             int vertexTag = vertexPtr->getTag();

@@ -62,16 +62,16 @@ XC::ListReinfLayer::ListReinfLayer(GeomSection *owr,MaterialHandler *ml)
   :  l_reg(), SectionMassProperties(owr), material_handler(ml) {}
 
 //! @brief Copy constructor.
-XC::ListReinfLayer::ListReinfLayer(const ListReinfLayer  &otro)
-  : l_reg(), material_handler(otro.material_handler)
-  { copy(otro); }
+XC::ListReinfLayer::ListReinfLayer(const ListReinfLayer  &other)
+  : l_reg(), material_handler(other.material_handler)
+  { copy(other); }
 
 //! @brief Assignment operator.
-XC::ListReinfLayer &XC::ListReinfLayer::operator=(const ListReinfLayer &otro)
+XC::ListReinfLayer &XC::ListReinfLayer::operator=(const ListReinfLayer &other)
   {
-    SectionMassProperties::operator=(otro);
-    material_handler= otro.material_handler;
-    copy(otro);
+    SectionMassProperties::operator=(other);
+    material_handler= other.material_handler;
+    copy(other);
     return *this;
   }
 

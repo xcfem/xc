@@ -42,13 +42,13 @@ XC::SetEstruct::SetEstruct(const std::string &nmb,Preprocessor *md)
   : SetBase(nmb,md) {}
 
 //! @brief Copy constructor.
-XC::SetEstruct::SetEstruct(const SetEstruct &otro)
-  : SetBase(otro) {}
+XC::SetEstruct::SetEstruct(const SetEstruct &other)
+  : SetBase(other) {}
 
 //! @brief Assignment operator.
-XC::SetEstruct &XC::SetEstruct::operator=(const SetEstruct &otro)
+XC::SetEstruct &XC::SetEstruct::operator=(const SetEstruct &other)
   {
-    SetBase::operator=(otro);
+    SetBase::operator=(other);
     return *this;
   }
 

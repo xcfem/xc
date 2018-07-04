@@ -449,12 +449,12 @@ void XC::AnalysisAggregation::free_mem(void)
     free_conv_test();
   }
 
-void XC::AnalysisAggregation::copy(const AnalysisAggregation &otro)
+void XC::AnalysisAggregation::copy(const AnalysisAggregation &other)
   {
-    if(otro.theSolnAlgo) copy_soln_algo(otro.theSolnAlgo);
-    if(otro.theIntegrator) copy_integrator(otro.theIntegrator);
-    if(otro.theSOE) copy_system_of_equations(otro.theSOE);
-    if(otro.theTest) copy_conv_test(otro.theTest);
+    if(other.theSolnAlgo) copy_soln_algo(other.theSolnAlgo);
+    if(other.theIntegrator) copy_integrator(other.theIntegrator);
+    if(other.theSOE) copy_system_of_equations(other.theSOE);
+    if(other.theTest) copy_conv_test(other.theTest);
   }
 
 //! @brief Default constructor.
@@ -468,24 +468,24 @@ XC::AnalysisAggregation::AnalysisAggregation(Analysis *owr,ModelWrapper *b)
 
 
 //! @brief Copy constructor.
-XC::AnalysisAggregation::AnalysisAggregation(const AnalysisAggregation &otro)
-  : EntCmd(otro), base(otro.base), theSolnAlgo(nullptr),theIntegrator(nullptr),
+XC::AnalysisAggregation::AnalysisAggregation(const AnalysisAggregation &other)
+  : EntCmd(other), base(other.base), theSolnAlgo(nullptr),theIntegrator(nullptr),
     theSOE(nullptr), theTest(nullptr)
   {
     if(base)
       base->set_owner(this);
-    copy(otro);
+    copy(other);
   }
 
 
 //! @brief Assignment operator.
-XC::AnalysisAggregation &XC::AnalysisAggregation::operator=(const AnalysisAggregation &otro)
+XC::AnalysisAggregation &XC::AnalysisAggregation::operator=(const AnalysisAggregation &other)
   {
-    EntCmd::operator=(otro);
-    base= otro.base;
+    EntCmd::operator=(other);
+    base= other.base;
     if(base)
       base->set_owner(this);
-    copy(otro);
+    copy(other);
     return *this;
   }
 

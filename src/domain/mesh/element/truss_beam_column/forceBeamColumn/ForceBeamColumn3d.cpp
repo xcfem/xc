@@ -89,21 +89,21 @@ XC::ForceBeamColumn3d::ForceBeamColumn3d(int tag)
   {}
 
 //! @brief Copy constructor.
-XC::ForceBeamColumn3d::ForceBeamColumn3d(const ForceBeamColumn3d &otro)
-  : NLForceBeamColumn3dBase(otro), beamIntegr(nullptr), v0(otro.v0), maxSubdivisions(otro.maxSubdivisions)
+XC::ForceBeamColumn3d::ForceBeamColumn3d(const ForceBeamColumn3d &other)
+  : NLForceBeamColumn3dBase(other), beamIntegr(nullptr), v0(other.v0), maxSubdivisions(other.maxSubdivisions)
   {
-    if(otro.beamIntegr)
-      alloc(*otro.beamIntegr);
+    if(other.beamIntegr)
+      alloc(*other.beamIntegr);
   }
 
 //! @brief Assignment operator.
-XC::ForceBeamColumn3d &XC::ForceBeamColumn3d::operator=(const ForceBeamColumn3d &otro)
+XC::ForceBeamColumn3d &XC::ForceBeamColumn3d::operator=(const ForceBeamColumn3d &other)
   {
-//     NLForceBeamColumn3dBase::operator=(otro);
-//     if(otro.beamIntegr)
-//       alloc(*otro.beamIntegr);
-//     v0= otro.v0;
-//     maxSubdivisions= otro.maxSubdivisions;
+//     NLForceBeamColumn3dBase::operator=(other);
+//     if(other.beamIntegr)
+//       alloc(*other.beamIntegr);
+//     v0= other.v0;
+//     maxSubdivisions= other.maxSubdivisions;
     std::cerr << getClassName() << "::" << __FUNCTION__
               << "; assignment operator must not be called."
               << std::endl;

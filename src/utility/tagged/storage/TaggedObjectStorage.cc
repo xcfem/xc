@@ -51,11 +51,11 @@ XC::TaggedObjectStorage::TaggedObjectStorage(EntCmd *owr,const std::string &cont
   : EntCmd(owr), MovableObject(0), containerName(contrName), transmitIDs(true) {}
 
 //! @brief Copy the components from the container into this one.
-void XC::TaggedObjectStorage::copy(const TaggedObjectStorage &otro)
+void XC::TaggedObjectStorage::copy(const TaggedObjectStorage &other)
   {
     TaggedObject *ptr= nullptr;
-    TaggedObjectStorage &otro_no_const= const_cast<TaggedObjectStorage &>(otro);
-    TaggedObjectIter &theIter= otro_no_const.getComponents();
+    TaggedObjectStorage &other_no_const= const_cast<TaggedObjectStorage &>(other);
+    TaggedObjectIter &theIter= other_no_const.getComponents();
     while((ptr= theIter()) != nullptr)
       addComponent(ptr->getCopy());
   }

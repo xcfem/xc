@@ -48,13 +48,13 @@ XC::EsfBeamColumn3d::EsfBeamColumn3d(const Vector &v)
   }
 
 //! @brief Copy constructor.
-XC::EsfBeamColumn3d::EsfBeamColumn3d(const XC::EsfBeamColumn3d &otro)
-  : Vector(otro) {}
+XC::EsfBeamColumn3d::EsfBeamColumn3d(const XC::EsfBeamColumn3d &other)
+  : Vector(other) {}
 
 //! @brief Assignment operator.
-XC::EsfBeamColumn3d &XC::EsfBeamColumn3d::operator=(const EsfBeamColumn3d &otro)
+XC::EsfBeamColumn3d &XC::EsfBeamColumn3d::operator=(const EsfBeamColumn3d &other)
   {
-    Vector::operator=((const Vector &)(otro));
+    Vector::operator=((const Vector &)(other));
     return *this;
   }
 

@@ -168,24 +168,24 @@ XC::Truss::Truss(void)
   { inicializa(); }
 
 //! @brief Copy constructor.
-XC::Truss::Truss(const Truss &otro)
-  :TrussBase(otro), theMaterial(nullptr), A(otro.A),theLoadSens(nullptr)
+XC::Truss::Truss(const Truss &other)
+  :TrussBase(other), theMaterial(nullptr), A(other.A),theLoadSens(nullptr)
   {
-    if(otro.theMaterial)
-      set_material(*otro.theMaterial);
-    if(otro.theLoadSens)
-      set_load_sens(*otro.theLoadSens);
+    if(other.theMaterial)
+      set_material(*other.theMaterial);
+    if(other.theLoadSens)
+      set_load_sens(*other.theLoadSens);
   }
 
 //! @brief Assignment operator.
-XC::Truss &XC::Truss::operator=(const Truss &otro)
+XC::Truss &XC::Truss::operator=(const Truss &other)
   {
-    TrussBase::operator=(otro);
-    if(otro.theMaterial)
-      set_material(*otro.theMaterial);
-    A= otro.A;
-    if(otro.theLoadSens)
-      set_load_sens(*otro.theLoadSens);
+    TrussBase::operator=(other);
+    if(other.theMaterial)
+      set_material(*other.theMaterial);
+    A= other.A;
+    if(other.theLoadSens)
+      set_load_sens(*other.theLoadSens);
     return *this;
   }
 

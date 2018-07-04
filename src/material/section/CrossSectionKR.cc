@@ -98,9 +98,9 @@ XC::CrossSectionKR::CrossSectionKR(const CrossSectionKR &otra)
   }
 
 //! @brief Assignment operator.
-XC::CrossSectionKR &XC::CrossSectionKR::operator=(const CrossSectionKR &otro)
+XC::CrossSectionKR &XC::CrossSectionKR::operator=(const CrossSectionKR &other)
   {
-    copy(otro);
+    copy(other);
     return *this;
   }
 

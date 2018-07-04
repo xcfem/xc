@@ -34,13 +34,13 @@ XC::DqMatrices::DqMatrices(const size_t &num)
   : dq_ptr_Matrices(num,static_cast<Matrix *>(nullptr)) {}
 
 // //! @brief Copy constructor.
-// XC::DqMatrices::DqMatrices(const DqMatrices &otro)
-//   : dq_ptr_Matrices(otro) {}
+// XC::DqMatrices::DqMatrices(const DqMatrices &other)
+//   : dq_ptr_Matrices(other) {}
 
 // //! @brief Assignment operator.
-// XC::DqMatrices &XC::DqMatrices::operator=(const DqMatrices &otro)
+// XC::DqMatrices &XC::DqMatrices::operator=(const DqMatrices &other)
 //   {
-//     dq_ptr_Matrices::operator=(otro);
+//     dq_ptr_Matrices::operator=(other);
 //     return *this;
 //   }
 

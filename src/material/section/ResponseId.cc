@@ -51,8 +51,8 @@ XC::ResponseId::ResponseId(const std::vector<std::string> &indices)
 // XC::ResponseId::ResponseId(int *dt, int size, bool cleanIt)
 //   : ID(dt,size,cleanIt) {}
 
-XC::ResponseId::ResponseId(const ID &otro)
-  : ID(otro) {}
+XC::ResponseId::ResponseId(const ID &other)
+  : ID(other) {}
 
 bool XC::ResponseId::hasResponse(const int &ri) const
   {

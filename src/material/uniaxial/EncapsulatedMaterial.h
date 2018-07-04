@@ -40,7 +40,7 @@ class EncapsulatedMaterial: public UniaxialMaterial
     UniaxialMaterial *theMaterial;
 
     void free_mem(void);
-    void copy(const UniaxialMaterial *otro);
+    void copy(const UniaxialMaterial *);
   public:
     EncapsulatedMaterial(int tag, int classTag, UniaxialMaterial &material); 
     EncapsulatedMaterial(int tag= 0,int classTag= 0);

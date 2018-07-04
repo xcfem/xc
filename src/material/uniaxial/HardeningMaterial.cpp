@@ -90,34 +90,34 @@ XC::HardeningMaterial::HardeningMaterial(void)
     this->revertToStart();
   }
 
-XC::HardeningMaterial::HardeningMaterial(const HardeningMaterial &otro)
-:UniaxialMaterial(otro), E(otro.E), sigmaY(otro.sigmaY), Hiso(otro.Hiso),
- Hkin(otro.Hkin), eta(otro.eta),
- CplasticStrain(otro.CplasticStrain), CbackStress(otro.CbackStress),
- Chardening(otro.Chardening), TplasticStrain(otro.TplasticStrain),
- TbackStress(otro.TbackStress), Thardening(otro.Thardening),
- Tstrain(otro.Tstrain), Tstress(otro.Tstress), Ttangent(otro.Ttangent),
+XC::HardeningMaterial::HardeningMaterial(const HardeningMaterial &other)
+:UniaxialMaterial(other), E(other.E), sigmaY(other.sigmaY), Hiso(other.Hiso),
+ Hkin(other.Hkin), eta(other.eta),
+ CplasticStrain(other.CplasticStrain), CbackStress(other.CbackStress),
+ Chardening(other.Chardening), TplasticStrain(other.TplasticStrain),
+ TbackStress(other.TbackStress), Thardening(other.Thardening),
+ Tstrain(other.Tstrain), Tstress(other.Tstress), Ttangent(other.Ttangent),
  parameterID(0), SHVs(nullptr)
   {}
 
 
-XC::HardeningMaterial &XC::HardeningMaterial::operator=(const HardeningMaterial &otro)
+XC::HardeningMaterial &XC::HardeningMaterial::operator=(const HardeningMaterial &other)
   {
-    UniaxialMaterial::operator=(otro);
-    E= otro.E;
-    sigmaY= otro.sigmaY;
-    Hiso= otro.Hiso;
-    Hkin= otro.Hkin;
-    eta= otro.eta;
-    CplasticStrain= otro.CplasticStrain;
-    CbackStress= otro.CbackStress;
-    Chardening= otro.Chardening;
-    TplasticStrain= otro.TplasticStrain;
-    TbackStress= otro.TbackStress;
-    Thardening= otro.Thardening;
-    Tstrain= otro.Tstrain;
-    Tstress= otro.Tstress;
-    Ttangent= otro.Ttangent;
+    UniaxialMaterial::operator=(other);
+    E= other.E;
+    sigmaY= other.sigmaY;
+    Hiso= other.Hiso;
+    Hkin= other.Hkin;
+    eta= other.eta;
+    CplasticStrain= other.CplasticStrain;
+    CbackStress= other.CbackStress;
+    Chardening= other.Chardening;
+    TplasticStrain= other.TplasticStrain;
+    TbackStress= other.TbackStress;
+    Thardening= other.Thardening;
+    Tstrain= other.Tstrain;
+    Tstress= other.Tstress;
+    Ttangent= other.Ttangent;
     return *this;
   }
 

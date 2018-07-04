@@ -130,7 +130,7 @@ const XC::Vector &XC::RegionSecc::IAxisDir_b(void) const
 //     //Returns a principal axis of inertia (we don't know yet
 //     //the major one or the minor one).
 //     Recta2d IAxis_b(void) const;
-//     //Return the otro principal axis of inertia (we don't know yet
+//     //Return the other principal axis of inertia (we don't know yet
 //     //the major one or the minor one).
 //     Ref2d2d principalAxesOfInertia(void) const;
 //     //Return the principal axes of inertia.

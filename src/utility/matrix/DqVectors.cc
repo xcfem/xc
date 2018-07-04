@@ -34,13 +34,13 @@ XC::DqVectors::DqVectors(const size_t &num)
   : dq_ptr_Vectors(num,static_cast<Vector *>(nullptr)) {}
 
 // //! @brief Copy constructor.
-// XC::DqVectors::DqVectors(const DqVectors &otro)
-//   : dq_ptr_Vectors(otro) {}
+// XC::DqVectors::DqVectors(const DqVectors &other)
+//   : dq_ptr_Vectors(other) {}
 
 // //! @brief Assignment operator.
-// XC::DqVectors &XC::DqVectors::operator=(const DqVectors &otro)
+// XC::DqVectors &XC::DqVectors::operator=(const DqVectors &other)
 //   {
-//     dq_ptr_Vectors::operator=(otro);
+//     dq_ptr_Vectors::operator=(other);
 //     return *this;
 //   }
 

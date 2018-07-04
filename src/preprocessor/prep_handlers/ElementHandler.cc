@@ -43,14 +43,14 @@ void XC::ElementHandler::SeedElemHandler::free_mem(void)
   }
 
 //! @brief Copy constructor.
-XC::ElementHandler::SeedElemHandler::SeedElemHandler(const SeedElemHandler &otro)
-  : ProtoElementHandler(otro), semilla(otro.semilla->getCopy()) {}
+XC::ElementHandler::SeedElemHandler::SeedElemHandler(const SeedElemHandler &other)
+  : ProtoElementHandler(other), semilla(other.semilla->getCopy()) {}
 
 //! @brief Assignment operator.
-XC::ElementHandler::SeedElemHandler &XC::ElementHandler::SeedElemHandler::operator=(const SeedElemHandler &otro)
+XC::ElementHandler::SeedElemHandler &XC::ElementHandler::SeedElemHandler::operator=(const SeedElemHandler &other)
   {
-    ProtoElementHandler::operator=(otro);
-    semilla= otro.semilla->getCopy();
+    ProtoElementHandler::operator=(other);
+    semilla= other.semilla->getCopy();
     return *this;
   }
 

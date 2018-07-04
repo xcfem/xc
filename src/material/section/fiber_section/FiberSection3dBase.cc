@@ -63,10 +63,10 @@ XC::FiberSection3dBase::FiberSection3dBase(const FiberSection3dBase &otra)
   : FiberSectionBase(otra) {}
 
 //! @brief Assignment operator.
-XC::FiberSection3dBase &XC::FiberSection3dBase::operator=(const FiberSection3dBase &otro)
+XC::FiberSection3dBase &XC::FiberSection3dBase::operator=(const FiberSection3dBase &other)
   {
-    FiberSectionBase::operator=(otro);
-    kr= otro.kr;
+    FiberSectionBase::operator=(other);
+    kr= other.kr;
     return *this;
   }
 

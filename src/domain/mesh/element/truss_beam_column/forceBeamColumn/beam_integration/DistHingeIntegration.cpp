@@ -81,15 +81,15 @@ XC::DistHingeIntegration::DistHingeIntegration(void)
   : PlasticLengthsBeamIntegration(BEAM_INTEGRATION_TAG_HingeMidpoint), beamInt(nullptr), parameterID(0)
   {}
 
-XC::DistHingeIntegration::DistHingeIntegration(const DistHingeIntegration &otro)
-  : PlasticLengthsBeamIntegration(otro), beamInt(nullptr), parameterID(otro.parameterID)
-  { copy(otro.beamInt); }
+XC::DistHingeIntegration::DistHingeIntegration(const DistHingeIntegration &other)
+  : PlasticLengthsBeamIntegration(other), beamInt(nullptr), parameterID(other.parameterID)
+  { copy(other.beamInt); }
 
-XC::DistHingeIntegration &XC::DistHingeIntegration::operator=(const DistHingeIntegration &otro)
+XC::DistHingeIntegration &XC::DistHingeIntegration::operator=(const DistHingeIntegration &other)
   {
-    PlasticLengthsBeamIntegration::operator=(otro);
-    parameterID= otro.parameterID;
-    copy(otro.beamInt);
+    PlasticLengthsBeamIntegration::operator=(other);
+    parameterID= other.parameterID;
+    copy(other.beamInt);
     return *this;
   }
 

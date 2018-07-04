@@ -45,8 +45,8 @@ XC::NodePtrs::NodePtrs(Element *owr,const size_t &sz)
   : EntCmd(owr), vector_ptr_nodes(sz,nullptr) {}
 
 //! @brief Copy constructor.
-XC::NodePtrs::NodePtrs(const NodePtrs &otro)
-  : EntCmd(otro), vector_ptr_nodes(otro.size(),nullptr) 
+XC::NodePtrs::NodePtrs(const NodePtrs &other)
+  : EntCmd(other), vector_ptr_nodes(other.size(),nullptr) 
   {
     const size_t sz= size();
     if(sz>0)
@@ -55,15 +55,15 @@ XC::NodePtrs::NodePtrs(const NodePtrs &otro)
         assert(owr);
         Domain *dom= owr->getDomain();
         if(dom)
-          setPtrs(dom,ID(otro.getTags()));
+          setPtrs(dom,ID(other.getTags()));
       }
   }
 
-XC::NodePtrs &XC::NodePtrs::operator=(const NodePtrs &otro)
+XC::NodePtrs &XC::NodePtrs::operator=(const NodePtrs &other)
   {
     inic();
-    EntCmd::operator=(otro);
-    resize(otro.size(),nullptr);
+    EntCmd::operator=(other);
+    resize(other.size(),nullptr);
     const size_t sz= size();
     if(sz>0)
       {
@@ -71,7 +71,7 @@ XC::NodePtrs &XC::NodePtrs::operator=(const NodePtrs &otro)
         assert(owr);
         Domain *dom= owr->getDomain();
         if(dom)
-          setPtrs(dom,ID(otro.getTags()));
+          setPtrs(dom,ID(other.getTags()));
       }
     return *this;
   }

@@ -46,26 +46,26 @@ XC::DqMeshRegion::DqMeshRegion(void)
   : dq_Reg() {}
 
 //! @brief Copy constructor.
-XC::DqMeshRegion::DqMeshRegion(const DqMeshRegion  &otro)
-  : dq_Reg(otro)
+XC::DqMeshRegion::DqMeshRegion(const DqMeshRegion  &other)
+  : dq_Reg(other)
   {
     const size_t sz= size();
     for(size_t i=0;i<sz;i++)
       {
-        const MeshRegion *tmp= otro[i];
+        const MeshRegion *tmp= other[i];
         if(tmp)
           (*this)[i]= tmp->getCopy();
       }
   }
 
 //! @brief Assignment operator.
-XC::DqMeshRegion &XC::DqMeshRegion::operator=(const DqMeshRegion &otro)
+XC::DqMeshRegion &XC::DqMeshRegion::operator=(const DqMeshRegion &other)
   {
-    resize(otro.size());
+    resize(other.size());
     const size_t sz= size();
     for(size_t i=0;i<sz;i++)
       {
-        const MeshRegion *tmp= otro[i];
+        const MeshRegion *tmp= other[i];
         if(tmp)
           (*this)[i]= tmp->getCopy();
       }

@@ -50,18 +50,18 @@ XC::ProtoTruss::ProtoTruss(int tag, int classTag,int Nd1,int Nd2,int ndof,int nd
 
 
 //! @brief Copy constructor.
-XC::ProtoTruss::ProtoTruss(const ProtoTruss &otro)
-  : Element1D(otro),numDOF(otro.numDOF),dimSpace(otro.dimSpace),theMatrix(otro.theMatrix), theVector(otro.theVector)
+XC::ProtoTruss::ProtoTruss(const ProtoTruss &other)
+  : Element1D(other),numDOF(other.numDOF),dimSpace(other.dimSpace),theMatrix(other.theMatrix), theVector(other.theVector)
   {}
 
 //! @brief Assignment operator.
-XC::ProtoTruss &XC::ProtoTruss::operator=(const ProtoTruss &otro)
+XC::ProtoTruss &XC::ProtoTruss::operator=(const ProtoTruss &other)
   {
-    Element1D::operator=(otro);
-    numDOF= otro.numDOF;
-    dimSpace= otro.dimSpace;
-    theMatrix= otro.theMatrix;
-    theVector= otro.theVector;
+    Element1D::operator=(other);
+    numDOF= other.numDOF;
+    dimSpace= other.dimSpace;
+    theMatrix= other.theMatrix;
+    theVector= other.theVector;
     return *this;
   }
 

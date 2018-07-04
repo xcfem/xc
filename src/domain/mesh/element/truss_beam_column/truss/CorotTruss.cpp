@@ -96,22 +96,22 @@ XC::CorotTruss::CorotTruss(void)
   :CorotTrussBase(0,ELE_TAG_CorotTruss,0,0,0), theMaterial(nullptr), A(0.0) {}
 
 //! @brief Copy constructor.
-XC::CorotTruss::CorotTruss(const CorotTruss &otro)
-  : CorotTrussBase(otro), theMaterial(nullptr), A(otro.A)
+XC::CorotTruss::CorotTruss(const CorotTruss &other)
+  : CorotTrussBase(other), theMaterial(nullptr), A(other.A)
   {
-    if(otro.theMaterial)
-      theMaterial= otro.theMaterial->getCopy();
+    if(other.theMaterial)
+      theMaterial= other.theMaterial->getCopy();
   }
 
 //! @brief Assignment operator.
-XC::CorotTruss &XC::CorotTruss::operator=(const CorotTruss &otro)
+XC::CorotTruss &XC::CorotTruss::operator=(const CorotTruss &other)
   {
-    CorotTrussBase::operator=(otro);
-    A= otro.A;
+    CorotTrussBase::operator=(other);
+    A= other.A;
     if(theMaterial) delete theMaterial;
     theMaterial= nullptr;
-    if(otro.theMaterial)
-      theMaterial= otro.theMaterial->getCopy();
+    if(other.theMaterial)
+      theMaterial= other.theMaterial->getCopy();
     return *this;
   }
 

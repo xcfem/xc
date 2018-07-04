@@ -87,12 +87,12 @@ XC::SetEstruct *XC::MapSetBase::find_set_estruct(const std::string &name)
   }
 
 //! @brief Copy constructor (DOESN'T COPY SETS).
-XC::MapSetBase::MapSetBase(const MapSetBase &otro)
+XC::MapSetBase::MapSetBase(const MapSetBase &other)
   : map_sets()
   {}
 
 //! @brief Assignment operator (DOESN'T COPY SETS).
-XC::MapSetBase &XC::MapSetBase::operator=(const MapSetBase &otro)
+XC::MapSetBase &XC::MapSetBase::operator=(const MapSetBase &other)
   {
     return *this;
   }

@@ -53,21 +53,21 @@ XC::RgQuadCell::RgQuadCell(Material *mat, int numSubdivIJ, int numSubdivJK)
   : RegionSecc(mat), rejilla(nullptr), nDivIJ(numSubdivIJ), nDivJK(numSubdivJK) {}
 
 //! @brief Copy constructor.
-XC::RgQuadCell::RgQuadCell(const RgQuadCell &otro)
-  : RegionSecc(otro), rejilla(nullptr), nDivIJ(otro.nDivIJ), nDivJK(otro.nDivJK) 
+XC::RgQuadCell::RgQuadCell(const RgQuadCell &other)
+  : RegionSecc(other), rejilla(nullptr), nDivIJ(other.nDivIJ), nDivJK(other.nDivJK) 
   {
-    if(otro.rejilla)
-      alloc(*otro.rejilla);
+    if(other.rejilla)
+      alloc(*other.rejilla);
   }
 
 //! @brief Assignment operator.
-XC::RgQuadCell &XC::RgQuadCell::operator=(const RgQuadCell &otro)
+XC::RgQuadCell &XC::RgQuadCell::operator=(const RgQuadCell &other)
   {
-    RegionSecc::operator=(otro);
-    if(otro.rejilla)
-      alloc(*otro.rejilla);
-    nDivIJ= otro.nDivIJ;
-    nDivJK= otro.nDivJK;
+    RegionSecc::operator=(other);
+    if(other.rejilla)
+      alloc(*other.rejilla);
+    nDivIJ= other.nDivIJ;
+    nDivJK= other.nDivJK;
     return *this;
   }
 

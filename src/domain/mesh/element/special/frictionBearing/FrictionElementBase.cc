@@ -72,35 +72,35 @@ XC::FrictionElementBase::FrictionElementBase(int classTag,const size_t &dim)
     Tgl(dim*2,dim*2), Tlb(dim,dim*2), kbInit(dim,dim)
   {}
 
-XC::FrictionElementBase::FrictionElementBase(const FrictionElementBase &otro)
-  :Element0D(otro), physicalProperties(otro.physicalProperties), uy(otro.uy), x(otro.x), y(otro.y), mass(otro.mass), maxIter(otro.maxIter), tol(otro.tol),
-    L(otro.L), ub(otro.ub), qb(otro.qb), kb(otro.kb), ul(otro.ul),
-    Tgl(otro.Tgl), Tlb(otro.Tlb), kbInit(otro.kbInit)
+XC::FrictionElementBase::FrictionElementBase(const FrictionElementBase &other)
+  :Element0D(other), physicalProperties(other.physicalProperties), uy(other.uy), x(other.x), y(other.y), mass(other.mass), maxIter(other.maxIter), tol(other.tol),
+    L(other.L), ub(other.ub), qb(other.qb), kb(other.kb), ul(other.ul),
+    Tgl(other.Tgl), Tlb(other.Tlb), kbInit(other.kbInit)
   {
-    if(otro.theFrnMdl)
-      alloc_friction_model(*otro.theFrnMdl);
+    if(other.theFrnMdl)
+      alloc_friction_model(*other.theFrnMdl);
   }
 
-XC::FrictionElementBase &XC::FrictionElementBase::operator=(const FrictionElementBase &otro)
+XC::FrictionElementBase &XC::FrictionElementBase::operator=(const FrictionElementBase &other)
   {
-    Element0D::operator=(otro);
-    physicalProperties= otro.physicalProperties;
-    uy= otro.uy;
-    x= otro.x;
-    y= otro.y;
-    mass= otro.mass;
-    maxIter= otro.maxIter;
-    tol= otro.tol;
-    L= otro.L;
-    ub= otro.ub;
-    qb= otro.qb;
-    kb= otro.kb;
-    ul= otro.ul;
-    Tgl= otro.Tgl;
-    Tlb= otro.Tlb;
-    kbInit= otro.kbInit;
-    if(otro.theFrnMdl)
-      alloc_friction_model(*otro.theFrnMdl);
+    Element0D::operator=(other);
+    physicalProperties= other.physicalProperties;
+    uy= other.uy;
+    x= other.x;
+    y= other.y;
+    mass= other.mass;
+    maxIter= other.maxIter;
+    tol= other.tol;
+    L= other.L;
+    ub= other.ub;
+    qb= other.qb;
+    kb= other.kb;
+    ul= other.ul;
+    Tgl= other.Tgl;
+    Tlb= other.Tlb;
+    kbInit= other.kbInit;
+    if(other.theFrnMdl)
+      alloc_friction_model(*other.theFrnMdl);
     return *this;
   }
 XC::FrictionElementBase::~FrictionElementBase()

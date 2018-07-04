@@ -34,13 +34,13 @@ XC::FVectorBeamColumn3d::FVectorBeamColumn3d(void)
   { zero(); }
 
 //! @brief Copy constructor.
-XC::FVectorBeamColumn3d::FVectorBeamColumn3d(const XC::FVectorBeamColumn3d &otro)
+XC::FVectorBeamColumn3d::FVectorBeamColumn3d(const XC::FVectorBeamColumn3d &other)
   {
-    p[0] = otro.p[0];
-    p[1] = otro.p[1];
-    p[2] = otro.p[2];
-    p[3] = otro.p[3];
-    p[4] = otro.p[4];
+    p[0] = other.p[0];
+    p[1] = other.p[1];
+    p[2] = other.p[2];
+    p[3] = other.p[3];
+    p[4] = other.p[4];
   }
 
 //! @brief Constructor a partir de un vector.
@@ -60,13 +60,13 @@ XC::FVectorBeamColumn3d::FVectorBeamColumn3d(const XC::Vector &v)
   }
 
 //! @brief Assignment operator.
-XC::FVectorBeamColumn3d &XC::FVectorBeamColumn3d::operator=(const XC::FVectorBeamColumn3d &otro)
+XC::FVectorBeamColumn3d &XC::FVectorBeamColumn3d::operator=(const XC::FVectorBeamColumn3d &other)
   {
-    p[0] = otro.p[0];
-    p[1] = otro.p[1];
-    p[2] = otro.p[2];
-    p[3] = otro.p[3];
-    p[4] = otro.p[4];
+    p[0] = other.p[0];
+    p[1] = other.p[1];
+    p[2] = other.p[2];
+    p[3] = other.p[3];
+    p[4] = other.p[4];
     return *this;
   }
 
@@ -89,23 +89,23 @@ XC::FVectorBeamColumn3d &XC::FVectorBeamColumn3d::operator*=(const double &d)
     return *this;    
   }
 
-XC::FVectorBeamColumn3d &XC::FVectorBeamColumn3d::operator+=(const FVectorBeamColumn3d &otro)
+XC::FVectorBeamColumn3d &XC::FVectorBeamColumn3d::operator+=(const FVectorBeamColumn3d &other)
   {
-    p[0]+= otro.p[0];
-    p[1]+= otro.p[1];
-    p[2]+= otro.p[2];
-    p[3]+= otro.p[3];
-    p[4]+= otro.p[4];
+    p[0]+= other.p[0];
+    p[1]+= other.p[1];
+    p[2]+= other.p[2];
+    p[3]+= other.p[3];
+    p[4]+= other.p[4];
     return *this;    
   }
 
-XC::FVectorBeamColumn3d &XC::FVectorBeamColumn3d::operator-=(const FVectorBeamColumn3d &otro)
+XC::FVectorBeamColumn3d &XC::FVectorBeamColumn3d::operator-=(const FVectorBeamColumn3d &other)
   {
-    p[0]-= otro.p[0];
-    p[1]-= otro.p[1];
-    p[2]-= otro.p[2];
-    p[3]-= otro.p[3];
-    p[4]-= otro.p[4];
+    p[0]-= other.p[0];
+    p[1]-= other.p[1];
+    p[2]-= other.p[2];
+    p[3]-= other.p[3];
+    p[4]-= other.p[4];
     return *this;    
   }
 

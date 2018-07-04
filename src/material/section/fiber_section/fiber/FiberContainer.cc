@@ -47,15 +47,15 @@ void XC::FiberContainer::allocFibers(int numOfFibers,const Fiber *muestra)
   }
 
 //! @brief Copy the fibers from te container into this object.
-void XC::FiberContainer::copy_fibers(const FiberContainer &otro)
+void XC::FiberContainer::copy_fibers(const FiberContainer &other)
   {
     free_mem();
-    const size_t numFibers= otro.getNumFibers();
+    const size_t numFibers= other.getNumFibers();
     if(numFibers)
       {
         allocFibers(numFibers);
         for(register size_t i= 0;i<numFibers;i++)
-          (*this)[i]= otro[i]->getCopy();
+          (*this)[i]= other[i]->getCopy();
       }
   }
 
@@ -77,15 +77,15 @@ XC::FiberContainer::FiberContainer(const size_t &num)
   : FiberPtrDeque(num) {}
 
 //! @brief Copy constructor.
-XC::FiberContainer::FiberContainer(const FiberContainer &otro)
+XC::FiberContainer::FiberContainer(const FiberContainer &other)
   : FiberPtrDeque() //Don't copy pointers
-  { copy_fibers(otro); }
+  { copy_fibers(other); }
 
 //! @brief Assignment operator.
-XC::FiberContainer &XC::FiberContainer::operator=(const FiberContainer &otro)
+XC::FiberContainer &XC::FiberContainer::operator=(const FiberContainer &other)
   {
-    EntCmd::operator=(otro); //Don't copy pointers
-    copy_fibers(otro); //They are copied here.
+    EntCmd::operator=(other); //Don't copy pointers
+    copy_fibers(other); //They are copied here.
     return *this;
   }
 

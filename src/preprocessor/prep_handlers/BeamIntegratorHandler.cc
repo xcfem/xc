@@ -69,13 +69,13 @@ XC::BeamIntegratorHandler::BeamIntegratorHandler(Preprocessor *owr)
   }
 
 //! @brief Copy constructor.
-XC::BeamIntegratorHandler::BeamIntegratorHandler(const BeamIntegratorHandler &otro) : PrepHandler(otro)
+XC::BeamIntegratorHandler::BeamIntegratorHandler(const BeamIntegratorHandler &other) : PrepHandler(other)
   { std::cerr << "This object must no be copied." << std::endl; }
 
 //! @brief Assignment operator.
-XC::BeamIntegratorHandler &XC::BeamIntegratorHandler::operator=(const BeamIntegratorHandler &otro)
+XC::BeamIntegratorHandler &XC::BeamIntegratorHandler::operator=(const BeamIntegratorHandler &other)
   {
-    PrepHandler::operator=(otro);
+    PrepHandler::operator=(other);
     std::cerr << "This object must not be assigned." << std::endl;
     return *this;
   }

@@ -134,16 +134,16 @@ XC::GenericSectionNd::GenericSectionNd(int tag)
   {}
 
 //! @brief Copy constructor.
-XC::GenericSectionNd::GenericSectionNd(const GenericSectionNd &otro)
-  : SectionForceDeformation(otro), theModel(nullptr), code(nullptr),
+XC::GenericSectionNd::GenericSectionNd(const GenericSectionNd &other)
+  : SectionForceDeformation(other), theModel(nullptr), code(nullptr),
     order(0)
-  { alloc(otro.theModel,otro.code); }
+  { alloc(other.theModel,other.code); }
 
 //! @brief Assignment operator.
-XC::GenericSectionNd &XC::GenericSectionNd::operator=(const GenericSectionNd &otro)
+XC::GenericSectionNd &XC::GenericSectionNd::operator=(const GenericSectionNd &other)
   {
-    SectionForceDeformation::operator=(otro);
-    alloc(otro.theModel,otro.code);
+    SectionForceDeformation::operator=(other);
+    alloc(other.theModel,other.code);
     return *this;
   }
 

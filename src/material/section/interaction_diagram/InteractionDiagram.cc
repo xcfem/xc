@@ -65,16 +65,16 @@ XC::InteractionDiagram::InteractionDiagram(const Pos3d &org,const Triang3dMesh &
   }
 
 //! @brief Copy constructor.
-XC::InteractionDiagram::InteractionDiagram(const InteractionDiagram &otro)
-  : ClosedTriangleMesh(otro)
+XC::InteractionDiagram::InteractionDiagram(const InteractionDiagram &other)
+  : ClosedTriangleMesh(other)
   {
     classify_trihedrons();
   }
 
 //! @brief Assignment operator.
-XC::InteractionDiagram &XC::InteractionDiagram::operator=(const InteractionDiagram &otro)
+XC::InteractionDiagram &XC::InteractionDiagram::operator=(const InteractionDiagram &other)
   {
-    ClosedTriangleMesh::operator=(otro);
+    ClosedTriangleMesh::operator=(other);
     classify_trihedrons();
     return *this;
   }

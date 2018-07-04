@@ -67,26 +67,26 @@ XC::VectorReinfBar::VectorReinfBar(const size_t &sz)
   : v_rfBar(sz,nullptr) {}
 
 //! @brief Copy constructor.
-XC::VectorReinfBar::VectorReinfBar(const VectorReinfBar  &otro)
-  : v_rfBar(otro.size(),nullptr)
+XC::VectorReinfBar::VectorReinfBar(const VectorReinfBar  &other)
+  : v_rfBar(other.size(),nullptr)
   {
     const size_t sz= size();
     for(size_t i=0;i<sz;i++)
       {
-        const ReinfBar *tmp= otro[i];
+        const ReinfBar *tmp= other[i];
         if(tmp)
           (*this)[i]= tmp->getCopy();
       }
   }
 
 //! @brief Assignment operator.
-XC::VectorReinfBar &XC::VectorReinfBar::operator=(const VectorReinfBar &otro)
+XC::VectorReinfBar &XC::VectorReinfBar::operator=(const VectorReinfBar &other)
   {
-    resize(otro.size());
+    resize(other.size());
     const size_t sz= size();
     for(size_t i=0;i<sz;i++)
       {
-        const ReinfBar *tmp= otro[i];
+        const ReinfBar *tmp= other[i];
         if(tmp)
           (*this)[i]= tmp->getCopy();
       }

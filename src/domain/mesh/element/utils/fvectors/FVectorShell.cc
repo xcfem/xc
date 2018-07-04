@@ -34,33 +34,33 @@ XC::FVectorShell::FVectorShell(void)
   : FVectorData<24>() { zero(); }
 
 //! @brief Copy constructor.
-XC::FVectorShell::FVectorShell(const XC::FVectorShell &otro)
-  : FVectorData<24>(otro)
+XC::FVectorShell::FVectorShell(const XC::FVectorShell &other)
+  : FVectorData<24>(other)
   {
-    p[0]= otro.p[0];
-    p[1]= otro.p[1];
-    p[2]= otro.p[2];
-    p[3]= otro.p[3];
-    p[4]= otro.p[4];
-    p[5]= otro.p[5];
-    p[6] = otro.p[6];
-    p[7] = otro.p[7];
-    p[8] = otro.p[8];
-    p[9] = otro.p[9];
-    p[10] = otro.p[10];
-    p[11] = otro.p[11];
-    p[12] = otro.p[12];
-    p[13] = otro.p[13];
-    p[14] = otro.p[14];
-    p[15] = otro.p[15];
-    p[16] = otro.p[16];
-    p[17] = otro.p[17];
-    p[18] = otro.p[18];
-    p[19] = otro.p[19];
-    p[20] = otro.p[20];
-    p[21] = otro.p[21];
-    p[22] = otro.p[22];
-    p[23] = otro.p[23];
+    p[0]= other.p[0];
+    p[1]= other.p[1];
+    p[2]= other.p[2];
+    p[3]= other.p[3];
+    p[4]= other.p[4];
+    p[5]= other.p[5];
+    p[6] = other.p[6];
+    p[7] = other.p[7];
+    p[8] = other.p[8];
+    p[9] = other.p[9];
+    p[10] = other.p[10];
+    p[11] = other.p[11];
+    p[12] = other.p[12];
+    p[13] = other.p[13];
+    p[14] = other.p[14];
+    p[15] = other.p[15];
+    p[16] = other.p[16];
+    p[17] = other.p[17];
+    p[18] = other.p[18];
+    p[19] = other.p[19];
+    p[20] = other.p[20];
+    p[21] = other.p[21];
+    p[22] = other.p[22];
+    p[23] = other.p[23];
   }
 
 //! @brief Constructor a partir de un vector.
@@ -99,32 +99,32 @@ XC::FVectorShell::FVectorShell(const XC::Vector &v)
   }
 
 //! @brief Assignment operator.
-XC::FVectorShell &XC::FVectorShell::operator=(const XC::FVectorShell &otro)
+XC::FVectorShell &XC::FVectorShell::operator=(const XC::FVectorShell &other)
   {
-    p[0] = otro.p[0];
-    p[1] = otro.p[1];
-    p[2] = otro.p[2];
-    p[3] = otro.p[3];
-    p[4] = otro.p[4];
-    p[5] = otro.p[5];
-    p[6] = otro.p[6];
-    p[7] = otro.p[7];
-    p[8] = otro.p[8];
-    p[9] = otro.p[9];
-    p[10] = otro.p[10];
-    p[11] = otro.p[11];
-    p[12] = otro.p[12];
-    p[13] = otro.p[13];
-    p[14] = otro.p[14];
-    p[15] = otro.p[15];
-    p[16] = otro.p[16];
-    p[17] = otro.p[17];
-    p[18] = otro.p[18];
-    p[19] = otro.p[19];
-    p[20] = otro.p[20];
-    p[21] = otro.p[21];
-    p[22] = otro.p[22];
-    p[23] = otro.p[23];
+    p[0] = other.p[0];
+    p[1] = other.p[1];
+    p[2] = other.p[2];
+    p[3] = other.p[3];
+    p[4] = other.p[4];
+    p[5] = other.p[5];
+    p[6] = other.p[6];
+    p[7] = other.p[7];
+    p[8] = other.p[8];
+    p[9] = other.p[9];
+    p[10] = other.p[10];
+    p[11] = other.p[11];
+    p[12] = other.p[12];
+    p[13] = other.p[13];
+    p[14] = other.p[14];
+    p[15] = other.p[15];
+    p[16] = other.p[16];
+    p[17] = other.p[17];
+    p[18] = other.p[18];
+    p[19] = other.p[19];
+    p[20] = other.p[20];
+    p[21] = other.p[21];
+    p[22] = other.p[22];
+    p[23] = other.p[23];
     return *this;
   }
 
@@ -185,61 +185,61 @@ XC::FVectorShell &XC::FVectorShell::operator*=(const double &d)
     return *this;    
   }
 
-XC::FVectorShell &XC::FVectorShell::operator+=(const FVectorShell &otro)
+XC::FVectorShell &XC::FVectorShell::operator+=(const FVectorShell &other)
   {
-    p[0]+= otro.p[0];
-    p[1]+= otro.p[1];
-    p[2]+= otro.p[2];
-    p[3]+= otro.p[3];
-    p[4]+= otro.p[4];
-    p[5]+= otro.p[5];
-    p[6]+= otro.p[6];
-    p[7]+= otro.p[7];
-    p[8]+= otro.p[8];
-    p[9]+= otro.p[9];
-    p[10]+= otro.p[10];
-    p[11]+= otro.p[11];
-    p[12]+= otro.p[12];
-    p[13]+= otro.p[13];
-    p[14]+= otro.p[14];
-    p[15]+= otro.p[15];
-    p[16]+= otro.p[16];
-    p[17]+= otro.p[17];
-    p[18]+= otro.p[18];
-    p[19]+= otro.p[19];
-    p[20]+= otro.p[20];
-    p[21]+= otro.p[21];
-    p[22]+= otro.p[22];
-    p[23]+= otro.p[23];
+    p[0]+= other.p[0];
+    p[1]+= other.p[1];
+    p[2]+= other.p[2];
+    p[3]+= other.p[3];
+    p[4]+= other.p[4];
+    p[5]+= other.p[5];
+    p[6]+= other.p[6];
+    p[7]+= other.p[7];
+    p[8]+= other.p[8];
+    p[9]+= other.p[9];
+    p[10]+= other.p[10];
+    p[11]+= other.p[11];
+    p[12]+= other.p[12];
+    p[13]+= other.p[13];
+    p[14]+= other.p[14];
+    p[15]+= other.p[15];
+    p[16]+= other.p[16];
+    p[17]+= other.p[17];
+    p[18]+= other.p[18];
+    p[19]+= other.p[19];
+    p[20]+= other.p[20];
+    p[21]+= other.p[21];
+    p[22]+= other.p[22];
+    p[23]+= other.p[23];
     return *this;    
   }
 
-XC::FVectorShell &XC::FVectorShell::operator-=(const FVectorShell &otro)
+XC::FVectorShell &XC::FVectorShell::operator-=(const FVectorShell &other)
   {
-    p[0]-= otro.p[0];
-    p[1]-= otro.p[1];
-    p[2]-= otro.p[2];
-    p[3]-= otro.p[3];
-    p[4]-= otro.p[4];
-    p[5]-= otro.p[5];
-    p[6]-= otro.p[6];
-    p[7]-= otro.p[7];
-    p[8]-= otro.p[8];
-    p[9]-= otro.p[9];
-    p[10]-= otro.p[10];
-    p[11]-= otro.p[11];
-    p[12]-= otro.p[12];
-    p[13]-= otro.p[13];
-    p[14]-= otro.p[14];
-    p[15]-= otro.p[15];
-    p[16]-= otro.p[16];
-    p[17]-= otro.p[17];
-    p[18]-= otro.p[18];
-    p[19]-= otro.p[19];
-    p[20]-= otro.p[20];
-    p[21]-= otro.p[21];
-    p[22]-= otro.p[22];
-    p[23]-= otro.p[23];
+    p[0]-= other.p[0];
+    p[1]-= other.p[1];
+    p[2]-= other.p[2];
+    p[3]-= other.p[3];
+    p[4]-= other.p[4];
+    p[5]-= other.p[5];
+    p[6]-= other.p[6];
+    p[7]-= other.p[7];
+    p[8]-= other.p[8];
+    p[9]-= other.p[9];
+    p[10]-= other.p[10];
+    p[11]-= other.p[11];
+    p[12]-= other.p[12];
+    p[13]-= other.p[13];
+    p[14]-= other.p[14];
+    p[15]-= other.p[15];
+    p[16]-= other.p[16];
+    p[17]-= other.p[17];
+    p[18]-= other.p[18];
+    p[19]-= other.p[19];
+    p[20]-= other.p[20];
+    p[21]-= other.p[21];
+    p[22]-= other.p[22];
+    p[23]-= other.p[23];
     return *this;    
   }
 

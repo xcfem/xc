@@ -69,7 +69,7 @@ XC::ElementRecorderBase::~ElementRecorderBase(void)
       }
   }
 
-//! @brief Send the object a otro proceso.
+//! @brief Send the object to another process.
 int XC::ElementRecorderBase::sendData(CommParameters &cp)
   {
     int res= MeshCompRecorder::sendData(cp);
@@ -78,7 +78,7 @@ int XC::ElementRecorderBase::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receive the object desde otro proceso.
+//! @brief Receive the object from other process.
 int XC::ElementRecorderBase::receiveData(const CommParameters &cp)
   {
     int res= MeshCompRecorder::receiveData(cp);
@@ -87,12 +87,13 @@ int XC::ElementRecorderBase::receiveData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Send the object a otro proceso.
+//! @brief Send the object to other process.
 int XC::ElementRecorderBase::sendSelf(CommParameters &cp)
   {
     int res= 0;
     if(cp.isDatastore() == 1)
-      std::cerr << "ElementRecorderBase::sendSelf() - does not send data to a datastore\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; does not send data to a datastore\n";
     else
       {
         setDbTag(cp);
@@ -101,20 +102,21 @@ int XC::ElementRecorderBase::sendSelf(CommParameters &cp)
         res= sendData(cp);
         if(cp.sendIdData(getDbTagData(),dataTag)< 0)
           {
-            std::cerr << "ElementRecorderBase::sendSelf() "
-                      << "- failed to send idData\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+                      << "; failed to send idData\n";
             return -1;
           }
       }
     return res;
   }
 
-//! @brief Receive the object desde otro proceso.
+//! @brief Receive the object from other process.
 int XC::ElementRecorderBase::recvSelf(const CommParameters &cp)
   {
     int res= 0;
     if(cp.isDatastore() == 1)
-      std::cerr << "ElementRecorderBase::recvSelf() - does not recv data to a datastore\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; does not recv data to a datastore\n";
     else
       {
         inicComm(8);
@@ -122,7 +124,8 @@ int XC::ElementRecorderBase::recvSelf(const CommParameters &cp)
         res= cp.receiveIdData(getDbTagData(),dataTag);
         if(res < 0)
           {
-            std::cerr << "ElementRecorderBase::recvSelf() - failed to recv idData\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; failed to recv idData\n";
             return res;
           }
         res= receiveData(cp);

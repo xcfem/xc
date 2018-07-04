@@ -42,13 +42,13 @@ void XC::NodeVectors::free_mem(void)
     trialData= nullptr;
   }
 
-void XC::NodeVectors::copy(const NodeVectors &otro)
+void XC::NodeVectors::copy(const NodeVectors &other)
   {
     free_mem();
-    numVectors= otro.numVectors;
-    if(otro.commitData)
+    numVectors= other.numVectors;
+    if(other.commitData)
       {
-        const size_t nDOF= otro.getVectorsSize();
+        const size_t nDOF= other.getVectorsSize();
         const size_t sz= numVectors*nDOF;
         if(this->createData(nDOF) < 0)
           {
@@ -56,7 +56,7 @@ void XC::NodeVectors::copy(const NodeVectors &otro)
             exit(-1);
           }
         for(register size_t i=0;i<sz;i++)
-          values[i] = otro.values[i];
+          values[i] = other.values[i];
       }
   }
 
@@ -66,15 +66,15 @@ XC::NodeVectors::NodeVectors(const size_t &nv)
 
 
 //! @brief Copy constructor.
-XC::NodeVectors::NodeVectors(const NodeVectors &otro)
-  : EntCmd(otro),MovableObject(NOD_TAG_NodeVectors), numVectors(otro.numVectors), commitData(nullptr), trialData(nullptr), values()
-  { copy(otro); }
+XC::NodeVectors::NodeVectors(const NodeVectors &other)
+  : EntCmd(other),MovableObject(NOD_TAG_NodeVectors), numVectors(other.numVectors), commitData(nullptr), trialData(nullptr), values()
+  { copy(other); }
 
-XC::NodeVectors &XC::NodeVectors::operator=(const NodeVectors &otro)
+XC::NodeVectors &XC::NodeVectors::operator=(const NodeVectors &other)
   {
-    EntCmd::operator=(otro);
-    MovableObject::operator=(otro);
-    copy(otro);
+    EntCmd::operator=(other);
+    MovableObject::operator=(other);
+    copy(other);
     return *this;
   }
 

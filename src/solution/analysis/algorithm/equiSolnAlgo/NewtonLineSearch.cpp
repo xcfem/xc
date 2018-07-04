@@ -77,14 +77,14 @@
 XC::NewtonLineSearch::NewtonLineSearch(AnalysisAggregation *owr)
   :EquiSolnAlgo(owr,EquiALGORITHM_TAGS_NewtonLineSearch), theLineSearch(nullptr) {}
 
-XC::NewtonLineSearch::NewtonLineSearch(const NewtonLineSearch &otro)
-  : EquiSolnAlgo(otro), theLineSearch(nullptr)
-  { if(otro.theLineSearch) copy(otro.theLineSearch); }
+XC::NewtonLineSearch::NewtonLineSearch(const NewtonLineSearch &other)
+  : EquiSolnAlgo(other), theLineSearch(nullptr)
+  { if(other.theLineSearch) copy(other.theLineSearch); }
 
-XC::NewtonLineSearch &XC::NewtonLineSearch::operator=(const NewtonLineSearch &otro)
+XC::NewtonLineSearch &XC::NewtonLineSearch::operator=(const NewtonLineSearch &other)
   {
-    EquiSolnAlgo::operator=(otro);
-    if(otro.theLineSearch) copy(otro.theLineSearch);
+    EquiSolnAlgo::operator=(other);
+    if(other.theLineSearch) copy(other.theLineSearch);
     return *this;
   }
 
