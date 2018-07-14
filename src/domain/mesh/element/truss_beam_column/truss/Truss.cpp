@@ -373,13 +373,14 @@ const XC::Matrix &XC::Truss::getInitialStiff(void) const
     return *theMatrix;
   }
 
-//! @brief Returns the matriz de amortiguamiento.
+//! @brief Returns the damping matrix.
 const XC::Matrix &XC::Truss::getDamp(void) const
   {
-    if(L == 0.0) { // - problem in setDomain() no further warnings
+    if(L == 0.0)
+      { // - problem in setDomain() no further warnings
         theMatrix->Zero();
         return *theMatrix;
-    }
+      }
 
     double eta = theMaterial->getDampTangent();
 

@@ -24,40 +24,41 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//MatrizPtrNod.h
-//Node matrix
+//ElemPtrArray.h
+//Point matrix
 
-#ifndef MATRIZPTRNOD_H
-#define MATRIZPTRNOD_H
+#ifndef MATRIZPTRELEM_H
+#define MATRIZPTRELEM_H
 
-#include "MatrizPtrBase.h"
-#include "xc_basic/src/matrices/m_int.h"
+#include "PtrArrayBase.h"
 #include <vector>
 
 class Pos3d;
 
 namespace XC{
-class Node;
-class SFreedom_Constraint;
 
-//! @ingroup MultiBlockTopologyMR
+  class Element;
+
+//! @ingroup MultiBlockTopology
 //! 
-//! @brief Matriz de pointers to nodes.
-class MatrizPtrNod: public MatrizPtrBase<Node>
+//! \defgroup MultiBlockTopologyMR References to nodes and elements.
+//
+//! @ingroup MultiBlockTopologyMR
+//
+//! @brief Matrix of pointers to elements.
+class ElemPtrArray: public PtrArrayBase<Element>
   {
   protected:
 
   public:
     //! @brief Constructor.
-    MatrizPtrNod(const size_t &f=0,const size_t &c=0)
-      : MatrizPtrBase<Node>(f,c) {}
-    m_int getTags(void) const;
-    void fix(const SFreedom_Constraint &) const;
+    ElemPtrArray(const size_t &f=0,const size_t &c=0)
+      : PtrArrayBase<Element>(f,c) {}
 
-    Node *findNode(const int &tag);
-    const Node *findNode(const int &tag) const;
-    Node *getNearestNode(const Pos3d &p);
-    const Node *getNearestNode(const Pos3d &p) const;
+    Element *findElement(const int &);
+    const Element *findElement(const int &) const;
+    Element *getNearestElement(const Pos3d &p);
+    const Element *getNearestElement(const Pos3d &p) const;
 
 
   };

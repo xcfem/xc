@@ -28,8 +28,8 @@
 
 #include "Element0D.h"
 #include <domain/mesh/node/Node.h>
-#include "preprocessor/multi_block_topology/matrices/TritrizPtrNod.h"
-#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/matrices/NodePtrArray3d.h"
+#include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
 #include "preprocessor/set_mgmt/SetEstruct.h"
 
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
@@ -255,12 +255,12 @@ void XC::Element0D::setUp(int Nd1, int Nd2, const Vector &x, const Vector &yp)
     setUpVectors(x,yp);
   }
 
-XC::TritrizPtrElem XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2) const
+XC::ElemPtrArray3d XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2) const
   {
     const size_t numberOfLayers= f1.getNumNodeLayers();
     const size_t numberOfRows= f1.getNumNodeRows();
     const size_t numberOfColumns= f1.getNumNodeColumns();
-    TritrizPtrElem retval(numberOfLayers,numberOfRows,numberOfColumns);
+    ElemPtrArray3d retval(numberOfLayers,numberOfRows,numberOfColumns);
     const size_t dimf1= f1.Dimension();
     const size_t dimf2= f2.Dimension();
     if(dimf1!=dimf2)

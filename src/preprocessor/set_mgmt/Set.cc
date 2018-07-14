@@ -36,7 +36,7 @@
 #include "preprocessor/multi_block_topology/entities/Face.h"
 #include "preprocessor/multi_block_topology/entities/Body.h"
 #include "preprocessor/multi_block_topology/entities/UniformGrid.h"
-#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
 #include "preprocessor/multi_block_topology/trf/TrfGeom.h"
 #include "utility/matrix/ID.h"
 

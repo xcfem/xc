@@ -239,15 +239,15 @@ class_<XC::Set, bases<XC::SetMeshComp> >("Set")
   .def(self * self)
    ;
 
-typedef XC::RowSet<XC::TritrizPtrNod::var_ref_i_row,XC::TritrizPtrElem::var_ref_i_row> set_i_row;
+typedef XC::RowSet<XC::NodePtrArray3d::var_ref_i_row,XC::ElemPtrArray3d::var_ref_i_row> set_i_row;
 class_<set_i_row, bases<XC::SetEstruct>, boost::noncopyable >("set_i_row", no_init);
 class_<XC::IRowSet, bases<set_i_row>, boost::noncopyable >("IRowSet", no_init);
 
-typedef XC::RowSet<XC::TritrizPtrNod::var_ref_j_row,XC::TritrizPtrElem::var_ref_j_row> set_j_row;
+typedef XC::RowSet<XC::NodePtrArray3d::var_ref_j_row,XC::ElemPtrArray3d::var_ref_j_row> set_j_row;
 class_<set_j_row, bases<XC::SetEstruct>, boost::noncopyable >("set_j_row", no_init);
 class_<XC::JRowSet, bases<set_j_row>, boost::noncopyable >("JRowSet", no_init);
 
-typedef XC::RowSet<XC::TritrizPtrNod::var_ref_k_row,XC::TritrizPtrElem::var_ref_k_row> set_k_row;
+typedef XC::RowSet<XC::NodePtrArray3d::var_ref_k_row,XC::ElemPtrArray3d::var_ref_k_row> set_k_row;
 class_<set_k_row, bases<XC::SetEstruct>, boost::noncopyable >("set_k_row", no_init);
 class_<XC::KRowSet, bases<set_k_row>, boost::noncopyable >("KRowSet", no_init);
 

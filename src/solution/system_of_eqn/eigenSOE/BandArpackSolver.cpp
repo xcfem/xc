@@ -139,7 +139,7 @@ int XC::BandArpackSolver::solve(void)
         return -1;
       }
 
-    int n = theSOE->size; //number of rows of the matriz (and of column becaus it is an square matrix).
+    int n = theSOE->size; //number of rows of the matrix (and of columns because it is an square matrix).
 
     // check iPiv is large enough
     if(iPiv.Size() < n)

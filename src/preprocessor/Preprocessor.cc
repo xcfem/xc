@@ -33,7 +33,7 @@
 #include "domain/mesh/element/Element.h"
 #include "preprocessor/set_mgmt/SetEstruct.h"
 #include "preprocessor/set_mgmt/Set.h"
-#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
 #include "boost/lexical_cast.hpp"
 
 

@@ -24,14 +24,14 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//MatrizPtrBase.h
+//PtrArrayBase.h
 //Pointers in a matrix structure.
 
-#ifndef MATRIZPTRBASE_H
-#define MATRIZPTRBASE_H
+#ifndef PTRARRAYBASE_H
+#define PTRARRAYBASE_H
 
 #include "xc_utils/src/nucleo/EntCmd.h"
-#include "xc_basic/src/matrices/matrizT.h"
+#include "xc_basic/src/matrices/TMatrix.h"
 #include <vector>
 #include "boost/any.hpp"
 #include "boost/lexical_cast.hpp"
@@ -46,10 +46,10 @@ namespace XC{
 //
 //! @brief Base class for matrices of pointers to nodes, elements and points.
 template <class T>
-class MatrizPtrBase: public MatrizT<T *,std::vector<T *> >, public EntCmd
+class PtrArrayBase: public TMatrix<T *,std::vector<T *> >, public EntCmd
   {
   public:
-    typedef MatrizT<T *,std::vector<T *> > m_ptr;
+    typedef TMatrix<T *,std::vector<T *> > m_ptr;
     typedef typename m_ptr::iterator iterator;
     typedef typename m_ptr::const_iterator const_iterator;
     typedef typename m_ptr::value_type value_type;
@@ -59,7 +59,7 @@ class MatrizPtrBase: public MatrizT<T *,std::vector<T *> >, public EntCmd
 
 
     //! @brief Constructor.
-    MatrizPtrBase(const size_t &f=0,const size_t &c=0)
+    PtrArrayBase(const size_t &f=0,const size_t &c=0)
       : m_ptr(f,c,nullptr), EntCmd() {}
   public:
     bool Null(void) const;
@@ -77,12 +77,12 @@ class MatrizPtrBase: public MatrizT<T *,std::vector<T *> >, public EntCmd
 
 //! @brief Matrix dimensions.
 template <class T>
-void XC::MatrizPtrBase<T>::dim(const size_t &nRows,const size_t &numberOfColumns)
+void XC::PtrArrayBase<T>::dim(const size_t &nRows,const size_t &numberOfColumns)
   { this->resize(nRows,numberOfColumns,nullptr); }
 
 //! @brief Returns true if it's empty or the pointers are NULL.
 template <class T>
-bool MatrizPtrBase<T>::Null(void) const
+bool PtrArrayBase<T>::Null(void) const
   {
     if(this->empty())
       return true;
@@ -92,7 +92,7 @@ bool MatrizPtrBase<T>::Null(void) const
 
 //! @brief Returns true if it's empty or any of the pointers are NULL.
 template <class T>
-bool MatrizPtrBase<T>::HasNull(void) const
+bool PtrArrayBase<T>::HasNull(void) const
   {
     bool retval= false;
     if(Null())
@@ -115,7 +115,7 @@ bool MatrizPtrBase<T>::HasNull(void) const
 //! @brief Asks each of the objects in the row to execute
 //! the code being passed as parameter.
 template <class T>
-std::vector<int> XC::MatrizPtrBase<T>::getRowObjectsTags(const size_t &f)
+std::vector<int> XC::PtrArrayBase<T>::getRowObjectsTags(const size_t &f)
   {
     const std::string nmbBlq= getClassName()+":row_objects:"+boost::lexical_cast<std::string>(f);
     const size_t numCols= this->getNumberOfColumns();
@@ -128,7 +128,7 @@ std::vector<int> XC::MatrizPtrBase<T>::getRowObjectsTags(const size_t &f)
 //! @brief Asks each of the objects in the column to execute
 //! the code being passed as parameter.
 template <class T>
-std::vector<int>  XC::MatrizPtrBase<T>::getColumnObjectsTags(const size_t &c)
+std::vector<int>  XC::PtrArrayBase<T>::getColumnObjectsTags(const size_t &c)
   {
     const std::string nmbBlq= getClassName()+":column_objects:"+boost::lexical_cast<std::string>(c);
     const size_t n_rows= this->getNumberOfRows();
@@ -141,7 +141,7 @@ std::vector<int>  XC::MatrizPtrBase<T>::getColumnObjectsTags(const size_t &c)
 //! @brief Asks each of the objects at the interior of the row to execute
 //! the code being passed as parameter.
 template <class T>
-std::vector<int> XC::MatrizPtrBase<T>::getRowInteriorObjectsTags(const size_t &f)
+std::vector<int> XC::PtrArrayBase<T>::getRowInteriorObjectsTags(const size_t &f)
   {
     const std::string nmbBlq= getClassName()+":row_interior_objects:"+boost::lexical_cast<std::string>(f);
     const size_t numCols= this->getNumberOfColumns();
@@ -154,7 +154,7 @@ std::vector<int> XC::MatrizPtrBase<T>::getRowInteriorObjectsTags(const size_t &f
 //! @brief Asks each of the objects at the interior of the column to execute
 //! the code being passed as parameter.
 template <class T>
-std::vector<int> XC::MatrizPtrBase<T>::getColumnInteriorObjectsTags(const size_t &c)
+std::vector<int> XC::PtrArrayBase<T>::getColumnInteriorObjectsTags(const size_t &c)
   {
     const std::string nmbBlq= getClassName()+":column_interior_objects:"+boost::lexical_cast<std::string>(c);
     const size_t n_rows= this->getNumberOfRows();
@@ -167,7 +167,7 @@ std::vector<int> XC::MatrizPtrBase<T>::getColumnInteriorObjectsTags(const size_t
 //! @brief Asks each of the objects at the interior to execute
 //! the code being passed as parameter.
 template <class T>
-std::vector<int> XC::MatrizPtrBase<T>::getTagsInteriorObjs(void)
+std::vector<int> XC::PtrArrayBase<T>::getTagsInteriorObjs(void)
   {
     const size_t n_rows= this->getNumberOfRows();
     const size_t numCols= this->getNumberOfColumns();
@@ -188,7 +188,7 @@ std::vector<int> XC::MatrizPtrBase<T>::getTagsInteriorObjs(void)
   }
 
 template <class T>
-std::vector<int> XC::MatrizPtrBase<T>::getTagsObjs(void)
+std::vector<int> XC::PtrArrayBase<T>::getTagsObjs(void)
   {
     const size_t n_rows= this->getNumberOfRows();
     const size_t numCols= this->getNumberOfColumns();

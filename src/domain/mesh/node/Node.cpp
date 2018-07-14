@@ -62,7 +62,6 @@
 #include <cstdlib>
 #include <domain/component/ContinuaReprComponent.h>
 #include <utility/matrix/Vector.h>
-#include "xc_basic/src/matrices/matrizExpr.h"
 #include "utility/actor/actor/MovableVector.h"
 #include "utility/actor/actor/MovableMatrix.h"
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
@@ -1148,7 +1147,7 @@ int XC::Node::revertToStart(void)
     return 0;
   }
 
-//! @brief Return the matriz de masas of the node.
+//! @brief Return the mass matrix of the node.
 //!
 //! Returns the mass matrix set for the node, which is a matrix of size
 //! ndof,ndof. This matrix is equal to that set in setMass()
@@ -1167,7 +1166,7 @@ int XC::Node::setRayleighDampingFactor(double alpham)
   }
 
 
-//! @brief Return the matriz de amortiguamiento of the node.
+//! @brief Return the damping matrix of the node.
 const XC::Matrix &XC::Node::getDamp(void)
   {
     // make sure it was created before we return it
@@ -1216,7 +1215,7 @@ const XC::Matrix &XC::Node::getDampSensitivity(void)
       }
   }
 
-//! @brief Set la matriz de masas to the node.
+//! @brief Set the mass matrix of the node.
 //!
 //! Sets the value of the mass at the node. A check is made to ensure that
 //! the \p mass has the same dimensions of the mass matrix associated with the

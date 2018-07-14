@@ -383,7 +383,7 @@ double XC::GeomSection::getCompressedStrutWidth(const Segment2d &lever_arm) cons
   {
     const Poligono2d contour= append_mid_points(getRegionsContour());
     const size_t num_vertices= contour.GetNumVertices();
-    Recta2d perp= lever_arm.Mediatriz();
+    Recta2d perp= lever_arm.getPerpendicularBisector();
     Segment2d ancho= contour.Clip(perp);
     Pos2d p= intersection_point(ancho,lever_arm);
     assert(p.exists());

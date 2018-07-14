@@ -167,7 +167,7 @@ int XC::SymBandEigenSolver::solve(int nModes)
     double *A= theSOE->A.getDataPtr();
     int numSuperD = theSOE->numSuperD;
     int size = n;
-    if(M) //Parece que la matriz M ha de ser DIAGONAL.
+    if(M) //Its seems that the M matrix must be DIAGONAL.
       {
         int i,j;
         bool singular = false;
@@ -201,8 +201,8 @@ int XC::SymBandEigenSolver::solve(int nModes)
           }
       }
 
-    // Llama a la subrutina LAPACK que calcula eigenvalues y eigenvectors
-    // de la matriz A transformada previamente.
+    // Calls the LAPACK routine that computes the eigenvalues and eigenvectors
+    // of the matrix A previously transforme.
     dsbevx_(jobz, range, uplo, &n, &kd, ab, &ldab,
 	    &q[0], &ldq, &vl, &vu, &il, &iu, &abstol, &m,
 	    eigenvalue.getDataPtr(), eigenvector.getDataPtr(), &ldz, work.getDataPtr(), &iwork[0], &ifail[0], &info);

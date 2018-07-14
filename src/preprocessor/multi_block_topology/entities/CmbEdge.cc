@@ -35,7 +35,7 @@
 #include "xc_utils/src/geom/d1/Segment3d.h"
 #include "xc_utils/src/geom/d1/Polilinea3d.h"
 
-#include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
+#include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
 #include "xc_basic/src/text/text_string.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
@@ -122,12 +122,12 @@ const XC::Vector &XC::CmbEdge::Side::getTang(const double &s) const
   { return edge->getTang(s); }
 
 //! @brief Return the positions on the line.
-MatrizPos3d XC::CmbEdge::Side::get_positions(void) const
+Pos3dArray XC::CmbEdge::Side::get_positions(void) const
   {
     if(edge)
       return edge->get_positions();
     else
-      return MatrizPos3d();
+      return Pos3dArray();
   }
 
 //! @brief Return the identifiers of the nodes of the forward sequence.
@@ -149,7 +149,7 @@ std::vector<int> XC::CmbEdge::Side::getTagsNodesReverse(void) const
   }
 
 //! @brief Return the positions of the nodes of the forward sequence.
-MatrizPos3d XC::CmbEdge::Side::getNodePosForward(void) const
+Pos3dArray XC::CmbEdge::Side::getNodePosForward(void) const
   {
     if(forward)
       return edge->getNodePosForward();
@@ -158,7 +158,7 @@ MatrizPos3d XC::CmbEdge::Side::getNodePosForward(void) const
   }
 
 //! @brief Return the positions of the nodes of the reverse sequence.
-MatrizPos3d XC::CmbEdge::Side::getNodePosReverse(void) const
+Pos3dArray XC::CmbEdge::Side::getNodePosReverse(void) const
   {
     if(forward)
       return edge->getNodePosReverse();
@@ -414,17 +414,17 @@ void XC::CmbEdge::SetNDiv(const size_t &nd)
   }
 
 //! @brief Return positions along the object.
-MatrizPos3d XC::CmbEdge::get_positions(void) const
+Pos3dArray XC::CmbEdge::get_positions(void) const
   {
     const size_t npos= NDiv()+1; //Number of positions.
-    MatrizPos3d retval(npos);
+    Pos3dArray retval(npos);
     if(!lines.empty())
       {
         size_t cont= 1;
         for(std::deque<Side>::const_iterator i=lines.begin();i!=lines.end();i++)
           {
             const Edge *e= (*i).getEdge();
-            MatrizPos3d tmp= e->get_positions();
+            Pos3dArray tmp= e->get_positions();
             const size_t sz= tmp.size()-1; //The last one is not added.
             for(size_t i=1;i<sz;i++)
               {
@@ -460,7 +460,7 @@ void XC::CmbEdge::genMesh(meshing_dir dm)
     line_meshing(dm);
     
     //pointers to nodes.
-    ttzNodes= TritrizPtrNod(1,NDiv()+1,1);
+    ttzNodes= NodePtrArray3d(1,NDiv()+1,1);
     size_t offset_j= 0;// initial column.
     for(std::deque<Side>::const_iterator i=lines.begin();i!=lines.end();i++)
       {
@@ -468,7 +468,7 @@ void XC::CmbEdge::genMesh(meshing_dir dm)
         offset_j+= (*i).getEdge()->getNumNodeRows()-1;
       }
     //pointers to elements.
-    ttzElements= TritrizPtrElem(1,NDiv(),1);
+    ttzElements= ElemPtrArray3d(1,NDiv(),1);
     offset_j= 0;// initial column.
     for(std::deque<Side>::const_iterator i=lines.begin();i!=lines.end();i++)
       {

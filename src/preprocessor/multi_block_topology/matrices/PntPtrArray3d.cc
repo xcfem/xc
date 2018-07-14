@@ -24,9 +24,9 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//TritrizPtrPnt.cc
+//PntPtrArray3d.cc
 
-#include "TritrizPtrPnt.h"
+#include "PntPtrArray3d.h"
 #include "preprocessor/multi_block_topology/entities/Pnt.h"
 #include "xc_basic/src/funciones/algebra/integ_num.h"
 
@@ -42,51 +42,54 @@
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/node/Node.h"
 #include "preprocessor/multi_block_topology/MultiBlockTopology.h"
-#include "xc_utils/src/geom/pos_vec/RangoTritriz.h"
-#include "xc_basic/src/matrices/RangoMatriz.h"
+#include "xc_utils/src/geom/pos_vec/Array3dRange.h"
+#include "xc_basic/src/matrices/MatrixRange.h"
 
 
 //! @brief Default constructor.
-XC::TritrizPtrPnt::TritrizPtrPnt(const size_t n_layers)
-  : TritrizPtrBase<MatrizPtrPnt>(n_layers) {}
+XC::PntPtrArray3d::PntPtrArray3d(const size_t n_layers)
+  : PtrArray3dBase<PntPtrArray>(n_layers) {}
 
 //! @brief Constructor.
-XC::TritrizPtrPnt::TritrizPtrPnt(const size_t n_layers,const size_t n_rows,const size_t cols)
-  : TritrizPtrBase<MatrizPtrPnt>(n_layers,n_rows,cols) {}
+XC::PntPtrArray3d::PntPtrArray3d(const size_t n_layers,const size_t n_rows,const size_t cols)
+  : PtrArray3dBase<PntPtrArray>(n_layers,n_rows,cols) {}
 
-void XC::TritrizPtrPnt::setPnt(const size_t &i,const size_t &j,const size_t &k,const int &id_point)
+void XC::PntPtrArray3d::setPnt(const size_t &i,const size_t &j,const size_t &k,const int &id_point)
   {
     if(check_range(i,j,k))
       {
         MultiBlockTopology *c= getMultiBlockTopology();
-        Pnt *tmp= TritrizPtrPnt::operator()(i,j,k);
+        Pnt *tmp= PntPtrArray3d::operator()(i,j,k);
         if(tmp!= nullptr)
-          std::clog << "Warning!, position: (" 
+          std::clog << "PntPtrArray3d::" << __FUNCTION__
+	            << "; warning!, position: (" 
                     << i << "," << j << "," << k 
                     << ") is already assigned to point: "
                     << tmp->getName() << std::endl;
-        TritrizPtrPnt::operator()(i,j,k)= c->getPoints().busca(id_point);
+        PntPtrArray3d::operator()(i,j,k)= c->getPoints().busca(id_point);
       }
     else
-     std::cerr << "(MatrizPtrPnt::setPnt): '"
-               << "'; indices: ("
+     std::cerr << "PntPtrArray3d::" << __FUNCTION__
+	       << "; indices: ("
                << i << ','  << j << ',' << k << ") out of range;"
-               << " number of layers: " << getNumberOfLayers() << " number of rows: " << getNumberOfRows() << " number of columns: " << getNumberOfColumns()
+               << " number of layers: " << getNumberOfLayers()
+	       << " number of rows: " << getNumberOfRows()
+	       << " number of columns: " << getNumberOfColumns()
                << std::endl;
   }
 
-XC::Pnt *XC::TritrizPtrPnt::getPnt(const size_t &i,const size_t &j,const size_t &k)
+XC::Pnt *XC::PntPtrArray3d::getPnt(const size_t &i,const size_t &j,const size_t &k)
   { return getAtIJK(i,j,k); }
 
 //! @brief Return the framework centroid.
-Pos3d XC::TritrizPtrPnt::getCentroide(void) const
+Pos3d XC::PntPtrArray3d::getCentroide(void) const
   {
     Pos3d retval;
     const size_t numberOfLayers= getNumberOfLayers();
     GEOM_FT x= 0.0, y= 0.0, z= 0.0;
     for(size_t i=1;i<=numberOfLayers;i++)
       {
-        const MatrizPtrPnt &layer= operator()(i);
+        const PntPtrArray &layer= operator()(i);
         Pos3d p= layer.getCentroide();
         x+= p.x();
         y+= p.y();
@@ -100,13 +103,13 @@ Pos3d XC::TritrizPtrPnt::getCentroide(void) const
 
 //! @brief Returns (if it exists) a pointer to the point
 //! identified by the tag being passed as parameter.
-XC::Pnt *XC::TritrizPtrPnt::findPoint(const int &tag)
+XC::Pnt *XC::PntPtrArray3d::findPoint(const int &tag)
   {
     Pnt *retval= nullptr;
     const size_t numberOfLayers= getNumberOfLayers();
     for(size_t i=1;i<=numberOfLayers;i++)
       {
-        MatrizPtrPnt &layer= operator()(i);
+        PntPtrArray &layer= operator()(i);
         retval= layer.findPoint(tag);
         if(retval) break;
       }
@@ -114,7 +117,7 @@ XC::Pnt *XC::TritrizPtrPnt::findPoint(const int &tag)
   }
 
 //! @brief Returns a pointer to the MultiBlockTopology object.
-const XC::MultiBlockTopology *XC::TritrizPtrPnt::getMultiBlockTopology(void) const
+const XC::MultiBlockTopology *XC::PntPtrArray3d::getMultiBlockTopology(void) const
   {
     const MultiBlockTopology *retval= nullptr;
     const EntCmd *ptr= Owner();
@@ -127,7 +130,7 @@ const XC::MultiBlockTopology *XC::TritrizPtrPnt::getMultiBlockTopology(void) con
   }
 
 //! @brief Returns a pointer to the MultiBlockTopology object.
-XC::MultiBlockTopology *XC::TritrizPtrPnt::getMultiBlockTopology(void)
+XC::MultiBlockTopology *XC::PntPtrArray3d::getMultiBlockTopology(void)
   {
     MultiBlockTopology *retval= nullptr;
     EntCmd *ptr= Owner();
@@ -140,14 +143,14 @@ XC::MultiBlockTopology *XC::TritrizPtrPnt::getMultiBlockTopology(void)
   }
 
 //! @brief Return the point closest to the one being passed as parameter.
-const XC::Pnt *XC::TritrizPtrPnt::getNearestPnt(const Pos3d &p) const
+const XC::Pnt *XC::PntPtrArray3d::getNearestPnt(const Pos3d &p) const
   {
-    TritrizPtrPnt *this_no_const= const_cast<TritrizPtrPnt *>(this);
+    PntPtrArray3d *this_no_const= const_cast<PntPtrArray3d *>(this);
     return this_no_const->getNearestPnt(p);
   }
 
 //! @brief Return the point closest to the one being passed as parameter.
-XC::Pnt *XC::TritrizPtrPnt::getNearestPnt(const Pos3d &p)
+XC::Pnt *XC::PntPtrArray3d::getNearestPnt(const Pos3d &p)
   {
     Pnt *retval= nullptr, *ptrPnt= nullptr;
     const size_t numberOfLayers= getNumberOfLayers();
@@ -155,7 +158,7 @@ XC::Pnt *XC::TritrizPtrPnt::getNearestPnt(const Pos3d &p)
     double tmp;
     for(size_t i=1;i<=numberOfLayers;i++)
       {
-        MatrizPtrPnt &layer= operator()(i);
+        PntPtrArray &layer= operator()(i);
         ptrPnt= layer.getNearestPnt(p);
         if(ptrPnt)
           {
@@ -172,13 +175,13 @@ XC::Pnt *XC::TritrizPtrPnt::getNearestPnt(const Pos3d &p)
 
 //! @brief Returns (if it exists) a pointer to the point
 //! identified by the tag being passed as parameter.
-const XC::Pnt *XC::TritrizPtrPnt::findPoint(const int &tag) const
+const XC::Pnt *XC::PntPtrArray3d::findPoint(const int &tag) const
   {
     const Pnt *retval= nullptr;
     const size_t numberOfLayers= getNumberOfLayers();
     for(size_t i=1;i<=numberOfLayers;i++)
       {
-        const MatrizPtrPnt &layer= operator()(i);
+        const PntPtrArray &layer= operator()(i);
         retval= layer.findPoint(tag);
         if(retval) break;
       }
@@ -190,7 +193,7 @@ const XC::Pnt *XC::TritrizPtrPnt::findPoint(const int &tag) const
 //! indexes of the point the values of the offsetIndices vector; i.e.:
 //! (i,j,k)->(i+offsetIndices[0],j+offsetIndices[1],k+offsetIndices[2])
 //! and moving the by the vectorOffset vector.
-std::deque<size_t> XC::TritrizPtrPnt::copyPoints(const RangoTritriz &rango,const std::vector<size_t> &offsetIndices,const Vector3d &vectorOffset= Vector3d())
+std::deque<size_t> XC::PntPtrArray3d::copyPoints(const Array3dRange &rango,const std::vector<size_t> &offsetIndices,const Vector3d &vectorOffset= Vector3d())
   {
     MultiBlockTopology *mbt= getMultiBlockTopology();
     std::deque<size_t> retval;
@@ -213,9 +216,9 @@ std::deque<size_t> XC::TritrizPtrPnt::copyPoints(const RangoTritriz &rango,const
   }  
 
 //! @brief Return the points del rango being passed as parameter.
-XC::TritrizPtrPnt XC::TritrizPtrPnt::getPointsOnRange(const RangoTritriz &rango)
+XC::PntPtrArray3d XC::PntPtrArray3d::getPointsOnRange(const Array3dRange &rango)
   {
-    TritrizPtrPnt retval(rango.getNumberOfLayers(),rango.getNumberOfRows(),rango.getNumberOfColumns());
+    PntPtrArray3d retval(rango.getNumberOfLayers(),rango.getNumberOfRows(),rango.getNumberOfColumns());
     const RangoIndice &layer_range= rango.getLayerRange();
     const RangoIndice &row_range= rango.getRowRange();
     const RangoIndice &rcols= rango.getColumnRange();
@@ -234,7 +237,7 @@ XC::TritrizPtrPnt XC::TritrizPtrPnt::getPointsOnRange(const RangoTritriz &rango)
   }
 
 //! @brief Return the points which indices are being passed as parameter.
-XC::Pnt *XC::TritrizPtrPnt::getPoint(const VIndices &iPoint)
+XC::Pnt *XC::PntPtrArray3d::getPoint(const VIndices &iPoint)
   {
     Pnt *retval= nullptr;
     if(iPoint.size()>2)
@@ -243,19 +246,19 @@ XC::Pnt *XC::TritrizPtrPnt::getPoint(const VIndices &iPoint)
           { retval= (*this)(iPoint[0],iPoint[1],iPoint[2]); }
       }
     else
-      std::cerr  << "::" << __FUNCTION__
-		<< "; vector of indexes: "
-                << iPoint << " is not valid." << std::endl;
+      std::cerr  << "PntPtrArray3d::" << __FUNCTION__
+		 << "; vector of indexes: "
+                 << iPoint << " is not valid." << std::endl;
     return retval;    
   }
 
 //! @brief Return the points which indices are being passed as parameter.
-XC::TritrizPtrPnt XC::TritrizPtrPnt::getPoints(const TritrizIndices &indices)
+XC::PntPtrArray3d XC::PntPtrArray3d::getPoints(const Indices3dArray &indices)
   {
     const size_t numberOfLayers= indices.getNumberOfLayers();
     const size_t numberOfRows= indices.getNumberOfRows();
     const size_t numberOfColumns= indices.getNumberOfColumns();
-    TritrizPtrPnt retval(numberOfLayers,numberOfRows,numberOfColumns);
+    PntPtrArray3d retval(numberOfLayers,numberOfRows,numberOfColumns);
     for(size_t i= 1;i<= numberOfLayers;i++)
       for(size_t j= 1;j<= numberOfRows;j++)
         for(size_t k= 1;k<= numberOfLayers;k++)
@@ -264,7 +267,7 @@ XC::TritrizPtrPnt XC::TritrizPtrPnt::getPoints(const TritrizIndices &indices)
             if(iPoint.size()>2)
               { retval(i,j,k)= getPoint(iPoint); }
             else
-	      std::cerr  << "::" << __FUNCTION__
+	      std::cerr << "PntPtrArray3d::" << __FUNCTION__
 			<< "; vector of indexes: "
                         << iPoint << " is not valid." << std::endl;
           }
@@ -272,11 +275,11 @@ XC::TritrizPtrPnt XC::TritrizPtrPnt::getPoints(const TritrizIndices &indices)
   }
 
 //! @brief Return the points which indices are being passed as parameters.
-XC::MatrizPtrPnt XC::TritrizPtrPnt::getPoints(const MatrizIndices &indices)
+XC::PntPtrArray XC::PntPtrArray3d::getPoints(const IndicesMatrix &indices)
   {
     const size_t numberOfRows= indices.getNumberOfRows();
     const size_t numberOfColumns= indices.getNumberOfColumns();
-    MatrizPtrPnt retval(numberOfRows,numberOfColumns);
+    PntPtrArray retval(numberOfRows,numberOfColumns);
     for(size_t i= 1;i<= numberOfRows;i++)
       for(size_t j= 1;j<= numberOfColumns;j++)
         {
@@ -284,7 +287,7 @@ XC::MatrizPtrPnt XC::TritrizPtrPnt::getPoints(const MatrizIndices &indices)
           if(iPoint.size()>2)
             { retval(i,j)= getPoint(iPoint); }
           else
-            std::cerr  << "::" << __FUNCTION__
+            std::cerr << "PntPtrArray3d::" << __FUNCTION__
 		      << "; vector of indexes: "
                       << iPoint << " is not valid." << std::endl;
         }
@@ -295,11 +298,11 @@ XC::MatrizPtrPnt XC::TritrizPtrPnt::getPoints(const MatrizIndices &indices)
 //! of the tritrix that result for adding to the indexex (i,j,k) of each point
 //! the values of the vector offsetIndices i. e.:
 //! Point (i,j,k): (i+offsetIndices(i,j,k)[0],j+offsetIndices(i,j,k)[1],k+offsetIndices(i,j,k)[2])
-XC::TritrizPtrPnt XC::TritrizPtrPnt::getCellPoints(const size_t &i,const size_t &j,const size_t &k,const TritrizIndices &offsetIndices)
+XC::PntPtrArray3d XC::PntPtrArray3d::getCellPoints(const size_t &i,const size_t &j,const size_t &k,const Indices3dArray &offsetIndices)
   {
     VIndices org(3);
     org[0]= i;org[1]= j;org[2]= k;
-    TritrizIndices tmp(offsetIndices);
+    Indices3dArray tmp(offsetIndices);
     tmp.Offset(org);
     return getPoints(tmp);
   }
@@ -308,11 +311,11 @@ XC::TritrizPtrPnt XC::TritrizPtrPnt::getCellPoints(const size_t &i,const size_t 
 //! of the tritrix that result for adding to the indexes (i,j) of each point
 //! the values of the vector offsetIndices i. e.:
 //! Point (i,j): (i+offsetIndices(i,j)[0],j+offsetIndices(i,j)[1])
-XC::MatrizPtrPnt XC::TritrizPtrPnt::getCellPoints(const size_t &i,const size_t &j,const MatrizIndices &offsetIndices)
+XC::PntPtrArray XC::PntPtrArray3d::getCellPoints(const size_t &i,const size_t &j,const IndicesMatrix &offsetIndices)
   {
     VIndices org(2);
     org[0]= i;org[1]= j;
-    MatrizIndices tmp(offsetIndices);
+    IndicesMatrix tmp(offsetIndices);
     tmp.Offset(org);
     return getPoints(tmp);
   }
@@ -326,7 +329,7 @@ XC::MatrizPtrPnt XC::TritrizPtrPnt::getCellPoints(const size_t &i,const size_t &
 // //! ...
 // //! @param nf: Number of rows of the matrix that holds the pointers to point.
 // //! @param nc: Number of columns of the matrix that holds the pointers to point.
-// std::deque<size_t> XC::TritrizPtrPnt::CreaQuads(const RangoTritriz &rango,const size_t &nf,const size_t &nc,const m_int &offsetIndices,const double &elemSizeI,const double &elemeSizeJ)
+// std::deque<size_t> XC::PntPtrArray3d::CreaQuads(const Array3dRange &rango,const size_t &nf,const size_t &nc,const m_int &offsetIndices,const double &elemSizeI,const double &elemeSizeJ)
 //   {
 //     MultiBlockTopology *mbt= getMultiBlockTopology();
 //     std::deque<size_t> retval;
@@ -348,7 +351,7 @@ XC::MatrizPtrPnt XC::TritrizPtrPnt::getCellPoints(const size_t &i,const size_t &
 //     return retval;
 //   }  
 
-void XC::TritrizPtrPnt::Print(std::ostream &os) const
+void XC::PntPtrArray3d::Print(std::ostream &os) const
   {
     const size_t numberOfLayers= getNumberOfLayers();
     const size_t numberOfRows= getNumberOfRows();
@@ -365,27 +368,27 @@ void XC::TritrizPtrPnt::Print(std::ostream &os) const
       }
   }
 
-std::ostream &XC::operator<<(std::ostream &os, const TritrizPtrPnt &t)
+std::ostream &XC::operator<<(std::ostream &os, const PntPtrArray3d &t)
   {
     t.Print(os);
     return os;
   }
 
 //! @brief Return the indexes of the points (j,k),(j+1,k),(j+1,k+1),(j,k+1). 
-std::vector<size_t> XC::getIdPointsQuad(const TritrizPtrPnt::constant_i_layer_const_ref &points,const size_t &j,const size_t &k)
+std::vector<size_t> XC::getIdPointsQuad(const PntPtrArray3d::constant_i_layer_const_ref &points,const size_t &j,const size_t &k)
   {
     std::vector<size_t> retval(4,-1);
     const size_t numberOfRows= points.getNumberOfRows();
     const size_t numberOfColumns= points.getNumberOfColumns();
     if(j>=numberOfRows)
       {
-        std::cerr  << __FUNCTION__
+        std::cerr << "PntPtrArray3d::" << __FUNCTION__
 	          << "; row index j= " << j << " out of range.\n";
         return retval;
       }
     if(k>=numberOfColumns)
       {
-        std::cerr  << __FUNCTION__
+        std::cerr << "PntPtrArray3d::" << __FUNCTION__
 	          << "; column index k= " << k << " out of range.\n";
         return retval;
       }
@@ -397,8 +400,8 @@ std::vector<size_t> XC::getIdPointsQuad(const TritrizPtrPnt::constant_i_layer_co
       {
         retval[0]= ptr->GetTag();
         if(retval[0]<0)
-          std::cerr << __FUNCTION__
-		    << "error when obtaining the point identifier ("
+          std::cerr << "PntPtrArray3d::" << __FUNCTION__
+		    << "; error when obtaining the point identifier ("
 		    << j << ',' << k << ").\n";
         p1= ptr->GetPos();
       }
@@ -409,8 +412,8 @@ std::vector<size_t> XC::getIdPointsQuad(const TritrizPtrPnt::constant_i_layer_co
       {
         retval[1]= ptr->GetTag();
         if(retval[1]<0)
-          std::cerr << __FUNCTION__
-		    << "error when obtaining the point identifier ("
+          std::cerr << "PntPtrArray3d::" << __FUNCTION__
+		    << "; error when obtaining the point identifier ("
 		    << j << ',' << k+1 << ").\n";
         p2= ptr->GetPos();
       }
@@ -421,8 +424,8 @@ std::vector<size_t> XC::getIdPointsQuad(const TritrizPtrPnt::constant_i_layer_co
       {
         retval[2]= ptr->GetTag();
         if(retval[2]<0)
-          std::cerr << __FUNCTION__
-		    << "error when obtaining the point identifier ("
+          std::cerr << "PntPtrArray3d::" << __FUNCTION__
+		    << "; error when obtaining the point identifier ("
 		    << j+1 << ',' << k+1 << ").\n";
         p3= ptr->GetPos();
       }
@@ -433,8 +436,8 @@ std::vector<size_t> XC::getIdPointsQuad(const TritrizPtrPnt::constant_i_layer_co
       {
         retval[3]=ptr->GetTag();
         if(retval[3]<0)
-          std::cerr << __FUNCTION__
-		    << "error when obtaining the point identifier ("
+          std::cerr << "PntPtrArray3d::" << __FUNCTION__
+		    << "; error when obtaining the point identifier ("
 		    << j+1 << ',' << k << ").\n";
         p4= ptr->GetPos();
       }
@@ -465,12 +468,13 @@ std::vector<size_t> XC::getIdPointsQuad(const TritrizPtrPnt::constant_i_layer_co
     const double area= tmp.getArea();
     if(area<1e-3)
       {
-        std::cerr << "When computing cell with indexes (" << j << ',' << k
-                  << ") a very small area was obtained (" << area << ").\n";
-        std::cerr << " position of the point (j,k) " << p1 << std::endl;
-	std::cerr << " position of the point (j+1,k) " << p2 << std::endl;
-	std::cerr << " position of the point (j+1,k+1) " << p3 << std::endl;
-	std::cerr << " position of the point (1,k+1) " << p4 << std::endl;
+        std::cerr << "PntPtrArray3d::" << __FUNCTION__
+		  << "; When computing cell with indexes (" << j << ',' << k
+                  << ") a very small area was obtained (" << area << ").\n"
+		  << " position of the point (j,k) " << p1 << std::endl
+		  << " position of the point (j+1,k) " << p2 << std::endl
+		  << " position of the point (j+1,k+1) " << p3 << std::endl
+		  << " position of the point (1,k+1) " << p4 << std::endl;
       }
     return retval;
   }

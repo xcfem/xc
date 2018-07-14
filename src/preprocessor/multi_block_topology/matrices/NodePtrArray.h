@@ -24,53 +24,40 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//MatrizPtrPnt.h
-//Point matrix.
+//NodePtrArray.h
+//Node matrix
 
-#ifndef MATRIZPTRPNT_H
-#define MATRIZPTRPNT_H
+#ifndef NODEPTRARRAY_H
+#define NODEPTRARRAY_H
 
-#include "MatrizPtrBase.h"
+#include "PtrArrayBase.h"
 #include "xc_basic/src/matrices/m_int.h"
 #include <vector>
 
 class Pos3d;
-class RangoMatriz;
-class Vector3d;
 
 namespace XC{
-class Pnt;
+class Node;
 class SFreedom_Constraint;
-class MultiBlockTopology;
 
 //! @ingroup MultiBlockTopologyMR
 //! 
-//! @brief Pointers to points in a matrix structure.
-class MatrizPtrPnt: public MatrizPtrBase<Pnt>
+//! @brief Two-dimensional array of pointers to nodes.
+class NodePtrArray: public PtrArrayBase<Node>
   {
   protected:
 
-
-    friend class MultiBlockTopology;
   public:
     //! @brief Constructor.
-    MatrizPtrPnt(const size_t &f=0,const size_t &c=0)
-      : MatrizPtrBase<Pnt>(f,c) {}
+    NodePtrArray(const size_t &f=0,const size_t &c=0)
+      : PtrArrayBase<Node>(f,c) {}
     m_int getTags(void) const;
+    void fix(const SFreedom_Constraint &) const;
 
-    const MultiBlockTopology *getMultiBlockTopology(void) const;
-    MultiBlockTopology *getMultiBlockTopology(void);
-
-    void setPnt(const size_t &,const size_t &,const int &);
-    Pnt *getPnt(const size_t &,const size_t &);
-
-    Pnt *findPoint(const size_t &);
-    const Pnt *findPoint(const size_t &) const;
-    Pnt *getNearestPnt(const Pos3d &p);
-    const Pnt *getNearestPnt(const Pos3d &p) const;
-    std::deque<size_t> copyPoints(const RangoMatriz &,const std::vector<size_t> &,const Vector3d &);
-
-    Pos3d getCentroide(void) const;
+    Node *findNode(const int &tag);
+    const Node *findNode(const int &tag) const;
+    Node *getNearestNode(const Pos3d &p);
+    const Node *getNearestNode(const Pos3d &p) const;
 
 
   };

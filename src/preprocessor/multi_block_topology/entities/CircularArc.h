@@ -45,7 +45,7 @@ class CircularArc: public LineBase
     Pnt *p3; //!< Midpoint of the arc.
   protected:
     const CircularSector3d get_sector_circular3d(void) const;
-    MatrizPos3d get_positions(void) const;
+    Pos3dArray get_positions(void) const;
     bool check_points(void) const;
   public:
     CircularArc(Preprocessor *m);

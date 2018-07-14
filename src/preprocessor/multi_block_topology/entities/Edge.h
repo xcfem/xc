@@ -33,7 +33,7 @@
 
 
 class BND3d;
-class MatrizPos3d;
+class Pos3dArray;
 
 namespace XC {
 class Pnt;
@@ -99,8 +99,8 @@ class Edge: public EntMdlr
     virtual void create_nodes(void);
     virtual void genMesh(meshing_dir dm);
 
-    virtual MatrizPos3d get_positions(void) const= 0;
-    virtual MatrizPos3d get_nodes_pos(void) const;
+    virtual Pos3dArray get_positions(void) const= 0;
+    virtual Pos3dArray get_nodes_pos(void) const;
 
     virtual Node *getNode(const size_t &i1,const size_t &j,const size_t &k=1);
     virtual const Node *getNode(const size_t &i,const size_t &j,const size_t &k=1) const;
@@ -117,8 +117,8 @@ class Edge: public EntMdlr
 
     std::vector<int> getTagsNodesForward(void) const;
     std::vector<int> getTagsNodesReverse(void) const;
-    MatrizPos3d getNodePosForward(void) const;
-    MatrizPos3d getNodePosReverse(void) const;
+    Pos3dArray getNodePosForward(void) const;
+    Pos3dArray getNodePosReverse(void) const;
 
     std::set<SetBase *> get_sets(void) const;
     void add_to_sets(std::set<SetBase *> &);

@@ -27,7 +27,7 @@
 //Framework3d.cc
 
 #include "Framework3d.h"
-#include "TritrizPtrPnt.h"
+#include "PntPtrArray3d.h"
 #include "preprocessor/Preprocessor.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
@@ -39,15 +39,15 @@
 
 //! @brief Constructor.
 XC::Framework3d::Framework3d(MultiBlockTopology *mbt)
-  : ModelComponentContainer<TritrizPtrPnt>(mbt) {}
+  : ModelComponentContainer<PntPtrArray3d>(mbt) {}
 
 //! @brief Creates a new three dimensional framework.
-XC::TritrizPtrPnt *XC::Framework3d::makeNew(void)
+XC::PntPtrArray3d *XC::Framework3d::makeNew(void)
   {
-    TritrizPtrPnt *retval= busca(getTag());
+    PntPtrArray3d *retval= busca(getTag());
     if(!retval) //New grid.
       {
-        retval= new TritrizPtrPnt();
+        retval= new PntPtrArray3d();
         retval->set_owner(this);
         (*this)[getTag()]= retval;
         //UpdateSets(retval);

@@ -31,16 +31,16 @@
 #define ENTMDLR_H
 
 #include "preprocessor/set_mgmt/SetEstruct.h"
-#include "preprocessor/multi_block_topology/matrices/TritrizPtrNod.h"
-#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/matrices/NodePtrArray3d.h"
+#include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
 #include "preprocessor/MeshingParams.h"
 
 class BND3d;
 class Pos3d;
-class MatrizPos3d;
-class TritrizPos3d;
+class Pos3dArray;
+class Pos3dArray3d;
 class RangoIndice;
-class RangoTritriz;
+class Array3dRange;
 class GeomObj3d;
 
 namespace XC {
@@ -57,18 +57,18 @@ class EntMdlr: public SetEstruct
     size_t idx; //!< @brief Object index (to be used as index for VTK arrays).
     bool doGenMesh; //!< True if the point must be meshed (node will be created). For exemple is false when it's the middle point of a line.
   protected:
-    TritrizPtrNod ttzNodes;
-    TritrizPtrElem ttzElements;
+    NodePtrArray3d ttzNodes;
+    ElemPtrArray3d ttzElements;
     friend class Set;
     friend class SetMeshComp;
     friend class MultiBlockTopology;
     virtual void update_topology(void)= 0;
-    void create_nodes(const TritrizPos3d &);
+    void create_nodes(const Pos3dArray3d &);
     Node *create_node(const Pos3d &pos,size_t i=1,size_t j=1, size_t k=1);
     bool create_elements(meshing_dir dm);
     Pnt *create_point(const Pos3d &);
-    void create_points(const MatrizPos3d &);
-    SetEstruct *create_row_set(const RangoTritriz &,const std::string &);
+    void create_points(const Pos3dArray &);
+    SetEstruct *create_row_set(const Array3dRange &,const std::string &);
 
     void clearAll(void);
   public:
@@ -115,13 +115,13 @@ class EntMdlr: public SetEstruct
     Element *getNearestElement(const Pos3d &p);
     const Element *getNearestElement(const Pos3d &p) const;
 
-    TritrizPtrNod &getTtzNodes(void)
+    NodePtrArray3d &getTtzNodes(void)
       { return ttzNodes; }
-    const TritrizPtrNod &getTtzNodes(void) const
+    const NodePtrArray3d &getTtzNodes(void) const
       { return ttzNodes; }
-    TritrizPtrElem &getTtzElements(void)
+    ElemPtrArray3d &getTtzElements(void)
       { return ttzElements; }
-    const TritrizPtrElem &getTtzElements(void) const
+    const ElemPtrArray3d &getTtzElements(void) const
       { return ttzElements; }
     //! @brief Return the object dimension (0, 1, 2 or 3).
     virtual unsigned short int GetDimension(void) const= 0;
@@ -129,15 +129,15 @@ class EntMdlr: public SetEstruct
 
     IRowSet getVarRefIRow(size_t f=1,size_t c=1,const std::string &nmb="tmp");
     IRowSet getVarRefIRow(const RangoIndice &layer_range,size_t f,size_t c,const std::string &nmb="tmp");
-    IRowSet getVarRefIRow(const RangoTritriz &rango,const std::string &nmb="tmp");
+    IRowSet getVarRefIRow(const Array3dRange &rango,const std::string &nmb="tmp");
 
     JRowSet getVarRefJRow(size_t layer=1,size_t c=1,const std::string &nmb="tmp");
     JRowSet getVarRefJRow(size_t layer,const RangoIndice &row_range,size_t c,const std::string &nmb="tmp");
-    JRowSet getVarRefJRow(const RangoTritriz &rango,const std::string &nmb="tmp");
+    JRowSet getVarRefJRow(const Array3dRange &rango,const std::string &nmb="tmp");
 
     KRowSet getVarRefKRow(size_t layer=1,size_t f=1,const std::string &nmb="tmp");
     KRowSet getVarRefKRow(size_t layer,size_t f,const RangoIndice &column_range,const std::string &nmb="tmp");
-    KRowSet getVarRefKRow(const RangoTritriz &rango,const std::string &nmb="tmp");
+    KRowSet getVarRefKRow(const Array3dRange &rango,const std::string &nmb="tmp");
 
     void fix(const SFreedom_Constraint &);
 

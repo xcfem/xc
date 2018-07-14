@@ -30,7 +30,7 @@
 #define QUADSURFACE_H
 
 #include "Face.h"
-#include "preprocessor/multi_block_topology/matrices/MatrizPtrPnt.h"
+#include "preprocessor/multi_block_topology/matrices/PntPtrArray.h"
 
 namespace XC {
 
@@ -40,7 +40,7 @@ namespace XC {
 class QuadSurface: public Face
   {
   protected:
-    MatrizPos3d get_positions(void) const;
+    Pos3dArray get_positions(void) const;
     const Edge *get_lado_homologo(const Edge *l) const;
   public:
     QuadSurface(Preprocessor *m,const size_t &ndivI= 4, const size_t &ndivJ= 4);
@@ -50,7 +50,7 @@ class QuadSurface: public Face
       { return 4; }
 
     void setPoints(const ID &);
-    void setPoints(const MatrizPtrPnt &pntPtrs);
+    void setPoints(const PntPtrArray &pntPtrs);
     void setPoints(const m_int &);
     void defGridPoints(const boost::python::list &);
 

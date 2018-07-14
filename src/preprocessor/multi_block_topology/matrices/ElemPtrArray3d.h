@@ -24,36 +24,30 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//MatrizPtrElem.h
-//Point matrix
+//ElemPtrArray3d.h
+//Pointers to element in an array of matrices
 
-#ifndef MATRIZPTRELEM_H
-#define MATRIZPTRELEM_H
+#ifndef ELEMPTRARRAY3d_H
+#define ELEMPTRARRAY3d_H
 
-#include "MatrizPtrBase.h"
-#include <vector>
+#include "xc_utils/src/nucleo/EntCmd.h"
+#include "ElemPtrArray.h"
+#include "PtrArray3dBase.h"
 
-class Pos3d;
 
 namespace XC{
 
-  class Element;
-
-//! @ingroup MultiBlockTopology
-//! 
-//! \defgroup MultiBlockTopologyMR References to nodes and elements.
-//
 //! @ingroup MultiBlockTopologyMR
-//
-//! @brief Matrix of pointers to elements.
-class MatrizPtrElem: public MatrizPtrBase<Element>
+//! 
+//! @brief Three-dimensional array of pointers to elements.
+class ElemPtrArray3d: public PtrArray3dBase<ElemPtrArray>
   {
   protected:
 
   public:
-    //! @brief Constructor.
-    MatrizPtrElem(const size_t &f=0,const size_t &c=0)
-      : MatrizPtrBase<Element>(f,c) {}
+
+    ElemPtrArray3d(const size_t n_layers= 0,const ElemPtrArray &m= ElemPtrArray());
+    ElemPtrArray3d(const size_t ,const size_t ,const size_t );
 
     Element *findElement(const int &);
     const Element *findElement(const int &) const;
@@ -63,6 +57,6 @@ class MatrizPtrElem: public MatrizPtrBase<Element>
 
   };
 
-} //end of XC namespace
+} //end of XC namespace.
 
 #endif

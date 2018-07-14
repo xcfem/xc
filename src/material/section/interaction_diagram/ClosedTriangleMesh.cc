@@ -362,7 +362,7 @@ void XC::ClosedTriangleMesh::setPositionsMatrix(const Matrix &m)
       }
   }
 
-//! @brief Escribe la matriz en un archivo binario.
+//! @brief Write the matrix in a binary file.
 void XC::ClosedTriangleMesh::write(std::ofstream &os)
   {
     os.write((char *) &tol,sizeof tol);
@@ -373,7 +373,7 @@ void XC::ClosedTriangleMesh::write(std::ofstream &os)
     m.write(os);
   }
 
-//! @brief Lee la matriz de un archivo binario.
+//! @brief Read the matrix from a binary file.
 void XC::ClosedTriangleMesh::read(std::ifstream &is)
   {
     is.read((char *) &tol,sizeof tol);

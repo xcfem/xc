@@ -166,7 +166,7 @@ int XC::SymBandEigenSOE::addA(const Matrix &m, const ID &id, double fact)
     return 0;
   }
 
-//! @brief Anula la matriz A.
+//! @brief Zeroes the matrix A.
 void XC::SymBandEigenSOE::zeroA(void)
   {
     A.Zero();
@@ -220,7 +220,7 @@ int XC::SymBandEigenSOE::addM(const Matrix &m, const ID &id, double fact)
     return 0;
   }
 
-//! @brief Anula la matriz M.
+//! @brief Zeroes the matrix M.
 void XC::SymBandEigenSOE::zeroM(void)
   {
     EigenSOE::zeroM();

@@ -34,12 +34,12 @@
 namespace XC {
 
 class Element;
-class TritrizPtrNod;
-class TritrizPtrElem;
+class NodePtrArray3d;
+class ElemPtrArray3d;
 
-//void mesh_quad4N_bidimensional(const Element &e,const TritrizPtrNod &nodes,TritrizPtrElem &);
-TritrizPtrElem put_quad4N_on_mesh(const Element &e,const TritrizPtrNod &,meshing_dir dm);
-TritrizPtrElem put_quad9N_on_mesh(const Element &e,const TritrizPtrNod &,meshing_dir dm);
+//void mesh_quad4N_bidimensional(const Element &e,const NodePtrArray3d &nodes,ElemPtrArray3d &);
+ElemPtrArray3d put_quad4N_on_mesh(const Element &e,const NodePtrArray3d &,meshing_dir dm);
+ElemPtrArray3d put_quad9N_on_mesh(const Element &e,const NodePtrArray3d &,meshing_dir dm);
 
 } // end of XC namespace
 #endif

@@ -31,7 +31,7 @@
 #ifndef QuadBase4N_h
 #define QuadBase4N_h
 
-#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
 #include "preprocessor/multi_block_topology/aux_meshing.h"
 #include "preprocessor/prep_handlers/LoadHandler.h"
 #include "domain/load/plane/BidimStrainLoad.h"
@@ -45,7 +45,7 @@ template <class PhysProp>
 class QuadBase4N : public PlaneElement<4,PhysProp>
   {
   protected:
-    TritrizPtrElem put_on_mesh(const TritrizPtrNod &,meshing_dir dm) const;
+    ElemPtrArray3d put_on_mesh(const NodePtrArray3d &,meshing_dir dm) const;
   public:
 
     QuadBase4N(int classTag,const PhysProp &pp);
@@ -85,7 +85,7 @@ XC::QuadBase4N<PhysProp>::QuadBase4N(int tag, int classTag, int node1, int node2
 
 //! @brief Put the element on the mesh being passed as parameter.
 template <class PhysProp>
-XC::TritrizPtrElem XC::QuadBase4N<PhysProp>::put_on_mesh(const XC::TritrizPtrNod &nodes,meshing_dir dm) const
+XC::ElemPtrArray3d XC::QuadBase4N<PhysProp>::put_on_mesh(const XC::NodePtrArray3d &nodes,meshing_dir dm) const
   { return put_quad4N_on_mesh(*this,nodes,dm); }
 
 //! @brief Returns the nodes de un lado of the element.

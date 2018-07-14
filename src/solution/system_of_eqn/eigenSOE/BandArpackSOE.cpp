@@ -182,7 +182,7 @@ int XC::BandArpackSOE::addA(const Matrix &m, const ID &id, double fact)
     return 0;
   }
 
-//! @brief Anula la matriz M.
+//! @brief Zeroes the matrix M.
 void XC::BandArpackSOE::zeroA(void)
   {
     A.Zero();
@@ -235,7 +235,7 @@ int XC::BandArpackSOE::addM(const Matrix &m, const ID &id, double fact)
     return retval;
   }
 
-//! @brief Anula la matriz M.
+//! @brief Zeroes the matrix M.
 void XC::BandArpackSOE::zeroM(void)
   {
     EigenSOE::zeroM();

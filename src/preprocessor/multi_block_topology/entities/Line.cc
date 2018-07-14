@@ -31,7 +31,7 @@
 #include "Pnt.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
 #include "xc_utils/src/geom/d1/Segment3d.h"
-#include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
+#include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
 #include "utility/matrix/util_matrix.h"
 
 #include "domain/mesh/node/Node.h"
@@ -173,11 +173,11 @@ BND3d XC::Line::Bnd(void) const
   }
 
 //! @brief Returns ndiv+1 positions equally spaced along the line.
-MatrizPos3d XC::Line::get_positions(void) const
+Pos3dArray XC::Line::get_positions(void) const
   {
-    MatrizPos3d retval;
+    Pos3dArray retval;
     if(check_points())
-      retval= MatrizPos3d(p1->GetPos(),p2->GetPos(),NDiv());
+      retval= Pos3dArray(p1->GetPos(),p2->GetPos(),NDiv());
     return retval;
   }
 

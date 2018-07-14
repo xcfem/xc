@@ -27,12 +27,12 @@
 //TrfGeom.cc
 
 #include "TrfGeom.h"
-#include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
-#include "xc_utils/src/geom/pos_vec/TritrizPos3d.h"
+#include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
+#include "xc_utils/src/geom/pos_vec/Pos3dArray3d.h"
 
-const MatrizPos3d &XC::TrfGeom::Transforma(const MatrizPos3d &m) const
+const Pos3dArray &XC::TrfGeom::Transforma(const Pos3dArray &m) const
   {
-    static MatrizPos3d retval;
+    static Pos3dArray retval;
     retval= m;
     const size_t numberOfRows= retval.getNumberOfRows();
     const size_t numberOfColumns= retval.getNumberOfColumns();
@@ -41,9 +41,9 @@ const MatrizPos3d &XC::TrfGeom::Transforma(const MatrizPos3d &m) const
         retval(j,k)= Transforma(retval(j,k));
     return retval;
   }
-const TritrizPos3d &XC::TrfGeom::Transforma(const TritrizPos3d &m) const
+const Pos3dArray3d &XC::TrfGeom::Transforma(const Pos3dArray3d &m) const
   {
-    static TritrizPos3d retval;
+    static Pos3dArray3d retval;
     retval= m;
     const size_t numberOfLayers= retval.getNumberOfLayers();
     const size_t numberOfRows= retval.getNumberOfRows();

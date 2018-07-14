@@ -76,11 +76,11 @@ class CmbEdge: public Edge
         void SetNDiv(const size_t &nd);
         size_t NDiv(void) const;
         size_t GetTag(void) const;
-        MatrizPos3d get_positions(void) const;
+        Pos3dArray get_positions(void) const;
         std::vector<int> getTagsNodesForward(void) const;
         std::vector<int> getTagsNodesReverse(void) const;
-        MatrizPos3d getNodePosForward(void) const;
-        MatrizPos3d getNodePosReverse(void) const;
+        Pos3dArray getNodePosForward(void) const;
+        Pos3dArray getNodePosReverse(void) const;
         double getLength(void) const;
         Pos3d getCentroid(void) const;	
         bool In(const GeomObj3d &, const double &tol= 0.0) const;
@@ -96,7 +96,7 @@ class CmbEdge: public Edge
       };
   protected:
     std::deque<Side> lines; //!< Lines that compose the object.
-    MatrizPos3d get_positions(void) const;
+    Pos3dArray get_positions(void) const;
 
     Side *first_line(void);
     const Side *first_line(void) const;

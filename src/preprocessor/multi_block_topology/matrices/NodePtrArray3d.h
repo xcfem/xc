@@ -24,16 +24,16 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//TritrizPtrNod.h
+//NodePtrArray3d.h
 //Pointers to nodes in an array of matrices.
 
-#ifndef TRITRIZPTRNOD_H
-#define TRITRIZPTRNOD_H
+#ifndef NODEPTRARRAY3D_H
+#define NODEPTRARRAY3D_H
 
 #include "xc_utils/src/nucleo/EntCmd.h"
 #include "xc_basic/src/funciones/algebra/ExprAlgebra.h"
-#include "MatrizPtrNod.h"
-#include "TritrizPtrBase.h"
+#include "NodePtrArray.h"
+#include "PtrArray3dBase.h"
 #include "utility/matrix/Vector.h"
 
 
@@ -41,21 +41,21 @@ class ExprAlgebra;
 class Intervalo1D;
 class Lista;
 class RangoIndice;
-class RangoTritriz;
+class Array3dRange;
 
 namespace XC{
 
 //! @ingroup MultiBlockTopologyMR
 //! 
-//! @brief "Tritriz" of pointers to elements.
-class TritrizPtrNod: public TritrizPtrBase<MatrizPtrNod>
+//! @brief Three-dimensional array of pointers to nodes.
+class NodePtrArray3d: public PtrArray3dBase<NodePtrArray>
   {
   protected:
 
   public:
 
-    TritrizPtrNod(const size_t n_layers= 0);
-    TritrizPtrNod(const size_t ,const size_t ,const size_t );
+    NodePtrArray3d(const size_t n_layers= 0);
+    NodePtrArray3d(const size_t ,const size_t ,const size_t );
 
     Node *findNode(const int &tag);
     const Node *findNode(const int &tag) const;
@@ -78,10 +78,10 @@ class TritrizPtrNod: public TritrizPtrBase<MatrizPtrNod>
   };
 
 
-std::ostream &operator<<(std::ostream &os,const TritrizPtrNod &);
+std::ostream &operator<<(std::ostream &os,const NodePtrArray3d &);
 
 template <class F>
-std::deque<double> TritrizPtrNod::RowSimpsonIntegration(const F &f,const std::string &nmb_coo,const size_t &num_coo,const ExprAlgebra &e,const size_t &n) const
+std::deque<double> NodePtrArray3d::RowSimpsonIntegration(const F &f,const std::string &nmb_coo,const size_t &num_coo,const ExprAlgebra &e,const size_t &n) const
   {
     const size_t sz= f.Size();
     std::deque<double> retval;
@@ -107,12 +107,12 @@ std::deque<double> TritrizPtrNod::RowSimpsonIntegration(const F &f,const std::st
     return retval;
   }
 
-inline void fix(const TritrizPtrNod &ttz,const SFreedom_Constraint &spc)
+inline void fix(const NodePtrArray3d &ttz,const SFreedom_Constraint &spc)
   { ttz.fix(spc); }
-void fix(const TritrizPtrNod::var_ref_caja &ref_caja,const SFreedom_Constraint &spc);
+void fix(const NodePtrArray3d::var_ref_caja &ref_caja,const SFreedom_Constraint &spc);
 
-std::vector<int> getNodeIdsQuad4N(const TritrizPtrNod::constant_i_layer_const_ref &nodes,const size_t &j,const size_t &k);
-std::vector<int> getNodeIdsQuad9N(const TritrizPtrNod::constant_i_layer_const_ref &nodes,const size_t &j,const size_t &k);
+std::vector<int> getNodeIdsQuad4N(const NodePtrArray3d::constant_i_layer_const_ref &nodes,const size_t &j,const size_t &k);
+std::vector<int> getNodeIdsQuad9N(const NodePtrArray3d::constant_i_layer_const_ref &nodes,const size_t &j,const size_t &k);
 
 } //end of XC namespace.
 

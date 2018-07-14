@@ -37,7 +37,7 @@
 #include "med.h"
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/set_mgmt/Set.h"
-#include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
+#include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
 
 //! @brief Constructor
 XC::SideSequence::SideSequence(const size_t first,const bool &_forward)
@@ -142,13 +142,13 @@ XC::Node *XC::Body::BodyFace::getNode(const size_t &i,const size_t &j)
   }
 
 //! @brief Return the positions for the nodes on a face.
-MatrizPos3d XC::Body::BodyFace::get_positions(void) const
+Pos3dArray XC::Body::BodyFace::get_positions(void) const
   {
     if(!surface)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; pointer to surface is null." << std::endl;
-        return MatrizPos3d(); 
+        return Pos3dArray(); 
       }
     const int numEdges= surface->getNumberOfEdges();
     if(numEdges!=4)
@@ -156,7 +156,7 @@ MatrizPos3d XC::Body::BodyFace::get_positions(void) const
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; can't mesh " << numEdges
 	          << " edges surfaces." << std::endl;
-        return MatrizPos3d();
+        return Pos3dArray();
       }
     const CmbEdge::Side *l1= getSide(1);
     const CmbEdge::Side *l2= getSide(2);
@@ -169,20 +169,20 @@ MatrizPos3d XC::Body::BodyFace::get_positions(void) const
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; lines 1 and 3 have different number of divisions. "
 	          << "Can't generate mesh." << std::endl;
-        return MatrizPos3d();
+        return Pos3dArray();
       }
     if(l2->NDiv()!=l4->NDiv())
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; lines 2 and 4 have different number of divisions. "
 	          << "Can't generate mesh." << std::endl;
-        return MatrizPos3d();
+        return Pos3dArray();
       }
-    MatrizPos3d ptos_l1= l1->getNodePosForward();
-    MatrizPos3d ptos_l2= l2->getNodePosForward();
-    MatrizPos3d ptos_l3= l3->getNodePosReverse(); //Reverse order.
-    MatrizPos3d ptos_l4= l4->getNodePosReverse(); //Reverse order.
-    return MatrizPos3d(ptos_l1,ptos_l2,ptos_l3,ptos_l4);
+    Pos3dArray ptos_l1= l1->getNodePosForward();
+    Pos3dArray ptos_l2= l2->getNodePosForward();
+    Pos3dArray ptos_l3= l3->getNodePosReverse(); //Reverse order.
+    Pos3dArray ptos_l4= l4->getNodePosReverse(); //Reverse order.
+    return Pos3dArray(ptos_l1,ptos_l2,ptos_l3,ptos_l4);
   }
 
 //! @brief Check the number of divisions.

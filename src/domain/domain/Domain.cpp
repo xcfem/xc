@@ -1214,7 +1214,7 @@ int XC::Domain::recvSelf(const CommParameters &cp)
 double XC::Domain::getNodeDisp(int nodeTag, int dof,int &errorFlag)
   { return mesh.getNodeDisp(nodeTag,dof,errorFlag); }
 
-//! @brief Set la matriz de masas al nudo identified by the argument.
+//! @brief Set the mass matrix for the node identified by the argument.
 int XC::Domain::setMass(const XC::Matrix &mass, int nodeTag)
   { return mesh.setMass(mass,nodeTag); }
 

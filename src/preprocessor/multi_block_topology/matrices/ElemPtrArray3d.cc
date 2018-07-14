@@ -24,9 +24,9 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//TritrizPtrElem.cc
+//ElemPtrArray3d.cc
 
-#include "TritrizPtrElem.h"
+#include "ElemPtrArray3d.h"
 #include "domain/mesh/element/Element.h"
 #include <boost/any.hpp>
 
@@ -36,25 +36,25 @@
 #include "boost/lexical_cast.hpp"
 
 //! @brief Default constructor.
-XC::TritrizPtrElem::TritrizPtrElem(const size_t n_layers,const MatrizPtrElem &m)
-  : TritrizPtrBase<MatrizPtrElem>(n_layers,m) {}
+XC::ElemPtrArray3d::ElemPtrArray3d(const size_t n_layers,const ElemPtrArray &m)
+  : PtrArray3dBase<ElemPtrArray>(n_layers,m) {}
 //! @brief Constructor.
-XC::TritrizPtrElem::TritrizPtrElem(const size_t n_layers,const size_t iRows,const size_t cols)
-  : TritrizPtrBase<MatrizPtrElem>(n_layers)
+XC::ElemPtrArray3d::ElemPtrArray3d(const size_t n_layers,const size_t iRows,const size_t cols)
+  : PtrArray3dBase<ElemPtrArray>(n_layers)
   {
     for(size_t i=0;i<n_layers;i++)
-      (*this)[i]= MatrizPtrElem(iRows,cols);
+      (*this)[i]= ElemPtrArray(iRows,cols);
   }
 
 //! @brief Returns (if it exists) a pointer to the element
 //! identified by the tag being passed as parameter.
-XC::Element *XC::TritrizPtrElem::findElement(const int &tag)
+XC::Element *XC::ElemPtrArray3d::findElement(const int &tag)
   {
     Element *retval= nullptr;
     const size_t numberOfLayers= getNumberOfLayers();
     for(size_t i=1;i<=numberOfLayers;i++)
       {
-        MatrizPtrElem &layer= operator()(i);
+        ElemPtrArray &layer= operator()(i);
         retval= layer.findElement(tag);
         if(retval) break;
       }
@@ -63,13 +63,13 @@ XC::Element *XC::TritrizPtrElem::findElement(const int &tag)
 
 //! @brief Returns (if it exists) a pointer to the element
 //! identified by the tag being passed as parameter.
-const XC::Element *XC::TritrizPtrElem::findElement(const int &tag) const
+const XC::Element *XC::ElemPtrArray3d::findElement(const int &tag) const
   {
     const Element *retval= nullptr;
     const size_t numberOfLayers= getNumberOfLayers();
     for(size_t i=1;i<=numberOfLayers;i++)
       {
-        const MatrizPtrElem &layer= operator()(i);
+        const ElemPtrArray &layer= operator()(i);
         retval= layer.findElement(tag);
         if(retval) break;
       }
@@ -77,20 +77,21 @@ const XC::Element *XC::TritrizPtrElem::findElement(const int &tag) const
   }
 
 //! @brief Returns the element closest to the point being passed as parameter.
-XC::Element *XC::TritrizPtrElem::getNearestElement(const Pos3d &p)
+XC::Element *XC::ElemPtrArray3d::getNearestElement(const Pos3d &p)
   {
     Element *retval= nullptr, *ptrElem= nullptr;
     const size_t numberOfLayers= getNumberOfLayers();
     double d= DBL_MAX;
     double tmp;
     if(numberOfLayers>100)
-      std::clog << "The element «tritriz» has"
+      std::clog << getClassName() << "::" << __FUNCTION__
+	        << "The element pointer array has"
                 << numberOfLayers << " layers "
                 << " is better to search by coordinates in the associated set."
                 << std::endl;
     for(size_t i=1;i<=numberOfLayers;i++)
       {
-        MatrizPtrElem &layer= operator()(i);
+        ElemPtrArray &layer= operator()(i);
         ptrElem= layer.getNearestElement(p);
         tmp= ptrElem->getDist2(p);
         if(tmp<d)
@@ -103,8 +104,8 @@ XC::Element *XC::TritrizPtrElem::getNearestElement(const Pos3d &p)
   }
 
 //! @brief Returns the element closest to the point being passed as parameter.
-const XC::Element *XC::TritrizPtrElem::getNearestElement(const Pos3d &p) const
+const XC::Element *XC::ElemPtrArray3d::getNearestElement(const Pos3d &p) const
   {
-    TritrizPtrElem *this_no_const= const_cast<TritrizPtrElem *>(this);
+    ElemPtrArray3d *this_no_const= const_cast<ElemPtrArray3d *>(this);
     return this_no_const->getNearestElement(p);
   }

@@ -288,7 +288,7 @@ const XC::Matrix &XC::FourNodeQuad::getInitialStiff(void) const
     return K;
   }
 
-//! @brief Return the matriz de masas.
+//! @brief Return the mass matrix.
 const XC::Matrix &XC::FourNodeQuad::getMass(void) const
   {
     K.Zero();

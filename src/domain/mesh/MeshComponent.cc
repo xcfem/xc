@@ -46,7 +46,7 @@ void XC::MeshComponent::check_matrices(const std::deque<Matrix> &matrices,const 
   }
 
 //! @brief Appends a new matrix to the container.
-void XC::MeshComponent::nueva_matriz(std::deque<Matrix> &matrices,const int &ndof) const
+void XC::MeshComponent::new_matrix(std::deque<Matrix> &matrices,const int &ndof) const
   {
     const size_t numMatrices= matrices.size();
     matrices.push_back(Matrix(ndof,ndof));
@@ -58,7 +58,7 @@ void XC::MeshComponent::setup_matrices(std::deque<Matrix> &matrices,const int &n
   {
     check_matrices(matrices,ndof);
     if(index == -1)
-      nueva_matriz(matrices,ndof);
+      new_matrix(matrices,ndof);
   }
 
 //! @brief Constructor.

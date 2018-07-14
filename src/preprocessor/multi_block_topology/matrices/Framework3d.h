@@ -34,17 +34,17 @@
 
 
 namespace XC {
-class TritrizPtrPnt;
+class PntPtrArray3d;
 
 //! @ingroup MultiBlockTopology
 //
 //! @brief Three dimensional framework container.
-class Framework3d: public ModelComponentContainer<TritrizPtrPnt>
+class Framework3d: public ModelComponentContainer<PntPtrArray3d>
   {
   public:
     Framework3d(MultiBlockTopology *mbt= nullptr);
 
-    TritrizPtrPnt *makeNew(void);
+    PntPtrArray3d *makeNew(void);
   };
 
 } //end of XC namespace

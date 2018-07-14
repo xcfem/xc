@@ -69,7 +69,7 @@
 #include "utility/matrix/Matrix.h"
 #include "domain/mesh/node/NodeTopology.h"
 
-class TritrizPos3d;
+class Pos3dArray3d;
 class Pos2d;
 class Pos3d;
 class SisCooRect3d3d;
@@ -85,8 +85,8 @@ class Parameter;
 class Response;
 class ElementalLoad;
 class Node;
-class TritrizPtrNod;
-class TritrizPtrElem;
+class NodePtrArray3d;
+class ElemPtrArray3d;
 class SetBase;
 class SetEstruct;
 class NodePtrsWithIDs;
@@ -127,8 +127,8 @@ class Element: public MeshComponent
   protected:
     friend class EntMdlr;
     friend class Preprocessor;
-    virtual TritrizPtrElem put_on_mesh(const TritrizPtrNod &,meshing_dir) const;
-    virtual TritrizPtrElem cose(const SetEstruct &f1,const SetEstruct &f2) const;
+    virtual ElemPtrArray3d put_on_mesh(const NodePtrArray3d &,meshing_dir) const;
+    virtual ElemPtrArray3d cose(const SetEstruct &f1,const SetEstruct &f2) const;
 
     const Vector &getRayleighDampingForces(void) const;
 
@@ -257,7 +257,7 @@ class Element: public MeshComponent
     std::list<Pos3d> getPosNodes(bool initialGeometry= true) const;
     virtual Pos3d getCenterOfMassPosition(bool initialGeometry= true) const;
     Vector getCenterOfMassCoordinates(bool initialGeometry= true) const;
-    TritrizPos3d getPoints(const size_t &ni,const size_t &nj,const size_t &nk,bool initialGeometry= true);
+    Pos3dArray3d getPoints(const size_t &ni,const size_t &nj,const size_t &nk,bool initialGeometry= true);
     bool In(const GeomObj3d &,const double &factor= 1.0, const double &tol= 0.0) const;
     bool Out(const GeomObj3d &,const double &factor= 1.0, const double &tol= 0.0) const;
     bool In(const GeomObj2d &,const double &factor= 1.0, const double &tol= 0.0) const;

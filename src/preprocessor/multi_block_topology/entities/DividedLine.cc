@@ -29,7 +29,7 @@
 #include "DividedLine.h"
 #include "Pnt.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
-#include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
+#include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
 
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
@@ -51,15 +51,15 @@ void XC::DividedLine::setLongs(const Vector &ls)
 
 //! @brief Return ndiv+1 positions along the line spaced
 //! according to the lengths specifiend in the longs member.
-MatrizPos3d XC::DividedLine::get_positions(void) const
+Pos3dArray XC::DividedLine::get_positions(void) const
   {
-    static MatrizPos3d retval;
+    static Pos3dArray retval;
     if(P1() && P2())
       {
 	std::vector<GEOM_FT> tmp(NDiv(),0);
         for(size_t i= 0;i<NDiv();i++)
           tmp[i]= double_to_FT(longs[i]);
-        retval= MatrizPos3d(P1()->GetPos(),P2()->GetPos(),tmp);
+        retval= Pos3dArray(P1()->GetPos(),P2()->GetPos(),tmp);
       }
     else
       std::cerr << getClassName() << __FUNCTION__

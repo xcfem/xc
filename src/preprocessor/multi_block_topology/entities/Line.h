@@ -42,7 +42,7 @@ class Line: public LineBase
   {
   protected:
 
-    MatrizPos3d get_positions(void) const;
+    Pos3dArray get_positions(void) const;
     Edge *split_at(Pnt *,const double &,const double &);
   public:
     Line(Preprocessor *m,const size_t &ndiv= 4);

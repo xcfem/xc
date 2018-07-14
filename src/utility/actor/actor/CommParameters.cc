@@ -172,21 +172,21 @@ int XC::CommParameters::sendMovableVectorPtr(MovableVector *ptr,DbTagData &dt, c
 XC::MovableVector *XC::CommParameters::receiveMovableVectorPtr(MovableVector* &ptr,DbTagData &dt, const PtrCommMetaData &meta)
   { return receiveMovablePtr(ptr,dt,meta); }
 
-//! @brief Envía la matriz through the channel being passed as parameter.
+//! @brief Send the matrix through the channel being passed as parameter.
 int XC::CommParameters::sendMatrix(const Matrix &v,const int &dataTag)
   {
     assert(canal);
     return canal->sendMatrix(dataTag,commitTag,v);
   }
 
-//! @brief Receives la matriz through the channel being passed as parameter.
+//! @brief Receives the matrix through the channel being passed as parameter.
 int XC::CommParameters::receiveMatrix(Matrix &v,const int &dataTag) const
   {
     assert(canal);
     return canal->recvMatrix(dataTag,commitTag,v);
   }
 
-//! @brief Envía la matriz through the channel being passed as parameter.
+//! @brief Send the matrix through the channel being passed as parameter.
 //! @param meta: index where the object dbTag is stored.
 int XC::CommParameters::sendMatrix(const Matrix &m,DbTagData &dt, const CommMetaData &meta)
   {
@@ -194,7 +194,7 @@ int XC::CommParameters::sendMatrix(const Matrix &m,DbTagData &dt, const CommMeta
     return sendMovable(mov,dt,meta);
   }
 
-//! @brief Receives la matriz through the channel being passed as parameter.
+//! @brief Receives the matrix through the channel being passed as parameter.
 //! @param meta: index where the object dbTag is stored.
 int XC::CommParameters::receiveMatrix(Matrix &m,DbTagData &dt, const CommMetaData &meta) const
   {
@@ -204,7 +204,7 @@ int XC::CommParameters::receiveMatrix(Matrix &m,DbTagData &dt, const CommMetaDat
     return res;
   }
 
-//! @brief Envía a pointer a la matriz through the channel being passed as parameter.
+//! @brief Send a pointer to the matrix through the channel being passed as parameter.
 //! @param meta: index where the object dbTag, number of rows and number of columns are stored.
 int XC::CommParameters::sendMatrixPtr(Matrix *ptr,DbTagData &dt, const MatrixCommMetaData &meta)
   {
@@ -223,7 +223,7 @@ int XC::CommParameters::sendMatrixPtr(Matrix *ptr,DbTagData &dt, const MatrixCom
     return retval;
   }
 
-//! @brief Receives a pointer a matriz through the channel being passed as parameter.
+//! @brief Receives a pointer to the matrix through the channel being passed as parameter.
 //! @param meta: index where the object dbTag, number of rows and number of columns are stored.
 XC::Matrix *XC::CommParameters::receiveMatrixPtr(Matrix* &ptr,DbTagData &dt, const MatrixCommMetaData &meta) const
   {
@@ -259,7 +259,7 @@ int XC::CommParameters::sendTensorPtr(BJtensor *ptr,DbTagData &dt, const TensorC
     return retval;
   }
 
-//! @brief Receives a pointer a matriz through the channel being passed as parameter.
+//! @brief Receives a pointer to tensor through the channel being passed as parameter.
 XC::BJtensor *XC::CommParameters::receiveTensorPtr(BJtensor* &ptr,DbTagData &dt, const TensorCommMetaData &) const
   {
     std::cerr << "CommParameters::receiveTensorPtr not implemented." << std::endl;

@@ -33,8 +33,8 @@
 
 class Vector3d;
 class Pos3d;
-class MatrizPos3d;
-class TritrizPos3d;
+class Pos3dArray;
+class Pos3dArray3d;
 
 namespace XC {
 
@@ -57,8 +57,8 @@ class TrfGeom: public EntMdlrBase
     //! @brief Applies the transformation to the point.
     virtual Pos3d Transforma(const Pos3d &p) const= 0;
     virtual Vector3d Transforma(const Vector3d &v) const= 0;
-    const MatrizPos3d &Transforma(const MatrizPos3d &m) const;
-    const TritrizPos3d &Transforma(const TritrizPos3d &m) const;
+    const Pos3dArray &Transforma(const Pos3dArray &m) const;
+    const Pos3dArray3d &Transforma(const Pos3dArray3d &m) const;
   };
 } //end of XC namespace
 

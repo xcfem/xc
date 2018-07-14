@@ -282,7 +282,7 @@ void XC::DqUniaxialMaterial::getInitialTangent(Matrix &k,const size_t &offset) c
       k(j,j)= (*i)->getInitialTangent();
   }
 
-//! @brief Return the matriz de flexibilidad.
+//! @brief Return the flexibility matrix.
 void XC::DqUniaxialMaterial::getFlexibility(Matrix &f,const size_t &offset) const
   {
     size_t j= offset;

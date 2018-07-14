@@ -28,9 +28,9 @@
 
 #include "EntMdlr.h"
 #include "xc_basic/src/matrices/RangoIndice.h"
-#include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
-#include "xc_utils/src/geom/pos_vec/TritrizPos3d.h"
-#include "xc_utils/src/geom/pos_vec/RangoTritriz.h"
+#include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
+#include "xc_utils/src/geom/pos_vec/Pos3dArray3d.h"
+#include "xc_utils/src/geom/pos_vec/Array3dRange.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/domain/Domain.h"
 #include "domain/mesh/element/Element.h"
@@ -234,7 +234,7 @@ const XC::Element *XC::EntMdlr::findElement(const int &tag) const
   { return ttzElements.findElement(tag); }
 
 //! @brief Creates a set that corresponds to a row of nodes and elements.
-XC::SetEstruct *XC::EntMdlr::create_row_set(const RangoTritriz &rango,const std::string &nmb)
+XC::SetEstruct *XC::EntMdlr::create_row_set(const Array3dRange &rango,const std::string &nmb)
   {
     SetEstruct *retval= nullptr;
     if(getPreprocessor())
@@ -289,7 +289,7 @@ XC::Node *XC::EntMdlr::create_node(const Pos3d &pos,size_t i,size_t j, size_t k)
   }
 
 //! @brief Creates nodes at the positions being passed as parameters.
-void XC::EntMdlr::create_nodes(const TritrizPos3d &positions)
+void XC::EntMdlr::create_nodes(const Pos3dArray3d &positions)
   {
     const size_t n_layers= positions.getNumberOfLayers();
     if(n_layers<1) return;
@@ -297,7 +297,7 @@ void XC::EntMdlr::create_nodes(const TritrizPos3d &positions)
       {
         const size_t n_rows= positions(1).getNumberOfRows();
         const size_t cols= positions(1).getNumberOfColumns();
-        ttzNodes = TritrizPtrNod(n_layers,n_rows,cols);
+        ttzNodes = NodePtrArray3d(n_layers,n_rows,cols);
 
         if(!getPreprocessor()) return;
         for(register size_t i= 1;i<=n_layers;i++)
@@ -378,7 +378,7 @@ XC::Pnt *XC::EntMdlr::create_point(const Pos3d &pos)
   { return getPreprocessor()->getMultiBlockTopology().getPoints().New(pos); }
 
 //! @brief Creates points at the positions being passed as parameters.
-void XC::EntMdlr::create_points(const MatrizPos3d &positions)
+void XC::EntMdlr::create_points(const Pos3dArray &positions)
   {
     if(verbosity>4)
       std::clog << "Creating points for line: '" << getName() << "'...";   
@@ -406,21 +406,21 @@ XC::IRowSet XC::EntMdlr::getVarRefIRow(size_t f,size_t c,const std::string &nmb)
   { return IRowSet(*this,f,c,nmb,getPreprocessor()); }
 XC::IRowSet XC::EntMdlr::getVarRefIRow(const RangoIndice &layer_range,size_t f,size_t c,const std::string &nmb)
   { return IRowSet(*this,layer_range,f,c,nmb,getPreprocessor()); }
-XC::IRowSet XC::EntMdlr::getVarRefIRow(const RangoTritriz &rango,const std::string &nmb)
+XC::IRowSet XC::EntMdlr::getVarRefIRow(const Array3dRange &rango,const std::string &nmb)
   { return getVarRefIRow(rango.getLayerRange(),rango.getRowRange().Inf(),rango.getColumnRange().Inf(),nmb); }
 
 XC::JRowSet XC::EntMdlr::getVarRefJRow(size_t layer,size_t c,const std::string &nmb)
   { return JRowSet(*this,layer,c,nmb,getPreprocessor()); }
 XC::JRowSet XC::EntMdlr::getVarRefJRow(size_t layer,const RangoIndice &row_range,size_t c,const std::string &nmb)
   { return JRowSet(*this,layer,row_range,c,nmb,getPreprocessor()); }
-XC::JRowSet XC::EntMdlr::getVarRefJRow(const RangoTritriz &rango,const std::string &nmb)
+XC::JRowSet XC::EntMdlr::getVarRefJRow(const Array3dRange &rango,const std::string &nmb)
   { return getVarRefJRow(rango.getLayerRange().Inf(),rango.getRowRange(),rango.getColumnRange().Inf(),nmb); }
 
 XC::KRowSet XC::EntMdlr::getVarRefKRow(size_t layer,size_t f,const std::string &nmb)
   { return KRowSet(*this,layer,f,nmb,getPreprocessor()); }
 XC::KRowSet XC::EntMdlr::getVarRefKRow(size_t layer,size_t f,const RangoIndice &column_range,const std::string &nmb)
   { return KRowSet(*this,layer,f,column_range,nmb,getPreprocessor()); }
-XC::KRowSet XC::EntMdlr::getVarRefKRow(const RangoTritriz &rango,const std::string &nmb)
+XC::KRowSet XC::EntMdlr::getVarRefKRow(const Array3dRange &rango,const std::string &nmb)
   { return getVarRefKRow(rango.getLayerRange().Inf(),rango.getRowRange().Inf(),rango.getColumnRange(),nmb); }
 
 //! @brief Return the squared distance to

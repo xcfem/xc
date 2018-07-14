@@ -123,7 +123,7 @@ XC::Matrix XC::EigenSolver::getEigenvectors(void) const
     return retval;
   }
 
-//! @brief Returns a matriz con los eigenvectors normalizados disposed
+//! @brief Returns a matrix with the normalized eigenvectors disposed
 //! in columns (infinity norm).
 XC::Matrix XC::EigenSolver::getNormalizedEigenvectors(void) const
   {

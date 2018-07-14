@@ -318,11 +318,11 @@ int XC::SymArpackSOE::addM(const Matrix &m, const ID &id, double fact)
     return this->addA(m, id, -shift);
   }
 
-//! @brief Anula la matriz A.
+//! @brief Zeroes the matrix A.
 void XC::SymArpackSOE::zeroA(void)
   { factored = false; }
 
-//! @brief Anula la matriz M.
+//! @brief Zeroes the matrix M.
 void XC::SymArpackSOE::zeroM(void)
   {
     EigenSOE::zeroM();

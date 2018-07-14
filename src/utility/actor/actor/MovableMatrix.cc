@@ -52,7 +52,7 @@ XC::DbTagData &XC::MovableMatrix::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envia la matriz through the channel being passed as parameter.
+//! @brief Send the matrix through the channel being passed as parameter.
 int XC::MovableMatrix::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);

@@ -66,7 +66,7 @@
 #include <utility/tagged/TaggedObject.h>
 #include <utility/matrix/Vector.h>
 
-class TritrizPos3d;
+class Pos3dArray3d;
 
 namespace XC {
 class Matrix;

@@ -62,7 +62,7 @@ int XC::LinearBucklingIntegrator::formKt(void)
     // FE_EleIter &theEles1 = mdl->getFEs();
     FE_Element *elePtr= nullptr;
     flagK= 0; //mass matrix (see formEleTangent)
-    theSOE->zeroM(); //hace nula la matriz M.
+    theSOE->zeroM(); //zerous the M matrix.
 
     // while((elePtr = theEles1()) != 0) 
     //     elePtr->formTangent(this);

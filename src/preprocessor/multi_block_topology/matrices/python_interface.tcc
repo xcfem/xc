@@ -23,148 +23,148 @@
 
 //Point pointers arrays
 
-typedef MatrizT<XC::Pnt *,std::vector<XC::Pnt *> > matriz_t_point_ptr;
-matriz_t_point_ptr::reference (matriz_t_point_ptr::*getPnt)(size_t,size_t)= &matriz_t_point_ptr::at;
-class_<matriz_t_point_ptr, bases<ProtoMatriz>, boost::noncopyable >("matriz_t_point_ptr", no_init)
+typedef TMatrix<XC::Pnt *,std::vector<XC::Pnt *> > t_matrix_point_ptr;
+t_matrix_point_ptr::reference (t_matrix_point_ptr::*getPnt)(size_t,size_t)= &t_matrix_point_ptr::at;
+class_<t_matrix_point_ptr, bases<ProtoMatrix>, boost::noncopyable >("t_matrix_point_ptr", no_init)
   .def("getPoint", make_function( getPnt, return_internal_reference<>() ))  ;
 
-typedef XC::MatrizPtrBase<XC::Pnt> matriz_point_ptr;
-class_<matriz_point_ptr, bases<matriz_t_point_ptr,EntCmd>, boost::noncopyable >("matriz_point_ptr", no_init)
-  .def("dim",&matriz_point_ptr::dim,"assings matrix dimensions.")
-  .add_property("nRow",&matriz_point_ptr::getNumberOfRows,"returns number of rows.")
-  .add_property("nCol",&matriz_point_ptr::getNumberOfColumns,"returns number of columns.")
+typedef XC::PtrArrayBase<XC::Pnt> point_ptr_matrix;
+class_<point_ptr_matrix, bases<t_matrix_point_ptr,EntCmd>, boost::noncopyable >("point_ptr_matrix", no_init)
+  .def("dim",&point_ptr_matrix::dim,"assings matrix dimensions.")
+  .add_property("nRow",&point_ptr_matrix::getNumberOfRows,"returns number of rows.")
+  .add_property("nCol",&point_ptr_matrix::getNumberOfColumns,"returns number of columns.")
   ;
 
-XC::Pnt *(XC::MatrizPtrPnt::*getNearestPntMatrizPtrPnt)(const Pos3d &)= &XC::MatrizPtrPnt::getNearestPnt;
-XC::Pnt *(XC::MatrizPtrPnt::*getPntWithTagMatrizPtrPnt)(const size_t &)= &XC::MatrizPtrPnt::findPoint;
-class_<XC::MatrizPtrPnt, bases<matriz_point_ptr>, boost::noncopyable >("MatrizPtrPnt", no_init)
-  .def("getNearestPnt",make_function(getNearestPntMatrizPtrPnt, return_internal_reference<>() ),"Returns nearest point.")
-  .def("getPntWithTag",make_function(getPntWithTagMatrizPtrPnt, return_internal_reference<>() ),"Returns point by tag.")
-  .def("setPnt", &XC::MatrizPtrPnt::setPnt)
-  .def("getPnt", &XC::MatrizPtrPnt::getPnt, return_internal_reference<>())
-  .def("getCentroid",&XC::MatrizPtrPnt::getCentroide)
+XC::Pnt *(XC::PntPtrArray::*getNearestPntPntPtrArray)(const Pos3d &)= &XC::PntPtrArray::getNearestPnt;
+XC::Pnt *(XC::PntPtrArray::*getPntWithTagPntPtrArray)(const size_t &)= &XC::PntPtrArray::findPoint;
+class_<XC::PntPtrArray, bases<point_ptr_matrix>, boost::noncopyable >("PntPtrArray", no_init)
+  .def("getNearestPnt",make_function(getNearestPntPntPtrArray, return_internal_reference<>() ),"Returns nearest point.")
+  .def("getPntWithTag",make_function(getPntWithTagPntPtrArray, return_internal_reference<>() ),"Returns point by tag.")
+  .def("setPnt", &XC::PntPtrArray::setPnt)
+  .def("getPnt", &XC::PntPtrArray::getPnt, return_internal_reference<>())
+  .def("getCentroid",&XC::PntPtrArray::getCentroide)
   ;
 
-typedef std::vector<XC::MatrizPtrPnt> vector_mp_points;
-XC::MatrizPtrPnt &(vector_mp_points::*getPointLayer)(size_t )= &vector_mp_points::at;
+typedef std::vector<XC::PntPtrArray> vector_mp_points;
+XC::PntPtrArray &(vector_mp_points::*getPointLayer)(size_t )= &vector_mp_points::at;
 class_<vector_mp_points, boost::noncopyable >("vector_mp_points", no_init)
   .def(vector_indexing_suite<vector_mp_points>() )
   .def("getLayer", getPointLayer, return_internal_reference<>(), "returns point layer." )
   ;
 
-typedef XC::TritrizPtrBase<XC::MatrizPtrPnt> tritriz_points;
-class_<tritriz_points, bases<vector_mp_points,EntCmd>, boost::noncopyable >("tritriz_points", no_init)
-  .def("dim",&tritriz_points::dim,"assings dimensions.")
-  .def("getAtIJK", &tritriz_points::getAtIJK, return_internal_reference<>(),"Returns reference to value at (i,j,k) position.")
+typedef XC::PtrArray3dBase<XC::PntPtrArray> array3d_points;
+class_<array3d_points, bases<vector_mp_points,EntCmd>, boost::noncopyable >("array3d_points", no_init)
+  .def("dim",&array3d_points::dim,"assings dimensions.")
+  .def("getAtIJK", &array3d_points::getAtIJK, return_internal_reference<>(),"Returns reference to value at (i,j,k) position.")
   ;
 
-XC::Pnt *(XC::TritrizPtrPnt::*getNearestPntTritrizPtrPnt)(const Pos3d &)= &XC::TritrizPtrPnt::getNearestPnt;
-XC::Pnt *(XC::TritrizPtrPnt::*getPntWithTagTritrizPtrPnt)(const int &)= &XC::TritrizPtrPnt::findPoint;
-class_<XC::TritrizPtrPnt, bases<tritriz_points>, boost::noncopyable >("TritrizPtrPnt", no_init)
-  .def("getNearestPnt",make_function(getNearestPntTritrizPtrPnt, return_internal_reference<>() ),"Returns nearest point.")
-  .def("getPntWithTag",make_function(getPntWithTagTritrizPtrPnt, return_internal_reference<>() ),"Returns point by tag.")
-  .def("setPnt", &XC::TritrizPtrPnt::setPnt)
-  .def("getPnt", &XC::TritrizPtrPnt::getPnt, return_internal_reference<>())
-  .def("getCentroid",&XC::TritrizPtrPnt::getCentroide)
+XC::Pnt *(XC::PntPtrArray3d::*getNearestPntPntPtrArray3d)(const Pos3d &)= &XC::PntPtrArray3d::getNearestPnt;
+XC::Pnt *(XC::PntPtrArray3d::*getPntWithTagPntPtrArray3d)(const int &)= &XC::PntPtrArray3d::findPoint;
+class_<XC::PntPtrArray3d, bases<array3d_points>, boost::noncopyable >("PntPtrArray3d", no_init)
+  .def("getNearestPnt",make_function(getNearestPntPntPtrArray3d, return_internal_reference<>() ),"Returns nearest point.")
+  .def("getPntWithTag",make_function(getPntWithTagPntPtrArray3d, return_internal_reference<>() ),"Returns point by tag.")
+  .def("setPnt", &XC::PntPtrArray3d::setPnt)
+  .def("getPnt", &XC::PntPtrArray3d::getPnt, return_internal_reference<>())
+  .def("getCentroid",&XC::PntPtrArray3d::getCentroide)
   ;
 
 //Node pointers arrays
 
-typedef MatrizT<XC::Node *,std::vector<XC::Node *> > matriz_t_ptr_nodes;
-matriz_t_ptr_nodes::reference (matriz_t_ptr_nodes::*getNod)(size_t,size_t)= &matriz_t_ptr_nodes::at;
-class_<matriz_t_ptr_nodes, bases<ProtoMatriz>, boost::noncopyable >("matriz_t_ptr_nodes", no_init)
+typedef TMatrix<XC::Node *,std::vector<XC::Node *> > t_matrix_ptr_nodes;
+t_matrix_ptr_nodes::reference (t_matrix_ptr_nodes::*getNod)(size_t,size_t)= &t_matrix_ptr_nodes::at;
+class_<t_matrix_ptr_nodes, bases<ProtoMatrix>, boost::noncopyable >("t_matrix_ptr_nodes", no_init)
   ;
 
-typedef XC::MatrizPtrBase<XC::Node> matriz_ptr_nodes;
-class_<matriz_ptr_nodes, bases<matriz_t_ptr_nodes,EntCmd>, boost::noncopyable >("matriz_ptr_nodes", no_init)
-  .def("getTagsInteriorNodes",&matriz_ptr_nodes::getTagsInteriorObjs,"return interior node tags.")
-  .add_property("nRow",&matriz_ptr_nodes::getNumberOfRows,"returns number of rows.")
-  .add_property("nCol",&matriz_ptr_nodes::getNumberOfColumns,"returns number of columns.")
-  .def("dim",&matriz_ptr_nodes::dim,"assings matrix dimensions.")
+typedef XC::PtrArrayBase<XC::Node> ptr_nodes_matrix;
+class_<ptr_nodes_matrix, bases<t_matrix_ptr_nodes,EntCmd>, boost::noncopyable >("ptr_nodes_matrix", no_init)
+  .def("getTagsInteriorNodes",&ptr_nodes_matrix::getTagsInteriorObjs,"return interior node tags.")
+  .add_property("nRow",&ptr_nodes_matrix::getNumberOfRows,"returns number of rows.")
+  .add_property("nCol",&ptr_nodes_matrix::getNumberOfColumns,"returns number of columns.")
+  .def("dim",&ptr_nodes_matrix::dim,"assings matrix dimensions.")
   ;
 
-XC::Node *(XC::MatrizPtrNod::*getNearestNodMatrizPtrNod)(const Pos3d &)= &XC::MatrizPtrNod::getNearestNode;
-XC::Node *(XC::MatrizPtrNod::*getNodWithTagMatrizPtrNod)(const int &)= &XC::MatrizPtrNod::findNode;
-class_<XC::MatrizPtrNod, bases<matriz_ptr_nodes>, boost::noncopyable >("MatrizPtrNod", no_init)
+XC::Node *(XC::NodePtrArray::*getNearestNodNodePtrArray)(const Pos3d &)= &XC::NodePtrArray::getNearestNode;
+XC::Node *(XC::NodePtrArray::*getNodWithTagNodePtrArray)(const int &)= &XC::NodePtrArray::findNode;
+class_<XC::NodePtrArray, bases<ptr_nodes_matrix>, boost::noncopyable >("NodePtrArray", no_init)
   .def("getNode", getNod, return_internal_reference<>())
-  .def("getNearestNode",make_function(getNearestNodMatrizPtrNod, return_internal_reference<>() ),"Returns nearest node.")
-  .def("getNodeWithTag",make_function(getNodWithTagMatrizPtrNod, return_internal_reference<>() ),"Returns node by tag.")
+  .def("getNearestNode",make_function(getNearestNodNodePtrArray, return_internal_reference<>() ),"Returns nearest node.")
+  .def("getNodeWithTag",make_function(getNodWithTagNodePtrArray, return_internal_reference<>() ),"Returns node by tag.")
   ;
 
 
-typedef std::vector<XC::MatrizPtrNod> vector_mp_nodes;
-XC::MatrizPtrNod &(vector_mp_nodes::*getNodeLayer)(size_t )= &vector_mp_nodes::at;
+typedef std::vector<XC::NodePtrArray> vector_mp_nodes;
+XC::NodePtrArray &(vector_mp_nodes::*getNodeLayer)(size_t )= &vector_mp_nodes::at;
 class_<vector_mp_nodes, boost::noncopyable >("vector_mp_nodes", no_init)
   .def(vector_indexing_suite<vector_mp_nodes>() )
   .def("getLayer", getNodeLayer, return_internal_reference<>(), "returns node layer." )
   ;
 
-typedef XC::TritrizPtrBase<XC::MatrizPtrNod> tritriz_nodes;
-class_<tritriz_nodes, bases<vector_mp_nodes,EntCmd>, boost::noncopyable >("tritriz_nodes", no_init)
-  .def("dim",&tritriz_nodes::dim,"assings dimensions.")
-  .def("getAtIJK", &tritriz_nodes::getAtIJK, return_internal_reference<>(),"Returns reference to value at (i,j,k) position.")
+typedef XC::PtrArray3dBase<XC::NodePtrArray> array3d_nodes;
+class_<array3d_nodes, bases<vector_mp_nodes,EntCmd>, boost::noncopyable >("array3d_nodes", no_init)
+  .def("dim",&array3d_nodes::dim,"assings dimensions.")
+  .def("getAtIJK", &array3d_nodes::getAtIJK, return_internal_reference<>(),"Returns reference to value at (i,j,k) position.")
   ;
 
-XC::Node *(XC::TritrizPtrNod::*getNearestNodeTritrizPtrNod)(const Pos3d &)= &XC::TritrizPtrNod::getNearestNode;
-XC::Node *(XC::TritrizPtrNod::*getNodeWithTagTritrizPtrNod)(const int &)= &XC::TritrizPtrNod::findNode;
-class_<XC::TritrizPtrNod, bases<tritriz_nodes>, boost::noncopyable >("TritrizPtrNod", no_init)
-  .def("getNearestNode",make_function(getNearestNodeTritrizPtrNod, return_internal_reference<>() ),"Returns nearest node.")
-  .def("getNodeWithTag",make_function(getNodeWithTagTritrizPtrNod, return_internal_reference<>() ),"Returns node by tag.")
+XC::Node *(XC::NodePtrArray3d::*getNearestNodeNodePtrArray3d)(const Pos3d &)= &XC::NodePtrArray3d::getNearestNode;
+XC::Node *(XC::NodePtrArray3d::*getNodeWithTagNodePtrArray3d)(const int &)= &XC::NodePtrArray3d::findNode;
+class_<XC::NodePtrArray3d, bases<array3d_nodes>, boost::noncopyable >("NodePtrArray3d", no_init)
+  .def("getNearestNode",make_function(getNearestNodeNodePtrArray3d, return_internal_reference<>() ),"Returns nearest node.")
+  .def("getNodeWithTag",make_function(getNodeWithTagNodePtrArray3d, return_internal_reference<>() ),"Returns node by tag.")
   ;
 
 //Element pointers arrays
 
-typedef MatrizT<XC::Element *,std::vector<XC::Element> > matriz_t_ptr_elements;
-matriz_t_ptr_elements::reference (matriz_t_ptr_elements::*getElem)(size_t,size_t)= &matriz_t_ptr_elements::at;
-class_<matriz_t_ptr_elements, bases<ProtoMatriz>, boost::noncopyable >("matriz_t_ptr_elements", no_init)
+typedef TMatrix<XC::Element *,std::vector<XC::Element> > t_matrix_ptr_elements;
+t_matrix_ptr_elements::reference (t_matrix_ptr_elements::*getElem)(size_t,size_t)= &t_matrix_ptr_elements::at;
+class_<t_matrix_ptr_elements, bases<ProtoMatrix>, boost::noncopyable >("t_matrix_ptr_elements", no_init)
   .add_property("getElement", make_function( getElem, return_internal_reference<>() ))  ;
 
-typedef XC::MatrizPtrBase<XC::Element *> matriz_ptr_elements;
-class_<matriz_ptr_elements, bases<matriz_t_ptr_elements,EntCmd>, boost::noncopyable >("matriz_ptr_elements", no_init)
-  .add_property("nRow",&matriz_ptr_elements::getNumberOfRows,"returns number of rows.")
-  .add_property("nCol",&matriz_ptr_elements::getNumberOfColumns,"returns number of columns.")
-  .def("dim",&matriz_ptr_elements::dim,"assings matrix dimensions.")
+typedef XC::PtrArrayBase<XC::Element *> ptr_elements_matrix;
+class_<ptr_elements_matrix, bases<t_matrix_ptr_elements,EntCmd>, boost::noncopyable >("ptr_elements_matrix", no_init)
+  .add_property("nRow",&ptr_elements_matrix::getNumberOfRows,"returns number of rows.")
+  .add_property("nCol",&ptr_elements_matrix::getNumberOfColumns,"returns number of columns.")
+  .def("dim",&ptr_elements_matrix::dim,"assings matrix dimensions.")
   ;
 
-XC::Element *(XC::MatrizPtrElem::*getNearestElementMatrizPtrElem)(const Pos3d &)= &XC::MatrizPtrElem::getNearestElement;
-XC::Element *(XC::MatrizPtrElem::*getElementWithTag)(const int &)= &XC::MatrizPtrElem::findElement;
-class_<XC::MatrizPtrElem, bases<matriz_ptr_elements>, boost::noncopyable >("MatrizPtrElem", no_init)
-  .def("getNearestElement",make_function(getNearestElementMatrizPtrElem, return_internal_reference<>() ),"Returns nearest element.")
+XC::Element *(XC::ElemPtrArray::*getNearestElementElemPtrArray)(const Pos3d &)= &XC::ElemPtrArray::getNearestElement;
+XC::Element *(XC::ElemPtrArray::*getElementWithTag)(const int &)= &XC::ElemPtrArray::findElement;
+class_<XC::ElemPtrArray, bases<ptr_elements_matrix>, boost::noncopyable >("ElemPtrArray", no_init)
+  .def("getNearestElement",make_function(getNearestElementElemPtrArray, return_internal_reference<>() ),"Returns nearest element.")
   .def("getElementWithTag",make_function(getElementWithTag, return_internal_reference<>() ),"Returns element by tag.")
   ;
 
-typedef std::vector<XC::MatrizPtrElem> vector_mp_elements;
-XC::MatrizPtrElem &(vector_mp_elements::*getElementLayer)(size_t )= &vector_mp_elements::at;
+typedef std::vector<XC::ElemPtrArray> vector_mp_elements;
+XC::ElemPtrArray &(vector_mp_elements::*getElementLayer)(size_t )= &vector_mp_elements::at;
 class_<vector_mp_elements, boost::noncopyable >("vector_mp_elements", no_init)
   .def(vector_indexing_suite<vector_mp_elements>() )
   .def("getLayer", getElementLayer, return_internal_reference<>(), "returns element layer.")
   ;
 
-typedef XC::TritrizPtrBase<XC::MatrizPtrElem> tritriz_elements;
-class_<tritriz_elements, bases<vector_mp_elements,EntCmd>, boost::noncopyable >("tritriz_elements", no_init)
-  .def("getLayerElementsTags",&tritriz_elements::getLayerObjectsTags,"return layer elements tags.")
-  .def("dim",&tritriz_elements::dim,"assings dimensions.")
-  .def("getAtIJK", &tritriz_elements::getAtIJK, return_internal_reference<>(),"Returns reference to value at (i,j,k) position.")
+typedef XC::PtrArray3dBase<XC::ElemPtrArray> array3d_elements;
+class_<array3d_elements, bases<vector_mp_elements,EntCmd>, boost::noncopyable >("array3d_elements", no_init)
+  .def("getLayerElementsTags",&array3d_elements::getLayerObjectsTags,"return layer elements tags.")
+  .def("dim",&array3d_elements::dim,"assings dimensions.")
+  .def("getAtIJK", &array3d_elements::getAtIJK, return_internal_reference<>(),"Returns reference to value at (i,j,k) position.")
   ;
 
-XC::Element *(XC::TritrizPtrElem::*getNearestElementTritrizPtrElem)(const Pos3d &)= &XC::TritrizPtrElem::getNearestElement;
-XC::Element *(XC::TritrizPtrElem::*getElementWithTagTritrizPtrElem)(const int &)= &XC::TritrizPtrElem::findElement;
-class_<XC::TritrizPtrElem, bases<tritriz_elements>, boost::noncopyable >("TritrizPtrElem", no_init)
-  .def("getNearestElement",make_function(getNearestElementTritrizPtrElem, return_internal_reference<>() ),"Returns nearest element.")
-  .def("getElementWithTag",make_function(getElementWithTagTritrizPtrElem, return_internal_reference<>() ),"Returns element by tag.")
+XC::Element *(XC::ElemPtrArray3d::*getNearestElementElemPtrArray3d)(const Pos3d &)= &XC::ElemPtrArray3d::getNearestElement;
+XC::Element *(XC::ElemPtrArray3d::*getElementWithTagElemPtrArray3d)(const int &)= &XC::ElemPtrArray3d::findElement;
+class_<XC::ElemPtrArray3d, bases<array3d_elements>, boost::noncopyable >("ElemPtrArray3d", no_init)
+  .def("getNearestElement",make_function(getNearestElementElemPtrArray3d, return_internal_reference<>() ),"Returns nearest element.")
+  .def("getElementWithTag",make_function(getElementWithTagElemPtrArray3d, return_internal_reference<>() ),"Returns element by tag.")
   ;
 
 
 //Frameworks 
 
-typedef XC::ModelComponentContainer<XC::MatrizPtrPnt> map_cm_m_points;
+typedef XC::ModelComponentContainer<XC::PntPtrArray> map_cm_m_points;
 class_<map_cm_m_points, bases<XC::ModelComponentContainerBase>, boost::noncopyable >("map_cm_m_points", no_init);
 
 class_<XC::Framework2d, bases<map_cm_m_points>, boost::noncopyable >("Framework2d", no_init)
   .def("new2DNet",make_function(&XC::Framework2d::makeNew, return_internal_reference<>() ),"Creates a 2D net.")
    ;
 
-typedef XC::ModelComponentContainer<XC::TritrizPtrPnt> map_cm_t_points;
+typedef XC::ModelComponentContainer<XC::PntPtrArray3d> map_cm_t_points;
 class_<map_cm_t_points, bases<XC::ModelComponentContainerBase>, boost::noncopyable >("map_cm_t_points", no_init);
 
 class_<XC::Framework3d, bases<map_cm_t_points>, boost::noncopyable >("Framework3d", no_init)

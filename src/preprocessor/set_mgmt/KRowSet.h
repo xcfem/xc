@@ -30,8 +30,8 @@
 #define KROWSET_H
 
 #include "RowSet.h"
-#include "preprocessor/multi_block_topology/matrices/TritrizPtrNod.h"
-#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/matrices/NodePtrArray3d.h"
+#include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
 
 class RangoIndice;
 
@@ -47,11 +47,11 @@ class EntMdlr;
 //!  - Nodes.
 //!  - Finite elements.
 //!  that correspond to a k_row of an EntMdlr object.
-class KRowSet: public RowSet<TritrizPtrNod::var_ref_k_row,TritrizPtrElem::var_ref_k_row>
+class KRowSet: public RowSet<NodePtrArray3d::var_ref_k_row,ElemPtrArray3d::var_ref_k_row>
   {
   public:
-    typedef TritrizPtrNod::var_ref_k_row tNodeRow;
-    typedef TritrizPtrElem::var_ref_k_row tElemRow;
+    typedef NodePtrArray3d::var_ref_k_row tNodeRow;
+    typedef ElemPtrArray3d::var_ref_k_row tElemRow;
     KRowSet(EntMdlr &e,const size_t &f=1,const size_t &c=1,const std::string &nmb="",Preprocessor *preprocessor= nullptr);
     KRowSet(EntMdlr &e,const size_t &layer,const size_t &f,const RangoIndice &,const std::string &nmb="",Preprocessor *preprocessor= nullptr);
   };

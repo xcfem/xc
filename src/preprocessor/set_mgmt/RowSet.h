@@ -30,7 +30,7 @@
 #define ROWSET_H
 
 #include "SetEstruct.h"
-#include "xc_utils/src/geom/pos_vec/RangoTritriz.h"
+#include "xc_utils/src/geom/pos_vec/Array3dRange.h"
 
 namespace XC {
 
@@ -69,10 +69,10 @@ class RowSet: public SetEstruct
     const reference_elem Element(const size_t &i) const
       { return element_row(i); }
 
-    RangoTritriz NodeRange(void) const
-      { return RangoTritriz(node_row); }
-    RangoTritriz ElementRange(void) const
-      { return RangoTritriz(element_row); }
+    Array3dRange NodeRange(void) const
+      { return Array3dRange(node_row); }
+    Array3dRange ElementRange(void) const
+      { return Array3dRange(element_row); }
 
     virtual size_t getNumNodeLayers(void) const
       { return node_row.getNumberOfLayers(); }

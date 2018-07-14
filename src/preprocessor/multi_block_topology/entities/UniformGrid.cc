@@ -29,7 +29,7 @@
 #include "UniformGrid.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/pos_vec/TritrizPos3d.h"
+#include "xc_utils/src/geom/pos_vec/Pos3dArray3d.h"
 
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/node/Node.h"
@@ -107,7 +107,7 @@ void XC::UniformGrid::add_to_sets(std::set<SetBase *> &sets)
 //! @brief Creates mesh nodes.
 void XC::UniformGrid::create_nodes(void)
   {
-    TritrizPos3d ptos= create_uniform_grid(Bnd(),ndiv_x,ndiv_y,ndiv_z);
+    Pos3dArray3d ptos= create_uniform_grid(Bnd(),ndiv_x,ndiv_y,ndiv_z);
     EntMdlr::create_nodes(ptos);
   }
 

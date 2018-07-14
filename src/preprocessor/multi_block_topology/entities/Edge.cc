@@ -33,7 +33,7 @@
 #include "utility/matrix/util_matrix.h"
 #include "xc_basic/src/matrices/m_int.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
-#include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
+#include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/set_mgmt/Set.h"
 
@@ -211,7 +211,7 @@ void XC::Edge::SetElemSize(const double &sz)
 //! @brief Create points along the line.
 void XC::Edge::divide(void)
   {
-    const MatrizPos3d positions= get_positions();
+    const Pos3dArray positions= get_positions();
     create_points(positions);
   }
 
@@ -344,20 +344,20 @@ std::vector<int> XC::Edge::getTagsNodesReverse(void) const
   }
 
 //! @brief Return the positions of the nodes in forward order.
-MatrizPos3d XC::Edge::getNodePosForward(void) const
+Pos3dArray XC::Edge::getNodePosForward(void) const
   {
     const size_t nn= getNumberOfNodes();
-    MatrizPos3d retval(nn);
+    Pos3dArray retval(nn);
     for(size_t i=1;i<=nn;i++)
       retval(i,1)= pos_node(*getNode(i));
     return retval;
   }
 
 //! @brief Return the positions of the nodes in reverse order.
-MatrizPos3d XC::Edge::getNodePosReverse(void) const
+Pos3dArray XC::Edge::getNodePosReverse(void) const
   {
     const size_t nn= getNumberOfNodes();
-    MatrizPos3d retval(nn);
+    Pos3dArray retval(nn);
     for(size_t i=1;i<=nn;i++)
       retval(i,1)= pos_node(*getNode(nn-i+1));
     return retval;
@@ -447,7 +447,7 @@ std::set<const XC::Edge *> XC::getConnectedLines(const Pnt &p)
   { return p.getConnectedEdges(); }
 
 //! @brief Return a matrix of positions along the line.
-MatrizPos3d XC::Edge::get_nodes_pos(void) const
+Pos3dArray XC::Edge::get_nodes_pos(void) const
   { return get_positions(); }
 
 //! @brief Create the nodes for both end points of the edge.
@@ -502,10 +502,10 @@ void XC::Edge::create_nodes(void)
 	            << "; preprocessor undefined." << std::endl;
         else
           {
-            const MatrizPos3d positions= get_nodes_pos();
+            const Pos3dArray positions= get_nodes_pos();
             const size_t n_rows= positions.getNumberOfRows();
             const size_t cols= positions.getNumberOfColumns();
-            ttzNodes= TritrizPtrNod(1,n_rows,cols);
+            ttzNodes= NodePtrArray3d(1,n_rows,cols);
 
             create_nodes_en_extremos();
 

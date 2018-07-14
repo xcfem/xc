@@ -31,7 +31,7 @@
 #ifndef TriBase3N_h
 #define TriBase3N_h
 
-#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
 #include "preprocessor/multi_block_topology/aux_meshing.h"
 #include "preprocessor/prep_handlers/LoadHandler.h"
 #include "domain/load/plane/BidimStrainLoad.h"
@@ -46,7 +46,7 @@ template <class PhysProp> //3 Gauss point by default.
 class TriBase3N: public PlaneElement<3,PhysProp>
   {
   protected:
-    TritrizPtrElem put_on_mesh(const TritrizPtrNod &,meshing_dir dm) const;
+    ElemPtrArray3d put_on_mesh(const NodePtrArray3d &,meshing_dir dm) const;
   public:
 
     TriBase3N(int classTag,const PhysProp &);
@@ -85,10 +85,10 @@ XC::TriBase3N<PhysProp>::TriBase3N(int tag, int classTag, int node1, int node2, 
 
 //! @brief Put the element on the mesh being passed as parameter.
 template <class PhysProp>
-XC::TritrizPtrElem XC::TriBase3N<PhysProp>::put_on_mesh(const XC::TritrizPtrNod &nodes,meshing_dir dm) const
+XC::ElemPtrArray3d XC::TriBase3N<PhysProp>::put_on_mesh(const XC::NodePtrArray3d &nodes,meshing_dir dm) const
   {
-    std::cerr << "TritrizPtrElem XC::TriBase3N<PhysProp>::put_on_mesh not implemented" << std::endl; 
-    TritrizPtrElem retval;
+    std::cerr << "ElemPtrArray3d XC::TriBase3N<PhysProp>::put_on_mesh not implemented" << std::endl; 
+    ElemPtrArray3d retval;
     return retval;
   }
 

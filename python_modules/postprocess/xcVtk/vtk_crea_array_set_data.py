@@ -8,10 +8,10 @@ def VtkCreaStrArraySetData(preprocessor,setName,entTypeName,nmbArray,data):
   
     # \preprocessor{\cad{\sets{\@setName
     #   {
-    #     \c{Definimos la matriz}
+    #     # Define matrix
     #     \vtk{ \define["vtkShStrArray",@nmbArray]{} }
     #     \numera{}
-    #     \c{Cargamos los valores en la matriz}
+    #     #Put the values in the matrix
     #     \def_var["tmp","string"]{}
     #     \@entTypeName{\for_each
     #       {

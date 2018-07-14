@@ -27,8 +27,8 @@
 //BrickBase.cc
 
 #include "BrickBase.h"
-#include "preprocessor/multi_block_topology/matrices/TritrizPtrNod.h"
-#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/matrices/NodePtrArray3d.h"
+#include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
 #include "domain/mesh/node/Node.h"
 
 //! @brief Constructor
@@ -54,13 +54,13 @@ size_t XC::BrickBase::getDimension(void) const
   { return 3; }
 
 //Put the element on the mesh being passed as parameter.
-XC::TritrizPtrElem XC::BrickBase::put_on_mesh(const XC::TritrizPtrNod &nodes,meshing_dir dm) const
+XC::ElemPtrArray3d XC::BrickBase::put_on_mesh(const XC::NodePtrArray3d &nodes,meshing_dir dm) const
   {
     const size_t numberOfLayers= nodes.getNumberOfLayers();
     const size_t numberOfRows= nodes.getNumberOfRows();
     const size_t numberOfColumns= nodes.getNumberOfColumns();
     const size_t mesh_dim= nodes.GetDim();
-    TritrizPtrElem retval(numberOfLayers-1,numberOfRows-1,numberOfColumns-1);
+    ElemPtrArray3d retval(numberOfLayers-1,numberOfRows-1,numberOfColumns-1);
     if(mesh_dim<3)
       std::cerr << "BrickBase::put_on_mesh; three-dimensional mesh needed, can't create elements." << std::endl;
     else

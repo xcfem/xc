@@ -64,7 +64,7 @@
 #include "domain/mesh/node/Node.h"
 #include "utility/matrix/Matrix.h"
 
-#include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
+#include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/sis_ref/Ref2d2d.h"
 #include "utility/actor/actor/MovableVector.h"
@@ -618,7 +618,7 @@ const XC::Matrix &XC::CrdTransf2d::getCooPoints(const size_t &ndiv) const
   {
     const Pos3d p0= nodeIPtr->getInitialPosition3d();
     const Pos3d p1= nodeJPtr->getInitialPosition3d();
-    MatrizPos3d linea(p0,p1,ndiv);
+    Pos3dArray linea(p0,p1,ndiv);
     static Matrix retval;
     retval= Matrix(ndiv+1,2);
     Pos3d tmp;

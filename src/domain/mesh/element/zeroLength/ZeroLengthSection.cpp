@@ -106,7 +106,7 @@ void XC::ZeroLengthSection::setup_section(const Material *sec)
       }
   }
 
-//! @brief Crea la matriz A y el vector v.
+//! @brief Creates the A matrix and the vector v.
 void XC::ZeroLengthSection::inicAv(void)
   {
     // Allocate transformation matrix

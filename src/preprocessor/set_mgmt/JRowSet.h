@@ -30,8 +30,8 @@
 #define JROWSET_H
 
 #include "RowSet.h"
-#include "preprocessor/multi_block_topology/matrices/TritrizPtrNod.h"
-#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/matrices/NodePtrArray3d.h"
+#include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
 
 class RangoIndice;
 
@@ -47,11 +47,11 @@ class EntMdlr;
 //!  - Nodes.
 //!  - Finite elements.
 //!  that correspond to a row of an EntMdlr object.
-class JRowSet: public RowSet<TritrizPtrNod::var_ref_j_row,TritrizPtrElem::var_ref_j_row>
+class JRowSet: public RowSet<NodePtrArray3d::var_ref_j_row,ElemPtrArray3d::var_ref_j_row>
   {
   public:
-    typedef TritrizPtrNod::var_ref_j_row tNodeRow;
-    typedef TritrizPtrElem::var_ref_j_row tElemRow;
+    typedef NodePtrArray3d::var_ref_j_row tNodeRow;
+    typedef ElemPtrArray3d::var_ref_j_row tElemRow;
     JRowSet(EntMdlr &e,const size_t &f=1,const size_t &c=1,const std::string &nmb="",Preprocessor *preprocessor= nullptr);
     JRowSet(EntMdlr &e,const size_t &layer,const RangoIndice &,const size_t &c,const std::string &nmb="",Preprocessor *preprocessor= nullptr);  };
 } //end of XC namespace

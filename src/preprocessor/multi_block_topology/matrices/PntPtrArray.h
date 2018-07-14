@@ -24,39 +24,57 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//TritrizPtrElem.h
-//Pointers to element in an array of matrices
+//PntPtrArray.h
+//Point matrix.
 
-#ifndef TRITRIZPTRELEM_H
-#define TRITRIZPTRELEM_H
+#ifndef PNTPTRARRAY_H
+#define PNTPTRARRAY_H
 
-#include "xc_utils/src/nucleo/EntCmd.h"
-#include "MatrizPtrElem.h"
-#include "TritrizPtrBase.h"
+#include "PtrArrayBase.h"
+#include "xc_basic/src/matrices/m_int.h"
+#include <vector>
 
+class Pos3d;
+class MatrixRange;
+class Vector3d;
 
 namespace XC{
+class Pnt;
+class SFreedom_Constraint;
+class MultiBlockTopology;
 
 //! @ingroup MultiBlockTopologyMR
 //! 
-//! @brief "Tritriz" of pointers to elements.
-class TritrizPtrElem: public TritrizPtrBase<MatrizPtrElem>
+//! @brief Pointers to points in a matrix structure.
+class PntPtrArray: public PtrArrayBase<Pnt>
   {
   protected:
 
+
+    friend class MultiBlockTopology;
   public:
+    //! @brief Constructor.
+    PntPtrArray(const size_t &f=0,const size_t &c=0)
+      : PtrArrayBase<Pnt>(f,c) {}
+    m_int getTags(void) const;
 
-    TritrizPtrElem(const size_t n_layers= 0,const MatrizPtrElem &m= MatrizPtrElem());
-    TritrizPtrElem(const size_t ,const size_t ,const size_t );
+    const MultiBlockTopology *getMultiBlockTopology(void) const;
+    MultiBlockTopology *getMultiBlockTopology(void);
 
-    Element *findElement(const int &);
-    const Element *findElement(const int &) const;
-    Element *getNearestElement(const Pos3d &p);
-    const Element *getNearestElement(const Pos3d &p) const;
+    void setPnt(const size_t &,const size_t &,const int &);
+    Pnt *getPnt(const size_t &,const size_t &);
+
+    Pnt *findPoint(const size_t &);
+    const Pnt *findPoint(const size_t &) const;
+    Pnt *getNearestPnt(const Pos3d &p);
+    const Pnt *getNearestPnt(const Pos3d &p) const;
+    std::deque<size_t> copyPoints(const MatrixRange &,const std::vector<size_t> &,const Vector3d &);
+
+    Pos3d getCentroide(void) const;
 
 
   };
 
-} //end of XC namespace.
+} //end of XC namespace
 
 #endif

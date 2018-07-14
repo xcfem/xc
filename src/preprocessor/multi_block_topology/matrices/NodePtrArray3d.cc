@@ -24,9 +24,9 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//TritrizPtrNod.cc
+//NodePtrArray3d.cc
 
-#include "TritrizPtrNod.h"
+#include "NodePtrArray3d.h"
 #include "domain/mesh/node/Node.h"
 #include "xc_basic/src/funciones/algebra/integ_num.h"
 
@@ -42,25 +42,25 @@
 #include "boost/lexical_cast.hpp"
 
 //! @brief Default constructor.
-XC::TritrizPtrNod::TritrizPtrNod(const size_t n_layers)
-  : TritrizPtrBase<MatrizPtrNod>(n_layers) {}
+XC::NodePtrArray3d::NodePtrArray3d(const size_t n_layers)
+  : PtrArray3dBase<NodePtrArray>(n_layers) {}
 //! @brief Constructor.
-XC::TritrizPtrNod::TritrizPtrNod(const size_t n_layers,const size_t n_rows,const size_t cols)
-  : TritrizPtrBase<MatrizPtrNod>(n_layers)
+XC::NodePtrArray3d::NodePtrArray3d(const size_t n_layers,const size_t n_rows,const size_t cols)
+  : PtrArray3dBase<NodePtrArray>(n_layers)
   {
     for(size_t i=0;i<n_layers;i++)
-      (*this)[i]= MatrizPtrNod(n_rows,cols);
+      (*this)[i]= NodePtrArray(n_rows,cols);
   }
 
 //! @brief Returns (if it exists) a pointer to the node
 //! which tag is being passed as parameter.
-XC::Node *XC::TritrizPtrNod::findNode(const int &tag)
+XC::Node *XC::NodePtrArray3d::findNode(const int &tag)
   {
     Node *retval= nullptr;
     const size_t numberOfLayers= getNumberOfLayers();
     for(size_t i=1;i<=numberOfLayers;i++)
       {
-        MatrizPtrNod &layer= operator()(i);
+        NodePtrArray &layer= operator()(i);
         retval= layer.findNode(tag);
         if(retval) break;
       }
@@ -68,27 +68,28 @@ XC::Node *XC::TritrizPtrNod::findNode(const int &tag)
   }
 
 //! @brief Returns the node closest to the point being passed as parameter.
-const XC::Node *XC::TritrizPtrNod::getNearestNode(const Pos3d &p) const
+const XC::Node *XC::NodePtrArray3d::getNearestNode(const Pos3d &p) const
   {
-    TritrizPtrNod *this_no_const= const_cast<TritrizPtrNod *>(this);
+    NodePtrArray3d *this_no_const= const_cast<NodePtrArray3d *>(this);
     return this_no_const->getNearestNode(p);
   }
 
 //! @brief Returns the node closest to the point being passed as parameter.
-XC::Node *XC::TritrizPtrNod::getNearestNode(const Pos3d &p)
+XC::Node *XC::NodePtrArray3d::getNearestNode(const Pos3d &p)
   {
     Node *retval= nullptr, *ptrNod= nullptr;
     const size_t numberOfLayers= getNumberOfLayers();
     double d= DBL_MAX;
     double tmp= 0;
     if(numberOfLayers>100)
-      std::clog << "La «tritriz» de nodes es tiene "
-                << numberOfLayers << " n_layers "
-                << " es mejor buscar por coordenadas en the set asociado."
+      std::clog << getClassName() << "::" << __FUNCTION__
+	        << "Node pointers array has "
+                << numberOfLayers << " layers "
+                << " is better to search by coordinates in the associated set."
                 << std::endl;
     for(size_t i=1;i<=numberOfLayers;i++)
       {
-        MatrizPtrNod &layer= operator()(i);
+        NodePtrArray &layer= operator()(i);
         ptrNod= layer.getNearestNode(p);
         tmp= ptrNod->getDist2(p);
         if(tmp<d)
@@ -102,7 +103,7 @@ XC::Node *XC::TritrizPtrNod::getNearestNode(const Pos3d &p)
 
 //! @brief Returns the indexes of the node identified by the pointer
 //! being passed as parameter.
-XC::ID XC::TritrizPtrNod::getNodeIndices(const Node *n) const
+XC::ID XC::NodePtrArray3d::getNodeIndices(const Node *n) const
   {
     ID retval(3);
     retval[0]= -1; retval[1]= -1; retval[2]= -1;
@@ -126,13 +127,13 @@ XC::ID XC::TritrizPtrNod::getNodeIndices(const Node *n) const
 
 //! @brief Returns (if it exists) a pointer to the node
 //! which tag is being passed as parameter.
-const XC::Node *XC::TritrizPtrNod::findNode(const int &tag) const
+const XC::Node *XC::NodePtrArray3d::findNode(const int &tag) const
   {
     const Node *retval= nullptr;
     const size_t numberOfLayers= getNumberOfLayers();
     for(size_t i=1;i<=numberOfLayers;i++)
       {
-        const MatrizPtrNod &layer= operator()(i);
+        const NodePtrArray &layer= operator()(i);
         retval= layer.findNode(tag);
         if(retval) break;
       }
@@ -141,7 +142,7 @@ const XC::Node *XC::TritrizPtrNod::findNode(const int &tag) const
 
 
 
-XC::Vector XC::TritrizPtrNod::IRowSimpsonIntegration(const size_t &f,const size_t &c,const ExprAlgebra &e,const size_t &n) const
+XC::Vector XC::NodePtrArray3d::IRowSimpsonIntegration(const size_t &f,const size_t &c,const ExprAlgebra &e,const size_t &n) const
   {
     const_ref_i_row iRow= getIRowConstRef(f,c);
     const std::deque<double> dq_retval= RowSimpsonIntegration(iRow,"z",2,e,n);
@@ -152,7 +153,7 @@ XC::Vector XC::TritrizPtrNod::IRowSimpsonIntegration(const size_t &f,const size_
     return retval;
   }
 
-XC::Vector XC::TritrizPtrNod::JRowSimpsonIntegration(const size_t &layer, const size_t &c,const ExprAlgebra &e,const size_t &n) const
+XC::Vector XC::NodePtrArray3d::JRowSimpsonIntegration(const size_t &layer, const size_t &c,const ExprAlgebra &e,const size_t &n) const
   {
     const_ref_j_row iRow= getJRowConstRef(layer,c);
     const std::deque<double> dq_retval= RowSimpsonIntegration(iRow,"x",0,e,n);
@@ -163,7 +164,7 @@ XC::Vector XC::TritrizPtrNod::JRowSimpsonIntegration(const size_t &layer, const 
     return retval;
   }
 
-XC::Vector XC::TritrizPtrNod::KRowSimpsonIntegration(const size_t &layer,const size_t &f,const ExprAlgebra &e,const size_t &n) const
+XC::Vector XC::NodePtrArray3d::KRowSimpsonIntegration(const size_t &layer,const size_t &f,const ExprAlgebra &e,const size_t &n) const
   {
     const_ref_k_row iRow= getKRowConstRef(layer,f);
     const std::deque<double> dq_retval= RowSimpsonIntegration(iRow,"y",1,e,n);
@@ -175,18 +176,18 @@ XC::Vector XC::TritrizPtrNod::KRowSimpsonIntegration(const size_t &layer,const s
   }
 
 //! @brief Impone desplazamiento nulo en the nodes de this set.
-void XC::TritrizPtrNod::fix(const SFreedom_Constraint &spc) const
+void XC::NodePtrArray3d::fix(const SFreedom_Constraint &spc) const
   {
     if(Null()) return;
     const size_t numberOfLayers= getNumberOfLayers();
     for(size_t i=1;i<=numberOfLayers;i++)
       {
-        const MatrizPtrNod &layer= operator()(i);
+        const NodePtrArray &layer= operator()(i);
         layer.fix(spc);
       }
   }
 
-std::vector<int> XC::TritrizPtrNod::getTags(void) const
+std::vector<int> XC::NodePtrArray3d::getTags(void) const
   {
     const size_t numberOfLayers= getNumberOfLayers();
     const size_t numberOfRows= getNumberOfRows();
@@ -200,7 +201,7 @@ std::vector<int> XC::TritrizPtrNod::getTags(void) const
     return retval;
   }
 
-void XC::TritrizPtrNod::Print(std::ostream &os) const
+void XC::NodePtrArray3d::Print(std::ostream &os) const
   {
     const size_t numberOfLayers= getNumberOfLayers();
     const size_t numberOfRows= getNumberOfRows();
@@ -217,13 +218,13 @@ void XC::TritrizPtrNod::Print(std::ostream &os) const
       }
   }
 
-std::ostream &XC::operator<<(std::ostream &os, const TritrizPtrNod &t)
+std::ostream &XC::operator<<(std::ostream &os, const NodePtrArray3d &t)
   {
     t.Print(os);
     return os;
   }
 
-void XC::fix(const XC::TritrizPtrNod::var_ref_caja &ref_caja,const XC::SFreedom_Constraint &spc)
+void XC::fix(const XC::NodePtrArray3d::var_ref_caja &ref_caja,const XC::SFreedom_Constraint &spc)
   {
     if(ref_caja.Empty()) return;
     const size_t numberOfLayers= ref_caja.getNumberOfLayers();
@@ -253,7 +254,7 @@ void XC::fix(const XC::TritrizPtrNod::var_ref_caja &ref_caja,const XC::SFreedom_
   }
 
 //! @brief Returns the indexes of the nodes (j,k),(j+1,k),(j+1,k+1),(j,k+1). 
-std::vector<int> XC::getNodeIdsQuad4N(const XC::TritrizPtrNod::constant_i_layer_const_ref &nodes,const size_t &j,const size_t &k)
+std::vector<int> XC::getNodeIdsQuad4N(const XC::NodePtrArray3d::constant_i_layer_const_ref &nodes,const size_t &j,const size_t &k)
   {
     std::vector<int> retval(4,-1);
     const size_t numberOfRows= nodes.getNumberOfRows();
@@ -347,7 +348,7 @@ std::vector<int> XC::getNodeIdsQuad4N(const XC::TritrizPtrNod::constant_i_layer_
   }
 
 //! @brief Returns the indexes of the nodes (j,k),(j+1,k),(j+1,k+1),(j,k+1). 
-std::vector<int> XC::getNodeIdsQuad9N(const XC::TritrizPtrNod::constant_i_layer_const_ref &nodes,const size_t &j,const size_t &k)
+std::vector<int> XC::getNodeIdsQuad9N(const XC::NodePtrArray3d::constant_i_layer_const_ref &nodes,const size_t &j,const size_t &k)
   {
     std::vector<int> retval(9,-1);
     std::cerr << "getNodeIdsQuad9N not implemented." << std::endl;

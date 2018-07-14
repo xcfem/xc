@@ -24,40 +24,40 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//TritrizPtrPnt.h
+//PntPtrArray3d.h
 //Vector of point matrices
 
-#ifndef TRITRIZPTRPNT_H
-#define TRITRIZPTRPNT_H
+#ifndef PNTPTRARRAY3d_H
+#define PNTPTRARRAY3d_H
 
 #include "xc_utils/src/nucleo/EntCmd.h"
-#include "MatrizPtrPnt.h"
-#include "TritrizPtrBase.h"
+#include "PntPtrArray.h"
+#include "PtrArray3dBase.h"
 #include "utility/matrix/Vector.h"
 
-#include "xc_basic/src/matrices/TritrizIndices.h"
+#include "xc_basic/src/matrices/Indices3dArray.h"
 
 class ExprAlgebra;
 class Intervalo1D;
 class Lista;
 class RangoIndice;
-class RangoTritriz;
+class Array3dRange;
 
 namespace XC{
 
 //! @ingroup MultiBlockTopologyMR
 //! 
-//! @brief "Tritriz" of elment pointers.
-class TritrizPtrPnt: public TritrizPtrBase<MatrizPtrPnt>
+//! @brief Three-dimenstional array of point pointers.
+class PntPtrArray3d: public PtrArray3dBase<PntPtrArray>
   {
   protected:
 
 
     friend class Framework3d;
-    TritrizPtrPnt(const size_t n_layers= 0);
-    TritrizPtrPnt(const size_t ,const size_t ,const size_t );
+    PntPtrArray3d(const size_t n_layers= 0);
+    PntPtrArray3d(const size_t ,const size_t ,const size_t );
   public:
-    inline virtual ~TritrizPtrPnt(void) {}
+    inline virtual ~PntPtrArray3d(void) {}
     Pnt *findPoint(const int &tag);
     const Pnt *findPoint(const int &tag) const;
     Pnt *getNearestPnt(const Pos3d &p);
@@ -66,13 +66,13 @@ class TritrizPtrPnt: public TritrizPtrBase<MatrizPtrPnt>
     const MultiBlockTopology *getMultiBlockTopology(void) const;
     MultiBlockTopology *getMultiBlockTopology(void);
 
-    std::deque<size_t> copyPoints(const RangoTritriz &,const std::vector<size_t> &,const Vector3d &);
-    TritrizPtrPnt getPointsOnRange(const RangoTritriz &);
+    std::deque<size_t> copyPoints(const Array3dRange &,const std::vector<size_t> &,const Vector3d &);
+    PntPtrArray3d getPointsOnRange(const Array3dRange &);
     Pnt *getPoint(const VIndices &i);
-    TritrizPtrPnt getPoints(const TritrizIndices &);
-    MatrizPtrPnt getPoints(const MatrizIndices &);
-    TritrizPtrPnt getCellPoints(const size_t &,const size_t &,const size_t &,const TritrizIndices &);
-    MatrizPtrPnt getCellPoints(const size_t &,const size_t &,const MatrizIndices &);
+    PntPtrArray3d getPoints(const Indices3dArray &);
+    PntPtrArray getPoints(const IndicesMatrix &);
+    PntPtrArray3d getCellPoints(const size_t &,const size_t &,const size_t &,const Indices3dArray &);
+    PntPtrArray getCellPoints(const size_t &,const size_t &,const IndicesMatrix &);
 
     Pos3d getCentroide(void) const;
 
@@ -84,9 +84,9 @@ class TritrizPtrPnt: public TritrizPtrBase<MatrizPtrPnt>
   };
 
 
-std::ostream &operator<<(std::ostream &os,const TritrizPtrPnt &);
+std::ostream &operator<<(std::ostream &os,const PntPtrArray3d &);
 
-std::vector<size_t> getIdPointsQuad(const TritrizPtrPnt::constant_i_layer_const_ref &,const size_t &j,const size_t &k);
+std::vector<size_t> getIdPointsQuad(const PntPtrArray3d::constant_i_layer_const_ref &,const size_t &j,const size_t &k);
 
 } //end of XC namespace.
 

@@ -32,7 +32,7 @@
 #include "xc_utils/src/nucleo/EntCmd.h"
 #include "utility/actor/actor/MovableObject.h"
 
-class TritrizPos3d;
+class Pos3dArray3d;
 
 namespace XC {
 

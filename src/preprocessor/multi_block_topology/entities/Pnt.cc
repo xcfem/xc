@@ -34,8 +34,8 @@
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
 #include "xc_basic/src/text/text_string.h"
-#include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
-#include "xc_utils/src/geom/pos_vec/TritrizPos3d.h"
+#include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
+#include "xc_utils/src/geom/pos_vec/Pos3dArray3d.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 #include "preprocessor/multi_block_topology/ReferenceFrame.h"
@@ -158,8 +158,8 @@ void XC::Pnt::create_nodes(void)
   {
     if(getGenMesh() && (getNumberOfNodes()==0))
       {
-        MatrizPos3d tmp(1,1,GetPos());
-        TritrizPos3d ptos(1,tmp);
+        Pos3dArray tmp(1,1,GetPos());
+        Pos3dArray3d ptos(1,tmp);
         EntMdlr::create_nodes(ptos);
       }
   }

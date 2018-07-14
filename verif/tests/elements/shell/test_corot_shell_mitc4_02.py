@@ -71,8 +71,8 @@ print "vPosN3= ",vPosN3
 print "movN3= ",movN3
 print "vPosN4= ",vPosN4
 print "movN4= ",movN4
-print "matriz R0= ",R0
-print "matriz R= ",R
+print "matrix R0= ",R0
+print "matrix R= ",R
 print "displacement of node 1 in local coordinate system: ",movLocalN1
 print "displacement of node 2 in local coordinate system: ",movLocalN2
 print "displacement of node 3 in local coordinate system: ",movLocalN3

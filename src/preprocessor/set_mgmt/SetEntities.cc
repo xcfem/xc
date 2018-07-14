@@ -34,7 +34,7 @@
 #include "preprocessor/multi_block_topology/entities/Face.h"
 #include "preprocessor/multi_block_topology/entities/Body.h"
 #include "preprocessor/multi_block_topology/entities/UniformGrid.h"
-#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
 #include "preprocessor/multi_block_topology/trf/TrfGeom.h"
 #include "utility/matrix/ID.h"
 
@@ -204,7 +204,7 @@ void XC::SetEntities::fillDownwards(SetMeshComp &mc)
         lines.insert(lines.end(),ll.begin(),ll.end());
 
         //Elements.
-        TritrizPtrElem &ttz_elements= (*i)->getTtzElements();
+        ElemPtrArray3d &ttz_elements= (*i)->getTtzElements();
         const size_t numberOfLayers= ttz_elements.getNumberOfLayers();
         const size_t numberOfRows= ttz_elements.getNumberOfRows();
         const size_t numberOfColumns= ttz_elements.getNumberOfColumns();
@@ -222,7 +222,7 @@ void XC::SetEntities::fillDownwards(SetMeshComp &mc)
           points.push_back(const_cast<Pnt *>((*i)->getVertex(j)));
 
         //Elements.
-        TritrizPtrElem &ttz_elements= (*i)->getTtzElements();
+        ElemPtrArray3d &ttz_elements= (*i)->getTtzElements();
         const size_t numberOfLayers= ttz_elements.getNumberOfLayers();
         const size_t numberOfRows= ttz_elements.getNumberOfRows();
         const size_t numberOfColumns= ttz_elements.getNumberOfColumns();

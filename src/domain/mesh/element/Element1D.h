@@ -50,12 +50,12 @@ class DeformationPlane;
 //! @brief Base class for one-dimensional elements (beam,truss,...)
 class Element1D : public ElementBase<2>
   {
-    void unidimensional_meshing(const TritrizPtrNod &,TritrizPtrElem &) const;
+    void unidimensional_meshing(const NodePtrArray3d &,ElemPtrArray3d &) const;
   protected:
     mutable std::vector<double> tributaryLengths;
 
-    TritrizPtrElem put_on_mesh(const TritrizPtrNod &,meshing_dir dm) const;
-    TritrizPtrElem cose(const SetEstruct &f1,const SetEstruct &f2) const;
+    ElemPtrArray3d put_on_mesh(const NodePtrArray3d &,meshing_dir dm) const;
+    ElemPtrArray3d cose(const SetEstruct &f1,const SetEstruct &f2) const;
 
     int sendCoordTransf(int posFlag,const int &,const int &,CommParameters &);
     CrdTransf *recvCoordTransf(int posFlag,const int &,const int &,const CommParameters &);

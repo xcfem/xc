@@ -67,7 +67,7 @@ class EigenSOE : public SystemOfEqn
   protected:
     int size; //!< order of A
     bool factored;
-    sparse_matrix massMatrix; //!< Matriz de masas (se usa en getModalParticipationFactor).
+    sparse_matrix massMatrix; //!< Mass matrix (used in getModalParticipationFactor).
     EigenSolver *theSolver;
 
     void free_mem(void);

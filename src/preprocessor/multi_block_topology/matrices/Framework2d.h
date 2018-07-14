@@ -34,19 +34,19 @@
 
 
 namespace XC {
-class MatrizPtrPnt;
+class PntPtrArray;
 
 //! @ingroup MultiBlockTopology
 //
 //! @brief Bidimensional framework container.
-class Framework2d: public ModelComponentContainer<MatrizPtrPnt>
+class Framework2d: public ModelComponentContainer<PntPtrArray>
   {
   protected:
-    MatrizPtrPnt *Crea(void);
+    PntPtrArray *Crea(void);
   public:
     Framework2d(MultiBlockTopology *mbt= nullptr);
 
-    MatrizPtrPnt *makeNew(void);
+    PntPtrArray *makeNew(void);
   };
 
 } //end of XC namespace

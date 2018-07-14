@@ -31,7 +31,7 @@
 #ifndef QuadBase9N_h
 #define QuadBase9N_h
 
-#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
 #include "preprocessor/multi_block_topology/aux_meshing.h"
 #include "preprocessor/prep_handlers/LoadHandler.h"
 #include "domain/load/plane/BidimStrainLoad.h"
@@ -45,7 +45,7 @@ template <class PhysProp>
 class QuadBase9N : public PlaneElement<9,PhysProp>
   {
   protected:
-    TritrizPtrElem put_on_mesh(const TritrizPtrNod &,meshing_dir dm) const;
+    ElemPtrArray3d put_on_mesh(const NodePtrArray3d &,meshing_dir dm) const;
 
   public:
 
@@ -78,7 +78,7 @@ XC::QuadBase9N<PhysProp>::QuadBase9N(int tag,int classTag,const PhysProp &pp)
 
 //! @brief Put the element on the mesh being passed as parameter.
 template <class PhysProp>
-XC::TritrizPtrElem XC::QuadBase9N<PhysProp>::put_on_mesh(const TritrizPtrNod &nodes,meshing_dir dm) const
+XC::ElemPtrArray3d XC::QuadBase9N<PhysProp>::put_on_mesh(const NodePtrArray3d &nodes,meshing_dir dm) const
   { return put_quad9N_on_mesh(*this,nodes,dm); }
 
 //! @brief Returns the element contour as a polygon.

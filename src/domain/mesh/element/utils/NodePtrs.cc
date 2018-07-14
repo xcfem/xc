@@ -325,7 +325,7 @@ size_t XC::NodePtrs::getDimension(void) const
     return retval;
   }
 
-//! @brief Returns a matriz con las coordinates of the nodes.
+//! @brief Returns a matrix with the coordinates of the nodes by rows.
 const XC::Matrix &XC::NodePtrs::getCoordinates(void) const
   {
     static Matrix retval;

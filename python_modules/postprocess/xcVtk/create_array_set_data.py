@@ -18,7 +18,7 @@ def VtkCreaStrArraySetData(setToDraw, entTypeName, attr):
                  ("pnts", "lines", "nodes", "elementos")
     attr:        attribute to be stored in the array
   '''
-  # Definimos la matriz
+  # Define matrix
   arr= vtk.vtkStringArray()
   arr.SetName(attr)
   container= None

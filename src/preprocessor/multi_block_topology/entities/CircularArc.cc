@@ -30,8 +30,8 @@
 #include "CircularArc.h"
 #include "Pnt.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
-#include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
-#include "xc_utils/src/geom/pos_vec/TritrizPos3d.h"
+#include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
+#include "xc_utils/src/geom/pos_vec/Pos3dArray3d.h"
 #include "xc_utils/src/geom/d2/CircularSector3d.h"
 
 #include "domain/mesh/node/Node.h"
@@ -215,7 +215,7 @@ BND3d XC::CircularArc::Bnd(void) const
   { return get_sector_circular3d().Bnd(); }
 
 //! @brief Return ndiv+1 equally-sapaced positions along the arc.
-MatrizPos3d XC::CircularArc::get_positions(void) const
+Pos3dArray XC::CircularArc::get_positions(void) const
 { return get_sector_circular3d().getArcPoints(NDiv()+1); }
 
 //! @brief Interface with VTK.

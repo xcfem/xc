@@ -52,7 +52,7 @@
 #include "ShellMITC4Base.h"
 #include "utility/matrix/ID.h"
 #include "utility/actor/actor/MovableVector.h"
-#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
 #include "preprocessor/multi_block_topology/aux_meshing.h"
 #include <domain/mesh/node/Node.h>
 #include <material/section/SectionForceDeformation.h>
@@ -359,7 +359,7 @@ const XC::Matrix &XC::ShellMITC4Base::getTangentStiff(void) const
     return stiff;
   }
 
-//! @brief Calcula la matriz G.
+//! @brief Computes the matrix G.
 const XC::Matrix XC::ShellMITC4Base::calculateG(void) const
   {
     const double dx34= xl[0][2]-xl[0][3];

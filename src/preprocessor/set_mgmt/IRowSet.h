@@ -30,8 +30,8 @@
 #define IROWSET_H
 
 #include "RowSet.h"
-#include "preprocessor/multi_block_topology/matrices/TritrizPtrNod.h"
-#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/matrices/NodePtrArray3d.h"
+#include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
 
 class RangoIndice;
 
@@ -47,11 +47,11 @@ class EntMdlr;
 //!  - Nodes.
 //!  - Finite elements.
 //!  that correspond to a i_row of an EntMdlr object.
-class IRowSet: public RowSet<TritrizPtrNod::var_ref_i_row,TritrizPtrElem::var_ref_i_row>
+class IRowSet: public RowSet<NodePtrArray3d::var_ref_i_row,ElemPtrArray3d::var_ref_i_row>
   {
   public:
-    typedef TritrizPtrNod::var_ref_i_row tNodeRow;
-    typedef TritrizPtrElem::var_ref_i_row tElemRow;
+    typedef NodePtrArray3d::var_ref_i_row tNodeRow;
+    typedef ElemPtrArray3d::var_ref_i_row tElemRow;
     IRowSet(EntMdlr &e,const size_t &f=1,const size_t &c=1,const std::string &nmb="",Preprocessor *preprocessor= nullptr);
     IRowSet(EntMdlr &e,const RangoIndice &layer_range,const size_t &f,const size_t &c,const std::string &nmb="",Preprocessor *preprocessor= nullptr);
   };

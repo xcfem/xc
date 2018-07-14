@@ -395,7 +395,7 @@ const XC::Matrix &XC::ElasticBeam3d::getInitialStiff(void) const
     return retval;
   }
 
-//! @brief Return the matriz de masas of the element.
+//! @brief Return the mass matrix of the element.
 const XC::Matrix &XC::ElasticBeam3d::getMass(void) const
   {
     K.Zero();
@@ -409,16 +409,16 @@ const XC::Matrix &XC::ElasticBeam3d::getMass(void) const
         K(0,0)= m;
         K(1,1)= m;
         K(2,2)= m;
-        K(3,3)= mpeq; //Modified by LCPT para evitar matriz M singular.
-        K(4,4)= mpeq; //Modified by LCPT para evitar matriz M singular.
-        K(5,5)= mpeq; //Modified by LCPT para evitar matriz M singular.
+        K(3,3)= mpeq; //Modified by LCPT to avoid a singular M matrix.
+        K(4,4)= mpeq; //Modified by LCPT to avoid a singular M matrix.
+        K(5,5)= mpeq; //Modified by LCPT to avoid a singular M matrix.
 
         K(6,6)= m;
         K(7,7)= m;
         K(8,8)= m;
-        K(9,9)= mpeq; //Modified by LCPT para evitar matriz M singular.
-        K(10,10)= mpeq; //Modified by LCPT para evitar matriz M singular.
-        K(11,11)= mpeq; //Modified by LCPT para evitar matriz M singular.
+        K(9,9)= mpeq; //Modified by LCPT to avoid a singular M matrix.
+        K(10,10)= mpeq; //Modified by LCPT to avoid a singular M matrix.
+        K(11,11)= mpeq; //Modified by LCPT to avoid a singular M matrix.
       }
     if(isDead())
       K*=dead_srf;

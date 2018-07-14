@@ -44,7 +44,7 @@
 #include "xc_utils/src/geom/d1/Segment2d.h"
 #include "xc_utils/src/geom/d1/Polilinea3d.h"
 #include "xc_utils/src/geom/pos_vec/SVD3d.h"
-#include "xc_utils/src/geom/pos_vec/TritrizPos3d.h"
+#include "xc_utils/src/geom/pos_vec/Pos3dArray3d.h"
 #include "xc_utils/src/gnu_gts/TriangleMap.h"
 
 

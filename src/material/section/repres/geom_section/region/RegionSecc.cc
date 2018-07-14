@@ -35,7 +35,7 @@
 
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
-#include "xc_utils/src/geom/matriz_FT.h"
+#include "xc_utils/src/geom/FT_matrix.h"
 
 //! @brief Constructor.
 XC::RegionSecc::RegionSecc(Material *mat)
@@ -179,7 +179,7 @@ XC::Matrix &XC::RegionSecc::getI(void) const
 //! @brief Return the tensor of inertia with respect to the point o.
 XC::Matrix &XC::RegionSecc::getI(const Pos2d &o) const
   {
-    matriz_FT tmp= getPolygon().I(o);
+    FT_matrix tmp= getPolygon().I(o);
     static Matrix i(2,2);
     i(0,0)= tmp(1,1); i(0,1)= tmp(1,2);
     i(1,0)= tmp(1,2); i(1,1)= tmp(2,2);

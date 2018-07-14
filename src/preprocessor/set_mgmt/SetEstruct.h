@@ -34,7 +34,7 @@
 #include "domain/mesh/node/NodeTopology.h"
 
 namespace XC {
-class TritrizPtrElem;
+class ElemPtrArray3d;
 class Node;
 class Element;
 
@@ -46,7 +46,7 @@ class SetEstruct: public SetBase
   {
   protected:
     friend class Preprocessor;
-    void add_elements(const TritrizPtrElem &);
+    void add_elements(const ElemPtrArray3d &);
 
     NodePtrSet getNodePtrSet(void);
   public:

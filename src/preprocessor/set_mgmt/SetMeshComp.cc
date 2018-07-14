@@ -30,7 +30,7 @@
 #include "Set.h"
 #include "domain/domain/Domain.h"
 #include "preprocessor/Preprocessor.h"
-#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
 #include "preprocessor/multi_block_topology/trf/TrfGeom.h"
 #include "domain/constraints/SFreedom_Constraint.h"
 #include "domain/constraints/MFreedom_Constraint.h"

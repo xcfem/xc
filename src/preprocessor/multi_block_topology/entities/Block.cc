@@ -38,8 +38,8 @@
 #include "med.h"
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/set_mgmt/Set.h"
-#include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
-#include "xc_utils/src/geom/pos_vec/TritrizPos3d.h"
+#include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
+#include "xc_utils/src/geom/pos_vec/Pos3dArray3d.h"
 #include "vtkCellType.h"
 
 // Numbering of vertices:
@@ -326,7 +326,7 @@ void XC::Block::create_face_nodes(void)
 //! - Edge 10 has indices (numberOfLayers,nfil,k=1..ncol) 
 //! - Edge 11 has indices (numberOfLayers,j=1..nfil,ncol) 
 //! - Edge 12 has indices (numberOfLayers,1,k=1..ncol) 
-TritrizPos3d XC::Block::get_positions(void) const
+Pos3dArray3d XC::Block::get_positions(void) const
   {
     const size_t ndiv_12= NDivI();
     const size_t ndiv_23= NDivJ();
@@ -339,11 +339,11 @@ TritrizPos3d XC::Block::get_positions(void) const
     const Pos3d p6= getVertex(6)->GetPos();
     const Pos3d p7= getVertex(7)->GetPos();
     const Pos3d p8= getVertex(8)->GetPos();
-    const MatrizPos3d ptos_l5= MatrizPos3d(p1,p5,ndiv_15);
-    const MatrizPos3d ptos_l6= MatrizPos3d(p2,p6,ndiv_15);
-    const MatrizPos3d ptos_l7= MatrizPos3d(p3,p7,ndiv_15);
-    const MatrizPos3d ptos_l8= MatrizPos3d(p4,p8,ndiv_15);
-    TritrizPos3d retval(ptos_l5,ptos_l6,ptos_l7,ptos_l8,ndiv_12,ndiv_23);
+    const Pos3dArray ptos_l5= Pos3dArray(p1,p5,ndiv_15);
+    const Pos3dArray ptos_l6= Pos3dArray(p2,p6,ndiv_15);
+    const Pos3dArray ptos_l7= Pos3dArray(p3,p7,ndiv_15);
+    const Pos3dArray ptos_l8= Pos3dArray(p4,p8,ndiv_15);
+    Pos3dArray3d retval(ptos_l5,ptos_l6,ptos_l7,ptos_l8,ndiv_12,ndiv_23);
     return retval;
   }
 
@@ -377,8 +377,8 @@ void XC::Block::create_nodes(void)
         const size_t n_layers= NDivK()+1;
         const size_t n_rows= NDivJ()+1;
         const size_t cols= NDivI()+1;
-        ttzNodes = TritrizPtrNod(n_layers,n_rows,cols); //Pointers to node.
-        TritrizPos3d node_pos= get_positions(); //Node positions.
+        ttzNodes = NodePtrArray3d(n_layers,n_rows,cols); //Pointers to node.
+        Pos3dArray3d node_pos= get_positions(); //Node positions.
 
         //Vertices.
 	ttzNodes(1,1,1)= getVertex(1)->getNode();

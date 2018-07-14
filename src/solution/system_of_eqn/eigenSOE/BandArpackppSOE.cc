@@ -140,7 +140,7 @@ int XC::BandArpackppSOE::addA(const Matrix &a, const ID &id, double fact)
   { return addToMatrix(A,a,id,fact); }
 
 
-//! @brief Anula la matriz A.
+//! @brief Zeroes the matrix A.
 void XC::BandArpackppSOE::zeroA(void)
   { A.Anula(); }
 
@@ -202,7 +202,7 @@ int XC::BandArpackppSOE::addM(const Matrix &m, const ID &id, double fact)
     return retval;
   }
 
-//! @brief Anula la matriz M.
+//! @brief Zeroes the matrix M.
 void XC::BandArpackppSOE::zeroM(void)
   { 
     EigenSOE::zeroM();

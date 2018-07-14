@@ -28,7 +28,7 @@
 
 #include "SetEstruct.h"
 #include "preprocessor/Preprocessor.h"
-#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/element/utils/ElementEdges.h"
@@ -138,7 +138,7 @@ XC::ElementEdges XC::SetEstruct::getElementEdges(void)
   }
 
 //! @brief Adds to the model the elements being passed as parameters.
-void XC::SetEstruct::add_elements(const TritrizPtrElem &elements)
+void XC::SetEstruct::add_elements(const ElemPtrArray3d &elements)
   {
     const size_t n_layers= elements.getNumberOfLayers();
     if(n_layers<1) return;

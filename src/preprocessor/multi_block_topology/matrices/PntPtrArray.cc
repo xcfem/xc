@@ -24,10 +24,10 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//MatrizPtrPnt.cc
+//PntPtrArray.cc
 
-#include "MatrizPtrPnt.h"
-#include "TritrizPtrPnt.h"
+#include "PntPtrArray.h"
+#include "PntPtrArray3d.h"
 #include "preprocessor/multi_block_topology/entities/Pnt.h"
 #include "domain/domain/Domain.h"
 #include "domain/constraints/SFreedom_Constraint.h"
@@ -39,11 +39,11 @@
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/node/Node.h"
 #include "preprocessor/multi_block_topology/MultiBlockTopology.h"
-#include "xc_basic/src/matrices/RangoMatriz.h"
+#include "xc_basic/src/matrices/MatrixRange.h"
 
 
 
-void XC::MatrizPtrPnt::setPnt(const size_t &j,const size_t &k,const int &id_point)
+void XC::PntPtrArray::setPnt(const size_t &j,const size_t &k,const int &id_point)
   {
     if(check_range(j,k))
       {
@@ -57,14 +57,14 @@ void XC::MatrizPtrPnt::setPnt(const size_t &j,const size_t &k,const int &id_poin
         at(j,k)= c->getPoints().busca(id_point);
      }
    else
-     std::cerr << "(MatrizPtrPnt::setPnt): '"
+     std::cerr << "(PntPtrArray::setPnt): '"
                << "'; indices: ("
                << j << ',' << k << ") out of range;"
                << " number of rows: " << n_rows << " number of columns: " << n_columns
                << std::endl;
   }
 
-XC::Pnt *XC::MatrizPtrPnt::getPnt(const size_t &j,const size_t &k)
+XC::Pnt *XC::PntPtrArray::getPnt(const size_t &j,const size_t &k)
   {
     Pnt *retval= nullptr;
     if(check_range(j,k))
@@ -74,7 +74,7 @@ XC::Pnt *XC::MatrizPtrPnt::getPnt(const size_t &j,const size_t &k)
 
 //! @brief Returns (if it exists) a pointer to point
 //! identified by the tag is being passed as parameter.
-XC::Pnt *XC::MatrizPtrPnt::findPoint(const size_t &tag)
+XC::Pnt *XC::PntPtrArray::findPoint(const size_t &tag)
   {
     Pnt *retval= nullptr;
     Pnt *tmp= nullptr;
@@ -97,7 +97,7 @@ XC::Pnt *XC::MatrizPtrPnt::findPoint(const size_t &tag)
   }
 
 //! @brief Returns a pointer to the MultiBlockTopology object.
-const XC::MultiBlockTopology *XC::MatrizPtrPnt::getMultiBlockTopology(void) const
+const XC::MultiBlockTopology *XC::PntPtrArray::getMultiBlockTopology(void) const
   {
     const MultiBlockTopology *retval= nullptr;
     const EntCmd *ptr= Owner();
@@ -105,9 +105,9 @@ const XC::MultiBlockTopology *XC::MatrizPtrPnt::getMultiBlockTopology(void) cons
     const Framework2d *e2d= dynamic_cast<const Framework2d *>(ptr);
     if(e2d)
       retval= e2d->getMultiBlockTopology();
-    else //Tritriz.
+    else //Array 3d.
       {
-        const TritrizPtrPnt *t= dynamic_cast<const TritrizPtrPnt *>(ptr);
+        const PntPtrArray3d *t= dynamic_cast<const PntPtrArray3d *>(ptr);
         retval= t->getMultiBlockTopology();
       }
     assert(retval);
@@ -115,7 +115,7 @@ const XC::MultiBlockTopology *XC::MatrizPtrPnt::getMultiBlockTopology(void) cons
   }
 
 //! @brief Returns a pointer to the MultiBlockTopology object.
-XC::MultiBlockTopology *XC::MatrizPtrPnt::getMultiBlockTopology(void)
+XC::MultiBlockTopology *XC::PntPtrArray::getMultiBlockTopology(void)
   {
     MultiBlockTopology *retval= nullptr;
     EntCmd *ptr= Owner();
@@ -123,9 +123,9 @@ XC::MultiBlockTopology *XC::MatrizPtrPnt::getMultiBlockTopology(void)
     Framework2d *e2d= dynamic_cast<Framework2d *>(ptr);
     if(e2d)
       retval= e2d->getMultiBlockTopology();
-    else //Tritriz.
+    else //Array 3d.
       {
-        TritrizPtrPnt *t= dynamic_cast<TritrizPtrPnt *>(ptr);
+        PntPtrArray3d *t= dynamic_cast<PntPtrArray3d *>(ptr);
         retval= t->getMultiBlockTopology();
       }
     assert(retval);
@@ -134,7 +134,7 @@ XC::MultiBlockTopology *XC::MatrizPtrPnt::getMultiBlockTopology(void)
 
 //! @brief Returns (if it exists) a pointer to the point
 //! identified by the tag passed as parameter.
-const XC::Pnt *XC::MatrizPtrPnt::findPoint(const size_t &tag) const
+const XC::Pnt *XC::PntPtrArray::findPoint(const size_t &tag) const
   {
     const Pnt *retval= nullptr;
     const Pnt *tmp= nullptr;
@@ -157,7 +157,7 @@ const XC::Pnt *XC::MatrizPtrPnt::findPoint(const size_t &tag) const
   }
 
 //! @brief Return the point closest to the point being passed as parameter.
-XC::Pnt *XC::MatrizPtrPnt::getNearestPnt(const Pos3d &p)
+XC::Pnt *XC::PntPtrArray::getNearestPnt(const Pos3d &p)
   {
     Pnt *retval= nullptr, *ptrPnt= nullptr;
     double d= DBL_MAX;
@@ -182,14 +182,14 @@ XC::Pnt *XC::MatrizPtrPnt::getNearestPnt(const Pos3d &p)
   }
 
 //! @brief Return the ppoint closest to the point being passed as parameter.
-const XC::Pnt *XC::MatrizPtrPnt::getNearestPnt(const Pos3d &p) const
+const XC::Pnt *XC::PntPtrArray::getNearestPnt(const Pos3d &p) const
   {
-    MatrizPtrPnt *this_no_const= const_cast<MatrizPtrPnt *>(this);
+    PntPtrArray *this_no_const= const_cast<PntPtrArray *>(this);
     return this_no_const->getNearestPnt(p);
   }
 
-//! @brief Returns a matriz with the point identifiers.
-m_int XC::MatrizPtrPnt::getTags(void) const
+//! @brief Returns an array with the point identifiers.
+m_int XC::PntPtrArray::getTags(void) const
   {
     const size_t numberOfRows= getNumberOfRows();
     const size_t numberOfColumns= getNumberOfColumns();
@@ -205,7 +205,7 @@ m_int XC::MatrizPtrPnt::getTags(void) const
   }
 
 //! @brief Return the framework centroid.
-Pos3d XC::MatrizPtrPnt::getCentroide(void) const
+Pos3d XC::PntPtrArray::getCentroide(void) const
   {
     Pos3d retval;
     const size_t numberOfRows= getNumberOfRows();
@@ -234,7 +234,7 @@ Pos3d XC::MatrizPtrPnt::getCentroide(void) const
 //! indexes of the point the values of the offsetIndices vector; i.e.:
 //! (i,j)->(i+offsetIndices[0],j+offsetIndices[1])
 //! and moving the by the vectorOffset vector.
-std::deque<size_t> XC::MatrizPtrPnt::copyPoints(const RangoMatriz &rango,const std::vector<size_t> &offsetIndices,const Vector3d &vectorOffset= Vector3d())
+std::deque<size_t> XC::PntPtrArray::copyPoints(const MatrixRange &rango,const std::vector<size_t> &offsetIndices,const Vector3d &vectorOffset= Vector3d())
   {
     MultiBlockTopology *mbt= getMultiBlockTopology();
     std::deque<size_t> retval;

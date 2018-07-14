@@ -21,8 +21,8 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-XC::TritrizPtrNod &(XC::EntMdlr::*getTtzNodes)(void)= &XC::EntMdlr::getTtzNodes;
-XC::TritrizPtrElem &(XC::EntMdlr::*getTtzElements)(void)= &XC::EntMdlr::getTtzElements;
+XC::NodePtrArray3d &(XC::EntMdlr::*getTtzNodes)(void)= &XC::EntMdlr::getTtzNodes;
+XC::ElemPtrArray3d &(XC::EntMdlr::*getTtzElements)(void)= &XC::EntMdlr::getTtzElements;
 XC::Node *(XC::EntMdlr::*getNodeEntMdlr)(const size_t &i,const size_t &,const size_t &)= &XC::EntMdlr::getNode;
 XC::Node *(XC::EntMdlr::*getNearestNodeEntMdlr)(const Pos3d &)= &XC::EntMdlr::getNearestNode;
 XC::Element *(XC::EntMdlr::*getElementEntMdlr)(const size_t &i,const size_t &,const size_t &)= &XC::EntMdlr::getElement; 

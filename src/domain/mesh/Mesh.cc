@@ -1134,7 +1134,7 @@ double XC::Mesh::getNodeDisp(int nodeTag, int dof,int &errorFlag)
     return result;
   }
 
-//! @brief Set la matriz de masas al nudo which tag being passed as parameter.
+//! @brief Set the mass matrix for the node identified by the argument.
 int XC::Mesh::setMass(const XC::Matrix &mass, int nodeTag)
   {
     Node *theNode = this->getNode(nodeTag);

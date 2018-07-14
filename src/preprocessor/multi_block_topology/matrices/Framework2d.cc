@@ -27,7 +27,7 @@
 //Framework2d.cc
 
 #include "Framework2d.h"
-#include "MatrizPtrPnt.h"
+#include "PntPtrArray.h"
 #include "preprocessor/Preprocessor.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
@@ -39,12 +39,12 @@
 
 //! @brief Constructor.
 XC::Framework2d::Framework2d(MultiBlockTopology *mbt)
-  : ModelComponentContainer<MatrizPtrPnt>(mbt) {}
+  : ModelComponentContainer<PntPtrArray>(mbt) {}
 
 //! @brief Creates a new point.
-XC::MatrizPtrPnt *XC::Framework2d::Crea(void)
+XC::PntPtrArray *XC::Framework2d::Crea(void)
   {
-    MatrizPtrPnt *retval= new MatrizPtrPnt();
+    PntPtrArray *retval= new PntPtrArray();
     retval->set_owner(this);
     (*this)[getTag()]= retval;
     //UpdateSets(retval);
@@ -53,9 +53,9 @@ XC::MatrizPtrPnt *XC::Framework2d::Crea(void)
   }
 
 //! @brief Creates a new bi-dimensional framework.
-XC::MatrizPtrPnt *XC::Framework2d::makeNew(void)
+XC::PntPtrArray *XC::Framework2d::makeNew(void)
   {
-    MatrizPtrPnt *retval= busca(getTag());
+    PntPtrArray *retval= busca(getTag());
     if(!retval) //The framework is new.
       retval= Crea();
     return retval;

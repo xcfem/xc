@@ -30,10 +30,10 @@
 #include "Pnt.h"
 #include "preprocessor/multi_block_topology/MultiBlockTopology.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
+#include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
-#include "xc_basic/src/matrices/matrizT.h"
+#include "xc_basic/src/matrices/TMatrix.h"
 
 //! @brief Constructor.
 XC::QuadSurface::QuadSurface(Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)
@@ -251,7 +251,7 @@ void XC::QuadSurface::setPoints(const ID &point_indexes)
   }
 
 //! @brief Creates and inserts the lines from the points being passed as parameter.
-void XC::QuadSurface::setPoints(const MatrizPtrPnt &pntPtrs)
+void XC::QuadSurface::setPoints(const PntPtrArray &pntPtrs)
   {
     const size_t nf= pntPtrs.getNumberOfRows(); //No. de rows of points.
     if(nf<2)
@@ -328,7 +328,7 @@ void XC::QuadSurface::setPoints(const m_int &point_indexes)
                   << "' must have at least two columns." << std::endl;
         return;
       }
-    MatrizPtrPnt points(nf,nc);
+    PntPtrArray points(nf,nc);
     for(size_t i= 1;i<=nf;i++)
       for(size_t j= 1;j<=nc;j++)
         {
@@ -365,9 +365,9 @@ void XC::QuadSurface::defGridPoints(const boost::python::list &l)
   }
 
 //! @brief Returns (ndivI+1)*(ndivJ+1) positions to place the nodes.
-MatrizPos3d XC::QuadSurface::get_positions(void) const
+Pos3dArray XC::QuadSurface::get_positions(void) const
   {
-    MatrizPos3d retval;
+    Pos3dArray retval;
     const int numEdges= getNumberOfEdges();
     if(numEdges!=4)
       {
@@ -377,11 +377,11 @@ MatrizPos3d XC::QuadSurface::get_positions(void) const
         return retval;
       }
 
-    MatrizPos3d ptos_l1= lines[0].getNodePosForward();
-    MatrizPos3d ptos_l2= lines[1].getNodePosForward();
-    MatrizPos3d ptos_l3= lines[2].getNodePosReverse(); //Ordenados al revés.
-    MatrizPos3d ptos_l4= lines[3].getNodePosReverse(); //Ordenados al revés.
-    retval= MatrizPos3d(ptos_l1,ptos_l2,ptos_l3,ptos_l4);
+    Pos3dArray ptos_l1= lines[0].getNodePosForward();
+    Pos3dArray ptos_l2= lines[1].getNodePosForward();
+    Pos3dArray ptos_l3= lines[2].getNodePosReverse(); //Ordenados al revés.
+    Pos3dArray ptos_l4= lines[3].getNodePosReverse(); //Ordenados al revés.
+    retval= Pos3dArray(ptos_l1,ptos_l2,ptos_l3,ptos_l4);
     retval.Trn();
     return retval;
   }
@@ -430,7 +430,7 @@ void XC::QuadSurface::create_nodes(void)
 
         const size_t n_rows= NDivJ()+1;
         const size_t cols= NDivI()+1;
-        ttzNodes = TritrizPtrNod(1,n_rows,cols);
+        ttzNodes = NodePtrArray3d(1,n_rows,cols);
 
 
         //j=1
@@ -454,7 +454,7 @@ void XC::QuadSurface::create_nodes(void)
           ttzNodes(1,j,cols)= lines[1].getNode(j);
 
 
-        MatrizPos3d node_pos= get_positions(); //Node positions.
+        Pos3dArray node_pos= get_positions(); //Node positions.
         for(size_t j= 2;j<n_rows;j++) //interior rows.
           for(size_t k= 2;k<cols;k++) //interior columns.
             create_node(node_pos(j,k),1,j,k);

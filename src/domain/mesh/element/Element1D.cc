@@ -27,8 +27,8 @@
 //Element1D.cc
 
 #include "Element1D.h"
-#include "preprocessor/multi_block_topology/matrices/TritrizPtrNod.h"
-#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/matrices/NodePtrArray3d.h"
+#include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/prep_handlers/LoadHandler.h"
 #include "preprocessor/set_mgmt/SetEstruct.h"
@@ -43,7 +43,7 @@
 #include "xc_basic/src/matrices/m_int.h"
 #include "domain/mesh/element/utils/coordTransformation/CrdTransf2d.h"
 #include "domain/mesh/element/utils/coordTransformation/CrdTransf3d.h"
-#include "xc_utils/src/geom/pos_vec/MatrizPos3d.h"
+#include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
 #include "xc_utils/src/geom/sis_coo/SisCooRect3d3d.h"
@@ -314,7 +314,7 @@ void XC::Element1D::strainLoad(const DeformationPlane &p1,const DeformationPlane
 size_t XC::Element1D::getDimension(void) const
   { return 1; }
 
-void meshing_on_i(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_i_row &nodes,XC::TritrizPtrElem::var_ref_i_row &elements)
+void meshing_on_i(const XC::Element1D &e,const XC::NodePtrArray3d::const_ref_i_row &nodes,XC::ElemPtrArray3d::var_ref_i_row &elements)
   {
     const size_t numberOfLayers= nodes.getNumberOfLayers();
     for(size_t i=1;i<numberOfLayers;i++)
@@ -327,7 +327,7 @@ void meshing_on_i(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_i_ro
       }
   }
 
-void meshing_on_j(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_j_row &nodes,XC::TritrizPtrElem::var_ref_j_row &elements)
+void meshing_on_j(const XC::Element1D &e,const XC::NodePtrArray3d::const_ref_j_row &nodes,XC::ElemPtrArray3d::var_ref_j_row &elements)
   {
     const size_t numberOfRows= nodes.getNumberOfRows();
     for(size_t j=1;j<numberOfRows;j++)
@@ -340,7 +340,7 @@ void meshing_on_j(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_j_ro
       }
   }
 
-void meshing_on_k(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_k_row &nodes,XC::TritrizPtrElem::var_ref_k_row &elements)
+void meshing_on_k(const XC::Element1D &e,const XC::NodePtrArray3d::const_ref_k_row &nodes,XC::ElemPtrArray3d::var_ref_k_row &elements)
   {
     const size_t numberOfColumns= nodes.getNumberOfColumns();
     for(size_t k=1;k<numberOfColumns;k++)
@@ -353,38 +353,38 @@ void meshing_on_k(const XC::Element1D &e,const XC::TritrizPtrNod::const_ref_k_ro
       }
   }
 
-void XC::Element1D::unidimensional_meshing(const XC::TritrizPtrNod &nodes,XC::TritrizPtrElem &elements) const
+void XC::Element1D::unidimensional_meshing(const XC::NodePtrArray3d &nodes,XC::ElemPtrArray3d &elements) const
   {
     const size_t numberOfLayers= nodes.getNumberOfLayers();
     const size_t numberOfRows= nodes.getNumberOfRows();
     const size_t numberOfColumns= nodes.getNumberOfColumns();
     if(nodes.isIRow())
       {
-        elements= TritrizPtrElem(numberOfLayers-1,MatrizPtrElem(1,1));
-        TritrizPtrElem::var_ref_i_row element_row= elements.getVarRefIRow(1,1);
+        elements= ElemPtrArray3d(numberOfLayers-1,ElemPtrArray(1,1));
+        ElemPtrArray3d::var_ref_i_row element_row= elements.getVarRefIRow(1,1);
         meshing_on_i(*this,nodes.getIRowConstRef(1,1),element_row);
       }
     else if(nodes.isJRow())
       {
-        elements= TritrizPtrElem(numberOfLayers,MatrizPtrElem(numberOfRows-1,numberOfColumns));
-        TritrizPtrElem::var_ref_j_row element_row= elements.getVarRefJRow(1,1);
+        elements= ElemPtrArray3d(numberOfLayers,ElemPtrArray(numberOfRows-1,numberOfColumns));
+        ElemPtrArray3d::var_ref_j_row element_row= elements.getVarRefJRow(1,1);
         meshing_on_j(*this,nodes.getJRowConstRef(1,1),element_row);
       }
     else if(nodes.isKRow())
       {
-        elements= TritrizPtrElem(numberOfLayers,MatrizPtrElem(numberOfRows,numberOfColumns-1));
-        TritrizPtrElem::var_ref_k_row element_row= elements.getVarRefKRow(1,1);
+        elements= ElemPtrArray3d(numberOfLayers,ElemPtrArray(numberOfRows,numberOfColumns-1));
+        ElemPtrArray3d::var_ref_k_row element_row= elements.getVarRefKRow(1,1);
         meshing_on_k(*this,nodes.getKRowConstRef(1,1),element_row);
       }
   }
 
-XC::TritrizPtrElem XC::Element1D::put_on_mesh(const TritrizPtrNod &nodes,meshing_dir dm) const
+XC::ElemPtrArray3d XC::Element1D::put_on_mesh(const NodePtrArray3d &nodes,meshing_dir dm) const
   {
     const size_t numberOfLayers= nodes.getNumberOfLayers();
     const size_t numberOfRows= nodes.getNumberOfRows();
     const size_t numberOfColumns= nodes.getNumberOfColumns();
     const size_t mesh_dim= nodes.GetDim();
-    TritrizPtrElem retval;
+    ElemPtrArray3d retval;
     if(mesh_dim<1)
       std::cerr << "There is only one node, can't create elements." << std::endl;
     else
@@ -402,11 +402,11 @@ XC::TritrizPtrElem XC::Element1D::put_on_mesh(const TritrizPtrNod &nodes,meshing
 		            << " Can't create elements." << std::endl;
                 else
                   {
-                    retval= TritrizPtrElem(numberOfLayers-1,MatrizPtrElem(numberOfRows,numberOfColumns));
+                    retval= ElemPtrArray3d(numberOfLayers-1,ElemPtrArray(numberOfRows,numberOfColumns));
                     for(size_t j=1;j<=numberOfRows;j++)
                       for(size_t k=1;k<=numberOfColumns;k++)
                         {
-                          TritrizPtrElem::var_ref_i_row element_row= retval.getVarRefIRow(j,k);
+                          ElemPtrArray3d::var_ref_i_row element_row= retval.getVarRefIRow(j,k);
                           meshing_on_i(*this,nodes.getIRowConstRef(j,k),element_row);
                         }
                   }
@@ -418,11 +418,11 @@ XC::TritrizPtrElem XC::Element1D::put_on_mesh(const TritrizPtrNod &nodes,meshing
 		            << " Can't create elements." << std::endl;
                 else
                   {
-                    retval= TritrizPtrElem(numberOfLayers,MatrizPtrElem(numberOfRows-1,numberOfColumns));
+                    retval= ElemPtrArray3d(numberOfLayers,ElemPtrArray(numberOfRows-1,numberOfColumns));
                     for(size_t i=1;i<=numberOfLayers;i++)
                       for(size_t k=1;k<=numberOfColumns;k++)
                         {
-                          XC::TritrizPtrElem::var_ref_j_row element_row= retval.getVarRefJRow(i,k);
+                          XC::ElemPtrArray3d::var_ref_j_row element_row= retval.getVarRefJRow(i,k);
                           meshing_on_j(*this,nodes.getJRowConstRef(i,k),element_row);
                         }
                   }
@@ -434,11 +434,11 @@ XC::TritrizPtrElem XC::Element1D::put_on_mesh(const TritrizPtrNod &nodes,meshing
 		            << " Can't create elements." << std::endl;
                 else
                   {
-                    retval= TritrizPtrElem(numberOfLayers,MatrizPtrElem(numberOfRows,numberOfColumns-1));
+                    retval= ElemPtrArray3d(numberOfLayers,ElemPtrArray(numberOfRows,numberOfColumns-1));
                     for(size_t i=1;i<=numberOfLayers;i++)
 	              for(size_t j=1;j<=numberOfRows;j++)
                         {
-                          XC::TritrizPtrElem::var_ref_k_row element_row= retval.getVarRefKRow(i,j);
+                          XC::ElemPtrArray3d::var_ref_k_row element_row= retval.getVarRefKRow(i,j);
                           meshing_on_k(*this,nodes.getKRowConstRef(i,j),element_row);
                         }
                   }
@@ -451,10 +451,10 @@ XC::TritrizPtrElem XC::Element1D::put_on_mesh(const TritrizPtrNod &nodes,meshing
     return retval;
   }
 
-XC::TritrizPtrElem XC::Element1D::cose(const SetEstruct &f1,const SetEstruct &f2) const
+XC::ElemPtrArray3d XC::Element1D::cose(const SetEstruct &f1,const SetEstruct &f2) const
   {
     const size_t nelem= f1.getNumberOfNodes();
-    TritrizPtrElem retval(nelem,1,1);
+    ElemPtrArray3d retval(nelem,1,1);
     const size_t numberOfLayers= std::min(f1.getNumNodeLayers(),f2.getNumNodeLayers());
     const size_t numberOfRows= std::min(f1.getNumNodeRows(),f2.getNumNodeRows());
     const size_t numberOfColumns= std::min(f1.getNumNodeColumns(),f2.getNumNodeColumns());
@@ -545,7 +545,7 @@ const XC::Matrix &XC::Element1D::getCooPoints(const size_t &ndiv) const
       {
         const Pos3d p0= theNodes[0]->getInitialPosition3d();
         const Pos3d p1= theNodes[1]->getInitialPosition3d();
-        MatrizPos3d linea(p0,p1,ndiv);
+        Pos3dArray linea(p0,p1,ndiv);
         retval= Matrix(ndiv+1,3);
         Pos3d tmp;
         for(size_t i= 0;i<ndiv+1;i++)

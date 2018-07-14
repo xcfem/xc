@@ -24,22 +24,24 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//MatrizPtrElem.cc
+//NodePtrArray.cc
 
-#include "MatrizPtrElem.h"
-#include "domain/mesh/element/Element.h"
+#include "NodePtrArray.h"
+#include "domain/mesh/node/Node.h"
+#include "domain/domain/Domain.h"
+#include "domain/constraints/SFreedom_Constraint.h"
 
 
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 
 #include "boost/lexical_cast.hpp"
 
-//! @brief Returns (if it exists) a pointer to the element
-//! identified by the tag being passed as parameter.
-XC::Element *XC::MatrizPtrElem::findElement(const int &tag)
+//! @brief Returns (if it exists) a pointer to the node
+//! which tag is being passed as parameter.
+XC::Node *XC::NodePtrArray::findNode(const int &tag)
   {
-    Element *retval= nullptr;
-    Element *tmp= nullptr;
+    Node *retval= nullptr;
+    Node *tmp= nullptr;
     const size_t numberOfRows= getNumberOfRows();
     const size_t numberOfColumns= getNumberOfColumns();
     for(size_t j= 1;j<=numberOfRows;j++)
@@ -58,12 +60,12 @@ XC::Element *XC::MatrizPtrElem::findElement(const int &tag)
     return retval;
   }
 
-//! @brief Returns (if it exists) a pointer to the element
-//! identified by the tag being passed as parameter.
-const XC::Element *XC::MatrizPtrElem::findElement(const int &tag) const
+//! @brief Returns (if it exists) a pointer to the node
+//! which tag is being passed as parameter.
+const XC::Node *XC::NodePtrArray::findNode(const int &tag) const
   {
-    const Element *retval= nullptr;
-    const Element *tmp= nullptr;
+    const Node *retval= nullptr;
+    const Node *tmp= nullptr;
     const size_t numberOfRows= getNumberOfRows();
     const size_t numberOfColumns= getNumberOfColumns();
     for(size_t j= 1;j<=numberOfRows;j++)
@@ -83,35 +85,62 @@ const XC::Element *XC::MatrizPtrElem::findElement(const int &tag) const
   }
 
 //! @brief Returns the node closest to the point being passed as parameter.
-XC::Element *XC::MatrizPtrElem::getNearestElement(const Pos3d &p)
+XC::Node *XC::NodePtrArray::getNearestNode(const Pos3d &p)
   {
-    Element *retval= nullptr, *ptrElem= nullptr;
+    Node *retval= nullptr, *ptrNod= nullptr;
     double d= DBL_MAX;
     double tmp;
     const size_t numberOfRows= getNumberOfRows();
     const size_t numberOfColumns= getNumberOfColumns();
     if(numberOfRows*numberOfColumns>500)
-      std::clog << "The element matrix has "
-                << numberOfRows*numberOfColumns << " components "
-                << " is better to search by coordinates in the associated set."
+      std::clog << "Node matrix has "
+                << numberOfRows*numberOfColumns << " elements "
+                << " better to look by coordinates in the associated set."
                 << std::endl;
     for(size_t j= 1;j<=numberOfRows;j++)
       for(size_t k= 1;k<=numberOfColumns;k++)
         {
-          ptrElem= operator()(j,k);
-          tmp= ptrElem->getDist2(p);
+          ptrNod= operator()(j,k);
+          tmp= ptrNod->getDist2(p);
           if(tmp<d)
             {
               d= tmp;
-              retval= ptrElem;
+              retval= ptrNod;
             }
         }
     return retval;
   }
 
 //! @brief Returns the node closest to the point being passed as parameter.
-const XC::Element *XC::MatrizPtrElem::getNearestElement(const Pos3d &p) const
+const XC::Node *XC::NodePtrArray::getNearestNode(const Pos3d &p) const
   {
-    MatrizPtrElem *this_no_const= const_cast<MatrizPtrElem *>(this);
-    return this_no_const->getNearestElement(p);
+    NodePtrArray *this_no_const= const_cast<NodePtrArray *>(this);
+    return this_no_const->getNearestNode(p);
+  }
+
+//! @brief Impone desplazamiento nulo en the nodes de this set.
+void XC::NodePtrArray::fix(const SFreedom_Constraint &semilla) const
+  {
+    if(Null()) return;
+    const size_t numberOfRows= getNumberOfRows();
+    const size_t numberOfColumns= getNumberOfColumns();
+    for(size_t j= 1;j<=numberOfRows;j++)
+      for(size_t k= 1;k<=numberOfColumns;k++)
+        operator()(j,k)->fix(semilla);
+  }
+
+//! @brief Returns an array with the identifiers of the nodes.
+m_int XC::NodePtrArray::getTags(void) const
+  {
+    const size_t numberOfRows= getNumberOfRows();
+    const size_t numberOfColumns= getNumberOfColumns();
+    m_int retval(numberOfRows,numberOfColumns,-1);
+    for(size_t j= 1;j<=numberOfRows;j++)
+      for(size_t k= 1;k<=numberOfColumns;k++)
+        {
+          const Node *ptr= operator()(j,k);
+          if(ptr)
+            retval(j,k)= ptr->getTag();
+        }
+    return retval;
   }

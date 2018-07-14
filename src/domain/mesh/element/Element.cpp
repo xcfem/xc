@@ -69,13 +69,13 @@
 #include "domain/mesh/node/NodeTopology.h"
 #include <domain/domain/Domain.h>
 #include "utility/matrix/nDarray/basics.h"
-#include "preprocessor/multi_block_topology/matrices/TritrizPtrElem.h"
+#include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/set_mgmt/SetMeshComp.h"
 #include "boost/any.hpp"
 
 
-#include "xc_utils/src/geom/pos_vec/TritrizPos3d.h"
+#include "xc_utils/src/geom/pos_vec/Pos3dArray3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/sis_coo/SisCooRect3d3d.h"
 #include "material/Material.h"
@@ -370,9 +370,9 @@ const XC::Vector &XC::Element::getNodeResistingForceIncInertia(const Node *ptrNo
 //! being passed as parameter and the acceleration that corresponding that mode.
 XC::Vector XC::Element::getEquivalentStaticLoad(int mode,const double &accel_mode) const
   {
-    const Matrix &matriz_masas= getMass();
+    const Matrix &mass_matrix= getMass();
     const Vector distrib_factors= getNodePtrs().getDistributionFactor(mode);
-    Vector retval= matriz_masas*distrib_factors;
+    Vector retval= mass_matrix*distrib_factors;
     retval*=(accel_mode);
     return retval;
   }
@@ -919,9 +919,9 @@ Pos3d XC::Element::getPosNode(const size_t &i,bool initialGeometry) const
   { return getNodePtrs().getPosNode(i,initialGeometry); }
 
 //! @brief Returns a grid of points distributed along the line.
-TritrizPos3d XC::Element::getPoints(const size_t &ni,const size_t &nj,const size_t &nk,bool initialGeometry)
+Pos3dArray3d XC::Element::getPoints(const size_t &ni,const size_t &nj,const size_t &nk,bool initialGeometry)
   {
-    TritrizPos3d retval;
+    Pos3dArray3d retval;
     std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; must be implemented in derived classes."
               << std::endl;
@@ -1057,18 +1057,18 @@ XC::Vector XC::Element::getCenterOfMassCoordinates(bool initialGeometry) const
   }
 
 //! @brief Places the element on the mesh.
-XC::TritrizPtrElem XC::Element::put_on_mesh(const XC::TritrizPtrNod &,meshing_dir) const
+XC::ElemPtrArray3d XC::Element::put_on_mesh(const XC::NodePtrArray3d &,meshing_dir) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
               << " is not implemented." << std::endl;
-    return TritrizPtrElem();
+    return ElemPtrArray3d();
   }
 
-XC::TritrizPtrElem XC::Element::cose(const SetEstruct &f1,const SetEstruct &f2) const
+XC::ElemPtrArray3d XC::Element::cose(const SetEstruct &f1,const SetEstruct &f2) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
               << " is not implemented." << std::endl;
-    return TritrizPtrElem();
+    return ElemPtrArray3d();
   }
 
 //! @brief Return the names of the material(s) of the element.
