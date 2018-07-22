@@ -72,9 +72,9 @@ class Matrix;
 
 //! @ingroup OneDimensionalElemNL
 //!
-//! @defgroup Cuadratura Function integration over the element domain.
+//! @defgroup Quadrature Function integration over the element domain.
 //
-//! @ingroup Cuadratura
+//! @ingroup Quadrature
 //! @brief Integration rule (quadrature).
 class QuadRule
   {

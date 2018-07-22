@@ -73,7 +73,7 @@ namespace XC {
 class Vector;
 class Matrix;
 
-//! @ingroup Cuadratura
+//! @ingroup Quadrature
 //
 //! @brief One-dimensional quadrature.
 class QuadRule1d01: public QuadRule

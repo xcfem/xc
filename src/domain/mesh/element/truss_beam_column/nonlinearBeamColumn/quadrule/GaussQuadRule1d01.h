@@ -63,7 +63,7 @@ namespace XC {
 class Vector;
 class Matrix;
 
-//! @ingroup Cuadratura
+//! @ingroup Quadrature
 //
 //! @brief One-dimensional Gauss quadrature.
 class GaussQuadRule1d01: public QuadRule1d
