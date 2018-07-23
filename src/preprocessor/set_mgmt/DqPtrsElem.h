@@ -33,7 +33,7 @@
 #include "DqPtrsKDTree.h"
 #include "domain/mesh/element/utils/KDTreeElements.h"
 
-class Polilinea3d;
+class Polyline3d;
 class GeomObj3d;
 
 namespace XC {
@@ -64,7 +64,7 @@ class DqPtrsElem: public DqPtrsKDTree<Element,KDTreeElements>
 
     Element *findElement(const int &);
     const Element *findElement(const int &) const;
-    std::deque<Polilinea3d> getContours(const double &factor= 0.0) const;
+    std::deque<Polyline3d> getContours(const double &factor= 0.0) const;
     DqPtrsElem pickElemsInside(const GeomObj3d &, const double &tol= 0.0);
     std::set<std::string> getMaterialNames(void) const;
     boost::python::list getMaterialNamesPy(void) const;

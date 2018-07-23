@@ -42,7 +42,7 @@
 #include "xc_utils/src/geom/d2/BND2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Cuadrilatero2d.h"
 #include "xc_utils/src/geom/d1/Segment2d.h"
-#include "xc_utils/src/geom/d1/Polilinea3d.h"
+#include "xc_utils/src/geom/d1/Polyline3d.h"
 #include "xc_utils/src/geom/pos_vec/SVD3d.h"
 #include "xc_utils/src/geom/pos_vec/Pos3dArray3d.h"
 #include "xc_utils/src/gnu_gts/TriangleMap.h"

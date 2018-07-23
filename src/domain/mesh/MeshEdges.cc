@@ -27,7 +27,7 @@
 //MeshEdges.cpp
 
 #include "MeshEdges.h"
-#include "xc_utils/src/geom/d1/Polilinea3d.h"
+#include "xc_utils/src/geom/d1/Polyline3d.h"
 #include "domain/mesh/node/Node.h"
 #include <set>
 
@@ -74,9 +74,9 @@ std::deque<const XC::MeshEdge *> XC::MeshEdges::getLoop(const MeshEdge *first) c
     return retval;
   }
 
-Polilinea3d getPolylineFromLoop(const std::deque<const XC::MeshEdge *> &loop, const double &factor)
+Polyline3d getPolylineFromLoop(const std::deque<const XC::MeshEdge *> &loop, const double &factor)
   {
-    Polilinea3d retval;
+    Polyline3d retval;
     Pos3d pt;
     for(std::deque<const XC::MeshEdge *>::const_iterator i= loop.begin();i!=loop.end();i++)
       {
@@ -90,15 +90,15 @@ Polilinea3d getPolylineFromLoop(const std::deque<const XC::MeshEdge *> &loop, co
 
 
 //! @brief returns closed contours from de edge set.
-std::deque<Polilinea3d> XC::MeshEdges::getContours(const double &factor) const
+std::deque<Polyline3d> XC::MeshEdges::getContours(const double &factor) const
   { return XC::getContours(*this,factor); }
 
 //! @brief returns closed contours from de edge set.
-std::deque<Polilinea3d> XC::getContours(MeshEdges edges, const double &factor)
+std::deque<Polyline3d> XC::getContours(MeshEdges edges, const double &factor)
   {
     const size_t max_iter= 100;
     size_t iter= 0;
-    std::deque<Polilinea3d> retval;
+    std::deque<Polyline3d> retval;
     do
       {
 	MeshEdges::const_iterator i= edges.begin();

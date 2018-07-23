@@ -28,7 +28,7 @@
 #include "DqPtrsElem.h"
 #include "domain/mesh/element/Element.h"
 #include "preprocessor/multi_block_topology/trf/TrfGeom.h"
-#include "xc_utils/src/geom/d1/Polilinea3d.h"
+#include "xc_utils/src/geom/d1/Polyline3d.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/MeshEdges.h"
 #include <boost/algorithm/string/find.hpp>
@@ -187,7 +187,7 @@ std::set<int> XC::DqPtrsElem::getTags(void) const
   }
 
 //! @brief Returns the element set contour.
-std::deque<Polilinea3d> XC::DqPtrsElem::getContours(const double &factor) const
+std::deque<Polyline3d> XC::DqPtrsElem::getContours(const double &factor) const
   {
     typedef std::set<const Element *> ElementConstPtrSet;
     const Element *elem= nullptr;

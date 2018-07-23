@@ -33,7 +33,7 @@
 #include "preprocessor/Preprocessor.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
 #include "xc_utils/src/geom/d1/Segment3d.h"
-#include "xc_utils/src/geom/d1/Polilinea3d.h"
+#include "xc_utils/src/geom/d1/Polyline3d.h"
 
 #include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
 #include "xc_basic/src/text/text_string.h"
@@ -729,9 +729,9 @@ XC::ID XC::CmbEdge::getKPoints(void) const
   }
 
 //! @brief Returns a polyline representation of the object.
-Polilinea3d XC::CmbEdge::getPolyline(void) const
+Polyline3d XC::CmbEdge::getPolyline(void) const
   {
-    Polilinea3d retval;
+    Polyline3d retval;
     retval.push_back(P1()->GetPos());
     for(std::deque<Side>::const_iterator i=lines.begin();i!=lines.end();i++)
       retval.push_back((*i).P2()->GetPos());

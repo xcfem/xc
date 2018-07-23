@@ -29,7 +29,7 @@
 #include "Face.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
-#include "xc_utils/src/geom/d1/Polilinea3d.h"
+#include "xc_utils/src/geom/d1/Polyline3d.h"
 
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
@@ -130,7 +130,7 @@ const XC::Pnt *XC::Face::getVertex(const size_t &i) const
   { return getSide(i)->P1(); }
 
 //! @brief Returns the contour of the face as a 3D polyline.
-Polilinea3d XC::Face::getContour(void) const
+Polyline3d XC::Face::getContour(void) const
   { return getPolyline(); }
 
 //! @brief Return the surfaces that touch the line.

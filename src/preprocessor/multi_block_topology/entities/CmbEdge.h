@@ -33,7 +33,7 @@
 #include <deque>
 #include "Edge.h"
 
-class Polilinea3d;
+class Polyline3d;
 
 namespace XC {
 //! @ingroup MultiBlockTopologyEnt
@@ -158,7 +158,7 @@ class CmbEdge: public Edge
     virtual const Pnt *getVertex(const size_t &i) const;
     virtual void SetVertice(const size_t &,Pnt *);
     virtual ID getKPoints(void) const;
-    Polilinea3d getPolyline(void) const;
+    Polyline3d getPolyline(void) const;
 
     BND3d Bnd(void) const;
     void genMesh(meshing_dir dm);

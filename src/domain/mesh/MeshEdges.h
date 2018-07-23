@@ -32,7 +32,7 @@
 #include "xc_utils/src/nucleo/EntCmd.h"
 #include "domain/mesh/MeshEdge.h"
 
-class Polilinea3d;
+class Polyline3d;
 
 
 namespace XC {
@@ -51,11 +51,11 @@ class MeshEdges: public EntCmd, public std::deque<MeshEdge>
 
     std::deque<const MeshEdge *> getLoop(const MeshEdge *) const;
     MeshEdges getEdgesNotInLoop(const std::deque<const MeshEdge *> &) const;
-    std::deque<Polilinea3d> getContours(const double &factor) const;
+    std::deque<Polyline3d> getContours(const double &factor) const;
     void print(std::ostream &) const;
   };
 
-std::deque<Polilinea3d> getContours(MeshEdges edges,const double &factor);
+std::deque<Polyline3d> getContours(MeshEdges edges,const double &factor);
 
 inline std::ostream &operator<<(std::ostream &os, const MeshEdges &me)
   {
