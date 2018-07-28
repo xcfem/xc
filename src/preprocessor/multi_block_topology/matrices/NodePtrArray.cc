@@ -119,14 +119,14 @@ const XC::Node *XC::NodePtrArray::getNearestNode(const Pos3d &p) const
   }
 
 //! @brief Impone desplazamiento nulo en the nodes de this set.
-void XC::NodePtrArray::fix(const SFreedom_Constraint &semilla) const
+void XC::NodePtrArray::fix(const SFreedom_Constraint &seed) const
   {
     if(Null()) return;
     const size_t numberOfRows= getNumberOfRows();
     const size_t numberOfColumns= getNumberOfColumns();
     for(size_t j= 1;j<=numberOfRows;j++)
       for(size_t k= 1;k<=numberOfColumns;k++)
-        operator()(j,k)->fix(semilla);
+        operator()(j,k)->fix(seed);
   }
 
 //! @brief Returns an array with the identifiers of the nodes.

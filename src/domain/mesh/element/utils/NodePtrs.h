@@ -33,7 +33,7 @@
 #include <list>
 
 class Pos3d;
-class SemiEspacio3d;
+class HalfSpace3d;
 class Plane;
 class GeomObj2d;
 class GeomObj3d;

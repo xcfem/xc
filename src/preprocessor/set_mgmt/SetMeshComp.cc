@@ -43,7 +43,7 @@
 
 #include "xc_utils/src/geom/pos_vec/SVD3d.h"
 #include "xc_utils/src/geom/d2/Plane.h"
-#include "xc_utils/src/geom/d3/SemiEspacio3d.h"
+#include "xc_utils/src/geom/d3/HalfSpace3d.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
 
 
@@ -349,7 +349,7 @@ SVD3d XC::SetMeshComp::getResistingSVD3d(const Plane &plane,const Pos3d &centro,
     //point from the values in the nodes at the ends of the edge.
     const double tol2= tol*tol;
     const Node *ptrNod= nullptr;
-    const SemiEspacio3d se(plane);
+    const HalfSpace3d se(plane);
     std::set<const Node *> nodes_on_plane;
     std::set<const Element *> connected_to_node;
     std::set<const Element *> connected_elements;

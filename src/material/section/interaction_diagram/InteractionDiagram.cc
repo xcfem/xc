@@ -138,17 +138,17 @@ const Trihedron *XC::InteractionDiagram::findTrihedronPtr(const Pos3d &p) const
       {
 	InteractionDiagram::const_iterator i= begin();
         const Trihedron *tr= &(*i);
-        SemiRecta3d rayo(tr->Cuspide(),p);
+        Ray3d ray(tr->Cuspide(),p);
         Recta3d axis= tr->Axis();
-        double angMin= angle(axis,rayo);
+        double angMin= angle(axis,ray);
         double angTmp= angMin;
         retval= tr;
         i++;
         for(;i!=end();i++)
           {
             tr= &(*i);
-            rayo= SemiRecta3d(tr->Cuspide(),p);
-            angTmp= angle(tr->Axis(),rayo);
+            ray= Ray3d(tr->Cuspide(),p);
+            angTmp= angle(tr->Axis(),ray);
             if(angTmp<angMin)
               {
                 angMin= angTmp;
@@ -192,7 +192,7 @@ GeomObj::list_Pos3d XC::InteractionDiagram::get_intersection(const Pos3d &p) con
         Triangle3d triang(i->Vertice(1),i->Vertice(2),i->Vertice(3));
         //We compute the plane that contains the triangle.
         const Plane plane= triang.getPlane();
-        SemiRecta3d Op(O,p);
+        Ray3d Op(O,p);
         //Intersection of the half-line with the plane.
         lst_intersec= intersection(plane,Op);
         if(lst_intersec.empty())

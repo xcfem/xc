@@ -49,7 +49,7 @@
 #include "xc_utils/src/geom/d2/ConvexHull2d.h"
 #include "xc_utils/src/geom/d2/HalfPlane2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/bool_op_poligono2d.h"
-#include "xc_utils/src/geom/d1/SemiRecta2d.h"
+#include "xc_utils/src/geom/d1/Ray2d.h"
 #include "xc_utils/src/geom/d1/Segment2d.h"
 
 
@@ -792,7 +792,7 @@ Segment2d XC::FiberSectionBase::getEffectiveDepthSegment(void) const
   {
     Segment2d retval;
     const Segment2d bm= getLeverArmSegment();
-    const SemiRecta2d sr(bm.Origen(),bm.Destino());
+    const Ray2d sr(bm.Origen(),bm.Destino());
     const Poligono2d contour= getRegionsContour();
     retval= contour.Clip(sr);
     return retval;

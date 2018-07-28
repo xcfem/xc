@@ -48,9 +48,9 @@ XC::BoundaryCondHandler::BoundaryCondHandler(Preprocessor *owr)
   : PrepHandler(owr), tag_sp_constraint(0), tag_mp_constraint(0) {}
 
 //! @grief Appends a single freedom constraint to the model.
-XC::SFreedom_Constraint *XC::BoundaryCondHandler::addSFreedom_Constraint(const int &tag_nod,const SFreedom_Constraint &semilla)
+XC::SFreedom_Constraint *XC::BoundaryCondHandler::addSFreedom_Constraint(const int &tag_nod,const SFreedom_Constraint &seed)
   {
-    SFreedom_Constraint *sp= semilla.getCopy(tag_sp_constraint);
+    SFreedom_Constraint *sp= seed.getCopy(tag_sp_constraint);
     tag_sp_constraint++;
     if(sp)
       {

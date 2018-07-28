@@ -38,19 +38,19 @@
 
 void XC::ElementHandler::SeedElemHandler::free_mem(void)
   {
-    if(semilla) delete semilla;
-    semilla= nullptr;
+    if(seed) delete seed;
+    seed= nullptr;
   }
 
 //! @brief Copy constructor.
 XC::ElementHandler::SeedElemHandler::SeedElemHandler(const SeedElemHandler &other)
-  : ProtoElementHandler(other), semilla(other.semilla->getCopy()) {}
+  : ProtoElementHandler(other), seed(other.seed->getCopy()) {}
 
 //! @brief Assignment operator.
 XC::ElementHandler::SeedElemHandler &XC::ElementHandler::SeedElemHandler::operator=(const SeedElemHandler &other)
   {
     ProtoElementHandler::operator=(other);
-    semilla= other.semilla->getCopy();
+    seed= other.seed->getCopy();
     return *this;
   }
 
@@ -59,7 +59,7 @@ void XC::ElementHandler::SeedElemHandler::add(XC::Element *e)
   {
     free_mem();
     assert(e);
-    semilla= e;
+    seed= e;
   }
 
 //! @brief Destructor.

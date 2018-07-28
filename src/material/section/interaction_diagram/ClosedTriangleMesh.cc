@@ -242,17 +242,17 @@ const Trihedron *XC::ClosedTriangleMesh::findTrihedronPtr(const Pos3d &p) const
           {
 	    ClosedTriangleMesh::const_iterator i= begin();
             const Trihedron *tr= &(*i);
-            SemiRecta3d rayo(tr->Cuspide(),p);
+            Ray3d ray(tr->Cuspide(),p);
             Recta3d axis= tr->Axis();
-            double rayAxisAngle= angle(axis,rayo);
+            double rayAxisAngle= angle(axis,ray);
             double angTmp= rayAxisAngle;
             retval= tr;
             i++;
             for(;i!=end();i++)
               {
                 tr= &(*i);
-                rayo= SemiRecta3d(tr->Cuspide(),p);
-                angTmp= angle(tr->Axis(),rayo);
+                ray= Ray3d(tr->Cuspide(),p);
+                angTmp= angle(tr->Axis(),ray);
                 if(angTmp<rayAxisAngle)
                   {
                     rayAxisAngle= angTmp;
@@ -297,7 +297,7 @@ GeomObj::list_Pos3d XC::ClosedTriangleMesh::get_intersection(const Pos3d &p) con
         Triangle3d triang(i->Vertice(1),i->Vertice(2),i->Vertice(3));
         //Plane of the triangle.
         const Plane plane= triang.getPlane();
-        SemiRecta3d Op(O,p);
+        Ray3d Op(O,p);
         //Itersection of the half-line and the plane.
         lst_intersec= intersection(plane,Op);
         if(lst_intersec.empty())

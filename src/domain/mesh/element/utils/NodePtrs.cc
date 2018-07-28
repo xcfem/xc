@@ -37,7 +37,7 @@
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 
 #include "xc_utils/src/geom/d2/Plane.h"
-#include "xc_utils/src/geom/d3/SemiEspacio3d.h"
+#include "xc_utils/src/geom/d3/HalfSpace3d.h"
 
 
 //! @brief Constructor.
@@ -421,9 +421,9 @@ bool XC::NodePtrs::Corta(const Plane &plane,bool initialGeometry) const
     double factor= 1.0;
     if(initialGeometry)
       factor= 0.0;
-    SemiEspacio3d halfSpace(plane);
+    HalfSpace3d halfSpace(plane);
     bool in= In(halfSpace,factor,0.0);
-    SemiEspacio3d complementario(halfSpace);
+    HalfSpace3d complementario(halfSpace);
     complementario.Swap();
     bool out= In(complementario,factor,0.0);
     return (!in && !out);

@@ -423,8 +423,8 @@ XC::DefaultTag &XC::Node::getDefaultTag(void)
 
 //! @brief Introduce en the node una constraint
 //! como la being passed as parameter.
-XC::SFreedom_Constraint *XC::Node::fix(const SFreedom_Constraint &semilla)
-  { return getPreprocessor()->getBoundaryCondHandler().addSFreedom_Constraint(getTag(),semilla); }
+XC::SFreedom_Constraint *XC::Node::fix(const SFreedom_Constraint &seed)
+  { return getPreprocessor()->getBoundaryCondHandler().addSFreedom_Constraint(getTag(),seed); }
 
 //! @brief Sets prescribed displacements on the DOFs being passed as parameter.
 void XC::Node::fix(const std::vector<int> &idDOFs,const std::vector<double> &values)
