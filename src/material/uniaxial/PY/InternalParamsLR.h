@@ -29,12 +29,13 @@
 #ifndef INTERNALPARAMSLR_H
 #define INTERNALPARAMSLR_H
 
-#include <material/uniaxial/PY/InternalParamsA.h>
+#include "InternalParamsA.h"
 
 namespace XC {
 //! @ingroup PYMat
 //
 //! @brief Internal parameters for a p-y material.
+//! Left and right reference points.
 class InternalParamsLR: public InternalParamsA
   {
   protected:

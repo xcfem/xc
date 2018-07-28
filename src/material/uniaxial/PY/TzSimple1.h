@@ -48,18 +48,18 @@
 // Description: This file contains the class definition for TzSimple1.
 // 
 
-#include <material/uniaxial/PY/PYBase.h>
+#include "PYBase.h"
 
 
 namespace XC {
 //! @ingroup PYMat
 //
-//! @brief Material que representa una curva t-z.
+//! @brief Simple uniaxial t-z material for use with a zeroLength element.
 class TzSimple1: public PYBase
   {
   private:
-    InternalParamsIn CNF; // Committed internal parameters for the NearField plastic component
-    InternalParamsIn TNF; // Trial internal parameters for the NearField plastic component
+    InternalParamsIn CNF; //!< Committed internal parameters for the NearField plastic component
+    InternalParamsIn TNF; //!< Trial internal parameters for the NearField plastic component
 
     // Functions to get t & z for elastic & plastic components
     void getNearField(double zlast, double dz, double dz_old);

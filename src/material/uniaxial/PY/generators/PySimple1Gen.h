@@ -26,7 +26,7 @@
 //----------------------------------------------------------------------------
 //$Revision: 1.4 $
 //$Date: 2004/06/30 00:27:40 $
-//$Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/PY/PySimple1Gen.h,v $
+//$Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/PY/generators/PySimple1Gen.h,v $
 
 #ifndef PYSIMPLE1GEN_H
 #define PYSIMPLE1GEN_H
@@ -39,7 +39,8 @@
 namespace XC {
 //! @ingroup PYMat
 //
-//! @brief ??.
+//! @brief Constructs PySimple1 materials (Boulanger, 2003) for
+//! pre-defined zeroLength elements.
 class PySimple1Gen: public Simple1GenBase
   {	
     std::vector<std::string> pTest;

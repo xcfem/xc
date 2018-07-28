@@ -29,7 +29,7 @@
 #ifndef PQYZBASE_H
 #define PQYZBASE_H
 
-#include <material/uniaxial/PY/PYBase.h>
+#include "PYBase.h"
 
 namespace XC {
 //! @ingroup PYMat
@@ -39,17 +39,17 @@ class PQyzBase: public PYBase
   {
   protected:
     // Generated parameters or constants (not user input)
-    double NFkrig; // stiffness of the "rigid" portion of Near Field spring
+    double NFkrig; //!< stiffness of the "rigid" portion of Near Field spring
     
-    InternalParamsLRIn CNF; // Committed internal parameters for the NearField rigid-plastic component
-    InternalParamsLRIn TNF; // Trial internal parameters for the NearField rigid-plastic component
+    InternalParamsLRIn CNF; //!< Committed internal parameters for the NearField rigid-plastic component
+    InternalParamsLRIn TNF; //!< Trial internal parameters for the NearField rigid-plastic component
     
     InternalParamsA CGap; //!< Committed internal parameters for the Gap (Drag + Closure)
     InternalParamsA TGap; //!< Trial internal parameters for the Gap (Drag + Closure) 
 
     // Material parameters
-    double Elast; // (p/matCapacity) when yielding first occurs in virgin loading
-    double nd; // exponent for hardening shape of drag component
+    double Elast; //!< (p/matCapacity) when yielding first occurs in virgin loading
+    double nd; //!< exponent for hardening shape of drag component
 
     int sendData(CommParameters &);
     int recvData(const CommParameters &);

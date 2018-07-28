@@ -49,21 +49,19 @@
 // Description: This file contains the class definition for PyLiq1.
 // 
 
-#include <material/uniaxial/PY/PySimple1.h>
-#include <iostream>
-#include <string>
+#include "PySimple1.h"
 
 namespace XC{
   class FourNodeQuad;
 
 //! @ingroup PYMat
 //
-//! @brief ??.
+//! @brief Uniaxial p-y material that incorporates liquefaction effects.
 class PyLiq1 : public PySimple1
   {
   private:
-    // Residual p (other parameters in PySimple1 base class)
-    double pRes;
+    // other parameters in PySimple1 base class
+    double pRes; //!< Residual p.
 
     // Committed and trial values for p, y, and ru
     double Ty;

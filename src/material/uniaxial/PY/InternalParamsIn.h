@@ -29,7 +29,7 @@
 #ifndef INTERNALPARAMSIN_H
 #define INTERNALPARAMSIN_H
 
-#include <material/uniaxial/PY/InternalParamsA.h>
+#include "InternalParamsA.h"
 
 namespace XC {
 //! @ingroup PYMat

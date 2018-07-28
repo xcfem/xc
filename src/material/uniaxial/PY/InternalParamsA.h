@@ -34,7 +34,7 @@
 namespace XC {
 //! @ingroup PYMat
 //
-//! @brief Internal parameters for a p-y material.
+//! @brief Internal parameters for the Gap (Drag + Closure).
 class InternalParamsA: public MovableObject
   {
   protected:

@@ -37,7 +37,8 @@
 namespace XC {
 //! @ingroup PYMat
 //
-//! @brief ??.
+//! @brief Base class for objects that constructs PySimple1 materials
+//! (Boulanger, 2003) for pre-defined zeroLength elements..
 class Simple1GenBase: public EntCmd
   {
   protected:	

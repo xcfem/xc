@@ -26,7 +26,7 @@
 //----------------------------------------------------------------------------
 //Simple1GenBase.cc
 
-#include "material/uniaxial/PY/Simple1GenBase.h"
+#include "Simple1GenBase.h"
 #include <fstream>
 #include <cmath>
 #include <iostream>

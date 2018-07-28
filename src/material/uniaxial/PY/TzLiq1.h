@@ -49,14 +49,14 @@
 // Description: This file contains the class definition for TzLiq1.
 // 
 
-#include <material/uniaxial/PY/TzSimple1.h>
+#include "TzSimple1.h"
 
 namespace XC {
 class FourNodeQuad;
 
 //! @ingroup PYMat
 //
-//! @brief ??.
+//! @brief Uniaxial t-z material that incorporates liquefaction effects.
 class TzLiq1 : public TzSimple1
   {
   private:

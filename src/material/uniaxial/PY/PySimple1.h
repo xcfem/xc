@@ -49,12 +49,13 @@
 // Description: This file contains the class definition for PySimple1.
 //
 
-#include <material/uniaxial/PY/PQyzBase.h>
+#include "PQyzBase.h"
 
 namespace XC {
 //! @ingroup PYMat
 //
-//! @brief Material que representa una curva p-y.
+//! @brief Simple uniaxial p-y material for use with a zeroLength
+//! element.
 class PySimple1: public PQyzBase
   {
   protected:

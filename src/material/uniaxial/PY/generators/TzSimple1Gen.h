@@ -26,7 +26,7 @@
 //----------------------------------------------------------------------------
 //$Revision: 1.4 $
 //$Date: 2004/06/30 00:27:40 $
-//$Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/PY/TzSimple1Gen.h,v $
+//$Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/PY/generators/TzSimple1Gen.h,v $
 
 #ifndef TZSIMPLE1GEN_H
 #define TZSIMPLE1GEN_H
@@ -36,7 +36,8 @@
 namespace XC {
 //! @ingroup PYMat
 //
-//! @brief ??.
+//! @brief Constructs TzSimple1 materials (Boulanger, 2003) for
+//! pre-defined zeroLength elements.
 class TzSimple1Gen: public Simple1GenBase
   {
   // Variables used for reading input files:

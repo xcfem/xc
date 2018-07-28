@@ -290,7 +290,7 @@ SET(uniaxial_steel_material material/uniaxial/steel/SteelBase material/uniaxial/
 
 SET(uniaxial_concrete_material material/uniaxial/concrete/RawConcrete material/uniaxial/concrete/ConcreteBase material/uniaxial/concrete/Concrete01 material/uniaxial/concrete/Concrete02 material/uniaxial/concrete/Concrete04)
 
-SET(uniaxial_py_material material/uniaxial/PY/InternalParamsA material/uniaxial/PY/InternalParamsIn material/uniaxial/PY/InternalParamsLR material/uniaxial/PY/InternalParamsLRIn material/uniaxial/PY/PYBase material/uniaxial/PY/PQyzBase material/uniaxial/PY/PyLiq1 material/uniaxial/PY/PySimple1 material/uniaxial/PY/Simple1GenBase material/uniaxial/PY/PySimple1Gen material/uniaxial/PY/QzSimple1 material/uniaxial/PY/TzLiq1 material/uniaxial/PY/TzSimple1 material/uniaxial/PY/TzSimple1Gen)
+SET(uniaxial_py_material material/uniaxial/PY/InternalParamsA material/uniaxial/PY/InternalParamsIn material/uniaxial/PY/InternalParamsLR material/uniaxial/PY/InternalParamsLRIn material/uniaxial/PY/PYBase material/uniaxial/PY/PQyzBase material/uniaxial/PY/PyLiq1 material/uniaxial/PY/PySimple1 material/uniaxial/PY/generators/Simple1GenBase material/uniaxial/PY/generators/PySimple1Gen material/uniaxial/PY/QzSimple1 material/uniaxial/PY/TzLiq1 material/uniaxial/PY/TzSimple1 material/uniaxial/PY/generators/TzSimple1Gen)
 
 SET(uniaxial_connected_material material/uniaxial/connected/ConnectedMaterial material/uniaxial/connected/SeriesMaterial material/uniaxial/connected/ParallelMaterial)
 

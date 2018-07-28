@@ -49,22 +49,23 @@
 // Description: This file contains the class definition for QzSimple1.
 // 
 
-#include "material/uniaxial/PY/PQyzBase.h"
+#include "PQyzBase.h"
 
 
 namespace XC {
 //! @ingroup PYMat
 //
-//! @brief Material que representa la resistencia por fuste de un pilote.
-class QzSimple1 : public PQyzBase
+//! @brief Simple uniaxial q-z material for use with a zeroLength
+//! element.
+class QzSimple1: public PQyzBase
   {
   private:
     // Material parameters
-    double suction; // ratio of max suction force to Qult
-    double maxElast; // max size of elastic range (in terms of dQ/Qult)
+    double suction; //!< ratio of max suction force to Qult
+    double maxElast; //!< max size of elastic range (in terms of dQ/Qult)
 
-    InternalParamsIn CSuction; // Committed internal parameters for the Suction component
-    InternalParamsIn TSuction; // Trial internal parameters for the Suction component
+    InternalParamsIn CSuction; //!< Committed internal parameters for the Suction component
+    InternalParamsIn TSuction; //!< Trial internal parameters for the Suction component
 
     InternalParamsA CClose; //!< Committed internal parameters for the Closure component
     InternalParamsA TClose; //!< Trial internal parameters for the Closure component

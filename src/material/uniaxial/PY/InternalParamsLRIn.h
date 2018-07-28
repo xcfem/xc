@@ -29,12 +29,12 @@
 #ifndef INTERNALPARAMSLRIn_H
 #define INTERNALPARAMSLRIn_H
 
-#include <material/uniaxial/PY/InternalParamsLR.h>
+#include "InternalParamsLR.h"
 
 namespace XC {
 //! @ingroup PYMat
 //
-//! @brief Internal parameters for a p-y material.
+//! @brief Internal parameters for the NearField rigid-plastic component.
 class InternalParamsLRIn: public InternalParamsLR
   {
   protected:

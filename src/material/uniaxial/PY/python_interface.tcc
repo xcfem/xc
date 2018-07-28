@@ -43,9 +43,8 @@ class_<XC::QzSimple1 , bases<XC::PQyzBase>, boost::noncopyable >("QzSimple1", no
 
 class_<XC::PyLiq1 , bases<XC::PySimple1>, boost::noncopyable >("PyLiq1", no_init);
 
+//Generators.
 class_<XC::Simple1GenBase, bases<EntCmd>, boost::noncopyable >("Simple1GenBase", no_init);
-
 class_<XC::PySimple1Gen, bases<XC::Simple1GenBase>, boost::noncopyable >("PySimple1Gen", no_init);
-
 class_<XC::TzSimple1Gen, bases<XC::Simple1GenBase>, boost::noncopyable >("TzSimple1Gen", no_init);
 

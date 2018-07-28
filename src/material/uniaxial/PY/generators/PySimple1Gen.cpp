@@ -36,7 +36,7 @@
 //              December 2, 2003                                    //
 //////////////////////////////////////////////////////////////////////
 
-#include "material/uniaxial/PY/PySimple1Gen.h"
+#include "PySimple1Gen.h"
 #include <fstream>
 #include <cmath>
 #include <iostream>

@@ -29,9 +29,9 @@
 #ifndef PYBASE_H
 #define PYBASE_H
 
-#include <material/uniaxial/UniaxialMaterial.h>
-#include <material/uniaxial/PY/InternalParamsIn.h>
-#include <material/uniaxial/PY/InternalParamsLRIn.h>
+#include "material/uniaxial/UniaxialMaterial.h"
+#include "InternalParamsIn.h"
+#include "InternalParamsLRIn.h"
 
 namespace XC {
 //! @ingroup MatUnx
@@ -39,7 +39,9 @@ namespace XC {
 //! @degroup PYMat
 //! @ingroup PYMat
 //
-//! @brief Material that represents a p-y curve.
+//! @brief Base class for the materials that represent a p-y curve that
+//! simulates the soil resistance as predefined nonlinear springs, where
+//! p is the soil pressure per unit length and y is the deflection.
 class PYBase: public UniaxialMaterial
   {
   protected:

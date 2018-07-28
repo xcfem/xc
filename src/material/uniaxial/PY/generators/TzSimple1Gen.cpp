@@ -26,8 +26,8 @@
 //----------------------------------------------------------------------------
 //////////////////////////////////////////////////////////////////////
 //  This file contains the constructor, destructor, and member        //  
-//  functions for the XC::TzSimple1Gen class.  The purpose of the        //
-//  class is to create XC::TzSimple1 materials associated with            //
+//  functions for the TzSimple1Gen class.  The purpose of the        //
+//  class is to create TzSimple1 materials associated with            //
 //  pre-defined    zeroLength elements, beam column elements, and        //
 //    nodes.                                                            //
 //                                                                    //
@@ -38,9 +38,9 @@
 
 //$Revision: 1.4 $
 //$Date: 2004/06/30 00:27:40 $
-//$Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/PY/TzSimple1Gen.cpp,v $
+//$Source: /usr/local/cvs/OpenSees/SRC/material/uniaxial/PY/generators/TzSimple1Gen.cpp,v $
 
-#include "material/uniaxial/PY/TzSimple1Gen.h"
+#include "TzSimple1Gen.h"
 #include <iostream>
 #include <fstream>
 #include <cmath>
@@ -331,7 +331,9 @@ void XC::TzSimple1Gen::GetTzSimple1(const std::string &file1, const std::string 
                             stype = tzType[j];
                         else                    
                           {
-                            std::cerr << "MatType must be tz1, tz2, tz3 or tz4.  " << mattype << " is not supported." << std::endl;
+                            std::cerr << getClassName() << "::" << __FUNCTION__
+				      << "; MatType must be tz1, tz2, tz3 or tz4.  "
+				      << mattype << " is not supported." << std::endl;
                             exit(0);
                           }
                         break;
@@ -389,7 +391,8 @@ void XC::TzSimple1Gen::GetPattern(const std::string &file6)
 
     if(!PatternOut)
       {
-        std::cerr << "Error opening " << file6 << " in XC::TzSimple1Gen.cpp.  Must Exit." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; error opening " << file6 << ". Must Exit." << std::endl;
         exit(-1);
       }
 
@@ -518,7 +521,8 @@ void XC::TzSimple1Gen::GetTzElements(const std::string &file)
 
     if(!in_file)
       {
-        std::cerr << "File " << file << "does not exist.  Must exit." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; file " << file << "does not exist.  Must exit." << std::endl;
         exit(-1);
       }
 
@@ -566,7 +570,8 @@ void XC::TzSimple1Gen::GetSoilProperties(const std::string &file)
     
     if(!in1)
       {
-        std::cerr << "File " << file << "does not exist.  Must exit." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; file " << file << "does not exist.  Must exit." << std::endl;
         exit(0);
       }
 
@@ -661,7 +666,8 @@ void XC::TzSimple1Gen::GetSoilProperties(const std::string &file)
           }
         else
           {
-            std::cerr << "MatType " << MatType[i] << "Is not supported in XC::TzSimple1Gen.cpp.";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; MatType " << MatType[i] << "is not supported.";
             exit(0);
           }
         // read to next line or next character
@@ -738,7 +744,9 @@ double XC::TzSimple1Gen::GetTult(const std::string &type)
       { return TULT; }
     else
       {
-        std::cerr << "TzType " << type << " is not supported in XC::TzSimple1GenPushover::GetTult.  Setting tult = 0.00000001";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "TzType " << type << " is not supported."
+	          << " Setting tult = 0.00000001";
         return 0.00000001;
       }
   }
@@ -779,7 +787,9 @@ double XC::TzSimple1Gen::GetVStress(double z)
     // Check that z lies within range of z_t and z_b
     if(z > maxz || z < minz)
     {
-        std::cerr << "Depth lies out of range of specified depth vectors in function 'vstress' in PySimple1GenPushover. Setting stress = 0." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; depth lies out of range of specified depth vectors."
+                  << " Setting stress = 0." << std::endl;
         return 0.0;
     }
 
