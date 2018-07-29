@@ -48,7 +48,7 @@
 
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/d2/Plane.h"
-#include "xc_utils/src/geom/d1/Recta3d.h"
+#include "xc_utils/src/geom/d1/Line3d.h"
 
 #include "boost/lexical_cast.hpp"
 

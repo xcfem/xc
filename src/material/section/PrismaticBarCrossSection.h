@@ -35,7 +35,7 @@ class PrincipalAxesOfInertia2D;
 #include "material/section/SectionForceDeformation.h"
 
 class HalfPlane2d;
-class Recta2d;
+class Line2d;
 class Pos2d;
 class Vector2d;
 
@@ -68,14 +68,14 @@ class PrismaticBarCrossSection: public SectionForceDeformation
     virtual double getCenterOfMassY(void) const;
     virtual double getCenterOfMassZ(void) const;
     Pos2d getCenterOfMass(void) const;
-    Recta2d getNeutralAxis(void) const;
-    Recta2d getInternalForcesAxis(void) const;
+    Line2d getNeutralAxis(void) const;
+    Line2d getInternalForcesAxis(void) const;
     Pos2d getPointOnTensionedHalfPlane(void) const;
     Pos2d getPointOnCompressedHalfPlane(void) const;
     HalfPlane2d getTensionedHalfPlane(void) const;
-    HalfPlane2d getTensionedHalfPlane(const Recta2d &) const;
+    HalfPlane2d getTensionedHalfPlane(const Line2d &) const;
     HalfPlane2d getCompressedHalfPlane(void) const;
-    HalfPlane2d getCompressedHalfPlane(const Recta2d &) const;
+    HalfPlane2d getCompressedHalfPlane(const Line2d &) const;
 
     const double &EA(void) const;
     const double &EIz(void) const;

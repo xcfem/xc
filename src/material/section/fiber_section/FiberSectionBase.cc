@@ -225,7 +225,7 @@ double XC::FiberSectionBase::getLeverArm(void) const
 
 //! @brief Returns section depth from the line being passed as parameter
 //! to the most compressed fiber.
-double XC::FiberSectionBase::getCompressedZoneDepth(const Recta2d &r) const
+double XC::FiberSectionBase::getCompressedZoneDepth(const Line2d &r) const
   {
     double retval= 0.0;
     const GeomSection *geom= getGeomSection();
@@ -286,7 +286,7 @@ double XC::FiberSectionBase::getTensionedZoneDepth(void) const
 
 //! @brief Returns section depth from the line being passed as parameter
 //! to the most tensioned fiber.
-double XC::FiberSectionBase::getTensionedZoneDepth(const Recta2d &r) const
+double XC::FiberSectionBase::getTensionedZoneDepth(const Line2d &r) const
   {
     double retval= 0.0;
     const GeomSection *geom= getGeomSection();
@@ -317,7 +317,7 @@ double XC::FiberSectionBase::getNeutralAxisDepth(void) const
 double XC::FiberSectionBase::getNeutralAxisDist(const double &y,const double &) const
   {
     double retval= 0.0;
-    const Recta2d fn= getNeutralAxis();
+    const Line2d fn= getNeutralAxis();
     if(fn.exists())
       retval= fn.dist(Pos2d(y,0));
     return retval;
@@ -327,10 +327,10 @@ double XC::FiberSectionBase::getNeutralAxisDist(const double &y,const double &) 
 //! as in article 49.2.4 from EHE-08 (hatched area in figure 49.2.4b).
 //! See also figures 47.5 y 47.6 from volume II of the
 //! book: "Proyecto y cálculo de estructuras de hormigón" author: J. Calavera.
-Recta2d XC::FiberSectionBase::getEffectiveConcreteAreaLimitLine(const double &hEfMax) const
+Line2d XC::FiberSectionBase::getEffectiveConcreteAreaLimitLine(const double &hEfMax) const
   {
-    Recta2d retval;
-    Recta2d fn= getNeutralAxis(); //Neutral axis computed from deformation plane.
+    Line2d retval;
+    Line2d fn= getNeutralAxis(); //Neutral axis computed from deformation plane.
     if(!fn.exists()) //It this doesn't work.
       fn= fibers.getNeutralAxis(); //Neutral axis computed from fiber model. 
     if(fn.exists())
@@ -372,7 +372,7 @@ std::list<Poligono2d> XC::FiberSectionBase::getGrossEffectiveConcreteAreaContour
         if(hEfMax>1e-6)
           {
 	    // Compute the line that limits the effective area contour
-            const Recta2d limit= getEffectiveConcreteAreaLimitLine(hEfMax);
+            const Line2d limit= getEffectiveConcreteAreaLimitLine(hEfMax);
             if(limit.exists())
               {
 		if(contour.Overlap(limit))
@@ -773,9 +773,9 @@ Segment2d XC::FiberSectionBase::getLeverArmSegment(void) const
     if(!retval.exists())
       {
         //Lever arm as 0.8 times total depth.
-        const Recta2d Xaxis= getInternalForcesAxis();
+        const Line2d Xaxis= getInternalForcesAxis();
         const Pos2d center_of_mass= getCenterOfMass();
-        const Recta2d Yaxis= Xaxis.Perpendicular(center_of_mass);
+        const Line2d Yaxis= Xaxis.Perpendicular(center_of_mass);
         const Poligono2d contour= getRegionsContour();
         retval= contour.Clip(Yaxis);
         Pos2d org= retval.Origen()+0.1*retval.GetVector();
@@ -800,12 +800,12 @@ Segment2d XC::FiberSectionBase::getEffectiveDepthSegment(void) const
 
 //! @brief Returns the intercept of the bending plane with the
 //! plane that contains the cross section.
-Recta2d XC::FiberSectionBase::getBendingPlaneTrace(void) const
+Line2d XC::FiberSectionBase::getBendingPlaneTrace(void) const
   {
-    Recta2d retval= fibers.getBendingPlaneTrace();
+    Line2d retval= fibers.getBendingPlaneTrace();
     if(!retval.exists())
       {
-        Recta2d axis= getInternalForcesAxis();
+        Line2d axis= getInternalForcesAxis();
         Pos2d center_of_mass= getCenterOfMass();
         retval= axis.Perpendicular(center_of_mass);
       } 
@@ -815,9 +815,9 @@ Recta2d XC::FiberSectionBase::getBendingPlaneTrace(void) const
 //! @brief Returns the intercept of a plane perpendicular to the bending
 //! plane through the centroid of the tensioned fibers with the
 //! plane that contains the cross section.
-Recta2d XC::FiberSectionBase::getTensionedPlaneTrace(void) const
+Line2d XC::FiberSectionBase::getTensionedPlaneTrace(void) const
   {
-    Recta2d retval= fibers.getTensionedPlaneTrace();
+    Line2d retval= fibers.getTensionedPlaneTrace();
     if(!retval.exists())
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; intercept of the tension plane not found." << std::endl;
@@ -827,9 +827,9 @@ Recta2d XC::FiberSectionBase::getTensionedPlaneTrace(void) const
 //! @brief Returns the intercept of a plane perpendicular to the bending
 //! plane through the centroid of the compressed fibers with the
 //! plane that contains the cross section.
-Recta2d XC::FiberSectionBase::getCompressedPlaneTrace(void) const
+Line2d XC::FiberSectionBase::getCompressedPlaneTrace(void) const
   {
-    Recta2d retval= fibers.getCompressedPlaneTrace();
+    Line2d retval= fibers.getCompressedPlaneTrace();
     if(!retval.exists())
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; intercept of the compression plane not found."
@@ -886,7 +886,7 @@ double XC::FiberSectionBase::getHomogenizedI(const double &E0) const
   {
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
-    const Recta2d axis= getInternalForcesAxis();
+    const Line2d axis= getInternalForcesAxis();
     return fibers.getIHomogenizedSection(E0,axis);
   }
 
@@ -895,7 +895,7 @@ double XC::FiberSectionBase::getSPosHomogeneizada(const double &E0) const
   {
     if(fabs(E0)<1e-6)
       std::clog << "homogenization reference modulus too small; E0= " << E0 << std::endl; 
-    const Recta2d axis= getInternalForcesAxis();
+    const Line2d axis= getInternalForcesAxis();
     return fibers.getSPosHomogenizedSection(E0,HalfPlane2d(axis));
   }
 

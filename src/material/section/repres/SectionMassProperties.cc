@@ -151,7 +151,7 @@ double XC::SectionMassProperties::getIHomogenizedSection(const double &E0,const 
 
 //! @brief Return the moment of inertia respecto a la recta being passed
 //! as parameter.
-double XC::SectionMassProperties::getIHomogenizedSection(const double &E0,const Recta2d &r) const
+double XC::SectionMassProperties::getIHomogenizedSection(const double &E0,const Line2d &r) const
   { return getIHomogenizedSection(E0,r.Point(),Vector(r.VDir()));  }
 
 //! @brief Return the i,j component of the tensor of inertia computed with
@@ -322,7 +322,7 @@ double XC::SectionMassProperties::getIGrossSection(const Pos2d &O,const Vector &
 
 //! @brief Return the moment of inertia respecto a la recta being passed
 //! as parameter.
-double XC::SectionMassProperties::getIGrossSection(const Recta2d &r) const
+double XC::SectionMassProperties::getIGrossSection(const Line2d &r) const
   { return getIGrossSection(r.Point(),Vector(r.VDir()));  }
 
 //! @brief Return the i,j component of the tensor of inertia computed with

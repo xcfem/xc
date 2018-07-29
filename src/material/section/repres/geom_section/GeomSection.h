@@ -122,12 +122,12 @@ class GeomSection: public SectionMassProperties
     double DistSpots(const size_t &i,const size_t &j) const;
     Poligono2d getRegionsContour(void) const;
     Poligono2d getCompressedZoneContour(const HalfPlane2d &) const;
-    double getLongCorte(const Recta2d &r) const;
-    std::vector<double> getLongsCorte(const std::list<Recta2d> &lr) const;
+    double getLongCorte(const Line2d &r) const;
+    std::vector<double> getLongsCorte(const std::list<Line2d> &lr) const;
     double getCompressedZoneDepth(const HalfPlane2d &) const;
     double getTensionedZoneDepth(const HalfPlane2d &) const;
-    double getLeverArm(const Recta2d &) const;
-    double getAnchoMecanico(const Recta2d &) const;
+    double getLeverArm(const Line2d &) const;
+    double getAnchoMecanico(const Line2d &) const;
     double getCover(const Pos2d &) const;
     double getCompressedStrutWidth(const Segment2d &) const;
 

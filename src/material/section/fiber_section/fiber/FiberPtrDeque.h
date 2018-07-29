@@ -35,7 +35,7 @@
 
 class Ref3d3d;
 class Pos2d;
-class Recta2d;
+class Line2d;
 class Segment2d;
 class Poligono2d;
 class BND2d;
@@ -122,7 +122,7 @@ class FiberPtrDeque: public EntCmd, public std::deque<Fiber *>
     double getExcentricidadMy(const double &z0= 0.0) const;
     Vector2d getMomentVector(const double &y0=0.0,const double &z0=0.0) const;
     Pos2d getResultantPosition(const double &y0=0.0,const double &z0=0.0) const;
-    Recta2d getNeutralAxis(void) const;
+    Line2d getNeutralAxis(void) const;
 
     double getCompressionResultant(void) const;
     double getCompressedFibersMz(const double &y0= 0.0) const;
@@ -155,9 +155,9 @@ class FiberPtrDeque: public EntCmd, public std::deque<Fiber *>
     Vector getLeverArmVector(void) const;
     Segment2d getLeverArmSegment(void) const;
     double getMechanicLeverArm(void) const;
-    Recta2d getBendingPlaneTrace(void) const;
-    Recta2d getTensionedPlaneTrace(void) const;
-    Recta2d getCompressedPlaneTrace(void) const;
+    Line2d getBendingPlaneTrace(void) const;
+    Line2d getTensionedPlaneTrace(void) const;
+    Line2d getCompressedPlaneTrace(void) const;
     double computeFibersEffectiveConcreteArea(const std::list<Poligono2d> &,const double &factor= 15) const;
     const std::list<Poligono2d> &getFiberEffectiveConcretAreaContour(const size_t &i) const;
     double getFiberEffectiveConcreteArea(const size_t &i) const;
@@ -233,7 +233,7 @@ class FiberPtrDeque: public EntCmd, public std::deque<Fiber *>
     Matrix &getIHomogenizedSection(const double &) const;
     Matrix &getIHomogenizedSection(const double &,const Pos2d &o) const;
     double getIHomogenizedSection(const double &,const Pos2d &O,const Vector &e) const;
-    double getIHomogenizedSection(const double &,const Recta2d &r) const;
+    double getIHomogenizedSection(const double &,const Line2d &r) const;
     //Static moments.
     double getSzPos(const double &yf,const double &y0,const double &factor= 1.0) const;
     double getSzNeg(const double &yf,const double &y0,const double &factor= 1.0) const;

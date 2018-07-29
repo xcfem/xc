@@ -30,7 +30,7 @@
 #include "preprocessor/Preprocessor.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/d2/Plane.h"
-#include "xc_utils/src/geom/d1/Recta3d.h"
+#include "xc_utils/src/geom/d1/Line3d.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 
@@ -78,9 +78,9 @@ Vector3d XC::PntMap::getVector(const Indice &i,const Indice &j) const
   }
 
 //! @brief Return the line defined by the points which indices are being passed as parameters.
-Recta3d XC::PntMap::getRecta(const Indice &i,const Indice &j) const
+Line3d XC::PntMap::getRecta(const Indice &i,const Indice &j) const
   {
-    Recta3d retval;
+    Line3d retval;
     const Pnt *pA= busca(i);
     const Pnt *pB= busca(j);
     if(!pA)
@@ -90,7 +90,7 @@ Recta3d XC::PntMap::getRecta(const Indice &i,const Indice &j) const
       std::cerr << getClassName() << "::" << __FUNCTION__ << "; point: " << j 
 		<< " not found." << std::endl;
     else
-      retval= Recta3d(pA->GetPos(),pB->GetPos());
+      retval= Line3d(pA->GetPos(),pB->GetPos());
     return retval;
   }
 

@@ -44,7 +44,7 @@ class_<XC::Bidirectional, bases<XC::SectionForceDeformation>, boost::noncopyable
 
 //class_<XC::Isolator2spring , bases<XC::SectionForceDeformation>, boost::noncopyable >("Isolator2spring", no_init);
 
-//HalfPlane2d (XC::PrismaticBarCrossSection::*getTensionedHalfPlaneRecta)(const Recta2d &,bool &)= &XC::PrismaticBarCrossSection::getTensionedHalfPlane;
+//HalfPlane2d (XC::PrismaticBarCrossSection::*getTensionedHalfPlaneRecta)(const Line2d &,bool &)= &XC::PrismaticBarCrossSection::getTensionedHalfPlane;
 //HalfPlane2d (XC::PrismaticBarCrossSection::*getTensionedHalfPlane)(bool &)= &XC::PrismaticBarCrossSection::getTensionedHalfPlane;
 class_<XC::PrismaticBarCrossSection, XC::PrismaticBarCrossSection *, bases<XC::SectionForceDeformation>, boost::noncopyable >("PrismaticBarCrossSection", no_init)
   .def("getCenterOfMassY",&XC::PrismaticBarCrossSection::getCenterOfMassY)

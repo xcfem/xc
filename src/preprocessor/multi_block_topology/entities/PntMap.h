@@ -33,7 +33,7 @@
 #include <map>
 
 class Pos3d;
-class Recta3d;
+class Line3d;
 class Plane;
 class Vector3d;
 
@@ -60,7 +60,7 @@ class PntMap: public EntityMap<Pnt>
     PntMap(MultiBlockTopology *mbt= nullptr);
 
     Vector3d getVector(const Indice &i,const Indice &j) const;
-    Recta3d getRecta(const Indice &i,const Indice &j) const;
+    Line3d getRecta(const Indice &i,const Indice &j) const;
     Plane getPlane(const Indice &i,const Indice &j,const Indice &k) const;
 
     Pnt *New(void);

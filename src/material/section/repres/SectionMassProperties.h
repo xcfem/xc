@@ -32,7 +32,7 @@
 #include "xc_utils/src/nucleo/EntCmd.h"
 
 class Pos2d;
-class Recta2d;
+class Line2d;
 class PrincipalAxesOfInertia2D;
 class Vector2d;
 
@@ -71,7 +71,7 @@ class SectionMassProperties: public EntCmd
     double getIGrossSection(const unsigned short int &,const unsigned short int &) const;
     double getIGrossSection(const unsigned short int &,const unsigned short int &,const Pos2d &) const;
     double getIGrossSection(const Pos2d &,const Vector &) const;
-    double getIGrossSection(const Recta2d &) const;
+    double getIGrossSection(const Line2d &) const;
     double getIOGrossSection(const Pos2d &) const;
     Matrix getIGrossSection(void) const;
     Matrix getIGrossSection(const Pos2d &) const;
@@ -96,7 +96,7 @@ class SectionMassProperties: public EntCmd
     double getIHomogenizedSection(const double &,const unsigned short int &,const unsigned short int &) const;
     double getIHomogenizedSection(const double &,const unsigned short int &,const unsigned short int &,const Pos2d &) const;
     double getIHomogenizedSection(const double &,const Pos2d &,const Vector &) const;
-    double getIHomogenizedSection(const double &,const Recta2d &) const;
+    double getIHomogenizedSection(const double &,const Line2d &) const;
     double getIOHomogenizedSection(const double &,const Pos2d &) const;
     Matrix getIHomogenizedSection(const double &) const;
     Matrix getIHomogenizedSection(const double &,const Pos2d &) const;

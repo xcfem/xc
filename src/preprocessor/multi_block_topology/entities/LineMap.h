@@ -32,7 +32,7 @@
 #include "EntityMap.h"
 #include "Edge.h"
 
-class Recta3d;
+class Line3d;
 class Plane;
 
 namespace XC {
@@ -59,7 +59,7 @@ class LineMap: public EntityMap<Edge>
     LineMap(MultiBlockTopology *mbt= nullptr);
 
     Vector3d getVector(const Indice &i,const Indice &j) const;
-    Recta3d getRecta(const Indice &i,const Indice &j) const;
+    Line3d getRecta(const Indice &i,const Indice &j) const;
     Plane getPlane(const Indice &i,const Indice &j,const Indice &k) const;
 
     template <class E>

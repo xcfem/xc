@@ -117,14 +117,14 @@ class CantileverRetainingWallGeometry(object):
     ''' Returns the midplane of the footing.'''
     toeEndPos= self.getWFToeEndPosition()
     heelEndPos= self.getWFHeelEndPosition()
-    return geom.Recta2d(toeEndPos,heelEndPos)
+    return geom.Line2d(toeEndPos,heelEndPos)
 
   def getFoundationPlane(self):
     ''' Returns the foundation plane.'''
     v= geom.Vector2d(0.0,-self.footingThickness/2.0)
     toeEndPos= self.getWFToeEndPosition()+v
     heelEndPos= self.getWFHeelEndPosition()+v
-    return geom.Recta2d(toeEndPos,heelEndPos)
+    return geom.Line2d(toeEndPos,heelEndPos)
   
   def getFoundationDepth(self,toeFillDepth):
     '''Return wall foundation depth.

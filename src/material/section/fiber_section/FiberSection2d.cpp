@@ -66,7 +66,7 @@
 #include <material/section/repres/section/FiberSectionRepr.h>
 
 #include "material/section/ResponseId.h"
-#include "xc_utils/src/geom/d1/Recta2d.h"
+#include "xc_utils/src/geom/d1/Line2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
 
 // constructors:

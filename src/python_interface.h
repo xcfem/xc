@@ -36,7 +36,7 @@
 #include <boost/python/docstring_options.hpp>
 #include <boost/python/implicit.hpp>
 #include "utility/actor/objectBroker/all_includes.h"
-#include "xc_utils/src/geom/d1/Recta2d.h"
+#include "xc_utils/src/geom/d1/Line2d.h"
 #include "xc_utils/src/geom/d2/HalfPlane2d.h"
 #include "xc_utils/src/geom/d2/Rejilla2d.h"
 #include "xc_utils/src/geom/d2/BND2d.h"

@@ -39,8 +39,8 @@
 #include "material/section/ResponseId.h"
 #include "preprocessor/prep_handlers/MaterialHandler.h"
 #include "material/section/interaction_diagram/InteractionDiagram.h"
-#include "xc_utils/src/geom/d1/Recta3d.h"
-#include "xc_utils/src/geom/d1/Recta2d.h"
+#include "xc_utils/src/geom/d1/Line3d.h"
+#include "xc_utils/src/geom/d1/Line2d.h"
 #include "xc_utils/src/geom/d2/HalfPlane2d.h"
 #include "utility/actor/actor/MovableMatrix.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
@@ -212,32 +212,32 @@ bool XC::PrismaticBarCrossSection::hayTorsor(const double &tol) const
   }
 
 //! @brief Returns the neutral axis.
-Recta2d XC::PrismaticBarCrossSection::getNeutralAxis(void) const
+Line2d XC::PrismaticBarCrossSection::getNeutralAxis(void) const
   { return getDeformationPlane().getNeutralAxis(); }
 
 //! @brief Returns the axis that is aligned with the
 //! cross-section internal forces.
-Recta2d XC::PrismaticBarCrossSection::getInternalForcesAxis(void) const
+Line2d XC::PrismaticBarCrossSection::getInternalForcesAxis(void) const
   {
-    Recta2d retval(getCenterOfMass(),Vector2d(1,0));
+    Line2d retval(getCenterOfMass(),Vector2d(1,0));
     const ResponseId &code= getType();
     if(isSubjectedToBending()) //Direction of the bending moment.
       {
         if(code.hasResponse(SECTION_RESPONSE_MY) && code.hasResponse(SECTION_RESPONSE_MZ))
-          retval= Recta2d(getCenterOfMass(),Vector2d(getStressResultant(SECTION_RESPONSE_MY),getStressResultant(SECTION_RESPONSE_MZ)));
+          retval= Line2d(getCenterOfMass(),Vector2d(getStressResultant(SECTION_RESPONSE_MY),getStressResultant(SECTION_RESPONSE_MZ)));
         else if(code.hasResponse(SECTION_RESPONSE_MY))
-          retval= Recta2d(getCenterOfMass(),Vector2d(1,0));
+          retval= Line2d(getCenterOfMass(),Vector2d(1,0));
         else if(code.hasResponse(SECTION_RESPONSE_MZ))
-          retval= Recta2d(getCenterOfMass(),Vector2d(0,1));
+          retval= Line2d(getCenterOfMass(),Vector2d(0,1));
       }
     else if(isSubjectedToShear()) //Direction normal to the shear force.
       {
         if(code.hasResponse(SECTION_RESPONSE_VY) && code.hasResponse(SECTION_RESPONSE_VZ))
-          retval= Recta2d(getCenterOfMass(),Vector2d(-getStressResultant(SECTION_RESPONSE_VZ),getStressResultant(SECTION_RESPONSE_VY)));
+          retval= Line2d(getCenterOfMass(),Vector2d(-getStressResultant(SECTION_RESPONSE_VZ),getStressResultant(SECTION_RESPONSE_VY)));
         else if(code.hasResponse(SECTION_RESPONSE_VY))
-          retval= Recta2d(getCenterOfMass(),Vector2d(0,1));
+          retval= Line2d(getCenterOfMass(),Vector2d(0,1));
         else if(code.hasResponse(SECTION_RESPONSE_VZ))
-          retval= Recta2d(getCenterOfMass(),Vector2d(1,0));
+          retval= Line2d(getCenterOfMass(),Vector2d(1,0));
       }
     return retval;
   }
@@ -252,7 +252,7 @@ Pos2d XC::PrismaticBarCrossSection::getPointOnCompressedHalfPlane(void) const
 
 //! @brief Returns the tensioned half-plane defined by the edge
 //! being passed as parameter.
-HalfPlane2d XC::PrismaticBarCrossSection::getTensionedHalfPlane(const Recta2d &r) const
+HalfPlane2d XC::PrismaticBarCrossSection::getTensionedHalfPlane(const Line2d &r) const
   { return getDeformationPlane().getTensionedHalfPlane(r); }
 
 //! @brief Returns the tensioned half-plane.
@@ -261,7 +261,7 @@ HalfPlane2d XC::PrismaticBarCrossSection::getTensionedHalfPlane(void) const
 
 //! @brief Returns the compressed half-plane defined by the edge
 //! being passed as parameter.
-HalfPlane2d XC::PrismaticBarCrossSection::getCompressedHalfPlane(const Recta2d &r) const
+HalfPlane2d XC::PrismaticBarCrossSection::getCompressedHalfPlane(const Line2d &r) const
   { return getDeformationPlane().getCompressedHalfPlane(r); }
 
 //! @brief Returns the compressed half-plane.

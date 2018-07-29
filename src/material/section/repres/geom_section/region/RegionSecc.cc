@@ -126,10 +126,10 @@ const XC::Vector &XC::RegionSecc::IAxisDir_b(void) const
     return retval;
   }
 
-//     Recta2d IAxis_a(void) const;
+//     Line2d IAxis_a(void) const;
 //     //Returns a principal axis of inertia (we don't know yet
 //     //the major one or the minor one).
-//     Recta2d IAxis_b(void) const;
+//     Line2d IAxis_b(void) const;
 //     //Return the other principal axis of inertia (we don't know yet
 //     //the major one or the minor one).
 //     Ref2d2d principalAxesOfInertia(void) const;
@@ -154,7 +154,7 @@ double XC::RegionSecc::getI(const unsigned short int &i,const unsigned short int
 double XC::RegionSecc::getI(const Pos2d &O,const Vector &e) const
   { return getPolygon().I(O,Vector2d(e[0],e[1])); }
 
-//     double I(const Recta2d &r) const;
+//     double I(const Line2d &r) const;
 //       //Return the moment of inertia respecto a la recta being passed
 //       //as parameter.
 

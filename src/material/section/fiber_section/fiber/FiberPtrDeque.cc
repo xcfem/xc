@@ -43,7 +43,7 @@
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
 #include "xc_utils/src/geom/d2/BND2d.h"
-#include "xc_utils/src/geom/d1/Recta2d.h"
+#include "xc_utils/src/geom/d1/Line2d.h"
 #include "xc_utils/src/geom/d1/Segment2d.h"
 #include "xc_utils/src/geom/d2/Circle2d.h"
 #include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
@@ -478,7 +478,7 @@ double XC::FiberPtrDeque::getIHomogenizedSection(const double &E0,const Pos2d &O
 
 //! @brief Return the moment of inertia with respect to the line being passed
 //! as parameter.
-double XC::FiberPtrDeque::getIHomogenizedSection(const double &E0,const Recta2d &r) const
+double XC::FiberPtrDeque::getIHomogenizedSection(const double &E0,const Line2d &r) const
   { return getIHomogenizedSection(E0,r.Point(),Vector(r.VDir())); }
 
 //! @brief Return the static moment of the cell areas that rely
@@ -749,7 +749,7 @@ Pos2d XC::FiberPtrDeque::getResultantPosition(const double &y0,const double &z0)
   }
 
 //! @brief Return an approximation of the neutral axis.
-Recta2d XC::FiberPtrDeque::getNeutralAxis(void) const
+Line2d XC::FiberPtrDeque::getNeutralAxis(void) const
   {
     const Segment2d las= getLeverArmSegment();
     const double C= getCompressionResultant();
@@ -759,7 +759,7 @@ Recta2d XC::FiberPtrDeque::getNeutralAxis(void) const
     const double a= las.getLength()*T/(T-C); //Similar triangles.
     const Pos2d org= TPos+a*las.VDir().Normalizado();
     const Vector2d v= las.Normal(); //Direction of the neutral axis.
-    return Recta2d(org,v);
+    return Line2d(org,v);
   }
 
 //! @brief Returns true if the section is subject to a under bending moment.
@@ -1283,15 +1283,15 @@ Segment2d XC::FiberPtrDeque::getLeverArmSegment(void) const
 
 //! @brief Return the intercept of the bending plane with
 //! the plane that contains the section.
-Recta2d XC::FiberPtrDeque::getBendingPlaneTrace(void) const
-  { return getLeverArmSegment().RectaSoporte(); }
+Line2d XC::FiberPtrDeque::getBendingPlaneTrace(void) const
+  { return getLeverArmSegment().getSupportLine(); }
 
 //! @brief Return the intercept of a plane perpendicular to the
 //! bending plane through the tensions centroid with the plane
 //! that contains the section.
-Recta2d XC::FiberPtrDeque::getTensionedPlaneTrace(void) const
+Line2d XC::FiberPtrDeque::getTensionedPlaneTrace(void) const
   { 
-    const Recta2d bendingTrace= getBendingPlaneTrace();
+    const Line2d bendingTrace= getBendingPlaneTrace();
     Pos2d pt(getCenterOfMassY(),getCenterOfMassZ());
     const double epsMax= getStrainMax();
     if(epsMax>0) //There are tractions.
@@ -1305,9 +1305,9 @@ Recta2d XC::FiberPtrDeque::getTensionedPlaneTrace(void) const
 //! @brief Return the intercept of a plane perpendicular to the
 //! bending plane through the compressions centroid with the plane
 //! that contains the section.
-Recta2d XC::FiberPtrDeque::getCompressedPlaneTrace(void) const
+Line2d XC::FiberPtrDeque::getCompressedPlaneTrace(void) const
   { 
-    const Recta2d bendingTrace= getBendingPlaneTrace();
+    const Line2d bendingTrace= getBendingPlaneTrace();
     Pos2d pt(getCenterOfMassY(),getCenterOfMassZ());
     const double epsMin= getStrainMin();
     if(epsMin<0) //There are compresions.

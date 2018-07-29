@@ -43,7 +43,7 @@
 #include "preprocessor/multi_block_topology/matrices/Framework3d.h"
 
 class Pos3d;
-class Recta3d;
+class Line3d;
 class Plane;
 class Vector3d;
 

@@ -47,7 +47,7 @@ class Rotation: public TrfGeom
     Rotation(Preprocessor *m)
       : TrfGeom(m), rr() {}
 
-    void setAxisAng(const Recta3d &r,const double &ang)
+    void setAxisAng(const Line3d &r,const double &ang)
       { rr= Rotation3d(r,ang); }
     virtual Pos3d Transforma(const Pos3d &p) const;
     virtual Vector3d Transforma(const Vector3d &v) const;

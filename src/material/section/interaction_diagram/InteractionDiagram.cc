@@ -139,7 +139,7 @@ const Trihedron *XC::InteractionDiagram::findTrihedronPtr(const Pos3d &p) const
 	InteractionDiagram::const_iterator i= begin();
         const Trihedron *tr= &(*i);
         Ray3d ray(tr->Cuspide(),p);
-        Recta3d axis= tr->Axis();
+        Line3d axis= tr->Axis();
         double angMin= angle(axis,ray);
         double angTmp= angMin;
         retval= tr;

@@ -155,7 +155,7 @@ def data_axis_to_pyplot(axis,contour):
     of the start and end points of the segment of axis inside the fiberSect contour
     passed as parameters.
     '''
-    sg=contour.clipRecta(axis)
+    sg=contour.clipLine(axis)
     return data_xcsegment_to_pyplot(sg)
 
     

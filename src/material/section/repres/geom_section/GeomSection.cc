@@ -273,7 +273,7 @@ Poligono2d XC::GeomSection::getCompressedZoneContour(const HalfPlane2d &sp_compr
 //! of the half-plane being passed as parameter.
 //! @param PFtrace: Trace of the bending plane with over plane that
 //! contains the cross section.
-double XC::GeomSection::getLeverArm(const Recta2d &PFtrace) const
+double XC::GeomSection::getLeverArm(const Line2d &PFtrace) const
   {
     Poligono2d contour= getRegionsContour();
     Pos2d C= contour.getCenterOfMass();
@@ -326,7 +326,7 @@ double XC::GeomSection::getTensionedZoneDepth(const HalfPlane2d &sp_compresiones
 //! @brief Return the lengths of the segments that results of
 //! cutting the line being passed as parameter with the section
 //! contour.
-double XC::GeomSection::getLongCorte(const Recta2d &r) const
+double XC::GeomSection::getLongCorte(const Line2d &r) const
   {
     double retval= 0.0;
     Poligono2d contour= append_mid_points(getRegionsContour());
@@ -338,7 +338,7 @@ double XC::GeomSection::getLongCorte(const Recta2d &r) const
 //! @brief Return the lengths of the segments that results of
 //! cutting the line being passed as parameter with the section
 //! contour.
-std::vector<double> XC::GeomSection::getLongsCorte(const std::list<Recta2d> &lr) const
+std::vector<double> XC::GeomSection::getLongsCorte(const std::list<Line2d> &lr) const
   {
     const size_t sz= lr.size();
     std::vector<double> retval;
@@ -346,9 +346,9 @@ std::vector<double> XC::GeomSection::getLongsCorte(const std::list<Recta2d> &lr)
       {
         Poligono2d contour= append_mid_points(getRegionsContour());
         int conta= 0;
-        for(std::list<Recta2d>::const_iterator i= lr.begin();i!=lr.end();i++,conta++)
+        for(std::list<Line2d>::const_iterator i= lr.begin();i!=lr.end();i++,conta++)
           {
-            const Recta2d &r= *i;
+            const Line2d &r= *i;
             if(contour.Overlap(r))
               retval[conta]= contour.Clip(r).getLength();
           }
@@ -358,12 +358,12 @@ std::vector<double> XC::GeomSection::getLongsCorte(const std::list<Recta2d> &lr)
 
 //! @brief Return the section width for the bending plane intersect
 //! being passed as parameter.
-double XC::GeomSection::getAnchoMecanico(const Recta2d &bending_plane_trace) const
+double XC::GeomSection::getAnchoMecanico(const Line2d &bending_plane_trace) const
   {
     const Poligono2d contour= append_mid_points(getRegionsContour());
     const size_t num_vertices= contour.GetNumVertices();
     double d= 0.0,dmax= 0.0;
-    Recta2d perp;
+    Line2d perp;
     Segment2d ancho;
     for(register size_t i=1;i<=num_vertices;i++)
       {
@@ -383,7 +383,7 @@ double XC::GeomSection::getCompressedStrutWidth(const Segment2d &lever_arm) cons
   {
     const Poligono2d contour= append_mid_points(getRegionsContour());
     const size_t num_vertices= contour.GetNumVertices();
-    Recta2d perp= lever_arm.getPerpendicularBisector();
+    Line2d perp= lever_arm.getPerpendicularBisector();
     Segment2d ancho= contour.Clip(perp);
     Pos2d p= intersection_point(ancho,lever_arm);
     assert(p.exists());

@@ -243,7 +243,7 @@ const Trihedron *XC::ClosedTriangleMesh::findTrihedronPtr(const Pos3d &p) const
 	    ClosedTriangleMesh::const_iterator i= begin();
             const Trihedron *tr= &(*i);
             Ray3d ray(tr->Cuspide(),p);
-            Recta3d axis= tr->Axis();
+            Line3d axis= tr->Axis();
             double rayAxisAngle= angle(axis,ray);
             double angTmp= rayAxisAngle;
             retval= tr;

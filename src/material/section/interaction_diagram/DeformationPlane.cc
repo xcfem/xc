@@ -32,8 +32,8 @@
 #include "xc_utils/src/geom/d2/GeneralEquationOfPlane.h"
 #include "utility/matrix/Vector.h"
 #include "material/section/ResponseId.h"
-#include "xc_utils/src/geom/d1/Recta3d.h"
-#include "xc_utils/src/geom/d1/Recta2d.h"
+#include "xc_utils/src/geom/d1/Line3d.h"
+#include "xc_utils/src/geom/d1/Line2d.h"
 #include "xc_utils/src/geom/d2/HalfPlane2d.h"
 #include "utility/actor/actor/MovableVector.h"
 
@@ -158,13 +158,13 @@ const XC::Vector &XC::DeformationPlane::getDeformation(const size_t &order,const
   }
 
 //! @brief Return the neutral axis.
-Recta2d XC::DeformationPlane::getNeutralAxis(void)const
+Line2d XC::DeformationPlane::getNeutralAxis(void)const
   {
     const double a= angle(*this,YZPlane3d);
-    Recta2d retval;
+    Line2d retval;
     if(a>1e-4)
       {
-        Recta3d trace= YZTrace();
+        Line3d trace= YZTrace();
         if(trace.exists())
           retval= trace.YZ2DProjection();
       }
@@ -179,7 +179,7 @@ Recta2d XC::DeformationPlane::getNeutralAxis(void)const
 Pos2d XC::DeformationPlane::getPointOnTensionedHalfPlane(void) const
   {
     Pos2d retval(0,0);
-    const Recta2d fn(getNeutralAxis());
+    const Line2d fn(getNeutralAxis());
     bool exists= fn.exists();
     const double a= angle(*this,YZPlane3d);
     if(exists && (a>mchne_eps_dbl)) //Neutral axis exists.
@@ -200,7 +200,7 @@ Pos2d XC::DeformationPlane::getPointOnTensionedHalfPlane(void) const
 Pos2d XC::DeformationPlane::getPointOnCompressedHalfPlane(void) const
   {
     Pos2d retval(0,0);
-    const Recta2d fn(getNeutralAxis());
+    const Line2d fn(getNeutralAxis());
     bool exists= fn.exists();
     const double a= angle(*this,YZPlane3d);
     if(exists && (a>mchne_eps_dbl)) //Neutral axis exists.
@@ -219,7 +219,7 @@ Pos2d XC::DeformationPlane::getPointOnCompressedHalfPlane(void) const
 
 //! @brief Returns the half plane which border is the line being passed
 //! as parameter and is contained in the half plane in traction.
-HalfPlane2d XC::DeformationPlane::getTensionedHalfPlane(const Recta2d &r) const
+HalfPlane2d XC::DeformationPlane::getTensionedHalfPlane(const Line2d &r) const
   {
     const HalfPlane2d spt= getTensionedHalfPlane();
     assert(spt.exists());
@@ -246,7 +246,7 @@ HalfPlane2d XC::DeformationPlane::getTensionedHalfPlane(const Recta2d &r) const
 //! @brief Returns the tensioned half-plane.
 HalfPlane2d XC::DeformationPlane::getTensionedHalfPlane(void) const
   {
-    const Recta2d fn= getNeutralAxis();
+    const Line2d fn= getNeutralAxis();
     bool exists= fn.exists();
     const double a= angle(*this,YZPlane3d);
     Pos2d tmp(0,0);
@@ -268,9 +268,9 @@ HalfPlane2d XC::DeformationPlane::getTensionedHalfPlane(void) const
   }
 
 //! @brief Returns the compressed half-plane.
-HalfPlane2d XC::DeformationPlane::getCompressedHalfPlane(const Recta2d &r) const
+HalfPlane2d XC::DeformationPlane::getCompressedHalfPlane(const Line2d &r) const
   {
-    const Recta2d fn= getNeutralAxis();
+    const Line2d fn= getNeutralAxis();
     bool exists= fn.exists();
     const double a= angle(*this,YZPlane3d);
     Pos2d tmp(0,0);
@@ -294,7 +294,7 @@ HalfPlane2d XC::DeformationPlane::getCompressedHalfPlane(const Recta2d &r) const
 //! @brief Returns the compressed half plane.
 HalfPlane2d XC::DeformationPlane::getCompressedHalfPlane(void) const
   {
-    const Recta2d fn= getNeutralAxis();
+    const Line2d fn= getNeutralAxis();
     bool exists= fn.exists();
     HalfPlane2d retval;
     if(exists)

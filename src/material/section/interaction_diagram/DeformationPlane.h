@@ -35,7 +35,7 @@
 
 class Pos2d;
 class Pos3d;
-class Recta2d;
+class Line2d;
 class HalfPlane2d;
 
 namespace XC {
@@ -75,13 +75,13 @@ class DeformationPlane: public Plane, public MovableObject
 
     void ConstantStrain(const double &);
 
-    Recta2d getNeutralAxis(void) const;
+    Line2d getNeutralAxis(void) const;
     Pos2d getPointOnTensionedHalfPlane(void) const;
     Pos2d getPointOnCompressedHalfPlane(void) const;
     HalfPlane2d getTensionedHalfPlane(void) const;
-    HalfPlane2d getTensionedHalfPlane(const Recta2d &) const;
+    HalfPlane2d getTensionedHalfPlane(const Line2d &) const;
     HalfPlane2d getCompressedHalfPlane(void) const;
-    HalfPlane2d getCompressedHalfPlane(const Recta2d &) const;
+    HalfPlane2d getCompressedHalfPlane(const Line2d &) const;
 
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
