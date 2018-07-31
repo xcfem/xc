@@ -41,6 +41,7 @@ class_<XC::EntMdlr, bases<XC::SetEstruct>, boost::noncopyable >("EntMdlr", no_in
   .def("getSimpsonWeights", &XC::EntMdlr::getSimpsonWeights,"Returns weights for Simpson's rule integration.")
   .def("In", &XC::EntMdlr::In,"\n""In(geomObject,tolerance) \n""Return true if this object lies inside the geometric object.")
   .def("Out", &XC::EntMdlr::Out,"\n""Out(geomObject,tolerance) \n""Return true if this object lies outside the geometric object.")
+  .def("getPosCentroid", &XC::EntMdlr::getCentroid,"Returns the centroid of the quad surface.")
    ;
 
 XC::Node *(XC::Pnt::*getNodePnt)(void)= &XC::Pnt::getNode;
@@ -69,7 +70,9 @@ class_<XC::QuadSurface, XC::QuadSurface *, bases<XC::Face>, boost::noncopyable >
   .add_property("getIVector", &XC::QuadSurface::getIVector,"Return the local x vector.")
   .add_property("getJVector", &XC::QuadSurface::getJVector,"Return the local x vector.")
   .add_property("getKVector", &XC::QuadSurface::getKVector,"Return the local x vector.")
+  .def("getLocalAxes",&XC::QuadSurface::getLocalAxes,"Return the surface local axes as matrix rows: [[x1,y1,z1],[x2,y2,z2],...·] .")
    ;
+
 
 
 class_<XC::Body, XC::Body *, bases<XC::EntMdlr>, boost::noncopyable >("Body","Six-faced body." ,no_init)
