@@ -11,10 +11,11 @@ import vtk
 from postprocess.xcVtk import cad_mesh
 from postprocess.xcVtk import vtk_grafico_base
 from miscUtils import LogMessages as lmsg
+from postprocess.xcVtk import local_axes_vector_field as lavf
 
 class RecordDefDisplayCAD(vtk_grafico_base.RecordDefDisplay):
     ''' Define graphic output.'''
-    def defineMeshScene(self, field):
+    def defineMeshScene(self):
         ''' Define mesh scene on ouput display.'''
         self.gridRecord.uGrid= vtk.vtkUnstructuredGrid()
         self.gridRecord.cellType= "lines"
@@ -27,6 +28,11 @@ class RecordDefDisplayCAD(vtk_grafico_base.RecordDefDisplay):
           self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
           cad_mesh.VtkDefineActorKPoint(self.gridRecord,self.renderer,0.02)
           cad_mesh.VtkDefineActorCells(self.gridRecord,self.renderer,"wireframe")
+          #Experimental yet (31/07/2018) LCPT
+          vField=lavf.QuadSurfacesLocalAxesVectorField(setToDraw.name+'_localAxes',1)#vectorScale)
+          vField.dumpVectors(setToDraw)
+          vField.addToDisplay(self)
+          #End of the experiment
           self.renderer.ResetCamera()
         else:
           lmsg.warning("Error when drawing set: '"+setToDraw.name+"' it has not key points so I can't get set geometry (use fillDownwards?)")
@@ -51,16 +57,15 @@ class RecordDefDisplayCAD(vtk_grafico_base.RecordDefDisplay):
         ''' Display geometric entities (points, lines, surfaces and volumes)
 
         :param xcSet: set to be represented
-        :param field: field to show (optional)
         :param diagrams: diagrams to show (optional)
         :param fName: name of the graphic file to create (if None then -> screen window).
         :param caption: text to display in the graphic.
         '''
         self.setupGrid(xcSet)
-        self.defineMeshScene(None)
+        self.defineMeshScene()
         self.displayScene(caption,fName)
 
-    def plotMultiBlockModel(self, xcSet, field, fName, caption= ''):
+    def plotMultiBlockModel(self, xcSet, fName, caption= ''):
         lmsg.warning('plotMultiBlockModel DEPRECATED; use displayBlocks.')
         self.displayBlocks(xcSet,fName,caption)
 

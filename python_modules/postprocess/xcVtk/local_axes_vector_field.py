@@ -14,7 +14,7 @@ from miscUtils import LogMessages as lmsg
 from postprocess.xcVtk import direction_field_data as dfd
 
 class LocalAxesVectorField(object):
-  '''Draws a the local axes on elements.'''
+  '''Draws the local axes on elements.'''
   xColor= [1.0,0.0,0.0] # red
   yColor= [0.0,1.0,0.0] # green
   zColor= [0.0,0.0,1.0] # blue
@@ -30,7 +30,7 @@ class LocalAxesVectorField(object):
 
 
   def dumpVectors(self,xcSet):
-    ''' Iterate over loaded elements dumping its axes into the graphic.'''
+    ''' Iterate over the elements dumping its axes into the graphic.'''
     elemSet= xcSet.getElements
     for e in elemSet:
       p= e.getPosCentroid(True)
@@ -47,6 +47,21 @@ class LocalAxesVectorField(object):
     self.yAxes.addToDisplay(recordDisplay)
     self.zAxes.addToDisplay(recordDisplay)
 
+class QuadSurfacesLocalAxesVectorField(LocalAxesVectorField):
+  '''Draws the local axes on quadrilateral surfaces.'''
+  def dumpVectors(self,xcSet):
+    ''' Iterate over the surfaces dumping its axes into the graphic.'''
+    surfaceSet= xcSet.getSurfaces
+    for s in surfaceSet:
+      p= s.getPosCentroid()
+      axes= s.getLocalAxes()
+      vx= axes(0,0); vy= axes(0,1); vz= axes(0,2)
+      self.xAxes.insertNextPair(p.x,p.y,p.z,vx,vy,vz)
+      vx= axes(1,0); vy= axes(1,1); vz= axes(1,2)
+      self.yAxes.insertNextPair(p.x,p.y,p.z,vx,vy,vz)
+      vx= axes(2,0); vy= axes(2,1); vz= axes(2,2)
+      self.zAxes.insertNextPair(p.x,p.y,p.z,vx,vy,vz)
+    
 class StrongWeakAxisVectorField(object):
   '''Draws a the strong axis on elements.'''
   strongColor= [1.0,0.0,0.0] # red
@@ -76,4 +91,6 @@ class StrongWeakAxisVectorField(object):
   def addToDisplay(self,recordDisplay):
     self.strongAxis.addToDisplay(recordDisplay)
     self.weakAxis.addToDisplay(recordDisplay)
+
+
 
