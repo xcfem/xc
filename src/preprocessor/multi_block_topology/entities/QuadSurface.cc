@@ -394,7 +394,8 @@ Vector3d XC::QuadSurface::getIVector(void) const
     const Pos3d p2= getVertex(2)->GetPos();
     const Pos3d p3= getVertex(3)->GetPos();
     const Pos3d p4= getVertex(4)->GetPos();
-    const Vector3d retval= 0.5*((p2-p1)+(p3-p4));
+    Vector3d retval= 0.5*((p2-p1)+(p3-p4));
+    retval.Normaliza();
     return retval;
   }
 
@@ -406,8 +407,12 @@ Vector3d XC::QuadSurface::getJVector(void) const
     const Pos3d p2= getVertex(2)->GetPos();
     const Pos3d p3= getVertex(3)->GetPos();
     const Pos3d p4= getVertex(4)->GetPos();
-    const Vector3d retval= 0.5*((p4-p1)+(p3-p2));
-    return retval;
+    Vector3d i= 0.5*((p2-p1)+(p3-p4));
+    i.Normaliza();
+    Vector3d j= 0.5*((p4-p1)+(p3-p2));
+    j.Normaliza();
+    Vector3d k= i.getCross(j);
+    return k.getCross(i);
   }
 
 //! @brief Returns a vector int the direction of the local
@@ -425,11 +430,11 @@ XC::Matrix XC::QuadSurface::getLocalAxes(void) const
   {
     Matrix retval(3,3);
     const Vector3d vectorI= getIVector();
-    retval(0,0)= vectorI(0); retval(0,1)= vectorI(1); retval(0,2)= vectorI(2);
+    retval(0,0)= vectorI(1); retval(0,1)= vectorI(2); retval(0,2)= vectorI(3);
     const Vector3d vectorJ= getJVector();
-    retval(1,0)= vectorJ(0); retval(1,1)= vectorJ(1); retval(1,2)= vectorJ(2);
+    retval(1,0)= vectorJ(1); retval(1,1)= vectorJ(2); retval(1,2)= vectorJ(3);
     const Vector3d vectorK= vectorI.getCross(vectorJ);    
-    retval(2,0)= vectorK(0); retval(2,1)= vectorK(1); retval(2,2)= vectorK(2);
+    retval(2,0)= vectorK(1); retval(2,1)= vectorK(2); retval(2,2)= vectorK(3);
     return retval;
   }
 
