@@ -40,6 +40,16 @@ class LUTField(object):
     self.valMin= min(self.valMin,value)
     self.valMax= max(self.valMax,value)
 
+  def updateMinMaxWithinRange(self,value,rg):
+    '''updates the minimum and maximum values of the scalar field
+    forcing these extreme values within the range rg=(vmin,vmax)
+    
+    All the values less than vmin are represented in blue and those greater than
+    vmax are displayed in red
+    '''
+    self.valMin= min(self.valMin,max(value,rg[0]))
+    self.valMax= max(self.valMax,min(value,rg[1]))
+
   def initializeMinMax(self,value= 1.0e99):
     '''Initialize minimum and maximum values that hopefully
        will be replaced by the real ones.''' 

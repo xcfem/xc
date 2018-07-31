@@ -16,15 +16,25 @@ from postprocess import extrapolate_elem_attr
 from postprocess import control_vars as cv
 
 class ScalarField(fb.FieldBase):
-  '''Scalar field defined at nodes.'''
-  def __init__(self,name, functionName, component=None, fUnitConv= 1.0):
+  '''Scalar field defined at nodes.
+
+    :ivar rgMinMax: range (vmin,vmax) with the maximum and minimum values of 
+              the field to be represented. All the values less than vmin are 
+              displayed in blue and those greater than vmax in red
+              (defaults to None)
+
+  '''
+  def __init__(self,name, functionName, component=None, fUnitConv= 1.0,rgMinMax=None):
     super(ScalarField,self).__init__(name,fUnitConv)
     self.attrName= functionName
     self.attrComponent= component
+    self.rgMinMax=rgMinMax
     self.arr= None
 
   def fillArray(self, nodeSet):
-    '''Creates an vtkDoubleArray filled with the proper values.'''
+    '''Creates an vtkDoubleArray filled with the proper values.
+ 
+   '''
     # Scalar values.
     self.arr= vtk.vtkDoubleArray()
     self.arr.SetName(self.name)
@@ -47,7 +57,10 @@ class ScalarField(fb.FieldBase):
       if hasattr(tmp,"__getitem__"):
         tmp= tmp[self.attrComponent]
       tmp*= self.fUnitConv
-      self.updateMinMax(tmp)
+      if not(self.rgMinMax):
+        self.updateMinMax(tmp)
+      else:
+        self.updateMinMaxWithinRange(tmp,self.rgMinMax)
       self.arr.SetTuple1(n.getIdx,tmp)
     return self.arr
 
@@ -64,9 +77,14 @@ class ScalarField(fb.FieldBase):
 
 
 class ExtrapolatedScalarField(ScalarField):
-  '''Scalar field defined at nodes.'''
-  def __init__(self,name, functionName, xcSet, component= None, fUnitConv= 1.0):
-    super(ExtrapolatedScalarField,self).__init__(name,functionName,component,fUnitConv)
+  '''Scalar field defined at nodes.
+  :ivar rgMinMax: range (vmin,vmax) with the maximum and minimum values  
+              of the scalar field (if any) to be represented. All the values 
+              less than vmin are displayed in blue and those greater than vmax 
+              in red (defaults to None)
+  '''
+  def __init__(self,name, functionName, xcSet, component= None, fUnitConv= 1.0,rgMinMax=None):
+    super(ExtrapolatedScalarField,self).__init__(name,functionName,component,fUnitConv,rgMinMax)
     self.xcSet= xcSet
 
   def display(self,defDisplay,fName= None,caption= '',defFScale=0.0):
@@ -78,8 +96,8 @@ class ExtrapolatedScalarField(ScalarField):
 
 class ExtrapolatedProperty(ExtrapolatedScalarField):
   '''Scalar field defined as property value at nodes.'''
-  def __init__(self,name,functionName,xcSet, component= None,fUnitConv= 1.0):
-    super(ExtrapolatedProperty,self).__init__(name,functionName, xcSet, component, fUnitConv)
+  def __init__(self,name,functionName,xcSet, component= None,fUnitConv= 1.0,rgMinMax=None):
+    super(ExtrapolatedProperty,self).__init__(name,functionName, xcSet, component, fUnitConv,rgMinMax)
 
   def extrapolate(self):
     extrapolate_elem_attr.extrapolate_elem_function_attr(self.xcSet.getElements,self.name,"getProp", self.name)
@@ -91,7 +109,7 @@ class ExtrapolatedProperty(ExtrapolatedScalarField):
     lmsg.warning('ExtrapolatedProperty.plot is DEPRECATED use display.')
     self.display(defDisplay,fName,caption)
 
-def getScalarFieldFromControlVar(attributeName,argument,xcSet,component,fUnitConv):
+def getScalarFieldFromControlVar(attributeName,argument,xcSet,component,fUnitConv,rgMinMax):
   '''return an scalar field that represents the control var over the 
                elements in the set.
 
@@ -104,4 +122,4 @@ def getScalarFieldFromControlVar(attributeName,argument,xcSet,component,fUnitCon
      :param fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3).
   '''
   nodePropName= cv.extrapolate_control_var(xcSet.getElements,attributeName,argument)
-  return ExtrapolatedScalarField(nodePropName,"getProp",xcSet,component,fUnitConv)
+  return ExtrapolatedScalarField(nodePropName,"getProp",xcSet,component,fUnitConv,rgMinMax)

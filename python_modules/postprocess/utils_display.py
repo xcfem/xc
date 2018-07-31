@@ -129,7 +129,7 @@ class FigureDefinition(SlideDefinition):
   def defField(self, xcSet):
     print '********** Enters FigureDefinition::defField; limit state: ', self.limitStateLabel, ' attributeName= ', self.attributeName, ' xcSet.name= ', xcSet.name
     #self.field= Fields.ExtrapolatedScalarField(self.attributeName,"getProp",None,1.0,xcSet)
-    self.field= Fields.getScalarFieldFromControlVar(self.attributeName,self.argument,xcSet,None,1.0)
+    self.field= Fields.getScalarFieldFromControlVar(attributeName=self.attributeName,argument=self.argument,xcSet=xcSet,component=None,fUnitConv=1.0,rgMinMax=None)
     print '********** Exits FigureDefinition::defField; limit state: ', self.limitStateLabel, ' attributeName= ', self.attributeName, ' xcSet.name= ', xcSet.name
 
   def genGraphicFile(self,defDisplay, xcSet, nmbFichGraf):

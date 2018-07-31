@@ -93,6 +93,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
         :param eigenMode: eigenvibration mode if we want to display the deformed 
                  shape associated with it when a modal analysis has been carried out. 
                  Defaults to None: no modal analysis.
+
         '''
         # Define grid
         self.nodes= vtk.vtkPoints()
