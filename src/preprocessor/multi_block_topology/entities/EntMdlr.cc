@@ -440,6 +440,14 @@ double XC::EntMdlr::getDistanceTo(const Pos3d &pt) const
 void XC::EntMdlr::fix(const SFreedom_Constraint &spc)
   { ttzNodes.fix(spc); }
 
+
+//! @brief Return the centroid of the object.
+Pos3d XC::EntMdlr::getCentroid(void) const
+  {
+    Pos3d retval;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; not implemented." << std::endl;
+  }
 //! @brief Destructor.
 XC::EntMdlr::~EntMdlr(void)
   { clearAll(); }

@@ -73,7 +73,6 @@ class Edge: public EntMdlr
     virtual size_t getNumberOfVertices(void) const= 0;
 
     virtual double getLength(void) const= 0;
-    virtual Pos3d getCentroid(void) const= 0;
 
     virtual const Pnt *getVertex(const size_t &i) const= 0;
     virtual void SetVertice(const size_t &,Pnt *)= 0;
