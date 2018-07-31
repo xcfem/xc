@@ -237,6 +237,7 @@ python tests/preprocessor/cad/split_linea_01.py
 python tests/preprocessor/cad/split_linea_02.py
 python tests/preprocessor/cad/split_linea_03.py
 echo "$BLEU" "  Meshing routines tests." "$NORMAL"
+python tests/preprocessor/test_surface_axes_01.py
 python tests/preprocessor/test_surface_meshing_01.py
 python tests/preprocessor/test_surface_meshing_02.py
 python tests/preprocessor/test_surface_meshing_03.py
