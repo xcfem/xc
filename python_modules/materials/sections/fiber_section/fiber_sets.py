@@ -70,7 +70,8 @@ class RCSets(object):
         fiberSets= scc.getFiberSets()
         self.concrFibers= FiberSet(scc,concrSetName,concrMatTag)
         self.reinfFibers= FiberSet(scc,reinfSetName,reinfMatTag)
-        self.tensionFibers= None
+#        self.tensionFibers= None
+        
     def reselTensionFibers(self,scc,tensionFibersSetName):
         '''returns a set with those fibers in tension from the total set 
         '''
