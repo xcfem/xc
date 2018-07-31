@@ -96,7 +96,7 @@ class QuickGraphics(object):
       return defDisplay
 
 
-    def displayDispRot(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None,defFScale=0.0):
+    def displayDispRot(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None,defFScale=0.0,rgMinMax=None):
       '''displays the component of the displacement or rotations in the 
       set of entities.
 
@@ -114,6 +114,10 @@ class QuickGraphics(object):
                 the initial position plus its displacement multiplied
                 by this factor. (Defaults to 0.0, i.e. display of 
                 initial/undeformed shape)
+      :param rgMinMax: range (vmin,vmax) with the maximum and minimum values of 
+              the field to be represented. All the values less than vmin are 
+              displayed in blue and those greater than vmax in red
+              (defaults to None)
 
       '''
       if(setToDisplay):
@@ -124,7 +128,7 @@ class QuickGraphics(object):
       nodSet= self.xcSet.getNodes
       for n in nodSet:
           n.setProp('propToDisp',n.getDisp[vCompDisp])
-      field= Fields.ScalarField('propToDisp',"getProp",None,fConvUnits)
+      field= Fields.ScalarField(name='propToDisp',functionName="getProp",component=None,fUnitConv=fConvUnits,rgMinMax=rgMinMax)
       defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
       defDisplay.displayMesh(xcSets=self.xcSet,field=field,diagrams= None, fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription+' '+self.xcSet.description,defFScale=defFScale)
 

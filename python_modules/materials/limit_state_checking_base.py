@@ -74,6 +74,20 @@ class fibSectLSProperties(object):
         self.sct.computeSpacement('tensSetFb')
         self.spacing= self.tensSetFb.getAverageDistanceBetweenFibers()
         nmbFi=self.tensSetFb.getNumFibers()
+        '''
+        print 'x= ',self.x
+        print 'd= ',self.d
+        print 'h= ',self.h
+        print 'As= ',self.As
+        print 'eps1= ', self.eps1
+        print 'eps2= ',self.eps2
+        '''
+        self.sct.computeSpacement('tensSetFb')
+        self.spacing= self.tensSetFb.getAverageDistanceBetweenFibers()
+        nmbFi=self.tensSetFb.getNumFibers()
+        '''
+        print 'nmbFI= ', nmbFi
+        '''
         if nmbFi>0:
             self.fiEqu=math.sqrt(4/math.pi*self.As/nmbFi)
         if len(self.tensSetFb) > 0:

@@ -157,9 +157,15 @@ class ElasticFoundation(object):
             n.setProp('soilReaction',[f3d.x,f3d.y,f3d.z])
         return self.svdReac.reduceTo(self.getCentroid())
 
-    def displayPressures(self, defDisplay, caption,fUnitConv,unitDescription):
-        '''Display foundation pressures.'''
+    def displayPressures(self, defDisplay, caption,fUnitConv,unitDescription,rgMinMax=None):
+        '''Display foundation pressures.
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
+              of the scalar field (if any) to be represented. All the values 
+              less than vmin are displayed in blue and those greater than vmax 
+              in red (defaults to None)
+        
+        '''
         reac= self.calcPressures()
 
-        field= Fields.ExtrapolatedScalarField('soilPressure','getProp',self.foundationSet,component=2,fUnitConv= fUnitConv)
+        field= Fields.ExtrapolatedScalarField('soilPressure','getProp',self.foundationSet,component=2,fUnitConv= fUnitConv,rgMinMax=rgMinMax)
         field.display(defDisplay,caption= caption+' '+unitDescription)

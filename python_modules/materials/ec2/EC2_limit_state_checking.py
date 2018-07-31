@@ -125,7 +125,7 @@ class CrackStraightController(lscb.LimitStateControllerBase):
 #            eps_cm=concrete.fctm()/2.0/concrete.E0()
 #            wk=srmax*(eps_sm-eps_cm)
             wk=srmax*eps_sm
-            print ' eps_sm= ',eps_sm, ' srmax= ', srmax, ' wk= ',wk
+#            print ' eps_sm= ',eps_sm, ' srmax= ', srmax, ' wk= ',wk
 #            print 'e.getProp(self.limitStateLabel).wk', e.getProp(self.limitStateLabel).wk
             if (wk>e.getProp(self.limitStateLabel).wk):
                 R=e.getProp('ResF')

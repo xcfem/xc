@@ -1024,7 +1024,6 @@ class CrackStraightController(lscb.LimitStateControllerBase):
       concrete=EHE_materials.concrOfName[sctCrkProp.concrName]
       rfSteel=EHE_materials.steelOfName[sctCrkProp.rsteelName]
       k1=self.EHE_k1(sctCrkProp.eps1,sctCrkProp.eps2)
-      
       '''
       print 'element= ', e.tag
       print 'Resisting force: [', R[0] , ',', R[1] , ',', R[2] , ',', R[3] , ',', R[4] , ',', R[5], ',',R[6],']'
@@ -1073,6 +1072,7 @@ class CrackStraightController(lscb.LimitStateControllerBase):
       eps_sm=rfset.getStrainMax()
       srmax=e.getProp("s_rmax")
       wk=srmax*eps_sm
+#      print ' eps_sm= ',eps_sm, ' srmax= ', srmax, ' wk= ',wk
       if (wk>e.getProp(self.limitStateLabel).wk):
 #        e.setProp(self.limitStateLabel,cv.RCCrackStraightControlVars(idSection,nmbComb,NTmp,MyTmp,MzTmp,srmax,eps_sm,wk))
         R=e.getProp('ResF')
