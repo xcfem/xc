@@ -370,7 +370,7 @@ Pos3d XC::NodePtrs::getCenterOfMassPosition(bool initialGeometry) const
     const size_t sz= size();
     if(sz>0)
       {
-        Vector3d tmp= getPosNode(0,initialGeometry).VectorPos();;
+        Vector3d tmp= getPosNode(0,initialGeometry).VectorPos();
         for(size_t i=1;i<sz;i++)
           tmp+= getPosNode(i,initialGeometry).VectorPos();
         tmp= tmp * 1.0/sz;

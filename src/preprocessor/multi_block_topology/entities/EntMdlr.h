@@ -156,6 +156,7 @@ class EntMdlr: public SetEstruct
 
     void BorraPtrNodElem(void);
 
+    virtual Pos3d getCentroid(void) const;
 
     virtual ~EntMdlr(void);
   };

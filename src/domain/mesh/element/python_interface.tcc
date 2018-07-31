@@ -53,7 +53,7 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("getCooCentroid",&XC::Element::getCenterOfMassCoordinates,"Return centroid's coordinates.")
   .def("In", ElementIn3D,"\n""In(geomObject,factor,tolerance) \n""Return true if the current positions of all the nodes scaled by a factor: initialPos+factor*currentDisplacement lie inside the geometric object.")
   .def("Out", ElementOut3D,"\n""Out(geomObject,factor,tolerance) \n""Return true if current positions of all the nodes scaled by a factor: initialPos+factor*currentDisplacement lie outside the geometric object.")
-  .def("getLocalAxes",&XC::Element::getLocalAxes,"Return element local axes as matrix rows: [[x1,y1,z1],[x2,y2,z2],...·] .")
+  .def("getLocalAxes",&XC::Element::getLocalAxes,"Return the element local axes as matrix rows: [[x1,y1,z1],[x2,y2,z2],...·] .")
   .def("getPoints",&XC::Element::getPoints,"Return a uniform grid of points over the element.")
   .def("resetTributaries",&XC::Element::resetTributaries)
   .def("dumpTributaries",&XC::Element::dumpTributaries)

@@ -54,9 +54,11 @@ class QuadSurface: public Face
     void setPoints(const m_int &);
     void defGridPoints(const boost::python::list &);
 
+    Pos3d getCentroid(void) const;
     Vector3d getIVector(void) const;
     Vector3d getJVector(void) const;
     Vector3d getKVector(void) const;
+    Matrix getLocalAxes(void) const;
 
     void SetNDiv(const Edge *l,const size_t &nd);
     virtual void ConciliaNDivIJ(void);

@@ -1076,7 +1076,7 @@ XC::DeformationPlane XC::FiberPtrDeque::getDeformationPlane(void) const
 		      << "; null pointer to fiber." << std::endl;
       }
     DeformationPlane retval;
-    retval.AjusteMinimosCuadrados(points);
+    retval.linearLeastSquaresFitting(points);
     return retval;
   }
 

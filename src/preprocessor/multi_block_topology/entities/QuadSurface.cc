@@ -419,6 +419,34 @@ Vector3d XC::QuadSurface::getKVector(void) const
     return vI.getCross(vJ);
   }
 
+//! @brief Returs a matrix with the axes of the surface as matrix rows
+//! [[x1,y1,z1],[x2,y2,z2],...·]
+XC::Matrix XC::QuadSurface::getLocalAxes(void) const
+  {
+    Matrix retval(3,3);
+    const Vector3d vectorI= getIVector();
+    retval(0,0)= vectorI(0); retval(0,1)= vectorI(1); retval(0,2)= vectorI(2);
+    const Vector3d vectorJ= getJVector();
+    retval(1,0)= vectorJ(0); retval(1,1)= vectorJ(1); retval(1,2)= vectorJ(2);
+    const Vector3d vectorK= vectorI.getCross(vectorJ);    
+    retval(2,0)= vectorK(0); retval(2,1)= vectorK(1); retval(2,2)= vectorK(2);
+    return retval;
+  }
+
+
+//! @brief Returns the centroid of the quad surface.
+Pos3d XC::QuadSurface::getCentroid(void) const
+  {
+    Pos3d retval;
+    Vector3d tmp= getVertex(1)->GetPos().VectorPos();
+    tmp+= getVertex(2)->GetPos().VectorPos();
+    tmp+= getVertex(3)->GetPos().VectorPos();
+    tmp+= getVertex(4)->GetPos().VectorPos();
+    tmp= tmp * 1.0/4.0;
+    retval= Pos3d()+tmp;
+    return retval;
+  }
+
 //! @brief Creates surface nodes.
 void XC::QuadSurface::create_nodes(void)
   {
