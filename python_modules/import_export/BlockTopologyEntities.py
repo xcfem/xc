@@ -182,7 +182,7 @@ class BlockData(object):
     self.pointSupports.readFromXCSet(xcSet,self.points)
 
   def readFromDxfFile(self,fName,preprocessor,dxfLayers):
-    dxfReader= DxfReader.DxfReader()
+    dxfReader= DxfReader.OldDxfReader()
     dxfReader.read(fName,preprocessor,dxfLayers)
     pointSet= preprocessor.getSets.getSet("total").getPoints
     for p in pointSet:

@@ -2,7 +2,6 @@
 
 import os
 from dxfwrite import DXFEngine
-import DxfReader
 import MeshEntities as me
 import BlockTopologyEntities as bte
 
