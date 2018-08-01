@@ -176,7 +176,7 @@ class DXFImport(object):
     counter= 0
     for key in self.lines:
       line= self.lines[key]
-      block= bte.BlockRecord(counter,'line',line,[key])
+      block= bte.BlockRecord(counter,'line',line,self.labelDict[key])
       retval.appendBlock(block)
       counter+= 1
 
