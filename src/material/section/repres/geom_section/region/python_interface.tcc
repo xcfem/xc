@@ -21,53 +21,53 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::RegionSecc, XC::RegionSecc *, bases<XC::DiscretBase>, boost::noncopyable >("RegionSecc", no_init)
-  .def("getNumCells",&XC::RegionSecc::getNumCells)
-  .def("getPolygon",&XC::RegionSecc::getPolygon)
-  .def("getArea",&XC::RegionSecc::getArea)
-  .def("getIy",&XC::RegionSecc::Iy)
-  .def("getIz",&XC::RegionSecc::Iz)
-  .def("getPyz",&XC::RegionSecc::Pyz)
-  .def("getCenterOfMass",make_function(&XC::RegionSecc::getCenterOfMass,return_internal_reference<>()))
+class_<XC::SectRegion, XC::SectRegion *, bases<XC::DiscretBase>, boost::noncopyable >("SectRegion", no_init)
+  .def("getNumCells",&XC::SectRegion::getNumCells)
+  .def("getPolygon",&XC::SectRegion::getPolygon)
+  .def("getArea",&XC::SectRegion::getArea)
+  .def("getIy",&XC::SectRegion::Iy)
+  .def("getIz",&XC::SectRegion::Iz)
+  .def("getPyz",&XC::SectRegion::Pyz)
+  .def("getCenterOfMass",make_function(&XC::SectRegion::getCenterOfMass,return_internal_reference<>()))
   ;
 
 
-class_<XC::RgQuadCell, bases<XC::RegionSecc>, boost::noncopyable >("RgQuadCell", no_init)
-  .def("setDiscretization",&XC::RgQuadCell::setDiscretization)
-  .add_property("nDivIJ",&XC::RgQuadCell::getNDivIJ,&XC::RgQuadCell::setNDivIJ,"Number of divisions of I->J side.")
-  .add_property("nDivJK",&XC::RgQuadCell::getNDivJK,&XC::RgQuadCell::setNDivJK,"Number of divisions of J->K side.")
-  .add_property("nDivCirc",&XC::RgQuadCell::getNDivIJ,&XC::RgQuadCell::setNDivIJ,"Number of divisions of I->J side.")
-  .add_property("nDivRad",&XC::RgQuadCell::getNDivJK,&XC::RgQuadCell::setNDivJK,"Number of divisions of J->K side.")
-  .add_property("getNumCells",&XC::RgQuadCell::getNumCells)
-  .def("genGrid",make_function(&XC::RgQuadCell::getMesh,return_internal_reference<>()))
-  .def("getCenterOfMassRejilla",&XC::RgQuadCell::getCenterOfMassRejilla)
-  .def("getVertCoords",&XC::RgQuadCell::getVertCoords)
-  .def("getCellVertCoords",&XC::RgQuadCell::getCellVertCoords)
+class_<XC::QuadCellRegion, bases<XC::SectRegion>, boost::noncopyable >("QuadCellRegion", no_init)
+  .def("setDiscretization",&XC::QuadCellRegion::setDiscretization)
+  .add_property("nDivIJ",&XC::QuadCellRegion::getNDivIJ,&XC::QuadCellRegion::setNDivIJ,"Number of divisions of I->J side.")
+  .add_property("nDivJK",&XC::QuadCellRegion::getNDivJK,&XC::QuadCellRegion::setNDivJK,"Number of divisions of J->K side.")
+  .add_property("nDivCirc",&XC::QuadCellRegion::getNDivIJ,&XC::QuadCellRegion::setNDivIJ,"Number of divisions of I->J side.")
+  .add_property("nDivRad",&XC::QuadCellRegion::getNDivJK,&XC::QuadCellRegion::setNDivJK,"Number of divisions of J->K side.")
+  .add_property("getNumCells",&XC::QuadCellRegion::getNumCells)
+  .def("genGrid",make_function(&XC::QuadCellRegion::getMesh,return_internal_reference<>()))
+  .def("getCenterOfMassRejilla",&XC::QuadCellRegion::getCenterOfMassRejilla)
+  .def("getVertCoords",&XC::QuadCellRegion::getVertCoords)
+  .def("getCellVertCoords",&XC::QuadCellRegion::getCellVertCoords)
   ;
 
-class_<XC::RgSccCirc, bases<XC::RgQuadCell>, boost::noncopyable >("RgSccCirc", no_init)
-  .add_property("center",&XC::RgSccCirc::getCenterPos,&XC::RgSccCirc::setCenterPos,"Center's position.")
-  .add_property("intRad",&XC::RgSccCirc::getInteriorRadius,&XC::RgSccCirc::setInteriorRadius,"Interior radiuls.")
-  .add_property("extRad",&XC::RgSccCirc::getExteriorRadius,&XC::RgSccCirc::setExteriorRadius,"Exterior radius.")
-  .add_property("initAngle",&XC::RgSccCirc::getInitialAngle,&XC::RgSccCirc::setInitialAngle,"Initial angle.")
-  .add_property("finalAngle",&XC::RgSccCirc::getFinalAngle,&XC::RgSccCirc::setFinalAngle,"Final angle.")
+class_<XC::CircularSectRegion, bases<XC::QuadCellRegion>, boost::noncopyable >("CircularSectRegion", no_init)
+  .add_property("center",&XC::CircularSectRegion::getCenterPos,&XC::CircularSectRegion::setCenterPos,"Center's position.")
+  .add_property("intRad",&XC::CircularSectRegion::getInteriorRadius,&XC::CircularSectRegion::setInteriorRadius,"Interior radiuls.")
+  .add_property("extRad",&XC::CircularSectRegion::getExteriorRadius,&XC::CircularSectRegion::setExteriorRadius,"Exterior radius.")
+  .add_property("initAngle",&XC::CircularSectRegion::getInitialAngle,&XC::CircularSectRegion::setInitialAngle,"Initial angle.")
+  .add_property("finalAngle",&XC::CircularSectRegion::getFinalAngle,&XC::CircularSectRegion::setFinalAngle,"Final angle.")
   ;
 
-class_<XC::RgSccQuad, bases<XC::RgQuadCell>, boost::noncopyable >("RgSccQuad", no_init)
-  .add_property("pMin",&XC::RgSccQuad::getPMin,&XC::RgSccQuad::setPMin,"Lower left corner.")
-  .add_property("pMax",&XC::RgSccQuad::getPMax,&XC::RgSccQuad::setPMax,"Upper right corner.")
-  .def("setTileSizeIJ",&XC::RgSccQuad::setTileSizeIJ,"Sets numbers of divisions to get a tile IJ side smaller than size.")
-  .def("setTileSizeJK",&XC::RgSccQuad::setTileSizeJK,"Sets numbers of divisions to get a tile JK side smaller than size.")
-  .def("setTileSize",&XC::RgSccQuad::setTileSize,"Sets numbers of divisions to get tile sizes smaller than sizeIJ and sizeJK.")
-  .def("swap",&XC::RgSccQuad::swap)
-  .def("getQuad",&XC::RgSccQuad::getQuad)
-  .def("getPolygon",&XC::RgSccQuad::getPolygon)
-  .def("setQuad",&XC::RgSccQuad::setQuad)
+class_<XC::QuadSectRegion, bases<XC::QuadCellRegion>, boost::noncopyable >("QuadSectRegion", no_init)
+  .add_property("pMin",&XC::QuadSectRegion::getPMin,&XC::QuadSectRegion::setPMin,"Lower left corner.")
+  .add_property("pMax",&XC::QuadSectRegion::getPMax,&XC::QuadSectRegion::setPMax,"Upper right corner.")
+  .def("setTileSizeIJ",&XC::QuadSectRegion::setTileSizeIJ,"Sets numbers of divisions to get a tile IJ side smaller than size.")
+  .def("setTileSizeJK",&XC::QuadSectRegion::setTileSizeJK,"Sets numbers of divisions to get a tile JK side smaller than size.")
+  .def("setTileSize",&XC::QuadSectRegion::setTileSize,"Sets numbers of divisions to get tile sizes smaller than sizeIJ and sizeJK.")
+  .def("swap",&XC::QuadSectRegion::swap)
+  .def("getQuad",&XC::QuadSectRegion::getQuad)
+  .def("getPolygon",&XC::QuadSectRegion::getPolygon)
+  .def("setQuad",&XC::QuadSectRegion::setQuad)
   ;
 
-class_<XC::RgSccPoligono, bases<XC::RgQuadCell>, boost::noncopyable >("RgSccPoligono", no_init);
+class_<XC::PolygonSectRegion, bases<XC::QuadCellRegion>, boost::noncopyable >("PolygonSectRegion", no_init);
 
-// typedef std::list<XC::RegionSecc *> lst_reg_ptrs;
+// typedef std::list<XC::SectRegion *> lst_reg_ptrs;
 // class_<lst_reg_ptrs, boost::noncopyable >("lst_reg_ptrs", no_init)
 //   .def("__iter__", boost::python::iterator<lst_reg_ptrs >())
 //   ;

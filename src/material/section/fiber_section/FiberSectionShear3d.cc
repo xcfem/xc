@@ -38,7 +38,7 @@
 #include "material/section/ResponseId.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
-#include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
+#include "xc_utils/src/geom/d2/2d_polygons/Polygon2d.h"
 
 XC::Vector XC::FiberSectionShear3d::def(6);
 XC::Vector XC::FiberSectionShear3d::defzero(6);

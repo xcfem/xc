@@ -55,7 +55,7 @@ class QuadBase9N : public PlaneElement<9,PhysProp>
     Element::NodesEdge getNodesEdge(const size_t &i) const;
     ID getLocalIndexNodesEdge(const size_t &i) const;
     int getEdgeNodes(const Node *,const Node *) const;
-    Poligono3d getPolygon(bool initialGeometry= true) const;
+    Polygon3d getPolygon(bool initialGeometry= true) const;
     Segment3d getSide(const size_t &i,bool initialGeometry= true) const;
 
     int getVtkCellType(void) const;
@@ -83,9 +83,9 @@ XC::ElemPtrArray3d XC::QuadBase9N<PhysProp>::put_on_mesh(const NodePtrArray3d &n
 
 //! @brief Returns the element contour as a polygon.
 template <class PhysProp>
-Poligono3d XC::QuadBase9N<PhysProp>::getPolygon(bool initialGeometry) const
+Polygon3d XC::QuadBase9N<PhysProp>::getPolygon(bool initialGeometry) const
   {
-    Poligono3d retval;
+    Polygon3d retval;
     std::cerr << this->getClassName() << "::" << __FUNCTION__
 	      << "; not implemented." << std::endl;
     return retval;

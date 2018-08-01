@@ -157,7 +157,7 @@ size_t XC::ListReinfLayer::getNumReinfBars(void) const
 //! Returns the rebar subset which center lies inside the polygon.
 //! @param plg: 2D polygon.
 //! @param retval: rebars which centers lies inside the polygon.
-void XC::ListReinfLayer::getBarrasIn(const Poligono2d &plg,ListReinfLayer &retval,bool clear)
+void XC::ListReinfLayer::getBarrasIn(const Polygon2d &plg,ListReinfLayer &retval,bool clear)
   {
     if(clear) retval.clear();
     const_iterator i= begin();

@@ -27,9 +27,9 @@
 //RegionContainer.cc
 
 #include "RegionContainer.h"
-#include <material/section/repres/geom_section/region/RgSccQuad.h>
-#include <material/section/repres/geom_section/region/RgSccCirc.h>
-#include <material/section/repres/geom_section/region/RgSccPoligono.h>
+#include <material/section/repres/geom_section/region/QuadSectRegion.h>
+#include <material/section/repres/geom_section/region/CircularSectRegion.h>
+#include <material/section/repres/geom_section/region/PolygonSectRegion.h>
 #include "material/uniaxial/UniaxialMaterial.h" 
 #include "preprocessor/prep_handlers/MaterialHandler.h"
 #include "utility/matrix/Vector.h"
@@ -41,8 +41,8 @@
 
 
 #include "xc_utils/src/geom/d2/BND2d.h"
-#include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
-#include "xc_utils/src/geom/d2/poligonos2d/bool_op_poligono2d.h"
+#include "xc_utils/src/geom/d2/2d_polygons/Polygon2d.h"
+#include "xc_utils/src/geom/d2/2d_polygons/polygon2d_bool_op.h"
 
 //! @brief Liberta todas las pociciones.
 void XC::RegionContainer::free_mem(void)
@@ -79,29 +79,29 @@ XC::RegionContainer &XC::RegionContainer::operator=(const RegionContainer &other
   }
 
 //! @brief Aggregates a new quadrilateral region.
-XC::RgSccQuad *XC::RegionContainer::newQuadRegion(const std::string &cod_mat)
+XC::QuadSectRegion *XC::RegionContainer::newQuadRegion(const std::string &cod_mat)
   {
     Material *mat= material_handler->find_ptr(cod_mat);
     if(!mat)
       std::cerr << getClassName() << __FUNCTION__
 	        << "; warning!, material: '"
                 << cod_mat << "' not found. Material definition pending.\n";
-    RgSccQuad tmp(mat);
-    RgSccQuad *ptr= dynamic_cast<XC::RgSccQuad *>(push_back(tmp));
+    QuadSectRegion tmp(mat);
+    QuadSectRegion *ptr= dynamic_cast<XC::QuadSectRegion *>(push_back(tmp));
     ptr->set_owner(this);
     return ptr;
   }
 
 //! @brief Aggregates a new circularl region.
-XC::RgSccCirc *XC::RegionContainer::newCircularRegion(const std::string &cod_mat)
+XC::CircularSectRegion *XC::RegionContainer::newCircularRegion(const std::string &cod_mat)
   {
     Material *mat= material_handler->find_ptr(cod_mat);
     if(!mat)
       std::cerr << getClassName() << __FUNCTION__
 	        << "; warning!, material: '"
                 << cod_mat << "' not found. Material definition pending.\n";
-    RgSccCirc tmp(mat);
-    RgSccCirc *ptr= dynamic_cast<XC::RgSccCirc *>(push_back(tmp));
+    CircularSectRegion tmp(mat);
+    CircularSectRegion *ptr= dynamic_cast<XC::CircularSectRegion *>(push_back(tmp));
     ptr->set_owner(this);
     return ptr;
   }
@@ -115,9 +115,9 @@ void XC::RegionContainer::clear(void)
   { free_mem(); }
 
 //! @brief Adds a region to the container.
-XC::RegionSecc *XC::RegionContainer::push_back(const RegionSecc &reg)
+XC::SectRegion *XC::RegionContainer::push_back(const SectRegion &reg)
   {
-    RegionSecc *tmp= reg.getCopy();
+    SectRegion *tmp= reg.getCopy();
     l_reg::push_back(tmp);
     return tmp;
   }
@@ -137,25 +137,25 @@ size_t XC::RegionContainer::getNumCells(void) const
     size_t ncells= 0;
     for(const_iterator i=begin();i!=end();i++)
       {
-        const RegionSecc *ptr= *i;
+        const SectRegion *ptr= *i;
         ncells+= ptr->getNumCells();
       }
     return ncells;
   }
 
 //! @brief Returns a list with the regions contours.
-std::list<Poligono2d> XC::RegionContainer::getRegionsContours(void) const
+std::list<Polygon2d> XC::RegionContainer::getRegionsContours(void) const
   {
-    std::list<Poligono2d> retval;
+    std::list<Polygon2d> retval;
     for(const_iterator i= begin();i!=end();i++)
       retval.push_back((*i)->getPolygon());
     return retval;
   }
 
 //! @brief Return the regions contours.
-std::list<Poligono2d> XC::RegionContainer::getContours(void) const
+std::list<Polygon2d> XC::RegionContainer::getContours(void) const
   {
-    std::list<Poligono2d> retval= join(getRegionsContours());
+    std::list<Polygon2d> retval= join(getRegionsContours());
     return retval;
   }
 

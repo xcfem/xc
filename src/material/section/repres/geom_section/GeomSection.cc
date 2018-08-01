@@ -37,7 +37,7 @@
 #include "material/section/repres/CrossSectionProperties3d.h"
 #include "material/section/repres/CrossSectionProperties2d.h"
 
-#include <material/section/repres/geom_section/region/RegionSecc.h>
+#include <material/section/repres/geom_section/region/SectRegion.h>
 
 #include "material/section/repres/geom_section/reinfLayer/ReinfLayer.h"
 
@@ -47,7 +47,7 @@
 #include "xc_utils/src/geom/pos_vec/Vector2d.h"
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
 #include "xc_utils/src/geom/sis_ref/Ref2d2d.h"
-#include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
+#include "xc_utils/src/geom/d2/2d_polygons/Polygon2d.h"
 #include "xc_utils/src/geom/d2/HalfPlane2d.h"
 #include "xc_utils/src/geom/d1/Segment2d.h"
 
@@ -237,10 +237,10 @@ double XC::GeomSection::DistSpots(const size_t &i,const size_t &j) const
   }
 
 //! @brief Return the contour of the regions.
-Poligono2d XC::GeomSection::getRegionsContour(void) const
+Polygon2d XC::GeomSection::getRegionsContour(void) const
   {
-    Poligono2d retval;
-    const std::list<Poligono2d> tmp= regions.getContours();
+    Polygon2d retval;
+    const std::list<Polygon2d> tmp= regions.getContours();
     if(!tmp.empty())
       {
         if(tmp.size()>1)
@@ -253,13 +253,13 @@ Poligono2d XC::GeomSection::getRegionsContour(void) const
   }
 
 //! @brief Return the contour of the compressed part of the regions.
-Poligono2d XC::GeomSection::getCompressedZoneContour(const HalfPlane2d &sp_compresiones) const
+Polygon2d XC::GeomSection::getCompressedZoneContour(const HalfPlane2d &sp_compresiones) const
   {
-    Poligono2d retval;
-    Poligono2d tmp= getRegionsContour();
+    Polygon2d retval;
+    Polygon2d tmp= getRegionsContour();
     if(!tmp.empty())
       {
-	std::list<Poligono2d> tmpList= tmp.getIntersection(sp_compresiones);
+	std::list<Polygon2d> tmpList= tmp.getIntersection(sp_compresiones);
         if(tmpList.size()>1)
 	  std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; is not a simply connected region."
@@ -275,7 +275,7 @@ Poligono2d XC::GeomSection::getCompressedZoneContour(const HalfPlane2d &sp_compr
 //! contains the cross section.
 double XC::GeomSection::getLeverArm(const Line2d &PFtrace) const
   {
-    Poligono2d contour= getRegionsContour();
+    Polygon2d contour= getRegionsContour();
     Pos2d C= contour.getCenterOfMass();
     HalfPlane2d sp(PFtrace.Perpendicular(C));
     const size_t num_vertices= contour.GetNumVertices();
@@ -295,7 +295,7 @@ double XC::GeomSection::getLeverArm(const Line2d &PFtrace) const
 //! being passed as parameter to the most compressed fiber.
 double XC::GeomSection::getCompressedZoneDepth(const HalfPlane2d &sp_compresiones) const
   {    
-    Poligono2d contour= getRegionsContour();
+    Polygon2d contour= getRegionsContour();
     const size_t num_vertices= contour.GetNumVertices();
     double d= 0.0,dneg= 0.0;    
     for(register size_t i=1;i<=num_vertices;i++)
@@ -311,7 +311,7 @@ double XC::GeomSection::getCompressedZoneDepth(const HalfPlane2d &sp_compresione
 //! being passed as parameter to the most tensioned fiber.
 double XC::GeomSection::getTensionedZoneDepth(const HalfPlane2d &sp_compresiones) const
   {
-    Poligono2d contour= getRegionsContour();
+    Polygon2d contour= getRegionsContour();
     const size_t num_vertices= contour.GetNumVertices();
     double d= 0.0,dpos=0.0;    
     for(register size_t i=1;i<=num_vertices;i++)
@@ -329,7 +329,7 @@ double XC::GeomSection::getTensionedZoneDepth(const HalfPlane2d &sp_compresiones
 double XC::GeomSection::getLongCorte(const Line2d &r) const
   {
     double retval= 0.0;
-    Poligono2d contour= append_mid_points(getRegionsContour());
+    Polygon2d contour= append_mid_points(getRegionsContour());
     if(contour.Overlap(r))
       retval= contour.Clip(r).getLength();
     return retval;
@@ -344,7 +344,7 @@ std::vector<double> XC::GeomSection::getLongsCorte(const std::list<Line2d> &lr) 
     std::vector<double> retval;
     if(sz>0)
       {
-        Poligono2d contour= append_mid_points(getRegionsContour());
+        Polygon2d contour= append_mid_points(getRegionsContour());
         int conta= 0;
         for(std::list<Line2d>::const_iterator i= lr.begin();i!=lr.end();i++,conta++)
           {
@@ -360,7 +360,7 @@ std::vector<double> XC::GeomSection::getLongsCorte(const std::list<Line2d> &lr) 
 //! being passed as parameter.
 double XC::GeomSection::getAnchoMecanico(const Line2d &bending_plane_trace) const
   {
-    const Poligono2d contour= append_mid_points(getRegionsContour());
+    const Polygon2d contour= append_mid_points(getRegionsContour());
     const size_t num_vertices= contour.GetNumVertices();
     double d= 0.0,dmax= 0.0;
     Line2d perp;
@@ -381,7 +381,7 @@ double XC::GeomSection::getAnchoMecanico(const Line2d &bending_plane_trace) cons
 //! that corresponds to the arm lever represented by the segment being passed as parameter.
 double XC::GeomSection::getCompressedStrutWidth(const Segment2d &lever_arm) const
   {
-    const Poligono2d contour= append_mid_points(getRegionsContour());
+    const Polygon2d contour= append_mid_points(getRegionsContour());
     const size_t num_vertices= contour.GetNumVertices();
     Line2d perp= lever_arm.getPerpendicularBisector();
     Segment2d ancho= contour.Clip(perp);

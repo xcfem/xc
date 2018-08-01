@@ -112,7 +112,7 @@ class LoadModel(object):
     def getCenteredVehicleBoundary(self):
         '''Return the boundary of the vehicle with respect to
            the load centroid.'''
-        retval= geom.Poligono2d()
+        retval= geom.Polygon2d()
         tmp= self.getVehicleBoundaryRelativePositions()
         for p in tmp:
             retval.agregaVertice(p)
@@ -235,7 +235,7 @@ class VehicleLoad(object):
 
     def getVehicleBoundary(self):
         '''Return the boundary of the vehicle.'''
-        retval= geom.Poligono2d()
+        retval= geom.Polygon2d()
         tmp= self.getVehicleBoundaryPositions()
         for p in tmp:
             retval.agregaVertice(geom.Pos2d(p.x,p.y))

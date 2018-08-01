@@ -34,14 +34,14 @@
 
 class Pos2d;
 class BND2d;
-class Poligono2d;
+class Polygon2d;
 class HalfPlane2d;
 
 namespace XC {
 
-class RegionSecc;
-class RgSccQuad;
-class RgSccCirc;
+class SectRegion;
+class QuadSectRegion;
+class CircularSectRegion;
 class MaterialHandler;
 class Vector;
 class Matrix;
@@ -49,10 +49,10 @@ class Matrix;
 //! @ingroup MATSCCRegions
 //
 //! @brief Section composed of some regions.
-class RegionContainer: protected std::list<RegionSecc *>, public SectionMassProperties
+class RegionContainer: protected std::list<SectRegion *>, public SectionMassProperties
   {
   public:
-    typedef std::list<RegionSecc *> l_reg;
+    typedef std::list<SectRegion *> l_reg;
     typedef l_reg::reference reference;
     typedef l_reg::const_reference const_reference;
     typedef l_reg::iterator iterator;
@@ -71,7 +71,7 @@ class RegionContainer: protected std::list<RegionSecc *>, public SectionMassProp
     RegionContainer &operator=(const RegionContainer  &);
     ~RegionContainer(void);
 
-    XC::RegionSecc *push_back(const RegionSecc &reg);
+    XC::SectRegion *push_back(const SectRegion &reg);
     inline size_t size(void) const
       { return l_reg::size(); }
     inline bool empty(void) const
@@ -84,13 +84,13 @@ class RegionContainer: protected std::list<RegionSecc *>, public SectionMassProp
     iterator begin(void);
     iterator end(void);
 
-    RgSccQuad *newQuadRegion(const std::string &);
-    RgSccCirc *newCircularRegion(const std::string &);
+    QuadSectRegion *newQuadRegion(const std::string &);
+    CircularSectRegion *newCircularRegion(const std::string &);
 
     size_t getNumCells(void) const;
 
-    std::list<Poligono2d> getRegionsContours(void) const;
-    std::list<Poligono2d> getContours(void) const;
+    std::list<Polygon2d> getRegionsContours(void) const;
+    std::list<Polygon2d> getContours(void) const;
     BND2d getBnd(void) const;
     RegionContainer Intersection(const HalfPlane2d &) const;
 

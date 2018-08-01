@@ -65,7 +65,7 @@
 #include "ListReinfLayer.h"
 #include "SingleBar.h"
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
-#include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
+#include "xc_utils/src/geom/d2/2d_polygons/Polygon2d.h"
 #include "xc_utils/src/geom/d2/HalfPlane2d.h"
 
 
@@ -124,7 +124,7 @@ XC::Vector XC::ReinfLayer::getCenterOfMass(void) const
   }
 
 //! @brief Returns the barras contenidas total o parcialmente en el polígono.
-void XC::ReinfLayer::getBarrasIn(const Poligono2d &plg,ListReinfLayer &retval,bool clear)
+void XC::ReinfLayer::getBarrasIn(const Polygon2d &plg,ListReinfLayer &retval,bool clear)
   {
     if(clear) retval.clear();
     const VectorReinfBar &barras= getReinfBars();  

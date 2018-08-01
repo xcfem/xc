@@ -37,7 +37,7 @@ class Ref3d3d;
 class Pos2d;
 class Line2d;
 class Segment2d;
-class Poligono2d;
+class Polygon2d;
 class BND2d;
 class HalfPlane2d;
 
@@ -73,7 +73,7 @@ class FiberPtrDeque: public EntCmd, public std::deque<Fiber *>
     double yCenterOfMass; //!< Y coordinate of the centroid.
     double zCenterOfMass; //!< Z coordinate of the centroid.
 
-    mutable std::deque<std::list<Poligono2d> > dq_ac_effective; //!< (Where appropriate) effective concrete areas for each fiber.
+    mutable std::deque<std::list<Polygon2d> > dq_ac_effective; //!< (Where appropriate) effective concrete areas for each fiber.
     mutable std::deque<double> recubs; //! Cover for each fiber.
     mutable std::deque<double> seps; //! Spacing for each fiber.
 
@@ -158,8 +158,8 @@ class FiberPtrDeque: public EntCmd, public std::deque<Fiber *>
     Line2d getBendingPlaneTrace(void) const;
     Line2d getTensionedPlaneTrace(void) const;
     Line2d getCompressedPlaneTrace(void) const;
-    double computeFibersEffectiveConcreteArea(const std::list<Poligono2d> &,const double &factor= 15) const;
-    const std::list<Poligono2d> &getFiberEffectiveConcretAreaContour(const size_t &i) const;
+    double computeFibersEffectiveConcreteArea(const std::list<Polygon2d> &,const double &factor= 15) const;
+    const std::list<Polygon2d> &getFiberEffectiveConcretAreaContour(const size_t &i) const;
     double getFiberEffectiveConcreteArea(const size_t &i) const;
     double getFibersEffectiveConcreteArea(void) const;
     void computeCovers(const GeomSection &) const;

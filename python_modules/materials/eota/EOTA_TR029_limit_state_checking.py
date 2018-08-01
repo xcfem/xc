@@ -77,7 +77,7 @@ def getA0pN(d,anchorPosition, hEf, tauRkUcr):
      :param tauRkUcr: Characteristic bond resistance for non-cracked concrete (must be taken from relevant ETA) (Pa).
     '''   
     halfSideA0pN= getCcrNp(d,hEf,tauRkUcr)
-    retval= geom.Poligono2d()
+    retval= geom.Polygon2d()
     retval.agregaVertice(geom.Pos2d(anchorPosition.x-halfSideA0pN,anchorPosition.y-halfSideA0pN))
     retval.agregaVertice(geom.Pos2d(anchorPosition.x+halfSideA0pN,anchorPosition.y-halfSideA0pN))
     retval.agregaVertice(geom.Pos2d(anchorPosition.x+halfSideA0pN,anchorPosition.y+halfSideA0pN))
@@ -123,7 +123,7 @@ def getA0cN(anchorPosition, hEf):
     :param hEf: effective anchorage depth (m).
     '''
     halfSideA0cN= getScrN(hEf)/2
-    retval= geom.Poligono2d()
+    retval= geom.Polygon2d()
     retval.agregaVertice(geom.Pos2d(anchorPosition.x-halfSideA0cN,anchorPosition.y-halfSideA0cN))
     retval.agregaVertice(geom.Pos2d(anchorPosition.x+halfSideA0cN,anchorPosition.y-halfSideA0cN))
     retval.agregaVertice(geom.Pos2d(anchorPosition.x+halfSideA0cN,anchorPosition.y+halfSideA0cN))
@@ -170,7 +170,7 @@ def getA0spN(anchorPosition, CcrSp):
                   anchor without spacing and edge effects in case of 
                   splitting failure (m).
     '''
-    retval= geom.Poligono2d()
+    retval= geom.Polygon2d()
     retval.agregaVertice(geom.Pos2d(anchorPosition.x-CcrSp,anchorPosition.y-CcrSp))
     retval.agregaVertice(geom.Pos2d(anchorPosition.x+CcrSp,anchorPosition.y-CcrSp))
     retval.agregaVertice(geom.Pos2d(anchorPosition.x+CcrSp,anchorPosition.y+CcrSp))

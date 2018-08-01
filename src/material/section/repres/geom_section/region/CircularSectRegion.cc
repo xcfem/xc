@@ -24,17 +24,17 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//RgSccCirc.cpp
+//CircularSectRegion.cpp
 // Written by Remo M. de Souza
 // December 1998
 
 #include <cmath>
 #include <utility/matrix/Matrix.h>
-#include <material/section/repres/geom_section/region/RgSccCirc.h>
+#include <material/section/repres/geom_section/region/CircularSectRegion.h>
 #include <material/section/repres/cell/QuadCell.h>
 
 #include "xc_basic/src/text/text_string.h"
-#include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
+#include "xc_utils/src/geom/d2/2d_polygons/Polygon2d.h"
 #include "xc_utils/src/geom/d2/AnnulusSector2d.h"
 #include "xc_utils/src/geom/d2/Rejilla2d.h"
 
@@ -42,56 +42,56 @@ const int I= 0, J=1, K= 2, L= 3; //Index of vertices.
 const int Y= 0, Z=1; //Index of Y and Z components.
 
 //! @brief Default constructor.
-XC::RgSccCirc::RgSccCirc(Material *mat)
-  : RgQuadCell(mat), centerPosit(2),intRad(0.0), extRad(0.0), initAng(0.0), finalAng(360.0)
+XC::CircularSectRegion::CircularSectRegion(Material *mat)
+  : QuadCellRegion(mat), centerPosit(2),intRad(0.0), extRad(0.0), initAng(0.0), finalAng(360.0)
   {}
 
 
-XC::RgSccCirc::RgSccCirc(Material *mat, int numSubdivCircunf, int numSubdivRadial,
+XC::CircularSectRegion::CircularSectRegion(Material *mat, int numSubdivCircunf, int numSubdivRadial,
                      const XC::Vector &centerPosition, double internRadius, 
                      double externRadius, double initialAngle, double finalAngle)
-  : RgQuadCell(mat,numSubdivCircunf,numSubdivRadial),
+  : QuadCellRegion(mat,numSubdivCircunf,numSubdivRadial),
     centerPosit(centerPosition), intRad(internRadius), extRad(externRadius), 
     initAng(initialAngle), finalAng(finalAngle)
   {}
 
-void XC::RgSccCirc::setCenterPosition(const Vector &centerPosition)
+void XC::CircularSectRegion::setCenterPosition(const Vector &centerPosition)
   { centerPosit = centerPosition; }
 
-void XC::RgSccCirc::setCenterPos(const Pos2d &p)
+void XC::CircularSectRegion::setCenterPos(const Pos2d &p)
   {
     centerPosit(0)= p.x();
     centerPosit(1)= p.y();
   }
 
-Pos2d XC::RgSccCirc::getCenterPos(void) const
+Pos2d XC::CircularSectRegion::getCenterPos(void) const
   { return Pos2d(centerPosit(0),centerPosit(1)); }
 
-void XC::RgSccCirc::setRadii(double internRadius, double externRadius)
+void XC::CircularSectRegion::setRadii(double internRadius, double externRadius)
   {
     intRad = internRadius;
     extRad = externRadius;
   }
 
-void XC::RgSccCirc::setAngles(double initialAngle, double finalAngle)
+void XC::CircularSectRegion::setAngles(double initialAngle, double finalAngle)
   {
     initAng  = initialAngle;
     finalAng = finalAngle;
   }
 
-void XC::RgSccCirc::getRadii(double &internRadius, double &externRadius) const
+void XC::CircularSectRegion::getRadii(double &internRadius, double &externRadius) const
   {
     internRadius = intRad;
     externRadius = extRad;
   }
 
-void XC::RgSccCirc::getAngles(double &initialAngle, double &finalAngle) const
+void XC::CircularSectRegion::getAngles(double &initialAngle, double &finalAngle) const
   {
     initialAngle = initAng;
     finalAngle   = finalAng;
   }
 
-const XC::Matrix &XC::RgSccCirc::getVertCoords(void) const
+const XC::Matrix &XC::CircularSectRegion::getVertCoords(void) const
   {
     static Matrix vertCoord(4,2);
     const double cosI= cos(initAng);
@@ -109,35 +109,35 @@ const XC::Matrix &XC::RgSccCirc::getVertCoords(void) const
     return vertCoord;
   }
 
-double XC::RgSccCirc::getMaxY(void) const
+double XC::CircularSectRegion::getMaxY(void) const
   {
-    std::cerr << "RgSccCirc::getMaxY not implemented." << std::endl;
+    std::cerr << "CircularSectRegion::getMaxY not implemented." << std::endl;
     return 0.0;
   }
-double XC::RgSccCirc::getMaxZ(void) const
+double XC::CircularSectRegion::getMaxZ(void) const
   {
-    std::cerr << "RgSccCirc::getMaxZ not implemented." << std::endl;
+    std::cerr << "CircularSectRegion::getMaxZ not implemented." << std::endl;
     return 0.0;
   }
-double XC::RgSccCirc::getMinY(void) const
+double XC::CircularSectRegion::getMinY(void) const
   {
-    std::cerr << "RgSccCirc::getMinY not implemented." << std::endl;
+    std::cerr << "CircularSectRegion::getMinY not implemented." << std::endl;
     return 0.0;
   }
-double XC::RgSccCirc::getMinZ(void) const
+double XC::CircularSectRegion::getMinZ(void) const
   {
-    std::cerr << "RgSccCirc::getMinZ not implemented." << std::endl;
+    std::cerr << "CircularSectRegion::getMinZ not implemented." << std::endl;
     return 0.0;
   }
 
-const XC::Vector &XC::RgSccCirc::getCenterPosition(void) const
+const XC::Vector &XC::CircularSectRegion::getCenterPosition(void) const
   { return centerPosit; }
 
 //! @brief Returns a polygon inscribed in the annulus sector.
-Poligono2d XC::RgSccCirc::getPolygon(void) const
-  { return getSector().getPoligono2d(nDivCirc()); }
+Polygon2d XC::CircularSectRegion::getPolygon(void) const
+  { return getSector().getPolygon2d(nDivCirc()); }
 
-AnnulusSector2d &XC::RgSccCirc::getSector(void) const
+AnnulusSector2d &XC::CircularSectRegion::getSector(void) const
   {
     static AnnulusSector2d retval;
     Pos2d O(centerPosit(0),centerPosit(1));
@@ -148,10 +148,10 @@ AnnulusSector2d &XC::RgSccCirc::getSector(void) const
   }
 
 //! @brief Return the discretization grid.
-const Rejilla2d &XC::RgSccCirc::getMesh(void) const
+const Rejilla2d &XC::CircularSectRegion::getMesh(void) const
   { return alloc(Rejilla2d(getSector().genMesh(nDivRad(),nDivCirc()))); }
 
-const XC::VectorCells &XC::RgSccCirc::getCells(void) const
+const XC::VectorCells &XC::CircularSectRegion::getCells(void) const
   {
     if(nDivRad() > 0  && nDivCirc() > 0)
       {
@@ -177,12 +177,12 @@ const XC::VectorCells &XC::RgSccCirc::getCells(void) const
   }
 
 //! @brief Virtual constructor.
-XC::RegionSecc *XC::RgSccCirc::getCopy(void) const
-  { return new RgSccCirc(*this); }
+XC::SectRegion *XC::CircularSectRegion::getCopy(void) const
+  { return new CircularSectRegion(*this); }
  
-void XC::RgSccCirc::Print(std::ostream &s, int flag) const
+void XC::CircularSectRegion::Print(std::ostream &s, int flag) const
   {
-    s << "\nRgQuadCell Type: RgSccCirc";
+    s << "\nQuadCellRegion Type: CircularSectRegion";
     //s << "\nMaterial Id: " << getMaterialID();
     s << "\nNumber of subdivisions in the radial direction: " << nDivRad();
     s << "\nNumber of subdivisions in the circunferential direction: " << nDivCirc();
@@ -191,8 +191,8 @@ void XC::RgSccCirc::Print(std::ostream &s, int flag) const
     s << "\nInitial Angle: " << initAng << "\tFinal Angle: " << finalAng;
   }
 
-std::ostream &XC::operator<<(std::ostream &s, XC::RgSccCirc &RgSccCirc)
+std::ostream &XC::operator<<(std::ostream &s, XC::CircularSectRegion &CircularSectRegion)
   {
-    RgSccCirc.Print(s);
+    CircularSectRegion.Print(s);
     return s;
   }

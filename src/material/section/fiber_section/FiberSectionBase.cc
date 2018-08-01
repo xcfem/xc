@@ -48,7 +48,7 @@
 #include "xc_utils/src/geom/d3/ConvexHull3d.h"
 #include "xc_utils/src/geom/d2/ConvexHull2d.h"
 #include "xc_utils/src/geom/d2/HalfPlane2d.h"
-#include "xc_utils/src/geom/d2/poligonos2d/bool_op_poligono2d.h"
+#include "xc_utils/src/geom/d2/2d_polygons/polygon2d_bool_op.h"
 #include "xc_utils/src/geom/d1/Ray2d.h"
 #include "xc_utils/src/geom/d1/Segment2d.h"
 
@@ -204,9 +204,9 @@ XC::GeomSection *XC::FiberSectionBase::getGeomSection(void)
   }
 
 //! @brief Returns cross section contour.
-Poligono2d XC::FiberSectionBase::getRegionsContour(void) const
+Polygon2d XC::FiberSectionBase::getRegionsContour(void) const
   {
-    Poligono2d retval;
+    Polygon2d retval;
     const GeomSection *geom= getGeomSection();
     if(geom)
       retval= geom->getRegionsContour();
@@ -358,10 +358,10 @@ Line2d XC::FiberSectionBase::getEffectiveConcreteAreaLimitLine(const double &hEf
 //! Concrete effective area as in article 49.2.4 from EHE-08 (hatched area
 //! in figure 49.2.4b). See also figures 47.5 y 47.6 from volume II of the
 //! book: "Proyecto y cálculo de estructuras de hormigón" author: J. Calavera.
-std::list<Poligono2d> XC::FiberSectionBase::getGrossEffectiveConcreteAreaContour(const double &hEfMax) const
+std::list<Polygon2d> XC::FiberSectionBase::getGrossEffectiveConcreteAreaContour(const double &hEfMax) const
   {
-    std::list<Poligono2d> retval;
-    Poligono2d contour= getRegionsContour(); //Computes cross-section contour.
+    std::list<Polygon2d> retval;
+    Polygon2d contour= getRegionsContour(); //Computes cross-section contour.
 
     const double epsMin= fibers.getStrainMin(); //Minimal strain.
     const double epsMax= fibers.getStrainMax(); //Maximal strain.
@@ -421,7 +421,7 @@ std::list<Poligono2d> XC::FiberSectionBase::getGrossEffectiveConcreteAreaContour
 double XC::FiberSectionBase::getGrossEffectiveConcreteArea(const double &hEfMax) const
   {
     double retval= 0.0;
-    std::list<Poligono2d> tmp= getGrossEffectiveConcreteAreaContour(hEfMax);
+    std::list<Polygon2d> tmp= getGrossEffectiveConcreteAreaContour(hEfMax);
     if(!tmp.empty())
       retval= area(tmp.begin(),tmp.end());
     else
@@ -436,7 +436,7 @@ double XC::FiberSectionBase::getGrossEffectiveConcreteArea(const double &hEfMax)
 double XC::FiberSectionBase::getNetEffectiveConcreteArea(const double &hEfMax,const std::string &rebarSetName,const double &factor) const
   {
     double retval= 0.0;
-    std::list<Poligono2d> grossEffectiveConcreteAreaContour= getGrossEffectiveConcreteAreaContour(hEfMax);
+    std::list<Polygon2d> grossEffectiveConcreteAreaContour= getGrossEffectiveConcreteAreaContour(hEfMax);
     if(!grossEffectiveConcreteAreaContour.empty())
       {
 	//Iterate over the rebar set.
@@ -461,7 +461,7 @@ double XC::FiberSectionBase::getNetEffectiveConcreteArea(const double &hEfMax,co
 double XC::FiberSectionBase::computeFibersEffectiveConcreteArea(const double &hEfMax,const std::string &rebarSetName,const double &factor) const
   {
     double retval= 0;
-    std::list<Poligono2d> grossEffectiveConcreteAreaContour= getGrossEffectiveConcreteAreaContour(hEfMax);
+    std::list<Polygon2d> grossEffectiveConcreteAreaContour= getGrossEffectiveConcreteAreaContour(hEfMax);
     if(!grossEffectiveConcreteAreaContour.empty())
       {
         fiber_set_const_iterator i= fiber_sets.find(rebarSetName);
@@ -776,7 +776,7 @@ Segment2d XC::FiberSectionBase::getLeverArmSegment(void) const
         const Line2d Xaxis= getInternalForcesAxis();
         const Pos2d center_of_mass= getCenterOfMass();
         const Line2d Yaxis= Xaxis.Perpendicular(center_of_mass);
-        const Poligono2d contour= getRegionsContour();
+        const Polygon2d contour= getRegionsContour();
         retval= contour.Clip(Yaxis);
         Pos2d org= retval.Origen()+0.1*retval.GetVector();
         Pos2d dest= retval.Destino()-0.1*retval.GetVector();
@@ -793,7 +793,7 @@ Segment2d XC::FiberSectionBase::getEffectiveDepthSegment(void) const
     Segment2d retval;
     const Segment2d bm= getLeverArmSegment();
     const Ray2d sr(bm.Origen(),bm.Destino());
-    const Poligono2d contour= getRegionsContour();
+    const Polygon2d contour= getRegionsContour();
     retval= contour.Clip(sr);
     return retval;
   }

@@ -24,46 +24,46 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//RgQuadCell.cpp
+//QuadCellRegion.cpp
 
-#include <material/section/repres/geom_section/region/RgQuadCell.h> 
+#include <material/section/repres/geom_section/region/QuadCellRegion.h> 
 
 
 #include "xc_utils/src/geom/d2/Rejilla2d.h"
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 
-void XC::RgQuadCell::free_mem(void) const
+void XC::QuadCellRegion::free_mem(void) const
   {
     if(rejilla) delete rejilla;
     rejilla= nullptr;
   }
 
-const Rejilla2d &XC::RgQuadCell::alloc(const Rejilla2d &ptos) const
+const Rejilla2d &XC::QuadCellRegion::alloc(const Rejilla2d &ptos) const
   {
     free_mem();
     rejilla= new Rejilla2d(ptos);
     return *rejilla;
   }
 
-XC::RgQuadCell::RgQuadCell(Material *mat)
-  : RegionSecc(mat), rejilla(nullptr), nDivIJ(1), nDivJK(1) {}
+XC::QuadCellRegion::QuadCellRegion(Material *mat)
+  : SectRegion(mat), rejilla(nullptr), nDivIJ(1), nDivJK(1) {}
 
-XC::RgQuadCell::RgQuadCell(Material *mat, int numSubdivIJ, int numSubdivJK)
-  : RegionSecc(mat), rejilla(nullptr), nDivIJ(numSubdivIJ), nDivJK(numSubdivJK) {}
+XC::QuadCellRegion::QuadCellRegion(Material *mat, int numSubdivIJ, int numSubdivJK)
+  : SectRegion(mat), rejilla(nullptr), nDivIJ(numSubdivIJ), nDivJK(numSubdivJK) {}
 
 //! @brief Copy constructor.
-XC::RgQuadCell::RgQuadCell(const RgQuadCell &other)
-  : RegionSecc(other), rejilla(nullptr), nDivIJ(other.nDivIJ), nDivJK(other.nDivJK) 
+XC::QuadCellRegion::QuadCellRegion(const QuadCellRegion &other)
+  : SectRegion(other), rejilla(nullptr), nDivIJ(other.nDivIJ), nDivJK(other.nDivJK) 
   {
     if(other.rejilla)
       alloc(*other.rejilla);
   }
 
 //! @brief Assignment operator.
-XC::RgQuadCell &XC::RgQuadCell::operator=(const RgQuadCell &other)
+XC::QuadCellRegion &XC::QuadCellRegion::operator=(const QuadCellRegion &other)
   {
-    RegionSecc::operator=(other);
+    SectRegion::operator=(other);
     if(other.rejilla)
       alloc(*other.rejilla);
     nDivIJ= other.nDivIJ;
@@ -71,30 +71,30 @@ XC::RgQuadCell &XC::RgQuadCell::operator=(const RgQuadCell &other)
     return *this;
   }
 
-XC::RgQuadCell::~RgQuadCell(void)
+XC::QuadCellRegion::~QuadCellRegion(void)
   { free_mem(); }
 
 //! @brief Sets the number of divisions on each direction.
-void XC::RgQuadCell::setDiscretization(int numSubdivIJ, int numSubdivJK)
+void XC::QuadCellRegion::setDiscretization(int numSubdivIJ, int numSubdivJK)
   {
     nDivIJ = numSubdivIJ;
     nDivJK = numSubdivJK;
   }
 
 //! @brief Return the number of divisions on each direction.
-void XC::RgQuadCell::getDiscretization(int &numSubdivIJ, int &numSubdivJK) const
+void XC::QuadCellRegion::getDiscretization(int &numSubdivIJ, int &numSubdivJK) const
   {
      numSubdivIJ = nDivIJ;
      numSubdivJK = nDivJK;
   }
 
 //! @brief Return the number of celdas.
-int XC::RgQuadCell::getNumCells (void) const
+int XC::QuadCellRegion::getNumCells (void) const
   { return nDivIJ * nDivJK; }
 
 
 //! @brief Return the centro de gravedad de la rejilla.
-XC::Vector XC::RgQuadCell::getCenterOfMassRejilla(void) const
+XC::Vector XC::QuadCellRegion::getCenterOfMassRejilla(void) const
   {
     Vector retval(2);
     assert(rejilla);
@@ -105,7 +105,7 @@ XC::Vector XC::RgQuadCell::getCenterOfMassRejilla(void) const
   }
 
 //! @brief Return the coordenadas of the point i,j.
-XC::Vector XC::RgQuadCell::getVertCoords(const size_t &i,const size_t &j) const
+XC::Vector XC::QuadCellRegion::getVertCoords(const size_t &i,const size_t &j) const
   {
     Vector retval(2);
     assert(rejilla);
@@ -120,7 +120,7 @@ XC::Vector XC::RgQuadCell::getVertCoords(const size_t &i,const size_t &j) const
 //                                                                                   |   |
 //                                                                                   |   |
 //                                                                               i,j +---+ i,j+1
-XC::Matrix XC::RgQuadCell::getCellVertCoords(const size_t &i,const size_t &j) const
+XC::Matrix XC::QuadCellRegion::getCellVertCoords(const size_t &i,const size_t &j) const
   {
     Matrix retval(4,2);
     assert(rejilla);

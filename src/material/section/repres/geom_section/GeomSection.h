@@ -43,7 +43,7 @@ namespace XC {
 class SectionReferenceFrame;
 class Spot;
 class Segment;
-class RegionSecc;
+class SectRegion;
 class ReinfLayer;
 class MaterialHandler;
 class Material;
@@ -120,8 +120,8 @@ class GeomSection: public SectionMassProperties
     
     // Section inquiring functions
     double DistSpots(const size_t &i,const size_t &j) const;
-    Poligono2d getRegionsContour(void) const;
-    Poligono2d getCompressedZoneContour(const HalfPlane2d &) const;
+    Polygon2d getRegionsContour(void) const;
+    Polygon2d getCompressedZoneContour(const HalfPlane2d &) const;
     double getLongCorte(const Line2d &r) const;
     std::vector<double> getLongsCorte(const std::list<Line2d> &lr) const;
     double getCompressedZoneDepth(const HalfPlane2d &) const;

@@ -24,45 +24,45 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//RgSccPoligono.h
+//PolygonSectRegion.h
 
-#ifndef RgSccPoligono_h 
-#define RgSccPoligono_h 
+#ifndef PolygonSectRegion_h 
+#define PolygonSectRegion_h 
 
-#include <material/section/repres/geom_section/region/RgQuadCell.h>
+#include <material/section/repres/geom_section/region/QuadCellRegion.h>
 #include "utility/matrix/Matrix.h"
-#include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
+#include "xc_utils/src/geom/d2/2d_polygons/Polygon2d.h"
 
-class Poligono2d;
+class Polygon2d;
 
 namespace XC {
 
 //! @ingroup MATSCCRegions
 //
-//! Poligonal patch for cross-section discretization.
-class RgSccPoligono: public RgQuadCell
+//! Polygonal patch for cross-section discretization.
+class PolygonSectRegion: public QuadCellRegion
   {
   private:
-    Poligono2d plg;//!< Polygon that defines the patch.
+    Polygon2d plg;//!< Polygon that defines the patch.
   protected:
 
   public:
-    RgSccPoligono(Material *);
-    RgSccPoligono(Material *, int numSubdivIJ, int numSubdivJK, const Poligono2d &);
+    PolygonSectRegion(Material *);
+    PolygonSectRegion(Material *, int numSubdivIJ, int numSubdivJK, const Polygon2d &);
     
     const Rejilla2d &getMesh(void) const;
     const VectorCells &getCells(void) const;
-    RegionSecc *getCopy(void) const;
+    SectRegion *getCopy(void) const;
 
     double getMaxY(void) const;
     double getMaxZ(void) const;
     double getMinY(void) const;
     double getMinZ(void) const;
-    Poligono2d getPolygon(void) const;
+    Polygon2d getPolygon(void) const;
 
 
     void Print(std::ostream &s, int flag =0) const;   
-    friend std::ostream &operator<<(std::ostream &s, RgSccPoligono &rg_scc_plg);    
+    friend std::ostream &operator<<(std::ostream &s, PolygonSectRegion &rg_scc_plg);    
   };
 } // end of XC namespace
 

@@ -37,7 +37,7 @@
 
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/d2/Poligono3d.h"
+#include "xc_utils/src/geom/d2/Polygon3d.h"
 
 #include "boost/lexical_cast.hpp"
 
@@ -333,7 +333,7 @@ std::vector<int> XC::getNodeIdsQuad4N(const XC::NodePtrArray3d::constant_i_layer
     positions.push_back(p2);
     positions.push_back(p3);
     positions.push_back(p4);
-    Poligono3d tmp(positions.begin(),positions.end());
+    Polygon3d tmp(positions.begin(),positions.end());
     const double area= tmp.getArea();
     if(area<1e-3)
       {

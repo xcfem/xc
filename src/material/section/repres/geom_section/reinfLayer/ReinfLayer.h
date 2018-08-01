@@ -60,7 +60,7 @@
 #include <material/section/repres/geom_section/reinfBar/VectorReinfBar.h>
 
 class HalfPlane2d;
-class Poligono2d;
+class Polygon2d;
 
 namespace XC {
 class ReinfBar;
@@ -97,7 +97,7 @@ class ReinfLayer: public DiscretBase
     virtual const double &getReinfBarArea(void) const;
 
     // reinforcing layer inquiring functions
-    void getBarrasIn(const Poligono2d &,ListReinfLayer &,bool );
+    void getBarrasIn(const Polygon2d &,ListReinfLayer &,bool );
     void getBarrasIn(const HalfPlane2d &,ListReinfLayer &,bool );
     
     const GeomSection *getGeomSection(void) const;

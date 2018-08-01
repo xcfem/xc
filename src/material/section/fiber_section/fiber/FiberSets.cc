@@ -27,7 +27,7 @@
 //FiberSets.cc
 
 #include "FiberSets.h"
-#include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
+#include "xc_utils/src/geom/d2/2d_polygons/Polygon2d.h"
 
 //! @brief Constructor.
 XC::FiberSets::FiberSets(void)

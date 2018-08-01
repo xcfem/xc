@@ -68,7 +68,7 @@ class SurfaceLoadRecord(ElementLoadRecord):
     retval+= ' ' + str(len(self.polygon)) + ' ' + str(self.polygon)
     return retval
   def get2DPolygon(self):
-    retval= geom.Poligono2d()
+    retval= geom.Polygon2d()
     for p in self.polygon:
       coords= [p[0],p[1]]
       if(self.projPlane=='xz'):

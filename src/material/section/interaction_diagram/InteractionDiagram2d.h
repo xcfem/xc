@@ -29,7 +29,7 @@
 #ifndef INTERACTION_DIAGRAM2D_H
 #define INTERACTION_DIAGRAM2D_H
 
-#include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
+#include "xc_utils/src/geom/d2/2d_polygons/Polygon2d.h"
 
 namespace XC {
 
@@ -40,13 +40,13 @@ class InteractionDiagramData;
 //! \@ingroup MATSCCDiagInt
 //
 //! @brief Interaction diagram (N,My) for an RC section.
-class InteractionDiagram2d: public Poligono2d
+class InteractionDiagram2d: public Polygon2d
   {
   protected:
     Pos2d get_intersection(const Pos2d &p) const;
   public:
     InteractionDiagram2d(void);
-    InteractionDiagram2d(const Poligono2d &);
+    InteractionDiagram2d(const Polygon2d &);
     virtual InteractionDiagram2d *clon(void) const;
 
     void Simplify(void);

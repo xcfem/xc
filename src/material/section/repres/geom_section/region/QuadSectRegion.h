@@ -24,14 +24,14 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//RgSccQuad.h
+//QuadSectRegion.h
 // Written by Remo M. de Souza
 // December 1998
 
-#ifndef RgSccQuad_h 
-#define RgSccQuad_h
+#ifndef QuadSectRegion_h 
+#define QuadSectRegion_h
 
-#include <material/section/repres/geom_section/region/RgQuadCell.h>
+#include <material/section/repres/geom_section/region/QuadCellRegion.h>
 #include "utility/matrix/Matrix.h"
 
 class Cuadrilatero2d;
@@ -50,15 +50,15 @@ namespace XC {
 //! @ingroup MATSCCRegions
 //
 //! @brief Quad that discretizes in quad cells.
-class RgSccQuad: public RgQuadCell
+class QuadSectRegion: public QuadCellRegion
   {
   private:
     Matrix vertCoord; //!< Coordinates of the vertices.
   protected:
 
   public:
-    RgSccQuad(Material *);
-    RgSccQuad(Material *, int numSubdivIJ, int numSubdivJK, const Matrix &vertexCoords);
+    QuadSectRegion(Material *);
+    QuadSectRegion(Material *, int numSubdivIJ, int numSubdivJK, const Matrix &vertexCoords);
 
     // edition functions
     void setVertCoords(const Matrix &vertexCoords);
@@ -69,7 +69,7 @@ class RgSccQuad: public RgQuadCell
     
     const Rejilla2d &getMesh(void) const;
     const VectorCells &getCells(void) const;
-    RegionSecc *getCopy(void) const;
+    SectRegion *getCopy(void) const;
 
     const Matrix &getVertCoords(void) const;
     double getMaxY(void) const;
@@ -86,12 +86,12 @@ class RgSccQuad: public RgQuadCell
     Pos2d getLVertex(void) const;
     Cuadrilatero2d getQuad(void) const;
     void setQuad(const Cuadrilatero2d &);
-    Poligono2d getPolygon(void) const;
+    Polygon2d getPolygon(void) const;
     void swap(void);
 
 
     void Print(std::ostream &s, int flag =0) const;   
-    friend std::ostream &operator<<(std::ostream &s, RgSccQuad &);    
+    friend std::ostream &operator<<(std::ostream &s, QuadSectRegion &);    
   };
 } // end of XC namespace
 

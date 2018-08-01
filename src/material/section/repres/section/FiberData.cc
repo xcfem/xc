@@ -30,7 +30,7 @@
 #include <material/section/repres/cell/VectorCells.h>
 #include <material/section/repres/cell/Cell.h>
 #include "material/section/repres/geom_section/region/RegionContainer.h"
-#include <material/section/repres/geom_section/region/RegionSecc.h>
+#include <material/section/repres/geom_section/region/SectRegion.h>
 #include <material/section/repres/geom_section/reinfBar/VectorReinfBar.h>
 #include <material/section/repres/geom_section/reinfBar/ReinfBar.h>
 #include "material/section/repres/geom_section/reinfLayer/ReinfLayer.h"

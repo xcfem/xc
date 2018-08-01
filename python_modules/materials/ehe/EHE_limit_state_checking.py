@@ -1248,10 +1248,10 @@ class TorsionParameters(object):
     self.h0= 0.0  # Real wall thickess.
     self.c= 0.0  # Longitudinal reinforcement concrete cover.
 
-    self.crossSectionContour= geom.Poligono2d()  # Cross section contour.
-    self.lineaMedia=  geom.Poligono2d() # Polygon defined by the midline of the effective hollow section.
-    self.lineaInt=  geom.Poligono2d() # Polygon defined by the interior contour of the effective hollow section.
-    self.effectiveHollowSection= geom.PoligonoConAgujeros2d() # Effective hollow section contour
+    self.crossSectionContour= geom.Polygon2d()  # Cross section contour.
+    self.lineaMedia=  geom.Polygon2d() # Polygon defined by the midline of the effective hollow section.
+    self.lineaInt=  geom.Polygon2d() # Polygon defined by the interior contour of the effective hollow section.
+    self.effectiveHollowSection= geom.PolygonWithHoles2d() # Effective hollow section contour
   def A(self):
     return self.crossSectionContour.getArea()
   def u(self):

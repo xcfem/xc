@@ -33,7 +33,7 @@
 #include "material/section/repres/SectionMassProperties.h"
 
 class Pos2d;
-class Poligono2d;
+class Polygon2d;
 class HalfPlane2d;
 
 namespace XC {
@@ -87,7 +87,7 @@ class ListReinfLayer: public std::list<ReinfLayer *>, public SectionMassProperti
 
     size_t getNumReinfBars(void) const;
 
-    void getBarrasIn(const Poligono2d &,ListReinfLayer &,bool );
+    void getBarrasIn(const Polygon2d &,ListReinfLayer &,bool );
     void getBarrasIn(const HalfPlane2d &,ListReinfLayer &,bool );
 
     double getAreaGrossSection(void) const;

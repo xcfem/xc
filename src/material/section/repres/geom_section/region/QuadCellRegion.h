@@ -24,14 +24,14 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//RgQuadCell.h
+//QuadCellRegion.h
 
-#ifndef RgQuadCell_h 
-#define RgQuadCell_h 
+#ifndef QUADCELLREGION_H 
+#define QUADCELLREGION_H
 
 
 #include <iostream>
-#include "material/section/repres/geom_section/region/RegionSecc.h" 
+#include "material/section/repres/geom_section/region/SectRegion.h" 
 
 class Rejilla2d;
 
@@ -47,7 +47,7 @@ namespace XC {
 //   +---+---+---+---+ nDivKL= 2
 //   |   |   |   |   |
 // I +---+---+---+---+ J
-class RgQuadCell: public RegionSecc
+class QuadCellRegion: public SectRegion
   {
     mutable Rejilla2d *rejilla; //!< Grid points.
   protected:
@@ -56,11 +56,11 @@ class RgQuadCell: public RegionSecc
     const Rejilla2d &alloc(const Rejilla2d &) const;
 
   public:
-    RgQuadCell(Material *);
-    RgQuadCell(Material *, int numSubdivIJ, int numSubdivJK);
-    RgQuadCell(const RgQuadCell &);
-    RgQuadCell &operator=(const RgQuadCell &);
-    virtual ~RgQuadCell(void);
+    QuadCellRegion(Material *);
+    QuadCellRegion(Material *, int numSubdivIJ, int numSubdivJK);
+    QuadCellRegion(const QuadCellRegion &);
+    QuadCellRegion &operator=(const QuadCellRegion &);
+    virtual ~QuadCellRegion(void);
 
     void setDiscretization(int numSubdivIJ, int numSubdivJK);
 

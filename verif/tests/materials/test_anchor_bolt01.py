@@ -24,7 +24,7 @@ areaBarra= math.pi*sqr(diamBarra/2.0) # Bar area in square meters.
 h= 274e-3 # Concrete element thickness.
 hef= 210e-3 # Effective anchor depth.
 posAnc=  geom.Pos2d(.135,0) # Anchor position
-contornoPiezaSoporte=  geom.Poligono2d() # Contour of concrete element.
+contornoPiezaSoporte=  geom.Polygon2d() # Contour of concrete element.
 contornoPiezaSoporte.agregaVertice(geom.Pos2d(0,-1))
 contornoPiezaSoporte.agregaVertice(geom.Pos2d(1,-1))
 contornoPiezaSoporte.agregaVertice(geom.Pos2d(1,1))
@@ -55,7 +55,7 @@ plgA0pN= EOTA_TR029_limit_state_checking.getA0pN(diamBarra,posAnc,hef,tauRkUcr)
 A0pN= plgA0pN.getArea()
 # Área neta pull-out
 plgApN= plgA0pN
-plgApN.clipPorPoligono(contornoPiezaSoporte)
+plgApN.clipUsingPolygon(contornoPiezaSoporte)
 ApN= plgApN.getArea()
 f2pN= EOTA_TR029_limit_state_checking.getFactor2pN(A0pN,ApN)
 N0Rdp= EOTA_TR029_limit_state_checking.axialInitialResistancePullOut(diamBarra,hef,tauRk)/gammaMc
@@ -66,7 +66,7 @@ plgA0cN= EOTA_TR029_limit_state_checking.getA0cN(posAnc,hef)
 A0cN= plgA0cN.getArea()
 # Cone extraction effective area.
 plgAcN= plgA0cN
-plgAcN.clipPorPoligono(contornoPiezaSoporte)
+plgAcN.clipUsingPolygon(contornoPiezaSoporte)
 AcN= plgAcN.getArea()
 f2cN= EOTA_TR029_limit_state_checking.getFactor2cN(A0cN,AcN)
 N0Rdc= EOTA_TR029_limit_state_checking.axialInitialResistanceConeFailure(k1,fckCube,hef)/gammaMc
@@ -81,7 +81,7 @@ plgA0spN= EOTA_TR029_limit_state_checking.getA0spN(posAnc,CcrSp)
 A0spN= plgA0spN.getArea()
 # Splitting effective area.
 plgAspN= plgA0spN
-plgAspN.clipPorPoligono(contornoPiezaSoporte)
+plgAspN.clipUsingPolygon(contornoPiezaSoporte)
 AspN= plgAspN.getArea()
 f2spN= EOTA_TR029_limit_state_checking.getFactor2spN(A0spN,AspN)
 N0RdSp= N0Rdc

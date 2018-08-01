@@ -75,7 +75,7 @@ class_<XC::InteractionDiagram, bases<XC::ClosedTriangleMesh>, boost::noncopyable
   ;
 
 double (XC::InteractionDiagram2d::*getCF2d)(const Pos2d &esf_d) const= &XC::InteractionDiagram2d::getCapacityFactor;
-class_<XC::InteractionDiagram2d, bases<Poligono2d>, boost::noncopyable >("InteractionDiagram2d", no_init)
+class_<XC::InteractionDiagram2d, bases<Polygon2d>, boost::noncopyable >("InteractionDiagram2d", no_init)
   .def("getIntersection",&XC::InteractionDiagram2d::getIntersection,"Returns the intersection of the ray O->point(N,My,Mz) with the interaction diagram.")
   .def("getCapacityFactor",getCF2d)
   .def("simplify",&XC::InteractionDiagram2d::Simplify)

@@ -67,7 +67,7 @@
 #include <material/section/repres/section/FiberSectionRepr.h>
 
 #include "material/section/ResponseId.h"
-#include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
+#include "xc_utils/src/geom/d2/2d_polygons/Polygon2d.h"
 
 //! @brief Constructor.
 XC::FiberSectionGJ::FiberSectionGJ(int tag,const fiber_list &fiberList, double gj,XC::MaterialHandler *mat_ldr): 

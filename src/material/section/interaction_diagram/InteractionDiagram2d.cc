@@ -51,10 +51,10 @@ GeomObj::list_Pos2d sort_points(const GeomObj::list_Pos2d &pts)
 
 //! @brief Default constructor.
 XC::InteractionDiagram2d::InteractionDiagram2d(void)
-  : Poligono2d() {}
+  : Polygon2d() {}
 
-XC::InteractionDiagram2d::InteractionDiagram2d(const Poligono2d &pts)
-  : Poligono2d(pts) //sort_points(pts))
+XC::InteractionDiagram2d::InteractionDiagram2d(const Polygon2d &pts)
+  : Polygon2d(pts) //sort_points(pts))
   { }
 
 //! @brief Virtual constructor.

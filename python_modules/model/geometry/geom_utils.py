@@ -131,7 +131,7 @@ def eq_points_parabola(startS,stopS,numPts,a,b,c,angSX):
 def rect2DPolygon(xCent,yCent,Lx,Ly):
     '''Rectangular polygon
     '''
-    pol=geom.Poligono2d()
+    pol=geom.Polygon2d()
     pol.agregaVertice(geom.Pos2d(xCent-Lx/2.0,yCent-Ly/2.0))
     pol.agregaVertice(geom.Pos2d(xCent-Lx/2.0,yCent+Ly/2.0))
     pol.agregaVertice(geom.Pos2d(xCent+Lx/2.0,yCent+Ly/2.0))

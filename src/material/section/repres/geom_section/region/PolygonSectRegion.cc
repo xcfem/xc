@@ -24,59 +24,59 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//RgSccPoligono.cpp                                                                        
+//PolygonSectRegion.cpp                                                                        
 
-#include <material/section/repres/geom_section/region/RgSccPoligono.h>
+#include <material/section/repres/geom_section/region/PolygonSectRegion.h>
 #include <material/section/repres/cell/QuadCell.h>
 
 #include "xc_basic/src/text/text_string.h"
 #include "xc_utils/src/geom/d2/Rejilla2d.h"
-#include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
+#include "xc_utils/src/geom/d2/2d_polygons/Polygon2d.h"
 #include <utility/matrix/Matrix.h>
 
-XC::RgSccPoligono::RgSccPoligono(Material *mat)
-  : RgQuadCell(mat), plg() {}
+XC::PolygonSectRegion::PolygonSectRegion(Material *mat)
+  : QuadCellRegion(mat), plg() {}
 
 
-XC::RgSccPoligono::RgSccPoligono(Material *mat, int numSubdivIJ, int numSubdivJK,const Poligono2d &p)
-  : RgQuadCell(mat,numSubdivIJ,numSubdivJK), plg(p)
+XC::PolygonSectRegion::PolygonSectRegion(Material *mat, int numSubdivIJ, int numSubdivJK,const Polygon2d &p)
+  : QuadCellRegion(mat,numSubdivIJ,numSubdivJK), plg(p)
   {}  
 
-double XC::RgSccPoligono::getMaxY(void) const
+double XC::PolygonSectRegion::getMaxY(void) const
   { return plg.GetXMax(); }
 
-double XC::RgSccPoligono::getMaxZ(void) const
+double XC::PolygonSectRegion::getMaxZ(void) const
   { return plg.GetYMax(); }
 
-double XC::RgSccPoligono::getMinY(void) const
+double XC::PolygonSectRegion::getMinY(void) const
   { return plg.GetXMin(); }
 
-double XC::RgSccPoligono::getMinZ(void) const
+double XC::PolygonSectRegion::getMinZ(void) const
   { return plg.GetYMin(); }
 
-Poligono2d XC::RgSccPoligono::getPolygon(void) const
+Polygon2d XC::PolygonSectRegion::getPolygon(void) const
   { return plg; }
 
-const Rejilla2d &XC::RgSccPoligono::getMesh(void) const
+const Rejilla2d &XC::PolygonSectRegion::getMesh(void) const
   {
-    std::cerr << "RgSccPoligono::getMesh not implemented." << std::endl;
+    std::cerr << "PolygonSectRegion::getMesh not implemented." << std::endl;
     static Rejilla2d retval;
     return retval;
   }
 
-const XC::VectorCells &XC::RgSccPoligono::getCells(void) const
+const XC::VectorCells &XC::PolygonSectRegion::getCells(void) const
   {
-    std::cerr << "RgSccPoligono::getCells not implemented." << std::endl;
+    std::cerr << "PolygonSectRegion::getCells not implemented." << std::endl;
     return cells;
   }
 
 
-XC::RegionSecc *XC::RgSccPoligono::getCopy (void) const
-  { return new RgSccPoligono(*this); }
+XC::SectRegion *XC::PolygonSectRegion::getCopy (void) const
+  { return new PolygonSectRegion(*this); }
  
-void XC::RgSccPoligono::Print(std::ostream &s, int flag) const
+void XC::PolygonSectRegion::Print(std::ostream &s, int flag) const
   {
-    s << "\nRgQuadCell Type: RgSccPoligono";
+    s << "\nQuadCellRegion Type: PolygonSectRegion";
     //s << "\nMaterial Id: " << getMaterialID();
     s << "\nNumber of subdivisions in the IJ direction: " << nDivIJ;
     s << "\nNumber of subdivisions in the JK direction: " << nDivJK;
@@ -84,7 +84,7 @@ void XC::RgSccPoligono::Print(std::ostream &s, int flag) const
   }
 
 
-std::ostream &XC::operator<<(std::ostream &s, XC::RgSccPoligono &rg_scc_cuad)
+std::ostream &XC::operator<<(std::ostream &s, XC::PolygonSectRegion &rg_scc_cuad)
   {
     rg_scc_cuad.Print(s);
     return s;

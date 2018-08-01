@@ -46,8 +46,8 @@
 #include "xc_utils/src/geom/d1/Line2d.h"
 #include "xc_utils/src/geom/d1/Segment2d.h"
 #include "xc_utils/src/geom/d2/Circle2d.h"
-#include "xc_utils/src/geom/d2/poligonos2d/Poligono2d.h"
-#include "xc_utils/src/geom/d2/poligonos2d/bool_op_poligono2d.h"
+#include "xc_utils/src/geom/d2/2d_polygons/Polygon2d.h"
+#include "xc_utils/src/geom/d2/2d_polygons/polygon2d_bool_op.h"
 #include "xc_utils/src/geom/d2/HalfPlane2d.h"
 #include "xc_utils/src/geom/listas/utils_list_pos2d.h"
 #include "material/section/interaction_diagram/DeformationPlane.h"
@@ -1344,7 +1344,7 @@ double XC::FiberPtrDeque::getAverageDistanceBetweenFibers(void) const
 //! same area. I think it's less anisotropic.
 //! @param grossEffectiveConcreteAreaContour: Contour of the gross effective area obtained from the section.
 //! @param factor: factor that multiplies rebar diameter to obtain the square prescribed by the standard (i.e. for EHE-08 factor= 15).
-double XC::FiberPtrDeque::computeFibersEffectiveConcreteArea(const std::list<Poligono2d> &grossEffectiveConcreteAreaContour,const double &factor) const
+double XC::FiberPtrDeque::computeFibersEffectiveConcreteArea(const std::list<Polygon2d> &grossEffectiveConcreteAreaContour,const double &factor) const
   {
     double retval= 0.0;
     const size_t n= 12;
@@ -1352,7 +1352,7 @@ double XC::FiberPtrDeque::computeFibersEffectiveConcreteArea(const std::list<Pol
     const size_t sz= size();
     dq_ac_effective.clear();
     dq_ac_effective.resize(sz);
-    Poligono2d tmp;
+    Polygon2d tmp;
     //Clip the rebars areas with the effective area contour.
     for(size_t i= 0;i<sz;i++) //For each rebar in the family.
       {
@@ -1360,15 +1360,15 @@ double XC::FiberPtrDeque::computeFibersEffectiveConcreteArea(const std::list<Pol
         L= factor*dm; //Side of the square prescribed by the standard.
         R= L*sqrt(2/(n*sin(2*M_PI/n)));
         const Pos2d pos= (*this)[i]->getPos();
-        tmp= Circle2d(pos,R).getPoligonoInscrito(n);
+        tmp= Circle2d(pos,R).getInscribedPolygon(n);
         if(tmp.Overlap(grossEffectiveConcreteAreaContour))
-          for(std::list<Poligono2d>::const_iterator j= grossEffectiveConcreteAreaContour.begin();j!=grossEffectiveConcreteAreaContour.end();j++)
+          for(std::list<Polygon2d>::const_iterator j= grossEffectiveConcreteAreaContour.begin();j!=grossEffectiveConcreteAreaContour.end();j++)
             {
               if((*j).In(tmp))
                 dq_ac_effective[i].push_back(tmp);
               else if((*j).Overlap(tmp))
                 {
-                  std::list<Poligono2d> tmpLst= intersection(tmp,*j);
+                  std::list<Polygon2d> tmpLst= intersection(tmp,*j);
                   assert(!tmpLst.empty());
                   dq_ac_effective[i].insert(dq_ac_effective[i].end(),tmpLst.begin(),tmpLst.end());
                 }
@@ -1378,10 +1378,10 @@ double XC::FiberPtrDeque::computeFibersEffectiveConcreteArea(const std::list<Pol
     //Clip computed intersections.
     for(size_t i= 0;i<sz;i++)
       {
-	std::list<Poligono2d> &p1= dq_ac_effective[i];
+	std::list<Polygon2d> &p1= dq_ac_effective[i];
         for(size_t j= i+1;j<sz;j++)
           {
-	    std::list<Poligono2d> &p2= dq_ac_effective[j];
+	    std::list<Polygon2d> &p2= dq_ac_effective[j];
             if(overlap(p1,p2))
               {
                 const Pos2d c1= (*this)[i]->getPos();
@@ -1406,7 +1406,7 @@ double XC::FiberPtrDeque::computeFibersEffectiveConcreteArea(const std::list<Pol
 
 //! @brief Return the contours of the effective area of the fiber which index
 //! is being passed as parameter.
-const std::list<Poligono2d> &XC::FiberPtrDeque::getFiberEffectiveConcretAreaContour(const size_t &i) const
+const std::list<Polygon2d> &XC::FiberPtrDeque::getFiberEffectiveConcretAreaContour(const size_t &i) const
   { return dq_ac_effective[i]; }
 
 //! @brief Return the effective area value of the fiber which index
@@ -1438,7 +1438,7 @@ double XC::FiberPtrDeque::getFibersEffectiveConcreteArea(void) const
 void XC::FiberPtrDeque::computeCovers(const GeomSection &g) const
   {
     const GeomObj::list_Pos2d positions= getPositions();
-    const Poligono2d contour= g.getRegionsContour();
+    const Polygon2d contour= g.getRegionsContour();
     recubs= getRecubrimientos(positions,contour);
     const size_t sz= recubs.size();
     for(size_t i= 0;i<sz;i++)

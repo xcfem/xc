@@ -24,14 +24,14 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//RgSccCirc.h
+//CircularSectRegion.h
 // Written by Remo M. de Souza
 // December 1998
 
-#ifndef RgSccCirc_h 
-#define RgSccCirc_h 
+#ifndef CircularSectRegion_h 
+#define CircularSectRegion_h 
 
-#include <material/section/repres/geom_section/region/RgQuadCell.h>
+#include <material/section/repres/geom_section/region/QuadCellRegion.h>
 #include <utility/matrix/Vector.h>
 
 class AnnulusSector2d;
@@ -42,7 +42,7 @@ class Matrix;
 //! @ingroup MATSCCRegions
 //
 //! @brief Circular shaped patch.
-class RgSccCirc: public RgQuadCell
+class CircularSectRegion: public QuadCellRegion
   {
   private:
     Vector centerPosit; //!< Center position.
@@ -51,8 +51,8 @@ class RgSccCirc: public RgQuadCell
     double initAng; //!< Starting angle.
     double finalAng; //!< Final angle.
   public:
-    RgSccCirc(Material *mat);
-    RgSccCirc(Material *, int numSubdivCircunf, int numSubdivRadial,
+    CircularSectRegion(Material *mat);
+    CircularSectRegion(Material *, int numSubdivCircunf, int numSubdivRadial,
               const Vector &centerPosition, double internRadius, 
               double externRadius, double initialAngle, double finalAngle);
     
@@ -90,7 +90,7 @@ class RgSccCirc: public RgQuadCell
     //inquiring functions
     const Rejilla2d &getMesh(void) const;
     const VectorCells &getCells(void) const;
-    RegionSecc *getCopy(void) const;
+    SectRegion *getCopy(void) const;
 
     void getRadii(double &internRadius, double &externRadius)  const;
     void getAngles(double &initialAngle, double &finalAngle)    const;
@@ -102,12 +102,12 @@ class RgSccCirc: public RgQuadCell
     double getMinY(void) const;
     double getMinZ(void) const;
 
-    Poligono2d getPolygon(void) const;
+    Polygon2d getPolygon(void) const;
     AnnulusSector2d &getSector(void) const;
 
 
     void Print(std::ostream &s, int flag =0) const;   
-    friend std::ostream &operator<<(std::ostream &s, RgSccCirc &rg_scc_circ);    
+    friend std::ostream &operator<<(std::ostream &s, CircularSectRegion &rg_scc_circ);    
   };
 } // end of XC namespace
 

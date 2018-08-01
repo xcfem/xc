@@ -35,7 +35,7 @@
 #include "xc_utils/src/geom/GeomObj.h"
 #include <material/section/CrossSectionKR.h>
 
-class Poligono2d;
+class Polygon2d;
 
 namespace XC {
 class Fiber;
@@ -110,7 +110,7 @@ class FiberSectionBase: public PrismaticBarCrossSection
     FiberSectionRepr *getFiberSectionRepr(void);
     GeomSection *getGeomSection(void);
     const GeomSection *getGeomSection(void) const;
-    Poligono2d getRegionsContour(void) const;
+    Polygon2d getRegionsContour(void) const;
     double getCompressedZoneDepth(const Line2d &) const;
     double getCompressedZoneDepth(void) const;
     double getTensionedZoneDepth(const Line2d &) const;
@@ -134,7 +134,7 @@ class FiberSectionBase: public PrismaticBarCrossSection
     double getGrossEffectiveConcreteArea(const double &) const;
     double getNetEffectiveConcreteArea(const double &,const std::string &,const double &factor= 15) const;
     double computeFibersEffectiveConcreteArea(const double &hEfMax,const std::string &,const double &factor= 15) const;
-    std::list<Poligono2d> getGrossEffectiveConcreteAreaContour(const double &) const;
+    std::list<Polygon2d> getGrossEffectiveConcreteAreaContour(const double &) const;
     void computeCovers(const std::string &) const;
     void computeSpacement(const std::string &) const;
     int updateCenterOfMass(void);

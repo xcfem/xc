@@ -24,19 +24,19 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//RegionSecc.h
+//SectRegion.h
 // Written by Remo M. de Souza
 // December 1998
 
-#ifndef RegionSecc_h 
-#define RegionSecc_h 
+#ifndef SectRegion_h 
+#define SectRegion_h 
 
 
 #include <iostream>
 #include "material/section/repres/DiscretBase.h" 
 #include <material/section/repres/cell/VectorCells.h>
 
-class Poligono2d;
+class Polygon2d;
 class HalfPlane2d;
 class Pos2d;
 
@@ -45,7 +45,7 @@ class Cell;
 class VectorCells;
 class Vector;
 class Matrix;
-class RgSccPoligono;
+class PolygonSectRegion;
 
 //! @ingroup MATSCCRepresGeom
 //!
@@ -54,14 +54,14 @@ class RgSccPoligono;
 //! @ingroup MATSCCRegions
 //
 //! @brief Region of a section that corresponds with a material.
-class RegionSecc: public DiscretBase
+class SectRegion: public DiscretBase
   {
   protected:
     mutable VectorCells cells;
 
   public:
-    RegionSecc(Material *);
-    virtual ~RegionSecc(void) {}
+    SectRegion(Material *);
+    virtual ~SectRegion(void) {}
 
     // inquiring functions
     //! @brief Returns the number of cells of the region.
@@ -69,10 +69,10 @@ class RegionSecc: public DiscretBase
     //! @brief Returns the cell container.
     virtual const VectorCells &getCells(void) const= 0;
     //! @brief Returns a copy of the region.
-    virtual RegionSecc *getCopy(void) const= 0;
+    virtual SectRegion *getCopy(void) const= 0;
 
-    virtual Poligono2d getPolygon(void) const;
-    RgSccPoligono Intersection(const HalfPlane2d &sp) const;
+    virtual Polygon2d getPolygon(void) const;
+    PolygonSectRegion Intersection(const HalfPlane2d &sp) const;
     const Vector &getCenterOfMass(void) const;
     double getLength(void) const;
     double getArea(void) const;
@@ -95,7 +95,7 @@ class RegionSecc: public DiscretBase
 
 
     virtual void Print(std::ostream &s, int flag= 0) const =0;   
-    friend std::ostream &operator<<(std::ostream &s, const RegionSecc &rg_scc);    
+    friend std::ostream &operator<<(std::ostream &s, const SectRegion &rg_scc);    
   };
 } // end of XC namespace
 

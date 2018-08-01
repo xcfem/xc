@@ -30,7 +30,7 @@
 #define PlaneElement_h
                                                                         
 #include <domain/mesh/element/ElemWithMaterial.h>
-#include "xc_utils/src/geom/d2/Poligono3d.h"
+#include "xc_utils/src/geom/d2/Polygon3d.h"
 #include "xc_utils/src/geom/d1/Segment3d.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "preprocessor/Preprocessor.h"
@@ -54,7 +54,7 @@ class PlaneElement : public ElemWithMaterial<NNODES, PhysProp>
     void checkElem(void);
     void setDomain(Domain *theDomain);
 
-    virtual Poligono3d getPolygon(bool initialGeometry= true) const;
+    virtual Polygon3d getPolygon(bool initialGeometry= true) const;
     virtual Segment3d getSide(const size_t &i,bool initialGeometry= true) const;
     Pos3d getCenterOfMassPosition(bool initialGeometry= true) const;
     double getPerimetro(bool initialGeometry= true) const;
@@ -155,10 +155,10 @@ double XC::PlaneElement<NNODES, PhysProp>::getTributaryArea(const Node *nod) con
 
 //! @brief Returns the element contour as a polygon.
 template <int NNODES,class PhysProp>
-Poligono3d XC::PlaneElement<NNODES, PhysProp>::getPolygon(bool initialGeometry) const
+Polygon3d XC::PlaneElement<NNODES, PhysProp>::getPolygon(bool initialGeometry) const
   {
     const std::list<Pos3d> positions= this->getPosNodes(initialGeometry);
-    return Poligono3d(positions.begin(),positions.end());
+    return Polygon3d(positions.begin(),positions.end());
   }
 
 //! @brief Returns a lado of the element. 

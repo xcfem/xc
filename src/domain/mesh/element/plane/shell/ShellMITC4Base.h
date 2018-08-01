@@ -37,7 +37,7 @@
 #include <utility/matrix/Matrix.h>
 #include "domain/mesh/element/utils/fvectors/FVectorShell.h"
 
-class Poligono3d;
+class Polygon3d;
 
 namespace XC {
 
