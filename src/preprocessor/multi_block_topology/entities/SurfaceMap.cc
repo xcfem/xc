@@ -57,14 +57,14 @@ void XC::SurfaceMap::UpdateSets(Face *nueva_face) const
       }
   }
 
-//! @brief Crea concilia el number of divisions of the lines.
+//! @brief Conciliate the number of divisions of the lines.
 bool XC::SurfaceMap::conciliaNDivs(void)
   { 
     getMultiBlockTopology()->conciliaNDivs();
     return checkNDivs();
   }
 
-//! @brief Verifica que los number of divisions of the edges
+//! @brief Verifies that number of divisions of the edges
 //! are compatible.
 bool XC::SurfaceMap::checkNDivs(void) const
   {

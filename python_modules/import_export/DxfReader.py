@@ -28,9 +28,7 @@ def layerToImport(layerName,namesToImport):
 
 class DXFImport(object):
   '''Import DXF entities.'''
-  threshold= 0.01
-
-  def __init__(self,dxfFileName,layerNamesToImport, getRelativeCoo):
+  def __init__(self,dxfFileName,layerNamesToImport, getRelativeCoo, threshold= 0.01):
     ''' Constructor.
 
        :param layerNamesToImport: list of regular expressions to be tested.
@@ -40,6 +38,7 @@ class DXFImport(object):
     self.dxfFile= dxfgrabber.readfile(dxfFileName)
     self.layersToImport= self.getLayersToImport(layerNamesToImport)
     self.getRelativeCoo= getRelativeCoo
+    self.threshold= threshold
     self.selectKPoints()
     self.labelDict= {}
     self.points= self.importPoints()

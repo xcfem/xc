@@ -145,7 +145,8 @@ void XC::MultiBlockTopology::conciliaNDivs(void)
             conta++;
             if(conta>max_num_iter)
               {
-		std::cerr << "Too much iterations." << std::endl;
+		std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; too much iterations." << std::endl;
                 break;
               }
           }
