@@ -28,7 +28,7 @@ def layerToImport(layerName,namesToImport):
 
 class DXFImport(object):
   '''Import DXF entities.'''
-  def __init__(self,dxfFileName,layerNamesToImport, getRelativeCoo, threshold= 0.01):
+  def __init__(self,dxfFileName,layerNamesToImport, getRelativeCoo, threshold= 0.01,importLines= True, importSurfaces= True):
     ''' Constructor.
 
        :param layerNamesToImport: list of regular expressions to be tested.
@@ -42,8 +42,14 @@ class DXFImport(object):
     self.selectKPoints()
     self.labelDict= {}
     self.points= self.importPoints()
-    self.importLines()
-    self.importFaces()
+    if(importLines):
+      self.importLines()
+    else:
+      self.lines= {}
+    if(importSurfaces):
+      self.importFaces()
+    else:
+      self.facesByLayer= {}
     
   def getIndexNearestPoint(self, pt):
     return cdist([pt], self.kPoints).argmin()
