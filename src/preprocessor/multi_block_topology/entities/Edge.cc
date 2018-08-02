@@ -392,7 +392,7 @@ std::set<const XC::Edge *> XC::Edge::getHomologousSides(const std::set<const XC:
             const Edge *h= (*i)->get_lado_homologo(this);
             if(h!=this)
               {
-                std::set<const XC::Edge *>::const_iterator k= lh.find(h);
+                std::set<const Edge *>::const_iterator k= lh.find(h);
                 if(k==lh.end()) //Not already added
                   new_adyacentes.insert(h);
               }
@@ -402,10 +402,10 @@ std::set<const XC::Edge *> XC::Edge::getHomologousSides(const std::set<const XC:
       retval.insert(*i);
     if(retval.size()>lh.size()) //There are new edges.
       {
-        for(std::set<const XC::Edge *>::const_iterator i= new_adyacentes.begin();i!=new_adyacentes.end();i++)
+        for(std::set<const Edge *>::const_iterator i= new_adyacentes.begin();i!=new_adyacentes.end();i++)
           {
-            std::set<const XC::Edge *> tmp= (*i)->getHomologousSides(retval);
-            for(std::set<const XC::Edge *>::const_iterator j= tmp.begin();j!=tmp.end();j++)
+            std::set<const Edge *> tmp= (*i)->getHomologousSides(retval); //Recursive call
+            for(std::set<const Edge *>::const_iterator j= tmp.begin();j!=tmp.end();j++)
               if(this!=*j) retval.insert(*j);
           }
         new_adyacentes.erase(new_adyacentes.begin(),new_adyacentes.end());

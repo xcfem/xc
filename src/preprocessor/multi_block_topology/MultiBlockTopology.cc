@@ -132,11 +132,11 @@ void XC::MultiBlockTopology::conciliaNDivs(void)
         while(!tmp_edges.empty())
           {
             const Edge *lado= *tmp_edges.begin();
-	    std::set<const XC::Edge *> homologos;
-            homologos= lado->getHomologousSides(homologos);
-            homologos.insert(lado);
-            const size_t nd= calcula_ndiv_lados(homologos);
-            for(std::set<const Edge *>::const_iterator i= homologos.begin();i!=homologos.end();i++)
+	    std::set<const XC::Edge *> homologous;
+            homologous= lado->getHomologousSides(homologous);
+            homologous.insert(lado);
+            const size_t nd= calcula_ndiv_lados(homologous);
+            for(std::set<const Edge *>::const_iterator i= homologous.begin();i!=homologous.end();i++)
               {
                 Edge *tmp= const_cast<Edge *>(*i);
                 tmp->SetNDiv(nd);
