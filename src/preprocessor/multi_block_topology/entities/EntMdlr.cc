@@ -447,6 +447,7 @@ Pos3d XC::EntMdlr::getCentroid(void) const
     Pos3d retval;
     std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not implemented." << std::endl;
+    return retval;
   }
 //! @brief Destructor.
 XC::EntMdlr::~EntMdlr(void)
