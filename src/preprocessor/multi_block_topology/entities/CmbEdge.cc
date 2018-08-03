@@ -750,15 +750,19 @@ BND3d XC::CmbEdge::Bnd(void) const
 	          << "; polyline empty." << std::endl;
         return retval;
       }
-    if(nv<2)
+    else
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; the polyline has only a point." << std::endl;
         retval= BND3d(getVertex(1)->GetPos(),getVertex(1)->GetPos());
-        return retval;
+	if(nv<2)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; the polyline has only a point." << std::endl;
+	  }
+	else
+	  {
+  	    for(size_t i=2;i<=nv;i++)
+	      retval+= getVertex(i)->GetPos();
+	  }
       }
-    retval= BND3d(getVertex(1)->GetPos(),getVertex(2)->GetPos());
-    for(size_t i=3;i<=nv;i++)
-      retval+= getVertex(i)->GetPos();
     return retval;
   }

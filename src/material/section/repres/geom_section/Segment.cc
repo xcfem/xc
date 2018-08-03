@@ -102,8 +102,16 @@ void XC::Segment::SetVertice(const size_t &i,Spot *p)
 BND2d XC::Segment::Bnd(void) const
   {
     BND2d retval;
-    if(p1) retval+= p1->GetPos();
-    if(p2) retval+= p2->GetPos();
+    if(p1 && p2)
+      {
+        retval= BND2d(p1->GetPos(),p1->GetPos());
+	retval+= p2->GetPos();
+      }
+    else
+      {
+        if(p1) retval= BND2d(p1->GetPos(),p1->GetPos());
+        if(p2) retval= BND2d(p2->GetPos(),p2->GetPos());
+      }
     return retval;
   }
 

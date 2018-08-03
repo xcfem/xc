@@ -154,11 +154,19 @@ template <class T>
 BND3d DqPtrsEntities<T>::Bnd(void) const
   {
     BND3d retval;
-    for(const_iterator i= this->begin();i!= this->end();i++)
+    if(!this->empty())
       {
+	const_iterator i= this->begin();
         const T *t= (*i);
         assert(t);
-	retval+= t->Bnd();
+        retval= t->Bnd();
+	i++;
+	for(;i!= this->end();i++)
+	  {
+	    const T *t= (*i);
+	    assert(t);
+	    retval+= t->Bnd();
+	  }
       }
     return retval;
   }

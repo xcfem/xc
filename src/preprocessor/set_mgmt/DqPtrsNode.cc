@@ -217,11 +217,19 @@ XC::DqPtrsNode XC::DqPtrsNode::pickNodesInside(const GeomObj3d &geomObj, const d
 BND3d XC::DqPtrsNode::Bnd(const double &factor= 1.0) const
   {
     BND3d retval;
-    for(const_iterator i= begin();i!=end();i++)
+    if(!empty())
       {
-        const Node *n= (*i);
-        assert(n);
-	retval+= n->getCurrentPosition3d(factor);
+	const_iterator i= begin();
+	const Node *n= (*i);
+	const Pos3d p= n->getCurrentPosition3d(factor);
+	retval= BND3d(p,p);
+	i++;
+	for(;i!=end();i++)
+	  {
+	    const Node *n= (*i);
+	    assert(n);
+	    retval+= n->getCurrentPosition3d(factor);
+	  }
       }
     return retval;    
   }

@@ -212,18 +212,21 @@ BND3d XC::Body::Bnd(void) const
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; body is empty." << std::endl;
-        return retval;
       }
-    if(nv<2)
+    else
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; body has only one point." << std::endl;
         retval= BND3d(getVertex(1)->GetPos(),getVertex(1)->GetPos());
-        return retval;
+	if(nv<2)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; body has only one point." << std::endl;
+	  }
+	else
+	  {
+	    for(size_t i=2;i<=nv;i++)
+	      retval+= getVertex(i)->GetPos();
+	  }
       }
-    retval= BND3d(getVertex(1)->GetPos(),getVertex(2)->GetPos());
-    for(size_t i=3;i<=nv;i++)
-      retval+= getVertex(i)->GetPos();
     return retval;
   }
 

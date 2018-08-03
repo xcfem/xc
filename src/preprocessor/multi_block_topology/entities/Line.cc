@@ -167,8 +167,16 @@ XC::Edge *XC::Line::splitAtCooNatural(const double &chi)
 BND3d XC::Line::Bnd(void) const
   {
     BND3d retval;
-    if(p1) retval+= p1->GetPos();
-    if(p2) retval+= p2->GetPos();
+    if(check_points())
+      {
+        retval= BND3d(p1->GetPos(),p1->GetPos());
+	retval+= p2->GetPos();
+      }
+    else
+      {
+        if(p1) retval+= BND3d(p1->GetPos(),p1->GetPos());
+        if(p2) retval+= BND3d(p2->GetPos(),p2->GetPos());
+      }
     return retval;
   }
 
