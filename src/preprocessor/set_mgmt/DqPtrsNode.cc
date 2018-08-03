@@ -30,6 +30,7 @@
 #include "preprocessor/multi_block_topology/trf/TrfGeom.h"
 #include "xc_basic/src/funciones/algebra/ExprAlgebra.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
+#include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
 
 //! @brief Constructor.
@@ -218,11 +219,33 @@ BND3d XC::DqPtrsNode::Bnd(const double &factor= 1.0) const
     BND3d retval;
     for(const_iterator i= begin();i!=end();i++)
       {
-        Node *n= (*i);
+        const Node *n= (*i);
         assert(n);
 	retval+= n->getCurrentPosition3d(factor);
       }
     return retval;    
+  }
+
+//! @brief Returns the centroid of the nodes.
+//!
+//! @param factor: scale factor for the current position
+//!                initPos+ factor * nodDisplacement.
+Pos3d XC::DqPtrsNode::getCentroid(const double &factor= 1.0) const
+  {
+    Pos3d retval;
+    if(!empty())
+      {
+	const size_t sz= size();
+        Vector3d vectorPos;
+	for(const_iterator i= begin();i!=end();i++)
+	  {
+	    const Node *n= (*i);
+	    assert(n);
+	    vectorPos+= n->getCurrentPosition3d(factor).VectorPos();
+	  }
+        retval+= (vectorPos*1/sz);
+      }
+    return retval;
   }
 
 //! @brief Return the union of both containers.

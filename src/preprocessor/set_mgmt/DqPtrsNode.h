@@ -66,6 +66,7 @@ class DqPtrsNode: public DqPtrsKDTree<Node,KDTreeNodes>
     std::set<int> getTags(void) const;
     DqPtrsNode pickNodesInside(const GeomObj3d &, const double &tol= 0.0);
     BND3d Bnd(const double &) const;
+    Pos3d getCentroid(const double &) const;
 
     Node *findNode(const int &tag);
     const Node *findNode(const int &tag) const;
