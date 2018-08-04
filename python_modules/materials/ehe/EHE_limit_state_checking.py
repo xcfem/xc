@@ -1255,13 +1255,13 @@ class TorsionParameters(object):
   def A(self):
     return self.crossSectionContour.getArea()
   def u(self):
-    return self.crossSectionContour.getPerimetro()
+    return self.crossSectionContour.getPerimeter()
   def he(self):
     return max(2*self.c,min(self.A()/self.u(),self.h0))
   def Ae(self):
     return self.lineaMedia.getArea()
   def ue(self):
-    return self.lineaMedia.getPerimetro()
+    return self.lineaMedia.getPerimeter()
 
 def computeEffectiveHollowSectionParameters(sectionGeometry, h0, c):
   '''Computes the parameter for torsion analysis of an

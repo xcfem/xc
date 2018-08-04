@@ -29,7 +29,7 @@ class_<ElemWithMaterial4N_Mech2D, bases<XC::ElementBase<4> >, boost::noncopyable
    ;
 
 class_<PlaneElement4N_Mech2D, bases<ElemWithMaterial4N_Mech2D>, boost::noncopyable >("PlaneElement4N_Mech2D", no_init)
-  .def("getPerimeter", &PlaneElement4N_Mech2D::getPerimetro, "Returns element's perimeter.")
+  .def("getPerimeter", &PlaneElement4N_Mech2D::getPerimeter, "Returns element's perimeter.")
   .def("getArea", &PlaneElement4N_Mech2D::getArea, "getArea(initialGeometry): return element's area. If initialGeometry is True the returned area corresponds to its undeformed geometry.")
    ;
 
@@ -44,7 +44,7 @@ class_<ElemWithMaterial3N_Mech2D, bases<XC::ElementBase<3> >, boost::noncopyable
    ;
 
 class_<PlaneElement3N_Mech2D, bases<ElemWithMaterial3N_Mech2D>, boost::noncopyable >("PlaneElement3N_Mech2D", no_init)
-  .def("getPerimeter", &PlaneElement3N_Mech2D::getPerimetro, "Returns element's perimeter.")
+  .def("getPerimeter", &PlaneElement3N_Mech2D::getPerimeter, "Returns element's perimeter.")
   .def("getArea", &PlaneElement3N_Mech2D::getArea, "getArea(initialGeometry): return element's area. If initialGeometry is True the returned area corresponds to its undeformed geometry.")
    ;
 
@@ -59,7 +59,7 @@ class_<ElemWithMaterial4N_SFD, bases<XC::ElementBase<4> >, boost::noncopyable >(
    ;
 
 class_<PlaneElement4N_SFD, bases<ElemWithMaterial4N_SFD>, boost::noncopyable >("PlaneElement4N_SFD", no_init)
-  .def("getPerimeter", &PlaneElement4N_SFD::getPerimetro, "Returns element's perimeter.")
+  .def("getPerimeter", &PlaneElement4N_SFD::getPerimeter, "Returns element's perimeter.")
   .def("getArea", &PlaneElement4N_SFD::getArea, "getArea(initialGeometry): return element's area. If initialGeometry is True the returned area corresponds to its undeformed geometry.")
    ;
 

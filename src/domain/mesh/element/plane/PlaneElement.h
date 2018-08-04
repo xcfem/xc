@@ -57,7 +57,7 @@ class PlaneElement : public ElemWithMaterial<NNODES, PhysProp>
     virtual Polygon3d getPolygon(bool initialGeometry= true) const;
     virtual Segment3d getSide(const size_t &i,bool initialGeometry= true) const;
     Pos3d getCenterOfMassPosition(bool initialGeometry= true) const;
-    double getPerimetro(bool initialGeometry= true) const;
+    double getPerimeter(bool initialGeometry= true) const;
     double getArea(bool initialGeometry= true) const;
     virtual void computeTributaryAreas(bool initialGeometry= true) const;
     double getTributaryArea(const Node *) const;
@@ -124,8 +124,8 @@ size_t XC::PlaneElement<NNODES, PhysProp>::getDimension(void) const
 
 //! @brief Returns the perimeter of the element.
 template <int NNODES,class PhysProp>
-double XC::PlaneElement<NNODES, PhysProp>::getPerimetro(bool initialGeometry) const
-  { return getPolygon(initialGeometry).Perimetro(); }
+double XC::PlaneElement<NNODES, PhysProp>::getPerimeter(bool initialGeometry) const
+  { return getPolygon(initialGeometry).getPerimeter(); }
 
 //! @brief Returns element area.
 //!

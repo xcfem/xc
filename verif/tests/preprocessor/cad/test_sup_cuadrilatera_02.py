@@ -113,7 +113,7 @@ perim= 0.0
 eIter= mesh.getElementIter
 elem= eIter.next()
 while not(elem is None):
-#  print elem.tag," nod. I: ",elem.getNodes[0].tag," nod. J: ",elem.getNodes[1].tag," nod. K: ",elem.getNodes[2].tag," nod. L: ",elem.getNodes[3].tag," L= ",elem.getPerimetro()
+#  print elem.tag," nod. I: ",elem.getNodes[0].tag," nod. J: ",elem.getNodes[1].tag," nod. K: ",elem.getNodes[2].tag," nod. L: ",elem.getNodes[3].tag," L= ",elem.getPerimeter()
   perim+= elem.getPerimeter(True)
   elem= eIter.next()
 
