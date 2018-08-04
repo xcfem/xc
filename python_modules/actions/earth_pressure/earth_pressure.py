@@ -20,6 +20,7 @@ import xc_base
 import geom
 import xc
 from miscUtils import LogMessages as lmsg
+from geotechnics import mononobe_okabe
 
 class PressureModelBase(object):
     '''Basse class for objects defining earth pressures.'''
@@ -55,22 +56,29 @@ class PressureModelBase(object):
               if(presElem!=0.0):
                   e.vector2dUniformLoadGlobal(loadVector)
 
+class EarthPressureBase(PressureModelBase):
+    '''Parameters to define a load of type earth pressure
 
-class EarthPressureModel(PressureModelBase):
+      :ivar zGround:   global Z coordinate of ground level
+      :ivar gammaSoil: weight density of soil 
+    '''
+    def __init__(self, zGround, gammaSoil):
+        super(EarthPressureBase,self).__init__()
+        self.zGround= zGround
+        self.gammaSoil= gammaSoil
+
+
+class EarthPressureModel(EarthPressureBase):
     '''Parameters to define a load of type earth pressure
 
       :ivar K:         coefficient of pressure
-      :ivar zGround:   global Z coordinate of ground level
-      :ivar gammaSoil: weight density of soil 
       :ivar zWater:    global Z coordinate of groundwater level 
                        (if zGroundwater<minimum z of model => there is no groundwater)
       :ivar gammaWater: weight density of water
     '''
     def __init__(self,K , zGround, gammaSoil, zWater, gammaWater):
-        super(EarthPressureModel,self).__init__()
+        super(EarthPressureModel,self).__init__(zGround, gammaSoil)
         self.K= K
-        self.zGround= zGround
-        self.gammaSoil= gammaSoil
         self.zWater= zWater
         self.gammaWater= gammaWater
 
@@ -271,3 +279,40 @@ class HorizontalLoadOnBackfill(PressureModelBase):
 
                                                   
                                                   
+class MononobeOkabePressureDistribution(EarthPressureBase):
+    '''Overpressure due to seismic action according to Mononobe-Okabe
+
+      :ivar H: height of the structure.
+      :ivar kv: seismic coefficient of vertical acceleration.
+      :ivar kh: seismic coefficient of horizontal acceleration.
+      :ivar psi: back face inclination of the structure (< PI/2)
+      :ivar phi: angle of internal friction of soil.
+      :ivar delta_ad: angle of friction soil - structure.
+      :ivar beta: slope inclination of backfill.
+      :ivar Kas: static earth pressure coefficient 
+    '''
+    def __init__(self,zGround, gamma_soil, H, kv, kh, psi, phi, delta_ad, beta, Kas):
+        super(MononobeOkabePressureDistribution,self).__init__(zGround, gamma_soil)
+        self.H= H
+        self.kv= kv
+        self.kh= kh
+        self.psi= psi
+        self.phi= phi
+        self.delta_ad= delta_ad
+        self.beta= beta
+        self.Kas= Kas
+        self.update()
+        
+    def update(self):
+        self.overpressure_dry= mononobe_okabe.overpressure_dry(self.H, self.gammaSoil, self.kv, self.kh, self.psi, self.phi, self.delta_ad, self.beta, self.Kas)
+        self.max_stress= 2*self.overpressure_dry/self.H
+    def getPressure(self,z):
+        '''Return the earth pressure acting on the points at global coordinate z
+        '''
+        zSup= self.zGround
+        zInf= self.zGround-self.H
+        retval= 0.0
+        if((z>=zInf) and (z<=zSup)):
+            retval= (z-zInf)/(zSup-zInf)*self.max_stress
+        return retval
+
