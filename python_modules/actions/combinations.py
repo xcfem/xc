@@ -20,16 +20,30 @@ class CombinationRecord(object):
   def createCombination(self,xcCombHandler):
     '''Create combination and insert it into the XC combination handler.'''
     xcCombHandler.newLoadCombination(self.name,self.expr)
-  def getRecordLoadCaseDisp(self,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
+  def getRecordLoadCaseDisp(self,setsToDispLoads,setsToDispDspRot,setsToDispIntForc, unitsScaleForc= 1e-3, unitsScaleMom= 1e-3, unitsScaleDisp= 1e3, unitsDispl= '[mm]'):
     '''Return a suitable RecordLoadCaseDisp for the combination.
 
-    :ivar setsToDispLoads: ordered list of sets of elements to display loads.
-    :ivar setsToDispDspRot: ordered list of sets of elements to display 
+    :param setsToDispLoads: ordered list of sets of elements to display loads.
+    :param setsToDispDspRot: ordered list of sets of elements to display 
                             displacements. 
-    :ivar setsToDispIntForc: ordered list of sets of elements to display 
+    :param setsToDispIntForc: ordered list of sets of elements to display 
                              internal forces.
+    :param unitsScaleForc: factor to apply to internal forces if we want to 
+                           change the units (defaults to 1e-3).
+    :param unitsScaleMom: factor to apply to internal moments if we want to
+                          change the units (defaults to 1e-3).
+    :param unitsScaleDispl: factor to apply to displacements if we want to 
+                            change the units (defaults to 1e3).
+    :param unitsDispl: text to especify the units in which displacements are 
+                       represented (defaults to '[mm]'
     '''
-    return graphical_reports.RecordLoadCaseDisp(self.name,self.expr,self.expr,setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
+    retval= graphical_reports.RecordLoadCaseDisp(self.name,self.expr,self.expr,setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
+    retval.unitsScaleForc= unitsScaleForc
+    retval.unitsScaleMom= unitsScaleMom
+    retval.unitsScaleDispl= unitsScaleDisp
+    retval.unitsDispl= unitsDispl    
+    return retval
+    
 
 class SituationCombs(dict):
   '''Combinations for a situation (frequent, rare, persistent,...).'''
@@ -54,10 +68,10 @@ class SituationCombs(dict):
   def getRecordLoadCaseDisp(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
     '''Returns a suitable RecordLoadCaseDisp for the combination.
 
-    :ivar setsToDispLoads: ordered list of sets of elements to display loads.
-    :ivar setsToDispDspRot: ordered list of sets of elements to display 
+    :param setsToDispLoads: ordered list of sets of elements to display loads.
+    :param setsToDispDspRot: ordered list of sets of elements to display 
                             displacements. 
-    :ivar setsToDispIntForc: ordered list of sets of elements to display 
+    :param setsToDispIntForc: ordered list of sets of elements to display 
                              internal forces.
     '''
     comb= self[combName]
@@ -85,10 +99,10 @@ class SituationsSet(object):
   def getRecordLoadCaseDisp(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
     '''Returns a suitable RecordLoadCaseDisp for the combination.
 
-    :ivar setsToDispLoads: ordered list of sets of elements to display loads.
-    :ivar setsToDispDspRot: ordered list of sets of elements to display 
+    :param setsToDispLoads: ordered list of sets of elements to display loads.
+    :param setsToDispDspRot: ordered list of sets of elements to display 
                             displacements. 
-    :ivar setsToDispIntForc: ordered list of sets of elements to display 
+    :param setsToDispIntForc: ordered list of sets of elements to display 
                              internal forces.
     '''
     for s in self.situations:
@@ -171,10 +185,10 @@ class CombContainer(object):
   def getRecordLoadCaseDisp(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
     '''Returns a suitable RecordLoadCaseDisp for the combination.
 
-    :ivar setsToDispLoads: ordered list of sets of elements to display loads.
-    :ivar setsToDispDspRot: ordered list of sets of elements to display 
+    :param setsToDispLoads: ordered list of sets of elements to display loads.
+    :param setsToDispDspRot: ordered list of sets of elements to display 
                             displacements. 
-    :ivar setsToDispIntForc: ordered list of sets of elements to display 
+    :param setsToDispIntForc: ordered list of sets of elements to display 
                              internal forces.
     '''
     retval= self.SLS.getRecordLoadCaseDisp(combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
