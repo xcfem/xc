@@ -35,6 +35,7 @@
 
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
+#include "xc_utils/src/geom/d3/BND3d.h"
 
 #include "xc_utils/src/geom/d2/Plane.h"
 #include "xc_utils/src/geom/d3/HalfSpace3d.h"
@@ -361,6 +362,27 @@ std::list<Pos3d> XC::NodePtrs::getPositions(bool initialGeometry) const
     for(size_t i=0;i<sz;i++)
       retval.push_back(getPosNode(i,initialGeometry));
     return retval;
+  }
+
+//! @brief Returns the boundary of the nodes.
+BND3d XC::NodePtrs::Bnd(const double &factor) const
+  {
+    BND3d retval;
+    if(!empty())
+      {
+	const_iterator i= begin();
+	const Node *n= (*i);
+	const Pos3d p= n->getCurrentPosition3d(factor);
+	retval= BND3d(p,p);
+	i++;
+	for(;i!=end();i++)
+	  {
+	    const Node *n= (*i);
+	    assert(n);
+	    retval+= n->getCurrentPosition3d(factor);
+	  }
+      }
+    return retval;    
   }
 
 //! @brief Returns the centroid of the node positions.

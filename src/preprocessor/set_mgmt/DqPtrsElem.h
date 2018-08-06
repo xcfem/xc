@@ -35,6 +35,7 @@
 
 class Polyline3d;
 class GeomObj3d;
+class BND3d;
 
 namespace XC {
 class TrfGeom;
@@ -64,6 +65,7 @@ class DqPtrsElem: public DqPtrsKDTree<Element,KDTreeElements>
 
     Element *findElement(const int &);
     const Element *findElement(const int &) const;
+    BND3d Bnd(const double &) const;    
     std::deque<Polyline3d> getContours(const double &factor= 0.0) const;
     DqPtrsElem pickElemsInside(const GeomObj3d &, const double &tol= 0.0);
     std::set<std::string> getMaterialNames(void) const;

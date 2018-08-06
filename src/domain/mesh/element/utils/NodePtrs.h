@@ -37,6 +37,7 @@ class HalfSpace3d;
 class Plane;
 class GeomObj2d;
 class GeomObj3d;
+class BND3d;
 
 
 namespace XC {
@@ -94,6 +95,7 @@ class NodePtrs: public EntCmd, public std::vector<Node *>
     std::vector<int> getIdx(void) const;
     bool checkDimension(const size_t &dim) const;
     size_t getDimension(void) const;
+    BND3d Bnd(const double &) const;    
     const Matrix &getCoordinates(void) const;
     Pos3d getPosNode(const size_t &i,bool initialGeometry= true) const;
     std::list<Pos3d> getPositions(bool initialGeometry= true) const;

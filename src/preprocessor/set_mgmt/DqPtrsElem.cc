@@ -27,11 +27,13 @@
 
 #include "DqPtrsElem.h"
 #include "domain/mesh/element/Element.h"
+#include "domain/mesh/element/utils/NodePtrsWithIDs.h"
 #include "preprocessor/multi_block_topology/trf/TrfGeom.h"
 #include "xc_utils/src/geom/d1/Polyline3d.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/MeshEdges.h"
 #include <boost/algorithm/string/find.hpp>
+#include "xc_utils/src/geom/d3/BND3d.h"
 
 //! @brief Constructor.
 XC::DqPtrsElem::DqPtrsElem(EntCmd *owr)
@@ -183,6 +185,26 @@ std::set<int> XC::DqPtrsElem::getTags(void) const
     std::set<int> retval;
     for(const_iterator i= begin();i!=end();i++)
       retval.insert((*i)->getTag());
+    return retval;
+  }
+
+//! @brief Returns the boundary of the element set.
+BND3d XC::DqPtrsElem::Bnd(const double &factor) const
+  {
+    const Element *elem= nullptr;
+    BND3d retval;
+    if(!empty())
+      {
+	const_iterator i= begin();
+        elem= *i;
+	retval= elem->getNodePtrs().Bnd(factor);
+	i++;
+	for(;i!=end();i++)
+	  {
+	    elem= *i;
+	    retval+= elem->getNodePtrs().Bnd(factor);
+	  }
+      }
     return retval;
   }
 
