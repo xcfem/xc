@@ -27,6 +27,8 @@ class LUTField(object):
   :ivar actor:      used to represent an entity in a rendering scene. The actor has position, 
                 orientation, scaling, a reference to the defining geometry, rendering 
                 properties and possibly a texture map.
+  :ivar valMin: minimum value of the diagram.
+  :ivar valMax: maximum value of the diagram.
   '''
   def __init__(self,fUnitConv):
     self.initializeMinMax()
@@ -64,7 +66,6 @@ class LUTField(object):
     self.lookUpTable= vtk.vtkLookupTable()
     self.lookUpTable.SetNumberOfTableValues(1024)
     self.lookUpTable.SetHueRange(0.667,0)
-    # self.lookUpTable.SetTableRange(self.valMin,self.valMax)
     self.lookUpTable.Build()
 
 
