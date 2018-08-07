@@ -35,7 +35,7 @@
 
 #include "xc_basic/src/text/text_string.h"
 #include "xc_utils/src/geom/d1/Segment2d.h"
-#include "xc_utils/src/geom/d2/Rejilla2d.h"
+#include "xc_utils/src/geom/d2/Grid2d.h"
 #include "xc_utils/src/geom/d2/2d_polygons/Cuadrilatero2d.h"
 #include <utility/matrix/Matrix.h>
 
@@ -198,8 +198,8 @@ void XC::QuadSectRegion::setVertCoords(const XC::Matrix &vertexCoords)
 const XC::Matrix &XC::QuadSectRegion::getVertCoords(void) const
   { return vertCoord; }
 
-const Rejilla2d &XC::QuadSectRegion::getMesh(void) const
-  { return alloc(Rejilla2d(getQuad().genBilinMesh(nDivIJ,nDivJK))); }
+const Grid2d &XC::QuadSectRegion::getMesh(void) const
+  { return alloc(Grid2d(getQuad().genBilinMesh(nDivIJ,nDivJK))); }
 
 const XC::VectorCells &XC::QuadSectRegion::getCells(void) const
   {

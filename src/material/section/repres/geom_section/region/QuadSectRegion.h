@@ -67,7 +67,7 @@ class QuadSectRegion: public QuadCellRegion
     int setTileSizeJK(const double &size);
     int setTileSize(const double &sizeIJ, const double &sizeJK);
     
-    const Rejilla2d &getMesh(void) const;
+    const Grid2d &getMesh(void) const;
     const VectorCells &getCells(void) const;
     SectRegion *getCopy(void) const;
 

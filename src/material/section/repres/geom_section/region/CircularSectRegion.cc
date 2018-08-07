@@ -36,7 +36,7 @@
 #include "xc_basic/src/text/text_string.h"
 #include "xc_utils/src/geom/d2/2d_polygons/Polygon2d.h"
 #include "xc_utils/src/geom/d2/AnnulusSector2d.h"
-#include "xc_utils/src/geom/d2/Rejilla2d.h"
+#include "xc_utils/src/geom/d2/Grid2d.h"
 
 const int I= 0, J=1, K= 2, L= 3; //Index of vertices.
 const int Y= 0, Z=1; //Index of Y and Z components.
@@ -111,22 +111,26 @@ const XC::Matrix &XC::CircularSectRegion::getVertCoords(void) const
 
 double XC::CircularSectRegion::getMaxY(void) const
   {
-    std::cerr << "CircularSectRegion::getMaxY not implemented." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
     return 0.0;
   }
 double XC::CircularSectRegion::getMaxZ(void) const
   {
-    std::cerr << "CircularSectRegion::getMaxZ not implemented." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
     return 0.0;
   }
 double XC::CircularSectRegion::getMinY(void) const
   {
-    std::cerr << "CircularSectRegion::getMinY not implemented." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
     return 0.0;
   }
 double XC::CircularSectRegion::getMinZ(void) const
   {
-    std::cerr << "CircularSectRegion::getMinZ not implemented." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
     return 0.0;
   }
 
@@ -148,8 +152,8 @@ AnnulusSector2d &XC::CircularSectRegion::getSector(void) const
   }
 
 //! @brief Return the discretization grid.
-const Rejilla2d &XC::CircularSectRegion::getMesh(void) const
-  { return alloc(Rejilla2d(getSector().genMesh(nDivRad(),nDivCirc()))); }
+const Grid2d &XC::CircularSectRegion::getMesh(void) const
+  { return alloc(Grid2d(getSector().genMesh(nDivRad(),nDivCirc()))); }
 
 const XC::VectorCells &XC::CircularSectRegion::getCells(void) const
   {
@@ -168,7 +172,7 @@ const XC::VectorCells &XC::CircularSectRegion::getCells(void) const
               {
                 cellVertCoord= getCellVertCoords(i,j);   //centerPosit(0) + rad_j  * cosTh1;
                 cells.put(k,QuadCell(cellVertCoord)); 
-                //std::cerr << "\ncreating cells XC::Cell " << k << " :" << cells[k];
+                //std::cerr << getClassName() << "::" << __FUNCTION__ << "\ncreating cells XC::Cell " << k << " :" << cells[k];
                 k++; 
               }
            }

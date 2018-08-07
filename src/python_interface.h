@@ -38,7 +38,7 @@
 #include "utility/actor/objectBroker/all_includes.h"
 #include "xc_utils/src/geom/d1/Line2d.h"
 #include "xc_utils/src/geom/d2/HalfPlane2d.h"
-#include "xc_utils/src/geom/d2/Rejilla2d.h"
+#include "xc_utils/src/geom/d2/Grid2d.h"
 #include "xc_utils/src/geom/d2/BND2d.h"
 #include "xc_utils/src/geom/d2/2d_polygons/Cuadrilatero2d.h"
 #include "xc_utils/src/geom/d1/Segment2d.h"

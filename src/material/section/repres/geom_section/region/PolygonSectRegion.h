@@ -50,7 +50,7 @@ class PolygonSectRegion: public QuadCellRegion
     PolygonSectRegion(Material *);
     PolygonSectRegion(Material *, int numSubdivIJ, int numSubdivJK, const Polygon2d &);
     
-    const Rejilla2d &getMesh(void) const;
+    const Grid2d &getMesh(void) const;
     const VectorCells &getCells(void) const;
     SectRegion *getCopy(void) const;
 
