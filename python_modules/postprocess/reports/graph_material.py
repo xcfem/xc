@@ -48,6 +48,8 @@ class MPLGraphic(object):
 
   def show(self):
     plt.show()
+  def close(self):
+    plt.close()
   def savefig(self,fileName):
     self.fig.savefig(fileName)
 
