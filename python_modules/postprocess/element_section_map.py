@@ -13,6 +13,7 @@ class ElementSectionMap(dict):
      for each element number. This way it defines
      a spatial distribution of the sections over
      the structure.'''
+  propName= 'sectionName'
   def assign(self,elemSet,setRCSects):
     '''Assigns the sections names: setRCSectsName+'1', setRCSectsName+'2', ...
        to the elements of the set.
@@ -21,17 +22,17 @@ class ElementSectionMap(dict):
        :param setRCSects: RC section definition, name, concrete type,
                           rebar positions,...
     '''
-    propName= 'sectionName'
     for e in elemSet:
-      if(not e.hasProp(propName)):
+      if(not e.hasProp(self.propName)):
         self[e.tag]=[]
         for i in range(len(setRCSects.lstRCSects)):
           sname=setRCSects.name+str(i+1)
           self[e.tag].append(sname)
-        e.setProp(propName,setRCSects.name)
+        e.setProp(self.propName,setRCSects.name)
       else:
-        lmsg.error("element: "+ str(e.tag) + " has already a section ("+e.getProp(propName)+")\n")
+        lmsg.error("element: "+ str(e.tag) + " has already a section ("+e.getProp(self.propName)+")\n")
 
 def loadElementSectionMap():
   lmsg.error('loadElementSectionMap DEPRECATED use loadRCMaterialDistribution' )
+
 
