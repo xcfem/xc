@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-
 from __future__ import division
+
 '''Providing the user with a quick and easy way to 
    display results (internal forces, displacements) of an user-defined
    load case.'''
@@ -263,7 +263,7 @@ class QuickGraphics(object):
       defDisplay.defineMeshScene(None,defFScale,color=self.xcSet.color)
       orNodalLBar='H'  #default orientation of scale bar for nodal loads
       # element loads
-      print 'scale=',elLoadScaleF,'fUnitConv=',fUnitConv,'loadPatternName=',loadCaseName,'component=',elLoadComp
+#      print 'scale=',elLoadScaleF,'fUnitConv=',fUnitConv,'loadPatternName=',loadCaseName,'component=',elLoadComp
       diagram= lld.LinearLoadDiagram(scale=elLoadScaleF,fUnitConv=fUnitConv,loadPatternName=loadCaseName,component=elLoadComp)
       diagram.addDiagram(preprocessor)
       if (diagram.valMax > -1e+99) or (diagram.valMin<1e+99):
@@ -447,6 +447,8 @@ def displayLoad(preprocessor,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vect
         setToDisplay.fillDownwards()
         lmsg.warning('set to display not defined; using total set.')
 
+    LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulo() #representative length of set size (to autoscale)
+    vectorScale*=LrefModSize/10.
     if setToDisplay.color.Norm()==0:
         setToDisplay.color=xc.Vector([rd.random(),rd.random(),rd.random()])
     defDisplay= vtk_FE_graphic.RecordDefDisplayEF()

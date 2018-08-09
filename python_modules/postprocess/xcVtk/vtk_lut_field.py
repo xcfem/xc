@@ -55,7 +55,7 @@ class LUTField(object):
        will be replaced by the real ones.''' 
     self.valMin= value #Extremely BIG (yes BIG) positive value.
     self.valMax= -self.valMin #Extremely BIG negative value.
-
+ 
   def creaLookUpTable(self):
     ''' Creates a  lookUpTable, that is an object used by mapper objects 
     to map scalar values into rga (red-green-blue-alpha transparency) color 

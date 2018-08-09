@@ -18,6 +18,7 @@ class LoadCase(object):
     :ivar timeSType: type of Time Series. Available time series:
           "constant_ts","linear_ts","path_ts","pulse_ts","rectangular_ts","triangular_ts","trig_ts". Defaults to "constant_ts"
     :ivar timeSName: name of the Time Serie
+    :ivar lstOfLoadDef: list of load definitions added to the load case
     '''
     def __init__(self,preprocessor,name,loadPType="default",timeSType="constant_ts"):
         self.preprocessor=preprocessor
@@ -25,6 +26,7 @@ class LoadCase(object):
         self.loadPType=loadPType
         self.timeSType=timeSType
         self.timeSName=self.name+'TS'
+        self.lstOfLoadDef=[]
 
     def create(self):
         '''Create the load case and set it as current
@@ -39,6 +41,7 @@ class LoadCase(object):
     def addLstLoads(self,lstLoads):
         '''list of loads to be added to the load case.
         '''
+        self.lstOfLoadDef+=lstLoads
         for ld in lstLoads:
             ld.appendLoadToCurrentLoadPattern()
 
