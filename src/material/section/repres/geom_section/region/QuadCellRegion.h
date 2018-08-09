@@ -33,7 +33,7 @@
 #include <iostream>
 #include "material/section/repres/geom_section/region/SectRegion.h" 
 
-class Rejilla2d;
+class Grid2d;
 
 namespace XC {
 
@@ -49,11 +49,11 @@ namespace XC {
 // I +---+---+---+---+ J
 class QuadCellRegion: public SectRegion
   {
-    mutable Rejilla2d *rejilla; //!< Grid points.
+    mutable Grid2d *grid; //!< Grid points.
   protected:
     int nDivIJ, nDivJK; //!< number of divisions.
     void free_mem(void) const;
-    const Rejilla2d &alloc(const Rejilla2d &) const;
+    const Grid2d &alloc(const Grid2d &) const;
 
   public:
     QuadCellRegion(Material *);
@@ -83,8 +83,8 @@ class QuadCellRegion: public SectRegion
       { return nDivJK; }
     int getNumCells(void) const;
     void getDiscretization(int &numSubdivIJ, int &numSubdivJK) const;
-    virtual const Rejilla2d &getMesh(void) const=0;
-    Vector getCenterOfMassRejilla(void) const;
+    virtual const Grid2d &getMesh(void) const=0;
+    Vector getCenterOfMassGrid(void) const;
     Vector getVertCoords(const size_t &,const size_t &) const;
     Matrix getCellVertCoords(const size_t &,const size_t &) const;
     

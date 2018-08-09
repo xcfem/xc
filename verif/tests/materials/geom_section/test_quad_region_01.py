@@ -28,8 +28,8 @@ elast.nDivIJ= n1
 elast.nDivJK= n2
 elast.pMin= geom.Pos2d(0.0,0.0)
 elast.pMax= geom.Pos2d(sideLength,sideLength)
-rejilla= elast.genGrid()
-points= rejilla.getPoints()
+grid= elast.genGrid()
+points= grid.getPoints()
 
 numQuads= points.getNumQuads()
 numPoints= points.getNumPoints()

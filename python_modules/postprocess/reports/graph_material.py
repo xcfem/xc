@@ -48,6 +48,8 @@ class MPLGraphic(object):
 
   def show(self):
     plt.show()
+  def close(self):
+    plt.close()
   def savefig(self,fileName):
     self.fig.savefig(fileName)
 
@@ -57,12 +59,21 @@ class InteractionDiagramGraphic(MPLGraphic):
     super(InteractionDiagramGraphic, self).__init__(title)
     self.decorations.xLabel= 'Mz [kN m]'
     self.decorations.yLabel= 'N [kN]'
-  def setupGraphic(self,diag):
+  def setupGraphic(self,diag, internalForces= None):
     path= self.getPathPolygon(diag)
     self.fig = plt.figure()
-    ax = self.fig.add_subplot(111)
-    patch = patches.PathPatch(path, facecolor='orange', lw=2)
+    ax= self.fig.add_subplot(111)
+    patch= patches.PathPatch(path, facecolor='orange', lw=2)
     ax.add_patch(patch)
+    if(internalForces):
+      N= internalForces[0]
+      My= internalForces[1]
+      n= []; my= []
+      for v in N:
+        n.append(v*self.fScale)
+      for v in My:
+        my.append(v*self.fScale)
+      ax.scatter(my,n, c='b', zorder= 10)
     ax.set_xlim(1.05*diag.getYMin*self.fScale,1.05*diag.getYMax*self.fScale)
     ax.set_ylim(1.05*diag.getXMin*self.fScale,1.05*diag.getXMax*self.fScale)
     if(self.decorations.title):

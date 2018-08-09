@@ -88,7 +88,7 @@ class CircularSectRegion: public QuadCellRegion
     void setAngles(double initialAngle, double finalAngle);
 
     //inquiring functions
-    const Rejilla2d &getMesh(void) const;
+    const Grid2d &getMesh(void) const;
     const VectorCells &getCells(void) const;
     SectRegion *getCopy(void) const;
 

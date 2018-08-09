@@ -497,6 +497,7 @@ BND3d XC::SetMeshComp::Bnd(const double &factor) const
       std::clog << getClassName() << "::" << __FUNCTION__
 	        << " node container empty. Call fillDownwards?"
 	        << std::endl;
+    retval+= elements.Bnd(factor);
     return retval;
   }
 

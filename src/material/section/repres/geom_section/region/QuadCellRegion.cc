@@ -29,43 +29,43 @@
 #include <material/section/repres/geom_section/region/QuadCellRegion.h> 
 
 
-#include "xc_utils/src/geom/d2/Rejilla2d.h"
+#include "xc_utils/src/geom/d2/Grid2d.h"
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 
 void XC::QuadCellRegion::free_mem(void) const
   {
-    if(rejilla) delete rejilla;
-    rejilla= nullptr;
+    if(grid) delete grid;
+    grid= nullptr;
   }
 
-const Rejilla2d &XC::QuadCellRegion::alloc(const Rejilla2d &ptos) const
+const Grid2d &XC::QuadCellRegion::alloc(const Grid2d &ptos) const
   {
     free_mem();
-    rejilla= new Rejilla2d(ptos);
-    return *rejilla;
+    grid= new Grid2d(ptos);
+    return *grid;
   }
 
 XC::QuadCellRegion::QuadCellRegion(Material *mat)
-  : SectRegion(mat), rejilla(nullptr), nDivIJ(1), nDivJK(1) {}
+  : SectRegion(mat), grid(nullptr), nDivIJ(1), nDivJK(1) {}
 
 XC::QuadCellRegion::QuadCellRegion(Material *mat, int numSubdivIJ, int numSubdivJK)
-  : SectRegion(mat), rejilla(nullptr), nDivIJ(numSubdivIJ), nDivJK(numSubdivJK) {}
+  : SectRegion(mat), grid(nullptr), nDivIJ(numSubdivIJ), nDivJK(numSubdivJK) {}
 
 //! @brief Copy constructor.
 XC::QuadCellRegion::QuadCellRegion(const QuadCellRegion &other)
-  : SectRegion(other), rejilla(nullptr), nDivIJ(other.nDivIJ), nDivJK(other.nDivJK) 
+  : SectRegion(other), grid(nullptr), nDivIJ(other.nDivIJ), nDivJK(other.nDivJK) 
   {
-    if(other.rejilla)
-      alloc(*other.rejilla);
+    if(other.grid)
+      alloc(*other.grid);
   }
 
 //! @brief Assignment operator.
 XC::QuadCellRegion &XC::QuadCellRegion::operator=(const QuadCellRegion &other)
   {
     SectRegion::operator=(other);
-    if(other.rejilla)
-      alloc(*other.rejilla);
+    if(other.grid)
+      alloc(*other.grid);
     nDivIJ= other.nDivIJ;
     nDivJK= other.nDivJK;
     return *this;
@@ -93,24 +93,24 @@ int XC::QuadCellRegion::getNumCells (void) const
   { return nDivIJ * nDivJK; }
 
 
-//! @brief Return the centro de gravedad de la rejilla.
-XC::Vector XC::QuadCellRegion::getCenterOfMassRejilla(void) const
+//! @brief Return the center of mass of the grid.
+XC::Vector XC::QuadCellRegion::getCenterOfMassGrid(void) const
   {
     Vector retval(2);
-    assert(rejilla);
-    Pos2d c= rejilla->getCenterOfMass();
+    assert(grid);
+    Pos2d c= grid->getCenterOfMass();
     retval[0]= c.x();
     retval[1]= c.y();
     return retval;
   }
 
-//! @brief Return the coordenadas of the point i,j.
+//! @brief Return the coordinates of the point i,j.
 XC::Vector XC::QuadCellRegion::getVertCoords(const size_t &i,const size_t &j) const
   {
     Vector retval(2);
-    assert(rejilla);
-    retval[0]= (*rejilla)(i,j).x();
-    retval[1]= (*rejilla)(i,j).y();
+    assert(grid);
+    retval[0]= (*grid)(i,j).x();
+    retval[1]= (*grid)(i,j).y();
     return retval;
   }
 
@@ -123,14 +123,14 @@ XC::Vector XC::QuadCellRegion::getVertCoords(const size_t &i,const size_t &j) co
 XC::Matrix XC::QuadCellRegion::getCellVertCoords(const size_t &i,const size_t &j) const
   {
     Matrix retval(4,2);
-    assert(rejilla);
-    retval(0,0)= (*rejilla)(i,j).x();
-    retval(0,1)= (*rejilla)(i,j).y();
-    retval(1,0)= (*rejilla)(i,j+1).x();
-    retval(1,1)= (*rejilla)(i,j+1).y();
-    retval(2,0)= (*rejilla)(i+1,j+1).x();
-    retval(2,1)= (*rejilla)(i+1,j+1).y();
-    retval(3,0)= (*rejilla)(i+1,j).x();
-    retval(3,1)= (*rejilla)(i+1,j).y();
+    assert(grid);
+    retval(0,0)= (*grid)(i,j).x();
+    retval(0,1)= (*grid)(i,j).y();
+    retval(1,0)= (*grid)(i,j+1).x();
+    retval(1,1)= (*grid)(i,j+1).y();
+    retval(2,0)= (*grid)(i+1,j+1).x();
+    retval(2,1)= (*grid)(i+1,j+1).y();
+    retval(3,0)= (*grid)(i+1,j).x();
+    retval(3,1)= (*grid)(i+1,j).y();
     return retval;
   }

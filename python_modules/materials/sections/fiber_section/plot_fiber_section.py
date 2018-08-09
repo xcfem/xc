@@ -50,7 +50,7 @@ def plotGeomSeccion(geomSection, path):
     ctx.set_line_width(trf.scale/300000)
     reinforcement= geomSection.getReinfLayers
     plotReinforcement(reinforcement,ctx)
-    trf.plotYZAxes(ctx)
+    trf.plotYZAxis(ctx)
     surface.set_eps(True)
     ctx.show_page()
     surface.finish()

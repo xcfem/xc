@@ -30,7 +30,7 @@
 #include <material/section/repres/cell/QuadCell.h>
 
 #include "xc_basic/src/text/text_string.h"
-#include "xc_utils/src/geom/d2/Rejilla2d.h"
+#include "xc_utils/src/geom/d2/Grid2d.h"
 #include "xc_utils/src/geom/d2/2d_polygons/Polygon2d.h"
 #include <utility/matrix/Matrix.h>
 
@@ -57,16 +57,18 @@ double XC::PolygonSectRegion::getMinZ(void) const
 Polygon2d XC::PolygonSectRegion::getPolygon(void) const
   { return plg; }
 
-const Rejilla2d &XC::PolygonSectRegion::getMesh(void) const
+const Grid2d &XC::PolygonSectRegion::getMesh(void) const
   {
-    std::cerr << "PolygonSectRegion::getMesh not implemented." << std::endl;
-    static Rejilla2d retval;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
+    static Grid2d retval;
     return retval;
   }
 
 const XC::VectorCells &XC::PolygonSectRegion::getCells(void) const
   {
-    std::cerr << "PolygonSectRegion::getCells not implemented." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
     return cells;
   }
 
