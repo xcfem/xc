@@ -97,9 +97,9 @@ void MEDTFieldInfo<T>::alloc(void) const
     const int nc= getXCFieldInfo().getNumberOfComponents();
     if(nc>0)
       {
-        MEDMEM::GROUP *grupo= getGrupoMED();
-        assert(grupo);
-        field= new MEDMEM::FIELD<T>(grupo,nc);
+        MEDMEM::GROUP *group= getMEDGroup();
+        assert(group);
+        field= new MEDMEM::FIELD<T>(group,nc);
       }
     else
       std::cerr << "El field: '" << getXCFieldInfo().getName() 
@@ -112,7 +112,7 @@ typename MEDTFieldInfo<T>::ArrayGauss *MEDTFieldInfo<T>::getArrayGauss(void) con
   {
     ArrayGauss *retval= nullptr;
     const int numberOfComponents= getXCFieldInfo().getNumberOfComponents();
-    const MEDMapNumCellsByType &cell_types= getGrupo().getMapCellTypes();
+    const MEDMapNumCellsByType &cell_types= getGroup().getMapCellTypes();
     const size_t numberOfTypes= cell_types.getNumberOfTypes();
     std::vector<int> numberOfElementsOfTypeC(numberOfTypes+1,0);
     std::vector<int> numberOfGaussPoint(numberOfTypes+1,1);
@@ -180,7 +180,7 @@ void MEDTFieldInfo<T>::setValueIJ(int i, int j,const T &value)
       std::cerr << "j index: " << j
                 << " out of range (1," << nc
                 << ").\n" << std::endl;
-    const int ne= getGrupo().getNumberOfElements();
+    const int ne= getGroup().getNumberOfElements();
     if(i>ne)
       std::cerr << "i index: " << i
                 << " out of range (1," << ne
@@ -198,7 +198,7 @@ void MEDTFieldInfo<T>::setValueIJK(int i, int j,int k,int t,const T &value)
       std::cerr << "j index: " << j
                 << " out of range (1," << nc
                 << ").\n" << std::endl;
-    const int ne= getGrupo().getNumberOfElements();
+    const int ne= getGroup().getNumberOfElements();
     if(i>ne)
       std::cerr << "i index: " << i
                 << " out of range (1," << ne

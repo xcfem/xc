@@ -35,11 +35,11 @@ XC::MEDFieldInfo::MEDFieldInfo(const FieldInfo &fi,MEDGroupInfo *grp)
   { set_owner(grp); }
 
 //! @brief Returns the group over which the field is defined.
-const XC::MEDGroupInfo &XC::MEDFieldInfo::getGrupo(void) const
+const XC::MEDGroupInfo &XC::MEDFieldInfo::getGroup(void) const
   { 
     const MEDGroupInfo *retval= dynamic_cast<const MEDGroupInfo *>(Owner());
     return *retval;
   }
 
-MEDMEM::GROUP *XC::MEDFieldInfo::getGrupoMED(void) const
-  { return getGrupo().getGrupoMED(); }
+MEDMEM::GROUP *XC::MEDFieldInfo::getMEDGroup(void) const
+  { return getGroup().getMEDGroup(); }

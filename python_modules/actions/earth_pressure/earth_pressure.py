@@ -126,6 +126,20 @@ class UniformLoadOnStem(PressureModelBase):
         '''Return the earth pressure acting on the points at global coordinate z.'''
         return self.qLoad
 
+class UniformLoadOnBackfill(UniformLoadOnStem):
+    '''Lateral earth pressure on a retaining wall due to a uniform indefinite
+       load on the backfill.
+
+    :ivar qLoad: surcharge load (force per unit area)
+    '''
+    def __init__(self,K, qLoad):
+        super(UniformLoadOnBackfill,self).__init__(qLoad)
+        self.K= K
+        
+    def getPressure(self,z):
+        '''Return the earth pressure acting on the points at global coordinate z.'''
+        return self.K*self.qLoad
+
 class StripLoadOnBackfill(UniformLoadOnStem):
     '''Lateral earth pressure on a retaining wall due to a strip surcharge 
     load on the backfill. (J.Calavera, pg.40)

@@ -73,8 +73,7 @@ const XC::MEDMapIndices &XC::MEDMeshing::getMapIndicesVertices(void) const
 const XC::MEDMapIndices &XC::MEDMeshing::getMapIndicesCeldas(void) const
   { return cells.getMapIndices(); }
 
-//! @brief Define los grupos de MEDMEM correspondientes a the sets
-//! de XC.
+//! @brief Define the MEDMEM group corresponding to the XC ones.
 void XC::MEDMeshing::defineMEDGroups(void)
   {
     for(MapSet::const_iterator i= sets.begin();i!=sets.end();i++)
@@ -119,16 +118,16 @@ XC::MEDGroupInfo *XC::MEDMeshing::getGroupInfo(const std::string &nmb) const
 XC::MEDGroupInfo *XC::MEDMeshing::getGroupInfo(const Set &set,const FieldInfo &field) const
   {
     MEDGroupInfo *retval= nullptr;
-    std::string nmb_grupo= "";
+    std::string nmb_group= "";
     if(field.isDefinedOnNodes())
-      nmb_grupo= set.getName()+str_node_group;
+      nmb_group= set.getName()+str_node_group;
     else if(field.isDefinedOnElements())
-      nmb_grupo= set.getName()+str_element_group;
-    retval= getGroupInfo(nmb_grupo);
+      nmb_group= set.getName()+str_element_group;
+    retval= getGroupInfo(nmb_group);
     if(!retval)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; group: '"
-                << nmb_grupo
+                << nmb_group
 		<< "' not found." << std::endl;
     return retval;  
   }
@@ -141,9 +140,9 @@ void XC::MEDMeshing::defineMEDGaussModels(const Set &set,MEDFieldInfo &med_fi) c
   }
 
 //! @brief Defines a field over an element set.
-void XC::MEDMeshing::defineMEDDblField(const Set &set,const FieldInfo &fi,MEDGroupInfo *grupo) const
+void XC::MEDMeshing::defineMEDDblField(const Set &set,const FieldInfo &fi,MEDGroupInfo *group) const
   {
-    MEDDblFieldInfo *med_fi= new MEDDblFieldInfo(fi,grupo);
+    MEDDblFieldInfo *med_fi= new MEDDblFieldInfo(fi,group);
     med_fields.push_back(med_fi);
     med_fi->to_med();
     if(fi.isDefinedOnNodes())
@@ -161,9 +160,9 @@ void XC::MEDMeshing::defineMEDDblField(const Set &set,const FieldInfo &fi,MEDGro
   }
 
 //! @brief Defines a field over a set.
-void XC::MEDMeshing::defineMEDIntField(const Set &set,const FieldInfo &fi,MEDGroupInfo *grupo) const
+void XC::MEDMeshing::defineMEDIntField(const Set &set,const FieldInfo &fi,MEDGroupInfo *group) const
   {
-    MEDIntFieldInfo *med_fi= new MEDIntFieldInfo(fi,grupo);
+    MEDIntFieldInfo *med_fi= new MEDIntFieldInfo(fi,group);
     med_fields.push_back(med_fi);
     med_fi->to_med();
     if(fi.isDefinedOnNodes())
@@ -189,14 +188,14 @@ void XC::MEDMeshing::defineMEDFields(void) const
         const Set *set= dynamic_cast<const Set *>(sets.busca_set(fi.getSetName()));
         if(set)
           {
-            MEDGroupInfo *grupo= getGroupInfo(*set,fi);
-            if(grupo)
+            MEDGroupInfo *group= getGroupInfo(*set,fi);
+            if(group)
               {
                 const std::string type_of_components= fi.getComponentsType();
                 if(type_of_components=="double")
-                  { defineMEDDblField(*set,fi,grupo); }
+                  { defineMEDDblField(*set,fi,group); }
                 else if(type_of_components=="int")
-                  { defineMEDIntField(*set,fi,grupo); }
+                  { defineMEDIntField(*set,fi,group); }
                 else
                   std::cerr << getClassName() << "::" << __FUNCTION__
 			    << "; unknown type: '" << type_of_components

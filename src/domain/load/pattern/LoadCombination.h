@@ -122,8 +122,8 @@ class LoadCombination: public ForceReprComponent
     inline void setDescomp(const std::string &descomp)
       { interpreta_descomp(descomp); }
 
-    const LoadCombinationGroup *getGrupo(void) const;
-    LoadCombinationGroup *getGrupo(void);
+    const LoadCombinationGroup *getGroup(void) const;
+    LoadCombinationGroup *getGroup(void);
 
     const_iterator begin(void) const
       { return descomp.begin(); }

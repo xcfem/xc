@@ -314,19 +314,19 @@ void XC::LoadCombination::limpia_ceros(void)
   }
 
 //! @brief Returns the group to wich the combination belongs.
-const XC::LoadCombinationGroup *XC::LoadCombination::getGrupo(void) const
+const XC::LoadCombinationGroup *XC::LoadCombination::getGroup(void) const
   { return dynamic_cast<const LoadCombinationGroup *>(Owner()); }
     
 
 //! @brief Returns the group to wich the combination belongs.
-XC::LoadCombinationGroup *XC::LoadCombination::getGrupo(void)
+XC::LoadCombinationGroup *XC::LoadCombination::getGroup(void)
   { return dynamic_cast<LoadCombinationGroup *>(Owner()); }
 
 //! @brief Returns, if possible, a pointer to the "previous" combination.
 const XC::LoadCombination *XC::LoadCombination::getPtrCombPrevia(void) const
   {
     const LoadCombination *retval= nullptr;
-    const LoadCombinationGroup *g= getGrupo();
+    const LoadCombinationGroup *g= getGroup();
     if(g)
       retval= g->getPtrCombPrevia(*this);
     return retval;

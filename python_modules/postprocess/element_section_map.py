@@ -22,6 +22,9 @@ class ElementSectionMap(dict):
        :param setRCSects: RC section definition, name, concrete type,
                           rebar positions,...
     '''
+    if len(elemSet)== 0:
+        lmsg.warning("element set is empty\n")
+      
     for e in elemSet:
       if(not e.hasProp(self.propName)):
         self[e.tag]=[]

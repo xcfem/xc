@@ -42,8 +42,8 @@ class MEDFieldInfo: public MEDObject
     friend class MEDMeshing;
     MEDFieldInfo(const FieldInfo &,MEDGroupInfo *);
 
-    const MEDGroupInfo &getGrupo(void) const;
-    MEDMEM::GROUP *getGrupoMED(void) const;
+    const MEDGroupInfo &getGroup(void) const;
+    MEDMEM::GROUP *getMEDGroup(void) const;
 
   public:
     inline virtual ~MEDFieldInfo(void)

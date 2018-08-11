@@ -31,7 +31,7 @@
 
 //! @brief Constructor.
 XC::MEDGroupInfo::MEDGroupInfo(MEDMeshing *mesh,const std::string &nmb)
-  : nombre(nmb), med_group(nullptr)
+  : grp_name(nmb), med_group(nullptr)
   {
     assert(mesh);
     set_owner(mesh);
@@ -40,7 +40,7 @@ XC::MEDGroupInfo::MEDGroupInfo(MEDMeshing *mesh,const std::string &nmb)
 
 //! Constructor.
 XC::MEDGroupInfo::MEDGroupInfo(MEDMeshing *mesh,const Set &set)
-  : nombre(set.getName()), med_group(nullptr)
+  : grp_name(set.getName()), med_group(nullptr)
   { 
     set_owner(mesh);
     indices= mesh->getMapIndicesCeldas();
@@ -81,7 +81,7 @@ const XC::MEDMeshing &XC::MEDGroupInfo::getMesh(void) const
     return *retval;
   }
 
-MEDMEM::GROUP *XC::MEDGroupInfo::getGrupoMED(void) const
+MEDMEM::GROUP *XC::MEDGroupInfo::getMEDGroup(void) const
   { return med_group; }
 
 //! @brief Returns the vector with the indexes of the elements
@@ -115,9 +115,9 @@ void XC::MEDGroupInfo::nueva_celda(size_t tag,const MED_EN::medGeometryElement &
     MEDCellBaseInfo::new_cell(tag,type);
   }
 
-//! @brief Returns the nombre del grupo.
+//! @brief Returns the name of the group.
 const std::string &XC::MEDGroupInfo::getName(void) const
-  { return nombre; }
+  { return grp_name; }
 
 //! @brief Returns the vector with the positions of the different element types
 //! int the vector of element indexes.
@@ -148,7 +148,7 @@ std::vector<int> XC::MEDGroupInfo::getElementIndices(void) const
 void XC::MEDGroupInfo::to_med(void) const
   {
     med_group= new MEDMEM::GROUP;
-    med_group->setName(nombre);
+    med_group->setName(grp_name);
     const MEDMeshing &mesh= getMesh();
     med_group->setMesh(&mesh.getMEDMesh());
     med_group->setEntity(entity_type);
