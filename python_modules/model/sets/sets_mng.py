@@ -54,6 +54,40 @@ def getSubsetElemOfMat(matType,fromSet,toSetName):
     newSet.elements=fromSet.elements.pickElemsOfMaterial(matType)
     return newSet
 
+def getMinCooNod(setWithNod,cooId):
+    '''Return the minimum value of the specified coordinate in the set of nodes
+
+    :param setWithNod: set that contains the nodes
+    :param cooId:  identification of the desired coordinate (0 for X coordinate,
+                   1 for Y coord. and 2 for Z coord.
+    '''
+    retval=0
+    nodInSet=setWithNod.getNodes
+    if cooId in [0,1,2]:
+        CoorNod=[n.getCoo[cooId] for n in nodInSet]
+        retval=min(CoorNod)
+    else:
+        lmsg.error("Wrong coordinate id. Available values: 0, 1, 2  \n")
+    return retval
+    
+def getMaxCooNod(setWithNod,cooId):
+    '''Return the maximum value of the specified coordinate in the set of nodes
+
+    :param setWithNod: set that contains the nodes
+    :param cooId:  identification of the desired coordinate (0 for X coordinate,
+                   1 for Y coord. and 2 for Z coord.
+    '''
+    retval=0
+    nodInSet=setWithNod.getNodes
+    if cooId in [0,1,2]:
+        CoorNod=[n.getCoo[cooId] for n in nodInSet]
+        retval=max(CoorNod)
+    else:
+        lmsg.error("Wrong coordinate id. Available values: 0, 1, 2  \n")
+    return retval
+    
+    
+    
 def setLin_to_lst(setLin):
     '''return a list with the lines included in the set `setLin` '''
     return [l for l in setLin.getLines]

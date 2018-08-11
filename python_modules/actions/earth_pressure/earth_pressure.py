@@ -21,6 +21,7 @@ import geom
 import xc
 from miscUtils import LogMessages as lmsg
 from geotechnics import mononobe_okabe
+from model.sets import sets_mng as sets
 
 class PressureModelBase(object):
     '''Basse class for objects defining earth pressures.'''
@@ -55,6 +56,8 @@ class PressureModelBase(object):
               loadVector= presElem*(vDir+tanDelta*tanVector)
               if(presElem!=0.0):
                   e.vector2dUniformLoadGlobal(loadVector)
+
+        
 
 class EarthPressureBase(PressureModelBase):
     '''Parameters to define a load of type earth pressure
@@ -206,6 +209,15 @@ class StripLoadOnBackfill(UniformLoadOnStem):
               if (sigma_v!=0.0) and (xElem>xMin) and (xElem<xMax):
                   e.vector2dUniformLoadGlobal(sigma_v*vDir)
 
+    def getMaxMagnitude(self,xcSet):
+        '''Return an estimation of the maximum magnitude of the vector loads 
+        (it's supposed to occur in a point placed 1/3L from the top)'''
+        zmin=sets.getMinCooNod(xcSet,2)
+        zmax=sets.getMaxCooNod(xcSet,2)
+        zcontrol=zmin+2/3.*(zmax-zmin)
+        maxEstValue=self.getPressure(zcontrol)
+        return maxEstValue
+
 
 class LineVerticalLoadOnBackfill(PressureModelBase):
     '''Lateral earth pressure on a retaining wall due to line surcharge 
@@ -231,6 +243,15 @@ class LineVerticalLoadOnBackfill(PressureModelBase):
             omega=math.atan(self.distWall/difZ)
             ret_press=self.qLoad/math.pi/difZ*(math.sin(2*omega))**2
         return ret_press
+
+    def getMaxMagnitude(self,xcSet):
+        '''Return an estimation of the maximum magnitude of the vector loads 
+        (it's supposed to occur in a point placed 1/3L from the top)'''
+        zmin=sets.getMinCooNod(xcSet,2)
+        zmax=sets.getMaxCooNod(xcSet,2)
+        zcontrol=zmin+2/3.*(zmax-zmin)
+        maxEstValue=self.getPressure(zcontrol)
+        return maxEstValue
 
 class HorizontalLoadOnBackfill(PressureModelBase):
     '''Lateral earth pressure on a retaining wall due to a surcharge 
@@ -291,6 +312,11 @@ class HorizontalLoadOnBackfill(PressureModelBase):
         self.setup()
         super(HorizontalLoadOnBackfill,self).appendLoadToCurrentLoadPattern(xcSet,vDir,iCoo,delta)
 
+    def getMaxMagnitude(self):
+        '''Return the maximum magnitude of the vector loads'''
+        self.setup()
+        maxValue=self.getPressure(self.zpresmax)
+        return maxValue
                                                   
                                                   
 class MononobeOkabePressureDistribution(EarthPressureBase):

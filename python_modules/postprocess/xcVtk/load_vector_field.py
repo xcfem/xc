@@ -1,12 +1,13 @@
- # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
+from __future__ import division
 
 ''' Loads represented as vectors. '''
 
-__author__= "Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2016 LCPT"
+__author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
+__copyright__= "Copyright 2018, LCPT, AO_O"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com"
+__email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import geom
 import xc
@@ -58,8 +59,23 @@ class LoadVectorField(vf.VectorField):
     return retval
 
 
+  
+  def getMaxElementalLoad(self,preprocessor,lp):
+    ''' Calculate the maximum absolute value of elemental loads in load pattern lp.'''
+    loadValues= self.sumElementalLoads(preprocessor,lp)
+    for eTag in loadValues.keys():
+      elem= preprocessor.getElementHandler.getElement(eTag)
+      if(elem.getDimension==2):
+        vLoad= loadValues[eTag]
+        self.data.insertNextLoadVector(vLoad[0],vLoad[1],vLoad[2])
+      else:
+        lmsg.warning('displaying of loads over 1D elements not yet implemented')
+    self.data.calculateLengths(self.fUnitConv)
+    rgMaxMin=self.data.lengths.GetRange()
+    return abs(max(rgMaxMin, key=abs))
+
   def dumpElementalLoads(self,preprocessor,lp):
-    ''' Iterate over cumulated loads dumping its loads into the graphic.'''
+    ''' Iterate over cumulated loads dumping them into the graphic.'''
     loadValues= self.sumElementalLoads(preprocessor,lp)
     for eTag in loadValues.keys():
       elem= preprocessor.getElementHandler.getElement(eTag)
@@ -91,6 +107,17 @@ class LoadVectorField(vf.VectorField):
       nl= lIter.next()
     return retval
 
+  def getMaxNodalLoad(self,preprocessor,lp):
+    ''' Calculate maximum absolute value of nodal loads in load pattern lp.'''
+    loadValues= self.sumNodalLoads(preprocessor,lp)
+    for nTag in loadValues.keys():
+      node= preprocessor.getNodeHandler.getNode(nTag)
+      vLoad= loadValues[nTag]
+      self.data.insertNextLoadVector(vLoad[0],vLoad[1],vLoad[2])
+    self.data.calculateLengths(self.fUnitConv)
+    rgMaxMin=self.data.lengths.GetRange()
+    return abs(max(rgMaxMin, key=abs))
+    
   def dumpNodalLoads(self,preprocessor,lp,defFScale):
     ''' Iterate over loaded nodes dumping its loads into the graphic.
 
@@ -108,12 +135,18 @@ class LoadVectorField(vf.VectorField):
       self.data.insertNextPair(p.x,p.y,p.z,vLoad[0],vLoad[1],vLoad[2],self.fUnitConv,self.showPushing)
     return len(loadValues)
 
+  
+  
   def dumpLoads(self, preprocessor,defFScale):
     preprocessor.resetLoadCase()
     loadPatterns= preprocessor.getLoadHandler.getLoadPatterns
     loadPatterns.addToDomain(self.lpName)
     lp= loadPatterns[self.lpName]
     if(lp):
+      maxElLd=self.getMaxElementalLoad(preprocessor,lp)
+      maxNdLd=self.getMaxNodalLoad(preprocessor,lp)
+      maxLd=max(maxElLd,maxNdLd)
+      self.data.scaleFactor/=maxLd
       #Iterate over loaded elements.
       count= self.dumpElementalLoads(preprocessor,lp)
       #Iterate over loaded nodes.

@@ -60,6 +60,19 @@ class InertialLoad(BaseVectorLoad):
                 el_group= ms.primitiveSet.getElements
             for e in el_group:
                 e.vector3dUniformLoadGlobal(loadVector)
+                
+    def getMaxMagnitude(self):
+        '''Return the maximum magnitude of the vector loads'''
+        maxValue=0
+        for ms in self.lstMeshSets:
+            if 'shell' in ms.elemType.lower():
+                val= ms.matSect.getAreaDensity()*self.loadVector.Norm()
+            elif 'beam' in ms.elemType.lower():
+                val= ms.matSect.getLongitudinalDensity()*self.loadVector.Norm()
+            maxValue=max(val,maxValue)
+        return maxValue
+
+             
 
 class NodalLoad(BaseVectorLoad):
     '''Point load applied on a list of nodes
@@ -77,6 +90,10 @@ class NodalLoad(BaseVectorLoad):
     def appendLoadToCurrentLoadPattern(self):
         for n in self.lstNod:
             n.newLoad(self.loadVector)
+            
+    def getMaxMagnitude(self):
+        '''Return the maximum magnitude of the vector loads'''
+        return self.loadVector.Norm()
 
 
            
@@ -106,6 +123,10 @@ class UniformLoadOnBeams(BaseVectorLoad):
                 else:
                     load= e.vector3dUniformLoadGlobal(self.loadVector)
  
+    def getMaxMagnitude(self):
+        '''Return the maximum magnitude of the vector loads'''
+        return self.loadVector.Norm()
+        
 
 class UniformLoadOnLines(BaseVectorLoad):
     '''Uniform load applied to all the lines (not necessarily defined as lines
@@ -142,6 +163,11 @@ class UniformLoadOnLines(BaseVectorLoad):
                 load=lnInfl[i]*self.loadVector
                 sortNod[i].newLoad(lnInfl[i]*self.loadVector)
 
+    def getMaxMagnitude(self):
+        '''Return the maximum magnitude of the vector loads'''
+        return self.loadVector.Norm()
+        
+
 class UniformLoadOnSurfaces(BaseVectorLoad):
     '''Uniform load applied on the shell elements generated from
     all the surfaces in the xcSet.
@@ -167,6 +193,10 @@ class UniformLoadOnSurfaces(BaseVectorLoad):
             else:
                 load=e.vector3dUniformLoadGlobal(self.loadVector)
 
+    def getMaxMagnitude(self):
+        '''Return the maximum magnitude of the vector loads'''
+        return self.loadVector.Norm()
+                
 class PointLoadOverShellElems(BaseVectorLoad):
     '''Point load distributed over the shell elements in xcSet whose 
     centroids are inside the prism defined by the 2D polygon prismBase
@@ -197,6 +227,19 @@ class PointLoadOverShellElems(BaseVectorLoad):
 
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
+        aux_set,factor=self.distrParam()
+        for e in aux_set.getElements:
+            if self.refSystem=='Local':
+                load=e.vector3dUniformLoadLocal(factor*self.loadVector)
+            else:
+                load=e.vector3dUniformLoadGlobal(factor*self.loadVector)
+        aux_set.clear()
+
+    def distrParam(self):
+        '''Return the set of elements over which to distribute the point load and the 
+        coefficient that must be applied to it '''
+        aux_set=None
+        factor=0.0
         prep=self.xcSet.getPreprocessor
         aux_set=sets.set_included_in_orthoPrism(preprocessor=prep,setInit=self.xcSet,prismBase=self.prismBase,prismAxis=self.prismAxis,setName='aux_set'+self.name)
         if aux_set.getNumElements==0:
@@ -204,12 +247,13 @@ class PointLoadOverShellElems(BaseVectorLoad):
         else:
             areaSet=float(np.sum([e.getArea(False) for e in aux_set.getElements]))
             factor=1.0/areaSet
-            for e in aux_set.getElements:
-                if self.refSystem=='Local':
-                    load=e.vector3dUniformLoadLocal(factor*self.loadVector)
-                else:
-                    load=e.vector3dUniformLoadGlobal(factor*self.loadVector)
-            aux_set.clear()
+        return (aux_set,factor)
+
+    def getMaxMagnitude(self):
+        '''Return the maximum magnitude of the vector loads'''
+        aux_set,factor=self.distrParam()
+        return factor*self.loadVector.Norm()
+
             
 class EarthPressLoad(BaseVectorLoad):
     '''Earth pressure applied on the elements (shell or beams)
@@ -256,6 +300,25 @@ class EarthPressLoad(BaseVectorLoad):
             lineL.appendLoadToCurrentLoadPattern(self.xcSet,self.loadVector)
         for horzL in self.horzLoads:
             horzL.appendLoadToCurrentLoadPattern(self.xcSet,self.loadVector)
+
+    def getMaxMagnitude(self):
+        '''Return the maximum magnitude of the vector loads'''
+        maxValue=0
+        if self.soilData<>None:
+            zmin=sets.getMinCooNod(self.xcSet,2)
+            pmax=self.soilData.getPressure(zmin)
+            maxValue=max(maxValue,pmax)
+        for stripL in self.stripLoads:
+            pmax=stripL.getMaxMagnitude(self.xcSet)
+            maxValue=max(maxValue,pmax)
+        for lineL in self.lineLoads:
+            pmax=lineL.getMaxMagnitude(self.xcSet)
+            maxValue=max(maxValue,pmax)
+        for horzL in self.horzLoads:
+            pmax=horzL.getMaxMagnitude()        
+            maxValue=max(maxValue,pmax)
+        return maxValue
+   
 
  
 

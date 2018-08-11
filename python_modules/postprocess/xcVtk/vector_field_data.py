@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-
+from __future__ import division
+
+__author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
+__copyright__= "Copyright 2018, LCPT, AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 '''Data to represent field vector in VTK.'''
 
@@ -45,6 +52,9 @@ class VectorFieldData(object):
       lmsg.warning('VectorFieldData.calculateLengths: no vectors defined.')
     return self.lengths
 
+  def insertNextLoadVector(self,vx,vy,vz):
+    self.vectors.InsertNextTuple3(vx,vy,vz)
+  
   def insertNextPair(self,px,py,pz,vx,vy,vz,fUnitConv= 1.0,pushing= False):
     '''Inserts a point in the collection.
        Parameters:
@@ -58,7 +68,6 @@ class VectorFieldData(object):
       self.points.InsertNextPoint(px-vx*factor,py-vy*factor,pz-vz*factor)
     else:
       self.points.InsertNextPoint(px,py,pz)
-    self.vectors.InsertNextTuple3(vx,vy,vz)
 
   def getPolydata(self,fUnitConv= 1.0):
     retval= vtk.vtkPolyData()
