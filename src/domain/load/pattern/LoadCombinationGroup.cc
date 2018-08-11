@@ -237,7 +237,7 @@ int XC::LoadCombinationGroup::recvSelf(const CommParameters &cp)
     return res;
   }
 
-std::deque<std::string> XC::LoadCombinationGroup::getListaNombres(void) const
+std::deque<std::string> XC::LoadCombinationGroup::getNamesList(void) const
   {
     std::deque<std::string> retval;
     for(const_iterator i= begin();i!= end();i++)

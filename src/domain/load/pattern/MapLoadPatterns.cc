@@ -366,7 +366,7 @@ int XC::MapLoadPatterns::recvSelf(const CommParameters &cp)
   }
 
 //! @brief Return the names of the load patterns.
-std::deque<std::string> XC::MapLoadPatterns::getListaNombres(void) const
+std::deque<std::string> XC::MapLoadPatterns::getNamesList(void) const
   {
     std::deque<std::string> retval;
     for(const_iterator i= begin();i!= end();i++)

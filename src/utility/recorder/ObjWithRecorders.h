@@ -48,8 +48,8 @@ class ObjWithRecorders: public EntCmd
     typedef lista_recorders::iterator recorder_iterator;
     typedef lista_recorders::const_iterator const_recorder_iterator; 
   private:
-    lista_recorders theRecorders; //!< Lista de recorders.
-    DataOutputHandler::map_output_handlers *output_handlers; //!< Manejadores para salida de resultados.
+    lista_recorders theRecorders; //!< recorders list.
+    DataOutputHandler::map_output_handlers *output_handlers; //!< output handlers.
 
   protected:
     int sendData(CommParameters &cp);

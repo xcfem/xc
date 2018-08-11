@@ -37,8 +37,6 @@
 #include "preprocessor/MeshingParams.h"
 #include "utility/matrix/Vector.h"
 
-class Lista;
-
 namespace XC {
 class SFreedom_Constraint;
 class Face;

@@ -34,7 +34,7 @@
 #include "NMPointCloudBase.h"
 #include "NMPointCloud.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
-#include "xc_utils/src/geom/pos_vec/ListaPos3d.h"
+#include "xc_utils/src/geom/pos_vec/Pos3dList.h"
 
 
 namespace XC {

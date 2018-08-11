@@ -49,7 +49,7 @@
 #include "xc_utils/src/geom/d2/2d_polygons/Polygon2d.h"
 #include "xc_utils/src/geom/d2/2d_polygons/polygon2d_bool_op.h"
 #include "xc_utils/src/geom/d2/HalfPlane2d.h"
-#include "xc_utils/src/geom/listas/utils_list_pos2d.h"
+#include "xc_utils/src/geom/lists/utils_list_pos2d.h"
 #include "material/section/interaction_diagram/DeformationPlane.h"
 
 

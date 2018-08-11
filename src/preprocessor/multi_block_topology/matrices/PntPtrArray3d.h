@@ -39,7 +39,6 @@
 
 class ExprAlgebra;
 class Intervalo1D;
-class Lista;
 class RangoIndice;
 class Array3dRange;
 

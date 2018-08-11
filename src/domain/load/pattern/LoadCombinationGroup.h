@@ -67,7 +67,7 @@ class LoadCombinationGroup: public LoadHandlerMember, public LoadCombinationMap
     void removeFromDomain(const std::string &);
     void removeAllFromDomain(void);
 
-    std::deque<std::string> getListaNombres(void) const;
+    std::deque<std::string> getNamesList(void) const;
     const std::string &getNombreLoadCombination(const LoadCombination *) const;
 
     const LoadCombination *buscaLoadCombination(const std::string &) const;

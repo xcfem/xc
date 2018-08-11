@@ -115,7 +115,7 @@ class MapLoadPatterns: public LoadHandlerMember
     inline void setCurrentTimeSeries(const std::string &nmb)
       { nmb_ts= nmb; }
 
-    std::deque<std::string> getListaNombres(void) const;
+    std::deque<std::string> getNamesList(void) const;
     boost::python::list getKeys(void) const;
 
     inline const int &getCurrentElementLoadTag(void) const
