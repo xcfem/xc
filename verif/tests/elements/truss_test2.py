@@ -19,12 +19,12 @@ import math
 
 
 E= 30e6 #Young modulus (psi)
-l= 15*12 #Bar length (15 pies) expresada in inches}
+l= 15*12 #Bar length (15 pies) expresada in inches.
 theta= math.radians(30) #angle between bars
-F= 5000 #Force magnitude (pounds)}
-A= 0.5 #Área in inches cuadradas}
-a= 2*l*math.cos(theta) #Distance between nodes extremos}
-b= l*math.sin(theta) #Distance between nodes extremos}
+F= 5000 #Force magnitude (pounds).
+A= 0.5 #Área in square inches.
+a= 2*l*math.cos(theta) #Distance between end nodes.
+b= l*math.sin(theta) #Distance between end nodes.
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor

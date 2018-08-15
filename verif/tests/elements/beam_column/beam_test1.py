@@ -20,8 +20,8 @@ E= 30e6 # Young modulus (psi)
 l= 20*12 # Bar length in inches
 a= 10*12 # Cantilever length
 h= 30 # Beam cross-section depth in inches.
-A= 50.65 # viga area in inches cuadradas
-I= 7892 # Inercia de la viga in inches a la cuarta
+A= 50.65 # viga area in square inches.
+I= 7892 # Inercia de la viga in inches to the fourth power.
 w= 10000/12.0 # Load per unit length (pounds)/pulgada.
 
 feProblem= xc.FEProblem()

@@ -23,7 +23,7 @@ L= 20 # Bar length.
 h= 0.30 # Beam cross-section depth.
 b= 0.2 # Beam cross-section width.
 A= b*h # Cross section area.
-I= b*h**3/12 # Inercia de la viga in inches a la cuarta
+I= b*h**3/12 # Inercia de la viga in inches to the fourth power.
 x= 0.5 # Relative abscissae where the punctual load is applied.
 P= 1e3 # punctual load.
 
