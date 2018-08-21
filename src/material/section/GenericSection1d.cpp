@@ -94,12 +94,12 @@ XC::GenericSection1d::GenericSection1d(int tag, UniaxialMaterial &m, int type)
 
 //! @brief Constructor.
 XC::GenericSection1d::GenericSection1d(int tag)
-:PrismaticBarCrossSection(0,SEC_TAG_Generic1d), theModel(0), code(0)
+  :PrismaticBarCrossSection(0,SEC_TAG_Generic1d), theModel(0), code(0)
   {}
 
 //! @brief Constructor.
 XC::GenericSection1d::GenericSection1d()
-:PrismaticBarCrossSection(0,SEC_TAG_Generic1d), theModel(0), code(0)
+  :PrismaticBarCrossSection(0,SEC_TAG_Generic1d), theModel(0), code(0)
   {}
 
 //! @brief Destructor.
