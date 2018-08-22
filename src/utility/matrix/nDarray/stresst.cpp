@@ -86,7 +86,7 @@
 //#                                                                              #
 //#                                                                              #
 //# DATE:              July 22 '93                                               #
-//# UPDATE HISTORY:    December 15 '93 replaced polinomial root solver for       #
+//# UPDATE HISTORY:    December 15 '93 replaced polynomial root solver for       #
 //#                    principal stresses with explicit formula                  #
 //#                    August 22-29 '94 choped to separate files and worked on   #
 //#                                   const and & issues                         #

@@ -124,7 +124,7 @@ class Cosseratstraintensor : public BJtensor
     void report(const std::string &) const;
     void reportshort(const std::string &) const;
 
-//..// polinomial root solver friend functions definitions
+//..// polynomial root solver friend functions definitions
 //..public:
 //..friend void laguer(complex *, int , complex *, double , int );
 //..friend void zroots(complex *, int , complex *, int );

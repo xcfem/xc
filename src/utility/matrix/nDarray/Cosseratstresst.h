@@ -153,7 +153,7 @@ class Cosseratstresstensor : public BJtensor
     //                   double alfa );
     //  
     //  
-    //  //..// polinomial root solver friend functions definitions
+    //  //..// polynomial root solver friend functions definitions
     //  //..public:
     //  //..friend void laguer(complex *, int , complex *, double , int );
     //  //..friend void zroots(complex *, int , complex *, int );
