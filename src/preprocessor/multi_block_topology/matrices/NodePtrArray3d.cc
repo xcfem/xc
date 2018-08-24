@@ -224,15 +224,15 @@ std::ostream &XC::operator<<(std::ostream &os, const NodePtrArray3d &t)
     return os;
   }
 
-void XC::fix(const XC::NodePtrArray3d::var_ref_caja &ref_caja,const XC::SFreedom_Constraint &spc)
+void XC::fix(const XC::NodePtrArray3d::box_var_ref &box_ref,const XC::SFreedom_Constraint &spc)
   {
-    if(ref_caja.Empty()) return;
-    const size_t numberOfLayers= ref_caja.getNumberOfLayers();
-    const size_t numberOfRows= ref_caja.getNumberOfRows();
-    const size_t numberOfColumns= ref_caja.getNumberOfColumns();
+    if(box_ref.Empty()) return;
+    const size_t numberOfLayers= box_ref.getNumberOfLayers();
+    const size_t numberOfRows= box_ref.getNumberOfRows();
+    const size_t numberOfColumns= box_ref.getNumberOfColumns();
 
     // Obtenemos el domain.
-    const Node *n= ref_caja(1,1,1);
+    const Node *n= box_ref(1,1,1);
     Domain *dom= nullptr;
     dom= n->getDomain();
     if(dom)
@@ -241,7 +241,7 @@ void XC::fix(const XC::NodePtrArray3d::var_ref_caja &ref_caja,const XC::SFreedom
           for(size_t j=1;j<=numberOfRows;j++)
             for(size_t k=1;k<=numberOfColumns;k++)
               {
-                const Node *nod= ref_caja(i,j,k);
+                const Node *nod= box_ref(i,j,k);
                 if(nod)
                   {
                     const int tag_nod= nod->getTag();

@@ -31,14 +31,14 @@
 #define PTRARRAY3DBASE_H
 
 #include "xc_utils/src/nucleo/EntCmd.h"
-#include "xc_utils/src/geom/pos_vec/ConstRefCajaArray3d.h"
+#include "xc_utils/src/geom/pos_vec/Array3dBoxConstRef.h"
 #include "xc_utils/src/geom/pos_vec/ConstantILayerConstRef.h"
 #include "xc_utils/src/geom/pos_vec/ConstantJLayerConstRef.h"
 #include "xc_utils/src/geom/pos_vec/ConstantKLayerConstRef.h"
 #include "xc_utils/src/geom/pos_vec/IRowConstRef.h"
 #include "xc_utils/src/geom/pos_vec/JRowConstRef.h"
 #include "xc_utils/src/geom/pos_vec/KRowConstRef.h"
-#include "xc_utils/src/geom/pos_vec/VarRefCajaArray3d.h"
+#include "xc_utils/src/geom/pos_vec/Array3dBoxVarRef.h"
 #include "xc_utils/src/geom/pos_vec/ConstantILayerVarRef.h"
 #include "xc_utils/src/geom/pos_vec/ConstantJLayerVarRef.h"
 #include "xc_utils/src/geom/pos_vec/ConstantKLayerVarRef.h"
@@ -61,7 +61,7 @@ class PtrArray3dBase: public std::vector<PtrArray>, public EntCmd
     typedef typename std::vector<PtrArray>::iterator iterator;
     typedef typename std::vector<PtrArray>::const_iterator const_iterator;
 
-    typedef ConstRefCajaArray3d<PtrArray3dBase<PtrArray> > const_ref_caja;
+    typedef Array3dBoxConstRef<PtrArray3dBase<PtrArray> > box_const_ref;
     typedef ConstantILayerConstRef<PtrArray3dBase<PtrArray> > constant_i_layer_const_ref;
     typedef ConstantJLayerConstRef<PtrArray3dBase<PtrArray> > constant_j_layer_const_ref;
     typedef ConstantKLayerConstRef<PtrArray3dBase<PtrArray> > constant_k_layer_const_ref;
@@ -69,7 +69,7 @@ class PtrArray3dBase: public std::vector<PtrArray>, public EntCmd
     typedef JRowConstRef<PtrArray3dBase<PtrArray> > const_ref_j_row;
     typedef KRowConstRef<PtrArray3dBase<PtrArray> > const_ref_k_row;
 
-    typedef VarRefCajaArray3d<PtrArray3dBase<PtrArray> > var_ref_caja;
+    typedef Array3dBoxVarRef<PtrArray3dBase<PtrArray> > box_var_ref;
     typedef ConstantILayerVarRef<PtrArray3dBase<PtrArray> > constant_i_layer_variable_ref;
     typedef ConstantJLayerVarRef<PtrArray3dBase<PtrArray> > constant_j_layer_variable_ref;
     typedef ConstantKLayerVarRef<PtrArray3dBase<PtrArray> > constant_k_layer_variable_ref;
@@ -116,8 +116,8 @@ class PtrArray3dBase: public std::vector<PtrArray>, public EntCmd
     const_reference getAtIJ(const size_t &,const size_t &) const;
     value_type getAtIJK(const size_t &,const size_t &,const size_t &);
 
-    const_ref_caja GetConstRefCaja(size_t layer=1,size_t f=1, size_t c=1) const;
-    const_ref_caja GetConstRefCaja(const Array3dRange &rango) const;
+    box_const_ref getBoxConstRef(size_t layer=1,size_t f=1, size_t c=1) const;
+    box_const_ref getBoxConstRef(const Array3dRange &rango) const;
 
     constant_i_layer_const_ref getConstantILayerConstRef(size_t layer=1,size_t f=1, size_t c=1) const;
     constant_i_layer_const_ref getConstantILayerConstRef(size_t layer,const RangoIndice &,const RangoIndice &) const;
@@ -133,8 +133,8 @@ class PtrArray3dBase: public std::vector<PtrArray>, public EntCmd
     const_ref_k_row getKRowConstRef(size_t layer=1,size_t f=1) const;
     const_ref_k_row getKRowConstRef(const size_t &layer,const size_t &f,const RangoIndice &) const;
 
-    var_ref_caja GetVarRefCaja(size_t layer=1,size_t f=1, size_t c=1);
-    var_ref_caja GetVarRefCaja(const Array3dRange &);
+    box_var_ref getBoxVarRef(size_t layer=1,size_t f=1, size_t c=1);
+    box_var_ref getBoxVarRef(const Array3dRange &);
 
     constant_i_layer_variable_ref getConstantILayerVarRef(size_t layer=1,size_t f=1, size_t c=1);
     constant_i_layer_variable_ref getConstantILayerVarRef(const size_t &layer,const RangoIndice &,const RangoIndice &);
@@ -150,7 +150,7 @@ class PtrArray3dBase: public std::vector<PtrArray>, public EntCmd
     var_ref_k_row getVarRefKRow(size_t layer=1,size_t f=1);
     var_ref_k_row getVarRefKRow(const size_t &layer,const size_t &f,const RangoIndice &);
 
-    void PutCaja(size_t layer_offset,size_t row_offset,size_t offset_col,const PtrArray3dBase<PtrArray> &otra);
+    void putBox(size_t layer_offset,size_t row_offset,size_t offset_col,const PtrArray3dBase<PtrArray> &otra);
 
     std::vector<int> getLayerObjectsTags(const size_t &);
     std::vector<int> getRowObjectsTags(const size_t &,const size_t &);
@@ -414,11 +414,11 @@ typename PtrArray3dBase<PtrArray>::const_reference PtrArray3dBase<PtrArray>::get
   }
 
 template <class PtrArray>
-typename PtrArray3dBase<PtrArray>::const_ref_caja PtrArray3dBase<PtrArray>::GetConstRefCaja(size_t layer,size_t f, size_t c) const
-  { return const_ref_caja(*this,layer,f,c); }
+typename PtrArray3dBase<PtrArray>::box_const_ref PtrArray3dBase<PtrArray>::getBoxConstRef(size_t layer,size_t f, size_t c) const
+  { return box_const_ref(*this,layer,f,c); }
 template <class PtrArray>
-typename PtrArray3dBase<PtrArray>::const_ref_caja PtrArray3dBase<PtrArray>::GetConstRefCaja(const Array3dRange &rango) const
-  { return const_ref_caja(*this,rango); }
+typename PtrArray3dBase<PtrArray>::box_const_ref PtrArray3dBase<PtrArray>::getBoxConstRef(const Array3dRange &rango) const
+  { return box_const_ref(*this,rango); }
 
 template <class PtrArray>
 typename PtrArray3dBase<PtrArray>::constant_i_layer_const_ref PtrArray3dBase<PtrArray>::getConstantILayerConstRef(size_t layer,size_t f, size_t c) const
@@ -459,11 +459,11 @@ typename PtrArray3dBase<PtrArray>::const_ref_k_row PtrArray3dBase<PtrArray>::get
   { return const_ref_k_row(*this,layer,f,column_range); }
 
 template <class PtrArray>
-typename PtrArray3dBase<PtrArray>::var_ref_caja PtrArray3dBase<PtrArray>::GetVarRefCaja(size_t layer,size_t f, size_t c)
-  { return var_ref_caja(*this,layer,f,c); }
+typename PtrArray3dBase<PtrArray>::box_var_ref PtrArray3dBase<PtrArray>::getBoxVarRef(size_t layer,size_t f, size_t c)
+  { return box_var_ref(*this,layer,f,c); }
 template <class PtrArray>
-typename PtrArray3dBase<PtrArray>::var_ref_caja PtrArray3dBase<PtrArray>::GetVarRefCaja(const Array3dRange &rango)
-  { return var_ref_caja(*this,rango); }
+typename PtrArray3dBase<PtrArray>::box_var_ref PtrArray3dBase<PtrArray>::getBoxVarRef(const Array3dRange &rango)
+  { return box_var_ref(*this,rango); }
 
 template <class PtrArray>
 typename PtrArray3dBase<PtrArray>::constant_i_layer_variable_ref PtrArray3dBase<PtrArray>::getConstantILayerVarRef(size_t layer,size_t f, size_t c)
@@ -505,7 +505,7 @@ typename PtrArray3dBase<PtrArray>::var_ref_k_row PtrArray3dBase<PtrArray>::getVa
 
 //! @brief Put in the array the array argument.
 template <class PtrArray>
-void PtrArray3dBase<PtrArray>::PutCaja(size_t layer_offset,size_t row_offset,size_t offset_col,const PtrArray3dBase<PtrArray> &otra)
+void PtrArray3dBase<PtrArray>::putBox(size_t layer_offset,size_t row_offset,size_t offset_col,const PtrArray3dBase<PtrArray> &otra)
   {
     const size_t numberOfLayers= otra.getNumberOfLayers();
     const size_t numberOfRows= otra.getNumberOfRows();
@@ -518,12 +518,14 @@ void PtrArray3dBase<PtrArray>::PutCaja(size_t layer_offset,size_t row_offset,siz
       }
     if((numberOfRows+row_offset)>this->getNumberOfRows())
       {
-        std::cerr << "NodePtrArray3d::PutCaja; row index out of range." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; row index out of range." << std::endl;
         return;
       }
     if((numberOfColumns+offset_col)>this->getNumberOfColumns())
       {
-        std::cerr << "NodePtrArray3d::PutCaja; column index out of range." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; column index out of range." << std::endl;
         return;
       }
     for(size_t i=1;i<=numberOfLayers;i++)

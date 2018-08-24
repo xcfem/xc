@@ -464,7 +464,7 @@ void XC::CmbEdge::genMesh(meshing_dir dm)
     size_t offset_j= 0;// initial column.
     for(std::deque<Side>::const_iterator i=lines.begin();i!=lines.end();i++)
       {
-        ttzNodes.PutCaja(0,offset_j,0,(*i).getEdge()->getTtzNodes());
+        ttzNodes.putBox(0,offset_j,0,(*i).getEdge()->getTtzNodes());
         offset_j+= (*i).getEdge()->getNumNodeRows()-1;
       }
     //pointers to elements.
@@ -472,7 +472,7 @@ void XC::CmbEdge::genMesh(meshing_dir dm)
     offset_j= 0;// initial column.
     for(std::deque<Side>::const_iterator i=lines.begin();i!=lines.end();i++)
       {
-        ttzElements.PutCaja(0,offset_j,0,(*i).getEdge()->getTtzElements());
+        ttzElements.putBox(0,offset_j,0,(*i).getEdge()->getTtzElements());
         offset_j+= (*i).getEdge()->getNumElementRows()-1;
       }
     if(verbosity>3)

@@ -108,7 +108,7 @@ std::deque<double> NodePtrArray3d::RowSimpsonIntegration(const F &f,const std::s
 
 inline void fix(const NodePtrArray3d &ttz,const SFreedom_Constraint &spc)
   { ttz.fix(spc); }
-void fix(const NodePtrArray3d::var_ref_caja &ref_caja,const SFreedom_Constraint &spc);
+void fix(const NodePtrArray3d::box_var_ref &box_ref,const SFreedom_Constraint &spc);
 
 std::vector<int> getNodeIdsQuad4N(const NodePtrArray3d::constant_i_layer_const_ref &nodes,const size_t &j,const size_t &k);
 std::vector<int> getNodeIdsQuad9N(const NodePtrArray3d::constant_i_layer_const_ref &nodes,const size_t &j,const size_t &k);
