@@ -115,8 +115,10 @@ class ArrayGraph: public Graph
     int getNumEdge(void) const;
 
     virtual void Print(std::ostream &s) const;
-    friend std::ostream &operator<<(std::ostream &s, const ArrayGraph &M);    
+    friend std::ostream &operator<<(std::ostream &, const ArrayGraph &);    
   };
+
+std::ostream &operator<<(std::ostream &, const ArrayGraph &);    
 } // end of XC namespace
 
 #endif

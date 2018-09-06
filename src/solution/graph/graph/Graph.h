@@ -130,8 +130,10 @@ class Graph: public MovableObject
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
 
-    friend std::ostream &operator<<(std::ostream &s, Graph &M);    
+    friend std::ostream &operator<<(std::ostream &, Graph &);    
   };
+
+std::ostream &operator<<(std::ostream &, Graph &);    
 } // end of XC namespace
 
 #endif

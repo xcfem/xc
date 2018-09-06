@@ -47,8 +47,6 @@
 #include "domain/domain/Domain.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
-#include "utility/med_xc/MEDMeshing.h"
-#include "utility/med_xc/MEDMesh.h"
 
 XC::FEM_ObjectBrokerAllClasses XC::FEProblem::theBroker;
 XC::Domain *XC::FEProblem::theActiveDomain= nullptr;
