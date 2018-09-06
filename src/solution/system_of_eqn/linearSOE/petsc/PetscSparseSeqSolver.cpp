@@ -109,7 +109,7 @@ int XC::PetscSparseSeqSolver::getNumIterations(void)
     return ierr;
   }
 
-
+//! @brief Set the system size.
 int XC::PetscSparseSeqSolver::setSize()
   {
     //int nnz = theSOE->nnz;
@@ -121,8 +121,10 @@ int XC::PetscSparseSeqSolver::setSize()
      */
 
     PetscBool flg;
-    int n = theSOE->size;
-    PetscErrorCode ierr= PetscOptionsGetInt(PETSC_NULL,"-n", &n, &flg); CHKERRQ(ierr);
+    int n= theSOE->size;
+    //Modified LCPT 6/9/2018
+    PetscErrorCode ierr= PetscOptionsGetInt(PETSC_NULL,nullptr,"-n", &n, &flg); CHKERRQ(ierr);
+    //End of modification
     const double *Xdata = theSOE->getPtrX();
     ierr = VecCreateSeqWithArray(PETSC_COMM_WORLD, n, n, Xdata, &x); CHKERRQ(ierr); //LCPT
     const double *Bdata = theSOE->getPtrB();

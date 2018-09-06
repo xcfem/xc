@@ -230,8 +230,8 @@ XC::SuperLU::SuperLU(int perm, double drop_tolerance, int panel, int relx, char 
 XC::SuperLU::~SuperLU(void)
   { free_mem(); }
 
-
-int XC::SuperLU::factoriza(void)
+//! @brief Compute the LU factorization of A.
+int XC::SuperLU::factorize(void)
   {
     int retval= 0;
     if(theSOE->factored == false)
@@ -240,12 +240,14 @@ int XC::SuperLU::factoriza(void)
         free_matricesLU();
         int info= 0;
         SuperLUStat_t slu_stat;
+	GlobalLU_t global_lu_t; //Ubuntu 18 
         StatInit(&slu_stat);
 
 
         //Prior to Ubuntu 16: dgstrf(&options, &AC, drop_tol, relax, &panelSize,etree.getDataPtr(), 0, perm_c.getDataPtr(), perm_r.getDataPtr(), &L, &U, &slu_stat, &info);
 	//it seems that argument 'drop_tol' is deprecated (or it was an error?)
-        dgstrf(&options, &AC, relax, panelSize,etree.getDataPtr(), nullptr, 0, perm_c.getDataPtr(), perm_r.getDataPtr(), &L, &U, &slu_stat, &info);
+        //Prior to Ubuntu 18: dgstrf(&options, &AC, relax, panelSize,etree.getDataPtr(), nullptr, 0, perm_c.getDataPtr(), perm_r.getDataPtr(), &L, &U, &slu_stat, &info);
+        dgstrf(&options, &AC, relax, panelSize,etree.getDataPtr(), nullptr, 0, perm_c.getDataPtr(), perm_r.getDataPtr(), &L, &U, &global_lu_t, &slu_stat, &info);	
         if(info != 0)
           {        
              std::cerr << getClassName() << "::" << __FUNCTION__
@@ -254,6 +256,7 @@ int XC::SuperLU::factoriza(void)
              retval= -info;
           }
         StatFree(&slu_stat);
+
         if(symmetric == 'Y')
           options.Fact= SamePattern_SameRowPerm;
         else
@@ -306,7 +309,7 @@ int XC::SuperLU::solve(void)
                 for(size_t i=0; i<n; i++)
                   *(Xptr++)= *(Bptr++);
 
-                const int ok= factoriza();
+                const int ok= factorize();
                 if(ok==0)
                   {
                     // do forward and backward substitution

@@ -91,7 +91,7 @@ XC::PetscSOE::~PetscSOE(void)
   { InvokePetscDestructors(); }
 
 
-
+//! @brief Set the system size.
 int XC::PetscSOE::setSize(Graph &theGraph)
   {
     PetscInitialize(0, PETSC_NULL, (char *)0, PETSC_NULL);
@@ -105,63 +105,68 @@ int XC::PetscSOE::setSize(Graph &theGraph)
     // first determine system size
     //
 
-    if(numProcesses == 1) {
-      
-      // if single process, the system size is size of graph
-      size = theGraph.getNumVertex();
-      factored= false;
+    if(numProcesses == 1)
+      {
+	// if single process, the system size is size of graph
+	size = theGraph.getNumVertex();
+	factored= false;
 
-    } else {
-
-      // first determine local max
-      size = 0;
-      factored= false;
-      VertexIter &theVertices = theGraph.getVertices();
-      Vertex *theVertex;
-      while ((theVertex = theVertices()) != 0) {
-	int vertexTag = theVertex->getTag();
-	if (vertexTag > size) 
-	  size = vertexTag;
       }
+    else
+      {
+	// first determine local max
+	size = 0;
+	factored= false;
+	VertexIter &theVertices = theGraph.getVertices();
+	Vertex *theVertex;
+	while ((theVertex = theVertices()) != 0)
+	  {
+	    int vertexTag = theVertex->getTag();
+	    if (vertexTag > size) 
+	      size = vertexTag;
+	  }
 
-      static XC::ID data(1);
+	static XC::ID data(1);
 
-      // all local max's sent to P0 which determines the max
-      // and informs all others
+	// all local max's sent to P0 which determines the max
+	// and informs all others
 
-      if (processID != 0) {
-	Channel *theChannel = theChannels[0];
-	
-	data(0) = size;
-	theChannel->sendID(0, 0, data);
-	theChannel->recvID(0, 0, data);
-	
-	size = data(0);
-      } else {
+	if(processID != 0)
+	  {
+	    Channel *theChannel = theChannels[0];
 
-    const int numChannels= theChannels.size();
-	for(int j=0; j<numChannels; j++) {
-	  Channel *theChannel = theChannels[j];
-	  theChannel->recvID(0, 0, data);
-	  if (data(0) > size)
+	    data(0) = size;
+	    theChannel->sendID(0, 0, data);
+	    theChannel->recvID(0, 0, data);
+
 	    size = data(0);
-	}
-	data(0) = size;
-	for (int j=0; j<numChannels; j++) {
-	  Channel *theChannel = theChannels[j];
-	  theChannel->sendID(0, 0, data);
-	}
+	  }
+	else
+	  {
+	    const int numChannels= theChannels.size();
+	    for(int j=0; j<numChannels; j++)
+	      {
+		Channel *theChannel = theChannels[j];
+		theChannel->recvID(0, 0, data);
+		if (data(0) > size)
+		  size = data(0);
+	      }
+	    data(0) = size;
+	    for (int j=0; j<numChannels; j++)
+	      {
+		Channel *theChannel = theChannels[j];
+		theChannel->sendID(0, 0, data);
+	      }
+	  }
+	size = size+1; // vertices numbered 0 through n-1
       }
-      size = size+1; // vertices numbered 0 through n-1
-    }
 
     InvokePetscDestructors();
     
     //
     // now we create the opensees vector objects
     //
-
-        inic(size);
+    inic(size);
     
     
     // 
@@ -180,73 +185,80 @@ int XC::PetscSOE::setSize(Graph &theGraph)
         for(int a=0; a<size; a++)
           {
             Vertex *theVertex = theGraph.getVertexPtr(a);
-	if (theVertex == 0) {
-	  std::cerr << "WARNING:XC::PetscSOE::setSize :";
-	  std::cerr << " vertex " << a << " not in graph! - size set to 0\n";
-	  size = 0;
-	  return -1;
-	}
-	
-	const std::set<int> &theAdjacency = theVertex->getAdjacency();
-	int idSize = theAdjacency.size();
-	
-	NNZ += idSize +1;
-	rowA(a)= idSize +1;  // +1 for the diagonal entry
+	    if (theVertex == 0)
+	      {
+		std::cerr << getClassName() << "::" << __FUNCTION__
+		          << "; WARNING: vertex " << a 
+                          << " not in graph! - size set to 0\n";
+		size = 0;
+		return -1;
+	      }
+
+	    const std::set<int> &theAdjacency = theVertex->getAdjacency();
+	    int idSize = theAdjacency.size();
+
+	    NNZ += idSize +1;
+	    rowA(a)= idSize +1;  // +1 for the diagonal entry
+	  }
+
+	// 
+	// Call Petsc VecCreate & MatCreate; NOTE: using previously allocated storage
+	// for vectors
+	//      ierr = PetscOptionsGetInt(PETSC_NULL, "-n", &size, &flg); CHKERRQ(ierr);
+
+	if (blockSize == 1)
+	  {
+	    ierr = MatCreateSeqAIJ(PETSC_COMM_SELF, size, size, 0, rowA.getDataPtr(), &A); CHKERRQ(ierr);
+	  }
+	else
+	  {
+	    ierr = MatCreateSeqBAIJ(PETSC_COMM_SELF, blockSize, size,size, 0, rowA.getDataPtr(), &A); CHKERRQ(ierr);
+	  }
+
+	ierr= VecCreateSeqWithArray(PETSC_COMM_WORLD, size, size, getPtrX(), &x); CHKERRQ(ierr); //LCPT
+	ierr= VecCreateSeqWithArray(PETSC_COMM_WORLD, size, size, getPtrB(), &b); CHKERRQ(ierr); //LCPT
+
+	// invoke setSize() on the Solver
+	LinearSOESolver *tSolver = this->getSolver();
+	int solverOK = tSolver->setSize();
+	if(solverOK < 0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << " solver failed setSize()\n";
+	    return solverOK;
+	  }    
       }
+    else
+      {
 
-      // 
-      // Call Petsc VecCreate & MatCreate; NOTE: using previously allocated storage for vectors
-      //      
+	// 
+	// Call Petsc VecCreate & MatCreate; NOTE: using previously allocated storage
+	// for vectors.
+	//
 
-      //      ierr = PetscOptionsGetInt(PETSC_NULL, "-n", &size, &flg); CHKERRQ(ierr);
-      
-      if (blockSize == 1) {
-	ierr = MatCreateSeqAIJ(PETSC_COMM_SELF, size, size, 0, rowA.getDataPtr(), &A); CHKERRQ(ierr);
-      } else {
-	ierr = MatCreateSeqBAIJ(PETSC_COMM_SELF, blockSize, size,size, 0, rowA.getDataPtr(), &A); CHKERRQ(ierr);
+	//Modified LCPT 6/9/2018
+	ierr= PetscOptionsGetInt(PETSC_NULL, nullptr, "-n", &size, &flg); CHKERRQ(ierr);
+	//End of modification
+	ierr= MatCreate(PETSC_COMM_WORLD, &A); CHKERRQ(ierr);
+	//ierr= MatCreate(PETSC_COMM_WORLD, PETSC_DECIDE, PETSC_DECIDE,size, size, ); CHKERRQ(ierr);
+	ierr= MatSetFromOptions(A);CHKERRQ(ierr);
+	ierr= MatGetOwnershipRange(A, &startRow, &endRow);CHKERRQ(ierr);
+
+	ierr= VecCreateMPIWithArray(PETSC_COMM_WORLD, endRow-startRow, size, size, &getX(startRow),  &x); CHKERRQ(ierr);  //LCPT
+	ierr= VecCreateMPIWithArray(PETSC_COMM_WORLD, endRow-startRow, size, size, &getB(startRow),  &b); CHKERRQ(ierr);  //LCPT
+
+	// invoke setSize() on the XC::Solver
+	LinearSOESolver *tSolver = this->getSolver();
+	const int solverOK = tSolver->setSize();
+	if(solverOK < 0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "WARNING: solver failed setSize()\n";
+	    return solverOK;
+	  }    
       }
-      
-      ierr= VecCreateSeqWithArray(PETSC_COMM_WORLD, size, size, getPtrX(), &x); CHKERRQ(ierr); //LCPT
-      ierr= VecCreateSeqWithArray(PETSC_COMM_WORLD, size, size, getPtrB(), &b); CHKERRQ(ierr); //LCPT
-
-      // invoke setSize() on the XC::Solver
-      LinearSOESolver *tSolver = this->getSolver();
-      int solverOK = tSolver->setSize();
-      if (solverOK < 0) {
-	std::cerr << "WARNING:XC::PetscSOE::setSize :";
-	std::cerr << " solver failed setSize()\n";
-	return solverOK;
-      }    
-      
-
-    } else {
-
-      // 
-      // Call Petsc VecCreate & MatCreate; NOTE: using previously allocated storage for vectors
-      // 
-      //
-
-      ierr= PetscOptionsGetInt(PETSC_NULL, "-n", &size, &flg); CHKERRQ(ierr);
-      ierr= MatCreate(PETSC_COMM_WORLD, &A); CHKERRQ(ierr);
-      //ierr= MatCreate(PETSC_COMM_WORLD, PETSC_DECIDE, PETSC_DECIDE,size, size, ); CHKERRQ(ierr);
-      ierr= MatSetFromOptions(A);CHKERRQ(ierr);
-      ierr= MatGetOwnershipRange(A, &startRow, &endRow);CHKERRQ(ierr);
-
-      ierr= VecCreateMPIWithArray(PETSC_COMM_WORLD, endRow-startRow, size, size, &getX(startRow),  &x); CHKERRQ(ierr);  //LCPT
-      ierr= VecCreateMPIWithArray(PETSC_COMM_WORLD, endRow-startRow, size, size, &getB(startRow),  &b); CHKERRQ(ierr);  //LCPT
-
-      // invoke setSize() on the XC::Solver
-      LinearSOESolver *tSolver = this->getSolver();
-      int solverOK = tSolver->setSize();
-      if (solverOK < 0) {
-	std::cerr << "WARNING:XC::PetscSOE::setSize :";
-	std::cerr << " solver failed setSize()\n";
-	return solverOK;
-      }    
-    }
-
     return result;    
-}
+  }
 
 
 int XC::PetscSOE::addA(const XC::Matrix &m, const XC::ID &id, double fact)

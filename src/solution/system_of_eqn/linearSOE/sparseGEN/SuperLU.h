@@ -109,7 +109,7 @@ class SuperLU : public SparseGenColLinSolver
     void inic_permutation_vectors(const size_t &n);
     void alloc_matrices(const size_t &n);
     void alloc(const size_t &n);
-    int factoriza(void);
+    int factorize(void);
 
     friend class LinearSOE;
     friend class FEM_ObjectBroker;
