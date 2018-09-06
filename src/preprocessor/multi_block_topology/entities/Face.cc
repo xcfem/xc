@@ -33,7 +33,7 @@
 
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
-#include "med.h"
+
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/set_mgmt/Set.h"
 #include "vtkCellType.h"
@@ -239,23 +239,3 @@ int XC::Face::getVtkCellType(void) const
     return retval;
   }
 
-//! @brief Interfaz con el formato MED de Salome.
-int XC::Face::getMEDCellType(void) const
-  {
-    const size_t nl= getNumberOfEdges();
-    int retval= -1;
-    switch(nl)
-      {
-      case 1:
-        retval= MED_SEG2;
-      case 2:
-        retval= MED_NONE;
-      case 3:
-        retval= MED_TRIA3;
-      case 4:
-        retval= MED_QUAD4;
-      default:
-        retval= MED_NONE;
-      }
-    return retval;
-  }

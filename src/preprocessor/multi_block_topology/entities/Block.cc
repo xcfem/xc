@@ -35,7 +35,7 @@
 
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
-#include "med.h"
+
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/set_mgmt/Set.h"
 #include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
@@ -82,11 +82,6 @@ XC::SetEstruct *XC::Block::getCopy(void) const
 //! @brief Interface with VTK.
 int XC::Block::getVtkCellType(void) const
   { return VTK_HEXAHEDRON; }
-
-//! @brief Interface with Salome MED format
-//! (http://www.salome-platform.org/user-section/about/med).
-int XC::Block::getMEDCellType(void) const
-  { return MED_HEXA8; }
 
 //! @brief Check that number of divisions of the lines are compatible.
 bool XC::Block::checkNDivs(void) const

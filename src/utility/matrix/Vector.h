@@ -191,7 +191,7 @@ class Vector: public EntCmd
 
     void write(std::ofstream &);
     void read(std::ifstream &);
-    friend std::ostream &operator<<(std::ostream &s, const Vector &);
+    friend std::ostream &operator<<(std::ostream &, const Vector &);
     friend std::string to_string(const Vector &);
     inline std::string toString(void) const
       { return to_string(*this); }
@@ -218,6 +218,8 @@ Vector normalize(const Vector &);
 Vector normalize_inf(const Vector &);
 
 
+std::ostream &operator<<(std::ostream &, const Vector &);
+std::string to_string(const Vector &);
 
 /********* INLINED VECTOR FUNCTIONS ***********/
 //! @brief Returns the size of the Vector.

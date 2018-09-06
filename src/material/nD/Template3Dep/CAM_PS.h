@@ -91,7 +91,7 @@ class CAMPotentialSurface : public PotentialSurface
 };
 
 // Overloaded Insertion Operator
-std::ostream &operator<<(std::ostream &os,const CAMPotentialSurface &YS);
+std::ostream &operator<<(std::ostream &,const CAMPotentialSurface &);
 
 } // end of XC namespace
 

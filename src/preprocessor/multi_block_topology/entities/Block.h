@@ -63,7 +63,6 @@ class Block: public Body
     Pnt *getVertex(const size_t &i);
     const Pnt *getVertex(const size_t &i) const;
     int getVtkCellType(void) const;
-    int getMEDCellType(void) const;
 
     size_t NDivI(void) const;
     size_t NDivJ(void) const;

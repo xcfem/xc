@@ -114,6 +114,7 @@ struct Conc02HistoryVars
       }
   };
 
+//! @brief Printing stuff.
 inline std::ostream &operator<<(std::ostream &os,const Conc02HistoryVars &hv)
    {
      hv.Print(os);

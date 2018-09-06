@@ -91,8 +91,10 @@ class QuadSectRegion: public QuadCellRegion
 
 
     void Print(std::ostream &s, int flag =0) const;   
-    friend std::ostream &operator<<(std::ostream &s, QuadSectRegion &);    
+    friend std::ostream &operator<<(std::ostream &, QuadSectRegion &);    
   };
+ 
+std::ostream &operator<<(std::ostream &, QuadSectRegion &);
 } // end of XC namespace
 
 

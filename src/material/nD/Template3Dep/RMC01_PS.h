@@ -83,14 +83,16 @@ class RMC01PotentialSurface : public PotentialSurface
 
     BJtensor d2Qodsds1(const EPState *EPS) const; // For Consistent Algorithm, Z Cheng, Jan 2004
 
-    void print() { std::cerr << *this; };
+    void print()
+      { std::cout << *this; };
 
     //================================================================================
     // Overloaded Insertion Operator
     // prints an RMC01-PotentialSurface's contents
     //================================================================================
-    friend std::ostream& operator<< (std::ostream& os, const RMC01PotentialSurface &PS);
+    friend std::ostream& operator<<(std::ostream &, const RMC01PotentialSurface &);
   };
+std::ostream& operator<<(std::ostream &, const RMC01PotentialSurface &);
 } // end of XC namespace
 
 #endif

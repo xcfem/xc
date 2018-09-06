@@ -87,12 +87,14 @@ class MDPotentialSurface : public PotentialSurface
     // Overloaded Insertion Operator
     // prints an PotentialSurface's contents 
     //================================================================================
-    friend std::ostream& operator<< (std::ostream& os, const MDPotentialSurface &PS)
-      {
-        os << "Manzari-Dafalias Potential Surface Parameters: " << std::endl;
-        return os;
-      }
-};
+    friend std::ostream& operator<<(std::ostream &, const MDPotentialSurface &);
+  };
+
+inline std::ostream& operator<<(std::ostream &os, const MDPotentialSurface &PS)
+  {
+    os << "Manzari-Dafalias Potential Surface Parameters: " << std::endl;
+    return os;
+  }
 } // end of XC namespace
 
 #endif

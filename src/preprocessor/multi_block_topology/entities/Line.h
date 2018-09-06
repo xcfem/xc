@@ -67,7 +67,6 @@ class Line: public LineBase
     Segment3d getLineSegment(void) const;
     virtual const Vector &getTang(const double &) const;
     int getVtkCellType(void) const;
-    int getMEDCellType(void) const;
 
 
   };

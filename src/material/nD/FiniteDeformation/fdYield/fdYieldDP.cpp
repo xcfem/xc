@@ -249,7 +249,7 @@ XC::stresstensor XC::fdYieldDP::dYoda(const XC::stresstensor &sts, const XC::FDE
 }
 	
 //--------------------------------------------------------------------
-std::ostream& XC::operator<<(std::ostream& os, const XC::fdYieldDP &fdydDP)
+std::ostream& XC::operator<<(std::ostream &os, const XC::fdYieldDP &fdydDP)
 {
     os << "fdYieldDP Parameters: " << "\n";
     os << "FricAngle: " << fdydDP.FricAngle << "\n";

@@ -36,7 +36,6 @@
 
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
-#include "med.h"
 #include "vtkCellType.h"
 
 //! @brief Constructor.
@@ -221,10 +220,6 @@ Pos3dArray XC::CircularArc::get_positions(void) const
 //! @brief Interface with VTK.
 int XC::CircularArc::getVtkCellType(void) const
   { return VTK_QUADRATIC_EDGE; }
-
-//! @brief Interface with MED format of Salome.
-int XC::CircularArc::getMEDCellType(void) const
-  { return MED_SEG3; }
 
 //! @brief Return k-points.
 XC::ID XC::CircularArc::getKPoints(void) const

@@ -74,7 +74,7 @@ void XC::fdEvolution_T::print()
     std::cerr << (*this);
 }
 
-std::ostream& XC::operator<< (std::ostream& os, const XC::fdEvolution_T & ev)
+std::ostream& XC::operator<<(std::ostream &os, const XC::fdEvolution_T & ev)
   {
     os << "XC::Tensor Evolution Law's Parameters: " << "\n";
     return os;

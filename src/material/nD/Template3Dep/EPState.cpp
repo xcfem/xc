@@ -1390,8 +1390,8 @@ int XC::EPState::revertToStart () {
 // Overloaded Insertion Operator
 // prints an XC::EPState's contents
 //================================================================================
-std::ostream &XC::operator<<(std::ostream& os, const XC::EPState & EPS)
-//ostream & operator<< (ostream& os, const XC::EPState & EPS)
+std::ostream &XC::operator<<(std::ostream &os, const XC::EPState & EPS)
+//ostream & operator<<(ostream &os, const XC::EPState & EPS)
     {
       //        os.setf( ios::showpos | ios::scientific);
       os.precision(4);

@@ -100,8 +100,10 @@ class SectionRepres: public TaggedObject
 
 
     void Print(std::ostream &s, int flag =0);
-    friend std::ostream &operator<<(std::ostream &s, SectionRepres &fiberSectionRepr);    
+    friend std::ostream &operator<<(std::ostream &, SectionRepres &);    
   };
+
+std::ostream &operator<<(std::ostream &, SectionRepres &);    
 
 } // end of XC namespace
 

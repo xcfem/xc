@@ -63,16 +63,12 @@ class MultiYieldSurface
     MultiYieldSurface(const Vector & center_init, double size_init, 
                     double plas_modul); 
 
-  void setData(const Vector & center_init, double size_init,double plas_modul); 
-  const Vector & center() const {return theCenter; }
-  double size() const {return theSize; }
-  double modulus() const {return plastShearModulus; }
-  void  setCenter(const Vector & newCenter); 
-
-  // friend ostream & operator<< (ostream & os, const MultiYieldSurface & );  
-  // friend istream & operator>> (istream & is, MultiYieldSurface & );
-
-};
+    void setData(const Vector &center_init, double size_init,double plas_modul); 
+    const Vector & center() const {return theCenter; }
+    double size() const {return theSize; }
+    double modulus() const {return plastShearModulus; }
+    void setCenter(const Vector &); 
+  };
 } // end of XC namespace
 
 #endif

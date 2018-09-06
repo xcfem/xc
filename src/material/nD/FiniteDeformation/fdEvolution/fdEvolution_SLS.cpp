@@ -89,7 +89,7 @@ void XC::fdEvolution_SLS::print()
 }
 
 //------------------------------------------------------------------------
-std::ostream& XC::operator<< (std::ostream& os, const XC::fdEvolution_SLS & fdesl)
+std::ostream& XC::operator<<(std::ostream &os, const XC::fdEvolution_SLS & fdesl)
 {
    os.precision(5);
    os.width(10);

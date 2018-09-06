@@ -1101,7 +1101,7 @@ void XC::stresstensor::reportTensor(const std::string &msg) const
 
 //##############################################################################
 std::ostream &XC::operator<<(std::ostream &os, const XC::stresstensor & rhs)
-//ostream& operator<< (ostream& os, const stresstensor & rhs)
+//ostream& operator<<(ostream &os, const stresstensor & rhs)
   {
         os.precision(4);
         os.width(10);

@@ -81,9 +81,9 @@ class VMPotentialSurface : public PotentialSurface
     // Overloaded Insertion Operator
     // prints an VM PotentialSurface's contents 
     //================================================================================
-    friend std::ostream& operator<< (std::ostream& os, const VMPotentialSurface & YS);
-
-};
+    friend std::ostream& operator<<(std::ostream &, const VMPotentialSurface &);
+  };
+std::ostream& operator<<(std::ostream &, const VMPotentialSurface &);
 } // end of XC namespace
 
 #endif

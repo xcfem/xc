@@ -633,16 +633,57 @@ double XC::MDEvolutionLaw::getFmax() const
 
 //================================================================================
 double XC::MDEvolutionLaw::getCf() const
-{       
-    return Cf;
-}
+  { return Cf; }
 
 //================================================================================
 double XC::MDEvolutionLaw::geta() const
-{       
-    return a;
-}
+  { return a; }
 
+//! @brief Print stuff.
+std::ostream& XC::operator<<(std::ostream &os, const XC::MDEvolutionLaw & MDEL)
+    {
+        os.unsetf( ios::scientific );
+        os.precision(5);
+
+        //os.width(10);       
+        os << std::endln << "Manzari-Dafalias Evolution Law's parameters:" << std::endln;
+	os << "Mc = " << MDEL.getMc() << "; ";
+        //os.width(10);       
+	os << "Me = "  << MDEL.getMe() << "; ";
+        //os.width(10);       
+	os << "Lambda = " << MDEL.getLambda() << "; ";
+        //os.width(10);       
+	os << "ec_ref = " << MDEL.getec_ref() << "; ";
+        //os.width(10);       
+	os << "p_ref = " << MDEL.getp_ref() << "kPa"  << "; " << std::endln;
+
+        //os.width(10);       
+        os << "kc_b = " << MDEL.getkc_b() << "; ";
+        //os.width(10);       
+	os << "kc_d = " << MDEL.getkc_d() << "; ";
+        //os.width(10);       
+	os << "ke_b = " << MDEL.getke_b() << "; ";
+        //os.width(10);       
+	os << "ke_d = " << MDEL.getke_d() << "; " << std::endln;
+
+        //os.width(10);       
+        //os << "h = " << MDEL.h << "; ";
+        //os.width(10);       
+	os << "ho = " << MDEL.getho() << "; ";
+        //os.width(10);       
+	os << "Cm = " << MDEL.getCm() << "; " << "eo = " << MDEL.geteo() << std::endln;
+
+        //os.width(10);       
+        //os << "D = " << MDEL.getD() << "; ";
+        //os.width(10);       
+	os << "Ao = " << MDEL.getAo() << "; ";
+        //os.width(10);       
+	os << "Fmax = " << MDEL.getFmax() << "; ";
+        //os.width(10);       
+	os << "Cf = " << MDEL.getCf() << "; " << std::endln << std::endln; 
+               
+        return os;
+    }
 
 #endif
 

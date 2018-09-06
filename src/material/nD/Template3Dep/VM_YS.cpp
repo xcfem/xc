@@ -153,7 +153,7 @@ double XC::VMYieldSurface::xi_s1(const XC::EPState *EPS) const {
 }
 
 //================================================================================
-std::ostream& XC::operator<< (std::ostream& os, const VMYieldSurface & YS)
+std::ostream& XC::operator<<(std::ostream &os, const VMYieldSurface & YS)
   {
     os << "Von Mises Yield Surface Parameters: " << std::endl;
     return os;

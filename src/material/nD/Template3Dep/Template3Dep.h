@@ -320,8 +320,11 @@ class Template3Dep : public NDMaterial
     EvolutionLaw_T * getELT4() const;
     
 
-    friend std::ostream& operator<< (std::ostream& os, const Template3Dep & MP);
+    friend std::ostream& operator<<(std::ostream &os, const Template3Dep & MP);
   };
+
+//! @brief Printing stuff.
+std::ostream& operator<<(std::ostream &os, const Template3Dep & MP);
 } // end of XC namespace
 
 

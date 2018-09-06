@@ -358,7 +358,7 @@ XC::BJtensor XC::fdFlowDP::d2Fodada(const XC::stresstensor &sts, const XC::FDEPS
 }
 
 //--------------------------------------------------------------------
-std::ostream& XC::operator<<(std::ostream& os, const XC::fdFlowDP &fdfdDP)
+std::ostream& XC::operator<<(std::ostream &os, const XC::fdFlowDP &fdfdDP)
   {
     os << "fdFlowDP Parameters: " << "\n";
     os << "DilatedAngle: " << fdfdDP.DilatedAngle << "\n";

@@ -407,10 +407,9 @@ class EPState
     // Overloaded Insertion Operator
     // prints an EPState's contents 
     //================================================================================
-    friend std::ostream & operator<< (std::ostream& os, const EPState & EPS);
-    //friend ostream & operator<< (ostream& os, const EPState & EPS);
-
-};
+    friend std::ostream & operator<<(std::ostream &, const EPState &);
+  };
+std::ostream & operator<<(std::ostream &, const EPState &);
 } // end of XC namespace
 
 

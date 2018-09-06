@@ -247,7 +247,7 @@ double XC::EvolutionLaw_NL_Eeq::getd() const
 }
 
 //================================================================================
-std::ostream& XC::operator<< (std::ostream& os, const XC::EvolutionLaw_NL_Eeq & NLEL)
+std::ostream& XC::operator<<(std::ostream &os, const EvolutionLaw_NL_Eeq & NLEL)
 {
   //    os.unsetf( ios::scientific );
     os.precision(5);

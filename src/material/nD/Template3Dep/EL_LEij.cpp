@@ -150,7 +150,7 @@ double XC::EvolutionLaw_L_Eij::geta() const
   { return a; }
 
 //================================================================================
-std::ostream& XC::operator<< (std::ostream& os, const XC::EvolutionLaw_L_Eij & LEL)
+std::ostream& XC::operator<<(std::ostream &os, const XC::EvolutionLaw_L_Eij & LEL)
   {
     //    os.unsetf(ios::scientific );
     os.precision(5);

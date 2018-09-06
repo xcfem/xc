@@ -41,7 +41,7 @@
 #include "solution/graph/graph/Vertex.h"
 #include "utility/matrix/ID.h"
 
-#include "xc_utils/src/geom/pos_vec/SVD3d.h"
+#include "xc_utils/src/geom/pos_vec/SlidingVectorsSystem3d.h"
 #include "xc_utils/src/geom/d2/Plane.h"
 #include "xc_utils/src/geom/d3/HalfSpace3d.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
@@ -342,7 +342,7 @@ void XC::SetMeshComp::calc_resisting_force(void)
 
 //! @brief Return the resultant of the forces over the nodes
 //! near to the plane, of the elements behind the plane.
-SVD3d XC::SetMeshComp::getResistingSVD3d(const Plane &plane,const Pos3d &centro,const double &tol,const bool &inc_inertia) const
+SlidingVectorsSystem3d XC::SetMeshComp::getResistingSlidingVectorsSystem3d(const Plane &plane,const Pos3d &centro,const double &tol,const bool &inc_inertia) const
   {
     //XX Can be enhanced computing the resultant in the intersection of
     //the element edges with the plane and interpolating the value at this
@@ -377,9 +377,9 @@ SVD3d XC::SetMeshComp::getResistingSVD3d(const Plane &plane,const Pos3d &centro,
 	        }
             }
       }
-    SVD3d retval(centro);
+    SlidingVectorsSystem3d retval(centro);
     for(std::set<const Node *>::const_iterator i= nodes_on_plane.begin();i!=nodes_on_plane.end();i++)
-      retval+= (*i)->getResistingSVD3d(connected_elements,inc_inertia);
+      retval+= (*i)->getResistingSlidingVectorsSystem3d(connected_elements,inc_inertia);
     return retval;    
   }
 

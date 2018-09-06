@@ -75,7 +75,7 @@ XC::stresstensor XC::fdYield::dYoda(const XC::stresstensor &sts,  const XC::FDEP
      return tZ2;
   }
 
-std::ostream& XC::operator<<(std::ostream& os, const XC::fdYield & fdyd)
+std::ostream& XC::operator<<(std::ostream &os, const XC::fdYield & fdyd)
   {
      os << "fdYield Parameters: " << "\n";
      return os;

@@ -52,7 +52,6 @@ class Segment: public Axis
     const Spot *P2(void) const;
     void setEndPoints(size_t, size_t);
     int getVtkCellType(void) const;
-    int getMEDCellType(void) const;
     //! @brief Return the number of vertices.
     inline virtual size_t getNumberOfVertices(void) const
       { return 2; }

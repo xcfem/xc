@@ -110,10 +110,9 @@ class EvolutionLaw_NL_Eeq : public EvolutionLaw_S
     // Overloaded Insertion Operator	 
     // prints nonlinear EvolutionLaw's contents 
     //================================================================================
-    friend std::ostream& operator<< (std::ostream& os, const EvolutionLaw_NL_Eeq & NLEL);
-
-    
-};
+    friend std::ostream& operator<<(std::ostream &, const EvolutionLaw_NL_Eeq &);
+  };
+std::ostream& operator<<(std::ostream &, const EvolutionLaw_NL_Eeq &);
 } // end of XC namespace
 
 

@@ -98,7 +98,7 @@ class DPPotentialSurface : public PotentialSurface
 // Overloaded Insertion Operator
 // prints an DP-PotentialSurface's contents 
 //================================================================================
-std::ostream& operator<< (std::ostream& os, const DPPotentialSurface &PS);
+std::ostream& operator<<(std::ostream &, const DPPotentialSurface &);
 
 } // end of XC namespace
 

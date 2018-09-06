@@ -66,7 +66,6 @@ namespace XC {
 class fdEvolution_S
   {
    public:
-    
     fdEvolution_S() {};
     virtual ~fdEvolution_S() {};
 
@@ -76,8 +75,10 @@ class fdEvolution_S
     virtual double HModulus(const stresstensor &sts, const FDEPState &fdepstate) const;  
 
     void print();
-    friend std::ostream& operator<< (std::ostream& os, const fdEvolution_S & ev);
+    friend std::ostream& operator<< (std::ostream &, const fdEvolution_S &);
   };
+
+std::ostream& operator<<(std::ostream &, const fdEvolution_S &);
 } // end of XC namespace
 
 

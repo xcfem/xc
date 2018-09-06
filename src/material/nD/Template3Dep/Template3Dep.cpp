@@ -3329,7 +3329,7 @@ double XC::Template3Dep::func(const XC::stresstensor & start_stress,
 // Overloaded Insertion Operator
 // prints an XC::EPState's contents
 //================================================================================
-std::ostream& XC::operator<<(std::ostream& os, const XC::Template3Dep & MP)
+std::ostream& XC::operator<<(std::ostream &os, const XC::Template3Dep & MP)
 {
     os << std::endl << "Template3Dep: " << std::endl;
     os << "\ttag: " << MP.getTag() << std::endl;

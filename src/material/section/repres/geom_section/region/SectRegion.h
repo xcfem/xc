@@ -95,8 +95,10 @@ class SectRegion: public DiscretBase
 
 
     virtual void Print(std::ostream &s, int flag= 0) const =0;   
-    friend std::ostream &operator<<(std::ostream &s, const SectRegion &rg_scc);    
+    friend std::ostream &operator<<(std::ostream &, const SectRegion &);
   };
+ 
+std::ostream &operator<<(std::ostream &, const SectRegion &);
 } // end of XC namespace
 
 

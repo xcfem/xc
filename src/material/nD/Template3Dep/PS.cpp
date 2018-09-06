@@ -124,9 +124,16 @@ XC::BJtensor XC::PotentialSurface::d2Qodsdt3( const XC::EPState *EPS ) const
 // The d(dQ/dsigma_ij)/dt4_mn
 //================================================================================
 XC::BJtensor XC::PotentialSurface::d2Qodsdt4( const XC::EPState *EPS ) const
-{ 
+  { 
      BJtensor temp(4,def_dim_4,0.0);
      return temp;
-}
+  }
+
+//! @brief Print stuff.
+std::ostream& XC::operator<<(std::ostream &os, const XC::PotentialSurface & PS)
+  {
+    os << "Potential Surface Parameters: " << std::endl;
+    return os;
+  }
 
 #endif

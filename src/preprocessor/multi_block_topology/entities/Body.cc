@@ -34,7 +34,7 @@
 
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
-#include "med.h"
+
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/set_mgmt/Set.h"
 #include "xc_utils/src/geom/pos_vec/Pos3dArray.h"

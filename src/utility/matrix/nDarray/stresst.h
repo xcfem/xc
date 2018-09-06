@@ -150,7 +150,7 @@ class stresstensor : public BJtensor
     // Overloaded Insertion Operator	  ZHaohui Added Aug. 13, 2000
     // prints an stresstensor's contents 
     //================================================================================
-    friend std::ostream &operator<<(std::ostream &os, const stresstensor & rhs);
+    friend std::ostream &operator<<(std::ostream &, const stresstensor &);
 
     //  // routine used by root finder, takes an alfa and returns the
     //  // yield function value for that alfa
@@ -178,7 +178,7 @@ class stresstensor : public BJtensor
     //  
   };
 
-std::ostream &operator<<(std::ostream &os, const stresstensor & rhs);
+std::ostream &operator<<(std::ostream &, const stresstensor &);
 
 } // end of XC namespace
 

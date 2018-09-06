@@ -66,7 +66,6 @@ class YS_Evolution: public TaggedObject, public MovableObject
     			 int _dimension, double shr_iso=0.5, double shr_kin=0.5);
 //  Methods inherited
     virtual void Print(std::ostream &s, int flag =0);
-//	friend std::ostream &operator<<(std::ostream &s, const YS_Evolution &hModel);
 
     virtual int	update(int flag=0);
     virtual int commitState(void);

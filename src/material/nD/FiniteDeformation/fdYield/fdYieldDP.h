@@ -84,8 +84,9 @@ class fdYieldDP : public fdYield
 
     void print(void);
 
-    friend std::ostream& operator<< (std::ostream& os, const fdYieldDP & fdydDP);
-};
+    friend std::ostream& operator<< (std::ostream &, const fdYieldDP &);
+  };
+std::ostream& operator<< (std::ostream &, const fdYieldDP &);
 } // end of XC namespace
 
 

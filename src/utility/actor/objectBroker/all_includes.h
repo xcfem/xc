@@ -255,23 +255,6 @@
 #include "utility/recorder/response/Response.h"
 #include "utility/recorder/response/ElementResponse.h"
 
-#include "utility/med_xc/MEDBaseInfo.h"
-#include "utility/med_xc/MEDCellBaseInfo.h"
-#include "utility/med_xc/MEDCellInfo.h"
-#include "utility/med_xc/MEDDblFieldInfo.h"
-#include "utility/med_xc/MEDFieldInfo.h"
-#include "utility/med_xc/MEDGaussModel.h"
-#include "utility/med_xc/MEDGroupInfo.h"
-#include "utility/med_xc/MEDIntFieldInfo.h"
-#include "utility/med_xc/MEDMapConectividad.h"
-#include "utility/med_xc/MEDMapIndices.h"
-#include "utility/med_xc/MEDMapNumCellsByType.h"
-#include "utility/med_xc/MEDMesh.h"
-#include "utility/med_xc/MEDMeshing.h"
-#include "utility/med_xc/MEDObject.h"
-#include "utility/med_xc/MEDTFieldInfo.h"
-#include "utility/med_xc/MEDVertexInfo.h"
-
 
 // sp_constraint header files
 #include "domain/constraints/SFreedom_Constraint.h"

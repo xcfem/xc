@@ -84,15 +84,16 @@ class MDPotentialSurface01 : public PotentialSurface
     double dgoverdt(double theta, double c) const;
     BJtensor apqdnods(const EPState *EPS) const;
     
-    void print() { std::cerr << *this; };
+    void print()
+      { std::cout << *this; };
 
     //================================================================================
     // Overloaded Insertion Operator
     // prints an PotentialSurface's contents 
     //================================================================================
-    friend std::ostream& operator<< (std::ostream& os, const MDPotentialSurface01 &PS);
-
-};
+    friend std::ostream& operator<<(std::ostream &, const MDPotentialSurface01 &);
+  };
+std::ostream& operator<<(std::ostream &, const MDPotentialSurface01 &);
 } // end of XC namespace
 
 #endif

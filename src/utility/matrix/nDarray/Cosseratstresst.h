@@ -142,7 +142,7 @@ class Cosseratstresstensor : public BJtensor
     // Overloaded Insertion Operator	  ZHaohui Added Aug. 13, 2000
     // prints an Cosseratstresstensor's contents 
     //================================================================================
-    friend std::ostream &operator<<(std::ostream &os, const Cosseratstresstensor & rhs);
+    friend std::ostream &operator<<(std::ostream &, const Cosseratstresstensor &);
 
     //  // routine used by root finder, takes an alfa and returns the
     //  // yield function value for that alfa
@@ -169,7 +169,7 @@ class Cosseratstresstensor : public BJtensor
     //  
     //  
   };
-std::ostream &operator<<(std::ostream &os, const Cosseratstresstensor & rhs);
+std::ostream &operator<<(std::ostream &, const Cosseratstresstensor &);
 } // end of XC namespace
 
 #endif

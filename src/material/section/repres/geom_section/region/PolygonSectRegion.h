@@ -62,8 +62,10 @@ class PolygonSectRegion: public QuadCellRegion
 
 
     void Print(std::ostream &s, int flag =0) const;   
-    friend std::ostream &operator<<(std::ostream &s, PolygonSectRegion &rg_scc_plg);    
+    friend std::ostream &operator<<(std::ostream &, PolygonSectRegion &);    
   };
+
+std::ostream &operator<<(std::ostream &, PolygonSectRegion &);    
 } // end of XC namespace
 
 

@@ -35,7 +35,7 @@
 
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
-#include "med.h"
+
 
 //! @brief Constructor.
 XC::LineBase::LineBase(Preprocessor *m,const size_t &nd)

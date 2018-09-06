@@ -106,9 +106,11 @@ class TaggedObject: public EntCmd
     void assignTag(int newTag);
     int getTag(void) const;
 
-    virtual void Print(std::ostream &s, int flag =0);       
-    friend std::ostream &operator<<(std::ostream &s, TaggedObject &m);        
+    virtual void Print(std::ostream &, int flag =0);       
+    friend std::ostream &operator<<(std::ostream &, TaggedObject &);        
   };
+
+std::ostream &operator<<(std::ostream &, TaggedObject &);        
 
 //! @brief Returns the tag associated with the object.
 inline int TaggedObject::getTag(void) const

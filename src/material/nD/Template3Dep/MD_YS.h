@@ -75,12 +75,15 @@ class MDYieldSurface : public YieldSurface
     // Redefine 1st derivative of F over tensorial internal variables
     BJtensor xi_t1(const EPState *EPS) const; // dF / d alpha_ij
 
-    void print() { std::cerr << *this; };
+    void print()
+      { std::cout << *this; };
   
     //================================================================================
     // Overloaded Insertion Operator
-    friend std::ostream& operator<< (std::ostream& os, const MDYieldSurface & YS);
+    friend std::ostream& operator<<(std::ostream &, const MDYieldSurface &);
   };
+ 
+std::ostream& operator<<(std::ostream &, const MDYieldSurface &);
 } // end of XC namespace
 
 #endif

@@ -87,7 +87,7 @@ class DPYieldSurface01: public YieldSurface
 };
 
 // Overloaded Insertion Operator
-std::ostream& operator<< (std::ostream& os, const DPYieldSurface01 & YS);
+std::ostream &operator<<(std::ostream &, const DPYieldSurface01 &);
 
 } // end of XC namespace
 

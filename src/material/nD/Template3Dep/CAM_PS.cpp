@@ -429,7 +429,7 @@ double XC:: CAMPotentialSurface::getM() const
   { return M; }
 
 
-std::ostream& XC::operator<< (std::ostream& os, const XC::CAMPotentialSurface & YS)
+std::ostream& XC::operator<<(std::ostream &os, const XC::CAMPotentialSurface & YS)
   {
     os << "Cam Clay Potential Surface Parameters: " << std::endl;
     os << "M = " << YS.getM() << std::endl;

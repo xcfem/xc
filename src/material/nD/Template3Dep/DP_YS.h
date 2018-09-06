@@ -103,9 +103,9 @@ class DPYieldSurface : public YieldSurface
     // Overloaded Insertion Operator
     // prints an DP YieldSurface's contents 
     //================================================================================
-    friend std::ostream& operator<< (std::ostream& os, const DPYieldSurface & YS);
-
-};
+    friend std::ostream& operator<<(std::ostream &, const DPYieldSurface &);
+  };
+std::ostream& operator<<(std::ostream &, const DPYieldSurface &);
 } // end of XC namespace
 
 #endif

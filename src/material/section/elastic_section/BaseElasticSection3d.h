@@ -80,6 +80,7 @@ class BaseElasticSection3d: public BaseElasticSection
     void Print(std::ostream &s, int flag =0) const;
   };
 
+//! @brief Printing sturr.
 inline std::ostream &operator<<(std::ostream &os,const BaseElasticSection3d &scc)
   {
     scc.Print(os);

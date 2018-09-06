@@ -105,9 +105,9 @@ class Timer
     int getNumPageFaults(void) const;
     
     virtual void Print(std::ostream &s) const;   
-    friend std::ostream &operator<<(std::ostream &s, const Timer &E);    
+    friend std::ostream &operator<<(std::ostream &, const Timer &);    
   };
-std::ostream &operator<<(std::ostream &s, const Timer &E);    
+std::ostream &operator<<(std::ostream &, const Timer &);
 } // end of XC namespace
 
 

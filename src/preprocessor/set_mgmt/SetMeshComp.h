@@ -36,7 +36,7 @@
 #include <set>
 
 class Pos3d;
-class SVD3d;
+class SlidingVectorsSystem3d;
 class Plane;
 
 namespace XC {
@@ -219,7 +219,7 @@ class SetMeshComp: public SetBase
     virtual void Transforma(const TrfGeom &trf);
     virtual void Transforma(const size_t &indice_trf);
 
-    SVD3d getResistingSVD3d(const Plane &,const Pos3d &,const double &,const bool &) const;
+    SlidingVectorsSystem3d getResistingSlidingVectorsSystem3d(const Plane &,const Pos3d &,const double &,const bool &) const;
 
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);

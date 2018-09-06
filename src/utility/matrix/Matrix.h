@@ -229,7 +229,7 @@ class Matrix: public EntCmd
     int Extract(const Matrix &V, int init_row, int init_col, double fact = 1.0);
 
 
-    friend std::ostream &operator<<(std::ostream &s, const Matrix &M);
+    friend std::ostream &operator<<(std::ostream &, const Matrix &);
     friend std::string to_string(const Matrix &);
     inline std::string toString(void) const
       { return to_string(*this); }
@@ -237,6 +237,8 @@ class Matrix: public EntCmd
     friend Matrix operator*(double a,const Matrix &M);
 
   };
+
+std::ostream &operator<<(std::ostream &, const Matrix &);
 
 Matrix m_double_to_matrix(const m_double &m);
 m_double matrix_to_m_double(const Matrix &m);

@@ -84,8 +84,9 @@ class fdFlowVM : public fdFlow
 
     void print(void);
 
-    friend std::ostream& operator<< (std::ostream& os, const fdFlowVM &fdflVM);
+    friend std::ostream& operator<< (std::ostream &, const fdFlowVM &);
 };
+std::ostream& operator<<(std::ostream &, const fdFlowVM &);
 } // end of XC namespace
 
 

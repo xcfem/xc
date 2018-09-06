@@ -141,7 +141,6 @@ class EntMdlr: public SetEstruct
 
     void fix(const SFreedom_Constraint &);
 
-    virtual int getMEDCellType(void) const;
     virtual int getVtkCellType(void) const;
 
     void setGenMesh(bool m);

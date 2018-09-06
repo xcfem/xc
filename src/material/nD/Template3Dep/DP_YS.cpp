@@ -215,8 +215,8 @@ XC::BJtensor XC::DPYieldSurface::xi_t1( const XC::EPState *EPS) const {
     return xi;
 }
 
-//================================================================================
-std::ostream& XC::operator<<(std::ostream& os, const XC::DPYieldSurface & YS)
+//===========================================================================
+std::ostream& XC::operator<<(std::ostream &os, const XC::DPYieldSurface &YS)
   {
    os << "Drucker-Prager Yield Surface Parameters: " << std::endl;
    os.precision(4);

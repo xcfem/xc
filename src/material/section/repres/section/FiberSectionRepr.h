@@ -107,8 +107,10 @@ class FiberSectionRepr: public SectionRepres
     FiberSectionGJ getFiberSectionGJ(int secTag,const double &GJ) const;
     
     void Print(std::ostream &s, int flag =0);
-    friend std::ostream &operator<<(std::ostream &s, FiberSectionRepr &fiberSectionRepr);    
+    friend std::ostream &operator<<(std::ostream &, FiberSectionRepr &);    
   };
+std::ostream &operator<<(std::ostream &, FiberSectionRepr &);
+ 
 } // end of XC namespace
 #endif
 

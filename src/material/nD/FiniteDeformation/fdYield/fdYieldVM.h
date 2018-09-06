@@ -80,7 +80,7 @@ class fdYieldVM : public fdYield
     
     void print(void);
 
-    friend std::ostream& operator<< (std::ostream& os, const fdYieldVM & fdydVM);
+    friend std::ostream& operator<<(std::ostream &, const fdYieldVM & fdydVM);
 };
 } // end of XC namespace
 

@@ -36,7 +36,6 @@
 
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
-#include "med.h"
 #include "vtkCellType.h"
 
 //! @brief Constructor.
@@ -212,8 +211,3 @@ const XC::Vector &XC::Line::getTang(const double &s) const
 //! @brief VTK interface.
 int XC::Line::getVtkCellType(void) const
   { return VTK_LINE; }
-
-
-//! @brief Salome MED interface.
-int XC::Line::getMEDCellType(void) const
-  { return MED_SEG2; }

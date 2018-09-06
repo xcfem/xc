@@ -63,7 +63,7 @@ class DbTagData
     void Print(std::ostream &os) const;
   };
 
-std::ostream &operator<<(std::ostream &os,const DbTagData &);
+std::ostream &operator<<(std::ostream &,const DbTagData &);
 
 } // end of XC namespace
 

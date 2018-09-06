@@ -131,7 +131,7 @@ double XC::fdFlowVM::d2Fodqdq(const XC::stresstensor &sts, const XC::FDEPState &
 }
 
 //--------------------------------------------------------------------
-std::ostream& XC::operator<<(std::ostream& os, const XC::fdFlowVM &fdflVM)
+std::ostream& XC::operator<<(std::ostream &os, const XC::fdFlowVM &fdflVM)
   {
     os << "fdFlowVM Parameters: " << "\n";
     os << "Y0: " << fdflVM.Y0 << "\n";

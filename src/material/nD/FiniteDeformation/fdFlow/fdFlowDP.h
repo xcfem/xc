@@ -87,8 +87,9 @@ class fdFlowDP : public fdFlow
     BJtensor d2Fodada(const stresstensor &sts, const FDEPState &fdepstate ) const ;
 
     void print(void);
-    friend std::ostream& operator<< (std::ostream& os, const fdFlowDP &fdflDP);
+    friend std::ostream& operator<< (std::ostream &, const fdFlowDP &);
   };
+std::ostream& operator<< (std::ostream &, const fdFlowDP &);
 } // end of XC namespace
 
 

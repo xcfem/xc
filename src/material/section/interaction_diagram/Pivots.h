@@ -88,6 +88,7 @@ class Pivots: public EntCmd
     void print(std::ostream &) const;
   };
 
+//! @brief Printing stuff.
 inline std::ostream &operator<<(std::ostream &os, const Pivots &p)
   {
     p.print(os);

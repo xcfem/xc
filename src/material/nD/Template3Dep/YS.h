@@ -95,8 +95,9 @@ class YieldSurface
     // Overloaded Insertion Operator
     // prints an YieldSurface's contents 
     //================================================================================
-    friend std::ostream& operator<< (std::ostream& os, const YieldSurface & YS);
-};
+    friend std::ostream& operator<<(std::ostream &, const YieldSurface &);
+  };
+std::ostream& operator<<(std::ostream &, const YieldSurface &);
 } // end of XC namespace
 
 

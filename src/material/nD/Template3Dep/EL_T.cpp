@@ -108,7 +108,7 @@ void XC::EvolutionLaw_T::print()
 // Overloaded Insertion Operator
 // prints base Evolution Law_T's contents 
 //================================================================================
-std::ostream& XC::operator<<(std::ostream& os, const XC::EvolutionLaw_T & EL)
+std::ostream& XC::operator<<(std::ostream &os, const XC::EvolutionLaw_T & EL)
   {
     os << "Base of Tensorial Evolution Law's Parameters: Nothing" << std::endl;
    return os;

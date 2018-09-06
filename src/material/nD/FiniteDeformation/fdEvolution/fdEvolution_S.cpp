@@ -71,7 +71,7 @@ void XC::fdEvolution_S::print()
     std::cerr << (*this);
 }
 
-std::ostream& XC::operator<< (std::ostream& os, const XC::fdEvolution_S & ev)
+std::ostream& XC::operator<<(std::ostream &os, const XC::fdEvolution_S & ev)
 {
    os << "Scalar Evolution Law's Parameters: " << "\n";
    return os;

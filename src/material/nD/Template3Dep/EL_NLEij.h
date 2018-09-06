@@ -103,10 +103,9 @@ class EvolutionLaw_NL_Eij : public EvolutionLaw_T
     // Overloaded Insertion Operator	  Zhaohui Added Aug. 13, 2000
     // prints Linear EvolutionLaw's contents 
     //================================================================================
-    friend std::ostream& operator<< (std::ostream& os, const EvolutionLaw_NL_Eij & LEL);
-
-    
-};
+    friend std::ostream& operator<<(std::ostream &, const EvolutionLaw_NL_Eij &);
+ };
+std::ostream &operator<<(std::ostream &, const EvolutionLaw_NL_Eij &);
 } // end of XC namespace
 
 

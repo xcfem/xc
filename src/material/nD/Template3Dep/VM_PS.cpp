@@ -136,7 +136,7 @@ XC::BJtensor XC::VMPotentialSurface::d2Qodsdt1(const XC::EPState *EPS) const
 //================================================================================
 // friend XC::std::ostream functions for output
 //================================================================================
-std::ostream& XC::operator<< (std::ostream& os, const XC::VMPotentialSurface & YS)
+std::ostream& XC::operator<<(std::ostream &os, const XC::VMPotentialSurface & YS)
   {
     os << "Von Mises Potential Surface Parameters: " << std::endl;
     return os;

@@ -74,7 +74,6 @@ class CircularArc: public LineBase
     virtual void SetVertice(const size_t &,Pnt *);
     virtual BND3d Bnd(void) const;
     int getVtkCellType(void) const;
-    int getMEDCellType(void) const;
     virtual ID getKPoints(void) const;
   };
 

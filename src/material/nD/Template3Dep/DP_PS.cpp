@@ -208,7 +208,7 @@ double XC::DPPotentialSurface::getalfa2() const {
 }
 
 //================================================================================
-std::ostream& XC::operator<< (std::ostream& os, const XC::DPPotentialSurface &PS)
+std::ostream& XC::operator<<(std::ostream &os, const XC::DPPotentialSurface &PS)
   {
      os << "Drucker-Prager Potential Surface Parameters: " << std::endl;
      os << "alfa2 = " << PS.getalfa2() << std::endl;

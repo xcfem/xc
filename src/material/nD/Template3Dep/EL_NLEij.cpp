@@ -184,7 +184,7 @@ double XC::EvolutionLaw_NL_Eij::getCr() const
 }
 
 //================================================================================
-std::ostream& XC::operator<<(std::ostream& os, const XC::EvolutionLaw_NL_Eij & LEL)
+std::ostream& XC::operator<<(std::ostream &os, const XC::EvolutionLaw_NL_Eij & LEL)
   {
   //    os.unsetf( ios::scientific );
     os.precision(5);

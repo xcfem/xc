@@ -109,7 +109,7 @@ class RegionContainer: protected std::list<SectRegion *>, public SectionMassProp
     void Print(std::ostream &s) const;
   };
 
- std::ostream &operator<<(std::ostream &os,const RegionContainer &lr);
+std::ostream &operator<<(std::ostream &,const RegionContainer &);
 
 } // end of XC namespace
 

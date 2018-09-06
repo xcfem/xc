@@ -105,9 +105,9 @@ class TriFCYieldSurface : public YieldSurface
     // Overloaded Insertion Operator
     // prints an XX YieldSurface's contents 
     //================================================================================
-    friend std::ostream& operator<< (std::ostream& os, const TriFCYieldSurface & YS);
-
-};
+    friend std::ostream& operator<<(std::ostream &, const TriFCYieldSurface &);
+  };
+std::ostream& operator<<(std::ostream &, const TriFCYieldSurface &);
 } // end of XC namespace
 
 #endif

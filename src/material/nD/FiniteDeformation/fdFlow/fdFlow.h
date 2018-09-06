@@ -90,8 +90,9 @@ class fdFlow
 
     virtual void print() = 0; 
 
-    friend std::ostream& operator<< (std::ostream& os, const fdFlow & fdfl);
+    friend std::ostream& operator<<(std::ostream &os, const fdFlow & fdfl);
 };
+std::ostream& operator<<(std::ostream &, const fdFlow &);
 } // end of XC namespace
 
 

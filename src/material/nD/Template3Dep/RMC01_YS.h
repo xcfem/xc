@@ -90,14 +90,17 @@ class RMC01YieldSurface : public YieldSurface
     // Redefine 1st derivative of F over tensorial internal variables
 //    tensor xi_t1(const EPState *EPS) const;
 
-    void print() { std::cerr << *this; }; 
+    void print()
+      { std::cout << *this; }; 
   
     //================================================================================
     // Overloaded Insertion Operator
     // prints an RMC01 YieldSurface's contents 
     //================================================================================
-    friend std::ostream& operator<< (std::ostream& os, const RMC01YieldSurface & YS);
+    friend std::ostream& operator<<(std::ostream &os, const RMC01YieldSurface & YS);
   };
+ 
+std::ostream& operator<<(std::ostream &, const RMC01YieldSurface &);
 } // end of XC namespace
 
 #endif

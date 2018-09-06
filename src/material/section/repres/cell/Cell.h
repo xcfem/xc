@@ -90,10 +90,10 @@ class Cell
     virtual double getArea(void) const = 0;
     virtual const Vector &getCentroidPosition(void);
     virtual void Print(std::ostream &s, int flag =0) const = 0;   
-    friend std::ostream &operator<<(std::ostream &s, const Cell &Cell);    
+    friend std::ostream &operator<<(std::ostream &, const Cell &);    
   };
 
-std::ostream &operator<<(std::ostream &s, const Cell &cell);
+std::ostream &operator<<(std::ostream &, const Cell &);
 
 } // end of XC namespace
 

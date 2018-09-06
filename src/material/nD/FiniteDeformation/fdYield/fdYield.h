@@ -85,8 +85,9 @@ class fdYield
     
     virtual void print() = 0; 
 
-    friend std::ostream& operator<< (std::ostream& os, const fdYield & fdyd);
+    friend std::ostream& operator<<(std::ostream &, const fdYield &);
   };
+std::ostream &operator<<(std::ostream &, const fdYield &);
 } // end of XC namespace
 
 

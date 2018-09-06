@@ -89,8 +89,10 @@ class VMYieldSurface : public YieldSurface
     // Overloaded Insertion Operator
     // prints an VM YieldSurface's contents 
     //================================================================================
-    friend std::ostream& operator<< (std::ostream& os, const VMYieldSurface & YS);
+    friend std::ostream& operator<<(std::ostream &, const VMYieldSurface &);
   };
+ 
+std::ostream& operator<<(std::ostream &, const VMYieldSurface &);
 } // end of XC namespace
 
 #endif

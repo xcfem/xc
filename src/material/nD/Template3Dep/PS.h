@@ -93,12 +93,11 @@ class PotentialSurface
     // Overloaded Insertion Operator
     // prints an PotentialSurface's contents 
     //================================================================================
-    friend std::ostream& operator<< (std::ostream& os, const PotentialSurface & PS)
-      {
-        os << "Potential Surface Parameters: " << std::endl;
-        return os;
-      }
-};
+    friend std::ostream& operator<<(std::ostream &, const PotentialSurface &);
+  };
+
+std::ostream& operator<<(std::ostream &os, const PotentialSurface & PS);
+
 } // end of XC namespace
 
 

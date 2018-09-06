@@ -355,7 +355,7 @@ XC::BJtensor XC::MDPotentialSurface01::dthetaoverds(const XC::EPState *EPS) cons
    return ret;
 }
 
-std::ostream& XC::operator<< (std::ostream& os, const XC::MDPotentialSurface01 &PS)
+std::ostream& XC::operator<<(std::ostream &os, const XC::MDPotentialSurface01 &PS)
   {
     os << "Manzari-Dafalias Potential Surface 01( with Pc) Parameters: " << std::endl;
     os << "Pc = " << PS.Pc << std::endl;

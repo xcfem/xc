@@ -30,8 +30,6 @@
 #include "GeomSection.h"
 #include "Spot.h"
 #include "Axis.h"
-
-#include "med.h"
 #include "vtkCellType.h"
 
 //! @brief Returns a pointer to the GeomSection.
@@ -148,6 +146,3 @@ int XC::EntGeomSection::getVtkCellType(void) const
     return VTK_EMPTY_CELL;
   } 
 
-//! @brief MED interface.
-int XC::EntGeomSection::getMEDCellType(void) const
-  { return MED_NONE; }

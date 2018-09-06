@@ -233,7 +233,7 @@ XC::BJtensor XC::DPYieldSurface01::xi_t1( const XC::EPState *EPS) const {
 const double &XC::DPYieldSurface01::getPc(void) const
   { return Pc; }
 
-std::ostream& operator<<(std::ostream& os,const XC::DPYieldSurface01 &YS)
+std::ostream& operator<<(std::ostream &os,const XC::DPYieldSurface01 &YS)
 {
    os << "Drucker-Prager Yield Surface 01 Parameters: " << std::endl;
    os << "Pc = " << YS.getPc() << std::endl;

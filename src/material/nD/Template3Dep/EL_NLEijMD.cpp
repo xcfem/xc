@@ -275,8 +275,8 @@ void XC::EvolutionLaw_NL_EijMD::print()
 //================================================================================
 // prints Manzari-Dafalia EvolutionLaw's contents 
 //================================================================================
-std::ostream& XC::operator<<(std::ostream& os, const XC::EvolutionLaw_NL_EijMD & MDEL)
-//ostream& operator<< (ostream& os, const EvolutionLaw_NL_EijMD & MDEL)
+std::ostream& XC::operator<<(std::ostream &os, const XC::EvolutionLaw_NL_EijMD & MDEL)
+//ostream& operator<<(ostream &os, const EvolutionLaw_NL_EijMD & MDEL)
 {
   //    os.unsetf( ios::scientific );
     os.precision(5);

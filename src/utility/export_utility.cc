@@ -41,7 +41,6 @@ void export_utility(void)
 
 #include "actor/channel/python_interface.tcc"
 #include "database/python_interface.tcc"
-#include "med_xc/python_interface.tcc"
 #include "recorder/python_interface.tcc"
 
   }

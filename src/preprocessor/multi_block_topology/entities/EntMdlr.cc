@@ -41,7 +41,6 @@
 
 
 
-#include "med.h"
 #include "vtkCellType.h"
 
 //! @brief Constructor.
@@ -83,15 +82,6 @@ int XC::EntMdlr::getVtkCellType(void) const
               << "; must be overloaded in derived classes."
 	      << std::endl;
     return VTK_EMPTY_CELL;
-  }
-
-//! @brief Interfaz con el formato MED de Salome.
-int XC::EntMdlr::getMEDCellType(void) const
-  {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; must be overloaded in derived classes."
-	      << std::endl;
-    return MED_NONE;
   }
 
 //! @brief Returns true if the object lies inside the

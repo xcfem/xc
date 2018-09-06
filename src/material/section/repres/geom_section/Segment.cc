@@ -31,7 +31,6 @@
 #include "Spot.h"
 #include "xc_utils/src/geom/d2/BND2d.h"
 
-#include "med.h"
 #include "vtkCellType.h"
 
 //! @brief Constructor.
@@ -118,10 +117,6 @@ BND2d XC::Segment::Bnd(void) const
 //! @brief VTK interface.
 int XC::Segment::getVtkCellType(void) const
   { return VTK_LINE; }
-
-//! @brief MED interface.
-int XC::Segment::getMEDCellType(void) const
-  { return MED_SEG2; }
 
 //! @brief Return segment length.
 double XC::Segment::getLong(void) const

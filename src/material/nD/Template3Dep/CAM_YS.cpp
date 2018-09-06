@@ -228,7 +228,7 @@ double XC::CAMYieldSurface::getM() const
 }
 
 
-std::ostream& XC::operator<<(std::ostream& os, const XC::CAMYieldSurface &YS)
+std::ostream& XC::operator<<(std::ostream &os, const XC::CAMYieldSurface &YS)
   {
     os << "Cam Clay Yield Surface Parameters: " << std::endl;
     os << "M = " << YS.getM() << std::endl;

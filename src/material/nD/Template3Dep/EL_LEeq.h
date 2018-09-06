@@ -97,12 +97,13 @@ class EvolutionLaw_L_Eeq : public EvolutionLaw_S
     // Overloaded Insertion Operator	  Zhaohui Added Aug. 13, 2000
     // prints Linear EvolutionLaw's contents 
     //================================================================================
-    friend std::ostream& operator<<(std::ostream &os,const XC::EvolutionLaw_L_Eeq & LEL);
+    friend std::ostream& operator<<(std::ostream &,const XC::EvolutionLaw_L_Eeq &);
   private:
     // some accessor functions
     double geta() const;      // Linear coefficient used to evolve internal var
     void   seta( double ad);
   };
+std::ostream& operator<<(std::ostream &,const XC::EvolutionLaw_L_Eeq &);
 } // end of XC namespace
 
 

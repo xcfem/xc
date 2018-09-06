@@ -61,7 +61,6 @@ class EntGeomSection: public EntConNmb
     inline GeomSection *GetGeomSection(void)
       { return getGeomSection(); }
     int getVtkCellType(void) const;
-    virtual int getMEDCellType(void) const;
 
 
     SectionReferenceFrame *SectionReferenceFrameActual(void);    

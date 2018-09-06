@@ -123,7 +123,7 @@ class straintensor : public BJtensor
     void report(const std::string &) const;
     void reportshort(const std::string &) const;
 
-    friend std::ostream &operator<<(std::ostream &os, const straintensor &rhs);
+    friend std::ostream &operator<<(std::ostream &, const straintensor &);
 
 //..// polynomial root solver friend functions definitions
 //..public:
@@ -132,7 +132,7 @@ class straintensor : public BJtensor
 //..
   };
 
-std::ostream &operator<<(std::ostream &os, const straintensor &rhs);
+std::ostream &operator<<(std::ostream &, const straintensor &);
 
 } // end of XC namespace
 

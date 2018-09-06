@@ -90,7 +90,7 @@ class CAMYieldSurface : public YieldSurface
   };
 
 // Overloaded Insertion Operator
-std::ostream &operator<<(std::ostream& os, const CAMYieldSurface &YS);
+std::ostream &operator<<(std::ostream &, const CAMYieldSurface &);
 
 } // end of XC namespace
 

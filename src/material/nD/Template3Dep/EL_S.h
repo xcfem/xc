@@ -95,10 +95,10 @@ class EvolutionLaw_S
     // Overloaded Insertion Operator
     // prints an Evolution Law_S's contents 
     //================================================================================
-    friend std::ostream &operator<<(std::ostream &os, const EvolutionLaw_S & EL);
+    friend std::ostream &operator<<(std::ostream &, const EvolutionLaw_S &);
   };
 
-std::ostream &operator<<(std::ostream &os, const EvolutionLaw_S & EL);
+std::ostream &operator<<(std::ostream &, const EvolutionLaw_S &);
 
 } // end of XC namespace
 

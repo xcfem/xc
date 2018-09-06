@@ -88,7 +88,6 @@ class Face: public CmbEdge
     void add_to_sets(std::set<SetBase *> &);
 
     int getVtkCellType(void) const;
-    int getMEDCellType(void) const;
   };
 
 std::set<const Face *> getConnectedSurfaces(const Edge &l);

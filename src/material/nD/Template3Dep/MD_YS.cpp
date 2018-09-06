@@ -241,7 +241,7 @@ XC::BJtensor XC::MDYieldSurface::xi_t1( const XC::EPState *EPS) const {
 }
 
 
-std::ostream& XC::operator<<(std::ostream& os, const MDYieldSurface & YS)
+std::ostream& XC::operator<<(std::ostream &os, const MDYieldSurface & YS)
   {
     os << "Manzari-Dafalias Yield Surface Parameters: " << std::endl;
     return os;

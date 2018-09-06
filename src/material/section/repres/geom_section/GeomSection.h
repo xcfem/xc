@@ -158,8 +158,10 @@ class GeomSection: public SectionMassProperties
     double getPyzHomogenizedSection(const double &E0) const;
 
     void Print(std::ostream &s, int flag =0);
-    friend std::ostream &operator<<(std::ostream &s, GeomSection &fiberSectionRepr);    
+    friend std::ostream &operator<<(std::ostream &, GeomSection &);    
   };
+
+std::ostream &operator<<(std::ostream &, GeomSection &);
 
 //! @brief Creates a new axis.
 template <class E>

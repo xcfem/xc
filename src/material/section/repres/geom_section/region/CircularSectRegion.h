@@ -107,8 +107,9 @@ class CircularSectRegion: public QuadCellRegion
 
 
     void Print(std::ostream &s, int flag =0) const;   
-    friend std::ostream &operator<<(std::ostream &s, CircularSectRegion &rg_scc_circ);    
+    friend std::ostream &operator<<(std::ostream &, CircularSectRegion &);    
   };
+std::ostream &operator<<(std::ostream &, CircularSectRegion &);    
 } // end of XC namespace
 
 

@@ -107,7 +107,7 @@ XC::BJtensor XC::fdFlow::d2Fodada(const XC::stresstensor &sts,  const XC::FDEPSt
      return Z4;
 }
 
-std::ostream& operator<<(std::ostream& os, const XC::fdFlow &fdfl)
+std::ostream& operator<<(std::ostream &os, const XC::fdFlow &fdfl)
 {
      os << "fdFlow Parameters: " << "\n";
      return os;
