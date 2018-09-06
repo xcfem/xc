@@ -156,7 +156,7 @@ def procesResultVerif(comb):
   tabComb= comb.tag
   nmbComb= comb.getName
   setTotal= preprocessor.getSets.getSet("total")
-  resultant= setTotal.getResistingSVD3d(plane,o,0.01,0)
+  resultant= setTotal.getResistingSlidingVectorsSystem3d(plane,o,0.01,0)
   global force
   force= resultant.getResultant()
   global moment
