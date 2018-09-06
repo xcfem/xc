@@ -45,7 +45,7 @@ inch3= inch2*inch
 inch4= inch3*inch
 
 def convert(value,unitA,unitB):
-  return value*float(unitA/unitB)
+  return value*(unitA/unitB)
 
 ratio1= abs((convert(hssSection['A'],meter2,inch2)-8.97452)/8.97452)
 ratio2= abs((convert(hssSection['h'],meter,inch)-7.00787)/7.00787)

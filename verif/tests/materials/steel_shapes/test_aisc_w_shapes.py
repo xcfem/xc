@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-import xc_base
-import geom
-import xc
-from solution import predefined_solutions
-from model import predefined_spaces
 from materials import typical_materials
 from materials.sections.structural_shapes import aisc_metric_shapes
 from sympy.physics import units
@@ -44,7 +39,8 @@ inch3= inch2*inch
 inch4= inch3*inch
 
 def convert(value,unitA,unitB):
-  return value*float(unitA/unitB)
+  factor= unitA.evalf()/unitB.evalf()
+  return value*factor
 
 ratio1= abs((convert(wSection['A'],meter2,inch2)-6.15351)/6.15351)
 ratio2= abs((convert(wSection['h'],meter,inch)-8.26772)/8.26772)
