@@ -191,7 +191,7 @@ class Mesh: public MeshComponentContainer
     void zeroLoads(void);
 
     virtual void Print(std::ostream &s, int flag =0);
-    friend std::ostream &operator<<(std::ostream &s, Mesh &M);
+    friend std::ostream &operator<<(std::ostream &, Mesh &);
 
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
@@ -204,6 +204,8 @@ class Mesh: public MeshComponentContainer
 
     static void setDeadSRF(const double &);
   };
+
+std::ostream &operator<<(std::ostream &, Mesh &);
 } // end of XC namespace
 
 #endif

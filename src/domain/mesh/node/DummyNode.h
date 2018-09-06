@@ -124,7 +124,7 @@ class DummyNode: public Node
     int commitState();
 
     void Print(std::ostream &s) const;
-    friend std::ostream &operator<<(std::ostream &s, const DummyNode &N);
+    friend std::ostream &operator<<(std::ostream &, const DummyNode &);
 
     int addElementPtr(Element *);
 
@@ -134,6 +134,8 @@ class DummyNode: public Node
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);    
   };
+ 
+std::ostream &operator<<(std::ostream &, const DummyNode &);
 } // end of XC namespace
 
 #endif

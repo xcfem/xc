@@ -70,7 +70,6 @@ class Constraint: public ContinuaReprComponent
     void setDomain(Domain *);
 
     virtual int getVtkCellType(void) const;
-    virtual int getMEDCellType(void) const;
 
     virtual void Print(std::ostream &s, int flag =0);
   };

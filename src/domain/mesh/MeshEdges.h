@@ -57,6 +57,7 @@ class MeshEdges: public EntCmd, public std::deque<MeshEdge>
 
 std::deque<Polyline3d> getContours(MeshEdges edges,const double &factor);
 
+//! @brief Printing stuff.
 inline std::ostream &operator<<(std::ostream &os, const MeshEdges &me)
   {
     me.print(os);

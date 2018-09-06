@@ -72,7 +72,6 @@ class Element0D : public ElementBase<2>
     int getNumDOF(void) const;
     size_t getDimension(void) const;
     int getVtkCellType(void) const;
-    int getMEDCellType(void) const;
     const Vector &getX(void) const;
     const Vector &getY(void) const;
     const Vector &getZ(void) const;

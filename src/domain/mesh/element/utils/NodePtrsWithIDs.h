@@ -92,7 +92,7 @@ class NodePtrsWithIDs: public NodePtrs, public MovableObject
     
   };
 
-std::ostream &operator<<(std::ostream &os,const NodePtrsWithIDs &nodePtrs);
+std::ostream &operator<<(std::ostream &,const NodePtrsWithIDs &);
 
 } //end of XC namespace
 #endif

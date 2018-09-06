@@ -32,7 +32,7 @@
 
 #include "BidimLoad.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
-class SVD3d;
+class SlidingVectorsSystem3d;
 
 namespace XC {
 class Matrix;
@@ -67,7 +67,7 @@ class BidimMecLoad : public BidimLoad
     inline void setTransComponent(const double &d)
       { Trans= d; }
 
-    virtual SVD3d getResultant(const Pos3d &p= Pos3d(), bool initialGeometry= true) const;
+    virtual SlidingVectorsSystem3d getResultant(const Pos3d &p= Pos3d(), bool initialGeometry= true) const;
 
     void Print(std::ostream &s, int flag =0) const;
 

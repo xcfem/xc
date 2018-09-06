@@ -119,7 +119,7 @@ class ForceBeamColumn3d: public NLForceBeamColumn3dBase
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
  
-    friend std::ostream &operator<<(std::ostream &s, ForceBeamColumn3d &E);        
+    friend std::ostream &operator<<(std::ostream &, ForceBeamColumn3d &);        
     void Print(std::ostream &s, int flag =0);    
   
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
@@ -129,6 +129,7 @@ class ForceBeamColumn3d: public NLForceBeamColumn3dBase
 
 
   };
+std::ostream &operator<<(std::ostream &, ForceBeamColumn3d &);
 } // end of XC namespace
 
 #endif

@@ -33,7 +33,7 @@
 #include "domain/mesh/element/plane/shell/ShellMITC4Base.h"
 #include "utility/matrix/Matrix.h"
 #include "utility/matrix/ID.h"
-#include "xc_utils/src/geom/pos_vec/SVD3d.h"
+#include "xc_utils/src/geom/pos_vec/SlidingVectorsSystem3d.h"
 #include "xc_utils/src/geom/pos_vec/VDesliz3d.h"
 
 
@@ -138,9 +138,9 @@ void XC::ShellUniformLoad::addFixedEndForcesInBasicSystem(const double &area,con
   }
 
 //! brief Returns load resultant (force and moment integration over the elements).
-SVD3d XC::ShellUniformLoad::getResultant(const Pos3d &centro, bool initialGeometry) const
+SlidingVectorsSystem3d XC::ShellUniformLoad::getResultant(const Pos3d &centro, bool initialGeometry) const
   {
-    SVD3d retval(centro);
+    SlidingVectorsSystem3d retval(centro);
     Matrix pressures= getGlobalPressures();
     const Domain *ptrDom= getDomain();
     if(ptrDom)

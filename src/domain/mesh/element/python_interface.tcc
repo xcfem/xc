@@ -34,7 +34,7 @@ const XC::Vector &(XC::Element::*getResistingForceRef)(void) const= &XC::Element
 const XC::Matrix &(XC::Element::*getInitialStiffRef)(void) const= &XC::Element::getInitialStiff;
 const XC::Matrix &(XC::Element::*getTangentStiffRef)(void) const= &XC::Element::getTangentStiff;
 bool (XC::Element::*ElementIn3D)(const GeomObj3d &,const double &,const double &) const= &XC::Element::In;
-bool (XC::Element::*ElementOut3D)(const GeomObj3d &,const double &,const double &) const= &XC::NodePtrs::Out;
+bool (XC::Element::*ElementOut3D)(const GeomObj3d &,const double &,const double &) const= &XC::Element::Out;
 class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >("Element", no_init)
   .add_property("getNodes", make_function( getNodePtrsRef, return_internal_reference<>() ))
   .add_property("getIdxNodes",&XC::Element::getIdxNodes,"Return the node indices for its use in VTK arrays.")
@@ -48,7 +48,6 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("getInitialStiff",make_function(getInitialStiffRef, return_internal_reference<>() ),"Return initial stiffness matrix.")
   .def("setDeadSRF",XC::Element::setDeadSRF,"Assigns Stress Reduction Factor for element deactivation.")
   .add_property("getVtkCellType",&XC::Element::getVtkCellType,"Return cell type for Vtk graphics.")
-  .def("getMEDCellType",&XC::Element::getVtkCellType,"Return cell type for MED file writing.")
   .def("getPosCentroid",&XC::Element::getCenterOfMassPosition,"Return centroid's position.")
   .def("getCooCentroid",&XC::Element::getCenterOfMassCoordinates,"Return centroid's coordinates.")
   .def("In", ElementIn3D,"\n""In(geomObject,factor,tolerance) \n""Return true if the current positions of all the nodes scaled by a factor: initialPos+factor*currentDisplacement lie inside the geometric object.")
@@ -110,7 +109,6 @@ XC::CrdTransf *(XC::Element1D::*getCrdTransf)(void)= &XC::Element1D::getCoordTra
 class_<XC::Element1D, bases<XC::ElementBase<2> >, boost::noncopyable >("Element1D", no_init)
     .add_property("getCoordTransf", make_function( getCrdTransf, return_internal_reference<>() ))
     .def("getLineSegment", &XC::Element1D::getLineSegment)
-    .def("getMEDCellType", &XC::Element1D::getMEDCellType,"Return the cell type that corresponds to the element in a MED file.")
     .def("vector2dUniformLoadGlobal", &XC::Element1D::vector2dUniformLoadGlobal,"Element's load.")
     .def("vector2dUniformLoadLocal", &XC::Element1D::vector2dUniformLoadLocal,"Element's load.")
     .def("vector2dPointByRelDistLoadGlobal", &XC::Element1D::vector2dPointByRelDistLoadGlobal,"Element's load.")

@@ -82,7 +82,6 @@ class Element1D : public ElementBase<2>
 
     size_t getDimension(void) const;
     int getVtkCellType(void) const;
-    int getMEDCellType(void) const;
 
     virtual void computeTributaryLengths(bool initialGeometry= true) const;
     double getTributaryLength(const Node *) const;

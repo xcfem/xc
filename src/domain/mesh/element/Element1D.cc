@@ -49,7 +49,6 @@
 #include "xc_utils/src/geom/sis_coo/SisCooRect3d3d.h"
 #include "xc_utils/src/geom/d1/Segment3d.h"
 #include "utility/actor/objectBroker/FEM_ObjectBroker.h"
-#include "med.h"
 #include "vtkCellType.h"
 
 //! @brief Constructor.
@@ -701,11 +700,6 @@ XC::CrdTransf3d *XC::Element1D::recvCoordTransf3d(int posFlag,const int &posClas
 //! @brief Interfaz con VTK.
 int XC::Element1D::getVtkCellType(void) const
   { return VTK_LINE; }
-
-//! @brief Interfaz con el formato MED de Salome.
-int XC::Element1D::getMEDCellType(void) const
-  { return MED_SEG2; }
-
 
 //! @brief Calcula the tributary lengths that corresponds to each
 //! node of the element

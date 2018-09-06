@@ -59,7 +59,7 @@ class FVector
     virtual void addMoment(const size_t &inod,const double &,const double &,const double &);
   };
 
-std::ostream &operator<<(std::ostream &,const FVector &f);
+std::ostream &operator<<(std::ostream &,const FVector &);
 
 } // end of XC namespace
 

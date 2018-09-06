@@ -268,7 +268,7 @@ class Domain: public ObjWithRecorders, public DistributedBase
     virtual MeshRegion *getRegion(int region);
 
     virtual void Print(std::ostream &s, int flag =0);
-    friend std::ostream &operator<<(std::ostream &s, Domain &M);
+    friend std::ostream &operator<<(std::ostream &, Domain &);
 
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
@@ -288,6 +288,7 @@ class Domain: public ObjWithRecorders, public DistributedBase
     static void setDeadSRF(const double &);
   };
 
+std::ostream &operator<<(std::ostream &, Domain &);
 int sendDomain(Domain &,int posDbTag,DbTagData &,CommParameters &cp);
 int receiveDomain(Domain &, int posDbTag,DbTagData &,CommParameters &cp);
 

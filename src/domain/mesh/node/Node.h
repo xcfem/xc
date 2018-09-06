@@ -73,7 +73,7 @@
 
 class Pos2d;
 class Pos3d;
-class SVD3d;
+class SlidingVectorsSystem3d;
 class GeomObj2d;
 class GeomObj3d;
 
@@ -328,7 +328,7 @@ class Node: public MeshComponent
 
     virtual const Vector &getReaction(void) const;
     const Vector &getResistingForce(const ElementConstPtrSet &,const bool &) const;
-    SVD3d getResistingSVD3d(const ElementConstPtrSet &,const bool &) const;
+    SlidingVectorsSystem3d getResistingSlidingVectorsSystem3d(const ElementConstPtrSet &,const bool &) const;
     virtual int addReactionForce(const Vector &, double factor);
     virtual int resetReactionForce(bool inclInertia);
     bool checkReactionForce(const double &) const;

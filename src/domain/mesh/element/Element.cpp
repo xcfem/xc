@@ -82,9 +82,8 @@
 #include "utility/matrix/DqMatrices.h"
 #include "utility/matrix/DqVectors.h"
 #include "utility/tagged/DefaultTag.h"
-#include "med.h"
+
 #include "domain/mesh/element/utils/gauss_models/GaussModel.h"
-#include "utility/med_xc/MEDGaussModel.h"
 #include "utility/actor/actor/CommMetaData.h"
 #include "vtkCellType.h"
 
@@ -663,15 +662,6 @@ int XC::Element::getVtkCellType(void) const
     return VTK_EMPTY_CELL;
   }
 
-//! @brief Interfaz con el formato MED de Salome.
-int XC::Element::getMEDCellType(void) const
-  {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; must be overloaded in derived classes."
-              << std::endl;
-    return ::MED_NONE;
-  }
-
 //! @brief Returns the Gauss integration model of the element.
 const XC::GaussModel &XC::Element::getGaussModel(void) const
   {
@@ -679,13 +669,6 @@ const XC::GaussModel &XC::Element::getGaussModel(void) const
               << "; must be overloaded in derived classes."
               << std::endl;
     return gauss_model_empty;
-  }
-
-//! @brief Returns the Gauss integration model of the element for MED library.
-XC::MEDGaussModel XC::Element::getMEDGaussModel(void) const
-  {
-    MEDGaussModel retval(getClassName(),getMEDCellType(),getGaussModel());
-    return retval;
   }
 
 //! @brief Returns the nodes of the element edge.

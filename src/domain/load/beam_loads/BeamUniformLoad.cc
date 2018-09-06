@@ -28,7 +28,7 @@
 
 #include "BeamUniformLoad.h"
 #include "domain/mesh/element/Element1D.h"
-#include "xc_utils/src/geom/pos_vec/SVD3d.h"
+#include "xc_utils/src/geom/pos_vec/SlidingVectorsSystem3d.h"
 #include "xc_utils/src/geom/pos_vec/VDesliz3d.h"
 #include "domain/mesh/element/utils/coordTransformation/CrdTransf.h"
 
@@ -48,9 +48,9 @@ std::string XC::BeamUniformLoad::Categoria(void) const
   { return "uniforme"; }
 
 //! brief Returns load resultant (force and moment integration over the elements).
-SVD3d XC::BeamUniformLoad::getResultant(const Pos3d &centro, bool initialGeometry) const
+SlidingVectorsSystem3d XC::BeamUniformLoad::getResultant(const Pos3d &centro, bool initialGeometry) const
   {
-    SVD3d retval(centro);
+    SlidingVectorsSystem3d retval(centro);
     Matrix uniformLoads= getDistributedGlobalForces();
     const Domain *ptrDom= getDomain();
     if(ptrDom)

@@ -31,7 +31,6 @@
 #include "domain/mesh/node/Node.h"
 
 #include "utility/matrix/ID.h"
-#include "med.h"
 #include "vtkCellType.h"
 
 //! @brief Default constructor; receives the tag of the class as a paramenter.
@@ -158,10 +157,6 @@ int XC::Constraint::getVtkCellType(void) const
     std::cerr << "Constraint::getVtkCellType; not implemented." << std::endl;
     return VTK_EMPTY_CELL;
   }
-
-//! @brief returns the "MED fichier" cell type.
-int XC::Constraint::getMEDCellType(void) const
-  { return MED_POINT1; }
 
 
 

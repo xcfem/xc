@@ -45,7 +45,6 @@
 #include "domain/mesh/node/Node.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
-#include "med.h"
 #include "vtkCellType.h"
 
 //! @brief Set the constraint matrix.

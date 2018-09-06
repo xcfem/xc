@@ -35,7 +35,7 @@
 #include "domain/mesh/element/utils/coordTransformation/CrdTransf.h"
 #include "utility/actor/actor/MovableID.h"
 #include "utility/actor/actor/MovableVector.h"
-#include "xc_utils/src/geom/pos_vec/SVD3d.h"
+#include "xc_utils/src/geom/pos_vec/SlidingVectorsSystem3d.h"
 
 XC::BeamMecLoad::BeamMecLoad(int tag,int classTag,const double &wt,const double &wa,const ID &theElementTags)
   :BeamLoad(tag, classTag, theElementTags), Trans(wt), Axial(wa) {}
@@ -174,11 +174,11 @@ const XC::Matrix &XC::BeamMecLoad::getGlobalMoments(void) const
   { return getGlobalVectors(getLocalMoments()); }
 
 //! brief Returns load resultant (force and moment integration over the elements).
-SVD3d XC::BeamMecLoad::getResultant(const Pos3d &centro, bool initialGeometry) const
+SlidingVectorsSystem3d XC::BeamMecLoad::getResultant(const Pos3d &centro, bool initialGeometry) const
   {
     std::cerr << getClassName()
               << "::getResultant not yet implemented." << std::endl;
-    return SVD3d(centro);
+    return SlidingVectorsSystem3d(centro);
   }
 
 void XC::BeamMecLoad::Print(std::ostream &s, int flag) const

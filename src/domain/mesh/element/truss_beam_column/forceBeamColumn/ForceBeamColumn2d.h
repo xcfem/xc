@@ -134,6 +134,8 @@ class ForceBeamColumn2d: public NLForceBeamColumn2dBase
     void getDistrLoadInterpolatMatrix(double xi, Matrix &bp, const ID &code);
     void compSectionDisplacements(std::vector<Vector> &,std::vector<Vector> &) const;
   };
+
+std::ostream &operator<<(std::ostream &, ForceBeamColumn2d &);
 } // end of XC namespace
 
 #endif

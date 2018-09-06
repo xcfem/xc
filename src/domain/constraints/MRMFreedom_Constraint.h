@@ -106,7 +106,6 @@ class MRMFreedom_Constraint: public MFreedom_ConstraintBase
     virtual int recvSelf(const CommParameters &);
     
     int getVtkCellType(void) const;
-    int getMEDCellType(void) const;
 
     virtual void Print(std::ostream &s, int flag =0);
 

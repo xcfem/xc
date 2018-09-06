@@ -35,7 +35,6 @@
 #include "preprocessor/multi_block_topology/aux_meshing.h"
 #include "preprocessor/prep_handlers/LoadHandler.h"
 #include "domain/load/plane/BidimStrainLoad.h"
-#include "med.h"
 #include "vtkCellType.h"
 
 namespace XC {
@@ -58,7 +57,6 @@ class TriBase3N: public PlaneElement<3,PhysProp>
     int getEdgeNodes(const Node *,const Node *) const;
 
     int getVtkCellType(void) const;
-    int getMEDCellType(void) const;
 
     void zeroLoad(void);	
     int addLoad(ElementalLoad *theLoad, double loadFactor);
@@ -193,11 +191,6 @@ int XC::TriBase3N<PhysProp>::addLoad(ElementalLoad *theLoad, double loadFactor)
 template <class PhysProp>
 int XC::TriBase3N<PhysProp>::getVtkCellType(void) const
   { return VTK_TRIANGLE; }
-
-//! @brief Interfaz con el formato MED de Salome.
-template <class PhysProp>
-int XC::TriBase3N<PhysProp>::getMEDCellType(void) const
-  { return MED_TRIA3; }
 
 } // end of XC namespace
 #endif

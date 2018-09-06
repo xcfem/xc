@@ -74,7 +74,7 @@
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/pos_vec/SVD3d.h"
+#include "xc_utils/src/geom/pos_vec/SlidingVectorsSystem3d.h"
 #include "xc_utils/src/geom/d2/GeomObj2d.h"
 #include "xc_utils/src/geom/d3/GeomObj3d.h"
 #include "preprocessor/multi_block_topology/trf/TrfGeom.h"
@@ -2010,20 +2010,20 @@ const XC::Vector &XC::Node::getResistingForce(const std::set<const Element *> &e
 
 //! @brief Returns the sliding vector system that represents
 //! the action of the elements of the set over the node.
-SVD3d XC::Node::getResistingSVD3d(const std::set<const Element *> &elements,const bool &inc_inertia) const
+SlidingVectorsSystem3d XC::Node::getResistingSlidingVectorsSystem3d(const std::set<const Element *> &elements,const bool &inc_inertia) const
   {
-    SVD3d retval;
+    SlidingVectorsSystem3d retval;
     const Pos3d o= getInitialPosition3d();
     const Vector &v= getResistingForce(elements,inc_inertia);
     if(numberDOF==2)
-      retval= SVD3d(o,Vector3d(v[0],v[1],0));
+      retval= SlidingVectorsSystem3d(o,Vector3d(v[0],v[1],0));
     else if(numberDOF==3)
-      retval= SVD3d(o,Vector3d(v[0],v[1],0),Vector3d(0,0,v[2]));
+      retval= SlidingVectorsSystem3d(o,Vector3d(v[0],v[1],0),Vector3d(0,0,v[2]));
     else if(numberDOF==6)
-      retval= SVD3d(o,Vector3d(v[0],v[1],v[2]),Vector3d(v[3],v[4],v[5]));
+      retval= SlidingVectorsSystem3d(o,Vector3d(v[0],v[1],v[2]),Vector3d(v[3],v[4],v[5]));
     else
       {
-        retval= SVD3d(o);
+        retval= SlidingVectorsSystem3d(o);
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; dof number: "
                   << numberDOF << " not covered."

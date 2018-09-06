@@ -137,7 +137,7 @@ class NLBeamColumn2d: public NLForceBeamColumn2dBase
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
 
-    friend std::ostream &operator<<(std::ostream &s, NLBeamColumn2d &E);        
+    friend std::ostream &operator<<(std::ostream &, NLBeamColumn2d &);        
     void Print(std::ostream &s, int flag =0);    
 
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
@@ -146,6 +146,8 @@ class NLBeamColumn2d: public NLForceBeamColumn2dBase
     int setParameter(const std::vector<std::string> &argv, Parameter &param);
     int updateParameter(int parameterID, Information &info);
   };
+
+ std::ostream &operator<<(std::ostream &, NLBeamColumn2d &);
 } // end of XC namespace
 
 #endif

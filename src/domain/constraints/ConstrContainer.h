@@ -172,8 +172,9 @@ class ConstrContainer: public MeshComponentContainer
     virtual int recvSelf(const CommParameters &);
 
     virtual void Print(std::ostream &s, int flag =0);
-    friend std::ostream &operator<<(std::ostream &s, ConstrContainer &cc);
+    friend std::ostream &operator<<(std::ostream &, ConstrContainer &);
   };
+std::ostream &operator<<(std::ostream &, ConstrContainer &);
 } // end of XC namespace
 
 #endif

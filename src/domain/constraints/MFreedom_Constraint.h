@@ -151,7 +151,6 @@ class MFreedom_Constraint: public MFreedom_ConstraintBase
     virtual int recvSelf(const CommParameters &);
     
     int getVtkCellType(void) const;
-    int getMEDCellType(void) const;
 
     int addResistingForceToNodalReaction(bool inclInertia);
 

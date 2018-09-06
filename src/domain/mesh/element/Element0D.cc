@@ -36,7 +36,6 @@
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/sis_coo/SisCooRect3d3d.h"
 #include "utility/actor/actor/MovableMatrix.h"
-#include "med.h"
 #include "vtkCellType.h"
 
 const double XC::Element0D::LenTol= 1.0e-6; // Tolerance for zero length of element
@@ -419,7 +418,4 @@ int XC::Element0D::recvData(const CommParameters &cp)
 int XC::Element0D::getVtkCellType(void) const
   { return VTK_VERTEX; }
 
-//! @brief Interfaz con el formato MED de Salome.
-int XC::Element0D::getMEDCellType(void) const
-  { return MED_SEG2; }
 

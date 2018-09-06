@@ -56,7 +56,7 @@ class BeamUniformLoad : public BeamMecLoad
     //! @brief Returns distributed moments (one for each element) expressed in global coordinates. Is simply a convenience function that makes the distributedness more explicit.
     inline const Matrix &getDistributedGlobalMoments(void) const
       { return getGlobalMoments(); }
-    virtual SVD3d getResultant(const Pos3d &p= Pos3d(), bool initialGeometry= true) const;
+    virtual SlidingVectorsSystem3d getResultant(const Pos3d &p= Pos3d(), bool initialGeometry= true) const;
   };
 } // end of XC namespace
 

@@ -283,9 +283,7 @@ class Element: public MeshComponent
     virtual Vector getInterpolationFactors(const Pos3d &) const;
 
     virtual int getVtkCellType(void) const;
-    virtual int getMEDCellType(void) const;
     virtual const GaussModel &getGaussModel(void) const;
-    MEDGaussModel getMEDGaussModel(void) const;
     virtual NodesEdge getNodesEdge(const size_t &) const;
     virtual int getEdgeNodes(const Node *,const Node *) const;
     int getEdgeNodes(const int &,const int &) const;

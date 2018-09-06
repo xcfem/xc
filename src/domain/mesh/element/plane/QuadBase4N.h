@@ -35,7 +35,6 @@
 #include "preprocessor/multi_block_topology/aux_meshing.h"
 #include "preprocessor/prep_handlers/LoadHandler.h"
 #include "domain/load/plane/BidimStrainLoad.h"
-#include "med.h"
 #include "vtkCellType.h"
 
 namespace XC {
@@ -57,7 +56,6 @@ class QuadBase4N : public PlaneElement<4,PhysProp>
     int getEdgeNodes(const Node *,const Node *) const;
 
     int getVtkCellType(void) const;
-    int getMEDCellType(void) const;
 
     void zeroLoad(void);	
     int addLoad(ElementalLoad *theLoad, double loadFactor);
@@ -190,10 +188,6 @@ template <class PhysProp>
 int XC::QuadBase4N<PhysProp>::getVtkCellType(void) const
   { return VTK_QUAD; }
 
-//! @brief Interfaz con el formato MED de Salome.
-template <class PhysProp>
-int XC::QuadBase4N<PhysProp>::getMEDCellType(void) const
-  { return MED_QUAD4; }
 
 } // end of XC namespace
 #endif

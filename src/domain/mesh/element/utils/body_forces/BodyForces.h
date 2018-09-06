@@ -67,6 +67,7 @@ class BodyForces: public MovableObject
     virtual void Print(std::ostream &s) const;
   };
 
+//! @brief Printing stuff.
 inline std::ostream &operator<<(std::ostream &os,const BodyForces &bf)
   {
     bf.Print(os);

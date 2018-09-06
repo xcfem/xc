@@ -72,7 +72,6 @@
 #include "domain/mesh/node/Node.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
-#include "med.h"
 #include "vtkCellType.h"
 
 //! @brief Sets the retained degrees of freedom.
@@ -304,8 +303,4 @@ int XC::MFreedom_Constraint::getVtkCellType(void) const
 	      << "; not implemented." << std::endl;
     return VTK_EMPTY_CELL;
   }
-
-//! @brief Interface with Salome MED format.
-int XC::MFreedom_Constraint::getMEDCellType(void) const
-  { return MED_SEG2; }
 

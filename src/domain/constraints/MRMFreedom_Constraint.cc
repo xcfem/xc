@@ -46,7 +46,6 @@
 #include "domain/mesh/element/utils/NodePtrsWithIDs.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
-#include "med.h"
 #include "vtkCellType.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 
@@ -300,10 +299,4 @@ int XC::MRMFreedom_Constraint::getVtkCellType(void) const
     return VTK_EMPTY_CELL;
   }
 
-//! @brief Interfce with Salome MED format.
-int XC::MRMFreedom_Constraint::getMEDCellType(void) const
-  { 
-    std::cerr << "MRMFreedom_Constraint::getMEDCellType; not implemented." << std::endl;
-    return MED_SEG2; 
-  }
 

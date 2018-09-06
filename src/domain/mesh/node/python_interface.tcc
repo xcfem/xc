@@ -81,7 +81,7 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   .def("getTributaryLength",make_function(&XC::Node::getTributary,return_value_policy<copy_const_reference>()))
   .def("getTributaryVolume",make_function(&XC::Node::getTributary,return_value_policy<copy_const_reference>()))
   .def("getResistingForce",make_function(&XC::Node::getResistingForce,return_value_policy<copy_const_reference>()))
-  .def("getResistingSVD3d",&XC::Node::getResistingSVD3d)
+  .def("getResistingSlidingVectorsSystem3d",&XC::Node::getResistingSlidingVectorsSystem3d)
 
   .def("setNumEigenvectors",&XC::Node::setNumEigenvectors,"set the number of eigenvectors for the node.")
   .def("setEigenvector",&XC::Node::setEigenvector,"setEigenVector(mode, vector) set the igenvector for i-th mode.")

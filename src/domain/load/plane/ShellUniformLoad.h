@@ -75,7 +75,7 @@ class ShellUniformLoad : public ShellMecLoad
     inline const Matrix &getDistributedGlobalMoments(void) const
       { return getGlobalMoments(); }
 
-    virtual SVD3d getResultant(const Pos3d &p= Pos3d(), bool initialGeometry= true) const;
+    virtual SlidingVectorsSystem3d getResultant(const Pos3d &p= Pos3d(), bool initialGeometry= true) const;
 
     int sendSelf(CommParameters &);  
     int recvSelf(const CommParameters &);
