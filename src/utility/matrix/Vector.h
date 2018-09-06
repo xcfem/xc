@@ -196,7 +196,7 @@ class Vector: public EntCmd
     inline std::string toString(void) const
       { return to_string(*this); }
     // friend istream &operator>>(istream &s, Vector &V);    
-    friend Vector operator*(double a, const Vector &V);
+    friend Vector operator*(double , const Vector &);
     
     friend class Message;
     friend class SystemOfEqn;
@@ -206,6 +206,8 @@ class Vector: public EntCmd
     friend class UDP_Socket;
     friend class MPI_Channel;
   };
+
+Vector operator*(double , const Vector &);
 
 std::vector<double> vector_to_std_vector(const Vector &);
 m_double vector_to_m_double(const Vector &);

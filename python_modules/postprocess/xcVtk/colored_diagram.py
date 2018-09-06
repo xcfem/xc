@@ -158,7 +158,7 @@ class ColoredDiagram(vtk_lut_field.LUTField):
     self.diagram.SetPolys(self.cells)
 
     self.mapper= vtk.vtkPolyDataMapper()
-    self.mapper.SetInput(self.diagram)
+    self.mapper.SetInputData(self.diagram)
     self.mapper.SetScalarRange(self.valMin,self.valMax)
     self.mapper.SetLookupTable(self.lookUpTable)
     self.actor= vtk.vtkActor() 

@@ -30,6 +30,23 @@
 #include <material/uniaxial/UniaxialMaterial.h>
 #include "utility/actor/actor/CommMetaData.h"
 
+//! @brief Make copy of the uniaxial materials for the element.
+void XC::Joint3DPhysicalProperties::setup(const UniaxialMaterial &springx, const UniaxialMaterial &springy, const UniaxialMaterial &springz)
+  {
+    theMaterial[0] = springx.getCopy();
+    theMaterial[1] = springy.getCopy();
+    theMaterial[2] = springz.getCopy();
+    for(size_t i=0 ; i<5 ; i++ )
+      {
+        if( theMaterial[i] == nullptr )
+          {
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << " ERROR: can not make copy of uniaxial materials, out of memory ";
+            exit(-1);
+          }
+      }
+  }
+
 //! @brief Constructor
 XC::Joint3DPhysicalProperties::Joint3DPhysicalProperties(const size_t &nMat,const UniaxialMaterial *ptr_mat)
   : UniaxialMatPhysicalProperties(nMat,ptr_mat)
@@ -38,33 +55,7 @@ XC::Joint3DPhysicalProperties::Joint3DPhysicalProperties(const size_t &nMat,cons
 //! @brief Constructor
 XC::Joint3DPhysicalProperties::Joint3DPhysicalProperties(const UniaxialMaterial &springx, const UniaxialMaterial &springy, const UniaxialMaterial &springz)
   : UniaxialMatPhysicalProperties(3,nullptr)
-  {
-    // make copy of the uniaxial materials for the element
-
-    if(&springx == nullptr)
-      {
-        std::cerr << "ERROR XC::Joint3D::Joint3D(): The rotational spring in y'z' plane does not exist ";
-        exit(-1);
-      }
-    else
-      { theMaterial[0] = springx.getCopy(); }
-
-    if(&springy == nullptr )
-      {
-        std::cerr << "ERROR XC::Joint3D::Joint3D(): The rotational spring in x'z' plane does not exist ";
-        exit(-1);
-      }
-    else
-      { theMaterial[1] = springy.getCopy(); }
-
-    if( &springz == nullptr )
-      {
-        std::cerr << "ERROR XC::Joint3D::Joint3D(): The rotational spring in x'y' plane does not exist ";
-        exit(-1);
-      }
-    else
-      { theMaterial[2] = springz.getCopy(); }
-  }
+  { setup(springx,springy,springz); }
 
 int XC::Joint3DPhysicalProperties::update(const Vector &dispC,const int &offset)
   {

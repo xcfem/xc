@@ -180,6 +180,8 @@ class BJtensor: public nDarray
 
 // GLOBAL
 BJtensor operator*(const double &lval,const BJtensor &rval);  // REVIEWER global *
+BJtensor operator+(const BJtensor & , const BJtensor & ); // BJtensor addition
+BJtensor operator-(const BJtensor & , const BJtensor & ); // BJtensor substraction
 
 } // end of XC namespace
 

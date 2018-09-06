@@ -46,6 +46,8 @@ class Joint2DPhysicalProperties : public UniaxialMatPhysicalProperties
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
+    void set_springs(const UniaxialMaterial &spring1, const UniaxialMaterial &spring2, const UniaxialMaterial &spring3, const UniaxialMaterial &spring4, const UniaxialMaterial &springC);
+    void set_damage_models(const DamageModel &, const DamageModel &, const DamageModel &, const DamageModel &, const DamageModel &);
   public:
     Joint2DPhysicalProperties(const size_t &nMat= 0,const UniaxialMaterial *ptr_mat= nullptr); 
     Joint2DPhysicalProperties(const UniaxialMaterial &spring1, const UniaxialMaterial &spring2, const UniaxialMaterial &spring3, const UniaxialMaterial &spring4, const UniaxialMaterial &springC);

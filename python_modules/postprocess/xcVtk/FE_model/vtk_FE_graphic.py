@@ -35,7 +35,7 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
         if(field):
             field.setupOnGrid(self.gridRecord.uGrid)
         self.gridMapper= vtk.vtkDataSetMapper()
-        self.gridMapper.SetInput(self.gridRecord.uGrid)
+        self.gridMapper.SetInputData(self.gridRecord.uGrid)
         if(field):
             field.setupOnMapper(self.gridMapper)
         elemActor= vtk.vtkActor()
@@ -66,13 +66,13 @@ class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
         sphereSource.SetPhiResolution(5)
 
         markNodes= vtk.vtkGlyph3D()
-        markNodes.SetInput(self.gridRecord.uGrid)
-        markNodes.SetSource(sphereSource.GetOutput())
+        markNodes.SetInputData(self.gridRecord.uGrid)
+        markNodes.SetSourceData(sphereSource.GetOutput())
         markNodes.ScalingOff()
         markNodes.OrientOff()
 
         mappNodes= vtk.vtkPolyDataMapper()
-        mappNodes.SetInput(markNodes.GetOutput())
+        mappNodes.SetInputData(markNodes.GetOutput())
         visNodes= vtk.vtkActor()
         visNodes.SetMapper(mappNodes)
 #        visNodes.GetProperty().SetColor(.7, .5, .5)

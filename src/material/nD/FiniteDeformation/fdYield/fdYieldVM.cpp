@@ -158,11 +158,11 @@ XC::stresstensor XC::fdYieldVM::dYoda(const XC::stresstensor &sts, const XC::FDE
 
 //--------------------------------------------------------------------
 std::ostream& XC::operator<<(std::ostream &os, const XC::fdYieldVM &fdydVM)
-{
+  {
     os << "fdYieldVM Parameters: " << "\n";
     os << "Y0: " << fdydVM.Y0 << "\n";
     return os;
-}
+  }
 
 void XC::fdYieldVM::print(void)
   { std::cerr << *this; }

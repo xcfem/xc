@@ -31,6 +31,36 @@
 #include "material/damage/DamageModel.h"
 #include "utility/actor/actor/CommMetaData.h"
 
+//! @brief Make copy of the uniaxial materials for the element.
+void XC::Joint2DPhysicalProperties::set_springs(const UniaxialMaterial &spring1, const UniaxialMaterial &spring2, const UniaxialMaterial &spring3, const UniaxialMaterial &spring4, const UniaxialMaterial &springC)
+  {
+    fixedEnd[0] = 0; theMaterial[0]= spring1.getCopy();
+    fixedEnd[1] = 0; theMaterial[1]= spring2.getCopy();
+    fixedEnd[2] = 0; theMaterial[2]= spring3.getCopy();
+    fixedEnd[3] = 0; theMaterial[3]= spring4.getCopy();
+    fixedEnd[4] = 0; theMaterial[4]= springC.getCopy();
+
+    for(size_t i=0 ; i<5 ; i++ )
+      {
+        if( fixedEnd[i] == 0 && theMaterial[i] == nullptr )
+          {
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << " ERROR: can not make copy of uniaxial materials, out of memory ";
+            exit(-1);
+          }
+      }
+  }
+
+//! @brief Set the damage models
+void XC::Joint2DPhysicalProperties::set_damage_models(const DamageModel &dmg1, const DamageModel &dmg2, const DamageModel &dmg3, const DamageModel &dmg4, const DamageModel &dmgC)
+  {
+    theDamages[0] = dmg1.getCopy();
+    theDamages[1] = dmg2.getCopy();
+    theDamages[2] = dmg3.getCopy();
+    theDamages[3] = dmg4.getCopy();
+    theDamages[4] = dmgC.getCopy();
+  }
+
 //! @brief Constructor
 XC::Joint2DPhysicalProperties::Joint2DPhysicalProperties(const size_t &nMat,const UniaxialMaterial *ptr_mat)
   : UniaxialMatPhysicalProperties(nMat,ptr_mat), theDamages(5,nullptr), fixedEnd(5)
@@ -43,37 +73,7 @@ XC::Joint2DPhysicalProperties::Joint2DPhysicalProperties(const size_t &nMat,cons
 XC::Joint2DPhysicalProperties::Joint2DPhysicalProperties(const UniaxialMaterial &spring1, const UniaxialMaterial &spring2, const UniaxialMaterial &spring3, const UniaxialMaterial &spring4, const UniaxialMaterial &springC)
   : UniaxialMatPhysicalProperties(5,nullptr), theDamages(5,nullptr), fixedEnd(5)
   {
-    // make copy of the uniaxial materials for the element
-
-    if(&spring1 == nullptr)
-      { fixedEnd[0] = 1;  theMaterial[0]= nullptr; }
-    else
-      { fixedEnd[0] = 0; theMaterial[0]= spring1.getCopy(); }
-    if(&spring2 == nullptr)
-      { fixedEnd[1] = 1;  theMaterial[1]= nullptr; }
-    else
-      { fixedEnd[1] = 0; theMaterial[1]= spring2.getCopy(); }
-    if(&spring3 == nullptr )
-      { fixedEnd[2] = 1;  theMaterial[2]= nullptr; }
-    else
-      { fixedEnd[2] = 0; theMaterial[2]= spring3.getCopy(); }
-    if(&spring4 == nullptr)
-      { fixedEnd[3] = 1;  theMaterial[3]= nullptr; }
-    else
-      { fixedEnd[3] = 0; theMaterial[3]= spring4.getCopy(); }
-    if(&springC == nullptr)
-      { std::cerr << "ERROR Joint2DPhysicalProperties constructor: The central node does not exist "; exit(-1); }
-    else
-      { fixedEnd[4] = 0; theMaterial[4] = springC.getCopy(); }
-
-    for(size_t i=0 ; i<5 ; i++ )
-      {
-        if( fixedEnd[i] == 0  && theMaterial[i] == nullptr )
-          {
-            std::cerr << "ERROR Joint2DhysicalProperties constructor: Can not make copy of uniaxial materials, out of memory ";
-            exit(-1);
-          }
-      }
+    set_springs(spring1,spring2,spring3,spring4,springC);
   }
 
 //! @brief Constructor
@@ -82,43 +82,8 @@ XC::Joint2DPhysicalProperties::Joint2DPhysicalProperties(const UniaxialMaterial 
   {
     // make copy of the uniaxial materials for the element
 
-    if(&spring1 == nullptr)
-      { fixedEnd[0] = 1;  theMaterial[0]= nullptr; }
-    else
-      { fixedEnd[0] = 0; theMaterial[0]= spring1.getCopy(); }
-    if(&spring2 == nullptr)
-      { fixedEnd[1] = 1;  theMaterial[1]= nullptr; }
-    else
-      { fixedEnd[1] = 0; theMaterial[1]= spring2.getCopy(); }
-    if(&spring3 == nullptr )
-      { fixedEnd[2] = 1;  theMaterial[2]= nullptr; }
-    else
-      { fixedEnd[2] = 0; theMaterial[2]= spring3.getCopy(); }
-    if(&spring4 == nullptr)
-      { fixedEnd[3] = 1;  theMaterial[3]= nullptr; }
-    else
-      { fixedEnd[3] = 0; theMaterial[3]= spring4.getCopy(); }
-    if(&springC == nullptr)
-      { std::cerr << "ERROR Joint2DPhysicalProperties constructor: The central node does not exist "; exit(-1); }
-    else
-      { fixedEnd[4] = 0; theMaterial[4] = springC.getCopy(); }
-
-    const size_t sz= theMaterial.size();
-    for(size_t i=0 ; i<sz ; i++ )
-      {
-        if( fixedEnd[i] == 0  && theMaterial[i] == nullptr )
-          {
-            std::cerr << "ERROR Joint2DhysicalProperties constructor: Can not make copy of uniaxial materials, out of memory ";
-            exit(-1);
-          }
-      }
-    // Handle the damage models
-    if( &dmg1 == nullptr ) { theDamages[0] = nullptr; } else { theDamages[0] = dmg1.getCopy(); }
-    if( &dmg2 == nullptr ) { theDamages[1] = nullptr; } else { theDamages[1] = dmg2.getCopy(); }
-    if( &dmg3 == nullptr ) { theDamages[2] = nullptr; } else { theDamages[2] = dmg3.getCopy(); }
-    if( &dmg4 == nullptr ) { theDamages[3] = nullptr; } else { theDamages[3] = dmg4.getCopy(); }
-    if( &dmgC == nullptr ) { theDamages[4] = nullptr; } else { theDamages[4] = dmgC.getCopy(); }
-
+    set_springs(spring1,spring2,spring3,spring4,springC);
+    set_damage_models(dmg1,dmg2,dmg3,dmg4,dmgC);
     theDamages.revertToStart(); //??
   }
 

@@ -97,7 +97,7 @@ class LUTField(object):
       pos.SetValue(0.1,0.1)        
       self.scalarBar.SetOrientationToHorizontal()
       self.scalarBar.SetWidth(0.8)
-      self.scalarBar.SetHeight(0.125)
+      self.scalarBar.SetHeight(0.06)
     else:
       pos.SetValue(0.85,0.25)     
       self.scalarBar.SetOrientationToVertical()
@@ -105,6 +105,9 @@ class LUTField(object):
       self.scalarBar.SetHeight(0.7)
     self.scalarBar.SetLookupTable(self.lookUpTable)
     self.scalarBar.Modified()
+    #self.scalarBar.SetLabelFormat("%.2f")
+    labelTextProperty=  self.scalarBar.GetLabelTextProperty()
+    labelTextProperty.ItalicOff()
     return self.scalarBar
 
   def creaVertColorScaleBar(self):

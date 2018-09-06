@@ -233,11 +233,11 @@ class Matrix: public EntCmd
     friend std::string to_string(const Matrix &);
     inline std::string toString(void) const
       { return to_string(*this); }
-    //    friend istream &operator>>(istream &s, Matrix &M);
-    friend Matrix operator*(double a,const Matrix &M);
+    friend Matrix operator*(double ,const Matrix &);
 
   };
 
+Matrix operator*(double ,const Matrix &);
 std::ostream &operator<<(std::ostream &, const Matrix &);
 
 Matrix m_double_to_matrix(const m_double &m);

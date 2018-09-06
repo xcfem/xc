@@ -39,8 +39,6 @@ XC installation.
          -SuperLU (Direct solution of large, sparse systems of linear equations libsuperlu3-dev).
          -Suitesparse (collection of libraries for computations for sparse matrices).
          -Petsc
-         -HDF5 (www.hdfgroup.org). Interfaz con Salome.
-         -MED V3.0 (www.code-aster.org/outils/med). Interfaz con Salome.
 
       You can find a list of the Ubuntu (or Debian) packages you need to
       fulfil the installation in "doc/needed_packages.txt". If you have

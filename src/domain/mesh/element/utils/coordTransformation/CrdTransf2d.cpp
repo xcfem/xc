@@ -76,10 +76,11 @@ XC::CrdTransf2d::CrdTransf2d(int tag, int classTag)
 //! @brief check rigid joint offset for node I
 void XC::CrdTransf2d::set_rigid_joint_offsetI(const Vector &rigJntOffset1)
   {
-    if(&rigJntOffset1 == 0 || rigJntOffset1.Size() != 2 )
+    if(rigJntOffset1.Size() != 2 )
       {
-        std::cerr << "CrdTransf2d:  Invalid rigid joint offset vector for node I\n";
-        std::cerr << "Size must be 2\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << ": invalid rigid joint offset vector for node I\n"
+		  << "Size must be 2\n";
       }
     else
       if(rigJntOffset1.Norm() > 0.0)
@@ -92,10 +93,11 @@ void XC::CrdTransf2d::set_rigid_joint_offsetI(const Vector &rigJntOffset1)
 //! @brief check rigid joint offset for node J
 void XC::CrdTransf2d::set_rigid_joint_offsetJ(const Vector &rigJntOffset2)
   {
-    if(&rigJntOffset2 == 0 || rigJntOffset2.Size() != 2 )
+    if(rigJntOffset2.Size() != 2 )
       {
-        std::cerr << "CrdTransf2d:  Invalid rigid joint offset vector for node J\n";
-        std::cerr << "Size must be 2\n";      
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << ": invalid rigid joint offset vector for node J\n"
+		  << "Size must be 2\n";      
       }
     else
       if(rigJntOffset2.Norm() > 0.0)

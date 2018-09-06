@@ -39,6 +39,8 @@ namespace XC {
 //! @brief Physical properties for shells.
 class Joint3DPhysicalProperties : public UniaxialMatPhysicalProperties
   {
+  protected:
+    void setup(const UniaxialMaterial &, const UniaxialMaterial &, const UniaxialMaterial &);
   public:
     Joint3DPhysicalProperties(const size_t &nMat= 0,const UniaxialMaterial *ptr_mat= nullptr); 
     Joint3DPhysicalProperties(const UniaxialMaterial &springx, const UniaxialMaterial &springy, const UniaxialMaterial &springz);

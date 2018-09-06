@@ -16,7 +16,6 @@ libgtkglextmm-x11-1.2-dev
 libgtkmm-2.4-dev
 libgts-bin
 libgts-dev
-libhdf5-mpi-dev
 liblapack-dev
 libmpfr-dev
 libmysql++-dev

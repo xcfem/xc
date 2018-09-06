@@ -41,8 +41,6 @@ namespace XC {
 class Domain;
 class FE_Datastore;
 class FEM_ObjectBrokerAllClasses;
-class MEDMesh;
-class MEDMeshing;
 
 //! @mainpage <a href="https://sites.google.com/site/xcfemanalysis/" target="_new">XC</a> Open source finite element analysis program.
 //! @author Luis C. Pérez Tato/Ana Ortega.

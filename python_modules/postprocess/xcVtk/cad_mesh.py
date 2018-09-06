@@ -29,13 +29,13 @@ def VtkDefineActorKPoint(recordGrid, renderer, radius):
   sphereSource.SetPhiResolution(5)
   
   markKPts= vtk.vtkGlyph3D()
-  markKPts.SetInput(recordGrid.uGrid) 
-  markKPts.SetSource(sphereSource.GetOutput())
+  markKPts.SetInputData(recordGrid.uGrid) 
+  markKPts.SetSourceData(sphereSource.GetOutput())
   markKPts.ScalingOff()
   markKPts.OrientOff()
     
   mappKPts= vtk.vtkPolyDataMapper()
-  mappKPts.SetInput(markKPts.GetOutput())
+  mappKPts.SetInputData(markKPts.GetOutput())
 
   visKPts= vtk.vtkActor()
   visKPts.SetMapper(mappKPts)
@@ -46,7 +46,7 @@ def VtkDefineActorKPoint(recordGrid, renderer, radius):
 def VtkDefineActorCells(recordGrid, renderer, tipoRepr):
   ''' Actor for the surfaces.'''
   uGridMapper= vtk.vtkDataSetMapper()
-  uGridMapper.SetInput(recordGrid.uGrid)
+  uGridMapper.SetInputData(recordGrid.uGrid)
   cellActor= vtk.vtkActor()
   cellActor.SetMapper(uGridMapper)
   cellActor.GetProperty().SetColor(1,1,0)

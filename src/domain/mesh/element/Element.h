@@ -95,7 +95,6 @@ class DqVectors;
 class DqMatrices;
 class DefaultTag;
 class GaussModel;
-class MEDGaussModel;
 class ParticlePos3d;
 
 //! @ingroup Mesh

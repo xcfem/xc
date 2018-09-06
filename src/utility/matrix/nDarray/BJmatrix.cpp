@@ -954,9 +954,9 @@ XC::BJmatrix XC::BJmatrix::scale( )
         for( int row=0 ; row<rows() ; row++ )
           if ( (temp=(double)fabs(mval(row,col))) > maximum )
             maximum = temp; // find max column magnitude in this row
-          if( fabs(maximum) <= double_eps )
-            error("singular XC::BJmatrix in scale()");
-          scale_vector.mval(col,0) = 1/maximum; // save the scaling
+	if( fabs(maximum) <= double_eps )
+	  error("singular XC::BJmatrix in scale()");
+	scale_vector.mval(col,0) = 1/maximum; // save the scaling
       }
     return scale_vector;
   }

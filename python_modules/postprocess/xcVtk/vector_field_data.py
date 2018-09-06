@@ -84,7 +84,7 @@ class VectorFieldData(object):
     #arrow.SetRadius(0.1)
     #arrow.SetHeight(0.5)
     self.glyph = vtk.vtkGlyph3D()
-    self.glyph.SetInput(self.polydata)
+    self.glyph.SetInputData(self.polydata)
     self.glyph.SetSourceConnection(arrow.GetOutputPort())
     self.glyph.ScalingOn()
     self.glyph.SetScaleModeToScaleByScalar()
