@@ -14,7 +14,7 @@ class Reactions(object):
     self.forces= dict()
     self.moments= dict()
     self.positions= dict()
-    self.svdReac= geom.SVD3d()
+    self.svdReac= geom.SlidingVectorsSystem3d()
     meshNodes= preprocessor.getNodeHandler
     meshNodes.calculateNodalReactions(True, 1e-7)
     f3d= geom.Vector3d(0.0,0.0,0.0)
@@ -36,7 +36,7 @@ class Reactions(object):
       self.moments[tag]= moment
       pos= n.getInitialPos3d
       self.positions[tag]= pos
-      self.svdReac+= geom.SVD3d(pos,f3d,m3d)
+      self.svdReac+= geom.SlidingVectorsSystem3d(pos,f3d,m3d)
   def getReactionForces(self):
     '''Returns a dictionary with the reactions forces at the nodes.
        The key of the map is the node tag.''' 

@@ -620,7 +620,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   def getEccentricity(self,R):
     '''Return the eccenctricity of the loads acting on the retaining wall.
 
-     :param R: (SVD3d) resultant of the loads acting on the retaining wall.
+     :param R: (SlidingVectorsSystem3d) resultant of the loads acting on the retaining wall.
     '''
     foundationPlane= self.getFoundationPlane()
     zml= R.zeroMomentLine(1e-5).getXY2DProjection() #Resultant line of action.
@@ -641,7 +641,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   def getOverturningSafetyFactor(self,R,gammaR):
     '''Return the factor of safety against overturning.
 
-     :param R: (SVD3d) resultant of the loads acting on the retaining wall.
+     :param R: (SlidingVectorsSystem3d) resultant of the loads acting on the retaining wall.
      :param gammaR: (float) partial resistance reduction factor.
     '''
     e= self.getEccentricity(R) #eccentricity
@@ -652,7 +652,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   def getSlidingSafetyFactor(self,R,gammaR,foundationSoilModel):
     '''Return the factor of safety against sliding.
 
-     :param R: (SVD3d) resultant of the loads acting on the retaining wall.
+     :param R: (SlidingVectorsSystem3d) resultant of the loads acting on the retaining wall.
      :param gammaR: partial resistance reduction factor.
      :param foundationSoilModel: (FrictionalCohesionalSoil) soil model.
      :param gammaMPhi: (float) partial reduction factor for internal friction angle of the soil.

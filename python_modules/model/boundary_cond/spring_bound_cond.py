@@ -136,7 +136,7 @@ class ElasticFoundation(object):
          and stores these values as properties of those nodes:
          property 'soilPressure:' [xStress,yStress,zStress]
          property 'soilReaction:' [xForce,yForce,zForce]'''
-        self.svdReac= geom.SVD3d()
+        self.svdReac= geom.SlidingVectorsSystem3d()
         f3d= geom.Vector3d(0.0,0.0,0.0)
         m3d= geom.Vector3d(0.0,0.0,0.0)
         for e in self.springs:
@@ -150,7 +150,7 @@ class ElasticFoundation(object):
                 f3d= geom.Vector3d(rf[0],rf[1],rf[2])
                 m3d= geom.Vector3d(rf[3],rf[4],rf[5])
             pos= n.getInitialPos3d
-            self.svdReac+= geom.SVD3d(pos,f3d,m3d)
+            self.svdReac+= geom.SlidingVectorsSystem3d(pos,f3d,m3d)
 
             #print "dispZ= ", n.getDisp[2]*1e3, "mm"
             n.setProp('soilPressure',[f3d.x/a,f3d.y/a,f3d.z/a])
