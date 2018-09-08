@@ -171,7 +171,9 @@
 #define LOAD_TAG_Beam3dPointLoad          6
 #define LOAD_TAG_BrickSelfWeight          7
 #define LOAD_TAG_BeamStrainLoad           8 //Modificado LCPT.
-#define PATTERN_TAG_PBowlLoading	  10
+#define LOAD_TAG_SurfaceLoader            9 // C.McGann, U.W.
+#define LOAD_TAG_SelfWeight              10 // C.McGann, U.W.
+#define PATTERN_TAG_PBowlLoading	  11
 #define LOAD_TAG_TrussStrainLoad          20 //Added by LCPT.
 #define LOAD_TAG_LoadCombination              30 //Added by LCPT.
 #define LOAD_TAG_ShellUniformLoad         40 //Added by LCPT.

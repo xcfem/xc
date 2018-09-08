@@ -168,7 +168,7 @@
 #include "domain/mesh/element/plane/fourNodeQuad/NineNodeMixedQuad.h"
 #include "domain/mesh/element/plane/fourNodeQuad/ConstantPressureVolumeQuad.h"
 #include "domain/mesh/element/plane/UP-ucsd/FourNodeQuadUP.h"
-#include "domain/mesh/element/plane/UP-ucsd/NineFourNodeQuadUP.h"
+#include "domain/mesh/element/plane/UP-ucsd/Nine_Four_Node_QuadUP.h"
 
 #include "domain/mesh/element/plane/shell/ShellLinearCrdTransf3d.h"
 #include "domain/mesh/element/plane/shell/ShellCorotCrdTransf3d.h"

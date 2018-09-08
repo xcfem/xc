@@ -72,11 +72,11 @@ class Beam2dUniformLoad : public BeamUniformLoad
     Beam2dUniformLoad(int tag);
     Beam2dUniformLoad(void);
 
-    int getType(void);
     inline const double &WTrans(void) const
       { return Trans; }
     inline const double &WAxial(void) const
       { return Axial; }
+    const Vector &getData(int &type, const double &loadFactor) const;
 
     size_t getForceVectorDimension(void) const;
     size_t getMomentVectorDimension(void) const;

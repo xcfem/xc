@@ -74,8 +74,13 @@ XC::Beam2dUniformLoad::Beam2dUniformLoad(int tag)
 XC::Beam2dUniformLoad::Beam2dUniformLoad(void)
   :BeamUniformLoad(0,LOAD_TAG_Beam2dUniformLoad) {}
 
-int XC::Beam2dUniformLoad::getType(void)
-  { return LOAD_TAG_Beam2dUniformLoad; }
+const XC::Vector &XC::Beam2dUniformLoad::getData(int &type, const double &loadFactor) const
+  {
+    type = getClassTag();
+    data(0)= WTrans();
+    data(1)= WAxial();
+    return data;
+  }
 
 //! @brief Return the dimension of the force vector.
 size_t XC::Beam2dUniformLoad::getForceVectorDimension(void) const

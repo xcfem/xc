@@ -101,6 +101,16 @@ XC::Vector XC::Beam3dPointLoad::getLocalMoment(void) const
     return retval;
   }
 
+const XC::Vector &XC::Beam3dPointLoad::getData(int &type, const double &loadFactor) const
+  {
+    type = getClassTag();
+    data(0) = py();
+    data(1) = pz();
+    data(2) = px();
+    data(3) = x;
+    return data;
+  }
+
 //! @brief Returns force vectors (one for each element) expressed in local coordinates.
 const XC::Matrix &XC::Beam3dPointLoad::getLocalForces(void) const
   {

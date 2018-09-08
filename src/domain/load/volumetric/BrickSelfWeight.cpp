@@ -71,8 +71,13 @@ XC::BrickSelfWeight::BrickSelfWeight(int tag)
 XC::BrickSelfWeight::BrickSelfWeight(void)
   :ElementBodyLoad(LOAD_TAG_BrickSelfWeight) {}
 
-int XC::BrickSelfWeight::getType(void)
-  { return LOAD_TAG_BrickSelfWeight; }
+const XC::Vector &XC::BrickSelfWeight::getData(int &type, const double &loadFactor) const
+  {
+    type= getClassTag();
+    //data(0) = P;
+    //data(1) = x;
+    return data;
+  }
 
 //! @brief Send members of the object through the
 //! communicator being passed as parameter.

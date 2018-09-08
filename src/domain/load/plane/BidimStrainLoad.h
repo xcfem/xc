@@ -62,6 +62,7 @@ class BidimStrainLoad: public BidimLoad
       { return strains[i]; }
     void setStrains(const Matrix &);
     void setStrainComp(const size_t &,const size_t &,const double &);
+    const Vector &getData(int &type, const double &loadFactor) const;
 
   
     int sendSelf(CommParameters &);  

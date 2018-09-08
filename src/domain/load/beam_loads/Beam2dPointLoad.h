@@ -79,6 +79,7 @@ class Beam2dPointLoad: public BeamPointLoad
       { return Trans; }
     inline const double &pAxial(void) const
       { return Axial; }
+    const Vector &getData(int &type, const double &loadFactor) const;
 
     size_t getForceVectorDimension(void) const;
     size_t getMomentVectorDimension(void) const;

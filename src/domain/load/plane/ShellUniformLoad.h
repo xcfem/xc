@@ -46,13 +46,13 @@ class ShellUniformLoad : public ShellMecLoad
     ShellUniformLoad(int tag= 0);
 
     std::string Categoria(void) const;
-    int getType(void);
     inline const double &Wx(void) const
       { return Axial1; }
     inline const double &Wy(void) const
       { return Axial2; }
     inline const double &Wz(void) const
       { return Trans; }
+    const Vector &getData(int &type, const double &loadFactor) const;
 
     size_t getForceVectorDimension(void) const;
     size_t getMomentVectorDimension(void) const;

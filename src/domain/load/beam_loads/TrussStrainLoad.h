@@ -58,6 +58,7 @@ class TrussStrainLoad : public ElementBodyLoad
       { return e2; }
     inline void setE2(const double &d)
       { e2= d; }
+    const Vector &getData(int &type, const double &loadFactor) const;
 
     int sendSelf(CommParameters &);  
     int recvSelf(const CommParameters &);

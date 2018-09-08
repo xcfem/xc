@@ -80,7 +80,6 @@ class Beam3dUniformLoad: public BeamUniformLoad
     Beam3dUniformLoad(int tag);    
     Beam3dUniformLoad(void);
 
-    int getType(void);
     inline const double &Wx(void) const
       { return Axial; }
     inline const double &Wy(void) const
@@ -97,6 +96,7 @@ class Beam3dUniformLoad: public BeamUniformLoad
       { tx= d; }
     inline double getTorsor(void)
       { return tx; }
+    const Vector &getData(int &type, const double &loadFactor) const;
 
     size_t getForceVectorDimension(void) const;
     size_t getMomentVectorDimension(void) const;

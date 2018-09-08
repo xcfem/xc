@@ -50,9 +50,6 @@ std::string XC::ShellUniformLoad::Categoria(void) const
   { return "uniforme"; }
 
 
-int XC::ShellUniformLoad::getType(void)
-  { return LOAD_TAG_ShellUniformLoad; }
-
 //! @brief Return the dimension of the force vector.
 size_t XC::ShellUniformLoad::getForceVectorDimension(void) const
   { return 3; }
@@ -89,6 +86,16 @@ const XC::Matrix &XC::ShellUniformLoad::getLocalMoments(void) const
         retval(i,2)= 0.0;
       }
     return retval;
+  }
+
+
+const XC::Vector &XC::ShellUniformLoad::getData(int &type, const double &loadFactor) const
+  {
+    type = getClassTag();
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << " not implemented yet." << std::endl;
+    static const Vector trash;
+    return trash;
   }
 
 //! @brief Adds the load al consistent load vector (see page 108 libro Eugenio Oñate).
@@ -193,7 +200,8 @@ int XC::ShellUniformLoad::recvSelf(const CommParameters &cp)
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "ShellUniformLoad::recvSelf() - data could not be received\n" ;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; data could not be received.\n" ;
     else
       res+= recvData(cp);
     return res;

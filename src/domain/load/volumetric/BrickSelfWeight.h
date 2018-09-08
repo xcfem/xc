@@ -51,7 +51,7 @@ class BrickSelfWeight: public ElementBodyLoad
     BrickSelfWeight(int tag);
     BrickSelfWeight(void);    
 
-    int getType(void);
+    const Vector &getData(int &type, const double &loadFactor) const;
 
     int sendSelf(CommParameters &);  
     int recvSelf(const CommParameters &);

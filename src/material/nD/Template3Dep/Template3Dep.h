@@ -239,7 +239,7 @@ class Template3Dep : public NDMaterial
     NDMaterial *getCopy(void) const;
     NDMaterial *getCopy(const std::string &) const;
 
-    const std::string &getType(void) const ;
+    const std::string &getType(void) const;
     int getOrder(void) const ;
 
     int sendSelf(CommParameters &);  

@@ -58,7 +58,7 @@
 #include "domain/mesh/element/plane/triangle/Tri31.h"
 #include "domain/mesh/element/plane/fourNodeQuad/NineNodeMixedQuad.h"
 #include "domain/mesh/element/plane/UP-ucsd/FourNodeQuadUP.h"
-#include "domain/mesh/element/plane/UP-ucsd/NineFourNodeQuadUP.h"
+#include "domain/mesh/element/plane/UP-ucsd/Nine_Four_Node_QuadUP.h"
 
 #include "domain/mesh/element/volumetric/brick/BbarBrick.h"
 #include "domain/mesh/element/volumetric/brick/Brick.h"

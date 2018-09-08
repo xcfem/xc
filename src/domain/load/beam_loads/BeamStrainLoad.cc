@@ -39,6 +39,15 @@ XC::BeamStrainLoad::BeamStrainLoad(int tag, const XC::ID &theElementTags)
 XC::BeamStrainLoad::BeamStrainLoad(int tag)
   :BeamLoad(tag, LOAD_TAG_BeamStrainLoad) {}
 
+const XC::Vector &XC::BeamStrainLoad::getData(int &type, const double &loadFactor) const
+  {
+    type = getClassTag();
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << " not implemented yet." << std::endl;
+    static const Vector trash;
+    return trash;
+  }
+
 //! @brief Send data through the channel being passed as parameter.
 int XC::BeamStrainLoad::sendData(CommParameters &cp)
   {

@@ -36,8 +36,8 @@
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-// $Revision: 1.1 $
-// $Date: 2005/09/22 21:28:36 $
+// $Revision: 1.5 $
+// $Date: 2007-02-02 01:44:56 $
 // $Source: /usr/local/cvs/OpenSees/SRC/element/UP-ucsd/Nine_Four_Node_QuadUP.h,v $
 
 #ifndef NineFourNodeQuadUP_h
@@ -54,57 +54,57 @@ class Node;
 class NDMaterial;
 class Response;
 
-//! @ingroup PlaneElements
-//
-//! @brief 9-4-node (9 node for solid and 4 node for fluid)
-//! plane strain element for solid-fluid fully coupled analysis. This
-//! implementation is a simplified u-p formulation of Biot theory
-//! (u - solid displacement, p - fluid pressure). Each element node has two
-//! DOFs for u and 1 DOF for p.
-class NineFourNodeQuadUP: public ElemWithMaterial<9,SolidMech2D>
+class NineFourNodeQuadUP : public ElemWithMaterial<9,SolidMech2D>
   {
   private:
     BodyForces2D bf; //!< Body forces
     mutable Matrix *Ki;
 
-    double kc;   // combined bulk modulus
-    double perm[2];  // lateral/vertical permeability
+    double kc;   //!< combined bulk modulus
+    double perm[2];  //!< lateral/vertical permeability
+    double appliedB[2]; // Body forces applied with load pattern, C.McGann, U.Washington
 
-    static Matrix K;		// Element stiffness, damping, and mass Matrix
-    static Vector P;		// Element resisting force vector
+    int applyLoad;      // flag for body force in load, C.McGann, U.Washington
+
+    static Matrix K; //!< Element stiffness, damping, and mass Matrix
+    static Vector P; //"< Element resisting force vector
     static const int nintu;
     static const int nintp;
     static const int nenu;
     static const int nenp;
 
-    static double shgu[3][9][9];	// Stores shape functions and derivatives (overwritten)
-    static double shgp[3][4][4];	// Stores shape functions and derivatives (overwritten)
-    static double shgq[3][9][4];	// Stores shape functions and derivatives (overwritten)
-    static double shlu[3][9][9];	// Stores shape functions and derivatives
-    static double shlp[3][4][4];	// Stores shape functions and derivatives
-    static double shlq[3][9][4];	// Stores shape functions and derivatives
-    static double wu[9];		// Stores quadrature weights
-    static double wp[4];		// Stores quadrature weights
-    static double dvolu[9];  // Stores detJacobian (overwritten)
-    static double dvolp[4];  // Stores detJacobian (overwritten)
-    static double dvolq[4];  // Stores detJacobian (overwritten)
+
+    static double shgu[3][9][9]; //!< Stores shape functions and derivatives (overwritten)
+    static double shgp[3][4][4]; //!< Stores shape functions and derivatives (overwritten)
+    static double shgq[3][9][4]; //!< Stores shape functions and derivatives (overwritten)
+    static double shlu[3][9][9]; //!< Stores shape functions and derivatives
+    static double shlp[3][4][4]; //!< Stores shape functions and derivatives
+    static double shlq[3][9][4]; //!< Stores shape functions and derivatives
+    static double wu[9]; //!< Stores quadrature weights
+    static double wp[4]; //!< Stores quadrature weights
+    static double dvolu[9]; //!< Stores detJacobian (overwritten)
+    static double dvolp[4]; //!< Stores detJacobian (overwritten)
+    static double dvolq[4]; // Stores detJacobian (overwritten)
 
     // private member functions - only objects of this class can call these
     double mixtureRho(int ipt) const;  // Mixture mass density at integration point i
     void shapeFunction(double *w, int nint, int nen, int mode) const;
     void globalShapeFunction(double *dvol, double *w, int nint, int nen, int mode) const;
+
+    double *initNodeDispl;
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
   public:
+    NineFourNodeQuadUP(void);
     NineFourNodeQuadUP(int tag, int nd1, int nd2, int nd3, int nd4,
 		  int nd5, int nd6, int nd7, int nd8, int nd9,
 		  NDMaterial &m, const char *type,
 		  double t, double bulk, double rhof, double perm1, double perm2,
 		  const BodyForces2D &bForces= BodyForces2D());
-    NineFourNodeQuadUP(void);
+
     Element *getCopy(void) const;    
-    virtual ~NineFourNodeQuadUP();
+    virtual ~NineFourNodeQuadUP(void);
 
     int getNumDOF(void) const;
     void setDomain(Domain *theDomain);
@@ -118,8 +118,9 @@ class NineFourNodeQuadUP: public ElemWithMaterial<9,SolidMech2D>
     const Matrix &getDamp(void) const;
     const Matrix &getMass(void) const;
 
+    void zeroLoad(void);
     int addLoad(ElementalLoad *theLoad, double loadFactor);
-    int addInertiaLoadToUnbalance(const Vector &accel);
+    int addInertiaLoadToUnbalance(const Vector &);
     const Vector &getResistingForce(void) const;
     const Vector &getResistingForceIncInertia(void) const;
 
@@ -134,11 +135,11 @@ class NineFourNodeQuadUP: public ElemWithMaterial<9,SolidMech2D>
     int setParameter(const std::vector<std::string> &argv, Parameter &param);
     int updateParameter(int parameterID, Information &info);
 
-    // RWB; PyLiq1 & TzLiq1 need to see the excess pore pressure and initial stresses.
+    // RWB; PyLiq1 & TzLiq1 need to see the excess pore pressure and
+    // initial stresses.
     friend class PyLiq1;
     friend class TzLiq1;
   };
 } // end of XC namespace
 
 #endif
-

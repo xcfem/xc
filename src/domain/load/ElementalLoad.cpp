@@ -55,6 +55,7 @@
 // Purpose: This file contains the methods for class XC::ElementalLoad.
 
 #include "domain/load/ElementalLoad.h"
+#include "utility/matrix/Vector.h"
 
 
 //! @brief Constructor.
@@ -85,6 +86,12 @@ int XC::ElementalLoad::setElementTags(const ID &theEleTags)
   {
     elemTags= theEleTags;
     return 0;
+  }
+
+const XC::Vector &XC::ElementalLoad::getSensitivityData(const int &gradIndex) const
+  {
+    static Vector trash(10);
+    return trash;
   }
 
 //! @brief Send data through the channel being passed as parameter.

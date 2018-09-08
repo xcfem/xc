@@ -78,9 +78,14 @@ XC::Beam3dUniformLoad::Beam3dUniformLoad(int tag)
 XC::Beam3dUniformLoad::Beam3dUniformLoad(void)
   :BeamUniformLoad(0,LOAD_TAG_Beam3dUniformLoad), wz(0.0), tx(0.0) {}
 
-int XC::Beam3dUniformLoad::getType(void)
-  { return LOAD_TAG_Beam3dUniformLoad; }
-
+const XC::Vector &XC::Beam3dUniformLoad::getData(int &type, const double &loadFactor) const
+  {
+    type = getClassTag();
+    data(0)= Wy();
+    data(1)= Wz();
+    data(2)= Wx();
+    return data;
+  }
 //! @brief Applied section forces due to element uniform load
 const XC::Matrix &XC::Beam3dUniformLoad::getAppliedSectionForces(const double &L,const Matrix &xi_pt,const double &loadFactor) const
   {

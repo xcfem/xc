@@ -91,6 +91,15 @@ void XC::BidimStrainLoad::setStrains(const Matrix &def)
     strains= tmp;
   }
 
+const XC::Vector &XC::BidimStrainLoad::getData(int &type, const double &loadFactor) const
+  {
+    type = getClassTag();
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << " not implemented yet." << std::endl;
+    static const Vector trash;
+    return trash;
+  }
+
 
 //! @brief Returns a vector to store the dbTags
 //! of the class members.

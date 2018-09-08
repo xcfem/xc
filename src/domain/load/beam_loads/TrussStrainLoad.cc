@@ -46,6 +46,15 @@ XC::TrussStrainLoad::TrussStrainLoad(int tag)
 XC::TrussStrainLoad::TrussStrainLoad(void)
   :ElementBodyLoad(LOAD_TAG_TrussStrainLoad), e1(0.0), e2(0.0) {}
 
+const XC::Vector &XC::TrussStrainLoad::getData(int &type, const double &loadFactor) const
+  {
+    type = getClassTag();
+    static Vector data(2);
+    data(0)= e1;
+    data(1)= e2;
+    return data;
+  }
+
 int XC::TrussStrainLoad::sendSelf(CommParameters &cp)
   {
     static ID data(2);

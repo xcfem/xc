@@ -82,6 +82,15 @@ size_t XC::Beam2dPointLoad::getForceVectorDimension(void) const
 size_t XC::Beam2dPointLoad::getMomentVectorDimension(void) const
   { return 1; }
 
+const XC::Vector &XC::Beam2dPointLoad::getData(int &type, const double &loadFactor) const
+  {
+    type = getClassTag();
+    data(0) = pTrans();
+    data(1) = pAxial();
+    data(2) = x;
+    return data;
+  }
+
 //! @brief Returns force expressed in local coordinates.
 XC::Vector XC::Beam2dPointLoad::getLocalForce(void) const
   {

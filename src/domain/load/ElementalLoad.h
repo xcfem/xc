@@ -88,6 +88,8 @@ class ElementalLoad: public Load
     int numElements(void) const;
     int setElementTags(const ID &theEleTags);
     virtual const ID &getElementTags(void) const;
+    virtual const Vector &getData(int &type, const double &loadFactor) const= 0;
+    virtual const Vector &getSensitivityData(const int &gradIndex) const;
   };
 } // end of XC namespace
 
