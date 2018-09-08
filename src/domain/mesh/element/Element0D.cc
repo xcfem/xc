@@ -34,7 +34,7 @@
 
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/sis_coo/SisCooRect3d3d.h"
+#include "xc_utils/src/geom/coo_sys/Rect3d3dCooSys.h"
 #include "utility/actor/actor/MovableMatrix.h"
 #include "vtkCellType.h"
 
@@ -181,7 +181,7 @@ XC::Matrix XC::Element0D::getLocalAxes(bool initialGeometry) const
   }
 
 //! @brief Returns the element coordinate system.
-SisCooRect3d3d XC::Element0D::getSisCoo(bool initialGeometry) const
+Rect3d3dCooSys XC::Element0D::getCooSys(bool initialGeometry) const
   {
     if(!initialGeometry)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -190,7 +190,7 @@ SisCooRect3d3d XC::Element0D::getSisCoo(bool initialGeometry) const
     const Vector3d x(transformation(0,0), transformation(0,1), transformation(0,2));
     const Vector3d y(transformation(1,0), transformation(1,1), transformation(1,2));
     const Vector3d z(transformation(2,0), transformation(2,1), transformation(2,2));
-    return SisCooRect3d3d(x,y,z);
+    return Rect3d3dCooSys(x,y,z);
   }    
 
 

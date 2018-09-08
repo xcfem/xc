@@ -77,7 +77,7 @@
 
 #include "xc_utils/src/geom/pos_vec/Pos3dArray3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/sis_coo/SisCooRect3d3d.h"
+#include "xc_utils/src/geom/coo_sys/Rect3d3dCooSys.h"
 #include "material/Material.h"
 #include "utility/matrix/DqMatrices.h"
 #include "utility/matrix/DqVectors.h"
@@ -878,7 +878,7 @@ Vector3d XC::Element::getKVector3d(bool initialGeometry) const
 
 //! @brief Returns the element coordinate system from the
 //! matrix returned by getLocalAxes.
-SisCooRect3d3d XC::Element::getSisCoo(bool initialGeometry) const
+Rect3d3dCooSys XC::Element::getCooSys(bool initialGeometry) const
   {
     const Matrix localAxes= getLocalAxes(initialGeometry);
     Matrix trfMatrix(3,3);
@@ -891,7 +891,7 @@ SisCooRect3d3d XC::Element::getSisCoo(bool initialGeometry) const
     const Vector3d x(trfMatrix(0,0), trfMatrix(0,1), trfMatrix(0,2));
     const Vector3d y(trfMatrix(1,0), trfMatrix(1,1), trfMatrix(1,2));
     const Vector3d z(trfMatrix(2,0), trfMatrix(2,1), trfMatrix(2,2));
-    return SisCooRect3d3d(x,y,z);
+    return Rect3d3dCooSys(x,y,z);
   }    
 
 

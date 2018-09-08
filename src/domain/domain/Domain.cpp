@@ -1262,7 +1262,7 @@ int XC::sendDomain(Domain &dom,int posDbTag,DbTagData &dt,CommParameters &cp)
     return retval;
   }
 
-//! @brief Recibe el domain through the specified channel.
+//! @brief Receives the domain through the specified channel.
 int XC::receiveDomain(Domain &dom,int posDbTag,DbTagData &dt,const CommParameters &cp)
   {
     int res= cp.receiveInt(dom.dbTag,dt,CommMetaData(posDbTag));

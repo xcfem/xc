@@ -73,7 +73,7 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("getIVector3d",&XC::Element::getIVector3d,"Return a 3D vector in the direction of the local axis 1.")
   .def("getJVector3d",&XC::Element::getJVector3d,"Return a 3D vector in the direction of the local axis 2.")
   .def("getKVector3d",&XC::Element::getKVector3d,"Return a 3D vector in the direction of the local axis 3.")
-  .def("getCoordinateSystem",&XC::Element::getSisCoo,"Return the element coordinate system.")
+  .def("getCoordinateSystem",&XC::Element::getCooSys,"Return the element coordinate system.")
    ;
 
 class_<XC::ElementIter, boost::noncopyable >("ElementIter", no_init)
@@ -100,7 +100,7 @@ class_<XC::Element0D , bases<XC::ElementBase<2>>, boost::noncopyable >("Element0
   .add_property("getIVector",make_function(&XC::Element0D::getX, return_internal_reference<>() ),"Return i vector.")
   .add_property("getJVector",make_function(&XC::Element0D::getY, return_internal_reference<>() ),"Return j vector.")
   .add_property("getKVector",make_function(&XC::Element0D::getZ, return_internal_reference<>() ),"Return k vector.")
-  .add_property("getSisCoo",&XC::Element0D::getSisCoo,"Return element coordinate system.")
+  .add_property("getCooSys",&XC::Element0D::getCooSys,"Return element coordinate system.")
   .add_property("getTransformation",make_function(&XC::Element0D::getTransformation, return_internal_reference<>() ),"Return element transformation.")
   ;
 

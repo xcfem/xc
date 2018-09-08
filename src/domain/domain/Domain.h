@@ -290,7 +290,7 @@ class Domain: public ObjWithRecorders, public DistributedBase
 
 std::ostream &operator<<(std::ostream &, Domain &);
 int sendDomain(Domain &,int posDbTag,DbTagData &,CommParameters &cp);
-int receiveDomain(Domain &, int posDbTag,DbTagData &,CommParameters &cp);
+int receiveDomain(Domain &, int posDbTag,DbTagData &,const CommParameters &cp);
 
 
 } // end of XC namespace

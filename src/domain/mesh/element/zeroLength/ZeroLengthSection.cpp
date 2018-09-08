@@ -66,7 +66,7 @@
 #include <utility/recorder/response/ElementResponse.h>
 #include "xc_utils/src/geom/pos_vec/Vector2d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
-#include "xc_utils/src/geom/sis_coo/SisCooRect3d3d.h"
+#include "xc_utils/src/geom/coo_sys/Rect3d3dCooSys.h"
 
 #include "material/section/ResponseId.h"
 #include "utility/matrix/Matrix.h"
@@ -444,9 +444,9 @@ double XC::ZeroLengthSection::getWeakAxisAngle(void) const
 //! expressed in the global coordinate system.
 const XC::Vector &XC::ZeroLengthSection::getVDirStrongAxisGlobalCoord(bool initialGeometry) const
   {
-    const SisCooRect3d3d sis_coo= getSisCoo(initialGeometry);
+    const Rect3d3dCooSys coo_sys= getCooSys(initialGeometry);
     const Vector eF= getVDirStrongAxisLocalCoord();
-    const Vector3d v= sis_coo.GetCooGlobales(Vector3d(eF[0],eF[1],eF[2]));
+    const Vector3d v= coo_sys.GetCooGlobales(Vector3d(eF[0],eF[1],eF[2]));
     static Vector retval(3);
     retval[0]= v.x(); retval[1]= v.y(); retval[2]= v.z();
     return retval;
@@ -456,9 +456,9 @@ const XC::Vector &XC::ZeroLengthSection::getVDirStrongAxisGlobalCoord(bool initi
 //! expressed in the global coordinate system.
 const XC::Vector &XC::ZeroLengthSection::getVDirWeakAxisGlobalCoord(bool initialGeometry) const
   {
-    const SisCooRect3d3d sis_coo= getSisCoo(initialGeometry);
+    const Rect3d3dCooSys coo_sys= getCooSys(initialGeometry);
     const Vector eD= getVDirWeakAxisLocalCoord();
-    const Vector3d v= sis_coo.GetCooGlobales(Vector3d(eD[0],eD[1],eD[2]));
+    const Vector3d v= coo_sys.GetCooGlobales(Vector3d(eD[0],eD[1],eD[2]));
     static Vector retval(3);
     retval[0]= v.x(); retval[1]= v.y(); retval[2]= v.z();
     return retval;

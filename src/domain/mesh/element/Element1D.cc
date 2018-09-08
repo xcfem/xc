@@ -46,7 +46,7 @@
 #include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
-#include "xc_utils/src/geom/sis_coo/SisCooRect3d3d.h"
+#include "xc_utils/src/geom/coo_sys/Rect3d3dCooSys.h"
 #include "xc_utils/src/geom/d1/Segment3d.h"
 #include "utility/actor/objectBroker/FEM_ObjectBroker.h"
 #include "vtkCellType.h"
@@ -521,7 +521,7 @@ XC::Matrix XC::Element1D::getLocalAxes(bool initialGeometry) const
 	  factor= 1.0;
         const Pos3d p0= theNodes[0]->getCurrentPosition3d(factor);
         const Pos3d p1= theNodes[1]->getCurrentPosition3d(factor);
-	const SisCooRect3d3d sc(p0,p1);
+	const Rect3d3dCooSys sc(p0,p1);
 	const Vector3d i= sc.GetI();
 	retval= Matrix(3,3);
 	retval(0,0)= i.x(); retval(0,1)= i.y(); retval(0,2)= i.z();
