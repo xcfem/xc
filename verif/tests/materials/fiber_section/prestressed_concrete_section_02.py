@@ -22,13 +22,13 @@ def gmSecHP02(nmbGeomSecc,concrDiagName,reinfSteelDiagramName,prestressingSteelD
   horm= regions.newQuadRegion(concrDiagName)
   horm.nDivIJ= 5 # Ala inferior
   horm.nDivJK= 5
-  horm.setQuad(geom.Cuadrilatero2d(geom.Pos2d(-0.593, 0.35), geom.Pos2d(-0.593, -0.35), geom.Pos2d(-0.523, -0.15), geom.Pos2d(-0.523, 0.15)))
+  horm.setQuad(geom.Quadrilateral2d(geom.Pos2d(-0.593, 0.35), geom.Pos2d(-0.593, -0.35), geom.Pos2d(-0.523, -0.15), geom.Pos2d(-0.523, 0.15)))
 
 
   horm= regions.newQuadRegion(concrDiagName)
   horm.nDivIJ= 5 # Transicion 2 ala inferior - alma
   horm.nDivJK= 5
-  horm.setQuad(geom.Cuadrilatero2d(geom.Pos2d(-0.523, 0.15), geom.Pos2d(-0.523, -0.15), geom.Pos2d(-0.413, -0.075), geom.Pos2d(-0.413, 0.075)))
+  horm.setQuad(geom.Quadrilateral2d(geom.Pos2d(-0.523, 0.15), geom.Pos2d(-0.523, -0.15), geom.Pos2d(-0.413, -0.075), geom.Pos2d(-0.413, 0.075)))
 
   horm= regions.newQuadRegion(concrDiagName)
   horm.nDivIJ= 5 # Alma 
@@ -39,12 +39,12 @@ def gmSecHP02(nmbGeomSecc,concrDiagName,reinfSteelDiagramName,prestressingSteelD
   horm= regions.newQuadRegion(concrDiagName)
   horm.nDivIJ= 5 # Transicion 1 alma - ala superior
   horm.nDivJK= 5
-  horm.setQuad(geom.Cuadrilatero2d(geom.Pos2d(0.587, 0.075), geom.Pos2d(0.587, -0.075), geom.Pos2d(0.687, -0.2), geom.Pos2d(0.687, 0.2)))
+  horm.setQuad(geom.Quadrilateral2d(geom.Pos2d(0.587, 0.075), geom.Pos2d(0.587, -0.075), geom.Pos2d(0.687, -0.2), geom.Pos2d(0.687, 0.2)))
 
   horm= regions.newQuadRegion(concrDiagName)
   horm.nDivIJ= 5 # Transicion 2 alma - ala superior
   horm.nDivJK= 5
-  horm.setQuad(geom.Cuadrilatero2d(geom.Pos2d(0.687, 0.2), geom.Pos2d(0.687, -0.2), geom.Pos2d(0.787, -0.6), geom.Pos2d(0.787, 0.6)))
+  horm.setQuad(geom.Quadrilateral2d(geom.Pos2d(0.687, 0.2), geom.Pos2d(0.687, -0.2), geom.Pos2d(0.787, -0.6), geom.Pos2d(0.787, 0.6)))
 
   horm= regions.newQuadRegion(concrDiagName)
   horm.nDivIJ= 4 # Ala superior

@@ -36,7 +36,7 @@
 #include "xc_basic/src/text/text_string.h"
 #include "xc_utils/src/geom/d1/Segment2d.h"
 #include "xc_utils/src/geom/d2/Grid2d.h"
-#include "xc_utils/src/geom/d2/2d_polygons/Cuadrilatero2d.h"
+#include "xc_utils/src/geom/d2/2d_polygons/Quadrilateral2d.h"
 #include <utility/matrix/Matrix.h>
 
 // L +-----------------------+ K
@@ -163,8 +163,8 @@ Pos2d XC::QuadSectRegion::getLVertex(void) const
   { return Pos2d(vertCoord(L,Y),vertCoord(L,Z)); }
 
 //! @brief Returns a quadrilateral object (geometry).
-Cuadrilatero2d XC::QuadSectRegion::getQuad(void) const
-  { return Cuadrilatero2d( getIVertex(),getJVertex(), getKVertex(),getLVertex()); }
+Quadrilateral2d XC::QuadSectRegion::getQuad(void) const
+  { return Quadrilateral2d( getIVertex(),getJVertex(), getKVertex(),getLVertex()); }
 
 void XC::QuadSectRegion::swap(void)
   {
@@ -177,7 +177,7 @@ void XC::QuadSectRegion::swap(void)
   }
 
 //! @brief Assigns vertex coordinates.
-void XC::QuadSectRegion::setQuad(const Cuadrilatero2d &quad)
+void XC::QuadSectRegion::setQuad(const Quadrilateral2d &quad)
   {
     Pos2d vI= quad.Vertice0(I); Pos2d vJ= quad.Vertice0(J);
     Pos2d vK= quad.Vertice0(K); Pos2d vL= quad.Vertice0(L);

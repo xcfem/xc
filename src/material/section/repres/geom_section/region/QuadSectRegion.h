@@ -34,7 +34,7 @@
 #include <material/section/repres/geom_section/region/QuadCellRegion.h>
 #include "utility/matrix/Matrix.h"
 
-class Cuadrilatero2d;
+class Quadrilateral2d;
 
 namespace XC {
 
@@ -84,8 +84,8 @@ class QuadSectRegion: public QuadCellRegion
     Pos2d getJVertex(void) const;
     Pos2d getKVertex(void) const;
     Pos2d getLVertex(void) const;
-    Cuadrilatero2d getQuad(void) const;
-    void setQuad(const Cuadrilatero2d &);
+    Quadrilateral2d getQuad(void) const;
+    void setQuad(const Quadrilateral2d &);
     Polygon2d getPolygon(void) const;
     void swap(void);
 
