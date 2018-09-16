@@ -61,7 +61,6 @@ class PQyzBase: public PYBase
     int commitState(void);
     int revertToLastCommit(void);
 
-
   };
 } // end of XC namespace
 

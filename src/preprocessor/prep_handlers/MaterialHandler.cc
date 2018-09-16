@@ -485,6 +485,10 @@ XC::Material *XC::MaterialHandler::newMaterial(const std::string &cmd,const std:
         materials[cod_mat]= retval;
         tag_mat++;
       }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; material type: " << cmd << " not found."
+	        << std::endl;
     return retval;
   }
 

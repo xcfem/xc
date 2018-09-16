@@ -78,7 +78,6 @@ class PySimple1: public PQyzBase
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
 
-
   public:
     PySimple1(int tag, int classtag, int soilType, double pult, double y50,double drag, double dashpot);
     PySimple1(int tag, int classtag= MAT_TAG_PySimple1);
@@ -87,12 +86,16 @@ class PySimple1: public PQyzBase
     int setTrialStrain(double y, double yRate);
     double getStress(void) const;
     double getDampTangent(void) const;
+    void setDragResistanceFactor(const double &);
+    double getDragResistanceFactor(void) const;
 
     int commitState(void);
     int revertToLastCommit(void);
     int revertToStart(void);
 
     UniaxialMaterial *getCopy(void) const;
+
+    void initialize(void);
 
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);

@@ -32,12 +32,14 @@
 /////////////////////////////////////////////////////////////////////
 //! @brief Constructor with data
 XC::PYBase::PYBase(int tag, int classtag, int soil, double v_ult, double v_50, double dash_pot)
-  :UniaxialMaterial(tag,classtag), initialTangent(0.0), soilType(soil), matCapacity(v_ult), v50(v_50), dashpot(dash_pot)
+  :UniaxialMaterial(tag,classtag), initialTangent(0.0), soilType(soil),
+   matCapacity(v_ult), v50(v_50), dashpot(dash_pot)
   {}
 
 //! @brief Default constructor.
 XC::PYBase::PYBase(int tag,int classtag)
-:UniaxialMaterial(tag,classtag), initialTangent(0.0), soilType(0), matCapacity(0.0), v50(0.0), dashpot(0.0)
+:UniaxialMaterial(tag,classtag), initialTangent(0.0), soilType(0),
+ matCapacity(0.0), v50(0.0), dashpot(0.0)
   {}
 
 /////////////////////////////////////////////////////////////////////
@@ -46,14 +48,62 @@ XC::PYBase::PYBase(void)
   :UniaxialMaterial(0,0), initialTangent(0.0),soilType(0), matCapacity(0.0), v50(0.0), dashpot(0.0)
   {}
 
+//! @brief Sets the soil type to represent:
+//! soilType= 1 Backbone of p-y curve approximates Matlock (1970) soft clay relation.
+//! soilType= 2 Backbone of p-y curve approximates API (1993) sand relation. 
+void XC::PYBase::setSoilType(const int &st)
+  { soilType= st; }
+
+//! @brief Gets the soil type to represent:
+//! soilType= 1 Backbone of p-y curve approximates Matlock (1970) soft clay relation.
+//! soilType= 2 Backbone of p-y curve approximates API (1993) sand relation. 
+int XC::PYBase::getSoilType(void) const
+  { return soilType; } 
+
+//! @brief Set the ultimate capacity of the p-y material. Note that "p" or
+//! "pult" are distributed loads [force per length of pile] in common design
+//! equations, but are both loads for this uniaxialMaterial [i.e.,
+//! distributed load times the tributary length of the pile]. 
+void XC::PYBase::setUltimateCapacity(const double &pult)
+  { matCapacity= pult; }
+//! @brief Get the ultimate capacity of the p-y material. Note that "p" or
+//! "pult" are distributed loads [force per length of pile] in common design
+//! equations, but are both loads for this uniaxialMaterial [i.e.,
+//! distributed load times the tributary length of the pile].
+double XC::PYBase::getUltimateCapacity(void) const
+  { return matCapacity; }
+//! @brief Set the displacement at which 50% of pult is mobilized in
+//! monotonic loading. 
+void XC::PYBase::setY50(const double &Y50)
+  { v50= Y50;}
+//! @brief Get the displacement at which 50% of pult is mobilized in
+//! monotonic loading. 
+double XC::PYBase::getY50(void) const
+  { return v50; }
+//! @brief Set the viscous damping term (dashpot) on the far-field (elastic)
+//! component of the displacement rate (velocity). (optional Default = 0.0).
+//! Nonzero dp values are used to represent radiation damping effects. 
+void XC::PYBase::setDashPot(const double &dp)
+  { dashpot= dp; }
+//! @brief Get the viscous damping term (dashpot) on the far-field (elastic)
+//! component of the displacement rate (velocity). (optional Default = 0.0).
+//! Nonzero dp values are used to represent radiation damping effects.
+double XC::PYBase::getDashPot(void) const
+  { return dashpot; }
+
 void XC::PYBase::getFarField(const double &v)
   { TFar.getField(v); }
 
 double XC::PYBase::getTangent(void) const
   { return T.tang(); }
 
+//! @brief Get initial stiffness.
 double XC::PYBase::getInitialTangent(void) const
   { return initialTangent; }
+
+//! @brief Set initial stiffness.
+void XC::PYBase::setInitialTangent(const double &t)
+  { initialTangent= t; }
 
 double XC::PYBase::getStrain(void) const
   { return T.z(); }

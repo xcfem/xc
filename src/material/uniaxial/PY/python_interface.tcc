@@ -29,7 +29,13 @@
 
  //class_<XC::InternalParamsLRIn, bases<XC::InternalParamsLR>, boost::noncopyable >("InternalParamsLRIn", no_init);
 
-class_<XC::PYBase, bases<XC::UniaxialMaterial>, boost::noncopyable >("PYBase", no_init);
+class_<XC::PYBase, bases<XC::UniaxialMaterial>, boost::noncopyable >("PYBase", no_init)
+  .add_property("soilType", &XC::PYBase::getSoilType,  &XC::PYBase::setSoilType,"soil type (1: soft clay, 2: sand).")
+  .add_property("ultimateCapacity", &XC::PYBase::getUltimateCapacity,  &XC::PYBase::setUltimateCapacity,"ultimate capacity of the p-y material (force).")
+  .add_property("y50", &XC::PYBase::getY50,  &XC::PYBase::setY50,"displacement at which 50% of pult is mobilized in monotonic loading.")
+  .add_property("dashPot", &XC::PYBase::getDashPot,  &XC::PYBase::setDashPot,"viscous damping term (dashpot) on the far-field (elastic) component of the displacement rate (velocity).")
+  .add_property("initialTangent", &XC::PYBase::getInitialTangent,  &XC::PYBase::setInitialTangent,"initial stiffness.")
+  ;
 
 class_<XC::PQyzBase, bases<XC::PYBase>, boost::noncopyable >("PQyzBase", no_init);
 
@@ -37,7 +43,10 @@ class_<XC::TzSimple1, bases<XC::PYBase>, boost::noncopyable >("TzSimple1", no_in
 
 class_<XC::TzLiq1 , bases<XC::TzSimple1>, boost::noncopyable >("TzLiq1", no_init);
 
-class_<XC::PySimple1, bases<XC::PQyzBase>, boost::noncopyable >("PySimple1", no_init);
+class_<XC::PySimple1, bases<XC::PQyzBase>, boost::noncopyable >("PySimple1", no_init)
+  .add_property("dragResistanceFactor", &XC::PySimple1::getDragResistanceFactor,  &XC::PySimple1::setDragResistanceFactor,"variable that sets the drag resistance within a fully-mobilized gap as Cd*getUltimateCapacity().")
+  .def("initialize",&XC::PySimple1::initialize,"Initialize material variables and history variables.")
+  ;
 
 class_<XC::QzSimple1 , bases<XC::PQyzBase>, boost::noncopyable >("QzSimple1", no_init);
 

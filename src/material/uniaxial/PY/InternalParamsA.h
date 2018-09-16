@@ -46,25 +46,25 @@ class InternalParamsA: public MovableObject
     int recvData(const CommParameters &);
   public:
     InternalParamsA(const double &V= 0.0,const double &r= 0.0,const double &t= 0.0);
-    inline const double &y(void) const //Para PySimple1
+    inline const double &y(void) const //For PySimple1
       { return v; }
-    inline double &y(void) //Para PySimple1
+    inline double &y(void) //For PySimple1
       { return v; }
-    inline double &z(void) //Para QzSimple1
+    inline double &z(void) //For QzSimple1
       { return v; }
-    inline const double &z(void) const //Para QzSimple1
+    inline const double &z(void) const //For QzSimple1
       { return v; }
-    inline const double &P(void) const //Para PySimple1
+    inline const double &P(void) const //For PySimple1
       { return R; }
-    inline double &P(void) //Para PySimple1
+    inline double &P(void) //For PySimple1
       { return R; }
-    inline const double &Q(void) const //Para QzSimple1
+    inline const double &Q(void) const //For QzSimple1
       { return R; }
-    inline double &Q(void) //Para QzSimple1
+    inline double &Q(void) //For QzSimple1
       { return R; }
-    inline const double &T(void) const //Para TzSimple1
+    inline const double &T(void) const //For TzSimple1
       { return R; }
-    inline double &T(void) //Para TzSimple1
+    inline double &T(void) //For TzSimple1
       { return R; }
     inline const double &tang(void) const
       { return Tang; }

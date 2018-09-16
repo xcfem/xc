@@ -47,7 +47,7 @@ class PYBase: public UniaxialMaterial
   protected:
     InternalParamsA C; //!< Committed history variables for entire Q-z material.
     InternalParamsA T; //!< Trial history variables for entire p-y material.
-    double TvRate; // Trial velocity
+    double TvRate; //!< Trial velocity
     InternalParamsA CFar; //!< Committed internal parameters for the Far Field component
     InternalParamsA TFar; //!< Trial internal parameters for the Far Field component
 
@@ -73,8 +73,18 @@ class PYBase: public UniaxialMaterial
 
     double getTangent(void) const;
     double getInitialTangent(void) const;
+    void setInitialTangent(const double &);
     double getStrain(void) const;
     double getStrainRate(void) const;
+
+    void setSoilType(const int &);
+    int getSoilType(void) const;
+    void setUltimateCapacity(const double &);
+    double getUltimateCapacity(void) const;
+    void setY50(const double &);
+    double getY50(void) const;
+    void setDashPot(const double &);
+    double getDashPot(void) const;
 
     int commitState(void);
     int revertToLastCommit(void);

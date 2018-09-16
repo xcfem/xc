@@ -352,6 +352,8 @@ python tests/materials/uniaxial/test_cable_material05.py
 python tests/materials/uniaxial/test_cable_material06.py
 python tests/materials/uniaxial/test_cable_material07.py
 python tests/materials/uniaxial/test_material_elast_no_traccion.py
+echo "$BLEU" "    PY materials." "$NORMAL"
+python tests/materials/uniaxial/py_simple1_test.py
 #nD Materials
 echo "$BLEU" "  nD materials tests." "$NORMAL"
 python tests/materials/test_elastic_isotropic_plane_strain_2d_01.py

@@ -64,9 +64,7 @@ XC::PySimple1::PySimple1(int tag, int classtag, int soil, double p_ult, double y
   :PQyzBase(tag,classtag,soil,p_ult,y_50,dash_pot), drag(dragratio)
   {
     // Initialize PySimple variables and history variables
-    //
-    revertToStart();
-    initialTangent= T.tang();
+    initialize();
   }
 
 //! @brief Constructor.
@@ -78,6 +76,12 @@ XC::PySimple1::PySimple1(int tag,int classtag)
 XC::PySimple1::PySimple1(void)
   :PQyzBase(0,0),drag(0.0) {}
 
+//! @brief Initial values for the material parameters.
+void XC::PySimple1::initialize(void)
+  {
+    revertToStart();
+    initialTangent= T.tang();
+  }
 
 /////////////////////////////////////////////////////////////////////
 void XC::PySimple1::getGap(double ylast, double dy, double dy_old)
@@ -317,7 +321,7 @@ void XC::PySimple1::getNearField(double ylast, double dy, double dy_old)
   }
 
 /////////////////////////////////////////////////////////////////////
-int XC::PySimple1::setTrialStrain (double newy, double yRate)
+int XC::PySimple1::setTrialStrain(double newy, double yRate)
   {
     // Set trial values for displacement and load in the material
     // based on the last Tangent modulus.
@@ -409,7 +413,7 @@ double XC::PySimple1::getStress(void) const
     // If converged, proportion by Tangents.
     // If not converged, proportion by ratio of displacements in components.
     //
-    double ratio_disp =(1.0/TFar.tang())/(1.0/TFar.tang() + 1.0/TNF.tang() + 1.0/TGap.tang());
+    double ratio_disp= (1.0/TFar.tang())/(1.0/TFar.tang() + 1.0/TNF.tang() + 1.0/TGap.tang());
     if(T.y() != C.y())
       {
         ratio_disp = (TFar.y() - CFar.y())/(T.y() - C.y());
@@ -574,7 +578,16 @@ int XC::PySimple1::revertToStart(void)
     this->commitState();
 
     return 0;
-}
+  }
+
+//! @brief Set the variable that sets the drag resistance within a
+//! fully-mobilized gap as Cd*getUltimateCapacity(). 
+void XC::PySimple1::setDragResistanceFactor(const double &Cd)
+  { drag= Cd; }
+//! @brief Return the variable that sets the drag resistance within a
+//! fully-mobilized gap as Cd*getUltimateCapacity().
+double XC::PySimple1::getDragResistanceFactor(void) const
+  { return drag; }
 
 /////////////////////////////////////////////////////////////////////
 XC::UniaxialMaterial *XC::PySimple1::getCopy(void) const
