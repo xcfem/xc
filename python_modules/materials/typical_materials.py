@@ -30,9 +30,9 @@ def defElasticMaterial(preprocessor,name,E):
   :param name:         name identifying the material
   :param E:            tangent in the stress-strain diagram
   '''
-  materiales= preprocessor.getMaterialHandler
-  materiales.newMaterial("elastic_material",name)
-  retval= materiales.getMaterial(name)
+  materials= preprocessor.getMaterialHandler
+  materials.newMaterial("elastic_material",name)
+  retval= materials.getMaterial(name)
   retval.name= name
   retval.E= E
   return retval
@@ -46,9 +46,9 @@ def defElasticPPMaterial(preprocessor,name,E,fyp,fyn):
   :param fyp:          stress at which material reaches plastic state in tension
   :param fyn:          stress at which material reaches plastic state in compression
   '''
-  materiales= preprocessor.getMaterialHandler
-  materiales.newMaterial("elasticpp_material",name)
-  retval= materiales.getMaterial(name)
+  materials= preprocessor.getMaterialHandler
+  materials.newMaterial("elasticpp_material",name)
+  retval= materials.getMaterial(name)
   retval.E= E
   retval.name= name
   retval.fyp= fyp
@@ -62,9 +62,9 @@ def defElastNoTensMaterial(preprocessor,name,E):
   :param name:         name identifying the material
   :param E:            tangent in the elastic zone of the stress-strain diagram
   '''
-  materiales= preprocessor.getMaterialHandler
-  materiales.newMaterial("elast_no_trac_material",name)
-  retval= materiales.getMaterial(name)
+  materials= preprocessor.getMaterialHandler
+  materials.newMaterial("elast_no_trac_material",name)
+  retval= materials.getMaterial(name)
   retval.name= name
   retval.E= E
   return retval
@@ -82,9 +82,9 @@ def defCableMaterial(preprocessor,name,E,prestress,rho):
   :param rho:          effective self weight (gravity component of weight per 
                   volume transverse to the cable)
   '''
-  materiales= preprocessor.getMaterialHandler
-  materiales.newMaterial("cable_material",name)
-  retval= materiales.getMaterial(name)
+  materials= preprocessor.getMaterialHandler
+  materials.newMaterial("cable_material",name)
+  retval= materials.getMaterial(name)
   retval.name= name
   retval.E= E
   retval.prestress= prestress
@@ -103,9 +103,9 @@ def defSteel01(preprocessor,name,E,fy,b):
   :param b:            strain-hardening ratio: ratio between post-yield tangent
                   and initial elastic tangent
   '''
-  materiales= preprocessor.getMaterialHandler
-  materiales.newMaterial("steel01",name)
-  retval= materiales.getMaterial(name)
+  materials= preprocessor.getMaterialHandler
+  materials.newMaterial("steel01",name)
+  retval= materials.getMaterial(name)
   retval.name= name
   retval.E= E
   retval.fy= fy
@@ -125,9 +125,9 @@ def defSteel02(preprocessor,name,E,fy,b,initialStress):
                   and initial elastic tangent
   :param initialStress: initial stress
   '''
-  materiales= preprocessor.getMaterialHandler
-  materiales.newMaterial("steel02",name)
-  retval= materiales.getMaterial(name)
+  materials= preprocessor.getMaterialHandler
+  materials.newMaterial("steel02",name)
+  retval= materials.getMaterial(name)
   retval.name= name
   retval.E= E
   retval.fy= fy
@@ -149,9 +149,9 @@ def defConcrete01(preprocessor,name,epsc0,fpc,fpcu,epscu):
   :param fpcu:         concrete crushing strength 
   :param epscu:        concrete strain at crushing strength 
   '''
-  materiales= preprocessor.getMaterialHandler
-  materiales.newMaterial("concrete01_material",name)
-  retval= materiales.getMaterial(name)
+  materials= preprocessor.getMaterialHandler
+  materials.newMaterial("concrete01_material",name)
+  retval= materials.getMaterial(name)
   retval.name= name
   retval.epsc0= epsc0
   retval.fpc= fpc
@@ -177,9 +177,9 @@ def defConcrete02(preprocessor,name,epsc0,fpc,fpcu,epscu,ratioSlope,ft,Ets):
   :param Ets:          tension softening stiffness (absolute value) (slope of the linear tension softening branch) 
 
   '''
-  materiales= preprocessor.getMaterialHandler
-  materiales.newMaterial("concrete02_material",name)
-  retval= materiales.getMaterial(name)
+  materials= preprocessor.getMaterialHandler
+  materials.newMaterial("concrete02_material",name)
+  retval= materials.getMaterial(name)
   retval.name= name
   retval.epsc0= epsc0
   retval.fpc= fpc
@@ -202,9 +202,9 @@ def defElasticSection2d(preprocessor,name,A,E,I):
   :param E:            Young’s modulus of material
   :param I:            second moment of area about the local z-axis
   '''
-  materiales= preprocessor.getMaterialHandler
-  materiales.newMaterial("elastic_section_2d",name)
-  retval= materiales.getMaterial(name)
+  materials= preprocessor.getMaterialHandler
+  materials.newMaterial("elastic_section_2d",name)
+  retval= materials.getMaterial(name)
   retval.name= name
   retval.sectionProperties.A= A
   retval.sectionProperties.E= E
@@ -224,9 +224,9 @@ def defElasticShearSection2d(preprocessor,name,A,E,G,I,alpha):
   :param I:            second moment of area about the local z-axis
    :param alpha:        shear shape factor
   '''
-  materiales= preprocessor.getMaterialHandler
-  materiales.newMaterial("elasticShearSection2d",name)
-  retval= materiales.getMaterial(name)
+  materials= preprocessor.getMaterialHandler
+  materials.newMaterial("elasticShearSection2d",name)
+  retval= materials.getMaterial(name)
   retval.name= name
   retval.sectionProperties.A= A
   retval.sectionProperties.E= E
@@ -260,9 +260,9 @@ def defElasticSection3d(preprocessor,name,A,E,G,Iz,Iy,J):
   :param J:            torsional moment of inertia of the section
 
   '''
-  materiales= preprocessor.getMaterialHandler
-  materiales.newMaterial("elastic_section_3d",name)
-  retval= materiales.getMaterial(name)
+  materials= preprocessor.getMaterialHandler
+  materials.newMaterial("elastic_section_3d",name)
+  retval= materials.getMaterial(name)
   retval.name= name
   retval.sectionProperties.A= A
   retval.sectionProperties.E= E
@@ -298,9 +298,9 @@ def defElasticShearSection3d(preprocessor,name,A,E,G,Iz,Iy,J,alpha):
   :param J:            torsional moment of inertia of the section
   :param alpha:        shear shape factor
   '''
-  materiales= preprocessor.getMaterialHandler
-  materiales.newMaterial("elasticShearSection3d",name)
-  retval= materiales.getMaterial(name)
+  materials= preprocessor.getMaterialHandler
+  materials.newMaterial("elasticShearSection3d",name)
+  retval= materials.getMaterial(name)
   retval.name= name
   retval.sectionProperties.A= A
   retval.sectionProperties.E= E
@@ -322,9 +322,9 @@ def defElasticIsotropicPlaneStrain(preprocessor,name,E,nu,rho):
   :param  nu:           Poisson’s ratio
   :param  rho:          mass density, optional (defaults to 0.0)
   '''
-  materiales= preprocessor.getMaterialHandler
-  materiales.newMaterial("elastic_isotropic_plane_strain_2d",name)
-  retval= materiales.getMaterial(name)
+  materials= preprocessor.getMaterialHandler
+  materials.newMaterial("elastic_isotropic_plane_strain_2d",name)
+  retval= materials.getMaterial(name)
   retval.name= name
   retval.E= E
   retval.nu= nu
@@ -341,9 +341,9 @@ def defElasticIsotropicPlaneStress(preprocessor,name,E,nu,rho):
   :param  nu:           Poisson’s ratio
   :param  rho:          mass density, optional (defaults to 0.0)
   '''
-  materiales= preprocessor.getMaterialHandler
-  materiales.newMaterial("elastic_isotropic_plane_stress_2d",name)
-  retval= materiales.getMaterial(name)
+  materials= preprocessor.getMaterialHandler
+  materials.newMaterial("elastic_isotropic_plane_stress_2d",name)
+  retval= materials.getMaterial(name)
   retval.name= name
   retval.E= E
   retval.nu= nu
@@ -360,9 +360,9 @@ def defElasticIsotropic3d(preprocessor,name,E,nu,rho):
   :param  nu:           Poisson’s ratio
   :param  rho:          mass density, optional (defaults to 0.0)
   '''
-  materiales= preprocessor.getMaterialHandler
-  materiales.newMaterial("elastic_isotropic_3d",name)
-  retval= materiales.getMaterial(name)
+  materials= preprocessor.getMaterialHandler
+  materials.newMaterial("elastic_isotropic_3d",name)
+  retval= materials.getMaterial(name)
   retval.name= name
   retval.E= E
   retval.nu= nu
@@ -381,9 +381,9 @@ def defElasticPlateSection(preprocessor,name,E,nu,rho,h):
   :param  rho:          mass density
   :param  h:            overall depth of the section
   '''
-  materiales= preprocessor.getMaterialHandler
-  materiales.newMaterial("elastic_plate_section",name)
-  retval= materiales.getMaterial(name)
+  materials= preprocessor.getMaterialHandler
+  materials.newMaterial("elastic_plate_section",name)
+  retval= materials.getMaterial(name)
   retval.name= name
   retval.E= E
   retval.nu= nu
@@ -403,9 +403,9 @@ def defElasticMembranePlateSection(preprocessor,name,E,nu,rho,h):
   :param  rho:          mass density
   :param  h:            overall depth of the section
   '''
-  materiales= preprocessor.getMaterialHandler
-  materiales.newMaterial("elastic_membrane_plate_section",name)
-  retval= materiales.getMaterial(name)
+  materials= preprocessor.getMaterialHandler
+  materials.newMaterial("elastic_membrane_plate_section",name)
+  retval= materials.getMaterial(name)
   retval.name= name
   retval.E= E
   retval.nu= nu
