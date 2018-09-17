@@ -29,7 +29,7 @@
 #include "BeamUniformLoad.h"
 #include "domain/mesh/element/Element1D.h"
 #include "xc_utils/src/geom/pos_vec/SlidingVectorsSystem3d.h"
-#include "xc_utils/src/geom/pos_vec/VDesliz3d.h"
+#include "xc_utils/src/geom/pos_vec/SlidingVector3d.h"
 #include "domain/mesh/element/utils/coordTransformation/CrdTransf.h"
 
 //! @brief Constructor.
@@ -67,7 +67,7 @@ SlidingVectorsSystem3d XC::BeamUniformLoad::getResultant(const Pos3d &centro, bo
 		  {
                     const double l= ptrTransf->getLength(initialGeometry);
                     const Vector3d force(l*uniformLoads(i,0),l*uniformLoads(i,1),l*uniformLoads(i,2));
-		    retval+= VDesliz3d(ptrElem->getCenterOfMassPosition(),force);
+		    retval+= SlidingVector3d(ptrElem->getCenterOfMassPosition(),force);
 		  }
                 else
 		  std::cerr << getClassName() << "::getResultant; the element: "

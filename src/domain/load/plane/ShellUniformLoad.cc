@@ -34,7 +34,7 @@
 #include "utility/matrix/Matrix.h"
 #include "utility/matrix/ID.h"
 #include "xc_utils/src/geom/pos_vec/SlidingVectorsSystem3d.h"
-#include "xc_utils/src/geom/pos_vec/VDesliz3d.h"
+#include "xc_utils/src/geom/pos_vec/SlidingVector3d.h"
 
 
 
@@ -161,7 +161,7 @@ SlidingVectorsSystem3d XC::ShellUniformLoad::getResultant(const Pos3d &centro, b
 	      {
   	        const double area= ptrShell->getArea();
 		const Vector3d force(area*pressures(i,0),area*pressures(i,1),area*pressures(i,2));
-		retval+= VDesliz3d(ptrShell->getCenterOfMassPosition(),force);
+		retval+= SlidingVector3d(ptrShell->getCenterOfMassPosition(),force);
               }
             else
 	      std::cerr << "ShellMecLoad::getResultant; the element: "

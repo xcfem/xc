@@ -13,8 +13,8 @@ def vectorReacUVW(preprocessor,idNode):
   reac= nod.getReaction
   return xc.Vector([reac[0],reac[1],reac[2]])
 
-def getSlidingVectorsSystemfromVDesliz(DOFs,coo,v):
-  '''Returns a sliding vector system that represents the vector.
+def getSlidingVectorsSystemfromSlidingVector(DOFs,coo,v):
+  '''Returns a sliding vector system equivalent to the sliding vector.
 
   Parameters:
   :param DOFs: degrees of freedom.
@@ -34,12 +34,12 @@ def getReactionFromSetOfNodes(DOFs,nodeSet):
   nodes= nodeSet.getNodes
   retval= geom.SlidingVectorsSystem3d()
   for n in nodes:
-    retval+= getSlidingVectorsSystemfromVDesliz(DOFs,n.get3dCoo,n.getReaction)
+    retval+= getSlidingVectorsSystemfromSlidingVector(DOFs,n.get3dCoo,n.getReaction)
   return retval
 
 def getReactionFromNodes(modelNodes,DOFs,nodeTags):
   retval= geom.SlidingVectorsSystem3d()
   for tag in nodeTags:
     n= modelNodes.getNode(tag)
-    retval+= getSlidingVectorsSystemfromVDesliz(DOFs,n.get3dCoo,n.getReaction)
+    retval+= getSlidingVectorsSystemfromSlidingVector(DOFs,n.get3dCoo,n.getReaction)
   return retval
