@@ -505,7 +505,7 @@ XC::GFunVisualizationAnalysis::evaluateGFunction(Vector thePoint, bool isFirstPo
         // Evaluate limit-state function
         result = theGFunEvaluator->runGFunAnalysis(thePoint);
         if (result < 0) {
-                std::cerr << "XC::GFunVisualizationAnalysis::analyze() - " << std::endl
+                std::cerr << "GFunVisualizationAnalysis::analyze() - " << std::endl
                         << " could not run analysis to evaluate limit-state function. " << std::endl;
                 return -1;
         }
@@ -574,17 +574,22 @@ XC::GFunVisualizationAnalysis::evaluateGFunction(Vector thePoint, bool isFirstPo
         
                 // And back to the x-space again, just to get the jacobian...
                 result = theProbabilityTransformation->set_u(u);
-                if (result < 0) {
-                        std::cerr << "XC::ArmijoStepSizeRule::computeStepSize() - could not set " << std::endl
-                                << " vector u in the xu-transformation. " << std::endl;
+                if (result < 0)
+		  {
+		    std::cerr << "GFunVisualizationAnalysis::" << __FUNCTION__
+		              << " - could not set " << std::endl
+                              << " vector u in the xu-transformation. "
+			      << std::endl;
                         return -1;
-                }
+                  }
                 result = theProbabilityTransformation->transform_u_to_x_andComputeJacobian();
-                if (result < 0) {
-                        std::cerr << "XC::ArmijoStepSizeRule::computeStepSize() - could not  " << std::endl
-                                << " transform u to x. " << std::endl;
+                if (result < 0)
+		  {
+                        std::cerr << "GFunVisualizationAnalysis::" << __FUNCTION__
+				  << " - could not  " << std::endl
+                                  << " transform u to x. " << std::endl;
                         return -1;
-                }
+                  }
                 theProbabilityTransformation->get_x();
                 Matrix jacobian_x_u = theProbabilityTransformation->getJacobian_x_u();
 
