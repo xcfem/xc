@@ -21,7 +21,7 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::LineSearch, bases<XC::MovableObject,EntCmd>, boost::noncopyable >("LineSearch", no_init);
+class_<XC::LineSearch, bases<XC::MovableObject,CommandEntity>, boost::noncopyable >("LineSearch", no_init);
 
 class_<XC::BisectionLineSearch, bases<XC::LineSearch>, boost::noncopyable >("BisectionLineSearch", no_init);
 

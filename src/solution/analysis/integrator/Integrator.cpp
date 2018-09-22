@@ -68,7 +68,7 @@
 //!
 //! @param owr: set of objects used to perform the analysis.
 XC::Integrator::Integrator(AnalysisAggregation *owr,int clasTag)
-  :MovableObject(clasTag), EntCmd(owr) {}
+  :MovableObject(clasTag), CommandEntity(owr) {}
 
 void XC::Integrator::applyLoadModel(double newTime)
   { getAnalysisModelPtr()->applyLoadDomain(newTime); }

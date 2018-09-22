@@ -29,7 +29,7 @@
 #ifndef MAPSOLUMETHOD_H
 #define MAPSOLUMETHOD_H
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "utility/handler/DataOutputHandler.h"
 #include "AnalysisAggregation.h"
 
@@ -41,7 +41,7 @@ class ModelWrapper;
 //!  @ingroup Solu
 //! 
 //! @brief Solution methods container.
-class AnalysisAggregationMap: public EntCmd
+class AnalysisAggregationMap: public CommandEntity
   {
   private:
     typedef std::map<std::string,AnalysisAggregation> map_solu_method;

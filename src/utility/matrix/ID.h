@@ -63,7 +63,7 @@
 #ifndef ID_h
 #define ID_h
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include <vector>
 #include <boost/python/list.hpp>
 
@@ -90,7 +90,7 @@ namespace XC {
 //! grow without the need to deallocate and allocate more memory. At
 //! present time none of the methods are declared as being virtual. THIS
 //! MAY CHANGE.
-class ID: public EntCmd, public std::vector<int>
+class ID: public CommandEntity, public std::vector<int>
   {
   public:
     typedef std::vector<int> v_int;
@@ -105,7 +105,7 @@ class ID: public EntCmd, public std::vector<int>
     explicit ID(const std::set<int> &);
     template <class InputIterator>
     inline ID(InputIterator first, InputIterator last)
-      : EntCmd(), std::vector<int>(first,last) {}
+      : CommandEntity(), std::vector<int>(first,last) {}
     inline virtual ~ID(){}
  
     // utility methods

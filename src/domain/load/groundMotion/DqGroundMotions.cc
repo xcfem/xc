@@ -34,16 +34,16 @@
 
 //! @brief Constructor.
 XC::DqGroundMotions::DqGroundMotions(const size_t &num)
-  : EntCmd(), MovableObject(0), gMotions(num,static_cast<GroundMotion *>(nullptr)) {}
+  : CommandEntity(), MovableObject(0), gMotions(num,static_cast<GroundMotion *>(nullptr)) {}
 
 //! @brief Copy constructor.
 XC::DqGroundMotions::DqGroundMotions(const DqGroundMotions &other)
-  : EntCmd(other), MovableObject(0), gMotions(other.gMotions) {}
+  : CommandEntity(other), MovableObject(0), gMotions(other.gMotions) {}
 
 //! @brief Assignment operator.
 XC::DqGroundMotions &XC::DqGroundMotions::operator=(const DqGroundMotions &other)
   {
-    EntCmd::operator=(other);
+    CommandEntity::operator=(other);
     gMotions= other.gMotions;
     return *this;
   }

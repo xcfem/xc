@@ -65,7 +65,7 @@
 // What: "@(#) Integrator.h, revA"
 
 #include <utility/actor/actor/MovableObject.h>
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 
 namespace XC {
 class FE_Element;
@@ -96,7 +96,7 @@ class AnalysisAggregation ;
 //! of them by the Analysis). It is also responsible for updating the
 //! response quantities at the DOFs with the appropriate values; the values
 //! are determined from the solution to the system of equations.
-class Integrator: public MovableObject, public EntCmd
+class Integrator: public MovableObject, public CommandEntity
   {
   protected:
     AnalysisAggregation  *getAnalysisAggregation (void);

@@ -29,7 +29,7 @@
 #ifndef PREPROCESSOR_H
 #define PREPROCESSOR_H
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "utility/actor/actor/MovableObject.h"
 #include "prep_handlers/MaterialHandler.h"
 #include "prep_handlers/BeamIntegratorHandler.h"
@@ -55,7 +55,7 @@ class FE_Datastore;
 //! 
 //!  @brief Finite element model generation tools.
 //!  
-class Preprocessor: public EntCmd, public MovableObject
+class Preprocessor: public CommandEntity, public MovableObject
   {
   private:
     static const int theDbTag= 0; //!< the Preprocessor unique database tag == 0
@@ -97,7 +97,7 @@ class Preprocessor: public EntCmd, public MovableObject
 
     SetEstruct *busca_set_estruct(const std::string &nmb);
   public:
-    Preprocessor(EntCmd *owr,DataOutputHandler::map_output_handlers *oh= nullptr);
+    Preprocessor(CommandEntity *owr,DataOutputHandler::map_output_handlers *oh= nullptr);
     inline Domain *getDomain(void)
       { return domain; }
     inline const Domain *getDomain(void) const

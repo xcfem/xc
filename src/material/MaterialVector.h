@@ -30,7 +30,7 @@
 #define MaterialVector_h
 
 #include <vector>
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "material/section/ResponseId.h"
 #include "utility/actor/actor/MovableID.h"
 #include "utility/matrix/Vector.h"
@@ -43,7 +43,7 @@ namespace XC {
 //! @brief Material pointer container. It's used by
 //! elements to store materials for each integration point.
 template <class MAT>
-class MaterialVector: public std::vector<MAT *>, public EntCmd, public MovableObject
+class MaterialVector: public std::vector<MAT *>, public CommandEntity, public MovableObject
   {
   protected:
     void clear_materials(void);

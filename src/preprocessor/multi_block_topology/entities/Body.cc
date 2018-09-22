@@ -61,7 +61,7 @@ XC::SideSequence::SideSequence(const size_t first,const bool &_forward)
 
 //! @brief Constructor.
 XC::Body::BodyFace::BodyFace(Body *owr, Face *face_ptr,const size_t &p,const bool &d)
-  : EntCmd(owr), surface(face_ptr), sec_lados(p,d) {}
+  : CommandEntity(owr), surface(face_ptr), sec_lados(p,d) {}
 
 //! @brief Return a pointer to the surface that limits the solid.
 XC::Face *XC::Body::BodyFace::Surface(void)

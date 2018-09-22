@@ -75,8 +75,8 @@ class CTestRelativeEnergyIncr: public ConvergenceTestNorm
   {
   public:
     // constructors
-    CTestRelativeEnergyIncr(EntCmd *owr);	    	
-    CTestRelativeEnergyIncr(EntCmd *owr,double tol, int maxNumIter, int printFlag, int normType=2);
+    CTestRelativeEnergyIncr(CommandEntity *owr);	    	
+    CTestRelativeEnergyIncr(CommandEntity *owr,double tol, int maxNumIter, int printFlag, int normType=2);
 
     ConvergenceTest *getCopy(void) const;
     

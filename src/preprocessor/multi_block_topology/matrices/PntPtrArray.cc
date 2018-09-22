@@ -100,7 +100,7 @@ XC::Pnt *XC::PntPtrArray::findPoint(const size_t &tag)
 const XC::MultiBlockTopology *XC::PntPtrArray::getMultiBlockTopology(void) const
   {
     const MultiBlockTopology *retval= nullptr;
-    const EntCmd *ptr= Owner();
+    const CommandEntity *ptr= Owner();
     assert(ptr);
     const Framework2d *e2d= dynamic_cast<const Framework2d *>(ptr);
     if(e2d)
@@ -118,7 +118,7 @@ const XC::MultiBlockTopology *XC::PntPtrArray::getMultiBlockTopology(void) const
 XC::MultiBlockTopology *XC::PntPtrArray::getMultiBlockTopology(void)
   {
     MultiBlockTopology *retval= nullptr;
-    EntCmd *ptr= Owner();
+    CommandEntity *ptr= Owner();
     assert(ptr);
     Framework2d *e2d= dynamic_cast<Framework2d *>(ptr);
     if(e2d)

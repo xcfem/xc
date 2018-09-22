@@ -79,7 +79,7 @@ class_<XC::MRMFreedom_ConstraintIter, boost::noncopyable >("MRMFreedom_Constrain
 
 class_<XC::GlueNodeToElement, bases<XC::MRMFreedom_Constraint>, boost::noncopyable >("GlueNodeToElement", no_init);
 
-//class_<XC::MapCasosActivos, bases<EntCmd>, boost::noncopyable >("MapCasosActivos", no_init);
+//class_<XC::MapCasosActivos, bases<CommandEntity>, boost::noncopyable >("MapCasosActivos", no_init);
 
 typedef std::map<int,XC::LoadPattern *> map_load_patterns;
 class_<map_load_patterns, boost::noncopyable>("map_load_patterns")

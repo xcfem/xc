@@ -56,7 +56,7 @@ class DqPtrsKDTree: public DqPtrs<T>
     typedef typename DqPtrs<T>::const_reference const_reference;
     typedef typename DqPtrs<T>::size_type size_type;
 
-    DqPtrsKDTree(EntCmd *owr= nullptr);
+    DqPtrsKDTree(CommandEntity *owr= nullptr);
     DqPtrsKDTree(const DqPtrsKDTree &);
     explicit DqPtrsKDTree(const std::deque<T *> &);
     explicit DqPtrsKDTree(const std::set<const T *> &);
@@ -87,7 +87,7 @@ void DqPtrsKDTree<T,KDTree>::create_tree(void)
 
 //! @brief Constructor.
 template <class T,class KDTree>
-DqPtrsKDTree<T,KDTree>::DqPtrsKDTree(EntCmd *owr)
+DqPtrsKDTree<T,KDTree>::DqPtrsKDTree(CommandEntity *owr)
   : DqPtrs<T>(owr) {}
 
 //! @brief Copy constructor.

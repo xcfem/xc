@@ -61,7 +61,7 @@
 #define DomainPartitioner_h
 
 #include <utility/matrix/ID.h>
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 
 namespace XC {
 class GraphPartitioner;
@@ -84,7 +84,7 @@ class TaggedObjectStorage;
 //! the domain to partition and load balance. Derived types can use the
 //! node graph of the domain. The partitioner uses a GraphPartitioner and
 //! a LoadBalancingAlgo to partition and load balance the domain. 
-class DomainPartitioner: public EntCmd
+class DomainPartitioner: public CommandEntity
   {
   private:
     PartitionedDomain *myDomain; 

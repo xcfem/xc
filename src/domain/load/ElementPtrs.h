@@ -29,7 +29,7 @@
 #ifndef ElementPtrs_h
 #define ElementPtrs_h
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 
 namespace XC {
 class Element;
@@ -40,7 +40,7 @@ class ID;
 //! @ingroup ElemLoads
 //
 //! @brief Pointers to the elements affected by the load.
-class ElementPtrs: public EntCmd
+class ElementPtrs: public CommandEntity
   {
   public:
     typedef std::vector<Element *> vector_ptr_elements;

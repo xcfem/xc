@@ -68,8 +68,8 @@ class CTestFixedNumIter: public ConvergenceTest
   {
   public:
     // constructors
-    CTestFixedNumIter(EntCmd *owr);
-    CTestFixedNumIter(EntCmd *owr,int maxNumIter, int printFlag, int normType=2);
+    CTestFixedNumIter(CommandEntity *owr);
+    CTestFixedNumIter(CommandEntity *owr,int maxNumIter, int printFlag, int normType=2);
     
     ConvergenceTest *getCopy(void) const;
     

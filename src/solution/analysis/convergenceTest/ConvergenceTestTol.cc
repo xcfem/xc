@@ -34,7 +34,7 @@
 //!
 //! @param owr: object that owns this one.
 //! @param classTag: identifier of the object class.
-XC::ConvergenceTestTol::ConvergenceTestTol(EntCmd *owr,int classTag)	    	
+XC::ConvergenceTestTol::ConvergenceTestTol(CommandEntity *owr,int classTag)	    	
   : ConvergenceTest(owr,classTag), tol(0.0) {}
 
 
@@ -46,7 +46,7 @@ XC::ConvergenceTestTol::ConvergenceTestTol(EntCmd *owr,int classTag)
 //! @param maxIter the max number of iterations to be performed.
 //! @param printFlag: what, if anything, is printed on each test.
 //! @param normType: type of norm to use (1-norm, 2-norm, p-norm, max-norm).
-XC::ConvergenceTestTol::ConvergenceTestTol(EntCmd *owr,int classTag,double theTol, int maxIter, int printFlag, int normType,int sz_norms)
+XC::ConvergenceTestTol::ConvergenceTestTol(CommandEntity *owr,int classTag,double theTol, int maxIter, int printFlag, int normType,int sz_norms)
   : ConvergenceTest(owr,classTag,maxIter,printFlag,normType,sz_norms), tol(theTol) {}
 
 //! Sets the tolerance used in test() to be \p newTol.

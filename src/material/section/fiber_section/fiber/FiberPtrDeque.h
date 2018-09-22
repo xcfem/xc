@@ -29,7 +29,7 @@
 #ifndef FiberPtrDeque_h
 #define FiberPtrDeque_h
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "xc_utils/src/geom/GeomObj.h"
 #include <deque>
 
@@ -63,7 +63,7 @@ enum ClaseEsfuerzo {SIMPLE_TENSION,COMPOSED_TENSION,FLEXION_SIMPLE,FLEXION_COMPU
 //! @ingroup MATSCCFibers
 //
 //! @brief Fiber pointers container.
-class FiberPtrDeque: public EntCmd, public std::deque<Fiber *>
+class FiberPtrDeque: public CommandEntity, public std::deque<Fiber *>
   {
   public:
     typedef std::deque<Fiber *> fiber_ptrs_dq;

@@ -73,7 +73,7 @@
 
 #include "domain/domain/subdomain/ShadowActorSubdomain.h"
 
-XC::ActorSubdomain::ActorSubdomain(Channel &theCh,FEM_ObjectBroker &theBroker,DataOutputHandler::map_output_handlers *oh,EntCmd *owr)
+XC::ActorSubdomain::ActorSubdomain(Channel &theCh,FEM_ObjectBroker &theBroker,DataOutputHandler::map_output_handlers *oh,CommandEntity *owr)
   :Subdomain(0,oh,owr), Actor(theCh,theBroker,0), msgData(4)
   {}
     

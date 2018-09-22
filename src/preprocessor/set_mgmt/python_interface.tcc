@@ -22,7 +22,7 @@
 //python_interface.tcc
 
 typedef XC::DqPtrs<XC::Node> dq_ptrs_node;
-class_<dq_ptrs_node, bases<EntCmd>, boost::noncopyable >("dq_ptrs_node",no_init)
+class_<dq_ptrs_node, bases<CommandEntity>, boost::noncopyable >("dq_ptrs_node",no_init)
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_node::indBegin, &dq_ptrs_node::indEnd))
   .add_property("size", &dq_ptrs_node::size, "Returns list size.")
   .def("__len__",&dq_ptrs_node::size, "Returns list size.")
@@ -49,7 +49,7 @@ class_<XC::DqPtrsNode, bases<dq_ptrs_node> >("DqPtrsNode",no_init)
   ;
 
 typedef XC::DqPtrs<XC::Element> dq_ptrs_element;
-class_<dq_ptrs_element, bases<EntCmd>, boost::noncopyable >("dq_ptrs_element",no_init)
+class_<dq_ptrs_element, bases<CommandEntity>, boost::noncopyable >("dq_ptrs_element",no_init)
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_element::indBegin, &dq_ptrs_element::indEnd))
   .add_property("size", &dq_ptrs_element::size, "Returns list size.")
   .def("__len__",&dq_ptrs_element::size, "Returns list size.")
@@ -81,7 +81,7 @@ class_<XC::DqPtrsElem, bases<dq_ptrs_element> >("DqPtrsElem",no_init)
    ;
 
 typedef XC::DqPtrs<XC::Constraint> dq_ptrs_constraint;
-class_<dq_ptrs_constraint, bases<EntCmd>, boost::noncopyable >("dq_ptrs_constraint",no_init)
+class_<dq_ptrs_constraint, bases<CommandEntity>, boost::noncopyable >("dq_ptrs_constraint",no_init)
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_constraint::indBegin, &dq_ptrs_constraint::indEnd))
   .add_property("size", &dq_ptrs_constraint::size, "Returns list size.")
   .def("__len__",&dq_ptrs_constraint::size, "Returns list size.")
@@ -141,7 +141,7 @@ class_<XC::SetMeshComp, bases<XC::SetBase>>("SetMeshComp",no_init)
   ;
 
 typedef XC::DqPtrs<XC::Pnt> dq_ptrs_pnt;
-class_<dq_ptrs_pnt, bases<EntCmd>, boost::noncopyable >("dq_ptrs_pnt",no_init)
+class_<dq_ptrs_pnt, bases<CommandEntity>, boost::noncopyable >("dq_ptrs_pnt",no_init)
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_pnt::indBegin, &dq_ptrs_pnt::indEnd))
   .def("at",make_function(&dq_ptrs_pnt::get, return_internal_reference<>() ), "Access specified point with bounds checking.")
   .def("__getitem__",make_function(&dq_ptrs_pnt::get, return_internal_reference<>() ), "Access specified point with bounds checking.")
@@ -158,7 +158,7 @@ class_<XC::SetEntities::lst_ptr_points, bases<dq_ptrs_pnt>>("lstPnts",no_init)
    ;
 
 typedef XC::DqPtrs<XC::Edge> dq_line_ptrs;
-class_<dq_line_ptrs, bases<EntCmd>, boost::noncopyable >("dq_line_ptrs",no_init)
+class_<dq_line_ptrs, bases<CommandEntity>, boost::noncopyable >("dq_line_ptrs",no_init)
 //.def(vector_indexing_suite<dq_line_ptrs>())  Doesn't work with pointer containers.
   .def("__iter__", range<return_internal_reference<> >(&dq_line_ptrs::indBegin, &dq_line_ptrs::indEnd))
   .add_property("size", &dq_line_ptrs::size, "Return container size.")
@@ -176,7 +176,7 @@ class_<XC::SetEntities::lst_line_pointers, bases<dq_line_ptrs>>("lstLines",no_in
    ;
 
 typedef XC::DqPtrs<XC::Face> dq_ptrs_surfaces;
-class_<dq_ptrs_surfaces, bases<EntCmd>, boost::noncopyable >("dq_ptrs_surfaces",no_init)
+class_<dq_ptrs_surfaces, bases<CommandEntity>, boost::noncopyable >("dq_ptrs_surfaces",no_init)
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_surfaces::indBegin, &dq_ptrs_surfaces::indEnd))
   .def("at",make_function(&dq_ptrs_surfaces::get, return_internal_reference<>() ), "Access specified surface with bounds checking.")
   .def("__getitem__",make_function(&dq_ptrs_surfaces::get, return_internal_reference<>() ), "Access specified surface with bounds checking.")
@@ -193,7 +193,7 @@ class_<XC::SetEntities::lst_surface_ptrs, bases<dq_ptrs_surfaces> >("lstSurfaces
    ;
 
 typedef XC::DqPtrs<XC::Body> dq_ptrs_cuerpos;
-class_<dq_ptrs_cuerpos, bases<EntCmd>, boost::noncopyable >("dq_ptrs_cuerpos",no_init)
+class_<dq_ptrs_cuerpos, bases<CommandEntity>, boost::noncopyable >("dq_ptrs_cuerpos",no_init)
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_cuerpos::indBegin, &dq_ptrs_cuerpos::indEnd))
   .def("at",make_function(&dq_ptrs_cuerpos::get, return_internal_reference<>() ), "Access specified body with bounds checking.")
   .def("__getitem__",make_function(&dq_ptrs_cuerpos::get, return_internal_reference<>() ), "Access specified body with bounds checking.")

@@ -57,7 +57,7 @@
 //! @brief Default constructor.
 //!
 //! @param owr: object that owns this one.
-XC::CTestNormDispIncr::CTestNormDispIncr(EntCmd *owr)	    	
+XC::CTestNormDispIncr::CTestNormDispIncr(CommandEntity *owr)	    	
   : ConvergenceTestTol(owr,CONVERGENCE_TEST_CTestNormDispIncr,0.0,0,0,2,25)
   {}
 
@@ -69,7 +69,7 @@ XC::CTestNormDispIncr::CTestNormDispIncr(EntCmd *owr)
 //! @param maxIter the max number of iterations to be performed.
 //! @param printFlag: what, if anything, is printed on each test.
 //! @param normType: type of norm to use (1-norm, 2-norm, p-norm, max-norm).
-XC::CTestNormDispIncr::CTestNormDispIncr(EntCmd *owr,double theTol, int maxIter, int printFlag, int normType)
+XC::CTestNormDispIncr::CTestNormDispIncr(CommandEntity *owr,double theTol, int maxIter, int printFlag, int normType)
   : ConvergenceTestTol(owr,CONVERGENCE_TEST_CTestNormDispIncr,theTol,maxIter,printFlag,normType,maxIter)
   {}
 

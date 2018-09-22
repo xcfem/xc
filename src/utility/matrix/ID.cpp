@@ -66,7 +66,7 @@ int XC::ID::ID_NOT_VALID_ENTRY= 0;
 
 //! @brief Default constructor, sets size = 0;
 XC::ID::ID(void)
-  :EntCmd(), std::vector<int>(0) {}
+  :CommandEntity(), std::vector<int>(0) {}
 
 
 //! @brief Constructor used to allocate a ID of size size.
@@ -77,17 +77,17 @@ XC::ID::ID(void)
 //! available an error message is printed and an ID of size \f$0\f$ is
 //! returned.  
 XC::ID::ID(const int &size)
-  :EntCmd(), std::vector<int>(size,0) {}
+  :CommandEntity(), std::vector<int>(size,0) {}
 
 
 //! @brief Constructor.
 XC::ID::ID(const std::vector<int> &v)
-  : EntCmd(), std::vector<int>(v)
+  : CommandEntity(), std::vector<int>(v)
   {}
 
 //! @brief Constructor (Python interface).
 XC::ID::ID(const boost::python::list &l)
-  : EntCmd(), std::vector<int>(len(l))
+  : CommandEntity(), std::vector<int>(len(l))
   {
     // copy the data
     const size_t sz= size();
@@ -96,7 +96,7 @@ XC::ID::ID(const boost::python::list &l)
   }
 
 XC::ID::ID(const std::set<int> &setInt)
-  : EntCmd(), std::vector<int>(setInt.size())
+  : CommandEntity(), std::vector<int>(setInt.size())
   {
     // copy the data
     int count= 0;

@@ -63,7 +63,7 @@ XC::TransfCooHandler &(XC::Preprocessor::*getTransfCooHandlerRef)(void)= &XC::Pr
 XC::MultiBlockTopology &(XC::Preprocessor::*getMultiBlockTopologyRef)(void)= &XC::Preprocessor::getMultiBlockTopology;
 XC::MapSet &(XC::Preprocessor::*getSetsRef)(void)= &XC::Preprocessor::get_sets;
 XC::Domain *(XC::Preprocessor::*getDomainRf)(void)= &XC::Preprocessor::getDomain;
-class_<XC::Preprocessor, bases<EntCmd>, boost::noncopyable >("Preprocessor", no_init)
+class_<XC::Preprocessor, bases<CommandEntity>, boost::noncopyable >("Preprocessor", no_init)
   .add_property("getNodeHandler", make_function( getNodeHandlerRef, return_internal_reference<>() ))
   .add_property("getMaterialHandler", make_function( getMaterialHandlerRef, return_internal_reference<>() ))
   .add_property("getBeamIntegratorHandler", make_function( getBeamIntegratorHandlerRef, return_internal_reference<>() ))

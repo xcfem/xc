@@ -29,7 +29,7 @@
 #ifndef ENTMDLRBASE_H
 #define ENTMDLRBASE_H
 
-#include "xc_utils/src/nucleo/EntConNmb.h"
+#include "xc_utils/src/kernel/NamedEntity.h"
 #include "xc_basic/src/text/LabelContainer.h"
 #include "utility/actor/actor/MovableObject.h"
 
@@ -42,7 +42,7 @@ class Face;
 //!  @ingroup Preprocessor
 //! 
 //!  \brief Base class of the preprocessor objects.
-class EntMdlrBase: public EntConNmb, public MovableObject
+class EntMdlrBase: public NamedEntity, public MovableObject
   {
   protected:
     LabelContainer labels; //!< Label container.

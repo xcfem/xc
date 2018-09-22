@@ -144,8 +144,8 @@ class Domain: public ObjWithRecorders, public DistributedBase
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
   public:
-    Domain(EntCmd *owr,DataOutputHandler::map_output_handlers *oh);
-    Domain(EntCmd *owr,int numNods, int numElements, int numSPs, int numMPs,int numLPatterns,int numNLockers,DataOutputHandler::map_output_handlers *oh);
+    Domain(CommandEntity *owr,DataOutputHandler::map_output_handlers *oh);
+    Domain(CommandEntity *owr,int numNods, int numElements, int numSPs, int numMPs,int numLPatterns,int numNLockers,DataOutputHandler::map_output_handlers *oh);
 
     virtual ~Domain(void);
 

@@ -52,7 +52,7 @@
 #define BeamIntegration_h
 
 #include <utility/actor/actor/MovableObject.h>
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 
 class ExprAlgebra;
 
@@ -70,7 +70,7 @@ class Vector;
 //
 //! @ingroup BeamInteg
 //! @brief Base class for integration on beam elements.
-class BeamIntegration: public MovableObject, public EntCmd
+class BeamIntegration: public MovableObject, public CommandEntity
   {
   public:
     BeamIntegration(int classTag);

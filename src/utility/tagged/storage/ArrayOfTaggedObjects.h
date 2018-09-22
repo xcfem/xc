@@ -114,7 +114,7 @@ class ArrayOfTaggedObjects : public TaggedObjectStorage
     void clearComponents(void);
 
   public:
-    ArrayOfTaggedObjects(EntCmd *owr,int size,const std::string &containerName);
+    ArrayOfTaggedObjects(CommandEntity *owr,int size,const std::string &containerName);
     ArrayOfTaggedObjects(const ArrayOfTaggedObjects &);
     ArrayOfTaggedObjects &operator=(const ArrayOfTaggedObjects &);
     ~ArrayOfTaggedObjects(void);

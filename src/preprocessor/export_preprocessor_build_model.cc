@@ -29,7 +29,7 @@ void export_preprocessor_build_model(void)
     docstring_options doc_options;
 
 XC::Preprocessor *(XC::EntMdlrBase::*getPreprocessorRef)(void)= &XC::EntMdlrBase::getPreprocessor;
-class_<XC::EntMdlrBase, bases<EntConNmb>, boost::noncopyable >("EntMdlrBase", no_init)
+class_<XC::EntMdlrBase, bases<NamedEntity>, boost::noncopyable >("EntMdlrBase", no_init)
   .add_property("tag", &XC::EntMdlrBase::GetTag)
   .add_property("getPreprocessor", make_function( getPreprocessorRef, return_internal_reference<>() ))
    ;

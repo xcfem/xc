@@ -31,7 +31,7 @@
 #define NodeVectors_h
 
 #include "utility/actor/actor/MovableObject.h"
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "utility/matrix/Vector.h"
 
 namespace XC {
@@ -44,7 +44,7 @@ class FEM_ObjectBroker;
 //
 //! @brief Vectores to store trial and commited
 //! values of node displacement, velocity, etc.
-class NodeVectors: public EntCmd, public MovableObject
+class NodeVectors: public CommandEntity, public MovableObject
   {
   protected:
     size_t numVectors; //!< number of vectors.

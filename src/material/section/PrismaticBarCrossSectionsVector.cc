@@ -91,7 +91,7 @@ XC::PrismaticBarCrossSectionsVector::PrismaticBarCrossSectionsVector(const size_
 
 //! @brief Copy constructor.
 XC::PrismaticBarCrossSectionsVector::PrismaticBarCrossSectionsVector(const PrismaticBarCrossSectionsVector &other)
-  : EntCmd(other), std::vector<PrismaticBarCrossSection *>(other.size(),nullptr), MovableObject(other)
+  : CommandEntity(other), std::vector<PrismaticBarCrossSection *>(other.size(),nullptr), MovableObject(other)
   {
     const size_t sz= other.size();
     for(size_t i= 0;i<sz;i++)
@@ -168,7 +168,7 @@ void XC::PrismaticBarCrossSectionsVector::clearAll(void)
   {
     clear_sections();
     std::vector<PrismaticBarCrossSection *>::clear();
-    EntCmd::clearPyProps();
+    CommandEntity::clearPyProps();
   }
 
 

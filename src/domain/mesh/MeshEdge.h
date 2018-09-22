@@ -36,7 +36,7 @@ class DqPtrsElem;
 //! @ingroup Mesh
 //
 //! @brief Mesh edge.
-class MeshEdge: public EntCmd
+class MeshEdge: public CommandEntity
   {
   public:
     typedef Element::NodesEdge NodesEdge; 

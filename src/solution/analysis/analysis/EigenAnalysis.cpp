@@ -101,7 +101,7 @@ int XC::EigenAnalysis::analyze(int numModes)
   {
     int result= 0;
     assert(solution_method);
-    EntCmd *old= solution_method->Owner();
+    CommandEntity *old= solution_method->Owner();
     solution_method->set_owner(this);
 
     // check for change in Domain since last step. As a change can

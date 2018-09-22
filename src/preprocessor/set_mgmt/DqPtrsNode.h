@@ -49,7 +49,7 @@ class TrfGeom;
 class DqPtrsNode: public DqPtrsKDTree<Node,KDTreeNodes>
   {
   public:
-    DqPtrsNode(EntCmd *owr= nullptr);
+    DqPtrsNode(CommandEntity *owr= nullptr);
     DqPtrsNode(const DqPtrsNode &);
     explicit DqPtrsNode(const std::deque<Node *> &);
     explicit DqPtrsNode(const std::set<const Node *> &);

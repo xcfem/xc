@@ -29,7 +29,7 @@
 #ifndef NODELOCKERS_H
 #define NODELOCKERS_H
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "domain/load/pattern/NodeLocker.h"
 #include <map>
 
@@ -38,7 +38,7 @@ namespace XC {
 class Mesh;
 
 //! @brief NodeLocker container.
-class NodeLockers: public EntCmd, public MovableObject
+class NodeLockers: public CommandEntity, public MovableObject
   {
     typedef std::map<std::string,NodeLocker *> map_node_lockers; //!< NodeLocker container.
     map_node_lockers node_lockers;

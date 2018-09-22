@@ -124,7 +124,7 @@ void XC::PartitionedDomain::alloc(void)
 //!
 //! @param owr: object that encloses this one.
 //! @param oh: to DEPRECATE.
-XC::PartitionedDomain::PartitionedDomain(EntCmd *owr,DataOutputHandler::map_output_handlers *oh)
+XC::PartitionedDomain::PartitionedDomain(CommandEntity *owr,DataOutputHandler::map_output_handlers *oh)
   :Domain(owr,oh), theSubdomains(nullptr),theDomainPartitioner(nullptr),
    theSubdomainIter(nullptr), mySubdomainGraph()
   { alloc(); }
@@ -139,7 +139,7 @@ XC::PartitionedDomain::PartitionedDomain(EntCmd *owr,DataOutputHandler::map_outp
 //! @param owr: object that encloses this one.
 //! @param thePartitioner: object that make the partition.
 //! @param oh: to DEPRECATE.
-XC::PartitionedDomain::PartitionedDomain(EntCmd *owr,DomainPartitioner &thePartitioner,DataOutputHandler::map_output_handlers *oh)
+XC::PartitionedDomain::PartitionedDomain(CommandEntity *owr,DomainPartitioner &thePartitioner,DataOutputHandler::map_output_handlers *oh)
   :Domain(owr,oh), theSubdomains(nullptr),theDomainPartitioner(&thePartitioner),
  theSubdomainIter(nullptr), mySubdomainGraph()
   { alloc(); }
@@ -156,7 +156,7 @@ XC::PartitionedDomain::PartitionedDomain(EntCmd *owr,DomainPartitioner &theParti
 //! @param owr: object that encloses this one.
 //! @param thePartitioner: object that make the partition.
 //! @param oh: to DEPRECATE.
-XC::PartitionedDomain::PartitionedDomain(EntCmd *owr,int numNodes, int numElements,
+XC::PartitionedDomain::PartitionedDomain(CommandEntity *owr,int numNodes, int numElements,
                                      int numSPs, int numMPs, int numLoadPatterns, int numNodeLockers,
                                      int numSubdomains,
                                      DomainPartitioner &thePartitioner,DataOutputHandler::map_output_handlers *oh)

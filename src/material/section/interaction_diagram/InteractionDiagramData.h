@@ -38,7 +38,7 @@ namespace XC {
 //! \@ingroup MATSCCDiagInt
 //
 //! @brief Parameters needed to obtain the interaction diagram.
-class InteractionDiagramData: public EntCmd
+class InteractionDiagramData: public CommandEntity
   {
     double umbral; //!< Minimal distance between diagram points.
     double inc_eps; //!< Strain step size.

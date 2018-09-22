@@ -31,7 +31,7 @@
 
 #include "material/MaterialVector.h"
 #include "material/uniaxial/UniaxialMaterial.h"
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "utility/actor/actor/MovableID.h"
 #include "utility/matrix/Vector.h"
 
@@ -44,7 +44,7 @@ class DamageModel;
 //
 //! @brief Vector de pointers to damage models.
 //! se emplea en Joint2D
-class DamageModelVector: public std::vector<DamageModel *>, public EntCmd, public MovableObject
+class DamageModelVector: public std::vector<DamageModel *>, public CommandEntity, public MovableObject
   {
   protected:
     void borra_dmg_models(void);

@@ -32,7 +32,7 @@
 
 
 //! @brief Constructor.
-XC::DqPtrsConstraint::DqPtrsConstraint(EntCmd *owr)
+XC::DqPtrsConstraint::DqPtrsConstraint(CommandEntity *owr)
   : DqPtrs<Constraint>(owr) {}
 
 //! @brief Copy constructor.

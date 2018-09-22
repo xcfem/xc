@@ -116,7 +116,7 @@ void XC::Domain::free_mem(void)
 //! ArrayOfTaggedObjects objects for each type of object to be stored.
 //!
 //! @param owr: object that contains this one.
-XC::Domain::Domain(EntCmd *owr,DataOutputHandler::map_output_handlers *oh)
+XC::Domain::Domain(CommandEntity *owr,DataOutputHandler::map_output_handlers *oh)
   :ObjWithRecorders(owr,oh),timeTracker(),CallbackCommit(""), dbTag(0),
    currentGeoTag(0), hasDomainChangedFlag(false), commitTag(0),
    mesh(this), constraints(this), theRegions(nullptr),
@@ -134,7 +134,7 @@ XC::Domain::Domain(EntCmd *owr,DataOutputHandler::map_output_handlers *oh)
 //! @param numMPs: number of multi-freedom constraintes.
 //! @param numLoadPatterns: number of load patterns.
 //! @param numNodeLockers: number of node lockers.
-XC::Domain::Domain(EntCmd *owr,int numNodes, int numElements, int numSPs, int numMPs, int numLoadPatterns,int numNodeLockers,DataOutputHandler::map_output_handlers *oh)
+XC::Domain::Domain(CommandEntity *owr,int numNodes, int numElements, int numSPs, int numMPs, int numLoadPatterns,int numNodeLockers,DataOutputHandler::map_output_handlers *oh)
   :ObjWithRecorders(owr,oh),timeTracker(), CallbackCommit(""), dbTag(0),
    currentGeoTag(0), hasDomainChangedFlag(false), commitTag(0), mesh(this),
    constraints(this), theRegions(nullptr), nmbCombActual(""), lastChannel(0),
@@ -1238,7 +1238,7 @@ int XC::Domain::calculateNodalReactions(bool inclInertia,const double &tol)
 const XC::Preprocessor *XC::Domain::getPreprocessor(void) const
   {
     const Preprocessor *retval= nullptr;
-    const EntProp *owr= Owner();
+    const EntityWithProperties *owr= Owner();
     if(owr)
       retval= dynamic_cast<const Preprocessor *>(owr);
     return retval;
@@ -1248,7 +1248,7 @@ const XC::Preprocessor *XC::Domain::getPreprocessor(void) const
 XC::Preprocessor *XC::Domain::getPreprocessor(void)
   {
     Preprocessor *retval= nullptr;
-    EntProp *owr= Owner();
+    EntityWithProperties *owr= Owner();
     if(owr)
       retval= dynamic_cast<Preprocessor *>(owr);
     return retval;

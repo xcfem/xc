@@ -129,7 +129,7 @@ class Subdomain: public Element, public Domain
 
     DomainDecompositionAnalysis *getDDAnalysis(void);
   public:
-    Subdomain(int tag,DataOutputHandler::map_output_handlers *oh,EntCmd *owr);
+    Subdomain(int tag,DataOutputHandler::map_output_handlers *oh,CommandEntity *owr);
 
     virtual ~Subdomain(void);
 

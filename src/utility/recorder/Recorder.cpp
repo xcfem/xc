@@ -60,7 +60,7 @@
 #include <utility/recorder/Recorder.h>
 
 XC::Recorder::Recorder(int classTag)
-  :MovableObject(classTag), EntCmd() {}
+  :MovableObject(classTag), CommandEntity() {}
 
 //! @brief //! Invoked by the analyst after the analysis has been performed.
 //! What the method does depends on the concrete subtype.

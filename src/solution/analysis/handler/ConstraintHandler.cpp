@@ -68,7 +68,7 @@
 //! @param owr: pointer to the model wrapper that owns the handler.
 //! @param classTag: identifier of the class.
 XC::ConstraintHandler::ConstraintHandler(ModelWrapper *owr,int classTag)
-  :MovableObject(classTag), EntCmd(owr) {}
+  :MovableObject(classTag), CommandEntity(owr) {}
 
 //! @brief Numbering of degrees of freedom.
 int XC::ConstraintHandler::doneNumberingDOF(void)

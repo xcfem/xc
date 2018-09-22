@@ -29,7 +29,7 @@
 #ifndef PREPROCESSORCONTAINER_H
 #define PREPROCESSORCONTAINER_H
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 
 namespace XC {
 class Domain;
@@ -40,7 +40,7 @@ class Preprocessor;
 //! @brief Base class for preprocessor containers i. e.
 //! objects that manage model entities: sets, geometric entities,
 //! mesh entities and so on.
-class PreprocessorContainer: public EntCmd
+class PreprocessorContainer: public CommandEntity
   {
     friend class Preprocessor;
     Preprocessor *preprocessor;

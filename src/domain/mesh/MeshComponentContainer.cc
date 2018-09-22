@@ -32,14 +32,14 @@
 
 
 //! @brief Constructor.
-XC::MeshComponentContainer::MeshComponentContainer(EntCmd *owr,int classTag, int dbTag)
-  :EntCmd(owr), MovableObject(classTag, dbTag) {}
+XC::MeshComponentContainer::MeshComponentContainer(CommandEntity *owr,int classTag, int dbTag)
+  :CommandEntity(owr), MovableObject(classTag, dbTag) {}
 
 //! @brief Returns a pointer to the mesh domain.
 const XC::Domain *XC::MeshComponentContainer::getDomain(void) const
   {
     const Domain *retval= nullptr;
-    const EntProp *owr= Owner();
+    const EntityWithProperties *owr= Owner();
     if(owr)
       retval= dynamic_cast<const Domain *>(owr);
     return retval;
@@ -49,7 +49,7 @@ const XC::Domain *XC::MeshComponentContainer::getDomain(void) const
 XC::Domain *XC::MeshComponentContainer::getDomain(void)
   {
     Domain *retval= nullptr;
-    EntProp *owr= Owner();
+    EntityWithProperties *owr= Owner();
     if(owr)
       retval= dynamic_cast<Domain *>(owr);
     return retval;

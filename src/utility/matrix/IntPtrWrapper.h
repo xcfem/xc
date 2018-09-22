@@ -28,13 +28,13 @@
 #ifndef IntPtrWrapper_h
 #define IntPtrWrapper_h
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include <boost/python/list.hpp>
 
 namespace XC {
 //! @ingroup Matrix
 //
-class IntPtrWrapper: public EntCmd
+class IntPtrWrapper: public CommandEntity
   {
   private:
     static int ID_NOT_VALID_ENTRY;

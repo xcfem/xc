@@ -21,7 +21,7 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::DOF_Numberer, bases<XC::MovableObject,EntCmd>, boost::noncopyable >("DOFNumberer", "A DOF numberer is responsible for assigning the equation numbers to the individual DOFs in each of the DOF groups in the analysis model.",no_init)
+class_<XC::DOF_Numberer, bases<XC::MovableObject,CommandEntity>, boost::noncopyable >("DOFNumberer", "A DOF numberer is responsible for assigning the equation numbers to the individual DOFs in each of the DOF groups in the analysis model.",no_init)
     .def("useAlgorithm", &XC::DOF_Numberer::useAlgorithm,return_internal_reference<>(),"\n""useAlgorithm(nmb)""Set the algorithm to be used for numerating the graph \n" "Parameters: \n""nmb: name of the algorithm, 'rcm' for Reverse Cuthill-Macgee or 'simple' for simple algorithm.")
     ;
 

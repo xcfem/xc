@@ -45,7 +45,7 @@ class Constraint;
 class DqPtrsConstraint: public DqPtrs<Constraint>
   {
   public:
-    DqPtrsConstraint(EntCmd *owr= nullptr);
+    DqPtrsConstraint(CommandEntity *owr= nullptr);
     explicit DqPtrsConstraint(const std::deque<Constraint *> &ts);
     explicit DqPtrsConstraint(const std::set<const Constraint *> &ts);
 

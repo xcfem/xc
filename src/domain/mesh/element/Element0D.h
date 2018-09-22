@@ -44,7 +44,7 @@ class Element0D : public ElementBase<2>
   {
   protected:
     static const double LenTol; //!< Tolerance for zero length of element.
-    class Vxy: public EntCmd
+    class Vxy: public CommandEntity
       {
         Vector x,y;
       public:

@@ -21,7 +21,7 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::Analysis, bases<EntCmd>, boost::noncopyable >("Analysis", no_init)
+class_<XC::Analysis, bases<CommandEntity>, boost::noncopyable >("Analysis", no_init)
   .add_property("getAnalysisResult", &XC::Analysis::getAnalysisResult)
   ;
 

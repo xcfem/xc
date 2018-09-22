@@ -30,7 +30,7 @@
 #ifndef ELEMPTRARRAY3d_H
 #define ELEMPTRARRAY3d_H
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "ElemPtrArray.h"
 #include "PtrArray3dBase.h"
 

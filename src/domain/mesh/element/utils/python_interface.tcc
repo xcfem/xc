@@ -32,7 +32,7 @@ class_<XC::ParticlePos3d>("ParticlePos3d")
   .def(self_ns::str(self_ns::self))
   ;
 
-class_<XC::RayleighDampingFactors, bases<EntCmd> >("RayleighDampingFactors")
+class_<XC::RayleighDampingFactors, bases<CommandEntity> >("RayleighDampingFactors")
   .def(init<double,double,double,double>())
   .add_property("alphaM",make_function( &XC::RayleighDampingFactors::getAlphaM, return_value_policy<return_by_value>()), &XC::RayleighDampingFactors::setAlphaM, "factor applied to elements or nodes mass matrix.")
   .add_property("betaK",make_function( &XC::RayleighDampingFactors::getBetaK, return_value_policy<return_by_value>()), &XC::RayleighDampingFactors::setBetaK, "factor applied to elements current stiffness matrix.")
@@ -49,7 +49,7 @@ class_<vector_ptr_nodes, boost::noncopyable>("vector_ptr_nodes")
 XC::Node *(XC::NodePtrs::*getNearestNodePtr)(const Pos3d &,bool initialGeometry)= &XC::NodePtrs::getNearestNode;
 bool (XC::NodePtrs::*NodePtrsIn3D)(const GeomObj3d &,const double &,const double &) const= &XC::NodePtrs::In;
 bool (XC::NodePtrs::*NodePtrsOut3D)(const GeomObj3d &,const double &,const double &) const= &XC::NodePtrs::Out;
-class_<XC::NodePtrs, bases<EntCmd,vector_ptr_nodes>, boost::noncopyable >("NodePtrs", no_init)
+class_<XC::NodePtrs, bases<CommandEntity,vector_ptr_nodes>, boost::noncopyable >("NodePtrs", no_init)
   .def("getNearestNode",make_function(getNearestNodePtr, return_internal_reference<>() ),"Return nearest node.")
   .def("In", NodePtrsIn3D,"\n""In(geomObject,factor,tolerance) \n""Return true if the current positions of all the nodes scaled by a factor: initialPos+factor*currentDisplacement lie inside the geometric object.")
   .def("Out", NodePtrsOut3D,"\n""Out(geomObject,factor,tolerance) \n""Return true if current positions of all the nodes scaled by a factor: initialPos+factor*currentDisplacement lie outside the geometric object.")

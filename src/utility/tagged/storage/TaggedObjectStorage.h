@@ -60,7 +60,7 @@
 //
 // What: "@(#) TaggedObjectStorage.h, revA"
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "utility/matrix/ID.h"
 #include "utility/actor/actor/MovableObject.h"
 
@@ -82,7 +82,7 @@ class TaggedObjectIter;
 //! the interface all concrete subclasses must provide. The interface
 //! defines methods to add and to remove the components, and methods to
 //! obtain access to the components.
-class TaggedObjectStorage: public EntCmd, public MovableObject
+class TaggedObjectStorage: public CommandEntity, public MovableObject
   {
     static ID dbTags;
     static ID classTags;
@@ -107,7 +107,7 @@ class TaggedObjectStorage: public EntCmd, public MovableObject
     int receiveData(const CommParameters &,T *(FEM_ObjectBroker::*p)(int));
     void copy(const TaggedObjectStorage &);
   public:
-    TaggedObjectStorage(EntCmd *owr,const std::string &containerName);
+    TaggedObjectStorage(CommandEntity *owr,const std::string &containerName);
     virtual ~TaggedObjectStorage(void) {}
 
     // public methods to populate the container

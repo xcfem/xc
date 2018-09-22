@@ -29,7 +29,7 @@ class_<t_matrix_point_ptr, bases<ProtoMatrix>, boost::noncopyable >("t_matrix_po
   .def("getPoint", make_function( getPnt, return_internal_reference<>() ))  ;
 
 typedef XC::PtrArrayBase<XC::Pnt> point_ptr_matrix;
-class_<point_ptr_matrix, bases<t_matrix_point_ptr,EntCmd>, boost::noncopyable >("point_ptr_matrix", no_init)
+class_<point_ptr_matrix, bases<t_matrix_point_ptr,CommandEntity>, boost::noncopyable >("point_ptr_matrix", no_init)
   .def("dim",&point_ptr_matrix::dim,"assings matrix dimensions.")
   .add_property("nRow",&point_ptr_matrix::getNumberOfRows,"returns number of rows.")
   .add_property("nCol",&point_ptr_matrix::getNumberOfColumns,"returns number of columns.")
@@ -53,7 +53,7 @@ class_<vector_mp_points, boost::noncopyable >("vector_mp_points", no_init)
   ;
 
 typedef XC::PtrArray3dBase<XC::PntPtrArray> array3d_points;
-class_<array3d_points, bases<vector_mp_points,EntCmd>, boost::noncopyable >("array3d_points", no_init)
+class_<array3d_points, bases<vector_mp_points,CommandEntity>, boost::noncopyable >("array3d_points", no_init)
   .def("dim",&array3d_points::dim,"assings dimensions.")
   .def("getAtIJK", &array3d_points::getAtIJK, return_internal_reference<>(),"Returns reference to value at (i,j,k) position.")
   ;
@@ -76,7 +76,7 @@ class_<t_matrix_ptr_nodes, bases<ProtoMatrix>, boost::noncopyable >("t_matrix_pt
   ;
 
 typedef XC::PtrArrayBase<XC::Node> ptr_nodes_matrix;
-class_<ptr_nodes_matrix, bases<t_matrix_ptr_nodes,EntCmd>, boost::noncopyable >("ptr_nodes_matrix", no_init)
+class_<ptr_nodes_matrix, bases<t_matrix_ptr_nodes,CommandEntity>, boost::noncopyable >("ptr_nodes_matrix", no_init)
   .def("getTagsInteriorNodes",&ptr_nodes_matrix::getTagsInteriorObjs,"return interior node tags.")
   .add_property("nRow",&ptr_nodes_matrix::getNumberOfRows,"returns number of rows.")
   .add_property("nCol",&ptr_nodes_matrix::getNumberOfColumns,"returns number of columns.")
@@ -100,7 +100,7 @@ class_<vector_mp_nodes, boost::noncopyable >("vector_mp_nodes", no_init)
   ;
 
 typedef XC::PtrArray3dBase<XC::NodePtrArray> array3d_nodes;
-class_<array3d_nodes, bases<vector_mp_nodes,EntCmd>, boost::noncopyable >("array3d_nodes", no_init)
+class_<array3d_nodes, bases<vector_mp_nodes,CommandEntity>, boost::noncopyable >("array3d_nodes", no_init)
   .def("dim",&array3d_nodes::dim,"assings dimensions.")
   .def("getAtIJK", &array3d_nodes::getAtIJK, return_internal_reference<>(),"Returns reference to value at (i,j,k) position.")
   ;
@@ -120,7 +120,7 @@ class_<t_matrix_ptr_elements, bases<ProtoMatrix>, boost::noncopyable >("t_matrix
   .add_property("getElement", make_function( getElem, return_internal_reference<>() ))  ;
 
 typedef XC::PtrArrayBase<XC::Element *> ptr_elements_matrix;
-class_<ptr_elements_matrix, bases<t_matrix_ptr_elements,EntCmd>, boost::noncopyable >("ptr_elements_matrix", no_init)
+class_<ptr_elements_matrix, bases<t_matrix_ptr_elements,CommandEntity>, boost::noncopyable >("ptr_elements_matrix", no_init)
   .add_property("nRow",&ptr_elements_matrix::getNumberOfRows,"returns number of rows.")
   .add_property("nCol",&ptr_elements_matrix::getNumberOfColumns,"returns number of columns.")
   .def("dim",&ptr_elements_matrix::dim,"assings matrix dimensions.")
@@ -141,7 +141,7 @@ class_<vector_mp_elements, boost::noncopyable >("vector_mp_elements", no_init)
   ;
 
 typedef XC::PtrArray3dBase<XC::ElemPtrArray> array3d_elements;
-class_<array3d_elements, bases<vector_mp_elements,EntCmd>, boost::noncopyable >("array3d_elements", no_init)
+class_<array3d_elements, bases<vector_mp_elements,CommandEntity>, boost::noncopyable >("array3d_elements", no_init)
   .def("getLayerElementsTags",&array3d_elements::getLayerObjectsTags,"return layer elements tags.")
   .def("dim",&array3d_elements::dim,"assings dimensions.")
   .def("getAtIJK", &array3d_elements::getAtIJK, return_internal_reference<>(),"Returns reference to value at (i,j,k) position.")

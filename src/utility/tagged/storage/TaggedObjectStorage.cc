@@ -47,8 +47,8 @@ const int XC::TaggedObjectStorage::posDbTag3;
 //!
 //! @param owr: object owner (this object is somewhat contained by).
 //! @param tag: name for this container.
-XC::TaggedObjectStorage::TaggedObjectStorage(EntCmd *owr,const std::string &contrName)
-  : EntCmd(owr), MovableObject(0), containerName(contrName), transmitIDs(true) {}
+XC::TaggedObjectStorage::TaggedObjectStorage(CommandEntity *owr,const std::string &contrName)
+  : CommandEntity(owr), MovableObject(0), containerName(contrName), transmitIDs(true) {}
 
 //! @brief Copy the components from the container into this one.
 void XC::TaggedObjectStorage::copy(const TaggedObjectStorage &other)

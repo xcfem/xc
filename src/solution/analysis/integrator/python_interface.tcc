@@ -20,7 +20,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //python_interface.tcc
-class_<XC::Integrator, bases<XC::MovableObject,EntCmd>, boost::noncopyable >("Integrator", no_init);
+class_<XC::Integrator, bases<XC::MovableObject,CommandEntity>, boost::noncopyable >("Integrator", no_init);
 
 class_<XC::EigenIntegrator, bases<XC::Integrator>, boost::noncopyable >("EigenIntegrator", no_init);
 

@@ -29,7 +29,7 @@
 #ifndef ENTGEOMSECTION_H
 #define ENTGEOMSECTION_H
 
-#include "xc_utils/src/nucleo/EntConNmb.h"
+#include "xc_utils/src/kernel/NamedEntity.h"
 
 namespace XC {
 class GeomSection;
@@ -44,7 +44,7 @@ class Axis;
 //! @ingroup MATSCCEntGeom
 //
 //! @brief Base class of section geometry representation classes.
-class EntGeomSection: public EntConNmb
+class EntGeomSection: public NamedEntity
   {
   private:
     GeomSection *sccGeom; //!< GeomSection.

@@ -75,7 +75,7 @@ class ActorSubdomain: public Subdomain, public Actor
     ID msgData;
     Vector lastResponse;
   public:
-    ActorSubdomain(Channel &, FEM_ObjectBroker &,DataOutputHandler::map_output_handlers *,EntCmd *);
+    ActorSubdomain(Channel &, FEM_ObjectBroker &,DataOutputHandler::map_output_handlers *,CommandEntity *);
     
     virtual int run(void);
     virtual const Vector &getLastExternalSysResponse(void);

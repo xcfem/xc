@@ -89,9 +89,9 @@ class_<v_sections, boost::noncopyable>("v_sections")
   .def(vector_indexing_suite<v_sections>() )
   ;
 
-class_<XC::PrismaticBarCrossSectionsVector, bases<EntCmd,v_sections>, boost::noncopyable >("PrismaticBarCrossSectionsVector", no_init);
+class_<XC::PrismaticBarCrossSectionsVector, bases<CommandEntity,v_sections>, boost::noncopyable >("PrismaticBarCrossSectionsVector", no_init);
 
-class_<XC::CrossSectionKR, bases<EntCmd>, boost::noncopyable >("CrossSectionKR", no_init);
+class_<XC::CrossSectionKR, bases<CommandEntity>, boost::noncopyable >("CrossSectionKR", no_init);
 
 
 class_<XC::ResponseId, bases<XC::ID>, boost::noncopyable >("ResponseId", no_init);

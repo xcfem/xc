@@ -103,9 +103,9 @@ class Mesh: public MeshComponentContainer
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
   public:
-    Mesh(EntCmd *owr);
-    Mesh(EntCmd *owr,TaggedObjectStorage &theNodesStorage, TaggedObjectStorage &theElementsStorage);
-    Mesh(EntCmd *owr,TaggedObjectStorage &theStorageType);
+    Mesh(CommandEntity *owr);
+    Mesh(CommandEntity *owr,TaggedObjectStorage &theNodesStorage, TaggedObjectStorage &theElementsStorage);
+    Mesh(CommandEntity *owr,TaggedObjectStorage &theStorageType);
     virtual ~Mesh(void);
 
     // methods to populate a mesh

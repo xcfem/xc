@@ -29,7 +29,7 @@
 #ifndef SectionMassProperties_h 
 #define SectionMassProperties_h 
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 
 class Pos2d;
 class Line2d;
@@ -46,10 +46,10 @@ class Matrix;
 //
 //! @brief Cross-section representation able to
 //! return mechanical propertis a area, moments of inertia,...
-class SectionMassProperties: public EntCmd
+class SectionMassProperties: public CommandEntity
   {
   public:
-    SectionMassProperties(EntCmd *owr= nullptr);
+    SectionMassProperties(CommandEntity *owr= nullptr);
 
     virtual double getAreaGrossSection(void) const= 0;
     virtual Vector getCenterOfMassGrossSection(void) const= 0;

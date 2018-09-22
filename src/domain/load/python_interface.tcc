@@ -51,7 +51,7 @@ class_<XC::ElementBodyLoad, bases<XC::ElementalLoad>, boost::noncopyable >("Elem
 
 class_<XC::ForceReprComponent, bases<XC::DomainComponent>, boost::noncopyable >("ForceReprComponent", no_init);
 
-class_<XC::LoadHandlerMember, bases<EntCmd,XC::MovableObject>, boost::noncopyable >("LoadHandlerMember", no_init);
+class_<XC::LoadHandlerMember, bases<CommandEntity,XC::MovableObject>, boost::noncopyable >("LoadHandlerMember", no_init);
 
 #include "pattern/python_interface.tcc"
 #include "groundMotion/python_interface.tcc"

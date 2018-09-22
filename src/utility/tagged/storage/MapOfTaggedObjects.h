@@ -101,7 +101,7 @@ class MapOfTaggedObjects : public TaggedObjectStorage
     void clearComponents(void);
 
   public:
-    MapOfTaggedObjects(EntCmd *owr,const std::string &containerName);
+    MapOfTaggedObjects(CommandEntity *owr,const std::string &containerName);
     MapOfTaggedObjects(const MapOfTaggedObjects &);
     MapOfTaggedObjects &operator=(const MapOfTaggedObjects &);
     ~MapOfTaggedObjects(void);

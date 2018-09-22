@@ -29,7 +29,7 @@
 #ifndef ElementEdges_h
 #define ElementEdges_h
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "domain/mesh/element/utils/ElementEdge.h"
 
 namespace XC {
@@ -41,7 +41,7 @@ class ID;
 //! @ingroup FEMisc
 //
 //! @brief Element edge container.
- class ElementEdges: public EntCmd, public std::vector<ElementEdge>
+ class ElementEdges: public CommandEntity, public std::vector<ElementEdge>
   {
   public:
     ElementEdges(void);

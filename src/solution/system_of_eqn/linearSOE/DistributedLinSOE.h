@@ -31,7 +31,7 @@
 
 
 #include "utility/actor/actor/DistributedObj.h"
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include <vector>
 
 namespace XC {

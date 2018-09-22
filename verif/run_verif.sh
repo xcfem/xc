@@ -61,6 +61,15 @@ python tests/elements/crd_transf/test_crd_transf3d_01.py
 python tests/elements/crd_transf/test_pdelta_01.py
 python tests/elements/crd_transf/test_pdelta_02.py
 echo "$BLEU" "  Beam column tests." "$NORMAL"
+echo "$BLEU" "    Elastic beam-column 2D tests." "$NORMAL"
+python tests/elements/beam_column/elastic_beam2d_sign_criteria_01.py
+python tests/elements/beam_column/elastic_beam2d_sign_criteria_02.py
+python tests/elements/beam_column/elastic_beam2d_sign_criteria_03.py
+python tests/elements/beam_column/elastic_beam3d_sign_criteria_01.py
+python tests/elements/beam_column/elastic_beam3d_sign_criteria_02.py
+python tests/elements/beam_column/elastic_beam3d_sign_criteria_03.py
+python tests/elements/beam_column/test_beam3d_sections_axes_orientation.py
+echo "$BLEU" "    Elastic beam-column 3D tests." "$NORMAL"
 python tests/elements/beam_column/beam_test1.py
 python tests/elements/beam_column/cantilever3d_01.py
 python tests/elements/beam_column/cantilever3d_02.py
@@ -72,16 +81,11 @@ python tests/elements/beam_column/cantilever3d_07.py
 python tests/elements/beam_column/cantilever3d_08.py
 python tests/elements/beam_column/cantilever3d_09.py
 python tests/elements/beam_column/cantilever3d_10.py
-python tests/elements/beam_column/elastic_beam2d_sign_criteria_01.py
-python tests/elements/beam_column/elastic_beam2d_sign_criteria_02.py
-python tests/elements/beam_column/elastic_beam2d_sign_criteria_03.py
-python tests/elements/beam_column/elastic_beam3d_sign_criteria_01.py
-python tests/elements/beam_column/elastic_beam3d_sign_criteria_02.py
-python tests/elements/beam_column/elastic_beam3d_sign_criteria_03.py
-python tests/elements/beam_column/test_beam3d_sections_axes_orientation.py
+echo "$BLEU" "    Force beam-column 2D tests." "$NORMAL"
 python tests/elements/beam_column/test_force_beam_column_2d_01.py
 python tests/elements/beam_column/test_force_beam_column_2d_02.py
 python tests/elements/beam_column/test_force_beam_column_2d_03.py
+echo "$BLEU" "    Force beam-column 3D tests." "$NORMAL"
 python tests/elements/beam_column/test_force_beam_column_3d_01.py
 python tests/elements/beam_column/test_force_beam_column_3d_02.py
 python tests/elements/beam_column/test_force_beam_column_3d_03.py

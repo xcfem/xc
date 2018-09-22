@@ -46,7 +46,7 @@ BOOST_PYTHON_MODULE(xc)
 
     XC::Domain *(XC::PreprocessorContainer::*getContainerDomain)(void)= &XC::PreprocessorContainer::getDomain;
     XC::Preprocessor *(XC::PreprocessorContainer::*getContainerPreprocessor)(void)= &XC::PreprocessorContainer::getPreprocessor;
-    class_<XC::PreprocessorContainer, bases<EntCmd>, boost::noncopyable >("PreprocessorContainer", no_init)
+    class_<XC::PreprocessorContainer, bases<CommandEntity>, boost::noncopyable >("PreprocessorContainer", no_init)
       .add_property("getPreprocessor", make_function( getContainerPreprocessor, return_internal_reference<>() ))
       .add_property("getDomain", make_function( getContainerDomain, return_internal_reference<>() ),"Return a reference to the domain.")
       ;
@@ -81,7 +81,7 @@ BOOST_PYTHON_MODULE(xc)
     XC::Domain *(XC::FEProblem::*getDomainRef)(void)= &XC::FEProblem::getDomain;
     XC::Preprocessor &(XC::FEProblem::*getPreprocessorRef)(void)= &XC::FEProblem::getPreprocessor;
     XC::ProcSolu &(XC::FEProblem::*getSoluProcRef)(void)= &XC::FEProblem::getSoluProc;
-    class_<XC::FEProblem, bases<EntCmd>, boost::noncopyable>("FEProblem")
+    class_<XC::FEProblem, bases<CommandEntity>, boost::noncopyable>("FEProblem")
       .def("getXCVersion",  make_function(&XC::FEProblem::getXCVersion,return_value_policy<copy_const_reference>()),"Return XC program version string.").staticmethod("getXCVersion")
       .def("getXCVersionShort",  make_function(&XC::FEProblem::getXCVersionShort,return_value_policy<copy_const_reference>()),"Return XC program (short) version string.").staticmethod("getXCVersionShort")
       .add_property("getDomain", make_function( getDomainRef, return_internal_reference<>() ),"Return a reference to the domain.")

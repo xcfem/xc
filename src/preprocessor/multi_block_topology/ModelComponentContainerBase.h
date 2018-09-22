@@ -29,7 +29,7 @@
 #ifndef ModelComponentContainerBase_H
 #define ModelComponentContainerBase_H
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 
 namespace XC {
 
@@ -39,7 +39,7 @@ class MultiBlockTopology;
 //! @ingroup MultiBlockTopology
 //
 //! @brief Base class for model component containers.
-class ModelComponentContainerBase: public EntCmd
+class ModelComponentContainerBase: public CommandEntity
   {
   public:
     typedef size_t Indice;

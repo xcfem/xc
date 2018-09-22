@@ -63,7 +63,7 @@
 //
 // What: "@(#) Analysis.h, revA"
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 
 namespace XC {
 
@@ -113,7 +113,7 @@ class CommParameters;
 //! analysis object encloses the domain upon which it will perform the
 //! analysis operations. The base Analysis class holds a pointer to this
 //! Domain and will return this pointer to subclasses.
-class Analysis: public EntCmd
+class Analysis: public CommandEntity
   {
   protected:
     int analysis_result; //!< Equal to zero if success.

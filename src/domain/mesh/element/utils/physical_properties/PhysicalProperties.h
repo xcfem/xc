@@ -42,7 +42,7 @@ namespace XC {
 //
 //! @brief Base class for element's physical properties.
 template <class MAT>
-class PhysicalProperties: public EntCmd, public MovableObject
+class PhysicalProperties: public CommandEntity, public MovableObject
   {
   public:
     typedef MaterialVector<MAT> material_vector;

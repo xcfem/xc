@@ -29,14 +29,14 @@
 #ifndef PIVOTSULTIMATESTRAINS_H
 #define PIVOTSULTIMATESTRAINS_H
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 
 namespace XC {
 
 //! @ingroup MATSCCDiagInt
 //
 //! @brief Definition of ultimate strains for the pivots
-class PivotsUltimateStrains: public EntCmd
+class PivotsUltimateStrains: public CommandEntity
   {
     double eps_agot_A; //!< A pivot ultimate strain.
     double eps_agot_B; //!< B pivot ultimate strain.

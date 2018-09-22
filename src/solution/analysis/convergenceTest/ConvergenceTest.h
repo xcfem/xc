@@ -61,7 +61,7 @@
 // to test the convergence of an algorithm. 
 
 #include <utility/actor/actor/MovableObject.h>
-#include "xc_utils/src/nucleo/EntWOwner.h"
+#include "xc_utils/src/kernel/EntityWithOwner.h"
 #include "utility/matrix/Vector.h"
 #include "solution/system_of_eqn/linearSOE/LinearSOE.h"
 
@@ -77,7 +77,7 @@ class AnalysisAggregation;
 //! algorithmic class to test if convergence has been achieved for an 
 //! iteration. The ConvergenceTest class is an abstract class, defining
 //! the interface that all subclasses must provide.
-class ConvergenceTest: public MovableObject, public EntWOwner
+class ConvergenceTest: public MovableObject, public EntityWithOwner
   {
     AnalysisAggregation *getAnalysisAggregation(void);
     const AnalysisAggregation *getAnalysisAggregation(void) const;
@@ -108,8 +108,8 @@ class ConvergenceTest: public MovableObject, public EntWOwner
     int recvData(const CommParameters &);
 
   public:
-    ConvergenceTest(EntCmd *owr,int classTag);	
-    ConvergenceTest(EntCmd *owr,int clasTag,int maxIter,int prtFlg, int normType,int sz_norms= 1);
+    ConvergenceTest(CommandEntity *owr,int classTag);	
+    ConvergenceTest(CommandEntity *owr,int clasTag,int maxIter,int prtFlg, int normType,int sz_norms= 1);
     inline virtual ~ConvergenceTest(void) {}
 
     virtual ConvergenceTest *getCopy(void) const= 0;

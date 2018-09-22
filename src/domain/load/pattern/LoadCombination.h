@@ -44,7 +44,7 @@ class LoadCombination: public ForceReprComponent
   {
     LoadHandler *handler; //!< Pointer to the load case manager.
     //! @brief Each of the terms (factor*LoadPattern) of the combination.
-    class summand: public EntCmd
+    class summand: public CommandEntity
       {
         float factor; //!< Factor that multiplies the load pattern effect.
         LoadPattern *lpattern; //!< Load pattern.

@@ -80,7 +80,7 @@ namespace XC {
 //! @ingroup GMotion
 //
 //! @brief Base class for ground motions.
-class GroundMotion: public MovableObject, public EntCmd
+class GroundMotion: public MovableObject, public CommandEntity
   {
   protected:
     mutable Vector data;

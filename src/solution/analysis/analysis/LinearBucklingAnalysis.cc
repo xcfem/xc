@@ -65,10 +65,10 @@ void XC::LinearBucklingAnalysis::clearAll(void)
 int XC::LinearBucklingAnalysis::analyze(int numSteps)
   {
     assert(solution_method);
-    EntCmd *old= solution_method->Owner();
+    CommandEntity *old= solution_method->Owner();
     solution_method->set_owner(this);
     assert(eigen_solu);
-    EntCmd *oldE= eigen_solu->Owner();
+    CommandEntity *oldE= eigen_solu->Owner();
     eigen_solu->set_owner(this);
     linearBucklingEigenAnalysis.set_owner(getProcSolu());
 

@@ -30,13 +30,13 @@
 #ifndef MapCasosActivos_h
 #define MapCasosActivos_h
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include <map>
 
 
 namespace XC {
 template<class T>
-class MapCasosActivos: public EntCmd, public std::map<int,T *>
+class MapCasosActivos: public CommandEntity, public std::map<int,T *>
   {
   public:
     typedef std::map<int, T *> t_map;
@@ -45,15 +45,15 @@ class MapCasosActivos: public EntCmd, public std::map<int,T *>
     typedef typename t_map::reference reference;
     typedef typename t_map::const_reference const_reference;
     typedef typename t_map::value_type value_type;
-    MapCasosActivos(EntCmd *);
+    MapCasosActivos(CommandEntity *);
     void Print(std::ostream &s, int flag =0);
   };
 
 //! @brief Constructor
 template<class T>
-MapCasosActivos<T>::MapCasosActivos(EntCmd *owr)
+MapCasosActivos<T>::MapCasosActivos(CommandEntity *owr)
 
-  : EntCmd(owr), t_map(*this) {}
+  : CommandEntity(owr), t_map(*this) {}
 
 template<class T>
 void MapCasosActivos<T>::Print(std::ostream &s, int flag)

@@ -40,15 +40,15 @@
 #include "utility/matrix/ID.h"
 
 //! @brief Default constructor.
-XC::Preprocessor::Preprocessor(EntCmd *owr,DataOutputHandler::map_output_handlers *oh)
-  : EntCmd(owr), MovableObject(0), domain(nullptr), materialHandler(this), transf(this), beamIntegrators(this), 
+XC::Preprocessor::Preprocessor(CommandEntity *owr,DataOutputHandler::map_output_handlers *oh)
+  : CommandEntity(owr), MovableObject(0), domain(nullptr), materialHandler(this), transf(this), beamIntegrators(this), 
     nodes(this), elements(this), loads(this), constraints(this),
     mbt(this),sets(this)
   { domain= new Domain(this,oh); }
 
 //! @brief Copy constructor (prohibited).
 XC::Preprocessor::Preprocessor(const Preprocessor &other)
-  : EntCmd(other), MovableObject(other), domain(nullptr), materialHandler(this), transf(this), beamIntegrators(this),
+  : CommandEntity(other), MovableObject(other), domain(nullptr), materialHandler(this), transf(this), beamIntegrators(this),
     nodes(this), elements(this), loads(this), constraints(this),
     mbt(this),sets(this)
   {

@@ -29,7 +29,7 @@
 #ifndef MAPSOLUMODEL_H
 #define MAPSOLUMODEL_H
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "ModelWrapper.h"
 
 namespace XC {
@@ -41,7 +41,7 @@ class Domain;
 //!  @ingroup Solu
 //! 
 //! @brief Finite element model wrappers container.
-class MapModelWrapper: public EntCmd
+class MapModelWrapper: public CommandEntity
   {
   public:
     typedef std::map<std::string,ModelWrapper> map_model_wrapper;

@@ -70,7 +70,7 @@
 //! @param owr: analysis aggregation that owns this object.
 //! @param classTag: identifier of the class.
 XC::SystemOfEqn::SystemOfEqn(AnalysisAggregation *owr,int classTag)
-  : MovableObject(classTag), EntCmd(owr) {}
+  : MovableObject(classTag), CommandEntity(owr) {}
 
 //! @brief Returns a pointer to the solution method that owns this object.
 XC::AnalysisAggregation *XC::SystemOfEqn::getAnalysisAggregation(void)

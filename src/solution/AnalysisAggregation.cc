@@ -459,7 +459,7 @@ void XC::AnalysisAggregation::copy(const AnalysisAggregation &other)
 
 //! @brief Default constructor.
 XC::AnalysisAggregation::AnalysisAggregation(Analysis *owr,ModelWrapper *b)
-  : EntCmd(owr), base(b), theSolnAlgo(nullptr),theIntegrator(nullptr),
+  : CommandEntity(owr), base(b), theSolnAlgo(nullptr),theIntegrator(nullptr),
     theSOE(nullptr), theTest(nullptr)
   {
     if(base)
@@ -469,7 +469,7 @@ XC::AnalysisAggregation::AnalysisAggregation(Analysis *owr,ModelWrapper *b)
 
 //! @brief Copy constructor.
 XC::AnalysisAggregation::AnalysisAggregation(const AnalysisAggregation &other)
-  : EntCmd(other), base(other.base), theSolnAlgo(nullptr),theIntegrator(nullptr),
+  : CommandEntity(other), base(other.base), theSolnAlgo(nullptr),theIntegrator(nullptr),
     theSOE(nullptr), theTest(nullptr)
   {
     if(base)
@@ -481,7 +481,7 @@ XC::AnalysisAggregation::AnalysisAggregation(const AnalysisAggregation &other)
 //! @brief Assignment operator.
 XC::AnalysisAggregation &XC::AnalysisAggregation::operator=(const AnalysisAggregation &other)
   {
-    EntCmd::operator=(other);
+    CommandEntity::operator=(other);
     base= other.base;
     if(base)
       base->set_owner(this);

@@ -29,7 +29,7 @@
 #ifndef DqGroundMotions_h
 #define DqGroundMotions_h
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include <deque>
 #include "utility/actor/actor/MovableObject.h"
 
@@ -41,7 +41,7 @@ namespace XC {
 //! @ingroup GMotion
 //
 //! @brief Seismic definitions container.
-  class DqGroundMotions : public EntCmd, public MovableObject
+  class DqGroundMotions : public CommandEntity, public MovableObject
   {
   protected:
     typedef std::deque<GroundMotion *> dq_ptr_GroundMotions;

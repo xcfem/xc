@@ -67,7 +67,7 @@ class Body: public EntMdlr
     //! @ingroup Geom
     //!
     //! @brief Surface that limits the body (face as seen by the body).
-    class BodyFace: public EntCmd
+    class BodyFace: public CommandEntity
       {
         Face *surface; //!< Face geometry.
         SideSequence sec_lados; //!< Edge sequence.

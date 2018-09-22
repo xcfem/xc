@@ -76,8 +76,8 @@
 //!
 //! @param tag: object identifier.
 //! @param owr: object owner (this object is somewhat contained by).
-XC::TaggedObject::TaggedObject(int tag,EntCmd *owr)
-  : EntCmd(owr), theTag(tag) {}
+XC::TaggedObject::TaggedObject(int tag,CommandEntity *owr)
+  : CommandEntity(owr), theTag(tag) {}
 
 //! @brief Virtual constructor.
 XC::TaggedObject *XC::TaggedObject::getCopy(void) const

@@ -1157,7 +1157,7 @@ XC::DomainDecompositionAnalysis *XC::CommParameters::getNewDomainDecompAnalysis(
     return broker->getNewDomainDecompAnalysis(classTag,theDomain);
   }
 
-XC::ConvergenceTest *XC::CommParameters::getNewConvergenceTest(EntCmd *owr,int classTag) const
+XC::ConvergenceTest *XC::CommParameters::getNewConvergenceTest(CommandEntity *owr,int classTag) const
   {
     assert(broker);
     return broker->getNewConvergenceTest(owr,classTag);

@@ -207,18 +207,18 @@ const XC::AnalysisAggregation *XC::ModelWrapper::getAnalysisAggregation(void) co
 
 //! @brief Default constructor.
 XC::ModelWrapper::ModelWrapper(AnalysisAggregation *owr)
-  : EntCmd(owr), theModel(nullptr), theHandler(nullptr), theDOFNumberer(nullptr)
+  : CommandEntity(owr), theModel(nullptr), theHandler(nullptr), theDOFNumberer(nullptr)
   { alloc_analysis_model(); }
 
 //! @brief Copy constructor.
 XC::ModelWrapper::ModelWrapper(const ModelWrapper &other)
-  : EntCmd(other), theModel(nullptr), theHandler(nullptr),theDOFNumberer(nullptr)
+  : CommandEntity(other), theModel(nullptr), theHandler(nullptr),theDOFNumberer(nullptr)
   { copy(other); }
 
 //! @brief Assignment operator.
 XC::ModelWrapper &XC::ModelWrapper::operator=(const ModelWrapper &other)
   {
-    EntCmd::operator=(other);
+    CommandEntity::operator=(other);
     copy(other);
     return *this;
   }

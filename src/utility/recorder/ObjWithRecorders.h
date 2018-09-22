@@ -30,7 +30,7 @@
 #ifndef ObjWithRecorders_h
 #define ObjWithRecorders_h
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "utility/handler/DataOutputHandler.h"
 #include <list>
 
@@ -41,7 +41,7 @@ class Recorder;
 //! @ingroup Recorder
 //
 //! @brief Object that can manage Recorders.
-class ObjWithRecorders: public EntCmd
+class ObjWithRecorders: public CommandEntity
   {
   public:
     typedef std::list<Recorder *> lista_recorders;
@@ -60,7 +60,7 @@ class ObjWithRecorders: public EntCmd
       { return theRecorders.size(); }
     virtual Domain *get_domain_ptr(void)= 0;
   public:
-    ObjWithRecorders(EntCmd *owr,DataOutputHandler::map_output_handlers *oh= nullptr);
+    ObjWithRecorders(CommandEntity *owr,DataOutputHandler::map_output_handlers *oh= nullptr);
     virtual ~ObjWithRecorders(void);
 
     Recorder *newRecorder(const std::string &,DataOutputHandler *oh= nullptr);

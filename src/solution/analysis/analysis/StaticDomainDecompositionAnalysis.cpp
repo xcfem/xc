@@ -107,7 +107,7 @@ bool XC::StaticDomainDecompositionAnalysis::doesIndependentAnalysis(void)
 int XC::StaticDomainDecompositionAnalysis::analyze(double dT)
   {
     assert(solution_method);
-    EntCmd *old= solution_method->Owner();
+    CommandEntity *old= solution_method->Owner();
     solution_method->set_owner(this);
 
     int result = 0;

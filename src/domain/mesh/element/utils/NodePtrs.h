@@ -29,7 +29,7 @@
 #ifndef NodePtrs_h
 #define NodePtrs_h
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include <list>
 
 class Pos3d;
@@ -55,7 +55,7 @@ class Vector;
 //! @ingroup FEMisc
 //
 //! @brief Pointers to nodes.
-class NodePtrs: public EntCmd, public std::vector<Node *>
+class NodePtrs: public CommandEntity, public std::vector<Node *>
   {
   public:
     typedef std::vector<Node *> vector_ptr_nodes;

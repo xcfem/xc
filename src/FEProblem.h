@@ -29,7 +29,7 @@
 #ifndef PROBLEMAEF_H
 #define PROBLEMAEF_H
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "version.h"
 #include "preprocessor/Preprocessor.h"
 #include "solution/ProcSolu.h"
@@ -79,7 +79,7 @@ class FEM_ObjectBrokerAllClasses;
 //! The program can be downloaded here: <a href="https://github.com/lcpt/xc" target="_new"> GitHub repo</a>. 
 
 //! @brief Finite element problem.
-class FEProblem: public EntCmd
+class FEProblem: public CommandEntity
   {
     mutable DataOutputHandler::map_output_handlers output_handlers; //Manejadores para salida de resultados.
     Preprocessor preprocessor; //!< Object that manages the model.

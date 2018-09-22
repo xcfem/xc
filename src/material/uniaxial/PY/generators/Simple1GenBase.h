@@ -32,14 +32,14 @@
 #include <string>
 #include <vector>
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 
 namespace XC {
 //! @ingroup PYMat
 //
 //! @brief Base class for objects that constructs PySimple1 materials
 //! (Boulanger, 2003) for pre-defined zeroLength elements..
-class Simple1GenBase: public EntCmd
+class Simple1GenBase: public CommandEntity
   {
   protected:	
     // Variables used for reading input files:

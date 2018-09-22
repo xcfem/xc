@@ -46,12 +46,12 @@
 
 //! @brief Default constructor
 XC::ShellCrdTransf3dBase::ShellCrdTransf3dBase(void)
-  : EntCmd(), MovableObject(0), theNodes(nullptr),
+  : CommandEntity(), MovableObject(0), theNodes(nullptr),
     vpos_centroide(3,0.0), g1(3,0.0), g2(3,0.0), g3(3,0.0) {}
 
 //! @brief Default constructor
 XC::ShellCrdTransf3dBase::ShellCrdTransf3dBase(const Vector &v1,const Vector &v2,const Vector &v3)
-  : EntCmd(), MovableObject(0), theNodes(nullptr),
+  : CommandEntity(), MovableObject(0), theNodes(nullptr),
     vpos_centroide(3,0.0), g1(v1), g2(v2), g3(v3) {}
 
 int XC::ShellCrdTransf3dBase::initialize(const NodePtrs &ptrs)

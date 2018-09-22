@@ -114,11 +114,11 @@ void XC::DOF_Numberer::free_mem(void)
 //! @param owr: pointer to the ModelWrapper that ows this object.
 //! @param clsTag: class indentifier. 
 XC::DOF_Numberer::DOF_Numberer(ModelWrapper *owr, int clsTag) 
-  :MovableObject(clsTag), EntCmd(owr), theGraphNumberer(nullptr) {}
+  :MovableObject(clsTag), CommandEntity(owr), theGraphNumberer(nullptr) {}
 
 //! @brief Copy constructor.
 XC::DOF_Numberer::DOF_Numberer(const DOF_Numberer &other)
-  : MovableObject(other), EntCmd(other), theGraphNumberer(nullptr)
+  : MovableObject(other), CommandEntity(other), theGraphNumberer(nullptr)
   {
     if(other.theGraphNumberer)
       copy(*other.theGraphNumberer);
@@ -128,7 +128,7 @@ XC::DOF_Numberer::DOF_Numberer(const DOF_Numberer &other)
 XC::DOF_Numberer &XC::DOF_Numberer::operator=(const DOF_Numberer &other)
   {
     MovableObject::operator=(other);
-    EntCmd::operator=(other);
+    CommandEntity::operator=(other);
     if(other.theGraphNumberer)
       copy(*other.theGraphNumberer);
     return *this;

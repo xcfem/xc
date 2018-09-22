@@ -36,7 +36,7 @@ class_<vectorSectionForceDeformation,boost::noncopyable>("vectorSectionForceDefo
   .def(vector_indexing_suite<vectorSectionForceDeformation>() )
   ;
 
-class_<material_vector_SectionFDMat,bases<vectorSectionForceDeformation,EntCmd>,boost::noncopyable>("MaterialVectorSectionFDMat", no_init)
+class_<material_vector_SectionFDMat,bases<vectorSectionForceDeformation,CommandEntity>,boost::noncopyable>("MaterialVectorSectionFDMat", no_init)
   .def("commitState", &material_vector_SectionFDMat::commitState,"Commits materials state.")
   .def("revertToLastCommit", &material_vector_SectionFDMat::revertToLastCommit,"Returns the material to its last commited state.")
   .def("revertToStart", &material_vector_SectionFDMat::revertToStart,"Returns the material to its initial state.")

@@ -62,7 +62,7 @@
 // What: "@(#) TimeSeries.h, revA"
 
 #include "utility/actor/actor/MovableObject.h"
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 
 namespace XC {
   class Information;
@@ -78,7 +78,7 @@ namespace XC {
 //! @brief Time variation of loads. A TimeSeries object is used to
 //! determine the load factor to be applied to the loads in a pettern.
 //! to the model. 
-class TimeSeries: public MovableObject, public EntCmd
+class TimeSeries: public MovableObject, public CommandEntity
   {
   public:
     TimeSeries(int classTag);

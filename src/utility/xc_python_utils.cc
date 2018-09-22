@@ -31,7 +31,7 @@
 #include "utility/matrix/ID.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
-#include "xc_utils/src/nucleo/python_utils.h"
+#include "xc_utils/src/kernel/python_utils.h"
 
 
 boost::python::list XC::xc_id_to_py_list(const XC::ID &id)

@@ -65,7 +65,7 @@
 #ifndef ModelBuilder_h
 #define ModelBuilder_h
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 
 namespace XC {
 class Domain;
@@ -80,7 +80,7 @@ class Domain;
 //! discretization of a structure: that is it discretizes the structure to
 //! be modeled into Elements, Nodes, Constraints, etc. and adds these
 //! components to the Domain.
- class ModelBuilder: public EntCmd
+ class ModelBuilder: public CommandEntity
   {
   private:
     Domain *myDomain;

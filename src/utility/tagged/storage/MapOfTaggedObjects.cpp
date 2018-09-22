@@ -71,7 +71,7 @@
 //! that are added to the map.
 //!
 //! @param owr: object owner (this object is somewhat contained by).
-XC::MapOfTaggedObjects::MapOfTaggedObjects(EntCmd *owr,const std::string &containerName)
+XC::MapOfTaggedObjects::MapOfTaggedObjects(CommandEntity *owr,const std::string &containerName)
   : TaggedObjectStorage(owr,containerName), myIter(*this) {}
 
 //! @brief Copy constructor.

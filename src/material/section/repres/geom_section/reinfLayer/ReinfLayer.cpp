@@ -89,7 +89,7 @@ void XC::ReinfLayer::setNumReinfBars(int numReinfBars)
 //! @brief Returns a reference to the (GeomSection) owner object.
 const XC::GeomSection *XC::ReinfLayer::getGeomSection(void) const
   {
-    const EntCmd *owr= Owner();
+    const CommandEntity *owr= Owner();
     assert(owr);
     const ListReinfLayer *l= dynamic_cast<const ListReinfLayer *>(owr);
     assert(l);

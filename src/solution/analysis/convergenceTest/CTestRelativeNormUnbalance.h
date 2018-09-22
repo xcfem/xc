@@ -75,8 +75,8 @@ class CTestRelativeNormUnbalance: public ConvergenceTestNorm
   {
   public:
     // constructors
-    CTestRelativeNormUnbalance(EntCmd *owr);	    	
-    CTestRelativeNormUnbalance(EntCmd *owr,double tol, int maxNumIter, int printFlag, int normType=2);
+    CTestRelativeNormUnbalance(CommandEntity *owr);	    	
+    CTestRelativeNormUnbalance(CommandEntity *owr,double tol, int maxNumIter, int printFlag, int normType=2);
     ConvergenceTest *getCopy(void) const;
 
     virtual std::string getStatusMsg(const int &flag= 1) const;

@@ -64,7 +64,7 @@
 //
 // What: "@(#) TaggedObject.h, revA"
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 
 namespace XC {
 class Domain;
@@ -88,7 +88,7 @@ class FEM_ObjectBroker;
 //! them. This saves us rewriting container classes for each type of 
 //! object. (templates will be able to provide this functionality when
 //! they are provided with all compilers). 
-class TaggedObject: public EntCmd
+class TaggedObject: public CommandEntity
   {
   private:
     int theTag; //!< object identifier.
@@ -99,7 +99,7 @@ class TaggedObject: public EntCmd
     void setTag(int newTag);  // CAUTION: this is a dangerous method to call
 
   public:
-    TaggedObject(int tag,EntCmd *owr= nullptr);
+    TaggedObject(int tag,CommandEntity *owr= nullptr);
     virtual TaggedObject *getCopy(void) const;
     virtual ~TaggedObject(void) {}
 

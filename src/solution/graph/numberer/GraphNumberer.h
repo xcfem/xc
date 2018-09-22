@@ -64,7 +64,7 @@
 #ifndef GraphNumberer_h
 #define GraphNumberer_h
 #include <utility/actor/actor/MovableObject.h>
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 
 namespace XC {
 class ID;
@@ -82,7 +82,7 @@ class ObjectBroker;
 //! algorithmic class for numbering the Vertices of a Graph; that is
 //! assigning a unique integer value (\f$0\f$ through \p numVertex \f$-1\f$) to
 //! each Vertex (uses \p tmp variable of Vertex) of the Graph.
-class GraphNumberer : public MovableObject, public EntCmd
+class GraphNumberer : public MovableObject, public CommandEntity
   {
   protected:
     friend class DOF_Numberer;

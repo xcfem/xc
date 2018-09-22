@@ -60,7 +60,7 @@ void XC::PropRecorder::callSetupCallback(const int &commitTag,const double &time
     this->lastTimeStamp= timeStamp;
     boost::python::object pyObj(boost::ref(*this));
     if(!CallbackSetup.empty())
-      EntCmd_exec(pyObj,CallbackSetup);
+      CommandEntity_exec(pyObj,CallbackSetup);
   }
 
 

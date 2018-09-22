@@ -63,7 +63,7 @@
 #ifndef LoadBalancer_h
 #define LoadBalancer_h
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 
 namespace XC {
 class Vector;
@@ -77,7 +77,7 @@ class Graph;
 //! A LoadBalancer is an object used to balance a
 //! PartitionedDomain. The LoadBalancer does this by invoking methods in
 //! the DomainPartitioner object with which it is associated.
-class LoadBalancer: public EntCmd
+class LoadBalancer: public CommandEntity
   {
   private:
     DomainPartitioner *theDomainPartitioner;    

@@ -67,7 +67,7 @@
 //! @brief Default constructor.
 //!
 //! @param owr: object that owns this one.
-XC::CTestEnergyIncr::CTestEnergyIncr(EntCmd *owr)	    	
+XC::CTestEnergyIncr::CTestEnergyIncr(CommandEntity *owr)	    	
   : ConvergenceTestTol(owr,CONVERGENCE_TEST_CTestEnergyIncr) {}
 
 //! @brief Constructor.
@@ -77,7 +77,7 @@ XC::CTestEnergyIncr::CTestEnergyIncr(EntCmd *owr)
 //! @param maxIter: max number of iterations to be performed.
 //! @param printFlag: what, if anything, is printed on each test.
 //! @param normType: type of norm to use (1-norm, 2-norm, p-norm, max-norm).
-XC::CTestEnergyIncr::CTestEnergyIncr(EntCmd *owr,double theTol, int maxIter, int printFlag, int normType)
+XC::CTestEnergyIncr::CTestEnergyIncr(CommandEntity *owr,double theTol, int maxIter, int printFlag, int normType)
   : ConvergenceTestTol(owr,CONVERGENCE_TEST_CTestEnergyIncr,theTol,maxIter,printFlag,normType,maxIter) {}
 
 //! @brief Virtual constructor.

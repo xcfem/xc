@@ -30,7 +30,7 @@
 #ifndef PTRARRAYBASE_H
 #define PTRARRAYBASE_H
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "xc_basic/src/matrices/TMatrix.h"
 #include <vector>
 #include "boost/any.hpp"
@@ -46,7 +46,7 @@ namespace XC{
 //
 //! @brief Base class for matrices of pointers to nodes, elements and points.
 template <class T>
-class PtrArrayBase: public TMatrix<T *,std::vector<T *> >, public EntCmd
+class PtrArrayBase: public TMatrix<T *,std::vector<T *> >, public CommandEntity
   {
   public:
     typedef TMatrix<T *,std::vector<T *> > m_ptr;
@@ -60,7 +60,7 @@ class PtrArrayBase: public TMatrix<T *,std::vector<T *> >, public EntCmd
 
     //! @brief Constructor.
     PtrArrayBase(const size_t &f=0,const size_t &c=0)
-      : m_ptr(f,c,nullptr), EntCmd() {}
+      : m_ptr(f,c,nullptr), CommandEntity() {}
   public:
     bool Null(void) const;
     bool HasNull(void) const;

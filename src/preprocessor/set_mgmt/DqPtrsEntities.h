@@ -49,7 +49,7 @@ class DqPtrsEntities: public DqPtrs<T>
     typedef typename dq_ptr::const_iterator const_iterator;
     typedef typename dq_ptr::iterator iterator;
 
-    DqPtrsEntities(EntCmd *owr= nullptr)
+    DqPtrsEntities(CommandEntity *owr= nullptr)
       : DqPtrs<T>(owr) {}
     DqPtrsEntities(const DqPtrs<T> &other)
       : DqPtrs<T>(other) {}

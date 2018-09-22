@@ -31,8 +31,7 @@
 #ifndef DQPTRS_H
 #define DQPTRS_H
 
-#include "xc_utils/src/nucleo/EntCmd.h"
-#include "xc_utils/src/nucleo/EntPropSorter.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include <deque>
 #include <set>
 #include "utility/actor/actor/MovableID.h"
@@ -54,7 +53,7 @@ namespace XC {
 //!  - Suprface.
 //!  - Body.
 template <class T>
-class DqPtrs: public EntCmd, protected std::deque<T *>
+class DqPtrs: public CommandEntity, protected std::deque<T *>
   {
   public:
     typedef typename std::deque<T *> lst_ptr;
@@ -65,7 +64,7 @@ class DqPtrs: public EntCmd, protected std::deque<T *>
     typedef typename lst_ptr::size_type size_type;
     typedef boost::indirect_iterator<iterator> indIterator;
   public:
-    DqPtrs(EntCmd *owr= nullptr);
+    DqPtrs(CommandEntity *owr= nullptr);
     DqPtrs(const DqPtrs &);
     explicit DqPtrs(const std::deque<T *> &ts);
     explicit DqPtrs(const std::set<const T *> &ts);
@@ -110,25 +109,25 @@ class DqPtrs: public EntCmd, protected std::deque<T *>
 
 //! @brief Constructor.
 template <class T>
-DqPtrs<T>::DqPtrs(EntCmd *owr)
-  : EntCmd(owr),lst_ptr() {}
+DqPtrs<T>::DqPtrs(CommandEntity *owr)
+  : CommandEntity(owr),lst_ptr() {}
 
 //! @brief Copy constructor.
 template <class T>
 DqPtrs<T>::DqPtrs(const DqPtrs<T> &other)
-  : EntCmd(other), lst_ptr(other)
+  : CommandEntity(other), lst_ptr(other)
   {}
 
 //! @brief Copy from deque container.
 template <class T>
 DqPtrs<T>::DqPtrs(const std::deque<T *> &ts)
-  : EntCmd(), lst_ptr(ts)
+  : CommandEntity(), lst_ptr(ts)
   {}
 
 //! @brief Copy from set container.
 template <class T>
 DqPtrs<T>::DqPtrs(const std::set<const T *> &st)
-  : EntCmd(), lst_ptr()
+  : CommandEntity(), lst_ptr()
   {
     typename std::set<const T *>::const_iterator k;
     k= st.begin();
@@ -140,7 +139,7 @@ DqPtrs<T>::DqPtrs(const std::set<const T *> &st)
 template <class T>
 DqPtrs<T> &DqPtrs<T>::operator=(const DqPtrs &other)
   {
-    EntCmd::operator=(other);
+    CommandEntity::operator=(other);
     lst_ptr::operator=(other);
     return *this;
   }
@@ -173,7 +172,7 @@ template<class T>
 void DqPtrs<T>::clearAll(void)
   {
     clear();
-    EntCmd::clearPyProps();
+    CommandEntity::clearPyProps();
   }
 
 //! @brief Access specified node with bounds checking.

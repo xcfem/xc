@@ -128,17 +128,17 @@ void XC::ProcSolu::free_mem(void)
 
 //! @brief Default constructor.
 XC::ProcSolu::ProcSolu(FEProblem *owr)
-  : EntCmd(owr), solu_control(this), theAnalysis(nullptr) {}
+  : CommandEntity(owr), solu_control(this), theAnalysis(nullptr) {}
 
 //! @brief Copy constructor.
 XC::ProcSolu::ProcSolu(const ProcSolu &other)
-  : EntCmd(other), solu_control(other.solu_control), theAnalysis(nullptr)
+  : CommandEntity(other), solu_control(other.solu_control), theAnalysis(nullptr)
   { copy_analysis(other.theAnalysis); }
 
 //! @brief Assignment operator.
 XC::ProcSolu &XC::ProcSolu::operator=(const ProcSolu &other)
   {
-    EntCmd::operator=(other);
+    CommandEntity::operator=(other);
     solu_control= other.solu_control;
     copy_analysis(other.theAnalysis);
     return *this;

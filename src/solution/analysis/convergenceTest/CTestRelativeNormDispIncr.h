@@ -78,8 +78,8 @@ class CTestRelativeNormDispIncr: public ConvergenceTestNorm
   {
   public:
     // constructors
-    CTestRelativeNormDispIncr(EntCmd *owr);	    	
-    CTestRelativeNormDispIncr(EntCmd *owr,double tol, int maxNumIter, int printFlag, int normType=2);
+    CTestRelativeNormDispIncr(CommandEntity *owr);	    	
+    CTestRelativeNormDispIncr(CommandEntity *owr,double tol, int maxNumIter, int printFlag, int normType=2);
 
     ConvergenceTest *getCopy(void) const;
     

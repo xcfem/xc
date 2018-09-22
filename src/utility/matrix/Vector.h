@@ -63,7 +63,7 @@
 #ifndef Vector_h
 #define Vector_h 
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "xc_basic/src/matrices/m_double.h"
 #include <cmath>
 
@@ -90,7 +90,7 @@ class SystemOfEqn;
 //! In the Vector class the data is stored in a 1d double array of length
 //! equal to the order of the Vector.  At present time none of the methods
 //! are declared as being virtual. THIS MAY CHANGE FOR PARALLEL.
-class Vector: public EntCmd
+class Vector: public CommandEntity
   {
   private:
     static double VECTOR_NOT_VALID_ENTRY;

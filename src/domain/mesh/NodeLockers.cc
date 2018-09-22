@@ -41,7 +41,7 @@
 
 //! @brief Default constructor.
 XC::NodeLockers::NodeLockers(Mesh *owr)
-  : EntCmd(owr), MovableObject(0),  tag(0), code("nil") {}
+  : CommandEntity(owr), MovableObject(0),  tag(0), code("nil") {}
 
 //! @brief Returns a pointer to the blocker whose name is passed as parameter.
 XC::NodeLocker *XC::NodeLockers::busca_node_locker(const std::string &nmb)

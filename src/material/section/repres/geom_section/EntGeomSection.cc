@@ -41,17 +41,17 @@ XC::GeomSection *XC::EntGeomSection::getGeomSection(void)
 
 //! @brief Constructor.
 XC::EntGeomSection::EntGeomSection(const std::string &nmb,GeomSection *s)
-  : EntConNmb(nmb),sccGeom(s) {}
+  : NamedEntity(nmb),sccGeom(s) {}
 
 //! @brief Copy constructor.
 XC::EntGeomSection::EntGeomSection(const EntGeomSection &other)
-  : EntConNmb(other), sccGeom(other.sccGeom)
+  : NamedEntity(other), sccGeom(other.sccGeom)
   {}
 
 //! @brief Assignment operator.
 XC::EntGeomSection &XC::EntGeomSection::operator=(const EntGeomSection &other)
   {
-    EntConNmb::operator=(other);
+    NamedEntity::operator=(other);
     sccGeom= other.sccGeom;
     return *this;
   }

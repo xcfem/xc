@@ -82,29 +82,29 @@ void XC::DqUniaxialMaterial::resize(const size_t &n)
   }
 
 //! @brief Constructor.
-XC::DqUniaxialMaterial::DqUniaxialMaterial(EntCmd *owner,const size_t &sz)
-  : EntCmd(owner), MovableObject(0), lst_ptr(sz) 
+XC::DqUniaxialMaterial::DqUniaxialMaterial(CommandEntity *owner,const size_t &sz)
+  : CommandEntity(owner), MovableObject(0), lst_ptr(sz) 
   {
     for(size_t i=0;i<sz;i++)
       lst_ptr::operator[](i)= nullptr;
   }
 
 //! @brief Constructor.
-XC::DqUniaxialMaterial::DqUniaxialMaterial(EntCmd *owner,const UniaxialMaterial &um)
-  : EntCmd(owner), MovableObject(0), lst_ptr()
+XC::DqUniaxialMaterial::DqUniaxialMaterial(CommandEntity *owner,const UniaxialMaterial &um)
+  : CommandEntity(owner), MovableObject(0), lst_ptr()
   { push_back(&um); }
 
 //! @brief Constructor.
-XC::DqUniaxialMaterial::DqUniaxialMaterial(EntCmd *owner,const UniaxialMaterial &um,const size_t &sz)
-  : EntCmd(owner), MovableObject(0), lst_ptr(sz)
+XC::DqUniaxialMaterial::DqUniaxialMaterial(CommandEntity *owner,const UniaxialMaterial &um,const size_t &sz)
+  : CommandEntity(owner), MovableObject(0), lst_ptr(sz)
   {
     for(size_t i=0;i<sz;i++)
       lst_ptr::operator[](i)= um.getCopy();
   }
 
 //! @brief Constructor.
-XC::DqUniaxialMaterial::DqUniaxialMaterial(EntCmd *owner,const UniaxialMaterial *um,const size_t &sz)
-  : EntCmd(owner), MovableObject(0), lst_ptr(sz)
+XC::DqUniaxialMaterial::DqUniaxialMaterial(CommandEntity *owner,const UniaxialMaterial *um,const size_t &sz)
+  : CommandEntity(owner), MovableObject(0), lst_ptr(sz)
   {
     if(um)
       {
@@ -116,18 +116,18 @@ XC::DqUniaxialMaterial::DqUniaxialMaterial(EntCmd *owner,const UniaxialMaterial 
 
 //! @brief Copy constructor.
 XC::DqUniaxialMaterial::DqUniaxialMaterial(const DqUniaxialMaterial &other)
-  : EntCmd(other), MovableObject(other), lst_ptr()
+  : CommandEntity(other), MovableObject(other), lst_ptr()
   { copy_list(other); }
 
 //! @brief Copy constructor.
 XC::DqUniaxialMaterial::DqUniaxialMaterial(const DqUniaxialMaterial &other,SectionForceDeformation *s)
-  : EntCmd(other), MovableObject(0), lst_ptr()
+  : CommandEntity(other), MovableObject(0), lst_ptr()
   { copy_list(other,s); }
 
 //! @brief Assignment operator.
 XC::DqUniaxialMaterial &XC::DqUniaxialMaterial::operator=(const DqUniaxialMaterial &other)
   {
-    EntCmd::operator=(other);
+    CommandEntity::operator=(other);
     MovableObject::operator=(other);
     copy_list(other);
     return *this;
@@ -148,7 +148,7 @@ void XC::DqUniaxialMaterial::clear(void)
 void XC::DqUniaxialMaterial::clearAll(void)
   {
     clear();
-    EntCmd::clearPyProps();
+    CommandEntity::clearPyProps();
   }
 
 //! @brief Commit materials state (normally when convergence is achieved).

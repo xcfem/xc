@@ -153,7 +153,7 @@ void XC::ShadowSubdomain::alloc_arrays(const size_t &sz1,const size_t &sz2)
     theShadowLPs=new ArrayOfTaggedObjects(static_cast<Domain *>(this),sz2,"LPs");
   }
 
-XC::ShadowSubdomain::ShadowSubdomain(int tag, MachineBroker &theMachineBroker, FEM_ObjectBroker &theObjectBroker,DataOutputHandler::map_output_handlers *oh,EntCmd *owr)
+XC::ShadowSubdomain::ShadowSubdomain(int tag, MachineBroker &theMachineBroker, FEM_ObjectBroker &theObjectBroker,DataOutputHandler::map_output_handlers *oh,CommandEntity *owr)
   :Shadow(ACTOR_TAGS_SUBDOMAIN, theObjectBroker, theMachineBroker, 0),
    Subdomain(tag,oh,owr),
    msgData(4),
@@ -182,7 +182,7 @@ XC::ShadowSubdomain::ShadowSubdomain(int tag, MachineBroker &theMachineBroker, F
   }
 
 
-XC::ShadowSubdomain::ShadowSubdomain(int tag, Channel &the_Channel, FEM_ObjectBroker &theObjectBroker,DataOutputHandler::map_output_handlers *oh,EntCmd *owr)
+XC::ShadowSubdomain::ShadowSubdomain(int tag, Channel &the_Channel, FEM_ObjectBroker &theObjectBroker,DataOutputHandler::map_output_handlers *oh,CommandEntity *owr)
   :Shadow(the_Channel, theObjectBroker),
    Subdomain(tag,oh,owr),
    msgData(4),

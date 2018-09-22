@@ -97,7 +97,7 @@ void XC::ArrayOfTaggedObjects::clearComponents(void)
 //! to \f$0\f$. 
 //!
 //! @param owr: object owner (this object is somewhat contained by).
-XC::ArrayOfTaggedObjects::ArrayOfTaggedObjects(EntCmd *owr,int size,const std::string &containerName)
+XC::ArrayOfTaggedObjects::ArrayOfTaggedObjects(CommandEntity *owr,int size,const std::string &containerName)
   :TaggedObjectStorage(owr,containerName), numComponents(0),sizeComponentArray(0), positionLastEntry(0),
    positionLastNoFitEntry(0),fitFlag(true), myIter(*this)
   {

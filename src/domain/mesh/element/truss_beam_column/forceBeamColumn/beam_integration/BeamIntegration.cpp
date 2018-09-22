@@ -57,7 +57,7 @@
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 
 XC::BeamIntegration::BeamIntegration(int classTag)
-  : MovableObject(classTag), EntCmd() {}
+  : MovableObject(classTag), CommandEntity() {}
 
 int XC::BeamIntegration::setParameter(const std::vector<std::string> &argv, Parameter &param)
   { return 0; }

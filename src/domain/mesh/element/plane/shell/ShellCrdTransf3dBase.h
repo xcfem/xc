@@ -29,7 +29,7 @@
 #ifndef ShellCrdTransf3dBase_h
 #define ShellCrdTransf3dBase_h
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "utility/actor/actor/MovableObject.h"
 #include "utility/matrix/Vector.h"
 #include "domain/mesh/element/utils/ParticlePos3d.h"
@@ -45,7 +45,7 @@ class NodePtrs;
 //! @ingroup PlaneElements
 //
 //! @brief Base class for 3D coordinate transformations.
-class ShellCrdTransf3dBase: public EntCmd, public MovableObject
+class ShellCrdTransf3dBase: public CommandEntity, public MovableObject
   {
   protected:
     const NodePtrs *theNodes;

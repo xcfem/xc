@@ -41,7 +41,7 @@ class ComputePivots;
 //! @ingroup MATSCCDiagInt
 //
 //! @brief Pivot positions computed for a bending plane.
-class Pivots: public EntCmd
+class Pivots: public CommandEntity
   {
     Pos3d A; //!< Pivot A (max strain in tensioned steel).
     Pos3d B; //!< Pivot B (min strain in compressed concrete).

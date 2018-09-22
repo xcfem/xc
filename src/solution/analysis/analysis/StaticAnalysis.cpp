@@ -293,7 +293,7 @@ int XC::StaticAnalysis::run_analysis_step(int num_step,int numSteps)
 int XC::StaticAnalysis::analyze(int numSteps)
   {
     assert(solution_method);
-    EntCmd *old= solution_method->Owner();
+    CommandEntity *old= solution_method->Owner();
     solution_method->set_owner(this);
     int result= 0;
     for(int i=0; i<numSteps; i++)

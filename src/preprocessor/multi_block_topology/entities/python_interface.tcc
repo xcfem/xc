@@ -93,7 +93,7 @@ class_<XC::UniformGrid, XC::UniformGrid *, bases<XC::EntMdlr>, boost::noncopyabl
   ;
 
 
-class_<XC::ModelComponentContainerBase, bases<EntCmd>, boost::noncopyable >("ModelComponentContainerBase", no_init)
+class_<XC::ModelComponentContainerBase, bases<CommandEntity>, boost::noncopyable >("ModelComponentContainerBase", no_init)
    .add_property("defaultTag", &XC::ModelComponentContainerBase::getTag, &XC::ModelComponentContainerBase::setTag)
    ;
 

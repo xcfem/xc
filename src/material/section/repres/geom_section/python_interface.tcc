@@ -25,7 +25,7 @@
 #include "reinfBar/python_interface.tcc"
 #include "reinfLayer/python_interface.tcc"
 
-class_<XC::EntGeomSection, bases<EntConNmb>, boost::noncopyable >("EntGeomSection", no_init);
+class_<XC::EntGeomSection, bases<NamedEntity>, boost::noncopyable >("EntGeomSection", no_init);
 
 class_<XC::SectionReferenceFrame, bases<XC::EntGeomSection>, boost::noncopyable >("SectionReferenceFrame", no_init);
 

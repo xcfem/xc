@@ -30,7 +30,7 @@
 #define PropRecorder_h
 
 #include <utility/recorder/DomainRecorderBase.h>
-#include "xc_utils/src/nucleo/python_utils.h"
+#include "xc_utils/src/kernel/python_utils.h"
 
 namespace XC {
 
@@ -83,7 +83,7 @@ void XC::PropRecorder::callRecordCallback(Container &c,const int &commitTag,cons
         if(tmp)
           {
             boost::python::object pyObj(boost::ref(*tmp));
-            EntCmd_exec(pyObj,CallbackRecord);
+            CommandEntity_exec(pyObj,CallbackRecord);
           }
         else
 	  std::cerr << getClassName() << "::" << __FUNCTION__
@@ -101,7 +101,7 @@ void PropRecorder::callRestartCallback(Container &c)
         if(tmp)
           {
             boost::python::object pyObj(boost::ref(*tmp));
-            EntCmd_exec(pyObj,this->CallbackRestart);
+            CommandEntity_exec(pyObj,this->CallbackRestart);
           }
         else
 	  std::cerr << getClassName() << "::" << __FUNCTION__

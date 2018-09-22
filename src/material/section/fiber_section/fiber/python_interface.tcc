@@ -67,7 +67,7 @@ XC::Matrix &(XC::FiberPtrDeque::*getHomogenizedSectionITensor)(const double &) c
 XC::Matrix &(XC::FiberPtrDeque::*getHomogenizedSectionITensorRelToPoint)(const double &,const Pos2d &) const= &XC::FiberPtrDeque::getIHomogenizedSection;
 double (XC::FiberPtrDeque::*getHomogenizedSectionIRelTo)(const double &,const Pos2d &,const XC::Vector &) const= &XC::FiberPtrDeque::getIHomogenizedSection;
 double (XC::FiberPtrDeque::*getHomogenizedSectionIRelToLine)(const double &, const Line2d &) const= &XC::FiberPtrDeque::getIHomogenizedSection;
-class_<XC::FiberPtrDeque, bases<EntCmd,fiber_ptrs_dq>, boost::noncopyable >("FiberPtrDeque", no_init)
+class_<XC::FiberPtrDeque, bases<CommandEntity,fiber_ptrs_dq>, boost::noncopyable >("FiberPtrDeque", no_init)
 //.def("__iter__", boost::python::iterator<XC::FiberPtrDeque >())
   .def("insert",&XC::FiberPtrDeque::push_back,"inserts fiber pointer.")
   .def("empty",&XC::FiberPtrDeque::empty,"Return true if there are no fibers.")

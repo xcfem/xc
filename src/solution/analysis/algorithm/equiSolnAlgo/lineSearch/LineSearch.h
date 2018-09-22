@@ -63,7 +63,7 @@
 // What: "@(#)LineSearch.h, revA"
 
 #include <utility/actor/actor/MovableObject.h>
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include <iostream>
 #include "utility/matrix/Vector.h"
 
@@ -82,7 +82,7 @@ class LinearSOE;
 //! i.e. no objects of it's type can be created.  Its subclasses seek
 //! to find a better solution to R(U)=0 than the solution Ui-1 + delta Ui
 //! would give, typically Ui = Ui-1 + factor * delta Ui.
-class LineSearch: public MovableObject, public EntCmd
+class LineSearch: public MovableObject, public CommandEntity
   {
   protected:
     Vector x;

@@ -62,17 +62,17 @@ void XC::NodeVectors::copy(const NodeVectors &other)
 
 //! @brief Constructor.
 XC::NodeVectors::NodeVectors(const size_t &nv)
-  :EntCmd(),MovableObject(NOD_TAG_NodeVectors), numVectors(nv), commitData(nullptr),trialData(nullptr), values() {}
+  :CommandEntity(),MovableObject(NOD_TAG_NodeVectors), numVectors(nv), commitData(nullptr),trialData(nullptr), values() {}
 
 
 //! @brief Copy constructor.
 XC::NodeVectors::NodeVectors(const NodeVectors &other)
-  : EntCmd(other),MovableObject(NOD_TAG_NodeVectors), numVectors(other.numVectors), commitData(nullptr), trialData(nullptr), values()
+  : CommandEntity(other),MovableObject(NOD_TAG_NodeVectors), numVectors(other.numVectors), commitData(nullptr), trialData(nullptr), values()
   { copy(other); }
 
 XC::NodeVectors &XC::NodeVectors::operator=(const NodeVectors &other)
   {
-    EntCmd::operator=(other);
+    CommandEntity::operator=(other);
     MovableObject::operator=(other);
     copy(other);
     return *this;

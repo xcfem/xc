@@ -81,7 +81,7 @@ XC::VariableTimeStepDirectIntegrationAnalysis::VariableTimeStepDirectIntegration
 int XC::VariableTimeStepDirectIntegrationAnalysis::analyze(int numSteps, double dT, double dtMin, double dtMax, int Jd)
   {
     assert(solution_method);
-    EntCmd *old= solution_method->Owner();
+    CommandEntity *old= solution_method->Owner();
     solution_method->set_owner(this);
 
     // get some pointers

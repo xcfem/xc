@@ -218,7 +218,7 @@ class CommParameters
     GroundMotion *brokeGroundMotion(const int &) const;
     DomainSolver *getNewDomainSolver(void) const;
     DomainDecompositionAnalysis *getNewDomainDecompAnalysis(int, Subdomain &) const;
-    ConvergenceTest *getNewConvergenceTest(EntCmd *owr,int classTag) const;
+    ConvergenceTest *getNewConvergenceTest(CommandEntity *owr,int classTag) const;
     TimeSeries *getNewTimeSeries(int classTag) const;
     CrdTransf2d *getNewCrdTransf2d(int classTag) const;
     CrdTransf3d *getNewCrdTransf3d(int classTag) const;

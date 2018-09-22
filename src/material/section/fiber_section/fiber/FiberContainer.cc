@@ -84,7 +84,7 @@ XC::FiberContainer::FiberContainer(const FiberContainer &other)
 //! @brief Assignment operator.
 XC::FiberContainer &XC::FiberContainer::operator=(const FiberContainer &other)
   {
-    EntCmd::operator=(other); //Don't copy pointers
+    CommandEntity::operator=(other); //Don't copy pointers
     copy_fibers(other); //They are copied here.
     return *this;
   }

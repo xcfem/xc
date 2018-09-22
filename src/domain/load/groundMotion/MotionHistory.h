@@ -29,7 +29,7 @@
 #ifndef MotionHistory_h
 #define MotionHistory_h
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 
 namespace XC {
   class TimeSeries;
@@ -42,7 +42,7 @@ namespace XC {
 //
 //! @brief Data that define acceleration, velocities and
 //! displacements due to a earthquake.
-class MotionHistory: public EntCmd
+class MotionHistory: public CommandEntity
   {
   private:
     TimeSeries *theAccelSeries; //!< Ground acceleration.

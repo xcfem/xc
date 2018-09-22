@@ -39,7 +39,7 @@ namespace XC {
 
 //! @ingroup Matrix
 //
-class AuxMatrix: public EntCmd
+class AuxMatrix: public CommandEntity
   {
   private:
     size_t sizeDoubleWork;

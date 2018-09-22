@@ -29,7 +29,7 @@
 #ifndef MeshEdges_h
 #define MeshEdges_h
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "domain/mesh/MeshEdge.h"
 
 class Polyline3d;
@@ -44,7 +44,7 @@ class ID;
 //! @ingroup Elem
 //
 //! @brief Element edge container.
-class MeshEdges: public EntCmd, public std::deque<MeshEdge>
+class MeshEdges: public CommandEntity, public std::deque<MeshEdge>
   {
   public:
     MeshEdges(void);

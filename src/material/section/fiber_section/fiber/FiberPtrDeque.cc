@@ -55,18 +55,18 @@
 
 //! @brief Constructor.
 XC::FiberPtrDeque::FiberPtrDeque(const size_t &num)
-  : EntCmd(), fiber_ptrs_dq(num,static_cast<Fiber *>(nullptr)), yCenterOfMass(0.0), zCenterOfMass(0.0)
+  : CommandEntity(), fiber_ptrs_dq(num,static_cast<Fiber *>(nullptr)), yCenterOfMass(0.0), zCenterOfMass(0.0)
   {}
 
 //! @brief Copy constructor.
 XC::FiberPtrDeque::FiberPtrDeque(const FiberPtrDeque &other)
-  : EntCmd(other), fiber_ptrs_dq(other), yCenterOfMass(other.yCenterOfMass), zCenterOfMass(other.zCenterOfMass)
+  : CommandEntity(other), fiber_ptrs_dq(other), yCenterOfMass(other.yCenterOfMass), zCenterOfMass(other.zCenterOfMass)
   {}
 
 //! @brief Assignment operator.
 XC::FiberPtrDeque &XC::FiberPtrDeque::operator=(const FiberPtrDeque &other)
   {
-    EntCmd::operator=(other);
+    CommandEntity::operator=(other);
     fiber_ptrs_dq::operator=(other);
     yCenterOfMass= other.yCenterOfMass;
     zCenterOfMass= other.zCenterOfMass;

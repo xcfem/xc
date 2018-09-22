@@ -24,7 +24,7 @@
 #ifndef FIELDINFO_H
 #define FIELDINFO_H
 
-#include "xc_utils/src/nucleo/EntConNmb.h"
+#include "xc_utils/src/kernel/NamedEntity.h"
 #include "xc_basic/src/matrices/m_string.h"
 #include <boost/python/list.hpp>
 
@@ -36,7 +36,7 @@ class Set;
 //! @ingroup POST_PROCESS
 //
 //! @brief Information about a field defined over a set.
-class FieldInfo: public EntConNmb
+class FieldInfo: public NamedEntity
   {
   protected:
     std::string nmb_set; //!< name of the set.

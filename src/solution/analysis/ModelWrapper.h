@@ -29,7 +29,7 @@
 #ifndef MODELWRAPPER_H
 #define MODELWRAPPER_H
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 
 namespace XC {
 
@@ -55,7 +55,7 @@ class Integrator;
 //!   the specified constraints in the domain are to be handled. 
 //! - The DOF numberer.  An object responsible for providing equation
 //!   numbers to the individual degrees of freedom in each DOF\_Group object.
-class ModelWrapper: public EntCmd
+class ModelWrapper: public CommandEntity
   {
     AnalysisModel *theModel; //!< Analysis model
     ConstraintHandler *theHandler; //!< Constrainnt handler.

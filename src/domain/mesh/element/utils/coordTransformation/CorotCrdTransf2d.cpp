@@ -101,20 +101,22 @@ XC::CorotCrdTransf2d::CorotCrdTransf2d(int tag, const Vector &rigJntOffsetI,cons
   : CrdTransf2d(tag, CRDTR_TAG_CorotCrdTransf2d),cosAlpha(0.0), sinAlpha(0.0),Ln(0), ub(3), ubcommit(3), ubpr(3)
   {
     // check rigid joint offset for node I
-    if(&rigJntOffsetI == 0 || rigJntOffsetI.Size() != 2 )
+    if(rigJntOffsetI.Size() != 2 )
       {
-        std::cerr << "XC::CorotCrdTransf2d::CorotCrdTransf2d:  Invalid rigid joint offset vector for node I\n";
-        std::cerr << "Size must be 2\n";      
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << ";  invalid rigid joint offset vector for node I.\n"
+		  << "Size must be 2.\n";      
         nodeIOffset.Zero();      
       }
     else
       nodeIOffset = rigJntOffsetI;
     
     // check rigid joint offset for node J
-    if(&rigJntOffsetJ == 0 || rigJntOffsetJ.Size() != 2 )
+    if(rigJntOffsetJ.Size() != 2 )
       {
-        std::cerr << "XC::CorotCrdTransf2d::CorotCrdTransf2d:  Invalid rigid joint offset vector for node J\n";
-        std::cerr << "Size must be 2\n";      
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; invalid rigid joint offset vector for node J.\n"
+		  << "Size must be 2\n";      
         nodeJOffset.Zero(); 
       }
     else
@@ -159,8 +161,8 @@ int XC::CorotCrdTransf2d::initialize(Node *nodeIPointer, Node *nodeJPointer)
     
     if((!nodeIPtr) || (!nodeJPtr))
       {
-        std::cerr << "\nCorotCrdTransf2d::initialize";
-        std::cerr << "\ninvalid pointers to the element nodes\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; invalid pointers to the element nodes.\n";
         return -1;
       }
     
@@ -282,7 +284,8 @@ int XC::CorotCrdTransf2d::compElemtLengthAndOrient(void)
     
     if(L == 0.0) 
       {
-        std::cerr << "\nXC::CorotCrdTransf2d::compElemtLengthAndOrien: 0 length\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; 0 length.\n";
         return -2;
       }
     
@@ -312,7 +315,8 @@ int XC::CorotCrdTransf2d::compElemtLengthAndOrientWRTLocalSystem(const Vector &u
     
     if(Ln == 0.0)
       {
-        std::cerr << "\nXC::CorotCrdTransf2d::compElemtLengthAndOrientWRTLocalSystem: 0 length\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; 0 length.\n";
         return -2;  
       }
     
@@ -511,8 +515,9 @@ const XC::Vector &XC::CorotCrdTransf2d::getGlobalResistingForce(const Vector &pb
     
     if(unifLoad.Norm() != 0.0)
       {
-        std::cerr << "XC::CorotCrdTransf2d::getGlobalResistingForce: affect of Po not implemented yet.";
-        std::cerr << "using zero value";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; affect of Po not implemented yet."
+		  << " Using zero value.";
       }  
     
     // transform resisting forces  from local to global coordinates
@@ -940,7 +945,8 @@ int XC::CorotCrdTransf2d::sendData(CommParameters &cp)
     res+=cp.sendVector(ubpr,getDbTagData(),CommMetaData(14));
     res+= cp.sendBool(nodeOffsets,getDbTagData(),CommMetaData(15));
     if(res<0)
-      std::cerr << "CorotCrdTransf2d::sendData - failed to send data.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data.\n";
     return res;
   }
 
@@ -955,7 +961,8 @@ int XC::CorotCrdTransf2d::recvData(const CommParameters &cp)
     res+= cp.receiveVector(ubpr,getDbTagData(),CommMetaData(14));
     res+= cp.receiveBool(nodeOffsets,getDbTagData(),CommMetaData(15));
     if(res<0)
-      std::cerr << "CorotCrdTransf2d::recvData - failed to receive data.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive data.\n";
     return res;    
   }
 
@@ -968,7 +975,8 @@ int XC::CorotCrdTransf2d::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag();
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "CorotCrdTransf2d::sendSelf() - data could not be sent\n" ;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; data could not be sent.\n" ;
     return res;
   }
 
@@ -980,7 +988,8 @@ int XC::CorotCrdTransf2d::recvSelf(const CommParameters &cp)
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "CorotCrdTransf2d::recvSelf() - data could not be received\n" ;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; data could not be received.\n" ;
     else
       res+= recvData(cp);
     return res;
@@ -990,7 +999,8 @@ int XC::CorotCrdTransf2d::recvSelf(const CommParameters &cp)
 const XC::Vector &XC::CorotCrdTransf2d::getPointGlobalCoordFromLocal(const Vector &xl) const
   {
     static Vector xg(3);
-    std::cerr << " XC::CorotCrdTransf2d::getPointGlobalCoordFromLocal: not implemented yet" ;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet." << std::endl;
     
     return xg;  
   }
@@ -998,8 +1008,8 @@ const XC::Vector &XC::CorotCrdTransf2d::getPointGlobalCoordFromLocal(const Vecto
 
 const XC::Vector &XC::CorotCrdTransf2d::getPointGlobalDisplFromBasic(double xi, const Vector &uxb) const
   {
-    std::cerr << " XC::CorotCrdTransf2d::getPointGlobalDisplFromBasic: not implemented yet" ;
-    
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet." << std::endl;
     return uxg;  
   }
 
@@ -1055,8 +1065,11 @@ const XC::Vector &XC::CorotCrdTransf2d::getGlobalResistingForceShapeSensitivity(
 
     if(nodeIOffset.Norm() != 0.0 || nodeJOffset.Norm() != 0.0)
       {
-        std::cerr << "ERROR: Currently a node offset cannot be used in " << std::endl
-                  << " conjunction with random nodal coordinates." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+ 	          << "; ERROR: currently a node offset cannot be used in "
+		  << std::endl
+                  << " conjunction with random nodal coordinates."
+		  << std::endl;
       }
   
     double dcosThetadh= 0.0;
@@ -1332,8 +1345,11 @@ double XC::CorotCrdTransf2d::getdLdh(void)
     
     if(nodeIOffset.Norm() != 0.0 || nodeJOffset.Norm() != 0.0)
       {
-        std::cerr << "ERROR: Currently a node offset cannot be used in " << std::endl
-                  << " conjunction with random nodal coordinates." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; ERROR: currently a node offset cannot be used in "
+		  << std::endl
+                  << " conjunction with random nodal coordinates."
+		  << std::endl;
       }
   
     if(nodeIid == 1) // here x1 is random
@@ -1358,8 +1374,11 @@ double XC::CorotCrdTransf2d::getd1overLdh(void)
     
     if(nodeIOffset.Norm() != 0.0 || nodeJOffset.Norm() != 0.0)
       {
-        std::cerr << "ERROR: Currently a node offset cannot be used in " << std::endl
-                  << " conjunction with random nodal coordinates." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; ERROR: currently a node offset cannot be used in "
+		  << std::endl
+                  << " conjunction with random nodal coordinates."
+		  << std::endl;
       }
   
     if(nodeIid == 1) // here x1 is random

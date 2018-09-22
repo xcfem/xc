@@ -64,7 +64,7 @@
 // What: "@(#) Channel.h, revA"
 
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include <set>
 
 namespace XC {
@@ -88,7 +88,7 @@ class FEM_ObjectBroker;
 //! channel in one process space is associated with a channel in the
 //! address space of another process space. The interaction is in the form
 //! of data sent between the two processes along the connection line.
-class Channel: public EntCmd
+class Channel: public CommandEntity
   {
   private:
     static int numChannel; //!< Number of channels.
@@ -98,7 +98,7 @@ class Channel: public EntCmd
     int sendMovable(int commitTag, MovableObject &);
     int receiveMovable(int commitTag, MovableObject &, FEM_ObjectBroker &);
   public:
-    Channel(EntCmd *owr= nullptr);
+    Channel(CommandEntity *owr= nullptr);
     inline virtual ~Channel(void) {}
 
     // methods to set up the channel in an actor space

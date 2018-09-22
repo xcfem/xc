@@ -29,7 +29,7 @@
 #ifndef MeshComponentContainer_h
 #define MeshComponentContainer_h
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "utility/actor/actor/MovableObject.h"
 
 
@@ -37,10 +37,10 @@ namespace XC {
 class Domain;
 
 //! @brief Base class for the element and constraint containers.
-class MeshComponentContainer: public EntCmd, public MovableObject
+class MeshComponentContainer: public CommandEntity, public MovableObject
   {
   public:
-    MeshComponentContainer(EntCmd *owr,int classTag, int dbTag= 0);
+    MeshComponentContainer(CommandEntity *owr,int classTag, int dbTag= 0);
 
     const Domain *getDomain(void) const;
     Domain *getDomain(void);

@@ -28,7 +28,7 @@ class_<XC::NodeLocker,XC::NodeLocker *, bases<XC::ForceReprComponent>, boost::no
   .def("clearAll",&XC::NodeLocker::clearAll)
   ;
 
-class_<XC::LoadContainer, bases<EntCmd>, boost::noncopyable >("LoadContainer", no_init)
+class_<XC::LoadContainer, bases<CommandEntity>, boost::noncopyable >("LoadContainer", no_init)
   .add_property("getNodalLoadIter", make_function( &XC::LoadContainer::getNodalLoads, return_internal_reference<>() ),"return an iterator over the nodal loads.")
   .add_property("getElementalLoadIter", make_function( &XC::LoadContainer::getElementalLoads, return_internal_reference<>() ),"return an iterator over the elemental loads.")
   .add_property("getNumNodalLoads",&XC::LoadContainer::getNumNodalLoads,"return the number of nodal loads.")
@@ -92,7 +92,7 @@ class_<XC::LoadCombinationGroup, bases<XC::LoadHandlerMember,XC::LoadCombination
   .def("clear", &XC::LoadCombinationGroup::clear)
   ;
 
-class_<XC::TimeSeries, bases<EntCmd,XC::MovableObject>, boost::noncopyable >("TimeSeries", no_init)
+class_<XC::TimeSeries, bases<CommandEntity,XC::MovableObject>, boost::noncopyable >("TimeSeries", no_init)
 .def("getFactor", &XC::TimeSeries::getFactor,"getFactor(pseudoTime): get load factor.")
   .add_property("getDuration", &XC::TimeSeries::getDuration)
   .add_property("getPeakFactor", &XC::TimeSeries::getPeakFactor)

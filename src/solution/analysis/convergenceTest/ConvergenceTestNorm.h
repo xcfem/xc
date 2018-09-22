@@ -44,8 +44,8 @@ class ConvergenceTestNorm: public ConvergenceTestTol
 
   public:
     // constructors
-    ConvergenceTestNorm(EntCmd *owr,int classTag);	    	
-    ConvergenceTestNorm(EntCmd *owr,int cTag,double tl, int maxNIter, int printFlag, int normType, int sz);
+    ConvergenceTestNorm(CommandEntity *owr,int classTag);	    	
+    ConvergenceTestNorm(CommandEntity *owr,int cTag,double tl, int maxNIter, int printFlag, int normType, int sz);
 
     virtual int start(void);  
   };

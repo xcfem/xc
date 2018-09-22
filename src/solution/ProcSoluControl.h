@@ -29,7 +29,7 @@
 #ifndef PROCSOLUCONTROL_H
 #define PROCSOLUCONTROL_H
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "analysis/MapModelWrapper.h"
 #include "AnalysisAggregationMap.h"
 
@@ -41,7 +41,7 @@ class Domain;
 //!  @ingroup Solu
 //! 
 //! @brief Container for the objects that control the solution procedure.
-class ProcSoluControl: public EntCmd
+class ProcSoluControl: public CommandEntity
   {
   private:
     MapModelWrapper solu_models; //!< Wrapper for the finite elment model

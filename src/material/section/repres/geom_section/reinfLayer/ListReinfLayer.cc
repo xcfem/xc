@@ -126,7 +126,7 @@ XC::ReinfLayer *XC::ListReinfLayer::push_back(const ReinfLayer &reg)
 //! that owns this one.
 const XC::GeomSection *XC::ListReinfLayer::getGeomSection(void) const
   {
-    const EntCmd *owr= Owner();
+    const CommandEntity *owr= Owner();
     assert(owr);
     const GeomSection *retval= dynamic_cast<const GeomSection *>(owr);
     assert(retval);

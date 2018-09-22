@@ -29,7 +29,7 @@
 #ifndef PrismaticBarCrossSectionsVector_h
 #define PrismaticBarCrossSectionsVector_h
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "utility/actor/actor/MovableObject.h"
 #include <vector>
 
@@ -45,7 +45,7 @@ class BeamStrainLoad;
 //
 //! @brief Vector of pointers to PrismaticBarCrossSectiones.
 //! used to store the sections for each integration point.
-class PrismaticBarCrossSectionsVector: public EntCmd, public std::vector<PrismaticBarCrossSection *>, public MovableObject
+class PrismaticBarCrossSectionsVector: public CommandEntity, public std::vector<PrismaticBarCrossSection *>, public MovableObject
   {
   protected:
     void clear_sections(void);

@@ -21,7 +21,7 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::ID, bases<EntCmd> >("ID")
+class_<XC::ID, bases<CommandEntity> >("ID")
   .def(vector_indexing_suite<XC::ID>() )  
   .def(init<boost::python::list>())
   .def(init<std::set<int> >())
@@ -40,7 +40,7 @@ implicitly_convertible<boost::python::list,XC::ID>();
 def("id_to_py_list",XC::xc_id_to_py_list);
 
 double &(XC::Vector::*getItemVector)(const size_t &)= &XC::Vector::at;
-class_<XC::Vector, bases<EntCmd> >("Vector")
+class_<XC::Vector, bases<CommandEntity> >("Vector")
   .def(init<boost::python::list>())
   .def("__getitem__",getItemVector, return_value_policy<return_by_value>())
   .def("__iter__",range(&XC::Vector::begin, &XC::Vector::end))
@@ -72,7 +72,7 @@ implicitly_convertible<XC::Vector,boost::python::list>();
 implicitly_convertible<boost::python::list,XC::Vector>();
 
 double &(XC::Matrix::*at)(int,int)= &XC::Matrix::operator();
-class_<XC::Matrix, bases<EntCmd> >("Matrix")
+class_<XC::Matrix, bases<CommandEntity> >("Matrix")
   .def(init<boost::python::list>())
   .def("__call__",at, return_value_policy<return_by_value>())
   .def(self * double())

@@ -39,11 +39,11 @@
 
 
 XC::MotionHistory::MotionHistory(const double &dt)
-  :EntCmd(), theAccelSeries(nullptr), theVelSeries(nullptr), theDispSeries(nullptr),
+  :CommandEntity(), theAccelSeries(nullptr), theVelSeries(nullptr), theDispSeries(nullptr),
   theIntegrator(nullptr), delta(dt) {}
 
 XC::MotionHistory::MotionHistory(const MotionHistory &other)
-  : EntCmd(other), theAccelSeries(nullptr), theVelSeries(nullptr), theDispSeries(nullptr),
+  : CommandEntity(other), theAccelSeries(nullptr), theVelSeries(nullptr), theDispSeries(nullptr),
   theIntegrator(nullptr), delta(other.delta)
   {
     if(other.theAccelSeries)
@@ -57,7 +57,7 @@ XC::MotionHistory::MotionHistory(const MotionHistory &other)
 
 XC::MotionHistory &XC::MotionHistory::operator=(const MotionHistory &other)
   {
-    EntCmd::operator=(other);
+    CommandEntity::operator=(other);
     clearSeries();
     if(theIntegrator)
       delete(theIntegrator);

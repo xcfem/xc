@@ -32,7 +32,7 @@
 //!
 //! @param owr: object that owns this one.
 //! @param classTag: identifier of the object class.
-XC::ConvergenceTestNorm::ConvergenceTestNorm(EntCmd *owr,int classTag)	    	
+XC::ConvergenceTestNorm::ConvergenceTestNorm(CommandEntity *owr,int classTag)	    	
   : ConvergenceTestTol(owr,classTag), norm0(0.0) {}
 
 
@@ -45,7 +45,7 @@ XC::ConvergenceTestNorm::ConvergenceTestNorm(EntCmd *owr,int classTag)
 //! @param printFlag: what, if anything, is printed on each test.
 //! @param normType: type of norm to use (1-norm, 2-norm, p-norm, max-norm).
 //! @param sz_norms: size of the vector that contains computed norms.
-XC::ConvergenceTestNorm::ConvergenceTestNorm(EntCmd *owr,int classTag,double theTol, int maxIter, int printFlag, int normType, int sz_norms)
+XC::ConvergenceTestNorm::ConvergenceTestNorm(CommandEntity *owr,int classTag,double theTol, int maxIter, int printFlag, int normType, int sz_norms)
   : ConvergenceTestTol(owr,classTag,theTol,maxIter,printFlag,normType,sz_norms), norm0(0.0) {}
 
 //! Sets an integer indicating the current number of iterations, {\em

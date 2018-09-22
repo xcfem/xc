@@ -37,7 +37,7 @@
 
 //! @brief Default constructor.
 XC::MapModelWrapper::MapModelWrapper(ProcSoluControl *owr)
-  : EntCmd(owr) {}
+  : CommandEntity(owr) {}
 
 //! @brief Return true if the method whose name is
 //! passed as parameter exists.

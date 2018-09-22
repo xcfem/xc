@@ -57,7 +57,7 @@
 //! @brief Default constructor.
 //!
 //! @param owr: object that owns this one.
-XC::CTestNormUnbalance::CTestNormUnbalance(EntCmd *owr)	    	
+XC::CTestNormUnbalance::CTestNormUnbalance(CommandEntity *owr)	    	
   : ConvergenceTestTol(owr,CONVERGENCE_TEST_CTestNormUnbalance)
   {}
 
@@ -69,7 +69,7 @@ XC::CTestNormUnbalance::CTestNormUnbalance(EntCmd *owr)
 //! @param maxIter the max number of iterations to be performed.
 //! @param printFlag: what, if anything, is printed on each test.
 //! @param normType: type of norm to use (1-norm, 2-norm, p-norm, max-norm).
-XC::CTestNormUnbalance::CTestNormUnbalance(EntCmd *owr,double theTol, int maxIter, int printFlag, int normType)
+XC::CTestNormUnbalance::CTestNormUnbalance(CommandEntity *owr,double theTol, int maxIter, int printFlag, int normType)
   : ConvergenceTestTol(owr,CONVERGENCE_TEST_CTestNormUnbalance,theTol,maxIter,printFlag,normType,maxIter)
   {}
 

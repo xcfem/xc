@@ -21,6 +21,6 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::Channel, bases<EntCmd>, boost::noncopyable  >("Channel", no_init);
+class_<XC::Channel, bases<CommandEntity>, boost::noncopyable  >("Channel", no_init);
 
 

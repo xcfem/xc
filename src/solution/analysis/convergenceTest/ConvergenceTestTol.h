@@ -49,8 +49,8 @@ class ConvergenceTestTol: public ConvergenceTest
     int recvData(const CommParameters &);
   public:
     // constructors
-    ConvergenceTestTol(EntCmd *owr,int classTag);	    	
-    ConvergenceTestTol(EntCmd *owr,int classTag,double tol, int maxNumIter, int printFlag, int normType,int sz_norms= 1);
+    ConvergenceTestTol(CommandEntity *owr,int classTag);	    	
+    ConvergenceTestTol(CommandEntity *owr,int classTag,double tol, int maxNumIter, int printFlag, int normType,int sz_norms= 1);
 
     void setTolerance(double newTol);
     double getTolerance(void) const;

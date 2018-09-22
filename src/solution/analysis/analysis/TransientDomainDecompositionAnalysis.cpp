@@ -106,7 +106,7 @@ bool XC::TransientDomainDecompositionAnalysis::doesIndependentAnalysis(void)
 int XC::TransientDomainDecompositionAnalysis::analyze(double dT)
   {
     assert(solution_method);
-    EntCmd *old= solution_method->Owner();
+    CommandEntity *old= solution_method->Owner();
     solution_method->set_owner(this);
     int result = 0;
     Domain *the_Domain = this->getDomainPtr();

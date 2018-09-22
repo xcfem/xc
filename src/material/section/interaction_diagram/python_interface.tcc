@@ -34,13 +34,13 @@ class_<XC::DeformationPlane, bases<Plane> >("DeformationPlane")
 class_<XC::ComputePivots, bases<Ref3d3d>, boost::noncopyable >("ComputePivots", no_init)
   ;
 
-class_<XC::PivotsUltimateStrains, bases<EntCmd>, boost::noncopyable >("PivotsUltimateStrains", no_init)
+class_<XC::PivotsUltimateStrains, bases<CommandEntity>, boost::noncopyable >("PivotsUltimateStrains", no_init)
   .add_property("ultimateStrainAPivot",make_function(&XC::PivotsUltimateStrains::getUltimateStrainAPivot,return_value_policy<copy_const_reference>()),&XC::PivotsUltimateStrains::setUltimateStrainAPivot)
   .add_property("ultimateStrainBPivot",make_function(&XC::PivotsUltimateStrains::getUltimateStrainBPivot,return_value_policy<copy_const_reference>()),&XC::PivotsUltimateStrains::setUltimateStrainBPivot)
   .add_property("ultimateStrainCPivot",make_function(&XC::PivotsUltimateStrains::getUltimateStrainCPivot,return_value_policy<copy_const_reference>()),&XC::PivotsUltimateStrains::setUltimateStrainCPivot)
   ;
 
-class_<XC::InteractionDiagramData, bases<EntCmd>>("InteractionDiagramParameters")
+class_<XC::InteractionDiagramData, bases<CommandEntity>>("InteractionDiagramParameters")
   .add_property("umbral",make_function(&XC::InteractionDiagramData::getUmbral,return_value_policy<copy_const_reference>()),&XC::InteractionDiagramData::setUmbral)
   .add_property("incEps",make_function(&XC::InteractionDiagramData::getIncEps,return_value_policy<copy_const_reference>()),&XC::InteractionDiagramData::setIncEps)
   .add_property("incTheta",make_function(&XC::InteractionDiagramData::getIncTheta,return_value_policy<copy_const_reference>()),&XC::InteractionDiagramData::setIncTheta)

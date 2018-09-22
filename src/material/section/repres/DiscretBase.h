@@ -30,7 +30,7 @@
 #define DiscretBase_h 
 
 
-#include "xc_utils/src/nucleo/EntConNmb.h"
+#include "xc_utils/src/kernel/NamedEntity.h"
 
 namespace XC {
   class Material;
@@ -42,7 +42,7 @@ namespace XC {
 //! @ingroup MATSCCRepres
 //!
 //! @brief Base class for cross-section discretization.
-class DiscretBase: public EntConNmb
+class DiscretBase: public NamedEntity
   {
   private:
     Material *mat; //!< Pointer to the fibers material.

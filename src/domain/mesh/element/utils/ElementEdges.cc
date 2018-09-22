@@ -37,7 +37,7 @@
 
 //! @brief Constructor.
 XC::ElementEdges::ElementEdges(void)
-  : EntCmd() {}
+  : CommandEntity() {}
 
 //! @brief Set the pointers from the element identifiers.
 void XC::ElementEdges::setPtrs(Domain *theDomain, const ID &theElementTags, const ID &theEdgesIndex)

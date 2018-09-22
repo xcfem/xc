@@ -63,7 +63,7 @@
 // What: "@(#) Recorder.h, revA"
 
 #include <utility/actor/actor/MovableObject.h>
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 
 namespace XC {
 class Domain;
@@ -83,7 +83,7 @@ class Domain;
 //! record()} is a method which is called by the Domain object during a
 //! commit()}. The {\em playback() method can be called by the analyst after
 //! the analysis has been performed.
-class Recorder: public MovableObject, public EntCmd
+class Recorder: public MovableObject, public CommandEntity
   {
   public:
     Recorder(int classTag);

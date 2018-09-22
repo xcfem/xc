@@ -66,7 +66,7 @@
 #define SystemOfEqn_h
 
 #include <utility/actor/actor/MovableObject.h>
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 
 namespace XC {
 class Graph;
@@ -86,7 +86,7 @@ class AnalysisAggregation;
 //! A Solver object, which is associated with the SystemOfEqn object, is
 //! responsible for performing the numerical operations to solve for the
 //! system of equations.
-class SystemOfEqn: public MovableObject, public EntCmd
+class SystemOfEqn: public MovableObject, public CommandEntity
   {
     AnalysisAggregation *getAnalysisAggregation(void);
     const AnalysisAggregation *getAnalysisAggregation(void) const;

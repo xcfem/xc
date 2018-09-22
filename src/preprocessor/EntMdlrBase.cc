@@ -47,12 +47,12 @@ XC::Preprocessor *XC::EntMdlrBase::getPreprocessor(void)
 
 //! @brief Constructor.
 XC::EntMdlrBase::EntMdlrBase(const std::string &nmb,Preprocessor *prep)
-  : EntConNmb(nmb,prep), MovableObject(0) {}
+  : NamedEntity(nmb,prep), MovableObject(0) {}
 
 //! @brief += operator.
 XC::EntMdlrBase &XC::EntMdlrBase::operator+=(const EntMdlrBase &other)
   {
-    EntConNmb::operator+=(other);
+    NamedEntity::operator+=(other);
     labels+= other.labels;
     return *this;
   }
@@ -60,7 +60,7 @@ XC::EntMdlrBase &XC::EntMdlrBase::operator+=(const EntMdlrBase &other)
 //! @brief -= operator.
 XC::EntMdlrBase &XC::EntMdlrBase::operator-=(const EntMdlrBase &other)
   {
-    EntConNmb::operator-=(other);
+    NamedEntity::operator-=(other);
     labels-= other.labels;
     return *this;
   }
@@ -68,7 +68,7 @@ XC::EntMdlrBase &XC::EntMdlrBase::operator-=(const EntMdlrBase &other)
 //! @brief *= operator (intersection).
 XC::EntMdlrBase &XC::EntMdlrBase::operator*=(const EntMdlrBase &other)
   {
-    EntConNmb::operator*=(other);
+    NamedEntity::operator*=(other);
     labels*= other.labels;
     return *this;
   }

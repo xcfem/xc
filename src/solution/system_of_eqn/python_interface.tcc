@@ -21,9 +21,9 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::SystemOfEqn, bases<XC::MovableObject,EntCmd>, boost::noncopyable >("SystemOfEqn", no_init);
+class_<XC::SystemOfEqn, bases<XC::MovableObject,CommandEntity>, boost::noncopyable >("SystemOfEqn", no_init);
 
-class_<XC::Solver, bases<XC::MovableObject,EntCmd>, boost::noncopyable >("Solver", no_init);
+class_<XC::Solver, bases<XC::MovableObject,CommandEntity>, boost::noncopyable >("Solver", no_init);
 
 #include "linearSOE/python_interface.tcc"
 #include "eigenSOE/python_interface.tcc"

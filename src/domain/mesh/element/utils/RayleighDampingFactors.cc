@@ -33,7 +33,7 @@
 
 //! @brief Constructor.
 XC::RayleighDampingFactors::RayleighDampingFactors(void)
-  :EntCmd(), MovableObject(0), alphaM(0.0), betaK(0.0), betaK0(0.0), betaKc(0.0) {}
+  :CommandEntity(), MovableObject(0), alphaM(0.0), betaK(0.0), betaK0(0.0), betaKc(0.0) {}
 
 //! @brief Constructor.
 //!
@@ -42,11 +42,11 @@ XC::RayleighDampingFactors::RayleighDampingFactors(void)
 //! @param bK0: factor applied to elements initial stiffness matrix.
 //! @param bKc: factor applied to elements committed stiffness matrix.
 XC::RayleighDampingFactors::RayleighDampingFactors(const double &aM,const double &bK,const double &bK0,const double &bKc)
-  :EntCmd(), MovableObject(0), alphaM(aM), betaK(bK), betaK0(bK0), betaKc(bKc) {}
+  :CommandEntity(), MovableObject(0), alphaM(aM), betaK(bK), betaK0(bK0), betaKc(bKc) {}
 
 //! @brief constructor
 XC::RayleighDampingFactors::RayleighDampingFactors(const Vector &v)
-  : EntCmd(), MovableObject(0), alphaM(v[0]), betaK(v[1]), betaK0(v[2]), betaKc(v[3]) {}
+  : CommandEntity(), MovableObject(0), alphaM(v[0]), betaK(v[1]), betaK0(v[2]), betaKc(v[3]) {}
 
 //! @brief Print Rayleigh factors values.
 void XC::RayleighDampingFactors::Print(std::ostream &s, int flag) const

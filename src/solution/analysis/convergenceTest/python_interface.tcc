@@ -21,7 +21,7 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-class_<XC::ConvergenceTest, bases<XC::MovableObject,EntCmd>, boost::noncopyable >("ConvergenceTest", no_init)
+class_<XC::ConvergenceTest, bases<XC::MovableObject,CommandEntity>, boost::noncopyable >("ConvergenceTest", no_init)
   .add_property("maxNumIter", &XC::ConvergenceTest::getMaxNumIter, &XC::ConvergenceTest::setMaxNumIter)
   .add_property("currentIter", &XC::ConvergenceTest::getCurrentIter, &XC::ConvergenceTest::setCurrentIter)
   .add_property("printFlag", &XC::ConvergenceTest::getPrintFlag, &XC::ConvergenceTest::setPrintFlag)

@@ -20,7 +20,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //python_interface.cc
-class_<XC::FieldInfo, bases<EntConNmb>, boost::noncopyable >("FieldInfo", no_init)
+class_<XC::FieldInfo, bases<NamedEntity>, boost::noncopyable >("FieldInfo", no_init)
   .add_property("isDefinedOnNodes",&XC::FieldInfo::isDefinedOnNodes,"True if field defined on nodes.")
   .add_property("isDefinedOnElements",&XC::FieldInfo::isDefinedOnElements,"True if field defined on elements.")
   .add_property("isDefinedOnGaussPoints",&XC::FieldInfo::isDefinedOnElements,"True if field defined on element's gauss points.")
@@ -43,7 +43,7 @@ class_<dq_fields, boost::noncopyable >("dqFields", no_init)
   .def(vector_indexing_suite<dq_fields >())  
   ;
 
-class_<XC::MapFields, bases<EntCmd,dq_fields> >("MapFields")
+class_<XC::MapFields, bases<CommandEntity,dq_fields> >("MapFields")
   .def("newField",make_function( &XC::MapFields::newField, return_internal_reference<>() ),"Defines a new field.")
   ;
 

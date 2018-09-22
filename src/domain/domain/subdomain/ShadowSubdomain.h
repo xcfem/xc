@@ -116,8 +116,8 @@ class ShadowSubdomain: public Shadow, public Subdomain
     virtual int buildNodeGraph(Graph &theNodeGraph);    
     
   public:
-    ShadowSubdomain(int tag, MachineBroker &theMachineBroker, FEM_ObjectBroker &theObjectBroker,DataOutputHandler::map_output_handlers *oh,EntCmd *owr);
-    ShadowSubdomain(int tag, Channel &, FEM_ObjectBroker &,DataOutputHandler::map_output_handlers *,EntCmd *);
+    ShadowSubdomain(int tag, MachineBroker &theMachineBroker, FEM_ObjectBroker &theObjectBroker,DataOutputHandler::map_output_handlers *oh,CommandEntity *owr);
+    ShadowSubdomain(int tag, Channel &, FEM_ObjectBroker &,DataOutputHandler::map_output_handlers *,CommandEntity *);
     virtual  ~ShadowSubdomain(void);    
 
     // method added for parallel domain generation

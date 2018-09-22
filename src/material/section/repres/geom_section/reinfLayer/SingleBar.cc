@@ -47,7 +47,7 @@ XC::SingleBar::SingleBar(ListReinfLayer *owr,Material *mat, double reinfBarArea,
 //! @brief Constructor.
 XC::SingleBar::SingleBar(const ReinfBar &bar)
   : ReinfLayer(nullptr,bar.getMaterialPtr(),1,bar.getDiameter(),bar.getArea()),posit(getPosition()) 
-  { set_owner(const_cast<EntCmd *>(bar.Owner())); }
+  { set_owner(const_cast<CommandEntity *>(bar.Owner())); }
 
 //! @brief Sets the position of the bar.
 void XC::SingleBar::setPosition(const Vector &Position)

@@ -66,7 +66,7 @@
 // What: "@(#) AnalysisModel.h, revA"
 
 #include <utility/actor/actor/MovableObject.h>
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "solution/graph/graph/DOF_Graph.h"
 #include "solution/graph/graph/DOF_GroupGraph.h"
 #include "utility/tagged/storage/ArrayOfTaggedObjects.h"
@@ -130,7 +130,7 @@ class ModelWrapper;
 //! 
 //! Each subclass of AnalysisModel must have its own subclasses
 //! of FE\_ELEIter and DOF\_GrpIter.
-class AnalysisModel: public MovableObject, public EntCmd
+class AnalysisModel: public MovableObject, public CommandEntity
   {
   private:
     int numFE_Ele; //!< number of FE_Elements objects added
@@ -171,7 +171,7 @@ class AnalysisModel: public MovableObject, public EntCmd
     friend class ModelWrapper;
     friend class FEM_ObjectBroker;
     AnalysisModel(ModelWrapper *owr= nullptr);
-    AnalysisModel(int classTag,EntCmd *owr);
+    AnalysisModel(int classTag,CommandEntity *owr);
     AnalysisModel(const AnalysisModel &);
     AnalysisModel &operator=(const AnalysisModel &);
     AnalysisModel *getCopy(void) const;

@@ -43,11 +43,11 @@
 
 //! @brief Constructor.
 XC::NodePtrs::NodePtrs(Element *owr,const size_t &sz)
-  : EntCmd(owr), vector_ptr_nodes(sz,nullptr) {}
+  : CommandEntity(owr), vector_ptr_nodes(sz,nullptr) {}
 
 //! @brief Copy constructor.
 XC::NodePtrs::NodePtrs(const NodePtrs &other)
-  : EntCmd(other), vector_ptr_nodes(other.size(),nullptr) 
+  : CommandEntity(other), vector_ptr_nodes(other.size(),nullptr) 
   {
     const size_t sz= size();
     if(sz>0)
@@ -63,7 +63,7 @@ XC::NodePtrs::NodePtrs(const NodePtrs &other)
 XC::NodePtrs &XC::NodePtrs::operator=(const NodePtrs &other)
   {
     inic();
-    EntCmd::operator=(other);
+    CommandEntity::operator=(other);
     resize(other.size(),nullptr);
     const size_t sz= size();
     if(sz>0)
@@ -372,7 +372,7 @@ BND3d XC::NodePtrs::Bnd(const double &factor) const
       {
 	const_iterator i= begin();
 	const Node *n= (*i);
-	const Pos3d p= n->getCurrentPosition3d(factor);
+	Pos3d p= n->getCurrentPosition3d(factor);
 	retval= BND3d(p,p);
 	i++;
 	for(;i!=end();i++)

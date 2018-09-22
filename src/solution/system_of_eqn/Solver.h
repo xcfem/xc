@@ -67,7 +67,7 @@
 #define Solver_h
 
 #include <utility/actor/actor/MovableObject.h>
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 
 namespace XC {
 
@@ -81,7 +81,7 @@ namespace XC {
 //!
 //! object is responsible for performing
 //! the numerical operations on its associated SystemOfEqn object.
-class Solver : public MovableObject, public EntCmd
+class Solver : public MovableObject, public CommandEntity
   {
   protected:
     Solver(int classTag);    

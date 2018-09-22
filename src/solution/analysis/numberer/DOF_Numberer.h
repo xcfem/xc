@@ -65,7 +65,7 @@
 #define DOF_Numberer_h
 
 #include <utility/actor/actor/MovableObject.h>
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 
 namespace XC {
 class AnalysisModel;
@@ -90,7 +90,7 @@ class ModelWrapper;
 //! assigns the equation numbers to the individual degrees-of-freedom. Subtypes
 //! may wish to implement the numbering in a more efficient manner by using
 //! the FE\_Element and DOF\_Group objects directly.
-class DOF_Numberer: public MovableObject, public EntCmd
+class DOF_Numberer: public MovableObject, public CommandEntity
   {
   private:
     ModelWrapper *getModelWrapper(void);

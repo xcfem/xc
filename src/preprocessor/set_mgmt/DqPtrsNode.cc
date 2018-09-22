@@ -34,7 +34,7 @@
 #include "xc_utils/src/geom/d3/BND3d.h"
 
 //! @brief Constructor.
-XC::DqPtrsNode::DqPtrsNode(EntCmd *owr)
+XC::DqPtrsNode::DqPtrsNode(CommandEntity *owr)
   : DqPtrsKDTree<Node,KDTreeNodes>(owr) {}
 
 //! @brief Copy constructor.

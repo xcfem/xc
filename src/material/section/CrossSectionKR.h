@@ -37,7 +37,7 @@ namespace XC {
 //! @ingroup MATSCC
 //
 //! @brief Stiffness matrix and resultant vector for a section.
-class CrossSectionKR: public EntCmd
+class CrossSectionKR: public CommandEntity
   {
     friend class FiberPtrDeque;
     double rData[4]; //!< stress resultant vector data.

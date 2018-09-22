@@ -77,8 +77,8 @@ class CTestNormDispIncr: public ConvergenceTestTol
   {
   public:
     // constructors
-    CTestNormDispIncr(EntCmd *owr= nullptr);	    	
-    CTestNormDispIncr(EntCmd *owr,double tol, int maxNumIter, int printFlag, int normType=2);
+    CTestNormDispIncr(CommandEntity *owr= nullptr);	    	
+    CTestNormDispIncr(CommandEntity *owr,double tol, int maxNumIter, int printFlag, int normType=2);
 
     ConvergenceTest *getCopy(void) const;
     

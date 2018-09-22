@@ -36,7 +36,7 @@ namespace XC {
 //! @ingroup MATSCCFibers
 //
 //! @brief Fiber sets container.
-class FiberSets: public std::map<std::string,FiberSet>, public EntCmd
+class FiberSets: public std::map<std::string,FiberSet>, public CommandEntity
   {
   public:
     FiberSets(void); 

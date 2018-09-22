@@ -65,7 +65,7 @@
 //
 // What: "@(#) Matrix.h, revA"
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "xc_basic/src/matrices/m_double.h"
 #include "Vector.h"
 
@@ -105,7 +105,7 @@ class AuxMatrix;
 //! the passing of data between objects in the system. To allow subclassing
 //! could reduce the efficiency of the program due to the manner in which
 //! virtual functions are implemented.
-class Matrix: public EntCmd
+class Matrix: public CommandEntity
   {
   private:
     static double MATRIX_NOT_VALID_ENTRY;

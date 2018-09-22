@@ -33,11 +33,11 @@
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
 //! @brief Constructor.
-XC::AggregatorAdditions::AggregatorAdditions(EntCmd *owner)
+XC::AggregatorAdditions::AggregatorAdditions(CommandEntity *owner)
   : DqUniaxialMaterial(owner), matCodes(0) {}
 
 //! @brief Constructor.
-XC::AggregatorAdditions::AggregatorAdditions(EntCmd *owner,const UniaxialMaterial &um, int c)
+XC::AggregatorAdditions::AggregatorAdditions(CommandEntity *owner,const UniaxialMaterial &um, int c)
   : DqUniaxialMaterial(owner,um), matCodes(1)
   {
     matCodes(0)= c;

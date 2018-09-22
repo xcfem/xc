@@ -120,7 +120,7 @@ XC::Pnt *XC::PntPtrArray3d::findPoint(const int &tag)
 const XC::MultiBlockTopology *XC::PntPtrArray3d::getMultiBlockTopology(void) const
   {
     const MultiBlockTopology *retval= nullptr;
-    const EntCmd *ptr= Owner();
+    const CommandEntity *ptr= Owner();
     assert(ptr);
     const Framework3d *e3d= dynamic_cast<const Framework3d *>(ptr);
     if(e3d)
@@ -133,7 +133,7 @@ const XC::MultiBlockTopology *XC::PntPtrArray3d::getMultiBlockTopology(void) con
 XC::MultiBlockTopology *XC::PntPtrArray3d::getMultiBlockTopology(void)
   {
     MultiBlockTopology *retval= nullptr;
-    EntCmd *ptr= Owner();
+    CommandEntity *ptr= Owner();
     assert(ptr);
     Framework3d *e3d= dynamic_cast<Framework3d *>(ptr);
     if(e3d)

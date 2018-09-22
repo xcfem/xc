@@ -79,7 +79,7 @@ void XC::ZeroLengthMaterials::clear(void)
 XC::MaterialHandler *XC::ZeroLengthMaterials::get_material_handler(void)
   {
     MaterialHandler *retval= nullptr;
-    EntCmd *owr= Owner();
+    CommandEntity *owr= Owner();
     if(owr)
       {
         ZeroLength *elem= dynamic_cast<ZeroLength *>(owr);

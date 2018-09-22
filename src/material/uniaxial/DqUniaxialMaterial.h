@@ -31,7 +31,7 @@
 #ifndef DQUNIAXIALMATERIAL_H
 #define DQUNIAXIALMATERIAL_H
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include <deque>
 #include <material/uniaxial/UniaxialMaterial.h>
 
@@ -41,7 +41,7 @@ namespace XC {
 //! @ingroup MatUnx
 //
 //! @brief Pointers to UniaxialMaterial container.
-class DqUniaxialMaterial: public EntCmd, public MovableObject, public std::deque<UniaxialMaterial *>
+class DqUniaxialMaterial: public CommandEntity, public MovableObject, public std::deque<UniaxialMaterial *>
   {
     void free_mem(void);
   public:
@@ -58,10 +58,10 @@ class DqUniaxialMaterial: public EntCmd, public MovableObject, public std::deque
 
 
   public:
-    DqUniaxialMaterial(EntCmd *owner= nullptr,const size_t &sz= 0);
-    DqUniaxialMaterial(EntCmd *owner,const UniaxialMaterial &);
-    DqUniaxialMaterial(EntCmd *owner,const UniaxialMaterial &um,const size_t &sz);
-    DqUniaxialMaterial(EntCmd *owner,const UniaxialMaterial *um,const size_t &sz);
+    DqUniaxialMaterial(CommandEntity *owner= nullptr,const size_t &sz= 0);
+    DqUniaxialMaterial(CommandEntity *owner,const UniaxialMaterial &);
+    DqUniaxialMaterial(CommandEntity *owner,const UniaxialMaterial &um,const size_t &sz);
+    DqUniaxialMaterial(CommandEntity *owner,const UniaxialMaterial *um,const size_t &sz);
     DqUniaxialMaterial(const DqUniaxialMaterial &);
     DqUniaxialMaterial(const DqUniaxialMaterial &,SectionForceDeformation *s);
     DqUniaxialMaterial &operator=(const DqUniaxialMaterial &);

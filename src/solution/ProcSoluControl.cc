@@ -38,7 +38,7 @@
 
 //! @brief Default constructor.
 XC::ProcSoluControl::ProcSoluControl(ProcSolu *owr)
-  : EntCmd(owr), solu_models(this), solu_methods(this) {}
+  : CommandEntity(owr), solu_models(this), solu_methods(this) {}
 
 
 XC::ProcSolu *XC::ProcSoluControl::getProcSolu(void)

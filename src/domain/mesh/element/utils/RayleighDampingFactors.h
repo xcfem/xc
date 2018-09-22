@@ -29,7 +29,7 @@
 #ifndef RayleighDampingFactors_h
 #define RayleighDampingFactors_h
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "utility/actor/actor/MovableObject.h"
 
 class Pos3dArray3d;
@@ -55,7 +55,7 @@ class Information;
 //! - Petrini, Lorenza , Maggi, Claudio , Priestley, M. J. Nigel and Calvi,
 //! G. Michele (2008) <a href="https://www.researchgate.net/publication/232862035_Experimental_Verification_of_Viscous_Damping_Modeling_for_Inelastic_Time_History_Analyzes">"Experimental Verification of Viscous Damping Modeling for Inelastic Time History Analyzes"</a>, Journal of Earthquake Engineering, 12:S1, pp. 125 — 145
 //! - Hall, J. F.(2006) <a href="https://www.usbr.gov/ssle/damsafety/TechDev/DSOTechDev/DSO-07-03.pdf">"Problems encountered from the use (or misuse) of Rayleigh damping"</a> Earthquake Engineering and Structural Dynamic, 35, 525–545 
-class RayleighDampingFactors: public EntCmd, public MovableObject
+class RayleighDampingFactors: public CommandEntity, public MovableObject
   {
     double alphaM; //!< factor applied to elements or nodes mass matrix. 
     double betaK; //!< factor applied to elements current stiffness matrix.

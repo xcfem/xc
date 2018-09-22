@@ -27,7 +27,7 @@
 
 //! @brief Constructor.
 XC::FieldInfo::FieldInfo(const std::string &nmb)
-  : EntConNmb(nmb),nmb_set("total"),on_nodes(true), on_gauss_points(false), componentsType("double"),
+  : NamedEntity(nmb),nmb_set("total"),on_nodes(true), on_gauss_points(false), componentsType("double"),
     iterationNumber(0), orderNumber(0), time(0)  {}
 
 void XC::FieldInfo::definedOnGaussPoints(void)

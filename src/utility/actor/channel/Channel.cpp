@@ -70,8 +70,8 @@
 int XC::Channel::numChannel = 0;
 
 //! @brief Constructor.
-XC::Channel::Channel(EntCmd *owr)
-  : EntCmd(owr)
+XC::Channel::Channel(CommandEntity *owr)
+  : CommandEntity(owr)
   {
     numChannel++;
     tag = numChannel;

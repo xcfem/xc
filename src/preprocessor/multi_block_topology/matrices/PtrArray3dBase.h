@@ -30,7 +30,7 @@
 #ifndef PTRARRAY3DBASE_H
 #define PTRARRAY3DBASE_H
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "xc_utils/src/geom/pos_vec/Array3dBoxConstRef.h"
 #include "xc_utils/src/geom/pos_vec/ConstantILayerConstRef.h"
 #include "xc_utils/src/geom/pos_vec/ConstantJLayerConstRef.h"
@@ -52,7 +52,7 @@ namespace XC{
 //! 
 //! @brief Three-dimensional array of object pointers.
 template <class PtrArray>
-class PtrArray3dBase: public std::vector<PtrArray>, public EntCmd
+class PtrArray3dBase: public std::vector<PtrArray>, public CommandEntity
   {
   public:
     typedef typename PtrArray::value_type value_type;
@@ -168,19 +168,19 @@ class PtrArray3dBase: public std::vector<PtrArray>, public EntCmd
 //! @brief Default constructor.
 template <class PtrArray>
 PtrArray3dBase<PtrArray>::PtrArray3dBase(const size_t &n_layers)
-  : std::vector<PtrArray>(n_layers), EntCmd() 
+  : std::vector<PtrArray>(n_layers), CommandEntity() 
   { set_owner_matrices(); }
 
 //! @brief Constructor.
 template <class PtrArray>
 PtrArray3dBase<PtrArray>::PtrArray3dBase(const size_t &n_layers,const PtrArray &m)
-  : std::vector<PtrArray>(n_layers,m), EntCmd()
+  : std::vector<PtrArray>(n_layers,m), CommandEntity()
   { set_owner_matrices(); }
 
 //! @brief Constructor.
 template <class PtrArray>
 PtrArray3dBase<PtrArray>::PtrArray3dBase(const size_t &n_layers,const size_t &n_rows,const size_t &cols)
-  : std::vector<PtrArray>(n_layers), EntCmd()
+  : std::vector<PtrArray>(n_layers), CommandEntity()
   {
     for(size_t i=0;i<n_layers;i++)
       (*this)[i]= PtrArray(n_rows,cols);
@@ -307,7 +307,7 @@ template <class PtrArray>
 void PtrArray3dBase<PtrArray>::clearAll(void)
   {
     std::vector<PtrArray>::clear();
-    EntCmd::clearPyProps();
+    CommandEntity::clearPyProps();
   }
 
 

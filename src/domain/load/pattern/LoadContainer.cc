@@ -111,8 +111,8 @@ void XC::LoadContainer::free(void)
   }
 
 //! @brief Default constructor.
-XC::LoadContainer::LoadContainer(EntCmd *owr)
-  :EntCmd(owr), MovableObject(PATTERN_TAG_LoadContainer),
+XC::LoadContainer::LoadContainer(CommandEntity *owr)
+  :CommandEntity(owr), MovableObject(PATTERN_TAG_LoadContainer),
    theNodalLoads(nullptr), theElementalLoads(nullptr),
    theNodIter(nullptr), theEleIter(nullptr)
   {

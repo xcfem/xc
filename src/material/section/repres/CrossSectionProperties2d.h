@@ -29,7 +29,7 @@
 #ifndef CrossSectionProperties2d_h
 #define CrossSectionProperties2d_h
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "utility/actor/actor/MovableObject.h"
 
 class PrincipalAxesOfInertia2D;
@@ -49,7 +49,7 @@ class SectionForceDeformation;
 //
 //! @brief Mechanical (E, G) and mass properties of a section (area, moments of inertia,...)
 //! for a bi-dimensional problem (three DOF for each section).
-class CrossSectionProperties2d: public EntCmd, public MovableObject
+class CrossSectionProperties2d: public CommandEntity, public MovableObject
   {
   private:
     double e, g, a, i, alpha;

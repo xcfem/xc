@@ -54,7 +54,7 @@ class CmbEdge: public Edge
     //! in the model, can not coincide with the orientation needed here, each
     //! pointer to line is accompanied by a boolean that indicates if the 
     //! line must be taken with its reversed direction or not.
-    class Side: public EntCmd
+    class Side: public CommandEntity
       {
         Edge *edge; //!< Pointer to line.
         bool forward; //!< true: forward (P1->P2), false: reversed (P2->P1)

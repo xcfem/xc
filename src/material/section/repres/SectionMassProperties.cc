@@ -38,8 +38,8 @@
 #include "xc_utils/src/geom/d1/Segment2d.h"
 
 //! @brief Constructor.
-XC::SectionMassProperties::SectionMassProperties(EntCmd *owr)
-  : EntCmd(owr) {}
+XC::SectionMassProperties::SectionMassProperties(CommandEntity *owr)
+  : CommandEntity(owr) {}
 
 //! @brief Inertia of the homogenized section about an axis parallel to x
 //! through his center of gravity.

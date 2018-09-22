@@ -69,8 +69,8 @@ ratio+= math.sqrt(pmin1.x**2+pmin1.y**2+pmin1.z**2)
 ratio+= math.sqrt((pmax1.x-2)**2+(pmax1.y-2)**2+pmax1.z**2)
 
 '''
-print 'bnd0=', bnd0
-print 'bnd1=', bnd1
+print 'bnd0:', bnd0
+print 'bnd1:', bnd1
 print 'ratio= ', ratio
 '''
 

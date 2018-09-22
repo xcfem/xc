@@ -38,7 +38,7 @@
 
 //! @brief Default constructor.
 XC::AnalysisAggregationMap::AnalysisAggregationMap(ProcSoluControl *owr)
-  : EntCmd(owr) {}
+  : CommandEntity(owr) {}
 
 //! @brief Return true if the solution method exists
 bool XC::AnalysisAggregationMap::AnalysisAggregationExists(const std::string &cod) const

@@ -29,7 +29,7 @@
 #ifndef ANALYSISAGGREGATION_H
 #define ANALYSISAGGREGATION_H
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "utility/handler/DataOutputHandler.h"
 
 namespace XC {
@@ -86,7 +86,7 @@ class ID;
 //!   form \f$Ax = b\f$, where \f$A\f$ is a matrix and \f$x\f$
 //!   and \f$b\f$ are vectors.
 //! - Convergence test.
-class AnalysisAggregation: public EntCmd
+class AnalysisAggregation: public CommandEntity
   {
     ModelWrapper *base; //!< Wrapper for the finite element model.
     SolutionAlgorithm *theSolnAlgo; //!< Solution algorithm.

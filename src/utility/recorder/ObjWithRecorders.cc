@@ -68,8 +68,8 @@
 
 #include "boost/any.hpp"
 
-XC::ObjWithRecorders::ObjWithRecorders(EntCmd *owr,DataOutputHandler::map_output_handlers *oh)
-  : EntCmd(owr), theRecorders(), output_handlers(oh) {}
+XC::ObjWithRecorders::ObjWithRecorders(CommandEntity *owr,DataOutputHandler::map_output_handlers *oh)
+  : CommandEntity(owr), theRecorders(), output_handlers(oh) {}
 
 
 //! @brief Read a Recorder object from file.

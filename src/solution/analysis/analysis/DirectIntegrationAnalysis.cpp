@@ -157,7 +157,7 @@ int XC::DirectIntegrationAnalysis::analyze(int numSteps, double dT)
   {
     int result= 0;
     assert(solution_method);
-    EntCmd *old= solution_method->Owner();
+    CommandEntity *old= solution_method->Owner();
     solution_method->set_owner(this);
     Domain *the_Domain = solution_method->getDomainPtr();
 

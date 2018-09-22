@@ -100,7 +100,7 @@ class_<dq_ptr_uniaxial_material, boost::noncopyable>("dq_ptr_uniaxial_material")
   .def(vector_indexing_suite<dq_ptr_uniaxial_material>() )
   ;
 
-class_<XC::DqUniaxialMaterial, bases<EntCmd,dq_ptr_uniaxial_material>, boost::noncopyable >("DqUniaxialMaterial", no_init);
+class_<XC::DqUniaxialMaterial, bases<CommandEntity,dq_ptr_uniaxial_material>, boost::noncopyable >("DqUniaxialMaterial", no_init);
 
 class_<XC::ZeroLengthMaterials, bases<XC::DqUniaxialMaterial>, boost::noncopyable >("ZeroLengthMaterials", no_init);
 

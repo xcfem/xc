@@ -32,7 +32,7 @@
 
 //! @brief Default constructor.
 XC::LoadHandlerMember::LoadHandlerMember(LoadHandler *owr)
-  : EntCmd(owr), MovableObject(0) {}
+  : CommandEntity(owr), MovableObject(0) {}
 
 
 //! @brief Returns the owner.

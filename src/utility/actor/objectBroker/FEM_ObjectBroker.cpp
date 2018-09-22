@@ -717,7 +717,7 @@ XC::FrictionModel *XC::FEM_ObjectBroker::getNewFrictionModel(int classTag)
       }
   }
 
-XC::ConvergenceTest *XC::FEM_ObjectBroker::getNewConvergenceTest(EntCmd *owr,int classTag)
+XC::ConvergenceTest *XC::FEM_ObjectBroker::getNewConvergenceTest(CommandEntity *owr,int classTag)
   {
     switch(classTag)
       {

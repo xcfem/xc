@@ -31,7 +31,7 @@ class_<XC::CartesianReferenceFrame3d, bases<XC::ReferenceFrame>, boost::noncopya
 .add_property("org",&XC::CartesianReferenceFrame3d::getOrg,&XC::CartesianReferenceFrame3d::setOrg,"Origin of the 3D cartesian coordinate system")
   ;
 
-class_<XC::ModelComponentContainerBase, bases<EntCmd>, boost::noncopyable >("ModelComponentContainerBase", no_init)
+class_<XC::ModelComponentContainerBase, bases<CommandEntity>, boost::noncopyable >("ModelComponentContainerBase", no_init)
   .def("setDefaultTag",&XC::ModelComponentContainerBase::setTag)
   ;
 

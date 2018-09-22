@@ -96,7 +96,7 @@
 //! is printed and the program is terminated. Note these arrays grow
 //! automatically if the problem needs it.
 XC::AnalysisModel::AnalysisModel(ModelWrapper *owr)
-  :MovableObject(AnaMODEL_TAGS_AnalysisModel), EntCmd(owr),
+  :MovableObject(AnaMODEL_TAGS_AnalysisModel), CommandEntity(owr),
    numFE_Ele(0), numDOF_Grp(0), numEqn(0),
    theFEs(this,256,"FEs"), theDOFGroups(this,256,"DOFs"), theFEiter(&theFEs), theDOFGroupiter(&theDOFGroups),
    theFEconst_iter(&theFEs), theDOFGroupconst_iter(&theDOFGroups),
@@ -107,8 +107,8 @@ XC::AnalysisModel::AnalysisModel(ModelWrapper *owr)
 //! Provided for subclasses to be used. The storage of the FE\_Elements
 //! and DOF\_Groups and iters to access them must be provided by the
 //! subclass.
-XC::AnalysisModel::AnalysisModel(int theClassTag,EntCmd *owr)
-  :MovableObject(theClassTag), EntCmd(owr),
+XC::AnalysisModel::AnalysisModel(int theClassTag,CommandEntity *owr)
+  :MovableObject(theClassTag), CommandEntity(owr),
    numFE_Ele(0), numDOF_Grp(0), numEqn(0),
    theFEs(this,1024,"FEs"), theDOFGroups(this,1024,"DOFs"),theFEiter(&theFEs), theDOFGroupiter(&theDOFGroups),
    theFEconst_iter(&theFEs), theDOFGroupconst_iter(&theDOFGroups),
@@ -116,7 +116,7 @@ XC::AnalysisModel::AnalysisModel(int theClassTag,EntCmd *owr)
 
 //! @brief Copy constructor.
 XC::AnalysisModel::AnalysisModel(const AnalysisModel &other)
-  : MovableObject(other), EntCmd(other),
+  : MovableObject(other), CommandEntity(other),
    numFE_Ele(other.numFE_Ele), numDOF_Grp(other.numDOF_Grp), numEqn(other.numEqn),
    theFEs(other.theFEs), theDOFGroups(other.theDOFGroups),theFEiter(&theFEs), theDOFGroupiter(&theDOFGroups),
    theFEconst_iter(&theFEs), theDOFGroupconst_iter(&theDOFGroups),
@@ -126,7 +126,7 @@ XC::AnalysisModel::AnalysisModel(const AnalysisModel &other)
 XC::AnalysisModel &XC::AnalysisModel::operator=(const AnalysisModel &other)
   { 
     MovableObject::operator=(other);
-    EntCmd::operator=(other);
+    CommandEntity::operator=(other);
     numFE_Ele= other.numFE_Ele;
     numDOF_Grp= other.numDOF_Grp;
     numEqn= other.numEqn;

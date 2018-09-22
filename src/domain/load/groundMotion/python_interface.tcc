@@ -21,7 +21,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //python_interface.tcc
-class_<XC::GroundMotion, bases<EntCmd>, boost::noncopyable >("GroundMotion", no_init)
+class_<XC::GroundMotion, bases<CommandEntity>, boost::noncopyable >("GroundMotion", no_init)
   .def("getDuration",&XC::GroundMotion::getDuration,"Returns motion's duration.")
 
   .def("getPeakAccel",&XC::GroundMotion::getPeakAccel,"Returns motion's peak acceleration")
@@ -34,7 +34,7 @@ class_<XC::GroundMotion, bases<EntCmd>, boost::noncopyable >("GroundMotion", no_
   .def("getDispVelAccel",make_function(&XC::GroundMotion::getDispVelAccel,return_internal_reference<>()),"Returns displacement, velocity and acceleration at time t.")
   ;
 
-class_<XC::MotionHistory, bases<EntCmd>, boost::noncopyable >("MotionHistory", no_init)
+class_<XC::MotionHistory, bases<CommandEntity>, boost::noncopyable >("MotionHistory", no_init)
   .add_property("delta", &XC::MotionHistory::getDelta,&XC::MotionHistory::setDelta,"Integration step size.")
   .add_property("accel", make_function( &XC::MotionHistory::getAccelHistory, return_internal_reference<>()),&XC::MotionHistory::setAccelHistory,"Integration step size.")
   .def("getNumberOfDataPoints",&XC::MotionHistory::getNumDataPoints,"Returns the number of data points.")
@@ -48,4 +48,4 @@ class_<XC::InterpolatedGroundMotion, bases<XC::GroundMotion>, boost::noncopyable
   ;
 
 
-class_<XC::DqGroundMotions , bases<EntCmd>, boost::noncopyable >("DqGroundMotions", no_init);
+class_<XC::DqGroundMotions , bases<CommandEntity>, boost::noncopyable >("DqGroundMotions", no_init);

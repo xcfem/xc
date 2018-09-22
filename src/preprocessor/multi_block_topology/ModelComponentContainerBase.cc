@@ -34,7 +34,7 @@
 
 //! @brief Constructor.
 XC::ModelComponentContainerBase::ModelComponentContainerBase(MultiBlockTopology *mbt)
-  : EntCmd(mbt), tag(0) {}
+  : CommandEntity(mbt), tag(0) {}
 
 //! @brief Return a pointer to MultiBlockTopology.
 const XC::MultiBlockTopology *XC::ModelComponentContainerBase::getMultiBlockTopology(void) const

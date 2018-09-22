@@ -62,7 +62,7 @@
 #define FEM_ObjectBroker_h
 
 #include "utility/actor/objectBroker/ObjectBroker.h"
-class EntCmd;
+class CommandEntity;
 
 namespace XC {
 class Channel;
@@ -180,7 +180,7 @@ class FEM_ObjectBroker
     virtual FrictionModel *getNewFrictionModel(int classTag);
     virtual Material *getNewMaterial(int classTag);
 
-    virtual ConvergenceTest *getNewConvergenceTest(EntCmd *owr,int classTag);
+    virtual ConvergenceTest *getNewConvergenceTest(CommandEntity *owr,int classTag);
     virtual NodeLocker *getNewNodeLocker(int classTag);
     virtual LoadPattern *getNewLoadPattern(int classTag);
     virtual LoadCombination *getNewLoadCombination(int classTag);

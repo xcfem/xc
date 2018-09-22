@@ -37,7 +37,7 @@ class MeshEdge;
 //! @ingroup FEMisc
 //
 //! @brief Element edge (TO DEPRECATE?? LP 7.02.2017).
-class ElementEdge: public EntCmd
+class ElementEdge: public CommandEntity
   {
     Element *elem; //! Element that owns this edge.
     int iedge; //! edge index.

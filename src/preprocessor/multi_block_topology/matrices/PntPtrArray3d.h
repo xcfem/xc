@@ -30,7 +30,7 @@
 #ifndef PNTPTRARRAY3d_H
 #define PNTPTRARRAY3d_H
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "PntPtrArray.h"
 #include "PtrArray3dBase.h"
 #include "utility/matrix/Vector.h"

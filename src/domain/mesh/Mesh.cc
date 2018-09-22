@@ -111,7 +111,7 @@ void XC::Mesh::init_bounds(void)
   { theBounds.Zero(); }
 
 //! @brief Constructor.
-XC::Mesh::Mesh(EntCmd *owr)
+XC::Mesh::Mesh(CommandEntity *owr)
   :MeshComponentContainer(owr,DOMAIN_TAG_Mesh), eleGraphBuiltFlag(false), nodeGraphBuiltFlag(false),
    theBounds(6), lockers(this)
   {
@@ -123,7 +123,7 @@ XC::Mesh::Mesh(EntCmd *owr)
   }
 
 //! @brief Constructor.
-XC::Mesh::Mesh(EntCmd *owr,TaggedObjectStorage &theNodesStorage,TaggedObjectStorage &theElementsStorage)
+XC::Mesh::Mesh(CommandEntity *owr,TaggedObjectStorage &theNodesStorage,TaggedObjectStorage &theElementsStorage)
   : MeshComponentContainer(owr,DOMAIN_TAG_Mesh), eleGraphBuiltFlag(false),
     nodeGraphBuiltFlag(false), theNodes(&theNodesStorage), theElements(&theElementsStorage), theBounds(6), lockers(this)
   {
@@ -141,7 +141,7 @@ XC::Mesh::Mesh(EntCmd *owr,TaggedObjectStorage &theNodesStorage,TaggedObjectStor
 
 
 //! @brief Constructor.
-XC::Mesh::Mesh(EntCmd *owr,TaggedObjectStorage &theStorage)
+XC::Mesh::Mesh(CommandEntity *owr,TaggedObjectStorage &theStorage)
   : MeshComponentContainer(owr,DOMAIN_TAG_Mesh),
     eleGraphBuiltFlag(false), nodeGraphBuiltFlag(false),
     theBounds(6), lockers(this)

@@ -106,10 +106,10 @@ class PartitionedDomain: public Domain
     DomainPartitioner *getPartitioner(void) const;
     virtual int buildEleGraph(Graph &theEleGraph);
   public:
-    PartitionedDomain(EntCmd *owr,DataOutputHandler::map_output_handlers *oh);    
-    PartitionedDomain(EntCmd *owr,DomainPartitioner &thePartitioner,DataOutputHandler::map_output_handlers *oh);    
+    PartitionedDomain(CommandEntity *owr,DataOutputHandler::map_output_handlers *oh);    
+    PartitionedDomain(CommandEntity *owr,DomainPartitioner &thePartitioner,DataOutputHandler::map_output_handlers *oh);    
 
-    PartitionedDomain(EntCmd *owr,int numNods, int numElems, 
+    PartitionedDomain(CommandEntity *owr,int numNods, int numElems, 
 		      int numSPs, int numMPs, int numLPatterns, int numNLockers,
 		      int numSubdom,
 		      DomainPartitioner &thePartitioner,DataOutputHandler::map_output_handlers *oh);

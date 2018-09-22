@@ -80,8 +80,8 @@ class CTestEnergyIncr: public ConvergenceTestTol
   {
   public:
     // constructors
-    CTestEnergyIncr(EntCmd *owr= nullptr);	    	
-    CTestEnergyIncr(EntCmd *owr,double tol, int maxNumIter, int printFlag, int normType =2);
+    CTestEnergyIncr(CommandEntity *owr= nullptr);	    	
+    CTestEnergyIncr(CommandEntity *owr,double tol, int maxNumIter, int printFlag, int normType =2);
 
     ConvergenceTest *getCopy(void) const;
     virtual std::string getStatusMsg(const int &flag= 1) const;

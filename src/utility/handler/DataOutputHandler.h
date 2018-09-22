@@ -52,13 +52,13 @@
 #define _DataOutputHandler
 
 #include <utility/actor/actor/MovableObject.h>
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include <map>
 
 namespace XC {
 class Vector;
 
-class DataOutputHandler: public MovableObject, public EntCmd
+class DataOutputHandler: public MovableObject, public CommandEntity
   {
   public:
     typedef std::map<std::string,DataOutputHandler *> map_output_handlers;

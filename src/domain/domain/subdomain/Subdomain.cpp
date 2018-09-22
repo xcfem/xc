@@ -100,7 +100,7 @@ XC::Matrix XC::Subdomain::badResult(1,1); // for returns from getStiff, getMass 
 //! take initial sizes of the arrays, the sizes used are:
 //! InternalNodeArray = 8024, ExternalNodeArray = 256. The initial sizes
 //! are not upperbounds on the number of components that can be added.
-XC::Subdomain::Subdomain(int tag,DataOutputHandler::map_output_handlers *oh,EntCmd *owr)
+XC::Subdomain::Subdomain(int tag,DataOutputHandler::map_output_handlers *oh,CommandEntity *owr)
  :Element(tag,ELE_TAG_Subdomain),
   Domain(owr,oh),
   realCost(0.0),cpuCost(0.0),pageCost(0),

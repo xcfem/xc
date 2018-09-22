@@ -27,7 +27,7 @@
 //Python exposition of the elements.
 #include "domain/mesh/element/python_interface.tcc"
 
-class_<XC::MeshComponentContainer, bases<EntCmd>, boost::noncopyable >("MeshComponentContainer", no_init)
+class_<XC::MeshComponentContainer, bases<CommandEntity>, boost::noncopyable >("MeshComponentContainer", no_init)
   ;
 
 XC::Node *(XC::Mesh::*getNodePtr)(int tag)= &XC::Mesh::getNode;

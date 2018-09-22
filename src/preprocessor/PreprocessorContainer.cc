@@ -35,7 +35,7 @@
 
 //! @brief Default constructor.
 XC::PreprocessorContainer::PreprocessorContainer(Preprocessor *prep)
-  : EntCmd(prep), preprocessor(prep) {}
+  : CommandEntity(prep), preprocessor(prep) {}
 
 //! @brief Returns the domain.
 const XC::Domain *XC::PreprocessorContainer::getDomain(void) const

@@ -26,7 +26,7 @@ const double &(XC::CrossSectionProperties2d::*getG)(void) const= &XC::CrossSecti
 const double &(XC::CrossSectionProperties2d::*getA)(void) const= &XC::CrossSectionProperties2d::A;
 const double &(XC::CrossSectionProperties2d::*getAlpha)(void) const= &XC::CrossSectionProperties2d::Alpha;
 const double &(XC::CrossSectionProperties2d::*getI)(void) const= &XC::CrossSectionProperties2d::I;
-class_<XC::CrossSectionProperties2d, bases<EntCmd> >("CrossSectionProperties2d")
+class_<XC::CrossSectionProperties2d, bases<CommandEntity> >("CrossSectionProperties2d")
   .add_property("E", make_function( getE, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties2d::setE,"Elastic modulus.")
   .add_property("G", make_function( getG, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties2d::setG,"Shear modulus.")
   .add_property("A", make_function( getA, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties2d::setA,"Area.")
@@ -54,7 +54,7 @@ class_<XC::CrossSectionProperties3d, bases<XC::CrossSectionProperties2d> >("Cros
   ;
 
 XC::Material *(XC::DiscretBase::*getMaterialPtr)(void) const= &XC::DiscretBase::getMaterialPtr;
-class_<XC::DiscretBase, bases<EntConNmb>, boost::noncopyable >("DiscretBase", no_init)
+class_<XC::DiscretBase, bases<NamedEntity>, boost::noncopyable >("DiscretBase", no_init)
   .def("getMaxY",&XC::DiscretBase::getMaxY,"Returns y coordinate maximum value.")
   .def("getMaxZ",&XC::DiscretBase::getMaxZ,"Returns z coordinate maximum value.")
   .def("getMinY",&XC::DiscretBase::getMinY,"Returns y coordinate minimum value.")
@@ -62,7 +62,7 @@ class_<XC::DiscretBase, bases<EntConNmb>, boost::noncopyable >("DiscretBase", no
   .def("getMaterial",make_function(getMaterialPtr,return_internal_reference<>()), "returns a pointer to the material.")
   ;
 
-class_<XC::SectionMassProperties, bases<EntCmd>, boost::noncopyable >("SectionMassProperties", no_init)
+class_<XC::SectionMassProperties, bases<CommandEntity>, boost::noncopyable >("SectionMassProperties", no_init)
   .def("getAreaGrossSection",&XC::SectionMassProperties::getAreaGrossSection,"Returns region's gross section.")
   .def("getCenterOfMassGrossSection",&XC::SectionMassProperties::getCenterOfMassGrossSection,"Returns center of gravity of gross section.")
   .def("getIyGrossSection",&XC::SectionMassProperties::getIyGrossSection,"Inertia of the gross section about an axis parallel to y through his center of gravity.")

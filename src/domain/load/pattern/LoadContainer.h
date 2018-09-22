@@ -52,7 +52,7 @@
 #ifndef LoadContainer_h
 #define LoadContainer_h
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "utility/actor/actor/MovableObject.h"
 
 namespace XC {
@@ -73,7 +73,7 @@ class Domain;
 //
 //! @brief A LoadContainer object is used to 
 //! to store loads on nodes and elements.
-class LoadContainer: public EntCmd, public MovableObject
+class LoadContainer: public CommandEntity, public MovableObject
   {
     friend class LoadPattern;
   private:
@@ -102,7 +102,7 @@ class LoadContainer: public EntCmd, public MovableObject
     virtual bool removeNodalLoad(int tag);
     virtual bool removeElementalLoad(int tag);
   public:
-    LoadContainer(EntCmd *);
+    LoadContainer(CommandEntity *);
     virtual ~LoadContainer(void);
 
     virtual void setDomain(Domain *theDomain);

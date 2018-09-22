@@ -72,8 +72,8 @@ namespace XC {
 class CTestRelativeTotalNormDispIncr: public ConvergenceTestNorm
   {
   public:
-    CTestRelativeTotalNormDispIncr(EntCmd *owr);
-    CTestRelativeTotalNormDispIncr(EntCmd *owr,double tol, int maxNumIter, int printFlag, int normType =2);
+    CTestRelativeTotalNormDispIncr(CommandEntity *owr);
+    CTestRelativeTotalNormDispIncr(CommandEntity *owr,double tol, int maxNumIter, int printFlag, int normType =2);
     ConvergenceTest *getCopy(void) const;
     
     

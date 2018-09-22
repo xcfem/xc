@@ -29,7 +29,7 @@
 #ifndef PROCSOLU_H
 #define PROCSOLU_H
 
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 #include "ProcSoluControl.h"
 
 
@@ -53,7 +53,7 @@ class FEProblem;
 //! specifiying:.
 //! - The type of analysis: static, dynamic, eigenvalues,...
 //! - The parameters that control the solution procedure.
-class ProcSolu: public EntCmd
+class ProcSolu: public CommandEntity
   {
   private:
     ProcSoluControl solu_control;//!< Control of the solution procedure.

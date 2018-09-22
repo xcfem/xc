@@ -89,7 +89,7 @@
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/element/ElementIter.h"
 
-#include "xc_utils/src/nucleo/python_utils.h"
+#include "xc_utils/src/kernel/python_utils.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 

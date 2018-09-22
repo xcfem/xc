@@ -33,7 +33,7 @@
 
 //! @brief Constructor.
 XC::MeshEdges::MeshEdges(void)
-  : EntCmd() {}
+  : CommandEntity() {}
 
 //! @brief returns the loop that starts in vertex passed as parameter.
 std::deque<const XC::MeshEdge *> XC::MeshEdges::getLoop(const MeshEdge *first) const

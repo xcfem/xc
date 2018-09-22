@@ -65,7 +65,7 @@
 // What: "@(#) ConstraintHandler.h, revA"
 
 #include <utility/actor/actor/MovableObject.h>
-#include "xc_utils/src/nucleo/EntCmd.h"
+#include "xc_utils/src/kernel/CommandEntity.h"
 
 namespace XC {
 class AnalysisMethod;
@@ -89,7 +89,7 @@ class ModelWrapper;
 //!   - setting the initial DOF equation numbers to -1, -2 or -3. A -1 indicates to the DOF_Numberer object that no equation number is to be allocated for this DOF, a -3 that this DOF is to be among the last group of dof to be numbered.
 //! 
 //!   - deleting the DOF_Group and FE_Element objects that it created.
-class ConstraintHandler: public MovableObject, public EntCmd
+class ConstraintHandler: public MovableObject, public CommandEntity
   {
     ModelWrapper *getModelWrapper(void);
     const ModelWrapper *getModelWrapper(void) const;
