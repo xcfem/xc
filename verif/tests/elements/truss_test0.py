@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-#Test from Ansys manual
-#Reference:  Strength of Materials, Part I, Elementary Theory and Problems, pg. 26, problem 10
+# Home made test
+# Checks the orientation of the element's unary vectors.
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -24,8 +24,8 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
-n1= nodes.newNodeXYZ(0,0,0)
-n2= nodes.newNodeXYZ(0,l,0)
+n1= nodes.newNodeXY(0,0)
+n2= nodes.newNodeXY(0,l)
 
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 
@@ -44,6 +44,7 @@ vI= truss.getIVector3d(True)
 vJ= truss.getJVector3d(True)
 vK= truss.getKVector3d(True)
 
+# Orientation of the element's unary vectors.
 ratio= (vI-geom.Vector3d(0,1,0)).getModulo()
 ratio+= (vJ-geom.Vector3d(-1,0,0)).getModulo()
 ratio+= (vK-geom.Vector3d(0,0,1)).getModulo()
