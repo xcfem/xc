@@ -48,7 +48,9 @@ class_<XC::PySimple1, bases<XC::PQyzBase>, boost::noncopyable >("PySimple1", no_
   .def("initialize",&XC::PySimple1::initialize,"Initialize material variables and history variables.")
   ;
 
-class_<XC::QzSimple1 , bases<XC::PQyzBase>, boost::noncopyable >("QzSimple1", no_init);
+class_<XC::QzSimple1 , bases<XC::PQyzBase>, boost::noncopyable >("QzSimple1", no_init)
+  .add_property("suction", &XC::QzSimple1::get_suction,  &XC::QzSimple1::set_suction,"Get/set the suction parameter (Uplift resistance is equal to suction*qult). The value of suction must be 0.0 to 0.1.")
+  ;
 
 class_<XC::PyLiq1 , bases<XC::PySimple1>, boost::noncopyable >("PyLiq1", no_init);
 

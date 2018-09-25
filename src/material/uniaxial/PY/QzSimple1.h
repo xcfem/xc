@@ -84,6 +84,9 @@ class QzSimple1: public PQyzBase
     QzSimple1(int tag, int classtag= MAT_TAG_QzSimple1);
     QzSimple1(void);
 
+    void set_suction(const double &);
+    double get_suction(void) const;
+    
     int setTrialStrain(double z, double zRate); 
     double getStress(void) const;
     double getDampTangent(void) const;

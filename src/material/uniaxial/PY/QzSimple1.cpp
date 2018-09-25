@@ -463,6 +463,23 @@ double XC::QzSimple1::getDampTangent(void) const
     return DampTangent;
   }
 
+//! @brief Set the suction parameter (Uplift resistance
+//! is equal to suction*qult). The value of suction must
+//! be 0.0 to 0.1.
+void XC::QzSimple1::set_suction(const double &s)
+  {
+    if((s<0.0) or (s>0.1))
+      std::clog << getClassName() << "::" << __FUNCTION__
+	        << "; the value of suction must be 0.0 to 0.1."
+	        << std::endl;
+    suction= s;
+  }
+
+//! @brief Return the suction parameter (Uplift resistance
+//! is equal to suction*qult)
+double XC::QzSimple1::get_suction(void) const
+  { return suction;  }
+
 /////////////////////////////////////////////////////////////////////
 int XC::QzSimple1::commitState(void)
   {
