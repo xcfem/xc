@@ -31,6 +31,14 @@ def Mlim(fcd,b,d):
   return 0.33*fcd*b*d**2 
 
 def AsSimpleBending(M,fcd,fsd,b,d):
+  ''' Return the required reinforcement for a rectangular section
+      subjected to simple bending.
+
+  :param M: bending moment to resist.
+  :param fcd: concrete design strength.
+  :param b: section width.
+  :param d: section depth.
+  '''
   Ml= Mlim(fcd,b,d)
   if(M>Ml):
     lmsg.warning('compression reinforcement needed Ml= '+ str(Ml/1e3) + ' kN m < '+ str(M/1e3)+ ' kN m') 
