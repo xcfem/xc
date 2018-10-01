@@ -19,26 +19,29 @@ XC installation.
       to use it with other Unix flavours.
     - Libraries needed:
 
-         -xc_basic: basic routines (must be previously installed; download it from https://github.com/lcpt/xc_basic).
-         -xc_util: utilities (must be previously installed; download it from https://github.com/lcpt/xc_utils).
-         -VTK Visualization ToolKit (<http://www.vtk.org>, ).
-         -Boost c++ libraries (<http://www.boost.org>).
-         -f2c Fortran to C translator (paquete Debian: libf2c2-dev)
-         -CGAL (computational geometry algorithms library <http://www.cgal.org/>).
-         -GNU plotutils libraries (libplot-dev).
-         -Multiple precision floating-point computation developers tools (libmpfr-dev).
-         -Multiprecision arithmetic library developers tools (libgmp3-dev).
-         -MySQL C++ library bindings (libmysql++-dev).
-         -Berkeley Database Libraries for C++ (libdb,libdb-dev).
-         -SQLite 3 development files (libsqlite3-dev).
-         -X11 (libX11-dev)
-         -TCL Tcl/Tk development support (tcl-dev).
-         -Arpack Fortran77 subroutines to solve large scale eigenvalue problems (paquete Debian: libarcpack2-dev).
-         -Arpack++ C++ interface for the Arpack library (Debian package: libarcpack++2-dev).
-         -Lapack (Library of linear algebra routines; liblapack-dev).
-         -SuperLU (Direct solution of large, sparse systems of linear equations libsuperlu3-dev).
-         -Suitesparse (collection of libraries for computations for sparse matrices).
-         -Petsc
+         * Libraries you must to download from GitHub and install yourself:
+             -xc_basic: basic routines (download it from https://github.com/lcpt/xc_basic).
+             -xc_util: utilities (download it from https://github.com/lcpt/xc_utils).
+	     
+	 * Libraries that can be installed from OS packages.
+	     -VTK Visualization ToolKit (<http://www.vtk.org>, ).
+	     -Boost c++ libraries (<http://www.boost.org>).
+	     -f2c Fortran to C translator (paquete Debian: libf2c2-dev)
+	     -CGAL (computational geometry algorithms library <http://www.cgal.org/>).
+	     -GNU plotutils libraries (libplot-dev).
+	     -Multiple precision floating-point computation developers tools (libmpfr-dev).
+	     -Multiprecision arithmetic library developers tools (libgmp3-dev).
+	     -MySQL C++ library bindings (libmysql++-dev).
+	     -Berkeley Database Libraries for C++ (libdb,libdb-dev).
+	     -SQLite 3 development files (libsqlite3-dev).
+	     -X11 (libX11-dev)
+	     -TCL Tcl/Tk development support (tcl-dev).
+	     -Arpack Fortran77 subroutines to solve large scale eigenvalue problems (paquete Debian: libarcpack2-dev).
+	     -Arpack++ C++ interface for the Arpack library (Debian package: libarcpack++2-dev).
+	     -Lapack (Library of linear algebra routines; liblapack-dev).
+	     -SuperLU (Direct solution of large, sparse systems of linear equations libsuperlu3-dev).
+	     -Suitesparse (collection of libraries for computations for sparse matrices).
+	     -Petsc
 
       You can find a list of the Ubuntu (or Debian) packages you need to
       fulfil the installation in "doc/needed_packages.txt". If you have
