@@ -30,6 +30,7 @@
 
 #include "xc_utils/src/kernel/CommandEntity.h"
 #include <boost/python/list.hpp>
+#include <vector>
 
 namespace XC {
 //! @ingroup Matrix
