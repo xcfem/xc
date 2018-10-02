@@ -34,9 +34,8 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXY(0.0,0.0)
-nod= nodes.newNodeXY(L,0.0)
+nod1= nodes.newNodeXY(0.0,0.0)
+nod2= nodes.newNodeXY(L,0.0)
 
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
@@ -46,7 +45,7 @@ elements= preprocessor.getElementHandler
 elements.defaultMaterial= "elast"
 elements.dimElem= 2 # Dimension of element space
 elements.defaultTag= 1 #Tag for the next element.
-truss= elements.newElement("Truss",xc.ID([1,2]));
+truss= elements.newElement("Truss",xc.ID([nod1.tag,nod2.tag]));
 truss.area= A
  
     
@@ -54,10 +53,10 @@ truss.area= A
 constraints= preprocessor.getBoundaryCondHandler
 
 #
-spc= constraints.newSPConstraint(1,0,0.0)
-spc= constraints.newSPConstraint(1,1,0.0)
-spc= constraints.newSPConstraint(2,0,0.0)
-spc= constraints.newSPConstraint(2,1,0.0)
+spc1= constraints.newSPConstraint(nod1.tag,0,0.0)
+spc2= constraints.newSPConstraint(nod1.tag,1,0.0)
+spc3= constraints.newSPConstraint(nod2.tag,0,0.0)
+spc4= constraints.newSPConstraint(nod2.tag,1,0.0)
 
     
 # Loads definition
