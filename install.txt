@@ -86,3 +86,8 @@ XC installation.
 
     cd /usr/local/src/prgs/xc/python_modules
     sh local_install.sh
+
+10.- Run verification tests (test that all works as intended).
+
+    cd /usr/local/src/prgs/xc/verif
+    follow the instructions in "readme.txt"
