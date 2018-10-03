@@ -18,7 +18,7 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
-feProblem.logFileName= "/tmp/borrar.log" # Nicely avoid warning messages.
+feProblem.logFileName= "/tmp/erase.log" # Nicely avoid warning messages.
 NumDivI= 3
 NumDivJ= 2
 CooMax= 10

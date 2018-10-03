@@ -19,8 +19,8 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 feProblem= xc.FEProblem()
-feProblem.logFileName= "/tmp/borrar.log" # Don't pring warnings
-feProblem.errFileName= "/tmp/borrar.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
+feProblem.logFileName= "/tmp/erase.log" # Don't pring warnings
+feProblem.errFileName= "/tmp/erase.err" # Ignore warning messagess about maximum error in computation of the interaction diagram.
 
 
 elementTags= [2524,2527]

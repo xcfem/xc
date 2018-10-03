@@ -91,7 +91,7 @@ beamRCsect.creaTwoSections()
 sections.append(beamRCsect)
 
 feProblem= xc.FEProblem()
-feProblem.errFileName= "/tmp/borrar.err" # Don't print errors.
+feProblem.errFileName= "/tmp/erase.err" # Don't print errors.
 preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeHandler
 # Problem type

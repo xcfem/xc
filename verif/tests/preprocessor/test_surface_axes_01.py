@@ -12,8 +12,8 @@ __email__= "l.pereztato@gmail.com"
 
 # Problem type
 feProblem= xc.FEProblem()
-feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
-feProblem.errFileName= "/tmp/borrar.err" # Ignore warning messages
+feProblem.logFileName= "/tmp/erase.log" # Ignore warning messages
+feProblem.errFileName= "/tmp/erase.err" # Ignore warning messages
 preprocessor=  feProblem.getPreprocessor
 
 points= preprocessor.getMultiBlockTopology.getPoints
