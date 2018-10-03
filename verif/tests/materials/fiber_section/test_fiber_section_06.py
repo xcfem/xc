@@ -29,7 +29,7 @@ x1= 0.0997 # Neutral axis depth 1.
 CurvZ2= 34.787e-3 # Curvature test 2.
 x2= 0.0649 # Neutral axis depth 2.
 feProblem= xc.FEProblem()
-feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
+feProblem.logFileName= "/tmp/erase.log" # Ignore warning messages
 preprocessor=  feProblem.getPreprocessor
 
 concr= EHE_materials.HA25

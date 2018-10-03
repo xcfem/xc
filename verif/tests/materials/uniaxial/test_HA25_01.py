@@ -19,7 +19,7 @@ __email__= "l.pereztato@gmail.com"
 
 # Model definition
 feProblem= xc.FEProblem()
-feProblem.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
+feProblem.logFileName= "/tmp/erase.log" # Para no imprimir mensajes de advertencia
 mdlr= feProblem.getPreprocessor
 concr= EHE_materials.HA25
 concr.alfacc=0.85 #f_maxd= 0.85*fcd

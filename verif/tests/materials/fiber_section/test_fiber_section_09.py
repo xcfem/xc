@@ -4,7 +4,7 @@
    informático del hormigón estructural (Cátedra de hormigón de la ETSICCP-IECA
    UPM). '''
 
-# feProblem.logFileName= "/tmp/borrar.log"  #Ignore warning messages
+# feProblem.logFileName= "/tmp/erase.log"  #Ignore warning messages
 
 import xc_base
 import geom

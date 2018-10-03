@@ -38,7 +38,7 @@ fy= 2600 # yield strength [kp/cm2].
 E= 1e6   # elastic moculus [kp/cm2].
 
 feProblem= xc.FEProblem()
-feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
+feProblem.logFileName= "/tmp/erase.log" # Ignore warning messages
 preprocessor=  feProblem.getPreprocessor
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)

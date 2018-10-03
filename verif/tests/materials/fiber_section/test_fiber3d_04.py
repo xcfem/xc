@@ -28,7 +28,7 @@ eps= F/(Area*Es)
 
 # Problem type
 feProblem= xc.FEProblem()
-feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
+feProblem.logFileName= "/tmp/erase.log" # Ignore warning messages
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 

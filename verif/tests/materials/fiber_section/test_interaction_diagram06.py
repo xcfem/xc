@@ -50,8 +50,8 @@ sccData.positvRebarRows=[defSimpleRCSection.MainReinfLayer(rebarsDiam=6e-3,areaR
 
 
 feProblem= xc.FEProblem()
-feProblem.logFileName= "/tmp/borrar.log" # Don't print warnings.
-feProblem.errFileName= "/tmp/borrar.err" # Don't print errors.
+feProblem.logFileName= "/tmp/erase.log" # Don't print warnings.
+feProblem.errFileName= "/tmp/erase.err" # Don't print errors.
 
 preprocessor=  feProblem.getPreprocessor
 sccData.defRCSimpleSection(preprocessor, 'd')

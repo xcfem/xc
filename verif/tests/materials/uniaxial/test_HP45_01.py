@@ -17,7 +17,7 @@ __email__= "l.pereztato@gmail.com"
 
 # Model definition
 feProblem= xc.FEProblem()
-feProblem.logFileName= "/tmp/borrar.log" # Para no imprimir mensajes de advertencia
+feProblem.logFileName= "/tmp/erase.log" # Para no imprimir mensajes de advertencia
 preprocessor=  feProblem.getPreprocessor
 HP45= EHE_materials.HA45
 errMax= concrete_base.concreteDesignDiagramTest(preprocessor, HP45)

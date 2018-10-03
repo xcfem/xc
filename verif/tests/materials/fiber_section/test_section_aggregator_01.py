@@ -42,7 +42,7 @@ fy= 2600 # yield stress [kp/cm2]
 E= 2.1e6 # initial elastic tangent [kp/cm2.
 
 feProblem= xc.FEProblem()
-feProblem.logFileName= "/tmp/borrar.log" # No warning messages
+feProblem.logFileName= "/tmp/erase.log" # No warning messages
 preprocessor=  feProblem.getPreprocessor
 # Materials definition
 epp= typical_materials.defElasticPPMaterial(preprocessor, "epp",E,fy,-fy)

@@ -11,7 +11,7 @@ The results obtained are acceptable considering that:
 - Fiber model discretization introduces an error.
  '''
 
-# feProblem.logFileName= "/tmp/borrar.log"  #Ignore warning messages
+# feProblem.logFileName= "/tmp/erase.log"  #Ignore warning messages
 
 from __future__ import division
 import xc_base

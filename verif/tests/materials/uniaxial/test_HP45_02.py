@@ -17,7 +17,7 @@ from materials.ehe import EHE_materials
 
 # Model definition
 feProblem= xc.FEProblem()
-feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
+feProblem.logFileName= "/tmp/erase.log" # Ignore warning messages
 preprocessor=  feProblem.getPreprocessor
 HP45= EHE_materials.HA45
 errMax= concrete_base.concreteDesignTangentTest(preprocessor, HP45)

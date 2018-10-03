@@ -53,7 +53,7 @@ sgc6= EHE_materials.HA25.sigmac(e6)
 sgs6= concrete_base.sigmaDReinfSteel(e6,EHE_materials.B500S)
 
 feProblem= xc.FEProblem()
-feProblem.logFileName= "/tmp/borrar.log" # Don't print warnings.
+feProblem.logFileName= "/tmp/erase.log" # Don't print warnings.
 
 preprocessor=  feProblem.getPreprocessor
 # Define materials

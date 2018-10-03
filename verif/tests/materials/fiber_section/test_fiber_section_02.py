@@ -26,7 +26,7 @@ from misc import scc3d_testing_bench
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
+feProblem.logFileName= "/tmp/erase.log" # Ignore warning messages
 
 # Rectangular cross-section definition
 b= 10 # Cross section width  [cm]

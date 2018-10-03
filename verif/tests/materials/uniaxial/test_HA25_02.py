@@ -18,7 +18,7 @@ from materials.ehe import EHE_materials
 
 # Model definition
 feProblem= xc.FEProblem()
-feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
+feProblem.logFileName= "/tmp/erase.log" # Ignore warning messages
 mdlr= feProblem.getPreprocessor
 concr= EHE_materials.HA25
 concr.alfacc=0.85 #f_maxd= 0.85*fcd
