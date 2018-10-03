@@ -50,18 +50,18 @@ seedElemHandler.defaultTag= 1
 elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
-pt= points.newPntIDPos3d(2,geom.Pos3d(CooMaxX,0.0,0.0))
-pt= points.newPntIDPos3d(3,geom.Pos3d(CooMaxX,CooMaxY,0.0))
-pt= points.newPntIDPos3d(4,geom.Pos3d(0.0,CooMaxY,0.0))
+pt1= points.newPntFromPos3d(geom.Pos3d(0.0,0.0,0.0))
+pt2= points.newPntFromPos3d(geom.Pos3d(CooMaxX,0.0,0.0))
+pt3= points.newPntFromPos3d(geom.Pos3d(CooMaxX,CooMaxY,0.0))
+pt4= points.newPntFromPos3d(geom.Pos3d(0.0,CooMaxY,0.0))
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
-surfaces.defaultTag= 1
-s= surfaces.newQuadSurfacePts(1,2,3,4)
+s= surfaces.newQuadSurfacePts(pt1.tag,pt2.tag,pt3.tag,pt4.tag)
 s.nDivI= NumDivI
 s.nDivJ= NumDivJ
 
-f1= preprocessor.getSets.getSet("f1")
-f1.genMesh(xc.meshDir.I)
+associatedSetName= 'f'+str(s.tag)
+f0= preprocessor.getSets.getSet(associatedSetName)
+f0.genMesh(xc.meshDir.I)
 sides= s.getEdges
 #Edge iterator
 for l in sides:
@@ -79,9 +79,8 @@ lp0= casos.newLoadPattern("default","0")
 #casos.currentLoadPattern= "0"
 
 
-f1= preprocessor.getSets.getSet("f1")
-nNodes= f1.getNumNodes
-capa1= f1.getNodeLayers.getLayer(0)
+nNodes= f0.getNumNodes
+capa1= f0.getNodeLayers.getLayer(0)
 nf= capa1.nRow
 nc= capa1.nCol
 for i in range(2,nf):
@@ -91,7 +90,7 @@ for i in range(2,nf):
 
 
 
-nElems= f1.getNumElements
+nElems= f0.getNumElements
 #We add the load case to domain.
 casos.addToDomain("0")
 
@@ -100,11 +99,10 @@ casos.addToDomain("0")
 analisis= predefined_solutions.simple_static_linear(feProblem)
 analOk= analisis.analyze(1)
 
-f1= preprocessor.getSets.getSet("f1")
 
 nodes= preprocessor.getNodeHandler
 
-node= f1.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)
+node= f0.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)
 # print "Central node: ", node.tag
 # print "Central node coordinates: ", node.getCoo
 # print "Central node displacements: ", node.getDisp
