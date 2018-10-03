@@ -37,36 +37,34 @@ matPrb= typical_materials.defElasticMembranePlateSection(preprocessor, "matPrb",
 
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= "matPrb"
-seedElemHandler.defaultTag= 1
 elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
 
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt= points.newPntIDPos3d(1,geom.Pos3d(1,0,0))
-pt= points.newPntIDPos3d(2,geom.Pos3d(1,1,0))
-pt= points.newPntIDPos3d(3,geom.Pos3d(1,1,1))
-pt= points.newPntIDPos3d(4,geom.Pos3d(1,0,1))
-pt= points.newPntIDPos3d(5,geom.Pos3d(0,1,0))
-pt= points.newPntIDPos3d(6,geom.Pos3d(0,1,1))
-pt= points.newPntIDPos3d(7,geom.Pos3d(0,0,1))
-pt= points.newPntIDPos3d(8,geom.Pos3d(0,0,0))
+pt1= points.newPntFromPos3d(geom.Pos3d(1,0,0))
+pt2= points.newPntFromPos3d(geom.Pos3d(1,1,0))
+pt3= points.newPntFromPos3d(geom.Pos3d(1,1,1))
+pt4= points.newPntFromPos3d(geom.Pos3d(1,0,1))
+pt5= points.newPntFromPos3d(geom.Pos3d(0,1,0))
+pt6= points.newPntFromPos3d(geom.Pos3d(0,1,1))
+pt7= points.newPntFromPos3d(geom.Pos3d(0,0,1))
+pt8= points.newPntFromPos3d(geom.Pos3d(0,0,0))
 
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
-surfaces.defaultTag= 1
-s= surfaces.newQuadSurfacePts(1,2,3,4)
+s= surfaces.newQuadSurfacePts(pt1.tag,pt2.tag,pt3.tag,pt4.tag)
 s.nDivI= 1
 s.nDivJ= 1
 
-s= surfaces.newQuadSurfacePts(3,6,7,4)
+s= surfaces.newQuadSurfacePts(pt3.tag,pt6.tag,pt7.tag,pt4.tag)
 s.nDivI= 1
 s.nDivJ= 4
 
-s= surfaces.newQuadSurfacePts(5,6,7,8)
+s= surfaces.newQuadSurfacePts(pt5.tag,pt6.tag,pt7.tag,pt8.tag)
 s.nDivI= 2
 s.nDivJ= 3
 
-s= surfaces.newQuadSurfacePts(5,8,1,2)
+s= surfaces.newQuadSurfacePts(pt5.tag,pt8.tag,pt1.tag,pt2.tag)
 s.nDivI= 4
 s.nDivJ= 4
 

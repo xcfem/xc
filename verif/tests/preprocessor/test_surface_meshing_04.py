@@ -34,7 +34,6 @@ nodes.newSeedNode()
 
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= "matPrb"
-seedElemHandler.defaultTag= 1
 elem= seedElemHandler.newElement("ShellMITC4",xc.ID([0,0,0,0]))
 
 
@@ -47,7 +46,6 @@ points.newPntFromPos3d(geom.Pos3d((R*cos45),(R*sin45),1.0))
 points.newPntFromPos3d(geom.Pos3d(0.0,R,1.0))
 
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
-surfaces.defaultTag= 1
 s1= surfaces.newQuadSurfaceGridPts([[1,2,3],[4,5,6]])
 s1.nDivI= 100
 s1.nDivJ= 1

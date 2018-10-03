@@ -52,7 +52,6 @@ pt7= points.newPntFromPos3d(geom.Pos3d(CooMaxX*2/3.0,CooMaxY,0.0))
 pt8= points.newPntFromPos3d(geom.Pos3d(CooMaxX,CooMaxY,0.0))
 
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
-surfaces.defaultTag= 1
 s1= surfaces.newQuadSurfacePts(pt1.tag,pt2.tag,pt6.tag,pt5.tag)
 s1.nDivI= 1
 s1.nDivJ= 1
