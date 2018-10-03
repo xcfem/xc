@@ -19,7 +19,7 @@ nu= 0.3 # Coeficiente de Poison
 G= 6720000
 thickness= 0.0001 # Cross section depth expressed in inches.
 unifLoad= 0.0001 # Carga uniforme en lb/in2.
-ptLoad= 100 # Carga puntual en lb.
+ptLoad= 100 # Punctual load en lb.
 
 import xc_base
 import geom
@@ -72,14 +72,14 @@ for l in sides:
     modelSpace.fixNode000_FFF(i)
 
 # Loads definition
-cargas= preprocessor.getLoadHandler
-casos= cargas.getLoadPatterns
+loadHandler= preprocessor.getLoadHandler
+lPatterns= loadHandler.getLoadPatterns
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
 #Load case definition
-lp0= casos.newLoadPattern("default","0")
-#casos.currentLoadPattern= "0"
+lp0= lPatterns.newLoadPattern("default","0")
+#lPatterns.currentLoadPattern= "0"
 
 
 f1= preprocessor.getSets.getSet("f1")
@@ -93,7 +93,7 @@ lp0.newNodalLoad(node.tag,xc.Vector([0,0,-ptLoad,0,0,0])) # Concentrated load
 
 nElems= f1.getNumElements
 #We add the load case to domain.
-casos.addToDomain("0")
+lPatterns.addToDomain("0")
 
 
 # Solution procedure

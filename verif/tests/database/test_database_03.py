@@ -58,32 +58,32 @@ beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]));
 
 modelSpace.fixNode000_000(1)
 
-cargas= preprocessor.getLoadHandler
+loadHandler= preprocessor.getLoadHandler
 
-casos= cargas.getLoadPatterns
+lPatterns= loadHandler.getLoadPatterns
 
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
 #Load case definition
-lp0= casos.newLoadPattern("default","0")
+lp0= lPatterns.newLoadPattern("default","0")
 lp0.newNodalLoad(2,xc.Vector([F,0,0,0,0,0]))
 #We add the load case to domain.
-casos.addToDomain("0")
+lPatterns.addToDomain("0")
 
 # Solution
 analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
-cargas= preprocessor.getLoadHandler
+loadHandler= preprocessor.getLoadHandler
 
-casos= cargas.getLoadPatterns
+lPatterns= loadHandler.getLoadPatterns
 
-lp1= casos.newLoadPattern("default","1")
+lp1= lPatterns.newLoadPattern("default","1")
 lp1.newNodalLoad(2,xc.Vector([F,0,0,0,0,0]))
 
 #We add the load case to domain.
-casos.addToDomain("1")
+lPatterns.addToDomain("1")
 
 import os
 os.system("rm -f /tmp/test03.db")

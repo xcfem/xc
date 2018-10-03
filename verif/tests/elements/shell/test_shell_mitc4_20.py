@@ -81,13 +81,13 @@ for l in sides:
     modelSpace.fixNode000_000(i)
 
 # Loads definition
-cargas= preprocessor.getLoadHandler
-casos= cargas.getLoadPatterns
-ts= casos.newTimeSeries("constant_ts","ts")
+loadHandler= preprocessor.getLoadHandler
+lPatterns= loadHandler.getLoadPatterns
+ts= lPatterns.newTimeSeries("constant_ts","ts")
 # \constant_ts["ts"]{ \factor{1.0} } # Time series: constant_ts[nombre]{factor}
-casos.currentTimeSeries= "ts"
-lp0= casos.newLoadPattern("default","0") 
-#casos.currentLoadPattern= "0"
+lPatterns.currentTimeSeries= "ts"
+lp0= lPatterns.newLoadPattern("default","0") 
+#lPatterns.currentLoadPattern= "0"
 
 nodal_loads.load_on_nodes_in_face(f1,lp0,[0,0,-nLoad,0,0,0])
 f1= preprocessor.getSets.getSet("f1")
@@ -100,7 +100,7 @@ nNodes= f1.getNumNodes
 
 nElems= f1.getNumElements
 #We add the load case to domain.
-casos.addToDomain("0")
+lPatterns.addToDomain("0")
 
 
 # Solution procedure

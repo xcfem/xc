@@ -136,9 +136,9 @@ spc= constraints.newSPConstraint(2,1,0.0) # Node 2, uy=0
 
 
 # Loads definition
-cargas= preprocessor.getLoadHandler   #loads container
+loadHandler= preprocessor.getLoadHandler   #loads container
 
-casos= cargas.getLoadPatterns
+lPatterns= loadHandler.getLoadPatterns
 
 
 elements= preprocessor.getElementHandler
@@ -158,11 +158,11 @@ fibersSccEl1= sccEl1.getFibers()
 setsRCEl1= fiber_sets.fiberSectionSetupRCSets(scc=sccEl1,concrMatTag=concr.tag,concrSetName="concrSetFbEl1",reinfMatTag=rfSteel.matTagK,reinfSetName="reinfSetFbEl1")
 
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
 dom= preprocessor.getDomain
 #Load case definition
-lp0= casos.newLoadPattern("default","0")
+lp0= lPatterns.newLoadPattern("default","0")
 
 strain=list()
 stress=list()
@@ -171,7 +171,7 @@ for F in Flist:
   pointLoad=xc.Vector([F,0,0])
   lp0.newNodalLoad(2,pointLoad)    #applies the point load on node 2 
   #We add the load case to domain.
-  casos.addToDomain("0")           #reads load pattern "0" and adds it to the domain
+  lPatterns.addToDomain("0")           #reads load pattern "0" and adds it to the domain
   # Solve
   #analisis= predefined_solutions.simple_newton_raphson(feProblem)
   analisis= predefined_solutions.simple_static_modified_newton(feProblem)

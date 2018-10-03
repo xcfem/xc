@@ -59,28 +59,28 @@ beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]));
 # Constraints
 modelSpace.fixNode000_000(1)
 # Loads definition
-cargas= preprocessor.getLoadHandler
-casos= cargas.getLoadPatterns
+loadHandler= preprocessor.getLoadHandler
+lPatterns= loadHandler.getLoadPatterns
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
-lpA= casos.newLoadPattern("default","A")
-lpB= casos.newLoadPattern("default","B")
-#casos.currentLoadPattern= "A"
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
+lpA= lPatterns.newLoadPattern("default","A")
+lpB= lPatterns.newLoadPattern("default","B")
+#lPatterns.currentLoadPattern= "A"
 eleLoad= lpA.newElementalLoad("beam3d_uniform_load")
 eleLoad.elementTags= xc.ID([1]) 
 eleLoad.axialComponent= f
 
-#casos.currentLoadPattern= "B"
+#lPatterns.currentLoadPattern= "B"
 eleLoad= lpB.newElementalLoad("beam3d_uniform_load")
 eleLoad.elementTags= xc.ID([1]) 
 eleLoad.transComponent= -f
-combs= cargas.getLoadCombinations
+combs= loadHandler.getLoadCombinations
 comb= combs.newLoadCombination("COMB","1.33*A+1.5*B")
 
 # Solution procedure
 # Resolvemos para el caso A
-cargas.addToDomain("A") # Append the combination to the domain
+loadHandler.addToDomain("A") # Append the combination to the domain
 analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
@@ -115,7 +115,7 @@ cumpleA= (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3-1.0)<1e-5)
 
 
 # Solve for combination COMB
-cargas.addToDomain("COMB")
+loadHandler.addToDomain("COMB")
 
 analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)

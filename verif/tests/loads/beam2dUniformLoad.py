@@ -58,20 +58,20 @@ modelSpace.fixNode000(1)
 
 
 # Loads definition
-cargas= preprocessor.getLoadHandler
-casos= cargas.getLoadPatterns
+loadHandler= preprocessor.getLoadHandler
+lPatterns= loadHandler.getLoadPatterns
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
 #Load case definition
-lp0= casos.newLoadPattern("default","0")
-#casos.currentLoadPattern= "0"
+lp0= lPatterns.newLoadPattern("default","0")
+#lPatterns.currentLoadPattern= "0"
 eleLoad= lp0.newElementalLoad("beam2d_uniform_load")
 eleLoad.elementTags= xc.ID([1]) 
 eleLoad.transComponent= -P 
 eleLoad.axialComponent= n
 #We add the load case to domain.
-casos.addToDomain("0")
+lPatterns.addToDomain("0")
 
 # Solution
 analisis= predefined_solutions.simple_static_linear(feProblem)

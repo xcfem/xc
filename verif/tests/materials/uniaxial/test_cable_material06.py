@@ -67,16 +67,16 @@ predefined_spaces.ConstraintsForLineExtremeNodes(l,modelSpace.fixNode000_000)
 predefined_spaces.ConstraintsForLineInteriorNodes(l,modelSpace.fixNodeFFF_000)
 
 # Loads definition
-cargas= preprocessor.getLoadHandler
-casos= cargas.getLoadPatterns
+loadHandler= preprocessor.getLoadHandler
+lPatterns= loadHandler.getLoadPatterns
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
 lPattern= "0"
-lp0= casos.newLoadPattern("default",lPattern)
-casos.currentLoadPattern= lPattern
+lp0= lPatterns.newLoadPattern("default",lPattern)
+lPatterns.currentLoadPattern= lPattern
 nodal_loads.load_on_nodes_in_line(l1,lp0,xc.Vector([0,-F,0,0,0,0]))
-casos.addToDomain(lPattern)
+lPatterns.addToDomain(lPattern)
 
 
 Nstep= 10  #  apply load in 10 steps

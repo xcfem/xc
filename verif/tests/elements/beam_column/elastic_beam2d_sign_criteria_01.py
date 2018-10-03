@@ -79,15 +79,15 @@ beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]));
 
 modelSpace.fixNode000(1)
 
-cargas= preprocessor.getLoadHandler
-casos= cargas.getLoadPatterns
+loadHandler= preprocessor.getLoadHandler
+lPatterns= loadHandler.getLoadPatterns
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
-lp0= casos.newLoadPattern("default","0")
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
+lp0= lPatterns.newLoadPattern("default","0")
 lp0.newNodalLoad(2,xc.Vector([F,0,0])) #Positive force along x axis
 #We add the load case to domain.
-casos.addToDomain("0")
+lPatterns.addToDomain("0")
 
 # Solution 0 N
 analisis= predefined_solutions.simple_static_linear(feProblem)
@@ -110,10 +110,10 @@ ratios.extend(phaseRatios)
 
 
 lp0.removeFromDomain()
-lp1= casos.newLoadPattern("default","1")
+lp1= lPatterns.newLoadPattern("default","1")
 lp1.newNodalLoad(2,xc.Vector([0,F,0])) #Positive force along y axis
 #We add the load case to domain.
-casos.addToDomain("1")
+lPatterns.addToDomain("1")
 
 # Solution 1 V
 analisis= predefined_solutions.simple_static_linear(feProblem)
@@ -135,10 +135,10 @@ ratios.extend(phaseRatios)
 #printResults(N1,V1,M1,N2,V2,M2,phaseRatios,'1')
 
 lp1.removeFromDomain()
-lp2= casos.newLoadPattern("default","2")
+lp2= lPatterns.newLoadPattern("default","2")
 lp2.newNodalLoad(2,xc.Vector([0,0,F])) #Positive moment about z axis
 #We add the load case to domain.
-casos.addToDomain("2")
+lPatterns.addToDomain("2")
 
 # Solution 2 M
 analisis= predefined_solutions.simple_static_linear(feProblem)

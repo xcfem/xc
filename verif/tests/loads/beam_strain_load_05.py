@@ -63,13 +63,13 @@ modelSpace.fixNode000(1)
 modelSpace.fixNode000(3)
 
 # Loads definition
-cargas= preprocessor.getLoadHandler
-casos= cargas.getLoadPatterns
-ts= casos.newTimeSeries("linear_ts","ts")
-casos.currentTimeSeries= "ts"
+loadHandler= preprocessor.getLoadHandler
+lPatterns= loadHandler.getLoadPatterns
+ts= lPatterns.newTimeSeries("linear_ts","ts")
+lPatterns.currentTimeSeries= "ts"
 #Load case definition
-lp0= casos.newLoadPattern("default","0")
-#casos.currentLoadPattern= "0"
+lp0= lPatterns.newLoadPattern("default","0")
+#lPatterns.currentLoadPattern= "0"
 eleLoad= lp0.newElementalLoad("beam_strain_load")
 eleLoad.elementTags= xc.ID([1])
 defTermica= xc.DeformationPlane(alpha*AT)
@@ -77,7 +77,7 @@ eleLoad.backEndDeformationPlane= defTermica
 eleLoad.frontEndDeformationPlane= defTermica
 
 #We add the load case to domain.
-casos.addToDomain("0")
+lPatterns.addToDomain("0")
 
 # Solution procedure
 analisis= predefined_solutions.simple_static_modified_newton(feProblem)

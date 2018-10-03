@@ -19,7 +19,7 @@ nu= 0.3 # Poisson's ratio
 G= 6720000
 thickness= 0.0001 # Cross section depth expressed in inches.
 unifLoad= 0.0001 # Uniform load in  lb/in2.
-ptLoad= 0.0004 # Carga puntual in lb.
+ptLoad= 0.0004 # Punctual load in lb.
 nLoad= unifLoad*CooMaxX*CooMaxY/NumDivI/NumDivJ # Tributary load for each node
 
 import xc_base
@@ -69,30 +69,30 @@ for l in sides:
     modelSpace.fixNode000_FFF(i)
 
 # Loads definition
-cargas= preprocessor.getLoadHandler
-casos= cargas.getLoadPatterns
+loadHandler= preprocessor.getLoadHandler
+lPatterns= loadHandler.getLoadPatterns
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
 #Load case definition
-lp0= casos.newLoadPattern("default","0")
-#casos.currentLoadPattern= "0"
+lp0= lPatterns.newLoadPattern("default","0")
+#lPatterns.currentLoadPattern= "0"
 
 
 nNodes= f0.getNumNodes
-capa1= f0.getNodeLayers.getLayer(0)
-nf= capa1.nRow
-nc= capa1.nCol
+layer1= f0.getNodeLayers.getLayer(0)
+nf= layer1.nRow
+nc= layer1.nCol
 for i in range(2,nf):
   for j in range(2,nc):
-    node= capa1.getNode(i,j)
+    node= layer1.getNode(i,j)
     lp0.newNodalLoad(node.tag,xc.Vector([0,0,-nLoad,0,0,0])) # Concentrated load
 
 
 
 nElems= f0.getNumElements
 #We add the load case to domain.
-casos.addToDomain("0")
+lPatterns.addToDomain("0")
 
 
 # Solution procedure

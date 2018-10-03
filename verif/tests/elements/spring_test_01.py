@@ -54,18 +54,18 @@ spc= constraints.newSPConstraint(2,1,0.0) # Node 2
 
 
 # Loads definition
-cargas= preprocessor.getLoadHandler
-casos= cargas.getLoadPatterns
+loadHandler= preprocessor.getLoadHandler
+lPatterns= loadHandler.getLoadPatterns
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
 lPattern= "0"
-lp0= casos.newLoadPattern("default",lPattern)
-#casos.currentLoadPattern= lPattern
-# de paso comprobamos que las cargas se acumulan
+lp0= lPatterns.newLoadPattern("default",lPattern)
+#lPatterns.currentLoadPattern= lPattern
+# we check that loads are cummulated by the way.
 lp0.newNodalLoad(2,xc.Vector([F/2.0,0]))
 lp0.newNodalLoad(2,xc.Vector([F/2.0,0]))
-casos.addToDomain(lPattern) # Append load pattern to domain.
+lPatterns.addToDomain(lPattern) # Append load pattern to domain.
 # Solution
 analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)

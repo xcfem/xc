@@ -97,22 +97,22 @@ modelSpace.fixNode000_000(5)
 modelSpace.fixNode000_000(9)
 
 # Loads definition
-cargas= preprocessor.getLoadHandler
+loadHandler= preprocessor.getLoadHandler
 
-casos= cargas.getLoadPatterns
+lPatterns= loadHandler.getLoadPatterns
 
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
 
-lpG= casos.newLoadPattern("default","G")
-#casos.currentLoadPattern= "G"
+lpG= lPatterns.newLoadPattern("default","G")
+#lPatterns.currentLoadPattern= "G"
 lpG.newNodalLoad(nod4.tag,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 lpG.newNodalLoad(nod8.tag,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 lpG.newNodalLoad(nod12.tag,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 
 # Combinaciones
-combs= cargas.getLoadCombinations
+combs= loadHandler.getLoadCombinations
 comb= combs.newLoadCombination("ELU001","1.00*G")
 
 printFlag= 0

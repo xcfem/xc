@@ -68,16 +68,16 @@ spc= constraints.newSPConstraint(3,0,0.0) # Node 3
 
 
 # Loads definition
-cargas= preprocessor.getLoadHandler
-casos= cargas.getLoadPatterns
+loadHandler= preprocessor.getLoadHandler
+lPatterns= loadHandler.getLoadPatterns
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
-lp0= casos.newLoadPattern("default","0")
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
+lp0= lPatterns.newLoadPattern("default","0")
 lp0.newNodalLoad(2,xc.Vector([0,-F2]))
 lp0.newNodalLoad(3,xc.Vector([0,-F1]))
 #We add the load case to domain.
-casos.addToDomain("0")
+lPatterns.addToDomain("0")
 
 # Solution procedure
 import os

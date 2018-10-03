@@ -15,13 +15,13 @@ preprocessor=  feProblem.getPreprocessor
 
 
 #Load modulation.
-cargas= preprocessor.getLoadHandler
-casos= cargas.getLoadPatterns
-ts= casos.newTimeSeries("constant_ts","ts")
-gm= casos.newLoadPattern("uniform_excitation","gm")
+loadHandler= preprocessor.getLoadHandler
+lPatterns= loadHandler.getLoadPatterns
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+gm= lPatterns.newLoadPattern("uniform_excitation","gm")
 mr= gm.motionRecord
 hist= mr.history
-accel= casos.newTimeSeries("path_ts","accel")
+accel= lPatterns.newTimeSeries("path_ts","accel")
 import os
 pth= os.path.dirname(__file__)
 #print "pth= ", pth

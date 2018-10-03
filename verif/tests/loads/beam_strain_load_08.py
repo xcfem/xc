@@ -69,21 +69,21 @@ spc= constraints.newSPConstraint(2,1,0.0)
 spc= constraints.newSPConstraint(2,2,0.0)
 
 # Loads definition
-cargas= preprocessor.getLoadHandler
+loadHandler= preprocessor.getLoadHandler
 
-casos= cargas.getLoadPatterns
-ts= casos.newTimeSeries("linear_ts","ts")
-casos.currentTimeSeries= "ts"
-lp0= casos.newLoadPattern("default","0")
+lPatterns= loadHandler.getLoadPatterns
+ts= lPatterns.newTimeSeries("linear_ts","ts")
+lPatterns.currentTimeSeries= "ts"
+lp0= lPatterns.newLoadPattern("default","0")
 lp0.gammaF= gammaF
-#casos.currentLoadPattern= "0"
+#lPatterns.currentLoadPattern= "0"
 eleLoad= lp0.newElementalLoad("beam_strain_load")
 eleLoad.elementTags= xc.ID([1])
 defTermica= xc.DeformationPlane(alpha*AT)
 eleLoad.backEndDeformationPlane= defTermica
 eleLoad.frontEndDeformationPlane= defTermica
 #We add the load case to domain.
-casos.addToDomain("0")
+lPatterns.addToDomain("0")
 
 analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)

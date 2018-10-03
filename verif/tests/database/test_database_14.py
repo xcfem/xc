@@ -72,16 +72,16 @@ mesh.setDeadSRF(0.0)
 mesh.freezeDeadNodes("congela") # Constraint inactive nodes.
 
 # Loads definition
-cargas= preprocessor.getLoadHandler
-casos= cargas.getLoadPatterns
+loadHandler= preprocessor.getLoadHandler
+lPatterns= loadHandler.getLoadPatterns
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
 #Load case definition
-lp0= casos.newLoadPattern("default","0")
+lp0= lPatterns.newLoadPattern("default","0")
 lp0.newNodalLoad(2,xc.Vector([F,F,F]))
 #We add the load case to domain.
-casos.addToDomain("0")
+lPatterns.addToDomain("0")
 
 import os
 os.system("rm -r -f /tmp/test14.db")

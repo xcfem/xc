@@ -50,21 +50,21 @@ modelSpace.fixNode000_FFF(3)
 modelSpace.fixNode000_FFF(4)
 
 # Loads definition
-cargas= preprocessor.getLoadHandler
+loadHandler= preprocessor.getLoadHandler
 
-casos= cargas.getLoadPatterns
+lPatterns= loadHandler.getLoadPatterns
 
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
 #Load case definition
-lp0= casos.newLoadPattern("default","0")
-#casos.currentLoadPattern= "0"
+lp0= lPatterns.newLoadPattern("default","0")
+#lPatterns.currentLoadPattern= "0"
 eleLoad= lp0.newElementalLoad("shell_uniform_load")
 eleLoad.elementTags= xc.ID([0]) 
 eleLoad.transComponent= q
 #We add the load case to domain.
-casos.addToDomain("0")
+lPatterns.addToDomain("0")
 
 import os
 os.system("rm -f /tmp/test07.db")

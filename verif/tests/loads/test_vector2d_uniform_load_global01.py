@@ -92,14 +92,14 @@ constraints= preprocessor.getBoundaryCondHandler
 modelSpace.fixNode000(1)
 
 # Loads definition
-cargas= preprocessor.getLoadHandler
-casos= cargas.getLoadPatterns
+loadHandler= preprocessor.getLoadHandler
+lPatterns= loadHandler.getLoadPatterns
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
 #Load case definition
-lp0= casos.newLoadPattern("default","0")
-casos.currentLoadPattern= "0"
+lp0= lPatterns.newLoadPattern("default","0")
+lPatterns.currentLoadPattern= "0"
 crdTransf= el.getCoordTransf
 vIElem= crdTransf.getIVector
 vJElem= crdTransf.getJVector
@@ -107,8 +107,8 @@ vCarga= f*vIElem-p*vJElem
 el.vector2dUniformLoadGlobal(vCarga)
 
 
-cargas= preprocessor.getLoadHandler
-cargas.addToDomain("0") # Append load pattern to domain.
+loadHandler= preprocessor.getLoadHandler
+loadHandler.addToDomain("0") # Append load pattern to domain.
 
 # Solution procedure
 analisis= predefined_solutions.simple_newton_raphson(feProblem)

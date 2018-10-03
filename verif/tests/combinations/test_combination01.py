@@ -59,13 +59,13 @@ beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]));
 modelSpace.fixNode000_000(1)
 
 # Loads definition
-cargas= preprocessor.getLoadHandler
-casos= cargas.getLoadPatterns
+loadHandler= preprocessor.getLoadHandler
+lPatterns= loadHandler.getLoadPatterns
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
-lpA= casos.newLoadPattern("default","A")
-lpB= casos.newLoadPattern("default","B")
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
+lpA= lPatterns.newLoadPattern("default","A")
+lpB= lPatterns.newLoadPattern("default","B")
 #\set_current_load_pattern{"A"}
 eleLoad= lpA.newElementalLoad("beam3d_uniform_load")
 eleLoad.elementTags= xc.ID([1])
@@ -73,9 +73,9 @@ eleLoad.axialComponent= f
 eleLoad= lpB.newElementalLoad("beam3d_uniform_load")
 eleLoad.elementTags= xc.ID([1])
 eleLoad.transComponent= -f
-combs= cargas.getLoadCombinations
+combs= loadHandler.getLoadCombinations
 comb= combs.newLoadCombination("COMB","1.33*A+1.5*B")
-cargas.addToDomain("COMB")
+loadHandler.addToDomain("COMB")
 
 # Solution
 analisis= predefined_solutions.simple_static_linear(feProblem)

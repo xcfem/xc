@@ -59,16 +59,16 @@ modelSpace.fixNodeFFF_000(2)
 modelSpace.fixNode000_000(3)
 
 # Loads definition
-cargas= preprocessor.getLoadHandler
-casos= cargas.getLoadPatterns
+loadHandler= preprocessor.getLoadHandler
+lPatterns= loadHandler.getLoadPatterns
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
 lPattern= "0"
-lp0= casos.newLoadPattern("default",lPattern)
-#casos.currentLoadPattern= lPattern
+lp0= lPatterns.newLoadPattern("default",lPattern)
+#lPatterns.currentLoadPattern= lPattern
 lp0.newNodalLoad(2,xc.Vector([0,-F,0,0,0,0]))
-casos.addToDomain(lPattern) # Append load pattern to domain.
+lPatterns.addToDomain(lPattern) # Append load pattern to domain.
 
 # Solution procedure
 analisis= predefined_solutions.simple_newton_raphson(feProblem)

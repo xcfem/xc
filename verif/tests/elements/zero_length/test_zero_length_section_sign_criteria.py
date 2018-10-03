@@ -91,18 +91,18 @@ zl= elements.newElement("ZeroLengthSection",xc.ID([1,2]))
 modelSpace.fixNode000_000(1)
 
 # Loads definition
-cargas= preprocessor.getLoadHandler
-casos= cargas.getLoadPatterns
+loadHandler= preprocessor.getLoadHandler
+lPatterns= loadHandler.getLoadPatterns
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
 #Load case definition
-lp0= casos.newLoadPattern("default","0")
-lp1= casos.newLoadPattern("default","1")
-lp2= casos.newLoadPattern("default","2")
-lp3= casos.newLoadPattern("default","3")
-lp4= casos.newLoadPattern("default","4")
-lp5= casos.newLoadPattern("default","5")
+lp0= lPatterns.newLoadPattern("default","0")
+lp1= lPatterns.newLoadPattern("default","1")
+lp2= lPatterns.newLoadPattern("default","2")
+lp3= lPatterns.newLoadPattern("default","3")
+lp4= lPatterns.newLoadPattern("default","4")
+lp5= lPatterns.newLoadPattern("default","5")
 lp0.newNodalLoad(2,xc.Vector([F,0,0,0,0,0]))
 lp1.newNodalLoad(2,xc.Vector([0,2*F,0,0,0,0]))
 lp2.newNodalLoad(2,xc.Vector([0,0,3*F,0,0,0]))
@@ -112,7 +112,7 @@ lp5.newNodalLoad(2,xc.Vector([0,0,0,0,0,6*F]))
 
 
 listaHipotesis= []
-for key in casos.getKeys():
+for key in lPatterns.getKeys():
   listaHipotesis.append(key)
 
 # Solution procedure
@@ -174,8 +174,8 @@ vJ= xc.Vector([0,0,0])
 vK= xc.Vector([0,0,0])
 
 for hip in listaHipotesis:
-  cargas= preprocessor.getLoadHandler
-  cargas.addToDomain(hip)
+  loadHandler= preprocessor.getLoadHandler
+  loadHandler.addToDomain(hip)
   ok= solve()
   if(ok==0):
     ele1= elements.getElement(1)
@@ -211,7 +211,7 @@ for hip in listaHipotesis:
     if(abs(Mz)>1):
       epsilonYPos= scc0.getStrain(1.0,0.0)
     epsMz= scc0.getSectionDeformationByName("defMz")
-    cargas.removeFromDomain(hip)
+    loadHandler.removeFromDomain(hip)
     dom= preprocessor.getDomain
     dom.revertToStart()
 

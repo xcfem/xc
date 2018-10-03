@@ -68,16 +68,16 @@ modelSpace.fixNode000_000(n1.tag)
 Fx= -400e3 # Axial force for shear checking.
 Fz= 1e3 # Bending moment force for shear checking.
 Fy= 1e5 # Bending moment force for shear checking.
-cargas= preprocessor.getLoadHandler
-casos= cargas.getLoadPatterns
+loadHandler= preprocessor.getLoadHandler
+lPatterns= loadHandler.getLoadPatterns
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
 #Load case definition
-lp0= casos.newLoadPattern("default","lp0")
+lp0= lPatterns.newLoadPattern("default","lp0")
 lp0.newNodalLoad(n3.tag,xc.Vector([Fx,Fy,Fz,0,0,0]))
 #We add the load case to domain.
-casos.addToDomain(lp0.getName())
+lPatterns.addToDomain(lp0.getName())
 
 # # Solution
 # analisis= predefined_solutions.simple_static_linear(feProblem)

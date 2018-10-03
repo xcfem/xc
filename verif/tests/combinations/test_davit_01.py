@@ -70,24 +70,24 @@ beam3.rho= densHorm*A
 modelSpace.fixNode000_000(1)
 
 # Loads definition
-cargas= preprocessor.getLoadHandler
+loadHandler= preprocessor.getLoadHandler
 
-casos= cargas.getLoadPatterns
+lPatterns= loadHandler.getLoadPatterns
 
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
 
 # Peso propio
-lpG= casos.newLoadPattern("default","G") 
+lpG= lPatterns.newLoadPattern("default","G") 
 # Sobrecarga de uso
-lpSC= casos.newLoadPattern("default","SC") 
+lpSC= lPatterns.newLoadPattern("default","SC") 
 # Viento
-lpVT= casos.newLoadPattern("default","VT") 
+lpVT= lPatterns.newLoadPattern("default","VT") 
 # Nieve
-lpNV= casos.newLoadPattern("default","NV") 
+lpNV= lPatterns.newLoadPattern("default","NV") 
 
-casos.currentLoadPattern= "G"
+lPatterns.currentLoadPattern= "G"
 elements= preprocessor.getSets.getSet("total").getElements
 for e in elements:
   pesoElem= (e.rho*(-10))
@@ -96,19 +96,19 @@ for e in elements:
 beam2.vector3dUniformLoadGlobal(xc.Vector([0.0,0.0,-22e3]))
 beam3.vector3dUniformLoadGlobal(xc.Vector([0.0,0.0,-22e3]))
 
-casos.currentLoadPattern= "SC"
+lPatterns.currentLoadPattern= "SC"
 
 beam3.vector3dPointByRelDistLoadGlobal(0.99,xc.Vector([0.0,0.0,-100e3]))
 
-casos.currentLoadPattern= "VT"
+lPatterns.currentLoadPattern= "VT"
 lpVT.newNodalLoad(3,xc.Vector([50e3,0.0,0.0,0.0,0.0,0.0]))
 
-casos.currentLoadPattern= "NV"
+lPatterns.currentLoadPattern= "NV"
 beam2.vector3dUniformLoadGlobal(xc.Vector([0.0,0.0,-10e3]))
 beam3.vector3dUniformLoadGlobal(xc.Vector([0.0,0.0,-10e3]))
 
 # Combinaciones
-combs= cargas.getLoadCombinations
+combs= loadHandler.getLoadCombinations
 import os
 pth= os.path.dirname(__file__)
 #print "pth= ", pth

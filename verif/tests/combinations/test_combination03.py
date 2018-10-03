@@ -18,15 +18,15 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor  
 
 #Load modulation.
-cargas= preprocessor.getLoadHandler
-casos= cargas.getLoadPatterns
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
-lpA= casos.newLoadPattern("default","A")
-lpB= casos.newLoadPattern("default","B")
-lpC= casos.newLoadPattern("default","C")
+loadHandler= preprocessor.getLoadHandler
+lPatterns= loadHandler.getLoadPatterns
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
+lpA= lPatterns.newLoadPattern("default","A")
+lpB= lPatterns.newLoadPattern("default","B")
+lpC= lPatterns.newLoadPattern("default","C")
 
-combs= cargas.getLoadCombinations
+combs= loadHandler.getLoadCombinations
 comb1= combs.newLoadCombination("COMB1","1.33*A+1.5*B+0.5*B")
 comb2= combs.newLoadCombination("COMB2","1.33*A+1.5*B+1.0*C")
 comb4= combs.newLoadCombination("COMB4","1.33*A")

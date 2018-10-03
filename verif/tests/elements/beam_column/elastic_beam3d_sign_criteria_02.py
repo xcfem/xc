@@ -91,16 +91,16 @@ modelSpace.fixNode000_000(1)
 
 elem=preprocessor.getElementHandler.getElement(1) #element 1
 
-cargas= preprocessor.getLoadHandler
-casos= cargas.getLoadPatterns
+loadHandler= preprocessor.getLoadHandler
+lPatterns= loadHandler.getLoadPatterns
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
-lp0= casos.newLoadPattern("default","0")
-casos.currentLoadPattern= "0"
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
+lp0= lPatterns.newLoadPattern("default","0")
+lPatterns.currentLoadPattern= "0"
 elem.vector3dPointByRelDistLoadLocal(xRelPtoAplic,xc.Vector([F,0,0]))
 #We add the load case to domain.
-casos.addToDomain("0")
+lPatterns.addToDomain("0")
 
 # Solution 0 N 
 analisis= predefined_solutions.simple_static_linear(feProblem)
@@ -125,10 +125,10 @@ ratios.extend(phaseRatios)
 # printResults(N1,Vy1,Vz1,T1,My1,Mz1,N2,Vy2,Vz2,T2,My2,Mz2,phaseRatios,'')
 
 lp0.removeFromDomain()
-lp1= casos.newLoadPattern("default","1")
-casos.currentLoadPattern= "1"
+lp1= lPatterns.newLoadPattern("default","1")
+lPatterns.currentLoadPattern= "1"
 elem.vector3dPointByRelDistLoadLocal(xRelPtoAplic,xc.Vector([0,F,0]))
-casos.addToDomain("1")
+lPatterns.addToDomain("1")
 
 # Solution 1 Mz Vy
 analisis= predefined_solutions.simple_static_linear(feProblem)
@@ -155,10 +155,10 @@ ratios.extend(phaseRatios)
 
 
 lp1.removeFromDomain()
-lp2= casos.newLoadPattern("default","2")
-casos.currentLoadPattern= "2"
+lp2= lPatterns.newLoadPattern("default","2")
+lPatterns.currentLoadPattern= "2"
 elem.vector3dPointByRelDistLoadLocal(xRelPtoAplic,xc.Vector([0,0,F]))
-casos.addToDomain("2")
+lPatterns.addToDomain("2")
 
 
 # Solution 2 My Vz
@@ -186,10 +186,10 @@ ratios.extend(phaseRatios)
 
 
 lp2.removeFromDomain()
-lp3= casos.newLoadPattern("default","3")
-casos.currentLoadPattern= "3"
+lp3= lPatterns.newLoadPattern("default","3")
+lPatterns.currentLoadPattern= "3"
 elem.vector3dUniformLoadLocal(xc.Vector([0,0,F]))
-casos.addToDomain("3")
+lPatterns.addToDomain("3")
 
 # Solution 3 T
 analisis= predefined_solutions.simple_static_linear(feProblem)

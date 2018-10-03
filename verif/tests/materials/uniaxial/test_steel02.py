@@ -63,21 +63,21 @@ spc= constraints.newSPConstraint(1,1,0.0)
 spc= constraints.newSPConstraint(2,1,0.0) # Node 2
 
 # Loads definition
-cargas= preprocessor.getLoadHandler
-casos= cargas.getLoadPatterns
-ts= casos.newTimeSeries("trig_ts","ts")
+loadHandler= preprocessor.getLoadHandler
+lPatterns= loadHandler.getLoadPatterns
+ts= lPatterns.newTimeSeries("trig_ts","ts")
 ts.factor= 1
 ts.tStart= 0
 ts.tFinish= 2
 ts.period= 1
 ts.shift= 0
-casos.currentTimeSeries= "ts"
+lPatterns.currentTimeSeries= "ts"
 #Load case definition
-lp0= casos.newLoadPattern("default","0")
+lp0= lPatterns.newLoadPattern("default","0")
 lp0.newNodalLoad(2,xc.Vector([F,0]))
 
 #We add the load case to domain.
-casos.addToDomain("0")
+lPatterns.addToDomain("0")
 
 x= []
 y= []

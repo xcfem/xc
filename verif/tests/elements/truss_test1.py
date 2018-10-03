@@ -63,19 +63,19 @@ spc= constraints.newSPConstraint(2,0,0.0)
 #Constrain the displacement of node 3 in X axis (gdl 0).
 spc= constraints.newSPConstraint(3,0,0.0)
 
-cargas= preprocessor.getLoadHandler
+loadHandler= preprocessor.getLoadHandler
 #Load pattern container:
-casos= cargas.getLoadPatterns
+lPatterns= loadHandler.getLoadPatterns
 #time series for the load pattern:
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
 #Load case definition
-lp0= casos.newLoadPattern("default","0")
+lp0= lPatterns.newLoadPattern("default","0")
 lp0.newNodalLoad(2,xc.Vector([0,-F2]))
 lp0.newNodalLoad(3,xc.Vector([0,-F1]))
 
 #Add the load pattern to the domain.
-casos.addToDomain("0")
+lPatterns.addToDomain("0")
 
 # Solution
 analisis= predefined_solutions.simple_static_linear(feProblem)

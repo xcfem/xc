@@ -111,21 +111,21 @@ modelSpace.fixNode000_000(5)
 modelSpace.fixNode000_000(9)
 
 # Loads definition
-cargas= preprocessor.getLoadHandler
+loadHandler= preprocessor.getLoadHandler
 
-casos= cargas.getLoadPatterns
+lPatterns= loadHandler.getLoadPatterns
 
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
 
-lpSHRINKAGE= casos.newLoadPattern("default","SHRINKAGE")
-lpFLU= casos.newLoadPattern("default","FLU")
+lpSHRINKAGE= lPatterns.newLoadPattern("default","SHRINKAGE")
+lpFLU= lPatterns.newLoadPattern("default","FLU")
 
-lpG= casos.newLoadPattern("default","G")
-lpSC= casos.newLoadPattern("default","SC")
-lpVT= casos.newLoadPattern("default","VT")
-lpNV= casos.newLoadPattern("default","NV")
+lpG= lPatterns.newLoadPattern("default","G")
+lpSC= lPatterns.newLoadPattern("default","SC")
+lpVT= lPatterns.newLoadPattern("default","VT")
+lpNV= lPatterns.newLoadPattern("default","NV")
 
 nod4= nodes.getNode(4)
 nod8= nodes.getNode(8)
@@ -147,7 +147,7 @@ lpNV.newNodalLoad(nod8.tag,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 lpNV.newNodalLoad(nod12.tag,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 
 # Combinaciones
-combs= cargas.getLoadCombinations
+combs= loadHandler.getLoadCombinations
 comb= combs.newLoadCombination("ELU001","1.00*G")
 comb= combs.newLoadCombination("ELU002","1.35*G")
 comb= combs.newLoadCombination("ELU003","1.00*G + 1.50*SC")
@@ -261,9 +261,9 @@ for e in setShells.getElements:
   espMedio= 2*Ac/u
   e.setProp("epsShrinkage",concrHA30.getShrEpscs(tFin,tS,Hrel*100,espMedio*1000))
 
-cargas= preprocessor.getLoadHandler
-casos= cargas.getLoadPatterns
-#casos.setCurrentLoadPattern("SHRINKAGE")
+loadHandler= preprocessor.getLoadHandler
+lPatterns= loadHandler.getLoadPatterns
+#lPatterns.setCurrentLoadPattern("SHRINKAGE")
 
 for e in setShells.getElements:
   eleLoad= lpSHRINKAGE.newElementalLoad("shell_strain_load")
@@ -300,9 +300,9 @@ for e in setShells.getElements:
   epsFluencia2=concrHA30.getCreepDeformation(tFin,t0,Hrel*100,espMedio*1000,tension2Media)
 
 
-cargas= preprocessor.getLoadHandler
-casos= cargas.getLoadPatterns
-#cargas.setCurrentLoadPattern("FLU")
+loadHandler= preprocessor.getLoadHandler
+lPatterns= loadHandler.getLoadPatterns
+#loadHandler.setCurrentLoadPattern("FLU")
 for e in setShells.getElements:
   eleLoad= lpFLU.newElementalLoad("shell_strain_load")
   eleLoad.elementTags= xc.ID([e.tag]) 
@@ -316,7 +316,7 @@ for e in setShells.getElements:
   eleLoad.setStrainComp(3,1,epsFluencia2)
 
 preprocessor.resetLoadCase()
-cargas= preprocessor.getLoadHandler
+loadHandler= preprocessor.getLoadHandler
 
 comb= combs.newLoadCombination("FASE0","1.00*FLU")
 comb.tagSaveFase0= comb.tag*100

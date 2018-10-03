@@ -96,40 +96,40 @@ modelSpace.fixNode000_000(5)
 modelSpace.fixNode000_000(9)
 
 # Loads definition
-cargas= preprocessor.getLoadHandler
+loadHandler= preprocessor.getLoadHandler
 
-casos= cargas.getLoadPatterns
+lPatterns= loadHandler.getLoadPatterns
 
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
 
-lpG= casos.newLoadPattern("default","G")
-lpSC= casos.newLoadPattern("default","SC")
-lpVT= casos.newLoadPattern("default","VT")
-lpNV= casos.newLoadPattern("default","NV")
-#casos.currentLoadPattern= "G"
+lpG= lPatterns.newLoadPattern("default","G")
+lpSC= lPatterns.newLoadPattern("default","SC")
+lpVT= lPatterns.newLoadPattern("default","VT")
+lpNV= lPatterns.newLoadPattern("default","NV")
+#lPatterns.currentLoadPattern= "G"
 n4Load= lpG.newNodalLoad(4,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 n8Load= lpG.newNodalLoad(8,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 n12Load= lpG.newNodalLoad(12,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 
-#casos.currentLoadPattern= "SC"
+#lPatterns.currentLoadPattern= "SC"
 n4Load= lpSC.newNodalLoad(4,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 n8Load= lpSC.newNodalLoad(8,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 n12Load= lpSC.newNodalLoad(12,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 
-#casos.currentLoadPattern= "VT"
+#lPatterns.currentLoadPattern= "VT"
 n4Load= lpVT.newNodalLoad(4,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 n8Load= lpVT.newNodalLoad(8,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 n12Load= lpVT.newNodalLoad(12,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 
-#casos.currentLoadPattern= "NV"
+#lPatterns.currentLoadPattern= "NV"
 n4Load= lpNV.newNodalLoad(4,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 n8Load= lpNV.newNodalLoad(8,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 n12Load= lpNV.newNodalLoad(12,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 
 # Combinaciones
-combs= cargas.getLoadCombinations
+combs= loadHandler.getLoadCombinations
 comb001= combs.newLoadCombination("ELU001","1.00*G")
 comb002= combs.newLoadCombination("ELU002","1.35*G")
 comb003= combs.newLoadCombination("ELU003","1.00*G + 1.50*SC")
@@ -231,7 +231,7 @@ db= feProblem.newDatabase("BerkeleyDB","/tmp/test_combinacion_05.db")
 
 helper= dbHelper.DatabaseHelperSolve(db)
 
-cargas= preprocessor.getLoadHandler
+loadHandler= preprocessor.getLoadHandler
 nombrePrevia="" 
 tagPrevia= 0 
 tagSave= 0

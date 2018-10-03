@@ -84,16 +84,16 @@ for i in range(1,NumDiv+2):
 modelSpace.fixNodesLine(line= l1)
 
 
-# Casos de carga
-cargas= preprocessor.getLoadHandler
+# Load patterns
+loadHandler= preprocessor.getLoadHandler
 #Load pattern container:
-casos= cargas.getLoadPatterns
+lPatterns= loadHandler.getLoadPatterns
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
 #Load case definition
-lp0= casos.newLoadPattern("default","0")
-#casos.currentLoadPattern= "0"
+lp0= lPatterns.newLoadPattern("default","0")
+#lPatterns.currentLoadPattern= "0"
 
 l2= preprocessor.getSets.getSet("l2")
 
@@ -105,7 +105,7 @@ for i in range(1,nNodes+1):
   F= (100*xNod+10)
   lp0.newNodalLoad(nodeTag,xc.Vector([0,F,0]))
 
-casos.addToDomain("0")
+lPatterns.addToDomain("0")
 nCargasNod= lp0.getNumNodalLoads
 
 ''' 

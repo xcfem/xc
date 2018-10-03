@@ -66,14 +66,14 @@ spc= constraints.newSPConstraint(nod1.tag,1,0.0)
 spc= constraints.newSPConstraint(nod2.tag,1,0.0)
 
 # Loads definition
-cargas= preprocessor.getLoadHandler
+loadHandler= preprocessor.getLoadHandler
 
-casos= cargas.getLoadPatterns
-ts= casos.newTimeSeries("linear_ts","ts")
-casos.currentTimeSeries= "ts"
+lPatterns= loadHandler.getLoadPatterns
+ts= lPatterns.newTimeSeries("linear_ts","ts")
+lPatterns.currentTimeSeries= "ts"
 #Load case definition
-lp0= casos.newLoadPattern("default","0")
-#casos.currentLoadPattern= "0"
+lp0= lPatterns.newLoadPattern("default","0")
+#lPatterns.currentLoadPattern= "0"
 eleLoad= lp0.newElementalLoad("shell_strain_load")
 eleLoad.elementTags= xc.ID([elem1.tag])
 eleLoad.setStrainComp(0,0,alpha*AT) #(id of Gauss point, id of component, value)
@@ -82,7 +82,7 @@ eleLoad.setStrainComp(2,0,alpha*AT)
 eleLoad.setStrainComp(3,0,alpha*AT)
 
 #We add the load case to domain.
-casos.addToDomain("0")
+lPatterns.addToDomain("0")
 
 analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)

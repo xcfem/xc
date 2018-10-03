@@ -62,28 +62,28 @@ beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]));
 modelSpace.fixNode000_000(1)
 
 # Loads definition
-cargas= preprocessor.getLoadHandler
-casos= cargas.getLoadPatterns
+loadHandler= preprocessor.getLoadHandler
+lPatterns= loadHandler.getLoadPatterns
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
-lpA= casos.newLoadPattern("default","A") 
-lpB= casos.newLoadPattern("default","B") 
-#casos.currentLoadPattern= "A"
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
+lpA= lPatterns.newLoadPattern("default","A") 
+lpB= lPatterns.newLoadPattern("default","B") 
+#lPatterns.currentLoadPattern= "A"
 eleLoad= lpA.newElementalLoad("beam3d_uniform_load")
 eleLoad.elementTags= xc.ID([1]) 
 eleLoad.axialComponent= f
 
-#casos.currentLoadPattern= "B"
+#lPatterns.currentLoadPattern= "B"
 eleLoad= lpB.newElementalLoad("beam3d_uniform_load")
 eleLoad.elementTags= xc.ID([1]) 
 eleLoad.transComponent= -f
 
-combs= cargas.getLoadCombinations
+combs= loadHandler.getLoadCombinations
 comb= combs.newLoadCombination("COMB","1.33*A+1.5*B")
 
 #We add the load case to domain.
-cargas.addToDomain("COMB")
+loadHandler.addToDomain("COMB")
 
 import os
 from miscUtils import LogMessages as lmsg

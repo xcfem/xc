@@ -92,23 +92,23 @@ modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
 modelSpace.fixNode000_000(1)
 
 # Loads definition
-cargas= preprocessor.getLoadHandler
+loadHandler= preprocessor.getLoadHandler
 
-casos= cargas.getLoadPatterns
+lPatterns= loadHandler.getLoadPatterns
 
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
 #Load case definition
-lp0= casos.newLoadPattern("default","0")
+lp0= lPatterns.newLoadPattern("default","0")
 lp0.newNodalLoad(2,xc.Vector([NDato,0,0,0,MyDato,MzDato]))
-lp1= casos.newLoadPattern("default","1")
+lp1= lPatterns.newLoadPattern("default","1")
 lp1.newNodalLoad(2,xc.Vector([NDato,0,0,0,MzDato/10.0,MyDato/10.0]))
-lp2= casos.newLoadPattern("default","2")
+lp2= lPatterns.newLoadPattern("default","2")
 lp2.newNodalLoad(2,xc.Vector([NDato,0,0,0,0,0]))
 
 #We add the load case to domain.
-casos.addToDomain("0")
+lPatterns.addToDomain("0")
 
 
 # Solution procedure
@@ -133,9 +133,9 @@ concreteSectionShearParams.calcVuEHE08(scc,"",EHE_materials.HA25,EHE_materials.B
 Vu2A= concreteSectionShearParams.Vu2
 
 
-cargas= preprocessor.getLoadHandler.removeFromDomain("0") # Quitamos la carga.
+loadHandler= preprocessor.getLoadHandler.removeFromDomain("0") # Quitamos la carga.
 preprocessor.resetLoadCase()
-cargas= preprocessor.getLoadHandler.addToDomain("1") # Añadimos la otra carga.
+loadHandler= preprocessor.getLoadHandler.addToDomain("1") # Añadimos la otra carga.
 
 
 analOk= analisis.analyze(10)
@@ -149,9 +149,9 @@ concreteSectionShearParams.calcVuEHE08(scc,"",EHE_materials.HA25,EHE_materials.B
 Vu2B= concreteSectionShearParams.Vu2
 
 
-cargas= preprocessor.getLoadHandler.removeFromDomain("1") # Quitamos la carga.
+loadHandler= preprocessor.getLoadHandler.removeFromDomain("1") # Quitamos la carga.
 preprocessor.resetLoadCase()
-cargas= preprocessor.getLoadHandler.addToDomain("2") # Añadimos la otra carga.
+loadHandler= preprocessor.getLoadHandler.addToDomain("2") # Añadimos la otra carga.
 
 
 analOk= analisis.analyze(10)

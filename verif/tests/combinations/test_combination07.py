@@ -96,43 +96,43 @@ modelSpace.fixNode000_000(5)
 modelSpace.fixNode000_000(9)
 
 # Loads definition
-cargas= preprocessor.getLoadHandler
+loadHandler= preprocessor.getLoadHandler
 
-casos= cargas.getLoadPatterns
+lPatterns= loadHandler.getLoadPatterns
 
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
 
-lpG0= casos.newLoadPattern("default","G0")
-lpG= casos.newLoadPattern("default","G")
-lpSC= casos.newLoadPattern("default","SC")
-lpVT= casos.newLoadPattern("default","VT")
-lpNV= casos.newLoadPattern("default","NV")
+lpG0= lPatterns.newLoadPattern("default","G0")
+lpG= lPatterns.newLoadPattern("default","G")
+lpSC= lPatterns.newLoadPattern("default","SC")
+lpVT= lPatterns.newLoadPattern("default","VT")
+lpNV= lPatterns.newLoadPattern("default","NV")
 
-#casos.currentLoadPattern= "G"
+#lPatterns.currentLoadPattern= "G"
 lpG.newNodalLoad(4,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 lpG.newNodalLoad(8,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 lpG.newNodalLoad(12,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 
-#casos.currentLoadPattern= "SC"
+#lPatterns.currentLoadPattern= "SC"
 lpSC.newNodalLoad(4,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 lpSC.newNodalLoad(8,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 lpSC.newNodalLoad(12,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 
-#casos.currentLoadPattern= "VT"
+#lPatterns.currentLoadPattern= "VT"
 lpVT.newNodalLoad(4,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 lpVT.newNodalLoad(8,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 lpVT.newNodalLoad(12,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 
-#casos.currentLoadPattern= "NV"
+#lPatterns.currentLoadPattern= "NV"
 lpNV.newNodalLoad(4,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 lpNV.newNodalLoad(8,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 lpNV.newNodalLoad(12,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 
 
 # Combinaciones
-combs= cargas.getLoadCombinations
+combs= loadHandler.getLoadCombinations
 comb= combs.newLoadCombination("ELU001","1.00*G")
 comb= combs.newLoadCombination("ELU002","1.35*G")
 comb= combs.newLoadCombination("ELU003","1.00*G + 1.50*SC")
@@ -226,9 +226,9 @@ helper= dbHelper.DatabaseHelperSolve(db)
 
 # Fase 0: pretensado
 preprocessor.resetLoadCase()
-cargas= preprocessor.getLoadHandler
+loadHandler= preprocessor.getLoadHandler
 
-combs= cargas.getLoadCombinations
+combs= loadHandler.getLoadCombinations
 comb= combs.newLoadCombination("FASE0","1.00*G0")
 tagSaveFase0= comb.tag*100
 comb.addToDomain()

@@ -170,21 +170,21 @@ spc= constraints.newSPConstraint(0,4,0.0)
 spc= constraints.newSPConstraint(0,5,0.0)
 
 # Loads definition
-cargas= preprocessor.getLoadHandler
-casos= cargas.getLoadPatterns
+loadHandler= preprocessor.getLoadHandler
+lPatterns= loadHandler.getLoadPatterns
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
 #Load case definition
 #Nodal Loads defined as [Fx,Fy,Fz,Mx,My,Mz] in the global coordinate system
-lcXbeam= casos.newLoadPattern("default","lcXbeam")
+lcXbeam= lPatterns.newLoadPattern("default","lcXbeam")
 lcXbeam.newNodalLoad(1,xc.Vector([0,0,F,0,-M,0])) #loads applied at front end
-lcYbeam= casos.newLoadPattern("default","lcYbeam")
+lcYbeam= lPatterns.newLoadPattern("default","lcYbeam")
 lcYbeam.newNodalLoad(2,xc.Vector([F,0,0,0,0,-M])) #loads applied at front end
-lcZbeam= casos.newLoadPattern("default","lcZbeam")
+lcZbeam= lPatterns.newLoadPattern("default","lcZbeam")
 lcZbeam.newNodalLoad(3,xc.Vector([F/math.sqrt(2),-F/math.sqrt(2),0,M/math.sqrt(2),M/math.sqrt(2),0])) #loads applied at front end
 
-# lcbeams= casos.newLoadPattern("default","lcbeams")
+# lcbeams= lPatterns.newLoadPattern("default","lcbeams")
 # lcbeams.newNodalLoad(1,xc.Vector([0,0,F,0,-M,0])) # loads applied at front end
 #                                                   # of beam X
 # lcbeams.newNodalLoad(2,xc.Vector([F,0,0,0,0,-M])) #loads applied at front end
@@ -192,7 +192,7 @@ lcZbeam.newNodalLoad(3,xc.Vector([F/math.sqrt(2),-F/math.sqrt(2),0,M/math.sqrt(2
 # lcbeams.newNodalLoad(3,xc.Vector([F/math.sqrt(2),-F/math.sqrt(2),0,M/math.sqrt(2),M/math.sqrt(2),0]))                             #loads applied at front end
 #                                                   # of beam Z
 
-# casos.addToDomain("lcbeams")
+# lPatterns.addToDomain("lcbeams")
 
 # Solution
 # analisis= predefined_solutions.simple_static_linear(feProblem)

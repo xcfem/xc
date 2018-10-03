@@ -88,15 +88,15 @@ beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]));
 
 modelSpace.fixNode000_000(1)
 
-cargas= preprocessor.getLoadHandler
-casos= cargas.getLoadPatterns
+loadHandler= preprocessor.getLoadHandler
+lPatterns= loadHandler.getLoadPatterns
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
-lp0= casos.newLoadPattern("default","0")
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
+lp0= lPatterns.newLoadPattern("default","0")
 lp0.newNodalLoad(2,xc.Vector([F,0,0,0,0,0])) #Positive force along x axis
 #We add the load case to domain.
-casos.addToDomain("0")
+lPatterns.addToDomain("0")
 
 # Solution 0 N
 analisis= predefined_solutions.simple_static_linear(feProblem)
@@ -122,10 +122,10 @@ ratios.extend(phaseRatios)
 
 
 lp0.removeFromDomain()
-lp1= casos.newLoadPattern("default","1")
+lp1= lPatterns.newLoadPattern("default","1")
 lp1.newNodalLoad(2,xc.Vector([0,F,0,0,0,0])) #Positive force along y axis
 #We add the load case to domain.
-casos.addToDomain("1")
+lPatterns.addToDomain("1")
 
 # Solution 1 My Vz
 analisis= predefined_solutions.simple_static_linear(feProblem)
@@ -150,10 +150,10 @@ ratios.extend(phaseRatios)
 #printResults(N1,Vy1,Vz1,T1,My1,Mz1,N2,Vy2,Vz2,T2,My2,Mz2,phaseRatios,'1')
 
 lp1.removeFromDomain()
-lp2= casos.newLoadPattern("default","2")
+lp2= lPatterns.newLoadPattern("default","2")
 lp2.newNodalLoad(2,xc.Vector([0,0,F,0,0,0])) #Positive force along z axis
 #We add the load case to domain.
-casos.addToDomain("2")
+lPatterns.addToDomain("2")
 
 # Solution 2 Mz Vy
 analisis= predefined_solutions.simple_static_linear(feProblem)
@@ -179,10 +179,10 @@ ratios.extend(phaseRatios)
 
 
 lp2.removeFromDomain()
-lp3= casos.newLoadPattern("default","3")
+lp3= lPatterns.newLoadPattern("default","3")
 lp3.newNodalLoad(2,xc.Vector([0,0,0,F,0,0])) #Positive moment about x axis
 #We add the load case to domain.
-casos.addToDomain("3")
+lPatterns.addToDomain("3")
 
 # Solution 3 T
 analisis= predefined_solutions.simple_static_linear(feProblem)
@@ -206,10 +206,10 @@ ratios.extend(phaseRatios)
 #printResults(N1,Vy1,Vz1,T1,My1,Mz1,N2,Vy2,Vz2,T2,My2,Mz2,phaseRatios,'3')
 
 lp3.removeFromDomain()
-lp4= casos.newLoadPattern("default","4")
+lp4= lPatterns.newLoadPattern("default","4")
 lp4.newNodalLoad(2,xc.Vector([0,0,0,0,F,0])) #Positive moment about y axis
 #We add the load case to domain.
-casos.addToDomain("4")
+lPatterns.addToDomain("4")
 
 # Solution 4 T
 analisis= predefined_solutions.simple_static_linear(feProblem)
@@ -233,10 +233,10 @@ ratios.extend(phaseRatios)
 #printResults(N1,Vy1,Vz1,T1,My1,Mz1,N2,Vy2,Vz2,T2,My2,Mz2,phaseRatios,'4')
 
 lp4.removeFromDomain()
-lp5= casos.newLoadPattern("default","5")
+lp5= lPatterns.newLoadPattern("default","5")
 lp5.newNodalLoad(2,xc.Vector([0,0,0,0,0,F])) #Positive moment about z axis
 #We add the load case to domain.
-casos.addToDomain("5")
+lPatterns.addToDomain("5")
 
 # Solution 5 T
 analisis= predefined_solutions.simple_static_linear(feProblem)

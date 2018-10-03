@@ -21,13 +21,13 @@ preprocessor=  feProblem.getPreprocessor
 
 
 #Load modulation.
-cargas= preprocessor.getLoadHandler
-casos= cargas.getLoadPatterns
-ts= casos.newTimeSeries("constant_ts","ts")
-gm= casos.newLoadPattern("uniform_excitation","gm")
+loadHandler= preprocessor.getLoadHandler
+lPatterns= loadHandler.getLoadPatterns
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+gm= lPatterns.newLoadPattern("uniform_excitation","gm")
 mr= gm.motionRecord
 hist= mr.history
-accel= casos.newTimeSeries("path_time_ts","accel")
+accel= lPatterns.newTimeSeries("path_time_ts","accel")
 accel.path= xc.Vector([20,74,128,182,236,290,344,398])
 accel.time= xc.Vector([0,1,2,3,4,5,6,7])
 hist.accel= accel

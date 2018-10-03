@@ -85,18 +85,18 @@ beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]));
 constraints= preprocessor.getBoundaryCondHandler
 modelSpace.fixNode000(nodeTag=2)
 
-cargas= preprocessor.getLoadHandler
-casos= cargas.getLoadPatterns
+loadHandler= preprocessor.getLoadHandler
+lPatterns= loadHandler.getLoadPatterns
 #Load modulation.
-ts= casos.newTimeSeries("constant_ts","ts")
-casos.currentTimeSeries= "ts"
-lp0= casos.newLoadPattern("default","0")
+ts= lPatterns.newTimeSeries("constant_ts","ts")
+lPatterns.currentTimeSeries= "ts"
+lp0= lPatterns.newLoadPattern("default","0")
 eleLoad= lp0.newElementalLoad("beam2d_point_load")
 eleLoad.elementTags= xc.ID([1])
 eleLoad.axialComponent=F
 eleLoad.x= xRelPtoAplic
 #We add the load case to domain.
-casos.addToDomain("0")
+lPatterns.addToDomain("0")
 
 # Solution 0 N
 analisis= predefined_solutions.simple_static_linear(feProblem)
@@ -120,13 +120,13 @@ ratios.extend(phaseRatios)
 
 
 lp0.removeFromDomain()
-lp1= casos.newLoadPattern("default","1")
+lp1= lPatterns.newLoadPattern("default","1")
 eleLoad= lp1.newElementalLoad("beam2d_point_load")
 eleLoad.elementTags= xc.ID([1])
 eleLoad.transComponent= F
 eleLoad.x= xRelPtoAplic
 #We add the load case to domain.
-casos.addToDomain("1")
+lPatterns.addToDomain("1")
 
 # Solution 1 V
 analisis= predefined_solutions.simple_static_linear(feProblem)
