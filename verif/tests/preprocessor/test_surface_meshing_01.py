@@ -26,8 +26,8 @@ numNodes= 0
 numElem= 0
 # Problem type
 feProblem= xc.FEProblem()
-feProblem.logFileName= "/tmp/borrar.log" # Ignore warning messages
-feProblem.errFileName= "/tmp/borrar.err" # Ignore warning messages
+feProblem.logFileName= "/tmp/erase.log" # Ignore warning messages
+feProblem.errFileName= "/tmp/erase.err" # Ignore warning messages
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
@@ -45,16 +45,15 @@ elem= seedElemHandler.newElement("FourNodeQuad",xc.ID([0,0,0,0]))
 
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
-pt= points.newPntIDPos3d(2,geom.Pos3d(CooMaxX/2,0.0,0.0))
-pt= points.newPntIDPos3d(3,geom.Pos3d(CooMaxX,0.0,0.0))
-pt= points.newPntIDPos3d(4,geom.Pos3d(0.0,CooMaxY,0.0))
-pt= points.newPntIDPos3d(5,geom.Pos3d(CooMaxX/2,CooMaxY,0.0))
-pt= points.newPntIDPos3d(6,geom.Pos3d(CooMaxX,CooMaxY,0.0))
+pt1= points.newPntFromPos3d(geom.Pos3d(0.0,0.0,0.0))
+pt2= points.newPntFromPos3d(geom.Pos3d(CooMaxX/2,0.0,0.0))
+pt3= points.newPntFromPos3d(geom.Pos3d(CooMaxX,0.0,0.0))
+pt4= points.newPntFromPos3d(geom.Pos3d(0.0,CooMaxY,0.0))
+pt5= points.newPntFromPos3d(geom.Pos3d(CooMaxX/2,CooMaxY,0.0))
+pt6= points.newPntFromPos3d(geom.Pos3d(CooMaxX,CooMaxY,0.0))
 
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
-surfaces.defaultTag= 1
-s1= surfaces.newQuadSurfacePts(1,2,5,4)
+s1= surfaces.newQuadSurfacePts(pt1.tag,pt2.tag,pt5.tag,pt4.tag)
 s1.nDivI= 1
 s1.nDivJ= 1
 
@@ -66,8 +65,7 @@ s1.genMesh(xc.meshDir.I)
 
 
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
-surfaces.defaultTag= 2
-s2= surfaces.newQuadSurfacePts(2,3,6,5)
+s2= surfaces.newQuadSurfacePts(pt2.tag,pt3.tag,pt6.tag,pt5.tag)
 s2.nDivI= 2
 s2.nDivJ= 2
 
