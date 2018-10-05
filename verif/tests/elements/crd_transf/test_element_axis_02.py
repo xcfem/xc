@@ -39,7 +39,7 @@ fy= 275e6 # Yield stress of the steel.
 E= 210e9 # Young modulus of the steel.
 steel= typical_materials.defSteel01(preprocessor, "steel",E,fy,0.001)
 
-# Secciones
+# Sections
 quadFibersGeom= preprocessor.getMaterialHandler.newSectionGeometry("quadFibersGeom")
 y1= h/2.0
 z1= b/2.0

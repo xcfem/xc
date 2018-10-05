@@ -59,7 +59,7 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 respT= typical_materials.defElasticMaterial(preprocessor, "respT",E) # Torsion response.
 respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",E) # Shear response in y direction.
 respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",E) # Shear response in y direction.
-# Secciones
+# Sections
 testQuadRegion= preprocessor.getMaterialHandler.newSectionGeometry("testQuadRegion")
 y1= width/2.0
 z1= depth/2.0
