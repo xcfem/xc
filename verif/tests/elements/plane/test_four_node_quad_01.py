@@ -21,7 +21,7 @@ from model import predefined_spaces
 from materials import typical_materials
 
 E= 30e6 # Young modulus (psi)
-nu= 0.3 # Coeficiente de Poison
+nu= 0.3 # Poisson's ratio
 rho= 0.0 # Densidad
 
 # Problem type

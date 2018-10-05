@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Home made test
 E= 30e6 # Young modulus (psi)
-nu= 0.33 # Coeficiente de Poison
+nu= 0.33 # Poisson's ratio
 rho= 1.5 # Densidad
 
 import xc_base

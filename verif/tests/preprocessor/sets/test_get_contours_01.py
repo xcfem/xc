@@ -16,7 +16,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 E= 30e6 # Young modulus (psi)
-nu= 0.3 # Coeficiente de Poison
+nu= 0.3 # Poisson's ratio
 rho= 0.0 # Densidad
 
 # Problem type
