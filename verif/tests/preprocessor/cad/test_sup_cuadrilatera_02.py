@@ -21,7 +21,7 @@ NumDivJ= 2
 CooMax= 10
 E= 30e6 # Young modulus (psi)
 nu= 0.3 # Poisson's ratio
-rho= 0.0 # Densidad
+rho= 0.0 # Density
 
 # Problem type
 feProblem= xc.FEProblem()

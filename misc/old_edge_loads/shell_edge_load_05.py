@@ -12,7 +12,7 @@ from materials import typical_materials
 E= 2.1e6 # Steel Young modulus.
 nu= 0.3 # Poisson's coefficient.
 h= 0.1 # Espesor.
-dens= 1.33 # Densidad kg/m2.
+dens= 1.33 # Density kg/m2.
 L= 2
 p= 10
 

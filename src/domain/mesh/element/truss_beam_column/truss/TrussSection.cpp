@@ -316,15 +316,18 @@ const XC::Matrix &XC::TrussSection::getInitialStiff(void) const
     return *theMatrix;
   }
 
+//! @brief Return the element material.
 const XC::Material *XC::TrussSection::getMaterial(void) const
   { return theSection; }
+//! @brief Return the element material.
 XC::Material *XC::TrussSection::getMaterial(void)
   { return theSection; }
-//! @brief Return the densidad of the section.
+//! @brief Return the density of the section.
 double XC::TrussSection::getRho(void) const
   { return theSection->getRho(); }
 
 
+//! @brief Return the element mass matrix.
 const XC::Matrix &XC::TrussSection::getMass(void) const
   {
     // zero the matrix

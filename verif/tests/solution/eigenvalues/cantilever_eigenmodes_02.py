@@ -22,10 +22,10 @@ A= b*h # Cross section area en m2
 I= 1/12.0*b*h**3 # Moment of inertia in m4
 J= 10*I # Cross section torsion constant
 theta= math.radians(30)
-E=2.0E11 # Elastic modulus en N/m2
+E=2.0E11 # Elastic modulus N/m2
 nu= 0.3 # Poisson's ratio
 G= E/(2*(1+nu)) # Shear modulus
-dens= 7800 # Densidad of the steel en kg/m3
+dens= 7800 # Steel density kg/m3
 m= A*dens
 
 NumDiv= 10

@@ -195,7 +195,7 @@ const XC::Matrix &XC::SectionForceDeformation::getInitialFlexibility(void) const
     return *fDefault;
   }
 
-//! @brief Returns the densidad (masa per unit length/area/volume)
+//! @brief Returns the density (mass per unit length/area/volume)
 //! of the section.
 double XC::SectionForceDeformation::getRho(void) const
   { return 0.0; }

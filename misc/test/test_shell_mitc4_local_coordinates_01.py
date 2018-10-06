@@ -3,8 +3,8 @@
 
 E= 2.1e6 # Steel Young modulus in kg/cm2.
 nu= 0.3 # Poisson's coefficient.
-h= 0.1 # Espesor.
-dens= 1.33 # Densidad kg/m2.
+h= 0.1 # Thickness.
+dens= 1.33 # Density kg/m2.
 
 import xc_base
 import geom
