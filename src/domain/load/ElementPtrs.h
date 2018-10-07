@@ -30,6 +30,7 @@
 #define ElementPtrs_h
 
 #include "xc_utils/src/kernel/CommandEntity.h"
+#include <vector>
 
 namespace XC {
 class Element;

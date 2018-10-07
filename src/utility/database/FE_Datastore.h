@@ -66,6 +66,7 @@
 // What: "@(#) FE_Datastore.h, revA"
 
 #include "utility/actor/channel/Channel.h"
+#include <vector>
 
 namespace XC {
 class Preprocessor;
