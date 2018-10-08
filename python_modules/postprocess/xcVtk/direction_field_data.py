@@ -49,4 +49,4 @@ class DirectionFieldData(vfd.VectorFieldData):
   def addToDisplay(self, recordDisplay):
     '''Adds the direction field to the display.'''
     self.setupActor()
-recordDisplay.renderer.AddActor(self.actor)
+    recordDisplay.renderer.AddActor(self.actor)
