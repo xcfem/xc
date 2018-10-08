@@ -119,3 +119,5 @@ class VectorFieldData(object):
     # Calling update because I'm going to use the scalar range to set the color map range
     self.glyph.Update()
 
+
+

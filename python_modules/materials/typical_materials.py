@@ -26,7 +26,7 @@ class BasicElasticMaterial(object):
 def defElasticMaterial(preprocessor,name,E):
   '''Constructs an elastic uniaxial material.
 
-  :param preprocessor: preprocessor name
+  :param preprocessor: preprocessor
   :param name:         name identifying the material
   :param E:            tangent in the stress-strain diagram
   '''
@@ -40,7 +40,7 @@ def defElasticMaterial(preprocessor,name,E):
 def defElasticPPMaterial(preprocessor,name,E,fyp,fyn):
   '''Constructs an elastic perfectly-plastic uniaxial material.
 
-  :param preprocessor: preprocessor name
+  :param preprocessor: preprocessor
   :param name:         name identifying the material
   :param E:            tangent in the elastic zone of the stress-strain diagram
   :param fyp:          stress at which material reaches plastic state in tension
@@ -58,7 +58,7 @@ def defElasticPPMaterial(preprocessor,name,E,fyp,fyn):
 def defElastNoTensMaterial(preprocessor,name,E):
   '''Constructs a uniaxial elastic - no tension material.
 
-  :param preprocessor: preprocessor name
+  :param preprocessor: preprocessor
   :param name:         name identifying the material
   :param E:            tangent in the elastic zone of the stress-strain diagram
   '''
@@ -75,7 +75,7 @@ def defCableMaterial(preprocessor,name,E,prestress,rho):
   The stress strain ranges from slack (large strain at zero stress) 
   to taught (linear with modulus E).
 
-  :param preprocessor: preprocessor name
+  :param preprocessor: preprocessor
   :param name:         name identifying the material
   :param E:            elastic modulus
   :param prestress:    prestress
@@ -96,7 +96,7 @@ def defCableMaterial(preprocessor,name,E,prestress,rho):
 def defSteel01(preprocessor,name,E,fy,b):
   '''Constructs a uniaxial bilinear steel material object with kinematic hardening
 
-  :param preprocessor: preprocessor name
+  :param preprocessor: preprocessor
   :param name:         name identifying the material
   :param E:            initial elastic tangent 
   :param fy:           yield strength 
@@ -117,7 +117,7 @@ def defSteel02(preprocessor,name,E,fy,b,initialStress):
   '''Constructs a uniaxial bilinear Giuffre-Menegotto-Pinto steel material with 
   isotropic strain hardening
 
-  :param preprocessor: preprocessor name
+  :param preprocessor: preprocessor
   :param name:         name identifying the material
   :param E:            initial elastic tangent 
   :param fy:           yield strength 
@@ -142,7 +142,7 @@ def defConcrete01(preprocessor,name,epsc0,fpc,fpcu,epscu):
   with degraded linear unloading/reloading stiffness according to 
   the work of Karsan-Jirsa and no tensile strength
 
-  :param preprocessor: preprocessor name
+  :param preprocessor: preprocessor
   :param name:         name identifying the material
   :param epsc0:        concrete strain at maximum strength 
   :param fpc:          concrete compressive strength at 28 days (compression is negative)
@@ -166,7 +166,7 @@ def defConcrete02(preprocessor,name,epsc0,fpc,fpcu,epscu,ratioSlope,ft,Ets):
   softening. Compressive concrete parameters should be input as negative values.
   The initial slope for this model is (2*fpc/epsc0) 
 
-  :param preprocessor: preprocessor name
+  :param preprocessor: preprocessor
   :param name:         name identifying the material
   :param epsc0:        concrete strain at maximum strength 
   :param fpc:          concrete compressive strength at 28 days (compression is negative)
@@ -196,7 +196,7 @@ def defConcrete02(preprocessor,name,epsc0,fpc,fpcu,epscu,ratioSlope,ft,Ets):
 def defElasticSection2d(preprocessor,name,A,E,I):
   '''Constructs an elastic section appropiate for 2D beam analysis.
 
-  :param preprocessor: preprocessor name
+  :param preprocessor: preprocessor
   :param name:         name identifying the section
   :param A:            cross-sectional area of the section
   :param E:            Young’s modulus of material
@@ -216,7 +216,7 @@ def defElasticShearSection2d(preprocessor,name,A,E,G,I,alpha):
   '''Constructs an elastic section appropiate for 2D beam analysis, 
   including shear deformations.
 
-  :param preprocessor: preprocessor name
+  :param preprocessor: preprocessor
   :param name:         name identifying the section
   :param A:            cross-sectional area of the section
   :param E:            Young’s modulus of the material
@@ -239,7 +239,7 @@ def defElasticSectionFromMechProp2d(preprocessor,name,mechProp2d):
   '''Constructs an elastic section appropiate for 2D beam analysis, 
   taking mechanical properties of the section form a MechProp2d object.
 
-  :param preprocessor: preprocessor name
+  :param preprocessor: preprocessor
   :param name:         name identifying the section
   :param mechProp2d:   object of type MechProp2d that contains the mechanical 
                   properties of the section
@@ -250,7 +250,7 @@ def defElasticSectionFromMechProp2d(preprocessor,name,mechProp2d):
 def defElasticSection3d(preprocessor,name,A,E,G,Iz,Iy,J):
   '''Constructs an elastic section appropiate for 3D beam analysis
 
-  :param preprocessor: preprocessor name
+  :param preprocessor: preprocessor
   :param name:         name identifying the section
   :param A:            cross-sectional area of the section
   :param E:            Young’s modulus of the material
@@ -276,7 +276,7 @@ def defElasticSectionFromMechProp3d(preprocessor,name,mechProp3d):
   '''Constructs an elastic section appropiate for 3D beam analysis, 
   taking mechanical properties of the section form a MechProp3d object.
 
-  :param preprocessor: preprocessor name
+  :param preprocessor: preprocessor
   :param name:         name identifying the section
   :param mechProp2d:   instance of the class MechProp3d that contains the 
                        mechanical properties of the section
@@ -288,7 +288,7 @@ def defElasticShearSection3d(preprocessor,name,A,E,G,Iz,Iy,J,alpha):
   '''Constructs an elastic section appropiate for 3D beam analysis, 
   including shear deformations.
 
-  :param preprocessor: preprocessor name
+  :param preprocessor: preprocessor
   :param name:         name identifying the section
   :param A:            cross-sectional area of the section
   :param E:            Young’s modulus of the material
@@ -316,7 +316,7 @@ def defElasticShearSection3d(preprocessor,name,A,E,G,Iz,Iy,J,alpha):
 def defElasticIsotropicPlaneStrain(preprocessor,name,E,nu,rho):
   '''Constructs an linear elastic isotropic plane-strain material.
 
-  :param  preprocessor: preprocessor name
+  :param  preprocessor: preprocessor
   :param  name:         name identifying the material
   :param  E:            Young’s modulus of the material
   :param  nu:           Poisson’s ratio
@@ -335,7 +335,7 @@ def defElasticIsotropicPlaneStrain(preprocessor,name,E,nu,rho):
 def defElasticIsotropicPlaneStress(preprocessor,name,E,nu,rho):
   '''Constructs an linear elastic isotropic plane-stress material.
 
-  :param  preprocessor: preprocessor name
+  :param  preprocessor: preprocessor
   :param  name:         name identifying the material
   :param  E:            Young’s modulus of the material
   :param  nu:           Poisson’s ratio
@@ -354,7 +354,7 @@ def defElasticIsotropicPlaneStress(preprocessor,name,E,nu,rho):
 def defElasticIsotropic3d(preprocessor,name,E,nu,rho):
   '''Constructs an linear elastic isotropic 3D material.
 
-  :param  preprocessor: preprocessor name
+  :param  preprocessor: preprocessor
   :param  name:         name identifying the material
   :param  E:            Young’s modulus of the material
   :param  nu:           Poisson’s ratio
@@ -374,7 +374,7 @@ def defElasticPlateSection(preprocessor,name,E,nu,rho,h):
   '''Constructs an elastic isotropic section material appropiate 
      for plate analysis.
 
-  :param  preprocessor: preprocessor name
+  :param  preprocessor: preprocessor
   :param  name:         name identifying the section
   :param  E:            Young’s modulus of the material
   :param  nu:           Poisson’s ratio
@@ -396,7 +396,7 @@ def defElasticMembranePlateSection(preprocessor,name,E,nu,rho,h):
   '''Constructs an elastic isotropic section material appropiate 
      for plate and shell analysis.
 
-  :param  preprocessor: preprocessor name
+  :param  preprocessor: preprocessor
   :param  name:         name identifying the section
   :param  E:            Young’s modulus of the material
   :param  nu:           Poisson’s ratio
