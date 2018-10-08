@@ -60,7 +60,7 @@ reinforcementB.p1= geom.Pos2d(y0-depth/2.0,z0+width/2.0)
 reinforcementB.p2= geom.Pos2d(y0+depth/2.0,z0+width/2.0)
 
 materiales= preprocessor.getMaterialHandler
-# Secciones
+# Sections
 quadFibers= materiales.newMaterial("fiber_section_3d","quadFibers")
 fiberSectionRepr= quadFibers.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("quadFibersGeom")

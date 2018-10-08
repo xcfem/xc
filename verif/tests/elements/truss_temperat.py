@@ -69,9 +69,9 @@ lPatterns.currentTimeSeries= "ts"
 lp0= lPatterns.newLoadPattern("default","0")
 #lPatterns.currentLoadPattern= "0"
 eleLoad= lp0.newElementalLoad("truss_temp_load")
-eleLoad.elementTags= xc.ID([1])
-eleLoad.eps1= alpha*10
-eleLoad.eps2= alpha*10
+eleLoad.elementTags= xc.ID([truss.tag])
+eleLoad.eps1= alpha*AT
+eleLoad.eps2= alpha*AT
 #We add the load case to domain.
 lPatterns.addToDomain("0")
 

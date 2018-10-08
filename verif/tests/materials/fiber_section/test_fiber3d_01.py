@@ -45,7 +45,7 @@ E= 2.1e6 # Young modulus.
 b=0.001    # strain-hardening ratio: ratio between post-yield tangent and initial elastic tangent
 steel= typical_materials.defSteel01(preprocessor=preprocessor,name="steel",E=E,fy=fy,b=b)
 
-# Secciones
+# Sections
 import os
 pth= os.path.dirname(__file__)
 #print "pth= ", pth

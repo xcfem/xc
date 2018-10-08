@@ -22,7 +22,7 @@ A= b*h # Cross section area en m2
 I= 1/12.0*b*h**3 # Moment of inertia in m4
 theta= math.radians(30)
 E=2.0E11 # Elastic modulus en N/m2
-dens= 7800 # Densidad of the steel en kg/m3
+dens= 7800 # Steel density kg/m3
 m= A*dens
 
 NumDiv= 10

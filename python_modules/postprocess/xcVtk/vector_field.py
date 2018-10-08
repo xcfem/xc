@@ -42,11 +42,11 @@ class VectorField(fb.FieldBase):
     self.actor.SetMapper(self.mapper)
     return self.actor
 
-  def addToDisplay(self, recordDisplay):
+  def addToDisplay(self, recordDisplay, orientation= 'H'):
     # Adds the vector field to the display.
     self.setupActor()
     recordDisplay.renderer.AddActor(self.actor)
-    self.creaColorScaleBar()
+    self.creaColorScaleBar(orientation)
     # mapper2D= vtk.vtkPolyDataMapper2D()
     # self.scalarBar.SetMapper(mapper2D)
     recordDisplay.renderer.AddActor2D(self.scalarBar)

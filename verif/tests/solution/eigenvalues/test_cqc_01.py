@@ -188,9 +188,8 @@ print "modos: ",modos
 print "modosTeor: ",modosTeor
 print "diff: ",diff
 print "ratio2= ",ratio2
-print "coeficientes para CQC: ",crossCQCCoefficients
-print "coeficientes CQC: ",crossCQCCoefficients
-print "coeficientes CQC example: ",crossCQCCoefficientsTeor
+print "coefficients CQC: ",crossCQCCoefficients
+print "coefficients CQC example: ",crossCQCCoefficientsTeor
 print "ratio3= ",ratio3
 print "factoresParticipacionModalX: ",factoresParticipacionModalX
 print "factoresParticipacionModalXTeor: ",factoresParticipacionModalXTeor

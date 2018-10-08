@@ -249,6 +249,7 @@ python tests/preprocessor/test_surface_meshing_03.py
 python tests/preprocessor/test_surface_meshing_04.py
 python tests/preprocessor/test_surface_meshing_05.py
 echo "$BLEU" "  Sets handling tests." "$NORMAL"
+python tests/preprocessor/sets/test_exist_set.py
 python tests/preprocessor/sets/mueve_set.py
 python tests/preprocessor/sets/test_set_01.py
 python tests/preprocessor/sets/une_sets.py

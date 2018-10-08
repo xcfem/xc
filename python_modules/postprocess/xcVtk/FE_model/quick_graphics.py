@@ -253,7 +253,7 @@ class QuickGraphics(object):
           if self.xcSet.color.Norm()==0:
               self.xcSet.color=xc.Vector([rd.random(),rd.random(),rd.random()])
       else:
-          lmsg.warning('QuickGraphics::displayLoadCaseBeamEl; set to display not defined; using previously defined set (total if None).')
+          lmsg.warning('QuickGraphics::dispLoadCaseBeamEl; set to display not defined; using previously defined set (total if None).')
       print 'xcSet', self.xcSet.name
       preprocessor= self.feProblem.getPreprocessor
       loadPatterns= preprocessor.getLoadHandler.getLoadPatterns
@@ -265,8 +265,8 @@ class QuickGraphics(object):
       # element loads
 #      print 'scale=',elLoadScaleF,'fUnitConv=',fUnitConv,'loadPatternName=',loadCaseName,'component=',elLoadComp
       diagram= lld.LinearLoadDiagram(scale=elLoadScaleF,fUnitConv=fUnitConv,loadPatternName=loadCaseName,component=elLoadComp)
-      diagram.addDiagram(preprocessor)
       if (diagram.valMax > -1e+99) or (diagram.valMin<1e+99):
+          diagram.addDiagram(preprocessor)
           defDisplay.appendDiagram(diagram)
           orNodalLBar='V'
       # nodal loads
@@ -275,14 +275,11 @@ class QuickGraphics(object):
       lPattern= loadPatterns[loadCaseName]
       count= 0
       if(lPattern):
-          count=vField.dumpNodalLoads(preprocessor,lp=loadPatterns[loadCaseName],defFScale=defFScale)
+          count=vField.dumpNodalLoads(preprocessor,defFScale=defFScale)
       else:
           lmsg.error('load pattern: '+ loadCaseName + ' not found.')
       if count >0:
-          vField.setupActor()
-          defDisplay.renderer.AddActor(vField.actor)
-          vField.creaColorScaleBar(orientation=orNodalLBar)
-          defDisplay.renderer.AddActor2D(vField.scalarBar)
+          vField.addToDisplay(defDisplay,orientation=orNodalLBar)
       defDisplay.displayScene(caption=caption,fName=fileName)
 
     def displayNodeValueDiagram(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,scaleFactor=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None,defFScale=0.0):

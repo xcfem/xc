@@ -31,6 +31,7 @@
 
 #include "xc_utils/src/kernel/CommandEntity.h"
 #include <list>
+#include <vector>
 
 class Pos3d;
 class HalfSpace3d;

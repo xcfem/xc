@@ -21,31 +21,39 @@ class LocalAxesVectorField(object):
   def __init__(self,name,scaleFactor= 1.0):
     '''
     Parameters:
-      scaleFactor: scale factor for the size of the vectors.
+      scaleFactor: scale efactor for the size of the vectors.
     '''
     super(LocalAxesVectorField,self).__init__()
     self.xAxes= dfd.DirectionFieldData(name+'X',self.xColor,3,scaleFactor)
     self.yAxes= dfd.DirectionFieldData(name+'Y',self.yColor,3,scaleFactor)
     self.zAxes= dfd.DirectionFieldData(name+'Z',self.zColor,3,scaleFactor)
 
-
+  def dumpPair(self,centroid,axes):
+    ''' Dump the pair into the xAxes, yAxes and zAxes objet.'''
+    vx= axes(0,0); vy= axes(0,1); vz= axes(0,2)
+    self.xAxes.insertNextPair(centroid.x,centroid.y,centroid.z,vx,vy,vz)
+    self.xAxes.insertNextVector(vx,vy,vz)
+    vx= axes(1,0); vy= axes(1,1); vz= axes(1,2)
+    self.yAxes.insertNextPair(centroid.x,centroid.y,centroid.z,vx,vy,vz)
+    self.yAxes.insertNextVector(vx,vy,vz)
+    vx= axes(2,0); vy= axes(2,1); vz= axes(2,2)
+    self.zAxes.insertNextPair(centroid.x,centroid.y,centroid.z,vx,vy,vz)
+    self.zAxes.insertNextVector(vx,vy,vz)
+    
+    
   def dumpVectors(self,xcSet):
     ''' Iterate over the elements dumping its axes into the graphic.'''
     elemSet= xcSet.getElements
     for e in elemSet:
-      p= e.getPosCentroid(True)
-      axes= e.getLocalAxes(True)
-      vx= axes(0,0); vy= axes(0,1); vz= axes(0,2)
-      self.xAxes.insertNextPair(p.x,p.y,p.z,vx,vy,vz)
-      vx= axes(1,0); vy= axes(1,1); vz= axes(1,2)
-      self.yAxes.insertNextPair(p.x,p.y,p.z,vx,vy,vz)
-      vx= axes(2,0); vy= axes(2,1); vz= axes(2,2)
-      self.zAxes.insertNextPair(p.x,p.y,p.z,vx,vy,vz)
+      self.dumpPair(e.getPosCentroid(True),e.getLocalAxes(True))
 
   def addToDisplay(self,recordDisplay):
-    self.xAxes.addToDisplay(recordDisplay)
-    self.yAxes.addToDisplay(recordDisplay)
-    self.zAxes.addToDisplay(recordDisplay)
+    if(self.xAxes.getNumberOfTuples()>0):
+      self.xAxes.addToDisplay(recordDisplay)
+    if(self.yAxes.getNumberOfTuples()>0):
+      self.yAxes.addToDisplay(recordDisplay)
+    if(self.yAxes.getNumberOfTuples()>0):
+      self.zAxes.addToDisplay(recordDisplay)
 
 class QuadSurfacesLocalAxesVectorField(LocalAxesVectorField):
   '''Draws the local axes on quadrilateral surfaces.'''
@@ -53,14 +61,8 @@ class QuadSurfacesLocalAxesVectorField(LocalAxesVectorField):
     ''' Iterate over the surfaces dumping its axes into the graphic.'''
     surfaceSet= xcSet.getSurfaces
     for s in surfaceSet:
-      p= s.getPosCentroid()
-      axes= s.getLocalAxes()
-      vx= axes(0,0); vy= axes(0,1); vz= axes(0,2)
-      self.xAxes.insertNextPair(p.x,p.y,p.z,vx,vy,vz)
-      vx= axes(1,0); vy= axes(1,1); vz= axes(1,2)
-      self.yAxes.insertNextPair(p.x,p.y,p.z,vx,vy,vz)
-      vx= axes(2,0); vy= axes(2,1); vz= axes(2,2)
-      self.zAxes.insertNextPair(p.x,p.y,p.z,vx,vy,vz)
+      self.dumpPair(s.getPosCentroid(),s.getLocalAxes())
+
     
 class StrongWeakAxisVectorField(object):
   '''Draws a the strong axis on elements.'''

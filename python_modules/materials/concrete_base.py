@@ -122,12 +122,14 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
 
     :ivar alfacc:    factor which takes account of the fatigue in the concrete when it is subjected to high levels of compression stress due to long duration loads. Normally alfacc=1 (default value)
 
-    :ivar tensionStiffparam: variable to determine the behaviour of concrete under tension. If tensionStiffparam is an instance of the class paramTensStiffness,    tension stiffness of concrete is considered in the constitutive model to 
-    take into account the tensile capacity of the intact concrete between 
-    cracks. The stress strain relationship corresponds to a concrete02 material
-    (linear tension softening),  based on the tension-stiffening constitutive 
-    model proposed by Stramandinoli & La Rovere (ref. article: Engineering 
-    Structures 30 (2008) 2069-2080).
+    :ivar tensionStiffparam: variable to determine the behaviour of concrete 
+    under tension. If tensionStiffparam is an instance of the class 
+    paramTensStiffness, tension stiffness of concrete is considered in the 
+    constitutive model to take into account the tensile capacity of the intact
+    concrete between cracks. The stress strain relationship corresponds to a 
+    concrete02 material (linear tension softening),  based on the 
+    tension-stiffening constitutive model proposed by Stramandinoli & 
+    La Rovere (ref. article: Engineering Structures 30 (2008) 2069-2080).
 
     :ivar initTensStiff: variable that also determines the behaviour of 
      concrete under tension. If initTensStiff ='Y' a concrete02 material model 

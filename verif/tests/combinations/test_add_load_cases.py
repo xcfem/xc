@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # home made test
-# Suma de acciones sobre ménsula.
+# Sum of the actions over the cantilever.
 
 import xc_base
 import geom

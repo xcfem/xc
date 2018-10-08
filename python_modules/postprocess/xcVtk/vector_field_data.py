@@ -117,4 +117,7 @@ class VectorFieldData(object):
     #self.glyph.SetInputArrayToProcess(3,0,0,0,self.lenghtsName) # colors
 
     # Calling update because I'm going to use the scalar range to set the color map range
-self.glyph.Update()
+    self.glyph.Update()
+
+
+

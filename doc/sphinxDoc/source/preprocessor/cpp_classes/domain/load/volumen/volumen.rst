@@ -1,5 +1,5 @@
-Volumen
-;;;;;;;
+Volume
+;;;;;;
 
 .. module:: xc
 	    

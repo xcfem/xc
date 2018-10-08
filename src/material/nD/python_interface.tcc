@@ -22,7 +22,7 @@
 //python_interface.tcc
 
 class_<XC::NDMaterial, XC::NDMaterial *, bases<XC::Material>, boost::noncopyable >("NDMaterial", no_init)
-    .add_property("getRho", &XC::NDMaterial::getRho,"Return the densidad del material.")
+    .add_property("getRho", &XC::NDMaterial::getRho,"Return the material density.")
     .add_property("getE", &XC::NDMaterial::getE)
     .add_property("getnu", &XC::NDMaterial::getnu)
     .add_property("getpsi", &XC::NDMaterial::getpsi)

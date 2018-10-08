@@ -59,8 +59,8 @@ Plane elements
       mesh/element/special/frictionBearing/frictionBearing.rst
 
 
-Volumen elements
-,,,,,,,,,,,,,,,,
+Volume elements
+,,,,,,,,,,,,,,,
 .. toctree::
    :maxdepth: 1
    

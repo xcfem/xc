@@ -52,8 +52,8 @@ steel= typical_materials.defSteel01(preprocessor, "steel",E,fy,0.001)
 respT= typical_materials.defElasticMaterial(preprocessor, "respT",G*J) # Torsion response.
 respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e9) # Shear response in y direction.
 respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e9) # Shear response in z direction.
-# Secciones
-# Secciones
+
+# Sections
 import os
 pth= os.path.dirname(__file__)
 #print "pth= ", pth

@@ -420,7 +420,7 @@ const XC::Material *XC::CorotTrussSection::getMaterial(void) const
 XC::Material *XC::CorotTrussSection::getMaterial(void)
   { return theSection; }
 
-//! @brief Return the densidad of the section.
+//! @brief Return the density of the section.
 double XC::CorotTrussSection::getRho(void) const
   { return theSection->getRho(); }
 

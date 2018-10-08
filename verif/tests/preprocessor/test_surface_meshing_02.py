@@ -17,7 +17,7 @@ __email__= "l.pereztato@gmail.com"
 CooMaxX= 3
 CooMaxY= 1
 E= 30e6 # Young modulus (psi)
-nu= 0.3 # Coeficiente de Poison
+nu= 0.3 # Poisson's ratio
 rho= 0.0 # Density
 #feProblem.logFileName= "/tmp/erase.log" # Ignore warning messages
 

@@ -393,7 +393,7 @@ const XC::Material *XC::CorotTruss::getMaterial(void) const
   { return theMaterial; }
 XC::Material *XC::CorotTruss::getMaterial(void)
   { return theMaterial; }
-//! @brief Return the densidad del material.
+//! @brief Return the material density.
 double XC::CorotTruss::getRho(void) const
   { return theMaterial->getRho(); }
 

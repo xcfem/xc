@@ -35,6 +35,7 @@
 #include "boost/lexical_cast.hpp"
 #include "Axis.h"
 #include "material/section/repres/SectionMassProperties.h"
+#include <vector>
 
 class HalfPlane2d;
 class Segment2d;
