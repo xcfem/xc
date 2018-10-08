@@ -66,6 +66,7 @@ print 'error= ', error
 print strains
 print stresses
 '''
+
 import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)

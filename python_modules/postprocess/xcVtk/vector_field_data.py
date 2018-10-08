@@ -32,6 +32,9 @@ class VectorFieldData(object):
     self.vectors.SetName(self.vectorsName)
     self.vectors.SetNumberOfComponents(numberOfComponents)
 
+  def getNumberOfTuples(self):
+    return self.vectors.GetNumberOfTuples()
+
   def calculateLengths(self,fUnitConv= 1.0):
     '''
     Lengths of the vectors.
@@ -41,7 +44,7 @@ class VectorFieldData(object):
     self.lengths= vtk.vtkDoubleArray()
     self.lenghtsName= self.name+'Lengths'
     self.lengths.SetName(self.lenghtsName)
-    sz= self.vectors.GetNumberOfTuples()
+    sz= self.getNumberOfTuples()
     if(sz):
       self.lengths.SetNumberOfValues(sz)
       for i in range(0,sz):
@@ -52,7 +55,7 @@ class VectorFieldData(object):
       lmsg.warning('VectorFieldData.calculateLengths: no vectors defined.')
     return self.lengths
 
-  def insertNextLoadVector(self,vx,vy,vz):
+  def insertNextVector(self,vx,vy,vz):
     self.vectors.InsertNextTuple3(vx,vy,vz)
   
   def insertNextPair(self,px,py,pz,vx,vy,vz,fUnitConv= 1.0,pushing= False):
@@ -72,9 +75,13 @@ class VectorFieldData(object):
   def getPolydata(self,fUnitConv= 1.0):
     retval= vtk.vtkPolyData()
     retval.SetPoints(self.points)
-    retval.GetPointData().AddArray(self.vectors)
-    self.calculateLengths(fUnitConv)
-    retval.GetPointData().AddArray(self.lengths)
+    sz= self.getNumberOfTuples()
+    if(sz>0):
+      retval.GetPointData().AddArray(self.vectors)
+      self.calculateLengths(fUnitConv)
+      retval.GetPointData().AddArray(self.lengths)
+    else:
+      lmsg.warning('VectorFieldData.getPolydata: no vectors.')
     return retval
 
   def setupGlyph(self,fUnitConv= 1.0):
@@ -100,15 +107,14 @@ class VectorFieldData(object):
     # The fact that I'm setting the minimum value of the range below
     #   the minimum of my data (real min=0.0) with the equations above
     #   forces a minimum non-zero glyph size.
-     
+
     #self.glyph.SetRange(-10, 10)    # Change these values to see effect on cone sizes
-     
+
     # Tell glyph which attribute arrays to use for what
     self.glyph.SetInputArrayToProcess(0,0,0,0,self.lenghtsName)	# scalars
     self.glyph.SetInputArrayToProcess(1,0,0,0,self.vectorsName) # vectors
     # self.glyph.SetInputArrayToProcess(2,0,0,0,'nothing')	# normals
     #self.glyph.SetInputArrayToProcess(3,0,0,0,self.lenghtsName) # colors
-     
-    # Calling update because I'm going to use the scalar range to set the color map range
-    self.glyph.Update()
 
+    # Calling update because I'm going to use the scalar range to set the color map range
+self.glyph.Update()
