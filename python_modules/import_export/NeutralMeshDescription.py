@@ -9,11 +9,13 @@ import BlockTopologyEntities as bte
 class GroupRecord(object):
 
   def readFromDATFile(self,fName):
-    self.name= None
+    self.name=  os.path.splitext(fName)[0]
     meshDesc= me.MeshData()
     meshDesc.readFromDATFile(fName)
     self.nodeIds= meshDesc.nodes.getTags()
     self.cellIds= meshDesc.cells.getTags()
+    self.pointIds= []
+    self.lineIds= []
 
   def setUp(self,name,points,lines):
     self.name= name
@@ -88,7 +90,7 @@ class XCImportExportData(object):
     else:
       return None
   def readDATFiles(self):
-    self.meshDesc= MeshData()
+    self.meshDesc= me.MeshData()
     self.meshDesc.readFromDATFile(self.mainDATFile)
     for fName in self.groupDATFiles:
       grp= GroupRecord()
