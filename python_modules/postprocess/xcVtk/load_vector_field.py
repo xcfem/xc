@@ -69,6 +69,7 @@ class LoadVectorField(vf.VectorField):
         self.data.insertNextVector(vLoad[0],vLoad[1],vLoad[2])
       else:
         lmsg.warning('displaying of loads over 1D elements not yet implemented')
+    return len(self.elementalLoadVectors)
 
   def getMaxLoad(self):
     ''' Calculate the maximum absolute value of the loads on the
@@ -116,6 +117,7 @@ class LoadVectorField(vf.VectorField):
     for nTag in self.nodalLoadVectors.keys():
       vLoad= self.nodalLoadVectors[nTag]
       self.data.insertNextVector(vLoad[0],vLoad[1],vLoad[2])
+    return len(self.nodalLoadVectors)
 
   def dumpNodalPositions(self,preprocessor,lp,defFScale):
     ''' Iterate over loaded nodes dumping its loads into the graphic.
@@ -136,10 +138,12 @@ class LoadVectorField(vf.VectorField):
   def populateLoads(self,preprocessor,lp, showElementalLoads= True, showNodalLoads= True):
     ''' Populate the vector container with loads 
         from the load pattern argument.'''
+    numberOfLoads= 0
     if(showElementalLoads):
-      self.populateWithElementalLoads(preprocessor,lp)
+      numberOfLoads+= self.populateWithElementalLoads(preprocessor,lp)
     if(showNodalLoads):
-      self.populateWithNodalLoads(preprocessor,lp)
+      numberOfLoads+= self.populateWithNodalLoads(preprocessor,lp)
+    return numberOfLoads
   
   def dumpLoads(self, preprocessor,defFScale, showElementalLoads= True, showNodalLoads= True):
     ''' Iterate over loads dumping them into the graphic.
@@ -156,17 +160,18 @@ class LoadVectorField(vf.VectorField):
     loadPatterns= preprocessor.getLoadHandler.getLoadPatterns
     loadPatterns.addToDomain(self.lpName)
     lp= loadPatterns[self.lpName]
+    count= 0
     if(lp):
-      self.populateLoads(preprocessor,lp)
-      self.data.scaleFactor/= self.getMaxLoad()
-      count= 0
-      #Iterate over loaded elements.
-      count+= self.dumpElementalPositions(preprocessor,lp)
-      #Iterate over loaded nodes.
-      count+= self.dumpNodalPositions(preprocessor,lp,defFScale)
-      if(count==0):
-        lmsg.warning('LoadVectorField.dumpLoads: no loads defined.')
-      loadPatterns.removeFromDomain(self.lpName)
+      numberOfLoads= self.populateLoads(preprocessor,lp)
+      if(numberOfLoads>0):
+        self.data.scaleFactor/= self.getMaxLoad()
+        #Iterate over loaded elements.
+        count+= self.dumpElementalPositions(preprocessor,lp)
+        #Iterate over loaded nodes.
+        count+= self.dumpNodalPositions(preprocessor,lp,defFScale)
+        if(count==0):
+          lmsg.warning('LoadVectorField.dumpLoads: no loads defined.')
+        loadPatterns.removeFromDomain(self.lpName)
     else:
       lmsg.error('Load pattern: '+ self.lpName + ' not found.')
     return count

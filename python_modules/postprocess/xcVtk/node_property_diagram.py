@@ -45,7 +45,7 @@ class NodePropertyDiagram(cd.ColoredDiagram):
       self.vDir= e.getJVector3d(True) #initialGeometry= True
       v0= self.getValueForNode(e.getNodes[0])
       v1= self.getValueForNode(e.getNodes[1])
-      indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,v0,v1,defFScale)
+      indxDiagrama= self.appendDataToDiagram(e,indxDiagrama,v0,v1,defFScale)
 
   def addDiagram(self):
     self.creaEstrucDatosDiagrama()

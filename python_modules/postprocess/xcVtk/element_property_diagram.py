@@ -47,69 +47,69 @@ class ElementPropertyDiagram(cd.ColoredDiagram):
       for e in elems:
         self.vDir= e.getJVector3d(True) #initialGeometry= True
         values= e.getProp(self.propertyName) # [back node value, front node value]
-        indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,values[0],values[1],defFScale)      
+        indxDiagrama= self.appendDataToDiagram(e,indxDiagrama,values[0],values[1],defFScale)      
     elif(self.propertyName=='FCVCP'):
       for e in elems:
         self.vDir= e.getJVector3d(True) #initialGeometry= True
         values= e.getProp(self.propertyName) # [back node value, front node value]
-        indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,values[0],values[1],defFScale)      
+        indxDiagrama= self.appendDataToDiagram(e,indxDiagrama,values[0],values[1],defFScale)      
     elif(self.propertyName=='N+'):
       for e in elems:
         self.vDir= e.getJVector3d(True) #initialGeometry= True
         values= e.getProp(self.propertyName) # [back node value, front node value]
-        indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,values[0],values[1],defFScale)      
+        indxDiagrama= self.appendDataToDiagram(e,indxDiagrama,values[0],values[1],defFScale)      
     elif(self.propertyName=='N-'):
       for e in elems:
         self.vDir= e.getJVector3d(True) #initialGeometry= True
         values= e.getProp(self.propertyName) # [back node value, front node value]
-        indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,values[0],values[1],defFScale)      
+        indxDiagrama= self.appendDataToDiagram(e,indxDiagrama,values[0],values[1],defFScale)      
     elif(self.propertyName=='My+'):
       for e in elems:
         self.vDir= e.elem.getKVector3d(True) # initialGeometry= True  
         values= e.getProp(self.propertyName) # [back node value, front node value]
-        indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,values[0],values[1],defFScale)      
+        indxDiagrama= self.appendDataToDiagram(e,indxDiagrama,values[0],values[1],defFScale)      
     elif(self.propertyName=='My-'):
       for e in elems:
         self.vDir= e.elem.getKVector3d(True) # initialGeometry= True  
         values= e.getProp(self.propertyName) # [back node value, front node value]
-        indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,values[0],values[1],defFScale)      
+        indxDiagrama= self.appendDataToDiagram(e,indxDiagrama,values[0],values[1],defFScale)      
     elif(self.propertyName=='Mz+'):
       for e in elems:
         self.vDir= e.elem.getJVector3d(True) # initialGeometry= True  
         values= e.getProp(self.propertyName) # [back node value, front node value]
-        indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,values[0],values[1],defFScale)      
+        indxDiagrama= self.appendDataToDiagram(e,indxDiagrama,values[0],values[1],defFScale)      
     elif(self.propertyName=='Mz-'):
       for e in elems:
         self.vDir= e.elem.getJVector3d(True) # initialGeometry= True  
         values= e.getProp(self.propertyName) # [back node value, front node value]
-        indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,values[0],values[1],defFScale)      
+        indxDiagrama= self.appendDataToDiagram(e,indxDiagrama,values[0],values[1],defFScale)      
     elif(self.propertyName=='Vy+'):
       for e in elems:
         self.vDir= e.elem.getJVector3d(True) # initialGeometry= True  
         values= e.getProp(self.propertyName) # [back node value, front node value]
-        indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,values[0],values[1],defFScale)      
+        indxDiagrama= self.appendDataToDiagram(e,indxDiagrama,values[0],values[1],defFScale)      
     elif(self.propertyName=='Vy-'):
       for e in elems:
         self.vDir= e.elem.getJVector3d(True) # initialGeometry= True  
         values= e.getProp(self.propertyName) # [back node value, front node value]
-        indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,values[0],values[1],defFScale)      
+        indxDiagrama= self.appendDataToDiagram(e,indxDiagrama,values[0],values[1],defFScale)      
     elif(self.propertyName=='Vz+'):
       for e in elems:
         self.vDir= e.elem.getKVector3d(True) # initialGeometry= True  
         values= e.getProp(self.propertyName) # [back node value, front node value]
-        indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,values[0],values[1],defFScale)      
+        indxDiagrama= self.appendDataToDiagram(e,indxDiagrama,values[0],values[1],defFScale)      
     elif(self.propertyName=='Vz-'):
       for e in elems:
         self.vDir= e.elem.getKVector3d(True) # initialGeometry= True  
         values= e.getProp(self.propertyName) # [back node value, front node value]
-        indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,values[0],values[1],defFScale)      
+        indxDiagrama= self.appendDataToDiagram(e,indxDiagrama,values[0],values[1],defFScale)      
     else:
       extrapolate_elem_attr.extrapolate_elem_function_attr(elems,self.propertyName,"getProp", self.propertyName)
       for e in elems:
         self.vDir= e.getJVector3d(True) #initialGeometry= True
         v0= e.getNodes[0].getProp(self.propertyName)
         v1= e.getNodes[1].getProp(self.propertyName)
-        indxDiagrama= self.agregaDatosADiagrama(e,indxDiagrama,v0,v1,defFScale)
+        indxDiagrama= self.appendDataToDiagram(e,indxDiagrama,v0,v1,defFScale)
 
   def addDiagram(self):
     self.creaEstrucDatosDiagrama()

@@ -11,7 +11,6 @@ class LinearLoadDiagram(cd.ColoredDiagram):
   '''Draws a load over a linear element (qx,qy,qz,...)'''
   def __init__(self,scale,fUnitConv,loadPatternName,component):
     super(LinearLoadDiagram,self).__init__(scale,fUnitConv)
-    print loadPatternName
     self.lpName= loadPatternName
     self.component= component
 
@@ -26,16 +25,16 @@ class LinearLoadDiagram(cd.ColoredDiagram):
         elem= preprocessor.getElementHandler.getElement(eTag)
         if(self.component=='axialComponent'):
           self.vDir= elem.getJVector3d(True)
-          indxDiagram= self.agregaDatosADiagrama(elem,indxDiagram,eLoad.axialComponent,eLoad.axialComponent)
+          indxDiagram= self.appendDataToDiagram(elem,indxDiagram,eLoad.axialComponent,eLoad.axialComponent)
         elif(self.component=='transComponent'):
           self.vDir= elem.getJVector3d(True) # initialGeometry= True  
-          indxDiagram= self.agregaDatosADiagrama(elem,indxDiagram,eLoad.transComponent,eLoad.transComponent)
+          indxDiagram= self.appendDataToDiagram(elem,indxDiagram,eLoad.transComponent,eLoad.transComponent)
         elif(self.component=='transYComponent'):
           self.vDir= elem.getJVector3d(True) # initialGeometry= True  
-          indxDiagram= self.agregaDatosADiagrama(elem,indxDiagram,eLoad.transYComponent,eLoad.transYComponent)
+          indxDiagram= self.appendDataToDiagram(elem,indxDiagram,eLoad.transYComponent,eLoad.transYComponent)
         elif(self.component=='transZComponent'):
           self.vDir= elem.getKVector3d(True) # initialGeometry= True  
-          indxDiagram= self.agregaDatosADiagrama(elem,indxDiagram,eLoad.transZComponent,eLoad.transZComponent)
+          indxDiagram= self.appendDataToDiagram(elem,indxDiagram,eLoad.transZComponent,eLoad.transZComponent)
         else:
           lmsg.error("LinearLoadDiagram :'"+self.component+"' unknown.")        
       eLoad= lIter.next()

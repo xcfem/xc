@@ -57,6 +57,9 @@ class LUTField(object):
        will be replaced by the real ones.''' 
     self.valMin= value #Extremely BIG (yes BIG) positive value.
     self.valMax= -self.valMin #Extremely BIG negative value.
+
+  def isValid(self):
+    return (self.valMax > -1e+99) or (self.valMin<1e+99)
  
   def creaLookUpTable(self):
     ''' Creates a  lookUpTable, that is an object used by mapper objects 

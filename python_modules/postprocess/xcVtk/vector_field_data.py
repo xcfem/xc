@@ -77,6 +77,7 @@ class VectorFieldData(object):
     retval.SetPoints(self.points)
     sz= self.getNumberOfTuples()
     if(sz>0):
+      print '+++++++ sz= ', sz 
       retval.GetPointData().AddArray(self.vectors)
       self.calculateLengths(fUnitConv)
       retval.GetPointData().AddArray(self.lengths)

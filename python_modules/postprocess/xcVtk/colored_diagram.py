@@ -171,7 +171,7 @@ class ColoredDiagram(vtk_lut_field.LUTField):
     self.creaColorScaleBar()
     recordDisplay.renderer.AddActor2D(self.scalarBar)
 
-  def agregaDatosADiagrama(self, elem,indxDiagrama,v0,v1,defFScale=0.0):
+  def appendDataToDiagram(self, elem,indxDiagrama,v0,v1,defFScale=0.0):
     ''' Appends to the diagram the values being passed as parameter.
 
                    ___----* value2
@@ -210,4 +210,4 @@ class ColoredDiagram(vtk_lut_field.LUTField):
        :param value2: value at the end node. 
     '''
     self.vDir= vDir
-    return self.agregaDatosADiagrama(elem,indxDiagram,value1,value2)
+    return self.appendDataToDiagram(elem,indxDiagram,value1,value2)
