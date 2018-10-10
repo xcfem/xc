@@ -14,9 +14,66 @@ if [ $REPLY != "y" ]; then
 	exit 1
 fi
 
-#Fixed some bugs detected by Bernd Hahnebach; thanks! (1/10/2018 LCPT):
 
-apt-get install cmake cimg-dev g++ gfortran gnuplot libarpack2-dev libarpack++2-dev libcgal-dev libdb-dev libf2c2-dev libglib2.0-dev libgmp3-dev libgtk2.0-dev libgtkgl2.0-dev libgtkglextmm-x11-1.2-dev libgtkmm-2.4-dev libgts-bin libgts-dev liblapack-dev libmpfr-dev libmysql++-dev libparmetis-dev libplot-dev libsqlite3-dev libsuperlu-dev libsuitesparse-dev libvtk6-dev libx11-dev petsc-dev tcl-dev python-vtk6 python-scipy python-sympy python-matplotlib python-pandas python-sklearn python-pip
+# packages installed by debian package manager apt-get
+# tested on Debian Stretch
+packages_build="\
+    git         \
+    cmake       \
+    g++         \
+    gfortran    \
+    libboost-all-dev"
+apt-get install -y $packages_build
+
+packages_lib="\
+    libarpack2-dev              \
+    libarpack++2-dev            \
+    libcgal-dev                 \
+    libdb-dev                   \
+    libf2c2-dev                 \
+    libglib2.0-dev              \
+    libgmp3-dev                 \
+    libgtk2.0-dev               \
+    libgtkgl2.0-dev             \
+    libgtkglextmm-x11-1.2-dev   \
+    libgtkmm-2.4-dev            \
+    libgts-bin                  \
+    libgts-dev                  \
+    liblapack-dev               \
+    libmpfr-dev                 \
+    libmysql++-dev              \
+    libplot-dev                 \
+    libsqlite3-dev              \
+    libsuperlu-dev              \
+    libsuitesparse-dev          \
+    libvtk6-dev                 \
+    libx11-dev                  \
+    libmetis-dev"
+apt-get install -y $packages_lib
+
+packages_dev="\
+    cimg-dev  \
+    petsc-dev \
+    tcl-dev"
+apt-get install -y $packages_dev
+
+packages_python="\
+    python-vtk6         \
+    python-scipy        \
+    python-sympy        \
+    python-matplotlib   \
+    python-pandas       \
+    python-sklearn      \
+    python-pip"
+apt-get install -y $packages_python
+
+packages_div="\
+    gnuplot \
+    bc"
+# bc is needed by xc_utils verification tests
+apt-get install -y $packages_div
+
+apt-get clean
 
 
 #mayavi installation. Some 'mayavi' packages seems
