@@ -25,10 +25,10 @@ h= 274e-3 # Concrete element thickness.
 hef= 210e-3 # Effective anchor depth.
 posAnc=  geom.Pos2d(.135,0) # Anchor position
 contornoPiezaSoporte=  geom.Polygon2d() # Contour of concrete element.
-contornoPiezaSoporte.agregaVertice(geom.Pos2d(0,-1))
-contornoPiezaSoporte.agregaVertice(geom.Pos2d(1,-1))
-contornoPiezaSoporte.agregaVertice(geom.Pos2d(1,1))
-contornoPiezaSoporte.agregaVertice(geom.Pos2d(0,1))    
+contornoPiezaSoporte.appendVertex(geom.Pos2d(0,-1))
+contornoPiezaSoporte.appendVertex(geom.Pos2d(1,-1))
+contornoPiezaSoporte.appendVertex(geom.Pos2d(1,1))
+contornoPiezaSoporte.appendVertex(geom.Pos2d(0,1))    
 
 
 fuk= 550e6 # Characteristic steel ultimate tensile strength (Pa).

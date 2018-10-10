@@ -115,7 +115,7 @@ class LoadModel(object):
         retval= geom.Polygon2d()
         tmp= self.getVehicleBoundaryRelativePositions()
         for p in tmp:
-            retval.agregaVertice(p)
+            retval.appendVertex(p)
         return retval
 
     def getRotatedPi(self):
@@ -238,6 +238,6 @@ class VehicleLoad(object):
         retval= geom.Polygon2d()
         tmp= self.getVehicleBoundaryPositions()
         for p in tmp:
-            retval.agregaVertice(geom.Pos2d(p.x,p.y))
+            retval.appendVertex(geom.Pos2d(p.x,p.y))
         return retval
 

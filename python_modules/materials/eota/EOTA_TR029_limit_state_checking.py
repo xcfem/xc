@@ -78,10 +78,10 @@ def getA0pN(d,anchorPosition, hEf, tauRkUcr):
     '''   
     halfSideA0pN= getCcrNp(d,hEf,tauRkUcr)
     retval= geom.Polygon2d()
-    retval.agregaVertice(geom.Pos2d(anchorPosition.x-halfSideA0pN,anchorPosition.y-halfSideA0pN))
-    retval.agregaVertice(geom.Pos2d(anchorPosition.x+halfSideA0pN,anchorPosition.y-halfSideA0pN))
-    retval.agregaVertice(geom.Pos2d(anchorPosition.x+halfSideA0pN,anchorPosition.y+halfSideA0pN))
-    retval.agregaVertice(geom.Pos2d(anchorPosition.x-halfSideA0pN,anchorPosition.y+halfSideA0pN))
+    retval.appendVertex(geom.Pos2d(anchorPosition.x-halfSideA0pN,anchorPosition.y-halfSideA0pN))
+    retval.appendVertex(geom.Pos2d(anchorPosition.x+halfSideA0pN,anchorPosition.y-halfSideA0pN))
+    retval.appendVertex(geom.Pos2d(anchorPosition.x+halfSideA0pN,anchorPosition.y+halfSideA0pN))
+    retval.appendVertex(geom.Pos2d(anchorPosition.x-halfSideA0pN,anchorPosition.y+halfSideA0pN))
     return retval
 
 def getFactor2pN(A0pN, ApN):
@@ -124,10 +124,10 @@ def getA0cN(anchorPosition, hEf):
     '''
     halfSideA0cN= getScrN(hEf)/2
     retval= geom.Polygon2d()
-    retval.agregaVertice(geom.Pos2d(anchorPosition.x-halfSideA0cN,anchorPosition.y-halfSideA0cN))
-    retval.agregaVertice(geom.Pos2d(anchorPosition.x+halfSideA0cN,anchorPosition.y-halfSideA0cN))
-    retval.agregaVertice(geom.Pos2d(anchorPosition.x+halfSideA0cN,anchorPosition.y+halfSideA0cN))
-    retval.agregaVertice(geom.Pos2d(anchorPosition.x-halfSideA0cN,anchorPosition.y+halfSideA0cN))
+    retval.appendVertex(geom.Pos2d(anchorPosition.x-halfSideA0cN,anchorPosition.y-halfSideA0cN))
+    retval.appendVertex(geom.Pos2d(anchorPosition.x+halfSideA0cN,anchorPosition.y-halfSideA0cN))
+    retval.appendVertex(geom.Pos2d(anchorPosition.x+halfSideA0cN,anchorPosition.y+halfSideA0cN))
+    retval.appendVertex(geom.Pos2d(anchorPosition.x-halfSideA0cN,anchorPosition.y+halfSideA0cN))
     return retval
 
 def getFactor2cN(A0cN, AcN):
@@ -171,10 +171,10 @@ def getA0spN(anchorPosition, CcrSp):
                   splitting failure (m).
     '''
     retval= geom.Polygon2d()
-    retval.agregaVertice(geom.Pos2d(anchorPosition.x-CcrSp,anchorPosition.y-CcrSp))
-    retval.agregaVertice(geom.Pos2d(anchorPosition.x+CcrSp,anchorPosition.y-CcrSp))
-    retval.agregaVertice(geom.Pos2d(anchorPosition.x+CcrSp,anchorPosition.y+CcrSp))
-    retval.agregaVertice(geom.Pos2d(anchorPosition.x-CcrSp,anchorPosition.y+CcrSp))
+    retval.appendVertex(geom.Pos2d(anchorPosition.x-CcrSp,anchorPosition.y-CcrSp))
+    retval.appendVertex(geom.Pos2d(anchorPosition.x+CcrSp,anchorPosition.y-CcrSp))
+    retval.appendVertex(geom.Pos2d(anchorPosition.x+CcrSp,anchorPosition.y+CcrSp))
+    retval.appendVertex(geom.Pos2d(anchorPosition.x-CcrSp,anchorPosition.y+CcrSp))
     return retval
 
 def getFactor2spN(A0spN, AspN):

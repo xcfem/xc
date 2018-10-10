@@ -132,10 +132,10 @@ def rect2DPolygon(xCent,yCent,Lx,Ly):
     '''Rectangular polygon
     '''
     pol=geom.Polygon2d()
-    pol.agregaVertice(geom.Pos2d(xCent-Lx/2.0,yCent-Ly/2.0))
-    pol.agregaVertice(geom.Pos2d(xCent-Lx/2.0,yCent+Ly/2.0))
-    pol.agregaVertice(geom.Pos2d(xCent+Lx/2.0,yCent+Ly/2.0))
-    pol.agregaVertice(geom.Pos2d(xCent+Lx/2.0,yCent-Ly/2.0))
+    pol.appendVertex(geom.Pos2d(xCent-Lx/2.0,yCent-Ly/2.0))
+    pol.appendVertex(geom.Pos2d(xCent-Lx/2.0,yCent+Ly/2.0))
+    pol.appendVertex(geom.Pos2d(xCent+Lx/2.0,yCent+Ly/2.0))
+    pol.appendVertex(geom.Pos2d(xCent+Lx/2.0,yCent-Ly/2.0))
     return pol
 
 def def_rg_cooLim(XYZLists,Xcoo,Ycoo,Zcoo):

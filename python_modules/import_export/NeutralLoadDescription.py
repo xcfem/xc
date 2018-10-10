@@ -75,7 +75,7 @@ class SurfaceLoadRecord(ElementLoadRecord):
         coords[1]= p[2]
       elif(self.projPlane=='yz'):
         coords=  [p[1],p[2]]
-      retval.agregaVertice(geom.Pos2d(coords[0],coords[1]))
+      retval.appendVertex(geom.Pos2d(coords[0],coords[1]))
     return retval
   def searchLoadedElements(self,elemSet):
     ''' Returns elements which have his center inside the polygon'''
