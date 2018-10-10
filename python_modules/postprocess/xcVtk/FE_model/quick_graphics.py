@@ -254,7 +254,6 @@ class QuickGraphics(object):
               self.xcSet.color=xc.Vector([rd.random(),rd.random(),rd.random()])
       else:
           lmsg.warning('QuickGraphics::dispLoadCaseBeamEl; set to display not defined; using previously defined set (total if None).')
-      print 'xcSet', self.xcSet.name
       preprocessor= self.feProblem.getPreprocessor
       loadPatterns= preprocessor.getLoadHandler.getLoadPatterns
       loadPatterns.addToDomain(loadCaseName)
@@ -265,10 +264,10 @@ class QuickGraphics(object):
       # element loads
 #      print 'scale=',elLoadScaleF,'fUnitConv=',fUnitConv,'loadPatternName=',loadCaseName,'component=',elLoadComp
       diagram= lld.LinearLoadDiagram(scale=elLoadScaleF,fUnitConv=fUnitConv,loadPatternName=loadCaseName,component=elLoadComp)
-      if (diagram.valMax > -1e+99) or (diagram.valMin<1e+99):
-          diagram.addDiagram(preprocessor)
+      diagram.addDiagram(preprocessor)
+      if diagram.isValid():
           defDisplay.appendDiagram(diagram)
-          orNodalLBar='V'
+      orNodalLBar='V'
       # nodal loads
       vField=lvf.LoadVectorField(loadPatternName=loadCaseName,fUnitConv=fUnitConv,scaleFactor=nodLoadScaleF,showPushing= True)
   #    loadPatterns= preprocessor.getLoadHandler.getLoadPatterns
