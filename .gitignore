@@ -26,6 +26,10 @@
 *.exe
 *.out
 *.app
+
+# Depends on distribution so ignored
+distro_name.txt
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
