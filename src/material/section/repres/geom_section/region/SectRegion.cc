@@ -143,7 +143,7 @@ double XC::SectRegion::getI1(void) const
 double XC::SectRegion::getI2(void) const
   { return getPolygon().I2(); }
 
-//     inline PrincipalAxesOfInertia2D Inercia(void)
+//     inline PrincipalAxesOfInertia2D Inertia(void)
 //       { return PrincipalAxesOfInertia2D(getCenterOfMass(),Iy(),Iz(),Pyz()); }
 
 //! @brief Return the i,j component of the tensor of inertia computed with respect to centroid.

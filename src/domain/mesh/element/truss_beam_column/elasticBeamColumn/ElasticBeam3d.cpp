@@ -312,7 +312,7 @@ const XC::Matrix &XC::ElasticBeam3d::getTangentStiff(void) const
     //of inertia not zero.
     const double eiyz= ctes_scc.EIyz();
     const double eimax= std::max(ctes_scc.EIz(),ctes_scc.EIy());
-    if(std::abs(eiyz/eimax)>1e-5) //Producto de inercia no nulo.
+    if(std::abs(eiyz/eimax)>1e-5) //Product of inertia not null.
       std::cerr << "ElasticBeam3d::getTangentStiff; this element must not"
                 << " be used with section that have a non-zero"
                 << " product of inertia."
@@ -363,7 +363,7 @@ const XC::Matrix &XC::ElasticBeam3d::getInitialStiff(void) const
     //of inertia not zero.
     const double eiyz= ctes_scc.EIyz();
     const double eimax= std::max(ctes_scc.EIz(),ctes_scc.EIy());
-    if(std::abs(eiyz/eimax)>1e-5) //Producto de inercia no nulo.
+    if(std::abs(eiyz/eimax)>1e-5) //Product of inertia not null.
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; this element must not"
                 << " be used with sections that has "

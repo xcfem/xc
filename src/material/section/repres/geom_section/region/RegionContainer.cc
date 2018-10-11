@@ -246,7 +246,7 @@ double XC::RegionContainer::getIzGrossSection(void) const
     return retval;
   }
 
-//! @brief Returns the producto de inercia of the gross cross-section respecto a los axis parallel to the y y al z por el centroid.
+//! @brief Returns the product of inertia of the gross cross-section respecto a los axis parallel to the y y al z por el centroid.
 double XC::RegionContainer::getPyzGrossSection(void) const
   {
     double retval= 0.0;
