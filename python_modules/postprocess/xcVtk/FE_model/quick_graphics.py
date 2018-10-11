@@ -81,250 +81,256 @@ class QuickGraphics(object):
             return 'N1'
 
     def getDisplay(self,vwName= 'XYZPos',hCamF=1.0):
-      '''Returns a suitable display to show the graphics.
+        '''Returns a suitable display to show the graphics.
 
-      :param viewName: name of the view that contains the renderer (possible
+        :param viewName: name of the view that contains the renderer (possible
                            options: "XYZPos", "XPos", "XNeg","YPos", "YNeg",
                            "ZPos", "ZNeg") (defaults to "XYZPos")
-      :param hCamFct: factor that applies to the height of the camera position
+        :param hCamFct: factor that applies to the height of the camera position
                           in order to change perspective of isometric views 
                           (defaults to 1, usual values 0.1 to 10)
-      '''
-      defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-      defDisplay.viewName=vwName
-      defDisplay.hCamFct=hCamF
-      return defDisplay
+        '''
+        defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
+        defDisplay.viewName=vwName
+        defDisplay.hCamFct=hCamF
+        return defDisplay
 
 
     def displayDispRot(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None,defFScale=0.0,rgMinMax=None):
-      '''displays the component of the displacement or rotations in the 
-      set of entities.
+        '''displays the component of the displacement or rotations in the 
+        set of entities.
 
-      :param itemToDisp: component of the displacement ('uX', 'uY' or 'uZ') 
+        :param itemToDisp: component of the displacement ('uX', 'uY' or 'uZ') 
                     or the rotation ('rotX', rotY', 'rotZ') to be depicted 
-      :param setToDisplay:   set of entities to be represented (defaults to all 
+        :param setToDisplay:   set of entities to be represented (defaults to all 
                     entities)
-      :param fConvUnits: factor of conversion to be applied to the results 
+        :param fConvUnits: factor of conversion to be applied to the results 
                     (defaults to 1)
-      :param unitDescription: string describing units like '[mm] or [cm]'
-      :param fileName: name of the file to plot the graphic. Defaults to 
+        :param unitDescription: string describing units like '[mm] or [cm]'
+        :param fileName: name of the file to plot the graphic. Defaults to 
                     None, in that case an screen display is generated
-      :param defFScale: factor to apply to current displacement of nodes 
+        :param defFScale: factor to apply to current displacement of nodes 
                 so that the display position of each node equals to
                 the initial position plus its displacement multiplied
                 by this factor. (Defaults to 0.0, i.e. display of 
                 initial/undeformed shape)
-      :param rgMinMax: range (vmin,vmax) with the maximum and minimum values of 
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values of 
               the field to be represented. All the values less than vmin are 
               displayed in blue and those greater than vmax in red
               (defaults to None)
 
-      '''
-      if(setToDisplay):
-          self.xcSet= setToDisplay
-      else:
-          lmsg.warning('QuickGraphics::displayDispRot; set to display not defined; using previously defined set (total if None).')
-      vCompDisp= self.getDispComponentFromName(itemToDisp)
-      nodSet= self.xcSet.getNodes
-      for n in nodSet:
-          n.setProp('propToDisp',n.getDisp[vCompDisp])
-      field= Fields.ScalarField(name='propToDisp',functionName="getProp",component=None,fUnitConv=fConvUnits,rgMinMax=rgMinMax)
-      defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
-      defDisplay.displayMesh(xcSets=self.xcSet,field=field,diagrams= None, fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription+' '+self.xcSet.description,defFScale=defFScale)
+        '''
+        if(setToDisplay):
+            self.xcSet= setToDisplay
+        else:
+            lmsg.warning('QuickGraphics::displayDispRot; set to display not defined; using previously defined set (total if None).')
+        vCompDisp= self.getDispComponentFromName(itemToDisp)
+        nodSet= self.xcSet.getNodes
+        for n in nodSet:
+            n.setProp('propToDisp',n.getDisp[vCompDisp])
+        field= Fields.ScalarField(name='propToDisp',functionName="getProp",component=None,fUnitConv=fConvUnits,rgMinMax=rgMinMax)
+        defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
+        defDisplay.displayMesh(xcSets=self.xcSet,field=field,diagrams= None, fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription+' '+self.xcSet.description,defFScale=defFScale)
 
     def displayIntForc(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None,defFScale=0.0):
-      '''displays the component of internal forces in the 
-      set of entities as a scalar field (i.e. appropiated for 2D elements; 
-      shells...).
+        '''displays the component of internal forces in the 
+        set of entities as a scalar field (i.e. appropiated for 2D elements; 
+        shells...).
 
-      :param itemToDisp:   component of the internal forces ('N1', 'N2', 'N12', 
+        :param itemToDisp:   component of the internal forces ('N1', 'N2', 'N12', 
              'M1', 'M2', 'M12', 'Q1', 'Q2') to be depicted 
-      :param setToDisplay: set of entities to be represented (default to all 
+        :param setToDisplay: set of entities to be represented (default to all 
              entities)
-      :param fConvUnits:   factor of conversion to be applied to the results 
+        :param fConvUnits:   factor of conversion to be applied to the results 
              (defalts to 1)
-      :param unitDescription: string like '[kN/m] or [kN m/m]'
-      :param viewName:  name of the view  that contains the renderer (possible
+        :param unitDescription: string like '[kN/m] or [kN m/m]'
+        :param viewName:  name of the view  that contains the renderer (possible
              options: "XYZPos", "XPos", "XNeg","YPos", "YNeg", "ZPos", "ZNeg") 
              (defaults to "XYZPos")
-      :param hCamFct:  factor that applies to the height of the camera position
+        :param hCamFct:  factor that applies to the height of the camera position
              in order to change perspective of isometric views (defaults to 1, 
              usual values 0.1 to 10)
-      :param fileName: name of the file to plot the graphic. Defaults to None,
+        :param fileName: name of the file to plot the graphic. Defaults to None,
              in that case an screen display is generated
-      :param defFScale: factor to apply to current displacement of nodes 
+        :param defFScale: factor to apply to current displacement of nodes 
                 so that the display position of each node equals to
                 the initial position plus its displacement multiplied
                 by this factor. (Defaults to 0.0, i.e. display of 
                 initial/undeformed shape)
-      '''
-      if(setToDisplay):
-          self.xcSet= setToDisplay
-      else:
-          lmsg.warning('QuickGraphics::displayIntForc; set to display not defined; using previously defined set (total if None).')
-      vCompDisp= self.getIntForceComponentFromName(itemToDisp)
-      elSet= self.xcSet.getElements.pickElemsOfDimension(2)
-      if(len(elSet)>0):
-          propName= 'propToDisp_'+str(itemToDisp)
-          for e in elSet:
-              if(e.getDimension==2):
-                  e.getResistingForce()
-                  mat= e.getPhysicalProperties.getVectorMaterials
-                  e.setProp(propName,mat.getMeanGeneralizedStressByName(vCompDisp))
-              else:
-                lmsg.warning('QuickGraphics::displayIntForc; not a 2D element; ignored.')
-          field= Fields.ExtrapolatedProperty(propName,"getProp",self.xcSet,fUnitConv= fConvUnits)
-          defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
-          field.display(defDisplay=defDisplay,fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.description,defFScale=defFScale)
+        '''
+        if(setToDisplay):
+            self.xcSet= setToDisplay
+        else:
+            lmsg.warning('QuickGraphics::displayIntForc; set to display not defined; using previously defined set (total if None).')
+        vCompDisp= self.getIntForceComponentFromName(itemToDisp)
+        elSet= self.xcSet.getElements.pickElemsOfDimension(2)
+        if(len(elSet)>0):
+            propName= 'propToDisp_'+str(itemToDisp)
+            for e in elSet:
+                if(e.getDimension==2):
+                    e.getResistingForce()
+                    mat= e.getPhysicalProperties.getVectorMaterials
+                    e.setProp(propName,mat.getMeanGeneralizedStressByName(vCompDisp))
+                else:
+                    lmsg.warning('QuickGraphics::displayIntForc; not a 2D element; ignored.')
+            field= Fields.ExtrapolatedProperty(propName,"getProp",self.xcSet,fUnitConv= fConvUnits)
+            defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
+            field.display(defDisplay=defDisplay,fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.description,defFScale=defFScale)
 
 
     def displayIntForcDiag(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,scaleFactor=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None,defFScale=0.0):
-      '''displays the component of internal forces in the set of entities as a 
-       diagram over lines (i.e. appropiated for beam elements).
+        '''displays the component of internal forces in the set of entities as a 
+         diagram over lines (i.e. appropiated for beam elements).
 
-      :param itemToDisp: component of the internal forces 
+        :param itemToDisp: component of the internal forces 
           ('N', 'Qy' (or 'Vy'), 'Qz' (or 'Vz'), 'My', 'Mz', 'T') to be depicted 
-      :param setToDisplay: set of entities (elements of type beam) to be 
+        :param setToDisplay: set of entities (elements of type beam) to be 
           represented
-      :param fConvUnits:   factor of conversion to be applied to the results 
-           (defaults to 1)
-      :param scaleFactor:  factor of scale to apply to the diagram display of
-      :param unitDescription: string like '[kN/m] or [kN m/m]'
-      :param viewName:  name of the view  that contains the renderer (possible
+        :param fConvUnits:   factor of conversion to be applied to the results 
+            (defaults to 1)
+        :param scaleFactor:  factor of scale to apply to the diagram display
+        :param unitDescription: string like '[kN/m] or [kN m/m]'
+        :param viewName:  name of the view  that contains the renderer (possible
                         options: "XYZPos", "XPos", "XNeg","YPos", "YNeg",
                         "ZPos", "ZNeg") (defaults to "XYZPos")
-      :param hCamFct:  factor that applies to the height of the camera position
+        :param hCamFct:  factor that applies to the height of the camera position
                           in order to change perspective of isometric views 
                           (defaults to 1, usual values 0.1 to 10)
-      :param fileName:  name of the file to plot the graphic. Defaults to None,
+        :param fileName:  name of the file to plot the graphic. Defaults to None,
                        in that case an screen display is generated
-      :param defFScale: factor to apply to current displacement of nodes 
+        :param defFScale: factor to apply to current displacement of nodes 
                 so that the display position of each node equals to
                 the initial position plus its displacement multiplied
                 by this factor. (Defaults to 0.0, i.e. display of 
                 initial/undeformed shape)
-      '''
-      if(setToDisplay):
-          self.xcSet= setToDisplay
-          if self.xcSet.color.Norm()==0:
-              self.xcSet.color=xc.Vector([rd.random(),rd.random(),rd.random()])
-      else:
-          lmsg.warning('QuickGraphics::displayIntForc; set to display not defined; using previously defined set (total if None).')
-      diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[self.xcSet],attributeName= "intForce",component= itemToDisp)
-      diagram.addDiagram()
-      defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
-      defDisplay.setupGrid(self.xcSet)
-      defDisplay.defineMeshScene(None,defFScale,color=self.xcSet.color)
-      defDisplay.appendDiagram(diagram) #Append diagram to the scene.
+        '''
+        if(setToDisplay):
+            self.xcSet= setToDisplay
+            if self.xcSet.color.Norm()==0:
+                self.xcSet.color=xc.Vector([rd.random(),rd.random(),rd.random()])
+        else:
+            lmsg.warning('QuickGraphics::displayIntForc; set to display not defined; using previously defined set (total if None).')
+        #auto-scale parameters
+        LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulo() #representative length of set size (to autoscale)
+        diagAux=cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[self.xcSet],attributeName= "intForce",component= itemToDisp)
+        maxAbs=diagAux.getMaxAbsComp()
+        scaleFactor*=LrefModSize/maxAbs*1e2
+        #
+        diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[self.xcSet],attributeName= "intForce",component= itemToDisp)
+        diagram.addDiagram()
+        defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
+        defDisplay.setupGrid(self.xcSet)
+        defDisplay.defineMeshScene(None,defFScale,color=self.xcSet.color)
+        defDisplay.appendDiagram(diagram) #Append diagram to the scene.
 
-      caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.description
-      defDisplay.displayScene(caption=caption,fName=fileName)
+        caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.description
+        defDisplay.displayScene(caption=caption,fName=fileName)
 
     def dispLoadCaseBeamEl(self,loadCaseName='',setToDisplay=None,fUnitConv=1.0,elLoadComp='transComponent',elLoadScaleF=1.0,nodLoadScaleF=1.0,viewName='XYZPos',hCamFct=1.0,caption='',fileName=None,defFScale=0.0):
-      '''Display the loads applied on beam elements and nodes for a given load case
+        '''Display the loads applied on beam elements and nodes for a given load case
 
-      :param setToDisplay:    set of beam elements to be represented
-      :param fUnitConv:  factor of conversion to be applied to the results
-                      (defaults to 1)
-      :param elLoadComp:  component of the loads on elements to be depicted
-                   [possible components: 'axialComponent', 'transComponent', 
-                    'transYComponent', 'transZComponent']
-      :param elLoadScaleF:    factor of scale to apply to the diagram display 
-                    of element loads (defaults to 1)
-      :param nodLoadScaleF: factor of scale to apply to the vector display of 
-                    nodal loads (defaults to 1)
-      :param viewName: name of the view  that contains the renderer (possible
-                              options: "XYZPos", "XPos", "XNeg","YPos", "YNeg",
-                              "ZPos", "ZNeg") (defaults to "XYZPos")
-      :param hCamFct: factor that applies to the height of the camera position 
-            in order to change perspective of isometric views (defaults to 1).
-                           Usual values 0.1 to 10
-      :param caption:   caption for the graphic
-      :param fileName:  name of the file to plot the graphic. Defaults to None,
-                        in that case an screen display is generated
-      :param defFScale: factor to apply to current displacement of nodes 
-                so that the display position of each node equals to
-                the initial position plus its displacement multiplied
-                by this factor. (Defaults to 0.0, i.e. display of 
-                initial/undeformed shape)
-      '''
-      if(setToDisplay):
-          self.xcSet= setToDisplay
-          if self.xcSet.color.Norm()==0:
-              self.xcSet.color=xc.Vector([rd.random(),rd.random(),rd.random()])
-      else:
-          lmsg.warning('QuickGraphics::dispLoadCaseBeamEl; set to display not defined; using previously defined set (total if None).')
-      preprocessor= self.feProblem.getPreprocessor
-      loadPatterns= preprocessor.getLoadHandler.getLoadPatterns
-      loadPatterns.addToDomain(loadCaseName)
-      defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
-      grid= defDisplay.setupGrid(self.xcSet)
-      defDisplay.defineMeshScene(None,defFScale,color=self.xcSet.color)
-      orNodalLBar='H'  #default orientation of scale bar for nodal loads
-      # element loads
-#      print 'scale=',elLoadScaleF,'fUnitConv=',fUnitConv,'loadPatternName=',loadCaseName,'component=',elLoadComp
-      diagram= lld.LinearLoadDiagram(scale=elLoadScaleF,fUnitConv=fUnitConv,loadPatternName=loadCaseName,component=elLoadComp)
-      diagram.addDiagram(preprocessor)
-      if diagram.isValid():
-          defDisplay.appendDiagram(diagram)
-      orNodalLBar='V'
-      # nodal loads
-      vField=lvf.LoadVectorField(loadPatternName=loadCaseName,fUnitConv=fUnitConv,scaleFactor=nodLoadScaleF,showPushing= True)
-  #    loadPatterns= preprocessor.getLoadHandler.getLoadPatterns
-      lPattern= loadPatterns[loadCaseName]
-      count= 0
-      if(lPattern):
-          count=vField.dumpNodalLoads(preprocessor,defFScale=defFScale)
-      else:
-          lmsg.error('load pattern: '+ loadCaseName + ' not found.')
-      if count >0:
-          vField.addToDisplay(defDisplay,orientation=orNodalLBar)
-      defDisplay.displayScene(caption=caption,fName=fileName)
+        :param setToDisplay:    set of beam elements to be represented
+        :param fUnitConv:  factor of conversion to be applied to the results
+                        (defaults to 1)
+        :param elLoadComp:  component of the loads on elements to be depicted
+                     [possible components: 'axialComponent', 'transComponent', 
+                      'transYComponent', 'transZComponent']
+        :param elLoadScaleF:    factor of scale to apply to the diagram display 
+                      of element loads (defaults to 1)
+        :param nodLoadScaleF: factor of scale to apply to the vector display of 
+                      nodal loads (defaults to 1)
+        :param viewName: name of the view  that contains the renderer (possible
+                                options: "XYZPos", "XPos", "XNeg","YPos", "YNeg",
+                                "ZPos", "ZNeg") (defaults to "XYZPos")
+        :param hCamFct: factor that applies to the height of the camera position 
+              in order to change perspective of isometric views (defaults to 1).
+                             Usual values 0.1 to 10
+        :param caption:   caption for the graphic
+        :param fileName:  name of the file to plot the graphic. Defaults to None,
+                          in that case an screen display is generated
+        :param defFScale: factor to apply to current displacement of nodes 
+                  so that the display position of each node equals to
+                  the initial position plus its displacement multiplied
+                  by this factor. (Defaults to 0.0, i.e. display of 
+                  initial/undeformed shape)
+        '''
+        if(setToDisplay):
+            self.xcSet= setToDisplay
+            if self.xcSet.color.Norm()==0:
+                self.xcSet.color=xc.Vector([rd.random(),rd.random(),rd.random()])
+        else:
+            lmsg.warning('QuickGraphics::dispLoadCaseBeamEl; set to display not defined; using previously defined set (total if None).')
+        preprocessor= self.feProblem.getPreprocessor
+        loadPatterns= preprocessor.getLoadHandler.getLoadPatterns
+        loadPatterns.addToDomain(loadCaseName)
+        defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
+        grid= defDisplay.setupGrid(self.xcSet)
+        defDisplay.defineMeshScene(None,defFScale,color=self.xcSet.color)
+        orNodalLBar='H'  #default orientation of scale bar for nodal loads
+        # element loads
+  #      print 'scale=',elLoadScaleF,'fUnitConv=',fUnitConv,'loadPatternName=',loadCaseName,'component=',elLoadComp
+        diagram= lld.LinearLoadDiagram(scale=elLoadScaleF,fUnitConv=fUnitConv,loadPatternName=loadCaseName,component=elLoadComp)
+        diagram.addDiagram(preprocessor)
+        if diagram.isValid():
+            defDisplay.appendDiagram(diagram)
+        orNodalLBar='V'
+        # nodal loads
+        vField=lvf.LoadVectorField(loadPatternName=loadCaseName,fUnitConv=fUnitConv,scaleFactor=nodLoadScaleF,showPushing= True)
+    #    loadPatterns= preprocessor.getLoadHandler.getLoadPatterns
+        lPattern= loadPatterns[loadCaseName]
+        count= 0
+        if(lPattern):
+            count=vField.dumpNodalLoads(preprocessor,defFScale=defFScale)
+        else:
+            lmsg.error('load pattern: '+ loadCaseName + ' not found.')
+        if count >0:
+            vField.addToDisplay(defDisplay,orientation=orNodalLBar)
+        defDisplay.displayScene(caption=caption,fName=fileName)
 
     def displayNodeValueDiagram(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,scaleFactor=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None,defFScale=0.0):
-      '''displays the a displacement (uX,uY,...) or a property defined in nodes 
-      as a diagram over lines (i.e. appropiated for beam elements).
+        '''displays the a displacement (uX,uY,...) or a property defined in nodes 
+        as a diagram over lines (i.e. appropiated for beam elements).
 
-      :param itemToDisp:   item to display.
-      :param setToDisplay: set of entities (elements of type beam) to be 
-             represented
-      :param fConvUnits:   factor of conversion to be applied to the results 
-             (defalts to 1)
-      :param scaleFactor:  factor of scale to apply to the diagram display of
-      :param unitDescription: string like '[m]' or '[rad]' or '[m/s2]'
-      :param viewName: name of the view  that contains the renderer (possible
-                       options: "XYZPos", "XPos", "XNeg","YPos", "YNeg",
-                       "ZPos", "ZNeg") (defaults to "XYZPos")
-      :param hCamFct:  factor that applies to the height of the camera position
-                          in order to change perspective of isometric views 
-                          (defaults to 1, usual values 0.1 to 10)
-      :param fileName: name of the file to plot the graphic. Defaults to None,
-                       in that case an screen display is generated
-      :param defFScale: factor to apply to current displacement of nodes 
-                so that the display position of each node equals to
-                the initial position plus its displacement multiplied
-                by this factor. (Defaults to 0.0, i.e. display of 
-                initial/undeformed shape)
-       '''
-      if(setToDisplay):
-          self.xcSet= setToDisplay
-          if self.xcSet.color.Norm()==0:
-              self.xcSet.color=xc.Vector([rd.random(),rd.random(),rd.random()])
-      else:
-          lmsg.warning('QuickGraphics::displayNodeValueDiagram; set to display not defined; using previously defined set (total if None).')
-      diagram= npd.NodePropertyDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[self.xcSet],attributeName= itemToDisp)
-      diagram.addDiagram()
-      defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
-      defDisplay.setupGrid(self.xcSet)
-      defDisplay.defineMeshScene(None,defFScale,color=self.xcSet.color)
-      defDisplay.appendDiagram(diagram) #Append diagram to the scene.
+        :param itemToDisp:   item to display.
+        :param setToDisplay: set of entities (elements of type beam) to be 
+               represented
+        :param fConvUnits:   factor of conversion to be applied to the results 
+               (defalts to 1)
+        :param scaleFactor:  factor of scale to apply to the diagram display of
+        :param unitDescription: string like '[m]' or '[rad]' or '[m/s2]'
+        :param viewName: name of the view  that contains the renderer (possible
+                         options: "XYZPos", "XPos", "XNeg","YPos", "YNeg",
+                         "ZPos", "ZNeg") (defaults to "XYZPos")
+        :param hCamFct:  factor that applies to the height of the camera position
+                            in order to change perspective of isometric views 
+                            (defaults to 1, usual values 0.1 to 10)
+        :param fileName: name of the file to plot the graphic. Defaults to None,
+                         in that case an screen display is generated
+        :param defFScale: factor to apply to current displacement of nodes 
+                  so that the display position of each node equals to
+                  the initial position plus its displacement multiplied
+                  by this factor. (Defaults to 0.0, i.e. display of 
+                  initial/undeformed shape)
+         '''
+        if(setToDisplay):
+            self.xcSet= setToDisplay
+            if self.xcSet.color.Norm()==0:
+                self.xcSet.color=xc.Vector([rd.random(),rd.random(),rd.random()])
+        else:
+            lmsg.warning('QuickGraphics::displayNodeValueDiagram; set to display not defined; using previously defined set (total if None).')
+        diagram= npd.NodePropertyDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[self.xcSet],attributeName= itemToDisp)
+        diagram.addDiagram()
+        defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
+        defDisplay.setupGrid(self.xcSet)
+        defDisplay.defineMeshScene(None,defFScale,color=self.xcSet.color)
+        defDisplay.appendDiagram(diagram) #Append diagram to the scene.
 
-      caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.description
-      defDisplay.displayScene(caption=caption,fName=fileName)
+        caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.description
+        defDisplay.displayScene(caption=caption,fName=fileName)
 
 def displayAxes(vectorField, preprocessor, setToDisplay=None,vectorScale=1.0,viewNm="XYZPos",hCamFct=1.0,caption= '',fileName=None,defFScale=0.0):
     '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
-    
+
     :param vectorField: function that generates the vector field.
     :param setToDisplay: set of elements to be displayed (defaults to total set)
     :param vectorScale: factor to apply to the vectors length in the 

@@ -94,6 +94,21 @@ class ControlVarDiagram(cd.ColoredDiagram):
           elemVDir= elem.getJVector3d(True) # initialGeometry= True 
         return [elemVDir,value1,value2]
 
+    def getMaxAbsComp(self):
+        '''Return the maximum absolute value of the component.
+        It is used only for calculating auto-scale parameter, so 
+        we compare only values of the component in first node of the elements
+        '''
+        maxV=0
+        for s in self.conjuntos:
+          for e in s.getElements:
+            e.getResistingForce()
+            componentData= abs(self.getElementComponentData(e)[1])
+            if componentData > maxV:
+                maxV=componentData
+        return maxV
+            
+
     def addDiagram(self):
         '''Add diagram to the scene
         '''
