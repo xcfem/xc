@@ -23,7 +23,7 @@ L= 20 # Bar length.
 h= 0.30 # Beam cross-section depth.
 b= 0.2 # Beam cross-section width.
 A= b*h # Cross section area.
-I= b*h**3/12 # Inercia de la viga in inches to the fourth power.
+I= b*h**3/12 # Inertia of the beam section in inches to the fourth power.
 P= 1e3 # Carga uniforme transversal.
 n= 1e6 # Carga uniforme axial.
 

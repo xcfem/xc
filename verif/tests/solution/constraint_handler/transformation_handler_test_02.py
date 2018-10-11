@@ -13,7 +13,7 @@ l= 20*12 # Bar length in inches
 a= 10*12 # Cantilever length
 h= 30 # Beam cross-section depth in inches.
 A= 50.65 # viga area in square inches.
-I= 7892 # Inercia de la viga in inches to the fourth power.
+I= 7892 # Inertia of the beam section in inches to the fourth power.
 w= 10000/12 # Load per unit length (pounds)/pulgada.
 
 import xc_base
