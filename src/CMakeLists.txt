@@ -73,7 +73,7 @@ set(version_file "${DIR_FUENTES_XC}src/version.cc")
 
 enable_language(Fortran)
 INCLUDE(${DIR_FUENTES_XC}CMake/find_packages.cmake)
-MESSAGE(STATUS "Boost_LIBRARIES: "${Boost_LIBRARIES})
+MESSAGE(STATUS "Boost_LIBRARIES: " ${Boost_LIBRARIES})
 
 #HDF5 library
 include_directories(${HDF5_HEADER_INCLUDE_DIR})
