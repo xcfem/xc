@@ -27,7 +27,7 @@
 //CrossSectionProperties3d.cc
 
 #include <material/section/repres/CrossSectionProperties3d.h>
-#include "xc_basic/src/util/inercia.h"
+#include "xc_basic/src/util/inertia.h"
 #include "xc_utils/src/geom/sis_ref/PrincipalAxesOfInertia2D.h"
 #include <domain/mesh/element/utils/Information.h>
 
@@ -78,15 +78,15 @@ XC::CrossSectionProperties3d::CrossSectionProperties3d(double EA_in, double EIz_
 
 //! @brief Returns the angle between the principal axes and the local system.
 double XC::CrossSectionProperties3d::getTheta(void) const
-  { return theta_inercia(Iy(),Iz(),Iyz()); }
+  { return theta_inertia(Iy(),Iz(),Iyz()); }
 
 //! @brief Returns the major principal axis of inertia.
 double XC::CrossSectionProperties3d::getI1(void) const
-  { return I1_inercia(Iy(),Iz(),Iyz()); }
+  { return I1_inertia(Iy(),Iz(),Iyz()); }
 
 //! @brief Returns the minor principal axis of inertia.
 double XC::CrossSectionProperties3d::getI2(void) const
-  { return I2_inercia(Iy(),Iz(),Iyz()); }
+  { return I2_inertia(Iy(),Iz(),Iyz()); }
 
 //! @brief Returns the principal axis of inertia.
 PrincipalAxesOfInertia2D XC::CrossSectionProperties3d::getInertiaAxes(void) const

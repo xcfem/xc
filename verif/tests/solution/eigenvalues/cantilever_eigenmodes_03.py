@@ -22,8 +22,8 @@ nuMat= 0.3 # Poisson's ratio.
 EMat= 2.0E11 # Young modulus en N/m2.
 espChapa= h # Thickness (m).
 area= b*espChapa # Cross section area en m2
-inercia1= 1/12.0*espChapa*b**3 # Moment of inertia in m4
-inercia2= 1/12.0*b*espChapa**3 # Moment of inertia in m4
+inertia1= 1/12.0*espChapa*b**3 # Moment of inertia in m4
+inertia2= 1/12.0*b*espChapa**3 # Moment of inertia in m4
 dens= 7800 # Density of the steel en kg/m3
 m= b*h*dens
 
@@ -113,9 +113,9 @@ f2calc= 1.0/T2
 
 
 Lambda= 1.87510407
-f1teor= Lambda**2/(2.0*math.pi*L**2)*math.sqrt(EMat*inercia1/m)
+f1teor= Lambda**2/(2.0*math.pi*L**2)*math.sqrt(EMat*inertia1/m)
 ratio1= abs(f1calc-f1teor)/f1teor
-f2teor= Lambda**2/(2*math.pi*L**2)*math.sqrt(EMat*inercia2/m)
+f2teor= Lambda**2/(2*math.pi*L**2)*math.sqrt(EMat*inertia2/m)
 ratio2= abs(f2calc-f2teor)/f2teor
 
 '''

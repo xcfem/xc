@@ -18,7 +18,7 @@ E= 30e6 # Young modulus (psi)
 l= 20*12 # Bar length in inches
 h= 30 # Beam cross-section depth in inches.
 A= 50.65 # viga area in square inches.
-I= 7892 # Inercia de la viga in inches to the fourth power.
+I= 7892 # Inertia of the beam section in inches to the fourth power.
 F= 1000 # Force
 
 # Problem type

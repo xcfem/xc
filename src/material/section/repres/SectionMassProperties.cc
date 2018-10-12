@@ -27,7 +27,7 @@
 //SectionMassProperties.cpp
 
 #include "SectionMassProperties.h"
-#include "xc_basic/src/util/inercia.h"
+#include "xc_basic/src/util/inertia.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
@@ -52,7 +52,7 @@ double XC::SectionMassProperties::getIxHomogenizedSection(const double &E0) cons
 //! @brief Agle of the principal axis of inertia of the homogenized section
 //! with respect of current axis.
 double XC::SectionMassProperties::getTheta_pHomogenizedSection(void) const
-  { return theta_inercia(getIyHomogenizedSection(1.0),getIzHomogenizedSection(1.0),getPyzHomogenizedSection(1.0)); }
+  { return theta_inertia(getIyHomogenizedSection(1.0),getIzHomogenizedSection(1.0),getPyzHomogenizedSection(1.0)); }
 
 //! @brief Direction of a principal axis of inertia of the homogenized section
 //! with respect of current axis.
@@ -84,7 +84,7 @@ double XC::SectionMassProperties::getI1HomogenizedSection(const double &E0) cons
     const double iy= getIyHomogenizedSection(E0);
     const double iz= getIzHomogenizedSection(E0);
     const double pyz= getPyzHomogenizedSection(E0);
-    return I1_inercia(iy,iz,pyz);
+    return I1_inertia(iy,iz,pyz);
   }
 
 //! @brief Minor principal moment of inertia of the homogenized section.
@@ -93,7 +93,7 @@ double XC::SectionMassProperties::getI2HomogenizedSection(const double &E0) cons
     const double iy= getIyHomogenizedSection(E0);
     const double iz= getIzHomogenizedSection(E0);
     const double pyz= getPyzHomogenizedSection(E0);
-    return I2_inercia(iy,iz,pyz);
+    return I2_inertia(iy,iz,pyz);
   }
 
 //! @brief Principal axis of inertia of the homogenized section.
@@ -224,7 +224,7 @@ double XC::SectionMassProperties::getIxGrossSection(void) const
 //! @brief Agle of the principal axis of inertia of the gross section with
 //! respect of current axis.
 double XC::SectionMassProperties::getTheta_pGrossSection(void) const
-  { return theta_inercia(getIyGrossSection(),getIzGrossSection(),getPyzGrossSection()); }
+  { return theta_inertia(getIyGrossSection(),getIzGrossSection(),getPyzGrossSection()); }
 
 //! @brief Direction of a principal axis of inertia of the gross section with
 //! respect of current axis.
@@ -254,7 +254,7 @@ double XC::SectionMassProperties::getI1GrossSection(void) const
     const double iy= getIyGrossSection();
     const double iz= getIzGrossSection();
     const double pyz= getPyzGrossSection();
-    return I1_inercia(iy,iz,pyz);
+    return I1_inertia(iy,iz,pyz);
   }
 
 //! @brief Minor principal moment of inertia of the gross section.
@@ -263,7 +263,7 @@ double XC::SectionMassProperties::getI2GrossSection(void) const
     const double iy= getIyGrossSection();
     const double iz= getIzGrossSection();
     const double pyz= getPyzGrossSection();
-    return I2_inercia(iy,iz,pyz);
+    return I2_inertia(iy,iz,pyz);
   }
 
 //! @brief Principal axis of inertia of the gross section.

@@ -22,8 +22,8 @@ nuMat= 0 # Poisson's ratio.
 EMat= 30E6 # Young modulus en psi.
 espChapa= h # Thickness en m.
 area= b*espChapa # Cross section area en m2
-inercia1= 1/12.0*espChapa*b**3 # Moment of inertia in m4
-inercia2= 1/12.0*b*espChapa**3 # Moment of inertia in m4
+inertia1= 1/12.0*espChapa*b**3 # Moment of inertia in m4
+inertia2= 1/12.0*b*espChapa**3 # Moment of inertia in m4
 dens= 0.000728 # Density of the material en lb-sec2/in4
 m= b*h*dens
 
@@ -112,7 +112,7 @@ f1calc= 1.0/T1
 
 
 lambdA= 1.87510407
-f1teor= lambdA**2/(2*math.pi*L**2)*math.sqrt(EMat*inercia2/m)
+f1teor= lambdA**2/(2*math.pi*L**2)*math.sqrt(EMat*inertia2/m)
 ratio1= abs(f1calc-f1teor)/f1teor
 
 ''' 

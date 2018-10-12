@@ -45,7 +45,7 @@
 #include "utility/actor/actor/MovableMatrix.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 #include "xc_utils/src/geom/sis_ref/PrincipalAxesOfInertia2D.h"
-#include "xc_basic/src/util/inercia.h"
+#include "xc_basic/src/util/inertia.h"
 
 //! @brief Constructor.
 XC::PrismaticBarCrossSection::PrismaticBarCrossSection(int tag, int classTag,MaterialHandler *mat_ldr)
@@ -149,17 +149,17 @@ const double &XC::PrismaticBarCrossSection::EIyz(void) const
 
 //! @brief Returns the angle that defines un principal axis of inertia.
 double XC::PrismaticBarCrossSection::getTheta(void) const
-  { return theta_inercia(EIy(),EIz(),EIyz()); }
+  { return theta_inertia(EIy(),EIz(),EIyz()); }
 
 //! @brief Returns the bending stiffness around
 //! the major principal axis of inertia.
 double XC::PrismaticBarCrossSection::getEI1(void) const
-  { return I1_inercia(EIy(),EIz(),EIyz()); }
+  { return I1_inertia(EIy(),EIz(),EIyz()); }
 
 //! @brief Returns the bending stiffness en
 //! torno al principal axis of inertia menor.
 double XC::PrismaticBarCrossSection::getEI2(void) const
-  { return I2_inercia(EIy(),EIz(),EIyz()); }
+  { return I2_inertia(EIy(),EIz(),EIyz()); }
 
 //! @brief Returns the principal axes of inertia of the cross-section.
 PrincipalAxesOfInertia2D XC::PrismaticBarCrossSection::getInertiaAxes(void) const

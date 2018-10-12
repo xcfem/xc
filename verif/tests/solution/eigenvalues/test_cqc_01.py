@@ -32,7 +32,7 @@ GMat= EMat/(2.0*(1+nuMat)) # Shear modulus.
 
 Iyy= 1 # Flexural inertia on y axis.
 Izz= 1 # Flexural inertia on z axis.
-Ir= 4/3.0 # Inercia a torsion.
+Ir= 4/3.0 # Torsional inertia.
 area= 1e7 # Section area.
 Lx= 1
 Ly= 1
