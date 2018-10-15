@@ -267,8 +267,13 @@ class QuickGraphics(object):
         grid= defDisplay.setupGrid(self.xcSet)
         defDisplay.defineMeshScene(None,defFScale,color=self.xcSet.color)
         orNodalLBar='H'  #default orientation of scale bar for nodal loads
-        # element loads
-  #      print 'scale=',elLoadScaleF,'fUnitConv=',fUnitConv,'loadPatternName=',loadCaseName,'component=',elLoadComp
+        # auto-scaling parameters
+        LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulo() #representative length of set size (to auto-scale)
+        diagAux=lld.LinearLoadDiagram(scale=elLoadScaleF,fUnitConv=fUnitConv,loadPatternName=loadCaseName,component=elLoadComp)
+        maxAbs=diagAux.getMaxAbsComp(preprocessor)
+        if maxAbs > 0:
+            elLoadScaleF*=LrefModSize/maxAbs*100
+        #
         diagram= lld.LinearLoadDiagram(scale=elLoadScaleF,fUnitConv=fUnitConv,loadPatternName=loadCaseName,component=elLoadComp)
         diagram.addDiagram(preprocessor)
         if diagram.isValid():
@@ -449,7 +454,7 @@ def displayLoad(preprocessor,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vect
         setToDisplay.fillDownwards()
         lmsg.warning('set to display not defined; using total set.')
 
-    LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulo() #representative length of set size (to autoscale)
+    LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulo() #representative length of set size (to auto-scale)
     vectorScale*=LrefModSize/10.
     if setToDisplay.color.Norm()==0:
         setToDisplay.color=xc.Vector([rd.random(),rd.random(),rd.random()])

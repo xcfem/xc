@@ -5,7 +5,7 @@ XC installation.
     It’s not always easy to verify than installation works properly
     (obviously, the developer's machine is the worst place to test
     installation process). If you find a bug in the installation please 
-    feel free to write to l.pereztato@gmail.com.
+    feel free to add an issue at https://github.com/xcfem/xc/issues.
 
 1.- Pre-requisites.
 
@@ -13,16 +13,16 @@ XC installation.
     compiler are necessary. You can use the library as a Python module,
     so you need a Python interpreter too. The library was tested
     with GNU C++ and Fortran version 4.8.2
-    
+
     - You will also need CMake ((http://www.cmake.org/).
     - The library is supposed to be used over Linux, maybe it's possible
       to use it with other Unix flavours.
     - Libraries needed:
 
          * Libraries you must to download from GitHub and install yourself:
-             -xc_basic: basic routines (download it from https://github.com/lcpt/xc_basic).
-             -xc_util: utilities (download it from https://github.com/lcpt/xc_utils).
-	     
+             -xc_basic: basic routines (download it from https://github.com/xcfem/xc_basic).
+             -xc_util: utilities (download it from https://github.com/xcfem/xc_utils).
+
 	 * Libraries that can be installed from OS packages.
 	     -VTK Visualization ToolKit (<http://www.vtk.org>, ).
 	     -Boost c++ libraries (<http://www.boost.org>).
