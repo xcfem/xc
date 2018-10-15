@@ -76,7 +76,7 @@ class FEM_ObjectBrokerAllClasses;
 //! <li> Suitesparse (collection of libraries for computations for sparse matrices).</li>
 //! </ul>
 //! 
-//! The program can be downloaded here: <a href="https://github.com/lcpt/xc" target="_new"> GitHub repo</a>. 
+//! The program can be downloaded here: <a href="https://github.com/xcfem/xc" target="_new"> GitHub repo</a>. 
 
 //! @brief Finite element problem.
 class FEProblem: public CommandEntity
