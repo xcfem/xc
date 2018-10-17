@@ -19,5 +19,5 @@ sh update.sh
 
 finally we push this repository into GitHub as usual.
 
-The result can be seen here: https://lcpt.github.io/XCmanual/
+The result can be seen here: https://github.com/xcfem/XCmanual/
 
