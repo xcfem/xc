@@ -11,7 +11,7 @@ The objective is to develop a robust structural analysis tool, which is owned by
 It's all about developing tools that allow us to keep going forward (much in the sense of <a href="https://youtu.be/QhGUtJFl0HM" target="_new">designing for strength, economy and beauty</a>) instead of repeating the same old solutions but in a faster way.
 
 
-## Depencies
+## Dependencies
 The program is based on:
 <ul>
 <li> <a href="http://www.python.org/" target="_new">Python.</a> </li>
