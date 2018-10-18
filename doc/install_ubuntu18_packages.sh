@@ -1,16 +1,16 @@
-# Must run as root so that we can shutdown backuppc and mount drives 
+# Must run as root so that we can shutdown backuppc and mount drives
 if [ $(whoami) != "root" ]; then
-	echo "Debe ejecutar este guión como «root»."
-	echo "Use 'sudo sh instala_paquetes_debian.sh' e introduzca la contraseña cuando se le pida."
-	exit 1
+    echo "You must run this script as root."
+    echo "Use 'sudo sh install_deb_packages.sh' and enter the password when prompted."
+    exit 1
 fi
 
 
-# Verificar que el usuario desea continuar
-read -p "Continuar (s/n)?" REPLY
-if [ $REPLY != "s" ]; then
-	echo "Exiting..."
-	exit 1
+# verify that the user wants to continue
+read -p "Continue (y/n)?" REPLY
+if [ $REPLY != "y" ]; then
+    echo "Exiting..."
+    exit 1
 fi
 
 
