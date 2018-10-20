@@ -1327,6 +1327,8 @@
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_tied_arch_simple_model.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_zapata_aislada.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ng_zapata_aislada.pyc
+/usr/local/lib/python2.7/dist-packages/rough_calculations/predim_diaphragm_wall.py
+/usr/local/lib/python2.7/dist-packages/rough_calculations/predim_diaphragm_wall.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/suspension_bridge_simple_model.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/suspension_bridge_simple_model.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/T_baem_bridges_rough_calc.py
