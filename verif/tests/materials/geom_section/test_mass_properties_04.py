@@ -49,10 +49,10 @@ reinforcementA.p2= geom.Pos2d(0.0,b/2+bw/2-0.05)
 
 elasticSection= typical_materials.defElasticSection3d(preprocessor, "elasticSection",0.0,Ec,Gc,0.0,0.0,1.0)
 elasticSection.sectionGeometry("sectionGeometryTest")
-paramSeccion= elasticSection.sectionProperties
-area= paramSeccion.A
-Iy= paramSeccion.Iy
-Iz= paramSeccion.Iz
+sectionProperties= elasticSection.sectionProperties
+area= sectionProperties.A
+Iy= sectionProperties.Iy
+Iz= sectionProperties.Iz
 
 areaTeor= b*hf+(d-hf)*bw+n*5*areaBar
 izTeor= 0.0081

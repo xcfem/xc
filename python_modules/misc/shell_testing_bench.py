@@ -8,7 +8,7 @@ import sqlite3 as sqlite
 from miscUtils import LogMessages as lmsg
 
 def nuevosZeroLengthShell(nmbS, tagElem, offset):
-# Define el modelo para probar las dos secciones de un elemento shell.
+# Define el modelo para probar las dos sections de un elemento shell.
   '''
     nmbS: Nombre del material.
     nodeTag: node identifier.
@@ -105,9 +105,9 @@ def simulaCargasXYFromTable(nmbQuery, nmbTbEsf, idElem, offset):
     lp.newNodalLoad(iNod1,xc.Vector([row['AXIL_X'],row['Q_X'],row['RASANTE'],row['TORSOR'],row['MOM_X'],0.0]))
     lp.newNodalLoad(iNod2,xc.Vector([row['AXIL_Y'],row['Q_Y'],row['RASANTE'],row['TORSOR'],row['MOM_Y'],0.0]))
 
-def simulaCargasSeccionesShell(nmbDatabase, nmbTablaEsfuerzos, nmbQueryEsfuerzos, nmbTablaSecc, offset):
-  # Introduce las cargas en cada una de las secciones
-  resetAccionesConstantTS("constant_ts","ts",1000) # Factor 1000 (acciones en kN y kN m)
+def simulateLoadsInShellSections(nmbDatabase, nmbTablaEsfuerzos, nmbQueryEsfuerzos, nmbTablaSecc, offset):
+  # Put the loads in each section
+  resetAccionesConstantTS("constant_ts","ts",1000) # Factor 1000 (actions expressed in kN y kN m)
 
   con= sqlite.connect(nmbDataBase)
   con.row_factory = sqlite.Row

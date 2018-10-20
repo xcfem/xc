@@ -28,12 +28,12 @@ nod= nodes.newNodeXY(5,5)
 lin= modelSpace.newCorotCrdTransf("lin")
 
 # Materials
-seccion= typical_materials.defElasticSection2d(preprocessor, "seccion",1,1,1)
+section= typical_materials.defElasticSection2d(preprocessor, "section",1,1,1)
     
 # Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin" # Coordinate transformation for the new elements
-elements.defaultMaterial= "seccion"
+elements.defaultMaterial= "section"
 elements.defaultTag= 1 #Tag for next element.
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
 

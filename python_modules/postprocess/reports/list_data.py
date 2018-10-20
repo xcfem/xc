@@ -87,7 +87,7 @@ def listaElementosBarraSet(preprocessor, setName, fileName, fmt):
      :param fileName: file name.
      :param fmt: format for coordinates.
   '''
-  caption= "Elementos del conjunto: "+setName
+  caption= "Elemento from set: "+setName
   defCampos= "|r|r|r|r|r|r|r|r|r|r|r|"
   idsCampos= " Id & nI  & nJ  &Sc.&  E     &  G     & Area   & alpha &    J     &   Iy    &    Iz  \\\\\n -  &     &  -  & - & GPa    & GPa    &  cm2   &   -   &   cm4    &  cm4    &   cm4"
   cabeceraSupertabular(fileName,11,defCampos,idsCampos,caption) 
@@ -96,8 +96,8 @@ def listaElementosBarraSet(preprocessor, setName, fileName, fmt):
   for e in elems:
     str= str(e.tag)+" & "+str(e.nod(0).tag)+" & "+str(e.nod(1).tag)+" & "
     k= 0
-    secciones= e.getSections()
-    for s in secciones:
+    sections= e.getSections()
+    for s in sections:
       fName.write(str,k," & ")
       fName.write(fmt.format(s.getE()/1e9)," & ",fmt.format(s.getG()/1e9)," & ",fmt.format(s.getA()*1e4)," & ",fmt.format(s.getAlpha())," & ")
       fName.write(fmt.format(s.getJ()*1e6)," & ",fmt.format(s.getIy()*1e6)," & ",fmt.format(s.getIz()*1e6),"\\\\\n")

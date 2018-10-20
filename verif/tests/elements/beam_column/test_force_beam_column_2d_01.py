@@ -42,13 +42,13 @@ nod= nodes.newNodeXY(L,0.0)
 lin= modelSpace.newLinearCrdTransf("lin")
 
 # Materials definition
-seccion= typical_materials.defElasticShearSection2d(preprocessor, "seccion",A,E,G,I,1.0)
+section= typical_materials.defElasticShearSection2d(preprocessor, "section",A,E,G,I,1.0)
 
 
 # Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin" # Coordinate transformation for the new elements
-elements.defaultMaterial= "seccion"
+elements.defaultMaterial= "section"
 beam2d= elements.newElement("ForceBeamColumn2d",xc.ID([1,2]));
 
 # Constraints

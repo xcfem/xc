@@ -42,7 +42,7 @@ preprocessor=  feProblem.getPreprocessor
 sectionProperties= xc.CrossSectionProperties3d()
 sectionProperties.A= A; sectionProperties.E= E; sectionProperties.G= G;
 sectionProperties.Iz= Iz; sectionProperties.Iy= Iy; sectionProperties.J= J
-seccion= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "seccion",sectionProperties)
+section= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "section",sectionProperties)
 
 #Nodes
 nodes= preprocessor.getNodeHandler
@@ -56,7 +56,7 @@ lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
-elements.defaultMaterial= "seccion"
+elements.defaultMaterial= "section"
 elements.defaultTag= 1 #Tag for next element.
 beam3d= elements.newElement("ElasticBeam3d",xc.ID([nod1.tag,nod2.tag]));
 

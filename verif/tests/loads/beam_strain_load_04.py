@@ -43,12 +43,12 @@ nod= nodes.newNodeXYZ(L,0.0,0.0)
 
 lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 # Materials definition
-seccion= typical_materials.defElasticShearSection3d(preprocessor, "seccion",A,E,G,Iz,Iy,J,1.0)
+section= typical_materials.defElasticShearSection3d(preprocessor, "section",A,E,G,Iz,Iy,J,1.0)
 
 # Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
-elements.defaultMaterial= "seccion"
+elements.defaultMaterial= "section"
 elements.defaultTag= 1
 beam= elements.newElement("ForceBeamColumn3d",xc.ID([1,2]));
     

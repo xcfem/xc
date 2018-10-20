@@ -33,7 +33,7 @@ def plotReinforcement(reinforcement, ctx):
             ctx.text_path(labelPlot)
             ctx.stroke()
 
-def plotGeomSeccion(geomSection, path):
+def plotSectionGeometry(geomSection, path):
     ''' draws section geometry in a postscript file'''
     WIDTH, HEIGHT = 256, 256
     surface = cairo.PSSurface(path, WIDTH, HEIGHT)

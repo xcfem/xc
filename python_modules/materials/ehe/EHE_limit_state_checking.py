@@ -1207,7 +1207,7 @@ class CrackControl(lscb.CrackControlBaseParameters):
     concrFctm= concrete.getProp("fctm")
     reinforcement= materiales.getMaterial(reinforcementCode)
     for e in elements:
-      scc= elements.getSeccion()
+      scc= elements.getSection()
       Ntmp= scc.N
       MyTmp= scc.My
       MzTmp= scc.Mz

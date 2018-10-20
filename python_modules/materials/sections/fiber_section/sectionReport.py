@@ -132,7 +132,7 @@ class SectionInfo(object):
 
   def writeReport(self,archTex, pathFigura):
     if(self.geomSection):
-      pfs.plotGeomSeccion(self.geomSection,pathFigura)
+      pfs.plotSectionGeometry(self.geomSection,pathFigura)
     else:
       sys.stderr.write('error: geometry of section: '+self.sectName+' not defined\n')
     fileHandler= open(archTex,'w')

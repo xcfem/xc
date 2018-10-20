@@ -40,23 +40,23 @@ sectionProperties= xc.CrossSectionProperties3d()
 sectionProperties.A= A; sectionProperties.E= E; sectionProperties.G= G;
 sectionProperties.Iz= Iz; sectionProperties.Iy= Iy; sectionProperties.J= J
 sectionProperties.rotate(math.radians(90))
-seccion= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "seccion",sectionProperties)
+section= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "section",sectionProperties)
 
 lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 
 # Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
-elements.defaultMaterial= "seccion"
+elements.defaultMaterial= "section"
 elements.defaultTag= 1 #Tag for the next element.
 beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]));
 
 
 
-angSeccion= 0
+sectionAngle= 0
 fuerte= beam3d.getVDirStrongAxisGlobalCoord(True) # initialGeometry= True
 debil= beam3d.getVDirWeakAxisGlobalCoord(True) # initialGeometry= True
-angSeccion= beam3d.getStrongAxisAngle()
+sectionAngle= beam3d.getStrongAxisAngle()
 ratio1= ((debil[0])**2+(debil[2])**2)
 ratio2= ((fuerte[0])**2+(fuerte[1])**2)
 
@@ -115,7 +115,7 @@ print "ratio5= ",ratio5
 import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
-if (ratio1 < 1e-15) & (ratio2 < 1e-15) & (abs(angSeccion) < 1e-12) & (ratio3 < 1e-5) & (ratio4 < 1e-6) & (ratio5 < 1e-6):
+if (ratio1 < 1e-15) & (ratio2 < 1e-15) & (abs(sectionAngle) < 1e-12) & (ratio3 < 1e-5) & (ratio4 < 1e-6) & (ratio5 < 1e-6):
   print "test ",fname,": ok."
 else:
   lmsg.error(fname+' ERROR.')

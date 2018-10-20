@@ -9,8 +9,8 @@ def listaEsfuerzosBarrasSet(preprocessor,nmbComb, setName, fmt, fName):
   for e in elements:
     str= nmbComb+" & "+e.tag+" & "
     k= 0
-    secciones= e.getSections()
-    for s in secciones:
+    sections= e.getSections()
+    for s in sections:
       fName.write(str,k," & ")
       fName.write(fmt.format(e.getProp("N")/1e3)," & ",fmt.format(e.getProp("Vy")/1e3)," & ",fmt.format(e.getProp("Vz")/1e3)," & ")
       fName.write(fmt.format(e.getProp("Mx")/1e3)," & ",fmt.format(e.getProp("My")/1e3)," & ",fmt.format(e.getProp("Mz")/1e3),"\\\\\n")
@@ -45,8 +45,8 @@ def listaEsfuerzosFCBarrasSet(preprocessor, nmbComb, setName, fmt, fName, nmbDia
   for e in elements:
     str= nmbComb+" & "+e.tag+" & "
     k= 0
-    secciones= e.getSections()
-    for s in secciones:
+    sections= e.getSections()
+    for s in sections:
       fName.write(str,k," & ")
       fName.write(fmt.format(e.getProp("N")/1e3)," & ",fmt.format(e.getProp("Vy")/1e3)," & ",fmt.format(e.getProp("Vz")/1e3)," & ")
       fName.write(fmt.format(e.getProp("Mx")/1e3)," & ",fmt.format(e.getProp("My")/1e3)," & ",fmt.format(e.getProp("Mz")/1e3)," & ",fmt.format(getCapacityFactor(nmbDiag)),"\\\\\n")

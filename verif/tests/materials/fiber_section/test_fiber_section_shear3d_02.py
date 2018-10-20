@@ -133,21 +133,21 @@ fibers= scc.getFibers()
 
 fibersDef= fibers.getDeformation()
 
-esfSeccion= xc.Vector([fibers.getResultant(),esfRespVy,esfRespVz,esfRespT,fibers.getMy(0.0),fibers.getMz(0.0)])
-defSeccion= xc.Vector([fibersDef[0],defRespVy,defRespVz,defRespT,fibersDef[2],fibersDef[1]])
+sectionInternalForces= xc.Vector([fibers.getResultant(),esfRespVy,esfRespVz,esfRespT,fibers.getMy(0.0),fibers.getMz(0.0)])
+sectionDef= xc.Vector([fibersDef[0],defRespVy,defRespVz,defRespT,fibersDef[2],fibersDef[1]])
 
 
 
 ratio1= (reacN1+esfElem).Norm()
-ratio2= (reacN1+esfSeccion).Norm()
-ratio3= (defElem-defSeccion).Norm()
+ratio2= (reacN1+sectionInternalForces).Norm()
+ratio3= (defElem-sectionDef).Norm()
 
 '''
 print "reacN1= ",reacN1
 print "esfElem= ",esfElem
-print "esfSeccion= ",esfSeccion
+print "sectionInternalForces= ",sectionInternalForces
 print "defElem= ",defElem
-print "defSeccion= ",defSeccion
+print "sectionDef= ",sectionDef
 print "ratio1= ",ratio1
 print "ratio2= ",ratio2
 print "ratio3= ",ratio3

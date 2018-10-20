@@ -57,7 +57,7 @@ preprocessor=  feProblem.getPreprocessor
 sccData.defRCSimpleSection(preprocessor, 'd')
 param= xc.InteractionDiagramParameters()
 diag= sccData.defInteractionDiagramNMy(preprocessor)
-#from materials.sections.fiber_section import plotGeomSeccion as pg
+#from materials.sections.fiber_section import plotSectionGeometry as pg
 #pg.plotInteractionDiagram2D(diag)
 
 

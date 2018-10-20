@@ -48,12 +48,12 @@ lin= modelSpace.newLinearCrdTransf("lin")
 sectionProperties= xc.CrossSectionProperties2d()
 sectionProperties.A= area; sectionProperties.E= Es;
 sectionProperties.I= Iz;
-seccion= typical_materials.defElasticSectionFromMechProp2d(preprocessor, "seccion",sectionProperties)
+section= typical_materials.defElasticSectionFromMechProp2d(preprocessor, "section",sectionProperties)
 
 # Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
-elements.defaultMaterial= "seccion"
+elements.defaultMaterial= "section"
 elements.defaultTag= 1 #Tag for next element.
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([2,4]))

@@ -41,22 +41,22 @@ lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 sectionProperties= xc.CrossSectionProperties3d()
 sectionProperties.A= A; sectionProperties.E= E; sectionProperties.G= G;
 sectionProperties.Iz= Iz; sectionProperties.Iy= Iy; sectionProperties.J= J
-seccion= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "seccion",sectionProperties)
+section= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "section",sectionProperties)
 
 # Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultTag= 1 #Tag for the next element.
-elements.defaultMaterial= "seccion"
+elements.defaultMaterial= "section"
 beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]));
 
 
 fuerte= beam3d.getVDirStrongAxisGlobalCoord(True) # initialGeometry= True
 debil= beam3d.getVDirWeakAxisGlobalCoord(True) # initialGeometry= True
-angSeccion= beam3d.getStrongAxisAngle()
+sectionAngle= beam3d.getStrongAxisAngle()
 ratio1= ((fuerte[0])**2+(fuerte[2])**2)
 ratio2= ((debil[0])**2+(debil[1])**2)
-ratio3= abs(angSeccion-math.pi/2)/(math.pi/2)
+ratio3= abs(sectionAngle-math.pi/2)/(math.pi/2)
 
 
 

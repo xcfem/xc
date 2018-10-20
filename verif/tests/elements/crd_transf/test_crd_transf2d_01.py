@@ -32,12 +32,12 @@ nod= nodes.newNodeXY(L*math.sqrt(2)/2,L*math.sqrt(2)/2)
 # Geometric transformations
 lin= modelSpace.newLinearCrdTransf("lin")
 # Materials
-seccion= typical_materials.defElasticSection2d(preprocessor, "seccion",1,1,1)
+section= typical_materials.defElasticSection2d(preprocessor, "section",1,1,1)
 
 # Elements definition
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
-elements.defaultMaterial= "seccion"
+elements.defaultMaterial= "section"
 #  sintaxis: beam2d_02[<tag>] 
 elements.defaultTag= 1 #Tag for next element.
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))

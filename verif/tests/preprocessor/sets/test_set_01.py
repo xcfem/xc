@@ -32,11 +32,11 @@ nod= nodes.newNodeXYZ(0.0,1.0,1.0)
 lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,1]))
 
 # Materials
-seccion= typical_materials.defElasticSection3d(preprocessor, "seccion",1,1,1,1,1,1)
+section= typical_materials.defElasticSection3d(preprocessor, "section",1,1,1,1,1,1)
 
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin" # Coord. transformation.
-elements.defaultMaterial= "seccion"
+elements.defaultMaterial= "section"
 elements.defaultTag= 1 #Tag for next element.
 beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]));
 beam3d= elements.newElement("ElasticBeam3d",xc.ID([2,3]))
