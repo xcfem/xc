@@ -35,7 +35,6 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 #First node number.
 nod1= nodes.newNodeXYZ(0,0,0)
 nod2= nodes.newNodeXYZ(1,0,0)
 nod3= nodes.newNodeXYZ(2,0,0)
@@ -47,7 +46,7 @@ nod8= nodes.newNodeXYZ(3,1,0)
 nod9= nodes.newNodeXYZ(0,2,0)
 nod10= nodes.newNodeXYZ(1,2,0)
 nod11= nodes.newNodeXYZ(2,2,0)
-nod11= nodes.newNodeXYZ(3,2,0)
+nod12= nodes.newNodeXYZ(3,2,0)
 
 
 # Materials definition
@@ -59,41 +58,40 @@ typical_materials.defSteel02(preprocessor, "prestressingSteel",Ep,fy,0.001,tInic
 elements= preprocessor.getElementHandler
 # Reinforced concrete deck
 elements.defaultMaterial= "hLosa"
-elements.defaultTag= 1
-elem= elements.newElement("ShellMITC4",xc.ID([1,2,6,5]))
-elem= elements.newElement("ShellMITC4",xc.ID([2,3,7,6]))
-elem= elements.newElement("ShellMITC4",xc.ID([3,4,8,7]))
-elem= elements.newElement("ShellMITC4",xc.ID([5,6,10,9]))
-elem= elements.newElement("ShellMITC4",xc.ID([6,7,11,10]))
-elem= elements.newElement("ShellMITC4",xc.ID([7,8,12,11]))
+shell1= elements.newElement("ShellMITC4",xc.ID([nod1.tag,nod2.tag,nod6.tag,nod5.tag]))
+shell2= elements.newElement("ShellMITC4",xc.ID([nod2.tag,nod3.tag,nod7.tag,nod6.tag]))
+shell3= elements.newElement("ShellMITC4",xc.ID([nod3.tag,nod4.tag,nod8.tag,nod7.tag]))
+shell4= elements.newElement("ShellMITC4",xc.ID([nod5.tag,nod6.tag,nod10.tag,nod9.tag]))
+shell5= elements.newElement("ShellMITC4",xc.ID([nod6.tag,nod7.tag,nod11.tag,nod10.tag]))
+shell6= elements.newElement("ShellMITC4",xc.ID([nod7.tag,nod8.tag,nod12.tag,nod11.tag]))
 
 # active reinforcement
 elements.defaultMaterial= "prestressingSteel"
 elements.dimElem= 3 # Dimension of element space
-truss= elements.newElement("Truss",xc.ID([1,2]));
-truss.area= Ap
-truss= elements.newElement("Truss",xc.ID([2,3]));
-truss.area= Ap
-truss= elements.newElement("Truss",xc.ID([3,4]));
-truss.area= Ap
-truss= elements.newElement("Truss",xc.ID([5,6]));
-truss.area= Ap
-truss= elements.newElement("Truss",xc.ID([6,7]));
-truss.area= Ap
-truss= elements.newElement("Truss",xc.ID([7,8]));
-truss.area= Ap
-truss= elements.newElement("Truss",xc.ID([9,10]));
-truss.area= Ap
-truss= elements.newElement("Truss",xc.ID([10,11]));
-truss.area= Ap
-truss= elements.newElement("Truss",xc.ID([11,12]));
-truss.area= Ap
+truss1= elements.newElement("Truss",xc.ID([nod1.tag,nod2.tag]));
+truss1.area= Ap
+truss2= elements.newElement("Truss",xc.ID([nod2.tag,nod3.tag]));
+truss2.area= Ap
+truss3= elements.newElement("Truss",xc.ID([nod3.tag,nod4.tag]));
+truss3.area= Ap
+truss4= elements.newElement("Truss",xc.ID([nod5.tag,nod6.tag]));
+truss4.area= Ap
+truss5= elements.newElement("Truss",xc.ID([nod6.tag,nod7.tag]));
+truss5.area= Ap
+truss6= elements.newElement("Truss",xc.ID([nod7.tag,nod8.tag]));
+truss6.area= Ap
+truss7= elements.newElement("Truss",xc.ID([nod9.tag,nod10.tag]));
+truss7.area= Ap
+truss8= elements.newElement("Truss",xc.ID([nod10.tag,nod11.tag]));
+truss8.area= Ap
+truss9= elements.newElement("Truss",xc.ID([nod11.tag,nod12.tag]));
+truss9.area= Ap
 
 # Constraints
 
-modelSpace.fixNode000_000(1)
-modelSpace.fixNode000_000(5)
-modelSpace.fixNode000_000(9)
+modelSpace.fixNode000_000(nod1.tag)
+modelSpace.fixNode000_000(nod5.tag)
+modelSpace.fixNode000_000(nod9.tag)
 
 # Loads definition
 loadHandler= preprocessor.getLoadHandler
@@ -111,24 +109,24 @@ lpVT= lPatterns.newLoadPattern("default","VT")
 lpNV= lPatterns.newLoadPattern("default","NV")
 
 #lPatterns.currentLoadPattern= "G"
-lpG.newNodalLoad(4,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
-lpG.newNodalLoad(8,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
-lpG.newNodalLoad(12,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
+lpG.newNodalLoad(nod4.tag,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
+lpG.newNodalLoad(nod8.tag,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
+lpG.newNodalLoad(nod12.tag,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 
 #lPatterns.currentLoadPattern= "SC"
-lpSC.newNodalLoad(4,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
-lpSC.newNodalLoad(8,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
-lpSC.newNodalLoad(12,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
+lpSC.newNodalLoad(nod4.tag,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
+lpSC.newNodalLoad(nod8.tag,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
+lpSC.newNodalLoad(nod12.tag,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 
 #lPatterns.currentLoadPattern= "VT"
-lpVT.newNodalLoad(4,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
-lpVT.newNodalLoad(8,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
-lpVT.newNodalLoad(12,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
+lpVT.newNodalLoad(nod4.tag,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
+lpVT.newNodalLoad(nod8.tag,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
+lpVT.newNodalLoad(nod12.tag,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 
 #lPatterns.currentLoadPattern= "NV"
-lpNV.newNodalLoad(4,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
-lpNV.newNodalLoad(8,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
-lpNV.newNodalLoad(12,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
+lpNV.newNodalLoad(nod4.tag,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
+lpNV.newNodalLoad(nod8.tag,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
+lpNV.newNodalLoad(nod12.tag,xc.Vector([F,0.0,0.0,0.0,0.0,0.0]))
 
 
 # Combinaciones
@@ -206,7 +204,6 @@ dXMax=-1e9
 
 def procesResultVerif(comb):
   nodes= preprocessor.getNodeHandler
-  nod8= nodes.getNode(8)
   deltaX= nod8.getDisp[0] # x displacement of node 8
   global dXMin
   dXMin=min(dXMin,deltaX)

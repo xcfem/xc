@@ -40,7 +40,6 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 #First node number.
 nod1= nodes.newNodeXYZ(2.0,0.0,0.0)
 nod2= nodes.newNodeXYZ(2.0,0.0,4.0)
 nod3= nodes.newNodeXYZ(0.0,0.0,4.0)
@@ -58,17 +57,16 @@ elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "scc"
 #  sintaxis: ElasticBeam3d[<tag>] 
-elements.defaultTag= 1
-beam1= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
+beam1= elements.newElement("ElasticBeam3d",xc.ID([nod1.tag,nod2.tag]))
 beam1.rho= densHorm*A
-beam2= elements.newElement("ElasticBeam3d",xc.ID([3,2])) 
+beam2= elements.newElement("ElasticBeam3d",xc.ID([nod3.tag,nod2.tag])) 
 beam2.rho= densHorm*A
-beam3= elements.newElement("ElasticBeam3d",xc.ID([2,4])) 
+beam3= elements.newElement("ElasticBeam3d",xc.ID([nod2.tag,nod4.tag])) 
 beam3.rho= densHorm*A
 
 # Constraints
 
-modelSpace.fixNode000_000(1)
+modelSpace.fixNode000_000(nod1.tag)
 
 # Loads definition
 loadHandler= preprocessor.getLoadHandler
@@ -145,17 +143,16 @@ def procesResultVerif(comb):
   tagSave= comb.tag*100
   db.save(tagSave)
   elements= preprocessor.getElementHandler
-  elem1= elements.getElement(1)
-  elem1.getResistingForce()
+  beam1.getResistingForce()
   global NMin1
-  NMin1=min(NMin1,elem1.getN1)
+  NMin1=min(NMin1,beam1.getN1)
   global NMin2
-  NMin2=min(NMin2,elem1.getN2)
+  NMin2=min(NMin2,beam1.getN2)
   ''' 
   print "tagComb= ",comb.tag
   print "nmbComb= ",comb.getName
-  print "N1= ",(elem1.getN1/1e3)
-  print "N2= ",(elem1.getN2/1e3)
+  print "N1= ",(beam1.getN1/1e3)
+  print "N2= ",(beam1.getN2/1e3)
   '''
 
 
