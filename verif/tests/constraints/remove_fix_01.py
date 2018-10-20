@@ -36,9 +36,8 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXYZ(0,0.0,0.0)
-nod= nodes.newNodeXYZ(L,0.0,0.0)
+nod1= nodes.newNodeXYZ(0,0.0,0.0)
+nod2= nodes.newNodeXYZ(L,0.0,0.0)
 
 
 lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
@@ -53,14 +52,11 @@ section= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "sectio
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "section"
-elements.defaultTag= 1 #Tag for the next element.
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]));
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([nod1.tag,nod2.tag]));
 
 # Constraints
-modelSpace.fixNode000_000(1)
-spc= modelSpace.constraints.newSPConstraint(2,1,0.0)
-spcTag= spc.tag
-# \fix[2,1,20]{ \valor{0.0} }
+modelSpace.fixNode000_000(nod1.tag)
+spc= modelSpace.constraints.newSPConstraint(nod2.tag,1,0.0)
 
 # Loads definition
 loadHandler= preprocessor.getLoadHandler
@@ -70,7 +66,7 @@ ts= lPatterns.newTimeSeries("constant_ts","ts")
 lPatterns.currentTimeSeries= "ts"
 #Load case definition
 lp0= lPatterns.newLoadPattern("default","0")
-lp0.newNodalLoad(2,xc.Vector([0,-F,0,0,0,0]))
+lp0.newNodalLoad(nod2.tag,xc.Vector([0,-F,0,0,0,0]))
 #We add the load case to domain.
 lPatterns.addToDomain("0")
 
@@ -80,13 +76,12 @@ result= analisis.analyze(1)
 
 
 nodes= preprocessor.getNodeHandler 
-nod2= nodes.getNode(2)
 delta0= nod2.getDisp[1]  # Node 2 yAxis displacement
 
 
 
 
-modelSpace.constraints.removeSPConstraint(spcTag)
+modelSpace.constraints.removeSPConstraint(spc.tag)
 #remove_fix{20}
 
 
@@ -98,14 +93,13 @@ result= analisis.analyze(1)
 
 
 nodes= preprocessor.getNodeHandler 
-nod2= nodes.getNode(2)
 delta= nod2.getDisp[1]  # Node 2 yAxis displacement
 
-elem1= elements.getElement(1)
-elem1.getResistingForce()
-M= elem1.getMy1
+#beam3d= elements.getElement(1)
+beam3d.getResistingForce()
+M= beam3d.getMy1
 MTeor= F*L
-V= elem1.getVz
+V= beam3d.getVz
 
 deltateor= (-F*L**3/(3*E*Iy))
 ratio1= ((delta-deltateor)/deltateor)
