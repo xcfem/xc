@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-# Test de elaboración propia, comprueba el funcionamiento del
-#    comando vector3d_edge_load_global.
+# vector3d_edge_load_global test (home made).
 import xc_base
 import geom
 import xc

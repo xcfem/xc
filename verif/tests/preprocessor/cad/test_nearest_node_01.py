@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Test para comprobar el funcionamiento de getNearestNode
+# getNearestNode method test
 import xc_base
 import geom
 import xc
@@ -21,7 +21,7 @@ nodes= preprocessor.getNodeHandler
 for i in range(1,1000):
   n= nodes.newNodeXYZ(i,0,0)
 
-# print "creados ",nnod," nodes.\n"
+# print "created ",nnod," nodes.\n"
 mesh= feProblem.getDomain.getMesh
 # crono= 1
 # \crono{\start{}}

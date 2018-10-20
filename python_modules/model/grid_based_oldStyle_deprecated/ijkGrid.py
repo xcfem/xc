@@ -553,7 +553,7 @@ def setEntLstSurf(preprocessor,lstSurf,nmbrSet):
 
 
 
-#Funciones geométricas simples
+#Simple geometric functions
 
 def lstNodesPLine(setBusq,lstPtsPLine):
     '''return the subset of nodes from the set `setBusq` that belong to the line defined by the successive points in list `lstPts`

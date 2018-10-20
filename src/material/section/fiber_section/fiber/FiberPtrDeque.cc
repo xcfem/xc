@@ -625,7 +625,7 @@ double XC::FiberPtrDeque::getSNegHomogenizedSection(const double &E0,const HalfP
     return retval;
   }
 
-//! @brief Funcion auxiliar para calcular los principal moments of inertia.
+//! @brief Auxiliary function to to compute principal moments of inertia.
 inline double R(const double &Iy,const double &Iz,const double Pyz)
   { return sqrt(sqr((Iy-Iz)/2)+sqr(Pyz)); }
 

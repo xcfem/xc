@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Test para comprobar el funcionamiento de getNearestElement
+# getNearestElement method test.
 import xc_base
 import geom
 import xc
