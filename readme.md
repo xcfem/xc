@@ -1,13 +1,17 @@
-[![XC](https://github.com/lcpt/xc/blob/master/doc/logo/xc_logo_100x80.jpeg)](https://sites.google.com/site/xcfemanalysis)
+[![XC](https://github.com/xcfem/xc/blob/master/doc/logo/xc_logo_100x80.jpeg)](https://sites.google.com/site/xcfemanalysis)
 
 Open source finite element analysis program.
+============================================
 
-You can see some screenshots <a href="https://github.com/lcpt/xc/tree/master/doc/screenshots" target="_new">here</a>.
+## Overview
+You can see some screenshots <a href="https://github.com/xcfem/xc/tree/master/doc/screenshots" target="_new">here</a>.
 
 The objective is to develop a robust structural analysis tool, which is owned by the community, and allows the users to improve and adapt it for their own needs.
 
 It's all about developing tools that allow us to keep going forward (much in the sense of <a href="https://youtu.be/QhGUtJFl0HM" target="_new">designing for strength, economy and beauty</a>) instead of repeating the same old solutions but in a faster way.
 
+
+## Dependencies
 The program is based on:
 <ul>
 <li> <a href="http://www.python.org/" target="_new">Python.</a> </li>
@@ -32,10 +36,12 @@ The program is based on:
 <li> <a href="http://www.mcs.anl.gov/petsc/petsc-as" target="_new"> PETSC</a> (Portable, Extensible Toolkit for Scientific Computation).</li>
 <li> <a href="http://crd-legacy.lbl.gov/~osni/#Software" target="_new"> Skypack</a> (SKYline PACKage).</li>
 <li> <a href="http://rene.ma.utexas.edu/CNA/ITPACK/" target="_new"> ITPACK</a> (collection of subroutines for solving large sparse linear systems by adaptive accelerated iterative algorithms).</li>
-<li> <a href="https://github.com/lcpt/xc_basic" target="_new"> xc_basic</a> Basic routines for XC (that will be simplified...).</li>
-<li> <a href="https://github.com/lcpt/xc_utils" target="_new"> xc_utils</a> Utilities for XC (that will be simplified...).</li>
+<li> <a href="https://github.com/xcfem/xc_basic" target="_new"> xc_basic</a> Basic routines for XC (that will be simplified...).</li>
+<li> <a href="https://github.com/xcfem/xc_utils" target="_new"> xc_utils</a> Utilities for XC (that will be simplified...).</li>
 </ul>
 
+
+## Features
 The main capabilities of the program:
 
 - Geometry modeling and mesh generation tools.
@@ -47,5 +53,11 @@ The main capabilities of the program:
 - Interface with Salome (in progress...).
 - Interface with SCIA Engineering (in progress...).
 
-You can take a look to the project <a href="https://sites.google.com/site/xcfemanalysis/" target="_new">home</a>, to the <a href="https://lcpt.github.io/XCmanual/" target="_new">Python documentation</a> or the <a href="https://codedocs.xyz/lcpt/xc/index.html" target="_new">C++ API documentation</a> or to our brand new <a href="http://www.xcengineering.xyz/html_files/software.html" target="_new"> XC page in the company site.</a> (all of them are work in progress ;-). 
+
+## Installation
+See <a href="https://github.com/xcfem/xc/blob/master/install.txt" target="_new">install</a>
+
+
+## Links
+You can take a look to the project <a href="https://sites.google.com/site/xcfemanalysis/" target="_new">home</a>, to the <a href="https://github.com/xcfem/XCmanual/" target="_new">Python documentation</a> or the <a href="https://codedocs.xyz/lcpt/xc/index.html" target="_new">C++ API documentation</a> or to our brand new <a href="http://www.xcengineering.xyz/html_files/software.html" target="_new"> XC page in the company site.</a> (all of them are work in progress ;-). 
 

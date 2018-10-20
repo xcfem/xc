@@ -1,17 +1,20 @@
 # Must run as root so that we can shutdown backuppc and mount drives
 if [ $(whoami) != "root" ]; then
-	echo "You must run this script as root."
-	echo "Use 'sudo sh install_deb_packages.sh' and enter the password when prompted."
-	exit 1
+    echo "You must run this script as root."
+    echo "Use 'sudo sh install_deb_packages.sh' and enter the password when prompted."
+    exit 1
 fi
 
+
+# print information about non-free packages
 echo "Some packages are in the "contrib" and "non-free" areas of the Debian distribution so these areas should be included in the sources.list file before running this script."
 
-# Verificar que el usuario desea continuar
+
+# verify that the user wants to continue
 read -p "Continue (y/n)?" REPLY
 if [ $REPLY != "y" ]; then
-	echo "Exiting..."
-	exit 1
+    echo "Exiting..."
+    exit 1
 fi
 
 
@@ -78,13 +81,13 @@ packages_nonfree="\
     libparmetis-dev"
 sudo apt-get install -y $packages_nonfree
 
+
 # free disk space by cleaning install files
 apt-get clean
 
 
-#mayavi installation. Some 'mayavi' packages seems
-#to require VTK 6 so we use pip. If you're a Debian user
-#you can help us with this sending us your comments.
+# mayavi installation. Some 'mayavi' packages seems
+# to require VTK 6 so we use pip. If you're a Debian user
+# you can help us with this sending us your comments.
 # (to reconsider because we already use VTK 6 LCPT 24/09/2018)
-
 sudo -H pip install mayavi
