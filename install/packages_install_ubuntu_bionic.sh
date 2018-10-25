@@ -6,11 +6,13 @@ if [ $(whoami) != "root" ]; then
 fi
 
 
-# verify that the user wants to continue
-read -p "Continue (y/n)?" REPLY
-if [ $REPLY != "y" ]; then
-    echo "Exiting..."
-    exit 1
+# verify that the user wants to continue, but do not verify if a parameter DoNotAsk was given with script start
+if [ $1 != "DoNotAsk" ]; then
+    read -p "Continue (y/n)?" REPLY
+    if [ $REPLY != "y" ]; then
+        echo "Exiting..."
+        exit 1
+    fi
 fi
 
 
