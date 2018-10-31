@@ -25,7 +25,7 @@ If you have any problem at installation process, feel free to add an issue at ht
 Compiling XC is straight forward. We provide scripts which automate the tasks above. 
 If you are familar with git, cmake and make, you can skip any further description 
 in this file and dirctly head over to the scripts. They should do the job for you without any hasle. 
-You will find further instructions in https://github.com/xcfem/xc/install/install.scripts.linux.md
+You will find further instructions in https://github.com/xcfem/xc/blob/master/install/install.scipts.linux.md
 
 
 ## Detailed description

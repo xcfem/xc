@@ -2,7 +2,7 @@ XC installation.
 ================
 
 ## Linux
-For linux see file install.linux.md
+For linux see file https://github.com/xcfem/xc/blob/master/install/install.linux.md
 
 
 ## Windows
