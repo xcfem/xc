@@ -56,7 +56,7 @@ class InertialLoad(BaseVectorLoad):
                 loadVector= ms.matSect.getAreaDensity()*self.loadVector
                 el_group= ms.primitiveSet.getElements
             elif 'beam' in ms.elemType.lower():
-                loadVector= ms.matSect.getLongitudinalDensity()*self.loadVector
+                loadVector= ms.matSect.getRho()*self.loadVector
                 el_group= ms.primitiveSet.getElements
             for e in el_group:
                 e.vector3dUniformLoadGlobal(loadVector)
@@ -68,7 +68,7 @@ class InertialLoad(BaseVectorLoad):
             if 'shell' in ms.elemType.lower():
                 val= ms.matSect.getAreaDensity()*self.loadVector.Norm()
             elif 'beam' in ms.elemType.lower():
-                val= ms.matSect.getLongitudinalDensity()*self.loadVector.Norm()
+                val= ms.matSect.getRho()*self.loadVector.Norm()
             maxValue=max(val,maxValue)
         return maxValue
 
