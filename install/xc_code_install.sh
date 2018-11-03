@@ -15,21 +15,22 @@ base_dir=`pwd`
 
 
 ##########################################################
-# clone xc_basic, xc_utils, XC
+# clone xc_utils and XC
 cd $base_dir
-git clone https://github.com/xcfem/xc_basic/ xc_basic
 git clone https://github.com/xcfem/xc_utils/ xc_utils
 git clone https://github.com/xcfem/xc/ xc
 
 
 ##########################################################
 # build xc_basic
-cd $base_dir
-mkdir build-xc_basic
-cd build-xc_basic
-cmake ../xc_basic/src
-make -j 2
-sudo make install
+### LCPT MERGED INTO xc_utils 03.11.2018 so not needed anymore.
+# cd $base_dir
+# mkdir build-xc_basic
+# cd build-xc_basic
+# cmake ../xc_basic/src
+# make -j 2
+# sudo make install
+### LCPT
 ## source needed as include dir for xc_utils, includes are not installed into /usr/local/include
 ## in xc_utils sqlite will only be found if build of xc_basic will not be removed
 ## or add find_packages sqlite to xc_utils, see a commit on a branch in my repo of xc_utils
