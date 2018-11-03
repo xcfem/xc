@@ -21,7 +21,7 @@ sudo bash packages_install_debian_stretch.sh
 - https://github.com/xcfem/xc/blob/master/install/packages_install_ubuntu_bionic.sh
 ```console
 wget https://raw.githubusercontent.com/xcfem/xc/master/install/packages_install_ubuntu_bionic.sh
-sudo bash packages_install_debian_stretch.sh
+sudo bash packages_install_ubuntu_bionic.sh
 #
 ```
 
