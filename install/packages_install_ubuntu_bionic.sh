@@ -6,27 +6,25 @@ if [ $(whoami) != "root" ]; then
 fi
 
 
-# print information about non-free packages
-echo "Some packages are in the "contrib" and "non-free" areas of the Debian distribution so these areas should be included in the sources.list file before running this script."
-
-
-# verify that the user wants to continue
-read -p "Continue (y/n)?" REPLY
-if [ $REPLY != "y" ]; then
-    echo "Exiting..."
-    exit 1
+# verify that the user wants to continue, but do not verify if a parameter DoNotAsk was given with script start
+if [ $1 != "DoNotAsk" ]; then
+    read -p "Continue (y/n)?" REPLY
+    if [ $REPLY != "y" ]; then
+        echo "Exiting..."
+        exit 1
+    fi
 fi
 
 
-# packages installed by debian package manager apt-get
-# tested on Debian Stretch
+# packages installed by package manager apt-get
+# tested on Ubuntu 18.04 Bionic Beaver
 packages_build="\
     git         \
     cmake       \
     g++         \
     gfortran    \
     libboost-all-dev"
-apt-get install -y $packages_build
+sudo apt-get install -y $packages_build
 
 packages_lib="\
     libarpack2-dev              \
@@ -52,13 +50,13 @@ packages_lib="\
     libvtk6-dev                 \
     libx11-dev                  \
     libmetis-dev"
-apt-get install -y $packages_lib
+sudo apt-get install -y $packages_lib
 
 packages_dev="\
     cimg-dev  \
     petsc-dev \
     tcl-dev"
-apt-get install -y $packages_dev
+sudo apt-get install -y $packages_dev
 
 packages_python="\
     python-vtk6         \
@@ -68,15 +66,15 @@ packages_python="\
     python-pandas       \
     python-sklearn      \
     python-pip"
-apt-get install -y $packages_python
+sudo apt-get install -y $packages_python
 
 packages_div="\
     gnuplot \
     bc"
 # bc is needed by xc_utils verification tests
-apt-get install -y $packages_div
+sudo apt-get install -y $packages_div
 
-# install nonfree packages
+# install nonfree packages (ubuntu does not know nonfree, means we gone just install)
 packages_nonfree="\
     libparmetis-dev"
 sudo apt-get install -y $packages_nonfree
@@ -86,8 +84,6 @@ sudo apt-get install -y $packages_nonfree
 apt-get clean
 
 
-# mayavi installation. Some 'mayavi' packages seems
-# to require VTK 6 so we use pip. If you're a Debian user
-# you can help us with this sending us your comments.
-# (to reconsider because we already use VTK 6 LCPT 24/09/2018)
+# mayavi installation. Ubuntu 'mayavi' package seems to require VTK 6,
+# so we use pip (to reconsider because we already use VTK 6 LCPT 24/09/2018)
 sudo -H pip install mayavi

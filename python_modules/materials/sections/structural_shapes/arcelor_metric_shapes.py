@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+__author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
+__copyright__= "Copyright 2018, LCPT, AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
+
 
 import math
 
@@ -174,6 +180,17 @@ IPN['IPN_600']= {'nmb':'IPN_600','P':199,'h':600e-3,'b':215e-3,'tw':21.6e-3,'tf'
 
 for item in IPN:
   shape= IPN[item]
+  Avy= shape['Avy']
+  A= shape['A']
+  E= shape['E']
+  nu= shape['nu']
+  b= shape['b']
+  h= shape['h']
+  tf= shape['tf']
+  tw= shape['tw']
+  r= shape['r1']
+  shape['d']= h-2*tf-2*r
+  shape['hi']= h-2*tf
   shape['alpha']= shape['Avy']/shape['A']
   shape['G']= shape['E']/(2*(1+shape['nu']))
   shape['AreaQy']= 2*shape['b']*shape['tf']+(shape['tw']+2*shape['r1'])*shape['tf']
@@ -347,21 +364,21 @@ HE['HL_1100_Mdot']= {'nmb':'HL_1100_Mdot', 'P':433, 'h':1108e-3, 'b':402e-3, 'tw
 HE['HL_1100_Rdot']= {'nmb':'HL_1100_Rdot', 'P':499, 'h':1118e-3, 'b':405e-3, 'tw':26e-3, 'tf':45e-3, 'r':20e-3, 'A':635.2e-4, 'hi':1028e-3, 'd':988e-3, 'FI':'M 27', 'Pmin':126e-3, 'Pmax':294e-3, 'AL':3.77, 'AG':7.56, 'Iz':1294000e-8, 'Wzel':23150e-6, 'Wzpl':26600e-6, 'iz':45.14e-2, 'Avy':300.4e-4, 'Iy':49980e-8, 'Wyel':2468e-6, 'Wypl':3870e-6, 'iy':8.87e-2, 'Ss':139.4e-3, 'It':3135e-8, 'E':2.1e+11, 'nu':0.3}
 
 for item in HE:
-  shape= HE[item]
-  Avy= shape['Avy']
-  A= shape['A']
-  E= shape['E']
-  nu= shape['nu']
-  b= shape['b']
-  d= shape['d']
-  hi= shape['hi']
-  tf= shape['tf']
-  tw= shape['tw']
-  r= shape['r']
-  shape['alpha']= Avy/A
-  shape['G']= E/(2*(1+nu))
-  shape['AreaQy']= A-2*b*tf+(tw+2*r)*tf
-  shape['AreaQz']= A-hi*tw
+    shape= HE[item]
+    Avy= shape['Avy']
+    A= shape['A']
+    E= shape['E']
+    nu= shape['nu']
+    b= shape['b']
+    d= shape['d']
+    hi= shape['hi']
+    tf= shape['tf']
+    tw= shape['tw']
+    r= shape['r']
+    shape['alpha']= Avy/A
+    shape['G']= E/(2*(1+nu))
+    shape['AreaQy']= A-2*b*tf+(tw+2*r)*tf
+    shape['AreaQz']= A-hi*tw
 
 # Arcelor UPN steel shapes.
 
@@ -406,20 +423,20 @@ UPN['UPN_380']= {'nmb':'UPN_380', 'P':63.1, 'h':380e-3, 'b':102e-3, 'tw':13.5e-3
 UPN['UPN_400']= {'nmb':'UPN_400', 'P':71.8, 'h':400e-3, 'b':110e-3, 'tw':14e-3, 'tf':18e-3, 'r1':18e-3, 'r2':9e-3, 'A':91.5e-4, 'd':324e-3, 'FI':'M 27', 'Pmin':61e-3, 'Pmax':62e-3, 'AL':1.182, 'AG':16.46, 'Iz':20350e-8, 'Wzel':1020e-6, 'Wzpl':1240e-6, 'iz':14.9e-2, 'Avy':58.55e-4, 'Iy':846e-8, 'Wyel':102e-6, 'Wypl':190e-6, 'iy':3.04e-2, 'Ss':44e-3, 'It':81.6e-8, 'Iw':221e-16, 'zs':2.65e-2, 'zm':5.11e-2, 'E':2.1e+11, 'nu':0.3}
 
 for item in UPN:
-  shape= UPN[item]
-  Avy= shape['Avy']
-  A= shape['A']
-  E= shape['E']
-  nu= shape['nu']
-  b= shape['b']
-  d= shape['d']
-  tf= shape['tf']
-  tw= shape['tw']
-  r1= shape['r1']
-  shape['alpha']= Avy/A
-  shape['G']= E/(2*(1+nu))
-  shape['AreaQy']= A-2*b*tf+(tw+r1)*tf
-  shape['AreaQz']= A-d*tw
+    shape= UPN[item]
+    Avy= shape['Avy']
+    A= shape['A']
+    E= shape['E']
+    nu= shape['nu']
+    b= shape['b']
+    d= shape['d']
+    tf= shape['tf']
+    tw= shape['tw']
+    r1= shape['r1']
+    shape['alpha']= Avy/A
+    shape['G']= E/(2*(1+nu))
+    shape['AreaQy']= A-2*b*tf+(tw+r1)*tf
+    shape['AreaQz']= A-d*tw
 
 # Arcelor L steel shapes.
 
@@ -572,18 +589,18 @@ AU['AU_25']= {'nmb':'AU_25', 'P':110.4, 'h':450e-3, 'b':750e-3, 's':10.2e-3, 't'
 #     f.close()
 
 for item in AU:
-  shape= AU[item]
-  h= shape['h'] #Height
-  tf= shape['t'] #Flange thickness
-  tw= shape['s'] #Web thickness
-  b= shape['b']
-  Avy= tw*(h-tf)/b #Projected shear area.
-  shape['Avy']= Avy
-  A= shape['A']
-  E= shape['E']
-  nu= shape['nu']
-  shape['alpha']= Avy/A
-  shape['G']= E/(2*(1+nu))
+    shape= AU[item]
+    h= shape['h'] #Height
+    tf= shape['t'] #Flange thickness
+    tw= shape['s'] #Web thickness
+    b= shape['b']
+    Avy= tw*(h-tf)/b #Projected shear area.
+    shape['Avy']= Avy
+    A= shape['A']
+    E= shape['E']
+    nu= shape['nu']
+    shape['alpha']= Avy/A
+    shape['G']= E/(2*(1+nu))
 
 # Arcelor square hollow tubes.
 # Cross section axis:
@@ -694,19 +711,19 @@ SHS['SHS175x175x7']= {'nmb':'SHS175x175x7', 'b':0.175, 'h':0.175, 'e':7e-3, 'P':
 SHS['SHS175x175x8']= {'nmb':'SHS175x175x8', 'b':0.175, 'h':0.175, 'e':8e-3, 'P':41.63, 'A':53.03e-4, 'Iz':2489.7e-8, 'Iy':2489.7e-8, 'Wzel':284.53e-6, 'Wzpl':334.92e-6, 'iz':6.85e-2, 'iy':6.85e-2, 'It':3726e-8, 'E':210000e6, 'nu':0.3}
 
 for item in SHS:
-  shape= SHS[item]
-  A= shape['A']
-  E= shape['E']
-  nu= shape['nu']
-  b= shape['b']
-  h= shape['h']
-  e= shape['e']
-  shape['alpha']= 0.5*5/6.0
-  shape['G']= E/(2*(1+nu))
-  shape['AreaQy']= 2*0.7*h*e
-  shape['AreaQz']= 2*0.7*b*e
-  shape['Wyel']= shape['Wzel']
-  shape['Wypl']= shape['Wzpl']
+    shape= SHS[item]
+    A= shape['A']
+    E= shape['E']
+    nu= shape['nu']
+    b= shape['b']
+    h= shape['h']
+    e= shape['e']
+    shape['alpha']= 0.5*5/6.0
+    shape['G']= E/(2*(1+nu))
+    shape['AreaQy']= 2*0.7*h*e
+    shape['AreaQz']= 2*0.7*b*e
+    shape['Wyel']= shape['Wzel']
+    shape['Wypl']= shape['Wzpl']
 
 # Arcelor rectangular hollow tubes.
 RHS={}
@@ -921,17 +938,17 @@ RHS['RHS250x100x7']= {'nmb':'250x100x7', 'b':100e-3, 'h':250e-3, 'e':7e-3, 'P':3
 RHS['RHS250x100x8']= {'nmb':'250x100x8', 'b':100e-3, 'h':250e-3, 'e':8e-3, 'P':40.225, 'A':51.24e-4, 'Iz':3714.08e-8, 'Wzel':297.13e-6, 'Wzpl':385.37e-6, 'iz':8.51e-2, 'Iy':875.06e-8, 'Wyel':175.01e-6, 'Wypl':201.45e-6, 'iy':4.13e-2, 'It':2438.66e-8, 'E':210000e6, 'nu':0.3}
 
 for item in RHS:
-  shape= RHS[item]
-  A= shape['A']
-  E= shape['E']
-  nu= shape['nu']
-  b= shape['b']
-  h= shape['h']
-  e= shape['e']
-  shape['alpha']= 0.5*5/6.0
-  shape['G']= E/(2*(1+nu))
-  shape['AreaQy']= 2*0.7*h*e
-  shape['AreaQz']= 2*0.7*b*e
+    shape= RHS[item]
+    A= shape['A']
+    E= shape['E']
+    nu= shape['nu']
+    b= shape['b']
+    h= shape['h']
+    e= shape['e']
+    shape['alpha']= 0.5*5/6.0
+    shape['G']= E/(2*(1+nu))
+    shape['AreaQy']= 2*0.7*h*e
+    shape['AreaQz']= 2*0.7*b*e
 
 # Tata steel circular hollow tubes.
 
@@ -1187,26 +1204,26 @@ R['R120']= {'nmb': "R120", 'd': 120e-3, 'r': 60e-3, 'P': 88.8, 'A': 113e-4, 'E':
 R['R130']= {'nmb': "R130", 'd': 130e-3, 'r': 65e-3, 'P': 104, 'A': 133e-4, 'E': 210000e6, 'nu': 0.3}
 
 for item in R:
-  shape= R[item]
-  A= shape['A']
-  E= shape['E']
-  nu= shape['nu']
-  r= shape['r']
-  Iz= math.pi*r**4/4.0
-  Iy= Iz
-  shape['alpha']= 0.5*5/6.0
-  shape['G']= E/(2*(1+nu))
-  shape['AreaQy']=  9/10*A
-  shape['AreaQz']=  9/10*A
-  shape['Iz']= Iz
-  shape['Iy']= Iy
-  shape['iz']= Iz/r
-  shape['iy']= Iy/r
-  shape['Wzel']= Iz/r
-  shape['Wyel']= Iy/r
-  shape['Wypl']= 4.0*r**3/3.0
-  shape['Wzpl']= 4.0*r**3/3.0
-  shape['J']= math.pi*r**4/2.0
+    shape= R[item]
+    A= shape['A']
+    E= shape['E']
+    nu= shape['nu']
+    r= shape['r']
+    Iz= math.pi*r**4/4.0
+    Iy= Iz
+    shape['alpha']= 0.5*5/6.0
+    shape['G']= E/(2*(1+nu))
+    shape['AreaQy']=  9/10*A
+    shape['AreaQz']=  9/10*A
+    shape['Iz']= Iz
+    shape['Iy']= Iy
+    shape['iz']= Iz/r
+    shape['iy']= Iy/r
+    shape['Wzel']= Iz/r
+    shape['Wyel']= Iy/r
+    shape['Wypl']= 4.0*r**3/3.0
+    shape['Wzpl']= 4.0*r**3/3.0
+    shape['J']= math.pi*r**4/2.0
 
 
   
@@ -1214,163 +1231,117 @@ import xc_base
 import geom
 from materials.sections import structural_steel
 
-class IPEShape(structural_steel.SteelShape):
-  def __init__(self,steel,name):
-    super(IPEShape,self).__init__(steel,name,IPE)
-    self.bHalf= self.get('b')/2.0 #Half flange width
-    self.hHalf= self.get('h')/2.0 #Half section height
-    self.hiHalf= self.get('hi')/2.0 #Half section interior height.
-    self.twHalf= self.get('tw')/2.0 #Half web thickness
-    self.tileSize= 0.01 #Size of tiles
-  def b(self):
-    return self.get('b')
-  def h(self):
-    '''Return shape height.'''
-    return self.get('h')
-  def tf(self):
-    '''Return flange thickess'''
-    return self.get('tf')
-  def tw(self):
-    '''Return web thickess'''
-    return self.get('tw')
-  def hw(self):
-    '''Return web height'''
-    return self.h()-2*self.tf()
-  def getRho(self):
-    ''' Returns mass per unit lenght. '''
-    return self.get('P')
-  def getShapeRegions(self):
-    ''' Returns regions valid for fiber section model creation. '''
-    retval= list()
-    #Lower flange
-    p0= geom.Pos2d(-self.hHalf,-self.bHalf)
-    p1= geom.Pos2d(-self.hiHalf,self.bHalf)
-    retval.append([p0,p1])
-    #Web
-    p2= geom.Pos2d(-self.hiHalf,-self.twHalf)
-    p3= geom.Pos2d(self.hiHalf,self.twHalf)
-    retval.append([p2,p3])
-    #Upper flange
-    p4= geom.Pos2d(self.hiHalf,-self.bHalf,)
-    p5= geom.Pos2d(self.hHalf,self.bHalf)
-    retval.append([p4,p5])
-    return retval
 
-  def discretization(self,preprocessor,matModelName):
-    self.sectionGeometryName= 'gm'+self.get('nmb')
-    self.gm= preprocessor.getMaterialHandler.newSectionGeometry(self.sectionGeometryName)
-    regions= self.gm.getRegions
-    for r in self.getShapeRegions():
-      reg= regions.newQuadRegion(matModelName)
-      reg.pMin= r[0]
-      reg.pMax= r[1]
-      numberOfTiles= reg.setTileSize(self.tileSize,self.tileSize)
-    return self.gm
+class IShape(structural_steel.SteelShape):
+    def __init__(self,steel,name,table):
+        super(IShape,self).__init__(steel,name,table)
+        self.bHalf= self.get('b')/2.0 #Half flange width
+        self.hHalf= self.get('h')/2.0 #Half section height
+        self.hiHalf= self.get('hi')/2.0 #Half section interior height.
+        self.twHalf= self.get('tw')/2.0 #Half web thickness
+        self.tileSize= 0.01 #Size of tiles
+    def b(self):
+        return self.get('b')
+    def h(self):
+        '''Return shape height.'''
+        return self.get('h')
+    def tf(self):
+        '''Return flange thickess'''
+        return self.get('tf')
+    def tw(self):
+        '''Return web thickess'''
+        return self.get('tw')
+    def hw(self):
+        '''Return web height'''
+        return self.h()-2*self.tf()
+    def getRho(self):
+        ''' Returns mass per unit lenght. '''
+        return self.get('P')
+    def getShapeRegions(self):
+        ''' Returns regions valid for fiber section model creation. '''
+        retval= list()
+        #Lower flange
+        p0= geom.Pos2d(-self.hHalf,-self.bHalf)
+        p1= geom.Pos2d(-self.hiHalf,self.bHalf)
+        retval.append([p0,p1])
+        #Web
+        p2= geom.Pos2d(-self.hiHalf,-self.twHalf)
+        p3= geom.Pos2d(self.hiHalf,self.twHalf)
+        retval.append([p2,p3])
+        #Upper flange
+        p4= geom.Pos2d(self.hiHalf,-self.bHalf,)
+        p5= geom.Pos2d(self.hHalf,self.bHalf)
+        retval.append([p4,p5])
+        return retval
 
-  def getFiberSection3d(self,preprocessor,matModelName):
-    reg= self.discretization(preprocessor,matModelName)
-    self.fiberSection3dName= 'fs3d'+self.get('nmb')
-    self.fiberSection3d= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d",self.fiberSection3dName)
-    fiberSectionRepr= self.fiberSection3d.getFiberSectionRepr()
-    fiberSectionRepr.setGeomNamed(self.sectionGeometryName)
-    self.fiberSection3d.setupFibers()
-    fibras= self.fiberSection3d.getFibers()
-    return self.fiberSection3d
+    def discretization(self,preprocessor,matModelName):
+        self.sectionGeometryName= 'gm'+self.get('nmb')
+        self.gm= preprocessor.getMaterialHandler.newSectionGeometry(self.sectionGeometryName)
+        regions= self.gm.getRegions
+        for r in self.getShapeRegions():
+            reg= regions.newQuadRegion(matModelName)
+            reg.pMin= r[0]
+            reg.pMax= r[1]
+            numberOfTiles= reg.setTileSize(self.tileSize,self.tileSize)
+        return self.gm
 
-class HEShape(structural_steel.SteelShape):
-  def __init__(self,steel,name):
-    super(HEShape,self).__init__(steel,name,HE)
-    self.bHalf= self.get('b')/2.0 #Half flange width
-    self.hHalf= self.get('h')/2.0 #Half section height
-    self.hiHalf= self.get('hi')/2.0 #Half section interior height.
-    self.twHalf= self.get('tw')/2.0 #Half web thickness
-    self.tileSize= 0.01 #Size of tiles
-  def b(self):
-    return self.get('b')
-  def h(self):
-    return self.get('h')
-  def tf(self):
-    return self.get('tf')
-  def tw(self):
-    return self.get('tw')
-  def hw(self):
-    return self.h()-2*self.tf()
-  def getRho(self):
-    ''' Returns mass per unit lenght. '''
-    return self.get('P')
-  def getShapeRegions(self):
-    ''' Returns regions valid for fiber section model creation. '''
-    retval= list()
-    #Lower flange
-    p0= geom.Pos2d(-self.hHalf,-self.bHalf)
-    p1= geom.Pos2d(-self.hiHalf,self.bHalf)
-    retval.append([p0,p1])
-    #Web
-    p2= geom.Pos2d(-self.hiHalf,-self.twHalf)
-    p3= geom.Pos2d(self.hiHalf,self.twHalf)
-    retval.append([p2,p3])
-    #Upper flange
-    p4= geom.Pos2d(self.hiHalf,-self.bHalf,)
-    p5= geom.Pos2d(self.hHalf,self.bHalf)
-    retval.append([p4,p5])
-    return retval
+    def getFiberSection3d(self,preprocessor,matModelName):
+        reg= self.discretization(preprocessor,matModelName)
+        self.fiberSection3dName= 'fs3d'+self.get('nmb')
+        self.fiberSection3d= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d",self.fiberSection3dName)
+        fiberSectionRepr= self.fiberSection3d.getFiberSectionRepr()
+        fiberSectionRepr.setGeomNamed(self.sectionGeometryName)
+        self.fiberSection3d.setupFibers()
+        fibras= self.fiberSection3d.getFibers()
+        return self.fiberSection3d
 
-  def discretization(self,preprocessor,matModelName):
-    self.sectionGeometryName= 'gm'+self.get('nmb')
-    self.gm= preprocessor.getMaterialHandler.newSectionGeometry(self.sectionGeometryName)
-    regions= self.gm.getRegions
-    for r in self.getShapeRegions():
-      reg= regions.newQuadRegion(matModelName)
-      reg.pMin= r[0]
-      reg.pMax= r[1]
-      numberOfTiles= reg.setTileSize(self.tileSize,self.tileSize)
-    return self.gm
+class IPNShape(IShape):
+    def __init__(self,steel,name):
+        super(IPNShape,self).__init__(steel,name,IPN)
 
-  def getFiberSection3d(self,preprocessor,matModelName):
-    reg= self.discretization(preprocessor,matModelName)
-    self.fiberSection3dName= 'fs3d'+self.get('nmb')
-    self.fiberSection3d= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d",self.fiberSection3dName)
-    fiberSectionRepr= self.fiberSection3d.getFiberSectionRepr()
-    fiberSectionRepr.setGeomNamed(self.sectionGeometryName)
-    self.fiberSection3d.setupFibers()
-    fibras= self.fiberSection3d.getFibers()
-    return self.fiberSection3d
+class IPEShape(IShape):
+    def __init__(self,steel,name):
+        super(IPEShape,self).__init__(steel,name,IPE)
+  
+class HEShape(IShape):
+    def __init__(self,steel,name):
+        super(HEShape,self).__init__(steel,name,HE)
 
 class UPNShape(structural_steel.SteelShape):
-  def __init__(self,steel,name):
-    super(UPNShape,self).__init__(steel,name,UPN)
-  def getRho(self):
-    ''' Returns mass per unit lenght. '''
-    return self.get('P')
-  def h(self):
-    '''Return shape height.'''
-    return self.get('h')
-  def tf(self):
-    '''Return flange thickess'''
-    return self.get('tf')
-  def tw(self):
-    '''Return web thickess'''
-    return self.get('tw')
-  def hw(self):
-    '''Return web height'''
-    return self.h()-2*self.tf()
+    def __init__(self,steel,name):
+        super(UPNShape,self).__init__(steel,name,UPN)
+    def getRho(self):
+        ''' Returns mass per unit lenght. '''
+        return self.get('P')
+    def h(self):
+        '''Return shape height.'''
+        return self.get('h')
+    def tf(self):
+        '''Return flange thickess'''
+        return self.get('tf')
+    def tw(self):
+        '''Return web thickess'''
+        return self.get('tw')
+    def hw(self):
+        '''Return web height'''
+        return self.h()-2*self.tf()
 
 class AUShape(structural_steel.SteelShape):
-  def __init__(self,steel,name):
-    super(AUShape,self).__init__(steel,name,AU)
-  def getRho(self):
-    ''' Returns mass per unit lenght. '''
-    return self.get('P')
+    def __init__(self,steel,name):
+        super(AUShape,self).__init__(steel,name,AU)
+    def getRho(self):
+        ''' Returns mass per unit lenght. '''
+        return self.get('P')
 
 class CHSShape(structural_steel.SteelShape):
-  def __init__(self,steel,name):
-    super(CHSShape,self).__init__(steel,name,CHS)
-  def getRho(self):
-    ''' Returns mass per unit lenght. '''
-    return self.get('P')
-  def alphaY(self):
-    '''Return shear shape factor with respect to local y-axis'''
-    return 1.0/2.0 #Shear distortion constant. See E. Oñate book page 122.
-  def alphaZ(self):
-    '''Return shear shape factor with respect to local z-axis'''
-    return self.alphaY()
+    def __init__(self,steel,name):
+        super(CHSShape,self).__init__(steel,name,CHS)
+    def getRho(self):
+        ''' Returns mass per unit lenght. '''
+        return self.get('P')
+    def alphaY(self):
+        '''Return shear shape factor with respect to local y-axis'''
+        return 1.0/2.0 #Shear distortion constant. See E. Oñate book page 122.
+    def alphaZ(self):
+        '''Return shear shape factor with respect to local z-axis'''
+        return self.alphaY()

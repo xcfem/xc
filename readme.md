@@ -53,7 +53,7 @@ The main capabilities of the program:
 
 
 ## Installation
-See <a href="https://github.com/xcfem/xc/blob/master/install.txt" target="_new">install</a>
+See <a href="https://github.com/xcfem/xc/blob/master/install/install.txt" target="_new">install</a>
 
 
 ## Links
