@@ -69,7 +69,7 @@
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/sis_ref/Ref3d3d.h"
 #include "utility/actor/actor/MovableMatrix.h"
-#include "xc_basic/src/matrices/giros.h"
+#include "xc_utils/src/matrices/giros.h"
 
 XC::Vector XC::CrdTransf3d::vectorI(3);
 XC::Vector XC::CrdTransf3d::vectorJ(3);

@@ -31,7 +31,7 @@
 #include "material/yieldSurface/evolution/BkStressLimSurface2D.h"
 #include <material/yieldSurface/yieldSurfaceBC/YieldSurface_BC.h>
 #include <cmath>
-#include "xc_basic/src/util/matem.h"
+#include "xc_utils/src/utils/misc_utils/matem.h"
 
 #define evolDebug 0
 //////////////////////////////////////////////////////////////////////

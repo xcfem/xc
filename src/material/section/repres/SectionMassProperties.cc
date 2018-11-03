@@ -27,7 +27,7 @@
 //SectionMassProperties.cpp
 
 #include "SectionMassProperties.h"
-#include "xc_basic/src/util/inertia.h"
+#include "xc_utils/src/utils/misc_utils/inertia.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"

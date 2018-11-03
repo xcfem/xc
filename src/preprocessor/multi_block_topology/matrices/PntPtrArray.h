@@ -31,7 +31,7 @@
 #define PNTPTRARRAY_H
 
 #include "PtrArrayBase.h"
-#include "xc_basic/src/matrices/m_int.h"
+#include "xc_utils/src/matrices/m_int.h"
 #include <vector>
 
 class Pos3d;

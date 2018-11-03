@@ -31,13 +31,13 @@
 #define PTRARRAYBASE_H
 
 #include "xc_utils/src/kernel/CommandEntity.h"
-#include "xc_basic/src/matrices/TMatrix.h"
+#include "xc_utils/src/matrices/TMatrix.h"
 #include <vector>
 #include "boost/any.hpp"
 #include "boost/lexical_cast.hpp"
 
 
-#include "xc_basic/src/matrices/m_int.h"
+#include "xc_utils/src/matrices/m_int.h"
 
 namespace XC{
 

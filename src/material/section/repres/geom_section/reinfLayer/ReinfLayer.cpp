@@ -59,7 +59,7 @@
 #include "material/section/repres/geom_section/reinfBar/ReinfBar.h"
 
 
-#include "xc_basic/src/matrices/m_double.h"
+#include "xc_utils/src/matrices/m_double.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
 #include "ListReinfLayer.h"

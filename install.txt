@@ -19,9 +19,8 @@ XC installation.
       to use it with other Unix flavours.
     - Libraries needed:
 
-         * Libraries you must to download from GitHub and install yourself:
-             -xc_basic: basic routines (download it from https://github.com/xcfem/xc_basic).
-             -xc_util: utilities (download it from https://github.com/xcfem/xc_utils).
+         * Library you must to download from GitHub and install yourself:
+             -xc_util: basic routines and utilities (download it from https://github.com/xcfem/xc_utils).
 
 	 * Libraries that can be installed from OS packages.
 	     -VTK Visualization ToolKit (<http://www.vtk.org>, ).

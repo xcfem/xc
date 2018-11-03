@@ -249,6 +249,8 @@ class profilematrix
 
 
   };
+profilematrix operator+(const profilematrix &, const profilematrix &);
+profilematrix operator-(const profilematrix &, const profilematrix &);
 
 } // end of XC namespace
 

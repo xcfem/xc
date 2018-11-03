@@ -33,7 +33,7 @@
 #include "preprocessor/set_mgmt/Set.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
-#include "xc_basic/src/text/text_string.h"
+#include "xc_utils/src/utils/text/text_string.h"
 #include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
 #include "xc_utils/src/geom/pos_vec/Pos3dArray3d.h"
 #include "domain/mesh/node/Node.h"

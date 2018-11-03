@@ -62,7 +62,7 @@
 // What: "@(#) TaggedObject.C, revA"
 
 #include "utility/tagged/TaggedObject.h"
-#include "xc_basic/src/matrices/m_double.h"
+#include "xc_utils/src/matrices/m_double.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
 #include "boost/lexical_cast.hpp"

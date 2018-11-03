@@ -39,7 +39,7 @@
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/node/Node.h"
 #include "preprocessor/multi_block_topology/MultiBlockTopology.h"
-#include "xc_basic/src/matrices/MatrixRange.h"
+#include "xc_utils/src/matrices/MatrixRange.h"
 
 
 

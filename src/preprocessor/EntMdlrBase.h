@@ -30,7 +30,7 @@
 #define ENTMDLRBASE_H
 
 #include "xc_utils/src/kernel/NamedEntity.h"
-#include "xc_basic/src/text/LabelContainer.h"
+#include "xc_utils/src/utils/text/LabelContainer.h"
 #include "utility/actor/actor/MovableObject.h"
 
 namespace XC {

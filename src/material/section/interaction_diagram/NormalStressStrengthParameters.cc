@@ -28,7 +28,7 @@
 
 #include "NormalStressStrengthParameters.h"
 #include "PivotsUltimateStrains.h"
-#include "xc_basic/src/util/matem.h"
+#include "xc_utils/src/utils/misc_utils/matem.h"
 
 
 //! @brief Factor de cumplimiento for the max strain.

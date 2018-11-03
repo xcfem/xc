@@ -64,7 +64,7 @@
 #define Vector_h 
 
 #include "xc_utils/src/kernel/CommandEntity.h"
-#include "xc_basic/src/matrices/m_double.h"
+#include "xc_utils/src/matrices/m_double.h"
 #include <cmath>
 
 class Vector2d;

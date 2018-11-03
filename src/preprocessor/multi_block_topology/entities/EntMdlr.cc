@@ -27,7 +27,7 @@
 //EntMdlr.cc
 
 #include "EntMdlr.h"
-#include "xc_basic/src/matrices/RangoIndice.h"
+#include "xc_utils/src/matrices/RangoIndice.h"
 #include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
 #include "xc_utils/src/geom/pos_vec/Pos3dArray3d.h"
 #include "xc_utils/src/geom/pos_vec/Array3dRange.h"

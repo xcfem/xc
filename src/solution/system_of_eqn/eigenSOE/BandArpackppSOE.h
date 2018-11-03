@@ -30,7 +30,7 @@
 #define BandArpackppSOE_h
 
 #include <solution/system_of_eqn/eigenSOE/ArpackSOE.h>
-#include "xc_basic/src/matrices/matdispZ.h"
+#include "xc_utils/src/matrices/matdispZ.h"
 
 typedef matdispZ<double> msp_double;
 

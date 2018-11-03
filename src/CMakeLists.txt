@@ -14,18 +14,6 @@ PROJECT(LIBXC)
 SET(build_setup_dir $ENV{HOME}/.xc_build)
 SET(build_setup_file ${build_setup_dir}/xc_dirs.cmake)
 
-#xc_basic
-SET(basica_setup_file ${build_setup_dir}/basica_dirs.cmake)
-INCLUDE(${basica_setup_file})
-SET(xc_basic_DIR ${basica_src_dir}/..)
-message(STATUS "basica project dir: " ${xc_basic_DIR})
-SET(xc_basic_INC ${basica_inc_dir})
-message(STATUS "basica include dir: " ${xc_basic_INC})
-INCLUDE_DIRECTORIES(${xc_basic_INC})
-SET(xc_basic_LIB ${basica_lib_dir})
-message(STATUS "basica lib dir: " ${xc_basic_LIB})
-
-
 #xc_utils
 SET(lcmd_setup_file ${build_setup_dir}/lcmd_dirs.cmake)
 INCLUDE(${lcmd_setup_file})
@@ -48,7 +36,6 @@ file(WRITE ${build_setup_file} "SET(xc_src_dir ${DIR_FUENTES_XC})\n")
 file(APPEND ${build_setup_file} "SET(xc_inc_dir ${libXC_INC})\n")
 file(APPEND ${build_setup_file} "SET(xc_lib_dir ${libXC_LIB})\n")
 
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${xc_basic_DIR}/CMake")
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${xc_utils_DIR}/CMake")
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${DIR_FUENTES_XC}/CMake")
 
@@ -344,7 +331,7 @@ SET(solution solution/analysis/ModelWrapper solution/AnalysisAggregation solutio
 add_library(XcBib SHARED ${utility} ${material} ${siseq} ${analysis} ${convergenceTest} ${coordTransformation} ${damage} ${domain} ${gauss_models} ${cyclic_model} ${element} ${graph} ${modelbuilder} ${reliability} ${unitest} ${preprocessor} ${solution} ${post_process} version FEProblem)
 
 #Python interface
-TARGET_LINK_LIBRARIES(XcBib xc_utils xc_basic ${VTK_BIB} ${CGAL_LIBRARIES} ${Plot_LIBRARY} ${MPFR_LIBRARIES} ${GMP_LIBRARY} ${MYSQL_LIBRARY} ${MySQLpp_LIBRARIES} ${SQLITE3_LIBRARY} ${GNUGTS_LIBRARIES} ${BerkeleyDB_LIBRARIES} ${ARPACK_LIB} ${ARPACKPP_LIB} ${LAPACK_LIBRARIES} ${SUPERLU_LIBRARIES} ${BLAS_LIBRARIES} ${PETSC_LIB_PETSC} ${METIS_LIBRARIES} ${TCL_LIBRARY} boost_python ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
+TARGET_LINK_LIBRARIES(XcBib xc_utils xc_basic_utils ${VTK_BIB} ${CGAL_LIBRARIES} ${Plot_LIBRARY} ${MPFR_LIBRARIES} ${GMP_LIBRARY} ${MYSQL_LIBRARY} ${MySQLpp_LIBRARIES} ${SQLITE3_LIBRARY} ${GNUGTS_LIBRARIES} ${BerkeleyDB_LIBRARIES} ${ARPACK_LIB} ${ARPACKPP_LIB} ${LAPACK_LIBRARIES} ${SUPERLU_LIBRARIES} ${BLAS_LIBRARIES} ${PETSC_LIB_PETSC} ${METIS_LIBRARIES} ${TCL_LIBRARY} boost_python ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
 LINK_DIRECTORIES("/usr/lib/python2.7") # Not needed?
 add_definitions(-fno-strict-aliasing)
 # Define the wrapper library that wraps our library

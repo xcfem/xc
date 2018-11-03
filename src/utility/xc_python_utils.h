@@ -26,7 +26,7 @@
 
 #include <boost/python/list.hpp>
 #include <vector>
-#include "xc_basic/src/matrices/m_double.h"
+#include "xc_utils/src/matrices/m_double.h"
 
 namespace XC {
   class ID;

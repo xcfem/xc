@@ -28,7 +28,7 @@
 
 #include "NodePtrArray3d.h"
 #include "domain/mesh/node/Node.h"
-#include "xc_basic/src/functions/algebra/integ_num.h"
+#include "xc_utils/src/functions/algebra/integ_num.h"
 
 #include <boost/any.hpp>
 #include "domain/domain/Domain.h"

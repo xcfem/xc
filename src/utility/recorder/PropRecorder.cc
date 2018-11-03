@@ -30,7 +30,7 @@
 #include <domain/domain/Domain.h>
 
 
-#include "xc_basic/src/text/text_string.h"
+#include "xc_utils/src/utils/text/text_string.h"
 
 //! @brief Constructor.
 XC::PropRecorder::PropRecorder(int classTag,Domain *ptr_dom)

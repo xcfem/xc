@@ -77,12 +77,12 @@ XC::UmfpackGenLinSolver::UmfpackGenLinSolver()
   }
 
 
-extern "C" int umd2fa_(int *n, int *ne, int *job, logical *transa,
+extern "C" int umd2fa_(const int *n, int *ne, int *job, logical *transa,
 		       int *lvalue, int *lindex, double *value,
 		       int *index, int *keep, double *cntl, int *icntl,
 		       int *info, double *rinfo);
 
-extern "C" int umd2so_(int *n, int *job, logical *transa,
+extern "C" int umd2so_(const int *n, int *job, logical *transa,
 		       int *lvalue, int *lindex, double *value,
 		       int *index, int *keep, double *b, double *x, 
 		       double *w, double *cntl, int *icntl,
@@ -90,14 +90,15 @@ extern "C" int umd2so_(int *n, int *job, logical *transa,
 
 int XC::UmfpackGenLinSolver::solve(void)
   {
-    if(theSOE == 0)
+    if(!theSOE)
       {
-	std::cerr << "WARNING XC::UmfpackGenLinSolver::solve(void)- ";
-	std::cerr << " No XC::LinearSOE object has been set\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING no LinearSOE object has been set"
+	          << std::endl;
 	return -1;
       }
     
-    int n = theSOE->size;
+    const int n = theSOE->size;
     int ne = theSOE->nnz;
     int lValue = theSOE->lValue;
 
