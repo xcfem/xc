@@ -36,8 +36,7 @@ The program is based on:
 <li> <a href="http://www.mcs.anl.gov/petsc/petsc-as" target="_new"> PETSC</a> (Portable, Extensible Toolkit for Scientific Computation).</li>
 <li> <a href="http://crd-legacy.lbl.gov/~osni/#Software" target="_new"> Skypack</a> (SKYline PACKage).</li>
 <li> <a href="http://rene.ma.utexas.edu/CNA/ITPACK/" target="_new"> ITPACK</a> (collection of subroutines for solving large sparse linear systems by adaptive accelerated iterative algorithms).</li>
-<li> <a href="https://github.com/xcfem/xc_basic" target="_new"> xc_basic</a> Basic routines for XC (that will be simplified...).</li>
-<li> <a href="https://github.com/xcfem/xc_utils" target="_new"> xc_utils</a> Utilities for XC (that will be simplified...).</li>
+<li> <a href="https://github.com/xcfem/xc_utils" target="_new"> xc_utils</a> Basic routines and utilities for XC.</li>
 </ul>
 
 
@@ -50,7 +49,6 @@ The main capabilities of the program:
 - Fiber section models (modelization of RC members,...).
 - Activation an deactivation of elements (construction phases,...).
 - Tools for implementing structural codes (Eurocodes, ACI, AISC,...) verifications (in progress...).
-- Interface with Salome (in progress...).
 - Interface with SCIA Engineering (in progress...).
 
 

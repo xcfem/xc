@@ -36,7 +36,7 @@
 #include "xc_utils/src/geom/d1/Polyline3d.h"
 
 #include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
-#include "xc_basic/src/text/text_string.h"
+#include "xc_utils/src/utils/text/text_string.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 

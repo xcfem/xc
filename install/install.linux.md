@@ -51,9 +51,9 @@ Some dependencies needed are:
 - Suitesparse (collection of libraries for computations for sparse matrices)
 
 
-## More dependencies ... xc_base and xc_utils
-XC has another two depencies which will not be available as packages. These are xc_base and xc_utils.
-They need to be compiled and installed before XC. We will gone do this in conjunction with XC
+## More dependencies ... xc_utils
+XC has another depency which will not be available as package. This is xc_utils.
+It need to be compiled and installed before XC. We will gone do this in conjunction with XC
 
 
 ## Get the source code
@@ -71,29 +71,16 @@ foo@bar:~$  cd build_xc
 foo@bar:~/build_xc$
 ```
 
-It is time to get the source code now. Git will clone the source code of xc_base, xc_utils and xc in the current directory
+It is time to get the source code now. Git will clone the source code of xc_utils and xc in the current directory
 ```console
-foo@bar:~/build_xc$  git clone https://github.com/xcfem/xc_basic/ xc_basic
 foo@bar:~/build_xc$  git clone https://github.com/xcfem/xc_utils/ xc_utils
 foo@bar:~/build_xc$  git clone https://github.com/xcfem/xc/ xc
 ```
 
 
-## Build and install xc_base
-As said before we need to build and install xc_base and xc_utils before. This is very straight forward.
+## Build and install xc_utils
+As said before we need to build and install xc_utils before. This is very straight forward.
 See the commands needed for this below
-### xc_base
-```console
-foo@bar:~/build_xc$
-foo@bar:~/build_xc$  mkdir build-xc_basic
-foo@bar:~/build_xc$  cd build-xc_basic
-foo@bar:~/build_xc/build-xc_basic$
-foo@bar:~/build_xc/build-xc_basic$  cmake ../xc_basic/src
-foo@bar:~/build_xc/build-xc_basic$  make -j 4  # depending on the core count of your machine put in more
-foo@bar:~/build_xc/build-xc_basic$  sudo make install
-foo@bar:~/build_xc/build-xc_basic$  cd ..
-foo@bar:~/build_xc$
-```
 
 ### xc_utils
 ```console

@@ -31,7 +31,7 @@
 #include "domain/domain/Domain.h"
 
 
-#include "xc_basic/src/matrices/m_int.h"
+#include "xc_utils/src/matrices/m_int.h"
 #include "utility/matrix/ID.h"
 
 

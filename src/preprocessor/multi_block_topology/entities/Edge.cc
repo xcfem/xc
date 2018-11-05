@@ -31,7 +31,7 @@
 #include "Pnt.h"
 #include "domain/mesh/node/Node.h"
 #include "utility/matrix/util_matrix.h"
-#include "xc_basic/src/matrices/m_int.h"
+#include "xc_utils/src/matrices/m_int.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
 #include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
 #include "preprocessor/Preprocessor.h"

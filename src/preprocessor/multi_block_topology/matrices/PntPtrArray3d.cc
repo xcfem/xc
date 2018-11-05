@@ -28,7 +28,7 @@
 
 #include "PntPtrArray3d.h"
 #include "preprocessor/multi_block_topology/entities/Pnt.h"
-#include "xc_basic/src/functions/algebra/integ_num.h"
+#include "xc_utils/src/functions/algebra/integ_num.h"
 
 #include <boost/any.hpp>
 #include "domain/domain/Domain.h"
@@ -43,7 +43,7 @@
 #include "domain/mesh/node/Node.h"
 #include "preprocessor/multi_block_topology/MultiBlockTopology.h"
 #include "xc_utils/src/geom/pos_vec/Array3dRange.h"
-#include "xc_basic/src/matrices/MatrixRange.h"
+#include "xc_utils/src/matrices/MatrixRange.h"
 
 
 //! @brief Default constructor.

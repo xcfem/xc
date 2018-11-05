@@ -34,7 +34,7 @@
 #include "xc_utils/src/geom/d2/Polygon3d.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
-#include "xc_basic/src/matrices/TMatrix.h"
+#include "xc_utils/src/matrices/TMatrix.h"
 
 //! @brief Constructor.
 XC::QuadSurface::QuadSurface(Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)

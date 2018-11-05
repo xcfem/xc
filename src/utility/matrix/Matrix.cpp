@@ -65,7 +65,7 @@
 #include "utility/matrix/nDarray/Tensor.h"
 #include <cstdlib>
 #include <iostream>
-#include "xc_basic/src/matrices/m_double.h"
+#include "xc_utils/src/matrices/m_double.h"
 
 //#include <boost/any.hpp>
 

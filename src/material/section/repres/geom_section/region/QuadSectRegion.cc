@@ -33,7 +33,7 @@
 #include <material/section/repres/geom_section/region/QuadSectRegion.h>
 #include <material/section/repres/cell/QuadCell.h>
 
-#include "xc_basic/src/text/text_string.h"
+#include "xc_utils/src/utils/text/text_string.h"
 #include "xc_utils/src/geom/d1/Segment2d.h"
 #include "xc_utils/src/geom/d2/Grid2d.h"
 #include "xc_utils/src/geom/d2/2d_polygons/Quadrilateral2d.h"

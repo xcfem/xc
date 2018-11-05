@@ -28,7 +28,7 @@
 
 #include "Body.h"
 #include "Pnt.h"
-#include "xc_basic/src/matrices/m_int.h"
+#include "xc_utils/src/matrices/m_int.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
 #include "Face.h"
 

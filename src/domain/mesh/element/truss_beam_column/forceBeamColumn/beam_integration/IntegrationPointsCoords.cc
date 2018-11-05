@@ -29,8 +29,8 @@
 #include "IntegrationPointsCoords.h"
 #include "BeamIntegration.h"
 #include "domain/mesh/element/utils/coordTransformation/CrdTransf.h"
-#include "xc_basic/src/functions/algebra/MapValores.h"
-#include "xc_basic/src/functions/algebra/ExprAlgebra.h"
+#include "xc_utils/src/functions/algebra/MapValores.h"
+#include "xc_utils/src/functions/algebra/ExprAlgebra.h"
 
 XC::IntegrationPointsCoords::IntegrationPointsCoords(const BeamIntegration &bInteg,int nIP,const CrdTransf &trf)
   : rst(nIP,3), rnsntn(nIP,3), xyz(nIP,3), XYZ(bInteg.getIntegrPointGlobalCoords(nIP,trf))

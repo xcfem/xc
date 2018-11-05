@@ -35,7 +35,7 @@
 #include "PtrArray3dBase.h"
 #include "utility/matrix/Vector.h"
 
-#include "xc_basic/src/matrices/Indices3dArray.h"
+#include "xc_utils/src/matrices/Indices3dArray.h"
 
 class ExprAlgebra;
 class Intervalo1D;
