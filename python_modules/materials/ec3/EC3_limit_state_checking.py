@@ -16,7 +16,7 @@ import numpy
 # Lateral torsional buckling of steel beams.
 
 def getLateralTorsionalBucklingCurve(shape):
-  ''' Returns the lateral torsional bukling curve name (a,b,c or d) depending of the type of section (rolled, welded,...). EC3 Table 6.4, 6.3.2.2(2).
+  ''' Returns the lateral torsional bukling curve name (a,b,c or d) depending of the type of section (rolled, welded,...). EC3 EN 1993-1-1 Table 6.4, 6.3.2.2(2).
   :param shape: cross section shape.
   :param rypo: 'rolled' or 'welded' shape
   '''
@@ -44,7 +44,7 @@ def shearBucklingVerificationNeeded(shape):
 
 def getBendingResistanceReductionCoefficient(shape,Vd):
   '''Returns bending resistance reduction coefficient as in
-     clause 6.2.8 of EC31-1
+     clause 6.2.8 of EC3 EN 1993-1-1
   :param shape: cross section shape.
   '''
   VplRd= shape.getVplRdy()

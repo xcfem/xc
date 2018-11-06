@@ -34,7 +34,7 @@ XY= HEB340.getBucklingReductionFactorY(Leq,'c',1)
 XZ= HEB340.getBucklingReductionFactorZ(Leq,'b',1)
 XYTeor= 0.69
 ratio1= abs(XY-XYTeor)/XY
-NbRd= HEB340.getBucklingResistance(Leq,'c','b',1)
+NbRd= HEB340.getBucklingResistance(Leq,Leq,'c','b',1)
 NbRdTeor= 4186.2e3
 ratio2= abs(NbRd-NbRdTeor)/NbRd
 
