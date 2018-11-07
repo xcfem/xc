@@ -272,9 +272,10 @@ class SteelShape(sp.SectionProperties):
         '''return shear shape factor with respect to y-axis (weak axis)'''
         return self.get('Avy')/self.A()
 
-    def alphaZ(self):
-        '''return shear shape factor with respect to z-axis (strong axis)'''
-        return self.get('Avz')/self.A()
+#Avz is not usually defined for steel sections
+#    def alphaZ(self):
+#        '''return shear shape factor with respect to z-axis (strong axis)'''
+#        return self.get('Avz')/self.A()
 
     def getNcrY(self,Leq):
         '''return theoretical critical axial force on y-axis (weak axis).

@@ -2,11 +2,11 @@
 ''' Classes and functions for limit state checking according to Eurocode 3. '''
 from __future__ import division
 
-__author__= "Luis C. Pérez Tato (LCPT)"
+__author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (AO_O)"
 __copyright__= "Copyright 2016 LCPT"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com"
+__email__= "l.pereztato@gmail.com ana.ortega.ort@gmail.com"
 
 import math
 from miscUtils import LogMessages as lmsg
@@ -126,7 +126,7 @@ def getLateralBucklingReductionFactor(shape,sectionClass,xi,Mi,supportCoefs= Sup
   ''' Returns lateral torsional buckling reduction factor value.
 
      :param shape: cross section shape.
-     :param sectionClass: section classification (1,2,3 or 4)
+     :param sectionClass: section classification (1 to 3, 4 not yet implemented)
      :param xi: abcissae for the moment diagram
      :param Mi: ordinate for the moment diagram
      :param supportCoefs: coefficients that represent support conditions.

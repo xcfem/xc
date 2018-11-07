@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
 '''Eurocode 3 checks for a beam or column.'''
-__author__= "Luis C. Pérez Tato (LCPT)"
+__author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (AO_O)"
 __copyright__= "Copyright 2016 LCPT"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com"
+__email__= "l.pereztato@gmail.com ana.ortega.ort@gmail.com"
 
 import math
 import xc_base
@@ -18,12 +18,16 @@ class EC3Beam(lu.LineWrapper):
     def __init__(self,line,ec3Shape):
         super(EC3Beam,self).__init__(line)
         self.ec3Shape= ec3Shape
+        
     def getLateralBucklingReductionFactor(self,sectionClass,ky= 1.0, kw= 1.0, k1= 1.0, k2= 1.0,typo= 'rolled'):
         ''' Returns lateral torsional buckling reduction factor value
             for the elements inside the line.'''
         xi= self.getNodeAbcissae()
         Mi= self.getElementFunctionOrdinates(-1,'getMz1',1,'getMz2')
-        return self.ec3Shape.getLateralBucklingReductionFactor(sectionClass,xi,Mi,ky,kw, k1, k2,typo)
+        #20181107
+        supCoef=EC3lsc.SupportCoefficients(ky,kw,k1,k2)
+#        return self.ec3Shape.getLateralBucklingReductionFactor(sectionClass,xi,Mi,ky,kw, k1, k2,typo)
+        return self.ec3Shape.getLateralBucklingReductionFactor(sectionClass,xi,Mi,supCoef)
 
     def updateLateralBucklingReductionFactor(self,sectionClass,ky= 1.0, kw= 1.0, k1= 1.0, k2= 1.0,typo= 'rolled'):
         chiLT= self.getLateralBucklingReductionFactor(sectionClass,ky,kw, k1, k2,typo)

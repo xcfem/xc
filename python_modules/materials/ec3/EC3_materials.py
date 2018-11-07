@@ -168,7 +168,7 @@ class EC3Shape(object):
     def getLateralBucklingReductionFactor(self,sectionClass,xi,Mi,supportCoefs= EC3lsc.SupportCoefficients()):
         ''' Returns lateral torsional buckling reduction factor value.
 
-          :param sectionClass: section classification (1,2,3 or 4)
+          :param sectionClass: section classification (1 to 3, 4 not yet implemented)
           :param xi: abcissa for the moment diagram
           :param Mi: ordinate for the moment diagram
           :param supportCoefs: coefficients that represent support conditions.
