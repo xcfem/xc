@@ -1267,6 +1267,8 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/vtk_load_strprop_cells.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/vtk_lut_field.py
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/vtk_lut_field.pyc
+/usr/local/lib/python2.7/dist-packages/rough_calculations/arch_bridge_rough_base.py
+/usr/local/lib/python2.7/dist-packages/rough_calculations/arch_bridge_rough_base.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ArchBridgeRoughModelBase.py
 /usr/local/lib/python2.7/dist-packages/rough_calculations/ArchBridgeRoughModelBase.pyc
 /usr/local/lib/python2.7/dist-packages/rough_calculations/arch_bridge_simple_model.py
