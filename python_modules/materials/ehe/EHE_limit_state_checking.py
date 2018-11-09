@@ -879,7 +879,7 @@ class ShearController(lscb.LimitStateControllerBase):
 
 
   def check(self,elements,nmbComb):
-    ''' For each element in the set 'elememts' passed as first parameter and 
+    ''' For each element in the set 'elements' passed as first parameter and 
     the resulting internal forces for the load combination 'nmbComb'  
     passed as second parameter, this method calculates all the variables 
     involved in the shear-ULS checking and obtains the capacity factor.
