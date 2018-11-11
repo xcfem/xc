@@ -27,6 +27,7 @@ const XC::Vector &(XC::CrdTransf::*getVectorGlobalFromLocal)(const XC::Vector &)
 const XC::Vector &(XC::CrdTransf::*getVectorLocalFromGlobal)(const XC::Vector &) const= &XC::CrdTransf::getVectorLocalCoordFromGlobal;
 class_<XC::CrdTransf, XC::CrdTransf*, bases<XC::TaggedObject,XC::MovableObject >, boost::noncopyable >("CrdTransf", no_init)
   .def("getName",&XC::CrdTransf::getName,"Returns the name of the coordinate transformation.")
+  .add_property("name",&XC::CrdTransf::getName,"Returns the name of the coordinate transformation.")
   .add_property("getInitialLength", &XC::CrdTransf::getInitialLength)
   .add_property("getDeformedLength", &XC::CrdTransf::getDeformedLength)
   .add_property("getIVector", make_function(&XC::CrdTransf::getI, return_internal_reference<>()))
