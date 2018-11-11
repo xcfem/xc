@@ -135,10 +135,10 @@ vtk_dibuja_prop_points
     :undoc-members:
     :show-inheritance:
 
-vtk_grafico_base
+vtk_graphic_base
 ----------------
 
-.. automodule:: postprocess.xcVtk.vtk_grafico_base
+.. automodule:: postprocess.xcVtk.vtk_graphic_base
     :members:
     :undoc-members:
     :show-inheritance:

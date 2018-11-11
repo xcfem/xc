@@ -57,5 +57,5 @@ See <a href="https://github.com/xcfem/xc/blob/master/install/install.txt" target
 
 
 ## Links
-You can take a look to the project <a href="https://sites.google.com/site/xcfemanalysis/" target="_new">home</a>, to the <a href="https://github.com/xcfem/XCmanual/" target="_new">Python documentation</a> or the <a href="https://codedocs.xyz/lcpt/xc/index.html" target="_new">C++ API documentation</a> or to our brand new <a href="http://www.xcengineering.xyz/html_files/software.html" target="_new"> XC page in the company site.</a> (all of them are work in progress ;-). 
+You can take a look to the project <a href="https://sites.google.com/site/xcfemanalysis/" target="_new">home</a>, to the <a href="https://xcfem.github.io/XCmanual/" target="_new">Python documentation</a> or the <a href="https://codedocs.xyz/lcpt/xc/index.html" target="_new">C++ API documentation</a> or to our brand new <a href="http://www.xcengineering.xyz/html_files/software.html" target="_new"> XC page in the company site.</a> (all of them are work in progress ;-). 
 
