@@ -12,11 +12,11 @@ import vtk
 from miscUtils import LogMessages as lmsg
 import xc_base
 from vtkUtils import utilsVtk
-from postprocess.xcVtk import vtk_grafico_base
+from postprocess.xcVtk import vtk_graphic_base
 import random as rd 
 import xc
 
-class RecordDefDisplayEF(vtk_grafico_base.RecordDefDisplay):
+class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
     ''' Define the parameters to configure the output device.
     '''
     def __init__(self):

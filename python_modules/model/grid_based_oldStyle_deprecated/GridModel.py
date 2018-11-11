@@ -19,7 +19,7 @@ from materials import typical_materials
 from materials.sections import section_properties
 from model import predefined_spaces
 from model.boundary_cond import spring_bound_cond as ef
-from postprocess.xcVtk import vtk_grafico_base
+from postprocess.xcVtk import vtk_graphic_base
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
 from postprocess.xcVtk.FE_model import Fields
 from postprocess.xcVtk import load_vector_field as lvf

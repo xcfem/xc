@@ -31,7 +31,8 @@ feProblem.errFileName= "/tmp/erase.err" # Ignore warning messages
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
-modelSpace= predefined_spaces.SolidMechanics2D(nodes)# Materials definition
+modelSpace= predefined_spaces.SolidMechanics2D(nodes)
+# Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
 nodes.newSeedNode()

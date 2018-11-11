@@ -9,11 +9,11 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import vtk
 from postprocess.xcVtk import cad_mesh
-from postprocess.xcVtk import vtk_grafico_base
+from postprocess.xcVtk import vtk_graphic_base
 from miscUtils import LogMessages as lmsg
 from postprocess.xcVtk import local_axes_vector_field as lavf
 
-class RecordDefDisplayCAD(vtk_grafico_base.RecordDefDisplay):
+class RecordDefDisplayCAD(vtk_graphic_base.RecordDefDisplay):
     ''' Define graphic output.'''
     def defineMeshScene(self):
         ''' Define mesh scene on ouput display.'''

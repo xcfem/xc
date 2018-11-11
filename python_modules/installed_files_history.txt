@@ -1255,6 +1255,8 @@
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/vtk_dibuja_prop_points.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/vtk_grafico_base.py
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/vtk_grafico_base.pyc
+/usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/vtk_graphic_base.py
+/usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/vtk_graphic_base.pyc
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/vtk_internal_force_diagram.py
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/vtkInternalForceDiagram.py
 /usr/local/lib/python2.7/dist-packages/postprocess/xcVtk/vtk_internal_force_diagram.pyc
