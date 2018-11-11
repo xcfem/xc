@@ -17,7 +17,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com  ana.ortega@ciccp.es"
 
-import csv
 import numpy
 import xc_base
 import geom
@@ -28,8 +27,8 @@ from materials.sections import section_properties
 from postprocess import control_vars as cv
 from solution import predefined_solutions
 from miscUtils import LogMessages as lmsg
-from materials.sections import internal_forces
 from collections import defaultdict
+from postprocess import limit_state_data as lsd
 
 # Fake section (elements must have a stiffness)
 sccFICT= section_properties.RectangularSection("rectang",b=.40,h=40)
@@ -60,44 +59,12 @@ class PhantomModel(object):
                     means that all the elements in the file of internal forces
                     results are analyzed) 
     '''
-    self.elementTags= set()
-    self.idCombs= set()
-    f= open(intForcCombFileName,"r")
-    self.internalForcesValues= defaultdict(list)
-    internalForcesListing= csv.reader(f)
-    internalForcesListing.next()    #skip first line (head)
-    if setCalc==None:
-      for lst in internalForcesListing:    #lst: list of internal forces for each combination and element
-        if(len(lst)>0):
-          idComb= lst[0]
-          self.idCombs.add(idComb)
-          tagElem= eval(lst[1])
-          idSection= eval(lst[2])
-          self.elementTags.add(tagElem)
-          crossSectionInternalForces= internal_forces.CrossSectionInternalForces()
-          crossSectionInternalForces.setFromCSVString(lst,3)
-          crossSectionInternalForces.idComb= idComb
-          crossSectionInternalForces.tagElem= tagElem
-          crossSectionInternalForces.idSection= idSection
-          self.internalForcesValues[tagElem].append(crossSectionInternalForces)
-    else:
-      setElTags=setCalc.getElementTags()
-      for lst in internalForcesListing:
-        if(len(lst)>0):
-          tagElem= eval(lst[1])
-          if tagElem in setElTags:
-            idComb= lst[0]
-            self.idCombs.add(idComb)
-            tagElem= eval(lst[1])
-            idSection= eval(lst[2])
-            self.elementTags.add(tagElem)
-            crossSectionInternalForces= internal_forces.CrossSectionInternalForces()
-            crossSectionInternalForces.setFromCSVString(lst,3)
-            crossSectionInternalForces.idComb= idComb
-            crossSectionInternalForces.tagElem= tagElem
-            crossSectionInternalForces.idSection= idSection
-            self.internalForcesValues[tagElem].append(crossSectionInternalForces)
-    f.close()
+    intForcItems=lsd.readIntForcesFile(intForcCombFileName,setCalc)
+    self.elementTags=intForcItems[0]
+    self.idCombs=intForcItems[1]
+    self.internalForcesValues=intForcItems[2]
+    return
+    
 
   def createPhantomElement(self,idElem,sectionName,sectionDefinition,sectionIndex,interactionDiagram,fakeSection):
     '''Creates a phantom element (that represents a section to check) 

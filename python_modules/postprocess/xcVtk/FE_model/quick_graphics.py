@@ -214,7 +214,8 @@ class QuickGraphics(object):
         LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulo() #representative length of set size (to autoscale)
         diagAux=cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[self.xcSet],attributeName= "intForce",component= itemToDisp)
         maxAbs=diagAux.getMaxAbsComp()
-        scaleFactor*=LrefModSize/maxAbs*1e2
+        if maxAbs > 0:
+            scaleFactor*=LrefModSize/maxAbs*1e2
         #
         diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[self.xcSet],attributeName= "intForce",component= itemToDisp)
         diagram.addDiagram()

@@ -2,11 +2,11 @@
 ''' Classes and functions for limit state checking according to Eurocode 3. '''
 from __future__ import division
 
-__author__= "Luis C. Pérez Tato (LCPT)"
+__author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (AO_O)"
 __copyright__= "Copyright 2016 LCPT"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com"
+__email__= "l.pereztato@gmail.com ana.ortega.ort@gmail.com"
 
 import math
 from miscUtils import LogMessages as lmsg
@@ -16,7 +16,7 @@ import numpy
 # Lateral torsional buckling of steel beams.
 
 def getLateralTorsionalBucklingCurve(shape):
-  ''' Returns the lateral torsional bukling curve name (a,b,c or d) depending of the type of section (rolled, welded,...). EC3 Table 6.4, 6.3.2.2(2).
+  ''' Returns the lateral torsional bukling curve name (a,b,c or d) depending of the type of section (rolled, welded,...). EC3 EN 1993-1-1 Table 6.4, 6.3.2.2(2).
   :param shape: cross section shape.
   :param rypo: 'rolled' or 'welded' shape
   '''
@@ -44,7 +44,7 @@ def shearBucklingVerificationNeeded(shape):
 
 def getBendingResistanceReductionCoefficient(shape,Vd):
   '''Returns bending resistance reduction coefficient as in
-     clause 6.2.8 of EC31-1
+     clause 6.2.8 of EC3 EN 1993-1-1
   :param shape: cross section shape.
   '''
   VplRd= shape.getVplRdy()
@@ -126,7 +126,7 @@ def getLateralBucklingReductionFactor(shape,sectionClass,xi,Mi,supportCoefs= Sup
   ''' Returns lateral torsional buckling reduction factor value.
 
      :param shape: cross section shape.
-     :param sectionClass: section classification (1,2,3 or 4)
+     :param sectionClass: section classification (1 to 3, 4 not yet implemented)
      :param xi: abcissae for the moment diagram
      :param Mi: ordinate for the moment diagram
      :param supportCoefs: coefficients that represent support conditions.

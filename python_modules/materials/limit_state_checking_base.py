@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ''' Base classes for limit state control.'''
 
-__author__= "Luis C. Pérez Tato (LCPT) & Ana Ortega"
+__author__= "Luis C. Pérez Tato (LCPT) & Ana Ortega (AO_O)"
 __copyright__= "Copyright 2017,LCPT AO_O"
 __license__= "GPL"
 __version__= "3.0"

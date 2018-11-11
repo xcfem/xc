@@ -121,16 +121,3 @@ class DiaphragmWallRoughModel(object):
         
 
 
-#      Examples
-print '** Example 1'
-example1=DiaphragmWallRoughModel(digHeight=9,phreaticLevel=2.4,distAnch=9,firstExcavHeight=1,distLastAnchExc=9,unifLoad=60,distLoadWall=0)
-example1.printResult()
-print '** Example 2'
-example2=DiaphragmWallRoughModel(digHeight=15,phreaticLevel=3.0,distAnch=15,firstExcavHeight=1,distLastAnchExc=15,unifLoad=100,distLoadWall=0)
-example2.printResult()
-print '** Example 3'
-example3=DiaphragmWallRoughModel(digHeight=9,phreaticLevel=2,distAnch=3,firstExcavHeight=1,distLastAnchExc=0,unifLoad=60,distLoadWall=0)
-example3.printResult()
-print '** Example 4'
-example4=DiaphragmWallRoughModel(digHeight=19,phreaticLevel=-2,distAnch=8,firstExcavHeight=1,distLastAnchExc=0,unifLoad=(10*5+100*(0.75*19-5))/(0.75*19),distLoadWall=0)
-example4.printResult()

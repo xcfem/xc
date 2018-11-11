@@ -12,7 +12,7 @@ class NodePropertyDiagram(cd.ColoredDiagram):
   '''Diagram to display a property defined at nodes over linear elements.'''
   def __init__(self,scaleFactor,fUnitConv,sets,attributeName):
     super(NodePropertyDiagram,self).__init__(scaleFactor,fUnitConv)
-    self.conjuntos= sets
+    self.lstSets= sets
     self.propertyName= attributeName
 
   def getValueForNode(self,node):
@@ -31,7 +31,7 @@ class NodePropertyDiagram(cd.ColoredDiagram):
     else:
       return node.getProp(self.propertyName)
 
-  def appendDataToDiagram(self, eSet,indxDiagrama,defFScale=0.0):
+  def appendDataSetToDiagram(self, eSet,indxDiagrama,defFScale=0.0):
     ''' Append property values to diagram .
     :param eSet: Element set.
     :param defFScale: factor to apply to current displacement of nodes 
@@ -54,9 +54,9 @@ class NodePropertyDiagram(cd.ColoredDiagram):
 
     indxDiagrama= 0
     indiceSet= 0
-    numSetsDiagrama= len(self.conjuntos)
-    for s in self.conjuntos:
-      self.appendDataToDiagram(s,indxDiagrama)
+    numSetsDiagrama= len(self.lstSets)
+    for s in self.lstSets:
+      self.appendDataSetToDiagram(s,indxDiagrama)
 
     self.updateLookUpTable()
     self.updateActorDiagrama()

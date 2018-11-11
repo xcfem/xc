@@ -11,7 +11,7 @@ __email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
 #file: L8-_Tied_Arches_Jan_10.pdf
 
 import math
-import ArchBridgeRoughModelBase as base
+import arch_bridge_rough_base as base
 
 class TiedArchBridgeRoughModel(base.ArchBridgeRoughModelBase):
   ''' Tied Arch bridge simple model
