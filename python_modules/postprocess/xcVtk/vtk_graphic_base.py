@@ -50,62 +50,32 @@ class RecordDefGrid(object):
       warnMsg+= self.uGrid.name
       warnMsg+= '. Maybe you must call fillDownwards on the set to display.'
       lmsg.warning('Warning; '+warnMsg)
-    return retval    
+    return retval
 
-class RecordDefDisplay(object):
-  ''' Provides de variables to define the output device.
+class CameraParameters(object):
+  ''' Provides the parameters to define the camera.
   
-  :ivar renderer:    specification of renderer. A renderer is an object that
-        controls the rendering process for objects. Rendering is the 
-        process of converting geometry, a specification for lights, and
-        a camera view into an image. (defaults to None)
-  :ivar renWin:  rendering window (defaults to None). A rendering window is a 
-        window in a graphical user interface where renderers draw their images. 
-  :ivar windowWidth: resolution expresed in pixels in the width direction of 
-        the window (defaults to 800)
-  :ivar windowHeight: resolution expresed in pixels in the height direction of 
-        the window (defaults to 600)
   :ivar viewName:    name of the view that contains the renderer 
         (defaults to "XYZPos")
+  :ivar viewUpVc: vector defined as [x,y,z] to orient the view. This vector of the
+                   model is placed in vertical orientation in the display
+  :ivar posCVc:    vector defined as [x,y,z] that points to the camera position
   :ivar zoom:        (defaults to 1.0)
-  :ivar bgRComp:     red component (defaults to 0.65)
-  :ivar bgGComp:     green component (defaults to 0.65)
-  :ivar bgBComp:     blue component (defaults to 0.65)
   :ivar hCamFct:     factor that applies to the height of the camera position 
         in order to change perspective of isometric views 
         (defaults to 1, usual values 0.1 to 10)
   '''
-  def __init__(self):
-    self.renderer= None
-    self.renWin= None
-    self.windowWidth= 800
-    self.windowHeight= 600
-    self.annotation= sa.ScreenAnnotation()
-    self.viewName= "XYZPos"
+  def __init__(self, viewNm= 'XYZPos', hCamF= 1.0):
+    self.viewName= viewNm
+    self.viewUpVc= [0,1,0]
+    self.posCVc= [0,0,100]
     self.zoom= 1.0
-    self.bgRComp= 0.65
-    self.bgGComp= 0.65
-    self.bgBComp= 0.65
-    self.hCamFct=1.0
-
-
-  def setView(self,viewUpVc,posCVc):
-    '''Sets the view
-
-    :param viewUpVc: vector defined as [x,y,z] to orient the view. This vector of the
-                     model is placed in vertical orientation in the display
-    :param posCVc:    vector defined as [x,y,z] that points to the camera position
-    '''
-    self.renderer.ResetCamera()
-    cam= self.renderer.GetActiveCamera()
-    cam.SetViewUp(viewUpVc[0],viewUpVc[1],viewUpVc[2])
-    cam.SetPosition(posCVc[0],posCVc[1],posCVc[2])
-    cam.SetParallelProjection(1)
-    cam.Zoom(self.zoom)
-    self.renderer.ResetCameraClippingRange()
-
-  def defineView(self):
-    '''Sets the view for the following predefined viewNames:
+    self.hCamFct= hCamF
+    self.defineViewParametersFromViewName()
+    
+  def defineViewParametersFromViewName(self):
+    '''Sets the values of the view parameters
+    from the following predefined viewNames:
     "ZPos","ZNeg","YPos","YNeg","XPos","XNeg","XYZPos"
     Zpos: View from positive Z axis (Z+)
     Zneg: View from negative Z axis (Z-)
@@ -123,35 +93,97 @@ class RecordDefDisplay(object):
     XYZNeg or -X-Y-Z: View from point (-1,-1,-1)
     '''
     if(self.viewName=="ZPos"):
-      self.setView(viewUpVc=[0,1,0],posCVc=[0,0,100])
+      self.viewUpVc= [0,1,0]
+      self.posCVc= [0,0,100]
     elif(self.viewName=="ZNeg"):
-      self.setView(viewUpVc=[0,1,0],posCVc=[0,0,-100])
+      self.viewUpVc= [0,1,0]
+      self.posCVc= [0,0,-100]
     elif(self.viewName=="YPos"):
-      self.setView(viewUpVc=[0,0,1],posCVc=[0,100,0])
+      self.viewUpVc= [0,0,1]
+      self.posCVc= [0,100,0]
     elif(self.viewName=="YNeg"):
-      self.setView(viewUpVc=[0,0,1],posCVc=[0,-100,0])
+      self.viewUpVc= [0,0,1]
+      self.posCVc= [0,-100,0]
     elif(self.viewName=="XPos"):
-      self.setView(viewUpVc=[0,0,1],posCVc=[100,0,0])
+      self.viewUpVc= [0,0,1]
+      self.posCVc= [100,0,0]
     elif(self.viewName=="XNeg"):
-      self.setView(viewUpVc=[0,0,1],posCVc=[-100,0,0])
+      self.viewUpVc= [0,0,1]
+      self.posCVc= [-100,0,0]
     elif(self.viewName=="XYZPos" or self.viewName=="+X+Y+Z"):
-      self.setView(viewUpVc=[-1,-1,1],posCVc=[100,100,self.hCamFct*100])
+      self.viewUpVc= [-1,-1,1]
+      self.posCVc= [100,100,self.hCamFct*100]
     elif(self.viewName=="+X+Y-Z"):
-      self.setView(viewUpVc=[1,1,1],posCVc=[100,100,-1*self.hCamFct*100])
+      self.viewUpVc= [1,1,1]
+      self.posCVc= [100,100,-1*self.hCamFct*100]
     elif(self.viewName=="+X-Y+Z"):
-      self.setView(viewUpVc=[-1,1,1],posCVc=[100,-100,self.hCamFct*100])
+      self.viewUpVc= [-1,1,1]
+      self.posCVc= [100,-100,self.hCamFct*100]
     elif(self.viewName=="+X-Y-Z"):
-      self.setView(viewUpVc=[1,-1,1],posCVc=[100,-100,-1*self.hCamFct*100])
+      self.viewUpVc= [1,-1,1]
+      self.posCVc= [100,-100,-1*self.hCamFct*100]
     elif(self.viewName=="-X+Y+Z"):
-      self.setView(viewUpVc=[1,-1,1],posCVc=[-100,100,self.hCamFct*100])
+      self.viewUpVc= [1,-1,1]
+      self.posCVc= [-100,100,self.hCamFct*100]
     elif(self.viewName=="-X+Y-Z"):
-      self.setView(viewUpVc=[-1,+1,1],posCVc=[-100,100,-1*self.hCamFct*100])
+      self.viewUpVc= [-1,+1,1]
+      self.posCVc= [-100,100,-1*self.hCamFct*100]
     elif(self.viewName=="-X-Y+Z"):
-      self.setView(viewUpVc=[1,1,1],posCVc=[-100,-100,self.hCamFct*100])
+      self.viewUpVc= [1,1,1]
+      self.posCVc= [-100,-100,self.hCamFct*100]
     elif(self.viewName=="XYZNeg" or self.viewName=="-X-Y-Z"):
-      self.setView(viewUpVc=[-1,-1,1],posCVc=[-100,-100,-1*self.hCamFct*100])
-    else:
+      self.viewUpVc= [-1,-1,1]
+      self.posCVc= [-100,-100,-1*self.hCamFct*100]
+    elif(self.viewName!="Custom"):
       sys.stderr.write("View name: '"+self.viewName+"' unknown.")
+  
+  def setView(self, camera):
+    '''Sets the camera parameters.'''
+    if(self.viewName!="Custom"):
+      self.defineViewParametersFromViewName()
+    camera.SetViewUp(self.viewUpVc[0],self.viewUpVc[1],self.viewUpVc[2])
+    camera.SetPosition(self.posCVc[0],self.posCVc[1],self.posCVc[2])
+    camera.SetParallelProjection(1)
+    camera.Zoom(self.zoom)
+
+class RecordDefDisplay(object):
+  ''' Provides the variables to define the output device.
+  
+  :ivar renderer:    specification of renderer. A renderer is an object that
+        controls the rendering process for objects. Rendering is the 
+        process of converting geometry, a specification for lights, and
+        a camera view into an image. (defaults to None)
+  :ivar renWin:  rendering window (defaults to None). A rendering window is a 
+        window in a graphical user interface where renderers draw their images. 
+  :ivar windowWidth: resolution expresed in pixels in the width direction of 
+        the window (defaults to 800)
+  :ivar windowHeight: resolution expresed in pixels in the height direction of 
+        the window (defaults to 600)
+  :ivar cameraParameters: parameters that define the camera position,
+                          zoom, etc.
+  :ivar bgRComp:     red component (defaults to 0.65)
+  :ivar bgGComp:     green component (defaults to 0.65)
+  :ivar bgBComp:     blue component (defaults to 0.65)
+  '''
+  def __init__(self):
+    self.renderer= None
+    self.renWin= None
+    self.windowWidth= 800
+    self.windowHeight= 600
+    self.annotation= sa.ScreenAnnotation()
+    self.bgRComp= 0.65
+    self.bgGComp= 0.65
+    self.bgBComp= 0.65
+    self.cameraParameters= CameraParameters()
+
+
+  def setView(self):
+    '''Sets the view'''
+    self.renderer.ResetCamera()
+    cam= self.renderer.GetActiveCamera()
+    self.cameraParameters.setView(cam)
+    self.renderer.ResetCameraClippingRange()
+
 
   def setupAxes(self):
     '''Add an vtkAxesActor to the renderer.'''
@@ -217,7 +249,7 @@ class RecordDefDisplay(object):
     :param caption: caption to display with the scene.
     :param fName: name of the image file, in none -> screen window.
     '''
-    self.defineView()
+    self.setView()
     self.setupWindow(caption)
     if(fName):
       self.plot(fName)

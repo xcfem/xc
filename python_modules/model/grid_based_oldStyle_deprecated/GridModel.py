@@ -955,14 +955,14 @@ class GridModel(object):
           self.lPatterns[nbrset]= grid.setEntLstSurf(self.getPreprocessor(),self.conjSup[cs].lstSup,nbrset)
     return self.grid.dicQuadSurf #???
 
-  def displayMesh(self,partToDisplay,caption= '',viewNm='XYZPos',defFScale=0.0):
+  def displayMesh(self,partToDisplay,caption= '',viewDef= vtk_graphic_base.CameraParameters('XYZPos'),defFScale=0.0):
     '''return a graphical representation of the mesh
 
     :param partToDisplay: XC set of elements to be displayed
     :param caption:       text to write in the graphic
-    :param viewNm:        name of the view to use
+    :param viewDef:       parameters that define the view to use
            predefined view names: 'XYZPos','XNeg','XPos','YNeg','YPos',
-           'ZNeg','ZPos'  (defaults to 'XYZPos')
+           'ZNeg','ZPos'
     :param defFScale: factor to apply to current displacement of nodes 
               so that the display position of each node equals to
               the initial position plus its displacement multiplied
@@ -970,17 +970,17 @@ class GridModel(object):
               initial/undeformed shape)
     '''
     defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-    defDisplay.FEmeshGraphic(partToDisplay,caption,viewNm,defFScale)
+    defDisplay.FEmeshGraphic(partToDisplay,caption,viewDef,defFScale)
     return defDisplay
 
-  def displayLocalAxes(self,setToDisplay=None,vectorScale=1.0,viewNm="XYZPos",hCamFct=1.0,caption= '',fileName=None,defFScale=0.0):
+  def displayLocalAxes(self,setToDisplay=None,vectorScale=1.0,viewDef= vtk_graphic_base.CameraParameters('XYZPos'), caption= '',fileName=None,defFScale=0.0):
     '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
     
     :param setToDisplay:   set of elements to be displayed (defaults to total set)
     :param vectorScale:    factor to apply to the vectors length in the representation
-    :param viewNm:         name of the view  that contains the renderer (possible options: "XYZPos", "XPos", "XNeg","YPos", "YNeg", "ZPos", "ZNeg")
-    :param hCamFct:     factor that applies to the height of the camera position in order to
-                        change perspective of isometric views (defaults to 1). Usual values 0.1 to 10
+    :param viewDef:       parameters that define the view to use
+           predefined view names: 'XYZPos','XNeg','XPos','YNeg','YPos',
+           'ZNeg','ZPos'
     :param fileName:       full name of the graphic file to generate. Defaults to `None`, in this case it returns a console output graphic.
     :param caption:        text to display in the graphic 
     :param defFScale: factor to apply to current displacement of nodes 
@@ -1000,14 +1000,13 @@ class GridModel(object):
       setToDisplay.color=xc.Vector([rd.random(),rd.random(),rd.random()])
     vField=lavf.LocalAxesVectorField(setToDisplay.name+'_localAxes',vectorScale)
     vField.dumpVectors(setToDisplay)
-    defDisplay.viewName= viewNm
-    defDisplay.hCamFct=hCamFct
+    defDisplay.cameraParameters= viewDef
     defDisplay.defineMeshScene(None,defFScale,color=setToDisplay.color) 
     vField.addToDisplay(defDisplay)
     defDisplay.displayScene(caption,fileName)
     return defDisplay
 
-  def displayLoad(self,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vectorScale=1.0,multByElemArea=False,viewNm="XYZPos",hCamFct=1.0,caption= '',fileName=None,defFScale=0.0):
+  def displayLoad(self,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vectorScale=1.0,multByElemArea=False,viewDef= vtk_graphic_base.CameraParameters('XYZPos'),caption= '',fileName=None,defFScale=0.0):
     '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
     
     :param setToDisplay:   set of elements to be displayed (defaults to total set)
@@ -1016,9 +1015,9 @@ class GridModel(object):
     :param vectorScale:    factor to apply to the vectors length in the representation
       
     :param multByElemArea: boolean value that must be `True` if we want to represent the total load on each element (=load multiplied by element area) and `False` if we are going to depict the value of the uniform load per unit area
-    :param viewNm:         name of the view  that contains the renderer (possible options: `XYZPos`, `XYZNeg`,`XPos`, `XNeg`,`YPos`, `YNeg`, `ZPos`, `ZNeg`)
-    :param hCamFct:     factor that applies to the height of the camera position in order to
-                        change perspective of isometric views (defaults to 1). Usual values 0.1 to 10
+    :param viewDef:       parameters that define the view to use
+           predefined view names: 'XYZPos','XNeg','XPos','YNeg','YPos',
+           'ZNeg','ZPos'
     :param fileName:       full name of the graphic file to generate. Defaults to ` None`, in this case it returns a console output graphic.
     :param caption:        text to display in the graphic 
     :param defFScale: factor to apply to current displacement of nodes 
@@ -1039,8 +1038,7 @@ class GridModel(object):
     vField=lvf.LoadVectorField(loadCaseNm,unitsScale,vectorScale)
     vField.multiplyByElementArea=multByElemArea
     vField.dumpLoads(self.getPreprocessor(),defFScale)
-    defDisplay.viewName= viewNm
-    defDisplay.hCamFct=hCamFct
+    defDisplay.cameraParameters= viewDef
     defDisplay.defineMeshScene(None,defFScale) 
     vField.addToDisplay(defDisplay)
     defDisplay.displayScene(caption,fileName,color=setToDisplay.color)

@@ -8,10 +8,11 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.Ortega@ciccp.es    l.pereztato@ciccp.es"
 
+from postprocess.xcVtk import vtk_graphic_base
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
 from postprocess.xcVtk.FE_model import Fields
 
-def displayFieldDirs1and2Base(limitStateLabel,argument,elementSet,genDescr,sectDescr,component,fUnitConv,fileName,captionTexts,defFScale=0.0,viewName='XYZPos',rgMinMax=None):
+def displayFieldDirs1and2Base(limitStateLabel,argument,elementSet,genDescr,sectDescr,component,fUnitConv,fileName,captionTexts,defFScale=0.0,viewDef= vtk_graphic_base.CameraParameters('XYZPos'),rgMinMax=None):
   '''Display a field defined over bi-dimensional elements in its two directions.
 
   :param limitStateLabel: label that identifies the limit state.
@@ -28,16 +29,14 @@ def displayFieldDirs1and2Base(limitStateLabel,argument,elementSet,genDescr,sectD
               the initial position plus its displacement multiplied
               by this factor. (Defaults to 0.0, i.e. display of 
               initial/undeformed shape)
-  :param viewName: name of the view that contains the renderer (possible
-                       options: "XYZPos", "XPos", "XNeg","YPos", "YNeg",
-                       "ZPos", "ZNeg") (defaults to "XYZPos")
+  :param viewDef: camera parameters (position, orientation,...)
   :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
               of the scalar field (if any) to be represented. All the values 
               less than vmin are displayed in blue and those greater than vmax 
               in red (defaults to None)
   '''
   defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-  defDisplay.viewName=viewName
+  defDisplay.cameraParameters= viewDef
   attributeName= limitStateLabel + 'Sect1'   #Normal stresses limit state direction 1.
   field= Fields.getScalarFieldFromControlVar(attributeName,argument,elementSet,component,fUnitConv,rgMinMax)
   captionBaseText= captionTexts[limitStateLabel] + ', ' + captionTexts[argument] + '. '+ genDescr.capitalize()
@@ -47,7 +46,7 @@ def displayFieldDirs1and2Base(limitStateLabel,argument,elementSet,genDescr,sectD
   field= Fields.getScalarFieldFromControlVar(attributeName,argument,elementSet,component,fUnitConv,rgMinMax)
   field.display(defDisplay,caption= captionBaseText + ', ' + sectDescr[1],defFScale=defFScale)
 
-def displayFieldDirs1and2(limitStateLabel,argument,elementSet,component,fUnitConv,fileName,captionTexts,defFScale=0.0,viewName='XYZPos',rgMinMax=None):
+def displayFieldDirs1and2(limitStateLabel,argument,elementSet,component,fUnitConv,fileName,captionTexts,defFScale=0.0,viewDef= vtk_graphic_base.CameraParameters('XYZPos'),rgMinMax=None):
   '''Display a field defined over bi-dimensional elements in its two directions.
 
   :param limitStateLabel: label that identifies the limit state.
@@ -62,9 +61,7 @@ def displayFieldDirs1and2(limitStateLabel,argument,elementSet,component,fUnitCon
               the initial position plus its displacement multiplied
               by this factor. (Defaults to 0.0, i.e. display of 
               initial/undeformed shape)
-  :param viewName: name of the view that contains the renderer (possible
-                       options: "XYZPos", "XPos", "XNeg","YPos", "YNeg",
-                       "ZPos", "ZNeg") (defaults to "XYZPos")
+  :param viewDef: camera parameters (position, orientation,...)
   :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
               of the scalar field (if any) to be represented. All the values 
               less than vmin are displayed in blue and those greater than vmax 
@@ -72,4 +69,4 @@ def displayFieldDirs1and2(limitStateLabel,argument,elementSet,component,fUnitCon
   
   '''
 #  displayFieldDirs1and2Base(limitStateLabel,argument,elementSet,elementSet.description,elementSet.sectDescr,component,fUnitConv,fileName,captionTexts,defFScale=defFScale )  #21/07/2017 needs revision
-  displayFieldDirs1and2Base(limitStateLabel,argument,elementSet,elementSet.description,['dir. 1', 'dir. 2'],component,fUnitConv,fileName,captionTexts,defFScale=defFScale,viewName= viewName,rgMinMax=rgMinMax)
+  displayFieldDirs1and2Base(limitStateLabel,argument,elementSet,elementSet.description,['dir. 1', 'dir. 2'],component,fUnitConv,fileName,captionTexts,defFScale=defFScale,viewDef= viewDef,rgMinMax=rgMinMax)

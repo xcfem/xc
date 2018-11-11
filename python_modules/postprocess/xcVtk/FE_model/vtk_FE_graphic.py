@@ -158,21 +158,19 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
         # else:
         #   print "Entity: ", self.gridRecord.entToLabel, " unknown."
 
-    def FEmeshGraphic(self,xcSet,caption= '',viewNm='XYZPos',defFScale=0.0):
+    def FEmeshGraphic(self,xcSet,caption= '',cameraParameters= vtk_graphic_base.CameraParameters('XYZPos'),defFScale=0.0):
         ''' Graphic of the FE mesh
 
         :param xcSet:   XC set of elements to be displayed
         :param caption: text to write in the graphic
-        :param viewNm:  name of the view to use for the representation
-                predefined view names: 'XYZPos','XNeg','XPos','YNeg','YPos',
-                'ZNeg','ZPos'  (defaults to 'XYZPos')
+        :param cameraParameters: camera parameters (position, orientation,...).
         :param defFScale: factor to apply to current displacement of nodes 
                    so that the display position of each node equals to
                    the initial position plus its displacement multiplied
                    by this factor. (Defaults to 0.0, i.e. display of 
                    initial/undeformed shape)
         '''
-        self.viewName=viewNm
+        self.cameraParameters= cameraParameters
         self.setupGrid(xcSet)
         self.displayGrid(caption)
 
@@ -201,9 +199,6 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
                     0.01)
         :param scaleConstr: scale of SPConstraints symbols (defaults to 0.2)
         '''
-        # 31/05/2018 LCPT.
-        # I've deleted the viewName argument because viewName it's already
-        # a member of the object (see __init__)        
         self.renderer= vtk.vtkRenderer()
         self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
         if type(xcSets) ==list:

@@ -53,7 +53,7 @@ class FigureBase(object):
     self.unitsLabel= units # Somethin like '[MPa]' or 'radians'...
     self.armatureDescription= reinfDescr #Something like "horizontal reinforcement."
     self.figSize= sz #LaTeX size for the figure.
-    self.viewName= "XYZPos"
+    self.cameraParameters= vtk_graphic_base.CameraParameters('XYZPos')
   def getCaption(self):
     retval= self.partLabel+'. '+self.figDescription
     if(self.unitsLabel!=None):
@@ -102,7 +102,7 @@ class SlideDefinition(FigureBase):
     jpegName= nmbFichGraf+".jpeg"
     epsName= nmbFichGraf+".eps"
     self.setupDiagrams()
-    defDisplay.viewName= self.viewName
+    defDisplay.cameraParameters= self.cameraParameters
     if(self.field):
       self.field.plot(preprocessor, defDisplay,fName)
     else:

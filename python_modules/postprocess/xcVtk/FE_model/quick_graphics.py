@@ -13,6 +13,7 @@ __email__= "ana.Ortega@ciccp.es    l.pereztato@ciccp.es"
 
 from miscUtils import LogMessages as lmsg
 from solution import predefined_solutions
+from postprocess.xcVtk import vtk_graphic_base
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
 from postprocess.xcVtk.FE_model import Fields
 from postprocess.xcVtk import control_var_diagram as cvd
@@ -80,23 +81,17 @@ class QuickGraphics(object):
             lmsg.error('Item '+str(componentName) +'is not a valid component. Displayable items are: N1, N2, N12, M1, M2, M12, Q1, Q2')
             return 'N1'
 
-    def getDisplay(self,vwName= 'XYZPos',hCamF=1.0):
+    def getDisplay(self,wmDef= vtk_graphic_base.CameraParameters('XYZPos',1.0)):
         '''Returns a suitable display to show the graphics.
 
-        :param viewName: name of the view that contains the renderer (possible
-                           options: "XYZPos", "XPos", "XNeg","YPos", "YNeg",
-                           "ZPos", "ZNeg") (defaults to "XYZPos")
-        :param hCamFct: factor that applies to the height of the camera position
-                          in order to change perspective of isometric views 
-                          (defaults to 1, usual values 0.1 to 10)
+        :param vwDef:  camera parameters.
         '''
         defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-        defDisplay.viewName=vwName
-        defDisplay.hCamFct=hCamF
+        defDisplay.cameraParameters= wmDef
         return defDisplay
 
 
-    def displayDispRot(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None,defFScale=0.0,rgMinMax=None):
+    def displayDispRot(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',viewDef= vtk_graphic_base.CameraParameters('XYZPos',1.0),fileName=None,defFScale=0.0,rgMinMax=None):
         '''displays the component of the displacement or rotations in the 
         set of entities.
 
@@ -129,10 +124,10 @@ class QuickGraphics(object):
         for n in nodSet:
             n.setProp('propToDisp',n.getDisp[vCompDisp])
         field= Fields.ScalarField(name='propToDisp',functionName="getProp",component=None,fUnitConv=fConvUnits,rgMinMax=rgMinMax)
-        defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
+        defDisplay= self.getDisplay(viewDef)
         defDisplay.displayMesh(xcSets=self.xcSet,field=field,diagrams= None, fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription+' '+self.xcSet.description,defFScale=defFScale)
 
-    def displayIntForc(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None,defFScale=0.0):
+    def displayIntForc(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',viewDef= vtk_graphic_base.CameraParameters('XYZPos'),fileName=None,defFScale=0.0):
         '''displays the component of internal forces in the 
         set of entities as a scalar field (i.e. appropiated for 2D elements; 
         shells...).
@@ -144,12 +139,7 @@ class QuickGraphics(object):
         :param fConvUnits:   factor of conversion to be applied to the results 
              (defalts to 1)
         :param unitDescription: string like '[kN/m] or [kN m/m]'
-        :param viewName:  name of the view  that contains the renderer (possible
-             options: "XYZPos", "XPos", "XNeg","YPos", "YNeg", "ZPos", "ZNeg") 
-             (defaults to "XYZPos")
-        :param hCamFct:  factor that applies to the height of the camera position
-             in order to change perspective of isometric views (defaults to 1, 
-             usual values 0.1 to 10)
+        :param viewDef:  camera parameters.
         :param fileName: name of the file to plot the graphic. Defaults to None,
              in that case an screen display is generated
         :param defFScale: factor to apply to current displacement of nodes 
@@ -174,11 +164,11 @@ class QuickGraphics(object):
                 else:
                     lmsg.warning('QuickGraphics::displayIntForc; not a 2D element; ignored.')
             field= Fields.ExtrapolatedProperty(propName,"getProp",self.xcSet,fUnitConv= fConvUnits)
-            defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
+            defDisplay= self.getDisplay(viewDef)
             field.display(defDisplay=defDisplay,fName=fileName,caption=self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.description,defFScale=defFScale)
 
 
-    def displayIntForcDiag(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,scaleFactor=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None,defFScale=0.0):
+    def displayIntForcDiag(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,scaleFactor=1.0,unitDescription= '',viewDef= vtk_graphic_base.CameraParameters('XYZPos'),fileName=None,defFScale=0.0):
         '''displays the component of internal forces in the set of entities as a 
          diagram over lines (i.e. appropiated for beam elements).
 
@@ -190,12 +180,7 @@ class QuickGraphics(object):
             (defaults to 1)
         :param scaleFactor:  factor of scale to apply to the diagram display
         :param unitDescription: string like '[kN/m] or [kN m/m]'
-        :param viewName:  name of the view  that contains the renderer (possible
-                        options: "XYZPos", "XPos", "XNeg","YPos", "YNeg",
-                        "ZPos", "ZNeg") (defaults to "XYZPos")
-        :param hCamFct:  factor that applies to the height of the camera position
-                          in order to change perspective of isometric views 
-                          (defaults to 1, usual values 0.1 to 10)
+        :param vwDef:  camera parameters.
         :param fileName:  name of the file to plot the graphic. Defaults to None,
                        in that case an screen display is generated
         :param defFScale: factor to apply to current displacement of nodes 
@@ -219,7 +204,7 @@ class QuickGraphics(object):
         #
         diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[self.xcSet],attributeName= "intForce",component= itemToDisp)
         diagram.addDiagram()
-        defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
+        defDisplay= self.getDisplay(viewDef)
         defDisplay.setupGrid(self.xcSet)
         defDisplay.defineMeshScene(None,defFScale,color=self.xcSet.color)
         defDisplay.appendDiagram(diagram) #Append diagram to the scene.
@@ -227,7 +212,7 @@ class QuickGraphics(object):
         caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.description
         defDisplay.displayScene(caption=caption,fName=fileName)
 
-    def dispLoadCaseBeamEl(self,loadCaseName='',setToDisplay=None,fUnitConv=1.0,elLoadComp='transComponent',elLoadScaleF=1.0,nodLoadScaleF=1.0,viewName='XYZPos',hCamFct=1.0,caption='',fileName=None,defFScale=0.0):
+    def dispLoadCaseBeamEl(self,loadCaseName='',setToDisplay=None,fUnitConv=1.0,elLoadComp='transComponent',elLoadScaleF=1.0,nodLoadScaleF=1.0,viewDef= vtk_graphic_base.CameraParameters('XYZPos'),caption='',fileName=None,defFScale=0.0):
         '''Display the loads applied on beam elements and nodes for a given load case
 
         :param setToDisplay:    set of beam elements to be represented
@@ -240,12 +225,7 @@ class QuickGraphics(object):
                       of element loads (defaults to 1)
         :param nodLoadScaleF: factor of scale to apply to the vector display of 
                       nodal loads (defaults to 1)
-        :param viewName: name of the view  that contains the renderer (possible
-                                options: "XYZPos", "XPos", "XNeg","YPos", "YNeg",
-                                "ZPos", "ZNeg") (defaults to "XYZPos")
-        :param hCamFct: factor that applies to the height of the camera position 
-              in order to change perspective of isometric views (defaults to 1).
-                             Usual values 0.1 to 10
+        :param vwDef:  camera parameters.
         :param caption:   caption for the graphic
         :param fileName:  name of the file to plot the graphic. Defaults to None,
                           in that case an screen display is generated
@@ -264,7 +244,7 @@ class QuickGraphics(object):
         preprocessor= self.feProblem.getPreprocessor
         loadPatterns= preprocessor.getLoadHandler.getLoadPatterns
         loadPatterns.addToDomain(loadCaseName)
-        defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
+        defDisplay= self.getDisplay(viewDef)
         grid= defDisplay.setupGrid(self.xcSet)
         defDisplay.defineMeshScene(None,defFScale,color=self.xcSet.color)
         orNodalLBar='H'  #default orientation of scale bar for nodal loads
@@ -293,7 +273,7 @@ class QuickGraphics(object):
             vField.addToDisplay(defDisplay,orientation=orNodalLBar)
         defDisplay.displayScene(caption=caption,fName=fileName)
 
-    def displayNodeValueDiagram(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,scaleFactor=1.0,unitDescription= '',viewName='XYZPos',hCamFct=1.0,fileName=None,defFScale=0.0):
+    def displayNodeValueDiagram(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,scaleFactor=1.0,unitDescription= '',viewDef= vtk_graphic_base.CameraParameters('XYZPos'),fileName=None,defFScale=0.0):
         '''displays the a displacement (uX,uY,...) or a property defined in nodes 
         as a diagram over lines (i.e. appropiated for beam elements).
 
@@ -304,12 +284,7 @@ class QuickGraphics(object):
                (defalts to 1)
         :param scaleFactor:  factor of scale to apply to the diagram display of
         :param unitDescription: string like '[m]' or '[rad]' or '[m/s2]'
-        :param viewName: name of the view  that contains the renderer (possible
-                         options: "XYZPos", "XPos", "XNeg","YPos", "YNeg",
-                         "ZPos", "ZNeg") (defaults to "XYZPos")
-        :param hCamFct:  factor that applies to the height of the camera position
-                            in order to change perspective of isometric views 
-                            (defaults to 1, usual values 0.1 to 10)
+        :param viewDef: camera parameters.
         :param fileName: name of the file to plot the graphic. Defaults to None,
                          in that case an screen display is generated
         :param defFScale: factor to apply to current displacement of nodes 
@@ -326,7 +301,7 @@ class QuickGraphics(object):
             lmsg.warning('QuickGraphics::displayNodeValueDiagram; set to display not defined; using previously defined set (total if None).')
         diagram= npd.NodePropertyDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[self.xcSet],attributeName= itemToDisp)
         diagram.addDiagram()
-        defDisplay= self.getDisplay(vwName=viewName,hCamF= hCamFct)
+        defDisplay= self.getDisplay(viewDef)
         defDisplay.setupGrid(self.xcSet)
         defDisplay.defineMeshScene(None,defFScale,color=self.xcSet.color)
         defDisplay.appendDiagram(diagram) #Append diagram to the scene.
@@ -334,19 +309,14 @@ class QuickGraphics(object):
         caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.description
         defDisplay.displayScene(caption=caption,fName=fileName)
 
-def displayAxes(vectorField, preprocessor, setToDisplay=None,vectorScale=1.0,viewNm="XYZPos",hCamFct=1.0,caption= '',fileName=None,defFScale=0.0):
+def displayAxes(vectorField, preprocessor, setToDisplay=None,vectorScale=1.0,viewDef= vtk_graphic_base.CameraParameters("XYZPos",1.0),caption= '',fileName=None,defFScale=0.0):
     '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
 
     :param vectorField: function that generates the vector field.
     :param setToDisplay: set of elements to be displayed (defaults to total set)
     :param vectorScale: factor to apply to the vectors length in the 
            representation.
-    :param viewNm: name of the view  that contains the renderer 
-           (possible options: 
-           "XYZPos", "XPos", "XNeg","YPos", "YNeg", "ZPos", "ZNeg")
-    :param hCamFct: factor that applies to the height of the camera position 
-           in order to change perspective of isometric views (defaults to 1). 
-           Usual values 0.1 to 10
+    :param viewDef: camera parameters.
     :param fileName: full name of the graphic file to generate. Defaults to 
            `None`, in this case it returns a console output graphic.
     :param caption: text to display in the graphic 
@@ -358,25 +328,19 @@ def displayAxes(vectorField, preprocessor, setToDisplay=None,vectorScale=1.0,vie
     '''
     defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
     defDisplay.setupGrid(setToDisplay)
-    defDisplay.viewName= viewNm
-    defDisplay.hCamFct=hCamFct
+    defDisplay.cameraParameters= viewDef
     defDisplay.defineMeshScene(None,defFScale) 
     vectorField.addToDisplay(defDisplay)
     defDisplay.displayScene(caption,fileName)
     return defDisplay
     
-def displayLocalAxes(prep,setToDisplay=None,vectorScale=1.0,viewNm="XYZPos",hCamFct=1.0,caption= '',fileName=None,defFScale=0.0):
+def displayLocalAxes(prep,setToDisplay=None,vectorScale=1.0,viewDef= vtk_graphic_base.CameraParameters("XYZPos",1.0),caption= '',fileName=None,defFScale=0.0):
     '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
     
     :param setToDisplay: set of elements to be displayed (defaults to total set)
     :param vectorScale: factor to apply to the vectors length in the 
            representation.
-    :param viewNm: name of the view  that contains the renderer 
-           (possible options: 
-            "XYZPos", "XPos", "XNeg","YPos", "YNeg", "ZPos", "ZNeg")
-    :param hCamFct: factor that applies to the height of the camera position 
-           in order to change perspective of isometric views (defaults to 1). 
-           Usual values 0.1 to 10
+    :param viewDef: camera parameters.
     :param fileName: full name of the graphic file to generate. 
            Defaults to `None`, in this case it returns a console output graphic.
     :param caption: text to display in the graphic 
@@ -392,22 +356,17 @@ def displayLocalAxes(prep,setToDisplay=None,vectorScale=1.0,viewNm="XYZPos",hCam
         lmsg.warning('set to display not defined; using total set.')
     vField=lavf.LocalAxesVectorField(setToDisplay.name+'_localAxes',vectorScale)
     vField.dumpVectors(setToDisplay)
-    return displayAxes(vField, prep,setToDisplay,vectorScale,viewNm,hCamFct,caption,fileName,defFScale)
+    return displayAxes(vField, prep,setToDisplay,vectorScale,viewDef,caption,fileName,defFScale)
 
 
-def displayStrongWeakAxis(preprocessor,setToDisplay=None,vectorScale=1.0,viewNm="XYZPos",hCamFct=1.0,caption= '',fileName=None,defFScale=0.0):
+def displayStrongWeakAxis(preprocessor,setToDisplay=None,vectorScale=1.0,viewDef= vtk_graphic_base.CameraParameters("XYZPos",1.0),caption= '',fileName=None,defFScale=0.0):
     '''vector field display of the loads applied to the chosen set of elements 
        in the load case passed as parameter
     
     :param setToDisplay: set of elements to be displayed (defaults to total set)
     :param vectorScale: factor to apply to the vectors length in the 
            representation.
-    :param viewNm: name of the view  that contains the renderer 
-            (possible options: 
-             "XYZPos", "XPos", "XNeg","YPos", "YNeg", "ZPos", "ZNeg")
-    :param hCamFct: factor that applies to the height of the camera position 
-           in order to change perspective of isometric views (defaults to 1). 
-           Usual values 0.1 to 10
+    :param viewDef: camera parameters.
     :param fileName: full name of the graphic file to generate. Defaults to 
            `None`, in this case it returns a console output graphic.
     :param caption: text to display in the graphic 
@@ -423,10 +382,10 @@ def displayStrongWeakAxis(preprocessor,setToDisplay=None,vectorScale=1.0,viewNm=
         lmsg.warning('set to display not defined; using total set.')
     vField=lavf.StrongWeakAxisVectorField(setToDisplay.name+'_strongWeakAxis',vectorScale)
     vField.dumpVectors(setToDisplay)
-    return displayAxes(vField,preprocessor,setToDisplay,vectorScale,viewNm,hCamFct,caption,fileName,defFScale)
+    return displayAxes(vField,preprocessor,setToDisplay,vectorScale,viewDef,caption,fileName,defFScale)
 
 
-def displayLoad(preprocessor,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vectorScale=1.0,multByElemArea=False,viewNm="XYZPos",hCamFct=1.0,caption= '',fileName=None,defFScale=0.0):
+def displayLoad(preprocessor,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vectorScale=1.0,multByElemArea=False,viewDef= vtk_graphic_base.CameraParameters("XYZPos",1.0),caption= '',fileName=None,defFScale=0.0):
     '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
     
     :param setToDisplay: set of elements to be displayed (defaults to total set)
@@ -439,8 +398,7 @@ def displayLoad(preprocessor,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vect
            represent the total load on each element (=load multiplied by 
            element area) and `False` if we are going to depict the value of
             the uniform load per unit area
-    :param viewNm:         name of the view  that contains the renderer 
-    :param hCamFct: factor that applies to the height of the camera position 
+    :param viewDef: camera parameters.
     :param fileName: full name of the graphic file to generate. Defaults to 
            ` None`, in this case it returns a console output graphic.
     :param caption: text to display in the graphic 
@@ -464,14 +422,13 @@ def displayLoad(preprocessor,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vect
     vField=lvf.LoadVectorField(loadCaseNm,unitsScale,vectorScale)
     vField.multiplyByElementArea=multByElemArea
     vField.dumpLoads(preprocessor,defFScale)
-    defDisplay.viewName= viewNm
-    defDisplay.hCamFct=hCamFct
+    defDisplay.cameraParameters= viewDef
     defDisplay.defineMeshScene(None,defFScale,color=setToDisplay.color) 
     vField.addToDisplay(defDisplay)
     defDisplay.displayScene(caption,fileName)
     return defDisplay
 
-def displayEigenResults(preprocessor,eigenMode, setToDisplay=None,defShapeScale=0.0,equLoadVctScale=None,accelMode=None, unitsScale=1.0,viewNm="XYZPos",hCamFct=1.0,caption= '',fileName=None):
+def displayEigenResults(preprocessor,eigenMode, setToDisplay=None,defShapeScale=0.0,equLoadVctScale=None,accelMode=None, unitsScale=1.0,viewDef= vtk_graphic_base.CameraParameters("XYZPos",1.0),caption= '',fileName=None):
     '''Display the deformed shape and/or the equivalent static forces 
     associated with the eigenvibration mode passed as parameter.
     
@@ -489,12 +446,7 @@ def displayEigenResults(preprocessor,eigenMode, setToDisplay=None,defShapeScale=
             only used if the equivalent static loads are to be displayed.
     :param unitsScale: factor to apply to the results if we want to change the 
            unit system.
-    :param viewNm: name of the view  that contains the renderer 
-               (possible options: 
-               `XYZPos`, `XYZNeg`,`XPos`, `XNeg`,`YPos`, `YNeg`, `ZPos`, `ZNeg`)
-    :param hCamFct: factor that applies to the height of the camera position 
-             in order to change perspective of isometric views (defaults to 1).
-             Usual values 0.1 to 10
+    :param viewDef: camera parameters.
     :param caption:   text to display in the graphic 
     :param fileName:  full name of the graphic file to generate. 
              Defaults to ` None`, in this case it returns a console output 
@@ -511,8 +463,7 @@ def displayEigenResults(preprocessor,eigenMode, setToDisplay=None,defShapeScale=
         setToDisplay.color=xc.Vector([rd.random(),rd.random(),rd.random()])
     defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
     defDisplay.setupGrid(setToDisplay)
-    defDisplay.viewName= viewNm
-    defDisplay.hCamFct=hCamFct
+    defDisplay.cameraParameters= viewDef
     defDisplay.defineMeshScene(None,defShapeScale,eigenMode,color=setToDisplay.color) 
     if equLoadVctScale not in [None,0]:
         vField=vf.VectorField(name='modo'+str(eigenMode),fUnitConv=unitsScale,scaleFactor=equLoadVctScale,showPushing= True)
