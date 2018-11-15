@@ -6,8 +6,9 @@ import math
 import xc_base
 import geom
 import xc
-import scipy.interpolate
 from materials.ec3 import EC3_limit_state_checking as EC3lsc
+from geom_utils import interpolation as intp
+import scipy.interpolate
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -43,7 +44,8 @@ psii= -1.0
 C1i= 0.0
 for i in range(1,nDiv+2): 
   mD= caseASampleMoments(5.0,10.0,psii)
-  mgf= EC3lsc.MomentGradientFactorC1(mD[0],mD[1])
+  Mi=intp.interpEquidistPoints(xi=mD[0],yi=mD[1],nDiv=4)
+  mgf= EC3lsc.MomentGradientFactorC1(Mi)
   C1i= mgf.getC1(supportCoefs)
   psi.append(psii)
   c1.append(C1i)

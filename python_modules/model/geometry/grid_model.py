@@ -600,10 +600,27 @@ class GridModel(object):
         nmLinInRang=self.getNmLinInRange(ijkRange)
         for nameLin in nmLinInRang:
             if nameLin in self.dicLin:
-                retval.append[dicLin[nameLin]]
+                retval.append(self.dicLin[nameLin])
         return retval
 
 
+    def getLstPntRange(self,ijkRange):
+        '''return the ordered list points in a 3D grid-region limited by 
+        ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+        ijkRange.ijkMax=(indXmax,indYmax,indZmax)
+
+        :param ijkRange: range for the search
+        '''
+        retval=list()
+        (imin,jmin,kmin)=ijkRange.ijkMin
+        (imax,jmax,kmax)=ijkRange.ijkMax
+        lstTagPnt=[self.getTagPntGrid(indPnt=(i,j,k)) for i in range(imin,imax+1) for j in range(jmin,jmax+1) for k in range(kmin,kmax+1)] #list of point tags to include in the set
+        points= self.prep.getMultiBlockTopology.getPoints
+        for tg in lstTagPnt:
+          pnt=points.get(tg)
+          retval.append(pnt)
+        return retval
+    
     def getSetPntRange(self,ijkRange,setName):
         '''return the set of points in a 3D grid-region limited by 
         ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
@@ -612,15 +629,12 @@ class GridModel(object):
         :param ijkRange: range for the search
         :param setName: name of the new set of points
         '''
-        (imin,jmin,kmin)=ijkRange.ijkMin
-        (imax,jmax,kmax)=ijkRange.ijkMax
-        lstTagPnt=[self.getTagPntGrid(indPnt=(i,j,k)) for i in range(imin,imax+1) for j in range(jmin,jmax+1) for k in range(kmin,kmax+1)] #list of point tags to include in the set
-        points= self.prep.getMultiBlockTopology.getPoints
+        lstPnt=self.getLstPntRange(ijkRange)
         retval= self.prep.getSets.defSet(setName)
         pntsSet=retval.getPoints
-        for tg in lstTagPnt:
-          pnt=points.get(tg)
+        for pnt in lstPnt:
           pntsSet.append(pnt)
         return retval
 
 
+    

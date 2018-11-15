@@ -475,6 +475,7 @@ python tests/materials/ec3/test_lateral_torsional_buckling01.py
 python tests/materials/ec3/test_lateral_torsional_buckling02.py
 python tests/materials/ec3/test_lateral_torsional_buckling03.py
 python tests/materials/ec3/test_cross_section_verification.py
+python tests/materials/ec3/test_beam_contrpnt.py
 echo "$BLEU" "    SIA 262 tests." "$NORMAL"
 python tests/materials/sia262/sia262_concrete_01.py
 python tests/materials/sia262/shear_01.py
