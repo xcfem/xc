@@ -13,6 +13,7 @@ from miscUtils import LogMessages as lmsg
 import xc_base
 from vtkUtils import utilsVtk
 from postprocess.xcVtk import vtk_graphic_base
+from postprocess.xcVtk import local_axes_vector_field as lavf
 import random as rd 
 import xc
 
@@ -173,6 +174,23 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
         self.cameraParameters= cameraParameters
         self.setupGrid(xcSet)
         self.displayGrid(caption)
+
+    def displayLocalAxes(self,xcSet,caption= '',cameraParameters= vtk_graphic_base.CameraParameters('XYZPos'), vectorScale=1.0):
+        '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
+
+        :param xcSet:   set of elements to be displayed (defaults to total set)
+        :param caption:        text to display in the graphic 
+        :param cameraParameters: camera parameters (position, orientation,...).
+        :param vectorScale:    factor to apply to the vectors length in the representation
+        '''
+        self.cameraParameters= cameraParameters
+        self.setupGrid(xcSet)
+        vField=lavf.LocalAxesVectorField(xcSet.name+'_localAxes',vectorScale)
+        vField.dumpVectors(xcSet)
+        self.cameraParameters= cameraParameters
+        self.defineMeshScene(None) 
+        vField.addToDisplay(self)
+        self.displayScene(caption)
 
     def defineMeshActorsSet(self,elemSet,field,defFScale,nodeSize):
         self.setupGrid(elemSet)
