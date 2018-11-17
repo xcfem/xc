@@ -200,18 +200,23 @@ def lstElem_to_set(preprocessor,lstElem,setName):
         s.getElements.append(e)
     return s  
 
-def get_lin_2Pts(lstLinBusq,tPto1,tPto2):
-    '''return the line that belongs to the set `lstLinBusq` and whose
-    starting and ending points are those of tags `tPto1` and `tPto2`
+def get_lin_2Pts(pnt1,pnt2,setSrchLin=None):
+    '''return the line that belongs to the set `,setSrchLin` and whose
+    starting and ending points are `pnt1` and `pnt2` (in this order)
+    If no set is defined, total set is adopted
     '''
     broke_out= False
-    for l in lstLinBusq:
+    tgp1=pnt1.tag
+    tgp2=pnt2.tag
+    if not setSrchLin:
+        setSrchLin=pnt1.getPreprocessor.getSets.getSet('total').getLines
+    for l in setSrchLin:
         extr= l.getKPoints()
-        if (extr[0]== tPto1 and extr[1]== tPto2) or (extr[0]== tPto2 and extr[1]== tPto1):
+        if (extr[0]== tgp1 and extr[1]== tgp2):
             broke_out= True
             break
     if not broke_out:
-#        print "Didn't find the line"
+#        print "Can't find the line"
         return
     else:
         return l
@@ -239,7 +244,7 @@ def get_lines_on_points(setPoints,setLinName,onlyIncluded=True):
     s=lstLin_to_set(prep,lstLin,setLinName)
     s.fillDownwards()
     return s
-    
+
 
 def setAddOf(setA,setB):
     '''return a new set that has all the entities in setA and setB

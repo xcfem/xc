@@ -21,6 +21,7 @@ import scipy.interpolate
 
 from materials.ec3 import EC3_materials
 from rough_calculations import ng_simple_beam as sb
+from geom_utils import interpolation as intp
 
 S355JR= EC3_materials.S355JR
 gammaM0= 1.00
@@ -35,12 +36,13 @@ k1= 1.0; k2= 1.0
 L= 3 # Bar length (m)
 x= [0.0,0.25*L,0.5*L,0.75*L,1.0*L]
 M= [-93.7e3,-93.7e3/2.0,0.0,114.3e3/2.0,114.3e3]
-overlineLambdaLT= IPE400.getLateralBucklingNonDimensionalBeamSlenderness(1,x,M)
+Mi=intp.interpEquidistPoints(xi=x,yi=M,nDiv=4)
+overlineLambdaLT= IPE400.getLateralBucklingNonDimensionalBeamSlenderness(1,L,Mi)
 alphaLT= IPE400.getLateralBucklingImperfectionFactor()
 # phiLT= IPE400.getLateralBucklingIntermediateFactor(1,x,M)
 # chiLT= IPE400.getLateralBucklingReductionFactor(1,x,M)
 # chiLT= IPE400.getLateralBucklingReductionFactor(1,x,M)
-MbRd= IPE400.getLateralTorsionalBucklingResistance(1,x,M)
+MbRd= IPE400.getLateralTorsionalBucklingResistance(1,L,Mi)
 MbRdTeor= 412.9e3
 ratio1= abs(MbRd-MbRdTeor)/MbRdTeor
 ratio2= abs(overlineLambdaLT-0.51)/0.51

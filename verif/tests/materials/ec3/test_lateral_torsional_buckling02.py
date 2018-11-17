@@ -16,7 +16,8 @@ import math
 import xc_base
 import geom
 import xc
-import scipy.interpolate
+from geom_utils import interpolation as intp
+
 
 
 from materials.ec3 import EC3_limit_state_checking as EC3lsc
@@ -34,8 +35,9 @@ k1= 1.0; k2= 1.0
 L= 6.0 # Bar length (m)
 x= [0.0,0.25*L,0.5*L,0.75*L,1.0*L]
 M= [-93.7,0,114.3,0,111.4]
-mgf= EC3lsc.MomentGradientFactorC1(x,M)
-Mcr1= IPE400.getMcr(x,M)
+Mi=intp.interpEquidistPoints(xi=x,yi=M,nDiv=4)
+mgf= EC3lsc.MomentGradientFactorC1(Mi)
+Mcr1= IPE400.getMcr(L,Mi)
 Mcr1Teor= 164.7e3
 
 ratio1= abs(Mcr1-Mcr1Teor)/Mcr1Teor
@@ -48,8 +50,9 @@ ratio1= abs(Mcr1-Mcr1Teor)/Mcr1Teor
 L= 3 # Bar length (m)
 x= [0.0,0.25*L,0.5*L,0.75*L,1.0*L]
 M= [-93.7e3,-93.7e3/2.0,0.0,114.3e3/2.0,114.3e3]
-mgf= EC3lsc.MomentGradientFactorC1(x,M)
-Mcr2= IPE400.getMcr(x,M)
+Mi=intp.interpEquidistPoints(xi=x,yi=M,nDiv=4)
+mgf= EC3lsc.MomentGradientFactorC1(Mi)
+Mcr2= IPE400.getMcr(L,Mi)
 Mcr2Teor= 1778e3
 
 ratio2= abs(Mcr2-Mcr2Teor)/Mcr2Teor
