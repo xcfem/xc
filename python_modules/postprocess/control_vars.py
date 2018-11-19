@@ -47,6 +47,7 @@ class ControlVarsBase(object):
         lmsg.error('argument: '+ arg+' not found')
     retval= obj
     return retval
+  
   def getFieldNames(self,parent= ''):
     retval= list()
     for key in self.__dict__:
@@ -56,11 +57,13 @@ class ControlVarsBase(object):
       except AttributeError:
         retval.append(parent+key)
     return retval
+  
   def getLaTeXFields(self,factor= 1e-3):
     ''' Returns a string with the intermediate fields of the LaTeX string.
 
     :param factor: factor for units (default 1e-3 -> kN)'''
     return self.combName
+  
   def getLaTeXString(self,eTag,factor= 1e-3):
     ''' Returns a string that we can insert in a LaTeX table.
 
@@ -265,6 +268,7 @@ class BiaxialBendingControlVars(UniaxialBendingControlVars):
     ''' Returns a string with the intermediate fields of the LaTeX string.
 
     :param factor: factor for units (default 1e-3 -> kN)'''
+#    print 'super(BiaxialBendingControlVars,self).getLaTeXFields(factor) =', super(BiaxialBendingControlVars,self).getLaTeXFields(factor)
     retval= super(BiaxialBendingControlVars,self).getLaTeXFields(factor)+" & "+fmt.Esf.format(self.Mz*factor)
     return retval
   def getAnsysStrings(self,eTag,axis, factor= 1e-3):
@@ -584,8 +588,9 @@ class FatigueControlVars(ControlVarsBase):
     retval+= ', Mu= ' + str(self.Mu*factor)
     retval+= ', Vu= ' + str(self.Vu*factor)
     return retval
+  
 
-def writeControlVarsFromElements(controlVarName,preprocessor,outputFileName):
+def writeControlVarsFromPhantomElements(controlVarName,preprocessor,outputFileName):
   '''Writes control var values from element into a file for
      doing graphics and into a latex file.
 
@@ -605,8 +610,8 @@ def writeControlVarsFromElements(controlVarName,preprocessor,outputFileName):
   fcs2= [] #Capacity factors at section 2.
   elementos= preprocessor.getSets["total"].getElements
   for e in elementos:
-    eTag= e.getProp("idElem")
-    idSection= e.getProp("idSection")
+    eTag= e.getProp("idElem")  # phantom model 
+    idSection= e.getProp("idSection")  
     controlVar= e.getProp(controlVarName)
     outStr= controlVar.getLaTeXString(eTag,1e-3)
     if(e.getProp("dir")==1):
@@ -620,6 +625,45 @@ def writeControlVarsFromElements(controlVarName,preprocessor,outputFileName):
 
   #printCierreListadoCapacityFactor("texOutput1")
   #printCierreListadoCapacityFactor("texOutput2")
+  texOutput1.close()
+  texOutput2.close()
+  xcOutput.close()
+    
+  os.system("cat /tmp/texOutput1.tmp /tmp/texOutput2.tmp > "+outputFileName+".tex")
+    
+  os.system("rm -f "+"/tmp/texOutput1.tmp")
+  os.system("rm -f "+"/tmp/texOutput2.tmp")
+  retval= [scipy.mean(fcs1),scipy.mean(fcs2)]
+  return retval
+
+def writeControlVarsFromElements(controlVarName,preprocessor,outputFileName,setCalc):
+  '''Writes control var values from element into a file for
+     doing graphics and into a latex file.
+
+
+  :param controlVarName: name of the control var. 
+  :param preprocessor:    preprocessor from FEA model.
+  :param outputFileName: name of the files to write (.py and .tex)
+  '''
+  texOutput1= open("/tmp/texOutput1.tmp","w")
+  texOutput1.write("Section 1\n")
+  texOutput2= open("/tmp/texOutput2.tmp","w")
+  texOutput2.write("Section 2\n")
+  xcOutput= open(outputFileName+".py","w")
+  fcs1= [] #Capacity factors at section 1.
+  fcs2= [] #Capacity factors at section 2.
+  for e in setCalc.getElements:
+#    idSection= e.getProp("idSection")  
+    controlVar1= e.getProp(controlVarName+'Sect1')
+    controlVar2= e.getProp(controlVarName+'Sect2')
+    outStr1= controlVar1.getLaTeXString(e.tag,1e-3)
+    outStr2= controlVar2.getLaTeXString(e.tag,1e-3)
+    fcs1.append(controlVar1.getCF())
+    texOutput1.write(outStr1)
+    xcOutput.write(controlVar1.strElementProp(e.tag,controlVarName+'Sect1',1e-3))
+    fcs2.append(controlVar2.getCF())
+    texOutput2.write(outStr2)
+    xcOutput.write(controlVar2.strElementProp(e.tag,controlVarName+'Sect2',1e-3))
   texOutput1.close()
   texOutput2.close()
   xcOutput.close()

@@ -15,6 +15,7 @@ from miscUtils import LogMessages as lmsg
 from materials.sections import internal_forces
 from collections import defaultdict
 import csv
+from postprocess import control_vars as cv
 
 def defaultAnalysis(feProb,steps= 1):
     '''Default analysis procedure for saveAll method.'''
@@ -96,6 +97,18 @@ class LimitStateData(object):
             fIntF.close()
             fDisp.close()
             comb.removeFromDomain() #Remove combination from the model.
+#20181117
+    def runChecking(self,setCalc):
+        if setCalc:
+            prep=setCalc.getPreprocessor
+            intForcCombFileName=self.getInternalForcesFileName()
+            self.controller.initControlVars(setCalc)
+            self.controller.checkSetFromIntForcFile(intForcCombFileName,setCalc)
+            cv.writeControlVarsFromElements(self.controller.limitStateLabel,prep,self.getOutputDataBaseFileName(),setCalc)
+        else:
+            lmsg.error("Result file hasn't been created, you must specify a valid set of elements")
+
+#20181117 end
 
 class NormalStressesRCLimitStateData(LimitStateData):
     ''' Reinforced concrete normal stresses data for limit state checking.'''
@@ -260,6 +273,21 @@ class FatigueResistanceRCLimitStateData(LimitStateData):
         '''
         return reinfConcreteSections.internalForcesVerification3D(self, "d",setCalc)
 
+class NormalStressesSSLimitStateData(LimitStateData):
+    ''' Structural steel normal stresses data for limit state checking.'''
+    def __init__(self):
+        '''Constructor '''
+        super(NormalStressesSSLimitStateData,self).__init__('ULS_normalStressesResistance','verifRsl_normStrsULS')
+
+    def check(self,setCalc=None):
+        '''Checking of normal stresses in ultimate limit states
+        (see self.dumpCombinations).
+
+        :param setCalc: set of elements to be analyzed (defaults to None which 
+                        means that all the elements in the file of internal forces
+                        results are analyzed) 
+        '''
+        return
 
 freqLoadsDisplacementControl= FreqLoadsDisplacementControlLimitStateData()
 freqLoadsCrackControl= FreqLoadsCrackControlRCLimitStateData()
@@ -267,6 +295,7 @@ quasiPermanentLoadsCrackControl= QPLoadsCrackControlRCLimitStateData()
 normalStressesResistance= NormalStressesRCLimitStateData()
 shearResistance= ShearResistanceRCLimitStateData()
 fatigueResistance= FatigueResistanceRCLimitStateData()
+steelNormalStressesResistance=NormalStressesSSLimitStateData()
 
 def readIntForcesFile(intForcCombFileName,setCalc=None):
     '''Extracts element and combination identifiers from the internal

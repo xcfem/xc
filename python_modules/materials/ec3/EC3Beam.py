@@ -44,7 +44,14 @@ class EC3Beam(object):
         self.typo=typo
         self.lstLines=lstLines
         self.lstPoints=lstPoints
-
+        
+    def getPreprocessor(self):
+        if  self.lstLines:
+            retval=self.lstLines[0].getPreprocessor
+        elif self.lstPoints:
+            retval=self.lstPoints[0].getPreprocessor
+        return retval
+    
     def setControlPoints(self):
         '''Set the five equally spaced points in the beam where the moment Mz 
         will be evaluated in order to obtain the moment gradient factor 
@@ -59,9 +66,10 @@ class EC3Beam(object):
         The method also creates the attributes 'length' and 'elemSet' that 
         represent the lenght of the beam and the set of elements included in it.
         '''
+        prep=self.getPreprocessor()
         if self.lstLines:
             lstLn=self.lstLines
-            pointsHandler=lstLn[0].getPreprocessor.getMultiBlockTopology.getPoints
+            pointsHandler=prep.getMultiBlockTopology.getPoints
             lstP3d=[pointsHandler.get(l.getKPoints()[0]).getPos for l in lstLn]
             lstP3d.append(pointsHandler.get(lstLn[-1].getKPoints()[1]).getPos)
         elif self.lstPoints:
@@ -71,7 +79,7 @@ class EC3Beam(object):
         else:
             lmsg.warning('Beam insufficiently defined: list of lines or points  required' )
         #set of elements included in the EC3beam
-        s=lstLn[0].getPreprocessor.getSets.defSet(self.name+'Set')
+        s=prep.getSets.defSet(self.name+'Set')
         self.elemSet=s.getElements
         for l in lstLn:
             for e in l.getElements():
@@ -131,20 +139,19 @@ class EC3Beam(object):
              e.setProp('chiLT',chiLT) #Lateral torsional buckling reduction factor.
 
 
-    def installULSControlRecorder(self,recorderType,sectionClass= 1, chiLT=1.0):
+    def installULSControlRecorder(self,recorderType, chiLT=1.0):
         '''Install recorder for verification of ULS criterion.'''
-        preprocessor= self.line.getPreprocessor
-        nodes= preprocessor.getNodeHandler
-        domain= preprocessor.getDomain
+        prep= self.getPreprocessor()
+        nodes= prep.getNodeHandler
+        domain= prep.getDomain
         recorder= domain.newRecorder(recorderType,None)
-        elems= self.getElements()
         eleTags= list()
-        for e in elems:
+        for e in self.elemSet:
             eleTags.append(e.tag)
             e.setProp('ULSControlRecorder',recorder)
         idEleTags= xc.ID(eleTags)
         recorder.setElements(idEleTags)
-        self.ec3Shape.setupULSControlVars(elems,sectionClass,chiLT)
+        self.ec3Shape.setupULSControlVars(self.elemSet,self.sectionClass,chiLT)
         if(nodes.numDOFs==3):
             recorder.callbackRecord= EC3lsc.controlULSCriterion2D()
         else:
