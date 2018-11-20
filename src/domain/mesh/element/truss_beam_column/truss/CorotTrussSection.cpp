@@ -249,7 +249,7 @@ int XC::CorotTrussSection::commitState()
     return retVal;
   }
 
-//! @brief Revert the element to its last commited state.
+//! @brief Revert the element to its last committed state.
 int XC::CorotTrussSection::revertToLastCommit()
   {
     // Revert the material

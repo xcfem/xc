@@ -60,7 +60,7 @@ bool XC::NDMaterialPhysicalProperties::check_material_elast_plana(const std::str
       return true;
   }
 
-//! @brief returns commited strains at each Gauss point.
+//! @brief returns committed strains at each Gauss point.
 XC::Matrix XC::NDMaterialPhysicalProperties::getCommittedStrain(void) const
   {
     const size_t numberOfRows= theMaterial.size();
@@ -75,7 +75,7 @@ XC::Matrix XC::NDMaterialPhysicalProperties::getCommittedStrain(void) const
     return retval;
   }   
 
-//! @brief returns commited stresses at each Gauss point.
+//! @brief returns committed stresses at each Gauss point.
 XC::Matrix XC::NDMaterialPhysicalProperties::getCommittedStress(void) const
   {
     const size_t numberOfRows= theMaterial.size();

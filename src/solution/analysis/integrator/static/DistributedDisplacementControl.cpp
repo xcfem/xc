@@ -53,7 +53,7 @@
 // Created: 07/98
 //
 // Description: This file contains the class definition for XC::DistributedDisplacementControl.
-// DistributedDisplacementControl is an algorithmic class for perfroming a static analysis
+// DistributedDisplacementControl is an algorithmic class for performing a static analysis
 // using the arc length scheme, that is within a load step the follwing
 // constraint is enforced: dU^TdU + alpha^2*dLambda^2 = DistributedDisplacementControl^2
 // where dU is change in nodal displacements for step, dLambda is

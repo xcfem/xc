@@ -36,7 +36,7 @@ namespace XC {
 
 //! @ingroup Nod
 //
-//! @brief Vectors that store trial and commited values
+//! @brief Vectors that store trial and committed values
 //! of the node acceleration.
 class NodeAccelVectors: public NodeVectors
   {

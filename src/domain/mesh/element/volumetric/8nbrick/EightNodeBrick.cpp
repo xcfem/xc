@@ -869,7 +869,7 @@ void XC::EightNodeBrick::incremental_Update()
 
     // incremental_strain.reportshort("\n incremental_strain XC::BJtensor at GAUSS point\n");
                 //----   GPstress[where].reportshortpqtheta("\n stress at GAUSS point in stiffness_tensor2\n");
-                // intialize total strain with the strain at this Gauss point before
+                // initialize total strain with the strain at this Gauss point before
                 // adding this increments strains!
                 //                total_strain_at_GP.Initialize(*(GPstrain+where));
                 //total_strain_at_GP.reportshort("\n total_strain XC::BJtensor at GAUSS point BEFORE\n");

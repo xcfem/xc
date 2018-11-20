@@ -809,7 +809,7 @@ int XC::Domain::commit(void)
     return 0;
   }
 
-//! @brief Return the domain to its last commited state.
+//! @brief Return the domain to its last committed state.
 //!
 //! To return the domain to the state it was in at the last commit. The
 //! domain invokes revertToLastCommit() on all nodes and elements in

@@ -46,7 +46,7 @@ class BaseElasticSection: public PrismaticBarCrossSection
   protected:
     Vector eTrial; //!< section trial deformations
     Vector eInic; //!< section initial deformations
-    Vector eCommit; //!< section commited deformations
+    Vector eCommit; //!< section committed deformations
     
     int sendData(CommParameters &);
     int recvData(const CommParameters &);

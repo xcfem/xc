@@ -88,7 +88,7 @@ int XC::ParkAng::setTrial(const Vector &trialVector)
         // Trial step
         double TEnergy, TMaxDefo, TDamage;
 
-        // Commited state
+        // Committed state
         double CForce= CommitInfo[0];;
         double CDeformation= CommitInfo[1];;
         //double CUnloadingK= CommitInfo[2];;

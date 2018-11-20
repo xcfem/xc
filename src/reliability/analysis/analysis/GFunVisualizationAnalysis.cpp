@@ -267,7 +267,7 @@ XC::Vector XC::GFunVisualizationAnalysis::getCurrentAxes12Point(int i, int j)
       }
     else
       {
-        // Here the start point is actually given in the orginal space
+        // Here the start point is actually given in the original space
         thePoint = (*theStartPoint);
 
         // Transform it into the u-space if that's where the user wants to be

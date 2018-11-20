@@ -288,11 +288,11 @@ int XC::Bidirectional::commitState(void)
         return 0;
   }
 
-//! @brief Revert to the last commited state.
+//! @brief Revert to the last committed state.
 int XC::Bidirectional::revertToLastCommit(void)
   { return 0; }
 
-//! @brief Revert to the last commited state.
+//! @brief Revert to the last committed state.
 int XC::Bidirectional::revertToStart(void)
   {
     for (int i = 0; i < 2; i++)

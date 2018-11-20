@@ -152,7 +152,7 @@ int XC::Concrete02::setTrialStrain(double trialStrain, double strainRate)
   {
     const double ec0= getInitialTangent();
 
-    // retrieve commited history variables
+    // retrieve committed history variables
     hstv.ecmin= hstvP.ecmin;
     hstv.dept= hstvP.dept;
 

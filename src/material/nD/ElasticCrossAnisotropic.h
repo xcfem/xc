@@ -70,7 +70,7 @@ class ElasticCrossAnisotropic : public NDMaterial
     static Vector sigma; //!< Stress vector ... class-wide for returns
     static Matrix D; //!< Elastic constants
     Vector Tepsilon; //!< Trial strain vector
-    Vector Cepsilon; //!< Commited strains
+    Vector Cepsilon; //!< Committed strains
 
     Tensor Dt; //!< Elastic constants tensor
 //Tensor Dt_commit; //!< last-step Elastic constants tensor

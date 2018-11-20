@@ -42,13 +42,13 @@ class FEM_ObjectBroker;
 
 //! @ingroup Nod
 //
-//! @brief Vectores to store trial and commited
+//! @brief Vectores to store trial and committed
 //! values of node displacement, velocity, etc.
 class NodeVectors: public CommandEntity, public MovableObject
   {
   protected:
     size_t numVectors; //!< number of vectors.
-    Vector *commitData; //!< commited quantities
+    Vector *commitData; //!< committed quantities
     Vector *trialData; //!< trial quantities
     
     Vector values; //!< double array holding the displacement/velocity/acceleration.

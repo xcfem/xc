@@ -48,13 +48,14 @@ b= xB-xD
 # Warning!. We change the sign of the
 # angle to make it equal to that in
 # the example (Thesis. Annexe 14. page 235).
-gammaD= -rough_calculations.masonryVault.calcGamma(f,j,k,r,xD)
-hA= rough_calculations.masonryVault.yAxis(f,j,k,r,xA)
-hC= rough_calculations.masonryVault.yAxis(f,j,k,r,xC)
-hD= rough_calculations.masonryVault.yAxis(f,j,k,r,xD)
-hB= rough_calculations.masonryVault.yAxis(f,j,k,r,xB)
+archGeom= rough_calculations.masonryVault.archGeometry([f,j,k,r],[xA,xC,xD,xB])
+gammaD= -archGeom.calcGamma(xD)
+hA= archGeom.yAxis(xA)
+hC= archGeom.yAxis(xC)
+hD= archGeom.yAxis(xD)
+hB= archGeom.yAxis(xB)
 LR= xB-xA
-hHalfL= rough_calculations.masonryVault.yAxis(f,j,k,r,L/2)
+hHalfL= archGeom.yAxis(L/2)
 
 #Filling characteristics
 angPhi= math.radians(30)
@@ -71,9 +72,9 @@ qrep= 0.005e6 # Charge uniformément repartie due au trafic (Pa).
 
 
 # Loads
-eta= v*(PPS*hS*LR+PPR*(hR*LR+rough_calculations.masonryVault.aux1(f,j,k,r,xB,xA)))
-phi= v*(PPS*hS*a+PPR*(hR*a+rough_calculations.masonryVault.aux1(f,j,k,r,xC,xA)))
-psi= v*(PPS*hS*b+PPR*(hR*b+rough_calculations.masonryVault.aux1(f,j,k,r,xB,xD)))
+eta= v*(PPS*hS*LR+PPR*(hR*LR+archGeom.aux1(xB,xA)))
+phi= v*(PPS*hS*a+PPR*(hR*a+archGeom.aux1(xC,xA)))
+psi= v*(PPS*hS*b+PPR*(hR*b+archGeom.aux1(xB,xD)))
 etaW= v*(PPS*hS*pow(LR,2)/2+PPR*(hR*pow(LR,2)/2-f*pow(xB,6)/30-j*pow(xB,5)/20-k*pow(xB,4)/12-r*pow(xB,3)/6-f*pow(xA,6)/6-j*pow(xA,5)/5+f*pow(xA,5)*xB/5-k*pow(xA,4)/4+j*pow(xA,4)*xB/4-r*pow(xA,3)/3+k*pow(xA,3)*xB/3+r*pow(xA,2)*xB/2))
 phiS= v*(PPS*hS*pow(a,2)/2+PPR*(hR*pow(a,2)/2-f*pow(xC,6)/30-j*pow(xC,5)/20-k*pow(xC,4)/12-r*pow(xC,3)/6-f*pow(xA,6)/6-j*pow(xA,5)/5+f*pow(xA,5)*xC/5-k*pow(xA,4)/4+j*pow(xA,4)*xC/4-r*pow(xA,3)/3+k*pow(xA,3)*xC/3+r*pow(xA,2)*xC/2))
 psiT= v*(PPS*hS*pow(b,2)/2+PPR*(hR*pow(b,2)/2-f*pow(xD,6)/30-j*pow(xD,5)/20-k*pow(xD,4)/12-r*pow(xD,3)/6-f*pow(xB,6)/6-j*pow(xB,5)/5+f*pow(xB,5)*xD/5-k*pow(xB,4)/4+j*pow(xB,4)*xD/4-r*pow(xB,3)/3+k*pow(xB,3)*xD/3+r*pow(xB,2)*xD/2))

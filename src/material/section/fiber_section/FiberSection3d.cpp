@@ -127,7 +127,7 @@ const XC::ResponseId &XC::FiberSection3d::getType(void) const
 int XC::FiberSection3d::getOrder(void) const
   { return 3; }
 
-//! @brief Returns to the last commited state.
+//! @brief Returns to the last committed state.
 int XC::FiberSection3d::revertToLastCommit(void)
   {
     FiberSection3dBase::revertToLastCommit();

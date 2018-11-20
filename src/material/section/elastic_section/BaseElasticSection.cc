@@ -49,7 +49,7 @@ int XC::BaseElasticSection::commitState(void)
     return 0;
   }
 
-//! @brief Revert to the last commited state. 
+//! @brief Revert to the last committed state. 
 int XC::BaseElasticSection::revertToLastCommit(void)
   {
     eTrial= eCommit;

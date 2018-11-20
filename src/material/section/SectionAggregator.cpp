@@ -537,7 +537,7 @@ int XC::SectionAggregator::commitState(void)
     return err;
   }
 
-//! @brief Returns the material to the las commited state.
+//! @brief Returns the material to the las committed state.
 int XC::SectionAggregator::revertToLastCommit(void)
   {
     int err= 0;

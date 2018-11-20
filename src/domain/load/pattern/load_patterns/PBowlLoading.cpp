@@ -792,7 +792,7 @@ XC::PBowlLoading::CompPBLoads()
   Vector *udd_e = new Vector(NIE*NDOF);
 
 
-  // intialize the F()
+  // initialize the F()
   for ( i=0;i<cols; i++)
       for ( j=0;j<thetimeSteps; j++)
          (*F)(i,j)=0;

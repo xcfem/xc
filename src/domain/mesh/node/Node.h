@@ -115,9 +115,9 @@ class Node: public MeshComponent
     DOF_Group *theDOF_GroupPtr; //!< pointer to associated DOF_Group
     Vector Crd; //!< original nodal coords
     
-    NodeDispVectors disp; //! Displacement vectors (commited,trial,...)
-    NodeVelVectors vel; //! Velocity vectors (commited,trial,...)
-    NodeAccelVectors accel; //! Acceleration vectors (commited,trial,...)
+    NodeDispVectors disp; //! Displacement vectors (committed,trial,...)
+    NodeVelVectors vel; //! Velocity vectors (committed,trial,...)
+    NodeAccelVectors accel; //! Acceleration vectors (committed,trial,...)
 
     Matrix R; //!< nodal (modal?) participation matrix
     Matrix mass; //!< mass matrix

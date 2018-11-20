@@ -152,7 +152,7 @@ void XC::ReinforcingSteel::updateHardeningLoactionParams()
   // ultimate stress in natural stress-strain
   fsup=Esup-(esup-eshp)*Esup;
 
-  // strain hardedned slope, yield plateu slope, and intersect
+  // strain hardedned slope, yield plateau slope, and intersect
   Eshp=Esh*pow(1.0+eshLoc,2.0)+fshp - Esup;
         Eypp=(fshp-fyp)/(eshp-eyp);
         fint= fyp-Eypp*eyp;
@@ -257,7 +257,7 @@ double XC::ReinforcingSteel::getTangent(void) const
 double XC::ReinforcingSteel::getInitialTangent(void) const
   { return Esp; }
 
-/***************** path dependent bahavior methods ***********/
+/***************** path dependent behavior methods ***********/
 int XC::ReinforcingSteel::commitState(void)
   {
 #ifdef HelpDebugMat
@@ -403,7 +403,7 @@ int XC::ReinforcingSteel::sendData(CommParameters &cp)
     // Strength degradation parameters
     res+= cp.sendVector(T_ePlastic,getDbTagData(),CommMetaData(2));
     res+= cp.sendVector(C_ePlastic,getDbTagData(),CommMetaData(3));
-    // Converged Menegotto-Pinto Equation paramenters
+    // Converged Menegotto-Pinto Equation parameters
     res+= cp.sendVector(CR,getDbTagData(),CommMetaData(4));
     res+= cp.sendVector(Cfch,getDbTagData(),CommMetaData(5));
     res+= cp.sendVector(CQ,getDbTagData(),CommMetaData(6));
@@ -434,7 +434,7 @@ int XC::ReinforcingSteel::sendData(CommParameters &cp)
     // Menegotto-Pinto Calibration Constants
     res+= cp.sendDoubles(RC1,RC2,RC3,getDbTagData(),CommMetaData(22));
 
-    // Menegotto-Pinto Equation paramenters
+    // Menegotto-Pinto Equation parameters
     res+= cp.sendDoubles(TR,Tfch,TQ,TEsec,Tea,Tfa,getDbTagData(),CommMetaData(23));
     res+= cp.sendDoubles(TEa,Teb,Tfb,TEb,getDbTagData(),CommMetaData(24));
 
@@ -460,7 +460,7 @@ int XC::ReinforcingSteel::recvData(const CommParameters &cp)
     // Strength degradation parameters
     res+= cp.receiveVector(T_ePlastic,getDbTagData(),CommMetaData(2));
     res+= cp.receiveVector(C_ePlastic,getDbTagData(),CommMetaData(3));
-    // Converged Menegotto-Pinto Equation paramenters
+    // Converged Menegotto-Pinto Equation parameters
     res+= cp.receiveVector(CR,getDbTagData(),CommMetaData(4));
     res+= cp.receiveVector(Cfch,getDbTagData(),CommMetaData(5));
     res+= cp.receiveVector(CQ,getDbTagData(),CommMetaData(6));
@@ -491,7 +491,7 @@ int XC::ReinforcingSteel::recvData(const CommParameters &cp)
     // Menegotto-Pinto Calibration Constants
     res+= cp.receiveDoubles(RC1,RC2,RC3,getDbTagData(),CommMetaData(22));
 
-    // Menegotto-Pinto Equation paramenters
+    // Menegotto-Pinto Equation parameters
     res+= cp.receiveDoubles(TR,Tfch,TQ,TEsec,Tea,Tfa,getDbTagData(),CommMetaData(23));
     res+= cp.receiveDoubles(TEa,Teb,Tfb,TEb,getDbTagData(),CommMetaData(24));
 
@@ -994,7 +994,7 @@ XC::ReinforcingSteel::Rule1(int res)
   return res;
 }
 
-// Rule 2: Compresion Envelope Branch
+// Rule 2: Compression Envelope Branch
 int
 XC::ReinforcingSteel::Rule2(int res)
 {
@@ -1098,7 +1098,8 @@ XC::ReinforcingSteel::Rule2(int res)
 int
 XC::ReinforcingSteel::Rule3(int res)
 {
-  if (trial.getStrain()-converged.getStrain() > 0.0) {        // reversal from brance
+  if(trial.getStrain()-converged.getStrain() > 0.0)
+    {        // reversal from branch
         if(Temin > converged.getStrain()-Teo_n) Temin=converged.getStrain()-Teo_n;
 
         Tea=converged.getStrain();

@@ -107,7 +107,7 @@ const XC::Vector &XC::NodeVectors::getData(const size_t &nDOF) const
     return *commitData;
   }
   
-//! @brief Returns commited values.
+//! @brief Returns committed values.
 const XC::Vector &XC::NodeVectors::getCommitData(void) const
   {
     assert(commitData);
@@ -219,7 +219,7 @@ int XC::NodeVectors::commitState(const size_t &nDOF)
   }
 
 
-//! @brief Returns the vectors its last commited value.
+//! @brief Returns the vectors its last committed value.
 int XC::NodeVectors::revertToLastCommit(const size_t &nDOF)
   {
     // check data exists, if does set trial = last commit, incr = 0
@@ -332,7 +332,7 @@ int XC::NodeVectors::recvData(const CommParameters &cp)
 
         // set the trial quantities equal to committed
         for(int i=0; i<nDOF; i++)
-          values[i]= values[i+nDOF]; // set trial equal commited
+          values[i]= values[i+nDOF]; // set trial equal committed
       }
     else if(commitData)
       {

@@ -205,7 +205,7 @@ int XC::ShellCorotCrdTransf3d::commitState(void)
   }
 
 
-//! @brief Returns to the last commited state.
+//! @brief Returns to the last committed state.
 int XC::ShellCorotCrdTransf3d::revertToLastCommit(void)
   { 
     g1trial= g1commit;

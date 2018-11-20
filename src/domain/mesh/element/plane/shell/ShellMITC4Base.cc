@@ -745,7 +745,7 @@ int XC::ShellMITC4Base::commitState(void)
     return retval;
   }
 
-//! @brief Returns to the last commited state.
+//! @brief Returns to the last committed state.
 int XC::ShellMITC4Base::revertToLastCommit(void)
   {
     int retval= theCoordTransf->revertToLastCommit();

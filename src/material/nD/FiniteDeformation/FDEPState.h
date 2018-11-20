@@ -69,11 +69,11 @@ class FDEPState
     straintensor StrainLikeKiVar;          // Tensor strain like evolution variable
 
 
-    straintensor CommitedFpInVar;          // Plastic F;
-    double CommitedStressLikeInVar;        // Scalar stress like evolution variable
-    double CommitedStrainLikeInVar;        // Scalar strain like evolution variable
-    stresstensor CommitedStressLikeKiVar;  // Tensor stress like evolution variable
-    straintensor CommitedStrainLikeKiVar;  // Tensor strain like evolution variable
+    straintensor CommittedFpInVar;          // Plastic F;
+    double CommittedStressLikeInVar;        // Scalar stress like evolution variable
+    double CommittedStrainLikeInVar;        // Scalar strain like evolution variable
+    stresstensor CommittedStressLikeKiVar;  // Tensor stress like evolution variable
+    straintensor CommittedStrainLikeKiVar;  // Tensor strain like evolution variable
   public:
       FDEPState();
       FDEPState ( const straintensor& xFpInVar,
@@ -81,11 +81,11 @@ class FDEPState
               double xStrainLikeInVar,
     	  const stresstensor& xStressLikeKiVar,
     	  const straintensor& xStrainLikeKiVar,
-    	  const straintensor& xCommitedFpInVar,
-              double xCommitedStressLikeInVar,
-              double xCommitedStrainLikeInVar,
-              const stresstensor& xCommitedStressLikeKiVar,
-              const straintensor& xCommitedStrainLikeKiVar);	
+    	  const straintensor& xCommittedFpInVar,
+              double xCommittedStressLikeInVar,
+              double xCommittedStrainLikeInVar,
+              const stresstensor& xCommittedStressLikeKiVar,
+              const straintensor& xCommittedStrainLikeKiVar);	
     FDEPState *newObj();
     FDEPState( const FDEPState& fdeps );
     
@@ -95,11 +95,11 @@ class FDEPState
     stresstensor getStressLikeKiVar() const;
     straintensor getStrainLikeKiVar() const;
     
-    straintensor getCommitedFpInVar() const;
-    double getCommitedStressLikeInVar() const;
-    double getCommitedStrainLikeInVar() const;
-    stresstensor getCommitedStressLikeKiVar() const;
-    straintensor getCommitedStrainLikeKiVar() const;
+    straintensor getCommittedFpInVar() const;
+    double getCommittedStressLikeInVar() const;
+    double getCommittedStrainLikeInVar() const;
+    stresstensor getCommittedStressLikeKiVar() const;
+    straintensor getCommittedStrainLikeKiVar() const;
     
     void setFpInVar(const straintensor& xFpInVar);
     void setStressLikeInVar(double xStressLikeInVar);
@@ -107,11 +107,11 @@ class FDEPState
     void setStressLikeKiVar(const stresstensor& xStressLikeKiVar);
     void setStrainLikeKiVar(const straintensor& xStrainLikeKiVar);
     
-    void setCommitedFpInVar(const straintensor& xCommitedFpInVar);
-    void setCommitedStressLikeInVar(double xCommitedStressLikeInVar);
-    void setCommitedStrainLikeInVar(double xCommitedStrainLikeInVar);
-    void setCommitedStressLikeKiVar(const stresstensor& xCommitedStressLikeKiVar);
-    void setCommitedStrainLikeKiVar(const straintensor& xCommitedStrainLikeKiVar);
+    void setCommittedFpInVar(const straintensor& xCommittedFpInVar);
+    void setCommittedStressLikeInVar(double xCommittedStressLikeInVar);
+    void setCommittedStrainLikeInVar(double xCommittedStrainLikeInVar);
+    void setCommittedStressLikeKiVar(const stresstensor& xCommittedStressLikeKiVar);
+    void setCommittedStrainLikeKiVar(const straintensor& xCommittedStrainLikeKiVar);
 
     int commitState(void) ;
     int revertToLastCommit(void) ;

@@ -183,9 +183,9 @@ void XC::BeamColumnJoint2d::setDomain(Domain *theDomain)
 
 int XC::BeamColumnJoint2d::commitState(void)
   {
-    // store commited external nodal displacements
+    // store committed external nodal displacements
     Uecommit = UeprCommit;
-    // store commited internal nodal displacements
+    // store committed internal nodal displacements
     UeIntcommit = UeprIntCommit;
 
     // store material history data.
@@ -214,7 +214,7 @@ int XC::BeamColumnJoint2d::update(void)
                 Vector Ue(16);
                 Ue.Zero();
 
-        // determine commited displacements given trial displacements
+        // determine committed displacements given trial displacements
                 getGlobalDispls(Ue);
 
                 // update displacements for the external nodes

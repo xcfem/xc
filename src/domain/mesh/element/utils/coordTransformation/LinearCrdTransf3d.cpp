@@ -98,7 +98,7 @@ int XC::LinearCrdTransf3d::commitState(void)
   { return 0; }
 
 
-//! @brief Returns to the last commited state.
+//! @brief Returns to the last committed state.
 int XC::LinearCrdTransf3d::revertToLastCommit(void)
   { return 0; }
 

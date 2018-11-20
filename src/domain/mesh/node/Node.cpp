@@ -1106,7 +1106,7 @@ int XC::Node::commitState(void)
   }
 
 
-//! @brief Returns to the last commited state.
+//! @brief Returns to the last committed state.
 //!
 //! Causes the node to set the trial nodal displacements, velocities and
 //! accelerations to be equal to the current committed displacements,

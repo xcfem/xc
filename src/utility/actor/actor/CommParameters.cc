@@ -139,7 +139,7 @@ XC::ID *XC::CommParameters::receiveIDPtr(ID* &ptr,DbTagData &dt, const ArrayComm
             mov.setDbTag(dt.getDbTagDataPos(meta.getPosDbTag()));
             int res= mov.recvSelf(*this);
             if(res < 0)
-              std::cerr << "CommParamenters::" << __FUNCTION__ << "; failed to receive ID data\n";
+              std::cerr << "CommParameters::" << __FUNCTION__ << "; failed to receive ID data\n";
             (*ptr)= static_cast<ID &>(mov);
           }
       }
@@ -244,7 +244,7 @@ XC::Matrix *XC::CommParameters::receiveMatrixPtr(Matrix* &ptr,DbTagData &dt, con
             mov.setDbTag(dt.getDbTagDataPos(meta.getPosDbTag()));
             int res= mov.recvSelf(*this);
             if(res < 0)
-              std::cerr << "CommParamenters::" << __FUNCTION__ << "; failed to receive ID data\n";
+              std::cerr << "CommParameters::" << __FUNCTION__ << "; failed to receive ID data\n";
             (*ptr)= static_cast<Matrix &>(mov);
           }
       }
@@ -499,7 +499,7 @@ XC::Vector *XC::CommParameters::receiveVectorPtr(Vector* &ptr,DbTagData &dt, con
             MovableVector mov(*ptr);
             int res= receiveMovable(mov,dt,meta);
             if(res < 0)
-              std::cerr << "CommParamenters::" << __FUNCTION__ << "; failed to receive ID data\n";
+              std::cerr << "CommParameters::" << __FUNCTION__ << "; failed to receive ID data\n";
             (*ptr)= static_cast<Vector &>(mov);
           }
       }
@@ -540,7 +540,7 @@ double *XC::CommParameters::receiveDoublePtr(double* &ptr,DbTagData &dt, const A
             MovableVector v(meta.getSize());
             int res= receiveMovable(v,dt,meta);
             if(res < 0)
-              std::cerr << "CommParamenters::" << __FUNCTION__ << "; failed to receive vector data\n";
+              std::cerr << "CommParameters::" << __FUNCTION__ << "; failed to receive vector data\n";
             for(size_t i=0;i<meta.getSize();i++)
               ptr[i]= v[i];
           }
@@ -610,7 +610,7 @@ int XC::CommParameters::receiveDouble(double &db1,DbTagData &dt, const CommMetaD
     MovableVector v(1);
     int res= receiveMovable(v,dt,meta);
     if(res < 0)
-      std::cerr << "CommParamenters::" << __FUNCTION__ << "; failed to receive vector data\n";
+      std::cerr << "CommParameters::" << __FUNCTION__ << "; failed to receive vector data\n";
     db1= v[0];
     return res;
   }
@@ -622,7 +622,7 @@ int XC::CommParameters::receiveDoubles(double &db1,double &db2,DbTagData &dt, co
     MovableVector v(2);
     int res= receiveMovable(v,dt,meta);
     if(res < 0)
-      std::cerr << "CommParamenters::" << __FUNCTION__ << "; failed to receive vector data\n";
+      std::cerr << "CommParameters::" << __FUNCTION__ << "; failed to receive vector data\n";
     db1= v[0]; db2= v[1];
     return res;
   }
@@ -634,7 +634,7 @@ int XC::CommParameters::receiveDoubles(double &db1,double &db2,double &db3,DbTag
     MovableVector v(3);
     int res= receiveMovable(v,dt,meta);
     if(res < 0)
-      std::cerr << "CommParamenters::" << __FUNCTION__ << "; failed to receive vector data\n";
+      std::cerr << "CommParameters::" << __FUNCTION__ << "; failed to receive vector data\n";
     db1= v[0]; db2= v[1]; db3= v[2];
     return res;
   }
@@ -647,7 +647,7 @@ int XC::CommParameters::receiveDoubles(double &db1,double &db2,double &db3,doubl
     MovableVector v(4);
     int res= receiveMovable(v,dt,meta);
     if(res < 0)
-      std::cerr << "CommParamenters::" << __FUNCTION__ << "; failed to receive vector data\n";
+      std::cerr << "CommParameters::" << __FUNCTION__ << "; failed to receive vector data\n";
     db1= v[0]; db2= v[1]; db3= v[2]; db4= v[3];
     return res;
   }
@@ -659,7 +659,7 @@ int XC::CommParameters::receiveDoubles(double &db1,double &db2,double &db3,doubl
     MovableVector v(5);
     int res= receiveMovable(v,dt,meta);
     if(res < 0)
-      std::cerr << "CommParamenters::" << __FUNCTION__ << "; failed to receive vector data\n";
+      std::cerr << "CommParameters::" << __FUNCTION__ << "; failed to receive vector data\n";
     db1= v[0]; db2= v[1]; db3= v[2]; db4= v[3]; db5= v[4];
     return res;
   }
@@ -671,7 +671,7 @@ int XC::CommParameters::receiveDoubles(double &db1,double &db2,double &db3,doubl
     MovableVector v(6);
     int res= receiveMovable(v,dt,meta);
     if(res < 0)
-      std::cerr << "CommParamenters::" << __FUNCTION__ << "; failed to receive vector data\n";
+      std::cerr << "CommParameters::" << __FUNCTION__ << "; failed to receive vector data\n";
     db1= v[0]; db2= v[1]; db3= v[2]; db4= v[3]; db5= v[4]; db6= v[5];
     return res;
   }
@@ -744,7 +744,7 @@ int XC::CommParameters::receiveBools(bool &b1,bool &b2,DbTagData &dt, const Comm
     MovableID v(2);
     int res= receiveMovable(v,dt,meta);
     if(res < 0)
-      std::cerr << "CommParamenters::" << __FUNCTION__ << "; failed to receive vector data\n";
+      std::cerr << "CommParameters::" << __FUNCTION__ << "; failed to receive vector data\n";
     b1= v[0]; b2= v[1];
     return res;
   }
@@ -756,7 +756,7 @@ int XC::CommParameters::receiveBools(bool &b1,bool &b2,bool &b3,DbTagData &dt, c
     MovableID v(3);
     int res= receiveMovable(v,dt,meta);
     if(res < 0)
-      std::cerr << "CommParamenters::" << __FUNCTION__ << "; failed to receive vector data\n";
+      std::cerr << "CommParameters::" << __FUNCTION__ << "; failed to receive vector data\n";
     b1= v[0]; b2= v[1]; b3= v[2];
     return res;
   }
@@ -769,7 +769,7 @@ int XC::CommParameters::receiveBools(bool &b1,bool &b2,bool &b3,bool &b4,DbTagDa
     MovableID v(4);
     int res= receiveMovable(v,dt,meta);
     if(res < 0)
-      std::cerr << "CommParamenters::" << __FUNCTION__ << "; failed to receive vector data\n";
+      std::cerr << "CommParameters::" << __FUNCTION__ << "; failed to receive vector data\n";
     b1= v[0]; b2= v[1]; b3= v[2]; b4= v[3];
     return res;
   }
@@ -781,7 +781,7 @@ int XC::CommParameters::receiveBools(bool &b1,bool &b2,bool &b3,bool &b4,bool &b
     MovableID v(5);
     int res= receiveMovable(v,dt,meta);
     if(res < 0)
-      std::cerr << "CommParamenters::" << __FUNCTION__ << "; failed to receive vector data\n";
+      std::cerr << "CommParameters::" << __FUNCTION__ << "; failed to receive vector data\n";
     b1= v[0]; b2= v[1]; b3= v[2]; b4= v[3]; b5= v[4];
     return res;
   }
@@ -793,7 +793,7 @@ int XC::CommParameters::receiveBools(bool &b1,bool &b2,bool &b3,bool &b4,bool &b
     MovableID v(6);
     int res= receiveMovable(v,dt,meta);
     if(res < 0)
-      std::cerr << "CommParamenters::" << __FUNCTION__ << "; failed to receive vector data\n";
+      std::cerr << "CommParameters::" << __FUNCTION__ << "; failed to receive vector data\n";
     b1= v[0]; b2= v[1]; b3= v[2]; b4= v[3]; b5= v[4]; b6= v[5];
     return res;
   }
@@ -859,7 +859,7 @@ int XC::CommParameters::receiveInt(int &i,DbTagData &dt, const CommMetaData &met
     MovableID v(1);
     int res= receiveMovable(v,dt,meta);
     if(res < 0)
-      std::cerr << "CommParamenters::" << __FUNCTION__ << "; failed to receive vector data\n";
+      std::cerr << "CommParameters::" << __FUNCTION__ << "; failed to receive vector data\n";
     i= v[0];
     return res;
   }
@@ -871,7 +871,7 @@ int XC::CommParameters::receiveInts(int &i1,int &i2,DbTagData &dt, const CommMet
     MovableID v(2);
     int res= receiveMovable(v,dt,meta);
     if(res < 0)
-      std::cerr << "CommParamenters::" << __FUNCTION__ << "; failed to receive vector data\n";
+      std::cerr << "CommParameters::" << __FUNCTION__ << "; failed to receive vector data\n";
     i1= v[0]; i2= v[1];
     return res;
   }
@@ -883,7 +883,7 @@ int XC::CommParameters::receiveInts(int &i1,int &i2,int &i3,DbTagData &dt, const
     MovableID v(3);
     int res= receiveMovable(v,dt,meta);
     if(res < 0)
-      std::cerr << "CommParamenters::" << __FUNCTION__ << "; failed to receive vector data\n";
+      std::cerr << "CommParameters::" << __FUNCTION__ << "; failed to receive vector data\n";
     i1= v[0]; i2= v[1]; i3= v[2];
     return res;
   }
@@ -896,7 +896,7 @@ int XC::CommParameters::receiveInts(int &i1,int &i2,int &i3,int &i4,DbTagData &d
     MovableID v(4);
     int res= receiveMovable(v,dt,meta);
     if(res < 0)
-      std::cerr << "CommParamenters::" << __FUNCTION__ << "; failed to receive vector data\n";
+      std::cerr << "CommParameters::" << __FUNCTION__ << "; failed to receive vector data\n";
     i1= v[0]; i2= v[1]; i3= v[2]; i4= v[3];
     return res;
   }
@@ -908,7 +908,7 @@ int XC::CommParameters::receiveInts(int &i1,int &i2,int &i3,int &i4,int &i5,DbTa
     MovableID v(5);
     int res= receiveMovable(v,dt,meta);
     if(res < 0)
-      std::cerr << "CommParamenters::" << __FUNCTION__ << "; failed to receive vector data\n";
+      std::cerr << "CommParameters::" << __FUNCTION__ << "; failed to receive vector data\n";
     i1= v[0]; i2= v[1]; i3= v[2]; i4= v[3]; i5= v[4];
     return res;
   }
@@ -920,7 +920,7 @@ int XC::CommParameters::receiveInts(int &i1,int &i2,int &i3,int &i4,int &i5,int 
     MovableID v(6);
     int res= receiveMovable(v,dt,meta);
     if(res < 0)
-      std::cerr << "CommParamenters::" << __FUNCTION__ << "; failed to receive vector data\n";
+      std::cerr << "CommParameters::" << __FUNCTION__ << "; failed to receive vector data\n";
     i1= v[0]; i2= v[1]; i3= v[2]; i4= v[3]; i5= v[4]; i6= v[5];
     return res;
   }
@@ -992,7 +992,7 @@ size_t XC::CommParameters::receiveSzts(size_t &i1,size_t &i2,DbTagData &dt, cons
     MovableID v(2);
     int res= receiveMovable(v,dt,meta);
     if(res < 0)
-      std::cerr << "CommParamenters::" << __FUNCTION__ << "; failed to receive vector data\n";
+      std::cerr << "CommParameters::" << __FUNCTION__ << "; failed to receive vector data\n";
     i1= v[0]; i2= v[1];
     return res;
   }
@@ -1004,7 +1004,7 @@ size_t XC::CommParameters::receiveSzts(size_t &i1,size_t &i2,size_t &i3,DbTagDat
     MovableID v(3);
     int res= receiveMovable(v,dt,meta);
     if(res < 0)
-      std::cerr << "CommParamenters::" << __FUNCTION__ << "; failed to receive vector data\n";
+      std::cerr << "CommParameters::" << __FUNCTION__ << "; failed to receive vector data\n";
     i1= v[0]; i2= v[1]; i3= v[2];
     return res;
   }
@@ -1017,7 +1017,7 @@ size_t XC::CommParameters::receiveSzts(size_t &i1,size_t &i2,size_t &i3,size_t &
     MovableID v(4);
     int res= receiveMovable(v,dt,meta);
     if(res < 0)
-      std::cerr << "CommParamenters::" << __FUNCTION__ << "; failed to receive vector data\n";
+      std::cerr << "CommParameters::" << __FUNCTION__ << "; failed to receive vector data\n";
     i1= v[0]; i2= v[1]; i3= v[2]; i4= v[3];
     return res;
   }
@@ -1029,7 +1029,7 @@ size_t XC::CommParameters::receiveSzts(size_t &i1,size_t &i2,size_t &i3,size_t &
     MovableID v(5);
     int res= receiveMovable(v,dt,meta);
     if(res < 0)
-      std::cerr << "CommParamenters::" << __FUNCTION__ << "; failed to receive vector data\n";
+      std::cerr << "CommParameters::" << __FUNCTION__ << "; failed to receive vector data\n";
     i1= v[0]; i2= v[1]; i3= v[2]; i4= v[3]; i5= v[4];
     return res;
   }
@@ -1041,7 +1041,7 @@ size_t XC::CommParameters::receiveSzts(size_t &i1,size_t &i2,size_t &i3,size_t &
     MovableID v(6);
     int res= receiveMovable(v,dt,meta);
     if(res < 0)
-      std::cerr << "CommParamenters::" << __FUNCTION__
+      std::cerr << "CommParameters::" << __FUNCTION__
 		<< "; failed to receive vector data\n";
     i1= v[0]; i2= v[1]; i3= v[2]; i4= v[3]; i5= v[4]; i6= v[5];
     return res;
@@ -1078,7 +1078,7 @@ int XC::CommParameters::receiveMovable(MovableObject &mv,DbTagData &dt, const Co
     mv.setDbTag(dt.getDbTagDataPos(meta.getPosDbTag()));
     int res= mv.recvSelf(*this);
     if(res < 0)
-      std::cerr << "CommParamenters::" << __FUNCTION__
+      std::cerr << "CommParameters::" << __FUNCTION__
 		<< "; failed to receive movable data\n";
     return res;
   }

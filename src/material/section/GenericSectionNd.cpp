@@ -208,7 +208,7 @@ const XC::Matrix &XC::GenericSectionNd::getInitialTangent(void) const
 int XC::GenericSectionNd::commitState()
   { return theModel->commitState(); }
 
-//! @brief Returns the material to its last commited state.
+//! @brief Returns the material to its last committed state.
 int XC::GenericSectionNd::revertToLastCommit()
   { return theModel->revertToLastCommit(); }
 

@@ -1332,7 +1332,7 @@ int XC::EPState::commitState ()
 //================================================================================
 int XC::EPState::revertToLastCommit () {
       int err = 0;
-      // revert the variables state  to last commited
+      // revert the variables state  to last committed
       CurrentStress   = Stress_commit;
       CurrentStrain   = Strain_commit;
       Eep = Eep_commit;

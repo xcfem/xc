@@ -160,7 +160,7 @@ int XC::MembranePlateFiberSection::commitState(void)
 
 
 
-//! @brief Revert to last commited state.
+//! @brief Revert to last committed state.
 int XC::MembranePlateFiberSection::revertToLastCommit(void)
   {
     int success = 0;

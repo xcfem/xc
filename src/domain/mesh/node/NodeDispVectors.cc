@@ -223,7 +223,7 @@ int XC::NodeDispVectors::commitState(const size_t &nDOF)
     return 0;
   }
 
-//! @brief Returns the vectors to its last commited value.
+//! @brief Returns the vectors to its last committed value.
 //!
 //! @param nDOF: number of degrees of freedom.
 int XC::NodeDispVectors::revertToLastCommit(const size_t &nDOF)

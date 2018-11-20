@@ -263,7 +263,7 @@ int XC::Spring::commitState(void)
     return retVal;
   }
 
-//! @brief Returns to the last commited state.
+//! @brief Returns to the last committed state.
 int XC::Spring::revertToLastCommit(void)
   { return theMaterial->revertToLastCommit(); }
 

@@ -166,7 +166,7 @@ const XC::ResponseId &XC::FiberSection2d::getType(void) const
 int XC::FiberSection2d::getOrder(void) const
   { return getType().Size(); }
 
-//! @brief Returns the section to its last commited state.
+//! @brief Returns the section to its last committed state.
 int XC::FiberSection2d::revertToLastCommit(void)
   {
     // Last committed section deformations

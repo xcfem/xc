@@ -252,7 +252,7 @@ XC::DamageModel *XC::Mehanny::getCopy(void) const
     theCopy->TrialNegPHC = TrialNegPHC;
     theCopy->TrialDamage = TrialDamage;
   
-    // Commited state
+    // Committed state
     theCopy->CommPlasticDefo = CommPlasticDefo;
     theCopy->CommDefoIncr= CommDefoIncr;
     theCopy->CommTempPDefo = CommTempPDefo;

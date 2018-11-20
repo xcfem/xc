@@ -53,7 +53,7 @@
 // Created: January 2002
 // Updated: September 2004
 //
-// Description: This file contains the class defination for 
+// Description: This file contains the class definition for 
 // bar-slip material. The file generates the 4 point envelope for both positive 
 // and negative loading and is basically a wrapper for the Pinching4 material at it's outset.
 // Updates: new damage analysis and user interface.
@@ -88,11 +88,11 @@ class BarSlipMaterial : public UniaxialMaterial
     // type of j to be used for beam top barslip it is "1" or it is "0" for beam bottom bar slip or column
     int type;
 
-    int damage; // type of damage in the material;
+    int damage; //!< type of damage in the material;
 
     // dimensions
-    double width;  // width of the member
-    double depth;  // depth of the member
+    double width;  //!< width of the member
+    double depth;  //!< depth of the member
 
     // material used at onset
 //	Pinching4Material* material;
@@ -104,22 +104,22 @@ class BarSlipMaterial : public UniaxialMaterial
     double fc;   // compressive strength of concrete
     
     // steel properties
-    double fy;    // yeild strength of steel
-    double Es;    // modulus of elasticity of steel
-    double fu;    // ultimate strength of steel
-    double Eh;    // modulus of hardening of steel
-    double db;    // reinforcing steel bar diameter
-    int nbars;  // no of reinforcing bars
+    double fy;    //!< yield strength of steel
+    double Es;    //!< modulus of elasticity of steel
+    double fu;    //!< ultimate strength of steel
+    double Eh;    //!< modulus of hardening of steel
+    double db;    //!< reinforcing steel bar diameter
+    int nbars;  //!< no of reinforcing bars
 
     // anchorage length
-    double ld;  // anchorage length of the reinforcing steel
+    double ld;  //!< anchorage length of the reinforcing steel
 
     	// bond strengths
-    double tauET;  // bond strength of steel that is elastic and carries tensile load
-    double tauYT;  // bond strength of steel that has yeilded in tension
-    double tauEC;  // bond strength of steel that is elastic and carries compression load
-    double tauYC;  // bond strength of steel that has yeilded in compression
-    double tauR;   // residual bond strength of steel
+    double tauET;  //!< bond strength of steel that is elastic and carries tensile load
+    double tauYT;  //!< bond strength of steel that has yeilded in tension
+    double tauEC;  //!< bond strength of steel that is elastic and carries compression load
+    double tauYC;  //!< bond strength of steel that has yeilded in compression
+    double tauR;   //!< residual bond strength of steel
 
     // unloading-reloading parameters 
     double rDispP; double rForceP; double uForceP;
@@ -137,7 +137,7 @@ class BarSlipMaterial : public UniaxialMaterial
     Matrix eN;
 
     //**************************************************************************
-    // Trial Set varables
+    // Trial Set variables
     double Tstrain; double Ttangent; double Tstress;
 
     // Converged Material History parameters

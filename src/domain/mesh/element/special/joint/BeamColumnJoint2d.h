@@ -52,7 +52,7 @@
 // Created: April 2002
 // Revised: August 2004
 //
-// Description: This file contains the class defination for beam-column joint.
+// Description: This file contains the class definition for beam-column joint.
 // This element is a 4 noded 12 dof (3 dof at each node) finite area super-element introduced by
 // Prof. Lowes and Arash. The element takes in 13 different material types in order to simulate
 // the inelastic action observed in a reinforced beam column joint.
@@ -102,8 +102,8 @@ class BeamColumnJoint2d : public ElemWithMaterial<4,BeamColumnJointPhysicalPrope
     double HgtFac; //!< distance in between the tension compression couple in the height direction 
     double WdtFac; //!< distance in between the tension compression couple in the width direction      
   
-    Vector Uecommit; //!< vector of external commited displacements
-    Vector UeIntcommit; //!< vector of internal commited displacements   
+    Vector Uecommit; //!< vector of external committed displacements
+    Vector UeIntcommit; //!< vector of internal committed displacements   
     Vector UeprCommit; //!< vector of previous external committed displacements
     Vector UeprIntCommit; //!< vector of previous internal committed displacements  
     Matrix BCJoint; //!< matrix describing relation between the component deformations and the external and internal deformations

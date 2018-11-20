@@ -55,7 +55,7 @@
 // Revision: A
 //
 // Description: This file contains the class definition for XC::BaseControl.
-// BaseControl is an algorithmic class for perfroming a static analysis
+// BaseControl is an algorithmic class for performing a static analysis
 // using a load control integration scheme.
 //
 // What: "@(#) BaseControl.h, revA"

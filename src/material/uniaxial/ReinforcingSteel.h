@@ -94,25 +94,25 @@ class ReinforcingSteel : public UniaxialMaterial
 
     // natural stress-strain variables
     double p;
-    double Esp;   // natural Elastic Modulus
-    double eshp;	// natural Hardening Strain
-    double fshp;  // natural Hardening Stress
-    double Eshp;  // natural Hardening Modulus
-    double esup;  // natural Strain at Peak Stress
-    double fsup;  // natural Peak Stress
-    double Esup;  // natural peak stress Modulus
-    double Eypp;  // natural Yield Plateu Modulus
-    double fint;  // natural Stress yield plateu intersect
-    double eyp;   // natural strain at yield
-    double fyp;   // natural yield stress
+    double Esp;   //!< natural Elastic Modulus
+    double eshp;  //!< natural Hardening Strain
+    double fshp;  //!< natural Hardening Stress
+    double Eshp;  //!< natural Hardening Modulus
+    double esup;  //!< natural Strain at Peak Stress
+    double fsup;  //!< natural Peak Stress
+    double Esup;  //!< natural peak stress Modulus
+    double Eypp;  //!< natural Yield Plateau Modulus
+    double fint;  //!< natural Stress yield plateau intersect
+    double eyp;   //!< natural strain at yield
+    double fyp;   //!< natural yield stress
 
-    double esh;   // engineering hardening strain (user input)
-    double Esh;   // engineering hardening slope (user input)
+    double esh;   //!< engineering hardening strain (user input)
+    double Esh;   //!< engineering hardening slope (user input)
 
-    double eshpa;	// Curve smoothing Parameters (at SH transition)
-    double Eshpb;	// These are used to eliminate a sudden discontinuity in stiffness
+    double eshpa; //!< Curve smoothing Parameters (at SH transition)
+    double Eshpb; //!< These are used to eliminate a sudden discontinuity in stiffness
 
-    double a1;    // Linear Hardening Constant (with relation to accumulated plastic strain)
+    double a1;    //!< Linear Hardening Constant (with relation to accumulated plastic strain)
     double hardLim;
 
     double THardFact;
@@ -121,7 +121,7 @@ class ReinforcingSteel : public UniaxialMaterial
     // Strength degradation parameters
     std::vector<double> T_ePlastic;
     std::vector<double> C_ePlastic;
-    //double Nbf;               // Cyclic Backbone factor used correct backbone proporsional to return strain
+    //double Nbf;               //!< Cyclic Backbone factor used correct backbone proporsional to return strain
     double TFatDamage;
     double CFatDamage;
     double LDratio;
@@ -136,7 +136,7 @@ class ReinforcingSteel : public UniaxialMaterial
     double RC2;
     double RC3;
 
-    // Menegotto-Pinto Equation paramenters
+    // Menegotto-Pinto Equation parameters
     double TR;
     double Tfch;
     double TQ;
@@ -152,7 +152,7 @@ class ReinforcingSteel : public UniaxialMaterial
     double rE1;
     double rE2;
 
-    // Converged Menegotto-Pinto Equation paramenters
+    // Converged Menegotto-Pinto Equation parameters
     std::vector<double> CR;
     std::vector<double> Cfch;
     std::vector<double> CQ;

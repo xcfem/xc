@@ -63,13 +63,13 @@ class NLForceBeamColumn3dBase: public BeamColumnWithSectionFDTrf3d
     Matrix kv; //!<stiffness matrix in the basic system 
     EsfBeamColumn3d Se; //!<element resisting forces in the basic system
 
-    Matrix kvcommit; //!<commited stiffness matrix in the basic system
-    EsfBeamColumn3d Secommit; //!<commited element end forces in the basic system
+    Matrix kvcommit; //!<committed stiffness matrix in the basic system
+    EsfBeamColumn3d Secommit; //!<committed element end forces in the basic system
 
     std::vector<Matrix> fs; //!<array of section flexibility matrices
     std::vector<Vector> vs; //!<array of section deformation vectors
     std::vector<Vector> Ssr; //!<array of section resisting force vectors
-    std::vector<Vector> vscommit; //!<array of commited section deformation vectors
+    std::vector<Vector> vscommit; //!<array of committed section deformation vectors
 
     Matrix sp; //!<Applied section forces due to element loads, 5 x nSections
     FVectorBeamColumn3d p0; //!<Reactions in the basic system due to element loads

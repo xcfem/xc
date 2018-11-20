@@ -210,7 +210,7 @@ int XC::BeamWithHinges2d::revertToLastCommit(void)
   {
     int err = 0;
 
-    // Revert the sections and then get their last commited
+    // Revert the sections and then get their last committed
     // deformations, stress resultants, and flexibilities
     for(int i = 0; i < 2; i++)
       {

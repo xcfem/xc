@@ -198,9 +198,9 @@ void XC::BeamColumnJoint3d::setDomain(Domain *theDomain)
 
 int XC::BeamColumnJoint3d::commitState(void)
   {
-    // store commited external nodal displacements
+    // store committed external nodal displacements
     Uecommit = UeprCommit;
-    // store commited internal nodal displacements
+    // store committed internal nodal displacements
     UeIntcommit = UeprIntCommit;
 
     // store material history data.
@@ -230,7 +230,7 @@ int XC::BeamColumnJoint3d::update()
         Vector Ue(28);
         Ue.Zero();
 
-        // determine commited displacements given trial displacements
+        // determine committed displacements given trial displacements
         this->getGlobalDispls(Ue);
 
         // update displacements for the external nodes

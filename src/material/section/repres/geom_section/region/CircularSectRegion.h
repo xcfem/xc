@@ -63,7 +63,7 @@ class CircularSectRegion: public QuadCellRegion
     //! @brief Returns internal radius.
     inline double getInteriorRadius(void) const
       { return intRad; }
-    //! @brief Returns extenal radius.
+    //! @brief Returns external radius.
     inline double getExteriorRadius(void) const
       { return extRad; }
     //! @brief Returns initial angle.

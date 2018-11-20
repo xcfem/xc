@@ -119,7 +119,7 @@ class ConvergenceTest: public MovableObject, public EntityWithOwner
     virtual int start(void);
     //! @brief Return a positive number if convergence is achieved.
     //! 
-    //! To return a postive number if the convergence criteria defined for the
+    //! To return a positive number if the convergence criteria defined for the
     //! object has been satisfied, the positibe number equal to the number of
     //! times since \p start that test() has been invoked. Otherwise a negative
     //! number is to be returned. A {\em -2} is returned if the test fails to

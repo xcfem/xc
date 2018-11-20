@@ -333,7 +333,7 @@ std::vector<XC::Node *> XC::TransformationDOF_Group::getPointersToRetainedNodes(
     return retval;
   }
 
-//! @brief Returns the commited value for the response.
+//! @brief Returns the committed value for the response.
 const XC::Vector &XC::TransformationDOF_Group::getCommittedResponse(const Vector &(Node::*response)(void) const)
   {
     const Vector &responseC= ((*myNode).*response)(); //Displacement, velocity or acceleration.
@@ -351,15 +351,15 @@ const XC::Vector &XC::TransformationDOF_Group::getCommittedResponse(const Vector
       }
   }
 
-//! @brief Returns the commited value for the displacement.
+//! @brief Returns the committed value for the displacement.
 const XC::Vector &XC::TransformationDOF_Group::getCommittedDisp(void)
   { return getCommittedResponse(&Node::getDisp); }
 
-//! @brief Returns the commited value for the velocity.
+//! @brief Returns the committed value for the velocity.
 const XC::Vector &XC::TransformationDOF_Group::getCommittedVel(void)
   { return getCommittedResponse(&Node::getVel); }
 
-//! @brief Returns the commited value for the acceleration.
+//! @brief Returns the committed value for the acceleration.
 const XC::Vector &XC::TransformationDOF_Group::getCommittedAccel(void)
   { return getCommittedResponse(&Node::getAccel); }
 

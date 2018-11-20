@@ -160,7 +160,7 @@ int XC::YS_Evolution2D::evolveSurface(YieldSurface_BC *ys, double lamda,
 //	std::cerr << *ys;
 
 	//freezeEvolution = false; -> have set this in commitState -> don't change
-	// first save the vlues on stack
+	// first save the values on stack
 	// static vectors could get reallocated elsewhere
 	XC::Vector f_sur(2);
 		f_sur(0) = F_Surface(0);

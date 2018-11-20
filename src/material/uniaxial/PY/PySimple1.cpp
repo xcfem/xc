@@ -280,7 +280,7 @@ void XC::PySimple1::getNearField(double ylast, double dy, double dy_old)
     //
     TNF.y() = ylast + dy;
 
-    // Postive loading
+    // Positive loading
     //
     if(NFdy >= 0.0)
       {
