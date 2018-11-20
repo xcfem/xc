@@ -46,6 +46,49 @@ def diagInteraction(N,d,v,alpha,beta):
   "Moment de flexion qui correspond au axil N au diagramme d'interaction."
   return -N/2*(-3*d*1e3*beta**2*v*1e3+math.sqrt(3)*beta**2*d*1e3*v*1e3-2*alpha*N-2*math.sqrt(3)*alpha*N)/(beta**2*v*1e3*(-3+math.sqrt(3)))/1e3
 
+def calcHA6p19(n,X,qrep,L,LR,v,l,a,b,hA,hB,hC,hD,xA,etaW,MA,MB,MC,RzB,phiS):
+  ''' Effort horizontal dans la rotule A selon l'equation 6.19
+
+  :param n: Multiplicateur limite des charges utiles (voir 6.32)
+  :param qrep: charge repartie
+  '''
+  factor1= 1.0/(a*(hA-hB)+LR*(hC-hA))
+  sum1= n*X*(-LR*v*l**2/8+a*l*v*(LR-a))
+  sum2A= -LR*v*a**2/2
+  sum2BA= a*v*(L/2.0-xA)
+  sum2BB= LR-L/4+xA/2.0
+  sum2B= sum2BA*sum2BB
+  sum2= n*qrep*(sum2A+sum2B)
+  sum3= a*(etaW+MA+MB+RzB)-LR*(MA+MC+phiS)
+  return factor1*(sum1+sum2+sum3)
+
+def calcVA6p20(n,X,qrep,L,LR,v,l,a,b,hA,hB,hC,hD,xA,etaW,MA,MB,MC,RzB,phiS):
+  ''' Effort vertical dans la rotule A selon l'equation 6.20
+
+  :param n: Multiplicateur limite des charges utiles (voir 6.32)
+  :param qrep: charge repartie
+  '''
+  denom= a*(a*(hA-hB)+LR*(hC-hA))
+  sum1= n*X*(v*l**2/8.0/a+(hC-hA)*(-LR*v*l**2/8+a*l*v*(LR-a))/denom)
+  num2A= -LR*v*a**2/2
+  num2BA= a*v*(L/2-xA)
+  num2BB= LR-L/4+xA/2
+  num2B= num2BA*num2BB
+  num2= num2A+num2B
+  sum2= n*qrep*(a*v/2.0+(hC-hA)*num2/(denom))
+  sum3= (MA+MC+phiS)/a
+  sum4= ((hC-hA)*(a*(etaW+MA+MB+RzB)-LR*(MA+MC+phiS)))/denom
+  return sum1+sum2+sum3+sum4
+
+def calcHB6p21(n,X,qrep,L,LR,v,l,a,b,hA,hB,hC,hD,xA,etaW,MA,MB,MC,RzB,phiS,R):
+  ''' Effort horizontal dans la rotule B selon l'equation 6.21
+
+  :param n: Multiplicateur limite des charges utiles (voir 6.32)
+  :param qrep: charge repartie
+  :param R: Resultante de la force horizontale (voir 6.12 et A 12.1)
+  '''
+  return calcHA6p19(n,X,qrep,L,LR,v,l,a,b,hA,hB,hC,hD,xA,etaW,MA,MB,MC,RzB,phiS)-R
+
 def calcE6p27(X,qrep,L,LR,v,l,a,b,hA,hB,hC,hD,xA):
   "Grandeur E pour le changement de variable selon l'equation 6.27"
   num1= -LR*v*l**2/8+a*l*v*(LR-a)
@@ -73,6 +116,24 @@ def calcE6p27(X,qrep,L,LR,v,l,a,b,hA,hB,hC,hD,xA):
   # print "sum2= ", sum2
   # print "****************************"
   return retval
+
+def calcVB6p22(n,X,qrep,L,LR,v,l,a,b,hA,hB,hC,hD,xA,etaW,MA,MB,MC,RzB,phiS,eta):
+  ''' Effort vertical dans la rotule B selon l'equation 6.22
+
+  :param n: Multiplicateur limite des charges utiles (voir 6.32)
+  :param qrep: charge repartie
+  '''
+  denom= a*(a*(hA-hB)+LR*(hC-hA))
+  sum1= n*X*(l*v-v*l**2/8.0/a-(hC-hA)*(-LR*v*l**2/8+a*l*v*(LR-a))/denom)
+  num2A= -LR*v*a**2/2
+  num2BA= a*v*(L/2-xA)
+  num2BB= LR-L/4+xA/2
+  num2B= num2BA*num2BB
+  num2= num2A+num2B
+  sum2= n*qrep*((L/2-xA)*v-a*v/2.0-(hC-hA)*num2/(denom))
+  sum3= eta-(MA+MC+phiS)/a
+  sum4= -((hC-hA)*(a*(etaW+MA+MB+RzB)-LR*(MA+MC+phiS)))/denom
+  return sum1+sum2+sum3+sum4
 
 def calcF6p28(R,LR,a,b,eta,phiS,etaW,psiT,MA,MB,MC,RzB,RzD,hA,hB,hC,hD):
   "Grandeur F pour le changement de variable selon l'equation 6.28"
@@ -180,11 +241,13 @@ def calcn6p32(alpha,beta,d,v,E,F,G,H):
 
 class archGeometry(object):
   '''
-  Arch geometric definition:
-   coefPolArch=[f,j,k,r]: Coefficients of polynomial y=fx^4+jx^3+kx^2+rx+u (u=0)
-   XRot=[xA,xB,xC,xD]:  X coordinate rotules A,B,C,D [m]
-   arcThick: arch thickness [m]
-   arcSpan: arch span [m]
+  Geometric definition of the arc:
+
+   :ivar coefPolArch=[f,j,k,r]: Coefficients of polynomial y=fx^4+jx^3+kx^2+rx+u (u=0)
+   :ivar XRot=[xA,xB,xC,xD]:  X coordinates of the rotules A,B,C,D [m]
+   :ivar arcThick: arch thickness [m]
+   :ivar arcSpan: arch span [m]
+   :ivar arcEffL: effective arch width [m]
   '''
   def __init__(self,coefPolArch=[0,0,0,0],XRot=[0,0,0,0],arcThick=0,arcSpan=15,arcEffL=4):
     self.coefPolArch=coefPolArch
@@ -474,16 +537,34 @@ class resistance(object):
     return diagInteraction(self.Nadmis,self.gm.arcThick,self.gm.arcEffL,self.fc.alpha,self.fc.beta)
   def getE(self):
     yRot= self.gm.getYRot()
-    return calcE6p27(self.tlR.getX(),self.tl.qrep,self.gm.arcSpan,self.gm.getDistxAB(),self.gm.arcEffL,self.tlR.getlQt(),self.gm.getDistxAC(),self.gm.getDistxBD(),yRot[0],yRot[1],yRot[2],yRot[3],self.gm.XRot[0])
+    return calcE6p27(X= self.tlR.getX(),qrep= self.tl.qrep,L= self.gm.arcSpan,LR= self.gm.getDistxAB(),v= self.gm.arcEffL, l= self.tlR.getlQt(), a= self.gm.getDistxAC(),b= self.gm.getDistxBD(), hA= yRot[0], hB= yRot[1], hC= yRot[2], hD= yRot[3], xA= self.gm.XRot[0])
   def getF(self):
     yRot= self.gm.getYRot()
-    return calcF6p28(self.plR.getR(),self.gm.getDistxAB(),self.gm.getDistxAC(),self.gm.getDistxBD(),self.plR.getEta(),self.plR.getPhiS(),self.plR.getEtaW(),self.plR.getPsiT(),self.getMadmis(),self.getMadmis(),self.getMadmis(),self.plR.getRzB(),self.plR.getRzD(),yRot[0],yRot[1],yRot[2],yRot[3])
+    return calcF6p28(R= self.plR.getR(),LR= self.gm.getDistxAB(),a= self.gm.getDistxAC(),b= self.gm.getDistxBD(),eta= self.plR.getEta(),phiS= self.plR.getPhiS(),etaW= self.plR.getEtaW(),psiT= self.plR.getPsiT(),MA= self.getMadmis(),MB= self.getMadmis(),MC= self.getMadmis(),RzB= self.plR.getRzB(),RzD= self.plR.getRzD(),hA= yRot[0],hB= yRot[1],hC= yRot[2],hD= yRot[3])
   def getG(self):
     yRot= self.gm.getYRot()
     return calcG6p29(self.tlR.getX(),self.tl.qrep,self.gm.arcSpan,self.gm.getDistxAB(),self.gm.arcEffL,self.tlR.getlQt(),self.gm.getDistxAC(),self.gm.getDistxBD(),yRot[0],yRot[1],yRot[2],yRot[3],self.gm.XRot[0],self.gm.getGammaD())
   def getH(self):
     yRot= self.gm.getYRot()
     return calcH6p30(self.gm.getDistxAB(),self.gm.getDistxAC(),self.plR.getEta(),self.plR.getPsi(),self.plR.getPhiS(),self.plR.getEtaW(),self.getMadmis(),self.getMadmis(),self.getMadmis(),self.plR.getRzB(),yRot[0],yRot[1],yRot[2],yRot[3],self.gm.getGammaD())
+  def getHA(self):
+    '''Effort horizontal dans la rotule A.'''
+    yRot= self.gm.getYRot()
+    return calcHA6p19(n= self.getSafCoef(), X= self.tlR.getX(),qrep= self.tl.qrep, L= self.gm.arcSpan, LR= self.gm.getDistxAB(), v= self.gm.arcEffL, l= self.tlR.getlQt(), a= self.gm.getDistxAC(), b= self.gm.getDistxBD(), hA= yRot[0], hB= yRot[1], hC= yRot[2], hD= yRot[3], xA= self.gm.XRot[0], etaW= self.plR.getEtaW(), MA= self.getMadmis(), MB= self.getMadmis(),MC= self.getMadmis(), RzB= self.plR.getRzB(), phiS= self.plR.getPhiS())
+  def getVA(self):
+    '''Effort vertical dans la rotule A.'''
+    yRot= self.gm.getYRot()
+    return calcVA6p20(n= self.getSafCoef(), X= self.tlR.getX(),qrep= self.tl.qrep, L= self.gm.arcSpan, LR= self.gm.getDistxAB(), v= self.gm.arcEffL, l= self.tlR.getlQt(), a= self.gm.getDistxAC(), b= self.gm.getDistxBD(), hA= yRot[0], hB= yRot[1], hC= yRot[2], hD= yRot[3], xA= self.gm.XRot[0], etaW= self.plR.getEtaW(), MA= self.getMadmis(), MB= self.getMadmis(),MC= self.getMadmis(), RzB= self.plR.getRzB(), phiS= self.plR.getPhiS())
+  def getHB(self):
+    '''Effort horizontal dans la rotule B.'''
+    yRot= self.gm.getYRot()
+    return calcHB6p21(n= self.getSafCoef(), X= self.tlR.getX(),qrep= self.tl.qrep, L= self.gm.arcSpan, LR= self.gm.getDistxAB(), v= self.gm.arcEffL, l= self.tlR.getlQt(), a= self.gm.getDistxAC(), b= self.gm.getDistxBD(), hA= yRot[0], hB= yRot[1], hC= yRot[2], hD= yRot[3], xA= self.gm.XRot[0], etaW= self.plR.getEtaW(), MA= self.getMadmis(), MB= self.getMadmis(),MC= self.getMadmis(), RzB= self.plR.getRzB(), phiS= self.plR.getPhiS(), R= self.plR.getR())
+  def getVB(self):
+    '''Effort vertical dans la rotule B.'''
+    yRot= self.gm.getYRot()
+    return calcVB6p22(n= self.getSafCoef(), X= self.tlR.getX(),qrep= self.tl.qrep, L= self.gm.arcSpan, LR= self.gm.getDistxAB(), v= self.gm.arcEffL, l= self.tlR.getlQt(), a= self.gm.getDistxAC(), b= self.gm.getDistxBD(), hA= yRot[0], hB= yRot[1], hC= yRot[2], hD= yRot[3], xA= self.gm.XRot[0], etaW= self.plR.getEtaW(), MA= self.getMadmis(), MB= self.getMadmis(),MC= self.getMadmis(), RzB= self.plR.getRzB(), phiS= self.plR.getPhiS(), eta= self.plR.getEta())
+
+
   def getSafCoef(self):
     """Safety coefficient - Multiplicateur limite des charges utiles (voir 6.32)"""
     retval= calcn6p32(self.fc.alpha,self.fc.beta,self.gm.arcThick,self.gm.arcEffL,self.getE(),self.getF(),self.getG(),self.getH())
@@ -520,5 +601,16 @@ class resistance(object):
     print "  (voir 6.28 et A 13.23); F= ",self.getF()
     print "  (voir 6.29 et A 13.34); G= ",self.getG()
     print "  (voir 6.30 et A 13.35); H= ",self.getH()
-    print "Multiplicateur limite des charges utiles (voir 6.32); n= ",self.getSafCoef()
+    n= self.getSafCoef()
+    print "Multiplicateur limite des charges utiles (voir 6.32); n= ", n
+    print "Réactions (ELU): "
+    print "  horizontale rotule A (voir 6.19 et A 13.9); HAult= ",self.getHA()/1e3, ' kN'
+    print "  verticale rotule A (voir 6.20 et A 13.13); HAult= ",self.getVA()/1e3, ' kN'
+    print "  horizontale rotule B (voir 6.21 et A 13.11); HBult= ",self.getHB()/1e3, ' kN'
+    print "  verticale rotule B (voir 6.22 et A 13.15); HBult= ",self.getVB()/1e3, ' kN'
+    print "Réactions (valeurs charactéristiques): "
+    print "  horizontale rotule A (voir 6.19 et A 13.9); HAk= ", self.getHA()/1e3/self.gm.arcEffL/n, ' kN/m'
+    print "  verticale rotule A (voir 6.20 et A 13.13); HAk= ", self.getVA()/1e3/self.gm.arcEffL/n, ' kN/m'
+    print "  horizontale rotule B (voir 6.21 et A 13.11); HBk= ", self.getHB()/1e3/self.gm.arcEffL/n, ' kN/m'
+    print "  verticale rotule B (voir 6.22 et A 13.15); HBk= ", self.getVB()/1e3/self.gm.arcEffL/n, ' kN/m'
 

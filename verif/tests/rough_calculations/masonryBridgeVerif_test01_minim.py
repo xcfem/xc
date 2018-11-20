@@ -71,15 +71,41 @@ res = resist.minimize()
 nTeor= 8.25829137054
 n=resist.getSafCoef()
 ratio1= abs(n-nTeor)/nTeor
+HA= resist.getHA()
+HAref= 2328579.69359
+ratio2= abs(HA-HAref)/HAref
+VA= resist.getVA()
+VAref= 2140854.81205
+ratio3= abs(VA-VAref)/VAref
+HB= resist.getHB()
+HBref= 893479.609326
+ratio4= abs(HB-HBref)/HBref
+VB= resist.getVB()
+VBref= 2243014.05185
+ratio5= abs(VB-VBref)/VBref
 
-# print 'n= ', n
-# print 'nTeor= ', nTeor
-# print 'ratio1= ', ratio1
+'''
+print 'n= ', n
+print 'nTeor= ', nTeor
+print 'ratio1= ', ratio1
+print 'HA= ', HA
+print 'HAref= ', HAref
+print 'ratio2= ', ratio2
+print 'VA= ', VA
+print 'VAref= ', VAref
+print 'ratio3= ', ratio3
+print 'HB= ', HB
+print 'HBref= ', HBref
+print 'ratio4= ', ratio4
+print 'VB= ', VB
+print 'VBref= ', VBref
+print 'ratio5= ', ratio5
+'''
 
 import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
-if abs(ratio1)<0.06:
+if (abs(ratio1)<0.06 and abs(ratio2)<1e-10 and abs(ratio3)<1e-10 and abs(ratio4)<1e-10 and abs(ratio5)<1e-10):
   print "test ",fname,": ok."
 else:
   lmsg.error(fname+' ERROR.')
