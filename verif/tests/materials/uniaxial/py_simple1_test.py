@@ -70,7 +70,7 @@ print stresses
 import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
-if(error<1e-15):
+if(error<1e-10):
   print "test ",fname,": ok."
 else:
   lmsg.error(fname+' ERROR.')
