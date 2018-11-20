@@ -78,7 +78,7 @@ class CorotCrdTransf2d: public CrdTransf2d
     mutable double Lxdotdot, Lydotdot; //!< double time derivatives of components of the deformed member
     
     Vector ub;                 // basic displacements
-    Vector ubcommit;           // commited basic displacements
+    Vector ubcommit;           // committed basic displacements
     Vector ubpr;               // previous basic displacements
     
     bool nodeOffsets;

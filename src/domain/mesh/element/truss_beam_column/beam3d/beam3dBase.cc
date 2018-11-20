@@ -85,7 +85,7 @@ XC::beam3dBase::beam3dBase(int tag, int classTag, double a, double e, double g,
    theta(Theta), L(0.0), rForce(12), isStiffFormed(false)
   {load.reset(12);}
 
-//! @brief Returns to the last commited state.
+//! @brief Returns to the last committed state.
 int XC::beam3dBase::revertToLastCommit(void)
   {
     return 0; // linear element - nothing to commit

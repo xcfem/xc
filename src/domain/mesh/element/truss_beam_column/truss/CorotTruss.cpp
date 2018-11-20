@@ -248,7 +248,7 @@ int XC::CorotTruss::commitState(void)
     return retVal;
   }
 
-//! @brief Revert to the last commited state.
+//! @brief Revert to the last committed state.
 int XC::CorotTruss::revertToLastCommit()
   {
     return theMaterial->revertToLastCommit();

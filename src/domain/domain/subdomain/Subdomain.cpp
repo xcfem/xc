@@ -536,7 +536,7 @@ const XC::ID &XC::Subdomain::getExternalNodes(void) const
 //!
 //! Returns the num of external dof associated with the subdomain, the number
 //! returned is the result of invoking getNumExternalEqn() on
-//! the DomainDecompAnalysis object assocaited with the Subdomain. If
+//! the DomainDecompAnalysis object associated with the Subdomain. If
 //! no Analysis yet associated with the Subdomain \f$0\f$ is returned.
 int XC::Subdomain::getNumDOF(void) const
   {

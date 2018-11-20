@@ -888,7 +888,7 @@ int XC::AnalysisModel::commitDomain(void)
     return retval;
   }
 
-//! @brief Returns to the last commited state.
+//! @brief Returns to the last committed state.
 //!
 //! Method which invokes revertToLastCommit() on the domain: this is an
 //! operation which causes all nodes in the domain to set the trial

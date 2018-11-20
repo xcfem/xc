@@ -22,7 +22,7 @@
 //python_interface.tcc
 
 class_<XC::SteelBase, bases<XC::UniaxialMaterial>, boost::noncopyable >("SteelBaseMaterial", no_init)
-  .add_property("E", &XC::SteelBase::getInitialTangent, &XC::SteelBase::setInitialTangent,"Intial Young's modulus.")
+  .add_property("E", &XC::SteelBase::getInitialTangent, &XC::SteelBase::setInitialTangent,"Initial Young's modulus.")
   .add_property("fy", &XC::SteelBase::getFy, &XC::SteelBase::setFy,"Yield stress.")
   .add_property("b", &XC::SteelBase::getHardeningRatio, &XC::SteelBase::setHardeningRatio,"Hardening ratio.")
    ;

@@ -784,7 +784,7 @@ int XC::Mesh::commit(void)
     return 0;
   }
 
-//! @brief Returns the mesh to its last commited state.
+//! @brief Returns the mesh to its last committed state.
 int XC::Mesh::revertToLastCommit(void)
   {
     //

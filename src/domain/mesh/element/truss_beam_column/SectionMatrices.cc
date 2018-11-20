@@ -34,7 +34,7 @@
 const size_t XC::SectionMatrices::maxNumSections;
 
 
-//! @brief alocate section flexibility matrices and section deformation vectors
+//! @brief Allocate section flexibility matrices and section deformation vectors
 void XC::SectionMatrices::alloc(const size_t &sz)
   {
     vsSubdivide.resize(sz);

@@ -284,7 +284,7 @@ void XC::QzSimple1::getNearField(double zlast, double dz, double dz_old)
     //
     TNF.z()= zlast + dz;
 
-    // Postive loading
+    // Positive loading
     //
     if(NFdz >= 0.0)
       {

@@ -55,7 +55,7 @@
 // Revision: A
 //
 // Description: This file contains the class definition for XC::LoadControl.
-// LoadControl is an algorithmic class for perfroming a static analysis
+// LoadControl is an algorithmic class for performing a static analysis
 // using a load control integration scheme.
 //
 // What: "@(#) LoadControl.h, revA"

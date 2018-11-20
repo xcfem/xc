@@ -108,11 +108,11 @@ double XC::NDMaterial::getnu(void)
 double XC::NDMaterial::getpsi(void)
   { return 0.0; }
 
-//! @brief Returns commited stresses
+//! @brief Returns committed stresses
 const XC::Vector &XC::NDMaterial::getCommittedStress(void) 
   { return this->getStress(); }
 
-//! @brief Returns commited strains
+//! @brief Returns committed strains
 const XC::Vector &XC::NDMaterial::getCommittedStrain(void) 
   { return this->getStrain(); }
 

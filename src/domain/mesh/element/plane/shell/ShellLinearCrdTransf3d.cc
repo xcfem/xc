@@ -130,7 +130,7 @@ int XC::ShellLinearCrdTransf3d::commitState(void)
   { return 0; }
 
 
-//! @brief Returns to the las commited state.
+//! @brief Returns to the las committed state.
 int XC::ShellLinearCrdTransf3d::revertToLastCommit(void)
   { return 0; }
 

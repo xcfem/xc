@@ -144,7 +144,7 @@ void XC::UniaxialFiber::setMaterial(const MaterialHandler &ldr,const std::string
 int XC::UniaxialFiber::commitState(void)
   { return theMaterial->commitState(); }
 
-//! @brief Returns to its last commited state.
+//! @brief Returns to its last committed state.
 int XC::UniaxialFiber::revertToLastCommit(void)
   { return theMaterial->revertToLastCommit(); }
 

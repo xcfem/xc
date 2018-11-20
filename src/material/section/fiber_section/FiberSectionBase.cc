@@ -547,7 +547,7 @@ int XC::FiberSectionBase::commitState(void)
     return err;
   }
 
-//! @brief Returns to the last commited state.
+//! @brief Returns to the last committed state.
 int XC::FiberSectionBase::revertToLastCommit(void)
   {
     // Last committed section deformations

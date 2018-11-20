@@ -75,10 +75,10 @@ XC::GeomSection XC::GeomSection::getGMReinforcementLayers(void) const
   }
 
 //! @brief Return a section with only the compressed regions of the section.
-XC::GeomSection XC::GeomSection::getCrackedSection(const HalfPlane2d &sp_compresiones) const
+XC::GeomSection XC::GeomSection::getCrackedSection(const HalfPlane2d &sp_compressions) const
   {
     GeomSection retval(getGMReinforcementLayers());
-    retval.regions= regions.Intersection(sp_compresiones);
+    retval.regions= regions.Intersection(sp_compressions);
     return retval;
   }
 
@@ -253,13 +253,13 @@ Polygon2d XC::GeomSection::getRegionsContour(void) const
   }
 
 //! @brief Return the contour of the compressed part of the regions.
-Polygon2d XC::GeomSection::getCompressedZoneContour(const HalfPlane2d &sp_compresiones) const
+Polygon2d XC::GeomSection::getCompressedZoneContour(const HalfPlane2d &sp_compressions) const
   {
     Polygon2d retval;
     Polygon2d tmp= getRegionsContour();
     if(!tmp.empty())
       {
-	std::list<Polygon2d> tmpList= tmp.getIntersection(sp_compresiones);
+	std::list<Polygon2d> tmpList= tmp.getIntersection(sp_compressions);
         if(tmpList.size()>1)
 	  std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; is not a simply connected region."
@@ -293,14 +293,14 @@ double XC::GeomSection::getLeverArm(const Line2d &PFtrace) const
 
 //! @brief Return the section depth from the border of the half-plane
 //! being passed as parameter to the most compressed fiber.
-double XC::GeomSection::getCompressedZoneDepth(const HalfPlane2d &sp_compresiones) const
+double XC::GeomSection::getCompressedZoneDepth(const HalfPlane2d &sp_compressions) const
   {    
     Polygon2d contour= getRegionsContour();
     const size_t num_vertices= contour.GetNumVertices();
     double d= 0.0,dneg= 0.0;    
     for(register size_t i=1;i<=num_vertices;i++)
       {
-        d= sp_compresiones.DistSigno(contour.Vertice(i));
+        d= sp_compressions.DistSigno(contour.Vertice(i));
         if(d<dneg) dneg= d;
       }
     assert(dneg<=0);
@@ -309,14 +309,14 @@ double XC::GeomSection::getCompressedZoneDepth(const HalfPlane2d &sp_compresione
 
 //! @brief Return the section depth from the border of the half-plane
 //! being passed as parameter to the most tensioned fiber.
-double XC::GeomSection::getTensionedZoneDepth(const HalfPlane2d &sp_compresiones) const
+double XC::GeomSection::getTensionedZoneDepth(const HalfPlane2d &sp_compressions) const
   {
     Polygon2d contour= getRegionsContour();
     const size_t num_vertices= contour.GetNumVertices();
     double d= 0.0,dpos=0.0;    
     for(register size_t i=1;i<=num_vertices;i++)
       {
-        d= sp_compresiones.DistSigno(contour.Vertice(i));
+        d= sp_compressions.DistSigno(contour.Vertice(i));
         if(d>dpos) dpos= d;
       }
     assert(dpos>=0);

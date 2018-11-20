@@ -56,7 +56,7 @@
 // Revision: A
 //
 // Description: This file contains the class definition for ArcLength.
-// ArcLength is an algorithmic class for perfroming a static analysis
+// ArcLength is an algorithmic class for performing a static analysis
 // using the arc length scheme, that is within a load step the follwing
 // constraint is enforced: 
 //  i=1        delta U^T delta U + alpha^2 delta lambda^2 = delta s^2
@@ -75,7 +75,7 @@ namespace XC {
 
 //! @ingroup StaticIntegrator
 //!
-//! @brief  ArcLength is an algorithmic class for perfroming a static analysis
+//! @brief  ArcLength is an algorithmic class for performing a static analysis
 //! using the arc length scheme.
 //!
 //!ArcLength is a subclass of StaticIntegrator, it is

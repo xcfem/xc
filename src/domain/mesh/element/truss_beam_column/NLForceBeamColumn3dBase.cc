@@ -40,7 +40,7 @@ XC::Matrix XC::NLForceBeamColumn3dBase::theMatrix(12,12);
 XC::Vector XC::NLForceBeamColumn3dBase::theVector(12);
 double XC::NLForceBeamColumn3dBase::workArea[200];
 
-//! @brief alocate section flexibility matrices and section deformation vectors
+//! @brief Allocate section flexibility matrices and section deformation vectors
 void XC::NLForceBeamColumn3dBase::resizeMatrices(const size_t &nSections)
   {
     fs.resize(nSections);

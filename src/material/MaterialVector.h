@@ -228,7 +228,7 @@ int MaterialVector<MAT>::commitState(void)
     return retVal;
   }
 
-//! @brief Returns materials to its last commited state.
+//! @brief Returns materials to its last committed state.
 template <class MAT>
 int MaterialVector<MAT>::revertToLastCommit(void)
   {

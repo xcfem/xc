@@ -154,7 +154,7 @@ int XC::DamageModelVector::commitState(const material_vector &materials)
     return result;
   }
 
-//! @brief Returns the damage models to its last commited state.
+//! @brief Returns the damage models to its last committed state.
 int XC::DamageModelVector::revertToLastCommit(void)
   {
     int retVal= 0;

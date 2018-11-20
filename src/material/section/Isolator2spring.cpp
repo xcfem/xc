@@ -115,7 +115,7 @@ const XC::Matrix &XC::Isolator2spring::getSectionTangent(void) const
 //! @brief Return the initial tangent stiffness matrix.
 const XC::Matrix &XC::Isolator2spring::getInitialTangent(void) const
   {
-    // Intial tangent uses nominal properties of the isolator.
+    // Initial tangent uses nominal properties of the isolator.
     ks(0,0)= k1;
     ks(1,1)= kvo;
     ks(0,1)= ks(1,0)= 0.0;

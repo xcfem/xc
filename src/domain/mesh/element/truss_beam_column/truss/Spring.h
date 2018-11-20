@@ -60,7 +60,7 @@
 //
 // Description: This file contains the class definition for Spring. A Spring object
 // provides the abstraction of the small deformation bar element. Each truss
-// object is assocaited with a material object. This Truss element will work
+// object is associated with a material object. This Truss element will work
 // in 1d, 2d or 3d problems.
 //
 // What: "@(#) Truss.h, revA"

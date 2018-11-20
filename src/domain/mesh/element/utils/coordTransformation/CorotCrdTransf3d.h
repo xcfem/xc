@@ -81,13 +81,13 @@ class CorotCrdTransf3d: public CrdTransf3d
     mutable Vector alphaIq; //!< quaternion for node I
     mutable Vector alphaJq; //!< quaternion for node J
     
-    Vector alphaIqcommit; //!< commited quaternion for node I
-    Vector alphaJqcommit; //!< commited quaternion for node J
+    Vector alphaIqcommit; //!< committed quaternion for node I
+    Vector alphaJqcommit; //!< committed quaternion for node J
     mutable Vector alphaI; //!< last trial rotations end i
     mutable Vector alphaJ; //!< last trial rotatations end j
     
     Vector ul; //!< local displacements
-    Vector ulcommit; //!< commited local displacements
+    Vector ulcommit; //!< committed local displacements
     Vector ulpr; //!< previous local displacements
     
     static Matrix RI; //!< nodal triad for node 1

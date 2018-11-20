@@ -367,7 +367,7 @@ int XC::FiberSectionShear3d::commitState(void)
     return err;
   }
 
-//! @brief Returns the material to the last commited state.
+//! @brief Returns the material to the last committed state.
 int XC::FiberSectionShear3d::revertToLastCommit(void)
   {
     int err= FiberSection3d::revertToLastCommit();

@@ -172,7 +172,7 @@ void XC::ElasticIsotropicPlaneStress2D::zeroInitialGeneralizedStrain(void)
 int XC::ElasticIsotropicPlaneStress2D::commitState(void)
   { return 0; }
 
-//! @brief Revert material to its last commited state.
+//! @brief Revert material to its last committed state.
 int XC::ElasticIsotropicPlaneStress2D::revertToLastCommit(void)
   { return 0; }
 

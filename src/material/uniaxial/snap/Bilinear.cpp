@@ -121,36 +121,42 @@ XC::Bilinear::Bilinear(int tag, XC::Vector inputParam  ,DamageModel *strength,Da
         
         if ( fyieldPos <= 0.0 || fyieldNeg >= 0.0 )
     {
-                std::cerr << "Error: XC::Bilinear::Bilinear  : Incorrect yield stresse \n" << "\a";
+                std::cerr << getClassName() << "::" << __FUNCTION__
+				  << ": Incorrect yield stresse \n" << "\a";
                 ErrorFlag =1;
     }
 
         if ( elstk <= 0.0 )
     {
-                std::cerr << "Error: XC::Bilinear::Bilinear  : Elastic modulus must be positive\n" << "\a";
+                std::cerr << getClassName() << "::" << __FUNCTION__
+				  << ": Elastic modulus must be positive\n" << "\a";
                 ErrorFlag =1;
     }
         
         if ( alfa < 0.0 || alfa > 0.8 )
     {
-                std::cerr << "Error: XC::Bilinear::Bilinear  : alpha is recommended to be in the range of [0.0 , 0.8]\n" << "\a";        
+                std::cerr << getClassName() << "::" << __FUNCTION__
+				  << ": alpha is recommended to be in the range of [0.0 , 0.8]\n" << "\a";        
     }
         
         if ( alfaCap >= 0.0 || alfaCap == alfa )
     {
-                std::cerr << "Error: XC::Bilinear::Bilinear  : CapSlope must be negative and not equal to alfa\n" << "\a";
+                std::cerr << getClassName() << "::" << __FUNCTION__
+				  << ": CapSlope must be negative and not equal to alfa\n" << "\a";
                 ErrorFlag =1;
     }        
         
         if ( capDispPos < fyieldPos/elstk || capDispNeg > fyieldNeg/elstk )
     {
-                std::cerr << "Error: XC::Bilinear::Bilinear  : Capping brach must be located outside the yield criteria\n" << "\a";
+                std::cerr << getClassName() << "::" << __FUNCTION__
+				  << ": Capping branch must be located outside the yield criteria\n" << "\a";
                 ErrorFlag =1;
     }
         
         if ( Resfac <  0.0  || Resfac > 1.0)
     {
-                std::cerr << "Error: XC::Bilinear::Bilinear  : Residual must be positive and less than 1.0\n" << "\a";
+                std::cerr << getClassName() << "::" << __FUNCTION__
+				  << ": Residual must be positive and less than 1.0\n" << "\a";
                 ErrorFlag =1;
     }
         
@@ -182,7 +188,8 @@ XC::Bilinear::Bilinear(int tag, XC::Vector inputParam  ,DamageModel *strength,Da
     }
 
         if ( ErrorFlag == 1 )    {
-                std::cerr << "Error: XC::Bilinear::Bilinear  : Error: check the input values\n" << "\a";        
+                std::cerr << getClassName() << "::" << __FUNCTION__
+				  << ": Error: check the input values\n" << "\a";        
                 exit(-1);
         }
 
@@ -191,7 +198,8 @@ XC::Bilinear::Bilinear(int tag, XC::Vector inputParam  ,DamageModel *strength,Da
         {
                 StrDamage = strength->getCopy();
                 if ( StrDamage == nullptr ) {
-                        std::cerr << "Error: XC::Bilinear::Bilinear  : Can not make a copy of strength damage model\n" << "\a";        
+                        std::cerr << getClassName() << "::" << __FUNCTION__
+				  << ": Can not make a copy of strength damage model\n" << "\a";        
                         exit(-1);
                 }
         }
@@ -200,7 +208,8 @@ XC::Bilinear::Bilinear(int tag, XC::Vector inputParam  ,DamageModel *strength,Da
         {
                 StfDamage = stiffness->getCopy();
                 if ( StfDamage == nullptr ) {
-                        std::cerr << "Error: XC::Bilinear::Bilinear  : Can not make a copy of stiffness damage model\n" << "\a";        
+                        std::cerr << getClassName() << "::" << __FUNCTION__
+				  << ": Can not make a copy of stiffness damage model\n" << "\a";        
                         exit(-1);
                 }
         }        
@@ -209,7 +218,8 @@ XC::Bilinear::Bilinear(int tag, XC::Vector inputParam  ,DamageModel *strength,Da
         {
                 CapDamage = capping->getCopy();
                 if ( CapDamage == nullptr ) {
-                        std::cerr << "Error: XC::Bilinear::Bilinear  : Can not make a copy of capping damage model\n" << "\a";        
+                        std::cerr << getClassName() << "::" << __FUNCTION__
+				  << ": Can not make a copy of capping damage model\n" << "\a";        
                         exit(-1);
                 }
         }

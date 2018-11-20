@@ -527,7 +527,7 @@ int XC::FiniteDeformationEP3D::ImplicitAlgorithm()
     XC::stresstensor  B_Mandel = tensorZ2;   // For Mandel stress
 
     // Read the previous incremental step history variables
-    Fp = fdeps->getCommitedFpInVar();
+    Fp = fdeps->getCommittedFpInVar();
     Fp_n = Fp;
     Fpinv = Fp.inverse();
     Fp_ninv  =  Fp_n.inverse();
@@ -537,15 +537,15 @@ int XC::FiniteDeformationEP3D::ImplicitAlgorithm()
     Ee_n = Ee;
 
     if( fdEvolutionS ) {
-      xi = fdeps->getCommitedStrainLikeInVar();
+      xi = fdeps->getCommittedStrainLikeInVar();
       xi_n = xi;
-      q = fdeps->getCommitedStressLikeInVar();
+      q = fdeps->getCommittedStressLikeInVar();
     }
 
     if( fdEvolutionT ) {
-      eta = fdeps->getCommitedStrainLikeKiVar();
+      eta = fdeps->getCommittedStrainLikeKiVar();
       eta_n = eta;
-      a = fdeps->getCommitedStressLikeKiVar();
+      a = fdeps->getCommittedStressLikeKiVar();
     }
 
     // Return stress from finite deformation elastic model
@@ -1183,7 +1183,7 @@ int XC::FiniteDeformationEP3D::SemiImplicitAlgorithm()
     BJtensor tensorI4 = tensorTemp1.transpose0110();
 
     // Read the previous incremental step history variables
-    Fp = fdeps->getCommitedFpInVar();
+    Fp = fdeps->getCommittedFpInVar();
     Fp_n = Fp;
     Fp_ninv  =  Fp_n.inverse();
     Fpinv = Fp.inverse();
@@ -1193,15 +1193,15 @@ int XC::FiniteDeformationEP3D::SemiImplicitAlgorithm()
     Ee_n = Ee;
 
     if( fdEvolutionS ) {
-      xi = fdeps->getCommitedStrainLikeInVar();
+      xi = fdeps->getCommittedStrainLikeInVar();
       xi_n = xi;
-      q = fdeps->getCommitedStressLikeInVar();
+      q = fdeps->getCommittedStressLikeInVar();
     }
 
     if( fdEvolutionT ) {
-      eta = fdeps->getCommitedStrainLikeKiVar();
+      eta = fdeps->getCommittedStrainLikeKiVar();
       eta_n = eta;
-      a = fdeps->getCommitedStressLikeKiVar();
+      a = fdeps->getCommittedStressLikeKiVar();
     }
 
     // Return stress from finite deformation elastic model

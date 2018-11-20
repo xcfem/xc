@@ -40,7 +40,7 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .add_property("getIdxNodes",&XC::Element::getIdxNodes,"Return the node indices for its use in VTK arrays.")
   .add_property("getDimension",&XC::Element::getDimension,"Return element's dimension (point: 0, line: 1, surface: 2 or volume: 3).")
   .def("commitState", &XC::Element::commitState,"Commits element state.")
-  .def("revertToLastCommit", &XC::Element::revertToLastCommit,"Return to the last commited state.")
+  .def("revertToLastCommit", &XC::Element::revertToLastCommit,"Return to the last committed state.")
   .def("revertToStart", &XC::Element::revertToStart,"Return the element to its initial state.")
   .def("getNumDOF", &XC::Element::getNumDOF,"Return the number of element DOFs.")
   .def("getResistingForce",make_function(getResistingForceRef, return_internal_reference<>() ),"Calculates element's resisting force.")

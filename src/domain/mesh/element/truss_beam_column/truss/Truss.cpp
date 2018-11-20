@@ -270,7 +270,7 @@ int XC::Truss::commitState()
     return retVal;
   }
 
-//! @brief Returns to the last commited state.
+//! @brief Returns to the last committed state.
 //!
 //! Return the result of invoking revertToLastCommit()
 //! on it's base class an on it's associated UniaxialMaterial object.

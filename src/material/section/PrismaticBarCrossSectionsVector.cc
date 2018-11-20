@@ -182,7 +182,7 @@ int XC::PrismaticBarCrossSectionsVector::commitState(void)
     return retVal;
   }
 
-//! @brief Returns the sections to its last commited state.
+//! @brief Returns the sections to its last committed state.
 int XC::PrismaticBarCrossSectionsVector::revertToLastCommit(void)
   {
     int retVal= 0;

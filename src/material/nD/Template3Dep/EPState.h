@@ -96,16 +96,16 @@ class EPState
     stresstensor TensorVar[ MaxNTensorVar ]; // tensor variable array for tensor hardening vars 
     //straintensor TensorVar[ MaxNTensorVar ]; // tensor variable array for tensor hardening vars 
 
-    // Commited state
-    stresstensor Stress_commit;   // Commited stress  --total             
-    straintensor Strain_commit;   // Commited strain  --total             
+    // Committed state
+    stresstensor Stress_commit;   // Committed stress  --total             
+    straintensor Strain_commit;   // Committed strain  --total             
     straintensor ElasticStrain_commit; //GZ Mar2005
     //straintensor PlasticStrain
 
 
-    double       ScalarVar_commit[ MaxNScalarVar ]; // Commited scalar variable array for scalar hardening vars 
-    //static stresstensor TensorVar_commit[ MaxNTensorVar ]; // Commited tensor variable array for tensor hardening vars     
-    stresstensor TensorVar_commit[ MaxNTensorVar ]; // Commited tensor variable array for tensor hardening vars 
+    double       ScalarVar_commit[ MaxNScalarVar ]; // Committed scalar variable array for scalar hardening vars 
+    //static stresstensor TensorVar_commit[ MaxNTensorVar ]; // Committed tensor variable array for tensor hardening vars     
+    stresstensor TensorVar_commit[ MaxNTensorVar ]; // Committed tensor variable array for tensor hardening vars 
     BJtensor Eep_commit;      // Current Elastic plastic stifness tensor
 
     //Initial state
@@ -318,7 +318,7 @@ class EPState
     const straintensor &getdPlasticStrain() const;
     const BJtensor &getEep(void) const;
 
-    //Get commited state vars
+    //Get committed state vars
     const stresstensor &getStress_commit() const;
     const straintensor &getStrain_commit() const;
     const straintensor &getElasticStrain_commit() const;

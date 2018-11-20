@@ -199,7 +199,7 @@ int XC::MFreedom_Joint2D::applyConstraint(double timeStamp)
         const Vector &crdR = RetainedNode->getCrds();
         const Vector &crdC = ConstrainedNode->getCrds();
 
-        // get commited displacements of nodes to get updated coordinates
+        // get committed displacements of nodes to get updated coordinates
         const Vector &dispR = RetainedNode->getDisp();
         const Vector &dispC = ConstrainedNode->getDisp();
 
@@ -288,7 +288,7 @@ const XC::Matrix &XC::MFreedom_Joint2D::getConstraint(void) const
         const Vector &crdR = RetainedNode->getCrds();
         const Vector &crdC = ConstrainedNode->getCrds();
 
-        // get commited displacements of nodes to get updated coordinates
+        // get committed displacements of nodes to get updated coordinates
         const Vector &dispR = RetainedNode->getTrialDisp();
         const Vector &dispC = ConstrainedNode->getTrialDisp();
 

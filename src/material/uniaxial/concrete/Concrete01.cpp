@@ -349,7 +349,7 @@ int XC::Concrete01::commitState(void)
     return 0;
   }
 
-//! @brief Returns to the last commited state.
+//! @brief Returns to the last committed state.
 int XC::Concrete01::revertToLastCommit(void)
   {
     commit_to_trial();

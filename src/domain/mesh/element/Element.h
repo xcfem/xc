@@ -166,7 +166,7 @@ class Element: public MeshComponent
 
     // methods dealing with committed state and update
     virtual int commitState(void);
-    //! @brief Revert to the last commited state.
+    //! @brief Revert to the last committed state.
     //!
     //! The element is to set it's current state to the last committed
     //! state. To return 0 if sucessfull, a negative number if not.
