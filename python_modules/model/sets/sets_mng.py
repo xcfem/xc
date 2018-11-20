@@ -200,26 +200,6 @@ def lstElem_to_set(preprocessor,lstElem,setName):
         s.getElements.append(e)
     return s  
 
-def get_lin_2Pts(pnt1,pnt2,setSrchLin=None):
-    '''return the line that belongs to the set `,setSrchLin` and whose
-    starting and ending points are `pnt1` and `pnt2` (in this order)
-    If no set is defined, total set is adopted
-    '''
-    broke_out= False
-    tgp1=pnt1.tag
-    tgp2=pnt2.tag
-    if not setSrchLin:
-        setSrchLin=pnt1.getPreprocessor.getSets.getSet('total').getLines
-    for l in setSrchLin:
-        extr= l.getKPoints()
-        if (extr[0]== tgp1 and extr[1]== tgp2):
-            broke_out= True
-            break
-    if not broke_out:
-#        print "Can't find the line"
-        return
-    else:
-        return l
 
 def get_lines_on_points(setPoints,setLinName,onlyIncluded=True):
     '''return a set of lines (and all the entities of lower rank associated) 

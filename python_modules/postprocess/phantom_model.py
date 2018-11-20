@@ -205,15 +205,18 @@ class PhantomModel(object):
       controller.preprocessor=self.preprocessor
       controller.check(elements,key)
 
-  def write(self,controller,outputFileName):
+  def write(self,controller,outputFileName,outputCfg):
     '''Writes results into the output file
 
     :param controller:     object that controls limit state in elements
     :param outputFileName: base name of output file (extensions .py and .tex)
+    :param outputCfg: instance of class 'verifOutVars' which defines the 
+           variables that control the output of the checking (append or not
+           the results to a file, generation or not of lists, ...)
     '''
-    return cv.writeControlVarsFromPhantomElements(controller.limitStateLabel,self.preprocessor,outputFileName)
+    return cv.writeControlVarsFromPhantomElements(controller.limitStateLabel,self.preprocessor,outputFileName,outputCfg)
 
-  def runChecking(self,limitStateData,setCalc=None):
+  def runChecking(self,limitStateData,outputCfg):
     '''Run the analysis, check the results and write them into a file
 
     :param limitStateData: object that contains the name of the file
@@ -221,17 +224,18 @@ class PhantomModel(object):
                            obtained for each element 
                            for the combinations analyzed and the
                            controller to use for the checking.
-    :param setCalc: set of elements to be analyzed (defaults to None which 
-                    means that all the elements in the file of internal forces
-                    results are analyzed) 
+    :param outputCfg: instance of class 'verifOutVars' which defines the 
+               variables that control the output of the checking (set of 
+               elements to be analyzed, append or not the results to a file,
+               generation or not of lists, ...)
      '''
+    retval=None
     intForcCombFileName= limitStateData.getInternalForcesFileName()
     controller= limitStateData.controller
-    meanCFs= -1.0
     if(controller):
-      self.build(intForcCombFileName,controller,setCalc)
+      self.build(intForcCombFileName,controller,outputCfg.setCalc)
       self.check(controller)
-      meanCFs= self.write(controller,limitStateData.getOutputDataBaseFileName())
+      retval=self.write(controller,limitStateData.getOutputDataBaseFileName(),outputCfg)
     else:
       lmsg.error('PhantomModel::runChecking controller not defined.')
-    return meanCFs
+    return retval

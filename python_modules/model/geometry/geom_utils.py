@@ -139,17 +139,87 @@ def rect2DPolygon(xCent,yCent,Lx,Ly):
     return pol
 
 def def_rg_cooLim(XYZLists,Xcoo,Ycoo,Zcoo):
-  '''Return an XYZ range given the three lists of coordinates of the grid
-  and the limit coordinates.
+    '''Return an XYZ range given the three lists of coordinates of the grid
+    and the limit coordinates.
 
-  :param XYZList: (xList,yList,zList)
-  :param Xcoo: (xmin,xmax)
-  :param Ycoo: (ymin,ymax)
-  :param Zcoo: (zmin,zmax)
-  '''
-  xLst=XYZLists[0]
-  yLst=XYZLists[1]
-  zLst=XYZLists[2]
-  rg=gm.IJKRange((xLst.index(Xcoo[0]),yLst.index(Ycoo[0]),zLst.index(Zcoo[0])),(xLst.index(Xcoo[1]),yLst.index(Ycoo[1]),zLst.index(Zcoo[1])))
-  return rg
+    :param XYZList: (xList,yList,zList)
+    :param Xcoo: (xmin,xmax)
+    :param Ycoo: (ymin,ymax)
+    :param Zcoo: (zmin,zmax)
+    '''
+    xLst=XYZLists[0]
+    yLst=XYZLists[1]
+    zLst=XYZLists[2]
+    rg=gm.IJKRange((xLst.index(Xcoo[0]),yLst.index(Ycoo[0]),zLst.index(Zcoo[0])),(xLst.index(Xcoo[1]),yLst.index(Ycoo[1]),zLst.index(Zcoo[1])))
+    return rg
                                                                                 
+def lstP3d_from_lstLns(lstLns):
+    '''Return an ordered list of vertex (3DPos) from the ordered list of 
+    consecutive lines 'lstLns' given as parameter. 
+    '''
+    prep=lstLns[0].getPreprocessor
+    pointsHandler=prep.getMultiBlockTopology.getPoints
+    lstP3d=[pointsHandler.get(l.getKPoints()[0]).getPos for l in lstLns]
+    lstP3d.append(pointsHandler.get(lstLns[-1].getKPoints()[1]).getPos)
+    return lstP3d
+
+def lstLns_from_lstPnts(lstPnts):
+    '''Return an ordered list of consecutive lines  from the ordered list of 
+    points 'lstPnts' given as parameter. 
+    '''
+    prep=lstPnts[0].getPreprocessor
+    lstLn=[get_lin_2Pts(lstPnts[i],lstPnts[i+1]) for i in range (len(lstPnts)-1)]
+    lstLn.append(get_lin_2Pts(lstPnts[-2],lstPnts[-1]))
+    return lstLn
+
+
+def get_lin_2Pts(pnt1,pnt2,setSrchLin=None):
+    '''return the line that belongs to the set `,setSrchLin` and whose
+    starting and ending points are `pnt1` and `pnt2` (in this order)
+    If no set is defined, total set is adopted
+    '''
+    broke_out= False
+    tgp1=pnt1.tag
+    tgp2=pnt2.tag
+    if not setSrchLin:
+        setSrchLin=pnt1.getPreprocessor.getSets.getSet('total').getLines
+    for l in setSrchLin:
+        extr= l.getKPoints()
+        if (extr[0]== tgp1 and extr[1]== tgp2):
+            broke_out= True
+            break
+    if not broke_out:
+#        print "Can't find the line"
+        return
+    else:
+        return l
+    
+def lstEquPnts_from_polyline(pol,nDiv):
+    '''Return a list of nDiv+1 equally spaced points (3dPos) in polyline 'pol'
+    
+    :param pol: polyline (as defined with geom.Polyline3d())
+    :param nDiv: number of divisions to split polyline
+    '''
+    L=pol.getLength()
+    nTotSegm=pol.getNumSegments()
+    eqDistCP=L/nDiv         
+    nmbCP=nDiv-1            #number of intermediate control points
+    cumLength=0             #cumulate length in the polyline
+    nmbSegm=1               #starting number of segment
+    retval=[pol.getSegment(1).getOrigen()]
+    for i in range(1,nmbCP+1):    #intermediate points
+        lengthCP=i*eqDistCP-cumLength
+        for j in range (nmbSegm,nTotSegm+1):
+            sg=pol.getSegment(j)
+            LSegm=sg.getLength()
+            if lengthCP<LSegm:
+                retval.append(sg.getPoint(lengthCP/LSegm))
+                break
+            else:
+                nmbSegm+=1
+                cumLength+=LSegm
+                lengthCP-=LSegm
+    retval.append(pol.getSegment(nTotSegm).getDestino())
+    return retval
+    
+  

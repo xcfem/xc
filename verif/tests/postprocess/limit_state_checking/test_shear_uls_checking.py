@@ -2,11 +2,11 @@
 
 '''Limit state controller for shear.'''
 
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com"
+__email__= "l.pereztato@gmail.com ana.ortega@ciccp.es"
 
 import math
 import xc_base
@@ -24,6 +24,7 @@ from postprocess import RC_material_distribution
 from materials.sections.fiber_section import defSimpleRCSection
 import sys
 import logging
+from postprocess.config import output_config as oc
 
 #Hide logging messages from modules.
 rootLogger = logging.getLogger()
@@ -129,8 +130,9 @@ lsd.shearResistance.controller.analysisToPerform= predefined_solutions.simple_ne
 lsd.LimitStateData.check_results_directory= '/tmp/'
 lsd.normalStressesResistance.outputDataBaseFileName= 'resVerif'
 
+outCfg=oc.verifOutVars(listFile='N',calcMeanCF='Y')
 
-(FEcheckedModel,meanFCs)= reinfConcreteSectionDistribution.runChecking(lsd.shearResistance, matDiagType="d",threeDim= True)  
+(FEcheckedModel,meanFCs)= reinfConcreteSectionDistribution.runChecking(lsd.shearResistance, matDiagType="d",threeDim= True,outputCfg=outCfg)  
 
 #print "mean FCs: ", meanFCs
 

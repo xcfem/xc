@@ -285,11 +285,9 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
                 CFtmp=sh.getBiaxialBendingEfficiency(sc,lf.N,lf.My,lf.Mz,lf.Vy,chLT)
                 if lf.idSection == 0:
                     if (CFtmp>e.getProp(self.limitStateLabel+'Sect1').CF):
-                        print 'CF0=', CFtmp
                         e.setProp(self.limitStateLabel+'Sect1',cv.BiaxialBendingControlVars('Sects1',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz))
                 else:
                     if (CFtmp>e.getProp(self.limitStateLabel+'Sect2').CF):
-                        print 'CF1=', CFtmp
                         e.setProp(self.limitStateLabel+'Sect2',cv.BiaxialBendingControlVars('Sects2',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz))
 
 

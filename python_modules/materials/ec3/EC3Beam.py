@@ -14,7 +14,6 @@ import geom
 import xc
 from model.geometry import geom_utils as gu
 from materials.ec3 import EC3_limit_state_checking as EC3lsc
-from model.sets import sets_mng as smg
 from miscUtils import LogMessages as lmsg
 
 class EC3Beam(object):
@@ -69,13 +68,10 @@ class EC3Beam(object):
         prep=self.getPreprocessor()
         if self.lstLines:
             lstLn=self.lstLines
-            pointsHandler=prep.getMultiBlockTopology.getPoints
-            lstP3d=[pointsHandler.get(l.getKPoints()[0]).getPos for l in lstLn]
-            lstP3d.append(pointsHandler.get(lstLn[-1].getKPoints()[1]).getPos)
+            lstP3d=gu.lstP3d_from_lstLns(lstLn)
         elif self.lstPoints:
             lstP3d=[p.getPos for p in self.lstPoints]
-            lstLn=[smg.get_lin_2Pts(self.lstPoints[i],self.lstPoints[i+1]) for i in range (len(self.lstPoints)-1)]
-            lstLn.append(smg.get_lin_2Pts(self.lstPoints[-2],self.lstPoints[-1]))
+            lstLn=gu.lstLns_from_lstPnts(self.lstPoints)
         else:
             lmsg.warning('Beam insufficiently defined: list of lines or points  required' )
         #set of elements included in the EC3beam
@@ -84,40 +80,20 @@ class EC3Beam(object):
         for l in lstLn:
             for e in l.getElements():
                 self.elemSet.append(e)
-        nmbSpac=4   # number of divisions (five points equally spaced)
         pol=geom.Polyline3d()
         for p in lstP3d:
             pol.append(p)
         self.length=pol.getLength()
-        nTotSegm=pol.getNumSegments()
-        eqDistCP=.25*self.length          #equidistance between control points
-        nmbCP=nmbSpac-1         #number of intermediate control points
-        cumLength=0             #cumulate length in the polyline
-        nmbSegm=1               #starting number of segment
+        lstEqPos3d=gu.lstEquPnts_from_polyline(pol,nDiv=4) #(five points equally spaced)
+        lstEqElem=[self.elemSet.getNearestElement(p) for p in lstEqPos3d]
         self.contrPnt=list()
-        firstPnt=lstP3d[0]
-        self.contrPnt.append((lstLn[0].getNearestElement(firstPnt),0)) 
-        for i in range(1,nmbCP+1):    #intermediate points
-            lengthCP=i*eqDistCP-cumLength
-            for j in range (nmbSegm,nTotSegm+1):
-                sg=pol.getSegment(j)
-                LSegm=sg.getLength()
-                if lengthCP<LSegm:
-                    pnt=sg.getPoint(lengthCP/LSegm)
-                    elem=lstLn[nmbSegm-1].getNearestElement(pnt)
-                    elSegm=elem.getLineSegment(0)
-                    relDistPointInElem=(pnt-elSegm.getOrigen()).getModulo()/elSegm.getLength()
-                    self.contrPnt.append((elem,relDistPointInElem))
-                    break
-                else:
-                    nmbSegm+=1
-                    cumLength+=LSegm
-                    lengthCP-=LSegm
-        lastPnt=lstP3d[-1]
-        self.contrPnt.append((lstLn[-1].getNearestElement(lastPnt),1)) 
+        for i in range(5):
+            elem=lstEqElem[i]
+            elSegm=elem.getLineSegment(0)
+            relDistPointInElem=(lstEqPos3d[i]-elSegm.getOrigen()).getModulo()/elSegm.getLength()
+            self.contrPnt.append((elem,relDistPointInElem))
         return
-        
-        
+            
     def getLateralBucklingReductionFactor(self):
         ''' Returns lateral torsional buckling reduction factor value
         for the elements of the beam.'''

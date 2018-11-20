@@ -16,6 +16,7 @@ from materials.sections import internal_forces
 from collections import defaultdict
 import csv
 from postprocess import control_vars as cv
+from postprocess.config import output_config as oc
 
 def defaultAnalysis(feProb,steps= 1):
     '''Default analysis procedure for saveAll method.'''
@@ -98,15 +99,35 @@ class LimitStateData(object):
             fDisp.close()
             comb.removeFromDomain() #Remove combination from the model.
 #20181117
-    def runChecking(self,setCalc):
-        if setCalc:
-            prep=setCalc.getPreprocessor
+    def runChecking(self,outputCfg):
+        '''This method reads, for the elements in setCalc,  the internal 
+        forces previously calculated and saved in the corresponding file.
+        Using the 'initControlVars' and 'checkSetFromIntForcFile' methods of 
+        the controller, the appropiate attributes are assigned to the 
+        elements and the associated limit state verification is run.
+        The results are written to a file in order to be displayed or listed.
+
+        :param outputCfg: instance of class 'verifOutVars' which defines the 
+               variables that control the output of the checking (set of 
+               elements to be analyzed, append or not the results to the 
+               result file [defatults to 'N'], generation or not
+               of list file [defatults to 'N', ...)
+        :param setCalc: set that contains elements to be checked
+        :param appendToResFile:  'Yes','Y','y',.., if results are appended to 
+               existing file of results (defaults to 'N')
+        :param listFile: 'Yes','Y','y',.., if latex listing file of results 
+                        is desired to be generated (defaults to 'N')
+        '''
+        retval=None
+        if outputCfg.setCalc:
+            prep=outputCfg.setCalc.getPreprocessor
             intForcCombFileName=self.getInternalForcesFileName()
-            self.controller.initControlVars(setCalc)
-            self.controller.checkSetFromIntForcFile(intForcCombFileName,setCalc)
-            cv.writeControlVarsFromElements(self.controller.limitStateLabel,prep,self.getOutputDataBaseFileName(),setCalc)
+            self.controller.initControlVars(outputCfg.setCalc)
+            self.controller.checkSetFromIntForcFile(intForcCombFileName,outputCfg.setCalc)
+            retval=cv.writeControlVarsFromElements(self.controller.limitStateLabel,prep,self.getOutputDataBaseFileName(),outputCfg)
         else:
             lmsg.error("Result file hasn't been created, you must specify a valid set of elements")
+        return retval
 
 #20181117 end
 
@@ -128,22 +149,25 @@ class NormalStressesRCLimitStateData(LimitStateData):
         combContainer.ULS.perm.dumpCombinations(loadCombinations)
         return loadCombinations
 
-    def check(self,reinfConcreteSections,setCalc=None):
+    def check(self,reinfConcreteSections,outputCfg=oc.verifOutVars()):
         '''Checking of normal stresses in ultimate limit states
         (see self.dumpCombinations).
 
-        :param reinfConcreteSections: Reinforced concrete sections on each element.
-        :param setCalc: set of elements to be analyzed (defaults to None which 
-                        means that all the elements in the file of internal forces
-                        results are analyzed) 
+        :param reinfConcreteSections: Reinforced concrete sections on each 
+               element.
+        :param outputCfg: instance of class 'verifOutVars' which defines the 
+               variables that control the output of the checking (set of 
+               elements to be analyzed, append or not the results to a file,
+               generation or not of lists, ...)
          '''
-        return reinfConcreteSections.internalForcesVerification3D(self, "d",setCalc)
+        return reinfConcreteSections.internalForcesVerification3D(self, "d",outputCfg)
 
 class ShearResistanceRCLimitStateData(LimitStateData):
     ''' Reinforced concrete shear resistance limit state data.'''
     def __init__(self):
         '''Limit state data constructor '''
         super(ShearResistanceRCLimitStateData,self).__init__('ULS_shearResistance','verifRsl_shearULS')
+        
     def dumpCombinations(self,combContainer,loadCombinations):
         '''Load into the solver the combinations needed for this limit state.
 
@@ -155,16 +179,18 @@ class ShearResistanceRCLimitStateData(LimitStateData):
         loadCombinations.clear()
         combContainer.ULS.perm.dumpCombinations(loadCombinations)
         return loadCombinations
-    def check(self,reinfConcreteSections,setCalc=None):
+    def check(self,reinfConcreteSections,outputCfg=oc.verifOutVars()):
         '''Checking of shear resistance in ultimate limit states 
         (see self.dumpCombinations).
 
-        :param reinfConcreteSections: Reinforced concrete sections on each element.
-        :param setCalc: set of elements to be analyzed (defaults to None which 
-                        means that all the elements in the file of internal forces
-                        results are analyzed) 
+        :param reinfConcreteSections: Reinforced concrete sections on each 
+               element.
+        :param outputCfg: instance of class 'verifOutVars' which defines the 
+               variables that control the output of the checking (set of 
+               elements to be analyzed, append or not the results to a file,
+               generation or not of lists, ...)
         '''
-        return reinfConcreteSections.internalForcesVerification3D(self,"d",setCalc)
+        return reinfConcreteSections.internalForcesVerification3D(self,"d",outputCfg)
 
 class FreqLoadsCrackControlRCLimitStateData(LimitStateData):
     ''' Reinforced concrete crack control under frequent loads limit state data.'''
@@ -182,16 +208,18 @@ class FreqLoadsCrackControlRCLimitStateData(LimitStateData):
         loadCombinations.clear()
         combContainer.SLS.freq.dumpCombinations(loadCombinations)
         return loadCombinations
-    def check(self,reinfConcreteSections,setCalc=None):
+    def check(self,reinfConcreteSections,outputCfg=oc.verifOutVars()):
         '''Checking of crack width under frequent loads in serviceability limit states 
            (see self.dumpCombinations).
 
-        :param reinfConcreteSections: Reinforced concrete sections on each element.
-        :param setCalc: set of elements to be analyzed (defaults to None which 
-                        means that all the elements in the file of internal forces
-                        results are analyzed) 
-        '''
-        return reinfConcreteSections.internalForcesVerification3D(self, "k",setCalc)
+        :param reinfConcreteSections: Reinforced concrete sections on each 
+               element.
+        :param outputCfg: instance of class verifOutVars which defines the 
+               variables that control the output of the checking (set of 
+               elements to be analyzed, append or not the results to file,
+               generation or not of lists, ...)
+         '''
+        return reinfConcreteSections.internalForcesVerification3D(self, "k",outputCfg)
 
 class QPLoadsCrackControlRCLimitStateData(LimitStateData):
     ''' Reinforced concrete crack control under quasi-permanent loads limit state data.'''
@@ -210,16 +238,18 @@ class QPLoadsCrackControlRCLimitStateData(LimitStateData):
         combContainer.SLS.qp.dumpCombinations(loadCombinations)
         return loadCombinations
 
-    def check(self,reinfConcreteSections,setCalc=None):
+    def check(self,reinfConcreteSections,outputCfg=oc.verifOutVars()):
         '''Checking of crack width under quasi-permanent loads in
         serviceability limit states (see self.dumpCombinations).
 
-        :param reinfConcreteSections: Reinforced concrete sections on each element.
-        :param setCalc: set of elements to be analyzed (defaults to None which 
-                        means that all the elements in the file of internal forces
-                        results are analyzed) 
+        :param reinfConcreteSections: Reinforced concrete sections on each 
+               element.
+        :param outputCfg: instance of class verifOutVars which defines the 
+               variables that control the output of the checking (set of 
+               elements to be analyzed, append or not the results to file,
+               generation or not of lists, ...)
         '''
-        return reinfConcreteSections.internalForcesVerification3D(self,"k",setCalc)
+        return reinfConcreteSections.internalForcesVerification3D(self,"k",outputCfg)
 
 class FreqLoadsDisplacementControlLimitStateData(LimitStateData):
     ''' Displacement control under frequent loads limit state data.'''
@@ -251,6 +281,7 @@ class FatigueResistanceRCLimitStateData(LimitStateData):
     def __init__(self):
         '''Limit state data constructor '''
         super(FatigueResistanceRCLimitStateData,self).__init__('ULS_fatigueResistance','verifRsl_fatigueULS')
+        
     def dumpCombinations(self,combContainer,loadCombinations):
         '''Load into the solver the combinations needed for this limit state.
 
@@ -262,16 +293,19 @@ class FatigueResistanceRCLimitStateData(LimitStateData):
         loadCombinations.clear()
         combContainer.ULS.fatigue.dumpCombinations(loadCombinations)
         return loadCombinations
-    def check(self,reinfConcreteSections,setCalc=None):
+    
+    def check(self,reinfConcreteSections,outputCfg=oc.verifOutVars()):
         '''Checking of fatigue under fatigue combinations loads in
         ultimate limit states (see self.dumpCombinations).
 
-        :param reinfConcreteSections: Reinforced concrete sections on each element.
-        :param setCalc: set of elements to be analyzed (defaults to None which 
-                        means that all the elements in the file of internal forces
-                        results are analyzed) 
+        :param reinfConcreteSections: Reinforced concrete sections on each 
+               element.
+        :param outputCfg: instance of class 'verifOutVars' which defines the 
+               variables that control the output of the checking (set of 
+               elements to be analyzed, append or not the results to a file,
+               generation or not of lists, ...)
         '''
-        return reinfConcreteSections.internalForcesVerification3D(self, "d",setCalc)
+        return reinfConcreteSections.internalForcesVerification3D(self, "d",outputCfg)
 
 class NormalStressesSSLimitStateData(LimitStateData):
     ''' Structural steel normal stresses data for limit state checking.'''
@@ -279,15 +313,6 @@ class NormalStressesSSLimitStateData(LimitStateData):
         '''Constructor '''
         super(NormalStressesSSLimitStateData,self).__init__('ULS_normalStressesResistance','verifRsl_normStrsULS')
 
-    def check(self,setCalc=None):
-        '''Checking of normal stresses in ultimate limit states
-        (see self.dumpCombinations).
-
-        :param setCalc: set of elements to be analyzed (defaults to None which 
-                        means that all the elements in the file of internal forces
-                        results are analyzed) 
-        '''
-        return
 
 freqLoadsDisplacementControl= FreqLoadsDisplacementControlLimitStateData()
 freqLoadsCrackControl= FreqLoadsCrackControlRCLimitStateData()

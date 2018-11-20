@@ -11,12 +11,13 @@ from materials.sections import RCsectionsContainer as sc
 from solution import predefined_solutions
 from materials.sia262 import SIA262_limit_state_checking #Change SIA262->EHE
 from postprocess import limit_state_data as lsd
+from postprocess.config import output_config as oc
 
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com"
+__email__= "l.pereztato@gmail.com ana.ortega@ciccp.es"
 
 feProblem= xc.FEProblem()
 feProblem.logFileName= "/tmp/erase.log" # Don't pring warnings
@@ -70,7 +71,9 @@ lsd.LimitStateData.check_results_directory= '/tmp/'
 lsd.normalStressesResistance.outputDataBaseFileName= 'ppTN'
 #intForceFileName= lsd.normalStressesResistance.getInternalForcesFileName()
 
-meanFCs= reinfConcreteSections.internalForcesVerification3D(lsd.normalStressesResistance,"d")
+outCfg=oc.verifOutVars(listFile='N',calcMeanCF='Y')
+
+meanFCs= reinfConcreteSections.internalForcesVerification3D(lsd.normalStressesResistance,"d",outCfg)
 
 
 #print "mean FCs: ", meanFCs
