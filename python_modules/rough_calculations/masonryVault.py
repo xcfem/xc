@@ -1,6 +1,8 @@
 #-*- coding: utf-8 -*-
 from __future__ import division
 import scipy.interpolate
+from matplotlib import pyplot as plt
+import numpy
 
 '''Based on the thesis: Capacité portante de ponts en arc en maçonnerie de pierre naturelle - Modèle d'évaluation intégrant le niveau d'endommagement. Alix Grandjean (2010). documenturl: https://infoscience.epfl.ch/record/142552/files/EPFL_TH4596.pdf
 '''
@@ -25,21 +27,6 @@ def getAdmissibleAxialForce(S):
   return Nadm(S)
    
 #Basic functions.
-def yAxis(f,j,k,r,x):
-  "Polynomial interpolation for arc's axis."
-  return f*math.pow(x,4)+j*math.pow(x,3)+k*math.pow(x,2)+r*x
-
-def calcGamma(f,j,k,r,x):
-  "Angle of tangent to arc at x."
-  return math.atan(4*f*math.pow(x,3)+3*j*math.pow(x,2)+2*k*x+r)
-
-def aux1(f,j,k,r,x1,x0):
-  "Aux function."
-  return -f*(pow(x1,5)-pow(x0,5))/5-j*(pow(x1,4)-pow(x0,4))/4-k*(pow(x1,3)-pow(x0,3))/3-r*(pow(x1,2)-pow(x0,2))/2
-
-def aux2(f,j,k,r,x2):
-  "Aux function."
-  return -f*math.pow(x2,6)/30-j*math.pow(x2,5)/20-k*math.pow(x2,4)/12-r*math.pow(x2,3)/6-f*math.pow(x2,6)/6-j*math.pow(x2,5)/5
 
 def vQtrans(v,delta,hRcle):
   "Largeur participante pour la charge transversale (voir 6.5 et figure 6.13)."
@@ -192,29 +179,97 @@ def calcn6p32(alpha,beta,d,v,E,F,G,H):
   return fact*sum 
 
 class archGeometry(object):
-  """
+  '''
   Arch geometric definition:
    coefPolArch=[f,j,k,r]: Coefficients of polynomial y=fx^4+jx^3+kx^2+rx+u (u=0)
    XRot=[xA,xB,xC,xD]:  X coordinate rotules A,B,C,D [m]
    arcThick: arch thickness [m]
    arcSpan: arch span [m]
-  """
+  '''
   def __init__(self,coefPolArch=[0,0,0,0],XRot=[0,0,0,0],arcThick=0,arcSpan=15,arcEffL=4):
     self.coefPolArch=coefPolArch
     self.XRot=XRot
     self.arcThick=arcThick
     self.arcSpan=arcSpan
     self.arcEffL=arcEffL
+  def yAxis(self,x):
+    "Polynomial intevrpolation for arc's axis."
+    retval= self.coefPolArch[0]*math.pow(x,4)+self.coefPolArch[1]*math.pow(x,3)+self.coefPolArch[2]*math.pow(x,2)+self.coefPolArch[3]*x
+    # if(retval<0.0):
+    #   lmsg.warning('yAxis: negative ordinate obtained: ('+str(x)+','+str(retval)+')')
+    return retval
+  def calcGamma(self,x):
+    "Angle of tangent to arc at x."
+    return math.atan(4*self.coefPolArch[0]*math.pow(x,3)+3*self.coefPolArch[1]*math.pow(x,2)+2*self.coefPolArch[2]*x+self.coefPolArch[3])
+  def check(self,x_i,y_i):
+    error= 0.0
+    for x, y in zip(x_i, y_i):
+      error+= (y-self.yAxis(x))**2
+    return math.sqrt(error);
+  def checkAbscissa(self,x):
+    if(x<0.0 or x>self.arcSpan):
+      lmsg.warning('checkAbscissa: abscissa out of arc: x= '+str(x)+' (0.0,'+str(self.arcSpan)+')')    
+  def aux1(self,x1,x0):
+    "Aux function."
+    return -self.coefPolArch[0]*(pow(x1,5)-pow(x0,5))/5-self.coefPolArch[1]*(pow(x1,4)-pow(x0,4))/4-self.coefPolArch[2]*(pow(x1,3)-pow(x0,3))/3-self.coefPolArch[3]*(pow(x1,2)-pow(x0,2))/2
+  def aux2(self,x2):
+    "Aux function."
+    return -self.coefPolArch[0]*math.pow(x2,6)/30-self.coefPolArch[1]*math.pow(x2,5)/20-self.coefPolArch[2]*math.pow(x2,4)/12-self.coefPolArch[3]*math.pow(x2,3)/6-self.coefPolArch[0]*math.pow(x2,6)/6-self.coefPolArch[1]*math.pow(x2,5)/5
+  def plot(self):
+    '''Draws the arc and the hinges in matplotlib.'''
+    #plot arc
+    x_i= list()
+    y_i= list()
+    x= 0.0
+    for i in range(0,11):
+      x_i.append(x)
+      y_i.append(self.yAxis(x))
+      x+= self.arcSpan/10.0
+    x_new = numpy.linspace(min(x_i), max(x_i), 100)
+    tck = scipy.interpolate.splrep(x_i, y_i)
+    y_smooth = scipy.interpolate.splev(x_new, tck)
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.plot(x_new, y_smooth)
+    ax.axis('equal')
+    #plot hinges
+    x_i= self.XRot
+    y_i= self.getYRot()
+    delta= self.arcSpan/10.0
+    ax.annotate('A', xy=(x_i[0], y_i[0]),  xycoords='data',
+            xytext=(x_i[0], y_i[0]+delta), textcoords='data',
+            arrowprops=dict(facecolor='black', shrink=0.01),
+            horizontalalignment='right', verticalalignment='top',
+            )
+    ax.annotate('B', xy=(x_i[1], y_i[1]),  xycoords='data',
+            xytext=(x_i[1], y_i[1]+delta), textcoords='data',
+            arrowprops=dict(facecolor='black', shrink=0.01),
+            horizontalalignment='right', verticalalignment='top',
+            )
+    ax.annotate('C', xy=(x_i[2], y_i[2]),  xycoords='data',
+            xytext=(x_i[2], y_i[2]+delta), textcoords='data',
+            arrowprops=dict(facecolor='black', shrink=0.01),
+            horizontalalignment='right', verticalalignment='top',
+            )
+    ax.annotate('D', xy=(x_i[3], y_i[3]),  xycoords='data',
+            xytext=(x_i[3], y_i[3]+delta), textcoords='data',
+            arrowprops=dict(facecolor='black', shrink=0.01),
+            horizontalalignment='right', verticalalignment='top',
+            )
+    plt.show()
+    
   def getYRot(self):
     """YRot=[yA,yB,yC,yD]: Y coordinate of rotules A,B,C,D [m]"""
-    YRot=[]
+    YRot= list()
     for x in self.XRot:
-      YRot.append(yAxis(self.coefPolArch[0],self.coefPolArch[1],self.coefPolArch[2],self.coefPolArch[3],x))
+      #self.checkAbscissa(x)
+      y= self.yAxis(x)
+      YRot.append(y)
     return YRot
   def getGammaD(self):
     """angle at rotule D """
     x=self.XRot[3]
-    return -calcGamma(self.coefPolArch[0],self.coefPolArch[1],self.coefPolArch[2],self.coefPolArch[3],x)
+    return -self.calcGamma(x)
   def getDistxAC(self):
     return self.XRot[2]-self.XRot[0]
   def getDistxBD(self):
@@ -224,7 +279,7 @@ class archGeometry(object):
   def getYKeystone(self):
     """Y coordinate in keystone of arch (at arcSpan/2)""" 
     x=self.arcSpan/2
-    return yAxis(self.coefPolArch[0],self.coefPolArch[1],self.coefPolArch[2],self.coefPolArch[3],x)
+    return self.yAxis(x)
   def getS(self):
     '''Rise to span ratio.'''
     return self.getYKeystone()/self.arcSpan
@@ -240,10 +295,11 @@ class archGeometry(object):
     retval+= "Distance séparant les rotules D et B; b= " +str(self.getDistxBD()) +" m\n"
     retval+= "Angle determiné par la perpendiculaire à la tangente à l'axe en D et la verticale (voir 6.2 et A 10.3); gammaD= " +str(self.getGammaD()) + " rad\n"
     retval+= "Hauteur des rotules: \n"
-    retval+= "  hA= " +str(self.getYRot()[0]) + " m\n"
-    retval+= "  hB= " +str(self.getYRot()[1]) + " m\n"
-    retval+= "  hC= " +str(self.getYRot()[2]) + " m\n"
-    retval+= "  hD= " +str(self.getYRot()[3]) + " m\n"
+    yRot= self.getYRot()
+    retval+= "  hA= " +str(yRot[0]) + " m\n"
+    retval+= "  hB= " +str(yRot[1]) + " m\n"
+    retval+= "  hC= " +str(yRot[2]) + " m\n"
+    retval+= "  hD= " +str(yRot[3]) + " m\n"
     retval+= "  LR= " +str(self.getDistxAB()) + " m\n"
     retval+= "Épaisseur de l'arc d= " +str(self.arcThick) + " m\n"
     retval+= "Largueur efficace de l'arc; v= " +str(self.arcEffL) + " m\n"
@@ -318,18 +374,18 @@ class permLoadResult(object):
     self.fc= fc
   def getEta(self):
     """Résultante des charges permanentes sur l'overture active de l'arc (fig. 6.9) [N]"""
-    return self.gm.arcEffL*(self.fc.swSupStr*self.fc.eqThickRoad*self.gm.getDistxAB()+self.fc.swFill*(self.fc.fillThick*self.gm.getDistxAB()+aux1(self.gm.coefPolArch[0],self.gm.coefPolArch[1],self.gm.coefPolArch[2],self.gm.coefPolArch[3],self.gm.XRot[1],self.gm.XRot[0])))
+    return self.gm.arcEffL*(self.fc.swSupStr*self.fc.eqThickRoad*self.gm.getDistxAB()+self.fc.swFill*(self.fc.fillThick*self.gm.getDistxAB()+self.gm.aux1(self.gm.XRot[1],self.gm.XRot[0])))
 
   def getEtaW(self):
     return self.gm.arcEffL*(self.fc.swSupStr*self.fc.eqThickRoad*pow(self.gm.getDistxAB(),2)/2+self.fc.swFill*(self.fc.fillThick*pow(self.gm.getDistxAB(),2)/2-self.gm.coefPolArch[0]*pow(self.gm.XRot[1],6)/30-self.gm.coefPolArch[1]*pow(self.gm.XRot[1],5)/20-self.gm.coefPolArch[2]*pow(self.gm.XRot[1],4)/12-self.gm.coefPolArch[3]*pow(self.gm.XRot[1],3)/6-self.gm.coefPolArch[0]*pow(self.gm.XRot[0],6)/6-self.gm.coefPolArch[1]*pow(self.gm.XRot[0],5)/5+self.gm.coefPolArch[0]*pow(self.gm.XRot[0],5)*self.gm.XRot[1]/5-self.gm.coefPolArch[2]*pow(self.gm.XRot[0],4)/4+self.gm.coefPolArch[1]*pow(self.gm.XRot[0],4)*self.gm.XRot[1]/4-self.gm.coefPolArch[3]*pow(self.gm.XRot[0],3)/3+self.gm.coefPolArch[2]*pow(self.gm.XRot[0],3)*self.gm.XRot[1]/3+self.gm.coefPolArch[3]*pow(self.gm.XRot[0],2)*self.gm.XRot[1]/2))
 
   def getPhi(self):
     """résultante des charges permanentes solicitant la portion d'arc comprise entre les rotules A et C (fig. 6.9) [N]"""
-    return self.gm.arcEffL*(self.fc.swSupStr*self.fc.eqThickRoad*self.gm.getDistxAC()+self.fc.swFill*(self.fc.fillThick*self.gm.getDistxAC()+aux1(self.gm.coefPolArch[0],self.gm.coefPolArch[1],self.gm.coefPolArch[2],self.gm.coefPolArch[3],self.gm.XRot[2],self.gm.XRot[0])))
+    return self.gm.arcEffL*(self.fc.swSupStr*self.fc.eqThickRoad*self.gm.getDistxAC()+self.fc.swFill*(self.fc.fillThick*self.gm.getDistxAC()+self.gm.aux1(self.gm.XRot[2],self.gm.XRot[0])))
 
   def getPsi(self):
     """résultante des charges permanentes solicitant la portion d'arc comprise entre les rotules D et B (fig. 6.9) [N] """
-    return self.gm.arcEffL*(self.fc.swSupStr*self.fc.eqThickRoad*self.gm.getDistxBD()+self.fc.swFill*(self.fc.fillThick*self.gm.getDistxBD()+aux1(self.gm.coefPolArch[0],self.gm.coefPolArch[1],self.gm.coefPolArch[2],self.gm.coefPolArch[3],self.gm.XRot[1],self.gm.XRot[3])))
+    return self.gm.arcEffL*(self.fc.swSupStr*self.fc.eqThickRoad*self.gm.getDistxBD()+self.fc.swFill*(self.fc.fillThick*self.gm.getDistxBD()+self.gm.aux1(self.gm.XRot[1],self.gm.XRot[3])))
 
   def getPhiS(self):
     """moment de flexion induit par la résultante phi de la charge permanente entre A et C, par rapport à la rotule C (fig. 6.9) [Nm] """
@@ -341,16 +397,19 @@ class permLoadResult(object):
 
   def getR(self):
     """résultant de la poussée laterale entre les rotules B et D [N]"""
-    return self.gm.arcEffL*(self.fc.getKp()*self.fc.mp*(self.fc.eqThickRoad*self.fc.swSupStr*(self.gm.getYRot()[3]-self.gm.getYRot()[1])+self.fc.swFill*self.fc.fillThick*(self.gm.getYRot()[3]-self.gm.getYRot()[1])-self.fc.swFill*(self.gm.getYRot()[3]*self.gm.getYRot()[3]/2-self.gm.getYRot()[1]*self.gm.getYRot()[1]/2))+self.fc.cohesion*self.fc.mc*self.fc.getKc()*(self.gm.getYRot()[3]-self.gm.getYRot()[1]))
+    yRot= self.gm.getYRot()
+    return self.gm.arcEffL*(self.fc.getKp()*self.fc.mp*(self.fc.eqThickRoad*self.fc.swSupStr*(yRot[3]-yRot[1])+self.fc.swFill*self.fc.fillThick*(yRot[3]-yRot[1])-self.fc.swFill*(yRot[3]*yRot[3]/2-yRot[1]*yRot[1]/2))+self.fc.cohesion*self.fc.mc*self.fc.getKc()*(yRot[3]-yRot[1]))
 
   def getRzB(self):
     """moment de flexion induit par la résultant de la poussée laterale entre les rotules B et D, par rapport à la rotule B [Nm]"""
-    return self.gm.arcEffL*(self.fc.getKp()*self.fc.mp*(self.fc.eqThickRoad*self.fc.swSupStr*(self.gm.getYRot()[3]*self.gm.getYRot()[3]/2-self.gm.getYRot()[1]*self.gm.getYRot()[1]/2-self.gm.getYRot()[1]*(self.gm.getYRot()[3]-self.gm.getYRot()[1])))+self.fc.swFill*(self.fc.fillThick*(self.gm.getYRot()[3]*self.gm.getYRot()[3]/2-self.gm.getYRot()[1]*self.gm.getYRot()[1]/2)-self.fc.fillThick*self.gm.getYRot()[1]*(self.gm.getYRot()[3]-self.gm.getYRot()[1])-pow(self.gm.getYRot()[3],3)/3+pow(self.gm.getYRot()[1],3)/3+self.gm.getYRot()[1]*(self.gm.getYRot()[3]*self.gm.getYRot()[3]/2-self.gm.getYRot()[1]*self.gm.getYRot()[1]/2))+self.fc.cohesion*self.fc.mc*self.fc.getKc()*(self.gm.getYRot()[3]*self.gm.getYRot()[3]/2-self.gm.getYRot()[1]*self.gm.getYRot()[1]/2-self.gm.getYRot()[1]*(self.gm.getYRot()[3]-self.gm.getYRot()[1])))
+    yRot= self.gm.getYRot()
+    return self.gm.arcEffL*(self.fc.getKp()*self.fc.mp*(self.fc.eqThickRoad*self.fc.swSupStr*(yRot[3]*yRot[3]/2-yRot[1]*yRot[1]/2-yRot[1]*(yRot[3]-yRot[1])))+self.fc.swFill*(self.fc.fillThick*(yRot[3]*yRot[3]/2-yRot[1]*yRot[1]/2)-self.fc.fillThick*yRot[1]*(yRot[3]-yRot[1])-pow(yRot[3],3)/3+pow(yRot[1],3)/3+yRot[1]*(yRot[3]*yRot[3]/2-yRot[1]*yRot[1]/2))+self.fc.cohesion*self.fc.mc*self.fc.getKc()*(yRot[3]*yRot[3]/2-yRot[1]*yRot[1]/2-yRot[1]*(yRot[3]-yRot[1])))
 
 
   def getRzD(self):
     """moment de flexion induit par la résultant de la poussée laterale entre les rotules B et D, par rapport à la rotule D [Nm]"""
-    return self.gm.arcEffL*(self.fc.getKp()*self.fc.mp*(self.fc.eqThickRoad*self.fc.swSupStr*(self.gm.getYRot()[3]*(self.gm.getYRot()[3]-self.gm.getYRot()[1])-self.gm.getYRot()[3]*self.gm.getYRot()[3]/2+self.gm.getYRot()[1]*self.gm.getYRot()[1]/2))+self.fc.swFill*(self.fc.fillThick*self.gm.getYRot()[3]*(self.gm.getYRot()[3]-self.gm.getYRot()[1])-self.fc.fillThick*(self.gm.getYRot()[3]*self.gm.getYRot()[3]/2-self.gm.getYRot()[1]*self.gm.getYRot()[1]/2)-self.gm.getYRot()[3]*(self.gm.getYRot()[3]*self.gm.getYRot()[3]/2-self.gm.getYRot()[1]*self.gm.getYRot()[1]/2)+pow(self.gm.getYRot()[3],3)/3-pow(self.gm.getYRot()[1],3)/3)+self.fc.cohesion*self.fc.mc*self.fc.getKc()*(self.gm.getYRot()[3]*(self.gm.getYRot()[3]-self.gm.getYRot()[1])-self.gm.getYRot()[3]*self.gm.getYRot()[3]/2+self.gm.getYRot()[1]*self.gm.getYRot()[1]/2))
+    yRot= self.gm.getYRot()
+    return self.gm.arcEffL*(self.fc.getKp()*self.fc.mp*(self.fc.eqThickRoad*self.fc.swSupStr*(yRot[3]*(yRot[3]-yRot[1])-yRot[3]*yRot[3]/2+yRot[1]*yRot[1]/2))+self.fc.swFill*(self.fc.fillThick*yRot[3]*(yRot[3]-yRot[1])-self.fc.fillThick*(yRot[3]*yRot[3]/2-yRot[1]*yRot[1]/2)-yRot[3]*(yRot[3]*yRot[3]/2-yRot[1]*yRot[1]/2)+pow(yRot[3],3)/3-pow(yRot[1],3)/3)+self.fc.cohesion*self.fc.mc*self.fc.getKc()*(yRot[3]*(yRot[3]-yRot[1])-yRot[3]*yRot[3]/2+yRot[1]*yRot[1]/2))
 
   def __str__(self):
     retval= "Résultante de la charge permanente (voir 6.3 et A 11.1); eta= "+ str(self.getEta()) +" N\n"
@@ -414,26 +473,31 @@ class resistance(object):
     """Moment de flexion admis (voir 5.17 et A 7.15) [Nm]"""
     return diagInteraction(self.Nadmis,self.gm.arcThick,self.gm.arcEffL,self.fc.alpha,self.fc.beta)
   def getE(self):
-    return calcE6p27(self.tlR.getX(),self.tl.qrep,self.gm.arcSpan,self.gm.getDistxAB(),self.gm.arcEffL,self.tlR.getlQt(),self.gm.getDistxAC(),self.gm.getDistxBD(),self.gm.getYRot()[0],self.gm.getYRot()[1],self.gm.getYRot()[2],self.gm.getYRot()[3],self.gm.XRot[0])
+    yRot= self.gm.getYRot()
+    return calcE6p27(self.tlR.getX(),self.tl.qrep,self.gm.arcSpan,self.gm.getDistxAB(),self.gm.arcEffL,self.tlR.getlQt(),self.gm.getDistxAC(),self.gm.getDistxBD(),yRot[0],yRot[1],yRot[2],yRot[3],self.gm.XRot[0])
   def getF(self):
-    return calcF6p28(self.plR.getR(),self.gm.getDistxAB(),self.gm.getDistxAC(),self.gm.getDistxBD(),self.plR.getEta(),self.plR.getPhiS(),self.plR.getEtaW(),self.plR.getPsiT(),self.getMadmis(),self.getMadmis(),self.getMadmis(),self.plR.getRzB(),self.plR.getRzD(),self.gm.getYRot()[0],self.gm.getYRot()[1],self.gm.getYRot()[2],self.gm.getYRot()[3])
+    yRot= self.gm.getYRot()
+    return calcF6p28(self.plR.getR(),self.gm.getDistxAB(),self.gm.getDistxAC(),self.gm.getDistxBD(),self.plR.getEta(),self.plR.getPhiS(),self.plR.getEtaW(),self.plR.getPsiT(),self.getMadmis(),self.getMadmis(),self.getMadmis(),self.plR.getRzB(),self.plR.getRzD(),yRot[0],yRot[1],yRot[2],yRot[3])
   def getG(self):
-    return calcG6p29(self.tlR.getX(),self.tl.qrep,self.gm.arcSpan,self.gm.getDistxAB(),self.gm.arcEffL,self.tlR.getlQt(),self.gm.getDistxAC(),self.gm.getDistxBD(),self.gm.getYRot()[0],self.gm.getYRot()[1],self.gm.getYRot()[2],self.gm.getYRot()[3],self.gm.XRot[0],self.gm.getGammaD())
+    yRot= self.gm.getYRot()
+    return calcG6p29(self.tlR.getX(),self.tl.qrep,self.gm.arcSpan,self.gm.getDistxAB(),self.gm.arcEffL,self.tlR.getlQt(),self.gm.getDistxAC(),self.gm.getDistxBD(),yRot[0],yRot[1],yRot[2],yRot[3],self.gm.XRot[0],self.gm.getGammaD())
   def getH(self):
-    return calcH6p30(self.gm.getDistxAB(),self.gm.getDistxAC(),self.plR.getEta(),self.plR.getPsi(),self.plR.getPhiS(),self.plR.getEtaW(),self.getMadmis(),self.getMadmis(),self.getMadmis(),self.plR.getRzB(),self.gm.getYRot()[0],self.gm.getYRot()[1],self.gm.getYRot()[2],self.gm.getYRot()[3],self.gm.getGammaD())
+    yRot= self.gm.getYRot()
+    return calcH6p30(self.gm.getDistxAB(),self.gm.getDistxAC(),self.plR.getEta(),self.plR.getPsi(),self.plR.getPhiS(),self.plR.getEtaW(),self.getMadmis(),self.getMadmis(),self.getMadmis(),self.plR.getRzB(),yRot[0],yRot[1],yRot[2],yRot[3],self.gm.getGammaD())
   def getSafCoef(self):
     """Safety coefficient - Multiplicateur limite des charges utiles (voir 6.32)"""
-    return calcn6p32(self.fc.alpha,self.fc.beta,self.gm.arcThick,self.gm.arcEffL,self.getE(),self.getF(),self.getG(),self.getH())
+    retval= calcn6p32(self.fc.alpha,self.fc.beta,self.gm.arcThick,self.gm.arcEffL,self.getE(),self.getF(),self.getG(),self.getH())
+    xA= self.gm.XRot[0] #Hinge outside span.
+    if(xA<0.0):
+      retval+= (1-xA)**2
+    xB= self.gm.XRot[1]
+    L= self.gm.arcSpan
+    if(xB>L): #Hinge outside span.
+      retval+= 10*(1+xB-L)**10
+    return retval
   def getMinimFunc(self,x):
     self.gm.XRot=x
     retval= self.getSafCoef()
-    xA= x[0] #Hinge outside span.
-    if(xA<0.0):
-      retval+= (1-xA)**2
-    xB= x[1]
-    L= self.gm.arcSpan
-    if(xB>L): #Hinge outside span.
-      retval+= (1+xB-L)**2
     if(self.verbose):
       print 'n= ', retval, 'x= ', x
     return retval
