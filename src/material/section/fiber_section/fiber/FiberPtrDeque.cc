@@ -773,7 +773,7 @@ bool XC::FiberPtrDeque::isSubjectedToBending(const double &tol) const
       return false;
   }
 
-//! @brief Return the resultant of the compresiones in the fibers.
+//! @brief Return the resultant of the compressions in the fibers.
 double XC::FiberPtrDeque::getCompressionResultant(void) const
   {
     register double retval= 0;
@@ -1159,9 +1159,9 @@ XC::ClaseEsfuerzo XC::FiberPtrDeque::getClaseEsfuerzo(const double &tol) const
       {
         const double r= (epsMin-epsMax)/epsMin;
         if(r<tol)
-          retval= COMPRESION_SIMPLE;
+          retval= SIMPLE_COMPRESSION;
         else
-          retval= COMPRESION_COMPUESTA;
+          retval= COMPOSED_COMPRESSION;
       }
     return retval;
   }
@@ -1197,11 +1197,11 @@ std::string XC::FiberPtrDeque::getStrClaseEsfuerzo(const double &tol) const
       case FLEXION_COMPUESTA:
 	retval= "flexion_compuesta";
         break;
-      case COMPRESION_SIMPLE:
-	retval= "compresion_simple";
+      case SIMPLE_COMPRESSION:
+	retval= "simple_compression";
         break;
-      case COMPRESION_COMPUESTA:
-	retval= "compresion_compuesta";
+      case COMPOSED_COMPRESSION:
+	retval= "composed_compression";
         break;
       case ERROR:
 	retval= "error";
@@ -1310,7 +1310,7 @@ Line2d XC::FiberPtrDeque::getCompressedPlaneTrace(void) const
     const Line2d bendingTrace= getBendingPlaneTrace();
     Pos2d pt(getCenterOfMassY(),getCenterOfMassZ());
     const double epsMin= getStrainMin();
-    if(epsMin<0) //There are compresions.
+    if(epsMin<0) //There are compressions.
       {
         const Vector &C= getCompressedFibersCentroid();
         pt= Pos2d(C[0],C[1]);
@@ -1610,7 +1610,7 @@ int XC::FiberPtrDeque::setTrialSectionDeformation(const FiberSection2d &Section2
     return retval;
   }
 
-//! @brief Return the fibers to its last commited state.
+//! @brief Return the fibers to its last committed state.
 int XC::FiberPtrDeque::revertToLastCommit(FiberSection2d &Section2d,CrossSectionKR &kr2)
   {
     int err= 0;
@@ -1791,7 +1791,7 @@ int XC::FiberPtrDeque::setTrialSectionDeformation(FiberSection3d &Section3d,Cros
     return retval;
   }
 
-//! @brief Returns to the last commited state.
+//! @brief Returns to the last committed state.
 int XC::FiberPtrDeque::revertToLastCommit(FiberSection3d &Section3d,CrossSectionKR &kr3)
   {
     int err= 0;
@@ -1949,7 +1949,7 @@ int XC::FiberPtrDeque::setTrialSectionDeformation(FiberSectionGJ &SectionGJ,Cros
     return retval;
   }
 
-//! @brief Returns to the last commited state.
+//! @brief Returns to the last committed state.
 int XC::FiberPtrDeque::revertToLastCommit(FiberSectionGJ &SectionGJ,CrossSectionKR &krGJ)
   {
     int err= 0;
