@@ -168,3 +168,6 @@ version.cc
 doc/sphinxDoc/build/
 _templates
 _build
+
+#install log for python_modules
+python_modules/installed_files_history.txt

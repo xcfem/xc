@@ -211,7 +211,7 @@ class PhantomModel(object):
     :param controller:     object that controls limit state in elements
     :param outputFileName: base name of output file (extensions .py and .tex)
     '''
-    return cv.writeControlVarsFromElements(controller.limitStateLabel,self.preprocessor,outputFileName)
+    return cv.writeControlVarsFromPhantomElements(controller.limitStateLabel,self.preprocessor,outputFileName)
 
   def runChecking(self,limitStateData,setCalc=None):
     '''Run the analysis, check the results and write them into a file

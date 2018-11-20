@@ -6,6 +6,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 
+# DEPRECATED module 17/11/2018. Use postprocess/config/default_config.py 
 
 class ProjectDirectories:
     '''Project directoy structure.'''
