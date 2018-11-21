@@ -54,7 +54,7 @@ class LimitStateData(object):
         '''Read a Python object from a pickle file.'''
         with open(name + '.pkl', 'r') as f:
             return pickle.load(f)
-    def saveAll(self,feProblem,combContainer,setCalc,fConvIntForc= 1.0,analysisToPerform= defaultAnalysis):
+    def saveAll(self,feProblem,combContainer,setCalc,fConvIntForc= 1.0,analysisToPerform= defaultAnalysis,lstSteelBeams=None):
         '''Write internal forces, displacements, .., for each combination
 
         :param feProblem: XC finite element problem to deal with.
@@ -65,6 +65,7 @@ class LimitStateData(object):
                                one desired for the displaying of internal forces
                                (The use of this factor won't be allowed in
                                 future versions)
+        :param lstSteelBeams: list of steel beams to analyze (defaults to None)
         '''
         if fConvIntForc != 1.0:
           lmsg.warning('fConvIntForc= ' + fConvIntForc + 'conversion factor between units is DEPRECATED' )
@@ -80,7 +81,10 @@ class LimitStateData(object):
         os.system("rm -f " + fNameDispl)
         fIntF= open(fNameInfForc,"a")
         fDisp= open(fNameDispl,"a")
-        fIntF.write(" Comb. , Elem. , Sect. , N , Vy , Vz , T , My , Mz \n")
+        if lstSteelBeams:
+            fIntF.write(" Comb. , Elem. , Sect. , N , Vy , Vz , T , My , Mz ,chiLT\n")
+        else:
+            fIntF.write(" Comb. , Elem. , Sect. , N , Vy , Vz , T , My , Mz \n")
         fDisp.write(" Comb. , Node , Ux , Uy , Uz , ROTx , ROTy , ROTz \n")
         fIntF.close()
         fDisp.close()
@@ -90,6 +94,9 @@ class LimitStateData(object):
             comb.addToDomain() #Combination to analyze.
             #Solution
             result= analysisToPerform(feProblem)
+            if lstSteelBeams:
+                for sb in lstSteelBeams:
+                    sb.updateLateralBucklingReductionFactor()
             #Writing results.
             fIntF= open(fNameInfForc,"a")
             fDisp= open(fNameDispl,"a")

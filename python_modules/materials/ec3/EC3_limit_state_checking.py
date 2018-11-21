@@ -279,10 +279,9 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
         for e in setCalc.getElements:
             sh=e.getProp('crossSection')
             sc=e.getProp('sectionClass')
-            chLT=e.getProp('chiLT')
             elIntForc=internalForcesValues[e.tag]
             for lf in elIntForc:
-                CFtmp=sh.getBiaxialBendingEfficiency(sc,lf.N,lf.My,lf.Mz,lf.Vy,chLT)
+                CFtmp=sh.getBiaxialBendingEfficiency(sc,lf.N,lf.My,lf.Mz,lf.Vy,lf.chiLT)
                 if lf.idSection == 0:
                     if (CFtmp>e.getProp(self.limitStateLabel+'Sect1').CF):
                         e.setProp(self.limitStateLabel+'Sect1',cv.BiaxialBendingControlVars('Sects1',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz))

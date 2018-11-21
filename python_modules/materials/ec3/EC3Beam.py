@@ -133,6 +133,6 @@ class EC3Beam(object):
         else:
             recorder.callbackRecord= EC3lsc.controlULSCriterion()
 
-        recorder.callbackRestart= "print \"Restart method called.\""
+#        recorder.callbackRestart= "print \"Restart method called.\"" #20181121
         return recorder
 

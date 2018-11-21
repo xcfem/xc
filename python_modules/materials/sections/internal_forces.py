@@ -94,6 +94,8 @@ class CrossSectionInternalForces:
     self.T= eval(csvStr[3+offset])
     self.My= eval(csvStr[4+offset])
     self.Mz= eval(csvStr[5+offset])
+    if len(csvStr) > (6+offset):   #steel beam
+      self.chiLT=eval(csvStr[6+offset])
 
   def getComponents(self):
     '''Returns the internal forces in a list.'''
