@@ -605,12 +605,12 @@ class resistance(object):
     print "Multiplicateur limite des charges utiles (voir 6.32); n= ", n
     print "Réactions (ELU): "
     print "  horizontale rotule A (voir 6.19 et A 13.9); HAult= ",self.getHA()/1e3, ' kN'
-    print "  verticale rotule A (voir 6.20 et A 13.13); HAult= ",self.getVA()/1e3, ' kN'
+    print "  verticale rotule A (voir 6.20 et A 13.13); VAult= ",self.getVA()/1e3, ' kN'
     print "  horizontale rotule B (voir 6.21 et A 13.11); HBult= ",self.getHB()/1e3, ' kN'
-    print "  verticale rotule B (voir 6.22 et A 13.15); HBult= ",self.getVB()/1e3, ' kN'
+    print "  verticale rotule B (voir 6.22 et A 13.15); VBult= ",self.getVB()/1e3, ' kN'
     print "Réactions (valeurs charactéristiques): "
     print "  horizontale rotule A (voir 6.19 et A 13.9); HAk= ", self.getHA()/1e3/self.gm.arcEffL/n, ' kN/m'
-    print "  verticale rotule A (voir 6.20 et A 13.13); HAk= ", self.getVA()/1e3/self.gm.arcEffL/n, ' kN/m'
+    print "  verticale rotule A (voir 6.20 et A 13.13); VAk= ", self.getVA()/1e3/self.gm.arcEffL/n, ' kN/m'
     print "  horizontale rotule B (voir 6.21 et A 13.11); HBk= ", self.getHB()/1e3/self.gm.arcEffL/n, ' kN/m'
-    print "  verticale rotule B (voir 6.22 et A 13.15); HBk= ", self.getVB()/1e3/self.gm.arcEffL/n, ' kN/m'
+    print "  verticale rotule B (voir 6.22 et A 13.15); VBk= ", self.getVB()/1e3/self.gm.arcEffL/n, ' kN/m'
 
