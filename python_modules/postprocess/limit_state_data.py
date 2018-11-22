@@ -314,12 +314,6 @@ class FatigueResistanceRCLimitStateData(LimitStateData):
         '''
         return reinfConcreteSections.internalForcesVerification3D(self, "d",outputCfg)
 
-class NormalStressesSSLimitStateData(LimitStateData):
-    ''' Structural steel normal stresses data for limit state checking.'''
-    def __init__(self):
-        '''Constructor '''
-        super(NormalStressesSSLimitStateData,self).__init__('ULS_normalStressesResistance','verifRsl_normStrsULS')
-
 
 freqLoadsDisplacementControl= FreqLoadsDisplacementControlLimitStateData()
 freqLoadsCrackControl= FreqLoadsCrackControlRCLimitStateData()
@@ -327,7 +321,7 @@ quasiPermanentLoadsCrackControl= QPLoadsCrackControlRCLimitStateData()
 normalStressesResistance= NormalStressesRCLimitStateData()
 shearResistance= ShearResistanceRCLimitStateData()
 fatigueResistance= FatigueResistanceRCLimitStateData()
-steelNormalStressesResistance=NormalStressesSSLimitStateData()
+
 
 def readIntForcesFile(intForcCombFileName,setCalc=None):
     '''Extracts element and combination identifiers from the internal
