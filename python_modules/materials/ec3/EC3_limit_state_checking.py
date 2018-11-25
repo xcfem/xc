@@ -263,7 +263,7 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
     def initControlVars(self,setCalc):
         '''Initialize control variables over elements.
 
-        :param setCalc: set of elements to define control variables in
+        :param setCalc: set of elements to which define control variables
         '''
         for e in setCalc.getElements:
             e.setProp(self.limitStateLabel+'Sect1',cv.BiaxialBendingControlVars())
@@ -289,6 +289,41 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
                     if (CFtmp>e.getProp(self.limitStateLabel+'Sect2').CF):
                         e.setProp(self.limitStateLabel+'Sect2',cv.BiaxialBendingControlVars('Sects2',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz))
 
+
+class ShearController(lsc.LimitStateControllerBase):
+    '''Object that controls shear limit state.'''
+
+    def __init__(self,limitStateLabel):
+        super(ShearController,self).__init__(limitStateLabel)
+
+    def initControlVars(self,setCalc):
+        '''Initialize control variables over elements.
+
+        :param setCalc: set of elements to which define control variables
+        '''
+        for e in setCalc.getElements:
+            e.setProp(self.limitStateLabel+'Sect1',cv.ShearYControlVars())
+            e.setProp(self.limitStateLabel+'Sect2',cv.ShearYControlVars())
+
+    def checkSetFromIntForcFile(self,intForcCombFileName,setCalc=None):
+        '''Launch checking.
+
+        :param setCalc: set of elements to check
+        '''
+        intForcItems=lsd.readIntForcesFile(intForcCombFileName,setCalc)
+        internalForcesValues=intForcItems[2]
+        for e in setCalc.getElements:
+            sh=e.getProp('crossSection')
+            sc=e.getProp('sectionClass')
+            elIntForc=internalForcesValues[e.tag]
+            for lf in elIntForc:
+                CFtmp=sh.getYShearEfficiency(sc,lf.Vy)
+                if lf.idSection == 0:
+                    if (CFtmp>e.getProp(self.limitStateLabel+'Sect1').CF):
+                        e.setProp(self.limitStateLabel+'Sect1',cv.ShearYControlVars('Sects1',lf.idComb,CFtmp,lf.Vy))
+                else:
+                    if (CFtmp>e.getProp(self.limitStateLabel+'Sect2').CF):
+                        e.setProp(self.limitStateLabel+'Sect2',cv.ShearYControlVars('Sects2',lf.idComb,CFtmp,lf.Vy))
 
 
 # Routines to install in recorder  to execute in every commit to check

@@ -200,17 +200,10 @@ class QuickGraphics(object):
         diagAux=cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[self.xcSet],attributeName= "intForce",component= itemToDisp)
         maxAbs=diagAux.getMaxAbsComp()
         if maxAbs > 0:
-            scaleFactor*=LrefModSize/maxAbs*1e2
+            scaleFactor*=0.15*LrefModSize/(maxAbs*fConvUnits)
         #
-        diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[self.xcSet],attributeName= "intForce",component= itemToDisp)
-        diagram.addDiagram()
-        defDisplay= self.getDisplay(viewDef)
-        defDisplay.setupGrid(self.xcSet)
-        defDisplay.defineMeshScene(None,defFScale,color=self.xcSet.color)
-        defDisplay.appendDiagram(diagram) #Append diagram to the scene.
-
         caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.description
-        defDisplay.displayScene(caption=caption,fName=fileName)
+        display_diagram(scaleFactor= scaleFactor,fConvUnits= fConvUnits,setToDispRes=self.xcSet,setDisp=self.xcSet,attributeName= "intForce",component= itemToDisp,caption=caption,viewDef=viewDef,defFScale=defFScale,fileName=fileName)
 
     def dispLoadCaseBeamEl(self,loadCaseName='',setToDisplay=None,fUnitConv=1.0,elLoadComp='transComponent',elLoadScaleF=1.0,nodLoadScaleF=1.0,viewDef= vtk_graphic_base.CameraParameters('XYZPos'),caption='',fileName=None,defFScale=0.0):
         '''Display the loads applied on beam elements and nodes for a given load case
@@ -309,7 +302,8 @@ class QuickGraphics(object):
         caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.description
         defDisplay.displayScene(caption=caption,fName=fileName)
 
-def displayAxes(vectorField, preprocessor, setToDisplay=None,vectorScale=1.0,viewDef= vtk_graphic_base.CameraParameters("XYZPos",1.0),caption= '',fileName=None,defFScale=0.0):
+        
+def display_axes(vectorField, preprocessor, setToDisplay=None,vectorScale=1.0,viewDef= vtk_graphic_base.CameraParameters("XYZPos",1.0),caption= '',fileName=None,defFScale=0.0):
     '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
 
     :param vectorField: function that generates the vector field.
@@ -334,7 +328,7 @@ def displayAxes(vectorField, preprocessor, setToDisplay=None,vectorScale=1.0,vie
     defDisplay.displayScene(caption,fileName)
     return defDisplay
     
-def displayLocalAxes(prep,setToDisplay=None,vectorScale=1.0,viewDef= vtk_graphic_base.CameraParameters("XYZPos",1.0),caption= '',fileName=None,defFScale=0.0):
+def display_local_axes(prep,setToDisplay=None,vectorScale=1.0,viewDef= vtk_graphic_base.CameraParameters("XYZPos",1.0),caption= '',fileName=None,defFScale=0.0):
     '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
     
     :param setToDisplay: set of elements to be displayed (defaults to total set)
@@ -356,10 +350,10 @@ def displayLocalAxes(prep,setToDisplay=None,vectorScale=1.0,viewDef= vtk_graphic
         lmsg.warning('set to display not defined; using total set.')
     vField=lavf.LocalAxesVectorField(setToDisplay.name+'_localAxes',vectorScale)
     vField.dumpVectors(setToDisplay)
-    return displayAxes(vField, prep,setToDisplay,vectorScale,viewDef,caption,fileName,defFScale)
+    return display_axes(vField, prep,setToDisplay,vectorScale,viewDef,caption,fileName,defFScale)
 
 
-def displayStrongWeakAxis(preprocessor,setToDisplay=None,vectorScale=1.0,viewDef= vtk_graphic_base.CameraParameters("XYZPos",1.0),caption= '',fileName=None,defFScale=0.0):
+def display_strong_weak_axis(preprocessor,setToDisplay=None,vectorScale=1.0,viewDef= vtk_graphic_base.CameraParameters("XYZPos",1.0),caption= '',fileName=None,defFScale=0.0):
     '''vector field display of the loads applied to the chosen set of elements 
        in the load case passed as parameter
     
@@ -382,10 +376,10 @@ def displayStrongWeakAxis(preprocessor,setToDisplay=None,vectorScale=1.0,viewDef
         lmsg.warning('set to display not defined; using total set.')
     vField=lavf.StrongWeakAxisVectorField(setToDisplay.name+'_strongWeakAxis',vectorScale)
     vField.dumpVectors(setToDisplay)
-    return displayAxes(vField,preprocessor,setToDisplay,vectorScale,viewDef,caption,fileName,defFScale)
+    return display_axes(vField,preprocessor,setToDisplay,vectorScale,viewDef,caption,fileName,defFScale)
 
 
-def displayLoad(preprocessor,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vectorScale=1.0,multByElemArea=False,viewDef= vtk_graphic_base.CameraParameters("XYZPos",1.0),caption= '',fileName=None,defFScale=0.0):
+def display_load(preprocessor,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vectorScale=1.0,multByElemArea=False,viewDef= vtk_graphic_base.CameraParameters("XYZPos",1.0),caption= '',fileName=None,defFScale=0.0):
     '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
     
     :param setToDisplay: set of elements to be displayed (defaults to total set)
@@ -428,7 +422,7 @@ def displayLoad(preprocessor,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vect
     defDisplay.displayScene(caption,fileName)
     return defDisplay
 
-def displayEigenResults(preprocessor,eigenMode, setToDisplay=None,defShapeScale=0.0,equLoadVctScale=None,accelMode=None, unitsScale=1.0,viewDef= vtk_graphic_base.CameraParameters("XYZPos",1.0),caption= '',fileName=None):
+def display_eigen_result(preprocessor,eigenMode, setToDisplay=None,defShapeScale=0.0,equLoadVctScale=None,accelMode=None, unitsScale=1.0,viewDef= vtk_graphic_base.CameraParameters("XYZPos",1.0),caption= '',fileName=None):
     '''Display the deformed shape and/or the equivalent static forces 
     associated with the eigenvibration mode passed as parameter.
     
@@ -475,3 +469,77 @@ def displayEigenResults(preprocessor,eigenMode, setToDisplay=None,defShapeScale=
         vField.addToDisplay(defDisplay)
     defDisplay.displayScene(caption,fileName)
     return defDisplay
+
+
+def display_diagram(scaleFactor,fConvUnits,setToDispRes,setDisp,attributeName,component,caption,viewDef,defFScale,fileName):
+    '''Auxiliary function to display results on linear elements.
+
+    :param scaleFactor:  factor of scale to apply to the diagram display
+    :param fConvUnits:   factor of conversion to be applied to the results 
+    :param setToDispRes: set of linear elements to which display results
+    :param setDisp:      set of elements (any type) to be depicted
+    :param attributeName:attribute name(e.g. 'ULS_normalStressesResistance')
+    :param component:    result item to display (e.g. 'N', 'My', ...)
+    :param caption:      caption to display
+    :param viewDef:      instance of class CameraParameters
+    :param defFScale:    factor to apply to current displacement of nodes 
+                so that the display position of each node equals to
+                the initial position plus its displacement multiplied
+                by this factor. (Defaults to 0.0, i.e. display of 
+                initial/undeformed shape)
+    :param fileName:     file to dump the display
+    '''
+    diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[setToDispRes],attributeName= attributeName,component= component)
+    diagram.addDiagram()
+    defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
+    defDisplay.cameraParameters=viewDef
+    defDisplay.setupGrid(setDisp)
+    if hasattr(setDisp,'color'):
+        color=setDisp.color
+    else:
+        color=xc.Vector([rd.random(),rd.random(),rd.random()])
+    defDisplay.defineMeshScene(None,defFScale,color=color)
+    defDisplay.appendDiagram(diagram) #Append diagram to the scene.
+    defDisplay.displayScene(caption=caption,fName=fileName)
+    
+def display_beam_result(attributeName,itemToDisp,beamSetDispRes,setToDisplay=None,fConvUnits=1.0,scaleFactor=1.0,caption=None,viewDef= vtk_graphic_base.CameraParameters('XYZPos'),fileName=None,defFScale=0.0):
+    '''display results for beam elements from a limit state verification file.
+
+    :param attributeName:attribute name(e.g. 'ULS_normalStressesResistance')
+    :param itemToDisp:   result item to display (e.g. 'N', 'My', ...)
+    :param beamSetDispRes:set of linear elements to which display results 
+    :param setToDisplay: set of elements (any type) to be depicted
+           (defaults to None, in that case only elements in beamSetDispRes
+           are displayed)
+    :param fConvUnits:   factor of conversion to be applied to the results 
+           (defaults to 1)
+    :param scaleFactor:  factor of scale to apply to the auto-scaled display
+           (defaults to 1)
+    :param caption:      caption to display
+           (defaults to 'attributeName + itemToDisp')
+    :param viewDef:      instance of class CameraParameters
+           (defaults to 'XYZPos')
+    :param fileName:     file to dump the display (defaults to screen display)
+    :param defFScale:    factor to apply to current displacement of nodes 
+                so that the display position of each node equals to
+                the initial position plus its displacement multiplied
+                by this factor. (Defaults to 0.0, i.e. display of 
+                initial/undeformed shape)
+
+   '''
+    #auto-scale parameters
+    LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulo() #representative length of set size (to autoscale)
+    lstArgVal=[e.getProp(attributeName+'Sect1')(itemToDisp) for e in beamSetDispRes.getElements]
+    maxAbs=max(abs(max(lstArgVal)),abs(min(lstArgVal)))
+    if maxAbs > 0:
+        scaleFactor*=0.15*LrefModSize/(maxAbs*fConvUnits)
+    if not setToDisplay:
+        setToDisplay=beamSetDispRes
+    if not caption:
+        if hasattr(beamSetDispRes,'description'):
+            descrSet=beamSetDispRes.description.capitalize()
+        else:
+            descrSet=''
+        caption= attributeName + ', ' + itemToDisp + '. '+ descrSet
+    display_diagram(scaleFactor,fConvUnits,beamSetDispRes,setToDisplay,attributeName,itemToDisp,caption,viewDef,defFScale,fileName)
+   
