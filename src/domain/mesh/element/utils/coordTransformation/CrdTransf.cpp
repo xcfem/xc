@@ -69,7 +69,7 @@
 #include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
 #include "utility/matrix/ID.h"
 #include "utility/actor/actor/MovableVector.h"
-#include "utility/actor/actor/ArrayCommMetaData.h"
+#include "utility/actor/actor/CommMetaData.h"
 #include "preprocessor/prep_handlers/TransfCooHandler.h"
 
 

@@ -101,7 +101,7 @@
 #include "preprocessor/Preprocessor.h"
 
 
-#include "utility/actor/actor/ArrayCommMetaData.h"
+#include "utility/actor/actor/CommMetaData.h"
 
 
 void XC::Domain::free_mem(void)

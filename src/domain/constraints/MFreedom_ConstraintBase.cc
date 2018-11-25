@@ -43,8 +43,7 @@
 #include "xc_utils/src/matrices/m_int.h"
 #include "domain/domain/Domain.h"
 #include "domain/mesh/node/Node.h"
-#include "utility/actor/actor/ArrayCommMetaData.h"
-#include "utility/actor/actor/MatrixCommMetaData.h"
+#include "utility/actor/actor/CommMetaData.h"
 #include "vtkCellType.h"
 
 //! @brief Set the constraint matrix.

@@ -68,7 +68,7 @@
 #include <fstream>
 
 #include <iomanip>
-#include "utility/actor/actor/ArrayCommMetaData.h"
+#include "utility/actor/actor/CommMetaData.h"
 #include "utility/matrix/ID.h"
 
 

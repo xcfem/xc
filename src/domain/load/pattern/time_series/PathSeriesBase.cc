@@ -31,7 +31,7 @@
 #include <utility/matrix/Vector.h>
 
 #include <fstream>
-#include "utility/actor/actor/ArrayCommMetaData.h"
+#include "utility/actor/actor/CommMetaData.h"
 #include "utility/matrix/ID.h"
 
 //! @brief Constructor.

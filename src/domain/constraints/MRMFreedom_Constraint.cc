@@ -44,8 +44,7 @@
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 #include "domain/mesh/element/utils/NodePtrsWithIDs.h"
-#include "utility/actor/actor/ArrayCommMetaData.h"
-#include "utility/actor/actor/MatrixCommMetaData.h"
+#include "utility/actor/actor/CommMetaData.h"
 #include "vtkCellType.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 

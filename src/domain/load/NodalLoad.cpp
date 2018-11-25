@@ -67,7 +67,7 @@
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/pos_vec/SlidingVectorsSystem3d.h"
-#include "utility/actor/actor/ArrayCommMetaData.h"
+#include "utility/actor/actor/CommMetaData.h"
 
 // AddingSensitivity:BEGIN /////////////////////////////////////
  XC::Vector XC::NodalLoad::gradientVector(1);

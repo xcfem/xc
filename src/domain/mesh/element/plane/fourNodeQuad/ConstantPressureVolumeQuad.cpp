@@ -63,7 +63,7 @@
 #include <material/nD/NDMaterial.h>
 #include <domain/domain/Domain.h>
 
-#include "utility/actor/actor/ArrayCommMetaData.h"
+#include "utility/actor/actor/CommMetaData.h"
 #include "domain/mesh/element/utils/gauss_models/GaussModel.h"
 
 //static data

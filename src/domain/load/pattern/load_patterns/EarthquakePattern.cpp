@@ -64,7 +64,7 @@
 #include "domain/mesh/element/ElementIter.h"
 #include <cstdlib>
 
-#include "utility/actor/actor/ArrayCommMetaData.h"
+#include "utility/actor/actor/CommMetaData.h"
 
 void XC::EarthquakePattern::copy(const Vector *a,const Vector *b)
   {

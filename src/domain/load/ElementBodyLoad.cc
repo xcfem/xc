@@ -36,7 +36,6 @@
 #include "utility/actor/actor/MovableID.h"
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/set_mgmt/MapSet.h"
-#include "utility/actor/actor/ArrayCommMetaData.h"
 #include "domain/mesh/node/Node.h"
 
 XC::ElementBodyLoad::ElementBodyLoad(int tag, int classTag, const XC::ID &theEleTags)

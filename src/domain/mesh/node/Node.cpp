@@ -90,8 +90,7 @@
 #include "domain/mesh/element/ElementIter.h"
 
 #include "xc_utils/src/kernel/python_utils.h"
-#include "utility/actor/actor/ArrayCommMetaData.h"
-#include "utility/actor/actor/MatrixCommMetaData.h"
+#include "utility/actor/actor/CommMetaData.h"
 
 #include "utility/tagged/DefaultTag.h"
 

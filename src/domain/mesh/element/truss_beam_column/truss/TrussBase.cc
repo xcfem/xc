@@ -29,7 +29,7 @@
 #include "domain/mesh/element/truss_beam_column/truss/TrussBase.h"
 #include <domain/mesh/node/Node.h>
 
-#include "utility/actor/actor/ArrayCommMetaData.h"
+#include "utility/actor/actor/CommMetaData.h"
 
 
 //! @brief Pone a cero los pointers to node, los cosenos directores y los sensibility parameters.
