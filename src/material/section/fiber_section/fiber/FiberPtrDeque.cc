@@ -38,7 +38,6 @@
 #include "material/uniaxial/UniaxialMaterial.h"
 
 #include <domain/mesh/element/utils/Information.h>
-#include <utility/matrix/Vector.h>
 #include "xc_utils/src/geom/sis_ref/Ref3d3d.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
@@ -51,6 +50,7 @@
 #include "xc_utils/src/geom/d2/HalfPlane2d.h"
 #include "xc_utils/src/geom/lists/utils_list_pos2d.h"
 #include "material/section/interaction_diagram/DeformationPlane.h"
+#include "utility/actor/actor/MovableDeque.h"
 
 
 //! @brief Constructor.
@@ -2334,8 +2334,9 @@ void XC::FiberPtrDeque::Print(std::ostream &s,const int &flag)
 int XC::FiberPtrDeque::sendData(CommParameters &cp)
   {
     int res= cp.sendDoubles(yCenterOfMass,zCenterOfMass,getDbTagData(),CommMetaData(0));
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not implemented yet." << std::endl;
+    res+= sendDeque(*this,cp,getDbTagData(),CommMetaData(1));
+    std::clog << getClassName() << "::" << __FUNCTION__
+	      << "; not fully implemented yet." << std::endl;
     return res;
   }
 
@@ -2343,8 +2344,9 @@ int XC::FiberPtrDeque::sendData(CommParameters &cp)
 int XC::FiberPtrDeque::recvData(const CommParameters &cp)
   {
     int res= cp.receiveDoubles(yCenterOfMass,zCenterOfMass,getDbTagData(),CommMetaData(0));
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not implemented yet." << std::endl;
+    res+= receiveDeque(*this,cp,getDbTagData(),CommMetaData(1),&FEM_ObjectBroker::getNewFiber);
+    std::clog << getClassName() << "::" << __FUNCTION__
+	      << "; not fully implemented yet." << std::endl;
     return res;
   }
 

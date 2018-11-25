@@ -146,6 +146,7 @@ class MovableObject: public DistributedBase
   };
 
 
+//! @brief Returns an empty object of the class identified by classTag.
 template <class T>
 T *getBrokedMovable(const int &dbTag,const int &classTag,const CommParameters &cp,T *(FEM_ObjectBroker::*ptrFunc)(int))
   {
