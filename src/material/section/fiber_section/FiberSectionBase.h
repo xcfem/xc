@@ -72,6 +72,9 @@ class FiberSectionBase: public PrismaticBarCrossSection
     friend class FiberContainer;
     FiberSectionRepr *section_repres; //! Section representation.
 
+    int sendData(CommParameters &);
+    int recvData(const CommParameters &);
+    
     void setup_repres(void);
     inline void alloc_fibers(int numOfFibers,const Fiber *muestra= nullptr)
       { fibers.allocFibers(numOfFibers,muestra); }

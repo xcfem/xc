@@ -106,11 +106,15 @@ XC::Fiber *XC::FiberSection2d::addFiber(int tag,const MaterialHandler &ldr,const
   {
     Fiber *retval= fibers.findFiber(tag);
     if(retval)
-      std::cerr << "(FiberSection2d::addFiber; fiber with tag: " << tag << " already exists." << std::endl;
+      std::cerr <<  getClassName() << "::" << __FUNCTION__
+		<< "; fiber with tag: " << tag
+		<< " already exists." << std::endl;
     else
       {
         if(position.Size()<1)
-          std::cerr << "(FiberSection2d::addFiber; position vector must be of dimension 2." << std::endl;
+          std::cerr <<  getClassName() << "::" << __FUNCTION__
+		    << "; position vector must be of dimension 2."
+		    << std::endl;
         UniaxialFiber2d f(tag,ldr,nmbMat,Area,position(0));
         retval= addFiber(f);
       }
@@ -181,17 +185,57 @@ int XC::FiberSection2d::revertToStart(void)
     return fibers.revertToStart(*this,kr);
   }
 
-int XC::FiberSection2d::sendSelf(CommParameters &cp)
+//! @brief Send data through the channel being passed as parameter.
+int XC::FiberSection2d::sendData(CommParameters &cp)
   {
-    int res= 0;
-    std::cerr <<  "XC::FiberSection2d::sendSelf - not implemented.\n";
+    int res= FiberSectionBase::sendData(cp);
+    res+= cp.sendInt(parameterID,getDbTagData(),CommMetaData(12));
     return res;
   }
 
-int XC::FiberSection2d::recvSelf(const CommParameters &)
+
+//! @brief Receive data through the channel being passed as parameter.
+int XC::FiberSection2d::recvData(const CommParameters &cp)
+  {    
+    int res= FiberSectionBase::recvData(cp);
+    res+= cp.receiveInt(parameterID,getDbTagData(),CommMetaData(12));
+    return res;
+  }
+
+int XC::FiberSection2d::sendSelf(CommParameters &cp)
   {
-    int res= 0;
-    std::cerr <<  "XC::FiberSection2d::recvSelf - not implemented.\n";
+    setDbTag(cp);
+    const int dataTag= getDbTag();
+    inicComm(13);
+    int res= sendData(cp);
+
+    res+= cp.sendIdData(getDbTagData(),dataTag);
+    if(res < 0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; failed to send data."
+	        << std::endl;
+    return res;
+  }
+
+int XC::FiberSection2d::recvSelf(const CommParameters &cp)
+  {
+    inicComm(13);
+    const int dataTag= getDbTag();
+    int res= cp.receiveIdData(getDbTagData(),dataTag);
+
+    if(res<0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids."
+	        << std::endl;
+    else
+      {
+        setTag(getDbTagDataPos(0));
+        res+= recvData(cp);
+        if(res<0)
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive data."
+	        << std::endl;
+      }
     return res;
   }
 
@@ -229,7 +273,8 @@ int XC::FiberSection2d::setParameter(const std::vector<std::string> &argv, Param
         // Check that the parameterID is valid
         if(parameterID < 0)
           {
-            std::cerr << "XC::FiberSection2d::setParameter() - could not set parameter. " << std::endl;
+            std::cerr <<  getClassName() << "::" << __FUNCTION__
+		      << "; could not set parameter. " << std::endl;
             return -1;
           }
         else
@@ -237,7 +282,8 @@ int XC::FiberSection2d::setParameter(const std::vector<std::string> &argv, Param
       }
     else
       {
-        std::cerr << "XC::FiberSection2d::setParameter() - could not set parameter. " << std::endl;
+        std::cerr <<  getClassName() << "::" << __FUNCTION__
+		  << "; could not set parameter. " << std::endl;
         return -1;
       }
   }
@@ -256,7 +302,8 @@ int XC::FiberSection2d::updateParameter (int parameterID, Information &info)
         int ok= fibers.updateParameter(materialTag,parameterID,info);
         if(ok < 0)
           {
-            std::cerr << "XC::FiberSection2d::updateParameter() - could not update parameter. " << std::endl;
+            std::cerr <<  getClassName() << "::" << __FUNCTION__
+		      << "; could not update parameter. " << std::endl;
             return ok;
           }
         else
@@ -264,7 +311,8 @@ int XC::FiberSection2d::updateParameter (int parameterID, Information &info)
       }
     else
       {
-        std::cerr << "XC::FiberSection2d::updateParameter() - could not update parameter. " << std::endl;
+        std::cerr <<  getClassName() << "::" << __FUNCTION__
+		  << "; could not update parameter. " << std::endl;
         return -1;
       }
   }

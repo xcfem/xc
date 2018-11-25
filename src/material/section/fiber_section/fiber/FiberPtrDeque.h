@@ -31,6 +31,7 @@
 
 #include "xc_utils/src/kernel/CommandEntity.h"
 #include "xc_utils/src/geom/GeomObj.h"
+#include "utility/actor/actor/MovableObject.h"
 #include <deque>
 
 class Ref3d3d;
@@ -63,7 +64,7 @@ enum ClaseEsfuerzo {SIMPLE_TENSION,COMPOSED_TENSION,FLEXION_SIMPLE,FLEXION_COMPU
 //! @ingroup MATSCCFibers
 //
 //! @brief Fiber pointers container.
-class FiberPtrDeque: public CommandEntity, public std::deque<Fiber *>
+ class FiberPtrDeque: public CommandEntity, public std::deque<Fiber *>, public MovableObject
   {
   public:
     typedef std::deque<Fiber *> fiber_ptrs_dq;
@@ -72,6 +73,9 @@ class FiberPtrDeque: public CommandEntity, public std::deque<Fiber *>
 
     double yCenterOfMass; //!< Y coordinate of the centroid.
     double zCenterOfMass; //!< Z coordinate of the centroid.
+
+    int sendData(CommParameters &);  
+    int recvData(const CommParameters &);
 
     mutable std::deque<std::list<Polygon2d> > dq_ac_effective; //!< (Where appropriate) effective concrete areas for each fiber.
     mutable std::deque<double> recubs; //! Cover for each fiber.
@@ -256,6 +260,8 @@ class FiberPtrDeque: public CommandEntity, public std::deque<Fiber *>
     size_t nearest_fiber(const double &y,const double &z) const;
 
     void Print(std::ostream &s,const int &flag);
+    int sendSelf(CommParameters &);
+    int recvSelf(const CommParameters &);
   };
 } // end of XC namespace
 

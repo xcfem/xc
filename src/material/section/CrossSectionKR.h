@@ -31,13 +31,14 @@
 
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/Matrix.h"
+#include "utility/actor/actor/MovableObject.h"
 
 namespace XC {
 
 //! @ingroup MATSCC
 //
 //! @brief Stiffness matrix and resultant vector for a section.
-class CrossSectionKR: public CommandEntity
+class CrossSectionKR: public CommandEntity, public MovableObject
   {
     friend class FiberPtrDeque;
     double rData[4]; //!< stress resultant vector data.
@@ -50,6 +51,10 @@ class CrossSectionKR: public CommandEntity
     void free_mem(void);
     void alloc(const size_t &dim);
     void copy(const CrossSectionKR &otra);
+
+    int sendData(CommParameters &);  
+    int recvData(const CommParameters &);
+
     inline void updateNMz(const double &f,const double &y)
       {
         rData[0]+= f; //N.
@@ -126,6 +131,9 @@ class CrossSectionKR: public CommandEntity
       { return *K; }
     inline Matrix &Stiffness(void)
       { return *K; }
+
+    int sendSelf(CommParameters &);
+    int recvSelf(const CommParameters &);
   };
 
 } // end of XC namespace

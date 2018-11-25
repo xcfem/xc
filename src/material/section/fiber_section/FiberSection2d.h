@@ -80,7 +80,8 @@ class FiberSection2d: public FiberSectionBase
     friend class FiberPtrDeque;
     double get_strain(const double &y) const;
   protected:
-
+    int sendData(CommParameters &);
+    int recvData(const CommParameters &);
   public:
     FiberSection2d(MaterialHandler *mat_ldr= nullptr); 
     FiberSection2d(int tag,MaterialHandler *mat_ldr= nullptr); 

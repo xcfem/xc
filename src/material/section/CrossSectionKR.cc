@@ -84,7 +84,7 @@ void XC::CrossSectionKR::zero(void)
 
 //! @brief Constructor.
 XC::CrossSectionKR::CrossSectionKR(const size_t &dim)
-  : R(nullptr), K(nullptr)
+  : MovableObject(0), R(nullptr), K(nullptr) 
   {
     alloc(dim);
     zero();
@@ -92,7 +92,7 @@ XC::CrossSectionKR::CrossSectionKR(const size_t &dim)
 
 //! @brief Copy constructor.
 XC::CrossSectionKR::CrossSectionKR(const CrossSectionKR &otra)
-  : R(nullptr), K(nullptr)
+  :  MovableObject(0), R(nullptr), K(nullptr)
   {
     copy(otra);
   }
@@ -108,4 +108,63 @@ XC::CrossSectionKR &XC::CrossSectionKR::operator=(const CrossSectionKR &other)
 XC::CrossSectionKR::~CrossSectionKR(void)
   {
     free_mem();
+  }
+
+//! @brief Send data through the channel being passed as parameter.
+int XC::CrossSectionKR::sendData(CommParameters &cp)
+  {
+    int res= cp.sendDoubles(rData[0],rData[1],rData[2],rData[3],getDbTagData(),CommMetaData(0));
+    res+= cp.sendDoubles(kData[0],kData[1],kData[2],kData[3],getDbTagData(),CommMetaData(1));
+    res+= cp.sendDoubles(kData[4],kData[5],kData[6],kData[7],getDbTagData(),CommMetaData(2));
+    res+= cp.sendDoubles(kData[8],kData[9],kData[10],kData[11],getDbTagData(),CommMetaData(3));
+    res+= cp.sendDoubles(kData[12],kData[13],kData[14],kData[15],getDbTagData(),CommMetaData(4));
+    return res;
+  }
+
+
+//! @brief Receive data through the channel being passed as parameter.
+int XC::CrossSectionKR::recvData(const CommParameters &cp)
+  {    
+    int res= cp.receiveDoubles(rData[0],rData[1],rData[2],rData[3],getDbTagData(),CommMetaData(0));
+    res+= cp.receiveDoubles(kData[0],kData[1],kData[2],kData[3],getDbTagData(),CommMetaData(1));
+    res+= cp.receiveDoubles(kData[4],kData[5],kData[6],kData[7],getDbTagData(),CommMetaData(2));
+    res+= cp.receiveDoubles(kData[8],kData[9],kData[10],kData[11],getDbTagData(),CommMetaData(3));
+    res+= cp.receiveDoubles(kData[12],kData[13],kData[14],kData[15],getDbTagData(),CommMetaData(4));
+    return res;
+  }
+
+int XC::CrossSectionKR::sendSelf(CommParameters &cp)
+  {
+    setDbTag(cp);
+    const int dataTag= getDbTag();
+    inicComm(5);
+    int res= sendData(cp);
+
+    res+= cp.sendIdData(getDbTagData(),dataTag);
+    if(res < 0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; failed to send data."
+	        << std::endl;
+    return res;
+  }
+
+int XC::CrossSectionKR::recvSelf(const CommParameters &cp)
+  {
+    inicComm(5);
+    const int dataTag= getDbTag();
+    int res= cp.receiveIdData(getDbTagData(),dataTag);
+
+    if(res<0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids."
+	        << std::endl;
+    else
+      {
+        res+= recvData(cp);
+        if(res<0)
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive data."
+	        << std::endl;
+      }
+    return res;
   }

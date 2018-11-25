@@ -30,14 +30,18 @@
 #define FiberSets_h
 
 #include "FiberSet.h"
+#include "utility/actor/actor/MovableObject.h"
 
 namespace XC {
 
 //! @ingroup MATSCCFibers
 //
 //! @brief Fiber sets container.
-class FiberSets: public std::map<std::string,FiberSet>, public CommandEntity
+class FiberSets: public std::map<std::string,FiberSet>, public CommandEntity, public MovableObject
   {
+  protected:
+    int sendData(CommParameters &);  
+    int recvData(const CommParameters &);
   public:
     FiberSets(void); 
 
@@ -46,6 +50,9 @@ class FiberSets: public std::map<std::string,FiberSet>, public CommandEntity
     iterator get_fiber_set(const std::string &);
     iterator sel_mat_tag(FiberSet &, const std::string &,const int &);
     iterator resel_mat_tag(const std::string &,const std::string &,const int &);
+
+    int sendSelf(CommParameters &);
+    int recvSelf(const CommParameters &);
   };
 } // end of XC namespace
 

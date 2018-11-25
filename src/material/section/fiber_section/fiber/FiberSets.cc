@@ -27,11 +27,12 @@
 //FiberSets.cc
 
 #include "FiberSets.h"
+#include "utility/actor/actor/MovableMap.h"
 #include "xc_utils/src/geom/d2/2d_polygons/Polygon2d.h"
 
 //! @brief Constructor.
 XC::FiberSets::FiberSets(void)
-  : std::map<std::string,FiberSet>()
+  : std::map<std::string,FiberSet>(), MovableObject(0)
   {}
 
 //! @brief Return true if the set already exists.
@@ -103,4 +104,76 @@ XC::FiberSets::iterator XC::FiberSets::resel_mat_tag(const std::string &set_name
     return i;
   }
 
+//! @brief Send object members through the channel being passed as parameter.
+int XC::FiberSets::sendData(CommParameters &cp)
+  {
+    const size_t sz= size();
+    setDbTagDataPos(0,sz);
+    int res= 0;
+    if(sz>0)
+      {
+        DbTagData labelData(sz);
+        DbTagData dbTags(sz);
+        int loc= 0;
+        for(iterator i=begin();i!=end();i++,loc++)
+          {
+	    const std::string &label= (*i).first;
+            res+= cp.sendString(label,labelData,CommMetaData(loc));
+	    FiberSet &object= (*i).second;
+            res+= cp.sendMovable(object,dbTags,CommMetaData(loc));
+          }
+        res+= labelData.send(getDbTagData(),cp,CommMetaData(1));
+        res+= dbTags.send(getDbTagData(),cp,CommMetaData(2));
+      }
+    return res;
+  }
 
+//! @brief Receives object through the channel being passed as parameter.
+int XC::FiberSets::recvData(const CommParameters &cp)
+  {
+    const size_t sz= getDbTagDataPos(0);
+    int res= 0;
+    if(sz>0)
+      {
+        DbTagData labelData(sz);
+        int res= labelData.receive(getDbTagData(),cp,CommMetaData(1));
+        DbTagData dbTags(sz);
+        res+= dbTags.receive(getDbTagData(),cp,CommMetaData(2));
+        std::string label;
+        FiberSet tmp;
+        for(size_t i= 0;i<sz;i++)
+          {
+            res+= cp.receiveString(label,labelData,CommMetaData(i));
+            res+= cp.receiveMovable(tmp,dbTags,CommMetaData(i));
+            (*this)[label]= tmp;
+          }
+      }
+    return res;
+  }
+
+//! @brief Sends object through the channel being passed as parameter.
+int XC::FiberSets::sendSelf(CommParameters &cp)
+  {
+    inicComm(2);
+    int res= sendData(cp);
+    const int dataTag=getDbTag();
+    res+= cp.sendIdData(getDbTagData(),dataTag);
+    if(res < 0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+                << dataTag << " failed to send ID";
+    return res;
+  }
+
+//! @brief Receives object through the channel being passed as parameter.
+int XC::FiberSets::recvSelf(const CommParameters &cp)
+  {
+    const int dataTag= this->getDbTag();
+    inicComm(2);
+    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    if(res<0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+                << dataTag << " failed to receive ID\n";
+    else
+      res+= recvData(cp);
+    return res;
+  }

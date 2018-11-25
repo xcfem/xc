@@ -55,12 +55,12 @@
 
 //! @brief Constructor.
 XC::FiberPtrDeque::FiberPtrDeque(const size_t &num)
-  : CommandEntity(), fiber_ptrs_dq(num,static_cast<Fiber *>(nullptr)), yCenterOfMass(0.0), zCenterOfMass(0.0)
+  : CommandEntity(), fiber_ptrs_dq(num,static_cast<Fiber *>(nullptr)), MovableObject(0), yCenterOfMass(0.0), zCenterOfMass(0.0)
   {}
 
 //! @brief Copy constructor.
 XC::FiberPtrDeque::FiberPtrDeque(const FiberPtrDeque &other)
-  : CommandEntity(other), fiber_ptrs_dq(other), yCenterOfMass(other.yCenterOfMass), zCenterOfMass(other.zCenterOfMass)
+  : CommandEntity(other), fiber_ptrs_dq(other), MovableObject(other), yCenterOfMass(other.yCenterOfMass), zCenterOfMass(other.zCenterOfMass)
   {}
 
 //! @brief Assignment operator.
@@ -68,6 +68,7 @@ XC::FiberPtrDeque &XC::FiberPtrDeque::operator=(const FiberPtrDeque &other)
   {
     CommandEntity::operator=(other);
     fiber_ptrs_dq::operator=(other);
+    MovableObject::operator=(other);
     yCenterOfMass= other.yCenterOfMass;
     zCenterOfMass= other.zCenterOfMass;
     return *this;
@@ -2329,5 +2330,50 @@ void XC::FiberPtrDeque::Print(std::ostream &s,const int &flag)
         }
   }
 
+//! @brief Send object members through the channel being passed as parameter.
+int XC::FiberPtrDeque::sendData(CommParameters &cp)
+  {
+    int res= cp.sendDoubles(yCenterOfMass,zCenterOfMass,getDbTagData(),CommMetaData(0));
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet." << std::endl;
+    return res;
+  }
+
+//! @brief Receives object through the channel being passed as parameter.
+int XC::FiberPtrDeque::recvData(const CommParameters &cp)
+  {
+    int res= cp.receiveDoubles(yCenterOfMass,zCenterOfMass,getDbTagData(),CommMetaData(0));
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet." << std::endl;
+    return res;
+  }
+
+//! @brief Sends object through the channel being passed as parameter.
+int XC::FiberPtrDeque::sendSelf(CommParameters &cp)
+  {
+    inicComm(2);
+    int res= sendData(cp);
+    const int dataTag=getDbTag();
+    res+= cp.sendIdData(getDbTagData(),dataTag);
+    if(res < 0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+                << dataTag << " failed to send ID"
+	        << std::endl;
+    return res;
+  }
+
+//! @brief Receives object through the channel being passed as parameter.
+int XC::FiberPtrDeque::recvSelf(const CommParameters &cp)
+  {
+    const int dataTag= this->getDbTag();
+    inicComm(2);
+    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    if(res<0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+                << dataTag << " failed to receive ID\n";
+    else
+      res+= recvData(cp);
+    return res;
+  }
 
 

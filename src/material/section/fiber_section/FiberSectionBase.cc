@@ -96,6 +96,34 @@ XC::FiberSectionBase &XC::FiberSectionBase::operator=(const FiberSectionBase &ot
     return *this;
   }
 
+//! @brief Send data through the channel being passed as parameter.
+int XC::FiberSectionBase::sendData(CommParameters &cp)
+  {
+    int res= PrismaticBarCrossSection::sendData(cp);
+    res+= cp.sendVector(eTrial,getDbTagData(),CommMetaData(5));
+    res+= cp.sendVector(eInic,getDbTagData(),CommMetaData(6));
+    res+= cp.sendVector(eCommit,getDbTagData(),CommMetaData(7));
+    res+= cp.sendMovable(kr,getDbTagData(),CommMetaData(8));
+    res+= cp.sendMovable(fibers,getDbTagData(),CommMetaData(9));
+    res+= cp.sendInt(fiberTag,getDbTagData(),CommMetaData(10));
+    res+= cp.sendMovable(fiber_sets,getDbTagData(),CommMetaData(11));
+    return res;
+  }
+
+//! @brief Receive data through the channel being passed as parameter.
+int XC::FiberSectionBase::recvData(const CommParameters &cp)
+  {    
+    int res= PrismaticBarCrossSection::recvData(cp);
+    res+= cp.receiveVector(eTrial,getDbTagData(),CommMetaData(5));
+    res+= cp.receiveVector(eInic,getDbTagData(),CommMetaData(6));
+    res+= cp.receiveVector(eCommit,getDbTagData(),CommMetaData(7));
+    res+= cp.receiveMovable(kr,getDbTagData(),CommMetaData(8));
+    res+= cp.receiveMovable(fibers,getDbTagData(),CommMetaData(9));
+    res+= cp.receiveInt(fiberTag,getDbTagData(),CommMetaData(10));
+    res+= cp.receiveMovable(fiber_sets,getDbTagData(),CommMetaData(11));
+    return res;
+  }
+
 //! @brief Creates a new fiber section representation.
 void XC::FiberSectionBase::setup_repres(void)
   {
