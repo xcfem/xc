@@ -83,6 +83,8 @@ class_<QuadBase9N_SFD, bases<PlaneElement9N_SFD>, boost::noncopyable >("QuadBase
   .def("getArea", &QuadBase9N_SFD::getArea, "Returns element's area.")
    ;
 
+XC::ShellCrdTransf3dBase *(XC::ShellMITC9::*getMITC9CoordTransfRef)(void)= &XC::ShellMITC9::getCoordTransf;
 class_<XC::ShellMITC9, bases<QuadBase9N_SFD>, boost::noncopyable >("ShellMITC9", no_init)
+    .add_property("getCoordTransf", make_function( getMITC9CoordTransfRef, return_internal_reference<>() ))
    ;
 

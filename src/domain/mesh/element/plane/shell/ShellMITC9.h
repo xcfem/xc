@@ -118,6 +118,7 @@ class ShellMITC9 : public QuadBase9N<SectionFDPhysicalProperties>
 
     virtual ShellCrdTransf3dBase *getCoordTransf(void);
     virtual const ShellCrdTransf3dBase *getCoordTransf(void) const;
+    double getArea(bool initialGeometry= true) const;
 
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);

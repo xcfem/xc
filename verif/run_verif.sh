@@ -145,6 +145,7 @@ python tests/elements/shell/test_shell_mitc4_25.py
 python tests/elements/shell/test_shell_mitc4_26.py
 python tests/elements/shell/test_shell_mitc4_27.py
 python tests/elements/shell/test_shell_mitc4_28.py
+python tests/elements/shell/test_shell_mitc9_01.py
 python tests/elements/shell/test_area_tributaria_01.py
 python tests/elements/shell/test_shell_mitc4_natural_coordinates_01.py
 python tests/elements/shell/test_transformInternalForces.py

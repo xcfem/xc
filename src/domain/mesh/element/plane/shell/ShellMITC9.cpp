@@ -135,6 +135,31 @@ const XC::Matrix &XC::ShellMITC9::getTangentStiff(void) const
     return stiff;
   }
 
+double XC::ShellMITC9::getArea(bool initialGeometry) const
+  {
+    // double retval= 0.0;
+    // if(getDomain())
+    //   {
+    // 	double xsj= 0.0;
+    // 	static const int ngauss= 9; 
+    // 	static const int numnodes= 9;
+    // 	static double shp[3][numnodes];  //shape functions at a gauss point
+    // 	//gauss loop 
+    // 	for(int i= 0;i<ngauss;i++)
+    // 	  {
+    // 	    //get shape functions
+    // 	    const GaussPoint &gp= getGaussModel().getGaussPoints()[i];
+    // 	    shape2d(gp.r_coordinate(), gp.s_coordinate(),xl,shp,xsj);
+    // 	    std::cout << "i= " << i << " xsj= " << xsj << std::endl;
+    // 	    //volume element to also be saved
+    // 	    retval+= gp.weight()*xsj;
+    // 	  }
+    //   }
+    // else
+      return getPolygon(initialGeometry).getArea();
+    //return retval;
+  }
+
 //! @brief return secant matrix 
 const XC::Matrix &XC::ShellMITC9::getInitialStiff(void) const 
   {
@@ -323,7 +348,7 @@ int XC::ShellMITC9::addLoad(ElementalLoad *theLoad, double loadFactor)
                 << getTag() << std::endl;
     else
       {
-        const double area= getPolygon().getArea();
+        const double area= getArea();
 
         // Accumulate elastic deformations in basic system
         if(ShellMecLoad *shellMecLoad= dynamic_cast<ShellMecLoad *>(theLoad))
@@ -398,7 +423,7 @@ void XC::ShellMITC9::formInertiaTerms(int tangFlag) const
     static const int nShape= 3;
     static const int massIndex= nShape - 1;
 
-    double xsj;  // determinant jacaobian matrix 
+    double xsj;  // determinant jacobian matrix 
     double dvol; //volume element
     static double shp[nShape][numberNodes];  //shape functions at a gauss point
     static Vector momentum(ndf);
@@ -503,7 +528,7 @@ void XC::ShellMITC9::formResidAndTangent(int tang_flag) const
 
     static const int ndf= 6; //two membrane plus three bending plus one drill
     static const int nstress= 8; //three membrane, three moment, two shear
-    static const int ngauss= 9;
+    static const int ngauss= 9; 
     static const int numnodes= 9;
 
 
@@ -898,7 +923,7 @@ const XC::Matrix &XC::ShellMITC9::computeBshear( int node, const double shp[3][9
     return Bshear;
   }
 
-//! @brief shape function routine for four node quads
+//! @brief shape function routine for nine node quads
 void XC::ShellMITC9::shape2d( double ss, double tt,const double x[2][9], double shp[3][9],double &xsj)
   {
     static const double s[]= { -0.5,  0.5, 0.5, -0.5 };
