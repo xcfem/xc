@@ -229,11 +229,8 @@ XC::Element *XC::FEM_ObjectBroker::getNewElement(int classTag)
         case ELE_TAG_ShellMITC4:
                 return new ShellMITC4();
 
-        case ELE_TAG_CorotShellMITC4:
-                return new CorotShellMITC4();
-
-        case ELE_TAG_ShellNL:
-                return new ShellNL();
+        case ELE_TAG_ShellMITC9:
+                return new ShellMITC9();
 
         case ELE_TAG_BbarBrick:
                 return new BbarBrick();
@@ -414,8 +411,6 @@ XC::ShellCrdTransf3dBase *XC::FEM_ObjectBroker::getNewShellCrdTransf3d(int class
       {
       case CRDTR_TAG_ShellLinearCrdTransf3d:
         return new ShellLinearCrdTransf3d();
-      // case CRDTR_TAG_ShellCorotCrdTransf3d:
-      //   return new ShellCorotCrdTransf3d();
       default:
         std::cerr << "FEM_ObjectBroker::getCrdTransf3d - ";
         std::cerr << " - no XC::CrdTransf3d type exists for class tag ";

@@ -78,8 +78,7 @@
 #include "domain/mesh/element/special/joint/Joint3D.h"
 
 #include "domain/mesh/element/plane/shell/ShellMITC4.h"
-#include "domain/mesh/element/plane/shell/CorotShellMITC4.h"
-#include "domain/mesh/element/plane/shell/ShellNL.h"
+#include "domain/mesh/element/plane/shell/ShellMITC9.h"
 
 #include "domain/mesh/element/zeroLength/ZeroLength.h"
 #include "domain/mesh/element/zeroLength/ZeroLengthSection.h"
@@ -203,7 +202,7 @@ void materialNotSuitableMsg(const std::string &errHeader, const std::string &mat
 //! - ForceBeamColumn_3d: Defines a beam-column element (ForceBeamColumn3d) no lineal,
 //!   for 3D problems.
 //! - ShellMITC4: Defines a shell element (ShellMITC4),
-//! - ShellNL: Defines a shell element (ShellNL),
+//! - ShellMITC9: Defines a shell element (ShellMITC9),
 //!   for shell problems.
 //! - FourNodeQuad: Defines a four node quad (FourNodeQuad),
 //! - Tri31: Defines a three node triangle with just a Gauss point (Tri31),
@@ -368,19 +367,11 @@ XC::Element *XC::ProtoElementHandler::create_element(const std::string &cmd,int 
         if(!retval)
 	  materialNotSuitableMsg(errHeader,nmb_mat,cmd);
       }
-    else if((cmd == "corot_shell_mitc4")||(cmd == "CorotShellMITC4"))
-      {
-	if(cmd=="corot_shell_mitc4")
-	  deprecatedElementNameMsg(errHeader,cmd,"CorotShellMITC4");
-        retval= new_element_mat<CorotShellMITC4,SectionForceDeformation>(tag_elem, get_ptr_material());
-        if(!retval)
-	  materialNotSuitableMsg(errHeader,nmb_mat,cmd);
-      }
-    else if((cmd == "shell_nl")||(cmd == "ShellNL"))
+    else if((cmd == "shell_nl")||(cmd == "ShellMITC9"))
       {
 	if(cmd=="shell_nl")
-	  deprecatedElementNameMsg(errHeader,cmd,"ShellNL");
-        retval= new_element_mat<ShellNL,SectionForceDeformation>(tag_elem, get_ptr_material());
+	  deprecatedElementNameMsg(errHeader,cmd,"ShellMITC9");
+        retval= new_element_mat<ShellMITC9,SectionForceDeformation>(tag_elem, get_ptr_material());
         if(!retval)
 	  materialNotSuitableMsg(errHeader,nmb_mat,cmd);
       }

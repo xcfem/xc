@@ -21,8 +21,8 @@
 // Written: Leopoldo Tesser, Diego Talledo
 // 9-node lagrangian shell element with membrane and drill
 //
-#ifndef ShellNL_h
-#define ShellNL_h
+#ifndef ShellMITC9_h
+#define ShellMITC9_h
 
 #include "domain/mesh/element/plane/QuadBase9N.h"
 #include "domain/mesh/element/utils/physical_properties/SectionFDPhysicalProperties.h"
@@ -34,7 +34,7 @@ namespace XC {
 //! @ingroup PlaneElements
 //
 //! @brief Lagrangian shell element with membrane and drill.
-class ShellNL : public QuadBase9N<SectionFDPhysicalProperties>
+class ShellMITC9 : public QuadBase9N<SectionFDPhysicalProperties>
   {
   private : 
     double Ktt;//!< drilling stiffness
@@ -84,11 +84,11 @@ class ShellNL : public QuadBase9N<SectionFDPhysicalProperties>
 
   public:
     //null constructor
-    ShellNL(void);
+    ShellMITC9(void);
     //full constructor
-    ShellNL(int tag,const SectionForceDeformation *theMaterial);
+    ShellMITC9(int tag,const SectionForceDeformation *theMaterial);
     Element *getCopy(void) const;
-    virtual ~ShellNL(void);
+    virtual ~ShellMITC9(void);
 
     int getNumDOF(void) const;
 

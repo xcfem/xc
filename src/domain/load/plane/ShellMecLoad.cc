@@ -32,7 +32,7 @@
 #include "utility/matrix/ID.h"
 
 #include "domain/mesh/element/plane/shell/ShellMITC4Base.h"
-#include "domain/mesh/element/plane/shell/ShellNL.h"
+#include "domain/mesh/element/plane/shell/ShellMITC9.h"
 #include "domain/mesh/element/utils/coordTransformation/CrdTransf.h"
 #include "domain/mesh/node/Node.h"
 
@@ -142,7 +142,7 @@ const XC::Matrix &XC::ShellMecLoad::getGlobalVectors(const Matrix &localVectors)
 		  std::cerr << "ShellMecLoad::getGlobalVectors; the element: "
                         << elemTag << " no tiene coordinate transformation." << std::endl;
               }
-            else if(const ShellNL *ptrShell= dynamic_cast<const ShellNL *>(ptrElem))
+            else if(const ShellMITC9 *ptrShell= dynamic_cast<const ShellMITC9 *>(ptrElem))
               {
                 const ShellCrdTransf3dBase *ptrTransf= ptrShell->getCoordTransf();
                 if(ptrTransf)

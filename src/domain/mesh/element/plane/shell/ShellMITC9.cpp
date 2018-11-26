@@ -47,40 +47,40 @@
 // Written: Leopoldo Tesser, Diego Talledo
 // 9-node lagrandian shell element with membrane and drill
 
-#include "ShellNL.h"
+#include "ShellMITC9.h"
 #include "domain/mesh/element/utils/gauss_models/GaussModel.h"
 #include "domain/mesh/element/plane/shell/R3vectors.h"
 #include "utility/actor/actor/MatrixCommMetaData.h"
 #include "domain/load/plane/ShellUniformLoad.h"
 
 //static data
-XC::Matrix  XC::ShellNL::stiff(54,54);
-XC::Vector  XC::ShellNL::resid(54); 
-XC::Matrix  XC::ShellNL::mass(54,54);
+XC::Matrix  XC::ShellMITC9::stiff(54,54);
+XC::Vector  XC::ShellMITC9::resid(54); 
+XC::Matrix  XC::ShellMITC9::mass(54,54);
 
 //! @brief null constructor
-XC::ShellNL::ShellNL(void)
-  :QuadBase9N<SectionFDPhysicalProperties>( 0, ELE_TAG_ShellNL, SectionFDPhysicalProperties(9,nullptr)), Ktt(0.0),theCoordTransf(), Ki(nullptr)
+XC::ShellMITC9::ShellMITC9(void)
+  :QuadBase9N<SectionFDPhysicalProperties>( 0, ELE_TAG_ShellMITC9, SectionFDPhysicalProperties(9,nullptr)), Ktt(0.0),theCoordTransf(), Ki(nullptr)
   { }
 
 //! @brief Return the Gauss points of the element.
-const XC::GaussModel &XC::ShellNL::getGaussModel(void) const
+const XC::GaussModel &XC::ShellMITC9::getGaussModel(void) const
   { return gauss_model_quad9; }
 
 //! @brief full constructor
-XC::ShellNL::ShellNL(int tag,const SectionForceDeformation *ptr_mat)
-  :QuadBase9N<SectionFDPhysicalProperties>(tag, ELE_TAG_ShellNL, SectionFDPhysicalProperties(9,ptr_mat)), Ktt(0.0),theCoordTransf(), Ki(nullptr) {}
+XC::ShellMITC9::ShellMITC9(int tag,const SectionForceDeformation *ptr_mat)
+  :QuadBase9N<SectionFDPhysicalProperties>(tag, ELE_TAG_ShellMITC9, SectionFDPhysicalProperties(9,ptr_mat)), Ktt(0.0),theCoordTransf(), Ki(nullptr) {}
 
 //! @brief Virtual constructor.
-XC::Element* XC::ShellNL::getCopy(void) const
-  { return new ShellNL(*this); }
+XC::Element* XC::ShellMITC9::getCopy(void) const
+  { return new ShellMITC9(*this); }
 
 //! @brief destructor 
-XC::ShellNL::~ShellNL(void)
+XC::ShellMITC9::~ShellMITC9(void)
   { if(Ki) delete Ki; }
 
 //! @brief set domain
-void XC::ShellNL::setDomain(Domain *theDomain ) 
+void XC::ShellMITC9::setDomain(Domain *theDomain ) 
   {
     QuadBase9N<SectionFDPhysicalProperties>::setDomain(theDomain);
 
@@ -108,24 +108,24 @@ void XC::ShellNL::setDomain(Domain *theDomain )
   }
 
 //! @brief return number of dofs
-int XC::ShellNL::getNumDOF(void) const
+int XC::ShellMITC9::getNumDOF(void) const
   { return 54; }
 
 //! @brief revert to last commit 
-int XC::ShellNL::revertToLastCommit(void) 
+int XC::ShellMITC9::revertToLastCommit(void) 
   {
     return QuadBase9N<SectionFDPhysicalProperties>::revertToLastCommit();
   }
 
 //! @brief revert to start 
-int XC::ShellNL::revertToStart(void) 
+int XC::ShellMITC9::revertToStart(void) 
   {
     zeroLoad();
     return QuadBase9N<SectionFDPhysicalProperties>::revertToStart();
   }
 
 //! @brief return stiffness matrix 
-const XC::Matrix &XC::ShellNL::getTangentStiff(void) const
+const XC::Matrix &XC::ShellMITC9::getTangentStiff(void) const
   {
     int tang_flag= 1; //get the tangent 
     //do tangent and residual here
@@ -136,7 +136,7 @@ const XC::Matrix &XC::ShellNL::getTangentStiff(void) const
   }
 
 //! @brief return secant matrix 
-const XC::Matrix &XC::ShellNL::getInitialStiff(void) const 
+const XC::Matrix &XC::ShellMITC9::getInitialStiff(void) const 
   {
     if(Ki)
       return *Ki;
@@ -299,7 +299,7 @@ const XC::Matrix &XC::ShellNL::getInitialStiff(void) const
   }
 
 //! @brief return mass matrix
-const XC::Matrix &XC::ShellNL::getMass(void) const
+const XC::Matrix &XC::ShellMITC9::getMass(void) const
   {
     int tangFlag= 1;
     formInertiaTerms( tangFlag );
@@ -309,13 +309,13 @@ const XC::Matrix &XC::ShellNL::getMass(void) const
   }
 
 //! @brief Zeroes the element load vector.
-void XC::ShellNL::zeroLoad(void)
+void XC::ShellMITC9::zeroLoad(void)
   {
     QuadBase9N<SectionFDPhysicalProperties>::zeroLoad();
     p0.zero();
   }
 
-int XC::ShellNL::addLoad(ElementalLoad *theLoad, double loadFactor)
+int XC::ShellMITC9::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
       std::cerr << getClassName() 
@@ -336,7 +336,7 @@ int XC::ShellNL::addLoad(ElementalLoad *theLoad, double loadFactor)
     return -1;
   }
 
-int XC::ShellNL::addInertiaLoadToUnbalance(const Vector &accel)
+int XC::ShellMITC9::addInertiaLoadToUnbalance(const Vector &accel)
   {
     int tangFlag= 1;
 
@@ -360,7 +360,7 @@ int XC::ShellNL::addInertiaLoadToUnbalance(const Vector &accel)
   }
 
 //! @brief get residual
-const XC::Vector &XC::ShellNL::getResistingForce(void) const
+const XC::Vector &XC::ShellMITC9::getResistingForce(void) const
   {
     int tang_flag= 0; //don't get the tangent
     formResidAndTangent( tang_flag );
@@ -374,7 +374,7 @@ const XC::Vector &XC::ShellNL::getResistingForce(void) const
   }
 
 //! @brief get residual with inertia terms
-const XC::Vector &XC::ShellNL::getResistingForceIncInertia(void) const
+const XC::Vector &XC::ShellMITC9::getResistingForceIncInertia(void) const
   {
     static Vector res(54);
     res= getResistingForce();
@@ -387,7 +387,7 @@ const XC::Vector &XC::ShellNL::getResistingForceIncInertia(void) const
     return res;
   }
 //! @brief form inertia terms
-void XC::ShellNL::formInertiaTerms(int tangFlag) const
+void XC::ShellMITC9::formInertiaTerms(int tangFlag) const
   {
     //translational mass only
     //rotational inertia terms are neglected
@@ -460,7 +460,7 @@ void XC::ShellNL::formInertiaTerms(int tangFlag) const
   }
 
 //! @brief form residual and tangent
-void XC::ShellNL::formResidAndTangent(int tang_flag) const
+void XC::ShellMITC9::formResidAndTangent(int tang_flag) const
   {
     //
     //  six(6) nodal dof's ordered :
@@ -692,7 +692,7 @@ void XC::ShellNL::formResidAndTangent(int tang_flag) const
   }
 
 //! @brief compute local coordinates and basis
-void XC::ShellNL::computeBasis(void) 
+void XC::ShellMITC9::computeBasis(void) 
   {
     theCoordTransf= ShellLinearCrdTransf3d(theNodes);
     for(int i= 0;i<4;i++)
@@ -705,7 +705,7 @@ void XC::ShellNL::computeBasis(void)
   }
 
 //! @brief compute Bdrill
-double *XC::ShellNL::computeBdrill( int node, const double shp[3][9] ) const
+double *XC::ShellMITC9::computeBdrill( int node, const double shp[3][9] ) const
   {
     static double Bdrill[6];
     static double B1;
@@ -737,7 +737,7 @@ double *XC::ShellNL::computeBdrill( int node, const double shp[3][9] ) const
   }
 
 //! @brief assemble a B matrix
-const XC::Matrix &XC::ShellNL::assembleB( const Matrix &Bmembrane, const Matrix &Bbend, const Matrix &Bshear) const
+const XC::Matrix &XC::ShellMITC9::assembleB( const Matrix &Bmembrane, const Matrix &Bbend, const Matrix &Bshear) const
   {
     //Matrix Bbend(3,3);  // plate bending B matrix
     //Matrix Bshear(2,3); // plate shear B matrix
@@ -830,7 +830,7 @@ const XC::Matrix &XC::ShellNL::assembleB( const Matrix &Bmembrane, const Matrix 
   }
 
 //! @brief compute Bmembrane matrix
-const XC::Matrix &XC::ShellNL::computeBmembrane( int node, const double shp[3][9] ) const
+const XC::Matrix &XC::ShellMITC9::computeBmembrane( int node, const double shp[3][9] ) const
   {
     static Matrix Bmembrane(3,2);
 
@@ -854,7 +854,7 @@ const XC::Matrix &XC::ShellNL::computeBmembrane( int node, const double shp[3][9
 
 
 //! @brief compute Bbend matrix
-const XC::Matrix &XC::ShellNL::computeBbend( int node, const double shp[3][9] ) const
+const XC::Matrix &XC::ShellMITC9::computeBbend( int node, const double shp[3][9] ) const
   {
     static Matrix Bbend(3,2);
 
@@ -877,7 +877,7 @@ const XC::Matrix &XC::ShellNL::computeBbend( int node, const double shp[3][9] ) 
   }
 
 //! @brief compute standard Bshear matrix
-const XC::Matrix &XC::ShellNL::computeBshear( int node, const double shp[3][9] ) const
+const XC::Matrix &XC::ShellMITC9::computeBshear( int node, const double shp[3][9] ) const
   {
     static Matrix Bshear(2,3);
 
@@ -899,7 +899,7 @@ const XC::Matrix &XC::ShellNL::computeBshear( int node, const double shp[3][9] )
   }
 
 //! @brief shape function routine for four node quads
-void XC::ShellNL::shape2d( double ss, double tt,const double x[2][9], double shp[3][9],double &xsj)
+void XC::ShellMITC9::shape2d( double ss, double tt,const double x[2][9], double shp[3][9],double &xsj)
   {
     static const double s[]= { -0.5,  0.5, 0.5, -0.5 };
     static const double t[]= { -0.5, -0.5, 0.5,  0.5 };
@@ -978,7 +978,7 @@ void XC::ShellNL::shape2d( double ss, double tt,const double x[2][9], double shp
     return;
   }
 
-XC::Matrix XC::ShellNL::transpose( int dim1,int dim2,const Matrix &M ) 
+XC::Matrix XC::ShellMITC9::transpose( int dim1,int dim2,const Matrix &M ) 
   {
     Matrix Mtran( dim2, dim1 );
 
@@ -992,14 +992,14 @@ XC::Matrix XC::ShellNL::transpose( int dim1,int dim2,const Matrix &M )
 
 //! @brief Returns a vector to store the dbTags
 //! of the class members.
-XC::DbTagData &XC::ShellNL::getDbTagData(void) const
+XC::DbTagData &XC::ShellMITC9::getDbTagData(void) const
   {
     static DbTagData retval(19);
     return retval;
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::ShellNL::sendData(CommParameters &cp)
+int XC::ShellMITC9::sendData(CommParameters &cp)
   {
     int res= QuadBase9N<SectionFDPhysicalProperties>::sendData(cp);
     res+=cp.sendDoubles(Ktt,xl[0][0],xl[0][1],xl[0][2],xl[0][3],getDbTagData(),CommMetaData(8));
@@ -1012,7 +1012,7 @@ int XC::ShellNL::sendData(CommParameters &cp)
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::ShellNL::recvData(const CommParameters &cp)
+int XC::ShellMITC9::recvData(const CommParameters &cp)
   {
     int res= QuadBase9N<SectionFDPhysicalProperties>::recvData(cp);
     res+=cp.receiveDoubles(Ktt,xl[0][0],xl[0][1],xl[0][2],xl[0][3],getDbTagData(),CommMetaData(8));
@@ -1025,20 +1025,20 @@ int XC::ShellNL::recvData(const CommParameters &cp)
   }
 
 //! @brief Returns a pointer a la coordinate transformation.
-XC::ShellCrdTransf3dBase *XC::ShellNL::getCoordTransf(void)
+XC::ShellCrdTransf3dBase *XC::ShellMITC9::getCoordTransf(void)
   { return &theCoordTransf; }
 
 //! @brief Returns (if possible) a pointer to the coordinate transformation.
-const XC::ShellCrdTransf3dBase *XC::ShellNL::getCoordTransf(void) const
+const XC::ShellCrdTransf3dBase *XC::ShellMITC9::getCoordTransf(void) const
   { return &theCoordTransf; }
 
 //! @brief print out element data
-void XC::ShellNL::Print(std::ostream &s, int flag )
+void XC::ShellMITC9::Print(std::ostream &s, int flag )
   {
     if(flag == -1)
       {
         int eleTag= this->getTag();
-        s << "EL_ShellNL\t" << eleTag << "\t";
+        s << "EL_ShellMITC9\t" << eleTag << "\t";
         s << eleTag << "\t" << 1; 
         s  << "\t" << theNodes.getTagNode(0) << "\t" << theNodes.getTagNode(1);
         s  << "\t" << theNodes.getTagNode(2) << "\t" << theNodes.getTagNode(3);
@@ -1086,7 +1086,7 @@ void XC::ShellNL::Print(std::ostream &s, int flag )
       }
   }
 
-int XC::ShellNL::sendSelf(CommParameters &cp)
+int XC::ShellMITC9::sendSelf(CommParameters &cp)
   {
     inicComm(19);
     int res= sendData(cp);
@@ -1094,18 +1094,18 @@ int XC::ShellNL::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag();
     res= cp.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "ShellNL::sendSelf() - failed to send ID data\n";
+      std::cerr << "ShellMITC9::sendSelf() - failed to send ID data\n";
     return res;
   }
     
-int  XC::ShellNL::recvSelf(const CommParameters &cp)
+int  XC::ShellMITC9::recvSelf(const CommParameters &cp)
   {
     inicComm(19);
 
     const int dataTag= getDbTag();
     int res = cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "ShellNL::sendSelf() - failed to receive ID data\n";
+      std::cerr << "ShellMITC9::sendSelf() - failed to receive ID data\n";
     else
       res+= recvData(cp);
     return res;

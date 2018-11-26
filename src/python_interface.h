@@ -77,6 +77,8 @@ typedef XC::QuadBase4N<XC::SolidMech2D> QuadBase4N_Mech2D;
 //Shell
 typedef XC::ElemWithMaterial<4,XC::SectionFDPhysicalProperties> ElemWithMaterial4N_SFD;
 typedef XC::PlaneElement<4,XC::SectionFDPhysicalProperties> PlaneElement4N_SFD;
+typedef XC::ElemWithMaterial<9,XC::SectionFDPhysicalProperties> ElemWithMaterial9N_SFD;
+typedef XC::PlaneElement<9,XC::SectionFDPhysicalProperties> PlaneElement9N_SFD;
 
 #endif
 

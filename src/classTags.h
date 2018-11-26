@@ -233,8 +233,7 @@
 #define ELE_TAG_PlateMITC4      2023 
 #define ELE_TAG_ShellMITC4      2024 
 #define ELE_TAG_Plate1          2022 
-#define ELE_TAG_ShellNL         2025 
-#define ELE_TAG_CorotShellMITC4      2026 
+#define ELE_TAG_ShellMITC9         2025 
 #define ELE_TAG_Brick                      3458 
 #define ELE_TAG_BbarBrick                  3457 
 #define ELE_TAG_FLBrick                  3455 
@@ -324,7 +323,6 @@
 #define CRDTR_TAG_PDeltaCrdTransf3d 20
 #define CRDTR_TAG_CorotCrdTransf3d  30
 #define CRDTR_TAG_ShellLinearCrdTransf3d 100
-#define CRDTR_TAG_ShellCorotCrdTransf3d  130
 
 #define NOD_TAG_Node      	1
 #define NOD_TAG_DummyNode 	2

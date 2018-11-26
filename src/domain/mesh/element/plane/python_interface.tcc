@@ -63,6 +63,15 @@ class_<PlaneElement4N_SFD, bases<ElemWithMaterial4N_SFD>, boost::noncopyable >("
   .def("getArea", &PlaneElement4N_SFD::getArea, "getArea(initialGeometry): return element's area. If initialGeometry is True the returned area corresponds to its undeformed geometry.")
    ;
 
+class_<ElemWithMaterial9N_SFD, bases<XC::ElementBase<9> >, boost::noncopyable >("ElemWithMaterial9N_SFD", no_init)
+  .add_property("getPhysicalProperties", make_function(getSectionFDPhysicalProp, return_internal_reference<>() ),"returns materials at integration points (gauss points).")
+   ;
+
+class_<PlaneElement9N_SFD, bases<ElemWithMaterial9N_SFD>, boost::noncopyable >("PlaneElement9N_SFD", no_init)
+  .def("getPerimeter", &PlaneElement9N_SFD::getPerimeter, "Returns element's perimeter.")
+  .def("getArea", &PlaneElement9N_SFD::getArea, "getArea(initialGeometry): return element's area. If initialGeometry is True the returned area corresponds to its undeformed geometry.")
+   ;
+
 
 //Shell
 #include "shell/python_interface.tcc"

@@ -89,6 +89,8 @@ class_<XC::ElementBase<4>, bases<XC::Element >, boost::noncopyable >("ElementBas
 
 class_<XC::ElementBase<8>, bases<XC::Element >, boost::noncopyable >("ElementBase8N","Base class for 8 node elements.", no_init);
 
+class_<XC::ElementBase<9>, bases<XC::Element >, boost::noncopyable >("ElementBase9N","Base class for 9 node elements.", no_init);
+
 class_<XC::ElementBase<20>, bases<XC::Element >, boost::noncopyable >("ElementBase20N","Base class for 20 node elements.", no_init);
 
 class_<XC::ElementBase<27>, bases<XC::Element >, boost::noncopyable >("ElementBase27N","Base class for 27 node elements.", no_init);

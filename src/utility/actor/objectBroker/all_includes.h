@@ -171,10 +171,8 @@
 #include "domain/mesh/element/plane/UP-ucsd/Nine_Four_Node_QuadUP.h"
 
 #include "domain/mesh/element/plane/shell/ShellLinearCrdTransf3d.h"
-#include "domain/mesh/element/plane/shell/ShellCorotCrdTransf3d.h"
 #include "domain/mesh/element/plane/shell/ShellMITC4.h"
-#include "domain/mesh/element/plane/shell/CorotShellMITC4.h"
-#include "domain/mesh/element/plane/shell/ShellNL.h"
+#include "domain/mesh/element/plane/shell/ShellMITC9.h"
 
 #include "domain/mesh/element/truss_beam_column/elasticBeamColumn/ElasticBeam2d.h"
 #include "domain/mesh/element/truss_beam_column/elasticBeamColumn/ElasticBeam3d.h"
