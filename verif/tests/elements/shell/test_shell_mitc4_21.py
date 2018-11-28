@@ -26,10 +26,10 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.newNodeIDXYZ(1,0,0,0)
-nodes.newNodeIDXYZ(2,1,0,0)
-nodes.newNodeIDXYZ(3,1,1,0)
-nodes.newNodeIDXYZ(4,0,1,0)
+nod1= nodes.newNodeXYZ(0,0,0)
+nod2= nodes.newNodeXYZ(1,0,0)
+nod3= nodes.newNodeXYZ(1,1,0)
+nod4= nodes.newNodeXYZ(0,1,0)
 
 
 # Materials definition
@@ -39,14 +39,14 @@ memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,
 
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= "memb1"
-elem= elements.newElement("ShellMITC4",xc.ID([1,2,3,4]))
+elem= elements.newElement("ShellMITC4",xc.ID([nod1.tag,nod2.tag,nod3.tag,nod4.tag]))
 
 
 # Constraints
-modelSpace.fixNode000_FFF(1)
-modelSpace.fixNode000_FFF(2)
-modelSpace.fixNode000_FFF(3)
-modelSpace.fixNode000_FFF(4)
+modelSpace.fixNode000_FFF(nod1.tag)
+modelSpace.fixNode000_FFF(nod2.tag)
+modelSpace.fixNode000_FFF(nod3.tag)
+modelSpace.fixNode000_FFF(nod4.tag)
 
 # Loads definition
 loadHandler= preprocessor.getLoadHandler
@@ -60,7 +60,7 @@ lPatterns.currentTimeSeries= "ts"
 lp0= lPatterns.newLoadPattern("default","0")
 #lPatterns.currentLoadPattern= "0"
 eleLoad= lp0.newElementalLoad("shell_uniform_load")
-eleLoad.elementTags= xc.ID([0]) 
+eleLoad.elementTags= xc.ID([elem.tag]) 
 eleLoad.transComponent= q
 #We add the load case to domain.
 lPatterns.addToDomain("0")
@@ -72,10 +72,10 @@ result= analisis.analyze(1)
 
 nodes.calculateNodalReactions(True,1e-7)
 
-RN1= nodes.getNode(1).getReaction[2] 
-RN2= nodes.getNode(2).getReaction[2] 
-RN3= nodes.getNode(3).getReaction[2] 
-RN4= nodes.getNode(4).getReaction[2] 
+RN1= nod1.getReaction[2] 
+RN2= nod2.getReaction[2] 
+RN3= nod3.getReaction[2] 
+RN4= nod4.getReaction[2] 
 RTeor= q/4.0
 
 ratio1= abs((RN1+RTeor)/RTeor)

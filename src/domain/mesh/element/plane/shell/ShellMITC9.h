@@ -39,23 +39,17 @@ class ShellMITC9 : public QuadBase9N<SectionFDPhysicalProperties>
   private : 
     double Ktt;//!< drilling stiffness
     ShellLinearCrdTransf3d theCoordTransf; //!< Coordinate transformation.
-    mutable Matrix *Ki;
-    //local nodal coordinates, two coordinates for each of nine nodes
-    double xl[2][9];
-    //shell basis vectors
+    mutable Matrix Ki; //!< Stiffness.
+    
+    double xl[2][9]; //!< local nodal coordinates, two coordinates for each of nine nodes
 
-    FVectorShell p0; // Reactions in the basic system due to element loads
+    FVectorShell p0; //!< Reactions in the basic system due to element loads
 
     //static data
     static Matrix stiff;
     static Vector resid;
     static Matrix mass;
     static Matrix damping;
-
-    //quadrature data
-    static const double root3;
-    static const double root3_over_root5;
-				  
 
 
     void computeBasis(void);
@@ -88,7 +82,6 @@ class ShellMITC9 : public QuadBase9N<SectionFDPhysicalProperties>
     //full constructor
     ShellMITC9(int tag,const SectionForceDeformation *theMaterial);
     Element *getCopy(void) const;
-    virtual ~ShellMITC9(void);
 
     int getNumDOF(void) const;
 
