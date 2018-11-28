@@ -419,40 +419,69 @@ XC::ShellCrdTransf3dBase *XC::FEM_ObjectBroker::getNewShellCrdTransf3d(int class
       }
   }
 
+//! @brief Return a beam integration scheme from the tag argument.
 XC::BeamIntegration *XC::FEM_ObjectBroker::getNewBeamIntegration(int classTag)
   {
-  switch(classTag) {
-  case BEAM_INTEGRATION_TAG_Lobatto:
-    return new LobattoBeamIntegration();
+    switch(classTag)
+      {
+      case BEAM_INTEGRATION_TAG_Lobatto:
+	return new LobattoBeamIntegration();
 
-  case BEAM_INTEGRATION_TAG_Legendre:
-    return new LegendreBeamIntegration();
+      case BEAM_INTEGRATION_TAG_Legendre:
+	return new LegendreBeamIntegration();
 
-  case BEAM_INTEGRATION_TAG_Radau:
-      return new RadauBeamIntegration();
+      case BEAM_INTEGRATION_TAG_Radau:
+	  return new RadauBeamIntegration();
 
-  case BEAM_INTEGRATION_TAG_NewtonCotes:
-    return new NewtonCotesBeamIntegration();
+      case BEAM_INTEGRATION_TAG_NewtonCotes:
+	return new NewtonCotesBeamIntegration();
 
-  case BEAM_INTEGRATION_TAG_HingeMidpoint:
-    return new HingeMidpointBeamIntegration();
+      case BEAM_INTEGRATION_TAG_Trapezoidal:        
+        return new TrapezoidalBeamIntegration();
 
-  case BEAM_INTEGRATION_TAG_HingeRadau:
-    return new HingeRadauBeamIntegration();
+      case BEAM_INTEGRATION_TAG_UserDefined:        
+        return new UserDefinedBeamIntegration();
+	
+      case BEAM_INTEGRATION_TAG_FixedLocation:        
+        return new FixedLocationBeamIntegration();
+	
+      case BEAM_INTEGRATION_TAG_LowOrder:        
+        return new LowOrderBeamIntegration();
 
-  case BEAM_INTEGRATION_TAG_HingeRadauTwo:
-    return new HingeRadauTwoBeamIntegration();
+      case BEAM_INTEGRATION_TAG_MidDistance:        
+        return new MidDistanceBeamIntegration();
+	
+      case BEAM_INTEGRATION_TAG_CompositeSimpson:        
+        return new CompositeSimpsonBeamIntegration();
 
-  case BEAM_INTEGRATION_TAG_HingeEndpoint:
-    return new HingeEndpointBeamIntegration();
+      case BEAM_INTEGRATION_TAG_HingeMidpoint:
+	return new HingeMidpointBeamIntegration();
 
-  default:
-    std::cerr << "FEM_ObjectBroker::getBeamIntegration - ";
-    std::cerr << " - no XC::BeamIntegration type exists for class tag ";
-    std::cerr << classTag << std::endl;
-    return nullptr;
+      case BEAM_INTEGRATION_TAG_HingeRadau:
+	return new HingeRadauBeamIntegration();
+
+      case BEAM_INTEGRATION_TAG_HingeRadauTwo:
+	return new HingeRadauTwoBeamIntegration();
+
+      case BEAM_INTEGRATION_TAG_HingeEndpoint:
+	return new HingeEndpointBeamIntegration();
+
+      case BEAM_INTEGRATION_TAG_UserHinge:
+	return new UserDefinedHingeIntegration();
+
+      case BEAM_INTEGRATION_TAG_DistHinge:
+	return new DistHingeIntegration();
+
+      // case BEAM_INTEGRATION_TAG_RegularizedHinge:
+      // 	return new RegularizedHingeIntegration();
+
+      default:
+	std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
+		  << " - no BeamIntegration type exists for class tag "
+		  << classTag << std::endl;
+	return nullptr;
+      }
   }
-}
 
 
 XC::UniaxialMaterial *XC::FEM_ObjectBroker::getNewUniaxialMaterial(int classTag)
