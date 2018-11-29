@@ -395,7 +395,7 @@ void XC::SetEntities::genMesh(const std::string &setName, meshing_dir dm)
     if(verbosity>1)
       std::clog << "Meshing set: " << setName << " ...";
 
-    //body_meshing(dm);
+    body_meshing(dm);
     surface_meshing(dm);
     line_meshing(dm);
     point_meshing(dm);
