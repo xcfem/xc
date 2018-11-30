@@ -57,8 +57,8 @@ class PlaneElement : public ElemWithMaterial<NNODES, PhysProp>
     virtual Polygon3d getPolygon(bool initialGeometry= true) const;
     virtual Segment3d getSide(const size_t &i,bool initialGeometry= true) const;
     Pos3d getCenterOfMassPosition(bool initialGeometry= true) const;
-    double getPerimeter(bool initialGeometry= true) const;
-    double getArea(bool initialGeometry= true) const;
+    virtual double getPerimeter(bool initialGeometry= true) const;
+    virtual double getArea(bool initialGeometry= true) const;
     virtual void computeTributaryAreas(bool initialGeometry= true) const;
     double getTributaryArea(const Node *) const;
 

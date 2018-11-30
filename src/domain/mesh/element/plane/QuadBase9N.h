@@ -84,8 +84,15 @@ template <class PhysProp>
 Polygon3d XC::QuadBase9N<PhysProp>::getPolygon(bool initialGeometry) const
   {
     Polygon3d retval;
-    std::cerr << this->getClassName() << "::" << __FUNCTION__
-	      << "; not implemented." << std::endl;
+    const NodePtrsWithIDs &nodePtrs= this->getNodePtrs();
+    retval.push_back(nodePtrs.getPosNode(0,initialGeometry));
+    retval.push_back(nodePtrs.getPosNode(4,initialGeometry));
+    retval.push_back(nodePtrs.getPosNode(1,initialGeometry));
+    retval.push_back(nodePtrs.getPosNode(5,initialGeometry));
+    retval.push_back(nodePtrs.getPosNode(2,initialGeometry));
+    retval.push_back(nodePtrs.getPosNode(6,initialGeometry));
+    retval.push_back(nodePtrs.getPosNode(3,initialGeometry));
+    retval.push_back(nodePtrs.getPosNode(7,initialGeometry));
     return retval;
   }
 

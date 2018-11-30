@@ -269,35 +269,6 @@ XC::NodalLoad *XC::FEM_ObjectBrokerAllClasses::getNewNodalLoad(int classTag)
       }
   }
 
-XC::BeamIntegration *XC::FEM_ObjectBrokerAllClasses::getNewBeamIntegration(int classTag)
-  {
-    switch(classTag)
-      {
-        case BEAM_INTEGRATION_TAG_Lobatto:
-          return new LobattoBeamIntegration();
-        case BEAM_INTEGRATION_TAG_Legendre:
-          return new LegendreBeamIntegration();
-
-        case BEAM_INTEGRATION_TAG_Radau:
-          return new RadauBeamIntegration();
-        case BEAM_INTEGRATION_TAG_NewtonCotes:
-          return new NewtonCotesBeamIntegration();
-        case BEAM_INTEGRATION_TAG_HingeMidpoint:
-          return new HingeMidpointBeamIntegration();
-        case BEAM_INTEGRATION_TAG_HingeRadau:
-          return new HingeRadauBeamIntegration();
-        case BEAM_INTEGRATION_TAG_HingeRadauTwo:
-          return new HingeRadauTwoBeamIntegration();
-        case BEAM_INTEGRATION_TAG_HingeEndpoint:
-          return new HingeEndpointBeamIntegration();
-        default:
-          std::cerr << "FEM_ObjectBrokerAllClasses::getBeamIntegration - ";
-          std::cerr << " - no BeamIntegration type exists for class tag ";
-          std::cerr << classTag << std::endl;
-          return 0;
-      }
-  }
-
 XC::SectionForceDeformation *XC::FEM_ObjectBrokerAllClasses::getNewSection(int classTag)
   {
     switch(classTag)

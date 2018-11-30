@@ -60,8 +60,7 @@ XC::Matrix  XC::ShellMITC9::mass(54,54);
 
 //! @brief null constructor
 XC::ShellMITC9::ShellMITC9(void)
-  :QuadBase9N<SectionFDPhysicalProperties>( 0, ELE_TAG_ShellMITC9, SectionFDPhysicalProperties(9,nullptr)), Ktt(0.0),theCoordTransf(), Ki(nullptr)
-  { }
+  :QuadBase9N<SectionFDPhysicalProperties>( 0, ELE_TAG_ShellMITC9, SectionFDPhysicalProperties(9,nullptr)), Ktt(0.0),theCoordTransf() {}
 
 //! @brief Return the Gauss points of the element.
 const XC::GaussModel &XC::ShellMITC9::getGaussModel(void) const
@@ -69,15 +68,11 @@ const XC::GaussModel &XC::ShellMITC9::getGaussModel(void) const
 
 //! @brief full constructor
 XC::ShellMITC9::ShellMITC9(int tag,const SectionForceDeformation *ptr_mat)
-  :QuadBase9N<SectionFDPhysicalProperties>(tag, ELE_TAG_ShellMITC9, SectionFDPhysicalProperties(9,ptr_mat)), Ktt(0.0),theCoordTransf(), Ki(nullptr) {}
+  :QuadBase9N<SectionFDPhysicalProperties>(tag, ELE_TAG_ShellMITC9, SectionFDPhysicalProperties(9,ptr_mat)), Ktt(0.0),theCoordTransf() {}
 
 //! @brief Virtual constructor.
 XC::Element* XC::ShellMITC9::getCopy(void) const
   { return new ShellMITC9(*this); }
-
-//! @brief destructor 
-XC::ShellMITC9::~ShellMITC9(void)
-  { if(Ki) delete Ki; }
 
 //! @brief set domain
 void XC::ShellMITC9::setDomain(Domain *theDomain ) 
@@ -135,167 +130,192 @@ const XC::Matrix &XC::ShellMITC9::getTangentStiff(void) const
     return stiff;
   }
 
+double XC::ShellMITC9::getArea(bool initialGeometry) const
+  {
+    // double retval= 0.0;
+    // if(getDomain())
+    //   {
+    // 	double xsj= 0.0;
+    // 	static const int ngauss= 9; 
+    // 	static const int numnodes= 9;
+    // 	static double shp[3][numnodes];  //shape functions at a gauss point
+    // 	//gauss loop 
+    // 	for(int i= 0;i<ngauss;i++)
+    // 	  {
+    // 	    //get shape functions
+    // 	    const GaussPoint &gp= getGaussModel().getGaussPoints()[i];
+    // 	    shape2d(gp.r_coordinate(), gp.s_coordinate(),xl,shp,xsj);
+    // 	    std::cout << "i= " << i << " xsj= " << xsj << std::endl;
+    // 	    //volume element to also be saved
+    // 	    retval+= gp.weight()*xsj;
+    // 	  }
+    //   }
+    // else
+      return getPolygon(initialGeometry).getArea();
+    //return retval;
+  }
+
 //! @brief return secant matrix 
 const XC::Matrix &XC::ShellMITC9::getInitialStiff(void) const 
   {
-    if(Ki)
-      return *Ki;
-
-    static const int ndf= 6; //two membrane plus three bending plus one drill
-    static const int nstress= 8; //three membrane, three moment, two shear
-    static const int ngauss= 9; 
-    static const int numnodes= 9;
-
-    double volume= 0.0;
-
-    static double xsj;  // determinant jacaobian matrix 
-    static double dvol[ngauss]; //volume element
-    static double shp[3][numnodes];  //shape functions at a gauss point
-
-    static Matrix stiffJK(ndf,ndf); //nodeJK stiffness 
-    static Matrix dd(nstress,nstress);  //material tangent
-
-    //static Matrix J0(2,2);  //Jacobian at center
- 
-    //static Matrix J0inv(2,2); //inverse of Jacobian at center
-
-    //---------B-matrices------------------------------------
-    static Matrix BJ(nstress,ndf);      // B matrix node J
-    static Matrix BJtran(ndf,nstress);
-    static Matrix BK(nstress,ndf);      // B matrix node k
-    static Matrix BJtranD(ndf,nstress);
-    static Matrix Bbend(3,3);  // bending B matrix
-    static Matrix Bshear(2,3); // shear B matrix
-    static Matrix Bmembrane(3,2); // membrane B matrix
-    static double BdrillJ[ndf]; //drill B matrix
-    static double BdrillK[ndf];  
-
-    double *drillPointer;
-
-    static double saveB[nstress][ndf][numnodes];
-
-    //-------------------------------------------------------
-    stiff.Zero();
-
-    //compute Jacobian and inverse at center
-    //double L1= 0.0;
-    //double L2= 0.0;
-    //computeJacobian( L1, L2, xl, J0, J0inv ); 
-
-    //gauss loop 
-    for(int i= 0;i<ngauss;i++)
+    if(Ki.isEmpty())
       {
-        //get shape functions
-        const GaussPoint &gp= getGaussModel().getGaussPoints()[i];
-        shape2d(gp.r_coordinate(), gp.s_coordinate(),xl,shp,xsj);
+	static const int ndf= 6; //two membrane plus three bending plus one drill
+	static const int nstress= 8; //three membrane, three moment, two shear
+	static const int ngauss= 9; 
+	static const int numnodes= 9;
 
-        //volume element to also be saved
-        dvol[i]= gp.weight()*xsj;  
-        volume+= dvol[i];
+	double volume= 0.0;
 
-        // j-node loop to compute strain 
-        for(int j=0;j<numnodes;j++)
-          {
-            //compute B matrix 
-            Bmembrane= computeBmembrane( j, shp );
-            Bbend= computeBbend( j, shp );
-            Bshear= computeBshear( j, shp );
-            BJ= assembleB(Bmembrane,Bbend,Bshear);
+	static double xsj;  // determinant jacaobian matrix 
+	static double dvol[ngauss]; //volume element
+	static double shp[3][numnodes];  //shape functions at a gauss point
 
-            //save the B-matrix
-            for(int p=0; p<nstress; p++)
-              for(int q=0;q<ndf;q++)
-                saveB[p][q][j]= BJ(p,q);
+	static Matrix stiffJK(ndf,ndf); //nodeJK stiffness 
+	static Matrix dd(nstress,nstress);  //material tangent
 
-            //drilling B matrix
-            drillPointer= computeBdrill( j, shp );
-            for(int p=0; p<ndf; p++ )
-              {
-                //BdrillJ[p]= *drillPointer++;
-	        BdrillJ[p]= *drillPointer; //set p-th component
-	        drillPointer++;             //pointer arithmetic
-	      }//end for p
-          } // end for j
+	//static Matrix J0(2,2);  //Jacobian at center
 
-        dd= physicalProperties[i]->getInitialTangent();
-        dd*= dvol[i];
+	//static Matrix J0inv(2,2); //inverse of Jacobian at center
 
-        //residual and tangent calculations node loops
+	//---------B-matrices------------------------------------
+	static Matrix BJ(nstress,ndf);      // B matrix node J
+	static Matrix BJtran(ndf,nstress);
+	static Matrix BK(nstress,ndf);      // B matrix node k
+	static Matrix BJtranD(ndf,nstress);
+	static Matrix Bbend(3,3);  // bending B matrix
+	static Matrix Bshear(2,3); // shear B matrix
+	static Matrix Bmembrane(3,2); // membrane B matrix
+	static double BdrillJ[ndf]; //drill B matrix
+	static double BdrillK[ndf];  
 
-        int jj= 0;
-        for(int j= 0;j<numnodes;j++)
-          {
-            //extract BJ
-            for(int p=0; p<nstress;p++)
-              {
-	        for(int q=0;q<ndf;q++)
-                  BJ(p,q)= saveB[p][q][j];
-              }//end for p
+	double *drillPointer;
 
-            //multiply bending terms by (-1.0) for correct statement
-            // of equilibrium  
-            for(int p= 3;p<6;p++)
-              {
-	        for(int q= 3;q<6;q++) 
-                BJ(p,q)*= (-1.0);
-               } //end for p
+	static double saveB[nstress][ndf][numnodes];
 
-            //transpose 
-            //BJtran= transpose( 8, ndf, BJ );
-            for(int p=0; p<ndf; p++)
-              {
-                for(int q=0; q<nstress; q++) 
-                  BJtran(p,q)= BJ(q,p);
-              }//end for p
+	//-------------------------------------------------------
+	stiff.Zero();
 
-            //drilling B matrix
-            drillPointer= computeBdrill( j, shp );
-            for(int p=0;p<ndf;p++)
-              {
-	        BdrillJ[p]= *drillPointer;
-	        drillPointer++;
-              }//end for p
+	//compute Jacobian and inverse at center
+	//double L1= 0.0;
+	//double L2= 0.0;
+	//computeJacobian( L1, L2, xl, J0, J0inv ); 
 
-            //BJtranD= BJtran * dd;
-            BJtranD.addMatrixProduct(0.0, BJtran,dd,1.0 );
-	  
+	//gauss loop 
+	for(int i= 0;i<ngauss;i++)
+	  {
+	    //get shape functions
+	    const GaussPoint &gp= getGaussModel().getGaussPoints()[i];
+	    shape2d(gp.r_coordinate(), gp.s_coordinate(),xl,shp,xsj);
 
-            for(int p=0; p<ndf; p++) 
-	      BdrillJ[p]*= (Ktt*dvol[i]);
+	    //volume element to also be saved
+	    dvol[i]= gp.weight()*xsj;  
+	    volume+= dvol[i];
 
+	    // j-node loop to compute strain 
+	    for(int j=0;j<numnodes;j++)
+	      {
+		//compute B matrix 
+		Bmembrane= computeBmembrane( j, shp );
+		Bbend= computeBbend( j, shp );
+		Bshear= computeBshear( j, shp );
+		BJ= assembleB(Bmembrane,Bbend,Bshear);
 
-            int kk= 0;
-            for(int k= 0;k<numnodes;k++)
-              {
-                //extract BK
-	        for(int p=0;p<nstress;p++)
-                  {
-                    for(int q=0; q<ndf; q++ )
-	              BK(p,q)= saveB[p][q][k];
+		//save the B-matrix
+		for(int p=0; p<nstress; p++)
+		  for(int q=0;q<ndf;q++)
+		    saveB[p][q][j]= BJ(p,q);
+
+		//drilling B matrix
+		drillPointer= computeBdrill( j, shp );
+		for(int p=0; p<ndf; p++ )
+		  {
+		    //BdrillJ[p]= *drillPointer++;
+		    BdrillJ[p]= *drillPointer; //set p-th component
+		    drillPointer++;             //pointer arithmetic
 		  }//end for p
-	
-                //drilling B matrix
-	        drillPointer= computeBdrill( k, shp );
-	        for(int p=0; p<ndf; p++)
-                  {
-                    BdrillK[p]= *drillPointer;
-	            drillPointer++;
-	          }//end for p
-	
-                //stiffJK= BJtranD * BK ;
-                // +  transpose( 1,ndf,BdrillJ ) * BdrillK; 
-	        stiffJK.addMatrixProduct(0.0, BJtranD,BK,1.0 );
-	
-	        for(int p= 0;p<ndf;p++)
-                  for(int q= 0;q<ndf;q++)
-                    stiff( jj+p, kk+q )+= stiffJK(p,q) + ( BdrillJ[p]*BdrillK[q] );
-                kk+= ndf;
-	      } // end for k loop
-            jj+= ndf;
-          } // end for j loop
-      } //end for i gauss loop 
-    Ki= new Matrix(stiff);
-    return stiff;
+	      } // end for j
+
+	    dd= physicalProperties[i]->getInitialTangent();
+	    dd*= dvol[i];
+
+	    //residual and tangent calculations node loops
+
+	    int jj= 0;
+	    for(int j= 0;j<numnodes;j++)
+	      {
+		//extract BJ
+		for(int p=0; p<nstress;p++)
+		  {
+		    for(int q=0;q<ndf;q++)
+		      BJ(p,q)= saveB[p][q][j];
+		  }//end for p
+
+		//multiply bending terms by (-1.0) for correct statement
+		// of equilibrium  
+		for(int p= 3;p<6;p++)
+		  {
+		    for(int q= 3;q<6;q++) 
+		    BJ(p,q)*= (-1.0);
+		   } //end for p
+
+		//transpose 
+		//BJtran= transpose( 8, ndf, BJ );
+		for(int p=0; p<ndf; p++)
+		  {
+		    for(int q=0; q<nstress; q++) 
+		      BJtran(p,q)= BJ(q,p);
+		  }//end for p
+
+		//drilling B matrix
+		drillPointer= computeBdrill( j, shp );
+		for(int p=0;p<ndf;p++)
+		  {
+		    BdrillJ[p]= *drillPointer;
+		    drillPointer++;
+		  }//end for p
+
+		//BJtranD= BJtran * dd;
+		BJtranD.addMatrixProduct(0.0, BJtran,dd,1.0 );
+
+
+		for(int p=0; p<ndf; p++) 
+		  BdrillJ[p]*= (Ktt*dvol[i]);
+
+
+		int kk= 0;
+		for(int k= 0;k<numnodes;k++)
+		  {
+		    //extract BK
+		    for(int p=0;p<nstress;p++)
+		      {
+			for(int q=0; q<ndf; q++ )
+			  BK(p,q)= saveB[p][q][k];
+		      }//end for p
+
+		    //drilling B matrix
+		    drillPointer= computeBdrill( k, shp );
+		    for(int p=0; p<ndf; p++)
+		      {
+			BdrillK[p]= *drillPointer;
+			drillPointer++;
+		      }//end for p
+
+		    //stiffJK= BJtranD * BK ;
+		    // +  transpose( 1,ndf,BdrillJ ) * BdrillK; 
+		    stiffJK.addMatrixProduct(0.0, BJtranD,BK,1.0 );
+
+		    for(int p= 0;p<ndf;p++)
+		      for(int q= 0;q<ndf;q++)
+			stiff( jj+p, kk+q )+= stiffJK(p,q) + ( BdrillJ[p]*BdrillK[q] );
+		    kk+= ndf;
+		  } // end for k loop
+		jj+= ndf;
+	      } // end for j loop
+	  } //end for i gauss loop 
+	Ki= stiff;
+      }
+    return Ki;
   }
 
 //! @brief return mass matrix
@@ -323,7 +343,7 @@ int XC::ShellMITC9::addLoad(ElementalLoad *theLoad, double loadFactor)
                 << getTag() << std::endl;
     else
       {
-        const double area= getPolygon().getArea();
+        const double area= getArea();
 
         // Accumulate elastic deformations in basic system
         if(ShellMecLoad *shellMecLoad= dynamic_cast<ShellMecLoad *>(theLoad))
@@ -398,7 +418,7 @@ void XC::ShellMITC9::formInertiaTerms(int tangFlag) const
     static const int nShape= 3;
     static const int massIndex= nShape - 1;
 
-    double xsj;  // determinant jacaobian matrix 
+    double xsj;  // determinant jacobian matrix 
     double dvol; //volume element
     static double shp[nShape][numberNodes];  //shape functions at a gauss point
     static Vector momentum(ndf);
@@ -503,7 +523,7 @@ void XC::ShellMITC9::formResidAndTangent(int tang_flag) const
 
     static const int ndf= 6; //two membrane plus three bending plus one drill
     static const int nstress= 8; //three membrane, three moment, two shear
-    static const int ngauss= 9;
+    static const int ngauss= 9; 
     static const int numnodes= 9;
 
 
@@ -695,7 +715,7 @@ void XC::ShellMITC9::formResidAndTangent(int tang_flag) const
 void XC::ShellMITC9::computeBasis(void) 
   {
     theCoordTransf= ShellLinearCrdTransf3d(theNodes);
-    for(int i= 0;i<4;i++)
+    for(int i= 0;i<9;i++)
       {
         const Vector &coorI= theNodes[i]->getCrds();
 
@@ -898,7 +918,7 @@ const XC::Matrix &XC::ShellMITC9::computeBshear( int node, const double shp[3][9
     return Bshear;
   }
 
-//! @brief shape function routine for four node quads
+//! @brief shape function routine for nine node quads
 void XC::ShellMITC9::shape2d( double ss, double tt,const double x[2][9], double shp[3][9],double &xsj)
   {
     static const double s[]= { -0.5,  0.5, 0.5, -0.5 };
@@ -1006,7 +1026,7 @@ int XC::ShellMITC9::sendData(CommParameters &cp)
     res+=cp.sendDoubles(xl[1][0],xl[1][1],xl[1][2],xl[1][3],getDbTagData(),CommMetaData(9));
     res+=cp.sendMovable(theCoordTransf,getDbTagData(),CommMetaData(10));
     res+= p0.sendData(cp,getDbTagData(),CommMetaData(11));
-    res+= cp.sendMatrixPtr(Ki,getDbTagData(),MatrixCommMetaData(14,15,16,17));
+    res+= cp.sendMatrix(Ki,getDbTagData(),CommMetaData(14));
     //res+= cp.sendVectors(inicDisp,getDbTagData(),CommMetaData(18));
     return res;
   }
@@ -1019,7 +1039,7 @@ int XC::ShellMITC9::recvData(const CommParameters &cp)
     res+=cp.receiveDoubles(xl[1][0],xl[1][1],xl[1][2],xl[1][3],getDbTagData(),CommMetaData(9));
     res+= cp.receiveMovable(theCoordTransf,getDbTagData(),CommMetaData(10));
     res+= p0.receiveData(cp,getDbTagData(),CommMetaData(11));
-    Ki= cp.receiveMatrixPtr(Ki,getDbTagData(),MatrixCommMetaData(14,15,16,17));
+    res+= cp.receiveMatrix(Ki,getDbTagData(),CommMetaData(14));
     //res+= cp.receiveVectors(inicDisp,getDbTagData(),CommMetaData(18));
     return res;
   }

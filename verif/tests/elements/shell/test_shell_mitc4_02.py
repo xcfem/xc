@@ -25,10 +25,10 @@ nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.newNodeIDXYZ(1,0,0,0)
-nodes.newNodeIDXYZ(2,2,0,0)
-nodes.newNodeIDXYZ(3,2,1,1)
-nodes.newNodeIDXYZ(4,0,1,1)
+nod1= nodes.newNodeXYZ(0,0,0)
+nod2= nodes.newNodeXYZ(2,0,0)
+nod3= nodes.newNodeXYZ(2,1,1)
+nod4= nodes.newNodeXYZ(0,1,1)
 
 
 # Materials definition
@@ -36,7 +36,7 @@ memb1= typical_materials.defElasticPlateSection(preprocessor, "memb1",E,nu,0,h)
 
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= "memb1"
-elem= elements.newElement("ShellMITC4",xc.ID([1,2,3,4]))
+elem= elements.newElement("ShellMITC4",xc.ID([nod1.tag,nod2.tag,nod3.tag,nod4.tag]))
 
 v1= xc.Vector([0,math.sqrt(2)/2,math.sqrt(2)/2])
 v2= xc.Vector([0,-math.sqrt(2)/2,math.sqrt(2)/2])

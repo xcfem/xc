@@ -29,15 +29,14 @@ nodes= preprocessor.getNodeHandler
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXYZ(0,0,0)
-nod= nodes.newNodeXYZ(L/3,0,0)
-nod= nodes.newNodeXYZ(2*L/3,0,0)
-nod= nodes.newNodeXYZ(L,0,0)
-nod= nodes.newNodeXYZ(0,h,0)
-nod= nodes.newNodeXYZ(L/3,h,0)
-nod= nodes.newNodeXYZ(2*L/3,h,0)
-nod= nodes.newNodeXYZ(L,h,0)
+nod1= nodes.newNodeXYZ(0,0,0)
+nod2= nodes.newNodeXYZ(L/3,0,0)
+nod3= nodes.newNodeXYZ(2*L/3,0,0)
+nod4= nodes.newNodeXYZ(L,0,0)
+nod5= nodes.newNodeXYZ(0,h,0)
+nod6= nodes.newNodeXYZ(L/3,h,0)
+nod7= nodes.newNodeXYZ(2*L/3,h,0)
+nod8= nodes.newNodeXYZ(L,h,0)
 
 
 # Materials definition
@@ -45,21 +44,20 @@ nmb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,n
 
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= "memb1"
-elements.defaultTag= 1
-elem= elements.newElement("ShellMITC4",xc.ID([1,2,6,5]))
+elem= elements.newElement("ShellMITC4",xc.ID([nod1.tag,nod2.tag,nod6.tag,nod5.tag]))
 
-elem= elements.newElement("ShellMITC4",xc.ID([2,3,7,6]))
-elem= elements.newElement("ShellMITC4",xc.ID([3,4,8,7]))
+elem= elements.newElement("ShellMITC4",xc.ID([nod2.tag,nod3.tag,nod7.tag,nod6.tag]))
+elem= elements.newElement("ShellMITC4",xc.ID([nod3.tag,nod4.tag,nod8.tag,nod7.tag]))
 
 # Constraints
-modelSpace.fixNode000_FFF(1)
-spc= modelSpace.constraints.newSPConstraint(2,2,0.0)
-spc= modelSpace.constraints.newSPConstraint(3,2,0.0)
-spc= modelSpace.constraints.newSPConstraint(4,2,0.0)
-modelSpace.fixNode000_FFF(5)
-spc= modelSpace.constraints.newSPConstraint(6,2,0.0)
-spc= modelSpace.constraints.newSPConstraint(7,2,0.0)
-spc= modelSpace.constraints.newSPConstraint(8,2,0.0)
+modelSpace.fixNode000_FFF(nod1.tag)
+spc= modelSpace.constraints.newSPConstraint(nod2.tag,2,0.0)
+spc= modelSpace.constraints.newSPConstraint(nod3.tag,2,0.0)
+spc= modelSpace.constraints.newSPConstraint(nod4.tag,2,0.0)
+modelSpace.fixNode000_FFF(nod5.tag)
+spc= modelSpace.constraints.newSPConstraint(nod6.tag,2,0.0)
+spc= modelSpace.constraints.newSPConstraint(nod7.tag,2,0.0)
+spc= modelSpace.constraints.newSPConstraint(nod8.tag,2,0.0)
 
 # Loads definition
 loadHandler= preprocessor.getLoadHandler
@@ -70,7 +68,7 @@ ts= lPatterns.newTimeSeries("constant_ts","ts")
 lPatterns.currentTimeSeries= "ts"
 #Load case definition
 lp0= lPatterns.newLoadPattern("default","0")
-lp0.newNodalLoad(8,xc.Vector([0,-F,0,0,0,0]))
+lp0.newNodalLoad(nod8.tag,xc.Vector([0,-F,0,0,0,0]))
 #We add the load case to domain.
 lPatterns.addToDomain("0")
 
@@ -82,13 +80,9 @@ result= analisis.analyze(1)
 
 
 
-
-nod8= nodes.getNode(8)
+# Retrieving node displacements.
 UX8= nod8.getDisp[0] # Node 8 xAxis displacement
-                 
 UY8= nod8.getDisp[1] # Node 8 yAxis displacement
-
-nod3= nodes.getNode(3)
 UX3= nod3.getDisp[0] # Node 3 xAxis displacement                 
 UY3= nod3.getDisp[1] # Node 3 yAxis displacement
 

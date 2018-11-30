@@ -88,8 +88,6 @@ class FEM_ObjectBrokerAllClasses: public FEM_ObjectBroker
     SFreedom_Constraint *getNewSP(int classTag);
     NodalLoad *getNewNodalLoad(int classTag);
     
-    BeamIntegration *getNewBeamIntegration(int classTag);
-
     SectionForceDeformation *getNewSection(int classTag);    
     NDMaterial *getNewNDMaterial(int classTag);
 
