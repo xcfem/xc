@@ -384,8 +384,57 @@ class BiaxialBendingControlVars(UniaxialBendingControlVars):
         retval+= ',Mz= ' + str(self.Mz*factor)
         return retval
 
+class SSBiaxialBendingControlVars(BiaxialBendingControlVars):
+    '''Control variables for biaxial bending normal stresses LS 
+    verification en steel-shape elements.
+
+    :ivar idSection:section identifier
+    :ivar combName: name of the load combinations to deal with
+    :ivar CF:       capacity factor (efficiency) (defaults to -1)
+    :ivar N:        axial force (defaults to 0.0)
+    :ivar My:       bending moment about Y (weak) axis (defaults to 0.0)
+    :ivar Mz:       bending moment about Z (strong) axis (defaults to 0.0)
+    :ivar Ncrd:     design resistance to axial compression
+    :ivar McRdy:    design moment resistance about Y (weak) axis
+    :ivar McRdz:    design moment resistance about Z (strong) axis
+    :ivar MvRdz:    reduced design moment resistance about Z (strong) axis 
+                    for shear interaction
+    :ivar MbRdz:    reduced design moment resistance about Z (strong) axis 
+                    for lateral-torsional bucking
+    :ivar chiLT:    reduction factor for lateral-torsional buckling 
+                    (defaults to 1)
+
+    '''
+    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0,Mz= 0.0,Ncrd=0.0,McRdy=0.0,McRdz=0.0,MvRdz=0.0,MbRdz=0.0,chiLT=1.0):
+        super(SSBiaxialBendingControlVars,self).__init__(idSection,combName,CF,N,My,Mz)
+        self.Ncrd=Ncrd
+        self.McRdy=McRdy
+        self.McRdz=McRdz
+        self.MvRdz=MvRdz
+        self.MbRdz=MbRdz
+        self.chiLT=chiLT
+        
+    def getLaTeXFields(self,factor= 1e-3):
+        ''' Returns a string with the intermediate fields of the LaTeX string.
+
+        :param factor: factor for units (default 1e-3 -> kN)'''
+        retval= super(SSBiaxialBendingControlVars,self).getLaTeXFields(factor)+" & "+fmt.Esf.format(self.Ncrd*factor)+" & "+fmt.Esf.format(self.McRdy*factor)+" & "+fmt.Esf.format(self.McRdz*factor)+" & "+fmt.Esf.format(self.MvRdz*factor)+" & "+fmt.Esf.format(self.MbRdz*factor)+" & "+fmt.Esf.format(self.chiLT)
+        return retval
+
+    def getStrArguments(self,factor):
+        '''Returns a string for a 'copy' (kind of) constructor.'''
+        retval= super(SSBiaxialBendingControlVars,self).getStrArguments(factor)
+        retval+= ',Ncrd= ' + str(self.Ncrd*factor)
+        retval+= ',McRdy= ' + str(self.McRdy*factor)
+        retval+= ',McRdz= ' + str(self.McRdz*factor)
+        retval+= ',MvRdz= ' + str(self.MvRdz*factor)
+        retval+= ',MbRdz= ' + str(self.MbRdz*factor)
+        retval+= ',chiLT= ' + str(self.chiLT)
+        return retval
+    
+    
 class RCShearControlVars(BiaxialBendingControlVars):
-    '''Control variables for biaxial bending shear limit state verification in
+    '''Control variables for shear limit state verification in
     reinforced concrete elements.
 
     :ivar idSection:section identifier

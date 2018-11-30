@@ -249,16 +249,18 @@ class EC3Shape(object):
     
     def getBiaxialBendingEfficiency(self,sectionClass,Nd,Myd,Mzd,Vyd= 0.0,chiLT=1.0):
         '''Return biaxial bending efficiency (clause 6.2.9 of EC3.1.1)
+        (only class 1 and 2 cross-sections are considered currently)
+
            chiLT: lateral buckling reduction factor (default= 1.0).
         '''
         NcRd= self.getNcRd(sectionClass)
         McRdy= self.getMcRdy(sectionClass)
+        McRdz= self.getMcRdz(sectionClass)
         MvRdz= self.getMvRdz(sectionClass,Vyd)
         MbRdz= chiLT*MvRdz #Lateral buckling reduction.
-        # alpha= 2.0
-        # beta= max(1.0,Nd/NcRd)
         alpha,beta=self.getBiaxBendCoeffs(Nd,NcRd)
-        return (abs(Mzd)/MbRdz)**alpha+(abs(Myd)/McRdy)**beta
+        CF=(abs(Mzd)/MbRdz)**alpha+(abs(Myd)/McRdy)**beta
+        return (CF,NcRd,McRdy,McRdz,MvRdz,MbRdz)
 
     def setupULSControlVars(self,elems,sectionClass= 1, chiLT=1.0):
         '''For each element creates the variables

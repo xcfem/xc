@@ -266,12 +266,14 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
         :param setCalc: set of elements to which define control variables
         '''
         for e in setCalc.getElements:
-            e.setProp(self.limitStateLabel+'Sect1',cv.BiaxialBendingControlVars())
-            e.setProp(self.limitStateLabel+'Sect2',cv.BiaxialBendingControlVars())
+            e.setProp(self.limitStateLabel+'Sect1',cv.SSBiaxialBendingControlVars())
+            e.setProp(self.limitStateLabel+'Sect2',cv.SSBiaxialBendingControlVars())
 
     def checkSetFromIntForcFile(self,intForcCombFileName,setCalc=None):
         '''Launch checking.
 
+        :param intForcCombFileName: name of the file to read the internal 
+               force results
         :param setCalc: set of elements to check
         '''
         intForcItems=lsd.readIntForcesFile(intForcCombFileName,setCalc)
@@ -281,13 +283,13 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
             sc=e.getProp('sectionClass')
             elIntForc=internalForcesValues[e.tag]
             for lf in elIntForc:
-                CFtmp=sh.getBiaxialBendingEfficiency(sc,lf.N,lf.My,lf.Mz,lf.Vy,lf.chiLT)
+                CFtmp,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp=sh.getBiaxialBendingEfficiency(sc,lf.N,lf.My,lf.Mz,lf.Vy,lf.chiLT)
                 if lf.idSection == 0:
                     if (CFtmp>e.getProp(self.limitStateLabel+'Sect1').CF):
-                        e.setProp(self.limitStateLabel+'Sect1',cv.BiaxialBendingControlVars('Sects1',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz))
+                        e.setProp(self.limitStateLabel+'Sect1',cv.SSBiaxialBendingControlVars('Sects1',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp,lf.chiLT))
                 else:
                     if (CFtmp>e.getProp(self.limitStateLabel+'Sect2').CF):
-                        e.setProp(self.limitStateLabel+'Sect2',cv.BiaxialBendingControlVars('Sects2',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz))
+                        e.setProp(self.limitStateLabel+'Sect2',cv.SSBiaxialBendingControlVars('Sects2',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp,lf.chiLT))
 
 
 class ShearController(lsc.LimitStateControllerBase):
