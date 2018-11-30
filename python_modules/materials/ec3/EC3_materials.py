@@ -126,7 +126,9 @@ class EC3Shape(object):
             lmsg.warning('section needs shear buckling verification.')
         return self.getAvy()*(self.steelType.fy/math.sqrt(3))/self.steelType.gammaM0()
     def getVcRdy(self):
-        '''Return y direction (web direction) shear resistance'''
+        '''Return y direction (web direction) shear resistance
+        [plastic design in absence of torsion]
+        '''
         return self.getVplRdy()
     def getBendingResistanceReductionCoefficient(self,Vd):
         '''Return bending resistance reduction coefficient as in
@@ -226,6 +228,25 @@ class EC3Shape(object):
         MbRdz= chiLT*MvRdz #Lateral buckling reduction.
         return abs(Mzd)/MbRdz
 
+    def getBiaxBendCoeffs(self,NEd,NplRd):
+        '''Return (alpha,beta) constants for bi-axial bending criterion 
+        (clause 6.2.9 of EC3.1.1)
+        '''
+        n=NEd/NplRd
+        if self.name[0] in ['I','H']:
+            alpha=2
+            beta=max(1,5*n)
+        elif self.name[:2] == 'CH':
+            alpha=2
+            beta=2
+        elif self.name[:2] in ['RH','SH']:
+            alpha=min(6,abs(1.66/(1-1.13*n**2)))
+            beta=alpha
+        else:  #conservative
+            alpha=1
+            beta=1
+        return (alpha,beta)
+    
     def getBiaxialBendingEfficiency(self,sectionClass,Nd,Myd,Mzd,Vyd= 0.0,chiLT=1.0):
         '''Return biaxial bending efficiency (clause 6.2.9 of EC3.1.1)
            chiLT: lateral buckling reduction factor (default= 1.0).
@@ -234,8 +255,9 @@ class EC3Shape(object):
         McRdy= self.getMcRdy(sectionClass)
         MvRdz= self.getMvRdz(sectionClass,Vyd)
         MbRdz= chiLT*MvRdz #Lateral buckling reduction.
-        alpha= 2.0
-        beta= max(1.0,Nd/NcRd)
+        # alpha= 2.0
+        # beta= max(1.0,Nd/NcRd)
+        alpha,beta=self.getBiaxBendCoeffs(Nd,NcRd)
         return (abs(Mzd)/MbRdz)**alpha+(abs(Myd)/McRdy)**beta
 
     def setupULSControlVars(self,elems,sectionClass= 1, chiLT=1.0):
@@ -318,6 +340,18 @@ class IPEShape(EC3Shape,arcelor_metric_shapes.IPEShape):
         EC3Shape.__init__(self,'rolled')
         arcelor_metric_shapes.IPEShape.__init__(self,steel,name)
 
+class SHSShape(EC3Shape,arcelor_metric_shapes.SHSShape):
+    """SHS shape with Eurocode 3 verification routines."""
+    def __init__(self,steel,name):
+        ''' Constructor.
+
+        :param steel: steel material.
+        :param name: shape name (i.e. 'SHS175x175x8')
+        '''
+        self.name=name
+        EC3Shape.__init__(self,'rolled')
+        arcelor_metric_shapes.SHSShape.__init__(self,steel,name)
+
 '''
 European H beams
 
@@ -390,4 +424,16 @@ class CHSShape(EC3Shape,arcelor_metric_shapes.CHSShape):
         self.name=name
         EC3Shape.__init__(self,'rolled')
         arcelor_metric_shapes.CHSShape.__init__(self,steel,name)
+    
+class RHSShape(EC3Shape,arcelor_metric_shapes.RHSShape):
+    """RHS shape with Eurocode 3 verification routines."""
+    def __init__(self,steel,name):
+        ''' Constructor.
+
+        :param steel: steel material.
+        :param name: shape name (i.e. AU_23)
+        '''
+        self.name=name
+        EC3Shape.__init__(self,'rolled')
+        arcelor_metric_shapes.RHSShape.__init__(self,steel,name)
     

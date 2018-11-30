@@ -35,6 +35,24 @@ import math
 # XXX Control shear distortion constants:
 #    alpha-> alphaZ,alphaY
 
+'''b: width  [m]
+   h: height [m]
+   e: thickness [m]
+   P: mass per metre [kg/m]
+   A: area of section [m2]
+   Iz: second moment of area about strong axis [m4]
+   Wzel: elastic modulus about strong axis [m4]
+   Wzpl: plastic modulus about strong axis [m4]
+   iz: radius of gyration about strong axis [m] 
+   Iy: second moment of area about weak axis [m4]
+   Wyel: elastic modulus about weak axis [m4]
+   Wypl: plastic modulus about weak axis [m4]
+   iy: radius of gyration about weak axis [m] 
+   It: torsional constant J [m4]
+   E: elastic modulus [N/m2]
+   nu: modulus of Poisson
+'''
+
 IPE= {}
 
 IPE['IPE_A_100']= {'nmb':'IPE_A_100', 'P':6.9, 'h':98e-3, 'b':55e-3, 'tw':3.6e-3, 'tf':4.7e-3, 'r':7e-3, 'A':8.78e-4, 'hi':88.6e-3, 'd':74.6e-3, 'FI':'-', 'Pmin':0e-3, 'Pmax':0e-3, 'AL':0.397, 'AG':57.57, 'Iz':141.2e-8, 'Wzel':28.81e-6, 'Wzpl':32.98e-6, 'iz':4.01e-2, 'Avy':4.44e-4, 'Iy':13.12e-8, 'Wyel':4.77e-6, 'Wypl':7.54e-6, 'iy':1.22e-2, 'Ss':21.2e-3, 'It':0.77e-8, 'E':2.1e+11, 'nu':0.3}
@@ -726,6 +744,7 @@ for item in SHS:
     shape['Wypl']= shape['Wzpl']
 
 # Arcelor rectangular hollow tubes.
+
 RHS={}
 
 RHS['RHS50x30x2_5']= {'nmb':'50x30x2_5', 'b':30e-3, 'h':50e-3, 'e':2.5e-3, 'P':2.817, 'A':3.59e-4, 'Iz':11.3e-8, 'Wzel':4.52e-6, 'Wzpl':5.7e-6, 'iz':1.77e-2, 'Iy':5.05e-8, 'Wyel':3.37e-6, 'Wypl':3.98e-6, 'iy':1.19e-2, 'It':11.74e-8, 'E':210000e6, 'nu':0.3}
@@ -936,6 +955,7 @@ RHS['RHS250x100x5']= {'nmb':'250x100x5', 'b':100e-3, 'h':250e-3, 'e':5e-3, 'P':2
 RHS['RHS250x100x6']= {'nmb':'250x100x6', 'b':100e-3, 'h':250e-3, 'e':6e-3, 'P':31.112, 'A':39.63e-4, 'Iz':2992.34e-8, 'Wzel':239.39e-6, 'Wzpl':304.85e-6, 'iz':8.69e-2, 'Iy':709.63e-8, 'Wyel':141.93e-6, 'Wypl':159.7e-6, 'iy':4.23e-2, 'It':1904.54e-8, 'E':210000e6, 'nu':0.3}
 RHS['RHS250x100x7']= {'nmb':'250x100x7', 'b':100e-3, 'h':250e-3, 'e':7e-3, 'P':35.606, 'A':45.36e-4, 'Iz':3341.65e-8, 'Wzel':267.33e-6, 'Wzpl':344.15e-6, 'iz':8.58e-2, 'Iy':791.97e-8, 'Wyel':158.39e-6, 'Wypl':180.37e-6, 'iy':4.18e-2, 'It':2181.58e-8, 'E':210000e6, 'nu':0.3}
 RHS['RHS250x100x8']= {'nmb':'250x100x8', 'b':100e-3, 'h':250e-3, 'e':8e-3, 'P':40.225, 'A':51.24e-4, 'Iz':3714.08e-8, 'Wzel':297.13e-6, 'Wzpl':385.37e-6, 'iz':8.51e-2, 'Iy':875.06e-8, 'Wyel':175.01e-6, 'Wypl':201.45e-6, 'iy':4.13e-2, 'It':2438.66e-8, 'E':210000e6, 'nu':0.3}
+RHS['RHS250x150x16']= {'nmb':'250x150x16', 'b':150e-3, 'h':250e-3, 'e':16e-3, 'P':90.300, 'A':115.0e-4, 'Iz':8880.00e-8, 'Wzel':710.00e-6, 'Wzpl':906.00e-6, 'iz':8.79e-2, 'Iy':3870.0e-8, 'Wyel':516.00e-6, 'Wypl':625.00e-6, 'iy':5.80e-2, 'It':8870.00e-8, 'E':210000e6, 'nu':0.3}   #Tata profile
 
 for item in RHS:
     shape= RHS[item]
@@ -1345,3 +1365,11 @@ class CHSShape(structural_steel.SteelShape):
     def alphaZ(self):
         '''Return shear shape factor with respect to local z-axis'''
         return self.alphaY()
+
+class RHSShape(structural_steel.SteelShape):
+    def __init__(self,steel,name):
+        super(RHSShape,self).__init__(steel,name,RHS)
+
+class SHSShape(structural_steel.SteelShape):
+    def __init__(self,steel,name):
+        super(SHSShape,self).__init__(steel,name,SHS)
