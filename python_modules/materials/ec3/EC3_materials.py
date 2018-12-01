@@ -111,15 +111,100 @@ class EC3Shape(object):
         :param typo: 'rolled' or 'welded' shape
       '''
       self.typo= typo
+
+    def getClassInternalPartInCompression(self,steel,ratioCT=None):
+        '''Return the cross-section classification of internal part 
+        (web in open shapes, ...) totally subject to compression 
+        (conservative). Clause 5.5 EC3-1-1
+
+        :param steel: steel type (e.g. S275JR)
+        :param ratioCT: ratio c/t width-to-thickness of the internal
+               compressed part (defaults to widthToThicknessWeb)
+        
+        '''
+        ratioCT=ratioCT if ratioCT is not None else self.widthToThicknessWeb()
+        eps=math.sqrt(235e6/steel.fy)
+        limits=[33*eps,38*eps,42*eps]
+        classif=0
+        while ratioCT>limits[classif]:
+            classif+=1
+        return (classif+1)
+    
+    def getClassInternalPartInBending(self,steel,ratioCT=None):
+        '''Return the cross-section classification of internal part 
+        (web in open shapes, ...) subject to pure bending. Clause 5.5 EC3-1-1
+
+        :param steel: steel type (e.g. S275JR)
+        :param ratioCT: ratio c/t width-to-thickness of the internal
+               compressed part (defaults to widthToThicknessWeb)
+        
+        '''
+        ratioCT=ratioCT if ratioCT is not None else self.widthToThicknessWeb()
+        eps=math.sqrt(235e6/steel.fy)
+        limits=[72*eps,83*eps,124*eps]
+        classif=0
+        while ratioCT>limits[classif]:
+            classif+=1
+        return (classif+1)
+        
+        
+    def getClassInternalPartInBending(self,steel):
+        '''Return the cross-section classification of internal part 
+        (web in open shapes, ...) totally subject to compression 
+        (conservative). Clause 5.5 EC3-1-1
+
+        :param steel: steel type (e.g. S275JR)
+        :param ratioCT: ratio c/t width-to-thickness of the internal
+               compressed part (defaults to widthToThicknessWeb)
+        
+        '''
+        ratioCT=self.widthToThicknessWeb()
+        eps=math.sqrt(235e6/steel.fy)
+        limits=[72*eps,83*eps,124*eps]
+        classif=0
+        while ratioCT>limits[classif]:
+            classif+=1
+        return (classif+1)
+        
+
+    def getClassOutstandPartInCompression(self,steel,ratioCT=None):
+        '''Return the cross-section classification of outstand part 
+        (flanges) totally subject to compression 
+        (conservative). Clause 5.5 EC3-1-1
+
+        :param steel: steel type (e.g. S275JR)
+        :param ratioCT: ratio c/t width-to-thickness of the outstand
+               compressed part (defaults to widthToThicknessFlange)
+        
+        '''
+        ratioCT=ratioCT if ratioCT is not None else self.widthToThicknessFlange()
+        eps=math.sqrt(235e6/steel.fy)
+        limits=[9*eps,10*eps,14*eps]
+        classif=0
+        while ratioCT>limits[classif]:
+            classif+=1
+        return (classif+1)
+    
+    def getCfactIntPart(self):
+        '''Return the C length of internal part in compression used to 
+        classify the cross-section. Table 5.2 EC3-1-1
+        '''
+        if self.name[0] in ['I','H']:
+            C=self.h
+        
+        
     def getLateralTorsionalBucklingCurve(self):
         ''' Return the lateral torsional bukling curve name (a,b,c or d) depending of the type of section (rolled, welded,...). EC3 Table 6.4, 6.3.2.2(2).'''
         return EC3lsc.getLateralTorsionalBucklingCurve(self)
+    
     def getAvy(self):
         '''Return y direction (web direction) shear area'''
         return self.get('Avy')
+    
     def shearBucklingVerificationNeeded(self):
         '''Return true if shear buckling verification is needed EC3-1-5'''
         return EC3lsc.shearBucklingVerificationNeeded(self)
+    
     def getVplRdy(self):
         '''Return y direction (web direction) plastic shear resistance'''
         if(self.shearBucklingVerificationNeeded()):
@@ -130,10 +215,12 @@ class EC3Shape(object):
         [plastic design in absence of torsion]
         '''
         return self.getVplRdy()
+    
     def getBendingResistanceReductionCoefficient(self,Vd):
         '''Return bending resistance reduction coefficient as in
            clause 6.2.8 of EC31-1'''
         return EC3lsc.getBendingResistanceReductionCoefficient(self,Vd)
+    
     def getNcRd(self,sectionClass):
         '''Return the axial compression resistance of the cross-section.'''
         return self.getAeff(sectionClass)*self.steelType.fy/self.steelType.gammaM0()
@@ -341,6 +428,7 @@ class IPEShape(EC3Shape,arcelor_metric_shapes.IPEShape):
         self.name=name
         EC3Shape.__init__(self,'rolled')
         arcelor_metric_shapes.IPEShape.__init__(self,steel,name)
+        
 
 class SHSShape(EC3Shape,arcelor_metric_shapes.SHSShape):
     """SHS shape with Eurocode 3 verification routines."""

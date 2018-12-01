@@ -1,4 +1,13 @@
 # -*- coding: utf-8 -*-
+from __future__ import division
+
+#Coefficients alpha, beta for biaxial bending  (clause 6.2.9 of EC3.1.1)
+__author__= "Ana Ortega (AO_O)"
+__copyright__= "Copyright 2018, AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "ana.ortega@ciccp.es"
+
 import xc_base
 import geom
 import xc

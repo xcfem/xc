@@ -1260,23 +1260,38 @@ class IShape(structural_steel.SteelShape):
         self.hiHalf= self.get('hi')/2.0 #Half section interior height.
         self.twHalf= self.get('tw')/2.0 #Half web thickness
         self.tileSize= 0.01 #Size of tiles
+        
     def b(self):
         return self.get('b')
+      
     def h(self):
         '''Return shape height.'''
         return self.get('h')
+      
     def tf(self):
         '''Return flange thickess'''
         return self.get('tf')
+      
     def tw(self):
         '''Return web thickess'''
         return self.get('tw')
+    
     def hw(self):
         '''Return web height'''
         return self.h()-2*self.tf()
+
+    def d(self):
+        '''Return internal web height'''
+        return self.h()-2*self.tf()-2*self.r()
+
+    def r(self):
+        '''Return radius web-flange'''
+        return self.get('r')
+      
     def getRho(self):
         ''' Returns mass per unit lenght. '''
         return self.get('P')
+      
     def getShapeRegions(self):
         ''' Returns regions valid for fiber section model creation. '''
         retval= list()
@@ -1294,6 +1309,22 @@ class IShape(structural_steel.SteelShape):
         retval.append([p4,p5])
         return retval
 
+    def widthToThicknessWeb(self):
+        '''return the ratio width-to-thickness for classification
+        in web (table 5.2 EC3-1-1)
+        '''
+        c=self.d()
+        t=self.tw()
+        return c/t
+
+    def widthToThicknessFlange(self):
+        '''return the ratio width-to-thickness for classification
+        in flange (table 5.2 EC3-1-1)
+        '''
+        c=(self.b()-self.tw()-2*self.r())/2.
+        t=self.tf()
+        return c/t
+        
     def discretization(self,preprocessor,matModelName):
         self.sectionGeometryName= 'gm'+self.get('nmb')
         self.gm= preprocessor.getMaterialHandler.newSectionGeometry(self.sectionGeometryName)
@@ -1315,37 +1346,102 @@ class IShape(structural_steel.SteelShape):
         fibras= self.fiberSection3d.getFibers()
         return self.fiberSection3d
 
-class IPNShape(IShape):
-    def __init__(self,steel,name):
-        super(IPNShape,self).__init__(steel,name,IPN)
-
-class IPEShape(IShape):
-    def __init__(self,steel,name):
-        super(IPEShape,self).__init__(steel,name,IPE)
-  
-class HEShape(IShape):
-    def __init__(self,steel,name):
-        super(HEShape,self).__init__(steel,name,HE)
-
-class UPNShape(structural_steel.SteelShape):
-    def __init__(self,steel,name):
-        super(UPNShape,self).__init__(steel,name,UPN)
-    def getRho(self):
-        ''' Returns mass per unit lenght. '''
-        return self.get('P')
+      
+class QHShape(structural_steel.SteelShape):
+    '''Quadrilateral hollow shape''' 
+    def __init__(self,steel,name,table):
+        super(QHShape,self).__init__(steel,name,table)
+        self.bHalf= self.get('b')/2.0 #Half section width
+        self.hHalf= self.get('h')/2.0 #Half section height
+        
+    def b(self):
+        return self.get('b')
+      
     def h(self):
         '''Return shape height.'''
         return self.get('h')
+      
+    def t(self):
+        '''Return thickess'''
+        return self.get('e')
+      
+    def hw(self):
+        '''Return web height'''
+        return self.h()-2*self.t()
+      
+    def getRho(self):
+        ''' Returns mass per unit lenght. '''
+        return self.get('P')
+
+    def widthToThicknessWeb(self):
+        '''return the ratio width-to-thickness  for classification
+        in web (table 5.2 EC3-1-1)
+        '''
+        c=self.h()-2*self.t()-2*self.get('e')
+        t=self.t()
+        return c/t
+
+    def widthToThicknessHorzInt(self):
+        '''return the internal ratio width-to-thickness  for classification
+        in horizontal sup. and inf. plates (table 5.2 EC3-1-1)
+        '''
+        c=self.b()-2*self.t()-2*self.get('e')
+        t=self.t()
+        return c/t
+        
+class UShape(structural_steel.SteelShape):
+    def __init__(self,steel,name,table):
+        super(UShape,self).__init__(steel,name,UPN)
+        
+    def getRho(self):
+        ''' Returns mass per unit lenght. '''
+        return self.get('P')
+      
+    def h(self):
+        '''Return shape height.'''
+        return self.get('h')
+      
+    def d(self):
+        '''Return internal web height.'''
+        return self.get('d')
+      
+    def b(self):
+        '''Return shape height.'''
+        return self.get('b')
+      
     def tf(self):
         '''Return flange thickess'''
         return self.get('tf')
+      
     def tw(self):
         '''Return web thickess'''
         return self.get('tw')
+      
     def hw(self):
         '''Return web height'''
         return self.h()-2*self.tf()
 
+    def r(self):
+        '''Return radius web-flange'''
+        return self.get('r1')
+
+    def widthToThicknessWeb(self):
+        '''return the ratio width-to-thickness for classification
+        in web (table 5.2 EC3-1-1)
+        '''
+        c=self.d()
+        t=self.tw()
+        return c/t
+
+    def widthToThicknessFlange(self):
+        '''return the ratio width-to-thickness for classification 
+        in flange (table 5.2 EC3-1-1)
+        '''
+        c=self.b()-self.tw()-self.r()
+        t=self.tf()
+        return c/t
+
+      
 class AUShape(structural_steel.SteelShape):
     def __init__(self,steel,name):
         super(AUShape,self).__init__(steel,name,AU)
@@ -1366,10 +1462,39 @@ class CHSShape(structural_steel.SteelShape):
         '''Return shear shape factor with respect to local z-axis'''
         return self.alphaY()
 
-class RHSShape(structural_steel.SteelShape):
+class IPNShape(IShape):
+    def __init__(self,steel,name):
+        super(IPNShape,self).__init__(steel,name,IPN)
+        
+    def d(self):
+        '''Return internal web height'''
+        return self.get('d')
+
+    def r(self):
+        '''Return radius web-flange'''
+        return (self.h()-2*self.tf()-self.d())/2.0
+
+class IPEShape(IShape):
+    def __init__(self,steel,name):
+        super(IPEShape,self).__init__(steel,name,IPE)
+  
+
+class HEShape(IShape):
+    def __init__(self,steel,name):
+        super(HEShape,self).__init__(steel,name,HE)
+
+        
+class RHSShape(QHShape):
     def __init__(self,steel,name):
         super(RHSShape,self).__init__(steel,name,RHS)
 
-class SHSShape(structural_steel.SteelShape):
+        
+class SHSShape(QHShape):
     def __init__(self,steel,name):
         super(SHSShape,self).__init__(steel,name,SHS)
+
+class UPNShape(UShape):
+    def __init__(self,steel,name):
+        super(UPNShape,self).__init__(steel,name,UPN)
+
+        
