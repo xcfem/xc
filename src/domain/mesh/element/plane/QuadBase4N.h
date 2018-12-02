@@ -44,6 +44,7 @@ template <class PhysProp>
 class QuadBase4N : public PlaneElement<4,PhysProp>
   {
   protected:
+    BoolArray3d get_node_pattern(void) const;
     ElemPtrArray3d put_on_mesh(const NodePtrArray3d &,meshing_dir dm) const;
   public:
 
@@ -80,6 +81,15 @@ XC::QuadBase4N<PhysProp>::QuadBase4N(int tag, int classTag, int node1, int node2
     this->theNodes.set_id_nodes(node1,node2,node3,node4);
   }
 
+//! @brief Return a grid of booleans, one for each of the
+//! element nodes. If there is a node that doesn't exist
+//! for a position the correspondin value will be false.
+template <class PhysProp>
+BoolArray3d XC::QuadBase4N<PhysProp>::get_node_pattern(void) const
+  {
+    BoolArray3d retval(1,2,2,true); //One layer, two rows, two columns.
+    return retval;
+  }
 
 //! @brief Put the element on the mesh being passed as parameter.
 template <class PhysProp>
