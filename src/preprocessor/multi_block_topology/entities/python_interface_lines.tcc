@@ -57,7 +57,7 @@ class_<XC::CircularArc, bases<XC::LineBase>, boost::noncopyable >("CircleArc", "
   .def("getAngle", &XC::CircularArc::getIncludedAngle,"Return the angle subtended by the arc.")
   .def("getTheta1",&XC::CircularArc::getTheta1,"Return the start angle.")
   .def("getTheta2",&XC::CircularArc::getTheta2,"Return the end angle.")
-  .def("getCentro",&XC::CircularArc::getCentro,"Return the center of the circumference.")
+  .def("getCenter",&XC::CircularArc::getCenter,"Return the center of the circumference.")
   .def("getPInic",&XC::CircularArc::getPInic,"Return start point of the arc.")
   .def("getPFin",&XC::CircularArc::getPFin,"Return end point of the arc.")
   .def("getPMed",&XC::CircularArc::getPMed,"Return the midpoint of the arc.")
