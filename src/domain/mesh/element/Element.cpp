@@ -1044,7 +1044,7 @@ XC::Vector XC::Element::getCenterOfMassCoordinates(bool initialGeometry) const
 //! for a position the correspondin value will be false.
 BoolArray3d XC::Element::get_node_pattern(void) const
   {
-    BoolArray3d retval;
+    BoolArray3d retval(1,1,1,false);
     std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not implemented yet." << std::endl;
     return retval;
