@@ -53,7 +53,17 @@ XC::BrickBase::BrickBase(int tag, int classTag, int node1, int node2, int node3,
 size_t XC::BrickBase::getDimension(void) const
   { return 3; }
 
-//Put the element on the mesh being passed as parameter.
+
+//! @brief Return a grid of booleans, one for each of the
+//! element nodes. If there is a node that doesn't exist
+//! for a position the correspondin value will be false.
+BoolArray3d XC::BrickBase::get_node_pattern(void) const
+  {
+    BoolArray3d retval(2,2,2,true); //Two layers, two rows, two columns.
+    return retval;
+  }
+
+//! @brief Put the element on the mesh being passed as parameter.
 XC::ElemPtrArray3d XC::BrickBase::put_on_mesh(const XC::NodePtrArray3d &nodes,meshing_dir dm) const
   {
     const size_t numberOfLayers= nodes.getNumberOfLayers();

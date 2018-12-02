@@ -118,7 +118,6 @@ class TwentyNodeBrick_u_p_U: public ElemWithMaterial<20,NDMaterialPhysicalProper
     double getPorePressure(double, double, double) const;
     Vector getExForceS();
     Vector getExForceF();
-        
   public:
     TwentyNodeBrick_u_p_U(int element_number,
                    int node_numb_1, int node_numb_2, int node_numb_3, int node_numb_4,
