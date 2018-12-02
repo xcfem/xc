@@ -75,7 +75,7 @@ BND3d XC::UniformGrid::Bnd(void) const
   }
 
 //! @brief Returns mesh centroid.
-Pos3d XC::UniformGrid::GetCentro(void) const
+Pos3d XC::UniformGrid::getCenter(void) const
   { return Pos3d(org.x()+Lx/2,org.y()+Ly/2,org.z()+Lz/2); }
 
 //! @brief Returns the sets to which this object belongs.

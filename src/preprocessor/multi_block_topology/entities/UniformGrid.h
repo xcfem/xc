@@ -90,7 +90,7 @@ class UniformGrid: public EntMdlr
       { return Lz; }
 
     virtual BND3d Bnd(void) const;
-    Pos3d GetCentro(void) const;
+    Pos3d getCenter(void) const;
 
     std::set<SetBase *> get_sets(void) const;
     void add_to_sets(std::set<SetBase *> &);
