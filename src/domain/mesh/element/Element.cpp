@@ -1039,6 +1039,18 @@ XC::Vector XC::Element::getCenterOfMassCoordinates(bool initialGeometry) const
     return retval;
   }
 
+//! @brief Return a grid of booleans, one for each of the
+//! element nodes. If there is a node that doesn't exist
+//! for a position the correspondin value will be false.
+BoolArray3d XC::Element::get_node_pattern(void) const
+  {
+    BoolArray3d retval;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; not implemented yet." << std::endl;
+    return retval;
+  }
+
+
 //! @brief Places the element on the mesh.
 XC::ElemPtrArray3d XC::Element::put_on_mesh(const XC::NodePtrArray3d &,meshing_dir) const
   {
@@ -1047,7 +1059,7 @@ XC::ElemPtrArray3d XC::Element::put_on_mesh(const XC::NodePtrArray3d &,meshing_d
     return ElemPtrArray3d();
   }
 
-XC::ElemPtrArray3d XC::Element::cose(const SetEstruct &f1,const SetEstruct &f2) const
+XC::ElemPtrArray3d XC::Element::sew(const SetEstruct &f1,const SetEstruct &f2) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
               << " is not implemented." << std::endl;
