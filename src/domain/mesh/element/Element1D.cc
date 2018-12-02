@@ -377,6 +377,15 @@ void XC::Element1D::unidimensional_meshing(const XC::NodePtrArray3d &nodes,XC::E
       }
   }
 
+//! @brief Return a grid of booleans, one for each of the
+//! element nodes. If there is a node that doesn't exist
+//! for a position the correspondin value will be false.
+BoolArray3d XC::Element1D::get_node_pattern(void) const
+  {
+    BoolArray3d retval(1,1,2,true); //One layer, one row, two columns.
+    return retval;
+  }
+
 XC::ElemPtrArray3d XC::Element1D::put_on_mesh(const NodePtrArray3d &nodes,meshing_dir dm) const
   {
     const size_t numberOfLayers= nodes.getNumberOfLayers();
@@ -450,7 +459,7 @@ XC::ElemPtrArray3d XC::Element1D::put_on_mesh(const NodePtrArray3d &nodes,meshin
     return retval;
   }
 
-XC::ElemPtrArray3d XC::Element1D::cose(const SetEstruct &f1,const SetEstruct &f2) const
+XC::ElemPtrArray3d XC::Element1D::sew(const SetEstruct &f1,const SetEstruct &f2) const
   {
     const size_t nelem= f1.getNumberOfNodes();
     ElemPtrArray3d retval(nelem,1,1);

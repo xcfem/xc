@@ -61,7 +61,8 @@ class Element0D : public ElementBase<2>
     Matrix transformation; //!< transformation matrix for orientation
 
     virtual void setUp(int Nd1, int Nd2,const Vector &x,const Vector &y);
-    ElemPtrArray3d cose(const SetEstruct &f1,const SetEstruct &f2) const;
+    BoolArray3d get_node_pattern(void) const;
+    ElemPtrArray3d sew(const SetEstruct &f1,const SetEstruct &f2) const;
 
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
