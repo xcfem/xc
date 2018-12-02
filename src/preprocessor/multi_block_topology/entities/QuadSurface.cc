@@ -475,34 +475,32 @@ void XC::QuadSurface::create_nodes(void)
         create_line_nodes();
 
         const size_t n_rows= NDivJ()+1;
-        const size_t cols= NDivI()+1;
-        ttzNodes = NodePtrArray3d(1,n_rows,cols);
+        const size_t n_cols= NDivI()+1;
+        ttzNodes= NodePtrArray3d(1,n_rows,n_cols);
 
 
+        //Set the pointers of the contour nodes.
         //j=1
-        for(size_t k=1;k<=cols;k++)
+        for(size_t k=1;k<=n_cols;k++)
           {
             Side &ll= lines[0];
             Node *nn= ll.getNode(k);
             ttzNodes(1,1,k)= nn;
           }
-
         //j=n_rows.
-        for(size_t k=1;k<=cols;k++) //En sentido inverso.
+        for(size_t k=1;k<=n_cols;k++) // Reverse.
           ttzNodes(1,n_rows,k)= lines[2].getNodeReverse(k);
-
-
         //k=1
-        for(size_t j=2;j<n_rows;j++) //En sentido inverso.
+        for(size_t j=2;j<n_rows;j++) // Reverse.
           ttzNodes(1,j,1)= lines[3].getNodeReverse(j);
-        //k=cols.
+        //k=n_cols.
         for(size_t j=2;j<n_rows;j++)
-          ttzNodes(1,j,cols)= lines[1].getNode(j);
+          ttzNodes(1,j,n_cols)= lines[1].getNode(j);
 
-
+        //Populate the interior nodes.
         Pos3dArray node_pos= get_positions(); //Node positions.
         for(size_t j= 2;j<n_rows;j++) //interior rows.
-          for(size_t k= 2;k<cols;k++) //interior columns.
+          for(size_t k= 2;k<n_cols;k++) //interior columns.
             create_node(node_pos(j,k),1,j,k);
       }
     else
