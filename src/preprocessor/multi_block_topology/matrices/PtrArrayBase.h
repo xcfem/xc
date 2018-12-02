@@ -59,8 +59,8 @@ class PtrArrayBase: public TMatrix<T *,std::vector<T *> >, public CommandEntity
 
 
     //! @brief Constructor.
-    PtrArrayBase(const size_t &f=0,const size_t &c=0)
-      : m_ptr(f,c,nullptr), CommandEntity() {}
+  PtrArrayBase(const size_t &f=0,const size_t &c=0, const value_type &def_value= nullptr)
+      : m_ptr(f,c,def_value), CommandEntity() {}
   public:
     bool Null(void) const;
     bool HasNull(void) const;

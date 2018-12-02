@@ -30,7 +30,7 @@
 #define ROWSET_H
 
 #include "SetEstruct.h"
-#include "xc_utils/src/geom/pos_vec/Array3dRange.h"
+#include "xc_utils/src/matrices/3d_arrays/Array3dRange.h"
 
 namespace XC {
 
