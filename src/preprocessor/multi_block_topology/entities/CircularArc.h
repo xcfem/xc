@@ -60,7 +60,7 @@ class CircularArc: public LineBase
     double getIncludedAngle(void) const;
     double getTheta1(void) const;
     double getTheta2(void) const;
-    Pos3d getCentro(void) const;
+    Pos3d getCenter(void) const;
     Pos3d getPInic(void) const;
     Pos3d getPFin(void) const;
     Pos3d getPMed(void) const;

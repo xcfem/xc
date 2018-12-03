@@ -44,6 +44,7 @@ class NDMaterial;
 class BrickBase : public ElemWithMaterial<8,NDMaterialPhysicalProperties>
   {
   protected:
+    BoolArray3d get_node_pattern(void) const;
     ElemPtrArray3d put_on_mesh(const NodePtrArray3d &,meshing_dir dm) const;
   public:
     BrickBase(int classTag);

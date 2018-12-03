@@ -157,7 +157,7 @@ XC::TwentyNodeBrick_u_p_U::~TwentyNodeBrick_u_p_U(void)
     if(Ki) delete Ki;
   }
 
-//======================================================================
+//! @brief Return the number of degrees of freedom.
 int XC::TwentyNodeBrick_u_p_U::getNumDOF(void) const
   { return Num_ElemDof; }
 

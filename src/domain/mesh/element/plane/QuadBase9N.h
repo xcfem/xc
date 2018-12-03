@@ -44,6 +44,7 @@ template <class PhysProp>
 class QuadBase9N : public PlaneElement<9,PhysProp>
   {
   protected:
+    BoolArray3d get_node_pattern(void) const;
     ElemPtrArray3d put_on_mesh(const NodePtrArray3d &,meshing_dir dm) const;
 
   public:
@@ -73,6 +74,15 @@ template <class PhysProp>
 XC::QuadBase9N<PhysProp>::QuadBase9N(int tag,int classTag,const PhysProp &pp)
   :PlaneElement<9,PhysProp>(tag,classTag,pp) {}
 
+//! @brief Return a grid of booleans, one for each of the
+//! element nodes. If there is a node that doesn't exist
+//! for a position the correspondin value will be false.
+template <class PhysProp>
+BoolArray3d XC::QuadBase9N<PhysProp>::get_node_pattern(void) const
+  {
+    BoolArray3d retval(1,2,2,true); //One layer, two rows, two columns.
+    return retval;
+  }
 
 //! @brief Put the element on the mesh being passed as parameter.
 template <class PhysProp>

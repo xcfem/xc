@@ -68,6 +68,7 @@
 #include "domain/mesh/element/utils/RayleighDampingFactors.h"
 #include "utility/matrix/Matrix.h"
 #include "domain/mesh/node/NodeTopology.h"
+#include "xc_utils/src/matrices/3d_arrays/BoolArray3d.h"
 
 class Pos3dArray3d;
 class Pos2d;
@@ -126,8 +127,9 @@ class Element: public MeshComponent
   protected:
     friend class EntMdlr;
     friend class Preprocessor;
+    virtual BoolArray3d get_node_pattern(void) const;
     virtual ElemPtrArray3d put_on_mesh(const NodePtrArray3d &,meshing_dir) const;
-    virtual ElemPtrArray3d cose(const SetEstruct &f1,const SetEstruct &f2) const;
+    virtual ElemPtrArray3d sew(const SetEstruct &f1,const SetEstruct &f2) const;
 
     const Vector &getRayleighDampingForces(void) const;
 

@@ -158,7 +158,7 @@ double XC::CircularArc::getLambda(const Pos3d &p) const
   }
 
 //! @brief Return the center of the circumference.
-Pos3d XC::CircularArc::getCentro(void) const
+Pos3d XC::CircularArc::getCenter(void) const
   {
     Pos3d retval;
     if(check_points())

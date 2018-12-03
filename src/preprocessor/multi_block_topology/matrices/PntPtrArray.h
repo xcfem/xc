@@ -50,12 +50,11 @@ class PntPtrArray: public PtrArrayBase<Pnt>
   {
   protected:
 
-
     friend class MultiBlockTopology;
   public:
     //! @brief Constructor.
-    PntPtrArray(const size_t &f=0,const size_t &c=0)
-      : PtrArrayBase<Pnt>(f,c) {}
+    PntPtrArray(const size_t &f=0,const size_t &c=0, const value_type &def_value= nullptr)
+      : PtrArrayBase<Pnt>(f,c,def_value) {}
     m_int getTags(void) const;
 
     const MultiBlockTopology *getMultiBlockTopology(void) const;

@@ -34,8 +34,7 @@
 #include "PntPtrArray.h"
 #include "PtrArray3dBase.h"
 #include "utility/matrix/Vector.h"
-
-#include "xc_utils/src/matrices/Indices3dArray.h"
+#include "xc_utils/src/matrices/3d_arrays/Indices3dArray.h"
 
 class ExprAlgebra;
 class Intervalo1D;

@@ -254,7 +254,16 @@ void XC::Element0D::setUp(int Nd1, int Nd2, const Vector &x, const Vector &yp)
     setUpVectors(x,yp);
   }
 
-XC::ElemPtrArray3d XC::Element0D::cose(const SetEstruct &f1,const SetEstruct &f2) const
+//! @brief Return a grid of booleans, one for each of the
+//! element nodes. If there is a node that doesn't exist
+//! for a position the correspondin value will be false.
+BoolArray3d XC::Element0D::get_node_pattern(void) const
+  {
+    BoolArray3d retval(1,1,2,true); //One layer, one row, two columns.
+    return retval;
+  }
+
+XC::ElemPtrArray3d XC::Element0D::sew(const SetEstruct &f1,const SetEstruct &f2) const
   {
     const size_t numberOfLayers= f1.getNumNodeLayers();
     const size_t numberOfRows= f1.getNumNodeRows();

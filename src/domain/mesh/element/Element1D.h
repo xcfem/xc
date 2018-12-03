@@ -54,8 +54,9 @@ class Element1D : public ElementBase<2>
   protected:
     mutable std::vector<double> tributaryLengths;
 
+    BoolArray3d get_node_pattern(void) const;
     ElemPtrArray3d put_on_mesh(const NodePtrArray3d &,meshing_dir dm) const;
-    ElemPtrArray3d cose(const SetEstruct &f1,const SetEstruct &f2) const;
+    ElemPtrArray3d sew(const SetEstruct &f1,const SetEstruct &f2) const;
 
     int sendCoordTransf(int posFlag,const int &,const int &,CommParameters &);
     CrdTransf *recvCoordTransf(int posFlag,const int &,const int &,const CommParameters &);
