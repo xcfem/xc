@@ -79,7 +79,7 @@ XC::QuadBase9N<PhysProp>::QuadBase9N(int tag,int classTag,const PhysProp &pp)
 template <class PhysProp>
 BoolArray3d XC::QuadBase9N<PhysProp>::getNodePattern(void) const
   {
-    BoolArray3d retval(1,2,2,true); //One layer, two rows, two columns.
+    BoolArray3d retval(1,3,3,true); //One layer, three rows, three columns.
     return retval;
   }
 
