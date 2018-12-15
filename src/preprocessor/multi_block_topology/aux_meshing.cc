@@ -35,11 +35,11 @@
 //! @ brief Mesh one layer (i= constant) of 4-nodes quadrangles.
 void meshing_quad4N_on_jk(const XC::Element &e,const XC::NodePtrArray3d::constant_i_layer_const_ref &nodes,XC::ElemPtrArray3d::constant_i_layer_variable_ref &elements)
   {
-    const size_t numberOfRows= nodes.getNumberOfRows();
-    const size_t numberOfColumns= nodes.getNumberOfColumns();
+    const size_t numberOfNodeRows= nodes.getNumberOfRows();
+    const size_t numberOfNodeColumns= nodes.getNumberOfColumns();
 
-    for(size_t j=1;j<numberOfRows;j++)
-      for(size_t k=1;k<numberOfColumns;k++)
+    for(size_t j=1;j<numberOfNodeRows;j++)
+      for(size_t k=1;k<numberOfNodeColumns;k++)
         {
 	  XC::Element *tmp= e.getCopy();
           const std::vector<int> indices= getNodeIdsQuad4N(nodes,j,k);
@@ -57,11 +57,11 @@ void meshing_quad4N_on_jk(const XC::Element &e,const XC::NodePtrArray3d::constan
 //! @ brief Mesh one row (j= constant) of 4-nodes quadrangles.
 void meshing_quad4N_on_ik(const XC::Element &e,const XC::NodePtrArray3d::constant_j_layer_const_ref &nodes,XC::ElemPtrArray3d::constant_j_layer_variable_ref &elements)
   {
-    const size_t numberOfLayers= nodes.getNumberOfLayers();
-    const size_t numberOfColumns= nodes.getNumberOfColumns();
+    const size_t numberOfNodeLayers= nodes.getNumberOfLayers();
+    const size_t numberOfNodeColumns= nodes.getNumberOfColumns();
     std::vector<int> in(4);
-    for(size_t i=1;i<numberOfLayers;i++)
-      for(size_t k=1;k<numberOfColumns;k++)
+    for(size_t i=1;i<numberOfNodeLayers;i++)
+      for(size_t k=1;k<numberOfNodeColumns;k++)
         {
 	  XC::Element *tmp= e.getCopy();
           in[0]= nodes(i,k)->getTag();
@@ -76,11 +76,11 @@ void meshing_quad4N_on_ik(const XC::Element &e,const XC::NodePtrArray3d::constan
 //! @ brief Mesh one column (k= constant)  of 4-nodes quadrangles.
 void meshing_quad4N_on_ij(const XC::Element &e,const XC::NodePtrArray3d::constant_k_layer_const_ref &nodes,XC::ElemPtrArray3d::constant_k_layer_variable_ref &elements)
   {
-    const size_t numberOfLayers= nodes.getNumberOfLayers();
-    const size_t numberOfRows= nodes.getNumberOfRows();
+    const size_t numberOfNodeLayers= nodes.getNumberOfLayers();
+    const size_t numberOfNodeRows= nodes.getNumberOfRows();
     std::vector<int> in(4);
-    for(size_t i=1;i<numberOfLayers;i++)
-      for(size_t j=1;j<numberOfRows;j++)
+    for(size_t i=1;i<numberOfNodeLayers;i++)
+      for(size_t j=1;j<numberOfNodeRows;j++)
         {
 	  XC::Element *tmp= e.getCopy();
           in[0]= nodes(i,j)->getTag();
@@ -95,26 +95,26 @@ void meshing_quad4N_on_ij(const XC::Element &e,const XC::NodePtrArray3d::constan
 //! @ brief Mesh a quadrangle with 4-node elements
 void meshing_quad4N_bidimensional(const XC::Element &e,const XC::NodePtrArray3d &nodes,XC::ElemPtrArray3d &elements)
   {
-    const size_t numberOfLayers= nodes.getNumberOfLayers();
-    const size_t numberOfRows= nodes.getNumberOfRows();
-    const size_t numberOfColumns= nodes.getNumberOfColumns();
+    const size_t numberOfNodeLayers= nodes.getNumberOfLayers();
+    const size_t numberOfNodeRows= nodes.getNumberOfRows();
+    const size_t numberOfNodeColumns= nodes.getNumberOfColumns();
     if(!nodes.HasNull()) //No hay pointers nulos.
       {
         if(nodes.isIConstantLayer())
           {
-            elements= XC::ElemPtrArray3d(numberOfLayers,XC::ElemPtrArray(numberOfRows-1,numberOfColumns-1));
+            elements= XC::ElemPtrArray3d(numberOfNodeLayers,XC::ElemPtrArray(numberOfNodeRows-1,numberOfNodeColumns-1));
             XC::ElemPtrArray3d::constant_i_layer_variable_ref elem_layer= elements.getConstantILayerVarRef(1);
             meshing_quad4N_on_jk(e,nodes.getConstantILayerConstRef(1),elem_layer);
           }
         else if(nodes.isJConstantLayer())
           {
-            elements= XC::ElemPtrArray3d(numberOfLayers-1,XC::ElemPtrArray(numberOfRows,numberOfColumns-1));
+            elements= XC::ElemPtrArray3d(numberOfNodeLayers-1,XC::ElemPtrArray(numberOfNodeRows,numberOfNodeColumns-1));
             XC::ElemPtrArray3d::constant_j_layer_variable_ref elem_layer= elements.getConstantJLayerVarRef(1);
             meshing_quad4N_on_ik(e,nodes.getConstantJLayerConstRef(1),elem_layer);
           }
         else if(nodes.isKConstantLayer())
           {
-            elements= XC::ElemPtrArray3d(numberOfLayers-1,XC::ElemPtrArray(numberOfRows-1,numberOfColumns));
+            elements= XC::ElemPtrArray3d(numberOfNodeLayers-1,XC::ElemPtrArray(numberOfNodeRows-1,numberOfNodeColumns));
             XC::ElemPtrArray3d::constant_k_layer_variable_ref elem_layer= elements.getConstantKLayerVarRef(1);
             meshing_quad4N_on_ij(e,nodes.getConstantKLayerConstRef(1),elem_layer);
           }
@@ -126,9 +126,9 @@ void meshing_quad4N_bidimensional(const XC::Element &e,const XC::NodePtrArray3d 
 //! @brief Place the elements on the mesh passed as parameter.
 XC::ElemPtrArray3d XC::put_quad4N_on_mesh(const Element &e,const NodePtrArray3d &nodes,meshing_dir dm)
   {
-    const size_t numberOfLayers= nodes.getNumberOfLayers();
-    const size_t numberOfRows= nodes.getNumberOfRows();
-    const size_t numberOfColumns= nodes.getNumberOfColumns();
+    const size_t numberOfNodeLayers= nodes.getNumberOfLayers();
+    const size_t numberOfNodeRows= nodes.getNumberOfRows();
+    const size_t numberOfNodeColumns= nodes.getNumberOfColumns();
     const size_t mesh_dim= nodes.GetDim();
 
 
@@ -146,14 +146,14 @@ XC::ElemPtrArray3d XC::put_quad4N_on_mesh(const Element &e,const NodePtrArray3d 
             switch(dm)
               {
               case dirm_i:
-                if(numberOfLayers<2)
+                if(numberOfNodeLayers<2)
 		  std::cerr << __FUNCTION__
 			    << "Not enough nodes in 'i' direction."
 		            << " Elements were not created." << std::endl;
                 else
                   {
-                    retval= ElemPtrArray3d(numberOfLayers,ElemPtrArray(numberOfRows-1,numberOfColumns-1));
-                    for(size_t i=1;i<=numberOfLayers;i++)
+                    retval= ElemPtrArray3d(numberOfNodeLayers,ElemPtrArray(numberOfNodeRows-1,numberOfNodeColumns-1));
+                    for(size_t i=1;i<=numberOfNodeLayers;i++)
                       {
                         ElemPtrArray3d::constant_i_layer_variable_ref elem_layer= retval.getConstantILayerVarRef(i);
                         meshing_quad4N_on_jk(e,nodes.getConstantILayerConstRef(i),elem_layer);
@@ -161,14 +161,14 @@ XC::ElemPtrArray3d XC::put_quad4N_on_mesh(const Element &e,const NodePtrArray3d 
                   }
                 break;
               case dirm_j:
-                if(numberOfRows<2)
+                if(numberOfNodeRows<2)
 		  std::cerr <<  __FUNCTION__
 			    << "Not enough nodes in 'j' direction."
 		            << " Elements were not created." << std::endl;
                 else
                   {
-                    retval= ElemPtrArray3d(numberOfLayers-1,ElemPtrArray(numberOfRows,numberOfColumns-1));
-                    for(size_t j=1;j<=numberOfRows;j++)
+                    retval= ElemPtrArray3d(numberOfNodeLayers-1,ElemPtrArray(numberOfNodeRows,numberOfNodeColumns-1));
+                    for(size_t j=1;j<=numberOfNodeRows;j++)
                       {
                         ElemPtrArray3d::constant_j_layer_variable_ref elem_layer= retval.getConstantJLayerVarRef(j);
                         meshing_quad4N_on_ik(e,nodes.getConstantJLayerConstRef(j),elem_layer);
@@ -176,14 +176,14 @@ XC::ElemPtrArray3d XC::put_quad4N_on_mesh(const Element &e,const NodePtrArray3d 
                   }
                 break;
               case dirm_k:
-                if(numberOfColumns<2)
+                if(numberOfNodeColumns<2)
 		  std::cerr <<  __FUNCTION__
 			    << "Not enough nodes in 'k' direction."
 		            << " Elements were not created." << std::endl;
                 else
                   {
-                    retval= ElemPtrArray3d(numberOfLayers-1,ElemPtrArray(numberOfRows-1,numberOfColumns));
-                    for(size_t k=1;k<=numberOfColumns;k++)
+                    retval= ElemPtrArray3d(numberOfNodeLayers-1,ElemPtrArray(numberOfNodeRows-1,numberOfNodeColumns));
+                    for(size_t k=1;k<=numberOfNodeColumns;k++)
                       {
                         ElemPtrArray3d::constant_k_layer_variable_ref elem_layer= retval.getConstantKLayerVarRef(k);
                         meshing_quad4N_on_ij(e,nodes.getConstantKLayerConstRef(k),elem_layer);
@@ -201,7 +201,24 @@ XC::ElemPtrArray3d XC::put_quad4N_on_mesh(const Element &e,const NodePtrArray3d 
 //! @ brief Mesh one layer (i= constant) with 9-nodes elements.
 void meshing_quad9N_on_jk(const XC::Element &e,const XC::NodePtrArray3d::constant_i_layer_const_ref &nodes,XC::ElemPtrArray3d::constant_i_layer_variable_ref &elements)
   {
-    std::cerr << "meshing_quad9N_on_jk not implemented." << std::endl;
+    const size_t numberOfNodeRows= nodes.getNumberOfRows();
+    const size_t numberOfNodeColumns= nodes.getNumberOfColumns();
+    const size_t numberOfElementRows= (numberOfNodeRows-1)/2;
+    const size_t numberOfElementColumns= (numberOfNodeColumns-1)/2;
+    for(size_t j=1;j<=numberOfElementRows;j++)
+      for(size_t k=1;k<=numberOfElementColumns;k++)
+        {
+	  XC::Element *tmp= e.getCopy();
+          const std::vector<int> indices= getNodeIdsQuad9N(nodes,j,k);
+          if((indices[0]>=0) && (indices[1]>=0) && (indices[2]>=0)  && (indices[3]>=0) & (indices[4]>=0) && (indices[5]>=0) && (indices[6]>=0)  && (indices[7]>=0) && (indices[8]>=0))
+            tmp->setIdNodes(indices);
+          else
+            {
+              delete tmp;
+              tmp= nullptr;
+            }
+          elements(j,k)= tmp;
+        }
   }
 
 //! @ brief Mesh one row (j= constant)  with 9-nodes elements.
@@ -219,26 +236,28 @@ void meshing_quad9N_on_ij(const XC::Element &e,const XC::NodePtrArray3d::constan
 //! @ brief Mesh one quadrangle  with 9-nodes elements.
 void meshing_quad9N_bidimensional(const XC::Element &e,const XC::NodePtrArray3d &nodes,XC::ElemPtrArray3d &elements)
   {
-    const size_t numberOfLayers= nodes.getNumberOfLayers();
-    const size_t numberOfRows= nodes.getNumberOfRows();
-    const size_t numberOfColumns= nodes.getNumberOfColumns();
+    const size_t numberOfNodeLayers= nodes.getNumberOfLayers();
+    const size_t numberOfNodeRows= nodes.getNumberOfRows();
+    const size_t numberOfNodeColumns= nodes.getNumberOfColumns();
     if(!nodes.HasNull()) //No hay pointers nulos.
       {
         if(nodes.isIConstantLayer())
           {
-            elements= XC::ElemPtrArray3d(numberOfLayers,XC::ElemPtrArray(numberOfRows-1,numberOfColumns-1));
+	    const size_t numberOfElementRows= (numberOfNodeRows-1)/2;
+	    const size_t numberOfElementColumns= (numberOfNodeColumns-1)/2;
+            elements= XC::ElemPtrArray3d(numberOfNodeLayers,XC::ElemPtrArray(numberOfElementRows,numberOfElementColumns));
             XC::ElemPtrArray3d::constant_i_layer_variable_ref elem_layer= elements.getConstantILayerVarRef(1);
             meshing_quad9N_on_jk(e,nodes.getConstantILayerConstRef(1),elem_layer);
           }
         else if(nodes.isJConstantLayer())
           {
-            elements= XC::ElemPtrArray3d(numberOfLayers-1,XC::ElemPtrArray(numberOfRows,numberOfColumns-1));
+            elements= XC::ElemPtrArray3d(numberOfNodeLayers-1,XC::ElemPtrArray(numberOfNodeRows,numberOfNodeColumns-1));
             XC::ElemPtrArray3d::constant_j_layer_variable_ref elem_layer= elements.getConstantJLayerVarRef(1);
             meshing_quad9N_on_ik(e,nodes.getConstantJLayerConstRef(1),elem_layer);
           }
         else if(nodes.isKConstantLayer())
           {
-            elements= XC::ElemPtrArray3d(numberOfLayers-1,XC::ElemPtrArray(numberOfRows-1,numberOfColumns));
+            elements= XC::ElemPtrArray3d(numberOfNodeLayers-1,XC::ElemPtrArray(numberOfNodeRows-1,numberOfNodeColumns));
             XC::ElemPtrArray3d::constant_k_layer_variable_ref elem_layer= elements.getConstantKLayerVarRef(1);
             meshing_quad9N_on_ij(e,nodes.getConstantKLayerConstRef(1),elem_layer);
           }
@@ -251,9 +270,9 @@ void meshing_quad9N_bidimensional(const XC::Element &e,const XC::NodePtrArray3d 
 //! @brief Places the elements on the mesh passed as parameter.
 XC::ElemPtrArray3d XC::put_quad9N_on_mesh(const Element &e,const NodePtrArray3d &nodes,meshing_dir dm)
   {
-    const size_t numberOfLayers= nodes.getNumberOfLayers();
-    const size_t numberOfRows= nodes.getNumberOfRows();
-    const size_t numberOfColumns= nodes.getNumberOfColumns();
+    const size_t numberOfNodeLayers= nodes.getNumberOfLayers();
+    const size_t numberOfNodeRows= nodes.getNumberOfRows();
+    const size_t numberOfNodeColumns= nodes.getNumberOfColumns();
     const size_t mesh_dim= nodes.GetDim();
 
 
@@ -271,14 +290,14 @@ XC::ElemPtrArray3d XC::put_quad9N_on_mesh(const Element &e,const NodePtrArray3d 
             switch(dm)
               {
               case dirm_i:
-                if(numberOfLayers<2)
+                if(numberOfNodeLayers<2)
 		  std::cerr <<  __FUNCTION__
 			    << "Not enough nodes in 'i' direction."
 		            << " Elements were not created." << std::endl;
                 else
                   {
-                    retval= ElemPtrArray3d(numberOfLayers,ElemPtrArray(numberOfRows-1,numberOfColumns-1));
-                    for(size_t i=1;i<=numberOfLayers;i++)
+                    retval= ElemPtrArray3d(numberOfNodeLayers,ElemPtrArray(numberOfNodeRows-1,numberOfNodeColumns-1));
+                    for(size_t i=1;i<=numberOfNodeLayers;i++)
                       {
                         ElemPtrArray3d::constant_i_layer_variable_ref elem_layer= retval.getConstantILayerVarRef(i);
                         meshing_quad9N_on_jk(e,nodes.getConstantILayerConstRef(i),elem_layer);
@@ -286,14 +305,14 @@ XC::ElemPtrArray3d XC::put_quad9N_on_mesh(const Element &e,const NodePtrArray3d 
                   }
                 break;
               case dirm_j:
-                if(numberOfRows<2)
+                if(numberOfNodeRows<2)
 		  std::cerr <<  __FUNCTION__
 			    << "Not enough nodes in 'j' direction."
 		            << " Elements were not created." << std::endl;
                 else
                   {
-                    retval= ElemPtrArray3d(numberOfLayers-1,ElemPtrArray(numberOfRows,numberOfColumns-1));
-                    for(size_t j=1;j<=numberOfRows;j++)
+                    retval= ElemPtrArray3d(numberOfNodeLayers-1,ElemPtrArray(numberOfNodeRows,numberOfNodeColumns-1));
+                    for(size_t j=1;j<=numberOfNodeRows;j++)
                       {
                         ElemPtrArray3d::constant_j_layer_variable_ref elem_layer= retval.getConstantJLayerVarRef(j);
                         meshing_quad9N_on_ik(e,nodes.getConstantJLayerConstRef(j),elem_layer);
@@ -301,14 +320,14 @@ XC::ElemPtrArray3d XC::put_quad9N_on_mesh(const Element &e,const NodePtrArray3d 
                   }
                 break;
               case dirm_k:
-                if(numberOfColumns<2)
+                if(numberOfNodeColumns<2)
 		  std::cerr <<  __FUNCTION__
 			    << "Not enough nodes in 'k' direction."
 		            << " Elements were not created." << std::endl;
                 else
                   {
-                    retval= ElemPtrArray3d(numberOfLayers-1,ElemPtrArray(numberOfRows-1,numberOfColumns));
-                    for(size_t k=1;k<=numberOfColumns;k++)
+                    retval= ElemPtrArray3d(numberOfNodeLayers-1,ElemPtrArray(numberOfNodeRows-1,numberOfNodeColumns));
+                    for(size_t k=1;k<=numberOfNodeColumns;k++)
                       {
                         ElemPtrArray3d::constant_k_layer_variable_ref elem_layer= retval.getConstantKLayerVarRef(k);
                         meshing_quad9N_on_ij(e,nodes.getConstantKLayerConstRef(k),elem_layer);

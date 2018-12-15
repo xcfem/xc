@@ -254,62 +254,60 @@ void XC::fix(const XC::NodePtrArray3d::box_var_ref &box_ref,const XC::SFreedom_C
   }
 
 //! @brief Returns the indexes of the nodes (j,k),(j+1,k),(j+1,k+1),(j,k+1). 
-std::vector<int> XC::getNodeIdsQuad4N(const XC::NodePtrArray3d::constant_i_layer_const_ref &nodes,const size_t &j,const size_t &k)
+std::vector<XC::Node *> getNodePtrs(const XC::NodePtrArray3d::constant_i_layer_const_ref &nodes,const size_t &j,const size_t &k, const std::vector< std::pair<int,int> > &indices)
   {
-    std::vector<int> retval(4,-1);
+    const size_t sz= indices.size();
+    std::vector<XC::Node *> retval(sz,nullptr);
     const size_t numberOfRows= nodes.getNumberOfRows();
     const size_t numberOfColumns= nodes.getNumberOfColumns();
     if(j>=numberOfRows)
       {
-        std::cerr << "getNodeIdsQuad; row index j= " << j << " out of range.\n";
+        std::cerr << __FUNCTION__ << "; row index j= " << j
+		  << " out of range.\n";
         return retval;
       }
     if(k>=numberOfColumns)
       {
-        std::cerr << "getNodeIdsQuad; column index k= " << k << " out of range.\n";
+        std::cerr << __FUNCTION__ << "; column index k= " << k
+		  << " out of range.\n";
         return retval;
       }
 
-
-    Pos3d p1;
-    const Node *ptr= nodes(j,k);
-    if(ptr)
+    size_t cont= 0;
+    for(std::vector< std::pair<int,int>>::const_iterator i= indices.begin();i!=indices.end();i++)
       {
-        retval[0]= ptr->getTag();
-        if(retval[0]<0)
-          std::cerr << "getNodeIdsQuad; error al obtener el node identifier (" << j << ',' << k << ").\n";
-        p1= ptr->getInitialPosition3d();
+	std::pair<int,int> v= *i;
+	XC::Node *ptr= nodes(j+v.first,k+v.second);
+        if(ptr)
+          retval[cont]= ptr;
+	else
+          std::cerr << __FUNCTION__ << "; error obtaining node at ("
+			<< j << ',' << k << ").\n";
+	cont++;
       }
+    return retval;
+  }
 
-    Pos3d p2;
-    ptr= nodes(j,k+1);
-    if(ptr)
+//! @brief Returns the indexes of the nodes (j,k),(j+1,k),(j+1,k+1),(j,k+1). 
+std::vector<int> XC::getNodeIdsQuad4N(const XC::NodePtrArray3d::constant_i_layer_const_ref &nodes,const size_t &j,const size_t &k)
+  {
+    std::vector<int> retval(4,-1);
+    std::vector< std::pair<int,int> > indices(4);
+    indices[0]= std::pair<int,int>(0,0);
+    indices[1]= std::pair<int,int>(0,1);
+    indices[2]= std::pair<int,int>(1,1);
+    indices[3]= std::pair<int,int>(1,0);
+    const std::vector<XC::Node *> node_pointers= getNodePtrs(nodes,j,k,indices);
+    std::list<Pos3d> positions;
+    size_t cont= 0; 
+    for(std::vector<XC::Node *>::const_iterator i= node_pointers.begin();i!=node_pointers.end();i++)
       {
-        retval[1]= ptr->getTag();
-        if(retval[1]<0)
-          std::cerr << "getNodeIdsQuad; error al obtener el node identifier (" << j << ',' << k+1 << ").\n";
-        p2= ptr->getInitialPosition3d();
-      }
+	const XC::Node *n= *i;
+        retval[cont]= n->getTag();
+        positions.push_back(n->getInitialPosition3d());
+	cont++;
+      }	
 
-    Pos3d p3;
-    ptr= nodes(j+1,k+1);
-    if(ptr)
-      {
-        retval[2]= ptr->getTag();
-        if(retval[2]<0)
-          std::cerr << "getNodeIdsQuad; error al obtener el node identifier (" << j+1 << ',' << k+1 << ").\n";
-        p3= ptr->getInitialPosition3d();
-      }
-
-    Pos3d p4;
-    ptr= nodes(j+1,k);
-    if(ptr)
-      {
-        retval[3]=ptr->getTag();
-        if(retval[3]<0)
-          std::cerr << "getNodeIdsQuad; error al obtener el node identifier (" << j+1 << ',' << k << ").\n";
-        p4= ptr->getInitialPosition3d();
-      }
 
 //     const Vector3d v2= p2-p1;
 //     const Vector3d v3= p3-p2;
@@ -328,21 +326,13 @@ std::vector<int> XC::getNodeIdsQuad4N(const XC::NodePtrArray3d::constant_i_layer
 //         std::swap(retval[2],retval[3]);
 //       }
 
-    std::list<Pos3d> positions;
-    positions.push_back(p1);
-    positions.push_back(p2);
-    positions.push_back(p3);
-    positions.push_back(p4);
     Polygon3d tmp(positions.begin(),positions.end());
     const double area= tmp.getArea();
     if(area<1e-3)
       {
         std::cerr << "Area for (" << j << ',' << k
                   << ") cell is too small (" << area << ").\n";
-        std::cerr << " position of the node (j,k) " << p1 << std::endl;
-	std::cerr << " position of the node (j+1,k) " << p2 << std::endl;
-	std::cerr << " position of the node (j+1,k+1) " << p3 << std::endl;
-	std::cerr << " position of the node (1,k+1) " << p4 << std::endl;
+        std::cerr << " polygon " << tmp << std::endl;
       }
     return retval;
   }
@@ -351,6 +341,35 @@ std::vector<int> XC::getNodeIdsQuad4N(const XC::NodePtrArray3d::constant_i_layer
 std::vector<int> XC::getNodeIdsQuad9N(const XC::NodePtrArray3d::constant_i_layer_const_ref &nodes,const size_t &j,const size_t &k)
   {
     std::vector<int> retval(9,-1);
-    std::cerr << "getNodeIdsQuad9N not implemented." << std::endl;
+    std::vector< std::pair<int,int> > indices(9);
+    indices[0]= std::pair<int,int>(0,0);
+    indices[1]= std::pair<int,int>(0,2);
+    indices[2]= std::pair<int,int>(2,2);
+    indices[3]= std::pair<int,int>(2,0);
+
+    indices[4]= std::pair<int,int>(0,1);
+    indices[5]= std::pair<int,int>(1,2);
+    indices[6]= std::pair<int,int>(2,1);
+    indices[7]= std::pair<int,int>(1,0);
+    indices[8]= std::pair<int,int>(1,1);
+    const std::vector<XC::Node *> node_pointers= getNodePtrs(nodes,j,k,indices);
+    std::list<Pos3d> positions;
+    size_t cont= 0; 
+    for(std::vector<XC::Node *>::const_iterator i= node_pointers.begin();i!=node_pointers.end();i++)
+      {
+	const XC::Node *n= *i;
+        retval[cont]= n->getTag();
+	if(cont<8)
+          positions.push_back(n->getInitialPosition3d());
+	cont++;
+      }	
+    Polygon3d tmp(positions.begin(),positions.end());
+    const double area= tmp.getArea();
+    if(area<1e-3)
+      {
+        std::cerr << "Area for (" << j << ',' << k
+                  << ") cell is too small (" << area << ").\n";
+        std::cerr << " polygon " << tmp << std::endl;
+      }
     return retval;
   }
