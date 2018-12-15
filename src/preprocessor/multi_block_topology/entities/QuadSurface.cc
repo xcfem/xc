@@ -35,6 +35,7 @@
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 #include "xc_utils/src/matrices/TMatrix.h"
+#include "preprocessor/Preprocessor.h"
 
 //! @brief Constructor.
 XC::QuadSurface::QuadSurface(Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)
@@ -474,8 +475,22 @@ void XC::QuadSurface::create_nodes(void)
       {
         create_line_nodes();
 
-        const size_t n_rows= NDivJ()+1;
-        const size_t n_cols= NDivI()+1;
+	//Compute number of subdivisions:
+	size_t n_subdiv_rows= 0;
+	size_t n_subdiv_cols= 0;
+        const Element *smll= getPreprocessor()->getElementHandler().get_seed_element();
+	if(smll)
+	  {
+	    BoolArray3d node_pattern= smll->getNodePattern();
+	    n_subdiv_rows= node_pattern.getNumberOfRows()-1;
+	    n_subdiv_cols= node_pattern.getNumberOfColumns()-1;
+	  }
+	else
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+	            << "; seed element not set."
+	            << std::endl;
+        const size_t n_rows= n_subdiv_rows*NDivJ()+1;
+        const size_t n_cols= n_subdiv_cols*NDivI()+1;
         ttzNodes= NodePtrArray3d(1,n_rows,n_cols);
 
 
