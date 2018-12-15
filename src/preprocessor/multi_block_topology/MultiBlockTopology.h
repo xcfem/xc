@@ -73,7 +73,7 @@ class MultiBlockTopology: public PreprocessorContainer
     static void numera_lista(L &l);
     void numera(void);
     ReferenceFrameMap reference_systems; //!< Reference systems container.
-    MapTrfGeom transformaciones_geometricas; //!< Geometric transformations container.
+    MapTrfGeom geometric_transformations; //!< Geometric transformations container.
 
     PntMap points; //!< Points container.
     LineMap edges; //!< Edges container.
@@ -111,10 +111,10 @@ class MultiBlockTopology: public PreprocessorContainer
       { return faces; }
     inline SurfaceMap &getSurfaces(void)
       { return faces; }
-    inline const MapTrfGeom &getTransformacionesGeometricas(void) const
-      { return transformaciones_geometricas; }
-    inline MapTrfGeom &getTransformacionesGeometricas(void)
-      { return transformaciones_geometricas; }
+    inline const MapTrfGeom &getGeometricTransformations(void) const
+      { return geometric_transformations; }
+    inline MapTrfGeom &getGeometricTransformations(void)
+      { return geometric_transformations; }
     inline const ReferenceFrameMap &getReferenceSystems(void) const
       { return reference_systems; }
     inline ReferenceFrameMap &getReferenceSystems(void)

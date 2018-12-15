@@ -44,14 +44,13 @@ template <class PhysProp>
 class QuadBase4N : public PlaneElement<4,PhysProp>
   {
   protected:
-    BoolArray3d get_node_pattern(void) const;
     ElemPtrArray3d put_on_mesh(const NodePtrArray3d &,meshing_dir dm) const;
   public:
-
     QuadBase4N(int classTag,const PhysProp &pp);
     QuadBase4N(int tag, int classTag,const PhysProp &);
     QuadBase4N(int tag, int classTag, int node1, int node2, int node3, int node4,const PhysProp &pp);
 
+    BoolArray3d getNodePattern(void) const;
     Element::NodesEdge getNodesEdge(const size_t &i) const;
     ID getLocalIndexNodesEdge(const size_t &i) const;
     int getEdgeNodes(const Node *,const Node *) const;
@@ -85,7 +84,7 @@ XC::QuadBase4N<PhysProp>::QuadBase4N(int tag, int classTag, int node1, int node2
 //! element nodes. If there is a node that doesn't exist
 //! for a position the correspondin value will be false.
 template <class PhysProp>
-BoolArray3d XC::QuadBase4N<PhysProp>::get_node_pattern(void) const
+BoolArray3d XC::QuadBase4N<PhysProp>::getNodePattern(void) const
   {
     BoolArray3d retval(1,2,2,true); //One layer, two rows, two columns.
     return retval;

@@ -54,7 +54,6 @@ class Element1D : public ElementBase<2>
   protected:
     mutable std::vector<double> tributaryLengths;
 
-    BoolArray3d get_node_pattern(void) const;
     ElemPtrArray3d put_on_mesh(const NodePtrArray3d &,meshing_dir dm) const;
     ElemPtrArray3d sew(const SetEstruct &f1,const SetEstruct &f2) const;
 
@@ -67,6 +66,8 @@ class Element1D : public ElementBase<2>
   public:
     Element1D(int tag, int classTag);
     Element1D(int tag, int classTag,int Nd1,int Nd2);
+
+    BoolArray3d getNodePattern(void) const;
     void setDomain(Domain *theDomain);
     Matrix getLocalAxes(bool) const;
     virtual CrdTransf *getCoordTransf(void);

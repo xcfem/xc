@@ -57,7 +57,7 @@ size_t XC::BrickBase::getDimension(void) const
 //! @brief Return a grid of booleans, one for each of the
 //! element nodes. If there is a node that doesn't exist
 //! for a position the correspondin value will be false.
-BoolArray3d XC::BrickBase::get_node_pattern(void) const
+BoolArray3d XC::BrickBase::getNodePattern(void) const
   {
     BoolArray3d retval(2,2,2,true); //Two layers, two rows, two columns.
     return retval;

@@ -37,9 +37,9 @@
 #include "domain/mesh/element/Element.h"
 
 //! @brief Applies the transformation to the elements of the set.
-Pos3d XC::Rotation::Transforma(const Pos3d &p) const
-  { return rr.Transforma(p); }
+Pos3d XC::Rotation::Transform(const Pos3d &p) const
+  { return rr.Transform(p); }
 
 //! @brief Applies the transformation to the elements of the set.
-Vector3d XC::Rotation::Transforma(const Vector3d &v) const
-  { return rr.Transforma(v); }
+Vector3d XC::Rotation::Transform(const Vector3d &v) const
+  { return rr.Transform(v); }

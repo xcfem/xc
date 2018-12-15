@@ -265,18 +265,18 @@ void XC::SetEntities::mueve(const Vector3d &desplaz)
   }
 
 //! @brief Applies the transformation to the elements of the set.
-void XC::SetEntities::Transforma(const TrfGeom &trf)
+void XC::SetEntities::Transform(const TrfGeom &trf)
   {
     for(lst_ptr_points::iterator i= points.begin();i!=points.end();i++)
-      (*i)->Transforma(trf);
+      (*i)->Transform(trf);
   }
 
 //! @brief Aplica to the set the transformation with the index being passed as parameter.
-void XC::SetEntities::Transforma(const size_t &indice_trf)
+void XC::SetEntities::Transform(const size_t &indice_trf)
   {
-    TrfGeom *trf= getPreprocessor()->getMultiBlockTopology().getTransformacionesGeometricas().busca(indice_trf);
+    TrfGeom *trf= getPreprocessor()->getMultiBlockTopology().getGeometricTransformations().busca(indice_trf);
     if(trf)
-      Transforma(*trf);
+      Transform(*trf);
   }
 
 //! @brief Creates a copy of the entities of the set and put them in another

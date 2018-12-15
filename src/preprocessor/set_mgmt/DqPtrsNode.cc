@@ -79,7 +79,7 @@ void XC::DqPtrsNode::transforma(const TrfGeom &trf)
   {
     //Transforma 
     for(iterator i= begin();i!=end();i++)
-      (*i)->Transforma(trf);
+      (*i)->Transform(trf);
     create_tree();
   }
 

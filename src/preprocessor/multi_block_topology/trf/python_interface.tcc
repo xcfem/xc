@@ -21,8 +21,8 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-Pos3d (XC::TrfGeom::*getTrfPos)(const Pos3d &) const= &XC::TrfGeom::Transforma;
-Vector3d (XC::TrfGeom::*getTrfVector)(const Vector3d &) const= &XC::TrfGeom::Transforma;
+Pos3d (XC::TrfGeom::*getTrfPos)(const Pos3d &) const= &XC::TrfGeom::Transform;
+Vector3d (XC::TrfGeom::*getTrfVector)(const Vector3d &) const= &XC::TrfGeom::Transform;
 class_<XC::TrfGeom, bases<XC::EntMdlrBase>, boost::noncopyable >("TrfGeom", no_init)
   .def("getTrfPos",getTrfPos)
   .def("getTrfVector",getTrfVector)

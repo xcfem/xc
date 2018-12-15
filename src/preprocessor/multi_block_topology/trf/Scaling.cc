@@ -36,9 +36,9 @@
 #include "domain/mesh/element/Element.h"
 
 //! @brief Applies the transformation to the elements of the set.
-Pos3d XC::Scaling::Transforma(const Pos3d &p) const
-  { return ee.Transforma(p); }
+Pos3d XC::Scaling::Transform(const Pos3d &p) const
+  { return ee.Transform(p); }
 
 //! @brief Applies the transformation to the elements of the set.
-Vector3d XC::Scaling::Transforma(const Vector3d &v) const
-  { return ee.Transforma(v); }
+Vector3d XC::Scaling::Transform(const Vector3d &v) const
+  { return ee.Transform(v); }

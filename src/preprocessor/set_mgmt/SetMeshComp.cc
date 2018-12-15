@@ -188,15 +188,16 @@ void XC::SetMeshComp::mueve(const Vector3d &desplaz)
   { nodes.mueve(desplaz); }
 
 //! @brief Aplies the transformation to the positions of the nodes.
-void XC::SetMeshComp::Transforma(const TrfGeom &trf)
+void XC::SetMeshComp::Transform(const TrfGeom &trf)
   { nodes.transforma(trf); }
 
-//! @brief Applies to the set the transformation with the identifier being passed as parameter.
-void XC::SetMeshComp::Transforma(const size_t &indice_trf)
+//! @brief Applies to the set the transformation with
+//! the identifier being passed as parameter.
+void XC::SetMeshComp::Transform(const size_t &indice_trf)
   {
-    TrfGeom *trf= getPreprocessor()->getMultiBlockTopology().getTransformacionesGeometricas().busca(indice_trf);
+    TrfGeom *trf= getPreprocessor()->getMultiBlockTopology().getGeometricTransformations().busca(indice_trf);
     if(trf)
-      Transforma(*trf);
+      Transform(*trf);
   }
 
 //! @brief Applies the single freedom constraint being passed as parameter to the nodes.

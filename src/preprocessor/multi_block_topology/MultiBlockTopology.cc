@@ -59,7 +59,7 @@
 //! @brief Constructor.
 XC::MultiBlockTopology::MultiBlockTopology(Preprocessor *prep)
   : PreprocessorContainer(prep), reference_systems(this),
-    transformaciones_geometricas(this),
+    geometric_transformations(this),
     points(this), edges(this), faces(this), cuerpos(this), unif_grid(this),
     framework2d(this), framework3d(this) {}
 

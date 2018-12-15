@@ -61,7 +61,6 @@ class Element0D : public ElementBase<2>
     Matrix transformation; //!< transformation matrix for orientation
 
     virtual void setUp(int Nd1, int Nd2,const Vector &x,const Vector &y);
-    BoolArray3d get_node_pattern(void) const;
     ElemPtrArray3d sew(const SetEstruct &f1,const SetEstruct &f2) const;
 
     int sendData(CommParameters &cp);
@@ -70,6 +69,8 @@ class Element0D : public ElementBase<2>
     Element0D(int tag, int classTag,int Nd1,int Nd2);
     Element0D(int tag, int classTag,int Nd1,int Nd2, int dim);
     Element0D(int tag, int classTag,int Nd1,int Nd2, int dim, const Vector &, const Vector &);
+
+    BoolArray3d getNodePattern(void) const;
     int getNumDOF(void) const;
     size_t getDimension(void) const;
     int getVtkCellType(void) const;

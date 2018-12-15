@@ -45,14 +45,13 @@ template <class PhysProp> //3 Gauss point by default.
 class TriBase3N: public PlaneElement<3,PhysProp>
   {
   protected:
-    BoolArray3d get_node_pattern(void) const;
     ElemPtrArray3d put_on_mesh(const NodePtrArray3d &,meshing_dir dm) const;
   public:
-
     TriBase3N(int classTag,const PhysProp &);
     TriBase3N(int tag, int classTag,const PhysProp &);
     TriBase3N(int tag, int classTag, int node1, int node2, int node3,const PhysProp &pp);
 
+    BoolArray3d getNodePattern(void) const;
     Element::NodesEdge getNodesEdge(const size_t &i) const;
     ID getLocalIndexNodesEdge(const size_t &i) const;
     int getEdgeNodes(const Node *,const Node *) const;
@@ -86,7 +85,7 @@ XC::TriBase3N<PhysProp>::TriBase3N(int tag, int classTag, int node1, int node2, 
 //! element nodes. If there is a node that doesn't exist
 //! for a position the correspondin value will be false.
 template <class PhysProp>
-BoolArray3d XC::TriBase3N<PhysProp>::get_node_pattern(void) const
+BoolArray3d XC::TriBase3N<PhysProp>::getNodePattern(void) const
   {
     BoolArray3d retval(1,2,2,true); //One layer, two rows, two columns.
     retval.assign(1,1,1,false); //No fourth corner on a triangle.

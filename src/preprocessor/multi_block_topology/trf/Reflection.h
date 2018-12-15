@@ -46,8 +46,8 @@ class Reflection: public TrfGeom
       : TrfGeom(m), rf() {}
     void setPlane(const Plane &p)
       { rf= Reflection3d(p); }
-    virtual Pos3d Transforma(const Pos3d &p) const;
-    virtual Vector3d Transforma(const Vector3d &v) const;
+    virtual Pos3d Transform(const Pos3d &p) const;
+    virtual Vector3d Transform(const Vector3d &v) const;
   };
 } //end of XC namespace
 

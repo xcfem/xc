@@ -178,8 +178,8 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     void fillUpwards(const SetMeshComp &);
     void fillDownwards(SetMeshComp &);
 
-    void Transforma(const TrfGeom &trf);
-    void Transforma(const size_t &indice_trf);
+    void Transform(const TrfGeom &trf);
+    void Transform(const size_t &indice_trf);
 
     void genMesh(const std::string &, meshing_dir dm);
 

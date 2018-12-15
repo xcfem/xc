@@ -251,16 +251,16 @@ void XC::Pnt::Mueve(const Vector3d &desplaz)
   }
 
 //! @brief Applies to the point the transformation being passed as parameter.
-void XC::Pnt::Transforma(const TrfGeom &trf)
-  { p= trf.Transforma(p); }
+void XC::Pnt::Transform(const TrfGeom &trf)
+  { p= trf.Transform(p); }
 
 //! @brief Applies to the point the transformation
 //! identified by the index being passed as parameter.
-void XC::Pnt::Transforma(const size_t &indice_trf)
+void XC::Pnt::Transform(const size_t &indice_trf)
   {
-    TrfGeom *trf= getPreprocessor()->getMultiBlockTopology().getTransformacionesGeometricas().busca(indice_trf);
+    TrfGeom *trf= getPreprocessor()->getMultiBlockTopology().getGeometricTransformations().busca(indice_trf);
     if(trf)
-      Transforma(*trf);
+      Transform(*trf);
   }
 
 XC::Vector &XC::operator-(const Pnt &b,const Pnt &a)

@@ -46,8 +46,8 @@ class Scaling: public TrfGeom
       : TrfGeom(m), ee(1) {}
     void setScaleFactor(const double &fe)
       { ee= Scaling3d(fe); }
-    virtual Pos3d Transforma(const Pos3d &p) const;
-    virtual Vector3d Transforma(const Vector3d &v) const;
+    virtual Pos3d Transform(const Pos3d &p) const;
+    virtual Vector3d Transform(const Vector3d &v) const;
   };
 } //end of XC namespace
 

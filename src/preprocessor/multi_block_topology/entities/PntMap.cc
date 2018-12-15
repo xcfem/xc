@@ -224,13 +224,13 @@ void XC::PntMap::Copy(const std::vector<Indice> &indices)
 
 //! @brief Applies the transformation to the points
 //! identified by the indices being passed as parameter.
-void XC::PntMap::Transforma(const TrfGeom &trf,const std::vector<Indice> &indices)
+void XC::PntMap::Transform(const TrfGeom &trf,const std::vector<Indice> &indices)
   {
     for(std::vector<Indice>::const_iterator i= indices.begin();i!=indices.end();i++)
       {
         Pnt *p= busca(*i);
         if(p)
-          p->Transforma(trf);
+          p->Transform(trf);
         else
 	  std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; point: " << *i << " not found.\n";

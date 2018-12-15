@@ -216,8 +216,8 @@ class SetMeshComp: public SetBase
     void fillUpwards(void);
     void fillDownwards(void);
 
-    virtual void Transforma(const TrfGeom &trf);
-    virtual void Transforma(const size_t &indice_trf);
+    virtual void Transform(const TrfGeom &trf);
+    virtual void Transform(const size_t &indice_trf);
 
     SlidingVectorsSystem3d getResistingSlidingVectorsSystem3d(const Plane &,const Pos3d &,const double &,const bool &) const;
 

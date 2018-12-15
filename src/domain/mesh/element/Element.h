@@ -127,7 +127,6 @@ class Element: public MeshComponent
   protected:
     friend class EntMdlr;
     friend class Preprocessor;
-    virtual BoolArray3d get_node_pattern(void) const;
     virtual ElemPtrArray3d put_on_mesh(const NodePtrArray3d &,meshing_dir) const;
     virtual ElemPtrArray3d sew(const SetEstruct &f1,const SetEstruct &f2) const;
 
@@ -151,6 +150,7 @@ class Element: public MeshComponent
     //! @brief return the number of external nodes associated with the element.
     virtual int getNumExternalNodes(void) const =0;
     virtual int getNumEdges(void) const;
+    virtual BoolArray3d getNodePattern(void) const;
     virtual NodePtrsWithIDs &getNodePtrs(void)= 0;	
     virtual const NodePtrsWithIDs &getNodePtrs(void) const= 0;	
     std::vector<int> getIdxNodes(void) const;

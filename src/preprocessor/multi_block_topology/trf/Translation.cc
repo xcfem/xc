@@ -40,9 +40,9 @@ void XC::Translation::setVector(const Vector3d &v)
   { tr= Translation3d(v); }
 
 //! @brief Applies the transformation to the elements of the set.
-Pos3d XC::Translation::Transforma(const Pos3d &p) const
-  { return tr.Transforma(p); }
+Pos3d XC::Translation::Transform(const Pos3d &p) const
+  { return tr.Transform(p); }
 
 //! @brief Applies the transformation to the elements of the set.
-Vector3d XC::Translation::Transforma(const Vector3d &v) const
-  { return tr.Transforma(v); }
+Vector3d XC::Translation::Transform(const Vector3d &v) const
+  { return tr.Transform(v); }

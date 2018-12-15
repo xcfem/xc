@@ -380,7 +380,7 @@ void XC::Element1D::unidimensional_meshing(const XC::NodePtrArray3d &nodes,XC::E
 //! @brief Return a grid of booleans, one for each of the
 //! element nodes. If there is a node that doesn't exist
 //! for a position the correspondin value will be false.
-BoolArray3d XC::Element1D::get_node_pattern(void) const
+BoolArray3d XC::Element1D::getNodePattern(void) const
   {
     BoolArray3d retval(1,1,2,true); //One layer, one row, two columns.
     return retval;

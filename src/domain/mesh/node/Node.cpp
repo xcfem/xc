@@ -775,10 +775,10 @@ void XC::Node::setPos(const Pos3d &p)
   }
 
 //! @brief Applies to the node position the transformation being passed as parameter.
-void XC::Node::Transforma(const TrfGeom &trf)
+void XC::Node::Transform(const TrfGeom &trf)
   {
     static Pos3d p;
-    setPos(trf.Transforma(getInitialPosition3d()));
+    setPos(trf.Transform(getInitialPosition3d()));
   }
 
 //! @brief Return the 3D position of the node.

@@ -1042,7 +1042,7 @@ XC::Vector XC::Element::getCenterOfMassCoordinates(bool initialGeometry) const
 //! @brief Return a grid of booleans, one for each of the
 //! element nodes. If there is a node that doesn't exist
 //! for a position the correspondin value will be false.
-BoolArray3d XC::Element::get_node_pattern(void) const
+BoolArray3d XC::Element::getNodePattern(void) const
   {
     BoolArray3d retval(1,1,1,false);
     std::cerr << getClassName() << "::" << __FUNCTION__

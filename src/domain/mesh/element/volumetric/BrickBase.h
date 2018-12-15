@@ -44,13 +44,13 @@ class NDMaterial;
 class BrickBase : public ElemWithMaterial<8,NDMaterialPhysicalProperties>
   {
   protected:
-    BoolArray3d get_node_pattern(void) const;
     ElemPtrArray3d put_on_mesh(const NodePtrArray3d &,meshing_dir dm) const;
   public:
     BrickBase(int classTag);
     BrickBase(int tag,int classTag,const NDMaterialPhysicalProperties &);
     BrickBase(int tag, int classTag,int nd1, int nd2, int nd3, int nd4,int nd5,int nd6,int nd7,int nd8, const NDMaterialPhysicalProperties &);
     size_t getDimension(void) const;
+    BoolArray3d getNodePattern(void) const;
   };
 
 } // end of XC namespace

@@ -151,8 +151,8 @@ class Set: public SetMeshComp
     void fillUpwards(void);
     void fillDownwards(void);
 
-    void Transforma(const TrfGeom &trf);
-    void Transforma(const size_t &indice_trf);
+    void Transform(const TrfGeom &trf);
+    void Transform(const size_t &indice_trf);
 
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);

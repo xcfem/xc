@@ -30,7 +30,7 @@
 #include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
 #include "xc_utils/src/geom/pos_vec/Pos3dArray3d.h"
 
-const Pos3dArray &XC::TrfGeom::Transforma(const Pos3dArray &m) const
+const Pos3dArray &XC::TrfGeom::Transform(const Pos3dArray &m) const
   {
     static Pos3dArray retval;
     retval= m;
@@ -38,10 +38,10 @@ const Pos3dArray &XC::TrfGeom::Transforma(const Pos3dArray &m) const
     const size_t numberOfColumns= retval.getNumberOfColumns();
     for(size_t j= 1;j<=numberOfRows;j++)
       for(size_t k= 1;k<=numberOfColumns;k++)
-        retval(j,k)= Transforma(retval(j,k));
+        retval(j,k)= Transform(retval(j,k));
     return retval;
   }
-const Pos3dArray3d &XC::TrfGeom::Transforma(const Pos3dArray3d &m) const
+const Pos3dArray3d &XC::TrfGeom::Transform(const Pos3dArray3d &m) const
   {
     static Pos3dArray3d retval;
     retval= m;
@@ -51,6 +51,6 @@ const Pos3dArray3d &XC::TrfGeom::Transforma(const Pos3dArray3d &m) const
     for(size_t i= 1;i<=numberOfLayers;i++)
       for(size_t j= 1;j<=numberOfRows;j++)
         for(size_t k= 1;k<=numberOfColumns;k++)
-          retval(i,j,k)= Transforma(retval(i,j,k));
+          retval(i,j,k)= Transform(retval(i,j,k));
     return retval;
   }

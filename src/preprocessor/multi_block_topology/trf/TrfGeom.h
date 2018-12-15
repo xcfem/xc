@@ -55,10 +55,10 @@ class TrfGeom: public EntMdlrBase
     inline virtual ~TrfGeom(void)
       {}
     //! @brief Applies the transformation to the point.
-    virtual Pos3d Transforma(const Pos3d &p) const= 0;
-    virtual Vector3d Transforma(const Vector3d &v) const= 0;
-    const Pos3dArray &Transforma(const Pos3dArray &m) const;
-    const Pos3dArray3d &Transforma(const Pos3dArray3d &m) const;
+    virtual Pos3d Transform(const Pos3d &p) const= 0;
+    virtual Vector3d Transform(const Vector3d &v) const= 0;
+    const Pos3dArray &Transform(const Pos3dArray &m) const;
+    const Pos3dArray3d &Transform(const Pos3dArray3d &m) const;
   };
 } //end of XC namespace
 

@@ -103,8 +103,8 @@ class Pnt: public EntMdlr
     double getSquaredDistanceTo(const Pos3d &pt) const;
 
     void Mueve(const Vector3d &);
-    void Transforma(const TrfGeom &trf);
-    void Transforma(const size_t &indice_trf);
+    void Transform(const TrfGeom &trf);
+    void Transform(const size_t &indice_trf);
 
     std::set<SetBase *> get_sets(void) const;
     void add_to_sets(std::set<SetBase *> &);
