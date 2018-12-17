@@ -1541,7 +1541,7 @@ void XC::MultiaxialCyclicPlasticity::plastic_integrator()
  }
 
     
- //(8) Compute consistent tangent, consistency paramter, and update stresses
+ //(8) Compute consistent tangent, consistency parameter, and update stresses
 
 ////////////////////////////// TANGENT /////////////////////
 

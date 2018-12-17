@@ -116,9 +116,9 @@ class BarSlipMaterial : public UniaxialMaterial
 
     	// bond strengths
     double tauET;  //!< bond strength of steel that is elastic and carries tensile load
-    double tauYT;  //!< bond strength of steel that has yeilded in tension
+    double tauYT;  //!< bond strength of steel that has yielded in tension
     double tauEC;  //!< bond strength of steel that is elastic and carries compression load
-    double tauYC;  //!< bond strength of steel that has yeilded in compression
+    double tauYC;  //!< bond strength of steel that has yielded in compression
     double tauR;   //!< residual bond strength of steel
 
     // unloading-reloading parameters 
