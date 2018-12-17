@@ -184,7 +184,8 @@ int XC::QuadBase4N<PhysProp>::addLoad(ElementalLoad *theLoad, double loadFactor)
           }
         else
           {
-            std::cerr << "QuadBase4N::addLoad -- load type unknown for element with tag: " <<
+            std::cerr << this->getClassName() << "::" << __FUNCTION__
+	              << "; load type unknown for element with tag: " <<
             this->getTag() << std::endl;
             return -1;
           }

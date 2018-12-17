@@ -151,7 +151,7 @@ double XC::ShellMITC9::getArea(bool initialGeometry) const
     // 	  }
     //   }
     // else
-      return getPolygon(initialGeometry).getArea();
+    return getPolygon(initialGeometry).getArea();
     //return retval;
   }
 

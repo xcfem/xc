@@ -355,9 +355,9 @@ Pos3d XC::NodePtrs::getPosNode(const size_t &i,bool initialGeometry) const
   }
 
 //! @brief Returns a list with the node positions.
-std::list<Pos3d> XC::NodePtrs::getPositions(bool initialGeometry) const
+std::deque<Pos3d> XC::NodePtrs::getPositions(bool initialGeometry) const
   {
-    std::list<Pos3d> retval;
+    std::deque<Pos3d> retval;
     const size_t sz= size();
     for(size_t i=0;i<sz;i++)
       retval.push_back(getPosNode(i,initialGeometry));

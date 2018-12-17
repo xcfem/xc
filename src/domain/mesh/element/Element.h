@@ -255,7 +255,7 @@ class Element: public MeshComponent
     virtual Vector3d getKVector3d(bool initialGeometry= true) const;
     virtual Rect3d3dCooSys getCooSys(bool) const;    
     Pos3d getPosNode(const size_t &i,bool initialGeometry= true) const;
-    std::list<Pos3d> getPosNodes(bool initialGeometry= true) const;
+    std::deque<Pos3d> getPosNodes(bool initialGeometry= true) const;
     virtual Pos3d getCenterOfMassPosition(bool initialGeometry= true) const;
     Vector getCenterOfMassCoordinates(bool initialGeometry= true) const;
     Pos3dArray3d getPoints(const size_t &ni,const size_t &nj,const size_t &nk,bool initialGeometry= true);

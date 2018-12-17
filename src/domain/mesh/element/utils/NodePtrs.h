@@ -99,7 +99,7 @@ class NodePtrs: public CommandEntity, public std::vector<Node *>
     BND3d Bnd(const double &) const;    
     const Matrix &getCoordinates(void) const;
     Pos3d getPosNode(const size_t &i,bool initialGeometry= true) const;
-    std::list<Pos3d> getPositions(bool initialGeometry= true) const;
+    std::deque<Pos3d> getPositions(bool initialGeometry= true) const;
     Pos3d getCenterOfMassPosition(bool initialGeometry= true) const;
     Node *getNearestNode(const Pos3d &p,bool initialGeometry= true);
     const Node *getNearestNode(const Pos3d &p,bool initialGeometry= true) const;

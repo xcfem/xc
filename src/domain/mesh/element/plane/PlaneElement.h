@@ -83,7 +83,7 @@ void XC::PlaneElement<NNODES, PhysProp>::checkElem(void)
   {
     if(this->getNodePtrs().hasNull())
       std::cerr << "the element: " << this->getTag()
-                << " tiene pointers to node, nulos." << std::endl;
+                << " pointers to nodes not set." << std::endl;
     else
       {
         const double area= this->getArea();
@@ -157,7 +157,7 @@ double XC::PlaneElement<NNODES, PhysProp>::getTributaryArea(const Node *nod) con
 template <int NNODES,class PhysProp>
 Polygon3d XC::PlaneElement<NNODES, PhysProp>::getPolygon(bool initialGeometry) const
   {
-    const std::list<Pos3d> positions= this->getPosNodes(initialGeometry);
+    const std::deque<Pos3d> positions= this->getPosNodes(initialGeometry);
     return Polygon3d(positions.begin(),positions.end());
   }
 

@@ -209,7 +209,9 @@ void meshing_quad9N_on_jk(const XC::Element &e,const XC::NodePtrArray3d::constan
       for(size_t k=1;k<=numberOfElementColumns;k++)
         {
 	  XC::Element *tmp= e.getCopy();
-          const std::vector<int> indices= getNodeIdsQuad9N(nodes,j,k);
+	  const size_t j_node= j*2-1;
+	  const size_t k_node= k*2-1;
+          const std::vector<int> indices= getNodeIdsQuad9N(nodes,j_node,k_node);
           if((indices[0]>=0) && (indices[1]>=0) && (indices[2]>=0)  && (indices[3]>=0) & (indices[4]>=0) && (indices[5]>=0) && (indices[6]>=0)  && (indices[7]>=0) && (indices[8]>=0))
             tmp->setIdNodes(indices);
           else
@@ -224,16 +226,16 @@ void meshing_quad9N_on_jk(const XC::Element &e,const XC::NodePtrArray3d::constan
 //! @ brief Mesh one row (j= constant)  with 9-nodes elements.
 void meshing_quad9N_on_ik(const XC::Element &e,const XC::NodePtrArray3d::constant_j_layer_const_ref &nodes,XC::ElemPtrArray3d::constant_j_layer_variable_ref &elements)
   {
-    std::cerr << "meshing_quad9N_on_ik not implemented." << std::endl;
+    std::cerr << __FUNCTION__ << " not implemented." << std::endl;
   }
 
 //! @ brief Mesh one column (k= constant) with 9-nodes elements.
 void meshing_quad9N_on_ij(const XC::Element &e,const XC::NodePtrArray3d::constant_k_layer_const_ref &nodes,XC::ElemPtrArray3d::constant_k_layer_variable_ref &elements)
   {
-    std::cerr << "meshing_quad9N_on_ij not implemented." << std::endl;
+    std::cerr << __FUNCTION__ << " not implemented." << std::endl;
   }
 
-//! @ brief Mesh one quadrangle  with 9-nodes elements.
+//! @ brief Mesh one quadrangle with 9-nodes elements.
 void meshing_quad9N_bidimensional(const XC::Element &e,const XC::NodePtrArray3d &nodes,XC::ElemPtrArray3d &elements)
   {
     const size_t numberOfNodeLayers= nodes.getNumberOfLayers();

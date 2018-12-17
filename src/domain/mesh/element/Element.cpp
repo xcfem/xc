@@ -802,6 +802,8 @@ int XC::Element::setMaterialParameter(Material *theMaterial,const std::vector<st
     return retval;
   }
 
+//! @brief Return the indexes of the nodes (used when creating
+//! VTK meshes).
 std::vector<int> XC::Element::getIdxNodes(void) const
   { return getNodePtrs().getIdx(); }
 
@@ -818,7 +820,7 @@ const XC::Matrix &XC::Element::getCooNodes(void) const
   { return getNodePtrs().getCoordinates(); }
 
 //! @brief Returns the coordinates of the nodes.
-std::list<Pos3d> XC::Element::getPosNodes(bool initialGeometry) const
+std::deque<Pos3d> XC::Element::getPosNodes(bool initialGeometry) const
   { return getNodePtrs().getPositions(initialGeometry); }
 
 bool XC::Element::In(const GeomObj3d &obj,const double &factor, const double &tol) const

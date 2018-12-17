@@ -58,6 +58,7 @@ class QuadBase9N : public PlaneElement<9,PhysProp>
     Segment3d getSide(const size_t &i,bool initialGeometry= true) const;
 
     int getVtkCellType(void) const;
+    std::vector<int> getIdxNodes(void) const;
 
     void zeroLoad(void);	
     int addLoad(ElementalLoad *theLoad, double loadFactor);
@@ -89,22 +90,40 @@ XC::ElemPtrArray3d XC::QuadBase9N<PhysProp>::put_on_mesh(const NodePtrArray3d &n
   { return put_quad9N_on_mesh(*this,nodes,dm); }
 
 //! @brief Returns the element contour as a polygon.
+//
+//   3   6    2
+//   +---+---+
+//   |       |
+// 7 +   +8  + 5
+//   |       |
+//   +---+---+
+//   0   4   1
 template <class PhysProp>
 Polygon3d XC::QuadBase9N<PhysProp>::getPolygon(bool initialGeometry) const
   {
-    Polygon3d retval;
-    const NodePtrsWithIDs &nodePtrs= this->getNodePtrs();
-    retval.push_back(nodePtrs.getPosNode(0,initialGeometry));
-    retval.push_back(nodePtrs.getPosNode(4,initialGeometry));
-    retval.push_back(nodePtrs.getPosNode(1,initialGeometry));
-    retval.push_back(nodePtrs.getPosNode(5,initialGeometry));
-    retval.push_back(nodePtrs.getPosNode(2,initialGeometry));
-    retval.push_back(nodePtrs.getPosNode(6,initialGeometry));
-    retval.push_back(nodePtrs.getPosNode(3,initialGeometry));
-    retval.push_back(nodePtrs.getPosNode(7,initialGeometry));
+    const std::deque<Pos3d> positions= this->getPosNodes(initialGeometry);
+    //Not collinear nodes:
+    Polygon3d retval(positions[7], positions[0], positions[4]);
+    //rest of the nodes:
+    retval.push_back(positions[1]);
+    retval.push_back(positions[5]);
+    retval.push_back(positions[2]);
+    retval.push_back(positions[6]);
+    retval.push_back(positions[3]);
     return retval;
   }
 
+//! @brief Return the indexes of the nodes (used when creating
+//! VTK meshes).
+template <class PhysProp>
+std::vector<int> XC::QuadBase9N<PhysProp>::getIdxNodes(void) const
+  {
+    std::vector<int> retval= this->getNodePtrs().getIdx();
+    retval.pop_back(); //Node at center removed.
+    return retval; 
+  }
+
+ 
 //! @brief Returns the element edge.
 template <class PhysProp>
 Segment3d XC::QuadBase9N<PhysProp>::getSide(const size_t &i,bool initialGeometry) const
