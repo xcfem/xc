@@ -35,22 +35,23 @@ import math
 # XXX Control shear distortion constants:
 #    alpha-> alphaZ,alphaY
 
-'''b: width  [m]
-   h: height [m]
-   e: thickness [m]
-   P: mass per metre [kg/m]
-   A: area of section [m2]
-   Iz: second moment of area about strong axis [m4]
-   Wzel: elastic modulus about strong axis [m4]
-   Wzpl: plastic modulus about strong axis [m4]
-   iz: radius of gyration about strong axis [m] 
-   Iy: second moment of area about weak axis [m4]
-   Wyel: elastic modulus about weak axis [m4]
-   Wypl: plastic modulus about weak axis [m4]
-   iy: radius of gyration about weak axis [m] 
-   It: torsional constant J [m4]
-   E: elastic modulus [N/m2]
-   nu: modulus of Poisson
+'''
+    b: width  [m]
+    h: height [m]
+    e: thickness [m]
+    P: mass per metre [kg/m]
+    A: area of section [m2]
+    Iz: second moment of area about strong axis [m4]
+    Wzel: elastic modulus about strong axis [m4]
+    Wzpl: plastic modulus about strong axis [m4]
+    iz: radius of gyration about strong axis [m] 
+    Iy: second moment of area about weak axis [m4]
+    Wyel: elastic modulus about weak axis [m4]
+    Wypl: plastic modulus about weak axis [m4]
+    iy: radius of gyration about weak axis [m] 
+    It: torsional constant J [m4]
+    E: elastic modulus [N/m2]
+    nu: modulus of Poisson
 '''
 
 IPE= {}
@@ -108,23 +109,23 @@ IPE['IPE_750x196+']= {'nmb':'IPE_750x196+', 'P':196, 'h':770e-3, 'b':268e-3, 'tw
 
 
 for item in IPE:
-  shape= IPE[item]
-  Avy= shape['Avy']
-  A= shape['A']
-  E= shape['E']
-  nu= shape['nu']
-  b= shape['b']
-  d= shape['d']
-  h= shape['h']
-  hi= shape['hi']
-  tf= shape['tf']
-  tw= shape['tw']
-  r= shape['r']
-  shape['Iw']= tf*((h+hi)/2.0)**2*b**3/24.0
-  shape['alpha']= Avy/A
-  shape['G']= E/(2*(1+nu))
-  shape['AreaQy']= A-2*b*tf+(tw+2*r)*tf
-  shape['AreaQz']= A-hi*tw
+    shape= IPE[item]
+    Avy= shape['Avy']
+    A= shape['A']
+    E= shape['E']
+    nu= shape['nu']
+    b= shape['b']
+    d= shape['d']
+    h= shape['h']
+    hi= shape['hi']
+    tf= shape['tf']
+    tw= shape['tw']
+    r= shape['r']
+    shape['Iw']= tf*((h+hi)/2.0)**2*b**3/24.0
+    shape['alpha']= Avy/A
+    shape['G']= E/(2*(1+nu))
+    shape['AreaQy']= A-2*b*tf+(tw+2*r)*tf
+    shape['AreaQz']= A-hi*tw
 # Arcelor IPN steel shapes.
 
 # Section axis:
@@ -197,22 +198,23 @@ IPN['IPN_550']= {'nmb':'IPN_550','P':166,'h':550e-3,'b':200e-3,'tw':19e-3,'tf':3
 IPN['IPN_600']= {'nmb':'IPN_600','P':199,'h':600e-3,'b':215e-3,'tw':21.6e-3,'tf':32.4e-3,'r1':21.6e-3,'r2':13e-3,'A':254e-4,'d':485.8e-3,'FI':'M 24','Pmin':126e-3,'Pmax':128e-3,'AL':1.97,'AG':9.89,'Iz':138800e-8,'Wzel':4627e-6,'Wzpl':5452e-6,'iz':23.39e-2,'Avy':138e-4,'Iy':4674e-8,'Wyel':435e-6,'Wypl':752e-6,'iy':4.29e-2,'Ss':117.6e-3,'It':787e-8,'E':2.1e+11,'nu':0.3}
 
 for item in IPN:
-  shape= IPN[item]
-  Avy= shape['Avy']
-  A= shape['A']
-  E= shape['E']
-  nu= shape['nu']
-  b= shape['b']
-  h= shape['h']
-  tf= shape['tf']
-  tw= shape['tw']
-  r= shape['r1']
-  shape['d']= h-2*tf-2*r
-  shape['hi']= h-2*tf
-  shape['alpha']= shape['Avy']/shape['A']
-  shape['G']= shape['E']/(2*(1+shape['nu']))
-  shape['AreaQy']= 2*shape['b']*shape['tf']+(shape['tw']+2*shape['r1'])*shape['tf']
-  shape['AreaQz']= shape['A']-shape['d']*shape['tw']
+    shape= IPN[item]
+    Avy= shape['Avy']
+    A= shape['A']
+    E= shape['E']
+    nu= shape['nu']
+    b= shape['b']
+    h= shape['h']
+    tf= shape['tf']
+    tw= shape['tw']
+    r1=shape['r1']
+    r= shape['r1']
+    shape['d']= h-2*tf-2*r
+    shape['hi']= h-2*tf
+    shape['alpha']= Avy/A
+    shape['G']= E/(2*(1+nu))
+    shape['AreaQy']= 2*b*tf+(tw+2*r1)*tf
+    shape['AreaQz']= A-d*tw
 # Arcelor HE steel shapes.
 
 # Axis of the section:
@@ -389,10 +391,12 @@ for item in HE:
     nu= shape['nu']
     b= shape['b']
     d= shape['d']
+    h= shape['h']
     hi= shape['hi']
     tf= shape['tf']
     tw= shape['tw']
     r= shape['r']
+    shape['Iw']= tf*((h+hi)/2.0)**2*b**3/24.0
     shape['alpha']= Avy/A
     shape['G']= E/(2*(1+nu))
     shape['AreaQy']= A-2*b*tf+(tw+2*r)*tf
@@ -542,18 +546,18 @@ L['L203x203x25.4']= {'nmb':'L203x203x25.4', 'P':75.9, 'h':203e-3, 'b':203e-3, 't
 L['L203x203x28.6']= {'nmb':'L203x203x28.6', 'P':84.7, 'h':203e-3, 'b':203e-3, 't':28.6e-3, 'r1':8e-3, 'r2':4e-3, 'A':108e-4, 'zs':6.11e-3, 'ys':6.11e-3, 'v':14.35e-2, 'u1':8.65e-2, 'u2':7.57e-2, 'AL':0.805, 'AG':9.5, 'Iy':4062e-8, 'Iz':4062e-8, 'Iyz':-2370e-8, 'Wzel':286.3e-6, 'Wyel':286.3e-6, 'iz':6.13e-2, 'iy':6.13e-2, 'Iu':6432e-8, 'iu':7.72e-2, 'Iv':1692e-8, 'iv':3.96e-2, 'E':2.1e+11, 'nu':0.3}
 
 for item in L:
-  shape= L[item]
-  A= shape['A']
-  E= shape['E']
-  nu= shape['nu']
-  b= shape['b']
-  t= shape['t']
-  r2= shape['r2']
-  shape['G']= E/(2*(1+nu))
-  shape['AreaQy']= t*(b-t-r2)
-  shape['AreaQz']= t*(b-t-r2)
-  shape['It']= 2/3.0*b*t*t*t
-  shape['alpha']= shape['AreaQy']/A
+    shape= L[item]
+    A= shape['A']
+    E= shape['E']
+    nu= shape['nu']
+    b= shape['b']
+    t= shape['t']
+    r2= shape['r2']
+    shape['G']= E/(2*(1+nu))
+    shape['AreaQy']= t*(b-t-r2)
+    shape['AreaQz']= t*(b-t-r2)
+    shape['It']= 2/3.0*b*t*t*t
+    shape['alpha']= shape['AreaQy']/A
 
 # Arcelor U shaped sheet pile.
 
@@ -1144,14 +1148,14 @@ CHS['CHS_508.0_14.2']= {'nmb':'CHS_508.0_14.2', 'D':508.0e-3, 't':14.2e-3, 'P':1
 CHS['CHS_508.0_16.0']= {'nmb':'CHS_508.0_16.0', 'D':508.0e-3, 't':16.0e-3, 'P':194, 'A':247e-4, 'Iz':74900e-8, 'iz':17.4e-2, 'Wzel':2950e-6, 'Wzpl':3870e-6, 'Iy':74900e-8, 'iy':17.4e-2, 'Wyel':2950e-6, 'Wypl':3870e-6, 'It':150000e-8, 'C':5900e-6, 'AL':1.60, 'AG':8.25, 'E': 210000e6, 'nu': 0.3 }
 
 for item in CHS:
-  shape= CHS[item]
-  A= shape['A']
-  E= shape['E']
-  nu= shape['nu']
-  shape['alpha']= 1.0/2.0
-  shape['G']= E/(2*(1+nu))
-  shape['AreaQy']= 0.5*A
-  shape['AreaQz']= 0.5*A
+    shape= CHS[item]
+    A= shape['A']
+    E= shape['E']
+    nu= shape['nu']
+    shape['alpha']= 1.0/2.0
+    shape['G']= E/(2*(1+nu))
+    shape['AreaQy']= 0.5*A
+    shape['AreaQz']= 0.5*A
   
 # ARCELOR's hot rolled round steel bars.
 
