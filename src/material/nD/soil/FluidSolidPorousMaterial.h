@@ -122,7 +122,7 @@ class FluidSolidPorousMaterial: public NDMaterial
      // Return an exact copy of itself.
      NDMaterial *getCopy(void) const;
 
-     // Return a copy of itself if "code"="PlainStrain" or "ThreeDimensional", otherwise return null.
+     // Return a copy of itself if "code"="PlaneStrain" or "ThreeDimensional", otherwise return null.
      NDMaterial *getCopy(const std::string &) const;
 
      // Return the string "PlaneStrain" or "ThreeDimensional".
