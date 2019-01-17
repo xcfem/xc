@@ -25,17 +25,17 @@ ratio3= abs(sgAdmB-400e6)/400e6
 sgAdmC= SIA262_materials.limitationContraintes("C",rebarSpacing)
 ratio4= abs(sgAdmC-230e6)/230e6
 kt= SIA262_materials.reductionFactorKT(t)
-AsTractionA= SIA262_limit_state_checking.AsMinTraction(SIA262_materials.c25_30,"A",rebarSpacing,t)
+AsTractionA= SIA262_limit_state_checking.MinReinfAreaUnderTension(SIA262_materials.c25_30,"A",rebarSpacing,t)
 ratio5= abs(AsTractionA-1538.20924739e-6)/1538.20924739e-6
-AsTractionB= SIA262_limit_state_checking.AsMinTraction(SIA262_materials.c25_30,"B",rebarSpacing,t)
+AsTractionB= SIA262_limit_state_checking.MinReinfAreaUnderTension(SIA262_materials.c25_30,"B",rebarSpacing,t)
 ratio6= abs(AsTractionB-1672.80255653e-6)/1672.80255653e-6
-AsTractionC= SIA262_limit_state_checking.AsMinTraction(SIA262_materials.c25_30,"C",rebarSpacing,t)
+AsTractionC= SIA262_limit_state_checking.MinReinfAreaUnderTension(SIA262_materials.c25_30,"C",rebarSpacing,t)
 ratio7= abs(AsTractionC-2909.22183745e-6)/2909.22183745e-6
-AsFlexionA= SIA262_limit_state_checking.AsMinFlexion(SIA262_materials.c25_30,concreteCover,"A",rebarSpacing,t)
+AsFlexionA= SIA262_limit_state_checking.MinReinfAreaUnderFlexion(SIA262_materials.c25_30,concreteCover,"A",rebarSpacing,t)
 ratio8= abs(AsFlexionA-346.647194688e-6)/346.647194688e-6
-AsFlexionB= SIA262_limit_state_checking.AsMinFlexion(SIA262_materials.c25_30,concreteCover,"B",rebarSpacing,t)
+AsFlexionB= SIA262_limit_state_checking.MinReinfAreaUnderFlexion(SIA262_materials.c25_30,concreteCover,"B",rebarSpacing,t)
 ratio9= abs(AsFlexionB-376.978824223e-6)/376.978824223e-6
-AsFlexionC= SIA262_limit_state_checking.AsMinFlexion(SIA262_materials.c25_30,concreteCover,"C",rebarSpacing,t)
+AsFlexionC= SIA262_limit_state_checking.MinReinfAreaUnderFlexion(SIA262_materials.c25_30,concreteCover,"C",rebarSpacing,t)
 ratio10= abs(AsFlexionC-655.615346475e-6)/655.615346475e-6
 
 '''

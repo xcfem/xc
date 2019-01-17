@@ -31,11 +31,11 @@ class RebarFamily(object):
     return max(SIA262_limit_state_checking.getBasicAnchorageLength(self.getDiam(),concrete.fck,self.steel.fyd()),self.minDiams*self.diam)
   def getExigenceFissuration(self):
     return self.exigenceFissuration
-  def getAsMinFlexion(self,concrete,epaisseur):
-    retval= SIA262_limit_state_checking.AsMinFlexion(concrete,self.getEffectiveCover(),self.exigenceFissuration,self.ecartement,epaisseur)
+  def getMinReinfAreaUnderFlexion(self,concrete,epaisseur):
+    retval= SIA262_limit_state_checking.MinReinfAreaUnderFlexion(concrete,self.getEffectiveCover(),self.exigenceFissuration,self.ecartement,epaisseur)
     return retval
-  def getAsMinTraction(self,concrete,epaisseur):
-    retval= SIA262_limit_state_checking.AsMinTraction(concrete,self.exigenceFissuration,self.ecartement,epaisseur)
+  def getMinReinfAreaUnderTension(self,concrete,epaisseur):
+    retval= SIA262_limit_state_checking.MinReinfAreaUnderTension(concrete,self.exigenceFissuration,self.ecartement,epaisseur)
     return retval
   def getMR(self,concrete,b,epaisseur):
     return ng_simple_bending_reinforcement.Mu(self.getAs(),concrete.fcd(),self.steel.fyd(),b,epaisseur-self.getEffectiveCover())
@@ -107,11 +107,11 @@ class DoubleRebarFamily(object):
     l1= self.f1.getBasicAnchorageLength(concrete)
     l2= self.f2.getBasicAnchorageLength(concrete)
     return max(l1,l2)
-  def getAsMinFlexion(self,concrete,epaisseur):
-    retval= SIA262_limit_state_checking.AsMinFlexion(concrete,self.getEffectiveCover(),self.f1.exigenceFissuration,self.getEcartement(),epaisseur)
+  def getMinReinfAreaUnderFlexion(self,concrete,epaisseur):
+    retval= SIA262_limit_state_checking.MinReinfAreaUnderFlexion(concrete,self.getEffectiveCover(),self.f1.exigenceFissuration,self.getEcartement(),epaisseur)
     return retval
-  def getAsMinTraction(self,concrete,epaisseur):
-    retval= SIA262_limit_state_checking.AsMinTraction(concrete,self.f1.exigenceFissuration,self.getEcartement(),epaisseur)
+  def getMinReinfAreaUnderTension(self,concrete,epaisseur):
+    retval= SIA262_limit_state_checking.MinReinfAreaUnderTension(concrete,self.f1.exigenceFissuration,self.getEcartement(),epaisseur)
     return retval
   def getExigenceFissuration(self):
     retval= self.f1.exigenceFissuration

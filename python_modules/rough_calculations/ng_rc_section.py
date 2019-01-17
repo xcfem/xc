@@ -25,10 +25,10 @@ class RCSection(object):
     self.stressLimitUnderPermanentLoads= 230e6
   def setArmature(self,tensionRebars):
     self.tensionRebars= tensionRebars
-  def getAsMinFlexion(self):
-    return self.tensionRebars.getAsMinFlexion(self.concrete,self.h)
-  def getAsMinTraction(self):
-    return self.tensionRebars.getAsMinTraction(self.concrete,self.h)
+  def getMinReinfAreaUnderFlexion(self):
+    return self.tensionRebars.getMinReinfAreaUnderFlexion(self.concrete,self.h)
+  def getMinReinfAreaUnderTension(self):
+    return self.tensionRebars.getMinReinfAreaUnderTension(self.concrete,self.h)
   def getMR(self):
     return self.tensionRebars.getMR(self.concrete,self.b,self.h)
   def getVR(self,Nd,Md):
@@ -36,7 +36,7 @@ class RCSection(object):
   def writeResultFlexion(self,outputFile,Nd,Md,Vd):
     famArm= self.tensionRebars
     concrete= self.concrete
-    AsMin= self.getAsMinFlexion()
+    AsMin= self.getMinReinfAreaUnderFlexion()
     ancrage= famArm.getBasicAnchorageLength(concrete)
     outputFile.write("  Dimensions coupe; b= "+ fmt.Longs.format(self.b)+ "m, h= "+ fmt.Longs.format(self.h)+ "m\\\\\n")
     ng_rebar_def.writeRebars(outputFile,concrete,famArm,AsMin)
@@ -51,7 +51,7 @@ class RCSection(object):
   def writeResultTraction(self,outputFile,Nd):
     famArm= self.tensionRebars
     concrete= self.concrete
-    AsMin= self.getAsMinTraction()/2
+    AsMin= self.getMinReinfAreaUnderTension()/2
     ancrage= famArm.getBasicAnchorageLength(concrete)
     ng_rebar_def.writeRebars(outputFile,concrete,famArm,AsMin)
     if(abs(Nd)>0):
