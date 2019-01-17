@@ -36,13 +36,17 @@ def AsMinContrainteLimiteeTraction(concrete,sgAdm,t):
   kt= SIA262_materials.reductionFactorKT(t)
   return kt*fctm*t/sgAdm
 
-def AsMinTraction(concrete,exigence,ecartement,t):
+def MinReinfAreaUnderTension(concrete,exigence,ecartement,t):
+  '''Return minimun amount of bonded reinforcement to control cracking
+     for reinforced concrete sections under tension.'''
   fctm= concrete.fctm()
   kt= SIA262_materials.reductionFactorKT(t)
   sgAdm= SIA262_materials.limitationContraintes(exigence,ecartement)
   return kt*fctm*t/sgAdm
 
-def AsMinFlexion(concrete,concreteCover,exigence,ecartement,t):
+def MinReinfAreaUnderFlexion(concrete,concreteCover,exigence,ecartement,t):
+  '''Return minimun amount of bonded reinforcement to control cracking
+     for reinforced concrete sections under flexion.'''
   fctd= concrete.fctm()*SIA262_materials.reductionFactorKT(t/3)
   z= 0.9*(t-concreteCover)
   w= 1/6.0*t**2
