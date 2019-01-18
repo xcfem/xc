@@ -52,26 +52,28 @@ class_<QuadBase4N_SFD, bases<PlaneElement4N_SFD>, boost::noncopyable >("QuadBase
   .def("getArea", &QuadBase4N_SFD::getArea, "Returns element's area.")
    ;
 
-
-XC::ShellCrdTransf3dBase *(XC::ShellMITC4Base::*getCoordTransfRef)(void)= &XC::ShellMITC4::getCoordTransf;
-XC::Vector (XC::ShellMITC4Base::*getParticlePos3dInterpolationFactors)(const XC::ParticlePos3d &) const= &XC::ShellMITC4::getInterpolationFactors;
-XC::Vector (XC::ShellMITC4Base::*getPos3dInterpolationFactors)(const Pos3d &) const= &XC::ShellMITC4::getInterpolationFactors;
-XC::Vector (XC::ShellMITC4Base::*getParticlePos3dInterpolatedDisplacements)(const XC::ParticlePos3d &) const= &XC::ShellMITC4::getInterpolationFactors;
-XC::Vector (XC::ShellMITC4Base::*getPos3dInterpolatedDisplacements)(const Pos3d &) const= &XC::ShellMITC4::getInterpolationFactors;
-class_<XC::ShellMITC4Base, bases<QuadBase4N_SFD>, boost::noncopyable >("ShellMITC4Base", no_init)
-    .add_property("getCoordTransf", make_function( getCoordTransfRef, return_internal_reference<>() ))
+XC::ShellCrdTransf3dBase *(XC::Shell4NBase::*getCoordTransfRef)(void)= &XC::ShellMITC4::getCoordTransf;
+XC::Vector (XC::Shell4NBase::*getParticlePos3dInterpolationFactors)(const XC::ParticlePos3d &) const= &XC::ShellMITC4::getInterpolationFactors;
+XC::Vector (XC::Shell4NBase::*getPos3dInterpolationFactors)(const Pos3d &) const= &XC::ShellMITC4::getInterpolationFactors;
+XC::Vector (XC::Shell4NBase::*getParticlePos3dInterpolatedDisplacements)(const XC::ParticlePos3d &) const= &XC::ShellMITC4::getInterpolationFactors;
+XC::Vector (XC::Shell4NBase::*getPos3dInterpolatedDisplacements)(const Pos3d &) const= &XC::ShellMITC4::getInterpolationFactors;
+class_<XC::Shell4NBase, bases<QuadBase4N_SFD>, boost::noncopyable >("Shell4NBase", no_init)
     .def("computeBasis", &XC::ShellMITC4Base::computeBasis,"Compute local coordinates and basis")
+    .add_property("getCoordTransf", make_function( getCoordTransfRef, return_internal_reference<>() ))
     .def("getLocalCoordinatesOfNode", &XC::ShellMITC4Base::getLocalCoordinatesOfNode,"Returns local coordinates of node i.")
     .def("getNaturalCoordinates", &XC::ShellMITC4Base::getNaturalCoordinates,"Returns natural coordinates of point.")
     .def("getMeanInternalForce",&XC::ShellMITC4Base::getMeanInternalForce)
     .def("getMeanInternalDeformation",&XC::ShellMITC4Base::getMeanInternalDeformation)
+    .def("getPos3dInterpolationFactors",getPos3dInterpolationFactors)
+    .def("getParticlePos3dInterpolationFactors",getParticlePos3dInterpolationFactors)
+    .def("getParticlePos3dInterpolatedDisplacements",getParticlePos3dInterpolatedDisplacements)
+    .def("getPos3dInterpolatedDisplacements",getPos3dInterpolatedDisplacements)
     .def("vector3dUniformLoadLocal",make_function(&XC::ShellMITC4Base::vector3dUniformLoadLocal, return_internal_reference<>() ))
     .def("vector3dUniformLoadGlobal",make_function(&XC::ShellMITC4Base::vector3dUniformLoadGlobal, return_internal_reference<>() ))
     .def("strainLoad",&XC::ShellMITC4Base::strainLoad)
-    .def("getParticlePos3dInterpolationFactors",getParticlePos3dInterpolationFactors)
-    .def("getPos3dInterpolationFactors",getPos3dInterpolationFactors)
-    .def("getParticlePos3dInterpolatedDisplacements",getParticlePos3dInterpolatedDisplacements)
-    .def("getPos3dInterpolatedDisplacements",getPos3dInterpolatedDisplacements)
+   ;
+
+class_<XC::ShellMITC4Base, bases<XC::Shell4NBase>, boost::noncopyable >("ShellMITC4Base", no_init)
    ;
 
 class_<XC::ShellMITC4, bases<XC::ShellMITC4Base>, boost::noncopyable >("ShellMITC4", no_init)
