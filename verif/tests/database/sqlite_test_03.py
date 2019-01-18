@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import sqlite3 as sqlite
-from sqliteUtils import macros_sqlite
+from sqliteUtils import sqlite_macros
 from misc import ansysToEsfBarra
 
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -13,16 +13,16 @@ __email__= "l.pereztato@gmail.com"
 dbName= "/tmp/pilares.db"
 import os
 os.system("rm -f " + dbName)
-macros_sqlite.SQLTcreaDBase(dbName)
+sqlite_macros.SQLTcreaDBase(dbName)
 
 conn= sqlite.connect(dbName)
 cur= conn.cursor()
 cur.execute("create table test3 ( num integer, name string );")
 cur.execute("create table test4 ( A integer, B double );")
-macros_sqlite.SQLTborraTabla(dbName,"test3")
-macros_sqlite.SQLTborraTabla(dbName,"test4")
-e1= macros_sqlite.SQLTexisteTabla(dbName,"test3")
-e2= macros_sqlite.SQLTexisteTabla(dbName,"test4")
+sqlite_macros.SQLTborraTabla(dbName,"test3")
+sqlite_macros.SQLTborraTabla(dbName,"test4")
+e1= sqlite_macros.SQLTexisteTabla(dbName,"test3")
+e2= sqlite_macros.SQLTexisteTabla(dbName,"test4")
 
 
 

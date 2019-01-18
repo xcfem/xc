@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import sqlite3 as sqlite
-from sqliteUtils import macros_sqlite
+from sqliteUtils import sqlite_macros
 from misc import ansysToEsfBarra
 
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -19,7 +19,7 @@ fNameIn= pth+"/../aux/pilares.lst"
 dbName= "/tmp/pilares.db"
 tbName= "esfPilares"
 os.system("rm -f " + dbName)
-macros_sqlite.SQLTcreaDBase(dbName)
+sqlite_macros.SQLTcreaDBase(dbName)
 ansysToEsfBarra.ansysToEsfBarra(fNameIn,dbName,tbName)
 
 i= 0
@@ -41,7 +41,7 @@ for r in rows:
     j+= 1
 
 
-e1= macros_sqlite.SQLTexisteTabla(dbName,tbName)
+e1= sqlite_macros.SQLTexisteTabla(dbName,tbName)
 
 
 ratio1= abs(i-6)/6 # 6 actions

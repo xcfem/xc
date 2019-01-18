@@ -35,7 +35,7 @@ pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
 #print "pth= ", pth
-execfile(pth+"/macros_test_fiber_section.py")
+execfile(pth+"/fiber_section_test_macros.py")
 
 
 fy= 2600 # yield stress [kp/cm2]

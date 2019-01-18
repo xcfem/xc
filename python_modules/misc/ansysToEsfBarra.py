@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import struct
 import sqlite3 as sqlite
-from sqliteUtils import macros_sqlite
+from sqliteUtils import sqlite_macros
 import re #regular expresions
 import tempfile
 
@@ -32,7 +32,7 @@ def ansysToEsfBarra(nmbArch, nmbDBase, nmbTabla):
      nmbDBase: Nombre de la base de datos donde se guardará la tabla.
      nmbTabla: Nombre de la tabla que contendrá los esfuerzos.
   '''
-  macros_sqlite.SQLTcreaTabla(nmbDBase,nmbTabla,"(ACCION string,ELEM integer,AXIL double,Q_1 double,Q_2 double,M_1 double,M_2 double,TORSOR double)")
+  sqlite_macros.SQLTcreaTabla(nmbDBase,nmbTabla,"(ACCION string,ELEM integer,AXIL double,Q_1 double,Q_2 double,M_1 double,M_2 double,TORSOR double)")
   actionFiles= splitActionFiles(nmbArch)
   
   fieldWidths = [9,12,12,12,12,12,12]
