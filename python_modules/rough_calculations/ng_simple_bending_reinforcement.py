@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+'''Simplified routines for design reinforced concrete elements.'''
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2016, LCPT"
@@ -11,8 +12,14 @@ from miscUtils import LogMessages as lmsg
 
 
 
-
 def neutralFiberDepth(M,fcd,b,d):
+  '''Return the depth of the neutral fiber in a rectangular section.
+
+  :param M: bending moment.
+  :param fcd: concrete design compressive strength.
+  :param b: section width.
+  :param d: section effective depth.
+  '''
   c= 0.85*fcd*b
   T= c*(d-math.sqrt(d**2-2*M/c))
   xpl= T/c
@@ -20,6 +27,14 @@ def neutralFiberDepth(M,fcd,b,d):
   return xpl
 
 def Mu(As,fcd,fsd,b,d):
+  '''Return the ultimate bending moment of a rectangular section.
+
+  :param As: reinforcement area.
+  :param fcd: concrete design compressive strength.
+  :param fsd: steel design yield strength.
+  :param b: section width.
+  :param d: section effective depth.
+  '''
   T= As*fsd
   z= 0.9*d
   c= 0.85*fcd*b
@@ -35,7 +50,8 @@ def AsSimpleBending(M,fcd,fsd,b,d):
       subjected to simple bending.
 
   :param M: bending moment to resist.
-  :param fcd: concrete design strength.
+  :param fcd: concrete design compressive strength.
+  :param fsd: steel design yield strength.
   :param b: section width.
   :param d: section depth.
   '''
