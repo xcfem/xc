@@ -25,32 +25,57 @@ adherenceStress_y= [1.5e6,1.8e6,2.1e6,2.4e6,2.7e6,3.0e6,3.3e6,3.6e6,3.8e6]
 adherenceStress= scipy.interpolate.interp1d(adherenceStress_x,adherenceStress_y)
 
 def getBasicAnchorageLength(phi,fck, fsd):
-  """Returns anchorage length according to SIA 262."""
+  """Returns anchorage length according to SIA 262.
+
+  :param phi: bar diameter.
+  :param fck: concrete characteristic compressive strength.
+  :param fsd: steel design yield strength.
+  """
   fbd= adherenceStress(abs(fck))
   return max(fsd/fbd/4.0,25.0)*phi
      
 # SIA 262 section 4.4.2
 
 def AsMinContrainteLimiteeTraction(concrete,sgAdm,t):
+  '''Return minimun amount of bonded reinforcement to limit
+     the stress in reinforcement under tension.
+
+  :param concrete: concrete material.
+  :param sgAdm: stress limit.
+  :param t: smallest dimension of the tensioned member.
+  '''
   fctm= concrete.fctm()
   kt= SIA262_materials.reductionFactorKT(t)
   return kt*fctm*t/sgAdm
 
-def MinReinfAreaUnderTension(concrete,exigence,ecartement,t):
-  '''Return minimun amount of bonded reinforcement to control cracking
-     for reinforced concrete sections under tension.'''
+def MinReinfAreaUnderTension(concrete,exigence,spacing,t):
+  '''Return the minimun amount of bonded reinforcement to control cracking
+     for reinforced concrete sections under tension.
+
+  :param concrete: concrete material.
+  :param exigence: crack control exigence.
+  :param spacing: rebar spacing.
+  :param t: smallest dimension of the tensioned member.
+  '''
   fctm= concrete.fctm()
-  kt= SIA262_materials.reductionFactorKT(t)
-  sgAdm= SIA262_materials.limitationContraintes(exigence,ecartement)
+  kt= SIA262_materials.reductionFactorKT(t) # 4.4.1.3 SIA 262:2014
+  sgAdm= SIA262_materials.limitationContraintes(exigence,spacing)
   return kt*fctm*t/sgAdm
 
-def MinReinfAreaUnderFlexion(concrete,concreteCover,exigence,ecartement,t):
-  '''Return minimun amount of bonded reinforcement to control cracking
-     for reinforced concrete sections under flexion.'''
+def MinReinfAreaUnderFlexion(concrete,concreteCover,exigence,spacing,t):
+  '''Return the minimun amount of bonded reinforcement to control cracking
+     for reinforced concrete sections under flexion.
+
+  :param concrete: concrete material.
+  :param concreteCover: concrete cover of the tensioned bars.
+  :param exigence: crack control exigence.
+  :param spacing: rebar spacing.
+  :param t: smallest dimension of the tensioned member.
+  '''
   fctd= concrete.fctm()*SIA262_materials.reductionFactorKT(t/3)
   z= 0.9*(t-concreteCover)
   w= 1/6.0*t**2
-  sgAdm= SIA262_materials.limitationContraintes(exigence,ecartement)
+  sgAdm= SIA262_materials.limitationContraintes(exigence,spacing)
   return fctd*w/sgAdm/z
 
 #Check normal stresses limit state.
@@ -72,7 +97,8 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
   def check(self,elements, nmbComb):
     '''Launch checking.
     
-      :param elements: elements to check
+      :param elements: elements to check.
+      :param nmbComb: load case name.
     '''
     #print "Postprocessing combination: ",nmbComb
     for e in elements:

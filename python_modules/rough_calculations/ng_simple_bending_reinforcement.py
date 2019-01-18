@@ -50,11 +50,13 @@ def AsSimpleBending(M,fcd,fsd,b,d):
       subjected to simple bending.
 
   :param M: bending moment to resist.
-  :param fcd: concrete design compressive strength.
+  :param fcd: concrete design compressive strength (absolute value).
   :param fsd: steel design yield strength.
   :param b: section width.
   :param d: section depth.
   '''
+  if(fcd<0.0):
+    lmsg.warning('positive value expected for concrete design strength fcd= '+ str(fcd/1e6) + ' MPa.') 
   Ml= Mlim(fcd,b,d)
   if(M>Ml):
     lmsg.warning('compression reinforcement needed Ml= '+ str(Ml/1e3) + ' kN m < '+ str(M/1e3)+ ' kN m') 
