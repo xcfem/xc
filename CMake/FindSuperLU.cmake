@@ -26,7 +26,7 @@ IF(SUPERLU_INCLUDE_DIR)
     MESSAGE( STATUS "Found SuperLU: ${SUPERLU_INCLUDE_DIR}")
   ENDIF(SUPERLU_LIBRARY)
 ELSE(SUPERLU_INCLUDE_DIR)
-  MESSAGE(FATAL_ERROR "No se encontró supermatrix.h")
+  MESSAGE(FATAL_ERROR "supermatrix.h not found.")
 ENDIF(SUPERLU_INCLUDE_DIR)
 
 # if both headers and library are found, store results

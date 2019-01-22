@@ -10,7 +10,7 @@ SET(ARPACKPP_SEARCH_PATHS ${CMAKE_SOURCE_DIR} /usr/include/arpack++ /usr/local/i
 # Include dir
 find_path(ARPACKPP_INCLUDE_DIR NAMES arbnsmat.h PATHS ${ARPACKPP_SEARCH_PATHS})
 IF(NOT ARPACKPP_INCLUDE_DIR)
-  MESSAGE(FATAL_ERROR "No se encontró arpack++ (arbnsmat.h)")
+  MESSAGE(FATAL_ERROR "arpack++ not found (arbnsmat.h)")
 ENDIF()
 
 FIND_LIBRARY(ARPACKPP_LIB NAMES arpack++ PATHS /usr/lib /usr/local/lib)
