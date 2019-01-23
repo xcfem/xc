@@ -11,9 +11,7 @@ __email__= "ana.Ortega@ciccp.es"
 import geom
 from miscUtils import LogMessages as lmsg
 
-
-
-def getSubsetInside(geomObj,fromSet,toSetName,tol=0.0):
+def get_subset_inside(geomObj,fromSet,toSetName,tol=0.0):
     '''return a subset of fromSet composed by the entities inside the 
     3D geometric figure geomObj.
 
@@ -30,7 +28,7 @@ def getSubsetInside(geomObj,fromSet,toSetName,tol=0.0):
     newSet.nodes=fromSet.nodes.pickNodesInside(geomObj,tol)
     return newSet
 
-def getSubsetElemOfType(elemType,fromSet,toSetName):
+def get_subset_elem_of_type(elemType,fromSet,toSetName):
     '''return a subset of fromSet composed by the elements of type
     elemType
 
@@ -42,7 +40,7 @@ def getSubsetElemOfType(elemType,fromSet,toSetName):
     newSet.elements=fromSet.elements.pickElemsOfType(elemType)
     return newSet
 
-def getSubsetElemOfMat(matType,fromSet,toSetName):
+def get_subset_elem_of_mat(matType,fromSet,toSetName):
     '''return a subset of fromSet composed by the elements of material 
     matType
 
@@ -54,7 +52,7 @@ def getSubsetElemOfMat(matType,fromSet,toSetName):
     newSet.elements=fromSet.elements.pickElemsOfMaterial(matType)
     return newSet
 
-def getMinCooNod(setWithNod,cooId):
+def get_min_coo_nod(setWithNod,cooId):
     '''Return the minimum value of the specified coordinate in the set of nodes
 
     :param setWithNod: set that contains the nodes
@@ -70,7 +68,7 @@ def getMinCooNod(setWithNod,cooId):
         lmsg.error("Wrong coordinate id. Available values: 0, 1, 2  \n")
     return retval
     
-def getMaxCooNod(setWithNod,cooId):
+def get_max_coo_nod(setWithNod,cooId):
     '''Return the maximum value of the specified coordinate in the set of nodes
 
     :param setWithNod: set that contains the nodes
@@ -185,7 +183,66 @@ def set_not_included_in_orthoPrism(preprocessor,setInit,prismBase,prismAxis,setN
     retval.name= setName
     return retval
 
+def get_subset_lin_paralell_to_axis(axis,fromSet,toSetName):
+    '''return a subset of fromSet composed by lines parallel to
+    one of the global axes.  If toSetName exists the subset is appended to it.
 
+    :param axis: global axis (can be equal to 'X', 'Y', 'Z')
+    :param fromSet: set from which to extract the subset
+    :param toSetName: string to name the created subset
+    '''
+    lstLin=None
+    allLines=fromSet.getLines
+    if axis in ['X','x']:
+        lstLin=[l for l in allLines if abs(abs(l.getTang(1)[0])-1)<0.001]
+    elif axis in ['Y','y']:
+        lstLin=[l for l in allLines if abs(abs(l.getTang(1)[1])-1)<0.001]
+    elif axis in ['Z','z']:
+        lstLin=[l for l in allLines if abs(abs(l.getTang(1)[2])-1)<0.001]
+    else:
+        lmsg.error("Wrong axis. Available values: 'X', 'Y', 'Z' \n")
+    if lstLin:
+        s=lstLin_to_set(fromSet.getPreprocessor,lstLin,toSetName)
+        s.fillDownwards()
+        return s
+
+def get_subset_lin_shorter_than(Lmax,fromSet,toSetName):
+    '''return a subset of fromSet composed by lines shorter than 
+    Lmax. If toSetName exists the subset is appended to it.
+
+    :param Lmax: maximum length of lines
+    :param fromSet: set from which to extract the subset
+    :param toSetName: string to name the subset
+    '''
+    lstLin=None
+    allLines=fromSet.getLines
+    lstLin=[l for l in allLines if l.getLong()<=Lmax]
+    if lstLin:
+        s=lstLin_to_set(fromSet.getPreprocessor,lstLin,toSetName)
+        s.fillDownwards()
+        return s
+    else:
+        lmsg.warning("No lines shorter than Lmax \n")
+        return
+    
+def get_subset_lin_longer_than(Lmin,fromSet,toSetName):
+    '''return a subset of fromSet composed by lines longer than 
+    Lmin. If toSetName exists the subset is appended to it.
+
+    :param Lmin: minimum length of lines
+    :param fromSet: set from which to extract the subset
+    :param toSetName: string to name the subset
+    '''
+    lstLin=None
+    allLines=fromSet.getLines
+    lstLin=[l for l in allLines if l.getLong()>=Lmin]
+    if lstLin:
+        s=lstLin_to_set(fromSet.getPreprocessor,lstLin,toSetName)
+        s.fillDownwards()
+        return s
+    else:
+        lmsg.warning("No lines longer than Lmin \n")
+        return
 
 def lstElem_to_set(preprocessor,lstElem,setName):
     '''add the elements in list `lstElem` to the set named setName.
