@@ -305,7 +305,7 @@ class EarthPressLoad(BaseVectorLoad):
         '''Return the maximum magnitude of the vector loads'''
         maxValue=0
         if self.soilData<>None:
-            zmin=sets.getMinCooNod(self.xcSet,2)
+            zmin=sets.get_min_coo_nod(self.xcSet,2)
             pmax=self.soilData.getPressure(zmin)
             maxValue=max(maxValue,pmax)
         for stripL in self.stripLoads:

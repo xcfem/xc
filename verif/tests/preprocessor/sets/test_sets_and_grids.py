@@ -130,43 +130,43 @@ pxmax=5
 pymax=13
 hexaedr=geom.BND3d(geom.Pos3d(0,0,0),geom.Pos3d(xList[pxmax],yList[pymax],zList[5]))
 
-wallInHex= sets.getSubsetInside(geomObj=hexaedr,fromSet=wall,toSetName='wallInHex',tol=0.0)
+wallInHex= sets.get_subset_inside(geomObj=hexaedr,fromSet=wall,toSetName='wallInHex',tol=0.0)
 wallInHex_nel_targ=(pxmax-wall_rg.getIMin())*(wall_rg.getKMax()-wall_rg.getKMin())
 
-floor1InHex= sets.getSubsetInside(geomObj=hexaedr,fromSet=floor1,toSetName='floor1InHex',tol=0.0)
+floor1InHex= sets.get_subset_inside(geomObj=hexaedr,fromSet=floor1,toSetName='floor1InHex',tol=0.0)
 floor1InHex_nel_targ=(pxmax-floor1_rg.getIMin())*(pymax-floor1_rg.getJMin())
 
-floor2InHex= sets.getSubsetInside(geomObj=hexaedr,fromSet=floor2,toSetName='floor2InHex',tol=0.0)
+floor2InHex= sets.get_subset_inside(geomObj=hexaedr,fromSet=floor2,toSetName='floor2InHex',tol=0.0)
 floor2InHex_nel_targ=(pxmax-floor2_rg[0].getIMin())*(pymax-floor2_rg[0].getJMin())
 
-columnsInHex= sets.getSubsetInside(geomObj=hexaedr,fromSet=columns,toSetName='columnsInHex',tol=0.0)
+columnsInHex= sets.get_subset_inside(geomObj=hexaedr,fromSet=columns,toSetName='columnsInHex',tol=0.0)
 columnsInHex_nel_targ=4
 
 ratio7=(wallInHex.elements.size-wallInHex_nel_targ)+(floor1InHex.elements.size-floor1InHex_nel_targ)+(floor2InHex.elements.size-floor2InHex_nel_targ)+(columnsInHex.elements.size-columnsInHex_nel_targ)
 
-overallInHex= sets.getSubsetInside(geomObj=hexaedr,fromSet=overallSet,toSetName='overallInHex',tol=0.0)
+overallInHex= sets.get_subset_inside(geomObj=hexaedr,fromSet=overallSet,toSetName='overallInHex',tol=0.0)
 
 ratio8=overallInHex.elements.size-wallInHex.elements.size-floor1InHex.elements.size-floor2InHex.elements.size-columnsInHex.elements.size
 
 ratio9=overallInHex.surfaces.size-wallInHex.surfaces.size-floor1InHex.surfaces.size-floor2InHex.surfaces.size-columnsInHex.surfaces.size
 
-shells=sets.getSubsetElemOfType(elemType='shell',fromSet=overallSet,toSetName='shells')
+shells=sets.get_subset_elem_of_type(elemType='shell',fromSet=overallSet,toSetName='shells')
 
 numShells= len(shells.getElements)
 ratio10= numShells-278
 
 #print shells.getElementTypes()
-beams=sets.getSubsetElemOfType(elemType='ElasticBeam3d',fromSet=overallSet,toSetName='beams')
+beams=sets.get_subset_elem_of_type(elemType='ElasticBeam3d',fromSet=overallSet,toSetName='beams')
 numBeams= len(beams.getElements)
 ratio11= numBeams-16
 
 
 '''
-columnsmat=sets.getSubsetElemOfMat(matType='columns_mat',fromSet=overallSet,toSetName='columnsmat')
+columnsmat=sets.get_subset_elem_of_mat(matType='columns_mat',fromSet=overallSet,toSetName='columnsmat')
 
 # this works but yields lots of warning messages
-wallmat=sets.getSubsetElemOfMat(matType='wall_mat',fromSet=overallSet,toSetName='wallmat')
-deckmat=sets.getSubsetElemOfMat(matType='deck_mat',fromSet=overallSet,toSetName='deckmat')
+wallmat=sets.get_subset_elem_of_mat(matType='wall_mat',fromSet=overallSet,toSetName='wallmat')
+deckmat=sets.get_subset_elem_of_mat(matType='deck_mat',fromSet=overallSet,toSetName='deckmat')
 '''
 import os
 from miscUtils import LogMessages as lmsg

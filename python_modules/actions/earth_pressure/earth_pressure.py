@@ -212,8 +212,8 @@ class StripLoadOnBackfill(UniformLoadOnStem):
     def getMaxMagnitude(self,xcSet):
         '''Return an estimation of the maximum magnitude of the vector loads 
         (it's supposed to occur in a point placed 1/3L from the top)'''
-        zmin=sets.getMinCooNod(xcSet,2)
-        zmax=sets.getMaxCooNod(xcSet,2)
+        zmin=sets.get_min_coo_nod(xcSet,2)
+        zmax=sets.get_max_coo_nod(xcSet,2)
         zcontrol=zmin+2/3.*(zmax-zmin)
         maxEstValue=self.getPressure(zcontrol)
         return maxEstValue
@@ -247,8 +247,8 @@ class LineVerticalLoadOnBackfill(PressureModelBase):
     def getMaxMagnitude(self,xcSet):
         '''Return an estimation of the maximum magnitude of the vector loads 
         (it's supposed to occur in a point placed 1/3L from the top)'''
-        zmin=sets.getMinCooNod(xcSet,2)
-        zmax=sets.getMaxCooNod(xcSet,2)
+        zmin=sets.get_min_coo_nod(xcSet,2)
+        zmax=sets.get_max_coo_nod(xcSet,2)
         zcontrol=zmin+2/3.*(zmax-zmin)
         maxEstValue=self.getPressure(zcontrol)
         return maxEstValue
