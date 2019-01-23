@@ -16,7 +16,7 @@ class SetToMesh(object):
     '''Base for classes that mesh a primitive set.
     
     :ivar primitiveSet: set of lines/surfaces/blocks.
-    :ivar elemSize: mean size of the elements (in elemSize= None don't 
+    :ivar elemSize: mean size of the elements (in elemSize= None do not 
                     change number of divisions).
     :ivar elemType: type of element for the mesh.
     '''
@@ -32,7 +32,10 @@ class RawLineSetToMesh(SetToMesh):
     
     :ivar matSect: instance of the class BeamMaterialData that defines the 
           material-section to be applied to the set of lines.
+    :ivar elemSize: mean size of the elements (in elemSize= None do not 
+                    change number of divisions).
     :ivar coordTransf: coordinate transformation for the elements.
+    :ivar elemType: type of element for the mesh (defaults to 'ElasticBeam3d').
     :ivar dimElemSpace: dimension of the element space (defaults to 3)
     '''
     def __init__(self,linSet,matSect,elemSize,coordTransf, elemType='ElasticBeam3d',dimElemSpace=3):
@@ -88,6 +91,8 @@ class LinSetToMesh(RawLineSetToMesh):
     
     :ivar matSect: instance of the class BeamMaterialData that defines the 
           material-section to be applied to the set of lines.
+    :ivar elemSize: mean size of the elements (in elemSize= None do not 
+                    change number of divisions).
     :ivar vDirLAxZ: direction vector for the element local axis Z 
           defined as xc.Vector([x,y,z]). This is the direction in which
           the Z local axis of the sections will be
@@ -113,6 +118,8 @@ class SurfSetToMesh(SetToMesh):
     :ivar surfSet: set of surfaces.
     :ivar matSect: instance of the class DeckMaterialData that defines the 
           material-section to be applied to the set of surfaces.
+    :ivar elemSize: mean size of the elements (in elemSize= None do not 
+                    change number of divisions).
     :ivar elemType: type of element for the mesh (defaults to 'ShellMITC4')
     '''
     def __init__(self,surfSet,matSect,elemSize,elemType='ShellMITC4'):
@@ -146,3 +153,11 @@ def multi_mesh(preprocessor,lstMeshSets):
     '''
     for ms in lstMeshSets:
         ms.generateMesh(preprocessor)
+
+def assign_ndiv_to_lines_in_set(ndiv,linSet):
+    '''Assign a number of divisions = ndiv to all the lines included 
+    in set linSet
+    '''
+    for l in linSet:
+        l.nDiv=ndiv
+    return

@@ -383,6 +383,48 @@ class GridModel(object):
             p.getPos.z= zOrig+scale*(zpt-zOrig)
         sPtZscale.clear()
 
+    def movePointsRangeToZcylinder(self,ijkRange,xCent,yCent,R):
+        '''Moves the points in the range to make them belong to 
+        a cylinder with radius R and axis parallel to global Z passing 
+        through the point (xCent,yCent,0)
+        '''
+        vCent=geom.Vector2d(xCent,yCent)
+        setPnt=self.getSetPntRange(ijkRange,'setPnt')
+        for p in setPnt.getPoints:
+            v=geom.Vector2d(p.getPos.x,p.getPos.y)-vCent
+            vdir=v.normalizado()
+            p.getPos.x=xCent+R*vdir.x
+            p.getPos.y=yCent+R*vdir.y
+        setPnt.clear()
+
+    def movePointsRangeToXcylinder(self,ijkRange,yCent,zCent,R):
+        '''Moves the points in the range to make them belong to 
+        a cylinder with radius R and axis parallel to global X passing 
+        through the point (0,yCent,zCent)
+        '''
+        vCent=geom.Vector2d(yCent,zCent)
+        setPnt=self.getSetPntRange(ijkRange,'setPnt')
+        for p in setPnt.getPoints:
+            v=geom.Vector2d(p.getPos.y,p.getPos.z)-vCent
+            vdir=v.normalizado()
+            p.getPos.y=yCent+R*vdir.x
+            p.getPos.z=zCent+R*vdir.y
+        setPnt.clear()
+
+    def movePointsRangeToYcylinder(self,ijkRange,xCent,zCent,R):
+        '''Moves the points in the range to make them belong to 
+        a cylinder with radius R and axis parallel to global Y passing 
+        through the point (xCent,0,zCent)
+        '''
+        vCent=geom.Vector2d(xCent,zCent)
+        setPnt=self.getSetPntRange(ijkRange,'setPnt')
+        for p in setPnt.getPoints:
+            v=geom.Vector2d(p.getPos.x,p.getPos.z)-vCent
+            vdir=v.normalizado()
+            p.getPos.x=xCent+R*vdir.x
+            p.getPos.z=zCent+R*vdir.y
+        setPnt.clear()
+
     def newQuadGridSurface(self,surfName):
         '''Generate the quadrangle surface defined by the 4 vertex whose tags
         are implicit in the name of the surface.
