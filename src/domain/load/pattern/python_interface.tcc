@@ -56,7 +56,8 @@ class_<XC::LoadPattern, bases<XC::NodeLocker>, boost::noncopyable >("LoadPattern
   .def("removeElementalLoad",&XC::LoadPattern::removeElementalLoad,"removes the elemental load with the tag passed as parameter.")
   .def("clearLoads",&XC::LoadPattern::clearLoads,"Deletes the pattern loads.")
   .def("addToDomain", &XC::LoadPattern::addToDomain,"Add combination to the domain.")
-   .def("removeFromDomain", &XC::LoadPattern::removeFromDomain,"Removes the combination from the domain.")
+  .def("removeFromDomain", &XC::LoadPattern::removeFromDomain,"Removes the combination from the domain.")
+  .def(self *= double())
   ;
 
 #include "load_patterns/python_interface.tcc"

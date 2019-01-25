@@ -79,11 +79,7 @@ void XC::LoadPattern::free(void)
     setTimeSeries(nullptr);
 
     // AddingSensitivity:BEGIN /////////////////////////////
-    if(randomLoads)
-      {
-        delete randomLoads;
-        randomLoads= nullptr;
-      }
+    randomLoads.resize(0);
     // AddingSensitivity:END ///////////////////////////////
   }
 
@@ -93,14 +89,14 @@ void XC::LoadPattern::free(void)
 //! @param classTag: class identifier.
 XC::LoadPattern::LoadPattern(int tag, int classTag)
   : NodeLocker(tag,classTag), loadFactor(0.0), gamma_f(1.0),
-    theSeries(nullptr), theLoads(this), randomLoads(nullptr), isConstant(false)
+    theSeries(nullptr), theLoads(this), randomLoads(), isConstant(false)
   {}
 
 
 //! @brief Constructor.
 XC::LoadPattern::LoadPattern(int tag)
   : NodeLocker(tag,PATTERN_TAG_LoadPattern),loadFactor(0.0), gamma_f(1.0),
-   theSeries(nullptr), theLoads(this), randomLoads(nullptr), isConstant(false)
+   theSeries(nullptr), theLoads(this), randomLoads(), isConstant(false)
   {}
 
 //! @brief Virtual constructor.
@@ -388,8 +384,8 @@ int XC::LoadPattern::sendData(CommParameters &cp)
     res+= sendTimeSeriesPtr(theSeries,8,9,getDbTagData(),cp);
     res+= cp.sendMovable(theLoads,getDbTagData(),CommMetaData(10));
 
-    res+= cp.sendVectorPtr(randomLoads,getDbTagData(),ArrayCommMetaData(11,12,13));
-    res+= cp.sendBools(RVisRandomProcessDiscretizer,isConstant,getDbTagData(),CommMetaData(14));
+    res+= cp.sendVector(randomLoads,getDbTagData(),CommMetaData(11));
+    res+= cp.sendBools(RVisRandomProcessDiscretizer,isConstant,getDbTagData(),CommMetaData(12));
     return res;
   }
 
@@ -400,8 +396,8 @@ int XC::LoadPattern::recvData(const CommParameters &cp)
     res+= cp.receiveDoubles(loadFactor,gamma_f,getDbTagData(),CommMetaData(7));
     theSeries= receiveTimeSeriesPtr(theSeries,8,9,getDbTagData(),cp);
     res+= cp.receiveMovable(theLoads,getDbTagData(),CommMetaData(10));
-    randomLoads= cp.receiveVectorPtr(randomLoads,getDbTagData(),ArrayCommMetaData(11,12,13));
-    res+= cp.receiveBools(RVisRandomProcessDiscretizer,isConstant,getDbTagData(),CommMetaData(14));
+    res+= cp.receiveVector(randomLoads,getDbTagData(),CommMetaData(11));
+    res+= cp.receiveBools(RVisRandomProcessDiscretizer,isConstant,getDbTagData(),CommMetaData(12));
     return res;
   }
 
@@ -543,18 +539,9 @@ const XC::Vector &XC::LoadPattern::getExternalForceSensitivity(int gradNumber)
     // THIS METHOD IS CURRENTLY ONLY USED FOR THE STATIC CASE
     // IT SHOULD BE DELETED AND REPLACED BY THE DYNAMIC CASE
 
-    // Initial declarations
-    Vector tempRandomLoads= theLoads.getExternalForceSensitivity(gradNumber);
-
     // Start with a fresh return vector
-    if(randomLoads == 0)
-      { randomLoads = new Vector(tempRandomLoads); }
-    else
-      {
-        delete randomLoads;
-        randomLoads = new Vector(tempRandomLoads);
-      }
-    return (*randomLoads);
+    randomLoads= theLoads.getExternalForceSensitivity(gradNumber);
+    return randomLoads;
   }
 
 // AddingSensitivity:END //////////////////////////////////////

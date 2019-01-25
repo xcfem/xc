@@ -63,6 +63,7 @@
 
 #include "NodeLocker.h"
 #include "LoadContainer.h"
+#include <utility/matrix/Vector.h>
 
 namespace XC {
 class NodalLoad;
@@ -103,7 +104,7 @@ class LoadPattern: public NodeLocker
     LoadContainer theLoads; //!< Load container.
 
     // AddingSensitivity:BEGIN //////////////////////////////////////
-    Vector *randomLoads;
+    Vector randomLoads;
     bool RVisRandomProcessDiscretizer;
     // AddingSensitivity:END ////////////////////////////////////////
 
@@ -176,7 +177,6 @@ class LoadPattern: public NodeLocker
     void setGammaF(const double &);
     LoadPattern &operator*=(const double &fact);
     LoadPattern &operator/=(const double &fact); 
-
     // methods for o/p
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
