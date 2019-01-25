@@ -157,8 +157,6 @@ comb024= combs.newLoadCombination("ELU024","1.35*G + 0.90*VT + 1.50*NV")
 comb025= combs.newLoadCombination("ELU025","1.35*G + 1.05*SC + 1.50*NV")
 comb026= combs.newLoadCombination("ELU026","1.35*G + 1.05*SC + 0.90*VT + 1.50*NV")
 
-
-
 printFlag= 0
 
 solu= feProblem.getSoluProc
@@ -186,8 +184,6 @@ integ= analysisAggregation.newIntegrator("load_control_integrator",xc.Vector([])
 soe= analysisAggregation.newSystemOfEqn("band_gen_lin_soe")
 solver= soe.newSolver("band_gen_lin_lapack_solver")
 analysis= solu.newAnalysis("static_analysis","analysisAggregation","")
-
-
 
 def resuelveCombEstatLin(comb,db,dbHelp):
   preprocessor.resetLoadCase()

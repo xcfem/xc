@@ -175,7 +175,8 @@
 #define LOAD_TAG_SelfWeight              10 // C.McGann, U.W.
 #define PATTERN_TAG_PBowlLoading	  11
 #define LOAD_TAG_TrussStrainLoad          20 //Added by LCPT.
-#define LOAD_TAG_LoadCombination              30 //Added by LCPT.
+#define LOAD_TAG_LoadPatternCombination   29 //Added by LCPT.
+#define LOAD_TAG_LoadCombination          30 //Added by LCPT.
 #define LOAD_TAG_ShellUniformLoad         40 //Added by LCPT.
 #define LOAD_TAG_BidimStrainLoad          50 //Added by LCPT.
 #define LOAD_TAG_ShellStrainLoad          60 //Added by LCPT.

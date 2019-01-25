@@ -62,19 +62,25 @@ class_<XC::LoadPattern, bases<XC::NodeLocker>, boost::noncopyable >("LoadPattern
 
 #include "load_patterns/python_interface.tcc"
 
+class_<XC::LoadPatternCombination, XC::LoadPatternCombination *, bases<XC::ForceReprComponent>, boost::noncopyable >("LoadPatternCombination", no_init)
+  .add_property("getName", make_function( &XC::LoadPatternCombination::getName, return_value_policy<return_by_value>() ), "Returns combination's name.")
+  .add_property("name", make_function( &XC::LoadPatternCombination::getName, return_value_policy<return_by_value>() ), "Returns combination's name.")
+  .def("addToDomain", &XC::LoadPatternCombination::addToDomain,"Add combination to the domain.")
+  .def("removeFromDomain", &XC::LoadPatternCombination::removeFromDomain,"Remove combination from the domain.")
+  .def("getDescomp", &XC::LoadPatternCombination::getString,"Returns combination expression.")
+  ;
+
 XC::LoadCombination &(XC::LoadCombination::*add)(const std::string &)= &XC::LoadCombination::add;
 XC::LoadCombination &(XC::LoadCombination::*substract)(const std::string &)= &XC::LoadCombination::substract;
-class_<XC::LoadCombination, XC::LoadCombination *, bases<XC::ForceReprComponent>, boost::noncopyable >("LoadCombination", no_init)
-  .add_property("getName", make_function( &XC::LoadCombination::getName, return_value_policy<return_by_value>() ), "Returns combination's name.")
-  .def("addToDomain", &XC::LoadCombination::addToDomain,"Add combination to the domain.")
-  .def("removeFromDomain", &XC::LoadCombination::removeFromDomain,"Remove combination from the domain.")
+class_<XC::LoadCombination, XC::LoadCombination *, bases<XC::LoadPatternCombination>, boost::noncopyable >("LoadCombination", no_init)
   .def("getCombPrevia", &XC::LoadCombination::getPtrCombPrevia,return_internal_reference<>(),"Returns previous load combination.")
-  .def("getDescomp", &XC::LoadCombination::getString,"Returns combination expression.")
   .def("add",add,return_internal_reference<>())
   .def("substract",substract,return_internal_reference<>())
   .def("multiplica",&XC::LoadCombination::multiplica,return_internal_reference<>())
   .def("divide",&XC::LoadCombination::divide,return_internal_reference<>())
   .def("asigna",&XC::LoadCombination::asigna,return_internal_reference<>())
+  .def(self + self)
+  .def(self *= double())
   ;
 
 class_<XC::LoadCombinationMap, boost::noncopyable>("LoadCombinationMap")

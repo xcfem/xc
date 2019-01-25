@@ -32,7 +32,7 @@ comb2= combs.newLoadCombination("COMB2","1.33*A+1.5*B+1.0*C")
 comb4= combs.newLoadCombination("COMB4","1.33*A")
 comb3= combs.newLoadCombination("COMB3","1.33*A+0.5*B")
 difference= combs.newLoadCombination("DIFFERENCE","")
-nombrePrevia= combs.getCombPrevia(combs.getComb("COMB1")).getName
+nombrePrevia= combs.getCombPrevia(combs.getComb("COMB1")).name
 difference.asigna("COMB1")
 difference.substract(nombrePrevia)
 descompDifference= difference.getDescomp("%3.1f")

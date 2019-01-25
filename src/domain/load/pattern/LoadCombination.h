@@ -29,7 +29,7 @@
 #ifndef LOADCOMBINATION_H
 #define LOADCOMBINATION_H
 
-#include "domain/component/ForceReprComponent.h"
+#include "LoadPatternCombination.h"
 
 namespace XC {
 class MapLoadPatterns;
@@ -39,102 +39,27 @@ class LoadCombinationGroup;
 
 //! @ingroup LPatterns
 //
-//! @brief Load pattern combination (1.5*PP+1.0*CP+1.6*SC ...).
-class LoadCombination: public ForceReprComponent
+//! @brief Base class for load pattern combinations
+//! (1.5*selfWeight+1.0*permanentLoad+1.6*trafficLoad ...).
+class LoadCombination: public LoadPatternCombination
   {
-    LoadHandler *handler; //!< Pointer to the load case manager.
-    //! @brief Each of the terms (factor*LoadPattern) of the combination.
-    class summand: public CommandEntity
-      {
-        float factor; //!< Factor that multiplies the load pattern effect.
-        LoadPattern *lpattern; //!< Load pattern.
-        void neg(void);
-      public:
-        summand(const float &f= 1.0,LoadPattern *lp= nullptr);
-        //! @brief Returns the factor that multiplies the load pattern.
-        const float &Factor(void) const;
-        const LoadPattern *getLoadPattern(void) const;
-        LoadPattern *getLoadPattern(void);
-	const std::string &getLoadPatternName(const MapLoadPatterns &lps) const;
-
-        summand getNeg(void) const;
-        const summand &add(const summand &);
-        const summand &substract(const summand &);
-        const summand &multiplica(const float &);
-        const summand &divide(const float &);
-
-	std::string getString(const MapLoadPatterns &,const std::string &fmt) const;
-        void Print(std::ostream &os) const;
-    
-      };
-  public:
-    typedef std::deque<summand> TDescomp; //!< Container type for the combination expression (1.5*PP+1.0*CP+1.6*SC ...).
-    typedef TDescomp::iterator iterator;
-    typedef TDescomp::const_iterator const_iterator;
-  private:
-    std::string nombre;
-    TDescomp descomp;
-    //used only to receive data.
-    static std::map<int,std::string> map_str_descomp;
   protected:
-    void set_gamma_f(void);
-    void set_domain(void);
     friend class Domain;
     friend class FEM_ObjectBroker;
-    void add_component(const summand &);
-    void interpreta_descomp(const std::string &str);
-    void limpia_ceros(void);
-    void clear(void);
-    const_iterator findLoadPattern(const LoadPattern *) const;
-    iterator findLoadPattern(const LoadPattern *);
-
-    iterator begin(void)
-      { return descomp.begin(); }
-    iterator end(void)
-      { return descomp.end(); }
 
     LoadCombination &add(const LoadCombination &);
     LoadCombination &substract(const LoadCombination &);
 
-    DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
     int recvDescomp(void);
 
 
     friend class LoadCombinationGroup;
-    LoadCombination(LoadCombinationGroup *owr= nullptr,const std::string &nmb= "",int tag= 0,LoadHandler *ll= nullptr);
-    inline void setNombre(const std::string &nmb)
-      { nombre= nmb;}
-    inline void setHandler(LoadHandler *ll)
-      { handler= ll; }
+    LoadCombination(LoadCombinationGroup *owr= nullptr,const std::string &nm= "",int tag= 0,LoadHandler *ll= nullptr);
 
   public:
-    ~LoadCombination(void);
-
-    virtual void setDomain(Domain *theDomain);
-    bool addToDomain(void);
-    void removeFromDomain(void);
-
-    inline const std::string &getName(void) const
-      { return nombre; }
-
-    inline void setDescomp(const std::string &descomp)
-      { interpreta_descomp(descomp); }
 
     const LoadCombinationGroup *getGroup(void) const;
     LoadCombinationGroup *getGroup(void);
-
-    const_iterator begin(void) const
-      { return descomp.begin(); }
-    const_iterator end(void) const
-      { return descomp.end(); }
-    size_t size(void) const
-      { return descomp.size(); }
-    bool empty(void) const
-      { return descomp.empty(); }
-
-    float getLoadPatternFactor(const LoadPattern *) const;
 
     LoadCombination &multiplica(const float &);
     LoadCombination &divide(const float &);
@@ -165,10 +90,6 @@ class LoadCombination: public ForceReprComponent
 
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
-
-    std::string getString(const std::string &fmt= "") const;
-    virtual void Print(std::ostream &s, int flag =0) const;
-
   };
 
 std::ostream &operator<<(std::ostream &os,const LoadCombination &);
