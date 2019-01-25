@@ -195,13 +195,13 @@ void XC::SetEntities::fillDownwards(SetMeshComp &mc)
 //     for(lst_cuerpos::iterator i=bodies.begin();i!=bodies.end();i++)
 //       {
 //         lst_surfaces ss= (*i)->getSurfaces();
-//         surfaces.insert(surfaces.end(),ss.begin(),ss.end());
+//         surfaces.insert_unique(surfaces.end(),ss.begin(),ss.end());
 //       }
     for(sup_iterator i=surfaces.begin();i!=surfaces.end();i++)
       {
         //Lines.
         lst_line_pointers ll((*i)->GetEdges());
-        lines.insert(lines.end(),ll.begin(),ll.end());
+        lines.insert_unique(lines.end(),ll.begin(),ll.end());
 
         //Elements.
         ElemPtrArray3d &ttz_elements= (*i)->getTtzElements();
@@ -248,12 +248,12 @@ void XC::SetEntities::fillUpwards(const SetMeshComp &mc)
     for(lin_iterator i=lines.begin();i!=lines.end();i++)
       {
         lst_surface_ptrs ss(getConnectedSurfaces(**i));
-        surfaces.insert(surfaces.end(),ss.begin(),ss.end());
+        surfaces.insert_unique(surfaces.end(),ss.begin(),ss.end());
       }
 //     for(lst_surfaces::iterator i=surfaces.begin();i!=surfaces.end();i++)
 //       {
 //         lst_cuerpos bb= getConnectedBodies(**i);
-//         bodies.insert(bodies.end(),bb.begin(),bb.end());
+//         bodies.insert_unique(bodies.end(),bb.begin(),bb.end());
 //       }
   }
 

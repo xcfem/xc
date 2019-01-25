@@ -100,6 +100,19 @@ class DqPtrs: public CommandEntity, protected std::deque<T *>
     template <class InputIterator>
     void insert(iterator pos, InputIterator f, InputIterator l)
       { lst_ptr::insert(pos,f,l); }
+    template <class InputIterator>
+    void insert_unique(iterator pos, InputIterator f, InputIterator l)
+      {
+	DqPtrs<T> tmp;
+	//Filter those already in the container.
+	for(InputIterator i= f;i!=l;i++)
+	  {
+	    T *ptr= *i;
+	    if(!this->in(ptr))
+	      { tmp.push_back(ptr); }
+	  }
+	lst_ptr::insert(pos,tmp.begin(),tmp.end()); //Add only new ones.
+      }
 
     
     int sendTags(int posSz,int posDbTag,DbTagData &dt,CommParameters &cp);
