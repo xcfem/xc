@@ -481,7 +481,7 @@ class GridModel(object):
         return ln
 
 
-    def appendSurfRange(self,ijkRange,nameSet):
+    def appendSurfRange(self,ijkRange,setSurf):
         '''generate the surfaces limited by a region defined by the coordinates
         that correspond to the indices in the grid 
         ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
@@ -489,11 +489,10 @@ class GridModel(object):
         and append them to the set named 'nameSet'.
         Add those surfaces to the dictionary dicQuadSurf.
         '''
-        setSurf= self.prep.getSets.getSet(nameSet)
         nmSurfinRang=self.getNmSurfInRange(ijkRange)
         for nameSurf in nmSurfinRang:
             s= self.newQuadGridSurface(nameSurf)
-            self.dicQuadSurf[nameSurf]=s
+            self.dicQuadSurf[nameSurf]= s
             setSurf.getSurfaces.append(s)
 
     def genSurfOneRegion(self,ijkRange,nameSet):
@@ -505,7 +504,7 @@ class GridModel(object):
         Add those surfaces to the dictionary dicQuadSurf.
         '''
         setSurf= self.prep.getSets.defSet(nameSet)
-        self.appendSurfRange(ijkRange,nameSet)
+        self.appendSurfRange(ijkRange,setSurf)
         return setSurf
 
     def genSurfMultiRegion(self,lstIJKRange,nameSet):
@@ -520,7 +519,7 @@ class GridModel(object):
         '''
         setSurf= self.prep.getSets.defSet(nameSet)
         for rg in lstIJKRange:
-            self.appendSurfRange(rg,nameSet)
+            self.appendSurfRange(rg,setSurf)
         return setSurf
 
     def appendLinRange(self,ijkRange,nameSet):
