@@ -786,8 +786,8 @@ XC::Vector XC::FiberSectionBase::getVectorCantoUtil(void) const
   {
     Vector retval(2);
     const Segment2d tmp= getEffectiveDepthSegment();
-    const Pos2d p1= tmp.Origen();
-    const Pos2d p2= tmp.Destino();
+    const Pos2d p1= tmp.getFromPoint();
+    const Pos2d p2= tmp.getToPoint();
     retval(0)= p2.x()-p1.x();
     retval(1)= p2.y()-p1.y();
     return retval;
@@ -806,8 +806,8 @@ Segment2d XC::FiberSectionBase::getLeverArmSegment(void) const
         const Line2d Yaxis= Xaxis.Perpendicular(center_of_mass);
         const Polygon2d contour= getRegionsContour();
         retval= contour.Clip(Yaxis);
-        Pos2d org= retval.Origen()+0.1*retval.GetVector();
-        Pos2d dest= retval.Destino()-0.1*retval.GetVector();
+        Pos2d org= retval.getFromPoint()+0.1*retval.GetVector();
+        Pos2d dest= retval.getToPoint()-0.1*retval.GetVector();
         retval= Segment2d(org,dest);
       }
     return retval;
@@ -820,7 +820,7 @@ Segment2d XC::FiberSectionBase::getEffectiveDepthSegment(void) const
   {
     Segment2d retval;
     const Segment2d bm= getLeverArmSegment();
-    const Ray2d sr(bm.Origen(),bm.Destino());
+    const Ray2d sr(bm.getFromPoint(),bm.getToPoint());
     const Polygon2d contour= getRegionsContour();
     retval= contour.Clip(sr);
     return retval;

@@ -206,7 +206,7 @@ def lstEquPnts_from_polyline(pol,nDiv):
     nmbCP=nDiv-1            #number of intermediate control points
     cumLength=0             #cumulate length in the polyline
     nmbSegm=1               #starting number of segment
-    retval=[pol.getSegment(1).getOrigen()]
+    retval=[pol.getSegment(1).getFromPoint()]
     for i in range(1,nmbCP+1):    #intermediate points
         lengthCP=i*eqDistCP-cumLength
         for j in range (nmbSegm,nTotSegm+1):
@@ -219,7 +219,20 @@ def lstEquPnts_from_polyline(pol,nDiv):
                 nmbSegm+=1
                 cumLength+=LSegm
                 lengthCP-=LSegm
-    retval.append(pol.getSegment(nTotSegm).getDestino())
+    retval.append(pol.getSegment(nTotSegm).getToPoint())
     return retval
     
   
+def lines_on_path(preprocessor, path, elementLength):
+    '''Return a list of lines between the points on the path
+    
+    :param path: point sequence
+    :param elementLength: length of the element for the lines
+    '''
+    retval= []
+    lines= preprocessor.getMultiBlockTopology.getLines
+    for points in zip(path, path[1:]):
+        newLine= lines.newLine(points[0].tag,points[1].tag)
+        newLine.setElemSize(elementLength)
+        retval.append(newLine)
+    return retval

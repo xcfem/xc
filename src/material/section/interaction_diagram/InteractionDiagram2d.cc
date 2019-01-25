@@ -69,8 +69,8 @@ Pos2d XC::InteractionDiagram2d::get_intersection(const Pos2d &p) const
     //Search for the trihedron that contains p.
     Ray2d Op(O,p);
     const Segment2d sg= Clip(Op);
-    const Pos2d p1= sg.Origen();
-    const Pos2d p2= sg.Destino();
+    const Pos2d p1= sg.getFromPoint();
+    const Pos2d p2= sg.getToPoint();
     if(p1!=O)
       return p1;
     else

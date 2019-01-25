@@ -146,8 +146,8 @@ def data_xcsegment_to_pyplot(XCsegment):
     '''Return the lists [x1,x2] and [y1,y2] with the coordinates 
     of the start and end points of the XCsegment passed as parameter.
     '''
-    stPt=XCsegment.getOrigen()
-    endPt=XCsegment.getDestino()
+    stPt=XCsegment.getFromPoint()
+    endPt=XCsegment.getToPoint()
     return ([stPt[0],endPt[0]],[stPt[1],endPt[1]])
 
 def data_axis_to_pyplot(axis,contour):

@@ -88,19 +88,19 @@ ec3beam.setControlPoints()
 
 #calculated control points
 e1S=ec3beam.contrPnt[0][0].getLineSegment(0)
-v1CP=e1S.getOrigen()+(e1S.getDestino()-e1S.getOrigen())*ec3beam.contrPnt[0][1]
+v1CP=e1S.getFromPoint()+(e1S.getToPoint()-e1S.getFromPoint())*ec3beam.contrPnt[0][1]
 
 e2S=ec3beam.contrPnt[1][0].getLineSegment(0)
-v2CP=e2S.getOrigen()+(e2S.getDestino()-e2S.getOrigen())*ec3beam.contrPnt[1][1]
+v2CP=e2S.getFromPoint()+(e2S.getToPoint()-e2S.getFromPoint())*ec3beam.contrPnt[1][1]
 
 e3S=ec3beam.contrPnt[2][0].getLineSegment(0)
-v3CP=e3S.getOrigen()+(e3S.getDestino()-e3S.getOrigen())*ec3beam.contrPnt[2][1]
+v3CP=e3S.getFromPoint()+(e3S.getToPoint()-e3S.getFromPoint())*ec3beam.contrPnt[2][1]
 
 e4S=ec3beam.contrPnt[3][0].getLineSegment(0)
-v4CP=e4S.getOrigen()+(e4S.getDestino()-e4S.getOrigen())*ec3beam.contrPnt[3][1]
+v4CP=e4S.getFromPoint()+(e4S.getToPoint()-e4S.getFromPoint())*ec3beam.contrPnt[3][1]
 
 e5S=ec3beam.contrPnt[4][0].getLineSegment(0)
-v5CP=e5S.getOrigen()+(e5S.getDestino()-e5S.getOrigen())*ec3beam.contrPnt[4][1]
+v5CP=e5S.getFromPoint()+(e5S.getToPoint()-e5S.getFromPoint())*ec3beam.contrPnt[4][1]
 
 #Target control points 
 p1=geom.Pos3d(0,0,0)

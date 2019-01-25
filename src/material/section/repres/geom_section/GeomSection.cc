@@ -387,7 +387,7 @@ double XC::GeomSection::getCompressedStrutWidth(const Segment2d &lever_arm) cons
     Segment2d ancho= contour.Clip(perp);
     Pos2d p= intersection_point(ancho,lever_arm);
     assert(p.exists());
-    double b2= std::min(dist2(p,ancho.Origen()),dist2(p,ancho.Destino()));
+    double b2= std::min(dist2(p,ancho.getFromPoint()),dist2(p,ancho.getToPoint()));
     double bmin2= b2;
     bool intersecaBrazo= false;
     for(register size_t i=1;i<=num_vertices;i++)
@@ -400,7 +400,7 @@ double XC::GeomSection::getCompressedStrutWidth(const Segment2d &lever_arm) cons
             p= intersection_point(ancho,lever_arm);
             if(p.exists())
               {
-                b2= std::min(dist2(p,ancho.Origen()),dist2(p,ancho.Destino()));
+                b2= std::min(dist2(p,ancho.getFromPoint()),dist2(p,ancho.getToPoint()));
                 if(b2<bmin2)
                   bmin2= b2;
               }
