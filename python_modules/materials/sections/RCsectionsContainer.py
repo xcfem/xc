@@ -17,73 +17,73 @@ from miscUtils import LogMessages as lmsg
 
 class SectionContainer(object):
 
-      def __init__(self):
-          ''' Container for the reinforced concrete definitions (name, concrete
-          type, rebar positions,...).
+    def __init__(self):
+        ''' Container for the reinforced concrete definitions (name, concrete
+        type, rebar positions,...).
 
-          :ivar   mapInteractionDiagrams:  file containing a dictionary such that
-                                           associates each element with the two 
-                                           interactions diagrams of materials 
-                                           to be used in the verification
-          '''
-          self.sections= [] # List with the section definitions.
-          self.mapSections= {} # Dictionary with pairs (sectionName, reference to
-                               # section definition.
-          self.mapInteractionDiagrams= None
+        :ivar   mapInteractionDiagrams:  file containing a dictionary such that
+                                         associates each element with the two 
+                                         interactions diagrams of materials 
+                                         to be used in the verification
+        '''
+        self.sections= [] # List with the section definitions.
+        self.mapSections= {} # Dictionary with pairs (sectionName, reference to
+                             # section definition.
+        self.mapInteractionDiagrams= None
 
-      def append(self, RCSections):
-          self.sections.append(RCSections)
-          for i in range(len(RCSections.lstRCSects)):
-            self.mapSections[RCSections.lstRCSects[i].sectionName]= RCSections.lstRCSects[i]
-          return
+    def append(self, RCSections):
+        self.sections.append(RCSections)
+        for i in range(len(RCSections.lstRCSects)):
+          self.mapSections[RCSections.lstRCSects[i].sectionName]= RCSections.lstRCSects[i]
+        return
 
-      def search(self,nmb):
-          ''' Return section named nmb (if founded) '''
-          retval= None
-          for s in self.sections:
-            if(s.name==nmb):
-              retval= s
-          return retval
+    def search(self,nmb):
+        ''' Return section named nmb (if founded) '''
+        retval= None
+        for s in self.sections:
+          if(s.name==nmb):
+            retval= s
+        return retval
 
-      def createRCsections(self,preprocessor,matDiagType):
-          '''Creates for each element in the container the fiber sections 
-          (RCsimpleSections) associated with it.
-          Depending on the value of attribute 'initTensStiff' of the concrete 
-          class, the method generates the concrete fibers using a constitutive 
-          model without tension branch (diagram ot type concrete01) or 
-          uses a concrete02 model, that initializes the material in order to
-          check the cracking limit state (tension stiffening models).
+    def createRCsections(self,preprocessor,matDiagType):
+        '''Creates for each element in the container the fiber sections 
+        (RCsimpleSections) associated with it.
+        Depending on the value of attribute 'initTensStiff' of the concrete 
+        class, the method generates the concrete fibers using a constitutive 
+        model without tension branch (diagram ot type concrete01) or 
+        uses a concrete02 model, that initializes the material in order to
+        check the cracking limit state (tension stiffening models).
 
-          :param matDiagType: type of stress-strain diagram 
-                      (="k" for characteristic diagram, 
-                       ="d" for design diagram)
-          '''
-          for s in self.sections:
-            for i in range(len(s.lstRCSects)):
-              s.lstRCSects[i].defRCSimpleSection(preprocessor,matDiagType)
+        :param matDiagType: type of stress-strain diagram 
+                    (="k" for characteristic diagram, 
+                     ="d" for design diagram)
+        '''
+        for s in self.sections:
+          for i in range(len(s.lstRCSects)):
+            s.lstRCSects[i].defRCSimpleSection(preprocessor,matDiagType)
 
 
-      def calcInteractionDiagrams(self,preprocessor,matDiagType, diagramType= 'NMyMz'):
-          '''Calculates 3D interaction diagrams for each section.
+    def calcInteractionDiagrams(self,preprocessor,matDiagType, diagramType= 'NMyMz'):
+        '''Calculates 3D interaction diagrams for each section.
 
-          :param preprocessor:    FEA problem preprocessor
-          :param matDiagType:     'k' for characteristic, 'd' for design
-          :param diagramType:    three dimensional diagram: NMyMz
-                                 bi-dimensional diagram: NMy
-                                 bi-dimensional diagram: NMz
-          '''
-          self.mapInteractionDiagrams= {}
-          for s in self.sections:
-            for i in range(len(s.lstRCSects)):
-      #        s.lstRCSects[i].defRCSimpleSection(preprocessor,matDiagType)
-              diag= None
-              if(diagramType=='NMyMz'):
-                diag= s.lstRCSects[i].defInteractionDiagram(preprocessor)
-              elif(diagramType=='NMy'):
-                diag= s.lstRCSects[i].defInteractionDiagramNMy(preprocessor,matDiagType)
-              elif(diagramType=='NMz'):
-                diag= s.lstRCSects[i].defInteractionDiagramNMz(preprocessor,matDiagType)
-              else:
-                lmsg.error("calcInteractionDiagrams; interaction diagram type: " + diagramType + "' unknown.")
-              self.mapInteractionDiagrams[s.lstRCSects[i].sectionName]= diag
+        :param preprocessor:    FEA problem preprocessor
+        :param matDiagType:     'k' for characteristic, 'd' for design
+        :param diagramType:    three dimensional diagram: NMyMz
+                               bi-dimensional diagram: NMy
+                               bi-dimensional diagram: NMz
+        '''
+        self.mapInteractionDiagrams= {}
+        for s in self.sections:
+          for i in range(len(s.lstRCSects)):
+    #        s.lstRCSects[i].defRCSimpleSection(preprocessor,matDiagType)
+            diag= None
+            if(diagramType=='NMyMz'):
+              diag= s.lstRCSects[i].defInteractionDiagram(preprocessor)
+            elif(diagramType=='NMy'):
+              diag= s.lstRCSects[i].defInteractionDiagramNMy(preprocessor,matDiagType)
+            elif(diagramType=='NMz'):
+              diag= s.lstRCSects[i].defInteractionDiagramNMz(preprocessor,matDiagType)
+            else:
+              lmsg.error("calcInteractionDiagrams; interaction diagram type: " + diagramType + "' unknown.")
+            self.mapInteractionDiagrams[s.lstRCSects[i].sectionName]= diag
 
