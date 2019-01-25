@@ -58,7 +58,6 @@ class CmbEdge: public Edge
       {
         Edge *edge; //!< Pointer to line.
         bool forward; //!< true: forward (P1->P2), false: reversed (P2->P1)
-      protected:
     
       public:
         Side(Edge *ptr= nullptr,const bool &s=true);
