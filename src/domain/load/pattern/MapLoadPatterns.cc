@@ -133,7 +133,8 @@ const XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const std::string &
     return retval;
   }
 
-//! @brief Returns a pointer to the caso cuyo tag being passed as parameter.
+//! @brief Returns a pointer to the load pattern identified by the
+//! tag being passed as parameter.
 XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const int &tag)
   {
     LoadPattern *retval= nullptr;

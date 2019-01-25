@@ -55,16 +55,16 @@ const float &XC::LoadCombination::summand::Factor(void) const
   { return factor; }
 
 //! @brief Returns the LoadPattern corresponding to the summand.
-const XC::LoadPattern *XC::LoadCombination::summand::Caso(void) const
+const XC::LoadPattern *XC::LoadCombination::summand::getLoadPattern(void) const
   { return lpattern; }
 
 //! @brief Returns the LoadPattern corresponding to the summand.
-XC::LoadPattern *XC::LoadCombination::summand::Caso(void)
+XC::LoadPattern *XC::LoadCombination::summand::getLoadPattern(void)
   { return lpattern; }
 
 //! @brief Returns the name of the load case corresponding to the summand.
-const std::string &XC::LoadCombination::summand::getNombreCaso(const MapLoadPatterns &casos) const
-  { return casos.getLoadPatternName(lpattern); }
+const std::string &XC::LoadCombination::summand::getLoadPatternName(const MapLoadPatterns &lPatterns) const
+  { return lPatterns.getLoadPatternName(lpattern); }
 
 //! @brief Changes the sign of the summand.
 void XC::LoadCombination::summand::neg(void)
@@ -115,16 +115,16 @@ const XC::LoadCombination::summand &XC::LoadCombination::summand::divide(const f
   }
 
 //! @brief Returns a string representation of the combination i.e. "1.35*G1".
-//! @arg \c casos: Load pattern container.
+//! @arg \c lPatterns: Load pattern container.
 //! @arg \c fmt: Format for the factor.
-std::string XC::LoadCombination::summand::getString(const MapLoadPatterns &casos,const std::string &fmt) const
+std::string XC::LoadCombination::summand::getString(const MapLoadPatterns &lPatterns,const std::string &fmt) const
   {
     std::string retval= "";
     if(fmt.empty())
       retval= boost::lexical_cast<std::string>(factor);
     else
       retval= format(fmt,factor);
-    retval+= '*' + getNombreCaso(casos);
+    retval+= '*' + getLoadPatternName(lPatterns);
     return retval;
   }
 
@@ -153,7 +153,7 @@ void XC::LoadCombination::LoadCombination::set_gamma_f(void)
   {
     for(iterator i= begin();i!=end();i++)
       {
-        LoadPattern *lp= i->Caso();
+        LoadPattern *lp= i->getLoadPattern();
         if(lp)
           lp->GammaF()= i->Factor();
         else
@@ -169,7 +169,7 @@ void XC::LoadCombination::set_domain(void)
     assert(dom);
     for(iterator i= begin();i!=end();i++)
       {
-        LoadPattern *lp= i->Caso();
+        LoadPattern *lp= i->getLoadPattern();
         if(lp)
           lp->setDomain(dom);
         else
@@ -187,15 +187,15 @@ bool XC::LoadCombination::addToDomain(void)
     set_gamma_f();
     for(iterator i= begin();i!=end();i++)
       {
-        LoadPattern *lp= i->Caso();
+        LoadPattern *lp= i->getLoadPattern();
         if(lp)
           {
             bool result= dom->addLoadPattern(lp);
             if((!result) && (verbosity>3))
               {
-                const MapLoadPatterns &casos= handler->getLoadPatterns();
+                const MapLoadPatterns &lPatterns= handler->getLoadPatterns();
 	        std::cerr << "Can't add load case: '"
-                          << i->getNombreCaso(casos)
+                          << i->getLoadPatternName(lPatterns)
                           << "' when activating combination: '"
                           << getName() << "'\n";
               }
@@ -215,7 +215,7 @@ void XC::LoadCombination::removeFromDomain(void)
     assert(dom);
     for(iterator i= begin();i!=end();i++)
       {
-        LoadPattern *lp= i->Caso();
+        LoadPattern *lp= i->getLoadPattern();
         if(lp)
           dom->removeLoadPattern(lp);
         else
@@ -227,10 +227,10 @@ void XC::LoadCombination::removeFromDomain(void)
 //! @brief Adds a component to the combination.
 void XC::LoadCombination::add_component(const summand &sum)
   {
-    const LoadPattern *lp= sum.Caso();
+    const LoadPattern *lp= sum.getLoadPattern();
     if((sum.Factor()!= 0.0) && lp)
       {
-        iterator j= buscaCaso(lp);
+        iterator j= findLoadPattern(lp);
         if(j!=end())
           (*j).add(sum);
         else
@@ -274,11 +274,11 @@ void XC::LoadCombination::interpreta_descomp(const std::string &str_descomp)
 
 
 //! @brief Returns a const iterator pointing to the load pattern being passed as parameter.
-XC::LoadCombination::const_iterator XC::LoadCombination::buscaCaso(const LoadPattern *lp) const
+XC::LoadCombination::const_iterator XC::LoadCombination::findLoadPattern(const LoadPattern *lp) const
   {
     const_iterator retval= end();
     for(const_iterator i= begin();i!=end();i++)
-      if(i->Caso()==lp)
+      if(i->getLoadPattern()==lp)
         {
           retval= i;
           break;;
@@ -287,11 +287,11 @@ XC::LoadCombination::const_iterator XC::LoadCombination::buscaCaso(const LoadPat
   }
 
 //! @brief Returns an iterator pointing to the load pattern being passed as parameter.
-XC::LoadCombination::iterator XC::LoadCombination::buscaCaso(const LoadPattern *lp)
+XC::LoadCombination::iterator XC::LoadCombination::findLoadPattern(const LoadPattern *lp)
   {
     iterator retval= end();
     for(iterator i= begin();i!=end();i++)
-      if(i->Caso()==lp)
+      if(i->getLoadPattern()==lp)
         {
           retval= i;
           break;;
@@ -576,10 +576,10 @@ XC::LoadCombination XC::LoadCombination::operator/(const float &fact) const
 
 //! @brief Returns the weighting factor for the load case
 //! being passed as parameter.
-float XC::LoadCombination::getCoefCaso(const LoadPattern *lp) const
+float XC::LoadCombination::getLoadPatternFactor(const LoadPattern *lp) const
   {
     float retval= 0.0;
-    const_iterator i= buscaCaso(lp);
+    const_iterator i= findLoadPattern(lp);
     if(i!=end())
       retval= (*i).Factor();
     return retval;
@@ -590,9 +590,9 @@ bool XC::LoadCombination::operator!=(const LoadCombination &otra) const
     bool retval= false;
     for(const_iterator i= begin();i!=end();i++)
       {
-        const LoadPattern *caso= (*i).Caso();
+        const LoadPattern *lPattern= (*i).getLoadPattern();
         const float f1= (*i).Factor();
-        const float f2= otra.getCoefCaso(caso);
+        const float f2= otra.getLoadPatternFactor(lPattern);
         if(f1!=f2)
           {
             retval= true;
@@ -607,9 +607,9 @@ bool XC::LoadCombination::operator==(const LoadCombination &otra) const
     bool retval= true;
     for(const_iterator i= begin();i!=end();i++)
       {
-        const LoadPattern *caso= (*i).Caso();
+        const LoadPattern *lPattern= (*i).getLoadPattern();
         const float f1= (*i).Factor();
-        const float f2= otra.getCoefCaso(caso);
+        const float f2= otra.getLoadPatternFactor(lPattern);
         if(f1!=f2)
           {
             retval= false;
@@ -633,9 +633,9 @@ bool XC::LoadCombination::dominaA(const LoadCombination &otra) const
       {
         for(const_iterator i= begin();i!=end();i++)
           {
-            const LoadPattern *caso= (*i).Caso();
+            const LoadPattern *lPattern= (*i).getLoadPattern();
             const float f1= (*i).Factor();
-            const float f2= otra.getCoefCaso(caso);
+            const float f2= otra.getLoadPatternFactor(lPattern);
             if(f1<f2)
               {
                 retval= false;
@@ -644,8 +644,8 @@ bool XC::LoadCombination::dominaA(const LoadCombination &otra) const
           }
         for(const_iterator i= otra.begin();i!=otra.end();i++)
           {
-            const LoadPattern *caso= (*i).Caso();
-            const float f1= getCoefCaso(caso);
+            const LoadPattern *lPattern= (*i).getLoadPattern();
+            const float f1= getLoadPatternFactor(lPattern);
             const float f2= (*i).Factor();
             if(f1<f2)
               {
@@ -663,14 +663,14 @@ bool XC::LoadCombination::dominaA(const LoadCombination &otra) const
 std::string XC::LoadCombination::getString(const std::string &fmt) const
   {
     std::string retval= "";
-    const MapLoadPatterns &casos= handler->getLoadPatterns();
+    const MapLoadPatterns &lPatterns= handler->getLoadPatterns();
     if(!empty())
       {
         const_iterator i= begin();
-        retval= (*i).getString(casos,fmt);
+        retval= (*i).getString(lPatterns,fmt);
         i++;
         for(;i!=end();i++)
-          retval+= '+' + (*i).getString(casos,fmt);
+          retval+= '+' + (*i).getString(lPatterns,fmt);
       }
     return retval;
   }

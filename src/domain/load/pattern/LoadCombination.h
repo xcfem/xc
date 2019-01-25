@@ -53,9 +53,9 @@ class LoadCombination: public ForceReprComponent
         summand(const float &f= 1.0,LoadPattern *lp= nullptr);
         //! @brief Returns the factor that multiplies the load pattern.
         const float &Factor(void) const;
-        const LoadPattern *Caso(void) const;
-        LoadPattern *Caso(void);
-	const std::string &getNombreCaso(const MapLoadPatterns &lps) const;
+        const LoadPattern *getLoadPattern(void) const;
+        LoadPattern *getLoadPattern(void);
+	const std::string &getLoadPatternName(const MapLoadPatterns &lps) const;
 
         summand getNeg(void) const;
         const summand &add(const summand &);
@@ -85,8 +85,8 @@ class LoadCombination: public ForceReprComponent
     void interpreta_descomp(const std::string &str);
     void limpia_ceros(void);
     void clear(void);
-    const_iterator buscaCaso(const LoadPattern *) const;
-    iterator buscaCaso(const LoadPattern *);
+    const_iterator findLoadPattern(const LoadPattern *) const;
+    iterator findLoadPattern(const LoadPattern *);
 
     iterator begin(void)
       { return descomp.begin(); }
@@ -134,7 +134,7 @@ class LoadCombination: public ForceReprComponent
     bool empty(void) const
       { return descomp.empty(); }
 
-    float getCoefCaso(const LoadPattern *) const;
+    float getLoadPatternFactor(const LoadPattern *) const;
 
     LoadCombination &multiplica(const float &);
     LoadCombination &divide(const float &);

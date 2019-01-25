@@ -140,20 +140,20 @@ const XC::ShellUniformLoad *XC::Shell4NBase::vector3dUniformLoadLocal(const Vect
     Preprocessor *preprocessor= getPreprocessor();
     if(preprocessor)
       {
-        MapLoadPatterns &casos= preprocessor->getLoadHandler().getLoadPatterns();
+        MapLoadPatterns &lPatterns= preprocessor->getLoadHandler().getLoadPatterns();
         static ID eTags(1);
         eTags[0]= getTag(); //Load for this element.
-        const int &loadTag= casos.getCurrentElementLoadTag(); //Load identifier.
+        const int &loadTag= lPatterns.getCurrentElementLoadTag(); //Load identifier.
 
         const size_t sz= v.Size();
         if(sz>2)
           {
-            LoadPattern *lp= casos.getCurrentLoadPatternPtr();
+            LoadPattern *lp= lPatterns.getCurrentLoadPatternPtr();
             if(lp)
               {
                 retval= new ShellUniformLoad(loadTag,v,eTags);
                 lp->addElementalLoad(retval);
-                casos.setCurrentElementLoadTag(loadTag+1);
+                lPatterns.setCurrentElementLoadTag(loadTag+1);
               }
             else
 	      std::cerr << getClassName() << "::" << __FUNCTION__
@@ -193,11 +193,11 @@ void XC::Shell4NBase::strainLoad(const Matrix &strains)
     Preprocessor *preprocessor= getPreprocessor();
     if(preprocessor)
       {
-        MapLoadPatterns &casos= preprocessor->getLoadHandler().getLoadPatterns();
+        MapLoadPatterns &lPatterns= preprocessor->getLoadHandler().getLoadPatterns();
         static ID eTags(1);
         eTags[0]= getTag(); //Load for this element.
-        const int &loadTag= casos.getCurrentElementLoadTag(); //Load identifier.
-        LoadPattern *lp= casos.getCurrentLoadPatternPtr();
+        const int &loadTag= lPatterns.getCurrentElementLoadTag(); //Load identifier.
+        LoadPattern *lp= lPatterns.getCurrentLoadPatternPtr();
         if(lp)
           {
             ShellStrainLoad *tmp= new ShellStrainLoad(loadTag,eTags);

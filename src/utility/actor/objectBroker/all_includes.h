@@ -279,7 +279,7 @@
 #include "domain/constraints/MRMFreedom_ConstraintIter.h"
 #include "domain/constraints/GlueNodeToElement.h"
 
-#include "domain/constraints/MapCasosActivos.h"
+#include "domain/constraints/MapActiveLoadPatterns.h"
 #include "domain/constraints/ConstrContainer.h"
 
 // nodal load header files

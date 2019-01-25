@@ -133,11 +133,11 @@ XC::ConstrContainer::ConstrContainer(Domain *owr)
 void XC::ConstrContainer::clearAll(void)
   {
     // clear the loads and constraints from any load pattern
-    for(MapCasosActivos<LoadPattern>::iterator i= activeLoadPatterns.begin();
+    for(MapActiveLoadPatterns<LoadPattern>::iterator i= activeLoadPatterns.begin();
         i!= activeLoadPatterns.end();i++)
       (*i).second->clearAll();
 
-    for(MapCasosActivos<NodeLocker>::iterator i= activeNodeLockers.begin();
+    for(MapActiveLoadPatterns<NodeLocker>::iterator i= activeNodeLockers.begin();
         i!= activeNodeLockers.end();i++)
       (*i).second->clearAll();
 
@@ -222,7 +222,7 @@ bool XC::ConstrContainer::addLoadPattern(LoadPattern *load)
     bool retval= true;
     // first check if a load pattern with a similar tag exists in model
     const int tag= load->getTag();
-    MapCasosActivos<LoadPattern>::const_iterator i= activeLoadPatterns.find(tag);
+    MapActiveLoadPatterns<LoadPattern>::const_iterator i= activeLoadPatterns.find(tag);
     if(i!=activeLoadPatterns.end())
       {
         if(verbosity>3)
@@ -243,7 +243,7 @@ bool XC::ConstrContainer::addNodeLocker(NodeLocker *nl)
     bool retval= true;
     // first check if a locker with a similar tag exists in model
     const int tag= nl->getTag();
-    MapCasosActivos<NodeLocker>::const_iterator i= activeNodeLockers.find(tag);
+    MapActiveLoadPatterns<NodeLocker>::const_iterator i= activeNodeLockers.find(tag);
     if(i!=activeNodeLockers.end())
       {
         std::clog << getClassName() << "::" << __FUNCTION__
@@ -263,9 +263,9 @@ bool XC::ConstrContainer::addSFreedom_Constraint(SFreedom_Constraint *spConstrai
   {
     bool retval= false;
     // now add it to the pattern
-    LoadPattern *caso= getLoadPattern(loadPatternTag);
-    if(caso)
-      retval= caso->addSFreedom_Constraint(spConstraint);
+    LoadPattern *lPattern= getLoadPattern(loadPatternTag);
+    if(lPattern)
+      retval= lPattern->addSFreedom_Constraint(spConstraint);
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< " - cannot add as pattern with tag "
@@ -291,9 +291,9 @@ bool XC::ConstrContainer::addNodalLoad(NodalLoad *load, int loadPatternTag)
     else
       {
         // now add it to the pattern
-        LoadPattern *caso= getLoadPattern(loadPatternTag);
-        if(caso)
-          retval= caso->addNodalLoad(load);
+        LoadPattern *lPattern= getLoadPattern(loadPatternTag);
+        if(lPattern)
+          retval= lPattern->addNodalLoad(load);
         else
           {
             std::cerr << getClassName() << "::" << __FUNCTION__
@@ -312,9 +312,9 @@ bool XC::ConstrContainer::addElementalLoad(ElementalLoad *load, int loadPatternT
   {
     bool retval= false;
     // now add it to the pattern
-    LoadPattern *caso= getLoadPattern(loadPatternTag);
-    if(caso)
-      retval= caso->addElementalLoad(load);
+    LoadPattern *lPattern= getLoadPattern(loadPatternTag);
+    if(lPattern)
+      retval= lPattern->addElementalLoad(load);
     else
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -411,7 +411,7 @@ bool XC::ConstrContainer::removeMRMFreedom_Constraint(int tag)
 //! @param numSPs: number of single freedom constrains on the load pattern.
 bool XC::ConstrContainer::removeLoadPattern(int tag,int &numSPs)
   { 
-    MapCasosActivos<LoadPattern>::iterator i= activeLoadPatterns.find(tag);
+    MapActiveLoadPatterns<LoadPattern>::iterator i= activeLoadPatterns.find(tag);
 
     bool retval= false;
     numSPs= 0;
@@ -439,7 +439,7 @@ bool XC::ConstrContainer::removeLoadPattern(int tag,int &numSPs)
 bool XC::ConstrContainer::removeNodeLocker(int tag,int &numSPs)
   {
     // remove the object from the container
-    MapCasosActivos<NodeLocker>::iterator i= activeNodeLockers.find(tag);
+    MapActiveLoadPatterns<NodeLocker>::iterator i= activeNodeLockers.find(tag);
 
     bool retval= false;
     numSPs= 0;
@@ -628,7 +628,7 @@ XC::MRMFreedom_Constraint *XC::ConstrContainer::getMRMFreedom_Constraint(int tag
 XC::LoadPattern *XC::ConstrContainer::getLoadPattern(const int &tag)
   {
     LoadPattern *retval= nullptr;
-    MapCasosActivos<LoadPattern>::iterator i= activeLoadPatterns.find(tag);
+    MapActiveLoadPatterns<LoadPattern>::iterator i= activeLoadPatterns.find(tag);
     if(i==activeLoadPatterns.end())
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << " - load pattern with tag: " << tag << " not found\n";
@@ -644,7 +644,7 @@ XC::LoadPattern *XC::ConstrContainer::getLoadPattern(const int &tag)
 const XC::LoadPattern *XC::ConstrContainer::getLoadPattern(const int &tag) const
   {
     const LoadPattern *retval= nullptr;
-    MapCasosActivos<LoadPattern>::const_iterator i= activeLoadPatterns.find(tag);
+    MapActiveLoadPatterns<LoadPattern>::const_iterator i= activeLoadPatterns.find(tag);
     if(i==activeLoadPatterns.end())
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << " - load pattern with tag: "
@@ -661,7 +661,7 @@ const XC::LoadPattern *XC::ConstrContainer::getLoadPattern(const int &tag) const
 XC::NodeLocker *XC::ConstrContainer::getNodeLocker(const int &tag)
   {
     NodeLocker *retval= nullptr;
-    MapCasosActivos<NodeLocker>::iterator i= activeNodeLockers.find(tag);
+    MapActiveLoadPatterns<NodeLocker>::iterator i= activeNodeLockers.find(tag);
     if(i==activeNodeLockers.end())
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << " - node locker with tag: "
@@ -678,7 +678,7 @@ XC::NodeLocker *XC::ConstrContainer::getNodeLocker(const int &tag)
 const XC::NodeLocker *XC::ConstrContainer::getNodeLocker(const int &tag) const
   {
     const NodeLocker *retval= nullptr;
-    MapCasosActivos<NodeLocker>::const_iterator i= activeNodeLockers.find(tag);
+    MapActiveLoadPatterns<NodeLocker>::const_iterator i= activeNodeLockers.find(tag);
     if(i==activeNodeLockers.end())
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << " - node locker with tag: "
@@ -712,14 +712,14 @@ int XC::ConstrContainer::getNumNodeLockers(void) const
 void XC::ConstrContainer::applyLoad(double timeStep)
   {
     // now loop over node lockers, invoking applyLoad on them
-    for(MapCasosActivos<NodeLocker>::iterator i= activeNodeLockers.begin();
+    for(MapActiveLoadPatterns<NodeLocker>::iterator i= activeNodeLockers.begin();
         i!= activeNodeLockers.end();i++)
       i->second->applyLoad();
 
 
 
     // now loop over load patterns, invoking applyLoad on them
-    for(MapCasosActivos<LoadPattern>::iterator i= activeLoadPatterns.begin();
+    for(MapActiveLoadPatterns<LoadPattern>::iterator i= activeLoadPatterns.begin();
         i!= activeLoadPatterns.end();i++)
       i->second->applyLoad(timeStep);
 
@@ -748,7 +748,7 @@ std::deque<int> XC::ConstrContainer::getTagsSPsNode(int nodeTag, int theDOF) con
   {
     ConstrContainer *this_no_const= const_cast<ConstrContainer *>(this);
     std::deque<int> retval= this_no_const->getSPs().searchAll(nodeTag,theDOF);
-    for(MapCasosActivos<LoadPattern>::const_iterator i= activeLoadPatterns.begin(); i!= activeLoadPatterns.end(); i++)
+    for(MapActiveLoadPatterns<LoadPattern>::const_iterator i= activeLoadPatterns.begin(); i!= activeLoadPatterns.end(); i++)
       {
 	const LoadPattern *lp= i->second;
 	const std::deque<int> lp_constr= lp->getTagsSPsNode(nodeTag,theDOF); 
@@ -802,7 +802,7 @@ std::deque<int> XC::ConstrContainer::getTagsMRMPsNode(int nodeTag) const
 std::deque<int> XC::ConstrContainer::getTagsLPs(void) const
   {
     std::deque<int> retval;   
-    for(MapCasosActivos<LoadPattern>::const_iterator i= activeLoadPatterns.begin();
+    for(MapActiveLoadPatterns<LoadPattern>::const_iterator i= activeLoadPatterns.begin();
         i!= activeLoadPatterns.end();i++)
       retval.push_back(i->second->getTag());
     return retval;
@@ -822,10 +822,10 @@ std::string XC::ConstrContainer::getLoadPatternsNames(void) const
             if(preprocessor)
               {
                 const LoadHandler &loadHandler= preprocessor->getLoadHandler();
-                const MapLoadPatterns &casos= loadHandler.getLoadPatterns();
-                for(MapCasosActivos<LoadPattern>::const_iterator i= activeLoadPatterns.begin();
+                const MapLoadPatterns &lPatterns= loadHandler.getLoadPatterns();
+                for(MapActiveLoadPatterns<LoadPattern>::const_iterator i= activeLoadPatterns.begin();
                     i!= activeLoadPatterns.end();i++)
-                  retval+= casos.getLoadPatternName((*i).second) + " ";
+                  retval+= lPatterns.getLoadPatternName((*i).second) + " ";
               }
             else
 	      std::cerr << getClassName() << "::" << __FUNCTION__
@@ -844,7 +844,7 @@ std::deque<int> XC::ConstrContainer::getTagsNLs(void) const
     // loop over all the nodel lockers that are currently added to the domain
     // getting theit tag
     std::deque<int> retval;   
-    for(MapCasosActivos<NodeLocker>::const_iterator i= activeNodeLockers.begin();
+    for(MapActiveLoadPatterns<NodeLocker>::const_iterator i= activeNodeLockers.begin();
         i!= activeNodeLockers.end();i++)
       retval.push_back(i->second->getTag());
     return retval;
@@ -995,7 +995,7 @@ bool XC::ConstrContainer::isDOFAffectedByConstraints(int nodeTag, int theDOF) co
 //! @brief Set as constant all the active load patterns (used in pushover analysis).
 void XC::ConstrContainer::setLoadConstant(void)
   {
-    for(MapCasosActivos<LoadPattern>::const_iterator i= activeLoadPatterns.begin();i!= activeLoadPatterns.end();i++)
+    for(MapActiveLoadPatterns<LoadPattern>::const_iterator i= activeLoadPatterns.begin();i!= activeLoadPatterns.end();i++)
       i->second->setLoadConstant(); //set load as constant.
   }
 
@@ -1071,10 +1071,10 @@ int XC::ConstrContainer::recvLPatternsTags(const int &posFlag,const int &posDbTa
                       {
                         if(verbosity>3)
                           {
-                            const MapLoadPatterns &casos= loadHandler.getLoadPatterns();
+                            const MapLoadPatterns &lPatterns= loadHandler.getLoadPatterns();
 	                    std::cerr << getClassName() << "::" << __FUNCTION__
 			              << "; could not add load pattern: '"
-                                      << casos.getLoadPatternName(load)
+                                      << lPatterns.getLoadPatternName(load)
                                       << "' with tag: " << load->getTag() << std::endl;
                           }
                       }

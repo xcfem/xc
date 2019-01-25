@@ -71,10 +71,10 @@ void XC::Element1D::vector2dUniformLoadGlobal(const Vector &v)
 void XC::Element1D::vector2dUniformLoadLocal(const Vector &v)
   {
     Preprocessor *preprocessor= getPreprocessor();
-    MapLoadPatterns &casos= preprocessor->getLoadHandler().getLoadPatterns();
+    MapLoadPatterns &lPatterns= preprocessor->getLoadHandler().getLoadPatterns();
     static ID eTags(1);
     eTags[0]= getTag(); //Load for this element.
-    const int &loadTag= casos.getCurrentElementLoadTag(); //Load identifier.
+    const int &loadTag= lPatterns.getCurrentElementLoadTag(); //Load identifier.
 
     const size_t sz= v.Size();
     if(sz>1)
@@ -84,11 +84,11 @@ void XC::Element1D::vector2dUniformLoadLocal(const Vector &v)
 		    << "; WARNING a vector of dimension 2"
 	            << " was expected instead of: " << v << std::endl;
         Beam2dUniformLoad *tmp= new Beam2dUniformLoad(loadTag,v[1],v[0],eTags);
-        LoadPattern *lp= casos.getCurrentLoadPatternPtr();
+        LoadPattern *lp= lPatterns.getCurrentLoadPatternPtr();
         if(lp)
           {
             lp->addElementalLoad(tmp);
-            casos.setCurrentElementLoadTag(loadTag+1);
+            lPatterns.setCurrentElementLoadTag(loadTag+1);
           }
         else
 	  std::cerr << getClassName() << "::" << __FUNCTION__
@@ -122,21 +122,21 @@ void XC::Element1D::vector2dPointByRelDistLoadLocal(const double &x,const Vector
     if(sz>1)
       {
         Preprocessor *preprocessor= getPreprocessor();
-        MapLoadPatterns &casos= preprocessor->getLoadHandler().getLoadPatterns();
+        MapLoadPatterns &lPatterns= preprocessor->getLoadHandler().getLoadPatterns();
         static ID eTags(1);
         eTags[0]= getTag(); //Load for this element.
-        const int &loadTag= casos.getCurrentElementLoadTag(); //Load identifier.
+        const int &loadTag= lPatterns.getCurrentElementLoadTag(); //Load identifier.
 
 	if(sz>2)
 	  std::cerr << getClassName() << "::" << __FUNCTION__
                     << "; ERROR a vector of dimension 2"
 	            << " was expected instead of: " << v << std::endl;
         Beam2dPointLoad *tmp= new Beam2dPointLoad(loadTag,v[1],x,eTags,v[0]);
-        LoadPattern *lp= casos.getCurrentLoadPatternPtr();
+        LoadPattern *lp= lPatterns.getCurrentLoadPatternPtr();
         if(lp)
           {
             lp->addElementalLoad(tmp);
-            casos.setCurrentElementLoadTag(loadTag+1);
+            lPatterns.setCurrentElementLoadTag(loadTag+1);
           }
         else
 	  std::cerr << getClassName() << "::" << __FUNCTION__
@@ -194,17 +194,17 @@ void XC::Element1D::vector3dUniformLoadLocal(const Vector &v)
     if(sz>2)
       {
         Preprocessor *preprocessor= getPreprocessor();
-        MapLoadPatterns &casos= preprocessor->getLoadHandler().getLoadPatterns();
+        MapLoadPatterns &lPatterns= preprocessor->getLoadHandler().getLoadPatterns();
         static ID eTags(1);
         eTags[0]= getTag(); //Load for this element.
-        const int &loadTag= casos.getCurrentElementLoadTag(); //Load identifier.
+        const int &loadTag= lPatterns.getCurrentElementLoadTag(); //Load identifier.
 
-        LoadPattern *lp= casos.getCurrentLoadPatternPtr();
+        LoadPattern *lp= lPatterns.getCurrentLoadPatternPtr();
         if(lp)
           {
             Beam3dUniformLoad *tmp= new Beam3dUniformLoad(loadTag,v,0.0,eTags);
             lp->addElementalLoad(tmp);
-            casos.setCurrentElementLoadTag(loadTag+1);
+            lPatterns.setCurrentElementLoadTag(loadTag+1);
           }
         else
 	  std::cerr << getClassName() << "::" << __FUNCTION__
@@ -238,17 +238,17 @@ void XC::Element1D::vector3dPointByRelDistLoadLocal(const double &x,const Vector
     if(sz>2)
       {
         Preprocessor *preprocessor= getPreprocessor();
-        MapLoadPatterns &casos= preprocessor->getLoadHandler().getLoadPatterns();
+        MapLoadPatterns &lPatterns= preprocessor->getLoadHandler().getLoadPatterns();
         static ID eTags(1);
         eTags[0]= getTag(); //Load for this element.
-        const int &loadTag= casos.getCurrentElementLoadTag(); //Load identifier.
+        const int &loadTag= lPatterns.getCurrentElementLoadTag(); //Load identifier.
 
         Beam3dPointLoad *tmp= new Beam3dPointLoad(loadTag,v[1],v[2],x,eTags,v[0]);
-        LoadPattern *lp= casos.getCurrentLoadPatternPtr();
+        LoadPattern *lp= lPatterns.getCurrentLoadPatternPtr();
         if(lp)
           {
             lp->addElementalLoad(tmp);
-            casos.setCurrentElementLoadTag(loadTag+1);
+            lPatterns.setCurrentElementLoadTag(loadTag+1);
           }
         else
 	  std::cerr << getClassName() << "::" << __FUNCTION__
@@ -289,19 +289,19 @@ void XC::Element1D::vector3dPointLoadLocal(const Vector &p,const Vector &v)
 void XC::Element1D::strainLoad(const DeformationPlane &p1,const DeformationPlane &p2)
   {
     Preprocessor *preprocessor= getPreprocessor();
-    MapLoadPatterns &casos= preprocessor->getLoadHandler().getLoadPatterns();
+    MapLoadPatterns &lPatterns= preprocessor->getLoadHandler().getLoadPatterns();
     static ID eTags(1);
     eTags[0]= getTag(); //Load for this element.
-    const int &loadTag= casos.getCurrentElementLoadTag(); //Load identifier.
+    const int &loadTag= lPatterns.getCurrentElementLoadTag(); //Load identifier.
 
     BeamStrainLoad *tmp= new BeamStrainLoad(loadTag,eTags);
     tmp->setDeformationPlane1(p1);
     tmp->setDeformationPlane2(p2);
-    LoadPattern *lp= casos.getCurrentLoadPatternPtr();
+    LoadPattern *lp= lPatterns.getCurrentLoadPatternPtr();
     if(lp)
       {
         lp->addElementalLoad(tmp);
-        casos.setCurrentElementLoadTag(loadTag+1);
+        lPatterns.setCurrentElementLoadTag(loadTag+1);
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__

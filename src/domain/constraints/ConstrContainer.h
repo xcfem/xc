@@ -30,7 +30,7 @@
 #define ConstrContainer_h
 
 #include "domain/mesh/MeshComponentContainer.h"
-#include "MapCasosActivos.h"
+#include "MapActiveLoadPatterns.h"
 #include <deque>
 #include <set>
 
@@ -65,8 +65,8 @@ class ConstrContainer: public MeshComponentContainer
     TaggedObjectStorage *theSPs;//!< Single freedom constraints.
     TaggedObjectStorage *theMPs;//!< Multi-freedom constraints.
     TaggedObjectStorage *theMRMPs;//!< Multi-row multi-freedom constraints.
-    MapCasosActivos<NodeLocker> activeNodeLockers; //!< active node lockers.
-    MapCasosActivos<LoadPattern> activeLoadPatterns; //!< active load patterns.
+    MapActiveLoadPatterns<NodeLocker> activeNodeLockers; //!< active node lockers.
+    MapActiveLoadPatterns<LoadPattern> activeLoadPatterns; //!< active load patterns.
 
     SingleDomSFreedom_Iter *theSFreedom_Iter;
     SingleDomMFreedom_Iter *theMFreedom_Iter;

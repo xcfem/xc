@@ -24,11 +24,11 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//MapCasosActivos.h
+//MapActiveLoadPatterns.h
                                                                         
                                                                         
-#ifndef MapCasosActivos_h
-#define MapCasosActivos_h
+#ifndef MapActiveLoadPatterns_h
+#define MapActiveLoadPatterns_h
 
 #include "xc_utils/src/kernel/CommandEntity.h"
 #include <map>
@@ -36,7 +36,7 @@
 
 namespace XC {
 template<class T>
-class MapCasosActivos: public CommandEntity, public std::map<int,T *>
+class MapActiveLoadPatterns: public CommandEntity, public std::map<int,T *>
   {
   public:
     typedef std::map<int, T *> t_map;
@@ -45,18 +45,18 @@ class MapCasosActivos: public CommandEntity, public std::map<int,T *>
     typedef typename t_map::reference reference;
     typedef typename t_map::const_reference const_reference;
     typedef typename t_map::value_type value_type;
-    MapCasosActivos(CommandEntity *);
+    MapActiveLoadPatterns(CommandEntity *);
     void Print(std::ostream &s, int flag =0);
   };
 
 //! @brief Constructor
 template<class T>
-MapCasosActivos<T>::MapCasosActivos(CommandEntity *owr)
+MapActiveLoadPatterns<T>::MapActiveLoadPatterns(CommandEntity *owr)
 
   : CommandEntity(owr), t_map(*this) {}
 
 template<class T>
-void MapCasosActivos<T>::Print(std::ostream &s, int flag)
+void MapActiveLoadPatterns<T>::Print(std::ostream &s, int flag)
   {
     // go through the array invoking Print on non-zero entries
     const_iterator p = this->begin();

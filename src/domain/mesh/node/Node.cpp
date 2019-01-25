@@ -932,13 +932,13 @@ const XC::NodalLoad *XC::Node::newLoad(const Vector &v)
     Preprocessor *preprocessor= getPreprocessor();
     if(preprocessor)
       {
-        MapLoadPatterns &casos= preprocessor->getLoadHandler().getLoadPatterns();
+        MapLoadPatterns &lPatterns= preprocessor->getLoadHandler().getLoadPatterns();
         const int nodeTag= getTag(); //Load over this node.
 
         const size_t sz= v.Size();
         if(sz>0)
           {
-            LoadPattern *lp= casos.getCurrentLoadPatternPtr();
+            LoadPattern *lp= lPatterns.getCurrentLoadPatternPtr();
             if(lp)
               retval= lp->newNodalLoad(nodeTag,v);
             else
