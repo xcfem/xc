@@ -154,10 +154,11 @@ def multi_mesh(preprocessor,lstMeshSets):
     for ms in lstMeshSets:
         ms.generateMesh(preprocessor)
 
-def assign_ndiv_to_lines_in_set(ndiv,linSet):
+def assign_ndiv_to_lines_in_set(lnSet,ndiv):
     '''Assign a number of divisions = ndiv to all the lines included 
     in set linSet
     '''
-    for l in linSet:
+    lnSet.fillDownwards()
+    for l in lnSet.getLines:
         l.nDiv=ndiv
     return

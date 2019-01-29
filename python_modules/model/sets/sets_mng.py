@@ -183,22 +183,24 @@ def set_not_included_in_orthoPrism(preprocessor,setInit,prismBase,prismAxis,setN
     retval.name= setName
     return retval
 
-def get_subset_lin_paralell_to_axis(axis,fromSet,toSetName):
+def get_subset_lin_paralell_to_axis(axis,fromSet,toSetName,tol=0.001):
     '''return a subset of fromSet composed by lines parallel to
     one of the global axes.  If toSetName exists the subset is appended to it.
 
     :param axis: global axis (can be equal to 'X', 'Y', 'Z')
     :param fromSet: set from which to extract the subset
     :param toSetName: string to name the created subset
+    :param tol: tolerance in line tangent to capture lines (defaults to 0.001)
     '''
     lstLin=None
+    fromSet.fillDownwards()
     allLines=fromSet.getLines
     if axis in ['X','x']:
-        lstLin=[l for l in allLines if abs(abs(l.getTang(1)[0])-1)<0.001]
+        lstLin=[l for l in allLines if abs(abs(l.getTang(1)[0])-1)<tol]
     elif axis in ['Y','y']:
-        lstLin=[l for l in allLines if abs(abs(l.getTang(1)[1])-1)<0.001]
+        lstLin=[l for l in allLines if abs(abs(l.getTang(1)[1])-1)<tol]
     elif axis in ['Z','z']:
-        lstLin=[l for l in allLines if abs(abs(l.getTang(1)[2])-1)<0.001]
+        lstLin=[l for l in allLines if abs(abs(l.getTang(1)[2])-1)<tol]
     else:
         lmsg.error("Wrong axis. Available values: 'X', 'Y', 'Z' \n")
     if lstLin:
@@ -215,6 +217,7 @@ def get_subset_lin_shorter_than(Lmax,fromSet,toSetName):
     :param toSetName: string to name the subset
     '''
     lstLin=None
+    fromSet.fillDownwards()
     allLines=fromSet.getLines
     lstLin=[l for l in allLines if l.getLong()<=Lmax]
     if lstLin:
@@ -234,6 +237,7 @@ def get_subset_lin_longer_than(Lmin,fromSet,toSetName):
     :param toSetName: string to name the subset
     '''
     lstLin=None
+    fromSet.fillDownwards()
     allLines=fromSet.getLines
     lstLin=[l for l in allLines if l.getLong()>=Lmin]
     if lstLin:
@@ -322,6 +326,7 @@ def get_lstNod_on_points_fromSet(setFrom):
     '''return the list of nearest nodes to all the points included in  
     the set of entities 'setFrom'
     '''
+    setFrom.fillDownwards()
     pts=setFrom.getPoints
     return [p.getNode() for p in pts]
 
