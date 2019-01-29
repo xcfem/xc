@@ -11,6 +11,7 @@ __email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
 
 
 import math
+from miscUtils import LogMessages as lmsg
 
 class LoadModel(object):
   ''' Railway load model SIA 261. '''
@@ -104,7 +105,7 @@ class LoadModel(object):
     ''' centrifugal force reduction factor (11.3.2)'''
     retval= 1.0
     if(v>=(120/3.6)): # 120 km/h
-      print "centrifugalForceReductionFactor not implemented."
+      lmsg.warning('computing of centrifugal force reduction factor not implemented for speeds greather than 120 km/h (v= '+ str(v) + ' km/h).')
     return retval
 
   def centrifugalAcceleration(self,r,v):

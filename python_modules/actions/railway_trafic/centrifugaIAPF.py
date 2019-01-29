@@ -3,6 +3,12 @@ from __future__ import division
 
 # Functions to compute centrifugal forces according to IAPF.
 
+__author__= "Ana Ortega (AO_O) Luis C. Pérez Tato"
+__copyright__= "Copyright 2017, AO_O LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "ana.Ortega@ciccp.es l.pereztato@ciccp.es"
+
 
 def CoefReductorCentrifugaIAPF(v, Lf):
   '''Returns the reduction factor of the centrifugal force
