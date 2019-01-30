@@ -72,8 +72,9 @@ XC::MySqlDatastore::MySqlDatastore(const std::string &projectName, Preprocessor 
     // connect to the server
     if(mysql_real_connect(&mysql, nullptr, nullptr, nullptr, nullptr, 0, "/tmp/mysql.sock", 0) == nullptr)
       {
-        std::cerr << "MySqlDatastore::MySqlDatastore() - could not connect to server\n";
-        std::cerr << mysql_error(&mysql) << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; could not connect to server.\n"
+		  << mysql_error(&mysql) << std::endl;
         connection = false;
       }
     else
@@ -86,8 +87,9 @@ XC::MySqlDatastore::MySqlDatastore(const std::string &projectName, Preprocessor 
             {
               connection = false;
               mysql_close(&mysql);
-              std::cerr << "MySqlDatastore::MySqlDatastore() - could not open the database\n";
-              std::cerr << mysql_error(&mysql) << std::endl;
+              std::cerr << getClassName() << "::" << __FUNCTION__
+			<< "; could not open the database\n"
+			<< mysql_error(&mysql) << std::endl;
             }
          }
       }
@@ -110,8 +112,9 @@ XC::MySqlDatastore::MySqlDatastore(const std::string &databaseName, const std::s
          // connect to the server & see if can link to database, or create a new one if one does not exist
         if(mysql_real_connect(&mysql, host.c_str(), user.c_str(), passwd.c_str(), nullptr, port, socket.c_str(), clientFlag) == nullptr)
           {
-            std::cerr << "MySqlDatastore::MySqlDatastore() - could not connect to server\n";
-            std::cerr << mysql_error(&mysql) << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; could not connect to server\n"
+		      << mysql_error(&mysql) << std::endl;
             connection = false;
 
           }
@@ -125,8 +128,9 @@ XC::MySqlDatastore::MySqlDatastore(const std::string &databaseName, const std::s
                   {
                     connection = false;
                     mysql_close(&mysql);
-                    std::cerr << "MySqlDatastore::MySqlDatastore() - could not open the database\n";
-                    std::cerr << mysql_error(&mysql) << std::endl;
+                    std::cerr << getClassName() << "::" << __FUNCTION__
+			      << "; could not open the database\n"
+			      << mysql_error(&mysql) << std::endl;
                   }
               }
           }
@@ -143,13 +147,15 @@ XC::MySqlDatastore::~MySqlDatastore()
 
 int XC::MySqlDatastore::sendMsg(int dbTag, int commitTag,const XC::Message &,ChannelAddress *theAddress)
   {
-    std::cerr << "MySqlDatastore::sendMsg() - not yet implemented\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not yet implemented\n";
     return -1;
   }
 
 int XC::MySqlDatastore::recvMsg(int dbTag, int commitTag, Message &, ChannelAddress *theAddress)
   {
-    std::cerr << "MySqlDatastore::recvMsg() - not yet implemented\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not yet implemented\n";
     return -1;
   }
 
@@ -158,7 +164,8 @@ int XC::MySqlDatastore::recvMsg(int dbTag, int commitTag, Message &, ChannelAddr
 int XC::MySqlDatastore::sendMatrix(int dbTag, int commitTag, const XC::Matrix &theMatrix, ChannelAddress *theAddress)
   {
     if(!checkDbTag(dbTag))
-      std::cerr << "Error en MySqlDatastore::sendMatrix." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; error when cheking dbTag." << std::endl;
     // check that we have a connection
     if(connection == false)
       return -1;
@@ -167,7 +174,8 @@ int XC::MySqlDatastore::sendMatrix(int dbTag, int commitTag, const XC::Matrix &t
     const int sizeData = theMatrix.getDataSize() * sizeof(double);
     if(sizeData > MAX_BLOB_SIZE)
       {
-        std::cerr << "MySqlDatastore::sendMatrix - vector too big to send to MySQL databse, enlarge BLOBS!";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; vector too big to send to MySQL databse, enlarge BLOBS!";
         return  -2;
       }
 
@@ -202,8 +210,9 @@ int XC::MySqlDatastore::sendMatrix(int dbTag, int commitTag, const XC::Matrix &t
         // invoke the query on the database
         if(mysql_query(&mysql, query.c_str()) != 0)
           {
-            std::cerr << "MySqlDatastore::sendMatrix() - failed to send the XC::Matrix to MySQL database";
-            std::cerr << std::endl << mysql_error(&mysql) << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; failed to send the XC::Matrix to MySQL database"
+		      << std::endl << mysql_error(&mysql) << std::endl;
             return -3;
           }
       }
@@ -214,7 +223,8 @@ int XC::MySqlDatastore::sendMatrix(int dbTag, int commitTag, const XC::Matrix &t
 int XC::MySqlDatastore::recvMatrix(int dbTag, int commitTag, Matrix &theMatrix, ChannelAddress *theAddress)
   {
     if(!checkDbTag(dbTag))
-      std::cerr << "Error en MySqlDatastore::recvMatrix." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; error when checking dbTags." << std::endl;
 
     // check that we have a connection
     if(connection == false)
@@ -237,8 +247,9 @@ int XC::MySqlDatastore::recvMatrix(int dbTag, int commitTag, Matrix &theMatrix, 
     // execute the SELECT query
     if(mysql_query(&mysql, query.c_str()) != 0)
       {
-        std::cerr << "MySqlDatastore::recvMatrix() - failed to receive vector from MySQL database";
-        std::cerr << std::endl << mysql_error(&mysql) << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed to receive vector from MySQL database"
+		  << std::endl << mysql_error(&mysql) << std::endl;
         return -3;
       }
 
@@ -249,16 +260,18 @@ int XC::MySqlDatastore::recvMatrix(int dbTag, int commitTag, Matrix &theMatrix, 
     if(!results)
       {
         // no vector stored in db with these keys
-        std::cerr << "MySqlDatastore::recvMatrix - no data in database for XC::Matrix with dbTag, cTag: ";
-        std::cerr << dbTag << ", " << commitTag << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; no data in database for Matrix with dbTag, cTag: "
+		  << dbTag << ", " << commitTag << std::endl;
         return -4;
       }
     row = mysql_fetch_row(results);
     if(row == nullptr)
       {
         // no vector stored in db with these keys
-        std::cerr << "MySqlDatastore::recvMatrix - no data in database for XC::Matrix with dbTag, cTag: ";
-        std::cerr << dbTag << ", " << commitTag << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; no data in database for Matrix with dbTag, cTag: "
+		  << dbTag << ", " << commitTag << std::endl;
         mysql_free_result(results);
         return -5;
       }
@@ -279,7 +292,8 @@ int XC::MySqlDatastore::recvMatrix(int dbTag, int commitTag, Matrix &theMatrix, 
 int XC::MySqlDatastore::sendVector(int dbTag, int commitTag, const XC::Vector &theVector, ChannelAddress *theAddress)
   {
     if(!checkDbTag(dbTag))
-      std::cerr << "Error en MySqlDatastore::sendVector." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "error when checking dbTag." << std::endl;
     // check that we have a connection
     if(!connection)
       return -1;
@@ -288,7 +302,8 @@ int XC::MySqlDatastore::sendVector(int dbTag, int commitTag, const XC::Vector &t
     const int sizeData = theVector.Size() * sizeof(double);
     if(sizeData > MAX_BLOB_SIZE)
       {
-        std::cerr << "MySqlDatastore::sendVector - vector too big to send to MySQL databse, enlarge BLOBS!";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; vector too big to send to MySQL databse, enlarge BLOBS!";
         return  -2;
       }
 
@@ -324,8 +339,9 @@ int XC::MySqlDatastore::sendVector(int dbTag, int commitTag, const XC::Vector &t
         // invoke the query on the database
         if(mysql_query(&mysql,query.c_str()) != 0)
           {
-            std::cerr << "MySqlDatastore::sendVector() - failed to send the XC::Vector to MySQL database";
-            std::cerr << std::endl << mysql_error(&mysql) << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; failed to send the Vector to MySQL database"
+		      << std::endl << mysql_error(&mysql) << std::endl;
             return -3;
           }
       }
@@ -336,7 +352,8 @@ int XC::MySqlDatastore::sendVector(int dbTag, int commitTag, const XC::Vector &t
 int XC::MySqlDatastore::recvVector(int dbTag, int commitTag, Vector &theVector,ChannelAddress *theAddress)
   {
     if(!checkDbTag(dbTag))
-      std::cerr << "Error en MySqlDatastore::recvVector." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; error when checking dbTag." << std::endl;
     // check that we have a connection
     if(!connection)
       return -1;
@@ -357,8 +374,9 @@ int XC::MySqlDatastore::recvVector(int dbTag, int commitTag, Vector &theVector,C
     // execute the SELECT query
     if(mysql_query(&mysql, query.c_str()) != 0)
       {
-        std::cerr << "MySqlDatastore::recvVector() - failed to receive vector from MySQL database";
-        std::cerr << std::endl << mysql_error(&mysql) << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed to receive vector from MySQL database"
+		  << std::endl << mysql_error(&mysql) << std::endl;
         return -3;
       }
 
@@ -369,16 +387,18 @@ int XC::MySqlDatastore::recvVector(int dbTag, int commitTag, Vector &theVector,C
     if(results == nullptr)
       {
         // no vector stored in XC::db with these keys
-        std::cerr << "MySqlDatastore::recvVector - no data in database for XC::Vector with dbTag, cTag: ";
-        std::cerr << dbTag << ", " << commitTag << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; no data in database for Vector with dbTag, cTag: "
+		  << dbTag << ", " << commitTag << std::endl;
         return -4;
       }
     row = mysql_fetch_row(results);
     if(row == nullptr)
       {
         // no vector stored in XC::db with these keys
-        std::cerr << "MySqlDatastore::recvVector - no data in database for XC::Vector with dbTag, cTag: ";
-        std::cerr << dbTag << ", " << commitTag << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; no data in database for Vector with dbTag, cTag: "
+		  << dbTag << ", " << commitTag << std::endl;
         mysql_free_result(results);
         return -5;
       }
@@ -398,7 +418,8 @@ int XC::MySqlDatastore::recvVector(int dbTag, int commitTag, Vector &theVector,C
 int XC::MySqlDatastore::sendID(int dbTag, int commitTag, const XC::ID &theID, ChannelAddress *theAddress)
   {
     if(!checkDbTag(dbTag))
-      std::cerr << "Error en MySqlDatastore::sendID." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "error when checking dbTag." << std::endl;
     // check that we have a connection
     if(!connection)
       return -1;
@@ -407,7 +428,8 @@ int XC::MySqlDatastore::sendID(int dbTag, int commitTag, const XC::ID &theID, Ch
     const int sizeData = theID.Size() * sizeof(int);
     if(sizeData > MAX_BLOB_SIZE)
       {
-        std::cerr << "MySqlDatastore::sendID - vector too big to send to MySQL databse, enlarge BLOBS!";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; vector too big to send to MySQL databse, enlarge BLOBS!";
         return  -2;
       }
 
@@ -443,8 +465,9 @@ int XC::MySqlDatastore::sendID(int dbTag, int commitTag, const XC::ID &theID, Ch
         // invoke the query on the database
         if(mysql_query(&mysql, query.c_str()) != 0)
           {
-            std::cerr << "MySqlDatastore::sendID() - failed to send the XC::ID to MySQL database";
-            std::cerr << std::endl << mysql_error(&mysql) << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; failed to send the ID to MySQL database"
+		      << std::endl << mysql_error(&mysql) << std::endl;
             return -3;
           }
       }
@@ -455,7 +478,8 @@ int XC::MySqlDatastore::sendID(int dbTag, int commitTag, const XC::ID &theID, Ch
 int XC::MySqlDatastore::recvID(int dbTag, int commitTag,ID &theID,ChannelAddress *theAddress)
   {
     if(!checkDbTag(dbTag))
-      std::cerr << "Error en MySqlDatastore::recvID." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; error when checking dbTag." << std::endl;
     // check that we have a connection
     if(!connection)
       return -1;
@@ -479,8 +503,9 @@ int XC::MySqlDatastore::recvID(int dbTag, int commitTag,ID &theID,ChannelAddress
     // execute the SELECT query
     if(mysql_query(&mysql, query.c_str()) != 0)
       {
-        std::cerr << "MySqlDatastore::recvID() - failed to receive vector from MySQL database";
-        std::cerr << std::endl << mysql_error(&mysql) << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed to receive vector from MySQL database"
+		  << std::endl << mysql_error(&mysql) << std::endl;
         return -3;
       }
 
@@ -491,16 +516,18 @@ int XC::MySqlDatastore::recvID(int dbTag, int commitTag,ID &theID,ChannelAddress
     if(results == nullptr)
       {
         // no vector stored in XC::db with these keys
-        std::cerr << "MySqlDatastore::recvID - no data in database for XC::ID with dbTag, cTag: ";
-        std::cerr << dbTag << ", " << commitTag << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; no data in database for XC::ID with dbTag, cTag: "
+		  << dbTag << ", " << commitTag << std::endl;
         return -4;
       }
     row = mysql_fetch_row(results);
     if(row == nullptr)
       {
         // no vector stored in XC::db with these keys
-        std::cerr << "MySqlDatastore::recvID - no data in database for XC::ID with dbTag, cTag: ";
-        std::cerr << dbTag << ", " << commitTag << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; no data in database for ID with dbTag, cTag: "
+		  << dbTag << ", " << commitTag << std::endl;
         mysql_free_result(results);
         return -5;
       }
@@ -538,9 +565,10 @@ int XC::MySqlDatastore::createTable(const std::string &tableName, const std::vec
       {
         if(mysql_errno(&mysql) != ER_TABLE_EXISTS_ERROR)
           {
-            std::cerr << "MySqlDatastore::createTable() - failed to create the table in the database";
-            std::cerr << std::endl << mysql_error(&mysql) << std::endl;
-            std::cerr << "SQL query: " << query << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; failed to create the table in the database"
+		      << std::endl << mysql_error(&mysql) << std::endl
+		      << "SQL query: " << query << std::endl;
             return -3;
           }
       }
@@ -578,9 +606,10 @@ int XC::MySqlDatastore::insertData(const std::string &tableName,const std::vecto
         // invoke the query on the database
         if(mysql_query(&mysql,query.c_str()) != 0)
           {
-            std::cerr << "MySqlDatastore::insertData() - failed to send the data to MySQL database";
-            std::cerr << query;
-            std::cerr << std::endl << mysql_error(&mysql) << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; failed to send the data to MySQL database "
+		      << query << std::endl << mysql_error(&mysql)
+		      << std::endl;
             return -3;
           }
       }
@@ -612,8 +641,9 @@ int XC::MySqlDatastore::getData(const std::string &tableName,const std::vector<s
     // execute the SELECT query
     if(mysql_query(&mysql, query.c_str()) != 0)
       {
-        std::cerr << "MySqlDatastore::getData() - failed to receive vector from MySQL database";
-        std::cerr << std::endl << mysql_error(&mysql) << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed to receive vector from MySQL database"
+		  << std::endl << mysql_error(&mysql) << std::endl;
         return -3;
       }
 
@@ -624,16 +654,18 @@ int XC::MySqlDatastore::getData(const std::string &tableName,const std::vector<s
     if(results == nullptr)
       {
         // no vector stored in XC::db with these keys
-        std::cerr << "MySqlDatastore::getData - no data in database for XC::Vector with dbTag, cTag: ";
-        std::cerr << dbTAG << ", " << commitTag << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; no data in database for XC::Vector with dbTag, cTag: "
+		  << dbTAG << ", " << commitTag << std::endl;
         return -4;
       }
     row = mysql_fetch_row(results);
     if(row == nullptr)
       {
         // no vector stored in XC::db with these keys
-        std::cerr << "MySqlDatastore::getData - no data in database for XC::Vector with dbTag, cTag: ";
-        std::cerr << dbTAG << ", " << commitTag << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; no data in database for XC::Vector with dbTag, cTag: "
+		  << dbTAG << ", " << commitTag << std::endl;
         mysql_free_result(results);
         return -5;
       }
@@ -669,14 +701,16 @@ int XC::MySqlDatastore::createOpenSeesDatabase(const std::string &projectName)
     query= "CREATE DATABASE "+ projectName;
     if(this->execute(query.c_str()) != 0)
       {
-        std::cerr << "MySqlDatastore::createOpenSeesDatabase() - could not create the database\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; could not create the database\n";
         return -1;
       }
 
     // link to the database,
     if(mysql_select_db(&mysql, projectName.c_str()) != 0)
       {
-        std::cerr << "MySqlDatastore::createOpenSeesDatabase() - could not set the database\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; could not set the database\n";
         return -2;
       }
 
@@ -686,7 +720,8 @@ int XC::MySqlDatastore::createOpenSeesDatabase(const std::string &projectName)
 
     if(this->execute(query.c_str()) != 0)
       {
-        std::cerr << "MySqlDatastore::createOpenSeesDatabase() - could not create the Messagess table\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; could not create the Messagess table\n";
         return -3;
       }
 
@@ -695,7 +730,8 @@ int XC::MySqlDatastore::createOpenSeesDatabase(const std::string &projectName)
 
     if(this->execute(query.c_str()) != 0)
       {
-        std::cerr << "MySqlDatastore::createOpenSeesDatabase() - could not create the Matricess table\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; could not create the Matricess table\n";
         return -3;
       }
 
@@ -704,7 +740,8 @@ int XC::MySqlDatastore::createOpenSeesDatabase(const std::string &projectName)
 
     if(this->execute(query.c_str()) != 0)
       {
-        std::cerr << "MySqlDatastore::createOpenSeesDatabase() - could not create the Vectors table\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; could not create the Vectors table\n";
         return -3;
       }
 
@@ -713,7 +750,8 @@ int XC::MySqlDatastore::createOpenSeesDatabase(const std::string &projectName)
 
     if(this->execute(query.c_str()) != 0)
       {
-        std::cerr << "MySqlDatastore::createOpenSeesDatabase() - could not create the XC::ID's table\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; could not create the ID's table\n";
         return -3;
       }
     // done
@@ -725,8 +763,9 @@ int XC::MySqlDatastore::execute(const std::string &query)
 
     if(mysql_query(&mysql,query.c_str()) != 0)
       {
-        std::cerr << "MySqlDatastore::execute() - could not execute command: " << query;
-        std::cerr << std::endl << mysql_error(&mysql) << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; could not execute command: " << query
+		  << std::endl << mysql_error(&mysql) << std::endl;
         return -1;
       }
     else
