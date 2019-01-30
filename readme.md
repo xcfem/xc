@@ -25,7 +25,6 @@ The program is based on:
 <li> <a href="http://matplotlib.org/" target="_new">Matplotlib.</a> </li>
 <li> <a href="http://www.mpfr.org/" target="_new">libmpfr.</a> Multiple precision floating-point computation developers tools (libmpfr).</li>
 <li> <a href="https://gmplib.org/" target="_new">libgmp.</a> Multiple precision arithmetic library developers tools (libgmp).</li>
-<li> <a href="https://dev.mysql.com/downloads/connector/cpp/" target="_new">libmysql++.</a> MySQL C++ library bindings.</li>
 <li> <a href="https://code.launchpad.net/~bdb/berkeley-db/trunk" target="_new"> Berkeley DB.</a> Berkeley database libraries for C++ (libdb,libdb-dev).</li>
 <li> SQLite 3 development files (libsqlite3).</li>
 <li> <a href="http://www.caam.rice.edu/software/ARPACK/" target="_new"> Arpack</a> (Fortran77 subroutines to solve large scale eigenvalue problems; libarcpack2-dev).</li>
