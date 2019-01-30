@@ -65,7 +65,6 @@ class FEM_ObjectBrokerAllClasses;
 //! <li> <a href="http://matplotlib.org/" target="_new">Matplotlib.</a> </li>
 //! <li> <a href="http://http://www.mpfr.org/" target="_new">libmpfr.</a> Multiple precision floating-point computation developers tools (libmpfr).</li>
 //! <li> <a href="https://gmplib.org/" target="_new">libgmp.</a> Multiple precision arithmetic library developers tools (libgmp).</li>
-//! <li> <a href="https://dev.mysql.com/downloads/connector/cpp/" target="_new">libmysql++.</a> MySQL C++ library bindings.</li>
 //! <li> Berkeley Database Libraries for C++ (libdb,libdb-dev).</li>
 //! <li> SQLite 3 development files (libsqlite3).</li>
 //! <li> X11 (libxt-dev, libsm-dev,etc.)</li>
