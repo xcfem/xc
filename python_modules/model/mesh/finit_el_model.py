@@ -50,7 +50,10 @@ class RawLineSetToMesh(SetToMesh):
         seedElemHandler.defaultMaterial= self.matSect.name
         seedElemHandler.dimElem= self.dimElemSpace
         #print 'name= ', self.coordinateTransformation.getName()
-        seedElemHandler.defaultTransformation= self.coordinateTransformation.getName()
+        if(self.coordinateTransformation):
+            seedElemHandler.defaultTransformation= self.coordinateTransformation.getName()
+        else:
+            seedElemHandler.defaultTransformation= 'None'
         return seedElemHandler.newElement(self.elemType,xc.ID([0,0]))
 
     def generateMesh(self, preprocessor):
@@ -106,8 +109,10 @@ class LinSetToMesh(RawLineSetToMesh):
     '''
     def __init__(self,linSet,matSect,elemSize,vDirLAxZ, elemType='ElasticBeam3d',dimElemSpace=3,coordTransfType='linear'):
         self.vDirLAxZ= vDirLAxZ
-        trfName= linSet.name+'trYGlobal'
-        cTrf= getDefaultCoordinateTransformation(linSet.owner,trfName,coordTransfType,self.vDirLAxZ)
+        cTrf= None
+        if(coordTransfType!= None):
+          trfName= linSet.name+'trYGlobal'
+          cTrf= getDefaultCoordinateTransformation(linSet.owner,trfName,coordTransfType,self.vDirLAxZ)
         super(LinSetToMesh,self).__init__(linSet,matSect,elemSize,cTrf,elemType,dimElemSpace)
 
    
