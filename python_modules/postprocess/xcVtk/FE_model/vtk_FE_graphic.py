@@ -76,7 +76,6 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
         mappNodes.SetInputData(markNodes.GetOutput())
         visNodes= vtk.vtkActor()
         visNodes.SetMapper(mappNodes)
-#        visNodes.GetProperty().SetColor(.7, .5, .5)
         visNodes.GetProperty().SetColor(rd.random(),rd.random(),rd.random())
         self.renderer.AddActor(visNodes)
 

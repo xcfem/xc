@@ -364,7 +364,7 @@ class StrainGradientLoadOnBeams(object):
     
     def appendLoadToLoadPattern(self,loadPattern):
         ''' Append load to the load pattern passed as parameter.'''
-        pDef= xc.DeformationPlane(strain)
+        pDef= xc.DeformationPlane(self.strain)
         for l in self.xcSet.getLines:
             for e in l.getElements():
                 eLoad= loadPattern.newElementalLoad("beam_strain_load")
