@@ -561,7 +561,7 @@ python tests/rough_calculations/test_footing_near_slope01.py
 python tests/rough_calculations/masonry_bridge_verif_01.py
 python tests/rough_calculations/masonryBridgeVerif_test01_minim.py
 python tests/rough_calculations/test_predim_diaphragm_wall.py
-
+python tests/rough_calculations/test_dome.py
 #Postprocess tests
 echo "$BLEU" "Verifiying routines for post processing." "$NORMAL"
 python tests/postprocess/test_export_shell_internal_forces.py
