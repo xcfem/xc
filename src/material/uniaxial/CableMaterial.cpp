@@ -158,8 +158,8 @@ int XC::CableMaterial::setTrial(double strain, double &stress, double &tangent, 
   {
     setTrialStrain(strain, strainRate);
     // set the return values
-    stress = trialStress;
-    tangent = trialTangent;
+    stress= trialStress;
+    tangent= trialTangent;
     return 0;
   }
 
