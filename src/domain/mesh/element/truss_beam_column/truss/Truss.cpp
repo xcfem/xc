@@ -106,8 +106,10 @@ void XC::Truss::set_material(const UniaxialMaterial &mat)
     theMaterial= mat.getCopy();
     if(!theMaterial)
       {
-        std::cerr << "FATAL Truss::set_material - " << getTag() <<
-          "failed to get a copy of material with tag " << mat.getTag() << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; FATAL truss - " << getTag()
+		  << " failed to get a copy of material with tag "
+	          << mat.getTag() << std::endl;
         exit(-1);
       }
   }
@@ -119,8 +121,9 @@ void XC::Truss::set_load_sens(const Vector &v)
     theLoadSens= new Vector(v);
     if(!theLoadSens)
       {
-        std::cerr << "FATAL Truss::set_load_sens - " << getTag() <<
-          "failed to get a copy of vector: " << v << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; truss " << getTag()
+		  << " failed to get a copy of vector: " << v << std::endl;
         exit(-1);
       }
   }
@@ -200,8 +203,7 @@ XC::Element* XC::Truss::getCopy(void) const
 XC::Truss::~Truss(void)
   { free_mem(); }
 
-//! method: setDomain()
-//!    to set a link to the enclosing XC::Domain and to set the node pointers.
+//! @brief Set a link to the enclosing Domain and to set the node pointers.
 //!    also determines the number of dof associated
 //!    with the truss element, we set matrix and vector pointers,
 //!    allocate space for t matrix, determine the length
@@ -232,9 +234,11 @@ void XC::Truss::setDomain(Domain *theDomain)
     // if differing dof at the ends - print a warning message
     if(dofNd1 != dofNd2)
       {
-        std::cerr <<"WARNING XC::Truss::setDomain(): nodes " << theNodes[0]->getTag()
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; WARNING: nodes " << theNodes[0]->getTag()
                   << " and " <<  theNodes[1]->getTag()
-                  << "have differing dof at ends for truss " << this->getTag() << std::endl;
+                  << " have differing dof at ends for truss "
+		  << this->getTag() << std::endl;
 
         // fill this in so don't segment fault later
         numDOF = 2;
@@ -453,7 +457,7 @@ void XC::Truss::zeroLoad(void)
 int XC::Truss::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
-      std::cerr << getClassName() 
+      std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; load over inactive element: "
                 << getTag() << std::endl;
     else
@@ -468,7 +472,9 @@ int XC::Truss::addLoad(ElementalLoad *theLoad, double loadFactor)
           }
         else
           {
-            std::cerr <<"XC::Truss::addLoad - load type unknown for truss with tag: " << this->getTag() << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+	              << "; load type unknown for truss with tag: "
+		      << this->getTag() << std::endl;
             return -1;
           }
       }
@@ -531,8 +537,8 @@ int XC::Truss::addInertiaLoadSensitivityToUnbalance(const XC::Vector &accel, boo
 
 #ifdef _G3DEBUG
     if(nodalDOF != Raccel1.Size() || nodalDOF != Raccel2.Size()) {
-      std::cerr << "XC::Truss::addInertiaLoadToUnbalance " <<
-        "matrix and vector sizes are incompatable\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; matrix and vector sizes are incompatable.\n";
       return -1;
     }
 #endif
@@ -565,8 +571,8 @@ int XC::Truss::addInertiaLoadSensitivityToUnbalance(const XC::Vector &accel, boo
 
 #ifdef _G3DEBUG
     if(nodalDOF != Raccel1.Size() || nodalDOF != Raccel2.Size()) {
-      std::cerr << "XC::Truss::addInertiaLoadToUnbalance " <<
-        "matrix and vector sizes are incompatable\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; marix and vector sizes are incompatable.\n";
       return -1;
     }
 #endif
@@ -698,7 +704,8 @@ int XC::Truss::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << "Truss::sendSelf - failed to send data.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data.\n";
     return res;
   }
 
@@ -710,12 +717,14 @@ int XC::Truss::recvSelf(const CommParameters &cp)
     const int dbTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dbTag);
     if(res<0)
-      std::cerr << "Truss::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         res+= recvData(cp);
         if(res<0)
-           std::cerr << "Truss::recvSelf - failed to receive data.\n";
+           std::cerr << getClassName() << "::" << __FUNCTION__
+		     << "; failed to receive data.\n";
       }
     return res;
   }
