@@ -315,10 +315,11 @@ size_t XC::Element1D::getDimension(void) const
 
 void meshing_on_i(const XC::Element1D &e,const XC::NodePtrArray3d::const_ref_i_row &nodes,XC::ElemPtrArray3d::var_ref_i_row &elements)
   {
+    XC::Element *tmp= nullptr;
     const size_t numberOfLayers= nodes.getNumberOfLayers();
     for(size_t i=1;i<numberOfLayers;i++)
       {
-	XC::Element *tmp= e.getCopy();
+	tmp= e.getCopy();
         const int Nd1= nodes(i)->getTag();
         const int Nd2= nodes(i+1)->getTag();
         tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
@@ -328,10 +329,11 @@ void meshing_on_i(const XC::Element1D &e,const XC::NodePtrArray3d::const_ref_i_r
 
 void meshing_on_j(const XC::Element1D &e,const XC::NodePtrArray3d::const_ref_j_row &nodes,XC::ElemPtrArray3d::var_ref_j_row &elements)
   {
+    XC::Element *tmp= nullptr;
     const size_t numberOfRows= nodes.getNumberOfRows();
     for(size_t j=1;j<numberOfRows;j++)
       {
-	XC::Element *tmp= e.getCopy();
+	tmp= e.getCopy();
         const int Nd1= nodes(j)->getTag();
         const int Nd2= nodes(j+1)->getTag();
         tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
@@ -341,10 +343,11 @@ void meshing_on_j(const XC::Element1D &e,const XC::NodePtrArray3d::const_ref_j_r
 
 void meshing_on_k(const XC::Element1D &e,const XC::NodePtrArray3d::const_ref_k_row &nodes,XC::ElemPtrArray3d::var_ref_k_row &elements)
   {
+    XC::Element *tmp= nullptr;
     const size_t numberOfColumns= nodes.getNumberOfColumns();
     for(size_t k=1;k<numberOfColumns;k++)
       {
-	XC::Element *tmp= e.getCopy();
+	tmp= e.getCopy();
         const int Nd1= nodes(k)->getTag();
         const int Nd2= nodes(k+1)->getTag();
         tmp->getNodePtrs().set_id_nodes(Nd1,Nd2);
@@ -375,7 +378,7 @@ void XC::Element1D::unidimensional_meshing(const XC::NodePtrArray3d &nodes,XC::E
         ElemPtrArray3d::var_ref_k_row element_row= elements.getVarRefKRow(1,1);
         meshing_on_k(*this,nodes.getKRowConstRef(1,1),element_row);
       }
-  }
+   }
 
 //! @brief Return a grid of booleans, one for each of the
 //! element nodes. If there is a node that doesn't exist
@@ -386,6 +389,7 @@ BoolArray3d XC::Element1D::getNodePattern(void) const
     return retval;
   }
 
+//! @brief Put the elements on the nodes being passed as parameter.
 XC::ElemPtrArray3d XC::Element1D::put_on_mesh(const NodePtrArray3d &nodes,meshing_dir dm) const
   {
     const size_t numberOfLayers= nodes.getNumberOfLayers();
@@ -397,7 +401,7 @@ XC::ElemPtrArray3d XC::Element1D::put_on_mesh(const NodePtrArray3d &nodes,meshin
       std::cerr << "There is only one node, can't create elements." << std::endl;
     else
       {
-       if(mesh_dim<2) //Bidimensional mesh
+        if(mesh_dim<2) //Bidimensional mesh
           unidimensional_meshing(nodes,retval);
         else
           {

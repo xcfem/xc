@@ -200,6 +200,7 @@ void XC::Mesh::add_element_to_domain(Element *element)
     dom->domainChange();
     kdtreeElements.insert(*element);
   }
+
 //! @brief Must only to be called from recvSelf.
 void XC::Mesh::add_elements_to_domain(void)
   {
@@ -237,7 +238,6 @@ bool XC::Mesh::addElement(Element *element)
       }
     const int eleTag = element->getTag();
 
-
     // check if an Element with the same tag already exists in the XC::Mesh
     TaggedObject *other = theElements->getComponentPtr(eleTag);
     if(other)
@@ -247,7 +247,6 @@ bool XC::Mesh::addElement(Element *element)
 		  << " already exists in model.\n";
         return false;
       }
-
 
     // add the element to the container object for the elements
     bool result = theElements->addComponent(element);
