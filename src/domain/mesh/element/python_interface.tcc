@@ -42,6 +42,7 @@ class_<XC::Element, XC::Element *,bases<XC::MeshComponent>, boost::noncopyable >
   .def("commitState", &XC::Element::commitState,"Commits element state.")
   .def("revertToLastCommit", &XC::Element::revertToLastCommit,"Return to the last committed state.")
   .def("revertToStart", &XC::Element::revertToStart,"Return the element to its initial state.")
+  .def("update", &XC::Element::update,"Updates the element state.")
   .def("getNumDOF", &XC::Element::getNumDOF,"Return the number of element DOFs.")
   .def("getResistingForce",make_function(getResistingForceRef, return_internal_reference<>() ),"Calculates element's resisting force.")
   .def("getTangentStiff",make_function(getTangentStiffRef, return_internal_reference<>() ),"Return tangent stiffness matrix.")
