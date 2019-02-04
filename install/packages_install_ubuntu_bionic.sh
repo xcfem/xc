@@ -74,12 +74,6 @@ packages_div="\
 # bc is needed by xc_utils verification tests
 sudo apt-get install -y $packages_div
 
-# install nonfree packages (ubuntu does not know nonfree, means we gone just install)
-packages_nonfree="\
-    libparmetis-dev"
-sudo apt-get install -y $packages_nonfree
-
-
 # free disk space by cleaning install files
 apt-get clean
 
