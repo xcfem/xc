@@ -500,6 +500,7 @@ python tests/materials/prestressing/test_anchorageLoss_prestress_tendon_02.py
 python tests/materials/prestressing/test_anchorageLoss_prestress_tendon_03.py
 python tests/materials/prestressing/test_anchorageLoss_prestress_tendon_04.py
 python tests/materials/prestressing/test_loss_prestress_units_01.py
+python tests/materials/prestressing/test_deflection_prestressed_beam_01.py
 
 echo "$BLEU" "  Other materials tests." "$NORMAL"
 python tests/materials/test_elastomeric_bearing_stiffness.py
@@ -561,7 +562,7 @@ python tests/rough_calculations/test_footing_near_slope01.py
 python tests/rough_calculations/masonry_bridge_verif_01.py
 python tests/rough_calculations/masonryBridgeVerif_test01_minim.py
 python tests/rough_calculations/test_predim_diaphragm_wall.py
-
+python tests/rough_calculations/test_dome.py
 #Postprocess tests
 echo "$BLEU" "Verifiying routines for post processing." "$NORMAL"
 python tests/postprocess/test_export_shell_internal_forces.py
