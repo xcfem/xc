@@ -45,7 +45,6 @@ nDivLines=8      #number of elements in each line
 
 #Material properties
 Ec=28e6      #modulus of elasticity of concrete [kPa]
-Ep=Ec*7.5    #modulus of elasticity of prestressing steel
 Ep=Ec*1e-3   #modulus of elasticity of prestressing steel (allow big deflection)
 nuc=0.2      #coefficient of Poisson of concrete
 densc= 2.5   #specific mass of concrete (t/m3)
