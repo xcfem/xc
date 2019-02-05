@@ -33,7 +33,7 @@ seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.dimElem= 3 #Bars defined in a three dimensional space.
 seedElemHandler.defaultMaterial= "elast"
 seedElemHandler.defaultTag= 1 #Number for the next element will be 1.
-truss= seedElemHandler.newElement("Truss",xc.ID([1,2]));
+truss= seedElemHandler.newElement("Truss",xc.ID([1,2]))
 truss.area= 10
 
 points= preprocessor.getMultiBlockTopology.getPoints

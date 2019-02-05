@@ -26,7 +26,7 @@ def getLg(soilClass):
     retval= 500
   else:
     sys.stderr.write("Unknown soil type: "+soilClass)
-  return retval;
+  return retval
 
 def getUgd(soilClass, quakeZone,bridgeClass):
   '''
@@ -97,7 +97,7 @@ def getUgd(soilClass, quakeZone,bridgeClass):
     retval*=1.2
   elif(bridgeClass == "COIII"):
     retval*=1.4
-  return retval;
+  return retval
   
 def getBminPontFlotant(dAbutFixedPoint,soilClass,quakeZone,bridgeClass):
   '''

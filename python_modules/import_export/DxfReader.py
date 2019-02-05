@@ -209,7 +209,7 @@ class OldDxfReader(object):
       dist= nearestPoint.getPos.distPos3d(pos3D)
     if(dist>self.tol):
       retval= self.pointHandler.newPntFromPos3d(pos3D)
-    return retval;
+    return retval
   def newLine(self,l):
     start= l.start
     posStart= geom.Pos3d(start[0],start[1],start[2])

@@ -21,7 +21,7 @@ idZCoord= '{1017EA1E-F76B-4D4B-8A4C-7E58FDED1B02}'
 idNodeTable= 'F67B790F-88D4-41ED-A3B9-3D9F9744B5AF' #sin llavecitas
 
 class NodeProperties(ctr.PropertiesContainer):
-  tableDef= None;
+  tableDef= None
   def __init__(self):
     super(NodeProperties,self).__init__(nc.idNodeContainer,nc.idNodeContainer,nc.progIdNodes)
     self.tableDef= propTable.PropertiesTable(idNodeTable,"XML\default","vertical",nc.idNodeContainer,nc.progIdNodes)

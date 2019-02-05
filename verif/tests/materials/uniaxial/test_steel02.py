@@ -53,7 +53,7 @@ elements= preprocessor.getElementHandler
 elements.defaultMaterial= "steel"
 elements.dimElem= 2 # Dimension of element space
 elements.defaultTag= 1 #Tag for the next element.
-spring= elements.newElement("Spring",xc.ID([1,2]));
+spring= elements.newElement("Spring",xc.ID([1,2]))
     
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
@@ -81,7 +81,7 @@ lPatterns.addToDomain("0")
 
 x= []
 y= []
-recorder= feProblem.getDomain.newRecorder("element_prop_recorder",None);
+recorder= feProblem.getDomain.newRecorder("element_prop_recorder",None)
 recorder.setElements(xc.ID([1]))
 recorder.callbackRecord= "x.append(self.getMaterial().getStrain()); y.append(self.getN())"
 recorder.callbackRestart= "print \"Restart method called.\""

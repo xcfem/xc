@@ -87,7 +87,7 @@ class NodeDict(dict):
     retval= list()
     for key in self:
       retval.append(self[key].id)
-    return retval;
+    return retval
   def __str__(self):
     retval= ''
     for key in self:
@@ -174,7 +174,7 @@ class CellDict(dict):
     retval= list()
     for key in self:
       retval.append(self[key].id)
-    return retval;
+    return retval
   def __str__(self):
     retval= ''
     for key in self:

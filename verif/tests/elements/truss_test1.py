@@ -44,11 +44,11 @@ elements= preprocessor.getElementHandler
 elements.dimElem= 2 #Bars defined ina a two dimensional space.
 elements.defaultMaterial= "elast"
 elements.defaultTag= 1 #Tag for the next element.
-truss= elements.newElement("Truss",xc.ID([1,2]));
+truss= elements.newElement("Truss",xc.ID([1,2]))
 truss.area= 1
-truss= elements.newElement("Truss",xc.ID([2,3]));
+truss= elements.newElement("Truss",xc.ID([2,3]))
 truss.area= 1
-truss= elements.newElement("Truss",xc.ID([3,4]));
+truss= elements.newElement("Truss",xc.ID([3,4]))
 truss.area= 1
 
 constraints= preprocessor.getBoundaryCondHandler

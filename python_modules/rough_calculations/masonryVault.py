@@ -268,7 +268,7 @@ class archGeometry(object):
     error= 0.0
     for x, y in zip(x_i, y_i):
       error+= (y-self.yAxis(x))**2
-    return math.sqrt(error);
+    return math.sqrt(error)
   def checkAbscissa(self,x):
     if(x<0.0 or x>self.arcSpan):
       lmsg.warning('checkAbscissa: abscissa out of arc: x= '+str(x)+' (0.0,'+str(self.arcSpan)+')')    

@@ -52,7 +52,7 @@ elements.defaultTransformation= "lin" # Coordinate transformation for the new el
 elements.dimElem= 2 # Dimension of element space
 elements.defaultMaterial= "section"
 elements.defaultTag= 1
-beam= elements.newElement("ForceBeamColumn2d",xc.ID([1,2]));
+beam= elements.newElement("ForceBeamColumn2d",xc.ID([1,2]))
     
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler

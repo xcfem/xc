@@ -363,7 +363,7 @@ class EC3Shape(object):
         preprocessor= elems.owner.getPreprocessor
         nodes= preprocessor.getNodeHandler
         domain= preprocessor.getDomain
-        recorder= domain.newRecorder(recorderType,None);
+        recorder= domain.newRecorder(recorderType,None)
         recorder.setElements(elems.getTags())
         for e in elems:
             e.setProp('ULSControlRecorder',recorder)

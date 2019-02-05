@@ -50,7 +50,7 @@ elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "section"
 elements.defaultTag= 1
-beam= elements.newElement("ForceBeamColumn3d",xc.ID([1,2]));
+beam= elements.newElement("ForceBeamColumn3d",xc.ID([1,2]))
     
 # Constraints
 

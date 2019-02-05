@@ -108,7 +108,7 @@ class StressCalc(object):
     retval= Mc +self.getMs()+self.getMsp()
     if(abs(self.getNc())>0.1):
       retval-= self.N*self.getYCentroidAh()
-    return retval;
+    return retval
   def resistingN(self):
     return self.getNc()+self.getNs()+self.getNsp()
 

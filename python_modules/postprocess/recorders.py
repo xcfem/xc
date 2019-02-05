@@ -15,7 +15,7 @@ def installNodeDisplacementRecorder(recorderName, nodeSet):
   preprocessor= nodeSet.owner.getPreprocessor
   nodes= preprocessor.getNodeHandler
   domain= preprocessor.getDomain
-  recorder= domain.newRecorder(recorderName,None);
+  recorder= domain.newRecorder(recorderName,None)
   recorder.setNodes(nodeSet.getTags())
   if(nodes.numDOFs==3):
     recorder.callbackRecord= callback_controls.controlMovModulusUV()

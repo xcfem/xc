@@ -40,7 +40,7 @@ preprocessor=  feProblem.getPreprocessor
 
 # Materials
 sectionProperties= xc.CrossSectionProperties3d()
-sectionProperties.A= A; sectionProperties.E= E; sectionProperties.G= G;
+sectionProperties.A= A; sectionProperties.E= E; sectionProperties.G= G
 sectionProperties.Iz= Iz; sectionProperties.Iy= Iy; sectionProperties.J= J
 section= typical_materials.defElasticSectionFromMechProp3d(preprocessor, "section",sectionProperties)
 
@@ -58,7 +58,7 @@ elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "section"
 elements.defaultTag= 1 #Tag for next element.
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([nod1.tag,nod2.tag]));
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([nod1.tag,nod2.tag]))
 
 # Constraints
 

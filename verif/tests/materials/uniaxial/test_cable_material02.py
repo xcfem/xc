@@ -45,7 +45,7 @@ mat= typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= "cable"
 elements.dimElem= 2 # Dimension of element space
-truss= elements.newElement("CorotTruss",xc.ID([1,2]));
+truss= elements.newElement("CorotTruss",xc.ID([1,2]))
 truss.area= area
     
 # Constraints

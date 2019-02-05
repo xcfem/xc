@@ -53,7 +53,7 @@ elements.defaultTransformation= "lin"
 elements.defaultMaterial= "scc"
 #  sintaxis: ElasticBeam3d[<tag>] 
 elements.defaultTag= 1 #Tag for next element.
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]));
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
 
 # Constraints
 modelSpace.fixNode000_000(1)

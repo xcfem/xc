@@ -43,7 +43,7 @@ elements= preprocessor.getElementHandler
 elements.defaultMaterial= "elast"
 elements.dimElem= 2 # Dimension of element space
 elements.defaultTag= 1 #First node number.
-spring= elements.newElement("Spring",xc.ID([nodA.tag,nodB.tag]));
+spring= elements.newElement("Spring",xc.ID([nodA.tag,nodB.tag]))
     
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler

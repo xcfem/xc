@@ -43,7 +43,7 @@ elements.defaultMaterial= "elast"
 elements.dimElem= 2 # Dimension of element space
 elements.defaultTag= 1
 #  sintaxis: Spring[<tag>] 
-spring= elements.newElement("Spring",xc.ID([1,2]));
+spring= elements.newElement("Spring",xc.ID([1,2]))
     
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler

@@ -44,7 +44,7 @@ preprocessor=  feProblem.getPreprocessor
 
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
-nodes.defaultTag= 0;
+nodes.defaultTag= 0
 nod0= nodes.newNodeXY(0,0)
 nod0.mass= nodeMassMatrix
 nod0.setProp("gdlsCoartados",xc.ID([0,1,2]))

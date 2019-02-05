@@ -123,7 +123,7 @@ class BlockDict(dict):
     retval= list()
     for key in self:
       retval.append(self[key].id)
-    return retval;
+    return retval
   def __str__(self):
     retval= ''
     for key in self:
@@ -226,13 +226,13 @@ class BlockData(object):
     tags= []
     for key in self.points:
       tags.append(self.points[key].id)
-    return tags;
+    return tags
 
   def getBlockTags(self):
     tags= []
     for key in self.blocks:
       tags.append(self.blocks[key].id)
-    return tags;
+    return tags
 
 
   def __str__(self):

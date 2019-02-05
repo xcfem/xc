@@ -40,7 +40,7 @@ idValueF= "{49F80183-A4E5-11D4-A43A-000000000000}"
 idSystem= "{ACC6FEC0-B7FC-11D4-ADD9-000000000000}"
 
 class NodeLoadProperties(ctr.PropertiesContainer):
-  tableProp= None;
+  tableProp= None
   def __init__(self):
     super(NodeLoadProperties,self).__init__(containerId,containerClsId,tbProgId)
     self.tableProp= propTable.PropertiesTable(tbId,"XML\default","vertical",tbClsId,tbProgId)

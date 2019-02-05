@@ -38,7 +38,7 @@ idGeomTable= "{748a0933-f05e-4b33-b4d6-4854fcd612c8}"
 idInternalNodes= "{ae6aa708-ce5c-4465-b54b-214413adac4d}"
 
 class EPPlaneProperties(ctr.PropertiesContainer):
-  tableProp= None;
+  tableProp= None
   def __init__(self):
     super(EPPlaneProperties,self).__init__(containerId,containerClsId,'')
     self.tableProp= propTable.PropertiesTable(tbId,tbName,"vertical",tbClsId,tbProgId)

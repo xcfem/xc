@@ -70,23 +70,23 @@ elem= elements.newElement("ShellMITC4",xc.ID([7,8,12,11]))
 # active reinforcement
 elements.defaultMaterial= "prestressingSteel"
 elements.dimElem= 3 # Dimension of element space
-truss= elements.newElement("Truss",xc.ID([1,2]));
+truss= elements.newElement("Truss",xc.ID([1,2]))
 truss.area= Ap
-truss= elements.newElement("Truss",xc.ID([2,3]));
+truss= elements.newElement("Truss",xc.ID([2,3]))
 truss.area= Ap
-truss= elements.newElement("Truss",xc.ID([3,4]));
+truss= elements.newElement("Truss",xc.ID([3,4]))
 truss.area= Ap
-truss= elements.newElement("Truss",xc.ID([5,6]));
+truss= elements.newElement("Truss",xc.ID([5,6]))
 truss.area= Ap
-truss= elements.newElement("Truss",xc.ID([6,7]));
+truss= elements.newElement("Truss",xc.ID([6,7]))
 truss.area= Ap
-truss= elements.newElement("Truss",xc.ID([7,8]));
+truss= elements.newElement("Truss",xc.ID([7,8]))
 truss.area= Ap
-truss= elements.newElement("Truss",xc.ID([9,10]));
+truss= elements.newElement("Truss",xc.ID([9,10]))
 truss.area= Ap
-truss= elements.newElement("Truss",xc.ID([10,11]));
+truss= elements.newElement("Truss",xc.ID([10,11]))
 truss.area= Ap
-truss= elements.newElement("Truss",xc.ID([11,12]));
+truss= elements.newElement("Truss",xc.ID([11,12]))
 truss.area= Ap
 
 # Constraints

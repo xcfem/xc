@@ -29,7 +29,7 @@ idName= "{4364BC01-AAB7-11D4-B3D9-00104BC3B531}"
 idLoad= "{49F9F892-83EC-11D4-B37D-000000000000}"
 
 class LoadGroupProperties(ctr.PropertiesContainer):
-  tableProp= None;
+  tableProp= None
   def __init__(self):
     super(LoadGroupProperties,self).__init__(containerId,containerClsId,tbProgId)
     self.tableProp= propTable.PropertiesTable(tbId,'',"vertical",tbClsId,tbProgId)

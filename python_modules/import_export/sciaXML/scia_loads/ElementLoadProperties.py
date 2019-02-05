@@ -43,7 +43,7 @@ idSystem= "{ACC6FEC0-B7FC-11D4-ADD9-000000000000}"
 idLocation= "{F68C16F1-8E6D-11D4-A419-000000000000}"
 
 class ElementLoadProperties(ctr.PropertiesContainer):
-  tableProp= None;
+  tableProp= None
   def __init__(self):
     super(ElementLoadProperties,self).__init__(containerId,containerClsId,tbProgId)
     self.tableProp= propTable.PropertiesTable(tbId,"XML\default","vertical",tbClsId,tbProgId)

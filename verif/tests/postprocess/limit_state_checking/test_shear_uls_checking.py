@@ -59,8 +59,8 @@ lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= section.name
-e1= elements.newElement("ElasticBeam3d",xc.ID([n1.tag,n2.tag]));
-e2= elements.newElement("ElasticBeam3d",xc.ID([n2.tag,n3.tag]));
+e1= elements.newElement("ElasticBeam3d",xc.ID([n1.tag,n2.tag]))
+e2= elements.newElement("ElasticBeam3d",xc.ID([n2.tag,n3.tag]))
 
 #Constraints.
 modelSpace.fixNode000_000(n1.tag)

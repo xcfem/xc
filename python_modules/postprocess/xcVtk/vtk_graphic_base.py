@@ -210,10 +210,10 @@ class RecordDefDisplay(object):
 
     # properties of the axes labels can be set as follows
     # this sets the x axis label to red
-    # axes.GetXAxisCaptionActor2D().GetCaptionTextProperty().SetColor(1,0,0);
+    # axes.GetXAxisCaptionActor2D().GetCaptionTextProperty().SetColor(1,0,0)
  
     # the actual text of the axis label can be changed:
-    # axes.SetXAxisLabelText("test");
+    # axes.SetXAxisLabelText("test")
     self.renderer.AddActor(axes)
 
   def setupWindow(self,caption= ''):

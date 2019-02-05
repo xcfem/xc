@@ -50,7 +50,7 @@ class EC5TimberRectCrossSection(section_properties.RectangularSection):
     preprocessor= elemSet.owner.getPreprocessor
     nodes= preprocessor.getNodeHandler
     domain= preprocessor.getDomain
-    recorder= domain.newRecorder(recorderName,None);
+    recorder= domain.newRecorder(recorderName,None)
     recorder.setElements(elemSet.getTags())
     if(nodes.numDOFs==3):
       self.setupULSControlVars2d(elemSet)

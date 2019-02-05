@@ -72,7 +72,7 @@ elements= preprocessor.getElementHandler
 elements.defaultMaterial= "horm"
 elements.dimElem= 2 # Dimension of element space
 #  sintaxis: Spring[<tag>] 
-spring= elements.newElement("Spring",xc.ID([1,2]));
+spring= elements.newElement("Spring",xc.ID([1,2]))
     
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
@@ -99,7 +99,7 @@ lp0.newNodalLoad(2,xc.Vector([-F,0]))
 lPatterns.addToDomain("0")
 x= []
 y= []
-recorder= feProblem.getDomain.newRecorder("element_prop_recorder",None);
+recorder= feProblem.getDomain.newRecorder("element_prop_recorder",None)
 recorder.setElements(xc.ID([0]))
 recorder.callbackRecord= "x.append(self.getMaterial().getStrain()); y.append(self.getN())"
 recorder.callbackRestart= "print \"Restart method called.\""

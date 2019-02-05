@@ -52,7 +52,7 @@ elements.defaultTransformation= "lin"
 elements.defaultMaterial= "scc"
 elements.dimElem= 2 # Dimension of element space
 elements.defaultTag= 1 #Tag for next element.
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]));
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
     
 # Constraints
 modelSpace.fixNode000_000(1)

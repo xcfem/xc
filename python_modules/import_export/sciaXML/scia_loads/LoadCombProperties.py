@@ -42,7 +42,7 @@ idPhase= "{1DC504C5-85BE-4323-B1EB-BADB2FA6A82B}"
 idMasterID= "{1DC504C6-85BE-4323-B1EB-BADB2FA6A82B}"
 
 class LoadCombProperties(ctr.PropertiesContainer):
-  tableProp= None;
+  tableProp= None
   def __init__(self):
     super(LoadCombProperties,self).__init__(containerId,containerClsId,tbProgId)
     self.tableProp= propTable.PropertiesTable(tbId,tbName,"vertical",tbClsId,tbProgId)

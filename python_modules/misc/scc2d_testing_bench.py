@@ -18,6 +18,6 @@ def sectionModel(preprocessor,sectionName):
   elementos.dimElem= 1
   elementos.defaultMaterial= sectionName
   elementos.defaultTag= 1 #Tag for the next element.
-  zls= elementos.newElement("ZeroLengthSection",xc.ID([1,2]));
+  zls= elementos.newElement("ZeroLengthSection",xc.ID([1,2]))
   return zls
 

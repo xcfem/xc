@@ -49,7 +49,7 @@ section= typical_materials.defElasticShearSection2d(preprocessor, "section",A,E,
 elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin" # Coordinate transformation for the new elements
 elements.defaultMaterial= "section"
-beam2d= elements.newElement("ForceBeamColumn2d",xc.ID([1,2]));
+beam2d= elements.newElement("ForceBeamColumn2d",xc.ID([1,2]))
 
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler

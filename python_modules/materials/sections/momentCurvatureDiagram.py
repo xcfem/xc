@@ -29,7 +29,7 @@ def getMomentCurvatureDiagram3D(preprocessor, nmbSecc, esfAxil, maxK, numIncr):
   elementos= preprocessor.getElementHandler
   elementos.defaultMaterial= nmbSecc
   elementos.defaultTag= 2001 #Tag for the next element.
-  zls= elementos.newElement("ZeroLengthSection",xc.ID([nod1.tag,nod2.tag]));
+  zls= elementos.newElement("ZeroLengthSection",xc.ID([nod1.tag,nod2.tag]))
 
   modelSpace.fixNode000_000(nod1.tag)
   modelSpace.constraints.newSPConstraint(nod2.tag,1,0.0)

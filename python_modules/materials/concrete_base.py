@@ -871,7 +871,7 @@ class paramTensStiffness(object):
 
 def defDiagKConcrete(preprocessor, concreteRecord):
   print 'defDiagKConcrete deprecated; use concreteRecord.defDiagK(preproccesor)'
-  return concreteRecord.defDiagK(preprocessor);
+  return concreteRecord.defDiagK(preprocessor)
 
 def defDiagDConcrete(preprocessor, concreteRecord):
   print 'defDiagDConcrete deprecated; use concreteRecord.defDiagD(preproccesor)'

@@ -56,7 +56,7 @@ vc.defVarsControlTensRegElastico3d([elem])
 
 
 
-recorder= feProblem.getDomain.newRecorder("element_prop_recorder",None);
+recorder= feProblem.getDomain.newRecorder("element_prop_recorder",None)
 recorder.setElements(xc.ID([0]))
 recorder.callbackRecord= cc.controTensRecElastico3d()
 

@@ -43,7 +43,7 @@ elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "section"
 elements.defaultTag= 1 #Tag for next element.
-beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]));
+beam3d= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
 
 centroidG= beam3d.getCoordTransf.getPointGlobalCoordFromBasic(0.5)
 posCentroidG= geom.Pos3d(centroidG[0],centroidG[1],centroidG[2])

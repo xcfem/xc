@@ -44,7 +44,7 @@ idTypeRY= "{49f8019b-a4e5-11d4-a43a-000000000000}"
 idTypeRZ= "{49f8019e-a4e5-11d4-a43a-000000000000}"
 
 class NodeSupportProperties(ctr.PropertiesContainer):
-  tableProp= None;
+  tableProp= None
   def __init__(self):
     super(NodeSupportProperties,self).__init__(containerId,containerClsId,'')
     self.tableProp= propTable.PropertiesTable(tbId,tbName,"vertical",tbClsId,tbProgId)

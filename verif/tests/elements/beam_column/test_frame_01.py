@@ -46,8 +46,8 @@ nod= nodes.newNodeXY(2*B+B,H)
 
 lin= modelSpace.newLinearCrdTransf("lin")
 sectionProperties= xc.CrossSectionProperties2d()
-sectionProperties.A= area; sectionProperties.E= Es;
-sectionProperties.I= Iz;
+sectionProperties.A= area; sectionProperties.E= Es
+sectionProperties.I= Iz
 section= typical_materials.defElasticSectionFromMechProp2d(preprocessor, "section",sectionProperties)
 
 # Elements definition
