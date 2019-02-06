@@ -52,14 +52,23 @@ XC::ElementBodyLoad::ElementBodyLoad(int classTag)
 void XC::ElementBodyLoad::setDomain(Domain *theDomain)
   {
     ElementalLoad::setDomain(theDomain);
+    const size_t sz= elemTags.Size();
+    if(sz==0)
+      std::clog << getClassName() << "::" << __FUNCTION__
+                << "; no element identifiers." << std::endl;
     theElements.setPtrs(theDomain,elemTags);
   }
 
+//! @brief Applies the load to the elements.
 void XC::ElementBodyLoad::applyLoad(double loadFactor) 
   {
     const int sz= theElements.size();
-    if(sz!=numElements())
-      std::cerr << "ElementBodyLoad::applyLoad; el number of pointers no coincide con el de identifiers." << std::endl;
+    const int numEle= numElements();
+    if(sz!=numEle)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; the number of pointers (" << sz
+	        << ") does not match the number of identifiers ("
+	        << numEle << "); something went wrong." << std::endl;
     for(int i=0; i<sz; i++)
       if(theElements[i])
         theElements[i]->addLoad(this, loadFactor);

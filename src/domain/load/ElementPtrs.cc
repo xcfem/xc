@@ -48,21 +48,30 @@ XC::ElementPtrs::~ElementPtrs(void)
 //! as parameter.
 void XC::ElementPtrs::setPtrs(Domain *theDomain, const ID &theElementTags)
   {
-    size_t sz= theElementTags.Size();
+    const size_t sz= theElementTags.Size();
+    if(sz==0)
+      std::clog << getClassName() << "::" << __FUNCTION__
+                << "; no element identifiers." << std::endl;
     theElements.clear();
     if(theDomain)
       {
         theElements.resize(sz);
         for(size_t i=0; i<sz; i++)
           {
-            theElements[i]= theDomain->getElement(theElementTags(i));
+	    const int eleTag= theElementTags(i);
+            theElements[i]= theDomain->getElement(eleTag);
             if(!theElements[i])
               {
-                std::cerr << "WARNING - XC::ElementPtrs::setDomain - ele with tag ";
-	        std::cerr << theElementTags(i) << " does not exist in the domain\n";
+                std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; WARNING - ele with tag: "
+			  << eleTag << " does not exist in the domain\n";
               }
           }
       }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; domain not set."
+	        << std::endl;
   }
 
 //! @brief Returns an iterator to the element identified by the
