@@ -69,21 +69,19 @@ tendon.roughCoordMtr=np.array([x_parab_rough,y_parab_rough,z_parab_rough])
 #Interpolated 3D spline 
 tendon.pntsInterpTendon(n_points_fine,smoothness=1,kgrade=3)
 # Losses of prestressing due to friction
-tendon.calcLossFriction(coefFric=mu,k=k,sigmaP0_extr1=sigmap0max,sigmaP0_extr2=0.0)
+lssFrict=tendon.getLossFriction(coefFric=mu,k=k,sigmaP0_extr1=sigmap0max,sigmaP0_extr2=0.0)
 # Losses of prestressing due to anchorage slip (loss due to friction must be
 # previously calculated
-tendon.calcLossAnchor(Ep=Ep,anc_slip_extr1=deltaL,anc_slip_extr2=0.0)
+lssAnch=tendon.getLossAnchor(Ep=Ep,anc_slip_extr1=deltaL,anc_slip_extr2=0.0)
 
 Laffected=tendon.projXYcoordZeroAnchLoss[0] # effective length of tendon
 #affected by the anchorage slip in extremity 1 [m]
 
 # Results
-lssAnch=tendon.lossAnch #prestress loss due to anchorage draw-in
 lssAnch_e1=lssAnch[0]   #prestress loss due to anchorage draw-in extremity 1
 lssAnch_md=lssAnch[int(len(lssAnch)/2)]   #prestress loss due to anchorage draw-in midspan
 lssAnch_e2=lssAnch[-1]   #prestress loss due to anchorage draw-in extremity 2
 
-lssFrict=tendon.lossFriction #prestress loss due to friction
 lssFrict_e1=lssFrict[0]   #prestress loss due to friction extremity 1
 lssFrict_md=lssFrict[int(len(lssFrict)/2)]   #prestress loss due to friction midspan
 lssFrict_e2=lssFrict[-1]   #prestress loss due to friction extremity 2

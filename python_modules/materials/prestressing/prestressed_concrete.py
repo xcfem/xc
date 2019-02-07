@@ -149,11 +149,13 @@ class PrestressTendon(object):
             self.lstOrderedElems.append(elem)
         return tendonSet
             
-    def calcLossFriction(self,coefFric,k,sigmaP0_extr1=0.0,sigmaP0_extr2=0.0):
-        '''Creates the attributes lossFriction and stressAfterLossFriction of 
-        type array that contains  for each point in fineCoordMtr the cumulative 
-        immediate loss of prestressing due to friction and the stress after 
-        this loss, respectively.
+    def getLossFriction(self,coefFric,k,sigmaP0_extr1=0.0,sigmaP0_extr2=0.0):
+        ''' Return an array that contains  for each point in fineCoordMtr the 
+        cumulative immediate loss of prestressing due to friction.
+        The method also creates the attribute stressAfterLossFriction, of 
+        type array, that contains  for each point in fineCoordMtr the stress
+        after after this loss (it is used in calculation of losses due to
+        anchorage slip)
 
         :param sigmaP0_extr1: maximum stress applied at the extremity 1 of 
                         the tendon (starting point) (stress refers to its 
@@ -181,23 +183,21 @@ class PrestressTendon(object):
             loss_frict_ext2=np.array([sigmaP0_extr2*(1-math.exp(-coefFric*cum_angl[i]-k*cum_len[i])) for i in range(len(cum_angl))])
             self.stressAfterLossFrictionOnlyExtr2=sigmaP0_extr2-loss_frict_ext2
         if (sigmaP0_extr1 != 0.0) and (sigmaP0_extr2 != 0.0):
-            self.lossFriction=np.minimum(loss_frict_ext1,loss_frict_ext2)
+            lossFriction=np.minimum(loss_frict_ext1,loss_frict_ext2)
             self.stressAfterLossFriction=np.maximum(self.stressAfterLossFrictionOnlyExtr1,self.stressAfterLossFrictionOnlyExtr2)
         elif (sigmaP0_extr1 != 0.0):
-            self.lossFriction=loss_frict_ext1
+            lossFriction=loss_frict_ext1
             self.stressAfterLossFriction=self.stressAfterLossFrictionOnlyExtr1
         elif (sigmaP0_extr2 != 0.0):
-            self.lossFriction=loss_frict_ext2
+            lossFriction=loss_frict_ext2
             self.stressAfterLossFriction=self.stressAfterLossFrictionOnlyExtr2
         else:
             lmsg.warning("No prestressing applied.")
-        return
+        return lossFriction
 
-    def calcLossAnchor(self,Ep,anc_slip_extr1=0.0,anc_slip_extr2=0.0):
-        '''Creates the attributes lossAnchor and stressAfterLossAnchor of type 
-        array that contains  for each point in fineCoordMtr the cumulative 
-        immediate loss of prestressing due to anchorage slip and the stress 
-        after this loss, respectively.
+    def getLossAnchor(self,Ep,anc_slip_extr1=0.0,anc_slip_extr2=0.0):
+        '''Return an array that contains  for each point in fineCoordMtr 
+        the cumulative loss of prestressing due to anchorage.
         Loss due to friction must be previously calculated
 
         :param Ep:      elasic modulus of the prestressing steel
@@ -259,8 +259,9 @@ class PrestressTendon(object):
             condlist=[self.fineScoord >= sCoordZeroLoss]
             choicelist = [2*(self.stressAfterLossFriction-stressSCoordZeroLoss)+excess_delta_sigma]
             lossAnchExtr2=np.select(condlist,choicelist)
-        self.lossAnch=lossAnchExtr1+lossAnchExtr2
-        self.stressAfterLossAnch=self.stressAfterLossFriction-self.lossAnch
+        lossAnch=lossAnchExtr1+lossAnchExtr2
+        return lossAnch
+#        self.stressAfterLossAnch=self.stressAfterLossFriction-self.lossAnch
 
     def fAnc_ext1(self,s):
         '''Funtion to minimize when searching the point from which the tendon 
@@ -289,13 +290,47 @@ class PrestressTendon(object):
         XYcoor=self.fineProjXYcoord[index1]+prop*(self.fineProjXYcoord[index2]-self.fineProjXYcoord[index1])
         return XYcoor
         
-    def plot3D(self,axisEqualScale='N',symbolRougPoints=None,symbolFinePoints=None,symbolTendon=None,symbolLossFriction=None,symbolStressAfterLossFriction=None,symbolLossAnch=None,symbolStressAfterLossAnch=None):
+    def applyStressToElems(self,stressMtr):
+        '''Apply stress in each tendon element with the corresponding 
+        value of stress defined in stressMtr
+
+        :param stressMtr: matrix of dimension 1*number of elements in the tendon                          with the stress to be applied to each of the elements 
+                          (from left to right)
+        '''
+        for e, s in zip(self.lstOrderedElems,stressMtr):
+            m=e.getMaterial()
+            m.prestress=s
+            e.update()
+        return
+    
+    def applyStressLossToElems(self,stressLossMtr):
+        '''Apply stress loss in each tendon element with the corresponding 
+        value of stress loss defined in stressMtr
+
+        :param stressLossMtr: matrix of dimension 1*number of elements in the 
+               tendon with the loss of stress to be applied to each of the 
+               elements (from left to right)
+        '''
+        for e, delta_stress in zip(self.lstOrderedElems,stressLossMtr):
+            m=e.getMaterial()
+            m.prestress=m.getStress()-delta_stress
+            e.update()
+        return
+        
+    def plot3D(self,axisEqualScale='N',symbolRougPoints=None,symbolFinePoints=None,symbolTendon=None,resultsToPlot=list()):
         '''Return in a 3D graphic the results to which a symbol is assigned.
         Symbol examples: 'r-': red solid line, 'mo': magenta circle, 
         'b--': blue dashes, 'ks':black square,'g^' green triangle_up, 
         'c*': cyan star, ...
         :param axisEqualScale:  ='Y', 'y','yes' or 'Yes' for equal aspect ratio
                              (defaults to 'N')
+        :param resultsToPlot: list of results to plot. Each result to be
+               displayed is input with the following parameters:
+               (matRes,symb,label), where:
+               - matRes: is the matrix of dimension 1*number of elements in the 
+                 tendon with the value of the result for each of those elements
+               - symb: is the symbol to use for representing this result
+               - label: is the text to label this result 
         '''
         fig = plt.figure()
         ax3d = fig.add_subplot(111, projection='3d')
@@ -305,14 +340,8 @@ class PrestressTendon(object):
             ax3d.plot(self.fineCoordMtr[0],self.fineCoordMtr[1],self.fineCoordMtr[2],symbolFinePoints,label='Interpolated points (spline)')
         if symbolTendon:
             ax3d.plot(self.fineCoordMtr[0],self.fineCoordMtr[1],self.fineCoordMtr[2],symbolTendon,label='Tendon')
-        if symbolLossFriction:
-            ax3d.plot(self.fineCoordMtr[0],self.fineCoordMtr[1],self.lossFriction,symbolLossFriction,label='Immediate loss due to friction')
-        if symbolStressAfterLossFriction:
-            ax3d.plot(self.fineCoordMtr[0],self.fineCoordMtr[1],self.stressAfterLossFriction,symbolStressAfterLossFriction,label='Stress after loss due to friction')
-        if symbolLossAnch:
-            ax3d.plot(self.fineCoordMtr[0],self.fineCoordMtr[1],self.lossAnch,symbolLossAnch,label='Immediate loss due to anchorage slip')
-        if symbolStressAfterLossAnch:
-            ax3d.plot(self.fineCoordMtr[0],self.fineCoordMtr[1],self.stressAfterLossAnch,symbolStressAfterLossAnch,label='Stress after loss due to anchorage slip')
+        for res in resultsToPlot:
+            ax3d.plot(self.fineCoordMtr[0],self.fineCoordMtr[1],res[0],res[1],label=res[2])
         ax3d.legend()
         ax3d.set_xlabel('X')
         ax3d.set_ylabel('Y')
@@ -323,19 +352,7 @@ class PrestressTendon(object):
             set_axes_equal(ax3d)
         return fig,ax3d
 
-    def applyStressToElems(self,stressMtr):
-        '''Initializes the stress in each tendon element with the corresponding 
-        value of stress defined in stressMtr
-
-        :param stressMtr: matrix of dimension 1*number of elements in the tendon                          with the stress to be applied to each of the elements 
-                          (from left to right)
-        '''
-        for e, s in zip(self.lstOrderedElems,stressMtr):
-            m=e.getMaterial()
-            m.initialStress=s
-        return
-        
-    def plot2D(self,XaxisValues='X',axisEqualScale='N',symbolRougPoints=None,symbolFinePoints=None,symbolTendon=None,symbolLossFriction=None,symbolStressAfterLossFriction=None,symbolLossAnch=None,symbolStressAfterLossAnch=None):
+    def plot2D(self,XaxisValues='X',axisEqualScale='N',symbolRougPoints=None,symbolFinePoints=None,symbolTendon=None,resultsToPlot=list()):
         '''Return in a 2D graphic the results to which a symbol is assigned.
         Symbol examples: 'r-': red solid line, 'mo': magenta circle, 'b--': blue dashes, 'ks':black square,'g^' green triangle_up, 'c*': cyan star, ...
         :param XaxisValues: ='X' (default) to represent in the diagram X-axis
@@ -347,6 +364,13 @@ class PrestressTendon(object):
                               curve on the XY plane
         :param axisEqualScale:  ='Y', 'y','yes' or 'Yes' for equal aspect ratio
                              (defaults to 'N')
+        :param resultsToPlot: list of results to plot. Each result to be
+               displayed is input with the following parameters:
+               (matRes,symb,label), where:
+               - matRes: is the matrix of dimension 1*number of elements in the 
+                 tendon with the value of the result for each of those elements
+               - symb: is the symbol to use for representing this result
+               - label: is the text to label this result 
         '''
         if XaxisValues.upper()=='X':
             XaxisCoord=self.fineCoordMtr[0]
@@ -372,14 +396,8 @@ class PrestressTendon(object):
             ax2d.plot(XaxisCoord,self.fineCoordMtr[2],symbolFinePoints,label='Interpolated points (spline)')
         if symbolTendon:
             ax2d.plot(XaxisCoord,self.fineCoordMtr[2],symbolTendon,label='Tendon')
-        if symbolLossFriction:
-            ax2d.plot(XaxisCoord,self.lossFriction,symbolLossFriction,label='Immediate loss due to friction')
-        if symbolStressAfterLossFriction:
-            ax2d.plot(XaxisCoord,self.stressAfterLossFriction,symbolStressAfterLossFriction,label='Stress after loss due to friction')
-        if symbolLossAnch:
-            ax2d.plot(XaxisCoord,self.lossAnch,symbolLossAnch,label='Immediate loss due to anchorage slip')
-        if symbolStressAfterLossAnch:
-            ax2d.plot(XaxisCoord,self.stressAfterLossAnch,symbolStressAfterLossAnch,label='Stress after loss due to anchorage slip')
+        for res in resultsToPlot:
+            ax2d.plot(XaxisCoord,res[0],res[1],label=res[2])
         ax2d.legend()
         ax2d.set_xlabel(xLab)
         if str.lower(axisEqualScale[0])=='y':

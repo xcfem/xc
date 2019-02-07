@@ -56,10 +56,11 @@ tendon_mm.roughCoordMtr=np.array([x_parab_rough,y_parab_rough,z_parab_rough])
 #Interpolated 3D spline 
 tendon_mm.pntsInterpTendon(n_points_fine,smoothness=1,kgrade=3)
 # Losses of prestressing due to friction
-tendon_mm.calcLossFriction(coefFric=mu,k=k_mm,sigmaP0_extr1=sigmap0max_mm,sigmaP0_extr2=0.0)
+lssFrict_mm=tendon_mm.getLossFriction(coefFric=mu,k=k_mm,sigmaP0_extr1=sigmap0max_mm,sigmaP0_extr2=0.0)
 # Losses of prestressing due to anchorage slip (loss due to friction must be
 # previously calculated
-tendon_mm.calcLossAnchor(Ep=Ep_mm,anc_slip_extr1=deltaL_mm,anc_slip_extr2=0.0)
+lssAnch_mm=tendon_mm.getLossAnchor(Ep=Ep_mm,anc_slip_extr1=deltaL_mm,anc_slip_extr2=0.0)
+stressAfterLossAnch_mm=tendon_mm.stressAfterLossFriction-lssAnch_mm
 
 Laffected_mm=tendon_mm.projXYcoordZeroAnchLoss[0] # effective length of tendon affected by
                            #the anchorage slip in extremity 1 [mm]
@@ -72,10 +73,11 @@ tendon_m.roughCoordMtr=np.array([x_parab_rough,y_parab_rough,z_parab_rough])
 #Interpolated 3D spline 
 tendon_m.pntsInterpTendon(n_points_fine,smoothness=1,kgrade=3)
 # Losses of prestressing due to friction
-tendon_m.calcLossFriction(coefFric=mu,k=k_m,sigmaP0_extr1=sigmap0max_m,sigmaP0_extr2=0.0)
+lssFrict_m=tendon_m.getLossFriction(coefFric=mu,k=k_m,sigmaP0_extr1=sigmap0max_m,sigmaP0_extr2=0.0)
 # Losses of prestressing due to anchorage slip (loss due to friction must be
 # previously calculated
-tendon_m.calcLossAnchor(Ep=Ep_m,anc_slip_extr1=deltaL_m,anc_slip_extr2=0.0)
+lssAnch_m=tendon_m.getLossAnchor(Ep=Ep_m,anc_slip_extr1=deltaL_m,anc_slip_extr2=0.0)
+stressAfterLossAnch_m=tendon_m.stressAfterLossFriction-lssAnch_m
 
 Laffected_m=tendon_m.projXYcoordZeroAnchLoss[0] # effective length of tendon affected by
                            #the anchorage slip in extremity 1 [m]
@@ -92,10 +94,10 @@ ratio7=(np.array(tendon_mm.getLengthSequence())-np.array(tendon_m.getLengthSeque
 ratio8=(tendon_mm.getReverseCumAngle()-tendon_m.getReverseCumAngle()).mean()
 ratio9=(tendon_mm.getReverseCumLength()-tendon_m.getReverseCumLength()*1000).mean()
 #Loss results
-ratio10=(np.array(tendon_mm.lossAnch)-np.array(tendon_m.lossAnch)*1e-6).mean()
-ratio11=(np.array(tendon_mm.lossFriction)-np.array(tendon_m.lossFriction)*1e-6).mean()
+ratio10=(np.array(lssAnch_mm)-np.array(lssAnch_m)*1e-6).mean()
+ratio11=(np.array(lssFrict_mm)-np.array(lssFrict_m)*1e-6).mean()
 ratio12=tendon_mm.slip1-tendon_m.slip1*1e-3
-ratio13=(np.array(tendon_mm.stressAfterLossAnch)-np.array(tendon_m.stressAfterLossAnch)*1e-6).mean()
+ratio13=(np.array(stressAfterLossAnch_mm)-np.array(stressAfterLossAnch_m)*1e-6).mean()
 ratio14=(np.array(tendon_mm.stressAfterLossFriction)-np.array(tendon_m.stressAfterLossFriction)*1e-6).mean()
 ratio15=Laffected_mm-Laffected_m*1000
 

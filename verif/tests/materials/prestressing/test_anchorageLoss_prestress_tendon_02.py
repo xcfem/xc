@@ -52,10 +52,10 @@ tendon1.roughCoordMtr=np.array([x_parab_rough,y_parab_rough,z_parab_rough])
 #Interpolated 3D spline 
 tendon1.pntsInterpTendon(n_points_fine,smoothness=1,kgrade=3)
 # Losses of prestressing due to friction 
-tendon1.calcLossFriction(coefFric=mu,k=k,sigmaP0_extr1=sigmap0max,sigmaP0_extr2=0.0)
+lssFrict1=tendon1.getLossFriction(coefFric=mu,k=k,sigmaP0_extr1=sigmap0max,sigmaP0_extr2=0.0)
 # Losses of prestressing due to anchorage slip (loss due to friction must be
 # previously calculated
-tendon1.calcLossAnchor(Ep=Ep,anc_slip_extr1=deltaL,anc_slip_extr2=0.0)
+lssAnch1=tendon1.getLossAnchor(Ep=Ep,anc_slip_extr1=deltaL,anc_slip_extr2=0.0)
 
 #Tendon prestressed from extremity 2 (right-end)
 #Tendon definition, layout and friction losses
@@ -64,19 +64,19 @@ tendon2.roughCoordMtr=np.array([x_parab_rough,y_parab_rough,z_parab_rough])
 #Interpolated 3D spline 
 tendon2.pntsInterpTendon(n_points_fine,smoothness=1,kgrade=3)
 # Loss of prestressing due to friction 
-tendon2.calcLossFriction(coefFric=mu,k=k,sigmaP0_extr1=0.0,sigmaP0_extr2=sigmap0max)
+lssFrict2=tendon2.getLossFriction(coefFric=mu,k=k,sigmaP0_extr1=0.0,sigmaP0_extr2=sigmap0max)
 # Loss of prestressing due to anchorage slip (loss due to friction must be
 # previously calculated)
-tendon2.calcLossAnchor(Ep=Ep,anc_slip_extr1=0.0,anc_slip_extr2=deltaL)
-
+lssAnch2=tendon2.getLossAnchor(Ep=Ep,anc_slip_extr1=0.0,anc_slip_extr2=deltaL)
+'''
 #Plot
-# fig1,ax2d=tendon1.plot2D(XaxisValues='S',symbolLossAnch='r-')
-# fig1.show()
-# fig2,ax2d=tendon2.plot3D(symbolLossAnch='r-')
-# fig2.savefig('fig2.png')
-
+fig1,ax2d=tendon1.plot2D(XaxisValues='X',resultsToPlot=[[lssAnch1,'r-','Immediate loss due to anchorage slip']])
+fig1.show()
+fig2,ax2d=tendon2.plot3D(resultsToPlot=[[lssAnch2,'r-','Immediate loss due to anchorage slip']])
+fig2.savefig('fig2.png')
+'''
 from sklearn.metrics import mean_squared_error
-ratio=mean_squared_error(tendon1.lossAnch,np.flipud(tendon2.lossAnch))
+ratio=mean_squared_error(lssAnch1,np.flipud(lssAnch2))
 
 import os
 from miscUtils import LogMessages as lmsg
