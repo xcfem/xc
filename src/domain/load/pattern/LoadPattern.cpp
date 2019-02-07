@@ -207,6 +207,7 @@ bool XC::LoadPattern::addNodalLoad(NodalLoad *load)
   }
 
 //! @brief Creates a nodal load.
+//! 
 //! @param nodeTag: node identifier.
 //! @param f: load vector.
 XC::NodalLoad *XC::LoadPattern::newNodalLoad(const int &nodeTag,const Vector &f)
@@ -220,13 +221,15 @@ XC::NodalLoad *XC::LoadPattern::newNodalLoad(const int &nodeTag,const Vector &f)
     return retval;
   }
 
-//! @brief Crea una load over elements.
-XC::ElementalLoad *XC::LoadPattern::newElementalLoad(const std::string &cmd)
+//! @brief Creates a new load over elements.
+//! 
+//! @param loadType: load type
+XC::ElementalLoad *XC::LoadPattern::newElementalLoad(const std::string &loadType)
   {
     MapLoadPatterns *map= dynamic_cast<MapLoadPatterns *>(Owner());
     assert(map);
     int nextTag= map->getCurrentElementLoadTag();
-    ElementalLoad *retval= procesa_element_load(this,nextTag,cmd);
+    ElementalLoad *retval= procesa_element_load(this,nextTag,loadType);
     if(retval)
       map->setCurrentElementLoadTag(++nextTag);
     return retval;

@@ -63,7 +63,8 @@ int XC::TrussStrainLoad::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag();
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "TrussStrainLoad::sendSelf() - failed to send extra data\n";    
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send extra data\n";    
     return res;
   }
 
@@ -73,7 +74,8 @@ int XC::TrussStrainLoad::recvSelf(const CommParameters &cp)
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "TrussStrainLoad::recvSelf() - data could not be received\n" ;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; data could not be received\n" ;
     else
       {
         res+= recvData(cp);

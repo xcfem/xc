@@ -11,7 +11,13 @@ __email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
 
 
 import math
+import scipy.interpolate
 from miscUtils import LogMessages as lmsg
+
+x_tab16= [0,6.4,20,2e6]
+y_tab16= [220e3,220e3,145e3,145e3]
+table16Interpolation= scipy.interpolate.interp1d(x_tab16,y_tab16)
+
 
 class LoadModel(object):
   ''' Railway load model SIA 261. '''
@@ -124,10 +130,12 @@ class LoadModel(object):
     return m*a
 
   def locomotiveDerailmentModel1(self):
-    ''' returns locomotive loads dues to derailment model 1 (table 17 and table 21)'''
-    retval= 350e3
+    ''' returns locomotive loads dues to derailment model 1 
+        -tables 16 (standard gauge) and 19 (narrow-gauge)-'''
+    retval= 350e3 # table 16
+    # Narrow-gauge railway -> table 19 
     if(self.loadModelNumber==4):
-      retval= 180e3
+      retval= 180e3 
     elif(self.loadModelNumber==5 or self.loadModelNumber==6):
       retval= 220e3
     elif(self.loadModelNumber==7):
@@ -137,12 +145,15 @@ class LoadModel(object):
     return retval
 
   def locomotiveDerailmentModel2(self):
-    ''' returns locomotive loads dues to derailment model 2 (table 17 and table 21)'''
+    ''' returns locomotive loads dues to derailment model 2 
+        -tables 16 (standard gauge) and 19 (narrow-gauge)-'''
     return 0.0
 
   def trainDerailmentModel1(self):
-    ''' returns train loads dues to derailment model 1 (table 17 and table 21)'''
-    retval= 110e3
+    ''' returns train loads dues to derailment model 1 
+        -tables 16 (standard gauge) and 19 (narrow-gauge)-'''
+    retval= 110e3 # table 16
+    # Narrow-gauge railway -> table 19
     if(self.loadModelNumber==4):
       retval= 35e3
     elif(self.loadModelNumber==5):
@@ -153,19 +164,28 @@ class LoadModel(object):
       retval= 0.0
     return retval
 
-  def trainDerailmentModel2(self):
-    ''' returns train loads dues to derailment model 2 (table 17 and table 21)'''
-    retval= 145e3
-    if(self.loadModelNumber==4):
-      retval= 50e3
-    elif(self.loadModelNumber==5):
-      retval= 80e3
-    elif(self.loadModelNumber==6):
-      retval= 110e3
-    elif(self.loadModelNumber==7):
-      retval= 180e3
-    elif(self.loadModelNumber==8):
-      retval= 0
+  def trainDerailmentModel2(self, l):
+    ''' returns train loads dues to derailment model 2 
+        -tables 16 (standard gauge) and 19 (narrow-gauge)-
+
+        :param l: length of the structure (in meters).'''
+    # Standard gauge -> table 16
+    if(self.loadModelNumber<4):
+      retval= table16Interpolation(l) # table 16
+    else: # Narrow-gauge railway -> table 19
+      factor= 1.0
+      if(l<20):
+        factor= 1.4
+      if(self.loadModelNumber==4):
+        retval= factor*50e3
+      elif(self.loadModelNumber==5):
+        retval= factor*80e3
+      elif(self.loadModelNumber==6):
+        retval= factor*110e3
+      elif(self.loadModelNumber==7):
+        retval= 180e3 # For length l= 6.5 m
+      elif(self.loadModelNumber==8):
+        retval= 0
     return retval
 
     

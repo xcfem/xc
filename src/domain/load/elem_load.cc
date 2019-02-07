@@ -30,29 +30,36 @@
 #include "boost/any.hpp"
 #include "utility/matrix/Vector.h"
 
-//! @brief Crea una nueva load over element
-XC::ElementalLoad *XC::procesa_element_load(XC::LoadPattern *lp,int &tag_el,const std::string &cmd)
+//! @brief Creates a new load over elements.
+//! 
+//! @param lp: load patter to append the load into.
+//! @param tag_el: identifier of the element load.
+//! @param loadType: load type
+XC::ElementalLoad *XC::procesa_element_load(XC::LoadPattern *lp,int &tag_el,const std::string &loadType)
   {
     ElementalLoad *retval= nullptr;
-    if(cmd == "beam2d_uniform_load")
+    if(loadType == "beam2d_uniform_load")
       retval= new_elem_load<Beam2dUniformLoad>(lp,tag_el);
-    else if(cmd == "beam2d_point_load")
+    else if(loadType == "beam2d_point_load")
       retval= new_elem_load<Beam2dPointLoad>(lp,tag_el);
-    else if(cmd == "beam_strain_load")
+    else if(loadType == "beam_strain_load")
       retval= new_elem_load<BeamStrainLoad>(lp,tag_el);
-    else if(cmd == "beam3d_point_load")
+    else if(loadType == "beam3d_point_load")
       retval= new_elem_load<Beam3dPointLoad>(lp,tag_el);
-    else if(cmd == "beam3d_uniform_load")
+    else if(loadType == "beam3d_uniform_load")
       retval= new_elem_load<Beam3dUniformLoad>(lp,tag_el);
-    else if(cmd == "brick_self_weight")
+    else if(loadType == "brick_self_weight")
       retval= new_elem_load<BrickSelfWeight>(lp,tag_el);
-    else if(cmd == "shell_uniform_load")
+    else if(loadType == "shell_uniform_load")
       retval= new_elem_load<ShellUniformLoad>(lp,tag_el);
-    else if(cmd == "bidim_strain_load")
+    else if(loadType == "bidim_strain_load")
       retval= new_elem_load<BidimStrainLoad>(lp,tag_el);
-    else if(cmd == "shell_strain_load")
+    else if(loadType == "shell_strain_load")
       retval= new_elem_load<ShellStrainLoad>(lp,tag_el);
-    else if(cmd == "truss_temp_load")
+    else if(loadType == "truss_temp_load")
       retval= new_elem_load<TrussStrainLoad>(lp,tag_el);
+    else
+      std::cerr << __FUNCTION__ << "; load type: '"
+	        << loadType << "' unknown." << std::endl;
     return retval;
   }
