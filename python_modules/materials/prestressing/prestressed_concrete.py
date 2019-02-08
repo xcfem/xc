@@ -136,7 +136,8 @@ class PrestressTendon(object):
         elems= preprocessor.getElementHandler
         elems.dimElem= preprocessor.getNodeHandler.dimSpace
         elems.defaultMaterial=materialName
-        elems.defaultTransformation=crdTransfName
+        if crdTransfName:
+            elems.defaultTransformation=crdTransfName
         nEnd2=nodes.newNodeXYZ(self.fineCoordMtr[0][0],self.fineCoordMtr[1][0],self.fineCoordMtr[2][0])
         tendonSet.getNodes.append(nEnd2)
         for i in range(1,len(self.fineCoordMtr[0])):
@@ -294,10 +295,11 @@ class PrestressTendon(object):
         '''Apply stress in each tendon element with the corresponding 
         value of stress defined in stressMtr
 
-        :param stressMtr: matrix of dimension 1*number of elements in the tendon                          with the stress to be applied to each of the elements 
+        :param stressMtr: matrix of dimension 1*number of nodes in the tendon                          with the stress to be applied to each of the elements 
                           (from left to right)
         '''
-        for e, s in zip(self.lstOrderedElems,stressMtr):
+        stressMtrToElem=(stressMtr[1:]+stressMtr[:-1])/2.0
+        for e, s in zip(self.lstOrderedElems,stressMtrToElem):
             m=e.getMaterial()
             m.prestress=s
             e.update()
@@ -307,11 +309,12 @@ class PrestressTendon(object):
         '''Apply stress loss in each tendon element with the corresponding 
         value of stress loss defined in stressMtr
 
-        :param stressLossMtr: matrix of dimension 1*number of elements in the 
+        :param stressLossMtr: matrix of dimension 1*number of nodes in the 
                tendon with the loss of stress to be applied to each of the 
                elements (from left to right)
         '''
-        for e, delta_stress in zip(self.lstOrderedElems,stressLossMtr):
+        stressLossMtrToElem=(stressLossMtr[1:]+stressLossMtr[:-1])/2.0
+        for e, delta_stress in zip(self.lstOrderedElems,stressLossMtrToElem):
             m=e.getMaterial()
             m.prestress=m.getStress()-delta_stress
             e.update()
