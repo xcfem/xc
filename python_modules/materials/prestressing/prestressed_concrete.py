@@ -28,13 +28,39 @@ class PrestressTendon(object):
 
     :ivar lstRoughPnt: list of 3D-coordinate tuples defining the points from 
                        which to interpolate the cubic spline that will delineate
-                       the tendon geometry. e.g. [(x1,y1,z1),(x2,y2,z2),...]
+                       the tendon geometry. e.g. [(x1,y1,z1),(x2,y2,z2),...].
+                       For straight tendon only two 3D-coordinate tuples are 
+                       provided defining the two extremities of the tendon.
     :ivar roughCoordMtr: matrix 3*n_rough_ptos [[x1,x2, ..],[y1,y2,..],[z1,z2,..]] 
 
     '''
     def __init__(self,lstRoughPnts):
         self.lstRoughPnts=lstRoughPnts
         self.roughCoordMtr=np.array(lstRoughPnts).transpose()
+
+    def pntsStraightTendon(self,eSize):
+        '''Interpolates coordinates in the straight line defined by two points 
+        in lstRoughPnt, spaced eSize. Creates attribute:
+        
+        - fineCoordMtr: matrix with coordinates of the interpolated points
+        [[x1,x2, ..],[y1,y2,..],[z1,z2,..]]
+        '''
+        extr1=geom.Pos3d(self.lstRoughPnts[0][0],self.lstRoughPnts[0][1],self.lstRoughPnts[0][2])
+        extr2=geom.Pos3d(self.lstRoughPnts[1][0],self.lstRoughPnts[1][1],self.lstRoughPnts[1][2])
+        v=extr2-extr1
+        L=v.getModulo()
+        nPnt=int(L/eSize)+1
+        eSize=L/(nPnt-1)
+        vn=v.normalizado()
+        xCoor,yCoor,zCoor=list(),list(),list()
+        for i in range(nPnt):
+            v=i*eSize*vn
+            xCoor.append(v.x)
+            yCoor.append(v.y)
+            zCoor.append(v.z)
+        self.fineCoordMtr=np.array([xCoor,yCoor,zCoor])
+        return
+            
 
     def pntsInterpTendon(self,nPntsFine,smoothness,kgrade=3):
         '''Generates a cubic spline (default) or a spline of grade kgrade 
@@ -115,9 +141,9 @@ class PrestressTendon(object):
         return np.flipud(acum_back)
 
     def creaTendonElements(self,preprocessor,materialName,elemTypeName,crdTransfName,areaTendon,setName):
-        '''Creates the nodes and elements of the tendon and appends them to a set. Creates also the attribute lstOrderedElems as a list with the elements of the tendon ordered from left to right.
+        '''Creates the nodes and elements of the tendon and appends them to the set returned. Creates also the attribute lstOrderedElems as a list with the elements of the tendon ordered from left to right.
 
-        :param preporcessor: preprocessor
+        :param preprocessor: preprocessor
         :param materialName: name of the material
         :param elemTypeName: name of the type of element
         :param crdTransfName: name of the coordinate transformation

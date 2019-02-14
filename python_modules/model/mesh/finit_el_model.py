@@ -49,7 +49,6 @@ class RawLineSetToMesh(SetToMesh):
         seedElemHandler= preprocessor.getElementHandler.seedElemHandler
         seedElemHandler.defaultMaterial= self.matSect.name
         seedElemHandler.dimElem= self.dimElemSpace
-        #print 'name= ', self.coordinateTransformation.getName()
         if(self.coordinateTransformation):
             seedElemHandler.defaultTransformation= self.coordinateTransformation.getName()
         else:
@@ -167,3 +166,36 @@ def assign_ndiv_to_lines_in_set(lnSet,ndiv):
     for l in lnSet.getLines:
         l.nDiv=ndiv
     return
+
+def createBeam2Pnts(preprocessor,startPnt,endPnt,setName,matSect,elemSize,vDirLAxZ,elemType='ElasticBeam3d',dimElemSpace=3,coordTransfType='linear'):
+    '''Return a set of beam elements created from startPnt to endPnt.
+    
+    :ivar preprocessor: preprocessor
+    :ivar startPnt: coordinates of first beam extremity (defined as 
+          geom.Pos3d(x,y,z)
+    :ivar startPnt: coordinates of end beam extremity (defined as 
+          geom.Pos3d(x,y,z)
+    :ivar setName: name of the set of entities created
+    :ivar matSect: instance of the class BeamMaterialData that defines the 
+          material-section to be applied to the set of lines.
+    :ivar elemSize: mean size of the elements
+    :ivar vDirLAxZ: direction vector for the element local axis Z 
+          defined as xc.Vector([x,y,z]). This is the direction in which
+          the Z local axis of the sections will be
+          oriented (i.e. in the case of rectangular sections this Z 
+          local axis of the section is parallel to the dimension
+          defined as width of the rectangle)
+    :ivar dimElemSpace: dimension of the element space (defaults to 3)
+    :ivar coordTransfType: type of coordinate transformation. Available 
+                       types: 'linear', 'PDelta' and 'corot' (defaults to 
+                       'linear') 
+    '''
+    s=preprocessor.getSets.defSet(setName)
+    ext1=preprocessor.getMultiBlockTopology.getPoints.newPntFromPos3d(startPnt)
+    ext2=preprocessor.getMultiBlockTopology.getPoints.newPntFromPos3d(endPnt)
+    l=preprocessor.getMultiBlockTopology.getLines.newLine(ext1.tag,ext2.tag)
+    s.getLines.append(l)
+    sMesh=LinSetToMesh(s,matSect,elemSize,vDirLAxZ,elemType,dimElemSpace,coordTransfType)
+    sMesh.generateMesh(preprocessor)
+    return s
+    
