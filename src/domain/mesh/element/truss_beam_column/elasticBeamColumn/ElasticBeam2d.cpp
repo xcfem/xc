@@ -94,12 +94,16 @@ void XC::ElasticBeam2d::set_transf(const CrdTransf *trf)
           theCoordTransf = tmp->getCopy();
         else
           {
-            std::cerr << "ElasticBeam2d::ElasticBeam2d -- failed to get copy of coordinate transformation\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; failed to get a copy of coordinate transformation."
+	              << std::endl;
             exit(-1);
           }
       }
     else
-      std::cerr << "ElasticBeam2d::set_transf; pointer to coordinate transformation is null." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; pointer to coordinate transformation is null."
+		<< std::endl;
   }
 
 XC::ElasticBeam2d::ElasticBeam2d(int tag)
@@ -217,22 +221,25 @@ void XC::ElasticBeam2d::setDomain(Domain *theDomain)
     int dofNd2 = theNodes[1]->getNumberDOF();
     if(dofNd1 != 3)
       {
-        std::cerr << "XC::ElasticBeam2d::setDomain -- Node 1: " << theNodes.getTagNode(0)
-               << " has incorrect number of DOF\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; Node 1: " << theNodes.getTagNode(0)
+                  << " has incorrect number of DOF.\n";
         exit(-1);
       }
 
     if(dofNd2 != 3)
       {
-        std::cerr << "XC::ElasticBeam2d::setDomain -- Node 2: " << theNodes.getTagNode(1)
-               << " has incorrect number of DOF\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; Node 2: " << theNodes.getTagNode(1)
+               << " has incorrect number of DOF.\n";
         exit(-1);
       }
     if(theCoordTransf)
       {
         if(theCoordTransf->initialize(theNodes[0], theNodes[1]) != 0)
           {
-            std::cerr << "XC::ElasticBeam2d::setDomain -- Error initializing coordinate transformation\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; error initializing coordinate transformation\n";
             exit(-1);
           }
         double L= theCoordTransf->getInitialLength();
@@ -275,7 +282,8 @@ int XC::ElasticBeam2d::commitState(void)
     int retVal= XC::Element::commitState();
     // call element commitState to do any base class stuff
     if(retVal!=0)
-      std::cerr << "XC::ElasticBeam2d::commitState () - failed in base class";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed in base class.";
     retVal += theCoordTransf->commitState();
     return retVal;
   }
@@ -424,7 +432,7 @@ void XC::ElasticBeam2d::zeroLoad(void)
 int XC::ElasticBeam2d::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
-      std::cerr << getClassName() 
+      std::cerr << getClassName() << "::" << __FUNCTION__ 
                 << "; load over inactive element: "
                 << getTag()  
                 << std::endl;
@@ -448,7 +456,9 @@ int XC::ElasticBeam2d::addLoad(ElementalLoad *theLoad, double loadFactor)
           }
         else
           {
-            std::cerr << "ElasticBeam2d::addLoad()  -- load type unknown for element with tag: " << this->getTag() << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; load type unknown for element with tag: "
+		      << this->getTag() << std::endl;
             return -1;
           }
       }
@@ -465,7 +475,8 @@ int XC::ElasticBeam2d::addInertiaLoadToUnbalance(const XC::Vector &accel)
 
         if(3 != Raccel1.Size() || 3 != Raccel2.Size())
           {
-            std::cerr << "XC::ElasticBeam2d::addInertiaLoadToUnbalance matrix and vector sizes are incompatable\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; matrix and vector sizes are incompatable.\n";
             return -1;
           }
 
@@ -575,7 +586,8 @@ int XC::ElasticBeam2d::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag();
     res= cp.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "ElasticBeam2d::sendSelf -- could not send data.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; could not send data.\n";
     return res;
   }
 
@@ -585,7 +597,8 @@ int XC::ElasticBeam2d::recvSelf(const CommParameters &cp)
     inicComm(12);
     int res = cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "ElasticBeam2d::recvSelf() - failed to receive ID data.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ID data.\n";
     else
       res+= recvData(cp);
     return res;
