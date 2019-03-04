@@ -37,7 +37,6 @@ nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
-vDisp= [0,0]
 vReac1= [0,0]
 vReac2= [0,0]
 
@@ -96,7 +95,8 @@ analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 nod2= nodes.getNode(2)
-vDisp= nod2.getDisp
+tmp= nod2.getDisp
+vDisp= xc.Vector([tmp[0],tmp[1]])
 
 a= x*L
 delta0= vDisp.dot(vIElem)
@@ -110,6 +110,8 @@ ratio1= ((delta1-delta1Teor)/delta1Teor)
 # print "delta0= ",delta0
 # print "delta0Teor= ",delta0Teor
 # print "ratio0= ",ratio0
+# print "vDisp= ",vDisp
+# print "vJElem= ",vJElem
 # print "delta1= ",delta1
 # print "delta1Teor= ",delta1Teor
 # print "ratio1= ",ratio1
