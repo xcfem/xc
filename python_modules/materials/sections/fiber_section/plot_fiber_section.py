@@ -59,20 +59,30 @@ class fibSectFeaturesToplot(object):
     '''Class to generate python plots of the selected features associated with 
     a fiber section.
 
-    :ivar 
+    :ivar fiberSection: fiber-section to plot
+    :ivar colorNeutralAxis: color to display the Neutral axis (defaults to None)
+    :ivar colorBendingPlane: color to display the beding plane (defaults to None)
+    :ivar colorCompressionPlane: color to display the compression plane (defaults to None)
+    :ivar colorTensionPlane: color to display the tension plane (defaults to None)
+    :ivar colorIntForcAxis: color to display the internal forces axis (defaults to None)
+    :ivar colorLeverArm: color to display the lever arm  (defaults to None)
+    :ivar colorEffDepth: color to display the effective depth (defaults to None)
+    :ivar colorEffConcrArea: color to display the limit of the effective concrete area (defaults to None)
+    :ivar MaxEffHeight: maximum effective height to calculate effective concrete area (defaults to None)
+    :ivar colorGrossEffConcrAreaContours: color to display the contours of the gross effective concrete area  (defaults to None)
     '''
-    def __init__(self,fiberSection):
+    def __init__(self,fiberSection,colorNeutralAxis=None,colorBendingPlane=None,colorCompressionPlane=None,colorTensionPlane=None,colorIntForcAxis=None,colorLeverArm=None,colorEffDepth=None,colorEffConcrArea=None,MaxEffHeight=None,colorGrossEffConcrAreaContours=None):
         self.fiberSection=fiberSection
-        self.colorNeutralAxis=None
-        self.colorBendingPlane=None
-        self.colorCompressionPlane=None
-        self.colorTensionPlane=None
-        self.colorIntForcAxis=None
-        self.colorLeverArm=None
-        self.colorEffDepth=None
-        self.colorEffConcrArea=None
-        self.MaxEffHeight=None
-        self.colorGrossEffConcrAreaContours=None
+        self.colorNeutralAxis=colorNeutralAxis
+        self.colorBendingPlane=colorBendingPlane
+        self.colorCompressionPlane=colorCompressionPlane
+        self.colorTensionPlane=colorTensionPlane
+        self.colorIntForcAxis=colorIntForcAxis
+        self.colorLeverArm=colorLeverArm
+        self.colorEffDepth=colorEffDepth
+        self.colorEffConcrArea=colorEffConcrArea
+        self.MaxEffHeight=MaxEffHeight
+        self.colorGrossEffConcrAreaContours=colorGrossEffConcrAreaContours
   
     def generatePlot(self):
         self.contour=self.fiberSection.getRegionsContour()
@@ -81,7 +91,13 @@ class fibSectFeaturesToplot(object):
         ax2d.axis('equal')
         #Fiber section contour
         (y,z)=data_xcpolygon_to_pyplot(self.contour)
-        ax2d.plot(y,z,'k')
+        ax2d.plot(y,z,'k',label='Cross-section')
+        for reinfLayer in self.fiberSection.getReinfLayers:
+            bars=reinfLayer.getReinfBars
+            for b in bars:
+                cent= b.getPos2d
+                R= b.diameter/2.0
+                ax2d.add_artist(plt.Circle((cent[0],cent[1]),R,color='black'))
         #Neutral axis 
         if self.colorNeutralAxis != None:
             (y,z)=data_axis_to_pyplot(self.fiberSection.getNeutralAxis(),self.contour)

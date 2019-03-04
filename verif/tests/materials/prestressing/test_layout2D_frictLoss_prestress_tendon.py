@@ -74,17 +74,16 @@ cumulative_angl=tendon.getCumAngle()
 ratio2= np.mean((cumulative_angl-aprox_cum_angle)**2)/np.mean(cumulative_angl)
 
 # Losses of prestressing due to friction
-tendon.calcLossFriction(coefFric=mu,k=k,sigmaP0_extr1=sigmap0max,sigmaP0_extr2=0.0)
-ratio3= np.mean((tendon.lossFriction-aprox_cum_loss)**2)/np.mean(tendon.lossFriction)
+lssFrict=tendon.getLossFriction(coefFric=mu,k=k,sigmaP0_extr1=sigmap0max,sigmaP0_extr2=0.0)
+ratio3= np.mean((lssFrict-aprox_cum_loss)**2)/np.mean(lssFrict)
 
+'''
 #Plot
-# fig1,ax2d=tendon.plot2D(XaxisValues='X',symbolRougPoints='b*',symbolFinePoints='r*',symbolTendon='g-',symbolLossFriction=None)
-#fig1.show()
-
-# fig2,ax2d=tendon.plot2D(XaxisValues='X',symbolRougPoints=None,symbolFinePoints=None,symbolTendon=None,symbolLossFriction='m-')
-# fig2.savefig('fig2.png')
-
-# fig3,ax2d=tendon.plot2D(XaxisValues='X',symbolStressAfterLossFriction='r-')
+fig1,ax2d=tendon.plot2D(XaxisValues='X',symbolRougPoints='b*',symbolFinePoints='r*',symbolTendon='g-')
+fig1.show()
+fig2,ax2d=tendon.plot2D(XaxisValues='X',symbolRougPoints=None,symbolFinePoints=None,symbolTendon=None,resultsToPlot=[[lssFrict,'m-','Immediate loss due to friction']])
+fig2.savefig('fig2.png')
+'''
 import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)

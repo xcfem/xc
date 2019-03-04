@@ -503,6 +503,7 @@ python tests/materials/prestressing/test_anchorageLoss_prestress_tendon_04.py
 python tests/materials/prestressing/test_loss_prestress_units_01.py
 python tests/materials/prestressing/test_deflection_prestressed_beam_01.py
 python tests/materials/prestressing/test_short_term_loss_prestress_01.py
+python tests/materials/prestressing/test_short_term_loss_prestress_02.py
 
 echo "$BLEU" "  Other materials tests." "$NORMAL"
 python tests/materials/test_elastomeric_bearing_stiffness.py

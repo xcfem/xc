@@ -50,17 +50,20 @@ tendon.roughCoordMtr=np.array([x_parab_rough,y_parab_rough,z_parab_rough])
 #Interpolated 3D spline 
 tendon.pntsInterpTendon(n_points_fine,smoothness=1,kgrade=3)
 # Losses of prestressing due to friction
-tendon.calcLossFriction(coefFric=mu,k=k,sigmaP0_extr1=sigmap0max,sigmaP0_extr2=0.0)
+lssFrict=tendon.getLossFriction(coefFric=mu,k=k,sigmaP0_extr1=sigmap0max,sigmaP0_extr2=0.0)
 # Losses of prestressing due to anchorage slip (loss due to friction must be
 # previously calculated
-tendon.calcLossAnchor(Ep=Ep,anc_slip_extr1=deltaL,anc_slip_extr2=0.0)
+lssAnch=tendon.getLossAnchor(Ep=Ep,anc_slip_extr1=deltaL,anc_slip_extr2=0.0)
+stressAfterLossAnch=tendon.stressAfterLossFriction-lssAnch
 
+'''
 #Plot
-# fig1,ax2d=tendon.plot2D(XaxisValues='S',symbolStressAfterLossFriction='g-',symbolStressAfterLossAnch='r-')
-#fig1.show()
+fig1,ax2d=tendon.plot2D(XaxisValues='X',resultsToPlot=[[stressAfterLossAnch,'r-','Stress after loss due to anchorage slip']])
+fig1.show()
+'''
 
 areaSigmFric=interpolate.splint(0,tendon.fineScoord[-1],tendon.tckLossFric)
-tckLA=interpolate.splrep(tendon.fineScoord,tendon.stressAfterLossAnch,k=3)
+tckLA=interpolate.splrep(tendon.fineScoord,stressAfterLossAnch,k=3)
 areaSigmAnc=interpolate.splint(0,tendon.fineScoord[-1],tckLA)
 
 ratio=(areaSigmFric-areaSigmAnc)-Ep*deltaL

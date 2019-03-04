@@ -26,11 +26,9 @@ import geom
 import xc
 from materials import typical_materials as tm
 from materials.prestressing import prestressed_concrete as presconc
-from rough_calculations import ng_prestressed_concrete as ng_presconc
 from model import predefined_spaces
 from solution import predefined_solutions
 from model.mesh import finit_el_model as fem
-from actions import loads
 
 #DATA
 #Geometry
