@@ -42,10 +42,10 @@ elem= seedElemHandler.newElement("FourNodeQuad",xc.ID([0,0,0,0]))
 
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
-pt= points.newPntIDPos3d(2,geom.Pos3d(CooMax,0.0,0.0))
-pt= points.newPntIDPos3d(3,geom.Pos3d(CooMax,CooMax,0.0))
-pt= points.newPntIDPos3d(4,geom.Pos3d(0.0,CooMax,0.0))
+pt1= points.newPntFromPos3d(geom.Pos3d(0.0,0.0,0.0))
+pt2= points.newPntFromPos3d(geom.Pos3d(CooMax,0.0,0.0))
+pt3= points.newPntFromPos3d(geom.Pos3d(CooMax,CooMax,0.0))
+pt4= points.newPntFromPos3d(geom.Pos3d(0.0,CooMax,0.0))
 
 #             l2
 #  4 +--------------------+ 3
@@ -56,42 +56,26 @@ pt= points.newPntIDPos3d(4,geom.Pos3d(0.0,CooMax,0.0))
 #
 
 lines= preprocessor.getMultiBlockTopology.getLines
-lines.defaultTag= 3
-l3= lines.newLine(1,2)
-lines.defaultTag= 2
-l2= lines.newLine(4,3)
-lines.defaultTag= 1
-l1= lines.newLine(2,3)
-lines.defaultTag= 4
-l1= lines.newLine(4,1)
+l3= lines.newLine(pt1.tag,pt2.tag)
+l2= lines.newLine(pt4.tag,pt3.tag)
+l1= lines.newLine(pt2.tag,pt3.tag)
+l4= lines.newLine(pt4.tag,pt1.tag)
 
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
-surfaces.defaultTag= 1
-s= surfaces.newQuadSurfaceLines(1,2,3,4)
+s= surfaces.newQuadSurfaceLines(l1.tag,l2.tag,l3.tag,l4.tag)
 s.nDivI= NumDivI
 s.nDivJ= NumDivJ
 
 
-''' 
-            for_each_side
-
-                 print "linea: ", edge.nombre," directo: ",directo
-                 edge{print "    p1: ",p1.nombre," p2: ",p2.nombre }
-
-'''
-
-
-
-f1= preprocessor.getSets.getSet("f1")
-f1.genMesh(xc.meshDir.I)
+s.genMesh(xc.meshDir.I)
 
 
 
 
-nnodCuadr= f1.getNumNodes
-# print "nnod= ",getNumNodes
-nelemCuadr= f1.getNumElements
-# print "nelem= ",getNumElements
+nnodCuadr= s.getNumNodes
+# print "nnod= ",s.getNumNodes
+nelemCuadr= s.getNumElements
+# print "nelem= ",s.getNumElements
 
 
 

@@ -38,32 +38,31 @@ seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= "elast2d"
 quad4n= seedElemHandler.newElement("FourNodeQuad",xc.ID([0,0,0,0]))
 
+#               
+#  4 +--------------------+ 3
+#    |                    |
+#    |                    |
+#    |                    |
+#  1 +--------------------+ 2
+#
+
 points= preprocessor.getMultiBlockTopology.getPoints
-pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
-pt= points.newPntIDPos3d(2,geom.Pos3d(CooMax,0.0,0.0))
-pt= points.newPntIDPos3d(3,geom.Pos3d(CooMax,CooMax,0.0))
-pt= points.newPntIDPos3d(4,geom.Pos3d(0.0,CooMax,0.0))
+pt1= points.newPntFromPos3d(geom.Pos3d(0.0,0.0,0.0))
+pt2= points.newPntFromPos3d(geom.Pos3d(CooMax,0.0,0.0))
+pt3= points.newPntFromPos3d(geom.Pos3d(CooMax,CooMax,0.0))
+pt4= points.newPntFromPos3d(geom.Pos3d(0.0,CooMax,0.0))
 
 surfaces= preprocessor.getMultiBlockTopology.getSurfaces
-surfaces.defaultTag= 1
-s= surfaces.newQuadSurfacePts(1,2,3,4)
+s= surfaces.newQuadSurfacePts(pt1.tag,pt2.tag,pt3.tag,pt4.tag)
 s.nDivI= NumDivI
 s.nDivJ= NumDivJ
 
-#
-#            \for_each_side
-#               {
-#                 print "linea: ", edge.nombre," directo: ",directo
-#                 \edge{print "    p1: ",p1.nombre," p2: ",p2.nombre}
-#               }
+s.genMesh(xc.meshDir.I)
 
-f1= preprocessor.getSets.getSet("f1")
-f1.genMesh(xc.meshDir.I)
-
-nnodCuadr= f1.getNumNodes
-# print "nnod= ",f1.getNumNodes
-nelemCuadr= f1.getNumElements
-# print "nelem= ",f1.getNumElements
+nnodCuadr= s.getNumNodes
+# print "nnod= ",s.getNumNodes
+nelemCuadr= s.getNumElements
+# print "nelem= ",s.getNumElements
 
 mesh= feProblem.getDomain.getMesh
 nnodDom= mesh.getNumNodes()
