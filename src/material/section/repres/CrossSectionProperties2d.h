@@ -63,8 +63,8 @@ class CrossSectionProperties2d: public CommandEntity, public MovableObject
   public:
     CrossSectionProperties2d(double E, double A, double I, double G= 0.0,double alpha= 0.0);
     CrossSectionProperties2d(double EA, double EI);
-    CrossSectionProperties2d(void);
-
+    CrossSectionProperties2d(const SectionForceDeformation &);
+    CrossSectionProperties2d(void); 
     bool check_values(void);
     inline double &E(void)
       { return e; }

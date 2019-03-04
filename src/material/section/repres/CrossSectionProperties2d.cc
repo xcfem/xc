@@ -30,6 +30,7 @@
 #include "xc_utils/src/utils/misc_utils/inertia.h"
 #include "xc_utils/src/geom/sis_ref/PrincipalAxesOfInertia2D.h"
 #include "domain/mesh/element/utils/Information.h"
+#include "material/section/ResponseId.h"
 
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
@@ -88,8 +89,31 @@ XC::CrossSectionProperties2d::CrossSectionProperties2d(void)
 
 //! @brief Constructor.
 XC::CrossSectionProperties2d::CrossSectionProperties2d(double EA_in, double EI_in)
-  : CommandEntity(), MovableObject(0), e(1), g(0.0), a(EA_in), i(EI_in), alpha(0)
+  : CommandEntity(), MovableObject(0), e(1.0), g(0.0), a(EA_in), i(EI_in), alpha(0)
   { check_values(); }
+
+//! @brief Constructor.
+XC::CrossSectionProperties2d::CrossSectionProperties2d(const SectionForceDeformation &section)
+  : CommandEntity(), MovableObject(0), e(1.0), g(1.0), a(0.0), i(0.0), alpha(0)
+  {
+    const Matrix &sectTangent= section.getInitialTangent();
+    const ResponseId &sectCode= section.getType();
+    for(int i=0; i<sectCode.Size(); i++)
+      {
+	int code = sectCode(i);
+	switch(code)
+	  {
+	  case SECTION_RESPONSE_P:
+	    a = sectTangent(i,i);
+	    break;
+	  case SECTION_RESPONSE_MZ:
+	    i = sectTangent(i,i);
+	    break;
+	  default:
+	    break;
+	  }
+      }
+  }
 
 //! @brief Constructor (2D cross sections).
 XC::CrossSectionProperties2d::CrossSectionProperties2d(double E_in, double A_in, double I_in, double G_in, double a)

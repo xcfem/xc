@@ -36,10 +36,12 @@
 #include "utility/matrix/ID.h"
 #include "domain/component/Parameter.h"
 #include "material/section/SectionForceDeformation.h"
+#include "material/section/ResponseId.h"
 
 XC::Matrix XC::CrossSectionProperties3d::ks4(4,4);
 XC::Matrix XC::CrossSectionProperties3d::ks6(6,6);
 
+//! @brief Check values of inertia values.
 bool XC::CrossSectionProperties3d::check_values(void)
   {
     bool retval= true;
@@ -75,6 +77,30 @@ XC::CrossSectionProperties3d::CrossSectionProperties3d(double E_in, double A_in,
 XC::CrossSectionProperties3d::CrossSectionProperties3d(double EA_in, double EIz_in, double EIy_in, double GJ_in)
   : CrossSectionProperties2d(EA_in,EIz_in), iy(EIy_in), iyz(0), j(GJ_in)
   { check_values(); }
+
+//! @brief Constructor.
+XC::CrossSectionProperties3d::CrossSectionProperties3d(const SectionForceDeformation &section)
+  : CrossSectionProperties2d(section), iy(0.0), iyz(0.0), j(0.0)
+  {
+    const Matrix &sectTangent= section.getInitialTangent();
+    const ResponseId &sectCode= section.getType();
+    for (int i=0; i<sectCode.Size(); i++)
+      {
+	int code = sectCode(i);
+	switch(code)
+	  {
+	  case SECTION_RESPONSE_MY:
+	    iy= sectTangent(i,i);
+	    break;
+	  case SECTION_RESPONSE_T:
+	    j= sectTangent(i,i);
+	    break;
+	  default:
+	    break;
+	  }
+      }
+  }
+
 
 //! @brief Returns the angle between the principal axes and the local system.
 double XC::CrossSectionProperties3d::getTheta(void) const
