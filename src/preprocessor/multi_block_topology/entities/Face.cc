@@ -125,6 +125,15 @@ int XC::Face::SenseOfEdge(const Edge *l,const Face &otra) const
       return -1;
   }
 
+//! @brief Reverse the verrtex sequence.
+//! 
+//! Changes the orientation of the object (I->J->K->L => L->K->J->I)
+void XC::Face::reverse(void)
+  {
+    CmbEdge::reverse();
+    close();
+  }
+
 //! @brief Returns the i-th vertex.
 const XC::Pnt *XC::Face::getVertex(const size_t &i) const
   { return getSide(i)->P1(); }

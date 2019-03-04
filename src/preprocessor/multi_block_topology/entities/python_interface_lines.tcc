@@ -86,4 +86,6 @@ class_<XC::CmbEdge, bases<XC::Edge>, boost::noncopyable >("CmbEdge","Compound li
   .add_property("getEdges", make_function( &XC::CmbEdge::getSides, return_internal_reference<>()))
   .def("addLines",&XC::CmbEdge::addLines, return_internal_reference<>(),"Add lines to the sequence.")
   .def("addPoints",&XC::CmbEdge::addPoints, return_internal_reference<>(),"Add points to the sequence.")
+  .def("getReversed",&XC::CmbEdge::getReversed,"Return the reversed face.")
+  .def("reverse",&XC::CmbEdge::reverse,"Reverse the vertex sequence.")
    ;

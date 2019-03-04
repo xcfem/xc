@@ -327,10 +327,23 @@ XC::Pnt *XC::CmbEdge::P1(void)
 XC::Pnt *XC::CmbEdge::P2(void)
   { return const_cast<Pnt *>(last_point()); }
 
+//! @brief Return the reverse vertex sequence.
+XC::CmbEdge XC::CmbEdge::getReversed(void) const
+  {
+    CmbEdge retval(*this);
+    retval.reverse();
+    return retval;
+  }
+
+//! @brief Reverse the verrtex sequence.
+//! 
+//! Changes the orientation of the object (I->J->K->L => L->K->J->I)
 void XC::CmbEdge::reverse(void)
   {
-    for(std::deque<Side>::iterator i=lines.begin();i!=lines.end();i++)
-      (*i).reverse();
+    ID tags= getKPoints();
+    lines.clear();
+    std::reverse(tags.begin(), tags.end());
+    addPoints(tags);
   }
 
 //! @brief Return the length of the line.
@@ -640,11 +653,11 @@ size_t XC::CmbEdge::IndiceEdge(const Edge *l) const
 
 //! @brief Returns a lado of the line compuesta.
 const XC::CmbEdge::Side *XC::CmbEdge::getSide(const size_t &i) const
-  { return &lines[i-1]; }
+  { return &lines.at(i-1); }
 
 //! @brief Returns a lado of the line compuesta.
 XC::CmbEdge::Side *XC::CmbEdge::getSide(const size_t &i)
-  { return &lines[i-1]; }
+  { return &lines.at(i-1); }
 
 //! @brief Return the side which extremes are the points
 //! being passed as parameters.

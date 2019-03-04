@@ -86,6 +86,7 @@ class Face: public CmbEdge
 
     std::set<SetBase *> get_sets(void) const;
     void add_to_sets(std::set<SetBase *> &);
+    virtual void reverse(void);
 
     int getVtkCellType(void) const;
   };
