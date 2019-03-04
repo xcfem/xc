@@ -171,7 +171,15 @@ int XC::ID::removeValue(const int &value)
     return place;
   }    
 
+//! @brief Return the reversed sequence.
+XC::ID XC::ID::getReversed(void) const
+  {
+    XC::ID retval(*this);
+    std::reverse(retval.begin(),retval.end());
+    return retval;
+  }
 
+//! @brief Changes the size of the array.
 int XC::ID::resize(const int &newSize, const int &defaultValue)
   {
     int retval= 0;

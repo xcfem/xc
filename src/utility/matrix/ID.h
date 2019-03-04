@@ -142,6 +142,7 @@ class ID: public CommandEntity, public std::vector<int>
     int getLocation(const int &) const;
     int getLocationOrdered(const int &) const; // for when insert was used to add elements
     int removeValue(const int &);
+    ID getReversed(void) const;
 
     friend std::ostream &operator<<(std::ostream &, const ID &);
     //    friend istream &operator>>(istream &s, ID &V);    
