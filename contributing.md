@@ -6,5 +6,7 @@ The following is a set of guidelines for contributing to XC and its packages, wh
 These are just guidelines, not rules, use your best judgment and feel free to propose changes to this document in a pull request.
 
 If you can read Spanish and write English you can help us with the translation of some source code files that we've written in Spanish some years ago. This is a quite easy way to contribute ;-)
+ z
+Here you can find an excellent post about writing git commit messages: https://chris.beams.io/posts/git-commit/ (I'll stick to the 7 rules myself :wink:).
 
 Work in progress...
