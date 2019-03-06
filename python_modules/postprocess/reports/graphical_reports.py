@@ -16,7 +16,50 @@ from postprocess.xcVtk import control_var_diagram as cvd
 from postprocess.xcVtk import vtk_graphic_base
 from postprocess.xcVtk.FE_model import quick_graphics as QGrph
 
-class RecordLoadCaseDisp(object):
+class OuputUnits(object):
+  '''Unit for the generation of graphic files report files.
+  
+  :ivar unitsScaleLoads: factor to apply to loads if we want to change
+                   the units (defaults to 1).
+  :ivar unitsLoads: text to especify the units in which loads are 
+                   represented (defaults to 'units:[m,kN]')
+  :ivar vectorScaleLoads: factor to apply to the vectors length in the 
+                   representation of element loads (defaults to 1).
+  :ivar vectorScalePointLoads: factor to apply to the vectors length in the 
+                   representation of nodal loads (defaults to 1).
+  :ivar unitsScaleDispl: factor to apply to displacements if we want to change
+                   the units (defaults to 1).
+  :ivar unitsDispl: text to especify the units in which displacements are 
+                   represented (defaults to '[m]'
+  :ivar scaleDispBeamIntForc: tuple (escN,escQ,escM) correponding to the scales
+                   to apply to displays of, respectively, axial forces (N),
+                   shear forces (Q) or bending moments (M) in beam elements
+                   (defaults to (1.0,1.0,1.0))
+  :ivar unitsScaleForc: factor to apply to internal forces if we want to change
+                   the units (defaults to 1).
+  :ivar unitsForc: text to especify the units in which forces are 
+                   represented (defaults to '[kN/m]')
+  :ivar unitsScaleMom: factor to apply to internal moments if we want to change
+                   the units (defaults to 1).
+  :ivar unitsMom:  text to especify the units in which bending moments are 
+                   represented (defaults to '[kN.m/m]')
+  '''
+
+  def __init__(self):
+    self.unitsScaleLoads=1.0
+    self.unitsLoads='units:[m,kN]'
+    self.vectorScaleLoads=1.0
+    self.vectorScalePointLoads=1.0
+    self.unitsScaleDispl=1.0
+    self.unitsDispl='[m]'
+    self.scaleDispBeamIntForc=(1.0,1.0,1.0)
+    self.unitsScaleForc=1.0
+    self.unitsForc='[kN/m]'
+    self.unitsScaleMom=1.0
+    self.unitsMom='[kN.m/m]'
+    
+
+class RecordLoadCaseDisp(OuputUnits):
   '''Generation of graphic files and adding to report-tex files for a load case
   
   :ivar loadCaseName:  name of the load case to be depicted
@@ -29,14 +72,6 @@ class RecordLoadCaseDisp(object):
   :ivar compElLoad: component of load on beam elements to be represented
                    available components: 'axialComponent', 'transComponent', 
                    'transYComponent','transZComponent' (defaults to 'transComponent')
-  :ivar unitsScaleLoads: factor to apply to loads if we want to change
-                   the units (defaults to 1).
-  :ivar unitsLoads: text to especify the units in which loads are 
-                   represented (defaults to 'units:[m,kN]')
-  :ivar vectorScaleLoads: factor to apply to the vectors length in the 
-                   representation of element loads (defaults to 1).
-  :ivar vectorScalePointLoads: factor to apply to the vectors length in the 
-                   representation of nodal loads (defaults to 1).
   :ivar multByElemAreaLoads: boolean value that must be True if we want to 
                    represent the total load on each element 
                    (=load multiplied by element area) and False if we 
@@ -47,10 +82,6 @@ class RecordLoadCaseDisp(object):
                    (defaults to ['uX', 'uY', 'uZ'])
   :ivar setsToDispDspRot: ordered list of sets of elements to display displacements 
                    or rotations
-  :ivar unitsScaleDispl: factor to apply to displacements if we want to change
-                   the units (defaults to 1).
-  :ivar unitsDispl: text to especify the units in which displacements are 
-                   represented (defaults to '[m]'
   :ivar listIntForc: ordered list of internal forces to be displayed
                    as scalar field over «shell» elements
                    available components: 'N1', 'N2', 'M1', 'M2', 'Q1', 'Q2'
@@ -63,18 +94,6 @@ class RecordLoadCaseDisp(object):
                  (defaults to ['N', 'My', 'Mz', 'Qy', 'Qz','T'])
   :ivar setsToDispBeamIntForc: ordered list of sets of elements (of type «beam»)
                     to display internal forces (defaults to [])
-  :ivar scaleDispBeamIntForc: tuple (escN,escQ,escM) correponding to the scales to apply to 
-                  displays of, respectively, axial forces (N), shear forces (Q)
-                  or bending moments (M) in beam elements
-                  (defaults to (1.0,1.0,1.0))
-  :ivar unitsScaleForc: factor to apply to internal forces if we want to change
-                   the units (defaults to 1).
-  :ivar unitsForc: text to especify the units in which forces are 
-                   represented (defaults to '[kN/m]')
-  :ivar unitsScaleMom: factor to apply to internal moments if we want to change
-                   the units (defaults to 1).
-  :ivar unitsMom:  text to especify the units in which bending moments are 
-                   represented (defaults to '[kN.m/m]')
   :ivar cameraParameters: parameters that define the camera position,
                           zoom, etc.
   :ivar cameraParametersForBeams: parameters that define the camera position,
@@ -82,30 +101,20 @@ class RecordLoadCaseDisp(object):
   '''
 
   def __init__(self,loadCaseName,loadCaseDescr,loadCaseExpr,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
+    super(RecordLoadCaseDisp,self).__init__()
     self.loadCaseName=loadCaseName
     self.loadCaseDescr=loadCaseDescr
     self.loadCaseExpr=loadCaseExpr
     self.setsToDispLoads=setsToDispLoads
     self.setsToDispBeamLoads=[]
     self.compElLoad='transComponent'
-    self.unitsScaleLoads=1.0
-    self.unitsLoads='units:[m,kN]'
-    self.vectorScaleLoads=1.0
-    self.vectorScalePointLoads=1.0
     self.multByElemAreaLoads=False
     self.listDspRot=['uX', 'uY', 'uZ']
     self.setsToDispDspRot=setsToDispDspRot
-    self.unitsScaleDispl=1.0
-    self.unitsDispl='[m]'
     self.listIntForc=['N1', 'N2', 'M1', 'M2', 'Q1', 'Q2']
     self.setsToDispIntForc=setsToDispIntForc
     self.listBeamIntForc=['N', 'My', 'Mz', 'Qy', 'Qz','T']
     self.setsToDispBeamIntForc=[]
-    self.scaleDispBeamIntForc=(1.0,1.0,1.0)
-    self.unitsScaleForc=1.0
-    self.unitsForc='[kN/m]'
-    self.unitsScaleMom=1.0
-    self.unitsMom='[kN.m/m]'
     self.cameraParameters= vtk_graphic_base.CameraParameters('XYZPos')
     self.cameraParametersBeams= vtk_graphic_base.CameraParameters('XYZPos')
     
