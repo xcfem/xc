@@ -21,6 +21,7 @@ python tests/actions/test_derailment_SIA.py
 python tests/actions/test_prestressing.py
 python tests/actions/test_peck_pressure_envelope.py
 python tests/actions/mononobe_okabe_test_01.py
+python tests/actions/test_earth_pressure.py
 
 #Combinations tests.
 echo "$BLEU" "Load combination tests." "$NORMAL"

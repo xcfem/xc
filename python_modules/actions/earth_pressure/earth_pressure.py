@@ -16,6 +16,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com" 
 
 import math
+import bisect
 import xc_base
 import geom
 import xc
@@ -71,31 +72,51 @@ class EarthPressureBase(PressureModelBase):
         self.gammaSoil= gammaSoil
 
 
-class EarthPressureModel(EarthPressureBase):
+class EarthPressureModel(PressureModelBase):
     '''Parameters to define a load of type earth pressure
 
-      :ivar K:         coefficient of pressure
-      :ivar zWater:    global Z coordinate of groundwater level 
-                       (if zGroundwater<minimum z of model => there is no groundwater)
+      :ivar zGround: global Z coordinate of ground level
+      :ivar zBottomSoils: list of global Z coordinates of the bottom level
+            for each soil (from top to bottom)
+      :ivar KSoils: list of pressure coefficients for each soil (from top 
+            to bottom)
+      :ivar gammaSoils: list of weight density for each soil (from top to
+            bottom)
+      :ivar zWater: global Z coordinate of groundwater level 
+            (if zGroundwater<minimum z of model => there is no groundwater)
       :ivar gammaWater: weight density of water
     '''
-    def __init__(self,K , zGround, gammaSoil, zWater, gammaWater):
-        super(EarthPressureModel,self).__init__(zGround, gammaSoil)
-        self.K= K
+    def __init__(self, zGround, zBottomSoils,KSoils,gammaSoils, zWater, gammaWater):
+        super(EarthPressureModel,self).__init__()
+        self.zGround=zGround
+        self.zBottomSoils=zBottomSoils
+        self.KSoils=KSoils
+        self.gammaSoils=gammaSoils
         self.zWater= zWater
-        self.gammaWater= gammaWater
+        self.zTopLev=[zGround]+zBottomSoils
+        self.zTopLev.reverse()
+        bisect.insort_left(self.zTopLev,zWater)
+        self.zTopLev.reverse()
+        indWat=self.zTopLev.index(zWater)
+        self.KSoils.insert(indWat-1,self.KSoils[indWat-1])
+        self.gammaSoils.insert(indWat-1,self.gammaSoils[indWat-1])
+        for i in range(indWat,len(self.gammaSoils)):
+            self.gammaSoils[i]-=gammaWater
+        self.gammaWater=[0]*indWat+[gammaWater]*(len(self.gammaSoils)-indWat)
+            
 
     def getPressure(self,z):
         '''Return the earth pressure acting on the points at global coordinate z.'''
+        self.zTopLev.reverse()
+        ind=len(self.zTopLev)-bisect.bisect_left(self.zTopLev,z)-1
+        self.zTopLev.reverse()
         ret_press= 0.0
-        if(z<self.zGround):
-            if(z>self.zWater):
-                ret_press=self.K*self.gammaSoil*(self.zGround-z)
-            else:
-                ret_press=self.K*(self.gammaSoil*(self.zGround-self.zWater) + (self.gammaSoil-self.gammaWater)*(self.zWater-z)) + self.gammaWater*(self.zWater-z)
+        for i in range(ind):
+            ret_press+=self.KSoils[i]*self.gammaSoils[i]*(self.zTopLev[i]-self.zTopLev[i+1])+self.gammaWater[i]*(self.zTopLev[i]-self.zTopLev[i+1])
+        ret_press+=self.KSoils[ind]*self.gammaSoils[ind]*(self.zTopLev[ind]-z)+self.gammaWater[ind]*(self.zTopLev[ind]-z)
         return ret_press
 
-class PeckPressureEnvelope(EarthPressureModel):
+class PeckPressureEnvelope(EarthPressureBase):
     ''' Envelope of apparent lateral pressure diagrams for design 
         of cuts in sand. See 10.2 in the book "Principles of Foundation
         Engineering" from Braja M. Das.
@@ -104,9 +125,12 @@ class PeckPressureEnvelope(EarthPressureModel):
       :ivar phi:       effective friction angle of sand.
     '''
     def __init__(self,phi , zGround, gammaSoil, zWater, gammaWater, H):
-        Ka= math.tan(math.pi/4.0-phi/2.0)**2 # Rankine active pressure coefficient.
-        super(PeckPressureEnvelope,self).__init__(Ka , zGround, gammaSoil, zWater, gammaWater)
+        self.K= math.tan(math.pi/4.0-phi/2.0)**2 # Rankine active pressure coefficient.
+        self.zWater=zWater
+        self.gammaWater=gammaWater
+        super(PeckPressureEnvelope,self).__init__( zGround, gammaSoil)
         self.H= H
+        
     def getPressure(self,z):
         '''Return the earth pressure acting on the points at global coordinate z.'''
         ret_press= 0.0

@@ -261,7 +261,7 @@ class EarthPressLoad(BaseVectorLoad):
     
     :ivar name: name identifying the load
     :ivar xcSet: set that contains the elements (shells and/or beams)
-    :ivar soilProp:  instance of the class EarthPressureModel that defines the 
+    :ivar soilData:  instance of the class EarthPressureModel that defines the 
           soil parameters required to calculate the earth pressure
           (K:coefficient of pressure, zGround: global Z coordinate of
           ground level,gammaSoil: weight density of soil, zWater: global Z
