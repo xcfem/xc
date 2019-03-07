@@ -63,4 +63,80 @@ class SphericalDome(object):
         T=self.getHorizSupportReaction(qVsurf)*self.getPlanRadius()
         return T
     
+
+class hyparUmbrella(object):
+    '''Rough calculation of a hyperbolic paraboloid umbrella
+    :ivar lx: size of one tympan (one-fourth of the umbrella) in X direction
+    :ivar ly: size of one tympan (one-fourth of the umbrella) in Y direction
+    :ivar zMax: Z coordinate of the umbrella corner
+    :ivar zSupp: Z coordinate of the umbrella central point (on the support)
+    :ivar thickness: thickness of the shell
+    :ivar k: warping of the hyperbolic paraboloid
+    '''
+    
+    def __init__(self,lx,ly,zMax,zSupp,thickness):
+        self.lx=lx
+        self.ly=ly
+        self.zMax=zMax
+        self.zSupp=zSupp
+        self.k=(self.zMax-self.zSupp)/(self.lx*self.ly)
+        self.thickness=thickness
+
+    def getZ(self,x,y):
+        '''return Z coordinate of point (x,y)
+        '''
+        return self.k*x*y
+
+    def getLedge(self):
+        '''return the maximum length of half an umbrella edge'''
+        return max(self.lx,self.ly)
+
+    def getLvalley(self):
+        '''return the length of the valley in the umbrella
+        '''
+        Ledge=self.getLedge()
+        c0=self.zMax-self.zSupp
+        return math.sqrt(Ledge**2+c0**2)
+
+    def getNxy(self,pz):
+        '''return shearing force in the hypar shell
+
+        :param pz: vertical load per unit area of ground projection
+        '''
+        return -pz/2/self.k
+
+    def getCompStress(self,pz):
+        '''return the maximum compressive stress in the hypar
+
+        :param pz: vertical load per unit area of ground projection
+        '''
+        return -pz/2/self.k/self.thickness
+    
+    def getTensStress(self,pz):
+        '''return the maximum tensile stress in the hypar
+
+        :param pz: vertical load per unit area of ground projection
+        '''
+        return pz/2/self.k/self.thickness
+    
+    def getTmax(self,pz):
+        '''return the maximum tension force in edge of umbrella
+
+        :param pz: vertical load per unit area of ground projection
+        '''
+        Nxy=self.getNxy(pz)
+        Ledge=self.getLedge()
+        return -Nxy*Ledge
+
+
+    def getCmax(self,pz):
+        '''return the maximum compression force in edge of umbrella
+
+        :param pz: vertical load per unit area of ground projection
+        '''
+        Nxy=self.getNxy(pz)
+        Lvalley=self.getLvalley()
+        return 2*Nxy*Lvalley
+
+        
         
