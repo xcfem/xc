@@ -68,6 +68,7 @@ class SituationCombs(dict):
   def getRecordLoadCaseDisp(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
     '''Returns a suitable RecordLoadCaseDisp for the combination.
 
+    :param combName: name of the combination to create the record for.
     :param setsToDispLoads: ordered list of sets of elements to display loads.
     :param setsToDispDspRot: ordered list of sets of elements to display 
                             displacements. 
@@ -99,6 +100,7 @@ class SituationsSet(object):
   def getRecordLoadCaseDisp(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
     '''Returns a suitable RecordLoadCaseDisp for the combination.
 
+    :param combName: name of the combination to create the record for.
     :param setsToDispLoads: ordered list of sets of elements to display loads.
     :param setsToDispDspRot: ordered list of sets of elements to display 
                             displacements. 
@@ -185,6 +187,7 @@ class CombContainer(object):
   def getRecordLoadCaseDisp(self,combName,setsToDispLoads,setsToDispDspRot,setsToDispIntForc):
     '''Returns a suitable RecordLoadCaseDisp for the combination.
 
+    :param combName: name of the combination to create the record for.
     :param setsToDispLoads: ordered list of sets of elements to display loads.
     :param setsToDispDspRot: ordered list of sets of elements to display 
                             displacements. 
