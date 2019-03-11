@@ -9,7 +9,9 @@ __email__= "ana.Ortega.Ort@gmail.com "
 
 # based on the course 'The art of structural engineering : Vaults',
 # by Maria Garlock
-
+'''
+:param theta: angle along hoops (circles around the dome)
+'''
 import math
 
 class SphericalDome(object):
@@ -62,6 +64,28 @@ class SphericalDome(object):
         to a uniform surface load qVsurf over the dome'''
         T=self.getHorizSupportReaction(qVsurf)*self.getPlanRadius()
         return T
+
+    def getMeridonialLinearForce(self,qVsurf,Phi):
+        '''Return the meridonial force per unit length
+
+        :param qVsurf: surface load over the dome
+        :param Phi: angle along meridian (from vertical), so that at the peak
+               of dome Phi=0 and at the dome's edge Phi=alpha [radians]
+
+        '''
+        Nphi=-self.sphRadius*qVsurf*(1/(1+math.cos(Phi)))
+        return Nphi
+    
+    def getHoopLinearForce(self,qVsurf,Phi):
+        '''Return the hoop force per unit length
+
+        :param qVsurf: surface load over the dome
+        :param Phi: angle along meridian (from vertical), so that at the peak
+               of dome Phi=0 and at the dome's edge Phi=alpha [radians]
+
+        '''
+        Ntheta=self.sphRadius*qVsurf*(1/(1+math.cos(Phi))-math.cos(Phi))
+        return Ntheta
     
 
 class hyparUmbrella(object):
