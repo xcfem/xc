@@ -26,7 +26,7 @@ pz=1.96   #vertical load per unit area of ground projection [kPa]
 
 
 riosW=vault.hyparUmbrella(lx=lx,ly=ly,zMax=zMax,zSupp=zSupp,thickness=th)
-k=riosW.k
+k=riosW.k    #warping [m-1]
 xCoor=[i*0.5 for i in range(15)]
 xCoor.append(lx)
 yCoor=[i*0.5 for i in range(11)]

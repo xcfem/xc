@@ -568,6 +568,7 @@ python tests/rough_calculations/masonry_bridge_verif_01.py
 python tests/rough_calculations/masonryBridgeVerif_test01_minim.py
 python tests/rough_calculations/test_predim_diaphragm_wall.py
 python tests/rough_calculations/test_dome.py
+python tests/rough_calculations/test_dome_02.py
 python tests/rough_calculations/test_hypar.py
 
 #Postprocess tests
