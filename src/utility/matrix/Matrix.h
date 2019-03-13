@@ -110,6 +110,10 @@ class Matrix: public CommandEntity
   private:
     static double MATRIX_NOT_VALID_ENTRY;
     static AuxMatrix auxMatrix;
+    static double *matrixWork;
+    static int *intWork;
+    static int sizeDoubleWork;
+    static int sizeIntWork;
 
     int numRows;
     int numCols;
@@ -162,8 +166,9 @@ class Matrix: public CommandEntity
 
     int addMatrix(double factThis, const Matrix &other, double factOther);
     int addMatrixProduct(double factThis, const Matrix &A, const Matrix &B, double factOther); // AB
+    int addMatrixTransposeProduct(double factThis, const Matrix &A, const Matrix &B, double factOther); // A'B
     int addMatrixTripleProduct(double factThis, const Matrix &A, const Matrix &B, double factOther); // A'BA
-    //int addMatrixTripleProduct(const Matrix &A, const Matrix &B, const Matrix &C double fact = 1.0); //ABC
+    int addMatrixTripleProduct(double factThis, const Matrix &A, const Matrix &B, const Matrix &C, double otherFact); //A'BC
 
     // overloaded operators all of which are pure
     double &operator()(int row, int col);
