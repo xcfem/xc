@@ -119,7 +119,6 @@ class EPPGapMaterial : public EPPBaseMaterial
     
     void Print(std::ostream &s, int flag =0);
 
-
   };
 } // end of XC namespace
 

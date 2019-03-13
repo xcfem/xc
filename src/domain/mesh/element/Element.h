@@ -132,7 +132,7 @@ class Element: public MeshComponent
 
     const Vector &getRayleighDampingForces(void) const;
 
-    Vector load;//!< vector for applying loads
+    Vector load;//!< vector for applied nodal loads.
     mutable RayleighDampingFactors rayFactors; //!< Rayleigh damping factors
                                              //(mutable para que getDamp pueda ser const).
     mutable Matrix Kc; //!< pointer to hold last committed matrix if needed for rayleigh damping

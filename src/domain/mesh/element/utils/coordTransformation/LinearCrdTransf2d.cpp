@@ -204,7 +204,7 @@ const XC::Vector &XC::LinearCrdTransf2d::getGlobalResistingForce(const XC::Vecto
   }
 
 
-const XC::Vector &XC::LinearCrdTransf2d::getGlobalResistingForceShapeSensitivity(const XC::Vector &pb, const XC::Vector &p0)
+const XC::Vector &XC::LinearCrdTransf2d::getGlobalResistingForceShapeSensitivity(const Vector &pb, const Vector &p0)
   {
     // transform resisting forces from the basic system to local coordinates
     static double pl[6];
@@ -287,6 +287,152 @@ const XC::Vector &XC::LinearCrdTransf2d::getGlobalResistingForceShapeSensitivity
     }
 
     return pg;
+  }
+
+const XC::Vector &XC::LinearCrdTransf2d::getGlobalResistingForceShapeSensitivity(const Vector &pb, const Vector &p0, int gradNumber)
+  {
+    // transform resisting forces from the basic system to local coordinates
+    static double pl[6];
+
+    const double q0 = pb(0);
+    const double q1 = pb(1);
+    const double q2 = pb(2);
+
+    const double oneOverL = 1.0/L;
+
+    double V = oneOverL*(q1+q2);
+    pl[0] = -q0;
+    pl[1] =  V;
+    pl[2] =  q1;
+    pl[3] =  q0;
+    pl[4] = -V;
+    pl[5] =  q2;
+
+    // add end forces due to element p0 loads
+    pl[0] += p0(0);
+    pl[1] += p0(1);
+    pl[4] += p0(2);
+
+    // transform resisting forces  from local to global coordinates
+    static Vector pg(6);
+    pg.Zero();
+
+    static ID nodeParameterID(2);
+    nodeParameterID(0) = nodeIPtr->getCrdsSensitivity();
+    nodeParameterID(1) = nodeJPtr->getCrdsSensitivity();
+
+    if (nodeParameterID(0) != 0 || nodeParameterID(1) != 0)
+      {
+
+	if(nodeIOffset.Norm2() != 0.0 || nodeJOffset.Norm2() != 0.0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+	              << "; currently a node offset cannot be used in "
+		      << " conjunction with random nodal coordinates."
+		      << std::endl;
+	  }
+
+        double dcosdh=0.0, dsindh=0.0, d1oLdh=0.0;
+
+	      double dx = cosTheta*L;
+	      double dy = sinTheta*L;
+
+	      if (nodeParameterID(0) == 1) { // here x1 is random
+		dcosdh = (-L+dx*dx/L)/(L*L);
+		dsindh = dx*dy/(L*L*L);
+		d1oLdh = dx/(L*L*L);
+	      }
+	      if (nodeParameterID(0) == 2) { // here y1 is random
+		dsindh = (-L+dy*dy/L)/(L*L);
+		dcosdh = dx*dy/(L*L*L);
+		d1oLdh = dy/(L*L*L);
+	      }
+
+	      if (nodeParameterID(1) == 1) { // here x2 is random
+		dcosdh = (L-dx*dx/L)/(L*L);
+		dsindh = -dx*dy/(L*L*L);
+		d1oLdh = -dx/(L*L*L);
+	      }
+	      if (nodeParameterID(1) == 2) { // here y2 is random
+		dsindh = (L-dy*dy/L)/(L*L);
+		dcosdh = -dx*dy/(L*L*L);
+		d1oLdh = -dy/(L*L*L);
+	      }
+
+	      pg(0) = dcosdh*pl[0] - dsindh*pl[1] - sinTheta*d1oLdh*(q1+q2);
+	      pg(1) = dsindh*pl[0] + dcosdh*pl[1] + cosTheta*d1oLdh*(q1+q2);
+
+	      pg(3) = dcosdh*pl[3] - dsindh*pl[4] + sinTheta*d1oLdh*(q1+q2);
+	      pg(4) = dsindh*pl[3] + dcosdh*pl[4] - cosTheta*d1oLdh*(q1+q2);
+
+	      pg(2) = 0.0;
+	      pg(5) = 0.0;
+	  }
+
+	  return pg;
+  }
+
+bool XC::LinearCrdTransf2d::isShapeSensitivity(void)
+  {
+    const int nodeParameterI= nodeIPtr->getCrdsSensitivity();
+    const int nodeParameterJ= nodeJPtr->getCrdsSensitivity();
+    return (nodeParameterI != 0 || nodeParameterJ != 0);
+  }
+
+
+double XC::LinearCrdTransf2d::getdLdh(void)
+  {
+    const int nodeParameterI = nodeIPtr->getCrdsSensitivity();
+    const int nodeParameterJ = nodeJPtr->getCrdsSensitivity();
+
+    if (nodeParameterI != 0 || nodeParameterJ != 0)
+      {
+        if(nodeIOffset.Norm2() != 0 || nodeJOffset.Norm2() != 0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+	              << "; ERROR: Currently a node offset cannot be used in "
+		      << " conjunction with random nodal coordinates."
+		      << std::endl;
+          }
+
+        if(nodeParameterI == 1) // here x1 is random
+          return -cosTheta;
+        if(nodeParameterI == 2) // here y1 is random
+          return -sinTheta;
+        if(nodeParameterJ == 1) // here x2 is random
+          return cosTheta;
+        if(nodeParameterJ == 2) // here y2 is random
+          return sinTheta;
+      }
+    return 0.0;
+  }
+
+
+double XC::LinearCrdTransf2d::getd1overLdh(void)
+  {
+    const int nodeParameterI= nodeIPtr->getCrdsSensitivity();
+    const int nodeParameterJ= nodeJPtr->getCrdsSensitivity();
+
+    if(nodeParameterI != 0 || nodeParameterJ != 0)
+      {
+        if(nodeIOffset.Norm2() != 0 || nodeJOffset.Norm2() != 0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+	              << "; ERROR: Currently a node offset cannot be used in "
+		      << " conjunction with random nodal coordinates."
+		      << std::endl;
+          }
+
+        if(nodeParameterI == 1) // here x1 is random
+          return cosTheta/(L*L);
+        if(nodeParameterI == 2) // here y1 is random
+          return sinTheta/(L*L);
+        if(nodeParameterJ == 1) // here x2 is random
+          return -cosTheta/(L*L);
+        if(nodeParameterJ == 2) // here y2 is random
+          return -sinTheta/(L*L);
+      }
+    return 0.0;
   }
 
 

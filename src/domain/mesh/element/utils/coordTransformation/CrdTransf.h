@@ -127,8 +127,12 @@ class CrdTransf: public TaggedObject, public MovableObject
     
     // AddingSensitivity:BEGIN //////////////////////////////////
     virtual const Vector &getBasicDisplSensitivity(int gradNumber);
-    virtual const Vector &getGlobalResistingForceShapeSensitivity(const Vector &basicForce, const Vector &uniformLoad);
+    virtual const Vector &getGlobalResistingForceShapeSensitivity(const Vector &, const Vector &);
+    virtual const Vector &getGlobalResistingForceShapeSensitivity(const Vector &pb, const Vector &p0, int gradNumber);
     virtual const Vector &getBasicTrialDispShapeSensitivity(void);
+    virtual bool isShapeSensitivity(void) {return false;}
+    virtual double getdLdh(void) {return 0.0;}
+    virtual double getd1overLdh(void) {return 0.0;}
     // AddingSensitivity:END //////////////////////////////////
     
     virtual const Vector &getGlobalResistingForce(const Vector &basicForce, const Vector &uniformLoad) const= 0;

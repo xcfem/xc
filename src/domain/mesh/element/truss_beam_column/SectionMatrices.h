@@ -46,7 +46,7 @@ class SectionMatrices: public MovableObject
     std::vector<Matrix> fsSubdivide;
 
   public:
-    static const size_t maxNumSections= 10;
+    static const size_t maxNumSections= 20; //Augmented 10->20 for DispBeamColumnNLd2
   private:
     void alloc(const size_t &sz);
     void free(void);

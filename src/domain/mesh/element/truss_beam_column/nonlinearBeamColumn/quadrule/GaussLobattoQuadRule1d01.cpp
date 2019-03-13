@@ -244,7 +244,8 @@ XC::GaussLobattoQuadRule1d01::GaussLobattoQuadRule1d01()
 int XC::GaussLobattoQuadRule1d01::setOrder(int quadOrder)
 {
   if (quadOrder < 2 || quadOrder > maxOrder) {
-    std::cerr << "XC::GaussLobattoQuadRule1d01::setOrder() -- Invalid quadrature order, " << quadOrder << std::endl;
+    std::cerr << "GaussLobattoQuadRule1d01::" << __FUNCTION__
+	      << "XC::GaussLobattoQuadRule1d01::setOrder() -- Invalid quadrature order, " << quadOrder << std::endl;
     exit(-1);
   }
   
@@ -301,7 +302,9 @@ int XC::GaussLobattoQuadRule1d01::setOrder(int quadOrder)
     break;
 
   default:
-    std::cerr << "\n Invalid quadrature order";
+    std::cerr << "GaussLobattoQuadRule1d01::" << __FUNCTION__
+	      << "; Invalid quadrature order."
+              << std::endl;
     return -1;
     break;
   }    
@@ -319,20 +322,20 @@ int XC::GaussLobattoQuadRule1d01::getNumIntegrPoints (void) const
   return order;
 }
 
-const XC::Matrix & 
-XC::GaussLobattoQuadRule1d01::getIntegrPointCoords (void) const
+const XC::Matrix &XC::GaussLobattoQuadRule1d01::getIntegrPointCoords (void) const
 {
   if (order < 2 || order > maxOrder)
-    std::cerr << "XC::GaussLobattoQuadRule1d01::getIntegrPointWeights() -- order " << order <<  " is currently invalid\n";
+    std::cerr << "GaussLobattoQuadRule1d01::" << __FUNCTION__
+	      << "; order " << order <<  " is currently invalid\n";
 
   return *myPts;
 }
 
-const XC::Vector & 
-XC::GaussLobattoQuadRule1d01::getIntegrPointWeights (void) const
+const XC::Vector &XC::GaussLobattoQuadRule1d01::getIntegrPointWeights (void) const
 {
   if (order < 2 || order > maxOrder)
-   std::cerr << "XC::GaussLobattoQuadRule1d01::getIntegrPointWeights() -- order " << order <<  " is currently invalid\n";
+   std::cerr << "GaussLobattoQuadRule1d01::" << __FUNCTION__
+	     << "; order " << order <<  " is currently invalid\n";
 			    
   return *myWts;
 }

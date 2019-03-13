@@ -55,10 +55,10 @@
 // The element displacement field gives rise to constant axial strain and
 // linear curvature.
 
-#ifndef DispBeamColumn2d_h
-#define DispBeamColumn2d_h
+#ifndef DispBeamColumn2dBase_h
+#define DispBeamColumn2dBase_h
 
-#include "DispBeamColumn2dBase.h"
+#include <domain/mesh/element/truss_beam_column/BeamColumnWithSectionFDTrf2d.h>
 #include "domain/mesh/element/utils/fvectors/FVectorBeamColumn2d.h"
 #include "utility/matrix/Matrix.h"
 #include "utility/matrix/Vector.h"
@@ -68,45 +68,60 @@ class Node;
 class PrismaticBarCrossSection;
 class CrdTransf2d;
 class Response;
-class GaussQuadRule1d01;
 
 //! @ingroup OneDimensionalElem
 //
 //! @brief displacement based 2D beam element with PrismaticBarCrossSection type material.
-class DispBeamColumn2d: public DispBeamColumn2dBase
+class DispBeamColumn2dBase : public BeamColumnWithSectionFDTrf2d
   {
-  private:
-    const Matrix &getInitialBasicStiff(void) const;
-    void getBasicStiff(Matrix &kb, int initial = 0) const;
-    static GaussQuadRule1d01 quadRule;
-  public:
-    DispBeamColumn2d(int tag, int nd1, int nd2,
-		     int numSections,const std::vector<PrismaticBarCrossSection *> &s,
-		     CrdTransf2d &coordTransf, double rho = 0.0);
-    DispBeamColumn2d(int tag= 0);
-    DispBeamColumn2d(int tag,int numSec,const Material *theSection,const CrdTransf *coordTransf);
-    Element *getCopy(void) const;
+  protected:
+    mutable Vector q; //!< Basic force
+    FVectorBeamColumn2d q0; //!< Fixed end forces in basic system
+    FVectorBeamColumn2d p0; //!< Reactions in basic system
 
-    // public methods to obtain stiffness, mass, damping and residual information    
-    int update(void);
-    const Matrix &getTangentStiff(void) const;
-    const Matrix &getInitialStiff(void) const;
-
-    const Vector &getResistingForce(void) const;
-
-    Response *setResponse(const std::vector<std::string> &argv, Information &eleInfo);
-    int getResponse(int responseID, Information &eleInfo);
+    double rho;	//!< Mass density per unit length
 
     // AddingSensitivity:BEGIN //////////////////////////////////////////
-    int            setParameter(const std::vector<std::string> &argv, Parameter &param);
-    int            updateParameter(int parameterID, Information &info);
-    int            activateParameter(int parameterID);
-    const Vector & getResistingForceSensitivity(int gradNumber);
-    const Matrix & getKiSensitivity(int gradNumber);
-    const Matrix & getMassSensitivity(int gradNumber);
-    int            commitSensitivity(int gradNumber, int numGrads);
+    int parameterID;
     // AddingSensitivity:END ///////////////////////////////////////////
-};
+
+    static Matrix K;		// Element stiffness, damping, and mass Matrix
+    static Vector P;		// Element resisting force vector
+
+    static double workArea[];
+
+    int sendData(CommParameters &cp);
+    int recvData(const CommParameters &cp);
+  public:
+    DispBeamColumn2dBase(int tag, int classTag, int nd1, int nd2,
+		     int numSections,const std::vector<PrismaticBarCrossSection *> &s,
+		     CrdTransf2d &coordTransf, double rho = 0.0);
+    DispBeamColumn2dBase(int tag= 0, int classTag= 0);
+    DispBeamColumn2dBase(int tag, int classTag, int numSec,const Material *theSection,const CrdTransf *coordTransf);
+
+    int getNumDOF(void) const;
+    void setDomain(Domain *theDomain);
+
+    // public methods to set the state of the element    
+    int commitState(void);
+    int revertToLastCommit(void);
+    int revertToStart(void);
+
+    // public methods to obtain stiffness, mass, damping and residual information    
+    const Matrix &getMass(void) const;
+
+    void zeroLoad();
+    int addLoad(ElementalLoad *theLoad, double loadFactor);
+    int addInertiaLoadToUnbalance(const Vector &accel);
+
+    const Vector &getResistingForceIncInertia(void) const;            
+
+    // public methods for element output
+    int sendSelf(CommParameters &);
+    int recvSelf(const CommParameters &);
+    void Print(std::ostream &s, int flag =0);
+
+  };
 } // end of XC namespace
 
 #endif

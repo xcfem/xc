@@ -1055,15 +1055,15 @@ const XC::Vector &XC::CorotCrdTransf2d::getGlobalResistingForceShapeSensitivity(
     static Vector dpgdh(6);
     dpgdh.Zero();
 
-    int nodeIid= nodeIPtr->getCrdsSensitivity();
-    int nodeJid= nodeJPtr->getCrdsSensitivity();
+    const int nodeIid= nodeIPtr->getCrdsSensitivity();
+    const int nodeJid= nodeJPtr->getCrdsSensitivity();
   
     if(nodeIid == 0 && nodeJid == 0)
       return dpgdh;
     
     this->update();
 
-    if(nodeIOffset.Norm() != 0.0 || nodeJOffset.Norm() != 0.0)
+    if(nodeIOffset.Norm2() != 0.0 || nodeJOffset.Norm2() != 0.0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
  	          << "; ERROR: currently a node offset cannot be used in "
@@ -1330,8 +1330,8 @@ const XC::Vector &XC::CorotCrdTransf2d::getBasicTrialDispShapeSensitivity(void)
 
 bool XC::CorotCrdTransf2d::isShapeSensitivity(void)
   {
-    int nodeIid= nodeIPtr->getCrdsSensitivity();
-    int nodeJid= nodeJPtr->getCrdsSensitivity();
+    const int nodeIid= nodeIPtr->getCrdsSensitivity();
+    const int nodeJid= nodeJPtr->getCrdsSensitivity();
     return (nodeIid != 0 || nodeJid != 0);
   }
 
@@ -1343,7 +1343,7 @@ double XC::CorotCrdTransf2d::getdLdh(void)
     if(nodeIid == 0 && nodeJid == 0) 
       return 0.0;
     
-    if(nodeIOffset.Norm() != 0.0 || nodeJOffset.Norm() != 0.0)
+    if(nodeIOffset.Norm2() != 0.0 || nodeJOffset.Norm2() != 0.0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; ERROR: currently a node offset cannot be used in "
@@ -1372,7 +1372,7 @@ double XC::CorotCrdTransf2d::getd1overLdh(void)
     if(nodeIid == 0 && nodeJid == 0)
       return 0.0;
     
-    if(nodeIOffset.Norm() != 0.0 || nodeJOffset.Norm() != 0.0)
+    if(nodeIOffset.Norm2() != 0.0 || nodeJOffset.Norm2() != 0.0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; ERROR: currently a node offset cannot be used in "

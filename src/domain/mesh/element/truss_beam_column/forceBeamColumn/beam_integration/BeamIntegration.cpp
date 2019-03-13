@@ -80,7 +80,17 @@ void XC::BeamIntegration::getWeightsDeriv(int nIP, double L, double dLdh,double 
       dwtsdh[i] = 0.0;
   }
 
-//! @brief Returns the coordenadas normalizadas (entre 0 y 1).
+//! @brief Returns the weights (entre 0 y 1).
+const XC::Vector &XC::BeamIntegration::getIntegrPointWeights(int numSections, double L) const
+  {
+    static Vector retval;
+    std::vector<double> wi(numSections);
+    getSectionWeights(numSections,L,&wi[0]);
+    retval= Vector(&wi[0],numSections);
+    return retval;
+  }
+
+//! @brief Returns the normalized coordinates (entre 0 y 1).
 const XC::Matrix &XC::BeamIntegration::getIntegrPointCoords(int numSections, double L) const
   {
     static Matrix retval;
@@ -94,7 +104,7 @@ const XC::Matrix &XC::BeamIntegration::getIntegrPointCoords(int numSections, dou
 const XC::Matrix &XC::BeamIntegration::getIntegrPointNaturalCoords(int numSections, double L) const
   {
     static Matrix retval;
-    retval= getIntegrPointCoords(numSections,L); //Coordenadas normalizadas.
+    retval= getIntegrPointCoords(numSections,L); //normalized coordinates.
     for(int i = 0;i<numSections; i++)
       retval(i,1)= 2.0*retval(i,1) - 1.0;
     return retval;
@@ -104,7 +114,7 @@ const XC::Matrix &XC::BeamIntegration::getIntegrPointNaturalCoords(int numSectio
 const XC::Matrix &XC::BeamIntegration::getIntegrPointLocalCoords(int numSections, double L) const
   {
     static Matrix retval;
-    retval= getIntegrPointCoords(numSections,L); //Coordenadas normalizadas.
+    retval= getIntegrPointCoords(numSections,L); //normalized coordinates.
     for(int i = 0;i<numSections; i++)
       retval(i,1)*= L;
     return retval;
