@@ -216,12 +216,12 @@ bool XC::ConstrContainer::addMRMFreedom_Constraint(MRMFreedom_Constraint *mrmfCo
   }
 
 //! @brief Appends a load pattern.
-//! @param load: pointer to the load pattern to append.
-bool XC::ConstrContainer::addLoadPattern(LoadPattern *load)
+//! @param lp: pointer to the load pattern to append.
+bool XC::ConstrContainer::addLoadPattern(LoadPattern *lp)
   {
     bool retval= true;
     // first check if a load pattern with a similar tag exists in model
-    const int tag= load->getTag();
+    const int tag= lp->getTag();
     MapActiveLoadPatterns<LoadPattern>::const_iterator i= activeLoadPatterns.find(tag);
     if(i!=activeLoadPatterns.end())
       {
@@ -232,9 +232,14 @@ bool XC::ConstrContainer::addLoadPattern(LoadPattern *load)
         retval= false;
       }
     else
-      activeLoadPatterns[tag]= load;// now we add the load pattern
+      activeLoadPatterns[tag]= lp;// now we add the load pattern
     return retval;
   }
+
+//! @brief Return true if the load pattern is already added to the domain.
+//! @param lp: pointer to the load pattern to ask for.
+bool XC::ConstrContainer::isLoadPatternActive(LoadPattern *lp)
+  { return activeLoadPatterns.in(lp); }
 
 //! @brief Appends a node locker.
 //! @param nl: pointer to the node locker to append.

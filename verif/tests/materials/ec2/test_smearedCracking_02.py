@@ -171,7 +171,7 @@ for F in Flist:
   pointLoad=xc.Vector([F,0,0])
   lp0.newNodalLoad(2,pointLoad)    #applies the point load on node 2 
   #We add the load case to domain.
-  lPatterns.addToDomain("0")           #reads load pattern "0" and adds it to the domain
+  lPatterns.addToDomain(lp0.name)           #reads load pattern "0" and adds it to the domain
   # Solve
   #analisis= predefined_solutions.simple_newton_raphson(feProblem)
   analisis= predefined_solutions.simple_static_modified_newton(feProblem)
@@ -182,6 +182,7 @@ for F in Flist:
   stress.append(F/areaSec/1e6)
   dom.revertToStart()
   lp0.clearLoads()
+  lPatterns.removeFromDomain(lp0.name)
 
 
 #Test comparison values

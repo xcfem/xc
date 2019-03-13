@@ -46,6 +46,7 @@ class MapActiveLoadPatterns: public CommandEntity, public std::map<int,T *>
     typedef typename t_map::const_reference const_reference;
     typedef typename t_map::value_type value_type;
     MapActiveLoadPatterns(CommandEntity *);
+    bool in(const T *) const;
     void Print(std::ostream &s, int flag =0);
   };
 
@@ -55,6 +56,16 @@ MapActiveLoadPatterns<T>::MapActiveLoadPatterns(CommandEntity *owr)
 
   : CommandEntity(owr), t_map(*this) {}
 
+template<class T>
+bool MapActiveLoadPatterns<T>::in(const T *lp) const
+  {
+    bool retval= false;
+    const_iterator i= this->find(lp->getTag());
+    if(i!=this->end())
+      retval= true;
+    return retval;
+  }
+ 
 template<class T>
 void MapActiveLoadPatterns<T>::Print(std::ostream &s, int flag)
   {
