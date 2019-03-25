@@ -100,7 +100,7 @@ XC::PathTimeSeries::PathTimeSeries(const std::string &fileName, double theFactor
   :PathSeriesBase(TSERIES_TAG_PathTimeSeries,theFactor), currentTimeLoc(0)
   { readFromFile(fileName); }
 
-//! @brief Lee el path desde archivo.
+//! @brief Read path from file.
 void XC::PathTimeSeries::readFromFile(const std::string &fileName)
   {
     // determine the number of data points
@@ -160,7 +160,7 @@ void XC::PathTimeSeries::readFromFile(const std::string &fileName)
       }
   }
 
-//! @brief Lee el path desde DOS archivos.
+//! @brief Read path from TWO files.
 void XC::PathTimeSeries::readFromFiles(const std::string &filePathName,const std::string &fileTimeName)
   {
     // determine the number of data points

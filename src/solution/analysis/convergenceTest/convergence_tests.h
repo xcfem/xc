@@ -26,9 +26,9 @@
 //----------------------------------------------------------------------------
 //convergence_tests.h
 
-//Archivos de cabecera de los criterios de convergencia.
+//Header files for convergence criterions.
 
-//Criterios de convergencia.
+//Convergence tests.
 #include "solution/analysis/convergenceTest/ConvergenceTest.h"
 #include "solution/analysis/convergenceTest/CTestNormUnbalance.h"
 #include "solution/analysis/convergenceTest/CTestRelativeEnergyIncr.h"

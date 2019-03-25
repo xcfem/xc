@@ -104,7 +104,7 @@ XC::PathSeries::PathSeries(const std::string &fileName, double theTimeIncr, doub
   :PathSeriesBase(TSERIES_TAG_PathSeries,theFactor),pathTimeIncr(theTimeIncr)
   { readFromFile(fileName); }
 
-//! @brief Lee el path desde archivo.
+//! @brief Read path from file.
 void XC::PathSeries::readFromFile(const std::string &fileName)
   {
     // determine the number of data points .. open file and count num entries

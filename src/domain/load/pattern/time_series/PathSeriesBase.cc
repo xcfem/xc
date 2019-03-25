@@ -71,7 +71,7 @@ size_t XC::PathSeriesBase::getNumDataPointsOnFile(const std::string &fName) cons
     return retval;
   }
 
-//! @brief Lee desde archivo
+//! @brief Read load vector from file
 size_t XC::PathSeriesBase::load_vector_from_file(Vector &v,std::istream &is)
   {
     size_t count = 0;

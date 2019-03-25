@@ -75,7 +75,7 @@ class Node;
 class ImposedMotionSP : public ImposedMotionBase
   {
   private:
-    Vector *theNodeResponse;        // vector for setting nodal response
+    Vector *theNodeResponse; //! vector for setting nodal response
   public:
     // constructors    
     ImposedMotionSP(void);        
