@@ -75,14 +75,18 @@ void XC::Concrete04::setup_parameters(void)
     // Make all concrete parameters negative
     if(fpc > 0.0 || epsc0 > 0.0 || epscu > 0.0)
       {
-        std::cerr << "error: negative values required for concrete stress-strain model"
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "error: negative values required for "
+	          << "concrete stress-strain model"
                   << std::endl;
       }
   
     if(fct < 0.0)
       {
         fct= 0.0;
-        std::cerr << "warning: fct less than 0.0 so the tensile response part is being set to 0"
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "warning: fct less than 0.0 so the tensile "
+	          << "response part is being set to 0."
                   << std::endl;
       }
     convergedState.Tangent()= Ec0;
@@ -262,10 +266,12 @@ void XC::Concrete04::setCompUnloadEnv()
   }
   
   
-  if (trialState.getStrain() >= 0.0) {
-    /*std::cerr << "actually made it in here" << std::endl;*/
+  if(trialState.getStrain() >= 0.0)
+    {
+    /*std::cerr << getClassName() << "::" << __FUNCTION__ 
+                << " actually made it in here" << std::endl;*/
     /*trialHistory.UnloadSlope()= Ec0;*/
-  }
+    }
   
 }
 
@@ -333,7 +339,8 @@ int XC::Concrete04::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data.\n";
     return res;
   }
 
@@ -344,13 +351,15 @@ int XC::Concrete04::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }

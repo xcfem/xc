@@ -426,12 +426,14 @@ bool XC::Domain::removeMRMFreedom_Constraint(int tag)
 //! is responsible for invoking {\em setDomain(this)} on the load. The
 //! call returns \p true if the load was added, otherwise a warning is
 //! raised and \p false is returned.
-bool XC::Domain::addLoadPattern(LoadPattern *load)
+//!
+//! @param lp: pointer to the load pattern to ask for.
+bool XC::Domain::addLoadPattern(LoadPattern *lp)
   {
-    bool result= constraints.addLoadPattern(load);
+    bool result= constraints.addLoadPattern(lp);
     if(result)
       {
-        load->setDomain(this);
+        lp->setDomain(this);
         domainChange();
       }
     else
@@ -439,10 +441,17 @@ bool XC::Domain::addLoadPattern(LoadPattern *load)
         if(verbosity>3)
           std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; can't add load pattern identified by: "
-                    << load->getTag() << "'\n";
+                    << lp->getTag() << "'\n";
       }
     return result;
   }
+
+//! @brief Return true if the load pattern is already added to the domain.
+//!
+//! @param lp: pointer to the load pattern to ask for.
+bool XC::Domain::isLoadPatternActive(LoadPattern *lp)
+  { return constraints.isLoadPatternActive(lp); }
+
 
 //! @brief Appends the node locker object to the domain. 
 bool XC::Domain::addNodeLocker(NodeLocker *nl)

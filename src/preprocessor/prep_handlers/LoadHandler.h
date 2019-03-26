@@ -39,12 +39,11 @@ class LoadCombination;
 
 //!  @ingroup Ldrs
 //! 
-//! @brief Lee load patterns desde archivo.
-//! Load definition manager.
+//! @brief Load definition manager.
 class LoadHandler: public PrepHandler
   {
     typedef std::map<std::string,GroundMotion *> map_ground_motions;
-    map_ground_motions ground_motions; //!< Movimientos del terreno.
+    map_ground_motions ground_motions; //!< Ground movement.
 
     MapLoadPatterns lpatterns; //!< Load patterns container.
     int tag_lp; //!< Default identifier for load patterns or load combinations.

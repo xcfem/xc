@@ -166,7 +166,7 @@ void XC::LoadPattern::setDomain(Domain *theDomain)
 bool XC::LoadPattern::addToDomain(void)
   {
     bool retval= false;
-    Domain *theDomain = this->getDomain();
+    Domain *theDomain= this->getDomain();
     if(theDomain)
       retval= theDomain->addLoadPattern(this);
     else
@@ -184,6 +184,16 @@ void XC::LoadPattern::removeFromDomain(void)
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; WARNING: null pointer to the domain\n";
+  }
+
+//! @brief Return true if the load pattern is already added to a domain.
+bool XC::LoadPattern::isActive(void)
+  {
+    bool retval= false;
+    Domain *theDomain = this->getDomain();
+    if(theDomain)
+      retval= theDomain->isLoadPatternActive(this);
+    return retval;
   }
 
 //! @brief Adds the nodal load being passed as parameter.
@@ -212,6 +222,11 @@ bool XC::LoadPattern::addNodalLoad(NodalLoad *load)
 //! @param f: load vector.
 XC::NodalLoad *XC::LoadPattern::newNodalLoad(const int &nodeTag,const Vector &f)
   {
+    if(isActive())
+      std::clog << getClassName() << "::" << __FUNCTION__
+	        << "; this load pattern is already active,"
+	        << " loads must be defined previously."
+	        << " results are undefined." << std::endl;
     MapLoadPatterns *map= dynamic_cast<MapLoadPatterns *>(Owner());
     assert(map);
     int nextTag= map->getCurrentNodeLoadTag();
@@ -226,6 +241,11 @@ XC::NodalLoad *XC::LoadPattern::newNodalLoad(const int &nodeTag,const Vector &f)
 //! @param loadType: load type
 XC::ElementalLoad *XC::LoadPattern::newElementalLoad(const std::string &loadType)
   {
+    if(isActive())
+      std::clog << getClassName() << "::" << __FUNCTION__
+	        << "; this load pattern is already active,"
+	        << " loads must be defined previously."
+	        << " results are undefined." << std::endl;
     MapLoadPatterns *map= dynamic_cast<MapLoadPatterns *>(Owner());
     assert(map);
     int nextTag= map->getCurrentElementLoadTag();
@@ -258,6 +278,11 @@ bool XC::LoadPattern::addElementalLoad(ElementalLoad *load)
 //! @brief Appends the elemental load being passed as parameter.
 bool XC::LoadPattern::newElementalLoad(ElementalLoad *load)
   {
+    if(isActive())
+      std::clog << getClassName() << "::" << __FUNCTION__
+	        << "; this load pattern is already active,"
+	        << " loads must be defined previously."
+	        << " results are undefined." << std::endl;
     MapLoadPatterns *map= dynamic_cast<MapLoadPatterns *>(Owner());
     int nextTag= map->getCurrentElementLoadTag();
     bool result= false;

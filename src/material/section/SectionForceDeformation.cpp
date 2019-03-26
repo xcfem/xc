@@ -445,6 +445,68 @@ const XC::Matrix &XC::SectionForceDeformation::getSectionTangentSensitivity(int 
     return dummy;
   }
 
+const XC::Matrix &XC::SectionForceDeformation::getSectionFlexibilitySensitivity(int gradIndex)
+  {
+  int order = this->getOrder();
+  
+  if (fDefault == 0) {		
+    fDefault = new Matrix(order,order);
+    if (fDefault == 0) {
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; failed to allocate matrix\n";
+      exit(-1);
+    }
+  }
+
+  const Matrix &dksdh = this->getSectionTangentSensitivity(gradIndex);
+  
+  const Matrix &fs = this->getSectionFlexibility();
+
+  *fDefault = (fs * dksdh * fs) * -1;
+
+  return *fDefault;
+}
+
+const XC::Matrix &XC::SectionForceDeformation::getInitialTangentSensitivity(int gradIndex)
+  {
+    int order = this->getOrder();
+
+    if (fDefault == 0) {		
+      fDefault = new Matrix(order,order);
+      if (fDefault == 0) {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed to allocate matrix\n";
+	exit(-1);
+      }
+    }
+
+    fDefault->Zero();
+
+    return *fDefault;
+  }
+
+const XC::Matrix &XC::SectionForceDeformation::getInitialFlexibilitySensitivity(int gradIndex)
+  {
+    int order = this->getOrder();
+
+    if (fDefault == 0) {		
+      fDefault = new Matrix(order,order);
+      if (fDefault == 0) {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed to allocate matrix\n";
+	exit(-1);
+      }
+    }
+
+    const Matrix &dksdh = this->getInitialTangentSensitivity(gradIndex);
+
+    const Matrix &fs = this->getInitialFlexibility();
+
+    *fDefault = (fs * dksdh * fs) * -1;
+
+    return *fDefault;
+  }
+
 double XC::SectionForceDeformation::getRhoSensitivity(int gradNumber)
   { return 0.0; }
 

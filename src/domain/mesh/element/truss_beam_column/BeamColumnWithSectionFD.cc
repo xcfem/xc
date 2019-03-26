@@ -64,7 +64,8 @@ int XC::BeamColumnWithSectionFD::commitState(void)
 
     if((retVal= Element1D::commitState()) != 0)
       {
-        std::cerr << "EightNodeBrick-XC::u_p_U::commitState () - failed in base class";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed in base class." << std::endl;
         return (-1);
       }
     retVal+= theSections.commitState();

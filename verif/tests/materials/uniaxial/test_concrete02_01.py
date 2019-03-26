@@ -59,7 +59,7 @@ lPatterns.currentTimeSeries= "ts"
 lp0= lPatterns.newLoadPattern("default","0")
 #lPatterns.currentLoadPattern= "0"
 #We add the load case to domain.
-lPatterns.addToDomain("0")
+#lPatterns.addToDomain(lp0.name)
 
 # Solution
 analisis= predefined_solutions.simple_static_modified_newton(feProblem)
@@ -73,8 +73,10 @@ calculatedStrains= []
 
 for stress in stressInput:
   dom.revertToStart()
+  lPatterns.removeFromDomain(lp0.name)
   lp0.clearLoads()
   nl= lp0.newNodalLoad(2,xc.Vector([stress]))
+  lPatterns.addToDomain(lp0.name)
   result= analisis.analyze(1)
   calculatedStresses.append(-elem1.getResistingForce()[0])
   calculatedStrains.append(elem1.getMaterials()[0].getStrain())

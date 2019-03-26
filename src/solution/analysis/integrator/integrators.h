@@ -26,7 +26,7 @@
 //----------------------------------------------------------------------------
 //integrators.h
 
-//Archivos de cabecera de todos los integrators.
+//File headers for all integrators.
 //Integrator.
 #include <solution/analysis/integrator/EigenIntegrator.h>
 #include <solution/analysis/integrator/StaticIntegrator.h>

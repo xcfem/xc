@@ -98,7 +98,7 @@ sp_capTexts={
     'SLS_frequentLoadsCrackControl': 'Comprobación ELS fisuración, casos de carga frecuentes',
     'SLS_quasiPermanentLoadsLoadsCrackControl': 'Comprobación ELS fisuración, casos de carga quasi-permanentes',
     
-}
+  }
 
 #English caption texts
 en_capTexts={
@@ -140,7 +140,7 @@ en_capTexts={
     'MbRdz':'reduced design moment resistance about Z (strong) axis for lateral-torsional bucking',
     'chiLT': 'reduction factor for lateral-torsional buckling ',
     
-}
+  }
 
 #Caption texts in French
 fr_capTexts={
@@ -185,7 +185,7 @@ fr_capTexts={
     'concreteShearCF':'vérification du béton. Facteur de capacité effort tranchant',
     'shearLimit': 'vérification du béton. Limites effort tranchant',
     
-}
+  }
 
 #Predefined colors for sets (progressing from light to dark)
 
@@ -218,4 +218,4 @@ setBasicColors={
     'blue02':xc.Vector([0.,0.8,1]),
     'blue03':xc.Vector([0.,0.4,1]),
     'blue04':xc.Vector([0.,0.,0.9])     
-}
+  }

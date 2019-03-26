@@ -323,8 +323,7 @@ int XC::GaussQuadRule1d01::getNumIntegrPoints (void) const
   return order;
 }
 
-const XC::Matrix & 
-XC::GaussQuadRule1d01::getIntegrPointCoords (void) const
+const XC::Matrix &XC::GaussQuadRule1d01::getIntegrPointCoords (void) const
 {
   if (order < 1 || order > maxOrder)
     std::cerr << "XC::GaussQuadRule1d01::getIntegrPointWeights() -- order " << order << " is currently invalid\n";
@@ -332,8 +331,7 @@ XC::GaussQuadRule1d01::getIntegrPointCoords (void) const
   return *myPts;
 }
 
-const XC::Vector & 
-XC::GaussQuadRule1d01::getIntegrPointWeights (void) const
+const XC::Vector &XC::GaussQuadRule1d01::getIntegrPointWeights (void) const
 {
   if (order < 1 || order > maxOrder)
     std::cerr << "XC::GaussQuadRule1d01::getIntegrPointWeights() -- order " << order << " is currently invalid\n";
@@ -341,9 +339,8 @@ XC::GaussQuadRule1d01::getIntegrPointWeights (void) const
   return *myWts;
 }
 
-const XC::Matrix & 
-XC::GaussQuadRule1d01::getIntegrPointCoords (int quadOrder)
-{
+const XC::Matrix &XC::GaussQuadRule1d01::getIntegrPointCoords (int quadOrder)
+  {
   if (order != quadOrder)
     this->setOrder(quadOrder);
 

@@ -241,7 +241,9 @@
 #define ELE_TAG_EnhancedQuad               3459
 #define ELE_TAG_ConstantPressureVolumeQuad 3456 
 #define ELE_TAG_NineNodeMixedQuad          3359 
+#define ELE_TAG_DispBeamColumn2dBase 98700
 #define ELE_TAG_DispBeamColumn2d 9870
+#define ELE_TAG_DispBeamColumnNL2d 98701
 #define ELE_TAG_DispBeamColumn3d 9871
 #define ELE_TAG_HingedBeam2d     9872
 #define ELE_TAG_HingedBeam3d     9873

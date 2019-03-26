@@ -58,7 +58,7 @@
 #include "domain/component/Parameter.h"
 #include <domain/mesh/node/Node.h>
 #include <material/section/PrismaticBarCrossSection.h>
-#include <domain/mesh/element/utils/coordTransformation/CrdTransf2d.h>
+#include "domain/mesh/element/utils/coordTransformation/CrdTransf2d.h"
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/ID.h>
@@ -66,209 +66,155 @@
 #include <cstring>
 #include <domain/mesh/element/utils/Information.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
-#include <utility/recorder/response/ElementResponse.h>
+#include "utility/recorder/response/ElementResponse.h"
 #include "domain/load/beam_loads/BeamMecLoad.h"
 #include <domain/mesh/element/truss_beam_column/nonlinearBeamColumn/quadrule/GaussQuadRule1d01.h>
 #include "material/section/ResponseId.h"
 #include "utility/actor/actor/MovableVector.h"
 
- XC::Matrix XC::DispBeamColumn2d::K(6,6);
- XC::Vector XC::DispBeamColumn2d::P(6);
-double XC::DispBeamColumn2d::workArea[100];
- XC::GaussQuadRule1d01 XC::DispBeamColumn2d::quadRule;
+XC::GaussQuadRule1d01 XC::DispBeamColumn2d::quadRule;
 
 XC::DispBeamColumn2d::DispBeamColumn2d(int tag, int nd1, int nd2,
-				       int numSec,const std::vector<PrismaticBarCrossSection *> &s,
-                                   CrdTransf2d &coordTransf, double r)
-  :BeamColumnWithSectionFDTrf2d(tag, ELE_TAG_DispBeamColumn2d,numSec), q(3), rho(r)
-  {
-    load.reset(6);
-    setSections(s);
-    set_transf(&coordTransf);
-
-    // Set connected external node IDs
-    theNodes.set_id_nodes(nd1,nd2);
-
-    q0[0] = 0.0;
-    q0[1] = 0.0;
-    q0[2] = 0.0;
-
-    p0[0] = 0.0;
-    p0[1] = 0.0;
-    p0[2] = 0.0;
-
-// AddingSensitivity:BEGIN /////////////////////////////////////
-    parameterID = 0;
-// AddingSensitivity:END //////////////////////////////////////
-  }
+				       int numSec,const std::vector<PrismaticBarCrossSection *> &s, CrdTransf2d &coordTransf, double r)
+  :DispBeamColumn2dBase(tag, ELE_TAG_DispBeamColumn2d, nd1, nd2, numSec, s, coordTransf, r)
+  {}
 
 XC::DispBeamColumn2d::DispBeamColumn2d(int tag,int numSec,const Material *m,const CrdTransf *trf)
-  :BeamColumnWithSectionFDTrf2d(tag, ELE_TAG_DispBeamColumn2d,numSec,m,trf), q(3), rho(0.0)
-  {
-    load.reset(6);
-    q0[0] = 0.0;
-    q0[1] = 0.0;
-    q0[2] = 0.0;
-
-    p0[0] = 0.0;
-    p0[1] = 0.0;
-    p0[2] = 0.0;
-
-// AddingSensitivity:BEGIN /////////////////////////////////////
-    parameterID = 0;
-// AddingSensitivity:END //////////////////////////////////////
-  }
+  :DispBeamColumn2dBase(tag, ELE_TAG_DispBeamColumn2d,numSec,m,trf)
+  {}
 
 XC::DispBeamColumn2d::DispBeamColumn2d(int tag)
-  :BeamColumnWithSectionFDTrf2d(tag, ELE_TAG_DispBeamColumn2d,1), q(3), rho(0.0)
-  {
-    load.reset(6);
-    q0[0] = 0.0;
-    q0[1] = 0.0;
-    q0[2] = 0.0;
-
-    p0[0] = 0.0;
-    p0[1] = 0.0;
-    p0[2] = 0.0;
-
-// AddingSensitivity:BEGIN /////////////////////////////////////
-    parameterID = 0;
-// AddingSensitivity:END //////////////////////////////////////
-  }
+  :DispBeamColumn2dBase(tag, ELE_TAG_DispBeamColumn2d)
+  {}
 
 //! @brief Virtual constructor.
 XC::Element* XC::DispBeamColumn2d::getCopy(void) const
   { return new DispBeamColumn2d(*this); }
 
-int XC::DispBeamColumn2d::getNumDOF(void) const
-  { return 6; }
-
-void XC::DispBeamColumn2d::setDomain(Domain *theDomain)
+int XC::DispBeamColumn2d::update(void)
   {
-    // Check XC::Domain is not null - invoked when object removed from a domain
-    BeamColumnWithSectionFDTrf2d::setDomain(theDomain);
-    if(theDomain)
-      {
-        int dofNd1 = theNodes[0]->getNumberDOF();
-        int dofNd2 = theNodes[1]->getNumberDOF();
+    // Update the transformation
+    theCoordTransf->update();
 
-        if(dofNd1 != 3 || dofNd2 != 3)
-          {
-            //std::cerr << "FATAL ERROR XC::DispBeamColumn2d (tag: %d), has differing number of DOFs at its nodes",
-            //        this->getTag());
-            return;
-          }
-        initialize_trf();
+    // Get basic deformations
+    const Vector &v= theCoordTransf->getBasicTrialDisp();
 
-        const double L = theCoordTransf->getInitialLength();
+    const double L = theCoordTransf->getInitialLength();
+    const double oneOverL = 1.0/L;
+    const size_t numSections= getNumSections();
+    const Matrix &pts = quadRule.getIntegrPointCoords(numSections);
 
-        if(L == 0.0)
-          {
-            // Add some error check
-          }
-        this->update();
+    // Loop over the integration points
+    for(size_t i = 0; i < numSections; i++) {
+
+      int order = theSections[i]->getOrder();
+      const ID &code = theSections[i]->getType();
+
+      Vector e(workArea, order);
+
+      double xi6 = 6.0*pts(i,0);
+
+      int j;
+      for(j = 0; j < order; j++) {
+	switch(code(j)) {
+	case SECTION_RESPONSE_P:
+	  e(j) = oneOverL*v(0); break;
+	case SECTION_RESPONSE_MZ:
+	  e(j) = oneOverL*((xi6-4.0)*v(1) + (xi6-2.0)*v(2)); break;
+	default:
+	  e(j) = 0.0; break;
+	}
       }
-  }
 
-int XC::DispBeamColumn2d::commitState()
-  {
-    int retVal = 0;
-
-    // call element commitState to do any base class stuff
-    if((retVal = this->XC::BeamColumnWithSectionFDTrf2d::commitState()) != 0) {
-      std::cerr << "XC::DispBeamColumn2d::commitState () - failed in base class";
+      // Set the section deformations
+      theSections[i]->setTrialSectionDeformation(e);
     }
 
-    retVal += theCoordTransf->commitState();
-
-    return retVal;
+    return 0;
   }
 
-int XC::DispBeamColumn2d::revertToLastCommit()
+void XC::DispBeamColumn2d::getBasicStiff(Matrix &kb, int initial) const
   {
-    int retVal = 0;
+    // Zero for integral
+    kb.Zero();
 
-  const size_t numSections= getNumSections();
-    // Loop over the integration points and revert to last committed state
+    const size_t numSections= getNumSections();
+    const Matrix &pts = quadRule.getIntegrPointCoords(numSections);
+    const Vector &wts = quadRule.getIntegrPointWeights(numSections);
+    const double L = theCoordTransf->getInitialLength();
+    const double oneOverL = 1.0/L;
+
+
+    // Loop over the integration points
     for(size_t i = 0; i < numSections; i++)
-         retVal += theSections[i]->revertToLastCommit();
+      {
+        const int order = theSections[i]->getOrder();
+        const ID &code = theSections[i]->getType();
 
-    retVal += theCoordTransf->revertToLastCommit();
+      Matrix ka(workArea, order, 3);
+      ka.Zero();
 
-    return retVal;
-  }
+      double xi6 = 6.0*pts(i,0);
 
-int XC::DispBeamColumn2d::revertToStart()
-{
-    int retVal = 0;
+      // Get the section tangent stiffness and stress resultant
+      const Matrix &ks = theSections[i]->getSectionTangent();
 
-  const size_t numSections= getNumSections();
-    // Loop over the integration points and revert states to start
-    for(size_t i= 0;i<numSections; i++)
-      retVal += theSections[i]->revertToStart();
-
-    retVal += theCoordTransf->revertToStart();
-
-    return retVal;
-}
-
-int
-XC::DispBeamColumn2d::update(void)
-{
-  // Update the transformation
-  theCoordTransf->update();
-
-  // Get basic deformations
-  const XC::Vector &v = theCoordTransf->getBasicTrialDisp();
-
-  double L = theCoordTransf->getInitialLength();
-  double oneOverL = 1.0/L;
-  const size_t numSections= getNumSections();
-  const XC::Matrix &pts = quadRule.getIntegrPointCoords(numSections);
-
-  // Loop over the integration points
-  for(size_t i = 0; i < numSections; i++) {
-
-    int order = theSections[i]->getOrder();
-    const XC::ID &code = theSections[i]->getType();
-
-    Vector e(workArea, order);
-
-    double xi6 = 6.0*pts(i,0);
-
-    int j;
-    for(j = 0; j < order; j++) {
-      switch(code(j)) {
-      case SECTION_RESPONSE_P:
-        e(j) = oneOverL*v(0); break;
-      case SECTION_RESPONSE_MZ:
-        e(j) = oneOverL*((xi6-4.0)*v(1) + (xi6-2.0)*v(2)); break;
-      default:
-        e(j) = 0.0; break;
+      // Perform numerical integration
+      //kb.addMatrixTripleProduct(1.0, *B, ks, wts(i)/L);
+      const double wti = wts(i)*oneOverL;
+      double tmp;
+      int j, k;
+      for (j = 0; j < order; j++) {
+	switch(code(j)) {
+	case SECTION_RESPONSE_P:
+	  for (k = 0; k < order; k++)
+	    ka(k,0) += ks(k,j)*wti;
+	  break;
+	case SECTION_RESPONSE_MZ:
+	  for (k = 0; k < order; k++) {
+	    tmp = ks(k,j)*wti;
+	    ka(k,1) += (xi6-4.0)*tmp;
+	    ka(k,2) += (xi6-2.0)*tmp;
+	  }
+	  break;
+	default:
+	  break;
+	}
+      }
+      for (j = 0; j < order; j++) {
+	switch (code(j)) {
+	case SECTION_RESPONSE_P:
+	  for (k = 0; k < 3; k++)
+	    kb(0,k) += ka(j,k);
+	  break;
+	case SECTION_RESPONSE_MZ:
+	  for (k = 0; k < 3; k++) {
+	    tmp = ka(j,k);
+	    kb(1,k) += (xi6-4.0)*tmp;
+	    kb(2,k) += (xi6-2.0)*tmp;
+	  }
+	  break;
+	default:
+	  break;
+	}
       }
     }
-
-    // Set the section deformations
-    theSections[i]->setTrialSectionDeformation(e);
   }
-
-  return 0;
-}
 
 const XC::Matrix &XC::DispBeamColumn2d::getTangentStiff(void) const
-{
+  {
   static Matrix kb(3,3);
 
+  this->getBasicStiff(kb);
   // Zero for integral
-  kb.Zero();
   q.Zero();
 
   const size_t numSections= getNumSections();
-  const XC::Matrix &pts = quadRule.getIntegrPointCoords(numSections);
-  const XC::Vector &wts = quadRule.getIntegrPointWeights(numSections);
+  const Matrix &pts = quadRule.getIntegrPointCoords(numSections);
+  const Vector &wts = quadRule.getIntegrPointWeights(numSections);
 
-  double L = theCoordTransf->getInitialLength();
-  double oneOverL = 1.0/L;
+  const double L = theCoordTransf->getInitialLength();
+  const double oneOverL = 1.0/L;
 
   // Loop over the integration points
   for(size_t i = 0; i < numSections; i++)
@@ -356,15 +302,15 @@ const XC::Matrix &XC::DispBeamColumn2d::getTangentStiff(void) const
   }
 
 const XC::Matrix &XC::DispBeamColumn2d::getInitialBasicStiff(void) const
-{
-  static XC::Matrix kb(3,3);
+  {
+    static Matrix kb(3,3);
 
   // Zero for integral
   kb.Zero();
 
   const size_t numSections= getNumSections();
-  const XC::Matrix &pts = quadRule.getIntegrPointCoords(numSections);
-  const XC::Vector &wts = quadRule.getIntegrPointWeights(numSections);
+  const Matrix &pts = quadRule.getIntegrPointCoords(numSections);
+  const Vector &wts = quadRule.getIntegrPointWeights(numSections);
 
   double L = theCoordTransf->getInitialLength();
   double oneOverL = 1.0/L;
@@ -437,91 +383,13 @@ const XC::Matrix &XC::DispBeamColumn2d::getInitialStiff(void) const
     return K;
   }
 
-const XC::Matrix&XC::DispBeamColumn2d::getMass(void) const
-  {
-    K.Zero();
-    if(rho == 0.0)
-      return K;
-    const double L = theCoordTransf->getInitialLength();
-    const double m = 0.5*rho*L;
-    K(0,0) = K(1,1) = K(3,3) = K(4,4) = m;
-    if(isDead())
-      K*=dead_srf;
-    return K;
-  }
 
-void XC::DispBeamColumn2d::zeroLoad(void)
-  {
-    BeamColumnWithSectionFDTrf2d::zeroLoad();
-
-    q0[0] = 0.0;
-    q0[1] = 0.0;
-    q0[2] = 0.0;
-
-    p0[0] = 0.0;
-    p0[1] = 0.0;
-    p0[2] = 0.0;
-    return;
-  }
-
-int XC::DispBeamColumn2d::addLoad(ElementalLoad *theLoad, double loadFactor)
-  {
-    if(isDead())
-      std::cerr << getClassName() 
-                << "; load over inactive element: "
-                << getTag()  
-                << std::endl;
-    else
-      {
-        if(BeamMecLoad *beamMecLoad= dynamic_cast<BeamMecLoad *>(theLoad))
-          {
-            const double L = theCoordTransf->getInitialLength();
-            beamMecLoad->addReactionsInBasicSystem(L,loadFactor,p0); // Accumulate reactions in basic system
-            beamMecLoad->addFixedEndForcesInBasicSystem(L,loadFactor,q0); // Fixed end forces in basic system
-          }
-        else
-          {
-            std::cerr << "XC::DispBeamColumn2d::DispBeamColumn2d -- load type unknown for element with tag: "
-                      << this->getTag() << "XC::DispBeamColumn2d::addLoad()\n";
-            return -1;
-          }
-      }
-    return 0;
-  }
-
-int XC::DispBeamColumn2d::addInertiaLoadToUnbalance(const XC::Vector &accel)
-  {
-        // Check for a quick return
-        if(rho == 0.0)
-                return 0;
-
-        // Get R * accel from the nodes
-        const XC::Vector &Raccel1 = theNodes[0]->getRV(accel);
-        const XC::Vector &Raccel2 = theNodes[1]->getRV(accel);
-
-    if(3 != Raccel1.Size() || 3 != Raccel2.Size()) {
-      std::cerr << "XC::DispBeamColumn2d::addInertiaLoadToUnbalance matrix and vector sizes are incompatable\n";
-      return -1;
-    }
-
-        double L = theCoordTransf->getInitialLength();
-        double m = 0.5*rho*L;
-
-    // Want to add ( - fact * M R * accel ) to unbalance
-        // Take advantage of lumped mass matrix
-        load(0) -= m*Raccel1(0);
-        load(1) -= m*Raccel1(1);
-        load(3) -= m*Raccel2(0);
-        load(4) -= m*Raccel2(1);
-
-    return 0;
-}
 
 const XC::Vector &XC::DispBeamColumn2d::getResistingForce(void) const
 {
   const size_t numSections= getNumSections();
-  const XC::Matrix &pts = quadRule.getIntegrPointCoords(numSections);
-  const XC::Vector &wts = quadRule.getIntegrPointWeights(numSections);
+  const Matrix &pts = quadRule.getIntegrPointCoords(numSections);
+  const Vector &wts = quadRule.getIntegrPointWeights(numSections);
 
   // Zero for integration
   q.Zero();
@@ -578,112 +446,6 @@ const XC::Vector &XC::DispBeamColumn2d::getResistingForce(void) const
       P*=dead_srf;
     return P;
   }
-
-const XC::Vector &XC::DispBeamColumn2d::getResistingForceIncInertia(void) const
-  {
-    this->getResistingForce();
-
-    if(rho != 0.0)
-      {
-	const Vector &accel1= theNodes[0]->getTrialAccel();
-	const Vector &accel2= theNodes[1]->getTrialAccel();
-
-	// Compute the current resisting force
-	this->getResistingForce();
-
-	const double L = theCoordTransf->getInitialLength();
-	const double m = 0.5*rho*L;
-
-	P(0) += m*accel1(0);
-	P(1) += m*accel1(1);
-	P(3) += m*accel2(0);
-	P(4) += m*accel2(1);
-
-	// add the damping forces if rayleigh damping
-	if(!rayFactors.nullValues())
-	  P += this->getRayleighDampingForces();
-
-      }
-    else
-      {
-	// add the damping forces if rayleigh damping
-	if(!rayFactors.nullKValues())
-	  P += this->getRayleighDampingForces();
-      }
-    if(isDead())
-      P*=dead_srf; //XXX Se aplica 2 veces sobre getResistingForce: arreglar.
-    return P;
-  }
-
-//! @brief Send members through the channel being passed as parameter.
-int XC::DispBeamColumn2d::sendData(CommParameters &cp)
-  {
-    int res= BeamColumnWithSectionFDTrf2d::sendData(cp);
-    res+= cp.sendVector(q,getDbTagData(),CommMetaData(13));
-    res+= p0.sendData(cp,getDbTagData(),CommMetaData(14));
-    res+= q0.sendData(cp,getDbTagData(),CommMetaData(15));
-    res+= cp.sendDouble(rho,getDbTagData(),CommMetaData(16));
-    res+= cp.sendInt(parameterID,getDbTagData(),CommMetaData(17));
-    return res;
-  }
-
-//! @brief Receives members through the channel being passed as parameter.
-int XC::DispBeamColumn2d::recvData(const CommParameters &cp)
-  {
-    int res= BeamColumnWithSectionFDTrf2d::recvData(cp);
-    res+= cp.receiveVector(q,getDbTagData(),CommMetaData(13));
-    res+= p0.receiveData(cp,getDbTagData(),CommMetaData(14));
-    res+= q0.receiveData(cp,getDbTagData(),CommMetaData(15));
-    res+= cp.receiveDouble(rho,getDbTagData(),CommMetaData(16));
-    res+= cp.receiveInt(parameterID,getDbTagData(),CommMetaData(17));
-    return res;
-  }
-
-int XC::DispBeamColumn2d::sendSelf(CommParameters &cp)
-  {
-    inicComm(18);
-    int res= sendData(cp);
-
-    const int dataTag= getDbTag(cp);
-    res+= cp.sendIdData(getDbTagData(),dataTag);
-    if(res < 0)
-      std::cerr << "NLBeamColumn2d::sendSelf -- failed to send ID data\n";
-    return res;
-  }
-
-int XC::DispBeamColumn2d::recvSelf(const CommParameters &cp)
-  {
-    inicComm(18);
-    const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
-    if(res<0)
-      std::cerr << "NLBeamColumn2d::recvSelf() - failed to recv ID data";
-    else
-      res+= recvData(cp);
-    return res;
-  }
-
-void XC::DispBeamColumn2d::Print(std::ostream &s, int flag)
-{
-  s << "\nDispBeamColumn2d, element id:  " << this->getTag() << std::endl;
-  s << "\tConnected external nodes:  " << theNodes;
-  s << "\tCoordTransf: " << theCoordTransf->getTag() << std::endl;
-  s << "\tmass density:  " << rho << std::endl;
-
-  double L = theCoordTransf->getInitialLength();
-  double P  = q(0);
-  double M1 = q(1);
-  double M2 = q(2);
-  double V = (M1+M2)/L;
-  s << "\tEnd 1 Forces (P V M): " << -P+p0[0]
-    << " " << V+p0[1] << " " << M1 << std::endl;
-  s << "\tEnd 2 Forces (P V M): " << P
-    << " " << -V+p0[2] << " " << M2 << std::endl;
-
-  //  for(size_t i = 0; i < numSections; i++)
-  // theSections[i]->Print(s,flag);
-}
-
 
 XC::Response *XC::DispBeamColumn2d::setResponse(const std::vector<std::string> &argv, Information &eleInfo)
   {
@@ -934,12 +696,11 @@ XC::DispBeamColumn2d::getMassSensitivity(int gradNumber)
 
 
 
-const XC::Vector &
-XC::DispBeamColumn2d::getResistingForceSensitivity(int gradNumber)
-{
-  const size_t numSections= getNumSections();
-        const XC::Matrix &pts = quadRule.getIntegrPointCoords(numSections);
-        const XC::Vector &wts = quadRule.getIntegrPointWeights(numSections);
+const XC::Vector &XC::DispBeamColumn2d::getResistingForceSensitivity(int gradNumber)
+  {
+    const size_t numSections= getNumSections();
+    const Matrix &pts = quadRule.getIntegrPointCoords(numSections);
+    const Vector &wts = quadRule.getIntegrPointWeights(numSections);
 
         double L = theCoordTransf->getInitialLength();
         double oneOverL = 1.0/L;
@@ -1114,7 +875,7 @@ int XC::DispBeamColumn2d::commitSensitivity(int gradNumber, int numGrads)
         double L = theCoordTransf->getInitialLength();
         double oneOverL = 1.0/L;
   const size_t numSections= getNumSections();
-        const XC::Matrix &pts = quadRule.getIntegrPointCoords(numSections);
+        const Matrix &pts = quadRule.getIntegrPointCoords(numSections);
 
         // Some extra declarations
         double d1oLdh = 0.0;

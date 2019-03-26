@@ -76,8 +76,10 @@ class BeamIntegration: public MovableObject, public CommandEntity
     BeamIntegration(int classTag);
     inline virtual ~BeamIntegration(void) {}
 
-    virtual void getSectionLocations(int nIP, double L, double *xi) const= 0;
     virtual void getSectionWeights(int nIP, double L, double *wt) const= 0;
+    const Vector &getIntegrPointWeights(int nIP, double L) const;
+
+    virtual void getSectionLocations(int nIP, double L, double *xi) const= 0;
     const Matrix &getIntegrPointCoords(int nIP, double L) const;
     const Matrix &getIntegrPointNaturalCoords(int nIP, double L) const;
     const Matrix &getIntegrPointLocalCoords(int nIP, double L) const;

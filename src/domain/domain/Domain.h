@@ -156,6 +156,7 @@ class Domain: public ObjWithRecorders, public DistributedBase
     virtual bool addMFreedom_Constraint(MFreedom_Constraint *);
     virtual bool addMRMFreedom_Constraint(MRMFreedom_Constraint *);
     virtual bool addLoadPattern(LoadPattern *);
+    virtual bool isLoadPatternActive(LoadPattern *);
     virtual bool addNodeLocker(NodeLocker *);
     virtual bool addLoadCombination(LoadCombination *);
 

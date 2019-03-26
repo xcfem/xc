@@ -88,7 +88,9 @@ const XC::TransfCooHandler *XC::CrdTransf::GetTransfCooHandler(void) const
   {
     const XC::TransfCooHandler *retval= dynamic_cast<const TransfCooHandler *>(Owner());
     if(!retval)
-      std::cerr << "CrdTransf::GetTransfCooHandler; coordinate transformation handler not defined." << std::endl;
+      std::cerr << "CrdTransf::" << __FUNCTION__
+		<< "; coordinate transformation handler not defined."
+		<< std::endl;
     return retval;
   }
 
@@ -97,7 +99,9 @@ XC::TransfCooHandler *XC::CrdTransf::GetTransfCooHandler(void)
   {
     XC::TransfCooHandler *retval= dynamic_cast<TransfCooHandler *>(Owner());
     if(!retval)
-      std::cerr << "CrdTransf::GetTransfCooHandler; coordinate transformation handler not defined." << std::endl;
+      std::cerr << "CrdTransf::" << __FUNCTION__
+		<< "; coordinate transformation handler not defined."
+		<< std::endl;
     return retval;
   }
 
@@ -117,8 +121,8 @@ int XC::CrdTransf::set_node_ptrs(Node *nodeIPointer, Node *nodeJPointer)
 
     if ((!nodeIPtr) || (!nodeJPtr))
       {
-        std::cerr << "\nLinearCrdTransf2d::initialize";
-        std::cerr << "\ninvalid pointers to the element nodes\n";
+        std::cerr << "CrdTransf::" << __FUNCTION__
+		  << "; invalid pointers to the element nodes\n";
         return -1;
       }
     return 0;
@@ -160,8 +164,20 @@ double XC::CrdTransf::getPointBasicCoordFromGlobal(const Vector &globalCoords) c
 
 const XC::Vector &XC::CrdTransf::getBasicDisplSensitivity(int gradNumber)
   {
-    std::cerr << "WARNING XC::CrdTransf::getBasicDisplSensitivity() - this method "
-        << " should not be called." << std::endl;
+    std::cerr << "CrdTransf::" << __FUNCTION__
+	      << "; WARNING - this method "
+              << " should not be called." << std::endl;
+
+    static XC::Vector dummy(1);
+    return dummy;
+  }
+
+const XC::Vector &XC::CrdTransf::getGlobalResistingForceShapeSensitivity(const Vector &pb, const Vector &p0, int gradNumber)
+  {
+    std::cerr << "CrdTransf::" << __FUNCTION__
+	      << "; ERROR - has not been"
+              << " implemented yet for the chosen transformation."
+	      << std::endl;
 
     static XC::Vector dummy(1);
     return dummy;
@@ -169,8 +185,10 @@ const XC::Vector &XC::CrdTransf::getBasicDisplSensitivity(int gradNumber)
 
 const XC::Vector &XC::CrdTransf::getGlobalResistingForceShapeSensitivity(const XC::Vector &pb, const XC::Vector &p0)
   {
-    std::cerr << "ERROR XC::CrdTransf::getGlobalResistingForceSensitivity() - has not been"
-        << " implemented yet for the chosen transformation." << std::endl;
+    std::cerr << "CrdTransf::" << __FUNCTION__
+	      << "; ERROR - has not been"
+              << " implemented yet for the chosen transformation."
+	      << std::endl;
 
     static XC::Vector dummy(1);
     return dummy;
@@ -178,8 +196,10 @@ const XC::Vector &XC::CrdTransf::getGlobalResistingForceShapeSensitivity(const X
 
 const XC::Vector &XC::CrdTransf::getBasicTrialDispShapeSensitivity(void)
   {
-    std::cerr << "ERROR CrdTransf::getBasicTrialDispShapeSensitivity() - has not been"
-        << " implemented yet for the chosen transformation." << std::endl;
+    std::cerr << "CrdTransf::" << __FUNCTION__
+	      << "; ERROR  has not been"
+              << " implemented yet for the chosen transformation."
+	      << std::endl;
 
     static Vector dummy(1);
     return dummy;
@@ -196,7 +216,8 @@ int XC::CrdTransf::sendData(CommParameters &cp)
     res+= cp.sendVector(nodeJInitialDisp,getDbTagData(),CommMetaData(5));
     res+= cp.sendBool(initialDispChecked,getDbTagData(),CommMetaData(6));
     if(res<0)
-      std::cerr << "CrdTransf::sendData - failed to send data.\n";
+      std::cerr << "CrdTransf::" << __FUNCTION__
+		<< "; failed to send data.\n";
     return res;
   }
 
@@ -211,7 +232,8 @@ int XC::CrdTransf::recvData(const CommParameters &cp)
     res+= cp.receiveVector(nodeJInitialDisp,getDbTagData(),CommMetaData(5));
     res+= cp.receiveBool(initialDispChecked,getDbTagData(),CommMetaData(6));
     if(res<0)
-      std::cerr << "CrdTransf::recvData - failed to receive data.\n";
+      std::cerr << "CrdTransf::" << __FUNCTION__
+		<< "; failed to receive data.\n";
     return res;    
   }
 

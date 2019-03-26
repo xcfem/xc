@@ -158,7 +158,10 @@ double XC::EPPGapMaterial::getStrain(void) const
 
 double XC::EPPGapMaterial::getInitialTangent(void) const
   {
-    return ((gap > 0.0) ? 0.0 : E);
+    if ((fy >= 0.0 && gap > 0.0) || (fy < 0.0 && gap < 0.0)) 
+      return 0.0; 
+    else 
+      return E;
   }
 
 int XC::EPPGapMaterial::commitState(void)
@@ -258,3 +261,4 @@ void XC::EPPGapMaterial::Print(std::ostream &s, int flag)
     if (damage == 1)
         s << "  damage accumulation specified" << std::endl;
   }
+

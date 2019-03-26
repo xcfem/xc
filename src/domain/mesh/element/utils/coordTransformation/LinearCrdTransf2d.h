@@ -87,7 +87,11 @@ class LinearCrdTransf2d: public SmallDispCrdTransf2d
     // AddingSensitivity:BEGIN //////////////////////////////////
     const Vector &getBasicDisplSensitivity(int gradNumber);
     const Vector &getGlobalResistingForceShapeSensitivity(const Vector &basicForce, const Vector &p0);
+    const Vector &getGlobalResistingForceShapeSensitivity(const Vector &pb, const Vector &p0, int gradNumber);
     const Vector &getBasicTrialDispShapeSensitivity(void);
+    bool isShapeSensitivity(void);
+    double getdLdh(void);
+    double getd1overLdh(void);
     // AddingSensitivity:END //////////////////////////////////
 
     const Vector &getGlobalResistingForce(const Vector &basicForce, const Vector &p0) const;
