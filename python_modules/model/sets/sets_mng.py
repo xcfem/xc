@@ -298,20 +298,21 @@ def setAddOf(setA,setB):
     return nSet
     
 
-def get_nodes_wire(setBusq,lstPtsWire):
-    '''return the subset of nodes from the set `setBusq` that belong to 
-    the line defined by the successive points in list `lstPts`
+def get_nodes_wire(setBusq,lstPtsWire,tol=0.01):
+    '''return the list of nodes from the set `setBusq` that belong to 
+    the line defined by the successive points in list `lstPtsWire`  
+    (expressed as geom.Pos3d(x,y,z))
     '''
     nodAux= setBusq.getNodes
     retval= list() 
     for i in range(0,len(lstPtsWire)-1):
-        segmAux= geom.LineSegment3d(lstPtsWire[i].getPos,lstPtsWire[i+1].getPos)
+        segmAux= geom.Line3d(lstPtsWire[i],lstPtsWire[i+1])
         for n in nodAux:
             p= n.getInitialPos3d
-            d= p.distSegment3d(segmAux)
-            if(d<0.01):
+            d= p.distLine3d(segmAux)
+            if(d<tol):
                 retval.append(n)
-    retval= list(set(retval))       #elimina nudos repetidos
+    retval= list(set(retval))       #clear duplicated nodes
     return retval
 
 def get_lstNod_from_lst3DPos(preprocessor,lst3DPos):
