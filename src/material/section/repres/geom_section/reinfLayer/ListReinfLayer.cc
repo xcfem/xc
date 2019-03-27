@@ -145,7 +145,7 @@ double XC::ListReinfLayer::getCover(void) const
     return retval;
   }
 
-//! @brief Returns the número total de celdas.
+//! @brief Returns the total number of cells (reinforcing bars).
 size_t XC::ListReinfLayer::getNumReinfBars(void) const
   {
     int nbars= 0;

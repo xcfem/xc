@@ -131,7 +131,7 @@ XC::RegionContainer::iterator XC::RegionContainer::begin(void)
 XC::RegionContainer::iterator XC::RegionContainer::end(void)
   { return l_reg::end(); }
 
-//! @brief Returns the número total de celdas.
+//! @brief Returns the total number of cells.
 size_t XC::RegionContainer::getNumCells(void) const
   {
     size_t ncells= 0;

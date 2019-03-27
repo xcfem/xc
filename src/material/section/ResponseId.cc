@@ -100,8 +100,9 @@ int XC::ResponseId::StringToRespId(const std::string &str)
       return PLATE_RESPONSE_q23;
     else
       {
-        std::cerr << "ResponseId::StringToRespId; la cadena: '"
-                  << str << "' no corresponde a ningún esfuerzo." << std::endl;
+        std::cerr << "ResponseId::" << __FUNCTION__
+	          << "; unknown code: '"
+                  << str << "'." << std::endl;
         return 0;
       }
   }
@@ -153,7 +154,8 @@ std::string XC::ResponseId::RespIdToString(const int &code)
         return "q23";
         break;
       default:
-        std::cerr << "Unknown code: '" << code
+        std::cerr << "ResponseId::" << __FUNCTION__
+		  << "; unknown code: '" << code
                   << "'."
                   << std::endl;
         return "nil";

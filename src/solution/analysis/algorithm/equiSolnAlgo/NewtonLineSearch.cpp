@@ -57,7 +57,7 @@
 // What: "@(#)NewtonLineSearch.h, revA"
 
 #include <solution/analysis/algorithm/equiSolnAlgo/NewtonLineSearch.h>
-//Búsqueda lineal.
+//Line search.
 #include <solution/analysis/algorithm/equiSolnAlgo/lineSearch/LineSearch.h>
 #include <solution/analysis/algorithm/equiSolnAlgo/lineSearch/BisectionLineSearch.h>
 #include <solution/analysis/algorithm/equiSolnAlgo/lineSearch/InitialInterpolatedLineSearch.h>
