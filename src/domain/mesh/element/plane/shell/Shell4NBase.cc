@@ -597,7 +597,7 @@ void XC::Shell4NBase::shape2d(const double &ss, const double &tt,const double x[
     return;
   }
 
-//! @brief Envía la coordinate transformation through the channel being passed as parameter.
+//! @brief Send the coordinate transformation through the channel being passed as parameter.
 int XC::Shell4NBase::sendCoordTransf(int posFlag,const int &posClassTag,const int &posDbTag,CommParameters &cp)
   {
     int retval= 0;
@@ -613,7 +613,7 @@ int XC::Shell4NBase::sendCoordTransf(int posFlag,const int &posClassTag,const in
     return retval;
   }
 
-//! @brief Recibe la coordinate transformation through the channel being passed as parameter.
+//! @brief Receives the coordinate transformation through the channel being passed as parameter.
 int XC::Shell4NBase::recvCoordTransf(int posFlag,const int &posClassTag,const int &posDbTag,const CommParameters &cp)
   {
     int res= 0;

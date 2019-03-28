@@ -82,7 +82,7 @@ void XC::PolygonSectRegion::Print(std::ostream &s, int flag) const
     //s << "\nMaterial Id: " << getMaterialID();
     s << "\nNumber of subdivisions in the IJ direction: " << nDivIJ;
     s << "\nNumber of subdivisions in the JK direction: " << nDivJK;
-    s << "\nVertex Polígono: " << plg;
+    s << "\nVertex Polygon: " << plg;
   }
 
 

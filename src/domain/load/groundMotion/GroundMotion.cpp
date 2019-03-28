@@ -140,7 +140,7 @@ int XC::GroundMotion::recvSelf(const CommParameters &cp)
     return 0;
   }
 
-//! @brief Envía a pointer al «ground motion» through the channel being passed as parameter.
+//! @brief Send a pointer to «ground motion» through the channel being passed as parameter.
 //! @param posClassTag: Index for the class identifier of the object (in ID).
 //! @param posDbTag: Index for the dbTag of the object (in ID).
 int XC::sendGroundMotionPtr(GroundMotion *ptr,DbTagData &dt,CommParameters &cp,const BrokedPtrCommMetaData &md)
@@ -152,12 +152,12 @@ int XC::sendGroundMotionPtr(GroundMotion *ptr,DbTagData &dt,CommParameters &cp,c
         res= cp.sendMovable(*ptr,dt,md);
       }
     if(res < 0)
-      std::cerr <<"WARNING sendGroundMotionPtr - "
+      std::cerr << __FUNCTION__ << "; WARNING"
                 << " failed to send ground motion.\n";
     return res;
   }
 
-//! @brief Recibe a pointer a «ground motion» through the channel being passed as parameter.
+//! @brief Receive a pointer a «ground motion» through the channel being passed as parameter.
 //! @param posClassTag: Index for the class identifier of the object (in ID).
 //! @param posDbTag: Index for the dbTag of the object (in ID).
 XC::GroundMotion *XC::receiveGroundMotionPtr(GroundMotion* ptr,DbTagData &dt,const CommParameters &cp,const BrokedPtrCommMetaData &md)
@@ -180,12 +180,12 @@ XC::GroundMotion *XC::receiveGroundMotionPtr(GroundMotion* ptr,DbTagData &dt,con
       {
         int res= cp.receiveMovable(*retval,dt,CommMetaData(md.getPosDbTag()));
         if(res<0)
-          std::cerr <<"WARNING - receiveGroundMotionPtr "
-                    << "failed to receive ground motion.\n";
+          std::cerr << __FUNCTION__ << "; WARNING"
+		    << " failed to receive ground motion.\n";
       }
     else
-      std::cerr <<"WARNING  - receiveGroundMotionPtr "
-                << " failed to get a blank ground motion of type "
+      std::cerr << __FUNCTION__ << "; WARNING"
+                << " failed to get a blank ground motion of type: "
                 << matClass << std::endl; 
     return retval;
   }

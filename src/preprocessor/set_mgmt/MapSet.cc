@@ -276,7 +276,7 @@ XC::DbTagData &XC::MapSet::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envía los dbTags of the sets través del canal being passed as parameter.
+//! @brief Send the dbTags of the sets through the channel being passed as parameter.
 int XC::MapSet::sendSetsDbTags(int posDbTag,CommParameters &cp)
   {
     const int size= MapSetBase::size();
@@ -292,7 +292,8 @@ int XC::MapSet::sendSetsDbTags(int posDbTag,CommParameters &cp)
     return res;
   }
 
-//! @brief Envía los nombres de clase of the sets través del canal being passed as parameter.
+//! @brief Send the names of the classes of the sets through
+//! the channel being passed as parameter.
 int XC::MapSet::sendSetsClassNames(int posDbTag,CommParameters &cp)
   {
     const int size= MapSetBase::size();
@@ -308,7 +309,7 @@ int XC::MapSet::sendSetsClassNames(int posDbTag,CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los dbTags of the sets through the channel being passed as parameter.
+//! @brief Receives the dbTags of the sets through the channel being passed as parameter.
 int XC::MapSet::receiveSetsDbTags(int posDbTag,int size,const CommParameters &cp)
   {
     setsDbTags.resize(size);

@@ -165,7 +165,8 @@ double XC::BeamIntegration::getIntegral(const ExprAlgebra &expr,int nIP,const Cr
     return retval;
   }
 
-//! @brief Envía a pointer a material through the channel being passed as parameter.
+//! @brief Send a pointer to material through the channel being
+//! passed as parameter.
 //! @param posClassTag: index of the class tags in the data vector
 //! @param posDbTag: index of the dbTag in the data vector
 int XC::sendBeamIntegrationPtr(BeamIntegration *ptr,int posClassTag, int posDbTag,DbTagData &dt,CommParameters &cp)
@@ -177,8 +178,8 @@ int XC::sendBeamIntegrationPtr(BeamIntegration *ptr,int posClassTag, int posDbTa
         res= cp.sendMovable(*ptr,dt,CommMetaData(posDbTag));
       }
     if(res < 0)
-      std::cerr <<"WARNING sendBeamIntegrationPtr - "
-                << " failed to send material\n";
+      std::cerr << __FUNCTION__ << "; WARNING "
+                << "failed to send material.\n";
     return res;
   }
 
@@ -197,7 +198,10 @@ XC::BeamIntegration *XC::receiveBeamIntegrationPtr(BeamIntegration* ptr,int posC
         // check if we have a material object already & if we do if of right type
         // if old one .. delete it
         if(ptr)
-          delete ptr;
+	  {
+            delete ptr;
+	    ptr= nullptr;
+	  }
         // create a new_ material object
         retval= cp.getNewBeamIntegration(matClass);
       }
@@ -205,12 +209,12 @@ XC::BeamIntegration *XC::receiveBeamIntegrationPtr(BeamIntegration* ptr,int posC
       {
         int res= cp.receiveMovable(*retval,dt,CommMetaData(posDbTag));
         if(res<0)
-          std::cerr <<"WARNING - receiveBeamIntegrationPtr "
+          std::cerr << __FUNCTION__ << "; WARNING " 
                     << "failed to receive material.\n";
       }
     else
-      std::cerr <<"WARNING  - receiveBeamIntegrationPtr "
-                << " failed to get a blank material of type "
+      std::cerr << __FUNCTION__ << "; WARNING "
+                << " failed to get a blank material of type: "
                 << matClass << std::endl; 
     return retval;
   }

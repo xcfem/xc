@@ -90,7 +90,7 @@ double XC::TimeSeries::getFactorSensitivity(double pseudoTime)
 
 // AddingSensitivity:END ////////////////////////////////////////////
 
-//! @brief Envía a pointer a la serie through the channel being passed as parameter.
+//! @brief Send a pointer to the series through the channel being passed as parameter.
 //! @param posClassTag: index of the class tag in the data vector.
 //! @param posDbTag: index of the dbTag in the data vector
 int XC::sendTimeSeriesPtr(TimeSeries *ptr,int posClassTag, int posDbTag,DbTagData &dt,CommParameters &cp)
@@ -102,8 +102,8 @@ int XC::sendTimeSeriesPtr(TimeSeries *ptr,int posClassTag, int posDbTag,DbTagDat
         res= cp.sendMovable(*ptr,dt,CommMetaData(posDbTag));
       }
     if(res < 0)
-      std::cerr <<"WARNING sendTimeSeriesPtr - "
-                << " failed to send time serie.\n";
+      std::cerr << __FUNCTION__ << "; WARNING "
+                << " failed to send time series.\n";
     return res;
   }
 
@@ -119,19 +119,22 @@ XC::TimeSeries *XC::receiveTimeSeriesPtr(TimeSeries* ptr,int posClassTag, int po
     else 
       {
         if(ptr)
-          delete ptr;
+	  {
+            delete ptr;
+	    ptr= nullptr;
+	  }
         retval= cp.getNewTimeSeries(tsClass);
       }
     if(retval)
       {
         int res= cp.receiveMovable(*retval,dt,CommMetaData(posDbTag));
         if(res<0)
-          std::cerr <<"WARNING - receiveTimeSeriesPtr "
+          std::cerr << __FUNCTION__ << "; WARNING "
                     << "failed to receive material.\n";
       }
     else
-      std::cerr <<"WARNING  - receiveTimeSeriesPtr "
-                << " failed to get a blank material of type "
+      std::cerr << __FUNCTION__ << "; WARNING "
+                << " failed to get a blank material of type: "
                 << tsClass << std::endl; 
     return retval;
   }

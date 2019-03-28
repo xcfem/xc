@@ -123,7 +123,7 @@ XC::Vector XC::ReinfLayer::getCenterOfMass(void) const
     return barras.getCenterOfMassGrossSection();
   }
 
-//! @brief Returns the barras contenidas total o parcialmente en el polígono.
+//! @brief Returns the bars that are totally or partially inside the polygon.
 void XC::ReinfLayer::getBarrasIn(const Polygon2d &plg,ListReinfLayer &retval,bool clear)
   {
     if(clear) retval.clear();
@@ -135,7 +135,7 @@ void XC::ReinfLayer::getBarrasIn(const Polygon2d &plg,ListReinfLayer &retval,boo
         retval.push_back(SingleBar(**i));
   }
 
-//! @brief Returns the barras contenidas total o parcialmente en el half-plane.
+//! @brief Returns the bars that are totally or partially inside the half-plane.
 void XC::ReinfLayer::getBarrasIn(const HalfPlane2d &sp,ListReinfLayer &retval,bool clear)
   {
     if(clear) retval.clear();
@@ -150,8 +150,7 @@ void XC::ReinfLayer::getBarrasIn(const HalfPlane2d &sp,ListReinfLayer &retval,bo
 //! @brief Return a vector containing the bars of the layer.
 XC::VectorReinfBar &XC::ReinfLayer::getReinfBars(void)
   {
-    //Evitamos duplicar el método.
-    return const_cast<VectorReinfBar&>(const_cast<const ReinfLayer&>(*this).getReinfBars());
+    return const_cast<VectorReinfBar&>(const_cast<const ReinfLayer&>(*this).getReinfBars()); //Avoid duplicate code duplication.
   } 
 
 //! @brief Returns the number of bars of the layer.

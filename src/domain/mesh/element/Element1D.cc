@@ -627,12 +627,12 @@ double XC::Element1D::getDist(const Pos3d &p,bool initialGeometry) const
     return sg.dist(p);
   }
 
-//! @brief Envía la coordinate transformation through the channel being passed as parameter.
+//! @brief Send the coordinate transformation through the channel being passed as parameter.
 int XC::Element1D::sendCoordTransf(int posFlag,const int &posClassTag,const int &posDbTag,CommParameters &cp)
   {
     int retval= 0;
     CrdTransf *ptr= getCoordTransf();
-    DbTagData &dt= getDbTagData();    
+    DbTagData &dt= getDbTagData();
     if(!ptr)
       setDbTagDataPos(posFlag,1);
     else
@@ -644,7 +644,7 @@ int XC::Element1D::sendCoordTransf(int posFlag,const int &posClassTag,const int 
     return retval;
   }
 
-//! @brief Recibe la coordinate transformation through the channel being passed as parameter.
+//! @brief Receives the coordinate transformation through the channel being passed as parameter.
 XC::CrdTransf *XC::Element1D::recvCoordTransf(int posFlag,const int &posClassTag,const int &posDbTag,const CommParameters &cp)
   {
     CrdTransf *ptr= getCoordTransf();

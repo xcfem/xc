@@ -259,7 +259,7 @@ bool XC::Mesh::addElement(Element *element)
     return result;
   }
 
-//! @brief Actualiza los límites del domain.
+//! @brief Update the domain boundary.
 void XC::Mesh::update_bounds(const Vector &crds)
   {
     const int dim = crds.Size();

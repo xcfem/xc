@@ -1550,7 +1550,7 @@ int XC::FiberPtrDeque::updateKRCenterOfMass(FiberSection2d &Section2d,CrossSecti
           }
       }
     yCenterOfMass= -Qz/Atot; //center or mass z coordinate 
-    kr2.kData[2]= kr2.kData[1]; //Simetría.
+    kr2.kData[2]= kr2.kData[1]; //Simetry.
     return 0;
   }
 
@@ -1607,7 +1607,7 @@ int XC::FiberPtrDeque::setTrialSectionDeformation(const FiberSection2d &Section2
             kr2.updateNMz(fs0,y);
           }
       }
-    kr2.kData[2]= kr2.kData[1]; //Simetría.
+    kr2.kData[2]= kr2.kData[1]; //Simetry.
     return retval;
   }
 
@@ -1659,7 +1659,7 @@ const XC::Matrix &XC::FiberPtrDeque::getInitialTangent(const FiberSection2d &Sec
           }
       }
 
-    kInitial[2]= kInitial[1]; //Simetría.
+    kInitial[2]= kInitial[1]; //Simetry.
     return kInitialMatrix;
   }
 
@@ -2003,9 +2003,9 @@ const XC::Matrix &XC::FiberPtrDeque::getInitialTangent(const FiberSectionGJ &Sec
             CrossSectionKR::updateKGJ(kInitialData,fiberArea,y,z,tangent);
           }
       }
-    kInitialData[4]= kInitialData[1]; //Simetría.
-    kInitialData[8]= kInitialData[2]; //Simetría.
-    kInitialData[9]= kInitialData[6]; //Simetría.
+    kInitialData[4]= kInitialData[1]; //Simetry.
+    kInitialData[8]= kInitialData[2]; //Simetry.
+    kInitialData[9]= kInitialData[6]; //Simetry.
 
     kInitialData[15]= SectionGJ.GJ; //(3,3)->15 //The remaining six elements of krGJ.kData are zero.
     return kInitial;
