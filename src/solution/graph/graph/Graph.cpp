@@ -483,7 +483,7 @@ int XC::Graph::recvData(const CommParameters &cp)
   {
     //setTag(getDbTagDataPos(0));
     int res= cp.receiveInts(numEdge,nextFreeTag,getDbTagData(),CommMetaData(2));
-    res+= myVertices.recibe<Vertex>(getDbTagDataPos(3),cp,&FEM_ObjectBroker::getNewVertex);
+    res+= myVertices.receive<Vertex>(getDbTagDataPos(3),cp,&FEM_ObjectBroker::getNewVertex);
     return res;
   }
 

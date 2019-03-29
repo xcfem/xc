@@ -280,8 +280,8 @@ int XC::LoadContainer::sendData(CommParameters &cp)
 int XC::LoadContainer::recvData(const CommParameters &cp)
   {
     clearAll();
-    int res= theNodalLoads->recibe<NodalLoad>(getDbTagDataPos(0),cp,&FEM_ObjectBroker::getNewNodalLoad);
-    res+= theElementalLoads->recibe<ElementalLoad>(getDbTagDataPos(1),cp,&FEM_ObjectBroker::getNewElementalLoad);
+    int res= theNodalLoads->receive<NodalLoad>(getDbTagDataPos(0),cp,&FEM_ObjectBroker::getNewNodalLoad);
+    res+= theElementalLoads->receive<ElementalLoad>(getDbTagDataPos(1),cp,&FEM_ObjectBroker::getNewElementalLoad);
     return res;
   }
 

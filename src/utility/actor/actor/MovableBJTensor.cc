@@ -43,21 +43,23 @@ XC::MovableBJTensor::MovableBJTensor(const BJtensor &v)
   :BJtensor(v),MovableObject(TENSOR_TAG_BJtensor) {}
 
 
-//! @brief Asigna el vector.
+//! @brief Sets the tensor value.
 void XC::MovableBJTensor::setBJTensor(const BJtensor &v)
   { BJtensor::operator=(v); }
 
-//! @brief Envia el vector through the channel being passed as parameter.
+//! @brief Sends the tensor through the channel being passed as parameter.
 int XC::MovableBJTensor::sendSelf(CommParameters &cp)
   {
-    std::cerr << "MovableBJTensor::sendSelf() - not implemented.\n";
+    std::cerr << "MovableBJTensor::" << __FUNCTION__
+              << "; not implemented.\n";
     return 0;
   }
 
-//! @brief Recibe el vector through the channel being passed as parameter.
+//! @brief Receive the tensor through the channel being passed as parameter.
 int XC::MovableBJTensor::recvSelf(const CommParameters &cp)
   {
-    std::cerr << "MovableBJTensor::recvSelf() - not implemented.\n";
+    std::cerr << "MovableBJTensor::" << __FUNCTION__
+	      << "; not implemented.\n";
     return 0;
   }
 

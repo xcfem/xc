@@ -1161,9 +1161,9 @@ int XC::ConstrContainer::sendData(CommParameters &cp)
 //! @brief Receives object members through the channel being passed as parameter.
 int XC::ConstrContainer::recvData(const CommParameters &cp)
   {
-    int res= theSPs->recibe<SFreedom_Constraint>(getDbTagDataPos(0),cp,&FEM_ObjectBroker::getNewSP);
-    res+= theMPs->recibe<MFreedom_Constraint>(getDbTagDataPos(1),cp,&FEM_ObjectBroker::getNewMP);
-    res+= theMRMPs->recibe<MRMFreedom_Constraint>(getDbTagDataPos(2),cp,&FEM_ObjectBroker::getNewMRMP);
+    int res= theSPs->receive<SFreedom_Constraint>(getDbTagDataPos(0),cp,&FEM_ObjectBroker::getNewSP);
+    res+= theMPs->receive<MFreedom_Constraint>(getDbTagDataPos(1),cp,&FEM_ObjectBroker::getNewMP);
+    res+= theMRMPs->receive<MRMFreedom_Constraint>(getDbTagDataPos(2),cp,&FEM_ObjectBroker::getNewMRMP);
     res+= recvNLockersTags(3,4,cp);
     res+= recvLPatternsTags(5,6,cp);
     return res;
