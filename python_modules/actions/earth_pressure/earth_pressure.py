@@ -107,13 +107,15 @@ class EarthPressureModel(PressureModelBase):
 
     def getPressure(self,z):
         '''Return the earth pressure acting on the points at global coordinate z.'''
-        self.zTopLev.reverse()
-        ind=len(self.zTopLev)-bisect.bisect_left(self.zTopLev,z)-1
-        self.zTopLev.reverse()
-        ret_press= 0.0
-        for i in range(ind):
-            ret_press+=self.KSoils[i]*self.gammaSoils[i]*(self.zTopLev[i]-self.zTopLev[i+1])+self.gammaWater[i]*(self.zTopLev[i]-self.zTopLev[i+1])
-        ret_press+=self.KSoils[ind]*self.gammaSoils[ind]*(self.zTopLev[ind]-z)+self.gammaWater[ind]*(self.zTopLev[ind]-z)
+        ret_press=0
+        if z <= self.zGround:
+            self.zTopLev.reverse()
+            ind=len(self.zTopLev)-bisect.bisect_left(self.zTopLev,z)-1
+            self.zTopLev.reverse()
+            ret_press= 0.0
+            for i in range(ind):
+                ret_press+=self.KSoils[i]*self.gammaSoils[i]*(self.zTopLev[i]-self.zTopLev[i+1])+self.gammaWater[i]*(self.zTopLev[i]-self.zTopLev[i+1])
+            ret_press+=self.KSoils[ind]*self.gammaSoils[ind]*(self.zTopLev[ind]-z)+self.gammaWater[ind]*(self.zTopLev[ind]-z)
         return ret_press
 
 class PeckPressureEnvelope(EarthPressureBase):
