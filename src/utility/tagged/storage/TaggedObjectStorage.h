@@ -93,7 +93,7 @@ class TaggedObjectStorage: public CommandEntity, public MovableObject
     const ID &getDBTags(CommParameters &);
     int sendObjectTags(CommParameters &);
     const ID &receiveTags(int posDbTag,int size,const CommParameters &);
-    int recibeObjectTags(const int &sz,const CommParameters &);
+    int receiveObjectTags(const int &sz,const CommParameters &);
     int sendObjects(CommParameters &);
     template <class T>
     int createObjects(const CommParameters &,T *(FEM_ObjectBroker::*p)(int));
@@ -153,7 +153,7 @@ class TaggedObjectStorage: public CommandEntity, public MovableObject
       { return transmitIDs; }
     virtual int sendData(CommParameters &);
     template <class T>
-    int recibe(int dbTag,const CommParameters &,T *(FEM_ObjectBroker::*p)(int));
+    int receive(int dbTag,const CommParameters &,T *(FEM_ObjectBroker::*p)(int));
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
     //! Invoke {\em Print(s,flag)} on all objects which have been added to
@@ -213,7 +213,7 @@ int TaggedObjectStorage::receiveData(const CommParameters &cp,T *(FEM_ObjectBrok
         if(transmitIDs)
           {
             clearAll();
-            recibeObjectTags(sz,cp);
+            receiveObjectTags(sz,cp);
             res+= this->createObjects(cp,ptrFunc);
           }
         res+= this->receiveObjects(cp);
@@ -223,7 +223,7 @@ int TaggedObjectStorage::receiveData(const CommParameters &cp,T *(FEM_ObjectBrok
 
 //! @brief Receives members through the channel being passed as parameter.
 template <class T>
-int TaggedObjectStorage::recibe(int dbTag,const CommParameters &cp,T *(FEM_ObjectBroker::*ptrFunc)(int))
+int TaggedObjectStorage::receive(int dbTag,const CommParameters &cp,T *(FEM_ObjectBroker::*ptrFunc)(int))
   {
     inicComm(5);
     setDbTag(dbTag);

@@ -78,7 +78,7 @@ int XC::MovableVector::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el vector through the channel being passed as parameter.
+//! @brief Receive the vector through the channel being passed as parameter.
 int XC::MovableVector::recvSelf(const CommParameters &cp)
   {
     inicComm(2);

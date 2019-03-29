@@ -322,7 +322,7 @@ int XC::MapSet::receiveSetsDbTags(int posDbTag,int size,const CommParameters &cp
     return res;
   }
 
-//! @brief Recibe los nombres de clase of the sets through the channel being passed as parameter.
+//! @brief Receives the class names of the sets through the channel being passed as parameter.
 int XC::MapSet::receiveSetsClassNames(int posDbTag,int size,const CommParameters &cp)
   {
     setsClassNames.resize(size);

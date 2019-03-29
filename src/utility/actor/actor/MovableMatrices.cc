@@ -55,19 +55,21 @@ int XC::MovableMatrices::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el vector through the channel being passed as parameter.
+//! @brief Receive the vector through the channel being passed as parameter.
 int XC::MovableMatrices::recvSelf(const CommParameters &cp)
   {
     inicComm(2);
     const int dataTag = getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << "MovableMatrices::recvSelf() - failed to receive ID data\n";
+      std::cerr << "MovableMatrices::" << __FUNCTION__
+	        << "; failed to receive ID data.\n";
     else
       res= cp.receiveMatrices(vectors,getDbTagData(),CommMetaData(1));
     if(res<0)
       {
-        std::cerr << "MovableMatrices::recvSelf - failed to receive data\n";
+        std::cerr << "MovableMatrices::" << __FUNCTION__
+		  << "; failed to receive data.\n";
         return res;
       }
     return res;

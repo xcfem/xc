@@ -252,7 +252,7 @@ int XC::NodeLocker::recvData(const CommParameters &cp)
     setTag(getDbTagDataPos(0));
     int res= cp.receiveInts(nextTag,currentGeoTag,lastGeoSendTag,getDbTagData(),CommMetaData(1));
     const int dbTagSPs= getDbTagDataPos(2);
-    res+= theSPs->recibe<SFreedom_Constraint>(dbTagSPs,cp,&FEM_ObjectBroker::getNewSP);
+    res+= theSPs->receive<SFreedom_Constraint>(dbTagSPs,cp,&FEM_ObjectBroker::getNewSP);
     return res;
   }
 

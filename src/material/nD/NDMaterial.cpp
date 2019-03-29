@@ -401,7 +401,7 @@ int XC::NDMaterial::commitSensitivity(XC::Vector & strainSensitivity, int gradNu
   { return 0; }
 // AddingSensitivity:END //////////////////////////////////////////
 
-//! @brief Recibe a pointer a material through the channel being passed as parameter.
+//! @brief Receive a pointer to material through the channel being passed as parameter.
 XC::NDMaterial *XC::receiveNDMaterialPtr(NDMaterial *ptr,DbTagData &dt,const CommParameters &cp,const BrokedPtrCommMetaData &md)
   {
     NDMaterial *retval= nullptr;

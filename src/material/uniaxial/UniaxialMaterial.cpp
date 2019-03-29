@@ -301,7 +301,7 @@ int XC::UniaxialMaterial::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe a pointer a material through the channel being passed as parameter.
+//! @brief Receives a pointer to uniaxial material through the channel being passed as parameter.
 XC::UniaxialMaterial *XC::receiveUniaxialMaterialPtr(UniaxialMaterial *ptr,DbTagData &dt,const CommParameters &cp,const BrokedPtrCommMetaData &md)
   {
     UniaxialMaterial *retval= nullptr;

@@ -1072,9 +1072,9 @@ int XC::Mesh::sendData(CommParameters &cp)
 //! @brief Receives object members through the channel being passed as parameter.
 int XC::Mesh::recvData(const CommParameters &cp)
   {
-    int res= theNodes->recibe<Node>(getDbTagDataPos(0),cp,&FEM_ObjectBroker::getNewNode);
+    int res= theNodes->receive<Node>(getDbTagDataPos(0),cp,&FEM_ObjectBroker::getNewNode);
     add_nodes_to_domain();
-    res+= theElements->recibe<Element>(getDbTagDataPos(1),cp,&FEM_ObjectBroker::getNewElement);
+    res+= theElements->receive<Element>(getDbTagDataPos(1),cp,&FEM_ObjectBroker::getNewElement);
     add_elements_to_domain();
 
     res+= cp.receiveVector(theBounds,getDbTagData(),CommMetaData(2));

@@ -113,7 +113,7 @@ int XC::MovableContainer<C>::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Sends deque through the channel being passed as parameter.
+//! @brief Sends container through the channel being passed as parameter.
 template <class C>
 int XC::MovableContainer<C>::sendSelf(CommParameters &cp)
   {
@@ -128,7 +128,7 @@ int XC::MovableContainer<C>::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe el deque through the channel being passed as parameter.
+//! @brief Receive the container through the channel being passed as parameter.
 template <class C>
 int XC::MovableContainer<C>::recvSelf(const CommParameters &cp)
   {
@@ -137,12 +137,14 @@ int XC::MovableContainer<C>::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << "MovableContainer::recvSelf - failed to receive ids.\n";
+      std::cerr << "MovableContainer::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         res+= recvData(cp);
         if(res<0)
-          std::cerr << "MovableContainer::recvSelf - failed to receive data.\n";
+          std::cerr << "MovableContainer::" << __FUNCTION__
+	            << "; failed to receive data.\n";
       }
     return res;
   }

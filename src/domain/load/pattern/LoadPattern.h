@@ -82,11 +82,13 @@ class MapLoadPatterns;
 //
 //! @ingroup LPatterns
 //
-//! @brief A LoadPattern object is used to 
-//! to store reference loads and single point constraints
-//! and a TimeSeries function which is used to determine
+//! @brief A load pattern is the spatial distribution as well as its
+//! variation in time of a specific set of forces, displacements,
+//! temperatures, and other effects which act on a structure.
+//! 
+//! A LoadPattern object is used to store reference loads and single point
+//! constraints and a TimeSeries function which is used to determine
 //! the load factor given the pseudo-time to the model.
-//!
 //! A LoadPattern is a container class for Load and SFreedom\_Constraint
 //! objects. Each LoadPattern object is associated with a TimeSeries
 //! object which, for a given pseudo time, will return the appropriate

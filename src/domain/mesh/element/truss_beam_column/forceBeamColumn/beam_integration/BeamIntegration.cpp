@@ -183,7 +183,7 @@ int XC::sendBeamIntegrationPtr(BeamIntegration *ptr,int posClassTag, int posDbTa
     return res;
   }
 
-//! @brief Recibe a pointer a material through the channel being passed as parameter.
+//! @brief Receive a pointer to beam integration through the channel being passed as parameter.
 //! @param posClassTag: index of the class tags in the data vector
 //! @param posDbTag: index of the dbTag in the data vector
 XC::BeamIntegration *XC::receiveBeamIntegrationPtr(BeamIntegration* ptr,int posClassTag, int posDbTag,DbTagData &dt,const CommParameters &cp)

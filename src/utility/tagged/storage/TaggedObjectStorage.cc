@@ -160,7 +160,7 @@ int XC::TaggedObjectStorage::sendObjectTags(CommParameters &cp)
     return res;
   }
 
-//! @brief Recibe los dbTags o classTags of the objects through the channel being passed as parameter.
+//! @brief Receives the dbTags or classTags of the objects through the channel being passed as parameter.
 const XC::ID &XC::TaggedObjectStorage::receiveTags(int posDbTag,int sz,const CommParameters &cp)
   {
     static ID retVal;
@@ -176,7 +176,7 @@ const XC::ID &XC::TaggedObjectStorage::receiveTags(int posDbTag,int sz,const Com
   }
 
 //! @brief Receive object tags through the channel being passed as parameter.
-int XC::TaggedObjectStorage::recibeObjectTags(const int &sz,const CommParameters &cp)
+int XC::TaggedObjectStorage::receiveObjectTags(const int &sz,const CommParameters &cp)
   {
     int res= 0;
     dbTags= receiveTags(posDbTag1,sz,cp);

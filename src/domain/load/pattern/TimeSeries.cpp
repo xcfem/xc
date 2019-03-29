@@ -107,7 +107,7 @@ int XC::sendTimeSeriesPtr(TimeSeries *ptr,int posClassTag, int posDbTag,DbTagDat
     return res;
   }
 
-//! @brief Recibe a pointer a la serie through the channel being passed as parameter.
+//! @brief Receive a pointer to the series through the channel being passed as parameter.
 //! @param posClassTag: index of class identifier in the data vector.
 //! @param posDbTag: index of the dbTag in the data vector
 XC::TimeSeries *XC::receiveTimeSeriesPtr(TimeSeries* ptr,int posClassTag, int posDbTag,DbTagData &dt,const CommParameters &cp)
