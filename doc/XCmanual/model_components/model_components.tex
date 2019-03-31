@@ -1,5 +1,42 @@
 \chapter{Finite element model components}
 
+\section{Introduction}
+XC is comprised of a set of Python modules and objects to perform:
+
+\begin{itemize}
+\item creation of the finite element model,
+\item specification of an analysis procedure,
+\item selection of quantities to be monitored during the analysis,
+\item and the output of results.
+\end{itemize}
+
+In each finite element analysis, an analyst constructs 5 main types of objects, as shown in figure~\ref{main}:
+
+\begin{figure}[htpb]
+%% \begin{center}
+%% \leavevmode
+%% \hbox{%
+%% %\epsfxsize=6.0in
+%% %\epsfysize=4.2in
+%% \epsffile{./main_objects.eps}}
+%% \end{center}
+\caption{Main Objects in an Analysis}
+\label{main}
+\end{figure}
+
+Those main objects are:
+\begin{enumerate}
+\item {\bf Preprocessor}: As in any finite element analysis, the analyst's first step is to subdivide the body under study into elements and nodes, to define loads acting on the elements and nodes, and to define constraints acting on the nodes. The Preprocessor is the object in the program responsible for building the Element, Node, LoadPattern, TimeSeries, Load and Constraint objects.
+
+\item {\bf Domain}: The Domain object is responsible for storing the objects created by the Preprocessor object and for providing the Analysis and Recorder objects access to these objects.
+
+\item {\bf Analysis}: Once the analyst has defined the model, the next step is to define the analysis that is to be performed on the model. This may vary from a simple static linear analysis to a transient non-linear analysis. The Analysis object is responsible for performing the analysis. In XC each Analysis object is composed of several component objects, which define how the analysis is performed. The component classes consist of the following: { SolutionAlgorithm}, {Integrator}, { ConstraintHandler}, { DOF\_Numberer}, {SystemOfEqn}, {Solver}, and {AnalysisModel}. 
+
+\item {\bf Recorder}: Once the model and analysis objects have been defined, the analyst has the option of specifying what is to be monitored during the analysis. This, for example, could be the displacement history at a node in a transient analysis or the entire state of the model at each step in the solution procedure. Several Recorder objects are created by the analyst to monitor the analysis.
+  \item {\bf Post-processor}: Postprocessing may be defined as the “art of results representation”. The post-processor is composed by the objects an modules that organize the output of the analysis such that it is easily understandable by the user. It can include checks on the codes and standards to which the construction must comply.
+\end{enumerate}
+
+
 \input{model_components/nodes.tex}
 
 \input{model_components/constraints.tex}
