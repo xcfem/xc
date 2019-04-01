@@ -85,8 +85,9 @@ class EarthPressureModel(PressureModelBase):
       :ivar zWater: global Z coordinate of groundwater level 
             (if zGroundwater<minimum z of model => there is no groundwater)
       :ivar gammaWater: weight density of water
+      :ivar qUnif: uniform load over the backfill surface (defaults to 0)
     '''
-    def __init__(self, zGround, zBottomSoils,KSoils,gammaSoils, zWater, gammaWater):
+    def __init__(self, zGround, zBottomSoils,KSoils,gammaSoils, zWater, gammaWater,qUnif=0):
         super(EarthPressureModel,self).__init__()
         self.zGround=zGround
         self.zBottomSoils=zBottomSoils
@@ -103,7 +104,7 @@ class EarthPressureModel(PressureModelBase):
         for i in range(indWat,len(self.gammaSoils)):
             self.gammaSoils[i]-=gammaWater
         self.gammaWater=[0]*indWat+[gammaWater]*(len(self.gammaSoils)-indWat)
-            
+        self.qUnif=qUnif    
 
     def getPressure(self,z):
         '''Return the earth pressure acting on the points at global coordinate z.'''
@@ -116,6 +117,7 @@ class EarthPressureModel(PressureModelBase):
             for i in range(ind):
                 ret_press+=self.KSoils[i]*self.gammaSoils[i]*(self.zTopLev[i]-self.zTopLev[i+1])+self.gammaWater[i]*(self.zTopLev[i]-self.zTopLev[i+1])
             ret_press+=self.KSoils[ind]*self.gammaSoils[ind]*(self.zTopLev[ind]-z)+self.gammaWater[ind]*(self.zTopLev[ind]-z)
+        ret_press+=self.KSoils[ind]*self.qUnif
         return ret_press
 
 class PeckPressureEnvelope(EarthPressureBase):
