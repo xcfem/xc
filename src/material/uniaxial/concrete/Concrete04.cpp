@@ -364,21 +364,20 @@ int XC::Concrete04::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::Concrete04::Print (std::ostream& s, int flag)
-{
-  s << "Concrete04, tag: " << this->getTag() << std::endl;
-  s << "  fpc: " << fpc << std::endl;
-  s << "  epsc0: " << epsc0 << std::endl;
-  s << "  fct: " << fct << std::endl;
-  s << "  epscu: " << epscu << std::endl;
-  s << "  Ec0:  " << Ec0 << std::endl;
-  s << "  etu:  " << etu << std::endl;
-  s << "  beta: " << beta << std::endl;
-}
+//! @brief Print stuff.
+void XC::Concrete04::Print(std::ostream& s, int flag)
+  {
+    s << getClassName() << ", tag: " << this->getTag() << std::endl
+      << "  fpc: " << fpc << std::endl
+      << "  epsc0: " << epsc0 << std::endl
+      << "  fct: " << fct << std::endl
+      << "  epscu: " << epscu << std::endl
+      << "  Ec0:  " << Ec0 << std::endl
+      << "  etu:  " << etu << std::endl
+      << "  beta: " << beta << std::endl;
+  }
 
 /*// LOWES: add functions for variable hinge-length model*/
-int XC::Concrete04::getMaterialType()
-{
-	return 0;
-}
+int XC::Concrete04::getMaterialType(void)
+  { return 0; }
 /*// LOWES: end*/
