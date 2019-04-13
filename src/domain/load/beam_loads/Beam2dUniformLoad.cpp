@@ -57,7 +57,6 @@
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
-#include "boost/any.hpp"
 #include "utility/matrix/ID.h"
 
 #include "domain/mesh/element/utils/fvectors/FVector.h"
@@ -65,7 +64,7 @@
 
 XC::Vector XC::Beam2dUniformLoad::data(2);
 
-XC::Beam2dUniformLoad::Beam2dUniformLoad(int tag, double wt, double wa,const XC::ID &theElementTags)
+XC::Beam2dUniformLoad::Beam2dUniformLoad(int tag, double wt, double wa,const ID &theElementTags)
   :BeamUniformLoad(tag, LOAD_TAG_Beam2dUniformLoad,wt,wa,theElementTags) {}
 
 XC::Beam2dUniformLoad::Beam2dUniformLoad(int tag)
