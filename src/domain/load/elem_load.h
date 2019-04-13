@@ -31,6 +31,7 @@
 
 #include "domain/load/beam_loads/Beam2dPointLoad.h"
 #include "domain/load/beam_loads/Beam2dUniformLoad.h"
+#include "domain/load/beam_loads/Beam2dPartialUniformLoad.h"
 #include "domain/load/beam_loads/BeamStrainLoad.h"
 #include "domain/load/beam_loads/Beam3dPointLoad.h"
 #include "domain/load/beam_loads/Beam3dUniformLoad.h"

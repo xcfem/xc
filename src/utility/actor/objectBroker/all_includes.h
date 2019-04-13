@@ -290,6 +290,7 @@
 #include "domain/load/ElementalLoad.h"
 #include "domain/load/ElementalLoadIter.h"
 #include "domain/load/beam_loads/Beam2dUniformLoad.h"
+#include "domain/load/beam_loads/Beam2dPartialUniformLoad.h"
 #include "domain/load/beam_loads/Beam2dPointLoad.h"
 #include "domain/load/beam_loads/Beam3dUniformLoad.h"
 #include "domain/load/beam_loads/Beam3dPointLoad.h"

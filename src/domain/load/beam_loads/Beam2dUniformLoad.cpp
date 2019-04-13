@@ -64,14 +64,14 @@
 
 XC::Vector XC::Beam2dUniformLoad::data(2);
 
+//! @brief Constructor.
 XC::Beam2dUniformLoad::Beam2dUniformLoad(int tag, double wt, double wa,const ID &theElementTags)
   :BeamUniformLoad(tag, LOAD_TAG_Beam2dUniformLoad,wt,wa,theElementTags) {}
 
+//! @brief Constructor.
 XC::Beam2dUniformLoad::Beam2dUniformLoad(int tag)
   :BeamUniformLoad(tag, LOAD_TAG_Beam2dUniformLoad) {}
 
-XC::Beam2dUniformLoad::Beam2dUniformLoad(void)
-  :BeamUniformLoad(0,LOAD_TAG_Beam2dUniformLoad) {}
 
 const XC::Vector &XC::Beam2dUniformLoad::getData(int &type, const double &loadFactor) const
   {

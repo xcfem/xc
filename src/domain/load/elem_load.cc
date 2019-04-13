@@ -27,7 +27,6 @@
 //elem_load.cc
 
 #include "elem_load.h"
-#include "boost/any.hpp"
 #include "utility/matrix/Vector.h"
 
 //! @brief Creates a new load over elements.
@@ -40,6 +39,8 @@ XC::ElementalLoad *XC::procesa_element_load(XC::LoadPattern *lp,int &tag_el,cons
     ElementalLoad *retval= nullptr;
     if(loadType == "beam2d_uniform_load")
       retval= new_elem_load<Beam2dUniformLoad>(lp,tag_el);
+    else if(loadType == "beam2d_partial_uniform_load")
+      retval= new_elem_load<Beam2dPartialUniformLoad>(lp,tag_el);
     else if(loadType == "beam2d_point_load")
       retval= new_elem_load<Beam2dPointLoad>(lp,tag_el);
     else if(loadType == "beam_strain_load")

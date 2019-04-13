@@ -58,15 +58,17 @@
 
 XC::Vector XC::Beam2dPartialUniformLoad::data(4);
 
+//! @brief Constructor.
 XC::Beam2dPartialUniformLoad::Beam2dPartialUniformLoad(int tag, double wt, double wa, double aL, double bL, const ID &theElementTags)
   : BeamUniformLoad(tag, LOAD_TAG_Beam2dPartialUniformLoad,wt,wa,theElementTags),
    aOverL(aL), bOverL(bL), parameterID(0) {}
 
-XC::Beam2dPartialUniformLoad::Beam2dPartialUniformLoad()
-  : BeamUniformLoad(LOAD_TAG_Beam2dPartialUniformLoad),
+//! @brief Constructor.
+XC::Beam2dPartialUniformLoad::Beam2dPartialUniformLoad(int tag)
+  : BeamUniformLoad(tag, LOAD_TAG_Beam2dPartialUniformLoad),
    aOverL(0.0), bOverL(0.0), parameterID(0) {}
 
-const XC::Vector &XC::Beam2dPartialUniformLoad::getData(int &type, double loadFactor)
+const XC::Vector &XC::Beam2dPartialUniformLoad::getData(int &type, const double &loadFactor) const
   {
     type = LOAD_TAG_Beam2dPartialUniformLoad;
     data(0) = Trans;

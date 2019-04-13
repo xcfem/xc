@@ -36,6 +36,7 @@
 #include "domain/load/beam_loads/Beam3dUniformLoad.h"
 #include "domain/load/beam_loads/Beam3dPointLoad.h"
 #include "domain/load/beam_loads/Beam2dUniformLoad.h"
+#include "domain/load/beam_loads/Beam2dPartialUniformLoad.h"
 #include "domain/load/beam_loads/Beam2dPointLoad.h"
 #include "domain/load/beam_loads/BeamStrainLoad.h"
 
@@ -84,6 +85,46 @@ void XC::Element1D::vector2dUniformLoadLocal(const Vector &v)
 		    << "; WARNING a vector of dimension 2"
 	            << " was expected instead of: " << v << std::endl;
         Beam2dUniformLoad *tmp= new Beam2dUniformLoad(loadTag,v[1],v[0],eTags);
+        LoadPattern *lp= lPatterns.getCurrentLoadPatternPtr();
+        if(lp)
+          {
+            lp->addElementalLoad(tmp);
+            lPatterns.setCurrentElementLoadTag(loadTag+1);
+          }
+        else
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; there is no current load pattern. Load ignored."
+                    << std::endl; 
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+                << "; ERROR a vector of dimension 2"
+	        << " was expected instead of: " << v << std::endl;
+  }
+
+void XC::Element1D::vector2dPartialUniformLoadGlobal(const double &aOverL, const double &bOverL, const Vector &v)
+  {
+    const CrdTransf *crd_trf= getCoordTransf();
+    const Vector vTrf= crd_trf->getVectorLocalCoordFromGlobal(v);
+    vector2dPartialUniformLoadLocal(aOverL, bOverL, vTrf);
+  }
+
+void XC::Element1D::vector2dPartialUniformLoadLocal(const double &aOverL, const double &bOverL, const Vector &v)
+  {
+    Preprocessor *preprocessor= getPreprocessor();
+    MapLoadPatterns &lPatterns= preprocessor->getLoadHandler().getLoadPatterns();
+    static ID eTags(1);
+    eTags[0]= getTag(); //Load for this element.
+    const int &loadTag= lPatterns.getCurrentElementLoadTag(); //Load identifier.
+
+    const size_t sz= v.Size();
+    if(sz>1)
+      {
+        if(sz>2)
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; WARNING a vector of dimension 2"
+	            << " was expected instead of: " << v << std::endl;
+        Beam2dPartialUniformLoad *tmp= new Beam2dPartialUniformLoad(loadTag,v[1],v[0],aOverL,bOverL,eTags);
         LoadPattern *lp= lPatterns.getCurrentLoadPatternPtr();
         if(lp)
           {

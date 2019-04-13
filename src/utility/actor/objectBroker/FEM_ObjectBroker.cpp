@@ -334,6 +334,8 @@ XC::ElementalLoad *XC::FEM_ObjectBroker::getNewElementalLoad(int classTag)
       {
       case LOAD_TAG_Beam2dUniformLoad:
         return new Beam2dUniformLoad();
+      case LOAD_TAG_Beam2dPartialUniformLoad:
+        return new Beam2dPartialUniformLoad();
       case LOAD_TAG_Beam2dPointLoad:
         return new Beam2dPointLoad();
       case LOAD_TAG_Beam3dUniformLoad:

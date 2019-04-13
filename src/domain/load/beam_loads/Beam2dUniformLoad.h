@@ -69,8 +69,7 @@ class Beam2dUniformLoad : public BeamUniformLoad
     static Vector data;
   public:
     Beam2dUniformLoad(int tag, double wTrans, double wAxial,const ID &theElementTags);
-    Beam2dUniformLoad(int tag);
-    Beam2dUniformLoad(void);
+    Beam2dUniformLoad(int tag= 0);
 
     inline const double &WTrans(void) const
       { return Trans; }

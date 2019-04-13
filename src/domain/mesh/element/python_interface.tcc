@@ -114,6 +114,8 @@ class_<XC::Element1D, bases<XC::ElementBase<2> >, boost::noncopyable >("Element1
     .def("getLineSegment", &XC::Element1D::getLineSegment)
     .def("vector2dUniformLoadGlobal", &XC::Element1D::vector2dUniformLoadGlobal,"Element's load.")
     .def("vector2dUniformLoadLocal", &XC::Element1D::vector2dUniformLoadLocal,"Element's load.")
+    .def("vector2dPartialUniformLoadGlobal", &XC::Element1D::vector2dPartialUniformLoadGlobal,"Element's load.")
+    .def("vector2dPartialUniformLoadLocal", &XC::Element1D::vector2dPartialUniformLoadLocal,"Element's load.")
     .def("vector2dPointByRelDistLoadGlobal", &XC::Element1D::vector2dPointByRelDistLoadGlobal,"Element's load.")
     .def("vector2dPointByRelDistLoadLocal", &XC::Element1D::vector2dPointByRelDistLoadLocal,"Element's load.")
     .def("vector2dPointLoadGlobal", &XC::Element1D::vector2dPointLoadGlobal,"Element's load.")

@@ -72,9 +72,9 @@ class Beam2dPartialUniformLoad : public BeamUniformLoad
     int recvData(const CommParameters &cp);    
   public:
     Beam2dPartialUniformLoad(int tag, double wTrans, double wAxial, double aL, double bL, const ID &theElementTags);
-    Beam2dPartialUniformLoad(void);    
+    Beam2dPartialUniformLoad(int tag= 0);    
 
-    const Vector &getData(int &type, double loadFactor);
+    const Vector &getData(int &type,const double &loadFactor) const;
 
     size_t getForceVectorDimension(void) const;
     size_t getMomentVectorDimension(void) const;
