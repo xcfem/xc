@@ -238,7 +238,8 @@ int XC::Beam2dUniformLoad::sendSelf(CommParameters &cp)
     const int dbTag= getDbTag();
     result+= cp.sendIdData(getDbTagData(),dbTag);
     if(result < 0)
-      std::cerr << "Beam2dUniformLoad::sendSelf() - failed to send extra data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; failed to send extra data\n";
     return result;
   }
 
@@ -249,7 +250,8 @@ int XC::Beam2dUniformLoad::recvSelf(const CommParameters &cp)
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "Beam2dUniformLoad::recvSelf() - data could not be received\n" ;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; data could not be received\n" ;
     else
       res+= recvData(cp);
     return res;
