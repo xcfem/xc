@@ -189,7 +189,7 @@ XC::Spot *XC::GeomSection::creaSpot(const Pos2d &p)
 XC::Spot *XC::GeomSection::newSpot(const Pos2d &p)
   {
     Pos2d trfP(p);
-    if(tag_sis_ref != 0) //El sistema de coordenadas no es el global.
+    if(tag_sis_ref != 0) //Not the global coordinate system.
       {
         SectionReferenceFrame *sr= get_reference_system(tag_sis_ref);
         if(sr)

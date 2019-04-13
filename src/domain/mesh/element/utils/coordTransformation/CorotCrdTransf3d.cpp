@@ -1480,7 +1480,7 @@ double XC::CorotCrdTransf3d::getInitialLength(void) const
 double XC::CorotCrdTransf3d::getDeformedLength(void) const
   { return Ln; }
 
-//! @brief Returns the vector expresado en coordenadas globales.
+//! @brief Returns the global coordinates of the vector.
 const XC::Vector &XC::CorotCrdTransf3d::getVectorGlobalCoordFromLocal(const Vector &localCoords) const
   {
     return CrdTransf3d::getVectorLocalCoordFromGlobal(localCoords);//This class uses the transposed of the R matrix.
@@ -1505,7 +1505,7 @@ const XC::Matrix &XC::CorotCrdTransf3d::getVectorGlobalCoordFromLocal(const Matr
     return retval;
   }
 
-//! @brief Returns the vector expresado en coordenadas locales.
+//! @brief Returns the local coordinates of the vector.
 const XC::Vector &XC::CorotCrdTransf3d::getVectorLocalCoordFromGlobal(const Vector &globalCoords) const
   {
     return CrdTransf3d::getVectorGlobalCoordFromLocal(globalCoords); //This class uses the transposed of the R matrix.

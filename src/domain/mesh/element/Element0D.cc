@@ -237,7 +237,7 @@ void XC::Element0D::setUpVectors(const Vector &x, const Vector &yp)
 //! @brief Establish the external nodes and set up the transformation matrix for orientation
 //! @param Nd1: Tag of the node dorsal.
 //! @param Nd2: Tag of the node frontal.
-//! @param x: Componentes del local x axis, expresadas en coordenadas globales.
+//! @param x: Components of the local x axis, expressed in global coordinates.
 //! @param yp: the vector used to define the local xy plane of the local-coordinate system.
 void XC::Element0D::setUp(int Nd1, int Nd2, const Vector &x, const Vector &yp)
   { 

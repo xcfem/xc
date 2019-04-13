@@ -100,7 +100,8 @@ const XC::Matrix &XC::BeamIntegration::getIntegrPointCoords(int numSections, dou
     return retval;
   }
 
-//! @brief Returns the coordenadas naturales (entre -1 y 1) a partir de las normalizadas.
+//! @brief Returns the natural coordinates (between -1 and 1) from the
+//! normalized ones.
 const XC::Matrix &XC::BeamIntegration::getIntegrPointNaturalCoords(int numSections, double L) const
   {
     static Matrix retval;
@@ -110,7 +111,8 @@ const XC::Matrix &XC::BeamIntegration::getIntegrPointNaturalCoords(int numSectio
     return retval;
   }
 
-//! @brief Returns the coordenadas locales (entre 0 y L) a partir de las normalizadas.
+//! @brief Returns the local coordinates (between 0 and L) from the
+//! normalized ones.
 const XC::Matrix &XC::BeamIntegration::getIntegrPointLocalCoords(int numSections, double L) const
   {
     static Matrix retval;
