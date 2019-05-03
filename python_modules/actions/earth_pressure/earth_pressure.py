@@ -117,7 +117,7 @@ class EarthPressureModel(PressureModelBase):
             for i in range(ind):
                 ret_press+=self.KSoils[i]*self.gammaSoils[i]*(self.zTopLev[i]-self.zTopLev[i+1])+self.gammaWater[i]*(self.zTopLev[i]-self.zTopLev[i+1])
             ret_press+=self.KSoils[ind]*self.gammaSoils[ind]*(self.zTopLev[ind]-z)+self.gammaWater[ind]*(self.zTopLev[ind]-z)
-        ret_press+=self.KSoils[ind]*self.qUnif
+            ret_press+=self.KSoils[ind]*self.qUnif
         return ret_press
 
 class PeckPressureEnvelope(EarthPressureBase):
