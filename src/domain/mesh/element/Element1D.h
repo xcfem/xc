@@ -90,6 +90,8 @@ class Element1D : public ElementBase<2>
 
     void vector2dUniformLoadGlobal(const Vector &);
     void vector2dUniformLoadLocal(const Vector &);
+    void vector2dPartialUniformLoadGlobal(const double &, const double &, const Vector &);
+    void vector2dPartialUniformLoadLocal(const double &, const double &, const Vector &);
     void vector2dPointByRelDistLoadGlobal(const double &,const Vector &);
     void vector2dPointByRelDistLoadLocal(const double &,const Vector &);
     void vector2dPointLoadGlobal(const Vector &,const Vector &);

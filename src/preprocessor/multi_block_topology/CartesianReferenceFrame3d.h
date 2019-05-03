@@ -25,7 +25,7 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
 //CartesianReferenceFrame3d.h
-//Sistema de coordenadas cartesianas.
+//Cartesian coordinate reference frame.
 
 #ifndef SISREFCARTESIANAS3D_H
 #define SISREFCARTESIANAS3D_H

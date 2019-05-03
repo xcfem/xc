@@ -689,7 +689,8 @@ int XC::FourNodeQuad::updateParameter(int parameterID, Information &info)
       }
   }
 
-//! @brief Return the determinante del jacobiano en las coordenadas being passed as parameters.
+//! @brief Return the determinant of the jacobian at the position
+//! being passed as parameters.
 double XC::FourNodeQuad::shapeFunction(const GaussPoint &gp) const
   {
     const double &xi= gp.r_coordinate();

@@ -28,9 +28,8 @@
 
 #include "NodePtrArray3d.h"
 #include "domain/mesh/node/Node.h"
-#include "xc_utils/src/functions/algebra/integ_num.h"
+#include "xc_utils/src/functions/algebra/num_integration.h"
 
-#include <boost/any.hpp>
 #include "domain/domain/Domain.h"
 #include "domain/constraints/SFreedom_Constraint.h"
 

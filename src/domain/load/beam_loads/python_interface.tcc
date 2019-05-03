@@ -66,6 +66,9 @@ class_<XC::Beam2dPointLoad, bases<XC::BeamPointLoad>, boost::noncopyable >("Beam
 class_<XC::Beam2dUniformLoad, bases<XC::BeamUniformLoad>, boost::noncopyable >("Beam2dUniformLoad", no_init)
   ;
 
+class_<XC::Beam2dPartialUniformLoad, bases<XC::BeamUniformLoad>, boost::noncopyable >("Beam2dPartialUniformLoad", no_init)
+  ;
+
 
 class_<XC::Beam3dPointLoad, bases<XC::BeamPointLoad>, boost::noncopyable >("Beam3dPointLoad", no_init)
   .add_property("transYComponent", &XC::Beam3dPointLoad::getTransComponent, &XC::Beam3dPointLoad::setTransComponent)

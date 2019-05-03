@@ -159,27 +159,39 @@
 #define DEG_TAG_STRENGTH_Energy		5
 #define DEG_TAG_STRENGTH_Section	6
 
-#define PATTERN_TAG_NodeLocker		  1 //Modificado LCPT.Added by LCPT.
-#define PATTERN_TAG_LoadContainer	  10 //Modificado LCPT.
-#define PATTERN_TAG_LoadPattern		  2 //Modificado LCPT.
-#define PATTERN_TAG_MultiSupportPattern	  4 //Modificado LCPT.
-#define PATTERN_TAG_UniformExcitation     3 //Modificado LCPT.
+#define PATTERN_TAG_LoadPattern           1
+#define PATTERN_TAG_MultiSupportPattern	  3
+#define PATTERN_TAG_UniformExcitation     2
+#define PATTERN_TAG_FirePattern           3
+#define PATTERN_TAG_PBowlLoading          4
+#define PATTERN_TAG_DRMLoadPattern        5
+#define PATTERN_TAG_NodeLocker		  5001 //Modificado LCPT.Added by LCPT.
+#define PATTERN_TAG_LoadContainer	  5002 //Modificado LCPT.
 
 #define LOAD_TAG_Beam2dUniformLoad        3
 #define LOAD_TAG_Beam2dPointLoad          4
 #define LOAD_TAG_Beam3dUniformLoad        5
 #define LOAD_TAG_Beam3dPointLoad          6
 #define LOAD_TAG_BrickSelfWeight          7
-#define LOAD_TAG_BeamStrainLoad           8 //Modificado LCPT.
+#define LOAD_TAG_Beam2dTempLoad           8
 #define LOAD_TAG_SurfaceLoader            9 // C.McGann, U.W.
 #define LOAD_TAG_SelfWeight              10 // C.McGann, U.W.
-#define PATTERN_TAG_PBowlLoading	  11
-#define LOAD_TAG_TrussStrainLoad          20 //Added by LCPT.
-#define LOAD_TAG_LoadPatternCombination   29 //Added by LCPT.
-#define LOAD_TAG_LoadCombination          30 //Added by LCPT.
-#define LOAD_TAG_ShellUniformLoad         40 //Added by LCPT.
-#define LOAD_TAG_BidimStrainLoad          50 //Added by LCPT.
-#define LOAD_TAG_ShellStrainLoad          60 //Added by LCPT.
+#define LOAD_TAG_Beam2dThermalAction      11
+#define LOAD_TAG_Beam2dPartialUniformLoad 12
+#define LOAD_TAG_Beam3dPartialUniformLoad 121
+#define LOAD_TAG_Beam3dThermalAction      13 // L.Jiang [ SIF ]
+#define LOAD_TAG_ShellThermalAction       14 // L.Jiang [ SIF ]
+#define LOAD_TAG_NodalThermalAction       15 //L.Jiang [ SIF ]
+#define LOAD_TAG_ThermalActionWrapper     16 //L.Jiang [ SIF ]
+#define LOAD_TAG_LysmerVelocityLoader      17  //Jose Abell (UANDES)
+
+#define LOAD_TAG_BeamStrainLoad           5008 //Modificado LCPT.
+#define LOAD_TAG_TrussStrainLoad          5020 //Added by LCPT.
+#define LOAD_TAG_LoadPatternCombination   5029 //Added by LCPT.
+#define LOAD_TAG_LoadCombination          5030 //Added by LCPT.
+#define LOAD_TAG_ShellUniformLoad         5040 //Added by LCPT.
+#define LOAD_TAG_BidimStrainLoad          5050 //Added by LCPT.
+#define LOAD_TAG_ShellStrainLoad          5060 //Added by LCPT.
 
 
 #define MAT_TAG_IsotropicLinElastic         1001

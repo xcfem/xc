@@ -57,7 +57,6 @@
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
-#include "boost/any.hpp"
 #include "utility/matrix/ID.h"
 
 #include "domain/mesh/element/utils/fvectors/FVector.h"
@@ -65,14 +64,14 @@
 
 XC::Vector XC::Beam2dUniformLoad::data(2);
 
-XC::Beam2dUniformLoad::Beam2dUniformLoad(int tag, double wt, double wa,const XC::ID &theElementTags)
+//! @brief Constructor.
+XC::Beam2dUniformLoad::Beam2dUniformLoad(int tag, double wt, double wa,const ID &theElementTags)
   :BeamUniformLoad(tag, LOAD_TAG_Beam2dUniformLoad,wt,wa,theElementTags) {}
 
+//! @brief Constructor.
 XC::Beam2dUniformLoad::Beam2dUniformLoad(int tag)
   :BeamUniformLoad(tag, LOAD_TAG_Beam2dUniformLoad) {}
 
-XC::Beam2dUniformLoad::Beam2dUniformLoad(void)
-  :BeamUniformLoad(0,LOAD_TAG_Beam2dUniformLoad) {}
 
 const XC::Vector &XC::Beam2dUniformLoad::getData(int &type, const double &loadFactor) const
   {
@@ -239,7 +238,8 @@ int XC::Beam2dUniformLoad::sendSelf(CommParameters &cp)
     const int dbTag= getDbTag();
     result+= cp.sendIdData(getDbTagData(),dbTag);
     if(result < 0)
-      std::cerr << "Beam2dUniformLoad::sendSelf() - failed to send extra data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; failed to send extra data\n";
     return result;
   }
 
@@ -250,7 +250,8 @@ int XC::Beam2dUniformLoad::recvSelf(const CommParameters &cp)
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "Beam2dUniformLoad::recvSelf() - data could not be received\n" ;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; data could not be received\n" ;
     else
       res+= recvData(cp);
     return res;

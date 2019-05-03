@@ -303,7 +303,7 @@ int XC::ElasticBeam3d::revertToStart()
 int XC::ElasticBeam3d::update(void)
   { return theCoordTransf->update(); }
 
-//! @brief Return the tangent stiffness matrix expresada en coordenadas globales.
+//! @brief Return the tangent stiffness matrix in global coordinates.
 const XC::Matrix &XC::ElasticBeam3d::getTangentStiff(void) const
   {
     const Vector &v= getSectionDeformation();

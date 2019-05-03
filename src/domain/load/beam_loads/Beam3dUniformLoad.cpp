@@ -257,7 +257,7 @@ int XC::Beam3dUniformLoad::recvSelf(const CommParameters &cp)
 
 void  XC::Beam3dUniformLoad::Print(std::ostream &s, int flag)
   {
-    s << "Beam2dUniformLoad - Reference load" << std::endl;
+    s << getClassName() << " - Reference load" << std::endl;
     s << "  Transverse (y): " << Trans << std::endl;
     s << "  Transverse (z): " << wz << std::endl;
     s << "  Axial (x):      " << Axial << std::endl;

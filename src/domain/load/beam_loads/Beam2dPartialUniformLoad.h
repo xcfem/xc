@@ -44,55 +44,53 @@
 **                                                                    **
 ** ****************************************************************** */
                                                                         
-// $Revision: 1.3 $
-// $Date: 2003/02/14 23:00:57 $
-// $Source: /usr/local/cvs/OpenSees/SRC/domain/load/beam_loads/Beam2dUniformLoad.h,v $
+// $Revision$
+// $Date$
+// $Source$
                                                                         
-#ifndef Beam2dUniformLoad_h
-#define Beam2dUniformLoad_h
+#ifndef Beam2dPartialUniformLoad_h
+#define Beam2dPartialUniformLoad_h
+
 
 // Written: fmk 
 
-// Purpose: This file contains the class definition for Beam2dUniformLoad.
-
+// Purpose: This file contains the class definition for Beam2dPartialUniformLoad.
 #include "domain/load/beam_loads/BeamUniformLoad.h"
 
 namespace XC {
-class FVector;
 
-//! @ingroup ElemLoads
-//
-//! @brief Uniform load over 2D beam elements.
-class Beam2dUniformLoad : public BeamUniformLoad
+class Beam2dPartialUniformLoad : public BeamUniformLoad
   {
   private:
+    double aOverL;
+    double bOverL;
     static Vector data;
-  public:
-    Beam2dUniformLoad(int tag, double wTrans, double wAxial,const ID &theElementTags);
-    Beam2dUniformLoad(int tag= 0);
 
-    inline const double &WTrans(void) const
-      { return Trans; }
-    inline const double &WAxial(void) const
-      { return Axial; }
-    const Vector &getData(int &type, const double &loadFactor) const;
+    int parameterID;
+  protected:
+    int sendData(CommParameters &cp);
+    int recvData(const CommParameters &cp);    
+  public:
+    Beam2dPartialUniformLoad(int tag, double wTrans, double wAxial, double aL, double bL, const ID &theElementTags);
+    Beam2dPartialUniformLoad(int tag= 0);    
+
+    const Vector &getData(int &type,const double &loadFactor) const;
 
     size_t getForceVectorDimension(void) const;
     size_t getMomentVectorDimension(void) const;
-    virtual Vector getLocalForce(void) const;
-    virtual Vector getLocalMoment(void) const;
-    const Matrix &getLocalForces(void) const;
-    const Matrix &getLocalMoments(void) const;
 
-    const Matrix &getAppliedSectionForces(const double &L,const XC::Matrix &xi,const double &loadFactor) const;
-    void addReactionsInBasicSystem(const double &,const double &,FVector &) const;
-    void addFixedEndForcesInBasicSystem(const double &,const double &,FVector &) const;
-    void addElasticDeformations(const double &L,const CrossSectionProperties2d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0);
+    int sendSelf(CommParameters &cp);  
+    int recvSelf(const CommParameters &cp);
+    
+    void Print(std::ostream &s, int flag =0);       
 
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int setParameter(const std::vector<std::string> &argv, Parameter &param);
+    int updateParameter(int parameterID, Information &info);
+    int activateParameter(int paramID);
+
+    const Vector &getSensitivityData(int gradNumber);
+  
   };
 } // end of XC namespace
 
 #endif
-

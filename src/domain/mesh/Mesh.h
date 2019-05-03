@@ -73,7 +73,7 @@ class Mesh: public MeshComponentContainer
     TaggedObjectStorage *theNodes; //!< Node container.
     SingleDomNodIter *theNodIter; //!< Node iterator.
     KDTreeNodes kdtreeNodes; //!< space-partitioning data structure for organizing nodes.
-    std::vector<std::string> nombresCoordenadas; //!< Coordinate names ("X","Y","Z",...).
+    std::vector<std::string> coordinateNames; //!< Coordinate names ("X","Y","Z",...).
     std::string nombreUnidades; //!< Units names ("cm","m","in",...).
 
     TaggedObjectStorage *theElements;
@@ -165,8 +165,8 @@ class Mesh: public MeshComponentContainer
     size_t getNumFreeNodes(void) const;
     virtual const Vector &getPhysicalBounds(void);
 
-    inline const std::vector<std::string> &getNombresCoordenadas(void) const
-      { return nombresCoordenadas; }
+    inline const std::vector<std::string> &getCoordinateNames(void) const
+      { return coordinateNames; }
     inline std::string getNombreUnidades(void) const
       { return nombreUnidades; }
 

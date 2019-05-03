@@ -68,7 +68,6 @@ class ReferenceFrame: public EntMdlrBase
     //! @brief Return the global coordinates of vector v.
     virtual Vector3d GetCooGlobales(const Vector3d &v) const= 0;
     //! @brief Return the local coordinates of point p.
-    //! expresada en coordenadas locales.
     virtual Pos3d GetPosLocal(const Pos3d &p) const= 0;
     //! @brief Return the local coordinates of vector v.
     virtual Vector3d GetCooLocales(const Vector3d &v) const= 0;
