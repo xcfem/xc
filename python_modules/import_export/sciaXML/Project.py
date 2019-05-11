@@ -33,14 +33,14 @@ class Project:
     containerNos= None
     if(len(nos) > 0):
       objects= list()
-      for coordenada in nos:
+      for coordinate in nos:
         o= obj.Object()
-        o.setId(coordenada.getId() + self.uuid)
-        o.setNm(coordenada.getName()  + self.uuid)
-        o.setP0(ObjectItem(String.valueOf(coordenada.getName()  + self.uuid), None, None, None, None, None))
-        o.setP1(ObjectItem(String.valueOf(coordenada.getX()), None, None, None, None, None))
-        o.setP2(ObjectItem(String.valueOf(coordenada.getY()), None, None, None, None, None))
-        o.setP3(ObjectItem(String.valueOf(coordenada.getZ()), None, None, None, None, None))
+        o.setId(coordinate.getId() + self.uuid)
+        o.setNm(coordinate.getName()  + self.uuid)
+        o.setP0(ObjectItem(String.valueOf(coordinate.getName()  + self.uuid), None, None, None, None, None))
+        o.setP1(ObjectItem(String.valueOf(coordinate.getX()), None, None, None, None, None))
+        o.setP2(ObjectItem(String.valueOf(coordinate.getY()), None, None, None, None, None))
+        o.setP3(ObjectItem(String.valueOf(coordinate.getZ()), None, None, None, None, None))
         objects.append(o)
 
 

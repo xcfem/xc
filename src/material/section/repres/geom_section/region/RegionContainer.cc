@@ -194,7 +194,7 @@ double XC::RegionContainer::getAreaGrossSection(void) const
     return retval;
   }
 
-//! @brief Returns the centro de gravedad of the gross cross-section.
+//! @brief Returns the center of gravity of the gross cross-section.
 XC::Vector XC::RegionContainer::getCenterOfMassGrossSection(void) const
   {
     Vector retval(2);

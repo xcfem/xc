@@ -1510,7 +1510,7 @@ int XC::FiberPtrDeque::updateCenterOfMass(void)
         zLoc= (*i)->getLocZ();
         fiberArea= (*i)->getArea();
         Atot+= fiberArea;
-        Qz+= -yLoc*fiberArea; //Coordenada y cambiada de signo.
+        Qz+= -yLoc*fiberArea; //minus y coordinate.
         Qy+= zLoc*fiberArea;
       }
     yCenterOfMass= -Qz/Atot; //center of mass y coordinate  XXX ¿Signo menos?
@@ -1537,7 +1537,7 @@ int XC::FiberPtrDeque::updateKRCenterOfMass(FiberSection2d &Section2d,CrossSecti
         if(fiberArea!= 0.0)
           {
             Atot+= fiberArea;
-            Qz+= -yLoc*fiberArea; //Coordenada y cambiada de signo.
+            Qz+= -yLoc*fiberArea; //minus y coordinate.
 
             //Updating stiffness matrix.
             tangent= (*i)->getMaterial()->getTangent();
@@ -1718,7 +1718,7 @@ int XC::FiberPtrDeque::updateKRCenterOfMass(FiberSection3d &Section3d,CrossSecti
         if(fiberArea!=0.0)
           {
             Atot+= fiberArea;
-            Qz+= -yLoc*fiberArea; //Coordenada y cambiada de signo.
+            Qz+= -yLoc*fiberArea; //minus y coordinate.
             Qy+= zLoc*fiberArea;
 
             //Updating stiffness matrix.
@@ -1870,7 +1870,7 @@ int XC::FiberPtrDeque::updateKRCenterOfMass(FiberSectionGJ &SectionGJ,CrossSecti
         if(fiberArea!=0.0)
           {
             Atot+= fiberArea;
-            Qz+= -yLoc*fiberArea; //Coordenada y cambiada de signo.
+            Qz+= -yLoc*fiberArea; //minus y coordinate.
             Qy+= zLoc*fiberArea;
 
             tangent= (*i)->getMaterial()->getTangent();

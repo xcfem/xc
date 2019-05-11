@@ -1021,7 +1021,7 @@ double XC::Element::getDist(const Pos3d &p,bool initialGeometry) const
     return 0.0;
   }
 
-//! @brief Returns the coordinates del centro de gravedad of the element.
+//! @brief Returns the coordinates del center of gravity of the element.
 Pos3d XC::Element::getCenterOfMassPosition(bool initialGeometry) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
@@ -1030,7 +1030,7 @@ Pos3d XC::Element::getCenterOfMassPosition(bool initialGeometry) const
     return retval;
   }
 
-//! @brief Returns the coordinates del centro de gravedad of the element.
+//! @brief Returns the coordinates del center of gravity of the element.
 XC::Vector XC::Element::getCenterOfMassCoordinates(bool initialGeometry) const
   {
     const Pos3d center_of_mass= getCenterOfMassPosition(initialGeometry);
