@@ -313,7 +313,7 @@ int XC::Analysis::setLinearSOE(LinearSOE &theNewSOE)
       return 0;
   }
 
-//! @brief Sets the sistema de eigenvalues to use in the analysis.
+//! @brief Sets the system of eigenvalues to use in the analysis.
 int XC::Analysis::setEigenSOE(EigenSOE &theSOE)
   {
     if(solution_method)

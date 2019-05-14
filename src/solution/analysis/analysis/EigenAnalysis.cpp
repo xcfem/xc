@@ -210,7 +210,7 @@ int XC::EigenAnalysis::setIntegrator(EigenIntegrator &theIntegrator)
     return 0;
   }
 
-//! @brief Sets the sistema de eigenvalues to use in the analysis.
+//! @brief Sets the system of eigenvalues to use in the analysis.
 int XC::EigenAnalysis::setEigenSOE(EigenSOE &theSOE)
   {
     Analysis::setEigenSOE(theSOE);
