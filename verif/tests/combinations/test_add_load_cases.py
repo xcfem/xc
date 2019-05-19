@@ -81,7 +81,7 @@ eleLoad= lp1.newElementalLoad("beam3d_uniform_load")
 eleLoad.elementTags= xc.ID([1])
 eleLoad.transComponent= -f
 #We add the load case to domain.
-lPatterns.addToDomain("0")
+lPatterns.addToDomain(lp0.name)
 #We add the load case to domain.
 lPatterns.addToDomain("1")
 

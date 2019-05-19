@@ -108,7 +108,7 @@ lp2= lPatterns.newLoadPattern("default","2")
 lp2.newNodalLoad(2,xc.Vector([NDato,0,0,0,0,0]))
 
 #We add the load case to domain.
-lPatterns.addToDomain("0")
+lPatterns.addToDomain(lp0.name)
 
 
 # Solution procedure

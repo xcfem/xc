@@ -83,7 +83,7 @@ lPatterns.currentTimeSeries= "ts"
 lp0= lPatterns.newLoadPattern("default","0")
 lp0.newNodalLoad(10,xc.Vector(loadOnDOFs))
 #We add the load case to domain.
-lPatterns.addToDomain("0")
+lPatterns.addToDomain(lp0.name)
 
 # Solution
 solver= predefined_solutions.SolutionProcedure()

@@ -55,7 +55,7 @@ lp0= lPatterns.newLoadPattern("default","0")
 #lPatterns.currentLoadPattern= "0"
 nl= lp0.newNodalLoad(2,xc.Vector([F]))
 #We add the load case to domain.
-lPatterns.addToDomain("0")
+lPatterns.addToDomain(lp0.name)
 
 # Solution
 analisis= predefined_solutions.simple_static_linear(feProblem)

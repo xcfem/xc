@@ -36,7 +36,6 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 elements= preprocessor.getElementHandler
 elements.dimElem= 2 #Bars defined in a two dimensional space.
 elements.defaultMaterial= "elast"
-elements.defaultTag= 1 #Tag for the next element.
 truss= elements.newElement("Truss",xc.ID([n1.tag,n2.tag]))
 truss.area= 1
 

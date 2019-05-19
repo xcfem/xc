@@ -105,7 +105,7 @@ for i in range(1,nNodes+1):
   F= (100*xNod+10)
   lp0.newNodalLoad(nodeTag,xc.Vector([0,F,0]))
 
-lPatterns.addToDomain("0")
+lPatterns.addToDomain(lp0.name)
 nCargasNod= lp0.getNumNodalLoads
 
 ''' 

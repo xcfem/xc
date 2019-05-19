@@ -89,7 +89,7 @@ loadMz= 0.999*scc10x20.getPlasticMomentZ(fy)
 lp0.newNodalLoad(2,xc.Vector([0,loadVy,loadVz,loadMx,0,loadMz]))
 
 #We add the load case to domain.
-lPatterns.addToDomain("0")
+lPatterns.addToDomain(lp0.name)
 
 
 # Solution procedure

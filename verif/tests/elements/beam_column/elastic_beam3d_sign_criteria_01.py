@@ -96,7 +96,7 @@ lPatterns.currentTimeSeries= "ts"
 lp0= lPatterns.newLoadPattern("default","0")
 lp0.newNodalLoad(2,xc.Vector([F,0,0,0,0,0])) #Positive force along x axis
 #We add the load case to domain.
-lPatterns.addToDomain("0")
+lPatterns.addToDomain(lp0.name)
 
 # Solution 0 N
 analisis= predefined_solutions.simple_static_linear(feProblem)

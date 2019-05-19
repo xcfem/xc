@@ -70,7 +70,7 @@ while not(elem is None):
   elem= eIter.next()
 
 #We add the load case to domain.
-lPatterns.addToDomain("0")
+lPatterns.addToDomain(lp0.name)
 
 
 # Solution

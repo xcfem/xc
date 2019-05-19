@@ -173,7 +173,7 @@ pointLoad= xc.Vector([0.0,0.0,0.0,0,M_y,0.0])  #flexión simple recta
 lp0.newNodalLoad(nodB.tag,pointLoad)    #applies the point load on node B 
 
 #We add the load case to domain.
-lPatterns.addToDomain("0")           #reads load pattern "0" and adds it to the domain
+lPatterns.addToDomain(lp0.name)           #reads load pattern "0" and adds it to the domain
 
 # Solve
 solution=  predefined_solutions.SolutionProcedure()

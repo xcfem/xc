@@ -73,7 +73,7 @@ eleLoad.elementTags= xc.ID([truss.tag])
 eleLoad.eps1= alpha*AT
 eleLoad.eps2= alpha*AT
 #We add the load case to domain.
-lPatterns.addToDomain("0")
+lPatterns.addToDomain(lp0.name)
 
 analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)

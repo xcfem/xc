@@ -100,7 +100,7 @@ el.vector3dUniformLoadGlobal(xc.Vector([f*math.sqrt(2)/2,f*math.sqrt(2)/2,0]))
 loadHandler= preprocessor.getLoadHandler
 
 #We add the load case to domain.
-lPatterns.addToDomain("0")
+lPatterns.addToDomain(lp0.name)
 # Solution procedure
 analisis= predefined_solutions.simple_static_modified_newton(feProblem)
 result= analisis.analyze(10)
