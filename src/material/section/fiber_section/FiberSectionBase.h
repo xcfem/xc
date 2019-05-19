@@ -76,8 +76,8 @@ class FiberSectionBase: public PrismaticBarCrossSection
     int recvData(const CommParameters &);
     
     void setup_repres(void);
-    inline void alloc_fibers(int numOfFibers,const Fiber *muestra= nullptr)
-      { fibers.allocFibers(numOfFibers,muestra); }
+    inline void alloc_fibers(int numOfFibers,const Fiber *sample= nullptr)
+      { fibers.allocFibers(numOfFibers,sample); }
     void create_fiber_set(const std::string &nombre);
     fiber_set_iterator get_fiber_set(const std::string &nmb_set);
     virtual double get_dist_to_neutral_axis(const double &,const double &) const;
