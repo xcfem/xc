@@ -46,7 +46,7 @@
                                                                         
 // $Revision: 1.3 $
 // $Date: 2002/12/05 22:49:09 $
-// $Source: /usr/local/cvs/OpenSees/SRC/material/nD/ElasticIsotropicAxiSymm.h,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/material/nD/elastic_isotropic/ElasticIsotropicAxiSymm.h,v $
 
 #ifndef ElasticIsotropicAxiSymm_h
 #define ElasticIsotropicAxiSymm_h
@@ -61,7 +61,7 @@
 //
 // What: "@(#) ElasticIsotropicAxiSymm.h, revA"
 
-#include <material/nD/ElasticIsotropicMaterial.h>
+#include <material/nD/elastic_isotropic/ElasticIsotropicMaterial.h>
 
 
 namespace XC {

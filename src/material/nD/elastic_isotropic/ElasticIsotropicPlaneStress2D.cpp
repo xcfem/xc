@@ -46,7 +46,7 @@
                                                                         
 // $Revision: 1.5 $
 // $Date: 2002/12/05 22:49:10 $
-// $Source: /usr/local/cvs/OpenSees/SRC/material/nD/ElasticIsotropicPlaneStress2D.cpp,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/material/nD/elastic_isotropic/ElasticIsotropicPlaneStress2D.cpp,v $
                                                                         
                                                                         
 

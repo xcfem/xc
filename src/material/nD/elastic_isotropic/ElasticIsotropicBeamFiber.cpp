@@ -46,7 +46,7 @@
 
 // $Revision: 1.3 $
 // $Date: 2002/12/05 22:49:09 $
-// $Source: /usr/local/cvs/OpenSees/SRC/material/nD/ElasticIsotropicBeamFiber.cpp,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/material/nD/elastic_isotropic/ElasticIsotropicBeamFiber.cpp,v $
 
 // Written: MHS
 // Created: Aug 2001
