@@ -99,11 +99,11 @@ double XC::PrismaticBarCrossSection::getStrain(const double &y,const double &z) 
     return 0.0;
   }
 
-//! @brief Returns the coordenada «y» del centro de gravedad of the cross-section.
+//! @brief Returns the y coordinate of the center of gravity of the cross-section.
 double XC::PrismaticBarCrossSection::getCenterOfMassY(void) const
   { return 0.0; }
 
-//! @brief Returns the coordenada «z» del centro de gravedad of the cross-section.
+//! @brief Returns the z coordinate of the center of gravity of the cross-section.
 double XC::PrismaticBarCrossSection::getCenterOfMassZ(void) const
   { return 0.0; }
 

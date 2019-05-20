@@ -81,7 +81,7 @@ while not(elem is None):
 loadHandler= preprocessor.getLoadHandler
 
 #We add the load case to domain.
-lPatterns.addToDomain("0")
+lPatterns.addToDomain(lp0.name)
 
 # Solution
 analisis= predefined_solutions.simple_static_linear(feProblem)

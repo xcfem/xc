@@ -46,7 +46,7 @@
                                                                         
 // $Revision: 1.19 $                                                              
 // $Date: 2004/02/24 20:50:58 $                                                                  
-// $Source: /usr/local/cvs/OpenSees/SRC/material/nD/ElasticIsotropicMaterial.cpp,v $                                                                
+// $Source: /usr/local/cvs/OpenSees/SRC/material/nD/elastic_isotropic/ElasticIsotropicMaterial.cpp,v $                                                                
                                                                         
                                                                         
 // File: ~/material/ElasticIsotropicMaterial.C
@@ -62,7 +62,7 @@
 
 #include <cstring>
 
-#include <material/nD/ElasticIsotropicMaterial.h>
+#include <material/nD/elastic_isotropic/ElasticIsotropicMaterial.h>
 #include <material/nD/elastic_isotropic/ElasticIsotropicPlaneStress2D.h>
 #include <material/nD/elastic_isotropic/ElasticIsotropicPlaneStrain2D.h>
 #include <material/nD/elastic_isotropic/ElasticIsotropicAxiSymm.h>

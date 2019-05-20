@@ -65,17 +65,12 @@
 XC::Vector  XC::PlateFiberMaterial::stress(5);
 XC::Matrix  XC::PlateFiberMaterial::tangent(5,5);
 
+//! @brief Default constructor.
 XC::PlateFiberMaterial::PlateFiberMaterial(int tag)
   : XC::NDAdaptorMaterial(ND_TAG_PlateFiberMaterial,tag,5)
   {}
 
-//null constructor
-XC::PlateFiberMaterial::PlateFiberMaterial() : 
-  XC::NDAdaptorMaterial(ND_TAG_PlateFiberMaterial,0,5) 
-  {}
-
-
-//full constructor
+//! @brief Full constructor
 XC::PlateFiberMaterial::PlateFiberMaterial(int tag, XC::NDMaterial &the3DMaterial) :
   XC::NDAdaptorMaterial(ND_TAG_PlateFiberMaterial,tag,the3DMaterial,5)
   {}

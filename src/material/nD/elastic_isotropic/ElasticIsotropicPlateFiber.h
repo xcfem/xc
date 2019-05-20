@@ -46,7 +46,7 @@
                                                                         
 // $Revision: 1.6 $
 // $Date: 2002/12/05 22:49:10 $
-// $Source: /usr/local/cvs/OpenSees/SRC/material/nD/ElasticIsotropicPlateFiber.h,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/material/nD/elastic_isotropic/ElasticIsotropicPlateFiber.h,v $
                                                                         
                                                                         
 #ifndef ElasticIsotropicPlateFiber_h
@@ -62,7 +62,7 @@
 //
 // What: "@(#) ElasticIsotropicPlateFiber.h, revA"
 
-#include <material/nD/ElasticIsotropicMaterial.h>
+#include <material/nD/elastic_isotropic/ElasticIsotropicMaterial.h>
 
 namespace XC {
 //! @ingroup EINDMat

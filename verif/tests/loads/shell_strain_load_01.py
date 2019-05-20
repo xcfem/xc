@@ -82,7 +82,7 @@ eleLoad.setStrainComp(2,0,alpha*AT)
 eleLoad.setStrainComp(3,0,alpha*AT)
 
 #We add the load case to domain.
-lPatterns.addToDomain("0")
+lPatterns.addToDomain(lp0.name)
 
 analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)

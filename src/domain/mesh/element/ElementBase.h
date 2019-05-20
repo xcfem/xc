@@ -120,6 +120,7 @@ TIPOMAT *ElementBase<NNODES>::cast_material(const Material *ptr_mat)
         std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; on element: " << getTag() 
                   << " the material " << ptr_mat->getTag()
+	          << " with name: " << ptr_mat->getName()
                   << " has not a suitable type." << std::endl;
         abort();
       }

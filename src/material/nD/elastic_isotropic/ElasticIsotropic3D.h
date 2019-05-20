@@ -55,7 +55,7 @@
 #ifndef ElasticIsotropic3D_h
 #define ElasticIsotropic3D_h
 	 
-#include <material/nD/ElasticIsotropicMaterial.h>
+#include <material/nD/elastic_isotropic/ElasticIsotropicMaterial.h>
 
 #include <utility/matrix/nDarray/straint.h>
 #include <utility/matrix/nDarray/stresst.h>

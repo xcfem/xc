@@ -33,10 +33,10 @@ nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
-nodes.defaultTag= 1 #First node number.
-nodes.newNodeXYZ(0,0,0)
-nodes.newNodeXYZ(a/2,-b,0)
-nodes.newNodeXYZ(a,0,0)
+#nodes.defaultTag= 1 #First node number.
+n1= nodes.newNodeXYZ(0,0,0)
+n2= nodes.newNodeXYZ(a/2,-b,0)
+n3= nodes.newNodeXYZ(a,0,0)
 
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
@@ -47,19 +47,18 @@ elast.E= E
 elements= preprocessor.getElementHandler
 elements.dimElem= 2 #Bidimensional space.
 elements.defaultMaterial= "elast"
-elements.defaultTag= 1 #Next element number.
-truss= elements.newElement("Truss",xc.ID([1,2]))
-truss.area= A
-truss= elements.newElement("Truss",xc.ID([2,3]))
-truss.area= A
+truss1= elements.newElement("Truss",xc.ID([n1.tag,n2.tag]))
+truss1.area= A
+truss2= elements.newElement("Truss",xc.ID([n2.tag,n3.tag]))
+truss2.area= A
 
 constraints= preprocessor.getBoundaryCondHandler
-#Zerp movement for node 1.
-spc= constraints.newSPConstraint(1,0,0.0)
-spc= constraints.newSPConstraint(1,1,0.0)
-#Zerp movement for node 1.
-spc= constraints.newSPConstraint(3,0,0.0)
-spc= constraints.newSPConstraint(3,1,0.0)
+#Zero movement for node 1.
+spc1= constraints.newSPConstraint(n1.tag,0,0.0)
+spc2= constraints.newSPConstraint(n1.tag,1,0.0)
+#Zero movement for node 3.
+spc3= constraints.newSPConstraint(n3.tag,0,0.0)
+spc4= constraints.newSPConstraint(n3.tag,1,0.0)
 
 loadHandler= preprocessor.getLoadHandler
 #Load case container:
@@ -69,19 +68,24 @@ ts= lPatterns.newTimeSeries("constant_ts","ts")
 lPatterns.currentTimeSeries= "ts"
 #Load case definition
 lp0= lPatterns.newLoadPattern("default","0")
-lp0.newNodalLoad(2,xc.Vector([0,-F]))
+lp0.newNodalLoad(n2.tag,xc.Vector([0,-F]))
 #We add the load case to domain.
-lPatterns.addToDomain("0")
+lPatterns.addToDomain(lp0.name)
 
 # Solution
 analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
-delta= nodes.getNode(2).getDisp[1]
-stress= elements.getElement(1).getMaterial().getStress()
+delta= n2.getDisp[1]
+stress= truss1.getMaterial().getStress()
 
 ratio1= delta/(-0.12)
 ratio2= stress/10000
+
+'''
+print('ratio1= ', ratio1)
+print('ratio2= ', ratio2)
+'''
 
 import os
 from miscUtils import LogMessages as lmsg

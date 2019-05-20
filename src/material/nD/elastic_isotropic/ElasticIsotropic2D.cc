@@ -46,7 +46,7 @@
                                                                         
 // $Revision: 1.5 $
 // $Date: 2002/12/05 22:49:09 $
-// $Source: /usr/local/cvs/OpenSees/SRC/material/nD/ElasticIsotropic2D.cpp,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/material/nD/elastic_isotropic/ElasticIsotropic2D.cpp,v $
                                                                         
                                                                         
 #include <material/nD/elastic_isotropic/ElasticIsotropic2D.h>                                                                        

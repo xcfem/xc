@@ -36,7 +36,7 @@ print "ratio4= ",(ratio4)
  '''
 
 ''' Como el método con el que se graba el interaction diagram no es exacto
-   (las coordenadas de los vértices son «calculadas») se pierde precisión por lo
+   (the coordinates of the vertices are «computed») se pierde precisión por lo
    que ha habido que aumentar la toleracia en el ratio3 respecto al test 01
    (test_interaction_diagram01) '''
 from miscUtils import LogMessages as lmsg

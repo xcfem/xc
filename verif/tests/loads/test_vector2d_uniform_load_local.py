@@ -103,7 +103,7 @@ lPatterns.currentLoadPattern= "0"
 el.vector2dUniformLoadLocal(xc.Vector([f,-p]))
 
 #We add the load case to domain.
-lPatterns.addToDomain("0")
+lPatterns.addToDomain(lp0.name)
 # Solution procedure
 analisis= predefined_solutions.simple_newton_raphson(feProblem)
 result= analisis.analyze(1)

@@ -71,11 +71,7 @@ class PlateFiberMaterial: public NDAdaptorMaterial
 
     int indexMap(int i) const;
   public : 
-    PlateFiberMaterial(int tag);
-    //null constructor
-    PlateFiberMaterial(void);
-
-    //full constructor
+    PlateFiberMaterial(int tag= 0);
     PlateFiberMaterial(int tag, NDMaterial &the3DMaterial );
 
     //make a clone of this material
@@ -83,7 +79,7 @@ class PlateFiberMaterial: public NDAdaptorMaterial
     NDMaterial *getCopy(const std::string &) const;
 
     //send back order of strain in vector form
-    int getOrder(void) const ;
+    int getOrder(void) const;
 
     //send back order of strain in vector form
     const std::string &getType(void) const ;

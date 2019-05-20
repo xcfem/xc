@@ -75,6 +75,7 @@
 #include "domain/component/Parameter.h"
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
+//! @brief Free the material pointer.
 void XC::Truss::free_material(void)
   {
     if(theMaterial)
@@ -84,6 +85,7 @@ void XC::Truss::free_material(void)
       }
   }
 
+//! @brief Free the load sensitivity.
 void XC::Truss::free_load_sens(void)
   {
     if(theLoadSens)
@@ -93,12 +95,14 @@ void XC::Truss::free_load_sens(void)
       }
   }
 
+//! @brief Free the material pointer and the load sensitivity.
 void XC::Truss::free_mem(void)
   {
     free_material();
     free_load_sens();
   }
 
+//! @brief Assign the material.
 void XC::Truss::set_material(const UniaxialMaterial &mat)
   {
     free_material();
@@ -114,6 +118,7 @@ void XC::Truss::set_material(const UniaxialMaterial &mat)
       }
   }
 
+//! @brief Assign the load sensitivity vector.
 void XC::Truss::set_load_sens(const Vector &v)
   {
     free_load_sens();
@@ -128,7 +133,7 @@ void XC::Truss::set_load_sens(const Vector &v)
       }
   }
 
-//! @brief Pone a cero los pointers to node, los cosenos directores y los sensibility parameters.
+//! @brief Nullify the pointers to node, the direction cosines and los sensibility parameters.
 void XC::Truss::inicializa(void)
   {
     TrussBase::inicializa();
@@ -163,7 +168,7 @@ XC::Truss::Truss(int tag,int dim,const Material *ptr_mat)
   }
 
 
-//! constructor:
+//! @brief constructor:
 //!   invoked by a FEM_ObjectBroker - blank object that recvSelf needs
 //!   to be invoked upon
 XC::Truss::Truss(void)

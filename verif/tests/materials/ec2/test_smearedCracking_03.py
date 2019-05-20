@@ -157,7 +157,7 @@ pointLoad=xc.Vector([0,0,0,0,M_y,0])
 lp0.newNodalLoad(2,pointLoad)    #applies the point load on node 2 
 
 #We add the load case to domain.
-lPatterns.addToDomain("0")           #reads load pattern "0" and adds it to the domain
+lPatterns.addToDomain(lp0.name)           #reads load pattern "0" and adds it to the domain
 
 # Solve
 solution=  predefined_solutions.SolutionProcedure()

@@ -28,11 +28,10 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
-nodes.defaultTag= 1 #Number for next node will be 1.
-nodes.newNodeXYZ(0,0,0)
-nodes.newNodeXYZ(0,l-a-b,0)
-nodes.newNodeXYZ(0,l-a,0)
-nodes.newNodeXYZ(0,l,0)
+n1= nodes.newNodeXYZ(0,0,0)
+n2= nodes.newNodeXYZ(0,l-a-b,0)
+n3= nodes.newNodeXYZ(0,l-a,0)
+n4= nodes.newNodeXYZ(0,l,0)
 
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 
@@ -43,25 +42,24 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 elements= preprocessor.getElementHandler
 elements.dimElem= 2 #Bars defined ina a two dimensional space.
 elements.defaultMaterial= "elast"
-elements.defaultTag= 1 #Tag for the next element.
-truss= elements.newElement("Truss",xc.ID([1,2]))
+truss= elements.newElement("Truss",xc.ID([n1.tag,n2.tag]))
 truss.area= 1
-truss= elements.newElement("Truss",xc.ID([2,3]))
+truss= elements.newElement("Truss",xc.ID([n2.tag,n3.tag]))
 truss.area= 1
-truss= elements.newElement("Truss",xc.ID([3,4]))
+truss= elements.newElement("Truss",xc.ID([n3.tag,n4.tag]))
 truss.area= 1
 
 constraints= preprocessor.getBoundaryCondHandler
 #Constrain the displacement of node 1.
-spc= constraints.newSPConstraint(1,0,0.0)
-spc= constraints.newSPConstraint(1,1,0.0)
+spc1= constraints.newSPConstraint(n1.tag,0,0.0)
+spc2= constraints.newSPConstraint(n1.tag,1,0.0)
 #Constrain the displacement of node 4.
-spc= constraints.newSPConstraint(4,0,0.0)
-spc= constraints.newSPConstraint(4,1,0.0)
+spc3= constraints.newSPConstraint(n4.tag,0,0.0)
+spc4= constraints.newSPConstraint(n4.tag,1,0.0)
 #Constrain the displacement of node 2 in X axis (gdl 0).
-spc= constraints.newSPConstraint(2,0,0.0)
+spc5= constraints.newSPConstraint(n2.tag,0,0.0)
 #Constrain the displacement of node 3 in X axis (gdl 0).
-spc= constraints.newSPConstraint(3,0,0.0)
+spc6= constraints.newSPConstraint(n3.tag,0,0.0)
 
 loadHandler= preprocessor.getLoadHandler
 #Load pattern container:
@@ -71,19 +69,19 @@ ts= lPatterns.newTimeSeries("constant_ts","ts")
 lPatterns.currentTimeSeries= "ts"
 #Load case definition
 lp0= lPatterns.newLoadPattern("default","0")
-lp0.newNodalLoad(2,xc.Vector([0,-F2]))
-lp0.newNodalLoad(3,xc.Vector([0,-F1]))
+lp0.newNodalLoad(n2.tag,xc.Vector([0,-F2]))
+lp0.newNodalLoad(n3.tag,xc.Vector([0,-F1]))
 
 #Add the load pattern to the domain.
-lPatterns.addToDomain("0")
+lPatterns.addToDomain(lp0.name)
 
 # Solution
 analisis= predefined_solutions.simple_static_linear(feProblem)
 result= analisis.analyze(1)
 
 nodes.calculateNodalReactions(True,1e-7)
-R1= nodes.getNode(4).getReaction[1]
-R2= nodes.getNode(1).getReaction[1]
+R1= n4.getReaction[1]
+R2= n1.getReaction[1]
 
 ratio1= (R1-900)/900
 ratio2= (R2-600)/600

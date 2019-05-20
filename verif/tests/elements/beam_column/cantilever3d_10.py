@@ -81,7 +81,7 @@ pl.transZComponent= Q2
 pl.x= lp0.alpha
 #lPatterns.currentLoadPattern= "0"
 #We add the load case to domain.
-lPatterns.addToDomain("0")
+lPatterns.addToDomain(lp0.name)
 
 # Solution
 analisis= predefined_solutions.simple_static_linear(feProblem)

@@ -73,7 +73,7 @@ for n in range(4,7):
     lp0.newNodalLoad(n,xc.Vector([0,0,FZ,0,0,0]))
 
 #We add the load case to domain.
-lPatterns.addToDomain("0")
+lPatterns.addToDomain(lp0.name)
 
 
 # Solution

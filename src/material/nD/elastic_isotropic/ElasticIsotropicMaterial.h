@@ -46,7 +46,7 @@
                                                                         
 // $Revision: 1.10 $
 // $Date: 2003/02/14 23:01:25 $
-// $Source: /usr/local/cvs/OpenSees/SRC/material/nD/ElasticIsotropicMaterial.h,v $
+// $Source: /usr/local/cvs/OpenSees/SRC/material/nD/elastic_isotropic/ElasticIsotropicMaterial.h,v $
                                                                         
                                                                         
 #ifndef ElasticIsotropicMaterial_h

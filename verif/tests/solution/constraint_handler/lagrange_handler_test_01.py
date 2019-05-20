@@ -81,7 +81,7 @@ lp0.newNodalLoad(2,xc.Vector([0,-F2]))
 lp0.newNodalLoad(3,xc.Vector([0,-F1]))
 
 #We add the load case to domain.
-lPatterns.addToDomain("0")
+lPatterns.addToDomain(lp0.name)
 
 # Solution procedure
 solver= predefined_solutions.SolutionProcedure()

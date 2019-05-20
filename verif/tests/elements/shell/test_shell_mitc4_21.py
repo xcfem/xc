@@ -63,7 +63,7 @@ eleLoad= lp0.newElementalLoad("shell_uniform_load")
 eleLoad.elementTags= xc.ID([elem.tag]) 
 eleLoad.transComponent= q
 #We add the load case to domain.
-lPatterns.addToDomain("0")
+lPatterns.addToDomain(lp0.name)
 
 # Solution
 analisis= predefined_solutions.simple_static_linear(feProblem)

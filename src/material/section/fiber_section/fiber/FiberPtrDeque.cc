@@ -1510,7 +1510,7 @@ int XC::FiberPtrDeque::updateCenterOfMass(void)
         zLoc= (*i)->getLocZ();
         fiberArea= (*i)->getArea();
         Atot+= fiberArea;
-        Qz+= -yLoc*fiberArea; //Coordenada y cambiada de signo.
+        Qz+= -yLoc*fiberArea; //minus y coordinate.
         Qy+= zLoc*fiberArea;
       }
     yCenterOfMass= -Qz/Atot; //center of mass y coordinate  XXX ¿Signo menos?
@@ -1537,7 +1537,7 @@ int XC::FiberPtrDeque::updateKRCenterOfMass(FiberSection2d &Section2d,CrossSecti
         if(fiberArea!= 0.0)
           {
             Atot+= fiberArea;
-            Qz+= -yLoc*fiberArea; //Coordenada y cambiada de signo.
+            Qz+= -yLoc*fiberArea; //minus y coordinate.
 
             //Updating stiffness matrix.
             tangent= (*i)->getMaterial()->getTangent();
@@ -1550,7 +1550,7 @@ int XC::FiberPtrDeque::updateKRCenterOfMass(FiberSection2d &Section2d,CrossSecti
           }
       }
     yCenterOfMass= -Qz/Atot; //center or mass z coordinate 
-    kr2.kData[2]= kr2.kData[1]; //Simetry.
+    kr2.kData[2]= kr2.kData[1]; //Symmetry.
     return 0;
   }
 
@@ -1607,7 +1607,7 @@ int XC::FiberPtrDeque::setTrialSectionDeformation(const FiberSection2d &Section2
             kr2.updateNMz(fs0,y);
           }
       }
-    kr2.kData[2]= kr2.kData[1]; //Simetry.
+    kr2.kData[2]= kr2.kData[1]; //Symmetry.
     return retval;
   }
 
@@ -1659,7 +1659,7 @@ const XC::Matrix &XC::FiberPtrDeque::getInitialTangent(const FiberSection2d &Sec
           }
       }
 
-    kInitial[2]= kInitial[1]; //Simetry.
+    kInitial[2]= kInitial[1]; //Symmetry.
     return kInitialMatrix;
   }
 
@@ -1718,7 +1718,7 @@ int XC::FiberPtrDeque::updateKRCenterOfMass(FiberSection3d &Section3d,CrossSecti
         if(fiberArea!=0.0)
           {
             Atot+= fiberArea;
-            Qz+= -yLoc*fiberArea; //Coordenada y cambiada de signo.
+            Qz+= -yLoc*fiberArea; //minus y coordinate.
             Qy+= zLoc*fiberArea;
 
             //Updating stiffness matrix.
@@ -1870,7 +1870,7 @@ int XC::FiberPtrDeque::updateKRCenterOfMass(FiberSectionGJ &SectionGJ,CrossSecti
         if(fiberArea!=0.0)
           {
             Atot+= fiberArea;
-            Qz+= -yLoc*fiberArea; //Coordenada y cambiada de signo.
+            Qz+= -yLoc*fiberArea; //minus y coordinate.
             Qy+= zLoc*fiberArea;
 
             tangent= (*i)->getMaterial()->getTangent();
@@ -2003,9 +2003,9 @@ const XC::Matrix &XC::FiberPtrDeque::getInitialTangent(const FiberSectionGJ &Sec
             CrossSectionKR::updateKGJ(kInitialData,fiberArea,y,z,tangent);
           }
       }
-    kInitialData[4]= kInitialData[1]; //Simetry.
-    kInitialData[8]= kInitialData[2]; //Simetry.
-    kInitialData[9]= kInitialData[6]; //Simetry.
+    kInitialData[4]= kInitialData[1]; //Symmetry.
+    kInitialData[8]= kInitialData[2]; //Symmetry.
+    kInitialData[9]= kInitialData[6]; //Symmetry.
 
     kInitialData[15]= SectionGJ.GJ; //(3,3)->15 //The remaining six elements of krGJ.kData are zero.
     return kInitial;

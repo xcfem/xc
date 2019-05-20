@@ -100,7 +100,7 @@ lp0= lPatterns.newLoadPattern("default","0")
 lPatterns.currentLoadPattern= "0"
 elem.vector3dPointByRelDistLoadLocal(xRelPtoAplic,xc.Vector([F,0,0]))
 #We add the load case to domain.
-lPatterns.addToDomain("0")
+lPatterns.addToDomain(lp0.name)
 
 # Solution 0 N
 analisis= predefined_solutions.simple_static_linear(feProblem)

@@ -28,7 +28,7 @@
 #ifndef ElasticIsotropic2D_h
 #define ElasticIsotropic2D_h
 
-#include <material/nD/ElasticIsotropicMaterial.h>
+#include <material/nD/elastic_isotropic/ElasticIsotropicMaterial.h>
 
 namespace XC {
 //! @ingroup NDMat

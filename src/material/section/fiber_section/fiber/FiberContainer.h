@@ -54,7 +54,7 @@ class FiberContainer : public FiberPtrDeque
     Fiber *addFiber(FiberSection3d &,Fiber &,CrossSectionKR &);
     Fiber *addFiber(FiberSectionGJ &,Fiber &,CrossSectionKR &);
 
-    void allocFibers(int numOfFibers,const Fiber *muestra= nullptr);
+    void allocFibers(int numOfFibers,const Fiber *sample= nullptr);
     void setup(FiberSection2d &,const fiber_list &,CrossSectionKR &);
     void setup(FiberSection3d &,const fiber_list &,CrossSectionKR &);
     void setup(FiberSectionGJ &,const fiber_list &,CrossSectionKR &);

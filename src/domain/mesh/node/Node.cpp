@@ -1851,7 +1851,7 @@ int XC::Node::updateParameter(int pparameterID, Information &info)
         {
           if(Crd(pparameterID-4) != info.theDouble)
             {
-              //Set el value of the coordenada.
+              //Set the coordinate value.
               Crd(pparameterID-4) = info.theDouble;
 
               // Need to "setDomain" to make the change take effect.

@@ -64,7 +64,7 @@ eleLoad= lp0.newElementalLoad("shell_uniform_load")
 eleLoad.elementTags= xc.ID([0]) 
 eleLoad.transComponent= q
 #We add the load case to domain.
-lPatterns.addToDomain("0")
+lPatterns.addToDomain(lp0.name)
 
 import os
 os.system("rm -f /tmp/test07.db")

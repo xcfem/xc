@@ -92,7 +92,7 @@ for i in range(2,nf):
 
 nElems= f0.getNumElements
 #We add the load case to domain.
-lPatterns.addToDomain("0")
+lPatterns.addToDomain(lp0.name)
 
 
 # Solution procedure

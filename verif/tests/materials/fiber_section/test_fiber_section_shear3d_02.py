@@ -84,7 +84,7 @@ loadMz= -6
 lp0.newNodalLoad(2,xc.Vector([loadN,loadVy,loadVz,loadMx,loadMy,loadMz]))
 
 #We add the load case to domain.
-lPatterns.addToDomain("0")
+lPatterns.addToDomain(lp0.name)
 
 
 # Solution procedure

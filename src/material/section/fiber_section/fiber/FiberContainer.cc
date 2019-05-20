@@ -34,15 +34,15 @@
 
 //! @brief Allocates memory for each fiber material and for its data;
 //! two (yLoc,Area) for 2D sections (getOrder()= 2) and three (yLoc,zLoc,Area) for 3D sections (getOrder()= 3).
-void XC::FiberContainer::allocFibers(int numOfFibers,const Fiber *muestra)
+void XC::FiberContainer::allocFibers(int numOfFibers,const Fiber *sample)
   {
     free_mem();
     if(numOfFibers)
       {
         resize(numOfFibers);
-        if(muestra)
+        if(sample)
           for(int i= 0;i<numOfFibers;i++)
-            (*this)[i]= muestra->getCopy();
+            (*this)[i]= sample->getCopy();
       }
   }
 

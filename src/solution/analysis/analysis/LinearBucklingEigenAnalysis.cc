@@ -73,7 +73,7 @@ int XC::LinearBucklingEigenAnalysis::setAlgorithm(LinearBucklingAlgo &theAlgo)
 int XC::LinearBucklingEigenAnalysis::setIntegrator(LinearBucklingIntegrator &theIntegrator)
   { return EigenAnalysis::setIntegrator(theIntegrator); }
 
-//! @brief Sets the sistema de eigenvalues to use in the analysis.
+//! @brief Sets the system of eigenvalues to use in the analysis.
 int XC::LinearBucklingEigenAnalysis::setEigenSOE(ArpackSOE &theSOE)
   { return EigenAnalysis::setEigenSOE(theSOE); }
 

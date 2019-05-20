@@ -172,8 +172,7 @@ const XC::Matrix &XC::ShellLinearCrdTransf3d::local_to_global_stiff_matrix(const
     return kg;
   }
 
-//! @brief Returns the load vector expresado en el sistema global of
-//! the element.
+//! @brief Returns the load vector expressend in global coordinates.
 const XC::Vector &XC::ShellLinearCrdTransf3d::getGlobalResistingForce(const Vector &p0) const
   { return local_to_global_resisting_force(p0); }
 
@@ -186,7 +185,8 @@ int XC::ShellLinearCrdTransf3d::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag();
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "ShellLinearCrdTransf3d::sendSelf() - data could not be sent\n" ;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; data could not be sent.\n" ;
     return res;
   }
 
@@ -197,7 +197,8 @@ int XC::ShellLinearCrdTransf3d::recvSelf(const CommParameters &cp)
     inicComm(3);
     int res= cp.receiveIdData(getDbTagData(),getDbTag());
     if(res<0)
-      std::cerr << "ShellLinearCrdTransf3d::recvSelf() - data could not be received\n" ;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; data could not be received.\n" ;
     else
       res+= recvData(cp);
     return res;
