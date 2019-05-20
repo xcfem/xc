@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+
 ''' Local axes represented as vectors. '''
 
 __author__= "Luis C. Pérez Tato (LCPT)"
@@ -21,7 +23,7 @@ class LocalAxesVectorField(object):
   def __init__(self,name,scaleFactor= 1.0):
     '''
     Parameters:
-      scaleFactor: scale efactor for the size of the vectors.
+      scaleFactor: scale factor for the size of the vectors.
     '''
     super(LocalAxesVectorField,self).__init__()
     self.xAxes= dfd.DirectionFieldData(name+'X',self.xColor,3,scaleFactor)
@@ -74,25 +76,33 @@ class StrongWeakAxisVectorField(object):
       scaleFactor: scale factor for the size of the vectors.
     '''
     super(StrongWeakAxisVectorField,self).__init__()
-    self.strongAxis= dfd.DirectionFieldData(name+'Strong',self.strongColor,3,scaleFactor*1.2)
-    self.weakAxis= dfd.DirectionFieldData(name+'Weak',self.weakColor,3,scaleFactor*0.8)
+    self.strongAxis= dfd.DirectionFieldData(name+'Strong',self.strongColor,3,scaleFactor)
+    self.weakAxis= dfd.DirectionFieldData(name+'Weak',self.weakColor,3,scaleFactor)
 
+
+  def dumpPair(self,element):
+    ''' dump weak and strong axis into the graphic.'''
+    p= element.getPosCentroid(True)
+    strongAxis= element.getVDirStrongAxisGlobalCoord(True) # initialGeometry= True
+    vx= 1.2*strongAxis[0]; vy= 1.2*strongAxis[1]; vz= 1.2*strongAxis[2]
+    self.strongAxis.insertNextPair(p.x,p.y,p.z,vx,vy,vz)
+    self.strongAxis.insertNextVector(vx,vy,vz)
+    weakAxis= element.getVDirWeakAxisGlobalCoord(True) # initialGeometry= True
+    vx= 0.8*weakAxis[0]; vy= 0.8*weakAxis[1]; vz= 0.8*weakAxis[2]
+    self.weakAxis.insertNextPair(p.x,p.y,p.z,vx,vy,vz)
+    self.weakAxis.insertNextVector(vx,vy,vz)
 
   def dumpVectors(self,xcSet):
-    ''' Iterate over loaded elements dumping its axes into the graphic.'''
+    ''' Iterate over the elements dumping its axes into the graphic.'''
     elemSet= xcSet.getElements
     for e in elemSet:
-      p= e.getPosCentroid(True)
-      strongAxis= e.getVDirStrongAxisGlobalCoord(True) # initialGeometry= True
-      vx= strongAxis[0]; vy= strongAxis[1]; vz= strongAxis[2]
-      self.strongAxis.insertNextPair(p.x,p.y,p.z,vx,vy,vz)
-      weakAxis= e.getVDirWeakAxisGlobalCoord(True) # initialGeometry= True
-      vx= weakAxis[0]; vy= weakAxis[1]; vz= weakAxis[2]
-      self.weakAxis.insertNextPair(p.x,p.y,p.z,vx,vy,vz)
+      self.dumpPair(e)
 
   def addToDisplay(self,recordDisplay):
-    self.strongAxis.addToDisplay(recordDisplay)
-    self.weakAxis.addToDisplay(recordDisplay)
+    if(self.strongAxis.getNumberOfTuples()>0):
+      self.strongAxis.addToDisplay(recordDisplay)
+    if(self.weakAxis.getNumberOfTuples()>0):
+      self.weakAxis.addToDisplay(recordDisplay)
 
 
 
