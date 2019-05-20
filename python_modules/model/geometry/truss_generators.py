@@ -45,11 +45,11 @@ class TrussBase(object):
         self.moduleWidth= self.span/self.numberOfModules
 
 # Ascii art:
-#     +---+----------+-----------+---+  Upper chord.
-#     |  / \        / \         / \  |
-#     | /   \      /   \       /   \ |
-#     |/     \    /     \     /     \|
-#     +-------+--+-------+---+-------+  Lower chord.
+#     +---+-------+-------+---+  Upper chord.
+#     |  / \     / \     / \  |
+#     | /   \   /   \   /   \ |
+#     |/     \ /     \ /     \|
+#     +-------+-------+-------+  Lower chord.
 
 class WarrenTruss(TrussBase):
     '''Warren truss.
@@ -202,7 +202,8 @@ class WarrenTruss(TrussBase):
         self.upperChordSet.genMesh(xc.meshDir.I)  # Generate the elements.
         # Diagonals
         seedElemHandler.defaultMaterial= self.diagonalMaterial.name  # Material name.
-        beam3d= seedElemHandler.newElement("Truss",xc.ID([0,0]));
+        seedElemHandler.dimElem= 3 #Bars defined ina a three-dimensional space.
+        trussElem= seedElemHandler.newElement("Truss",xc.ID([0,0]));
         self.diagonalSet.genMesh(xc.meshDir.I)  # Generate the elements.
         # End posts
         seedElemHandler.defaultMaterial= self.endPostsMaterial.name  # Material name.
