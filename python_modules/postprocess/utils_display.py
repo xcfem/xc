@@ -208,7 +208,7 @@ class PartToDisplay(object):
   def getElementSet(self,preprocessor):
     elementSetName= self.getShortName()+'_elementSet'
     elems= self.getElements()
-    # Definimos el conjunto
+    # Define the set
     self.xcSet= preprocessor.getSets.defSet(elementSetName)
     for e in elems:
       self.xcSet.getElements.append(e)
