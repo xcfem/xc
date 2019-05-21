@@ -201,7 +201,7 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
         '''
         self.cameraParameters= cameraParameters
         self.setupGrid(xcSet)
-        vField=lavf.StrongWeakAxisVectorField(xcSet.name+'_localAxes',vectorScale)
+        vField=lavf.StrongWeakAxisVectorField(xcSet.name+'_strongWeakAxis',vectorScale)
         vField.dumpVectors(xcSet)
         self.cameraParameters= cameraParameters
         self.defineMeshScene(None) 
