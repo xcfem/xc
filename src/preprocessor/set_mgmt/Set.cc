@@ -205,6 +205,26 @@ void XC::Set::genMesh(meshing_dir dm)
 bool XC::Set::In(const Pnt *p) const
   { return entities.In(p); }
 
+//! @brief Return a set with the entities of this one.
+XC::Set XC::Set::getEntitiesSet(void) const
+  {
+    Set retval(*this);
+    retval.setName(this->getName()+"_entities");
+    retval.setDescription(this->getDescription() + " entities");
+    retval.getMeshComp().clear();
+    return retval;
+  }
+
+//! @brief Return a set with the mesh components of this one.
+XC::Set XC::Set::getMeshComponentsSet(void) const
+  {
+    Set retval(*this);
+    retval.setName(this->getName()+"_mesh_components");
+    retval.setDescription(this->getDescription() + " mesh components");
+    retval.entities.clear();
+    return retval;
+  }
+
 //! @brief Return a new set that contains the points that lie insiof the
 //! geometric object.
 //!

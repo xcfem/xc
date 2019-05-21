@@ -132,6 +132,8 @@ class_<XC::SetMeshComp, bases<XC::SetBase>>("SetMeshComp",no_init)
   .def("getElementMaterials",&XC::SetMeshComp::getElementMaterialNamesPy,"getElementMaterials() return a list with the names of the element materials in the containe.")
   .def("pickElemsOfMaterial",&XC::SetMeshComp::pickElemsOfMaterial,"pickElemsOfMaterial(materialName) return the elements that have that material.")
   .def("getBnd", &XC::SetMeshComp::Bnd, "Returns set boundary.")
+  .def("fillUpwards", &XC::SetMeshComp::fillUpwards,"add entities upwards.")
+  .def("fillDownwards", &XC::SetMeshComp::fillDownwards,"add entities downwards.")
   .def(self += self)
   .def(self -= self)
   .def(self *= self)
@@ -210,15 +212,21 @@ class_<XC::SetEntities::lst_ptr_cuerpos, bases<dq_ptrs_cuerpos> >("lstBodies",no
    ;
 
 class_<XC::SetEntities, bases<XC::PreprocessorContainer> >("SetEntities",no_init)
-  .def("getBnd", &XC::SetEntities::Bnd, "Returns entities boundary.")
+  .def("getBnd", &XC::SetEntities::Bnd, "return entities boundary.")
+  .def("fillUpwards", &XC::SetEntities::fillUpwards,"add entities upwards.")
+  .def("fillDownwards", &XC::SetEntities::fillDownwards,"add entities downwards.")
   ;
 
+XC::SetEntities &(XC::Set::*getEntities)(void)= &XC::Set::getEntities;
+XC::SetMeshComp &(XC::Set::*getMeshComponents)(void)= &XC::Set::getMeshComp;
 XC::SetEntities::lst_ptr_points &(XC::Set::*getPoints)(void)= &XC::Set::getPoints;
 XC::SetEntities::lst_line_pointers &(XC::Set::*getLines)(void)= &XC::Set::getLines;
 XC::SetEntities::lst_surface_ptrs &(XC::Set::*getSurfaces)(void)= &XC::Set::getSurfaces;
 XC::SetEntities::lst_ptr_cuerpos &(XC::Set::*getBodies)(void)= &XC::Set::getBodies;
 class_<XC::Set, bases<XC::SetMeshComp> >("Set")
   .add_property("description", make_function( &XC::Set::getDescription, return_value_policy<copy_const_reference>() ), &XC::Set::setDescription,"Description (string) of the set.")
+  .add_property("getEntities", make_function(getEntities, return_internal_reference<>() ),"return the entities (points, lines, surfaces,...) of the set.")
+  .add_property("getMeshComponents", make_function(getMeshComponents, return_internal_reference<>() ),"return the mesh components (nodes, elements,...) of the set.")
   .add_property("getPoints", make_function(getPoints, return_internal_reference<>() ),"return the points of the set.")
   .add_property("getLines", make_function(getLines, return_internal_reference<>() ),"return the lines of the set.")
   .add_property("getSurfaces", make_function(getSurfaces, return_internal_reference<>() ),"return the surfaces of the set.")
@@ -227,6 +235,8 @@ class_<XC::Set, bases<XC::SetMeshComp> >("Set")
   .add_property("lines", make_function(getLines, return_internal_reference<>() ),&XC::Set::setLines,"lines of the set.")
   .add_property("surfaces", make_function(getSurfaces, return_internal_reference<>() ),&XC::Set::setSurfaces,"surfaces of the set.")
   .add_property("bodies", make_function(getBodies, return_internal_reference<>() ),&XC::Set::setBodies,"bodies of the set.")
+  .def("getEntitiesSet", &XC::Set::getEntitiesSet, "Return the entities (points, lines, surfaces,...) on a set.")
+  .def("getMeshComponentsSet", &XC::Set::getMeshComponentsSet, "Return the mesh components (nodes, elements,...) on a set.")
   .def("fillUpwards", &XC::Set::fillUpwards,"add entities upwards.")
   .def("fillDownwards", &XC::Set::fillDownwards,"add entities downwards.")
   .def("numerate", &XC::Set::numera,"Numerate entities (VTK).")

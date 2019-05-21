@@ -140,7 +140,7 @@ void XC::SetMeshComp::appendFromGeomEntity(const SetBase &s)
       nodes.push_back(dom->getNode(*i));
   }
 
-//!  @brief Clears all the objectsof the lists.
+//!  @brief Clears all the objects of the lists.
 void XC::SetMeshComp::clear(void)
   {
     //SetBase::clear();

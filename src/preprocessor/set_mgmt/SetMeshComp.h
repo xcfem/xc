@@ -79,12 +79,13 @@ class SetMeshComp: public SetBase
     DqPtrsNode nodes; //!< node set.
     DqPtrsElem elements; //!< element set.
     lst_ptr_constraints constraints; //!< constraints set.
+
+  protected:
     void extend_lists(const SetMeshComp &);
     void substract_lists(const SetMeshComp &);
     void intersect_lists(const SetMeshComp &);
     void copy_lists(const SetMeshComp &);
-
-  protected:
+    
     void clearAll(void);
 
     DbTagData &getDbTagData(void) const;

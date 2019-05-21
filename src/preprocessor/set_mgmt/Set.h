@@ -83,7 +83,23 @@ class Set: public SetMeshComp
 
     void clear(void);
 
-    //! @brief Returns a const reference to the entities container.
+    Set getEntitiesSet(void) const;
+    Set getMeshComponentsSet(void) const;
+
+    //! @brief Return a reference to the entities container.
+    virtual const SetEntities &getEntities(void) const
+      { return entities; }
+    //! @brief Return a reference to the entities container.
+    virtual SetEntities &getEntities(void)
+      { return entities; }
+    //! @brief Return a reference to the mesh components container.
+    virtual const SetMeshComp &getMeshComp(void) const
+      { return *this; }
+    //! @brief Return a reference to the entities container.
+    virtual SetMeshComp &getMeshComp(void)
+      { return *this; }
+
+    //! @brief Returns a const reference to the points container.
     virtual const SetEntities::lst_ptr_points &getPoints(void) const
       { return entities.getPoints(); }
     //! @brief Return a reference to the the point container.
