@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
+from __future__ import print_function
 
 
 __author__= "Ana Ortega (AO_O)"
@@ -116,12 +117,11 @@ class UniformLoadOnBeams(BaseVectorLoad):
 
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
-        for l in self.xcSet.getLines:
-            for e in l.getElements():
-                if self.refSystem=='Local':
-                    load= e.vector3dUniformLoadLocal(self.loadVector)
-                else:
-                    load= e.vector3dUniformLoadGlobal(self.loadVector)
+        for e in self.xcSet.getElements:
+            if self.refSystem=='Local':
+                load= e.vector3dUniformLoadLocal(self.loadVector)
+            else:
+                load= e.vector3dUniformLoadGlobal(self.loadVector)
  
     def getMaxMagnitude(self):
         '''Return the maximum magnitude of the vector loads'''
