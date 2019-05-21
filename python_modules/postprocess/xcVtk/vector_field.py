@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2018, LCPT, AO_O"
 __license__= "GPL"
@@ -44,9 +46,13 @@ class VectorField(fb.FieldBase):
 
   def addToDisplay(self, recordDisplay, orientation= 'H'):
     # Adds the vector field to the display.
-    self.setupActor()
-    recordDisplay.renderer.AddActor(self.actor)
-    self.creaColorScaleBar(orientation)
-    # mapper2D= vtk.vtkPolyDataMapper2D()
-    # self.scalarBar.SetMapper(mapper2D)
-    recordDisplay.renderer.AddActor2D(self.scalarBar)
+    nTuples= self.data.getNumberOfTuples()
+    if(nTuples>0):
+      self.setupActor()
+      recordDisplay.renderer.AddActor(self.actor)
+      self.creaColorScaleBar(orientation)
+      # mapper2D= vtk.vtkPolyDataMapper2D()
+      # self.scalarBar.SetMapper(mapper2D)
+      recordDisplay.renderer.AddActor2D(self.scalarBar)
+    else:
+      lmsg.warning('vector field: no vectors to display. Command ignored.')
