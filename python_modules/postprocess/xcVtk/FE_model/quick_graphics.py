@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
+from __future__ import print_function
 
 '''Providing the user with a quick and easy way to 
    display results (internal forces, displacements) of an user-defined
