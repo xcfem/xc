@@ -20,16 +20,15 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.SolidMechanics3D(nodes)
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXYZ(0,0.0,0.0)
-nod= nodes.newNodeXYZ(L,0.0,0.0)
+nod1= nodes.newNodeXYZ(0,0.0,0.0)
+nod2= nodes.newNodeXYZ(L,0.0,0.0)
 
 
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
 
 modelSpace.fixNode000(1)
-rr= preprocessor.getBoundaryCondHandler.newRigidRod(1,2)
+rr= preprocessor.getBoundaryCondHandler.newRigidRod(nod1.tag,nod2.tag)
 
 
 # Loads definition
@@ -42,7 +41,7 @@ ts= lPatterns.newTimeSeries("constant_ts","ts")
 lPatterns.currentTimeSeries= "ts"
 #Load case definition
 lp0= lPatterns.newLoadPattern("default","0")
-lp0.newNodalLoad(2,xc.Vector([-F,F,-F]))
+lp0.newNodalLoad(nod2.tag,xc.Vector([-F,F,-F]))
 #We add the load case to domain.
 lPatterns.addToDomain(lp0.name)
 
@@ -54,7 +53,6 @@ result= analisis.analyze(1)
 
 nodes= preprocessor.getNodeHandler
  
-nod2= nodes.getNode(2)
 deltaX= nod2.getDisp[0]
 deltaY= nod2.getDisp[0]
 deltaZ= nod2.getDisp[0]  # Node 2 displacement

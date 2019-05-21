@@ -33,26 +33,26 @@ p4= geom.Pos3d(0,1,0)
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.newNodeIDXYZ(1,p1.x,p1.y,p1.z)
-nodes.newNodeIDXYZ(2,p2.x,p2.y,p2.z)
-nodes.newNodeIDXYZ(3,p3.x,p3.y,p3.z)
-nodes.newNodeIDXYZ(4,p4.x,p4.y,p4.z)
+n1= nodes.newNodeXYZ(p1.x,p1.y,p1.z)
+n2= nodes.newNodeXYZ(p2.x,p2.y,p2.z)
+n3= nodes.newNodeXYZ(p3.x,p3.y,p3.z)
+n4= nodes.newNodeXYZ(p4.x,p4.y,p4.z)
 
-p10= geom.Pos3d(0.5,0.5,0.0)
-n10= nodes.newNodeIDXYZ(10,p10.x,p10.y,p10.z)
+pA= geom.Pos3d(0.5,0.5,0.0)
+nA= nodes.newNodeXYZ(pA.x,pA.y,pA.z)
 
 # Materials definition
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= "memb1"
-elem= elements.newElement("ShellMITC4",xc.ID([1,2,3,4]))
+elem= elements.newElement("ShellMITC4",xc.ID([n1.tag,n2.tag,n3.tag,n4.tag]))
 
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-modelSpace.fixNode000_FFF(1)
-modelSpace.fixNode000_FFF(2)
-modelSpace.fixNode000_FFF(3)
-modelSpace.fixNode000_FFF(4)
+modelSpace.fixNode000_FFF(n1.tag)
+modelSpace.fixNode000_FFF(n2.tag)
+modelSpace.fixNode000_FFF(n3.tag)
+modelSpace.fixNode000_FFF(n4.tag)
 #modelSpace.fixNode000_000( 1)
 #modelSpace.fixNode000_000( 2)
 #modelSpace.fixNode000_000( 3)
@@ -63,11 +63,11 @@ gluedDOFs= [0,1,2,3,4,5]
 loadOnDOFs= [0,0,0,0,0,0]
 for i in range(0,6):
   if i not in gluedDOFs:
-    modelSpace.constraints.newSPConstraint(10,i,0.0)
+    modelSpace.constraints.newSPConstraint(nA.tag,i,0.0)
   else:
     loadOnDOFs[i]= -1000.0
 
-glue= modelSpace.constraints.newGlueNodeToElement(n10,elem,xc.ID(gluedDOFs))
+glue= modelSpace.constraints.newGlueNodeToElement(nA,elem,xc.ID(gluedDOFs))
 
 # Loads definition
 loadHandler= preprocessor.getLoadHandler
@@ -79,7 +79,7 @@ ts= lPatterns.newTimeSeries("constant_ts","ts")
 lPatterns.currentTimeSeries= "ts"
 #Load case definition
 lp0= lPatterns.newLoadPattern("default","0")
-lp0.newNodalLoad(10,xc.Vector(loadOnDOFs))
+lp0.newNodalLoad(nA.tag,xc.Vector(loadOnDOFs))
 #We add the load case to domain.
 lPatterns.addToDomain(lp0.name)
 
@@ -89,15 +89,15 @@ result= analisis.analyze(1)
 
 nodes.calculateNodalReactions(False,1e-7)
 
-reactionNode10= nodes.getNode(10).getReaction
-ratio1= reactionNode10.Norm()
-svdReactionNodes= nodal_reactions.getReactionFromNodes(nodes,"UVWRxRyRz",[1,2,3,4])
-actionNode10= xc.Vector(loadOnDOFs)
-actionNode10Norm= actionNode10.Norm()
-svdAction= nodal_reactions.getSlidingVectorsSystemfromSlidingVector("UVWRxRyRz",n10.get3dCoo,actionNode10)
+reactionNodeA= nA.getReaction
+ratio1= reactionNodeA.Norm()
+svdReactionNodes= nodal_reactions.getReactionFromNodes(nodes,"UVWRxRyRz",[n1.tag,n2.tag,n3.tag,n4.tag])
+actionNodeA= xc.Vector(loadOnDOFs)
+actionNodeANorm= actionNodeA.Norm()
+svdAction= nodal_reactions.getSlidingVectorsSystemfromSlidingVector("UVWRxRyRz",nA.get3dCoo,actionNodeA)
 svdResid= svdReactionNodes+svdAction
-ratio2= svdResid.getResultant().getModulo()/actionNode10Norm
-ratio3= svdResid.getMoment().getModulo()/actionNode10Norm
+ratio2= svdResid.getResultant().getModulo()/actionNodeANorm
+ratio3= svdResid.getMoment().getModulo()/actionNodeANorm
 
 # print "svdAction= ", svdAction
 # print "svdReactionNodes= ", svdReactionNodes
