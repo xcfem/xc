@@ -371,7 +371,7 @@ def display_strong_weak_axis(preprocessor,setToDisplay=None,vectorScale=1.0,view
               initial/undeformed shape)
     '''
     if(setToDisplay == None):
-        setToDisplay=preprocessor.getSets.getSet('total')
+        setToDisplay= preprocessor.getSets.getSet('total')
         setToDisplay.fillDownwards()
         lmsg.warning('set to display not defined; using total set.')
     vField=lavf.StrongWeakAxisVectorField(setToDisplay.name+'_strongWeakAxis',vectorScale)
