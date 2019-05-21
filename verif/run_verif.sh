@@ -265,6 +265,7 @@ python tests/preprocessor/sets/test_pick_entities.py
 python tests/preprocessor/sets/test_sets_and_grids.py
 python tests/preprocessor/sets/test_get_bnd_01.py
 python tests/preprocessor/sets/test_fill_downwards_01.py
+python tests/preprocessor/sets/test_get_mesh_components_01.py
 echo "$BLEU" "  Preprocessor grid model tests." "$NORMAL"
 python tests/preprocessor/grid_model/test_grid_model_01.py
 
