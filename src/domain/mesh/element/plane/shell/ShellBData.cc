@@ -32,7 +32,7 @@
 
 
 
-//! @brief Inicializa los pointers to the shear matrices.
+//! @brief Initialize the pointerspointers to the shear matrices.
 void XC::ShellBData::shear_matrix_ptrs_setup(void)
   {
     //shear matrix pointers

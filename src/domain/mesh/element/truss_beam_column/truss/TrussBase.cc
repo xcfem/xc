@@ -33,7 +33,7 @@
 
 
 //! @brief Pone a cero los pointers to node, los cosenos directores y los sensibility parameters.
-void XC::TrussBase::inicializa(void)
+void XC::TrussBase::initialize(void)
   {
     // set node pointers to nullptr
     theNodes.inic();
@@ -57,14 +57,14 @@ void XC::TrussBase::alloc_load(const size_t &sz)
 //!  and storing the tags of the truss end nodes.
 XC::TrussBase::TrussBase(int classTag,int tag,int dim,int Nd1, int Nd2)
   :ProtoTruss(tag,classTag,Nd1,Nd2,0,dim), L(0.0)
-  { inicializa(); }
+  { initialize(); }
 
 //! @brief constructor:
 //!  responsible for allocating the necessary space needed by each object
 //!  and storing the tags of the truss end nodes.
 XC::TrussBase::TrussBase(int classTag,int tag,int dim)
   :ProtoTruss(tag,classTag,0,0,0,dim), L(0.0)
-  { inicializa(); }
+  { initialize(); }
 
 
 //! constructor:
@@ -72,7 +72,7 @@ XC::TrussBase::TrussBase(int classTag,int tag,int dim)
 //!   to be invoked upon
 XC::TrussBase::TrussBase(int classTag)
   :ProtoTruss(0,classTag,0,0,0,0), L(0.0)
-  { inicializa(); }
+  { initialize(); }
 
 //! @brief Copy constructor.
 XC::TrussBase::TrussBase(const TrussBase &other)

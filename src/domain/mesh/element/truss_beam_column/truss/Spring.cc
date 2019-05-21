@@ -37,8 +37,8 @@
 
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
-//! @brief Pone a cero los pointers to node y los cosenos directores.
-void XC::Spring::inicializa(void)
+//! @brief Nullify the pointers to node and the direction cosines.
+void XC::Spring::initialize(void)
   {
     // set node pointers to nullptr
     theNodes.inic();
@@ -62,7 +62,7 @@ XC::Spring::Spring(int tag,int dim,int Nd1, int Nd2, UniaxialMaterial &theMat,do
         exit(-1);
       }
 
-    inicializa();
+    initialize();
   }
 
 //! @brief constructor:
@@ -72,7 +72,7 @@ XC::Spring::Spring(int tag,int dim,const Material *ptr_mat)
   :ProtoTruss(tag,ELE_TAG_Spring,0,0,0,dim), theMaterial(nullptr)
   {
     theMaterial= cast_material<UniaxialMaterial>(ptr_mat);
-    inicializa();
+    initialize();
   }
 
 
@@ -83,7 +83,7 @@ XC::Spring::Spring(void)
   :ProtoTruss(0,ELE_TAG_Spring,0,0,0,0),
    theMaterial(nullptr)
   {
-    inicializa();
+    initialize();
   }
 
 //! @brief Copy constructor.

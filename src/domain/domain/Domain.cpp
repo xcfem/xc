@@ -783,7 +783,7 @@ void XC::Domain::applyLoad(double timeStep)
 void XC::Domain::setLoadConstant(void)
   { constraints.setLoadConstant(); }
 
-//! @brief Inicializa.
+//! @brief Initialize mesh.
 int XC::Domain::initialize(void)
   { return mesh.initialize(); }
 

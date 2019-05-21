@@ -84,9 +84,7 @@ class Spring : public ProtoTruss
 
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    void inicializa(void);
-  protected:
-
+    void initialize(void);
   public:
     Spring(int tag, int dimension, int Nd1, int Nd2, UniaxialMaterial &theMaterial, double A);
     Spring(int tag,int dimension,const Material *ptr_mat);

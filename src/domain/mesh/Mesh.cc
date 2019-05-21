@@ -106,7 +106,7 @@ bool XC::Mesh::check_containers(void) const
       return true;
   }
 
-//! @brief Inicializa los el BND del domain.
+//! @brief Initialize the domain boundary.
 void XC::Mesh::init_bounds(void)
   { theBounds.Zero(); }
 
@@ -740,7 +740,7 @@ void XC::Mesh::zeroLoads(void)
         elePtr->zeroLoad();
   }
 
-//! @brief Inicializa.
+//! @brief Compute elements initial stiff.
 int XC::Mesh::initialize(void)
   {
     Element *elePtr= nullptr;

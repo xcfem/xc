@@ -78,7 +78,6 @@ class ProtoTruss : public Element1D
     // public methods to obtain inforrmation about dof & connectivity    
     int getNumDIM(void) const;	
     int getNumDOF(void) const;
-
   };
 
 } //end of XC namespace

@@ -90,7 +90,7 @@ class Truss : public TrussBase
     Vector *theLoadSens;
 // AddingSensitivity:END ///////////////////////////////////////////
 
-    void inicializa(void);
+    void initialize(void);
   protected:
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &cp);

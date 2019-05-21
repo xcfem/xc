@@ -95,14 +95,14 @@ XC::TrussSection::TrussSection(int tag, int dim, int Nd1, int Nd2, SectionForceD
        std::cerr << "TrussSection::TrussSection - section does not provide axial response\n";
 
     // set node pointers to nullptr
-    inicializa();
+    initialize();
   }
 
 XC::TrussSection::TrussSection(int tag,int dim,const Material *ptr_mat)
   :TrussBase(ELE_TAG_TrussSection,tag,dim,0,0), theSection(nullptr)
   {
     theSection= cast_material<SectionForceDeformation>(ptr_mat);
-    inicializa();
+    initialize();
   }
 
 // constructor:
@@ -111,7 +111,7 @@ XC::TrussSection::TrussSection(int tag,int dim,const Material *ptr_mat)
 XC::TrussSection::TrussSection(void)
   :TrussBase(ELE_TAG_TrussSection), theSection(nullptr)
   {
-    inicializa();
+    initialize();
   }
 
 //! @brief Virtual constructor.

@@ -134,9 +134,9 @@ void XC::Truss::set_load_sens(const Vector &v)
   }
 
 //! @brief Nullify the pointers to node, the direction cosines and los sensibility parameters.
-void XC::Truss::inicializa(void)
+void XC::Truss::initialize(void)
   {
-    TrussBase::inicializa();
+    TrussBase::initialize();
 // AddingSensitivity:BEGIN /////////////////////////////////////
     parameterID = 0;
 // AddingSensitivity:END //////////////////////////////////////
@@ -149,7 +149,7 @@ XC::Truss::Truss(int tag,int dim,int Nd1, int Nd2, UniaxialMaterial &theMat,doub
   :TrussBase(ELE_TAG_Truss,tag,dim,Nd1,Nd2), theMaterial(nullptr),A(a),theLoadSens(nullptr)
   {
     set_material(theMat);
-    inicializa();
+    initialize();
   }
 
 //! @brief constructor:
@@ -164,7 +164,7 @@ XC::Truss::Truss(int tag,int dim,const Material *ptr_mat)
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; not a suitable material." << std::endl;
-    inicializa();
+    initialize();
   }
 
 
@@ -173,7 +173,7 @@ XC::Truss::Truss(int tag,int dim,const Material *ptr_mat)
 //!   to be invoked upon
 XC::Truss::Truss(void)
   :TrussBase(ELE_TAG_Truss), theMaterial(nullptr), A(0.0),theLoadSens(nullptr)
-  { inicializa(); }
+  { initialize(); }
 
 //! @brief Copy constructor.
 XC::Truss::Truss(const Truss &other)

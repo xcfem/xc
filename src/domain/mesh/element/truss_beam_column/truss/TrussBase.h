@@ -46,7 +46,7 @@ class TrussBase : public ProtoTruss
 
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
-    void inicializa(void);
+    void initialize(void);
     void setup_L_cos_dir(void);
     void set_load(const Vector &);
     void alloc_load(const size_t &);
@@ -63,8 +63,6 @@ class TrussBase : public ProtoTruss
     Vector *getLoad(void)
       { return &load; }
     const double &getL(void) const;
-
-
   };
 } // end of XC namespace
 
