@@ -36,9 +36,10 @@ class QuickGraphics(object):
                      combination of previously defined actions
                      e.g. '1.0*GselfWeight+1.0*GearthPress'
     '''
-    def __init__(self,feProblem):
-        self.feProblem= feProblem
-        self.xcSet= self.feProblem.getPreprocessor.getSets.getSet('total')
+    def __init__(self,feProblem= None):
+        if(feProblem):
+            self.feProblem= feProblem
+            self.xcSet= self.feProblem.getPreprocessor.getSets.getSet('total')
         self.loadCaseName=''
 
     def solve(self,loadCaseName,loadCaseExpr=''):
@@ -50,6 +51,7 @@ class QuickGraphics(object):
         preprocessor.resetLoadCase()
         combs.addToDomain(self.loadCaseName)
         #Solution
+        lmsg.warning('Here we use a simple linear static solution that is not always a suitable method.')
         analysis= predefined_solutions.simple_static_linear(self.feProblem)
         result= analysis.analyze(1)
         combs.removeFromDomain(self.loadCaseName)
@@ -209,7 +211,8 @@ class QuickGraphics(object):
     def dispLoadCaseBeamEl(self,loadCaseName='',setToDisplay=None,fUnitConv=1.0,elLoadComp='transComponent',elLoadScaleF=1.0,nodLoadScaleF=1.0,viewDef= vtk_graphic_base.CameraParameters('XYZPos'),caption='',fileName=None,defFScale=0.0):
         '''Display the loads applied on beam elements and nodes for a given load case
 
-        :param setToDisplay:    set of beam elements to be represented
+        :param loadCaseName: load case name
+        :param setToDisplay: set of beam elements to be represented
         :param fUnitConv:  factor of conversion to be applied to the results
                         (defaults to 1)
         :param elLoadComp:  component of the loads on elements to be depicted
@@ -235,7 +238,7 @@ class QuickGraphics(object):
                 self.xcSet.color=xc.Vector([rd.random(),rd.random(),rd.random()])
         else:
             lmsg.warning('QuickGraphics::dispLoadCaseBeamEl; set to display not defined; using previously defined set (total if None).')
-        preprocessor= self.feProblem.getPreprocessor
+        preprocessor= setToDisplay.getPreprocessor
         loadPatterns= preprocessor.getLoadHandler.getLoadPatterns
         loadPatterns.addToDomain(loadCaseName)
         defDisplay= self.getDisplay(viewDef)

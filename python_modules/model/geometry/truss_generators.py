@@ -76,6 +76,10 @@ class TrussBase(object):
             self.lowerChordLines.append(lines.newLine(p[0].tag, p[1].tag))
         for p in list(zip(*(self.upperChordPoints[start:] for start in range(0, 2)))):
             self.upperChordLines.append(lines.newLine(p[0].tag, p[1].tag))
+        for l in self.lowerChordLines:
+            l.nDiv= 2
+        for l in self.upperChordLines:
+            l.nDiv= 2
 
     def createGeometry(self, feProblem, org= geom.Pos3d(0,0,0)):
         '''Creates the geometry of the Truss.'''
@@ -155,7 +159,7 @@ class TrussBase(object):
         # Diagonals
         seedElemHandler.defaultMaterial= self.diagonalMaterial.name  # Material name.
         seedElemHandler.dimElem= 3 #Bars defined ina a three-dimensional space.
-        trussElem= seedElemHandler.newElement("Truss",xc.ID([0,0]));
+        trussElem= seedElemHandler.newElement('Truss',xc.ID([0,0]));
         trussElem.area= self.diagonalArea
         self.diagonalSet.genMesh(xc.meshDir.I)  # Generate the elements.
         # End posts
@@ -229,6 +233,8 @@ class WarrenTruss(TrussBase):
         lines= self.preprocessor.getMultiBlockTopology.getLines # Line container.
         self.posts.append(lines.newLine(self.lowerChordPoints[0].tag,self.upperChordPoints[0].tag))
         self.posts.append(lines.newLine(self.lowerChordPoints[-1].tag,self.upperChordPoints[-1].tag))
+        for l in self.posts:
+            l.nDiv= 2
             
 
         
@@ -281,6 +287,8 @@ class FanTruss(WarrenTruss):
         lines= self.preprocessor.getMultiBlockTopology.getLines # Line container
         for i in range(1,len(self.lowerChordPoints)-1):
             self.posts.append(lines.newLine(self.lowerChordPoints[i].tag,self.upperChordPoints[2*i].tag))
+        for l in self.posts:
+            l.nDiv= 2
 
     def createDiagonalsGeometry(self):
         '''Creates the geometry of the truss diagonals.'''

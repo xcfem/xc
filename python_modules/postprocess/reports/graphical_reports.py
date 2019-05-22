@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+
 __author__= "Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, AO_O" 
 __license__= "GPL"
@@ -208,6 +210,117 @@ class RecordLoadCaseDisp(OuputUnits):
             insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt)
     texFile.write('\\clearpage\n')
     return
+
+  def displayDispRot(self, fName= None):
+    '''Displays load vectors on the set argument.
+
+    :param setToDisplay: set of elements to be displayed (defaults to total set)
+    :param fileName: full name of the graphic file to generate. Defaults to 
+           ` None`, in this case it returns a console output graphic.,
+    :param defFScale: factor to apply to current displacement of nodes 
+                  so that the display position of each node equals to
+                  the initial position plus its displacement multiplied
+                  by this factor. (Defaults to 0.0, i.e. display of 
+                  initial/undeformed shape)
+    '''
+    qg= QGrph.QuickGraphics()
+    for st in self.setsToDispDspRot:
+        for arg in self.listDspRot:
+            if arg[0]=='u':
+                fcUn= self.unitsScaleDispl
+                unDesc= self.unitsDispl
+            else:
+                fcUn= 1.0
+                unDesc=''
+            qg.displayDispRot(itemToDisp=arg,setToDisplay=st,fConvUnits=fcUn,unitDescription=unDesc,viewDef= self.cameraParameters,fileName= fName)
+    
+  def displayLoad(self, setToDisplay, caption= None, fName= None, defFScale= 0.0):
+    '''Displays load vectors on the set argument.
+
+    :param setToDisplay: set of elements to be displayed (defaults to total set)
+    :param caption: text to display in the graphic. Defaults to 
+           ` None` in this case the text is the load case description
+           and the units of the loads.
+    :param fileName: full name of the graphic file to generate. Defaults to 
+           ` None`, in this case it returns a console output graphic.,
+    :param defFScale: factor to apply to current displacement of nodes 
+                  so that the display position of each node equals to
+                  the initial position plus its displacement multiplied
+                  by this factor. (Defaults to 0.0, i.e. display of 
+                  initial/undeformed shape)
+    '''
+    preprocessor= setToDisplay.getPreprocessor
+    if(not caption):
+      caption= 'load case: ' + self.loadCaseDescr + ', set: ' + setToDisplay.name + ', '  + self.unitsLoads
+    QGrph.display_load(preprocessor,setToDisplay= setToDisplay,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads,viewDef= self.cameraParameters, caption= caption,fileName= fName,defFScale= defFScale)
+      
+  def displayIntForcDiag(self,itemToDisp,setToDisplay,fileName=None,defFScale=0.0):
+    '''displays the component of internal forces in the set of entities as a 
+     diagram over lines (i.e. appropiated for beam elements).
+
+    :param itemToDisp: component of the internal forces 
+      ('N', 'Qy' (or 'Vy'), 'Qz' (or 'Vz'), 'My', 'Mz', 'T') to be depicted 
+    :param setToDisplay: set of entities (elements of type beam) to be 
+      represented
+    :param unitDescription: string like '[kN/m] or [kN m/m]'
+    :param fileName:  name of the file to plot the graphic. Defaults to None,
+                   in that case an screen display is generated
+    :param defFScale: factor to apply to current displacement of nodes 
+            so that the display position of each node equals to
+            the initial position plus its displacement multiplied
+            by this factor. (Defaults to 0.0, i.e. display of 
+            initial/undeformed shape)
+    '''
+    if itemToDisp[0]=='M':
+        fcUn=self.unitsScaleMom
+        unDesc=self.unitsMom
+        scaleFact=self.scaleDispBeamIntForc[2]
+    else:
+        fcUn=self.unitsScaleForc
+        unDesc=self.unitsForc
+        if itemToDisp[0]=='N':
+          scaleFact=self.scaleDispBeamIntForc[0]
+        else:
+          scaleFact=self.scaleDispBeamIntForc[1]
+    qg= QGrph.QuickGraphics()
+    qg.displayIntForcDiag(itemToDisp= itemToDisp,setToDisplay= setToDisplay,fConvUnits= self.unitsScaleLoads,scaleFactor= scaleFact, unitDescription= unDesc, viewDef= self.cameraParameters, fileName= fileName, defFScale= defFScale)
+    
+  def dispLoadCaseBeamEl(self,setToDisplay,caption= None,fileName=None,defFScale=0.0):
+    '''Display the loads applied on beam elements and nodes for a given load case
+
+    :param setToDisplay:    set of beam elements to be represented
+    :param caption:   caption for the graphic
+    :param fileName:  name of the file to plot the graphic. Defaults to None,
+                      in that case an screen display is generated
+    :param defFScale: factor to apply to current displacement of nodes 
+              so that the display position of each node equals to
+              the initial position plus its displacement multiplied
+              by this factor. (Defaults to 0.0, i.e. display of 
+              initial/undeformed shape)
+    '''
+    qg= QGrph.QuickGraphics()
+    if(not caption):
+      caption= 'load case: ' + self.loadCaseDescr + ', set: ' + setToDisplay.name + ', '  + self.unitsLoads
+    qg.dispLoadCaseBeamEl(loadCaseName=self.loadCaseName,setToDisplay=setToDisplay,fUnitConv=self.unitsScaleLoads,elLoadComp=self.compElLoad,elLoadScaleF=self.vectorScaleLoads,nodLoadScaleF=self.vectorScalePointLoads,viewDef= self.cameraParameters, caption= caption, fileName= fileName)
+
+  def displayLoadOnSets(self, caption= None, fName= None, defFScale= 0.0):
+    '''Displays load vectors for each of the sets in self.setsToDispLoads
+
+    :param caption: text to display in the graphic. Defaults to 
+           ` None` in this case the text is the load case description
+           and the units of the loads.
+    :param fileName: full name of the graphic file to generate. Defaults to 
+           ` None`, in this case it returns a console output graphic.,
+    :param defFScale: factor to apply to current displacement of nodes 
+                  so that the display position of each node equals to
+                  the initial position plus its displacement multiplied
+                  by this factor. (Defaults to 0.0, i.e. display of 
+                  initial/undeformed shape)
+    '''
+    for st in self.setsToDispLoads:
+      self.displayLoad(setToDisplay= st,caption= caption,fName= fName,defFScale= defFScale)
+    for st in self.setsToDispBeamLoads:
+      self.dispLoadCaseBeamEl(setToDisplay=st, fileName= fName, defFScale= defFScale)
 
 def checksReports(limitStateLabel,setsShEl,argsShEl,capTexts,pathGr,texReportFile,grWdt,setsBmElView=[],argsBmElScale=[]):
     '''Create a LaTeX report including the desired graphical results obtained
