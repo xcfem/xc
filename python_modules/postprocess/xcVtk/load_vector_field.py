@@ -15,9 +15,31 @@ import vtk
 from miscUtils import LogMessages as lmsg
 from postprocess.xcVtk import vector_field as vf
 
+class LoadOnPoints(vf.VectorField):
+  '''Draws punctual loads.'''
+  def __init__(self,loadPatternName,fUnitConv= 1e-3,scaleFactor= 1.0,showPushing= True,components= [0,1,2]):
+    '''
+    Parameters:
+      loadPatternName: name of the load pattern to display.
+      fUnitConv: unit conversion factor.
+      scaleFactor: scale factor for the size of the vectors.
+      showPushing: true if the loads push the loaded point (as oppssed to pull). Default: True
+      components: index of the components of the load. Default: [0,1,2] 
+    '''
+    super(LoadOnPoints,self).__init__(loadPatternName,fUnitConv,scaleFactor,showPushing)
+    self.lpName= loadPatternName 
+    self.components= components
 
-class LoadVectorField(vf.VectorField):
-  '''Draws a load over a points on nodes and on elements.'''
+  def getMaxLoad(self):
+    ''' Calculate the maximum absolute value of the loads on the
+        vector container.'''
+    self.data.calculateLengths(self.fUnitConv)
+    rgMaxMin=self.data.lengths.GetRange()
+    return abs(max(rgMaxMin, key=abs))
+
+
+class LoadVectorField(LoadOnPoints):
+  '''Draws a load over a point on nodes and on elements.'''
   def __init__(self,loadPatternName,fUnitConv= 1e-3,scaleFactor= 1.0,showPushing= True,components= [0,1,2],multiplyByElementArea= True):
     '''
     Parameters:
@@ -29,8 +51,6 @@ class LoadVectorField(vf.VectorField):
       multiplyByElementArea: for loads over elements (default= True).
     '''
     super(LoadVectorField,self).__init__(loadPatternName,fUnitConv,scaleFactor,showPushing)
-    self.lpName= loadPatternName 
-    self.components= components
     self.multiplyByElementArea= multiplyByElementArea
 
   def sumElementalLoads(self,preprocessor,lp):
@@ -70,13 +90,6 @@ class LoadVectorField(vf.VectorField):
       else:
         lmsg.warning('displaying of loads over 1D elements not yet implemented')
     return len(self.elementalLoadVectors)
-
-  def getMaxLoad(self):
-    ''' Calculate the maximum absolute value of the loads on the
-        vector container.'''
-    self.data.calculateLengths(self.fUnitConv)
-    rgMaxMin=self.data.lengths.GetRange()
-    return abs(max(rgMaxMin, key=abs))
 
   def dumpElementalPositions(self,preprocessor,lp):
     ''' Iterate over cumulated loads dumping them into the graphic.'''
