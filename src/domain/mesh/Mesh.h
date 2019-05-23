@@ -78,7 +78,7 @@ class Mesh: public MeshComponentContainer
 
     TaggedObjectStorage *theElements;
     SingleDomEleIter *theEleIter;
-    KDTreeElements kdtreeElements; //!< space-partitioning data structure for organizing nodes. Search finite element by its position (x,y,x).
+    KDTreeElements kdtreeElements; //!< space-partitioning data structure for organizing elements. Search finite element by its position (x,y,x).
 
     Vector theBounds;
     int tagNodeCheckReactionException;//!< Exception for checking reactions (see Domain::checkNodalReactions).
