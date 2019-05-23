@@ -80,7 +80,7 @@ BND3d XC::Pnt::Bnd(void) const
   { return BND3d(p,p);  }
 
 //! @brief Return the lines that start o finish in this point.
-std::set<const XC::Edge *> XC::Pnt::EdgesExtremo(void) const
+std::set<const XC::Edge *> XC::Pnt::getEdgesThatEndOnThisPoint(void) const
   {
     std::set<const Edge *> retval;
     if(!lines_pt.empty())
@@ -89,7 +89,7 @@ std::set<const XC::Edge *> XC::Pnt::EdgesExtremo(void) const
         for(;i!=lines_pt.end();i++)
           {
             const Edge *l= *i;
-            if(Extremo(*l))
+            if(isEndPoint(*l))
               retval.insert(l);
           }
       }
@@ -119,8 +119,8 @@ bool XC::Pnt::isConnectedTo(const Edge &l) const
   }
 
 //! @brief Returns true if the point is an end of the edge.
-bool XC::Pnt::Extremo(const Edge &l) const
-  { return l.Extremo(*this); }
+bool XC::Pnt::isEndPoint(const Edge &l) const
+  { return l.isEndPoint(*this); }
 
 //! @brief Returns true if the points touches the surface.
 bool XC::Pnt::isConnectedTo(const Face &s) const
@@ -278,7 +278,7 @@ XC::Vector &XC::operator-(const Pnt &b,const Pnt &a)
 const XC::Edge *XC::find_connected_edge_const_ptr(const Pnt &pA,const Pnt &pB)
   {
     const Edge *retval= nullptr;
-    const std::set<const Edge *> pA_lines= pA.getConnectedEdges();
+    const std::set<const Edge *> pA_lines= pA.getEdgesThatEndOnThisPoint();
     for(std::set<const Edge *>::const_iterator i= pA_lines.begin();i!=pA_lines.end();i++)
       if(pB.isConnectedTo(**i))
         {
@@ -292,7 +292,7 @@ const XC::Edge *XC::find_connected_edge_const_ptr(const Pnt &pA,const Pnt &pB)
 const XC::Edge *XC::find_connected_edge_const_ptr(const Pnt &pA,const Pnt &pB, const Pnt &pC)
   {
     const Edge *retval= nullptr;
-    const std::set<const Edge *> pA_lines= pA.getConnectedEdges();
+    const std::set<const Edge *> pA_lines= pA.getEdgesThatEndOnThisPoint();
     for(std::set<const Edge *>::const_iterator i= pA_lines.begin();i!=pA_lines.end();i++)
       if(pB.isConnectedTo(**i) && pC.isConnectedTo(**i))
         {
@@ -306,7 +306,7 @@ const XC::Edge *XC::find_connected_edge_const_ptr(const Pnt &pA,const Pnt &pB, c
 XC::Edge *XC::find_connected_edge_ptr(const Pnt &pA,const Pnt &pB)
   {
     Edge *retval= nullptr;
-    std::set<const Edge *> pA_lines= pA.getConnectedEdges();
+    std::set<const Edge *> pA_lines= pA.getEdgesThatEndOnThisPoint();
     for(std::set<const Edge *>::iterator i= pA_lines.begin();i!=pA_lines.end();i++)
       if(pB.isConnectedTo(**i))
         {
@@ -320,7 +320,7 @@ XC::Edge *XC::find_connected_edge_ptr(const Pnt &pA,const Pnt &pB)
 XC::Edge *XC::find_connected_edge_ptr(const Pnt &pA,const Pnt &pB, const Pnt &pC)
   {
     Edge *retval= nullptr;
-    std::set<const Edge *> pA_lines= pA.getConnectedEdges();
+    std::set<const Edge *> pA_lines= pA.getEdgesThatEndOnThisPoint();
     for(std::set<const Edge *>::iterator i= pA_lines.begin();i!=pA_lines.end();i++)
       if(pB.isConnectedTo(**i) && pC.isConnectedTo(**i))
         {
@@ -331,12 +331,12 @@ XC::Edge *XC::find_connected_edge_ptr(const Pnt &pA,const Pnt &pB, const Pnt &pC
   }
 
 //! @brief Search for a line that connects the points.
-XC::Edge *XC::busca_edge_ptr_extremos(const Pnt &pA,const Pnt &pB)
+XC::Edge *XC::find_edge_ptr_by_endpoints(const Pnt &pA,const Pnt &pB)
   {
     Edge *retval= nullptr;
-    std::set<const Edge *> pA_lines= pA.EdgesExtremo();
+    std::set<const Edge *> pA_lines= pA.getEdgesThatEndOnThisPoint();
     for(std::set<const Edge *>::iterator i= pA_lines.begin();i!=pA_lines.end();i++)
-      if(pB.Extremo(**i))
+      if(pB.isEndPoint(**i))
         {
           retval= const_cast<Edge *>(*i);
           break;
@@ -345,12 +345,12 @@ XC::Edge *XC::busca_edge_ptr_extremos(const Pnt &pA,const Pnt &pB)
   }
 
 //! @brief Search for a line that connects the points.
-XC::Edge *XC::busca_edge_ptr_extremos(const Pnt &pA,const Pnt &pB, const Pnt &pC)
+XC::Edge *XC::find_edge_ptr_by_endpoints(const Pnt &pA,const Pnt &pB, const Pnt &pC)
   {
     Edge *retval= nullptr;
-    std::set<const Edge *> pA_lines= pA.EdgesExtremo();
+    std::set<const Edge *> pA_lines= pA.getEdgesThatEndOnThisPoint();
     for(std::set<const Edge *>::iterator i= pA_lines.begin();i!=pA_lines.end();i++)
-      if(pB.isConnectedTo(**i) && pC.Extremo(**i))
+      if(pB.isConnectedTo(**i) && pC.isEndPoint(**i))
         {
           retval= const_cast<Edge *>(*i);
           break;
@@ -359,12 +359,12 @@ XC::Edge *XC::busca_edge_ptr_extremos(const Pnt &pA,const Pnt &pB, const Pnt &pC
   }
 
 //! @brief Search for a line that connects the points.
-const XC::Edge *XC::busca_edge_const_ptr_extremos(const Pnt &pA,const Pnt &pB)
+const XC::Edge *XC::find_edge_const_ptr_by_endpoints(const Pnt &pA,const Pnt &pB)
   {
     const Edge *retval= nullptr;
-    std::set<const Edge *> pA_lines= pA.EdgesExtremo();
+    std::set<const Edge *> pA_lines= pA.getEdgesThatEndOnThisPoint();
     for(std::set<const Edge *>::iterator i= pA_lines.begin();i!=pA_lines.end();i++)
-      if(pB.Extremo(**i))
+      if(pB.isEndPoint(**i))
         {
           retval= *i;
           break;
@@ -373,12 +373,12 @@ const XC::Edge *XC::busca_edge_const_ptr_extremos(const Pnt &pA,const Pnt &pB)
   }
 
 //! @brief Search for a line that connects the points.
-const XC::Edge *XC::busca_edge_const_ptr_extremos(const Pnt &pA,const Pnt &pB, const Pnt &pC)
+const XC::Edge *XC::find_edge_const_ptr_by_endpoints(const Pnt &pA,const Pnt &pB, const Pnt &pC)
   {
     const Edge *retval= nullptr;
-    std::set<const Edge *> pA_lines= pA.EdgesExtremo();
+    std::set<const Edge *> pA_lines= pA.getEdgesThatEndOnThisPoint();
     for(std::set<const Edge *>::iterator i= pA_lines.begin();i!=pA_lines.end();i++)
-      if(pB.isConnectedTo(**i) && pC.Extremo(**i))
+      if(pB.isConnectedTo(**i) && pC.isEndPoint(**i))
         {
           retval= (*i);
           break;

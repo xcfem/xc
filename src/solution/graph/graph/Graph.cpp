@@ -375,7 +375,7 @@ int XC::Graph::merge(Graph &other)
     return result;
   }
 
-//! @brief Returns the extremos del ancho de banda.
+//! @brief Returns the ends of the bandwith.
 void XC::Graph::getBand(int &numSubD,int &numSuperD) const
   {
     numSubD = 0;

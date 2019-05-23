@@ -125,7 +125,7 @@ XC::Edge *XC::LineMap::createLine(Pnt *pA,Pnt *pB)
                     << pA->getName() << ","
                     << pB->getName() 
                     << "), are the same." << std::endl;
-        tmp= busca_edge_ptr_extremos(*pA,*pB);
+        tmp= find_edge_ptr_by_endpoints(*pA,*pB);
         if(!tmp)
           {
             assert(getPreprocessor());
@@ -162,7 +162,7 @@ XC::Edge *XC::LineMap::createDividedLine(Pnt *pA,Pnt *pB)
                     << pA->getName() << ","
                     << pB->getName() 
                     << "), are the same." << std::endl;
-        tmp= busca_edge_ptr_extremos(*pA,*pB);
+        tmp= find_edge_ptr_by_endpoints(*pA,*pB);
         if(!tmp)
           {
             assert(getPreprocessor());
@@ -191,7 +191,7 @@ XC::Edge *XC::LineMap::createArc(Pnt *pA,Pnt *pB,Pnt *pC)
     Edge *tmp= nullptr;
     if(pA && pB && pC)
       {
-        tmp= busca_edge_ptr_extremos(*pA,*pB,*pC);
+        tmp= find_edge_ptr_by_endpoints(*pA,*pB,*pC);
         if(!tmp)
           {
             assert(getPreprocessor());

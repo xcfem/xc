@@ -90,8 +90,8 @@ class MultiBlockTopology: public PreprocessorContainer
     //! @brief Constructor.
     MultiBlockTopology(Preprocessor *mod= nullptr);
 
-    Edge *busca_edge_extremos(const PntMap::Indice &,const PntMap::Indice &);
-    const Edge *busca_edge_extremos(const PntMap::Indice &,const PntMap::Indice &) const;
+    Edge *find_edge_by_endpoints(const PntMap::Indice &,const PntMap::Indice &);
+    const Edge *find_edge_by_endpoints(const PntMap::Indice &,const PntMap::Indice &) const;
     
     void conciliaNDivs(void);
 

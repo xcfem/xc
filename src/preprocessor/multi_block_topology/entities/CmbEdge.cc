@@ -75,11 +75,11 @@ const XC::Pnt *XC::CmbEdge::Side::P2(void) const
 
 //! @brief Returns true if the points being passed as parameters
 //! are the endpoints of the side.
-bool XC::CmbEdge::Side::ExtremosEn(const Pnt *p1,const Pnt *p2) const
+bool XC::CmbEdge::Side::areEndPoints(const Pnt *p1,const Pnt *p2) const
   {
     bool retval= false;
     if(edge)
-      retval= edge->ExtremosEn(p1,p2);
+      retval= edge->areEndPoints(p1,p2);
     const Pnt *e1= P1();
     const Pnt *e2= P2();
     if(p1==e1)
@@ -659,13 +659,13 @@ const XC::CmbEdge::Side *XC::CmbEdge::getSide(const size_t &i) const
 XC::CmbEdge::Side *XC::CmbEdge::getSide(const size_t &i)
   { return &lines.at(i-1); }
 
-//! @brief Return the side which extremes are the points
+//! @brief Return the side whose end points are the points
 //! being passed as parameters.
 const XC::CmbEdge::Side *XC::CmbEdge::getSideByPoints(const Pnt *p1,const Pnt *p2) const
   {
     const Side *retval= nullptr;
     for(std::deque<Side>::const_iterator i=lines.begin();i!=lines.end();i++)
-      if((*i).ExtremosEn(p1,p2))
+      if((*i).areEndPoints(p1,p2))
         {
           retval= &(*i);
           break;
@@ -673,13 +673,13 @@ const XC::CmbEdge::Side *XC::CmbEdge::getSideByPoints(const Pnt *p1,const Pnt *p
     return retval; //Not found.
   }
 
-//! @brief Return the side which extremes are the points
+//! @brief Return the side whose endpoints are the points
 //! being passed as parameters.
 XC::CmbEdge::Side *XC::CmbEdge::getSideByPoints(const Pnt *p1,const Pnt *p2)
   {
     Side *retval= nullptr;
     for(std::deque<Side>::iterator i=lines.begin();i!=lines.end();i++)
-      if((*i).ExtremosEn(p1,p2))
+      if((*i).areEndPoints(p1,p2))
         {
           retval= &(*i);
           break;
@@ -687,7 +687,7 @@ XC::CmbEdge::Side *XC::CmbEdge::getSideByPoints(const Pnt *p1,const Pnt *p2)
     return retval;
   }
 
-//! @brief Return the side which extremes are the points
+//! @brief Return the side whose endpoints are the points
 //! being passed as parameters.
 const XC::CmbEdge::Side *XC::CmbEdge::getSideByPoints(const size_t &idP1,const size_t &idP2) const
   {

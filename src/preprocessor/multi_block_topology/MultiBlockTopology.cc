@@ -75,13 +75,13 @@ void XC::MultiBlockTopology::numera(void)
 
 //! @brief Return the «edge» that has as end points those
 //! whose indices are passed as parameters.
-XC::Edge *XC::MultiBlockTopology::busca_edge_extremos(const PntMap::Indice &pA,const PntMap::Indice &pB)
+XC::Edge *XC::MultiBlockTopology::find_edge_by_endpoints(const PntMap::Indice &pA,const PntMap::Indice &pB)
   {
     Edge *retval= nullptr;
     const Pnt *p1= points.busca(pA);
     const Pnt *p2= points.busca(pB);
     if(p1 && p2)
-      { retval= busca_edge_ptr_extremos(*p1,*p2); }
+      { retval= find_edge_ptr_by_endpoints(*p1,*p2); }
     else
       {
         if(!p1)
@@ -98,13 +98,13 @@ XC::Edge *XC::MultiBlockTopology::busca_edge_extremos(const PntMap::Indice &pA,c
 
 //! @brief Returs the «edge» that has as end points those
 //! whose indices are passed as parameter.
-const XC::Edge *XC::MultiBlockTopology::busca_edge_extremos(const PntMap::Indice &pA,const PntMap::Indice &pB) const
+const XC::Edge *XC::MultiBlockTopology::find_edge_by_endpoints(const PntMap::Indice &pA,const PntMap::Indice &pB) const
   {
     const Edge *retval= nullptr;
     const Pnt *p1= points.busca(pA);
     const Pnt *p2= points.busca(pB);
     if(p1 && p2)
-      { retval= busca_edge_ptr_extremos(*p1,*p2); }
+      { retval= find_edge_ptr_by_endpoints(*p1,*p2); }
     else
       {
         if(!p1)

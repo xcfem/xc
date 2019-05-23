@@ -106,7 +106,7 @@ const XC::Pnt *XC::Edge::P2(void) const
 //!
 //! @param p1: first point.
 //! @param p2: second point.
-bool XC::Edge::ExtremosEn(const Pnt *p1,const Pnt *p2) const
+bool XC::Edge::areEndPoints(const Pnt *p1,const Pnt *p2) const
   {
     bool retval= false;
     const Pnt *e1= P1();
@@ -439,7 +439,7 @@ bool XC::Edge::isConnectedTo(const Body &b) const
   }
 
 //! @brief Return true if it is an end point of the line.
-bool XC::Edge::Extremo(const Pnt &p) const
+bool XC::Edge::isEndPoint(const Pnt &p) const
   { return ((&p == P1()) || (&p == P2()));  }
 
 //! @brief Return the list of edges that have this point as starting or ending point.
@@ -451,7 +451,7 @@ Pos3dArray XC::Edge::get_nodes_pos(void) const
   { return get_positions(); }
 
 //! @brief Create the nodes for both end points of the edge.
-void XC::Edge::create_nodes_en_extremos(void)
+void XC::Edge::create_nodes_on_endpoints(void)
   {
     if(verbosity>4)
       std::clog << "Creating nodes for '" << getName() << "' edge ends...";   
@@ -507,7 +507,7 @@ void XC::Edge::create_nodes(void)
             const size_t cols= positions.getNumberOfColumns();
             ttzNodes= NodePtrArray3d(1,n_rows,cols);
 
-            create_nodes_en_extremos();
+            create_nodes_on_endpoints();
 
 
             if((n_rows*cols)>2) //If it has intermediate nodes...

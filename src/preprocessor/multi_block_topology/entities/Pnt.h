@@ -93,11 +93,11 @@ class Pnt: public EntMdlr
       { return lines_pt; }
     const size_t getNLines(void) const
       { return getConnectedEdges().size(); }
-    std::set<const Edge *> EdgesExtremo(void) const;
+    std::set<const Edge *> getEdgesThatEndOnThisPoint(void) const;
 
     const std::string &getConnectedEdgesNames(void) const;
     bool isConnectedTo(const Edge &l) const;
-    bool Extremo(const Edge &l) const;
+    bool isEndPoint(const Edge &l) const;
     bool isConnectedTo(const Face &s) const;
     bool isConnectedTo(const Body &b) const;
     double getSquaredDistanceTo(const Pos3d &pt) const;
@@ -118,10 +118,10 @@ const Edge *find_connected_edge_const_ptr(const Pnt &,const Pnt &,const Pnt &);
 Edge *find_connected_edge_ptr(const Pnt &,const Pnt &);
 Edge *find_connected_edge_ptr(const Pnt &,const Pnt &,const Pnt &);
 
-Edge *busca_edge_ptr_extremos(const Pnt &pA,const Pnt &pB);
-Edge *busca_edge_ptr_extremos(const Pnt &,const Pnt &,const Pnt &);
-const Edge *busca_edge_const_ptr_extremos(const Pnt &pA,const Pnt &pB);
-const Edge *busca_edge_const_ptr_extremos(const Pnt &,const Pnt &,const Pnt &);
+Edge *find_edge_ptr_by_endpoints(const Pnt &pA,const Pnt &pB);
+Edge *find_edge_ptr_by_endpoints(const Pnt &,const Pnt &,const Pnt &);
+const Edge *find_edge_const_ptr_by_endpoints(const Pnt &pA,const Pnt &pB);
+const Edge *find_edge_const_ptr_by_endpoints(const Pnt &,const Pnt &,const Pnt &);
 
 } //end of XC namespace
 

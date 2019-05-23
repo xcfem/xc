@@ -87,7 +87,7 @@ class TransfCooHandler;
 class CrdTransf: public TaggedObject, public MovableObject
   {
   protected:
-    Node *nodeIPtr, *nodeJPtr; //!< pointers to the nodes extremos of the element.
+    Node *nodeIPtr, *nodeJPtr; //!< pointers to the end nodes of the element.
     mutable double L; //!< element length
     Vector nodeIOffset,nodeJOffset; //!< rigid joint offsets
     std::vector<double> nodeIInitialDisp; //!< Initial displacement for I node.

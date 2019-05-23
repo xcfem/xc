@@ -56,7 +56,7 @@ class Edge: public EntMdlr
 
     virtual Pnt *P1(void);
     virtual Pnt *P2(void);
-    void create_nodes_en_extremos(void);
+    void create_nodes_on_endpoints(void);
   public:
     Edge(Preprocessor *m,const size_t &nd= 4);
     Edge(const std::string &nombre= "",Preprocessor *m= nullptr,const size_t &nd= 4);
@@ -68,7 +68,7 @@ class Edge: public EntMdlr
     virtual const Pnt *P2(void) const;
     bool In(const GeomObj3d &, const double &tol= 0.0) const;
     bool Out(const GeomObj3d &, const double &tol= 0.0) const;
-    bool ExtremosEn(const Pnt *,const Pnt *) const;
+    bool areEndPoints(const Pnt *,const Pnt *) const;
     //! @brief Return the number of vertices.
     virtual size_t getNumberOfVertices(void) const= 0;
 
@@ -93,7 +93,7 @@ class Edge: public EntMdlr
     const std::string &getConnectedSurfacesNames(void) const;
     bool isConnectedTo(const Face &s) const;
     bool isConnectedTo(const Body &b) const;
-    bool Extremo(const Pnt &) const;
+    bool isEndPoint(const Pnt &) const;
     virtual BND3d Bnd(void) const= 0;
     virtual void create_nodes(void);
     virtual void genMesh(meshing_dir dm);

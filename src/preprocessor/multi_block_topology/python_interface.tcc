@@ -55,7 +55,7 @@ XC::SurfaceMap &(XC::MultiBlockTopology::*getSurfaceMapRef)(void)= &XC::MultiBlo
 XC::Framework2d &(XC::MultiBlockTopology::*getRefToFramework2d)(void)= &XC::MultiBlockTopology::getFramework2d;
 XC::Framework3d &(XC::MultiBlockTopology::*getRefToFramework3d)(void)= &XC::MultiBlockTopology::getFramework3d;
 XC::UniformGridMap &(XC::MultiBlockTopology::*getUniformGridsRef)(void)= &XC::MultiBlockTopology::getUniformGrids;
-XC::Edge *(XC::MultiBlockTopology::*getLineWithEndPoints)(const XC::PntMap::Indice &,const XC::PntMap::Indice &) = &XC::MultiBlockTopology::busca_edge_extremos;
+XC::Edge *(XC::MultiBlockTopology::*getLineWithEndPoints)(const XC::PntMap::Indice &,const XC::PntMap::Indice &) = &XC::MultiBlockTopology::find_edge_by_endpoints;
 class_<XC::MultiBlockTopology, bases<XC::PreprocessorContainer>, boost::noncopyable >("MultiBlockTopology", no_init)
   .add_property("getReferenceSystems", make_function( getReferenceSystems, return_internal_reference<>() ))
   .add_property("getGeometricTransformations", make_function( getGeometricTransformations, return_internal_reference<>() ))

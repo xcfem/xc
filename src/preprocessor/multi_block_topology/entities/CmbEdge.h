@@ -66,7 +66,7 @@ class CmbEdge: public Edge
         void SetEdge(Edge *l);
         const Pnt *P1(void) const;
         const Pnt *P2(void) const;
-        bool ExtremosEn(const Pnt *,const Pnt *) const;
+        bool areEndPoints(const Pnt *,const Pnt *) const;
         const std::string &getName(void) const;
         inline bool isDirect(void) const
           { return forward; }

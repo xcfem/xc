@@ -39,8 +39,8 @@ namespace XC {
 //! @brief Line segment.
 class Segment: public Axis
   {
-    Spot *p1; //!< Extremo dorsal del segment.
-    Spot *p2; //!< Extremo frontal del segment.
+    Spot *p1; //!< Back end of the segment.
+    Spot *p2; //!< Front end of the segment.
   protected:
 
   public:
