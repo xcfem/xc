@@ -19,8 +19,7 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXYZ(1,1,1)
+nod1= nodes.newNodeXYZ(1,1,1)
 
     
 # Define materials
@@ -28,15 +27,15 @@ kx= typical_materials.defElasticMaterial(preprocessor, "kx",KX)
 ky= typical_materials.defElasticMaterial(preprocessor, "ky",KY)
 
 
-fixedNode, newElement= modelSpace.setBearingOnXYRigZ(nod.tag,["kx","ky"])
+fixedNode, newElement= modelSpace.setBearingOnXYRigZ(nod1.tag,["kx","ky"])
 
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
 
 #
-spc= constraints.newSPConstraint(nod.tag,3,0.0) # nod1 Rx= 0,Ry= 0 and Rz= 0
-spc= constraints.newSPConstraint(nod.tag,4,0.0)
-spc= constraints.newSPConstraint(nod.tag,5,0.0)
+spc= constraints.newSPConstraint(nod1.tag,3,0.0) # nod1 Rx= 0,Ry= 0 and Rz= 0
+spc= constraints.newSPConstraint(nod1.tag,4,0.0)
+spc= constraints.newSPConstraint(nod1.tag,5,0.0)
 
 
 # Loads definition
@@ -49,7 +48,7 @@ ts= lPatterns.newTimeSeries("constant_ts","ts")
 lPatterns.currentTimeSeries= "ts"
 #Load case definition
 lp0= lPatterns.newLoadPattern("default","0")
-lp0.newNodalLoad(nod.tag,xc.Vector([FX,FY,FZ,0,0,0]))
+lp0.newNodalLoad(nod1.tag,xc.Vector([FX,FY,FZ,0,0,0]))
 #We add the load case to domain.
 lPatterns.addToDomain(lp0.name)
 
@@ -61,9 +60,9 @@ result= analisis.analyze(1)
 
 nodes.calculateNodalReactions(False,1e-7)
 
-deltax= nod.getDisp[0]
-deltay= nod.getDisp[1]
-deltaz= nod.getDisp[2] 
+deltax= nod1.getDisp[0]
+deltay= nod1.getDisp[1]
+deltaz= nod1.getDisp[2] 
 RX= fixedNode.getReaction[0]
 RY= fixedNode.getReaction[1] 
 RZ= fixedNode.getReaction[2] 

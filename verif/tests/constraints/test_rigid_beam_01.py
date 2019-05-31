@@ -27,7 +27,7 @@ nod2= nodes.newNodeXYZ(L,0.0,0.0)
 
 # Constraints
 
-modelSpace.fixNode000_000(1)
+modelSpace.fixNode000_000(nod1.tag)
 rr= preprocessor.getBoundaryCondHandler.newRigidBeam(nod1.tag,nod2.tag)
 
 

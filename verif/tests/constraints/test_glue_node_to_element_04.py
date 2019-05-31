@@ -27,10 +27,10 @@ p4= geom.Pos3d(0,1,0)
 
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.newNodeIDXYZ(1,p1.x,p1.y,p1.z)
-nodes.newNodeIDXYZ(2,p2.x,p2.y,p2.z)
-nodes.newNodeIDXYZ(3,p3.x,p3.y,p3.z)
-nodes.newNodeIDXYZ(4,p4.x,p4.y,p4.z)
+n1= nodes.newNodeIDXYZ(1,p1.x,p1.y,p1.z)
+n2= nodes.newNodeIDXYZ(2,p2.x,p2.y,p2.z)
+n3= nodes.newNodeIDXYZ(3,p3.x,p3.y,p3.z)
+n4= nodes.newNodeIDXYZ(4,p4.x,p4.y,p4.z)
 
 p10= geom.Pos3d(0.5,0.5,0.0)
 n10= nodes.newNodeIDXYZ(10,p10.x,p10.y,p10.z)
@@ -39,18 +39,18 @@ n10= nodes.newNodeIDXYZ(10,p10.x,p10.y,p10.z)
 memb1= typical_materials.defElasticMembranePlateSection(preprocessor, "memb1",E,nu,dens,h)
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= "memb1"
-elem= elements.newElement("ShellMITC4",xc.ID([1,2,3,4]))
+elem= elements.newElement("ShellMITC4",xc.ID([n1.tag,n2.tag,n3.tag,n4.tag]))
 
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-modelSpace.fixNode000_FFF(1)
-modelSpace.fixNode000_FFF(2)
-modelSpace.fixNode000_FFF(3)
-modelSpace.fixNode000_FFF(4)
-#modelSpace.fixNode000_000( 1)
-#modelSpace.fixNode000_000( 2)
-#modelSpace.fixNode000_000( 3)
-#modelSpace.fixNode000_000( 4)
+modelSpace.fixNode000_FFF(n1.tag)
+modelSpace.fixNode000_FFF(n2.tag)
+modelSpace.fixNode000_FFF(n3.tag)
+modelSpace.fixNode000_FFF(n4.tag)
+#modelSpace.fixNode000_000( n1.tag)
+#modelSpace.fixNode000_000( n2.tag)
+#modelSpace.fixNode000_000( n3.teg)
+#modelSpace.fixNode000_000( n4.tag)
 
 #Glued node.
 gluedDOFs= [0,1,2,3,4,5]
@@ -77,7 +77,6 @@ lp0.newNodalLoad(10,xc.Vector(loadOnDOFs))
 #We add the load case to domain.
 lPatterns.addToDomain(lp0.name)
 
-# Solution
 # Solution
 solver= predefined_solutions.SolutionProcedure()
 analisis= solver.simpleLagrangeStaticLinear(feProblem)

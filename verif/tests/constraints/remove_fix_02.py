@@ -33,9 +33,8 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 feProblem.logFileName= "/tmp/erase.log" # Ignore warning messages
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXYZ(0,0.0,0.0)
-nod= nodes.newNodeXYZ(L,0.0,0.0)
+nod1= nodes.newNodeXYZ(0,0.0,0.0)
+nod2= nodes.newNodeXYZ(L,0.0,0.0)
 
 
 lin= modelSpace.newLinearCrdTransf("lin",xc.Vector([0,1,0]))
@@ -74,14 +73,13 @@ elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "agg"
 elements.numSections= 3 # Number of sections along the element.
-elements.defaultTag= 1
-el= elements.newElement("ForceBeamColumn3d",xc.ID([1,2]))
+elem1= elements.newElement("ForceBeamColumn3d",xc.ID([nod1.tag,nod2.tag]))
 
 
 
 # Constraints
-modelSpace.fixNode000_000(1)
-spc= modelSpace.constraints.newSPConstraint(2,1,0.0)
+modelSpace.fixNode000_000(nod1.tag)
+spc= modelSpace.constraints.newSPConstraint(nod2.tag,1,0.0)
 spcTag= spc.tag
 
 # Loads definition
@@ -92,7 +90,7 @@ ts= lPatterns.newTimeSeries("constant_ts","ts")
 lPatterns.currentTimeSeries= "ts"
 #Load case definition
 lp0= lPatterns.newLoadPattern("default","0")
-lp0.newNodalLoad(2,xc.Vector([0,-F,0,0,0,0]))
+lp0.newNodalLoad(nod2.tag,xc.Vector([0,-F,0,0,0,0]))
 #We add the load case to domain.
 lPatterns.addToDomain(lp0.name)
 # Solution procedure
@@ -101,7 +99,6 @@ result= analisis.analyze(10)
 
 
 nodes= preprocessor.getNodeHandler 
-nod2= nodes.getNode(2)
 delta0= nod2.getDisp[1]  # Node 2 yAxis displacement
 
 
@@ -114,13 +111,10 @@ result= analisis.analyze(1)
 
 
 nodes.calculateNodalReactions(True,1e-7) 
-nod2= nodes.getNode(2)
 delta= nod2.getDisp[1]  # Node 2 xAxis displacement
-nod1= nodes.getNode(1)
 Ry= nod1.getReaction[1] 
 RMz= nod1.getReaction[5] 
 
-elem1= elements.getElement(1)
 elem1.getResistingForce()
 scc0= elem1.getSections()[0]
 

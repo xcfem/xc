@@ -27,7 +27,7 @@ nod2= nodes.newNodeXYZ(L,0.0,0.0)
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
 
-modelSpace.fixNode000(1)
+modelSpace.fixNode000(nod1.tag)
 rr= preprocessor.getBoundaryCondHandler.newRigidRod(nod1.tag,nod2.tag)
 
 

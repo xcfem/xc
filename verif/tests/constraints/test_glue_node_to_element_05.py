@@ -47,10 +47,10 @@ modelSpace.fixNode000_FFF(n1.tag)
 modelSpace.fixNode000_FFF(n2.tag)
 modelSpace.fixNode000_FFF(n3.tag)
 modelSpace.fixNode000_FFF(n4.tag)
-#modelSpace.fixNode000_000( 1)
-#modelSpace.fixNode000_000( 2)
-#modelSpace.fixNode000_000( 3)
-#modelSpace.fixNode000_000( 4)
+#modelSpace.fixNode000_000( n1.tag)
+#modelSpace.fixNode000_000( n2.tag)
+#modelSpace.fixNode000_000( n3.tag)
+#modelSpace.fixNode000_000( n4.tag)
 
 #Glued node.
 gluedDOFs= [0,1,2,3,4,5]
