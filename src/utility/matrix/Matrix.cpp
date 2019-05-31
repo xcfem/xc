@@ -343,12 +343,12 @@ int XC::Matrix::Solve(const Vector &b, Vector &x) const
     int nrhs= 1;
     int ldA= n;
     int ldB= n;
-    int info;
     double *Aptr= matrixWork;
     double *Xptr= x.theData;
     int *iPIV= auxMatrix.getIntWork();
     
 
+    int info;
     dgesv_(&n,&nrhs,Aptr,&ldA,iPIV,Xptr,&ldB,&info);
 
     return 0;
@@ -1796,19 +1796,25 @@ double XC::Matrix::RCond(void) const
     for(int i=0; i<dataSize; i++)
       matrixWork[i]= data(i);
 
-
     int ldA= n;
     int info;
     double *Aptr= matrixWork;
 
-    //Computes the norm of the matrix.
+    //Computes the "1" norm of the matrix using LAPACK.
     Vector wrk(n);
     double *wrkPtr= wrk.getDataPtr();
     const double anorm= dlange_("1", &n, &n, Aptr, &ldA, wrkPtr, 1);
 
-    //Modifies matrixWork in place with a LU decomposition.
+    //Modifies matrixWork in place with a LU factorization.
     int *iPIV= auxMatrix.getIntWork();
     dgetrf_(&n, &n, Aptr, &ldA, iPIV, &info);
+    // info
+    //   = 0:  successful exit
+    //   < 0:  if INFO = -i, the i-th argument had an illegal value
+    //   > 0:  if INFO = i, U(i,i) is exactly zero. The factorization
+    //         has been completed, but the factor U is exactly
+    //         singular, and division by zero will occur if it is used
+    //         to solve a system of equations.
     if(info != 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
     	        << "; LaPack dgtrf_ failure with error: " << info
@@ -1819,6 +1825,9 @@ double XC::Matrix::RCond(void) const
 	wrk.resize(4*n);
         wrkPtr= wrk.getDataPtr();
 	dgecon_("1", &n, Aptr, &ldA, &anorm, &retval, wrkPtr, iPIV, &info, 1);
+	// info
+	//   = 0:  successful exit
+	//   < 0:  if INFO = -i, the i-th argument had an illegal value
 	if(info != 0)
 	  std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; LaPack dgecon_ failure with error: " << info
