@@ -17,7 +17,7 @@ ctest= analysisAggregation.newConvergenceTest("norm_disp_incr_conv_test")
 ctest.printFlag= 0
 ctest.tol= 1e-8
 ctest.maxNumIter= 10
-integ= analysisAggregation.newIntegrator("load_control_integrator",xc.Vector([1.0,1,1.0,1.0]))
+integ= analysisAggregation.newIntegrator("load_control_integrator",xc.Vector([]))
 soe= analysisAggregation.newSystemOfEqn("band_spd_lin_soe")
 solver= soe.newSolver("band_spd_lin_lapack_solver")
 

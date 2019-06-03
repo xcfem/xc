@@ -115,7 +115,7 @@ numberer.useAlgorithm("rcm")
 analysisAggregations= solCtrl.getAnalysisAggregationContainer
 analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
 solAlgo= analysisAggregation.newSolutionAlgorithm("frequency_soln_algo")
-integ= analysisAggregation.newIntegrator("eigen_integrator",xc.Vector([1.0,1,1.0,1.0]))
+integ= analysisAggregation.newIntegrator("eigen_integrator",xc.Vector([]))
 soe= analysisAggregation.newSystemOfEqn("full_gen_eigen_soe")
 solver= soe.newSolver("full_gen_eigen_solver")
 analysis= solu.newAnalysis("modal_analysis","analysisAggregation","")

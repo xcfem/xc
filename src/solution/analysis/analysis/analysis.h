@@ -31,6 +31,7 @@
 #include "solution/analysis/analysis/DomainDecompositionAnalysis.h"
 #include "solution/analysis/analysis/DirectIntegrationAnalysis.h"
 #include "solution/analysis/analysis/LinearBucklingAnalysis.h"
+#include "solution/analysis/analysis/IllConditioningAnalysis.h"
 #include "solution/analysis/analysis/EigenAnalysis.h"
 #include "solution/analysis/analysis/ModalAnalysis.h"
 //#include "solution/analysis/analysis/SubdomainAnalysis.h"

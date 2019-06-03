@@ -87,6 +87,7 @@
 #define EigenALGORITHM_TAGS_Frequency 1
 #define EigenALGORITHM_TAGS_Standard  2
 #define EigenALGORITHM_TAGS_LinearBuckling 3
+#define EigenALGORITHM_TAGS_KEigen 4
 
 #define EigenINTEGRATOR_TAGS_Eigen 1
 

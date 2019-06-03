@@ -27,5 +27,7 @@ class_<XC::FrequencyAlgo, bases<XC::EigenAlgorithm>, boost::noncopyable >("Frequ
 
 class_<XC::LinearBucklingAlgo, bases<XC::EigenAlgorithm>, boost::noncopyable >("LinearBucklingAlgo", "Solution algorithm for linear buckling analysis", no_init);
 
+class_<XC::KEigenAlgo, bases<XC::EigenAlgorithm>, boost::noncopyable >("KEigenAlgo", "Solution algorithm for ill-conditioning analysis", no_init);
+
 class_<XC::StandardEigenAlgo, bases<XC::EigenAlgorithm>, boost::noncopyable >("StandardEigenAlgo", "Solution algorithm for standard eigenvalue problems", no_init);
 

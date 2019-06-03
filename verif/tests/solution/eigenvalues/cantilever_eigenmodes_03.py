@@ -85,7 +85,7 @@ numberer.useAlgorithm("rcm")
 analysisAggregations= solCtrl.getAnalysisAggregationContainer
 analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
 solAlgo= analysisAggregation.newSolutionAlgorithm("frequency_soln_algo")
-integ= analysisAggregation.newIntegrator("eigen_integrator",xc.Vector([1.0,1,1.0,1.0]))
+integ= analysisAggregation.newIntegrator("eigen_integrator",xc.Vector([]))
 
 #soe= analysisAggregation.newSystemOfEqn("sym_band_eigen_soe")
 #solver= soe.newSolver("sym_band_eigen_solver")

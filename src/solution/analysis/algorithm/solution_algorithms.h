@@ -40,6 +40,7 @@
 #include <solution/analysis/algorithm/eigenAlgo/FrequencyAlgo.h>
 #include <solution/analysis/algorithm/eigenAlgo/StandardEigenAlgo.h>
 #include <solution/analysis/algorithm/eigenAlgo/LinearBucklingAlgo.h>
+#include <solution/analysis/algorithm/eigenAlgo/KEigenAlgo.h>
 #include <solution/analysis/algorithm/domainDecompAlgo/DomainDecompAlgo.h>
 //#include "solution/analysis/algorithm/equiSolnAlgo/AcceleratedNewton.h"
 #include "solution/analysis/algorithm/equiSolnAlgo/lineSearch/BisectionLineSearch.h"

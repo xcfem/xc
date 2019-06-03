@@ -59,6 +59,7 @@ namespace XC {
 class KEigenIntegrator: public EigenIntegrator
   {
   protected:
+    friend class AnalysisAggregation;
     KEigenIntegrator(AnalysisAggregation *);
     Integrator *getCopy(void) const;
   public:

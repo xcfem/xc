@@ -57,7 +57,8 @@ int XC::LinearBucklingEigenAnalysis::setupPreviousStep(void)
 	result = domainChanged();
 	if(result < 0)
           {
-	    std::cerr << "LinearBucklingEigenAnalysis::setupPreviousStep() - domainChanged failed\n";
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; domainChanged failed\n";
 	    return -1;
 	  }
       }

@@ -115,7 +115,7 @@ numberer.useAlgorithm("rcm")
 analysisAggregations= solCtrl.getAnalysisAggregationContainer
 analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
 solAlgo= analysisAggregation.newSolutionAlgorithm("frequency_soln_algo")
-integ= analysisAggregation.newIntegrator("eigen_integrator",xc.Vector([1.0,1,1.0,1.0]))
+integ= analysisAggregation.newIntegrator("eigen_integrator",xc.Vector([]))
 soe= analysisAggregation.newSystemOfEqn("band_arpack_soe")
 soe.shift= 0.0
 solver= soe.newSolver("band_arpack_solver")

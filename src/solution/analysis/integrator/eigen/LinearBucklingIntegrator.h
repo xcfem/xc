@@ -42,8 +42,9 @@ namespace XC {
 
 //! @ingroup EigenIntegrator
 //
-//! @brief LinearBucklingIntegrator is an algorithmic class for setting up the finite element 
-//! equations for a linear buckling analysis. 
+//! @brief LinearBucklingIntegrator is an algorithmic class for
+//! setting up the finite element equations for a linear
+//! buckling analysis. 
 class LinearBucklingIntegrator : public EigenIntegrator
   {
   protected:

@@ -170,6 +170,7 @@ python tests/elements/kill_elements_02.py
 
 echo "$BLEU" "Solver tests." "$NORMAL"
 python tests/solution/superlu_solver_test_01.py
+python tests/solution/ill_conditioning_01.py
 
 #Constraint handlers tests.
 echo "$BLEU" "  Constraint handler tests." "$NORMAL"

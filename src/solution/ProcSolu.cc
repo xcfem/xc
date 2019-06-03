@@ -33,6 +33,7 @@
 #include <solution/analysis/analysis/Analysis.h>
 #include <solution/analysis/analysis/EigenAnalysis.h>
 #include "solution/analysis/analysis/ModalAnalysis.h"
+#include <solution/analysis/analysis/IllConditioningAnalysis.h>
 #include <solution/analysis/analysis/LinearBucklingAnalysis.h>
 #include <solution/analysis/analysis/LinearBucklingEigenAnalysis.h>
 #include <solution/analysis/analysis/StaticAnalysis.h>
@@ -81,15 +82,20 @@ bool XC::ProcSolu::alloc_analysis(const std::string &nmb,const std::string &anal
               }
             else if(nmb=="linear_buckling_eigen_analysis") //Used only inside LinearBucklingAnalysis.
               theAnalysis= new LinearBucklingEigenAnalysis(analysis_aggregation);
+            else if(nmb=="ill-conditioning_analysis")
+              theAnalysis= new IllConditioningAnalysis(analysis_aggregation);
             else if(nmb=="static_analysis")
               theAnalysis= new StaticAnalysis(analysis_aggregation);
             else if(nmb=="variable_time_step_direct_integration_analysis")
               theAnalysis= new VariableTimeStepDirectIntegrationAnalysis(analysis_aggregation);
+	    else
+	      std::cerr << getClassName() << "::" << __FUNCTION__
+	            << "; analysis type: '"
+                    << nmb << "' unknown." << std::endl;
 	  }
         else
           std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; analysis type: '"
-                    << nmb << "' unknown." << std::endl;
+	            << "; pointers not defined in analysis aggregation." << std::endl;
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__

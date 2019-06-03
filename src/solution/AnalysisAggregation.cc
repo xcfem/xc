@@ -93,6 +93,8 @@ bool XC::AnalysisAggregation::alloc_soln_algo(const std::string &nmb)
       theSolnAlgo=new StandardEigenAlgo(this);
     else if(nmb=="linear_buckling_soln_algo")
       theSolnAlgo=new LinearBucklingAlgo(this);
+    else if(nmb=="ill-conditioning_soln_algo")
+      theSolnAlgo=new KEigenAlgo(this);
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; solution algorithm: '"
@@ -164,10 +166,20 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
       }
     else if(nmb=="displacement_control_integrator")
       {
-        theIntegrator=new DisplacementControl(this);
+	if(params.Size()>0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+	            << ' ' << nmb << " integrator doesn't need parameters."
+	            << std::endl;
+        theIntegrator= new DisplacementControl(this);
       }
     else if(nmb=="distributed_displacement_control_integrator")
-      theIntegrator=new DistributedDisplacementControl(this);
+      {
+	if(params.Size()>0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+	            << ' ' << nmb << " integrator doesn't need parameters."
+	            << std::endl;
+        theIntegrator=new DistributedDisplacementControl(this);
+      }
     else if(nmb=="HS_constraint_integrator")
       {
         double arc_length= 1.0;
@@ -185,9 +197,21 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
         theIntegrator=new HSConstraint(this,arc_length,psi_u,psi_f,u_ref);
       }
     else if(nmb=="load_control_integrator")
-      { theIntegrator=new LoadControl(this); }
+      {
+	if(params.Size()>0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+	            << ' ' << nmb << " integrator doesn't need parameters."
+	            << std::endl;
+        theIntegrator=new LoadControl(this);
+      }
     else if(nmb=="load_path_integrator")
-      theIntegrator=new LoadPath(this);
+      {
+	if(params.Size()>0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+	            << ' ' << nmb << " integrator doesn't need parameters."
+	            << std::endl;
+        theIntegrator=new LoadPath(this);
+      }
     else if(nmb=="min_unbal_disp_norm_integrator")
       {
         double lambda1= 1.0;
@@ -205,50 +229,177 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
         theIntegrator=new MinUnbalDispNorm(this,lambda1,specnum_iter_step,dlambda1min,dlambda1max);
       }
     else if(nmb=="eigen_integrator")
-      theIntegrator=new EigenIntegrator(this);
+      {
+	if(params.Size()>0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+	            << ' ' << nmb << " integrator doesn't need parameters."
+	            << std::endl;
+        theIntegrator=new EigenIntegrator(this);
+      }
     else if(nmb=="linear_buckling_integrator")
-      theIntegrator=new LinearBucklingIntegrator(this);
+      {
+	if(params.Size()>0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+	            << ' ' << nmb << " integrator doesn't need parameters."
+	            << std::endl;
+        theIntegrator=new LinearBucklingIntegrator(this);
+      }
+    else if(nmb=="ill-conditioning_integrator")
+      {
+	if(params.Size()>0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+	            << ' ' << nmb << " integrator doesn't need parameters."
+	            << std::endl;
+         theIntegrator=new KEigenIntegrator(this);
+      }
     else if(nmb=="alpha_os_integrator")
-      theIntegrator=new AlphaOS(this);
+      {
+	if(params.Size()>0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+	            << ' ' << nmb << " integrator doesn't need parameters."
+	            << std::endl;
+        theIntegrator=new AlphaOS(this);
+      }
     else if(nmb=="alpha_os_generalized_integrator")
-      theIntegrator=new AlphaOSGeneralized(this);
+      {
+	if(params.Size()>0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+	            << ' ' << nmb << " integrator doesn't need parameters."
+	            << std::endl;
+        theIntegrator=new AlphaOSGeneralized(this);
+      }
     else if(nmb=="central_difference_integrator")
-      theIntegrator=new CentralDifference(this);
+      {
+	if(params.Size()>0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+	            << ' ' << nmb << " integrator doesn't need parameters."
+	            << std::endl;
+        theIntegrator=new CentralDifference(this);
+      }
     else if(nmb=="central_difference_alternative_integrator")
-      theIntegrator=new CentralDifferenceAlternative(this);
+      {
+	if(params.Size()>0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+	            << ' ' << nmb << " integrator doesn't need parameters."
+	            << std::endl;
+        theIntegrator=new CentralDifferenceAlternative(this);
+      }
     else if(nmb=="central_difference_no_damping_integrator")
-      theIntegrator=new CentralDifferenceNoDamping(this);
+      {
+	if(params.Size()>0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+	            << ' ' << nmb << " integrator doesn't need parameters."
+	            << std::endl;
+        theIntegrator=new CentralDifferenceNoDamping(this);
+      }
     else if(nmb=="collocation_integrator")
-      theIntegrator=new Collocation(this);
+      {
+	if(params.Size()>0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+	            << ' ' << nmb << " integrator doesn't need parameters."
+	            << std::endl;
+        theIntegrator=new Collocation(this);
+      }
     else if(nmb=="collocation_hybrid_simulation_integrator")
-      theIntegrator=new CollocationHybridSimulation(this);
+      {
+	if(params.Size()>0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+	            << ' ' << nmb << " integrator doesn't need parameters."
+	            << std::endl;
+        theIntegrator=new CollocationHybridSimulation(this);
+      }
     else if(nmb=="HHT_integrator")
-      theIntegrator=new HHT(this);
+      {
+	if(params.Size()>0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+	            << ' ' << nmb << " integrator doesn't need parameters."
+	            << std::endl;
+        theIntegrator=new HHT(this);
+      }
     else if(nmb=="HHT1_integrator")
-      theIntegrator=new HHT1(this);
+      {
+	if(params.Size()>0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+	            << ' ' << nmb << " integrator doesn't need parameters."
+	            << std::endl;
+        theIntegrator=new HHT1(this);
+      }
     else if(nmb=="HHT_explicit_integrator")
-      theIntegrator=new HHTExplicit(this);
+      {
+	if(params.Size()>0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+	            << ' ' << nmb << " integrator doesn't need parameters."
+	            << std::endl;
+        theIntegrator=new HHTExplicit(this);
+      }
     else if(nmb=="HHT_generalized_integrator")
-      theIntegrator=new HHTGeneralized(this);
+      {
+	if(params.Size()>0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+	            << ' ' << nmb << " integrator doesn't need parameters."
+	            << std::endl;
+        theIntegrator=new HHTGeneralized(this);
+      }
     else if(nmb=="HHT_generalized_explicit_integrator")
-      theIntegrator=new HHTGeneralizedExplicit(this);
+      {
+	if(params.Size()>0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+	            << ' ' << nmb << " integrator doesn't need parameters."
+	            << std::endl;
+        theIntegrator=new HHTGeneralizedExplicit(this);
+      }
     else if(nmb=="HHT_hybrid_simulation_integrator")
-      theIntegrator=new HHTHybridSimulation(this);
+      {
+        if(params.Size()>0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+	            << ' ' << nmb << " integrator doesn't need parameters."
+	            << std::endl;
+        theIntegrator=new HHTHybridSimulation(this);
+      }
     else if(nmb=="newmark_integrator")
-      theIntegrator=new Newmark(this,.5,.25);
+      {
+        if(params.Size()>0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+	            << ' ' << nmb << " integrator doesn't need parameters."
+	            << std::endl;
+         theIntegrator=new Newmark(this,.5,.25);
+      }
     else if(nmb=="newmark1_integrator")
-      theIntegrator=new Newmark1(this,.5,.25);
+      {
+	if(params.Size()>0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+	            << ' ' << nmb << " integrator doesn't need parameters."
+	            << std::endl;
+        theIntegrator=new Newmark1(this,.5,.25);
+      }
     else if(nmb=="newmark_explicit_integrator")
-      theIntegrator=new NewmarkExplicit(this,.5);
+      {
+	if(params.Size()>0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+	            << ' ' << nmb << " integrator doesn't need parameters."
+	            << std::endl;
+        theIntegrator=new NewmarkExplicit(this,.5);
+      }
     else if(nmb=="newmark_hybrid_simulation_integrator")
-      theIntegrator=new NewmarkHybridSimulation(this);
+      {
+	if(params.Size()>0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+	            << ' ' << nmb << " integrator doesn't need parameters."
+	            << std::endl;
+        theIntegrator=new NewmarkHybridSimulation(this);
+      }
     else if(nmb=="wilson_theta_integrator")
-      theIntegrator=new WilsonTheta(this);
+      {
+	if(params.Size()>0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+	            << ' ' << nmb << " integrator doesn't need parameters."
+	            << std::endl;
+        theIntegrator=new WilsonTheta(this);
+      }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; integrator: '"
                 << nmb << "' unknown." << std::endl;
-
     if(theIntegrator)
       theIntegrator->set_owner(this);
 

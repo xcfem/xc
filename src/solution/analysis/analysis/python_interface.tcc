@@ -73,6 +73,10 @@ class_<XC::LinearBucklingEigenAnalysis, bases<XC::EigenAnalysis>, boost::noncopy
   .def("getEigenvalue", make_function(&XC::LinearBucklingEigenAnalysis::getEigenvalue, return_value_policy<copy_const_reference>()) )
   ;
 
+class_<XC::IllConditioningAnalysis, bases<XC::EigenAnalysis>, boost::noncopyable >("IllConditioningAnalysis", no_init)
+  .def("getEigenvalue", make_function(&XC::IllConditioningAnalysis::getEigenvalue, return_value_policy<copy_const_reference>()) )
+  ;
+
 class_<XC::ModalAnalysis , bases<XC::EigenAnalysis>, boost::noncopyable >("ModalAnalysis", no_init)
   .add_property("spectrum", make_function(&XC::ModalAnalysis::getSpectrum,return_internal_reference<>()),&XC::ModalAnalysis::setSpectrum,"Response spectrum,") 
   .def("getCQCModalCrossCorrelationCoefficients",&XC::ModalAnalysis::getCQCModalCrossCorrelationCoefficients,"Returns CQC correlation coefficients.")
