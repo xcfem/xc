@@ -212,7 +212,8 @@ int XC::StaticDomainDecompositionAnalysis::initialize(void)
     return 0;
   }
 
-//! @brief Hace los cambios que sean necesarios como consecuencia de un cambio en el domain.
+//! @brief Make the necessary changes due to a change in the
+//! domain.
 int XC::StaticDomainDecompositionAnalysis::domainChanged(void)
   {
   Domain *the_Domain = this->getDomainPtr();

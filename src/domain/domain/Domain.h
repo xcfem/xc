@@ -247,12 +247,12 @@ class Domain: public ObjWithRecorders, public DistributedBase
     virtual int setEigenvalues(const Vector &);
     virtual const double &getEigenvalue(int) const;
     double getAngularFrequency(int) const;
-    double getPeriodo(int) const;
-    double getFrecuencia(int) const;
+    double getPeriod(int) const;
+    double getFrequency(int) const;
     virtual const Vector &getEigenvalues(void) const;
     Vector getAngularFrequencies(void) const;
-    Vector getPeriodos(void) const;
-    Vector getFrecuencias(void) const;
+    Vector getPeriods(void) const;
+    Vector getFrequencies(void) const;
     virtual int setModalParticipationFactors(const Vector &);
     virtual const double &getModalParticipationFactor(int mode) const;
     virtual const Vector &getModalParticipationFactors(void) const;

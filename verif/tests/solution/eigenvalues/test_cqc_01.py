@@ -94,7 +94,7 @@ solver= soe.newSolver("full_gen_eigen_solver")
 
 analysis= solu.newAnalysis("modal_analysis","analysisAggregation","")
 analOk= analysis.analyze(3)
-periodos= analysis.getPeriods()
+periods= analysis.getPeriods()
 angularFrequencies= analysis.getAngularFrequencies()
 aceleraciones= [2.27,2.45,6.98]
 crossCQCCoefficients= analysis.getCQCModalCrossCorrelationCoefficients(xc.Vector([0.05,0.05,0.05]))
@@ -120,10 +120,10 @@ maxDispMod3= A3[0:3] #getBox(A3,1,1,3,1)
 
 # Theorethical values taken from the exampleE26.8 of the book: Clough, R. W., and Penzien, J., Dynamics of Structures
 angularFrequenciesTeor= xc.Vector([4.59,4.83,14.56])
-periodosTeor= xc.Vector([2*math.pi/4.59,2*math.pi/4.83,2*math.pi/14.56])
+theorPeriods= xc.Vector([2*math.pi/4.59,2*math.pi/4.83,2*math.pi/14.56])
 ratio0= (angularFrequencies-angularFrequenciesTeor).Norm()
-frecuenciasTeor= [4.59/2/math.pi,4.83/2/math.pi,14.56/2/math.pi]
-ratio1= (periodos-periodosTeor).Norm()
+theorFrequencies= [4.59/2/math.pi,4.83/2/math.pi,14.56/2/math.pi]
+ratio1= (periods-theorPeriods).Norm()
 modosTeor= numpy.matrix([[-0.731,0.271,-1],
                          [0.232,1,0.242],
                          [-1,0.036,0.787]])
@@ -181,8 +181,8 @@ ratioDispCQC= (maxDispCQC-maxDispCQCTeor).Norm()
 print "angular frequencies: ",angularFrequencies
 print "angular frequencies (teor.): ",angularFrequenciesTeor
 print "ratio0= ",ratio0
-print "periodos: ",periodos
-print "periodosTeor: ",periodosTeor
+print "periods: ",periods
+print "theorPeriods: ",theorPeriods
 print "ratio1= ",ratio1
 print "modos: ",modos
 print "modosTeor: ",modosTeor

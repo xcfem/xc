@@ -204,12 +204,12 @@ double XC::EigenSOE::getAngularFrequency(int i) const
   { return sqrt(getEigenvalue(i)); }
 
 //! @brief Returns the period of the i-th mode.
-double XC::EigenSOE::getPeriodo(int i) const
+double XC::EigenSOE::getPeriod(int i) const
   { return 2.0*M_PI/getAngularFrequency(i); }
 
-//! @brief Return the frecuency of the i-th mode.
-double XC::EigenSOE::getFrecuencia(int i) const
-  { return 1./getPeriodo(i); }
+//! @brief Return the frequency of the i-th mode.
+double XC::EigenSOE::getFrequency(int i) const
+  { return 1./getPeriod(i); }
 
 //! @brief Returns a vector with computed eigenvalues for each mode.
 XC::Vector XC::EigenSOE::getEigenvalues(void) const
@@ -223,13 +223,13 @@ XC::Vector XC::EigenSOE::getAngularFrequencies(void) const
 
 //! @brief Returns a vector with the computed periods
 //! for each mode.
-XC::Vector XC::EigenSOE::getPeriodos(void) const
-  { return theSolver->getPeriodos(); }
+XC::Vector XC::EigenSOE::getPeriods(void) const
+  { return theSolver->getPeriods(); }
 
 //! @brief Returns a vector with the computed frequencies
 //! for each mode.
-XC::Vector XC::EigenSOE::getFrecuencias(void) const
-  { return theSolver->getFrecuencias(); }
+XC::Vector XC::EigenSOE::getFrequencies(void) const
+  { return theSolver->getFrequencies(); }
 
 //! @brief Returns the number of computed eigenvalues.
 const int &XC::EigenSOE::getNumModes(void) const

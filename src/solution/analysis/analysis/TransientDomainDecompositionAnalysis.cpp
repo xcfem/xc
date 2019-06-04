@@ -208,7 +208,7 @@ int XC::TransientDomainDecompositionAnalysis::initialize(void)
     return 0;
   }
 
-//! @brief Hace los cambios que sean necesarios como consecuencia de un cambio en el domain.
+//! @brief Make the changes derived of a change in the domain.
 int XC::TransientDomainDecompositionAnalysis::domainChanged(void)
   {
 

@@ -910,12 +910,12 @@ double XC::Domain::getAngularFrequency(int i) const
   { return sqrt(getEigenvalue(i)); }
 
 //! @brief Return the period of the i-th mode.
-double XC::Domain::getPeriodo(int i) const
+double XC::Domain::getPeriod(int i) const
   { return 2.0*M_PI/getAngularFrequency(i); }
 
 //! @brief Return the frequency of the i-th mode.
-double XC::Domain::getFrecuencia(int i) const
-{ return 1./getPeriodo(i); }
+double XC::Domain::getFrequency(int i) const
+{ return 1./getPeriod(i); }
 
 //! @brief Return the eigenvalues vector.
 const XC::Vector &XC::Domain::getEigenvalues(void) const
@@ -932,7 +932,7 @@ XC::Vector XC::Domain::getAngularFrequencies(void) const
   }
 
 //! @brief Returns a vector with the computed periods (for each mode).
-XC::Vector XC::Domain::getPeriodos(void) const
+XC::Vector XC::Domain::getPeriods(void) const
   {
     Vector retval= getAngularFrequencies();
     const int dim= retval.Size();
@@ -942,9 +942,9 @@ XC::Vector XC::Domain::getPeriodos(void) const
   }
 
 //! @brief Returns a vector with the computed frequencies (for each mode).
-XC::Vector XC::Domain::getFrecuencias(void) const
+XC::Vector XC::Domain::getFrequencies(void) const
   {
-    Vector retval= getPeriodos();
+    Vector retval= getPeriods();
     const int dim= retval.Size();
     for(int i= 0;i<dim;i++)
       retval[i]= 1.0/retval(i);

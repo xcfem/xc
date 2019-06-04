@@ -137,7 +137,7 @@ int XC::EigenAnalysis::analyze(int numModes)
     return 0;
   }
 
-//! @brief Hace los cambios necesarios como consecuencia de un cambio en el domain.
+//! @brief Make the changes derived of a change in the domain.
 int XC::EigenAnalysis::domainChanged(void)
   {
     getAnalysisModelPtr()->clearAll();    
@@ -280,12 +280,12 @@ double XC::EigenAnalysis::getAngularFrequency(int i) const
   { return sqrt(getEigenvalue(i)); }
 
 //! @brief Returns the period for the i-th mode.
-double XC::EigenAnalysis::getPeriodo(int i) const
+double XC::EigenAnalysis::getPeriod(int i) const
   { return 2.0*M_PI/getAngularFrequency(i); }
 
 //! @brief Return the frequency for the i-th mode.
-double XC::EigenAnalysis::getFrecuencia(int i) const
-  { return 1./getPeriodo(i); }
+double XC::EigenAnalysis::getFrequency(int i) const
+  { return 1./getPeriod(i); }
 
 //! @brief Returns a vector with the computed eigenvalues for each mode.
 XC::Vector XC::EigenAnalysis::getEigenvalues(void) const
@@ -308,26 +308,26 @@ XC::Vector XC::EigenAnalysis::getAngularFrequencies(void) const
   }
 
 //! @brief Returns a vector with the computed vectors for each mode.
-XC::Vector XC::EigenAnalysis::getPeriodos(void) const
+XC::Vector XC::EigenAnalysis::getPeriods(void) const
   {
     Vector retval;
     EigenSOE *ptr_soe= getEigenSOEPtr();
     if(ptr_soe)
-      retval= ptr_soe->getPeriodos();
+      retval= ptr_soe->getPeriods();
     return retval;
   }
 
-//! @brief Returns a vector con las frecuencias calculadas.
-XC::Vector XC::EigenAnalysis::getFrecuencias(void) const
+//! @brief Returns a vector with the computed frequencies.
+XC::Vector XC::EigenAnalysis::getFrequencies(void) const
   {
     Vector retval;
     EigenSOE *ptr_soe= getEigenSOEPtr();
     if(ptr_soe)
-      retval= ptr_soe->getFrecuencias();
+      retval= ptr_soe->getFrequencies();
     return retval;
   }
 
-//! @brief Returns the number of eigenvalues que se han calculado.
+//! @brief Returns the number of computed eigenvalues.
 int XC::EigenAnalysis::getNumModes(void) const
   {
     int retval= 0;

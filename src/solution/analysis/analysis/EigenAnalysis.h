@@ -101,12 +101,12 @@ class EigenAnalysis : public Analysis
     //Eigenvalues.
     virtual const double &getEigenvalue(int mode) const;
     double getAngularFrequency(int mode) const;
-    double getPeriodo(int mode) const;
-    double getFrecuencia(int mode) const;
+    double getPeriod(int mode) const;
+    double getFrequency(int mode) const;
     Vector getEigenvalues(void) const;
     Vector getAngularFrequencies(void) const;
-    Vector getPeriodos(void) const;
-    Vector getFrecuencias(void) const;
+    Vector getPeriods(void) const;
+    Vector getFrequencies(void) const;
     int getNumModes(void) const;
 
     //Modal participation factors.

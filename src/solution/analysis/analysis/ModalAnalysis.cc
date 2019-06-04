@@ -45,25 +45,25 @@ double XC::ModalAnalysis::getAcceleration(const double &T) const
 
 //! @brief Returns the accelerations that correspond to the periods
 //! being passed as parameters.
-XC::Vector XC::ModalAnalysis::getAccelerations(const Vector &periodos) const
+XC::Vector XC::ModalAnalysis::getAccelerations(const Vector &periods) const
   {
-    const int sz= periodos.Size();
+    const int sz= periods.Size();
     Vector retval(sz);
     for(int i= 0;i<sz;i++)
-      retval[i]= getAcceleration(periodos(i));
+      retval[i]= getAcceleration(periods(i));
     return retval;
   }
 
 //! @brief Returns the accelerations that correspond to the
 //! computed modes.
 XC::Vector XC::ModalAnalysis::getModalAccelerations(void) const
-  { return getAccelerations(getPeriodos()); }
+  { return getAccelerations(getPeriods()); }
 
 //! @brief Return the equivalent static load for the mode
 //! being passed as parameter.
 XC::Vector XC::ModalAnalysis::getEquivalentStaticLoad(int mode) const
   {
-    const double accel= getAcceleration(getPeriodo(mode));
+    const double accel= getAcceleration(getPeriod(mode));
     return EigenAnalysis::getEquivalentStaticLoad(mode,accel);
   }
 

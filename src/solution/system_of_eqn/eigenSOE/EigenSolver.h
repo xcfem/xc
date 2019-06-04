@@ -80,12 +80,12 @@ class EigenSolver : public Solver
     Matrix getNormalizedEigenvectors(void) const;
     virtual const double &getEigenvalue(int mode) const= 0;
     double getAngularFrequency(int mode) const;
-    double getPeriodo(int mode) const;
-    double getFrecuencia(int mode) const;
+    double getPeriod(int mode) const;
+    double getFrequency(int mode) const;
     Vector getEigenvalues(void) const;
     Vector getAngularFrequencies(void) const;
-    Vector getPeriodos(void) const;
-    Vector getFrecuencias(void) const;
+    Vector getPeriods(void) const;
+    Vector getFrequencies(void) const;
 
     virtual int setSize(void)= 0;
     virtual const int &getSize(void) const= 0;
