@@ -35,14 +35,14 @@ class PivotsUltimateStrains;
 
 //! @ingroup MATSCCDiagInt
 //
-//! @brief Parameter that define the ultimate limit states of a RC
+//! @brief Parameters that define the ultimate limit states of a RC
 //! section under normal stresses.
 class NormalStressStrengthParameters
   {
     const PivotsUltimateStrains &agot_pivots; //!< Ultimate strain at pivots.
     double eps_c_max; //!< concrete max strain (most tensioned fiber).
     double eps_c_min; //!< concrete min strain (most compressed fiber).
-    double eps_c_pC; //!< concrte strain at C pivot.
+    double eps_c_pC; //!< concrete strain at C pivot.
 
   private:
     double fc_tension(void) const;
