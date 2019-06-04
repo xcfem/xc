@@ -31,7 +31,6 @@
 #ifndef NMYMZPOINTCLOUD_H
 #define NMYMZPOINTCLOUD_H
 
-#include "NMPointCloudBase.h"
 #include "NMPointCloud.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 #include "xc_utils/src/geom/pos_vec/Pos3dList.h"
