@@ -36,13 +36,12 @@ namespace XC {
 //! @ingroup MATSCCDiagInt
 //
 //! @brief Definition of ultimate strains for the pivots
+//! of a reinforced concrete sections.
 class PivotsUltimateStrains: public CommandEntity
   {
     double eps_agot_A; //!< A pivot ultimate strain.
     double eps_agot_B; //!< B pivot ultimate strain.
     double eps_agot_C; //!< C pivot ultimate strain.
-  protected:
-    
   public:
     PivotsUltimateStrains(const double &eA= 0.01,const double &eB= -0.0035,const double &eC= -0.002);
 
