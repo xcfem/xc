@@ -16,10 +16,6 @@ __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 nmbHorm= "HA25"
 from materials.ehe import EHE_materials
 
-# Data
-gammac= 1.5  # Concrete safety coefficient
-gammas= 1.15 # Steel safety coefficient
-
 width= 0.5  # Cross-section width [m]
 depth= 0.75 # Cross-section depth [m]
 cover= 0.06 # Cover [m]

@@ -25,10 +25,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-# Partial safety factors.
-gammac= 1.5 # Partial safety factor for concrete.
-gammas= 1.15 # Partial safety factor for steel.
-
 width= 0.3 # Section width expressed in meters.
 depth= 0.4 # Section depth expressed in meters.
 cover= 0.05 # Concrete cover expressed in meters.

@@ -23,11 +23,6 @@ from materials.ehe import EHE_materials
 from model import predefined_spaces
 from solution import predefined_solutions
 
-# Partial safety factors.
-gammas= 1.15 # Partial safety factor for steel.
-
-
-
 MzDato= 15e3
 NDato= 0.0
 

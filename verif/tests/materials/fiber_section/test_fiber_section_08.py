@@ -31,10 +31,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-# Partial safety factors.
-gammac= 1.5 # Partial safety factor for concrete.
-gammas= 1.15 # Partial safety factor for steel.
-
 CurvZ= 11.474e-3 # Curvature test 1.
 x1= 0.0997 # Neutral axis depth 1.
 MzDato= 55.949206e3 # Bending moment that makes tension reinforcement to yield.

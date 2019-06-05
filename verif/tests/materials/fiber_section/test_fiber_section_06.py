@@ -18,11 +18,6 @@ import xc
 
 from materials.ehe import EHE_materials
 
-# Partial safety factors.
-gammac= 1.5 # Partial safety factor for concrete.
-gammas= 1.15 # Partial safety factor for steel.
-
-
 CurvZ1= 11.474e-3 # Curvature test 1.
 x1= 0.0997 # Neutral axis depth 1.
 

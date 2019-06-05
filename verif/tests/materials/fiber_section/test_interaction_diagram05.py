@@ -17,10 +17,6 @@ import xc
 from materials.ehe import EHE_materials
 import math
 
-# Partial safety factors.
-gammac= 1.5  # concrete safety coefficient
-gammas= 1.15 # reinforcement steel safety coefficient
-
 radius= 0.75/2.0 # Cross-section radius expressed in meters.
 diam= 20e-3 # Bar diameter expressed in meters.
 cover= 0.06+12e-3+diam/2.0 # Concrete cover expressed in meters.

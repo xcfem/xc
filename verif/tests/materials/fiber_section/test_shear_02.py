@@ -27,9 +27,6 @@ __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 
 # Data
 
-gammac= 1.5  # Concrete safety coefficient
-gammas= 1.15 # Steel safety coefficient
-
 width= 0.4  # Cross-section width [m]
 depth= 0.6  # Cross-section depth [m]
 cover= 0.05 # Cover [m]
