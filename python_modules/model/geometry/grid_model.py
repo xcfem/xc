@@ -677,5 +677,21 @@ class GridModel(object):
           pntsSet.append(pnt)
         return retval
 
+    def getSetPntMultiRegion(self,lstIJKRange,setName):
+        '''return the set of points in a all the 3D grid-regions
+        included in the list of ijkRanges passed as parameter
+        Each region defines a volume limited by the coordinates    
+        that correspond to the indices in the grid 
+        ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+        ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
+        '''
+        retval= self.prep.getSets.defSet(setName)
+        pntsSet=retval.getPoints
+        for rg in lstIJKRange:
+            lstPnt=self.getLstPntRange(rg)
+            for pnt in lstPnt:
+                pntsSet.append(pnt)
+        return retval
+
 
     
