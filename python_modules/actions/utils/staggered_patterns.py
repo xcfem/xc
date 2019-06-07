@@ -6,7 +6,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= " ana.Ortega.Ort@gmail.com l.pereztato@gmail.com"
 
-from model.grid_based_oldStyle_deprecated import ijkGrid
+from model.geometry import grid_model as gm
 
 def listaNombresLoadPatterns(preprocessor):
   '''return list of load pattern names
@@ -29,13 +29,14 @@ def staggeredPatternType1(lIndX,lIndY,indZ):
     indSupPatt=[]
     for i in range(0,len(lIndX)-1,2):
         for j in range(0,len(lIndY)-1,2):
-            inds=ijkGrid.IJKRange([lIndX[i],lIndY[j],indZ],[lIndX[i+1],lIndY[j+1],indZ])
+            inds=gm.IJKRange([lIndX[i],lIndY[j],indZ],[lIndX[i+1],lIndY[j+1],indZ])
             indSupPatt.append(inds)
     for i in range(1,len(lIndX)-1,2):
         for j in range(1,len(lIndY)-1,2):
-            inds=ijkGrid.IJKRange([lIndX[i],lIndY[j],indZ],[lIndX[i+1],lIndY[j+1],indZ])
+            inds=gm.IJKRange([lIndX[i],lIndY[j],indZ],[lIndX[i+1],lIndY[j+1],indZ])
             indSupPatt.append(inds)
     return indSupPatt
+  
 def staggeredPatternType2(lIndX,lIndY,indZ):
     '''return a list of grid ranges that delimit a set of staggered 
     patterned surfaces, i.e. in a floor of a buildin from the following parameters:
@@ -49,11 +50,11 @@ def staggeredPatternType2(lIndX,lIndY,indZ):
     indSupPatt=[]
     for i in range(0,len(lIndX)-1,2):
         for j in range(1,len(lIndY)-1,2):
-            inds=ijkGrid.IJKRange([lIndX[i],lIndY[j],indZ],[lIndX[i+1],lIndY[j+1],indZ])
+            inds=gm.IJKRange([lIndX[i],lIndY[j],indZ],[lIndX[i+1],lIndY[j+1],indZ])
             indSupPatt.append(inds)
     for i in range(1,len(lIndX)-1,2):
         for j in range(0,len(lIndY)-1,2):
-            inds=ijkGrid.IJKRange([lIndX[i],lIndY[j],indZ],[lIndX[i+1],lIndY[j+1],indZ])
+            inds=gm.IJKRange([lIndX[i],lIndY[j],indZ],[lIndX[i+1],lIndY[j+1],indZ])
             indSupPatt.append(inds)
     return indSupPatt
 
