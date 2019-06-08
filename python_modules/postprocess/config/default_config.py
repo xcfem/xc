@@ -56,7 +56,7 @@ class envConfig(object):
         elif language[:2].lower()=='fr':
             self.capTexts=fr_capTexts
         self.colors=setBasicColors
-        
+        self.grWidth=grWidth
 
 
 #Spanish caption texts
