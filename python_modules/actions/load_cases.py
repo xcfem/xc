@@ -35,7 +35,7 @@ class LoadCase(object):
         lPatterns.newTimeSeries(self.timeSType,self.timeSName)
         lPatterns.currentTimeSeries=self.timeSName
         lPatterns.newLoadPattern(self.loadPType,self.name)
-        lPatterns.addToDomain(self.name)
+#        lPatterns.addToDomain(self.name) #10/06/2019
         lPatterns.currentLoadPattern=self.name
             
     def addLstLoads(self,lstLoads):
