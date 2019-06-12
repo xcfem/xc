@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+
 '''Data to represent directions (modulus doesn't matters) field in VTK.'''
 
 __author__= "Ana Ortega (AOO) and Luis C. Pérez Tato (LCPT)"
@@ -11,6 +13,7 @@ __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 import vtk
 from miscUtils import LogMessages as lmsg
 from postprocess.xcVtk import vector_field_data as vfd
+import zlib
 
 class DirectionFieldData(vfd.VectorFieldData):
   '''Directions (modulus doesn't matters) Vectors defined at points.'''
@@ -36,6 +39,9 @@ class DirectionFieldData(vfd.VectorFieldData):
     self.mapper.SetColorModeToMapScalars()
     self.mapper.ScalarVisibilityOn()
     self.mapper.SetScalarRange(self.lengths.GetRange())
+    if(len(self.lenghtsName)>80):
+      self.lenghtsName= zlib.compress(self.lenghtsName)
+      lmsg.log('lengthsName string compressed to avoid buffer overflow.')
     self.mapper.SelectColorArray(self.lenghtsName)
     self.mapper.SetLookupTable(self.lookupTable)
     return self.mapper
