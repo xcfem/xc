@@ -78,8 +78,6 @@ const size_t maxOrder= 10;
 // Assumes section order is less than or equal to maxOrder.
 // Can increase if needed!!!
 double XC::SectionAggregator::workArea[2*maxOrder*(maxOrder+1)];
-//int    XC::SectionAggregator::codeArea[maxOrder]; Not sharing area anymore
-//                                                  LCPT 19/09/2016
 
 //! @brief Comprueba que los pointers no sean nulos.
 void XC::SectionAggregator::check_ptrs(void) const

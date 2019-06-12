@@ -430,7 +430,8 @@ XC::NDMaterial *XC::J2Plasticity::getCopy(const std::string &type) const
       retval= new J2PlateFiber(this->getTag(), bulk, shear, sigma_0,
                               sigma_infty, delta, Hard, eta) ;
     else // Handle other cases
-      std::cerr << "J2Plasticity::getModel failed to get model: " << type << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to get model: " << type << std::endl;
     return retval;
   }
 
@@ -548,9 +549,11 @@ void XC::J2Plasticity::plastic_integrator( )
 
         iteration_counter++ ;
 
-        if( iteration_counter > max_iterations ) {
-            std::cerr << "More than " << max_iterations ;
-            std::cerr << " iterations in constituive subroutine J2-plasticity \n" ;
+        if( iteration_counter > max_iterations)
+	  {
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; More than " << max_iterations
+		      << " iterations in constituive subroutine J2-plasticity \n" ;
             break ;
         } //end if 
         
@@ -739,15 +742,17 @@ return ;
 
 
 XC::NDMaterial *XC::J2Plasticity::getCopy(void) const
-{
-  std::cerr << "J2Plasticity::getCopy -- subclass responsibility\n"; 
-  exit(-1);
-  return 0;
-}
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+  	      << "; subclass responsibility\n"; 
+    exit(-1);
+    return 0;
+  }
 
 const std::string &XC::J2Plasticity::getType(void) const
   {
-    std::cerr << "J2Plasticity::getType -- subclass responsibility\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; subclass responsibility\n";
     exit(-1);
     static const std::string error="error";
     return error;
@@ -755,7 +760,8 @@ const std::string &XC::J2Plasticity::getType(void) const
 
 int XC::J2Plasticity::getOrder(void) const
   {
-    std::cerr << "J2Plasticity::getOrder -- subclass responsibility\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; subclass responsibility\n";
     exit(-1);
     return 0;
   }
@@ -825,7 +831,8 @@ int XC::J2Plasticity::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data.\n";
     return res;
   }
 
@@ -837,13 +844,15 @@ int XC::J2Plasticity::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }
