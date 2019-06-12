@@ -40,12 +40,24 @@ class RecordDefGrid(object):
     self.cellType= "nil"
     self.uGrid= None
 
-  def getBND(self):
+  def getSetBND(self):
+    ''' Returns the set boundary'''
+    retval= self.xcSet.getBnd(0.0)
+    points= self.xcSet.getPoints
+    if(len(points)==0):
+      warnMsg= 'there are no points in the set: '
+      warnMsg+= self.xcSet.name
+      warnMsg+= '. Maybe you must call fillDownwards on the set to display.'
+      lmsg.warning('Warning; '+warnMsg)
+    return retval
+
+  def getGridBND(self):
     ''' Returns the grid boundary'''
     retval= geom.BND3d()
     points= self.uGrid.GetPoints()
     if(points.GetNumberOfPoints()>0):
-      bounds= points.GetBounds()
+      bounds = [0]*6
+      points.GetBounds(bounds)
       retval= geom.BND3d(geom.Pos3d(bounds[0],bounds[2],bounds[4]),geom.Pos3d(bounds[1],bounds[3],bounds[5]))
     else:
       warnMsg= 'there are no points in the grid: '
@@ -54,6 +66,10 @@ class RecordDefGrid(object):
       lmsg.warning('Warning; '+warnMsg)
     return retval
 
+  def getDiagonalLength(self):
+    '''Return the length of the diagonal of the bounding box.'''
+    return self.getSetBND().diagonal
+  
 class CameraParameters(object):
   ''' Provides the parameters to define the camera.
   
@@ -189,7 +205,7 @@ class RecordDefDisplay(object):
 
   def setupAxes(self):
     '''Add an vtkAxesActor to the renderer.'''
-    bnd= self.gridRecord.getBND()
+    bnd= self.gridRecord.getGridBND()
     offsetVector= bnd.diagonal*0.1
     offset= offsetVector.getModulo()
     axesPosition= bnd.pMin-offsetVector
@@ -202,7 +218,7 @@ class RecordDefDisplay(object):
     length= offset
     axes.SetTotalLength(length,length,length)
 
-    textSize= int(3*offset)
+    textSize= int(min(3*offset,25)) #Value out of range for int when displacements are extremely HUGE (>1E6)
     axes.GetXAxisCaptionActor2D().GetTextActor().SetTextScaleMode(False)
     axes.GetXAxisCaptionActor2D().GetTextActor().GetTextProperty().SetFontSize(textSize)
     axes.GetYAxisCaptionActor2D().GetTextActor().SetTextScaleMode(False)
