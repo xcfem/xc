@@ -32,7 +32,7 @@ class_<XC::Edge, bases<XC::EntMdlr>, boost::noncopyable >("Edge","Base class for
   .add_property("lastNode",make_function(getLastNodePtr, return_internal_reference<>()),"Return the last node of the edge")
   .def("getLong", &XC::Edge::getLength,"Return the length of the edge.")
   .def("getCentroid", &XC::Edge::getCentroid,"Return the centroid of the edge.")
-  .def("getTang", &XC::Edge::getTang, return_internal_reference<>(),"Return a vector tangent to the edge.")
+  .def("getTang", &XC::Edge::getTang, return_internal_reference<>(),"Return a vector tangent to the edge at parameter 0<=s<=L.")
   .def("divide",&XC::Edge::divide,"Create points along the line.")
   .def("getKPoints",&XC::Edge::getKPoints,"Return the end points of the edge.")
   .def("getTagsNodes",&XC::Edge::getTagsNodesForward,"Return node tags in forward order.")
