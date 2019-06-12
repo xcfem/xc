@@ -79,6 +79,7 @@ class PredefinedSpace(object):
         fulcrumNode= nodes.newNodeFromVector(coordNodeB)
         rb= self.constraints.newRigidBeam(nodeTagA,fulcrumNode.tag)
         ed= self.constraints.newEqualDOF(fulcrumNode.tag,pivotNode,xc.ID(self.getDisplacementDOFs()))
+        return fulcrumNode
 
     def setBearingBetweenNodes(self,iNodA,iNodB,bearingMaterialNames,orientation= None):
         '''Modelize a bearing between the nodes
