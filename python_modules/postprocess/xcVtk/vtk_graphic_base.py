@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+
 ''' Display nice images of the model. '''
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
