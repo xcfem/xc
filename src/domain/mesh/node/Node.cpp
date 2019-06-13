@@ -1932,6 +1932,31 @@ double XC::Node::getAccSensitivity(int dof, int gradNum)
   }
 // AddingSensitivity:END /////////////////////////////////////////
 
+size_t XC::Node::getNumberOfConnectedConstraints(void) const
+  {
+    size_t retval= 0;
+    for(std::set<ContinuaReprComponent *>::const_iterator i= connected.begin();i!=connected.end();i++)
+      {
+        const Constraint *ptr= dynamic_cast<const Constraint *>(*i);
+        if(ptr)
+          retval++;
+      }
+    return retval;    
+  }
+
+//! @brief Return the number of elements that are connected with this node.
+size_t XC::Node::getNumberOfConnectedElements(void) const
+  {
+    size_t retval= 0;
+    for(std::set<ContinuaReprComponent *>::const_iterator i= connected.begin();i!=connected.end();i++)
+      {
+        const Element *ptrElem= dynamic_cast<const Element *>(*i);
+        if(ptrElem)
+          retval++;
+      }
+    return retval;
+  }
+
 //! @brief Return a list of pointers to the elements that are connected with this node.
 std::set<const XC::Element *> XC::Node::getConnectedElements(void) const
   {

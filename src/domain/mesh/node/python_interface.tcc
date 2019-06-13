@@ -111,6 +111,8 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
 
   .def("newLoad",make_function(&XC::Node::newLoad, return_internal_reference<>() ),"Create a new load on the node and put it on the current load pattern.")
 
+  .def("getNumberOfConnectedConstraints",&XC::Node::getNumberOfConnectedConstraints,"Returns the number of constraints that affect the node.")
+  .def("getNumberOfConnectedElements",&XC::Node::getNumberOfConnectedElements,"Returns the number of elements connected to the node.")
 
   .def("getMaxModalDisplacement",getMaxModalDisplacement)
   .def("getMaxModalVelocity",getMaxModalVelocity)

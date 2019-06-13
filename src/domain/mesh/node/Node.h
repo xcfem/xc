@@ -138,7 +138,7 @@ class Node: public MeshComponent
 
     static std::deque<Matrix> theMatrices;
 
-    mutable std::set<ContinuaReprComponent *> connected; //!< Components (elements, contraints,...) that are connected with this node.
+    mutable std::set<ContinuaReprComponent *> connected; //!< Components (elements, constraints,...) that are connected with this node.
 
     std::set<int> freeze_constraints;//!< Tags of the constraints created by freeze() method.
     const ID &get_id_constraints(void) const;
@@ -175,8 +175,11 @@ class Node: public MeshComponent
     virtual void setDOF_GroupPtr(DOF_Group *theDOF_Grp);
     virtual DOF_Group *getDOF_GroupPtr(void);
 
+    size_t getNumberOfConnectedConstraints(void) const;
+
     void connect(ContinuaReprComponent *el) const;
     void disconnect(ContinuaReprComponent *el) const;
+    size_t getNumberOfConnectedElements(void) const;
     ElementConstPtrSet getConnectedElements(void) const;
     ElementPtrSet getConnectedElements(void);
     const MeshEdge *next(const std::deque<MeshEdge> &, const std::set<const MeshEdge *> &) const;
