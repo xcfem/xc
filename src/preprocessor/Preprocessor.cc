@@ -52,13 +52,15 @@ XC::Preprocessor::Preprocessor(const Preprocessor &other)
     nodes(this), elements(this), loads(this), constraints(this),
     mbt(this),sets(this)
   {
-    std::cerr << "This object must no be copied." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; this object must no be copied." << std::endl;
   }
 
 //! @brief Assignment operator (prohibited).
 XC::Preprocessor &XC::Preprocessor::operator=(const Preprocessor &other)
   {
-    std::cerr << "Can't assign a preprocessor object." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; can't assign a preprocessor object." << std::endl;
     return *this;
   }
 
@@ -134,7 +136,8 @@ void XC::Preprocessor::resetLoadCase(void)
     if(domain)
       domain->resetLoadCase();
     else
-      std::cerr << "Preprocessor::resetLoadCase; domain not defined (null ptr)."
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; domain not defined (null ptr)."
                 << std::endl;
   }
 
@@ -217,7 +220,8 @@ int XC::Preprocessor::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "::sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data\n";
     return res;
   }
 
@@ -229,13 +233,15 @@ int XC::Preprocessor::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }
