@@ -128,6 +128,31 @@ XC::Pnt *XC::PntMap::Crea(void)
     return retval;
   }
 
+//! @brief Check if there is a point too close to the new one.
+bool XC::PntMap::checkPosition(const Pos3d &newPos)
+  {
+    bool retval= true;
+    if(verbosity>1)
+      {
+	const Pnt *tmp= getNearest(newPos);
+	if(tmp)
+	  {
+	    const Pos3d pos= tmp->GetPos();
+	    const double d2= dist2(pos,newPos);
+	    if(d2<(tol*tol))
+	      {
+		std::clog << getClassName() << "::" << __FUNCTION__
+			  << "; new point at position: " << newPos
+			  << " is very close to point: " << tmp->GetTag()
+			  << " at position: " << pos
+			  << " distance: " << sqrt(d2)
+			  << std::endl;
+	      }
+	  }
+      }
+    return retval;
+  }
+
 //! @brief Creates a new point.
 XC::Pnt *XC::PntMap::New(void)
   {
@@ -140,13 +165,14 @@ XC::Pnt *XC::PntMap::New(void)
 
 //! @brief Creates a new point at the position being passed as parameter.
 XC::Pnt *XC::PntMap::New(const Pos3d &pos)
-  {
+  { 
     Pnt *retval= busca(getTag());
     if(retval)
       std::cerr << getClassName() << "::" << __FUNCTION__ << "; point with tag: " 
                 << getTag() << " already exists, doing nothing." << std::endl;
     else //The point is new.
       {
+	checkPosition(pos);
         retval= Crea();
         retval->Pos()= pos;
       }
@@ -164,7 +190,10 @@ XC::Pnt *XC::PntMap::New(const size_t &tag,const Pos3d &pos)
     if(retval)
       isNew= false;
     else
-      retval= Crea();
+      {
+        checkPosition(pos);
+        retval= Crea();
+      }
     if(!isNew)
       setTag(old_tag);
     retval->setPos(pos); //Sets the position.
@@ -190,6 +219,7 @@ XC::Pnt *XC::PntMap::Copy(const Pnt *p,const Vector3d &v= Vector3d())
                 << getTag() << " already exists, no changes made." << std::endl;
     else //The point is new.
       {
+	checkPosition(p->GetPos()+v);
         retval= new Pnt(*p);
         if(retval)
           {
@@ -230,7 +260,10 @@ void XC::PntMap::Transform(const TrfGeom &trf,const std::vector<Indice> &indices
       {
         Pnt *p= busca(*i);
         if(p)
-          p->Transform(trf);
+	  {
+	    // position check?
+            p->Transform(trf);
+	  }
         else
 	  std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; point: " << *i << " not found.\n";

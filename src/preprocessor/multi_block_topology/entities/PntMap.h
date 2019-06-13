@@ -26,8 +26,8 @@
 //----------------------------------------------------------------------------
 //PntMap.h
 
-#ifndef MAPPUNTOS_H
-#define MAPPUNTOS_H
+#ifndef PNTMAP_H
+#define PNTMAP_H
 
 #include "EntityMap.h"
 #include <map>
@@ -50,11 +50,10 @@ class TrfGeom;
 //! @brief Point container.
 class PntMap: public EntityMap<Pnt>
   {
+    const double tol= 0.01;
   private:
     void UpdateSets(Pnt *) const;
   protected:
-
-
     Pnt *Crea(void);
   public:
     PntMap(MultiBlockTopology *mbt= nullptr);
@@ -63,6 +62,7 @@ class PntMap: public EntityMap<Pnt>
     Line3d getRecta(const Indice &i,const Indice &j) const;
     Plane getPlane(const Indice &i,const Indice &j,const Indice &k) const;
 
+    bool checkPosition(const Pos3d &);
     Pnt *New(void);
     Pnt *New(const Pos3d &);
     Pnt *New(const size_t &,const Pos3d &);
