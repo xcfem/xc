@@ -69,7 +69,7 @@ class PredefinedSpace(object):
         '''Create a fulcrum between the nodes passed as parameters.
 
         Creates a rigid link between the nodes.
-        It's called fulcrumb because it's pinned on pivotNode.
+        It's called fulcrum because it's pinned on pivotNode.
 
         :param   nodeTagA: tag of the master node.
         :param   nodeTagB: tag of the pivot (slave node).
