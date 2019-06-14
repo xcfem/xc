@@ -3,6 +3,7 @@ from collections import defaultdict
 
 import BasicEntities as be
 from miscUtils import LogMessages as lmsg
+from dxfwrite import DXFEngine
 
 class MaterialRecord(object):
   def __init__(self,name,typo,thermalExp,rho,E,nu,G,logDec,specHeat,thermalCond):
@@ -45,7 +46,7 @@ class NodeRecord(object):
     strCommand= '.newNodeIDXYZ(' + strId + ',' + self.coords[0] + ',' + self.coords[1] +','+ self.coords[2]+')'
     return 'n' + strId + '= ' + nodeHandlerName + strCommand
   def writeDxf(self,drawing,layerName):
-    drawing.add(dxfEngine.point((self.coords[0], self.coords[1], self.coords[2]), color=0, layer=layerName))
+    drawing.add(DXFEngine.point((self.coords[0], self.coords[1], self.coords[2]), color=0, layer=layerName))
 
 class NodeDict(dict):
   ''' Node container.'''
@@ -119,10 +120,26 @@ class CellRecord(object):
     return strCommand
   def writeDxf(self,nodeDict,drawing,layerName):
     numNodes= len(self.nodeIds)
-    for i in range(0,numNodes-1):
-      coordsA= nodeDict[self.nodeIds[i]].coords
-      coordsB= nodeDict[self.nodeIds[i+1]].coords
-      drawing.add(dxfEngine.line((coordsA[0], coordsA[1], coordsA[2]),(coordsB[0], coordsB[1], coordsB[2]), color=0, layer=layerName))
+    if(numNodes==2):
+      coordsA= nodeDict[self.nodeIds[0]].coords
+      coordsB= nodeDict[self.nodeIds[1]].coords
+      drawing.add(DXFEngine.line((coordsA[0], coordsA[1], coordsA[2]),(coordsB[0], coordsB[1], coordsB[2]), color=0, layer=layerName))
+    elif(numNodes==3):
+      coordsA= nodeDict[self.nodeIds[0]].coords
+      coordsB= nodeDict[self.nodeIds[1]].coords
+      coordsC= nodeDict[self.nodeIds[2]].coords
+      drawing.add(DXFEngine.face3d([(coordsA[0], coordsA[1], coordsA[2]),(coordsB[0], coordsB[1], coordsB[2]), (coordsC[0], coordsC[1], coordsC[2])], color=0, layer=layerName))      
+    elif(numNodes==4):
+      coordsA= nodeDict[self.nodeIds[0]].coords
+      coordsB= nodeDict[self.nodeIds[1]].coords
+      coordsC= nodeDict[self.nodeIds[2]].coords
+      coordsD= nodeDict[self.nodeIds[3]].coords
+      drawing.add(DXFEngine.face3d([(coordsA[0], coordsA[1], coordsA[2]),(coordsB[0], coordsB[1], coordsB[2]), (coordsC[0], coordsC[1], coordsC[2]), (coordsD[0], coordsD[1], coordsD[2])], color=0, layer=layerName))      
+    else:
+      for i in range(0,numNodes-1):
+        coordsA= nodeDict[self.nodeIds[i]].coords
+        coordsB= nodeDict[self.nodeIds[i+1]].coords
+        drawing.add(DXFEngine.line((coordsA[0], coordsA[1], coordsA[2]),(coordsB[0], coordsB[1], coordsB[2]), color=0, layer=layerName))
 
 class CellDict(dict):
   '''Cell container.'''
@@ -273,7 +290,7 @@ class MeshData(object):
     #groups have no representation in DXF files.
   def writeDxfFile(self,fileName):
     '''Write mesh in a DXF file.'''
-    drawing= dxfEngine.drawing(fileName)
+    drawing= DXFEngine.drawing(fileName)
     self.writeDxf(drawing)
     drawing.save()
   def writeToXCFile(self,xcImportExportData):

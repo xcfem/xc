@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
@@ -9,6 +11,7 @@ __email__= "l.pereztato@gmail.com" "anaOrtegaOrt@gmail.com"
 import BasicEntities as be
 import MeshEntities as me
 from miscUtils import LogMessages as lmsg
+from dxfwrite import DXFEngine
 
 class PointRecord(me.NodeRecord):
   '''kPoint type entity'''
@@ -68,6 +71,7 @@ class BlockRecord(me.CellRecord):
     else:
       self.labels= list()
   def getType(self):
+    '''Return the type of the block.'''
     return self.cellType
   def getStrKeyPointsIds(self):
     tmp= str(self.nodeIds)
@@ -100,17 +104,25 @@ class BlockDict(dict):
       if(numPoints==4):
         tagPoints= [points[0],points[1],points[2],points[3]]
         thickness= s.getElement(1,1,1).getPhysicalProperties.getVectorMaterials[0].h
-        block= BlockRecord(s.tag,str(s.tag),tagPoints,thickness)
-      elif(numPoints==2):
+        block= BlockRecord(id= s.tag, typ= 'surface',kPoints= tagPoints,thk= thickness)
+      else:
+        lmsg.error('surface with ',str(numPoints), 'points.')
+      self.append(block)
+    lines= xcSet.getLines
+    for l in lines:
+      points= l.getKPoints()
+      numPoints= len(points)
+      if(numPoints==2):
         tagPoints= [points[0],points[1]]
-        block= BlockRecord(s.tag,str(s.tag),tagPoints,0.0)
-      self.append(block)        
-  def writeDxf(self,nodeDict,drawing):
+        block= BlockRecord(id= l.tag, typ= 'line',kPoints= tagPoints, thk= 0.0)
+      self.append(block)
+  def writeDxf(self, name, pointDict,drawing):
     '''Write the cells in dxf file.'''
-    layerName= 'blocks'
+    layerName= name+'_blocks'
     drawing.add_layer(layerName)
     for key in self:
-      self[key].writeDxf(nodeDict,drawing,layerName)
+      self[key].writeDxf(pointDict,drawing,layerName)
+
   def writeToXCFile(self,f,xcImportExportData):
     '''Write the XC commands that define the cells (elements).'''
     for key in self:
@@ -177,8 +189,11 @@ class BlockData(object):
 
   def readFromXCSet(self,xcSet):
     '''Read points and surfaces from an XC set.'''
+    self.name= xcSet.name
     self.points.readFromXCSet(xcSet)
+    print(len(self.points), ' points read.')
     self.blocks.readFromXCSet(xcSet)
+    print(len(self.blocks), ' blocks read.')
     self.pointSupports.readFromXCSet(xcSet,self.points)
 
   def readFromDxfFile(self,fName,preprocessor,dxfLayers):
@@ -202,15 +217,14 @@ class BlockData(object):
     layerName= 'points'
     drawing.add_layer(layerName)
     for key in self.points:
-      self.points[key].writeDxf(drawing,layername)
-
-    drawing.add_layer('lines')
-    drawing.add_layer('surfaces')
-    drawing.add_layer('volumes')
-    for key in self.blocks:
-      block= self.blocks[key]
-      block.writeDxf(drawing)
-    
+      self.points[key].writeDxf(drawing,layerName)
+    self.blocks.writeDxf(self.name, self.points,drawing)
+      
+  def writeDxfFile(self,fileName):
+    '''Write mesh in a DXF file.'''
+    drawing= DXFEngine.drawing(fileName)
+    self.writeDxf(drawing)
+    drawing.save()    
 
   def writeToXCFile(self,xcImportExportData):
     f= xcImportExportData.outputFile
