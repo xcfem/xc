@@ -59,7 +59,7 @@ class Segment: public Axis
     virtual Spot *getVertex(const size_t &i);
     virtual void SetVertice(const size_t &,Spot *);
     virtual BND2d Bnd(void) const;
-    double getLong(void) const;
+    double getLength(void) const;
 
   };
 

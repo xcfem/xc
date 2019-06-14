@@ -119,7 +119,7 @@ int XC::Segment::getVtkCellType(void) const
   { return VTK_LINE; }
 
 //! @brief Return segment length.
-double XC::Segment::getLong(void) const
+double XC::Segment::getLength(void) const
   {
     double retval= -1;
     if(p1 && p2)

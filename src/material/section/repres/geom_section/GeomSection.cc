@@ -326,7 +326,7 @@ double XC::GeomSection::getTensionedZoneDepth(const HalfPlane2d &sp_compressions
 //! @brief Return the lengths of the segments that results of
 //! cutting the line being passed as parameter with the section
 //! contour.
-double XC::GeomSection::getLongCorte(const Line2d &r) const
+double XC::GeomSection::getCutLength(const Line2d &r) const
   {
     double retval= 0.0;
     Polygon2d contour= append_mid_points(getRegionsContour());
@@ -338,7 +338,7 @@ double XC::GeomSection::getLongCorte(const Line2d &r) const
 //! @brief Return the lengths of the segments that results of
 //! cutting the line being passed as parameter with the section
 //! contour.
-std::vector<double> XC::GeomSection::getLongsCorte(const std::list<Line2d> &lr) const
+std::vector<double> XC::GeomSection::getCutLengths(const std::list<Line2d> &lr) const
   {
     const size_t sz= lr.size();
     std::vector<double> retval;

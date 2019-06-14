@@ -28,24 +28,24 @@ lines= preprocessor.getMultiBlockTopology.getLines
 lines.defaultTag= 1
 l= lines.newCircleArc(1,2,3)
 angc= l.getAngle()
-long= l.getLong()
+length= l.getLength()
 
         # \arco_circunf[1]
         #   {
         #     \p1{1} \p2{3} \p3{2}
         #     angc= getAngComp
-        #     long= long
+        #     length= length
         #   }
 
 
 angteor= math.pi/2.0
 ratio1= (angteor/angc)
 lteor= 2*math.pi*R/4.0
-ratio2= (lteor/long)
+ratio2= (lteor/length)
 
 # print "Included angle: ",math.degrees(angc)
 # print "theoretical included angle: ",math.degrees(angteor)
-# print "Arc length: ",long
+# print "Arc length: ",length
 # print "Theorethical length: ",lteor
 
 from miscUtils import LogMessages as lmsg

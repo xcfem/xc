@@ -38,7 +38,7 @@ class RCSection(object):
     concrete= self.concrete
     AsMin= self.getMinReinfAreaUnderFlexion()
     ancrage= famArm.getBasicAnchorageLength(concrete)
-    outputFile.write("  Dimensions coupe; b= "+ fmt.Longs.format(self.b)+ "m, h= "+ fmt.Longs.format(self.h)+ "m\\\\\n")
+    outputFile.write("  Dimensions coupe; b= "+ fmt.Lengths.format(self.b)+ "m, h= "+ fmt.Lengths.format(self.h)+ "m\\\\\n")
     ng_rebar_def.writeRebars(outputFile,concrete,famArm,AsMin)
     if(abs(Md)>0):
       MR= self.getMR()

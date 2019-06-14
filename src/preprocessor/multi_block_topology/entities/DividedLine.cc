@@ -36,21 +36,21 @@
 
 //! @brief Constructor.
 XC::DividedLine::DividedLine(Preprocessor *m,const size_t &nd)
-  : Line(m,nd), longs(nd,1.0){}
+  : Line(m,nd), lengths(nd,1.0){}
 
 //! @brief Virtual constructor.
 XC::SetEstruct *XC::DividedLine::getCopy(void) const
   { return new DividedLine(*this); }
 
 //! @brief assigns lengths.
-void XC::DividedLine::setLongs(const Vector &ls)
+void XC::DividedLine::setLengths(const Vector &ls)
   {
-    longs= vector_to_std_vector(ls);
-    SetNDiv(longs.size());
+    lengths= vector_to_std_vector(ls);
+    SetNDiv(lengths.size());
   }
 
 //! @brief Return ndiv+1 positions along the line spaced
-//! according to the lengths specifiend in the longs member.
+//! according to the lengths specifiend in the lengths member.
 Pos3dArray XC::DividedLine::get_positions(void) const
   {
     static Pos3dArray retval;
@@ -58,7 +58,7 @@ Pos3dArray XC::DividedLine::get_positions(void) const
       {
 	std::vector<GEOM_FT> tmp(NDiv(),0);
         for(size_t i= 0;i<NDiv();i++)
-          tmp[i]= double_to_FT(longs[i]);
+          tmp[i]= double_to_FT(lengths[i]);
         retval= Pos3dArray(P1()->GetPos(),P2()->GetPos(),tmp);
       }
     else

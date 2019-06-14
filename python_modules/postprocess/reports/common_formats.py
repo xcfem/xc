@@ -4,6 +4,6 @@
 Esf= "{:6.2f}"
 Stress= "{:6.2f}"
 Diam= "{:2.0f}"
-Longs= "{:4.2f}"
+Lengths= "{:4.2f}"
 Areas= "{:6.2f}"
 Factor= "{:4.2f}"

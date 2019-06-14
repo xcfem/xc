@@ -43,12 +43,12 @@ lines.defaultTag= 1
 l1= lines.newLine(1,2)
 l1.nDiv= NumDiv
 
-length= l1.getLong()
+length= l1.getLength()
 l1.splitAtNaturalCoordinate(0.0)
 l2= lines.get(2) 
-length1= l1.getLong()
+length1= l1.getLength()
 l2= lines.get(2)
-length2= l2.getLong()
+length2= l2.getLength()
 
 
 ratio1= abs(length1-length/2)

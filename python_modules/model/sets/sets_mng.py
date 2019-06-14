@@ -219,7 +219,7 @@ def get_subset_lin_shorter_than(Lmax,fromSet,toSetName):
     lstLin=None
     fromSet.fillDownwards()
     allLines=fromSet.getLines
-    lstLin=[l for l in allLines if l.getLong()<=Lmax]
+    lstLin=[l for l in allLines if l.getLength()<=Lmax]
     if lstLin:
         s=lstLin_to_set(fromSet.getPreprocessor,lstLin,toSetName)
         s.fillDownwards()
@@ -239,7 +239,7 @@ def get_subset_lin_longer_than(Lmin,fromSet,toSetName):
     lstLin=None
     fromSet.fillDownwards()
     allLines=fromSet.getLines
-    lstLin=[l for l in allLines if l.getLong()>=Lmin]
+    lstLin=[l for l in allLines if l.getLength()>=Lmin]
     if lstLin:
         s=lstLin_to_set(fromSet.getPreprocessor,lstLin,toSetName)
         s.fillDownwards()

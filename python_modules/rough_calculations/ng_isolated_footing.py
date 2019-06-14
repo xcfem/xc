@@ -32,7 +32,7 @@ class IsolatedFooting(object):
     retval+= "\\item Axil característico del pilar N$_k$ = " + fmt.Esf.format(self.Nk) + " kN\n"
     retval+= "\\item Tensión admisible del terreno $\\sigma_{adm}$ = " + fmt.Esf.format(self.Sadm) + " kN/m$^2$\n"
     retval+= "\\item Diámetro de la reinforcement longitudinal del pilar $\\Phi$ = " + fmt.Diam.format(self.FiArmPilar) + " cm\n"
-    retval+= "\item Escuadría del pilar $l$ = " +  fmt.Longs.format(self.Lpilar) + " m\n"
+    retval+= "\item Escuadría del pilar $l$ = " +  fmt.Lengths.format(self.Lpilar) + " m\n"
     retval+= "\\end{itemize}\n"
     return retval
 
@@ -41,13 +41,13 @@ class IsolatedFooting(object):
     self.Lzapata=(math.sqrt(self.Nk/self.Sadm))
     retval= "Área de la zapata\n"
     area= self.Nk/self.Sadm
-    retval+= "$$A=a^2=\\cfrac{N_k}{\\sigma_{adm}}=" + fmt.Esf.format(area) + "\\ m^2 \\rightarrow a =" + fmt.Longs.format(self.Lzapata) + "\\ m$$\n"
+    retval+= "$$A=a^2=\\cfrac{N_k}{\\sigma_{adm}}=" + fmt.Esf.format(area) + "\\ m^2 \\rightarrow a =" + fmt.Lengths.format(self.Lzapata) + "\\ m$$\n"
     retval+= "Canto de la zapata\n"
     vuelo=((math.sqrt(self.Nk/self.Sadm)-self.Lpilar)/2)
-    retval+= "$$ vuelo = v = \\frac{a-l}{2} = " + fmt.Longs.format(vuelo) + "\\ m $$\n"
+    retval+= "$$ vuelo = v = \\frac{a-l}{2} = " + fmt.Lengths.format(vuelo) + "\\ m $$\n"
     aux=((15*self.FiArmPilar*self.FiArmPilar+10)/100)
     depth=max((max(vuelo/2,0.5)),aux)
-    retval+= "$$h = max[v/2; (15\\Phi^2 +10)/100; 0.5] = " + fmt.Longs.format(depth) + "\\ m $$\n"
+    retval+= "$$h = max[v/2; (15\\Phi^2 +10)/100; 0.5] = " + fmt.Lengths.format(depth) + "\\ m $$\n"
     retval+= "Footing reinforcement\n"
     Md=(1.5*self.Sadm*(self.Lzapata)**2/8)
     As=(Md/0.8/depth/500*1.15*10)

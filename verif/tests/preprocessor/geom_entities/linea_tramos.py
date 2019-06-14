@@ -41,7 +41,7 @@ pt= points.newPntIDPos3d(2,geom.Pos3d(CooMax,CooMax,CooMax))
 lines= preprocessor.getMultiBlockTopology.getLines
 lines.defaultTag= 1
 l= lines.newDividedLine(1,2)
-l.setLongs(xc.Vector([raiz3,raiz3,raiz3,raiz3,raiz3,raiz3,raiz3,raiz3,raiz3,raiz3]))
+l.setLengths(xc.Vector([raiz3,raiz3,raiz3,raiz3,raiz3,raiz3,raiz3,raiz3,raiz3,raiz3]))
 
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)

@@ -45,7 +45,7 @@ class_<XC::Spot, bases<XC::EntGeomSection>, boost::noncopyable >("Spot", no_init
   ;
 
 class_<XC::Segment, bases<XC::Axis>, boost::noncopyable >("Segment", no_init)
-  .def("getLong",&XC::Segment::getLong)
+  .def("getLength",&XC::Segment::getLength)
   ;
 
 XC::RegionContainer &(XC::GeomSection::*getRegionContainer)(void)= &XC::GeomSection::getRegions;
