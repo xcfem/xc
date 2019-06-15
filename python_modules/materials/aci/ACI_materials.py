@@ -24,7 +24,7 @@ class ACIConcrete(concrete_base.Concrete):
     
     def __init__(self,nmbConcrete, fck, gammaC):
         super(ACIConcrete,self).__init__(nmbConcrete,fck, gammaC)
-        lmsg.error('Implementation of ACI concrete pending\n.')
+        lmsg.warning('Implementation of ACI concrete pending.\n')
     def getEcm(self):
         '''Longitudinal secant modulus of deformation at 28 days expressed
         in [Pa] [+] according to expression 19.2.2.1.b of ACI 318-14.'''
