@@ -11,13 +11,20 @@ import math
 from postprocess.reports import common_formats as fmt
 
 class IsolatedFooting(object):
+  ''' Rough design of isolated footing.
+
+  :ivar B: Footing side dimension (m)
+  :ivar Nk: Characteristic value of axial load in pillar (N).
+  :ivar FiArmPilar: Column main rebars diameter (m)
+  :ivar Lpilar: Column depth (m)
+  '''
   def __init__(self,B,Nk=10e3,Sadm=150e3,FiArmPilar=12e-3,Lpilar=0.5):
     ''' Constructor.
 
-    :ivar B: Footing side dimension (m)
-    :ivar Nk: Characteristic value of axial load in pillar (N).
-    :ivar FiArmPilar: Pillar main rebars diameter (m)
-    :ivar Lpilar: Pillar depth (m)
+    :param B: Footing side dimension (m)
+    :param Nk: Characteristic value of axial load in pillar (N).
+    :param FiArmPilar: Column main rebars diameter (m)
+    :param Lpilar: Column depth (m)
     '''
     self.Lzapata= B 
     self.Nk= Nk/1e3 # Axil característico (kN)
