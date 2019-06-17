@@ -30,8 +30,8 @@ void export_preprocessor_build_model(void)
 
 XC::Preprocessor *(XC::EntMdlrBase::*getPreprocessorRef)(void)= &XC::EntMdlrBase::getPreprocessor;
 class_<XC::EntMdlrBase, bases<NamedEntity>, boost::noncopyable >("EntMdlrBase", no_init)
-  .add_property("tag", &XC::EntMdlrBase::GetTag)
-  .add_property("getPreprocessor", make_function( getPreprocessorRef, return_internal_reference<>() ))
+  .add_property("tag", &XC::EntMdlrBase::GetTag, "Return the object identifier.")
+  .add_property("getPreprocessor", make_function( getPreprocessorRef, return_internal_reference<>() ),"Return the preprocessor that built this object.")
    ;
 
 bool (XC::SetBase::*isNodeIn)(const XC::Node *) const= &XC::SetBase::In;
@@ -49,15 +49,15 @@ class_<XC::SetBase, bases<XC::EntMdlrBase>, boost::noncopyable >("SetBase", no_i
   .def("computeTributaryLengths",&XC::SetBase::computeTributaryLengths)
   .def("computeTributaryAreas",&XC::SetBase::computeTributaryAreas)
   .def("computeTributaryVolumes",&XC::SetBase::computeTributaryVolumes)
-  .def("isNodeIn",isNodeIn,"True if sets contains node.")
-  .def("isElementIn",isElementIn,"True if sets contains element.")
-  .def("isPntIn",isPntIn,"True if sets contains point.")
-  .def("isEdgeIn",isEdgeIn,"True if sets contains edge.")
-  .def("isFaceIn",isFaceIn,"True if sets contains face.")
-  .def("isBodyIn",isBodyIn,"True if sets contains body.")
-  .def("isUniformGridIn",isUniformGridIn,"True if sets contains uniform grid.")
-  .add_property("getNumNodes",&XC::SetBase::getNumberOfNodes,"Returns the number or nodes.")
-  .add_property("getNumElements",&XC::SetBase::getNumberOfElements,"Returns the number or elements.")
+  .def("isNodeIn",isNodeIn,"True if set contains node.")
+  .def("isElementIn",isElementIn,"True if set contains the element argument.")
+  .def("isPntIn",isPntIn,"True if sets contains the point argument.")
+  .def("isEdgeIn",isEdgeIn,"True if set contains the edge argument.")
+  .def("isFaceIn",isFaceIn,"True if set contains the face argument.")
+  .def("isBodyIn",isBodyIn,"True if set contains the body argument.")
+  .def("isUniformGridIn",isUniformGridIn,"True if set contains the uniform grid argument.")
+  .add_property("getNumNodes",&XC::SetBase::getNumberOfNodes,"Return the number or nodes.")
+  .add_property("getNumElements",&XC::SetBase::getNumberOfElements,"Return the number or elements.")
   .add_property("color", make_function(&XC::SetBase::getColor, return_internal_reference<>() ),&XC::SetBase::setColor,"stores a color for the objects of the set.")
   .def("setColorComponents",make_function(&XC::SetBase::setColorComponents, return_internal_reference<>() ),"set the components of the color for the objects of the set.")
    ;
