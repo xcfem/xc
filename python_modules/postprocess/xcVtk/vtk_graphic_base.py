@@ -297,14 +297,14 @@ class RecordDefDisplay(object):
 
   def plot(self,fName):
     '''Plots window contents'''
+    self.renWin.Render()
+
     w2i = vtk.vtkWindowToImageFilter()
-    writer = vtk.vtkJPEGWriter()
     w2i.SetInput(self.renWin)
     w2i.Update()
-    writer.SetInputConnection(w2i.GetOutputPort())
+    writer= vtk.vtkJPEGWriter()
     writer.SetFileName(fName)
-    self.renWin.Render()
-    w2i.Update()
+    writer.SetInputConnection(w2i.GetOutputPort())
     writer.Write()
  
  
