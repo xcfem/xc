@@ -299,12 +299,14 @@ class RecordDefDisplay(object):
     '''Plots window contents'''
     self.renWin.Render()
 
-    w2i = vtk.vtkWindowToImageFilter()
-    w2i.SetInput(self.renWin)
-    w2i.Update()
+    w2if = vtk.vtkWindowToImageFilter()
+    w2if.SetInput(self.renWin)
+    w2if.SetScale(1) # image quality
+    w2if.ReadFrontBufferOff(); #Read from the front buffer.
+    w2if.Update()
     writer= vtk.vtkJPEGWriter()
     writer.SetFileName(fName)
-    writer.SetInputConnection(w2i.GetOutputPort())
+    writer.SetInputConnection(w2if.GetOutputPort())
     writer.Write()
  
  
