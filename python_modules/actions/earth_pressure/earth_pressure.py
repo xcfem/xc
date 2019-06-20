@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
+from __future__ import print_function
 
 '''Calculation of lateral earth pressures on vertical walls (retaining, 
 basement, earth support system, ...) exerced by a given back soil with 
@@ -89,22 +90,24 @@ class EarthPressureModel(PressureModelBase):
     '''
     def __init__(self, zGround, zBottomSoils,KSoils,gammaSoils, zWater, gammaWater,qUnif=0):
         super(EarthPressureModel,self).__init__()
-        self.zGround=zGround
-        self.zBottomSoils=zBottomSoils
-        self.KSoils=KSoils
-        self.gammaSoils=gammaSoils
+        self.zGround= zGround
+        self.zBottomSoils= zBottomSoils
+        self.KSoils= KSoils
+        self.gammaSoils= gammaSoils
         self.zWater= zWater
-        self.zTopLev=[zGround]+zBottomSoils
+        self.zTopLev= [zGround]+zBottomSoils
         self.zTopLev.reverse()
         bisect.insort_left(self.zTopLev,zWater)
         self.zTopLev.reverse()
-        indWat=self.zTopLev.index(zWater)
-        self.KSoils.insert(indWat-1,self.KSoils[indWat-1])
-        self.gammaSoils.insert(indWat-1,self.gammaSoils[indWat-1])
-        for i in range(indWat,len(self.gammaSoils)):
-            self.gammaSoils[i]-=gammaWater
-        self.gammaWater=[0]*indWat+[gammaWater]*(len(self.gammaSoils)-indWat)
-        self.qUnif=qUnif    
+        if(self.zWater>self.zBottomSoils[-1]):
+            indWat= self.zTopLev.index(zWater)
+            self.KSoils.insert(indWat-1,self.KSoils[indWat-1])
+            self.gammaSoils.insert(indWat-1,self.gammaSoils[indWat-1])
+            for i in range(indWat,len(self.gammaSoils)):
+                self.gammaSoils[i]-=gammaWater
+            self.gammaWater=[0]*indWat+[gammaWater]*(len(self.gammaSoils)-indWat)
+                
+        self.qUnif=qUnif
 
     def getPressure(self,z):
         '''Return the earth pressure acting on the points at global coordinate z.'''
@@ -115,8 +118,12 @@ class EarthPressureModel(PressureModelBase):
             self.zTopLev.reverse()
             ret_press= 0.0
             for i in range(ind):
-                ret_press+=self.KSoils[i]*self.gammaSoils[i]*(self.zTopLev[i]-self.zTopLev[i+1])+self.gammaWater[i]*(self.zTopLev[i]-self.zTopLev[i+1])
-            ret_press+=self.KSoils[ind]*self.gammaSoils[ind]*(self.zTopLev[ind]-z)+self.gammaWater[ind]*(self.zTopLev[ind]-z)
+                ret_press+=self.KSoils[i]*self.gammaSoils[i]*(self.zTopLev[i]-self.zTopLev[i+1])
+            ret_press+=self.KSoils[ind]*self.gammaSoils[ind]*(self.zTopLev[ind]-z)
+            if(self.zWater>self.zBottomSoils[-1]):
+                for i in range(ind):
+                    ret_press+= self.gammaWater[i]*(self.zTopLev[i]-self.zTopLev[i+1])
+                ret_press+= self.gammaWater[ind]*(self.zTopLev[ind]-z)
             ret_press+=self.KSoils[ind]*self.qUnif
         return ret_press
 
