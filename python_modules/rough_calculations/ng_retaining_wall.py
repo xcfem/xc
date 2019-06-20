@@ -773,3 +773,12 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     internalForces= InternalForces(y,envelopeMd, envelopeVd, abs(envelopeMdHeel), abs(envelopeVdHeel))
     self.uls_results= WallULSResults(internalForces)
     return self.uls_results
+
+# class BasementWall(RetainingWall):
+#   '''Basement retaining wall.'''
+#   def __init__(self,name= 'prb',concreteCover=40e-3,stemBottomWidth=0.25,stemTopWidth=0.25,footingThickness= 0.25):
+#     '''Constructor '''
+#     super(BasementWall,self).__init__(name,stemBottomWidth,stemTopWidth,footingThickness)
+#     #Materials.
+#     self.concrete= SIA262_materials.c25_30
+#     self.reinforcement= RetainingWallReinforcement(concreteCover)
