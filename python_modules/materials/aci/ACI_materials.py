@@ -93,6 +93,12 @@ standard_bars_areas['#14']= num14Area
 standard_bars_areas['#18']= num18Area
 standard_bars_areas['#18J']= num18JArea
 
+def findNumberByArea(area):
+    for key in standard_bars_areas:
+        barArea= standard_bars_areas[key]
+        if(abs(area-barArea)<1e-6):
+            return key
+
 standard_bars_diameters= dict()
 standard_bars_diameters['#2']= math.sqrt(4.0*num2Area/math.pi)
 standard_bars_diameters['#3']= math.sqrt(4.0*num3Area/math.pi)
