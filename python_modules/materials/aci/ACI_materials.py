@@ -44,15 +44,20 @@ class ACIConcrete(concrete_base.Concrete):
         return 3.0*(-1e-3)
         
 # ACI concretes
-A36M= ACIConcrete(nmbConcrete="A36M",fck=-20e6,gammaC=1.5)
+A36M= ACIConcrete(nmbConcrete="A36M",fck=-20e6,gammaC=1.667) #????
+
+c3500= ACIConcrete(nmbConcrete="C3500",fck=-3500*ACIConcrete.toPascal,gammaC=1.667)
+c4000= ACIConcrete(nmbConcrete="C4000",fck=-4000*ACIConcrete.toPascal,gammaC=1.667)
 
 # Reinforcing steel.
 
+A615G60= concrete_base.ReinforcingSteel(steelName="A615G60", fyk=420e6, emax=0.08,gammaS=1.15)
 A706G60= concrete_base.ReinforcingSteel(steelName="A706G60", fyk=420e6, emax=0.08,gammaS=1.15)
 
 
 #Bar areas in square meters.
 
+num2Area= 32e-6
 num3Area= 71e-6
 num4Area= 129e-6
 num5Area= 200e-6
@@ -65,3 +70,41 @@ num11Area= 1006e-6
 num14Area= 1452e-6
 num18Area= 2581e-6
 num18JArea= 2678e-6
+
+barAreas= [num2Area, num3Area, num4Area, num5Area, num6Area, num7Area, num8Area, num9Area, num10Area, num11Area, num14Area, num18Area, num18JArea]
+
+diameters= list()
+
+for a in barAreas:
+    diameters.append(math.sqrt(4.0*a/math.pi))
+
+standard_bars_areas= dict()
+standard_bars_areas['#2']= num2Area
+standard_bars_areas['#3']= num3Area
+standard_bars_areas['#4']= num4Area
+standard_bars_areas['#5']= num5Area
+standard_bars_areas['#6']= num6Area
+standard_bars_areas['#7']= num7Area
+standard_bars_areas['#8']= num8Area
+standard_bars_areas['#9']= num9Area
+standard_bars_areas['#10']= num10Area
+standard_bars_areas['#11']= num11Area
+standard_bars_areas['#14']= num14Area
+standard_bars_areas['#18']= num18Area
+standard_bars_areas['#18J']= num18JArea
+
+standard_bars_diameters= dict()
+standard_bars_diameters['#2']= math.sqrt(4.0*num2Area/math.pi)
+standard_bars_diameters['#3']= math.sqrt(4.0*num3Area/math.pi)
+standard_bars_diameters['#4']= math.sqrt(4.0*num4Area/math.pi)
+standard_bars_diameters['#5']= math.sqrt(4.0*num5Area/math.pi)
+standard_bars_diameters['#6']= math.sqrt(4.0*num6Area/math.pi)
+standard_bars_diameters['#7']= math.sqrt(4.0*num7Area/math.pi)
+standard_bars_diameters['#8']= math.sqrt(4.0*num8Area/math.pi)
+standard_bars_diameters['#9']= math.sqrt(4.0*num9Area/math.pi)
+standard_bars_diameters['#10']= math.sqrt(4.0*num10Area/math.pi)
+standard_bars_diameters['#11']= math.sqrt(4.0*num11Area/math.pi)
+standard_bars_diameters['#14']= math.sqrt(4.0*num14Area/math.pi)
+standard_bars_diameters['#18']= math.sqrt(4.0*num18Area/math.pi)
+standard_bars_diameters['#18J']= math.sqrt(4.0*num18JArea/math.pi)
+
