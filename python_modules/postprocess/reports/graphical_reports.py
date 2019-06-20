@@ -398,13 +398,15 @@ def insertGrInTex(texFile,grFileNm,grWdt,capText,labl=''):
     return
   
 def getRecordLoadCaseDispFromLoadPattern(loadPattern, unitsScaleLoads= 1e-3, unitsScaleDispl= 1e-3, setsToDispLoads= None, setsToDispDspRot= None, setsToDispIntForc= None):
-  xcTotalSet= loadPattern.getDomain.getPreprocessor.getSets.getSet("total")
-  if(not setsToDispLoads):
-    setsToDispLoads= [xcTotalSet]
-  if(not setsToDispDspRot):
-    setsToDispDspRot= [xcTotalSet]
-  if(not setsToDispIntForc):
-    setsToDispIntForc= [xcTotalSet]
+  domain= loadPattern.getDomain # Not always set.
+  if(domain):
+      xcTotalSet= domain.getPreprocessor.getSets.getSet("total")
+      if(not setsToDispLoads):
+        setsToDispLoads= [xcTotalSet]
+      if(not setsToDispDspRot):
+        setsToDispDspRot= [xcTotalSet]
+      if(not setsToDispIntForc):
+        setsToDispIntForc= [xcTotalSet]
   name= loadPattern.name
   retval= RecordLoadCaseDisp(name,loadPattern.description,'1.0*'+name,setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
   retval.unitsScaleLoads=1e-3
