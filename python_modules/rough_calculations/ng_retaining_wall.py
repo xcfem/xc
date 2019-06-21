@@ -441,11 +441,13 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     outputFile.write("\\end{figure}\n")
     
   def createFEProblem(self, title):
+    '''Create finite element problem.'''
     self.feProblem= xc.FEProblem()
-    self.feProblem.title= 'Retaining wall A'
+    self.feProblem.title= title
     return self.feProblem
     
   def genMesh(self,nodes,springMaterials):
+    '''Generate finite element mesh.'''
     self.defineWireframeModel(nodes)
     nodes.newSeedNode()
     preprocessor= self.modelSpace.preprocessor    
@@ -778,3 +780,11 @@ class BasementWall(RetainingWall):
   def __init__(self,name= 'prb',concreteCover=40e-3,stemBottomWidth=0.25,stemTopWidth=0.25,footingThickness= 0.25, concrete= None, steel= None):
     '''Constructor '''
     super(BasementWall,self).__init__(name,concreteCover, stemBottomWidth,stemTopWidth,footingThickness, concrete, steel)
+    
+  def genMesh(self,nodes,springMaterials):
+    '''Generate finite element mesh.'''
+    super(BasementWall,self).genMesh(nodes, springMaterials)
+    stemLine= self.wireframeModelLines['stem']
+    # pin stem head
+    headNode= stemLine.lastNode
+    headNode.fix(xc.ID([0]),xc.Vector([0.0]))

@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 '''Definition of typical reinforcement schemes.'''
 from __future__ import division
-from materials.sia262 import SIA262_materials
 from materials.sia262 import SIA262_limit_state_checking
 from rough_calculations import ng_simple_bending_reinforcement
 from postprocess.reports import common_formats as fmt
@@ -16,9 +15,10 @@ class RebarFamily(object):
     :ivar spacing: spacing of the bars.
     :ivar concreteCover: concrete cover of the bars.
     :ivar crackControlRequirement: crack control requirement.
+    :ivar RebarController: control of some parameters as development lenght...
   '''
   minDiams= 50
-  def __init__(self,steel,diam,spacing,concreteCover,crackControlRequirement= 'B'):
+  def __init__(self,steel,diam,spacing,concreteCover,miscC= SIA262_limit_state_checking.RebarController('B')):
     ''' Constructor.
 
     :param steel: reinforcing steel material.
@@ -31,11 +31,11 @@ class RebarFamily(object):
     self.diam= diam
     self.spacing= spacing
     self.concreteCover= concreteCover
-    self.crackControlRequirement= crackControlRequirement
+    self.rebarController= miscC
   def __repr__(self):
     return self.steel.name + ", diam: " + str(int(self.diam*1e3)) + " mm, e= " + str(int(self.spacing*1e3))
-  def getCopy(self,crackControlRequirement):
-    return RebarFamily(self.steel,self.diam,self.spacing,self.concreteCover,crackControlRequirement)
+  def getCopy(self,barController):
+    return RebarFamily(self.steel,self.diam,self.spacing,self.concreteCover,barController)
   def getDiam(self):
     ''' Return the diameter of the bars.'''
     return self.diam
@@ -50,11 +50,11 @@ class RebarFamily(object):
     return self.getNumBarsPerMeter()*self.getBarArea()
   def getBasicAnchorageLength(self,concrete):
     ''' Return the basic anchorage length of the bars.'''
-    return max(SIA262_limit_state_checking.getBasicAnchorageLength(self.getDiam(),concrete.fck,self.steel.fyd()),self.minDiams*self.diam)
+    return max(self.rebarController.getBasicAnchorageLength(concrete,self.getDiam(),self.steel),self.minDiams*self.diam)
   def getCrackControlRequirement(self):
     ''' Return the crack control requirement as in clause 4.4.2.2.3
         of SIA 262:2014.'''
-    return self.crackControlRequirement
+    return self.rebarController.crackCRequirement
   def getMinReinfAreaUnderFlexion(self,concrete,thickness):
     '''Return the minimun amount of bonded reinforcement to control cracking
        for reinforced concrete sections under flexion.
@@ -62,8 +62,7 @@ class RebarFamily(object):
     :param concrete: concrete material.
     :param thickness: thickness of the bended member.
     '''
-    retval= SIA262_limit_state_checking.MinReinfAreaUnderFlexion(concrete,self.getEffectiveCover(),self.crackControlRequirement,self.spacing,thickness)
-    return retval
+    return self.rebarController.getMinReinfAreaUnderFlexion(concrete,self.getEffectiveCover(),self.crackControlRequirement,self.spacing,thickness)
   def getMinReinfAreaUnderTension(self,concrete,thickness):
     '''Return the minimun amount of bonded reinforcement to control cracking
        for reinforced concrete sections under tension.
@@ -71,8 +70,8 @@ class RebarFamily(object):
     :param concrete: concrete material.
     :param thickness: thickness of the tensioned member.
     '''
-    retval= SIA262_limit_state_checking.MinReinfAreaUnderTension(concrete,self.crackControlRequirement,self.spacing,thickness)
-    return retval
+    return self.rebarController.getMinReinfAreaUnderTension(concrete,self.spacing,thickness)
+  
   def getMR(self,concrete,b,thickness):
     '''Return the bending resistance of the (b x thickness) rectangular section.
 
@@ -146,8 +145,8 @@ class DoubleRebarFamily(object):
     self.f2= f2
   def __repr__(self):
     return self.f1.__repr__() + " + " + self.f2.__repr__()
-  def getCopy(self,crackControlRequirement):
-    return DoubleRebarFamily(self.f1.getCopy(crackControlRequirement),self.f2.getCopy(crackControlRequirement))
+  def getCopy(self,barController):
+    return DoubleRebarFamily(self.f1.getCopy(barController),self.f2.getCopy(barController))
   def getAs(self):
     ''' Return the total area of the bars.'''
     return self.f1.getAs()+self.f2.getAs()
@@ -178,7 +177,7 @@ class DoubleRebarFamily(object):
     :param concrete: concrete material.
     :param thickness: thickness of the bended member.
     '''
-    retval= SIA262_limit_state_checking.MinReinfAreaUnderFlexion(concrete,self.getEffectiveCover(),self.f1.crackControlRequirement,self.getSpacing(),thickness)
+    retval= self.f1.rebarController.getMinReinfAreaUnderFlexion(concrete,self.getEffectiveCover(),self.getSpacing(),thickness)
     return retval
   def getMinReinfAreaUnderTension(self,concrete,thickness):
     '''Return the minimun amount of bonded reinforcement to control cracking
@@ -187,13 +186,14 @@ class DoubleRebarFamily(object):
     :param concrete: concrete material.
     :param thickness: thickness of the tensioned member.
     '''
-    retval= SIA262_limit_state_checking.MinReinfAreaUnderTension(concrete,self.f1.crackControlRequirement,self.getSpacing(),thickness)
+    #RebarController.crackControlRequirement= self.f1.crackControlRequirement
+    retval= self.f1.rebarController.MinReinfAreaUnderTension(concrete,self.getSpacing(),thickness)
     return retval
   def getCrackControlRequirement(self):
     ''' Return the crack control requirement as in clause 4.4.2.2.3
         of SIA 262:2014.'''
-    retval= self.f1.crackControlRequirement
-    if(retval!=self.f2.crackControlRequirement):
+    retval= self.f1.rebarController.crackControlRequirement
+    if(retval!=self.f2.rebarController.crackControlRequirement):
       cmsg.error("Different specifications for crack control.")
     return retval
   def getMR(self,concrete,b,thickness):

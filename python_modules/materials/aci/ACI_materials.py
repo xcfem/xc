@@ -43,6 +43,13 @@ class ACIConcrete(concrete_base.Concrete):
         according to clause 22.2.2.1 of ACI 318-14
         """
         return 3.0*(-1e-3)
+    def getFctm(self):
+        """Fctm: mean tensile strength [Pa][+] (according to 
+           ACI 318-14 R14.3.2.1 )
+        """
+        fcklb_inch2= abs(self.fck*self.fromPascal) #Pa -> lb/inch2
+        return self.toPascal*5.0*math.sqrt(fcklb_inch2)
+    
         
 # ACI concretes
 A36M= ACIConcrete(nmbConcrete="A36M",fck=-20e6,gammaC=1.667) #????
