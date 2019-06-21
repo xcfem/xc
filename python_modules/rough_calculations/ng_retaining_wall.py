@@ -20,7 +20,6 @@ import matplotlib
 import matplotlib.pyplot as plt
 from materials import typical_materials
 from materials.sections import section_properties
-from materials.sia262 import SIA262_materials
 from model.geometry import retaining_wall_geometry
 from rough_calculations import ng_rebar_def
 from rough_calculations import ng_rc_section
@@ -116,7 +115,7 @@ class InternalForces(object):
 
 class RetainingWallReinforcement(dict):
   ''' Simplified reinforcement for a cantilever retaining wall.'''
-  def __init__(self,concreteCover=40e-3, steel= SIA262_materials.B500B):
+  def __init__(self,concreteCover=40e-3, steel= None):
     '''Constructor '''
     super(RetainingWallReinforcement, self).__init__()
     self.concreteCover= concreteCover
@@ -220,12 +219,12 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   '''Cantilever retaining wall.'''
   b= 1.0
 
-  def __init__(self,name= 'prb',concreteCover=40e-3,stemBottomWidth=0.25,stemTopWidth=0.25,footingThickness= 0.25):
+  def __init__(self,name= 'prb',concreteCover=40e-3,stemBottomWidth=0.25,stemTopWidth=0.25,footingThickness= 0.25, concrete= None, steel= None):
     '''Constructor '''
     super(RetainingWall,self).__init__(name,stemBottomWidth,stemTopWidth,footingThickness)
     #Materials.
-    self.concrete= SIA262_materials.c25_30
-    self.reinforcement= RetainingWallReinforcement(concreteCover)
+    self.concrete= concrete
+    self.reinforcement= RetainingWallReinforcement(concreteCover, steel)
     
   def getBasicAnchorageLength(self,index):
     '''Returns basic anchorage length for the reinforcement at "index".''' 
@@ -774,11 +773,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     self.uls_results= WallULSResults(internalForces)
     return self.uls_results
 
-# class BasementWall(RetainingWall):
-#   '''Basement retaining wall.'''
-#   def __init__(self,name= 'prb',concreteCover=40e-3,stemBottomWidth=0.25,stemTopWidth=0.25,footingThickness= 0.25):
-#     '''Constructor '''
-#     super(BasementWall,self).__init__(name,stemBottomWidth,stemTopWidth,footingThickness)
-#     #Materials.
-#     self.concrete= SIA262_materials.c25_30
-#     self.reinforcement= RetainingWallReinforcement(concreteCover)
+class BasementWall(RetainingWall):
+  '''Basement retaining wall (propped cantilever).'''
+  def __init__(self,name= 'prb',concreteCover=40e-3,stemBottomWidth=0.25,stemTopWidth=0.25,footingThickness= 0.25, concrete= None, steel= None):
+    '''Constructor '''
+    super(BasementWall,self).__init__(name,concreteCover, stemBottomWidth,stemTopWidth,footingThickness, concrete, steel)
