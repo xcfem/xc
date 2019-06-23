@@ -19,13 +19,24 @@ aciRCLimitStrains= concrete_base.ReinforcedConcreteLimitStrains(EpsCU= -3.0e-3,E
 class ACIConcrete(concrete_base.Concrete):
     """ Concrete model according to ACI 318
 
+    :ivar Lambda: modification factor to reflect the reduced mechanical
+                  properties of lightweight concrete relative to normalweight
+                  concrete of the same compressive strength.
     """
     toPascal= 6894.76 #Conversion from Pa to lb/inch2
     fromPascal= 1.0/toPascal #Conversion from lb/inch2 to Pa
     
-    def __init__(self,nmbConcrete, fck, gammaC):
-        super(ACIConcrete,self).__init__(nmbConcrete,fck, gammaC)
-        lmsg.warning('Implementation of ACI concrete pending.\n')
+    def __init__(self,concreteName, fck, gammaC, Lambda= 1.0):
+        '''
+        Constructor.
+
+        :param concretName: name for the concrete material.
+        :param Lambda: modification factor to reflect the reduced mechanical
+                       properties of lightweight concrete.
+        '''
+        super(ACIConcrete,self).__init__(concreteName,fck, gammaC)
+        #lmsg.warning('Implementation of ACI concrete pending.')
+        self.Lambda= Lambda
     def getEcm(self):
         '''Longitudinal secant modulus of deformation at 28 days expressed
         in [Pa] [+] according to expression 19.2.2.1.b of ACI 318-14.'''
@@ -38,29 +49,35 @@ class ACIConcrete(concrete_base.Concrete):
         '''
         return 2.0*0.85*self.fck/self.getEcm()
     def getEpscu2(self):
-        """
+        '''
         return nominal ultimate strain [-] at parabola-rectangle diagram 
         according to clause 22.2.2.1 of ACI 318-14
-        """
+        '''
         return 3.0*(-1e-3)
+    def getLambdaSqrtFck(self):
+        '''
+        return the product: Lambda*math.sqrd(fck).
+        '''
+        fcklb_inch2= abs(self.fck*self.fromPascal) #Pa -> lb/inch2
+        return self.Lambda*self.toPascal*math.sqrt(fcklb_inch2)
+    
     def getFctm(self):
         """Fctm: mean tensile strength [Pa][+] (according to 
            ACI 318-14 R14.3.2.1 )
         """
-        fcklb_inch2= abs(self.fck*self.fromPascal) #Pa -> lb/inch2
-        return self.toPascal*5.0*math.sqrt(fcklb_inch2)
+        return 5.0*self.getLambdaSqrtFck()
     
         
 # ACI concretes
-A36M= ACIConcrete(nmbConcrete="A36M",fck=-20e6,gammaC=1.667) #????
+A36M= ACIConcrete(concreteName="A36M",fck=-20e6,gammaC=1.667) #????
 
-c3500= ACIConcrete(nmbConcrete="C3500",fck=-3500*ACIConcrete.toPascal,gammaC=1.667)
-c4000= ACIConcrete(nmbConcrete="C4000",fck=-4000*ACIConcrete.toPascal,gammaC=1.667)
+c3500= ACIConcrete(concreteName="C3500",fck=-3500*ACIConcrete.toPascal,gammaC=1.667)
+c4000= ACIConcrete(concreteName="C4000",fck=-4000*ACIConcrete.toPascal,gammaC=1.667)
 
 # Reinforcing steel.
 
-A615G60= concrete_base.ReinforcingSteel(steelName="A615G60", fyk=420e6, emax=0.08,gammaS=1.15)
-A706G60= concrete_base.ReinforcingSteel(steelName="A706G60", fyk=420e6, emax=0.08,gammaS=1.15)
+A615G60= concrete_base.ReinforcingSteel(steelName="A615G60", fyk=415e6, emax=0.08,gammaS=1.15)
+A706G60= concrete_base.ReinforcingSteel(steelName="A706G60", fyk=415e6, emax=0.08,gammaS=1.15)
 
 
 #Bar areas in square meters.
@@ -121,6 +138,28 @@ standard_bars_diameters['#11']= math.sqrt(4.0*num11Area/math.pi)
 standard_bars_diameters['#14']= math.sqrt(4.0*num14Area/math.pi)
 standard_bars_diameters['#18']= math.sqrt(4.0*num18Area/math.pi)
 standard_bars_diameters['#18J']= math.sqrt(4.0*num18JArea/math.pi)
+
+def getPsi_sFromBarNumber(barNumber):
+    ''' Return factor used to modify development length based on
+        reinforcement size according to table 25.4.2.4 of ACI
+        318-14.'''
+    retval= 1.0
+    number= int(barNumber.replace('#',''))
+    if(number<7):
+        retval= 0.8
+    return retval
+
+def getPsi_sFromDiameter(phi):
+    ''' Return factor used to modify development length based on
+        reinforcement size according to table 25.4.2.4 of ACI
+        318-14.
+
+        :param phi: bar diameter.
+    '''
+    retval= 1.0
+    if(phi<standard_bars_diameters['#6']):
+        retval= 0.8
+    return retval
 
 #Generic layers (rows of rebars)
 n2s150r45= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#2'],areaRebar= standard_bars_areas['#2'],rebarsSpacing= 0.150,width=1.0,nominalCover= 0.045)
