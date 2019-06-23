@@ -14,6 +14,9 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
+toPascal= 6894.76 #Conversion from Pa to lb/inch2
+fromPascal= 1.0/toPascal #Conversion from lb/inch2 to Pa
+
 aciRCLimitStrains= concrete_base.ReinforcedConcreteLimitStrains(EpsCU= -3.0e-3,EpsC0= -2.0e-3,SMaxStrain= 10e-3);
 
 class ACIConcrete(concrete_base.Concrete):
@@ -22,10 +25,7 @@ class ACIConcrete(concrete_base.Concrete):
     :ivar Lambda: modification factor to reflect the reduced mechanical
                   properties of lightweight concrete relative to normalweight
                   concrete of the same compressive strength.
-    """
-    toPascal= 6894.76 #Conversion from Pa to lb/inch2
-    fromPascal= 1.0/toPascal #Conversion from lb/inch2 to Pa
-    
+    """    
     def __init__(self,concreteName, fck, gammaC, Lambda= 1.0):
         '''
         Constructor.
@@ -40,8 +40,8 @@ class ACIConcrete(concrete_base.Concrete):
     def getEcm(self):
         '''Longitudinal secant modulus of deformation at 28 days expressed
         in [Pa] [+] according to expression 19.2.2.1.b of ACI 318-14.'''
-        fcklb_inch2= abs(self.fck*self.fromPascal) #Pa -> lb/inch2
-        return 57000*(math.sqrt(fcklb_inch2))*self.toPascal #lb/inch2 -> Pa
+        fcklb_inch2= abs(self.fck*fromPascal) #Pa -> lb/inch2
+        return 57000*(math.sqrt(fcklb_inch2))*toPascal #lb/inch2 -> Pa
     def getEpsc2(self):
         '''
         return strain (<0) at peak stress at parabola-rectangle diagram 
@@ -54,13 +54,17 @@ class ACIConcrete(concrete_base.Concrete):
         according to clause 22.2.2.1 of ACI 318-14
         '''
         return 3.0*(-1e-3)
+    def getSqrtFck(self):
+        '''
+        return the product: Lambda*math.sqrd(fck).
+        '''
+        fcklb_inch2= abs(self.fck*fromPascal) #Pa -> lb/inch2
+        return toPascal*math.sqrt(fcklb_inch2)
     def getLambdaSqrtFck(self):
         '''
         return the product: Lambda*math.sqrd(fck).
         '''
-        fcklb_inch2= abs(self.fck*self.fromPascal) #Pa -> lb/inch2
-        return self.Lambda*self.toPascal*math.sqrt(fcklb_inch2)
-    
+        return self.Lambda*self.getSqrtFck()
     def getFctm(self):
         """Fctm: mean tensile strength [Pa][+] (according to 
            ACI 318-14 R14.3.2.1 )
@@ -71,8 +75,8 @@ class ACIConcrete(concrete_base.Concrete):
 # ACI concretes
 A36M= ACIConcrete(concreteName="A36M",fck=-20e6,gammaC=1.667) #????
 
-c3500= ACIConcrete(concreteName="C3500",fck=-3500*ACIConcrete.toPascal,gammaC=1.667)
-c4000= ACIConcrete(concreteName="C4000",fck=-4000*ACIConcrete.toPascal,gammaC=1.667)
+c3500= ACIConcrete(concreteName="C3500",fck=-3500*toPascal,gammaC=1.667)
+c4000= ACIConcrete(concreteName="C4000",fck=-4000*toPascal,gammaC=1.667)
 
 # Reinforcing steel.
 

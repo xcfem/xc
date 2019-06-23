@@ -8,6 +8,7 @@ __email__= "l.pereztato@gmail.com"
 
 import scipy.interpolate
 from materials.sia262 import SIA262_materials
+from materials.sections import rebar_family as rf
 import geom
 from materials import limit_state_checking_base as lsc
 from postprocess import control_vars as cv
@@ -18,6 +19,7 @@ import geom
 from materials.sections.fiber_section import fiber_sets
 from materials.sections import stressCalc as sc
 from miscUtils import LogMessages as lmsg
+from postprocess.reports import common_formats as fmt
 
 # Returns adherence stress (Pa) for concrete type (tableau 19 SIA 262).
 adherenceStress_x= [12e6 , 16e6,20e6 ,25e6 ,30e6 ,35e6 ,40e6 ,45e6 ,50e6]
@@ -258,10 +260,21 @@ class ShearController(lsc.LimitStateControllerBase):
     self.s= rcSection.shReinfZ.shReinfSpacing
     self.Vcu= 0.0 # Concrete contribution to the shear strength.
     self.Vsu= 0.0 # Rebar contribution to the shear strength.
+    
+  def getVuNoShearRebars(self,Nd,Md,AsTrac,b,d):
+    '''Section shear capacity without shear reinforcement.
 
+       :param Nd: axial internal force on the section.
+       :param Md: bending moment on the section.
+       :param AsTrac: area of tensioned reinforcement.
+    '''
+    return VuNoShearRebars(self.concrete, self.steel,Nd,Md,AsTrac,self.width,self.depthUtil)
   def calcVcu(self, Nd, Md, Mu):
-    ''' Computes the shear strength of the section without shear reinforcement.'''
+    ''' Computes the shear strength of the section without 
+        shear reinforcement.
+    '''
     self.Vcu= VuNoShearRebarsSIA262(self.concrete,Nd,abs(Md),abs(Mu),self.width,self.depthUtil)
+    return self.Vcu
    
   def calcVsu(self):
     ''' Computes the shear strength of the section without shear reinforcement.
@@ -616,3 +629,115 @@ class FatigueController(lsc.LimitStateControllerBase):
         controlVars.shearLimit= getShearLimit(section,controlVars,controlVars.Vu)
         controlVars.concreteShearCF= getShearCF(controlVars)
         e.setProp(self.limitStateLabel,controlVars)
+
+##################
+# Rebar families.#
+##################
+
+class SIARebarFamily(rf.RebarFamily):
+  ''' Family or reinforcement bars with checking according to SIA 262.
+
+    :ivar crackControlRequirement: crack control requirement A B or C.
+  '''
+  minDiams= 50
+  def __init__(self,steel,diam,spacing,concreteCover, crackControlRequirement= 'B'):
+    ''' Constructor.
+
+    :param steel: reinforcing steel material.
+    :param diam: diameter of the bars.
+    :param spacing: spacing of the bars.
+    :param concreteCover: concrete cover of the bars.
+    :param crackControlRequirement: crack control requierement A, B or C.
+    '''
+    super(SIARebarFamily,self).__init__(steel,diam,spacing,concreteCover)
+    self.crackControlRequirement= crackControlRequirement
+  def getCopy(self,barController):
+    return SIARebarFamily(self.steel,self.diam,self.spacing,self.concreteCover,self.crackControlRequirement)
+  def getRebarController(self):
+    return RebarController(self.crackControlRequirement)
+  def getBasicAnchorageLength(self,concrete):
+    ''' Return the basic anchorage length of the bars.'''
+    rebarController= self.getRebarController()
+    return max(rebarController.getBasicAnchorageLength(concrete,self.getDiam(),self.steel),self.minDiams*self.diam)
+  def getCrackControlRequirement(self):
+    ''' Return the crack control requirement as in clause 4.4.2.2.3
+        of SIA 262:2014.'''
+    return self.crackControlRequirement
+  def getMinReinfAreaUnderFlexion(self,concrete,thickness):
+    '''Return the minimun amount of bonded reinforcement to control cracking
+       for reinforced concrete sections under flexion.
+
+    :param concrete: concrete material.
+    :param thickness: thickness of the bended member.
+    '''
+    return self.getRebarController().getMinReinfAreaUnderFlexion(concrete,self.getEffectiveCover(),self.spacing,thickness)
+  def getMinReinfAreaUnderTension(self,concrete,thickness):
+    '''Return the minimun amount of bonded reinforcement to control cracking
+       for reinforced concrete sections under tension.
+
+    :param concrete: concrete material.
+    :param thickness: thickness of the tensioned member.
+    '''
+    return self.getRebarController().getMinReinfAreaUnderTension(concrete,self.spacing,thickness)
+  
+  def getVR(self,concrete,Nd,Md,b,thickness):
+    '''Return the shear resistance of the (b x thickness) rectangular section.
+
+    :param concrete: concrete material.
+    :param Nd: design axial force.
+    :param Md: design bending moment.
+    :param b: width of the rectangular section.
+    :param thickness: height of the rectangular section.
+    '''
+    return VuNoShearRebars(concrete,self.steel,Nd,Md,self.getAs(),b,self.d(thickness))
+  
+  def writeRebars(self, outputFile,concrete,AsMin):
+    '''Write rebar family data.'''
+    self.writeDef(outputFile,concrete)
+    outputFile.write("  area: As= "+ fmt.Areas.format(self.getAs()*1e4) + " cm2/m areaMin("+self.getCrackControlRequirement()+"): " + fmt.Areas.format(AsMin*1e4) + " cm2/m")
+    rf.writeF(outputFile,"  F(As)", self.getAs()/AsMin)
+
+class SIAFamNBars(SIARebarFamily):
+  n= 2 #Number of bars.
+  def __init__(self,steel,n,diam,spacing,concreteCover):
+    RebarFamily.__init__(self,steel,diam,spacing,concreteCover)
+    self.n= int(n)
+  def __repr__(self):
+    return str(n) + " x " + self.steel.name + ", diam: " + str(int(self.diam*1e3)) + " mm, e= " + str(int(self.spacing*1e3))
+  def writeDef(self,outputFile,concrete):
+    outputFile.write("  n= "+str(self.n)+" diam: "+ fmt.Diam.format(self.getDiam()*1000) + " mm, spacing: "+ fmt.Diam.format(self.spacing*1e3)+ " mm")
+    ancrage= self.getBasicAnchorageLength(concrete)
+    outputFile.write("  l. ancrage L="+ fmt.Lengths.format(ancrage) + " m ("+ fmt.Diam.format(ancrage/self.getDiam())+ " diamètres).\\\\\n")
+
+class SIADoubleRebarFamily(rf.DoubleRebarFamily):
+    ''' Two reinforcement bars families.'''
+    def getCopy(self,barController):
+        return SIADoubleRebarFamily(self.f1, self.f2)
+    def getRebarController(self):
+        return RebarController(self.getCrackControlRequirement())
+    def getCrackControlRequirement(self):
+        ''' Return the crack control requirement as in clause 4.4.2.2.3
+            of SIA 262:2014.'''
+        retval= self.f1.crackControlRequirement
+        if(retval!=self.f2.crackControlRequirement):
+          cmsg.error("Different specifications for crack control.")
+        return retval
+    def getVR(self,concrete,Nd,Md,b,thickness):
+        '''Return the shear resistance of the (b x thickness) rectangular section.
+        :param concrete: concrete material.
+        :param Nd: design axial force.
+        :param Md: design bending moment.
+        :param b: width of the rectangular section.
+        :param thickness: height of the rectangular section.
+        '''
+        assert self.f1.steel==self.f2.steel
+        return VuNoShearRebars(concrete,self.f1.steel,Nd,Md,self.getAs(),b,self.d(thickness))  
+    def writeRebars(self, outputFile,concrete,AsMin):
+        '''Write rebar family data.'''
+        self.writeDef(outputFile,concrete)
+        outputFile.write("  area: As= "+ fmt.Areas.format(self.getAs()*1e4) + " cm2/m areaMin("+self.getCrackControlRequirement()+"): " + fmt.Areas.format(AsMin*1e4) + " cm2/m")
+        rf.writeF(outputFile,"  F(As)", self.getAs()/AsMin)
+
+
+
+    

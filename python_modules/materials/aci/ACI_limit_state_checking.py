@@ -11,6 +11,7 @@ __email__= "l.pereztato@gmail.com"
 
 import scipy.interpolate
 from materials.aci import ACI_materials
+from materials.sections import rebar_family as rf
 import geom
 from materials import limit_state_checking_base as lsc
 from postprocess import control_vars as cv
@@ -21,6 +22,7 @@ import geom
 from materials.sections.fiber_section import fiber_sets
 from materials.sections import stressCalc as sc
 from miscUtils import LogMessages as lmsg
+from postprocess.reports import common_formats as fmt
 
 class RebarController(object):
     '''Control of some parameters as development lenght 
@@ -36,9 +38,6 @@ class RebarController(object):
                           less than 3db (spacing is not calculated)
                     * 1.2 for all other epoxy coated bars 
                     * 1.0 for uncoated bars
-       :ivar Lambda: lightweight aggregate concrete factor 
-                    * 0.75 for lightweight concrete 
-                    * 1.0 for normal-weight concrete
        :ivar Ktr: transverse reinforcement index. Factor that represents the 
                   contribution of confining reinforcement across potential 
                   splitting planes; is conservatively assumed to be zero.
@@ -92,8 +91,136 @@ class RebarController(object):
         psi_t_psi_e= min(self.psi_t*self.psi_e,1.7)
         psi_t_psi_e_psi_s= psi_t_psi_e*ACI_materials.getPsi_sFromDiameter(phi)
         #Clause 25.4.1.4:
-        l= min(concrete.getLambdaSqrtFck(),concrete.Lambda*concrete.toPascal*100.0)
+        l= min(concrete.getLambdaSqrtFck(),concrete.Lambda*ACI_materials.toPascal*100.0)
         retval= 3.0/40.0*(steel.fyk/l)
         retval*= psi_t_psi_e_psi_s/self.getConfinementTerm(phi)
         retval*= phi
         return max(retval,12*0.0254) #Clause 25.4.2.1b
+
+##################
+# Rebar families.#
+##################
+
+class ACIRebarFamily(rf.RebarFamily):
+    ''' Family or reinforcement bars with checking according to ACI 318-14.
+
+       :ivar psi_t: reinforcement location factor; "concrete below" is 
+                    taken as the depth from the rebar center to the bottom 
+                    of the concrete section.
+                    * 1.3 for concrete below ≥ 12 inches 
+                    * 1.0 for concrete below < 12 inches 
+       :ivar psi_e: coating factor 
+                    * 1.5 for epoxy coated bars with cover (to center of bar)
+                          less than 3db (spacing is not calculated)
+                    * 1.2 for all other epoxy coated bars 
+                    * 1.0 for uncoated bars
+    '''
+    def __init__(self,steel,diam,spacing,concreteCover):
+      ''' Constructor.
+
+      :param steel: reinforcing steel material.
+      :param diam: diameter of the bars.
+      :param spacing: spacing of the bars.
+      :param concreteCover: concrete cover of the bars.
+      '''
+      super(ACIRebarFamily,self).__init__(steel,diam,spacing,concreteCover)
+      self.psi_t= 1.3
+      self.psi_e= 1.0 # uncoated bars.
+
+    def getCopy(self,barController):
+      return ACIRebarFamily(self.steel,self.diam,self.spacing,self.concreteCover)
+    def getRebarController(self):
+      return RebarController(psi_t= self.psi_t, psi_e= self.psi_e, concreteCover= self.concreteCover, spacing= self.spacing)
+    def getBasicAnchorageLength(self,concrete):
+      ''' Return the basic anchorage length of the bars.'''
+      rebarController= self.getRebarController()
+      return rebarController.getBasicAnchorageLength(concrete,self.getDiam(),self.steel)
+    def getMinReinfAreaUnderFlexion(self, thickness, b= 1.0, type= 'slab', concrete= None):
+        '''Return the minimun amount of bonded reinforcement to control cracking
+           for reinforced concrete sections under flexion per unit length 
+           according to clauses 7.6.1.1, 8.6.1.1, 9.6.1.2, 10.6.1.1, 11.6.1,
+           12.6.1 
+
+        :param steel: reinforcement steel.
+        :param thickness: gross thickness of concrete section (doesn't include 
+                          the area of the voids).
+        '''
+        retval= 0.0025*thickness*b
+        fy= self.steel.fyk
+        if(type=='slab'):
+            limit= ACI_materials.toPascal*60e3
+            retval= thickness # b= 1
+            if(fy<limit):
+                retval*= 0.0020
+            else:
+                retval*= max(0.0018*limit/fy,0.0014)
+        elif(type=='wall'):
+            retval= 0.0025*thickness # b= 1
+        elif(type=='beam'):
+            d= 0.9*thickness
+            retval= d*b
+            retval*= max(3.0*concrete.getSqrtFck(),ACI_materials.toPascal*200)
+        elif(type=='column'):
+            retval= 0.01*thickness*b
+        return retval
+
+    def getMinReinfAreaUnderTension(self,thickness, type= 'slab', concrete= None):
+        '''Return the minimun amount of bonded reinforcement to control cracking
+           for reinforced concrete sections under tension.
+
+        :param concrete: concrete material.
+        :param thickness: thickness of the tensioned member.
+        '''
+        return 2.0*self.getMinReinfAreaUnderFlexion(thickness= thickness, type= type, concrete= concrete)
+
+    def getVR(self,concrete,Nd,Md,b,thickness):
+        '''Return the shear resistance carried by the congrete on a (b x thickness)
+           rectangular section according to clause 22.5.5.1 of ACI 318-14.
+
+        :param concrete: concrete material.
+        :param Nd: design axial force.
+        :param Md: design bending moment.
+        :param b: width of the rectangular section.
+        :param thickness: height of the rectangular section.
+        '''
+        retval= 2.0*concrete.getLambdaSqrtFck()*b*0.9*thickness
+        if(Nd<0.0):
+            retval*=(1-Nd/b/thickness/2000.0*ACI_materials.toPascal)
+        return retval
+
+    def writeRebars(self, outputFile,concrete,AsMin):
+        '''Write rebar family data.'''
+        self.writeDef(outputFile,concrete)
+        outputFile.write("  area: As= "+ fmt.Areas.format(self.getAs()*1e4) + " cm2/m areaMin: " + fmt.Areas.format(AsMin*1e4) + " cm2/m")
+        rf.writeF(outputFile,"  F(As)", self.getAs()/AsMin)
+
+class ACIFamNBars(ACIRebarFamily):
+    n= 2 #Number of bars.
+    def __init__(self,steel,n,diam,spacing,concreteCover):
+        RebarFamily.__init__(self,steel,diam,spacing,concreteCover)
+        self.n= int(n)
+    def __repr__(self):
+        return str(n) + " x " + self.steel.name + ", diam: " + str(int(self.diam*1e3)) + " mm, e= " + str(int(self.spacing*1e3))
+    def writeDef(self,outputFile,concrete):
+        outputFile.write("  n= "+str(self.n)+" diam: "+ fmt.Diam.format(self.getDiam()*1000) + " mm, spacing: "+ fmt.Diam.format(self.spacing*1e3)+ " mm")
+        ancrage= self.getBasicAnchorageLength(concrete)
+        outputFile.write("  l. ancrage L="+ fmt.Lengths.format(ancrage) + " m ("+ fmt.Diam.format(ancrage/self.getDiam())+ " diamètres).\\\\\n")
+
+class ACIDoubleRebarFamily(rf.DoubleRebarFamily):
+    ''' Two reinforcement bars families.'''
+    def getCopy(self,barController):
+        return ACIDoubleRebarFamily(self.f1, self.f2)
+    def getVR(self,concrete,Nd,Md,b,thickness):
+        '''Return the shear resistance of the (b x thickness) rectangular section.
+        :param concrete: concrete material.
+        :param Nd: design axial force.
+        :param Md: design bending moment.
+        :param b: width of the rectangular section.
+        :param thickness: height of the rectangular section.
+        '''
+        return self.f1.getVR(concrete,Nd,Md,b,thickness)
+    def writeRebars(self, outputFile,concrete,AsMin):
+        '''Write rebar family data.'''
+        self.writeDef(outputFile,concrete)
+        outputFile.write("  area: As= "+ fmt.Areas.format(self.getAs()*1e4) + " cm2/m areaMin: " + fmt.Areas.format(AsMin*1e4) + " cm2/m")
+        rf.writeF(outputFile,"  F(As)", self.getAs()/AsMin)

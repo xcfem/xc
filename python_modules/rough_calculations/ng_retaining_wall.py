@@ -21,7 +21,6 @@ import matplotlib.pyplot as plt
 from materials import typical_materials
 from materials.sections import section_properties
 from model.geometry import retaining_wall_geometry
-from rough_calculations import ng_rebar_def
 from rough_calculations import ng_rc_section
 import os
 from miscUtils import LogMessages as lmsg
@@ -115,17 +114,15 @@ class InternalForces(object):
 
 class RetainingWallReinforcement(dict):
   ''' Simplified reinforcement for a cantilever retaining wall.'''
-  def __init__(self,concreteCover=40e-3, steel= None):
+  def __init__(self,concreteCover=40e-3, steel= None,rebarFamilyTemplate= None):
     '''Constructor '''
     super(RetainingWallReinforcement, self).__init__()
     self.concreteCover= concreteCover
     #Materials.
     self.steel= steel
     #Default reinforcement
-    AdefA= ng_rebar_def.RebarFamily(self.steel,8e-3,0.15,concreteCover)
-    Adef= AdefA
     for i in range(1,15):
-      self[i]= Adef
+      self[i]= rebarFamilyTemplate
     # #Armature de peau semelle
     # R= self.footingThickness-2*self.concreteCover-8e-3
     # n= math.ceil(R/0.15)+1
@@ -389,7 +386,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     #Armature 10. armature de peau semelle.
     outputFile.write("\\textbf{Armature 10 (armature de peau semelle):}\\\\\n")
     outputFile.write("  --\\\\\n")
-    #writeRebars(outputFile,self.concrete,self.reinforcement[10],1e-5)
+    #self.reinforcement[10].writeRebars(outputFile,self.concrete,1e-5)
 
     #Coupe 11. armature long. extérieure voile.
     outputFile.write("\\textbf{Armature 11 (armature long. extérieure voile):}\\\\\n")
@@ -402,7 +399,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     #Armature 13. armature long. couronnement.
     outputFile.write("\\textbf{Armature 13 (armature long. couronnement):}\\\\\n")
     outputFile.write("  --\\\\\n")
-    #writeRebars(outputFile,self.concrete,self.reinforcement[13],1e-5)
+    #self.reinforcement[13].writeRebars(outputFile,self.concrete,1e-5)
     outputFile.write("\\hline\n")
     outputFile.write("\\end{supertabular}\n")
     outputFile.write("\\end{center}\n")

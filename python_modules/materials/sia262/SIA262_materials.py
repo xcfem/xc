@@ -12,7 +12,6 @@ __license__= 'GPL'
 __version__= '3.0'
 __email__= 'l.pereztato@gmail.com ana.Ortega.Ort@gmail.com'
 
-
 class ConcreteSIA262(ec2.EC2Concrete):
   def nufc(self):
     return min(math.pow(30e6/-self.fck,1/3.0),1.0)
@@ -133,3 +132,4 @@ def numBars(AsNec):
     n= math.ceil(AsNec/a)
     retval.append((d,n))
   return retval
+
