@@ -104,6 +104,7 @@ class RebarController(object):
 class ACIRebarFamily(rf.RebarFamily):
     ''' Family or reinforcement bars with checking according to ACI 318-14.
 
+       :ivar barNumber: bar number in ACI 318 code.
        :ivar psi_t: reinforcement location factor; "concrete below" is 
                     taken as the depth from the rebar center to the bottom 
                     of the concrete section.
@@ -115,20 +116,22 @@ class ACIRebarFamily(rf.RebarFamily):
                     * 1.2 for all other epoxy coated bars 
                     * 1.0 for uncoated bars
     '''
-    def __init__(self,steel,diam,spacing,concreteCover):
+    def __init__(self,steel,barNumber,spacing,concreteCover):
       ''' Constructor.
 
       :param steel: reinforcing steel material.
-      :param diam: diameter of the bars.
+      :param barNumber: diameter of the bars.
       :param spacing: spacing of the bars.
       :param concreteCover: concrete cover of the bars.
       '''
+      self.barNumber= barNumber
+      diam= ACI_materials.standard_bars_diameters[barNumber]
       super(ACIRebarFamily,self).__init__(steel,diam,spacing,concreteCover)
       self.psi_t= 1.3
       self.psi_e= 1.0 # uncoated bars.
 
     def getCopy(self,barController):
-      return ACIRebarFamily(self.steel,self.diam,self.spacing,self.concreteCover)
+      return ACIRebarFamily(self.steel,self.barNumber,self.spacing,self.concreteCover)
     def getRebarController(self):
       return RebarController(psi_t= self.psi_t, psi_e= self.psi_e, concreteCover= self.concreteCover, spacing= self.spacing)
     def getBasicAnchorageLength(self,concrete):
@@ -196,8 +199,8 @@ class ACIRebarFamily(rf.RebarFamily):
 
 class ACIFamNBars(ACIRebarFamily):
     n= 2 #Number of bars.
-    def __init__(self,steel,n,diam,spacing,concreteCover):
-        RebarFamily.__init__(self,steel,diam,spacing,concreteCover)
+    def __init__(self,steel,n,barNumber,spacing,concreteCover):
+        RebarFamily.__init__(self,steel,barNumber,spacing,concreteCover)
         self.n= int(n)
     def __repr__(self):
         return str(n) + " x " + self.steel.name + ", diam: " + str(int(self.diam*1e3)) + " mm, e= " + str(int(self.spacing*1e3))
