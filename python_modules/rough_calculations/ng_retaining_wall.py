@@ -274,9 +274,10 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   def writeDef(self,pth,outputFile):
     '''Write wall definition in LaTeX format.'''
     pathFiguraEPS= pth+self.name+".eps"
-    pathFiguraPDF= pth+self.name+".pdf"
-    self.internalForcesULS.writeGraphic(pathFiguraEPS)
-    os.system("convert "+pathFiguraEPS+" "+pathFiguraPDF)
+    pathFiguraJPEG= pth+self.name+".jpeg"
+    #self.internalForcesULS.writeGraphic(pathFiguraEPS)
+    self.internalForcesULS.writeGraphic(pathFiguraJPEG)
+    os.system("convert "+pathFiguraJPEG+" "+pathFiguraEPS)
     outputFile.write("\\begin{table}\n")
     outputFile.write("\\begin{center}\n")
     outputFile.write("\\begin{tabular}[H]{|l|}\n")
