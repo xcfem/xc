@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
+from __future__ import print_function
 
 '''Routines for cantilever retaining walls design.'''
 
@@ -32,7 +33,7 @@ def filterRepeatedValues(yList,mList,vList):
   sz= len(yList)
 
   mapM={}
-  mapV= {}
+  mapV={}
   for i in range(0,sz):
     y= abs(yList[i])
     mapM[y]= mList[i]
@@ -51,16 +52,21 @@ def filterRepeatedValues(yList,mList,vList):
 
 class InternalForces(object):
   '''Internal forces for a retaining wall obtained.'''
-  def __init__(self,y,mdMax,vdMax,MdSemelle,VdSemelle):
-    self.y, self.mdMax, self.vdMax= filterRepeatedValues(y,mdMax,vdMax)
+  def __init__(self,y,mdEnvelope,vdEnvelope,MdSemelle,VdSemelle):
+    self.mdEnvelope= mdEnvelope
+    self.vdEnvelope= vdEnvelope
+    self.mdEnvelope.filterRepeatedValues()
+    self.vdEnvelope.filterRepeatedValues()
     self.interpolate()
     self.stemHeight= self.y[-1]
-    print 'stemHeight= ', self.stemHeight
     self.MdSemelle= MdSemelle
     self.VdSemelle= VdSemelle
   def interpolate(self):
-    self.mdMaxVoile= scipy.interpolate.interp1d(self.y,self.mdMax)
-    self.vdMaxVoile= scipy.interpolate.interp1d(self.y,self.vdMax)    
+    self.y= self.mdEnvelope.yValues
+    self.mdMaxStem= scipy.interpolate.interp1d(self.y,self.mdEnvelope.positive)
+    self.mdMinStem= scipy.interpolate.interp1d(self.y,self.mdEnvelope.negative)
+    self.vdMaxStem= scipy.interpolate.interp1d(self.y,self.vdEnvelope.positive)    
+    self.vdMinStem= scipy.interpolate.interp1d(self.y,self.vdEnvelope.negative)    
   def __imul__(self,f):
     for m in self.mdMax:
       m*=f
@@ -71,28 +77,50 @@ class InternalForces(object):
     self.VdSemelle*=f
     return self
   def clone(self):
-    return InternalForces(self.y, self.mdMax, self.vdMax,self.MdSemelle,self.VdSemelle)
+    return InternalForces(self.mdEnvelope, self.vdEnvelope,self.MdSemelle,self.VdSemelle)
   def __mul__(self, f):
     retval= self.clone()
     retval*= f
     return retval
   def __rmul__(self,f):
     return self*f
-  def MdEncastrement(self,footingThickness):
+  def MdMaxEncastrement(self,footingThickness):
     '''Bending moment (envelope) at stem base.'''
     yEncastrement= self.stemHeight-footingThickness/2.0
-    return self.Md(yEncastrement)
-  def VdEncastrement(self,epaisseurEncastrement):
+    return self.MdMax(yEncastrement)
+  def VdMaxEncastrement(self,epaisseurEncastrement):
     '''Shear force (envelope) at stem base.'''
     yV= self.stemHeight-epaisseurEncastrement
-    return abs(self.vdMaxVoile(yV))
-  def Vd(self, yCoupe):
-    '''Shear (envelope) at height yCoupe.'''
-    return abs(self.vdMaxVoile(yCoupe))
-  def Md(self, yCoupe):
-    '''Bending moment (envelope) at height yCoupe.'''
-    return abs(self.mdMaxVoile(yCoupe))
-  def getYVoile(self,hCoupe):
+    return abs(self.vdMaxStem(yV))
+  def MdMaxMidStem(self,footingThickness):
+    '''Max. bending moment (envelope) at the middle of the stem.'''
+    yMidStem= (self.stemHeight-footingThickness/2.0)/2.0
+    return self.MdMax(yMidStem)
+  def VdMaxMidStem(self,footingThickness):
+    '''Max. shear (envelope) at the middle of the stem.'''
+    yMidStem= (self.stemHeight-footingThickness/2.0)/2.0
+    return self.VdMax(yMidStem)
+  def MdMinMidStem(self,footingThickness):
+    '''Min. bending moment (envelope) at the middle of the stem.'''
+    yMidStem= (self.stemHeight-footingThickness/2.0)/2.0
+    return self.MdMin(yMidStem)
+  def VdMinMidStem(self,footingThickness):
+    '''Min. shear (envelope) at the middle of the stem.'''
+    yMidStem= (self.stemHeight-footingThickness/2.0)/2.0
+    return self.VdMin(yMidStem)
+  def VdMax(self, yCoupe):
+    '''Max. shear (envelope) at height yCoupe.'''
+    return abs(self.vdMaxStem(yCoupe))
+  def MdMax(self, yCoupe):
+    '''Max. bending moment (envelope) at height yCoupe.'''
+    return abs(self.mdMaxStem(yCoupe))
+  def VdMin(self, yCoupe):
+    '''Min. shear (envelope) at height yCoupe.'''
+    return abs(self.vdMinStem(yCoupe))
+  def MdMin(self, yCoupe):
+    '''Min bending moment (envelope) at height yCoupe.'''
+    return abs(self.mdMinStem(yCoupe))
+  def getYStem(self,hCoupe):
     return self.stemHeight-hCoupe
   def writeGraphic(self,fileName):
     '''Draws a graphic of internal forces (envelopes) in
@@ -100,15 +128,21 @@ class InternalForces(object):
     z= []
     for yi in self.y:
       z.append(self.stemHeight-yi)
-    m= []
-    for mi in self.mdMax:
-      m.append(mi/1e3)
-    v= []
-    for vi in self.vdMax:
-      v.append(vi/1e3)
-    plt.plot(m,z,'-', v, z,'--')
-    plt.legend(['Md (kN m/m)', 'Vd (kN/m)'], loc='best')
-    plt.title("Efforts internes.")
+    mPos= []
+    for mi in self.mdEnvelope.positive:
+      mPos.append(mi/1e3)
+    mNeg= []
+    for mi in self.mdEnvelope.negative:
+      mNeg.append(mi/1e3)
+    vPos= []
+    for vi in self.vdEnvelope.positive:
+      vPos.append(vi/1e3)
+    vNeg= []
+    for vi in self.vdEnvelope.negative:
+      vNeg.append(vi/1e3)
+    plt.plot(mPos,z,'+', vPos, z,'^',mNeg,z,'-', vNeg, z,'v')
+    plt.legend(['Md+ (kN m/m)', 'Vd+ (kN/m)','Md- (kN m/m)', 'Vd- (kN/m)'], loc='best')
+    plt.title("Internal forces.")
     plt.savefig(fileName)
     plt.close()
 
@@ -211,7 +245,54 @@ class WallSLSResults(WallULSResults):
     outputFile.write("\\hline\n")
     outputFile.write("\\end{tabular}\n")
     outputFile.write("\\end{center}\n")
-    
+
+class Envelope(object):
+  def __init__(self, yValues):
+    '''Constructor.'''
+    self.yValues= yValues
+    size= len(self.yValues)
+    self.positive= [-1.0e23]*size
+    self.negative= [1.0e23]*size
+  def __str__(self):
+    retval= str(self.yValues)+'\n'
+    retval+= str(self.positive)+'\n'
+    retval+= str(self.negative)+'\n'
+    return retval
+  def update(self,values):
+    '''Update envelopes.'''
+    self.positive= [max(l1, l2) for l1, l2 in zip(self.positive, values)]
+    self.negative= [min(l1, l2) for l1, l2 in zip(self.negative, values)]
+  def filterRepeatedValues(self):
+    '''Filter repeated values.'''
+    sz= len(self.yValues)
+
+    mapPos= dict()
+    mapNeg= dict()
+    for i in range(0,sz):
+      y= abs(self.yValues[i])
+      mapPos[y]= self.positive[i]
+      mapNeg[y]= self.negative[i]
+
+    retY= list()
+    retPos= list()
+    for y in mapPos:
+      retY.append(y)
+    retY.sort()
+    for y in retY:
+      retPos.append(mapPos[y])
+    self.positive= retPos
+      
+    retY= list()
+    retNeg= list()
+    for y in mapNeg:
+      retY.append(y)
+    retY.sort()
+    for y in retY:
+      retNeg.append(mapNeg[y])
+    self.negative= retNeg
+    self.yValues= retY
+
+  
 class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   '''Cantilever retaining wall.'''
   b= 1.0
@@ -325,22 +406,22 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
 
     #Coupe 1. Béton armé. Encastrement.
     C1= self.getSection1()
-    VdEncastrement= self.internalForcesULS.VdEncastrement(self.stemBottomWidth)
-    MdEncastrement= self.internalForcesULS.MdEncastrement(self.footingThickness)
+    VdMaxEncastrement= self.internalForcesULS.VdMaxEncastrement(self.stemBottomWidth)
+    MdMaxEncastrement= self.internalForcesULS.MdMaxEncastrement(self.footingThickness)
     outputFile.write("\\textbf{Armature 1 (armature extérieure en attente) :} \\\\\n")
     NdEncastrement= 0.0 #we neglect axial force
-    C1.writeResultFlexion(outputFile,NdEncastrement, MdEncastrement,VdEncastrement)
-    C1.writeResultStress(outputFile,self.internalForcesSLS.MdEncastrement(self.footingThickness))
+    C1.writeResultFlexion(outputFile,NdEncastrement, MdMaxEncastrement,VdMaxEncastrement)
+    C1.writeResultStress(outputFile,MdMaxEncastrement)
 
-    #Coupe 2. Béton armé. Voile
-    yCoupe2= self.internalForcesULS.getYVoile(self.getBasicAnchorageLength(1))
+    #Coupe 2. Béton armé. Stem
+    yCoupe2= self.internalForcesULS.getYStem(self.getBasicAnchorageLength(1))
     C2= self.getSection2(yCoupe2)
     Nd2= 0.0 #we neglect axial force
-    Vd2= self.internalForcesULS.Vd(yCoupe2)
-    Md2= self.internalForcesULS.Md(yCoupe2)
+    Vd2= self.internalForcesULS.VdMax(yCoupe2)
+    Md2= self.internalForcesULS.MdMax(yCoupe2)
     outputFile.write("\\textbf{Armature 2 (armature extériéure voile):}\\\\\n")
     C2.writeResultFlexion(outputFile,Nd2,Md2,Vd2)
-    C2.writeResultStress(outputFile,self.internalForcesSLS.Md(yCoupe2))
+    C2.writeResultStress(outputFile,Md2)
 
     #Coupe 3. Béton armé. Semelle
     C3= self.getSection3()
@@ -417,7 +498,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
 
     defStrings= {}
     defStrings[1]= self.getSection1().tensionRebars.getDefStrings()
-    yCoupe2= self.internalForcesULS.getYVoile(self.getBasicAnchorageLength(1))
+    yCoupe2= self.internalForcesULS.getYStem(self.getBasicAnchorageLength(1))
     defStrings[2]= self.getSection2(yCoupe2).tensionRebars.getDefStrings()
     defStrings[3]= self.getSection3().tensionRebars.getDefStrings()
     defStrings[4]= self.getSection4().tensionRebars.getDefStrings()
@@ -504,8 +585,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     for n in elasticBearingNodes:
       lT= n.getTributaryLength()
       lngTot+= lT
-      #print "tag= ", n.tag, " lT= ", lT
-      #print "before k= ", kY.E
+      #print("tag= ", n.tag, " lT= ", lT)
+      #print("before k= ", kY.E)
       kX.E= kSx*lT
       kY.E= kSy*lT
       fixedNode, newElem= self.modelSpace.setBearing(n.tag,["kX","kY"])
@@ -516,16 +597,16 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   def createSelfWeightLoads(self,rho= 2500, grav= 9.81):
     '''Create the loads of the concrete weight.'''
     for e in self.wallSet.getElements:
-      selfWeightLoad= grav*rho*e.sectionProperties.A
-      e.vector2dUniformLoadGlobal(xc.Vector([0.0, -selfWeightLoad]))
+      selfWeightLoad= xc.Vector([0.0, -grav*rho*e.sectionProperties.A])
+      e.vector2dUniformLoadGlobal(selfWeightLoad)
   def createDeadLoad(self,heelFillDepth,toeFillDepth,rho= 2000, grav= 9.81):
     '''Create the loads of earth self weigth.'''
+    heelFillLoad= xc.Vector([0.0, -grav*rho*heelFillDepth])
     for e in self.heelSet.getElements:
-      heelFillLoad= grav*rho*heelFillDepth
-      e.vector2dUniformLoadGlobal(xc.Vector([0.0, -heelFillLoad]))
+      e.vector2dUniformLoadGlobal(heelFillLoad)
+    toeFillLoad= xc.Vector([0.0, -grav*rho*toeFillDepth])
     for e in self.toeSet.getElements:
-      toeFillLoad= grav*rho*toeFillDepth
-      e.vector2dUniformLoadGlobal(xc.Vector([0.0, -toeFillLoad]))
+      e.vector2dUniformLoadGlobal(toeFillLoad)
 
   def createEarthPressureLoadOnStem(self,pressureModel,vDir= xc.Vector([-1.0,0.0]),Delta= 0.0):
     '''Create the loads of the earth pressure over the stem.
@@ -732,10 +813,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
 
   def getEnvelopeInternalForces(self,envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel):
     md, vd= self.getStemInternalForces()
-    tmpMd= [max(l1, l2) for l1, l2 in zip(envelopeMd, md)]
-    envelopeMd= tmpMd
-    tmpVd= [max(l1, l2) for l1, l2 in zip(envelopeVd, vd)]
-    envelopeVd= tmpVd
+    envelopeMd.update(md)
+    envelopeVd.update(vd)
     mdHeel, vdHeel= self.getHeelInternalForces()
     envelopeMdHeel= min(mdHeel,envelopeMdHeel)
     envelopeVdHeel= min(vdHeel,envelopeVdHeel)
@@ -745,8 +824,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     rotation= 1e15
     rotationComb= ''
     y= self.getStemYCoordinates()
-    envelopeMd= [0]*len(y)
-    envelopeVd= [0]*len(y)
+    envelopeMd= Envelope(y)
+    envelopeVd= Envelope(y)
     envelopeMdHeel= 1.0e15
     envelopeVdHeel= 1.0e15
     for comb in combinations:
@@ -762,8 +841,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
 
   def performULSAnalysis(self,combinations):
     y= self.getStemYCoordinates()
-    envelopeMd= [0]*len(y)
-    envelopeVd= [0]*len(y)
+    envelopeMd= Envelope(y)
+    envelopeVd= Envelope(y)
     envelopeMdHeel= 1.0e15
     envelopeVdHeel= 1.0e15
     for comb in combinations:
@@ -778,7 +857,11 @@ class BasementWall(RetainingWall):
   def __init__(self,name= 'prb',concreteCover=40e-3,stemBottomWidth=0.25,stemTopWidth=0.25,footingThickness= 0.25, concrete= None, steel= None):
     '''Constructor '''
     super(BasementWall,self).__init__(name,concreteCover, stemBottomWidth,stemTopWidth,footingThickness, concrete, steel)
-    
+
+  def getSection5(self):
+    '''Returns RC section for armature in position 5.'''
+    return ng_rc_section.RCSection(self.reinforcement[5],self.concrete,self.b,self.stemBottomWidth)
+
   def genMesh(self,nodes,springMaterials):
     '''Generate finite element mesh.'''
     super(BasementWall,self).genMesh(nodes, springMaterials)
@@ -786,3 +869,94 @@ class BasementWall(RetainingWall):
     # pin stem head
     headNode= stemLine.lastNode
     headNode.fix(xc.ID([0]),xc.Vector([0.0]))
+
+  def writeResult(self,pth):
+    '''Write reinforcement verification results in LaTeX format.'''
+    outputFile= open(pth+self.name+".tex","w")
+    self.writeDef(pth,outputFile)
+    self.stability_results.writeOutput(outputFile,self.name)
+    self.sls_results.writeOutput(outputFile,self.name)
+    outputFile.write("\\bottomcaption{Calcul armatures mur "+ self.name +"} \\label{tb_"+self.name+"}\n")
+    outputFile.write("\\tablefirsthead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{Armatures mur "+self.name+"}}\\\\\\hline\n}\n")
+    outputFile.write("\\tablehead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{"+self.name+" (suite)}}\\\\\\hline\n}\n")
+    outputFile.write("\\tabletail{\\hline \\multicolumn{1}{|r|}{../..}\\\\\\hline}\n")
+    outputFile.write("\\tablelasttail{\\hline}\n")
+    outputFile.write("\\begin{center}\n")
+    outputFile.write("\\begin{supertabular}[H]{|l|}\n")
+    outputFile.write("\\hline\n")
+
+    #Coupe 1. Béton armé. Encastrement.
+    C1= self.getSection1()
+    VdMaxEncastrement= self.internalForcesULS.VdMaxEncastrement(self.stemBottomWidth)
+    MdMaxEncastrement= self.internalForcesULS.MdMaxEncastrement(self.footingThickness)
+    outputFile.write("\\textbf{Armature 1 (armature extérieure en attente) :} \\\\\n")
+    NdEncastrement= 0.0 #we neglect axial force
+    C1.writeResultFlexion(outputFile,NdEncastrement, MdMaxEncastrement,VdMaxEncastrement)
+    C1.writeResultStress(outputFile,MdMaxEncastrement)
+
+    #Coupe 2. Béton armé. Stem
+    yCoupe2= self.internalForcesULS.getYStem(self.getBasicAnchorageLength(1))
+    C2= self.getSection2(yCoupe2)
+
+    #Coupe 3. Béton armé. Semelle
+    C3= self.getSection3()
+
+    C4= self.getSection4()
+    
+    C6= self.getSection6()
+    C7= self.getSection7()
+    C8= self.getSection8()
+    C9= C8
+    C11= self.getSection11()
+    C12= C11
+
+    #Coupe 4. armature intérieure en attente. Encastrement voile 
+    outputFile.write("\\textbf{Armature 4 (armature intérieure en attente):}\\\\\n")
+    C4.writeResultCompression(outputFile,0.0,C12.tensionRebars.getAs())
+
+    #Coupe 5. armature intérieure en voile.
+    outputFile.write("\\textbf{Armature 5 (armature intérieure en voile):}\\\\\n")
+    C5= self.getSection5()
+    VdMinMidStem= self.internalForcesULS.VdMinMidStem(self.stemBottomWidth)
+    MdMinMidStem= self.internalForcesULS.MdMinMidStem(self.footingThickness)
+    NdMidStem= 0.0 #we neglect axial force
+    C5.writeResultFlexion(outputFile,NdMidStem, MdMinMidStem,VdMinMidStem)
+    C5.writeResultStress(outputFile,MdMinMidStem)
+
+    #Coupe 6. armature couronnement.
+    outputFile.write("\\textbf{Armature 6 (armature couronnement):}\\\\\n")
+    C6.writeResultFlexion(outputFile,0.0,0.0,0.0)
+
+    #Coupe 7. armature inférieure semelle.
+    outputFile.write("\\textbf{Armature 7 (armature trsv. inférieure semelle):}\\\\\n")
+    C7.writeResultCompression(outputFile,0.0,C8.tensionRebars.getAs())
+
+    #Coupe 8. armature long. inférieure semelle.
+    outputFile.write("\\textbf{Armature 8 (armature long. inférieure semelle):}\\\\\n")
+    C8.writeResultTraction(outputFile,0.0)
+
+    #Coupe 9. armature long. supérieure semelle.
+    outputFile.write("\\textbf{Armature 9 (armature long. supérieure semelle):}\\\\\n")
+    C9.writeResultTraction(outputFile,0.0)
+
+    #Armature 10. armature de peau semelle.
+    outputFile.write("\\textbf{Armature 10 (armature de peau semelle):}\\\\\n")
+    outputFile.write("  --\\\\\n")
+    #self.reinforcement[10].writeRebars(outputFile,self.concrete,1e-5)
+
+    #Coupe 11. armature long. extérieure voile.
+    outputFile.write("\\textbf{Armature 11 (armature long. extérieure voile):}\\\\\n")
+    C11.writeResultTraction(outputFile,0.0)
+
+    #Coupe 12. armature long. intérieure voile.
+    outputFile.write("\\textbf{Armature 12 (armature long. intérieure voile):}\\\\\n")
+    C12.writeResultTraction(outputFile,0.0)
+
+    #Armature 13. armature long. couronnement.
+    outputFile.write("\\textbf{Armature 13 (armature long. couronnement):}\\\\\n")
+    outputFile.write("  --\\\\\n")
+    #self.reinforcement[13].writeRebars(outputFile,self.concrete,1e-5)
+    outputFile.write("\\hline\n")
+    outputFile.write("\\end{supertabular}\n")
+    outputFile.write("\\end{center}\n")
+    outputFile.close()
