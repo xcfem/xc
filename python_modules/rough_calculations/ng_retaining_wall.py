@@ -842,8 +842,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     envelopeMd.update(md)
     envelopeVd.update(vd)
     mdHeel, vdHeel= self.getHeelInternalForces()
-    envelopeMdHeel= min(mdHeel,envelopeMdHeel)
-    envelopeVdHeel= min(vdHeel,envelopeVdHeel)
+    envelopeMdHeel.update([mdHeel])
+    envelopeVdHeel.update([vdHeel])
     return envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel 
 
   def performSLSAnalysis(self,combinations):
@@ -852,8 +852,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     y= self.getStemYCoordinates()
     envelopeMd= Envelope(y)
     envelopeVd= Envelope(y)
-    envelopeMdHeel= 1.0e15
-    envelopeVdHeel= 1.0e15
+    envelopeMdHeel= Envelope([0.0])
+    envelopeVdHeel= Envelope([0.0])
     for comb in combinations:
       reactions= self.resultComb(comb)
       envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel= self.getEnvelopeInternalForces(envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel)
@@ -861,7 +861,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
       if(rot<rotation):
         rotation= rot
         rotationComb= comb
-    internalForces= InternalForces(y,envelopeMd, envelopeVd, abs(envelopeMdHeel), abs(envelopeVdHeel))
+    internalForces= InternalForces(y,envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel)
     self.sls_results= WallSLSResults(internalForces,rotation, rotationComb)
     return self.sls_results
 
@@ -869,12 +869,12 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     y= self.getStemYCoordinates()
     envelopeMd= Envelope(y)
     envelopeVd= Envelope(y)
-    envelopeMdHeel= 1.0e15
-    envelopeVdHeel= 1.0e15
+    envelopeMdHeel= Envelope([0.0])
+    envelopeVdHeel= Envelope([0.0])
     for comb in combinations:
       reactions= self.resultComb(comb)
       envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel= self.getEnvelopeInternalForces(envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel)
-    internalForces= InternalForces(y,envelopeMd, envelopeVd, abs(envelopeMdHeel), abs(envelopeVdHeel))
+    internalForces= InternalForces(y,envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel)
     self.uls_results= WallULSResults(internalForces)
     return self.uls_results
 
@@ -926,6 +926,12 @@ class BasementWall(RetainingWall):
 
     #Coupe 3. Béton armé. Semelle
     C3= self.getSection3()
+    Nd3= 0.0 #we neglect axial force
+    Vd3= max(abs(self.internalForcesULS.VdSemelle.positive[0]),abs(self.internalForcesULS.VdSemelle.negative[0]))
+    Md3= max(abs(self.internalForcesULS.MdSemelle.positive[0]),abs(self.internalForcesULS.MdSemelle.negative[0]))
+    outputFile.write("\\textbf{Armature 3 (armature supérieure semelle):}\\\\\n")
+    C3.writeResultFlexion(outputFile,Nd3,Md3,Vd3)
+    C3.writeResultStress(outputFile,Md3)
 
     C4= self.getSection4()
     
