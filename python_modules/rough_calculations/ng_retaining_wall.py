@@ -177,13 +177,15 @@ class RetainingWallReinforcement(dict):
     return self[index]
     
 class WallStabilityResults(object):
-  def __init__(self,wall,combinations,foundationSoilModel,gammaR= 1):
+  def __init__(self,wall,combinations,foundationSoilModel,sg_adm= None, gammaR= 1):
     self.Foverturning= 1e15
     self.FoverturningComb= ''
     self.Fsliding= 1e15
     self.FslidingComb= ''
     self.Fbearing= 1e15
     self.FbearingComb= ''
+    self.FadmPressure= 1e15
+    self.FadmPressureComb= ''
     for comb in combinations:
       reactions= wall.resultComb(comb)
       R= reactions.getResultant()
@@ -199,6 +201,11 @@ class WallStabilityResults(object):
       if(Fbearing<self.Fbearing):
         self.Fbearing= Fbearing
         self.FbearingComb= comb
+      if(sg_adm):
+        FadmPressure= wall.getAdmissiblePressureSafetyFactor(R,sg_adm)
+        if(FadmPressure<self.FadmPressure):
+          self.FadmPressure= FadmPressure
+          self.FadmPressureComb= comb
   def writeOutput(self,outputFile,name):
     '''Write results in LaTeX format.'''
     outputFile.write("\\begin{center}\n")
@@ -211,6 +218,8 @@ class WallStabilityResults(object):
     outputFile.write("Renversement:  & " + fmt.Factor.format(self.Foverturning) +" & 1.00 & "+self.FoverturningComb+'\\\\\n')
     outputFile.write("Glissement:  & " + fmt.Factor.format(self.Fsliding) +" & 1.00 & "+self.FslidingComb+'\\\\\n')
     outputFile.write("Poinçonnement:  & " + fmt.Factor.format(self.Fbearing) +" & 1.00 & "+self.FbearingComb+'\\\\\n')
+    if(self.FadmPressureComb!=''):
+      outputFile.write("Adm. pressure:  & " + fmt.Factor.format(self.FadmPressure) +" & 1.00 & "+self.FadmPressureComb+'\\\\\n')
     outputFile.write("\\hline\n")
     outputFile.write("\\multicolumn{4}{|l|}{$F_{disp}$: sécurité disponible.}\\\\\n")
     outputFile.write("\\multicolumn{4}{|l|}{$F_{req}$: sécurité requise.}\\\\\n")
@@ -754,6 +763,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   def getBearingPressureSafetyFactor(self,R,foundationSoilModel,toeFillDepth,q= 0.0):
     ''' Return the factor of safety against bearing capacity of the soil.
 
+     :param R: force on the bearing plane.
+     :param foundationSoilModel: soil model for the Brinch-Hansen analysis.
      :param toeFillDepth: (float) depht of the soil filling over the toe.
      :param q: (float) uniform load over the filling.
     '''
@@ -766,6 +777,21 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     qu= foundationSoilModel.qu(q,D,self.b,bReduced,F.y,0.0,F.x)
     sigma= F.y/bReduced
     return qu/sigma
+  
+  def getAdmissiblePressureSafetyFactor(self,R,sg_adm):
+    ''' Return the factor of safety against bearing capacity of the soil.
+
+     :param R: force on the bearing plane.
+     :param toeFillDepth: (float) depht of the soil filling over the toe.
+     :param q_adm: (float) admissible bearing pressure.
+    '''
+    Beff= self.b
+    e= self.getEccentricity(R) #eccentricity
+    b= self.getFootingWidth()
+    bReduced= 2*(b/2.0+e)
+    F= R.getResultant()
+    sigma= F.y/bReduced
+    return sg_adm/sigma
 
   def getStemYCoordinates(self):
     y= list()
@@ -807,8 +833,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     preprocessor.getLoadHandler.getLoadCombinations.removeFromDomain(nmbComb)
     return reactions
   
-  def performStabilityAnalysis(self,combinations,foundationSoilModel): 
-    self.stability_results= WallStabilityResults(self,combinations,foundationSoilModel)
+  def performStabilityAnalysis(self,combinations,foundationSoilModel, sg_adm= None): 
+    self.stability_results= WallStabilityResults(self, combinations, foundationSoilModel, sg_adm)
     return self.stability_results
 
   def getEnvelopeInternalForces(self,envelopeMd, envelopeVd, envelopeMdHeel, envelopeVdHeel):
