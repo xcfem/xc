@@ -119,7 +119,11 @@ class RecordLoadCaseDisp(OuputUnits):
     self.setsToDispBeamIntForc=[]
     self.cameraParameters= vtk_graphic_base.CameraParameters('XYZPos')
     self.cameraParametersBeams= vtk_graphic_base.CameraParameters('XYZPos')
-    
+  def getDescription(self):
+    retval= self.loadCaseDescr
+    if(len(retval)==0):
+      retval= self.loadCaseName
+    return retval
   def loadReports(self,FEcase,pathGr,texFile,grWdt):
     '''Creates the graphics files of loads for the load case and insert them in
     a LaTex file
@@ -134,13 +138,13 @@ class RecordLoadCaseDisp(OuputUnits):
     labl=self.loadCaseName
     for st in self.setsToDispLoads:
       grfname=pathGr+self.loadCaseName+st.name
-      capt=self.loadCaseDescr + ', ' + st.description + ', '  + self.unitsLoads
+      capt=self.getDescription() + ', ' + st.description + ', '  + self.unitsLoads
       QGrph.displayLoad(preprocessor=preprocessor,setToDisplay=st,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads, viewDef= self.cameraParameters,caption= capt,fileName=grfname+'.jpg')
       QGrph.displayLoad(preprocessor=preprocessor,setToDisplay=st,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads, viewDef= self.cameraParameters,caption= capt,fileName=grfname+'.eps')
       insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt,labl=labl) 
     for st in self.setsToDispBeamLoads:
       grfname=pathGr+self.loadCaseName+st.name
-      capt=self.loadCaseDescr + ', ' + st.description + ', '  + self.unitsLoads
+      capt=self.getDescription() + ', ' + st.description + ', '  + self.unitsLoads
       lcs=QGrph.QuickGraphics(FEcase)
       lcs.dispLoadCaseBeamEl(loadCaseName=self.loadCaseName,setToDisplay=st,fUnitConv=self.unitsScaleLoads,elLoadComp=self.compElLoad,elLoadScaleF=self.vectorScaleLoads,nodLoadScaleF=self.vectorScalePointLoads, viewDef= self.cameraParameters,caption= capt,fileName=grfname+'.jpg')
       lcs.dispLoadCaseBeamEl(loadCaseName=self.loadCaseName,setToDisplay=st,fUnitConv=self.unitsScaleLoads,elLoadComp=self.compElLoad,elLoadScaleF=self.vectorScaleLoads,nodLoadScaleF=self.vectorScalePointLoads, viewDef= self.cameraParameters,caption= capt,fileName=grfname+'.eps')
@@ -173,7 +177,7 @@ class RecordLoadCaseDisp(OuputUnits):
             grfname=pathGr+self.loadCaseName+st.name+arg
             lcs.displayDispRot(itemToDisp=arg,setToDisplay=st,fConvUnits=fcUn,unitDescription=unDesc, viewDef= self.cameraParameters,fileName=grfname+'.jpg')
             lcs.displayDispRot(itemToDisp=arg,setToDisplay=st,fConvUnits=fcUn,unitDescription=unDesc, viewDef= self.cameraParameters,fileName=grfname+'.eps')
-            capt=self.loadCaseDescr + '. ' + st.description.capitalize() + ', ' + capStdTexts[arg] + ' ' + unDesc
+            capt=self.getDescription() + '. ' + st.description.capitalize() + ', ' + capStdTexts[arg] + ' ' + unDesc
             insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt)
     #Internal forces displays on sets of «shell» elements
     for st in self.setsToDispIntForc:
@@ -187,7 +191,7 @@ class RecordLoadCaseDisp(OuputUnits):
             grfname=pathGr+self.loadCaseName+st.name+arg
             lcs.displayIntForc(itemToDisp=arg,setToDisplay=st,fConvUnits= fcUn,unitDescription=unDesc, viewDef= self.cameraParameters,fileName=grfname+'.jpg')
             lcs.displayIntForc(itemToDisp=arg,setToDisplay=st,fConvUnits= fcUn,unitDescription=unDesc, viewDef= self.cameraParameters,fileName=grfname+'.eps')
-            capt=self.loadCaseDescr + '. ' + st.description.capitalize() + ', ' + capStdTexts[arg] + ' ' + unDesc
+            capt=self.getDescription() + '. ' + st.description.capitalize() + ', ' + capStdTexts[arg] + ' ' + unDesc
             insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt)
     #Internal forces displays on sets of «beam» elements
     for st in self.setsToDispBeamIntForc:
@@ -206,7 +210,7 @@ class RecordLoadCaseDisp(OuputUnits):
             grfname=pathGr+self.loadCaseName+st.name+arg
             lcs.displayIntForcDiag(itemToDisp=arg,setToDisplay=st,fConvUnits= fcUn,scaleFactor=scaleFact,unitDescription=unDesc, viewDef= self.cameraParametersBeams,fileName=grfname+'.jpg')
             lcs.displayIntForcDiag(itemToDisp=arg,setToDisplay=st,fConvUnits= fcUn,scaleFactor=scaleFact,unitDescription=unDesc, viewDef= self.cameraParametersBeams,fileName=grfname+'.eps')
-            capt=self.loadCaseDescr + '. ' + st.description.capitalize() + ', ' + capStdTexts[arg] + ' ' + unDesc
+            capt=self.getDescription() + '. ' + st.description.capitalize() + ', ' + capStdTexts[arg] + ' ' + unDesc
             insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt)
     texFile.write('\\clearpage\n')
     return
@@ -251,7 +255,7 @@ class RecordLoadCaseDisp(OuputUnits):
     '''
     preprocessor= setToDisplay.getPreprocessor
     if(not caption):
-      caption= 'load case: ' + self.loadCaseDescr + ', set: ' + setToDisplay.name + ', '  + self.unitsLoads
+      caption= 'load case: ' + self.getDescription() + ', set: ' + setToDisplay.name + ', '  + self.unitsLoads
     QGrph.display_load(preprocessor,setToDisplay= setToDisplay,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads,viewDef= self.cameraParameters, caption= caption,fileName= fName,defFScale= defFScale)
       
   def displayIntForcDiag(self,itemToDisp,setToDisplay,fileName=None,defFScale=0.0):
@@ -300,7 +304,7 @@ class RecordLoadCaseDisp(OuputUnits):
     '''
     qg= QGrph.QuickGraphics()
     if(not caption):
-      caption= 'load case: ' + self.loadCaseDescr + ', set: ' + setToDisplay.name + ', '  + self.unitsLoads
+      caption= 'load case: ' + self.getDescription() + ', set: ' + setToDisplay.name + ', '  + self.unitsLoads
     qg.dispLoadCaseBeamEl(loadCaseName=self.loadCaseName,setToDisplay=setToDisplay,fUnitConv=self.unitsScaleLoads,elLoadComp=self.compElLoad,elLoadScaleF=self.vectorScaleLoads,nodLoadScaleF=self.vectorScalePointLoads,viewDef= self.cameraParameters, caption= caption, fileName= fileName)
 
   def displayLoadOnSets(self, caption= None, fName= None, defFScale= 0.0):
