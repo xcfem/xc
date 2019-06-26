@@ -184,8 +184,8 @@ class DoubleRebarFamily(object):
 def writeF(outputFile,text,F):
   fmt= "{:4.2f}"
   if(F>1):
-    outputFile.write(text+ "= "+ fmt.format(F)+ " Ok!\\\\\n")
+    outputFile.write(text+ "= "+ fmt.format(F)+ " OK!\\\\\n")
   elif(F>=0.95):
-    outputFile.write(text+ "= "+ fmt.format(F)+ " $\\sim$ Ok!\\\\\n")
+    outputFile.write(text+ "= "+ fmt.format(F)+ " $\\sim$ OK!\\\\\n")
   else:
-    outputFile.write(text+ "= "+ fmt.format(F)+ " Erreur!\\\\\n")
+    outputFile.write(text+ "= "+ fmt.format(F)+ " Error!\\\\\n")
