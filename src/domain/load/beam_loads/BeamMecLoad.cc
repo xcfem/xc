@@ -123,7 +123,7 @@ const XC::Matrix &XC::BeamMecLoad::getLocalForces(void) const
     return retval;
   }
 
-//! @brief Returns puntual/distributed force moments (one for each element) expressed in local coordinates.
+//! @brief Returns punctual/distributed force moments (one for each element) expressed in local coordinates.
 const XC::Matrix &XC::BeamMecLoad::getLocalMoments(void) const
   {
     static Matrix retval;

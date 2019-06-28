@@ -45,7 +45,7 @@ XC::BeamUniformLoad::BeamUniformLoad(int classTag)
   :BeamMecLoad(0,classTag) {}
 
 std::string XC::BeamUniformLoad::Categoria(void) const
-  { return "uniforme"; }
+  { return "uniform"; }
 
 //! brief Returns load resultant (force and moment integration over the elements).
 SlidingVectorsSystem3d XC::BeamUniformLoad::getResultant(const Pos3d &centro, bool initialGeometry) const

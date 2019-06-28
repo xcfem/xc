@@ -33,7 +33,7 @@ J= .2e-1 # Cross section torsion constant (m4)
 
 # Load
 f= 1.5e3 # Load magnitude en N/m.
-p= 1000 # Carga uniforme transversal.
+p= 1000 # Transverse uniform load.
 
 # Problem type
 feProblem= xc.FEProblem()

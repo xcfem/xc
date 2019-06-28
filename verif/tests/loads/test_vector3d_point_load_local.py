@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Reference:  Expresiones de la flecha el el Prontuario de
-# Estructuras Metálicas del CEDEX. Apartado 3.3 Carga puntual sobre ménsula.
+# Estructuras Metálicas del CEDEX. Apartado 3.3 Punctual load on cantilever.
 # ISBN: 84-7790-336-0
 # url={https://books.google.ch/books?id=j88yAAAACAAJ},
 
@@ -31,7 +31,7 @@ Iy= h*b**3/12 # Cross section moment of inertia
 J= 1e-8 # Cross section torsion constant
 x= 0.5 # Relative abscissae where the punctual load is applied.
 P= 1e3 # punctual load.
-n= 1e6 # Carga uniforme axial.
+n= 1e6 # Axial uniform load.
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   

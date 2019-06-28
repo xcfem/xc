@@ -706,8 +706,8 @@ class LoadState(object):
      #Uniform load (fx,fy,fz) on surfaces.
     self.appendUniformLoadsToCurrentLoadPattern(dicQuadSurf)
   
-    #Cargas lineales
-    #Cargas puntuales
+    #Linear loads
+    #Punctual loads
     self.appendPunctualLoadsToLoadPattern(nodes)
 
     #uniform loads on beams

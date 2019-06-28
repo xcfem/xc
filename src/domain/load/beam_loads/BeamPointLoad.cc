@@ -63,7 +63,7 @@ XC::BeamPointLoad::BeamPointLoad(int tag, int classTag)
   :BeamMecLoad(tag, classTag), x(0.0) {}
 
 std::string XC::BeamPointLoad::Categoria(void) const
-  { return "puntual"; }
+  { return "punctual"; }
 
 //! @brief Send data through the channel being passed as parameter.
 int XC::BeamPointLoad::sendData(CommParameters &cp)

@@ -6,11 +6,12 @@ from __future__ import division
 
 def getFlechaVigaBiapQUnif(l,EI,q):
     '''
-    Devuelve la flecha en el centro de vano de una viga biapoyada
-    bajo carga uniforme
-    l: Luz entre apoyos.
-    EI: Rigidez a flexión.
-    q: Load per unit length (uniform).
+    Beam deflection at mid-span for a simple supported beam under
+    uniform load.
+
+    :param l: span.
+    :param EI: bending stiffness.
+    :param q: load per unit length (uniform).
     '''  
     return -5*q*l**3/384/EI
   

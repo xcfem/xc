@@ -333,7 +333,7 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
         # while not(eleLoad is None):
         #   force= eleLoad.getGlobalForces()
         #   categoria= eleLoad.category
-        #   if(categoria=="uniforme"):
+        #   if(categoria=="uniform"):
         #     self.displayElementUniformLoad(preprocessor, eleLoad,loadPattern,color,force,fScale)
         #   else:
         #     self.displayElementPunctualLoad(preprocessor, eleLoad,loadPattern,color,force,fScale)

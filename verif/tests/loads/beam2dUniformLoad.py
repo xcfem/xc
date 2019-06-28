@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # home made test
 # Reference:  Expresiones de la flecha el el Prontuario de
-# Estructuras Metálicas del CEDEX. Apartado 3.3 Carga puntual sobre ménsula.
+# Estructuras Metálicas del CEDEX. Apartado 3.3 Punctual load on cantilever.
 # ISBN: 84-7790-336-0
 # url={https://books.google.ch/books?id=j88yAAAACAAJ},
 
@@ -24,8 +24,8 @@ h= 0.30 # Beam cross-section depth.
 b= 0.2 # Beam cross-section width.
 A= b*h # Cross section area.
 I= b*h**3/12 # Inertia of the beam section in inches to the fourth power.
-P= 1e3 # Carga uniforme transversal.
-n= 1e6 # Carga uniforme axial.
+P= 1e3 # Transverse uniform load.
+n= 1e6 # Axial uniform load.
 
 # Problem type
 feProblem= xc.FEProblem()

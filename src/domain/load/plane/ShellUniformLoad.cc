@@ -47,7 +47,7 @@ XC::ShellUniformLoad::ShellUniformLoad(int tag)
   :ShellMecLoad(tag, LOAD_TAG_ShellUniformLoad) {}
 
 std::string XC::ShellUniformLoad::Categoria(void) const
-  { return "uniforme"; }
+  { return "uniform"; }
 
 
 //! @brief Return the dimension of the force vector.

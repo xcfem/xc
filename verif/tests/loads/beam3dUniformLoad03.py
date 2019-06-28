@@ -17,8 +17,8 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 L= 2 # Bar length.
-P= 10e3 # Carga uniforme transversal.
-n= 1e6 # Carga uniforme axial.
+P= 10e3 # Transverse uniform load.
+n= 1e6 # Axial uniform load.
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   

@@ -42,7 +42,7 @@ class_<XC::BeamMecLoad, bases<XC::BeamLoad>, boost::noncopyable >("BeamMecLoad",
   .def("getLocalForce",&XC::BeamMecLoad::getLocalForce,"Returns local coordinates or force vector.")
   .def("getLocalMoment",&XC::BeamMecLoad::getLocalMoment,"Returns local coordinates of bending moment vector.")
   .def("getLocalForces",make_function(&XC::BeamMecLoad::getLocalForces, return_internal_reference<>() ),"Returns punctual/distributed force vectors (one for each element) expressed in element local coordinates.")
-  .def("getLocalMoments",make_function(&XC::BeamMecLoad::getLocalMoments, return_internal_reference<>() ),"Returns puntual/distributed force moments (one for each element) expressed in element local coordinates." )
+  .def("getLocalMoments",make_function(&XC::BeamMecLoad::getLocalMoments, return_internal_reference<>() ),"Returns punctual/distributed force moments (one for each element) expressed in element local coordinates." )
   .def("getGlobalVectors",make_function(&XC::BeamMecLoad::getGlobalVectors, return_internal_reference<>() ))
   .def("getGlobalForces",make_function(&XC::BeamMecLoad::getGlobalForces, return_internal_reference<>() ),"Returns punctual/distributed force vectors (one for each element) expressed in global coordinates.")
   .def("getGlobalMoments",make_function(&XC::BeamMecLoad::getGlobalMoments, return_internal_reference<>() ),"Returns punctual/distributed moment vectors (one for each element) expressed in global coordinates.")

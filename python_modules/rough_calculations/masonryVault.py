@@ -506,7 +506,7 @@ class trafficLoadResult(object):
     return vQtrans(self.gm.arcEffL,self.tl.delta,self.tl.fillThickKeys)
 
   def getqtrans(self):
-    """Charge de trafic uniformemente [N/m] répartie après diffussion transversale (voir 6-15)"""
+    """Uniform traffic load [N/m] after transverse diffusion (see 6-15)"""
     return self.tl.Q/self.getvQt()
 
   def getlQt(self):
@@ -518,9 +518,9 @@ class trafficLoadResult(object):
 
   def printResults(self):
     #print "vQt= ",vQt," m"
-    print "Charge de trafic uniformemente répartie après diffussion transversale (voir 6-15) qtrans= ",self.getqtrans()," N/m"
+    print "Uniform trafic load after transverse difussion (see 6-15) qtrans= ",self.getqtrans()," N/m"
     #print "lQt= ",lQt," m"
-    print "Charge de trafic ponctuelle aprés diffusion longitudinale et transversale (voir 6.18); X= ",self.getX()/1e6," MPa"
+    print "Punctual traffic load after longitudinal and transverse diffusion (see 6.18); X= ",self.getX()/1e6," MPa"
 
 class resistance(object):
   def __init__(self,Nadmis,gm,fc,tl,plR,tlR):

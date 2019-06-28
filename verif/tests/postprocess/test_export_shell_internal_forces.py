@@ -18,8 +18,8 @@ E= 17472000 # Elastic modulus en lb/in2
 nu= 0.3 # Poisson's ratio
 G= 6720000
 thickness= 0.0001 # Cross section depth expressed in inches.
-unifLoad= 0.0001 # Carga uniforme en lb/in2.
-ptLoad= 100 # Punctual load en lb.
+unifLoad= 0.0001 # Uniform load (lb/in2).
+ptLoad= 100 # Punctual load (lb).
 
 import xc_base
 import geom

@@ -7,8 +7,8 @@ def esfuerzoPunzonamiento(qk,A):
     '''Estimación del esfuerzo de punzonamiento en la losa sobre
        un pilar (HL.3 números gordos)
     
-       :param qk: carga uniforme total característica sobre la losa o forjado
-       :param A: área de influencia del pilar.
+       :param qk: characteristic total uniform load on the slab or deck.
+       :param A: column tributary area.
     '''
     return 1.6*qk*A
 
