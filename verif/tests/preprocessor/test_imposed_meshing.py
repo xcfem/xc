@@ -110,13 +110,13 @@ deck_mat.setupElasticSection(preprocessor=prep)   #creates the section-material
 
 #                         ***FE model - MESH***
 # Fix lines' division
-st=sets.get_subset_lin_paralell_to_axis(axis='Z',fromSet=flatwall+cylwall,toSetName='st')
+st=sets.get_subset_lin_parallel_to_axis(axis='Z',fromSet=flatwall+cylwall,toSetName='st')
 fem.assign_ndiv_to_lines_in_set(lnSet=st,ndiv=5)
 st.clear()
-st=sets.get_subset_lin_paralell_to_axis(axis='X',fromSet=flatwall+flatdeck,toSetName='st')
+st=sets.get_subset_lin_parallel_to_axis(axis='X',fromSet=flatwall+flatdeck,toSetName='st')
 fem.assign_ndiv_to_lines_in_set(lnSet=st,ndiv=3)
 st.clear()
-st=sets.get_subset_lin_paralell_to_axis(axis='Y',fromSet=flatdeck,toSetName='st',tol=0.01)
+st=sets.get_subset_lin_parallel_to_axis(axis='Y',fromSet=flatdeck,toSetName='st',tol=0.01)
 fem.assign_ndiv_to_lines_in_set(lnSet=st,ndiv=5)
 st.clear()
 st=sets.get_subset_lin_longer_than(Lmin=1.5,fromSet=deck2,toSetName='st')
@@ -124,7 +124,7 @@ fem.assign_ndiv_to_lines_in_set(lnSet=st,ndiv=3)
 st.clear()
 auxrg=[gm.IJKRange((0,1,lastZpos),(1,lastYpos-1,lastZpos)),gm.IJKRange((lastXpos-1,1,lastZpos),(lastXpos,lastYpos-1,lastZpos))]
 auxSet=gridGeom.getSetSurfMultiRegion(lstIJKRange=auxrg, nameSet='auxSet')
-st=sets.get_subset_lin_paralell_to_axis(axis='X',fromSet=auxSet,toSetName='st',tol=0.1)
+st=sets.get_subset_lin_parallel_to_axis(axis='X',fromSet=auxSet,toSetName='st',tol=0.1)
 fem.assign_ndiv_to_lines_in_set(lnSet=st,ndiv=3)
 st.clear()
 #Meshing

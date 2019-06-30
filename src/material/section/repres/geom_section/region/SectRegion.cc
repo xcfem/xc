@@ -82,11 +82,11 @@ double XC::SectRegion::getLength(void) const
 double XC::SectRegion::getArea(void) const
   { return getPolygon().getArea(); }
 
-//! @brief Return the moment of inertia with respect to the axis paralelo al y por el centroid.
+//! @brief Return the moment of inertia with respect to the axis parallel to y axis through the centroid.
 double XC::SectRegion::Iy(void) const
   { return getPolygon().Ix(); }
 
-//! @brief Return the moment of inertia with respect to the axis paralelo al z por el centroid.
+//! @brief Return the moment of inertia with respect to the axis parallel to z axis through the centroid.
 double XC::SectRegion::Iz(void) const
   { return getPolygon().Iy(); }
 

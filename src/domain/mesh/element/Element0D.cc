@@ -72,7 +72,7 @@ bool XC::Element0D::Vxy::check(void) const
       }
     Vector3d vx(x[0],x[1],x[2]);
     Vector3d vy(y[0],y[1],y[2]);
-    if(paralelos(vx,vy))
+    if(parallel(vx,vy))
       {
         std::cerr << "Element0D::check; vector I= " << x
                   << " and J= " << y << " are almost parallel, angle: "

@@ -183,7 +183,7 @@ def set_not_included_in_orthoPrism(preprocessor,setInit,prismBase,prismAxis,setN
     retval.name= setName
     return retval
 
-def get_subset_lin_paralell_to_axis(axis,fromSet,toSetName,tol=0.001):
+def get_subset_lin_parallel_to_axis(axis,fromSet,toSetName,tol=0.001):
     '''return a subset of fromSet composed by lines parallel to
     one of the global axes.  If toSetName exists the subset is appended to it.
 

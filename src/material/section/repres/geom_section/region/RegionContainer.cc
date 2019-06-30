@@ -232,7 +232,7 @@ double XC::RegionContainer::getIyGrossSection(void) const
     return retval;
   }
 
-//! @brief Returns the moment of inertia of the gross cross-section with respect to the axis paralelo al z por el centroid.
+//! @brief Returns the moment of inertia of the gross cross-section with respect to the axis parallel to z axis through the centroid.
 double XC::RegionContainer::getIzGrossSection(void) const
   {
     double retval= 0.0;

@@ -88,7 +88,7 @@ XC::DOF_Numberer *XC::ParallelNumberer::getCopy(void) const
   { return new ParallelNumberer(*this);  }
 
 // int numberDOF(void)
-// The ParalellNumberer sitting on P0, collects each partition graph from P1 through Pn-1, 
+// The ParallelNumberer sitting on P0, collects each partition graph from P1 through Pn-1, 
 // merges them into 1 large graph, & then numbers this graph. The ParallelNumberers sitting 
 // on P1 through Pn-1 then receive the mapping info for the dof tag and dof numbering from P0.
 

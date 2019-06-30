@@ -101,15 +101,15 @@ double XC::ReinfBar::getDiameter(void) const
 double XC::ReinfBar::getArea(void) const
   { return area; }
 
-//! @brief Return the moment of inertia with respect to the axis paralelo al y por el centroid.
+//! @brief Return the moment of inertia with respect to the axis parallel to y axis through the centroid.
 double XC::ReinfBar::Iy(void) const
   { return M_PI/4.0*pow((diameter/2.0),4.0); }
 
-//! @brief Return the moment of inertia with respect to the axis paralelo al z por el centroid.
+//! @brief Return the moment of inertia with respect to the axis parallel to z axis through the centroid.
 double XC::ReinfBar::Iz(void) const
   { return Iy(); }
 
-//! @brief Return the product of inertia respecto a the parallel axes por el centroid.
+//! @brief Return the product of inertia with respect to the parallel axes through the centroid.
 double XC::ReinfBar::Pyz(void) const
   { return 0.0; }
 

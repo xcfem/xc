@@ -108,8 +108,9 @@ XC::Joint2D::Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag
 
     if(dimNd1 != 2 || dimNd2 != 2 || dimNd3 != 2 || dimNd4 != 2 )
       {
-        std::cerr << "WARNING XC::Joint2D::setDomain(): has incorrect space dimension \n";
-        std::cerr << "                                    space dimension not supported by XC::Joint2D";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING has incorrect space dimension \n"
+		  << "                                    space dimension not supported by XC::Joint2D";
         return;
       }
 
@@ -121,8 +122,9 @@ XC::Joint2D::Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag
 
     if(dofNd1 != 3 || dofNd2 != 3 || dofNd3 != 3 || dofNd4 != 3 )
       {
-        std::cerr << "WARNING XC::Joint2D::Joint2D: has incorrect degrees of freedom \n";
-        std::cerr << "                                    DOF not supported by XC::Joint2D";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING has incorrect degrees of freedom \n"
+		  << "                                    DOF not supported by XC::Joint2D";
         return;
       }
 
@@ -137,7 +139,8 @@ XC::Joint2D::Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag
 
     if(L1<1e-12  || L2<1e-12 )
       {
-        std::cerr << "WARNING XC::Joint2D::(): zero length\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING zero length\n";
         return;
       }
 
@@ -154,7 +157,8 @@ XC::Joint2D::Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag
 
     if(Center3.Norm() > 1e-6 )
       {
-        std::cerr << "WARNING XC::Joint2D::(): can not construct a paralelogram over external nodes\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; WARNING can not construct a parallelogram over external nodes\n";
         return;
       }
 
@@ -162,11 +166,13 @@ XC::Joint2D::Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag
     Node *tmp= new Node(IntNodeTag , 4, Center1(0) , Center1(1) );
     theNodes.set_node(4,tmp);
     if(theNodes[4] == nullptr )
-      { std::cerr << "Joint2D::Joint2D - Unable to generate new nodes , out of memory\n" ; }
+      { std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; unable to generate new nodes , out of memory\n" ; }
     else
       {
         if(getDomain()->addNode( theNodes[4] ) == false ) // add internal nodes to domain
-          std::cerr << "XC::Joint2D::Joint2D - unable to add internal nodeto domain\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; unable to add internal nodeto domain\n";
       }
 
 
@@ -179,28 +185,32 @@ XC::Joint2D::Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag
     // create MFreedom_Joint constraint node 1
     if(addMFreedom_Joint(getDomain(), InternalConstraints(0), theNodes.getTagNode(4), theNodes.getTagNode(0), 2, physicalProperties.getFixedEndInfo()(0), LrgDisp ) != 0)
       {
-        std::cerr << "WARNING XC::Joint2D::Joint2D(): can not generate ForJoint MP at node 1\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING can not generate ForJoint MP at node 1\n";
         return;
       }
 
     // create MFreedom_Joint constraint node 2
     if(addMFreedom_Joint(getDomain(), InternalConstraints(1), theNodes.getTagNode(4), theNodes.getTagNode(1), 3, physicalProperties.getFixedEndInfo()(1), LrgDisp ) != 0)
       {
-        std::cerr << "WARNING XC::Joint2D::Joint2D(): can not generate ForJoint MP at node 2\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING can not generate ForJoint MP at node 2\n";
         return;
       }
 
     // create MFreedom_Joint constraint node 3
     if( addMFreedom_Joint(getDomain(), InternalConstraints(2), theNodes.getTagNode(4), theNodes.getTagNode(2), 2, physicalProperties.getFixedEndInfo()(2), LrgDisp ) != 0)
       {
-        std::cerr << "WARNING XC::Joint2D::Joint2D(): can not generate ForJoint MP at node 3\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING can not generate ForJoint MP at node 3\n";
         return;
       }
 
     // create MFreedom_Joint constraint node 4
     if(addMFreedom_Joint(getDomain(), InternalConstraints(3), theNodes.getTagNode(4), theNodes.getTagNode(3), 3, physicalProperties.getFixedEndInfo()(3), LrgDisp ) != 0)
       {
-        std::cerr << "WARNING XC::Joint2D::Joint2D(): can not generate ForJoint MP at node 4\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING can not generate ForJoint MP at node 4\n";
         return;
       }
   }
@@ -232,8 +242,9 @@ XC::Joint2D::Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag
 
     if(dimNd1 != 2 || dimNd2 != 2 || dimNd3 != 2 || dimNd4 != 2 )
       {
-        std::cerr << "WARNING XC::Joint2D::setDomain(): has incorrect space dimension \n";
-        std::cerr << "                                    space dimension not supported by XC::Joint2D";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING has incorrect space dimension \n"
+		  << "                                    space dimension not supported by XC::Joint2D";
         return;
       }
 
@@ -245,8 +256,9 @@ XC::Joint2D::Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag
 
     if(dofNd1 != 3 || dofNd2 != 3 || dofNd3 != 3 || dofNd4 != 3 )
       {
-        std::cerr << "WARNING XC::Joint2D::Joint2D: has incorrect degrees of freedom \n";
-        std::cerr << "                                    DOF not supported by XC::Joint2D";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING has incorrect degrees of freedom \n"
+		  << "                                    DOF not supported by XC::Joint2D";
         return;
       }
 
@@ -261,7 +273,8 @@ XC::Joint2D::Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag
 
     if(L1<1e-12  || L2<1e-12 )
       {
-        std::cerr << "WARNING XC::Joint2D::(): zero length\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING zero length\n";
         return;
       }
 
@@ -278,7 +291,8 @@ XC::Joint2D::Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag
 
     if(Center3.Norm() > 1e-6 )
       {
-        std::cerr << "WARNING XC::Joint2D::(): can not construct a paralelogram over external nodes\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING can not construct a parallelogram over external nodes\n";
         return;
       }
 
@@ -288,12 +302,14 @@ XC::Joint2D::Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag
 
     if( theNodes[4] == nullptr )
       {
-        std::cerr << "Joint2D::Joint2D - Unable to generate new nodes , out of memory\n" ;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; unable to generate new nodes , out of memory\n" ;
       }
     else
       {
         if(getDomain()->addNode( theNodes[4] ) == false )                // add intenal nodes to domain
-        std::cerr << "Joint2D::Joint2D - unable to add internal nodeto domain\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; unable to add internal nodeto domain\n";
       }
 
 
@@ -307,28 +323,32 @@ XC::Joint2D::Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag
     // create MFreedom_Joint constraint node 1
     if( addMFreedom_Joint(getDomain(), InternalConstraints(0), theNodes.getTagNode(4), theNodes.getTagNode(0), 2, physicalProperties.getFixedEndInfo()(0), LrgDisp ) != 0)
       {
-        std::cerr << "WARNING XC::Joint2D::Joint2D(): can not generate ForJoint MP at node 1\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING can not generate ForJoint MP at node 1\n";
         return;
       }
 
     // create MFreedom_Joint constraint node 2
     if( addMFreedom_Joint( getDomain(), InternalConstraints(1), theNodes.getTagNode(4), theNodes.getTagNode(1), 3, physicalProperties.getFixedEndInfo()(1), LrgDisp ) != 0)
       {
-        std::cerr << "WARNING XC::Joint2D::Joint2D(): can not generate ForJoint MP at node 2\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING can not generate ForJoint MP at node 2\n";
                 return;
       }
 
     // create MFreedom_Joint constraint node 3
     if( addMFreedom_Joint( getDomain(), InternalConstraints(2), theNodes.getTagNode(4), theNodes.getTagNode(2), 2, physicalProperties.getFixedEndInfo()(2), LrgDisp ) != 0)
       {
-        std::cerr << "WARNING XC::Joint2D::Joint2D(): can not generate ForJoint MP at node 3\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING can not generate ForJoint MP at node 3\n";
         return;
       }
 
     // create MFreedom_Joint constraint node 4
     if( addMFreedom_Joint( getDomain(), InternalConstraints(3), theNodes.getTagNode(4), theNodes.getTagNode(3), 3, physicalProperties.getFixedEndInfo()(3), LrgDisp ) != 0)
       {
-        std::cerr << "WARNING XC::Joint2D::Joint2D(): can not generate ForJoint MP at node 4\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING can not generate ForJoint MP at node 4\n";
         return;
       }
   }
@@ -366,10 +386,11 @@ void XC::Joint2D::setDomain(Domain *theDomain)
   {
     Joint2dBase::setDomain(theDomain);
     //Ckeck domain not null - invoked when object removed from a domain
-    if(theDomain == 0)
+    if(theDomain == nullptr)
       {
         theNodes.inic();
-        std::cerr << "WARNING XC::Joint2D(): Specified domain does not exist , Domain = 0\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING specified domain does not exist , Domain = 0\n";
       }
   }
 
@@ -384,13 +405,15 @@ int XC::Joint2D::addMFreedom_Joint(Domain *theDomain, int mpNum,
 
     if(Temp_MF == nullptr)
       {
-        std::cerr << "XC::Joint2D::addMFreedom_Joint - WARNING ran out of memory for ForJoint XC::MFreedom_Constraint ";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING ran out of memory for ForJoint XC::MFreedom_Constraint ";
         return -1;
       }
     // Add the multi-point constraint to the domain
     if(getDomain()->addMFreedom_Constraint(Temp_MF) == false)
       {
-        std::cerr << "XC::Joint2D::addMFreedom_Joint - WARNING could not add equalDOF XC::MFreedom_Constraint to domain ";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING could not add equalDOF XC::MFreedom_Constraint to domain ";
         delete Temp_MF;
         return -2;
       }
@@ -774,7 +797,8 @@ int XC::Joint2D::sendSelf(CommParameters &cp)
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data\n";
     return res;
   }
 
@@ -786,13 +810,15 @@ int XC::Joint2D::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(cp);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }
@@ -842,7 +868,8 @@ XC::Joint2D::setParameter(const std::vector<std::string> &argv, Parameter &param
                 // Get material tag numbers from user input
                 int paramMaterialTag = atoi(argv[1]);
                 if( paramMaterialTag<0 || paramMaterialTag>4 ) {
-                        std::cerr << "XC::Joint2D::setParameter() - material number out of range, must be 0 to 4." << std::endl;
+                        std::cerr << getClassName() << "::" << __FUNCTION__
+				  << "; material number out of range, must be 0 to 4." << std::endl;
                 return -1;
                 }
 
@@ -852,7 +879,8 @@ XC::Joint2D::setParameter(const std::vector<std::string> &argv, Parameter &param
 
                 // Check if the ok is valid
                 if(ok < 0) {
-                        std::cerr << "XC::Joint2D::setParameter() - could not set parameter. " << std::endl;
+                        std::cerr << getClassName() << "::" << __FUNCTION__
+				  << "; could not set parameter. " << std::endl;
                         return -1;
                 }
                 else {
@@ -872,7 +900,8 @@ XC::Joint2D::updateParameter (int parameterID, Information &info)
         int MaterialTag = (int)( floor( (double)parameterID / 1000.0 ) );
         int MaterialParameterID = parameterID-1000*MaterialTag;
         if( MaterialTag<0 || MaterialTag>4 ) {
-                std::cerr << "XC::Joint2D::updateParameter() - material number out of range, must be 0 to 4." << std::endl;
+                std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; material number out of range, must be 0 to 4." << std::endl;
                 return -1;
         }
 
@@ -905,7 +934,8 @@ XC::Joint2D::activateParameter(int passedParameterID)
                 int activeMaterialTag = (int)( floor( (double)passedParameterID / 1000.0 ) );
 
                 if( activeMaterialTag<0 || activeMaterialTag>4 ) {
-                        std::cerr << "XC::Joint2D::activateParameter() - material number out of range, must be 0 to 4." << std::endl;
+                        std::cerr << getClassName() << "::" << __FUNCTION__
+				  << "; material number out of range, must be 0 to 4." << std::endl;
                         return -1;
                 }
 
