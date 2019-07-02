@@ -12,6 +12,7 @@ from materials.sections import rebar_family
 
 
 class RCSection(object):
+  '''Reinforced concrete section.'''
   tensionRebars= None
   b= 0.25
   h= 0.25
