@@ -19,9 +19,9 @@ class BasementWall(rw.RetainingWall):
     '''Constructor '''
     super(BasementWall,self).__init__(name,concreteCover, stemBottomWidth,stemTopWidth,footingThickness, concrete, steel)
 
-  def getSection5(self):
-    '''Returns RC section for armature in position 5.'''
-    return ng_rc_section.RCSection(self.reinforcement[5],self.concrete,self.b,self.stemBottomWidth)
+  def getSectionIntStem(self):
+    '''Returns RC section for reinforcement at stem interior.'''
+    return ng_rc_section.RCSection(self.reinforcement[self.intStemIndex],self.concrete,self.b,self.stemBottomWidth)
 
   def genMesh(self,nodes,springMaterials):
     '''Generate finite element mesh.'''
@@ -38,7 +38,7 @@ class BasementWall(rw.RetainingWall):
     self.stability_results.writeOutput(outputFile,self.name)
     self.sls_results.writeOutput(outputFile,self.name)
     outputFile.write("\\bottomcaption{Calcul armatures mur "+ self.name +"} \\label{tb_"+self.name+"}\n")
-    outputFile.write("\\tablefirsthead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{Armatures mur "+self.name+"}}\\\\\\hline\n}\n")
+    outputFile.write("\\tablefirsthead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{Reinforcements mur "+self.name+"}}\\\\\\hline\n}\n")
     outputFile.write("\\tablehead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{"+self.name+" (suite)}}\\\\\\hline\n}\n")
     outputFile.write("\\tabletail{\\hline \\multicolumn{1}{|r|}{../..}\\\\\\hline}\n")
     outputFile.write("\\tablelasttail{\\hline}\n")
@@ -46,83 +46,83 @@ class BasementWall(rw.RetainingWall):
     outputFile.write("\\begin{supertabular}[H]{|l|}\n")
     outputFile.write("\\hline\n")
 
-    #Coupe 1. Béton armé. Encastrement.
-    C1= self.getSection1()
+    #Coupe ExtStemBottomIndex. Reinforced concrete. Encastrement.
+    CExtStemBottom= self.getSectionExtStemBottom()
     VdMaxEncastrement= self.internalForcesULS.VdMaxEncastrement(self.stemBottomWidth)
     MdMaxEncastrement= self.internalForcesULS.MdMaxEncastrement(self.footingThickness)
-    outputFile.write("\\textbf{Armature 1 (armature extérieure en attente) :} \\\\\n")
+    outputFile.write("\\textbf{Reinforcement " + str(extStemBottomIndex) + " (armature extérieure en attente) :} \\\\\n")
     NdEncastrement= 0.0 #we neglect axial force
-    C1.writeResultFlexion(outputFile,NdEncastrement, MdMaxEncastrement,VdMaxEncastrement)
-    C1.writeResultStress(outputFile,MdMaxEncastrement)
+    CExtStemBottom.writeResultFlexion(outputFile,NdEncastrement, MdMaxEncastrement,VdMaxEncastrement)
+    CExtStemBottom.writeResultStress(outputFile,MdMaxEncastrement)
 
-    #Coupe 2. Béton armé. Stem
-    yCoupe2= self.internalForcesULS.getYStem(self.getBasicAnchorageLength(1))
-    C2= self.getSection2(yCoupe2)
+    # Exterior rebars in stem.
+    yCoupeExtStem= self.internalForcesULS.getYStem(self.getBasicAnchorageLength(self.extStemBottomIndex))
+    CExtStem= self.getSectionExtStem(yCoupeExtStem)
 
-    #Coupe 3. Béton armé. Semelle
-    C3= self.getSection3()
-    Nd3= 0.0 #we neglect axial force
-    Vd3= max(abs(self.internalForcesULS.VdSemelle.positive[0]),abs(self.internalForcesULS.VdSemelle.negative[0]))
-    Md3= max(abs(self.internalForcesULS.MdSemelle.positive[0]),abs(self.internalForcesULS.MdSemelle.negative[0]))
-    outputFile.write("\\textbf{Armature 3 (armature supérieure semelle):}\\\\\n")
-    C3.writeResultFlexion(outputFile,Nd3,Md3,Vd3)
-    C3.writeResultStress(outputFile,Md3)
+    # Rebars on footing top
+    CTopFooting= self.getSectionTopFooting()
+    NdTopFooting= 0.0 #we neglect axial force
+    VdTopFooting= max(abs(self.internalForcesULS.VdSemelle.positive[0]),abs(self.internalForcesULS.VdSemelle.negative[0]))
+    MdTopFooting= max(abs(self.internalForcesULS.MdSemelle.positive[0]),abs(self.internalForcesULS.MdSemelle.negative[0]))
+    outputFile.write("\\textbf{Reinforcement "+str(self.topFootingIndex)+" (armature supérieure semelle):}\\\\\n")
+    CTopFooting.writeResultFlexion(outputFile,NdTopFooting,MdTopFooting,VdTopFooting)
+    CTopFooting.writeResultStress(outputFile,MdTopFooting)
 
-    C4= self.getSection4()
+    CIntStemBottom= self.getSectionIntStemBottom()
     
-    C6= self.getSection6()
-    C7= self.getSection7()
-    C8= self.getSection8()
-    C9= C8
-    C11= self.getSection11()
-    C12= C11
+    CSectionStemTop= self.getSectionStemTop()
+    CSectionFootingBottom= self.getSectionFootingBottom()
+    CSectionFootingBottomLongitudinal= self.getSectionFootingBottomLongitudinal()
+    CSectionFootingTopLongitudinal= CSectionFootingBottomLongitudinal
+    CSectionStemLongExt= self.getSectionStemLongExt()
+    CSectionStemLongInt= CSectionStemLongExt
 
-    #Coupe 4. armature intérieure en attente. Encastrement voile 
-    outputFile.write("\\textbf{Armature 4 (armature intérieure en attente):}\\\\\n")
-    C4.writeResultCompression(outputFile,0.0,C12.tensionRebars.getAs())
+    # Interior rebars at stem bottom 
+    outputFile.write("\\textbf{Reinforcement "+str(self.intStemBottomIndex)+" (armature intérieure en attente):}\\\\\n")
+    CIntStemBottom.writeResultCompression(outputFile,0.0,CSectionStemLongInt.tensionRebars.getAs())
 
-    #Coupe 5. armature intérieure en voile.
-    outputFile.write("\\textbf{Armature 5 (armature intérieure en voile):}\\\\\n")
-    C5= self.getSection5()
+    # Interior rebars at stem.
+    outputFile.write("\\textbf{Reinforcement "+str(self.intStemIndex)+" (armature intérieure en voile):}\\\\\n")
+    CIntStem= self.getSectionIntStem()
     VdMinMidStem= self.internalForcesULS.VdMinMidStem(self.stemBottomWidth)
     MdMinMidStem= self.internalForcesULS.MdMinMidStem(self.footingThickness)
     NdMidStem= 0.0 #we neglect axial force
-    C5.writeResultFlexion(outputFile,NdMidStem, MdMinMidStem,VdMinMidStem)
-    C5.writeResultStress(outputFile,MdMinMidStem)
+    CIntStem.writeResultFlexion(outputFile,NdMidStem, MdMinMidStem,VdMinMidStem)
+    CIntStem.writeResultStress(outputFile,MdMinMidStem)
 
-    #Coupe 6. armature couronnement.
-    outputFile.write("\\textbf{Armature 6 (armature couronnement):}\\\\\n")
-    C6.writeResultFlexion(outputFile,0.0,0.0,0.0)
+    # Reinforcement at stem top.
+    outputFile.write("\\textbf{Reinforcement "+str(self.topStemIndex)+" (armature couronnement):}\\\\\n")
+    CSectionStemTop.writeResultFlexion(outputFile,0.0,0.0,0.0)
 
-    #Coupe 7. armature inférieure semelle.
-    outputFile.write("\\textbf{Armature 7 (armature trsv. inférieure semelle):}\\\\\n")
-    C7.writeResultCompression(outputFile,0.0,C8.tensionRebars.getAs())
+    # Reinforcement at footing bottom.
+    outputFile.write("\\textbf{Reinforcement "+str(self.bottomFootingIndex)+" (armature trsv. inférieure semelle):}\\\\\n")
+    CSectionFootingBottom.writeResultCompression(outputFile,0.0,CSectionFootingBottomLongitudinal.tensionRebars.getAs())
 
-    #Coupe 8. armature long. inférieure semelle.
-    outputFile.write("\\textbf{Armature 8 (armature long. inférieure semelle):}\\\\\n")
-    C8.writeResultTraction(outputFile,0.0)
+    # Longitudinal reinforcement at footing bottom.
+    outputFile.write("\\textbf{Reinforcement "+str(self.longBottomFootingIndex)+" (armature long. inférieure semelle):}\\\\\n")
+    CSectionFootingBottomLongitudinal.writeResultTraction(outputFile,0.0)
 
-    #Coupe 9. armature long. supérieure semelle.
-    outputFile.write("\\textbf{Armature 9 (armature long. supérieure semelle):}\\\\\n")
-    C9.writeResultTraction(outputFile,0.0)
+    # Longitudinal reinforcement at footing top.
+    outputFile.write("\\textbf{Reinforcement "+str(self.longTopFootingIndex)+" (armature long. supérieure semelle):}\\\\\n")
+    CSectionFootingTopLongitudinal.writeResultTraction(outputFile,0.0)
 
-    #Armature 10. armature de peau semelle.
-    outputFile.write("\\textbf{Armature 10 (armature de peau semelle):}\\\\\n")
+    # Footing skin reinforcement.
+    outputFile.write("\\textbf{Reinforcement "+str(self.skinFootingIndex)+" (armature de peau semelle):}\\\\\n")
     outputFile.write("  --\\\\\n")
-    #self.reinforcement[10].writeRebars(outputFile,self.concrete,1e-5)
+    #self.reinforcement[self.skinFootingIndex].writeRebars(outputFile,self.concrete,1e-5)
 
-    #Coupe 11. armature long. extérieure voile.
-    outputFile.write("\\textbf{Armature 11 (armature long. extérieure voile):}\\\\\n")
-    C11.writeResultTraction(outputFile,0.0)
+    # Stem exterior longitudinal reinforcement.
+    outputFile.write("\\textbf{Reinforcement "+str(self.longExtStemIndex)+" (armature long. extérieure voile):}\\\\\n")
+    CSectionStemLongExt.writeResultTraction(outputFile,0.0)
 
-    #Coupe 12. armature long. intérieure voile.
-    outputFile.write("\\textbf{Armature 12 (armature long. intérieure voile):}\\\\\n")
-    C12.writeResultTraction(outputFile,0.0)
+    # Stem interior longitudinal reinforcement.
+    outputFile.write("\\textbf{Reinforcement "+str(self.longIntStemIndex)+" (armature long. intérieure voile):}\\\\\n")
+    CSectionStemLongInt.writeResultTraction(outputFile,0.0)
 
-    #Armature 13. armature long. couronnement.
-    outputFile.write("\\textbf{Armature 13 (armature long. couronnement):}\\\\\n")
+    # Stem top skin reinforcement.
+    outputFile.write("\\textbf{Reinforcement "+str(self.topSkinIndex)+" (armature long. couronnement):}\\\\\n")
     outputFile.write("  --\\\\\n")
-    #self.reinforcement[13].writeRebars(outputFile,self.concrete,1e-5)
+    #self.reinforcement[self.topSkinIndex].writeRebars(outputFile,self.concrete,1e-5)
     outputFile.write("\\hline\n")
     outputFile.write("\\end{supertabular}\n")
     outputFile.write("\\end{center}\n")

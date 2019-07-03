@@ -146,11 +146,11 @@ class InternalForces(object):
     plt.savefig(fileName)
     plt.close()
 
-class RetainingWallReinforcement(dict):
+class ReinforcementMap(dict):
   ''' Simplified reinforcement for a cantilever retaining wall.'''
   def __init__(self,concreteCover=40e-3, steel= None,rebarFamilyTemplate= None):
     '''Constructor '''
-    super(RetainingWallReinforcement, self).__init__()
+    super(ReinforcementMap, self).__init__()
     self.concreteCover= concreteCover
     #Materials.
     self.steel= steel
@@ -161,12 +161,12 @@ class RetainingWallReinforcement(dict):
     # R= self.footingThickness-2*self.concreteCover-8e-3
     # n= math.ceil(R/0.15)+1
     # ecart= R/(n-1)
-    # self[10]= FamNBars(self.steel,n,8e-3,ecart,concreteCover)
+    # self[self.skinFootingIndex]= FamNBars(self.steel,n,8e-3,ecart,concreteCover)
     # #Armature couronnement.
     # R= self.stemTopWidth-2*self.concreteCover-8e-3
     # n= math.ceil(R/0.15)+1
     # ecart= R/(n-1)
-    # self[13]= FamNBars(self.steel,n,8e-3,ecart,concreteCover)
+    # self[self.topSkinIndex]= FamNBars(self.steel,n,8e-3,ecart,concreteCover)
     
   def setArmature(self,index,armature):
     '''Assigns armature.'''
@@ -175,6 +175,10 @@ class RetainingWallReinforcement(dict):
   def getArmature(self,index):
     '''Return armature at index.'''
     return self[index]
+  
+  def getBasicAnchorageLength(self,index, concrete):
+    '''Returns basic anchorage length for the reinforcement at "index".''' 
+    return self.getArmature(index).getBasicAnchorageLength(concrete)
     
 class WallStabilityResults(object):
   def __init__(self,wall,combinations,foundationSoilModel,sg_adm= None, gammaR= 1):
@@ -301,48 +305,173 @@ class Envelope(object):
     self.negative= retNeg
     self.yValues= retY
 
+class StemReinforcement(ReinforcementMap):
+  '''Stem reinforcement. '''
+  extStemBottomIndex= 1 # exterior reinforcement at stem bottom.
+  extStemIndex= 2 # exterior reinforcement at stem.
+  intStemBottomIndex= 4 # interior reinforcement at stem.
+  intStemIndex= 5 # interior reinforcement at stem.
+  topStemIndex= 6 # reinforcement at stem top.
+  longExtStemIndex= 11 # exterior longitudinal reinforcement at stem.
+  longIntStemIndex= 12 # interior longitudinal reinforcement at stem.
+  topSkinIndex= 13 # longitudinal skin reinforcement at stem top.
+
+  def __init__(self,wallGeom, concreteCover, steel):
+    '''Constructor.'''
+    super(StemReinforcement,self).__init__(concreteCover, steel)
+    self.wallGeom= wallGeom
+        
+  def getSectionExtStemBottom(self):
+    '''Returns RC section for exterior reinforcement at stem bottom.'''
+    return ng_rc_section.RCSection(self[self.extStemBottomIndex],self.wallGeom.concrete,self.wallGeom.b,self.wallGeom.stemBottomWidth)
+  def getSectionExtStem(self,y):
+    '''Returns RC section for exterior reinforcement at stem.'''
+    c= self.wallGeom.getDepth(y)
+    return ng_rc_section.RCSection(self[self.extStemIndex],self.wallGeom.concrete,self.wallGeom.b,c)
+  def getSectionIntStemBottom(self):
+    '''Returns RC section for interior reinforcement at stem bottom.'''
+    return ng_rc_section.RCSection(self[self.intStemBottomIndex],self.wallGeom.concrete, self.wallGeom.b,self.wallGeom.stemBottomWidth)
+  def getSectionStemTop(self):
+    '''Returns RC section for reinforcement at stem top.'''
+    return ng_rc_section.RCSection(self[self.topStemIndex],self.wallGeom.concrete, self.wallGeom.b,self.wallGeom.stemTopWidth)
+  def getSectionStemLongExt(self):
+    '''Returns RC section for loingitudinal reinforcement in stem exterior.'''
+    return ng_rc_section.RCSection(self[self.longExtStemIndex],self.wallGeom.concrete,self.wallGeom.b,(self.wallGeom.stemTopWidth+self.wallGeom.stemBottomWidth)/2.0)
+  def writeResult(self, outputFile):
+    '''Write stem reinforcement verification results in LaTeX format.'''
+
+    # Exterior reinforcement in stem bottom.
+    CExtStemBottom= self.getSectionExtStemBottom()
+    VdMaxEncastrement= self.wallGeom.internalForcesULS.VdMaxEncastrement(self.wallGeom.stemBottomWidth)
+    MdMaxEncastrement= self.wallGeom.internalForcesULS.MdMaxEncastrement(self.wallGeom.footingThickness)
+    outputFile.write("\\textbf{Reinforcement "+str(self.extStemBottomIndex)+" (armature extérieure en attente) :} \\\\\n")
+    NdEncastrement= 0.0 #we neglect axial force
+    CExtStemBottom.writeResultFlexion(outputFile,NdEncastrement, MdMaxEncastrement,VdMaxEncastrement)
+    CExtStemBottom.writeResultStress(outputFile,MdMaxEncastrement)
+
+    # Exterior reinforcement in stem.
+    yCoupeExtStem= self.wallGeom.internalForcesULS.getYStem(self.getBasicAnchorageLength(self.extStemBottomIndex, self.wallGeom.concrete))
+    CExtStem= self.getSectionExtStem(yCoupeExtStem)
+    NdExtStem= 0.0 #we neglect axial force
+    VdExtStem= self.wallGeom.internalForcesULS.VdMax(yCoupeExtStem)
+    MdExtStem= self.wallGeom.internalForcesULS.MdMax(yCoupeExtStem)
+    outputFile.write("\\textbf{Reinforcement "+str(self.extStemIndex)+" (armature extériéure voile):}\\\\\n")
+    CExtStem.writeResultFlexion(outputFile,NdExtStem,MdExtStem,VdExtStem)
+    CExtStem.writeResultStress(outputFile,MdExtStem)
+
+    # Interior reinforcement at stem bottom 
+    CIntStemBottom= self.getSectionIntStemBottom()
+    CIntStem= CIntStemBottom
+    CSectionStemTop= self.getSectionStemTop()
+    CSectionStemLongExt= self.getSectionStemLongExt()
+    CSectionStemLongInt= CSectionStemLongExt
+
+    outputFile.write("\\textbf{Reinforcement "+str(self.intStemBottomIndex)+" (armature intérieure en attente):}\\\\\n")
+    CIntStemBottom.writeResultCompression(outputFile,0.0,CSectionStemLongInt.tensionRebars.getAs())
+
+    # Exterior reinforcement at stem.
+    outputFile.write("\\textbf{Reinforcement "+str(self.intStemIndex)+" (armature intérieure en voile):}\\\\\n")
+    CIntStem.writeResultCompression(outputFile,0.0,CSectionStemLongInt.tensionRebars.getAs())
+
+    # Reinforcement at stem top.
+    outputFile.write("\\textbf{Reinforcement "+str(self.topStemIndex)+" (armature couronnement):}\\\\\n")
+    CSectionStemTop.writeResultFlexion(outputFile,0.0,0.0,0.0)
+
+    # Stem exterior longitudinal reinforcement.
+    outputFile.write("\\textbf{Reinforcement "+str(self.longExtStemIndex)+" (armature long. extérieure voile):}\\\\\n")
+    CSectionStemLongExt.writeResultTraction(outputFile,0.0)
+
+    # Stem interior longitudinal reinforcement.
+    outputFile.write("\\textbf{Reinforcement  "+str(self.longIntStemIndex)+" (armature long. intérieure voile):}\\\\\n")
+    CSectionStemLongInt.writeResultTraction(outputFile,0.0)
+
+    # Stem top skin reinforcement.
+    outputFile.write("\\textbf{Reinforcement "+str(self.topSkinIndex)+" (armature long. couronnement):}\\\\\n")
+    outputFile.write("  --\\\\\n")
+    #self[self.topSkinIndex].writeRebars(outputFile,self.wallGeom.concrete,1e-5)
+    
+  def drawSchema(self,defStrings):
+    '''Stem data for wall scheme drawing in LaTeX format.'''
+    
+    defStrings[self.extStemBottomIndex]= self.getSectionExtStemBottom().tensionRebars.getDefStrings()
+    yCoupeExtStem= self.wallGeom.internalForcesULS.getYStem(self.getBasicAnchorageLength(self.extStemBottomIndex))
+    defStrings[self.extStemIndex]= self.getSectionExtStem(yCoupeExtStem).tensionRebars.getDefStrings()
+    defStrings[self.intStemBottomIndex]= self.getSectionIntStemBottom().tensionRebars.getDefStrings()
+    defStrings[self.intStemIndex]= self.getSectionIntStemBottom().tensionRebars.getDefStrings() #CIntStem==CIntStemBottom
+    defStrings[self.topStemIndex]= self.getSectionStemTop().tensionRebars.getDefStrings()
+    defStrings[self.longExtStemIndex]= self.getSectionStemLongExt().tensionRebars.getDefStrings()
+    defStrings[self.longIntStemIndex]= self.getSectionStemLongInt().tensionRebars.getDefStrings() #CSectionStemLongInt==CSectionStemLongExt
+
+class FootingReinforcement(ReinforcementMap):
+  '''Footing reinforcement. '''
+  topFootingIndex= 3 # transverse reinforcement at wall footing top.
+  bottomFootingIndex= 7 # transverse reinforcement at wall footing bottom.
+  longBottomFootingIndex= 8 # longitudinal reinforcement at wall footing bottom.
+  longTopFootingIndex= 9 # longitudinal reinforcement at wall footing bottom.
+  skinFootingIndex= 10 # skin reinforcement at wall footing.
+
+  def __init__(self,wallGeom, concreteCover, steel):
+    '''Constructor.'''
+    super(FootingReinforcement,self).__init__(concreteCover, steel)
+    self.wallGeom= wallGeom
+
+  def getSectionTopFooting(self):
+    '''Returns RC section for reinforcement on footing top.'''
+    return ng_rc_section.RCSection(self[self.topFootingIndex],self.wallGeom.concrete,self.wallGeom.b,self.wallGeom.footingThickness)
+  def getSectionFootingBottom(self):
+    '''Returns RC section for reinforcement at footing bottom.'''
+    return ng_rc_section.RCSection(self[self.wallGeom.bottomFootingIndex],self.wallGeom.concrete,self.wallGeom.b,self.wallGeom.footingThickness)
+  def getSectionFootingBottomLongitudinal(self):
+    '''Returns RC section for longitudinal reinforcement at footing bottom.'''
+    return ng_rc_section.RCSection(self[self.longBottomFootingIndex],self.wallGeom.concrete,self.wallGeom.b,self.wallGeom.footingThickness)
+  def writeResult(self, outputFile):
+    '''Write reinforcement verification results in LaTeX format.'''
+    
+    # Reinforcement on footing top
+    CTopFooting= self.getSectionTopFooting()
+    NdTopFooting= 0.0 #we neglect axial force
+    VdTopFooting= self.wallGeom.internalForcesULS.VdSemelle
+    MdTopFooting= self.wallGeom.internalForcesULS.MdSemelle
+    outputFile.write("\\textbf{Reinforcement "+str(self.topFootingIndex)+" (armature supérieure semelle):}\\\\\n")
+    CTopFooting.writeResultFlexion(outputFile,NdTopFooting,MdTopFooting,VdTopFooting)
+    CTopFooting.writeResultStress(outputFile,self.wallGeom.internalForcesSLS.MdSemelle)
+
+    CSectionFootingBottom= self.getSectionFootingBottom()
+    CSectionFootingBottomLongitudinal= self.getSectionFootingBottomLongitudinal()
+    CSectionFootingTopLongitudinal= CSectionFootingBottomLongitudinal
+
+    # Reinforcemnt at footing bottom.
+    outputFile.write("\\textbf{Reinforcement "+str(self.bottomFootingIndex)+" (armature trsv. inférieure semelle):}\\\\\n")
+    CSectionFootingBottom.writeResultCompression(outputFile,0.0,CSectionFootingBottomLongitudinal.tensionRebars.getAs())
+
+    # Longitudinal reinforcement at footing bottom.
+    outputFile.write("\\textbf{Reinforcement "+str(self.longBottomFootingIndex)+" (armature long. inférieure semelle):}\\\\\n")
+    CSectionFootingBottomLongitudinal.writeResultTraction(outputFile,0.0)
+
+    # Longitudinal reinforcement at footing top.
+    outputFile.write("\\textbf{Reinforcement "+str(self.longTopFootingIndex)+" (armature long. supérieure semelle):}\\\\\n")
+    CSectionFootingTopLongitudinal.writeResultTraction(outputFile,0.0)
+
+    # Footing skin reinforcement.
+    outputFile.write("\\textbf{Reinforcement "+str(self.skinFootingIndex)+" (armature de peau semelle):}\\\\\n")
+    outputFile.write("  --\\\\\n")
+    #self[self.skinFootingIndex].writeRebars(outputFile,self.wallGeom.concrete,1e-5)
+
+
   
 class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   '''Cantilever retaining wall.'''
   b= 1.0
 
+  
   def __init__(self,name= 'prb',concreteCover=40e-3,stemBottomWidth=0.25,stemTopWidth=0.25,footingThickness= 0.25, concrete= None, steel= None):
     '''Constructor '''
     super(RetainingWall,self).__init__(name,stemBottomWidth,stemTopWidth,footingThickness)
     #Materials.
     self.concrete= concrete
-    self.reinforcement= RetainingWallReinforcement(concreteCover, steel)
+    self.stemReinforcement= StemReinforcement(self,concreteCover, steel)
+    self.footingReinforcement= FootingReinforcement(self,concreteCover, steel)
     
-  def getBasicAnchorageLength(self,index):
-    '''Returns basic anchorage length for the reinforcement at "index".''' 
-    return self.reinforcement.getArmature(index).getBasicAnchorageLength(self.concrete)
-
-  def getSection1(self):
-    '''Returns RC section for armature in position 1.'''
-    return ng_rc_section.RCSection(self.reinforcement[1],self.concrete,self.b,self.stemBottomWidth)
-  def getSection2(self,y):
-    '''Returns RC section for armature in position 2.'''
-    c= self.getDepth(y)
-    return ng_rc_section.RCSection(self.reinforcement[2],self.concrete,self.b,c)
-  def getSection3(self):
-    '''Returns RC section for armature in position 3.'''
-    return ng_rc_section.RCSection(self.reinforcement[3],self.concrete,self.b,self.footingThickness)
-  def getSection4(self):
-    '''Returns RC section for armature in position 4.'''
-    return ng_rc_section.RCSection(self.reinforcement[4],self.concrete,self.b,self.stemBottomWidth)
-  def getSection6(self):
-    '''Returns RC section for armature in position 6.'''
-    return ng_rc_section.RCSection(self.reinforcement[6],self.concrete,self.b,self.stemTopWidth)
-  def getSection7(self):
-    '''Returns RC section for armature in position 7.'''
-    return ng_rc_section.RCSection(self.reinforcement[7],self.concrete,self.b,self.footingThickness)
-  def getSection8(self):
-    '''Returns RC section for armature in position 8.'''
-    return ng_rc_section.RCSection(self.reinforcement[8],self.concrete,self.b,self.footingThickness)
-  def getSection11(self):
-    '''Returns RC section for armature in position 11.'''
-    return ng_rc_section.RCSection(self.reinforcement[11],self.concrete,self.b,(self.stemTopWidth+self.stemBottomWidth)/2.0)
-
   def setULSInternalForcesEnvelope(self,wallInternalForces):
     '''Assigns the ultimate limit state infernal forces envelope for the stem.'''
     if(hasattr(self,'stemHeight')):
@@ -389,8 +518,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     outputFile.write("\\begin{tabular}{llll}\n")
     outputFile.write("\\multicolumn{3}{c}{\\textsc{Matériels}}\\\\\n")
     outputFile.write("  Béton: " + self.concrete.materialName +" & ")
-    outputFile.write("  Acier: " + self.reinforcement.steel.materialName +" & ")
-    outputFile.write("  ConcreteCover: "+ fmt.Diam.format(self.reinforcement.concreteCover*1e3)+ " mm\\\\\n")
+    outputFile.write("  Acier: " + self.stemReinforcement.steel.materialName +" & ")
+    outputFile.write("  ConcreteCover: "+ fmt.Diam.format(self.stemReinforcement.concreteCover*1e3)+ " mm\\\\\n")
     outputFile.write("\\end{tabular} \\\\\n")
     outputFile.write("\\hline\n")
     outputFile.write("\\end{tabular}\n")
@@ -405,7 +534,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     self.stability_results.writeOutput(outputFile,self.name)
     self.sls_results.writeOutput(outputFile,self.name)
     outputFile.write("\\bottomcaption{Calcul armatures mur "+ self.name +"} \\label{tb_"+self.name+"}\n")
-    outputFile.write("\\tablefirsthead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{Armatures mur "+self.name+"}}\\\\\\hline\n}\n")
+    outputFile.write("\\tablefirsthead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{Reinforcements mur "+self.name+"}}\\\\\\hline\n}\n")
     outputFile.write("\\tablehead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{"+self.name+" (suite)}}\\\\\\hline\n}\n")
     outputFile.write("\\tabletail{\\hline \\multicolumn{1}{|r|}{../..}\\\\\\hline}\n")
     outputFile.write("\\tablelasttail{\\hline}\n")
@@ -413,84 +542,9 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     outputFile.write("\\begin{supertabular}[H]{|l|}\n")
     outputFile.write("\\hline\n")
 
-    #Coupe 1. Béton armé. Encastrement.
-    C1= self.getSection1()
-    VdMaxEncastrement= self.internalForcesULS.VdMaxEncastrement(self.stemBottomWidth)
-    MdMaxEncastrement= self.internalForcesULS.MdMaxEncastrement(self.footingThickness)
-    outputFile.write("\\textbf{Armature 1 (armature extérieure en attente) :} \\\\\n")
-    NdEncastrement= 0.0 #we neglect axial force
-    C1.writeResultFlexion(outputFile,NdEncastrement, MdMaxEncastrement,VdMaxEncastrement)
-    C1.writeResultStress(outputFile,MdMaxEncastrement)
+    self.stemReinforcement.writeResult(outputFile)
+    self.footingReinforcement.writeResult(outputFile)
 
-    #Coupe 2. Béton armé. Stem
-    yCoupe2= self.internalForcesULS.getYStem(self.getBasicAnchorageLength(1))
-    C2= self.getSection2(yCoupe2)
-    Nd2= 0.0 #we neglect axial force
-    Vd2= self.internalForcesULS.VdMax(yCoupe2)
-    Md2= self.internalForcesULS.MdMax(yCoupe2)
-    outputFile.write("\\textbf{Armature 2 (armature extériéure voile):}\\\\\n")
-    C2.writeResultFlexion(outputFile,Nd2,Md2,Vd2)
-    C2.writeResultStress(outputFile,Md2)
-
-    #Coupe 3. Béton armé. Semelle
-    C3= self.getSection3()
-    Nd3= 0.0 #we neglect axial force
-    Vd3= self.internalForcesULS.VdSemelle
-    Md3= self.internalForcesULS.MdSemelle
-    outputFile.write("\\textbf{Armature 3 (armature supérieure semelle):}\\\\\n")
-    C3.writeResultFlexion(outputFile,Nd3,Md3,Vd3)
-    C3.writeResultStress(outputFile,self.internalForcesSLS.MdSemelle)
-
-    C4= self.getSection4()
-    C5= C4
-    C6= self.getSection6()
-    C7= self.getSection7()
-    C8= self.getSection8()
-    C9= C8
-    C11= self.getSection11()
-    C12= C11
-
-    #Coupe 4. armature intérieure en attente. Encastrement voile 
-    outputFile.write("\\textbf{Armature 4 (armature intérieure en attente):}\\\\\n")
-    C4.writeResultCompression(outputFile,0.0,C12.tensionRebars.getAs())
-
-    #Coupe 5. armature intérieure en voile.
-    outputFile.write("\\textbf{Armature 5 (armature intérieure en voile):}\\\\\n")
-    C5.writeResultCompression(outputFile,0.0,C12.tensionRebars.getAs())
-
-    #Coupe 6. armature couronnement.
-    outputFile.write("\\textbf{Armature 6 (armature couronnement):}\\\\\n")
-    C6.writeResultFlexion(outputFile,0.0,0.0,0.0)
-
-    #Coupe 7. armature inférieure semelle.
-    outputFile.write("\\textbf{Armature 7 (armature trsv. inférieure semelle):}\\\\\n")
-    C7.writeResultCompression(outputFile,0.0,C8.tensionRebars.getAs())
-
-    #Coupe 8. armature long. inférieure semelle.
-    outputFile.write("\\textbf{Armature 8 (armature long. inférieure semelle):}\\\\\n")
-    C8.writeResultTraction(outputFile,0.0)
-
-    #Coupe 9. armature long. supérieure semelle.
-    outputFile.write("\\textbf{Armature 9 (armature long. supérieure semelle):}\\\\\n")
-    C9.writeResultTraction(outputFile,0.0)
-
-    #Armature 10. armature de peau semelle.
-    outputFile.write("\\textbf{Armature 10 (armature de peau semelle):}\\\\\n")
-    outputFile.write("  --\\\\\n")
-    #self.reinforcement[10].writeRebars(outputFile,self.concrete,1e-5)
-
-    #Coupe 11. armature long. extérieure voile.
-    outputFile.write("\\textbf{Armature 11 (armature long. extérieure voile):}\\\\\n")
-    C11.writeResultTraction(outputFile,0.0)
-
-    #Coupe 12. armature long. intérieure voile.
-    outputFile.write("\\textbf{Armature 12 (armature long. intérieure voile):}\\\\\n")
-    C12.writeResultTraction(outputFile,0.0)
-
-    #Armature 13. armature long. couronnement.
-    outputFile.write("\\textbf{Armature 13 (armature long. couronnement):}\\\\\n")
-    outputFile.write("  --\\\\\n")
-    #self.reinforcement[13].writeRebars(outputFile,self.concrete,1e-5)
     outputFile.write("\\hline\n")
     outputFile.write("\\end{supertabular}\n")
     outputFile.write("\\end{center}\n")
@@ -506,20 +560,13 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
       outputFile.write(l)
 
     defStrings= {}
-    defStrings[1]= self.getSection1().tensionRebars.getDefStrings()
-    yCoupe2= self.internalForcesULS.getYStem(self.getBasicAnchorageLength(1))
-    defStrings[2]= self.getSection2(yCoupe2).tensionRebars.getDefStrings()
-    defStrings[3]= self.getSection3().tensionRebars.getDefStrings()
-    defStrings[4]= self.getSection4().tensionRebars.getDefStrings()
-    defStrings[5]= self.getSection4().tensionRebars.getDefStrings() #C5==C4
-    defStrings[6]= self.getSection6().tensionRebars.getDefStrings()
-    defStrings[7]= self.getSection7().tensionRebars.getDefStrings()
-    defStrings[8]= self.getSection8().tensionRebars.getDefStrings()
-    defStrings[9]= self.getSection8().tensionRebars.getDefStrings() #C9==C8
-    #defStrings[10]= self.getSection10().tensionRebars.getDefStrings()
-    defStrings[11]= self.getSection11().tensionRebars.getDefStrings()
-    defStrings[12]= self.getSection11().tensionRebars.getDefStrings() #C12==C11
-
+    stemReinforcement.drawSchema(defStrings)
+    defStrings[self.topFootingIndex]= self.getSectionTopFooting().tensionRebars.getDefStrings()
+    defStrings[self.bottomFootingIndex]= self.getSectionFootingBottom().tensionRebars.getDefStrings()
+    defStrings[self.longBottomFootingIndex]= self.getSectionFootingBottomLongitudinal().tensionRebars.getDefStrings()
+    defStrings[self.longTopFootingIndex]= self.getSectionFootingBottomLongitudinal().tensionRebars.getDefStrings() #CSectionFootingTopLongitudinal==CSectionFootingBottomLongitudinal
+    #defStrings[self.skinFootingIndex]= self.getSectionFootingSkin().tensionRebars.getDefStrings()
+    
     rebarAnno= draw_schema.getRebarAnnotationLines(defStrings)
     for l in rebarAnno:
       outputFile.write(l)
