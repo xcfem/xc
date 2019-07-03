@@ -5,7 +5,7 @@
 import xc_base
 import geom
 import xc
-from rough_calculations import nb_poussee_terres as pt
+from rough_calculations import ng_earth_pressure as pt
 import math
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
