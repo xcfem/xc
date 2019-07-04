@@ -337,6 +337,9 @@ class StemReinforcement(ReinforcementMap):
   def getSectionStemLongExt(self):
     '''Returns RC section for loingitudinal reinforcement in stem exterior.'''
     return ng_rc_section.RCSection(self[self.longExtStemIndex],self.wallGeom.concrete,self.wallGeom.b,(self.wallGeom.stemTopWidth+self.wallGeom.stemBottomWidth)/2.0)
+  def getSectionStemLongInt(self):
+    '''Returns RC section for loingitudinal reinforcement in stem interior.'''
+    return ng_rc_section.RCSection(self[self.longIntStemIndex],self.wallGeom.concrete,self.wallGeom.b,(self.wallGeom.stemTopWidth+self.wallGeom.stemBottomWidth)/2.0)
   def writeResult(self, outputFile):
     '''Write stem reinforcement verification results in LaTeX format.'''
 
@@ -394,13 +397,13 @@ class StemReinforcement(ReinforcementMap):
     '''Stem data for wall scheme drawing in LaTeX format.'''
     
     defStrings[self.extStemBottomIndex]= self.getSectionExtStemBottom().tensionRebars.getDefStrings()
-    yCoupeExtStem= self.wallGeom.internalForcesULS.getYStem(self.getBasicAnchorageLength(self.extStemBottomIndex))
+    yCoupeExtStem= self.wallGeom.internalForcesULS.getYStem(self.getBasicAnchorageLength(self.extStemBottomIndex, self.wallGeom.concrete))
     defStrings[self.extStemIndex]= self.getSectionExtStem(yCoupeExtStem).tensionRebars.getDefStrings()
     defStrings[self.intStemBottomIndex]= self.getSectionIntStemBottom().tensionRebars.getDefStrings()
     defStrings[self.intStemIndex]= self.getSectionIntStemBottom().tensionRebars.getDefStrings() #CIntStem==CIntStemBottom
     defStrings[self.topStemIndex]= self.getSectionStemTop().tensionRebars.getDefStrings()
     defStrings[self.longExtStemIndex]= self.getSectionStemLongExt().tensionRebars.getDefStrings()
-    defStrings[self.longIntStemIndex]= self.getSectionStemLongInt().tensionRebars.getDefStrings() #CSectionStemLongInt==CSectionStemLongExt
+    defStrings[self.longIntStemIndex]= defStrings[self.longExtStemIndex]#self.getSectionStemLongInt().tensionRebars.getDefStrings() #CSectionStemLongInt==CSectionStemLongExt
 
 class FootingReinforcement(ReinforcementMap):
   '''Footing reinforcement. '''
@@ -420,7 +423,7 @@ class FootingReinforcement(ReinforcementMap):
     return ng_rc_section.RCSection(self[self.topFootingIndex],self.wallGeom.concrete,self.wallGeom.b,self.wallGeom.footingThickness)
   def getSectionFootingBottom(self):
     '''Returns RC section for reinforcement at footing bottom.'''
-    return ng_rc_section.RCSection(self[self.wallGeom.bottomFootingIndex],self.wallGeom.concrete,self.wallGeom.b,self.wallGeom.footingThickness)
+    return ng_rc_section.RCSection(self[self.bottomFootingIndex],self.wallGeom.concrete,self.wallGeom.b,self.wallGeom.footingThickness)
   def getSectionFootingBottomLongitudinal(self):
     '''Returns RC section for longitudinal reinforcement at footing bottom.'''
     return ng_rc_section.RCSection(self[self.longBottomFootingIndex],self.wallGeom.concrete,self.wallGeom.b,self.wallGeom.footingThickness)
@@ -457,6 +460,14 @@ class FootingReinforcement(ReinforcementMap):
     outputFile.write("  --\\\\\n")
     #self[self.skinFootingIndex].writeRebars(outputFile,self.wallGeom.concrete,1e-5)
 
+  def drawSchema(self,defStrings):
+    '''Footing scheme drawing in LaTeX format.'''
+
+    defStrings[self.topFootingIndex]= self.getSectionTopFooting().tensionRebars.getDefStrings()
+    defStrings[self.bottomFootingIndex]= self.getSectionFootingBottom().tensionRebars.getDefStrings()
+    defStrings[self.longBottomFootingIndex]= self.getSectionFootingBottomLongitudinal().tensionRebars.getDefStrings()
+    defStrings[self.longTopFootingIndex]= self.getSectionFootingBottomLongitudinal().tensionRebars.getDefStrings() #CSectionFootingTopLongitudinal==CSectionFootingBottomLongitudinal
+    #defStrings[self.skinFootingIndex]= self.getSectionFootingSkin().tensionRebars.getDefStrings()
 
   
 class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
@@ -560,12 +571,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
       outputFile.write(l)
 
     defStrings= {}
-    stemReinforcement.drawSchema(defStrings)
-    defStrings[self.topFootingIndex]= self.getSectionTopFooting().tensionRebars.getDefStrings()
-    defStrings[self.bottomFootingIndex]= self.getSectionFootingBottom().tensionRebars.getDefStrings()
-    defStrings[self.longBottomFootingIndex]= self.getSectionFootingBottomLongitudinal().tensionRebars.getDefStrings()
-    defStrings[self.longTopFootingIndex]= self.getSectionFootingBottomLongitudinal().tensionRebars.getDefStrings() #CSectionFootingTopLongitudinal==CSectionFootingBottomLongitudinal
-    #defStrings[self.skinFootingIndex]= self.getSectionFootingSkin().tensionRebars.getDefStrings()
+    self.stemReinforcement.drawSchema(defStrings)
+    self.footingReinforcement.drawSchema(defStrings)
     
     rebarAnno= draw_schema.getRebarAnnotationLines(defStrings)
     for l in rebarAnno:
