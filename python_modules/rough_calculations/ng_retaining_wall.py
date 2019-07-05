@@ -12,12 +12,11 @@ __email__= "l.pereztato@gmail.com"
 
 import sys
 from postprocess.reports import common_formats as fmt
-from postprocess.reports import draw_schema_armature_mur as draw_schema
+from postprocess.reports import draw_wall_reinforcement_scheme as draw_schema
 from postprocess import get_reactions
 import math
 import scipy.interpolate
 import matplotlib
-#matplotlib.use('PS')
 import matplotlib.pyplot as plt
 from materials import typical_materials
 from materials.sections import section_properties

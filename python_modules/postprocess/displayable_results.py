@@ -57,10 +57,10 @@ class ResultsDescriptionContainer(dict):
       result= self[key]
       partName= partToDisplay.partName
       index= result.getReinforcementLabel()
-      txtArmature= partToDisplay.reinforcementLabels[index-1]
+      reinforcementText= partToDisplay.reinforcementLabels[index-1]
       print '**** key= ', key
       print '**** label= ', self.limitStateData.label
-      figDef= utils_display.FigureDefinition(partName,self.limitStateData.label,key,result.description,txtArmature,result.units)
+      figDef= utils_display.FigureDefinition(partName,self.limitStateData.label,key,result.description,reinforcementText,result.units)
       retval.append(figDef)
     return retval
   def display(self,tp,partToDisplay):

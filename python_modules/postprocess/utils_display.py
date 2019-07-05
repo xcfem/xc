@@ -51,15 +51,15 @@ class FigureBase(object):
     self.attributeName= ''
     self.figDescription= figDescr #Text to insert as caption in the LaTeX file.
     self.unitsLabel= units # Somethin like '[MPa]' or 'radians'...
-    self.armatureDescription= reinfDescr #Something like "horizontal reinforcement."
+    self.reinforcementDescription= reinfDescr #Something like "horizontal reinforcement."
     self.figSize= sz #LaTeX size for the figure.
     self.cameraParameters= vtk_graphic_base.CameraParameters('XYZPos')
   def getCaption(self):
     retval= self.partLabel+'. '+self.figDescription
     if(self.unitsLabel!=None):
       retval+= ' ['+ self.unitsLabel +']'
-    if(self.armatureDescription!=None):
-      retval+= '. ' + self.armatureDescription
+    if(self.reinforcementDescription!=None):
+      retval+= '. ' + self.reinforcementDescription
     return retval
   def getFileName(self):
     return su.slugify(self.partLabel+self.limitStateLabel+self.attributeName)
