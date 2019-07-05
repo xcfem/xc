@@ -7,10 +7,11 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
+import math
 from miscUtils import LogMessages as lmsg
 from materials.sections.fiber_section import fiber_sets
 from solution import predefined_solutions
-import math
+from postprocess import control_vars as cv
 
 class LimitStateControllerBase(object):
     '''
@@ -168,3 +169,12 @@ class CrackControlBaseParameters(LimitStateControllerBase):
         self.tensionedRebars.printParams()
 
         
+class ShearControllerBase(LimitStateControllerBase):
+    '''Base class for shear controller classes.'''
+    def initControlVars(self,elements):
+        ''' Initialize control variables over elements.
+
+          :param elements: elements to define control variables in
+        '''
+        for e in elements:
+          e.setProp(self.limitStateLabel,cv.RCShearControlVars())
