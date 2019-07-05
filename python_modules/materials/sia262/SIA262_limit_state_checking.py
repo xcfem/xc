@@ -244,8 +244,8 @@ def VuWithShearRebarsSIA262(concrete,steel,Nd,Md,Mu,b,d,Asw,s,z,alpha=math.radia
   Vsu= VuShearRebars90SIA262(Asw,s,steel,z,alpha)
   return Vcu+Vsu
 
-class ShearController(lsc.LimitStateControllerBase):
-  '''Object that controls shear limit state with SIA 262.'''
+class ShearController(lsc.ShearControllerBase):
+  '''Object that controls shear limit state according to SIA 262.'''
 
   def __init__(self,limitStateLabel):
     super(ShearController,self).__init__(limitStateLabel)
@@ -291,14 +291,6 @@ class ShearController(lsc.LimitStateControllerBase):
 
   def Vu(self):
     return self.Vcu+self.Vsu
-
-  def initControlVars(self,elements):
-    ''' Initialize control variables over elements.
-
-      :param elements: elements to define control variables in
-    '''
-    for e in elements:
-      e.setProp(self.limitStateLabel,cv.RCShearControlVars())
 
   def check(self,elements,nmbComb):
     '''

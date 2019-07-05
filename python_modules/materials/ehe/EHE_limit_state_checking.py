@@ -691,7 +691,7 @@ def getVuEHE08SiAt(fck,fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alph
     return  min(getVu2EHE08(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv,alpha,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue),getVu1EHE08(fck,fcd,Ncd,Ac,b0,d,alpha,theta))
   
 
-class ShearController(lscb.LimitStateControllerBase):
+class ShearController(lscb.ShearControllerBase):
   '''Shear control according to EHE-08.'''
   def __init__(self,limitStateLabel):
     super(ShearController,self).__init__(limitStateLabel,fakeSection= False)
@@ -728,15 +728,6 @@ class ShearController(lscb.LimitStateControllerBase):
     self.Vu1= 0.0 # Shear strength at failure due to diagonal compression in the web.
     self.Vu2= 0.0 # Shear strength at failure due to tensile force in the web
     self.Vu= 0.0 # Shear strength at failure.
-
-  def initControlVars(self,elements):
-    ''' Initialize control variables over elements.
-
-      :param elements: elements to define control variables in
-    '''
-    for e in elements:
-      e.setProp(self.limitStateLabel,cv.RCShearControlVars())
-
 
   def extractFiberData(self, scc, concrete, reinfSteel):
     ''' Extract basic parameters from the fiber model of the section
