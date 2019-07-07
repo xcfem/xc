@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com ana.ortega@ciccp.es"
 
 import xc_base
 import geom
@@ -12,12 +17,12 @@ from solution import predefined_solutions
 from materials.sia262 import SIA262_limit_state_checking #Change SIA262->EHE
 from postprocess import limit_state_data as lsd
 from postprocess.config import output_config as oc
+import logging
 
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
-__copyright__= "Copyright 2015, LCPT and AO_O"
-__license__= "GPL"
-__version__= "3.0"
-__email__= "l.pereztato@gmail.com ana.ortega@ciccp.es"
+
+#Hide INFO messages from modules.
+rootLogger = logging.getLogger()
+rootLogger.setLevel(logging.ERROR)
 
 feProblem= xc.FEProblem()
 feProblem.logFileName= "/tmp/erase.log" # Don't pring warnings

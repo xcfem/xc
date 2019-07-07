@@ -44,7 +44,11 @@ from materials.sia262 import SIA262_limit_state_checking
 from model import model_inquiry as minq
 from misc import matrixUtils
 from postprocess.control_vars import *
+import logging
 
+#Hide INFO messages from modules.
+rootLogger = logging.getLogger()
+rootLogger.setLevel(logging.ERROR)
 
 
 hbeam=0.5     #heigh of the rectangular RC section (in Y local axis direction)
