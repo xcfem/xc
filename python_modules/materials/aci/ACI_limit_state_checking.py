@@ -212,7 +212,7 @@ class ShearController(lsc.ShearControllerBase):
             section= scc.getProp("datosSecc")
             self.setSection(section)
             NTmp= scc.getStressResultantComponent("N")
-            VuTmp= self.getVu(NTmp) 
+            VuTmp= self.calcVu(NTmp) 
             VyTmp= scc.getStressResultantComponent("Vy")
             VzTmp= scc.getStressResultantComponent("Vz")
             VTmp= math.sqrt((VyTmp)**2+(VzTmp)**2)
