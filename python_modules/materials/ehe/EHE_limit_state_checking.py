@@ -250,7 +250,7 @@ class ShearDesignParameters(object):
   def __init__(self):
     self.concreteArea= 0.0 # Concrete section total area.
     self.widthMin= 0.0 # net width of the element according to clause 40.3.5.
-    self.depthUtil= 0.0 # effective depth (meters).
+    self.effectiveDepth= 0.0 # effective depth (meters).
     self.mechanicLeverArm= 0.0 # mechanic lever arm (meters).
     self.tensionedRebarsArea= 0.0 # Area of tensioned longitudinal steel rebars anchored at a distance greater than the effective depth of the section.
     self.tensionedStrandsArea= 0.0 # Area of tensioned longitudinal prestressed steel anchored at a distance greater than the effective depth of the section.
@@ -266,20 +266,20 @@ class ShearDesignParameters(object):
     '''Compute section shear strength.'''
     self.concreteArea= concreteFibersSet.getArea()
     self.widthMin= concreteFibersSet.getAnchoMecanico() # Enhance (not valid with non-convex sections).
-    self.depthUtil= concreteFibersSet.getEffectiveDepth()
+    self.effectiveDepth= concreteFibersSet.getEffectiveDepth()
     self.mechanicLeverArm= concreteFibersSet.getMechanicLeverArm()
     self.tensionedRebarsArea= tensionedRebarsFiberSet.getArea
     # self.tensionedStrandsArea= 
 
     self.sigmaXD= N/area+Mz/Iz*centerOfMassY+My/Iy*centerOfMassZ
-    self.ultimateShearStrength= getVu(fck,fcd,N,self.concreteArea,self.widthMin,self.depthUtil,self.mechanicLeverArm,self.angAlpha,self.angTheta,self.tensionedRebarsArea,fyd,self.tensionedStrandsArea,fpd,self.sigmaXD,self.sigmaYD,AsTrsv,self.areaShReinfBranchsTrsv,fydTrsv)
+    self.ultimateShearStrength= getVu(fck,fcd,N,self.concreteArea,self.widthMin,self.effectiveDepth,self.mechanicLeverArm,self.angAlpha,self.angTheta,self.tensionedRebarsArea,fyd,self.tensionedStrandsArea,fpd,self.sigmaXD,self.sigmaYD,AsTrsv,self.areaShReinfBranchsTrsv,fydTrsv)
 
   def printParams(self):
     '''Print shear checking values.'''
     print "area of tensioned rebars; As= ",self.tensionedRebarsArea*1e4," cm2"
     print "transverse reinforcement area; AsTrsv= ",self.areaShReinfBranchsTrsv*1e4," cm2"
     print "design value of normal stress; sigmaXD= ",self.sigmaXD/1e6," MPa"
-    print "effective depth; d= ",self.depthUtil," m"
+    print "effective depth; d= ",self.effectiveDepth," m"
     print "minimal width; b0= ",self.widthMin," m"
     print "mechanic lever arm; z= ",self.mechanicLeverArm," m"
     print "shear strength; Vu= ",self.ultimateShearStrength/1e3," kN"
@@ -704,7 +704,7 @@ class ShearController(lscb.ShearControllerBase):
     self.fctdH= 0.0 # design tensile strength of the concrete.
     self.gammaC= 0.0 # partial safety factor for concrete.
     self.fydS= 0.0 # design value of reinforcement steel strength.
-    self.depthUtil= 0.0 # current effective depth
+    self.effectiveDepth= 0.0 # current effective depth
     self.mechanicLeverArm= 0.0 # current value of mechanic lever arm.
     self.strutWidth= 0.0 # compressed strut width «b0».
     self.I= 0.0 # moment of inertia of the section with respect to the neutral axis in elastic range.
@@ -778,12 +778,12 @@ class ShearController(lscb.ShearControllerBase):
           self.S= scc.getSPosHomogeneizada(self.E0)
           self.Vu2= getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.strutWidth,self.alphaL,self.concreteAxialForce,self.concreteArea)
         else: # Cracked section
-          self.depthUtil= scc.getEffectiveDepth() # d
+          self.effectiveDepth= scc.getEffectiveDepth() # d
           if(self.tensionedRebars.number>0):
             self.tensionedRebarsArea= tensionedReinforcement.getArea(1)
           else:
             self.tensionedRebarsArea= 0.0
-          self.Vu2= getVu2EHE08NoAtSiFis(self.fckH,self.fcdH,self.gammaC,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.depthUtil,self.tensionedRebarsArea,0.0)
+          self.Vu2= getVu2EHE08NoAtSiFis(self.fckH,self.fcdH,self.gammaC,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.effectiveDepth,self.tensionedRebarsArea,0.0)
         self.Vsu= 0.0
         self.Vu1= -1.0
       else: # Uncracked section
@@ -835,15 +835,15 @@ class ShearController(lscb.ShearControllerBase):
         self.concreteAxialForce= concrFibers.getCompressionResultant()
         self.reinforcementElasticModulus= reinfFibers[0].getMaterial().getInitialTangent()
         self.strutWidth= scc.getCompressedStrutWidth() # b0
-        self.depthUtil= scc.getEffectiveDepth() # d
+        self.effectiveDepth= scc.getEffectiveDepth() # d
         self.mechanicLeverArm= scc.getMechanicLeverArm() # z
         if(self.tensionedRebars.number>0):
           self.tensionedRebars.area= tensionedReinforcement.getArea(1)
         else:
           self.tensionedRebars.area= 0.0
         self.thetaFisuras= getCrackAngleEHE08(Nd,Md,Vd,Td,self.mechanicLeverArm,self.tensionedRebars.area,0.0,self.reinforcementElasticModulus,0.0,0.0,self.VuAe,self.Vuue)
-        self.Vcu= getVcuEHE08(self.fckH,self.fcdH,self.gammaC,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.depthUtil,self.mechanicLeverArm,self.tensionedRebars.area,0.0,self.theta,Nd,Md,Vd,Td,self.reinforcementElasticModulus,0.0,0.0,self.VuAe,self.Vuue)
-        self.Vu1= getVu1EHE08(self.fckH,self.fcdH,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.depthUtil,self.alpha,self.theta)
+        self.Vcu= getVcuEHE08(self.fckH,self.fcdH,self.gammaC,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.effectiveDepth,self.mechanicLeverArm,self.tensionedRebars.area,0.0,self.theta,Nd,Md,Vd,Td,self.reinforcementElasticModulus,0.0,0.0,self.VuAe,self.Vuue)
+        self.Vu1= getVu1EHE08(self.fckH,self.fcdH,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.effectiveDepth,self.alpha,self.theta)
         self.Vsu= getVsuEHE08(self.mechanicLeverArm,self.alpha,self.theta,self.AsTrsv,self.fydS)
         self.Vu2= self.Vcu+self.Vsu
         self.Vu= min(self.Vu1,self.Vu2)

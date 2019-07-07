@@ -254,8 +254,8 @@ class ShearController(lsc.ShearControllerBase):
     self.concrete= rcSection.concrType #Arreglar
     self.steel= rcSection.reinfSteelType
     self.width= rcSection.b
-    self.depthUtil= 0.9* rcSection.h
-    self.mechanicLeverArm= 0.9*self.depthUtil #Mejorar
+    self.effectiveDepth= 0.9* rcSection.h
+    self.mechanicLeverArm= 0.9*self.effectiveDepth #Mejorar
     self.AsTrsv= rcSection.shReinfZ.getAs()
     self.s= rcSection.shReinfZ.shReinfSpacing
     self.Vcu= 0.0 # Concrete contribution to the shear strength.
@@ -268,12 +268,12 @@ class ShearController(lsc.ShearControllerBase):
        :param Md: bending moment on the section.
        :param AsTrac: area of tensioned reinforcement.
     '''
-    return VuNoShearRebars(self.concrete, self.steel,Nd,Md,AsTrac,self.width,self.depthUtil)
+    return VuNoShearRebars(self.concrete, self.steel,Nd,Md,AsTrac,self.width,self.effectiveDepth)
   def calcVcu(self, Nd, Md, Mu):
     ''' Computes the shear strength of the section without 
         shear reinforcement.
     '''
-    self.Vcu= VuNoShearRebarsSIA262(self.concrete,Nd,abs(Md),abs(Mu),self.width,self.depthUtil)
+    self.Vcu= VuNoShearRebarsSIA262(self.concrete,Nd,abs(Md),abs(Mu),self.width,self.effectiveDepth)
     return self.Vcu
    
   def calcVsu(self):
