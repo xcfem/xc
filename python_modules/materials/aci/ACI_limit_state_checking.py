@@ -97,6 +97,20 @@ class RebarController(object):
         retval*= phi
         return max(retval,12*0.0254) #Clause 25.4.2.1b
 
+#Check normal stresses limit state.
+
+class BiaxialBendingNormalStressController(lsc.BiaxialBendingNormalStressControllerBase):
+  '''Object that controls normal stresses limit state.'''
+
+  def __init__(self,limitStateLabel):
+    super(BiaxialBendingNormalStressController,self).__init__(limitStateLabel)
+
+class UniaxialBendingNormalStressController(lsc.UniaxialBendingNormalStressControllerBase):
+  '''Object that controls normal stresses limit state (uniaxial bending).'''
+
+  def __init__(self,limitStateLabel):
+    super(UniaxialBendingNormalStressController,self).__init__(limitStateLabel)
+
 # Shear checking.
 
 def VcNoShearRebars(concrete,Nd,b,d):
