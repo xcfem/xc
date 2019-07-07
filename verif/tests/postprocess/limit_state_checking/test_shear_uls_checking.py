@@ -25,13 +25,12 @@ from materials.sections.fiber_section import defSimpleRCSection
 import sys
 import logging
 from postprocess.config import output_config as oc
+from miscUtils import LogMessages as lmsg
 
-#Hide logging messages from modules.
+#Hide INFO messages from modules.
 rootLogger = logging.getLogger()
-lhStdout = rootLogger.handlers[0]  # stdout is the only handler initially
-fileHandler = logging.FileHandler("{0}/{1}.log".format('/tmp/', 'test'))
-rootLogger.addHandler(fileHandler)
-rootLogger.removeHandler(lhStdout)
+rootLogger.setLevel(logging.ERROR)
+
 
 # Geometry
 L= 1.0 # Bar length (m)
