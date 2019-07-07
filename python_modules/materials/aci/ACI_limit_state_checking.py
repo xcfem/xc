@@ -99,19 +99,33 @@ class RebarController(object):
 
 # Shear checking.
 
-def VuNoShearRebars(concrete,Nd,Md,b,d):
-    '''Return the shear resistance carried by the concrete on a (b x thickness)
+def VcNoShearRebars(concrete,Nd,b,d):
+    '''Return concrete shear capacity on a (b x thickness)
        rectangular section according to clause 22.5.5.1 of ACI 318-14.
 
     :param concrete: concrete material.
     :param Nd: design axial force.
-    :param Md: design bending moment.
     :param b: width of the rectangular section.
     :param d: effective thickness of the RC section.
     '''
     retval= 2.0*concrete.getLambdaSqrtFck()*b*d
     if(Nd<0.0):
-        retval*=(1-Nd/b/thickness/2000.0*ACI_materials.toPascal)
+        retval*=(1-Nd/b/d/(2000.0*ACI_materials.toPascal))
+    return retval
+
+def Vu(concrete,Nd,b,d):
+    '''Return the ultimate shear strength of the section 
+       a (b x thickness) rectangular section according to clause 
+       22.5.1.2 of ACI 318-14.
+
+    :param concrete: concrete material.
+    :param Nd: design axial force.
+    :param b: width of the rectangular section.
+    :param d: effective thickness of the RC section.
+    '''
+    retval= VcNoShearRebars(concrete,Nd,b,d)
+    retval+= 8.0*concrete.getLambdaSqrtFck()*b*d
+    retval*= concrete.gmmC
     return retval
 
 class ShearController(lsc.ShearControllerBase):
@@ -124,28 +138,94 @@ class ShearController(lsc.ShearControllerBase):
         self.width= rcSection.b
         self.depthUtil= 0.9*rcSection.h
         self.mechanicLeverArm= 0.9*self.depthUtil #Mejorar
-        self.AsTrsv= rcSection.shReinfZ.getAs()
-        self.s= rcSection.shReinfZ.shReinfSpacing
-        self.Vcu= 0.0 # Concrete contribution to the shear strength.
-        self.Vsu= 0.0 # Rebar contribution to the shear strength.
-    def getVuNoShearRebars(self,concrete,Nd,Md,b,d):
+        self.AsTrsv= rcSection.shReinfY.getAs()
+        self.s= rcSection.shReinfY.shReinfSpacing
+        self.Vc= 0.0 # Concrete contribution to the shear strength.
+        self.Vu= 0.0 # Ultimate shear strength.
+        
+    def getVcNoShearRebars(self,Nd):
         '''Return the shear resistance carried by the concrete on a (b x thickness)
            rectangular section according to clause 22.5.5.1 of ACI 318-14.
 
-        :param concrete: concrete material.
         :param Nd: design axial force.
-        :param Md: design bending moment.
-        :param b: width of the rectangular section.
-        :param d: effective thickness of the RC section.
         '''
-        return VuNoShearRebars(self.concrete, Nd, Md, b, d)
-    def calcVcu(self, Nd, Md, Mu):
+        return VcNoShearRebars(self.concrete, Nd, self.width, self.depthUtil)
+    
+    def getVu(self,Nd):
+        '''Return the ultimate shear resistance carried by the concrete on 
+           a (b x thickness) rectangular section according to clause 
+           22.5.1.2 of ACI 318-14.
+
+        :param Nd: design axial force.
+        '''
+        return Vu(self.concrete, Nd, self.width, self.depthUtil)
+        
+    def calcVc(self, Nd):
         ''' Computes the shear strength of the section without 
             shear reinforcement.
-        '''
-        self.Vcu= self.VuNoShearRebars(concrete,Nd,abs(Md),self.width,self.depthUtil)
-        return self.Vcu
 
+        :param concrete: concrete material.
+        :param Nd: design axial force.
+        '''
+        self.Vc= self.getVcNoShearRebars(Nd)
+        return self.Vc
+    
+    def calcVu(self, Nd):
+        '''Return the ultimate shear resistance carried by the concrete on 
+           a (b x thickness) rectangular section according to clause 
+           22.5.1.2 of ACI 318-14.
+
+        :param Nd: design axial force.
+        '''
+        self.Vu= self.getVu(Nd)
+        return self.Vu
+
+    def getVmax(self,Nd):
+        '''Return the shear strength of the concrete section
+           according to clause 16.5.2.3 of ACI 318-14.
+
+        :param Nd: design axial force.
+        '''
+        Av= self.AsTrsv
+        self.calcVc(Nd)
+        self.calcVu(Nd)
+        retval= 0.5*self.concrete.gmmC*self.Vc # ACI 9.6.3.1
+        if(Av>0.0): # ACI 22.5.1.1, 22.5.10.1, 20.5.10.5.3
+            retval= Av*self.steel.fyd()*self.depthUtil/self.s+self.concrete.gmmC*self.Vc
+        retval= min(self.Vu,retval) #ACI 22.5.1.2
+        self.Vsu= retval-self.Vc 
+        return retval
+    
+    def check(self,elements,nmbComb):
+        '''
+        Check the shear strength of the RC section.
+           Transverse reinforcement is not
+           taken into account yet.
+        '''
+        lmsg.log("Postprocesing combination: "+nmbComb)
+        # XXX torsional deformation ingnored.
+
+        for e in elements:
+            e.getResistingForce()
+            scc= e.getSection()
+            idSection= e.getProp("idSection")
+            section= scc.getProp("datosSecc")
+            self.setSection(section)
+            NTmp= scc.getStressResultantComponent("N")
+            VuTmp= self.getVmax(NTmp) 
+            VyTmp= scc.getStressResultantComponent("Vy")
+            VzTmp= scc.getStressResultantComponent("Vz")
+            VTmp= math.sqrt((VyTmp)**2+(VzTmp)**2)
+            if(VuTmp!=0.0):
+              FCtmp= abs(VTmp)/VuTmp
+            else:
+              FCtmp= 10
+            if(FCtmp>=e.getProp(self.limitStateLabel).CF):
+              MyTmp= scc.getStressResultantComponent("My")
+              MzTmp= scc.getStressResultantComponent("Mz")
+              Mu= 0.0 # Not used in ACI-318
+              theta= None # Not used in ACI-318
+              e.setProp(self.limitStateLabel,cv.RCShearControlVars(idSection,nmbComb,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,theta,self.Vc,self.Vsu,VuTmp)) # Worst cas
 
 ##################
 # Rebar families.#
@@ -236,7 +316,7 @@ class ACIRebarFamily(rf.RebarFamily):
         :param b: width of the rectangular section.
         :param thickness: height of the rectangular section.
         '''
-        return VuNoShearRebars(concrete,Nd,Md,AsTrac,b,0.9*thickness)
+        return VcNoShearRebars(concrete,Nd,Md,AsTrac,b,0.9*thickness)
 
     def writeRebars(self, outputFile,concrete,AsMin):
         '''Write rebar family data.'''

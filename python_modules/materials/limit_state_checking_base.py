@@ -38,7 +38,7 @@ class LimitStateControllerBase(object):
 
 
     def check(self,elements,nmbComb):
-        '''Crack control.'''
+        '''Limit state control.'''
         lmsg.error('limit state check not implemented.')
 
 
@@ -178,3 +178,6 @@ class ShearControllerBase(LimitStateControllerBase):
         '''
         for e in elements:
           e.setProp(self.limitStateLabel,cv.RCShearControlVars())
+    def check(self,elements,nmbComb):
+        '''Shear control.'''
+        lmsg.error('shear limit state check not implemented.')

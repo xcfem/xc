@@ -582,6 +582,7 @@ python tests/postprocess/test_export_shell_internal_forces.py
 echo "$BLEU" "  limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/test_shell_normal_stresses_uls_checking.py
 python tests/postprocess/limit_state_checking/test_shear_uls_checking.py
+python tests/postprocess/limit_state_checking/test_shear_uls_checking_aci.py
 
 #VTK tests
 ##python tests/vtk/dibuja_edges.py
