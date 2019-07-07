@@ -75,6 +75,7 @@ class ACIConcrete(concrete_base.Concrete):
 # ACI concretes
 A36M= ACIConcrete(concreteName="A36M",fck=-20e6,gammaC=1.667) #????
 
+c3000= ACIConcrete(concreteName="C3000",fck=-3000*toPascal,gammaC=1.667)
 c3500= ACIConcrete(concreteName="C3500",fck=-3500*toPascal,gammaC=1.667)
 c4000= ACIConcrete(concreteName="C4000",fck=-4000*toPascal,gammaC=1.667)
 
