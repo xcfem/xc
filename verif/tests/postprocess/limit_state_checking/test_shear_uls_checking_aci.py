@@ -41,6 +41,7 @@ nodes= preprocessor.getNodeHandler
 # Materials
 sectionGeometry= section_properties.RectangularSection("test",b=.3,h=.5)
 concr= ACI_materials.c4000
+concr.gmmC= 1/0.75
 section= concr.defElasticShearSection3d(preprocessor, sectionGeometry)
 
 # Problem type
@@ -109,6 +110,7 @@ reinfLayer= defSimpleRCSection.MainReinfLayer(rebarsDiam= barDiameter,areaRebar=
 #reinforcement directions of a slab or the front and back ending sections
 #of a beam element
 reinfSteel= ACI_materials.A615G60
+reinfSteel.gammaS= 1.0/0.75
 beamRCsect= defSimpleRCSection.RecordRCSlabBeamSection(name='beamRCsect',sectionDescr='beam section',concrType=concr, reinfSteelType=reinfSteel,width= sectionGeometry.b,depth= sectionGeometry.h)
 beamRCsect.dir1PositvRebarRows=[reinfLayer]
 beamRCsect.dir1NegatvRebarRows=[reinfLayer]
@@ -133,9 +135,9 @@ outCfg=oc.verifOutVars(listFile='N',calcMeanCF='Y')
 
 #print "mean FCs: ", meanFCs
 
-meanFC0Teor= 0.83882846671
+meanFC0Teor= 0.932218036004
 ratio1= abs(meanFCs[0]-meanFC0Teor)/meanFC0Teor
-meanFC1Teor= 0.83882846671
+meanFC1Teor= 0.932218036004
 ratio2= abs(meanFCs[1]-meanFC1Teor)/meanFC1Teor
 
 print "meanFCs[0]= ", meanFCs[0]
