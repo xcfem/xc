@@ -113,7 +113,7 @@ def VcNoShearRebars(concrete,Nd,b,d):
         retval*=(1-Nd/b/d/(2000.0*ACI_materials.toPascal))
     return retval
 
-def Vu(concrete,Nd,b,d):
+def V_max(concrete,Nd,b,d):
     '''Return the ultimate shear strength of the section 
        a (b x thickness) rectangular section according to clause 
        22.5.1.2 of ACI 318-14.
@@ -125,7 +125,7 @@ def Vu(concrete,Nd,b,d):
     '''
     retval= VcNoShearRebars(concrete,Nd,b,d)
     retval+= 8.0*concrete.getLambdaSqrtFck()*b*d
-    retval*= concrete.gmmC
+    retval/= concrete.gmmC
     return retval
 
 class ShearController(lsc.ShearControllerBase):
@@ -136,8 +136,8 @@ class ShearController(lsc.ShearControllerBase):
         self.concrete= rcSection.concrType #Arreglar
         self.steel= rcSection.reinfSteelType
         self.width= rcSection.b
-        self.depthUtil= 0.9*rcSection.h
-        self.mechanicLeverArm= 0.9*self.depthUtil #Mejorar
+        self.effectiveDepth= 0.9*rcSection.h
+        self.mechanicLeverArm= 0.9*self.effectiveDepth #Mejorar
         self.AsTrsv= rcSection.shReinfY.getAs()
         self.s= rcSection.shReinfY.shReinfSpacing
         self.Vc= 0.0 # Concrete contribution to the shear strength.
@@ -149,16 +149,16 @@ class ShearController(lsc.ShearControllerBase):
 
         :param Nd: design axial force.
         '''
-        return VcNoShearRebars(self.concrete, Nd, self.width, self.depthUtil)
+        return VcNoShearRebars(self.concrete, Nd, self.width, self.effectiveDepth)
     
-    def getVu(self,Nd):
-        '''Return the ultimate shear resistance carried by the concrete on 
-           a (b x thickness) rectangular section according to clause 
+    def getV_max(self,Nd):
+        '''Return the maximum shear resistance that can be carried by 
+           the concrete of the section according to clause 
            22.5.1.2 of ACI 318-14.
 
         :param Nd: design axial force.
         '''
-        return Vu(self.concrete, Nd, self.width, self.depthUtil)
+        return V_max(self.concrete, Nd, self.width, self.effectiveDepth)
         
     def calcVc(self, Nd):
         ''' Computes the shear strength of the section without 
@@ -170,6 +170,22 @@ class ShearController(lsc.ShearControllerBase):
         self.Vc= self.getVcNoShearRebars(Nd)
         return self.Vc
     
+    def getVu(self,Nd):
+        '''Return the shear strength of the concrete section
+           according to clause 16.5.2.3 of ACI 318-14.
+
+        :param Nd: design axial force.
+        '''
+        self.calcVc(Nd)
+        V_max= self.getV_max(Nd)
+        retval= self.Vc/self.concrete.gmmC # ACI 9.6.3.1
+        Av= self.AsTrsv*self.effectiveDepth
+        if(Av>0.0): # ACI 22.5.1.1, 22.5.10.1, 20.5.10.5.3
+            retval+= Av*self.steel.fyd()
+        retval= min(V_max,retval) #ACI 22.5.1.2
+        self.Vsu= retval-self.Vc
+        return retval
+    
     def calcVu(self, Nd):
         '''Return the ultimate shear resistance carried by the concrete on 
            a (b x thickness) rectangular section according to clause 
@@ -179,22 +195,6 @@ class ShearController(lsc.ShearControllerBase):
         '''
         self.Vu= self.getVu(Nd)
         return self.Vu
-
-    def getVmax(self,Nd):
-        '''Return the shear strength of the concrete section
-           according to clause 16.5.2.3 of ACI 318-14.
-
-        :param Nd: design axial force.
-        '''
-        Av= self.AsTrsv
-        self.calcVc(Nd)
-        self.calcVu(Nd)
-        retval= 0.5*self.concrete.gmmC*self.Vc # ACI 9.6.3.1
-        if(Av>0.0): # ACI 22.5.1.1, 22.5.10.1, 20.5.10.5.3
-            retval= Av*self.steel.fyd()*self.depthUtil/self.s+self.concrete.gmmC*self.Vc
-        retval= min(self.Vu,retval) #ACI 22.5.1.2
-        self.Vsu= retval-self.Vc 
-        return retval
     
     def check(self,elements,nmbComb):
         '''
@@ -212,7 +212,7 @@ class ShearController(lsc.ShearControllerBase):
             section= scc.getProp("datosSecc")
             self.setSection(section)
             NTmp= scc.getStressResultantComponent("N")
-            VuTmp= self.getVmax(NTmp) 
+            VuTmp= self.getVu(NTmp) 
             VyTmp= scc.getStressResultantComponent("Vy")
             VzTmp= scc.getStressResultantComponent("Vz")
             VTmp= math.sqrt((VyTmp)**2+(VzTmp)**2)
