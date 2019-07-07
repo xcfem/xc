@@ -492,6 +492,7 @@ python tests/materials/sia262/test_anchorage_length.py
 python tests/materials/sia262/test_crack_control_01.py
 echo "$BLEU" "    ACI 318 tests." "$NORMAL"
 python tests/materials/aci/test_aci_development_01.py
+python tests/materials/aci/test_aci_shear_01.py
 echo "$BLEU" "    SIA 263 tests." "$NORMAL"
 python tests/materials/sia263/test_coefs_fatique_SIA263.py
 
