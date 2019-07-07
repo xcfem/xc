@@ -140,11 +140,11 @@ ratio1= abs(meanFCs[0]-meanFC0Teor)/meanFC0Teor
 meanFC1Teor= 0.932218036004
 ratio2= abs(meanFCs[1]-meanFC1Teor)/meanFC1Teor
 
+'''
 print "meanFCs[0]= ", meanFCs[0]
 print "ratio1= ",ratio1
 print "meanFCs[1]= ", meanFCs[1]
 print "ratio2= ",ratio2
-'''
 '''
 
 # Show logging messages.
