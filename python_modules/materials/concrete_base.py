@@ -20,6 +20,7 @@ import numpy as np
 import geom
 import xc_base
 from postprocess.reports import graph_material as mg
+from miscUtils import LogMessages as lmsg
 
 class ReinforcedConcreteLimitStrains(object):
     def __init__(self,EpsCU= -3.5e-3,EpsC0= -2.0e-3,SMaxStrain= 10e-3):
@@ -870,11 +871,11 @@ class paramTensStiffness(object):
     
 
 def defDiagKConcrete(preprocessor, concreteRecord):
-  print 'defDiagKConcrete deprecated; use concreteRecord.defDiagK(preproccesor)'
+  lmsg.warning('defDiagKConcrete deprecated; use concreteRecord.defDiagK(preproccesor)')
   return concreteRecord.defDiagK(preprocessor)
 
 def defDiagDConcrete(preprocessor, concreteRecord):
-  print 'defDiagDConcrete deprecated; use concreteRecord.defDiagD(preproccesor)'
+  lmsg.warning('defDiagDConcrete deprecated; use concreteRecord.defDiagD(preproccesor)')
   return concreteRecord.defDiagD(preprocessor)
 
 
