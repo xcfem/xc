@@ -51,15 +51,15 @@ def filterRepeatedValues(yList,mList,vList):
 
 class InternalForces(object):
   '''Internal forces for a retaining wall obtained.'''
-  def __init__(self,y,mdEnvelope,vdEnvelope,MdSemelle,VdSemelle):
+  def __init__(self,y,mdEnvelope,vdEnvelope,MdFooting,VdFooting):
     self.mdEnvelope= mdEnvelope
     self.vdEnvelope= vdEnvelope
     self.mdEnvelope.filterRepeatedValues()
     self.vdEnvelope.filterRepeatedValues()
     self.interpolate()
     self.stemHeight= self.y[-1]
-    self.MdSemelle= MdSemelle
-    self.VdSemelle= VdSemelle
+    self.MdFooting= MdFooting
+    self.VdFooting= VdFooting
   def interpolate(self):
     self.y= self.mdEnvelope.yValues
     self.mdMaxStem= scipy.interpolate.interp1d(self.y,self.mdEnvelope.positive)
@@ -72,11 +72,11 @@ class InternalForces(object):
     for v in self.vdMax:
       v*=f
     self.interpolate()
-    self.MdSemelle*=f
-    self.VdSemelle*=f
+    self.MdFooting*=f
+    self.VdFooting*=f
     return self
   def clone(self):
-    return InternalForces(self.mdEnvelope, self.vdEnvelope,self.MdSemelle,self.VdSemelle)
+    return InternalForces(self.mdEnvelope, self.vdEnvelope,self.MdFooting,self.VdFooting)
   def __mul__(self, f):
     retval= self.clone()
     retval*= f
@@ -156,28 +156,28 @@ class ReinforcementMap(dict):
     #Default reinforcement
     for i in range(1,15):
       self[i]= rebarFamilyTemplate
-    # #Armature de peau semelle
+    # #Footing skin reinforcement
     # R= self.footingThickness-2*self.concreteCover-8e-3
     # n= math.ceil(R/0.15)+1
     # ecart= R/(n-1)
     # self[self.skinFootingIndex]= FamNBars(self.steel,n,8e-3,ecart,concreteCover)
-    # #Armature couronnement.
+    # #Stem top reinforcement
     # R= self.stemTopWidth-2*self.concreteCover-8e-3
     # n= math.ceil(R/0.15)+1
     # ecart= R/(n-1)
     # self[self.topSkinIndex]= FamNBars(self.steel,n,8e-3,ecart,concreteCover)
     
-  def setArmature(self,index,armature):
-    '''Assigns armature.'''
-    self[index]= armature
+  def setReinforcement(self,index,reinforcement):
+    '''Set reinforcement.'''
+    self[index]= reinforcement
 
-  def getArmature(self,index):
-    '''Return armature at index.'''
+  def getReinforcement(self,index):
+    '''Return reinforcement at index.'''
     return self[index]
   
   def getBasicAnchorageLength(self,index, concrete):
     '''Returns basic anchorage length for the reinforcement at "index".''' 
-    return self.getArmature(index).getBasicAnchorageLength(concrete)
+    return self.getReinforcement(index).getBasicAnchorageLength(concrete)
     
 class WallStabilityResults(object):
   def __init__(self,wall,combinations,foundationSoilModel,sg_adm= None, gammaR= 1):
@@ -214,18 +214,18 @@ class WallStabilityResults(object):
     outputFile.write("\\begin{center}\n")
     outputFile.write("\\begin{tabular}[H]{|l|c|c|c|}\n")
     outputFile.write("\\hline\n")
-    outputFile.write("\\multicolumn{4}{|c|}{\\textsc{Verification stabilité mur: "+name+"}}\\\\\n")
+    outputFile.write("\\multicolumn{4}{|c|}{\\textsc{wall: "+name+" stability check}}\\\\\n")
     outputFile.write("\\hline\n")
-    outputFile.write("Vérification:  & $F_{disp}$ & $F_{req}$ & Combinaison\\\\\n")
+    outputFile.write("Vérification:  & $F_{disp}$ & $F_{req}$ & Combination\\\\\n")
     outputFile.write("\\hline\n")
-    outputFile.write("Renversement:  & " + fmt.Factor.format(self.Foverturning) +" & 1.00 & "+self.FoverturningComb+'\\\\\n')
-    outputFile.write("Glissement:  & " + fmt.Factor.format(self.Fsliding) +" & 1.00 & "+self.FslidingComb+'\\\\\n')
-    outputFile.write("Poinçonnement:  & " + fmt.Factor.format(self.Fbearing) +" & 1.00 & "+self.FbearingComb+'\\\\\n')
+    outputFile.write("Overturning:  & " + fmt.Factor.format(self.Foverturning) +" & 1.00 & "+self.FoverturningComb+'\\\\\n')
+    outputFile.write("Sliding:  & " + fmt.Factor.format(self.Fsliding) +" & 1.00 & "+self.FslidingComb+'\\\\\n')
+    outputFile.write("Bearign capacity:  & " + fmt.Factor.format(self.Fbearing) +" & 1.00 & "+self.FbearingComb+'\\\\\n')
     if(self.FadmPressureComb!=''):
       outputFile.write("Adm. pressure:  & " + fmt.Factor.format(self.FadmPressure) +" & 1.00 & "+self.FadmPressureComb+'\\\\\n')
     outputFile.write("\\hline\n")
-    outputFile.write("\\multicolumn{4}{|l|}{$F_{disp}$: sécurité disponible.}\\\\\n")
-    outputFile.write("\\multicolumn{4}{|l|}{$F_{req}$: sécurité requise.}\\\\\n")
+    outputFile.write("\\multicolumn{4}{|l|}{$F_{avail.}$: available security.}\\\\\n")
+    outputFile.write("\\multicolumn{4}{|l|}{$F_{req}$: required security.}\\\\\n")
     
     outputFile.write("\\hline\n")
     outputFile.write("\\end{tabular}\n")
@@ -245,14 +245,14 @@ class WallSLSResults(WallULSResults):
     outputFile.write("\\begin{center}\n")
     outputFile.write("\\begin{tabular}[H]{|l|c|c|c|}\n")
     outputFile.write("\\hline\n")
-    outputFile.write("\\multicolumn{3}{|c|}{\\textsc{Verification rotation mur: "+name+"}}\\\\\n")
+    outputFile.write("\\multicolumn{3}{|c|}{\\textsc{Wall: "+name+" rotation check}}\\\\\n")
     outputFile.write("\\hline\n")
-    outputFile.write("$\\beta_{disp} (\\permil)$ & $\\beta_{req}(\\permil)$ & Combinaison\\\\\n")
+    outputFile.write("$\\beta_{disp} (\\permil)$ & $\\beta_{req}(\\permil)$ & Combination\\\\\n")
     outputFile.write("\\hline\n")
     outputFile.write(fmt.Factor.format(self.rotation*1000) +" & 2.00 & "+self.rotationComb+'\\\\\n')
     outputFile.write("\\hline\n")
-    outputFile.write("\\multicolumn{3}{|l|}{$\\beta_{disp}$: rotation maximale calculée du mur.}\\\\\n")
-    outputFile.write("\\multicolumn{3}{|l|}{$\\beta_{req}$: rotation maximale autorisée du mur.}\\\\\n")
+    outputFile.write("\\multicolumn{3}{|l|}{$\\beta_{disp}$: wall maximum computed rotation.}\\\\\n")
+    outputFile.write("\\multicolumn{3}{|l|}{$\\beta_{req}$: wall maximum admissible rotation.}\\\\\n")
     
     outputFile.write("\\hline\n")
     outputFile.write("\\end{tabular}\n")
@@ -346,7 +346,7 @@ class StemReinforcement(ReinforcementMap):
     CExtStemBottom= self.getSectionExtStemBottom()
     VdMaxEncastrement= self.wallGeom.internalForcesULS.VdMaxEncastrement(self.wallGeom.stemBottomWidth)
     MdMaxEncastrement= self.wallGeom.internalForcesULS.MdMaxEncastrement(self.wallGeom.footingThickness)
-    outputFile.write("\\textbf{Reinforcement "+str(self.extStemBottomIndex)+" (armature extérieure en attente) :} \\\\\n")
+    outputFile.write("\\textbf{Reinforcement "+str(self.extStemBottomIndex)+" (ouside reinforcement dowels) :} \\\\\n")
     NdEncastrement= 0.0 #we neglect axial force
     CExtStemBottom.writeResultFlexion(outputFile,NdEncastrement, MdMaxEncastrement,VdMaxEncastrement)
     CExtStemBottom.writeResultStress(outputFile,MdMaxEncastrement)
@@ -357,7 +357,7 @@ class StemReinforcement(ReinforcementMap):
     NdExtStem= 0.0 #we neglect axial force
     VdExtStem= self.wallGeom.internalForcesULS.VdMax(yCoupeExtStem)
     MdExtStem= self.wallGeom.internalForcesULS.MdMax(yCoupeExtStem)
-    outputFile.write("\\textbf{Reinforcement "+str(self.extStemIndex)+" (armature extériéure voile):}\\\\\n")
+    outputFile.write("\\textbf{Reinforcement "+str(self.extStemIndex)+" (outside stem reinforcement):}\\\\\n")
     CExtStem.writeResultFlexion(outputFile,NdExtStem,MdExtStem,VdExtStem)
     CExtStem.writeResultStress(outputFile,MdExtStem)
 
@@ -368,27 +368,27 @@ class StemReinforcement(ReinforcementMap):
     CSectionStemLongExt= self.getSectionStemLongExt()
     CSectionStemLongInt= CSectionStemLongExt
 
-    outputFile.write("\\textbf{Reinforcement "+str(self.intStemBottomIndex)+" (armature intérieure en attente):}\\\\\n")
+    outputFile.write("\\textbf{Reinforcement "+str(self.intStemBottomIndex)+" (inside reinforcement dowels):}\\\\\n")
     CIntStemBottom.writeResultCompression(outputFile,0.0,CSectionStemLongInt.tensionRebars.getAs())
 
     # Exterior reinforcement at stem.
-    outputFile.write("\\textbf{Reinforcement "+str(self.intStemIndex)+" (armature intérieure en voile):}\\\\\n")
+    outputFile.write("\\textbf{Reinforcement "+str(self.intStemIndex)+" (inside vertical stem reinforcement):}\\\\\n")
     CIntStem.writeResultCompression(outputFile,0.0,CSectionStemLongInt.tensionRebars.getAs())
 
     # Reinforcement at stem top.
-    outputFile.write("\\textbf{Reinforcement "+str(self.topStemIndex)+" (armature couronnement):}\\\\\n")
+    outputFile.write("\\textbf{Reinforcement "+str(self.topStemIndex)+" (top stem reinforcement):}\\\\\n")
     CSectionStemTop.writeResultFlexion(outputFile,0.0,0.0,0.0)
 
     # Stem exterior longitudinal reinforcement.
-    outputFile.write("\\textbf{Reinforcement "+str(self.longExtStemIndex)+" (armature long. extérieure voile):}\\\\\n")
+    outputFile.write("\\textbf{Reinforcement "+str(self.longExtStemIndex)+" (outside stem longitudinal reinforcement):}\\\\\n")
     CSectionStemLongExt.writeResultTraction(outputFile,0.0)
 
     # Stem interior longitudinal reinforcement.
-    outputFile.write("\\textbf{Reinforcement  "+str(self.longIntStemIndex)+" (armature long. intérieure voile):}\\\\\n")
+    outputFile.write("\\textbf{Reinforcement  "+str(self.longIntStemIndex)+" (inside stem longitudinal reinforcement):}\\\\\n")
     CSectionStemLongInt.writeResultTraction(outputFile,0.0)
 
     # Stem top skin reinforcement.
-    outputFile.write("\\textbf{Reinforcement "+str(self.topSkinIndex)+" (armature long. couronnement):}\\\\\n")
+    outputFile.write("\\textbf{Reinforcement "+str(self.topSkinIndex)+" (longitudinal stem top reinforcement):}\\\\\n")
     outputFile.write("  --\\\\\n")
     #self[self.topSkinIndex].writeRebars(outputFile,self.wallGeom.concrete,1e-5)
     
@@ -432,30 +432,30 @@ class FootingReinforcement(ReinforcementMap):
     # Reinforcement on footing top
     CTopFooting= self.getSectionTopFooting()
     NdTopFooting= 0.0 #we neglect axial force
-    VdTopFooting= self.wallGeom.internalForcesULS.VdSemelle
-    MdTopFooting= self.wallGeom.internalForcesULS.MdSemelle
-    outputFile.write("\\textbf{Reinforcement "+str(self.topFootingIndex)+" (armature supérieure semelle):}\\\\\n")
+    VdTopFooting= self.wallGeom.internalForcesULS.VdFooting
+    MdTopFooting= self.wallGeom.internalForcesULS.MdFooting
+    outputFile.write("\\textbf{Reinforcement "+str(self.topFootingIndex)+" (footing top reinforcement):}\\\\\n")
     CTopFooting.writeResultFlexion(outputFile,NdTopFooting,MdTopFooting,VdTopFooting)
-    CTopFooting.writeResultStress(outputFile,self.wallGeom.internalForcesSLS.MdSemelle)
+    CTopFooting.writeResultStress(outputFile,self.wallGeom.internalForcesSLS.MdFooting)
 
     CSectionFootingBottom= self.getSectionFootingBottom()
     CSectionFootingBottomLongitudinal= self.getSectionFootingBottomLongitudinal()
     CSectionFootingTopLongitudinal= CSectionFootingBottomLongitudinal
 
     # Reinforcemnt at footing bottom.
-    outputFile.write("\\textbf{Reinforcement "+str(self.bottomFootingIndex)+" (armature trsv. inférieure semelle):}\\\\\n")
+    outputFile.write("\\textbf{Reinforcement "+str(self.bottomFootingIndex)+" (footing bottom transverse reinforcement):}\\\\\n")
     CSectionFootingBottom.writeResultCompression(outputFile,0.0,CSectionFootingBottomLongitudinal.tensionRebars.getAs())
 
     # Longitudinal reinforcement at footing bottom.
-    outputFile.write("\\textbf{Reinforcement "+str(self.longBottomFootingIndex)+" (armature long. inférieure semelle):}\\\\\n")
+    outputFile.write("\\textbf{Reinforcement "+str(self.longBottomFootingIndex)+" (footing bottom longitudinal reinforcement):}\\\\\n")
     CSectionFootingBottomLongitudinal.writeResultTraction(outputFile,0.0)
 
     # Longitudinal reinforcement at footing top.
-    outputFile.write("\\textbf{Reinforcement "+str(self.longTopFootingIndex)+" (armature long. supérieure semelle):}\\\\\n")
+    outputFile.write("\\textbf{Reinforcement "+str(self.longTopFootingIndex)+" (footing top longitudinal reinforcement):}\\\\\n")
     CSectionFootingTopLongitudinal.writeResultTraction(outputFile,0.0)
 
     # Footing skin reinforcement.
-    outputFile.write("\\textbf{Reinforcement "+str(self.skinFootingIndex)+" (armature de peau semelle):}\\\\\n")
+    outputFile.write("\\textbf{Reinforcement "+str(self.skinFootingIndex)+" (foogint skin reinforcement):}\\\\\n")
     outputFile.write("  --\\\\\n")
     #self[self.skinFootingIndex].writeRebars(outputFile,self.wallGeom.concrete,1e-5)
 
@@ -526,14 +526,14 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
 
     outputFile.write("\\hline\n")
     outputFile.write("\\begin{tabular}{llll}\n")
-    outputFile.write("\\multicolumn{3}{c}{\\textsc{Matériels}}\\\\\n")
-    outputFile.write("  Béton: " + self.concrete.materialName +" & ")
-    outputFile.write("  Acier: " + self.stemReinforcement.steel.materialName +" & ")
-    outputFile.write("  ConcreteCover: "+ fmt.Diam.format(self.stemReinforcement.concreteCover*1e3)+ " mm\\\\\n")
+    outputFile.write("\\multicolumn{3}{c}{\\textsc{Materials}}\\\\\n")
+    outputFile.write("  Concrete: " + self.concrete.materialName +" & ")
+    outputFile.write("  Steel: " + self.stemReinforcement.steel.materialName +" & ")
+    outputFile.write("  Concrete cover: "+ fmt.Diam.format(self.stemReinforcement.concreteCover*1e3)+ " mm\\\\\n")
     outputFile.write("\\end{tabular} \\\\\n")
     outputFile.write("\\hline\n")
     outputFile.write("\\end{tabular}\n")
-    outputFile.write("\\caption{Matériels et dimensions mur "+ self.name +"} \\label{tb_def_"+self.name+"}\n")
+    outputFile.write("\\caption{Wall materials and dimensions "+ self.name +"} \\label{tb_def_"+self.name+"}\n")
     outputFile.write("\\end{center}\n")
     outputFile.write("\\end{table}\n")
 
@@ -543,7 +543,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     self.writeDef(pth,outputFile)
     self.stability_results.writeOutput(outputFile,self.name)
     self.sls_results.writeOutput(outputFile,self.name)
-    outputFile.write("\\bottomcaption{Calcul armatures mur "+ self.name +"} \\label{tb_"+self.name+"}\n")
+    outputFile.write("\\bottomcaption{Wall "+ self.name +" reinforcement} \\label{tb_"+self.name+"}\n")
     outputFile.write("\\tablefirsthead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{Reinforcements mur "+self.name+"}}\\\\\\hline\n}\n")
     outputFile.write("\\tablehead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{"+self.name+" (suite)}}\\\\\\hline\n}\n")
     outputFile.write("\\tabletail{\\hline \\multicolumn{1}{|r|}{../..}\\\\\\hline}\n")
@@ -578,7 +578,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
       outputFile.write(l)
     outputFile.write(draw_schema.tail)
     outputFile.write("\\end{center}\n")
-    outputFile.write("\\caption{Schéma armatures mur "+ self.name +"} \\label{fg_"+self.name+"}\n")
+    outputFile.write("\\caption{Wall "+ self.name +" reinforcement scheme} \\label{fg_"+self.name+"}\n")
     outputFile.write("\\end{figure}\n")
     
   def createFEProblem(self, title):

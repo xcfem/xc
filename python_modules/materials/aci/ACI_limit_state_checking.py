@@ -330,7 +330,7 @@ class ACIRebarFamily(rf.RebarFamily):
         :param b: width of the rectangular section.
         :param thickness: height of the rectangular section.
         '''
-        return VcNoShearRebars(concrete,Nd,Md,AsTrac,b,0.9*thickness)
+        return VcNoShearRebars(concrete,Nd,b,0.9*thickness)
 
     def writeRebars(self, outputFile,concrete,AsMin):
         '''Write rebar family data.'''
@@ -347,8 +347,8 @@ class ACIFamNBars(ACIRebarFamily):
         return str(n) + " x " + self.steel.name + ", diam: " + str(int(self.diam*1e3)) + " mm, e= " + str(int(self.spacing*1e3))
     def writeDef(self,outputFile,concrete):
         outputFile.write("  n= "+str(self.n)+" diam: "+ fmt.Diam.format(self.getDiam()*1000) + " mm, spacing: "+ fmt.Diam.format(self.spacing*1e3)+ " mm")
-        ancrage= self.getBasicAnchorageLength(concrete)
-        outputFile.write("  l. ancrage L="+ fmt.Lengths.format(ancrage) + " m ("+ fmt.Diam.format(ancrage/self.getDiam())+ " diamètres).\\\\\n")
+        reinfDevelopment= self.getBasicAnchorageLength(concrete)
+        outputFile.write("  reinf. development L="+ fmt.Lengths.format(reinfDevelopment) + " m ("+ fmt.Diam.format(reinfDevelopment/self.getDiam())+ " diameters).\\\\\n")
 
 class ACIDoubleRebarFamily(rf.DoubleRebarFamily):
     ''' Two reinforcement bars families.'''

@@ -22,7 +22,7 @@ class RCSection(object):
     self.b= b
     self.h= h
     self.stressLimitUnderPermanentLoads= 230e6
-  def setArmature(self,tensionRebars):
+  def setReinforcement(self,tensionRebars):
     self.tensionRebars= tensionRebars
   def getMinReinfAreaUnderFlexion(self):
     return self.tensionRebars.getMinReinfAreaUnderFlexion(concrete= self.concrete, thickness= self.h)
@@ -34,20 +34,20 @@ class RCSection(object):
     return self.tensionRebars.getVR(self.concrete,Nd,Md,self.b,self.h)
   def writeResultFlexion(self,outputFile,Nd,Md,Vd):
     AsMin= self.getMinReinfAreaUnderFlexion()
-    ancrage= self.tensionRebars.getBasicAnchorageLength(self.concrete)
-    outputFile.write("  Dimensions coupe; b= "+ fmt.Lengths.format(self.b)+ "m, h= "+ fmt.Lengths.format(self.h)+ "m\\\\\n")
+    reinfDevelopment= self.tensionRebars.getBasicAnchorageLength(self.concrete)
+    outputFile.write("  RC section dimensions; b= "+ fmt.Lengths.format(self.b)+ " m, h= "+ fmt.Lengths.format(self.h)+ " m\\\\\n")
     self.tensionRebars.writeRebars(outputFile,self.concrete,AsMin)
     if(abs(Md)>0):
       MR= self.getMR()
-      outputFile.write("  Verif. en flexion: Md= "+ fmt.Esf.format(Md/1e3)+ " kN m, MR= "+ fmt.Esf.format(MR/1e3)+ "kN m")
+      outputFile.write("  Bending check: Md= "+ fmt.Esf.format(Md/1e3)+ " kN m, MR= "+ fmt.Esf.format(MR/1e3)+ "kN m")
       rebar_family.writeF(outputFile,"  F(M)", MR/Md)
     if(abs(Vd)>0):
       VR= self.getVR(Nd,Md)
-      outputFile.write("  Vérif. eff. tranchant: Vd= "+ fmt.Esf.format(Vd/1e3)+ "kN,  VR= "+ fmt.Esf.format(VR/1e3)+ "kN")
+      outputFile.write("  Shear check: Vd= "+ fmt.Esf.format(Vd/1e3)+ " kN,  VR= "+ fmt.Esf.format(VR/1e3)+ " kN")
       rebar_family.writeF(outputFile,"  F(V)",VR/Vd)
   def writeResultTraction(self,outputFile,Nd):
     AsMin= self.getMinReinfAreaUnderTension()/2.0
-    ancrage= self.tensionRebars.getBasicAnchorageLength(self.concrete)
+    reinfDevelopment= self.tensionRebars.getBasicAnchorageLength(self.concrete)
     self.tensionRebars.writeRebars(outputFile,self.concrete,AsMin)
     if(abs(Nd)>0):
       lmsg.error("ERROR; tension not implemented.")

@@ -82,8 +82,8 @@ class RebarFamily(object):
     return retval
   def writeDef(self,outputFile,concrete):
     outputFile.write("  diam: "+ fmt.Diam.format(self.getDiam()*1000) + " mm, spacing: "+ fmt.Diam.format(self.spacing*1e3)+ " mm")
-    ancrage= self.getBasicAnchorageLength(concrete)
-    outputFile.write("  l. ancrage L="+ fmt.Lengths.format(ancrage) + " m ("+ fmt.Diam.format(ancrage/self.getDiam())+ " diamètres).\\\\\n")
+    reinfDevelopment= self.getBasicAnchorageLength(concrete)
+    outputFile.write("  reinf. development L="+ fmt.Lengths.format(reinfDevelopment) + " m ("+ fmt.Diam.format(reinfDevelopment/self.getDiam())+ " diameters).\\\\\n")
 
 class FamNBars(RebarFamily):
   n= 2 #Number of bars.
@@ -94,8 +94,8 @@ class FamNBars(RebarFamily):
     return str(n) + " x " + self.steel.name + ", diam: " + str(int(self.diam*1e3)) + " mm, e= " + str(int(self.spacing*1e3))
   def writeDef(self,outputFile,concrete):
     outputFile.write("  n= "+str(self.n)+" diam: "+ fmt.Diam.format(self.getDiam()*1000) + " mm, spacing: "+ fmt.Diam.format(self.spacing*1e3)+ " mm")
-    ancrage= self.getBasicAnchorageLength(concrete)
-    outputFile.write("  l. ancrage L="+ fmt.Lengths.format(ancrage) + " m ("+ fmt.Diam.format(ancrage/self.getDiam())+ " diamètres).\\\\\n")
+    reinfDevelopment= self.getBasicAnchorageLength(concrete)
+    outputFile.write("  reinf. development L="+ fmt.Lengths.format(reinfDevelopment) + " m ("+ fmt.Diam.format(reinfDevelopment/self.getDiam())+ " diameters).\\\\\n")
 
 
 class DoubleRebarFamily(object):
