@@ -108,7 +108,7 @@ y= [435e6,435e6,290e6,230e6,190e6,160e6,140e6]
 courbeC= scipy.interpolate.interp1d(x,y)
 
 
-def limitationContraintes(exigence,s):
+def stressLimits(exigence,s):
   if(exigence=='A'):
     return courbeA(s)
   elif (exigence=='B'):

@@ -65,6 +65,6 @@ class RCSection(object):
     '''Cheking of stresses under permanent loads (SIA 262 fig. 31)'''
     if(abs(M)>0):
       stress= M/(0.9*self.h*self.tensionRebars.getAs())
-      outputFile.write("  Verif. contraintes: M= "+ fmt.Esf.format(M/1e3)+ " kN m, $\sigma_s$= "+ fmt.Esf.format(stress/1e6)+ " MPa\\\\\n")
+      outputFile.write("  Stress check: M= "+ fmt.Esf.format(M/1e3)+ " kN m, $\sigma_s$= "+ fmt.Esf.format(stress/1e6)+ " MPa\\\\\n")
       outputFile.write("    $\sigma_{lim}$= "+ fmt.Esf.format(self.stressLimitUnderPermanentLoads/1e6)+ " MPa")
       rebar_family.writeF(outputFile,"  F($\sigma_s$)", self.stressLimitUnderPermanentLoads/stress)
