@@ -246,6 +246,14 @@ class RectangularSection(SectionProperties):
        :param fy: material yield stress.
     '''
     return 2*fy/self.b*self.Iy()
+  def getElasticSectionModulusY(self):
+    '''Returns the plastic section modulus.
+
+       Computes the plastic section modulus assuming that plastic neutral 
+       axis passes through section centroid (which is true whenever the 
+       rectangular section is homogeneous).
+    '''
+    return (self.b*self.h)*self.b/6.0
   def getPlasticSectionModulusY(self):
     '''Returns the plastic section modulus.
 
@@ -260,6 +268,14 @@ class RectangularSection(SectionProperties):
        :param fy: material yield stress.
     '''
     return 2*fy/self.h*self.Iz()
+  def getElasticSectionModulusZ(self):
+    '''Returns the plastic section modulus.
+
+       Computes the plastic section modulus assuming that plastic neutral 
+       axis passes through section centroid (which is true whenever the 
+       rectangular section is homogeneous).
+    '''
+    return (self.b*self.h)*self.h/6.0
   def getPlasticSectionModulusZ(self):
     '''Returns the plastic section modulus.
 
