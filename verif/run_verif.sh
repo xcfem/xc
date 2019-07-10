@@ -495,6 +495,9 @@ python tests/materials/aci/test_aci_development_01.py
 python tests/materials/aci/test_aci_shear_01.py
 echo "$BLEU" "    SIA 263 tests." "$NORMAL"
 python tests/materials/sia263/test_coefs_fatique_SIA263.py
+echo "$BLEU" "    AWC NDS tests." "$NORMAL"
+python tests/materials/awc_nds/awc_nds2018_test01.py
+
 
 echo "$BLEU" "  Plate and membrane materials." "$NORMAL"
 python tests/materials/test_material_elastic_membrane_plate_section_01.py
