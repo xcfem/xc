@@ -497,6 +497,7 @@ echo "$BLEU" "    SIA 263 tests." "$NORMAL"
 python tests/materials/sia263/test_coefs_fatique_SIA263.py
 echo "$BLEU" "    AWC NDS tests." "$NORMAL"
 python tests/materials/awc_nds/awc_nds2018_test01.py
+python tests/materials/awc_nds/rsdg_exemple_5_1.py
 
 
 echo "$BLEU" "  Plate and membrane materials." "$NORMAL"
