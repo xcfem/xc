@@ -229,7 +229,7 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
         '''
         self.renderer= vtk.vtkRenderer()
         self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
-        if type(xcSets) ==list:
+        if type(xcSets)==list:
             for s in xcSets:
                 self.defineMeshActorsSet(s,field,defFScale,nodeSize)
                 self.displaySPconstraints(s,scaleConstr)
@@ -349,6 +349,11 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
         diagram.addDiagramToScene(self)
 
     def displaySPconstraints(self, xcSet,scale):
+        ''' Display single point constraints.
+
+        :param xcSet: set to be displayed
+        :param scale: scale for SPConstraints symbols.
+        '''
         prep=xcSet.getPreprocessor
         nodInSet=xcSet.nodes.getTags()
         #direction vectors for each DOF
@@ -359,11 +364,11 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
         while sp:
             nod=sp.getNode
             if nod.tag in nodInSet:
-                dof=sp.getDOFNumber
+                dof= sp.getDOFNumber
                 if dof < 3:
-                    utilsVtk.drawVtkSymb(symbType='cone',renderer=self.renderer, RGBcolor=[0,0,1], vPos=nod.getCoo, vDir=DOFdirVct[dof], scale=scale)
+                    utilsVtk.drawVtkSymb(symbType='cone',renderer=self.renderer, RGBcolor=[0,0,1], vPos=nod.getInitialPos3d, vDir=DOFdirVct[dof], scale=scale)
                 else:
-                    utilsVtk.drawVtkSymb(symbType='doubleCone',renderer=self.renderer, RGBcolor=[0,1,0], vPos=nod.getCoo, vDir=DOFdirVct[dof], scale=scale)
+                    utilsVtk.drawVtkSymb(symbType='doubleCone',renderer=self.renderer, RGBcolor=[0,1,0], vPos=nod.getInitialPos3d, vDir=DOFdirVct[dof], scale=scale)
             sp= spIter.next()
         return
                     
