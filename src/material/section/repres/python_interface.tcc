@@ -32,6 +32,8 @@ class_<XC::CrossSectionProperties2d, bases<CommandEntity> >("CrossSectionPropert
   .add_property("A", make_function( getA, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties2d::setA,"Area.")
   .add_property("Alpha", make_function( getAlpha, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties2d::setAlpha," Shear reduction factor.")
   .add_property("I", make_function( getI, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties2d::setI, "Moment of inertia.")
+  .def("EA", &XC::CrossSectionProperties2d::EA, "Tensional stiffness.")
+  .def("EI", &XC::CrossSectionProperties2d::EI, "Flexural stiffness.")
   .def(self_ns::str(self_ns::self))
   ;
 
@@ -44,6 +46,9 @@ class_<XC::CrossSectionProperties3d, bases<XC::CrossSectionProperties2d> >("Cros
   .add_property("Iy", make_function( getIy, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties3d::setIy)
   .add_property("Iyz", make_function( getIyz, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties3d::setIyz)
   .add_property("J", make_function( getJ, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties3d::setJ)
+  .def("EA", &XC::CrossSectionProperties3d::EA, "Tensional stiffness.")
+  .def("EIz", &XC::CrossSectionProperties3d::EIz, "Flexural stiffness around z axis.")
+  .def("EIy", &XC::CrossSectionProperties3d::EIy, "Flexural stiffness around y axis.")
   .def("rotate",&XC::CrossSectionProperties3d::rotate,"Rotate section (deprecated).")
   .def("getI1",&XC::CrossSectionProperties3d::getI1)
   .def("getI2",&XC::CrossSectionProperties3d::getI2)
