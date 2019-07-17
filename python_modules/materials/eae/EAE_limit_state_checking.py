@@ -36,6 +36,9 @@ def getFilletWeldThroatPlaneYieldCriteriaLHS(sigmaN, tauN, tauPll):
     '''
     return math.sqrt((sigmaN)**2+3*((tauN)**2+(tauPll)**2))
 
+# ENHANCE: it will be great if we can store
+# the interpolation in a file to avoid repeating
+# computations every time the module is loaded.
 # Table 59.8.2 in clause 59.8.2 of EAE (page 256)
 x= [235e6,275e6,355e6,420e6,460e6]
 y= [0.8,0.85,0.90,1.0,1.0]

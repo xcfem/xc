@@ -16,6 +16,14 @@ class ConcreteSlab(object):
     self.l= min(L,l)
     self.thickness= thickness
 
+# ENHANCE: it will be great if we can store
+# the interpolation in a file to avoid repeating
+# computations every time the module is loaded.
+x= [0.4,0.5,0.6,0.7,0.8,0.9,1] #l/L
+y= [8.9,10.2,11.6,13.5,15.9,18.9,22.7]
+fn= scipy.interpolate.interp1d(x,y)
+
+
 class FourSidesPinnedConcreteSlab(ConcreteSlab):
   '''Four sides pinned concrete slab preliminary structural calculations'''
   def __init__(self,l,L,thickness):
@@ -31,9 +39,6 @@ class FourSidesPinnedConcreteSlab(ConcreteSlab):
     '''
     a= 8.0
     if(self.l/self.L>=0.4):
-      x= [0.4,0.5,0.6,0.7,0.8,0.9,1] #l/L
-      y= [8.9,10.2,11.6,13.5,15.9,18.9,22.7]
-      fn= scipy.interpolate.interp1d(x,y)
       a= fn(self.l/self.L)
     return p*self.l*self.l/a
 

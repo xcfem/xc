@@ -110,6 +110,9 @@ according to table D.6 del CTE.
 #  F
 #  F
 
+# ENHANCE FOR ALL THE INTERPOLATIONS: it will be great if we can store
+# the interpolation in a file to avoid repeating
+# computations every time the module is loaded.
 '''
 External pressure factor (positive downwards) in the F zone of the roof 
 for mostly transverse winds (-45<theta<45) and area

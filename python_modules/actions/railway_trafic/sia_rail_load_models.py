@@ -14,6 +14,9 @@ import math
 import scipy.interpolate
 from miscUtils import LogMessages as lmsg
 
+# ENHANCE: it will be great if we can store
+# the interpolation in a file to avoid repeating
+# computations every time the module is loaded.
 x_tab16= [0,6.4,20,2e6]
 y_tab16= [220e3,220e3,145e3,145e3]
 table16Interpolation= scipy.interpolate.interp1d(x_tab16,y_tab16)

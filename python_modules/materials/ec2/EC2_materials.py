@@ -10,7 +10,6 @@ Ductility grades:
 '''
 
 import math
-import scipy.interpolate
 from materials import concrete_base
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"

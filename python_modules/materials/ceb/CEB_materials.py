@@ -31,6 +31,9 @@ class CEBPrestressingSteel(concrete_base.PrestressingSteel):
     - ptsRO1000Class2: for low relaxation strands and wires.
     - ptsRO1000Class3: for bars
     '''
+    # ENHANCE: it will be great if we can store
+    # the interpolation in a file to avoid repeating
+    # computations every time the module is loaded.
     ptsRO1000Class1= scipy.interpolate.interp1d([0, 0.5, 0.6, 0.7, 0.8],[0, 0, 4, 12+1.0/9.0, 12+1.0/9.0])
     ptsRO1000Class2= scipy.interpolate.interp1d([0, 0.5, 0.6, 0.7, 0.8],[0, 0, 4/9.0, 2, 4+3.5/9.0])
     ptsRO1000Class3= scipy.interpolate.interp1d([0, 0.5, 0.6, 0.7, 0.8],[0, 0, 2, 4, 6+4/9.0])

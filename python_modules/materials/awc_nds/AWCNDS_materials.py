@@ -18,6 +18,9 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
+# ENHANCE: it will be great if we can store
+# the interpolation in a file to avoid repeating
+# computations every time the module is loaded.
 tenMinutes= 10/(365.25*24*60)
 sevenDays= 7/365.25
 twoMonths= 2/12

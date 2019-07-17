@@ -105,6 +105,10 @@ class ElastomericBearing(Bearing):
                    steel plates).
 
     """
+    # ENHANCE (FOR ALL THE INTERPOLATIONS): it will be great
+    # if we can store the interpolation in a file to avoid repeating
+    # computations every time the module is loaded.
+    
     # Points that define the values of V2 as a function of b/a
     #   see "Puentes" book from Javier Manterola Armisén page 591
     x2= [1,1.5,2,3,4,6,8,10,10000]

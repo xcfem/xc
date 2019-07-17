@@ -10,7 +10,6 @@ __email__= "l.pereztato@gmail.com ana.ortega@ciccp.es"
 
 import math
 from miscUtils import LogMessages as lmsg
-import scipy.interpolate
 import numpy
 from materials import limit_state_checking_base as lsc
 from postprocess import control_vars as cv
