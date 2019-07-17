@@ -9,7 +9,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import scipy.interpolate
 from materials.aci import ACI_materials
 from materials.sections import rebar_family as rf
 import geom
