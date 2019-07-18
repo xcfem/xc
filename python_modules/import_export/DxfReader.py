@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import division
+from __future__ import print_function
+
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
@@ -13,186 +16,295 @@ import xc
 import re
 from scipy.spatial.distance import cdist
 from import_export import BlockTopologyEntities as bte
+from miscUtils import LogMessages as lmsg
+from geom_utils import principal_axis as pa
+
+class FloatList(list):
+    '''List of floats that are more than
+       "tol" apart.
+    '''
+    def __init__(self,tol= .01):
+      super(FloatList,self).__init__()
+      self.tol= tol
+    def append(self,num):
+        dMin= 1e23
+        for v in self:
+            dMin= min(abs(num-v), dMin)
+        if(dMin>self.tol):
+            super(FloatList,self).append(num)
+
+def decompose_polyface(polyface, tol= .01):
+    '''Return the quadrilateral surfaces that
+       compose the polyface.
+    '''
+    # Compute the principal axis.
+    points= list()
+    for face in polyface:
+        for pt in face:
+            points.append([pt[0],pt[1],pt[2]])
+    sisRef= pa.get_principal_axis_3D(points)
+    # Compute relative coordinates.
+    x_i= FloatList(tol)
+    y_i= FloatList(tol)
+    for p in points:
+        pRel= sisRef.getPosLocal(geom.Pos3d(p[0],p[1],p[2]))
+        x_i.append(pRel[0])
+        y_i.append(pRel[1])
+    x_i.sort()
+    nx= len(x_i)
+    y_i.sort()
+    ny= len(y_i)
+    # Create candidate surfaces.
+    candidates= list()
+    for i in range(0,nx-1):
+        for j in range(0, ny-1):
+            x= x_i[i]; y= y_i[j]
+            p1= geom.Pos2d(x,y)
+            x= x_i[i+1]; y= y_i[j]
+            p2= geom.Pos2d(x,y)
+            x= x_i[i+1]; y= y_i[j+1]
+            p3= geom.Pos2d(x,y)
+            x= x_i[i]; y= y_i[j+1]
+            p4= geom.Pos2d(x,y)
+            face= geom.Polygon2d()
+            face.appendVertex(p1)
+            face.appendVertex(p2)
+            face.appendVertex(p3)
+            face.appendVertex(p4)
+            print(face.getArea())
+            candidates.append(face)
+    # Create polygons in local coodinates.
+    polyfaces2d= list()
+    for face in polyface:
+        polygon= geom.Polygon2d()
+        for pt in face:
+            ptLocal= sisRef.getPosLocal(geom.Pos3d(pt[0],pt[1],pt[2]))
+            polygon.appendVertex(geom.Pos2d(ptLocal.x,ptLocal.y))
+        polyfaces2d.append(polygon)
+    # Select surfaces inside polyface.
+    selected= list()
+    for face in candidates:
+        c= face.getCenterOfMass()
+        for polyface in polyfaces2d:
+            if(polyface.In(c,tol/5.0)):
+                selected.append(face)
+                break
+    retval= list()
+    for face in selected:
+        vList= list()
+        vertices= face.getVertices()
+        for v in vertices:
+            vList.append(sisRef.getPosGlobal(geom.Pos3d(v.x,v.y,0.0)))
+        retval.append(vList)
+    return retval
+  
 
 def layerToImport(layerName,namesToImport):
-  '''Return true if the layer name matches one of the regular expressions
-     contained in the second argument.
+    '''Return true if the layer name matches one of the regular expressions
+       contained in the second argument.
 
-     :param layerName: name of the layer.
-     :param namesToImport: list of regular expressions to be tested.
-  '''
-  for regExp in namesToImport:
-    if(re.match(regExp,layerName)):
-      return True
-  return False
-
-class DXFImport(object):
-  '''Import DXF entities.'''
-  def __init__(self,dxfFileName,layerNamesToImport, getRelativeCoo, threshold= 0.01,importLines= True, importSurfaces= True):
-    ''' Constructor.
-
-       :param layerNamesToImport: list of regular expressions to be tested.
-       :param getRelativeCoo: coordinate transformation to be applied to the
-                              points.
-    '''
-    self.dxfFile= dxfgrabber.readfile(dxfFileName)
-    self.layersToImport= self.getLayersToImport(layerNamesToImport)
-    self.getRelativeCoo= getRelativeCoo
-    self.threshold= threshold
-    self.selectKPoints()
-    self.labelDict= {}
-    self.points= self.importPoints()
-    if(importLines):
-      self.importLines()
-    else:
-      self.lines= {}
-    if(importSurfaces):
-      self.importFaces()
-    else:
-      self.facesByLayer= {}
-    
-  def getIndexNearestPoint(self, pt):
-    return cdist([pt], self.kPoints).argmin()
-
-  def getNearestPoint(self, pt):
-    return self.kPoints[self.getIndexNearestPoint(pt)]
-
-  def getLayersToImport(self, namesToImport):
-    '''Return the layers names that will be imported according to the
-       regular expressions contained in the second argument.
-
+       :param layerName: name of the layer.
        :param namesToImport: list of regular expressions to be tested.
     '''
-    retval= []
-    for layer in self.dxfFile.layers:
-      layerName= layer.name
-      if(layerToImport(layer.name,namesToImport)):
-        retval.append(layer.name)
-    return retval
-  
-  def extractPoints(self):
-    '''Extract the points from the entities argument.'''
-    retval= []
-    for obj in self.dxfFile.entities:
-      type= obj.dxftype
-      layerName= obj.layer
-      if(layerName in self.layersToImport):
-        if(type == '3DFACE'):
-          for pt in obj.points:
-            retval.append(self.getRelativeCoo(pt))
-        elif(type == 'LINE'):
-          for pt in [obj.start,obj.end]:
-            retval.append(self.getRelativeCoo(pt))
-        elif(type == 'POINT'):
-          retval.append(self.getRelativeCoo(obj.point))
-        elif(type=='POLYLINE'):
-          pts= obj.points
-          for pt in pts:
-            retval.append(self.getRelativeCoo(pt))
-    return retval
-  
-  def selectKPoints(self):
-    '''Selects the k-points to be used in the model. All the points that
-       are closer than the threshold distance are melted into one k-point.
-    '''
-    points= self.extractPoints()
-    self.kPoints= [points[0]]
-    for p in points:
-      nearestPoint= self.getNearestPoint(p)
-      dist= cdist([p],[nearestPoint])[0][0]
-      if(dist>self.threshold):
-        self.kPoints.append(p)
+    for regExp in namesToImport:
+        if(re.match(regExp,layerName)):
+            return True
+    return False
 
-  def importPoints(self):
-    ''' Import points from DXF.'''
-    retval= {}
-    for obj in self.dxfFile.entities:
-      type= obj.dxftype
-      layerName= obj.layer
-      if(layerName in self.layersToImport):
-        if(type == 'POINT'):
-          vertices= [-1]
-          p= self.getRelativeCoo(obj.point)
-          vertices[0]= self.getIndexNearestPoint(p,kPoints)
-          retval[obj.handle]= (layerName, vertices)
-    return retval
+class DXFImport(object):
+    '''Import DXF entities.'''
+    def __init__(self,dxfFileName,layerNamesToImport, getRelativeCoo, threshold= 0.01,importLines= True, importSurfaces= True, tolerance= .01):
+        ''' Constructor.
 
-  def importLines(self):
-    ''' Import lines from DXF.'''
-    self.lines= {}
-    self.polylines= {}
-    for obj in self.dxfFile.entities:
-      type= obj.dxftype
-      lineName= obj.handle
-      layerName= obj.layer
-      if(layerName in self.layersToImport):
-        if(type == 'LINE'):
-          vertices= [-1,-1]
-          p1= self.getRelativeCoo(obj.start)
-          p2= self.getRelativeCoo(obj.end)
-          length= cdist([p1],[p2])[0][0]
-          vertices[0]= self.getIndexNearestPoint(p1)
-          vertices[1]= self.getIndexNearestPoint(p2)
-          if(vertices[0]==vertices[1]):
-            print 'Error in line ', lineName, ' vertices are equal: ', vertices
-          if(length>self.threshold):
-            self.lines[lineName]= vertices
-            self.labelDict[lineName]= [layerName]
+           :param layerNamesToImport: list of regular expressions to be tested.
+           :param getRelativeCoo: coordinate transformation to be applied to the
+                                  points.
+        '''
+        self.dxfFile= dxfgrabber.readfile(dxfFileName)
+        self.tolerance= tolerance
+        self.impLines= importLines
+        self.impSurfaces= importSurfaces
+        self.layersToImport= self.getLayersToImport(layerNamesToImport)
+        self.getRelativeCoo= getRelativeCoo
+        self.threshold= threshold
+        self.selectKPoints()
+        self.labelDict= {}
+        self.points= self.importPoints()
+        if(self.impLines):
+            self.importLines()
+        else:
+            self.lines= {}
+        if(self.impSurfaces):
+            self.importFaces()
+        else:
+            self.facesByLayer= {}
+
+    def getIndexNearestPoint(self, pt):
+        return cdist([pt], self.kPoints).argmin()
+
+    def getNearestPoint(self, pt):
+        return self.kPoints[self.getIndexNearestPoint(pt)]
+
+    def getLayersToImport(self, namesToImport):
+      '''Return the layers names that will be imported according to the
+         regular expressions contained in the second argument.
+
+         :param namesToImport: list of regular expressions to be tested.
+      '''
+      retval= []
+      for layer in self.dxfFile.layers:
+          layerName= layer.name
+          if(layerToImport(layer.name,namesToImport)):
+              retval.append(layer.name)
+      return retval
+
+    def extractPoints(self):
+        '''Extract the points from the entities argument.'''
+        retval= []
+        for obj in self.dxfFile.entities:
+            type= obj.dxftype
+            layerName= obj.layer
+            if(layerName in self.layersToImport):
+                if(type == 'POINT'):
+                    retval.append(self.getRelativeCoo(obj.point))
+                if(self.impSurfaces):
+                    if(type == '3DFACE'):
+                        for pt in obj.points:
+                            retval.append(self.getRelativeCoo(pt))
+                    elif(type == 'POLYFACE'):
+                        self.polyfaceQuads= decompose_polyface(obj, tol= self.tolerance)
+                        for q in self.polyfaceQuads:
+                            for pt in q:
+                                retval.append(self.getRelativeCoo(pt))
+                if(type == 'LINE'):
+                    for pt in [obj.start,obj.end]:
+                        retval.append(self.getRelativeCoo(pt))
+                elif(type=='POLYLINE'):
+                    pts= obj.points
+                    for pt in pts:
+                        retval.append(self.getRelativeCoo(pt))
+        return retval
+
+    def selectKPoints(self):
+      '''Selects the k-points to be used in the model. All the points that
+         are closer than the threshold distance are melted into one k-point.
+      '''
+      points= self.extractPoints()
+      self.kPoints= [points[0]]
+      for p in points:
+        nearestPoint= self.getNearestPoint(p)
+        dist= cdist([p],[nearestPoint])[0][0]
+        if(dist>self.threshold):
+          self.kPoints.append(p)
+
+    def importPoints(self):
+      ''' Import points from DXF.'''
+      retval= {}
+      for obj in self.dxfFile.entities:
+        type= obj.dxftype
+        layerName= obj.layer
+        if(layerName in self.layersToImport):
+          if(type == 'POINT'):
+            vertices= [-1]
+            p= self.getRelativeCoo(obj.point)
+            vertices[0]= self.getIndexNearestPoint(p,kPoints)
+            retval[obj.handle]= (layerName, vertices)
+      return retval
+
+    def importLines(self):
+      ''' Import lines from DXF.'''
+      self.lines= {}
+      self.polylines= {}
+      for obj in self.dxfFile.entities:
+        type= obj.dxftype
+        lineName= obj.handle
+        layerName= obj.layer
+        if(layerName in self.layersToImport):
+          if(type == 'LINE'):
+            vertices= [-1,-1]
+            p1= self.getRelativeCoo(obj.start)
+            p2= self.getRelativeCoo(obj.end)
+            length= cdist([p1],[p2])[0][0]
+            vertices[0]= self.getIndexNearestPoint(p1)
+            vertices[1]= self.getIndexNearestPoint(p2)
+            if(vertices[0]==vertices[1]):
+              lmsg.error('Error in line '+lineName+' vertices are equal: '+vertices)
+            if(length>self.threshold):
+              self.lines[lineName]= vertices
+              self.labelDict[lineName]= [layerName]
+            else:
+              lmsg.error('line too short: '+str(p1)+','+str(p2)+length)
+          elif(type == 'POLYLINE'):
+            vertices= set()
+            for p in obj.points:
+              rCoo= self.getRelativeCoo(p)
+              vertices.add(self.getIndexNearestPoint(rCoo))
+              self.polylines[lineName]= vertices
+              self.labelDict[lineName]= [layerName]
+
+    def importFaces(self):
+      ''' Import 3D faces from DXF.'''
+      self.facesByLayer= {}
+      for name in self.layersToImport:
+        self.facesByLayer[name]= dict()
+
+      for obj in self.dxfFile.entities:
+        type= obj.dxftype
+        layerName= obj.layer
+        if(layerName in self.layersToImport):
+          facesDict= self.facesByLayer[layerName]
+          if(type == '3DFACE'):
+            vertices= list()
+            for pt in obj.points:
+              p= self.getRelativeCoo(pt)
+              idx= self.getIndexNearestPoint(p)
+              vertices.append(idx)
+            self.labelDict[obj.handle]= [layerName]
+            facesDict[obj.handle]= vertices
+          elif(type == 'POLYFACE'):
+            count= 0
+            for q in self.polyfaceQuads:
+                vertices= list()
+                for pt in q:
+                    p= self.getRelativeCoo(pt)
+                    idx= self.getIndexNearestPoint(p)
+                    if not idx in vertices:
+                        vertices.append(idx)
+                    else:
+                        lmsg.error('Point p: '+str(p)+' idx: '+str(idx)+' repeated in '+str(q)+' vertices: '+str(vertices))
+                count+= 1
+                id= obj.handle+'_'+str(count)
+                print(id, vertices)
+                self.labelDict[id]= [layerName]
+                facesDict[id]= vertices
           else:
-            print 'line too short: ', p1, p2, length
-        elif(type == 'POLYLINE'):
-          vertices= set()
-          for p in obj.points:
-            rCoo= self.getRelativeCoo(p)
-            vertices.add(self.getIndexNearestPoint(rCoo))
-            self.polylines[lineName]= vertices
-            self.labelDict[lineName]= [layerName]
-            
-  def importFaces(self):
-    ''' Import 3D faces from DXF.'''
-    self.facesByLayer= {}
-    for name in self.layersToImport:
-      self.facesByLayer[name]= dict()
+            lmsg.log('Entity of type: '+type+' ignored.')      
 
-    for obj in self.dxfFile.entities:
-      type= obj.dxftype
-      layerName= obj.layer
-      if(layerName in self.layersToImport):
-        facesDict= self.facesByLayer[layerName]
-        if(type == '3DFACE'):
-          vertices= []
-          for pt in obj.points:
-            p= self.getRelativeCoo(pt)
-            idx= self.getIndexNearestPoint(p)
-            vertices.append(idx)
-          #print layerName, obj.handle
-          self.labelDict[obj.handle]= [layerName]
-          facesDict[obj.handle]= vertices
 
-  def exportBlockTopology(self, name):
-    retval= bte.BlockData()
-    retval.name= name
+    def exportBlockTopology(self, name):
+        retval= bte.BlockData()
+        retval.name= name
 
-    counter= 0
-    for p in self.kPoints:
-      retval.appendPoint(id= counter,x= p[0],y= p[1],z= p[2])
-      counter+= 1
+        counter= 0
+        for p in self.kPoints:
+            retval.appendPoint(id= counter,x= p[0],y= p[1],z= p[2])
+            counter+= 1
 
-    counter= 0
-    for key in self.lines:
-      line= self.lines[key]
-      block= bte.BlockRecord(counter,'line',line,self.labelDict[key])
-      retval.appendBlock(block)
-      counter+= 1
+        counter= 0
+        for key in self.lines:
+            line= self.lines[key]
+            block= bte.BlockRecord(counter,'line',line,self.labelDict[key])
+            retval.appendBlock(block)
+            counter+= 1
 
-    for name in self.layersToImport:
-      fg= self.facesByLayer[name]
-      for key in fg:
-        face= fg[key]
-        block= bte.BlockRecord(counter,'face',face,self.labelDict[key])
-        retval.appendBlock(block)
-        counter+= 1
-    return retval
+        for name in self.layersToImport:
+            fg= self.facesByLayer[name]
+            for key in fg:
+                face= fg[key]
+                block= bte.BlockRecord(counter,'face',face,self.labelDict[key])
+                retval.appendBlock(block)
+                counter+= 1
+        return retval
     
 
 
