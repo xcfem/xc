@@ -204,7 +204,15 @@ class GridModel(object):
     def lastZIndex(self):
         return len(self.gridCoo[2])-1
 
-
+    def getIJKrangeFromXYZrange(self,xyzRange):
+        '''Return an ijkRange that matches with coordinates in xyzRange defined as:
+        xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
+        Coordinates must be previously defined in the grid. 
+        '''
+        ijkRange=IJKRange((self.gridCoo[0].index(xyzRange[0][0]),self.gridCoo[1].index(xyzRange[0][1]),self.gridCoo[2].index(xyzRange[0][2])),
+                          (self.gridCoo[0].index(xyzRange[1][0]),self.gridCoo[1].index(xyzRange[1][1]),self.gridCoo[2].index(xyzRange[1][2])))
+        return ijkRange
+    
     def getPntGrid(self,indPnt):
         '''Return the point at indPnt=(i,j,k) index of the grid.
 
@@ -506,6 +514,15 @@ class GridModel(object):
         setSurf= self.prep.getSets.defSet(nameSet)
         self.appendSurfRange(ijkRange,setSurf)
         return setSurf
+    
+    def genSurfOneXYZRegion(self,xyzRange,nameSet):
+        '''generate the surfaces limited by a region defined by the coordinates
+        defined in the range  xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
+        Return a set with the surfaces generated.
+        Add those surfaces to the dictionary dicQuadSurf.
+        '''
+        ijkRange=self.getIJKrangeFromXYZrange(xyzRange)
+        return self.genSurfOneRegion(ijkRange,nameSet)
 
     def genSurfMultiRegion(self,lstIJKRange,nameSet):
         '''generate the surfaces limited by all the regions included in the 
@@ -522,6 +539,19 @@ class GridModel(object):
             self.appendSurfRange(rg,setSurf)
         return setSurf
 
+    def genSurfMultiXYZRegion(self,lstXYZRange,nameSet):
+        '''generate the surfaces limited by all the regions included in the 
+        list of xyzRanges passed as parameter.
+        Each region defines a volume limited by the coordinates    
+        that correspond to the coordinates in ranges xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
+        Return a set with the surfaces generated.
+        Add those surfaces to the dictionary dicQuadSurf.
+        '''
+        lstIJKRange=list()
+        for rg in lstXYZRange:
+            lstIJKRange.append(self.getIJKrangeFromXYZrange(rg))
+        return self.genSurfMultiRegion(lstIJKRange,nameSet)
+        
     def appendLinRange(self,ijkRange,nameSet):
         '''generate the lines limited by a region defined by the coordinates
         that correspond to the indices in the grid 
@@ -549,6 +579,17 @@ class GridModel(object):
         self.appendLinRange(ijkRange,nameSet)
         return setLin
 
+    def genLinOneXYZRegion(self,xyzRange,nameSet): 
+        '''generate the lines limited by a region defined by the coordinates
+        defined in range xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
+        ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+        ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
+        Return a set with the lines generated.
+        Add those lines to the dictionary dicLin.
+        '''
+        ijkRange=self.getIJKrangeFromXYZrange(xyzRange)
+        return self.genLinOneRegion(ijkRange,nameSet)
+        
     def genLinMultiRegion(self,lstIJKRange,nameSet):
         '''generate the lines limited by all the regions included in the 
         list of ijkRanges passed as parameter.
@@ -564,6 +605,19 @@ class GridModel(object):
             self.appendLinRange(rg,nameSet)
         return setLin
 
+    def genLinMultiXYZRegion(self,lstXYZRange,nameSet):
+        '''generate the lines limited by all the regions included in the 
+        list of coordinate passed as parameter.
+        Each region defines a volume limited by the coordinates    
+        that correspond to the ranges xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
+        Return a set with the lines generated.
+        Add those lines to the dictionary dicLin.
+        '''
+        lstIJKRange=list()
+        for rg in lstXYZRange:
+            lstIJKRange.append(self.getIJKrangeFromXYZrange(rg))
+        return self.genLinMultiRegion(lstIJKRange,nameSet)
+        
     def getSetSurfOneRegion(self,ijkRange,nameSet):
         '''return the set of surfaces and all the entities(lines, 
         points, elements, nodes, ...) associated 
@@ -580,6 +634,15 @@ class GridModel(object):
         setSurf.fillDownwards()    
         return setSurf
 
+    def getSetSurfOneXYZRegion(self,xyzRange,nameSet):
+        '''return the set of surfaces and all the entities(lines, 
+        points, elements, nodes, ...) associated 
+        with them in a region limited by the coordinates
+        in range xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
+        '''
+        ijkRange=self.getIJKrangeFromXYZrange(xyzRange)
+        return self.getSetSurfOneRegion(ijkRange,nameSet)
+        
     def getSetSurfMultiRegion(self,lstIJKRange,nameSet):
         '''return the set of surfaces and all the entities(lines,
         points, elements, nodes, ...) associated with them in a all
@@ -598,6 +661,18 @@ class GridModel(object):
         setSurf.fillDownwards()    
         return setSurf
 
+    def getSetSurfMultiXYZRegion(self,lstXYZRange,nameSet):
+        '''return the set of surfaces and all the entities(lines,
+        points, elements, nodes, ...) associated with them in a all
+        the regions  included in the list of xyzRanges passed as parameter.
+        Each region defines a volume limited by the coordinates    
+        that correspond to coordinates in range xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
+        '''
+        lstIJKRange=list()
+        for rg in lstXYZRange:
+            lstIJKRange.append(self.getIJKrangeFromXYZrange(rg))
+        return self.getSetSurfMultiRegion(lstIJKRange,nameSet)
+        
     def getSetLinOneRegion(self,ijkRange,nameSet):
         '''return the set of lines and all the entities(points, elements, 
         nodes, ...) associated with them in a region limited by the coordinates
@@ -612,6 +687,14 @@ class GridModel(object):
                 setLin.getLines.append(self.dicLin[nameLin])
         setLin.fillDownwards()    
         return setLin
+        
+    def getSetLinOneXYZRegion(self,xyzRange,nameSet):
+        '''return the set of lines and all the entities(points, elements, 
+        nodes, ...) associated with them in a region limited by the coordinates
+        defined in range xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
+        '''
+        ijkRange=self.getIJKrangeFromXYZrange(xyzRange)
+        return self.getSetLinOneRegion(ijkRange,nameSet)
 
     def getSetLinMultiRegion(self,lstIJKRange,nameSet):
         '''return the set of lines and all the entities(points, elements, 
@@ -631,6 +714,18 @@ class GridModel(object):
         setLin.fillDownwards()    
         return setLin
 
+    def getSetLinMultiXYZRegion(self,lstXYZRange,nameSet):
+        '''return the set of lines and all the entities(points, elements, 
+        nodes, ...) associated with them in a all the regions  included in the 
+        list of xyzRanges passed as parameter.
+        Each region defines a volume limited by the coordinates    
+        defined in range xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
+        '''
+        lstIJKRange=list()
+        for rg in lstXYZRange:
+            lstIJKRange.append(self.getIJKrangeFromXYZrange(rg))
+        return self.getSetLinMultiRegion(lstIJKRange,nameSet)
+        
     def getLstLinRange(self,ijkRange):
         '''return a list of lines in a region limited by the coordinates
         that correspond to the indices in the grid 
@@ -644,6 +739,12 @@ class GridModel(object):
                 retval.append(self.dicLin[nameLin])
         return retval
 
+    def getLstLinXYZRange(self,xyzRange):
+        '''return a list of lines in a region limited by the coordinates
+        defined in range xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
+        '''
+        ijkRange=self.getIJKrangeFromXYZrange(xyzRange)
+        return self.getLstLinRange(ijkRange)
 
     def getLstPntRange(self,ijkRange):
         '''return the ordered list points in a 3D grid-region limited by 
@@ -662,6 +763,13 @@ class GridModel(object):
           retval.append(pnt)
         return retval
     
+    def getLstPntXYZRange(self,xyzRange):
+        '''return the ordered list points in a 3D grid-region limited by 
+        coordinates defined in xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
+        '''
+        ijkRange=self.getIJKrangeFromXYZrange(xyzRange)
+        return self.getLstPntRange(ijkRange)
+        
     def getSetPntRange(self,ijkRange,setName):
         '''return the set of points in a 3D grid-region limited by 
         ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
@@ -677,6 +785,13 @@ class GridModel(object):
           pntsSet.append(pnt)
         return retval
 
+    def getSetPntXYZRange(self,xyzRange,setName):
+        '''return the set of points in a 3D grid-region limited by 
+        coordinates in xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
+        '''
+        ijkRange=self.getIJKrangeFromXYZrange(xyzRange)
+        return self.getSetPntRange(ijkRange,setName)
+        
     def getSetPntMultiRegion(self,lstIJKRange,setName):
         '''return the set of points in a all the 3D grid-regions
         included in the list of ijkRanges passed as parameter
@@ -692,6 +807,16 @@ class GridModel(object):
             for pnt in lstPnt:
                 pntsSet.append(pnt)
         return retval
-
+    
+    def getSetPntMultiXYZRegion(self,lstXYZRange,setName):
+        '''return the set of points in a all the 3D grid-regions
+        included in the list of xyzRanges passed as parameter
+        Each region defines a volume limited by the coordinates    
+        defined in xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
+        '''
+        lstIJKRange=list()
+        for rg in lstXYZRange:
+            lstIJKRange.append(self.getIJKrangeFromXYZrange(rg))
+        return self.getSetPntMultiRegion(lstIJKRange,setName)
 
     

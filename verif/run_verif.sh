@@ -270,6 +270,7 @@ python tests/preprocessor/sets/test_fill_downwards_01.py
 python tests/preprocessor/sets/test_get_mesh_components_01.py
 echo "$BLEU" "  Preprocessor grid model tests." "$NORMAL"
 python tests/preprocessor/grid_model/test_grid_model_01.py
+python tests/preprocessor/grid_model/test_grid_model_02.py
 
 #Tests about constraints.
 echo "$BLEU" "Displacement constraints tests." "$NORMAL"
