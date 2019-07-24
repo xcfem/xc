@@ -321,6 +321,7 @@ python tests/loads/beam_strain_load_07.py
 python tests/loads/beam_strain_load_08.py
 python tests/loads/beam_strain_load_09.py
 python tests/loads/shell_strain_load_01.py
+python tests/loads/shell_grad_strain_load_02.py
 python tests/loads/test_cte_wind_load.py
 python tests/loads/test_ground_motion_01.py
 python tests/loads/test_ground_motion_02.py
