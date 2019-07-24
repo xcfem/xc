@@ -71,7 +71,6 @@ def decompose_polyface(polyface, tol= .01):
             face.appendVertex(p2)
             face.appendVertex(p3)
             face.appendVertex(p4)
-            print(face.getArea())
             candidates.append(face)
     # Create polygons in local coodinates.
     polyfaces2d= list()
@@ -125,6 +124,7 @@ class DXFImport(object):
         self.impLines= importLines
         self.impSurfaces= importSurfaces
         self.layersToImport= self.getLayersToImport(layerNamesToImport)
+        self.polyfaceQuads= dict()
         self.getRelativeCoo= getRelativeCoo
         self.threshold= threshold
         self.selectKPoints()
@@ -172,8 +172,8 @@ class DXFImport(object):
                         for pt in obj.points:
                             retval.append(self.getRelativeCoo(pt))
                     elif(type == 'POLYFACE'):
-                        self.polyfaceQuads= decompose_polyface(obj, tol= self.tolerance)
-                        for q in self.polyfaceQuads:
+                        self.polyfaceQuads[obj.handle]= decompose_polyface(obj, tol= self.tolerance)
+                        for q in self.polyfaceQuads[obj.handle]:
                             for pt in q:
                                 retval.append(self.getRelativeCoo(pt))
                 if(type == 'LINE'):
@@ -263,7 +263,7 @@ class DXFImport(object):
             facesDict[obj.handle]= vertices
           elif(type == 'POLYFACE'):
             count= 0
-            for q in self.polyfaceQuads:
+            for q in self.polyfaceQuads[obj.handle]:
                 vertices= list()
                 for pt in q:
                     p= self.getRelativeCoo(pt)
@@ -274,7 +274,6 @@ class DXFImport(object):
                         lmsg.error('Point p: '+str(p)+' idx: '+str(idx)+' repeated in '+str(q)+' vertices: '+str(vertices))
                 count+= 1
                 id= obj.handle+'_'+str(count)
-                print(id, vertices)
                 self.labelDict[id]= [layerName]
                 facesDict[id]= vertices
           else:
