@@ -332,7 +332,6 @@ add_library(XcBib SHARED ${utility} ${material} ${siseq} ${analysis} ${convergen
 
 #Python interface
 TARGET_LINK_LIBRARIES(XcBib xc_utils xc_basic_utils ${VTK_BIB} ${CGAL_LIBRARIES} ${Plot_LIBRARY} ${MPFR_LIBRARIES} ${GMP_LIBRARY} ${MYSQL_LIBRARY} ${MySQLpp_LIBRARIES} ${SQLITE3_LIBRARY} ${GNUGTS_LIBRARIES} ${BerkeleyDB_LIBRARIES} ${ARPACK_LIB} ${ARPACKPP_LIB} ${LAPACK_LIBRARIES} ${SUPERLU_LIBRARIES} ${BLAS_LIBRARIES} ${PETSC_LIB_PETSC} ${METIS_LIBRARIES} ${TCL_LIBRARY} boost_python ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
-LINK_DIRECTORIES("/usr/lib/python2.7") # Not needed?
 add_definitions(-fno-strict-aliasing)
 # Define the wrapper library that wraps our library
 add_library(xc SHARED utility/export_utility material/export_material_base material/uniaxial/export_material_uniaxial material/nD/export_material_nD material/section/export_material_section material/section/export_material_fiber_section domain/export_domain domain/mesh/export_domain_mesh preprocessor/export_preprocessor_handlers preprocessor/export_preprocessor_build_model  preprocessor/export_preprocessor_sets preprocessor/export_preprocessor_main solution/export_solution python_interface)
