@@ -131,6 +131,24 @@ def dead_LC(preprocessor,lcName,drivewaySet,qAsphalt,sidewalkSet=None,qSidewalk=
         lc.addLstLoads([loads.UniformLoadOnLines(name= lcName+'deckEdg', xcSet=deckEdgeSet, loadVector=xc.Vector([0,0,-qDeckEdge,0,0,0]))])
     return lc
     
-    
-        
+def thermal_rheological_LC(preprocessor,lcName,lst_Sets_DOF_Strain):
+    '''Return a thermal or rheological load case (shrinkage, creep, 
+       thermal expansion, ...)
+
+    :param preprocessor: preprocessor
+    :param lcName: load case name
+    :param lst_Sets_DOF_Strain: list of type [(set,DOF,strain),..] where:
+                  set: is the set of shell elements to which apply the strain
+                  DOF: is the degree of freedom (0,1 or 2) in which strain acts
+                  strain: is strain to apply to all the elements in set 
+                          (e.g.: alpha x deltaT for thermal expansion).
+    '''
+    lc=lcases.LoadCase(preprocessor,lcName,"default","constant_ts")
+    lc.create()
+    for ld in lst_Sets_DOF_Strain:
+        st=ld[0]
+        dof=ld[1]
+        strn=ld[2]
+        lc.addLstLoads([loads.StrainLoadOnShells(name=lcName+st.name,xcSet=st,DOFstrain=dof,strain=strn)])
+    return lc
     
