@@ -15,6 +15,7 @@ from model.sets import sets_mng as sets
 from miscUtils import LogMessages as lmsg
 import numpy as np
 from actions import load_cases
+from actions.imposed_strain import imp_strain as imps 
 
 class BaseVectorLoad(object):
     '''Base class for loads introduced using a load as an xcVector 
@@ -329,6 +330,9 @@ class StrainLoadOnShells(object):
     :ivar name:  name identifying the load
     :ivar xcSet: set that contains the elements
     :ivar DOFstrain: degree of freedom to which apply the strain 
+                     0: strain along local x
+                     1: strain along local y
+                     3: strain along local z
     :ivar strain: strain (e.g.: alpha x deltaT for thermal expansion)
 
     '''
@@ -344,14 +348,13 @@ class StrainLoadOnShells(object):
         lcm=load_cases.LoadCaseManager(prep)
         loadPatternName= prep.getLoadHandler.getLoadPatterns.currentLoadPattern
         loadPattern= prep.getLoadHandler.getLoadPatterns[loadPatternName]
-        for s in self.xcSet.getSurfaces:
-            for e in s.getElements():
-                eLoad= loadPattern.newElementalLoad("shell_strain_load")
-                eLoad.elementTags= xc.ID([e.tag])
-                eLoad.setStrainComp(0,self.DOFstrain,self.strain)
-                eLoad.setStrainComp(1,self.DOFstrain,self.strain)
-                eLoad.setStrainComp(2,self.DOFstrain,self.strain)
-                eLoad.setStrainComp(3,self.DOFstrain,self.strain)
+        for e in self.xcSet.getElements:
+            eLoad= loadPattern.newElementalLoad("shell_strain_load")
+            eLoad.elementTags= xc.ID([e.tag])
+            eLoad.setStrainComp(0,self.DOFstrain,self.strain)
+            eLoad.setStrainComp(1,self.DOFstrain,self.strain)
+            eLoad.setStrainComp(2,self.DOFstrain,self.strain)
+            eLoad.setStrainComp(3,self.DOFstrain,self.strain)
 
 class StrainGradientLoadOnBeams(object):
     '''Strain load applied on the beam elements generated from
@@ -372,3 +375,36 @@ class StrainGradientLoadOnBeams(object):
                 eleLoad.backEndDeformationPlane= pDef
                 eleLoad.frontEndDeformationPlane= pDef
     
+class StrainGradientThermalLoadOnShells(imps.gradThermalStrain):
+    '''Apply a thermal gradient between top and bottom faces of the shell 
+    elements in xcSet.
+   
+    :ivar name:  name identifying the load
+    :ivar xcSet: set that contains the elements
+    :ivar elThick: thickness of elements
+    :ivar alpha: Thermal expansion coefficient of material (1/ºC)
+    :ivar Ttop: Temperature (ºC) at the top face of elements
+    :ivar Tbottom: Temperature (ºC) at the bottom face of elements
+    :ivar DOFstrain: degree of freedom to which apply the strain 
+                     3: curvature around local x
+                     4: curvature around local y
+                     5: curvature around local z
+
+    '''
+    def __init__(self,name, elemSet,elThick,DOF,alpha,Ttop,Tbottom):
+        super(StrainGradientThermalLoadOnShells,self).__init__(elemSet,elThick,DOF,alpha,Ttop,Tbottom)
+        self.name=name
+    
+    def appendLoadToCurrentLoadPattern(self):
+        ''' Append load to the load pattern passed as parameter.'''
+        prep=self.elemSet.getPreprocessor
+        lcm=load_cases.LoadCaseManager(prep)
+        loadPatternName= prep.getLoadHandler.getLoadPatterns.currentLoadPattern
+        loadPattern= prep.getLoadHandler.getLoadPatterns[loadPatternName]
+        for e in self.elemSet.getElements:
+            eLoad= loadPattern.newElementalLoad("shell_strain_load")
+            eLoad.elementTags= xc.ID([e.tag])
+            eLoad.setStrainComp(0,self.DOF,self.curvature)
+            eLoad.setStrainComp(1,self.DOF,self.curvature)
+            eLoad.setStrainComp(2,self.DOF,self.curvature)
+            eLoad.setStrainComp(3,self.DOF,self.curvature)
