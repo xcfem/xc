@@ -33,16 +33,9 @@ class FloatList(list):
         if(dMin>self.tol):
             super(FloatList,self).append(num)
 
-def decompose_polyface(polyface, tol= .01):
-    '''Return the quadrilateral surfaces that
-       compose the polyface.
-    '''
-    # Compute the principal axis.
-    points= list()
-    for face in polyface:
-        for pt in face:
-            points.append([pt[0],pt[1],pt[2]])
-    sisRef= pa.get_principal_axis_3D(points)
+
+def get_candidate_2Dquads(sisRef, points, tol):
+    '''Return candidate quads in 2D.'''
     # Compute relative coordinates.
     x_i= FloatList(tol)
     y_i= FloatList(tol)
@@ -72,7 +65,80 @@ def decompose_polyface(polyface, tol= .01):
             face.appendVertex(p3)
             face.appendVertex(p4)
             candidates.append(face)
-    # Create polygons in local coodinates.
+    return candidates
+
+def quads2d_to_global_coordinates(sisRef, selected_quads):
+    '''Convert the quads from 2D to 3D.'''
+    retval= list()
+    for face in selected_quads:
+        vList= list()
+        vertices= face.getVertices()
+        for v in vertices:
+            vList.append(sisRef.getPosGlobal(geom.Pos3d(v.x,v.y,0.0)))
+        retval.append(vList)
+    return retval
+    
+def get_polygon_axis(points, tol):
+    '''Compute the polygon axis on the assumption that
+       they all the sides are orthogonal.'''
+    pline= geom.Polyline3d()
+    for p in points:
+        pline.appendVertex(geom.Pos3d(p[0],p[1],p[2]))
+    pline.simplify(tol)
+    pt0= pline[1]
+    pt1= pline[2]
+    pt2= pline[3]
+    v1= pt0-pt1
+    v2= pt2-pt1
+    return geom.Ref3d3d(pt1,v1,v2)    
+    
+def decompose_polyline(polyline, tol= .01):
+    '''Return the quadrilateral surfaces that
+       compose the polyline.
+    '''
+    retval= list()
+    if((len(polyline.points)>2) and polyline.is_closed):
+        # Compute the principal axis.
+        points= list()
+        for pt in polyline.points:
+            points.append([pt[0],pt[1],pt[2]])            
+        sisRef= get_polygon_axis(points,tol)
+
+        # Create candidate surfaces.
+        candidates= get_candidate_2Dquads(sisRef, points, tol)
+
+        # Create polygon in local coordinates.
+        polygon= geom.Polygon2d()
+        for pt in polyline:
+            ptLocal= sisRef.getPosLocal(geom.Pos3d(pt[0],pt[1],pt[2]))
+            polygon.appendVertex(geom.Pos2d(ptLocal.x,ptLocal.y))
+
+        # Select surfaces inside polygon.
+        selected= list()
+        for face in candidates:
+            c= face.getCenterOfMass()
+            if(polygon.In(c,tol/5.0)):
+                selected.append(face)
+        retval= quads2d_to_global_coordinates(sisRef, selected)
+
+    return retval
+
+def decompose_polyface(polyface, tol= .01):
+    '''Return the quadrilateral surfaces that
+       compose the polyface.
+    '''
+    # Compute the principal axis.
+    points= list()
+    for face in polyface:
+        for pt in face:
+            points.append([pt[0],pt[1],pt[2]])
+    #sisRef= get_polygon_axis(points,tol)
+    sisRef= pa.get_principal_axis_3D(points)
+
+    # Create candidate surfaces.
+    candidates= get_candidate_2Dquads(sisRef,points, tol)
+
+    # Create polygons in local coordinates.
     polyfaces2d= list()
     for face in polyface:
         polygon= geom.Polygon2d()
@@ -88,15 +154,7 @@ def decompose_polyface(polyface, tol= .01):
             if(polyface.In(c,tol/5.0)):
                 selected.append(face)
                 break
-    retval= list()
-    for face in selected:
-        vList= list()
-        vertices= face.getVertices()
-        for v in vertices:
-            vList.append(sisRef.getPosGlobal(geom.Pos3d(v.x,v.y,0.0)))
-        retval.append(vList)
-    return retval
-  
+    return quads2d_to_global_coordinates(sisRef, selected)
 
 def layerToImport(layerName,namesToImport):
     '''Return true if the layer name matches one of the regular expressions
@@ -112,19 +170,22 @@ def layerToImport(layerName,namesToImport):
 
 class DXFImport(object):
     '''Import DXF entities.'''
-    def __init__(self,dxfFileName,layerNamesToImport, getRelativeCoo, threshold= 0.01,importLines= True, importSurfaces= True, tolerance= .01):
+    def __init__(self,dxfFileName,layerNamesToImport, getRelativeCoo, threshold= 0.01,importLines= True, importSurfaces= True, polylinesAsSurfaces= False, tolerance= .01):
         ''' Constructor.
 
            :param layerNamesToImport: list of regular expressions to be tested.
            :param getRelativeCoo: coordinate transformation to be applied to the
                                   points.
         '''
-        self.dxfFile= dxfgrabber.readfile(dxfFileName)
+        self.options= {"grab_blocks":True,"assure_3d_coords":True,"resolve_text_styles":True}
+        self.dxfFile= dxfgrabber.readfile(filename= dxfFileName, options= self.options)
         self.tolerance= tolerance
         self.impLines= importLines
         self.impSurfaces= importSurfaces
+        self.polylinesAsSurfaces= polylinesAsSurfaces
         self.layersToImport= self.getLayersToImport(layerNamesToImport)
         self.polyfaceQuads= dict()
+        self.polylineQuads= dict()
         self.getRelativeCoo= getRelativeCoo
         self.threshold= threshold
         self.selectKPoints()
@@ -179,10 +240,16 @@ class DXFImport(object):
                 if(type == 'LINE'):
                     for pt in [obj.start,obj.end]:
                         retval.append(self.getRelativeCoo(pt))
-                elif(type=='POLYLINE'):
-                    pts= obj.points
-                    for pt in pts:
-                        retval.append(self.getRelativeCoo(pt))
+                elif((type == 'POLYLINE') or (type == 'LWPOLYLINE')):
+                    if(self.polylinesAsSurfaces):
+                        self.polylineQuads[obj.handle]= decompose_polyline(obj, tol= self.tolerance)
+                        for q in self.polylineQuads[obj.handle]:
+                            for pt in q:
+                                retval.append(self.getRelativeCoo(pt))                        
+                    else:
+                        pts= obj.points
+                        for pt in pts:
+                            retval.append(self.getRelativeCoo(pt))
         return retval
 
     def selectKPoints(self):
@@ -234,13 +301,14 @@ class DXFImport(object):
               self.labelDict[lineName]= [layerName]
             else:
               lmsg.error('line too short: '+str(p1)+','+str(p2)+length)
-          elif(type == 'POLYLINE'):
-            vertices= set()
-            for p in obj.points:
-              rCoo= self.getRelativeCoo(p)
-              vertices.add(self.getIndexNearestPoint(rCoo))
-              self.polylines[lineName]= vertices
-              self.labelDict[lineName]= [layerName]
+          elif((type == 'POLYLINE') or (type == 'LWPOLYLINE')):
+              if(not self.polylinesAsSurfaces): # Import as lines
+                  vertices= set()
+                  for p in obj.points:
+                    rCoo= self.getRelativeCoo(p)
+                    vertices.add(self.getIndexNearestPoint(rCoo))
+                    self.polylines[lineName]= vertices
+                    self.labelDict[lineName]= [layerName]
 
     def importFaces(self):
       ''' Import 3D faces from DXF.'''
@@ -252,32 +320,48 @@ class DXFImport(object):
         type= obj.dxftype
         layerName= obj.layer
         if(layerName in self.layersToImport):
-          facesDict= self.facesByLayer[layerName]
-          if(type == '3DFACE'):
-            vertices= list()
-            for pt in obj.points:
-              p= self.getRelativeCoo(pt)
-              idx= self.getIndexNearestPoint(p)
-              vertices.append(idx)
-            self.labelDict[obj.handle]= [layerName]
-            facesDict[obj.handle]= vertices
-          elif(type == 'POLYFACE'):
-            count= 0
-            for q in self.polyfaceQuads[obj.handle]:
+            facesDict= self.facesByLayer[layerName]
+            if(type == '3DFACE'):
                 vertices= list()
-                for pt in q:
+                for pt in obj.points:
                     p= self.getRelativeCoo(pt)
                     idx= self.getIndexNearestPoint(p)
-                    if not idx in vertices:
-                        vertices.append(idx)
-                    else:
-                        lmsg.error('Point p: '+str(p)+' idx: '+str(idx)+' repeated in '+str(q)+' vertices: '+str(vertices))
-                count+= 1
-                id= obj.handle+'_'+str(count)
-                self.labelDict[id]= [layerName]
-                facesDict[id]= vertices
-          else:
-            lmsg.log('Entity of type: '+type+' ignored.')      
+                    vertices.append(idx)
+                self.labelDict[obj.handle]= [layerName]
+                facesDict[obj.handle]= vertices
+            elif(type == 'POLYFACE'):
+                count= 0
+                for q in self.polyfaceQuads[obj.handle]:
+                    vertices= list()
+                    for pt in q:
+                        p= self.getRelativeCoo(pt)
+                        idx= self.getIndexNearestPoint(p)
+                        if not idx in vertices:
+                            vertices.append(idx)
+                        else:
+                            lmsg.error('Point p: '+str(p)+' idx: '+str(idx)+' repeated in '+str(q)+' vertices: '+str(vertices))
+                    count+= 1
+                    id= obj.handle+'_'+str(count)
+                    self.labelDict[id]= [layerName]
+                    facesDict[id]= vertices
+            elif((type == 'POLYLINE') or (type == 'LWPOLYLINE')):
+                count= 0
+                if(self.polylinesAsSurfaces): # Import as surfaces
+                    for q in self.polylineQuads[obj.handle]:
+                        vertices= list()
+                        for pt in q:
+                            p= self.getRelativeCoo(pt)
+                            idx= self.getIndexNearestPoint(p)
+                            if not idx in vertices:
+                                vertices.append(idx)
+                            else:
+                                lmsg.error('Point p: '+str(p)+' idx: '+str(idx)+' repeated in '+str(q)+' vertices: '+str(vertices))
+                        count+= 1
+                        id= obj.handle+'_'+str(count)
+                        self.labelDict[id]= [layerName]
+                        facesDict[id]= vertices
+            else:
+              lmsg.log('Entity of type: '+type+' ignored.')      
 
 
     def exportBlockTopology(self, name):
@@ -342,7 +426,7 @@ class OldDxfReader(object):
           pt= self.newKeyPoint(obj.end)
           if(pt):
             retval.append(pt.tag)
-        elif(type=='POLYLINE'):
+        elif((type == 'POLYLINE') or (type == 'LWPOLYLINE')):
           pts= obj.points
           for p in pts:
             pt= self.newKeyPoint(p)
@@ -357,7 +441,7 @@ class OldDxfReader(object):
         color= obj.color
         if(type=='LINE'):
           retval.append(self.newLine(obj).tag)
-        if(type=='POLYLINE'):
+        if((type == 'POLYLINE') or (type == 'LWPOLYLINE')):
           pts= obj.points
           sz= len(pts)
           for i in range(0,sz):
