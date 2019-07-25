@@ -22,7 +22,7 @@ python tests/actions/test_prestressing.py
 python tests/actions/test_peck_pressure_envelope.py
 python tests/actions/mononobe_okabe_test_01.py
 python tests/actions/test_earth_pressure.py
-
+python tests/actions/test_thermal_grad_shell.py 
 #Combinations tests.
 echo "$BLEU" "Load combination tests." "$NORMAL"
 python tests/combinations/add_loads_01.py
@@ -321,6 +321,7 @@ python tests/loads/beam_strain_load_07.py
 python tests/loads/beam_strain_load_08.py
 python tests/loads/beam_strain_load_09.py
 python tests/loads/shell_strain_load_01.py
+python tests/loads/shell_grad_strain_load_02.py
 python tests/loads/test_cte_wind_load.py
 python tests/loads/test_ground_motion_01.py
 python tests/loads/test_ground_motion_02.py

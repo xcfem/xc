@@ -49,10 +49,9 @@ lmb.WheelLoad(pos=geom.Pos2d(1.0,0.6),ld=37.5e3,lx=0.4,ly=0.4),
 lmb.WheelLoad(pos=geom.Pos2d(-1.0,0.6),ld=37.5e3,lx=0.4,ly=0.4)])
 
 
-def IAP_traffic_LC(preprocessor,lcName,deckSet,virtLane1Set,xyCentPL1,hDistrPL,slopeDistrPL=1.0,vQbraking=None,virtLane2Set=None,xyCentPL2=None,virtLane3Set=None,xyCentPL3=None,restDrivewaySet=None,sidewalkSet=None):
+def IAP_traffic_LC(lcName,deckSet,virtLane1Set,xyCentPL1,hDistrPL,slopeDistrPL=1.0,vQbraking=None,virtLane2Set=None,xyCentPL2=None,virtLane3Set=None,xyCentPL3=None,restDrivewaySet=None,sidewalkSet=None):
     '''Return a traffic load case according to IAP.
 
-    :param preprocessor: preprocessor
     :param lcName: load case name
     :param deckSet: deck set of elements (used to distribute point loads)
     :param virtLane1Set: virtual lane 1 set of elements
@@ -74,6 +73,7 @@ def IAP_traffic_LC(preprocessor,lcName,deckSet,virtLane1Set,xyCentPL1,hDistrPL,s
     :param sidewalkSet: sidewalk set of elements (defaults to None, not considered)
  
     '''
+    preprocessor=deckSet.getPreprocessor
     if vQbraking:
         qunifVL1,qunifVL2,qunifVL3,qunifRest,qunifSidewalk=[0.4*9e3]+4*[0.4*2.5e3] #uniform load on virtual lanes, rest of driveway and sidewalks when braking forceis considered
         QpointVL1,QpointVL2,QpointVL3=[IAP_carril_virt1_fren,IAP_carril_virt2_fren,IAP_carril_virt3_fren]
@@ -104,10 +104,9 @@ def IAP_traffic_LC(preprocessor,lcName,deckSet,virtLane1Set,xyCentPL1,hDistrPL,s
     return lc
 
             
-def dead_LC(preprocessor,lcName,drivewaySet,qAsphalt,sidewalkSet=None,qSidewalk=None,barrierSet=None,qBarrier=None,deckEdgeSet=None,qDeckEdge=None):
+def dead_LC(lcName,drivewaySet,qAsphalt,sidewalkSet=None,qSidewalk=None,barrierSet=None,qBarrier=None,deckEdgeSet=None,qDeckEdge=None):
     '''Return the dead load case (asphalt, sidewalk, barriers, ...)
 
-    :param preprocessor: preprocessor
     :param lcName: load case name
     :param drivewaySet: driveway set of elements (where to apply asphalt load)
     :param qAsphalt: uniform load due to asphalt weight
@@ -118,6 +117,7 @@ def dead_LC(preprocessor,lcName,drivewaySet,qAsphalt,sidewalkSet=None,qSidewalk=
     :param deckEdgeSet: set of lines in the edges of the deck (defaults to None).
     :param qDeckEdge: uniform linear load to apply on the edges of the deck (defaults to None).
     '''
+    preprocessor=drivewaySet.getPreprocessor
     lc=lcases.LoadCase(preprocessor,lcName,"default","constant_ts")
     lc.create()
     # add surface loads
@@ -131,24 +131,37 @@ def dead_LC(preprocessor,lcName,drivewaySet,qAsphalt,sidewalkSet=None,qSidewalk=
         lc.addLstLoads([loads.UniformLoadOnLines(name= lcName+'deckEdg', xcSet=deckEdgeSet, loadVector=xc.Vector([0,0,-qDeckEdge,0,0,0]))])
     return lc
     
-def thermal_rheological_LC(preprocessor,lcName,lst_Sets_DOF_Strain):
+def thermal_rheological_LC(lcName,lstUnifThStrnData):
+    '''Return a thermal or rheological load case (shrinkage, creep, 
+       thermal expansion, ...)
+
+    :param lcName: load case name
+    :param lstUnifThStrnData: list of instances of 'unifStrain' or 
+                  'unifThermalStrain' classes that defines the data
+                  parameters (set, DOF, strain, temperature, ...) 
+
+    '''
+    preprocessor=lstUnifThStrnData[0].elemSet.getPreprocessor
+    lc=lcases.LoadCase(preprocessor,lcName,"default","constant_ts")
+    lc.create()
+    for sd in lstUnifThStrnData:
+        lc.addLstLoads([loads.StrainLoadOnShells(name=lcName+sd.elemSet.name,xcSet=sd.elemSet,DOFstrain=sd.DOF,strain=sd.strain)])
+    return lc
+    
+def gradient_thermal_LC(lcName,lstGradThStrnData):
     '''Return a thermal or rheological load case (shrinkage, creep, 
        thermal expansion, ...)
 
     :param preprocessor: preprocessor
     :param lcName: load case name
-    :param lst_Sets_DOF_Strain: list of type [(set,DOF,strain),..] where:
-                  set: is the set of shell elements to which apply the strain
-                  DOF: is the degree of freedom (0,1 or 2) in which strain acts
-                  strain: is strain to apply to all the elements in set 
-                          (e.g.: alpha x deltaT for thermal expansion).
+    :param lstGradThStrnData: list of instances of gradThermalStrain class
+                  that defines the data parameters (set, element thickness,
+                  DOF, alpha, temperatures on top and bottom faces)
     '''
+    preprocessor=lstGradThStrnData[0].elemSet.getPreprocessor
     lc=lcases.LoadCase(preprocessor,lcName,"default","constant_ts")
     lc.create()
-    for ld in lst_Sets_DOF_Strain:
-        st=ld[0]
-        dof=ld[1]
-        strn=ld[2]
-        lc.addLstLoads([loads.StrainLoadOnShells(name=lcName+st.name,xcSet=st,DOFstrain=dof,strain=strn)])
+    for sd in lstGradThStrnData:
+        lc.addLstLoads([loads.StrainGradientThermalLoadOnShells(name=lcName+sd.elemSet.name,elemSet=sd.elemSet,elThick=sd.elThick,DOF=sd.DOF,alpha=sd.alpha,Ttop=sd.Ttop,Tbottom=sd.Tbottom)])
     return lc
-    
+ 
