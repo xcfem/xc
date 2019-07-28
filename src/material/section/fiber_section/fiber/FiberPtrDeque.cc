@@ -758,7 +758,7 @@ Line2d XC::FiberPtrDeque::getNeutralAxis(void) const
     const double T= getTensionResultant();
     const Pos2d TPos= las.getFromPoint(); //Tension centroid.
     const double a= las.getLength()*T/(T-C); //Similar triangles.
-    const Pos2d org= TPos+a*las.VDir().Normalizado();
+    const Pos2d org= TPos+a*las.VDir().getNormalized();
     const Vector2d v= las.Normal(); //Direction of the neutral axis.
     return Line2d(org,v);
   }

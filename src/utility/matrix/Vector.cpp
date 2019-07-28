@@ -313,7 +313,7 @@ int XC::Vector::Normalize(void)
     return 0;
   }
 
-//! @brief Normaliza el vector using the infinity norm.
+//! @brief Normalize the vector using the infinity norm.
 int XC::Vector::NormalizeInf(void)
   {
     int retval= 0;

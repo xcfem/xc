@@ -51,7 +51,7 @@ class PrestressTendon(object):
         L=v.getModulo()
         nPnt=int(L/eSize)+1
         eSize=L/(nPnt-1)
-        vn=v.normalizado()
+        vn=v.normalized()
         xCoor,yCoor,zCoor=list(),list(),list()
         for i in range(nPnt):
             v=i*eSize*vn
