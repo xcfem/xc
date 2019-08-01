@@ -194,6 +194,30 @@ class TrussBase(TrussGeometry):
         self.postsSet.genMesh(xc.meshDir.I)  # Generate the elements.
         self.fillDownwards()
 
+    def createSelfWeightLoads(self,rho, grav):
+        ''' Create the self weight loads for the
+            elements of the truss.
+
+            :param rho: material density
+            :param grav: gravity acceleration (vector).
+        '''
+        for e in self.upperChordSet.getElements:
+            v= rho*e.sectionProperties.A*grav
+            e.vector3dUniformLoadGlobal(v)
+        for e in self.lowerChordSet.getElements:
+            v= rho*e.sectionProperties.A*grav
+            e.vector3dUniformLoadGlobal(v)
+        for e in self.postsSet.getElements:
+            v= rho*e.sectionProperties.A*grav
+            e.vector3dUniformLoadGlobal(v)
+        for e in self.diagonalSet.getElements:
+            v= rho*e.area*grav
+            loadVector= xc.Vector([v[0]/2.0,v[1]/2.0,v[2]/2.0,0.0,0.0,0.0])
+            n1= e.getNodes[0]
+            n1.newLoad(loadVector)
+            n2= e.getNodes[1]
+            n2.newLoad(loadVector)
+
 # Warren truss web style ascii art:
 #     +---+-------+-------+---+  Upper chord.
 #     |  / \     / \     / \  |
