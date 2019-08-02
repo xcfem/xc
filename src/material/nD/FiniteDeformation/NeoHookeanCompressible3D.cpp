@@ -83,10 +83,6 @@ XC::NeoHookeanCompressible3D::NeoHookeanCompressible3D( )
   {}
 
 
-//-------------------------------------------------------------------------------------------------------------------------------------------------
-double XC::NeoHookeanCompressible3D::getRho(void) const
-  { return rho; }
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------
 int XC::NeoHookeanCompressible3D::setTrialF(const XC::straintensor &f)
 {

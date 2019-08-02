@@ -185,7 +185,7 @@ XC::TwentySevenNodeBrick::TwentySevenNodeBrick(int element_number,
 
 //! @brief Constructor
 XC::TwentySevenNodeBrick::TwentySevenNodeBrick ():ElementBase<27>(0, ELE_TAG_TwentySevenNodeBrick ),
-  mmodel(0), Ki(0), bf(3), rho(0.0), pressure(0.0)
+  mmodel(nullptr), Ki(0), bf(3), rho(0.0), pressure(0.0)
   {load.reset(81);}
 
 
@@ -2245,7 +2245,7 @@ XC::BJtensor XC::TwentySevenNodeBrick::linearized_nodal_forces(void) const
                 final_linearized_stress =
                   Constitutive("ijkl") * incremental_strain("kl");
 
-                // nodal forces See Zienkievicz part 1 XC::pp 108
+                // nodal forces See Zienkievicz part 1 pp 108
                 linearized_nodal_forces = linearized_nodal_forces +
                           dhGlobal("ib")*final_linearized_stress("ab")*weight;
                 //::::                   nodal_forces.print("nf","\n\n Nodal Forces \n");

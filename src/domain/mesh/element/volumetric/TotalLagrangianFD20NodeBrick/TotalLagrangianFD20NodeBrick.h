@@ -75,8 +75,6 @@ class TotalLagrangianFD20NodeBrick: public ElemWithMaterial<20,NDMaterialPhysica
     static const double wts[3]; //!< Stores quadrature weights
     BodyForces3D bf; //!< Body forces
 
-    double rho;    //!< Mass per unit volume
-
     double det_of_Jacobian;
     
     mutable Matrix *Ki;

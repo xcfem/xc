@@ -101,9 +101,6 @@ XC::ElasticIsotropicMaterial::ElasticIsotropicMaterial(int tag, int eps_size)
 XC::ElasticIsotropicMaterial::ElasticIsotropicMaterial(int tag, int eps_size, double e, double nu, double r)
   :XC::NDMaterial(tag, ND_TAG_ElasticIsotropic), E(e), v(nu), rho(r), epsilon(eps_size) {}
 
-double XC::ElasticIsotropicMaterial::getRho(void) const
-  { return rho; }
-
 // Boris Jeremic (@ucdavis.edu) 19June2002
 double XC::ElasticIsotropicMaterial::getE(void)
   { return E; }

@@ -76,9 +76,9 @@ class BrickUP : public BrickBase
   {
   private :
     BodyForces3D bf; //!< Body forces
-    double rho;			// Fluid mass per unit volume
-    double kc;   // combined bulk modulus
-    double perm[3];  // permeability
+    double rho_f; //!< Fluid mass per unit volume
+    double kc;  //!< combined bulk modulus
+    double perm[3]; //!< permeability
     mutable Matrix *Ki;
 
     //static data

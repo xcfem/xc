@@ -30,19 +30,19 @@
 
 //! @brief Constructor.
 XC::SolidMech2D::SolidMech2D(const size_t &nMat,const NDMaterial *ptr_mat, const double &t, const double &r)
-  :NDMaterialPhysicalProperties(nMat,ptr_mat), thickness(t), rho(r) {}
+  :NDMaterialPhysicalProperties(nMat,ptr_mat), thickness(t)
+  {
+    setRho(r);
+  }
 
 //! @brief Constructor.
 XC::SolidMech2D::SolidMech2D(const size_t &nMat, NDMaterial &theMat,const std::string &type, const double &t, const double &r)
-  : NDMaterialPhysicalProperties(nMat,nullptr), thickness(t), rho(r)
+  : NDMaterialPhysicalProperties(nMat,nullptr), thickness(t)
   {
     if(check_material_type(type))
       theMaterial.setMaterial(&theMat,type);
+    setRho(r);
   }
-
-//! @brief Returns densities for each position.
-XC::Vector XC::SolidMech2D::getRhoi(void) const
-  { return NDMaterialPhysicalProperties::getRhoi(rho); }
 
 #define DBTAGS_SIZE 3
 //! @brief Returns a vector to store the dbTags
@@ -57,7 +57,7 @@ XC::DbTagData &XC::SolidMech2D::getDbTagData(void) const
 int XC::SolidMech2D::sendData(CommParameters &cp)
   {
     int res= NDMaterialPhysicalProperties::sendData(cp);
-    res+= cp.sendDoubles(thickness,rho,getDbTagData(),CommMetaData(2));
+    res+= cp.sendDouble(thickness,getDbTagData(),CommMetaData(2));
     return res;
   }
 
@@ -65,7 +65,7 @@ int XC::SolidMech2D::sendData(CommParameters &cp)
 int XC::SolidMech2D::recvData(const CommParameters &cp)
   {
     int res= NDMaterialPhysicalProperties::recvData(cp);
-    res+= cp.receiveDoubles(thickness,rho,getDbTagData(),CommMetaData(2));
+    res+= cp.receiveDouble(thickness,getDbTagData(),CommMetaData(2));
     return res;
   }
 

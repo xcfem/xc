@@ -97,7 +97,7 @@ const double  BrickUP::wg[] = { 1.0, 1.0, 1.0, 1.0,
 
 //null constructor
 XC::BrickUP::BrickUP(void)
-  : BrickBase(ELE_TAG_BrickUP), rho(0), kc(0), Ki(0)
+  : BrickBase(ELE_TAG_BrickUP), rho_f(0), kc(0), Ki(0)
   {
     perm[0] = perm[1] = perm[2] = 0.;
   }
@@ -113,7 +113,7 @@ XC::BrickUP::BrickUP(int tag,
                          NDMaterial &theMaterial, double bulk, double rhof,
                         double p1, double p2, double p3,
                    const BodyForces3D &bForces)
-  : BrickBase(tag,ELE_TAG_BrickUP,node1,node2,node3,node4,node5,node6,node7,node8,NDMaterialPhysicalProperties(8,&theMaterial)), bf(bForces), rho(rhof),kc(bulk), Ki(nullptr)
+  : BrickBase(tag,ELE_TAG_BrickUP,node1,node2,node3,node4,node5,node6,node7,node8,NDMaterialPhysicalProperties(8,&theMaterial)), bf(bForces), rho_f(rhof),kc(bulk), Ki(nullptr)
   {
     // Permeabilities
     perm[0] = p1;
@@ -872,7 +872,7 @@ void  XC::BrickUP::formResidAndTangent(int tang_flag) const
                 }
 
         // Subtract fluid body force
-                resid( jj + 3 ) += dvol[i]*rho*(perm[0]*bf[0]*Shape[0][j][i] +
+                resid( jj + 3 ) += dvol[i]*rho_f*(perm[0]*bf[0]*Shape[0][j][i] +
                                         perm[1]*bf[1]*Shape[1][j][i] +
                                                                                 perm[2]*bf[2]*Shape[2][j][i]);
       } // end if tang_flag
@@ -913,7 +913,7 @@ double XC::BrickUP::mixtureRho(int i) const
     const double rhoi= physicalProperties[i]->getRho();
     //double e = 0.7;  //physicalProperties[i]->getVoidRatio();
     //n = e / (1.0 + e);
-    //return n * rho + (1.0-n) * rhoi;
+    //return n * rho_f + (1.0-n) * rhoi;
     return rhoi;
   }
 
@@ -997,7 +997,7 @@ const XC::Matrix &XC::BrickUP::computeB( int node, const double shp[4][8] ) cons
 int XC::BrickUP::sendData(CommParameters &cp)
   {
     int res= BrickBase::sendData(cp);
-    res+= cp.sendDoubles(bf[0],bf[1],bf[2],rho,kc,getDbTagData(),CommMetaData(8));
+    res+= cp.sendDoubles(bf[0],bf[1],bf[2],rho_f,kc,getDbTagData(),CommMetaData(8));
     res+= cp.sendDoubles(perm[0],perm[1],perm[2],getDbTagData(),CommMetaData(9));
     res+= cp.sendMatrixPtr(Ki,getDbTagData(),MatrixCommMetaData(10,11,12,13));
     return res;
@@ -1007,7 +1007,7 @@ int XC::BrickUP::sendData(CommParameters &cp)
 int XC::BrickUP::recvData(const CommParameters &cp)
   {
     int res= BrickBase::recvData(cp);
-    res+= cp.receiveDoubles(bf[0],bf[1],bf[2],rho,kc,getDbTagData(),CommMetaData(8));
+    res+= cp.receiveDoubles(bf[0],bf[1],bf[2],rho_f,kc,getDbTagData(),CommMetaData(8));
     res+= cp.receiveDoubles(perm[0],perm[1],perm[2],getDbTagData(),CommMetaData(9));
     Ki= cp.receiveMatrixPtr(Ki,getDbTagData(),MatrixCommMetaData(10,11,12,13));
     return res;

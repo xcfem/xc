@@ -151,6 +151,25 @@ bool XC::NDMaterialPhysicalProperties::haveRho(void) const
     return retval;
   }
 
+//! @brief Returns the average of the densities for each material.
+double XC::NDMaterialPhysicalProperties::getRho(void) const
+  {
+    const size_t numMaterials= theMaterial.size();
+    double retval= 0.0;
+    for(size_t i=0; i<numMaterials; i++)
+      retval+= theMaterial[i]->getRho();
+    retval/= numMaterials;
+    return retval;
+  }
+
+//! @brief Set the density for all materials.
+void XC::NDMaterialPhysicalProperties::setRho(const double &r)
+  {
+    const size_t numMaterials= theMaterial.size();
+    for(size_t i=0; i<numMaterials; i++)
+      theMaterial[i]->setRho(r);
+  }
+
 //! @brief Returns densities for each position.
 XC::Vector XC::NDMaterialPhysicalProperties::getRhoi(const double &rhoDefault) const
   {

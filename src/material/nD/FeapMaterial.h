@@ -78,7 +78,11 @@ class FeapMaterial : public NDMaterial
   virtual const Vector &getStrain(void) const;
   virtual const Vector &getStress(void) const;
   virtual const Matrix &getTangent(void) const;
-  virtual double getRho(void) const;
+  
+  inline virtual double getRho(void) const
+    { return rho; }
+  inline virtual void setRho(const double &r)
+    { rho= r; }
   
   virtual int commitState(void);
   virtual int revertToLastCommit(void);    

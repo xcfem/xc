@@ -78,7 +78,7 @@ XC::FiniteDeformationElastic3D::FiniteDeformationElastic3D( )
 :XC::NDMaterial(0, 0), rho(0.0)
 {}
 
-//-------------------------------------------------------------------------------------------------------------------------------------------------
+//! @brief Return material density.
 double XC::FiniteDeformationElastic3D::getRho(void) const
   { return rho; }
 

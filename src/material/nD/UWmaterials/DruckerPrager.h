@@ -176,9 +176,12 @@ class DruckerPrager : public NDMaterial
 //int setParameter(const std::vector<std::string> &argv, Parameter &param);
 //int updateParameter (int parameterID, Information &info);
 
-  double getRho(void) {return massDen;};
+  inline double getRho(void) const
+    { return massDen; }
+  inline void setRho(const double &r)
+    { massDen= r; }
   
-};
+  };
 } // end XC namespace
 
 

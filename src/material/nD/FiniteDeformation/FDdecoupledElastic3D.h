@@ -113,9 +113,6 @@ class FDdecoupledElastic3D: public FiniteDeformationElastic3D
     
     virtual ~FDdecoupledElastic3D();
 
-
-    double getRho(void) const;
-
     int setTrialF(const straintensor &f);
     int setTrialFIncr(const straintensor &df);
     int setTrialC(const straintensor &c);

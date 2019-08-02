@@ -111,6 +111,7 @@ class NDMaterial: public Material
 
     // methods to set state and retrieve state using Matrix and Vector classes
     virtual double getRho(void) const;
+    virtual void setRho(const double &);
 // BJ added 19June2002
     virtual double getE(void);
     virtual double getnu(void);

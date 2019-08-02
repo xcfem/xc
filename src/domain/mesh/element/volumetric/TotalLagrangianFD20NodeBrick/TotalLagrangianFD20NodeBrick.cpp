@@ -97,7 +97,6 @@ XC::NDMaterial &m, const BodyForces3D &bForces)
   {
     theNodes.set_id_nodes(node_numb_1,node_numb_2,node_numb_3,node_numb_4,node_numb_5,node_numb_6,node_numb_7,node_numb_8,node_numb_9,node_numb_10,node_numb_11,node_numb_12,node_numb_13,node_numb_14,node_numb_15,node_numb_16,node_numb_17,node_numb_18,node_numb_19,node_numb_20);
 
-      rho = m.getRho();
   }
 
 //-------------------------------------------------------------------------------------------
@@ -107,7 +106,6 @@ XC::TotalLagrangianFD20NodeBrick::TotalLagrangianFD20NodeBrick(void)
      bf(0) = 0.0;
      bf(1) = 0.0;
      bf(2) = 0.0;
-     rho = 0.0;
   }
 //! @brief Virtual constructor.
 XC::Element* XC::TotalLagrangianFD20NodeBrick::getCopy(void) const
@@ -380,6 +378,7 @@ XC::BJtensor XC::TotalLagrangianFD20NodeBrick::getBodyForce(void) const
     bodyforce.val(2) = bf(1);
     bodyforce.val(3) = bf(2);
 
+    const double rho= physicalProperties.getRho();
     for( GP_c_r = 0 ; GP_c_r < NumIntegrationPts ; GP_c_r++ ) {
       r = pts[GP_c_r ];
       rw = wts[GP_c_r ];
@@ -514,36 +513,35 @@ XC::TotalLagrangianFD20NodeBrick::addLoad(ElementalLoad *theLoad, double loadFac
 
 //=============================================================================
 int XC::TotalLagrangianFD20NodeBrick::addInertiaLoadToUnbalance(const XC::Vector &accel)
-{
+  {
     // Check for a quick return
-    if(rho == 0.0) return 0;
+    const double rho= physicalProperties.getRho();
+    if(rho != 0.0)
+      {
+	static XC::Vector ra(NumElemDof);
+	for(int i=0; i<NumNodes; i++)
+	  {
+	    const XC::Vector &RA = theNodes[i]->getRV(accel);
+	    if( RA.Size() != NumDof )
+	      {
+		std::cerr << getClassName() << "::" << __FUNCTION__
+			  << ": matrix and vector sizes are incompatible \n";
+		return (-1);
+	      }
 
-    static XC::Vector ra(NumElemDof);
-    int i, j;
+	    for(int j=0; j<NumDof; j++)
+	      { ra(i*NumDof +j) = RA(j); }
+	  }
 
-    for(i=0; i<NumNodes; i++) {
-      const XC::Vector &RA = theNodes[i]->getRV(accel);
-      if( RA.Size() != NumDof ) {
-        std::cerr << "XC::TotalLagrangianFD20NodeBrick::addInertiaLoadToUnbalance(): matrix and vector sizes are incompatable \n";
-        return (-1);
+	this->getMass();
+
+	if(load.isEmpty())
+	  load.reset(NumElemDof);
+
+	load.addMatrixVector(1.0, M, ra, -1.0);
       }
-
-      for(j=0; j<NumDof; j++) {
-        ra(i*NumDof +j) = RA(j);
-      }
-
-    }
-
-    this->getMass();
-
-    if(load.isEmpty())
-      load.reset(NumElemDof);
-
-    load.addMatrixVector(1.0, M, ra, -1.0);
-
     return 0;
-
-}
+  }
 
 
 //=============================================================================
@@ -573,24 +571,25 @@ const XC::Vector &XC::TotalLagrangianFD20NodeBrick::getResistingForceIncInertia(
     Vector a(NumElemDof);
 
     this->getResistingForce();
-
+    const double rho= physicalProperties.getRho();
     if(rho != 0.0)
-    {
-      for(i=0; i<NumNodes; i++) {
-        const XC::Vector &acc = theNodes[i]->getTrialAccel();
-        if( acc.Size() != NumDof ) {
-          std::cerr << "XC::TotalLagrangianFD20NodeBrick::getResistingForceIncInertia matrix and vector sizes are incompatable \n";
-          exit(-1);
-        }
-       for(j=0; j<NumDof; j++) {
-         a(i*NumDof +j) = acc(j);
+      {
+	for(i=0; i<NumNodes; i++)
+	  {
+	    const XC::Vector &acc = theNodes[i]->getTrialAccel();
+	    if( acc.Size() != NumDof )
+	      {
+		std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; matrix and vector sizes are incompatible.\n";
+		exit(-1);
+	      }
+	    for(j=0; j<NumDof; j++)
+	      { a(i*NumDof +j) = acc(j); }
+	  }
+
+	this->getMass();
+	P.addMatrixVector(1.0, M, a, 1.0);
       }
-    }
-
-    this->getMass();
-    P.addMatrixVector(1.0, M, a, 1.0);
-
-  }
     if(isDead())
       P*=dead_srf;
     return P;

@@ -104,13 +104,10 @@ XC::FDdecoupledElastic3D::FDdecoupledElastic3D(const FDdecoupledElastic3D &fde3d
     alloc(fde3d.W);
   }
 
-//! @brief 
+//! @brief Destructor.
 XC::FDdecoupledElastic3D::~FDdecoupledElastic3D(void)
   { free_mem(); }
 
-//! @brief 
-double XC::FDdecoupledElastic3D::getRho(void) const
-  { return rho; }
 //! @brief 
 const XC::WEnergy *XC::FDdecoupledElastic3D::getWEnergy(void) const
   { return W; }

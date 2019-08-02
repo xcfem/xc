@@ -91,8 +91,8 @@ class TwentyNodeBrick_u_p_U: public ElemWithMaterial<20,NDMaterialPhysicalProper
     BodyForces3D bf; //!< Body forces
     double poro;                   // Porosity
     double alpha;		   // Coefficient for soil (approximate equal 1)
-    double rho_s;      		   // Solid density
-    double rho_f;      		   // Fluid density
+    double rho_s; //!< Solid density
+    double rho_f; //!< Fluid density
     double ks;                     // Bulk modulus of solid
     double kf;                     // Bulk modulus of fluid
     double pressure;   		   // Normal surface traction (pressure) over entire element  //?
