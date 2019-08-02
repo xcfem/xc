@@ -102,6 +102,8 @@ class_<XC::DqPtrsConstraint, bases<dq_ptrs_constraint>, boost::noncopyable >("Dq
    .def(self * self)
    ;
 
+// XC::SetBase exposed in export_preprocessor_build_model.cc
+
 XC::DqPtrsNode &(XC::SetMeshComp::*getNodesRef)(void)= &XC::SetMeshComp::getNodes;
 XC::DqPtrsElem &(XC::SetMeshComp::*getElementsRef)(void)= &XC::SetMeshComp::getElements;
 XC::DqPtrsConstraint &(XC::SetMeshComp::*GetConstraintsRef)(void)= &XC::SetMeshComp::GetConstraints;
@@ -134,7 +136,6 @@ class_<XC::SetMeshComp, bases<XC::SetBase>>("SetMeshComp",no_init)
   .def("getElementMaterials",&XC::SetMeshComp::getElementMaterialNamesPy,"getElementMaterials() return a list with the names of the element materials in the containe.")
   .def("pickElemsOfMaterial",&XC::SetMeshComp::pickElemsOfMaterial,"pickElemsOfMaterial(materialName) return the elements that have that material.")
   .def("getBnd", &XC::SetMeshComp::Bnd, "Returns set boundary.")
-  .def("createInertiaLoads", &XC::SetMeshComp::createInertiaLoads,"Create the inertia load for the given acceleration vector.")
   .def("fillUpwards", &XC::SetMeshComp::fillUpwards,"add entities upwards.")
   .def("fillDownwards", &XC::SetMeshComp::fillDownwards,"add entities downwards.")
   .def(self += self)

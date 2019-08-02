@@ -23,7 +23,7 @@ class BasicElasticMaterial(object):
   def G(self):
     return self.E/(2*(1+self.nu))
 
-def defElasticMaterial(preprocessor,name,E):
+def defElasticMaterial(preprocessor,name,E, rho= 0.0):
   '''Constructs an elastic uniaxial material.
 
   :param preprocessor: preprocessor
@@ -35,6 +35,7 @@ def defElasticMaterial(preprocessor,name,E):
   retval= materials.getMaterial(name)
   retval.name= name
   retval.E= E
+  retval.rho= rho
   return retval
 
 def defElasticPPMaterial(preprocessor,name,E,fyp,fyn):

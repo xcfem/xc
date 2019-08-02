@@ -121,6 +121,7 @@ class Truss : public TrussBase
     
     const Material *getMaterial(void) const;
     Material *getMaterial(void);
+    void setRho(const double &);
     virtual double getRho(void) const;
     inline const double &getArea(void) const
       { return A; }

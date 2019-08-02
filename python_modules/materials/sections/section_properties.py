@@ -141,7 +141,7 @@ class SectionProperties(object):
     if(materiales.materialExists(self.sectionName)):
       sys.stderr.write("Section: "+self.sectionName+" is already defined.")
     else:
-      retval= typical_materials.defElasticSection3d(preprocessor,self.sectionName,self.A(),material.E,material.G(),self.Iz(),self.Iy(),self.J())
+      retval= typical_materials.defElasticSection3d(preprocessor,self.sectionName,self.A(),material.E,material.G(),self.Iz(),self.Iy(),self.J(), rho= material.rho)
       return retval
   def defElasticShearSection3d(self,preprocessor,material):
     '''elastic section appropiate for 3D beam analysis, including shear deformations
@@ -153,7 +153,7 @@ class SectionProperties(object):
     if(materiales.materialExists(self.sectionName)):
       sys.stderr.write("Section: "+self.sectionName+" is already defined.")
     else:
-      retval= typical_materials.defElasticShearSection3d(preprocessor,self.sectionName,self.A(),material.E,material.G(),self.Iz(),self.Iy(),self.J(),self.alphaY())
+      retval= typical_materials.defElasticShearSection3d(preprocessor,self.sectionName,self.A(),material.E,material.G(),self.Iz(),self.Iy(),self.J(),self.alphaY(), rho= material.rho)
       return retval
     
   def defElasticSection2d(self,preprocessor,material):
@@ -168,7 +168,7 @@ class SectionProperties(object):
     if(materiales.materialExists(self.sectionName)):
       sys.stderr.write("Section: "+self.sectionName+" is already defined.")
     else:
-      retval= typical_materials.defElasticSection2d(preprocessor,self.sectionName,self.A(),material.E,self.Iz())
+      retval= typical_materials.defElasticSection2d(preprocessor,self.sectionName,self.A(),material.E,self.Iz(), rho= material.rho)
       return retval
   def defElasticShearSection2d(self,preprocessor,material):
     '''elastic section appropiate for 2D beam analysis, including shear deformations
@@ -181,7 +181,7 @@ class SectionProperties(object):
     if(materiales.materialExists(self.sectionName)):
       sys.stderr.write("Section: "+self.sectionName+" is already defined.")
     else:
-      retval= typical_materials.defElasticShearSection2d(preprocessor,self.sectionName,self.A(),material.E,material.G(),self.Iz(),self.alphaY())
+      retval= typical_materials.defElasticShearSection2d(preprocessor,self.sectionName,self.A(),material.E,material.G(),self.Iz(),self.alphaY(), rho= material.rho)
       return retval
   def getCrossSectionProperties2D(self,material):
     '''Return a CrossSectionProperties object with the

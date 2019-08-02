@@ -72,6 +72,14 @@ void XC::SetBase::genMesh(meshing_dir dm)
               << " not implemented." << std::endl;
   }
 
+//! @brief Creates the inertia load that corresponds to the
+//! acceleration argument.
+void XC::SetBase::createInertiaLoads(const Vector &)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << " not implemented." << std::endl;
+  }
+
 //! @brief Impone desplazamiento nulo for all the nodes of this set.
 void XC::SetBase::fix(const SFreedom_Constraint &)
   {

@@ -79,7 +79,8 @@ class SetBase: public EntMdlrBase
     void computeTributaryVolumes(bool initialGeometry= true) const;
 
     virtual size_t getNumberOfNodes(void) const= 0;
-    virtual size_t getNumberOfElements(void) const= 0;
+    virtual size_t getNumberOfElements(void) const= 0;    
+    virtual void createInertiaLoads(const Vector &);
   };
 
 } //end of XC namespace

@@ -415,12 +415,19 @@ const XC::Matrix &XC::Truss::getDamp(void) const
     return damp;
   }
 
+//! @brief Return a pointer to the element material.
 const XC::Material *XC::Truss::getMaterial(void) const
   { return theMaterial; }
+
+//! @brief Return a pointer to the element material.
 XC::Material *XC::Truss::getMaterial(void)
   { return theMaterial; }
 
-//! @brief Returns the material linear density.
+//! @brief Set the material density.
+void XC::Truss::setRho(const double &r)
+  { theMaterial->setRho(r); }
+
+//! @brief Returns the material density.
 double XC::Truss::getRho(void) const
   { return theMaterial->getRho(); }
 
