@@ -68,7 +68,8 @@ class BaseElasticSection: public PrismaticBarCrossSection
     inline const Vector &getInitialSectionDeformation(void) const
       { return eInic; }
     const Vector &getSectionDeformation(void) const;
-
+    virtual double getRho(void) const= 0;
+    virtual void setRho(const double &)= 0;
 
     void Print(std::ostream &s, int flag =0) const;
   };

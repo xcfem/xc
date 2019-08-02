@@ -22,6 +22,7 @@
 //python_interface.tcc
 
 class_<XC::BaseElasticSection, bases<XC::PrismaticBarCrossSection>, boost::noncopyable >("BaseElasticSection", no_init)
+  .add_property("rho", &XC::BaseElasticSection::getRho, &XC::BaseElasticSection::setRho,"Material density.")
   .def("sectionGeometry",&XC::BaseElasticSection::sectionGeometry)
   ;
 

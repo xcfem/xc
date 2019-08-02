@@ -124,6 +124,38 @@ XC::Preprocessor *XC::DomainComponent::getPreprocessor(void)
     return retval;
   }
 
+//! @brief Return the current load pattern.
+const XC::LoadPattern *XC::DomainComponent::getCurrentLoadPattern(void) const
+  {
+    const LoadPattern *retval= nullptr;
+    const Preprocessor *preprocessor= getPreprocessor();
+    if(preprocessor)
+      {
+        const MapLoadPatterns &lPatterns= preprocessor->getLoadHandler().getLoadPatterns();
+        retval= lPatterns.getCurrentLoadPatternPtr();
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; preprocessor not defined." << std::endl;
+    return retval;
+  }
+
+//! @brief Return the current load pattern.
+XC::LoadPattern *XC::DomainComponent::getCurrentLoadPattern(void)
+  {
+    LoadPattern *retval= nullptr;
+    Preprocessor *preprocessor= getPreprocessor();
+    if(preprocessor)
+      {
+        MapLoadPatterns &lPatterns= preprocessor->getLoadHandler().getLoadPatterns();
+        retval= lPatterns.getCurrentLoadPatternPtr();
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; preprocessor not defined." << std::endl;
+    return retval;
+  }
+
 //! @brief Send object members through the channel being passed as parameter.
 int XC::DomainComponent::sendData(CommParameters &cp)
   {

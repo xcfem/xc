@@ -222,6 +222,8 @@ class SetMeshComp: public SetBase
 
     SlidingVectorsSystem3d getResistingSlidingVectorsSystem3d(const Plane &,const Pos3d &,const double &,const bool &) const;
 
+    void createInertiaLoads(const Vector &);
+
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
 

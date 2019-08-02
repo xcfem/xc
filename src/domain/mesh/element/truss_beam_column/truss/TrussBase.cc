@@ -93,8 +93,8 @@ XC::TrussBase &XC::TrussBase::operator=(const TrussBase &other)
 void XC::TrussBase::setup_L_cos_dir(void)
   {
     // NOTE t = -t(every one else uses for residual calc)
-    const XC::Vector &end1Crd = theNodes[0]->getCrds();
-    const XC::Vector &end2Crd = theNodes[1]->getCrds();	
+    const Vector &end1Crd = theNodes[0]->getCrds();
+    const Vector &end2Crd = theNodes[1]->getCrds();	
     if(getNumDIM() == 1)
       {
 	double dx = end2Crd(0)-end1Crd(0);	

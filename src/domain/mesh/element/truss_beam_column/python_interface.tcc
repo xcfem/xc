@@ -30,6 +30,7 @@ class_<XC::ProtoBeam2d, bases<XC::Element1D>, boost::noncopyable >("ProtoBeam2d"
   .def("getVDirWeakAxisLocalCoord",&XC::ProtoBeam2d::getVDirWeakAxisLocalCoord,"Returns the direction vector of element weak axis expressed in the local coordinate system.")
 .def("getStrongAxisAngle",&XC::ProtoBeam2d::getStrongAxisAngle,"Returns the angle between element strong axis and local XZ plane.")
   .def("getWeakAxisAngle",&XC::ProtoBeam2d::getWeakAxisAngle,"Returns the angle between element weak axis and local XZ plane.")
+  .def("createInertiaLoad", &XC::ProtoBeam2d::createInertiaLoad,"Create the inertia load for the given acceleration vector.")
    ;
 
 class_<XC::ProtoBeam3d, bases<XC::Element1D>, boost::noncopyable >("ProtoBeam3d", no_init)
@@ -39,6 +40,7 @@ class_<XC::ProtoBeam3d, bases<XC::Element1D>, boost::noncopyable >("ProtoBeam3d"
   .def("getVDirWeakAxisLocalCoord",&XC::ProtoBeam3d::getVDirWeakAxisLocalCoord,"Returns the direction vector of element weak axis expressed in the local coordinate system.")
   .def("getStrongAxisAngle",&XC::ProtoBeam3d::getStrongAxisAngle,"Returns the angle between element strong axis and local XZ plane.")
   .def("getWeakAxisAngle",&XC::ProtoBeam3d::getWeakAxisAngle,"Returns the angle between element weak axis and local XZ plane.")
+  .def("createInertiaLoad", &XC::ProtoBeam3d::createInertiaLoad,"Create the inertia load for the given acceleration vector.")
    ;
 
 #include "elasticBeamColumn/python_interface.tcc"

@@ -42,12 +42,14 @@ void XC::ProtoBeam2d::set_material(const Material *m)
           ctes_scc= scc->getCrossSectionProperties();
         else
           {
-            std::cerr << "ProtoBeam2d::ProtoBeam2d -- material type is not valid.\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+	              << "; material type is not valid.\n";
           }
       }
     else
       if(verbosity>0)
-        std::cerr << "ProtoBeam2d::set_material; pointer to material is null." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; pointer to material is null." << std::endl;
   }
 
 //! @brief Default constructor.
@@ -114,3 +116,10 @@ double XC::ProtoBeam2d::getWeakAxisAngle(void) const
     return atan2(eD(2),eD(1));
   }
 
+//! @brief Creates the inertia load that corresponds to the
+//! acceleration argument.
+void XC::ProtoBeam2d::createInertiaLoad(const Vector &accel)
+  {
+    const Vector load= -accel*getLinearRho();
+    vector2dUniformLoadGlobal(load);
+  }

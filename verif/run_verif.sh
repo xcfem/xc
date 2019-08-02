@@ -331,6 +331,8 @@ python tests/loads/test_ground_motion_05.py
 python tests/loads/test_ground_motion_06.py
 python tests/loads/test_ground_motion_07.py
 python tests/loads/test_ground_motion_08.py
+python tests/loads/test_inertia_loads_01.py
+python tests/loads/test_inertia_loads_02.py
 
 #Materials tests
 #Uniaxial materials.

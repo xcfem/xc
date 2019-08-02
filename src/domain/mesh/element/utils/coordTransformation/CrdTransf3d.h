@@ -102,6 +102,8 @@ class CrdTransf3d: public CrdTransf
   public:
     CrdTransf3d(int tag, int classTag);
     CrdTransf3d(int tag, int classTag, const Vector &vecInLocXZPlane);
+    inline virtual int getDimension(void) const
+      { return 3; }
     
     virtual CrdTransf3d *getCopy(void) const= 0;
     int initialize(Node *node1Pointer, Node *node2Pointer);

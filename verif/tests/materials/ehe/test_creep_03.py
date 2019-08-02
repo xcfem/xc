@@ -263,7 +263,7 @@ for e in setShells.getElements:
 
 loadHandler= preprocessor.getLoadHandler
 lPatterns= loadHandler.getLoadPatterns
-#lPatterns.setCurrentLoadPattern("SHRINKAGE")
+#lPatterns.currentLoadPattern= "SHRINKAGE"
 
 for e in setShells.getElements:
   eleLoad= lpSHRINKAGE.newElementalLoad("shell_strain_load")
@@ -302,7 +302,7 @@ for e in setShells.getElements:
 
 loadHandler= preprocessor.getLoadHandler
 lPatterns= loadHandler.getLoadPatterns
-#loadHandler.setCurrentLoadPattern("FLU")
+#loadHandler.currentLoadPattern= "FLU"
 for e in setShells.getElements:
   eleLoad= lpFLU.newElementalLoad("shell_strain_load")
   eleLoad.elementTags= xc.ID([e.tag]) 

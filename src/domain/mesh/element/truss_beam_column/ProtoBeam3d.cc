@@ -114,3 +114,11 @@ double XC::ProtoBeam3d::getWeakAxisAngle(void) const
     Vector eD= getVDirWeakAxisLocalCoord();
     return atan2(eD(2),eD(1));
   }
+
+//! @brief Creates the inertia load that corresponds to the
+//! acceleration argument.
+void XC::ProtoBeam3d::createInertiaLoad(const Vector &accel)
+  {
+    const Vector load= -accel*getLinearRho();
+    vector3dUniformLoadGlobal(load);
+  }

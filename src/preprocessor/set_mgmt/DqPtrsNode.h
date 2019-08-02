@@ -71,6 +71,8 @@ class DqPtrsNode: public DqPtrsKDTree<Node,KDTreeNodes>
     Node *findNode(const int &tag);
     const Node *findNode(const int &tag) const;
     void numera(void);
+
+    void createInertiaLoads(const Vector &);
   };
 
 DqPtrsNode operator+(const DqPtrsNode &a,const DqPtrsNode &b);

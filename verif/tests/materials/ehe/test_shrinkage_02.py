@@ -254,7 +254,7 @@ for e in shellElems:
   epsShrinkage= concrHA30.getShrEpscs(tFin,tS,RH,h0mm)
 
 
-#loadHandler.setCurrentLoadPattern("SHRINKAGE")
+#loadHandler.currentLoadPattern= "SHRINKAGE"
 
 for e in shellElems:
   eleLoad= lpSHRINKAGE.newElementalLoad("shell_strain_load")

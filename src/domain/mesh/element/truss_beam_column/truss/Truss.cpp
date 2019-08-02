@@ -419,7 +419,8 @@ const XC::Material *XC::Truss::getMaterial(void) const
   { return theMaterial; }
 XC::Material *XC::Truss::getMaterial(void)
   { return theMaterial; }
-//! @brief Returns the material density.
+
+//! @brief Returns the material linear density.
 double XC::Truss::getRho(void) const
   { return theMaterial->getRho(); }
 
@@ -430,7 +431,7 @@ const XC::Matrix &XC::Truss::getMass(void) const
     Matrix &mass= *theMatrix;
     mass.Zero();
 
-    const double rho= getRho();
+    const double rho= getLinearRho();
     // check for quick return
     if(L == 0.0 || rho == 0.0)
       { // - problem in setDomain() no further warnings
@@ -457,6 +458,25 @@ void XC::Truss::zeroLoad(void)
     return;
   }
 
+//! @brief Creates the inertia load that corresponds to the
+//! acceleration argument.
+void XC::Truss::createInertiaLoad(const Vector &accel)
+  {
+    const int accelSize= accel.Size();
+    const Vector load= -0.5*accel*getLinearRho()*L;
+    const int nDOF= theNodes[0]->getNumberDOF();
+    Vector nLoad(nDOF);
+    if(accelSize>nDOF)
+         std::cerr << getClassName() << "::" << __FUNCTION__
+		   << "; acceleration of incorrect size "
+		   << accelSize << " should be less than " <<  nDOF
+		   << std::endl;
+    const int sz= std::min(nDOF,accelSize);
+    for(int i= 0;i<sz;i++)
+      nLoad[i]= load[i];
+    theNodes[0]->newLoad(nLoad);
+    theNodes[1]->newLoad(nLoad);
+  }
 
 //! @brief Adds a load.
 int XC::Truss::addLoad(ElementalLoad *theLoad, double loadFactor)
@@ -489,7 +509,7 @@ int XC::Truss::addLoad(ElementalLoad *theLoad, double loadFactor)
 //! @brief Adds inertia forces.
 int XC::Truss::addInertiaLoadToUnbalance(const Vector &accel)
   {
-    const double rho= getRho();
+    const double rho= getLinearRho();
     // check for a quick return
     if(L == 0.0 || rho == 0.0)
         return 0;
@@ -525,7 +545,7 @@ int XC::Truss::addInertiaLoadSensitivityToUnbalance(const XC::Vector &accel, boo
       { set_load_sens(Vector(numDOF)); }
     else
       { theLoadSens->Zero(); }
-    const double rho= getRho();
+    const double rho= getLinearRho();
 
   if(somethingRandomInMotions)
     {
@@ -638,7 +658,7 @@ const XC::Vector &XC::Truss::getResistingForceIncInertia(void) const
   {
     this->getResistingForce();
 
-    const double rho= getRho();
+    const double rho= getLinearRho();
     // now incluof the mass portion
     if(L != 0.0 && rho != 0.0)
       {

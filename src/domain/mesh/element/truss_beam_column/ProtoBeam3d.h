@@ -58,6 +58,10 @@ class ProtoBeam3d : public Element1D
       { return ctes_scc.getRho(); }
     inline void setRho(const double &r)
       { ctes_scc.setRho(r); }
+    inline double getLinearRho(void) const
+      { return getRho()*ctes_scc.A(); }
+
+    virtual void createInertiaLoad(const Vector &);
 
     Vector getVDirStrongAxisLocalCoord(void) const;
     Vector getVDirWeakAxisLocalCoord(void) const;
