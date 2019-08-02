@@ -26,7 +26,7 @@ class EC3Steel(steel_base.BasicSteel):
       :ivar gammaM1: Partial factor for buckling resistance.
       :ivar gammaM2: Partial factor for cross-sections in tension to fracture.
     '''
-
+    rho= 7850 # Material density kg/m3
     def __init__(self, fy, fy16, fy40, fy63, fy80, fy100, fy125, fu, gammaM, gammaM1= 1.0, gammaM2= 1.1):
         super(EC3Steel,self).__init__(210000e6,0.3,fy,fu,gammaM)
         self.fy16= fy16
