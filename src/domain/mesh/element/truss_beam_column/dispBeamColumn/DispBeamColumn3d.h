@@ -80,8 +80,6 @@ class DispBeamColumn3d : public BeamColumnWithSectionFDTrf3d
     FVectorBeamColumn3d q0;  // Fixed end forces in basic system (no torsion)
     FVectorBeamColumn3d p0;  // Reactions in basic system (no torsion)
 
-    double rho;			// Mass density per unit length
-
     const Matrix &getInitialBasicStiff(void) const;
 
     static Matrix K;		// Element stiffness, damping, and mass Matrix

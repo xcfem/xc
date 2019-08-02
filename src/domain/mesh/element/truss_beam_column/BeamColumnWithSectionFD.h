@@ -46,6 +46,7 @@ class BeamColumnWithSectionFD : public Element1D
 
 
     SectionMatrices section_matrices;
+    double rho;	//!< Density per unit length
 
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
@@ -68,6 +69,11 @@ class BeamColumnWithSectionFD : public Element1D
  
     Response *setSectionResponse(PrismaticBarCrossSection *,const std::vector<std::string> &,const size_t &,Information &);
     int setSectionParameter(PrismaticBarCrossSection *,const std::vector<std::string> &,const size_t &, Parameter &);
+    
+    virtual double getRho(void) const
+      { return rho; }
+    virtual void setRho(const double &r)
+      { rho= r; }
 
     // public methods to set the state of the element
     int commitState(void);

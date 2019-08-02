@@ -73,15 +73,13 @@ double XC::BeamWithHinges3d::workArea[200];
 
 XC::BeamWithHinges3d::BeamWithHinges3d(int tag)
   :BeamColumnWithSectionFDTrf3d(tag, ELE_TAG_BeamWithHinges3d,2),
-   ctes_scc(), beta1(0.0), beta2(0.0), rho(0.0),
-   kb(6,6), q(6), kbCommit(6,6), qCommit(6),
+   ctes_scc(), beta1(0.0), beta2(0.0), kb(6,6), q(6), kbCommit(6,6), qCommit(6),
    initialFlag(0), maxIter(0), tolerance(0.0), applied_sf(nullptr), p0(),v0()
   { load.reset(12); }
 
 XC::BeamWithHinges3d::BeamWithHinges3d(int tag,const Material *mat,const CrdTransf *coordTransf)
   :BeamColumnWithSectionFDTrf3d(tag, ELE_TAG_BeamWithHinges3d,2,mat,coordTransf),
-   ctes_scc(), beta1(0.0), beta2(0.0), rho(0.0),
-   kb(6,6), q(6), kbCommit(6,6), qCommit(6),
+   ctes_scc(), beta1(0.0), beta2(0.0), kb(6,6), q(6), kbCommit(6,6), qCommit(6),
    initialFlag(0), maxIter(0), tolerance(0.0), applied_sf(nullptr), p0(),v0()
   { load.reset(12); }
 
@@ -93,10 +91,10 @@ XC::BeamWithHinges3d::BeamWithHinges3d(int tag, int nodeI, int nodeJ,
                                    CrdTransf3d &coordTransf,
                                    double r, int max, double tol)
   :BeamColumnWithSectionFDTrf3d(tag, ELE_TAG_BeamWithHinges3d,2,nodeI,nodeJ,coordTransf),
-   ctes_scc(e,a,iz,iy,g,j), beta1(lpi), beta2(lpj), rho(r),
-   kb(6,6), q(6), kbCommit(6,6), qCommit(6),
+   ctes_scc(e,a,iz,iy,g,j), beta1(lpi), beta2(lpj), kb(6,6), q(6), kbCommit(6,6), qCommit(6),
    initialFlag(0), maxIter(max), tolerance(tol), applied_sf(nullptr), p0(),v0()
   {
+    setRho(r);
     load.reset(12);
 
     // Get copies of sections
@@ -106,8 +104,7 @@ XC::BeamWithHinges3d::BeamWithHinges3d(int tag, int nodeI, int nodeJ,
 
 //! @brief Copy constructor.
 XC::BeamWithHinges3d::BeamWithHinges3d(const XC::BeamWithHinges3d &other)
-  :BeamColumnWithSectionFDTrf3d(other), ctes_scc(other.ctes_scc), beta1(other.beta1), beta2(other.beta2), rho(other.rho),
-   kb(other.kb), q(other.q), kbCommit(other.kbCommit), qCommit(other.qCommit),
+  :BeamColumnWithSectionFDTrf3d(other), ctes_scc(other.ctes_scc), beta1(other.beta1), beta2(other.beta2), kb(other.kb), q(other.q), kbCommit(other.kbCommit), qCommit(other.qCommit),
    initialFlag(other.initialFlag), maxIter(other.maxIter), tolerance(other.tolerance),
    applied_sf(nullptr), p0(other.p0),v0(other.v0)
   {}
@@ -119,7 +116,6 @@ XC::BeamWithHinges3d::BeamWithHinges3d(const XC::BeamWithHinges3d &other)
 //     ctes_scc= other.ctes_scc;
 //     beta1= other.beta1;
 //     beta2= other.beta2;
-//     rho= other.rho;
 //     kb= other.kb;
 //     q= other.q;
 //     kbCommit= other.kbCommit;
@@ -463,6 +459,7 @@ const XC::Matrix &XC::BeamWithHinges3d::getInitialStiff(void) const
 const XC::Matrix &XC::BeamWithHinges3d::getMass(void) const
   {
     theMatrix.Zero();
+    const double rho= getRho();
     if(rho != 0.0)
       {
         double L = theCoordTransf->getInitialLength();
@@ -524,24 +521,25 @@ int XC::BeamWithHinges3d::addLoad(ElementalLoad *theLoad, double loadFactor)
   }
 
 int XC::BeamWithHinges3d::addInertiaLoadToUnbalance(const XC::Vector &accel)
-{
-  if(rho == 0.0)
+  {
+    const double rho= getRho();
+    if(rho == 0.0)
+      return 0;
+
+    const Vector &Raccel1 = theNodes[0]->getRV(accel);
+    const Vector &Raccel2 = theNodes[1]->getRV(accel);
+
+    double L = theCoordTransf->getInitialLength();
+    double mass = 0.5*L*rho;
+
+    int i,j;
+    for(i = 0, j = 6; i < 3; i++, j++) {
+      load(i) += mass*Raccel1(i);
+      load(j) += mass*Raccel2(i);        // Yes, this should be 'i'
+    }
+
     return 0;
-
-  const XC::Vector &Raccel1 = theNodes[0]->getRV(accel);
-  const XC::Vector &Raccel2 = theNodes[1]->getRV(accel);
-
-  double L = theCoordTransf->getInitialLength();
-  double mass = 0.5*L*rho;
-
-  int i,j;
-  for(i = 0, j = 6; i < 3; i++, j++) {
-    load(i) += mass*Raccel1(i);
-    load(j) += mass*Raccel2(i);        // Yes, this should be 'i'
   }
-
-  return 0;
-}
 
 const XC::Vector &XC::BeamWithHinges3d::getResistingForce(void) const
   {
@@ -557,6 +555,7 @@ const XC::Vector &XC::BeamWithHinges3d::getResistingForceIncInertia(void) const
   {
     theVector = this->getResistingForce();
 
+    const double rho= getRho();
     if(rho != 0.0)
       {
         double ag[12];
@@ -599,25 +598,25 @@ const XC::Vector &XC::BeamWithHinges3d::getResistingForceIncInertia(void) const
 int XC::BeamWithHinges3d::sendData(CommParameters &cp)
   {
     int res= BeamColumnWithSectionFDTrf3d::sendData(cp);
-    res+= cp.sendDoubles(beta1,beta2,rho,getDbTagData(),CommMetaData(12));
-    res+= cp.sendMatrix(fs[0],getDbTagData(),CommMetaData(13));
-    res+= cp.sendMatrix(fs[1],getDbTagData(),CommMetaData(14));
-    res+= cp.sendVector(sr[0],getDbTagData(),CommMetaData(15));
-    res+= cp.sendVector(sr[1],getDbTagData(),CommMetaData(16));
-    res+= cp.sendVector(e[0],getDbTagData(),CommMetaData(17));
-    res+= cp.sendVector(e[1],getDbTagData(),CommMetaData(18));
-    res+= cp.sendMatrix(kb,getDbTagData(),CommMetaData(19));
-    res+= cp.sendVector(q,getDbTagData(),CommMetaData(20));
-    res+= cp.sendMatrix(kbCommit,getDbTagData(),CommMetaData(21));
-    res+= cp.sendVector(qCommit,getDbTagData(),CommMetaData(22));
-    res+= cp.sendVector(eCommit[0],getDbTagData(),CommMetaData(23));
-    res+= cp.sendVector(eCommit[1],getDbTagData(),CommMetaData(24));
-    res+= cp.sendInts(initialFlag,maxIter,getDbTagData(),CommMetaData(25));
-    res+= cp.sendDouble(tolerance,getDbTagData(),CommMetaData(26));
-    res+= cp.sendMatrixPtr(applied_sf,getDbTagData(),MatrixCommMetaData(26,27,28,29));
-    res+= p0.sendData(cp,getDbTagData(),CommMetaData(30));
-    res+= v0.sendData(cp,getDbTagData(),CommMetaData(31));
-    res+= cp.sendMovable(ctes_scc,getDbTagData(),CommMetaData(32));
+    res+= cp.sendDoubles(beta1,beta2,getDbTagData(),CommMetaData(13));
+    res+= cp.sendMatrix(fs[0],getDbTagData(),CommMetaData(14));
+    res+= cp.sendMatrix(fs[1],getDbTagData(),CommMetaData(15));
+    res+= cp.sendVector(sr[0],getDbTagData(),CommMetaData(16));
+    res+= cp.sendVector(sr[1],getDbTagData(),CommMetaData(17));
+    res+= cp.sendVector(e[0],getDbTagData(),CommMetaData(18));
+    res+= cp.sendVector(e[1],getDbTagData(),CommMetaData(19));
+    res+= cp.sendMatrix(kb,getDbTagData(),CommMetaData(20));
+    res+= cp.sendVector(q,getDbTagData(),CommMetaData(21));
+    res+= cp.sendMatrix(kbCommit,getDbTagData(),CommMetaData(22));
+    res+= cp.sendVector(qCommit,getDbTagData(),CommMetaData(23));
+    res+= cp.sendVector(eCommit[0],getDbTagData(),CommMetaData(24));
+    res+= cp.sendVector(eCommit[1],getDbTagData(),CommMetaData(25));
+    res+= cp.sendInts(initialFlag,maxIter,getDbTagData(),CommMetaData(26));
+    res+= cp.sendDouble(tolerance,getDbTagData(),CommMetaData(27));
+    res+= cp.sendMatrixPtr(applied_sf,getDbTagData(),MatrixCommMetaData(28,29,30,31));
+    res+= p0.sendData(cp,getDbTagData(),CommMetaData(32));
+    res+= v0.sendData(cp,getDbTagData(),CommMetaData(33));
+    res+= cp.sendMovable(ctes_scc,getDbTagData(),CommMetaData(34));
     return res;
   }
 
@@ -625,25 +624,25 @@ int XC::BeamWithHinges3d::sendData(CommParameters &cp)
 int XC::BeamWithHinges3d::recvData(const CommParameters &cp)
   {
     int res= BeamColumnWithSectionFDTrf3d::recvData(cp);
-    res+= cp.receiveDoubles(beta1,beta2,rho,getDbTagData(),CommMetaData(12));
-    res+= cp.receiveMatrix(fs[0],getDbTagData(),CommMetaData(13));
-    res+= cp.receiveMatrix(fs[1],getDbTagData(),CommMetaData(14));
-    res+= cp.receiveVector(sr[0],getDbTagData(),CommMetaData(15));
-    res+= cp.receiveVector(sr[1],getDbTagData(),CommMetaData(16));
-    res+= cp.receiveVector(e[0],getDbTagData(),CommMetaData(17));
-    res+= cp.receiveVector(e[1],getDbTagData(),CommMetaData(18));
-    res+= cp.receiveMatrix(kb,getDbTagData(),CommMetaData(19));
-    res+= cp.receiveVector(q,getDbTagData(),CommMetaData(20));
-    res+= cp.receiveMatrix(kbCommit,getDbTagData(),CommMetaData(21));
-    res+= cp.receiveVector(qCommit,getDbTagData(),CommMetaData(22));
-    res+= cp.receiveVector(eCommit[0],getDbTagData(),CommMetaData(23));
-    res+= cp.receiveVector(eCommit[1],getDbTagData(),CommMetaData(24));
-    res+= cp.receiveInts(initialFlag,maxIter,getDbTagData(),CommMetaData(25));
-    res+= cp.receiveDouble(tolerance,getDbTagData(),CommMetaData(26));
-    applied_sf= cp.receiveMatrixPtr(applied_sf,getDbTagData(),MatrixCommMetaData(26,27,28,29));
-    res+= p0.receiveData(cp,getDbTagData(),CommMetaData(30));
-    res+= v0.receiveData(cp,getDbTagData(),CommMetaData(31));
-    res+= cp.receiveMovable(ctes_scc,getDbTagData(),CommMetaData(32));
+    res+= cp.receiveDoubles(beta1,beta2,getDbTagData(),CommMetaData(13));
+    res+= cp.receiveMatrix(fs[0],getDbTagData(),CommMetaData(14));
+    res+= cp.receiveMatrix(fs[1],getDbTagData(),CommMetaData(15));
+    res+= cp.receiveVector(sr[0],getDbTagData(),CommMetaData(16));
+    res+= cp.receiveVector(sr[1],getDbTagData(),CommMetaData(17));
+    res+= cp.receiveVector(e[0],getDbTagData(),CommMetaData(18));
+    res+= cp.receiveVector(e[1],getDbTagData(),CommMetaData(19));
+    res+= cp.receiveMatrix(kb,getDbTagData(),CommMetaData(20));
+    res+= cp.receiveVector(q,getDbTagData(),CommMetaData(21));
+    res+= cp.receiveMatrix(kbCommit,getDbTagData(),CommMetaData(22));
+    res+= cp.receiveVector(qCommit,getDbTagData(),CommMetaData(23));
+    res+= cp.receiveVector(eCommit[0],getDbTagData(),CommMetaData(24));
+    res+= cp.receiveVector(eCommit[1],getDbTagData(),CommMetaData(25));
+    res+= cp.receiveInts(initialFlag,maxIter,getDbTagData(),CommMetaData(26));
+    res+= cp.receiveDouble(tolerance,getDbTagData(),CommMetaData(27));
+    applied_sf= cp.receiveMatrixPtr(applied_sf,getDbTagData(),MatrixCommMetaData(28,29,30,31));
+    res+= p0.receiveData(cp,getDbTagData(),CommMetaData(31));
+    res+= v0.receiveData(cp,getDbTagData(),CommMetaData(32));
+    res+= cp.receiveMovable(ctes_scc,getDbTagData(),CommMetaData(33));
     return res;
   }
 
@@ -652,7 +651,7 @@ int XC::BeamWithHinges3d::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
     const int dataTag= getDbTag();
-    inicComm(33);
+    inicComm(34);
     int res= sendData(cp);
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
@@ -664,7 +663,7 @@ int XC::BeamWithHinges3d::sendSelf(CommParameters &cp)
 //! @brief Receives object through the channel being passed as parameter.
 int XC::BeamWithHinges3d::recvSelf(const CommParameters &cp)
   {
-    inicComm(33);
+    inicComm(34);
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 

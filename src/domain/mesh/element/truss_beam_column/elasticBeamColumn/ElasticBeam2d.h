@@ -82,8 +82,6 @@ class ElasticBeam2d: public ProtoBeam2d
     double alpha;
     double d; //!< Section depth.
     
-    double rho; //!< Mass denstity per unit length.
-    
     static Matrix K;
     static Vector P;
     
@@ -125,10 +123,6 @@ class ElasticBeam2d: public ProtoBeam2d
     int revertToLastCommit(void);        
     int revertToStart(void);
 
-    double getRho(void) const
-      { return rho; }
-    void setRho(const double &r)
-      { rho= r; }
     inline double getDepth(void) const
       { return d; }
     void setDepth(const double &h)

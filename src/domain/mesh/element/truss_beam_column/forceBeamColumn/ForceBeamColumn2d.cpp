@@ -910,9 +910,9 @@ const XC::Vector &XC::ForceBeamColumn2d::getResistingForceIncInertia(void) const
 int XC::ForceBeamColumn2d::sendData(CommParameters &cp)
   {
     int res= NLForceBeamColumn2dBase::sendData(cp);
-    res+= sendBeamIntegrationPtr(beamIntegr,28,29,getDbTagData(),cp);
-    res+= v0.sendData(cp,getDbTagData(),CommMetaData(30));
-    res+= cp.sendInt(maxSubdivisions,getDbTagData(),CommMetaData(31));
+    res+= sendBeamIntegrationPtr(beamIntegr,25,26,getDbTagData(),cp);
+    res+= v0.sendData(cp,getDbTagData(),CommMetaData(27));
+    res+= cp.sendInt(maxSubdivisions,getDbTagData(),CommMetaData(28));
     return res;
   }
 
@@ -920,16 +920,16 @@ int XC::ForceBeamColumn2d::sendData(CommParameters &cp)
 int XC::ForceBeamColumn2d::recvData(const CommParameters &cp)
   {
     int res= NLForceBeamColumn2dBase::recvData(cp);
-    beamIntegr= receiveBeamIntegrationPtr(beamIntegr,28,29,getDbTagData(),cp);
-    res+= v0.receiveData(cp,getDbTagData(),CommMetaData(30));
-    res+= cp.receiveInt(maxSubdivisions,getDbTagData(),CommMetaData(31));
+    beamIntegr= receiveBeamIntegrationPtr(beamIntegr,25,26,getDbTagData(),cp);
+    res+= v0.receiveData(cp,getDbTagData(),CommMetaData(27));
+    res+= cp.receiveInt(maxSubdivisions,getDbTagData(),CommMetaData(28));
     return res;
   }
 
 //! @brief Send the object.
 int XC::ForceBeamColumn2d::sendSelf(CommParameters &cp)
   {
-    inicComm(32);
+    inicComm(29);
     int res= sendData(cp);
     
     const int dataTag= getDbTag();
@@ -943,7 +943,7 @@ int XC::ForceBeamColumn2d::sendSelf(CommParameters &cp)
 //! @brief Send the object.
 int XC::ForceBeamColumn2d::recvSelf(const CommParameters &cp)
   {
-    inicComm(32);
+    inicComm(29);
 
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);

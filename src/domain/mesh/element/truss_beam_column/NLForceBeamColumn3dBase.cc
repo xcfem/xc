@@ -53,7 +53,7 @@ void XC::NLForceBeamColumn3dBase::resizeMatrices(const size_t &nSections)
 // invoked by a FEM_ObjectBroker, recvSelf() needs to be invoked on this object.
 XC::NLForceBeamColumn3dBase::NLForceBeamColumn3dBase(int tag,int classTag,int numSec)
   : BeamColumnWithSectionFDTrf3d(tag,classTag,numSec),
-  rho(0.0), maxIters(10), tol(1e-8), initialFlag(0), isTorsion(false),
+  maxIters(10), tol(1e-8), initialFlag(0), isTorsion(false),
   kv(NEBD,NEBD), Se(), kvcommit(NEBD,NEBD), Secommit(),
   fs(numSec), vs(numSec), Ssr(numSec),vscommit(numSec), p0()
   {}
@@ -62,7 +62,7 @@ XC::NLForceBeamColumn3dBase::NLForceBeamColumn3dBase(int tag,int classTag,int nu
 // invoked by a FEM_ObjectBroker, recvSelf() needs to be invoked on this object.
 XC::NLForceBeamColumn3dBase::NLForceBeamColumn3dBase(int tag,int classTag,int numSec,const Material *m,const CrdTransf *coordTransf)
   : BeamColumnWithSectionFDTrf3d(tag,classTag,numSec,m,coordTransf),
-  rho(0.0), maxIters(10), tol(1e-8), initialFlag(0), isTorsion(false),
+  maxIters(10), tol(1e-8), initialFlag(0), isTorsion(false),
   kv(NEBD,NEBD), Se(), kvcommit(NEBD,NEBD), Secommit(),
   fs(numSec), vs(numSec), Ssr(numSec),vscommit(numSec), p0()
   {
@@ -71,7 +71,7 @@ XC::NLForceBeamColumn3dBase::NLForceBeamColumn3dBase(int tag,int classTag,int nu
 
 //! @brief Copy constructor.
 XC::NLForceBeamColumn3dBase::NLForceBeamColumn3dBase(const NLForceBeamColumn3dBase &other)
-  : BeamColumnWithSectionFDTrf3d(other), rho(other.rho), maxIters(other.maxIters), tol(other.tol), initialFlag(other.initialFlag), isTorsion(other.isTorsion),
+  : BeamColumnWithSectionFDTrf3d(other), maxIters(other.maxIters), tol(other.tol), initialFlag(other.initialFlag), isTorsion(other.isTorsion),
     kv(other.kv), Se(other.Se), kvcommit(other.kvcommit), Secommit(other.Secommit),
     fs(other.fs), vs(other.vs), Ssr(other.Ssr),vscommit(other.vscommit), sp(other.sp), p0(), Ki(other.Ki)
   {}
@@ -138,19 +138,19 @@ void XC::NLForceBeamColumn3dBase::initializeSectionHistoryVariables(void)
 int XC::NLForceBeamColumn3dBase::sendData(CommParameters &cp)
   {
     int res= BeamColumnWithSectionFDTrf3d::sendData(cp);
-    res+= cp.sendDoubles(rho,tol,getDbTagData(),CommMetaData(12));
-    res+= cp.sendInts(maxIters,initialFlag,getDbTagData(),CommMetaData(13));
-    res+= cp.sendBool(isTorsion,getDbTagData(),CommMetaData(14));
-    res+= cp.sendMatrix(kv,getDbTagData(),CommMetaData(15));
-    res+= cp.sendVector(Se,getDbTagData(),CommMetaData(16));
-    res+= cp.sendMatrix(kvcommit,getDbTagData(),CommMetaData(17));
-    res+= cp.sendVector(Secommit,getDbTagData(),CommMetaData(18));
-    res+= cp.sendMatrices(fs,getDbTagData(),CommMetaData(19));;
-    res+= cp.sendVectors(vs,getDbTagData(),CommMetaData(20));
-    res+= cp.sendVectors(Ssr,getDbTagData(),CommMetaData(21));
-    res+= cp.sendVectors(vscommit,getDbTagData(),CommMetaData(22));
-    res+= cp.sendMatrix(sp,getDbTagData(),CommMetaData(23));
-    res+= p0.sendData(cp,getDbTagData(),CommMetaData(24));
+    res+= cp.sendDouble(tol,getDbTagData(),CommMetaData(13));
+    res+= cp.sendInts(maxIters,initialFlag,getDbTagData(),CommMetaData(14));
+    res+= cp.sendBool(isTorsion,getDbTagData(),CommMetaData(15));
+    res+= cp.sendMatrix(kv,getDbTagData(),CommMetaData(16));
+    res+= cp.sendVector(Se,getDbTagData(),CommMetaData(17));
+    res+= cp.sendMatrix(kvcommit,getDbTagData(),CommMetaData(18));
+    res+= cp.sendVector(Secommit,getDbTagData(),CommMetaData(19));
+    res+= cp.sendMatrices(fs,getDbTagData(),CommMetaData(20));
+    res+= cp.sendVectors(vs,getDbTagData(),CommMetaData(21));
+    res+= cp.sendVectors(Ssr,getDbTagData(),CommMetaData(22));
+    res+= cp.sendVectors(vscommit,getDbTagData(),CommMetaData(23));
+    res+= cp.sendMatrix(sp,getDbTagData(),CommMetaData(24));
+    res+= p0.sendData(cp,getDbTagData(),CommMetaData(25));
     return res;
   }
 
@@ -158,18 +158,18 @@ int XC::NLForceBeamColumn3dBase::sendData(CommParameters &cp)
 int XC::NLForceBeamColumn3dBase::recvData(const CommParameters &cp)
   {
     int res= BeamColumnWithSectionFDTrf3d::recvData(cp);
-    res+= cp.receiveDoubles(rho,tol,getDbTagData(),CommMetaData(12));
-    res+= cp.receiveInts(maxIters,initialFlag,getDbTagData(),CommMetaData(13));
-    res+= cp.receiveBool(isTorsion,getDbTagData(),CommMetaData(14));
-    res+= cp.receiveMatrix(kv,getDbTagData(),CommMetaData(15));
-    res+= cp.receiveVector(Se,getDbTagData(),CommMetaData(16));
-    res+= cp.receiveMatrix(kvcommit,getDbTagData(),CommMetaData(17));
-    res+= cp.receiveVector(Secommit,getDbTagData(),CommMetaData(18));
-    res+= cp.receiveMatrices(fs,getDbTagData(),CommMetaData(19));;
-    res+= cp.receiveVectors(vs,getDbTagData(),CommMetaData(20));
-    res+= cp.receiveVectors(Ssr,getDbTagData(),CommMetaData(21));
-    res+= cp.receiveVectors(vscommit,getDbTagData(),CommMetaData(22));
-    res+= cp.receiveMatrix(sp,getDbTagData(),CommMetaData(23));
-    res+= p0.receiveData(cp,getDbTagData(),CommMetaData(24));
+    res+= cp.receiveDouble(tol,getDbTagData(),CommMetaData(13));
+    res+= cp.receiveInts(maxIters,initialFlag,getDbTagData(),CommMetaData(14));
+    res+= cp.receiveBool(isTorsion,getDbTagData(),CommMetaData(15));
+    res+= cp.receiveMatrix(kv,getDbTagData(),CommMetaData(16));
+    res+= cp.receiveVector(Se,getDbTagData(),CommMetaData(17));
+    res+= cp.receiveMatrix(kvcommit,getDbTagData(),CommMetaData(18));
+    res+= cp.receiveVector(Secommit,getDbTagData(),CommMetaData(19));
+    res+= cp.receiveMatrices(fs,getDbTagData(),CommMetaData(20));
+    res+= cp.receiveVectors(vs,getDbTagData(),CommMetaData(21));
+    res+= cp.receiveVectors(Ssr,getDbTagData(),CommMetaData(22));
+    res+= cp.receiveVectors(vscommit,getDbTagData(),CommMetaData(23));
+    res+= cp.receiveMatrix(sp,getDbTagData(),CommMetaData(24));
+    res+= p0.receiveData(cp,getDbTagData(),CommMetaData(25));
     return res;
   }

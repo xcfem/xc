@@ -53,6 +53,7 @@ class CrossSectionProperties2d: public CommandEntity, public MovableObject
   {
   private:
     double e, g, a, i, alpha;
+    double rho;  //!< Material density.
     static Matrix ks2;
     static Matrix ks3;
   protected:
@@ -61,7 +62,7 @@ class CrossSectionProperties2d: public CommandEntity, public MovableObject
     int recvData(const CommParameters &);
 
   public:
-    CrossSectionProperties2d(double E, double A, double I, double G= 0.0,double alpha= 0.0);
+    CrossSectionProperties2d(double E, double A, double I, double G= 0.0,double alpha= 0.0, double rho= 0.0);
     CrossSectionProperties2d(double EA, double EI);
     CrossSectionProperties2d(const SectionForceDeformation &);
     CrossSectionProperties2d(void); 
@@ -90,6 +91,10 @@ class CrossSectionProperties2d: public CommandEntity, public MovableObject
       { return alpha; }
     inline void setAlpha(const double &al)
       { alpha= al; }
+    inline double getRho(void) const
+      { return rho; }
+    inline void setRho(const double &r)
+      { rho= r; }
     inline double &I(void)
       { return i; }
     inline const double &I(void) const

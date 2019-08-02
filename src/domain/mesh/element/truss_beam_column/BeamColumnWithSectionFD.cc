@@ -36,19 +36,19 @@
 
 
 XC::BeamColumnWithSectionFD::BeamColumnWithSectionFD(int tag, int classTag,const size_t &numSecc)
-  : Element1D(tag,classTag), theSections(numSecc)
+  : Element1D(tag,classTag), theSections(numSecc), rho(0.0)
   {}
 
 XC::BeamColumnWithSectionFD::BeamColumnWithSectionFD(int tag, int classTag,const size_t &numSecc= 1,const Material *m= nullptr)
-  : Element1D(tag,classTag), theSections(numSecc,m)
+  : Element1D(tag,classTag), theSections(numSecc,m), rho(0.0)
   {}
 
 XC::BeamColumnWithSectionFD::BeamColumnWithSectionFD(int tag, int classTag,const size_t &numSecc,const PrismaticBarCrossSection *matModel)
-  : Element1D(tag,classTag), theSections(numSecc,matModel)
+  : Element1D(tag,classTag), theSections(numSecc,matModel), rho(0.0)
   {}
 
 XC::BeamColumnWithSectionFD::BeamColumnWithSectionFD(int tag, int classTag,const size_t &numSecc,const PrismaticBarCrossSection *sccModel,int Nd1,int Nd2)
-  : Element1D(tag,classTag,Nd1,Nd2), theSections(numSecc,sccModel)
+  : Element1D(tag,classTag,Nd1,Nd2), theSections(numSecc,sccModel), rho(0.0)
   {}
 
 //! @brief Zeroes loads on element.
@@ -127,6 +127,7 @@ int XC::BeamColumnWithSectionFD::sendData(CommParameters &cp)
     int res= Element1D::sendData(cp);
     res+= cp.sendMovable(theSections,getDbTagData(),CommMetaData(7));
     res+= cp.sendMovable(section_matrices,getDbTagData(),CommMetaData(8));
+    res+= cp.sendDouble(rho,getDbTagData(),CommMetaData(9));
     return res;
   }
 
@@ -136,6 +137,7 @@ int XC::BeamColumnWithSectionFD::recvData(const CommParameters &cp)
     int res= Element1D::recvData(cp);
     res+= cp.receiveMovable(theSections,getDbTagData(),CommMetaData(7));
     res+= cp.receiveMovable(section_matrices,getDbTagData(),CommMetaData(8));
+    res+= cp.receiveDouble(rho,getDbTagData(),CommMetaData(9));
     return res;
   }
 

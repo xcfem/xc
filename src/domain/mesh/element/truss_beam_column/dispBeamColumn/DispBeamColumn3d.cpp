@@ -77,8 +77,9 @@ XC::DispBeamColumn3d::DispBeamColumn3d(int tag, int nd1, int nd2,
 				       int numSec,const std::vector<PrismaticBarCrossSection *> &s,
                                    CrdTransf3d &coordTransf, double r)
   :BeamColumnWithSectionFDTrf3d(tag, ELE_TAG_DispBeamColumn3d,numSec),
-   q(6), q0(), p0(), rho(r)
+   q(6), q0(), p0()
   {
+    setRho(r);
     load.reset(12);
     setSections(s);
     set_transf(&coordTransf);
@@ -89,11 +90,11 @@ XC::DispBeamColumn3d::DispBeamColumn3d(int tag, int nd1, int nd2,
 
 XC::DispBeamColumn3d::DispBeamColumn3d(int tag,int numSec,const Material *m,const CrdTransf *trf)
   :BeamColumnWithSectionFDTrf3d(tag, ELE_TAG_DispBeamColumn3d,numSec,m,trf),
-   q(6), q0(), p0(), rho(0.0) {load.reset(12);}
+   q(6), q0(), p0() {load.reset(12);}
 
 XC::DispBeamColumn3d::DispBeamColumn3d(int tag)
   :BeamColumnWithSectionFDTrf3d(tag, ELE_TAG_DispBeamColumn3d,0),
-   q(6), q0(), p0(), rho(0.0) {load.reset(12);}
+   q(6), q0(), p0() {load.reset(12);}
 
 //! @brief Virtual constructor.
 XC::Element* XC::DispBeamColumn3d::getCopy(void) const
@@ -455,20 +456,21 @@ const XC::Matrix &XC::DispBeamColumn3d::getInitialStiff(void) const
   }
 
 const XC::Matrix &XC::DispBeamColumn3d::getMass(void) const
-{
-  K.Zero();
+  {
+    K.Zero();
 
-  if(rho == 0.0)
-    return K;
+    const double rho= getRho();
+    if(rho == 0.0)
+      return K;
 
-  double L = theCoordTransf->getInitialLength();
-  double m = 0.5*rho*L;
+    double L = theCoordTransf->getInitialLength();
+    double m = 0.5*rho*L;
 
-  K(0,0) = K(1,1) = K(2,2) = K(6,6) = K(7,7) = K(8,8) = m;
+    K(0,0) = K(1,1) = K(2,2) = K(6,6) = K(7,7) = K(8,8) = m;
 
-    if(isDead())
-      K*=dead_srf;
-    return K;
+      if(isDead())
+	K*=dead_srf;
+      return K;
   }
 
 void XC::DispBeamColumn3d::zeroLoad(void)
@@ -507,32 +509,33 @@ int XC::DispBeamColumn3d::addLoad(ElementalLoad *theLoad, double loadFactor)
 int XC::DispBeamColumn3d::addInertiaLoadToUnbalance(const XC::Vector &accel)
   {
     // Check for a quick return
+    const double rho= getRho();
     if(rho == 0.0)
       return 0;
 
-  // Get R * accel from the nodes
-  const XC::Vector &Raccel1 = theNodes[0]->getRV(accel);
-  const XC::Vector &Raccel2 = theNodes[1]->getRV(accel);
+    // Get R * accel from the nodes
+    const Vector &Raccel1 = theNodes[0]->getRV(accel);
+    const Vector &Raccel2 = theNodes[1]->getRV(accel);
 
-  if(6 != Raccel1.Size() || 6 != Raccel2.Size()) {
-    std::cerr << "XC::DispBeamColumn3d::addInertiaLoadToUnbalance matrix and vector sizes are incompatable\n";
-    return -1;
+    if(6 != Raccel1.Size() || 6 != Raccel2.Size()) {
+      std::cerr << "XC::DispBeamColumn3d::addInertiaLoadToUnbalance matrix and vector sizes are incompatable\n";
+      return -1;
+    }
+
+    const double L = theCoordTransf->getInitialLength();
+    const double m = 0.5*rho*L;
+
+    // Want to add ( - fact * M R * accel ) to unbalance
+    // Take advantage of lumped mass matrix
+    load(0) -= m*Raccel1(0);
+    load(1) -= m*Raccel1(1);
+    load(2) -= m*Raccel1(2);
+    load(6) -= m*Raccel2(0);
+    load(7) -= m*Raccel2(1);
+    load(8) -= m*Raccel2(2);
+
+    return 0;
   }
-
-  const double L = theCoordTransf->getInitialLength();
-  const double m = 0.5*rho*L;
-
-  // Want to add ( - fact * M R * accel ) to unbalance
-  // Take advantage of lumped mass matrix
-  load(0) -= m*Raccel1(0);
-  load(1) -= m*Raccel1(1);
-  load(2) -= m*Raccel1(2);
-  load(6) -= m*Raccel2(0);
-  load(7) -= m*Raccel2(1);
-  load(8) -= m*Raccel2(2);
-
-  return 0;
-}
 
 const XC::Vector &XC::DispBeamColumn3d::getResistingForce(void) const
 {
@@ -601,6 +604,7 @@ const XC::Vector &XC::DispBeamColumn3d::getResistingForceIncInertia(void) const
   {
     this->getResistingForce();
 
+    const double rho= getRho();
     if(rho != 0.0)
       {
 	const Vector &accel1 = theNodes[0]->getTrialAccel();
@@ -641,7 +645,6 @@ int XC::DispBeamColumn3d::sendData(CommParameters &cp)
     res+= cp.sendVector(q,getDbTagData(),CommMetaData(13));
     res+= p0.sendData(cp,getDbTagData(),CommMetaData(14));
     res+= q0.sendData(cp,getDbTagData(),CommMetaData(15));
-    res+= cp.sendDouble(rho,getDbTagData(),CommMetaData(16));
     return res;
   }
 
@@ -652,13 +655,12 @@ int XC::DispBeamColumn3d::recvData(const CommParameters &cp)
     res+= cp.receiveVector(q,getDbTagData(),CommMetaData(13));
     res+= p0.receiveData(cp,getDbTagData(),CommMetaData(14));
     res+= q0.receiveData(cp,getDbTagData(),CommMetaData(15));
-    res+= cp.receiveDouble(rho,getDbTagData(),CommMetaData(16));
     return res;
   }
 
 int XC::DispBeamColumn3d::sendSelf(CommParameters &cp)
   {
-    inicComm(17);
+    inicComm(16);
     int res= sendData(cp);
 
     const int dataTag= getDbTag(cp);
@@ -670,7 +672,7 @@ int XC::DispBeamColumn3d::sendSelf(CommParameters &cp)
 
 int XC::DispBeamColumn3d::recvSelf(const CommParameters &cp)
   {
-    inicComm(17);
+    inicComm(16);
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
