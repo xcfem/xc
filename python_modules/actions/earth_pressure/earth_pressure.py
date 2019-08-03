@@ -47,13 +47,13 @@ class PressureModelBase(object):
         if(iCoo==2): #3D
           tanVector= xc.Vector([vDir[2],vDir[1],-vDir[0]])
         if(len(vDir)==3): #3D load.
-          for e in xcSet.getElements:
+          for e in xcSet.elements:
               presElem=self.getPressure(e.getCooCentroid(False)[iCoo])
               loadVector= presElem*(vDir+tanDelta*tanVector)
               if(presElem!=0.0):
                   e.vector3dUniformLoadGlobal(loadVector)
         else: #2D load.
-          for e in xcSet.getElements:
+          for e in xcSet.elements:
               presElem=self.getPressure(e.getCooCentroid(False)[iCoo])
               loadVector= presElem*(vDir+tanDelta*tanVector)
               if(presElem!=0.0):
@@ -222,7 +222,7 @@ class StripLoadOnBackfill(UniformLoadOnStem):
         tanAlph= math.tan(alph)
         avgZCoo= 0.0
         length= 0.0
-        for e in xcSet.getElements:
+        for e in xcSet.elements:
             z= e.getCooCentroid(False)[iZCoo]
             l= e.getLineSegment(False).getLength()
             avgZCoo+=z*l
@@ -234,12 +234,12 @@ class StripLoadOnBackfill(UniformLoadOnStem):
         L= xMax-xMin
         sigma_v= self.qLoad*self.stripWidth/L
         if(len(vDir)==3): #3D load.
-          for e in xcSet.getElements:
+          for e in xcSet.elements:
               xElem= e.getCooCentroid(False)[iXCoo]
               if (sigma_v!=0.0) and (xElem>xMin) and (xElem<xMax):
                   e.vector3dUniformLoadGlobal(sigma_v*vDir)
         else: #2D load.
-          for e in xcSet.getElements:
+          for e in xcSet.elements:
               xElem= e.getCooCentroid(False)[iXCoo]
               if (sigma_v!=0.0) and (xElem>xMin) and (xElem<xMax):
                   e.vector2dUniformLoadGlobal(sigma_v*vDir)

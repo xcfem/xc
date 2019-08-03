@@ -515,7 +515,7 @@ class ijkGrid(object):
  
   def appendLoadInRangeToCurrentLoadPattern(self,ijkRange,nmbrSet,loadVector):
     s= self.getSetSurfOneRegion(ijkRange,nmbrSet)
-    sElem=s.getElements
+    sElem=s.elements
     for e in sElem:
       e.vector3dUniformLoadGlobal(loadVector)
 
@@ -532,7 +532,7 @@ class ijkGrid(object):
 
   def appendEarthPressureToCurrentLoadPattern(self,ijkRange,nmbrSet,earthPressLoadressure):
     s= self.getSetSurfOneRegion(ijkRange,nmbrSet)
-    sElem=s.getElements
+    sElem=s.elements
     for e in sElem:
       zElem=e.getCooCentroid(False)[2]
       presElem= earthPressLoadressure.getPressure(zElem) 
@@ -558,7 +558,7 @@ def setEntLstSurf(preprocessor,lstSurf,nmbrSet):
 def lstNodesPLine(setBusq,lstPtsPLine):
     '''return the subset of nodes from the set `setBusq` that belong to the line defined by the successive points in list `lstPts`
     '''
-    nodAux= setBusq.getNodes
+    nodAux= setBusq.nodes
     retval= list() 
     for i in range(0,len(lstPtsPLine)-1):
         segmAux= geom.LineSegment3d(lstPtsPLine[i].getPos,lstPtsPLine[i+1].getPos)
@@ -597,7 +597,7 @@ def setSurf2lstSurf(setSurf):
 def setNod2lstNod(setNod):
     '''return a list with the nodes included in the set `setNod` '''
     retval= list()
-    nodAux= setNod.getNodes
+    nodAux= setNod.nodes
     for n in nodAux:
         retval.append(n)
     return retval
@@ -605,7 +605,7 @@ def setNod2lstNod(setNod):
 def setElem2lstElem(setElem):
     '''return a list with the elements included in the set `setElem` '''
     retval= list()
-    elemAux= setElem.getElements
+    elemAux= setElem.elements
     for n in elemAux:
         retval.append(n)
     return retval

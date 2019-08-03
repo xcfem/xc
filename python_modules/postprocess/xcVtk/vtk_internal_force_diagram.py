@@ -76,7 +76,7 @@ class InternalForceDiagram(cd.ColoredDiagram):
     indiceSet= 0
     numSetsDiagrama= len(self.conjuntos)
     for s in self.conjuntos:
-      for e in s.getElements:
+      for e in s.elements:
         e.getResistingForce()
         componentData= self.getElementComponentData(e)
         indxDiagrama= self.appendDataFromElementEnds(componentData[0],e,indxDiagrama,componentData[1],componentData[2])

@@ -41,7 +41,7 @@ class GroupRecord(object):
         strCommand= self.name + '.getNodes.append(n' + str(n) + ')'
         f.write(strCommand+'\n')
       for e in self.cellIds:
-        strCommand= self.name + '.getElements.append(e' + str(e) + ')'
+        strCommand= self.name + '.elements.append(e' + str(e) + ')'
         f.write(strCommand+'\n')
       for p in self.pointIds:
         strCommand= self.name + '.getMultiBlockTopology.getPoints.append(' + str(p) + ')'

@@ -197,7 +197,7 @@ class PhantomModel(object):
     :param controller: object that controls limit state in elements.
     '''
     combs= self.preprocessor.getLoadHandler.getLoadPatterns #Here each load pattern represents a combination.
-    elements= self.preprocessor.getSets.getSet("total").getElements
+    elements= self.preprocessor.getSets.getSet("total").elements
     for key in combs.getKeys():
       comb= combs[key]
       #print "Resolving load combination: ",key

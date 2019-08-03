@@ -76,7 +76,7 @@ class EC3Beam(object):
             lmsg.warning('Beam insufficiently defined: list of lines or points  required' )
         #set of elements included in the EC3beam
         s=prep.getSets.defSet(self.name+'Set')
-        self.elemSet=s.getElements
+        self.elemSet=s.elements
         for l in lstLn:
             for e in l.elements:
                 self.elemSet.append(e)

@@ -45,7 +45,7 @@ class LocalAxesVectorField(object):
     
   def dumpVectors(self,xcSet):
     ''' Iterate over the elements dumping its axes into the graphic.'''
-    elemSet= xcSet.getElements
+    elemSet= xcSet.elements
     for e in elemSet:
       self.dumpPair(e.getPosCentroid(True),e.getLocalAxes(True))
 
@@ -94,7 +94,7 @@ class StrongWeakAxisVectorField(object):
 
   def dumpVectors(self,xcSet):
     ''' Iterate over the elements dumping its axes into the graphic.'''
-    elemSet= xcSet.getElements
+    elemSet= xcSet.elements
     for e in elemSet:
       self.dumpPair(e)
 

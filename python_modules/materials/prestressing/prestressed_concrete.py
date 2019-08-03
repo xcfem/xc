@@ -165,14 +165,14 @@ class PrestressTendon(object):
         if crdTransfName:
             elems.defaultTransformation=crdTransfName
         nEnd2=nodes.newNodeXYZ(self.fineCoordMtr[0][0],self.fineCoordMtr[1][0],self.fineCoordMtr[2][0])
-        tendonSet.getNodes.append(nEnd2)
+        tendonSet.nodes.append(nEnd2)
         for i in range(1,len(self.fineCoordMtr[0])):
             nEnd1=nodes.getNode(nEnd2.tag)
             nEnd2=nodes.newNodeXYZ(self.fineCoordMtr[0][i],self.fineCoordMtr[1][i],self.fineCoordMtr[2][i])
             elem=elems.newElement(elemTypeName,xc.ID([nEnd1.tag,nEnd2.tag]))
             elem.area=areaTendon
-            tendonSet.getNodes.append(nEnd2)
-            tendonSet.getElements.append(elem)
+            tendonSet.nodes.append(nEnd2)
+            tendonSet.elements.append(elem)
             self.lstOrderedElems.append(elem)
         return tendonSet
             

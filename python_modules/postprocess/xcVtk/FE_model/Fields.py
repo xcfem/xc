@@ -100,7 +100,7 @@ class ExtrapolatedProperty(ExtrapolatedScalarField):
     super(ExtrapolatedProperty,self).__init__(name,functionName, xcSet, component, fUnitConv,rgMinMax)
 
   def extrapolate(self):
-    extrapolate_elem_attr.extrapolate_elem_function_attr(self.xcSet.getElements,self.name,"getProp", self.name)
+    extrapolate_elem_attr.extrapolate_elem_function_attr(self.xcSet.elements,self.name,"getProp", self.name)
 
   def display(self,defDisplay,fName= None,caption= '',defFScale=0.0):
     self.extrapolate()
@@ -121,5 +121,5 @@ def getScalarFieldFromControlVar(attributeName,argument,xcSet,component,fUnitCon
      :param component: component of the control var to represent.
      :param fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3).
   '''
-  nodePropName= cv.extrapolate_control_var(xcSet.getElements,attributeName,argument)
+  nodePropName= cv.extrapolate_control_var(xcSet.elements,attributeName,argument)
   return ExtrapolatedScalarField(nodePropName,"getProp",xcSet,component,fUnitConv,rgMinMax)

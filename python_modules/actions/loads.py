@@ -56,10 +56,10 @@ class InertialLoad(BaseVectorLoad):
         for ms in self.lstMeshSets:
             if 'shell' in ms.elemType.lower():
                 loadVector= ms.matSect.getAreaDensity()*self.loadVector
-                el_group= ms.primitiveSet.getElements
+                el_group= ms.primitiveSet.elements
             elif 'beam' in ms.elemType.lower():
                 loadVector= ms.matSect.getRho()*self.loadVector
-                el_group= ms.primitiveSet.getElements
+                el_group= ms.primitiveSet.elements
             for e in el_group:
                 e.vector3dUniformLoadGlobal(loadVector)
                 
@@ -118,7 +118,7 @@ class UniformLoadOnBeams(BaseVectorLoad):
 
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
-        for e in self.xcSet.getElements:
+        for e in self.xcSet.elements:
             if self.refSystem=='Local':
                 load= e.vector3dUniformLoadLocal(self.loadVector)
             else:
@@ -188,7 +188,7 @@ class UniformLoadOnSurfaces(BaseVectorLoad):
         
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
-        for e in self.xcSet.getElements:
+        for e in self.xcSet.elements:
             if self.refSystem=='Local':
                 load=e.vector3dUniformLoadLocal(self.loadVector)
             else:
@@ -229,7 +229,7 @@ class PointLoadOverShellElems(BaseVectorLoad):
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
         aux_set,factor=self.distrParam()
-        for e in aux_set.getElements:
+        for e in aux_set.elements:
             if self.refSystem=='Local':
                 load=e.vector3dUniformLoadLocal(factor*self.loadVector)
             else:
@@ -246,7 +246,7 @@ class PointLoadOverShellElems(BaseVectorLoad):
         if aux_set.getNumElements==0:
             lmsg.warning('Can\'t distribute load: '+self.name+'(Elements in set = 0)')
         else:
-            areaSet=float(np.sum([e.getArea(False) for e in aux_set.getElements]))
+            areaSet=float(np.sum([e.getArea(False) for e in aux_set.elements]))
             factor=1.0/areaSet
         return (aux_set,factor)
 
@@ -348,7 +348,7 @@ class StrainLoadOnShells(object):
         lcm=load_cases.LoadCaseManager(prep)
         loadPatternName= prep.getLoadHandler.getLoadPatterns.currentLoadPattern
         loadPattern= prep.getLoadHandler.getLoadPatterns[loadPatternName]
-        for e in self.xcSet.getElements:
+        for e in self.xcSet.elements:
             eLoad= loadPattern.newElementalLoad("shell_strain_load")
             eLoad.elementTags= xc.ID([e.tag])
             eLoad.setStrainComp(0,self.DOFstrain,self.strain)
@@ -401,7 +401,7 @@ class StrainGradientThermalLoadOnShells(imps.gradThermalStrain):
         lcm=load_cases.LoadCaseManager(prep)
         loadPatternName= prep.getLoadHandler.getLoadPatterns.currentLoadPattern
         loadPattern= prep.getLoadHandler.getLoadPatterns[loadPatternName]
-        for e in self.elemSet.getElements:
+        for e in self.elemSet.elements:
             eLoad= loadPattern.newElementalLoad("shell_strain_load")
             eLoad.elementTags= xc.ID([e.tag])
             eLoad.setStrainComp(0,self.DOF,self.curvature)

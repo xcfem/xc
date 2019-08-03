@@ -4,7 +4,7 @@ def VtkLoadNodes(setName, nmbContndr):
   nSet.numerate()
   print "nombre set: ",nSet.nombre
   print "num. nodes: ",nSet.getNumNodes
-  nodes= nSet.getNodes
+  nodes= nSet.nodes
   for n in nodes:
     nmbContndr.InsertPoint(n.getIdx,coord[0],coord[1],coord[2])
   ugrid.SetPoints(nmbContndr)

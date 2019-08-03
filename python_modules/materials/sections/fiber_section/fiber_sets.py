@@ -126,7 +126,7 @@ def createRCFiberSets(preprocessor, setName, concrMatTag, reinfMatTag):
     :param reinfMatTag:      tag of the uniaxial material that makes up the reinforcing steel fibers
     '''
     st= preprocessor.getSets.getSet(setName)
-    elements= st.getElements
+    elements= st.elements
     for e in elements:
         scc= e.getSection()
         sets= fiberSectionSetupRCSets(scc,concrMatTag,"concrete",reinfMatTag,"reinforcement")

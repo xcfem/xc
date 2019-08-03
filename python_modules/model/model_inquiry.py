@@ -44,7 +44,7 @@ def getNodesInCoordinateRegion(xmin,xmax,ymin,ymax,zmin,zmax,xcSet):
 
   '''
   retval=list()
-  setNodes=xcSet.getNodes
+  setNodes=xcSet.nodes
   for n in setNodes:
     vCoord=n.getCoo
     xNod=vCoord[0]

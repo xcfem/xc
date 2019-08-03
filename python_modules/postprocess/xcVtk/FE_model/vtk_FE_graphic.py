@@ -103,12 +103,12 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
         eSet.numerate()
         self.gridRecord.uGrid.name= eSet.name+'_grid'
         # Scalar values.
-        nodeSet= eSet.getNodes
+        nodeSet= eSet.nodes
         if(field):
             arr= field.fillArray(nodeSet)
             field.creaLookUpTable()      
         # Load nodes in vtk
-        setNodes= eSet.getNodes
+        setNodes= eSet.nodes
         if eigenMode==None:
             for n in setNodes:
                 pos= n.getCurrentPos3d(defFScale)
@@ -118,7 +118,7 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
                 pos= n.getEigenPos3d(defFScale,eigenMode)
                 self.nodes.InsertPoint(n.getIdx,pos.x,pos.y,pos.z)
          # Load elements in vtk
-        setElems= eSet.getElements
+        setElems= eSet.elements
         for e in setElems:
             vertices= xc_base.vector_int_to_py_list(e.getIdxNodes)
             vtx= vtk.vtkIdList()

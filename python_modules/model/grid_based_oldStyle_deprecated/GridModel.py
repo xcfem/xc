@@ -846,7 +846,7 @@ class GridModel(object):
     st= self.getPreprocessor().getSets.defSet(setName)
     st.clear() #Clean set if exists.
     for e in elems:
-      st.getElements.append(e)
+      st.elements.append(e)
     st.fillDownwards()
     return st
 

@@ -70,7 +70,7 @@ class FigsCollectionPlotter(object):
     #Load properties to display:
     fName= self.fieldFilesPath + "verifRsl_crackingSLS_freq.py"
     execfile(fName)
-    elemSet= preprocessor.getSets.getSet(elemSetName).getElements
+    elemSet= preprocessor.getSets.getSet(elemSetName).elements
     for e in elemSet:
       sgPos1= e.getProp("sg_sPos1")
       sgNeg1= e.getProp("sg_sNeg1")
@@ -93,7 +93,7 @@ class FigsCollectionPlotter(object):
     #Load properties to display:
     fName= self.fieldFilesPath + "verifRsl_crackingSLS_qperm.py"
     execfile(fName)
-    elemSet= preprocessor.getSets.getSet(elemSetName).getElements
+    elemSet= preprocessor.getSets.getSet(elemSetName).elements
     for e in elemSet:
       sgPos1= e.getProp("sg_sPos1")
       sgNeg1= e.getProp("sg_sNeg1")
@@ -124,7 +124,7 @@ class FigsCollectionPlotter(object):
     fName= self.fieldFilesPath + "verifRsl_fatigueULS.py"
     execfile(fName)
 
-    elemSet= preprocessor.getSets.getSet(elemSetName).getElements
+    elemSet= preprocessor.getSets.getSet(elemSetName).elements
     for e in elemSet:
       Vy11= e.getProp("Vy11")
       Vy01= e.getProp("Vy01")

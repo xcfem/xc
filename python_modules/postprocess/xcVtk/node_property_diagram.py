@@ -40,7 +40,7 @@ class NodePropertyDiagram(cd.ColoredDiagram):
               by this factor. (Defaults to 0.0, i.e. display of 
               initial/undeformed shape)
     ''' 
-    elems= eSet.getElements
+    elems= eSet.elements
     for e in elems:
       self.vDir= e.getJVector3d(True) #initialGeometry= True
       v0= self.getValueForNode(e.getNodes[0])

@@ -123,7 +123,7 @@ class QuickGraphics(object):
         else:
             lmsg.warning('QuickGraphics::displayDispRot; set to display not defined; using previously defined set (total if None).')
         vCompDisp= self.getDispComponentFromName(itemToDisp)
-        nodSet= self.xcSet.getNodes
+        nodSet= self.xcSet.nodes
         for n in nodSet:
             n.setProp('propToDisp',n.getDisp[vCompDisp])
         field= Fields.ScalarField(name='propToDisp',functionName="getProp",component=None,fUnitConv=fConvUnits,rgMinMax=rgMinMax)
@@ -156,7 +156,7 @@ class QuickGraphics(object):
         else:
             lmsg.warning('QuickGraphics::displayIntForc; set to display not defined; using previously defined set (total if None).')
         vCompDisp= self.getIntForceComponentFromName(itemToDisp)
-        elSet= self.xcSet.getElements.pickElemsOfDimension(2)
+        elSet= self.xcSet.elements.pickElemsOfDimension(2)
         if(len(elSet)>0):
             propName= 'propToDisp_'+str(itemToDisp)
             for e in elSet:
@@ -465,7 +465,7 @@ def display_eigen_result(preprocessor,eigenMode, setToDisplay=None,defShapeScale
     defDisplay.defineMeshScene(None,defShapeScale,eigenMode,color=setToDisplay.color) 
     if equLoadVctScale not in [None,0]:
         vField=vf.VectorField(name='modo'+str(eigenMode),fUnitConv=unitsScale,scaleFactor=equLoadVctScale,showPushing= True)
-        setNodes= setToDisplay.getNodes
+        setNodes= setToDisplay.nodes
         for n in setNodes:
             pos= n.getEigenPos3d(defShapeScale,eigenMode)
             vEqLoad=n.getEquivalentStaticLoad(eigenMode,accelMode)
@@ -533,7 +533,7 @@ def display_beam_result(attributeName,itemToDisp,beamSetDispRes,setToDisplay=Non
    '''
     #auto-scale parameters
     LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulo() #representative length of set size (to autoscale)
-    lstArgVal=[e.getProp(attributeName+'Sect1')(itemToDisp) for e in beamSetDispRes.getElements]
+    lstArgVal=[e.getProp(attributeName+'Sect1')(itemToDisp) for e in beamSetDispRes.elements]
     maxAbs=max(abs(max(lstArgVal)),abs(min(lstArgVal)))
     if maxAbs > 0:
         scaleFactor*=0.15*LrefModSize/(maxAbs*fConvUnits)

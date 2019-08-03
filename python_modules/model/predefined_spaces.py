@@ -743,15 +743,15 @@ def glueSets(preprocessor,DOF2Glue,masterSet,slaveSet,onCoord=None):
     mdlSpace=getModelSpace(preprocessor)
     if onCoord in ['x','y','z','X','Y','Z']:
         indCoo=['x','y','z'].index(onCoord.lower())
-        nodSlave=np.array([n for n in slaveSet.getNodes])
+        nodSlave=np.array([n for n in slaveSet.nodes])
         cooSlave=np.array([n.get3dCoo[indCoo] for n in nodSlave])
         slSize=len(nodSlave)
-        for n in masterSet.getNodes:
+        for n in masterSet.nodes:
             aux=np.full((slSize),n.get3dCoo[indCoo])
             nSlave=nodSlave[abs(aux-cooSlave).argmin()]
             mdlSpace.constraints.newEqualDOF(n.tag,nSlave.tag,xc.ID(DOF2Glue))
     else:
-        for n in masterSet.getNodes:
-            nSlave=slaveSet.getNodes.getNearestNode(geom.Pos3d(n.get3dCoo[0],n.get3dCoo[1],n.get3dCoo[2]))
+        for n in masterSet.nodes:
+            nSlave=slaveSet.nodes.getNearestNode(geom.Pos3d(n.get3dCoo[0],n.get3dCoo[1],n.get3dCoo[2]))
             mdlSpace.constraints.newEqualDOF(n.tag,nSlave.tag,xc.ID(DOF2Glue))
   

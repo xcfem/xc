@@ -612,12 +612,12 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
       l.setElemSize(elementSize)
       l.genMesh(xc.meshDir.I)
       for e in l.elements:
-        self.foundationSet.getElements.append(e)
-        self.wallSet.getElements.append(e)
+        self.foundationSet.elements.append(e)
+        self.wallSet.elements.append(e)
         if(lineName=='heel'):
-          self.heelSet.getElements.append(e)
+          self.heelSet.elements.append(e)
         else:
-          self.toeSet.getElements.append(e)
+          self.toeSet.elements.append(e)
     self.foundationSet.fillDownwards()
     
     stemSection= section_properties.RectangularSection(self.name+"StemSection",self.b,(self.stemTopWidth+self.stemBottomWidth)/2.0)
@@ -633,12 +633,12 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
         h= self.getDepth(y)
         stemSection.h= h
         e.sectionProperties= stemSection.getCrossSectionProperties2D(wallMatData)
-        self.stemSet.getElements.append(e)
-        self.wallSet.getElements.append(e)
+        self.stemSet.elements.append(e)
+        self.wallSet.elements.append(e)
     # Springs on nodes.
     self.foundationSet.computeTributaryLengths(False)
     self.fixedNodes= []
-    elasticBearingNodes= self.foundationSet.getNodes
+    elasticBearingNodes= self.foundationSet.nodes
     kX= springMaterials[0] #Horizontal
     kSx= kX.E
     kY= springMaterials[1] #Vertical
@@ -658,16 +658,16 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
 
   def createSelfWeightLoads(self,rho= 2500, grav= 9.81):
     '''Create the loads of the concrete weight.'''
-    for e in self.wallSet.getElements:
+    for e in self.wallSet.elements:
       selfWeightLoad= xc.Vector([0.0, -grav*rho*e.sectionProperties.A])
       e.vector2dUniformLoadGlobal(selfWeightLoad)
   def createDeadLoad(self,heelFillDepth,toeFillDepth,rho= 2000, grav= 9.81):
     '''Create the loads of earth self weigth.'''
     heelFillLoad= xc.Vector([0.0, -grav*rho*heelFillDepth])
-    for e in self.heelSet.getElements:
+    for e in self.heelSet.elements:
       e.vector2dUniformLoadGlobal(heelFillLoad)
     toeFillLoad= xc.Vector([0.0, -grav*rho*toeFillDepth])
-    for e in self.toeSet.getElements:
+    for e in self.toeSet.elements:
       e.vector2dUniformLoadGlobal(toeFillLoad)
 
   def createEarthPressureLoadOnStem(self,pressureModel,vDir= xc.Vector([-1.0,0.0]),Delta= 0.0):
@@ -848,7 +848,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
 
   def getStemYCoordinates(self):
     y= list()
-    for e in self.stemSet.getElements:
+    for e in self.stemSet.elements:
       n1= e.getNodes[0]
       y.append(n1.getInitialPos2d.y)
     n2= e.getNodes[1]
@@ -858,7 +858,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   def getStemInternalForces(self):
     md= list()
     vd= list()
-    for e in self.stemSet.getElements:
+    for e in self.stemSet.elements:
       md.append(e.getMz1)
       vd.append(e.getVy1)
     md.append(e.getMz2)
@@ -868,7 +868,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   def getHeelInternalForces(self):
     md= 1.0e15
     vd= 1.0e15
-    for e in self.heelSet.getElements:
+    for e in self.heelSet.elements:
       md= min(md,e.getMz1)
       vd= min(vd,e.getVy1)
     return md, vd

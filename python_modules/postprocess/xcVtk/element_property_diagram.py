@@ -42,7 +42,7 @@ class ElementPropertyDiagram(cd.ColoredDiagram):
               by this factor. (Defaults to 0.0, i.e. display of 
               initial/undeformed shape)
     '''
-    elems= eSet.getElements
+    elems= eSet.elements
     if(self.propertyName=='FCTNCP'):
       for e in elems:
         self.vDir= e.getJVector3d(True) #initialGeometry= True

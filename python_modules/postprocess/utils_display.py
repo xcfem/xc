@@ -211,7 +211,7 @@ class PartToDisplay(object):
     # Define the set
     self.xcSet= preprocessor.getSets.defSet(elementSetName)
     for e in elems:
-      self.xcSet.getElements.append(e)
+      self.xcSet.elements.append(e)
     self.xcSet.fillDownwards()
     return self.xcSet
   def display(self,preprocessor,tp,resultsToDisplay):

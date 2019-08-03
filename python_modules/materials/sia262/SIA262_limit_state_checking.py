@@ -396,7 +396,7 @@ def procesResultVerifFISSIA262(preprocessor,nmbComb,limitStress):
   print "Postprocesing combination: ",nmbComb,"\n"
 
   secHAParamsFis= CrackControlSIA262(limitStress)
-  elements= preprocessor.getSets.getSet("total").getElements
+  elements= preprocessor.getSets.getSet("total").elements
   secHAParamsFis.check(elements,nmbComb)
 
 def procesResultVerifFISSIA262PlanB(preprocessor,nmbComb,limitStress):
@@ -404,7 +404,7 @@ def procesResultVerifFISSIA262PlanB(preprocessor,nmbComb,limitStress):
   print "Postprocesing combination: ",nmbComb,"\n"
 
   secHAParamsFis= CrackControlSIA262PlanB(limitStress)
-  elements= preprocessor.getSets.getSet("total").getElements
+  elements= preprocessor.getSets.getSet("total").elements
   secHAParamsFis.check(elements,nmbComb)
 
 # Control of fatigue limit state according to SIA 262.

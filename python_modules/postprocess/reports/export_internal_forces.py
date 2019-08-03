@@ -74,7 +74,7 @@ def exportaEsfuerzosShellSet(preprocessor,nmbComb, st, fName):
   errMsg= 'exportaEsfuerzosShellSet deprecated use exportInternalForces'
   errMsg+= 'with apropriate arguments'
   lmsg.error(errMsg)
-  elems= st.getElements
+  elems= st.elements
   exportShellInternalForces(nmbComb,elems,fName)
 
 def exportBeamInternalForces(nmbComb, elems, fName):
