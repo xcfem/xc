@@ -201,13 +201,13 @@ class PartToDisplay(object):
     '''Returns a list of the elements of this part.'''
     retval= list()
     for sup in self.surfaceList:
-      elSup= sup.getElements()
+      elSup= sup.elements
       for elem in elSup:
         retval.append(elem)
     return retval
   def getElementSet(self,preprocessor):
     elementSetName= self.getShortName()+'_elementSet'
-    elems= self.getElements()
+    elems= self.elements
     # Define the set
     self.xcSet= preprocessor.getSets.defSet(elementSetName)
     for e in elems:

@@ -78,7 +78,7 @@ class EC3Beam(object):
         s=prep.getSets.defSet(self.name+'Set')
         self.elemSet=s.getElements
         for l in lstLn:
-            for e in l.getElements():
+            for e in l.elements:
                 self.elemSet.append(e)
         pol=geom.Polyline3d()
         for p in lstP3d:

@@ -45,7 +45,7 @@ def listSetNodes(preprocessor, setName, fileName, fmt):
   idsCampos= "Id & x & y & z"
   cabeceraSupertabular(fileName,4,defCampos,idsCampos,caption) 
   s= preprocessor.getSets.getSet(setName)
-  nodes= s.getNodes()
+  nodes= s.nodes
   for n in nodes:
     pos= n.getPos()
     fileName.write(n.tag," & ",fmt.format(pos.x)," & ",fmt.format(pos.y)," & ",fmt.format(pos.z),"\\\\\n")
@@ -59,7 +59,7 @@ def listaElementosSet(preprocessor, setName, fileName):
   '''
   fileName.write("Elementos del conjunto: ",setName,"\n")
   s= preprocessor.getSets.getSet(setName)
-  elems= s.getElements()
+  elems= s.elements
   for e in elems:
     fileName.write(e.tag," & ",e.nod(0).tag," & ",e.nod(1).tag,"\\\\\n")
 
@@ -75,7 +75,7 @@ def listaElementosTrussSet(preprocessor, setName, fileName, fmt):
   idsCampos= "Id & nI & nJ & Mater."
   cabeceraSupertabular(fileName,4,defCampos,idsCampos,caption) 
   s= preprocessor.getSets.getSet(setName)
-  elems= s.getElements()
+  elems= s.elements
   for e in elems:
     fileName.write(e.tag," & ",e.nod(0).tag," & ",e.nod(1).tag," & ",e,getMaterial().tag,"\\\\\n")
   cierraSupertabular(fileName) 
@@ -92,7 +92,7 @@ def listaElementosBarraSet(preprocessor, setName, fileName, fmt):
   idsCampos= " Id & nI  & nJ  &Sc.&  E     &  G     & Area   & alpha &    J     &   Iy    &    Iz  \\\\\n -  &     &  -  & - & GPa    & GPa    &  cm2   &   -   &   cm4    &  cm4    &   cm4"
   cabeceraSupertabular(fileName,11,defCampos,idsCampos,caption) 
   s= preprocessor.getSets.getSet(setName)
-  elems= s.getElements()
+  elems= s.elements
   for e in elems:
     str= str(e.tag)+" & "+str(e.nod(0).tag)+" & "+str(e.nod(1).tag)+" & "
     k= 0

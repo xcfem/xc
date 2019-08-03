@@ -43,7 +43,7 @@ def listaCapacityFactor(preprocessor,setName, fName, titulo):
   '''
   printCabeceraListadoCapacityFactor(fName,titulo)
   st= preprocessor.getSets.getSet(setName)
-  elems= st.getElements()
+  elems= st.elements
   tagFCCPCP= 0
   FCCPCP= 0
   HIPCPCP= "" 

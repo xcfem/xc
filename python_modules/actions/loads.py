@@ -150,7 +150,7 @@ class UniformLoadOnLines(BaseVectorLoad):
         for l in self.xcSet.getLines:
             ptExt1tag=l.getKPoints()[0]
             ext1=pointsCont.get(ptExt1tag).getPos
-            nod=[n for n in l.getNodes()]
+            nod=[n for n in l.nodes]
             ndistExtr1=[(n.getInitialPos3d).distPos3d(ext1) for n in nod]
             sortNod=[nod for ndistExtr1,nod in sorted(zip(ndistExtr1,nod))]
             lnInfl=[(sortNod[i-1].getInitialPos3d).distPos3d(sortNod[i+1].getInitialPos3d)/2 for i in range(1,len(sortNod)-1)]
@@ -369,7 +369,7 @@ class StrainGradientLoadOnBeams(object):
         ''' Append load to the load pattern passed as parameter.'''
         pDef= xc.DeformationPlane(self.strain)
         for l in self.xcSet.getLines:
-            for e in l.getElements():
+            for e in l.elements:
                 eLoad= loadPattern.newElementalLoad("beam_strain_load")
                 eLoad.elementTags= xc.ID([e.tag])
                 eleLoad.backEndDeformationPlane= pDef

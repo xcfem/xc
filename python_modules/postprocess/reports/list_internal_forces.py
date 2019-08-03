@@ -5,7 +5,7 @@ def listaEsfuerzosBarrasSet(preprocessor,nmbComb, setName, fmt, fName):
   str= "" 
   k= 0
   s= preprocessor.getSets.getSet(setName)
-  elems= s.getElements()
+  elems= s.elements
   for e in elements:
     str= nmbComb+" & "+e.tag+" & "
     k= 0
@@ -41,7 +41,7 @@ def listaEsfuerzosFCBarrasSet(preprocessor, nmbComb, setName, fmt, fName, nmbDia
   str= "" 
   k= 0
   s= preprocessor.getSets.getSet(setName)
-  elems= s.getElements()
+  elems= s.elements
   for e in elements:
     str= nmbComb+" & "+e.tag+" & "
     k= 0
@@ -75,7 +75,7 @@ def listaEsfuerzosFCBarrasLineas(nmbComb, setNameLineas, fmt, fName, encab, tit,
 # Imprime los esfuerzos de los elementos contenidos en el conjunto que se pasa como parámetro.
 def listaDatosEsfuerzosTrussSet(nmbComb, setName, fmt, fName):
   s= preprocessor.getSets.getSet(setName)
-  elems= s.getElements()
+  elems= s.elements
   for e in elements:
     fName.write(nmbComb," & ",e.tag," & ",fmt.format(e.getStrain()*1e2)," & ",fmt.format(e.getStress()/1e6)," & ",fmt.format(e.getN()/1e3),"\\\\\n")
 
@@ -125,7 +125,7 @@ def listaEsfuerzosZeroLenghtSet(nmbComb, setName, fmt, fName, encab, tit):
   momY= 0
   momZ= 0
   s= preprocessor.getSets.getSet(setName)
-  elems= s.getElements()
+  elems= s.elements
   for e in elements:
     str= nmbComb+" & "+e.tag+" & "
     mats= e.getMaterials()
@@ -144,7 +144,7 @@ def listaEsfuerzosZeroLenghtSet(nmbComb, setName, fmt, fName, encab, tit):
 # Imprime los esfuerzos de los elementos contenidos en el conjunto que se pasa como parámetro.
 def listaEsfuerzosElasticBeam3dSet(preprocessor, nmbComb, setName, fmt, fName):
   s= preprocessor.getSets.getSet(setName)
-  elems= s.getElements()
+  elems= s.elements
   for e in elements:
     str= nmbComb+" & "+e.tag+" & "
     fName.write(str,1," & ")

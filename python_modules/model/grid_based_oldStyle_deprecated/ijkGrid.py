@@ -522,7 +522,7 @@ class ijkGrid(object):
   def appendLoadBeamsInRangeToCurrentLoadPattern(self,ijkRange,loadVector,refSystem):
     lstLinRg=self.getLstLinRange(ijkRange)
     for l in lstLinRg:
-      lElem=l.getElements()
+      lElem=l.elements
       for e in lElem:
         if refSystem=='Local':
           e.vector3dUniformLoadLocal(loadVector)

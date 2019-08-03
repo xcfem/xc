@@ -27,7 +27,7 @@ class LineWrapper(object):
     return retval
 
   def getElements(self):
-    return self.line.getElements()
+    return self.line.elements
 
   def getNodeAbcissae(self):
     '''Returns node's abcissae; first node x= 0.0 last node x= lengthOfLine.'''
@@ -55,7 +55,7 @@ class LineWrapper(object):
       retval.append(0.0) #Initialize values
       indices[n.tag]= count
       count+= 1
-    for e in self.getElements():
+    for e in self.elements:
       f0= factor0*getattr(e, funcName0)
       f1= factor1*getattr(e, funcName1)
       i0= indices[e.getNodes[0].tag]

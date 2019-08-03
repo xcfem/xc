@@ -611,7 +611,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
       l= self.wireframeModelLines[lineName]
       l.setElemSize(elementSize)
       l.genMesh(xc.meshDir.I)
-      for e in l.getElements():
+      for e in l.elements:
         self.foundationSet.getElements.append(e)
         self.wallSet.getElements.append(e)
         if(lineName=='heel'):
@@ -628,7 +628,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
       l.setElemSize(elementSize)
       seedElemHandler.defaultMaterial= stemSection.sectionName
       l.genMesh(xc.meshDir.I)
-      for e in l.getElements():
+      for e in l.elements:
         y= -e.getPosCentroid(True).y
         h= self.getDepth(y)
         stemSection.h= h

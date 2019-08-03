@@ -89,7 +89,7 @@ f1.genMesh(xc.meshDir.I)
 #   We ask for the line to fix:
 lineToFix= preprocessor.getMultiBlockTopology.getLineWithEndPoints(pt0.tag,pt1.tag)
 #   We ask for the nodes on this line
-nodesToFix= lineToFix.getNodes()
+nodesToFix= lineToFix.nodes
 #   We fix them
 for n in nodesToFix:
     modelSpace.fixNode000_000(n.tag) # node fixed.
@@ -107,7 +107,7 @@ lp0 = lPatterns.newLoadPattern("default","0")  # New load pattern named 0
 #   We ask for the line to load:
 lineToLoad= preprocessor.getMultiBlockTopology.getLineWithEndPoints(pt3.tag,pt2.tag)
 #   We ask for the nodes on this line
-nodesToLoad= lineToLoad.getNodes()
+nodesToLoad= lineToLoad.nodes
 P= 9e6
 loadForEachNode= P/len(nodesToLoad)
 #   We load them
