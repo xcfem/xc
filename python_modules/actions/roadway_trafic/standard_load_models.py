@@ -165,3 +165,23 @@ def gradient_thermal_LC(lcName,lstGradThStrnData):
         lc.addLstLoads([loads.StrainGradientThermalLoadOnShells(name=lcName+sd.elemSet.name,elemSet=sd.elemSet,elThick=sd.elThick,DOF=sd.DOF,alpha=sd.alpha,Ttop=sd.Ttop,Tbottom=sd.Tbottom)])
     return lc
  
+def wind_LC(lcName,deckLineSet,vectWindDeck,windwardPileSet,vectWindwardPile,leewardPileSet=None,vectLeewrdPile=None):
+    '''Return the dead load case (asphalt, sidewalk, barriers, ...)
+
+    :param lcName: load case name
+    :param deckLineSet: set of lines to apply wind on deck.
+    :param vectWindDeck: components [vx,vy] of the  uniform linear load due to wind on deck.
+    :param windwardPileSet:set of lines to apply on piles windward.
+    :param vectWindwardPile: components [vx,vy] of the  uniform linear load due to wind on piles (windward side).
+    :param leewardPileSet:set of lines to apply wind on pilesleeward (defaults to None).
+    :param vectLeewardPile: components [vx,vy] of the  uniform linear load due to wind on piles (leeward side) (defaults to None).
+    '''
+    preprocessor=deckLineSet.getPreprocessor
+    lc=lcases.LoadCase(preprocessor,lcName,"default","constant_ts")
+    lc.create()
+    #add linear loads
+    lc.addLstLoads([loads.UniformLoadOnLines(name= lcName+'deck', xcSet=deckLineSet, loadVector=xc.Vector([vectWindDeck[0],vectWindDeck[1],0,0,0]))])
+    lc.addLstLoads([loads.UniformLoadOnLines(name= lcName+'pilewindward', xcSet=windwardPileSet, loadVector=xc.Vector([vectWindwardPile[0],vectWindwardPile[1],0,0,0]))])
+    if leewardPileSet:
+        lc.addLstLoads([loads.UniformLoadOnLines(name= lcName+'pileleeward', xcSet=leewardPileSet, loadVector=xc.Vector([vectLeewardPile[0],vectLeewardPile[1],0,0,0]))])
+    return lc
