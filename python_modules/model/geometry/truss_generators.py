@@ -69,6 +69,49 @@ class TrussGeometry(object):
             self.lowerChordJointsPos.append(self.lowerChordAxis.getFromPoint()+self.moduleWidth*x*self.getLowerChordDirection())
         for x in upperChordX:
             self.upperChordJointsPos.append(self.upperChordAxis.getFromPoint()+self.moduleWidth*x*self.getUpperChordDirection())
+    def getUpperChordFrontEndPoint(self):
+        '''Return the front end of the upper chord.'''
+        return self.upperChordPoints[-1]
+    def getUpperChordBackEndPoint(self):
+        '''Return the back end of the upper chord.'''
+        return self.upperChordPoints[0]
+    def getLowerChordFrontEndPoint(self):
+        '''Return the front end of the lower chord.'''
+        return self.lowerChordPoints[-1]
+    def getLowerChordBackEndPoint(self):
+        '''Return the back end of the lower chord.'''
+        return self.lowerChordPoints[0]
+    def fixNodes(self, modelSpace):
+        '''Fix the supported nodes.
+        '''
+        # The fixed nodes and the support conditions
+        # are not configurable: to enhance.
+        self.A= self.getUpperChordBackEndPoint()
+        self.B= self.getUpperChordFrontEndPoint()
+        modelSpace.fixNode('F00_FFF',self.A.getNode().tag)  # Fix all the y and z displacement DOFs of the node
+                                                      # at point A.
+        modelSpace.fixNode('000_FFF',self.B.getNode().tag)  # Fix all the 3 displacement DOFs of the node
+                                                      # at point B.
+        self.C= self.getLowerChordBackEndPoint()
+        self.D= self.getLowerChordFrontEndPoint()
+        modelSpace.fixNode('F0F_FFF',self.C.getNode().tag)  # Fix the y displacement DOFs of the node
+                                                       # at point C.
+        modelSpace.fixNode('F0F_FFF',self.D.getNode().tag)  # Fix the y displacement DOFs of the node
+                                                       # at point D.
+    def getReactions(self):
+        return (self.A.getNode().getReaction, self.B.getNode().getReaction)
+       
+    def getDeflection(self, axis= 2, globalCreepFactor= 1.5):
+        ''' Return the deflection of the truss
+
+           :param axis: axis for the deflection displacement.
+           :param globalCreepFactor: creep factor.
+        '''
+        lowerChordCentroid= self.lowerChordSet.getNodes.getCentroid(1.0)
+        lowerChordCenterNode= self.lowerChordSet.getNodes.getNearestNode(lowerChordCentroid)
+        deltaY= globalCreepFactor*lowerChordCenterNode.getDisp[axis]
+        ratio= abs(self.span()/deltaY)
+        return deltaY, ratio
     
 class TrussBase(TrussGeometry):
     '''Base class for truss generators.
