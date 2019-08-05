@@ -108,6 +108,7 @@ class CrdTransf: public TaggedObject, public MovableObject
     const TransfCooHandler *GetTransfCooHandler(void) const;
     TransfCooHandler *GetTransfCooHandler(void);
     std::string getName(void) const;
+    virtual int getDimension(void) const= 0;
 
     virtual int initialize(Node *node1Pointer, Node *node2Pointer) = 0;
     virtual int update(void) = 0;

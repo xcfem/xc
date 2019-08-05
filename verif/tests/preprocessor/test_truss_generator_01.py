@@ -44,7 +44,9 @@ span= feetToMeter*31.0+5*inchToMeter
 
 #########################################################
 # Mesh generation.
-truss= truss_generators.FanTruss(trussRise= depth, trussModule= panelSize, trussSpan= span)
+lowerChordAxis= geom.Segment3d(geom.Pos3d(0.0,0.0,0.0),geom.Pos3d(span,0.0,0.0))
+upperChordAxis= geom.Segment3d(geom.Pos3d(0.0,0.0,depth),geom.Pos3d(span,0.0,depth))
+truss= truss_generators.FanTruss(lowerChordAxis, upperChordAxis, trussModule= panelSize)
 truss.lowerChordMaterial= chordsSection
 truss.upperChordMaterial= chordsSection
 truss.diagonalMaterial= diagonalsMaterial

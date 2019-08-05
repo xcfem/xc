@@ -42,6 +42,8 @@ class_<XC::Truss, bases<XC::TrussBase>, boost::noncopyable >("Truss")
   .def("getN", &XC::Truss::getAxialForce,"Returns axial (N) internal force.")
   .add_property("getN1", &XC::Truss::getAxialForce,"Returns axial (N) internal force at node 1.")
   .add_property("getN2", &XC::Truss::getAxialForce,"Returns axial (N) internal force at node 2.")
+  .def("createInertiaLoad", &XC::Truss::createInertiaLoad,"Create the inertia load for the given acceleration vector.")
+  .add_property("rho", &XC::Truss::getRho,&XC::Truss::setRho)
    ;
 
 class_<XC::CorotTrussBase, bases<XC::ProtoTruss>, boost::noncopyable >("CorotTrussBase", no_init);

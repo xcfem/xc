@@ -341,7 +341,9 @@ const XC::GaussModel &XC::Tri31::getGaussModel(void) const
 
 int XC::Tri31::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
-    std::cerr << "Tri31::addLoad - load type unknown for ele with tag: " << this->getTag() << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; load type unknown for ele with tag: "
+	      << this->getTag() << std::endl;
     return -1;
   }
 

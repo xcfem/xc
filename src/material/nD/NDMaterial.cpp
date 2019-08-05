@@ -93,8 +93,16 @@ XC::NDMaterial::NDMaterial(void)
   :Material(0, 0) {}
 
 
+//! @brief Get material density.
 double XC::NDMaterial::getRho(void) const
   { return 0.0; }
+
+//! @brief Set material density.
+void XC::NDMaterial::setRho(const double &)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << " not implemented yet." << std::endl;
+  }
 
 // BJ added 19June2002
 double XC::NDMaterial::getE(void) 

@@ -53,6 +53,10 @@ mesh= feProblem.getDomain.getMesh
 nnod= mesh.getNumNodes()
 nelem= mesh.getNumElements()
 
+# for n in l.nodes:
+#   print n.tag
+# for e in l.elements:
+#   print e.tag
 # nIter= mesh.getNodeIter
 # nod= nIter.next()
 # while not(nod is None):

@@ -225,6 +225,32 @@ boost::python::list XC::SetEstruct::getElements(void)
     return retval;
   }
 
+//! @brief Creates the inertia load that corresponds to the
+//! acceleration argument.
+void XC::SetEstruct::createInertiaLoads(const Vector &accel)
+  {
+    size_t numberOfLayers= getNumNodeLayers();
+    if(numberOfLayers>0)
+      {
+        const size_t numberOfRows= getNumNodeRows();
+        const size_t numberOfColumns= getNumNodeColumns();
+        for(size_t i= 1;i<=numberOfLayers;i++)
+          for(size_t j= 1;j<=numberOfRows;j++)
+            for(size_t k= 1;k<=numberOfColumns;k++)
+              getNode(i,j,k)->createInertiaLoad(accel);
+      }
+    numberOfLayers= getNumElementLayers();
+    if(numberOfLayers>0)
+      {
+        const size_t numberOfRows= getNumElementRows();
+        const size_t numberOfColumns= getNumElementColumns();
+        for(size_t i= 1;i<=numberOfLayers;i++)
+          for(size_t j= 1;j<=numberOfRows;j++)
+            for(size_t k= 1;k<=numberOfColumns;k++)
+              getElement(i,j,k)->createInertiaLoad(accel);
+      }
+  }
+
 //! @brief Returns true if the node belongs to the set.
 bool XC::SetEstruct::In(const Node *n) const
   {

@@ -27,9 +27,9 @@ def VtkCreaStrArraySetData(setToDraw, entTypeName, attr):
   elif(entTypeName=="lines"):
     container= setToDraw.getLines
   elif(entTypeName=="nodes"):
-    container= setToDraw.getNodes
+    container= setToDraw.nodes
   elif(entTypeName=="elementos"):
-    container= setToDraw.getElements
+    container= setToDraw.elements
   else:
     lmsg.error("error: "+entTypeName+" not implemented.")
   for e in container:

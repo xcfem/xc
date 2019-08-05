@@ -81,7 +81,6 @@ class BeamWithHinges2d: public BeamColumnWithSectionFDTrf2d
   private:
     CrossSectionProperties2d ctes_scc; //!< Section mechanical properties E,A,Iy,...
     double beta1, beta2;
-    double rho;
 
     Matrix fs[2];
     Vector sr[2];
@@ -125,11 +124,6 @@ class BeamWithHinges2d: public BeamColumnWithSectionFDTrf2d
     BeamWithHinges2d(int tag,const Material *theSection,const CrdTransf *coordTransf);
     Element *getCopy(void) const;
   
-    double getRho(void) const
-      { return rho; }
-    void setRho(const double &r)
-      { rho= r; }
-
     inline CrossSectionProperties2d getSectionProperties(void) const
       { return ctes_scc; }
     void setSectionProperties(const CrossSectionProperties2d &ctes)

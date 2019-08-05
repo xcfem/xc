@@ -107,7 +107,7 @@ void XC::ElasticBeam2d::set_transf(const CrdTransf *trf)
   }
 
 XC::ElasticBeam2d::ElasticBeam2d(int tag)
-  :ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d), eInic(2), alpha(0.0), d(0.0), rho(0.0),
+  :ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d), eInic(2), alpha(0.0), d(0.0),
   q(3), theCoordTransf(nullptr)
   {
     load.reset(6);
@@ -123,7 +123,7 @@ XC::ElasticBeam2d::ElasticBeam2d(int tag)
 
 //! @brief Constructor.
 XC::ElasticBeam2d::ElasticBeam2d(int tag,const Material *m,const CrdTransf *trf)
-  :ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d,m), eInic(2), alpha(0.0), d(0.0), rho(0.0),
+  :ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d,m), eInic(2), alpha(0.0), d(0.0),
   q(3), theCoordTransf(nullptr)
   {
     load.reset(6);
@@ -143,8 +143,9 @@ XC::ElasticBeam2d::ElasticBeam2d(int tag, double a, double e, double i, int Nd1,
                                  CrdTransf2d &coordTransf, double Alpha, double depth,
                                  double r)
   :ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d,a,e,i,Nd1,Nd2), eInic(2), alpha(Alpha), d(depth),
-   rho(r),  q(3), theCoordTransf(nullptr)
+   q(3), theCoordTransf(nullptr)
   {
+    setRho(r);
     load.reset(6);
     set_transf(&coordTransf);
 
@@ -160,7 +161,7 @@ XC::ElasticBeam2d::ElasticBeam2d(int tag, double a, double e, double i, int Nd1,
 
 //! @brief Copy constructor.
 XC::ElasticBeam2d::ElasticBeam2d(const ElasticBeam2d &other)
-  :ProtoBeam2d(other), eInic(other.eInic), alpha(other.alpha), d(other.d), rho(other.rho),
+  :ProtoBeam2d(other), eInic(other.eInic), alpha(other.alpha), d(other.d),
   q(other.q), theCoordTransf(nullptr)
   {
     set_transf(other.theCoordTransf);
@@ -175,13 +176,12 @@ XC::ElasticBeam2d::ElasticBeam2d(const ElasticBeam2d &other)
   }
 
 //! @brief Assignment operator.
-XC::ElasticBeam2d &XC::ElasticBeam2d::operator=(const XC::ElasticBeam2d &other)
+XC::ElasticBeam2d &XC::ElasticBeam2d::operator=(const ElasticBeam2d &other)
   {
     ProtoBeam2d::operator=(other);
     eInic= other.eInic;
     alpha= other.alpha;
     d= other.d;
-    rho= other.rho;
     q= other.q;
     set_transf(other.theCoordTransf);
 
@@ -394,6 +394,7 @@ const XC::Matrix &XC::ElasticBeam2d::getMass(void) const
   {
     K.Zero();
 
+    const double rho= getRho();
     if(rho>0.0)
       {
         const double L = theCoordTransf->getInitialLength();
@@ -467,11 +468,12 @@ int XC::ElasticBeam2d::addLoad(ElementalLoad *theLoad, double loadFactor)
 
 int XC::ElasticBeam2d::addInertiaLoadToUnbalance(const XC::Vector &accel)
   {
+    const double rho= getRho();
     if(rho!=0.0)
       {
         // Get R * accel from the nodes
-        const XC::Vector &Raccel1 = theNodes[0]->getRV(accel);
-        const XC::Vector &Raccel2 = theNodes[1]->getRV(accel);
+        const Vector &Raccel1 = theNodes[0]->getRV(accel);
+        const Vector &Raccel2 = theNodes[1]->getRV(accel);
 
         if(3 != Raccel1.Size() || 3 != Raccel2.Size())
           {
@@ -502,6 +504,7 @@ const XC::Vector &XC::ElasticBeam2d::getResistingForceIncInertia(void) const
     if(!rayFactors.nullValues())
       P+= this->getRayleighDampingForces();
 
+    const double rho= getRho();
     if(rho!=0.0)
       {
         const Vector &accel1 = theNodes[0]->getTrialAccel();
@@ -619,7 +622,7 @@ void XC::ElasticBeam2d::Print(std::ostream &s, int flag)
         s << "\nElasticBeam2d: " << this->getTag() << std::endl;
         s << "\tConnected Nodes: " << theNodes;
         s << "\tCoordTransf: " << theCoordTransf->getTag() << std::endl;
-        s << "\tmass density:  " << rho << std::endl;
+        s << "\tmass density:  " << getRho() << std::endl;
         const double P  = q(0);
         const double M1 = q(1);
         const double M2 = q(2);

@@ -85,16 +85,19 @@ bool XC::CrossSectionProperties2d::check_values(void)
 
 //! @brief Constructor.
 XC::CrossSectionProperties2d::CrossSectionProperties2d(void)
-  :CommandEntity(), MovableObject(0), e(0), g(0.0) , a(0), i(0), alpha(0) {}
+  :CommandEntity(), MovableObject(0), e(0), g(0.0) , a(0), i(0),
+   alpha(0), rho(0) {}
 
 //! @brief Constructor.
 XC::CrossSectionProperties2d::CrossSectionProperties2d(double EA_in, double EI_in)
-  : CommandEntity(), MovableObject(0), e(1.0), g(0.0), a(EA_in), i(EI_in), alpha(0)
+  : CommandEntity(), MovableObject(0), e(1.0), g(0.0), a(EA_in), i(EI_in),
+    alpha(0), rho(0)
   { check_values(); }
 
 //! @brief Constructor.
 XC::CrossSectionProperties2d::CrossSectionProperties2d(const SectionForceDeformation &section)
-  : CommandEntity(), MovableObject(0), e(1.0), g(1.0), a(0.0), i(0.0), alpha(0)
+  : CommandEntity(), MovableObject(0), e(1.0), g(1.0), a(0.0), i(0.0),
+    alpha(0), rho(0)
   {
     const Matrix &sectTangent= section.getInitialTangent();
     const ResponseId &sectCode= section.getType();
@@ -116,8 +119,9 @@ XC::CrossSectionProperties2d::CrossSectionProperties2d(const SectionForceDeforma
   }
 
 //! @brief Constructor (2D cross sections).
-XC::CrossSectionProperties2d::CrossSectionProperties2d(double E_in, double A_in, double I_in, double G_in, double a)
-  : CommandEntity(), MovableObject(0), e(E_in), g(G_in), a(A_in), i(I_in), alpha(a)
+XC::CrossSectionProperties2d::CrossSectionProperties2d(double E_in, double A_in, double I_in, double G_in, double a, double r)
+  : CommandEntity(), MovableObject(0), e(E_in), g(G_in), a(A_in), i(I_in),
+    alpha(a), rho(r)
   { check_values(); }
 
 //! @brief Returns the angle between the principal axes and the local system.
@@ -260,11 +264,11 @@ XC::DbTagData &XC::CrossSectionProperties2d::getDbTagData(void) const
 
 //! @brief Send members through the channel being passed as parameter.
 int XC::CrossSectionProperties2d::sendData(CommParameters &cp)
-  { return cp.sendDoubles(e,g,a,i,alpha,getDbTagData(),CommMetaData(0)); }
+  { return cp.sendDoubles(e,g,a,i,alpha,rho,getDbTagData(),CommMetaData(0)); }
 
 //! @brief Receives members through the channel being passed as parameter.
 int XC::CrossSectionProperties2d::recvData(const CommParameters &cp)
-  { return cp.receiveDoubles(e,g,a,i,alpha,getDbTagData(),CommMetaData(0)); }
+  { return cp.receiveDoubles(e,g,a,i,alpha,rho,getDbTagData(),CommMetaData(0)); }
 
 //! @brief Sends object through the channel being passed as parameter.
 int XC::CrossSectionProperties2d::sendSelf(CommParameters &cp)

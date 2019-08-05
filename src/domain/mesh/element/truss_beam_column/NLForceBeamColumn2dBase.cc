@@ -48,7 +48,7 @@ void XC::NLForceBeamColumn2dBase::resizeMatrices(const size_t &nSections)
 // invoked by a FEM_ObjectBroker, recvSelf() needs to be invoked on this object.
 XC::NLForceBeamColumn2dBase::NLForceBeamColumn2dBase(int tag,int classTag,int numSec)
   : BeamColumnWithSectionFDTrf2d(tag,classTag,numSec),
-    rho(0), maxIters(10), tol(1e-8), initialFlag(0),
+    maxIters(10), tol(1e-8), initialFlag(0),
     kv(NEBD,NEBD), Se(NEBD), kvcommit(NEBD,NEBD), Secommit(NEBD),
     fs(numSec), vs(numSec), Ssr(numSec), vscommit(numSec), p0()
   {}
@@ -57,14 +57,14 @@ XC::NLForceBeamColumn2dBase::NLForceBeamColumn2dBase(int tag,int classTag,int nu
 // invoked by a FEM_ObjectBroker, recvSelf() needs to be invoked on this object.
 XC::NLForceBeamColumn2dBase::NLForceBeamColumn2dBase(int tag,int classTag,int numSec,const Material *m,const CrdTransf *coordTransf)
   : BeamColumnWithSectionFDTrf2d(tag,classTag,numSec,m,coordTransf),
-    rho(0), maxIters(10), tol(1e-8), initialFlag(0),
+    maxIters(10), tol(1e-8), initialFlag(0),
     kv(NEBD,NEBD), Se(NEBD), kvcommit(NEBD,NEBD), Secommit(NEBD),
     fs(numSec), vs(numSec), Ssr(numSec), vscommit(numSec), p0()
   {}
 
 //! @brief Copy constructor.
 XC::NLForceBeamColumn2dBase::NLForceBeamColumn2dBase(const NLForceBeamColumn2dBase &other)
-  : BeamColumnWithSectionFDTrf2d(other), rho(other.rho), maxIters(other.maxIters), tol(other.tol), initialFlag(other.initialFlag),
+  : BeamColumnWithSectionFDTrf2d(other), maxIters(other.maxIters), tol(other.tol), initialFlag(other.initialFlag),
     kv(other.kv), Se(other.Se), kvcommit(other.kvcommit), Secommit(other.Secommit),
     fs(other.fs), vs(other.vs), Ssr(other.Ssr), vscommit(other.vscommit), sp(other.sp), p0(other.p0), Ki(other.Ki)
   {}
@@ -132,18 +132,18 @@ void XC::NLForceBeamColumn2dBase::initializeSectionHistoryVariables(void)
 int XC::NLForceBeamColumn2dBase::sendData(CommParameters &cp)
   {
     int res= BeamColumnWithSectionFDTrf2d::sendData(cp);
-    res+= cp.sendDoubles(rho,tol,getDbTagData(),CommMetaData(12));
-    res+= cp.sendInts(maxIters,initialFlag,getDbTagData(),CommMetaData(13));
-    res+= cp.sendMatrix(kv,getDbTagData(),CommMetaData(14));
-    res+= cp.sendVector(Se,getDbTagData(),CommMetaData(15));
-    res+= cp.sendMatrix(kvcommit,getDbTagData(),CommMetaData(16));
-    res+= cp.sendVector(Secommit,getDbTagData(),CommMetaData(17));
-    res+= cp.sendMatrices(fs,getDbTagData(),CommMetaData(18));;
-    res+= cp.sendVectors(vs,getDbTagData(),CommMetaData(19));
-    res+= cp.sendVectors(Ssr,getDbTagData(),CommMetaData(20));
-    res+= cp.sendVectors(vscommit,getDbTagData(),CommMetaData(21));
-    res+= cp.sendMatrix(sp,getDbTagData(),CommMetaData(22));
-    res+= p0.sendData(cp,getDbTagData(),CommMetaData(23));
+    res+= cp.sendDouble(tol,getDbTagData(),CommMetaData(13));
+    res+= cp.sendInts(maxIters,initialFlag,getDbTagData(),CommMetaData(14));
+    res+= cp.sendMatrix(kv,getDbTagData(),CommMetaData(15));
+    res+= cp.sendVector(Se,getDbTagData(),CommMetaData(16));
+    res+= cp.sendMatrix(kvcommit,getDbTagData(),CommMetaData(17));
+    res+= cp.sendVector(Secommit,getDbTagData(),CommMetaData(18));
+    res+= cp.sendMatrices(fs,getDbTagData(),CommMetaData(19));;
+    res+= cp.sendVectors(vs,getDbTagData(),CommMetaData(20));
+    res+= cp.sendVectors(Ssr,getDbTagData(),CommMetaData(21));
+    res+= cp.sendVectors(vscommit,getDbTagData(),CommMetaData(22));
+    res+= cp.sendMatrix(sp,getDbTagData(),CommMetaData(23));
+    res+= p0.sendData(cp,getDbTagData(),CommMetaData(24));
     return res;
   }
 
@@ -151,17 +151,17 @@ int XC::NLForceBeamColumn2dBase::sendData(CommParameters &cp)
 int XC::NLForceBeamColumn2dBase::recvData(const CommParameters &cp)
   {
     int res= BeamColumnWithSectionFDTrf2d::recvData(cp);
-    res+= cp.receiveDoubles(rho,tol,getDbTagData(),CommMetaData(12));
-    res+= cp.receiveInts(maxIters,initialFlag,getDbTagData(),CommMetaData(13));
-    res+= cp.receiveMatrix(kv,getDbTagData(),CommMetaData(14));
-    res+= cp.receiveVector(Se,getDbTagData(),CommMetaData(15));
-    res+= cp.receiveMatrix(kvcommit,getDbTagData(),CommMetaData(16));
-    res+= cp.receiveVector(Secommit,getDbTagData(),CommMetaData(17));
-    res+= cp.receiveMatrices(fs,getDbTagData(),CommMetaData(18));;
-    res+= cp.receiveVectors(vs,getDbTagData(),CommMetaData(19));
-    res+= cp.receiveVectors(Ssr,getDbTagData(),CommMetaData(20));
-    res+= cp.receiveVectors(vscommit,getDbTagData(),CommMetaData(21));
-    res+= cp.receiveMatrix(sp,getDbTagData(),CommMetaData(22));
-    res+= p0.receiveData(cp,getDbTagData(),CommMetaData(23));
+    res+= cp.receiveDouble(tol,getDbTagData(),CommMetaData(13));
+    res+= cp.receiveInts(maxIters,initialFlag,getDbTagData(),CommMetaData(14));
+    res+= cp.receiveMatrix(kv,getDbTagData(),CommMetaData(15));
+    res+= cp.receiveVector(Se,getDbTagData(),CommMetaData(16));
+    res+= cp.receiveMatrix(kvcommit,getDbTagData(),CommMetaData(17));
+    res+= cp.receiveVector(Secommit,getDbTagData(),CommMetaData(18));
+    res+= cp.receiveMatrices(fs,getDbTagData(),CommMetaData(19));;
+    res+= cp.receiveVectors(vs,getDbTagData(),CommMetaData(20));
+    res+= cp.receiveVectors(Ssr,getDbTagData(),CommMetaData(21));
+    res+= cp.receiveVectors(vscommit,getDbTagData(),CommMetaData(22));
+    res+= cp.receiveMatrix(sp,getDbTagData(),CommMetaData(23));
+    res+= p0.receiveData(cp,getDbTagData(),CommMetaData(24));
     return res;
   }

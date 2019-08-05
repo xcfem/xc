@@ -384,6 +384,14 @@ SlidingVectorsSystem3d XC::SetMeshComp::getResistingSlidingVectorsSystem3d(const
     return retval;    
   }
 
+//! @brief Creates the inertia load that corresponds to the
+//! acceleration argument.
+void XC::SetMeshComp::createInertiaLoads(const Vector &accel)
+  {
+    nodes.createInertiaLoads(accel);
+    elements.createInertiaLoads(accel);
+  }
+
 //! @brief Returns true if the node with the tag
 //! being passed as parameter, belongs to the set.
 bool XC::SetMeshComp::InNodeTag(const int tag_node) const

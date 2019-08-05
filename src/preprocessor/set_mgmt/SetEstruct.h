@@ -97,6 +97,8 @@ class SetEstruct: public SetBase
     std::set<int> getElementTags(void) const;
     boost::python::list getElements(void);
     ElementEdges getElementEdges(void);
+    
+    void createInertiaLoads(const Vector &);
   };
 } //end of XC namespace
 #endif

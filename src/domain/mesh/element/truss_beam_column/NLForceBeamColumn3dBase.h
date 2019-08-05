@@ -53,7 +53,6 @@ class NLForceBeamColumn3dBase: public BeamColumnWithSectionFDTrf3d
 
     
     // internal data
-    double rho; //!<mass density per unit length
     int maxIters; //!<maximum number of local iterations
     double tol;	 //!<tolerance for relative energy norm for local iterations
 
@@ -94,11 +93,6 @@ class NLForceBeamColumn3dBase: public BeamColumnWithSectionFDTrf3d
     void setSection(const PrismaticBarCrossSection *sccModel);
 
     int getNumDOF(void) const;
-
-    double getRho(void) const
-      { return rho; }
-    void setRho(const double &r)
-      { rho= r; }
 
     const Matrix &getTangentStiff(void) const;
 

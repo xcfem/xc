@@ -79,8 +79,7 @@ double XC::BeamWithHinges2d::workArea[100];
 XC::BeamWithHinges2d::BeamWithHinges2d(int tag)
   :BeamColumnWithSectionFDTrf2d(tag, ELE_TAG_BeamWithHinges2d,2),
    ctes_scc(0.0,0.0,0.0),
-   beta1(0.0), beta2(0.0), rho(0.0),
-   kb(3,3), q(3), kbCommit(3,3), qCommit(3),
+   beta1(0.0), beta2(0.0), kb(3,3), q(3), kbCommit(3,3), qCommit(3),
    initialFlag(0), maxIter(0), tolerance(0.0), sp()
   {
     load.reset(6);
@@ -94,8 +93,7 @@ XC::BeamWithHinges2d::BeamWithHinges2d(int tag)
 XC::BeamWithHinges2d::BeamWithHinges2d(int tag,const Material *mat,const CrdTransf *coordTransf)
   :BeamColumnWithSectionFDTrf2d(tag, ELE_TAG_BeamWithHinges2d,2,mat,coordTransf),
    ctes_scc(0.0,0.0,0.0),
-   beta1(0.0), beta2(0.0), rho(0.0),
-   kb(3,3), q(3), kbCommit(3,3), qCommit(3),
+   beta1(0.0), beta2(0.0), kb(3,3), q(3), kbCommit(3,3), qCommit(3),
    initialFlag(0), maxIter(0), tolerance(0.0), sp()
   {
     load.reset(6);
@@ -123,10 +121,10 @@ XC::BeamWithHinges2d::BeamWithHinges2d(int tag, int nodeI, int nodeJ,
                                        double r, int max, double tol)
   :BeamColumnWithSectionFDTrf2d(tag, ELE_TAG_BeamWithHinges2d,2,nodeI,nodeJ,coordTransf),
    ctes_scc(e,a,i),
-   beta1(lpi), beta2(lpj), rho(r),
-   kb(3,3), q(3), kbCommit(3,3), qCommit(3),
+   beta1(lpi), beta2(lpj), kb(3,3), q(3), kbCommit(3,3), qCommit(3),
    initialFlag(0), maxIter(max), tolerance(tol), sp()
   {
+    setRho(r);
     load.reset(6);
 
     // Get copies of sections
@@ -525,6 +523,7 @@ const XC::Matrix &XC::BeamWithHinges2d::getMass(void) const
   {
     theMatrix.Zero();
 
+    const double rho= getRho();
     if(rho != 0.0)
       {
         const double L = theCoordTransf->getInitialLength();
@@ -587,6 +586,7 @@ int XC::BeamWithHinges2d::addLoad(ElementalLoad *theLoad, double loadFactor)
 
 int XC::BeamWithHinges2d::addInertiaLoadToUnbalance(const XC::Vector &accel)
   {
+    const double rho= getRho();
     if(rho == 0.0)
       return 0;
 
@@ -651,6 +651,7 @@ const XC::Vector &XC::BeamWithHinges2d::getResistingForceIncInertia(void) const
   {
     theVector=  this->getResistingForce();
 
+    const double rho= getRho();
     if(rho != 0.0)
       {
 
@@ -696,7 +697,7 @@ int XC::BeamWithHinges2d::sendData(CommParameters &cp)
   {
     int res= BeamColumnWithSectionFDTrf2d::sendData(cp);
     res+= cp.sendMovable(ctes_scc,getDbTagData(),CommMetaData(12));
-    res+= cp.sendDoubles(beta1,beta2,rho,getDbTagData(),CommMetaData(13));
+    res+= cp.sendDoubles(beta1,beta2,getDbTagData(),CommMetaData(13));
     res+= cp.sendMatrix(fs[0],getDbTagData(),CommMetaData(14));
     res+= cp.sendMatrix(fs[1],getDbTagData(),CommMetaData(15));
     res+= cp.sendVector(sr[0],getDbTagData(),CommMetaData(16));
@@ -722,7 +723,7 @@ int XC::BeamWithHinges2d::recvData(const CommParameters &cp)
   {
     int res= BeamColumnWithSectionFDTrf2d::recvData(cp);
     res+= cp.receiveMovable(ctes_scc,getDbTagData(),CommMetaData(12));
-    res+= cp.receiveDoubles(beta1,beta2,rho,getDbTagData(),CommMetaData(13));
+    res+= cp.receiveDoubles(beta1,beta2,getDbTagData(),CommMetaData(13));
     res+= cp.receiveMatrix(fs[0],getDbTagData(),CommMetaData(14));
     res+= cp.receiveMatrix(fs[1],getDbTagData(),CommMetaData(15));
     res+= cp.receiveVector(sr[0],getDbTagData(),CommMetaData(16));
@@ -748,7 +749,7 @@ int XC::BeamWithHinges2d::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
     const int dataTag= getDbTag();
-    inicComm(33);
+    inicComm(31);
     int res= sendData(cp);
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
@@ -761,7 +762,7 @@ int XC::BeamWithHinges2d::sendSelf(CommParameters &cp)
 //! @brief Receives object through the channel being passed as parameter.
 int XC::BeamWithHinges2d::recvSelf(const CommParameters &cp)
   {
-    inicComm(33);
+    inicComm(31);
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 

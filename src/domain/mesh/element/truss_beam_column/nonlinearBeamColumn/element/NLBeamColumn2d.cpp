@@ -984,7 +984,7 @@ bool XC::NLBeamColumn2d::isSubdomain(void)
 int XC::NLBeamColumn2d::sendData(CommParameters &cp)
   {
     int res= NLForceBeamColumn2dBase::sendData(cp);
-    res+= cp.sendInt(maxSubdivisions,getDbTagData(),CommMetaData(29));
+    res+= cp.sendInt(maxSubdivisions,getDbTagData(),CommMetaData(25));
     return res;
   }
 
@@ -992,13 +992,13 @@ int XC::NLBeamColumn2d::sendData(CommParameters &cp)
 int XC::NLBeamColumn2d::recvData(const CommParameters &cp)
   {
     int res= NLForceBeamColumn2dBase::recvData(cp);
-    res+= cp.receiveInt(maxSubdivisions,getDbTagData(),CommMetaData(29));
+    res+= cp.receiveInt(maxSubdivisions,getDbTagData(),CommMetaData(25));
     return res;
   }
 
 int XC::NLBeamColumn2d::sendSelf(CommParameters &cp)
   {
-    inicComm(30);
+    inicComm(26);
     int res= sendData(cp);
 
     const int dataTag= getDbTag(cp);
@@ -1011,7 +1011,7 @@ int XC::NLBeamColumn2d::sendSelf(CommParameters &cp)
 
 int XC::NLBeamColumn2d::recvSelf(const CommParameters &cp)
   {
-    inicComm(30);
+    inicComm(26);
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)

@@ -79,8 +79,6 @@ class DispBeamColumn2dBase : public BeamColumnWithSectionFDTrf2d
     FVectorBeamColumn2d q0; //!< Fixed end forces in basic system
     FVectorBeamColumn2d p0; //!< Reactions in basic system
 
-    double rho;	//!< Mass density per unit length
-
     // AddingSensitivity:BEGIN //////////////////////////////////////////
     int parameterID;
     // AddingSensitivity:END ///////////////////////////////////////////

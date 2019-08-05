@@ -72,6 +72,7 @@ class Domain;
 class Renderer;
 class Information;
 class Preprocessor;
+class LoadPattern;
 
 //! @brief Base class for domain components (nodes, elements, constraints,
 //! loads,...).
@@ -98,7 +99,9 @@ class DomainComponent: public TaggedObject, public MovableObject
     virtual Domain *getDomain(void) const;
     const Preprocessor *getPreprocessor(void) const;
     Preprocessor *getPreprocessor(void);
-
+    const LoadPattern *getCurrentLoadPattern(void) const;
+    LoadPattern *getCurrentLoadPattern(void);
+    
     void set_index(const size_t &i);
 
   };

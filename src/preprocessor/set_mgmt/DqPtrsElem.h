@@ -78,6 +78,8 @@ class DqPtrsElem: public DqPtrsKDTree<Element,KDTreeElements>
     DqPtrsElem pickElemsOfDimension(const size_t &);
     DqPtrsElem pickElemsOfMaterial(const std::string &);
     void numera(void);
+    
+    void createInertiaLoads(const Vector &);
   };
 
 DqPtrsElem operator+(const DqPtrsElem &a,const DqPtrsElem &b);

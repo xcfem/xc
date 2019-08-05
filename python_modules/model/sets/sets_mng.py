@@ -60,7 +60,7 @@ def get_min_coo_nod(setWithNod,cooId):
                    1 for Y coord. and 2 for Z coord.
     '''
     retval=0
-    nodInSet=setWithNod.getNodes
+    nodInSet=setWithNod.nodes
     if cooId in [0,1,2]:
         CoorNod=[n.getCoo[cooId] for n in nodInSet]
         retval=min(CoorNod)
@@ -76,7 +76,7 @@ def get_max_coo_nod(setWithNod,cooId):
                    1 for Y coord. and 2 for Z coord.
     '''
     retval=0
-    nodInSet=setWithNod.getNodes
+    nodInSet=setWithNod.nodes
     if cooId in [0,1,2]:
         CoorNod=[n.getCoo[cooId] for n in nodInSet]
         retval=max(CoorNod)
@@ -100,11 +100,11 @@ def setSurf_to_lst(setSurf):
 
 def setNod_to_lst(setNod):
     '''return a list with the nodes included in the set `setNod` '''
-    return [n for n in setNod.getNodes]
+    return [n for n in setNod.nodes]
 
 def setElem_to_lst(setElem):
     '''return a list with the elements included in the set `setElem` '''
-    return [e for e in setElem.getElements]
+    return [e for e in setElem.elements]
    
 def lstNod_to_set(preprocessor,lstNod,setName):
     '''add the nodes in list `lstNod` to the set named setName.
@@ -116,7 +116,7 @@ def lstNod_to_set(preprocessor,lstNod,setName):
     else:
         s=setsMng.defSet(setName)
     for n in lstNod:
-        s.getNodes.append(n)
+        s.nodes.append(n)
     return s   
 
 def lstLin_to_set(preprocessor,lstLin,setName):
@@ -148,7 +148,7 @@ def set_included_in_orthoPrism(preprocessor,setInit,prismBase,prismAxis,setName)
     :param prismAxis:    axis of the prism (can be equal to 'X', 'Y', 'Z')
     :param setName:      name of the set to be generated                   
     '''
-    sElIni=setInit.getElements
+    sElIni=setInit.elements
     if prismAxis in ['X','x']:
         elem_inside_prism=[e for e in sElIni if prismBase.In(geom.Pos2d(e.getPosCentroid(True).y,e.getPosCentroid(True).z),0)]
     elif prismAxis in ['Y','y']:
@@ -258,7 +258,7 @@ def lstElem_to_set(preprocessor,lstElem,setName):
     else:
         s=setsMng.defSet(setName)
     for e in lstElem:
-        s.getElements.append(e)
+        s.elements.append(e)
     return s  
 
 
@@ -303,7 +303,7 @@ def get_nodes_wire(setBusq,lstPtsWire,tol=0.01):
     the line defined by the successive points in list `lstPtsWire`  
     (expressed as geom.Pos3d(x,y,z))
     '''
-    nodAux= setBusq.getNodes
+    nodAux= setBusq.nodes
     retval= list() 
     for i in range(0,len(lstPtsWire)-1):
         segmAux= geom.Line3d(lstPtsWire[i],lstPtsWire[i+1])
@@ -357,7 +357,7 @@ def append_nodes_from_line(setTo,line):
   :param line: line that contains the nodes 
   '''
   nn= line.getNumNodes
-  nodes= setTo.getNodes
+  nodes= setTo.nodes
   for i in range(1,nn):
     n= line.getNode(1,1,i)
     nodes.append(n)

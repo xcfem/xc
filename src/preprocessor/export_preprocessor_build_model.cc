@@ -60,7 +60,8 @@ class_<XC::SetBase, bases<XC::EntMdlrBase>, boost::noncopyable >("SetBase", no_i
   .add_property("getNumElements",&XC::SetBase::getNumberOfElements,"Return the number or elements.")
   .add_property("color", make_function(&XC::SetBase::getColor, return_internal_reference<>() ),&XC::SetBase::setColor,"stores a color for the objects of the set.")
   .def("setColorComponents",make_function(&XC::SetBase::setColorComponents, return_internal_reference<>() ),"set the components of the color for the objects of the set.")
-   ;
+  .def("createInertiaLoads", &XC::SetBase::createInertiaLoads, "Create the inertia load for the given acceleration vector.")
+  ;
 
 class_<XC::SetEstruct, bases<XC::SetBase>, boost::noncopyable >("SetEstruct", no_init)
   .add_property("getNumNodeLayers", &XC::SetEstruct::getNumNodeLayers,"Return the number of node layers.")
@@ -76,8 +77,10 @@ class_<XC::SetEstruct, bases<XC::SetBase>, boost::noncopyable >("SetEstruct", no
   .add_property("isKRow", &XC::SetEstruct::isKRow)
   .add_property("getDimension", &XC::SetEstruct::Dimension)
   .add_property("getStrType", &XC::SetEstruct::getStrType,"Return a string describing the set type i_row, j_row, k_row,...")
-  .def("getNodes", &XC::SetEstruct::getNodes, "Return entitie's nodes.")
-  .def("getElements", &XC::SetEstruct::getElements, "Return entitie's elements.")
+  .add_property("getNodes", &XC::SetEstruct::getNodes, "Return entity nodes. DEPRECATED use nodes.")
+  .add_property("getElements", &XC::SetEstruct::getElements, "Return entity elements. DEPRECATED use elements.")
+  .add_property("nodes", &XC::SetEstruct::getNodes, "Return entity nodes.")
+  .add_property("elements", &XC::SetEstruct::getElements, "Return entity elements.")
   .def("getNodeI", &XC::SetEstruct::getNodeI, return_internal_reference<>(), "Return node in position (i)." )
   .def("getNodeIJ", &XC::SetEstruct::getNodeIJ, return_internal_reference<>(), "Return node in position (i,j)." )
   .def("getNodeIJK", &XC::SetEstruct::getNodeIJK, return_internal_reference<>(), "Return node in position (i,j,k).")

@@ -31,7 +31,7 @@ def getSlidingVectorsSystemfromSlidingVector(DOFs,coo,v):
     return geom.SlidingVectorsSystem3d(geom.Pos3d(coo[0],coo[1],coo[2]),geom.Vector3d(v[0],v[1],v[2]),geom.Vector3d(v[3],v[4],v[5]))
 
 def getReactionFromSetOfNodes(DOFs,nodeSet):
-  nodes= nodeSet.getNodes
+  nodes= nodeSet.nodes
   retval= geom.SlidingVectorsSystem3d()
   for n in nodes:
     retval+= getSlidingVectorsSystemfromSlidingVector(DOFs,n.get3dCoo,n.getReaction)

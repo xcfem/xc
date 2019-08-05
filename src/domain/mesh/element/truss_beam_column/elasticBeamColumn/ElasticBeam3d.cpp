@@ -102,13 +102,13 @@ void XC::ElasticBeam3d::set_transf(const CrdTransf *trf)
 
 //! @brief Default constructor.
 XC::ElasticBeam3d::ElasticBeam3d(int tag)
-  :ProtoBeam3d(tag,ELE_TAG_ElasticBeam3d), eInic(3), rho(0.0),
+  :ProtoBeam3d(tag,ELE_TAG_ElasticBeam3d), eInic(3),
    sectionTag(0), q(), q0(), p0(), theCoordTransf(0)
   { load.reset(12); }
 
 //! @brief Constructor.
 XC::ElasticBeam3d::ElasticBeam3d(int tag,const Material *m,const CrdTransf *trf)
-  :ProtoBeam3d(tag,ELE_TAG_ElasticBeam3d,m), eInic(3), rho(0.0),
+  :ProtoBeam3d(tag,ELE_TAG_ElasticBeam3d,m), eInic(3),
    sectionTag(0), q(), q0(), p0(), theCoordTransf(nullptr)
   { load.reset(12); set_transf(trf); }
 
@@ -117,15 +117,16 @@ XC::ElasticBeam3d::ElasticBeam3d(int tag, double a, double e, double g,
                              double jx, double iy, double iz, int Nd1, int Nd2,
                              CrdTransf3d &coordTransf, double r, int sectTag)
   :ProtoBeam3d(tag,ELE_TAG_ElasticBeam3d,a,e,g,jx,iy,iz,Nd1,Nd2), eInic(3),
-   rho(r), sectionTag(sectTag), q(), q0(), p0(), theCoordTransf(0)
+   sectionTag(sectTag), q(), q0(), p0(), theCoordTransf(0)
   {
+    setRho(r);
     load.reset(12);
     set_transf(&coordTransf);
   }
 
 //! @brief Constructor.
 XC::ElasticBeam3d::ElasticBeam3d(int tag, int Nd1, int Nd2, SectionForceDeformation *section,CrdTransf3d &coordTransf, double r)
-  :ProtoBeam3d(tag,ELE_TAG_ElasticBeam3d,Nd1,Nd2), eInic(3), rho(0.0), q(), theCoordTransf(0)
+  :ProtoBeam3d(tag,ELE_TAG_ElasticBeam3d,Nd1,Nd2), eInic(3), q(), theCoordTransf(0)
   {
     load.reset(12);
     if(section)
@@ -134,7 +135,7 @@ XC::ElasticBeam3d::ElasticBeam3d(int tag, int Nd1, int Nd2, SectionForceDeformat
         ctes_scc.E() = 1.0;
         ctes_scc.G() = 1.0;
         ctes_scc.J() = 0.0;
-        rho = r;
+        ctes_scc.setRho(r);
 
         const Matrix &sectTangent = section->getSectionTangent();
         const ID &sectCode = section->getType();
@@ -181,7 +182,7 @@ XC::ElasticBeam3d::ElasticBeam3d(int tag, int Nd1, int Nd2, SectionForceDeformat
 
 //! @brief Copy constructor.
 XC::ElasticBeam3d::ElasticBeam3d(const XC::ElasticBeam3d &other)
-  :ProtoBeam3d(other), eInic(other.eInic), rho(other.rho),
+  :ProtoBeam3d(other), eInic(other.eInic),
    sectionTag(other.sectionTag), q(other.q), theCoordTransf(nullptr)
   {
     set_transf(other.theCoordTransf);
@@ -195,7 +196,6 @@ XC::ElasticBeam3d &XC::ElasticBeam3d::operator=(const XC::ElasticBeam3d &other)
   {
     ProtoBeam3d::operator=(other);
     eInic= other.eInic;
-    rho= other.rho;
     sectionTag= other.sectionTag;
     q= other.q;
     set_transf(other.theCoordTransf);
@@ -400,6 +400,7 @@ const XC::Matrix &XC::ElasticBeam3d::getMass(void) const
   {
     K.Zero();
 
+    const double rho= getRho();
     if(rho > 0.0)
       {
         const double L= theCoordTransf->getInitialLength();
@@ -471,6 +472,7 @@ int XC::ElasticBeam3d::addLoad(ElementalLoad *theLoad, double loadFactor)
 
 int XC::ElasticBeam3d::addInertiaLoadToUnbalance(const XC::Vector &accel)
   {
+    const double rho= getRho();
     if(rho == 0.0) return 0;
 
     // Get R * accel from the nodes
@@ -508,6 +510,7 @@ const XC::Vector &XC::ElasticBeam3d::getResistingForceIncInertia(void) const
     if(!rayFactors.nullValues())
       P+= this->getRayleighDampingForces();
 
+    const double rho= getRho();
     if(rho == 0.0)
       return P;
     else
@@ -631,11 +634,10 @@ int XC::ElasticBeam3d::sendData(CommParameters &cp)
     int res= ProtoBeam3d::sendData(cp);
     res+= sendCoordTransf(8,9,10,cp);
     res+= cp.sendVector(eInic,dt,CommMetaData(11));
-    res+= cp.sendDouble(rho,dt,CommMetaData(12));
-    res+= cp.sendInt(sectionTag,dt,CommMetaData(13));
-    res+= sendEsfBeamColumn3d(q,14,dt,cp);
-    res+= p0.sendData(cp,dt,CommMetaData(15));
-    res+= q0.sendData(cp,dt,CommMetaData(16));
+    res+= cp.sendInt(sectionTag,dt,CommMetaData(12));
+    res+= sendEsfBeamColumn3d(q,13,dt,cp);
+    res+= p0.sendData(cp,dt,CommMetaData(14));
+    res+= q0.sendData(cp,dt,CommMetaData(15));
     return res;
   }
 
@@ -646,11 +648,10 @@ int XC::ElasticBeam3d::recvData(const CommParameters &cp)
     int res= ProtoBeam3d::recvData(cp);
     theCoordTransf= recvCoordTransf3d(8,9,10,cp);
     res+= cp.receiveVector(eInic,dt,CommMetaData(11));
-    res+= cp.receiveDouble(rho,dt,CommMetaData(12));
-    res+= cp.receiveInt(sectionTag,dt,CommMetaData(13));
-    res+= receiveEsfBeamColumn3d(q,14,dt,cp);
-    res+= p0.receiveData(cp,dt,CommMetaData(15));
-    res+= q0.receiveData(cp,dt,CommMetaData(16));
+    res+= cp.receiveInt(sectionTag,dt,CommMetaData(12));
+    res+= receiveEsfBeamColumn3d(q,13,dt,cp);
+    res+= p0.receiveData(cp,dt,CommMetaData(14));
+    res+= q0.receiveData(cp,dt,CommMetaData(15));
     return res;
   }
 

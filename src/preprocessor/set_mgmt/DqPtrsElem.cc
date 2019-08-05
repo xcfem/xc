@@ -143,6 +143,14 @@ void XC::DqPtrsElem::numera(void)
       }
   }
 
+//! @brief Creates the inertia load that corresponds to the
+//! acceleration argument.
+void  XC::DqPtrsElem::createInertiaLoads(const Vector &accel)
+  {
+    for(iterator i= begin();i!=end();i++)
+      (*i)->createInertiaLoad(accel);
+  }
+
 //! @brief Deactivates the elements.
 void XC::DqPtrsElem::kill_elements(void)
   {

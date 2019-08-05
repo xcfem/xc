@@ -134,11 +134,11 @@ for e in tendonSet.getElements:
 
 # Connection between tendon and beam
 gluedDOFs= [0,1,2,3,4,5]
-for n1,n2 in zip(beamLines[0].getNodes(),tendonLines[0].getNodes()):
+for n1,n2 in zip(beamLines[0].nodes,tendonLines[0].nodes):
     modelSpace.constraints.newEqualDOF(n1.tag,n2.tag,xc.ID(gluedDOFs))
-for n1,n2 in zip(beamLines[1].getNodes(),tendonLines[1].getNodes()):
+for n1,n2 in zip(beamLines[1].nodes,tendonLines[1].nodes):
     modelSpace.constraints.newEqualDOF(n1.tag,n2.tag,xc.ID(gluedDOFs))
-for n1,n2 in zip(beamLines[2].getNodes(),tendonLines[2].getNodes()):
+for n1,n2 in zip(beamLines[2].nodes,tendonLines[2].nodes):
     modelSpace.constraints.newEqualDOF(n1.tag,n2.tag,xc.ID(gluedDOFs))
 
 # mid-span node

@@ -46,6 +46,7 @@ class_<XC::DqPtrsNode, bases<dq_ptrs_node> >("DqPtrsNode",no_init)
   .def(self + self)
   .def(self - self)
   .def(self * self)
+  .def("createInertiaLoads", &XC::DqPtrsNode::createInertiaLoads,"Create the inertia load for the given acceleration vector.")
   ;
 
 typedef XC::DqPtrs<XC::Element> dq_ptrs_element;
@@ -74,6 +75,7 @@ class_<XC::DqPtrsElem, bases<dq_ptrs_element> >("DqPtrsElem",no_init)
   .def("getTypes",&XC::DqPtrsElem::getTypesPy,"getElementTypes() return a list with the element types in the container.")
   .def("getMaterials",&XC::DqPtrsElem::getMaterialNamesPy,"getElementMaterials() return a list with the names of the element materials in the container.")
   .def("pickElemsOfMaterial",&XC::DqPtrsElem::pickElemsOfMaterial,"pickElemsOfMaterial(materialName) return the elements that have that material.")
+  .def("createInertiaLoads", &XC::DqPtrsElem::createInertiaLoads,"Create the inertia load for the given acceleration vector.")
   .def(self += self)
   .def(self + self)
   .def(self - self)
@@ -100,6 +102,8 @@ class_<XC::DqPtrsConstraint, bases<dq_ptrs_constraint>, boost::noncopyable >("Dq
    .def(self * self)
    ;
 
+// XC::SetBase exposed in export_preprocessor_build_model.cc
+
 XC::DqPtrsNode &(XC::SetMeshComp::*getNodesRef)(void)= &XC::SetMeshComp::getNodes;
 XC::DqPtrsElem &(XC::SetMeshComp::*getElementsRef)(void)= &XC::SetMeshComp::getElements;
 XC::DqPtrsConstraint &(XC::SetMeshComp::*GetConstraintsRef)(void)= &XC::SetMeshComp::GetConstraints;
@@ -107,8 +111,8 @@ XC::Node *(XC::SetMeshComp::*getNearestNodeSetMeshComp)(const Pos3d &)= &XC::Set
 XC::Element *(XC::SetMeshComp::*getNearestElementSetMeshComp)(const Pos3d &)= &XC::SetMeshComp::getNearestElement;
 void (XC::SetMeshComp::*transforms)(const XC::TrfGeom &)= &XC::SetMeshComp::Transform;
 class_<XC::SetMeshComp, bases<XC::SetBase>>("SetMeshComp",no_init)
-  .add_property("getNodes", make_function(getNodesRef, return_internal_reference<>() ),"return the nodes of the set.")
-  .add_property("getElements", make_function(getElementsRef, return_internal_reference<>() ),"return the elements of the set.")
+  .add_property("getNodes", make_function(getNodesRef, return_internal_reference<>() ),"return the nodes of the set. DEPRECATED use nodes.")
+  .add_property("getElements", make_function(getElementsRef, return_internal_reference<>() ),"return the elements of the set. DEPRECATED use elements.")
   .add_property("getConstraints", make_function(GetConstraintsRef, return_internal_reference<>() ),"return the constraints of the set.")
   .add_property("nodes", make_function(getNodesRef, return_internal_reference<>() ),&XC::SetMeshComp::setNodes,"nodes of the set.")
   .add_property("elements", make_function(getElementsRef, return_internal_reference<>() ),&XC::SetMeshComp::setElements,"elements of the set.")

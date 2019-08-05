@@ -15,34 +15,28 @@ import xc
 from miscUtils import LogMessages as lmsg
 import uuid 
 
-class TrussBase(object):
-    '''Base class for truss generators.
+class TrussGeometry(object):
+    '''Base class for truss overall geometry.
 
     :ivar name: name of the truss (automatically assigned).
-    :ivar rise: rise of the truss.
+    :ivar lowerChordAxis: axis of the lower chord.
+    :ivar upperChordAxis: axis of the upper chord.
     :ivar moduleWidth:  width of each truss
-    :ivar span:  truss span
-    :ivar horizDirectionVector: direction of the chords.
-    :ivar vertDirectionVector: direction of the vertical studs.
     '''
-    def __init__(self,trussRise,trussModule, trussSpan, horizDirectionVector= geom.Vector3d(1.0,0.0,0.0), vertDirectionVector= geom.Vector3d(0,1.0,0.0)):
+    def __init__(self, lowerChordAxis, upperChordAxis,trussModule):
         '''Constructor.
 
             Args:
-                :param trussRise: (float) rise of the truss.
+                :param lowerChordAxis: axis of the lower chord.
+                :param upperChordAxis: axis of the upper chord.
                 :param trussModule: (float) width of each truss.
-                :param trussSpan: (float) span of each truss.
-                :param horizDirectionVector: direction of the chords.
-                :param vertDirectionVector: direction of the vertical studs.
         '''
         self.name= uuid.uuid4().hex
-        self.rise= trussRise
+        self.lowerChordAxis= lowerChordAxis
+        self.upperChordAxis= upperChordAxis
         self.moduleWidth= trussModule
-        self.span= trussSpan
-        self.horizDirectionVector= horizDirectionVector
-        self.vertDirectionVector= vertDirectionVector
-        self.numberOfModules= round(self.span/self.moduleWidth,0)
-        self.moduleWidth= self.span/self.numberOfModules
+        self.numberOfModules= round(self.span()/self.moduleWidth,0)
+        self.moduleWidth= self.span()/self.numberOfModules
         
         self.lowerChordJointsPos= list()
         self.upperChordJointsPos= list()
@@ -53,21 +47,58 @@ class TrussBase(object):
         self.diagonalLines= list()
         self.posts= list()
         self.crdTransf= None
+        
+    def span(self):
+        '''Return the span of the truss.'''
+        return self.lowerChordAxis.getLength()
+    def getLowerChordDirection(self):
+        return self.lowerChordAxis.getVDir().normalized()
+    def getUpperChordDirection(self):
+        return self.upperChordAxis.getVDir().normalized()
+    def getUpDirection(self):
+        v1= self.upperChordAxis.getFromPoint()-self.lowerChordAxis.getFromPoint()
+        v2= self.upperChordAxis.getToPoint()-self.lowerChordAxis.getToPoint()
+        return (0.5*(v1+v2)).normalized()
+    def getNormalVector(self):
+        '''Get a vector normal to the truss plane.'''
+        tmp= self.getLowerChordDirection().cross(self.getUpDirection())
+        return xc.Vector([tmp.x,tmp.y,tmp.z])
+    def populateChords(self, lowerChordX, upperChordX):
+        '''Create the positions along the chords.'''
+        for x in lowerChordX:
+            self.lowerChordJointsPos.append(self.lowerChordAxis.getFromPoint()+self.moduleWidth*x*self.getLowerChordDirection())
+        for x in upperChordX:
+            self.upperChordJointsPos.append(self.upperChordAxis.getFromPoint()+self.moduleWidth*x*self.getUpperChordDirection())
+    
+class TrussBase(TrussGeometry):
+    '''Base class for truss generators.
+
+    '''
+    def __init__(self, lowerChordAxis, upperChordAxis,trussModule):
+        '''Constructor.
+
+            Args:
+                :param lowerChordAxis: axis of the lower chord.
+                :param upperChordAxis: axis of the upper chord.
+                :param trussModule: (float) width of each truss.
+        '''
+        super(TrussBase,self).__init__(lowerChordAxis, upperChordAxis,trussModule)
+         
         self.lowerChordMaterial= None
         self.upperChordMaterial= None
         self.diagonalMaterial= None
         self.diagonalArea= None
         self.postsMaterial= None
 
-    def createKeyPoints(self, feProblem, org= geom.Pos3d(0,0,0)):
+    def createKeyPoints(self, feProblem):
         '''Create the key points for the Truss.'''
         self.computeJointPositions()
         self.preprocessor= feProblem.getPreprocessor
         kPoints= self.preprocessor.getMultiBlockTopology.getPoints # Point container.
         for j in self.lowerChordJointsPos:
-            self.lowerChordPoints.append(kPoints.newPntFromPos3d(org+j))
+            self.lowerChordPoints.append(kPoints.newPntFromPos3d(j))
         for j in self.upperChordJointsPos:
-            self.upperChordPoints.append(kPoints.newPntFromPos3d(org+j))
+            self.upperChordPoints.append(kPoints.newPntFromPos3d(j))
             
     def createChordsGeometry(self):
         '''Creates the geometry of the truss chords.'''
@@ -81,9 +112,9 @@ class TrussBase(object):
         for l in self.upperChordLines:
             l.nDiv= 2
 
-    def createGeometry(self, feProblem, org= geom.Pos3d(0,0,0)):
+    def createGeometry(self, feProblem):
         '''Creates the geometry of the Truss.'''
-        self.createKeyPoints(feProblem, org)
+        self.createKeyPoints(feProblem)
         self.createChordsGeometry()
         self.createDiagonalsGeometry()
         self.createPostsGeometry()
@@ -109,11 +140,6 @@ class TrussBase(object):
             self.postsSet.getLines.append(l)
             self.trussSet.getLines.append(l)
         self.fillDownwards()
-
-    def getNormalVector(self):
-        '''Get a vector normal to the truss plane.'''
-        tmp= self.horizDirectionVector.cross(self.vertDirectionVector)
-        return xc.Vector([tmp.x,tmp.y,tmp.z])
 
     def createCoordTransformation(self,coordTransfType= 'linear'):
         '''Creates a coordinate transformation for the truss elements.'''
@@ -168,6 +194,18 @@ class TrussBase(object):
         self.postsSet.genMesh(xc.meshDir.I)  # Generate the elements.
         self.fillDownwards()
 
+    def createSelfWeightLoads(self,grav):
+        ''' Create the self weight loads for the
+            elements of the truss.
+
+            :param rho: material density
+            :param grav: gravity acceleration (vector).
+        '''
+        self.upperChordSet.createInertiaLoads(-grav)
+        self.lowerChordSet.createInertiaLoads(-grav)
+        self.postsSet.createInertiaLoads(-grav)
+        self.diagonalSet.createInertiaLoads(-grav)
+
 # Warren truss web style ascii art:
 #     +---+-------+-------+---+  Upper chord.
 #     |  / \     / \     / \  |
@@ -192,17 +230,15 @@ class WarrenTruss(TrussBase):
     :ivar diagonalArea: area of the diagonals cross-section.
     :ivar postsMaterial: material for the posts.
     '''
-    def __init__(self,trussRise,trussModule, trussSpan, horizDirectionVector= geom.Vector3d(1.0,0.0,0.0), vertDirectionVector= geom.Vector3d(0,0.0,1.0)):
+    def __init__(self, lowerChordAxis, upperChordAxis,trussModule):
         '''Constructor.
 
-            Args:
-                :param trussRise: (float) rise of the truss.
-                :param trussModule: (float) width of each truss.
-                :param trussSpan: (float) span of each truss.
-                :param horizDirectionVector: direction of the chords.
-                :param vertDirectionVector: direction of the vertical studs.
+           Args:
+              :param lowerChordAxis: axis of the lower chord.
+              :param upperChordAxis: axis of the upper chord.
+              :param trussModule: (float) width of each truss.
         '''
-        super(WarrenTruss,self).__init__(trussRise,trussModule, trussSpan, horizDirectionVector, vertDirectionVector)
+        super(WarrenTruss,self).__init__(lowerChordAxis, upperChordAxis,trussModule)
 
     def computeJointPositions(self):
         '''Compute the positions of the truss joints.'''
@@ -213,11 +249,7 @@ class WarrenTruss(TrussBase):
         for i in range(0,int(self.numberOfModules)):
             upperChordX.append(i+0.5)
         upperChordX.append(self.numberOfModules)
-
-        for x in lowerChordX:
-            self.lowerChordJointsPos.append(self.moduleWidth*x*self.horizDirectionVector)
-        for x in upperChordX:
-            self.upperChordJointsPos.append(self.moduleWidth*x*self.horizDirectionVector+self.rise*self.vertDirectionVector)
+        self.populateChords(lowerChordX,upperChordX)
     
     def createDiagonalsGeometry(self):
         '''Creates the geometry of the truss diagonals.'''
@@ -242,7 +274,7 @@ class WarrenTruss(TrussBase):
 
 
 # Fan truss web style ascii art:
-#     +---+-------+-------+---+  Upper chord.
+#     +---+---+---+---+---+---+  Upper chord.
 #     |  / \  |  / \  |  / \  |
 #     | /   \ | /   \ | /   \ |
 #     |/     \|/     \|/     \|
@@ -252,17 +284,16 @@ class FanTruss(WarrenTruss):
     '''Fan truss.
 
     '''
-    def __init__(self, trussRise, trussModule, trussSpan, horizDirectionVector= geom.Vector3d(1.0,0.0,0.0), vertDirectionVector= geom.Vector3d(0,0.0,1.0)):
+    def __init__(self, lowerChordAxis, upperChordAxis,trussModule):
         '''Constructor.
 
-            Args:
-                :param trussRise: (float) rise of the truss.
-                :param trussModule: (float) width of each truss.
-                :param trussSpan: (float) span of each truss.
-                :param horizDirectionVector: direction of the chords.
-                :param vertDirectionVector: direction of the vertical studs.
+           Args:
+              :param lowerChordAxis: axis of the lower chord.
+              :param upperChordAxis: axis of the upper chord.
+              :param trussModule: (float) width of each truss.
+
         '''
-        super(FanTruss,self).__init__(trussRise,trussModule, trussSpan, horizDirectionVector, vertDirectionVector)
+        super(FanTruss,self).__init__(lowerChordAxis, upperChordAxis,trussModule)
 
     def computeJointPositions(self):
         '''Compute the positions of the truss joints.'''
@@ -274,11 +305,7 @@ class FanTruss(WarrenTruss):
             upperChordX.append(i)
             upperChordX.append(i+0.5)
         upperChordX.append(self.numberOfModules)
-
-        for x in lowerChordX:
-            self.lowerChordJointsPos.append(self.moduleWidth*x*self.horizDirectionVector)
-        for x in upperChordX:
-            self.upperChordJointsPos.append(self.moduleWidth*x*self.horizDirectionVector+self.rise*self.vertDirectionVector)
+        self.populateChords(lowerChordX,upperChordX)
         
     def createPostsGeometry(self):
         '''Creates the geometry of the Truss.'''

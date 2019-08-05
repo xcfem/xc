@@ -104,7 +104,7 @@ class ElasticFoundation(object):
         self.springs= list() #spring elements.
         self.foundationSet.resetTributaries()
         self.foundationSet.computeTributaryAreas(False)
-        sNod= self.foundationSet.getNodes
+        sNod= self.foundationSet.nodes
         preprocessor= self.foundationSet.getPreprocessor
         modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
         self.createMaterials(preprocessor,self.foundationSet.name)

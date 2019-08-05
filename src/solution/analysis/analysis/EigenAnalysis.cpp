@@ -253,7 +253,7 @@ XC::Matrix XC::EigenAnalysis::getEigenvectors(void) const
     return retval;
   }
 
-//! @brief Returns a matrix con los eigenvectors normalizados
+//! @brief Returns a matrix with the normalized eigenvectors
 //! (infinity norm) as columns of the matrix.
 XC::Matrix XC::EigenAnalysis::getNormalizedEigenvectors(void) const
   {

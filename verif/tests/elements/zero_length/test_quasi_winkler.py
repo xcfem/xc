@@ -127,7 +127,7 @@ EIbeta3= F/(E*I*pow(beta,3))
 yAdimCentroVano= l1LastNode.getDisp[1]/EIbeta3
 yAdimMaxima= -1e6
 
-for n in l2.getNodes():
+for n in l2.nodes:
   yAdimMaxima= max(yAdimMaxima,n.getDisp[1]/EIbeta3)
   ''' 
   print "  node: ",n.tag," x= ",(n.get3dCoo[0]-Lmedios)/L

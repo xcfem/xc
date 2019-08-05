@@ -39,7 +39,7 @@ def listTieStrength(preprocessor,setName, fName, titulo):
   '''
   printCabeceraListadoTirante(fName,titulo)
   st= preprocessor.getSets.getSet(setName)
-  elems= st.getElements()
+  elems= st.elements
   tagFCTNCPCP= 0
   FCTNCPCP= 0
   HIPCPCPTN= ""

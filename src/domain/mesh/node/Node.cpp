@@ -929,31 +929,35 @@ int XC::Node::incrTrialAccel(const Vector &incrAccel)
 const XC::NodalLoad *XC::Node::newLoad(const Vector &v)
   {
     NodalLoad *retval= nullptr;
-    Preprocessor *preprocessor= getPreprocessor();
-    if(preprocessor)
-      {
-        MapLoadPatterns &lPatterns= preprocessor->getLoadHandler().getLoadPatterns();
-        const int nodeTag= getTag(); //Load over this node.
+    LoadPattern *lp= getCurrentLoadPattern();
+    const int nodeTag= getTag(); //Load over this node.
 
-        const size_t sz= v.Size();
-        if(sz>0)
-          {
-            LoadPattern *lp= lPatterns.getCurrentLoadPatternPtr();
-            if(lp)
-              retval= lp->newNodalLoad(nodeTag,v);
-            else
-	      std::cerr << getClassName() << "::" << __FUNCTION__
-                        << "; there is no current load pattern."
-                        << " Nodal load ignored." << std::endl; 
-          }
+    const size_t sz= v.Size();
+    if(sz>0)
+      {
+        if(lp)
+          retval= lp->newNodalLoad(nodeTag,v);
         else
-          std::cerr << getClassName() << "::" << __FUNCTION__
-                    << "; a vector of dimension greater than zero was expected." << std::endl;
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; there is no current load pattern."
+		    << " Nodal load ignored." << std::endl; 
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; preprocessor not defined." << std::endl;
+                << "; a vector of dimension greater than zero was expected." << std::endl;
     return retval;
+  }
+
+//! @brief Creates the inertia load that corresponds to the
+//! acceleration argument.
+void XC::Node::createInertiaLoad(const Vector &accel)
+  {
+    Vector v= unbalLoad;
+    v.Zero();
+    const size_t sz= accel.Size();
+    for(size_t i= 0;i<sz;i++)
+      v[i]-= mass(i,i)*accel(i); //Like Ansys.
+    newLoad(v); //Put the load in the current load pattern.
   }
 
 //! @brief Causes the node to zero out its unbalanced load vector.

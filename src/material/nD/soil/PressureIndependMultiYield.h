@@ -107,8 +107,9 @@ class PressureIndependMultiYield: public PressureMultiYieldBase
 
     void setup(int nd, double r, double refShearModul, double refBulkModul, double cohesi, double peakShearStra, double frictionAng, double refPress, double pressDependCoe, int numberOfYieldSurf, double * gredu);
 
-     double getRho(void) const
-       {return rhox[matN];} ;
+     inline double getRho(void) const
+       {return rhox[matN];}
+     
      // Sets the values of the trial strain tensor.
      int setTrialStrain(const Vector &strain);
 

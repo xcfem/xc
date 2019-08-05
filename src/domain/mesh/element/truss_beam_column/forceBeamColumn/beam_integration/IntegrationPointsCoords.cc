@@ -40,10 +40,10 @@ XC::IntegrationPointsCoords::IntegrationPointsCoords(const BeamIntegration &bInt
     for(int i= 0;i<nIP;i++)
       rst(i,1)= naturales(i,1);
     
-    const Matrix &normalizadas= bInteg.getIntegrPointNormalizedCoords(nIP,trf);
+    const Matrix &normalized= bInteg.getIntegrPointNormalizedCoords(nIP,trf);
     rnsntn.Zero();
     for(int i= 0;i<nIP;i++)
-      rnsntn(i,1)= normalizadas(i,1);
+      rnsntn(i,1)= normalized(i,1);
 
     const Matrix &locales= bInteg.getIntegrPointLocalCoords(nIP,trf);
     xyz.Zero();

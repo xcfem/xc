@@ -198,6 +198,13 @@ void XC::Element::setDomain(Domain *theDomain)
       getNodePtrs().set_node_ptrs(theDomain);
   }
 
+//! @brief Creates the inertia load that corresponds to the
+//! acceleration argument.
+void XC::Element::createInertiaLoad(const Vector &)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; not implemented yet." << std::endl;
+  }
 
 //! @brief Zeroes the loads over the element.
 //!

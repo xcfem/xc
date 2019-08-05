@@ -73,8 +73,8 @@ class LimitStateData(object):
         loadCombinations= preprocessor.getLoadHandler.getLoadCombinations
         #Putting combinations inside XC.
         loadCombinations= self.dumpCombinations(combContainer,loadCombinations)
-        elemSet= setCalc.getElements
-        nodSet= setCalc.getNodes
+        elemSet= setCalc.elements
+        nodSet= setCalc.nodes
         fNameInfForc= self.getInternalForcesFileName()
         fNameDispl= self.getDisplacementsFileName()
         os.system("rm -f " + fNameInfForc) #Clear obsolete files.

@@ -77,8 +77,9 @@
 double XC::DispBeamColumn2dBase::workArea[100];
 
 XC::DispBeamColumn2dBase::DispBeamColumn2dBase(int tag, int classTag, int nd1, int nd2, int numSec,const std::vector<PrismaticBarCrossSection *> &s, CrdTransf2d &coordTransf, double r)
-  : BeamColumnWithSectionFDTrf2d(tag, classTag,numSec), q(3), rho(r)
+  : BeamColumnWithSectionFDTrf2d(tag, classTag,numSec), q(3)
   {
+    setRho(r);
     load.reset(6);
     setSections(s);
     set_transf(&coordTransf);
@@ -100,7 +101,7 @@ XC::DispBeamColumn2dBase::DispBeamColumn2dBase(int tag, int classTag, int nd1, i
   }
 
 XC::DispBeamColumn2dBase::DispBeamColumn2dBase(int tag, int classTag, int numSec,const Material *m,const CrdTransf *trf)
-  :BeamColumnWithSectionFDTrf2d(tag, classTag, numSec,m,trf), q(3), rho(0.0)
+  :BeamColumnWithSectionFDTrf2d(tag, classTag, numSec,m,trf), q(3)
   {
     load.reset(6);
     q0[0] = 0.0;
@@ -117,7 +118,7 @@ XC::DispBeamColumn2dBase::DispBeamColumn2dBase(int tag, int classTag, int numSec
   }
 
 XC::DispBeamColumn2dBase::DispBeamColumn2dBase(int tag, int classTag)
-  :BeamColumnWithSectionFDTrf2d(tag, classTag,1), q(3), rho(0.0)
+  :BeamColumnWithSectionFDTrf2d(tag, classTag,1), q(3)
   {
     load.reset(6);
     q0[0] = 0.0;
@@ -214,6 +215,7 @@ int XC::DispBeamColumn2dBase::revertToStart()
 const XC::Matrix&XC::DispBeamColumn2dBase::getMass(void) const
   {
     K.Zero();
+    const double rho= getRho();
     if(rho == 0.0)
       return K;
     const double L = theCoordTransf->getInitialLength();
@@ -267,6 +269,7 @@ int XC::DispBeamColumn2dBase::addInertiaLoadToUnbalance(const XC::Vector &accel)
   {
     int retval= 0;
     // Check for a quick return
+    const double rho= getRho();
     if(rho != 0.0)
       {
         // Get R * accel from the nodes
@@ -298,7 +301,7 @@ int XC::DispBeamColumn2dBase::addInertiaLoadToUnbalance(const XC::Vector &accel)
 const XC::Vector &XC::DispBeamColumn2dBase::getResistingForceIncInertia(void) const
   {
     this->getResistingForce();
-
+    const double rho= getRho();
     if(rho != 0.0)
       {
 	const Vector &accel1= theNodes[0]->getTrialAccel();
@@ -338,8 +341,7 @@ int XC::DispBeamColumn2dBase::sendData(CommParameters &cp)
     res+= cp.sendVector(q,getDbTagData(),CommMetaData(13));
     res+= p0.sendData(cp,getDbTagData(),CommMetaData(14));
     res+= q0.sendData(cp,getDbTagData(),CommMetaData(15));
-    res+= cp.sendDouble(rho,getDbTagData(),CommMetaData(16));
-    res+= cp.sendInt(parameterID,getDbTagData(),CommMetaData(17));
+    res+= cp.sendInt(parameterID,getDbTagData(),CommMetaData(16));
     return res;
   }
 
@@ -350,14 +352,13 @@ int XC::DispBeamColumn2dBase::recvData(const CommParameters &cp)
     res+= cp.receiveVector(q,getDbTagData(),CommMetaData(13));
     res+= p0.receiveData(cp,getDbTagData(),CommMetaData(14));
     res+= q0.receiveData(cp,getDbTagData(),CommMetaData(15));
-    res+= cp.receiveDouble(rho,getDbTagData(),CommMetaData(16));
-    res+= cp.receiveInt(parameterID,getDbTagData(),CommMetaData(17));
+    res+= cp.receiveInt(parameterID,getDbTagData(),CommMetaData(16));
     return res;
   }
 
 int XC::DispBeamColumn2dBase::sendSelf(CommParameters &cp)
   {
-    inicComm(18);
+    inicComm(17);
     int res= sendData(cp);
 
     const int dataTag= getDbTag(cp);
@@ -370,7 +371,7 @@ int XC::DispBeamColumn2dBase::sendSelf(CommParameters &cp)
 
 int XC::DispBeamColumn2dBase::recvSelf(const CommParameters &cp)
   {
-    inicComm(18);
+    inicComm(17);
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
@@ -386,7 +387,7 @@ void XC::DispBeamColumn2dBase::Print(std::ostream &s, int flag)
     s << "\nDispBeamColumn2dBase, element id:  " << this->getTag() << std::endl;
     s << "\tConnected external nodes:  " << theNodes;
     s << "\tCoordTransf: " << theCoordTransf->getTag() << std::endl;
-    s << "\tmass density:  " << rho << std::endl;
+    s << "\tmass density:  " << getRho() << std::endl;
 
     double L = theCoordTransf->getInitialLength();
     double P  = q(0);

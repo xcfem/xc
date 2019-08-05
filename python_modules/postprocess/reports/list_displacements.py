@@ -47,7 +47,7 @@ def listPointsDisplacements(preprocessor,nmbComb,pointList, fmt, fName, encab, t
 # Imprime los desplazamientos de los nodes contenidos en el conjunto que se pasa como parámetro.
 def listNodeDisplacementsSet(preprocessor,nmbComb, setName, fmt, fName):
   s= preprocessor.getSets.getSet(setName)
-  nodes= s.getNodes()
+  nodes= s.nodes
   for n in nodes:
     fName.write(nmbComb," & ",n.tag," & ")
     disp= nod.getDisp()

@@ -419,7 +419,7 @@ class GridModel(object):
         setPnt=self.getSetPntRange(ijkRange,'setPnt')
         for p in setPnt.getPoints:
             v=geom.Vector2d(p.getPos.x,p.getPos.y)-vCent
-            vdir=v.normalizado()
+            vdir= v.normalized()
             p.getPos.x=xCent+R*vdir.x
             p.getPos.y=yCent+R*vdir.y
         setPnt.clear()
@@ -433,7 +433,7 @@ class GridModel(object):
         setPnt=self.getSetPntRange(ijkRange,'setPnt')
         for p in setPnt.getPoints:
             v=geom.Vector2d(p.getPos.y,p.getPos.z)-vCent
-            vdir=v.normalizado()
+            vdir=v.normalized()
             p.getPos.y=yCent+R*vdir.x
             p.getPos.z=zCent+R*vdir.y
         setPnt.clear()
@@ -447,7 +447,7 @@ class GridModel(object):
         setPnt=self.getSetPntRange(ijkRange,'setPnt')
         for p in setPnt.getPoints:
             v=geom.Vector2d(p.getPos.x,p.getPos.z)-vCent
-            vdir=v.normalizado()
+            vdir=v.normalized()
             p.getPos.x=xCent+R*vdir.x
             p.getPos.z=zCent+R*vdir.y
         setPnt.clear()

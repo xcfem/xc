@@ -264,7 +264,7 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
 
         :param setCalc: set of elements to which define control variables
         '''
-        for e in setCalc.getElements:
+        for e in setCalc.elements:
             e.setProp(self.limitStateLabel+'Sect1',cv.SSBiaxialBendingControlVars())
             e.setProp(self.limitStateLabel+'Sect2',cv.SSBiaxialBendingControlVars())
 
@@ -277,7 +277,7 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
         '''
         intForcItems=lsd.readIntForcesFile(intForcCombFileName,setCalc)
         internalForcesValues=intForcItems[2]
-        for e in setCalc.getElements:
+        for e in setCalc.elements:
             sh=e.getProp('crossSection')
             sc=e.getProp('sectionClass')
             elIntForc=internalForcesValues[e.tag]
@@ -302,7 +302,7 @@ class ShearController(lsc.LimitStateControllerBase):
 
         :param setCalc: set of elements to which define control variables
         '''
-        for e in setCalc.getElements:
+        for e in setCalc.elements:
             e.setProp(self.limitStateLabel+'Sect1',cv.ShearYControlVars())
             e.setProp(self.limitStateLabel+'Sect2',cv.ShearYControlVars())
 
@@ -313,7 +313,7 @@ class ShearController(lsc.LimitStateControllerBase):
         '''
         intForcItems=lsd.readIntForcesFile(intForcCombFileName,setCalc)
         internalForcesValues=intForcItems[2]
-        for e in setCalc.getElements:
+        for e in setCalc.elements:
             sh=e.getProp('crossSection')
             sc=e.getProp('sectionClass')
             elIntForc=internalForcesValues[e.tag]

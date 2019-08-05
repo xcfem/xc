@@ -268,11 +268,7 @@ const XC::Matrix &XC::FeapMaterial::getTangent(void) const
   }
 }
 
-double XC::FeapMaterial::getRho(void) const
-  { return rho; }
-
-int
-XC::FeapMaterial::commitState(void)
+int XC::FeapMaterial::commitState(void)
 {
   // Set committed values equal to corresponding trial values
   for(int i = 0; i < numHV; i++)

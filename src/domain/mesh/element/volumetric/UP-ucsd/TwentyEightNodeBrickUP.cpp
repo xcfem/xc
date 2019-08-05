@@ -91,7 +91,7 @@ double XC::TwentyEightNodeBrickUP::dvolq[8];
 
 //null constructor
 XC::TwentyEightNodeBrickUP::TwentyEightNodeBrickUP(void)
-  : ElemWithMaterial<20,NDMaterialPhysicalProperties>(0, ELE_TAG_Twenty_Eight_Node_BrickUP,NDMaterialPhysicalProperties(27,nullptr)), rho(0), kc(0), Ki(0)
+  : ElemWithMaterial<20,NDMaterialPhysicalProperties>(0, ELE_TAG_Twenty_Eight_Node_BrickUP,NDMaterialPhysicalProperties(27,nullptr)), rho_f(0), kc(0), Ki(0)
   {
 
     perm[0] = perm[1] = perm[2] = 0.;
@@ -127,7 +127,7 @@ XC::TwentyEightNodeBrickUP::TwentyEightNodeBrickUP(int tag,
                                                NDMaterial &theMaterial, double bulk, double rhof,
                                                double p1, double p2, double p3,
                                                const BodyForces3D &bForces)
-:ElemWithMaterial<20,NDMaterialPhysicalProperties>(tag, ELE_TAG_Twenty_Eight_Node_BrickUP,NDMaterialPhysicalProperties(27,&theMaterial)), bf(bForces), rho(rhof), kc(bulk), Ki(0)
+:ElemWithMaterial<20,NDMaterialPhysicalProperties>(tag, ELE_TAG_Twenty_Eight_Node_BrickUP,NDMaterialPhysicalProperties(27,&theMaterial)), bf(bForces), rho_f(rhof), kc(bulk), Ki(0)
   {
     theNodes.set_id_nodes(node1 ,node2 ,node3 ,node4 ,node5 ,node6 ,node7 ,node8 ,node9 ,node10 ,node11 ,node12 ,node13 ,node14 ,node15 ,node16 ,node17 ,node18 ,node19 ,node20);
 
@@ -735,7 +735,7 @@ const XC::Vector &XC::TwentyEightNodeBrickUP::getResistingForce(void) const
     for(j = 0; j < nenp; j++) {
             jk = j*4+3;
             for(i = 0; i < nintp; i++) {
-                    resid(jk) += dvolp[i]*rho*(perm[0]*bf[0]*shgp[0][j][i] +
+                    resid(jk) += dvolp[i]*rho_f*(perm[0]*bf[0]*shgp[0][j][i] +
                             perm[1]*bf[1]*shgp[1][j][i] + perm[2]*bf[2]*shgp[2][j][i]);
             }
     }
@@ -900,7 +900,7 @@ double XC::TwentyEightNodeBrickUP::mixtureRho(int i) const
     rhoi= physicalProperties[i]->getRho();
     //e = 0.7;  //physicalProperties[i]->getVoidRatio();
     //n = e / (1.0 + e);
-    //return n * rho + (1.0-n) * rhoi;
+    //return n * rho_f + (1.0-n) * rhoi;
     return rhoi;
 }
 
@@ -929,7 +929,7 @@ void   XC::TwentyEightNodeBrickUP::computeBasis(void) const
 int XC::TwentyEightNodeBrickUP::sendData(CommParameters &cp)
   {
     int res= ElemWithMaterial<20,NDMaterialPhysicalProperties>::sendData(cp);
-    res+= cp.sendDoubles(bf[0],bf[1],bf[2],rho,kc,getDbTagData(),CommMetaData(8));
+    res+= cp.sendDoubles(bf[0],bf[1],bf[2],rho_f,kc,getDbTagData(),CommMetaData(8));
     res+= cp.sendDoubles(perm[0],perm[1],perm[2],getDbTagData(),CommMetaData(9));
     res+= cp.sendMatrixPtr(Ki,getDbTagData(),MatrixCommMetaData(12,13,14,15));
     return res;
@@ -939,7 +939,7 @@ int XC::TwentyEightNodeBrickUP::sendData(CommParameters &cp)
 int XC::TwentyEightNodeBrickUP::recvData(const CommParameters &cp)
   {
     int res= ElemWithMaterial<20,NDMaterialPhysicalProperties>::recvData(cp);
-    res+= cp.receiveDoubles(bf[0],bf[1],bf[2],rho,kc,getDbTagData(),CommMetaData(8));
+    res+= cp.receiveDoubles(bf[0],bf[1],bf[2],rho_f,kc,getDbTagData(),CommMetaData(8));
     res+= cp.receiveDoubles(perm[0],perm[1],perm[2],getDbTagData(),CommMetaData(9));
     Ki= cp.receiveMatrixPtr(Ki,getDbTagData(),MatrixCommMetaData(12,13,14,15));
     return res;

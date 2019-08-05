@@ -769,7 +769,7 @@ def writeControlVarsFromPhantomElements(controlVarName,preprocessor,outputFileNa
            variables that control the output of the checking (append or not
            the results to a file, generation or not of lists, ...)
     '''
-    elems= preprocessor.getSets["total"].getElements
+    elems= preprocessor.getSets["total"].elements
     if outputCfg.appendToResFile.lower()[0]=='y':
         xcOutput= open(outputFileName+".py","a+")
     else:
@@ -833,9 +833,9 @@ def writeControlVarsFromElements(controlVarName,preprocessor,outputFileName,outp
            list file [defatults to 'N', ...)
     '''
     if outputCfg.setCalc:
-        elems=outputCfg.setCalc.getElements
+        elems=outputCfg.setCalc.elements
     else:
-        elemens= preprocessor.getSets["total"].getElements
+        elemens= preprocessor.getSets["total"].elements
     if outputCfg.appendToResFile.lower()[0]=='y':
         xcOutput= open(outputFileName+".py","a+")
     else:
@@ -892,7 +892,7 @@ def writeControlVarsFromElementsForAnsys(controlVarName,preprocessor,outputFileN
     #printCabeceraListadoCapacityFactor("texOutput2","2 ("+ sectionName2 +")")
     fcs1= [] #Capacity factors at section 1.
     fcs2= [] #Capacity factors at section 2.
-    elems= preprocessor.getSets["total"].getElements
+    elems= preprocessor.getSets["total"].elements
     for e in elems:
         eTag= e.getProp("idElem")
         controlVar= e.getProp(controlVarName)

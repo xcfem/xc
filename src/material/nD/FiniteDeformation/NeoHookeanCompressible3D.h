@@ -86,8 +86,6 @@ class NeoHookeanCompressible3D : public FiniteDeformationElastic3D
     NeoHookeanCompressible3D(int tag);
     NeoHookeanCompressible3D();    
     
-    double getRho(void) const;
-
     int setTrialF(const straintensor &f);
     int setTrialFIncr(const straintensor &df);
     int setTrialC(const straintensor &c);

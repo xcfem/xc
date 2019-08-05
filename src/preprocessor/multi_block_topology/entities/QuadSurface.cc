@@ -397,7 +397,7 @@ Vector3d XC::QuadSurface::getIVector(void) const
     const Pos3d p3= getVertex(3)->GetPos();
     const Pos3d p4= getVertex(4)->GetPos();
     Vector3d retval= 0.5*((p2-p1)+(p3-p4));
-    retval.Normaliza();
+    retval.Normalize();
     return retval;
   }
 
@@ -410,9 +410,9 @@ Vector3d XC::QuadSurface::getJVector(void) const
     const Pos3d p3= getVertex(3)->GetPos();
     const Pos3d p4= getVertex(4)->GetPos();
     Vector3d i= 0.5*((p2-p1)+(p3-p4));
-    i.Normaliza();
+    i.Normalize();
     Vector3d j= 0.5*((p4-p1)+(p3-p2));
-    j.Normaliza();
+    j.Normalize();
     Vector3d k= i.getCross(j);
     return k.getCross(i);
   }

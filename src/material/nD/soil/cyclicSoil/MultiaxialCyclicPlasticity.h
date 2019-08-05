@@ -243,7 +243,10 @@ class MultiaxialCyclicPlasticity: public NDMaterial
   virtual const std::string &getType(void) const ;
   virtual int getOrder (void) const ;
     
-  double getRho(void) const;
+  inline double getRho(void) const
+    { return density; }
+  inline virtual void setRho(const double &r)
+    { density= r; }
   int updateParameter(int responseID, Information &eleInformation);	
   Vector& getMCPparameter(void);   // used for debug only
   }; //end of MultiaxialCyclicPlasticity declarations

@@ -20,7 +20,7 @@ def getTagsNodesFromSet(preprocessor, setName):
   '''Return the tags of the nodes from a set.'''
   retvalSetNodeTags= [] 
   st= preprocessor.getSets.getSet(setName)
-  nodes= st.getNodes()
+  nodes= st.nodes
   for n in nodes:
     retvalSetNodeTags.append(n.tag)
   return retvalSetNodeTags
@@ -30,7 +30,7 @@ def getTagsNodesFromSet(preprocessor, setName):
 def getTagsElementosSet(preprocessor,setName):
   retvalTagsElementosSet= []
   st= preprocessor.getSets.getSet(setName)
-  elems= st.getElements()
+  elems= st.elements
   for n in elems:
     retvalTagsElementosSet.append(n.tag)
   return retvalTagsElementosSet
@@ -44,7 +44,7 @@ def getNodesInCoordinateRegion(xmin,xmax,ymin,ymax,zmin,zmax,xcSet):
 
   '''
   retval=list()
-  setNodes=xcSet.getNodes
+  setNodes=xcSet.nodes
   for n in setNodes:
     vCoord=n.getCoo
     xNod=vCoord[0]

@@ -96,7 +96,9 @@ class CrdTransf2d: public CrdTransf
     int recvData(const CommParameters &cp);
   public:
     CrdTransf2d(int tag, int classTag);
-
+    inline virtual int getDimension(void) const
+      { return 2; }
+    
     int initialize(Node *node1Pointer, Node *node2Pointer);    
     virtual CrdTransf2d *getCopy(void) const= 0;
     //! @brief Return the initial length of the element.

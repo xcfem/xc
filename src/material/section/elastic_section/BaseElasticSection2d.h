@@ -47,7 +47,6 @@ class BaseElasticSection2d: public BaseElasticSection
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
 
-
   public:
     BaseElasticSection2d(int tag,int classTag,const size_t &dim, const double &E, const double &A, const double &I,double G, const double &alpha);
     BaseElasticSection2d(int tag,int classTag,const size_t &dim,MaterialHandler *mat_ldr= nullptr);    
@@ -56,6 +55,11 @@ class BaseElasticSection2d: public BaseElasticSection
     const CrossSectionProperties2d &getCrossSectionProperties(void) const;   
     void setCrossSectionProperties(const CrossSectionProperties2d &);  
     void sectionGeometry(const std::string &);
+
+    inline double getRho(void) const
+      { return ctes_scc.getRho(); }
+    inline void setRho(const double &r)
+      { ctes_scc.setRho(r); }
 
     double getStrain(const double &y,const double &z= 0) const;
 

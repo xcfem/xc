@@ -198,13 +198,13 @@ class MaterialSurface(MaterialBase):
 
   def appendVector3dUniformLoadGlobalToCurrentLoadPattern(self,loadVector):
     for s in self.lstSup:
-      elSup=s.getElements()
+      elSup=s.elements
       for el in elSup:
         elementLoad= el.vector3dUniformLoadGlobal(loadVector)    
 
   def appendStrainGradientToLoadPattern(self,loadPattern,nabla):
     for s in self.lstSup:
-      elSup=s.getElements()
+      elSup=s.elements
       for el in elSup:
         eleLoad= loadPattern.newElementalLoad("shell_strain_load")
         eleLoad.elementTags= xc.ID([el.tag])
@@ -216,14 +216,14 @@ class MaterialSurface(MaterialBase):
     '''Return a list of the elements of the material surface.'''
     retval= []
     for sup in self.lstSup:
-      elSup= sup.getElements()
+      elSup= sup.elements
       for elem in elSup:
         retval.append(elem)
     return retval
   def getElementsPart(self):
     '''DEPRECATED (use getElements); return a list of the elements of the material surface.'''
     lmsg.warning('MaterialSurface.getElementsPart DEPRECATED; use getElements.')
-    return self.getElements()
+    return self.elements
 
 class MaterialLine(MaterialBase):
   '''Line defined by a range list, a material and an element type, size and direction vector.
@@ -260,24 +260,24 @@ class MaterialLine(MaterialBase):
     '''return a list of the elements of the material line.'''
     retval= []
     for lin in self.lstLines:
-      elLin= lin.getElements()
+      elLin= lin.elements
       for elem in elLin:
         retval.append(elem)
     return retval
   def getElementsPart(self):
     '''DEPRECATED (use getElements); return a list of the elements of the material line.'''
     lmsg.warning('MaterialLine.getElementsPart DEPRECATED; use getElements.')
-    return self.getElements()
+    return self.elements
 
   def appendVector3dUniformLoadGlobalToCurrentLoadPattern(self,loadVector):
     for l in self.lstLines:
-      elLin=l.getElements()
+      elLin=l.elements
       for el in elLin:
         elementLoad= el.vector3dUniformLoadGlobal(loadVector)    
   
   def appendVector3dUniformLoadLocalToCurrentLoadPattern(self,loadVector):
     for l in self.lstLines:
-      elLin=l.getElements()
+      elLin=l.elements
       for el in elLin:
         elementLoad= el.vector3dUniformLoadLocal(loadVector)    
 
@@ -332,7 +332,7 @@ class ConstrainedRanges(IJKRangeList):
     for rng in self.ranges:
       lstLin= self.grid.getLstLinRange(rng)
       for l in lstLin:
-        setnod=l.getNodes()
+        setnod=l.nodes
         for n in setnod:
           for i in range(0,6):
             coac= self.constraints[i]
@@ -495,7 +495,7 @@ class UniformLoadOnLinesInRange(LoadByLstGridRange):
     for rng in self.lstGridRg:
       lstLin= self.grid.getLstLinRange(rng)
       for l in lstLin:
-        setnod=l.getNodes()
+        setnod=l.nodes
         sortNod=list()
         for n in setnod:
           pn=n.getInitialPos3d
@@ -824,12 +824,12 @@ class GridModel(object):
       keys= self.conjSup.keys()
       if(nombreConj in keys):
         sup= self.conjSup[nombreConj]
-        retval+= sup.getElements()
+        retval+= sup.elements
     if(hasattr(self,'conjLin')):
       keys= self.conjLin.keys()
       if(nombreConj in keys):
         lin= self.conjLin[nombreConj]
-        retval+= lin.getElements()
+        retval+= lin.elements
     if len(retval)==0:
       lmsg.warning('part: '+ nombreConj+ ' not found or it contains no elements.')
     return retval
@@ -846,7 +846,7 @@ class GridModel(object):
     st= self.getPreprocessor().getSets.defSet(setName)
     st.clear() #Clean set if exists.
     for e in elems:
-      st.getElements.append(e)
+      st.elements.append(e)
     st.fillDownwards()
     return st
 

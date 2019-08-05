@@ -79,7 +79,6 @@ class ElasticBeam3d : public ProtoBeam3d
   {
   private:
     Vector eInic; //!< section initial deformations
-    double rho;  //!< Density.
     int sectionTag;
     mutable EsfBeamColumn3d q;
     FVectorBeamColumn3d q0;  //!< Fixed end forces in basic system (no torsion)
@@ -122,10 +121,6 @@ class ElasticBeam3d : public ProtoBeam3d
     int revertToLastCommit(void);
     int revertToStart(void);
 
-    double getRho(void) const
-      { return rho; }
-    void setRho(const double &r)
-      { rho= r; }
     const Vector &getInitialStrain(void) const
       { return eInic; }
     void setInitialStrain(const Vector &e)

@@ -164,6 +164,14 @@ void XC::DqPtrsNode::numera(void)
       }
   }
 
+//! @brief Creates the inertia load that corresponds to the
+//! acceleration argument.
+void  XC::DqPtrsNode::createInertiaLoads(const Vector &accel)
+  {
+    for(iterator i= begin();i!=end();i++)
+      (*i)->createInertiaLoad(accel);
+  }
+
 //! @brief Returns true if the node identified by the tag
 //! being passed as parameter, belongs to the set.
 bool XC::DqPtrsNode::InNodeTag(const int tag_node) const

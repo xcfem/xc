@@ -75,7 +75,6 @@ class BeamWithHinges3d: public BeamColumnWithSectionFDTrf3d
   private:
     CrossSectionProperties3d ctes_scc; //!< mechanical properties of the section E,A,Iy,...
     double beta1, beta2;
-    double rho;
 
     Matrix fs[2];
     Vector sr[2];
@@ -125,11 +124,6 @@ class BeamWithHinges3d: public BeamColumnWithSectionFDTrf3d
     Element *getCopy(void) const;
     ~BeamWithHinges3d(void);
     
-    double getRho(void) const
-      { return rho; }
-    void setRho(const double &r)
-      { rho= r; }
-
     inline CrossSectionProperties3d getSectionProperties(void) const
       { return ctes_scc; }
     void setSectionProperties(const CrossSectionProperties3d &ctes)

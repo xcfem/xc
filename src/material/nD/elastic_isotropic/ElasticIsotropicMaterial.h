@@ -83,7 +83,7 @@ namespace XC {
 //! material implementations, as described by the Prototype pattern in
 //! {\em Design Patterns} by Gamma et al.
 //! (see https://en.wikipedia.org/wiki/Design_Patterns).
-class ElasticIsotropicMaterial : public NDMaterial
+class ElasticIsotropicMaterial: public NDMaterial
   {
   protected:
     double E; //!< Elastic modulus
@@ -105,8 +105,9 @@ class ElasticIsotropicMaterial : public NDMaterial
     // For parallel processing
     ElasticIsotropicMaterial(void);
 
-    virtual double getRho(void) const;
-    inline void setRho(const double &r)
+    inline virtual double getRho(void) const
+      { return rho; }
+    inline virtual void setRho(const double &r)
       { rho= r; }
 // BJ added 19June2002
     double getE(void);

@@ -59,6 +59,8 @@ class NDMaterialPhysicalProperties: public PhysicalProperties<NDMaterial>
     Matrix getCommittedStress(void) const;
 
     bool haveRho(void) const;
+    double getRho(void) const;
+    void setRho(const double &);
     Vector getRhoi(const double &rhoDefault= 0.0) const;
  };
 

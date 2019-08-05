@@ -993,7 +993,7 @@ const XC::Vector &XC::ForceBeamColumn3d::getResistingForceIncInertia(void) const
 int XC::ForceBeamColumn3d::sendData(CommParameters &cp)
   {
     int res= NLForceBeamColumn3dBase::sendData(cp);
-    res+= sendBeamIntegrationPtr(beamIntegr,29,30,getDbTagData(),cp);
+    res+= sendBeamIntegrationPtr(beamIntegr,25,26,getDbTagData(),cp);
     return res;
   }
 
@@ -1001,14 +1001,14 @@ int XC::ForceBeamColumn3d::sendData(CommParameters &cp)
 int XC::ForceBeamColumn3d::recvData(const CommParameters &cp)
   {
     int res= NLForceBeamColumn3dBase::recvData(cp);
-    beamIntegr= receiveBeamIntegrationPtr(beamIntegr,29,30,getDbTagData(),cp);
+    beamIntegr= receiveBeamIntegrationPtr(beamIntegr,25,26,getDbTagData(),cp);
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
 int XC::ForceBeamColumn3d::sendSelf(CommParameters &cp)
   {
-    inicComm(31);
+    inicComm(27);
     int res= sendData(cp);
     
     const int dataTag= getDbTag();
@@ -1021,7 +1021,7 @@ int XC::ForceBeamColumn3d::sendSelf(CommParameters &cp)
 //! @brief Receives object through the channel being passed as parameter.
 int XC::ForceBeamColumn3d::recvSelf(const CommParameters &cp)
   {
-    inicComm(31);
+    inicComm(27);
 
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);

@@ -192,7 +192,8 @@ class Element: public MeshComponent
     virtual const Matrix &getMass(void) const;
 
     // methods for applying loads
-    virtual void zeroLoad(void);	
+    virtual void zeroLoad(void);
+    virtual void createInertiaLoad(const Vector &);
     virtual int addLoad(ElementalLoad *theLoad, double loadFactor)=0;
     virtual int addInertiaLoadToUnbalance(const Vector &accel)=0;
 

@@ -81,7 +81,7 @@ class SurfaceLoadRecord(ElementLoadRecord):
     ''' Returns elements which have his center inside the polygon'''
     plg= self.get2DPolygon()
     self.tags= list()
-    for e in elemSet.getElements:
+    for e in elemSet.elements:
       pos= e.getPosCentroid(True)
       projPos= geom.Pos2d(pos.x,pos.y)
       if(self.projPlane=='xz'):

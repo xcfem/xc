@@ -69,7 +69,7 @@ class NodeDict(dict):
       self.append(id,pos.x,pos.y,pos.z)
       id+= 1
   def readFromXCSet(self,xcSet):
-    nodeSet= xcSet.getNodes
+    nodeSet= xcSet.nodes
     for n in nodeSet:
       pos= n.getInitialPos3d
       self.append(n.tag, pos.x, pos.y, pos.z)
@@ -161,7 +161,7 @@ class CellDict(dict):
     for i in range(0,umesh.getNumberOfCells()):
       self.append(CellRecord(umesh.getTypeOfCell(i), umesh.getNodeIdsOfCell(i)))
   def readFromXCSet(self,xcSet):
-    elemSet= xcSet.getElements
+    elemSet= xcSet.elements
     for e in elemSet:
       nodes= e.getNodes.getExternalNodes
       numNodes= len(nodes)

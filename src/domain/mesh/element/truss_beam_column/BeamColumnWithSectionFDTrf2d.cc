@@ -107,7 +107,7 @@ const XC::CrdTransf *XC::BeamColumnWithSectionFDTrf2d::getCoordTransf(void) cons
 int XC::BeamColumnWithSectionFDTrf2d::sendData(CommParameters &cp)
   {
     int res= BeamColumnWithSectionFD::sendData(cp);
-    res+= sendCoordTransf(9,10,11,cp);
+    res+= sendCoordTransf(10,11,12,cp);
     return res;
   }
 
@@ -115,6 +115,6 @@ int XC::BeamColumnWithSectionFDTrf2d::sendData(CommParameters &cp)
 int XC::BeamColumnWithSectionFDTrf2d::recvData(const CommParameters &cp)
   {
     int res= BeamColumnWithSectionFD::recvData(cp);
-    theCoordTransf= recvCoordTransf2d(9,10,11,cp);
+    theCoordTransf= recvCoordTransf2d(10,11,12,cp);
     return res;
   }
