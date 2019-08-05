@@ -21,7 +21,7 @@ __email__= "ana.Ortega@ciccp.es"
 import xc_base
 import geom
 import xc
-
+import math
 
 class IJKRange(object):
     '''Range of indexes (i,j,k) in the 3D-grid that defines a region 
@@ -333,6 +333,25 @@ class GridModel(object):
           p.getPos.z+= slopeX*(p.getPos.x-xZeroSlope)+slopeY*(p.getPos.y-yZeroSlope)
         sPtMove.clear()
 
+
+    def rotPntsZAxis(self,ijkRange,angle,xyRotCent):
+        '''Rotates points in ijkRange around a Z axis passing by xyRotCent.
+
+        :param ijkRange: range for the search.
+        :param angle: rotation angle (degrees)
+        :param xyRotCent: coordinates [x,y] of the axis Z of rotation
+        '''
+        theta=math.radians(angle)
+        sinTheta=math.sin(theta)
+        cosTheta=math.cos(theta)
+        sPtMove=self.getSetPntRange(ijkRange,'sPtMove')
+        for p in sPtMove.getPoints:
+            xp=p.getPos.x
+            yp=p.getPos.y
+            p.getPos.x= xyRotCent[0]+cosTheta*(xp-xyRotCent[0])-sinTheta*(yp-xyRotCent[1])
+            p.getPos.y= xyRotCent[1]+sinTheta*(xp-xyRotCent[0])+cosTheta*(yp-xyRotCent[1])
+        sPtMove.clear()
+        
     def scaleCoorXPointsRange(self,ijkRange,xOrig,scale):
         '''Applies a scale in X with origin xOrig (fixed axis: X=xOrig) 
         to the points in a 3D grid-region limited by 
