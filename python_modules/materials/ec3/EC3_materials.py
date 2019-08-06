@@ -13,6 +13,7 @@ from materials import steel_base
 from materials import typical_materials
 from materials.ec3 import EC3_limit_state_checking as EC3lsc
 from miscUtils import LogMessages as lmsg
+from materials.sections import structural_steel
 
 class EC3Steel(steel_base.BasicSteel):
     '''Eurocode 3 structural steel.
@@ -104,12 +105,13 @@ S450J0= EC3Steel(fy= 450e6, fy16= 450e6, fy40= 430e6, fy63= 410e6, fy80= 390e6, 
 
 class EC3Shape(object):
     """Steel shape with Eurocode 3 verification routines."""
-    def __init__(self,typo= 'rolled'):
+    def __init__(self,name, typo= 'rolled'):
       '''
         Constructor.
 
         :param typo: 'rolled' or 'welded' shape
       '''
+      self.name=name
       self.typo= typo
 
     def getClassInternalPartInCompression(self,steel,ratioCT=None):
@@ -412,8 +414,7 @@ class IPNShape(EC3Shape,arcelor_metric_shapes.IPNShape):
         :param steel: steel material.
         :param name: shape name (i.e. IPN_160)
         '''
-        self.name=name
-        EC3Shape.__init__(self,'rolled')
+        EC3Shape.__init__(self,name,'rolled')
         arcelor_metric_shapes.IPNShape.__init__(self,steel,name)
 
 
@@ -425,8 +426,7 @@ class IPEShape(EC3Shape,arcelor_metric_shapes.IPEShape):
         :param steel: steel material.
         :param name: shape name (i.e. IPE_600)
         '''
-        self.name=name
-        EC3Shape.__init__(self,'rolled')
+        EC3Shape.__init__(self,name,'rolled')
         arcelor_metric_shapes.IPEShape.__init__(self,steel,name)
         
 
@@ -438,8 +438,7 @@ class SHSShape(EC3Shape,arcelor_metric_shapes.SHSShape):
         :param steel: steel material.
         :param name: shape name (i.e. 'SHS175x175x8')
         '''
-        self.name=name
-        EC3Shape.__init__(self,'rolled')
+        EC3Shape.__init__(self,name,'rolled')
         arcelor_metric_shapes.SHSShape.__init__(self,steel,name)
 
 '''
@@ -475,8 +474,7 @@ class HEShape(EC3Shape,arcelor_metric_shapes.HEShape):
         :param steel: steel material.
         :param name: shape name (i.e. HE_600_A)
         '''
-        self.name=name
-        EC3Shape.__init__(self,'rolled')
+        EC3Shape.__init__(self, name,'rolled')
         arcelor_metric_shapes.HEShape.__init__(self,steel,name)
 
 class UPNShape(EC3Shape,arcelor_metric_shapes.UPNShape):
@@ -487,8 +485,7 @@ class UPNShape(EC3Shape,arcelor_metric_shapes.UPNShape):
         :param steel: steel material.
         :param name: shape name (i.e. UPN_320)
         '''
-        self.name=name
-        EC3Shape.__init__(self,'rolled')
+        EC3Shape.__init__(self, name, 'rolled')
         arcelor_metric_shapes.UPNShape.__init__(self,steel,name)
 
 class AUShape(EC3Shape,arcelor_metric_shapes.AUShape):
@@ -499,8 +496,7 @@ class AUShape(EC3Shape,arcelor_metric_shapes.AUShape):
         :param steel: steel material.
         :param name: shape name (i.e. AU_23)
         '''
-        self.name=name
-        EC3Shape.__init__(self,'rolled')
+        EC3Shape.__init__(self, name, 'rolled')
         arcelor_metric_shapes.AUShape.__init__(self,steel,name)
 
 class CHSShape(EC3Shape,arcelor_metric_shapes.CHSShape):
@@ -511,8 +507,7 @@ class CHSShape(EC3Shape,arcelor_metric_shapes.CHSShape):
         :param steel: steel material.
         :param name: shape name (i.e. AU_23)
         '''
-        self.name=name
-        EC3Shape.__init__(self,'rolled')
+        EC3Shape.__init__(self, name, 'rolled')
         arcelor_metric_shapes.CHSShape.__init__(self,steel,name)
     
 class RHSShape(EC3Shape,arcelor_metric_shapes.RHSShape):
@@ -523,7 +518,6 @@ class RHSShape(EC3Shape,arcelor_metric_shapes.RHSShape):
         :param steel: steel material.
         :param name: shape name (i.e. AU_23)
         '''
-        self.name=name
-        EC3Shape.__init__(self,'rolled')
+        EC3Shape.__init__(self, name, 'rolled')
         arcelor_metric_shapes.RHSShape.__init__(self,steel,name)
     
