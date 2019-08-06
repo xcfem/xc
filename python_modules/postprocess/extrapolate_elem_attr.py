@@ -43,7 +43,7 @@ def create_attribute_at_nodes(xcSet,attributeName,initialValue):
     '''
     nodeTags= {}
     for e in xcSet:
-      elemNodes= e.nodes
+      elemNodes= e.getNodes
       sz= len(elemNodes)
       for i in range(0,sz):
         n= elemNodes[i]
