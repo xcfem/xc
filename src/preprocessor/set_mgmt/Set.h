@@ -72,7 +72,7 @@ class Set: public SetMeshComp
     int recvData(const CommParameters &);
 
 
-    void mueve(const Vector3d &);
+    void move(const Vector3d &);
   public:
     Set(const std::string &nmb="",Preprocessor *preprocessor= nullptr);
 

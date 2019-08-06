@@ -102,7 +102,7 @@ class Pnt: public EntMdlr
     bool isConnectedTo(const Body &b) const;
     double getSquaredDistanceTo(const Pos3d &pt) const;
 
-    void Mueve(const Vector3d &);
+    void Move(const Vector3d &);
     void Transform(const TrfGeom &trf);
     void Transform(const size_t &indice_trf);
 

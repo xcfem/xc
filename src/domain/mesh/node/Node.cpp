@@ -2155,7 +2155,7 @@ int XC::Node::resetReactionForce(bool inclInertia)
   }
 
 //! @brief Moves the node (intended only for its use from XC::Set).
-void XC::Node::Mueve(const Vector3d &desplaz)
+void XC::Node::Move(const Vector3d &desplaz)
   {
     Crd(0)+= desplaz.x();
     Crd(1)+= desplaz.y();

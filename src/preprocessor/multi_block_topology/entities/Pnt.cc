@@ -244,7 +244,7 @@ void XC::Pnt::add_to_sets(std::set<SetBase *> &sets)
 
 //! @brief Moves the point (used by XC::Set only).
 //! @param desplaz: displacement vector.
-void XC::Pnt::Mueve(const Vector3d &desplaz)
+void XC::Pnt::Move(const Vector3d &desplaz)
   {
     p+=desplaz;
     return;

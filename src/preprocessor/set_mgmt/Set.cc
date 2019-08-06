@@ -139,10 +139,10 @@ void XC::Set::numera(void)
   }
 
 //! @brief Moves the objects of the set.
-void XC::Set::mueve(const Vector3d &desplaz)
+void XC::Set::move(const Vector3d &desplaz)
   {
-    entities.mueve(desplaz);
-    SetMeshComp::mueve(desplaz);
+    entities.move(desplaz);
+    SetMeshComp::move(desplaz);
   }
 
 //! @brief Applies the transformation to the elements of the set.

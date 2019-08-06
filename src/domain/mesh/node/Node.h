@@ -213,7 +213,7 @@ class Node: public MeshComponent
     bool Out(const GeomObj3d &,const double &factor= 1.0, const double &tol= 0.0) const;
     bool Out(const GeomObj2d &,const double &factor= 1.0, const double &tol= 0.0) const;
     void setPos(const Pos3d &);
-    void Mueve(const Vector3d &desplaz);  
+    void Move(const Vector3d &desplaz);  
     void Transform(const TrfGeom &trf);
     double getDist2(const Pos2d &p,bool initialGeometry= true) const;
     double getDist(const Pos2d &p,bool initialGeometry= true) const;

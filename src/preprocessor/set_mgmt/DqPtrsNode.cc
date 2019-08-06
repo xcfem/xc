@@ -67,10 +67,10 @@ XC::DqPtrsNode &XC::DqPtrsNode::operator+=(const DqPtrsNode &other)
   }
 
 //! @brief Desplaza los nodes of the set.
-void XC::DqPtrsNode::mueve(const Vector3d &desplaz)
+void XC::DqPtrsNode::move(const Vector3d &desplaz)
   {
     for(iterator i= begin();i!=end();i++)
-      (*i)->Mueve(desplaz);
+      (*i)->Move(desplaz);
     create_tree();
   }
 
