@@ -571,6 +571,7 @@ for item in W:
   shape= W[item]
   shape['alpha']= shape['Avy']/shape['A']
   shape['G']= shape['E']/(2*(1+shape['nu']))
+  shape['hi']= shape['h']-2*shape['tf']
   shape['AreaQz']= 2*shape['b']*shape['tf']
   shape['AreaQy']= shape['A']-shape['AreaQz']
 
@@ -614,6 +615,8 @@ C['C75X5.2']= {'nmb':'C75X5.2', 'P':5.20, 'A':703e-6, 'h':76.2e-3, 'b':34.8e-3, 
 for item in C:
   shape= C[item]
   shape['G']= shape['E']/(2*(1+shape['nu']))
+  shape['hi']= shape['h']-2*shape['tf']
+  shape['Avy']= shape['h']*shape['tw']
   shape['AreaQz']= 2*shape['b']*shape['tf']
   shape['AreaQy']= shape['A']-shape['AreaQz']
 
@@ -996,3 +999,17 @@ for item in HSS:
   shape['G']= shape['E']/(2*(1+shape['nu']))
   shape['AreaQz']= 2*0.7*shape['h']*shape['e']
   shape['AreaQy']= shape['AreaQz']
+
+from materials.sections import structural_steel
+
+class WShape(structural_steel.IShape):
+    def __init__(self,steel,name):
+        super(WShape,self).__init__(steel,name,W)
+        
+    def d(self):
+        '''Return internal web height'''
+        return self.get('d')
+
+class CShape(structural_steel.UShape):
+    def __init__(self,steel,name):
+        super(CShape,self).__init__(steel,name,C)

@@ -55,7 +55,7 @@ class DqPtrsNode: public DqPtrsKDTree<Node,KDTreeNodes>
     explicit DqPtrsNode(const std::set<const Node *> &);
     DqPtrsNode &operator=(const DqPtrsNode &);
     DqPtrsNode &operator+=(const DqPtrsNode &);
-    void mueve(const Vector3d &);
+    void move(const Vector3d &);
     void transforma(const TrfGeom &trf);
 
     size_t getNumLiveNodes(void) const;

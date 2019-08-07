@@ -258,10 +258,10 @@ void XC::SetEntities::fillUpwards(const SetMeshComp &mc)
   }
 
 //! @brief Moves the objects of the set.
-void XC::SetEntities::mueve(const Vector3d &desplaz)
+void XC::SetEntities::move(const Vector3d &desplaz)
   {
     for(lst_ptr_points::iterator i= points.begin();i!=points.end();i++)
-      (*i)->Mueve(desplaz);
+      (*i)->Move(desplaz);
   }
 
 //! @brief Applies the transformation to the elements of the set.

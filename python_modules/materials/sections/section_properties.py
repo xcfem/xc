@@ -522,50 +522,57 @@ class ISection(SectionProperties):
     return (self.tTF+self.tBF)/2.0*hPrf**2/12*self.wTF**3*self.wBF**3/(self.wTF**3+self.wBF**3)
 
 class PolygonalSection(SectionProperties):
-  '''Polygonal section geometric parameters
+    '''Polygonal section geometric parameters
 
-  :ivar plg:  contour of the section.
+    :ivar plg:  contour of the section.
 
-  '''
-  def __init__(self,name,plg):
-    super(PolygonalSection,self).__init__(name)
-    self.plg= plg
-  def hTotal(self):
-    '''Return total height (parallel to local y axis) of the section
     '''
-    return self.plg.getBnd().height
-  def A(self):
-    '''Return cross-sectional area of the section'''
-    return self.plg.getArea()
-  def Iy(self):
-    '''Return second moment of area about the local y-axis
-    '''
-    return self.plg.getIy()
-  def Iz(self):
-    '''Return second moment of area about the local z-axis
-    '''
-    return self.plg.getIx()
-  def J(self):
-    '''Return torsional constant of the section'''
-    msg= 'Torsional constant not implemented for section:'
-    msg+= self.sectionName
-    msg+= '. Zero returned'
-    lmsg.warning(msg)
-    return 0.0
-  def alphaY(self):
-    '''Return shear shape factor with respect to local y-axis'''
-    msg= 'alphaY: shear shape factor not implemented for section: '
-    msg+= self.sectionName
-    msg+= '. 5/6 returned'
-    lmsg.warning(msg)
-    return 5.0/6.0
-  def alphaZ(self):
-    '''Return shear shape factor with respect to local z-axis'''
-    msg= 'alphaZ: shear shape factor not implemented for section: '
-    msg+= self.sectionName
-    msg+= '. 5/6 returned'
-    lmsg.warning(msg)
-    return 5.0/6.0
+    def __init__(self,name,plg):
+        '''Constructor.'''
+        super(PolygonalSection,self).__init__(name)
+        self.plg= plg
+        self.reCenter()
+    def reCenter(self):
+        '''Put the centroid of the section in the
+           origin.'''
+        v= geom.Pos2d(0.0,0.0)-self.plg.getCenterOfMass()
+        self.plg.move(v)
+    def hTotal(self):
+        '''Return total height (parallel to local y axis) of the section
+        '''
+        return self.plg.getBnd().height
+    def A(self):
+        '''Return cross-sectional area of the section'''
+        return self.plg.getArea()
+    def Iy(self):
+        '''Return second moment of area about the local y-axis
+        '''
+        return self.plg.getIy()
+    def Iz(self):
+        '''Return second moment of area about the local z-axis
+        '''
+        return self.plg.getIx()
+    def J(self):
+        '''Return an approximation of the torsional constant of the section
+
+           Return the torsional constant of a circle with the same area.
+        '''
+        R2= self.A()/math.pi
+        return 0.5*math.pi*R2**2
+    def alphaY(self):
+        '''Return shear shape factor with respect to local y-axis'''
+        msg= 'alphaY: shear shape factor not implemented for section: '
+        msg+= self.sectionName
+        msg+= '. 5/6 returned'
+        lmsg.warning(msg)
+        return 5.0/6.0
+    def alphaZ(self):
+        '''Return shear shape factor with respect to local z-axis'''
+        msg= 'alphaZ: shear shape factor not implemented for section: '
+        msg+= self.sectionName
+        msg+= '. 5/6 returned'
+        lmsg.warning(msg)
+        return 5.0/6.0
 
 ##   Return the torsion constant of a box 
 ##   according to the book "Puentes (apuntes para su diseño

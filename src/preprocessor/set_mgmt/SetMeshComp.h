@@ -95,7 +95,7 @@ class SetMeshComp: public SetBase
 
     void calc_resisting_force(void);
 
-    void mueve(const Vector3d &);
+    void move(const Vector3d &);
   public:
     SetMeshComp(const std::string &nmb="",Preprocessor *preprocessor= nullptr);
     SetMeshComp(const SetMeshComp &);

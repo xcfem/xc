@@ -105,7 +105,7 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     void body_meshing(meshing_dir dm);
     void uniform_grid_meshing(meshing_dir dm);
 
-    void mueve(const Vector3d &);
+    void move(const Vector3d &);
   public:
     SetEntities(Preprocessor *preprocessor= nullptr);
     SetEntities(const SetEntities &);

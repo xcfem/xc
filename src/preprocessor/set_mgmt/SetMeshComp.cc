@@ -184,8 +184,8 @@ void XC::SetMeshComp::numera(void)
   }
 
 //! @brief Moves the nodes.
-void XC::SetMeshComp::mueve(const Vector3d &desplaz)
-  { nodes.mueve(desplaz); }
+void XC::SetMeshComp::move(const Vector3d &desplaz)
+  { nodes.move(desplaz); }
 
 //! @brief Aplies the transformation to the positions of the nodes.
 void XC::SetMeshComp::Transform(const TrfGeom &trf)
