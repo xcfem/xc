@@ -139,8 +139,8 @@ class RecordLoadCaseDisp(OuputUnits):
     for st in self.setsToDispLoads:
       grfname=pathGr+self.loadCaseName+st.name
       capt=self.getDescription() + ', ' + st.description + ', '  + self.unitsLoads
-      QGrph.displayLoad(preprocessor=preprocessor,setToDisplay=st,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads, viewDef= self.cameraParameters,caption= capt,fileName=grfname+'.jpg')
-      QGrph.displayLoad(preprocessor=preprocessor,setToDisplay=st,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads, viewDef= self.cameraParameters,caption= capt,fileName=grfname+'.eps')
+      QGrph.display_load(preprocessor=preprocessor,setToDisplay=st,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads, viewDef= self.cameraParameters,caption= capt,fileName=grfname+'.jpg')
+      QGrph.display_load(preprocessor=preprocessor,setToDisplay=st,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads, viewDef= self.cameraParameters,caption= capt,fileName=grfname+'.eps')
       insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt,labl=labl) 
     for st in self.setsToDispBeamLoads:
       grfname=pathGr+self.loadCaseName+st.name
@@ -353,14 +353,14 @@ def checksReports(limitStateLabel,setsShEl,argsShEl,capTexts,pathGr,texReportFil
     for st in setsShEl:
         for arg in argsShEl:
             attributeName= limitStateLabel + 'Sect1'
-            field= Fields.getScalarFieldFromControlVar(attributeName,arg,st,None,1.0)
+            field= Fields.getScalarFieldFromControlVar(attributeName,arg,st,None,1.0,None)
             capt=capTexts[limitStateLabel] + ', ' + capTexts[arg] + '. '+ st.description.capitalize() + ', ' + 'section 1'
             grFileNm=pathGr+st.name+arg+'Sect1'
             field.display(defDisplay=dfDisp,caption=capt,fName=grFileNm+'.jpg')
             insertGrInTex(texFile=report,grFileNm=grFileNm,grWdt=grWdt,capText=capt)
 
             attributeName= limitStateLabel + 'Sect2'
-            field= Fields.getScalarFieldFromControlVar(attributeName,arg,st,None,1.0)
+            field= Fields.getScalarFieldFromControlVar(attributeName,arg,st,None,1.0,None)
             capt=capTexts[limitStateLabel] + ', ' + capTexts[arg] + '. '+ st.description.capitalize() + ', ' + 'section 2'
             grFileNm=pathGr+st.name+arg+'Sect2'
             field.display(defDisplay=dfDisp,caption=capt,fName=grFileNm+'.jpg')
