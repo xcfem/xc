@@ -537,7 +537,6 @@ class PolygonalSection(SectionProperties):
            origin.'''
         v= geom.Pos2d(0.0,0.0)-self.plg.getCenterOfMass()
         self.plg.move(v)
-        print(self.plg.getCenterOfMass())
     def hTotal(self):
         '''Return total height (parallel to local y axis) of the section
         '''
@@ -554,12 +553,12 @@ class PolygonalSection(SectionProperties):
         '''
         return self.plg.getIx()
     def J(self):
-        '''Return torsional constant of the section'''
-        msg= 'Torsional constant not implemented for section:'
-        msg+= self.sectionName
-        msg+= '. Zero returned'
-        lmsg.warning(msg)
-        return 0.0
+        '''Return an approximation of the torsional constant of the section
+
+           Return the torsional constant of a circle with the same area.
+        '''
+        R2= self.A()/math.pi
+        return 0.5*math.pi*R2**2
     def alphaY(self):
         '''Return shear shape factor with respect to local y-axis'''
         msg= 'alphaY: shear shape factor not implemented for section: '
