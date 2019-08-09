@@ -79,7 +79,7 @@ class FiberSectionBase: public PrismaticBarCrossSection
     inline void alloc_fibers(int numOfFibers,const Fiber *sample= nullptr)
       { fibers.allocFibers(numOfFibers,sample); }
     void create_fiber_set(const std::string &nombre);
-    fiber_set_iterator get_fiber_set(const std::string &nmb_set);
+    fiber_set_iterator get_fiber_set(const std::string &set_name);
     virtual double get_dist_to_neutral_axis(const double &,const double &) const;
     Pos3d Esf2Pos3d(void) const;
     Pos3d getNMyMz(const DeformationPlane &);
@@ -156,10 +156,10 @@ class FiberSectionBase: public PrismaticBarCrossSection
     
     inline FiberSets &getFiberSets(void)
       { return fiber_sets; }
-    //fiber_set_iterator sel(const std::string &nmb_set,const std::string &cond);
-    fiber_set_iterator sel_mat_tag(const std::string &nmb_set,const int &matTag);
-    //fiber_set_iterator resel(const std::string &nmb_set,const std::string &nmb_set_org,const std::string &cond);
-    fiber_set_iterator resel_mat_tag(const std::string &nmb_set,const std::string &nmb_set_org,const int &matTag);
+    //fiber_set_iterator sel(const std::string &set_name,const std::string &cond);
+    fiber_set_iterator sel_mat_tag(const std::string &set_name,const int &matTag);
+    //fiber_set_iterator resel(const std::string &set_name,const std::string &set_name_org,const std::string &cond);
+    fiber_set_iterator resel_mat_tag(const std::string &set_name,const std::string &set_name_org,const int &matTag);
     inline virtual double getCenterOfMassY(void) const
       { return fibers.getCenterOfMassY(); }
     double getArea(void) const;

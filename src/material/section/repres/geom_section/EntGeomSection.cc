@@ -105,7 +105,7 @@ const XC::Spot *XC::EntGeomSection::BuscaSpot(const size_t &id_point) const
     return retval;
   }
 
-//! @brief Returns a pointer to the axis indentified by the tag being passed
+//! @brief Returns a pointer to the axis identified by the tag being passed
 //! as parameter.
 XC::Axis *XC::EntGeomSection::findAxis(const size_t &id_Axis)
   {
@@ -122,7 +122,7 @@ XC::Axis *XC::EntGeomSection::findAxis(const size_t &id_Axis)
     return retval;
   }
 
-//! @brief Returns a pointer to the Axis indentified by the tag being passed as parameter.
+//! @brief Returns a pointer to the Axis identified by the tag being passed as parameter.
 const XC::Axis *XC::EntGeomSection::findAxis(const size_t &id_Axis) const
   {
     const Axis *retval= nullptr;

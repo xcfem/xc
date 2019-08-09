@@ -36,7 +36,7 @@ namespace XC {
 //! @ingroup MATSCCYS
 //
 //! @brief Cross section with yield surface
-//! fro bi-dimensional problem (three degrees of freedom in each section).
+//! for bi-dimensional problem (three degrees of freedom in each section).
 class YS_Section2D02: public YieldSurfaceSection2d
   {
   private:

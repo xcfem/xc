@@ -99,7 +99,7 @@ double XC::RMC01YieldSurface::f(const XC::EPState *EPS) const
     double a1 = (3.0*1.7320508076*alfa) / (2.0+1.7320508076*alfa);
     double e = (3.0-a1)/(3.0+a1); // ratio of tensile radius to compressive radius
     double Frou = g_0(theta, e);
-    //double f = a1*p+q*Frou+a2; // yield fuction
+    //double f = a1*p+q*Frou+a2; // yield function
     double f = alfa*p*(-3.0) + Frou*q/1.7320508076 - k; // new form 
     return f;
   }

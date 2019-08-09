@@ -34,7 +34,7 @@
 
 
 //! @brief Constructor.
-//! @param tag: object identifer.
+//! @param tag: object identifier.
 //! @param classTag: class identifier.
 XC::BaseElasticSection2d::BaseElasticSection2d(int tag, int classTag, const size_t &dim, MaterialHandler *mat_ldr)
   : BaseElasticSection(tag, classTag,dim,mat_ldr), ctes_scc() {}
@@ -45,7 +45,7 @@ XC::BaseElasticSection2d::BaseElasticSection2d(int classTag,const size_t &dim)
   : BaseElasticSection(0, classTag,dim), ctes_scc() {}
 
 //! @brief Constructor.
-//! @param tag: object identifer.
+//! @param tag: object identifier.
 //! @param classTag: class identifier.
 XC::BaseElasticSection2d::BaseElasticSection2d(int tag, int classTag, const size_t &dim, const double &E, const double &A, const double &I,double G, const double &alpha)
   : BaseElasticSection(tag, classTag,dim ), ctes_scc(E,A,I,G,alpha) {}

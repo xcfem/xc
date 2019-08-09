@@ -106,7 +106,7 @@ double XC::NewUniaxialMaterial::getStrain(void) const
 int XC::NewUniaxialMaterial::commitState(void)
   { return 0; }
 
-//! @brief Returns the material to its last commmited state.
+//! @brief Returns the material to its last committed state.
 int XC::NewUniaxialMaterial::revertToLastCommit(void)
   { return 0; }
 

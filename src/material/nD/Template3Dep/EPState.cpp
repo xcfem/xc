@@ -1016,7 +1016,7 @@ void XC::EPState::setpsi( double psid ) {
 }
 
 //================================================================================
-// Retrun the nth Scalar Var.... Starting from 1!!
+// Return the nth Scalar Var.... Starting from 1!!
 //================================================================================
 double XC::EPState::getScalarVar( int WhichOne) const {
 
@@ -1035,7 +1035,7 @@ double XC::EPState::getScalarVar( int WhichOne) const {
 
 
 //================================================================================
-// Retrun the nth XC::Tensor Var.... Starting from 1!!
+// Return the nth XC::Tensor Var.... Starting from 1!!
 //================================================================================
 XC::stresstensor XC::EPState::getTensorVar(int WhichOne) const
   {

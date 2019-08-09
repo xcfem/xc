@@ -309,7 +309,7 @@ int XC::SeriesMaterial::recvSelf(const CommParameters &cp)
 void XC::SeriesMaterial::Print(std::ostream &s, int flag)
   {
     s << "\nSeriesMaterial, tag: " << this->getTag() << std::endl;
-    s << "\tUniaxial Componenets" << std::endl;
+    s << "\tUniaxial Components" << std::endl;
     const size_t numMaterials= theModels.size();
     for(size_t i = 0; i < numMaterials; i++)
       s << "\t\tUniaxial XC::Material, tag: " << theModels[i]->getTag() << std::endl;

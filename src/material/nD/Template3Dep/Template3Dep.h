@@ -41,7 +41,7 @@
 #                                                                              #
 # DATE:              08-03-2000                                                #
 # UPDATE HISTORY:    09-12-2000                                                #
-#       May 2004, Zhao Cheng spliting the elastic part        #
+#       May 2004, Zhao Cheng splitting the elastic part        #
 #                                                                              #
 #                                                                              #
 # SHORT EXPLANATION: The Template3Dep class is used to hold specific           #

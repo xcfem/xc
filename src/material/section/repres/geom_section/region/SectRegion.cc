@@ -74,7 +74,7 @@ const XC::Vector &XC::SectRegion::getCenterOfMass(void) const
     return retval;
   }
 
-//! @brief Return the region contour lenght.
+//! @brief Return the region contour length.
 double XC::SectRegion::getLength(void) const
   { return getPolygon().getLength(); }
 

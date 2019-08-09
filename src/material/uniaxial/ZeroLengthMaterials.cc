@@ -118,7 +118,7 @@ void XC::ZeroLengthMaterials::push_back(const int &dir,const UniaxialMaterial *t
           }
         else
           std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; cant' create an UniaxialMaterial objet." << std::endl;
+	        << "; can't create an UniaxialMaterial object." << std::endl;
       }
   }
 
@@ -138,7 +138,7 @@ void XC::ZeroLengthMaterials::push_front(const int &dir,const UniaxialMaterial *
           }
         else
           std::cerr << getClassName() << "::" << __FUNCTION__
-	            << "; cant' create an UniaxialMaterial objet."
+	            << "; can't create an UniaxialMaterial object."
 		    << std::endl;
       }
   }

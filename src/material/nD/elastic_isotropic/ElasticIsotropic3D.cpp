@@ -57,7 +57,7 @@
 #include "material/nD/NDMaterialType.h"
 
 XC::Matrix XC::ElasticIsotropic3D::D(6,6);	  // global for XC::ElasticIsotropic3D only
-XC::Vector XC::ElasticIsotropic3D::sigma(6);	 // global for XC::ElasticIsotropic3D onyl
+XC::Vector XC::ElasticIsotropic3D::sigma(6);	 // global for XC::ElasticIsotropic3D only
 XC::stresstensor XC::ElasticIsotropic3D::Stress;
 
 XC::ElasticIsotropic3D::ElasticIsotropic3D(int tag, double E, double nu, double rho):

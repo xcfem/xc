@@ -172,13 +172,13 @@ const Trihedron *XC::InteractionDiagram::findTrihedronPtr(const Pos3d &p) const
     return retval;
   }
 
-//! @brief Return the intersection of the half-line thats links the
+//! @brief Return the intersection of the half-line that links the
 //! origin (0,0,0) and p and the interaction diagram.
 GeomObj::list_Pos3d XC::InteractionDiagram::get_intersection(const Pos3d &p) const
   {
     GeomObj::list_Pos3d lst_intersec;
     const Pos3d O= Pos3d(0.0,0.0,0.0);
-    //Search for the trihedron thant contains p.
+    //Search for the trihedron that contains p.
     const Trihedron *i= findTrihedronPtr(p);
     if(!i)
       {

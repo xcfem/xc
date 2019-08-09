@@ -38,14 +38,14 @@ XC::SteelBase::SteelBase(int tag,int classTag,const double &Fy,const double &e0,
 XC::SteelBase::SteelBase(int tag,int classTag)
   :UniaxialMaterial(tag,classTag), fy(0.0),E0(0.0),b(0.0),a1(0.0), a2(0.0), a3(0.0), a4(0.0) {}
 
-//! @brief Assigns intial Young's modulus.
+//! @brief Assigns initial Young's modulus.
 void XC::SteelBase::setInitialTangent(const double &d)
   {
     E0= d;
     setup_parameters(); //Initialize history variables.
   }
 
-//! @brief Returns intial Young's modulus.
+//! @brief Returns initial Young's modulus.
 double XC::SteelBase::getInitialTangent(void) const
   { return E0; }
 

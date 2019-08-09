@@ -80,7 +80,7 @@ class NodePtrArray3d: public PtrArray3dBase<NodePtrArray>
 std::ostream &operator<<(std::ostream &os,const NodePtrArray3d &);
 
 template <class F>
-std::deque<double> NodePtrArray3d::RowSimpsonIntegration(const F &f,const std::string &nmb_coo,const size_t &num_coo,const ExprAlgebra &e,const size_t &n) const
+std::deque<double> NodePtrArray3d::RowSimpsonIntegration(const F &f,const std::string &coo_name,const size_t &num_coo,const ExprAlgebra &e,const size_t &n) const
   {
     const size_t sz= f.Size();
     std::deque<double> retval;
@@ -93,7 +93,7 @@ std::deque<double> NodePtrArray3d::RowSimpsonIntegration(const F &f,const std::s
         const Vector *p1= &(f(i)->getCrds());
         if(!p1) return retval;
         double s1= ((*p0)(num_coo)+(*p1)(num_coo))/2.0;
-        Intervalo1D iv(nmb_coo,ExprAlgebra(s0),ExprAlgebra(s1),n);
+        Intervalo1D iv(coo_name,ExprAlgebra(s0),ExprAlgebra(s1),n);
         retval.push_back(e.IntegSimpson(iv).ToNum());
         s0= s1;
         p0= p1;
@@ -101,7 +101,7 @@ std::deque<double> NodePtrArray3d::RowSimpsonIntegration(const F &f,const std::s
     const Vector *p1= &(f(sz)->getCrds());
     if(!p1) return retval;
     double s1= (*p1)(num_coo);
-    Intervalo1D iv(nmb_coo,ExprAlgebra(s0),ExprAlgebra(s1),n);
+    Intervalo1D iv(coo_name,ExprAlgebra(s0),ExprAlgebra(s1),n);
     retval.push_back(e.IntegSimpson(iv).ToNum());
     return retval;
   }

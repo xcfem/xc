@@ -116,11 +116,11 @@ double XC::QuadSectRegion::getMinZ(void) const
   }
 
 
-//! @brief Returns upper rigth corner.
+//! @brief Returns upper right corner.
 Pos2d XC::QuadSectRegion::getPMax(void) const
   { return Pos2d(getMaxY(),getMaxZ()); }
 
-//! @brief Sets upper rigth corner.
+//! @brief Sets upper right corner.
 void XC::QuadSectRegion::setPMax(const Pos2d &p)
   {
     const double y= p.x();
@@ -135,7 +135,7 @@ void XC::QuadSectRegion::setPMax(const Pos2d &p)
 Pos2d XC::QuadSectRegion::getPMin(void) const
   { return Pos2d(getMinY(),getMinZ()); }
 
-//! @brief Sets upper rigth corner.
+//! @brief Sets upper right corner.
 void XC::QuadSectRegion::setPMin(const Pos2d &p)
   {
     const double y= p.x();

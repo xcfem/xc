@@ -137,9 +137,9 @@ XC::FiberSectionShear3d &XC::FiberSectionShear3d::operator=(const FiberSectionSh
   }
 
 //! @brief Sets the material defining the shear response along the y axis.
-void XC::FiberSectionShear3d::setRespVyByName(const std::string &nmb_mat)
+void XC::FiberSectionShear3d::setRespVyByName(const std::string &material_name)
   {
-    const Material *ptr_mat= material_handler->find_ptr(nmb_mat);
+    const Material *ptr_mat= material_handler->find_ptr(material_name);
     if(ptr_mat)
       {
         const UniaxialMaterial *tmp= dynamic_cast<const UniaxialMaterial *>(ptr_mat);
@@ -147,12 +147,12 @@ void XC::FiberSectionShear3d::setRespVyByName(const std::string &nmb_mat)
           setRespVy(tmp);
         else
           std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
-                    << "material identified by: '" << nmb_mat
+                    << "material identified by: '" << material_name
                     << "' is not uniaxial.\n";
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
-                << "material identified by: '" << nmb_mat
+                << "material identified by: '" << material_name
                 << "' not found.\n";
   }
 
@@ -161,9 +161,9 @@ XC::UniaxialMaterial *XC::FiberSectionShear3d::getRespVy(void)
   { return respVy; }
 
 //! @brief Sets the material defining the shear response along the y axis.
-void XC::FiberSectionShear3d::setRespVzByName(const std::string &nmb_mat)
+void XC::FiberSectionShear3d::setRespVzByName(const std::string &material_name)
   {
-    const Material *ptr_mat= material_handler->find_ptr(nmb_mat);
+    const Material *ptr_mat= material_handler->find_ptr(material_name);
     if(ptr_mat)
       {
         const UniaxialMaterial *tmp= dynamic_cast<const UniaxialMaterial *>(ptr_mat);
@@ -171,12 +171,12 @@ void XC::FiberSectionShear3d::setRespVzByName(const std::string &nmb_mat)
           setRespVz(tmp);
         else
           std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
-                    << "material identified by: '" << nmb_mat
+                    << "material identified by: '" << material_name
                     << "' is not uniaxial.\n";
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
-                << "material identified by: '" << nmb_mat
+                << "material identified by: '" << material_name
                 << "'. not found.\n";
   }
 
@@ -185,9 +185,9 @@ XC::UniaxialMaterial *XC::FiberSectionShear3d::getRespVz(void)
   { return respVz; }
 
 //! @brief Sets the material defining the shear response along the y axis.
-void XC::FiberSectionShear3d::setRespTByName(const std::string &nmb_mat)
+void XC::FiberSectionShear3d::setRespTByName(const std::string &material_name)
   {
-    const Material *ptr_mat= material_handler->find_ptr(nmb_mat);
+    const Material *ptr_mat= material_handler->find_ptr(material_name);
     if(ptr_mat)
       {
         const UniaxialMaterial *tmp= dynamic_cast<const UniaxialMaterial *>(ptr_mat);
@@ -195,12 +195,12 @@ void XC::FiberSectionShear3d::setRespTByName(const std::string &nmb_mat)
           setRespT(tmp);
         else
           std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
-                    << "material identified by: '" << nmb_mat
+                    << "material identified by: '" << material_name
                     << "' is not uniaxial.\n";
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
-                << "material identified by: '" << nmb_mat
+                << "material identified by: '" << material_name
                 << "' not found.\n";
   }
 

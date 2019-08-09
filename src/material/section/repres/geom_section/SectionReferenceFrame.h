@@ -38,7 +38,7 @@ namespace XC {
 
 //! @ingroup MATSCCEntGeom
 //
-//! @brief Reference system used for make easier definining point positions.
+//! @brief Reference system used for make easier defining point positions.
 class SectionReferenceFrame: public EntGeomSection
   {
   protected:

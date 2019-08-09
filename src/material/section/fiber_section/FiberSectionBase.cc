@@ -146,24 +146,24 @@ void XC::FiberSectionBase::create_fiber_set(const std::string &nmb)
   { fiber_sets.create_fiber_set(nmb); }
 
 //! @brief Creates a fiber set which name is being passed as parameter.
-XC::FiberSectionBase::fiber_set_iterator XC::FiberSectionBase::get_fiber_set(const std::string &nmb_set)
-  { return fiber_sets.get_fiber_set(nmb_set); }
+XC::FiberSectionBase::fiber_set_iterator XC::FiberSectionBase::get_fiber_set(const std::string &set_name)
+  { return fiber_sets.get_fiber_set(set_name); }
 
 
 //! @brief Creates a fiber set which material has the tag being passed as parameter.
-XC::FiberSectionBase::fiber_set_iterator XC::FiberSectionBase::sel_mat_tag(const std::string &nmb_set,const int &matTag)
+XC::FiberSectionBase::fiber_set_iterator XC::FiberSectionBase::sel_mat_tag(const std::string &set_name,const int &matTag)
   {
-    fiber_set_iterator i= get_fiber_set(nmb_set);
+    fiber_set_iterator i= get_fiber_set(set_name);
     fibers.SelMatTag(matTag,(*i).second);
     return i;
   }
 
-//! @brief Creates a fiber set with those that belongs to the set with the name nmb_set_org, and have the material indetified with the tag being passed as parameter.
-//! @param nmb_set: new set name.
-//! @param nmb_set_org: set that contains the fibers.
+//! @brief Creates a fiber set with those that belongs to the set with the name set_name_org, and have the material indetified with the tag being passed as parameter.
+//! @param set_name: new set name.
+//! @param set_name_org: set that contains the fibers.
 //! @param matTag: material tag.
-XC::FiberSectionBase::fiber_set_iterator XC::FiberSectionBase::resel_mat_tag(const std::string &nmb_set,const std::string &nmb_set_org,const int &matTag)
-  { return fiber_sets.resel_mat_tag(nmb_set,nmb_set_org,matTag); }
+XC::FiberSectionBase::fiber_set_iterator XC::FiberSectionBase::resel_mat_tag(const std::string &set_name,const std::string &set_name_org,const int &matTag)
+  { return fiber_sets.resel_mat_tag(set_name,set_name_org,matTag); }
  
 
 //! @brief Destructor:
@@ -619,7 +619,7 @@ void XC::FiberSectionBase::getInteractionDiagramPointsForTheta(NMyMzPointCloud &
       {
         //Domains 1 and 2
         Pos3d P1= pivots.getAPivot(); //Pivot.
-        Pos3d P2= P1+100.0*cp.GetK(); //Bending arount local z axis.
+        Pos3d P2= P1+100.0*cp.GetK(); //Bending around local z axis.
         Pos3d P3;
         DeformationPlane def;
         const double inc_eps_B= diag_data.getIncEps();

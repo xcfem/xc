@@ -119,7 +119,7 @@ const XC::Matrix& XC::ElasticPlateSection::getSectionTangent(void) const
 const XC::Matrix& XC::ElasticPlateSection::getInitialTangent(void) const
   { return getSectionTangent(); }
 
-//! @brief Returns the labels of the DOFs for wich the element
+//! @brief Returns the labels of the DOFs for which the element
 //! adds (assembles) stiffness.
 const XC::ResponseId &XC::ElasticPlateSection::getType(void) const 
   { return RespPlateMat; }

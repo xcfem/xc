@@ -48,7 +48,7 @@
 //#                                                                              #
 //# Yield surface is based on article by Menetrey, P. and William, K.J.          #
 //# published in 1995 in  ACI Structural Journal pp 311-318. Purpose of the     #
-//# Yield surface is to model triaxial strenght of concrete                      #
+//# Yield surface is to model triaxial strength of concrete                      #
 //#                                                                              #
 //#                                                                              #
 //################################################################################
@@ -65,7 +65,7 @@ namespace XC {
 //
 //! @brief Yield surface is based on article by Menetrey, P. and William, K.J.
 //! published in 1995 in  ACI Structural Journal pp 311-318. Purpose of the
-//! Yield surface is to model triaxial strenght of concrete.
+//! Yield surface is to model triaxial strength of concrete.
 class TriFCYieldSurface : public YieldSurface
   {
   // Private vars to define the TriFCYieldSurface Yield Surface

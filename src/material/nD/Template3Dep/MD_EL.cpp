@@ -46,7 +46,7 @@
 #                                                                                #
 #                                                                                #
 # SHORT EXPLANATION: The goal is to create a platform for efficient and easy     #
-#                    implemetation of any elasto-plastic constitutive model!     #
+#                    implementation of any elasto-plastic constitutive model!     #
 #                                                                                #
 //================================================================================
 */

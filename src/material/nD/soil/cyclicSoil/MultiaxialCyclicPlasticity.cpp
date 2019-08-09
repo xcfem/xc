@@ -1258,7 +1258,7 @@ void XC::MultiaxialCyclicPlasticity::plastic_integrator()
  
 //LABEL6:
   if(plasticflag==0){
-    // intitialize
+    // initialize
 
     // converge better
     X[1] = Psi ;         // stiff at time n

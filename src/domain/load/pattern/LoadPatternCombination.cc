@@ -180,16 +180,16 @@ void XC::LoadPatternCombination::interpreta_descomp(const std::string &str_desco
         else
           {
             const float factor= boost::lexical_cast<float>(q_blancos(str_prod[0]));
-            const std::string nmb_hipot= q_blancos(str_prod[1]);
+            const std::string hypothesis_name= q_blancos(str_prod[1]);
             if(handler)
               {
-                LoadPattern *lp= handler->getLoadPatterns().buscaLoadPattern(nmb_hipot);
+                LoadPattern *lp= handler->getLoadPatterns().buscaLoadPattern(hypothesis_name);
                 if(lp)
                   add_component(summand(factor,lp));
                 else
 	          std::cerr << getClassName() << "::" << __FUNCTION__
 		            << " load case identified by: '" 
-                            << nmb_hipot << "' not found.\n";
+                            << hypothesis_name << "' not found.\n";
               }
             else
 	      std::cerr << getClassName() << "::" << __FUNCTION__

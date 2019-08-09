@@ -79,7 +79,7 @@ const size_t maxOrder= 10;
 // Can increase if needed!!!
 double XC::SectionAggregator::workArea[2*maxOrder*(maxOrder+1)];
 
-//! @brief Comprueba que los pointers no sean nulos.
+//! @brief Check that pointers are not null.
 void XC::SectionAggregator::check_ptrs(void) const
   {
     if(!theCode || !def || !defzero || !s || !ks || !fs )
@@ -90,6 +90,7 @@ void XC::SectionAggregator::check_ptrs(void) const
       }        
   }
 
+//! @brief Allocate storage for pointers.
 void XC::SectionAggregator::alloc_storage_ptrs(void)
   {
     free_storage_ptrs();
@@ -118,6 +119,7 @@ void XC::SectionAggregator::alloc_storage_ptrs(void)
 		<< "; 0 or negative order; order= " << order << std::endl;
   }
 
+//! @brief Free memory
 void XC::SectionAggregator::free_storage_ptrs(void)
   {
     if(def)

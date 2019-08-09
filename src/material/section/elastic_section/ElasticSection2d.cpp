@@ -80,7 +80,7 @@ XC::Vector XC::ElasticSection2d::s(2);
 XC::ElasticSection2d::ElasticSection2d(int tag, MaterialHandler *mat_ldr)
   : BaseElasticSection2d(tag,SEC_TAG_Elastic2d,2,mat_ldr) {}
 
-//! @breif Default constructor.
+//! @brief Default constructor.
 XC::ElasticSection2d::ElasticSection2d(void)
   : BaseElasticSection2d(0,SEC_TAG_Elastic2d,2) {}
 

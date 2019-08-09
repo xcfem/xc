@@ -202,8 +202,8 @@ enum ClaseEsfuerzo {SIMPLE_TENSION,COMPOSED_TENSION,FLEXION_SIMPLE,FLEXION_COMPU
 
     void SelMatTag(const int &matTag,FiberPtrDeque &,bool clear= true);
 
-    //size_t IMaxProp(const std::string &nmb_prop) const;
-    //size_t IMinProp(const std::string &nmb_prop) const;
+    //size_t IMaxProp(const std::string &prop_name) const;
+    //size_t IMinProp(const std::string &prop_name) const;
     size_t getFiberWithMaxCoord(const Ref3d3d &r,const size_t &iCoo) const;
     size_t getFiberWithMinCoord(const Ref3d3d &r,const size_t &iCoo) const;
 
@@ -250,11 +250,11 @@ enum ClaseEsfuerzo {SIMPLE_TENSION,COMPOSED_TENSION,FLEXION_SIMPLE,FLEXION_COMPU
     inline double getIpolar(const double &factor= 1.0) const
       { return getIz(factor,yCenterOfMass)+getIy(factor,zCenterOfMass); }
     //! @brief Returns the radius of gyration with respect to the axis
-    //! parallel to z que passes through the centroid.
+    //! parallel to z through the centroid.
     inline double getiz(const double factor= 1.0) const
       { return getIz(factor,yCenterOfMass)/getArea(factor); }
     //! @brief Returns the radius of gyration with respect to the axis
-    //! parallel to y que passes through the centroid.
+    //! parallel to y through the centroid.
     inline double getiy(const double factor= 1.0) const
       { return getIy(factor,zCenterOfMass)/getArea(factor); }
     size_t nearest_fiber(const double &y,const double &z) const;

@@ -41,7 +41,7 @@
 #                                                                              #
 # DATE:              08-03-2000                                                #
 # UPDATE HISTORY:                                                              #
-#		     May 2004, Zhao Cheng spliting the elastic part            #
+#		     May 2004, Zhao Cheng splitting the elastic part            #
 #                                                                              #
 #                                                                              #
 #                                                                              #

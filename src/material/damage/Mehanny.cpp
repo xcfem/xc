@@ -373,8 +373,8 @@ int XC::Mehanny::processData(double PDefo)
            ( (TrialDefoIncr <= -AbsTol) && (TrialDefoIncr >= -RelTol*TrialPosPHC) ) ||
            ( (TrialDefoIncr+TrialTempPDefo) <= -AbsTol && (TrialDefoIncr+TrialTempPDefo) <= -RelTol*TrialPosPHC )         )
           {
-            // in case the plastic deformation increament is significant enough
-            // or the current increment is larger than the tolerence
+            // in case the plastic deformation increment is significant enough
+            // or the current increment is larger than the tolerance
           
             if( TrialPosCycle == 0.0 && TrialNegCycle == 0.0 )
               {

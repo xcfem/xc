@@ -350,7 +350,7 @@ XC::BJtensor XC::CAMPotentialSurface::d2Qodsds1(const EPState *EPS) const
 // 
 // // fourth order tensors in the final equation for second derivative
 // // of theta over ( d \sigma_{pq} d \sigma_{mn} )
-// // BE CAREFULL order is   PQ MN
+// // BE CAREFUL order is   PQ MN
 // 
 //     BJtensor s_pq_d_mn( 4, def_dim_4, 0.0);
 //     BJtensor s_pn_d_mq( 4, def_dim_4, 0.0);

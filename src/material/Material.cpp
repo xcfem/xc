@@ -83,7 +83,7 @@ const XC::MaterialHandler *XC::Material::getMaterialHandler(void) const
     return retval;
   }
 
-//! @brief Returs a pointer to the material handler (if possible).
+//! @brief Returns a pointer to the material handler (if possible).
 XC::MaterialHandler *XC::Material::getMaterialHandler(void)
   {
     XC::MaterialHandler *retval= dynamic_cast<MaterialHandler *>(Owner());

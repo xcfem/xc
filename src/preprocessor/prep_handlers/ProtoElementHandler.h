@@ -50,11 +50,11 @@ class ProtoElementHandler: public PrepHandler
   {
     Element *create_element(const std::string &cmd,int tag_elem);
 
-    std::string nmb_mat; //!< When appropriate, material name for the new element.
+    std::string material_name; //!< When appropriate, material name for the new element.
     int num_sec; //!< When appropriate, number of sections (integration points) on one-dimensional elements.
     int dim_elem; //!< If required, dimension of the new element (0,1,2 or 3)
-    std::string nmb_transf; //!< If required, transformation identifier for the new element.
-    std::string nmb_integ; //!< If required, integrator identifier for the new element.
+    std::string transformation_name; //!< If required, transformation identifier for the new element.
+    std::string integrator_name; //!< If required, integrator identifier for the new element.
     int dir; //!< If required (i.e. for zero length elements), direction of the element material.
   protected:
     virtual void add(Element *)= 0;

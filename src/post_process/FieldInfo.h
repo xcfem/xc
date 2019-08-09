@@ -39,7 +39,7 @@ class Set;
 class FieldInfo: public NamedEntity
   {
   protected:
-    std::string nmb_set; //!< name of the set.
+    std::string set_name; //!< name of the set.
     bool on_nodes; //!< True if defined over the nodes of the set.
     bool on_gauss_points; //!< True if defined over Gauss points of the elements.
     std::vector<std::string> componentNames; //!< Name of the field components.
@@ -66,9 +66,9 @@ class FieldInfo: public NamedEntity
       { return on_gauss_points; }
     void definedOnGaussPoints(void);
     void setSetName(const std::string &nmb)
-      { nmb_set= nmb; }
+      { set_name= nmb; }
     inline const std::string &getSetName(void) const
-      { return nmb_set; }
+      { return set_name; }
     inline size_t getNumberOfComponents(void) const
       { return componentNames.size(); }
     inline void setComponentsType(const std::string &s)

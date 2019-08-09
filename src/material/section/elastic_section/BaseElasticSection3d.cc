@@ -35,7 +35,7 @@
 
 
 //! @brief Constructor.
-//! @param tag: object identifer.
+//! @param tag: object identifier.
 //! @param classTag: class identifier.
 XC::BaseElasticSection3d::BaseElasticSection3d(int tag, int classTag, const size_t &dim, MaterialHandler *mat_ldr)
   : BaseElasticSection(tag, classTag,dim,mat_ldr), ctes_scc() {}
@@ -44,7 +44,7 @@ XC::BaseElasticSection3d::BaseElasticSection3d(int tag, int classTag, const size
 //! 
 //! Construct an elastic section for three-dimensional elements with an
 //! integer identifier \p tag, and the mass properties \p ctes.
-//! @param tag: object identifer.
+//! @param tag: object identifier.
 //! @param classTag: class identifier.
 XC::BaseElasticSection3d::BaseElasticSection3d(int tag,int classTag,const size_t &dim,const CrossSectionProperties3d &ctes,MaterialHandler *mat_ldr)
   : BaseElasticSection(tag, classTag,dim,mat_ldr), ctes_scc(ctes) {}

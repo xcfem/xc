@@ -58,7 +58,7 @@
 // Revision: AA
 //
 // Description: This file contains the class definition for 
-// Cimbined damage model. It is a subclass od DamageModel
+// Cimbined damage model. It is a subclass of DamageModel
 //
 
 #include <material/damage/DamageModel.h>

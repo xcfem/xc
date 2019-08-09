@@ -48,7 +48,7 @@
 //#                                                                              #
 //# Yield surface is based on article by Menetrey, P. and William, K.J.          #
 //# published in 1995 in  ACI Structural Journal XC::pp 311-318. Purpose of the     #
-//# Yield surface is to model triaxial strenght of concrete. All the necessary   #
+//# Yield surface is to model triaxial strength of concrete. All the necessary   #
 //# explanations about functions are there                                       #
 //#                                                                              #
 //#                                                                              #
@@ -70,7 +70,7 @@ XC::TriFCYieldSurface::TriFCYieldSurface (double fc, double ft, double e, double
 
      fcomp= fc;                      // a way to fix those two factors so they are not        
      ftens= ft;                     // in need for evolution law, do not need to be derived and could be
-     el= e;                // suplied as a constansts (how this is done look in definition of Cam Clay model)
+     el= e;                // supplied as a constansts (how this is done look in definition of Cam Clay model)
      c= coh;
   }
 
@@ -89,7 +89,7 @@ double XC::TriFCYieldSurface::f(const XC::EPState *EPS) const
     const double th= EPS->getStress().theta();        //  explanation look Jeremic&Sture,1998  
 
     //double el= EPS->getScalarVar(1);                   // functions to select four parameters needed
-    //double fcomp= EPS->getScalarVar(3);           // to define yield surface. All are called throug
+    //double fcomp= EPS->getScalarVar(3);           // to define yield surface. All are called through
     //double ftens= EPS->getScalarVar(4);           // EPS state so that scalar evolution laws could 
     //double c= EPS->getScalarVar(2);                   // be developed for all of them
 
@@ -118,7 +118,7 @@ double XC::TriFCYieldSurface::f(const XC::EPState *EPS) const
     return yield_func;
   }
 
-//! @brief BJtensor dF/dsigma_ij  (this is the place wher a derivativ over yield function is coded)
+//! @brief BJtensor dF/dsigma_ij  (this is the place where a derivative over yield function is coded)
 XC::BJtensor XC::TriFCYieldSurface::dFods(const XC::EPState *EPS ) const 
   {
      BJtensor dFoverds( 2, def_dim_2, 0.0);
@@ -131,9 +131,9 @@ XC::BJtensor XC::TriFCYieldSurface::dFods(const XC::EPState *EPS ) const
      BJtensor DpoDs= EPS->getStress().dpoverds();           //  functions to get  already defined
      BJtensor DqoDs= EPS->getStress().dqoverds();           //  drivatives of p, q and theta which are defined
      BJtensor DtoDs= EPS->getStress().dthetaoverds(); //  in stress.cpp file. With method getStress()  
-							//  it is made sure that function is filled with curent stress 
+							//  it is made sure that function is filled with current stress 
 
-     // some parametres neccecary to define yield function and make calculation more transparent
+     // some parametres necessary to define yield function and make calculation more transparent
 
      double el= EPS->getScalarVar(1);                   // parameters called through      
      //double c= EPS->getScalarVar(2);                   // definitions of 'set EPS'
@@ -142,9 +142,9 @@ XC::BJtensor XC::TriFCYieldSurface::dFods(const XC::EPState *EPS ) const
      //double b3= pow (1.5,(1./2.) );
      double b4= pow (6.,(1./2.) ); 
 
-     double a4= 3.0*((fcomp * fcomp) - (ftens * ftens));         // variables neccecary to define 
+     double a4= 3.0*((fcomp * fcomp) - (ftens * ftens));         // variables necessary to define 
      double a5= (fcomp * ftens);                                 // factor   m 
-     double a6= (el/(1.0+ el));                                         // which is an expresion for 
+     double a6= (el/(1.0+ el));                                         // which is an expression for 
      double m= a4*a6/a5;                                         // friction parameter
         
         
@@ -156,7 +156,7 @@ XC::BJtensor XC::TriFCYieldSurface::dFods(const XC::EPState *EPS ) const
 																				 5.0*el*el -4.0*el),(1./2.));
      double ww= ww1/ww2; 
 
-     //derivation of the William Warnke fuction over theta
+     //derivation of the William Warnke function over theta
 
      // some factors enabling me to check the function. It might not be 
      // the example of clearness but it was clear to me at the time I
@@ -178,7 +178,7 @@ XC::BJtensor XC::TriFCYieldSurface::dFods(const XC::EPState *EPS ) const
      double dWW13= dWW10 * (dWW11 - dWW12);
      double dWW14= (2.0 * dWW2 * dWW3) + (dWW1 * dWW6);  
          
-     //William Warnke fuction derived over theta
+     //William Warnke function derived over theta
 
      double dWWodth= (dWW7 / (dWW8 + dWW9)) - (dWW13 / (dWW14 * dWW14));  
 

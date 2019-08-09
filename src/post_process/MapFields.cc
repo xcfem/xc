@@ -64,9 +64,9 @@ XC::MapFields::MapFields(Preprocessor *prep)
   : PreprocessorContainer(prep), MovableObject(0) {}
 
 //! @bred Defines a new field
-XC::FieldInfo &XC::MapFields::newField(const std::string &nmb_field)
+XC::FieldInfo &XC::MapFields::newField(const std::string &field_name)
   {
-    FieldInfo fi(nmb_field);
+    FieldInfo fi(field_name);
     fi.set_owner(this);
     push_back(fi);
     return back();

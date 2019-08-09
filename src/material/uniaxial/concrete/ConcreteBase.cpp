@@ -47,11 +47,11 @@ XC::ConcreteBase::ConcreteBase(int tag, int classTag)
 double XC::ConcreteBase::getStress(void) const
   { return trialState.getStress(); }
 
-//! @breif Returns material strain.
+//! @brief Returns material strain.
 double XC::ConcreteBase::getStrain(void) const
   { return trialState.getStrain(); }
 
-//! @breif Returns the tangent to stress-strain diagram.
+//! @brief Returns the tangent to stress-strain diagram.
 double XC::ConcreteBase::getTangent(void) const
   { return trialState.getTangent(); }
 

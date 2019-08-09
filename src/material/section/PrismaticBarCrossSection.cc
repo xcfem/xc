@@ -91,7 +91,7 @@ XC::DeformationPlane XC::PrismaticBarCrossSection::getDeformationPlane(void) con
     return  DeformationPlane(df);
   }
 
-//! @brief Returns strain at postion being passed as parameter.
+//! @brief Returns strain at position being passed as parameter.
 double XC::PrismaticBarCrossSection::getStrain(const double &y,const double &z) const
   {
     std::cerr << "getStrain not implemented for class: "

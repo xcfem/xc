@@ -302,7 +302,7 @@ XC::Template3Dep::Template3Dep( int tag                       ,
   {
     alloc(theElMat,YS_,PS_,EPS_,ELS1_,ELS2_,ELS3_,ELS4_,ELT1_,ELT2_,ELT3_,ELT4_);
 
-    //Initialze Eep using E-elastic
+    //Initialize Eep using E-elastic
     BJtensor E  = ElasticStiffnessTensor();
     EPS->setEep( E );
 
@@ -2770,7 +2770,7 @@ XC::EPState XC::Template3Dep::BackwardEulerEPState( const XC::straintensor &stra
         //**********
 
        // already set everything
-  // Need to genarate Eep and set strains and stresses
+  // Need to generate Eep and set strains and stresses
         //if( ( flag !=1) && (step_counter < MAX_STEP_COUNT) )
         //Guanzhou out Mar2005 if( ( flag !=1) ) {
           //Guanzhou out Mar2005

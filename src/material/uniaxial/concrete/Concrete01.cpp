@@ -122,7 +122,7 @@ XC::Concrete01::Concrete01(void)
     revertToLastCommit();
   }
 
-//! @brief Assigns concrete compressive strenght.
+//! @brief Assigns concrete compressive strength.
 void XC::Concrete01::setFpcu(const double &d)
   {
     fpcu= d;
@@ -133,7 +133,7 @@ void XC::Concrete01::setFpcu(const double &d)
       }
   }
 
-//! @brief Returns concrete compressive strenght.
+//! @brief Returns concrete compressive strength.
 double XC::Concrete01::getFpcu(void) const
   { return fpcu; }
 

@@ -190,7 +190,7 @@ int XC::PressureMultiYieldBase::recvData(const CommParameters &cp)
   {
     int res= NDMaterial::recvData(cp);
     res+= cp.receiveInts(matN,e2p,activeSurfaceNum,committedActiveSurf,getDbTagData(),CommMetaData(1));
-    //theSurfaces; // XXX not received (postition 2 reserved).
+    //theSurfaces; // XXX not received (position 2 reserved).
     //committedSurfaces;  // XXX not received (position 3 reserved).
     res+= cp.receiveMovable(currentStress,getDbTagData(),CommMetaData(4));
     res+= cp.receiveMovable(trialStress,getDbTagData(),CommMetaData(5));

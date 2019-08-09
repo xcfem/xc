@@ -2117,7 +2117,7 @@ XC::Response *XC::FiberPtrDeque::setResponse(const std::vector<std::string> &arg
 
 // //! Return the max value of the property being passed as parameter over the fiber set.
 // //! being passed as parameter.
-// size_t XC::FiberPtrDeque::IMaxProp(const std::string &nmb_prop) const
+// size_t XC::FiberPtrDeque::IMaxProp(const std::string &prop_name) const
 //   {
 //     size_t retval= 0;
 //     double vmax= 0.0;
@@ -2129,7 +2129,7 @@ XC::Response *XC::FiberPtrDeque::setResponse(const std::vector<std::string> &arg
 //         return retval;
 //       }
 //     register size_t i= 0;
-//     (*this)[i]->interpreta(nmb_prop);
+//     (*this)[i]->interpreta(prop_name);
 //     boost::any propertyValue= InterpreteRPN::Pila().Pop();
 //     if(boost_any_is_number(propertyValue))
 //       {
@@ -2141,7 +2141,7 @@ XC::Response *XC::FiberPtrDeque::setResponse(const std::vector<std::string> &arg
 //     for(;i<nf;i++)
 //       if((*this)[i])
 //         {
-//           (*this)[i]->interpreta(nmb_prop);
+//           (*this)[i]->interpreta(prop_name);
 //           boost::any propertyValue= InterpreteRPN::Pila().Pop();
 //           if(boost_any_is_number(propertyValue))
 //             {
@@ -2161,7 +2161,7 @@ XC::Response *XC::FiberPtrDeque::setResponse(const std::vector<std::string> &arg
 
 // //! Return the index of the fiber that presents the minimal value
 // //! of the property which name is being passed as parameter.
-// size_t XC::FiberPtrDeque::IMinProp(const std::string &nmb_prop) const
+// size_t XC::FiberPtrDeque::IMinProp(const std::string &prop_name) const
 //   {
 //     size_t retval= 0;
 //     double vmin= 0.0;
@@ -2173,7 +2173,7 @@ XC::Response *XC::FiberPtrDeque::setResponse(const std::vector<std::string> &arg
 //         return retval;
 //       }
 //     register size_t i= 0;
-//     (*this)[i]->interpreta(nmb_prop);
+//     (*this)[i]->interpreta(prop_name);
 //     boost::any propertyValue= InterpreteRPN::Pila().Pop();
 //     if(boost_any_is_number(propertyValue))
 //       {
@@ -2185,7 +2185,7 @@ XC::Response *XC::FiberPtrDeque::setResponse(const std::vector<std::string> &arg
 //     for(;i<nf;i++)
 //       if((*this)[i])
 //         {
-//           (*this)[i]->interpreta(nmb_prop);
+//           (*this)[i]->interpreta(prop_name);
 //           propertyValue= InterpreteRPN::Pila().Pop();
 //           if(boost_any_is_number(propertyValue))
 //             {

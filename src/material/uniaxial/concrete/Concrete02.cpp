@@ -93,7 +93,7 @@ XC::Concrete02::Concrete02(int tag):
 XC::UniaxialMaterial* XC::Concrete02::getCopy(void) const
   { return new Concrete02(*this); }
 
-//! @brief Assigns concrete compressive strenght.
+//! @brief Assigns concrete compressive strength.
 void XC::Concrete02::setFpcu(const double &d)
   {
     fpcu= d;
@@ -104,11 +104,11 @@ void XC::Concrete02::setFpcu(const double &d)
       }
   }
 
-//! @brief Returns concrete compressive strenght.
+//! @brief Returns concrete compressive strength.
 double XC::Concrete02::getFpcu(void) const
   { return fpcu; }
 
-//! @brief Assigns concrete tensile strenght.
+//! @brief Assigns concrete tensile strength.
 void XC::Concrete02::setFt(const double &d)
   {
     ft= d;
@@ -119,7 +119,7 @@ void XC::Concrete02::setFt(const double &d)
       }
   }
 
-//! @brief Returns concrete tensile strenght.
+//! @brief Returns concrete tensile strength.
 double XC::Concrete02::getFt(void) const
   { return ft; }
 
@@ -135,7 +135,7 @@ void XC::Concrete02::setEts(const double &d)
       }
   }
 
-//! @brief Returns concrete tensile strenght.
+//! @brief Returns concrete tensile strength.
 double XC::Concrete02::getEts(void) const
   { return Ets; }
 
@@ -143,7 +143,7 @@ double XC::Concrete02::getEts(void) const
 void XC::Concrete02::setLambda(const double &d)
   { rat= d; }
 
-//! @brief Returns concrete tensile strenght.
+//! @brief Returns concrete tensile strength.
 double XC::Concrete02::getLambda(void) const
   { return rat; }
 

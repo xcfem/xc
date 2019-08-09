@@ -90,18 +90,20 @@
 
 //! @brief Default constructor.
 XC::ProtoElementHandler::ProtoElementHandler(Preprocessor *preprocessor)
-  : PrepHandler(preprocessor), nmb_mat("nil"), num_sec(3), dim_elem(0), nmb_transf("nil"), nmb_integ("Lobatto"), dir(0)
+  : PrepHandler(preprocessor), material_name("nil"), num_sec(3), dim_elem(0), transformation_name("nil"), integrator_name("Lobatto"), dir(0)
  {}
 
 //! @brief Returns a reference to the material handler.
 const XC::MaterialHandler &XC::ProtoElementHandler::get_material_handler(void) const
   { return getPreprocessor()->getMaterialHandler(); }
 
-//! @brief Returns an iterator al material que se especifica en nmb_mat.
+//! @brief Returns an iterator to the material whose name corresponds
+//! to material_name contents.
 XC::MaterialHandler::const_iterator XC::ProtoElementHandler::get_iter_material(void) const
-  { return getPreprocessor()->getMaterialHandler().find(nmb_mat); }
+  { return getPreprocessor()->getMaterialHandler().find(material_name); }
 
-//! @brief Returns a pointer to material que se especifica en nmb_mat.
+//! @brief Returns a pointer to the material whose name corresponds
+//! to material_name contents.
 const XC::Material *XC::ProtoElementHandler::get_ptr_material(void) const
   {
     Material *retval= nullptr;
@@ -110,7 +112,7 @@ const XC::Material *XC::ProtoElementHandler::get_ptr_material(void) const
       retval= imat->second;
     else 
       std::cerr << "ProtoElementHandler - material: '" 
-                << nmb_mat << "' not found.\n";
+                << material_name << "' not found.\n";
     return retval;
   }
 
@@ -118,12 +120,14 @@ const XC::Material *XC::ProtoElementHandler::get_ptr_material(void) const
 const XC::BeamIntegratorHandler &XC::ProtoElementHandler::get_beam_integrator_handler(void) const
   { return getPreprocessor()->getBeamIntegratorHandler(); }
 
-//! @brief Returns an iterator al integrator que se especifica en nmb_integ.
+//! @brief Returns an iterator to the integrator whose name corresponds to
+//! the contents of integrator_name.
 XC::BeamIntegratorHandler::const_iterator XC::ProtoElementHandler::get_iter_beam_integrator(void) const
-  { return getPreprocessor()->getBeamIntegratorHandler().find(nmb_integ); }
+  { return getPreprocessor()->getBeamIntegratorHandler().find(integrator_name); }
 
 
-//! @brief Returns a pointer to integrator que se especifica en nmb_integ.
+//! @brief Returns a pointer to the integrator whose name corresponds to
+//! the contents of integrator_name.
 const XC::BeamIntegration *XC::ProtoElementHandler::get_ptr_beam_integrator(void) const
   {
     BeamIntegration *retval= nullptr;
@@ -134,7 +138,7 @@ const XC::BeamIntegration *XC::ProtoElementHandler::get_ptr_beam_integrator(void
       if(verbosity>0)
         std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; integrator named: '" 
-                  << nmb_integ << "' not found.\n";
+                  << integrator_name << "' not found.\n";
     return retval;
   }
 
@@ -144,7 +148,7 @@ const XC::TransfCooHandler &XC::ProtoElementHandler::get_transf_coo_handler(void
 
 //! @brief Returns an iterator to the coordinate transformation with the name being passed as parameter.
 XC::TransfCooHandler::const_iterator XC::ProtoElementHandler::get_iter_transf_coo(void) const
-  { return getPreprocessor()->getTransfCooHandler().find(nmb_transf); }
+  { return getPreprocessor()->getTransfCooHandler().find(transformation_name); }
 
 //! @brief Returns a pointer to the coordinate transformation with the name being passed as parameter (nullptr if not found).
 const XC::CrdTransf *XC::ProtoElementHandler::get_ptr_transf_coo(void) const
@@ -157,7 +161,7 @@ const XC::CrdTransf *XC::ProtoElementHandler::get_ptr_transf_coo(void) const
       if(verbosity>0)
         std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; coordinate transformation named: '" 
-                  << nmb_transf << "' not found.\n";
+                  << transformation_name << "' not found.\n";
     return retval;
   }
 
@@ -365,7 +369,7 @@ XC::Element *XC::ProtoElementHandler::create_element(const std::string &cmd,int 
 	  deprecatedElementNameMsg(errHeader,cmd,"ShellMITC4");
         retval= new_element_mat<ShellMITC4,SectionForceDeformation>(tag_elem, get_ptr_material());
         if(!retval)
-	  materialNotSuitableMsg(errHeader,nmb_mat,cmd);
+	  materialNotSuitableMsg(errHeader,material_name,cmd);
       }
     else if((cmd == "shell_nl")||(cmd == "ShellMITC9"))
       {
@@ -373,7 +377,7 @@ XC::Element *XC::ProtoElementHandler::create_element(const std::string &cmd,int 
 	  deprecatedElementNameMsg(errHeader,cmd,"ShellMITC9");
         retval= new_element_mat<ShellMITC9,SectionForceDeformation>(tag_elem, get_ptr_material());
         if(!retval)
-	  materialNotSuitableMsg(errHeader,nmb_mat,cmd);
+	  materialNotSuitableMsg(errHeader,material_name,cmd);
       }
     else if((cmd == "quad4n")||(cmd == "FourNodeQuad"))
       {
@@ -381,7 +385,7 @@ XC::Element *XC::ProtoElementHandler::create_element(const std::string &cmd,int 
 	  deprecatedElementNameMsg(errHeader,cmd,"FourNodeQuad");
         retval= new_element_mat<FourNodeQuad,NDMaterial>(tag_elem, get_ptr_material());
         if(!retval)
-	  materialNotSuitableMsg(errHeader,nmb_mat,cmd);
+	  materialNotSuitableMsg(errHeader,material_name,cmd);
       }
     else if((cmd == "tri31")||(cmd == "Tri31"))
       {
@@ -389,7 +393,7 @@ XC::Element *XC::ProtoElementHandler::create_element(const std::string &cmd,int 
 	  deprecatedElementNameMsg(errHeader,cmd,"Tri31");
         retval= new_element_mat<Tri31,NDMaterial>(tag_elem, get_ptr_material());
         if(!retval)
-	  materialNotSuitableMsg(errHeader,nmb_mat,cmd);
+	  materialNotSuitableMsg(errHeader,material_name,cmd);
       }
     else if((cmd == "brick")||(cmd == "Brick"))
       {
@@ -397,7 +401,7 @@ XC::Element *XC::ProtoElementHandler::create_element(const std::string &cmd,int 
 	  deprecatedElementNameMsg(errHeader,cmd,"Brick");
         retval= new_element_mat<Brick,NDMaterial>(tag_elem, get_ptr_material());
         if(!retval)
-	  materialNotSuitableMsg(errHeader,nmb_mat,cmd);
+	  materialNotSuitableMsg(errHeader,material_name,cmd);
       }
     else
       std::cerr << errHeader
@@ -431,11 +435,11 @@ XC::Element *XC::ProtoElementHandler::newElement(const std::string &type,const I
 
 //! @brief Sets the default material name for new elements.
 void XC::ProtoElementHandler::setDefaultMaterial(const std::string &nmb)
-  { nmb_mat= nmb; }
+  { material_name= nmb; }
 
 //! @brief Returns the default material name for new elements.
 const std::string &XC::ProtoElementHandler::getDefaultMaterial(void) const
-  { return nmb_mat; }
+  { return material_name; }
 
 //! @brief Default number of sections for new elements.
 void XC::ProtoElementHandler::setNumSections(const int &ns)
@@ -455,17 +459,17 @@ int XC::ProtoElementHandler::getDimElem(void) const
 
 //! @brief Sets the name of the default coordinate transformation for new elements.
 void XC::ProtoElementHandler::setDefaultTransf(const std::string &nmb)
-  { nmb_transf= nmb; }
+  { transformation_name= nmb; }
 
 //! @brief Returns the name of the default coordinate transformation for new elements.
 const std::string &XC::ProtoElementHandler::getDefaultTransf(void) const
-  { return nmb_transf; }
+  { return transformation_name; }
 
 //! @brief Sets the name of the default integrator for new elements.
 void XC::ProtoElementHandler::setDefaultIntegrator(const std::string &nmb)
-  { nmb_integ= nmb; }
+  { integrator_name= nmb; }
 
 //! @brief Returns the name of the default integrator for new elements.
 const std::string &XC::ProtoElementHandler::getDefaultIntegrator(void) const
-  { return nmb_integ; }
+  { return integrator_name; }
 

@@ -130,7 +130,7 @@ int XC::FiberSectionRepr::addFiber(Fiber &newFiber)
     return 0;
   }
 
-//! @brief Returns the number of fibers of hte section.
+//! @brief Returns the number of fibers of the section.
 int XC::FiberSectionRepr::getNumFibers(void) const
   { return fibers.size(); }
 

@@ -46,7 +46,7 @@ class MapLoadPatterns: public LoadHandlerMember
   {
     typedef std::map<std::string,TimeSeries *> map_timeseries;
     map_timeseries tseries; //!< Load/displacement time variation.
-    std::string nmb_ts; //!< Time series identifier for new load patterns.
+    std::string time_series_name; //!< Time series identifier for new load patterns.
 
     typedef std::map<std::string,LoadPattern *> map_loadpatterns; //!< Load pattern container type.
     map_loadpatterns loadpatterns; //!< Load pattern container.
@@ -111,9 +111,9 @@ class MapLoadPatterns: public LoadHandlerMember
     const std::string &getLoadPatternName(const LoadPattern *) const;
     TimeSeries *newTimeSeries(const std::string &,const std::string &);
     inline const std::string &getCurrentTimeSeries(void) const
-      { return nmb_ts; }
+      { return time_series_name; }
     inline void setCurrentTimeSeries(const std::string &nmb)
-      { nmb_ts= nmb; }
+      { time_series_name= nmb; }
 
     std::deque<std::string> getNamesList(void) const;
     boost::python::list getKeys(void) const;
@@ -145,7 +145,7 @@ TimeSeries *XC::MapLoadPatterns::create_time_series(const std::string &cod_ts)
         tseries[cod_ts]= nts;
         ts= nts;
       }
-    nmb_ts= cod_ts;
+    time_series_name= cod_ts;
     return ts;
   }
 
@@ -157,7 +157,7 @@ LoadPattern *XC::MapLoadPatterns::create_load_pattern(const std::string &cod_lp)
     LoadPattern *lp= buscaLoadPattern(cod_lp);
     if(!lp) //Doesn't exist.
       {
-	std::map<std::string,TimeSeries *>::const_iterator its= tseries.find(nmb_ts);
+	std::map<std::string,TimeSeries *>::const_iterator its= tseries.find(time_series_name);
         if(its!= tseries.end())
           {
             lp= new LP(tag_lp);
@@ -174,7 +174,7 @@ LoadPattern *XC::MapLoadPatterns::create_load_pattern(const std::string &cod_lp)
           }
         else
 	  std::cerr << "MapLoadPatterns; ERROR " 
-                    << ", time series: " << nmb_ts
+                    << ", time series: " << time_series_name
 		    << " not found." << std::endl;
       }
     return lp;

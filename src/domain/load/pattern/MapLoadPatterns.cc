@@ -64,7 +64,7 @@
 
 //! @brief Default constructor.
 XC::MapLoadPatterns::MapLoadPatterns(LoadHandler *owr)
-  : LoadHandlerMember(owr), nmb_ts("nil"), lpcode("nil"), tag_el(0), tag_nl(0), tag_spc(0) {}
+  : LoadHandlerMember(owr), time_series_name("nil"), lpcode("nil"), tag_el(0), tag_nl(0), tag_spc(0) {}
 
 //! @brief Returns a pointer to the TS cuyo dbTag being passed as parameter.
 //! se usa en LoadPattern::recvData.
@@ -315,7 +315,7 @@ XC::DbTagData &XC::MapLoadPatterns::getDbTagData(void) const
 int XC::MapLoadPatterns::sendData(CommParameters &cp)
   {
     int res= sendMap(tseries,cp,getDbTagData(),CommMetaData(0));
-    res+= cp.sendString(nmb_ts,getDbTagData(),CommMetaData(1));
+    res+= cp.sendString(time_series_name,getDbTagData(),CommMetaData(1));
     res+= sendMap(loadpatterns,cp,getDbTagData(),CommMetaData(2));
     res+= cp.sendString(lpcode,getDbTagData(),CommMetaData(3));
     res+= cp.sendInts(tag_el,tag_nl,tag_spc,getDbTagData(),CommMetaData(4));
@@ -327,7 +327,7 @@ int XC::MapLoadPatterns::recvData(const CommParameters &cp)
   {
     clear();
     int res= receiveMap(tseries,cp,getDbTagData(),CommMetaData(0),&FEM_ObjectBroker::getNewTimeSeries);
-    res+= cp.receiveString(nmb_ts,getDbTagData(),CommMetaData(1));
+    res+= cp.receiveString(time_series_name,getDbTagData(),CommMetaData(1));
     res+= receiveMap(loadpatterns,cp,getDbTagData(),CommMetaData(2),&FEM_ObjectBroker::getNewLoadPattern);
     for(iterator i= begin();i!= end();i++)
       (*i).second->set_owner(this);
