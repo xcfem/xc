@@ -32,7 +32,7 @@ class envConfig(object):
         self.reportNormStrGrPath=annexPath+'text/graphics/normStrsULS/'
         
         self.verifShearFile=verifPath+'verifRsl_shearULS.py'
-        self.reportShearFile=annexPath+'text/graphics/shearULS/'
+        self.reportShearFile=annexPath+'text/graphics/report_shearULS.tex'
         self.reportShearGrPath=annexPath+'text/graphics/shearULS/'
         
         self.verifCrackFreqFile=verifPath+'verifRsl_crackingSLS_freq.py'

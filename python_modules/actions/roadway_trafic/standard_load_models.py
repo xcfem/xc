@@ -180,8 +180,8 @@ def wind_LC(lcName,deckLineSet,vectWindDeck,windwardPileSet,vectWindwardPile,lee
     lc=lcases.LoadCase(preprocessor,lcName,"default","constant_ts")
     lc.create()
     #add linear loads
-    lc.addLstLoads([loads.UniformLoadOnLines(name= lcName+'deck', xcSet=deckLineSet, loadVector=xc.Vector([vectWindDeck[0],vectWindDeck[1],0,0,0]))])
-    lc.addLstLoads([loads.UniformLoadOnLines(name= lcName+'pilewindward', xcSet=windwardPileSet, loadVector=xc.Vector([vectWindwardPile[0],vectWindwardPile[1],0,0,0]))])
+    lc.addLstLoads([loads.UniformLoadOnLines(name= lcName+'deck', xcSet=deckLineSet, loadVector=xc.Vector([vectWindDeck[0],vectWindDeck[1],0,0,0,0]))])
+    lc.addLstLoads([loads.UniformLoadOnLines(name= lcName+'pilewindward', xcSet=windwardPileSet, loadVector=xc.Vector([vectWindwardPile[0],vectWindwardPile[1],0,0,0,0]))])
     if leewardPileSet:
-        lc.addLstLoads([loads.UniformLoadOnLines(name= lcName+'pileleeward', xcSet=leewardPileSet, loadVector=xc.Vector([vectLeewardPile[0],vectLeewardPile[1],0,0,0]))])
+        lc.addLstLoads([loads.UniformLoadOnLines(name= lcName+'pileleeward', xcSet=leewardPileSet, loadVector=xc.Vector([vectLeewardPile[0],vectLeewardPile[1],0,0,0,0]))])
     return lc
