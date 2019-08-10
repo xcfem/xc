@@ -63,7 +63,7 @@ EntityMap<Entity>::EntityMap(MultiBlockTopology *mbt)
 template <class Entity>
 Entity *EntityMap<Entity>::getNearest(const Pos3d &p)
   {
-    //Commented code is buggy (inifinite recursion) if
+    //Commented code is buggy (infinite recursion) if
     //the function is called from Python
     /* EntityMap<Entity> *this_no_const= const_cast<EntityMap<Entity> *>(this); */
     /* return const_cast<Entity *>(this_no_const->getNearest(p)); */

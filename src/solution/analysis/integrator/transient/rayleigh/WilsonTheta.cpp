@@ -352,7 +352,7 @@ int XC::WilsonTheta::update(const Vector &deltaU)
     if (deltaU.Size() != U.get().Size())
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; WARNING - Vectors of incompatable size "
+		  << "; WARNING - Vectors of incompatible size "
 		  << " expecting " << U.get().Size()
 		  << " obtained " << deltaU.Size() << std::endl;
 	return -3;

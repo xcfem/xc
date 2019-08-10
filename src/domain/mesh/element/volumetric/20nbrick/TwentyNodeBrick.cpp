@@ -2953,7 +2953,7 @@ int XC::TwentyNodeBrick::addInertiaLoadToUnbalance(const Vector &accel)
         3 != Raccel17.Size() || 3 != Raccel18.Size() || 3 != Raccel19.Size() || 3 != Raccel20.Size()   ){
  // Xiaoyan changed 2 to 3 and added Racce15-18  09/27/00
 std::cerr << "XC::TwentyNodeBrick::addInertiaLoadToUnbalance " <<
-  "matrix and vector sizes are incompatable\n";
+  "matrix and vector sizes are incompatible\n";
   return -1;
     }
 

@@ -120,7 +120,7 @@ void meshing_quad4N_bidimensional(const XC::Element &e,const XC::NodePtrArray3d 
           }
       }
     else  //There are null pointers.
-      std::cerr << "meshing_quad4N_bidimensional; one or more pointes to node are null." << std::endl;
+      std::cerr << "meshing_quad4N_bidimensional; one or more points to node are null." << std::endl;
   }
 
 //! @brief Place the elements on the mesh passed as parameter.

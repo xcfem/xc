@@ -143,7 +143,7 @@ int XC::CentralDifferenceNoDamping::update(const XC::Vector &X)
     // check deltaU is of correct size
     if(X.Size() != U.get().Size())
       {
-        std::cerr << "WARNING XC::CentralDifferenceNoDamping::update() - Vectors of incompatable size ";
+        std::cerr << "WARNING XC::CentralDifferenceNoDamping::update() - Vectors of incompatible size ";
         std::cerr << " expecting " << U.get().Size() << " obtained " << X.Size() << std::endl;
         return -3;
       }

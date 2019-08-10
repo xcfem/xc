@@ -382,7 +382,7 @@ int XC::DOF_Numberer::numberDOF(ID &lastDOFs)
     if(orderedRefs.Size() != am->getNumDOF_Groups())
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; WARNING - incompatable Sizes\n";
+	          << "; WARNING - incompatible Sizes\n";
         return -3;
       }
 

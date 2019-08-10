@@ -238,7 +238,7 @@ int XC::ProfileSPDLinSOE::setSize(Graph &theGraph)
 
 //! @brief Assembles the product of m by fact into A.
 //! 
-//! First tests that \p loc and \p M are of compatable sizes; if not
+//! First tests that \p loc and \p M are of compatible sizes; if not
 //! a warning message is printed and a \f$-1\f$ is returned. The LinearSOE
 //! object then assembles \p fact times the Matrix {\em 
 //! M} into the matrix \f$A\f$. The Matrix is assembled into \f$A\f$ at the

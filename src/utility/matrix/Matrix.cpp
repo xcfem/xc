@@ -519,7 +519,7 @@ int XC::Matrix::addMatrix(double factThis, const Matrix &other, double factOther
 #ifdef _G3DEBUG
     if((other.numRows != numRows) || (other.numCols != numCols)) {
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; incompatable matrices\n";
+		<< "; incompatible matrices\n";
       return -1;
     }
 #endif
@@ -588,7 +588,7 @@ int XC::Matrix::addMatrixProduct(double thisFact, const Matrix &B, const Matrix 
 #ifdef _G3DEBUG
     if((B.numRows != numRows) || (C.numCols != numCols) || (B.numCols != C.numRows)) {
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; incompatable matrices, this\n";
+		<< "; incompatible matrices, this\n";
       return -1;
     }
 #endif
@@ -665,7 +665,7 @@ int XC::Matrix::addMatrixTransposeProduct(double thisFact,
 
 #ifdef _G3DEBUG
   if ((B.numCols != numRows) || (C.numCols != numCols) || (B.numRows != C.numRows)) {
-    opserr << "Matrix::addMatrixProduct(): incompatable matrices, this\n";
+    opserr << "Matrix::addMatrixProduct(): incompatible matrices, this\n";
     return -1;
   }
 #endif
@@ -730,7 +730,7 @@ int XC::Matrix::addMatrixTripleProduct(double thisFact,
     if((numCols != numRows) || (B.numCols != B.numRows) || (T.numCols != numRows) ||
 	(T.numRows != B.numCols)) {
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; incompatable matrices\n";
+		<< "; incompatible matrices\n";
       return -1;
     }
 #endif
@@ -837,7 +837,7 @@ int XC::Matrix::addMatrixTripleProduct(double thisFact,
 #ifdef _G3DEBUG
     if ((numRows != A.numRows) || (A.numCols != B.numRows) || (B.numCols != C.numRows) ||
 	(C.numCols != numCols)) {
-      std::cerr << "Matrix::addMatrixTripleProduct() - incompatable matrices\n";
+      std::cerr << "Matrix::addMatrixTripleProduct() - incompatible matrices\n";
       return -1;
     }
 #endif
@@ -966,7 +966,7 @@ XC::Vector XC::Matrix::getCol(int col) const
 		
 // Matrix &operator=(const Matrix  &V):
 //      the assignment operator, This is assigned to be a copy of V. if sizes
-//      are not compatable this.data [] is deleted. The data pointers will not
+//      are not compatible this.data [] is deleted. The data pointers will not
 //      point to the same area in mem after the assignment.
 //
 
@@ -1179,7 +1179,7 @@ XC::Vector XC::Matrix::operator*(const Vector &V) const
     if(V.Size() != numCols)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; incompatable sizes\n";
+		  << "; incompatible sizes\n";
 	return result;
       } 
     
@@ -1226,7 +1226,7 @@ XC::Vector XC::Matrix::operator^(const Vector &V) const
     if(V.Size() != numRows)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; incompatable sizes\n";
+		  << "; incompatible sizes\n";
         return result;
       } 
 
@@ -1300,7 +1300,7 @@ XC::Matrix XC::Matrix::operator*(const Matrix &M) const
     if(numCols != M.numRows || result.numRows != numRows)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; incompatable sizes\n";
+		  << "; incompatible sizes\n";
 	return result;
       } 
 
@@ -1354,7 +1354,7 @@ XC::Matrix XC::Matrix::operator^(const Matrix &M) const
     if(numRows != M.numRows || result.numRows != numCols)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; incompatable sizes\n";
+		  << "; incompatible sizes\n";
         return result;
       } 
 
@@ -1385,7 +1385,7 @@ XC::Matrix &XC::Matrix::operator+=(const Matrix &M)
   if(numRows != M.numRows || numCols != M.numCols)
     {
       std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; matrices incompatable\n";
+	        << "; matrices incompatible\n";
       return *this;
     }
 #endif
@@ -1405,7 +1405,7 @@ XC::Matrix &XC::Matrix::operator-=(const Matrix &M)
   if(numRows != M.numRows || numCols != M.numCols)
     {
       std::cerr << getClassName() << "::" << __FUNCTION__
-	        << ";  matrices incompatable [" << numRows << " "
+	        << ";  matrices incompatible [" << numRows << " "
 	        << numCols << "]" << "[" << M.numRows << "]"
 	        << M.numCols << "]\n";
       return *this;

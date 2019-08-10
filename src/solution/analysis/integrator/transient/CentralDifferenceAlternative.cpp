@@ -136,7 +136,7 @@ int XC::CentralDifferenceAlternative::update(const Vector &X)
     // check deltaU is of correct size
     if(X.Size() != Ut.Size())
       {
-        std::cerr << "WARNING CentralDifferenceAlternative::update() - Vectors of incompatable size ";
+        std::cerr << "WARNING CentralDifferenceAlternative::update() - Vectors of incompatible size ";
         std::cerr << " expecting " << Ut.Size() << " obtained " << X.Size() << std::endl;
         return -3;
       }

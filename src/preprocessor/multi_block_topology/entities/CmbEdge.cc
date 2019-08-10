@@ -637,7 +637,7 @@ void XC::CmbEdge::insert(Edge *l)
       }
   }
 
-//! @brief Searchs the line l from those of this compound line.
+//! @brief Searches the line l from those of this compound line.
 size_t XC::CmbEdge::IndiceEdge(const Edge *l) const
   {
     size_t retval= 1;

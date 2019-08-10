@@ -168,7 +168,7 @@ XC::ID XC::EntMdlr::getNodeIndices(const Node *n) const
   { return ttzNodes.getNodeIndices(n); }
 
 //! @brief Returns a pointer to the element which indexes
-//! are being passed as paremeters.
+//! are being passed as parameters.
 //!
 //! @param i: index of the layer.
 //! @param j: index of the row.
@@ -181,7 +181,7 @@ XC::Element *XC::EntMdlr::getElement(const size_t &i,const size_t &j,const size_
       return nullptr;
   }
 
-//! @brief Returns a pointer to the element which indices are being passed as paremeters.
+//! @brief Returns a pointer to the element which indices are being passed as parameters.
 //!
 //! @param i: index of the layer.
 //! @param j: index of the row.
@@ -325,10 +325,10 @@ bool XC::EntMdlr::create_elements(meshing_dir dm)
                   if(verbosity>4)
                     std::clog << "Creating elements of entity: '"
 			      << getName() << "'...";   
-                  const Element *smll= getPreprocessor()->getElementHandler().get_seed_element();
-                  if(smll)
+                  const Element *seed= getPreprocessor()->getElementHandler().get_seed_element();
+                  if(seed)
                     {
-                      ttzElements= smll->put_on_mesh(ttzNodes,dm);
+                      ttzElements= seed->put_on_mesh(ttzNodes,dm);
                       add_elements(ttzElements);
                       retval= true;
                     }

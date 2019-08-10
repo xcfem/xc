@@ -481,7 +481,7 @@ int XC::ElasticBeam3d::addInertiaLoadToUnbalance(const XC::Vector &accel)
 
     if(6 != Raccel1.Size() || 6 != Raccel2.Size())
       {
-        std::cerr << "XC::ElasticBeam3d::addInertiaLoadToUnbalance matrix and vector sizes are incompatable\n";
+        std::cerr << "XC::ElasticBeam3d::addInertiaLoadToUnbalance matrix and vector sizes are incompatible\n";
         return -1;
       }
 

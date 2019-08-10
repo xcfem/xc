@@ -98,7 +98,7 @@ T *TransfCooHandler::newCrdTransf(const std::string &trfName)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "transformation: '" << trfName
-	          << "' aready exists. I do nothing." << std::endl;
+	          << "' already exists. I do nothing." << std::endl;
 	retval= dynamic_cast<T *>(ptr);
       }
     else

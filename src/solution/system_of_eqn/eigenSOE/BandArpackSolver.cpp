@@ -110,13 +110,13 @@ void XC::BandArpackSolver::print_err_info(int info)
          std::cerr << "IPARAM(7) must be 1,2,3,4,5.\n";
          break;
        case -11:
-         std::cerr << "IPARAM(7) = 1 and BMAT = 'G' are incompatable.\n";
+         std::cerr << "IPARAM(7) = 1 and BMAT = 'G' are incompatible.\n";
          break;
        case -12:
          std::cerr << "IPARAM(1) must be equal to 0 or 1.\n";
          break;
        case -13:
-         std::cerr << "NEV and WHICH = 'BE' are incompatable.\n";
+         std::cerr << "NEV and WHICH = 'BE' are incompatible.\n";
          break;
        case -9999:
          std::cerr << "Could not build an Arnoldi factorization.";

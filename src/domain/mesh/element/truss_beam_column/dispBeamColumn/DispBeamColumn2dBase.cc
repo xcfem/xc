@@ -279,7 +279,7 @@ int XC::DispBeamColumn2dBase::addInertiaLoadToUnbalance(const XC::Vector &accel)
         if(3 != Raccel1.Size() || 3 != Raccel2.Size())
 	  {
             std::cerr << getClassName() << "::" << __FUNCTION__
-	              << "; matrix and vector sizes are incompatable\n";
+	              << "; matrix and vector sizes are incompatible\n";
             retval= -1;
           }
         else

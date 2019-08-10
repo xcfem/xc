@@ -244,7 +244,7 @@ XC::Edge *XC::LineMap::createCopy(const Edge *l)
 	  }
         else
 	  std::cerr << getClassName() << __FUNCTION__
-	            << "; memory exhausted or the objet: '"
+	            << "; memory exhausted or the object: '"
                     << l->getName() << "is not a line." << std::endl; 
       }
     return retval;

@@ -55,7 +55,7 @@ class EntMdlr: public SetEstruct
   {
   private:
     size_t idx; //!< @brief Object index (to be used as index for VTK arrays).
-    bool doGenMesh; //!< True if the point must be meshed (node will be created). For exemple is false when it's the middle point of a line.
+    bool doGenMesh; //!< True if the point must be meshed (node will be created). For example is false when it's the middle point of a line.
   protected:
     NodePtrArray3d ttzNodes;
     ElemPtrArray3d ttzElements;

@@ -187,7 +187,7 @@ int XC::NodeVectors::incrTrialData(const size_t &nDOF,const Vector &incrData)
     // check vector arg is of correct size
     if(size_t(incrData.Size()) != nDOF)
       {
-        std::cerr << "WARNING XC::NodeVectors::incrTrialData() - incompatable sizes\n";
+        std::cerr << "WARNING XC::NodeVectors::incrTrialData() - incompatible sizes\n";
         return -2;
       }
 

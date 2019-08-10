@@ -93,7 +93,7 @@ bool XC::CircularArc::check_points(void) const
     return retval;
   }
   
-//! @brief Return the cirle sector correlated with the arc.
+//! @brief Return the circle sector correlated with the arc.
 const CircularSector3d XC::CircularArc::get_sector_circular3d(void) const
   {
     CircularSector3d retval;

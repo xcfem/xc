@@ -96,7 +96,7 @@ XC::Edge *XC::MultiBlockTopology::find_edge_by_endpoints(const PntMap::Indice &p
     return retval;
   }
 
-//! @brief Returs the «edge» that has as end points those
+//! @brief Returns the «edge» that has as end points those
 //! whose indices are passed as parameter.
 const XC::Edge *XC::MultiBlockTopology::find_edge_by_endpoints(const PntMap::Indice &pA,const PntMap::Indice &pB) const
   {

@@ -426,7 +426,7 @@ Vector3d XC::QuadSurface::getKVector(void) const
     return vI.getCross(vJ);
   }
 
-//! @brief Returs a matrix with the axes of the surface as matrix rows
+//! @brief Returns a matrix with the axes of the surface as matrix rows
 //! [[x1,y1,z1],[x2,y2,z2],...·]
 XC::Matrix XC::QuadSurface::getLocalAxes(void) const
   {

@@ -364,7 +364,7 @@ int XC::Tri31::addInertiaLoadToUnbalance(const Vector &accel)
     const Vector &Raccel3 = theNodes[2]->getRV(accel);
 
     if(2 != Raccel1.Size() || 2 != Raccel2.Size() || 2 != Raccel3.Size()) {
-            std::cerr << "Tri31::addInertiaLoadToUnbalance matrix and vector sizes are incompatable\n";
+            std::cerr << "Tri31::addInertiaLoadToUnbalance matrix and vector sizes are incompatible\n";
         return -1;
     }
 

@@ -266,7 +266,7 @@ const int &XC::IntPtrWrapper::min(void) const
 
 // IntPtrWrapper &operator=(const IntPtrWrapper  &V):
 //        the assignment operator, This is assigned to be a copy of V. if sizes
-//        are not compatable this.data [] is deleted. The data pointers will not
+//        are not compatible this.data [] is deleted. The data pointers will not
 //        point to the same area in mem after the assignment.
 //
 

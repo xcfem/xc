@@ -38,7 +38,7 @@ namespace XC {
 //! @brief Line segment between two points.
 class DividedLine: public Line
   {
-    std::vector<double> lengths; //!< Lenght of the line segments.
+    std::vector<double> lengths; //!< Length of the line segments.
   protected:
 
     Pos3dArray get_positions(void) const;

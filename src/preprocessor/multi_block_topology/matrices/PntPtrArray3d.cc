@@ -293,7 +293,7 @@ XC::PntPtrArray XC::PntPtrArray3d::getPoints(const IndicesMatrix &indices)
     return retval;
   }
 
-//! @brief Return the cell builded by the points obtained from the positions
+//! @brief Return the cell built by the points obtained from the positions
 //! of the tritrix that result for adding to the indexex (i,j,k) of each point
 //! the values of the vector offsetIndices i. e.:
 //! Point (i,j,k): (i+offsetIndices(i,j,k)[0],j+offsetIndices(i,j,k)[1],k+offsetIndices(i,j,k)[2])
@@ -306,7 +306,7 @@ XC::PntPtrArray3d XC::PntPtrArray3d::getCellPoints(const size_t &i,const size_t 
     return getPoints(tmp);
   }
 
-//! @brief Return the cell builded by the points obtained from the positions
+//! @brief Return the cell built by the points obtained from the positions
 //! of the tritrix that result for adding to the indexes (i,j) of each point
 //! the values of the vector offsetIndices i. e.:
 //! Point (i,j): (i+offsetIndices(i,j)[0],j+offsetIndices(i,j)[1])

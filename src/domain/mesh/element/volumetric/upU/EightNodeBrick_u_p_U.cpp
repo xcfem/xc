@@ -285,7 +285,7 @@ int XC::EightNodeBrick_u_p_U::addInertiaLoadToUnbalance(const XC::Vector &accel)
     const XC::Vector &RA = theNodes[i]->getRV(accel);
 
     if( RA.Size() != Num_Dof ) {
-      std::cerr << "XC::EightNodeBrick_u_p_U::addInertiaLoadToUnbalance matrix and vector sizes are incompatable\n";
+      std::cerr << "XC::EightNodeBrick_u_p_U::addInertiaLoadToUnbalance matrix and vector sizes are incompatible\n";
       return (-1);
     }
 
@@ -320,7 +320,7 @@ const XC::Vector &XC::EightNodeBrick_u_p_U::getResistingForce(void) const
     for(i=0; i<Num_Nodes; i++) {
       const XC::Vector &disp = theNodes[i]->getTrialDisp();
       if( disp.Size() != Num_Dof ) {
-        std::cerr << "XC::EightNode_Brick_u_p_U::getResistingForce(): matrix and vector sizes are incompatable \n";
+        std::cerr << "XC::EightNode_Brick_u_p_U::getResistingForce(): matrix and vector sizes are incompatible \n";
         exit(-1);
       }
       for(j=0; j<Num_Dof; j++) {
@@ -353,7 +353,7 @@ const XC::Vector &XC::EightNodeBrick_u_p_U::getResistingForceIncInertia(void) co
     for(i=0; i<Num_Nodes; i++) {
       const XC::Vector &acc = theNodes[i]->getTrialAccel();
       if( acc.Size() != Num_Dof ) {
-        std::cerr << "XC::EightNode_Brick_u_p_U::getResistingForceIncInertia matrix and vector sizes are incompatable \n";
+        std::cerr << "XC::EightNode_Brick_u_p_U::getResistingForceIncInertia matrix and vector sizes are incompatible \n";
         exit(-1);
       }
       for(j=0; j<Num_Dof; j++) {
@@ -367,7 +367,7 @@ const XC::Vector &XC::EightNodeBrick_u_p_U::getResistingForceIncInertia(void) co
     for(i=0; i<Num_Nodes; i++) {
       const XC::Vector &vel = theNodes[i]->getTrialVel();
       if( vel.Size() != Num_Dof ) {
-        std::cerr << "XC::EightNode_Brick_u_p_U::getResistingForceIncInertia matrix and vector sizes are incompatable \n";
+        std::cerr << "XC::EightNode_Brick_u_p_U::getResistingForceIncInertia matrix and vector sizes are incompatible \n";
         exit(-1);
       }
       for(j=0; j<Num_Dof; j++) {

@@ -267,7 +267,7 @@ bool XC::Body::Out(const GeomObj3d &geomObj, const double &tol) const
 std::set<const XC::Body *> XC::getConnectedBodies(const Face &s)
   { return s.getConnectedBodies(); }
 
-//! @brief Return the sets to wich the body belongs.
+//! @brief Return the sets to which the body belongs.
 std::set<XC::SetBase *> XC::Body::get_sets(void) const
   {
     std::set<SetBase *> retval;

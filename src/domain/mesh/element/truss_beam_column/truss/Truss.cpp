@@ -570,7 +570,7 @@ int XC::Truss::addInertiaLoadSensitivityToUnbalance(const XC::Vector &accel, boo
 #ifdef _G3DEBUG
     if(nodalDOF != Raccel1.Size() || nodalDOF != Raccel2.Size()) {
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; matrix and vector sizes are incompatable.\n";
+		<< "; matrix and vector sizes are incompatible.\n";
       return -1;
     }
 #endif
@@ -604,7 +604,7 @@ int XC::Truss::addInertiaLoadSensitivityToUnbalance(const XC::Vector &accel, boo
 #ifdef _G3DEBUG
     if(nodalDOF != Raccel1.Size() || nodalDOF != Raccel2.Size()) {
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; marix and vector sizes are incompatable.\n";
+		<< "; marix and vector sizes are incompatible.\n";
       return -1;
     }
 #endif

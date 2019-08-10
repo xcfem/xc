@@ -148,7 +148,7 @@ bool XC::DqPtrsKDTree<T,KDTree>::push_back(T *t)
     return retval;
   }
 
-//! @brief Inserts an object at the begining of the container.
+//! @brief Inserts an object at the beginning of the container.
 template <class T,class KDTree>
 bool XC::DqPtrsKDTree<T,KDTree>::push_front(T *t)
   {

@@ -2838,7 +2838,7 @@ int XC::EightNodeBrick::addInertiaLoadToUnbalance(const XC::Vector &accel)
          3 != Raccel4.Size() || 3 != Raccel5.Size() || 3 != Raccel6.Size() ||
   3 != Raccel7.Size() || 3 != Raccel8.Size()  ){
   // Xiaoyan changed 2 to 3 and added Racce15-18  09/27/00
-      std::cerr << "XC::EightNodeBrick::addInertiaLoadToUnbalance matrix and vector sizes are incompatable\n";
+      std::cerr << "XC::EightNodeBrick::addInertiaLoadToUnbalance matrix and vector sizes are incompatible\n";
       return -1;
     }
 

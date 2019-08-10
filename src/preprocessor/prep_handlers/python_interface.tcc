@@ -46,7 +46,7 @@ class_<XC::MaterialHandler, bases<XC::PrepHandler>, boost::noncopyable >("Materi
   .def("newMaterial", &XC::MaterialHandler::newMaterial,return_internal_reference<>(),"Creates a new material.")
   .def("getMaterial", &XC::MaterialHandler::getMaterial,return_internal_reference<>(),"Returns the material which name being passed as parameter.")
   .def("materialExists",&XC::MaterialHandler::existeMaterial,"True if material is already defined.")
-  .def("getName",&XC::MaterialHandler::getName,"Returns the name thats corresponds to the identifier.")
+  .def("getName",&XC::MaterialHandler::getName,"Returns the name that corresponds to the identifier.")
   .def("newSectionGeometry", &XC::MaterialHandler::newSectionGeometry,return_internal_reference<>())
   .def("getSectionGeometry", &XC::MaterialHandler::getGeomSection,return_internal_reference<>(),"Returns section geometry whose name is given.")
   .def("geomSectionExists",&XC::MaterialHandler::existeGeomSection,"True if section's shape is already defined.")
@@ -61,7 +61,7 @@ class_<XC::MaterialHandler, bases<XC::PrepHandler>, boost::noncopyable >("Materi
 
 class_<XC::BeamIntegratorHandler, bases<XC::PrepHandler>, boost::noncopyable >("BeamIntegratorHandler", no_init)
   .def("newBeamIntegrator", &XC::BeamIntegratorHandler::newBI,return_internal_reference<>(),"Creates a new integration scheme.")
-  .def("get", &XC::BeamIntegratorHandler::get,return_internal_reference<>(),"Retunrs the integrator.")
+  .def("get", &XC::BeamIntegratorHandler::get,return_internal_reference<>(),"Returns the integrator.")
   .def("exists",&XC::BeamIntegratorHandler::exists,"True if integrator is already defined.")
   .add_property("size", &XC::BeamIntegratorHandler::size, "Returns container's size (number of defined integration schemes).")
   .def("__len__",&XC::BeamIntegratorHandler::size, "Returns container's size (number of defined integration schemes).")
@@ -121,6 +121,6 @@ class_<XC::TransfCooHandler, bases<XC::PrepHandler>, boost::noncopyable >("Trans
   .def("newPDeltaCrdTransf3d", &XC::TransfCooHandler::newPDeltaCrdTransf3d,return_internal_reference<>(),"New P-Delta 3d coordinate transformation.")
   .def("newCorotCrdTransf2d", &XC::TransfCooHandler::newCorotCrdTransf2d,return_internal_reference<>(),"New corotational 2d coordinate transformation.")
   .def("newCorotCrdTransf3d", &XC::TransfCooHandler::newCorotCrdTransf3d,return_internal_reference<>(),"New corotational 3d coordinate transformation.")
-  .def("getName",&XC::TransfCooHandler::getName,"Returns the name thats corresponds to the identifier.")
+  .def("getName",&XC::TransfCooHandler::getName,"Returns the name that corresponds to the identifier.")
   .def("getCoordTransf", make_function(getCoordTransf, return_internal_reference<>() ),"Return the coordinate transformation from its name.")
   ;

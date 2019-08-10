@@ -359,7 +359,7 @@ int XC::FourNodeQuad::addInertiaLoadToUnbalance(const XC::Vector &accel)
 
     if(2 != Raccel1.Size() || 2 != Raccel2.Size() || 2 != Raccel3.Size() || 2 != Raccel4.Size())
       {
-        std::cerr << "XC::FourNodeQuad::addInertiaLoadToUnbalance matrix and vector sizes are incompatable\n";
+        std::cerr << "XC::FourNodeQuad::addInertiaLoadToUnbalance matrix and vector sizes are incompatible\n";
         return -1;
       }
 

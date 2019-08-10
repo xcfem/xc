@@ -412,7 +412,7 @@ const XC::Matrix &XC::fElement::getTangentStiff(void) const
         // check nst is as determined in readyfRoutine()
         if(nstI != nstR)
           {
-            std::cerr << "FATAL XC::fElement::getTangentStiff() problems with incompatable nst";
+            std::cerr << "FATAL XC::fElement::getTangentStiff() problems with incompatible nst";
             std::cerr << " ready: " << nstR << " invoke: " << nstI << std::endl;
             exit(-1);
           }
@@ -455,7 +455,7 @@ const XC::Matrix &XC::fElement::getDamp(void) const
 
     // check nst is as determined in readyfRoutine()
     if(nstI != nstR) {
-        std::cerr << "FATAL XC::fElement::getTangentStiff() problems with incompatable nst";
+        std::cerr << "FATAL XC::fElement::getTangentStiff() problems with incompatible nst";
         std::cerr << " ready: " << nstR << " invoke: " << nstI << std::endl;
         exit(-1);
     }
@@ -495,7 +495,7 @@ const XC::Matrix &XC::fElement::getMass(void) const
     // check nst is as determined in readyfRoutine()
     if(nstI != nstR)
       {
-        std::cerr << "FATAL XC::fElement::getTangentStiff() problems with incompatable nst";
+        std::cerr << "FATAL XC::fElement::getTangentStiff() problems with incompatible nst";
         std::cerr << " ready: " << nstR << " invoke: " << nstI << std::endl;
         exit(-1);
       }
@@ -567,7 +567,7 @@ const XC::Vector &XC::fElement::getResistingForce(void) const
 
     // check nst is as determined in readyfRoutine()
     if(nstI != nstR) {
-        std::cerr << "FATAL XC::fElement::getTangentStiff() problems with incompatable nst";
+        std::cerr << "FATAL XC::fElement::getTangentStiff() problems with incompatible nst";
         std::cerr << " ready: " << nstR << " invoke: " << nstI << std::endl;
         exit(-1);
     }
@@ -614,7 +614,7 @@ const XC::Vector &XC::fElement::getResistingForceIncInertia(void) const
     // check nst is as determined in readyfRoutine()
     if(nstI != nstR)
       {
-        std::cerr << "FATAL XC::fElement::getTangentStiff() problems with incompatable nst";
+        std::cerr << "FATAL XC::fElement::getTangentStiff() problems with incompatible nst";
         std::cerr << " ready: " << nstR << " invoke: " << nstI << std::endl;
         exit(-1);
       }

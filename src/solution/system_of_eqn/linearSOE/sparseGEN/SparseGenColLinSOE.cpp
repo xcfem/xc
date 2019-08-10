@@ -212,7 +212,7 @@ int XC::SparseGenColLinSOE::setSize(Graph &theGraph)
 
 //! @brief Assemblies the product fact*m into the system matrix.
 //!
-//! First tests that \p loc and \p M are of compatable sizes; if not
+//! First tests that \p loc and \p M are of compatible sizes; if not
 //! a warning message is printed and a \f$-1\f$ is returned. The LinearSOE
 //! object then assembles \p fact times the Matrix {\em 
 //! M} into the matrix \f$A\f$. The Matrix is assembled into \f$A\f$ at the

@@ -72,7 +72,7 @@ class DqPtrsEntities: public DqPtrs<T>
   };
 
  
-//! @brief Returns a pointer to the objet identified by the name.
+//! @brief Returns a pointer to the object identified by the name.
 template <class T>
 T *DqPtrsEntities<T>::searchName(const std::string &nmb)
   {

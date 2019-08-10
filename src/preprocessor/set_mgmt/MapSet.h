@@ -53,7 +53,7 @@ class Domain;
   private:
     map_ent_mdlr entities; //! Geometric entities (points, lines, surfaces,...).
     Set *total; //!< Pointer to total set (Created in constructor).
-    map_sets open_sets; //!< Opened sets (those for wich each new entity will be added to).
+    map_sets open_sets; //!< Opened sets (those for which each new entity will be added to).
 
     friend class EntMdlr;
 

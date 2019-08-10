@@ -498,7 +498,7 @@ int XC::Twenty_Node_Brick::addInertiaLoadToUnbalance(const XC::Vector &accel)
             const XC::Vector &Raccel = theNodes[i]->getRV(accel);
             if(3 != Raccel.Size())
               {
-                std::cerr << "XC::Twenty_Node_Brick::addInertiaLoadToUnbalance matrix and vector sizes are incompatable\n";
+                std::cerr << "XC::Twenty_Node_Brick::addInertiaLoadToUnbalance matrix and vector sizes are incompatible\n";
                 return -1;
               }
             ra[i*3] = Raccel(0);
@@ -620,7 +620,7 @@ const XC::Vector &XC::Twenty_Node_Brick::getResistingForceIncInertia(void) const
         for(i=0; i<nenu; i++) {
                 const XC::Vector &accel = theNodes[i]->getTrialAccel();
                 if( 3 != accel.Size() ) {
-                        std::cerr << "XC::Twenty_Node_Brick::getResistingForceIncInertia matrix and vector sizes are incompatable\n";
+                        std::cerr << "XC::Twenty_Node_Brick::getResistingForceIncInertia matrix and vector sizes are incompatible\n";
                         exit(-1);
                 }
 
@@ -647,7 +647,7 @@ const XC::Vector &XC::Twenty_Node_Brick::getResistingForceIncInertia(void) const
         for(i=0; i<nenu; i++) {
                 const XC::Vector &vel = theNodes[i]->getTrialVel();
                 if( 3!= vel.Size() ) {
-                        std::cerr << "XC::Twenty_Node_Brick::getResistingForceIncInertia matrix and vector sizes are incompatable\n";
+                        std::cerr << "XC::Twenty_Node_Brick::getResistingForceIncInertia matrix and vector sizes are incompatible\n";
                         exit(-1);
                 }
                 a[i*3] = vel(0);

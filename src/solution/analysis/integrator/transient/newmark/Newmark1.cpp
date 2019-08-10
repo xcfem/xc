@@ -220,7 +220,7 @@ int XC::Newmark1::update(const XC::Vector &deltaU)
     // check deltaU is of correct size
     if(deltaU.Size() != U.get().Size())
       {
-        std::cerr << "WARNING XC::Newmark1::update() - Vectors of incompatable size ";
+        std::cerr << "WARNING XC::Newmark1::update() - Vectors of incompatible size ";
         std::cerr << " expecting " << U.get().Size() << " obtained " << deltaU.Size() << std::endl;
         return -3;
       }

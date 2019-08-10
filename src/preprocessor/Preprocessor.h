@@ -60,7 +60,7 @@ class Preprocessor: public CommandEntity, public MovableObject
   private:
     static const int theDbTag= 0; //!< the Preprocessor unique database tag == 0
 
-    Domain *domain; //!< Proble domain.
+    Domain *domain; //!< Problem domain.
 
     MaterialHandler materialHandler; //!< Material creation tools.
     TransfCooHandler transf; //!< Coordinate transformation.

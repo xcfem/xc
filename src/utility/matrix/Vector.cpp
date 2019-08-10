@@ -367,13 +367,13 @@ int XC::Vector::addVector(double thisFact, const Vector &other, double otherFact
     if(otherFact == 0.0 && thisFact == 1.0)
       return 0; 
 
-    // if sizes are compatable add
+    // if sizes are compatible add
 #ifdef _G3DEBUG
     if(sz != other.sz)
       {
-        // else sizes are incompatable, do nothing but warning
+        // else sizes are incompatible, do nothing but warning
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; incompatable Vector sizes\n";
+		  << "; incompatible Vector sizes\n";
         return -1;
       }
 #endif
@@ -464,14 +464,14 @@ int XC::Vector::addMatrixVector(double thisFact, const Matrix &m, const XC::Vect
     if(thisFact == 1.0 && otherFact == 0.0)
       return 0;
 
-  // check the sizes are compatable
+  // check the sizes are compatible
 #ifdef _G3DEBUG
-  // check the sizes are compatable
+  // check the sizes are compatible
     if((sz != m.noRows()) && (m.noCols() != v.sz))
       {
-        // otherwise incompatable sizes
+        // otherwise incompatible sizes
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; incompatable sizes\n";
+		  << "; incompatible sizes\n";
         return -1;    
       }
 #endif
@@ -598,12 +598,12 @@ int XC::Vector::addMatrixTransposeVector(double thisFact, const XC::Matrix &m, c
       return 0;
 
 #ifdef _G3DEBUG
-  // check the sizes are compatable
+  // check the sizes are compatible
     if((sz != m.noRows()) && (m.noRows() != v.sz))
       {
-        // otherwise incompatable sizes
+        // otherwise incompatible sizes
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; incompatable sizes\n";
+		  << "; incompatible sizes\n";
         return -1;    
       }
 #endif
@@ -916,7 +916,7 @@ XC::Vector XC::Vector::operator()(const ID &rows) const
 
 
 //! @brief the assignment operator, This is assigned to be a copy of V. if sizes
-//! are not compatable this.theData [] is deleted. The data pointers will not
+//! are not compatible this.theData [] is deleted. The data pointers will not
 //! point to the same area in mem after the assignment.
 XC::Vector &XC::Vector::operator=(const Vector &V) 
   {

@@ -379,7 +379,7 @@ int XC::TrussSection::addInertiaLoadToUnbalance(const XC::Vector &accel)
 #ifdef _G3DEBUG
     if(nodalDOF != Raccel1.Size() || nodalDOF != Raccel2.Size()) {
       std::cerr << "XC::TrussSection::addInertiaLoadToUnbalance " <<
-        "matrix and vector sizes are incompatable\n";
+        "matrix and vector sizes are incompatible\n";
       return -1;
     }
 #endif

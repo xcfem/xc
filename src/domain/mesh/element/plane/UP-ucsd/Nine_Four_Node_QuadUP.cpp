@@ -847,7 +847,7 @@ const XC::Vector &XC::NineFourNodeQuadUP::getResistingForceIncInertia(void) cons
     if((i<nenp && 3 != accel.Size()) || (i>=nenp && 2 != accel.Size())) {
 
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; matrix and vector sizes are incompatable.\n";
+		<< "; matrix and vector sizes are incompatible.\n";
 
          return P;
 
@@ -902,7 +902,7 @@ const XC::Vector &XC::NineFourNodeQuadUP::getResistingForceIncInertia(void) cons
       if((i<nenp && 3 != vel.Size()) || (i>=nenp && 2 != vel.Size())) {
 
          std::cerr << getClassName() << "::" << __FUNCTION__
-		   << "; matrix and vector sizes are incompatable\n";
+		   << "; matrix and vector sizes are incompatible\n";
 
          return P;
 

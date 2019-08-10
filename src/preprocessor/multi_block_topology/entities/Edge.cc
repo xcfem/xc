@@ -561,7 +561,7 @@ const XC::Vector &XC::Edge::getTang(const double &s) const
     return retval;
   }
 
-//! @brief Return the sets to wich this edge belongs.
+//! @brief Return the sets to which this edge belongs.
 std::set<XC::SetBase *> XC::Edge::get_sets(void) const
   {
     std::set<SetBase *> retval;

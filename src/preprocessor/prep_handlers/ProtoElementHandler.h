@@ -43,7 +43,7 @@ class Element;
 //! @brief Finite element creation.
 //!
 //! This objetct allows the creation of finite element obbjets. It can be done
-//! directly (specifiying the finite element type, material, nodes,...) creating
+//! directly (specifying the finite element type, material, nodes,...) creating
 //! one element after another or you can specify a "seed element" that will be
 //! used by the meshing routines.
 class ProtoElementHandler: public PrepHandler
