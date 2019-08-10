@@ -1,0 +1,11 @@
+codespell -I ../../doc/codespell_whitelist.txt --skip="*.pdf,*.PDF"
+
+OR
+
+codespell -I ../../doc/codespell_whitelist.txt --skip="*.pdf,*.PDF" --interactive 3
+
+OR
+
+codespell -I ../../doc/codespell_whitelist.txt --skip="*.pdf,*.PDF" --interactive 3 -w
+
+
