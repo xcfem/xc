@@ -52,7 +52,7 @@
 // Created: 04/04
 // Revision: A
 //
-// Description: This file contains the class implementatation of XC::ElementRecorder.
+// Description: This file contains the class implementation of XC::ElementRecorder.
 //
 // What: "@(#) ElementRecorder.C, revA"
 
@@ -113,7 +113,7 @@ void XC::DamageRecorder::alloc(const size_t &numSec, DamageModel *dmgPtr)
       }
     else
       {
-        std::cerr << "DamageRecorder::DamageRecorder - no damage pointer associated with the damge recorder" <<std::endl;
+        std::cerr << "DamageRecorder::DamageRecorder - no damage pointer associated with the damage recorder" <<std::endl;
       }
     // allocate pointers to element responses and damage models
     theResponses= std::vector<Response *>(3*numSec,nullptr);
@@ -238,7 +238,7 @@ int XC::DamageRecorder::record(int commitTag, double timeStamp)
                                         if ( theResponses[i+numSec*j]->getResponse() < 0) {
                                                 DamageInformation(j) = 0.0;
                                         } else {
-                                                // ask the element for the reponse
+                                                // ask the element for the response
                                                 Information &eleinfo = theResponses[i+numSec*j]->getInformation();
                                                 const Vector &infovector = eleinfo.getData();
                                                 DamageInformation(j) = infovector(dofID);
@@ -269,7 +269,7 @@ int XC::DamageRecorder::record(int commitTag, double timeStamp)
                 }
     }
         
-    // succesfull completion - return 0
+    // successful completion - return 0
     return result;
   }
 

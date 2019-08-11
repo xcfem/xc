@@ -50,7 +50,7 @@
                                                                         
 // Written: fmk 
 //
-// Description: This file contains the class implementatation of 
+// Description: This file contains the class implementation of 
 // EnvelopeElementRecorder.
 //
 // What: "@(#) EnvelopeElementRecorder.C, revA"
@@ -140,7 +140,7 @@ int XC::EnvelopeElementRecorder::record(int commitTag, double timeStamp)
           {
             if(theResponses[i] != 0)
               {
-                // ask the element for the reponse
+                // ask the element for the response
                 int res;
                 if(( res = theResponses[i]->getResponse()) < 0)
                   result += res;
@@ -220,14 +220,14 @@ int XC::EnvelopeElementRecorder::record(int commitTag, double timeStamp)
         }
       }
   }
-    // succesfull completion - return 0
+    // successful completion - return 0
     return result;
 }
 
 int XC::EnvelopeElementRecorder::restart(void)
   { return envelope.restart(); }
 
-//! @brief Send the object a través del communicator que
+//! @brief Send the object through the communicator
 //! being passed as parameter.
 int XC::EnvelopeElementRecorder::sendData(CommParameters &cp)
   {
@@ -236,7 +236,7 @@ int XC::EnvelopeElementRecorder::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receive the object a través del communicator que
+//! @brief Receive the object through the communicator
 //! being passed as parameter.
 int XC::EnvelopeElementRecorder::receiveData(const CommParameters &cp)
   {
@@ -245,7 +245,7 @@ int XC::EnvelopeElementRecorder::receiveData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Send the object a través del communicator que
+//! @brief Send the object through the communicator
 //! being passed as parameter.
 int XC::EnvelopeElementRecorder::sendSelf(CommParameters &cp)
   {
@@ -269,7 +269,7 @@ int XC::EnvelopeElementRecorder::sendSelf(CommParameters &cp)
   }
 
 
-//! @brief Receive the object a través del communicator que
+//! @brief Receive the object through the communicator
 //! being passed as parameter.
 int XC::EnvelopeElementRecorder::recvSelf(const CommParameters &cp)
   {

@@ -118,7 +118,7 @@ int XC::MachineBroker::runActors(void)
           }
         else
           {
-            // create an actor of approriate type
+            // create an actor of appropriate type
             Actor *theActor= getObjectBrokerPtr()->getNewActor(actorType, theChannel);
             if(!theActor)
               {
@@ -128,7 +128,7 @@ int XC::MachineBroker::runActors(void)
             else
               idData(0) = 0;
 
-            // send ID back indicating wheter actor was created 
+            // send ID back indicating whether actor was created 
             if(theChannel->sendID(0, 0, idData) < 0)
               { std::cerr << "MachineBroker::run(void) - failed to send XC::ID\n"; }
 

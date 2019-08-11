@@ -287,7 +287,7 @@ int XC::UDP_Socket::recvMsg(int dbTag, int commitTag, Message &msg, ChannelAddre
   {	
     if(!checkDbTag(dbTag))
       std::cerr << "Error en UDP_Socket::recvMsg" << std::endl;
-    // if o.k. get a ponter to the data in the message and 
+    // if o.k. get a pointer to the data in the message and 
     // place the incoming data there
     int size;
     char *gMsg;
@@ -387,7 +387,7 @@ int XC::UDP_Socket::recvMatrix(int dbTag, int commitTag, Matrix &theMatrix, Chan
   {	
     if(!checkDbTag(dbTag))
       std::cerr << "Error en UDP_Socket::recvMatrix" << std::endl;
-    // if o.k. get a ponter to the data in the message and 
+    // if o.k. get a pointer to the data in the message and 
     // place the incoming data there
     double *matrixData= theMatrix.getDataPtr();
     char *gMsg= reinterpret_cast<char *>(matrixData);
@@ -490,7 +490,7 @@ int XC::UDP_Socket::recvVector(int dbTag, int commitTag, Vector &theVector, Chan
     if(!checkDbTag(dbTag))
       std::cerr << "Error en UDP_Socket::recvVector" << std::endl;
 
-    // if o.k. get a ponter to the data in the message and 
+    // if o.k. get a pointer to the data in the message and 
     // place the incoming data there
     int size;
     double *vectorData = theVector.theData;
@@ -591,7 +591,7 @@ int XC::UDP_Socket::recvID(int dbTag, int commitTag, ID &theID, ChannelAddress *
     if(!checkDbTag(dbTag))
       std::cerr << "Error en UDP_Socket::recvID" << std::endl;
 
-    // if o.k. get a ponter to the data in the message and 
+    // if o.k. get a pointer to the data in the message and 
     // place the incoming data there
     int *idData = theID.getDataPtr();
     char *gMsg = (char *)idData;;

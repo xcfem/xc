@@ -79,11 +79,11 @@
 //#                                     memory ###                               #
 //#                    october 11 '93 added transpose0110, transpose0101,        #
 //#                                   transpose0111 so the creation of           #
-//#                                   isotropic XC::BJtensor is much easer and         #
+//#                                   isotropic XC::BJtensor is much easier and         #
 //#                                   understandable !                           #
-//#                    januar 06 '93  added BJtensor2BJmatrix_1, BJtensor2BJmatrix_2     #
+//#                    january 06 '93  added BJtensor2BJmatrix_1, BJtensor2BJmatrix_2     #
 //#                                   inverse_1, inverse_2, inverse_3            #
-//#                    januar 20 '93  added inverse  TRUE ONE                    #
+//#                    january 20 '93  added inverse  TRUE ONE                    #
 //#                    August 22-29 '94 choped to separate files and worked on   #
 //#                                   const and & issues                         #
 //#                    August 30-31 '94 added use_def_dim to full the CC         #
@@ -130,7 +130,7 @@ XC::BJtensor::BJtensor(const std::string &flag)
 
 ////##############################################################################
 //XC::BJtensor::BJtensor(const XC::BJtensor & x):   // copy initializer
-//  nDarray("NO")           // with base class constructor cancelation
+//  nDarray("NO")           // with base class constructor cancellation
 //  {
 //    x.pc_nDarray_rep->n++;  // we're adding another reference.
 ////    x.reference_count(+1); // we're adding another reference.
@@ -498,7 +498,7 @@ XC::BJtensor XC::operator+(const XC::BJtensor &lval, const XC::BJtensor &rval)
 
 
 //..//++//##############################################################################
-//..//++// BJtensor substraction
+//..//++// BJtensor subtraction
 //..//++BJtensor XC::BJtensor::operator-(BJtensor & rval)
 //++ {
 //++    int this_rank_of_BJtensor = this->rank();  //pc_nDarray_rep->nDarray_rank;
@@ -507,7 +507,7 @@ XC::BJtensor XC::operator+(const XC::BJtensor &lval, const XC::BJtensor &rval)
 //++    if(this_rank_of_BJtensor != rval_rank_of_BJtensor)
 //++      {
 //++        ::printf("\a\nTensors of different ranks:",
-//++                 " substraction not possible\n");
+//++                 " subtraction not possible\n");
 //++        ::exit ( 1 );
 //++      }
 //++
@@ -580,7 +580,7 @@ XC::BJtensor XC::operator+(const XC::BJtensor &lval, const XC::BJtensor &rval)
 //++ }
 
 //````````//##############################################################################
-//````````// BJtensor substraction
+//````````// BJtensor subtraction
 //````````BJtensor& XC::BJtensor::operator-=(const XC::BJtensor & rval)
 //````````  {
 //````````    int this_rank_of_BJtensor = this->rank();  //pc_nDarray_rep->nDarray_rank;
@@ -645,7 +645,7 @@ XC::BJtensor XC::operator+(const XC::BJtensor &lval, const XC::BJtensor &rval)
 //````````
 
 //##############################################################################
-// BJtensor substraction
+// BJtensor subtraction
 XC::BJtensor XC::operator-(const XC::BJtensor & lval, const XC::BJtensor & rval)
   {
     XC::BJtensor result(lval);
@@ -657,7 +657,7 @@ XC::BJtensor XC::operator-(const XC::BJtensor & lval, const XC::BJtensor & rval)
 
 
 ////##############################################################################
-//// scalar substraction
+//// scalar subtraction
 //BJtensor  XC::BJtensor::operator-( double rval)
 //  {
 //// construct XC::BJtensor using the same control numbers as for the
@@ -1173,7 +1173,7 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
 
           }
 
-// deleting dinamically allocated arrays
+// deleting dynamically allocated arrays
                              
     delete  [] this_contr;   
     delete  [] arg_contr;    
@@ -1587,7 +1587,7 @@ XC::BJtensor XC::BJtensor::operator*(const BJtensor &arg) const
 //......
 //......          }
 //......
-//......// deleting dinamically allocated arrays
+//......// deleting dynamically allocated arrays
 //......
 //......    delete [] lval_contr;
 //......    delete [] rval_contr;
@@ -2121,7 +2121,7 @@ double XC::BJtensor::determinant() const
 //##############################################################################
 XC::BJmatrix XC::BJtensor::BJtensor2BJmatrix_1() const // convert XC::BJtensor of even order to XC::BJmatrix
                                 // to be used in inversion process
-                                // in the begining only XC::BJtensor of
+                                // in the beginning only XC::BJtensor of
                                 // 2 and 4 order
                                 // I_ijkl scheme
   {
@@ -2183,7 +2183,7 @@ XC::BJmatrix XC::BJtensor::BJtensor2BJmatrix_1() const // convert XC::BJtensor o
 //##############################################################################
 XC::BJmatrix XC::BJtensor::BJtensor2BJmatrix_2() const // convert XC::BJtensor of even order to XC::BJmatrix
                                 // to be used in inversion process
-                                // in the begining only XC::BJtensor of
+                                // in the beginning only XC::BJtensor of
                                 // 2 and 4 order
                                 // I_ikjl scheme
   {
@@ -2247,7 +2247,7 @@ XC::BJmatrix XC::BJtensor::BJtensor2BJmatrix_2() const // convert XC::BJtensor o
 //~~~~//##############################################################################
 //~~~~BJmatrix XC::BJtensor::BJtensor2BJmatrix_3()  // convert XC::BJtensor of even order to XC::BJmatrix
 //~~~~                                // to be used in inversion process
-//~~~~                                // in the begining only XC::BJtensor of
+//~~~~                                // in the beginning only XC::BJtensor of
 //~~~~                                // 2 and 4 order
 //~~~~                                // I_iljk scheme
 //~~~~  {
@@ -2314,7 +2314,7 @@ XC::BJmatrix XC::BJtensor::BJtensor2BJmatrix_2() const // convert XC::BJtensor o
 //..XC::BJtensor XC::BJtensor::inverse()  // invert XC::BJtensor of even rank by
 //..                          // converting it to XC::BJmatrix
 //..                          // and than inverting the XC::BJmatrix
-//..                          // and at the end puting it back
+//..                          // and at the end putting it back
 //..                          // again ( back conversion )
 //..  {
 //..    static int BJmatrix_dims[] = {0,0};
@@ -2399,7 +2399,7 @@ XC::BJmatrix XC::BJtensor::BJtensor2BJmatrix_2() const // convert XC::BJtensor o
 //~~~~BJtensor XC::BJtensor::inverse_1()  // invert XC::BJtensor of even rank by
 //~~~~                            // converting it to XC::BJmatrix
 //~~~~                            // and than inverting the XC::BJmatrix
-//~~~~                            // and at the end puting it back
+//~~~~                            // and at the end putting it back
 //~~~~                            // again ( back conversion )
 //~~~~                            // I_ijkl scheme
 //~~~~
@@ -2425,7 +2425,7 @@ XC::BJmatrix XC::BJtensor::BJtensor2BJmatrix_2() const // convert XC::BJtensor o
 XC::BJtensor XC::BJtensor::inverse_2()  const // invert XC::BJtensor of even rank by
                             // converting it to XC::BJmatrix
                             // and than inverting the XC::BJmatrix
-                            // and at the end puting it back
+                            // and at the end putting it back
                             // again ( back conversion )
                             // I_ikjl scheme
 
@@ -2451,7 +2451,7 @@ XC::BJtensor XC::BJtensor::inverse_2()  const // invert XC::BJtensor of even ran
 XC::BJtensor XC::BJtensor::inverse()  const // invert XC::BJtensor of even rank by
                           // converting it to XC::BJmatrix
                           // and than inverting the XC::BJmatrix
-                          // and at the end puting it back
+                          // and at the end putting it back
                           // again ( back conversion )
                           // I_ikjl scheme   TRUE ONE
 
@@ -2488,31 +2488,33 @@ XC::BJtensor XC::BJtensor::inverse()  const // invert XC::BJtensor of even rank 
 #ifdef SASA
 //***** Dodo Sasa
 //  result.pc_nDarray_rep->dim=this->dim();
-//************** Dosta prljavo ( ako se ubije treba videti da se
-// iskopira niz a ne pointer jer ovako moze da bude problema ako 
-// se unisti jedan od nizova !!!
-// Takodje ako su dimenzije tenzora razlicite bi ce problema
- if(BJmatrix_or_BJtensor4==4){
-  result.pc_nDarray_rep->dim[0]=this->dim()[2];
-  result.pc_nDarray_rep->dim[1]=this->dim()[3];
-  result.pc_nDarray_rep->dim[2]=this->dim()[0];
-  result.pc_nDarray_rep->dim[3]=this->dim()[1];
-  }
- else {
-  result.pc_nDarray_rep->dim[0]=this->dim()[1];
-  result.pc_nDarray_rep->dim[1]=this->dim()[0];
-  }
+// Pretty dirty (if it kills you should see that the string is copied
+// and not the pointer as this can be a problem if one of the strings
+// is destroyed !!!
+// Also, if the dimensions of the tensors are different, there will be problems
+  if(BJmatrix_or_BJtensor4==4)
+    {
+      result.pc_nDarray_rep->dim[0]=this->dim()[2];
+      result.pc_nDarray_rep->dim[1]=this->dim()[3];
+      result.pc_nDarray_rep->dim[2]=this->dim()[0];
+      result.pc_nDarray_rep->dim[3]=this->dim()[1];
+    }
+  else
+    {
+      result.pc_nDarray_rep->dim[0]=this->dim()[1];
+      result.pc_nDarray_rep->dim[1]=this->dim()[0];
+    }
 #endif
-// ***************** Kraj izmena koje je dodao Sasa
+// ***************** End of changes added by Sasa
     return result;
   }
 
 
 //~~~~//##############################################################################
-//~~~~BJtensor XC::BJtensor::inverse_3()  // invert XC::BJtensor of even rank by
-//~~~~                            // converting it to XC::BJmatrix
+//~~~~BJtensor XC::BJtensor::inverse_3()  // invert BJtensor of even rank by
+//~~~~                            // converting it to BJmatrix
 //~~~~                            // and than inverting the XC::BJmatrix
-//~~~~                            // and at the end puting it back
+//~~~~                            // and at the end putting it back
 //~~~~                            // again ( back conversion )
 //~~~~                            // I_ilkj scheme
 //~~~~

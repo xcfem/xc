@@ -41,9 +41,9 @@ class Element;
 class ElementPropRecorder: public PropRecorder
   {
   public:
-    typedef std::deque<Element *> dq_elements; //!< Pointes to elements.
+    typedef std::deque<Element *> dq_elements; //!< Pointers to elements.
   private:
-    dq_elements elements; //!< Element's wich data will be recorded.
+    dq_elements elements; //!< Element's which data will be recorded.
   public:
     ElementPropRecorder(Domain *ptr_dom= nullptr);
 

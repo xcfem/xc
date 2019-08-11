@@ -134,7 +134,7 @@ bool XC::MapOfTaggedObjects::addComponent(TaggedObject *newComponent)
 	theMap.insert(value_type(tag,newComponent));
         transmitIDs= true; //Component added.
 		      
-	// check if sucessfully added 
+	// check if successfully added 
 	theEle = theMap.find(tag);
 	if(theEle == theMap.end())
          {
@@ -145,7 +145,7 @@ bool XC::MapOfTaggedObjects::addComponent(TaggedObject *newComponent)
 	 }
       }
     // if ele already there map cannot add even if allowMultiple is true
-    // as the map template does not allow multiple entries wih the same tag
+    // as the map template does not allow multiple entries with the same tag
     else
       {	
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -249,7 +249,7 @@ XC::TaggedObjectStorage *XC::MapOfTaggedObjects::getEmptyCopy(void)
     return theCopy;
   }
 
-//! @brief Libera la memoria ocupada por los componentes.
+//! @brief Free memory reserved for components.
 void XC::MapOfTaggedObjects::clearComponents(void)
   {
     iterator p= begin();

@@ -52,7 +52,7 @@ XC::CommParameters::CommParameters(int cTag, Channel &theChannel)
 XC::CommParameters::CommParameters(int cTag, Channel &theChannel, FEM_ObjectBroker &theBroker)
   : commitTag(cTag),canal(&theChannel),broker(&theBroker) {}
 
-//! @brief Solicita al canal que devuelva un tag para la database.
+//! @brief Ask the channel for a tag for the database.
 int XC::CommParameters::getDbTag(void) const
   {
     assert(canal);
@@ -91,7 +91,7 @@ int XC::CommParameters::sendID(const ID &v,DbTagData &dt, const CommMetaData &me
     return sendMovable(mov,dt,meta);
   }
 
-//! @brief Receives an ID objet through the channel being passed as parameter.
+//! @brief Receives an ID object through the channel being passed as parameter.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::CommParameters::receiveID(ID &v,DbTagData &dt, const CommMetaData &meta) const
@@ -1141,7 +1141,7 @@ XC::ResponseId *XC::CommParameters::receiveResponseIdPtr(ResponseId* &ri,DbTagDa
 //! @param meta: index where the object dbTag is stored.
 int XC::CommParameters::sendMovable(MovableObject &mv,DbTagData &dt, const CommMetaData &meta)
   {
-    mv.setDbTag(*this); //Nos aseguramos de que se le asigna un dbTag.
+    mv.setDbTag(*this); //Verify that a tag is assigned.
     int retval= mv.sendSelf(*this);
     dt.setDbTagDataPos(meta.getPosDbTag(), mv.getDbTag());
     return retval;

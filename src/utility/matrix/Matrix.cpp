@@ -575,7 +575,7 @@ int XC::Matrix::addMatrix(double factThis, const Matrix &other, double factOther
       }
     } 
 
-    // successfull
+    // successful
     return 0;
 }
 

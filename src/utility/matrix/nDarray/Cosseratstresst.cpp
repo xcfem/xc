@@ -28,7 +28,7 @@
 //################################################################################
 //# COPY-YES  (C):     :-))                                                      #
 //# PROJECT:           Object Oriented Finite XC::Element Program                    #
-//# PURPOSE:           stress XC::BJtensor with all necessery functions                #
+//# PURPOSE:           stress XC::BJtensor with all necessary functions                #
 //# CLASS:             stresstensor                                              #
 //#                                                                              #
 //# VERSION:                                                                     #
@@ -340,7 +340,7 @@ XC::Cosseratstresstensor XC::Cosseratstresstensor::principal()  const
     double ctm = cos( theta_ - TWOOVERTHREE*PI );
     double ctp = cos( theta_ + TWOOVERTHREE*PI );
 
-    ret.val(1,1) = - p_ + temp*ct;  // - becasue p is p = -1/3 sigma_ij delta_ii
+    ret.val(1,1) = - p_ + temp*ct;  // - because p is p = -1/3 sigma_ij delta_ii
     ret.val(2,2) = - p_ + temp*ctm;
     ret.val(3,3) = - p_ + temp*ctp;
 
@@ -767,7 +767,7 @@ XC::BJtensor XC::Cosseratstresstensor::d2thetaoverds2( void ) const
 
 // fourth order tensors in the final equation for second derivative
 // of theta over ( d \sigma_{pq} d \sigma_{mn} )
-// BE CAREFULL order is   PQ MN
+// BE CAREFUL order is   PQ MN
 
     BJtensor s_pq_d_mn( 4, def_dim_4, 0.0);
     BJtensor s_pn_d_mq( 4, def_dim_4, 0.0);

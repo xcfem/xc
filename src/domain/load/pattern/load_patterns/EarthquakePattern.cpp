@@ -83,7 +83,7 @@ XC::EarthquakePattern::EarthquakePattern(int tag, int _classTag)
 //! time specified. These values are placed in two Vectors of size equal
 //! to the number of GroundMotion objects. For each node in the Domain
 //! addInertiaLoadToUnbalance() is invoked with the acceleration Vector
-//! objects. SIMILAR OPERATION WITH VEL and ACCEL NEEDS TO BE INVOKED ON
+//! objects. SIMILAR OPERATION WITH VEL and ACCEL NEES TO BE INVOKED ON
 //! ELEMENTS .. NEED TO MODIFY ELEMENT INTERFACE
 void XC::EarthquakePattern::applyLoad(double time)
   {

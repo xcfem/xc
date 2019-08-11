@@ -227,7 +227,7 @@ bool XC::BerkeleyDbDatastore::create_aux_entities(void)
           }
       }
 
-    // now create the enviroment
+    // now create the environment
     ret= dbenv->open(dbenv, project.c_str(),DB_CREATE | DB_INIT_LOG | DB_PRIVATE | DB_INIT_MPOOL, S_IRUSR | S_IWUSR);
     if(ret!= 0)
       {

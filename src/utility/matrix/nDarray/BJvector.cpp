@@ -89,7 +89,7 @@
 //*/
 
 // All of this inheritance idioms are after
-// Jim Coplien : "Advanced C++ programing styles and idioms".
+// Jim Coplien : "Advanced C++ programming styles and idioms".
 
 #ifndef VECTOR_CC
 #define VECTOR_CC

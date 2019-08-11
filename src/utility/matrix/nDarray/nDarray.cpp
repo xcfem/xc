@@ -61,14 +61,14 @@
 //                         PAZI 'VAMO:
 //
 //
-//0. napravi vise vrsta za (int), (int, int),
+//0. make more types for (int), (int, int),
 //   (int,int,int) . . .
 //
 //1. for efficiency code val(int), val(int, int) . . .  up to
 //   fourth order inline . . . also operator() . . .
 //   Check in Ellis & Stroustrup about inline functions
 //
-//2. Code symetric operators ( *, +, -, : . . . ) as friends
+//2. Code symmetric operators ( *, +, -, : . . . ) as friends
 //   see Coplien's recomendation . . .
 //
 //
@@ -347,10 +347,10 @@ XC::nDarray::nDarray(const std::string &flag, int rank_of_nDarray, const int *pd
 {
   if ( flag[0] != 'I' && flag[0] != 'e' && flag[0] != 'C' )
    {
-    ::printf("\nTo create a 2nd rank Kronecker delta type: nDarray (\"I\",2,dims);\n");
-//    ::printf(  "To create a 4th rank unit XC::nDarray type: nDarray (\"I\",4,dims);\n");
-    ::printf(  "To create a 3th rank Levi-Civita XC::BJtensor type: nDarray (\"e\",3,dims);\n");
-    ::printf(  "To create a 2nd rank Cosserat Kronecker delta type: nDarray (\"C\",3,dims);\n");
+     std::cerr <<"\n To create a 2nd rank Kronecker delta type: nDarray (\"I\",2,dims);\n"
+     //        << " To create a 4th rank unit XC::nDarray type: nDarray (\"I\",4,dims);\n";
+               << "To create a 3th rank Levi-Civita XC::BJtensor type: nDarray (\"e\",3,dims);\n"
+	       << "To create a 2nd rank Cosserat Kronecker delta type: nDarray (\"C\",3,dims);\n";
     ::exit( 1 );
    }
  // create the structure:
@@ -601,7 +601,7 @@ const double &XC::nDarray::val(int subscript, ...) const
   {
 // if scalar get back
     if(pc_nDarray_rep->nDarray_rank==0) return (*pc_nDarray_rep->pd_nDdata);
-// for all others procede
+// for all others proceed
     va_list p_arg;
     va_start(p_arg, subscript); // initialize p_arg
 
@@ -626,7 +626,7 @@ double &XC::nDarray::val(int subscript, ...)
   {
 // if scalar get back
     if(pc_nDarray_rep->nDarray_rank==0) return (*pc_nDarray_rep->pd_nDdata);
-// for all others procede
+// for all others proceed
     va_list p_arg;
     va_start(p_arg, subscript); // initialize p_arg
 
@@ -782,9 +782,9 @@ double &XC::nDarray::val4(int first, int second, int third, int fourth)
 //..                      int third, int fourth,
 //..                      int subscript, ...)
 //..  {
-//..// ako je skalar tojest nulti red onda o'ma nazad
+//..// if the scalar is zero order then o'ma back
 //..    if(pc_nDarray_rep->nDarray_rank==0) return (*pc_nDarray_rep->pd_nDdata);
-//..// za bilo koji veci red ajd' dalje
+//..// for any higher order go ahead
 //..    va_list p_arg;
 //..    va_start(p_arg, subscript); // initialize p_arg
 //..
@@ -801,7 +801,7 @@ double &XC::nDarray::val4(int first, int second, int third, int fourth)
 //..
 //..
 //..    for ( int Dcount=5 ; Dcount<=pc_nDarray_rep->nDarray_rank-1 ; Dcount++ )
-//..      {    // ovo ce ustvari biti preskoceno za sve dimenzije manje od 2
+//..      {    // this will actually be skipped for all dimensions less than 2
 //..        drugi = va_arg(p_arg, int);    // sledeci
 //..        where = where*pc_nDarray_rep->dim[Dcount]+drugi - 1;
 //..        prvi = drugi;
@@ -820,7 +820,7 @@ double XC::nDarray::cval(int subscript, ...)  const
   {
 // if scalar get back
     if(pc_nDarray_rep->nDarray_rank==0) return (*pc_nDarray_rep->pd_nDdata);
-// for all others procede
+// for all others proceed
     va_list p_arg;
     va_start(p_arg, subscript); // initialize p_arg
 
@@ -847,9 +847,9 @@ double XC::nDarray::cval(int subscript, ...)  const
 //..// another overloading of operator() . . .
 //..double XC::nDarray::operator()(int subscript, ...) const
 //..  {
-//..// ako je skalar tojest nulti red onda o'ma nazad
+//..// if the scalar is zero order then o'ma back
 //..    if(pc_nDarray_rep->nDarray_rank==0) return (*pc_nDarray_rep->pd_nDdata);
-//..// za bilo koji veci red ajd' dalje
+//..// for any higher order go ahead
 //..    va_list p_arg;
 //..    va_start(p_arg, subscript); // initialize p_arg
 //..
@@ -859,7 +859,7 @@ double XC::nDarray::cval(int subscript, ...)  const
 //..    prvi = subscript; // prvi indeks
 //..    long int where = prvi - 1;
 //..    for ( int Dcount=1 ; Dcount<=pc_nDarray_rep->nDarray_rank-1 ; Dcount++ )
-//..      {    // ovo ce ustvari biti preskoceno za sve dimenzije manje od 2
+//..      {    // this will actually be skipped for all dimensions less than 2
 //..        drugi = va_arg(p_arg, int);    // sledeci
 //..        where = where*pc_nDarray_rep->dim[Dcount]+drugi - 1;
 //..        prvi = drugi;
@@ -935,9 +935,9 @@ double XC::nDarray::cval(int subscript, ...)  const
 //@@@@@                            int third, int fourth,
 //@@@@@                            int subscript, ...) const
 //@@@@@   {
-//@@@@@ // ako je skalar tojest nulti red onda o'ma nazad
+//@@@@@ // if the scalar is zero order then o'ma back
 //@@@@@     if(pc_nDarray_rep->nDarray_rank==0) return (*pc_nDarray_rep->pd_nDdata);
-//@@@@@ // za bilo koji veci red ajd' dalje
+//@@@@@ // for any higher order go ahead
 //@@@@@     va_list p_arg;
 //@@@@@     va_start(p_arg, subscript); // initialize p_arg
 //@@@@@
@@ -954,7 +954,7 @@ double XC::nDarray::cval(int subscript, ...)  const
 //@@@@@
 //@@@@@
 //@@@@@     for ( int Dcount=5 ; Dcount<=pc_nDarray_rep->nDarray_rank-1 ; Dcount++ )
-//@@@@@       {    // ovo ce ustvari biti preskoceno za sve dimenzije manje od 2
+//@@@@@       {    // this will actually be skipped for all dimensions less than 2
 //@@@@@         drugi = va_arg(p_arg, int);    // sledeci
 //@@@@@         where = where*pc_nDarray_rep->dim[Dcount]+drugi - 1;
 //@@@@@         prvi = drugi;
@@ -1228,7 +1228,7 @@ XC::nDarray  operator*( const double lval,const XC::nDarray &rval)
     return rval*lval;
   }
 //##############################################################################
-// nDarray substraction
+// nDarray subtraction
 XC::nDarray& XC::nDarray::operator-=(const XC::nDarray & rval)
   {
     int this_rank_of_nDarray = this->pc_nDarray_rep->nDarray_rank;
@@ -1292,7 +1292,7 @@ i,rval.pc_nDarray_rep->dim[i]);
 
 
 //##############################################################################
-// nDarray substraction
+// nDarray subtraction
 XC::nDarray operator-(const XC::nDarray &lval, const XC::nDarray &rval)
   {
     XC::nDarray result(lval);
@@ -1301,7 +1301,7 @@ XC::nDarray operator-(const XC::nDarray &lval, const XC::nDarray &rval)
   }
 
 //++//##############################################################################
-//++// nDarray substraction
+//++// nDarray subtraction
 //++nDarray XC::nDarray::operator-( nDarray & rval)
 //++ {
 //++    int this_rank_of_nDarray = this->pc_nDarray_rep->nDarray_rank;
@@ -1310,7 +1310,7 @@ XC::nDarray operator-(const XC::nDarray &lval, const XC::nDarray &rval)
 //++    if(this_rank_of_nDarray != rval_rank_of_nDarray)
 //++      {
 //++        ::printf("\a\nnDarrays of different ranks:",
-//++                 " substraction not possible\n");
+//++                 " subtraction not possible\n");
 //++        ::exit ( 1 );
 //++      }
 //++
@@ -1400,7 +1400,7 @@ XC::nDarray operator-(const XC::nDarray &lval, const XC::nDarray &rval)
 //++
 
 //##############################################################################
-// scalar substraction
+// scalar subtraction
 XC::nDarray  XC::nDarray::operator-( double rval)
   {
 // construct XC::nDarray using the same control numbers as for the
@@ -1605,7 +1605,7 @@ double XC::nDarray::trace() const
 //-----
 
 //##############################################################################
-// nDarray comparisson                    // nDarray comparisson
+// nDarray comparison                    // nDarray comparison
 bool XC::nDarray::operator==(const nDarray &rval)  // returns 1 if they are same
   {                                       // returns 0 if they are not
     int true_or_not = 1; // suppose that they are the same
@@ -1620,7 +1620,7 @@ bool XC::nDarray::operator==(const nDarray &rval)  // returns 1 if they are same
 
     if(this_rank_of_nDarray != rval_rank_of_nDarray)
       {
-        ::printf("\a\nnDarrays of different ranks: comparisson not possible\n");
+        ::printf("\a\nnDarrays of different ranks: comparison not possible\n");
         ::exit ( 1 );
       }
 
@@ -2104,7 +2104,7 @@ XC::nDarray XC::nDarray::eigenvalues(void)
     int cols = this->dim(2);
     if ( rows != cols && this->rank() != 2 )
       {
-        ::printf("rows!=cols in eigenvalues and rank != 2 \n");
+        std::cerr << "rows!=cols in eigenvalues and rank != 2 \n";
         ::exit(1);
       }
 
@@ -2112,8 +2112,8 @@ XC::nDarray XC::nDarray::eigenvalues(void)
     const int pdim[] = {rows};
     nDarray EV(1, pdim, 0.0);
 
-// najbezbolinije da stvarno napravim dvodimenzioni niz pa da  ga kopiram u 'a'
-// PAZI oni u NRC rade kao u FORTRANU dakle nizovi od 1 do n
+// most painless to really make a two dimensional string and copy it to 'a'
+// BEWARE they work in NRC as in FORTRAN therefore strings of 1 - n
     double ** a = new double *[rows+1];
     if ( !a ) {::printf("memory exhausted for **a \n"); ::exit(1);}
     for ( int i=0 ; i<(rows+1) ; i++ )
@@ -2175,8 +2175,8 @@ XC::nDarray XC::nDarray::eigenvectors(void)
     nDarray  EV(2, pdim, 0.0);
 //    BJmatrix temp( rows, rows, rows, this->data() );
 
-// najbezbolinije da stvarno napravim dvodimenzioni niz pa da  ga kopiram u 'a'
-// PAZI oni u NRC rade kao u FORTRANU dakle nizovi od 1 - n
+// most painless to really make a two dimensional string and copy it to 'a'
+// BEWARE they work in NRC as in FORTRAN therefore strings of 1 - n
     double ** a = new double *[rows+1];
     if ( !a ) {::printf("memory exhausted for **a \n"); ::exit(1);}
     for ( int i=0 ; i<(rows+1) ; i++ )

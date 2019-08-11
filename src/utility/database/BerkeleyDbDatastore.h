@@ -71,7 +71,7 @@ namespace XC {
 class BerkeleyDbDatastore: public DBDatastore
   {
   private:
-    DB_ENV *dbenv; //!< database enviroment - directory containing files
+    DB_ENV *dbenv; //!< database environment - directory containing files
     DB *dbMatrix; //!< file holding the data for the Matrices
     DB *dbVector; //!< file holding the data for the Vectors
     DB *dbID; //!< file holding the data for the ID's
@@ -99,7 +99,7 @@ class BerkeleyDbDatastore: public DBDatastore
     // method to get a database tag
     int getDbTag(void) const;
   
-    // methods for sending and recieving matrices, vectors and id's
+    // methods for sending and receiving matrices, vectors and id's
     int sendMsg(int dbTag, int commitTag, const Message &, ChannelAddress *theAddress= nullptr);    
     int recvMsg(int dbTag, int commitTag, Message &, ChannelAddress *theAddress= nullptr);        
 

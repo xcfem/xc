@@ -28,7 +28,7 @@
 //################################################################################
 //# COPYRIGHT (C):     :-))                                                      #
 //# PROJECT:           Object Oriented Finite Element Program                    #
-//# PURPOSE:           stress tensor with all necessery functions                #
+//# PURPOSE:           stress tensor with all necessary functions                #
 //# CLASS:             stresstensor                                              #
 //#                                                                              #
 //# VERSION:                                                                     #

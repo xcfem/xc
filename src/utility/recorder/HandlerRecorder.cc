@@ -41,7 +41,7 @@ void XC::HandlerRecorder::SetOutputHandler(DataOutputHandler *tH)
   { theHandler= tH; }
 
 
-//! @brief Sends objet through the communicator being passed as parameter.
+//! @brief Sends object through the communicator being passed as parameter.
 int XC::HandlerRecorder::sendData(CommParameters &cp)
   {
     cp.sendBrokedPtr(theHandler,getDbTagData(),BrokedPtrCommMetaData(0,1,2));
@@ -50,7 +50,7 @@ int XC::HandlerRecorder::sendData(CommParameters &cp)
     return 0;
   }
 
-//! @brief Receives objet through the communicator being passed as parameter.
+//! @brief Receives object through the communicator being passed as parameter.
 int XC::HandlerRecorder::receiveData(const CommParameters &cp)
   {
     if(theHandler)

@@ -101,7 +101,7 @@ void XC::NodeRecorder::setup_dofs(const ID &dofs)
       }
   }
 
-//! @brief create memory to hold nodal XC::ID's (neeed parallel).
+//! @brief create memory to hold nodal XC::ID's (need parallel).
 void XC::NodeRecorder::setup_nodes(const ID &nodes)
   {
     const int numNode = nodes.Size();
@@ -452,7 +452,7 @@ int XC::NodeRecorder::record(int commitTag, double timeStamp)
     return 0;
   }
 
-//! @brief Send the object a través del communicator que
+//! @brief Send the object through the communicator
 //! being passed as parameter.
 int XC::NodeRecorder::sendData(CommParameters &cp)
   {
@@ -461,7 +461,7 @@ int XC::NodeRecorder::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receive the object a través del communicator que
+//! @brief Receive the object through the communicator
 //! being passed as parameter.
 int XC::NodeRecorder::receiveData(const CommParameters &cp)
   {
@@ -470,7 +470,7 @@ int XC::NodeRecorder::receiveData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Send the object a través del communicator que
+//! @brief Send the object through the communicator
 //! being passed as parameter.
 int XC::NodeRecorder::sendSelf(CommParameters &cp)
   {
@@ -494,7 +494,7 @@ int XC::NodeRecorder::sendSelf(CommParameters &cp)
     return res;
   }
 
-//! @brief Receive the object a través del communicator que
+//! @brief Receive the object through the communicator
 //! being passed as parameter.
 int XC::NodeRecorder::recvSelf(const CommParameters &cp)
   {

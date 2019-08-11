@@ -444,7 +444,7 @@ int XC::Vector::addVector(double thisFact, const Vector &other, double otherFact
   	      *dataPtr++= value;
             }
       } 
-    // successfull
+    // successful
     return 0;
   }
 	    
@@ -585,7 +585,7 @@ int XC::Vector::addMatrixVector(double thisFact, const Matrix &m, const XC::Vect
         }
       }
       
-    // successfull
+    // successful
     return 0;
   }
 
@@ -897,7 +897,7 @@ XC::Vector XC::Vector::operator()(const ID &rows) const
         return result;
       }
 
-    // copy the appropraite contents from current to result     
+    // copy the appropriate contents from current to result     
     int pos;
     for(int i=0; i<rows.Size(); i++)
       {

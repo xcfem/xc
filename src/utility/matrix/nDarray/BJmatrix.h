@@ -144,11 +144,11 @@ class BJmatrix : public nDarray
 //-----      virtual vector operator*( double ); // scalar multiplication 
 
 // this is COUPLING between ordinary BJmatrix and SKYMATRIX
-// it will be usefull in multiplying vectors with skyBJmatrix
+// it will be useful in multiplying vectors with skyBJmatrix
 //####      BJmatrix operator*(const skyBJmatrix & rval);  // BJutility/matrix/skyBJmatrix multiplication
 //####      double & val(int row,  int col); // element selection;
 
-//####// this one is the same as mval except that it is more convinient
+//####// this one is the same as mval except that it is more convenient
 //####// to overload operator (row,col).
 //####// THE ROW AND COL COUNTER STARTS FROM 1 ( NOT FROM 0 )
 //####      double & operator( )(int row, int col);

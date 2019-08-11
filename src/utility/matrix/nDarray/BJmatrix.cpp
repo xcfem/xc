@@ -99,12 +99,13 @@ XC::BJmatrix::BJmatrix(int rank, int rows, int columns, double initvalues):
                                              // base constructor
 //##############################################################################
 XC::BJmatrix::BJmatrix(const std::string &flag, int dimension ): // create an ident XC::BJmatrix
-  nDarray("NO")           // with base class constructor cancelation
+  nDarray("NO")           // with base class constructor cancellation
   {
     if ( flag[0] != 'I' && flag[0] != 'e' )
      {
-      ::printf("\nTo create a 2nd rank Kronecker delta type: nDarray (\"I\",2);\n");
-      ::exit( 1 );
+       std::cerr << "\n To create a 2nd rank Kronecker delta type:"
+	         << "nDarray (\"I\",2);\n";
+       ::exit(1);
      }
 // create the structure:
      pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded
@@ -143,7 +144,7 @@ static const std::string nonstandard= "is a 'non-standard'file. A 'standard' BJm
 //#############################################################################
 // read from "standard" BJmatrix file:
 XC::BJmatrix::BJmatrix(const std::string &initfile):
-  nDarray("NO")           // with base class constructor cancelation
+  nDarray("NO")           // with base class constructor cancellation
 {
 #define BSIZE 120
   FILE *from;
@@ -230,7 +231,7 @@ XC::BJmatrix::BJmatrix(const std::string &initfile):
 //#############################################################################
 // read from flat XC::BJmatrix file: and write to test output
 XC::BJmatrix::BJmatrix(const std::string &initfile,const std::string &outfile):
-  nDarray("NO")           // with base class constructor cancelation
+  nDarray("NO")           // with base class constructor cancellation
 {
 //#define BSIZE 120
   FILE *from;
@@ -292,7 +293,7 @@ XC::BJmatrix::BJmatrix(const std::string &initfile,const std::string &outfile):
 
 //##############################################################################
 XC::BJmatrix::BJmatrix(const XC::BJmatrix & x): // copy-initializer
-  nDarray("NO")     // with base class constructor cancelation
+  nDarray("NO")     // with base class constructor cancellation
     {
       x.pc_nDarray_rep->n++;  // we're adding another reference.
 //      x.reference_count(+1); // we're adding another reference.
@@ -406,9 +407,9 @@ void XC::BJmatrix::write_standard(const std::string &filename,const std::string 
 //....// temporary XC::BJmatrix that will keep result
 //....   BJmatrix result( this_r, rval_c, 0.0 );
 //....
-//....// copy *this if necessery
+//....// copy *this if necessary
 //....// i.e. if somebody else is pointing to the same nDarray_rep class
-//....// then allocate new memory for the this and disconect this from
+//....// then allocate new memory for the this and disconnect this from
 //....// the old one!
 //....    if ( this->pc_nDarray_rep->n > 1 )// see ARK in JOOP may/june '90
 //....      {                               // "Letter From a Newcomer"
@@ -502,7 +503,7 @@ XC::BJmatrix XC::BJmatrix::operator*( BJmatrix & arg)
   }
 
 //**sky**// this is COUPLING between ordinary XC::BJmatrix and SKYMATRIX
-//**sky**// it will be usefull in multiplying vector with skyBJmatrix
+//**sky**// it will be useful in multiplying vector with skyBJmatrix
 //**sky**BJmatrix XC::BJmatrix::operator*(const skyBJmatrix & arg)
 //**sky**  {
 //**sky**    if( cols() != arg.dimension_of_sky_M())
@@ -813,14 +814,14 @@ XC::BJtensor XC::BJmatrix::BJmatrix2BJtensor_22()  // convert XC::BJmatrix of to
 //##BJmatrix XC::BJmatrix::compress_col(int col1, int col2, int to_col)
 //##  {
 //##    BJmatrix mat_temp( rows(), cols()-1);
-//##//    mat_temp.print("mat_temp first appearence\n");
+//##//    mat_temp.print("mat_temp first appearance\n");
 //##    for( int row=1 ; row<=rows() ; row++ )
 //##      {
 //##        // make temp vector to be put in the to_col :
 //##// val STARTS from 0
 //##        mat_temp(row,to_col) = val(row-1,col1-1)+val(row-1,col2-1);
 //##      }
-//##//    mat_temp.print("mat_temp second appearence\n");
+//##//    mat_temp.print("mat_temp second appearance\n");
 //##
 //##   int temp_row=1;
 //##   int temp_col=1;
@@ -843,7 +844,7 @@ XC::BJtensor XC::BJmatrix::BJmatrix2BJtensor_22()  // convert XC::BJmatrix of to
 //##            temp_col++;
 //##          }
 //##      }
-//##//    mat_temp.print("mat_temp third appearence\n");
+//##//    mat_temp.print("mat_temp third appearance\n");
 //##
 //##    return mat_temp;
 //##  }
@@ -854,14 +855,14 @@ XC::BJtensor XC::BJmatrix::BJmatrix2BJtensor_22()  // convert XC::BJmatrix of to
 //##BJmatrix XC::BJmatrix::compress_row(int row1, int row2, int to_row)
 //##  {
 //##    BJmatrix mat_temp( rows()-1, cols());
-//##//    mat_temp.print("mat_temp first appearence\n");
+//##//    mat_temp.print("mat_temp first appearance\n");
 //##    for( int col=1 ; col<=cols() ; col++ )
 //##      {
 //##        // make temp vector to be put in the to_row :
 //##// val STARTS from 0
 //##        mat_temp(to_row,col) = val(row1-1,col-1)+val(row2-1,col-1);
 //##      }
-//##//    mat_temp.print("mat_temp second appearence\n");
+//##//    mat_temp.print("mat_temp second appearance\n");
 //##
 //##   int temp_col=1;
 //##   int temp_row=1;
@@ -884,7 +885,7 @@ XC::BJtensor XC::BJmatrix::BJmatrix2BJtensor_22()  // convert XC::BJmatrix of to
 //##            temp_row++;
 //##          }
 //##      }
-//##//    mat_temp.print("mat_temp third appearence\n");
+//##//    mat_temp.print("mat_temp third appearance\n");
 //##
 //##    return mat_temp;
 //##  }
@@ -1044,7 +1045,7 @@ XC::BJmatrix XC::BJmatrix::lu_decompose(BJmatrix & indx, int & d )
           {
             if( lu_decomp.mval(row,row) == 0 )
               lu_decomp.mval(row,row) = TINY;
-       // If the pivot element is zero the XC::BJmatrix is
+       // If the pivot element is zero the BJmatrix is
        // singular (at least to the precision of the
        // algorithm).  For some applications on singular
        // matrices, it is desirable to substitute TINY for zero
@@ -1052,7 +1053,7 @@ XC::BJmatrix XC::BJmatrix::lu_decompose(BJmatrix & indx, int & d )
             dum = 1/lu_decomp.mval(row,row);
 
             for( col=row+1 ; col <= cols()-1 ; col++ )
-              lu_decomp.mval(row,col) *= dum;
+              lu_decomp.mval(row,col)*= dum;
 
           }
 
@@ -1137,8 +1138,8 @@ double & XC::BJmatrix::mval (int row, int col) // I am still keeping mval
 // 
 //     vector EV((rows), 0.0);
 // 
-// // najbezbolinije da stvarno napravim dvodimenzioni niz pa da  ga kopiram u 'a'
-// // PAZI oni u NRC rade kao u FORTRANU dakle nizovi od 1 do n
+// // most painless to really make a two-dimensional array and copy it to 'a'
+// // BEWARE they work in NRC as in FORTRAN therefore strings from 1 to n
 //     double ** a = new double *[rows+1];
 //     if ( !a ) {::printf("memory exhausted for **a \n"); ::exit(1);}
 //     for ( int i=0 ; i<(rows+1) ; i++ )
@@ -1194,8 +1195,8 @@ double & XC::BJmatrix::mval (int row, int col) // I am still keeping mval
 //     BJmatrix EV(rows, rows, 0.0);
 // //    BJmatrix temp( rows, rows, rows, this->data() );
 // 
-// // najbezbolinije da stvarno napravim dvodimenzioni niz pa da  ga kopiram u 'a'
-// // PAZI oni u NRC rade kao u FORTRANU dakle nizovi od 1 - n
+// // most painless to really make a two-dimensional array and copy it to 'a'
+// // BEWARE they work in NRC as in FORTRAN therefore strings from 1 to n
 //     double ** a = new double *[rows+1];
 //     if ( !a ) {::printf("memory exhausted for **a \n"); ::exit(1);}
 //     for ( int i=0 ; i<(rows+1) ; i++ )

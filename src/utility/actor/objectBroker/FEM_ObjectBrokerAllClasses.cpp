@@ -630,27 +630,25 @@ int XC::FEM_ObjectBrokerAllClasses::addUniaxialMaterial(int classTag,const char 
 
 
 XC::Parameter *XC::FEM_ObjectBrokerAllClasses::getParameter(int classTag)
-{
-  Parameter *theRes = 0;
+  {
+    Parameter *retval= nullptr;
 
-  switch(classTag) {
-  case  PARAMETER_TAG_Parameter:
-    theRes = new Parameter;
-    break;
+    switch(classTag)
+      {
+      case  PARAMETER_TAG_Parameter:
+	retval = new Parameter;
+	break;
+    //case PARAMETER_TAG_MaterialStageParameter:
+    //  retval = new MaterialStageParameter();
+    //  break;
+      case PARAMETER_TAG_MatParameter:
+	retval = new MatParameter();
+	break;
+      default:
+	;
+      }
 
-//   case PARAMETER_TAG_MaterialStageParameter:
-//     theRes = new MaterialStageParameter();
-//     break;
-
-  case PARAMETER_TAG_MatParameter:
-    theRes = new MatParameter();
-    break;
-
-  default:
-    ;
+    return retval;
   }
-
-  return theRes;
-}
 
 

@@ -165,7 +165,7 @@ int XC::MySqlDatastore::sendMatrix(int dbTag, int commitTag, const XC::Matrix &t
   {
     if(!checkDbTag(dbTag))
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; error when cheking dbTag." << std::endl;
+		<< "; error when checking dbTag." << std::endl;
     // check that we have a connection
     if(connection == false)
       return -1;
@@ -175,7 +175,7 @@ int XC::MySqlDatastore::sendMatrix(int dbTag, int commitTag, const XC::Matrix &t
     if(sizeData > MAX_BLOB_SIZE)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; vector too big to send to MySQL databse, enlarge BLOBS!";
+		  << "; vector too big to send to MySQL database, enlarge BLOBS!";
         return  -2;
       }
 
@@ -303,7 +303,7 @@ int XC::MySqlDatastore::sendVector(int dbTag, int commitTag, const XC::Vector &t
     if(sizeData > MAX_BLOB_SIZE)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; vector too big to send to MySQL databse, enlarge BLOBS!";
+		  << "; vector too big to send to MySQL database, enlarge BLOBS!";
         return  -2;
       }
 
@@ -429,7 +429,7 @@ int XC::MySqlDatastore::sendID(int dbTag, int commitTag, const XC::ID &theID, Ch
     if(sizeData > MAX_BLOB_SIZE)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; vector too big to send to MySQL databse, enlarge BLOBS!";
+		  << "; vector too big to send to MySQL database, enlarge BLOBS!";
         return  -2;
       }
 

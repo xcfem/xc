@@ -1221,7 +1221,7 @@ int XC::FileDatastore::getData(const std::string &tableName,const std::vector<st
 
 
 /*******************************************************************
- *              MISC METHODS & FUNCTONS FOR OPENING THE FILE       *
+ *              MISC METHODS & FUNCTIONS FOR OPENING THE FILE       *
  *******************************************************************/
 
 int XC::FileDatastore::openFile(const std::string &fileName, FileDatastoreOutputFile *theFileStruct, int dataSize)

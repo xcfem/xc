@@ -121,7 +121,7 @@
 
 
 //##############################################################################
-// find out the machine epsilon of the runing platform !
+// find out the machine epsilon of the running platform !
 //##############################################################################
 float f_macheps()
   {

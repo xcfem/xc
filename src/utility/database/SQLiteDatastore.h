@@ -54,7 +54,7 @@ class SQLiteDatastore: public DBDatastore
   public:
     SQLiteDatastore(const std::string &,Preprocessor &, FEM_ObjectBroker &,int dbRun = 0);    
 
-    // methods for sending and recieving matrices, vectors and id's
+    // methods for sending and receiving matrices, vectors and id's
     int sendMsg(int , int , const Message &, ChannelAddress *a= nullptr);    
     int recvMsg(int , int , Message &, ChannelAddress *a= nullptr);        
 

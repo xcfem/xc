@@ -54,7 +54,7 @@
 //
 // Description: This file contains the class implementation for XC::FilePlotter
 // FilePlotter is a class for building a Plane Frame model in an interpreted
-// enviroment. The constructor is used to add new commands to the interpreter,
+// environment. The constructor is used to add new commands to the interpreter,
 // these commands are also defined in this file.
 //
 // What: "@(#) FilePlotter.C, revA"
@@ -297,7 +297,7 @@ int XC::FilePlotter::plotFile(void)
 //     /*
 //      * second pass: 1) open file
 //      *              2) get the renderer ready for drawing virgin image and then draw the x and y axis
-//      *              3) parse throgh the file and connect the dots
+//      *              3) parse through the file and connect the dots
 //      *              4) close the file
 //      */
 
@@ -522,7 +522,7 @@ int XC::FilePlotter::plotFiles(void)
 //     /*
 //      * second pass: 1) open file
 //      *              2) get the renderer ready for drawing virgin image and then draw the x and y axis
-//      *              3) parse throgh the file and connect the dots
+//      *              3) parse through the file and connect the dots
 //      *              4) close the file
 //      */
 

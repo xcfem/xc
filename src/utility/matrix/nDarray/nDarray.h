@@ -295,7 +295,7 @@ class nDarray
 
     nDarray deep_copy(void); // make an image
 
-    bool operator==(const nDarray &rval);  // nDarray comparisson
+    bool operator==(const nDarray &rval);  // nDarray comparison
                                       // returns 1 if they are same
                                       // returns 0 if they are not
 
@@ -319,9 +319,9 @@ class nDarray
 
     int number_of_zeros(void) const; // number of members that are
                                       // smaller than sqrt(macheps)
-//.....//-> the declaration also put in the nDaray_rep class defintion because
+//.....//-> the declaration also put in the nDaray_rep class definition because
 //.....//-> frienship is not inhereted ( see ARM page 251 or around ).
-//.....    friend BJtensor operator*(BJtensor& lval, BJtensor& rval); // inner/outter product
+//.....    friend BJtensor operator*(BJtensor& lval, BJtensor& rval); // inner/outer product
 
   public:
     int rank(void) const;

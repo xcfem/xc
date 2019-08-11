@@ -91,8 +91,8 @@
 #include "utility/matrix/nDarray/BJmatrix.h"
 
 // All of this inheritance idioms are after
-// Jim Coplien : "Advanced C++ programing styles and idioms".
-// I tried to understand idioms and I think I succeded.
+// Jim Coplien : "Advanced C++ programming styles and idioms".
+// I tried to understand idioms and I think I succeeded.
 
 namespace XC {
 //! @ingroup Matrix

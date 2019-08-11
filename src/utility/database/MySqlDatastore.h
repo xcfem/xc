@@ -86,7 +86,7 @@ class MySqlDatastore: public DBDatastore
     MySqlDatastore(const std::string &,const std::string &, const std::string &, const std::string &, unsigned int port, const std::string &, unsigned int clientFlag, Preprocessor &, FEM_ObjectBroker &, int dbRun = 0);
     ~MySqlDatastore();
 
-    // methods for sending and recieving matrices, vectors and id's
+    // methods for sending and receiving matrices, vectors and id's
     int sendMsg(int dbTag, int commitTag, const Message &, ChannelAddress *theAddress= nullptr);    
     int recvMsg(int dbTag, int commitTag, Message &, ChannelAddress *theAddress= nullptr);        
 

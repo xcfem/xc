@@ -28,7 +28,7 @@
 //################################################################################
 //# COPYRIGHT (C):     :-))                                                      #
 //# PROJECT:           Object Oriented Finite Element Program                    #
-//# PURPOSE:           strain tensor with all necessery functions                #
+//# PURPOSE:           strain tensor with all necessary functions                #
 //# CLASS:             straintensor                                              #
 //#                                                                              #
 //# VERSION:                                                                     #

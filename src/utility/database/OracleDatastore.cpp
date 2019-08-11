@@ -149,7 +149,7 @@ XC::ChannelAddress *XC::OracleDatastore::getLastSendersAddress(void)
 
 
 /********************************************************************
- *                USEFULE METHODS  TO STORE/RETRIEVE DATA           *
+ *                USEFUL METHODS  TO STORE/RETRIEVE DATA           *
  ********************************************************************/
 
 int XC::OracleDatastore::commitState(int commitTag)

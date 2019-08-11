@@ -27,7 +27,7 @@
 //################################################################################
 //# COPY-YES  (C):     :-))                                                      #
 //# PROJECT:           Object Oriented Finite XC::Element Program                    #
-//# PURPOSE:           strain XC::BJtensor with all necessery functions                #
+//# PURPOSE:           strain XC::BJtensor with all necessary functions                #
 //# CLASS:             straintensor                                              #
 //#                                                                              #
 //# VERSION:                                                                     #
@@ -39,7 +39,7 @@
 //#                                                                              #
 //# DATE:              July 25 '93                                               #
 //# UPDATE HISTORY:    December 15 '93 replaced polynomial root solver for       #
-//#                    principal straines with explicit formula                  #
+//#                    principal strains with explicit formula                  #
 //#                    August 22-29 '94 choped to separate files and worked on   #
 //#                                   const and & issues                         #
 //#                    August 30-31 '94 added use_def_dim to full the CC         #

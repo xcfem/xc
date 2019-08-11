@@ -65,7 +65,7 @@
 
 
 
-//! @brief Libera la memoria ocupada por los componentes.
+//! @brief Free components memory.
 void XC::ArrayOfTaggedObjects::clearComponents(void)
   {
     const size_t sz= theComponents.size();

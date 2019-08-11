@@ -376,7 +376,7 @@ int XC::TCP_Socket::recvMsg(int dbTag, int commitTag, Message &msg, ChannelAddre
 	}
     }
 
-    // if o.k. get a ponter to the data in the message and 
+    // if o.k. get a pointer to the data in the message and 
     // place the incoming data there
     int nleft,nread;
     char *gMsg;
@@ -419,7 +419,7 @@ int XC::TCP_Socket::sendMsg(int dbTag, int commitTag, const XC::Message &msg, Ch
 	}
     }
 
-    // if o.k. get a ponter to the data in the message and 
+    // if o.k. get a pointer to the data in the message and 
     // place the incoming data there
     int nwrite, nleft;    
     char *gMsg;
@@ -461,7 +461,7 @@ int XC::TCP_Socket::recvMatrix(int dbTag, int commitTag,Matrix &theMatrix, Chann
 	}
     }
 
-    // if o.k. get a ponter to the data in the XC::Matrix and 
+    // if o.k. get a pointer to the data in the XC::Matrix and 
     // place the incoming data there
     int nleft,nread;
     double *matrixData = theMatrix.getDataPtr();
@@ -507,7 +507,7 @@ int XC::TCP_Socket::sendMatrix(int dbTag, int commitTag,const Matrix &theMatrix,
 	}
     }
 
-    // if o.k. get a ponter to the data in the XC::Matrix and 
+    // if o.k. get a pointer to the data in the XC::Matrix and 
     // place the incoming data there
     int nwrite;    
     const double *matrixData= theMatrix.getDataPtr();
@@ -549,7 +549,7 @@ int XC::TCP_Socket::recvVector(int dbTag, int commitTag,Vector &theVector, Chann
 	}
     }
 
-    // if o.k. get a ponter to the data in the XC::Vector and 
+    // if o.k. get a pointer to the data in the XC::Vector and 
     // place the incoming data there
     int nleft,nread;
     double *matrixData = theVector.theData;
@@ -592,7 +592,7 @@ int XC::TCP_Socket::sendVector(int dbTag, int commitTag,const Vector &theVector,
 	}
     }
 
-    // if o.k. get a ponter to the data in the XC::Vector and 
+    // if o.k. get a pointer to the data in the XC::Vector and 
     // place the incoming data there
     int nwrite, nleft;    
     double *vectorData = theVector.theData;
@@ -635,7 +635,7 @@ int XC::TCP_Socket::recvID(int dbTag, int commitTag,ID &theID, ChannelAddress *t
 	}
     }
 
-    // if o.k. get a ponter to the data in the XC::ID and 
+    // if o.k. get a pointer to the data in the XC::ID and 
     // place the incoming data there
     int nread;
     int *idData = theID.getDataPtr();
@@ -678,7 +678,7 @@ int XC::TCP_Socket::sendID(int dbTag, int commitTag,const ID &theID, ChannelAddr
 	}
     }
 
-    // if o.k. get a ponter to the data in the XC::ID and 
+    // if o.k. get a pointer to the data in the XC::ID and 
     // place the incoming data there
     int nwrite;    
     const int *idData = theID.getDataPtr();

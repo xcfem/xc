@@ -51,7 +51,7 @@
 // Written: fmk 
 // Created: 09/99
 //
-// Description: This file contains the class implementatation of XC::ElementRecorder.
+// Description: This file contains the class implementation of XC::ElementRecorder.
 //
 // What: "@(#) ElementRecorder.C, revA"
 
@@ -119,7 +119,7 @@ int XC::ElementRecorder::record(int commitTag, double timeStamp)
           { 
             if(theResponses[i])
               {
-	        // ask the element for the reponse
+	        // ask the element for the response
 	        int res;
 	        if(( res = theResponses[i]->getResponse()) < 0)
 	          result += res;
@@ -138,7 +138,7 @@ int XC::ElementRecorder::record(int commitTag, double timeStamp)
 
         theHandler->write(data);
       }
-    // succesfull completion - return 0
+    // successful completion - return 0
     return result;
   }
 

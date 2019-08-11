@@ -75,12 +75,12 @@
 //#                                     memory ###                               #
 //#                    october 11 '93 added transpose0110, transpose0101,        #
 //#                                   transpose0111 so the creation of           #
-//#                                   isotropic BJtensor is much easer and         #
+//#                                   isotropic BJtensor is much easier and         #
 //#                                   understandable!                            #
-//#                    januar 06 '93  added BJtensor2BJmatrix_1, BJtensor2BJmatrix_2     #
+//#                    january 06 '93  added BJtensor2BJmatrix_1, BJtensor2BJmatrix_2     #
 //#                                   BJtensor2BJmatrix_3, inverse_1, inverse_2,     #
 //#                                   inverse_3                                  #
-//#                    januar 20 '93  added inverse  TRUE ONE                    #
+//#                    january 20 '93  added inverse  TRUE ONE                    #
 //#                    August 22-29 '94 choped to separate files and worked on   #
 //#                                   const and & issues                         #
 //#                    August 30-31 '94 added use_def_dim to full the CC         #
@@ -130,11 +130,11 @@ class BJtensor: public nDarray
     BJtensor&  operator=( const BJtensor & rval);       // BJtensor assignment
 
     friend BJtensor operator+(const BJtensor & , const BJtensor & ); // BJtensor addition
-    friend BJtensor operator-(const BJtensor & , const BJtensor & ); // BJtensor substraction
+    friend BJtensor operator-(const BJtensor & , const BJtensor & ); // BJtensor subtraction
 
     BJtensor& operator*=(const double &rval);     // Added Zhao Oct2005
     BJtensor operator*(const double &rval) const; // scalar multiplication, Added const Zhao Oct2005
-    BJtensor operator*(const BJtensor &rval) const;       // inner/outter product
+    BJtensor operator*(const BJtensor &rval) const;       // inner/outer product
     BJtensor operator/(const BJtensor &rval) const;       // BJtensor division rval MUST BE BJtensor of
                                             // order 0 ( i.e. scalar in BJtensor form )
 
@@ -181,7 +181,7 @@ class BJtensor: public nDarray
 // GLOBAL
 BJtensor operator*(const double &lval,const BJtensor &rval);  // REVIEWER global *
 BJtensor operator+(const BJtensor & , const BJtensor & ); // BJtensor addition
-BJtensor operator-(const BJtensor & , const BJtensor & ); // BJtensor substraction
+BJtensor operator-(const BJtensor & , const BJtensor & ); // BJtensor subtraction
 
 } // end of XC namespace
 

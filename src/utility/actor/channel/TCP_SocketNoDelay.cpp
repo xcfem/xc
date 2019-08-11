@@ -380,7 +380,7 @@ XC::TCP_SocketNoDelay::recvMsg(Message &msg, ChannelAddress *theAddress)
 	}
     }
 
-    // if o.k. get a ponter to the data in the message and 
+    // if o.k. get a pointer to the data in the message and 
     // place the incoming data there
     int nleft,nread;
     char *gMsg;
@@ -421,7 +421,7 @@ int XC::TCP_SocketNoDelay::sendMsg(const Message &msg, ChannelAddress *theAddres
 	}
     }
 
-    // if o.k. get a ponter to the data in the message and 
+    // if o.k. get a pointer to the data in the message and 
     // place the incoming data there
     int nwrite, nleft;    
     char *gMsg;
@@ -463,7 +463,7 @@ XC::TCP_SocketNoDelay::recvMatrix(Matrix &theMatrix, ChannelAddress *theAddress)
 	}
     }
 
-    // if o.k. get a ponter to the data in the XC::Matrix and 
+    // if o.k. get a pointer to the data in the XC::Matrix and 
     // place the incoming data there
     int nleft,nread;
     double *data = theMatrix.myData;
@@ -506,7 +506,7 @@ XC::TCP_SocketNoDelay::sendMatrix(const XC::Matrix &theMatrix, ChannelAddress *t
 	}
     }
 
-    // if o.k. get a ponter to the data in the XC::Matrix and 
+    // if o.k. get a pointer to the data in the XC::Matrix and 
     // place the incoming data there
     int nwrite, nleft;    
     double *data = theMatrix.myData;
@@ -553,7 +553,7 @@ XC::TCP_SocketNoDelay::recvVector(Vector &theVector, ChannelAddress *theAddress)
 	}
     }
 
-    // if o.k. get a ponter to the data in the XC::Vector and 
+    // if o.k. get a pointer to the data in the XC::Vector and 
     // place the incoming data there
     int nleft,nread;
     double *data = theVector.theData;
@@ -595,7 +595,7 @@ XC::TCP_SocketNoDelay::sendVector(const XC::Vector &theVector, ChannelAddress *t
 	}
     }
 
-    // if o.k. get a ponter to the data in the XC::Vector and 
+    // if o.k. get a pointer to the data in the XC::Vector and 
     // place the incoming data there
     int nwrite, nleft;    
     double *data = theVector.theData;
@@ -637,7 +637,7 @@ XC::TCP_SocketNoDelay::recvID(ID &theID, ChannelAddress *theAddress)
 	}
     }
 
-    // if o.k. get a ponter to the data in the XC::ID and 
+    // if o.k. get a pointer to the data in the XC::ID and 
     // place the incoming data there
     int nleft,nread;
     int *data = theID.data;
@@ -679,7 +679,7 @@ XC::TCP_SocketNoDelay::sendID(const XC::ID &theID, ChannelAddress *theAddress)
 	}
     }
 
-    // if o.k. get a ponter to the data in the XC::ID and 
+    // if o.k. get a pointer to the data in the XC::ID and 
     // place the incoming data there
     int nwrite, nleft;    
     int *data = theID.data;

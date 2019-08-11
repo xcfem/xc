@@ -116,7 +116,7 @@
 #endif
 //##############################################################################
 //##############################################################################
-// usefull arrays for constructors . . .
+// useful arrays for constructors . . .
 //#ifdef SASA
  static const int def_dim_4_2[]={2,2,2,2}; //  Sasa jan - 99
 //#endif

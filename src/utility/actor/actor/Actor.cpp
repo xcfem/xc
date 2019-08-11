@@ -159,7 +159,7 @@ XC::Actor::~Actor(void)
 
 
 
-//! @brief Method to add a function to the list of avaiable actor methods.
+//! @brief Method to add a function to the list of available actor methods.
 //!
 //! Aadd as a function to the actor object the function \p fp,
 //! this function is identified by the \p tag value. This

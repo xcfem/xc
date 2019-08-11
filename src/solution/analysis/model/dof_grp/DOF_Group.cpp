@@ -531,7 +531,7 @@ const XC::Vector &XC::DOF_Group::getCommittedAccel(void)
 //! to store the correct components of \p u, then invokes setTrialDisp()
 //! on the node object; if no node object an error message is
 //! printed. CURRENTLY THERE IS NO CHECK TO SEE IF myID(i) DOES NOT OVERFLOW
-//! ADMISSABLE VALUES IN U - THIS NEEDS TO CHANGE
+//! ADMISSABLE VALUES IN U - THIS NEES TO CHANGE
 void XC::DOF_Group::setNodeDisp(const Vector &u)
   {
     if(!myNode)

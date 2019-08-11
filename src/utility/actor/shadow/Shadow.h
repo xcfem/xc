@@ -90,7 +90,7 @@ class FEM_ObjectBroker;
 class Shadow: public ShadowActorBase
   {
   private:
-    ChannelAddress *theRemoteActorsAddress; //!< Adress of the actor.    
+    ChannelAddress *theRemoteActorsAddress; //!< Address of the actor.    
   public:
     Shadow(Channel &theChannel, FEM_ObjectBroker &);
 
