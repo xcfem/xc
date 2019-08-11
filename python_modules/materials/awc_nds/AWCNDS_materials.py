@@ -236,20 +236,39 @@ PlywoodPanels['7/8']= PlywoodPanel('7/8',b= 1.0, h= 0.875*in2meter, shear_consta
 PlywoodPanels['1']= PlywoodPanel('1',b= 1.0, h= 1.000*in2meter, shear_constant= 8.00) #,  'CrossSectionalArea':12.000, 'MomentOfInertia':1.000, 'SectionModulus':2.000, 'StaticalMoment':1.500
 PlywoodPanels['1-1/8']= PlywoodPanel('1-1/8',b= 1.0, h= 1.125*in2meter, shear_constant= 9.00) #,  'CrossSectionalArea':13.500, 'MomentOfInertia':1.424, 'SectionModulus':2.531, 'StaticalMoment':1.898
 
-# Properties of LSL beams and headers taken from:
-# LP SolidStart LSL Beam & Header Technical Guide
-
-class LSLHeader(sp.RectangularSection):
-    ''' LSL structural beam/header.'''
+class Header(sp.RectangularSection):
+    ''' Structural beam/header.'''
     nu= 0.2
     def __init__(self, name, b, h, Ms, Vs, linearDensity):
         '''Constructor.'''
-        super(LSLHeader,self).__init__(name, b, h)
+        super(Header,self).__init__(name, b, h)
         self.Ms= Ms # Allowable moment.
         self.Vs= Vs # Allowable shear.
         self.rho= linearDensity/b/h
+        self.xc_material_name= None
         self.xc_material= None
         self.xc_section= None
+    def getFb(self):
+        return self.getVolumeFactor()*self.Fb_12
+    def defXCMaterial(self):
+        '''Defines the material in XC.'''
+        if(not self.xc_material):
+            self.xc_material= typical_materials.MaterialData(name= self.xc_material_name,E=self.E,nu=self.nu,rho=self.rho)
+        return self.xc_material
+    def defElasticShearSection2d(self, preprocessor):
+        mat= self.defXCMaterial()
+        self.xc_section= super(Header,self).defElasticShearSection2d(preprocessor,mat)
+        return self.xc_section
+
+
+# Properties of LSL beams and headers taken from:
+# LP SolidStart LSL Beam & Header Technical Guide
+
+class LSLHeader(Header):
+    ''' LSL structural beam/header.'''
+    def __init__(self, name, b, h, Ms, Vs, linearDensity):
+        '''Constructor.'''
+        super(LSLHeader,self).__init__(name, b, h, Ms, Vs, linearDensity)
     def getVolumeFactor(self):
         '''Return volumen factor.'''
         retval= 1.0
@@ -260,17 +279,6 @@ class LSLHeader(sp.RectangularSection):
         else:
             retval= pow(in12/self.h,0.12)
         return retval
-    def defXCMaterial(self):
-        '''Defines the LSL material in XC.'''
-        if(not self.xc_material):
-            self.xc_material= typical_materials.MaterialData(name= self.xc_material_name,E=self.E,nu=self.nu,rho=self.rho)
-        return self.xc_material
-    def defElasticShearSection2d(self, preprocessor):
-        mat= self.defXCMaterial()
-        self.xc_section= super(LSLHeader,self).defElasticShearSection2d(preprocessor,mat)
-        return self.xc_section
-        
-
 
 class LSL_135E(LSLHeader):
     ''' LSL 1.35E structural beam/header.'''
@@ -340,3 +348,74 @@ LSL155Headers['5.25x11-7/8']= LSL_155E('5.25x11-7/8', b= 5.25*in2meter, h= 11.87
 LSL155Headers['5.25x14']= LSL_155E('5.25x14', b= 5.25*in2meter, h= 14*in2meter, Ms= 33110*pound2N*foot2meter, Vs= 20090*pound2N, linearDensity= 23.5*pound2kg)
 LSL155Headers['5.25x16']= LSL_155E('5.25x16', b= 5.25*in2meter, h= 16*in2meter, Ms= 42558*pound2N*foot2meter, Vs= 22960*pound2N, linearDensity= 26.8*pound2kg)
 LSL155Headers['5.25x18']= LSL_155E('5.25x18', b= 5.25*in2meter, h= 18*in2meter, Ms= 53107*pound2N*foot2meter, Vs= 25830*pound2N, linearDensity= 30.2*pound2kg)
+
+# Properties of LVL beams and headers taken from:
+# LP SolidStart LVL Beam & Header Technical Guide
+
+class LVLHeader(Header):
+    ''' LVL structural beam/header.'''
+    def __init__(self, name, b, h, Ms, Vs, linearDensity):
+        '''Constructor.'''
+        super(LVLHeader,self).__init__(name, b, h, Ms, Vs, linearDensity)
+    def getVolumeFactor(self):
+        '''Return volumen factor.'''
+        retval= 1.0
+        in12= 12.0*0.0254
+        in3_5= 3.5*0.0254
+        if(self.h>in12):
+            retval*= pow((in12/self.h),0.143)
+        else:
+            if(self.h<in3_5):
+                retval*= 1.147
+            else:
+                retval*= pow((in12/self.h),0.111)
+        return retval
+
+class LVL_2900Fb2E(LVLHeader):
+    ''' LVL 2900Fb 2.0E structural beam/header.'''
+    E= 2.0e6*psi2Pa # Elastic modulus (Pa)
+    Fb_12= 2900*psi2Pa # Bending stress for 12" depth.
+    Fv= 285*psi2Pa # Shear stress.
+    Fc_pll= 3200*psi2Pa # Compression stress (parallel to grain)
+    Fc_perp= 750*psi2Pa # Compression stress (perpendicular to grain)
+    xc_material_name= 'LSL_135E'
+    def __init__(self, name, b, h, Ms, Vs, linearDensity):
+        super(LVL_2900Fb2E,self).__init__(name, b, h, Ms, Vs, linearDensity)
+
+LVLHeaders= dict()
+
+LVLHeaders['1.75x7-1/4']= LVL_2900Fb2E('1.75x7-1/4', b= 1.75*in2meter, h= 7.25*in2meter, Ms= 3918*pound2N*foot2meter, Vs= 2411*pound2N, linearDensity= 3.6*pound2kg)
+LVLHeaders['1.75x9-1/4']= LVL_2900Fb2E('1.75x9-1/4', b= 1.75*in2meter, h= 9.25*in2meter, Ms= 6208*pound2N*foot2meter, Vs= 3076*pound2N, linearDensity= 4.6*pound2kg)
+LVLHeaders['1.75x9-1/2']= LVL_2900Fb2E('1.75x9-1/2', b= 1.75*in2meter, h= 9.5*in2meter, Ms= 6529*pound2N*foot2meter, Vs= 3159*pound2N, linearDensity= 4.8*pound2kg)
+LVLHeaders['1.75x11-1/4']= LVL_2900Fb2E('1.75x11-1/4', b= 1.75*in2meter, h= 11.25*in2meter, Ms= 8985*pound2N*foot2meter, Vs= 3741*pound2N, linearDensity= 5.6*pound2kg)
+LVLHeaders['1.75x11-7/8']= LVL_2900Fb2E('1.75x11-7/8', b= 1.75*in2meter, h= 11.875*in2meter, Ms= 9951*pound2N*foot2meter, Vs= 3948*pound2N, linearDensity= 5.9*pound2kg)
+LVLHeaders['1.75x14']= LVL_2900Fb2E('1.75x14', b= 1.75*in2meter, h= 14*in2meter, Ms= 13514*pound2N*foot2meter, Vs= 4655*pound2N, linearDensity= 7*pound2kg)
+LVLHeaders['1.75x16']= LVL_2900Fb2E('1.75x16', b= 1.75*in2meter, h= 16*in2meter, Ms= 17318*pound2N*foot2meter, Vs= 5320*pound2N, linearDensity= 8*pound2kg)
+LVLHeaders['1.75x18']= LVL_2900Fb2E('1.75x18', b= 1.75*in2meter, h= 18*in2meter, Ms= 21552*pound2N*foot2meter, Vs= 5985*pound2N, linearDensity= 9*pound2kg)
+
+LVLHeaders['3.5x7-1/4']= LVL_2900Fb2E('3.5x7-1/4', b= 3.5*in2meter, h= 7.25*in2meter, Ms= 7837*pound2N*foot2meter, Vs= 4821*pound2N, linearDensity= 7.3*pound2kg)
+LVLHeaders['3.5x9-1/4']= LVL_2900Fb2E('3.5x9-1/4', b= 3.5*in2meter, h= 9.25*in2meter, Ms= 12416*pound2N*foot2meter, Vs= 6151*pound2N, linearDensity= 9.3*pound2kg)
+LVLHeaders['3.5x9-1/2']= LVL_2900Fb2E('3.5x9-1/2', b= 3.5*in2meter, h= 9.5*in2meter, Ms= 13057*pound2N*foot2meter, Vs= 6318*pound2N, linearDensity= 9.5*pound2kg)
+LVLHeaders['3.5x11-1/4']= LVL_2900Fb2E('3.5x11-1/4', b= 3.5*in2meter, h= 11.25*in2meter, Ms= 17970*pound2N*foot2meter, Vs= 7481*pound2N, linearDensity= 11.3*pound2kg)
+LVLHeaders['3.5x11-7/8']= LVL_2900Fb2E('3.5x11-7/8', b= 3.5*in2meter, h= 11.875*in2meter, Ms= 19902*pound2N*foot2meter, Vs= 7897*pound2N, linearDensity= 11.9*pound2kg)
+LVLHeaders['3.5x14']= LVL_2900Fb2E('3.5x14', b= 3.5*in2meter, h= 14*in2meter, Ms= 27029*pound2N*foot2meter, Vs= 9310*pound2N, linearDensity= 14*pound2kg)
+LVLHeaders['3.5x16']= LVL_2900Fb2E('3.5x16', b= 3.5*in2meter, h= 16*in2meter, Ms= 34636*pound2N*foot2meter, Vs= 10640*pound2N, linearDensity= 16*pound2kg)
+LVLHeaders['3.5x18']= LVL_2900Fb2E('3.5x18', b= 3.5*in2meter, h= 18*in2meter, Ms= 43105*pound2N*foot2meter, Vs= 11970*pound2N, linearDensity= 18*pound2kg)
+
+LVLHeaders['5.25x7-1/4']= LVL_2900Fb2E('5.25x7-1/4', b= 5.25*in2meter, h= 7.25*in2meter, Ms= 11755*pound2N*foot2meter, Vs= 7232*pound2N, linearDensity= 10.9*pound2kg)
+LVLHeaders['5.25x9-1/4']= LVL_2900Fb2E('5.25x9-1/4', b= 5.25*in2meter, h= 9.25*in2meter, Ms= 18624*pound2N*foot2meter, Vs= 9227*pound2N, linearDensity= 13.9*pound2kg)
+LVLHeaders['5.25x9-1/2']= LVL_2900Fb2E('5.25x9-1/2', b= 5.25*in2meter, h= 9.5*in2meter, Ms= 19586*pound2N*foot2meter, Vs= 9476*pound2N, linearDensity= 14.3*pound2kg)
+LVLHeaders['5.25x11-1/4']= LVL_2900Fb2E('5.25x11-1/4', b= 5.25*in2meter, h= 11.25*in2meter, Ms= 26955*pound2N*foot2meter, Vs= 11222*pound2N, linearDensity= 16.9*pound2kg)
+LVLHeaders['5.25x11-7/8']= LVL_2900Fb2E('5.25x11-7/8', b= 5.25*in2meter, h= 11.875*in2meter, Ms= 29854*pound2N*foot2meter, Vs= 11845*pound2N, linearDensity= 17.8*pound2kg)
+LVLHeaders['5.25x14']= LVL_2900Fb2E('5.25x14', b= 5.25*in2meter, h= 14*in2meter, Ms= 40543*pound2N*foot2meter, Vs= 13965*pound2N, linearDensity= 21*pound2kg)
+LVLHeaders['5.25x16']= LVL_2900Fb2E('5.25x16', b= 5.25*in2meter, h= 16*in2meter, Ms= 51954*pound2N*foot2meter, Vs= 15960*pound2N, linearDensity= 24*pound2kg)
+LVLHeaders['5.25x18']= LVL_2900Fb2E('5.25x18', b= 5.25*in2meter, h= 18*in2meter, Ms= 64657*pound2N*foot2meter, Vs= 17955*pound2N, linearDensity= 27*pound2kg)
+
+LVLHeaders['7x7-1/4']= LVL_2900Fb2E('7x7-1/4', b= 7*in2meter, h= 7.25*in2meter, Ms= 15673*pound2N*foot2meter, Vs= 9643*pound2N, linearDensity= 14.5*pound2kg)
+LVLHeaders['7x9-1/4']= LVL_2900Fb2E('7x9-1/4', b= 7*in2meter, h= 9.25*in2meter, Ms= 24832*pound2N*foot2meter, Vs= 12303*pound2N, linearDensity= 18.5*pound2kg)
+LVLHeaders['7x9-1/2']= LVL_2900Fb2E('7x9-1/2', b= 7*in2meter, h= 9.5*in2meter, Ms= 26115*pound2N*foot2meter, Vs= 12635*pound2N, linearDensity= 19*pound2kg)
+LVLHeaders['7x11-1/4']= LVL_2900Fb2E('7x11-1/4', b= 7*in2meter, h= 11.25*in2meter, Ms= 35940*pound2N*foot2meter, Vs= 14963*pound2N, linearDensity= 22.5*pound2kg)
+LVLHeaders['7x11-7/8']= LVL_2900Fb2E('7x11-7/8', b= 7*in2meter, h= 11.875*in2meter, Ms= 39805*pound2N*foot2meter, Vs= 15794*pound2N, linearDensity= 23.8*pound2kg)
+LVLHeaders['7x14']= LVL_2900Fb2E('7x14', b= 7*in2meter, h= 14*in2meter, Ms= 54057*pound2N*foot2meter, Vs= 18620*pound2N, linearDensity= 28*pound2kg)
+LVLHeaders['7x16']= LVL_2900Fb2E('7x16', b= 7*in2meter, h= 16*in2meter, Ms= 69272*pound2N*foot2meter, Vs= 21280*pound2N, linearDensity= 32*pound2kg)
+LVLHeaders['7x18']= LVL_2900Fb2E('7x18', b= 7*in2meter, h= 18*in2meter, Ms= 86209*pound2N*foot2meter, Vs= 23940*pound2N, linearDensity= 36.1*pound2kg)
