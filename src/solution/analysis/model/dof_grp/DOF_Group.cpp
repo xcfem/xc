@@ -531,7 +531,7 @@ const XC::Vector &XC::DOF_Group::getCommittedAccel(void)
 //! to store the correct components of \p u, then invokes setTrialDisp()
 //! on the node object; if no node object an error message is
 //! printed. CURRENTLY THERE IS NO CHECK TO SEE IF myID(i) DOES NOT OVERFLOW
-//! ADMISSABLE VALUES IN U - THIS NEES TO CHANGE
+//! ADMISSIBLE VALUES IN U - THIS NEES TO CHANGE
 void XC::DOF_Group::setNodeDisp(const Vector &u)
   {
     if(!myNode)
@@ -671,7 +671,7 @@ void XC::DOF_Group::incrNodeDisp(const Vector &u)
 //! difference being that the trial response quantities at the nodes are
 //! incremented, not set, with the values now given; this is done by
 //! invoking incrTrialDisp()}, {\em incrTrialVel(), and {\em 
-//! incrTrialAccel()} respectivly on the nodes. MUST ALL CHANGE AS
+//! incrTrialAccel()} respectively on the nodes. MUST ALL CHANGE AS
 //! setNodeDisp.
 void XC::DOF_Group::incrNodeVel(const Vector &udot)
   {

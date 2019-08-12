@@ -125,7 +125,7 @@ int XC::PlainNumberer::numberDOF(int lastDOF)
 		  << "; WARNING: does not use the lastDOF as requested.\n";
       }
     
-    // iterate throgh  the DOFs first time setting -2 values
+    // iterate through  the DOFs first time setting -2 values
     DOF_GrpIter &theDOFGroups= theModel->getDOFGroups();
     DOF_Group *dofGroupPtr= nullptr;
     while((dofGroupPtr= theDOFGroups()) != 0)
@@ -137,7 +137,7 @@ int XC::PlainNumberer::numberDOF(int lastDOF)
       }
 
 
-    // iterate throgh  the DOFs second time setting -3 values
+    // iterate through  the DOFs second time setting -3 values
     DOF_GrpIter &moreDOFs= theModel->getDOFGroups();
     
     while((dofGroupPtr= moreDOFs()) != 0)
@@ -247,7 +247,7 @@ int XC::PlainNumberer::numberDOF(ID &lastDOFs)
     std::cerr << "WARNING PlainNumberer::numberDOF(ID):";
     std::cerr << " does not use the lastDOFs as requested\n";
     
-    // iterate throgh  the DOFs first time setting -2 values
+    // iterate through  the DOFs first time setting -2 values
     DOF_GrpIter &theDOFGroups= theModel->getDOFGroups();
     DOF_Group *dofGroupPtr= nullptr;
     
@@ -258,7 +258,7 @@ int XC::PlainNumberer::numberDOF(ID &lastDOFs)
           if(theID(i) == -2) dofGroupPtr->setID(i,eqnNumber++);
       }
 
-    // iterate throgh  the DOFs first time setting -3 values
+    // iterate through  the DOFs first time setting -3 values
     DOF_GrpIter &moreDOFs= theModel->getDOFGroups();
     
     while((dofGroupPtr= moreDOFs()) != 0)

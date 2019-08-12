@@ -92,7 +92,7 @@ int XC::LinearBucklingAnalysis::analyze(int numSteps)
     return result;
   }
 
-//! @brief Hace los cambios que sean necesarios tras un cambio en el domain.
+//! @brief Make the changes that a domain change requires.
 int XC::LinearBucklingAnalysis::domainChanged(void)
   {
     int retval= StaticAnalysis::domainChanged();

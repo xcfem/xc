@@ -36,7 +36,7 @@ namespace XC {
 
 //! @ingroup Integrator
 //
-//! @brief Vectores empleados en varios integrators.
+//! @brief Vectors used by many integrators.
 class IntegratorVectors: public MovableObject
   {
   protected:

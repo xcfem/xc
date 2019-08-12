@@ -50,7 +50,7 @@ class FEProblem;
 //! @brief Solution procedure for the finite element problem.
 //!
 //! This objects allows the definition of the problem to be analyzed by
-//! specifiying:.
+//! specifying:.
 //! - The type of analysis: static, dynamic, eigenvalues,...
 //! - The parameters that control the solution procedure.
 class ProcSolu: public CommandEntity

@@ -58,7 +58,7 @@
 
 // Description: This file contains the class definition for
 // NewtonRaphson. NewtonRaphson is a class which uses the
-// Newton-Raphson solution algorihm
+// Newton-Raphson solution algorithm
 // to solve the equations. No member functions are declared as virtual as
 // it is not expected that this class will be subclassed.
 //
@@ -75,7 +75,7 @@
 
 //! @brief Constructor
 //!
-//! @param AnalysisAggregation: object the object which is used to acces the
+//! @param AnalysisAggregation: object the object which is used to access the
 //! object that compound the analysis and that, at the end of each iteration,
 //! are used to determine if convergence has been obtained.
 XC::NewtonRaphson::NewtonRaphson(AnalysisAggregation *owr,int theTangentToUse)

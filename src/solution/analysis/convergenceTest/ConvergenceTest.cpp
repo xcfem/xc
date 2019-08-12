@@ -134,10 +134,10 @@ void XC::ConvergenceTest::setNormType(const int &i)
   { nType= i; }
 
 //! This is invoked at the start of each iteration. To return
-//! {\em 0} if sucessfull, i.e that testing can proceed, a
+//! {\em 0} if successful, i.e that testing can proceed, a
 //! negative number if not.
 //! Sets an integer indicating the current number of iterations, {\em
-//! currentNumIter} to \f$1\f$. returns \f$0\f$ if successfull, an error message
+//! currentNumIter} to \f$1\f$. returns \f$0\f$ if successful, an error message
 //! and \f$-1\f$ are returned if no LinearSOE object has been set.
 int XC::ConvergenceTest::start(void)
   {

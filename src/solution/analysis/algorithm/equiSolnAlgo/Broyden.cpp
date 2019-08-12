@@ -90,7 +90,7 @@ int XC::Broyden::solveCurrentStep(void)
       }
 
     // set itself as the ConvergenceTest objects EquiSolnAlgo
-    theTest->set_owner(getAnalysisAggregation()); //LCPT. Creo que esto no hace falta.
+    theTest->set_owner(getAnalysisAggregation()); //LCPT. I think that's unnecessary.
     if(theTest->start() < 0)
       {
         std::cerr << "Broyden::solveCurrentStep() -"

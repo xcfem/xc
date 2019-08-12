@@ -82,7 +82,7 @@ XC::GraphNumberer *XC::RCM::getCopy(void) const
 //! @brief Method to perform the Reverse Cuthill-mcKenn numbering scheme. The
 //! user can supply a starting vertex, if none is provided the first vertex
 //! returned by the iter is used. If minDegree flag is set to true, at each 
-//! level set the adjacent vertices not yet added from a vertex in the previos
+//! level set the adjacent vertices not yet added from a vertex in the previous
 //! level set are added in descending degree. The result of the numbering scheme
 //! is returned in an ID which contains the references for the vertices.
 //!
@@ -186,7 +186,7 @@ const XC::ID &XC::RCM::number(Graph &theGraph, int startVertex)
                 if(startLastLevelSet == currentMark)
                   startLastLevelSet= nextMark;
 
-                // check to see if graph is disconneted
+                // check to see if graph is disconnected
         
                 if((currentMark == nextMark) && (currentMark >= 0))
                   {
@@ -255,7 +255,7 @@ const XC::ID &XC::RCM::number(Graph &theGraph, int startVertex)
         //  we decrement because we are doing reverse Cuthill-McKee
         currentMark--;
 
-        // check to see if graph is disconneted
+        // check to see if graph is disconnected
         
         if((currentMark == nextMark) && (currentMark >= 0))
           {
@@ -371,7 +371,7 @@ const XC::ID &XC::RCM::number(Graph &theGraph, const ID &startVertices)
         
             currentMark--;
 
-            // check to see if graph is disconneted
+            // check to see if graph is disconnected
         
             if((currentMark == nextMark) && (currentMark >= 0)) {
             

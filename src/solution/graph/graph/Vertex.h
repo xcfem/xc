@@ -80,7 +80,7 @@ class Vertex: public TaggedObject, public MovableObject
   {
   private:
     int myRef; //!< Tag of the object represented by the vertex.
-    double myWeight; //!< Vertex weigth on the graph.
+    double myWeight; //!< Vertex weight on the graph.
     int myColor; //!< Color of the vertex.
     int myDegree; //!< Degree of the vertex.
     int myTmp;

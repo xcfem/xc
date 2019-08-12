@@ -68,7 +68,7 @@ class KEigenIntegrator: public EigenIntegrator
     virtual int formM(void);
      
     // methods to instruct the FE_Element and DOF_Group objects
-    // how to determing their contribution to M
+    // how to determining their contribution to M
     virtual int formEleTangM(FE_Element *);
     virtual int formNodTangM(DOF_Group *);
 

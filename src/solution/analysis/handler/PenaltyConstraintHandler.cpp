@@ -138,7 +138,7 @@ int XC::PenaltyConstraintHandler::handle(const ID *nodesLast)
     while((spPtr = theSPs()) != 0)
       numSPs++;
 
-    // initialse the DOF_Groups and add them to the XC::AnalysisModel.
+    // initialize the DOF_Groups and add them to the XC::AnalysisModel.
     //    : must of course set the initial IDs
     NodeIter &theNod= theDomain->getNodes();
     Node *nodPtr= nullptr;

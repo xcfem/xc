@@ -192,7 +192,7 @@ void XC::PartitionedDomain::clearAll(void)
 //! To add the element pointed to by theElementPtr to the domain. If \p check
 //! is \p true the domain is responsible for checking to see that: 1)
 //! no other element with a similar tag, element number, exists in any of
-//! the subdomains. If check is successfull the partitioned domain
+//! the subdomains. If check is successful the partitioned domain
 //! attempts to add the element to the storage arrey. The call returns
 //! \p false if the element was not added, otherwise \p true is 
 //! returned.   
@@ -255,7 +255,7 @@ bool XC::PartitionedDomain::addElement(Element *elePtr)
 //! Adds the node pointed to by theNodePtr to the domain. If \p check
 //! is \p true the domain is responsible for checking that no other
 //! node with a similar tag, node number, exists in any of the
-//! subdomains. If successfull the partition domain attempts to add the
+//! subdomains. If successful the partition domain attempts to add the
 //! node by invoking {\em Domain::addNode}. The call returns \p false if
 //! the node was not added, otherwise \p true is returned.  
 bool XC::PartitionedDomain::addNode(Node *nodePtr)
@@ -1265,7 +1265,7 @@ int XC::PartitionedDomain::partition(int numPartitions, bool usingMain, int main
 //!
 //! Adds the subdomain pointed to by theSubdomainPtr to the domain. The domain
 //! is responsible for checking that no other subdomain with a similar tag,
-//! has been previously added to the domain. If successfull
+//! has been previously added to the domain. If successful
 //! the domain is responsible for invoking {\em setDomain(this)} on the
 //! Subdomain. The domain is also responsible for invoking {\em
 //! domainChange()}. The call returns \p false if the subdomain was not added, 
@@ -1322,7 +1322,7 @@ XC::DomainPartitioner *XC::PartitionedDomain::getPartitioner(void) const
 //! 
 //! A method which will cause the domain to discard the current element
 //! graph and build a new one based on the element connectivity. Returns
-//! \f$0\f$ if successfull otherwise \f$-1\f$ is returned along with an error
+//! \f$0\f$ if successful otherwise \f$-1\f$ is returned along with an error
 //! message to std::cerr.
 int XC::PartitionedDomain::buildEleGraph(Graph &theEleGraph)
   {

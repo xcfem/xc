@@ -143,7 +143,7 @@ int XC::BisectionLineSearch::search(double s0, double s1, LinearSOE &theSOE, Inc
     //                           ---------------
     //                                2.0
 
-    count = 0; //intial value of iteration counter 
+    count = 0; //initial value of iteration counter 
     while( r > tolerance  &&  count < maxIter )
       {
         count++;

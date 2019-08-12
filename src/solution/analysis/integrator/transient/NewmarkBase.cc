@@ -35,7 +35,7 @@
 
 #include "utility/actor/actor/ArrayCommMetaData.h"
 
-//! @brief Defautl constructor.
+//! @brief Default constructor.
 //!
 //! @param owr: analysis aggregation that will own this object.
 //! @param classTag: class identifier.

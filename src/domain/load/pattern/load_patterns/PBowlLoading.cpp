@@ -485,7 +485,7 @@ XC::PBowlLoading::sendSelf(CommParameters &cp)
       return -1;
     }
 
-  // if get here successfull
+  // if get here successful
   return 0;
 }
 
@@ -577,7 +577,7 @@ XC::PBowlLoading::recvSelf(const CommParameters &cp)
     }
   }
 
-  // if get here successfull
+  // if get here successful
   return 0;
 }
 

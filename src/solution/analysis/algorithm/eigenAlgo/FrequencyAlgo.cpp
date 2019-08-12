@@ -116,7 +116,7 @@ int XC::FrequencyAlgo::solveCurrentStep(int nModes)
 int XC::FrequencyAlgo::sendSelf(CommParameters &cp)
   { return 0; }
 
-//! @breif Receive.
+//! @brief Receive.
 int XC::FrequencyAlgo::recvSelf(const CommParameters &cp)
   { return 0; }
 

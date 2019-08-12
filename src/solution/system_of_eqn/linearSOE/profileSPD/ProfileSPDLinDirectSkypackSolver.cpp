@@ -109,7 +109,7 @@ XC::ProfileSPDLinDirectSkypackSolver::ProfileSPDLinDirectSkypackSolver(int Mcols
 //! Is responsible for setting the \p block information required by the
 //! SKYPACK routines (block[0]=1; block[1]=size, block[2]=1) and for
 //! creating space for the \p invD work array. Returns \f$0\f$ if
-//! successfull, otherwise a warning message is printed and a \f$-1\f$ is
+//! successful, otherwise a warning message is printed and a \f$-1\f$ is
 //! returned.
 int XC::ProfileSPDLinDirectSkypackSolver::setSize(void)
   {
@@ -155,7 +155,7 @@ extern "C" int skyss_(int *LDX, int *N, int *NRHS,
 //! a routine which uses the BLAS level 1 routines, skypf2() is a
 //! routine which uses BLAS levels 2 and 3. If skypf2()
 //! has been called, \p invD is set up. Once the matrix has been
-//! factored, skyss() is called. If the solution is sucessfully
+//! factored, skyss() is called. If the solution is successfully
 //! obtained, i.e. the skyss() routine returns \f$0\f$ in the INFO
 //! argument, \f$0\f$ is returned, otherwise it prints a warning message and
 //! returns INFO. The solve process changes \f$A\f$ and \f$X\f$.   

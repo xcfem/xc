@@ -135,7 +135,7 @@ int XC::FullGenLinLapackSolver::solve(void)
 	dgetrs_(strN, &n,&nrhs,Aptr,&ldA,iPIV,Xptr,&ldB,&info);
     }
     
-    // check if successfull
+    // check if successful
     if(info != 0)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
@@ -151,7 +151,7 @@ int XC::FullGenLinLapackSolver::solve(void)
 //!
 //! Is used to construct a 1d integer array, #iPiv that is needed by
 //! the LAPACK solvers. It checks to see if current size of #iPiv is
-//! large enough, if not it resizes it. Returns 0 if sucessfull,
+//! large enough, if not it resizes it. Returns 0 if successful,
 //! prints a warning message and returns a -1 if not enough memory
 //! is available for this new array.
 int XC::FullGenLinLapackSolver::setSize(void)

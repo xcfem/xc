@@ -151,14 +151,14 @@ int XC::CTestEnergyIncr::test(void)
                 std::clog << getEnergyProductMessage();
               }
           }
-        // return the number of times test has been called - SUCCESSFULL
+        // return the number of times test has been called - SUCCESSFUL
         return currentIter;
       }
     // algo failed to converged after specified number of iterations - but RETURN OK
     else if((printFlag == 5 || printFlag == 6) && currentIter >= maxNumIter)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; WARNING: failed to converge but goin on -"
+		  << "; WARNING: failed to converge but going on -"
 		  << getEnergyProductMessage();
         calculatedNormX= getNormX(); //Update values.
 	calculatedNormB= getNormB();

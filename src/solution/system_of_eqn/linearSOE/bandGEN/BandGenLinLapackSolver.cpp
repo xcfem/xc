@@ -135,7 +135,7 @@ int XC::BandGenLinLapackSolver::solve(void)
         }
     }
 
-    // check if successfull
+    // check if successful
     if(info != 0)
       {
 	std::cerr << "WARNING XC::BandGenLinLapackSolver::solve() -";
@@ -152,7 +152,7 @@ int XC::BandGenLinLapackSolver::solve(void)
 //!
 //! Is used to construct a 1d integer array, #iPiv that is needed by
 //! the LAPACK solvers. It checks to see if current size of #iPiv is
-//! large enough, if not resizes it. Returns 0 if sucessfull, prints
+//! large enough, if not resizes it. Returns 0 if successful, prints
 //! a warning message and returns a -1 if not enough memory is
 //! available for this new array.
 int XC::BandGenLinLapackSolver::setSize()

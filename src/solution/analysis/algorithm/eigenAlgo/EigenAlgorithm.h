@@ -87,7 +87,7 @@ class EigenAlgorithm : public SolutionAlgorithm
 
     EigenAlgorithm(AnalysisAggregation *,int classTag);
   public:
-    // pure virtural functions
+    // pure virtual functions
     virtual int solveCurrentStep(int numModes) = 0;
     virtual void Print(std::ostream &s, int flag=0) = 0;
      

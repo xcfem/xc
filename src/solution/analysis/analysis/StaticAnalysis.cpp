@@ -429,7 +429,7 @@ int XC::StaticAnalysis::domainChanged(void)
         return -6;
       }
 
-    // if get here successfull
+    // if get here successful
     return 0;
   }
 

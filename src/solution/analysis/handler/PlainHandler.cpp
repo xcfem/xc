@@ -122,7 +122,7 @@ int XC::PlainHandler::handle(const ID *nodesLast)
         return -1;
       }
 
-    // initialse the DOF_Groups and add them to the AnalysisModel.
+    // initialize the DOF_Groups and add them to the AnalysisModel.
     //    : must of course set the initial IDs
     NodeIter &theNod= theDomain->getNodes();
     Node *nodPtr= nullptr;

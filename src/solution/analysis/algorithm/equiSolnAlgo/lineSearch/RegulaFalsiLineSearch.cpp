@@ -99,7 +99,7 @@ int XC::RegulaFalsiLineSearch::search(double s0, double s1, LinearSOE &theSOE, I
   //                                     ------------------------
   //                                           s(l) - s(u)
 
-  int count = 0; //intial value of iteration counter 
+  int count = 0; //initial value of iteration counter 
   while ( r > tolerance  &&  count < maxIter ) {
     
     count++;

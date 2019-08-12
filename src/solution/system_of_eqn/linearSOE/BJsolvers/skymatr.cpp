@@ -632,7 +632,7 @@ double & XC::skymatrix::mval(int row, int col) const
 //##########################################################################
 // full_val function allows you to treat skymatrix as if it is full
 // float matrix. The function will calculate position inside sky matrix
-// and return appropriate number if row and col are bellow skyline or
+// and return appropriate number if row and col are below skyline or
 // return zero (0) if row and col are above sky line
 double XC::skymatrix::full_val(int row, int col) const
   {
@@ -1039,7 +1039,7 @@ XC::skymatrix & XC::skymatrix::v_ldl_factorize()
         }
       if ( *(pc_skymatrix_rep->data-1+kn)<=0 )
         {
-          printf("\n Colsol Stoped - Stiffness XC::Matrix not positive definite \n");
+          printf("\n Colsol Stopped - Stiffness XC::Matrix not positive definite \n");
           printf(" non positive pivot for equation, %d\n ", n);
           printf(" pivot, %.12e \n", *(pc_skymatrix_rep->data-1+kn) );
           exit(1);

@@ -188,7 +188,7 @@ int XC::NewtonLineSearch::solveCurrentStep(void)
         //line search direction
         const Vector &dx0 = theSOE->getX() ;
 
-        //intial value of s
+        //initial value of s
         double s0= - (dx0 ^ Resid0) ;
 
        if(theIntegrator->update(theSOE->getX()) < 0)

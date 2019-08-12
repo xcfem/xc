@@ -87,7 +87,7 @@ XC::SwapHeavierToLighterNeighbours::SwapHeavierToLighterNeighbours(double fG, in
 //! looping through the adjacency ID of the Vertex), if the vertex weight is
 //! {\em factorGreater} times greater than the other Vertices load then {\em
 //! swapBoundary(i, other)} is invoked on the DomainPartitioner. Returns
-//! \f$0\f$ if successfull, otherwise a negative number and a warning message
+//! \f$0\f$ if successful, otherwise a negative number and a warning message
 //! are returned if either no link has been set to the DomainPartitioner
 //! or swapBoundary() returns a negative number.
 int XC::SwapHeavierToLighterNeighbours::balance(Graph &theWeightedGraph)

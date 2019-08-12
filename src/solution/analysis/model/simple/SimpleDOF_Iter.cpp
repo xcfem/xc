@@ -57,7 +57,7 @@
 //
 // Description: This file contains the method definitions for class 
 // SimpleDOF_Iter. SimpleDOF_Iter is a class for iterating through the 
-// DOF_Groups of an simple analysis mdoel. 
+// DOF_Groups of an simple analysis model. 
 
 #include "solution/analysis/model/simple/SimpleDOF_Iter.h"
 #include "solution/analysis/model/AnalysisModel.h"

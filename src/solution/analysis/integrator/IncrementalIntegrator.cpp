@@ -181,7 +181,7 @@ int XC::IncrementalIntegrator::formUnbalance(void)
 //! setSize() has not been called and a \f$-2\f$ if location in \p id is
 //! greater than \f$order-1\f$ of \f$b\f$ vector.
 //!
-//! @param id: dofs identifiers on wich the response is requested.
+//! @param id: dofs identifiers on which the response is requested.
 //! @param result: respones values.
 int XC::IncrementalIntegrator::getLastResponse(Vector &result, const XC::ID &id)
   {
@@ -207,7 +207,7 @@ int XC::IncrementalIntegrator::getLastResponse(Vector &result, const XC::ID &id)
           {
 	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; WARNING location " << loc
-		      << "in ID ouside bounds ";
+		      << "in ID outside bounds ";
 	    std::cerr << size << "\n";	
 	    res = -2;
 	  }

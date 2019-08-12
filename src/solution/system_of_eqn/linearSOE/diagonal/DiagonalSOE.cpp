@@ -49,7 +49,7 @@
 // $Source: /usr/local/cvs/OpenSees/SRC/system_of_eqn/linearSOE/diagonal/DiagonalSOE.cpp,v $
 
 // Written: fmk 
-// Created: Febuary 1997
+// Created: February 1997
 // Revision: A
 //
 // Description: This file contains the implementation for XC::DiagonalSOE

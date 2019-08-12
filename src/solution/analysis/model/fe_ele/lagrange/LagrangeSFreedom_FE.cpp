@@ -194,7 +194,7 @@ const XC::Vector &XC::LagrangeSFreedom_FE::getResidual(Integrator *theNewIntegra
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << " constrained DOF " << constrainedDOF
-		  << " ouside range.\n";
+		  << " outside range.\n";
 	resid(1)= 0;
       }
     

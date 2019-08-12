@@ -44,7 +44,7 @@ class Domain;
 class ProcSoluControl: public CommandEntity
   {
   private:
-    MapModelWrapper solu_models; //!< Wrapper for the finite elment model
+    MapModelWrapper solu_models; //!< Wrapper for the finite element model
     AnalysisAggregationMap solu_methods; //!< Solution methods.
 
     ProcSolu *getProcSolu(void);

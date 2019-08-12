@@ -104,7 +104,7 @@ int XC::DistributedBandLinSOE::setB(const int &size,const Vector &v,const double
     if(v.Size() != size)
       {
 	std::cerr << "WARNING XC::DistributedBandLinSOE::setB() -";
-	std::cerr << " incomptable sizes " << size << " and " << v.Size() << std::endl;
+	std::cerr << " incompatible sizes " << size << " and " << v.Size() << std::endl;
 	return -1;
       }
     

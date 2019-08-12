@@ -151,7 +151,7 @@ int XC::CTestNormDispIncr::test(void)
       }
     // algo failed to converged after specified number of iterations - return FAILURE -2
     else if(currentIter >= maxNumIter)
-      { // failes to converge
+      { // fails to converge
         std::cerr << getFailedToConvergeMessage();
         currentIter++;    
         return -2;

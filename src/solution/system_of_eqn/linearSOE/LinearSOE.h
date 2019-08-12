@@ -111,7 +111,7 @@ class LinearSOE : public SystemOfEqn
     //! and sparsity of the matrix $A$ and vectors $x$ and $b$. This
     //! information can be deduced from the number of vertices and
     //! the connectivity between the vertices in the Graph object \p theGraph.
-    //! To return $0$ if sucessfull, a negative number if not.
+    //! To return $0$ if successful, a negative number if not.
     virtual int setSize(Graph &theGraph) =0;
     //! @brief Returns the number of equations in the system.
     virtual int getNumEqn(void) const =0;
@@ -122,7 +122,7 @@ class LinearSOE : public SystemOfEqn
     //! $a_{loc(i),loc(j)}+= M(i,j)$. Numbering in $A$ starts
     //! at $(0,0)$, i.e. C style. If allocation specified is outside
     //! the range, i.e. $(-1,-1)$ the corresponding entry in \p M
-    //! is not added to $A$. To return $0$ if sucessfull, a
+    //! is not added to $A$. To return $0$ if successful, a
     //! negative number if not.
     virtual int addA(const Matrix &M, const ID &loc, double fact = 1.0) =0;
 
@@ -130,12 +130,12 @@ class LinearSOE : public SystemOfEqn
     //! the vector $b$. The Vector is assembled into $b$ at the locations
     //! given by the ID object {\em loc}, i.e. $b_{loc(i)} += V(i)$. If a
     //! location specified is outside the range, e.g. $-1$, the corresponding
-    //! entry in {\em V} is not added to $b$. To return $0$ if sucessfull, a
+    //! entry in {\em V} is not added to $b$. To return $0$ if successful, a
     //! negative number if not.
     virtual int addB(const Vector &V, const ID &loc,const double &fact= 1.0) =0;    
 
     //! The LinearSOE object sets the vector \p b to be \p fact times
-    //! the vector \p V. To return $0$ if sucessfull, a negative number if
+    //! the vector \p V. To return $0$ if successful, a negative number if
     //! not.
     virtual int setB(const Vector &V, const double &fact= 1.0) =0;        
 

@@ -266,7 +266,7 @@ int XC::Metis::partition(Graph &theGraph, int numPart)
 	if(vertexPtr == 0)
           {
 	    std::cerr << "WARNING XC::Metis::partition - No partitioning done";
-	    std::cerr << " Metis requires consequtive XC::Vertex Numbering\n";
+	    std::cerr << " Metis requires consecutive XC::Vertex Numbering\n";
 	    
 	    return -2;
 	  }

@@ -67,7 +67,7 @@ namespace XC {
 
 //! @ingroup CTest
 //
-//! @brief Convergence test thats uses the quotient of
+//! @brief Convergence test that uses the quotient of
 //! current and initial norms of the solution vector.
 class CTestRelativeTotalNormDispIncr: public ConvergenceTestNorm
   {

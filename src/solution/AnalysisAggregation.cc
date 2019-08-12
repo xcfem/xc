@@ -953,7 +953,7 @@ void XC::AnalysisAggregation::brokeEquiSolnAlgo(const CommParameters &cp,const I
     theSolnAlgo->set_owner(this);
   }
 
-//! @brief Verifica que los pointers no sean nulos.
+//! @brief Verifies that the pointers are not null.
 bool XC::AnalysisAggregation::CheckPointers(void)
   {
     if(!base)

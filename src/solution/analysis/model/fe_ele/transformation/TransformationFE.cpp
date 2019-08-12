@@ -243,7 +243,7 @@ const XC::Matrix &XC::TransformationFE::getTangent(Integrator *theNewIntegrator)
             localK.setData(localKbuffer.getDataPtr(), numDOFi, numDOFj);
 
             // copy K(i,j) into localK matrix
-            // CHECK SIZE OF BUFFFER            
+            // CHECK SIZE OF BUFFER            
             for(int a=0; a<numDOFi; a++)
                 for(int b=0; b<numDOFj; b++)
                     localK(a,b) = theTangent(noRowsOriginal+a, noColsOriginal+b);
@@ -256,20 +256,20 @@ const XC::Matrix &XC::TransformationFE::getTangent(Integrator *theNewIntegrator)
             if(Ti != 0 && Tj != 0) {
                 noRowsTransformed = Ti->noCols();
                 noColsTransformed = Tj->noCols();
-                // CHECK SIZE OF BUFFFER
+                // CHECK SIZE OF BUFFER
                 localTtKT.setData(dataBuffer.getDataPtr(), noRowsTransformed, noColsTransformed);
                 localTtKT = (*Ti) ^ localK * (*Tj);
             } else if(Ti == 0 && Tj != 0) {
                 noRowsTransformed = numDOFi;
                 noColsTransformed = Tj->noCols();
-                // CHECK SIZE OF BUFFFER
+                // CHECK SIZE OF BUFFER
                 localTtKT.setData(dataBuffer.getDataPtr(), noRowsTransformed, noColsTransformed);
                 // localTtKT = localK * (*Tj);               
                 localTtKT.addMatrixProduct(0.0, localK, *Tj, 1.0);
             } else if(Ti != 0 && Tj == 0) {
                 noRowsTransformed = Ti->noCols();
                 noColsTransformed = numDOFj;
-                // CHECK SIZE OF BUFFFER
+                // CHECK SIZE OF BUFFER
                 localTtKT.setData(dataBuffer.getDataPtr(), noRowsTransformed, noColsTransformed);
                 localTtKT = (*Ti) ^ localK;
             } else {
@@ -406,7 +406,7 @@ const XC::Vector &XC::TransformationFE::getK_Force(const XC::Vector &accel, doub
       localK.setData(localKbuffer.getDataPtr(), numDOFi, numDOFj);
       
       // copy K(i,j) into localK matrix
-      // CHECK SIZE OF BUFFFER            
+      // CHECK SIZE OF BUFFER            
       for(int a=0; a<numDOFi; a++)
         for(int b=0; b<numDOFj; b++)
           localK(a,b) = theTangent(noRowsOriginal+a, noColsOriginal+b);
@@ -419,20 +419,20 @@ const XC::Vector &XC::TransformationFE::getK_Force(const XC::Vector &accel, doub
       if(Ti != 0 && Tj != 0) {
         noRowsTransformed = Ti->noCols();
         noColsTransformed = Tj->noCols();
-        // CHECK SIZE OF BUFFFER
+        // CHECK SIZE OF BUFFER
         localTtKT.setData(dataBuffer.getDataPtr(), noRowsTransformed, noColsTransformed);
         localTtKT = (*Ti) ^ localK * (*Tj);
       } else if(Ti == 0 && Tj != 0) {
         noRowsTransformed = numDOFi;
         noColsTransformed = Tj->noCols();
-        // CHECK SIZE OF BUFFFER
+        // CHECK SIZE OF BUFFER
         localTtKT.setData(dataBuffer.getDataPtr(), noRowsTransformed, noColsTransformed);
         // localTtKT = localK * (*Tj);               
         localTtKT.addMatrixProduct(0.0, localK, *Tj, 1.0);
       } else if(Ti != 0 && Tj == 0) {
         noRowsTransformed = Ti->noCols();
         noColsTransformed = numDOFj;
-        // CHECK SIZE OF BUFFFER
+        // CHECK SIZE OF BUFFER
         localTtKT.setData(dataBuffer.getDataPtr(), noRowsTransformed, noColsTransformed);
         localTtKT = (*Ti) ^ localK;
       } else {
@@ -519,7 +519,7 @@ const XC::Vector &XC::TransformationFE::getM_Force(const Vector &accel, double f
             localK.setData(localKbuffer.getDataPtr(), numDOFi, numDOFj);
       
             // copy K(i,j) into localK matrix
-            // CHECK SIZE OF BUFFFER            
+            // CHECK SIZE OF BUFFER            
             for(int a=0; a<numDOFi; a++)
               for(int b=0; b<numDOFj; b++)
                 localK(a,b) = theTangent(noRowsOriginal+a, noColsOriginal+b);
@@ -532,20 +532,20 @@ const XC::Vector &XC::TransformationFE::getM_Force(const Vector &accel, double f
       if(Ti != 0 && Tj != 0) {
         noRowsTransformed = Ti->noCols();
         noColsTransformed = Tj->noCols();
-        // CHECK SIZE OF BUFFFER
+        // CHECK SIZE OF BUFFER
         localTtKT.setData(dataBuffer.getDataPtr(), noRowsTransformed, noColsTransformed);
         localTtKT = (*Ti) ^ localK * (*Tj);
       } else if(Ti == 0 && Tj != 0) {
         noRowsTransformed = numDOFi;
         noColsTransformed = Tj->noCols();
-        // CHECK SIZE OF BUFFFER
+        // CHECK SIZE OF BUFFER
         localTtKT.setData(dataBuffer.getDataPtr(), noRowsTransformed, noColsTransformed);
         // localTtKT = localK * (*Tj);               
         localTtKT.addMatrixProduct(0.0, localK, *Tj, 1.0);
       } else if(Ti != 0 && Tj == 0) {
         noRowsTransformed = Ti->noCols();
         noColsTransformed = numDOFj;
-        // CHECK SIZE OF BUFFFER
+        // CHECK SIZE OF BUFFER
         localTtKT.setData(dataBuffer.getDataPtr(), noRowsTransformed, noColsTransformed);
         localTtKT = (*Ti) ^ localK;
       } else {
@@ -631,7 +631,7 @@ const XC::Vector &XC::TransformationFE::getC_Force(const XC::Vector &accel, doub
       localK.setData(localKbuffer.getDataPtr(), numDOFi, numDOFj);
       
       // copy K(i,j) into localK matrix
-      // CHECK SIZE OF BUFFFER            
+      // CHECK SIZE OF BUFFER            
       for(int a=0; a<numDOFi; a++)
         for(int b=0; b<numDOFj; b++)
           localK(a,b) = theTangent(noRowsOriginal+a, noColsOriginal+b);
@@ -644,20 +644,20 @@ const XC::Vector &XC::TransformationFE::getC_Force(const XC::Vector &accel, doub
       if(Ti != 0 && Tj != 0) {
         noRowsTransformed = Ti->noCols();
         noColsTransformed = Tj->noCols();
-        // CHECK SIZE OF BUFFFER
+        // CHECK SIZE OF BUFFER
         localTtKT.setData(dataBuffer.getDataPtr(), noRowsTransformed, noColsTransformed);
         localTtKT = (*Ti) ^ localK * (*Tj);
       } else if(Ti == 0 && Tj != 0) {
         noRowsTransformed = numDOFi;
         noColsTransformed = Tj->noCols();
-        // CHECK SIZE OF BUFFFER
+        // CHECK SIZE OF BUFFER
         localTtKT.setData(dataBuffer.getDataPtr(), noRowsTransformed, noColsTransformed);
         // localTtKT = localK * (*Tj);               
         localTtKT.addMatrixProduct(0.0, localK, *Tj, 1.0);
       } else if(Ti != 0 && Tj == 0) {
         noRowsTransformed = Ti->noCols();
         noColsTransformed = numDOFj;
-        // CHECK SIZE OF BUFFFER
+        // CHECK SIZE OF BUFFER
         localTtKT.setData(dataBuffer.getDataPtr(), noRowsTransformed, noColsTransformed);
         localTtKT = (*Ti) ^ localK;
       } else {

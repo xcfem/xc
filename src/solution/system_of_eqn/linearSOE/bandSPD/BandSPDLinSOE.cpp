@@ -52,7 +52,7 @@
 // file: ~/system_of_eqn/linearSOE/bandSPD/BandSPDLinSOE.C
 //
 // Written: fmk
-// Created: Febuary 1997
+// Created: February 1997
 // Revision: A
 //
 // Description: This file contains the implementation for XC::BandSPDLinSOE

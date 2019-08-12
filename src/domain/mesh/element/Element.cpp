@@ -457,8 +457,8 @@ XC::Response *XC::Element::setResponse(const std::vector<std::string> &argv, Inf
 //!
 //! getResponse is a method invoked to obtain information from an
 //! analysis. The method is invoked with the integer argument returned and
-//! the Information object that was prepared in a successfull {\em
-//! setResponse()} method invocation. To return \f$0\f$ if successfull, a
+//! the Information object that was prepared in a successful {\em
+//! setResponse()} method invocation. To return \f$0\f$ if successful, a
 //! negative number if not. The base class implementation will always
 //! return \f$-1\f$. 
 int XC::Element::getResponse(int responseID, Information &eleInfo)

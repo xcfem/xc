@@ -108,7 +108,7 @@ int XC::SymBandEigenSOE::setSize(Graph &theGraph)
   }
 
 //! @brief Assemblies into A the matrix being passed as parameter
-//! multimplied by the fact paremeter.
+//! multimplied by the fact parameter.
 int XC::SymBandEigenSOE::addA(const Matrix &m, const ID &id, double fact)
   {
     // check for a quick return 
@@ -174,7 +174,7 @@ void XC::SymBandEigenSOE::zeroA(void)
   }
 
 //! @brief Assemblies into A the matrix being passed as parameter
-//! multimplied by the fact paremeter.
+//! multimplied by the fact parameter.
 int XC::SymBandEigenSOE::addM(const Matrix &m, const ID &id, double fact)
   {
     // check for a quick return 
@@ -193,7 +193,7 @@ int XC::SymBandEigenSOE::addM(const Matrix &m, const ID &id, double fact)
     int idSize= id.Size();    
     if(idSize != m.noRows() && idSize != m.noCols())
       {
-        std::cerr << "WARING: SymBandEigenSOE::addM() -- Matrix and ID not of similar sizes!!\n";
+        std::cerr << "WARNING: SymBandEigenSOE::addM() -- Matrix and ID not of similar sizes!!\n";
         return -1;
       }
 

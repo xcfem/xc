@@ -136,7 +136,7 @@ void XC::DomainPartitioner::setPartitionedDomain(PartitionedDomain &theDomain)
 //! partitioned 
 //! using the GraphPartitioner into \p numParts; if partitioning fails an error 
 //! message is printed and  \f$-10 +\f$ number returned from GraphPartitioner is
-//! returned. If successfull the domain is partitioned according to the
+//! returned. If successful the domain is partitioned according to the
 //! following rules: \begin{itemize}
 //! \item All nodes which are internal to a partition are added using the
 //! addNode() method of the Subdomain. These nodes are removed from
@@ -656,7 +656,7 @@ XC::Graph &XC::DomainPartitioner::getColoredGraph(void)
 //! and place it in subdomain \p to. If \p notAdjacentOther is {\em
 //! true} a check is made to ensure that the vertex to be swapped is not
 //! adjacent to a vertex in any other partition. Returns \f$0\f$ if
-//! successfull, returns an error message and \f$-1\f$ if PartitionedDomain
+//! successful, returns an error message and \f$-1\f$ if PartitionedDomain
 //! has not been partitioned, \f$-2\f$ if \p from Subdomain does not exist,
 //! \f$-3\f$ if {\em to Subdomain} does not exist, \f$-4\f$ if a vertex given by
 //! \p tag does not exist, returns \f$-5\f$ if \p notAdjacentOther was
@@ -1015,7 +1015,7 @@ int XC::DomainPartitioner::swapVertex(int from, int to, int vertexTag, bool adja
 //! subdomain \p from that are connected to elements in subdomain {\em
 //! to} and place them in subdomain \p to. If \p adjacentVertexOther is
 //! \p true no Elements which are connected to elements in subdomains other 
-//! than \p to and \p from are moved. Returns \f$0\f$ if successfull, returns 
+//! than \p to and \p from are moved. Returns \f$0\f$ if successful, returns 
 //! an error message and \f$-1\f$ if PartitionedDomain has not been partitioned,
 //! \f$-2\f$ if \p from Subdomain does not exist, \f$-3\f$ if {\em to Subdomain}
 //! does not exist. The Elements, Nodes, NodalLoads, SFreedom\_Constraints

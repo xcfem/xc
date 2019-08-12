@@ -194,11 +194,11 @@ XC::LinearSOESolver *XC::SuperLU::getCopy(void) const
 //! supplied, \f$1\f$ defines a min-degree ordering based on \f$A^TA\f$
 //! and \f$2\f$ a min-degree ordering based on \f$A^T + A\f$. \p relax defines
 //! the min number of columns in a subtree for the subtree to be considered a
-//! single supernode. \p thresh defines the pivoting threshhold: at
+//! single supernode. \p thresh defines the pivoting threshold: at
 //! step j of the Gaussian elimination if (abs\f$(A_{jj}) \ge\f$ \p thresh
 //! (max\f$ i \ge j\f$ abs(\f$A_{ij}\f$)). A value for \p thresh of \f$0.0\f$
 //! definines no pivoting, a value of \f$1.0\f$ classical partial pivoting.
-//! \p panelSize defines the number of consequtive columns used as a
+//! \p panelSize defines the number of consecutive columns used as a
 //! panel in the elimination. For more information on these values see the
 //! SuperLU manual.
 XC::SuperLU::SuperLU(int perm, double drop_tolerance, int panel, int relx, char symm)
@@ -272,7 +272,7 @@ int XC::SuperLU::factorize(void)
 //! it is associated with (pointer kept by parent class) by calling the SeuperLU
 //! routine dgstrf(), if the system is marked as not having been factored,
 //! or dgstrs(), if system is marked as having been factored. If the
-//! solution is sucessfully obtained, i.e. the SuperLU routines return \f$0\f$
+//! solution is successfully obtained, i.e. the SuperLU routines return \f$0\f$
 //! in the INFO argument, it marks the system has having been
 //! factored and returns \f$0\f$, otherwise it prints a warning message and
 //! returns INFO. The solve process changes \f$A\f$ and \f$X\f$ and sets the
@@ -349,7 +349,7 @@ int XC::SuperLU::solve(void)
 //! etree} by calling the SuperLU routine sp\_preorder(). It then
 //! creates a SuperMatrix for X by calling the SuperLU routine 
 //! dCreate\_Dense\_Matrix().
-//! Returns \f$0\f$ if sucessfull, prints a warning message and returns
+//! Returns \f$0\f$ if successful, prints a warning message and returns
 //! a \f$-1\f$ if not enough memory is available for the arrays.
 int XC::SuperLU::setSize(void)
   {

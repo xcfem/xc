@@ -85,7 +85,7 @@ void XC::ArrayGraph::free_mem(void)
 //! theVertices} of size \p arraySize and sets the number of vertices,
 //! \p numVertex, and number of edges \p numEdge to \f$0\f$. If it fails
 //! to get an array of appropriate size it sets its \p arraySize to
-//! \f$0\f$; subclasses can check if successfull construction by invoking the
+//! \f$0\f$; subclasses can check if successful construction by invoking the
 //! protected member function getArraySize().
 XC::ArrayGraph::ArrayGraph(int arraySize)
   :numVertex(0), lastEmpty(0), theVertices(arraySize,static_cast<Vertex *>(nullptr)), myIter(*this) {}
@@ -99,13 +99,13 @@ XC::ArrayGraph::~ArrayGraph(void)
 //! Method to add a vertex to the graph. If the adjacency list
 //! of the vertex is not empty the graph will first check to see all
 //! vertices in the the the vertices adjacency list exist in the graph
-//! before the vertex is added. It then checks if it neeeds a new_ array
+//! before the vertex is added. It then checks if it needs a new_ array
 //! and if so creates one, i.e. if the {\em arraySize} $=$ {\em
 //! numVertex} it creates a new_ array, whose size is double the original
 //! and copies the pointers to the vertices, before invoking {\em
 //! delete()} on the old array. It now tries to add the vertex in the
 //! array at location {\em vertexTag}. If this fails it adds at the first
-//! empty location it comes to. Returns a 0 if successfull addition, a
+//! empty location it comes to. Returns a 0 if successful addition, a
 //! $-1$ otherwise and a message to cerr explaining the problem.  
 bool XC::ArrayGraph::addVertex(const Vertex &vrt)
   {
@@ -222,7 +222,7 @@ const XC::Vertex *XC::ArrayGraph::getVertexPtr(int vertexTag) const
 //! {\em vertexTag} and {\em otherVertexTag} exist in the graph. If they
 //! do not exist a $-1$ is returned, otherwise the method invokes {\em
 //! addEdge()} on each of the corresponding vertices in the 
-//! graph. Returns $0$ if sucessfull, a negative number if not.
+//! graph. Returns $0$ if successful, a negative number if not.
 int XC::ArrayGraph::addEdge(int vertexTag, int otherVertexTag)
   {
     // get pointers to the vertices, if one does not exist return

@@ -40,9 +40,9 @@ void revrse(int n, int *v);
                    numbered during the ordering process.  it is
                    initialized to 0 and set to -1 as each nod
 		   is numbered.
-            xls - the index bector for a vevel structure. the level
-                  structre is sotred in the currently unused spaces 
-		  in the permutation vectore perm.
+            xls - the index vector for a vevel structure. the level
+                  structure is stored in the currently unused spaces 
+		  in the permutation vector perm.
             work - a working vector 
   program routines -
             fnroot, rcm 
@@ -97,9 +97,9 @@ void genrcm(int neqns, int **padj, int *perm, int *mask, int *xls, int *work)
                    numbered during the ordering process.  it is
 		   initialized to 0 and set to -1 as each node
 		   is numbered.
-            xls - the index bector for a vevel structure. the level
-                  structre is sotred in the currently unused spaces 
-		  in the permutation vectore perm.
+            xls - the index vector for a vevel structure. the level
+                  structure is stored in the currently unused spaces 
+		  in the permutation vector perm.
             work - a working vector 
   program routines - 
             fnroot, rcm 
@@ -131,7 +131,7 @@ void subrcm (int neqns, int root, int **padj, int *perm,
 ********************  rcm . . . reverse cuthill mckee ******************
 ************************************************************************
 
-  purpose - rcm numbers a connected component spedified by 
+  purpose - rcm numbers a connected component specified by 
             mask and root, using the rcm algorithm.  the
 	    numbering is to be started at the node root.
   input parameters -
@@ -141,7 +141,7 @@ void subrcm (int neqns, int root, int **padj, int *perm,
 	    padj - the adjacency structure
 
   updated parameters - 
-            mask - only those nodes wiht nonnegarive inpu mask
+            mask - only those nodes with nonnegative input mask
 	    values are considered by the routine.
 	    the nodes numbered by rcm will have their
 	    mask values set to zero.
@@ -175,7 +175,7 @@ int rcm(int root, int **padj, int *mask, int *perm, int *deg, int *work)
    lvlend &= 0 ;
    lnbr = 1 ;
 /* -----------------------------------------------------
-   lbegin and lvlend point to the begiinning adn
+   lbegin and lvlend point to the beginning and
    the end of the current level respectively.
    -----------------------------------------------------*/
    do

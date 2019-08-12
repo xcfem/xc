@@ -94,7 +94,7 @@ class PartitionedModelBuilder: public ModelBuilder, public MovableObject
     //! boundary nodes, nodal loads and constraints to the PartitionedDomain
     //! object. The integer \p numSubdomains is passed to provide information
     //! about the number of subdomains in the PartitionedDomain. To return
-    //! \f$0\f$ if successfull, a negative number if not.
+    //! \f$0\f$ if successful, a negative number if not.
     virtual int buildInterface(int numSubdomains) =0;
     //! This method must be provided by the subclasses. It is used to add
     //! nodes, elements, loads and constraints to the subdomain {\em

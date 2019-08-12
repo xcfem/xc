@@ -145,13 +145,13 @@ int XC::CTestRelativeEnergyIncr::test(void)
               }
           }
         
-        // return the number of times test has been called - SUCCESSFULL
+        // return the number of times test has been called - SUCCESSFUL
         return currentIter;
       }
     // algo failed to converged after specified number of iterations - but RETURN OK
     else if((printFlag == 5 || printFlag == 6) && currentIter >= maxNumIter)
       {
-        std::cerr << "WARNING: XC::CTestRelativeEnergyIncr::test() - failed to converge but goin on -";
+        std::cerr << "WARNING: XC::CTestRelativeEnergyIncr::test() - failed to converge but going on -";
         std::cerr << getRatioMessage("(dX*dR/dX1*dR1)");
         calculatedNormX= getNormX(); //Update values.
         calculatedNormB= getNormB();

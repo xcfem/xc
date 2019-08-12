@@ -55,7 +55,7 @@
 // File: ~/system_of_eqn/linearSOE/bandSPD/BandSPDLinSOE.h
 //
 // Written: fmk 
-// Created: Febuary 1997
+// Created: February 1997
 // Revision: A
 //
 // Description: This file contains the class definition for BandSPDLinSOE

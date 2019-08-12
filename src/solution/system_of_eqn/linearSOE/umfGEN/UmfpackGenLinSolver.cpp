@@ -111,7 +111,7 @@ int XC::UmfpackGenLinSolver::solve(void)
     double *Bptr = theSOE->getPtrB();
     double *Aptr = theSOE->A.getDataPtr();
 
-    int job =0; // set to 1 if wish to do iterative refinment
+    int job =0; // set to 1 if wish to do iterative refinement
     logical trans = FALSE_;
 
     if(theSOE->factored == false)

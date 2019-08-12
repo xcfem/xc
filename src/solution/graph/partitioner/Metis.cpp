@@ -291,7 +291,7 @@ int XC::Metis::partition(Graph &theGraph, int numPart)
 	  {
 	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "WARNING; No partitioning done"
-		      << " Metis requires consequtive Vertex Numbering\n";    
+		      << " Metis requires consecutive Vertex Numbering\n";    
 	    return -2;
 	  }
 	
@@ -360,7 +360,7 @@ int XC::Metis::partitionGraph(int *nvtxs, int *xadj, int *adjncy, int *vwgt,
 		      int *options, int *edgecut, int *part, bool whichToUse)
 {
   // which to use -> if true use edge cut partitinioning, else uses communication
-  // based partition, standard aplications , uniformly mesh regions need use the edge-cut
+  // based partition, standard applications , uniformly mesh regions need use the edge-cut
   // first one works fine second is weird
   if (whichToUse) {
     METIS_PartGraphRecursive(nvtxs, xadj, adjncy, vwgt, adjwgt, wgtflag,numflag, nparts,options, edgecut, part);
@@ -374,7 +374,7 @@ int XC::Metis::partitionGraph(int *nvtxs, int *xadj, int *adjncy, int *vwgt,
 int XC::Metis::partitionHexMesh(int* elmnts, int* epart, int* npart, int ne, int nn, int nparts, bool whichToUse)
   {
     // which to use -> if true use edge cut partitinioning, else uses communication
-    // based partition, standard aplications , uniformly mesh regions need use the edge-cut
+    // based partition, standard applications , uniformly mesh regions need use the edge-cut
     // first one works fine second is weird
     int numflag =0;
     int edgecut =0;
@@ -402,7 +402,7 @@ const XC::ID &XC::Metis::number(Graph &theGraph, int lastVertex)
     if (checkOptions() == false)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "ERROR: chek options failed\n";
+		  << "ERROR: check options failed\n";
         return theRefResult;
       }
     
@@ -447,7 +447,7 @@ const XC::ID &XC::Metis::number(Graph &theGraph, int lastVertex)
 	  {
 	    std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "WARNING; No partitioning done"
-		      << " Metis requires consequtive Vertex Numbering\n";
+		      << " Metis requires consecutive Vertex Numbering\n";
 	    
 	    return theRefResult;
 	  }
@@ -491,8 +491,8 @@ const XC::ID &XC::Metis::number(Graph &theGraph, int lastVertex)
     std::cerr << getClassName() << "::" << __FUNCTION__
               << "number -2\n";
     // we assign numbers now based on the partitions returned.
-    // each vertex in partion i is assigned a number less than
-    // thos in partion i+1: NOTE WE DON'T CARE WHAT THE NUMBERING IS
+    // each vertex in partition i is assigned a number less than
+    // those in partition i+1: NOTE WE DON'T CARE WHAT THE NUMBERING IS
     // WITHIN A PARTITION
     int count = 0;
     for (int i=0; i<numPartitions; i++) {

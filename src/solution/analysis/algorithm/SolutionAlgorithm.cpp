@@ -75,7 +75,7 @@ XC::SolutionAlgorithm::SolutionAlgorithm(AnalysisAggregation *owr,int clasTag)
       ObjWithRecorders::setLinks(dom);
   }
 
-//! @brief Perform the appropiate modifications as a result of a change
+//! @brief Perform the appropriate modifications as a result of a change
 //! in the domain.
 //!
 //! Is called by the Analysis if the domain changes. It is called after

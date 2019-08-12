@@ -169,7 +169,7 @@ XC::AnalysisModel::~AnalysisModel(void)
 bool XC::AnalysisModel::addFE_Element(FE_Element *theElement)
   {
     // check we don't add a null pointer or this is a subclass
-    // trying to use this method when it should'nt
+    // trying to use this method when it shouldn't
     bool retval= false;
     if(theElement)
       {
@@ -364,7 +364,7 @@ bool XC::AnalysisModel::addDOF_Group(DOF_Group *theGroup)
   {
 
     // check we don't add a null pointer or this is a subclass trying
-    // to use a method it should'nt be using
+    // to use a method it shouldn't be using
     if(theGroup == 0)
       return false;
   

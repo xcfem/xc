@@ -478,7 +478,7 @@ int XC::Subdomain::invokeChangeOnAnalysis(void)
   }
 
 
-//! @brief Returns the number of external nodes that have been successfully
+//! @brief Returns the number of external nodes that have been successfuly
 //! added to the subdomain as external nodes and have yet to be removed from the
 //! subdomain. 
 int XC::Subdomain::getNumExternalNodes(void) const

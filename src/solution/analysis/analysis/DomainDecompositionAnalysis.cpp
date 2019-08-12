@@ -288,7 +288,7 @@ int XC::DomainDecompositionAnalysis::computeInternalResponse(void)
 //! formTangent()} is invoked on \p theIntegrator, condenseA() is
 //! invoked on \p theSolver object, a flag is set to indicate that the
 //! tangent has been formed, and the \p counter is incremented. Returns
-//! a \f$0\f$ if successfull, if either the formTangent() or {\em
+//! a \f$0\f$ if successful, if either the formTangent() or {\em
 //! condenseA()} method returns a negative number this number is
 //! returned.  
 int XC::DomainDecompositionAnalysis::formTangent(void)

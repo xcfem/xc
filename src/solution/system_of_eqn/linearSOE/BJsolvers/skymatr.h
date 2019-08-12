@@ -145,7 +145,7 @@ class skymatrix
       double & mval(int , int ) const;
 // full_val inline function allows you to treat skymatrix as if it is full
 // float matrix. The function will calculate position inside sky matrix
-// and return appropriate number if row and col are bellow skyline or
+// and return appropriate number if row and col are below skyline or
 // return zero (0) if row and col are above sky line
       double full_val (int , int ) const;
 

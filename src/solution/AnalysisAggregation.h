@@ -67,7 +67,7 @@ class ID;
 //!  @ingroup Solu
 //! 
 //! @brief Solution procedure for the finite element problem. The
-//! solution procedure is defined by specifiying:
+//! solution procedure is defined by specifying:
 //! - Wrapper for the finite element model. Container for the finite
 //!   element model "as seen" from the solver.
 //! - Solution algorithm.  An algorithmic class specifying the

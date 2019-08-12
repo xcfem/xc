@@ -69,7 +69,7 @@ int XC::BandArpackppSOE::setSize(Graph &theGraph)
   }
 
 //! @brief Assemblies into A the matrix being passed as parameter
-//! multimplied by the fact paremeter.
+//! multimplied by the fact parameter.
 int XC::BandArpackppSOE::addToMatrix(msp_double &MT,const Matrix &m, const ID &id,const double &fact)
   {
     // check for a quick return 
@@ -135,7 +135,7 @@ int XC::BandArpackppSOE::addToMatrix(msp_double &MT,const Matrix &m, const ID &i
   }
 
 //! @brief Assemblies into A the matrix being passed as parameter
-//! multimplied by the fact paremeter.
+//! multimplied by the fact parameter.
 int XC::BandArpackppSOE::addA(const Matrix &a, const ID &id, double fact)
   { return addToMatrix(A,a,id,fact); }
 
@@ -145,7 +145,7 @@ void XC::BandArpackppSOE::zeroA(void)
   { A.Anula(); }
 
 //! @brief Assemblies into M the matrix being passed as parameter
-//! multimplied by the fact paremeter.
+//! multimplied by the fact parameter.
 int XC::BandArpackppSOE::addM(const Matrix &m, const ID &id, double fact)
   { 
     int retval= 0;

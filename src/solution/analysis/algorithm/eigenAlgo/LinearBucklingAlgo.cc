@@ -115,7 +115,7 @@ void XC::LinearBucklingAlgo::Print(std::ostream &s, int flag)
 int XC::LinearBucklingAlgo::sendSelf(CommParameters &cp)
   { return 0; }
 
-//! @breif Receive.
+//! @brief Receive.
 int XC::LinearBucklingAlgo::recvSelf(const CommParameters &cp)
   { return 0; }
 

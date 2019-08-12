@@ -144,10 +144,11 @@ void XC::EigenSOE::resize_mass_matrix_if_needed(const size_t &sz)
 int XC::EigenSOE::solve(int numModes)
   { return (theSolver->solve(numModes)); }
 
-//! @brief No hace nada.
+//! @brief Do nothing.
 int XC::EigenSOE::solve(void)
   {
-    std::cerr << "ERROR XC::EigenSOE::solve(void) - need to specify numModes\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; ERROR - need to specify numModes\n";
     return -1;
   }
 

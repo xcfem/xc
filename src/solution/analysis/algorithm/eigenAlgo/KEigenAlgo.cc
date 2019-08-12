@@ -115,7 +115,7 @@ void XC::KEigenAlgo::Print(std::ostream &s, int flag)
 int XC::KEigenAlgo::sendSelf(CommParameters &cp)
   { return 0; }
 
-//! @breif Receive.
+//! @brief Receive.
 int XC::KEigenAlgo::recvSelf(const CommParameters &cp)
   { return 0; }
 

@@ -716,7 +716,7 @@ XC::profilematrix XC::profilematrix::operator+(const double &rval)
         for ( int kal=0 ; kal<this->pc_profilematrix_rep->total_numb ; kal++ )
          add.pc_profilematrix_rep->al[kal] += rval;
       }
-//..// thsi is OK!
+//..// this is OK!
 //..    else if ( this->pc_profilematrix_rep->flag == 'S' )
 //..      {
 //..        this->pc_profilematrix_rep->al= New_pc_profilematrix_rep->au;
@@ -730,7 +730,7 @@ XC::profilematrix XC::profilematrix::operator+(const double &rval)
  }
 
 //##############################################################################
-// profilematrix substraction
+// profilematrix subtraction
 XC::profilematrix &XC::profilematrix::operator-=(const profilematrix &rval)
   {
     long int this_total_numb= this->pc_profilematrix_rep->total_numb;
@@ -847,7 +847,7 @@ XC::profilematrix &XC::profilematrix::operator-=(const profilematrix &rval)
 
 
 //##############################################################################
-// profilematrix substraction
+// profilematrix subtraction
 XC::profilematrix XC::operator-(const XC::profilematrix & lval, const XC::profilematrix & rval)
   {
     XC::profilematrix result(lval);
@@ -857,7 +857,7 @@ XC::profilematrix XC::operator-(const XC::profilematrix & lval, const XC::profil
 
 
 //##############################################################################
-// scalar substraction
+// scalar subtraction
 XC::profilematrix XC::profilematrix::operator-(const double &rval)
   {
 // construct profilematrix using the same control numbers as for the
@@ -879,7 +879,7 @@ XC::profilematrix XC::profilematrix::operator-(const double &rval)
         for ( int kal=0 ; kal<this->pc_profilematrix_rep->total_numb ; kal++ )
          sub.pc_profilematrix_rep->al[kal] -= rval;
       }
-//..// Thsi is OK!
+//..// This is OK!
 //..    else if ( this->pc_profilematrix_rep->flag == 'S' )
 //..      {
 //..        this->pc_profilematrix_rep->al= New_pc_profilematrix_rep->au;
@@ -1001,7 +1001,7 @@ XC::profilematrix  XC::profilematrix::operator*(const double &rval)
 // the profile !!!!!!!!!!!
 // so row and col must be within profile !!!!!!!!!!!!!!!
 //##########################################################################
-// this one is the same as mval except that it is more convinient  //  ________
+// this one is the same as mval except that it is more convenient  //  ________
 // to overload operator (row,col).                                 // |  rows
 double & XC::profilematrix::operator( )(int row, int col) const        // |c
   {                                                                // |o
@@ -1063,7 +1063,7 @@ double & XC::profilematrix::mval(int row, int col) const // only for the members
 //##########################################################################
 // full_val function allows you to treat profilematrix as if it is full
 // float matrix. The function will calculate position inside profile matrix
-// and return appropriate number if row and col are bellow/right profile line or
+// and return appropriate number if row and col are below/right profile line or
 // return zero (0) if row and col are above/left profile line
 double XC::profilematrix::full_val(int row, int col) const
   {

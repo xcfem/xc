@@ -83,7 +83,7 @@ XC::ShedHeaviest::ShedHeaviest(double fG, int rels, bool disallowDisconnected)
 //! iterating through the Graph \p theWeightedGraph looking at the
 //! vertex weights. Then {\em releaseBoundary(max, theWieightedGraph,
 //! true, factorGreater)} is invoked on the
-//! DomainPartitioner \p numRelease times. Returns \f$0\f$ if successfull,
+//! DomainPartitioner \p numRelease times. Returns \f$0\f$ if successful,
 //! otherwise a negative number and a warning message are returned if
 //! either no link has been set to the DomainPartitioner or {\em
 //! releaseBoundary()} returns a negative number.

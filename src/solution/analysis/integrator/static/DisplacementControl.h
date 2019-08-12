@@ -84,7 +84,7 @@ class Domain;
 //! \noindent where \f$\delta Uc_n\f$ depends on \f$\delta Uc_{n-1}\f$,
 //! the displacement increment at the previous time step, \f$J_{n-1}\f$,
 //! the number of iterations required to achieve convergence in the
-//! previos load step, and \f$Jd\f$, the desired number of iteraions. \f$\delta
+//! previous load step, and \f$Jd\f$, the desired number of iteraions. \f$\delta
 //! Uc_n\f$ is bounded by \f$\delta Uc_{min}\f$  and \f$\delta Uc_{max}\f$.
 //! 
 //! 

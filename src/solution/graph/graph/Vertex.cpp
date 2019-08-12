@@ -103,7 +103,7 @@ int XC::Vertex::getTmp(void) const
 //! If the adjacency list for that vertex does not already contain {\em
 //! otherTag}, \p otherTag is added to the adjacency list and the
 //! degree of the vertex is incremented by \f$1\f$. Returns a \f$0\f$ if
-//! sucessfull, a \f$1\f$ if edge already existed and a negative number if
+//! successful, a \f$1\f$ if edge already existed and a negative number if
 //! not. Note that no check is done by the vertex to see that a vertex
 //! with \p otherTag exists in the graph. The adjacency list for a
 //! Vertex is stored in an ID object containing the adjacent Vertices

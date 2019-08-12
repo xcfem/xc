@@ -112,7 +112,7 @@ void XC::DOF_Numberer::free_mem(void)
 //! @brief Constructor
 //!
 //! @param owr: pointer to the ModelWrapper that ows this object.
-//! @param clsTag: class indentifier. 
+//! @param clsTag: class identifier. 
 XC::DOF_Numberer::DOF_Numberer(ModelWrapper *owr, int clsTag) 
   :MovableObject(clsTag), CommandEntity(owr), theGraphNumberer(nullptr) {}
 
@@ -200,7 +200,7 @@ int XC::DOF_Numberer::numberDOF(int lastDOF_Group)
         return -2;
       }
 
-    // check we cant do quick return
+    // check we can do quick return
     if(am->getNumDOF_Groups() == 0)
       return 0;
 
@@ -256,7 +256,7 @@ int XC::DOF_Numberer::numberDOF(int lastDOF_Group)
       }
 
     // iterate through the DOFs one last time setting any -4 values
-    // iterate throgh the DOFs second time setting -3 values
+    // iterate through the DOFs second time setting -3 values
     DOF_GrpIter &tDOFs= am->getDOFGroups();
     DOF_Group *dofGroupPtr= nullptr;
     while((dofGroupPtr= tDOFs()) != 0)
@@ -368,7 +368,7 @@ int XC::DOF_Numberer::numberDOF(ID &lastDOFs)
         return -2;
       }
 
-    // check we cant do quick return
+    // check we can do quick return
     if(am->getNumDOF_Groups() == 0)
       return 0;
 
@@ -408,7 +408,7 @@ int XC::DOF_Numberer::numberDOF(ID &lastDOFs)
          }        
       }
 
-    // iterate throgh  the DOFs first time setting -3 values
+    // iterate through  the DOFs first time setting -3 values
     
     for(int k=0; k<size; k++)
       {
@@ -424,7 +424,7 @@ int XC::DOF_Numberer::numberDOF(ID &lastDOFs)
       }
 
     // iterate through the DOFs one last time setting any -4 values
-    // iterate throgh  the DOFs second time setting -3 values
+    // iterate through  the DOFs second time setting -3 values
     DOF_GrpIter &tDOFs= am->getDOFGroups();
     DOF_Group *dofGroupPtr= nullptr;
     while((dofGroupPtr= tDOFs()) != 0)

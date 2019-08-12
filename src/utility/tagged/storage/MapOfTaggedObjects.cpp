@@ -134,7 +134,7 @@ bool XC::MapOfTaggedObjects::addComponent(TaggedObject *newComponent)
 	theMap.insert(value_type(tag,newComponent));
         transmitIDs= true; //Component added.
 		      
-	// check if successfully added 
+	// check if successfuly added 
 	theEle = theMap.find(tag);
 	if(theEle == theMap.end())
          {

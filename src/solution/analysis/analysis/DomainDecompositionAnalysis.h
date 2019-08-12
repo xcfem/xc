@@ -83,7 +83,7 @@ class Subdomain;
 //! method to solve the equations. Its public member functions are all
 //! virtual to allow for the generalization of the 
 //! class. The following are the aggregates of such an analysis type:
-//! - Subdomain: a pointer to the subdomain on wich the analysis is performed. 
+//! - Subdomain: a pointer to the subdomain on which the analysis is performed. 
 //! - DomainSolver: an algorithmic class specifying the
 //!   sequence of operations to be performed in performing the numerical 
 //!   operations.

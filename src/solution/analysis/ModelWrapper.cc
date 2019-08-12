@@ -287,17 +287,21 @@ int XC::ModelWrapper::setNumberer(DOF_Numberer &theNewNumberer)
     return 0;
   }
 
-//! @brief Verifica que los pointers no sean nulos.
+//! @brief Verify that the point are not null.
 bool XC::ModelWrapper::CheckPointers(void)
   {
     if(!theModel)
       {
-        std::cerr << "ModelWrapper::check_pointers; error, you haven't set the analysis model." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; error, you haven't set the analysis model."
+		  << std::endl;
         return false;
       }
     if(!theHandler)
       {
-        std::cerr << "ModelWrapper::check_pointers; error, you haven't set the constraints handler." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; error, you haven't set the constraints handler."
+		  << std::endl;
         return false;
       }
     if(!theDOFNumberer)

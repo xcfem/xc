@@ -230,7 +230,7 @@ int XC::SymSparseLinSOE::addA(const XC::Matrix &in_m, const XC::ID &in_id, doubl
    // check that m and id are of similar size
    if(idSize != in_m.noRows() && idSize != in_m.noCols()) {
        std::cerr << "XC::SymSparseLinSOE::addA() ";
-       std::cerr << " - Matrix and XC::ID not of similiar sizes\n";
+       std::cerr << " - Matrix and XC::ID not of similar sizes\n";
        return -1;
    }
 

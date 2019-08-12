@@ -194,7 +194,7 @@ bool XC::Graph::addVertex(const Vertex &vrt, bool checkAdjacency)
 //! \p vertexTag and \p otherVertexTag exist in the graph. If they
 //! do not exist a \f$-1\f$ is returned, otherwise the method invokes {\em
 //! addEdge()} on each of the corresponding vertices in the 
-//! graph. Increments \p numEdge by \f$1\f$ and returns \f$0\f$ if sucessfull,
+//! graph. Increments \p numEdge by \f$1\f$ and returns \f$0\f$ if successful,
 //! a \f$1\f$ if the edge already existed, and a \f$-2\f$ if one addEdge()
 //! was successful, but the other was not.  
 //!
@@ -375,7 +375,7 @@ int XC::Graph::merge(Graph &other)
     return result;
   }
 
-//! @brief Returns the ends of the bandwith.
+//! @brief Returns the ends of the bandwidth.
 void XC::Graph::getBand(int &numSubD,int &numSuperD) const
   {
     numSubD = 0;

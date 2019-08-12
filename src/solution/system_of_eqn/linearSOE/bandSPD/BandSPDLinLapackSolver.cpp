@@ -120,7 +120,7 @@ int XC::BandSPDLinLapackSolver::solve(void)
 	dpbtrs_(strU,&n,&kd,&nrhs,Aptr,&ldA,Xptr,&ldB,&info);
     }
 
-    // check if successfull
+    // check if successful
     if(info != 0)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__

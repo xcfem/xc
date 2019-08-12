@@ -203,7 +203,7 @@ int XC::BandSPDLinThreadSolver::solve(void)
     dpbtrs_("U",&n,&kd,&nrhs,Aptr,&ldA,Xptr,&ldB,&info);
     
 
-    // check if successfull
+    // check if successful
     if (info != 0)
 	return info;
 
