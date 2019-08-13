@@ -392,6 +392,19 @@ class SolidMechanics3D(PredefinedSpace):
         self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
         self.constraints.newSPConstraint(nodeTag,1,0.0)
         self.constraints.newSPConstraint(nodeTag,2,0.0)
+        
+    def fixNode(self,DOFpattern,nodeTag):
+        '''Restrain DOF of a node according to the DOFpattern, which is a given
+         string of type '0FF' that matches the DOFs (uX,uY,uZ)
+         where 'F' means FREE and '0' means constrained with value=0
+         Note: DOFpaterns '0FF','0_FF', ... are equivalent
+
+         :param nodeTag: node identifier.
+        '''
+        DOFpatclean=DOFpattern.replace('_','')
+        DOFtoConstr=[i for i in range(len(DOFpatclean)) if DOFpatclean[i]=='0']
+        for nc in DOFtoConstr:
+            self.constraints.newSPConstraint(nodeTag,nc,0.0)
 
 def gdls_elasticidad3D(nodes):
     '''Defines the dimension of the space: nodes by three coordinates (x,y,z) 
