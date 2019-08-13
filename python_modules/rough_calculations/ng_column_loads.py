@@ -25,10 +25,10 @@ __email__= "l.pereztato@gmail.com"
 ##   +  |  +    |     +    -
 
   
-def getAreaInfluenciaPilar(L1,L2,L3,L4):
+def getColumnTributaryArea(L1,L2,L3,L4):
     '''
-    Área de influencia de un pilar a partir de las luces de los vanos anejos
-    ver «Números gordos en el proyecto de estructuras» page 44
+    Tributary area of a column from the neighbour spans
+    see «Números gordos en el proyecto de estructuras» page 44
     '''
-    return (L1+L2)/2*(L3+L4)/2
+    return (L1+L2)/2*(L3+L4)/2.0
   
