@@ -42,7 +42,7 @@ class Vector;
 class PathSeriesBase: public CFactorSeries
   {
   protected:
-    Vector thePath; //!< vector containg the data points
+    Vector thePath; //!< vector containing the data points
     int lastSendCommitTag;
 
     static size_t load_vector_from_file(Vector &v,std::istream &is);

@@ -152,9 +152,9 @@ ratio2= abs((deltax-Ax)/Ax)
 #diff= ley-ley_modelo
 diff_x= []
 diff_y= []
-def substract(x,y): return x-y
-diff_x= map(substract,x,x_modelo)
-diff_y= map(substract,y,y_modelo)
+def subtract(x,y): return x-y
+diff_x= map(subtract,x,x_modelo)
+diff_y= map(subtract,y,y_modelo)
 
 ratio3= 0
 for d in diff_x:

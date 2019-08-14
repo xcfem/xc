@@ -71,7 +71,7 @@
 namespace XC {
 //! @ingroup TSeries
 //
-//! @brief Serie de ondas triangulares.
+//! @brief Series de ondas triangulares.
 class TriangleSeries: public PeriodSeries
   {
   protected:

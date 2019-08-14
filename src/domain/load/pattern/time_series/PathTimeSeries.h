@@ -82,7 +82,7 @@ class Vector;
 class PathTimeSeries : public PathSeriesBase
   {
   private:
-    Vector time; //!< vector containg the time values of data points
+    Vector time; //!< vector containing the time values of data points
     mutable int currentTimeLoc; //!< current location in time
   protected:
     int sendData(CommParameters &cp);

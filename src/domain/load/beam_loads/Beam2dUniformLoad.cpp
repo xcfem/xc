@@ -168,8 +168,8 @@ void XC::Beam2dUniformLoad::addReactionsInBasicSystem(const double &L,const doub
 
     // Reactions in basic system
     p0[0]-= P; //Resta el axil. 
-    p0[1]-= V; //Substracts the reaction at the back end.
-    p0[2]-= V; //Substracts the reaction at the front end.
+    p0[1]-= V; //Subtracts the reaction at the back end.
+    p0[2]-= V; //Subtracts the reaction at the front end.
   }
 
 //! @brief Returns the consistent load vector (see page 108 libro Eugenio Oñate).

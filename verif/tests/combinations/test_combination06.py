@@ -93,7 +93,7 @@ if previa!=None:
 
 diff= combs.newLoadCombination("DIFF","")
 diff.asigna("ELSCP001")
-diff.substract(nombrePrevia)
+diff.subtract(nombrePrevia)
 descompDiff= diff.getDescomp("%3.1f")
 
 ratio1= (nombrePrevia=="")

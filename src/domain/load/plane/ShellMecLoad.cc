@@ -90,7 +90,7 @@ XC::Vector XC::ShellMecLoad::getLocalMoment(void) const
     return retval;
   }
 
-//! @brief Returns the componentes of the force vectors.
+//! @brief Returns the components of the force vectors.
 const XC::Matrix &XC::ShellMecLoad::getLocalForces(void) const
   {
     static Matrix retval;

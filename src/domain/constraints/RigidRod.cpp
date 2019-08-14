@@ -106,7 +106,7 @@ void XC::RigidRod::setup(Domain *theDomain)
     // create the ID to identify the constrained dof
     ID id(dimR);
 
-    // construct the tranformation matrix Ccr, where  Uc = Ccr Ur & set the diag
+    // construct the transformation matrix Ccr, where  Uc = Ccr Ur & set the diag
     Matrix mat(dimR,dimR);
     mat.Zero();
 

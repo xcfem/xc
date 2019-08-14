@@ -73,11 +73,11 @@ XC::PointsSpectrum::PointsSpectrum(int tag, Vector freq, Vector ampl)
 	std::cerr << "Number of points to XC::PointsSpectrum is not consistent!" << std::endl;
       }
 
-    // Check that the frequencies are consequtive
+    // Check that the frequencies are consecutive
     for(int i=1; i<freq.Size(); i++)
       {
 	if(freq(i-1)>freq(i))
-          { std::cerr << "ERROR: The given XC::Spectrum frequencies are not consequtive!" << std::endl;	}
+          { std::cerr << "ERROR: The given XC::Spectrum frequencies are not consecutive!" << std::endl;	}
       }
     frequencies = new Vector(freq);
     amplitudes = new Vector(ampl);

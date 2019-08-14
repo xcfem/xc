@@ -77,7 +77,7 @@ class MFreedom_Joint2D : public MFreedom_Joint
   {
   private:
     int MainDOF; //!<  main degree of freedom for rotation
-    int AuxDOF; //!<  Auxilary degree of freedom for shear
+    int AuxDOF; //!<  Auxiliary degree of freedom for shear
     int FixedEnd; //!<  fixed rotational degree of freedom at the end released = 0 , fixed = 1
     
   public:

@@ -174,7 +174,7 @@ const XC::Matrix &XC::Beam2dPointLoad::getAppliedSectionForces(const double &L,c
   }
 
 //! @brief Adds the load to the consistent load vector (see page 108 Eugenio Oñate's book).
-//! @param L Element lenght.
+//! @param L Element length.
 //! @param loadFactor Load factor.
 //! @param p0 element load vector.
 void XC::Beam2dPointLoad::addReactionsInBasicSystem(const double &L,const double &loadFactor,FVector &p0) const
@@ -196,9 +196,9 @@ void XC::Beam2dPointLoad::addReactionsInBasicSystem(const double &L,const double
         const double V1= P-V2; //Front end reaction.
 
         // Accumulate reactions in basic system
-        p0[0]-= N; //Substracts axial load.
-        p0[1]-= V1; //Substracts back end reaction.
-        p0[2]-= V2; //Substracts front end reaction.
+        p0[0]-= N; //Subtracts axial load.
+        p0[1]-= V1; //Subtracts back end reaction.
+        p0[2]-= V2; //Subtracts front end reaction.
       }
   }
 

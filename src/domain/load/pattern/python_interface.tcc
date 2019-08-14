@@ -71,11 +71,11 @@ class_<XC::LoadPatternCombination, XC::LoadPatternCombination *, bases<XC::Force
   ;
 
 XC::LoadCombination &(XC::LoadCombination::*add)(const std::string &)= &XC::LoadCombination::add;
-XC::LoadCombination &(XC::LoadCombination::*substract)(const std::string &)= &XC::LoadCombination::substract;
+XC::LoadCombination &(XC::LoadCombination::*subtract)(const std::string &)= &XC::LoadCombination::subtract;
 class_<XC::LoadCombination, XC::LoadCombination *, bases<XC::LoadPatternCombination>, boost::noncopyable >("LoadCombination", no_init)
   .def("getCombPrevia", &XC::LoadCombination::getPtrCombPrevia,return_internal_reference<>(),"Returns previous load combination.")
   .def("add",add,return_internal_reference<>())
-  .def("substract",substract,return_internal_reference<>())
+  .def("subtract",subtract,return_internal_reference<>())
   .def("multiplica",&XC::LoadCombination::multiplica,return_internal_reference<>())
   .def("divide",&XC::LoadCombination::divide,return_internal_reference<>())
   .def("asigna",&XC::LoadCombination::asigna,return_internal_reference<>())

@@ -137,8 +137,8 @@ exempleModes= xc.Matrix([[0.323,-0.764,0.946,-0.897,0.623],
                          [0.685,-0.700,-0.672,0.907,0.658],
                          [0.891,0.241,-1.000,-1.000,-0.195],
                          [1.000,1.000,0.849,0.427,0.042]])
-substract_modes= (modos-exempleModes)
-ratio2= (substract_modes).Norm()
+subtract_modes= (modos-exempleModes)
+ratio2= (subtract_modes).Norm()
 ratio3= abs(totalMass-targetTotalMass)/targetTotalMass
 ''' The values of the first three distribution factors values (fist 3 columns)
    were taken from the reference example. The two others (which are not given
@@ -159,7 +159,7 @@ print "kPl3a= ",kPl3a
 print "periods: ",periods
 print "ratio1= ",ratio1
 print "modos: ",modos
-print "substract_modes: ",substract_modes
+print "subtract_modes: ",subtract_modes
 print "ratio2= ",ratio2
 print "modalParticipationFactors: ",modalParticipationFactors
 print "effectiveModalMasses: ",effectiveModalMasses

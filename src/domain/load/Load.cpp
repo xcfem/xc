@@ -55,7 +55,7 @@
 // Created: 11/96
 // Revision: A
 //
-// Purpose: This file contains the implementaion for the XC::Load class.
+// Purpose: This file contains the implementation for the XC::Load class.
 //
 // What: "@(#) Load.C, revA"
 

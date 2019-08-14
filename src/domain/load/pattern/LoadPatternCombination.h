@@ -65,7 +65,7 @@ class LoadPatternCombination: public ForceReprComponent
 
         summand getNeg(void) const;
         const summand &add(const summand &);
-        const summand &substract(const summand &);
+        const summand &subtract(const summand &);
         const summand &multiplica(const float &);
         const summand &divide(const float &);
 

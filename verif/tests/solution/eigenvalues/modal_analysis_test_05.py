@@ -163,7 +163,7 @@ print "periods: ",periods
 print "ratio1= ",ratio1
 # Los modos se obtienen con distinto signo
 print "modes: ",modes
-print "substract_modes: ",diff_modes
+print "subtract_modes: ",diff_modes
 print "ratio2= ",ratio2
 
 print "modalParticipationFactors: ",modalParticipationFactors

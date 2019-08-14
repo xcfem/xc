@@ -101,7 +101,7 @@ XC::MFreedom_Joint3D::MFreedom_Joint3D(Domain *theDomain, int tag, int nodeRetai
       }
   
   
-    // check the main degree of freedom. Assign auxilary DOF 
+    // check the main degree of freedom. Assign auxiliary DOF 
     if( RotDOF<6 || RotDOF>8 || DispDOF<6 || DispDOF>8 || RotDOF==DispDOF )
       {
         std::cerr << getClassName() << "::" << __FUNCTION__

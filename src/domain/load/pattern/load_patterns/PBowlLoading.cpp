@@ -593,7 +593,7 @@ void XC::PBowlLoading::Print(std::ostream &s, int flag)
 // void
 // XC::PBowlLoading::addPBElements(const XC::ID &PBEle)
 // {
-//   // create a copy of the vector containg plastic bowl elements
+//   // create a copy of the vector containing plastic bowl elements
 //   PBowlElements = new ID(PBEle);
 //   // ensure we did not run out of memory
 //   if (PBowlElements == 0 || PBowlElements->Size() == 0) {
@@ -625,7 +625,7 @@ XC::PBowlLoading::CompPBLoads()
   ID NidesinFirstEle = theElement->getNodePtrs().getExternalNodes();
 
   int i, j, k, bi;
-  //Inital node list from the first plastic bowl element
+  //Initial node list from the first plastic bowl element
   for (i = 0; i<NIE; i++)
      (*Bowl_node)(i) = NidesinFirstEle(i);
 
@@ -931,7 +931,7 @@ XC::PBowlLoading::getNodalLoad(int nodeTag, double time)
 
   delete dummy;
 
-  //Create the nodal load vector accoding to the DOFs the node has
+  //Create the nodal load vector according to the DOFs the node has
   int numDOF = theNode->getNumberDOF();
   Vector *nodalLoad = new Vector(numDOF);
 

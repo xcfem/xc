@@ -70,7 +70,7 @@
 //! @param theDomain: domain where the constraint is defined.
 //! @param nR: identifier of the retained node.
 //! @param nC: identifiers of the constrained nodes.
-//! @param perpPlaneConstrained: direction of perpendicular to constained plane: 0, 1 or 3.
+//! @param perpPlaneConstrained: direction of perpendicular to constrained plane: 0, 1 or 3.
 //! @param startMPtag: tag for the first multi-freedom constraint (one constraint for each node).
 XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPlaneConstrained, int startMPtag)
   : MFreedom_Constraint(startMPtag)
@@ -122,7 +122,7 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
     // create the ID to identify the constrained dof
     ID id(3);
 
-    // construct the tranformation matrix Ccr, where  Uc = Ccr Ur & set the diag
+    // construct the transformation matrix Ccr, where  Uc = Ccr Ur & set the diag
     Matrix mat(3,3);
     mat.Zero();
     mat(0,0) = 1.0; mat(1,1) = 1.0; mat(2,2) = 1.0;
@@ -150,7 +150,7 @@ XC::RigidDiaphragm::RigidDiaphragm(Domain &theDomain, int nR, ID &nC, int perpPl
           if((nodeR->getNumberDOF() == 6) && (crdR.Size() == 3))
             {
 
-              // determine delta Coordintaes
+              // determine delta Coordinates
               const double deltaX = crdC(0) - crdR(0);
               const double deltaY = crdC(1) - crdR(1);
               const double deltaZ = crdC(2) - crdR(2);

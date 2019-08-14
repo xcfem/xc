@@ -87,8 +87,8 @@ const XC::LoadPatternCombination::summand &XC::LoadPatternCombination::summand::
     return *this;
   }
 
-//! @brief Substract from this summand the argument.
-const XC::LoadPatternCombination::summand &XC::LoadPatternCombination::summand::substract(const summand &other)
+//! @brief Subtract from this summand the argument.
+const XC::LoadPatternCombination::summand &XC::LoadPatternCombination::summand::subtract(const summand &other)
   {
     if(lpattern==other.lpattern)
       factor-= other.factor;

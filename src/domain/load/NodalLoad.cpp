@@ -158,7 +158,7 @@ void  XC::NodalLoad::setDomain(Domain *newDomain)
 int XC::NodalLoad::getNodeTag(void) const
   { return loadedNode; }
 
-//! @brief Returns the componentes of the force vector.
+//! @brief Returns the components of the force vector.
 const XC::Vector &XC::NodalLoad::getForce(void) const
   {
     static Vector retval(3);

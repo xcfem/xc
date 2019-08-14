@@ -266,7 +266,7 @@ double XC::PathTimeSeries::getFactor(double pseudoTime) const
             time1= time2;
             time2= time(currentTimeLoc+1);
           }
-        // if pseudo time greater than ending time reurn 0
+        // if pseudo time greater than ending time return 0
         if(pseudoTime > time2)
           return 0.0;
       }

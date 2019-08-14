@@ -77,7 +77,7 @@ int XC::FixedStepSizeRule::computeStepSize(Vector u,
 									Vector d,
 									int stepNumber)
 {
-	// This method is in fact not neccesary 
+	// This method is in fact not necessary 
 	// for the fixed step size rule. The 
 	// user has already given the step size. 
 

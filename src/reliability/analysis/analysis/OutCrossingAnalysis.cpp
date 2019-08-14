@@ -243,7 +243,7 @@ XC::OutCrossingAnalysis::analyze(void)
 
 				if (analysisType == 1) {
 					// Get the 'dgdu' vector from the sensitivity evaluator
-					// (The returned matrix containes 'node#' 'dir#' 'dgdu' in rows)
+					// (The returned matrix contains 'node#' 'dir#' 'dgdu' in rows)
 					DgDdispl = theGradGEvaluator->getDgDdispl();
 
 

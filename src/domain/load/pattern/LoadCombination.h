@@ -48,7 +48,7 @@ class LoadCombination: public LoadPatternCombination
     friend class FEM_ObjectBroker;
 
     LoadCombination &add(const LoadCombination &);
-    LoadCombination &substract(const LoadCombination &);
+    LoadCombination &subtract(const LoadCombination &);
 
     int recvDescomp(void);
 
@@ -64,12 +64,12 @@ class LoadCombination: public LoadPatternCombination
     LoadCombination &multiplica(const float &);
     LoadCombination &divide(const float &);
     LoadCombination &add(const std::string &);
-    LoadCombination &substract(const std::string &);
+    LoadCombination &subtract(const std::string &);
     LoadCombination &asigna(const std::string &);
     inline LoadCombination &operator+=(const LoadCombination &c)
       { return add(c); }
     LoadCombination &operator-=(const LoadCombination &c)
-      { return substract(c); }
+      { return subtract(c); }
     LoadCombination &operator*=(const float &f)
       { return multiplica(f); }
     LoadCombination &operator/=(const float &f)

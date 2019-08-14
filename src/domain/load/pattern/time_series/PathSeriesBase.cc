@@ -55,7 +55,7 @@ size_t XC::PathSeriesBase::getNumDataPointsOnFile(const std::string &fName) cons
     double dataPoint;
     std::ifstream theFile;
     size_t retval= 0;
-    // first open and go through file containg path
+    // first open and go through file containing path
     theFile.open(fName.c_str(), std::ios::in);
     if(theFile.bad() || !theFile.is_open())
       {

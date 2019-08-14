@@ -119,7 +119,7 @@ XC::OptimizationAnalysis::analyze(void)
 	// Number of limit-state functions
 	int K = 4; 
 
-	// Declar 'tvector'
+	// Declare 'tvector'
 	Vector tvector(K);
 	for(int k=0; k<K; k++)
           {

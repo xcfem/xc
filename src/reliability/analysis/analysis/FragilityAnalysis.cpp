@@ -167,7 +167,7 @@ int XC::FragilityAnalysis::analyze(void)
 		outputFile << "#                                                                     #" << std::endl;
 		outputFile << "#                                                                     #" << std::endl;
 		outputFile << "#                    Failure probability     Estimated probability    #" << std::endl;
-		outputFile << "#    Parameter       estimate (fragility)     densitity function      #" << std::endl;
+		outputFile << "#    Parameter       estimate (fragility)     density function      #" << std::endl;
 		outputFile << "#     value               (CDF)                    (PDF)              #" << std::endl;
 		outputFile.setf(ios::scientific, ios::floatfield);
 		outputFile.flush();

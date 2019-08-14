@@ -82,7 +82,7 @@ XC::OpenSeesGFunEvaluator::OpenSeesGFunEvaluator(Tcl_Interp *passedTclInterp,
 	fileName= passedFileName;
 	nsteps = 0;
 	dt = 0.0;
-	// (here the user has provided a file with the analysis commmands)
+	// (here the user has provided a file with the analysis commands)
 
 	createRecorders();
 

@@ -43,9 +43,9 @@ while(j<=sFin):
 
 diff_strain= []
 diff_stress= []
-def substract(x,y): return x-y
-diff_strain= map(substract,lStrain,vStrainTeor)
-diff_stress= map(substract,lStress,vStressTeor)
+def subtract(x,y): return x-y
+diff_strain= map(subtract,lStrain,vStrainTeor)
+diff_stress= map(subtract,lStress,vStressTeor)
 
 ratio1= 0
 for d in diff_strain:

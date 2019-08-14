@@ -481,7 +481,7 @@ int XC::ConstrContainer::removeLPs(void)
     return numSPs;
   }
 
-//! @brief Removes all nodel lockers.
+//! @brief Removes all node lockers.
 int XC::ConstrContainer::removeNLs(void)
   {
     const std::deque<int> tags= getTagsNLs();
@@ -846,7 +846,7 @@ std::string XC::ConstrContainer::getLoadPatternsNames(void) const
 //! @brief Loop over all the load patterns that are currently added to the domain getting their tag.
 std::deque<int> XC::ConstrContainer::getTagsNLs(void) const
   {
-    // loop over all the nodel lockers that are currently added to the domain
+    // loop over all the node lockers that are currently added to the domain
     // getting theit tag
     std::deque<int> retval;   
     for(MapActiveLoadPatterns<NodeLocker>::const_iterator i= activeNodeLockers.begin();

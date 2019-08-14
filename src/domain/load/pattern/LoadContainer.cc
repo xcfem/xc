@@ -224,15 +224,15 @@ void XC::LoadContainer::clearAll(void)
   }
 
 //! @brief To remove the nodal load whose identifier is given by \p tag from
-//! the LoadPattern and sets the laods associated Domain object to
-//! \f$0\f$. Returns a pointer to the load if succesfully removed, otherwise
+//! the LoadPattern and sets the loads associated Domain object to
+//! \f$0\f$. Returns a pointer to the load if successfully removed, otherwise
 // \f$0\f$ is returned. 
 bool XC::LoadContainer::removeNodalLoad(int tag)
   { return theNodalLoads->removeComponent(tag); }
 
 //! @brief To remove the elemental load whose identifier is given by \p tag from
 //! the LoadPattern and set the loads associated Domain object to
-//! \f$0\f$. Returns a pointer to the load if succesfully removed, otherwise
+//! \f$0\f$. Returns a pointer to the load if successfully removed, otherwise
 //! \f$0\f$ is returned. 
 bool XC::LoadContainer::removeElementalLoad(int tag)
   { return theElementalLoads->removeComponent(tag); }

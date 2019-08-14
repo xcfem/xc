@@ -135,8 +135,7 @@ int XC::StaticSensitivityIntegrator::formSensitivityRHS(int passedGradNumber)
                 dofNumber = (int)randomLoads(i+1);
                 aNode = theDomain->getNode(nodeNumber);
                 aDofGroup = aNode->getDOF_GroupPtr();
-                const XC::ID &anID = aDofGroup->getID();
-                relevantID = anID(dofNumber-1);
+                relevantID = aDofGroup->getID()(dofNumber-1);
                 oneDimID(0) = relevantID;
                 theSOE->addB(oneDimVectorWithOne, oneDimID);
               }

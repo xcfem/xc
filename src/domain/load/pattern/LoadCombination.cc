@@ -47,11 +47,11 @@ XC::LoadCombination::LoadCombination(LoadCombinationGroup *owr,const std::string
   :LoadPatternCombination(tag,LOAD_TAG_LoadCombination,name,ll)
   { set_owner(owr); }
 
-//! @brief Returns the group to wich the combination belongs.
+//! @brief Returns the group to which the combination belongs.
 const XC::LoadCombinationGroup *XC::LoadCombination::getGroup(void) const
   { return dynamic_cast<const LoadCombinationGroup *>(Owner()); }
     
-//! @brief Returns the group to wich the combination belongs.
+//! @brief Returns the group to which the combination belongs.
 XC::LoadCombinationGroup *XC::LoadCombination::getGroup(void)
   { return dynamic_cast<LoadCombinationGroup *>(Owner()); }
 
@@ -103,7 +103,7 @@ const std::string XC::LoadCombination::getDescompRestoSobrePrevia(void) const
     if(c)
       {
         LoadCombination dif(*this);
-        dif.substract(*c);
+        dif.subtract(*c);
         retval= dif.getString();
       }
     return retval;
@@ -177,8 +177,8 @@ XC::LoadCombination &XC::LoadCombination::add(const std::string &nmbComb)
   }
 
 
-//! @brief Substracts the combination being passed as parameter.
-XC::LoadCombination &XC::LoadCombination::substract(const LoadCombination &other)
+//! @brief Subtracts the combination being passed as parameter.
+XC::LoadCombination &XC::LoadCombination::subtract(const LoadCombination &other)
   {
     for(const_iterator i= other.begin();i!=other.end();i++)
       add_component((*i).getNeg());
@@ -186,14 +186,14 @@ XC::LoadCombination &XC::LoadCombination::substract(const LoadCombination &other
     return *this;
   }
 
-//! @brief Substracts the combination being passed as parameter.
-XC::LoadCombination &XC::LoadCombination::substract(const std::string &nmbComb)
+//! @brief Subtracts the combination being passed as parameter.
+XC::LoadCombination &XC::LoadCombination::subtract(const std::string &nmbComb)
   {
     if(!nmbComb.empty())
       {
         const LoadCombination *cmb= handler->getLoadCombinations().buscaLoadCombination(nmbComb);
         if(cmb)
-          substract(*cmb);
+          subtract(*cmb);
         else
           std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; load combination identified by: '" 
@@ -246,7 +246,7 @@ XC::LoadCombination XC::LoadCombination::operator+(const LoadCombination &c) con
     return retval;
   }
 
-//! @brief Substraction operator.
+//! @brief Subtraction operator.
 XC::LoadCombination XC::LoadCombination::operator-(const LoadCombination &c) const
   {
     LoadCombination retval(*this);

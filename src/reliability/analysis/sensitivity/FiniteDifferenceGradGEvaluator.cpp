@@ -321,7 +321,7 @@ XC::Matrix XC::FiniteDifferenceGradGEvaluator::getDgDdispl(void)
 	// This method is implemented solely for the purpose of mean 
 	// out-crossing rate analysis using "two searches". Then the 
 	// derivative of the limit-state function wrt. the displacement
-	// is needed to expand the limit-state funciton expression
+	// is needed to expand the limit-state function expression
 
 	// Result matrix
 	Matrix *DgDdispl = 0;

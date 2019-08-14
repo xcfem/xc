@@ -92,7 +92,7 @@ int XC::MultiSupportPattern::addMotion(GroundMotion &theMotion, int tag)
     // ensure no motion with given tag already added
     if(theMotionTags.getLocation(tag) >= 0)
       {
-        std::cerr << "XC::MultiSupportPattern::addMotion - could not add new, motion wih same tag exists\n";
+        std::cerr << "XC::MultiSupportPattern::addMotion - could not add new, motion with same tag exists\n";
         return -1;
       }
 

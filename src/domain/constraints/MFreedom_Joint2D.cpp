@@ -96,7 +96,7 @@ XC::MFreedom_Joint2D::MFreedom_Joint2D(Domain *domain, int tag, int nodeRetain, 
         return;
       }
 
-    // check the XC::main degree of freedom. Assign auxilary DOF 
+    // check the XC::main degree of freedom. Assign auxiliary DOF 
     if( MainDOF!= 2 && MainDOF!=3 )
       {
         std::cerr << "MFreedom_Joint2D::MFreedom_Joint2D - Wrong main degree of freedom" ;

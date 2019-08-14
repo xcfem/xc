@@ -41,7 +41,7 @@ bool XC::MapFields::exists(const std::string &nmb) const
     return (i!=end());
   }
 
-//! @brief Returns a pointer to the set wich name is being passed as parameter.
+//! @brief Returns a pointer to the set which name is being passed as parameter.
 XC::MapFields::iterator XC::MapFields::buscaField(const std::string &nmb)
   {
     iterator i=begin();

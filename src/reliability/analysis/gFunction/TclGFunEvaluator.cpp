@@ -104,7 +104,7 @@ XC::TclGFunEvaluator::runGFunAnalysis(Vector x)
 //////////////////////////////////////////////////////////////////////////
 
 
-	// Set values of random variables in the Tcl intepreter
+	// Set values of random variables in the Tcl interpreter
 	for (i=0; i<x.Size(); i++) {
 		sprintf(theCommand,"set x_%d %20.12e",(i+1),x(i));
 		Tcl_Eval( theTclInterp, theCommand );

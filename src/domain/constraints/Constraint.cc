@@ -58,7 +58,7 @@ XC::Constraint::~Constraint(void)
   }
 
 //! @brief Sets the domain for the constraint.
-//! @param model: domain in wich the constraint is created.
+//! @param model: domain in which the constraint is created.
 void XC::Constraint::setDomain(Domain *model)
   {
     Domain *tmp= getDomain();

@@ -62,7 +62,7 @@ class ResponseId;
 
 //! @ingroup MATSCCElastica
 //
-//! @brief Base clas for cross sections with linear elastic material
+//! @brief Base class for cross sections with linear elastic material
 //! with shear stiffness on a bi-dimensional space (3 DOF on each section).
 class ElasticShearSection2d: public BaseElasticSection2d
   {
