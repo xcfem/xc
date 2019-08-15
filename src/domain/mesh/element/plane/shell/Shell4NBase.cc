@@ -323,7 +323,7 @@ int XC::Shell4NBase::addInertiaLoadToUnbalance(const Vector &accel)
     for(i=0;i<4;i++)
       {
         const Vector &Raccel= theNodes[i]->getRV(accel);
-        //XXX ¿change the basis of Raccel to the local sytem?
+        //XXX ¿change the basis of Raccel to the local system?
         for(int j=0;j<6;j++)
           resid(count++)= Raccel(i);
       }
@@ -660,7 +660,7 @@ int XC::Shell4NBase::recvData(const CommParameters &cp)
     return res;
   }
 
-//! @brief Returs a matrix with the axes of the element as matrix rows
+//! @brief Returns a matrix with the axes of the element as matrix rows
 //! [[x1,y1,z1],[x2,y2,z2],...·]
 XC::Matrix XC::Shell4NBase::getLocalAxes(bool initialGeometry) const
   { return theCoordTransf->getLocalAxes(initialGeometry); }

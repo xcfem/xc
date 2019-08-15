@@ -182,7 +182,7 @@ int XC::DispBeamColumn2dBase::commitState()
     return retVal;
   }
 
-//! @brief Revert the state of the element to the last commited one.
+//! @brief Revert the state of the element to the last committed one.
 int XC::DispBeamColumn2dBase::revertToLastCommit()
   {
     int retVal = 0;

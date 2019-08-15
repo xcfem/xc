@@ -224,23 +224,23 @@ int XC::BeamColumnJoint3d::revertToStart()
      return mcs;
   }
 
+//! @brief Update joint state.
 int XC::BeamColumnJoint3d::update()
-{
+  {
+    Vector Ue(28);
+    Ue.Zero();
 
-        Vector Ue(28);
-        Ue.Zero();
+    // determine committed displacements given trial displacements
+    this->getGlobalDispls(Ue);
 
-        // determine committed displacements given trial displacements
-        this->getGlobalDispls(Ue);
+    // update displacements for the external nodes
+    UeprCommit.Extract(Ue,0,1.0);
 
-        // update displacements for the external nodes
-        UeprCommit.Extract(Ue,0,1.0);
+    // update displacement for the internal nodes
+    UeprIntCommit.Extract(Ue,24,1.0);
 
-        // update displacement for the internal nodes
-        UeprIntCommit.Extract(Ue,24,1.0);
-
-        return 0;
-}
+    return 0;
+  }
 
 
 const XC::Matrix &XC::BeamColumnJoint3d::getTangentStiff(void) const
@@ -260,6 +260,7 @@ const XC::Vector &XC::BeamColumnJoint3d::getResistingForce(void) const
     return R;
   }
 
+//! @brief Get global displacements.
 void XC::BeamColumnJoint3d::getGlobalDispls(Vector &dg)
   {
     // local variables that will be used in this method
@@ -793,7 +794,7 @@ double XC::BeamColumnJoint3d::getStepSize(double s0,double s1,Vector uExt,Vector
         Vector kSpr(13); kSpr.Zero();
         Vector intEq(4); intEq.Zero();
 
-        double r0 = 0.0;            // tolerance chcek for line-search
+        double r0 = 0.0;            // tolerance check for line-search
         double tolerance = 0.8;     // slack region tolerance set for line-search
 
         if(s0 != 0.0)

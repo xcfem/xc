@@ -156,7 +156,7 @@ class TwentyNodeBrick: public ElementBase<20>
     // returns nodal forces for given constant stress field in the element
     BJtensor nodal_forces_from_stress(stresstensor &) const;
     // returns nodal forces for given incremental strain field in an element
-    // by using the linearized constitutive tensor from the begining of the step !
+    // by using the linearized constitutive tensor from the beginning of the step !
     BJtensor linearized_nodal_forces(void) const;
 
     // updates Material point stresses and strains from given displacements

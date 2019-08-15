@@ -650,7 +650,7 @@ size_t XC::Mesh::getNumFreeNodes(void) const
 const XC::Vector &XC::Mesh::getPhysicalBounds(void)
   { return theBounds; }
 
-//! @brief Builds the elements graph of the mesh (if not builded yet) and
+//! @brief Builds the elements graph of the mesh (if not built yet) and
 //! returns a reference to it.
 //! 
 //! Returns the current element graph (the connectivity of the elements
@@ -916,9 +916,9 @@ int XC::Mesh::buildEleGraph(Graph &theEleGraph)
         theElementTagVertices[ElementTag] = count++;
       }
 
-    // We now need to determine which elements are asssociated with each node.
+    // We now need to determine which elements are associated with each node.
     // As this info is not in the XC::Node interface we must build it; which we
-    // do using vertices for each node, when we addVertex at thes nodes we
+    // do using vertices for each node, when we addVertex at these nodes we
     // will not be adding vertices but element tags.
 
     int maxNodNum = 0;
@@ -1111,7 +1111,7 @@ int XC::Mesh::recvSelf(const CommParameters &cp)
     return res;
   }
   
-//! @brief Returns the component of the displacement of the node wich the tag is being passed as parameter.
+//! @brief Returns the component of the displacement of the node which the tag is being passed as parameter.
 //! @param nodeTag: node identifier.
 //! @param dof: degree of freedom component.
 //! @param errorFlag: error indicator.

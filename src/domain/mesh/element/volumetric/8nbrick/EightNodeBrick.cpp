@@ -170,7 +170,7 @@ XC::EightNodeBrick::EightNodeBrick(int element_number,
                 //DBGPstrain[where].reportshort("strain within before Initialization");
                 //DB
                 //DB// I suspect that [] should be overloaded so that compiler knows which
-                //DB// material model is returning a pointer and fot the purpose
+                //DB// material model is returning a pointer and for the purpose
                 //DB//matpoint[where].report("mmodel within before Initialization");
                 //DB//matpoint[where].report("mmodel within before Initialization"); // operator[] overloaded
                 //DB(matpoint)->operator[](where).report("mmodel within before Initialization"); // operator[] overloaded
@@ -302,7 +302,7 @@ XC::EightNodeBrick::EightNodeBrick(void)
 //                //DBGPstrain[where].reportshort("strain within before Initialization");
 //                //DB
 //                //DB// I suspect that [] should be overloaded so that compiler knows which
-//                //DB// material model is returning a pointer and fot the purpose
+//                //DB// material model is returning a pointer and for the purpose
 //                //DB//matpoint[where].report("mmodel within before Initialization");
 //                //DB//matpoint[where].report("mmodel within before Initialization"); // operator[] overloaded
 //                //DB(matpoint)->operator[](where).report("mmodel within before Initialization"); // operator[] overloaded
@@ -320,7 +320,7 @@ XC::EightNodeBrick::EightNodeBrick(void)
 //                //.                        );      // ugly syntax but it works!
 //                //.                                // still don't know what's wrong
 //                //.                                // with the old style matpoint[where]
-//                // Initialize it with the elastic stiffness XC::BJtensor at the begining
+//                // Initialize it with the elastic stiffness XC::BJtensor at the beginning
 //                //````double Ey= (matpoint)->operator[](where).E();
 //                //````double nu= (matpoint)->operator[](where).nu();
 //                //````BJtensor Constitutive= (matpoint)->operator[](where).StiffnessTensorE(Ey,nu);
@@ -505,7 +505,7 @@ void XC::EightNodeBrick::incremental_Update()
                 //::::   ::printf("WEIGHT= %f", weight);
                 //::::   ::printf("determinant of Jacobian= %f", determinant_of_Jacobian);
                 //::::   matpoint[where].report("Gauss Point\n");
-                // incremental straines at this Gauss point
+                // incremental strains at this Gauss point
                 // now in Update we know the incremental displacements so let's find
                 // the incremental strain
                 incremental_strain =
@@ -858,7 +858,7 @@ void XC::EightNodeBrick::incremental_Update()
                 //printf("determinant of Jacobian= %.6e", det_of_Jacobian);
                 //matpoint[where].report("Gauss Point\n");
 
-                // incremental straines at this Gauss point
+                // incremental strains at this Gauss point
                 //GPstress[where].reportshortpqtheta("\n stress at GAUSS point in stiffness_tensor1\n");
 
     //incremental_strain =
@@ -1047,7 +1047,7 @@ void XC::EightNodeBrick::set_strain_stress_tensor(FILE *fp, double * u)
                 // Derivatives of local coordinates multiplied with inverse of Jacobian (see Bathe p-202)
                 dhGlobal= dh("ij") * JacobianINV("kj");
                 //weight
-                // straines at this Gauss point from displacement
+                // strains at this Gauss point from displacement
                 strain= (dhGlobal("ib")*total_displacements("ia")).symmetrize11();
                 strain.null_indices();
                 // here comes the final_stress calculation
@@ -1570,14 +1570,14 @@ XC::BJtensor XC::EightNodeBrick::nodal_forces(void) const
                 //..::printf("determinant of Jacobian= %f", det_of_Jacobian);
                 //..matpoint[where].report("Gauss Point\n");
 
-                //..   // samo jos odredi ovaj XC::BJtensor E i to za svaku gauss tacku drugaciji !!!!!!!!!!!!
-                //..   ovde negde bi trebalo da se na osnovu inkrementalnih pomeranja
-                //..   nadje inkrementalna deformacija ( strain_increment ) pa sa njom dalje:
+                //..    just determine this BJtensor E yet and for each gauss point different !!!!!!!!!!!!
+                //..    here should be based on incremental shifts somewhere
+                //..    find incremental deformation (strain_increment) and then with it:
                 //..
                 //// BJtensor of incremental displacements taken from node objects
                 //                incremental_displacements= incr_disp();
                 //
-                //// incremental straines at this Gauss point
+                //// incremental strains at this Gauss point
                 //                incremental_strain =
                 //                  (dhGlobal("ib")*incremental_displacements("ia")).symmetrize11();
                 //
@@ -1587,20 +1587,20 @@ XC::BJtensor XC::EightNodeBrick::nodal_forces(void) const
                 ////                integr_type= (matpoint)->operator[](where).integration_type();
                 ////                if( !strcmp(integr_type,"BakcwardEuler")
 
-                //..   dakle ovde posalji strain_increment jer se stari stress cuva u okviru svake
-                //..   Gauss tacke a samo saljes strain_increment koji ce da se prenese
-                //..   u integracionu rutinu pa ce ta da vrati krajnji napon i onda moze da
-                //..   se pravi ConstitutiveStiffnessTensor.
-                //.. Ustvari posalji sve sto imas ( incremental_strain, start_stress,
-                //.. number_of_subincrements . . . u ovu Constitutive_tensor funkciju
-                //.. pa ona nek ide, u zavisnosti od modela koji se koristi i neka
-                //.. onda tamo u svakoj posebnoj modelskoj funkciji vrati sta treba
-                //.. ( recimo Elastic odmah vraca Eelastic a recimo MRS_Lade prvo
-                //.. pita koji nacin integracije da koristi pa onda u zvisnosti od toga
-                //.. zove funkcuju koja integrali za taj algoritam ( ForwardEuler, BakcwardEuler,
-                //.. SemiBackwardEuler, . . . ) i onda kada funkcija vrati napon onda
-                //.. se opet pita koji je tip integracije bio u pitanju pa pravi odgovarajuci
-                //.. ConstitutiveTensor i vraca ga nazad!
+                //..  so send stress_increment here because old stress is stored within each
+                //..  Gauss points and only send strain_increment to be transmitted
+                //..  into the integration routine so that it will return the final voltage and then it can
+                //..  that is, the ConstitutiveStiffnessTensor.
+                //..  Actually send everything you have (incremental_strain, start_stress,
+                //..  number_of_subincrements. . . into this Constitutive_tensor function
+                //..  so let it go, depending on the model used and let
+                //..  then there in each special model function return what it needs
+                //..  (say Elastic returns Eelastic immediately and let's say MRS_Lade first
+                //..  asks what method of integration to use and then depending on it
+                //..  call function which integrals for that algorithm (ForwardEuler, BakcwardEuler,
+                //..  SemiBackwardEuler ,. . . ) and then when the function returns voltage then
+                //..  one wonders again what type of integration was at stake so the right one
+                //..  ConstitutiveTensor and brings it back!
 
                 //                   stress_at_GP= (GPstress)->operator[](where);
                 //stress_at_GP= GPstress[where];
@@ -1881,7 +1881,7 @@ XC::BJtensor XC::EightNodeBrick::nodal_forces_from_stress(stresstensor & stress)
 
 ////#############################################################################
 // returns nodal forces for given incremental strain field in an element
-// by using the linearized constitutive XC::BJtensor from the begining of the step !
+// by using the linearized constitutive XC::BJtensor from the beginning of the step !
 XC::BJtensor XC::EightNodeBrick::linearized_nodal_forces(void) const
   {
     int force_dim[]= {8,3};  // Xiaoyan changed from {20,3 to {8,3} for 8 nodes
@@ -1967,7 +1967,7 @@ XC::BJtensor XC::EightNodeBrick::linearized_nodal_forces(void) const
                 //..                           GP_c_r,GP_c_s,GP_c_t);
                 //..::printf("WEIGHT= %f", weight);
                 //..::printf("determinant of Jacobian= %f", det_of_Jacobian);
-                // incremental straines at this Gauss point
+                // incremental strains at this Gauss point
                 // now in Update we know the incremental displacements so let's find
                 // the incremental strain
                 incremental_strain =
@@ -2039,7 +2039,7 @@ void XC::EightNodeBrick::report(char * msg)
     //             ::printf("%6d",G_N_numbs[j]);     // Commented by Xiaoyan
     ::printf("\n\n");
 
-    //    ::printf("Node existance array \n");
+    //    ::printf("Node existence array \n");
     //           for( int k=0 ; k<12 ; k++ )
     //             ::printf("%6d",node_existance[k]);
     //           ::printf("\n\n");          // Commented by Xiaoyan
@@ -2125,7 +2125,7 @@ void XC::EightNodeBrick::reportshort(char * msg)
            //             ::printf("%6d",G_N_numbs[j]);   //// Commented by Xiaoyan
            ::printf("\n\n");
 
-           //    ::printf("Node existance array \n");
+           //    ::printf("Node existence array \n");
            //           for( int k=0 ; k<12 ; k++ )
            //             ::printf("%6d",node_existance[k]);     // Commented by Xiaoyan
            ::printf("\n\n");
@@ -2434,7 +2434,7 @@ int XC::EightNodeBrick::commitState(void)
 
     // Loop over the integration points and commit the material states
     int count= r_integration_order* s_integration_order * t_integration_order;
-    //for(i= 0; i < r_integration_order; i++)        // Xiaoyan chaneged order to
+    //for(i= 0; i < r_integration_order; i++)        // Xiaoyan changed order to
     //  for(j= 0; j < s_integration_order; j++)      // r_integration_order,
     //                  // s_integration_order, and
     //      for(k= 0; k < t_integration_order; k++)      // added t_integration_order,
@@ -2570,7 +2570,7 @@ int XC::EightNodeBrick::revertToLastCommit ()
 
     // Loop over the integration points and revert to last committed material states
     int count= r_integration_order* s_integration_order * t_integration_order;
-    //for(i= 0; i < r_integration_order; i++)       // Xiaoyan chaneged order to
+    //for(i= 0; i < r_integration_order; i++)       // Xiaoyan changed order to
     //  for(j= 0; j < s_integration_order; j++)     // r_integration_order,
     //      for(k= 0; k < t_integration_order; k++)     // s_integration_order, and
                        // added t_integration_order,
@@ -2590,7 +2590,7 @@ int XC::EightNodeBrick::revertToStart ()
     int retVal= 0;
 
     // Loop over the integration points and revert to last committed material states
-    //for(i= 0; i < r_integration_order; i++)       // Xiaoyan chaneged order to
+    //for(i= 0; i < r_integration_order; i++)       // Xiaoyan changed order to
     //  for(j= 0; j < s_integration_order; j++)     // r_integration_order,
     //      for(k= 0; k < t_integration_order; k++)     // s_integration_order, and
                  // added t_integration_order,
@@ -2771,39 +2771,39 @@ int XC::EightNodeBrick::addLoad(ElementalLoad *theLoad, double loadFactor)
             if(rho == 0.0)
               return 0;
 
-            Vector ba(24), bfx(3);
+            Vector baNodes(24), bfx(3);
             bfx(0)= bf(0) * loadFactor;
             bfx(1)= bf(1) * loadFactor;
             bfx(2)= bf(2) * loadFactor;
 
-            ba(0)=  bfx(0);
-            ba(1)=  bfx(1);
-            ba(2)=  bfx(2);
-            ba(3)=  bfx(0);
-            ba(4)=  bfx(1);
-            ba(5)=  bfx(2);
-            ba(6)=  bfx(0);
-            ba(7)=  bfx(1);
-            ba(8)=  bfx(2);
-            ba(9)=  bfx(0);
-            ba(10)= bfx(1);
-            ba(11)= bfx(2);
-            ba(12)= bfx(0);
-            ba(13)= bfx(1);
-            ba(14)= bfx(2);
-            ba(15)= bfx(0);
-            ba(16)= bfx(1);
-            ba(17)= bfx(2);
-            ba(18)= bfx(0);
-            ba(19)= bfx(1);
-            ba(20)= bfx(2);
-            ba(21)= bfx(0);
-            ba(22)= bfx(1);
-            ba(23)= bfx(2);
+            baNodes(0)=  bfx(0);
+            baNodes(1)=  bfx(1);
+            baNodes(2)=  bfx(2);
+            baNodes(3)=  bfx(0);
+            baNodes(4)=  bfx(1);
+            baNodes(5)=  bfx(2);
+            baNodes(6)=  bfx(0);
+            baNodes(7)=  bfx(1);
+            baNodes(8)=  bfx(2);
+            baNodes(9)=  bfx(0);
+            baNodes(10)= bfx(1);
+            baNodes(11)= bfx(2);
+            baNodes(12)= bfx(0);
+            baNodes(13)= bfx(1);
+            baNodes(14)= bfx(2);
+            baNodes(15)= bfx(0);
+            baNodes(16)= bfx(1);
+            baNodes(17)= bfx(2);
+            baNodes(18)= bfx(0);
+            baNodes(19)= bfx(1);
+            baNodes(20)= bfx(2);
+            baNodes(21)= bfx(0);
+            baNodes(22)= bfx(1);
+            baNodes(23)= bfx(2);
 
             //Form equivalent body force
             this->getMass();
-            bforce.addMatrixVector(0.0, M, ba, 1.0);
+            bforce.addMatrixVector(0.0, M, baNodes, 1.0);
             load.addVector(1.0, bforce, 1.0);
           }
         else
@@ -2905,36 +2905,36 @@ const XC::Vector XC::EightNodeBrick::FormEquiBodyForce(void)
     if(rho == 0.0)
       return bforce;
 
-    Vector ba(24);
+    Vector baNodes(24);
 
-    ba(0)=  bf(0);
-    ba(1)=  bf(1);
-    ba(2)=  bf(2);
-    ba(3)=  bf(0);
-    ba(4)=  bf(1);
-    ba(5)=  bf(2);
-    ba(6)=  bf(0);
-    ba(7)=  bf(1);
-    ba(8)=  bf(2);
-    ba(9)=  bf(0);
-    ba(10)= bf(1);
-    ba(11)= bf(2);
-    ba(12)= bf(0);
-    ba(13)= bf(1);
-    ba(14)= bf(2);
-    ba(15)= bf(0);
-    ba(16)= bf(1);
-    ba(17)= bf(2);
-    ba(18)= bf(0);
-    ba(19)= bf(1);
-    ba(20)= bf(2);
-    ba(21)= bf(0);
-    ba(22)= bf(1);
-    ba(23)= bf(2);
+    baNodes(0)=  bf(0);
+    baNodes(1)=  bf(1);
+    baNodes(2)=  bf(2);
+    baNodes(3)=  bf(0);
+    baNodes(4)=  bf(1);
+    baNodes(5)=  bf(2);
+    baNodes(6)=  bf(0);
+    baNodes(7)=  bf(1);
+    baNodes(8)=  bf(2);
+    baNodes(9)=  bf(0);
+    baNodes(10)= bf(1);
+    baNodes(11)= bf(2);
+    baNodes(12)= bf(0);
+    baNodes(13)= bf(1);
+    baNodes(14)= bf(2);
+    baNodes(15)= bf(0);
+    baNodes(16)= bf(1);
+    baNodes(17)= bf(2);
+    baNodes(18)= bf(0);
+    baNodes(19)= bf(1);
+    baNodes(20)= bf(2);
+    baNodes(21)= bf(0);
+    baNodes(22)= bf(1);
+    baNodes(23)= bf(2);
 
     //Form equivalent body force
-    bforce.addMatrixVector(0.0, M, ba, 1.0);
-    //std::cerr << " ba " << ba;
+    bforce.addMatrixVector(0.0, M, baNodes, 1.0);
+    //std::cerr << " baNodes " << baNodes;
     //std::cerr << " M " << M;
     //if(getTag() == 886)
     //std::cerr << " @@@@@ FormEquiBodyForce  " << bforce;
@@ -3101,7 +3101,7 @@ void XC::EightNodeBrick::Print(std::ostream &s, int flag)
            short where =
            ((GP_c_r-1)*s_integration_order+GP_c_s-1)*t_integration_order+GP_c_t-1;
 
-           s << "\n insde Gauss-Legendre loop: where= " << where << std::endl;
+           s << "\n inside Gauss-Legendre loop: where= " << where << std::endl;
            s << " GP_c_r= " << GP_c_r << "GP_c_s= " << GP_c_s << " GP_c_t= " << GP_c_t << std::endl;
            matpoint[where].report("Material Point\n");
            //GPstress[where].reportshort("stress at Gauss Point");
@@ -4047,7 +4047,7 @@ int XC::EightNodeBrick::update(void) //Note: Guanzhou finished the algorithm con
     BJtensor JacobianINV;
     BJtensor dhGlobal;
 
-    //Guanzhou out incr_displacements= incr_disp();//Get incrmental disp from domain
+    //Guanzhou out incr_displacements= incr_disp();//Get incremental disp from domain
 
     BJtensor trial_disp(2,disp_dim,0.0);
     trial_disp= total_disp();//Guanzhou added, get trial disp from domain
@@ -4082,7 +4082,7 @@ int XC::EightNodeBrick::update(void) //Note: Guanzhou finished the algorithm con
                 //....  ::printf("determinant of Jacobian is %f\n",Jacobian_determinant );
                 // Derivatives of local coordinates multiplied with inverse of Jacobian (see Bathe p-202)
                 dhGlobal= dh("ij") * JacobianINV("kj");
-                // incrmental straines at this Gauss point
+                // incremental strains at this Gauss point
                 // now in Update we know the total displacements so let's find
                 // the total strain
                 trial_strain =

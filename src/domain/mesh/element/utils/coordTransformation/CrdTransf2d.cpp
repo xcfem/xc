@@ -487,7 +487,7 @@ int XC::CrdTransf2d::getInitialLocalAxes(Vector &XAxis, Vector &YAxis) const
 int XC::CrdTransf2d::getLocalAxes(Vector &XAxis, Vector &YAxis) const
   { return getInitialLocalAxes(XAxis,YAxis); }
 
-//! @brief Returs a matrix with the axes of the element as matrix rows
+//! @brief Returns a matrix with the axes of the element as matrix rows
 //! [[x1,y1,z1],[x2,y2,z2],...·]
 XC::Matrix XC::CrdTransf2d::getLocalAxes(bool initialGeometry) const
   {

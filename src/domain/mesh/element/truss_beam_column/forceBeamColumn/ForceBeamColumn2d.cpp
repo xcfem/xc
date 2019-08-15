@@ -141,7 +141,7 @@ XC::ForceBeamColumn2d &XC::ForceBeamColumn2d::operator=(const ForceBeamColumn2d 
 //     v0= other.v0;
 //     maxSubdivisions= other.maxSubdivisions;
     std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; assignement operator must not be called."
+	      << "; assignment operator must not be called."
               << std::endl;
     return *this;    
   }
@@ -1206,7 +1206,7 @@ void XC::ForceBeamColumn2d::Print(std::ostream &s, int flag)
       }
   }
 
-//! @brief Prints element information in the ouput stream.
+//! @brief Prints element information in the output stream.
 std::ostream &XC::operator<<(std::ostream &s, ForceBeamColumn2d &E)
   {
     E.Print(s);

@@ -118,7 +118,7 @@ int XC::NodeDispVectors::setTrialDispComponent(const size_t &nDOF,const double &
           }
       }
 
-    // perform the assignment .. we dont't go through Vector interface
+    // perform the assignment .. we don't go through Vector interface
     // as we are sure of size and this way is quicker
     const double tDisp = value;
     values[dof+2*nDOF]= tDisp - values[dof+nDOF];
@@ -152,7 +152,7 @@ int XC::NodeDispVectors::setTrialDisp(const size_t &nDOF,const Vector &newTrialD
           }
       }
 
-    // perform the assignment .. we dont't go through Vector interface
+    // perform the assignment .. we don't go through Vector interface
     // as we are sure of size and this way is quicker
     for(size_t i=0;i<nDOF;i++)
       {
@@ -177,7 +177,7 @@ int XC::NodeDispVectors::incrTrialDisp(const size_t &nDOF,const Vector &incrDisp
         return -2;
       }
 
-    // create a copy if no trial exists andd add committed
+    // create a copy if no trial exists and add committed
     if(!trialData)
       {
         if(this->createDisp(nDOF) < 0)

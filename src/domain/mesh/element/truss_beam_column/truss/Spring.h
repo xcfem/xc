@@ -94,7 +94,7 @@ class Spring : public ProtoTruss
     Element *getCopy(void) const;
     ~Spring(void);
 
-    // public methods to obtain inforrmation about dof & connectivity    
+    // public methods to obtain information about dof & connectivity    
     void setDomain(Domain *theDomain);
 
     // public methods to set the state of the element    

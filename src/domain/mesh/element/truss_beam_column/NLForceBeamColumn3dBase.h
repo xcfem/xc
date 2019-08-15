@@ -40,7 +40,7 @@ namespace XC {
 
 //! @ingroup OneDimensionalElem
 //
-//! @brief Base clas for 3D force beam column elements with PrismaticBarCrossSection type material.
+//! @brief Base class for 3D force beam column elements with PrismaticBarCrossSection type material.
 class NLForceBeamColumn3dBase: public BeamColumnWithSectionFDTrf3d
   {
     NLForceBeamColumn3dBase &operator=(const NLForceBeamColumn3dBase &);

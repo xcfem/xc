@@ -151,7 +151,7 @@ XC::Vector XC::ShellLinearCrdTransf3d::getBasicTrialVel(const int &i) const
 XC::Vector XC::ShellLinearCrdTransf3d::getBasicTrialAccel(const int &i) const
   { return (*theNodes)[i]->getTrialAccel(); }
 
-//! @brief Returs the load vector in global coordinates.
+//! @brief Returns the load vector in global coordinates.
 const XC::Vector &XC::ShellLinearCrdTransf3d::local_to_global_resisting_force(const Vector &pl) const
   {
     // transform resisting forces  from local to global coordinates

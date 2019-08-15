@@ -82,7 +82,7 @@ XC::ReleaseHeavierToLighterNeighbours::ReleaseHeavierToLighterNeighbours(double 
 //! For \p numRelease times the Vertices of \p theWeightedGraph are
 //! iterated through. For each Vertex, \f$i\f$, {\em releaseBoundary(i,
 //! theWeightedGraph, true, factorGreater)} is invoked on
-//! the DomainPartitioner. Returns \f$0\f$ if succesfull, otherwise a negative
+//! the DomainPartitioner. Returns \f$0\f$ if successful, otherwise a negative
 //! number and a warning message are returned if either no link has been
 //! set to the DomainPartitioner or releaseBoundary() returns a
 //! negative number. 

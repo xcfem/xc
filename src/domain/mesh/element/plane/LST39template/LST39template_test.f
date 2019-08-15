@@ -64,10 +64,10 @@ C     Timing test.  It is run only if NT>0. SECNDS is system dep
       nesec = float(NT)/(tend-tbeg)
       print '("Elements/sec=",I10)', nesec
       end
-      subroutine   SECNDS (tim)
-      real         t(3), tim
+      subroutine   SECNDS (time)
+      real         t(3), time
       call etime(t)
-      tim =        t(1)
+      time =        t(1)
       return
       end
 C=DECK MATRIXPRINT

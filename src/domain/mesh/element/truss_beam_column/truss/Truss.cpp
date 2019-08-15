@@ -286,7 +286,7 @@ int XC::Truss::commitState()
 int XC::Truss::revertToLastCommit()
   {
     int retVal= 0;
-    // DONT call element revertToLastCommit because is a pure virtual method.
+    // DON'T call element revertToLastCommit because is a pure virtual method.
     // if((retVal = this->TrussBase::revertToLastCommit()) != 0)
     //   std::cerr << getClassName() << "::" << __FUNCTION__
     // 		<< "; failed in base class";
@@ -881,7 +881,7 @@ int XC::Truss::setParameter(const std::vector<std::string> &argv, Parameter &par
     // Cross sectional area of the truss itself
     if(argv[0] == "A")
       return param.addObject(1, this);
-    // Mass densitity (per unit volume) of the truss itself
+    // Mass density (per unit volume) of the truss itself
     else if(argv[0] == "rho")
       return param.addObject(1, this);
     // a material parameter

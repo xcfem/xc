@@ -352,7 +352,7 @@ void XC::ZeroLength::setDomain(Domain *theDomain)
 
 //! @brief Commit state of element.
 //! 
-//! Commit state of element by commiting state of materials.
+//! Commit state of element by committing state of materials.
 //! Return 0 if successful, !0 otherwise.
 int XC::ZeroLength::commitState(void)
   {

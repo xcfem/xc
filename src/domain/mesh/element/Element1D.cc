@@ -560,7 +560,7 @@ const XC::CrdTransf *XC::Element1D::checkCoordTransf(void) const
   }
 
 
-//! @brief Returs a matrix with the axes of the element as matrix rows
+//! @brief Returns a matrix with the axes of the element as matrix rows
 //! [[x1,y1,z1],[x2,y2,z2],...·]
 XC::Matrix XC::Element1D::getLocalAxes(bool initialGeometry) const
   {
@@ -642,8 +642,8 @@ Segment3d XC::Element1D::getLineSegment(bool initialGeometry) const
       return Segment3d(theNodes[0]->getCurrentPosition3d(),theNodes[1]->getCurrentPosition3d());
   }
 
-//! @brief Return the squared distance from the element to the point que
-//! is being passed as parameter.
+//! @brief Return the squared distance from the element to the point
+//! being passed as parameter.
 double XC::Element1D::getDist2(const Pos2d &p,bool initialGeometry) const
   { return getDist2(To3dXY2d(p),initialGeometry); }
 
@@ -652,8 +652,8 @@ double XC::Element1D::getDist2(const Pos2d &p,bool initialGeometry) const
 double XC::Element1D::getDist(const Pos2d &p,bool initialGeometry) const
   { return getDist(To3dXY2d(p),initialGeometry); }
 
-//! @brief Return the squared distance from the element to the point que
-//! is being passed as parameter.
+//! @brief Return the squared distance from the element to the point
+//! being passed as parameter.
 double XC::Element1D::getDist2(const Pos3d &p,bool initialGeometry) const
   {
     const Segment3d sg(getLineSegment(initialGeometry));

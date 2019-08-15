@@ -62,7 +62,7 @@ class ElementBase: public Element
     //! @brief Returns the element number of nodes.
     static inline const int numNodes(void)
       { return NNODES; }
-    // public methods to obtain inforrmation about dof & connectivity    
+    // public methods to obtain information about dof & connectivity    
     int getNumExternalNodes(void) const;
     NodePtrsWithIDs &getNodePtrs(void);
     const NodePtrsWithIDs &getNodePtrs(void) const;

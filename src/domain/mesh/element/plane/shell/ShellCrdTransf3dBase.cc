@@ -93,7 +93,7 @@ Plane XC::ShellCrdTransf3dBase::getPlane(void) const
 Pos3d XC::ShellCrdTransf3dBase::getProj(const Pos3d &p)
   { return getPlane().Projection(p); }
 
-//! @brief Returs a matrix with the axes of the element as matrix rows
+//! @brief Returns a matrix with the axes of the element as matrix rows
 //! [[x1,y1,z1],[x2,y2,z2],...·]
 XC::Matrix XC::ShellCrdTransf3dBase::getLocalAxes(bool initialGeometry) const
   {

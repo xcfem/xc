@@ -129,7 +129,7 @@ XC::fElement::fElement(int tag,
     for(int i=0; i<sizeD; i++) d[i] = 0.0;
     feapData= Vector(d, sizeD);
 
-    // allocate space for static varaibles on creation of first instance
+    // allocate space for static variables on creation of first instance
     if(numfElements == 0)
       {
         fElementM[0]= new Matrix(1,1); // dummy for error
@@ -189,7 +189,7 @@ XC::fElement::fElement(int tag,
             for(int i=0; i<sizeH; i++) h[i] = 0.0;
     }
 
-    // allocate space for static varaibles on creation of first instance
+    // allocate space for static variables on creation of first instance
     if(numfElements == 0)
       {
         fElementM[0] = new Matrix(1,1); // dummy for error
@@ -484,7 +484,7 @@ const XC::Matrix &XC::fElement::getMass(void) const
     int NH1, NH2, NH3;
     int nstR = this->readyfRoutine(true);
 
-    // zero the matrix and vector (consistant and lumped)
+    // zero the matrix and vector (consistent and lumped)
     fElementM[nstR]->Zero();
     fElementV[nstR]->Zero();
 
@@ -519,7 +519,7 @@ int XC::fElement::addInertiaLoadToUnbalance(const Vector &accel)
     Vector &resid = *(fElementV[nstR]);
   static const int numberNodes = 4 ;
 
-  // store computed RV fro nodes in resid vector
+  // store computed RV from nodes in resid vector
   int count = 0;
   for(int i=0; i<nen; i++) {
     const XC::Vector &Raccel = theNodes[i]->getRV(accel);

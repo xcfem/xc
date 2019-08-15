@@ -565,7 +565,7 @@ void XC::InelasticYS2DGNL::forceBalance(Vector &eleforce, int algo) const
                         break;
                 }
                 default:
-                        std::cerr << "XC::InelasticYS2DGNL::forceBalance - unkown algo\n";
+                        std::cerr << "XC::InelasticYS2DGNL::forceBalance - unknown algo\n";
                         break;
         }
 

@@ -155,7 +155,7 @@ XC::TwentySevenNodeBrick::TwentySevenNodeBrick(int element_number,
                 //DBGPstrain[where].reportshort("strain within before Initialization");
                 //DB
                 //DB// I suspect that [] should be overloaded so that compiler knows which
-                //DB// material model is returning a pointer and fot the purpose
+                //DB// material model is returning a pointer and for the purpose
                 //DB//matpoint[where].report("mmodel within before Initialization");
                 //DB//matpoint[where].report("mmodel within before Initialization"); // operator[] overloaded
                 //DB(matpoint)->operator[](where).report("mmodel within before Initialization"); // operator[] overloaded
@@ -274,7 +274,7 @@ void XC::TwentySevenNodeBrick::incremental_Update()
                 //::::   ::printf("WEIGHT = %f", weight);
                 //::::   ::printf("determinant of Jacobian = %f", determinant_of_Jacobian);
                 //::::   matpoint[where].report("Gauss Point\n");
-                // incremental straines at this Gauss point
+                // incremental strains at this Gauss point
                 // now in Update we know the incremental displacements so let's find
                 // the incremental strain
                 incremental_strain =
@@ -992,7 +992,7 @@ XC::BJtensor XC::TwentySevenNodeBrick::getStiffnessTensor(void) const
                 //printf("determinant of Jacobian = %.6e", det_of_Jacobian);
                 //matpoint[where].report("Gauss Point\n");
 
-                // incremental straines at this Gauss point
+                // incremental strains at this Gauss point
                 //GPstress[where].reportshortpqtheta("\n stress at GAUSS point in stiffness_tensor1\n");
 
     //09-02-2001 Zhaohui
@@ -1168,7 +1168,7 @@ void XC::TwentySevenNodeBrick::set_strain_stress_tensor(FILE *fp, double * u)
                 //dhGlobal = dh("ij") * JacobianINV("jk");// Zhaohui 09-02-2001
                 dhGlobal = dh("ij") * JacobianINV("kj");
                 //weight
-                // straines at this Gauss point from displacement
+                // strains at this Gauss point from displacement
                 strain = (dhGlobal("ib")*total_displacements("ia")).symmetrize11();
                 strain.null_indices();
                 // here comes the final_stress calculation
@@ -1819,14 +1819,14 @@ XC::BJtensor XC::TwentySevenNodeBrick::nodal_forces(void) const
                 //..::printf("determinant of Jacobian = %f", det_of_Jacobian);
                 //..matpoint[where].report("Gauss Point\n");
 
-                //..   // samo jos odredi ovaj XC::BJtensor E i to za svaku gauss tacku drugaciji !!!!!!!!!!!!
-                //..   ovde negde bi trebalo da se na osnovu inkrementalnih pomeranja
-                //..   nadje inkrementalna deformacija ( strain_increment ) pa sa njom dalje:
+                //..    just determine this BJtensor E yet and for each gauss point different !!!!!!!!!!!!
+                //..    here should be based on incremental shifts somewhere
+                //..    find incremental deformation (strain_increment) and then with it:
                 //..
                 //// BJtensor of incremental displacements taken from node objects
                 //                incremental_displacements = incr_disp();
                 //
-                //// incremental straines at this Gauss point
+                //// incremental strains at this Gauss point
                 //                incremental_strain =
                 //                  (dhGlobal("ib")*incremental_displacements("ia")).symmetrize11();
                 //
@@ -1836,20 +1836,21 @@ XC::BJtensor XC::TwentySevenNodeBrick::nodal_forces(void) const
                 ////                integr_type = (matpoint)->operator[](where).integration_type();
                 ////                if( !strcmp(integr_type,"BakcwardEuler")
 
-                //..   dakle ovde posalji strain_increment jer se stari stress cuva u okviru svake
-                //..   Gauss tacke a samo saljes strain_increment koji ce da se prenese
-                //..   u integracionu rutinu pa ce ta da vrati krajnji napon i onda moze da
-                //..   se pravi ConstitutiveStiffnessTensor.
-                //.. Ustvari posalji sve sto imas ( incremental_strain, start_stress,
-                //.. number_of_subincrements . . . u ovu Constitutive_tensor funkciju
-                //.. pa ona nek ide, u zavisnosti od modela koji se koristi i neka
-                //.. onda tamo u svakoj posebnoj modelskoj funkciji vrati sta treba
-                //.. ( recimo Elastic odmah vraca Eelastic a recimo MRS_Lade prvo
-                //.. pita koji nacin integracije da koristi pa onda u zvisnosti od toga
-                //.. zove funkcuju koja integrali za taj algoritam ( ForwardEuler, BakcwardEuler,
-                //.. SemiBackwardEuler, . . . ) i onda kada funkcija vrati napon onda
-                //.. se opet pita koji je tip integracije bio u pitanju pa pravi odgovarajuci
-                //.. ConstitutiveTensor i vraca ga nazad!
+                //.. so send stress_increment here because old stress is stored within each
+                //.. Gauss points and only send strain_increment to be transmitted
+                //.. into the integration routine so that it will return the final voltage and then
+                //.. it can that is, the ConstitutiveStiffnessTensor.
+                //..    
+                //.. Actually send everything you have (incremental_strain, start_stress,
+                //.. number_of_subincrements. . . into this Constitutive_tensor function
+                //.. so let it go, depending on the model used and let it go
+                //.. then there in each special model function return what it needs
+                //.. (say Elastic returns Eelastic immediately and let's say MRS_Lade first
+                //.. asks what method of integration to use and then depending on it
+                //.. call function which integrals for that algorithm (ForwardEuler, BakcwardEuler,
+                //.. SemiBackwardEuler ,. . . ) and then when the function returns voltage then
+                //.. one wonders again what type of integration was at stake so the right one
+                //.. ConstitutiveTensor and brings it back!
 
                 //                   stress_at_GP = (GPstress)->operator[](where);
                 //stress_at_GP = GPstress[where];
@@ -2122,7 +2123,7 @@ XC::BJtensor XC::TwentySevenNodeBrick::nodal_forces_from_stress(stresstensor & s
 
 ////#############################################################################
 // returns nodal forces for given incremental strain field in an element
-// by using the linearized constitutive XC::BJtensor from the begining of the step !
+// by using the linearized constitutive XC::BJtensor from the beginning of the step !
 XC::BJtensor XC::TwentySevenNodeBrick::linearized_nodal_forces(void) const
   {
     int force_dim[] = {27,3};
@@ -2209,7 +2210,7 @@ XC::BJtensor XC::TwentySevenNodeBrick::linearized_nodal_forces(void) const
                 //..                           GP_c_r,GP_c_s,GP_c_t);
                 //..::printf("WEIGHT = %f", weight);
                 //..::printf("determinant of Jacobian = %f", det_of_Jacobian);
-                // incremental straines at this Gauss point
+                // incremental strains at this Gauss point
                 // now in Update we know the incremental displacements so let's find
                 // the incremental strain
                 incremental_strain =
@@ -2335,7 +2336,7 @@ XC::BJtensor XC::TwentySevenNodeBrick::linearized_nodal_forces(void) const
 //....
 //....// Derivatives of local coordinates multiplied with inverse of Jacobian (see Bathe p-202)
 //....                dhGlobal = dh("ij") * JacobianINV("jk");
-//....// straines
+//....// strains
 //....//  strain = (dh("ib")*displacements("ia")).symmetrize11();
 //....                strain = (dhGlobal("ib")*displacementsT("ia")).symmetrize11();
 //....//  straintensor strain = dh("ib")*displacements("ia");
@@ -2402,7 +2403,7 @@ void XC::TwentySevenNodeBrick::report(char * msg)
     //             ::printf("%6d",G_N_numbs[j]);     // Commented by Xiaoyan
     ::printf("\n\n");
 
-    //    ::printf("Node existance array \n");
+    //    ::printf("Node existence array \n");
     //           for( int k=0 ; k<15 ; k++ )
     //             ::printf("%6d",node_existance[k]);
     //           ::printf("\n\n");          // Commented by Xiaoyan
@@ -2509,7 +2510,7 @@ void XC::TwentySevenNodeBrick::reportshort(char * msg)
            //             ::printf("%6d",G_N_numbs[j]);   //// Commented by Xiaoyan
            ::printf("\n\n");
 
-           //    ::printf("Node existance array \n");
+           //    ::printf("Node existence array \n");
            //           for( int k=0 ; k<15 ; k++ )
            //             ::printf("%6d",node_existance[k]);     // Commented by Xiaoyan
            ::printf("\n\n");
@@ -2899,7 +2900,7 @@ int XC::TwentySevenNodeBrick::commitState ()
 
     // Loop over the integration points and commit the material states
     int count  = r_integration_order* s_integration_order * t_integration_order;
-    //for(i = 0; i < r_integration_order; i++)        // Xiaoyan chaneged order to
+    //for(i = 0; i < r_integration_order; i++)        // Xiaoyan changed order to
     //  for(j = 0; j < s_integration_order; j++)      // r_integration_order,
     //                  // s_integration_order, and
     //      for(k = 0; k < t_integration_order; k++)      // added t_integration_order,
@@ -3022,7 +3023,7 @@ int XC::TwentySevenNodeBrick::revertToLastCommit ()
 
     // Loop over the integration points and revert to last committed material states
     int count  = r_integration_order* s_integration_order * t_integration_order;
-    //for(i = 0; i < r_integration_order; i++)       // Xiaoyan chaneged order to
+    //for(i = 0; i < r_integration_order; i++)       // Xiaoyan changed order to
     //  for(j = 0; j < s_integration_order; j++)     // r_integration_order,
     //      for(k = 0; k < t_integration_order; k++)     // s_integration_order, and
                        // added t_integration_order,
@@ -3042,7 +3043,7 @@ int XC::TwentySevenNodeBrick::revertToStart ()
     int retVal = 0;
 
     // Loop over the integration points and revert to last committed material states
-    //for(i = 0; i < r_integration_order; i++)       // Xiaoyan chaneged order to
+    //for(i = 0; i < r_integration_order; i++)       // Xiaoyan changed order to
     //  for(j = 0; j < s_integration_order; j++)     // r_integration_order,
     //      for(k = 0; k < t_integration_order; k++)     // s_integration_order, and
                  // added t_integration_order,
@@ -3196,99 +3197,99 @@ int XC::TwentySevenNodeBrick::addLoad(ElementalLoad *theLoad, double loadFactor)
             if(rho == 0.0)
               return 0;
 
-            Vector ba(81), bfx(3);
+            Vector baNodes(81), bfx(3);
             bfx(0) = bf(0) * loadFactor;
             bfx(1) = bf(1) * loadFactor;
             bfx(2) = bf(2) * loadFactor;
 
-            ba( 0) = bfx(0);
-            ba( 1) = bfx(1);
-            ba( 2) = bfx(2);
-            ba( 3) = bfx(0);
-            ba( 4) = bfx(1);
-            ba( 5) = bfx(2);
-            ba( 6) = bfx(0);
-            ba( 7) = bfx(1);
-            ba( 8) = bfx(2);
-            ba( 9) = bfx(0);
-            ba(10) = bfx(1);
-            ba(11) = bfx(2);
-            ba(12) = bfx(0);
-            ba(13) = bfx(1);
-            ba(14) = bfx(2);
-            ba(15) = bfx(0);
-            ba(16) = bfx(1);
-            ba(17) = bfx(2);
-            ba(18) = bfx(0);
-            ba(19) = bfx(1);
-            ba(20) = bfx(2);
-            ba(21) = bfx(0);
-            ba(22) = bfx(1);
-            ba(23) = bfx(2);
-            ba(24) = bfx(0);
-            ba(25) = bfx(1);
-            ba(26) = bfx(2);
-            ba(27) = bfx(0);
-            ba(28) = bfx(1);
-            ba(29) = bfx(2);
-            ba(30) = bfx(0);
-            ba(31) = bfx(1);
-            ba(32) = bfx(2);
-            ba(33) = bfx(0);
-            ba(34) = bfx(1);
-            ba(35) = bfx(2);
-            ba(36) = bfx(0);
-            ba(37) = bfx(1);
-            ba(38) = bfx(2);
-            ba(39) = bfx(0);
-            ba(40) = bfx(1);
-            ba(41) = bfx(2);
-            ba(42) = bfx(0);
-            ba(43) = bfx(1);
-            ba(44) = bfx(2);
-            ba(45) = bfx(0);
-            ba(46) = bfx(1);
-            ba(47) = bfx(2);
-            ba(48) = bfx(0);
-            ba(49) = bfx(1);
-            ba(50) = bfx(2);
-            ba(51) = bfx(0);
-            ba(52) = bfx(1);
-            ba(53) = bfx(2);
-            ba(54) = bfx(0);
-            ba(55) = bfx(1);
-            ba(56) = bfx(2);
-            ba(57) = bfx(0);
-            ba(58) = bfx(1);
-            ba(59) = bfx(2);
-            ba(60) = bfx(0);
-            ba(61) = bfx(1);
-            ba(62) = bfx(2);
-            ba(63) = bfx(0);
-            ba(64) = bfx(1);
-            ba(65) = bfx(2);
-            ba(66) = bfx(0);
-            ba(67) = bfx(1);
-            ba(68) = bfx(2);
-            ba(69) = bfx(0);
-            ba(70) = bfx(1);
-            ba(71) = bfx(2);
-            ba(72) = bfx(0);
-            ba(73) = bfx(1);
-            ba(74) = bfx(2);
-            ba(75) = bfx(0);
-            ba(76) = bfx(1);
-            ba(77) = bfx(2);
-            ba(78) = bfx(0);
-            ba(79) = bfx(1);
-            ba(80) = bfx(2);
+            baNodes( 0) = bfx(0);
+            baNodes( 1) = bfx(1);
+            baNodes( 2) = bfx(2);
+            baNodes( 3) = bfx(0);
+            baNodes( 4) = bfx(1);
+            baNodes( 5) = bfx(2);
+            baNodes( 6) = bfx(0);
+            baNodes( 7) = bfx(1);
+            baNodes( 8) = bfx(2);
+            baNodes( 9) = bfx(0);
+            baNodes(10) = bfx(1);
+            baNodes(11) = bfx(2);
+            baNodes(12) = bfx(0);
+            baNodes(13) = bfx(1);
+            baNodes(14) = bfx(2);
+            baNodes(15) = bfx(0);
+            baNodes(16) = bfx(1);
+            baNodes(17) = bfx(2);
+            baNodes(18) = bfx(0);
+            baNodes(19) = bfx(1);
+            baNodes(20) = bfx(2);
+            baNodes(21) = bfx(0);
+            baNodes(22) = bfx(1);
+            baNodes(23) = bfx(2);
+            baNodes(24) = bfx(0);
+            baNodes(25) = bfx(1);
+            baNodes(26) = bfx(2);
+            baNodes(27) = bfx(0);
+            baNodes(28) = bfx(1);
+            baNodes(29) = bfx(2);
+            baNodes(30) = bfx(0);
+            baNodes(31) = bfx(1);
+            baNodes(32) = bfx(2);
+            baNodes(33) = bfx(0);
+            baNodes(34) = bfx(1);
+            baNodes(35) = bfx(2);
+            baNodes(36) = bfx(0);
+            baNodes(37) = bfx(1);
+            baNodes(38) = bfx(2);
+            baNodes(39) = bfx(0);
+            baNodes(40) = bfx(1);
+            baNodes(41) = bfx(2);
+            baNodes(42) = bfx(0);
+            baNodes(43) = bfx(1);
+            baNodes(44) = bfx(2);
+            baNodes(45) = bfx(0);
+            baNodes(46) = bfx(1);
+            baNodes(47) = bfx(2);
+            baNodes(48) = bfx(0);
+            baNodes(49) = bfx(1);
+            baNodes(50) = bfx(2);
+            baNodes(51) = bfx(0);
+            baNodes(52) = bfx(1);
+            baNodes(53) = bfx(2);
+            baNodes(54) = bfx(0);
+            baNodes(55) = bfx(1);
+            baNodes(56) = bfx(2);
+            baNodes(57) = bfx(0);
+            baNodes(58) = bfx(1);
+            baNodes(59) = bfx(2);
+            baNodes(60) = bfx(0);
+            baNodes(61) = bfx(1);
+            baNodes(62) = bfx(2);
+            baNodes(63) = bfx(0);
+            baNodes(64) = bfx(1);
+            baNodes(65) = bfx(2);
+            baNodes(66) = bfx(0);
+            baNodes(67) = bfx(1);
+            baNodes(68) = bfx(2);
+            baNodes(69) = bfx(0);
+            baNodes(70) = bfx(1);
+            baNodes(71) = bfx(2);
+            baNodes(72) = bfx(0);
+            baNodes(73) = bfx(1);
+            baNodes(74) = bfx(2);
+            baNodes(75) = bfx(0);
+            baNodes(76) = bfx(1);
+            baNodes(77) = bfx(2);
+            baNodes(78) = bfx(0);
+            baNodes(79) = bfx(1);
+            baNodes(80) = bfx(2);
 
 
 
 
             //Form equivalent body force
             this->getMass();
-            bforce.addMatrixVector(0.0, M, ba, 1.0);
+            bforce.addMatrixVector(0.0, M, baNodes, 1.0);
             load.addVector(1.0, bforce, 1.0);
           }
         else
@@ -3481,94 +3482,94 @@ const XC::Vector XC::TwentySevenNodeBrick::FormEquiBodyForce(void)
     if(rho == 0.0)
       return bforce;
 
-    Vector ba(81);
+    Vector baNodes(81);
 
-    ba( 0) = bf(0);
-    ba( 1) = bf(1);
-    ba( 2) = bf(2);
-    ba( 3) = bf(0);
-    ba( 4) = bf(1);
-    ba( 5) = bf(2);
-    ba( 6) = bf(0);
-    ba( 7) = bf(1);
-    ba( 8) = bf(2);
-    ba( 9) = bf(0);
-    ba(10) = bf(1);
-    ba(11) = bf(2);
-    ba(12) = bf(0);
-    ba(13) = bf(1);
-    ba(14) = bf(2);
-    ba(15) = bf(0);
-    ba(16) = bf(1);
-    ba(17) = bf(2);
-    ba(18) = bf(0);
-    ba(19) = bf(1);
-    ba(20) = bf(2);
-    ba(21) = bf(0);
-    ba(22) = bf(1);
-    ba(23) = bf(2);
-    ba(24) = bf(0);
-    ba(25) = bf(1);
-    ba(26) = bf(2);
-    ba(27) = bf(0);
-    ba(28) = bf(1);
-    ba(29) = bf(2);
-    ba(30) = bf(0);
-    ba(31) = bf(1);
-    ba(32) = bf(2);
-    ba(33) = bf(0);
-    ba(34) = bf(1);
-    ba(35) = bf(2);
-    ba(36) = bf(0);
-    ba(37) = bf(1);
-    ba(38) = bf(2);
-    ba(39) = bf(0);
-    ba(40) = bf(1);
-    ba(41) = bf(2);
-    ba(42) = bf(0);
-    ba(43) = bf(1);
-    ba(44) = bf(2);
-    ba(45) = bf(0);
-    ba(46) = bf(1);
-    ba(47) = bf(2);
-    ba(48) = bf(0);
-    ba(49) = bf(1);
-    ba(50) = bf(2);
-    ba(51) = bf(0);
-    ba(52) = bf(1);
-    ba(53) = bf(2);
-    ba(54) = bf(0);
-    ba(55) = bf(1);
-    ba(56) = bf(2);
-    ba(57) = bf(0);
-    ba(58) = bf(1);
-    ba(59) = bf(2);
-    ba(60) = bf(0);
-    ba(61) = bf(1);
-    ba(62) = bf(2);
-    ba(63) = bf(0);
-    ba(64) = bf(1);
-    ba(65) = bf(2);
-    ba(66) = bf(0);
-    ba(67) = bf(1);
-    ba(68) = bf(2);
-    ba(69) = bf(0);
-    ba(70) = bf(1);
-    ba(71) = bf(2);
-    ba(72) = bf(0);
-    ba(73) = bf(1);
-    ba(74) = bf(2);
-    ba(75) = bf(0);
-    ba(76) = bf(1);
-    ba(77) = bf(2);
-    ba(78) = bf(0);
-    ba(79) = bf(1);
-    ba(80) = bf(2);
+    baNodes( 0) = bf(0);
+    baNodes( 1) = bf(1);
+    baNodes( 2) = bf(2);
+    baNodes( 3) = bf(0);
+    baNodes( 4) = bf(1);
+    baNodes( 5) = bf(2);
+    baNodes( 6) = bf(0);
+    baNodes( 7) = bf(1);
+    baNodes( 8) = bf(2);
+    baNodes( 9) = bf(0);
+    baNodes(10) = bf(1);
+    baNodes(11) = bf(2);
+    baNodes(12) = bf(0);
+    baNodes(13) = bf(1);
+    baNodes(14) = bf(2);
+    baNodes(15) = bf(0);
+    baNodes(16) = bf(1);
+    baNodes(17) = bf(2);
+    baNodes(18) = bf(0);
+    baNodes(19) = bf(1);
+    baNodes(20) = bf(2);
+    baNodes(21) = bf(0);
+    baNodes(22) = bf(1);
+    baNodes(23) = bf(2);
+    baNodes(24) = bf(0);
+    baNodes(25) = bf(1);
+    baNodes(26) = bf(2);
+    baNodes(27) = bf(0);
+    baNodes(28) = bf(1);
+    baNodes(29) = bf(2);
+    baNodes(30) = bf(0);
+    baNodes(31) = bf(1);
+    baNodes(32) = bf(2);
+    baNodes(33) = bf(0);
+    baNodes(34) = bf(1);
+    baNodes(35) = bf(2);
+    baNodes(36) = bf(0);
+    baNodes(37) = bf(1);
+    baNodes(38) = bf(2);
+    baNodes(39) = bf(0);
+    baNodes(40) = bf(1);
+    baNodes(41) = bf(2);
+    baNodes(42) = bf(0);
+    baNodes(43) = bf(1);
+    baNodes(44) = bf(2);
+    baNodes(45) = bf(0);
+    baNodes(46) = bf(1);
+    baNodes(47) = bf(2);
+    baNodes(48) = bf(0);
+    baNodes(49) = bf(1);
+    baNodes(50) = bf(2);
+    baNodes(51) = bf(0);
+    baNodes(52) = bf(1);
+    baNodes(53) = bf(2);
+    baNodes(54) = bf(0);
+    baNodes(55) = bf(1);
+    baNodes(56) = bf(2);
+    baNodes(57) = bf(0);
+    baNodes(58) = bf(1);
+    baNodes(59) = bf(2);
+    baNodes(60) = bf(0);
+    baNodes(61) = bf(1);
+    baNodes(62) = bf(2);
+    baNodes(63) = bf(0);
+    baNodes(64) = bf(1);
+    baNodes(65) = bf(2);
+    baNodes(66) = bf(0);
+    baNodes(67) = bf(1);
+    baNodes(68) = bf(2);
+    baNodes(69) = bf(0);
+    baNodes(70) = bf(1);
+    baNodes(71) = bf(2);
+    baNodes(72) = bf(0);
+    baNodes(73) = bf(1);
+    baNodes(74) = bf(2);
+    baNodes(75) = bf(0);
+    baNodes(76) = bf(1);
+    baNodes(77) = bf(2);
+    baNodes(78) = bf(0);
+    baNodes(79) = bf(1);
+    baNodes(80) = bf(2);
 
 
     //Form equivalent body force
-    bforce.addMatrixVector(0.0, M, ba, 1.0);
-    //std::cerr << " ba " << ba;
+    bforce.addMatrixVector(0.0, M, baNodes, 1.0);
+    //std::cerr << " baNodes " << baNodes;
     //std::cerr << " M " << M;
     //if(getTag() == 886)
     //std::cerr << " @@@@@ FormEquiBodyForce  " << bforce;
@@ -3591,7 +3592,7 @@ const XC::Vector XC::TwentySevenNodeBrick::FormEquiBodyForce(void)
 //    const XC::Vector &nd7Crds = theNodes[6]->getCrds();
 //    const XC::Vector &nd8Crds = theNodes[7]->getCrds();
 //
-//    //dir is the XC::ID for vertial direction, e.g. 1 means x-dir is vertical...
+//    //dir is the XC::ID for vertical direction, e.g. 1 means x-dir is vertical...
 //    double Zavg = nd1Crds( dir-1)+
 //           nd2Crds( dir-1)+
 //           nd3Crds( dir-1)+
@@ -4015,7 +4016,7 @@ int XC::TwentySevenNodeBrick::getResponse (int responseID, Information &eleInfo)
 
     const std::string &tp= matpoint[1].getType();
     const int tag= matpoint[1].getTag();
-    //std::cerr << "Materail Tag:" << tag << std::endl;
+    //std::cerr << "Material Tag:" << tag << std::endl;
     //tp = strTypeElasticIsotropic3D;
     float height = 1;
              //std::cerr << "height" << height;
@@ -4989,7 +4990,7 @@ int XC::TwentySevenNodeBrick::update()  //Guanzhou added May 6, 2004
                 //::::   ::printf("WEIGHT = %f", weight);
                 //::::   ::printf("determinant of Jacobian = %f", determinant_of_Jacobian);
                 //::::   matpoint[where].report("Gauss Point\n");
-                // incremental straines at this Gauss point
+                // incremental strains at this Gauss point
                 // now in Update we know the incremental displacements so let's find
                 // the incremental strain
                 incremental_strain =

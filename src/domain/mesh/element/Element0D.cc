@@ -169,7 +169,7 @@ const XC::Vector &XC::Element0D::getZ(void) const
     return retval;
   }
 
-//! @brief Returs a matrix with the axes of the element as matrix rows
+//! @brief Returns a matrix with the axes of the element as matrix rows
 //! [[x1,y1,z1],[x2,y2,z2],...·]
 XC::Matrix XC::Element0D::getLocalAxes(bool initialGeometry) const
   {

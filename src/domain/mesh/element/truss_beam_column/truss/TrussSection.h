@@ -90,7 +90,7 @@ class TrussSection : public TrussBase
     Element *getCopy(void) const;
     ~TrussSection(void);
 
-    // public methods to obtain inforrmation about dof & connectivity    
+    // public methods to obtain information about dof & connectivity    
     void setDomain(Domain *theDomain);
 
     // public methods to set the state of the element    

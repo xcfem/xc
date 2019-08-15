@@ -75,7 +75,7 @@ class ProtoTruss : public Element1D
     Material &getMaterialRef(void);
     virtual double getRho(void) const= 0;
 
-    // public methods to obtain inforrmation about dof & connectivity    
+    // public methods to obtain information about dof & connectivity    
     int getNumDIM(void) const;	
     int getNumDOF(void) const;
   };

@@ -498,7 +498,7 @@ void XC::BeamColumnJoint2d::getGlobalDispls(Vector &dg)
         formK(kSpring);
 
         dg.Zero();
-        // commmited external and internal displacement update
+        // committed external and internal displacement update
         for(int ig = 0; ig < 13; ig++ ) {
                 if(ig<12)
                 {
@@ -746,7 +746,7 @@ double XC::BeamColumnJoint2d::getStepSize(double s0,double s1,Vector uExt,Vector
         Vector kSpr(13); kSpr.Zero();
         Vector intEq(4); intEq.Zero();
 
-        double r0 = 0.0;            // tolerance chcek for line-search
+        double r0 = 0.0;            // tolerance check for line-search
         double tolerance = 0.8;     // slack region tolerance set for line-search
 
         if(s0 != 0.0)

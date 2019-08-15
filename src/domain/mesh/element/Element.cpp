@@ -114,7 +114,7 @@ int XC::Element::getNumEdges(void) const
 //! @brief Commit the current element state.
 //!
 //! The element is to commit its current state. To return 0 if
-//! sucessfull, a negative number if not.
+//! successful, a negative number if not.
 int XC::Element::commitState(void)
   {
     if(!Kc.isEmpty())
@@ -135,7 +135,7 @@ int XC::Element::update(void)
 //! @brief Reverts the element to its initial state.
 //!
 //! The element is to set it's current state to the state it was at before
-//! the analysis started. To return 0 if sucessfull, a negative number
+//! the analysis started. To return 0 if successful, a negative number
 //! if not. 
 int XC::Element::revertToStart(void)
   { return 0; }
@@ -840,7 +840,7 @@ bool XC::Element::Out(const GeomObj2d &obj,const double &factor, const double &t
   { return getNodePtrs().Out(obj,factor,tol); }
 
 
-//! @brief Returs a matrix with the axes of the element as matrix rows
+//! @brief Returns a matrix with the axes of the element as matrix rows
 //! [[x1,y1,z1],[x2,y2,z2],...·]
 XC::Matrix XC::Element::getLocalAxes(bool initialGeometry) const
   {

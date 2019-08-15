@@ -572,7 +572,7 @@ int XC::ConstantPressureVolumeQuad::addInertiaLoadToUnbalance(const XC::Vector &
     int tangFlag = 1;
     formInertiaTerms( tangFlag );
 
-    // store computed RV fro nodes in resid vector
+    // store computed RV from nodes in resid vector
     int count = 0;
 
     for(i=0; i<numberNodes; i++)

@@ -134,9 +134,9 @@ class Element: public MeshComponent
 
     Vector load;//!< vector for applied nodal loads.
     mutable RayleighDampingFactors rayFactors; //!< Rayleigh damping factors
-                                             //(mutable para que getDamp pueda ser const).
+                                             //(mutable to allow getDamp being const).
     mutable Matrix Kc; //!< pointer to hold last committed matrix if needed for rayleigh damping
-                        //(mutable para que getDamp pueda ser const).
+                        //(mutable to allow getDamp being const).
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
 
@@ -171,7 +171,7 @@ class Element: public MeshComponent
     //! @brief Revert to the last committed state.
     //!
     //! The element is to set it's current state to the last committed
-    //! state. To return 0 if sucessfull, a negative number if not.
+    //! state. To return 0 if successful, a negative number if not.
     virtual int revertToLastCommit(void) = 0;
     virtual int revertToStart(void);
     virtual int update(void);

@@ -271,7 +271,7 @@ void XC::ZeroLengthSection::setDomain(Domain *theDomain)
     setTransformation(); // Set up the A matrix
   }
 
-//! @brief Commit state of element by commiting state of the section.
+//! @brief Commit state of element by committing state of the section.
 //! Return 0 if successful, !0 otherwise.
 int XC::ZeroLengthSection::commitState()
   {
@@ -296,7 +296,7 @@ int XC::ZeroLengthSection::revertToLastCommit()
     return theSection->revertToLastCommit();
   }
 
-//! @brief Revert state of element to initial sate by reverting to initial state
+//! @brief Revert state of element to initial state by reverting to initial state
 //! of the section. Return 0 if successful, !0 otherwise.
 int XC::ZeroLengthSection::revertToStart()
   {

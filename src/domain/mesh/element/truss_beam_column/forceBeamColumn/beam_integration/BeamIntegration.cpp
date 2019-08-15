@@ -146,14 +146,14 @@ const XC::Matrix &XC::BeamIntegration::getIntegrPointLocalCoords(int nIP,const C
 const XC::Matrix &XC::BeamIntegration::getIntegrPointGlobalCoords(int nIP,const CrdTransf &trf) const
   { return trf.getPointsGlobalCoordFromLocal(getIntegrPointLocalCoords(nIP,trf)); }
 
-//! @brief Returns the values of the expresion being pased as parameter on each integration point.
+//! @brief Returns the values of the expression being passed as parameter on each integration point.
 const XC::Vector &XC::BeamIntegration::evalInIntegrPoints(const ExprAlgebra &expr,int nIP,const CrdTransf &trf) const
   {
     const IntegrationPointsCoords ipCoords(*this,nIP,trf);
     return ipCoords.eval(expr);
   }
 
-//! @brief Returns the integral of the expresion.
+//! @brief Returns the integral of the expression.
 double XC::BeamIntegration::getIntegral(const ExprAlgebra &expr,int nIP,const CrdTransf &trf) const
   {
     const double L= trf.getInitialLength();

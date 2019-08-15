@@ -50,7 +50,7 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   .def("In", In3D,"\n""In(geomObject,factor,tolerance) \n""Return true if current position of node scaled by a factor: initialPos+factor*currentDisplacement lies inside the geometric object.")
   .def("Out", Out3D,"\n""Out(geomObject,factor,tolerance) \n""Return true if current position of node scaled by a factor: initialPos+factor*currentDisplacement lies outside the geometric object.")
   //Call Policies: here we don't use return_internal_reference because
-  // if we do so we obtain always last calculated value and that makes imposible
+  // if we do so we obtain always last calculated value and that makes impossible
   // to put history results in a Python list for example. That's why we use
   // copy_const_reference instead. 
   .add_property("getReaction", make_function( &XC::Node::getReaction, return_value_policy<copy_const_reference>() ), "Return the reaction at this node.")
@@ -88,7 +88,7 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   .add_property("getNumModes",&XC::Node::getNumModes,"return the number of modes for the node.")
   .def("getEigenvector",&XC::Node::getEigenvector,"getEigenvector(i) returns the eigenvector that corresponds to i-th mode.")
   .def("getNormalizedEigenvector",&XC::Node::getNormalizedEigenvector,"getNormalizedEigenvector(i) returns the eigenvector that corresponds to i-th mode.")
-  .add_property("getEigenvectors",make_function(&XC::Node::getEigenvectors,return_internal_reference<>()),"Returs all the eigenvectors for the node.")
+  .add_property("getEigenvectors",make_function(&XC::Node::getEigenvectors,return_internal_reference<>()),"Returns all the eigenvectors for the node.")
   .add_property("getNormalizedEigenvectors",&XC::Node::getNormalizedEigenvectors,"Returns all the normalized eigenvectors for the node.")
   .def("getEigenPos2d", &XC::Node::getEigenPosition2d,"getEigenPos2d(factor, mode) returns 2D modal position of node scaled by a factor: initialPos+factor*getNormalizedEigenvector(mode).")
   .def("getEigenPos3d", &XC::Node::getEigenPosition3d,"\n""getEigenPos3d(factor, mode) \n""Return 3D modal position of node scaled by a factor: initialPos+factor*getNormalizedEigenVector(mode).")
@@ -99,10 +99,10 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   .def("getModalParticipationFactor",getModalParticipationFactor,"Return the modal participation factor corresponding to the i-th mode.")
   .add_property("getModalParticipationFactors",getModalParticipationFactors,"Return the modal participation factors for all the models.")
   .def("getModalParticipationFactorForDOFs",getModalParticipationFactorForDOFs,"getModalParticipationFactorForDOFs(i,dofs): return the 'dofs' components of the modal participation factors corresponding to the i-th model.")
-  .def("getModalParticipationFactorsForDOFs",getModalParticipationFactorsForDOFs,"getModalParticipationFactorsForDOFs(dofs): return the 'dofs' compoents of all the modal participation factors.")
+  .def("getModalParticipationFactorsForDOFs",getModalParticipationFactorsForDOFs,"getModalParticipationFactorsForDOFs(dofs): return the 'dofs' components of all the modal participation factors.")
 
   .def("getDistributionFactor",getDistributionFactor,"Returns the distribution factor corresponding to the i-th mode.")
-  .def("getDistributionFactorForDOFs",getDistributionFactorForDOFs,"getDistributionFactorForDOFs(i,dofs): returns the 'dofs' compoents of the distribution factor corresponding to the i-th mode.")
+  .def("getDistributionFactorForDOFs",getDistributionFactorForDOFs,"getDistributionFactorForDOFs(i,dofs): returns the 'dofs' components of the distribution factor corresponding to the i-th mode.")
   .add_property("getDistributionFactors",&XC::Node::getDistributionFactors,"Returns the distribution factor corresponding to all the computed modes.")
 
   .def("getEffectiveModalMass",&XC::Node::getEffectiveModalMass,"Returns the effective modal mass corresponding to the i-th mode.")

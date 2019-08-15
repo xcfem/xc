@@ -145,7 +145,7 @@ int XC::NodeVectors::setTrialData(const size_t &nDOF,const double &value,const s
         return -2;
       }
 
-    // perform the assignment .. we dont't go through Vector interface
+    // perform the assignment .. we don't go through Vector interface
     // as we are sure of size and this way is quicker
     if(!values.isEmpty())
       values[dof]= value;
@@ -174,7 +174,7 @@ int XC::NodeVectors::setTrialData(const size_t &nDOF,const Vector &newTrialData)
           }
       }
 
-    // perform the assignment .. we dont't go through XC::Vector interface
+    // perform the assignment .. we don't go through XC::Vector interface
     // as we are sure of size and this way is quicker
     for(size_t i=0;i<nDOF;i++)
       values[i]= newTrialData(i);
@@ -191,7 +191,7 @@ int XC::NodeVectors::incrTrialData(const size_t &nDOF,const Vector &incrData)
         return -2;
       }
 
-    // create a copy if no trial exists andd add committed
+    // create a copy if no trial exists and add committed
     if(values.isEmpty())
       {
         if(this->createData(nDOF) < 0)

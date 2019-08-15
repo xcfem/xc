@@ -958,7 +958,7 @@ void XC::Twenty_Node_Brick::Jacobian3d(int gaussPoint, double& xsj, int mode)
         } //end for j
 
 
-        //Compute derivatives with repect to global coords.
+        //Compute derivatives with respect to global coords.
 
         for( k=0; k<nen; k++) {
 

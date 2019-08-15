@@ -360,7 +360,7 @@ int XC::BbarBrick::addInertiaLoadToUnbalance(const XC::Vector &accel)
   int tangFlag = 1 ;
   formInertiaTerms( tangFlag ) ;
 
-  // store computed RV fro nodes in resid vector
+  // store computed RV from nodes in resid vector
   int count = 0;
   for(i=0; i<numberNodes; i++) {
     const XC::Vector &Raccel = theNodes[i]->getRV(accel);

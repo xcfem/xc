@@ -42,7 +42,7 @@ class TrussBase : public ProtoTruss
   {
   protected:
     double L;	    //!< length of truss based on undeformed configuration.
-    double cosX[3]; //!< Cosenos directores.
+    double cosX[3]; //!< Cosenos directories.
 
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);

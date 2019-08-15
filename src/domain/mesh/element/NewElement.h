@@ -81,7 +81,7 @@ class NewElement : public Element
     NewElement(int tag);
     NewElement();    
 
-    // public methods to obtain inforrmation about dof & connectivity    
+    // public methods to obtain information about dof & connectivity    
     NodePtrsWithIDs &getNodePtrs(void);
     const NodePtrsWithIDs &getNodePtrs(void) const;
     int getNumDOF(void) const;	

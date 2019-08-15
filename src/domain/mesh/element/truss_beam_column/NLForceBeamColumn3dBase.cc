@@ -80,7 +80,7 @@ XC::NLForceBeamColumn3dBase::NLForceBeamColumn3dBase(const NLForceBeamColumn3dBa
 XC::NLForceBeamColumn3dBase &XC::NLForceBeamColumn3dBase::operator=(const NLForceBeamColumn3dBase &)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; assigment operator must not be called."
+	      << "; assignment operator must not be called."
               << std::endl;
     return *this;
   }

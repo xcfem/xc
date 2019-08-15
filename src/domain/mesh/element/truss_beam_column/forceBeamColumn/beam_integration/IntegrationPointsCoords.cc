@@ -92,7 +92,7 @@ MapValores XC::IntegrationPointsCoords::getMapValores(const size_t &i,const std:
     return retval;
   }
 
-//! @brief Returns the values of the expresion on each integration point.
+//! @brief Returns the values of the expression on each integration point.
 const XC::Vector &XC::IntegrationPointsCoords::eval(const ExprAlgebra &expr) const
   {
     const size_t nIP= rst.noRows();

@@ -94,7 +94,7 @@ const XC::TransfCooHandler *XC::CrdTransf::GetTransfCooHandler(void) const
     return retval;
   }
 
-//! @brief Returs a pointer to the coordinate transformation handler (if possible).
+//! @brief Returns a pointer to the coordinate transformation handler (if possible).
 XC::TransfCooHandler *XC::CrdTransf::GetTransfCooHandler(void)
   {
     XC::TransfCooHandler *retval= dynamic_cast<TransfCooHandler *>(Owner());

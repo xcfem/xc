@@ -98,7 +98,7 @@ class EightNodeBrick: public ElementBase<8>
     double pressure; //!< Normal surface traction (pressure) over entire element
     int    order; //!< Order of the quadrature rule
 
-    //int dir; //!< Direction of vertial coord.
+    //int dir; //!< Direction of vertical coord.
     //double surflevel; //!< free surface level above or below this element
 
     //QuadRule1d *theQuadRule; //!< Integration rule
@@ -253,7 +253,7 @@ class EightNodeBrick: public ElementBase<8>
     // returns nodal forces for given constant stress field in the element
     BJtensor nodal_forces_from_stress(stresstensor &) const;
     // returns nodal forces for given incremental strain field in an element
-    // by using the linearized constitutive BJtensor from the begining of the step !
+    // by using the linearized constitutive BJtensor from the beginning of the step !
     BJtensor linearized_nodal_forces(void) const;
 
     // updates Material point stresses and strains from given displacements

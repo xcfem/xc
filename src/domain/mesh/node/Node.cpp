@@ -850,7 +850,7 @@ const XC::Vector &XC::Node::getTrialVel(void) const
 const XC::Vector &XC::Node::getTrialAccel(void) const
   { return accel.getTrialData(numberDOF); }
 
-//! @breif Returns the displacement increment.
+//! @brief Returns the displacement increment.
 const XC::Vector &XC::Node::getIncrDisp(void) const
   { return disp.getIncrDisp(numberDOF); }
 
@@ -1283,7 +1283,7 @@ const XC::Vector &XC::Node::getRV(const Vector &V)
     // see if quick return , i.e. R == 0
     if(R.isEmpty())
       unbalLoadWithInertia.Zero();
-    else if(R.noCols() != V.Size()) // check dimesions of R and V
+    else if(R.noCols() != V.Size()) // check dimensions of R and V
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; R and V of incompatible dimensions.\n"
@@ -1297,7 +1297,7 @@ const XC::Vector &XC::Node::getRV(const Vector &V)
 
 
 //! @brief Set the dimensions of the matrix that
-//! constains the eigenvectors.
+//! constrains the eigenvectors.
 int XC::Node::setNumEigenvectors(int numVectorsToStore)
   {
     // ensure a positive number of vectors
