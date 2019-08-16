@@ -944,7 +944,7 @@ class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
   Esh= 0.0 # Slope of the line in the yielding region.
   bsh= 0.0 # Ratio between post-yield tangent and initial elastic tangent
   k=1.05   # fmaxk/fyk ratio (Annex C of EC2: class A k>=1,05 B , class B k>=1,08)
-  def __init__(self,steelName, fyk, emax, gammaS,k=1.05):
+  def __init__(self,steelName, fyk, emax, gammaS, k=1.05):
     super(ReinforcingSteel,self).__init__(steelName)
     self.fyk= fyk # Characteristic value of the yield strength
     self.gammaS= gammaS
