@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # home made test
-# Mésula sometida a carga vertical en su extremo.
+# Cantilever under vertical load at his end.
 
 import xc_base
 import geom
