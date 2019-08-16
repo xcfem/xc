@@ -32,7 +32,7 @@ ratio15= 10
 ratio16= 10
 ratio17= 10
 
-hssSection= aisc_metric_shapes.HSS['HSS7X7X_375']
+hssSection= aisc_metric_shapes.HSS['HSS7X7X3/8']
 
 meter= units.m
 meter2= units.m*units.m
@@ -49,7 +49,7 @@ def convert(value,unitA,unitB):
 
 ratio1= abs((convert(hssSection['A'],meter2,inch2)-8.97452)/8.97452)
 ratio2= abs((convert(hssSection['h'],meter,inch)-7.00787)/7.00787)
-ratio3= abs((convert(hssSection['e'],meter,inch)-0.375197)/0.375197)
+ratio3= abs((convert(hssSection['t'],meter,inch)-0.375197)/0.375197)
 ratio4= abs((convert(hssSection['b'],meter,inch)-7.00787)/7.00787)
 ratio5= abs((convert(hssSection['Iz'],meter4,inch4)-65.108)/65.108)
 ratio6= abs((convert(hssSection['Wzel'],meter3,inch3)-18.6122)/18.6122)
