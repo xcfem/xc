@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import division
+from __future__ import print_function
+
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2016, LCPT"
 __license__= "GPL"
@@ -241,7 +244,7 @@ class ShearController(lsc.ShearControllerBase):
        XXX Orientation of the transverse reinforcement is not
        taken into account.
     '''
-    print "Postprocesing combination: ",nmbComb
+    print("Postprocesing combination: ",nmbComb)
     # XXX torsional deformation ingnored.
 
     for e in elements:
@@ -326,7 +329,7 @@ class CrackControlSIA262(lsc.CrackControlBaseParameters):
 
   def check(self,elements,nmbComb):
     '''Crack control checking.'''
-    print "REWRITE NEEDED. See equivalent function in  CrackControlSIA262PlanB."
+    print("REWRITE NEEDED. See equivalent function in  CrackControlSIA262PlanB.")
     for e in elements:
       scc= e.getSection()
       idSection= e.getProp("idSection")
@@ -360,7 +363,7 @@ class CrackControlSIA262PlanB(CrackControlSIA262):
       sigma_sPos= stressCalc.sgs
       sigma_sNeg= stressCalc.sgsp
       sigma_c= stressCalc.sgc
-      #print "sgc0= ", stressCalc.sgc0
+      #print("sgc0= ", stressCalc.sgc0)
       # sigma_s= 0.0
       # eNC= datosScc.depth/3
       # exc= 0.0
@@ -376,7 +379,7 @@ class CrackControlSIA262PlanB(CrackControlSIA262):
       #     sigma_s= 10*sg
       #   else:
       #     sigma_s= MyTmp/denom
-      # print "eNC= ", eNC, " exc= ", exc, "sigma_s= ", sigma_s/1e6
+      # print("eNC= ", eNC, " exc= ", exc, "sigma_s= ", sigma_s/1e6)
       CFPos= sigma_sPos/self.limitStress #Positive face capacity factor.
       CFNeg= sigma_sNeg/self.limitStress #Negative face capacity factor.
       elementControlVars= None
@@ -393,7 +396,7 @@ class CrackControlSIA262PlanB(CrackControlSIA262):
 
 def procesResultVerifFISSIA262(preprocessor,nmbComb,limitStress):
   '''Crack control checking of reinforced concrete sections.'''
-  print "Postprocesing combination: ",nmbComb,"\n"
+  print("Postprocesing combination: ",nmbComb,"\n")
 
   secHAParamsFis= CrackControlSIA262(limitStress)
   elements= preprocessor.getSets.getSet("total").elements
@@ -401,7 +404,7 @@ def procesResultVerifFISSIA262(preprocessor,nmbComb,limitStress):
 
 def procesResultVerifFISSIA262PlanB(preprocessor,nmbComb,limitStress):
   '''Crack control checking of reinforced concrete sections.'''
-  print "Postprocesing combination: ",nmbComb,"\n"
+  print("Postprocesing combination: ",nmbComb,"\n")
 
   secHAParamsFis= CrackControlSIA262PlanB(limitStress)
   elements= preprocessor.getSets.getSet("total").elements
@@ -487,7 +490,7 @@ def getShearLimit(sccData,controlVars,vu):
   else:
     retval= 0.5*vu-abs(vd_min)
   if(retval<0):
-    print "limite negativo = ", retval
+    print("limite negativo = ", retval)
   return retval
 
 def getShearCF(controlVars):
@@ -521,7 +524,7 @@ class FatigueController(lsc.LimitStateControllerBase):
         - ELUF3: fatigue load in position 3 (XXX not yet implemented!!!).
         - ...
     '''
-    print 'Controlling limit state: ',self.limitStateLabel, ' for load combination: ',combNm,"\n"
+    print('Controlling limit state: ',self.limitStateLabel, ' for load combination: ',combNm,"\n")
 
 
     index= int(combNm[-1])
@@ -539,7 +542,7 @@ class FatigueController(lsc.LimitStateControllerBase):
       sigma_sPos= stressCalc.sgs
       sigma_sNeg= stressCalc.sgsp
       sigma_c= stressCalc.sgc
-      #print "sgc0= ", stressCalc.sgc0
+      #print("sgc0= ", stressCalc.sgc0)
       controlVars= e.getProp(self.limitStateLabel)
       resultsComb= cv.FatigueControlBaseVars(combNm,-1.0,N, My, Mz,Vy,sigma_sPos, sigma_sNeg,sigma_c)
       if(index==0):
@@ -548,10 +551,10 @@ class FatigueController(lsc.LimitStateControllerBase):
         controlVars.state1= resultsComb
         kc= 1.0 #XXX  SIA 262 4.2.1.7
         controlVars.concreteLimitStress= getConcreteLimitStress(datosScc,kc,controlVars)
-        #print "concreteLimitStress= ", controlVars.concreteLimitStress/1e6
+        #print("concreteLimitStress= ", controlVars.concreteLimitStress/1e6)
         controlVars.concreteBendingCF= controlVars.getConcreteMinStress()/controlVars.concreteLimitStress
         
-        #print "concreteBendingCF= ",controlVars.concreteBendingCF
+        #print("concreteBendingCF= ",controlVars.concreteBendingCF)
         section= scc.getProp("datosSecc")
         concreteSectionShearParams= ShearController(self.limitStateLabel)
         concreteSectionShearParams.setSection(section)
