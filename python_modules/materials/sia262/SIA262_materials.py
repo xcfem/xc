@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 '''Reinforce concrete materials according to SIA 262 standard (Switzerland).'''
 
+from __future__ import division
+from __future__ import print_function
+
 import math
 import scipy.interpolate
 from materials.ec2 import EC2_materials as ec2
@@ -88,10 +91,10 @@ def reductionFactorKT(t):
 #   emax:     maximum strain in tension
 #   gammaS:   Partial factor for material.
 #   k:        fmaxk/fyk ratio
-B500A= concrete_base.ReinforcingSteel(steelName='B500A', fyk=500e6, emax=0.02, gammaS=500/435, k=1.05)
-B500B= concrete_base.ReinforcingSteel(steelName='B500B', fyk=500e6, emax=0.045, gammaS=500/435, k=1.08)
-B500C= concrete_base.ReinforcingSteel(steelName='B500C', fyk=500e6, emax=0.065, gammaS=500/435, k=1.15)
-B700B= concrete_base.ReinforcingSteel(steelName='B700B', fyk=700e6, emax=0.045, gammaS=500/435, k=1.08)
+B500A= concrete_base.ReinforcingSteel(steelName='B500A', fyk=500e6, emax=0.02, gammaS=500/435.0, k=1.05)
+B500B= concrete_base.ReinforcingSteel(steelName='B500B', fyk=500e6, emax=0.045, gammaS=500/435.0, k=1.08)
+B500C= concrete_base.ReinforcingSteel(steelName='B500C', fyk=500e6, emax=0.065, gammaS=500/435.0, k=1.15)
+B700B= concrete_base.ReinforcingSteel(steelName='B700B', fyk=700e6, emax=0.045, gammaS=500/435.0, k=1.08)
 
 SpecialII1956SIA161= concrete_base.ReinforcingSteel(steelName='SpecialII', fyk=300e6, emax=0.045,gammaS=1.15,k=1.05)
 
@@ -116,7 +119,7 @@ def stressLimits(exigence,s):
   elif (exigence=='C'):
     return courbeC(s)
   else:
-    print "Value for exigence: '",exigence,"' unknown."
+    print("Value for exigence: '",exigence,"' unknown.")
 
 diametres= [6e-3,8e-3,10e-3,12e-3,14e-3,16e-3,18e-3,20e-3,22e-3,26e-3,30e-3,34e-3,40e-3]
 
