@@ -208,6 +208,73 @@ def getFireDesignAdjustementFactor(refValue):
         retval= 2.03
     return retval
 
+class Column(object):
+    ''' Column according to chapter 3.7 of NDS-2018.'''
+    def __init__(self, unbracedLengthB, unbracedLengthH, section):
+        ''' Constructor. '''
+        #Default fixity conditions.
+        self.rotationI= 'free'
+        self.translationI= 'fixed'
+        self.rotationJ= 'free'
+        self.translationJ= 'fixed'
+        self.unbracedLengthB= unbracedLengthB
+        self.unbracedLengthH= unbracedLengthH
+        self.section= section
+
+    def getEffectiveBucklingLengthCoefficientRecommended(self):
+        '''Return the column effective buckling length coefficients
+           according to NDS 2018 appendix G'''
+        if(self.rotationI=='fixed'):
+            if(self.rotationJ=='fixed'):
+                if(self.translationJ=='fixed'):
+                    retval= .65 # Theoretical .5
+                else: # self.translationJ=='free'
+                    retval= 1.2 #Theoretical 1.0
+            else: # self.rotationJ=='free'
+                if(self.translationJ== 'fixed'):
+                    retval= .8 # Theoretical .7
+                else: # self.translationJ=='free'
+                    retval= 2.1 # Theoretical 2.0
+        else: # self.rotationI=='free'
+             if(self.rotationJ=='fixed'):
+                 if(self.translationJ=='free'):
+                     retval= 2.0 # Theoretical 2.0
+                 else:
+                     retval= 0.8 # Theoretical .7
+             else: # self.rotationJ=='free'
+                 if(self.translationI=='fixed' and self.translationJ=='fixed'):
+                     retval= 1.0 # Theoretical 1.0
+                 else:
+                     retval= 1e6 # Stiffness matrix singular
+        return retval
+
+    def getSlendernessRatio(self):
+        ''' Return the slenderness ratio.'''
+        Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
+        srB= Ke*self.unbracedLengthB/self.section.b
+        srH= Ke*self.unbracedLengthH/self.section.h
+        return max(srB,srH)
+
+    def getColumnStabilityFactor(self, c, E_adj, Fc_adj):
+        ''' Return the column stability factor according
+            to expression 3.7-1 of NDS-2.018. 
+
+        :param E_adj: adjusted modulus of elasticity for beam 
+                      stability and column stability calculations.
+        :param Fc_adj: adjusted compression stress design value parallel 
+                       to grain.
+        :param c: 0.8 for sawn lumber, 0.85 for round timber poles 
+                  and piles and 0.9 for structural glued laminated
+                  timber structural composite lumber, and 
+                  cross-laminated timber.
+        '''
+        sr= self.getSlendernessRatio()
+        FcE= 0.822*E_adj/((sr)**2)
+        ratio= FcE/Fc_adj
+        tmp= (1+ratio)/2.0/c
+        return tmp-math.sqrt(tmp**2-ratio/c)
+        
+
 # Properties of Plywood structural panels taken from:
 # http://www.pfsteco.com/techtips/pdf/tt_plywooddesigncapacities
 # table C.
