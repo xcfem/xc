@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
+from __future__ import print_function
+
 ''' Structural steel as specified in ASTM standard.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
@@ -33,35 +35,7 @@ class ASTMShape(object):
 
        '''
        self.name=name
-       lmsg.warning('Work in progress. Not ready to use.')
        
-    def getEffectiveBucklingLengthCoefficientRecommended(self,rotI='free',transI='fixed',rotJ= 'free',transJ= 'fixed'):
-        '''Return the effective length factor
-           according to table C-A-7.1 or AISC specification'''
-        if(rotI=='fixed'):
-            if(rotJ=='fixed'):
-                if(transJ=='fixed'):
-                    retval= .65 # Theoretical .5
-                else: # transJ=='free'
-                    retval= 1.2 #Theoretical 1.0
-            else: # rotJ=='free'
-                if(transJ== 'fixed'):
-                    retval= .8 # Theoretical .7
-                else: # transJ=='free'
-                    retval= 2.1 # Theoretical 2.0
-        else: # rotI=='free'
-             if(rotJ=='fixed'):
-                 if(transJ=='free'):
-                     retval= 2.0 # Theoretical 2.0
-                 else:
-                     retval= 0.8 # Theoretical .7
-             else: # rotJ=='free'
-                 if(transI=='fixed' and transJ=='fixed'):
-                     retval= 1.0 # Theoretical 1.0
-                 else:
-                     retval= 1e6 # Stiffness matrix singular
-        return retval
-
 from materials.sections.structural_shapes import aisc_metric_shapes
 
 class WShape(ASTMShape,aisc_metric_shapes.WShape):
@@ -107,7 +81,7 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
             "b" wall of the section.
         '''
         retval= 'nonslender'
-        bSlendernessRatio= self.get('bSlendernesRatio')
+        bSlendernessRatio= self.get('bSlendernessRatio')
         lambda_r= self.getLimitingWithToThicknessRatio()
         if(bSlendernessRatio>lambda_r):
             retval= 'slender'
@@ -117,16 +91,25 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
             "h" wall of the section.
         '''
         retval= 'nonslender'
-        hSlendernessRatio= self.get('hSlendernesRatio')
+        hSlendernessRatio= self.get('hSlendernessRatio')
         lambda_r= self.getLimitingWithToThicknessRatio()
         if(hSlendernessRatio>lambda_r):
             retval= 'slender'
         return retval
+    def getClassification(self):
+        ''' Return the classification for local buckling of the
+            section.
+        '''
+        retval= 'nonslender'
+        if((self.getHClassification()=='slender') or (self.getBClassification()=='slender')):
+            retval= 'slender'
+        return retval
+       
     def getReducedEffectiveH(self):
         '''Return the reduced effective width corresponding
            to the "h" walls of the shape.'''
         rt= math.sqrt(self.steelType.E/self.steelType.fy) #Simplification
-        h_t= self.get('hSlendernesRatio')
+        h_t= self.get('hSlendernessRatio')
         t= self.get('t')
         retval= 1.92*t*rt*(1.0-0.38/h_t*rt)
         retval= min(retval,self.get('h'))
@@ -135,15 +118,103 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
         '''Return the reduced effective width corresponding
            to the "b" walls of the shape.'''
         rt= math.sqrt(self.steelType.E/self.steelType.fy) #Simplification
-        b_t= self.get('bSlendernesRatio')
+        b_t= self.get('bSlendernessRatio')
         t= self.get('t')
         retval= 1.92*t*rt*(1.0-0.38/b_t*rt)
         retval= min(retval,self.get('b'))
         return retval
     def getEffectiveArea(self):
         '''Return the effective area.'''
-        h_eff= self.getReducedEffectiveH()
-        b_eff= self.getReducedEffectiveB()
-        t= self.get('t')
-        return 2.0*(h_eff+b_eff)*t
-          
+        retval= self.get('A')
+        clasif= self.getClassification()
+        if(clasif == 'slender'):
+            t= self.get('t')
+            h_ineff= self.get('h_flat')-self.getReducedEffectiveH()
+            retval-= 2.0*h_ineff*t
+            b_ineff= self.get('b_flat')-self.getReducedEffectiveB()
+            retval-= 2.0*b_ineff*t
+        return retval
+
+class MemberConnection(object):
+    '''Member length and connections
+
+       :ivar L: member length.
+       :ivar rotI: fixity of the rotation at member start.
+       :ivar transI: fixity of the translation at member start.
+       :ivar rotJ: fixity of the rotation at member end.
+       :ivar transJ: fixity of the translation at member end.
+    '''
+    def __init__(self,L,rotI='free',transI='fixed',rotJ= 'free',transJ= 'fixed'):
+        '''Constructor.'''
+        self.L= L
+        self.rotI= rotI
+        self.transI= transI
+        self.rotJ= rotJ
+        self.transJ= transJ
+    def getEffectiveBucklingLengthCoefficientRecommended(self):
+        '''Return the effective length factor
+           according to table C-A-7.1 or AISC specification'''
+        if(self.rotI=='fixed'):
+            if(self.rotJ=='fixed'):
+                if(self.transJ=='fixed'):
+                    retval= .65 # Theoretical .5
+                else: # self.transJ=='free'
+                    retval= 1.2 #Theoretical 1.0
+            else: # self.rotJ=='free'
+                if(self.transJ== 'fixed'):
+                    retval= .8 # Theoretical .7
+                else: # self.transJ=='free'
+                    retval= 2.1 # Theoretical 2.0
+        else: # self.rotI=='free'
+             if(self.rotJ=='fixed'):
+                 if(self.transJ=='free'):
+                     retval= 2.0 # Theoretical 2.0
+                 else:
+                     retval= 0.8 # Theoretical .7
+             else: # self.rotJ=='free'
+                 if(self.transI=='fixed' and self.transJ=='fixed'):
+                     retval= 1.0 # Theoretical 1.0
+                 else:
+                     retval= 1e6 # Stiffness matrix singular
+        return retval
+
+class Member(object):
+    """C shape with ASTM 3 verification routines."""
+    def __init__(self,shape,connection):
+        ''' Constructor.
+
+        :param shape: structural shape.
+        :param connection: member length and connection information.
+        '''
+        self.shape= shape
+        self.connection= connection
+    def getEffectiveLength(self):
+        '''Return the member effective length according to
+           section E2 of AISC 360-16.'''
+        K= self.connection.getEffectiveBucklingLengthCoefficientRecommended()
+        return  K*self.connection.L #Effective length of member.
+    def getSlendernessRatio(self):
+        '''Return the slenderness ratio of the member.'''
+        Lc= self.getEffectiveLength()
+        r= min(self.shape.get('iy'),self.shape.get('iz'))
+        return Lc/r
+    def getElasticBucklingStress(self):
+        '''Return the elastic buckling stress of the member.'''
+        return math.pi**2*self.shape.steelType.E/(self.getSlendernessRatio())**2
+    def getCriticalStress(self):
+        '''Return the critical stress as definded in
+           section E7 of AISC 360-16.
+        '''
+        treshold= 4.71*math.sqrt(self.shape.steelType.E/self.shape.steelType.fy)
+        r= self.getSlendernessRatio()
+        Fe= self.getElasticBucklingStress()
+        fy_fe= self.shape.steelType.fy/Fe
+        if((r<=treshold) or (fy_fe<=2.25)):
+            return math.pow(0.658,fy_fe)*self.shape.steelType.fy
+        else:
+            return 0.877*Fe
+    def getNominalCompressiveStrength(self):
+        ''' Return the nominal compressive strength according to
+            section E7 of AISC 360-16.
+        '''
+        return self.shape.getEffectiveArea()*self.getCriticalStress()

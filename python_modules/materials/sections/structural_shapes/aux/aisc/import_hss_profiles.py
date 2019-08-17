@@ -126,9 +126,9 @@ for row in sheet.iter_rows():
         col= column_index_from_string(sheet_columns['tdes'])-1
         out.write("\'t\':" + str(row[col].value)+"e-3, ")
         col= column_index_from_string(sheet_columns['b/tdes'])-1
-        out.write("\'bSlendernesRatio\':" + str(row[col].value)+", ")
+        out.write("\'bSlendernessRatio\':" + str(row[col].value)+", ")
         col= column_index_from_string(sheet_columns['h/tdes'])-1
-        out.write("\'hSlendernesRatio\':" + str(row[col].value)+", ")
+        out.write("\'hSlendernessRatio\':" + str(row[col].value)+", ")
         col= column_index_from_string(sheet_columns['Ix'])-1
         out.write("\'Iz\':" + str(row[col].value)+"e-6, ")
         col= column_index_from_string(sheet_columns['Zx'])-1
