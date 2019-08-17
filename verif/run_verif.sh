@@ -505,6 +505,7 @@ python tests/materials/awc_nds/rsdg_exemple_5_1.py
 python tests/materials/awc_nds/plywood_sheating_test.py
 echo "$BLEU" "    ASTM/AISC tests." "$NORMAL"
 python tests/materials/astm/hss12x8_test.py
+python tests/materials/astm/hss8x8_test.py
 
 echo "$BLEU" "  Plate and membrane materials." "$NORMAL"
 python tests/materials/test_material_elastic_membrane_plate_section_01.py
