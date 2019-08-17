@@ -71,7 +71,7 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
         ASTMShape.__init__(self, name)
         aisc_metric_shapes.HSSShape.__init__(self,steel,name)
         
-    def getLimitingWithToThicknessRatio(self):
+    def getLimitingWidthToThicknessRatio(self):
         ''' Return the Limiting Width-to-Thickness Ratio 
             according to table B4.1A of AISC-360-16.
         '''
@@ -83,7 +83,7 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
         '''
         retval= 'nonslender'
         bSlendernessRatio= self.get('bSlendernessRatio')
-        lambda_r= self.getLimitingWithToThicknessRatio()
+        lambda_r= self.getLimitingWidthToThicknessRatio()
         if(bSlendernessRatio>lambda_r):
             retval= 'slender'
         return retval
@@ -94,7 +94,7 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
         '''
         retval= 'nonslender'
         hSlendernessRatio= self.get('hSlendernessRatio')
-        lambda_r= self.getLimitingWithToThicknessRatio()
+        lambda_r= self.getLimitingWidthToThicknessRatio()
         if(hSlendernessRatio>lambda_r):
             retval= 'slender'
         return retval

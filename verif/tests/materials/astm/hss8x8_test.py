@@ -20,7 +20,7 @@ member= ASTM_materials.Member(hss,connection)
 
 Pd= -258.9561299844e3
 k= member.connection.getEffectiveBucklingLengthCoefficientRecommended()
-lambda_r= member.shape.getLimitingWithToThicknessRatio()
+lambda_r= member.shape.getLimitingWidthToThicknessRatio()
 bClassification= member.shape.getBClassification()
 hClassification= member.shape.getHClassification()
 h_eff= member.shape.getReducedEffectiveH()

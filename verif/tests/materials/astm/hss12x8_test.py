@@ -18,7 +18,7 @@ connection= ASTM_materials.MemberConnection(L= 30*0.3048,rotI='fixed',transI='fi
 member= ASTM_materials.Member(hss,connection)
 
 k= member.connection.getEffectiveBucklingLengthCoefficientRecommended()
-lambda_r= member.shape.getLimitingWithToThicknessRatio()
+lambda_r= member.shape.getLimitingWidthToThicknessRatio()
 bClassification= member.shape.getBClassification()
 hClassification= member.shape.getHClassification()
 h_eff= member.shape.getReducedEffectiveH()
