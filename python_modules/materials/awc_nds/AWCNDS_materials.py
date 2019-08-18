@@ -249,7 +249,7 @@ class LVL_2900Fb2E(Wood):
         super(LVL_2900Fb2E,self).__init__(name)
 
 class Member(object):
-    ''' Column according to chapter 3.7 of NDS-2018.'''
+    ''' Beam/Column according to chapter 3.7 and 3.9 of NDS-2018.'''
     def __init__(self, unbracedLengthB, unbracedLengthH, section, connection= buckling_base.MemberConnection()):
         ''' Constructor. '''
         self.unbracedLengthB= unbracedLengthB
@@ -261,6 +261,16 @@ class Member(object):
         '''Return the column effective buckling length coefficients
            according to NDS 2018 appendix G'''
         return self.connection.getEffectiveBucklingLengthCoefficientRecommended()
+    def getBSlendernessRatio(self):
+        ''' Return the slenderness ratio for the B dimension.'''
+        Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
+        return Ke*self.unbracedLengthB/self.section.b
+    
+    def getHSlendernessRatio(self):
+        ''' Return the slenderness ratio for the H dimension.'''
+        Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
+        return Ke*self.unbracedLengthH/self.section.h
+        
     def getSlendernessRatio(self):
         ''' Return the slenderness ratio.'''
         Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
@@ -286,6 +296,82 @@ class Member(object):
         ratio= FcE/Fc_adj
         tmp= (1+ratio)/2.0/c
         return tmp-math.sqrt(tmp**2-ratio/c)
+    def getFcE1(self, E_adj):
+        ''' Return the value of F_{cE1} as defined in section
+            3.9.2 of NDS-2.018.
+
+        :param E_adj: adjusted modulus of elasticity for beam 
+                      stability and column stability calculations.
+        '''
+        if(self.section.h>self.section.b): # Wide side: H
+            return 0.822*E_adj/(self.getHSlendernessRatio())**2
+        else: # Wide side B
+            return 0.822*E_adj/(self.getBSlendernessRatio())**2
+    def getFcE2(self, E_adj):
+        ''' Return the value of F_{cE2} as defined in section
+            3.9.2 of NDS-2.018.
+
+        :param E_adj: adjusted modulus of elasticity for beam 
+                      stability and column stability calculations.
+        '''
+        if(self.section.h<self.section.b): # Narrow side: H
+            return 0.822*E_adj/(self.getHSlendernessRatio())**2
+        else: # Narrow side B
+            return 0.822*E_adj/(self.getBSlendernessRatio())**2
+    def getBendingSlendernessRatioH(self):
+        ''' Return the slenderness ratio for bending in
+            the h plane.'''
+        Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
+        le= Ke*self.unbracedLengthH
+        return math.sqrt(le*self.section.h/self.section.b**2)
+    def getBendingSlendernessRatioB(self):
+        ''' Return the slenderness ratio for bending in the
+            B plane.'''
+        Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
+        le= Ke*self.unbracedLengthB
+        return math.sqrt(le*self.section.b/self.section.h**2)
+    def getFbE(self, E_adj):
+        ''' Return the value of F_{bE} as defined in section
+            3.9.2 of NDS-2.018.
+
+        :param E_adj: adjusted modulus of elasticity for beam 
+                      stability and column stability calculations.
+        '''
+        sr= 1.0
+        if(self.section.h<self.section.b): # Narrow side: H
+            sr= self.getBendingSlendernessRatioB()
+            print('sr= ', sr)
+        else: # Narrow side B
+            sr= self.getBendingSlendernessRatioH()
+            print('sr= ', sr)
+        return 1.2*E_adj/sr**2
+    def getCapacityFactor(self, E_adj, Fc_adj, Fb1_adj, Fb2_adj, fc,fb1, fb2):
+        ''' Return the capacity factor for members subjected to a 
+            combination of bending about one or both principal axes 
+            and axial compression according to section 3.9.2 of
+            NDS-2.018.
+
+        :param E_adj: adjusted modulus of elasticity for beam 
+                      stability and column stability calculations.
+        :param Fc_adj: adjusted value of reference compression stress.
+        :param Fb1_adj: adjusted value of reference bending stress (for
+                        bending load applied to narrow face of member).
+        :param Fb2_adj: adjusted value of reference bending stress (for
+                        bending load applied to wide face of member).
+        :param fc: compression stress.
+        :param fb1: bending stress (bending load applied to narrow face
+                    of member).
+        :param fb2: bending stress (bending load applied to wide face
+                    of member).
+        '''
+        val393= (fc/Fc_adj)**2 #Equation 3-9-3
+        FcE1= self.getFcE1(E_adj)
+        FcE2= self.getFcE2(E_adj)
+        FbE= self.getFbE(E_adj)
+        val393+= fb1/(Fb1_adj*(1-min(fc/FcE1,1.0)))
+        val393+= fb2/(Fb2_adj*(1-min(fc/FcE2,1.0)-min(fb1/FbE,1.0)**2))
+        val394= fc/FcE2+(fb1/FbE)**2 #Equation 3-9-4
+        return max(val393,val394)
         
 
 # Properties of Plywood structural panels taken from:
