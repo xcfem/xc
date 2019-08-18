@@ -13,6 +13,7 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 import math
 from materials import steel_base
 from miscUtils import LogMessages as lmsg
+from materials import buckling_base
 
 class ASTMSteel(steel_base.BasicSteel):
     '''ASTM structural steel.'''
@@ -418,7 +419,7 @@ class BendingState(object):
         '''
         return 12.5*self.Mmax/(2.5*self.Mmax+3*self.Ma+4*self.Mb+3*self.Mc)
 
-class MemberConnection(object):
+class MemberConnection(buckling_base.MemberConnection):
     '''Member length and connections
 
        :ivar L: member length.
@@ -432,38 +433,9 @@ class MemberConnection(object):
     '''
     def __init__(self,L,rotI='free',transI='fixed',rotJ= 'free',transJ= 'fixed'):
         '''Constructor.'''
+        super(MemberConnection, self).__init__(rotI,transI,rotJ,transJ)
         self.L= L
         self.Lb= L
-        self.rotI= rotI
-        self.transI= transI
-        self.rotJ= rotJ
-        self.transJ= transJ
-    def getEffectiveBucklingLengthCoefficientRecommended(self):
-        '''Return the effective length factor
-           according to table C-A-7.1 or AISC specification'''
-        if(self.rotI=='fixed'):
-            if(self.rotJ=='fixed'):
-                if(self.transJ=='fixed'):
-                    retval= .65 # Theoretical .5
-                else: # self.transJ=='free'
-                    retval= 1.2 #Theoretical 1.0
-            else: # self.rotJ=='free'
-                if(self.transJ== 'fixed'):
-                    retval= .8 # Theoretical .7
-                else: # self.transJ=='free'
-                    retval= 2.1 # Theoretical 2.0
-        else: # self.rotI=='free'
-             if(self.rotJ=='fixed'):
-                 if(self.transJ=='free'):
-                     retval= 2.0 # Theoretical 2.0
-                 else:
-                     retval= 0.8 # Theoretical .7
-             else: # self.rotJ=='free'
-                 if(self.transI=='fixed' and self.transJ=='fixed'):
-                     retval= 1.0 # Theoretical 1.0
-                 else:
-                     retval= 1e6 # Stiffness matrix singular
-        return retval
     def getLateralTorsionalBucklingModificationFactor(self,bendingState):
         ''' Return the lateral-torsional buckling modification factor Cb
             for non uniform moment diagrams when both ends of the segment

@@ -48,6 +48,7 @@ print('Pn: ', Pn/1e3, ' kN', Pn/1e3*kN2kips, ' ksi')
 print('ratio1: ', ratio1)
 '''
 
+
 import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
