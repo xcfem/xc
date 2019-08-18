@@ -340,10 +340,8 @@ class Member(object):
         sr= 1.0
         if(self.section.h<self.section.b): # Narrow side: H
             sr= self.getBendingSlendernessRatioB()
-            print('sr= ', sr)
         else: # Narrow side B
             sr= self.getBendingSlendernessRatioH()
-            print('sr= ', sr)
         return 1.2*E_adj/sr**2
     def getCapacityFactor(self, E_adj, Fc_adj, Fb1_adj, Fb2_adj, fc,fb1, fb2):
         ''' Return the capacity factor for members subjected to a 
