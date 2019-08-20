@@ -391,3 +391,42 @@ class MononobeOkabePressureDistribution(EarthPressureBase):
             retval= (z-zInf)/(zSup-zInf)*self.max_stress
         return retval
 
+class EarthPressureSlopedWall(object):
+    '''Earth pressure on a sloped wall. A single soil type with no freatic
+    is considered.
+
+    :ivar Ksoil: pressure coefficient of the soil
+    :ivar gammaSoil: weight density of the soil
+    :ivar zGroundPnt1: global Z coordinate of ground level at point of 
+                      coordinates XYpnt1
+    :ivar XYpnt1: (x,y) coordinates of point 1   
+    :ivar zGroundPnt2: global Z coordinate of ground level at point of 
+                      coordinates XYpnt2
+    :ivar XYpnt2: (x,y) coordinates of point 2   
+    '''
+    
+    def __init__(self, Ksoil,gammaSoil,zGroundPnt1,XYpnt1,zGroundPnt2,XYpnt2):
+        self.Ksoil=Ksoil
+        self.gammaSoil=gammaSoil
+        self.zGroundPnt1=zGroundPnt1
+        self.XYpnt1=XYpnt1
+        self.zGroundPnt2=zGroundPnt2
+        self.XYpnt2=XYpnt2
+        self.slope=(self.zGroundPnt2-self.zGroundPnt1)/math.sqrt((self.XYpnt2[0]-self.XYpnt1[0])**2+(self.XYpnt2[1]-self.XYpnt1[1])**2)
+        
+    def getPressure(self,x,y,z):
+        zGround=self.zGroundPnt1+self.slope*math.sqrt((x-self.XYpnt1[0])**2+(y-self.XYpnt1[1])**2)
+        if z<zGround:
+            ret_press=self.Ksoil*self.gammaSoil*(zGround-z)
+        else:
+            ret_press=0.0
+        return ret_press
+        
+    def appendLoadToCurrentLoadPattern(self,xcSet,loadVector):
+        for e in xcSet.elements:
+            coo=e.getCooCentroid(False)
+            presElem=self.getPressure(coo[0],coo[1],coo[2])
+            loadVector= presElem*vDir
+            if(presElem!=0.0):
+                e.vector3dUniformLoadGlobal(loadVector)
+
