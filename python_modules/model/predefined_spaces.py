@@ -87,11 +87,22 @@ class PredefinedSpace(object):
           Args:
               :param iNodA: (int) first node identifier (tag).
               :param iNodB: (int) second node identifier (tag).
-              :param bearingMaterialNames: (list) material names for the zero length
-                 element.
-              :param orientation: (list) vectors used to orient the zero length
-                 element; (x,yp) x: axis of the element, yp: vector that lies 
-                 on the xy plane of the element.
+              :param bearingMaterialNames: (list) material names for the zero 
+                 length element [mat1,mat2,mat3,mat4,mat5,mat6], where:
+                 mat1,mat2,mat3 correspond to translations along local x,y,z 
+                 axes, respectively,
+                 mat3,mat4,mat5 correspond to rotation about local x,y,z 
+                 axes, respectively.
+              :param orientation: (list) of two vectors [x,yp] used to orient 
+                 the zero length element, where: 
+                 x: are the vector components in global coordinates defining 
+                    local x-axis (optional)
+                 yp: vector components in global coordinates defining a  vector
+                      that lies in the local x-y plane of the element(optional).
+               If the optional orientation vector are not specified, the local
+               element axes coincide with the global axes. Otherwise, the local
+               z-axis is defined by the cross product between the vectors x 
+               and yp specified in the command line.
           :return: newly created zero length element that represents the bearing.
 
         '''
@@ -115,11 +126,22 @@ class PredefinedSpace(object):
 
           Args:
               :param iNod: (int) node identifier (tag).
-              :param bearingMaterialNames (list): material names for the zero length
-                 element.
-              :param orientation: (list) vectors used to orient the zero length
-                 element; (x,yp) x: axis of the element, yp: vector that lies 
-                 on the xy plane of the element.
+              :param bearingMaterialNames (list): (list) material names for the zero 
+                 length element [mat1,mat2,mat3,mat4,mat5,mat6], where:
+                 mat1,mat2,mat3 correspond to translations along local x,y,z 
+                 axes, respectively,
+                 mat3,mat4,mat5 correspond to rotation about local x,y,z 
+                 axes, respectively.
+              :param orientation: (list) of two vectors [x,yp] used to orient 
+                 the zero length element, where: 
+                 x: are the vector components in global coordinates defining 
+                    local x-axis (optional)
+                 yp: vector components in global coordinates defining a  vector
+                      that lies in the local x-y plane of the element(optional).
+               If the optional orientation vector are not specified, the local
+               element axes coincide with the global axes. Otherwise, the local
+               z-axis is defined by the cross product between the vectors x 
+               and yp specified in the command line.
           Returns:
               :rtype: (int, int) new node tag, new element tag.
         '''
