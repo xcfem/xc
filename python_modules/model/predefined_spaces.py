@@ -697,7 +697,7 @@ class StructuralMechanics3D(PredefinedSpace):
                 if(constrCond[i] <> 'free'):
                     self.constraints.newSPConstraint(n.tag,i,constrCond[i])
                     
-    def setHugeBarBetweenNodes(self,nodeTagA, nodeTagB, nmbTransf):
+    def setHugeBeamBetweenNodes(self,nodeTagA, nodeTagB, nmbTransf):
         '''
         Creates a very stiff bar between the two nodes being passed as parameters.
         (it was a workaround to the problem with the reactions values in nodes when
@@ -708,24 +708,33 @@ class StructuralMechanics3D(PredefinedSpace):
         :param   nodeTagB: tag of bar's to node.
         :param   nmbTransf: name of the coordinate transformation to use for the new bar.
         '''
-        elementos= self.preprocessor.getElementHandler
-        elementos.defaultTransformation= nmbTransf
+        elements= self.preprocessor.getElementHandler
+        elements.defaultTransformation= nmbTransf
         # Material definition
         matName= 'bar' + str(nodeTagA) + str(nodeTagB) + nmbTransf
-        A= 10
-        E= 1e14
-        G= 1e12
-        Iz= 10
-        Iy= 10
-        J= 10
+        (A,E,G,Iz,Iy,J)= (10, 1e14 , 1e12 , 10, 10, 10)
         scc= tm.defElasticSection3d(self.preprocessor,matName,A,E,G,Iz,Iy,J)
-        defMat= elementos.defaultMaterial
-        #print "defMat= ", defMat
-        elementos.defaultMaterial= matName
-        elem= elementos.newElement("ElasticBeam3d",xc.ID([nodeTagA,nodeTagB]))
-        elementos.defaultMaterial= defMat
+        elements.defaultMaterial= matName
+        elem= elements.newElement("ElasticBeam3d",xc.ID([nodeTagA,nodeTagB]))
         scc= elem.sectionProperties
-        #print "A= ", elem.sectionProperties.A
+        return elem
+
+    def setHugeTrussBetweenNodes(self,nodeTagA, nodeTagB):
+        '''
+        Creates a very stiff bar between the two nodes being passed as parameters.
+
+        :param   nodeTagA: tag of bar's from node.
+        :param   nodeTagB: tag of bar's to node.
+        '''
+        elements= self.preprocessor.getElementHandler
+        # Material definition
+        matName= 'truss' + str(nodeTagA) + str(nodeTagB)
+        (A,E)=( 10 , 1e14)
+        mat= tm.defElasticMaterial(self.preprocessor, matName,E)
+        elements.dimElem= 3
+        elements.defaultMaterial= matName
+        elem= elements.newElement("Truss",xc.ID([nodeTagA,nodeTagB]))
+        elem.area=A
         return elem
 
 def getStructuralMechanics3DSpace(preprocessor):

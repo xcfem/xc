@@ -26,12 +26,9 @@ nod2= nodes.newNodeXYZ(L,0.0,0.0)
 
 
 # Constraints
-
-modelSpace.fixNode000_000(nod1.tag)
-linCrdTr=modelSpace.newLinearCrdTransf('linCrdTr',xzVector=xc.Vector([0,1,0]))
-rr= modelSpace.setHugeBeamBetweenNodes(nod1.tag,nod2.tag,'linCrdTr')
-
-
+modelSpace.fixNode('000_000',nod1.tag)
+modelSpace.fixNode('F00_000',nod2.tag)
+rr= modelSpace.setHugeTrussBetweenNodes(nod1.tag,nod2.tag)
 
 # Loads definition
 loadHandler= preprocessor.getLoadHandler
@@ -43,7 +40,7 @@ ts= lPatterns.newTimeSeries("constant_ts","ts")
 lPatterns.currentTimeSeries= "ts"
 #Load case definition
 lp0= lPatterns.newLoadPattern("default","0")
-lp0.newNodalLoad(nod2.tag,xc.Vector([-F,F,-F,0,0,0]))
+lp0.newNodalLoad(nod2.tag,xc.Vector([F,0,0,0,0,0]))
 #We add the load case to domain.
 lPatterns.addToDomain(lp0.name)
 
@@ -53,23 +50,18 @@ result= analisis.analyze(1)
 
 
 deltaX= nod2.getDisp[0]
-deltaY= nod2.getDisp[1]
-deltaZ= nod2.getDisp[2]  # Node 2 displacement
-
-
-ratio1= math.sqrt(deltaX**2+deltaY**2+deltaZ**2)
+rr.getResistingForce()
+N=rr.getN()
 
 ''' 
 print deltaX
-print deltaY
-print deltaZ
-print ratio1
+print N
   '''
 
 import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
-if ratio1<1e-8:
+if deltaX<1e-10:
   print "test ",fname,": ok."
 else:
   lmsg.error(fname+' ERROR.')
