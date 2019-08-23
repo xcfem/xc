@@ -35,6 +35,10 @@
 XC::DistributedBase::DistributedBase(void)
   {}
 
+//! @brief Destructor.
+XC::DistributedBase::~DistributedBase(void)
+  {}
+
 //! @brief Returns a vector to store class dbTags.
 XC::DbTagData &XC::DistributedBase::getDbTagData(void) const
   {

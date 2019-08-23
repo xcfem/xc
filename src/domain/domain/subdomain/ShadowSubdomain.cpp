@@ -658,7 +658,7 @@ bool XC::ShadowSubdomain::removeSFreedom_Constraint(int loadTag, int loadPattern
   }
 
 
-static XC::ArrayOfTaggedObjects fakeArray(nullptr,1,"Eror");
+static XC::ArrayOfTaggedObjects fakeArray(nullptr,1,"Error");
 static XC::SingleDomEleIter fakeEleIter(&fakeArray);
 static XC::SingleDomNodIter fakeNodIter(&fakeArray);
 

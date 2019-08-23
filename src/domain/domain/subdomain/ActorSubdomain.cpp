@@ -83,51 +83,49 @@ int XC::ActorSubdomain::run(void)
     Vector theVect(4);
     bool exitYet = false;
 
-    while (exitYet == false) {
-
+    while(exitYet == false)
+      {
   	this->recvID(msgData);
 	int action = msgData(0);
 
 	int theType, theOtherType, tag, dbTag, loadPatternTag;
 	Element *theEle= nullptr;
 	Node *theNod= nullptr;
-        SFreedom_Constraint *theSP= nullptr;
 	MFreedom_Constraint *theMP= nullptr;
-	LoadPattern *theLoadPattern;
-	NodalLoad *theNodalLoad;
-	ElementalLoad *theElementalLoad;
-	DomainDecompositionAnalysis *theDDAnalysis;
-	const XC::Matrix *theMatrix;
-	const XC::Vector *theVector;
-	Matrix *theM;
-	Vector *theV;
-	PartitionedModelBuilder *theBuilder;
-	IncrementalIntegrator *theIntegrator;
-	EquiSolnAlgo *theAlgorithm;
-	LinearSOE *theSOE;
-	LinearSOESolver *theSolver;
-	ConvergenceTest *theTest;
-	Recorder *theRecorder;
-	bool res;
-	double doubleRes;
+	SFreedom_Constraint *theSP= nullptr;
+	LoadPattern *theLoadPattern= nullptr;
+	NodalLoad *theNodalLoad= nullptr;
+	ElementalLoad *theElementalLoad= nullptr;
+	DomainDecompositionAnalysis *theDDAnalysis= nullptr;
+	const Matrix *theMatrix= nullptr;
+	const Vector *theVector= nullptr;
+	Matrix *theMtx= nullptr;
+	Vector *theVct= nullptr;
+	PartitionedModelBuilder *theBuilder= nullptr;
+	IncrementalIntegrator *theIntegrator= nullptr;
+	EquiSolnAlgo *theAlgorithm= nullptr;
+	LinearSOE *theSOE= nullptr;
+	LinearSOESolver *theSolver= nullptr;
+	ConvergenceTest *theTest= nullptr;
+	Recorder *theRecorder= nullptr;
+	bool res= false;
+	double doubleRes= 0.0;
 	int intRes;
 
 
-	const XC::ID *theID;
+	const ID *theID;
 	
-	switch (action) {
-
+	switch (action)
+	  {
 	  case ShadowActorSubdomain_setTag:
 	    tag = msgData(1); // subdomain tag
 	    this->setTag(tag);
-	    this->XC::Actor::setCommitTag(tag);
-
+	    this->Actor::setCommitTag(tag);
 	    break;
 
 	  case ShadowActorSubdomain_newStep:
 	    this->recvVector(theVect);
 	    this->newStep(theVect(0));
-
 	    break;
 
 	  case ShadowActorSubdomain_buildSubdomain:
@@ -138,14 +136,12 @@ int XC::ActorSubdomain::run(void)
 	    theBuilder = theBroker->getPtrNewPartitionedModelBuilder(*this, theType);
 	    this->recvObject(*theBuilder);
 	    this->buildSubdomain(tag, *theBuilder);
-
 	    break;
 
 	case ShadowActorSubdomain_getRemoteData:
 	    theID = &(this->getExternalNodes());
 	    msgData(0) = theID->Size();
 	    msgData(1) = this->getNumDOF();
-
 	    this->sendID(msgData);
 	    if(theID->Size() != 0)
 	      this->sendID(*theID);
@@ -159,10 +155,9 @@ int XC::ActorSubdomain::run(void)
  	  case ShadowActorSubdomain_addElement:
 	    theType = msgData(1);
 	    dbTag = msgData(2);
-
 	    theEle = theBroker->getNewElement(theType);
-
-	    if(theEle != 0) {
+	    if(theEle != 0)
+	      {
 		theEle->setDbTag(dbTag);		
 		this->recvObject(*theEle);
 		bool result = this->addElement(theEle);
@@ -170,8 +165,9 @@ int XC::ActorSubdomain::run(void)
 		    msgData(0) = 0;
 		else
 		    msgData(0) = -1;
-	    } else
-		msgData(0) = -1;
+	      }
+	    else
+	      msgData(0) = -1;
 
 	    /*
 	    this->recvID(msgData);	    
@@ -185,7 +181,6 @@ int XC::ActorSubdomain::run(void)
 	    */
 
 	    break;
-
 	    
 	  case ShadowActorSubdomain_hasNode:
 	    theType = msgData(1);
@@ -195,7 +190,6 @@ int XC::ActorSubdomain::run(void)
 	    else
 	      msgData(0) = -1;
 	    this->sendID(msgData);
-
 	    break;
 
 	  case ShadowActorSubdomain_hasElement:
@@ -206,7 +200,6 @@ int XC::ActorSubdomain::run(void)
 	    else
 	      msgData(0) = -1;
 	    this->sendID(msgData);
-	   
              break;
 
 
@@ -214,8 +207,8 @@ int XC::ActorSubdomain::run(void)
 	    theType = msgData(1);
 	    dbTag = msgData(2);
 	    theNod = theBroker->getNewNode(theType);
-
-	    if(theNod != 0) {
+	    if(theNod != 0)
+	      {
 		theNod->setDbTag(dbTag);		
 		this->recvObject(*theNod); 
 		bool result = this->addNode(theNod);
@@ -223,21 +216,19 @@ int XC::ActorSubdomain::run(void)
 		  msgData(0) = 0;
 		else
 		  msgData(0) = -1;
-	    } else
-		msgData(0) = -1;
+	      }
+	    else
+	      msgData(0) = -1;
 	    //	    std::cerr << "XC::ActorSubdomain::add node: " << *theNod;
 	    break;
-
-
-
-
 
 	  case ShadowActorSubdomain_addExternalNode:
 	    theType = msgData(1);
 	    dbTag = msgData(2);
 	    theNod = theBroker->getNewNode(theType);
 
-	    if(theNod != 0) {
+	    if(theNod != 0)
+	      {
 		theNod->setDbTag(dbTag);
 		this->recvObject(*theNod);
 		bool result = this->XC::Subdomain::addExternalNode(theNod);
@@ -253,18 +244,15 @@ int XC::ActorSubdomain::run(void)
 		    msgData(0) = 0;
 		else
 		    msgData(0) = -1;
-	    } else
-		msgData(0) = -1;
-
+	      }
+	    else
+	      msgData(0) = -1;
 	    break;	    
 
-	    
 	  case ShadowActorSubdomain_addSFreedom_Constraint:
 	    theType = msgData(1);
-	    dbTag = msgData(2);
-	    
-	    theSP = theBroker->getNewSP(theType);
-	    
+	    dbTag = msgData(2);	    
+	    theSP= theBroker->getNewSP(theType);
 	    if(theSP)
               {
 		theSP->setDbTag(dbTag);
@@ -363,9 +351,7 @@ int XC::ActorSubdomain::run(void)
 	    theType = msgData(1);
 	    dbTag = msgData(2);
 	    loadPatternTag = msgData(3);
-	    
 	    theSP = theBroker->getNewSP(theType);
-
 	    if(theSP)
               {
 		theSP->setDbTag(dbTag);
@@ -682,32 +668,36 @@ int XC::ActorSubdomain::run(void)
 	    doubleRes = this->getNodeDisp(tag, dbTag, intRes);
 	    msgData(0) = intRes;
 	    this->sendID(msgData);
-	    if(intRes == 0) {
-	      theV = new Vector(1);
-	      (*theV)(0) = doubleRes;
-	      this->sendVector(*theV);
-	      delete theV;
-	    }
+	    if(intRes == 0)
+	      {
+	        theVct = new Vector(1);
+	        (*theVct)(0) = doubleRes;
+	        this->sendVector(*theVct);
+	        delete theVct;
+		theVct= nullptr;
+	      }
 	    break;
 
 	  case ShadowActorSubdomain_setMass:
 	    tag = msgData(1);  // nodeTag
 	    dbTag = msgData(2); // noRows
 	    theOtherType = msgData(3); // noRows
-	    theM = new Matrix(dbTag, theOtherType);
-	    this->recvMatrix(*theM);
-	    intRes = this->setMass(*theM, tag);
+	    theMtx = new Matrix(dbTag, theOtherType);
+	    this->recvMatrix(*theMtx);
+	    intRes = this->setMass(*theMtx, tag);
 	    
-	    delete theM;
+	    delete theMtx;
+	    theMtx= nullptr;
 	    msgData(0) = intRes;
 	    this->sendID(msgData);
 	    break;
 
          case ShadowActorSubdomain_setRayleighDampingFactors:
-	   theV = new Vector(4);
-	   this->recvVector(*theV);
-	   intRes = this->XC::Subdomain::setRayleighDampingFactors(RayleighDampingFactors(*theV));
-	   delete theV;
+	   theVct= new Vector(4);
+	   this->recvVector(*theVct);
+	   intRes= this->XC::Subdomain::setRayleighDampingFactors(RayleighDampingFactors(*theVct));
+	   delete theVct;
+	   theVct= nullptr;
 	   break;
 
 	  case ShadowActorSubdomain_DIE:
@@ -715,19 +705,18 @@ int XC::ActorSubdomain::run(void)
 	    break;
 
 	  default:
-	    std::cerr << "ActorSubdomain::invalid action " << action << "received\n";
+	    std::cerr << Domain::getClassName() << "::" << __FUNCTION__
+	              << ";invalid action " << action << "received\n";
 	    msgData(0) = -1;
 	}
     }
 
     this->sendID(msgData);
     return 0;
-}
+  }
 
 
-
-const XC::Vector &
-XC::ActorSubdomain::getLastExternalSysResponse(void)
+const XC::Vector &XC::ActorSubdomain::getLastExternalSysResponse(void)
   {
     int numDOF = this->getNumDOF();
     numDOF = this->getNumDOF();

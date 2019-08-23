@@ -100,7 +100,7 @@ class PartitionedModelBuilder: public ModelBuilder, public MovableObject
     //! nodes, elements, loads and constraints to the subdomain {\em
     //! theSubdomain}. The integers \p partition and \p numPartitions
     //! are used to identify which partition is being built and the total
-    //! number of partitions. To return \f$0\f$ if succesfull, a negative number
+    //! number of partitions. To return \f$0\f$ if successful, a negative number
     //! if not.
     virtual int buildSubdomain(int partition, int numPartitions, Subdomain &) =0;
     

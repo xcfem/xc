@@ -202,7 +202,7 @@ bool XC::Subdomain::addNode(Node *node)
 bool XC::Subdomain::addExternalNode(Node *thePtr)
   {
 #ifdef _G3DEBUG
-  // check to see it has not alredy been added
+  // check to see it has not already been added
 
     int nodTag = thePtr->getTag();
     TaggedObject *other = externalNodes->getComponentPtr(nodTag);
@@ -478,7 +478,7 @@ int XC::Subdomain::invokeChangeOnAnalysis(void)
   }
 
 
-//! @brief Returns the number of external nodes that have been successfuly
+//! @brief Returns the number of external nodes that have been successfully
 //! added to the subdomain as external nodes and have yet to be removed from the
 //! subdomain. 
 int XC::Subdomain::getNumExternalNodes(void) const
@@ -574,7 +574,7 @@ const XC::Matrix &XC::Subdomain::getInitialStiff(void)
 
 //! For this class does nothing but print an error message. Subtypes may
 //! provide a condensed damping matrix, \f$T^tDT\f$ or a damping matrix
-//! corresponding to some comination of the condensed stifffness and mass
+//! corresponding to some combination of the condensed stifffness and mass
 //! matrices. Returns a zero matrix of dimensions (1x1).
 const XC::Matrix &XC::Subdomain::getDamp(void)
   {
@@ -760,7 +760,7 @@ const XC::Vector &XC::Subdomain::getLastExternalSysResponse(void)
         std::cerr << Domain::getClassName() << "::" << __FUNCTION__
 		  << "; FATAL ERROR: "
 		  << "; no FE_Element *exists for a subdomain.\n"
-		  << " This is the responsibilty of the"
+		  << " This is the responsibility of the"
 	          << " FE_ELement constructor.\n";
         exit(0);
       }

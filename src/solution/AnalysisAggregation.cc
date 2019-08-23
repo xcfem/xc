@@ -72,29 +72,29 @@ bool XC::AnalysisAggregation::alloc_soln_algo(const std::string &nmb)
     free_soln_algo();
 
     if(nmb=="bfgs_soln_algo")
-      theSolnAlgo=new BFGS(this);
+      theSolnAlgo= new BFGS(this);
     else if(nmb=="broyden_soln_algo")
-      theSolnAlgo=new Broyden(this);
+      theSolnAlgo= new Broyden(this);
     else if(nmb=="krylov_newton_soln_algo")
-      theSolnAlgo=new KrylovNewton(this);
+      theSolnAlgo= new KrylovNewton(this);
     else if(nmb=="linear_soln_algo")
-      theSolnAlgo=new Linear(this);
+      theSolnAlgo= new Linear(this);
     else if(nmb=="modified_newton_soln_algo")
-      theSolnAlgo=new ModifiedNewton(this);
+      theSolnAlgo= new ModifiedNewton(this);
     else if(nmb=="newton_raphson_soln_algo")
-      theSolnAlgo=new NewtonRaphson(this);
+      theSolnAlgo= new NewtonRaphson(this);
     else if(nmb=="newton_line_search_soln_algo")
-      theSolnAlgo=new NewtonLineSearch(this);
+      theSolnAlgo= new NewtonLineSearch(this);
     else if(nmb=="periodic_newton_soln_algo")
-      theSolnAlgo=new PeriodicNewton(this);
+      theSolnAlgo= new PeriodicNewton(this);
     else if(nmb=="frequency_soln_algo")
-      theSolnAlgo=new FrequencyAlgo(this);
+      theSolnAlgo= new FrequencyAlgo(this);
     else if(nmb=="standard_eigen_soln_algo")
-      theSolnAlgo=new StandardEigenAlgo(this);
+      theSolnAlgo= new StandardEigenAlgo(this);
     else if(nmb=="linear_buckling_soln_algo")
-      theSolnAlgo=new LinearBucklingAlgo(this);
+      theSolnAlgo= new LinearBucklingAlgo(this);
     else if(nmb=="ill-conditioning_soln_algo")
-      theSolnAlgo=new KEigenAlgo(this);
+      theSolnAlgo= new KEigenAlgo(this);
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; solution algorithm: '"
@@ -152,7 +152,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
         double alpha= 1.0;
         if(params.Size()>1)
           alpha= params[1];
-        theIntegrator=new ArcLength(this,arc_length,alpha);
+        theIntegrator= new ArcLength(this,arc_length,alpha);
       }
     else if(nmb=="arc_length1_integrator")
       {
@@ -162,7 +162,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
         double alpha= 1.0;
         if(params.Size()>1)
           alpha= params[1];
-        theIntegrator=new ArcLength1(this,arc_length,alpha);
+        theIntegrator= new ArcLength1(this,arc_length,alpha);
       }
     else if(nmb=="displacement_control_integrator")
       {
@@ -178,7 +178,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
-        theIntegrator=new DistributedDisplacementControl(this);
+        theIntegrator= new DistributedDisplacementControl(this);
       }
     else if(nmb=="HS_constraint_integrator")
       {
@@ -194,7 +194,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
         double u_ref= 1.0;
         if(params.Size()>3)
           u_ref= params[3];
-        theIntegrator=new HSConstraint(this,arc_length,psi_u,psi_f,u_ref);
+        theIntegrator= new HSConstraint(this,arc_length,psi_u,psi_f,u_ref);
       }
     else if(nmb=="load_control_integrator")
       {
@@ -202,7 +202,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
-        theIntegrator=new LoadControl(this);
+        theIntegrator= new LoadControl(this);
       }
     else if(nmb=="load_path_integrator")
       {
@@ -210,7 +210,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
-        theIntegrator=new LoadPath(this);
+        theIntegrator= new LoadPath(this);
       }
     else if(nmb=="min_unbal_disp_norm_integrator")
       {
@@ -226,7 +226,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
         double dlambda1max= 1.0;
         if(params.Size()>3)
           dlambda1max= params[3];
-        theIntegrator=new MinUnbalDispNorm(this,lambda1,specnum_iter_step,dlambda1min,dlambda1max);
+        theIntegrator= new MinUnbalDispNorm(this,lambda1,specnum_iter_step,dlambda1min,dlambda1max);
       }
     else if(nmb=="eigen_integrator")
       {
@@ -234,7 +234,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
-        theIntegrator=new EigenIntegrator(this);
+        theIntegrator= new EigenIntegrator(this);
       }
     else if(nmb=="linear_buckling_integrator")
       {
@@ -242,7 +242,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
-        theIntegrator=new LinearBucklingIntegrator(this);
+        theIntegrator= new LinearBucklingIntegrator(this);
       }
     else if(nmb=="ill-conditioning_integrator")
       {
@@ -250,7 +250,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
-         theIntegrator=new KEigenIntegrator(this);
+         theIntegrator= new KEigenIntegrator(this);
       }
     else if(nmb=="alpha_os_integrator")
       {
@@ -258,7 +258,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
-        theIntegrator=new AlphaOS(this);
+        theIntegrator= new AlphaOS(this);
       }
     else if(nmb=="alpha_os_generalized_integrator")
       {
@@ -266,7 +266,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
-        theIntegrator=new AlphaOSGeneralized(this);
+        theIntegrator= new AlphaOSGeneralized(this);
       }
     else if(nmb=="central_difference_integrator")
       {
@@ -274,7 +274,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
-        theIntegrator=new CentralDifference(this);
+        theIntegrator= new CentralDifference(this);
       }
     else if(nmb=="central_difference_alternative_integrator")
       {
@@ -282,7 +282,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
-        theIntegrator=new CentralDifferenceAlternative(this);
+        theIntegrator= new CentralDifferenceAlternative(this);
       }
     else if(nmb=="central_difference_no_damping_integrator")
       {
@@ -290,7 +290,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
-        theIntegrator=new CentralDifferenceNoDamping(this);
+        theIntegrator= new CentralDifferenceNoDamping(this);
       }
     else if(nmb=="collocation_integrator")
       {
@@ -298,7 +298,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
-        theIntegrator=new Collocation(this);
+        theIntegrator= new Collocation(this);
       }
     else if(nmb=="collocation_hybrid_simulation_integrator")
       {
@@ -306,7 +306,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
-        theIntegrator=new CollocationHybridSimulation(this);
+        theIntegrator= new CollocationHybridSimulation(this);
       }
     else if(nmb=="HHT_integrator")
       {
@@ -314,7 +314,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
-        theIntegrator=new HHT(this);
+        theIntegrator= new HHT(this);
       }
     else if(nmb=="HHT1_integrator")
       {
@@ -322,7 +322,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
-        theIntegrator=new HHT1(this);
+        theIntegrator= new HHT1(this);
       }
     else if(nmb=="HHT_explicit_integrator")
       {
@@ -330,7 +330,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
-        theIntegrator=new HHTExplicit(this);
+        theIntegrator= new HHTExplicit(this);
       }
     else if(nmb=="HHT_generalized_integrator")
       {
@@ -338,7 +338,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
-        theIntegrator=new HHTGeneralized(this);
+        theIntegrator= new HHTGeneralized(this);
       }
     else if(nmb=="HHT_generalized_explicit_integrator")
       {
@@ -346,7 +346,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
-        theIntegrator=new HHTGeneralizedExplicit(this);
+        theIntegrator= new HHTGeneralizedExplicit(this);
       }
     else if(nmb=="HHT_hybrid_simulation_integrator")
       {
@@ -354,7 +354,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
-        theIntegrator=new HHTHybridSimulation(this);
+        theIntegrator= new HHTHybridSimulation(this);
       }
     else if(nmb=="newmark_integrator")
       {
@@ -362,7 +362,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
-         theIntegrator=new Newmark(this,.5,.25);
+         theIntegrator= new Newmark(this,.5,.25);
       }
     else if(nmb=="newmark1_integrator")
       {
@@ -370,7 +370,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
-        theIntegrator=new Newmark1(this,.5,.25);
+        theIntegrator= new Newmark1(this,.5,.25);
       }
     else if(nmb=="newmark_explicit_integrator")
       {
@@ -378,7 +378,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
-        theIntegrator=new NewmarkExplicit(this,.5);
+        theIntegrator= new NewmarkExplicit(this,.5);
       }
     else if(nmb=="newmark_hybrid_simulation_integrator")
       {
@@ -386,7 +386,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
-        theIntegrator=new NewmarkHybridSimulation(this);
+        theIntegrator= new NewmarkHybridSimulation(this);
       }
     else if(nmb=="wilson_theta_integrator")
       {
@@ -394,7 +394,7 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
 	  std::clog << getClassName() << "::" << __FUNCTION__
 	            << ' ' << nmb << " integrator doesn't need parameters."
 	            << std::endl;
-        theIntegrator=new WilsonTheta(this);
+        theIntegrator= new WilsonTheta(this);
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -449,47 +449,47 @@ bool XC::AnalysisAggregation::alloc_system_of_equations(const std::string &nmb,A
   {
     free_system_of_equations();
     if(nmb=="band_arpack_soe")
-      theSOE=new BandArpackSOE(this);
+      theSOE= new BandArpackSOE(this);
     else if(nmb=="band_arpackpp_soe")
-      theSOE=new BandArpackppSOE(this);
+      theSOE= new BandArpackppSOE(this);
     else if(nmb=="sym_arpack_soe")
-      theSOE=new SymArpackSOE(this);
+      theSOE= new SymArpackSOE(this);
     else if(nmb=="sym_band_eigen_soe")
-      theSOE=new SymBandEigenSOE(this);
+      theSOE= new SymBandEigenSOE(this);
     else if(nmb=="full_gen_eigen_soe")
-      theSOE=new FullGenEigenSOE(this);
+      theSOE= new FullGenEigenSOE(this);
     else if(nmb=="band_gen_lin_soe")
-      theSOE=new BandGenLinSOE(this);
+      theSOE= new BandGenLinSOE(this);
     else if(nmb=="distributed_band_gen_lin_soe")
-      theSOE=new DistributedBandGenLinSOE(this);
+      theSOE= new DistributedBandGenLinSOE(this);
     else if(nmb=="band_spd_lin_soe")
-      theSOE=new BandSPDLinSOE(this);
+      theSOE= new BandSPDLinSOE(this);
     else if(nmb=="distributed_band_spd_lin_soe")
-      theSOE=new DistributedBandSPDLinSOE(this);
+      theSOE= new DistributedBandSPDLinSOE(this);
     else if(nmb=="diagonal_soe")
-      theSOE=new DiagonalSOE(this);
+      theSOE= new DiagonalSOE(this);
     else if(nmb=="distributed_diagonal_soe")
-      theSOE=new DistributedDiagonalSOE(this);
+      theSOE= new DistributedDiagonalSOE(this);
     else if(nmb=="full_gen_lin_soe")
-      theSOE=new FullGenLinSOE(this);
+      theSOE= new FullGenLinSOE(this);
 //     else if(nmb=="itpack_lin_soe")
-//       theSOE=new ItpackLinSOE(this);
+//       theSOE= new ItpackLinSOE(this);
     else if(nmb=="profile_spd_lin_soe")
-      theSOE=new ProfileSPDLinSOE(this);
+      theSOE= new ProfileSPDLinSOE(this);
     else if(nmb=="distributed_profile_spd_lin_soe")
-      theSOE=new DistributedProfileSPDLinSOE(this);
+      theSOE= new DistributedProfileSPDLinSOE(this);
     else if(nmb=="sparse_gen_col_lin_soe")
-      theSOE=new SparseGenColLinSOE(this);
+      theSOE= new SparseGenColLinSOE(this);
     else if(nmb=="distributed_sparse_gen_col_lin_soe")
-      theSOE=new DistributedSparseGenColLinSOE(this);
+      theSOE= new DistributedSparseGenColLinSOE(this);
     else if(nmb=="sparse_gen_row_lin_soe")
-      theSOE=new SparseGenRowLinSOE(this);
+      theSOE= new SparseGenRowLinSOE(this);
     else if(nmb=="distributed_sparse_gen_row_lin_soe")
-      theSOE=new DistributedSparseGenRowLinSOE(this);
+      theSOE= new DistributedSparseGenRowLinSOE(this);
     else if(nmb=="sym_sparse_lin_soe")
-      theSOE =new SymSparseLinSOE(this);
+      theSOE= new SymSparseLinSOE(this);
 //     else if(nmb=="umfpack_gen_lin_soe")
-//       theSOE =new UmfpackGenLinSOE();
+//       theSOE= new UmfpackGenLinSOE();
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; system of equations: '"
@@ -913,13 +913,13 @@ int XC::AnalysisAggregation::setConvergenceTest(ConvergenceTest &theNewTest)
 
 void XC::AnalysisAggregation::brokeDDLinearSOE(const CommParameters &cp,const ID &data)
   {
-    theSOE = cp.brokeDDLinearSOE(data(5),data(6));
+    theSOE= cp.brokeDDLinearSOE(data(5),data(6));
     theSOE->set_owner(this);
   }
 
 void XC::AnalysisAggregation::brokeLinearSOE(const CommParameters &cp,const ID &data)
   {
-    theSOE = cp.brokeLinearSOE(data(4),data(5));
+    theSOE= cp.brokeLinearSOE(data(4),data(5));
     theSOE->set_owner(this);
   }
 

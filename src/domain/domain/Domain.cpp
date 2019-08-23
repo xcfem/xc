@@ -131,7 +131,7 @@ XC::Domain::Domain(CommandEntity *owr,DataOutputHandler::map_output_handlers *oh
 //! @param numNodes: number of nodes.
 //! @param numElements: number of elements.
 //! @param numSPs: number of single freedom constraints.
-//! @param numMPs: number of multi-freedom constraintes.
+//! @param numMPs: number of multi-freedom constraints.
 //! @param numLoadPatterns: number of load patterns.
 //! @param numNodeLockers: number of node lockers.
 XC::Domain::Domain(CommandEntity *owr,int numNodes, int numElements, int numSPs, int numMPs, int numLoadPatterns,int numNodeLockers,DataOutputHandler::map_output_handlers *oh)
@@ -1145,7 +1145,7 @@ int XC::Domain::recvData(const CommParameters &cp)
     int res= ObjWithRecorders::recvData(cp);
     res+= cp.receiveMovable(timeTracker,getDbTagData(),CommMetaData(2));
     //
-    // now if the currentGeoTag does not agree with whats in the domain
+    // now if the currentGeoTag does not agree with what's in the domain
     // we must wipe everything in the domain and recreate the domain based on the info from the channel
     //
     const int tagChannel= cp.getChannel()->getTag();

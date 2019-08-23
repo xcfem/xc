@@ -35,7 +35,7 @@
 namespace XC {
   class Vector;
   class KEigenAlgo;
-  class ArpackSOE;
+  class EigenSOE;
   class KEigenIntegrator;
 
 //! @ingroup AnalysisType
@@ -53,7 +53,7 @@ class IllConditioningAnalysis: public EigenAnalysis
      
     virtual int setAlgorithm(KEigenAlgo &theAlgo);
     virtual int setIntegrator(KEigenIntegrator &theIntegrator);
-    virtual int setEigenSOE(ArpackSOE &theSOE);
+    virtual int setEigenSOE(EigenSOE &theSOE);
   };
 inline Analysis *IllConditioningAnalysis::getCopy(void) const
   { return new IllConditioningAnalysis(*this); }

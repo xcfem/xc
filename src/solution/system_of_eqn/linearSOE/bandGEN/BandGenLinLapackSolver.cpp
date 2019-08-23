@@ -70,14 +70,18 @@
 XC::BandGenLinLapackSolver::BandGenLinLapackSolver(void)
   :BandGenLinSolver(SOLVER_TAGS_BandGenLinLapackSolver) {}
 
-
+//! @brief LAPACK Computes the solution to the system of linear equations
+//! with a band matrix A and multiple right-hand sides.
 extern "C" int dgbsv_(int *N, int *KL, int *KU, int *NRHS, double *A, 
 		      int *LDA, int *iPiv, double *B, int *LDB, int *INFO);
 		      
 
+//! @brief LAPACK Solves a system of linear equations with an LU-factored
+//! band matrix, with multiple right-hand sides.
 extern "C" int dgbtrs_(char *TRANS, int *N, int *KL, int *KU, int *NRHS, 
 		       double *A, int *LDA, int *iPiv, double *B, int *LDB, 
 		       int *INFO);
+extern "C" int dgbcon_(char *norm, int *N, int *KL, int *KU, double *ab, int *ldab, const int *iPiv, double *anorm, double *rcond, double *work, int *iwork, int *INFO);
 
 //! @brief Performs the solution of the system of equations.
 //!
@@ -91,60 +95,62 @@ extern "C" int dgbtrs_(char *TRANS, int *N, int *KL, int *KU, int *NRHS,
 //! returns INFO. The solve process changes A and X.
 int XC::BandGenLinLapackSolver::solve(void)
   {
-    if(theSOE == 0)
+    if(!theSOE)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; no LinearSOE object has been set.\n";
 	return -1;
       }
-
-    int n = theSOE->size;    
-    // check iPiv is large enough
-    if(iPiv.Size() < n)
+    else
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; iPiv not large enough - has setSize() been called?\n";
-	return -1;
+	int n = theSOE->size;    
+	// check iPiv is large enough
+	if(iPiv.Size() < n)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; iPiv not large enough - has setSize() been called?\n";
+	    return -1;
+	  }
+
+	int kl = theSOE->numSubD;
+	int ku = theSOE->numSuperD;
+	int ldA = 2*kl + ku +1;
+	int nrhs = 1;
+	int ldB = n;
+	int info;
+	double *Aptr = theSOE->A.getDataPtr();
+	double *Xptr = theSOE->getPtrX();
+	double *Bptr = theSOE->getPtrB();
+	int    *iPIV = iPiv.getDataPtr();
+
+	// first copy B into X
+	for(int i=0; i<n; i++)
+	  {	*(Xptr++) = *(Bptr++); }
+	Xptr = theSOE->getPtrX();
+
+	// now solve AX = B
+
+	{
+	  if(theSOE->factored == false) // factor and solve 	
+	    dgbsv_(&n,&kl,&ku,&nrhs,Aptr,&ldA,iPIV,Xptr,&ldB,&info);
+	  else // solve only using factored matrix
+	    {
+	      char ene[]= "N";
+	      dgbtrs_(ene,&n,&kl,&ku,&nrhs,Aptr,&ldA,iPIV,Xptr,&ldB,&info);
+	    }
+	}
+
+	// check if successful
+	if(info != 0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << ";LAPACK routine returned " << info << std::endl;
+	    return -info;
+	  }
+
+	theSOE->factored = true;
+	return 0;
       }
-
-    int kl = theSOE->numSubD;
-    int ku = theSOE->numSuperD;
-    int ldA = 2*kl + ku +1;
-    int nrhs = 1;
-    int ldB = n;
-    int info;
-    double *Aptr = theSOE->A.getDataPtr();
-    double *Xptr = theSOE->getPtrX();
-    double *Bptr = theSOE->getPtrB();
-    int    *iPIV = iPiv.getDataPtr();
-    
-    // first copy B into X
-    for(int i=0; i<n; i++)
-      {	*(Xptr++) = *(Bptr++); }
-    Xptr = theSOE->getPtrX();
-
-    // now solve AX = B
-
-    {
-      if(theSOE->factored == false) // factor and solve 	
-        dgbsv_(&n,&kl,&ku,&nrhs,Aptr,&ldA,iPIV,Xptr,&ldB,&info);
-      else // solve only using factored matrix
-        {
-          char ene[]= "N";
-          dgbtrs_(ene,&n,&kl,&ku,&nrhs,Aptr,&ldA,iPIV,Xptr,&ldB,&info);
-        }
-    }
-
-    // check if successful
-    if(info != 0)
-      {
-	std::cerr << "WARNING XC::BandGenLinLapackSolver::solve() -";
-	std::cerr << "LAPACK routine returned " << info << std::endl;
-	return -info;
-      }
-
-    theSOE->factored = true;
-    return 0;
   }
     
 

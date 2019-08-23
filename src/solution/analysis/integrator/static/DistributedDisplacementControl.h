@@ -76,7 +76,8 @@ class Domain;
 
 //! @ingroup StaticIntegrator
 //
-//! @brief ??.
+//! @brief Distributed version of the algorithmic class for
+//! performing a static analysis using the displacement control method.
 class DistributedDisplacementControl: public DisplacementControl, public DistributedObj
   {
   private:
