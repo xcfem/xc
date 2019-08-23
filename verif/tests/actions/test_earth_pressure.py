@@ -41,7 +41,7 @@ pres01_10_tg=pres01_20_tg+1.4*1.3*10+10
 pres01_5_tg=pres01_10_tg+1.5*1.4*5+5
 pres01_0_tg=pres01_10_tg+1.5*1.4*10+10
 
-OK01= (pres01_45-pres01_45_tg<1e-6) and (pres01_40-pres01_40_tg<1e-6)  and (pres01_35-pres01_35_tg<1e-6) and (pres01_30-pres01_30_tg<1e-6) and (pres01_25-pres01_25_tg<1e-6) and (pres01_20-pres01_20_tg<1e-6) and (pres01_15-pres01_15_tg<1e-6) and (pres01_10-pres01_10_tg<1e-6) and (pres01_5-pres01_5_tg<1e-6) and (pres01_0-pres01_0_tg<1e-6)
+OK01= abs(pres01_45-pres01_45_tg)<1e-6 and abs(pres01_40-pres01_40_tg<1e-6)  and abs(pres01_35-pres01_35_tg)<1e-6 and abs(pres01_30-pres01_30_tg)<1e-6 and abs(pres01_25-pres01_25_tg)<1e-6 and abs(pres01_20-pres01_20_tg)<1e-6 and abs(pres01_15-pres01_15_tg)<1e-6 and abs(pres01_10-pres01_10_tg)<1e-6 and abs(pres01_5-pres01_5_tg)<1e-6 and abs(pres01_0-pres01_0_tg)<1e-6
 
 soil02=ep.EarthPressureModel(zGround=50, zBottomSoils=[40,30,20,10,-10],KSoils=[1.1,1.2,1.3,1.4,1.5],gammaSoils=[2,2.1,2.2,2.3,2.4], zWater=-1e3, gammaWater=1)
 
@@ -67,7 +67,7 @@ pres02_10_tg=pres02_20_tg+1.4*2.3*10
 pres02_5_tg=pres02_10_tg+1.5*2.4*5
 pres02_0_tg=pres02_10_tg+1.5*2.4*10
 
-OK02= (pres02_45-pres02_45_tg<1e-6) and (pres02_40-pres02_40_tg<1e-6)  and (pres02_35-pres02_35_tg<1e-6) and (pres02_30-pres02_30_tg<1e-6) and (pres02_25-pres02_25_tg<1e-6) and (pres02_20-pres02_20_tg<1e-6) and (pres02_15-pres02_15_tg<1e-6) and (pres02_10-pres02_10_tg<1e-6) and (pres02_5-pres02_5_tg<1e-6) and (pres02_0-pres02_0_tg<1e-6)
+OK02= abs(pres02_45-pres02_45_tg)<1e-6 and abs(pres02_40-pres02_40_tg<1e-6)  and abs(pres02_35-pres02_35_tg)<1e-6 and abs(pres02_30-pres02_30_tg)<1e-6 and abs(pres02_25-pres02_25_tg)<1e-6 and abs(pres02_20-pres02_20_tg)<1e-6 and abs(pres02_15-pres02_15_tg)<1e-6 and abs(pres02_10-pres02_10_tg)<1e-6 and abs(pres02_5-pres02_5_tg)<1e-6 and abs(pres02_0-pres02_0_tg)<1e-6
 
 '''
 print(OK02)

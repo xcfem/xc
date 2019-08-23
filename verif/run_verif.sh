@@ -22,6 +22,7 @@ python tests/actions/test_prestressing.py
 python tests/actions/test_peck_pressure_envelope.py
 python tests/actions/mononobe_okabe_test_01.py
 python tests/actions/test_earth_pressure.py
+python tests/actions/test_earth_pressure_sloped_wall.py
 python tests/actions/test_thermal_grad_shell.py 
 #Combinations tests.
 echo "$BLEU" "Load combination tests." "$NORMAL"
@@ -282,6 +283,7 @@ python tests/constraints/test_elastic_bearing_03.py
 python tests/constraints/test_elastic_bearing_04.py
 python tests/constraints/test_rigid_beam_01.py
 python tests/constraints/test_rigid_rod_01.py
+python tests/constraints/test_huge_beam.py
 python tests/constraints/test_fulcrum_01.py
 python tests/constraints/test_glue_node_to_element_01.py
 python tests/constraints/test_glue_node_to_element_02.py
