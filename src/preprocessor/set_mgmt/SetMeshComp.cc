@@ -337,7 +337,7 @@ void XC::SetMeshComp::kill_elements(void)
 void XC::SetMeshComp::alive_elements(void)
   { elements.alive_elements(); }
 
-//! @brief Calcula los esfuerzos on each uno de los elements.
+//! @brief Compute the internal forces on each element.
 void XC::SetMeshComp::calc_resisting_force(void)
   { elements.calc_resisting_force(); }
 
@@ -417,8 +417,7 @@ const XC::Node *XC::SetMeshComp::getNearestNode(const Pos3d &p) const
     return this_no_const->getNearestNode(p);
   }
 
-
-//! @brief Returns the tags de los elements.
+//! @brief Returns the element tags.
 std::set<int> XC::SetMeshComp::getElementTags(void) const
   { return elements.getTags(); }
 
