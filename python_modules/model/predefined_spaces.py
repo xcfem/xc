@@ -11,6 +11,7 @@ import xc
 import numpy as np
 from miscUtils import LogMessages as lmsg
 import geom
+from materials import typical_materials as tm
 
 class PredefinedSpace(object):
     def __init__(self,nodes,dimSpace,numDOFs):
@@ -50,7 +51,7 @@ class PredefinedSpace(object):
             spc= self.constraints.newSPConstraint(nodeTag,i,prescDisplacements[i])
 
     def setRigidBeamBetweenNodes(self,nodeTagA, nodeTagB):
-        '''Create a rigid rod between the nodes passed as parameters.
+        '''Create a rigid beam between the nodes passed as parameters.
 
         :param   nodeTagA: tag of the master node.
         :param   nodeTagB: tag of the slave node.
@@ -707,7 +708,7 @@ class StructuralMechanics3D(PredefinedSpace):
         :param   nodeTagB: tag of bar's to node.
         :param   nmbTransf: name of the coordinate transformation to use for the new bar.
         '''
-        elementos= preprocessor.getElementHandler
+        elementos= self.preprocessor.getElementHandler
         elementos.defaultTransformation= nmbTransf
         # Material definition
         matName= 'bar' + str(nodeTagA) + str(nodeTagB) + nmbTransf
@@ -717,7 +718,7 @@ class StructuralMechanics3D(PredefinedSpace):
         Iz= 10
         Iy= 10
         J= 10
-        scc= typical_materials.defElasticSection3d(preprocessor,matName,A,E,G,Iz,Iy,J)
+        scc= tm.defElasticSection3d(self.preprocessor,matName,A,E,G,Iz,Iy,J)
         defMat= elementos.defaultMaterial
         #print "defMat= ", defMat
         elementos.defaultMaterial= matName
