@@ -26,16 +26,14 @@
 //----------------------------------------------------------------------------
 //IllConditioningAnalysis.cpp
 
-
 #include <solution/analysis/analysis/IllConditioningAnalysis.h>
 #include <solution/analysis/algorithm/eigenAlgo/KEigenAlgo.h>
 #include <solution/analysis/model/AnalysisModel.h>
-#include <solution/system_of_eqn/eigenSOE/ArpackSOE.h>
+#include <solution/system_of_eqn/eigenSOE/EigenSOE.h>
 #include <solution/analysis/numberer/DOF_Numberer.h>
 #include <solution/analysis/handler/ConstraintHandler.h>
 #include <solution/analysis/integrator/eigen/KEigenIntegrator.h>
 #include <domain/domain/Domain.h>
-
 
 //! @brief Constructor.
 XC::IllConditioningAnalysis::IllConditioningAnalysis(AnalysisAggregation *analysis_aggregation)
@@ -50,6 +48,6 @@ int XC::IllConditioningAnalysis::setIntegrator(KEigenIntegrator &theIntegrator)
   { return EigenAnalysis::setIntegrator(theIntegrator); }
 
 //! @brief Sets the system of eigenvalues to use in the analysis.
-int XC::IllConditioningAnalysis::setEigenSOE(ArpackSOE &theSOE)
+int XC::IllConditioningAnalysis::setEigenSOE(EigenSOE &theSOE)
   { return EigenAnalysis::setEigenSOE(theSOE); }
 
