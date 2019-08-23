@@ -91,7 +91,7 @@ XC::PartitionedModelBuilder::PartitionedModelBuilder(Subdomain &aSubdomain, int 
 //! itself. Then for each Subdomain in the PartitionedDomain it invokes
 //! {\em buildSubdomain(numSub, *this)}. If building the interface or any
 //! of the subdomains fails, a warning message is printed and a negative
-//! number is returned. Returns \f$0\f$ if sucessfull.
+//! number is returned. Returns \f$0\f$ if successful.
 int XC::PartitionedModelBuilder::buildFE_Model(void)
   {
     int result;
