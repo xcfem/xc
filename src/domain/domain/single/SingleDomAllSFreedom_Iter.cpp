@@ -96,41 +96,41 @@ void XC::SingleDomAllSFreedom_Iter::reset(void)
 
 XC::SFreedom_Constraint *XC::SingleDomAllSFreedom_Iter::operator()(void)
   {
-    SFreedom_Constraint *theRes = 0;
+    SFreedom_Constraint *sFreedomConstraintPtr= nullptr;
 
     if(doneDomainSPs == false)
       {
-        theRes= (*theDomainSPs)();
-        if(theRes)
-          return theRes;
+        sFreedomConstraintPtr= (*theDomainSPs)();
+        if(sFreedomConstraintPtr)
+          return sFreedomConstraintPtr;
         else
           doneDomainSPs = true;
       }
 
     while(currentLoadPattern!=theLoadPatterns->end())
       {
-        theRes= (*theLoadPatternSPs)();
-        if(!theRes)
+        sFreedomConstraintPtr= (*theLoadPatternSPs)();
+        if(!sFreedomConstraintPtr)
           {
             currentLoadPattern++;
             if(currentLoadPattern!=theLoadPatterns->end())
               theLoadPatternSPs= &(currentLoadPattern->second->getSPs());
           }
         else
-	  return theRes;
+	  return sFreedomConstraintPtr;
       }
 
     while(currentNodeLocker!=theNodeLockers->end())
       {
-        theRes= (*theNodeLockerSPs)();
-        if(!theRes)
+        sFreedomConstraintPtr= (*theNodeLockerSPs)();
+        if(!sFreedomConstraintPtr)
           {
             currentNodeLocker++;
             if(currentNodeLocker!=theNodeLockers->end())
               theNodeLockerSPs = &(currentNodeLocker->second->getSPs());
           }
         else
-          return theRes;
+          return sFreedomConstraintPtr;
       }
     return 0;
   }
