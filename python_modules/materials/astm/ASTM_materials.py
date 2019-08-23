@@ -23,6 +23,7 @@ class ASTMSteel(steel_base.BasicSteel):
 
 A36= ASTMSteel(250e6,400e6,1.0)
 A529= ASTMSteel(290e6,414e6,1.0)
+A572= ASTMSteel(345e6,450e6,1.0)
 A53= ASTMSteel(240e6,414e6,1.0)
 A992= ASTMSteel(345e6,450e6,1.0)
 A500= ASTMSteel(315e6,400e6,1.0)
