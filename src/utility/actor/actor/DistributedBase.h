@@ -40,7 +40,8 @@ class DbTagData;
 class DistributedBase
   {
   public:
-    DistributedBase(void);        
+    DistributedBase(void);
+    virtual ~DistributedBase(void);
 
     virtual DbTagData &getDbTagData(void) const;
     const int &getDbTagDataPos(const int &i) const;
