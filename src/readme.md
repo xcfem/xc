@@ -1,3 +1,6 @@
+there is a bit of fluff in what i have given you and it needs to be
+cleaned out. NEXT TIME.
+
 CONTENTS:
 As to the organisation: for every class there will eventually
 be 2 files, a class.h, and a class.cc. all files
@@ -85,8 +88,7 @@ utility/matrix: contains the Matrix, Vector and ID classes.
 
 classTags.h (contains class tags)
         
-there is a bit of fluff in what i have given you and it needs to be
-cleaned out. NEXT TIME.
+
 
 
 
