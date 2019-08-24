@@ -165,7 +165,7 @@ def gradient_thermal_LC(lcName,lstGradThStrnData):
         lc.addLstLoads([loads.StrainGradientThermalLoadOnShells(name=lcName+sd.elemSet.name,elemSet=sd.elemSet,elThick=sd.elThick,DOF=sd.DOF,alpha=sd.alpha,Ttop=sd.Ttop,Tbottom=sd.Tbottom)])
     return lc
  
-def wind_LC(lcName,deckLineSet,vectWindDeck,windwardPileSet,vectWindwardPile,leewardPileSet=None,vectLeewrdPile=None):
+def wind_LC(lcName,deckLineSet,vectWindDeck,windwardPileSet,vectWindwardPile,leewardPileSet=None,vectLeewardPile=None):
     '''Return the dead load case (asphalt, sidewalk, barriers, ...)
 
     :param lcName: load case name

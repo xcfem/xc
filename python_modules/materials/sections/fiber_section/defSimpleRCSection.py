@@ -23,9 +23,10 @@ class RecordShearReinforcement(object):
   
   :ivar familyName:        name identifying the family of shear reinforcing bars
   :ivar nShReinfBranches:  number of effective branches 
-  :ivar areaShReinfBranch: area of the shear reinforcing bar
+  :ivar areaShReinfBranch: area of the shear reinforcing bar [in the unit of 
+                           area of the model] 
   :ivar shReinfSpacing:    longitudinal distance between transverse 
-                           reinforcements
+                           reinforcements [in the unit of length of the model] 
   :ivar angAlphaShReinf:   angle between the shear reinforcing bars and the 
                            axis of the member
   :ivar angThetaConcrStruts: angle between the concrete's compression struts 
