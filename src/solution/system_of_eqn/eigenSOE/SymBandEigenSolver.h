@@ -92,6 +92,8 @@ class SymBandEigenSolver : public EigenSolver
   
     virtual const Vector &getEigenvector(int mode) const;
     virtual const double &getEigenvalue(int mode) const;
+    
+    double getRCond(const char &);
   
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);

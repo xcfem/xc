@@ -74,6 +74,24 @@ extern "C" int dsbevx_(char *jobz, char *range, char *uplo, int *n, int *kd,
 		       int *m, double *w, double *z, int *ldz,
 		       double *work, int *iwork, int *ifail, int *info);
 
+//! @brief Returns the value of the 1-norm, Frobenius norm, infinity-norm,
+//! or the largest absolute value of any element of  a real symmetric band
+//! matrix. 
+extern "C" double dlansb_(const char *norm, const char *uplo, const int *n,
+			  const int *k, const double *a, const int *lda,
+			  double *work);
+//! @brief Computes the Cholesky factorization of a real symmetric
+//! positive definite band matrix A.
+extern "C" int dpbtrf_(const char *uplo, const int *n, const int *kd,
+		       double *ab, const int *ldab, int *INFO);
+
+//! @brief estimates the reciprocal of the condition number (in the
+//! 1-norm) of a real symmetric positive definite band matrix A
+//! using the factorization A = U*D*U**T or A = L*D*L**T computed by DDPBRF.
+extern "C" int dpbcon_(const char *uplo, const int *n, const int *kd,
+		       const double *ab, const int *ldab, const double *anorm,
+		       double *rcond, double *work, int *iwork, int *INFO);
+
 int XC::SymBandEigenSolver::solve(void)
   {return this->solve(theSOE->size);}
 
@@ -81,7 +99,8 @@ int XC::SymBandEigenSolver::solve(int nModes)
   {
     if(!theSOE)
       {
-        std::cerr << "SymBandEigenSolver::solve() -- no XC::EigenSOE has been set yet\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; no EigenSOE has been set yet.\n";
         return -1;
       }
   
@@ -305,7 +324,7 @@ const double &XC::SymBandEigenSolver::getEigenvalue(int mode) const
 
 int XC::SymBandEigenSolver::setSize(void)
   {
-    int size = theSOE->size;    
+    const int size = theSOE->size;    
     if(eigenV.Size() != size)
       eigenV.resize(size);
     return 0;
@@ -315,8 +334,71 @@ int XC::SymBandEigenSolver::setSize(void)
 const int &XC::SymBandEigenSolver::getSize(void) const
   { return theSOE->size; }
 
+//! @brief Estimates the reciprocal of the condition number of a real
+//! general band matrix A, in either the 1-norm or the infinity-norm,
+//! using the LU factorization computed by DGBTRF.
+//!
+//! @param c: Specifies whether the 1-norm condition number or the
+//!           infinity-norm condition number is required:
+//!           = '1' or 'O':  1-norm;
+//!           = 'I':         Infinity-norm.
+double XC::SymBandEigenSolver::getRCond(const char &c)
+  {
+    double retval= 0.0;
+    if((c!='1') && (c!='0') && (c!='o'))
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; only 1-norm is supported.\n";
+      }
+    if(!theSOE)
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; no LinearSOE object has been set.\n";
+	return -1;
+      }
+    else
+      {
+	int n = theSOE->size;
+	const int k= theSOE->numSuperD;
+        const int ldA = k+1;// Leading dimension of the matrix
+	int info;
+	double *Aptr= theSOE->A.getDataPtr();
+        char uplo[] = "U"; // Upper triagle of matrix is stored
+	
+	//now solve
+	if(theSOE->factored == false) // factorize
+	  dpbtrf_(uplo,&n,&k,Aptr,&ldA,&info);
+	if(info != 0)
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; LaPack dgbtrf_ failure with error: " << info
+		    << std::endl;
+	else
+	  {
+	    char norm[1];
+	    norm[0]= c;
+            Vector wrk(3*n);
+            double *wrkPtr= wrk.getDataPtr();
+	    ID iwrk(n);
+	    int *iwrkPtr= iwrk.getDataPtr();
+            const double anorm= dlansb_(norm, uplo, &n, &k, Aptr, &ldA, wrkPtr);
+	    dpbcon_(uplo,&n,&k,Aptr,&ldA,&anorm,&retval,wrkPtr,iwrkPtr,&info);
+	  }
+
+	// check if successful
+	if(info != 0)
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << ";LAPACK routine returned " << info << std::endl;
+	    return -info;
+	  }
+	theSOE->factored = true;
+	return retval;
+      }
+  }
+
 int XC::SymBandEigenSolver::sendSelf(CommParameters &cp)
   { return 0; }
 
 int XC::SymBandEigenSolver::recvSelf(const CommParameters &cp)
   { return 0; }
+
