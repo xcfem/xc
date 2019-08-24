@@ -83,9 +83,11 @@ class_<XC::ElementRecorder, bases<XC::ElementRecorderBase>, boost::noncopyable >
 
 class_<XC::EnvelopeElementRecorder, bases<XC::ElementRecorderBase>, boost::noncopyable >("EnvelopeElementRecorder", no_init);
 
-class_<XC::ObjWithRecorders, bases<CommandEntity>, boost::noncopyable >("ObjWithRecorders", no_init)
-  .def("newRecorder",make_function(&XC::ObjWithRecorders::newRecorder,return_internal_reference<>()),"Creates a new recorder.")  
-  .def("removeRecorders",&XC::ObjWithRecorders::removeRecorders,"Deletes all the recorders.")  
+class_<XC::RecorderContainer, boost::noncopyable >("RecorderContainer", no_init)
+  .def("newRecorder",make_function(&XC::RecorderContainer::newRecorder,return_internal_reference<>()),"Creates a new recorder.")  
+  .def("removeRecorders",&XC::RecorderContainer::removeRecorders,"Deletes all the recorders.")  
+  ;
+class_<XC::ObjWithRecorders, bases<CommandEntity,XC::RecorderContainer>, boost::noncopyable >("ObjWithRecorders", no_init)
   ;
 
 
