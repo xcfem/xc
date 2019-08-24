@@ -11,8 +11,7 @@ to look at it and give your own comments) there is a latex2html
 version of this file at:
 http://eig.stanford.edu/~g3
 
-element: - contains the element classes, all in subdirectories, i.e. the
-Truss.h and Truss.C files are in a subdirectory truss.
+
 
 domain: - contains the classes for the domain. all in subdirectores:
         domain - the Domain class and abstract Iters for the objects of
@@ -20,6 +19,8 @@ domain: - contains the classes for the domain. all in subdirectores:
                 for Domain, partitioned contains the PartitionedDomain
                 class and the iters for this class.
         node - the Node and NodalLoad classes.
+		element: - contains the element classes, all in subdirectories, i.e. the
+Truss.h and Truss.C files are in a subdirectory truss.
         constraints - the SFreedom_Constraint and MFreedom_Constraint classes.
         subdomain - the Subdomain, ActorSubdomain and ShadowSubdomain
                 classes.
