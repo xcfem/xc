@@ -314,12 +314,12 @@ int XC::ProfileSPDLinDirectSolver::solve(void)
 //! @brief Returns the determinant.
 double XC::ProfileSPDLinDirectSolver::getDeterminant(void) 
   {
-    int theSize = theSOE->size;
+    const int theSize = theSOE->size;
     double determinant = 1.0;
     for (int i=0; i<theSize; i++)
       determinant *= invD[i];
     determinant = 1.0/determinant;
-     return determinant;
+    return determinant;
   }
 
 //! @brief Sets the system of equations to solve.
