@@ -85,6 +85,7 @@ class BandGenLinLapackSolver: public BandGenLinSolver
 
     int solve(void);
     int setSize(void);
+    double getRCond(const char &);
 
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);

@@ -105,6 +105,7 @@ class LinearSOESolver : public Solver
     virtual int setSize(void) = 0;
     //! @brief Returns the determinant of the system matrix.
     virtual double getDeterminant(void) {return 1.0;};
+    virtual double getRCond(const char &);
   };
 } // end of XC namespace
 
