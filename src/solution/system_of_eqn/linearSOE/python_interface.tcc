@@ -102,8 +102,6 @@ class_<XC::SymSparseLinSOE, bases<XC::SparseSOEBase>, boost::noncopyable >("SymS
 //     ;
 
 class_<XC::LinearSOESolver, bases<XC::Solver>, boost::noncopyable >("LinearSOESolver", no_init)
-  .def("getDeterminant",&XC::LinearSOESolver::getDeterminant,"Return the determinant of the matrix.")
-  .def("getRCond",&XC::LinearSOESolver::getRCond,"Return the the reciprocal of the condition number of the matrix (1: 1-norm, I: infinity-norm).")
   ;
 
 class_<XC::BandGenLinSolver, bases<XC::LinearSOESolver>, boost::noncopyable >("BandGenLinSolver", no_init);

@@ -91,6 +91,8 @@ class Solver : public MovableObject, public CommandEntity
     //! negative number if not; the actual value
     //! depending on the type of Solver.
     virtual int solve(void) = 0;
+    virtual double getDeterminant(void);
+    virtual double getRCond(const char &);
   };
 
 } // end of XC namespace

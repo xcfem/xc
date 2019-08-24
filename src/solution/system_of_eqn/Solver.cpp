@@ -70,3 +70,26 @@
 XC::Solver::Solver(int classTag)
   : MovableObject(classTag), CommandEntity() {}
 
+
+//! @brief Estimates the reciprocal of the condition number of the
+//! matrix A, in either the 1-norm or the infinity-norm,
+//! using the LU factorization computed by DGBTRF.
+//!
+//! @param c: Specifies whether the 1-norm condition number or the
+//!           infinity-norm condition number is required:
+//!           = '1' or 'O':  1-norm;
+//!           = 'I':         Infinity-norm.
+double XC::Solver::getRCond(const char &)
+  {
+    std::cout << getClassName() << "::" << __FUNCTION__
+              << "; not implemented yet." << std::endl;
+    return 0.0;
+  }
+
+//! @brief Return the determinant of the system matrix.
+double XC::Solver::getDeterminant(void)
+  {
+    std::cout << getClassName() << "::" << __FUNCTION__
+              << "; not implemented yet." << std::endl;
+    return 1.0;
+  }
