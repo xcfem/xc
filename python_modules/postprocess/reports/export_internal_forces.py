@@ -47,6 +47,18 @@ def exportInternalForces(nmbComb, elems, fDesc):
         fDesc.write(nmbComb+", "+str(e.tag)+", 1, "+internalForces.getCSVString()+" , " + str(e.getProp('chiLT'))+'\n')
       else:
         fDesc.write(nmbComb+", "+str(e.tag)+", 1, "+internalForces.getCSVString()+'\n')
+    elif('Truss' in elementType):
+      e.getResistingForce()
+      internalForces= internal_forces.CrossSectionInternalForces(e.getN1) # Internal forces at the origin of the bar.
+      if e.hasProp('chiLT'):   #steel beam
+        fDesc.write(nmbComb+", "+str(e.tag)+", 0, "+internalForces.getCSVString()+" , "+str(e.getProp('chiLT'))+'\n')
+      else:
+        fDesc.write(nmbComb+", "+str(e.tag)+", 0, "+internalForces.getCSVString()+'\n')
+      internalForces= internal_forces.CrossSectionInternalForces(e.getN2) # Internal forces at the end of the bar.
+      if e.hasProp('chiLT'):
+        fDesc.write(nmbComb+", "+str(e.tag)+", 1, "+internalForces.getCSVString()+" , " + str(e.getProp('chiLT'))+'\n')
+      else:
+        fDesc.write(nmbComb+", "+str(e.tag)+", 1, "+internalForces.getCSVString()+'\n')
     elif('ZeroLength' in elementType):
       lmsg.warning("exportInternalForces for element type: '"+elementType+"' not implemented.")
     else:
