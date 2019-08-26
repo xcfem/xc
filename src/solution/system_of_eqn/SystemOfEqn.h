@@ -91,6 +91,7 @@ class SystemOfEqn: public MovableObject, public CommandEntity
     AnalysisAggregation *getAnalysisAggregation(void);
     const AnalysisAggregation *getAnalysisAggregation(void) const;
   protected:
+    mutable std::string tmpFileName; //!< File name to store matrices
     virtual AnalysisModel *getAnalysisModelPtr(void);
     virtual const AnalysisModel *getAnalysisModelPtr(void) const;
 
@@ -104,6 +105,8 @@ class SystemOfEqn: public MovableObject, public CommandEntity
     //! @brief Invoked to cause the system of equation object to solve
     //! itself. To return 0 if successful, negative number if not.
     virtual int solve(void)= 0;
+    virtual void save(void) const;
+    virtual void restore(void);
   };
 } // end of XC namespace
 
