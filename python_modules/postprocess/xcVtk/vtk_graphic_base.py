@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
+import math
 
 ''' Display nice images of the model. '''
 
@@ -214,7 +215,9 @@ class RecordDefDisplay(object):
     axes= vtk.vtkAxesActor()
     #  The axes are positioned with a user transform
     axes.SetUserTransform(transform)
-
+    if math.isnan(float(offset)):
+      offset=1
+    print('pp',offset)
     length= offset
     axes.SetTotalLength(length,length,length)
 
