@@ -49,10 +49,10 @@ XC::KEigenIntegrator *XC::KEigenAlgo::getKEigenIntegrator(void)
 
 //! @brief Constructor.
 XC::KEigenAlgo::KEigenAlgo(AnalysisAggregation *owr)
-  :EigenAlgorithm(owr,EigenALGORITHM_TAGS_KEigen) {}
+  :EigenAlgorithm(owr,EigenALGORITHM_TAGS_KEigen), ns(0), nl(0), condNumberThreshold(1e5) {}
 
-//! @brief Solves the current step.
-int XC::KEigenAlgo::solveCurrentStep(int numModes)
+//! @brief Compute the ns smallest eigenvalues.
+int XC::KEigenAlgo::compute_smallest_eigenvalues(int ns)
   {
     AnalysisModel *theModel= getAnalysisModelPtr();
     KEigenIntegrator *theIntegrator= getKEigenIntegrator();
@@ -71,18 +71,47 @@ int XC::KEigenAlgo::solveCurrentStep(int numModes)
         return -3;
       }
 
-    if(theSOE->solve(numModes) < 0) //Computes eigenmodes.
+    if(theSOE->solve(ns) < 0) //Computes smallest eigenmodes.
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; Warning - the EigenSOE failed in solve().\n";
         return -4;
       }
 
-    eigen_to_model(numModes); //Send eigenvectors (modes) and eigenvalues to the model.
+    eigen_to_model(ns); //Send eigenvectors (modes) and eigenvalues to the model.
     return 0;
   }
 
-//! @brief Dump the eigenvalues into the model (see Finite Element Procedures. Klaus Jurgen Bathe page 632).
+//! @brief Compute the nl largest eigenvalues.
+int XC::KEigenAlgo::compute_largest_eigenvalues(int ns)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet." << std::endl;
+    return 0;
+  }
+
+//! @brief Solves the current step.
+//!
+//! In this particular case numModes is ignored.
+int XC::KEigenAlgo::solveCurrentStep(int numModes)
+  {
+    EigenSOE *theSOE = getEigenSOEPtr();
+    const double rcond= theSOE->getRCond();
+    if(rcond>1.0/condNumberThreshold)
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; ill conditioned system RCOND= "
+		  << rcond << std::endl;
+	if(ns==0)
+	  ns= numModes;
+	compute_smallest_eigenvalues(ns);
+        compute_largest_eigenvalues(nl);
+      }
+    return 0;
+  }
+
+//! @brief Dump the eigenvalues into the model (see Finite Element
+//! Procedures. Klaus Jurgen Bathe page 632).
 void XC::KEigenAlgo::eigen_to_model(int numModes)
   {
     AnalysisModel *theModel= getAnalysisModelPtr();

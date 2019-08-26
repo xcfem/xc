@@ -39,14 +39,33 @@ class KEigenIntegrator;
 class KEigenAlgo : public EigenAlgorithm
   {
   protected:
+    int ns; //!< number of smallest eigenpairs
+    int nl; //!< number of largest eigenpairs
+    double condNumberThreshold; //!< condition number threshold for
+                               //triggering analysis;
+
     KEigenIntegrator *getKEigenIntegrator(void);
     virtual void eigen_to_model(int numModes);
 
     friend class AnalysisAggregation;
     KEigenAlgo(AnalysisAggregation *);
     virtual SolutionAlgorithm *getCopy(void) const;
+    int compute_smallest_eigenvalues(int ns);
+    int compute_largest_eigenvalues(int nl);
   public:
     virtual int solveCurrentStep(int numModes);
+    inline int getNs(void) const
+      { return ns; }
+    inline void setNs(int n)
+      { ns= n; }
+    inline int getNl(void) const
+      { return nl; }
+    inline void setNl(int n)
+      { nl= n; }
+    inline int getConditionNumberThreshold(void) const
+      { return condNumberThreshold; }
+    inline void setConditionNumberThreshold(int n)
+      { condNumberThreshold= n; }
     virtual void Print(std::ostream &s, int flag = 0);
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
