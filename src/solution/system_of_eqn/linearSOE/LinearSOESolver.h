@@ -83,7 +83,7 @@ class LinearSOE;
 //! A LinearSOESolver object is responsible for solving the LinearSOE
 //! object that it is associated with. That is, to find \f$x\f$ such
 //! that the matrix equation \f$Ax=b\f$ is satisfied.
-class LinearSOESolver : public Solver
+class LinearSOESolver: public Solver
   {
   protected:
     LinearSOESolver(int classTag= 0);
@@ -103,8 +103,6 @@ class LinearSOESolver : public Solver
     //! data that needs to be updated if the size of the system of equation
     //! changes.
     virtual int setSize(void) = 0;
-    //! @brief Returns the determinant of the system matrix.
-    virtual double getDeterminant(void) {return 1.0;};
   };
 } // end of XC namespace
 

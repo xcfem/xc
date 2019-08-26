@@ -23,7 +23,10 @@
 
 class_<XC::SystemOfEqn, bases<XC::MovableObject,CommandEntity>, boost::noncopyable >("SystemOfEqn", no_init);
 
-class_<XC::Solver, bases<XC::MovableObject,CommandEntity>, boost::noncopyable >("Solver", no_init);
+class_<XC::Solver, bases<XC::MovableObject,CommandEntity>, boost::noncopyable >("Solver", no_init)
+  .def("getDeterminant",&XC::Solver::getDeterminant,"Return the determinant of the matrix.")
+  .def("getRCond",&XC::Solver::getRCond,"Return the the reciprocal of the condition number of the matrix (1: 1-norm, I: infinity-norm).")
+  ;
 
 #include "linearSOE/python_interface.tcc"
 #include "eigenSOE/python_interface.tcc"

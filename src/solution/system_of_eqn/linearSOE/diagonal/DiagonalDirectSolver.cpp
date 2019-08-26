@@ -80,15 +80,14 @@ int XC::DiagonalDirectSolver::setSize(void)
     return 0;
   }
 
-
+//! @brief Find the solution.
 int XC::DiagonalDirectSolver::solve(void)
   {
-
     // check for quick returns
     if(!theSOE)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__;
-        std::cerr << " - No ProfileSPDSOE has been assigned\n";
+        std::cerr << "; no ProfileSPDSOE has been assigned\n";
         return -1;
       }
     
@@ -102,54 +101,85 @@ int XC::DiagonalDirectSolver::solve(void)
     int size = theSOE->size;
 
     if(theSOE->factored == false)
-      {
-    
-    // FACTOR & SOLVE
-    double invD;
-    for (int i=0; i<size; i++) {
-      
-      double aii = *Aptr;
+      {    
+	// FACTOR & SOLVE
+	double invD;
+	for(int i=0; i<size; i++)
+	  {
+	    double aii = *Aptr;
 
-      // check that the diag > the tolerance specified
-      if (aii == 0.0) {
-	std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
-	std::cerr << " aii = 0 (i, aii): (" << i << ", " << aii << ")\n"; 
-	return(-2);
+	    // check that the diag > the tolerance specified
+	    if(aii == 0.0)
+	      {
+	        std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
+	        std::cerr << " aii = 0 (i, aii): (" << i << ", " << aii << ")\n"; 
+	        return(-2);
+	      }
+	    if (fabs(aii) <= minDiagTol)
+	      {
+	        std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
+	        std::cerr << " aii < minDiagTol (i, aii): (" << i;
+	        std::cerr << ", " << aii << ")\n"; 
+	        return(-2);
+	      }		
+ 	    // store the inverse 1/Aii in A; and solve for Xi
+	    invD = 1.0/aii; 
+	    *Xptr++ = invD * *Bptr++;
+	    *Aptr++ = invD;
+	  }
+	theSOE->factored = true;
       }
-      if (fabs(aii) <= minDiagTol) {
-	std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
-	std::cerr << " aii < minDiagTol (i, aii): (" << i;
-	std::cerr << ", " << aii << ")\n"; 
-	return(-2);
-      }		
+    else
+      {
+	// JUST SOLVE
+	for (int i=0; i<size; i++)
+	  { *Xptr++ = *Aptr++ * *Bptr++; }
+      }	
+    return 0;
+  }
 
-      // store the inverse 1/Aii in A; and solve for Xi
-      invD = 1.0/aii; 
-      *Xptr++ = invD * *Bptr++;
-      *Aptr++ = invD;
-    }
-
-    theSOE->factored = true;
-
-  } else {
-
-    // JUST SOLVE
-    for (int i=0; i<size; i++) {
-      *Xptr++ = *Aptr++ * *Bptr++;
-    }
-  }	
-    
-  return 0;
-}
-
+//! @brief Return the determinant of the matrix.
 double XC::DiagonalDirectSolver::getDeterminant(void) 
-{
-  double determinant = 0.0;
-  return determinant;
-}
+  {
+    double retval= 0.0;
+    // check for quick returns
+    if(!theSOE)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__;
+        std::cerr << "; no system of equations has been assigned\n";
+      }
+    else
+      {
+	if(theSOE->size>0)
+	  {
+            retval= 1.0;
+	    // set some pointers
+	    double *Aptr = theSOE->A.getDataPtr();
+	    const int size = theSOE->size;
+
+	    if(theSOE->factored == false)
+	      {
+		for(int i=0; i<size; i++)
+		  {
+		    retval*= *Aptr;
+		    Aptr++;
+		  }
+	      }
+	    else
+	      {
+		for (int i=0; i<size; i++)
+		  {
+		    retval/= *Aptr++;
+		    Aptr++;
+		  }
+	      }
+	  }
+      }
+    return retval;
+  }
 
 int XC::DiagonalDirectSolver::setDiagonalSOE(DiagonalSOE &theNewSOE)
-{
+  {
   if (theSOE != 0) {
     std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
     std::cerr << " has already been called \n";	

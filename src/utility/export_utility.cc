@@ -30,8 +30,6 @@ void export_utility(void)
     docstring_options doc_options;
 
 #include "matrix/python_interface.tcc"
-    class_<XC::ObjWithRecorders, bases<CommandEntity>, boost::noncopyable  >("ObjWithRecorders", no_init);
-
     class_<XC::MovableObject, boost::noncopyable >("MovableObject", no_init)
        ;
 
