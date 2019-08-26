@@ -55,6 +55,7 @@ soe= analysisAggregation.newSystemOfEqn("sym_band_eigen_soe")
 solver= soe.newSolver("sym_band_eigen_solver")
 
 analysis= solu.newAnalysis("ill-conditioning_analysis","analysisAggregation","")
+feProblem.errFileName= "/tmp/erase.err" # Ignore error messages (compute_largest_eigenvalues; not implemented yet.)
 analOk= analysis.analyze(1)
 eig1= analysis.getEigenvalue(1)
 v1= n1.getEigenvector(1)
