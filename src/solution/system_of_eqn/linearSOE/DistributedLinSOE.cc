@@ -155,7 +155,8 @@ int XC::DistributedLinSOE::send(CommParameters &cp)
     int res= cp.sendID(idData,getDbTagData(),CommMetaData(0));//XXX assign position.
     if(res < 0)
       {
-        std::cerr <<"WARNING DistributedLinSOE::sendSelf() - failed to send data\n";
+        std::cerr << "DistributedLinSOE::" << __FUNCTION__
+	          << "; WARNING failed to send data\n";
         return -1;
       }
     return res;
@@ -167,7 +168,8 @@ int XC::DistributedLinSOE::receive(const CommParameters &cp)
     int res= cp.receiveID(idData,getDbTagData(),CommMetaData(0));//XXX assign position.
     if(res < 0)
       {
-        std::cerr <<"WARNING DistributedLinSOE::recvSelf() - failed to send data\n";
+        std::cerr << "DistributedLinSOE::" << __FUNCTION__
+		  <<"; failed to send data\n";
         return -1;
       }	      
     processID = idData(0);
