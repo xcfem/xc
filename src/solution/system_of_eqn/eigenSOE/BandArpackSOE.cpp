@@ -41,7 +41,9 @@
 #include <solution/graph/graph/Graph.h>
 #include <solution/graph/graph/Vertex.h>
 #include <solution/graph/graph/VertexIter.h>
-
+#define BOOST_NO_CXX11_SCOPED_ENUMS
+#include <boost/filesystem.hpp>
+#undef BOOST_NO_CXX11_SCOPED_ENUMS
 
 //! @brief Constructor.
 XC::BandArpackSOE::BandArpackSOE(AnalysisAggregation *owr, double theShift)
@@ -254,3 +256,43 @@ int XC::BandArpackSOE::sendSelf(CommParameters &cp)
 int XC::BandArpackSOE::recvSelf(const CommParameters &cp)
   { return 0; }
 
+//! @brief Save the SOE matrices and vectors to file.
+//!
+//! Normally it's used to store temporarily those
+//! objects on disk while executing getRCond to avoid
+//! interferences with solve (different types of
+//! factorization...).
+void XC::BandArpackSOE::save(void) const
+  {
+    tmpFileName= std::tmpnam(nullptr);
+    std::cout << "tmpFileName= " << tmpFileName << std::endl;
+    std::ofstream out(tmpFileName,std::ios::out|std::ios::binary);
+    if(!out)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; cannot open file: "
+		<< tmpFileName << std::endl;
+    const size_t sz= A.Size();
+    out.write((char *)(&sz), sizeof(sz));
+    out.write((char *)(A.getDataPtr()),size);
+    out.close();
+  }
+
+//! @brief Restore the SOE matrices and vectors from file.
+//!
+//! Normally it's used to restore those
+//! objects from disk after executing getRCond to avoid
+//! interferences with solve (different types of
+//! factorization...).
+void XC::BandArpackSOE::restore(void)
+  {
+    std::cout << "tmpFileName= " << tmpFileName << std::endl;
+    std::ifstream in(tmpFileName,std::ios::in|std::ios::binary);
+    if(!in)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; cannot open file: " << tmpFileName
+		<< std::endl;
+    const size_t sz= A.Size();
+    in.read((char *)(&sz), sizeof(sz));
+    in.read((char *)(A.getDataPtr()),size);
+    in.close();
+  }

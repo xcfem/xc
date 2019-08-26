@@ -149,10 +149,10 @@ void XC::BandArpackSolver::print_err_info(int info)
 //! @brief Solves the eigenproblem.
 int XC::BandArpackSolver::solve(void)
   {
-    if(theSOE == 0)
+    if(!theSOE)
       {
-        std::cerr << "WARNING XC::BandGenLinLapackSolver::solve(void)- ";
-        std::cerr << " No LinearSOE object has been set\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; no LinearSOE object has been set\n";
         return -1;
       }
 
@@ -237,7 +237,7 @@ int XC::BandArpackSolver::solve(void)
             if(ierr != 0)
               {
                 std::cerr << getClassName() << "::" << __FUNCTION__
-			  << "; error with dgbtrs_ 1" <<std::endl;
+			  << "; error with dgbtrs_ 1" << std::endl;
                 exit(0);
               }
             continue;
@@ -250,7 +250,8 @@ int XC::BandArpackSolver::solve(void)
             dgbtrs_(ene, &n, &kl, &ku, &nrhs, Aptr, &ldA, iPIV,&workd[ipntr[1] - 1], &ldB, &ierr);
             if(ierr != 0)
               {
-                std::cerr << "XC::BandArpackSolver::Error with dgbtrs_ 2" <<std::endl;
+                std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; error with dgbtrs_ 2" <<std::endl;
                 exit(0);
               }
             continue;
@@ -264,7 +265,8 @@ int XC::BandArpackSolver::solve(void)
       }
     if(info < 0)
       {
-        std::cerr << "BandArpackSolver::Error with _saupd info = " 
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; error with _saupd info = " 
                   << info << std::endl;
         print_err_info(info);
         return info;
@@ -273,12 +275,14 @@ int XC::BandArpackSolver::solve(void)
       {
         if(info == 1)
           {
-            std::cerr << "BandArpackSolver::Maximum number of iteration reached."
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; maximum number of iteration reached."
                       << std::endl;
           }
         else if (info == 3)
           {
-            std::cerr << "BandArpackSolver::No Shifts could be applied during implicit,";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; no Shifts could be applied during implicit,";
             std::cerr << "Arnoldi update, try increasing NCV." << std::endl;
           }
 
@@ -294,7 +298,8 @@ int XC::BandArpackSolver::solve(void)
                     &workl[0], &lworkl, &info);
             if(info != 0)
               {
-                std::cerr << "BandArpackSolver::Error with dseupd_" << info;
+                std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; error with dseupd_" << info;
                 switch(info)
                   {
                   case -1:

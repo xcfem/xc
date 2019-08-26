@@ -234,13 +234,15 @@ int XC::SymBandEigenSolver::solve(int nModes)
 
     if(info > 0)
       {
-        std::cerr << "SymBandEigenSolver::solve() -- LAPACK dsbevx returned error code " << info << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; LAPACK dsbevx returned error code " << info << std::endl;
         return -info;
       }
 
     if(m < numModes)
       {
-        std::cerr << "SymBandEigenSolver::solve() -- LAPACK dsbevx only computed " << m << " eigenvalues, " <<
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; LAPACK dsbevx only computed " << m << " eigenvalues, " <<
         numModes << "were requested\n";
         numModes = m;
       }
@@ -303,7 +305,8 @@ const XC::Vector &XC::SymBandEigenSolver::getEigenvector(int mode) const
       }
     else
       {
-        std::cerr << "SymBandEigenSolver::getEigenVector() -- eigenvectors not yet computed\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; eigenvectors not yet computed\n";
         eigenV.Zero();
       }      
     return eigenV;  
@@ -318,7 +321,8 @@ const double &XC::SymBandEigenSolver::getEigenvalue(int mode) const
     if(!eigenvalue.isEmpty())
       retval= eigenvalue[mode-1];
     else
-      std::cerr << "SymBandEigenSolver::getEigenvalue() -- eigenvalues not yet computed\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; eigenvalues not yet computed\n";
     return retval;
   }
 
@@ -358,40 +362,43 @@ double XC::SymBandEigenSolver::getRCond(const char &c)
       }
     else
       {
-	int n = theSOE->size;
-	const int k= theSOE->numSuperD;
-        const int ldA = k+1;// Leading dimension of the matrix
-	int info;
-	double *Aptr= theSOE->A.getDataPtr();
-        char uplo[] = "U"; // Upper triagle of matrix is stored
-	
-	//now solve
 	if(theSOE->factored == false) // factorize
-	  dpbtrf_(uplo,&n,&k,Aptr,&ldA,&info);
-	if(info != 0)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; LaPack dgbtrf_ failure with error: " << info
-		    << std::endl;
-	else
 	  {
-	    char norm[1];
-	    norm[0]= c;
-            Vector wrk(3*n);
-            double *wrkPtr= wrk.getDataPtr();
-	    ID iwrk(n);
-	    int *iwrkPtr= iwrk.getDataPtr();
-            const double anorm= dlansb_(norm, uplo, &n, &k, Aptr, &ldA, wrkPtr);
-	    dpbcon_(uplo,&n,&k,Aptr,&ldA,&anorm,&retval,wrkPtr,iwrkPtr,&info);
+	    theSOE->save(); //Avoid interference with solve()
+	    int n = theSOE->size;
+	    const int k= theSOE->numSuperD;
+	    const int ldA= k+1;// Leading dimension of the matrix
+	    int info;
+	    double *Aptr= theSOE->A.getDataPtr();
+	    char uplo[] = "U"; // Upper triangle of matrix is stored
+	    dpbtrf_(uplo,&n,&k,Aptr,&ldA,&info);
+	    if(info > 0) //Singular matrix.
+	      { retval= DBL_MAX; }
+	    else if(info < 0)
+	      std::cerr << getClassName() << "::" << __FUNCTION__
+			<< "; LaPack dpbtrf_ failure with error: " << info
+			<< std::endl;
+	    else //solve
+	      {
+		char norm[1];
+		norm[0]= c;
+		Vector wrk(3*n);
+		double *wrkPtr= wrk.getDataPtr();
+		ID iwrk(n);
+		int *iwrkPtr= iwrk.getDataPtr();
+		const double anorm= dlansb_(norm, uplo, &n, &k, Aptr, &ldA, wrkPtr);
+		dpbcon_(uplo,&n,&k,Aptr,&ldA,&anorm,&retval,wrkPtr,iwrkPtr,&info);
+		// check if successful
+		if(info != 0)
+		  {
+		    std::cerr << getClassName() << "::" << __FUNCTION__
+			      << ";LAPACK dpbcon routine returned "
+			      << info << std::endl;
+		    return -info;
+		  }
+	      }
+            theSOE->restore(); //Avoid interference with solve()
 	  }
-
-	// check if successful
-	if(info != 0)
-	  {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
-		      << ";LAPACK routine returned " << info << std::endl;
-	    return -info;
-	  }
-	theSOE->factored = true;
 	return retval;
       }
   }

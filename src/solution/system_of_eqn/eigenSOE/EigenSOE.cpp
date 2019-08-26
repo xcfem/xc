@@ -152,9 +152,25 @@ int XC::EigenSOE::solve(void)
     return -1;
   }
 
+//! @brief Returns the determinant of the system matrix.
+double XC::EigenSOE::getDeterminant(void)
+  { return theSolver->getDeterminant(); }
+
+//! @brief Returns the reciprocal of the condition number.
+//!
+//! Computes the reciprocal of the condition number using
+//! the norm specified by the char argument:
+//! if norm = '1' or 'O', then the routine estimates the condition number
+//! of matrix in 1-norm, if norm = 'I', then the routine estimates the
+//! condition number of matrix in infinity-norm.
+double XC::EigenSOE::getRCond(const char &norm)
+  { return theSolver->getRCond(norm); }
+
+
 //! @brief Return a pointer to the solver used to solve the eigenproblem.
 XC::EigenSolver *XC::EigenSOE::getSolver(void)
   { return theSolver; }
+
 
 //! @brief Anula la matrix M.
 void XC::EigenSOE::zeroM(void)
