@@ -44,7 +44,6 @@ namespace XC {
 class IllConditioningAnalysis: public EigenAnalysis
   {
   protected:
-
     friend class ProcSolu;
     friend class KEigenAnalysis;
     IllConditioningAnalysis(AnalysisAggregation *analysis_aggregation);
