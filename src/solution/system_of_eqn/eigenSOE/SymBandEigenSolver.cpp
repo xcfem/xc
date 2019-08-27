@@ -364,7 +364,7 @@ double XC::SymBandEigenSolver::getRCond(const char &c)
       {
 	if(theSOE->factored == false) // factorize
 	  {
-	    theSOE->save(); //Avoid interference with solve()
+	    theSOE->save(); //Avoid conflict with solve()
 	    int n = theSOE->size;
 	    const int k= theSOE->numSuperD;
 	    const int ldA= k+1;// Leading dimension of the matrix
@@ -397,8 +397,12 @@ double XC::SymBandEigenSolver::getRCond(const char &c)
 		    return -info;
 		  }
 	      }
-            theSOE->restore(); //Avoid interference with solve()
+            theSOE->restore(); //Avoid conflict with solve()
 	  }
+	else
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; matrix already factored, conflict with solve()."
+		    << std::endl;
 	return retval;
       }
   }

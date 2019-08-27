@@ -50,8 +50,8 @@ class KEigenAlgo : public EigenAlgorithm
     friend class AnalysisAggregation;
     KEigenAlgo(AnalysisAggregation *);
     virtual SolutionAlgorithm *getCopy(void) const;
-    int compute_smallest_eigenvalues(int ns);
-    int compute_largest_eigenvalues(int nl);
+    int compute_smallest_eigenvalues(void);
+    int compute_largest_eigenvalues(void);
   public:
     virtual int solveCurrentStep(int numModes);
     inline int getNs(void) const

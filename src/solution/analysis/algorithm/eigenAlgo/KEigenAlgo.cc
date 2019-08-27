@@ -52,7 +52,16 @@ XC::KEigenAlgo::KEigenAlgo(AnalysisAggregation *owr)
   :EigenAlgorithm(owr,EigenALGORITHM_TAGS_KEigen), ns(0), nl(0), condNumberThreshold(1e5) {}
 
 //! @brief Compute the ns smallest eigenvalues.
-int XC::KEigenAlgo::compute_smallest_eigenvalues(int ns)
+int XC::KEigenAlgo::compute_smallest_eigenvalues(void)
+  {
+    if(ns>0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; not implemented yet." << std::endl;
+    return 0;
+  }
+
+//! @brief Compute the nl largest eigenvalues.
+int XC::KEigenAlgo::compute_largest_eigenvalues(void)
   {
     AnalysisModel *theModel= getAnalysisModelPtr();
     KEigenIntegrator *theIntegrator= getKEigenIntegrator();
@@ -71,22 +80,14 @@ int XC::KEigenAlgo::compute_smallest_eigenvalues(int ns)
         return -3;
       }
 
-    if(theSOE->solve(ns) < 0) //Computes smallest eigenmodes.
+    if(theSOE->solve(nl) < 0) //Computes nl largest eigenvalues.
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; Warning - the EigenSOE failed in solve().\n";
         return -4;
       }
 
-    eigen_to_model(ns); //Send eigenvectors (modes) and eigenvalues to the model.
-    return 0;
-  }
-
-//! @brief Compute the nl largest eigenvalues.
-int XC::KEigenAlgo::compute_largest_eigenvalues(int ns)
-  {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not implemented yet." << std::endl;
+    eigen_to_model(nl); //Send eigenvectors (modes) and eigenvalues to the model.
     return 0;
   }
 
@@ -102,10 +103,10 @@ int XC::KEigenAlgo::solveCurrentStep(int numModes)
 	std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; ill conditioned system RCOND= "
 		  << rcond << std::endl;
-	if(ns==0)
-	  ns= numModes;
-	compute_smallest_eigenvalues(ns);
-        compute_largest_eigenvalues(nl);
+	if(nl==0)
+	  nl= numModes;
+        compute_largest_eigenvalues();
+	compute_smallest_eigenvalues();
       }
     return 0;
   }
