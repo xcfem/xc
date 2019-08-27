@@ -24,7 +24,7 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-// File: ~/system_of_eqn/eigenSOE/ArpackSOE.C
+// File: ~/system_of_eqn/eigenSOE/ArpackSOE.cc
 //
 // Written: Jun Peng 
 // Created: February 1999

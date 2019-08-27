@@ -40,7 +40,7 @@ XC::BandArpackppSolver::BandArpackppSolver(const int &nModes)
  :EigenSolver(EigenSOLVER_TAGS_BandArpackppSolver,nModes),
  theSOE(nullptr), eigenvalues(nModes), eigenvectors(nModes,Vector()) {}
 
-//! @brief Solves para todos los eigenvalues del problema.
+//! @brief Compute all the eigenvalues.
 int XC::BandArpackppSolver::solve(void)
   { return solve(theSOE->size);}
 
@@ -91,7 +91,12 @@ int XC::BandArpackppSolver::solve(int nModes)
       {
         numModes = nModes; // Set number of modes
         const int n= theSOE->size; // Number of equations
-
+	if(which!="LM")
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; computation of: " << which
+		    << " eigenvalues not implemented yet."
+		    << std::endl;
+    
         // Check for quick return
         if((numModes <= 1) || (numModes>=(n-1)))
           {
@@ -100,7 +105,7 @@ int XC::BandArpackppSolver::solve(int nModes)
 	              << "; the number of modes must be"
                       << " between: " << 2 << " and " << n-2 << ".\n";
             retval= -2;
-          }
+          }	
         else
           {
             Vector vk;

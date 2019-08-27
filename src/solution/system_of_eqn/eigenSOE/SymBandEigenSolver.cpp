@@ -65,8 +65,8 @@
 #include <solution/analysis/integrator/Integrator.h>
 #include "utility/matrix/Vector.h"
 
-XC::SymBandEigenSolver::SymBandEigenSolver()
-:EigenSolver(EigenSOLVER_TAGS_SymBandEigenSolver), theSOE(nullptr) {}
+XC::SymBandEigenSolver::SymBandEigenSolver(void)
+  : EigenSolver(EigenSOLVER_TAGS_SymBandEigenSolver), theSOE(nullptr) {}
 
 extern "C" int dsbevx_(char *jobz, char *range, char *uplo, int *n, int *kd,
 		       double *ab, int *ldab, double *q, int *ldq,
@@ -106,7 +106,13 @@ int XC::SymBandEigenSolver::solve(int nModes)
   
     // Set number of modes
     numModes= nModes;
-
+    
+    if(which!="LM")
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; computation of: " << which
+	        << " eigenvalues not implemented yet."
+	        << std::endl;
+    
     // Number of equations
     int n= theSOE->size;
 
@@ -153,8 +159,8 @@ int XC::SymBandEigenSolver::solve(int nModes)
     std::vector<double> q(ldq*n);
 
     // Index ranges [1,numModes] of eigenpairs to compute
-    int il = 1;
-    int iu = numModes;
+    int il= 1; //index of the smallest eigenvalue to be returned.
+    int iu= numModes; //index of the largest eigenvalue to be returned.
 
     // Compute eigenvalues and eigenvectors
     char jobz[] = "V";

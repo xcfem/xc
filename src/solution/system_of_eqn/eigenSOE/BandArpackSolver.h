@@ -60,10 +60,9 @@ struct ArpackAuxVars
     std::vector<long int> select;
     const char bmat= 'G'; //!< 'G': generalized eigenvalue problem A*x= lambda*B*x
     const char howmy= 'A';
-    const std::string which= "LM"; //! LM: compute the largest (in magnitude) eigenvalues.
 	
     ArpackAuxVars(int n, int ncv, int nev, int maxitr, int mode);
-    int dsaupd(int &ido, const int &n, const int &nev, const double &tol,
+    int dsaupd(int &ido, const int &n, const std::string &which, const int &nev, const double &tol,
 	       const int &ncv, int &info);
   };
 //! @ingroup LinearSolver

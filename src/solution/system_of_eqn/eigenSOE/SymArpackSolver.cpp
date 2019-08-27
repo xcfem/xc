@@ -56,13 +56,13 @@ extern "C" {
 }
 
 
-extern "C" int dsaupd_(int *ido, char* bmat, int *n, char *which, int *nev,
+extern "C" int dsaupd_(int *ido, char* bmat, int *n, const char *which, int *nev,
                        double *tol, double *resid, int *ncv, double *v, int *ldv,
                        int *iparam, int *ipntr, double *workd, double *workl,
                        int *lworkl, int *info);
 
 extern "C" int dseupd_(bool *rvec, char *howmny, long int *select, double *d, double *z,
-                       int *ldz, double *sigma, char *bmat, int *n, char *which,
+                       int *ldz, double *sigma, char *bmat, int *n, const char *which,
                        int *nev, double *tol, double *resid, int *ncv, double *v,
                        int *ldv, int *iparam, int *ipntr, double *workd,
                        double *workl, int *lworkl, int *info);
@@ -80,8 +80,8 @@ int XC::SymArpackSolver::solve(void)
   {
     if(!theSOE)
       {
-        std::cerr << "WARNING XC::SymArpackSolver::solve(void)- ";
-        std::cerr << " No XC::EigenSOE object has been set\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; no EigenSOE object has been set\n";
         return -1;
       }
 
@@ -109,7 +109,8 @@ int XC::SymArpackSolver::solve(void)
         factor = pfsfct(n, diag, penv, nblks, xblk, begblk, first, rowblks);
         if(factor>0)
           {
-            std::cerr << "In XC::SymArpackSolver: error in factorization.\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; error in factorization.\n";
             return -1;
           }
         factored = true;
@@ -154,10 +155,10 @@ int XC::SymArpackSolver::solve(void)
     //unsigned int sizeWhich =2;
     //unsigned int sizeBmat =1;
     //unsigned int sizeHowmany =1;
-    char eleeme[] = "LM"; 
+    //char which[] = "LM"; 
     while(1)
       {
-        dsaupd_(&ido, &bmat, &n, eleeme, &nev, &tol, &resid[0], &ncv, v.getDataPtr(), &ldv,
+        dsaupd_(&ido, &bmat, &n, which.c_str(), &nev, &tol, &resid[0], &ncv, v.getDataPtr(), &ldv,
                 iparam, ipntr, &workd[0], &workl[0], &lworkl, &info);
         if(ido == -1)
           {
@@ -182,27 +183,33 @@ int XC::SymArpackSolver::solve(void)
 
     if(info < 0)
       {
-        std::cerr << "BandArpackSolver::Error with _saupd info = " << info <<std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; with _saupd info = " << info <<std::endl;
         return info;
       }
     else
       {
         if(info == 1)
-         { std::cerr << "BandArpackSolver::Maximum number of iteration reached." << std::endl; }
+         {
+	   std::cerr << getClassName() << "::" << __FUNCTION__
+		     << "; maximum number of iteration reached." << std::endl;
+	 }
         else if(info == 3)
           {
-            std::cerr << "XC::BandArpackSolver::No Shifts could be applied during implicit," << std::endl;
-            std::cerr << "Arnoldi update, try increasing NCV." << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "no shifts could be applied during implicit"
+		      << " Arnoldi update, try increasing NCV." << std::endl;
           }
         double sigma = theSOE->shift;
         if(iparam[4] > 0)
           {
-            dseupd_(&rvec, &howmy, &select[0], d.getDataPtr(), v.getDataPtr(), &ldv, &sigma, &bmat, &n, eleeme,
+            dseupd_(&rvec, &howmy, &select[0], d.getDataPtr(), v.getDataPtr(), &ldv, &sigma, &bmat, &n, which.c_str(),
                     &nev, &tol, &resid[0], &ncv, v.getDataPtr(), &ldv, iparam, ipntr, &workd[0],
                     &workl[0], &lworkl, &info);
             if(info != 0)
               {
-                std::cerr << "BandArpackSolver::Error with dseupd_" << info;
+                std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; error with dseupd_" << info;
                 return -1;
               }
           }
@@ -243,7 +250,8 @@ bool XC::SymArpackSolver::setEigenSOE(EigenSOE *soe)
         retval= true;
       }
     else
-      std::cerr << getClassName() << "::setEigenSOE: not a suitable system of equations." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; not a suitable system of equations." << std::endl;
     return retval;
   }
 
@@ -322,7 +330,8 @@ const XC::Vector &XC::SymArpackSolver::getEigenvector(int mode) const
 
     if(mode <= 0 || mode > numModes)
       {
-        std::cerr << "BandArpackSOE::mode is out of range(1 - nev)";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; mode is out of range(1 - nev)";
         exit (0);
       }
     int size = theSOE->size;
@@ -338,7 +347,8 @@ const double &XC::SymArpackSolver::getEigenvalue(int mode) const
   {
     if(mode <= 0 || mode > numModes)
       {
-        std::cerr << "BandArpackSOE::mode is out of range(1 - nev)";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; mode is out of range(1 - nev)";
         exit (0);
       }
     return value[mode - 1];

@@ -115,7 +115,7 @@ XC::ArpackAuxVars::ArpackAuxVars(int n, int ncv, int nev, int maxitr, int mode)
 //! @param tol: Stopping criterion: the relative accuracy of the Ritz value is considered acceptable if BOUNDS(I)<=TOL*ABS(RITZ(I)). If tol<0. is passed a default is set:
 //! @param ncv: number of columns of the matrix v (<=n) t. This will ndicate how many Lanczos vectors are generated at each iteration (see Arpack manual).
 //! @param info: On input: see Arpack manual. On output: error flag (if any). 
-int XC::ArpackAuxVars::dsaupd(int &ido, const int &n, const int &nev, const double &tol, const int &ncv, int &info)
+int XC::ArpackAuxVars::dsaupd(int &ido, const int &n, const std::string &which, const int &nev, const double &tol, const int &ncv, int &info)
   {
     return dsaupd_(&ido, &bmat, &n, which.c_str(), &nev, &tol, &resid[0], &ncv, &v[0], &ldv,iparam, ipntr, &workd[0], &workl[0], &lworkl, &info);
   }
@@ -248,8 +248,8 @@ int XC::BandArpackSolver::dsaupd_loop(const int &ncv, const int &nev, ArpackAuxV
     int ierr= 0;
     while(1)
       {
-        //dsaupd_(&ido, &av.bmat, &n, av.which.c_str(), &nev, &tol, &av.resid[0], &ncv, &av.v[0], &av.ldv,av.iparam, av.ipntr, &av.workd[0], &av.workl[0], &av.lworkl, &info);
-	av.dsaupd(ido, n, nev, tol, ncv, info);
+        //dsaupd_(&ido, &av.bmat, &n, which.c_str(), &nev, &tol, &av.resid[0], &ncv, &av.v[0], &av.ldv,av.iparam, av.ipntr, &av.workd[0], &av.workl[0], &av.lworkl, &info);
+	av.dsaupd(ido, n, which, nev, tol, ncv, info);
         if(ido == -1) //Initialization phase
           {
             myMv(n, &av.workd[av.ipntr[0]-1], &av.workd[av.ipntr[1]-1]);
@@ -369,8 +369,8 @@ int XC::BandArpackSolver::solve(void)
             n= theSOE->size;
             av.ldv = n;
 
-            dseupd_(&rvec, &av.howmy, &av.select[0], av.d.getDataPtr(), av.z.getDataPtr(), &av.ldv, &sigma, &av.bmat, &n, av.which.c_str(),
-                    &nev, &tol, &av.resid[0], &ncv, &av.v[0], &av.ldv, av.iparam, av.ipntr, &av.workd[0],
+            dseupd_(&rvec, &av.howmy, &av.select[0], av.d.getDataPtr(), av.z.getDataPtr(), &av.ldv, &sigma, &av.bmat, &n,
+		    which.c_str(),&nev, &tol, &av.resid[0], &ncv, &av.v[0], &av.ldv, av.iparam, av.ipntr, &av.workd[0],
                     &av.workl[0], &av.lworkl, &info);
             if(info != 0)
               {
