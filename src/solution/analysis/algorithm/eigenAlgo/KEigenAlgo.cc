@@ -29,6 +29,7 @@
 #include <solution/analysis/algorithm/eigenAlgo/KEigenAlgo.h>
 #include <solution/analysis/integrator/eigen/KEigenIntegrator.h>
 #include <solution/system_of_eqn/eigenSOE/EigenSOE.h>
+#include <solution/system_of_eqn/eigenSOE/EigenSolver.h>
 #include <solution/analysis/model/AnalysisModel.h>
 #include <utility/matrix/Vector.h>
 
@@ -51,17 +52,8 @@ XC::KEigenIntegrator *XC::KEigenAlgo::getKEigenIntegrator(void)
 XC::KEigenAlgo::KEigenAlgo(AnalysisAggregation *owr)
   :EigenAlgorithm(owr,EigenALGORITHM_TAGS_KEigen), ns(0), nl(0), condNumberThreshold(1e5) {}
 
-//! @brief Compute the ns smallest eigenvalues.
-int XC::KEigenAlgo::compute_smallest_eigenvalues(void)
-  {
-    if(ns>0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; not implemented yet." << std::endl;
-    return 0;
-  }
-
-//! @brief Compute the nl largest eigenvalues.
-int XC::KEigenAlgo::compute_largest_eigenvalues(void)
+//! @brief Compute the smallest or largest eigenvalues.
+int XC::KEigenAlgo::compute_eigenvalues(int numEigen, const std::string &which)
   {
     AnalysisModel *theModel= getAnalysisModelPtr();
     KEigenIntegrator *theIntegrator= getKEigenIntegrator();
@@ -79,15 +71,66 @@ int XC::KEigenAlgo::compute_largest_eigenvalues(void)
 		  << "; WARNING - the Integrator failed in formKtplusDt().\n";
         return -3;
       }
-
-    if(theSOE->solve(nl) < 0) //Computes nl largest eigenvalues.
+    EigenSolver *solver= theSOE->getSolver();
+    solver->setWhichEigenvalues(which); //Which eigenvalues to compute.
+    if(theSOE->solve(numEigen) < 0) //Computes numEigen eigenvalues.
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; Warning - the EigenSOE failed in solve().\n";
         return -4;
       }
+    return 0;
+  }
 
-    eigen_to_model(nl); //Send eigenvectors (modes) and eigenvalues to the model.
+//! @brief Compute the ns smallest eigenvalues.
+int XC::KEigenAlgo::compute_smallest_eigenvalues(void)
+  {
+    if(ns>0)
+      {
+	compute_eigenvalues(ns,"LM"); // YES LM.
+	EigenSOE *theSOE = getEigenSOEPtr();
+	for(int i= 1;i<=ns;i++)
+	  {
+	    const double ev= theSOE->getEigenvalue(i);
+	    const double denom= 1.0-ev;
+	    if(denom!=0.0)
+	      eigenvalues.push_back(1.0/denom);
+	    else
+	      {
+		std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; theSOE.eigenvalue(" << i << ")= "
+			  << ev << std::endl;
+		eigenvalues.push_back(1e99);
+	      }
+	    eigenvectors.push_back(theSOE->getEigenvector(i));
+	  }
+      }
+    return 0;
+  }
+
+//! @brief Compute the nl largest eigenvalues.
+int XC::KEigenAlgo::compute_largest_eigenvalues(void)
+  {
+    if(nl>0)
+      {
+	compute_eigenvalues(nl,"LS"); // YES LS.
+	EigenSOE *theSOE = getEigenSOEPtr();
+	for(int i= 1;i<=nl;i++)
+	  {
+	    const double ev= theSOE->getEigenvalue(i);
+	    const double denom= 1.0-ev;
+	    if(denom!=0.0)
+	      eigenvalues.push_back(1.0/denom);
+	    else
+	      {
+		std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; theSOE.eigenvalue(" << i << ")= "
+			  << ev << std::endl;
+		eigenvalues.push_back(1e99);
+	      }
+	    eigenvectors.push_back(theSOE->getEigenvector(i));
+	  }
+      }
     return 0;
   }
 
@@ -100,39 +143,30 @@ int XC::KEigenAlgo::solveCurrentStep(int numModes)
     const double rcond= theSOE->getRCond();
     if(rcond>1.0/condNumberThreshold)
       {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; ill conditioned system RCOND= "
-		  << rcond << std::endl;
-	if(nl==0)
-	  nl= numModes;
+	// std::cerr << getClassName() << "::" << __FUNCTION__
+	// 	  << "; ill conditioned system RCOND= "
+	// 	  << rcond << std::endl;
+	if(ns==0)
+	  ns= numModes;
         compute_largest_eigenvalues();
-	compute_smallest_eigenvalues();
+        compute_smallest_eigenvalues();
+	eigen_to_model();
       }
     return 0;
   }
 
 //! @brief Dump the eigenvalues into the model (see Finite Element
 //! Procedures. Klaus Jurgen Bathe page 632).
-void XC::KEigenAlgo::eigen_to_model(int numModes)
+void XC::KEigenAlgo::eigen_to_model(void)
   {
+    size_t numModes= ns+nl;
     AnalysisModel *theModel= getAnalysisModelPtr();
     theModel->setNumEigenvectors(numModes);
     Vector theEigenvalues(numModes);
-    EigenSOE *theSOE = getEigenSOEPtr();
-    for(int i= 1;i<=numModes;i++)
+    for(size_t i= 0;i<numModes;i++)
       {
-        const double ev= theSOE->getEigenvalue(i);
-        const double denom= 1.0-ev;
-        if(denom!=0.0)
-          theEigenvalues[i-1]= 1.0/denom;
-        else
-          {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; theSOE.eigenvalue(" << i << ")= "
-                      << ev << std::endl;
-	    theEigenvalues[i-1]= 1e99;
-          }
-        theModel->setEigenvector(i, theSOE->getEigenvector(i));
+	theEigenvalues[i]= eigenvalues[i];
+        theModel->setEigenvector(i+1, eigenvectors[i]);
       }
     theModel->setEigenvalues(theEigenvalues);
   }

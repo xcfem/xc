@@ -43,13 +43,16 @@ class KEigenAlgo : public EigenAlgorithm
     int nl; //!< number of largest eigenpairs
     double condNumberThreshold; //!< condition number threshold for
                                //triggering analysis;
+    mutable std::deque<Vector> eigenvectors;
+    mutable std::deque<double> eigenvalues;
 
     KEigenIntegrator *getKEigenIntegrator(void);
-    virtual void eigen_to_model(int numModes);
+    virtual void eigen_to_model(void);
 
     friend class AnalysisAggregation;
     KEigenAlgo(AnalysisAggregation *);
     virtual SolutionAlgorithm *getCopy(void) const;
+    int compute_eigenvalues(int numEigen, const std::string &);
     int compute_smallest_eigenvalues(void);
     int compute_largest_eigenvalues(void);
   public:
