@@ -45,6 +45,7 @@ print 'localAxes= ', localAxes
 print ratio
 '''
 
+feProblem.errFileName= "cerr" # Display errors if any.
 import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
