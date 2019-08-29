@@ -28,9 +28,10 @@ class_<XC::FrequencyAlgo, bases<XC::EigenAlgorithm>, boost::noncopyable >("Frequ
 class_<XC::LinearBucklingAlgo, bases<XC::EigenAlgorithm>, boost::noncopyable >("LinearBucklingAlgo", "Solution algorithm for linear buckling analysis", no_init);
 
 class_<XC::KEigenAlgo, bases<XC::EigenAlgorithm>, boost::noncopyable >("KEigenAlgo", "Solution algorithm for ill-conditioning analysis", no_init)
-  .add_property("ns", &XC::KEigenAlgo::getNs,&XC::KEigenAlgo::setNs," number of smallest eigenpairs")
-  .add_property("nl", &XC::KEigenAlgo::getNl,&XC::KEigenAlgo::setNl," number of largest eigenpairs")
-  .add_property("condNumberThreshold",&XC::KEigenAlgo::getConditionNumberThreshold,&XC::KEigenAlgo::setConditionNumberThreshold,"condition number threshold for triggering analysis")
+  .add_property("ns", &XC::KEigenAlgo::getNs,&XC::KEigenAlgo::setNs," number of smallest eigenpairs.")
+  .add_property("nl", &XC::KEigenAlgo::getNl,&XC::KEigenAlgo::setNl," number of largest eigenpairs.")
+  .add_property("condNumberThreshold",&XC::KEigenAlgo::getConditionNumberThreshold,&XC::KEigenAlgo::setConditionNumberThreshold,"condition number threshold for triggering analysis.")
+  .add_property("rcond",&XC::KEigenAlgo::getRCond,&XC::KEigenAlgo::setRCond,"return the computed reciprocal condition number near 1 if the the system is well conditioned near 1 if it's bad conditioned.")
   ;
 
 class_<XC::StandardEigenAlgo, bases<XC::EigenAlgorithm>, boost::noncopyable >("StandardEigenAlgo", "Solution algorithm for standard eigenvalue problems", no_init);
