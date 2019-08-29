@@ -113,7 +113,7 @@ int XC::KEigenAlgo::compute_largest_eigenvalues(void)
   {
     if(nl>0)
       {
-	compute_eigenvalues(nl,"LS"); // YES LS.
+	compute_eigenvalues(nl,"SM"); // YES SM.
 	EigenSOE *theSOE = getEigenSOEPtr();
 	for(int i= 1;i<=nl;i++)
 	  {
@@ -140,8 +140,8 @@ int XC::KEigenAlgo::compute_largest_eigenvalues(void)
 int XC::KEigenAlgo::solveCurrentStep(int numModes)
   {
     EigenSOE *theSOE = getEigenSOEPtr();
-    const double rcond= theSOE->getRCond();
-    if(rcond>1.0/condNumberThreshold)
+    rcond= theSOE->getRCond();
+    if(rcond<1.0/condNumberThreshold)
       {
 	// std::cerr << getClassName() << "::" << __FUNCTION__
 	// 	  << "; ill conditioned system RCOND= "

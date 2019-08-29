@@ -43,6 +43,7 @@ class KEigenAlgo : public EigenAlgorithm
     int nl; //!< number of largest eigenpairs
     double condNumberThreshold; //!< condition number threshold for
                                //triggering analysis;
+    mutable double rcond; //!< computed reciprocal condition number.
     mutable std::deque<Vector> eigenvectors;
     mutable std::deque<double> eigenvalues;
 
@@ -65,10 +66,14 @@ class KEigenAlgo : public EigenAlgorithm
       { return nl; }
     inline void setNl(int n)
       { nl= n; }
-    inline int getConditionNumberThreshold(void) const
+    inline double getConditionNumberThreshold(void) const
       { return condNumberThreshold; }
-    inline void setConditionNumberThreshold(int n)
-      { condNumberThreshold= n; }
+    inline void setConditionNumberThreshold(double d)
+      { condNumberThreshold= d; }
+    inline double getRCond(void) const
+      { return rcond; }
+    inline void setRCond(double d)
+      { rcond= d; }
     virtual void Print(std::ostream &s, int flag = 0);
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
