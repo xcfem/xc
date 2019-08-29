@@ -333,11 +333,20 @@ int XC::BandArpackSolver::solve(void)
 
     if(ierr != 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; error in dgbtrf_ " << std::endl;
+	if(ierr<0) // Error in dgbtrf_ argument.
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; error in dgbtrf_: "
+		      << ierr << std::endl;
+	  }
+        if(ierr>0) // Singular matrix.
+          {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; singular matrix (one or more zero eigenvalues)"
+		      << std::endl;
+	  }
         return -1;
       }
-
     int info= dsaupd_loop(ncv,nev,av);
     if(info < 0)
       {
@@ -352,7 +361,7 @@ int XC::BandArpackSolver::solve(void)
         if(info == 1)
           {
             std::cerr << getClassName() << "::" << __FUNCTION__
-		      << "; maximum number of iteration reached."
+		      << "; maximum number of iterations reached."
                       << std::endl;
           }
         else if (info == 3)
@@ -575,7 +584,7 @@ double XC::BandArpackSolver::getRCond(const char &c)
 		int *iwrkPtr= iwrk.getDataPtr();
 		const double anorm= dlangb_(norm, &n, &kl, &ku, Aptr, &ldA, wrkPtr);
 		if(anorm==0)
-		  retval= DBL_MAX;
+		  retval= 0.0; //! singular matrix.
 		else
 		  dgbcon_(norm,&n,&kl,&ku,Aptr,&ldA,iPIV,&anorm,&retval,wrkPtr,iwrkPtr,&info);
 	      }

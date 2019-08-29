@@ -379,12 +379,12 @@ double XC::SymBandEigenSolver::getRCond(const char &c)
 	    char uplo[] = "U"; // Upper triangle of matrix is stored
 	    dpbtrf_(uplo,&n,&k,Aptr,&ldA,&info);
 	    if(info > 0) //Singular matrix.
-	      { retval= DBL_MAX; }
+	      { retval= 0.0; }
 	    else if(info < 0)
 	      std::cerr << getClassName() << "::" << __FUNCTION__
 			<< "; LaPack dpbtrf_ failure with error: " << info
 			<< std::endl;
-	    else //solve
+	    else //info==0 -> solve
 	      {
 		char norm[1];
 		norm[0]= c;
