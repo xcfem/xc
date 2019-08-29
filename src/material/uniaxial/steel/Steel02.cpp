@@ -65,8 +65,9 @@
 #include <utility/matrix/Vector.h>
 #include <cfloat>
 #include <cstdlib>
-
 #include "utility/actor/actor/MovableVector.h"
+#include "domain/mesh/element/utils/Information.h"
+#include "domain/component/Parameter.h"
 
 //! @brief Sets all history and state variables to initial values
 int XC::Steel02::setup_parameters(void)
@@ -368,3 +369,22 @@ int XC::Steel02::recvSelf(const CommParameters &cp)
 //! @brief Print stuff.
 void XC::Steel02::Print(std::ostream &s, int flag)
   { s << "Steel02:(strain, stress, tangent) " << eps << " " << sig << " " << e << std::endl; }
+
+// AddingSensitivity:BEGIN ///////////////////////////////////
+int XC::Steel02::setParameter(const std::vector<std::string> &argv, Parameter &param)
+  {  
+    const int sp= SteelBase::setParameter(argv,param);
+    if(sp<0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; WARNING: could not set parameter. "
+		<< std::endl;
+    return sp;
+  }
+
+int XC::Steel02::updateParameter(int parameterID, Information &info)
+  {
+    const int up= SteelBase::updateParameter(parameterID,info);
+    return up;
+  }
+
+// AddingSensitivity:END /////////////////////////////////////////////

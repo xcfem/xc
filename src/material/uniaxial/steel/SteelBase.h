@@ -67,6 +67,10 @@ class SteelBase : public UniaxialMaterial
       { return b*E0; }
     inline double getEpsy(void) const
       { return fy/E0; }
+// AddingSensitivity:BEGIN //////////////////////////////////////////
+    int    setParameter(const std::vector<std::string> &argv, Parameter &param);
+    int    updateParameter(int parameterID, Information &info);
+// AddingSensitivity:END ///////////////////////////////////////////    
   };
 } // end of XC namespace
 
