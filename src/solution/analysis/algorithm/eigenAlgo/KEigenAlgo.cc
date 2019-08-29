@@ -53,7 +53,7 @@ XC::KEigenAlgo::KEigenAlgo(AnalysisAggregation *owr)
   :EigenAlgorithm(owr,EigenALGORITHM_TAGS_KEigen), ns(0), nl(0), condNumberThreshold(1e5) {}
 
 //! @brief Compute the smallest or largest eigenvalues.
-int XC::KEigenAlgo::compute_eigenvalues(int numEigen, const std::string &which)
+int XC::KEigenAlgo::form_matrices(void)
   {
     AnalysisModel *theModel= getAnalysisModelPtr();
     KEigenIntegrator *theIntegrator= getKEigenIntegrator();
@@ -64,6 +64,13 @@ int XC::KEigenAlgo::compute_eigenvalues(int numEigen, const std::string &which)
 		  << "; domain, model or integrator not assigned.\n";
         return -1;
       }
+    
+    if(theIntegrator->formK() < 0) //Builds tangent stiffness matrix.
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; the Integrator failed in formK()\n";
+        return -2;
+      }
 
     if(theIntegrator->formM()<0) //Builds form the M= I (identity) matrix.
       {
@@ -71,6 +78,12 @@ int XC::KEigenAlgo::compute_eigenvalues(int numEigen, const std::string &which)
 		  << "; WARNING - the Integrator failed in formKtplusDt().\n";
         return -3;
       }
+    return 0;
+  }
+//! @brief Compute the smallest or largest eigenvalues.
+int XC::KEigenAlgo::compute_eigenvalues(int numEigen, const std::string &which)
+  {
+    EigenSOE *theSOE = getEigenSOEPtr();
     EigenSolver *solver= theSOE->getSolver();
     solver->setWhichEigenvalues(which); //Which eigenvalues to compute.
     if(theSOE->solve(numEigen) < 0) //Computes numEigen eigenvalues.
@@ -78,6 +91,39 @@ int XC::KEigenAlgo::compute_eigenvalues(int numEigen, const std::string &which)
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; Warning - the EigenSOE failed in solve().\n";
         return -4;
+      }
+    if(theSOE->getNumModes()<numEigen)
+      {
+	std::clog << getClassName() << "::" << __FUNCTION__
+		  << "; Warning - number of modes reduced from: "
+	          << numEigen << " to " << theSOE->getNumModes()
+	          << " due to the size of the system matrix."
+	          << std::endl;
+      }
+    return 0;
+  }
+
+//! @brief Put the computed eigen values into the eigenvalues
+//! member and the computed eigen vectors into the eigenvectors
+//! member.
+int XC::KEigenAlgo::dump_modes(void)
+  {
+    EigenSOE *theSOE = getEigenSOEPtr();
+    const int numModes= theSOE->getNumModes();
+    for(int i= 1;i<=numModes;i++)
+      {
+	const double ev= theSOE->getEigenvalue(i);
+	const double denom= 1.0-ev;
+	if(denom!=0.0)
+	  eigenvalues.push_back(1.0/denom);
+	else
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; theSOE.eigenvalue(" << i << ")= "
+		      << ev << std::endl;
+	    eigenvalues.push_back(1e99);
+	  }
+	eigenvectors.push_back(theSOE->getEigenvector(i));
       }
     return 0;
   }
@@ -88,22 +134,7 @@ int XC::KEigenAlgo::compute_smallest_eigenvalues(void)
     if(ns>0)
       {
 	compute_eigenvalues(ns,"LM"); // YES LM.
-	EigenSOE *theSOE = getEigenSOEPtr();
-	for(int i= 1;i<=ns;i++)
-	  {
-	    const double ev= theSOE->getEigenvalue(i);
-	    const double denom= 1.0-ev;
-	    if(denom!=0.0)
-	      eigenvalues.push_back(1.0/denom);
-	    else
-	      {
-		std::cerr << getClassName() << "::" << __FUNCTION__
-			  << "; theSOE.eigenvalue(" << i << ")= "
-			  << ev << std::endl;
-		eigenvalues.push_back(1e99);
-	      }
-	    eigenvectors.push_back(theSOE->getEigenvector(i));
-	  }
+	dump_modes();
       }
     return 0;
   }
@@ -114,22 +145,7 @@ int XC::KEigenAlgo::compute_largest_eigenvalues(void)
     if(nl>0)
       {
 	compute_eigenvalues(nl,"SM"); // YES SM.
-	EigenSOE *theSOE = getEigenSOEPtr();
-	for(int i= 1;i<=nl;i++)
-	  {
-	    const double ev= theSOE->getEigenvalue(i);
-	    const double denom= 1.0-ev;
-	    if(denom!=0.0)
-	      eigenvalues.push_back(1.0/denom);
-	    else
-	      {
-		std::cerr << getClassName() << "::" << __FUNCTION__
-			  << "; theSOE.eigenvalue(" << i << ")= "
-			  << ev << std::endl;
-		eigenvalues.push_back(1e99);
-	      }
-	    eigenvectors.push_back(theSOE->getEigenvector(i));
-	  }
+	dump_modes();
       }
     return 0;
   }
@@ -139,7 +155,14 @@ int XC::KEigenAlgo::compute_largest_eigenvalues(void)
 //! In this particular case numModes is ignored.
 int XC::KEigenAlgo::solveCurrentStep(int numModes)
   {
-    EigenSOE *theSOE = getEigenSOEPtr();
+    const int fm= form_matrices();
+    if(fm<0)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; error in matrix assembly.\n";
+        return fm;
+      }
+    EigenSOE *theSOE = getEigenSOEPtr();    
     rcond= theSOE->getRCond();
     if(rcond<1.0/condNumberThreshold)
       {
@@ -159,7 +182,7 @@ int XC::KEigenAlgo::solveCurrentStep(int numModes)
 //! Procedures. Klaus Jurgen Bathe page 632).
 void XC::KEigenAlgo::eigen_to_model(void)
   {
-    size_t numModes= ns+nl;
+    const size_t numModes= eigenvalues.size();
     AnalysisModel *theModel= getAnalysisModelPtr();
     theModel->setNumEigenvectors(numModes);
     Vector theEigenvalues(numModes);

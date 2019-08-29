@@ -323,4 +323,6 @@ void XC::FullGenEigenSOE::restore(void)
     in.read((char *)(&sz), sizeof(sz));
     in.read((char *)(M.getDataPtr()),sz);
     in.close();
+    remove(tmpFileName.c_str()); //Not needed anymore;
+    tmpFileName= "";
   }

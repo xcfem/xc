@@ -62,8 +62,7 @@
 #include <solution/graph/graph/Vertex.h>
 #include <solution/graph/graph/VertexIter.h>
 #include <cmath>
-
-
+#include <cstdio>
 
 //! @brief Constructor.
 XC::SymBandEigenSOE::SymBandEigenSOE(AnalysisAggregation *owr)
@@ -289,4 +288,6 @@ void XC::SymBandEigenSOE::restore(void)
     in.read((char *)(&sz), sizeof(sz));
     in.read((char *)(M.getDataPtr()),sz);
     in.close();
+    remove(tmpFileName.c_str()); //Not needed anymore;
+    tmpFileName= "";
   }

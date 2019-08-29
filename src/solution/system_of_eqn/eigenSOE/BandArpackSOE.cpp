@@ -293,4 +293,6 @@ void XC::BandArpackSOE::restore(void)
     in.read((char *)(&sz), sizeof(sz));
     in.read((char *)(A.getDataPtr()),size);
     in.close();
+    remove(tmpFileName.c_str()); //Not needed anymore;
+    tmpFileName= "";
   }
