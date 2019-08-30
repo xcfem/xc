@@ -89,6 +89,7 @@ print "Number of elements: ",numElem
 ratio1= abs(numNodes-8)
 ratio2= abs(numElem-3)
 
+feProblem.errFileName= "cerr" #Display errors if any.
 import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)

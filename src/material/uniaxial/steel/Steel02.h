@@ -140,6 +140,10 @@ class Steel02 : public SteelBase
 
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
+// AddingSensitivity:BEGIN //////////////////////////////////////////
+    int    setParameter(const std::vector<std::string> &argv, Parameter &param);
+    int    updateParameter(int parameterID, Information &info);
+// AddingSensitivity:END ///////////////////////////////////////////
 
     void Print(std::ostream &s, int flag =0);
   };

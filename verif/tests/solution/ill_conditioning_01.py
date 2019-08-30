@@ -70,8 +70,7 @@ print "n1.getEigenvector(1)= ",v1
 print "n2.getEigenvector(1)= ",v2
 print "ratio1= ", ratio1
 print "ratio2= ", ratio2
-
-   '''
+'''
 
 import os
 from miscUtils import LogMessages as lmsg

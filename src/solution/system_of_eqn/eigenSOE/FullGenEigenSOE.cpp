@@ -114,7 +114,8 @@ int XC::FullGenEigenSOE::setSize(Graph &theGraph)
           }
       }
     else
-      std::cerr << "FullGenEigenSOE::setSize(); no se ha asignado the solver." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; solver not set." << std::endl;
     return result;
   }
 
@@ -129,7 +130,8 @@ int XC::FullGenEigenSOE::addA(const Matrix &a, const ID &id, double fact)
     int idSize = id.Size();    
     if(idSize != a.noRows() && idSize != a.noCols())
       {
-        std::cerr << "FullGenEigenSOE::addA() - Matrix and ID not of similar sizes\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; matrix and ID not of similar sizes\n";
         return -1;
       }
 
@@ -185,7 +187,8 @@ int XC::FullGenEigenSOE::addM(const Matrix &m, const ID &id, double fact)
         int idSize = id.Size();
         if(idSize != m.noRows() && idSize != m.noCols())
           {
-            std::cerr << "FullGenEigenSOE::addM() - Matrix and ID not of similar sizes\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; matrix and ID not of similar sizes\n";
             return -1;
           }
 
@@ -274,3 +277,52 @@ int XC::FullGenEigenSOE::sendSelf(CommParameters &cp)
 
 int XC::FullGenEigenSOE::recvSelf(const CommParameters &cp)
   { return 0; }
+
+//! @brief Save the SOE matrices and vectors to file.
+//!
+//! Normally it's used to store temporarily those
+//! objects on disk while executing getRCond to avoid
+//! interferences with solve (different types of
+//! factorization...).
+void XC::FullGenEigenSOE::save(void) const
+  {
+    tmpFileName= std::tmpnam(nullptr);
+    std::cout << "tmpFileName= " << tmpFileName << std::endl;
+    std::ofstream out(tmpFileName,std::ios::out|std::ios::binary);
+    if(!out)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; cannot open file: "
+		<< tmpFileName << std::endl;
+    size_t sz= A.Size();
+    out.write((char *)(&sz), sizeof(sz));
+    out.write((char *)(A.getDataPtr()),sz);
+    sz= M.Size();
+    out.write((char *)(&sz), sizeof(sz));
+    out.write((char *)(M.getDataPtr()),sz);
+    out.close();
+  }
+
+//! @brief Restore the SOE matrices and vectors from file.
+//!
+//! Normally it's used to restore those
+//! objects from disk after executing getRCond to avoid
+//! interferences with solve (different types of
+//! factorization...).
+void XC::FullGenEigenSOE::restore(void)
+  {
+    std::cout << "tmpFileName= " << tmpFileName << std::endl;
+    std::ifstream in(tmpFileName,std::ios::in|std::ios::binary);
+    if(!in)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; cannot open file: " << tmpFileName
+		<< std::endl;
+    size_t sz= A.Size();
+    in.read((char *)(&sz), sizeof(sz));
+    in.read((char *)(A.getDataPtr()),sz);
+    sz= M.Size();
+    in.read((char *)(&sz), sizeof(sz));
+    in.read((char *)(M.getDataPtr()),sz);
+    in.close();
+    remove(tmpFileName.c_str()); //Not needed anymore;
+    tmpFileName= "";
+  }

@@ -106,8 +106,8 @@ int XC::EigenIntegrator::formK()
     EigenSOE *theSOE= getEigenSOEPtr();
     if(!mdl || !theSOE)
       {
-	std::cerr << "WARNING EigenIntegrator::formK -";
-	std::cerr << " no AnalysisModel or EigenSOE has been set\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; no AnalysisModel or EigenSOE has been set\n";
 	return -1;
       }
     

@@ -74,6 +74,8 @@ class BandArpackSOE: public ArpackSOE
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
     
+    virtual void save(void) const;
+    virtual void restore(void);
 
     friend class BandArpackSolver;
   };

@@ -95,6 +95,7 @@ print "meanFCs[1]= ", meanFCs[1]
 print "ratio2= ",ratio2
 '''
 
+feProblem.errFileName= "cerr" # Display errors if any.
 import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)

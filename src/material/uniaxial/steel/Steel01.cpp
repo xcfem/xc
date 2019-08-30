@@ -312,60 +312,20 @@ void XC::Steel01::Print(std::ostream& s, int flag)
 // AddingSensitivity:BEGIN ///////////////////////////////////
 int XC::Steel01::setParameter(const std::vector<std::string> &argv, Parameter &param)
   {
-    const size_t argc= argv.size();
-    if(argc < 1) return -1;
-    if(argv[0] == "sigmaY" || argv[0] == "fy")
-      return param.addObject(1, this);
-    if(argv[0] == "E")
-      return param.addObject(2, this);
-    if(argv[0] == "b")
-      return param.addObject(3, this);
-    if(argv[0] == "a1")
-      return param.addObject(4, this);
-    if(argv[0] == "a2")
-      return param.addObject(5, this);
-    if(argv[0] == "a3")
-      return param.addObject(6, this);
-    if(argv[0] == "a4")
-      return param.addObject(7, this);
-    else
-      std::cerr << "WARNING: Could not set parameter in XC::Steel01. " << std::endl;
-    return -1;
+    const int sp= SteelBase::setParameter(argv,param);
+    if(sp<0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; WARNING: could not set parameter. "
+		<< std::endl;
+    return sp;
   }
 
 
 int XC::Steel01::updateParameter(int parameterID, Information &info)
   {
-    switch (parameterID)
-      {
-      case -1:
-        return -1;
-      case 1:
-        this->fy= info.theDouble;
-        break;
-      case 2:
-        this->E0 = info.theDouble;
-        break;
-      case 3:
-        this->b = info.theDouble;
-        break;
-      case 4:
-        this->a1 = info.theDouble;
-        break;
-      case 5:
-        this->a2 = info.theDouble;
-        break;
-      case 6:
-        this->a3 = info.theDouble;
-        break;
-      case 7:
-        this->a4 = info.theDouble;
-        break;
-      default:
-        return -1;
-      }
+    const int up= SteelBase::updateParameter(parameterID,info);
     Ttangent = E0;          // Initial stiffness
-    return 0;
+    return up;
   }
 
 

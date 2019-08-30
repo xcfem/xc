@@ -91,6 +91,9 @@ class FullGenEigenSOE : public EigenSOE
     virtual void zeroM(void);
     virtual void identityM(void);
 
+    virtual void save(void) const;
+    virtual void restore(void);
+
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
   };

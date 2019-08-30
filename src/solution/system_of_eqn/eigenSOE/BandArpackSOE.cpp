@@ -42,7 +42,6 @@
 #include <solution/graph/graph/Vertex.h>
 #include <solution/graph/graph/VertexIter.h>
 
-
 //! @brief Constructor.
 XC::BandArpackSOE::BandArpackSOE(AnalysisAggregation *owr, double theShift)
   :ArpackSOE(owr,EigenSOE_TAGS_BandArpackSOE,theShift),
@@ -59,7 +58,8 @@ bool XC::BandArpackSOE::setSolver(EigenSolver *newSolver)
         retval= ArpackSOE::setSolver(tmp);
       }
     else
-      std::cerr << "BandArpackSOE::setSolver; incompatible solver." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; incompatible solver." << std::endl;
     return retval;
   }
 
@@ -78,13 +78,13 @@ int XC::BandArpackSOE::setSize(Graph &theGraph)
     A.Zero();
     factored = false;
 
-    // invoke setSize() on the XC::Solver
+    // invoke setSize() on the solver
     EigenSolver *theSolvr = this->getSolver();
     int solverOK = theSolvr->setSize();
     if(solverOK < 0)
       {
-        std::cerr << "WARNING: BandArpackSOE::setSize :";
-        std::cerr << " solver failed setSize()\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: solver failed setSize()\n";
         return solverOK;
       }
     return result;
@@ -101,7 +101,8 @@ int XC::BandArpackSOE::addA(const Matrix &m, const ID &id, double fact)
     int idSize = id.Size();
     if(idSize != m.noRows() && idSize != m.noCols())
       {
-        std::cerr << "BandArpackSOE::addA(); Matrix and ID not of similar sizes\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; Matrix and ID not of similar sizes\n";
         return -1;
       }
 
@@ -201,7 +202,8 @@ int XC::BandArpackSOE::addM(const Matrix &m, const ID &id, double fact)
         // check that m and id are of same size
         if(idSize != m.noRows() && idSize != m.noCols())
           {
-            std::cerr << "BandArpackSOE::addM(); Matrix and ID not of similar sizes\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; matrix and ID not of similar sizes\n";
             retval= -1;
           }
         else
@@ -254,3 +256,43 @@ int XC::BandArpackSOE::sendSelf(CommParameters &cp)
 int XC::BandArpackSOE::recvSelf(const CommParameters &cp)
   { return 0; }
 
+//! @brief Save the SOE matrices and vectors to file.
+//!
+//! Normally it's used to store temporarily those
+//! objects on disk while executing getRCond to avoid
+//! interferences with solve (different types of
+//! factorization...).
+void XC::BandArpackSOE::save(void) const
+  {
+    tmpFileName= std::tmpnam(nullptr);
+    std::ofstream out(tmpFileName,std::ios::out|std::ios::binary);
+    if(!out)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; cannot open file: "
+		<< tmpFileName << std::endl;
+    const size_t sz= A.Size();
+    out.write((char *)(&sz), sizeof(sz));
+    out.write((char *)(A.getDataPtr()),size);
+    out.close();
+  }
+
+//! @brief Restore the SOE matrices and vectors from file.
+//!
+//! Normally it's used to restore those
+//! objects from disk after executing getRCond to avoid
+//! interferences with solve (different types of
+//! factorization...).
+void XC::BandArpackSOE::restore(void)
+  {
+    std::ifstream in(tmpFileName,std::ios::in|std::ios::binary);
+    if(!in)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; cannot open file: " << tmpFileName
+		<< std::endl;
+    const size_t sz= A.Size();
+    in.read((char *)(&sz), sizeof(sz));
+    in.read((char *)(A.getDataPtr()),size);
+    in.close();
+    remove(tmpFileName.c_str()); //Not needed anymore;
+    tmpFileName= "";
+  }

@@ -70,7 +70,7 @@
 //! @param owr: analysis aggregation that owns this object.
 //! @param classTag: identifier of the class.
 XC::SystemOfEqn::SystemOfEqn(AnalysisAggregation *owr,int classTag)
-  : MovableObject(classTag), CommandEntity(owr) {}
+  : MovableObject(classTag), CommandEntity(owr), tmpFileName("") {}
 
 //! @brief Returns a pointer to the solution method that owns this object.
 XC::AnalysisAggregation *XC::SystemOfEqn::getAnalysisAggregation(void)
@@ -102,7 +102,23 @@ int XC::SystemOfEqn::checkSize(Graph &theGraph) const
     const int retval= theGraph.getNumVertex();
     if(retval==0)
       std::cerr << "WARNING! " << getClassName() << "::" << __FUNCTION__
-	        << "; model has zero DOFs, add nodes or reduce constraints." << std::endl;
+	        << "; model has zero DOFs, add nodes or reduce constraints."
+		<< std::endl;
     return retval;
   }
 
+//! @brief Stores the matrices and vectors in a temporal file.
+void XC::SystemOfEqn::save(void) const
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet."
+	      << std::endl;
+  }
+
+//! @brief Restore the matrices and vectors from a temporal file.
+void XC::SystemOfEqn::restore(void)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet."
+	      << std::endl;
+  }

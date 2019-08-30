@@ -139,9 +139,11 @@ class LinearSOE : public SystemOfEqn
     //! not.
     virtual int setB(const Vector &V, const double &fact= 1.0) =0;        
 
-    //! @brief To zero the matrix $A$, i.e. set all the components of $A$ to $0$.
+    //! @brief To zero the matrix $A$, i.e. set all the components
+    //! of $A$ to $0$.
     virtual void zeroA(void) =0;
-    //! @brief To zero the vector $b$, i.e. set all the components of $b$ to $0$.
+    //! @brief To zero the vector $b$, i.e. set all the components
+    //! of $b$ to $0$.
     virtual void zeroB(void) =0;
 
     //! @brief Return a const reference to the vector $x$.
@@ -149,6 +151,7 @@ class LinearSOE : public SystemOfEqn
     //! @brief Return a const reference to the vector $b$.
     virtual const Vector &getB(void) const= 0;    
     virtual double getDeterminant(void);
+    virtual double getRCond(const char &norm= '1');
     //! @brief Return the 2-norm of the vector $x$.
     virtual double normRHS(void) const= 0;
 

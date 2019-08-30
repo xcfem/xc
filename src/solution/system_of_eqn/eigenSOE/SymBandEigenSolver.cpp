@@ -65,8 +65,8 @@
 #include <solution/analysis/integrator/Integrator.h>
 #include "utility/matrix/Vector.h"
 
-XC::SymBandEigenSolver::SymBandEigenSolver()
-:EigenSolver(EigenSOLVER_TAGS_SymBandEigenSolver), theSOE(nullptr) {}
+XC::SymBandEigenSolver::SymBandEigenSolver(void)
+  : EigenSolver(EigenSOLVER_TAGS_SymBandEigenSolver), theSOE(nullptr) {}
 
 extern "C" int dsbevx_(char *jobz, char *range, char *uplo, int *n, int *kd,
 		       double *ab, int *ldab, double *q, int *ldq,
@@ -106,7 +106,13 @@ int XC::SymBandEigenSolver::solve(int nModes)
   
     // Set number of modes
     numModes= nModes;
-
+    
+    if(which!="LM")
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; computation of: " << which
+	        << " eigenvalues not implemented yet."
+	        << std::endl;
+    
     // Number of equations
     int n= theSOE->size;
 
@@ -153,8 +159,13 @@ int XC::SymBandEigenSolver::solve(int nModes)
     std::vector<double> q(ldq*n);
 
     // Index ranges [1,numModes] of eigenpairs to compute
-    int il = 1;
-    int iu = numModes;
+    int il= 1; //index of the smallest eigenvalue to be returned.
+    int iu= numModes; //index of the largest eigenvalue to be returned.
+    if(which=="SM")
+      {
+	iu= n;
+        il= n-numModes;
+      }
 
     // Compute eigenvalues and eigenvectors
     char jobz[] = "V";
@@ -185,7 +196,7 @@ int XC::SymBandEigenSolver::solve(int nModes)
     double *M= theSOE->M.getDataPtr();
     double *A= theSOE->A.getDataPtr();
     int numSuperD = theSOE->numSuperD;
-    int size = n;
+    const int size = n;
     if(M) //Its seems that the M matrix must be DIAGONAL.
       {
         int i,j;
@@ -197,7 +208,8 @@ int XC::SymBandEigenSolver::solve(int nModes)
               {
 	        singular = true;
 	        // alternative is to set as a small no ~ 1e-10 times smallest m(i,i) != 0.0
-	        std::cerr << "SymBandEigenSolver::solve() - M matrix singular\n";
+	        std::cerr << getClassName() << "::" << __FUNCTION__
+		          << "; m matrix singular\n";
 	        return -1;
               }
             else
@@ -228,19 +240,23 @@ int XC::SymBandEigenSolver::solve(int nModes)
 
     if(info < 0)
       {
-        std::cerr << "SymBandEigenSolver::solve() -- invalid argument number " << -info << " passed to LAPACK dsbevx\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; invalid argument number " << -info
+		  << " passed to LAPACK dsbevx\n";
         return info;
       }
 
     if(info > 0)
       {
-        std::cerr << "SymBandEigenSolver::solve() -- LAPACK dsbevx returned error code " << info << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; LAPACK dsbevx returned error code " << info << std::endl;
         return -info;
       }
 
     if(m < numModes)
       {
-        std::cerr << "SymBandEigenSolver::solve() -- LAPACK dsbevx only computed " << m << " eigenvalues, " <<
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; LAPACK dsbevx only computed " << m << " eigenvalues, " <<
         numModes << "were requested\n";
         numModes = m;
       }
@@ -275,7 +291,8 @@ bool XC::SymBandEigenSolver::setEigenSOE(EigenSOE *soe)
         retval= true;
       }
     else
-      std::cerr << getClassName() << "::setEigenSOE: not a suitable system of equations." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< ": not a suitable system of equations." << std::endl;
     return retval;
   }
 
@@ -287,7 +304,8 @@ const XC::Vector &XC::SymBandEigenSolver::getEigenvector(int mode) const
   {
     if(mode < 1 || mode > numModes)
       {
-        std::cerr << "SymBandEigenSolver::getEigenVector() -- mode " << mode << " is out of range (1 - "
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; mode " << mode << " is out of range (1 - "
 	          << numModes << ")\n";
         eigenV.Zero();
         return eigenV;  
@@ -303,7 +321,8 @@ const XC::Vector &XC::SymBandEigenSolver::getEigenvector(int mode) const
       }
     else
       {
-        std::cerr << "SymBandEigenSolver::getEigenVector() -- eigenvectors not yet computed\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; eigenvectors not yet computed\n";
         eigenV.Zero();
       }      
     return eigenV;  
@@ -313,12 +332,14 @@ const double &XC::SymBandEigenSolver::getEigenvalue(int mode) const
   {
     static double retval= 0.0;
     if(mode < 1 || mode > numModes)
-      std::cerr << "SymBandEigenSolver::getEigenvalue() -- mode " 
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; mode " 
                 << mode << " is out of range (1 - " << numModes << ")\n";
     if(!eigenvalue.isEmpty())
       retval= eigenvalue[mode-1];
     else
-      std::cerr << "SymBandEigenSolver::getEigenvalue() -- eigenvalues not yet computed\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; eigenvalues not yet computed\n";
     return retval;
   }
 
@@ -358,40 +379,47 @@ double XC::SymBandEigenSolver::getRCond(const char &c)
       }
     else
       {
-	int n = theSOE->size;
-	const int k= theSOE->numSuperD;
-        const int ldA = k+1;// Leading dimension of the matrix
-	int info;
-	double *Aptr= theSOE->A.getDataPtr();
-        char uplo[] = "U"; // Upper triagle of matrix is stored
-	
-	//now solve
 	if(theSOE->factored == false) // factorize
-	  dpbtrf_(uplo,&n,&k,Aptr,&ldA,&info);
-	if(info != 0)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; LaPack dgbtrf_ failure with error: " << info
-		    << std::endl;
+	  {
+	    theSOE->save(); //Avoid conflict with solve()
+	    int n = theSOE->size;
+	    const int k= theSOE->numSuperD;
+	    const int ldA= k+1;// Leading dimension of the matrix
+	    int info;
+	    double *Aptr= theSOE->A.getDataPtr();
+	    char uplo[] = "U"; // Upper triangle of matrix is stored
+	    dpbtrf_(uplo,&n,&k,Aptr,&ldA,&info);
+	    if(info > 0) //Singular matrix.
+	      { retval= 0.0; }
+	    else if(info < 0)
+	      std::cerr << getClassName() << "::" << __FUNCTION__
+			<< "; LaPack dpbtrf_ failure with error: " << info
+			<< std::endl;
+	    else //info==0 -> solve
+	      {
+		char norm[1];
+		norm[0]= c;
+		Vector wrk(3*n);
+		double *wrkPtr= wrk.getDataPtr();
+		ID iwrk(n);
+		int *iwrkPtr= iwrk.getDataPtr();
+		const double anorm= dlansb_(norm, uplo, &n, &k, Aptr, &ldA, wrkPtr);
+		dpbcon_(uplo,&n,&k,Aptr,&ldA,&anorm,&retval,wrkPtr,iwrkPtr,&info);
+		// check if successful
+		if(info != 0)
+		  {
+		    std::cerr << getClassName() << "::" << __FUNCTION__
+			      << ";LAPACK dpbcon routine returned "
+			      << info << std::endl;
+		    return -info;
+		  }
+	      }
+            theSOE->restore(); //Avoid conflict with solve()
+	  }
 	else
-	  {
-	    char norm[1];
-	    norm[0]= c;
-            Vector wrk(3*n);
-            double *wrkPtr= wrk.getDataPtr();
-	    ID iwrk(n);
-	    int *iwrkPtr= iwrk.getDataPtr();
-            const double anorm= dlansb_(norm, uplo, &n, &k, Aptr, &ldA, wrkPtr);
-	    dpbcon_(uplo,&n,&k,Aptr,&ldA,&anorm,&retval,wrkPtr,iwrkPtr,&info);
-	  }
-
-	// check if successful
-	if(info != 0)
-	  {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
-		      << ";LAPACK routine returned " << info << std::endl;
-	    return -info;
-	  }
-	theSOE->factored = true;
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; matrix already factored, conflict with solve()."
+		    << std::endl;
 	return retval;
       }
   }

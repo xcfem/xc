@@ -83,6 +83,8 @@ class EigenSOE : public SystemOfEqn
 
     virtual int solve(int numModes);
     virtual int solve(void);
+    virtual double getDeterminant(void);
+    virtual double getRCond(const char &norm= '1');
      
     // pure virtual functions
     virtual int addA(const Matrix &, const ID &, double fact = 1.0) = 0;

@@ -71,7 +71,84 @@
 
 
 
-
+//! @brief computes for a pair of N-by-N real nonsymmetric matrices (A,B)
+//! the generalized eigenvalues, and optionally, the left and/or right
+//! generalized eigenvectors.
+//!
+//! @param JOBVL: 'N':  do not compute the left generalized eigenvectors, 'V':  compute the left generalized eigenvectors.
+//! @param JOBVR: 'N':  do not compute the right generalized eigenvectors, 'V':  compute the right generalized eigenvectors.
+//! @param N: order of the matrices.
+//! @param A: On entry, the matrix A in the pair (A,B), overwritten on exit.
+//! @param LDA: the leading dimension of A.  LDA >= max(1,N).
+//! @param B: On entry, the matrix B in the pair (A,B), overwritten on exit.
+//! @param LDB: the leading dimension of B.  LDB >= max(1,N).
+//! @param  ALPHAR:  (output) DOUBLE PRECISION array, dimension (N)
+//! @param  ALPHAI:  (output) DOUBLE PRECISION array, dimension (N)
+//! @param  BETA:    (output) DOUBLE PRECISION array, dimension (N)
+//!           On exit, (ALPHAR(j) + ALPHAI(j)*i)/BETA(j), j=1,...,N, will
+//!           be the generalized eigenvalues.  If ALPHAI(j) is zero, then
+//!           the j-th eigenvalue is real; if positive, then the j-th and
+//!           (j+1)-st eigenvalues are a complex conjugate pair, with
+//!           ALPHAI(j+1) negative.
+//! 
+//!           Note: the quotients ALPHAR(j)/BETA(j) and ALPHAI(j)/BETA(j)
+//!           may easily over- or underflow, and BETA(j) may even be zero.
+//!           Thus, the user should avoid naively computing the ratio
+//!           alpha/beta.  However, ALPHAR and ALPHAI will be always less
+//!           than and usually comparable with norm(A) in magnitude, and
+//!           BETA always less than and usually comparable with norm(B).
+//! 
+//! @param VL: (output) DOUBLE PRECISION array, dimension (LDVL,N)
+//!           If JOBVL = 'V', the left eigenvectors u(j) are stored one
+//!           after another in the columns of VL, in the same order as
+//!           their eigenvalues. If the j-th eigenvalue is real, then
+//!           u(j) = VL(:,j), the j-th column of VL. If the j-th and
+//!           (j+1)-th eigenvalues form a complex conjugate pair, then
+//!           u(j) = VL(:,j)+i*VL(:,j+1) and u(j+1) = VL(:,j)-i*VL(:,j+1).
+//!           Each eigenvector is scaled so the largest component has
+//!           abs(real part)+abs(imag. part)=1.
+//!           Not referenced if JOBVL = 'N'.
+//! 
+//! @param LDVL:    (input) INTEGER
+//!           The leading dimension of the matrix VL. LDVL >= 1, and
+//!           if JOBVL = 'V', LDVL >= N.
+//! 
+//! @param VR:      (output) DOUBLE PRECISION array, dimension (LDVR,N)
+//!           If JOBVR = 'V', the right eigenvectors v(j) are stored one
+//!           after another in the columns of VR, in the same order as
+//!           their eigenvalues. If the j-th eigenvalue is real, then
+//!           v(j) = VR(:,j), the j-th column of VR. If the j-th and
+//!           (j+1)-th eigenvalues form a complex conjugate pair, then
+//!           v(j) = VR(:,j)+i*VR(:,j+1) and v(j+1) = VR(:,j)-i*VR(:,j+1).
+//!           Each eigenvector is scaled so the largest component has
+//!           abs(real part)+abs(imag. part)=1.
+//!           Not referenced if JOBVR = 'N'.
+//! 
+//! @param  LDVR:    (input) INTEGER
+//!           The leading dimension of the matrix VR. LDVR >= 1, and
+//!           if JOBVR = 'V', LDVR >= N.
+//! 
+//! @param  WORK:    (workspace/output) DOUBLE PRECISION array, dimension (MAX(1,LWORK))
+//!           On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
+//! 
+//! @param LWORK :  (input) INTEGER
+//!           The dimension of the array WORK.  LWORK >= max(1,8*N).
+//!           For good performance, LWORK must generally be larger.
+//! 
+//!           If LWORK = -1, then a workspace query is assumed; the routine
+//!           only calculates the optimal size of the WORK array, returns
+//!           this value as the first entry of the WORK array, and no error
+//!           message related to LWORK is issued by XERBLA.
+//! 
+//! @param INFO:    (output) INTEGER
+//!           = 0:  successful exit
+//!           < 0:  if INFO = -i, the i-th argument had an illegal value.
+//!           = 1,...,N:
+//!                 The QZ iteration failed.  No eigenvectors have been
+//!                 calculated, but ALPHAR(j), ALPHAI(j), and BETA(j)
+//!                 should be correct for j=INFO+1,...,N.
+//!           > N:  =N+1: other than QZ iteration failed in DHGEQZ.
+//!                 =N+2: error return from DTGEVC.
 extern "C" int dggev_(char *JOBVL, char *JOBVR, int *N, double *A, int *LDA,
                       double *B, int *LDB, double *ALPHAR, double *ALPHAI,
                       double *BETA, double *VL, int *LDVL, double *VR,
@@ -88,10 +165,10 @@ int XC::FullGenEigenSolver::solve(void)
 
 int XC::FullGenEigenSolver::solve(int nEigen)
   {
-    if(theSOE == 0)
+    if(!theSOE)
       {
-        std::cerr << "FullGenEigenSolver::solve()- "
-            << " No EigenSOE object has been set yet\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; no EigenSOE object has been set yet.\n";
         return -1;
       }
 
@@ -106,15 +183,20 @@ int XC::FullGenEigenSolver::solve(int nEigen)
     int n= theSOE->size;
 
     // set the number of eigenvalues
-    numModes = nEigen;
+    numModes= nEigen;
     if(numModes > n)
       {
-	std::clog << "FullGenEigenSolver::solve; number of nodes: " << numModes
+	std::clog << getClassName() << "::" << __FUNCTION__
+		  << "; number of nodes: " << numModes
                   << " is greater than the maximum: " << n 
                   << " we take the maximum." << std::endl;
         numModes = n;
       }
-
+    if(which!="LM")
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; computation of: " << which
+	        << " eigenvalues not implemented yet."
+	        << std::endl;
     // do not compute left eigenvalues and eigenvectors
     char jobvl[]= "N";
 
@@ -170,16 +252,19 @@ int XC::FullGenEigenSolver::solve(int nEigen)
 
     if(info < 0)
       {
-        std::cerr << "FullGenEigenSolver::solve() - invalid argument number "
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; invalid argument number "
                   << -info << " passed to LAPACK dggev routine\n";
         return info;
       }
 
-    if(info > 0) {
-        std::cerr << "FullGenEigenSolver::solve() - the LAPACK dggev routine "
+    if(info > 0)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; the LAPACK dggev routine "
             << "returned error code " << info << std::endl;
         return -info;
-    }
+      }
 
     theSOE->factored = true;
 
@@ -193,7 +278,8 @@ int XC::FullGenEigenSolver::solve(int nEigen)
             else
               {
                 eigenvalue[i] = -mag/beta[i];
-                std::cerr << "FullGenEigenSolver::solve() - the eigenvalue "
+                std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; - the eigenvalue "
                     << i+1 << " is complex with magnitude "
                     << -eigenvalue[i] << std::endl;
               }
@@ -211,17 +297,20 @@ int XC::FullGenEigenSolver::solve(int nEigen)
       {
         if(eigenvalue[i] == DBL_MAX)
           {
-	    std::cerr << "FullGenEigenSolver::solve() - the eigenvalue "
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; - the eigenvalue "
 		    << i+1 << " is numerically undetermined or infinite\n";
           }
       }
 
     int lworkOpt = (int) work[0];
-    if(lwork < lworkOpt) {
-        std::cerr << "FullGenEigenSolver::solve() - optimal workspace size "
+    if(lwork < lworkOpt)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << ";  optimal workspace size "
                 << lworkOpt << " is larger than provided workspace size "
                 << lwork << " consider increasing workspace\n";
-    }
+      }
 
     // clean up the memory
     return 0;
@@ -253,7 +342,8 @@ bool XC::FullGenEigenSolver::setEigenSOE(EigenSOE *soe)
         retval= true;
       }
     else
-      std::cerr << getClassName() << "::setEigenSOE: not a suitable system of equations." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; not a suitable system of equations." << std::endl;
     return retval;
   }
 
@@ -266,8 +356,9 @@ const XC::Vector& XC::FullGenEigenSolver::getEigenvector(int mode) const
   {
     if(mode <= 0 || mode > numModes)
       {
-        std::cerr << "FullGenEigenSolver::getEigenVector() - mode "
-            << mode << " is out of range (1 - " << numModes << ")\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; mode " << mode
+		  << " is out of range (1 - " << numModes << ")\n";
         eigenV.Zero();
         return eigenV;
       }
@@ -283,7 +374,7 @@ const XC::Vector& XC::FullGenEigenSolver::getEigenvector(int mode) const
     else
       {
         std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
-            << "eigenvectors not computed yet\n";
+                  << "; eigenvectors not computed yet\n";
         eigenV.Zero();
       }      
     return eigenV;
@@ -295,8 +386,9 @@ const double &XC::FullGenEigenSolver::getEigenvalue(int mode) const
     static const double retval= 0.0;
     if(mode <= 0 || mode > numModes)
       {
-        std::cerr << "FullGenEigenSolver::getEigenvalue() - mode " 
-            << mode << " is out of range (1 - " << numModes << ")\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; mode " << mode << " is out of range (1 - "
+		  << numModes << ")\n";
         return retval;
       }
     else
@@ -306,7 +398,7 @@ const double &XC::FullGenEigenSolver::getEigenvalue(int mode) const
         else
           {
             std::cerr << getClassName() << "::" << __FUNCTION__ << "; "
-                      << "eigenvalues not yet computed\n";
+                      << "; eigenvalues not yet computed\n";
             return retval;
           }
       }

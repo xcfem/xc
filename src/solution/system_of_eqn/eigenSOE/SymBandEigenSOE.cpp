@@ -62,8 +62,7 @@
 #include <solution/graph/graph/Vertex.h>
 #include <solution/graph/graph/VertexIter.h>
 #include <cmath>
-
-
+#include <cstdio>
 
 //! @brief Constructor.
 XC::SymBandEigenSOE::SymBandEigenSOE(AnalysisAggregation *owr)
@@ -80,7 +79,8 @@ bool XC::SymBandEigenSOE::setSolver(EigenSolver *newSolver)
         retval= EigenSOE::setSolver(tmp);
       }
     else
-      std::cerr << "SymBandEigenSOE::setSolver; incompatible solver." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; incompatible solver." << std::endl;
     return retval;
   }
 
@@ -118,7 +118,8 @@ int XC::SymBandEigenSOE::addA(const Matrix &m, const ID &id, double fact)
     int idSize = id.Size();    
     if(idSize != m.noRows() && idSize != m.noCols())
       {
-        std::cerr << "SymBandEigenSOE::addA() -- Matrix and ID not of similar sizes,\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; matrix and ID not of similar sizes,\n";
         return -1;
       }
     if(fact == 1.0)
@@ -193,7 +194,8 @@ int XC::SymBandEigenSOE::addM(const Matrix &m, const ID &id, double fact)
     int idSize= id.Size();    
     if(idSize != m.noRows() && idSize != m.noCols())
       {
-        std::cerr << "WARNING: SymBandEigenSOE::addM() -- Matrix and ID not of similar sizes!!\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; matrix and ID not of similar sizes!!\n";
         return -1;
       }
 
@@ -243,3 +245,49 @@ int XC::SymBandEigenSOE::sendSelf(CommParameters &cp)
 int XC::SymBandEigenSOE::recvSelf(const CommParameters &cp)
   { return 0; }
 
+//! @brief Save the SOE matrices and vectors to file.
+//!
+//! Normally it's used to store temporarily those
+//! objects on disk while executing getRCond to avoid
+//! interferences with solve (different types of
+//! factorization...).
+void XC::SymBandEigenSOE::save(void) const
+  {
+    tmpFileName= std::tmpnam(nullptr);
+    std::ofstream out(tmpFileName,std::ios::out|std::ios::binary);
+    if(!out)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; cannot open file: "
+		<< tmpFileName << std::endl;
+    size_t sz= A.Size();
+    out.write((char *)(&sz), sizeof(sz));
+    out.write((char *)(A.getDataPtr()),sz);
+    sz= M.Size();
+    out.write((char *)(&sz), sizeof(sz));
+    out.write((char *)(M.getDataPtr()),sz);
+    out.close();
+  }
+
+//! @brief Restore the SOE matrices and vectors from file.
+//!
+//! Normally it's used to restore those
+//! objects from disk after executing getRCond to avoid
+//! interferences with solve (different types of
+//! factorization...).
+void XC::SymBandEigenSOE::restore(void)
+  {
+    std::ifstream in(tmpFileName,std::ios::in|std::ios::binary);
+    if(!in)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; cannot open file: " << tmpFileName
+		<< std::endl;
+    size_t sz= A.Size();
+    in.read((char *)(&sz), sizeof(sz));
+    in.read((char *)(A.getDataPtr()),sz);
+    sz= M.Size();
+    in.read((char *)(&sz), sizeof(sz));
+    in.read((char *)(M.getDataPtr()),sz);
+    in.close();
+    remove(tmpFileName.c_str()); //Not needed anymore;
+    tmpFileName= "";
+  }

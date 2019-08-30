@@ -74,19 +74,22 @@ int XC::StandardEigenAlgo::solveCurrentStep(int numModes)
     EigenSOE *theSOE = getEigenSOEPtr();
     if((theModel == 0) || (theIntegrator == 0) || (theSOE == 0))
       {
-        std::cerr << "StandardEigenAlgo::solverCurrentStep() -- domain, model or integrator not assigned.\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; domain, model or integrator not assigned.\n";
         return -1;
       }
   
     if(theIntegrator->formK() < 0)
       {
-        std::cerr << "XC::StandardEigenAlgo::solverCurrentStep() -- the Integrator failed in formK()\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; the Integrator failed in formK()\n";
         return -2;
       }
   
     if(theSOE->solve(numModes) < 0)
       {
-        std::cerr << "XC::StandardEigenAlgo::solverCurrentStep() -- the EigenSOE failed in solve()\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; the EigenSOE failed in solve()\n";
         return -4;
       }
   

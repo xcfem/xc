@@ -221,6 +221,16 @@ int XC::LinearSOE::solve(void)
 double XC::LinearSOE::getDeterminant(void)
   { return getSolver()->getDeterminant(); }
 
+//! @brief Returns the reciprocal of the condition number.
+//!
+//! Computes the reciprocal of the condition number using
+//! the norm specified by the char argument:
+//! if norm = '1' or 'O', then the routine estimates the condition number
+//! of matrix in 1-norm, if norm = 'I', then the routine estimates the
+//! condition number of matrix in infinity-norm.
+double XC::LinearSOE::getRCond(const char &norm)
+  { return getSolver()->getRCond(norm); }
+
 
 //! @brief Returns a pointer to the solver.
 XC::LinearSOESolver *XC::LinearSOE::getSolver(void)

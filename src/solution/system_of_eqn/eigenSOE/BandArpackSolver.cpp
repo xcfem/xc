@@ -68,13 +68,14 @@ extern "C" int dgbtrs_(char *TRANS, int *N, int *KL, int *KU, int *NRHS,
                        double *A, int *LDA, int *iPiv, double *B, int *LDB,
                        int *INFO);
 
-extern "C" int dsaupd_(int *ido, char* bmat, int *n, char *which, int *nev,
-                       double *tol, double *resid, int *ncv, double *v, int *ldv,
+//! @brief Reverse communication interface for the Implicitly Restarted Arnoldi Iteration.
+extern "C" int dsaupd_(int *ido, const char* bmat, const int *n, const char *which, const int *nev,
+                       const double *tol, double *resid, const int *ncv, double *v, int *ldv,
                        int *iparam, int *ipntr, double *workd, double *workl,
                        int *lworkl, int *info);
-
-extern "C" int dseupd_(bool *rvec, char *howmny, long int *select, double *d, double *z,
-                       int *ldz, double *sigma, char *bmat, int *n, char *which,
+//! @brief Postprocess of eigenvalues and eigenvectors.
+extern "C" int dseupd_(bool *rvec, const char *howmny, long int *select, double *d, double *z,
+                       int *ldz, double *sigma, const char *bmat, int *n, const char *which,
                        int *nev, double *tol, double *resid, int *ncv, double *v,
                        int *ldv, int *iparam, int *ipntr, double *workd,
                        double *workl, int *lworkl, int *info);
@@ -90,72 +91,199 @@ extern "C" double dlangb_(const char *norm, const int *n,
 //! using the LU factorization computed by DGBTRF.
 extern "C" int dgbcon_(char *norm, const int *N, const int *KL, const int *KU, const double *ab, const int *ldab, const int *iPiv, const double *anorm, double *rcond, double *work, int *iwork, int *INFO);
 
-//! @brief Imprime mensajes de error.
-void XC::BandArpackSolver::print_err_info(int info)
+//! @brief Constructor.
+//!
+//! @param n: dimension of the eigenproblem
+//! @param ncv: number of columns of the matrix v (<=n) t. This will indicate how many Lanczos vectors are generated at each iteration (see Arpack manual).
+//! @param nev: number of eigenvalues to be computed.
+//! @param maxitr: maximum number of iterations.
+//! @param mode: type of eigenproblem to be solved (see dsaupd description in Arpack manual).
+XC::ArpackAuxVars::ArpackAuxVars(int n, int ncv, int nev, int maxitr, int mode)
+  : ldv(n), lworkl(ncv*ncv+8*ncv), v(n*ncv), workl(ncv*ncv+8*ncv+1),
+  workd(3*n+1), d(nev), z(n*nev), resid(n), select(ncv)
   {
-     switch(info)
-       {
-       case -1:
-         std::cerr << "N must be positive.\n";
-         break;
-       case -2:
-         std::cerr << "NEV must be positive.\n";
-         break;
-       case -3:
-         std::cerr << "NCV must be greater than NEV and less than or equal to N.\n";
-         break;
-       case -4:
-         std::cerr << "The maximum number of Arnoldi update iterations allowed";
-         break;
-       case -5:
-         std::cerr << "WHICH must be one of 'LM', 'SM', 'LA', 'SA' or 'BE'.\n";
-         break;
-       case -6:
-         std::cerr << "BMAT must be one of 'I' or 'G'.\n";
-         break;
-       case -7:
-         std::cerr << "Length of private work array WORKL is not sufficient.\n";
-         break;
-       case -8:
-         std::cerr << "Error return from trid. eigenvalue calculation";
-         std::cerr << "Informatinal error from LAPACK routine dsteqr.\n";
-         break;
-       case -9:
-         std::cerr << "Starting vector is zero.\n";
-         break;
-       case -10:
-         std::cerr << "IPARAM(7) must be 1,2,3,4,5.\n";
-         break;
-       case -11:
-         std::cerr << "IPARAM(7) = 1 and BMAT = 'G' are incompatible.\n";
-         break;
-       case -12:
-         std::cerr << "IPARAM(1) must be equal to 0 or 1.\n";
-         break;
-       case -13:
-         std::cerr << "NEV and WHICH = 'BE' are incompatible.\n";
-         break;
-       case -9999:
-         std::cerr << "Could not build an Arnoldi factorization.";
-         std::cerr << " IPARAM(5) returns the size of the current Arnoldi\n";
-         std::cerr << "factorization. The user is advised to check that";
-         std::cerr << "enough workspace and array storage has been allocated.\n";
-         break;
-       default:
-         std::cerr << "unrecognised return value\n";
-       }
+    iparam[0] = 1;
+    iparam[2] = maxitr;
+    iparam[6] = mode;
   }
 
+//! @brief Reverse communication interface for the Implicitly Restarted Arnoldi Iteration.
+//!
+//! @param ido: Reverse communication flag
+//! @param n: dimension of the eigenproblem
+//! @param nev: number of eigenvalues to be computed.
+//! @param tol: Stopping criterion: the relative accuracy of the Ritz value is considered acceptable if BOUNDS(I)<=TOL*ABS(RITZ(I)). If tol<0. is passed a default is set:
+//! @param ncv: number of columns of the matrix v (<=n) t. This will ndicate how many Lanczos vectors are generated at each iteration (see Arpack manual).
+//! @param info: On input: see Arpack manual. On output: error flag (if any). 
+int XC::ArpackAuxVars::dsaupd(int &ido, const int &n, const std::string &which, const int &nev, const double &tol, const int &ncv, int &info)
+  {
+    int retval= dsaupd_(&ido, &bmat, &n, which.c_str(), &nev, &tol, &resid[0], &ncv, &v[0], &ldv,iparam, ipntr, &workd[0], &workl[0], &lworkl, &info);
+    if(info!= 0)
+      std::cerr << "ArpackAuxVars::" << __FUNCTION__
+		<< "; error with dsaupd; info = " 
+		<< info << std::endl;
+    return retval;
+  }
+
+//! @brief Print error message.
+std::string XC::BandArpackSolver::get_err_string(int info)
+  {
+    std::string retval= "";
+    switch(info)
+      {
+      case -1:
+	retval= "N must be positive.";
+	break;
+      case -2:
+	retval= "NEV must be positive.";
+	break;
+      case -3:
+	retval= "NCV must be greater than NEV and less than or equal to N.";
+	break;
+      case -4:
+	retval= "The maximum number of Arnoldi update iterations allowed";
+	break;
+      case -5:
+	retval= "WHICH must be one of 'LM', 'SM', 'LA', 'SA' or 'BE'.";
+	break;
+      case -6:
+	retval= "BMAT must be one of 'I' or 'G'.";
+	break;
+      case -7:
+	retval= "Length of private work array WORKL is not sufficient.";
+	break;
+      case -8:
+	retval= "Error return from trid. eigenvalue calculation; informational error from LAPACK routine dsteqr.";
+	break;
+      case -9:
+	retval= "Starting vector is zero.";
+	break;
+      case -10:
+	retval= "IPARAM(7) must be 1,2,3,4,5.";
+	break;
+      case -11:
+	retval= "IPARAM(7) = 1 and BMAT = 'G' are incompatible.";
+	break;
+      case -12:
+	retval= "IPARAM(1) must be equal to 0 or 1.";
+	break;
+      case -13:
+	retval= "NEV and WHICH = 'BE' are incompatible.";
+	break;
+      }
+    return retval;
+  }
+
+//! @brief Get error message.
+std::string XC::BandArpackSolver::dsaupd_err_string(int info)
+  {
+    std::string retval= get_err_string(info);
+    if(retval=="")
+      {
+	switch(info)
+	  {
+	  case -9999:
+	    retval= "Could not build an Arnoldi factorization.";
+	    retval+= " IPARAM(5) returns the size of the current Arnoldi\n";
+	    retval+= "factorization. The user is advised to check that";
+	    retval+= "enough workspace and array storage has been allocated.";
+	    break;
+	  default:
+	    retval= "unrecognised return value";
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Get error message.
+std::string XC::BandArpackSolver::dseupd_err_string(int info)
+  {
+    std::string retval= get_err_string(info);
+    if(retval=="")
+      {
+	switch(info)
+	  {
+	  case -14:
+	    retval= "DSAUPD did not find any eigenvalues to sufficient accuracy.";
+	    break;
+	  case -15:
+	    retval= "HOWMNY must be one of 'A' or 'S' if RVEC = .true.";
+	    break;
+	  case -16:
+	    retval= "HOWMNY = 'S' not yet implemented";
+	    break;
+	  default:
+	    retval= "unrecognised return value";
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Implicitly Restarted Arnoldi Iteration loop
+//! @param ncv: number of columns of the matrix v (<=n) t. This will indicate how many Lanczos vectors are generated at each iteration (see Arpack manual).
+//! @param nev: number of eigenvalues to be computed.
+int XC::BandArpackSolver::dsaupd_loop(const int &ncv, const int &nev, ArpackAuxVars &av)
+  {
+    int n = theSOE->size; //number of rows of the matrix (and of columns because it is an square matrix).
+    int kl = theSOE->numSubD; //Number of subdiagonals of the matrix.
+    int ku = theSOE->numSuperD; //Number of superdiagonals of the matrix.
+    int ldA = 2*kl + ku +1;
+    int ldB = n;
+    double *Aptr = theSOE->A.getDataPtr(); //Pointer to A matrix.
+    int *iPIV = iPiv.getDataPtr(); //Pivots indexes.
+    int info= 0;
+    char ene[] = "N"; 
+    int ido= 0; // first call to the reverse communication interface.
+    int nrhs = 1;
+    int ierr= 0;
+    while(1)
+      {
+        //dsaupd_(&ido, &av.bmat, &n, which.c_str(), &nev, &tol, &av.resid[0], &ncv, &av.v[0], &av.ldv,av.iparam, av.ipntr, &av.workd[0], &av.workl[0], &av.lworkl, &info);
+	av.dsaupd(ido, n, which, nev, tol, ncv, info);
+        if(ido == -1) //Initialization phase
+          {
+            myMv(n, &av.workd[av.ipntr[0]-1], &av.workd[av.ipntr[1]-1]);
+            dgbtrs_(ene, &n, &kl, &ku, &nrhs, Aptr, &ldA, iPIV,&av.workd[av.ipntr[1] - 1], &ldB, &ierr);
+            if(ierr != 0)
+              {
+                std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; error with dgbtrs_ 1" << std::endl;
+                exit(0);
+              }
+            continue;
+          }
+        else if(ido == 1) //compute  Y = OP * Z  and Z = B * X  (see dsaupd in arpack manual).
+          {
+
+            //          double ratio = 1.0;
+            myCopy(n, &av.workd[av.ipntr[2]-1], &av.workd[av.ipntr[1]-1]);
+            dgbtrs_(ene, &n, &kl, &ku, &nrhs, Aptr, &ldA, iPIV,&av.workd[av.ipntr[1] - 1], &ldB, &ierr);
+            if(ierr != 0)
+              {
+                std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; error with dgbtrs_ 2" <<std::endl;
+                exit(0);
+              }
+            continue;
+          }
+        else if(ido == 2) //compute  Y = B * X (see dsaupd in arpack manual).
+          {
+            myMv(n, &av.workd[av.ipntr[0]-1], &av.workd[av.ipntr[1]-1]);
+            continue;
+          }
+        break; // ido==99: done.
+      }
+    return info;
+  }
 //! @brief Solves the eigenproblem.
 int XC::BandArpackSolver::solve(void)
   {
-    if(theSOE == 0)
+    if(!theSOE)
       {
-        std::cerr << "WARNING XC::BandGenLinLapackSolver::solve(void)- ";
-        std::cerr << " No LinearSOE object has been set\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; no LinearSOE object has been set\n";
         return -1;
       }
-
     int n = theSOE->size; //number of rows of the matrix (and of columns because it is an square matrix).
 
     // check iPiv is large enough
@@ -171,10 +299,7 @@ int XC::BandArpackSolver::solve(void)
     int kl = theSOE->numSubD; //Number of subdiagonals of the matrix.
     int ku = theSOE->numSuperD; //Number of superdiagonals of the matrix.
     int ldA = 2*kl + ku +1;
-    int nrhs = 1;
-    int ldB = n;
     double *Aptr = theSOE->A.getDataPtr(); //Pointer to A matrix.
-    int *iPIV = iPiv.getDataPtr(); //Pivots indexes.
 
     if(numModes==n)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -186,169 +311,76 @@ int XC::BandArpackSolver::solve(void)
 
     // set up the space for ARPACK functions.
     // this is done each time method is called!! .. this needs to be cleaned up
-    int ldv = n;
-    int lworkl = ncv*ncv + 8*ncv;
-    std::vector<double> v(ldv * ncv);
-    std::vector<double> workl(lworkl + 1);
-    std::vector<double> workd(3 * n + 1);
-    Vector d(nev);
-    Vector z(n * nev);
-    std::vector<double> resid(n);
-    int iparam[11];
-    int ipntr[11];
-    std::vector<long int> select(ncv);
-
-    char which[]= "LM";
-    char bmat= 'G';
-    char howmy= 'A';
-
-    // some more variables
     int mode = 3;
+    ArpackAuxVars av(n,ncv,nev,maxitr,mode);
 
-    iparam[0] = 1;
-    iparam[2] = maxitr;
-    iparam[6] = mode;
 
     bool rvec = true;
-
-    int ido= 0;
-
     int ierr= 0;
 
-    // Do the factorization of Matrix (A-dM) here.
+    // Do the factorization of matrix (A-dM) here.
     dgbtrf_(&n, &n, &kl, &ku, Aptr, &ldA, iPiv.getDataPtr(), &ierr);
 
     if(ierr != 0)
       {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; error in dgbtrf_ " << std::endl;
+	if(ierr<0) // Error in dgbtrf_ argument.
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; error in dgbtrf_: "
+		      << ierr << std::endl;
+	  }
+        if(ierr>0) // Singular matrix.
+          {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; singular matrix (one or more zero eigenvalues)"
+		      << std::endl;
+	  }
         return -1;
       }
-
-    int info= 0;
-    char ene[] = "N"; 
-    while(1)
-      {
-        dsaupd_(&ido, &bmat, &n, which, &nev, &tol, &resid[0], &ncv, &v[0], &ldv,iparam, ipntr, &workd[0], &workl[0], &lworkl, &info);
-        if(ido == -1)
-          {
-            myMv(n, &workd[ipntr[0]-1], &workd[ipntr[1]-1]);
-            dgbtrs_(ene, &n, &kl, &ku, &nrhs, Aptr, &ldA, iPIV,&workd[ipntr[1] - 1], &ldB, &ierr);
-            if(ierr != 0)
-              {
-                std::cerr << getClassName() << "::" << __FUNCTION__
-			  << "; error with dgbtrs_ 1" <<std::endl;
-                exit(0);
-              }
-            continue;
-          }
-        else if(ido == 1)
-          {
-
-            //          double ratio = 1.0;
-            myCopy(n, &workd[ipntr[2]-1], &workd[ipntr[1]-1]);
-            dgbtrs_(ene, &n, &kl, &ku, &nrhs, Aptr, &ldA, iPIV,&workd[ipntr[1] - 1], &ldB, &ierr);
-            if(ierr != 0)
-              {
-                std::cerr << "XC::BandArpackSolver::Error with dgbtrs_ 2" <<std::endl;
-                exit(0);
-              }
-            continue;
-          }
-        else if(ido == 2)
-          {
-            myMv(n, &workd[ipntr[0]-1], &workd[ipntr[1]-1]);
-            continue;
-          }
-        break;
-      }
+    int info= dsaupd_loop(ncv,nev,av);
     if(info < 0)
       {
-        std::cerr << "BandArpackSolver::Error with _saupd info = " 
-                  << info << std::endl;
-        print_err_info(info);
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; error with dsaupd loop info = " 
+                  << info << ' ' << dsaupd_err_string(info) << std::endl;
         return info;
       }
     else
       {
         if(info == 1)
           {
-            std::cerr << "BandArpackSolver::Maximum number of iteration reached."
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; maximum number of iterations reached."
                       << std::endl;
           }
         else if (info == 3)
           {
-            std::cerr << "BandArpackSolver::No Shifts could be applied during implicit,";
-            std::cerr << "Arnoldi update, try increasing NCV." << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; no Shifts could be applied during implicit,";
+            std::cerr << " Arnoldi update, try increasing NCV." << std::endl;
           }
 
         double sigma = theSOE->shift;
-        if(iparam[4] > 0)
+        if(av.iparam[4] > 0)
           {
             rvec = true;
             n= theSOE->size;
-            ldv = n;
+            av.ldv = n;
 
-            dseupd_(&rvec, &howmy, &select[0], d.getDataPtr(), z.getDataPtr(), &ldv, &sigma, &bmat, &n, which,
-                    &nev, &tol, &resid[0], &ncv, &v[0], &ldv, iparam, ipntr, &workd[0],
-                    &workl[0], &lworkl, &info);
+            dseupd_(&rvec, &av.howmy, &av.select[0], av.d.getDataPtr(), av.z.getDataPtr(), &av.ldv, &sigma, &av.bmat, &n,
+		    which.c_str(),&nev, &tol, &av.resid[0], &ncv, &av.v[0], &av.ldv, av.iparam, av.ipntr, &av.workd[0],
+                    &av.workl[0], &av.lworkl, &info);
             if(info != 0)
               {
-                std::cerr << "BandArpackSolver::Error with dseupd_" << info;
-                switch(info)
-                  {
-                  case -1:
-                    std::cerr << " N must be positive.\n";
-                    break;
-                  case -2:
-                    std::cerr << " NEV must be positive.\n";
-                    break;
-                  case -3:
-                    std::cerr << " NCV must be greater than NEV and less than or equal to N.\n";
-                    break;
-                  case -5:
-                    std::cerr << " WHICH must be one of 'LM', 'SM', 'LA', 'SA' or 'BE'.\n";
-                    break;
-                  case -6:
-                    std::cerr << " BMAT must be one of 'I' or 'G'.\n";
-                    break;
-                  case -7:
-                    std::cerr << " Length of private work WORKL array is not sufficient.\n";
-                    break;
-                  case -8:
-                    std::cerr << " Error return from trid. eigenvalue calculation";
-                    std::cerr << "Information error from LAPACK routine dsteqr.\n";
-                    break;
-                  case -9:
-                    std::cerr << " Starting vector is zero.\n";
-                    break;
-                  case -10:
-                    std::cerr << " IPARAM(7) must be 1,2,3,4,5.\n";
-                    break;
-                  case -11:
-                    std::cerr << " IPARAM(7) = 1 and BMAT = 'G' are incompatibl\n";
-                    break;
-                  case -12:
-                    std::cerr << " NEV and WHICH = 'BE' are incompatible.\n";
-                    break;
-                  case -14:
-                    std::cerr << " DSAUPD did not find any eigenvalues to sufficient accuracy.\n";
-                    break;
-                  case -15:
-                    std::cerr << " HOWMNY must be one of 'A' or 'S' if RVEC = .true.\n";
-                    break;
-                  case -16:
-                    std::cerr << " HOWMNY = 'S' not yet implemented\n";
-                    break;
-                  default:
-                    ;
-                  }
+                std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; error with dseupd_" << info << ' '
+			  << dseupd_err_string(info) << std::endl;
                 return info;
               }
           }
       }
-    value= d;
-    eigenvector= z;
+    value= av.d;
+    eigenvector= av.z;
     theSOE->factored = true;
 
     return 0;
@@ -438,7 +470,9 @@ const XC::Vector &XC::BandArpackSolver::getEigenvector(int mode) const
       }
     else
       {
-        std::cerr << "XC::BandArpackSOE::getEigenvector() - eigenvectors not yet determined";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; eigenvectors not yet determined."
+	          << std::endl;
         eigenV.Zero();
       }
     return eigenV;
@@ -451,14 +485,16 @@ const double &XC::BandArpackSolver::getEigenvalue(int mode) const
     static double retval= 0.0;
     if(mode <= 0 || mode > numModes)
       {
-        std::cerr << "BandArpackSOE::getEigenvalue() - mode is out of range(1 - nev)";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; mode is out of range(1 - nev)";
         retval= -1.0;
       }
     if(!value.isEmpty())
       return value[mode-1];
     else
       {
-        std::cerr << "BandArpackSOE::getEigenvalue() - eigenvalues not yet determined";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; eigenvalues not yet determined";
         retval= -2.0;
       }
     return retval;
@@ -500,7 +536,7 @@ double XC::BandArpackSolver::getRCond(const char &c)
       }
     else
       {
-	int n = theSOE->size;    
+	int n = theSOE->size;
 	// check iPiv is large enough
 	if(iPiv.Size() < n)
 	  {
@@ -509,43 +545,54 @@ double XC::BandArpackSolver::getRCond(const char &c)
 	    return -1;
 	  }
 
-	int kl = theSOE->numSubD;
-	int ku = theSOE->numSuperD;
-	const int ldA = 2*kl + ku +1;
-	int info;
-	double *Aptr= theSOE->A.getDataPtr();
-	int *iPIV = iPiv.getDataPtr();
 
 	//now solve
 	if(theSOE->factored == false) // factorize
-	  dgbtrf_(&n,&n,&kl,&ku,Aptr,&ldA,iPIV,&info);
-	
-	if(info != 0)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; LaPack dgbtrf_ failure with error: " << info
-		    << std::endl;
-	else
 	  {
-	    char norm[1];
-	    norm[0]= c;
-            Vector wrk(3*n);
-            double *wrkPtr= wrk.getDataPtr();
-	    ID iwrk(n);
-	    int *iwrkPtr= iwrk.getDataPtr();
-            const double anorm= dlangb_(norm, &n, &kl, &ku, Aptr, &ldA, wrkPtr);
-	    dgbcon_(norm,&n,&kl,&ku,Aptr,&ldA,iPIV,&anorm,&retval,wrkPtr,iwrkPtr,&info);
-	  }
+	    theSOE->save(); //Avoid conflict with solve()
+	    int kl = theSOE->numSubD;
+	    int ku = theSOE->numSuperD;
+	    const int ldA = 2*kl + ku +1;
+	    int info;
+	    double *Aptr= theSOE->A.getDataPtr();
+	    int *iPIV = iPiv.getDataPtr();
+	    dgbtrf_(&n,&n,&kl,&ku,Aptr,&ldA,iPIV,&info);
 
-	// check if successful
-	if(info != 0)
-	  {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
-		      << ";LAPACK routine returned " << info << std::endl;
-	    return -info;
+	    if(info<0) //info>0 means matrix singular but this is not a problem here
+	      std::cerr << getClassName() << "::" << __FUNCTION__
+			<< "; LaPack dgbtrf_ failure with error: " << info
+			<< std::endl;
+	    else
+	      {
+		info= 0; 
+		char norm[1];
+		norm[0]= c;
+		Vector wrk(3*n);
+		double *wrkPtr= wrk.getDataPtr();
+		ID iwrk(n);
+		int *iwrkPtr= iwrk.getDataPtr();
+		const double anorm= dlangb_(norm, &n, &kl, &ku, Aptr, &ldA, wrkPtr);
+		if(anorm==0)
+		  retval= 0.0; //! singular matrix.
+		else
+		  dgbcon_(norm,&n,&kl,&ku,Aptr,&ldA,iPIV,&anorm,&retval,wrkPtr,iwrkPtr,&info);
+	      }
+
+	    // check if successful
+	    if(info != 0)
+	      {
+		std::cerr << getClassName() << "::" << __FUNCTION__
+			  << ";LAPACK routine returned " << info << std::endl;
+		return -info;
+	      }
+	    theSOE->restore(); //Avoid conflict with solve()
 	  }
-	theSOE->factored = true;
-	return retval;
+	else
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; matrix already factored, conflict with solve()."
+		    << std::endl;
       }
+    return retval;
   }
 
 int XC::BandArpackSolver::sendSelf(CommParameters &cp)

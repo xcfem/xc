@@ -48,7 +48,7 @@
 
 //! @brief Constructor.
 XC::EigenSolver::EigenSolver(const int &classTag,const int &nModes)
-  :Solver(classTag), numModes(nModes) {}
+  :Solver(classTag), numModes(nModes), which("LM") {}
 
 //! @brief Return the angular frequency for the i-th mode.
 double XC::EigenSolver::getAngularFrequency(int i) const
