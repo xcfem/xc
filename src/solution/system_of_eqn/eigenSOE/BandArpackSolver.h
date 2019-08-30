@@ -86,8 +86,9 @@ class BandArpackSolver : public EigenSolver
     int dsaupd_loop(const int &ncv, const int &nev,ArpackAuxVars &);
     int getNCV(int n, int nev);
 
-    void print_err_info(int);
-    void dseupd_print_err_info(int);
+    static std::string get_err_string(int);
+    static std::string dsaupd_err_string(int);
+    static std::string dseupd_err_string(int);
   protected:
 
 

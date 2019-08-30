@@ -117,116 +117,106 @@ XC::ArpackAuxVars::ArpackAuxVars(int n, int ncv, int nev, int maxitr, int mode)
 //! @param info: On input: see Arpack manual. On output: error flag (if any). 
 int XC::ArpackAuxVars::dsaupd(int &ido, const int &n, const std::string &which, const int &nev, const double &tol, const int &ncv, int &info)
   {
-    return dsaupd_(&ido, &bmat, &n, which.c_str(), &nev, &tol, &resid[0], &ncv, &v[0], &ldv,iparam, ipntr, &workd[0], &workl[0], &lworkl, &info);
+    int retval= dsaupd_(&ido, &bmat, &n, which.c_str(), &nev, &tol, &resid[0], &ncv, &v[0], &ldv,iparam, ipntr, &workd[0], &workl[0], &lworkl, &info);
+    if(info!= 0)
+      std::cerr << "ArpackAuxVars::" << __FUNCTION__
+		<< "; error with dsaupd; info = " 
+		<< info << std::endl;
+    return retval;
   }
 
 //! @brief Print error message.
-void XC::BandArpackSolver::print_err_info(int info)
+std::string XC::BandArpackSolver::get_err_string(int info)
   {
-     switch(info)
-       {
-       case -1:
-         std::cerr << "N must be positive.\n";
-         break;
-       case -2:
-         std::cerr << "NEV must be positive.\n";
-         break;
-       case -3:
-         std::cerr << "NCV must be greater than NEV and less than or equal to N.\n";
-         break;
-       case -4:
-         std::cerr << "The maximum number of Arnoldi update iterations allowed";
-         break;
-       case -5:
-         std::cerr << "WHICH must be one of 'LM', 'SM', 'LA', 'SA' or 'BE'.\n";
-         break;
-       case -6:
-         std::cerr << "BMAT must be one of 'I' or 'G'.\n";
-         break;
-       case -7:
-         std::cerr << "Length of private work array WORKL is not sufficient.\n";
-         break;
-       case -8:
-         std::cerr << "Error return from trid. eigenvalue calculation";
-         std::cerr << "Informatinal error from LAPACK routine dsteqr.\n";
-         break;
-       case -9:
-         std::cerr << "Starting vector is zero.\n";
-         break;
-       case -10:
-         std::cerr << "IPARAM(7) must be 1,2,3,4,5.\n";
-         break;
-       case -11:
-         std::cerr << "IPARAM(7) = 1 and BMAT = 'G' are incompatible.\n";
-         break;
-       case -12:
-         std::cerr << "IPARAM(1) must be equal to 0 or 1.\n";
-         break;
-       case -13:
-         std::cerr << "NEV and WHICH = 'BE' are incompatible.\n";
-         break;
-       case -9999:
-         std::cerr << "Could not build an Arnoldi factorization.";
-         std::cerr << " IPARAM(5) returns the size of the current Arnoldi\n";
-         std::cerr << "factorization. The user is advised to check that";
-         std::cerr << "enough workspace and array storage has been allocated.\n";
-         break;
-       default:
-         std::cerr << "unrecognised return value\n";
-       }
-  }
-
-//! @brief Print error message.
-void XC::BandArpackSolver::dseupd_print_err_info(int info)
-  {
+    std::string retval= "";
     switch(info)
       {
       case -1:
-	std::cerr << " N must be positive.\n";
+	retval= "N must be positive.";
 	break;
       case -2:
-	std::cerr << " NEV must be positive.\n";
+	retval= "NEV must be positive.";
 	break;
       case -3:
-	std::cerr << " NCV must be greater than NEV and less than or equal to N.\n";
+	retval= "NCV must be greater than NEV and less than or equal to N.";
+	break;
+      case -4:
+	retval= "The maximum number of Arnoldi update iterations allowed";
 	break;
       case -5:
-	std::cerr << " WHICH must be one of 'LM', 'SM', 'LA', 'SA' or 'BE'.\n";
+	retval= "WHICH must be one of 'LM', 'SM', 'LA', 'SA' or 'BE'.";
 	break;
       case -6:
-	std::cerr << " BMAT must be one of 'I' or 'G'.\n";
+	retval= "BMAT must be one of 'I' or 'G'.";
 	break;
       case -7:
-	std::cerr << " Length of private work WORKL array is not sufficient.\n";
+	retval= "Length of private work array WORKL is not sufficient.";
 	break;
       case -8:
-	std::cerr << " Error return from trid. eigenvalue calculation";
-	std::cerr << "Information error from LAPACK routine dsteqr.\n";
+	retval= "Error return from trid. eigenvalue calculation; informational error from LAPACK routine dsteqr.";
 	break;
       case -9:
-	std::cerr << " Starting vector is zero.\n";
+	retval= "Starting vector is zero.";
 	break;
       case -10:
-	std::cerr << " IPARAM(7) must be 1,2,3,4,5.\n";
+	retval= "IPARAM(7) must be 1,2,3,4,5.";
 	break;
       case -11:
-	std::cerr << " IPARAM(7) = 1 and BMAT = 'G' are incompatibl\n";
+	retval= "IPARAM(7) = 1 and BMAT = 'G' are incompatible.";
 	break;
       case -12:
-	std::cerr << " NEV and WHICH = 'BE' are incompatible.\n";
+	retval= "IPARAM(1) must be equal to 0 or 1.";
 	break;
-      case -14:
-	std::cerr << " DSAUPD did not find any eigenvalues to sufficient accuracy.\n";
+      case -13:
+	retval= "NEV and WHICH = 'BE' are incompatible.";
 	break;
-      case -15:
-	std::cerr << " HOWMNY must be one of 'A' or 'S' if RVEC = .true.\n";
-	break;
-      case -16:
-	std::cerr << " HOWMNY = 'S' not yet implemented\n";
-	break;
-      default:
-	;
       }
+    return retval;
+  }
+
+//! @brief Get error message.
+std::string XC::BandArpackSolver::dsaupd_err_string(int info)
+  {
+    std::string retval= get_err_string(info);
+    if(retval=="")
+      {
+	switch(info)
+	  {
+	  case -9999:
+	    retval= "Could not build an Arnoldi factorization.";
+	    retval+= " IPARAM(5) returns the size of the current Arnoldi\n";
+	    retval+= "factorization. The user is advised to check that";
+	    retval+= "enough workspace and array storage has been allocated.";
+	    break;
+	  default:
+	    retval= "unrecognised return value";
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Get error message.
+std::string XC::BandArpackSolver::dseupd_err_string(int info)
+  {
+    std::string retval= get_err_string(info);
+    if(retval=="")
+      {
+	switch(info)
+	  {
+	  case -14:
+	    retval= "DSAUPD did not find any eigenvalues to sufficient accuracy.";
+	    break;
+	  case -15:
+	    retval= "HOWMNY must be one of 'A' or 'S' if RVEC = .true.";
+	    break;
+	  case -16:
+	    retval= "HOWMNY = 'S' not yet implemented";
+	    break;
+	  default:
+	    retval= "unrecognised return value";
+	  }
+      }
+    return retval;
   }
 
 //! @brief Implicitly Restarted Arnoldi Iteration loop
@@ -351,9 +341,8 @@ int XC::BandArpackSolver::solve(void)
     if(info < 0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; error with _saupd info = " 
-                  << info << std::endl;
-        print_err_info(info);
+		  << "; error with dsaupd loop info = " 
+                  << info << ' ' << dsaupd_err_string(info) << std::endl;
         return info;
       }
     else
@@ -384,8 +373,8 @@ int XC::BandArpackSolver::solve(void)
             if(info != 0)
               {
                 std::cerr << getClassName() << "::" << __FUNCTION__
-			  << "; error with dseupd_" << info;
-		dseupd_print_err_info(info);
+			  << "; error with dseupd_" << info << ' '
+			  << dseupd_err_string(info) << std::endl;
                 return info;
               }
           }

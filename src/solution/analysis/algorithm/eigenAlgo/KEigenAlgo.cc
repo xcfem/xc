@@ -133,8 +133,8 @@ int XC::KEigenAlgo::compute_smallest_eigenvalues(void)
   {
     if(ns>0)
       {
-	compute_eigenvalues(ns,"LM"); // YES LM.
-	dump_modes();
+	if(compute_eigenvalues(ns,"LM") == 0) // YES LM.
+	  dump_modes();
       }
     return 0;
   }
@@ -144,8 +144,8 @@ int XC::KEigenAlgo::compute_largest_eigenvalues(void)
   {
     if(nl>0)
       {
-	compute_eigenvalues(nl,"SM"); // YES SM.
-	dump_modes();
+	if(compute_eigenvalues(nl,"SM") == 0) // YES SM.
+	  dump_modes();
       }
     return 0;
   }
@@ -183,15 +183,23 @@ int XC::KEigenAlgo::solveCurrentStep(int numModes)
 void XC::KEigenAlgo::eigen_to_model(void)
   {
     const size_t numModes= eigenvalues.size();
-    AnalysisModel *theModel= getAnalysisModelPtr();
-    theModel->setNumEigenvectors(numModes);
-    Vector theEigenvalues(numModes);
-    for(size_t i= 0;i<numModes;i++)
+    if(numModes)
       {
-	theEigenvalues[i]= eigenvalues[i];
-        theModel->setEigenvector(i+1, eigenvectors[i]);
+	AnalysisModel *theModel= getAnalysisModelPtr();
+	theModel->setNumEigenvectors(numModes);
+	Vector theEigenvalues(numModes);
+	for(size_t i= 0;i<numModes;i++)
+	  {
+	    theEigenvalues[i]= eigenvalues[i];
+	    theModel->setEigenvector(i+1, eigenvectors[i]);
+	  }
+	theModel->setEigenvalues(theEigenvalues);
       }
-    theModel->setEigenvalues(theEigenvalues);
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; no eigenvalues to transfer."
+	        << std::endl;
+	
   }
 
 //! @brief Print the object
