@@ -8,6 +8,7 @@ from model import predefined_spaces
 from materials import typical_materials
 from model.sets import sets_mng 
 from miscUtils import LogMessages as lmsg
+from postprocess.xcVtk.FE_model import Fields
 
 '''Generation of boundary conditions based on springs 
 '''
