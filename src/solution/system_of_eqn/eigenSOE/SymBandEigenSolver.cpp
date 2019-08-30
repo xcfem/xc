@@ -161,6 +161,11 @@ int XC::SymBandEigenSolver::solve(int nModes)
     // Index ranges [1,numModes] of eigenpairs to compute
     int il= 1; //index of the smallest eigenvalue to be returned.
     int iu= numModes; //index of the largest eigenvalue to be returned.
+    if(which=="SM")
+      {
+	iu= n;
+        il= n-numModes;
+      }
 
     // Compute eigenvalues and eigenvectors
     char jobz[] = "V";
@@ -191,7 +196,7 @@ int XC::SymBandEigenSolver::solve(int nModes)
     double *M= theSOE->M.getDataPtr();
     double *A= theSOE->A.getDataPtr();
     int numSuperD = theSOE->numSuperD;
-    int size = n;
+    const int size = n;
     if(M) //Its seems that the M matrix must be DIAGONAL.
       {
         int i,j;
@@ -203,7 +208,8 @@ int XC::SymBandEigenSolver::solve(int nModes)
               {
 	        singular = true;
 	        // alternative is to set as a small no ~ 1e-10 times smallest m(i,i) != 0.0
-	        std::cerr << "SymBandEigenSolver::solve() - M matrix singular\n";
+	        std::cerr << getClassName() << "::" << __FUNCTION__
+		          << "; m matrix singular\n";
 	        return -1;
               }
             else
@@ -234,7 +240,9 @@ int XC::SymBandEigenSolver::solve(int nModes)
 
     if(info < 0)
       {
-        std::cerr << "SymBandEigenSolver::solve() -- invalid argument number " << -info << " passed to LAPACK dsbevx\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; invalid argument number " << -info
+		  << " passed to LAPACK dsbevx\n";
         return info;
       }
 
@@ -283,7 +291,8 @@ bool XC::SymBandEigenSolver::setEigenSOE(EigenSOE *soe)
         retval= true;
       }
     else
-      std::cerr << getClassName() << "::setEigenSOE: not a suitable system of equations." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< ": not a suitable system of equations." << std::endl;
     return retval;
   }
 
@@ -295,7 +304,8 @@ const XC::Vector &XC::SymBandEigenSolver::getEigenvector(int mode) const
   {
     if(mode < 1 || mode > numModes)
       {
-        std::cerr << "SymBandEigenSolver::getEigenVector() -- mode " << mode << " is out of range (1 - "
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; mode " << mode << " is out of range (1 - "
 	          << numModes << ")\n";
         eigenV.Zero();
         return eigenV;  
@@ -322,7 +332,8 @@ const double &XC::SymBandEigenSolver::getEigenvalue(int mode) const
   {
     static double retval= 0.0;
     if(mode < 1 || mode > numModes)
-      std::cerr << "SymBandEigenSolver::getEigenvalue() -- mode " 
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; mode " 
                 << mode << " is out of range (1 - " << numModes << ")\n";
     if(!eigenvalue.isEmpty())
       retval= eigenvalue[mode-1];

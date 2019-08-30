@@ -84,6 +84,7 @@ int XC::KEigenAlgo::form_matrices(void)
 int XC::KEigenAlgo::compute_eigenvalues(int numEigen, const std::string &which)
   {
     EigenSOE *theSOE = getEigenSOEPtr();
+    theSOE->save();
     EigenSolver *solver= theSOE->getSolver();
     solver->setWhichEigenvalues(which); //Which eigenvalues to compute.
     if(theSOE->solve(numEigen) < 0) //Computes numEigen eigenvalues.
@@ -131,22 +132,31 @@ int XC::KEigenAlgo::dump_modes(void)
 //! @brief Compute the ns smallest eigenvalues.
 int XC::KEigenAlgo::compute_smallest_eigenvalues(void)
   {
+    EigenSOE *theSOE = getEigenSOEPtr();
+    theSOE->save();
     if(ns>0)
       {
 	if(compute_eigenvalues(ns,"LM") == 0) // YES LM.
 	  dump_modes();
       }
+    theSOE->restore();
     return 0;
   }
 
 //! @brief Compute the nl largest eigenvalues.
 int XC::KEigenAlgo::compute_largest_eigenvalues(void)
   {
+    EigenSOE *theSOE = getEigenSOEPtr();
+    theSOE->save();
     if(nl>0)
       {
-	if(compute_eigenvalues(nl,"SM") == 0) // YES SM.
-	  dump_modes();
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; computation of largest eigenvalues"
+                  << " not implemented yet." << std::endl;
+    	// if(compute_eigenvalues(nl,"SM") == 0) // YES SM.
+    	//   dump_modes();
       }
+    theSOE->restore();
     return 0;
   }
 
@@ -199,7 +209,6 @@ void XC::KEigenAlgo::eigen_to_model(void)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; no eigenvalues to transfer."
 	        << std::endl;
-	
   }
 
 //! @brief Print the object
