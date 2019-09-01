@@ -21,11 +21,11 @@ l= 10 #Bar length
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeHandler
+nodeHandler= preprocessor.getNodeHandler
 
-modelSpace= predefined_spaces.SolidMechanics2D(nodes)
-n1= nodes.newNodeXY(0,0)
-n2= nodes.newNodeXY(0,l)
+modelSpace= predefined_spaces.SolidMechanics2D(nodeHandler)
+n1= nodeHandler.newNodeXY(0,0)
+n2= nodeHandler.newNodeXY(0,l)
 
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 

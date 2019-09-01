@@ -21,13 +21,12 @@ from materials import typical_materials
 # Model definition
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-nodes= preprocessor.getNodeHandler
-nodes.dimSpace= 1 # One coordinate for each node.
-nodes.numDOFs= 1 # One degree of freedom for each node.
+nodeHandler= preprocessor.getNodeHandler
+nodeHandler.dimSpace= 1 # One coordinate for each node.
+nodeHandler.numDOFs= 1 # One degree of freedom for each node.
 
-nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXY(1,0)
-nod= nodes.newNodeXY(1.0+l,0)
+n1= nodeHandler.newNodeXY(1,0)
+n2= nodeHandler.newNodeXY(1.0+l,0)
 
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",K)
@@ -37,11 +36,11 @@ elements= preprocessor.getElementHandler
 elements.defaultMaterial= "elast"
 elements.dimElem= 1 #Element dimension.
 elements.defaultTag= 1
-zl= elements.newElement("ZeroLength",xc.ID([1,2]))
+zl= elements.newElement("ZeroLength",xc.ID([n1.tag,n2.tag]))
 
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-spc= constraints.newSPConstraint(1,0,0.0) # Node 1
+spc= constraints.newSPConstraint(n1.tag,0,0.0) # Node 1
 
 
 # Loads definition
@@ -53,7 +52,7 @@ lPatterns.currentTimeSeries= "ts"
 #Load case definition
 lp0= lPatterns.newLoadPattern("default","0")
 #lPatterns.currentLoadPattern= "0"
-nl= lp0.newNodalLoad(2,xc.Vector([F]))
+nl= lp0.newNodalLoad(n2.tag,xc.Vector([F]))
 #We add the load case to domain.
 lPatterns.addToDomain(lp0.name)
 
@@ -63,12 +62,10 @@ result= analisis.analyze(1)
 
 
 
-nodes.calculateNodalReactions(True,1e-7)
+nodeHandler.calculateNodalReactions(True,1e-7)
 
-nod2= nodes.getNode(2)
-deltax= nod2.getDisp[0] 
-nod1= nodes.getNode(1)
-R= nod1.getReaction[0] 
+deltax= n2.getDisp[0] 
+R= n1.getReaction[0] 
 
 elements= preprocessor.getElementHandler
 
@@ -85,7 +82,7 @@ print "R= ",R
 print "dx= ",deltax
 print "ratio1= ",(ratio1)
 print "ratio2= ",(ratio2)
-   '''
+'''
   
 import os
 from miscUtils import LogMessages as lmsg
