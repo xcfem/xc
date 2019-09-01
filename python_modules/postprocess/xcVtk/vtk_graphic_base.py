@@ -217,7 +217,6 @@ class RecordDefDisplay(object):
     axes.SetUserTransform(transform)
     if math.isnan(float(offset)):
       offset=25
-    print('pp',offset)
     length= offset
     axes.SetTotalLength(length,length,length)
 

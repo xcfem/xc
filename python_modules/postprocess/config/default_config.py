@@ -26,6 +26,9 @@ class envConfig(object):
 
         lsd.LimitStateData.internal_forces_results_directory= intForcPath
         lsd.LimitStateData.check_results_directory= verifPath
+
+        self.intForcPath=intForcPath
+        self.verifPath=verifPath
         
         self.verifNormStrFile=verifPath+'verifRsl_normStrsULS.py'
         self.reportNormStrFile=annexPath+'text/report_normStrsULS.tex'
