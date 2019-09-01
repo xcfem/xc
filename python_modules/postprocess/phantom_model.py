@@ -101,11 +101,11 @@ class PhantomModel(object):
   def createElements(self,intForcCombFileName,controller,setCalc=None):
     '''Creates the phantom model elements from the data read on the file.
     
-    :param   intForcCombFileName: name of the file containing the internal
-                                  forces obtained for each element for 
-                                  the combinations analyzed
-    :param   controller:   object that takes the internal forces and the
-                           section definition and checks the limit state.
+    :param intForcCombFileName: name of the file containing the internal
+                                forces obtained for each element for 
+                                the combinations analyzed
+    :param controller: object that takes the internal forces and the
+                       section definition and checks the limit state.
     :param setCalc: set of elements to be analyzed (defaults to None which 
                     means that all the elements in the file of internal forces
                     results are analyzed) 
