@@ -97,7 +97,9 @@ void XC::TaggedObject::setTag(int newTag)
 //! @brief Set tag (to be called from Python interface).
 void XC::TaggedObject::assignTag(int newTag) 
   {
-    std::clog << "Call assignTag is not a good idea (usually)." << std::endl;
+    if(verbosity>0)
+      std::clog << "Call assignTag is not a good idea (usually)."
+		<< std::endl;
     setTag(newTag);
   }
 
