@@ -36,7 +36,8 @@ class LimitStateControllerBase(object):
         self.fakeSection= fakeSection
         #Linear analysis by default.
         self.analysisToPerform= predefined_solutions.simple_static_linear
-        self.preprocessor=None   
+        self.preprocessor=None
+        self.verbose= True # display log messages by default
 
 
     def check(self,elements,nmbComb):
@@ -192,7 +193,8 @@ class BiaxialBendingNormalStressControllerBase(LimitStateControllerBase):
       :param elements: elements to check.
       :param nmbComb: load case name.
     '''
-    lmsg.log("Postprocessing combination: "+nmbComb)
+    if(self.verbose):
+      lmsg.log("Postprocessing combination: "+nmbComb)
     for e in elements:
       e.getResistingForce()
       TagTmp= e.tag
@@ -229,7 +231,8 @@ class UniaxialBendingNormalStressControllerBase(LimitStateControllerBase):
     Parameters:
       elements:    elements to check
     '''
-    lmsg.log("Postprocessing combination: "+nmbComb)
+    if(self.verbose):
+      lmsg.log("Postprocessing combination: "+nmbComb)
     for e in elements:
       e.getResistingForce()
       TagTmp= e.tag
