@@ -829,13 +829,14 @@ class ShearController(lscb.ShearControllerBase):
       errMsg= "concrete area too smail; Ac= " + str(self.concreteArea) + " m2\n"
       lmsg.error(errMsg)
     else:
+      self.E0= concrFibers[0].getMaterial().getInitialTangent()
+      self.strutWidth= scc.getCompressedStrutWidth() # b0
+      self.effectiveDepth= scc.getEffectiveDepth() # d
+      self.concreteAxialForce= concrFibers.getCompressionResultant()
+      self.Vu1= getVu1EHE08(self.fckH,self.fcdH,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.effectiveDepth,self.alpha,self.theta)
       if(self.isBending):
         self.eps1= concrFibers.getStrainMax()
-        self.E0= concrFibers[0].getMaterial().getInitialTangent()
-        self.concreteAxialForce= concrFibers.getCompressionResultant()
         self.reinforcementElasticModulus= reinfFibers[0].getMaterial().getInitialTangent()
-        self.strutWidth= scc.getCompressedStrutWidth() # b0
-        self.effectiveDepth= scc.getEffectiveDepth() # d
         self.mechanicLeverArm= scc.getMechanicLeverArm() # z
         if(self.tensionedRebars.number>0):
           self.tensionedRebars.area= tensionedReinforcement.getArea(1)
@@ -843,12 +844,17 @@ class ShearController(lscb.ShearControllerBase):
           self.tensionedRebars.area= 0.0
         self.thetaFisuras= getCrackAngleEHE08(Nd,Md,Vd,Td,self.mechanicLeverArm,self.tensionedRebars.area,0.0,self.reinforcementElasticModulus,0.0,0.0,self.VuAe,self.Vuue)
         self.Vcu= getVcuEHE08(self.fckH,self.fcdH,self.gammaC,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.effectiveDepth,self.mechanicLeverArm,self.tensionedRebars.area,0.0,self.theta,Nd,Md,Vd,Td,self.reinforcementElasticModulus,0.0,0.0,self.VuAe,self.Vuue)
-        self.Vu1= getVu1EHE08(self.fckH,self.fcdH,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.effectiveDepth,self.alpha,self.theta)
         self.Vsu= getVsuEHE08(self.mechanicLeverArm,self.alpha,self.theta,self.AsTrsv,self.fydS)
         self.Vu2= self.Vcu+self.Vsu
-        self.Vu= min(self.Vu1,self.Vu2)
       else: # Uncracked section
-        lmsg.error("Checking of shear strength without bending is not implemented.")
+        # I (LCPT) don't find an expression for this case in EHE
+        # so I ignore the shear reinforcement.
+        axes= scc.getInternalForcesAxes()
+        self.I= scc.getFibers().getHomogenizedSectionIRelToLine(self.E0,axes)
+        self.S= scc.getFibers().getSPosHomogenizedSection(self.E0,geom.HalfPlane2d(axes))
+        self.strutWidth= scc.getCompressedStrutWidth() # b0
+        self.Vu2= getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.strutWidth,self.alphaL,self.concreteAxialForce,self.concreteArea)
+      self.Vu= min(self.Vu1,self.Vu2)
 
   def calcVuEHE08(self, scc, torsionParameters, concrete, reinfSteel, Nd, Md, Vd, Td):
     '''  Compute the shear strength at failure.
@@ -886,7 +892,8 @@ class ShearController(lscb.ShearControllerBase):
 
     XXX Rebar orientation not taken into account yet.
     '''
-    lmsg.log("Postprocessing combination: "+nmbComb)
+    if(self.verbose):
+      lmsg.log("Postprocessing combination: "+nmbComb)
     secHAParamsTorsion= None # XXX Ignore torsional deformation.
     for e in elements:
       R=e.getResistingForce()
@@ -1002,7 +1009,8 @@ class CrackStraightController(lscb.LimitStateControllerBase):
     fakeSection as False, a reinfoced concrete fiber section is generated
     for each of these elements. 
     '''
-    lmsg.log("Postprocessing combination: "+nmbComb)
+    if(self.verbose):
+      lmsg.log("Postprocessing combination: "+nmbComb)
     for e in elements:
       Aceff=0  #init. value
       R=e.getResistingForce()
@@ -1189,7 +1197,8 @@ class CrackControl(lscb.CrackControlBaseParameters):
 
   def check(self,elements,nmbComb):
     ''' Crack control of concrete sections.'''
-    lmsg.log("Postprocessing combination: "+nmbComb+"\n")
+    if(self.verbose):
+      lmsg.log("Postprocessing combination: "+nmbComb+"\n")
 
     defParamsFisuracion("secHAParamsFisuracion")
     materiales= preprocessor.getMaterialHandler

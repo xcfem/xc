@@ -86,7 +86,8 @@ class CrackStraightController(lscb.LimitStateControllerBase):
         fakeSection as False, a reinfoced concrete fiber section is generated
         for each of these elements. 
         '''
-        lmsg.log("Postprocessing combination: "+nmbComb)
+        if(self.verbose):
+          lmsg.log("Postprocessing combination: "+nmbComb)
         for e in elements:
             Aceff=0  #init. value
             R=e.getResistingForce()
