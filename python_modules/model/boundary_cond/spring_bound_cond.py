@@ -162,18 +162,19 @@ class ElasticFoundation(object):
             n.setProp('soilReaction',[f3d.x,f3d.y,f3d.z])
         return self.svdReac.reduceTo(self.getCentroid())
 
-    def displayPressures(self, caption,fUnitConv,unitDescription,rgMinMax=None):
+    def displayPressures(self, caption,fUnitConv,unitDescription,rgMinMax=None,fileName=None):
         '''Display foundation pressures for a single load case.
         :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
               of the scalar field (if any) to be represented. All the values 
               less than vmin are displayed in blue and those greater than vmax 
               in red (defaults to None)
+        :param fileName: file name (defaults to None -> screen display)
         '''
         reac= self.calcPressures()
 
         field= Fields.ExtrapolatedScalarField('soilPressure','getProp',self.foundationSet,component=2,fUnitConv= fUnitConv,rgMinMax=rgMinMax)
         defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-        field.display(defDisplay,caption= caption+' '+unitDescription)
+        field.display(defDisplay,caption= caption+' '+unitDescription,fName=fileName)
 
     def displayMaxPressures(self,FEcase,combs,caption,fUnitConv,unitDescription,rgMinMax=None,fileName=None):
         '''Calculate and display the maximum earth pressures (Z direction)
