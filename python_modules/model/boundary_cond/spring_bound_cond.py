@@ -175,7 +175,7 @@ class ElasticFoundation(object):
         defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
         field.display(defDisplay,caption= caption+' '+unitDescription)
 
-    def displayMaxPressures(self,FEcase,combs,caption,fUnitConv,unitDescription,rgMinMax=None):
+    def displayMaxPressures(self,FEcase,combs,caption,fUnitConv,unitDescription,rgMinMax=None,fileName=None):
         '''Calculate and display the maximum earth pressures (Z direction)
         obtained from the group of load combinations passed as paremeter.
 
@@ -189,6 +189,7 @@ class ElasticFoundation(object):
               of the scalar field (if any) to be represented. All the values 
               less than vmin are displayed in blue and those greater than vmax 
               in red (defaults to None)
+        :param fileName: file name (defaults to None -> screen display)
         '''
         #Init max. pressures
         nodSet=self.foundationSet.getNodes
@@ -206,7 +207,7 @@ class ElasticFoundation(object):
         #Display max. pressures
         field= Fields.ExtrapolatedScalarField(name='maxSoilPressure',functionName='getProp',xcSet=self.foundationSet,component=None,fUnitConv=fUnitConv,rgMinMax=rgMinMax)
         defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-        field.display(defDisplay,caption= caption+' '+unitDescription)
+        field.display(defDisplay,caption= caption+' '+unitDescription,fName=fileName)
         
 def takeSecond(elem):
     return elem[1]
