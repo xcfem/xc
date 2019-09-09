@@ -9,6 +9,8 @@ from materials import typical_materials
 from model.sets import sets_mng 
 from miscUtils import LogMessages as lmsg
 from postprocess.xcVtk.FE_model import Fields
+from postprocess.xcVtk.FE_model import quick_graphics as QGrph
+from postprocess.xcVtk.FE_model import vtk_FE_graphic
 
 '''Generation of boundary conditions based on springs 
 '''
@@ -160,19 +162,52 @@ class ElasticFoundation(object):
             n.setProp('soilReaction',[f3d.x,f3d.y,f3d.z])
         return self.svdReac.reduceTo(self.getCentroid())
 
-    def displayPressures(self, defDisplay, caption,fUnitConv,unitDescription,rgMinMax=None):
-        '''Display foundation pressures.
+    def displayPressures(self, caption,fUnitConv,unitDescription,rgMinMax=None):
+        '''Display foundation pressures for a single load case.
         :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
               of the scalar field (if any) to be represented. All the values 
               less than vmin are displayed in blue and those greater than vmax 
               in red (defaults to None)
-        
         '''
         reac= self.calcPressures()
 
         field= Fields.ExtrapolatedScalarField('soilPressure','getProp',self.foundationSet,component=2,fUnitConv= fUnitConv,rgMinMax=rgMinMax)
+        defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
         field.display(defDisplay,caption= caption+' '+unitDescription)
 
+    def displayMaxPressures(self,FEcase,combs,caption,fUnitConv,unitDescription,rgMinMax=None):
+        '''Calculate and display the maximum earth pressures (Z direction)
+        obtained from the group of load combinations passed as paremeter.
+
+        :param FEcase: finite element problem
+        :param combs: load cases to analyze and compare to obtain the maximum 
+                    pressures.
+        :param caption: caption text to diaplay.
+        :param fUnitConv: factor to apply to results (unit conversion)
+        :param unitDescription: text to display as unit description.
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
+              of the scalar field (if any) to be represented. All the values 
+              less than vmin are displayed in blue and those greater than vmax 
+              in red (defaults to None)
+        '''
+        #Init max. pressures
+        nodSet=self.foundationSet.getNodes
+        for n in nodSet:
+            n.setProp('maxSoilPressure',-1e10)
+        #Calculate max. pressures
+        for lc in combs:
+            lcs=QGrph.QuickGraphics(FEcase)
+            lcs.solve(loadCaseName=combs[lc].name,loadCaseExpr=combs[lc].expr)
+            reac= self.calcPressures()
+            for n in nodSet:
+                prs=n.getProp('soilPressure')[2]
+                if prs > n.getProp('maxSoilPressure'):
+                    n.setProp('maxSoilPressure',prs)
+        #Display max. pressures
+        field= Fields.ExtrapolatedScalarField(name='maxSoilPressure',functionName='getProp',xcSet=self.foundationSet,component=None,fUnitConv=fUnitConv,rgMinMax=rgMinMax)
+        defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
+        field.display(defDisplay,caption= caption+' '+unitDescription)
+        
 def takeSecond(elem):
     return elem[1]
 
