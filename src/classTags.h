@@ -445,7 +445,7 @@
 #define INTEGRATOR_TAGS_AlphaOSGeneralized              25
 #define INTEGRATOR_TAGS_Collocation 	          	    26
 #define INTEGRATOR_TAGS_CollocationHybridSimulation 	27
-
+#define INTEGRATOR_TAGS_EQPath			        56
 
 
 #define LinSOE_TAGS_FullGenLinSOE		1
