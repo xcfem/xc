@@ -152,7 +152,7 @@ int XC::LoadPath::update(const Vector &deltaU)
 	return -1;
       }
 
-    myModel->incrDisp(deltaU);    
+    myModel->incrDisp(deltaU);
     updateModel();
     return 0;
   }

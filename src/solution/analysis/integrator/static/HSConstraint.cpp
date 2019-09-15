@@ -34,7 +34,7 @@
 //                 Yodel  it.  Enjoy it. We wrote it, that's all we
 //                 wanted to do.''
 //
-//# PROJECT:           Object Oriented Finite XC::Element Program
+//# PROJECT:           Object Oriented Finite Element Program
 //# PURPOSE:           Hyper-spherical Constraint
 //# CLASS:             HSConstraint
 //#
