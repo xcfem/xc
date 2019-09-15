@@ -346,6 +346,45 @@ class CFNMyMz(CFNMy):
         retval+= ',Mz= ' + str(self.Mz*factor)
         return retval
 
+class AxialForceControlVars(ControlVarsBase):
+    '''Axial force. Internal forces [N] for a combination.
+
+    :ivar idSection:section identifier
+    :ivar combName: name of the load combinations to deal with
+    :ivar N:        axial force (defaults to 0.0)
+    '''
+    def __init__(self,idSection= 'nil',combName= 'nil',N= 0.0):
+        super(AxialForceControlVars,self).__init__(combName)
+        self.N= N # Axial force.
+
+    def getLaTeXFields(self,factor= 1e-3):
+      ''' Returns a string with the intermediate fields of the LaTeX string.
+
+      :param factor: factor for units (default 1e-3 -> kN)'''
+      retval= self.idSection+" & "
+      retval+= super(AxialForceControlVars,self).getLaTeXFields(factor)
+      retval+= " & "+fmt.Esf.format(self.N*factor)
+      return retval
+
+    def getAnsysStrings(self,eTag,axis, factor= 1e-3):
+      ''' Returns a string to represent fields in ANSYS (R).
+
+      :param eTag: element identifier.
+      :param axis: section 1 or 2
+      :param factor: factor for units (default 1e-3 -> kN)'''
+      retval= 'idSection= "' + self.idSection +'", ' 
+      retval+= super(AxialForceControlVars,self).getAnsysStrings(eTag,axis,factor)
+      retval.append("detab,"+str(eTag)+",N" +axis+","+str(self.N*factor)+"\n")
+      return retval
+
+    def getStrArguments(self,factor):
+      '''Returns a string for a 'copy' (kind of) constructor.'''
+      retval= 'idSection= "' + self.idSection +'", ' 
+      retval+= super(AxialForceControlVars,self).getStrArguments(factor)
+      retval+= ',N= ' + str(self.N*factor) 
+      return retval
+
+        
 class BiaxialBendingControlVars(UniaxialBendingControlVars):
     '''Biaxial bending. Normal stresses limit state variables. [CF,N,My,Mz].
 

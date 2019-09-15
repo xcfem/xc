@@ -375,5 +375,67 @@ def readIntForcesFile(intForcCombFileName,setCalc=None):
     f.close()
     return (elementTags,idCombs,internalForcesValues)
 
+def string_el_max_axial_force(element,section,setName,combName,axialForc):
+    retval='preprocessor.getElementHandler.getElement('+str(element)+').setProp("maxAxialForceSect'+str(section)+'",AxialForceControlVars('+'idSection= "' + setName + 'Sects'+str(section)+'"' + ', combName= "' + combName +'", N= ' + str(axialForc) + ')) \n'
+    return retval
+    
+def calc_max_tension_axial_forces(setCalc,intForcCombFileName,outputFileName):
+    '''Calculate maximum tension forces for the elements included in setCalc 
+    among the load combinations for which internal-force results are stored in 
+    intForcCombFileName. The maximum tension forces calculated are written to
+    outputFileName file. 
+    '''
+    f=open(outputFileName,"w")
+    etags,combs,intForc=readIntForcesFile(intForcCombFileName,setCalc)
+    setName=setCalc.name
+    for el in etags:
+        #init tension axial forces
+        maxNsect1,maxNsect2=(0.0,0.0)
+        maxCmbsect1,maxCmbsect2=('','')
+        elIntF=intForc[el]
+        for ind in range(len(combs)):
+            Nsect1=elIntF[2*ind].N
+            Nsect2=elIntF[2*ind+1].N
+            if Nsect1>maxNsect1:
+                maxNsect1=Nsect1
+                maxCmbsect1=elIntF[2*ind].idComb
+            if Nsect2>maxNsect2:
+                maxNsect2=Nsect2
+                maxCmbsect2=elIntF[2*ind+1].idComb
+        strSect1=string_el_max_axial_force(el,1,setName,maxCmbsect1,maxNsect1)
+        strSect2=string_el_max_axial_force(el,2,setName,maxCmbsect2,maxNsect2)
+        f.write(strSect1) 
+        f.write(strSect2) 
+    f.close()
+
+def calc_max_compression_axial_forces(setCalc,intForcCombFileName,outputFileName):
+    '''Calculate maximum compression forces for the elements included in setCalc 
+    among the load combinations for which internal-force results are stored in 
+    intForcCombFileName. The maximum tension forces calculated are written to
+    outputFileName file. 
+    '''
+    f=open(outputFileName,"w")
+    etags,combs,intForc=readIntForcesFile(intForcCombFileName,setCalc)
+    setName=setCalc.name
+    for el in etags:
+        #init compression axial forces
+        maxNsect1,maxNsect2=(0.0,0.0)
+        maxCmbsect1,maxCmbsect2=('','')
+        elIntF=intForc[el]
+        for ind in range(len(combs)):
+            Nsect1=elIntF[2*ind].N
+            Nsect2=elIntF[2*ind+1].N
+            if Nsect1<maxNsect1:
+                maxNsect1=Nsect1
+                maxCmbsect1=elIntF[2*ind].idComb
+            if Nsect2<maxNsect2:
+                maxNsect2=Nsect2
+                maxCmbsect2=elIntF[2*ind+1].idComb
+        strSect1=string_el_max_axial_force(el,1,setName,maxCmbsect1,maxNsect1)
+        strSect2=string_el_max_axial_force(el,2,setName,maxCmbsect2,maxNsect2)
+        f.write(strSect1) 
+        f.write(strSect2) 
+    f.close()
+
 
 
