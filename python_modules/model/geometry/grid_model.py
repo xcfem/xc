@@ -204,6 +204,18 @@ class GridModel(object):
     def lastZIndex(self):
         return len(self.gridCoo[2])-1
 
+    def getIJKfromXYZ(self,xyz):
+        '''Return (i,j,k) indexes that match with (x,y,z) coordinates
+        '''
+        ijk=(self.gridCoo[0].index(xyz[0]),self.gridCoo[1].index(xyz[1]),self.gridCoo[2].index(xyz[2]))
+        return ijk
+
+    def getPntXYZ(self,xyz):
+        '''Return the point of the grid with coordinates (x,y,z)'''
+        ijk=self.getIJKfromXYZ(xyz)
+        pnt=self.getPntGrid(ijk)
+        return pnt
+    
     def getIJKrangeFromXYZrange(self,xyzRange):
         '''Return an ijkRange that matches with coordinates in xyzRange defined as:
         xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))

@@ -382,6 +382,25 @@ def display_strong_weak_axis(preprocessor,setToDisplay=None,vectorScale=1.0,view
     vField.dumpVectors(setToDisplay)
     return display_axes(vField,preprocessor,setToDisplay,vectorScale,viewDef,caption,fileName,defFScale)
 
+def checkSet(preprocessor,setToDisplay):
+    if(setToDisplay == None):
+        setToDisplay=preprocessor.getSets.getSet('total')
+        setToDisplay.fillDownwards()
+        lmsg.warning('set to display not defined; using total set.')
+    return setToDisplay
+
+def display_vector_field(preprocessor,vField,setToDisplay,viewDef,caption,fileName,defFScale=0.0):
+    if setToDisplay.color.Norm()==0:
+        setToDisplay.color=xc.Vector([rd.random(),rd.random(),rd.random()])
+    defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
+    defDisplay.setupGrid(setToDisplay)
+    vField.dumpVectors(preprocessor,defFScale)
+    defDisplay.cameraParameters= viewDef
+    defDisplay.defineMeshScene(None,defFScale,color=setToDisplay.color) 
+    vField.addToDisplay(defDisplay)
+    defDisplay.displayScene(caption,fileName)
+    return defDisplay
+    
 
 def display_load(preprocessor,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vectorScale=1.0,multByElemArea=False,viewDef= vtk_graphic_base.CameraParameters("XYZPos",1.0),caption= '',fileName=None,defFScale=0.0):
     '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
@@ -406,25 +425,12 @@ def display_load(preprocessor,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vec
                   by this factor. (Defaults to 0.0, i.e. display of 
                   initial/undeformed shape)
     '''
-    if(setToDisplay == None):
-        setToDisplay=preprocessor.getSets.getSet('total')
-        setToDisplay.fillDownwards()
-        lmsg.warning('set to display not defined; using total set.')
-
+    setToDisplay=checkSet(preprocessor,setToDisplay)
     LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulo() #representative length of set size (to auto-scale)
     vectorScale*=LrefModSize/10.
-    if setToDisplay.color.Norm()==0:
-        setToDisplay.color=xc.Vector([rd.random(),rd.random(),rd.random()])
-    defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-    defDisplay.setupGrid(setToDisplay)
     vField=lvf.LoadVectorField(loadCaseNm,unitsScale,vectorScale)
     vField.multiplyByElementArea=multByElemArea
-    vField.dumpLoads(preprocessor,defFScale)
-    defDisplay.cameraParameters= viewDef
-    defDisplay.defineMeshScene(None,defFScale,color=setToDisplay.color) 
-    vField.addToDisplay(defDisplay)
-    defDisplay.displayScene(caption,fileName)
-    return defDisplay
+    display_vector_field(preprocessor,vField,setToDisplay,viewDef,caption,fileName,defFScale)
 
 def display_eigen_result(preprocessor,eigenMode, setToDisplay=None,defShapeScale=0.0,equLoadVctScale=None,accelMode=None, unitsScale=1.0,viewDef= vtk_graphic_base.CameraParameters("XYZPos",1.0),caption= '',fileName=None):
     '''Display the deformed shape and/or the equivalent static forces 
