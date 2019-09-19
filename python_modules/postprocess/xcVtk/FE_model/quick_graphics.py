@@ -2,7 +2,7 @@
 from __future__ import division
 from __future__ import print_function
 
-'''Providing the user with a quick and easy way to 
+'''Provide the user with a quick and easy way to 
    display results (internal forces, displacements) of an user-defined
    load case.'''
 
@@ -26,7 +26,7 @@ from postprocess.xcVtk import vector_field as vf
 import xc
 import random as rd 
 
-class QuickGraphics(object):
+class LoadCaseResults(object):
     '''This class is aimed at providing the user with a quick and easy way to 
     display results (internal forces, displacements) of an user-defined
     load case.
@@ -36,19 +36,16 @@ class QuickGraphics(object):
                      combination of previously defined actions
                      e.g. '1.0*GselfWeight+1.0*GearthPress'
     '''
-    def __init__(self,feProblem= None):
-        if(feProblem):
-            self.feProblem= feProblem
-            self.xcSet= self.feProblem.getPreprocessor.getSets.getSet('total')
-        self.loadCaseName=''
-
-    def solve(self,loadCaseName,loadCaseExpr=''):
+    def __init__(self,feProblem,loadCaseName,loadCaseExpr):
+        self.feProblem= feProblem
+        self.prep= feProblem.getPreprocessor
         self.loadCaseName=loadCaseName
         self.loadCaseExpr=loadCaseExpr
-        preprocessor= self.feProblem.getPreprocessor
-        combs=preprocessor.getLoadHandler.getLoadCombinations
+
+    def solve(self):
+        combs=self.prep.getLoadHandler.getLoadCombinations
         lCase=combs.newLoadCombination(self.loadCaseName,self.loadCaseExpr)
-        preprocessor.resetLoadCase()
+        self.prep.resetLoadCase()
         combs.addToDomain(self.loadCaseName)
         #Solution
         lmsg.warning('Here we use a simple linear static solution that is not always a suitable method.')
@@ -93,6 +90,15 @@ class QuickGraphics(object):
         defDisplay.cameraParameters= wmDef
         return defDisplay
 
+    def checkSetToDisp(self,setToDisplay):
+        if(setToDisplay):
+            self.xcSet= setToDisplay
+        else:
+            lmsg.warning('Set to display not defined; using total set.')
+            self.xcSet=self.prep.getSets.getSet('total')
+        self.xcSet.fillDownwards()
+        if self.xcSet.color.Norm()==0:
+            self.xcSet.color=xc.Vector([rd.random(),rd.random(),rd.random()])
 
     def displayDispRot(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',viewDef= vtk_graphic_base.CameraParameters('XYZPos',1.0),fileName=None,defFScale=0.0,rgMinMax=None):
         '''displays the component of the displacement or rotations in the 
@@ -118,10 +124,7 @@ class QuickGraphics(object):
               (defaults to None)
 
         '''
-        if(setToDisplay):
-            self.xcSet= setToDisplay
-        else:
-            lmsg.warning('QuickGraphics::displayDispRot; set to display not defined; using previously defined set (total if None).')
+        self.checkSetToDisp(setToDisplay)
         vCompDisp= self.getDispComponentFromName(itemToDisp)
         nodSet= self.xcSet.nodes
         for n in nodSet:
@@ -151,10 +154,7 @@ class QuickGraphics(object):
                 by this factor. (Defaults to 0.0, i.e. display of 
                 initial/undeformed shape)
         '''
-        if(setToDisplay):
-            self.xcSet= setToDisplay
-        else:
-            lmsg.warning('QuickGraphics::displayIntForc; set to display not defined; using previously defined set (total if None).')
+        self.checkSetToDisp(setToDisplay)
         vCompDisp= self.getIntForceComponentFromName(itemToDisp)
         elSet= self.xcSet.elements.pickElemsOfDimension(2)
         if(len(elSet)>0):
@@ -192,14 +192,9 @@ class QuickGraphics(object):
                 by this factor. (Defaults to 0.0, i.e. display of 
                 initial/undeformed shape)
         '''
-        if(setToDisplay):
-            self.xcSet= setToDisplay
-            if self.xcSet.color.Norm()==0:
-                self.xcSet.color=xc.Vector([rd.random(),rd.random(),rd.random()])
-        else:
-            lmsg.warning('QuickGraphics::displayIntForc; set to display not defined; using previously defined set (total if None).')
+        self.checkSetToDisp(setToDisplay)
         #auto-scale parameters
-        LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulo() #representative length of set size (to autoscale)
+        LrefModSize=self.xcSet.getBnd(1.0).diagonal.getModulo() #representative length of set size (to autoscale)
         diagAux=cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[self.xcSet],attributeName= "intForce",component= itemToDisp)
         maxAbs=diagAux.getMaxAbsComp()
         if maxAbs > 0:
@@ -232,14 +227,8 @@ class QuickGraphics(object):
                   by this factor. (Defaults to 0.0, i.e. display of 
                   initial/undeformed shape)
         '''
-        if(setToDisplay):
-            self.xcSet= setToDisplay
-            if self.xcSet.color.Norm()==0:
-                self.xcSet.color=xc.Vector([rd.random(),rd.random(),rd.random()])
-        else:
-            lmsg.warning('QuickGraphics::dispLoadCaseBeamEl; set to display not defined; using previously defined set (total if None).')
-        preprocessor= setToDisplay.getPreprocessor
-        loadPatterns= preprocessor.getLoadHandler.getLoadPatterns
+        self.checkSetToDisp(setToDisplay)
+        loadPatterns= self.prep.getLoadHandler.getLoadPatterns
         loadPatterns.addToDomain(loadCaseName)
         defDisplay= self.getDisplay(viewDef)
         grid= defDisplay.setupGrid(self.xcSet)
@@ -248,22 +237,22 @@ class QuickGraphics(object):
         # auto-scaling parameters
         LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulo() #representative length of set size (to auto-scale)
         diagAux=lld.LinearLoadDiagram(scale=elLoadScaleF,fUnitConv=fUnitConv,loadPatternName=loadCaseName,component=elLoadComp)
-        maxAbs=diagAux.getMaxAbsComp(preprocessor)
+        maxAbs=diagAux.getMaxAbsComp(self.prep)
         if maxAbs > 0:
             elLoadScaleF*=LrefModSize/maxAbs*100
         #
         diagram= lld.LinearLoadDiagram(scale=elLoadScaleF,fUnitConv=fUnitConv,loadPatternName=loadCaseName,component=elLoadComp)
-        diagram.addDiagram(preprocessor)
+        diagram.addDiagram(self.prep)
         if diagram.isValid():
             defDisplay.appendDiagram(diagram)
         orNodalLBar='V'
         # nodal loads
         vField=lvf.LoadVectorField(loadPatternName=loadCaseName,fUnitConv=fUnitConv,scaleFactor=nodLoadScaleF,showPushing= True)
-    #    loadPatterns= preprocessor.getLoadHandler.getLoadPatterns
+    #    loadPatterns= self.prep.getLoadHandler.getLoadPatterns
         lPattern= loadPatterns[loadCaseName]
         count= 0
         if(lPattern):
-            count=vField.dumpNodalLoads(preprocessor,defFScale=defFScale)
+            count=vField.dumpNodalLoads(self.prep,defFScale=defFScale)
         else:
             lmsg.error('load pattern: '+ loadCaseName + ' not found.')
         if count >0:
@@ -290,12 +279,7 @@ class QuickGraphics(object):
                   by this factor. (Defaults to 0.0, i.e. display of 
                   initial/undeformed shape)
          '''
-        if(setToDisplay):
-            self.xcSet= setToDisplay
-            if self.xcSet.color.Norm()==0:
-                self.xcSet.color=xc.Vector([rd.random(),rd.random(),rd.random()])
-        else:
-            lmsg.warning('QuickGraphics::displayNodeValueDiagram; set to display not defined; using previously defined set (total if None).')
+        self.checkSetToDisp(setToDisplay)
         diagram= npd.NodePropertyDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[self.xcSet],attributeName= itemToDisp)
         diagram.addDiagram()
         defDisplay= self.getDisplay(viewDef)
@@ -306,8 +290,16 @@ class QuickGraphics(object):
         caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.description
         defDisplay.displayScene(caption=caption,fName=fileName)
 
+def checkSetToDisp(preprocessor,setToDisplay):
+    if(setToDisplay == None):
+        setToDisplay=preprocessor.getSets.getSet('total')
+        setToDisplay.fillDownwards()
+        lmsg.warning('set to display not defined; using total set.')
+    if setToDisplay.color.Norm()==0:
+        setToDisplay.color=xc.Vector([rd.random(),rd.random(),rd.random()])
+    return setToDisplay
         
-def display_axes(vectorField, preprocessor, setToDisplay=None,vectorScale=1.0,viewDef= vtk_graphic_base.CameraParameters("XYZPos",1.0),caption= '',fileName=None,defFScale=0.0):
+def display_axes(vectorField, prep, setToDisplay=None,vectorScale=1.0,viewDef= vtk_graphic_base.CameraParameters("XYZPos",1.0),caption= '',fileName=None,defFScale=0.0):
     '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
 
     :param vectorField: function that generates the vector field.
@@ -348,10 +340,7 @@ def display_local_axes(prep,setToDisplay=None,vectorScale=1.0,viewDef= vtk_graph
               by this factor. (Defaults to 0.0, i.e. display of 
               initial/undeformed shape)
     '''
-    if(setToDisplay == None):
-        setToDisplay=preprocessor.getSets.getSet('total')
-        setToDisplay.fillDownwards()
-        lmsg.warning('set to display not defined; using total set.')
+    setToDisplay=checkSetToDisp(prep,setToDisplay)
     vField=lavf.LocalAxesVectorField(setToDisplay.name+'_localAxes',vectorScale)
     vField.dumpVectors(setToDisplay)
     return display_axes(vField, prep,setToDisplay,vectorScale,viewDef,caption,fileName,defFScale)
@@ -374,24 +363,13 @@ def display_strong_weak_axis(preprocessor,setToDisplay=None,vectorScale=1.0,view
               by this factor. (Defaults to 0.0, i.e. display of 
               initial/undeformed shape)
     '''
-    if(setToDisplay == None):
-        setToDisplay= preprocessor.getSets.getSet('total')
-        setToDisplay.fillDownwards()
-        lmsg.warning('set to display not defined; using total set.')
+    setToDisplay=checkSetToDisp(preprocessor,setToDisplay)
     vField=lavf.StrongWeakAxisVectorField(setToDisplay.name+'_strongWeakAxis',vectorScale)
     vField.dumpVectors(setToDisplay)
     return display_axes(vField,preprocessor,setToDisplay,vectorScale,viewDef,caption,fileName,defFScale)
 
-def checkSet(preprocessor,setToDisplay):
-    if(setToDisplay == None):
-        setToDisplay=preprocessor.getSets.getSet('total')
-        setToDisplay.fillDownwards()
-        lmsg.warning('set to display not defined; using total set.')
-    return setToDisplay
 
 def display_vector_field(preprocessor,vField,setToDisplay,viewDef,caption,fileName,defFScale=0.0):
-    if setToDisplay.color.Norm()==0:
-        setToDisplay.color=xc.Vector([rd.random(),rd.random(),rd.random()])
     defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
     defDisplay.setupGrid(setToDisplay)
     vField.dumpVectors(preprocessor,defFScale)
@@ -425,7 +403,7 @@ def display_load(preprocessor,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vec
                   by this factor. (Defaults to 0.0, i.e. display of 
                   initial/undeformed shape)
     '''
-    setToDisplay=checkSet(preprocessor,setToDisplay)
+    setToDisplay=checkSetToDisp(preprocessor,setToDisplay)
     LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulo() #representative length of set size (to auto-scale)
     vectorScale*=LrefModSize/10.
     vField=lvf.LoadVectorField(loadCaseNm,unitsScale,vectorScale)
@@ -456,15 +434,10 @@ def display_eigen_result(preprocessor,eigenMode, setToDisplay=None,defShapeScale
              Defaults to ` None`, in this case it returns a console output 
              graphic.
     '''
-    if(setToDisplay == None):
-        setToDisplay=preprocessor.getSets.getSet('total')
-        setToDisplay.fillDownwards()
-        lmsg.warning('set to display not defined; using total set.')
+    setToDisplay=checkSetToDisp(preprocessor,setToDisplay)
     if equLoadVctScale not in [None,0] and accelMode==None:
         lmsg.warning("Can't display equivalent static loads. Parameter accelMode should not be null ")
         equLoadVctScale=None
-    if setToDisplay.color.Norm()==0:
-        setToDisplay.color=xc.Vector([rd.random(),rd.random(),rd.random()])
     defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
     defDisplay.setupGrid(setToDisplay)
     defDisplay.cameraParameters= viewDef

@@ -162,9 +162,9 @@ class RecordLoadCaseDisp(OuputUnits):
     :param grWdt:      width to be applied to graphics
     :param capStdTexts: dictionary with the standard captions.
     '''
-    lcs=QGrph.QuickGraphics(FEproblem)
+    lcs=QGrph.LoadCaseResults(FEproblem,self.loadCaseName,self.loadCaseExpr)
     #solve for load case
-    lcs.solve(loadCaseName=self.loadCaseName,loadCaseExpr=self.loadCaseExpr)
+    lcs.solve()
     #Displacements and rotations displays
     for st in self.setsToDispDspRot:
         for arg in self.listDspRot:
