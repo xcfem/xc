@@ -12,6 +12,12 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.Ortega@ciccp.es    l.pereztato@ciccp.es"
 
+import math
+import xc_base
+import geom
+import xc
+import vtk
+import random as rd 
 from miscUtils import LogMessages as lmsg
 from solution import predefined_solutions
 from postprocess.xcVtk import vtk_graphic_base
@@ -23,8 +29,6 @@ from postprocess.xcVtk import load_vector_field as lvf
 from postprocess.xcVtk import node_property_diagram as npd
 from postprocess.xcVtk import local_axes_vector_field as lavf
 from postprocess.xcVtk import vector_field as vf
-import xc
-import random as rd 
 
 class LoadCaseResults(object):
     '''This class is aimed at providing the user with a quick and easy way to 
@@ -203,6 +207,37 @@ class LoadCaseResults(object):
         caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.description
         display_diagram(scaleFactor= scaleFactor,fConvUnits= fConvUnits,setToDispRes=self.xcSet,setDisp=self.xcSet,attributeName= "intForce",component= itemToDisp,caption=caption,viewDef=viewDef,defFScale=defFScale,fileName=fileName)
 
+    def displayReactions(self,setToDisplay=None,fConvUnits=1.0,scaleFactor=1.0,unitDescription= '',viewDef= vtk_graphic_base.CameraParameters('XYZPos'),fileName=None,defFScale=0.0):
+        self.checkSetToDisp(setToDisplay)
+        self.prep.getNodeHandler.calculateNodalReactions(True,1e-7)
+        #auto-scale
+        LrefModSize=self.xcSet.getBnd(1.0).diagonal.getModulo() #representative length of set size (to autoscale)
+        maxAbs=0
+        for n in self.xcSet.nodes:
+            r=n.getReaction
+            modR=max(math.sqrt(r[0]**2+r[1]**2+r[2]**2),math.sqrt(r[3]**2+r[4]**2+r[5]**2))
+            if modR>maxAbs:
+                maxAbs=modR
+        if maxAbs > 0:
+            scaleFactor*=0.15*LrefModSize/(maxAbs*fConvUnits)
+        #
+        caption= self.loadCaseName+' Reactions'+ ' '+unitDescription +' '+self.xcSet.description
+        vFieldF=vf.VectorField(name='Freact',fUnitConv=fConvUnits,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()) #Force
+        vFieldM=vf.VectorField(name='Mreact',fUnitConv=fConvUnits,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource())
+        for n in self.xcSet.nodes:
+            p=n.getCurrentPos3d(defFScale)
+            r=n.getReaction
+            vFieldF.data.insertNextVector(r[0],r[1],r[2])
+            vFieldF.data.insertNextPair(p.x,p.y,p.z,r[0],r[1],r[2],vFieldF.fUnitConv,vFieldF.showPushing)
+            vFieldM.data.insertNextVector(r[3],r[4],r[5])
+            vFieldM.data.insertNextPair(p.x,p.y,p.z,r[3],r[4],r[5],vFieldM.fUnitConv,vFieldM.showPushing)
+        defDisplay= self.getDisplay(viewDef)
+        defDisplay.setupGrid(self.xcSet)
+        defDisplay.defineMeshScene(None,defFScale,color=self.xcSet.color)
+        vFieldF.addToDisplay(defDisplay)
+        vFieldM.addToDisplay(defDisplay,'V')
+        defDisplay.displayScene(caption,fileName)
+        
     def dispLoadCaseBeamEl(self,loadCaseName='',setToDisplay=None,fUnitConv=1.0,elLoadComp='transComponent',elLoadScaleF=1.0,nodLoadScaleF=1.0,viewDef= vtk_graphic_base.CameraParameters('XYZPos'),caption='',fileName=None,defFScale=0.0):
         '''Display the loads applied on beam elements and nodes for a given load case
 

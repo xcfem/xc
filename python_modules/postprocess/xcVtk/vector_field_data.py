@@ -84,15 +84,12 @@ class VectorFieldData(object):
       lmsg.warning('VectorFieldData.getPolydata: no vectors.')
     return retval
 
-  def setupGlyph(self,fUnitConv= 1.0):
+  def setupGlyph(self,fUnitConv= 1.0,symType=vtk.vtkArrowSource()):
     self.polydata= self.getPolydata(fUnitConv)
     # Generate the arrow for the glyphs
-    arrow = vtk.vtkArrowSource()
-    #arrow.SetRadius(0.1)
-    #arrow.SetHeight(0.5)
     self.glyph = vtk.vtkGlyph3D()
     self.glyph.SetInputData(self.polydata)
-    self.glyph.SetSourceConnection(arrow.GetOutputPort())
+    self.glyph.SetSourceConnection(symType.GetOutputPort())
     self.glyph.ScalingOn()
     self.glyph.SetScaleModeToScaleByScalar()
     self.glyph.SetVectorModeToUseVector()

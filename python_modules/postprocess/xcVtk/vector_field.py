@@ -18,14 +18,14 @@ from postprocess.xcVtk import vector_field_data as vfd
 
 class VectorField(fb.FieldBase):
   '''Vector field defined at points.'''
-  def __init__(self,name,fUnitConv,scaleFactor,showPushing= True):
+  def __init__(self,name,fUnitConv,scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()):
     super(VectorField,self).__init__(name,fUnitConv)
     self.data= vfd.VectorFieldData(name,3,scaleFactor)
     self.showPushing= showPushing #If true vector push else pulls from point
-
+    self.symType=symType
 
   def setupMapper(self):
-    self.data.setupGlyph(self.fUnitConv)
+    self.data.setupGlyph(self.fUnitConv,self.symType)
     self.mapper = vtk.vtkPolyDataMapper()
     self.mapper.SetInputConnection(self.data.glyph.GetOutputPort())
     self.mapper.SetScalarModeToUsePointFieldData()
