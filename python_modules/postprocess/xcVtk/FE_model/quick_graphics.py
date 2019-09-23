@@ -30,32 +30,18 @@ from postprocess.xcVtk import node_property_diagram as npd
 from postprocess.xcVtk import local_axes_vector_field as lavf
 from postprocess.xcVtk import vector_field as vf
 
-class LoadCaseResults(object):
+class QuickGraphics(object):
     '''This class is aimed at providing the user with a quick and easy way to 
-    display results (internal forces, displacements) of an user-defined
-    load case.
+    display results (internal forces, displacements).
 
     :ivar loadCaseName:   name of the load case to be created
     :ivar loadCaseExpr:   expression that defines de load case as a
                      combination of previously defined actions
                      e.g. '1.0*GselfWeight+1.0*GearthPress'
     '''
-    def __init__(self,feProblem,loadCaseName,loadCaseExpr):
-        self.feProblem= feProblem
-        self.prep= feProblem.getPreprocessor
+    def __init__(self,loadCaseName= '',loadCaseExpr= ''):
         self.loadCaseName=loadCaseName
         self.loadCaseExpr=loadCaseExpr
-
-    def solve(self):
-        combs=self.prep.getLoadHandler.getLoadCombinations
-        lCase=combs.newLoadCombination(self.loadCaseName,self.loadCaseExpr)
-        self.prep.resetLoadCase()
-        combs.addToDomain(self.loadCaseName)
-        #Solution
-        lmsg.warning('Here we use a simple linear static solution that is not always a suitable method.')
-        analysis= predefined_solutions.simple_static_linear(self.feProblem)
-        result= analysis.analyze(1)
-        combs.removeFromDomain(self.loadCaseName)
 
     def getDispComponentFromName(self,compName):
         if compName == 'uX':
@@ -97,12 +83,12 @@ class LoadCaseResults(object):
     def checkSetToDisp(self,setToDisplay):
         if(setToDisplay):
             self.xcSet= setToDisplay
+            self.xcSet.fillDownwards()
+            if self.xcSet.color.Norm()==0:
+                self.xcSet.color=xc.Vector([rd.random(),rd.random(),rd.random()])
         else:
-            lmsg.warning('Set to display not defined; using total set.')
-            self.xcSet=self.prep.getSets.getSet('total')
-        self.xcSet.fillDownwards()
-        if self.xcSet.color.Norm()==0:
-            self.xcSet.color=xc.Vector([rd.random(),rd.random(),rd.random()])
+            lmsg.error('Set to display not defined; using total set.')
+            self.xcSet= None
 
     def displayDispRot(self,itemToDisp='',setToDisplay=None,fConvUnits=1.0,unitDescription= '',viewDef= vtk_graphic_base.CameraParameters('XYZPos',1.0),fileName=None,defFScale=0.0,rgMinMax=None):
         '''displays the component of the displacement or rotations in the 
@@ -209,7 +195,8 @@ class LoadCaseResults(object):
 
     def displayReactions(self,setToDisplay=None,fConvUnits=1.0,scaleFactor=1.0,unitDescription= '',viewDef= vtk_graphic_base.CameraParameters('XYZPos'),fileName=None,defFScale=0.0):
         self.checkSetToDisp(setToDisplay)
-        self.prep.getNodeHandler.calculateNodalReactions(True,1e-7)
+        preprocessor= setToDisplay.getPreprocessor
+        preprocessor.getNodeHandler.calculateNodalReactions(True,1e-7)
         #auto-scale
         LrefModSize=self.xcSet.getBnd(1.0).diagonal.getModulo() #representative length of set size (to autoscale)
         maxAbs=0
@@ -263,7 +250,8 @@ class LoadCaseResults(object):
                   initial/undeformed shape)
         '''
         self.checkSetToDisp(setToDisplay)
-        loadPatterns= self.prep.getLoadHandler.getLoadPatterns
+        preprocessor= setToDisplay.getPreprocessor
+        loadPatterns= preprocessor.getLoadHandler.getLoadPatterns
         loadPatterns.addToDomain(loadCaseName)
         defDisplay= self.getDisplay(viewDef)
         grid= defDisplay.setupGrid(self.xcSet)
@@ -272,22 +260,22 @@ class LoadCaseResults(object):
         # auto-scaling parameters
         LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulo() #representative length of set size (to auto-scale)
         diagAux=lld.LinearLoadDiagram(scale=elLoadScaleF,fUnitConv=fUnitConv,loadPatternName=loadCaseName,component=elLoadComp)
-        maxAbs=diagAux.getMaxAbsComp(self.prep)
+        maxAbs=diagAux.getMaxAbsComp(preprocessor)
         if maxAbs > 0:
             elLoadScaleF*=LrefModSize/maxAbs*100
         #
         diagram= lld.LinearLoadDiagram(scale=elLoadScaleF,fUnitConv=fUnitConv,loadPatternName=loadCaseName,component=elLoadComp)
-        diagram.addDiagram(self.prep)
+        diagram.addDiagram(preprocessor)
         if diagram.isValid():
             defDisplay.appendDiagram(diagram)
         orNodalLBar='V'
         # nodal loads
         vField=lvf.LoadVectorField(loadPatternName=loadCaseName,fUnitConv=fUnitConv,scaleFactor=nodLoadScaleF,showPushing= True)
-    #    loadPatterns= self.prep.getLoadHandler.getLoadPatterns
+    #    loadPatterns= preprocessor.getLoadHandler.getLoadPatterns
         lPattern= loadPatterns[loadCaseName]
         count= 0
         if(lPattern):
-            count=vField.dumpNodalLoads(self.prep,defFScale=defFScale)
+            count=vField.dumpNodalLoads(preprocessor,defFScale=defFScale)
         else:
             lmsg.error('load pattern: '+ loadCaseName + ' not found.')
         if count >0:
@@ -324,6 +312,43 @@ class LoadCaseResults(object):
 
         caption= self.loadCaseName+' '+itemToDisp+' '+unitDescription +' '+self.xcSet.description
         defDisplay.displayScene(caption=caption,fName=fileName)
+
+class LoadCaseResults(QuickGraphics):
+    '''This class is aimed at providing the user with a quick and easy way to 
+    display results (internal forces, displacements) of an user-defined
+    load case.
+
+    :ivar feProblem:   finite element problem
+    :ivar loadCaseName:   name of the load case to be created
+    :ivar loadCaseExpr:   expression that defines de load case as a
+                     combination of previously defined actions
+                     e.g. '1.0*GselfWeight+1.0*GearthPress'
+    '''
+    def __init__(self,feProblem,loadCaseName= '',loadCaseExpr= ''):
+        super(LoadCaseResults,self).__init__(loadCaseName, loadCaseExpr)
+        self.feProblem= feProblem
+        if(self.feProblem):
+          self.prep= feProblem.getPreprocessor
+
+    def solve(self):
+        combs=self.prep.getLoadHandler.getLoadCombinations
+        lCase=combs.newLoadCombination(self.loadCaseName,self.loadCaseExpr)
+        self.prep.resetLoadCase()
+        combs.addToDomain(self.loadCaseName)
+        #Solution
+        lmsg.warning('Here we use a simple linear static solution that is not always a suitable method.')
+        analysis= predefined_solutions.simple_static_linear(self.feProblem)
+        result= analysis.analyze(1)
+        combs.removeFromDomain(self.loadCaseName)
+    def checkSetToDisp(self,setToDisplay):
+        if(setToDisplay):
+            self.xcSet= setToDisplay
+        else:
+            lmsg.warning('Set to display not defined; using total set.')
+            self.xcSet= self.prep.getSets.getSet('total')
+        self.xcSet.fillDownwards()
+        if self.xcSet.color.Norm()==0:
+            self.xcSet.color=xc.Vector([rd.random(),rd.random(),rd.random()])
 
 def checkSetToDisp(preprocessor,setToDisplay):
     if(setToDisplay == None):
