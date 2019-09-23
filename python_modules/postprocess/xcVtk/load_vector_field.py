@@ -183,7 +183,7 @@ class LoadVectorField(LoadOnPoints):
             #Iterate over loaded nodes.
             count+= self.dumpNodalPositions(preprocessor,lp,defFScale)
             if(count==0):
-              lmsg.warning('LoadVectorField.dumpLoads: no loads defined.')
+              lmsg.warning('LoadVectorField.dumpVectors: no loads defined.')
             loadPatterns.removeFromDomain(self.lpName)
         else:
           lmsg.error('Load pattern: '+ self.lpName + ' not found.')
@@ -198,6 +198,6 @@ class LoadVectorField(LoadOnPoints):
                   the initial position plus its displacement multiplied
                   by this factor.
         '''
-        return self.dumpLoads(preprocessor,defFScale,False,True)
+        return self.dumpVectors(preprocessor,defFScale,False,True)
     
 
