@@ -37,6 +37,10 @@ class OuputUnits(object):
                    to apply to displays of, respectively, axial forces (N),
                    shear forces (Q) or bending moments (M) in beam elements
                    (defaults to (1.0,1.0,1.0))
+  :ivar scaleDispReactions: tuple (escN,escM) correponding to the scales
+                   to apply to displays of, respectively, forces (F)
+                   or moments (M) in nodal reactions
+                   (defaults to (1.0,1.0))
   :ivar unitsScaleForc: factor to apply to internal forces if we want to change
                    the units (defaults to 1).
   :ivar unitsForc: text to especify the units in which forces are 
@@ -55,6 +59,7 @@ class OuputUnits(object):
     self.unitsScaleDispl=1.0
     self.unitsDispl='[m]'
     self.scaleDispBeamIntForc=(1.0,1.0,1.0)
+    self.scaleDispReactions=(1.0,1.0)
     self.unitsScaleForc=1.0
     self.unitsForc='[kN/m]'
     self.unitsScaleMom=1.0
@@ -96,6 +101,8 @@ class RecordLoadCaseDisp(OuputUnits):
                  (defaults to ['N', 'My', 'Mz', 'Qy', 'Qz','T'])
   :ivar setsToDispBeamIntForc: ordered list of sets of elements (of type «beam»)
                     to display internal forces (defaults to [])
+  :ivar setsToDispReactions: ordered list of sets of nodes
+                    to display reactions (defaults to [])
   :ivar cameraParameters: parameters that define the camera position,
                           zoom, etc.
   :ivar cameraParametersForBeams: parameters that define the camera position,
@@ -114,9 +121,10 @@ class RecordLoadCaseDisp(OuputUnits):
     self.listDspRot=['uX', 'uY', 'uZ']
     self.setsToDispDspRot=setsToDispDspRot
     self.listIntForc=['N1', 'N2', 'M1', 'M2', 'Q1', 'Q2']
-    self.setsToDispIntForc=setsToDispIntForc
+    self.setsToDispIntForc= setsToDispIntForc
     self.listBeamIntForc=['N', 'My', 'Mz', 'Qy', 'Qz','T']
     self.setsToDispBeamIntForc=[]
+    self.setsToDispReactions=[]
     self.cameraParameters= vtk_graphic_base.CameraParameters('XYZPos')
     self.cameraParametersBeams= vtk_graphic_base.CameraParameters('XYZPos')
   def getDescription(self):
@@ -145,7 +153,7 @@ class RecordLoadCaseDisp(OuputUnits):
     for st in self.setsToDispBeamLoads:
       grfname=pathGr+self.loadCaseName+st.name
       capt=self.getDescription() + ', ' + st.description + ', '  + self.unitsLoads
-      lcs=QGrph.QuickGraphics(FEcase)
+      lcs=QGrph.LoadCaseResults(FEcase)
       lcs.dispLoadCaseBeamEl(loadCaseName=self.loadCaseName,setToDisplay=st,fUnitConv=self.unitsScaleLoads,elLoadComp=self.compElLoad,elLoadScaleF=self.vectorScaleLoads,nodLoadScaleF=self.vectorScalePointLoads, viewDef= self.cameraParameters,caption= capt,fileName=grfname+'.jpg')
       lcs.dispLoadCaseBeamEl(loadCaseName=self.loadCaseName,setToDisplay=st,fUnitConv=self.unitsScaleLoads,elLoadComp=self.compElLoad,elLoadScaleF=self.vectorScaleLoads,nodLoadScaleF=self.vectorScalePointLoads, viewDef= self.cameraParameters,caption= capt,fileName=grfname+'.eps')
       insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt,labl=labl) 
@@ -273,6 +281,7 @@ class RecordLoadCaseDisp(OuputUnits):
             by this factor. (Defaults to 0.0, i.e. display of 
             initial/undeformed shape)
     '''
+    qg= QGrph.QuickGraphics()
     for st in self.setsToDispIntForc:
         if itemToDisp[0]=='M':
             fcUn=self.unitsScaleMom
@@ -285,10 +294,9 @@ class RecordLoadCaseDisp(OuputUnits):
               scaleFact=self.scaleDispBeamIntForc[0]
             else:
               scaleFact=self.scaleDispBeamIntForc[1]
-        qg= QGrph.QuickGraphics()
         qg.displayIntForcDiag(itemToDisp= itemToDisp,setToDisplay= st,fConvUnits= self.unitsScaleLoads,scaleFactor= scaleFact, unitDescription= unDesc, viewDef= self.cameraParameters, fileName= fileName, defFScale= defFScale)
     
-  def dispLoadCaseBeamEl(self,setToDisplay,caption= None,fileName=None,defFScale=0.0):
+  def dispLoadCaseBeamEl(self, setToDisplay,caption= None,fileName=None,defFScale=0.0):
     '''Display the loads applied on beam elements and nodes for a given load case
 
     :param setToDisplay:    set of beam elements to be represented
@@ -324,6 +332,22 @@ class RecordLoadCaseDisp(OuputUnits):
       self.displayLoad(setToDisplay= st,caption= caption,fName= fName,defFScale= defFScale)
     for st in self.setsToDispBeamLoads:
       self.dispLoadCaseBeamEl(setToDisplay=st, fileName= fName, defFScale= defFScale)
+  def displayReactionsOnSets(self, fileName=None,defFScale=0.0):
+    '''displays the reactions as vector on affected nodes
+
+    :param fileName:  name of the file to plot the graphic. Defaults to None,
+                   in that case an screen display is generated
+    :param defFScale: factor to apply to current displacement of nodes 
+            so that the display position of each node equals to
+            the initial position plus its displacement multiplied
+            by this factor. (Defaults to 0.0, i.e. display of 
+            initial/undeformed shape)
+    '''
+    qg= QGrph.QuickGraphics()
+    for st in self.setsToDispReactions:
+        unDesc= '[m,kN]'
+        scaleFact= self.scaleDispReactions[0]
+        qg.displayReactions(setToDisplay= st,fConvUnits= self.unitsScaleLoads,scaleFactor= scaleFact, unitDescription= unDesc, viewDef= self.cameraParameters, fileName= fileName, defFScale= defFScale)
 
 def checksReports(limitStateLabel,setsShEl,argsShEl,capTexts,pathGr,texReportFile,grWdt,setsBmElView=[],argsBmElScale=[]):
     '''Create a LaTeX report including the desired graphical results obtained
