@@ -216,10 +216,10 @@ class QuickGraphics(object):
             p=n.getCurrentPos3d(defFScale)
             f3d= n.getReactionForce3d
             m3d= n.getReactionMoment3d
-            vFieldF.data.insertNextVector(f3d[0],f3d[1],f3d[2])
-            vFieldF.data.insertNextPair(p.x,p.y,p.z,f3d[0],f3d[1],f3d[2],vFieldF.fUnitConv,vFieldF.showPushing)
-            vFieldM.data.insertNextVector(m3d[0],m3d[1],m3d[2])
-            vFieldM.data.insertNextPair(p.x,p.y,p.z,m3d[0],m3d[1],m3d[2],vFieldM.fUnitConv,vFieldM.showPushing)
+            vFieldF.data.insertNextVector(f3d.x,f3d.y,f3d.z)
+            vFieldF.data.insertNextPair(p.x,p.y,p.z,f3d.x,f3d.y,f3d.z,vFieldF.fUnitConv,vFieldF.showPushing)
+            vFieldM.data.insertNextVector(m3d.x,m3d.y,m3d.z)
+            vFieldM.data.insertNextPair(p.x,p.y,p.z,m3d.x,m3d.y,m3d.z,vFieldM.fUnitConv,vFieldM.showPushing)
         defDisplay= self.getDisplay(viewDef)
         defDisplay.setupGrid(self.xcSet)
         defDisplay.defineMeshScene(None,defFScale,color=self.xcSet.color)

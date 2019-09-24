@@ -25,7 +25,7 @@ class Reactions(object):
           f3d= n.getReactionForce3d
           m3d= n.getReactionMoment3d
           if(nodeHandler.numDOFs==3):
-              force= geom.Vector2d(f3d[0],f3d[1])
+              force= geom.Vector2d(f3d.x,f3d.y)
           else:
               force= f3d
           self.forces[tag]= force
