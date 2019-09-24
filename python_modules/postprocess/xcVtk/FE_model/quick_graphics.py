@@ -184,7 +184,7 @@ class QuickGraphics(object):
         '''
         self.checkSetToDisp(setToDisplay)
         #auto-scale parameters
-        LrefModSize=self.xcSet.getBnd(1.0).diagonal.getModulo() #representative length of set size (to autoscale)
+        LrefModSize=self.xcSet.getBnd(1.0).diagonal.getModulus() #representative length of set size (to autoscale)
         diagAux=cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[self.xcSet],attributeName= "intForce",component= itemToDisp)
         maxAbs=diagAux.getMaxAbsComp()
         if maxAbs > 0:
@@ -198,11 +198,12 @@ class QuickGraphics(object):
         preprocessor= setToDisplay.getPreprocessor
         preprocessor.getNodeHandler.calculateNodalReactions(True,1e-7)
         #auto-scale
-        LrefModSize=self.xcSet.getBnd(1.0).diagonal.getModulo() #representative length of set size (to autoscale)
+        LrefModSize=self.xcSet.getBnd(1.0).diagonal.getModulus() #representative length of set size (to autoscale)
         maxAbs=0
         for n in self.xcSet.nodes:
-            r=n.getReaction
-            modR=max(math.sqrt(r[0]**2+r[1]**2+r[2]**2),math.sqrt(r[3]**2+r[4]**2+r[5]**2))
+            f3d= n.getReactionForce3d
+            m3d= n.getReactionMoment3d
+            modR= max(f3d.getModulus(),m3d.getModulus())
             if modR>maxAbs:
                 maxAbs=modR
         if maxAbs > 0:
@@ -213,11 +214,12 @@ class QuickGraphics(object):
         vFieldM=vf.VectorField(name='Mreact',fUnitConv=fConvUnits,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource())
         for n in self.xcSet.nodes:
             p=n.getCurrentPos3d(defFScale)
-            r=n.getReaction
-            vFieldF.data.insertNextVector(r[0],r[1],r[2])
-            vFieldF.data.insertNextPair(p.x,p.y,p.z,r[0],r[1],r[2],vFieldF.fUnitConv,vFieldF.showPushing)
-            vFieldM.data.insertNextVector(r[3],r[4],r[5])
-            vFieldM.data.insertNextPair(p.x,p.y,p.z,r[3],r[4],r[5],vFieldM.fUnitConv,vFieldM.showPushing)
+            f3d= n.getReactionForce3d
+            m3d= n.getReactionMoment3d
+            vFieldF.data.insertNextVector(f3d[0],f3d[1],f3d[2])
+            vFieldF.data.insertNextPair(p.x,p.y,p.z,f3d[0],f3d[1],f3d[2],vFieldF.fUnitConv,vFieldF.showPushing)
+            vFieldM.data.insertNextVector(m3d[0],m3d[1],m3d[2])
+            vFieldM.data.insertNextPair(p.x,p.y,p.z,m3d[0],m3d[1],m3d[2],vFieldM.fUnitConv,vFieldM.showPushing)
         defDisplay= self.getDisplay(viewDef)
         defDisplay.setupGrid(self.xcSet)
         defDisplay.defineMeshScene(None,defFScale,color=self.xcSet.color)
@@ -258,7 +260,7 @@ class QuickGraphics(object):
         defDisplay.defineMeshScene(None,defFScale,color=self.xcSet.color)
         orNodalLBar='H'  #default orientation of scale bar for nodal loads
         # auto-scaling parameters
-        LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulo() #representative length of set size (to auto-scale)
+        LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to auto-scale)
         diagAux=lld.LinearLoadDiagram(scale=elLoadScaleF,fUnitConv=fUnitConv,loadPatternName=loadCaseName,component=elLoadComp)
         maxAbs=diagAux.getMaxAbsComp(preprocessor)
         if maxAbs > 0:
@@ -464,7 +466,7 @@ def display_load(preprocessor,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vec
                   initial/undeformed shape)
     '''
     setToDisplay=checkSetToDisp(preprocessor,setToDisplay)
-    LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulo() #representative length of set size (to auto-scale)
+    LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to auto-scale)
     vectorScale*=LrefModSize/10.
     vField=lvf.LoadVectorField(loadCaseNm,unitsScale,vectorScale)
     vField.multiplyByElementArea=multByElemArea
@@ -571,7 +573,7 @@ def display_beam_result(attributeName,itemToDisp,beamSetDispRes,setToDisplay=Non
 
    '''
     #auto-scale parameters
-    LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulo() #representative length of set size (to autoscale)
+    LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to autoscale)
     lstArgVal=[e.getProp(attributeName+'Sect1')(itemToDisp) for e in beamSetDispRes.elements]
     maxAbs=max(abs(max(lstArgVal)),abs(min(lstArgVal)))
     if maxAbs > 0:
