@@ -81,7 +81,7 @@ class ColoredDiagram(vtk_lut_field.LUTField):
 
     assert(valOrg*valDest<=0.0)
     org_dest= dest-org
-    longTramo= (org_dest).getModulo
+    longTramo= (org_dest).getModulus
     s0= 0.0
     if(abs(valOrg-valDest)>0):
       s0= valOrg/(valOrg-valDest)

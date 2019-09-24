@@ -173,7 +173,7 @@ for key in combs.getKeys():
   procesResultVerif(comb)
 
 ratio1= (abs(force.x-3*F)/3/F)
-ratio2= moment.getModulo()
+ratio2= moment.getModulus()
 
 ''' 
 print "force= ",force/1e3," kN\n"

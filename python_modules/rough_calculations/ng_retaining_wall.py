@@ -810,8 +810,8 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     e= self.getEccentricity(R) #eccentricity
     b= self.getFootingWidth()
     bReduced= 2*(b/2.0+e)
-    Rd= Fnormal.getModulo()*math.tan(foundationSoilModel.getDesignPhi())+foundationSoilModel.getDesignC()*bReduced/math.cos(alphaAngle)
-    return Rd/Ftang.getModulo()/gammaR   
+    Rd= Fnormal.getModulus()*math.tan(foundationSoilModel.getDesignPhi())+foundationSoilModel.getDesignC()*bReduced/math.cos(alphaAngle)
+    return Rd/Ftang.getModulus()/gammaR   
 
   def getBearingPressureSafetyFactor(self,R,foundationSoilModel,toeFillDepth,q= 0.0):
     ''' Return the factor of safety against bearing capacity of the soil.

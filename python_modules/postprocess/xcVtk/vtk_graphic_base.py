@@ -208,7 +208,7 @@ class RecordDefDisplay(object):
     '''Add an vtkAxesActor to the renderer.'''
     bnd= self.gridRecord.getGridBND()
     offsetVector= bnd.diagonal*0.1
-    offset= offsetVector.getModulo()
+    offset= offsetVector.getModulus()
     axesPosition= bnd.pMin-offsetVector
     transform = vtk.vtkTransform()
     transform.Translate(axesPosition.x, axesPosition.y, axesPosition.z)

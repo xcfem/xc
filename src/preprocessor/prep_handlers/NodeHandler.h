@@ -64,9 +64,9 @@ class NodeHandler: public PrepHandler
     Node *newNodeIDV(const int &,const Vector &);
     Node *duplicateNode(const int &);
 
-    size_t getDimEspacio(void) const
+    size_t getSpaceDim(void) const
       { return ncoo_def_node; }
-    void setDimEspacio(const size_t &dim)
+    void setSpaceDim(const size_t &dim)
       { ncoo_def_node= dim; }
     void setNumDOFs(const size_t &ndof)
       { ndof_def_node= ndof; }

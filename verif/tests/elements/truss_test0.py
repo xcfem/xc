@@ -44,9 +44,9 @@ vJ= truss.getJVector3d(True)
 vK= truss.getKVector3d(True)
 
 # Orientation of the element's unary vectors.
-ratio= (vI-geom.Vector3d(0,1,0)).getModulo()
-ratio+= (vJ-geom.Vector3d(-1,0,0)).getModulo()
-ratio+= (vK-geom.Vector3d(0,0,1)).getModulo()
+ratio= (vI-geom.Vector3d(0,1,0)).getModulus()
+ratio+= (vJ-geom.Vector3d(-1,0,0)).getModulus()
+ratio+= (vK-geom.Vector3d(0,0,1)).getModulus()
 
 #print 'vI= ', vI, ' vJ= ',vJ, ' vK= ',vK
 #print "ratio= ",ratio

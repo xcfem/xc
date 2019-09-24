@@ -99,8 +99,8 @@ actionNode10= xc.Vector(loadOnDOFs)
 actionNode10Norm= actionNode10.Norm()
 svdAction= nodal_reactions.getSlidingVectorsSystemfromSlidingVector("UVWRxRyRz",n10.get3dCoo,actionNode10)
 svdResid= svdReactionNodes+svdAction
-ratio2= svdResid.getResultant().getModulo()/actionNode10Norm
-ratio3= svdResid.getMoment().getModulo()/actionNode10Norm
+ratio2= svdResid.getResultant().getModulus()/actionNode10Norm
+ratio3= svdResid.getMoment().getModulus()/actionNode10Norm
 
 # print "svdAction= ", svdAction
 # print "svdReactionNodes= ", svdReactionNodes

@@ -31,9 +31,9 @@ jVector= s1.getJVector
 kVector= s1.getKVector
 localAxes= s1.getLocalAxes()
 
-ratio= (iVector-geom.Vector3d(1.0,0.0,0.0)).getModulo()**2
-ratio+= (jVector-geom.Vector3d(0.0,1.0,0.0)).getModulo()**2
-ratio+= (kVector-geom.Vector3d(0.0,0.0,1.0)).getModulo()**2
+ratio= (iVector-geom.Vector3d(1.0,0.0,0.0)).getModulus()**2
+ratio+= (jVector-geom.Vector3d(0.0,1.0,0.0)).getModulus()**2
+ratio+= (kVector-geom.Vector3d(0.0,0.0,1.0)).getModulus()**2
 testMatrix= xc.Matrix([[1,0,0],[0,1,0],[0,0,1]])
 ratio+= (localAxes-testMatrix).OneNorm()
 

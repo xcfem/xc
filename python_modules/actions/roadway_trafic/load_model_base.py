@@ -81,7 +81,7 @@ class LoadModel(object):
 
     def normalize(self):
         '''Sets the positions with respect to the loads centroid.'''
-        dispModulus= self.getCentroid().getPositionVector().getModulo()
+        dispModulus= self.getCentroid().getPositionVector().getModulus()
         if(dispModulus>1e-4):
             normalizedPositions= self.getLoadRelativePositions()
             if(self.vehicleBoundary):

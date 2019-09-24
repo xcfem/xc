@@ -48,7 +48,7 @@ class PrestressTendon(object):
         extr1=geom.Pos3d(self.lstRoughPnts[0][0],self.lstRoughPnts[0][1],self.lstRoughPnts[0][2])
         extr2=geom.Pos3d(self.lstRoughPnts[1][0],self.lstRoughPnts[1][1],self.lstRoughPnts[1][2])
         v=extr2-extr1
-        L=v.getModulo()
+        L=v.getModulus()
         nPnt=int(L/eSize)+1
         eSize=L/(nPnt-1)
         vn=v.normalized()

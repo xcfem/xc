@@ -33,11 +33,11 @@ strongAxis= scc.sectionProperties.getVDirStrongAxis()
 weakAxis= scc.sectionProperties.getVDirWeakAxis()
 
 strongAxisTeor= geom.Vector2d(math.sqrt(2)/2,math.sqrt(2)/2)
-ratio0= (strongAxis-strongAxisTeor).getModulo()
-ratio1= (I1axis-strongAxisTeor).getModulo()
+ratio0= (strongAxis-strongAxisTeor).getModulus()
+ratio1= (I1axis-strongAxisTeor).getModulus()
 weakAxisTeor= geom.Vector2d(-math.sqrt(2)/2,math.sqrt(2)/2)
-ratio2= (weakAxis-weakAxisTeor).getModulo()
-ratio3= (I2axis-weakAxisTeor).getModulo()
+ratio2= (weakAxis-weakAxisTeor).getModulus()
+ratio3= (I2axis-weakAxisTeor).getModulus()
 
 ''' 
 print "Iz: ",Iz

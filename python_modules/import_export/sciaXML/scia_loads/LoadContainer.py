@@ -136,7 +136,7 @@ class FreeLoadContainer(LoadContainerBase):
       elemTags= eLoad.elementTags
       resultant= eLoad.getResultant(geom.Pos3d(0,0,0),True) #Total force over the elements.
       totalForce= geom.Vector3d(resultant.x,resultant.y,resultant.z)
-      totalForceModulus= totalForce.getModulo()
+      totalForceModulus= totalForce.getModulus()
       numberOfLoadedElements= len(elemTags)
       if(numberOfLoadedElements>1):
         #It seems there is a bug in 

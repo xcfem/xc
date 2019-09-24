@@ -90,7 +90,7 @@ class EC3Beam(object):
         for i in range(5):
             elem=lstEqElem[i]
             elSegm=elem.getLineSegment(0)
-            relDistPointInElem=(lstEqPos3d[i]-elSegm.getFromPoint()).getModulo()/elSegm.getLength()
+            relDistPointInElem=(lstEqPos3d[i]-elSegm.getFromPoint()).getModulus()/elSegm.getLength()
             self.contrPnt.append((elem,relDistPointInElem))
         return
             
