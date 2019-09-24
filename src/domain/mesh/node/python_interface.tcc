@@ -54,6 +54,8 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   // to put history results in a Python list for example. That's why we use
   // copy_const_reference instead. 
   .add_property("getReaction", make_function( &XC::Node::getReaction, return_value_policy<copy_const_reference>() ), "Return the reaction at this node.")
+  .add_property("getReactionForce3d", &XC::Node::getReactionForce3d, "Return the reaction force at this node as a 3D vector.")
+  .add_property("getReactionMoment3d", &XC::Node::getReactionMoment3d, "Return the reaction moment at this node as a 3D vector.")
   .def("checkReactionForce", &XC::Node::checkReactionForce, "checkReactionForce(tolerance): return true if reactions correspond to constrained degrees of freedom, false otherwise.")
   .add_property("getDisp", make_function( &XC::Node::getDisp, return_value_policy<copy_const_reference>() ),"Return the displacement vector.")
   .add_property("getDispXYZ", &XC::Node::getDispXYZ, "Return the translational components of the displacement.")

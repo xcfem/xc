@@ -331,6 +331,8 @@ class Node: public MeshComponent
     virtual void Print(std::ostream &s, int flag = 0);
 
     virtual const Vector &getReaction(void) const;
+    Vector3d getReactionForce3d(void) const;
+    Vector3d getReactionMoment3d(void) const;
     const Vector &getResistingForce(const ElementConstPtrSet &,const bool &) const;
     SlidingVectorsSystem3d getResistingSlidingVectorsSystem3d(const ElementConstPtrSet &,const bool &) const;
     virtual int addReactionForce(const Vector &, double factor);

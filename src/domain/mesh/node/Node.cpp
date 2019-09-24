@@ -2064,6 +2064,76 @@ SlidingVectorsSystem3d XC::Node::getResistingSlidingVectorsSystem3d(const std::s
 const XC::Vector &XC::Node::getReaction(void) const
   { return reaction; }
 
+//! @brief Return the reaction force in a 3D vector.
+Vector3d XC::Node::getReactionForce3d(void) const
+  {
+    Vector3d retval(0.0,0.0,0.0);
+    const size_t dim= getDim();
+    if(numberDOF== 3)
+      {
+	if(dim==2) // 2D structural
+	  retval= Vector3d(reaction[0],reaction[1],0.0);
+	else if(dim==3) // 3D solid mechanics
+	  retval= Vector3d(reaction[0],reaction[1],reaction[2]);
+	else
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+	            << " not implemented for numDOFs= "	
+                    << numberDOF << " and spaceDim= "
+                    << dim << std::endl;
+      }
+    else if(numberDOF==2)
+      {
+	if(dim==2) // 2D solid mechanics
+	  retval= Vector3d(reaction[0],reaction[1],0.0);
+	else
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+	            << " not implemented for numDOFs= "	
+                    << numberDOF << " and spaceDim= "
+                    << dim << std::endl;
+      }
+    else if(numberDOF== 6) // 3D structural
+      retval= Vector3d(reaction[0],reaction[1],reaction[2]);
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	            << " not implemented for numDOFs= "	
+                    << numberDOF << " and spaceDim= "
+                    << dim << std::endl;
+    return retval;
+  }
+
+//! @brief Return the reaction moment in a 3D vector.
+Vector3d XC::Node::getReactionMoment3d(void) const
+  {
+    Vector3d retval(0.0,0.0,0.0);
+    const size_t dim= getDim();
+    if(numberDOF== 3)
+      {
+	if(dim==2) // 2D structural
+	  retval= Vector3d(0.0, 0.0, reaction[2]);
+	else if(dim!=3) // NOT 3D solid mechanics => error.
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+	            << " not implemented for numDOFs= "	
+                    << numberDOF << " and spaceDim= "
+                    << dim << std::endl;
+      }
+    else if(numberDOF==2)
+      {
+	if(dim!=2) // NOT 2D solid mechanics => error.
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+	            << " not implemented for numDOFs= "	
+                    << numberDOF << " and spaceDim= "
+                    << dim << std::endl;
+      }
+    else if(numberDOF== 6) // 3D structural
+      retval= Vector3d(reaction[3],reaction[4],reaction[5]);
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	            << " not implemented for numDOFs= "	
+                    << numberDOF << " and spaceDim= "
+                    << dim << std::endl;
+    return retval;
+  }
+
 //! @brief Increments the node reaction.
 int XC::Node::addReactionForce(const Vector &add, double factor)
   {
