@@ -358,27 +358,30 @@ bool XC::AnalysisAggregation::alloc_integrator(const std::string &nmb,const Vect
       }
     else if(nmb=="newmark_integrator")
       {
+        double gamma= 0.5;
         if(params.Size()>0)
-	  std::clog << getClassName() << "::" << __FUNCTION__
-	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << std::endl;
-         theIntegrator= new Newmark(this,.5,.25);
+          gamma= params[0];
+        double beta= .25;
+        if(params.Size()>1)
+          beta= params[1];
+        theIntegrator= new Newmark(this,gamma,beta);
       }
     else if(nmb=="newmark1_integrator")
       {
-	if(params.Size()>0)
-	  std::clog << getClassName() << "::" << __FUNCTION__
-	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << std::endl;
-        theIntegrator= new Newmark1(this,.5,.25);
+        double gamma= 0.5;
+        if(params.Size()>0)
+          gamma= params[0];
+        double beta= .25;
+        if(params.Size()>1)
+          beta= params[1];
+        theIntegrator= new Newmark1(this,gamma,beta);
       }
     else if(nmb=="newmark_explicit_integrator")
       {
-	if(params.Size()>0)
-	  std::clog << getClassName() << "::" << __FUNCTION__
-	            << ' ' << nmb << " integrator doesn't need parameters."
-	            << std::endl;
-        theIntegrator= new NewmarkExplicit(this,.5);
+        double gamma= 0.5;
+        if(params.Size()>0)
+          gamma= params[0];
+        theIntegrator= new NewmarkExplicit(this,gamma);
       }
     else if(nmb=="newmark_hybrid_simulation_integrator")
       {
