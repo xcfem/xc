@@ -255,7 +255,7 @@ class SolutionProcedure(object):
         analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
         self.analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
         self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("frequency_soln_algo")
-        self.integ= self.analysisAggregation.newIntegrator("eigen_integrator",xc.Vector([1.0,1,1.0,1.0]))
+        self.integ= self.analysisAggregation.newIntegrator("eigen_integrator",xc.Vector([]))
         soe_string= systemPrefix+'_eigen_soe'
         solver_string= systemPrefix+'_eigen_solver'
         self.soe= self.analysisAggregation.newSystemOfEqn(soe_string)
