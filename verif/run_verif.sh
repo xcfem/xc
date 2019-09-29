@@ -173,7 +173,7 @@ echo "$BLEU" "Solver tests." "$NORMAL"
 python tests/solution/superlu_solver_test_01.py
 python tests/solution/ill_conditioning_01.py
 
-#Constraint handlers tests.
+## Constraint handlers tests.
 echo "$BLEU" "  Constraint handler tests." "$NORMAL"
 python tests/solution/constraint_handler/plain_handler_test_01.py
 python tests/solution/constraint_handler/transformation_handler_test_01.py
@@ -181,7 +181,7 @@ python tests/solution/constraint_handler/transformation_handler_test_02.py
 python tests/solution/constraint_handler/transformation_handler_test_03.py
 python tests/solution/constraint_handler/lagrange_handler_test_01.py
 
-#Eigenvalues.
+## Eigenvalues.
 echo "$BLEU" "  Eigenvalue solution tests." "$NORMAL"
 python tests/solution/eigenvalues/cantilever_eigenmodes_01.py
 python tests/solution/eigenvalues/cantilever_eigenmodes_02.py
@@ -202,6 +202,10 @@ python tests/solution/eigenvalues/modal_analysis_test_04.py
 python tests/solution/eigenvalues/modal_analysis_test_05.py
 python tests/solution/eigenvalues/test_cqc_01.py
 python tests/solution/eigenvalues/test_band_arpackpp_solver_01.py
+
+## Time history.
+echo "$BLEU" "  Time history solution tests." "$NORMAL"
+python tests/solution/time_history/test_time_history_01.py
 
 #Preprocessor tests
 echo "$BLEU" "Preprocessor tests." "$NORMAL"

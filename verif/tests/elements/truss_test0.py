@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+
 # Home made test
 # Checks the orientation of the element's unary vectors.
 
@@ -55,7 +57,7 @@ import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio)<1e-15:
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 
