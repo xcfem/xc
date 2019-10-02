@@ -70,7 +70,7 @@ def extrapolate_elem_function_attr(elemSet,attributeName,function, argument,init
     nodeTags= create_attribute_at_nodes(elemSet,attributeName,initialValue)
     #Calculate totals.
     for e in elemSet:
-      elemNodes= e.nodes
+      elemNodes= e.getNodes
       sz= len(elemNodes)
       for i in range(0,sz):
         n= elemNodes[i]
