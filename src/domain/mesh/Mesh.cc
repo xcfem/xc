@@ -1189,4 +1189,33 @@ int XC::Mesh::calculateNodalReactions(bool inclInertia, const double &tol)
     return 0;
   }
 
+//! @brief Normalize the node eigenvectors for
+//! the mode argument.
+void XC::Mesh::normalizeEigenvectors(int mode)
+  {
+    double norm= 0.0;
+    Node *theNode= nullptr;
+    NodeIter &theNodes = this->getNodes();
+    while((theNode = theNodes()) != nullptr)
+      {
+	const Vector eigenvector= theNode->getEigenvector(mode);
+        norm= std::max(norm,eigenvector.NormInf());
+      }
+    if(norm!= 0.0)
+      {
+        theNodes = this->getNodes();
+	while((theNode = theNodes()) != nullptr)
+	  {
+	    Vector eigenvector= theNode->getEigenvector(mode);
+	    eigenvector/=norm;
+	    theNode->setEigenvector(mode,eigenvector);
+
+	  }
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "ERROR, zero norm." << std::endl;
+  }
+
+
 

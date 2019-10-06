@@ -54,5 +54,6 @@ class_<XC::Mesh, bases<XC::MeshComponentContainer>, boost::noncopyable >("Mesh",
   .def("getNumDeadElements", &XC::Mesh::getNumDeadElements,"Returns the number of dead elements.")
   .def("getNearestElement",make_function(getNearestElementPtrMesh, return_internal_reference<>() ),"Returns nearest node.")
   .def("setDeadSRF",XC::Mesh::setDeadSRF,"Assigns Stress Reduction Factor for element deactivation. Syntax: setDeadSRF(factor)")
+  .def("normalizeEigenvectors",&XC::Mesh::normalizeEigenvectors,"Normalize node eigenvectors for the argument mode. Syntax: normalizeEigenvectors(mode)")
   .staticmethod("setDeadSRF")
   ;

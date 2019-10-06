@@ -201,6 +201,7 @@ class Mesh: public MeshComponentContainer
     virtual int setMass(const Matrix &mass, int nodeTag);
 
     virtual int calculateNodalReactions(bool inclInertia, const double &);
+    void normalizeEigenvectors(int mode);
 
     static void setDeadSRF(const double &);
   };
