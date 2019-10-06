@@ -121,8 +121,6 @@ soe.shift= 0.0
 solver= soe.newSolver("band_arpack_solver")
 solver.tol= 1e-3
 solver.maxNumIter= 5
-#soe= buck.newSystemOfEqn("band_arpackpp_soe")
-#solver= soe.newSolver("band_arpackpp_solver")
 
 analysis= solu.newAnalysis("modal_analysis","analysisAggregation","")
 analOk= analysis.analyze(4)
