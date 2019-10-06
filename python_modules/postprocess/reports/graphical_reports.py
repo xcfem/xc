@@ -132,7 +132,7 @@ class RecordDisp(OuputUnits):
         self.listBeamIntForc=['N', 'My', 'Mz', 'Qy', 'Qz','T']
         self.setsToDispBeamIntForc=[]
         self.setsToDispReactions=[]
-        self.setsToDispEigenvalues=[]
+        self.setsToDispEigenvectors=[]
         self.cameraParameters= vtk_graphic_base.CameraParameters('XYZPos')
         self.cameraParametersBeams= vtk_graphic_base.CameraParameters('XYZPos')
 
