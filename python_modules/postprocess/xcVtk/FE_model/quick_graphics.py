@@ -34,10 +34,10 @@ class QuickGraphics(object):
     '''This class is aimed at providing the user with a quick and easy way to 
     display results (internal forces, displacements).
 
-    :ivar loadCaseName:   name of the load case to be created
-    :ivar loadCaseExpr:   expression that defines de load case as a
-                     combination of previously defined actions
-                     e.g. '1.0*GselfWeight+1.0*GearthPress'
+    :ivar loadCaseName: OPTIONAL. name of the load case to be created
+    :ivar loadCaseExpr: OPTIONAL. expression that defines de load case as a
+                        combination of previously defined actions
+                        e.g. '1.0*GselfWeight+1.0*GearthPress'
     '''
     def __init__(self,loadCaseName= '',loadCaseExpr= ''):
         self.loadCaseName=loadCaseName
@@ -226,7 +226,40 @@ class QuickGraphics(object):
         vFieldF.addToDisplay(defDisplay)
         vFieldM.addToDisplay(defDisplay,'V')
         defDisplay.displayScene(caption,fileName)
-        
+
+    def displayEigenvectors(self,mode= 1, setToDisplay=None,fConvUnits=1.0,scaleFactor=1.0,viewDef= vtk_graphic_base.CameraParameters('XYZPos'),fileName=None,defFScale=0.0):
+        self.checkSetToDisp(setToDisplay)
+        preprocessor= setToDisplay.getPreprocessor
+        #auto-scale
+        LrefModSize=self.xcSet.getBnd(1.0).diagonal.getModulus() #representative length of set size (to autoscale)
+        maxAbs=0
+        for n in self.xcSet.nodes:
+            disp3d= n.getEigenvectorDisp3dComponents(mode)
+            rot3d= n.getEigenvectorRot3dComponents(mode)
+            modR= max(disp3d.getModulus(),rot3d.getModulus())
+            if modR>maxAbs:
+                maxAbs=modR
+        if maxAbs > 0:
+            scaleFactor*=0.15*LrefModSize/(maxAbs*fConvUnits)
+        #
+        caption= 'Mode '+ str(mode) + ' eigenvectors' + ' '+self.xcSet.description
+        vFieldF=vf.VectorField(name='Freact',fUnitConv=fConvUnits,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()) #Force
+        vFieldM=vf.VectorField(name='Mreact',fUnitConv=fConvUnits,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource())
+        for n in self.xcSet.nodes:
+            p=n.getCurrentPos3d(defFScale)
+            disp3d= n.getEigenvectorDisp3dComponents(mode)
+            rot3d= n.getEigenvectorRot3dComponents(mode)
+            vFieldF.data.insertNextVector(disp3d.x,disp3d.y,disp3d.z)
+            vFieldF.data.insertNextPair(p.x,p.y,p.z,disp3d.x,disp3d.y,disp3d.z,vFieldF.fUnitConv,vFieldF.showPushing)
+            vFieldM.data.insertNextVector(rot3d.x,rot3d.y,rot3d.z)
+            vFieldM.data.insertNextPair(p.x,p.y,p.z,rot3d.x,rot3d.y,rot3d.z,vFieldM.fUnitConv,vFieldM.showPushing)
+        defDisplay= self.getDisplay(viewDef)
+        defDisplay.setupGrid(self.xcSet)
+        defDisplay.defineMeshScene(None,defFScale,color=self.xcSet.color)
+        vFieldF.addToDisplay(defDisplay)
+        vFieldM.addToDisplay(defDisplay,'V')
+        defDisplay.displayScene(caption,fileName)
+
     def dispLoadCaseBeamEl(self,loadCaseName='',setToDisplay=None,fUnitConv=1.0,elLoadComp='transComponent',elLoadScaleF=1.0,nodLoadScaleF=1.0,viewDef= vtk_graphic_base.CameraParameters('XYZPos'),caption='',fileName=None,defFScale=0.0):
         '''Display the loads applied on beam elements and nodes for a given load case
 

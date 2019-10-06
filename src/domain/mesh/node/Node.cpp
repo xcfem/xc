@@ -1407,6 +1407,14 @@ Pos3d XC::Node::getEigenPosition3d(const double &factor, int mode) const
     return getPosition3d(fd);
   }
 
+//! @brief Return the eigenvector displacement components in a 3D vector.
+Vector3d XC::Node::getEigenvectorDisp3dComponents(int mode) const
+  { return get3dForceComponents(getEigenvector(mode)); }
+
+//! @brief Return the eigenvector rotation components in a 3D vector.
+Vector3d XC::Node::getEigenvectorRot3dComponents(int mode) const
+  { return get3dMomentComponents(getEigenvector(mode)); }
+
 //! @brief Returns the modal participation factor
 //! corresponding to i-th mode.
 double XC::Node::getModalParticipationFactor(int i) const
@@ -2066,15 +2074,23 @@ const XC::Vector &XC::Node::getReaction(void) const
 
 //! @brief Return the reaction force in a 3D vector.
 Vector3d XC::Node::getReactionForce3d(void) const
+  { return get3dForceComponents(reaction); }
+
+//! @brief Return the reaction moment in a 3D vector.
+Vector3d XC::Node::getReactionMoment3d(void) const
+  { return get3dMomentComponents(reaction); }
+
+//! @brief Return the "force/displacement" components in a 3d vector.
+Vector3d XC::Node::get3dForceComponents(const Vector &v) const
   {
     Vector3d retval(0.0,0.0,0.0);
     const size_t dim= getDim();
     if(numberDOF== 3)
       {
 	if(dim==2) // 2D structural
-	  retval= Vector3d(reaction[0],reaction[1],0.0);
+	  retval= Vector3d(v[0],v[1],0.0);
 	else if(dim==3) // 3D solid mechanics
-	  retval= Vector3d(reaction[0],reaction[1],reaction[2]);
+	  retval= Vector3d(v[0],v[1],v[2]);
 	else
 	  std::cerr << getClassName() << "::" << __FUNCTION__
 	            << " not implemented for numDOFs= "	
@@ -2084,7 +2100,7 @@ Vector3d XC::Node::getReactionForce3d(void) const
     else if(numberDOF==2)
       {
 	if(dim==2) // 2D solid mechanics
-	  retval= Vector3d(reaction[0],reaction[1],0.0);
+	  retval= Vector3d(v[0],v[1],0.0);
 	else
 	  std::cerr << getClassName() << "::" << __FUNCTION__
 	            << " not implemented for numDOFs= "	
@@ -2092,7 +2108,7 @@ Vector3d XC::Node::getReactionForce3d(void) const
                     << dim << std::endl;
       }
     else if(numberDOF== 6) // 3D structural
-      retval= Vector3d(reaction[0],reaction[1],reaction[2]);
+      retval= Vector3d(v[0],v[1],v[2]);
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 	            << " not implemented for numDOFs= "	
@@ -2100,16 +2116,16 @@ Vector3d XC::Node::getReactionForce3d(void) const
                     << dim << std::endl;
     return retval;
   }
-
-//! @brief Return the reaction moment in a 3D vector.
-Vector3d XC::Node::getReactionMoment3d(void) const
+  
+//! @brief Return the "moment/rotation" components in a 3d vector.
+Vector3d XC::Node::get3dMomentComponents(const Vector &v) const
   {
     Vector3d retval(0.0,0.0,0.0);
     const size_t dim= getDim();
     if(numberDOF== 3)
       {
 	if(dim==2) // 2D structural
-	  retval= Vector3d(0.0, 0.0, reaction[2]);
+	  retval= Vector3d(0.0, 0.0, v[2]);
 	else if(dim!=3) // NOT 3D solid mechanics => error.
 	  std::cerr << getClassName() << "::" << __FUNCTION__
 	            << " not implemented for numDOFs= "	
@@ -2125,7 +2141,7 @@ Vector3d XC::Node::getReactionMoment3d(void) const
                     << dim << std::endl;
       }
     else if(numberDOF== 6) // 3D structural
-      retval= Vector3d(reaction[3],reaction[4],reaction[5]);
+      retval= Vector3d(v[3],v[4],v[5]);
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 	            << " not implemented for numDOFs= "	
@@ -2133,7 +2149,7 @@ Vector3d XC::Node::getReactionMoment3d(void) const
                     << dim << std::endl;
     return retval;
   }
-
+ 
 //! @brief Increments the node reaction.
 int XC::Node::addReactionForce(const Vector &add, double factor)
   {
