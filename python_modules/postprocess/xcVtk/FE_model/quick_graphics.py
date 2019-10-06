@@ -199,32 +199,40 @@ class QuickGraphics(object):
         preprocessor.getNodeHandler.calculateNodalReactions(True,1e-7)
         #auto-scale
         LrefModSize=self.xcSet.getBnd(1.0).diagonal.getModulus() #representative length of set size (to autoscale)
-        maxAbs=0
+        maxAbs=0.0
+        forcePairs= list()
+        momentPairs= list()
+        threshold= LrefModSize/1000.0
         for n in self.xcSet.nodes:
             f3d= n.getReactionForce3d
             m3d= n.getReactionMoment3d
-            modR= max(f3d.getModulus(),m3d.getModulus())
-            if modR>maxAbs:
+            modF3d= f3d.getModulus()
+            if(modF3d>threshold):
+                p=n.getCurrentPos3d(defFScale)
+                forcePairs.append(([p.x,p.y,p.z],[f3d.x,f3d.y,f3d.z]))
+            modM3d= m3d.getModulus()
+            if(modM3d>threshold):
+                p=n.getCurrentPos3d(defFScale)
+                momentPairs.append(([p.x,p.y,p.z],[m3d.x,m3d.y,m3d.z]))
+            modR= max(modF3d,modF3d)
+            if(modR>maxAbs):
                 maxAbs=modR
-        if maxAbs > 0:
+        if(maxAbs>0):
             scaleFactor*=0.15*LrefModSize/(maxAbs*fConvUnits)
         #
         caption= self.loadCaseName+' Reactions'+ ' '+unitDescription +' '+self.xcSet.description
-        vFieldF=vf.VectorField(name='Freact',fUnitConv=fConvUnits,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()) #Force
-        vFieldM=vf.VectorField(name='Mreact',fUnitConv=fConvUnits,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource())
-        for n in self.xcSet.nodes:
-            p=n.getCurrentPos3d(defFScale)
-            f3d= n.getReactionForce3d
-            m3d= n.getReactionMoment3d
-            vFieldF.data.insertNextVector(f3d.x,f3d.y,f3d.z)
-            vFieldF.data.insertNextPair(p.x,p.y,p.z,f3d.x,f3d.y,f3d.z,vFieldF.fUnitConv,vFieldF.showPushing)
-            vFieldM.data.insertNextVector(m3d.x,m3d.y,m3d.z)
-            vFieldM.data.insertNextPair(p.x,p.y,p.z,m3d.x,m3d.y,m3d.z,vFieldM.fUnitConv,vFieldM.showPushing)
+        vFieldF= vf.VectorField(name='Freact',fUnitConv=fConvUnits,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()) # Force
+        vFieldM= vf.VectorField(name='Mreact',fUnitConv=fConvUnits,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()) # Moment
+        vFieldF.populateFromPairList(forcePairs)
+        vFieldM.populateFromPairList(momentPairs)
+
         defDisplay= self.getDisplay(viewDef)
         defDisplay.setupGrid(self.xcSet)
         defDisplay.defineMeshScene(None,defFScale,color=self.xcSet.color)
-        vFieldF.addToDisplay(defDisplay)
-        vFieldM.addToDisplay(defDisplay,'V')
+        if(len(forcePairs)>0):
+            vFieldF.addToDisplay(defDisplay)
+        if(len(momentPairs)>0):
+            vFieldM.addToDisplay(defDisplay,'V')
         defDisplay.displayScene(caption,fileName)
 
     def displayEigenvectors(self,mode= 1, setToDisplay=None,fConvUnits=1.0,scaleFactor=1.0,viewDef= vtk_graphic_base.CameraParameters('XYZPos'),fileName=None,defFScale=0.0):
@@ -232,32 +240,40 @@ class QuickGraphics(object):
         preprocessor= setToDisplay.getPreprocessor
         #auto-scale
         LrefModSize=self.xcSet.getBnd(1.0).diagonal.getModulus() #representative length of set size (to autoscale)
-        maxAbs=0
+        maxAbs=0.0
+        dispPairs= list()
+        rotPairs= list()
+        threshold= LrefModSize/1000.0
         for n in self.xcSet.nodes:
             disp3d= n.getEigenvectorDisp3dComponents(mode)
             rot3d= n.getEigenvectorRot3dComponents(mode)
-            modR= max(disp3d.getModulus(),rot3d.getModulus())
-            if modR>maxAbs:
+            modDisp3d= disp3d.getModulus()
+            if(modDisp3d>threshold):
+                p=n.getCurrentPos3d(defFScale)
+                dispPairs.append(([p.x,p.y,p.z],[disp3d.x,disp3d.y,disp3d.z]))
+            modRot3d= rot3d.getModulus()
+            if(modRot3d>threshold):
+                p=n.getCurrentPos3d(defFScale)
+                rotPairs.append(([p.x,p.y,p.z],[rot3d.x,rot3d.y,rot3d.z]))
+            modR= max(modDisp3d,modRot3d)
+            if(modR>maxAbs):
                 maxAbs=modR
         if maxAbs > 0:
             scaleFactor*=0.15*LrefModSize/(maxAbs*fConvUnits)
         #
         caption= 'Mode '+ str(mode) + ' eigenvectors' + ' '+self.xcSet.description
-        vFieldF=vf.VectorField(name='Freact',fUnitConv=fConvUnits,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()) #Force
-        vFieldM=vf.VectorField(name='Mreact',fUnitConv=fConvUnits,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource())
-        for n in self.xcSet.nodes:
-            p=n.getCurrentPos3d(defFScale)
-            disp3d= n.getEigenvectorDisp3dComponents(mode)
-            rot3d= n.getEigenvectorRot3dComponents(mode)
-            vFieldF.data.insertNextVector(disp3d.x,disp3d.y,disp3d.z)
-            vFieldF.data.insertNextPair(p.x,p.y,p.z,disp3d.x,disp3d.y,disp3d.z,vFieldF.fUnitConv,vFieldF.showPushing)
-            vFieldM.data.insertNextVector(rot3d.x,rot3d.y,rot3d.z)
-            vFieldM.data.insertNextPair(p.x,p.y,p.z,rot3d.x,rot3d.y,rot3d.z,vFieldM.fUnitConv,vFieldM.showPushing)
+        vFieldD= vf.VectorField(name='Deigenvectors',fUnitConv=fConvUnits,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()) #Force
+        vFieldR= vf.VectorField(name='Reigenvectors',fUnitConv=fConvUnits,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource())
+        vFieldD.populateFromPairList(dispPairs)
+        vFieldR.populateFromPairList(rotPairs)
+            
         defDisplay= self.getDisplay(viewDef)
         defDisplay.setupGrid(self.xcSet)
         defDisplay.defineMeshScene(None,defFScale,color=self.xcSet.color)
-        vFieldF.addToDisplay(defDisplay)
-        vFieldM.addToDisplay(defDisplay,'V')
+        if(len(dispPairs)>0):
+            vFieldD.addToDisplay(defDisplay)
+        if(len(rotPairs)>0):
+            vFieldR.addToDisplay(defDisplay,'V')
         defDisplay.displayScene(caption,fileName)
 
     def dispLoadCaseBeamEl(self,loadCaseName='',setToDisplay=None,fUnitConv=1.0,elLoadComp='transComponent',elLoadScaleF=1.0,nodLoadScaleF=1.0,viewDef= vtk_graphic_base.CameraParameters('XYZPos'),caption='',fileName=None,defFScale=0.0):
