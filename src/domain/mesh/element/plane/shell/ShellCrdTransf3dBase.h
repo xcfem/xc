@@ -85,7 +85,7 @@ class ShellCrdTransf3dBase: public CommandEntity, public MovableObject
     Pos3d getProj(const Pos3d &);
 
     virtual int initialize(const NodePtrs &)= 0;
-    virtual int setup_nodal_local_coordinates(double xl[2][4]) const;
+    virtual int setup_nodal_local_coordinates(void) const;
     virtual int update(void)= 0;
 
     virtual int commitState(void) = 0;
