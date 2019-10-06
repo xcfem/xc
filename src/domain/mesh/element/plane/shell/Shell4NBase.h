@@ -74,8 +74,9 @@ class Shell4NBase: public QuadBase4N<SectionFDPhysicalProperties>
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
 
-    friend class ShellLinearCrdTransf3d;
     friend class ShellCrdTransf3dBase;
+    friend class ShellLinearCrdTransf3d;
+    friend class ShellUpBasisCrdTransf3d;
     typedef double (*pointer_to_xl)[4]; // To return xl.
     inline const pointer_to_xl get_xl(void) const
       { return xl; }
