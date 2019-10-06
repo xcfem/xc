@@ -156,7 +156,7 @@ int XC::SymBandEigenSolver::solve(int nModes)
 
     // Orthogonal matrix used in reduction to tridiagonal form
     // (see LAPACK dsbevx subroutine documentation)
-    std::vector<double> q(ldq*n);
+    std::vector<double> q(ldq*n); //Very large vector!!! LCPT 6-10-2019
 
     // Index ranges [1,numModes] of eigenpairs to compute
     int il= 1; //index of the smallest eigenvalue to be returned.

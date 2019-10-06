@@ -64,14 +64,12 @@ int XC::KEigenAlgo::form_matrices(void)
 		  << "; domain, model or integrator not assigned.\n";
         return -1;
       }
-    
     if(theIntegrator->formK() < 0) //Builds tangent stiffness matrix.
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; the Integrator failed in formK()\n";
         return -2;
       }
-
     if(theIntegrator->formM()<0) //Builds form the M= I (identity) matrix.
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -172,7 +170,7 @@ int XC::KEigenAlgo::solveCurrentStep(int numModes)
 		  << "; error in matrix assembly.\n";
         return fm;
       }
-    EigenSOE *theSOE = getEigenSOEPtr();    
+    EigenSOE *theSOE = getEigenSOEPtr(); 
     rcond= theSOE->getRCond();
     if(rcond<1.0/condNumberThreshold)
       {

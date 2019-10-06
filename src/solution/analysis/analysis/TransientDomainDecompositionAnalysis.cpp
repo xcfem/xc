@@ -246,7 +246,7 @@ int XC::TransientDomainDecompositionAnalysis::domainChanged(void)
   result = getLinearSOEPtr()->setSize(theGraph);
   if (result < 0) {
     std::cerr << getClassName() << "::" << __FUNCTION__ << "; ";
-    std::cerr << "XC::LinearSOE::setSize() failed";
+    std::cerr << "LinearSOE::setSize() failed";
     return -3;
   }	    
 

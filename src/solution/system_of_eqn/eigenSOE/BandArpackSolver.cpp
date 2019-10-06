@@ -290,8 +290,8 @@ int XC::BandArpackSolver::solve(void)
     if(iPiv.Size() < n)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "WARNING - ";
-        std::cerr << " iPiv not large enough - has setSize() been called?\n";
+	          << "WARNING - "
+		  << " iPiv not large enough - has setSize() been called?\n";
         return -1;
       }
 

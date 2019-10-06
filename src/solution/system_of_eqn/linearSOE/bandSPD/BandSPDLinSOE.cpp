@@ -167,9 +167,7 @@ int XC::BandSPDLinSOE::setSize(Graph &theGraph)
     size= checkSize(theGraph);
     half_band= theGraph.getVertexDiffMaxima();
 
-
     half_band+= 1; // include the diagonal
-
 
     if(half_band*size > A.Size())// we have to get another space for A
       inicA(half_band*size); 

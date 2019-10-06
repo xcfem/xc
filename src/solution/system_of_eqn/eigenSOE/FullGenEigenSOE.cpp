@@ -287,7 +287,6 @@ int XC::FullGenEigenSOE::recvSelf(const CommParameters &cp)
 void XC::FullGenEigenSOE::save(void) const
   {
     tmpFileName= std::tmpnam(nullptr);
-    std::cout << "tmpFileName= " << tmpFileName << std::endl;
     std::ofstream out(tmpFileName,std::ios::out|std::ios::binary);
     if(!out)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -310,7 +309,6 @@ void XC::FullGenEigenSOE::save(void) const
 //! factorization...).
 void XC::FullGenEigenSOE::restore(void)
   {
-    std::cout << "tmpFileName= " << tmpFileName << std::endl;
     std::ifstream in(tmpFileName,std::ios::in|std::ios::binary);
     if(!in)
       std::cerr << getClassName() << "::" << __FUNCTION__

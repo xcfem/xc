@@ -110,13 +110,13 @@ int XC::EigenIntegrator::formK()
 		  << "; no AnalysisModel or EigenSOE has been set\n";
 	return -1;
       }
-    
+   
     // the loops to form and add the tangents are broken into two for 
     // efficiency when performing parallel computations
 
     // loop through the FE_Elements getting them to form the tangent
     // FE_EleIter &theEles1= mdl->getFEs();
-    FE_Element *elePtr;
+    FE_Element *elePtr= nullptr;
 
     flagK= 0; //stiffness matrix (see formEleTangent)
     theSOE->zeroA();
@@ -124,16 +124,18 @@ int XC::EigenIntegrator::formK()
     //while((elePtr = theEles1()) != 0) 
     //  elePtr->formTangent(this);
    
-   // loop through the FE_Elements getting them to add the tangent    
+    // loop through the FE_Elements getting them to add the tangent    
     int result = 0;
     FE_EleIter &theEles2= mdl->getFEs();    
-    while((elePtr = theEles2()) != 0)
+    while((elePtr = theEles2()) != nullptr)
       {
         if(theSOE->addA(elePtr->getTangent(this), elePtr->getID()) < 0)
           {
-	    std::cerr << "WARNING XC::EigenIntegrator::formK -";
-	    std::cerr << " failed in addA for XC::ID " << elePtr->getID();	    
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+                      << "; WARNING - failed in addA for ID "
+		      << elePtr->getID();	    
 	    result = -2;
+	    break;
 	  }
       }
     return result;    

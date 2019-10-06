@@ -405,7 +405,8 @@ void XC::Graph::getBand(int &numSubD,int &numSuperD) const
     numSubD*= -1;
   }
 
-//! @brief Returns the maximum (positive) of the difference between vertices indexes.
+//! @brief Returns the maximum (positive) of the difference between
+//! vertices indexes.
 int XC::Graph::getVertexDiffMaxima(void) const
   {
     int retval = 0;
@@ -429,7 +430,8 @@ int XC::Graph::getVertexDiffMaxima(void) const
     return retval;
   }
 
-//! @brief Returns the extreme (positive or negative) of the difference between vertices indexes.
+//! @brief Returns the extreme (positive or negative) of the difference
+//! between vertices indexes.
 int XC::Graph::getVertexDiffExtrema(void) const
   {
     int retval = 0;
@@ -445,7 +447,7 @@ int XC::Graph::getVertexDiffExtrema(void) const
         for(std::set<int>::const_iterator i= theAdjacency.begin(); i!= theAdjacency.end(); i++)
           {
             const int otherNum= *i;
-            const int diff = vertexNum - otherNum;
+            const int diff= vertexNum - otherNum;
             if(diff > 0)
               {
 	        if(diff > retval)

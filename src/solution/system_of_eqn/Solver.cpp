@@ -81,7 +81,7 @@ XC::Solver::Solver(int classTag)
 //!           = 'I':         Infinity-norm.
 double XC::Solver::getRCond(const char &)
   {
-    std::cout << getClassName() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not implemented yet." << std::endl;
     return 0.0;
   }
@@ -89,7 +89,7 @@ double XC::Solver::getRCond(const char &)
 //! @brief Return the determinant of the system matrix.
 double XC::Solver::getDeterminant(void)
   {
-    std::cout << getClassName() << "::" << __FUNCTION__
+    std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not implemented yet." << std::endl;
     return 1.0;
   }

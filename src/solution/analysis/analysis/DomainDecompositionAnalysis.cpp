@@ -235,7 +235,7 @@ int XC::DomainDecompositionAnalysis::domainChanged(void)
 
     getDOF_NumbererPtr()->numberDOF(theLastDOFs);
 
-    // we invoke setSize() on the XC::LinearSOE which
+    // we invoke setSize() on the LinearSOE which
     // causes that object to determine its size    
     
     getLinearSOEPtr()->setSize(getAnalysisModelPtr()->getDOFGraph());    

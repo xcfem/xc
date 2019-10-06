@@ -92,8 +92,16 @@ int XC::SymBandEigenSOE::setSize(Graph &theGraph)
   
     // determine the number of superdiagonals and subdiagonals
     numSuperD = theGraph.getVertexDiffExtrema();
-  
-    int newSize = size*(numSuperD+1);
+
+    int tmp;
+    if(__builtin_smul_overflow(size, numSuperD, &tmp))
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; ERROR: integer overflow."
+		  << " Number of diagonals is huge: "
+	          << numSuperD << std::endl;
+      }
+    const int newSize = size*(numSuperD+1);
     if(newSize > A.Size())
       A.resize(newSize);
     A.Zero();  
@@ -103,7 +111,9 @@ int XC::SymBandEigenSOE::setSize(Graph &theGraph)
     EigenSolver *theSolvr = getSolver();
     result = theSolvr->setSize();
     if(result < 0)
-      std::cerr << "SymBandEigenSOE::setSize() -- solver failed in setSize()\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< ";- solver failed in " << __FUNCTION__
+	        << std::endl;
     return result;
   }
 
@@ -113,6 +123,12 @@ int XC::SymBandEigenSOE::addA(const Matrix &m, const ID &id, double fact)
   {
     // check for a quick return 
     if(fact == 0.0) return 0;
+    if(A.Size()==0)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; ERROR: A matrix has zero size - has setSize() been called?\n";
+        return -1;
+      }      
 
     // check that m and id are of similar size
     int idSize = id.Size();    
@@ -129,14 +145,14 @@ int XC::SymBandEigenSOE::addA(const Matrix &m, const ID &id, double fact)
             int col = id(i);
             if(col < size && col >= 0)
               {
-	        double *coliiPtr = A.getDataPtr() +(col+1)*(numSuperD+1) - 1;
-	        int minColRow = col - (numSuperD+1) + 1;
+	        double *coliiPtr= A.getDataPtr() +(col+1)*(numSuperD+1) - 1;
+	        const int minColRow= col - (numSuperD+1) + 1;
 	        for(int j= 0;j<idSize;j++)
                   {
 	            int row = id(j);
 	            if(row<size && row>=0 && row<=col && row>=minColRow)
                       { // only add upper
-	                double *APtr = coliiPtr + (row-col);
+	                double *APtr= coliiPtr + (row-col);
 	                *APtr+= m(j,i);
 	              }
 	          }// for j
@@ -150,8 +166,8 @@ int XC::SymBandEigenSOE::addA(const Matrix &m, const ID &id, double fact)
             int col = id(i);
             if(col < size && col >= 0)
               {
-	        double *coliiPtr = A.getDataPtr() +(col+1)*(numSuperD+1) - 1;
-	        int minColRow = col - (numSuperD+1) +1;
+	        double *coliiPtr= A.getDataPtr()+(col+1)*(numSuperD+1) - 1;
+	        const int minColRow= col - (numSuperD+1) +1;
 	        for(int j = 0; j < idSize; j++)
                   {
 	            int row = id(j);
@@ -217,7 +233,9 @@ int XC::SymBandEigenSOE::addM(const Matrix &m, const ID &id, double fact)
 	    issueWarning = true;
     if(issueWarning == true)
       {
-        std::cerr << "WARNING SymBandEigenSOE::addM() - m passed was not diagonal, only diagonal entries added\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: m passed was not diagonal,"
+	          << " only diagonal entries added\n";
       }
     return 0;
   }

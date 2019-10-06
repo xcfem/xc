@@ -123,7 +123,7 @@ int XC::SymArpackSOE::setSize(Graph &theGraph)
 	    theVertex = theGraph.getVertexPtr(a);
 	    if(theVertex == 0)
               {
-	        std::cerr << "WARNING:XC::SymArpackSOE::setSize :";
+	        std::cerr << "WARNING: SymArpackSOE::setSize :";
 	        std::cerr << " vertex " << a << " not in graph! - size set to 0\n";
 	        size = 0;
 	        return -1;
@@ -170,7 +170,7 @@ int XC::SymArpackSOE::setSize(Graph &theGraph)
     int solverOK = theSolvr->setSize();
     if(solverOK < 0)
       {
-	std::cerr << "WARNING:XC::SymArpackSOE::setSize :";
+	std::cerr << "WARNING: SymArpackSOE::setSize :";
 	std::cerr << " solver failed setSize()\n";
 	return solverOK;
       } 

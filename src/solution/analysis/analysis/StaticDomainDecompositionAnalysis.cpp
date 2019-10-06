@@ -253,8 +253,8 @@ int XC::StaticDomainDecompositionAnalysis::domainChanged(void)
   Graph &theGraph = getAnalysisModelPtr()->getDOFGraph();
   result = getLinearSOEPtr()->setSize(theGraph);
   if (result < 0) {
-    std::cerr << "XC::StaticDomainDecompositionAnalysis::handle() - ";
-    std::cerr << "XC::LinearSOE::setSize() failed";
+    std::cerr << "StaticDomainDecompositionAnalysis::handle() - ";
+    std::cerr << "LinearSOE::setSize() failed";
     return -3;
   }	    
 
