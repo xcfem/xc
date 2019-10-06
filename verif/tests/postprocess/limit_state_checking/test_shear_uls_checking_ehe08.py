@@ -34,10 +34,10 @@ sep_long=250
 cercosPil=[diam_cercos,nramas_m,sep_long]
 pilasRCSects=rcs.RecordRCSlabBeamSection(name='pilasRCSects',sectionDescr='pilas',concrType=concrete, reinfSteelType=reinfSteel,width=lRectEqPila,depth=lRectEqPila,elemSetName='pilas')
 
-pilasRCSects.dir1PositvRebarRows=[rcs.rebLayer(lnPil[0],lnPil[1],rnom)]
-pilasRCSects.dir1NegatvRebarRows=[rcs.rebLayer(lnPil[0],lnPil[1],rnom)]
-pilasRCSects.dir2PositvRebarRows=[rcs.rebLayer(lnPil[0],lnPil[1],rnom)]
-pilasRCSects.dir2NegatvRebarRows=[rcs.rebLayer(lnPil[0],lnPil[1],rnom)]
+pilasRCSects.dir1PositvRebarRows=[rcs.rebLayer_mm(lnPil[0],lnPil[1],rnom)]
+pilasRCSects.dir1NegatvRebarRows=[rcs.rebLayer_mm(lnPil[0],lnPil[1],rnom)]
+pilasRCSects.dir2PositvRebarRows=[rcs.rebLayer_mm(lnPil[0],lnPil[1],rnom)]
+pilasRCSects.dir2NegatvRebarRows=[rcs.rebLayer_mm(lnPil[0],lnPil[1],rnom)]
 
 pilasRCSects.dir1ShReinfZ=rcs.RecordShearReinforcement(familyName= "sh",nShReinfBranches=cercosPil[1],areaShReinfBranch= math.pi*(cercosPil[0]*1e-3)**2/4.,shReinfSpacing=cercosPil[2]*1e-3,angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
 pilasRCSects.dir2ShReinfZ=rcs.RecordShearReinforcement(familyName= "sh",nShReinfBranches=cercosPil[1],areaShReinfBranch= math.pi*(cercosPil[0]*1e-3)**2/4.,shReinfSpacing=cercosPil[2]*1e-3,angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
