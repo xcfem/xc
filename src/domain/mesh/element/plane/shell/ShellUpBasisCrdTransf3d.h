@@ -24,43 +24,32 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-                                                                        
-#ifndef ElementBodyLoad_h
-#define ElementBodyLoad_h
+//ShellUpBasisCrdTransf3d.h
 
-#include "ElementalLoad.h"
-#include "ElementPtrs.h"
+#ifndef ShellUpBasisCrdTransf3d_h
+#define ShellUpBasisCrdTransf3d_h
+
+#include "ShellLinearCrdTransf3d.h"
 
 namespace XC {
-class Element;
- class ID;
- class Vector;
- 
 
-//! @ingroup ElemLoads
+class Matrix;
+
+//! @ingroup PlaneElements
 //
-//! @brief Base class for body loads over elements.
-class ElementBodyLoad: public ElementalLoad
+//! @brief Shell 3D coordinate transformations that updates
+//! vector directions (needs debugging).
+class ShellUpBasisCrdTransf3d: public ShellLinearCrdTransf3d
   {
-  private:
-    ElementPtrs theElements; //!< Loaded elements.
-  protected:
-
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
-
   public:
-    ElementBodyLoad(int tag, int classTag, const ID &theElementTags);
-    ElementBodyLoad(int tag, int classTag);
-    ElementBodyLoad(int classTag);    
+    ShellUpBasisCrdTransf3d(void);
+    ShellUpBasisCrdTransf3d(const Vector &,const Vector &,const Vector &);
+    ShellUpBasisCrdTransf3d(const NodePtrs &t);
+    virtual ShellCrdTransf3dBase *getCopy(void) const;
 
-    virtual void setDomain(Domain *theDomain);
-    virtual void applyLoad(double loadfactor);
-
-    virtual int removeElement(int tag);
-    void Print(std::ostream &s, int flag =0) const;       
+    virtual int update(void);
   };
+
 } // end of XC namespace
 
 #endif
-

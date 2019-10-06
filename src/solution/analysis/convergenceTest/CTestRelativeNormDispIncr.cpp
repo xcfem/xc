@@ -139,9 +139,10 @@ int XC::CTestRelativeNormDispIncr::test(void)
     // algo failed to converged after specified number of iterations - but RETURN OK
     else if((printFlag == 5 || printFlag == 6) && currentIter >= maxNumIter)
       {
-        std::cerr << "WARNING: XC::CTestRelativeNormDispIncr::test() - failed to converge but going on -";
-        std::cerr << getRatioMessage("(|dR|/|dR1|)");
-        std::cerr << ", Norm deltaR: " << getNormB() << ")\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; WARNING: failed to converge but going on -"
+		  << getRatioMessage("(|dR|/|dR1|)")
+		  << ", Norm deltaR: " << getNormB() << ")\n";
         return currentIter;
       }
     

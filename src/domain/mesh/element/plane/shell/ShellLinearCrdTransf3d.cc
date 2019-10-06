@@ -35,6 +35,7 @@
 #include "utility/matrix/ID.h"
 #include "domain/mesh/element/utils/NodePtrs.h"
 #include "domain/mesh/element/plane/shell/R3vectors.h"
+#include "ShellMITC4Base.h"
 
 //! @brief Default constructor
 XC::ShellLinearCrdTransf3d::ShellLinearCrdTransf3d(void)
@@ -186,7 +187,7 @@ int XC::ShellLinearCrdTransf3d::sendSelf(CommParameters &cp)
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; data could not be sent.\n" ;
+	        << "; data could not be sent.\n";
     return res;
   }
 
@@ -198,7 +199,7 @@ int XC::ShellLinearCrdTransf3d::recvSelf(const CommParameters &cp)
     int res= cp.receiveIdData(getDbTagData(),getDbTag());
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; data could not be received.\n" ;
+	        << "; data could not be received.\n";
     else
       res+= recvData(cp);
     return res;

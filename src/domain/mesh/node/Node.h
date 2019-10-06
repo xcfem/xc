@@ -287,6 +287,8 @@ class Node: public MeshComponent
     Matrix getNormalizedEigenvectors(void) const;
     Pos2d getEigenPosition2d(const double &, int) const;
     Pos3d getEigenPosition3d(const double &, int) const;
+    Vector3d getEigenvectorDisp3dComponents(int ) const;
+    Vector3d getEigenvectorRot3dComponents(int ) const;
     
     //Angular frequencies.
     double getAngularFrequency(int) const;
@@ -330,6 +332,9 @@ class Node: public MeshComponent
 
     virtual void Print(std::ostream &s, int flag = 0);
 
+    Vector3d get3dForceComponents(const Vector &) const;
+    Vector3d get3dMomentComponents(const Vector &) const;
+    
     virtual const Vector &getReaction(void) const;
     Vector3d getReactionForce3d(void) const;
     Vector3d getReactionMoment3d(void) const;

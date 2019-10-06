@@ -25,40 +25,47 @@
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
                                                                         
-#ifndef ElementBodyLoad_h
-#define ElementBodyLoad_h
+#ifndef SelfWeight_h
+#define SelfWeight_h
 
-#include "ElementalLoad.h"
-#include "ElementPtrs.h"
+// Written: Chris McGann, U.Washington
+//          02.2011
+//
+// Description: This file contains the class definition for SelfWeight, a load class for 
+//               applying body forces inside load patterns for continuum elements.
+#include <domain/load/ElementBodyLoad.h>
 
 namespace XC {
-class Element;
- class ID;
- class Vector;
- 
-
 //! @ingroup ElemLoads
 //
-//! @brief Base class for body loads over elements.
-class ElementBodyLoad: public ElementalLoad
+//! @brief Self weight.
+class SelfWeight: public ElementBodyLoad
   {
   private:
-    ElementPtrs theElements; //!< Loaded elements.
+    static Vector data;
+    double xFact;
+    double yFact;
+    double zFact;
   protected:
-
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
 
   public:
-    ElementBodyLoad(int tag, int classTag, const ID &theElementTags);
-    ElementBodyLoad(int tag, int classTag);
-    ElementBodyLoad(int classTag);    
+    SelfWeight(int tag, double xf, double yf, double zf, const ID &theElementTags);
+    SelfWeight(int tag);
+    SelfWeight(void);    
 
-    virtual void setDomain(Domain *theDomain);
-    virtual void applyLoad(double loadfactor);
+    const Vector &getData(int &type, const double &loadFactor) const;
+    inline const double &getXFact(void) const
+      { return xFact; }
+    inline const double &getYFact(void) const
+      { return yFact; }
+    inline const double &getZFact(void) const
+      { return zFact; }
 
-    virtual int removeElement(int tag);
-    void Print(std::ostream &s, int flag =0) const;       
+    int sendSelf(CommParameters &);  
+    int recvSelf(const CommParameters &);
+    void Print(std::ostream &s, int flag =0);       
   };
 } // end of XC namespace
 

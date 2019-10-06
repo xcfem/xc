@@ -35,6 +35,7 @@
 #include "utility/matrix/ID.h"
 #include "domain/mesh/element/plane/shell/R3vectors.h"
 #include "domain/mesh/element/utils/NodePtrs.h"
+#include "ShellMITC4Base.h"
 
 
 #include "xc_utils/src/geom/pos_vec/Pos2d.h"
@@ -68,8 +69,10 @@ int XC::ShellCrdTransf3dBase::initialize(const NodePtrs &ptrs)
   }
 
 //! @brief Update local coordinates of the nodes.
-int XC::ShellCrdTransf3dBase::setup_nodal_local_coordinates(double xl[2][4]) const
+int XC::ShellCrdTransf3dBase::setup_nodal_local_coordinates(void) const
   {
+    const ShellMITC4Base *element= dynamic_cast<const ShellMITC4Base *>(Owner());
+    Shell4NBase::pointer_to_xl xl= element->get_xl();
     //local nodal coordinates in plane of shell
     for(int i= 0;i<4;i++)
       {

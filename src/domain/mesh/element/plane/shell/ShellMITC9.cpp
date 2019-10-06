@@ -1027,7 +1027,7 @@ int XC::ShellMITC9::sendData(CommParameters &cp)
     res+=cp.sendMovable(theCoordTransf,getDbTagData(),CommMetaData(10));
     res+= p0.sendData(cp,getDbTagData(),CommMetaData(11));
     res+= cp.sendMatrix(Ki,getDbTagData(),CommMetaData(14));
-    //res+= cp.sendVectors(inicDisp,getDbTagData(),CommMetaData(18));
+    //res+= cp.sendVectors(initDisp,getDbTagData(),CommMetaData(18));
     return res;
   }
 
@@ -1040,7 +1040,7 @@ int XC::ShellMITC9::recvData(const CommParameters &cp)
     res+= cp.receiveMovable(theCoordTransf,getDbTagData(),CommMetaData(10));
     res+= p0.receiveData(cp,getDbTagData(),CommMetaData(11));
     res+= cp.receiveMatrix(Ki,getDbTagData(),CommMetaData(14));
-    //res+= cp.receiveVectors(inicDisp,getDbTagData(),CommMetaData(18));
+    //res+= cp.receiveVectors(initDisp,getDbTagData(),CommMetaData(18));
     return res;
   }
 
@@ -1108,24 +1108,26 @@ void XC::ShellMITC9::Print(std::ostream &s, int flag )
 
 int XC::ShellMITC9::sendSelf(CommParameters &cp)
   {
-    inicComm(19);
+    inicComm(getDbTagData().Size());
     int res= sendData(cp);
 
     const int dataTag= getDbTag();
     res= cp.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "ShellMITC9::sendSelf() - failed to send ID data\n";
+      std::cerr << "getClassName()" << "::" << __FUNCTION__
+	        << "; failed to send ID data\n";
     return res;
   }
     
 int  XC::ShellMITC9::recvSelf(const CommParameters &cp)
   {
-    inicComm(19);
+    inicComm(getDbTagData().Size());
 
     const int dataTag= getDbTag();
     int res = cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "ShellMITC9::sendSelf() - failed to receive ID data\n";
+      std::cerr << "getClassName()" << "::" << __FUNCTION__
+		<< "; failed to receive ID data\n";
     else
       res+= recvData(cp);
     return res;

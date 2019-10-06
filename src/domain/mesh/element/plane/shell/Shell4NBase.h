@@ -45,8 +45,8 @@ class ShellUniformLoad;
 
 //! @ingroup PlaneElements
 //
-//! @brief Base class for MIT C4 shell elements.
-class Shell4NBase : public QuadBase4N<SectionFDPhysicalProperties>
+//! @brief Base class for four node shell elements.
+class Shell4NBase: public QuadBase4N<SectionFDPhysicalProperties>
   {
     void free_mem(void);
     void alloc(const ShellCrdTransf3dBase *);
@@ -54,6 +54,8 @@ class Shell4NBase : public QuadBase4N<SectionFDPhysicalProperties>
     mutable double xl[2][4]; //!< local nodal coordinates, two coordinates for each of four nodes
 
     ShellCrdTransf3dBase *theCoordTransf; //!< Coordinate transformation.
+    int applyLoad;
+    double appliedB[3]; //!< Body forces applied with load
 
     mutable Matrix Ki;
 
@@ -72,6 +74,14 @@ class Shell4NBase : public QuadBase4N<SectionFDPhysicalProperties>
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
 
+    friend class ShellCrdTransf3dBase;
+    friend class ShellLinearCrdTransf3d;
+    friend class ShellUpBasisCrdTransf3d;
+    typedef double (*pointer_to_xl)[4]; // To return xl.
+    inline const pointer_to_xl get_xl(void) const
+      { return xl; }
+    inline pointer_to_xl get_xl(void)
+      { return xl; }
   public:
     //null constructor
     Shell4NBase(int classTag,const ShellCrdTransf3dBase *);
@@ -104,6 +114,8 @@ class Shell4NBase : public QuadBase4N<SectionFDPhysicalProperties>
     void strainLoad(const Matrix &);
 
     // methods for applying loads
+    void zeroLoad(void);
+    int addLoad(ElementalLoad *, double);
     int addInertiaLoadToUnbalance(const Vector &accel);
 
     int commitState(void);
