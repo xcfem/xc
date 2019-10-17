@@ -5,7 +5,6 @@ VERIFICATION TESTS REQUIRED!!!.'''
 import math
 from materials import concrete_base
 from miscUtils import LogMessages as lmsg
-from materials import concrete_base
 from materials.sections.fiber_section import defSimpleRCSection
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
