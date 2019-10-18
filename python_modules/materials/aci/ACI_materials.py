@@ -13,7 +13,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
-toPascal= 6894.76 #Conversion from Pa to lb/inch2
+toPascal= 6894.757 #Conversion from Pa to lb/inch2
 fromPascal= 1.0/toPascal #Conversion from lb/inch2 to Pa
 
 aciRCLimitStrains= concrete_base.ReinforcedConcreteLimitStrains(EpsCU= -3.0e-3,EpsC0= -2.0e-3,SMaxStrain= 10e-3);
