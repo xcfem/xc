@@ -47,11 +47,29 @@ class Mortar(object):
 
 sMortar= Mortar(1350.0*toPascal)
 
-class CMUWall(object):
+class CMUWallCellReinforcement(object):
+    """ Masonry wall 
+
+    :ivar steelType: steel type.
+    :ivar reinfArea: area of reinforcement on each cell.
+    """
+    def __init__(self, steelType= None, reinfArea= 0.0):
+        '''
+        Constructor.
+
+        :param steelType: steel type.
+        :param area: area of reinforcement on each cell.
+        '''
+        self.steelType= steelType
+        self.area= reinfArea
+
+class CMUWallFabric(object):
     """ Masonry wall 
 
     :ivar thickness: nominal wall thickness.
     :ivar groutedCellsSpacing: spacing of grouted cells.
+    :ivar mortar: type of mortar.
+    :ivar reinfArea: area of reinforcement on each cell.
     """
     # Interpolation of the equivalent thickness
     xT= [6,8,10,12] # nominal wall thickness (inches)
@@ -91,6 +109,7 @@ class CMUWall(object):
         [0.0, 1113.0, 2092.0, 3499.0],
         [0.0, 1319.0, 2470.0, 4119.0]] # gross moment of inertia in**4
     fInertia= scipy.interpolate.interp2d(xI,yI,zI)
+    # Cracking moment strength
     xM= xI # nominal wall thickness (inches)
     yM= yI # effective width
     zM= [[323.0, 593.0, 946.0, 1379.0],
@@ -100,16 +119,36 @@ class CMUWall(object):
         [0.0, 2235.0, 3328.0, 4608.0],
         [0.0, 2648.0, 3929.0, 5424.0]]
     fMoment=  scipy.interpolate.interp2d(xM,yM,zM)
-    def __init__(self,thickness, spacing, mortar= sMortar):
+    # Weigth of CMU walls (pounds per square foot)
+    xW= [6,8,10,12] # nominal wall thickness (inches)
+    yW= [0.0,16.0,24.0,32.0,40.0,48.0,56.0,64.0,72.0,1e6] # spacing inches
+    zW= [[68.0, 92.0, 116.0, 140.0],
+         [58.0, 75.0, 92.0, 111.0],
+         [53.0, 69.0, 85.0, 102.0],
+         [51.0, 65.0, 78.0, 93.0],
+         [50.0, 62.0, 75.0, 89.0],
+         [49.0, 60.0, 72.0, 85.0],
+         [48.0, 58.0, 70.0, 83.0],
+         [47.0, 57.0, 69.0, 81.0],
+         [46.0, 56.0, 68.0, 80.0],
+         [43.0, 50.0, 59.0, 69.0]]
+    fWeight=  scipy.interpolate.interp2d(xW,yW,zW)
+    def __init__(self,thickness, spacing, mortar= sMortar, cellReinf= None):
         '''
         Constructor.
 
         :param thickness: wall thickness.
         :param spacing: spacing of grouted cells.
+        :param mortar: type of mortar.
+        :param cellReinf: reinforcement on each cell.
         '''
         self.thickness= thickness
         self.groutedCellsSpacing= spacing
         self.mortar= mortar
+        if(cellReinf):
+            self.cellReinf= reinf
+        else:
+            self.cellReinf= None
     
     def getEquivalentWallThickness(self):
         ''' Return the equivalent wall thickness according to
@@ -165,11 +204,109 @@ class CMUWall(object):
         ''' Return the section modulus
             (see TM 5-809-3 page 5-4).'''
         return  2.0*self.getGrossMomentOfInertia()/self.thickness
-    def getCrackingMoment(self):
-        '''Return the cracking moment of the fabric
+    def getCrackingMomentStrength(self):
+        '''Return the cracking moment strength of the fabric
            according to equation 5-7 of  TM 5-809-3.'''
         th_inches= self.thickness/0.0254
         b_inch= self.getEffectiveWidth()/0.0254
         return self.fMoment(th_inches,b_inch)[0]/8.85 #lbf.ft-> N.m
-        
+    
+    def getMassPerSquareMeter(self):
+        '''Return the mass of the fabric per square meter
+           according to table 5-5 of TM 5-809-3.'''
+        th_inches= self.thickness/0.0254
+        b_inch= self.getEffectiveWidth()/0.0254
+        return self.fWeight(th_inches,b_inch)[0]*4.88242764 #pounds/sqft-> kg/m2
 
+    def getEffectiveDepth(self):
+        ''' Return the total depth from the compression face to 
+            the reinforcing steel.'''
+        return 0.5*self.thickness # rebar in the middle
+    
+    def getSteelRatio(self):
+        '''Return the steel ratio according to equation 5-8
+           of TM 5-809-3.'''
+        retval= 0.0
+        d= self.getEffectiveDepth()
+        if(cellReinf):
+            retval= cellReinf.reinfArea/d/self.getEffectiveWidth()
+        return retval
+
+    # Flexural design rectangular section according to
+    # section 5-4 of TM 5-809-3.
+    def getKCoefficient(self):
+        '''Return the ratio of the depth of the compressive stress 
+           block to the total depth from the compression face to 
+           the reinforcing steel: d, according to equation 5-9
+           of TM 5-809-3.'''
+        retval= 0.0
+        if(cellReinf):
+            n= cellReinf.steelType.fy/self.mortar.fm
+            np= n*self.getSteelRatio()
+            retval= math.sqrt(np**2+2*np)-np
+        return retval
+
+    def getBalancedSteelRatio(self, Fm, Fs):
+        '''Return the balanced steel ratio defined as the reinforcing 
+           ratio where the steel and the masonry reach their maximum 
+           allowable stresses for the same applied moment, according
+           to equation 5-11 of TM 5-809-3.
+
+        :param Fm: allowable flexural compressive stress in the masonry.
+        :param Fs: allowable tensile stress in the reinforcing steel.
+        '''
+        retval= 0.0
+        r= Fs/Fm
+        if(cellReinf):
+            n= cellReinf.steelType.fy/self.mortar.fm
+            retval= n/(2*r*(n+r))
+        return retval
+
+    def getJCoefficient(self):
+        '''Return the ratio of the distance between the resultant 
+           compressive force and the centroid of the tensile force 
+           to the distance d, according to equation 5-9
+           of TM 5-809-3.'''
+        retval= 0.0
+        if(cellReinf):
+            retval= 1.0 - self.getKCoefficient()/3.0
+        return retval
+    
+    def getReinforcementResistingMoment(self, Fs):
+        '''Return the resisting moment for the reinforcement
+           according to equation 5-14 of TM 5-809-3.
+
+        :param Fs: allowable tensile stress in the reinforcing steel.
+        '''
+        retval= 0.0
+        if(cellReinf):
+            j= self.getJCoefficient()
+            d= self.getEffectiveDepth()
+            retval= Fs*cellReinf.area*j*d #(N.m)
+        return retval
+    
+    def getMasonryResistingMoment(self, Fm):
+        '''Return the resisting moment for the masonry
+           according to equation 5-15 of TM 5-809-3.
+
+        :param Fm: allowable flexural compressive stress in the masonry.
+        '''
+        retval= 0.0
+        if(cellReinf):
+            k= self.getKCoefficient()
+            j= self.getJCoefficient()
+            b= self.getEffectiveWidth()
+            d= self.getEffectiveDepth()
+            retval= Fm*k*j*d*d**2/2.0 #(N.m)
+        return retval
+
+    # Design for axial compression (section 5-4 c)
+    def getCompressiveStress(self,P):
+        '''Return the compressive stress in the masonry
+           according to equation 5-21 of TM 5-809-3.
+
+        :param P: axial load (N/m)
+        '''
+        return P/self.getEffectiveArea()
+    
+    # Design for shear (section 5-4 d)

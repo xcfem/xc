@@ -16,24 +16,24 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 ratios=[]
-cmuWall6= tm5_809_3_materials.CMUWall(thickness= 6*0.0254,spacing= 0.0)
+cmuWall6= tm5_809_3_materials.CMUWallFabric(thickness= 6*0.0254,spacing= 0.0)
 eqThickness6= cmuWall6.getEquivalentWallThickness()
 effArea6= cmuWall6.getEffectiveArea()
-cmuWall12= tm5_809_3_materials.CMUWall(thickness= 12*0.0254,spacing= 72.0*0.0254)
+cmuWall12= tm5_809_3_materials.CMUWallFabric(thickness= 12*0.0254,spacing= 72.0*0.0254)
 eqThickness12= cmuWall12.getEquivalentWallThickness()
 effArea12= cmuWall12.getEffectiveArea()
-cmuWall8= tm5_809_3_materials.CMUWall(thickness= 8*0.0254,spacing= 40*0.0254)
+cmuWall8= tm5_809_3_materials.CMUWallFabric(thickness= 8*0.0254,spacing= 40*0.0254)
 eqThickness8= cmuWall8.getEquivalentWallThickness()
 effArea8= cmuWall8.getEffectiveArea()
 b12= cmuWall12.getEffectiveWidth()
 Ig12= cmuWall12.getGrossMomentOfInertia()
 fr= cmuWall12.mortar.fr()*tm5_809_3_materials.fromPascal
 fr_ref= 2.5*math.sqrt(1350)
-Mcr12= cmuWall12.getCrackingMoment()
+Mcr12= cmuWall12.getCrackingMomentStrength()
 Mcr12_ref= 5424
 b8= cmuWall8.getEffectiveWidth()
 Ig8= cmuWall8.getGrossMomentOfInertia()
-Mcr8= cmuWall8.getCrackingMoment()
+Mcr8= cmuWall8.getCrackingMomentStrength()
 Mcr8_ref= 2235
 
 
