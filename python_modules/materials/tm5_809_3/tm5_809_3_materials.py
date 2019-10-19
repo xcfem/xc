@@ -18,8 +18,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
-toPascal= ACI_materials.toPascal #Conversion from Pa to lb/inch2
-fromPascal= ACI_materials.fromPascal #Conversion from lb/inch2 to Pa
+toPascal= ACI_materials.toPascal #Conversion from lb/inch2 to Pa 
+fromPascal= ACI_materials.fromPascal #Conversion from Pa to lb/inch2
 inch2Meter= 0.0254 # Conversion from inch to meter
 feet2Meter= 0.3049 # Conversion from feet to meter
 
@@ -71,7 +71,7 @@ class CMUWallCellReinforcement(object):
         self.steelType= steelType
         self.area= reinfArea
         self.nBars= nBars
-    def getAllowableWorkingStress(self):
+    def Fs(self):
         '''Return allowable working stress according to
            table 5-8 of TM 5-809-3.'''
         return 24000.0*toPascal
@@ -298,15 +298,14 @@ class CMUWallFabric(object):
             lmsg.warning('reinforcement not defined.')
         return retval
 
-    def getBalancedSteelRatio(self, Fs):
+    def getBalancedSteelRatio(self):
         '''Return the balanced steel ratio defined as the reinforcing 
            ratio where the steel and the masonry reach their maximum 
            allowable stresses for the same applied moment, according
            to equation 5-11 of TM 5-809-3.
-
-        :param Fs: allowable tensile stress in the reinforcing steel.
         '''
         retval= 0.0
+        Fs= self.cellReinf.Fs()
         Fm= self.mortar.Fm()
         r= Fs/Fm
         if(self.cellReinf):
@@ -327,20 +326,25 @@ class CMUWallFabric(object):
             lmsg.warning('reinforcement not defined.')
         return retval
     
-    def getReinforcementResistingMoment(self, Fs):
+    def getReinforcementResistingMoment(self):
         '''Return the resisting moment for the reinforcement
            according to equation 5-14 of TM 5-809-3.
-
-        :param Fs: allowable tensile stress in the reinforcing steel.
         '''
         retval= 0.0
         if(self.cellReinf):
             j= self.getJCoefficient()
             d= self.getEffectiveDepth()
+            Fs= self.cellReinf.Fs()
             retval= Fs*self.cellReinf.area*j*d #(N.m)
         else:
             lmsg.warning('reinforcement not defined.')
         return retval
+    
+    def getReinforcementResistingMomentPerUnitLength(self):
+        '''Return the resisting moment for the reinforcement
+           per unit length.
+        '''
+        return self.getReinforcementResistingMoment()/self.groutedCellsSpacing
     
     def getMasonryResistingMoment(self):
         '''Return the resisting moment for the masonry
@@ -358,6 +362,12 @@ class CMUWallFabric(object):
         else:
             lmsg.warning('reinforcement not defined.')
         return retval
+
+    def getMasonryResistingMomentPerUnitLength(self):
+        '''Return the resisting moment for the masonry
+           per unit length.
+        '''
+        return self.getMasonryResistingMoment()/self.groutedCellsSpacing
 
     # Design for axial compression (section 5-4 c)
     def getCompressiveStress(self,P):
@@ -401,4 +411,4 @@ class CMUWallFabric(object):
         R= 1.0
         if(accountForBuckling):
             R= (1-(h/40.0/self.thickness)**3) # eq 5-25 (stress reduction factor)
-        return 0.2*mortar.fm*R
+        return 0.2*self.mortar.fm*R
