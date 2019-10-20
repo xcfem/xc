@@ -21,7 +21,7 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 toPascal= ACI_materials.toPascal #Conversion from lb/inch2 to Pa 
 fromPascal= ACI_materials.fromPascal #Conversion from Pa to lb/inch2
 inch2Meter= 0.0254 # Conversion from inch to meter
-feet2Meter= 0.3049 # Conversion from feet to meter
+feet2Meter= 0.3048 # Conversion from feet to meter
 
 class Mortar(object):
     ''' Mortar according to TM 5-809-3.
@@ -164,7 +164,11 @@ class CMUWallFabric(object):
         :param cellReinf: reinforcement on each cell.
         '''
         self.thickness= thickness
-        self.groutedCellsSpacing= spacing
+        if(spacing!= 0.0):
+            self.groutedCellsSpacing= spacing
+        else:
+            lmsg.warning('cell spacing cannot be zero set to 1E-6.')
+            self.groutedCellsSpacing= 1e-6#thickness
         self.mortar= mortar
         if(cellReinf):
             self.cellReinf= cellReinf
@@ -188,8 +192,9 @@ class CMUWallFabric(object):
             else:
                 th_inches= 12.0
         return self.fEquivalentThickness(th_inches,sp_inch)[0]*inch2Meter
-    def getEffectiveArea(self):
-        ''' Return the effective area according to
+    
+    def getEffectiveAreaPerUnitLength(self):
+        ''' Return the effective area per unit length according to
             table 5-3 of TM 5-809-3.'''
         sp_inch= self.groutedCellsSpacing/inch2Meter
         th_inches= self.thickness/inch2Meter
@@ -204,7 +209,15 @@ class CMUWallFabric(object):
                 lmsg.error('thickness: '+str(self.thickness)+' out of range (too thick).')
             else:
                 th_inches= 12.0
-        return self.fEffectiveArea(th_inches,sp_inch)[0]*inch2Meter**2/feet2Meter #in/ft->m2/m
+        retval= float(self.fEffectiveArea(th_inches,sp_inch)[0]) #in2/ft
+        retval/= feet2Meter #in2/m
+        retval*= (inch2Meter**2) #in2/m->m2/m
+        return retval
+    
+    def getEffectiveArea(self):
+        ''' Return the effective area.'''
+        return self.getEffectiveAreaPerUnitLength()*self.groutedCellsSpacing
+
     def getBw(self):
         '''Return the width of the masonry element effective in 
            resisting out-of-plane shear as shown in figure
@@ -368,6 +381,14 @@ class CMUWallFabric(object):
            per unit length.
         '''
         return self.getMasonryResistingMoment()/self.groutedCellsSpacing
+    
+    def getResistingMoment(self):
+        '''Return the resisting moment of the masonry fabric.'''
+        return min(self.getMasonryResistingMoment(),self.getReinforcementResistingMoment())
+    def getResistingMomentPerUnitLength(self):
+        '''Return the resisting moment of the masonry fabric
+           per unit length.'''
+        return self.getResistingMoment()/self.groutedCellsSpacing
 
     # Design for axial compression (section 5-4 c)
     def getCompressiveStress(self,P):
@@ -376,7 +397,7 @@ class CMUWallFabric(object):
 
         :param P: axial load (N/m)
         '''
-        return P/self.getEffectiveArea()
+        return P/self.getEffectiveAreaPerUnitLength()
     
     # Design for shear (section 5-4 d)
     def getShearStress(self, V):
@@ -391,24 +412,71 @@ class CMUWallFabric(object):
         '''Return the in-plane shear stress according to equation
         5-23 of TM 5-809-3.
 
-        :param V: in-plane shear load
+        :param V: in-plane shear load (N/m)
         '''
-        return V/self.getEffectiveArea()
+        return V/self.getEffectiveAreaPerUnitLength()
 
     # Allowable stresses.
-    def getAllowableAxialStress(self,h, accountForBuckling= True):
+    def getStressReductionFactor(self,h):
+        '''Return the stress reduction factor due to buckling according 
+           to equation 5-25 of TM 5-809-3.
+
+        The stress reduction factor (R) limits the axial stress on the wall so 
+        that buckling  will not occur. When analyzing the top or bottom of
+        a wall, where buckling is not a concern, the stress reduction factor 
+        should not be used.
+
+        :param h: clear height of the wall. None if buckling is not
+                  a concern.
+        '''
+        return (1-(h/40.0/self.thickness)**3) # eq 5-25.
+        
+    def getAllowableAxialStress(self,h= None):
         '''Return the allowable axial strees according to equation 
            5-24 of TM 5-809-3.
 
-        :param h: clear height of the wall.
-        :param accountForBuckling: The stress reduction factor limits the 
-                                   axial stress on the wall so that buckling 
-                                   will not occur. When analyzing the top or 
-                                   bottom of a wall, where buckling is not a 
-                                   concern, the stress reduction factor 
-                                   should not be used.
+        The stress reduction factor (R) limits the axial stress on the wall so 
+        that buckling  will not occur. When analyzing the top or bottom of
+        a wall, where buckling is not a concern, the stress reduction factor 
+        should not be used.
+
+        :param h: clear height of the wall. None if buckling is not
+                  a concern.
         '''
-        R= 1.0
-        if(accountForBuckling):
-            R= (1-(h/40.0/self.thickness)**3) # eq 5-25 (stress reduction factor)
-        return 0.2*self.mortar.fm*R
+        retval= 0.2*self.mortar.fm
+        if(h):
+            retval*= self.getStressReductionFactor(h) # eq 5-25 (stress reduction factor)
+        return retval
+
+    def getResistingAxialForce(self,h= None):
+        '''Return the resisting axial force of the masonry fabric.
+
+        :param h: clear height of the wall. None if buckling is not
+                  a concern.
+        '''
+        return self.getAllowableAxialStress(h)*self.getEffectiveArea()
+    
+    def getResistingAxialForcePerUnitLength(self,h= None):
+        '''Return the resisting axial force of the masonry fabric
+           per unit length.
+
+        :param h: clear height of the wall. None if buckling is not
+                  a concern.
+        '''
+        return self.getResistingAxialForce(h)/self.groutedCellsSpacing
+
+    def getCapacityFactor(self,axialLoad,bendingMoment, h= None):
+        ''' Return the capacity factor of the masonry fabric under
+            the internal forces being passed as parameter.
+
+        :param axialLoad: axial load (N/m).
+        :param bendingMoment: bending moment (N.m/m).
+        :param h: clear height of the wall. None if buckling is not
+                  a concern.
+        '''
+        Mu= self.getResistingMomentPerUnitLength()
+        Fu= self.getResistingAxialForcePerUnitLength(h)
+        return axialLoad/Fu+bendingMoment/Mu
+
+
+
