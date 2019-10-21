@@ -27,7 +27,6 @@ S= S_iu*inch2Meter # Cell spacing (meters).
 cellReinf= tm5_809_3_materials.CMUWallCellReinforcement(reinfArea= ACI_materials.num6Area)
 cmuWall= tm5_809_3_materials.CMUWallFabric(thickness= 12*inch2Meter,spacing= S, cellReinf= cellReinf)
 wallHeight= 24*foot2Meter # 24 ft-> m
-eccentricity= 0.5*cmuWall.thickness
 
 ratios= list()
 n= cmuWall.get_n()
