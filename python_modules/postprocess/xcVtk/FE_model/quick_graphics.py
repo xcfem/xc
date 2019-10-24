@@ -310,18 +310,18 @@ class QuickGraphics(object):
         orNodalLBar='H'  #default orientation of scale bar for nodal loads
         # auto-scaling parameters
         LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to auto-scale)
-        diagAux=lld.LinearLoadDiagram(scale=elLoadScaleF,fUnitConv=fUnitConv,loadPatternName=loadCaseName,component=elLoadComp)
+        diagAux=lld.LinearLoadDiagram(setToDisp=self.xcSet,scale=elLoadScaleF,fUnitConv=fUnitConv,loadPatternName=loadCaseName,component=elLoadComp)
         maxAbs=diagAux.getMaxAbsComp(preprocessor)
         if maxAbs > 0:
             elLoadScaleF*=LrefModSize/maxAbs*100
-        #
-        diagram= lld.LinearLoadDiagram(scale=elLoadScaleF,fUnitConv=fUnitConv,loadPatternName=loadCaseName,component=elLoadComp)
+        #Linear loads
+        diagram= lld.LinearLoadDiagram(setToDisp=self.xcSet,scale=elLoadScaleF,fUnitConv=fUnitConv,loadPatternName=loadCaseName,component=elLoadComp)
         diagram.addDiagram(preprocessor)
         if diagram.isValid():
             defDisplay.appendDiagram(diagram)
         orNodalLBar='V'
         # nodal loads
-        vField=lvf.LoadVectorField(loadPatternName=loadCaseName,fUnitConv=fUnitConv,scaleFactor=nodLoadScaleF,showPushing= True)
+        vField=lvf.LoadVectorField(loadPatternName=loadCaseName,setToDisp=self.xcSet,fUnitConv=fUnitConv,scaleFactor=nodLoadScaleF,showPushing= True)
     #    loadPatterns= preprocessor.getLoadHandler.getLoadPatterns
         lPattern= loadPatterns[loadCaseName]
         count= 0
@@ -517,7 +517,7 @@ def display_load(preprocessor,setToDisplay=None,loadCaseNm='',unitsScale=1.0,vec
     setToDisplay=checkSetToDisp(preprocessor,setToDisplay)
     LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to auto-scale)
     vectorScale*=LrefModSize/10.
-    vField=lvf.LoadVectorField(loadCaseNm,unitsScale,vectorScale)
+    vField=lvf.LoadVectorField(loadCaseNm,setToDisplay,unitsScale,vectorScale)
     vField.multiplyByElementArea=multByElemArea
     display_vector_field(preprocessor,vField,setToDisplay,viewDef,caption,fileName,defFScale)
 

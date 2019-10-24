@@ -8,9 +8,10 @@ from postprocess.xcVtk import colored_diagram as cd
 from miscUtils import LogMessages as lmsg
 
 class LinearLoadDiagram(cd.ColoredDiagram):
-    '''Draws a load over a linear element (qx,qy,qz,...)'''
-    def __init__(self,scale,fUnitConv,loadPatternName,component):
+    '''Draw a load over a set of linear element (qx,qy,qz,...)'''
+    def __init__(self,setToDisp,scale,fUnitConv,loadPatternName,component):
         super(LinearLoadDiagram,self).__init__(scale,fUnitConv)
+        self.setToDisp=setToDisp
         self.lpName= loadPatternName
         self.component= component
 
@@ -18,25 +19,27 @@ class LinearLoadDiagram(cd.ColoredDiagram):
         ''' Iterate over loaded elements dumping its loads into the graphic.'''
         lIter= lp.loads.getElementalLoadIter
         eLoad= lIter.next()
+        eTagsSet=self.setToDisp.getElements.getTags()
         while(eLoad):
             tags= eLoad.elementTags
             for i in range(0,len(tags)):
                 eTag= tags[i]
-                elem= preprocessor.getElementHandler.getElement(eTag)
-                if(self.component=='axialComponent'):
-                    self.vDir= elem.getJVector3d(True)
-                    indxDiagram= self.appendDataToDiagram(elem,indxDiagram,eLoad.axialComponent,eLoad.axialComponent)
-                elif(self.component=='transComponent'):
-                    self.vDir= elem.getJVector3d(True) # initialGeometry= True  
-                    indxDiagram= self.appendDataToDiagram(elem,indxDiagram,eLoad.transComponent,eLoad.transComponent)
-                elif(self.component=='transYComponent'):
-                    self.vDir= elem.getJVector3d(True) # initialGeometry= True  
-                    indxDiagram= self.appendDataToDiagram(elem,indxDiagram,eLoad.transYComponent,eLoad.transYComponent)
-                elif(self.component=='transZComponent'):
-                    self.vDir= elem.getKVector3d(True) # initialGeometry= True  
-                    indxDiagram= self.appendDataToDiagram(elem,indxDiagram,eLoad.transZComponent,eLoad.transZComponent)
-                else:
-                    lmsg.error("LinearLoadDiagram :'"+self.component+"' unknown.")        
+                if eTag in eTagsSet:
+                    elem= preprocessor.getElementHandler.getElement(eTag)
+                    if(self.component=='axialComponent'):
+                        self.vDir= elem.getJVector3d(True)
+                        indxDiagram= self.appendDataToDiagram(elem,indxDiagram,eLoad.axialComponent,eLoad.axialComponent)
+                    elif(self.component=='transComponent'):
+                        self.vDir= elem.getJVector3d(True) # initialGeometry= True  
+                        indxDiagram= self.appendDataToDiagram(elem,indxDiagram,eLoad.transComponent,eLoad.transComponent)
+                    elif(self.component=='transYComponent'):
+                        self.vDir= elem.getJVector3d(True) # initialGeometry= True  
+                        indxDiagram= self.appendDataToDiagram(elem,indxDiagram,eLoad.transYComponent,eLoad.transYComponent)
+                    elif(self.component=='transZComponent'):
+                        self.vDir= elem.getKVector3d(True) # initialGeometry= True  
+                        indxDiagram= self.appendDataToDiagram(elem,indxDiagram,eLoad.transZComponent,eLoad.transZComponent)
+                    else:
+                        lmsg.error("LinearLoadDiagram :'"+self.component+"' unknown.")        
                 eLoad= lIter.next()
 
     def getMaxAbsComp(self,preprocessor):

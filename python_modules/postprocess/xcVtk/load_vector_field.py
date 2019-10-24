@@ -40,10 +40,11 @@ class LoadOnPoints(vf.VectorField):
 
 class LoadVectorField(LoadOnPoints):
     '''Draws a load over a point on nodes and on elements.'''
-    def __init__(self,loadPatternName,fUnitConv= 1e-3,scaleFactor= 1.0,showPushing= True,components= [0,1,2],multiplyByElementArea= True):
+    def __init__(self,loadPatternName,setToDisp,fUnitConv= 1e-3,scaleFactor= 1.0,showPushing= True,components= [0,1,2],multiplyByElementArea= True):
         '''
         Parameters:
           loadPatternName: name of the load pattern to display.
+          setToDisp: set over which to display the loads.
           fUnitConv: unit conversion factor.
           scaleFactor: scale factor for the size of the vectors.
           showPushing: true if the loads push the loaded point (as oppssed to pull). Default: True
@@ -52,6 +53,7 @@ class LoadVectorField(LoadOnPoints):
         '''
         super(LoadVectorField,self).__init__(loadPatternName,fUnitConv,scaleFactor,showPushing)
         self.multiplyByElementArea= multiplyByElementArea
+        self.setToDisp=setToDisp
 
     def sumElementalLoads(self,preprocessor,lp):
         ''' Iterate over loaded elements and cumulate their loads.'''
@@ -59,22 +61,25 @@ class LoadVectorField(LoadOnPoints):
         elementLoad= lIter.next()
         comp_i= self.components[0]; comp_j= self.components[1]; comp_k= self.components[2]
         retval= dict()
+        eTagsSet=self.setToDisp.getElements.getTags()
         while(elementLoad):
           tags= elementLoad.elementTags
+          print 'aquí tags= ', tags
           for i in range(0,len(tags)):
             eTag= tags[i]
-            elem= preprocessor.getElementHandler.getElement(eTag)
-            if(elem.getDimension==2):
-              vLoad= elem.getCoordTransf.getVectorGlobalCoordFromLocal(elementLoad.getLocalForce())
-              if(self.multiplyByElementArea):
-                vLoad*=elem.getArea(True)
-              v= xc.Vector([vLoad[comp_i],vLoad[comp_j],vLoad[comp_k]])
-              if eTag in retval:
-                retval[eTag]+= v
-              else:
-                retval[eTag]= v
-    #        else:
-    #          lmsg.warning('displaying of loads over 1D elements not yet implemented')
+            if eTag in eTagsSet:
+                elem= preprocessor.getElementHandler.getElement(eTag)
+                if(elem.getDimension==2):
+                  vLoad= elem.getCoordTransf.getVectorGlobalCoordFromLocal(elementLoad.getLocalForce())
+                  if(self.multiplyByElementArea):
+                    vLoad*=elem.getArea(True)
+                  v= xc.Vector([vLoad[comp_i],vLoad[comp_j],vLoad[comp_k]])
+                  if eTag in retval:
+                    retval[eTag]+= v
+                  else:
+                    retval[eTag]= v
+        #        else:
+        #          lmsg.warning('displaying of loads over 1D elements not yet implemented')
           elementLoad= lIter.next()
         return retval
 
@@ -111,15 +116,17 @@ class LoadVectorField(LoadOnPoints):
         lIter= lp.loads.getNodalLoadIter
         nl= lIter.next()
         retval= dict()
+        nTagsSet=self.setToDisp.getNodes.getTags()
         while(nl):
           nTag= nl.getNodeTag
-          node= preprocessor.getNodeHandler.getNode(nTag)
-          vLoad= nl.getForce
-          v= xc.Vector([vLoad[0], vLoad[1], vLoad[2]])
-          if nTag in retval:
-            retval[nTag]+= v
-          else:
-            retval[nTag]= v
+          if nTag in nTagsSet:
+              node= preprocessor.getNodeHandler.getNode(nTag)
+              vLoad= nl.getForce
+              v= xc.Vector([vLoad[0], vLoad[1], vLoad[2]])
+              if nTag in retval:
+                retval[nTag]+= v
+              else:
+                retval[nTag]= v
           nl= lIter.next()
         return retval
 
