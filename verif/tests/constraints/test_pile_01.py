@@ -155,24 +155,29 @@ for z in z_node_check:
     V_calc.append(V)
     M=e_p.getMz2
     M_calc.append(M)
-
-err_ux=0
+    
+nVal=len(z_node_check)
+ac_ux=0
 for i in range(len(ux_comp)):
-    err_ux+=(ux_comp[i]-ux_calc[i])/ux_comp[i]
-err_Kx=0
+    ac_ux+=((ux_comp[i]-ux_calc[i])/ux_comp[i])**2
+err_ux=math.sqrt(ac_ux/nVal)
+ac_Kx=0
 for i in range(len(Kx_comp)):
-    err_Kx+=(Kx_comp[i]-Kx_calc[i])/Kx_comp[i]
-err_V=0
+    ac_Kx+=((Kx_comp[i]-Kx_calc[i])/Kx_comp[i])**2
+err_Kx=math.sqrt(ac_Kx/nVal)
+ac_V=0
 for i in range(len(V_comp)):
-    err_V+=(V_comp[i]-V_calc[i])/V_comp[i]
-err_M=0
+    ac_V+=((V_comp[i]-V_calc[i])/V_comp[i])**2
+err_V=math.sqrt(ac_V/nVal)
+ac_M=0
 for i in range(len(M_comp)):
-    err_M+=(M_comp[i]-M_calc[i])/M_comp[i]
+    ac_M+=((M_comp[i]-M_calc[i])/M_comp[i])**2
+err_M=math.sqrt(ac_M/nVal)
 
 import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
-if abs(err_ux)<0.055 and abs(err_Kx)<0.0002 and abs(err_V)<0.2 and abs(err_M)<0.06:
+if abs(err_ux)<0.095 and abs(err_Kx)<5e-5 and abs(err_V)<0.13 and abs(err_M)<0.13:
   print "test ",fname,": ok."
 else:
   lmsg.error(fname+' ERROR.')
