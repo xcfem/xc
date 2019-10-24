@@ -170,10 +170,24 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
                    by this factor. (Defaults to 0.0, i.e. display of 
                    initial/undeformed shape)
         '''
+        lmsg.warning('FEmeshGraphic DEPRECATED use displayFEMesh.')
         self.cameraParameters= cameraParameters
+        self.displayFEMesh(xcSet,caption,defFScale)
+
+    def displayFEMesh(self,xcSet,caption= '',defFScale=0.0):
+        ''' Graphic of the FE mesh
+
+        :param xcSet:   XC set of elements to be displayed
+        :param caption: text to write in the graphic
+        :param defFScale: factor to apply to current displacement of nodes 
+                   so that the display position of each node equals to
+                   the initial position plus its displacement multiplied
+                   by this factor. (Defaults to 0.0, i.e. display of 
+                   initial/undeformed shape)
+        '''
         self.setupGrid(xcSet)
         self.displayGrid(caption)
-
+        
     def displayLocalAxes(self,xcSet,caption= 'local axis', vectorScale=1.0):
         '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
 

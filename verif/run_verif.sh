@@ -505,6 +505,9 @@ python tests/materials/sia262/test_crack_control_01.py
 echo "$BLEU" "    ACI 318 tests." "$NORMAL"
 python tests/materials/aci/test_aci_development_01.py
 python tests/materials/aci/test_aci_shear_01.py
+echo "$BLEU" "    TM 5-809-3 tests." "$NORMAL"
+python tests/materials/tm5_809_3/test_equivalent_wall_thickness.py
+python tests/materials/tm5_809_3/tm_5_809_3_test01.py
 echo "$BLEU" "    SIA 263 tests." "$NORMAL"
 python tests/materials/sia263/test_coefs_fatique_SIA263.py
 echo "$BLEU" "    AWC NDS tests." "$NORMAL"

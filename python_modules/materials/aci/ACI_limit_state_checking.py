@@ -23,6 +23,23 @@ from materials.sections import stressCalc as sc
 from miscUtils import LogMessages as lmsg
 from postprocess.reports import common_formats as fmt
 
+def getMaximumShearTransferStrength(concrete, Ac, monolithic= True):
+    ''' Return the maximum shear-transfer strength permitted
+        across a shear plane monolithically according to table 22.9.4.4
+        of ACI-318-14
+
+        :param Ac: area of the shear plane
+    '''
+    fck= -concrete.fck
+    lim1= 0.2*fck*Ac # (a) and (d) in table
+    lim2= Ac*1600*ACI_materials.toPascal
+    if(not monolithic):
+        lim2*=0.5 #(c) in table
+    retval= min(lim1,lim2)
+    if(monolithic):
+        retval= min(retval,(480.0*ACI_materials.toPascal+0.08*fck)*Ac)
+    return retval
+
 class RebarController(object):
     '''Control of some parameters as development lenght 
        minimum reinforcement and so on.

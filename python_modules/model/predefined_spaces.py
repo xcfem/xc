@@ -25,6 +25,8 @@ class PredefinedSpace(object):
         self.setPreprocessor(nodes.getPreprocessor)
         nodes.dimSpace= dimSpace
         nodes.numDOFs= numDOFs
+        # Graphic stuff.
+        self.cameraParameters= None
 
     def setPreprocessor(self,preprocessor):
         '''Sets suitable values for the members from the dimension of the space 
@@ -207,6 +209,90 @@ class PredefinedSpace(object):
         for i in range(0,numDOFs):
             spc= self.constraints.newSPConstraint(newNode.tag,i,0.0)
         return newNode.tag, zl.tag
+
+    def getTotalSet(self):
+        '''Return the set that contains all the defined
+           entities.'''
+        return self.preprocessor.getSets.getSet("total")
+
+    def getDefaultCameraParameters(self):
+        '''Return the default camera parameters.'''
+        from postprocess.xcVtk import vtk_graphic_base # avoid import if not needed
+        return vtk_graphic_base.CameraParameters('XYZPos')
+        
+    
+    def displayBlocks(self, setToDisplay= None, caption= None):
+        '''Display the blocks (points, lines, surfaces and volumes)
+           of the set.
+
+           :param setToDisplay: set to display.
+           :param caption: title of the graphic.
+        '''
+        from postprocess.xcVtk.CAD_model import vtk_CAD_graphic  # avoid import if not needed
+        if(setToDisplay==None):
+            setToDisplay= self.getTotalSet()
+        if(caption==None):
+            caption= setToDisplay.name+' set; blocks'
+        if(self.cameraParameters==None):
+            self.cameraParameters= getDefaultCameraParameters()
+        defDisplay= vtk_CAD_graphic.RecordDefDisplayCAD()
+        defDisplay.cameraParameters= self.cameraParameters
+        defDisplay.displayBlocks(setToDisplay,caption= caption)
+
+    def displayFEMesh(self, setToDisplay= None, caption= None, defFScale=0.0):
+        '''Display the mesh (nodes, elements and constraints)
+           of the set.
+
+           :param setToDisplay: set to display.
+           :param caption: title of the graphic.
+        '''
+        from postprocess.xcVtk.FE_model import vtk_FE_graphic # avoid import if not needed
+        if(setToDisplay==None):
+            setToDisplay= self.getTotalSet()
+        if(caption==None):
+            caption= setToDisplay.name+' set; mesh'
+        if(self.cameraParameters==None):
+            self.cameraParameters= getDefaultCameraParameters()
+        defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
+        defDisplay.cameraParameters= self.cameraParameters
+        defDisplay.displayFEMesh(xcSet= setToDisplay,caption= caption, defFScale= defFScale)
+
+    def displayLocalAxes(self, vectorScale, setToDisplay= None, caption= None):
+        '''Display the local axes of the elements contained in the set.
+
+           :param setToDisplay: set to display.
+           :param caption: title of the graphic.
+           :param vectorScale: scale factor applied to the vectors.
+        '''
+        from postprocess.xcVtk.FE_model import vtk_FE_graphic # avoid import if not needed
+        if(setToDisplay==None):
+            setToDisplay= self.getTotalSet()
+        if(caption==None):
+            caption= setToDisplay.name+' set; local axes'
+        if(self.cameraParameters==None):
+            self.cameraParameters= getDefaultCameraParameters()
+        defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
+        defDisplay.cameraParameters= self.cameraParameters
+        defDisplay.displayLocalAxes(setToDisplay,caption= caption, vectorScale= vectorScale)
+
+    def displayStrongWeakAxis(self, vectorScale= 1.0, setToDisplay= None, caption= None):
+        '''Display the local axes of the elements contained in the set.
+
+           :param setToDisplay: set to display.
+           :param caption: title of the graphic.
+           :param vectorScale: scale factor applied to the vectors.
+        '''
+        from postprocess.xcVtk.FE_model import vtk_FE_graphic # avoid import if not needed
+        if(setToDisplay==None):
+            setToDisplay= self.getTotalSet()
+        if(caption==None):
+            caption= setToDisplay.name+' set; strong and weak axis'
+        if(self.cameraParameters==None):
+            self.cameraParameters= getDefaultCameraParameters()
+        defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
+        defDisplay.cameraParameters= self.cameraParameters
+        defDisplay.displayStrongWeakAxis(setToDisplay,caption= caption, vectorScale= vectorScale)
+        
 
 def getModelSpace(preprocessor):
       '''Return a PredefinedSpace from the dimension of the space 
