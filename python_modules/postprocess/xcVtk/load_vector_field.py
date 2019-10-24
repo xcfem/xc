@@ -64,7 +64,6 @@ class LoadVectorField(LoadOnPoints):
         eTagsSet=self.setToDisp.getElements.getTags()
         while(elementLoad):
           tags= elementLoad.elementTags
-          print 'aquí tags= ', tags
           for i in range(0,len(tags)):
             eTag= tags[i]
             if eTag in eTagsSet:
