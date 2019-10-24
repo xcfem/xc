@@ -296,6 +296,7 @@ python tests/constraints/test_glue_node_to_element_03.py
 python tests/constraints/test_glue_node_to_element_04.py
 python tests/constraints/test_glue_node_to_element_05.py
 python tests/constraints/test_glue_node_to_element_06.py
+python tests/constraints/test_pile_01.py
 
 #Load tests
 echo "$BLEU" "Loads tests." "$NORMAL"

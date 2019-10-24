@@ -156,8 +156,6 @@ class ElasticFoundation(object):
                 m3d= geom.Vector3d(rf[3],rf[4],rf[5])
             pos= n.getInitialPos3d
             self.svdReac+= geom.SlidingVectorsSystem3d(pos,f3d,m3d)
-
-            #print "dispZ= ", n.getDisp[2]*1e3, "mm"
             n.setProp('soilPressure',[f3d.x/a,f3d.y/a,f3d.z/a])
             n.setProp('soilReaction',[f3d.x,f3d.y,f3d.z])
         return self.svdReac.reduceTo(self.getCentroid())
@@ -228,7 +226,7 @@ class PileFoundation(object):
     :ivar groundLevel: ground elevation
     :ivar soilsProp:  properties of the levels of soil, defined from 
                      top to bottom as a list: 
-                     - [(zBottomSoil,typeSoil,propSoil), ...] where,
+                     - [[zBottomSoil,typeSoil,propSoil], ...] where,
                      'zBottomSoil' is the global Z coordinate of the 
                      bottom level of the soil,
                      -'typeSoil' is the type od soil: 'sandy' or 'clay'
@@ -295,10 +293,10 @@ class PileFoundation(object):
     def generateSpringsPile(self,alphaKh_x,alphaKh_y,alphaKv_z):
         '''Generate the springs that simulate the soils along the pile
 
-        :param alphaKh_x: coefficient to be applied to the horizontal stiffness of
-                          a single pile in X direction
-        :param alphaKh_y: coefficient to be applied to the horizontal stiffness of
-                          a single pile in Y direction
+        :param alphaKh_x: coefficient to be applied to the horizontal stiffness
+                          of a single pile in X direction
+        :param alphaKh_y: coefficient to be applied to the horizontal stiffness
+                          of a single pile in Y direction
         :param alphaKh_Z: coefficient to be applied to the vertical stiffness of
                           a single pile in Z direction
         '''
@@ -311,49 +309,41 @@ class PileFoundation(object):
         self.setPile.computeTributaryLengths(False)
         lstNodPile=[(n,n.get3dCoo[2]) for n in self.setPile.nodes]
         lstNodPile.sort(key=takeSecond,reverse=True) #z in descending order
-        print 'lstNodPile',lstNodPile
-        for i in lstNodPile:
-            print 'lstNodPile tag=',i[0].tag, 'lstNodPile_z]=',i[1]
+        if self.soilsProp[-1][0] >= lstNodPile[-1][1]:
+            self.soilsProp[-1][0]=lstNodPile[-1][1]-1
         zval=lstNodPile[0][1]
         while zval > self.groundLevel:  #aerial zone of pile
             lstNodPile.pop(0)
             zval=lstNodPile[0][1]
-            print 'zval',zval
         modelSpace= predefined_spaces.getModelSpace(prep)
         #Springs horizontal stiffness
         z=lstNodPile[0][1]
         self.springs= list() #spring elements.
+        if self.pileDiam <= 1:
+            coefKh=1
+        else:
+            coefKh=self.pileDiam
         for s in range(len(self.soilsProp)):
             zBottom=self.soilsProp[s][0]
             soilType=self.soilsProp[s][1][:2].lower()
             soilPrp=self.soilsProp[s][2]
             if soilType not in ('sa','cl'):
                 lmsg.warning('wrong type of soil')
-            print 'zBottom=',zBottom
-            print 'soilPrp=',soilPrp
             while z>zBottom:
-                print 'z=', z
                 n=lstNodPile[0][0]
-                print 'aquí n.tag=',n.tag
                 lnTribNod=n.getTributaryLength()
-                print 'lnTribNod=',lnTribNod
                 if soilType == 'sa': #sandy soil
-                    Kh_x=alphaKh_x*soilPrp*(self.groundLevel-z)*lnTribNod
-                    Kh_y=alphaKh_y*soilPrp*(self.groundLevel-z)*lnTribNod
+                    Kh_x=alphaKh_x*soilPrp*(self.groundLevel-z)*lnTribNod*coefKh
+                    Kh_y=alphaKh_y*soilPrp*(self.groundLevel-z)*lnTribNod*coefKh
                 else:
-                    Kh_x=75*alphaKh_x*soilPrp*lnTribNod
-                    Kh_y=75*alphaKh_y*soilPrp*lnTribNod
+                    Kh_x=75*alphaKh_x*soilPrp*lnTribNod*coefKh
+                    Kh_y=75*alphaKh_y*soilPrp*lnTribNod*coefKh
                 springX.E=Kh_x
                 springY.E=Kh_y
-                print 'n.tag=',n.tag
-                print 'springX.E=',springX.E
-                print 'springY.E=',springY.E
-                print 'springZ.E=',springZ.E
                 if len(lstNodPile)==1:
                     #Spring vertical stiffness (end of pile)
                     Kv_end=alphaKv_z*self.getVerticalStiffnessSinglePile()
                     springZ.E=Kv_end
-                    print 'springZ.E=',springZ.E
                     nn= modelSpace.setBearing(n.tag,['springX','springY','springZ'])
                     self.springs.append(nn[1])
                     break

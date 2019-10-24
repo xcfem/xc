@@ -855,16 +855,17 @@ def rebLayer_mm(fi,s,c):
   '''
   return MainReinfLayer(rebarsDiam=fi*1e-3,areaRebar= math.pi*(fi*1e-3)**2/4.0,rebarsSpacing=s*1e-3,width=1.0,nominalCover=c*1e-3)
 
-def rebLayerByNumFi_mm(n,fi,c,L):
+def rebLayerByNumFi_mm(n,fi,c,latC,L):
   '''Defines a layer of  main reinforcement bars with a fixed number of rebars. Spacing is calculated
   so that the rebars (and two lateral covers) are inserted in the length L passed as parameter.
 
   :param n: number of rebars
   :param fi: bar diameter [mm]
-  :param c: nominal cover [mm] 
+  :param c: nominal cover [mm]
+  :param latC: nominal lateral cover [mm]
   :param L: length where the n rebars and two lateral covers are inserted
   '''
-  s=(L-2*c-fi)/(n-1)
+  s=(L-2*latC-fi)/(n-1)
   rl=MainReinfLayer(rebarsDiam=fi*1e-3,areaRebar= math.pi*(fi*1e-3)**2/4.0,rebarsSpacing=s*1e-3,width=L,nominalCover=c*1e-3)
   rl.nRebars=n
   rl.centerRebars(L*1e-3)
