@@ -27,6 +27,7 @@ class PredefinedSpace(object):
         nodes.numDOFs= numDOFs
         # Graphic stuff.
         self.cameraParameters= None
+        self.outputUnits=None
 
     def setPreprocessor(self,preprocessor):
         '''Sets suitable values for the members from the dimension of the space 
@@ -219,7 +220,11 @@ class PredefinedSpace(object):
         '''Return the default camera parameters.'''
         from postprocess.xcVtk import vtk_graphic_base # avoid import if not needed
         return vtk_graphic_base.CameraParameters('XYZPos')
-        
+
+    def getDefaultOuputUnits(self):
+        ''' Default output units conversion'''
+        return OuputUnits(1e-3,'kN',1.0,'m',1e3,'mm',1e3,'x1E3 rad')
+
     
     def displayBlocks(self, setToDisplay= None, caption= None):
         '''Display the blocks (points, lines, surfaces and volumes)
@@ -234,12 +239,12 @@ class PredefinedSpace(object):
         if(caption==None):
             caption= setToDisplay.name+' set; blocks'
         if(self.cameraParameters==None):
-            self.cameraParameters= getDefaultCameraParameters()
+            self.cameraParameters= self.getDefaultCameraParameters()
         defDisplay= vtk_CAD_graphic.RecordDefDisplayCAD()
         defDisplay.cameraParameters= self.cameraParameters
         defDisplay.displayBlocks(setToDisplay,caption= caption)
 
-    def displayFEMesh(self, setToDisplay= None, caption= None, defFScale=0.0):
+    def displayFEMesh(self, setsToDisplay= None, caption= None, scaleConstr=0.20):
         '''Display the mesh (nodes, elements and constraints)
            of the set.
 
@@ -247,17 +252,17 @@ class PredefinedSpace(object):
            :param caption: title of the graphic.
         '''
         from postprocess.xcVtk.FE_model import vtk_FE_graphic # avoid import if not needed
-        if(setToDisplay==None):
-            setToDisplay= self.getTotalSet()
+        if(setsToDisplay==None):
+            setsToDisplay= [self.getTotalSet()]
         if(caption==None):
-            caption= setToDisplay.name+' set; mesh'
+            caption= 'mesh'
         if(self.cameraParameters==None):
             self.cameraParameters= getDefaultCameraParameters()
         defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
         defDisplay.cameraParameters= self.cameraParameters
-        defDisplay.displayFEMesh(xcSet= setToDisplay,caption= caption, defFScale= defFScale)
-
-    def displayLocalAxes(self, vectorScale, setToDisplay= None, caption= None):
+        defDisplay.displayMesh(xcSets=setsToDisplay,caption= caption, scaleConstr=scaleConstr)
+        
+    def displayLocalAxes(self, vectorScale=1.0, setToDisplay= None, caption= None):
         '''Display the local axes of the elements contained in the set.
 
            :param setToDisplay: set to display.
@@ -292,6 +297,47 @@ class PredefinedSpace(object):
         defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
         defDisplay.cameraParameters= self.cameraParameters
         defDisplay.displayStrongWeakAxis(setToDisplay,caption= caption, vectorScale= vectorScale)
+        
+    def initQGraph(self,setToDisplay):
+        '''Initialize a quick graphic'''
+        from postprocess.xcVtk.FE_model import quick_graphics as QGrph
+        if(setToDisplay==None):
+            setToDisplay= self.getTotalSet()
+        if(self.cameraParameters==None):
+            self.cameraParameters= self.getDefaultCameraParameters()
+        if(self.outputUnits==None):
+            self.outputUnits= self.getDefaultOuputUnits()
+        return setToDisplay,QGrph.QuickGraphics()
+        
+    def displayUx(self,setToDisplay= None):
+        '''Display results in X-displacement from a load case previously calculated'''
+        setToDisplay,gr=self.initQGraph(setToDisplay)
+        gr.displayDispRot(itemToDisp='uX',setToDisplay=setToDisplay,fConvUnits=self.outputUnits.scaleUnitsDispl,unitDescription=self.outputUnits.textUnitsDispl,viewDef=self.cameraParameters)
+        
+    def displayUy(self,setToDisplay= None):
+        '''Display results in Y-displacement from a load case previously calculated'''
+        setToDisplay,gr=self.initQGraph(setToDisplay)
+        gr.displayDispRot(itemToDisp='uY',setToDisplay=setToDisplay,fConvUnits=self.outputUnits.scaleUnitsDispl,unitDescription=self.outputUnits.textUnitsDispl,viewDef=self.cameraParameters)
+        
+    def displayUz(self,setToDisplay= None):
+        '''Display results in Z-displacement from a load case previously calculated'''
+        setToDisplay,gr=self.initQGraph(setToDisplay)
+        gr.displayDispRot(itemToDisp='uZ',setToDisplay=setToDisplay,fConvUnits=self.outputUnits.scaleUnitsDispl,unitDescription=self.outputUnits.textUnitsDispl,viewDef=self.cameraParameters)
+        
+    def displayRotX(self,setToDisplay= None):
+        '''Display results in X-rotation from a load case previously calculated'''
+        setToDisplay,gr=self.initQGraph(setToDisplay)
+        gr.displayDispRot(itemToDisp='rotX',setToDisplay=setToDisplay,fConvUnits=self.outputUnits.scaleUnitsRot,unitDescription=self.outputUnits.textUnitsRot,viewDef=self.cameraParameters)
+
+    def displayRotY(self,setToDisplay= None):
+        '''Display results in X-rotation from a load case previously calculated'''
+        setToDisplay,gr=self.initQGraph(setToDisplay)
+        gr.displayDispRot(itemToDisp='rotY',setToDisplay=setToDisplay,fConvUnits=self.outputUnits.scaleUnitsRot,unitDescription=self.outputUnits.textUnitsRot,viewDef=self.cameraParameters)
+
+    def displayRotZ(self,setToDisplay= None):
+        '''Display results in X-rotation from a load case previously calculated'''
+        setToDisplay,gr=self.initQGraph(setToDisplay)
+        gr.displayDispRot(itemToDisp='rotZ',setToDisplay=setToDisplay,fConvUnits=self.outputUnits.scaleUnitsRot,unitDescription=self.outputUnits.textUnitsRot,viewDef=self.cameraParameters)
         
 
 def getModelSpace(preprocessor):
@@ -886,3 +932,15 @@ def glueSets(preprocessor,DOF2Glue,masterSet,slaveSet,onCoord=None):
             nSlave=slaveSet.nodes.getNearestNode(geom.Pos3d(n.get3dCoo[0],n.get3dCoo[1],n.get3dCoo[2]))
             mdlSpace.constraints.newEqualDOF(n.tag,nSlave.tag,xc.ID(DOF2Glue))
   
+
+class OuputUnits(object):
+    def __init__(self,scaleUnitsForce,textUnitsForce,scaleUnitsLengthMoment,textUnitsLengthMoment,scaleUnitsDispl,textUnitsDispl,scaleUnitsRot,textUnitsRot):
+        self.scaleUnitsForce=scaleUnitsForce
+        self.textUnitsForce=textUnitsForce
+        self.scaleUnitsLengthMoment=scaleUnitsLengthMoment
+        self.textUnitsLengthMoment=textUnitsLengthMoment
+        self.scaleUnitsDispl=scaleUnitsDispl
+        self.scaleUnitsRot=scaleUnitsRot
+        self.textUnitsRot='['+textUnitsRot+']'
+        self.textUnitsDispl='['+textUnitsDispl+']'
+        self.textUnitsLoadsIntForces='units:['+textUnitsLengthMoment+','+textUnitsForce+']'
