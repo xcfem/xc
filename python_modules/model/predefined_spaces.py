@@ -225,7 +225,6 @@ class PredefinedSpace(object):
         ''' Default output units conversion'''
         return OuputUnits(1e-3,'kN',1.0,'m',1e3,'mm',1e3,'x1E3 rad')
 
-    
     def displayBlocks(self, setToDisplay= None, caption= None):
         '''Display the blocks (points, lines, surfaces and volumes)
            of the set.
@@ -257,7 +256,7 @@ class PredefinedSpace(object):
         if(caption==None):
             caption= 'mesh'
         if(self.cameraParameters==None):
-            self.cameraParameters= getDefaultCameraParameters()
+            self.cameraParameters= self.getDefaultCameraParameters()
         defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
         defDisplay.cameraParameters= self.cameraParameters
         defDisplay.displayMesh(xcSets=setsToDisplay,caption= caption, scaleConstr=scaleConstr)
@@ -275,7 +274,7 @@ class PredefinedSpace(object):
         if(caption==None):
             caption= setToDisplay.name+' set; local axes'
         if(self.cameraParameters==None):
-            self.cameraParameters= getDefaultCameraParameters()
+            self.cameraParameters= self.getDefaultCameraParameters()
         defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
         defDisplay.cameraParameters= self.cameraParameters
         defDisplay.displayLocalAxes(setToDisplay,caption= caption, vectorScale= vectorScale)
@@ -293,7 +292,7 @@ class PredefinedSpace(object):
         if(caption==None):
             caption= setToDisplay.name+' set; strong and weak axis'
         if(self.cameraParameters==None):
-            self.cameraParameters= getDefaultCameraParameters()
+            self.cameraParameters= self.getDefaultCameraParameters()
         defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
         defDisplay.cameraParameters= self.cameraParameters
         defDisplay.displayStrongWeakAxis(setToDisplay,caption= caption, vectorScale= vectorScale)
@@ -490,6 +489,14 @@ class StructuralMechanics2D(PredefinedSpace):
         for i in range(1,nn+1):
             nodeTag= line.getNodeI(i).tag
             self.fixNode000(nodeTag)
+            
+    def getDefaultCameraParameters(self):
+        '''Return the default camera parameters.'''
+        from postprocess.xcVtk import vtk_graphic_base # avoid import if not needed
+        retval= vtk_graphic_base.CameraParameters('2DProblemCamera')
+        retval.viewUpVc= [0,0,1]
+        retval.posCVc= [0,-100,0]
+        return retval
 
 def getStructuralMechanics2DSpace(preprocessor):
     '''Return a PredefinedSpace from the dimension of the space 
