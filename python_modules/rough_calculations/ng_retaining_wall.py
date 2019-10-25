@@ -274,6 +274,29 @@ class Envelope(object):
     '''Update envelopes.'''
     self.positive= [max(l1, l2) for l1, l2 in zip(self.positive, values)]
     self.negative= [min(l1, l2) for l1, l2 in zip(self.negative, values)]
+  def getMaximum(self):
+    '''Return the maximum of the positive envelope'''
+    retval= self.positive[0]
+    for v in self.positive[1:]:
+      retval= max(v,retval)
+    return retval
+  def getMinimum(self):
+    '''Return the minimum of the negative envelope'''
+    retval= self.negative[0]
+    for v in self.negative[1:]:
+      retval= min(v,retval)
+    return retval
+  def getAbsMaximum(self):
+    '''Return the greatest value positive or negative'''
+    retval= self.positive[0]
+    for v in self.positive[1:]:
+      if(abs(v)>abs(retval)):
+        retval= v
+    for v in self.negative:
+      if(abs(v)>abs(retval)):
+        retval= v
+    return retval
+    
   def filterRepeatedValues(self):
     '''Filter repeated values.'''
     sz= len(self.yValues)
@@ -432,11 +455,11 @@ class FootingReinforcement(ReinforcementMap):
     # Reinforcement on footing top
     CTopFooting= self.getSectionTopFooting()
     NdTopFooting= 0.0 #we neglect axial force
-    VdTopFooting= self.wallGeom.internalForcesULS.VdFooting
-    MdTopFooting= self.wallGeom.internalForcesULS.MdFooting
+    VdTopFooting= self.wallGeom.internalForcesULS.VdFooting.getAbsMaximum()
+    MdTopFooting= self.wallGeom.internalForcesULS.MdFooting.getAbsMaximum() # Concomitant??
     outputFile.write("\\textbf{Reinforcement "+str(self.topFootingIndex)+" (footing top reinforcement):}\\\\\n")
     CTopFooting.writeResultFlexion(outputFile,NdTopFooting,MdTopFooting,VdTopFooting)
-    CTopFooting.writeResultStress(outputFile,self.wallGeom.internalForcesSLS.MdFooting)
+    CTopFooting.writeResultStress(outputFile,self.wallGeom.internalForcesSLS.MdFooting.getAbsMaximum())
 
     CSectionFootingBottom= self.getSectionFootingBottom()
     CSectionFootingBottomLongitudinal= self.getSectionFootingBottomLongitudinal()
