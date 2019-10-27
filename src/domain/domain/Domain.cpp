@@ -532,6 +532,19 @@ bool XC::Domain::removeLoadPattern(LoadPattern *lp)
     return retval;
   }
 
+//! @brief Remove from all load pattenrs from domain.
+bool XC::Domain::removeAllLoadPatterns(void)
+  {
+    bool retval= true;
+    std::map<int,XC::LoadPattern *> &activeLoadPatterns= constraints.getLoadPatterns();
+    for(std::map<int,XC::LoadPattern *>::iterator i= activeLoadPatterns.begin();
+	i!=activeLoadPatterns.end();i++)
+      retval*= removeLoadPattern(i->second);
+    return retval;
+  }
+
+
+
 //! @brief Remove from domain the load pattern being passed as parameter.
 bool XC::Domain::removeNodeLocker(NodeLocker *nl)
   {
