@@ -128,7 +128,7 @@ class Domain: public ObjWithRecorders, public DistributedBase
     Vector theEigenvalues; //!< Eigenvalues.
     Vector modalParticipationFactors; //!< Modal participation factors.
     DqMeshRegion *theRegions;
-    std::string nmbCombActual;//!< Current load combination.
+    std::deque<std::string> activeCombinations;//!< load combinations currently active.
 
     int lastChannel;
     int lastGeoSendTag; //!< the value of currentGeoTag when sendSelf was last invoked
@@ -198,7 +198,8 @@ class Domain: public ObjWithRecorders, public DistributedBase
     virtual ConstrContainer &getConstraints(void);
     virtual const ConstrContainer &getConstraints(void) const;
 
-    const std::string &getCurrentCombinationName(void) const;
+    std::string getCurrentCombinationName(void) const;
+    std::string getCurrentLoadCaseDescription(void) const;
 
     bool existElement(int tag);
     virtual Element *getElement(int tag);

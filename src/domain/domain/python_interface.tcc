@@ -37,6 +37,7 @@ class_<XC::Domain, bases<XC::ObjWithRecorders>, boost::noncopyable >("Domain", n
   .add_property("getMesh", make_function( getMeshRef, return_internal_reference<>() ),"returns finite element mesh.")
   .add_property("getConstraints", make_function( getConstraintsRef, return_internal_reference<>() ),"returns mesh constraints.")
   .add_property("getTimeTracker", make_function( &XC::Domain::getTimeTracker, return_internal_reference<>() ),"returns the pseudo-time tracker of the domain.")
+  .add_property("currentCombinationName", &XC::Domain::getCurrentCombinationName,"returns current combination/load case name.")
   .def("setDeadSRF",XC::Domain::setDeadSRF,"Assigns Stress Reduction Factor for element deactivation.")
   .def("commit",&XC::Domain::commit)
   .def("revertToLastCommit",&XC::Domain::revertToLastCommit)

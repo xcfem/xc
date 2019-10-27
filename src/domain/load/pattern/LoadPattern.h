@@ -170,6 +170,7 @@ class LoadPattern: public NodeLocker
     const MapLoadPatterns *getMapLoadPatterns(void) const;
     MapLoadPatterns *getMapLoadPatterns(void);    
     const std::string &getName(void) const;
+    std::string getFactoredName(void) const;
     inline const std::string &getDescription(void) const
       { return description; }
     inline void setDescription(const std::string &d)

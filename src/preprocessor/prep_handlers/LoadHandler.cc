@@ -120,7 +120,8 @@ int XC::LoadHandler::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
     const int dataTag= getDbTag();
-    inicComm(4);
+    DbTagData &dbTagData= getDbTagData();
+    inicComm(dbTagData.Size());
     int res= sendData(cp);
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
@@ -133,7 +134,8 @@ int XC::LoadHandler::sendSelf(CommParameters &cp)
 //! @brief Receives object through the channel being passed as parameter.
 int XC::LoadHandler::recvSelf(const CommParameters &cp)
   {
-    inicComm(4);
+    DbTagData &dbTagData= getDbTagData();
+    inicComm(dbTagData.Size());
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 

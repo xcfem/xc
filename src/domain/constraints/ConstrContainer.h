@@ -146,6 +146,7 @@ class ConstrContainer: public MeshComponentContainer
     virtual int getNumMPs(void) const;
     virtual int getNumMRMPs(void) const;
     virtual int getNumLoadPatterns(void) const;
+    virtual std::string getActiveLoadCaseDescription(void) const;
     virtual int getNumNodeLockers(void) const;
 
     std::deque<int> getTagsSPsNode(int , int ) const;
