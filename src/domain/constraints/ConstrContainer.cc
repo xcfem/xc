@@ -718,10 +718,11 @@ std::string XC::ConstrContainer::getActiveLoadCaseDescription(void) const
       {
 	MapActiveLoadPatterns<LoadPattern>::const_iterator i= activeLoadPatterns.begin();
 	retval= i->second->getFactoredName();
+	i++;
 	for(;i!=activeLoadPatterns.end();i++)
 	  retval+= '+'+i->second->getFactoredName();
       }
-    return retval;    
+    return retval;
   }
 
 //! @brief Returns the number of node lockers.

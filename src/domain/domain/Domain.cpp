@@ -562,6 +562,7 @@ std::string XC::Domain::getCurrentCombinationName(void) const
       {
 	std::deque<std::string>::const_iterator i= activeCombinations.begin();
 	retval= *i;
+	i++;
 	for(;i!= activeCombinations.end();i++)
 	  retval+= '+'+*i;
       }
