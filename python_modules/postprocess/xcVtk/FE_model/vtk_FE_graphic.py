@@ -13,7 +13,7 @@ from miscUtils import LogMessages as lmsg
 import xc_base
 from vtkUtils import utilsVtk
 from postprocess.xcVtk import vtk_graphic_base
-from postprocess.xcVtk import local_axes_vector_field as lavf
+from postprocess.xcVtk.fields import local_axes_vector_field as lavf
 import random as rd 
 import xc
 
@@ -24,6 +24,7 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
         super(RecordDefDisplayEF,self).__init__()
         self.nodes= None
         self.gridMapper= None
+        
     def VtkDefineElementsActor(self, reprType,field,color=xc.Vector([rd.random(),rd.random(),rd.random()])):
         ''' Define the actor to display elements
 
@@ -188,7 +189,7 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
         self.setupGrid(xcSet)
         self.displayGrid(caption)
         
-    def displayLocalAxes(self,xcSet,caption= 'local axis', vectorScale=1.0):
+    def displayLocalAxes(self,xcSet,caption= 'local axis', vectorScale=1.0, fileName= None, defFScale= 0.0):
         '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
 
         :param xcSet:   set of elements to be displayed (defaults to total set)

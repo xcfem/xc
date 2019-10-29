@@ -196,7 +196,7 @@ class ElasticFoundation(object):
             n.setProp('maxSoilPressure',-1e10)
         #Calculate max. pressures
         for lc in combs:
-            lcs=QGrph.QuickGraphics(FEcase)
+            lcs=QGrph.LoadCaseResults(FEcase)
             lcs.solve(loadCaseName=combs[lc].name,loadCaseExpr=combs[lc].expr)
             reac= self.calcPressures()
             for n in nodSet:

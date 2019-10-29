@@ -14,9 +14,11 @@ import xc
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
 from postprocess.xcVtk.FE_model import Fields
 from postprocess import utils_display
-from postprocess.xcVtk import control_var_diagram as cvd
+from postprocess.xcVtk.diagrams import control_var_diagram as cvd
 from postprocess.xcVtk import vtk_graphic_base
-from postprocess.xcVtk.FE_model import quick_graphics as QGrph
+from postprocess import output_handler as oh
+from model import predefined_spaces
+from PIL import Image
 
 class OuputUnits(object):
     '''Unit for the generation of graphic files report files.
@@ -139,8 +141,17 @@ class RecordDisp(OuputUnits):
     def getDescription(self):
         return ''
 
+    def getOutputHandler(self, setToDisplay):
+        ''' Return an output handler from the set argument.
+            NOT a very elegant solution-> to refactor.'''
+        modelSpace= predefined_spaces.getModelSpaceFromPreprocessor(setToDisplay.getPreprocessor)
+        outputHandler= oh.OutputHandler(modelSpace)
+        outputHandler.outputStyle.cameraParameters= self.cameraParameters
+        return outputHandler
+        
     def displayDispRot(self, fName= None):
-        '''Displays load vectors on the set argument.
+        '''Displays the component of the displacement or rotations
+           on the set argument.
 
         :param setToDisplay: set of elements to be displayed (defaults to total set)
         :param fileName: full name of the graphic file to generate. Defaults to 
@@ -151,36 +162,11 @@ class RecordDisp(OuputUnits):
                       by this factor. (Defaults to 0.0, i.e. display of 
                       initial/undeformed shape)
         '''
-        qg= QGrph.QuickGraphics()
+        # Not a very elegant solution. To enhance.
+        outputHandler= self.getOutputHandler(self.setsToDispDspRot)
         for st in self.setsToDispDspRot:
             for arg in self.listDspRot:
-                if arg[0]=='u':
-                    fcUn= self.unitsScaleDispl
-                    unDesc= self.unitsDispl
-                else:
-                    fcUn= 1.0
-                    unDesc=''
-                qg.displayDispRot(itemToDisp=arg,setToDisplay=st,fConvUnits=fcUn,unitDescription=unDesc,viewDef= self.cameraParameters,fileName= fName)
-
-    def displayLoad(self, setToDisplay, caption= None, fName= None, defFScale= 0.0):
-        '''Displays load vectors on the set argument.
-
-        :param setToDisplay: set of elements to be displayed (defaults to total set)
-        :param caption: text to display in the graphic. Defaults to 
-               ` None` in this case the text is the load case description
-               and the units of the loads.
-        :param fileName: full name of the graphic file to generate. Defaults to 
-               ` None`, in this case it returns a console output graphic.,
-        :param defFScale: factor to apply to current displacement of nodes 
-                      so that the display position of each node equals to
-                      the initial position plus its displacement multiplied
-                      by this factor. (Defaults to 0.0, i.e. display of 
-                      initial/undeformed shape)
-        '''
-        preprocessor= setToDisplay.getPreprocessor
-        if(not caption):
-          caption= 'load case: ' + self.getDescription() + ', set: ' + setToDisplay.name + ', '  + self.unitsLoads
-        QGrph.display_load(preprocessor,setToDisplay= setToDisplay,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads,viewDef= self.cameraParameters, caption= caption,fileName= fName,defFScale= defFScale)
+                outputHandler.displayDispRot(itemToDisp=arg,setToDisplay=st,fileName= fName)
 
     def displayIntForcDiag(self,itemToDisp,fileName=None,defFScale=0.0):
         '''displays the component of internal forces as a 
@@ -197,20 +183,9 @@ class RecordDisp(OuputUnits):
                 by this factor. (Defaults to 0.0, i.e. display of 
                 initial/undeformed shape)
         '''
-        qg= QGrph.QuickGraphics()
+        outputHandler= self.getOutputHandler(self.setsToDispDspRot)
         for st in self.setsToDispIntForc:
-            if itemToDisp[0]=='M':
-                fcUn=self.unitsScaleMom
-                unDesc=self.unitsMom
-                scaleFact=self.scaleDispBeamIntForc[2]
-            else:
-                fcUn=self.unitsScaleForc
-                unDesc=self.unitsForc
-                if itemToDisp[0]=='N':
-                  scaleFact=self.scaleDispBeamIntForc[0]
-                else:
-                  scaleFact=self.scaleDispBeamIntForc[1]
-            qg.displayIntForcDiag(itemToDisp= itemToDisp,setToDisplay= st,fConvUnits= self.unitsScaleLoads,scaleFactor= scaleFact, unitDescription= unDesc, viewDef= self.cameraParameters, fileName= fileName, defFScale= defFScale)
+            qg.displayIntForcDiag(itemToDisp= itemToDisp,setToDisplay= st,fileName= fileName, defFScale= defFScale)
 
     def dispLoadCaseBeamEl(self, setToDisplay,caption= None,fileName=None,defFScale=0.0):
         '''Display the loads applied on beam elements and nodes for a given load case
@@ -225,10 +200,10 @@ class RecordDisp(OuputUnits):
                   by this factor. (Defaults to 0.0, i.e. display of 
                   initial/undeformed shape)
         '''
-        qg= QGrph.QuickGraphics()
+        outputHandler= self.getOutputHandler(self.setsToDispDspRot)
         if(not caption):
           caption= 'load case: ' + self.getDescription() + ', set: ' + setToDisplay.name + ', '  + self.unitsLoads
-        qg.dispLoadCaseBeamEl(loadCaseName=self.loadCaseName,setToDisplay=setToDisplay,fUnitConv=self.unitsScaleLoads,elLoadComp=self.compElLoad,elLoadScaleF=self.vectorScaleLoads,nodLoadScaleF=self.vectorScalePointLoads,viewDef= self.cameraParameters, caption= caption, fileName= fileName)
+        outputHandler.dispLoads(setToDisplay=setToDisplay,elLoadComp=self.compElLoad,caption= caption, fileName= fileName, defFScale= defFScale)
 
     def displayLoadOnSets(self, caption= None, fName= None, defFScale= 0.0):
         '''Displays load vectors for each of the sets in self.setsToDispLoads
@@ -244,10 +219,11 @@ class RecordDisp(OuputUnits):
                       by this factor. (Defaults to 0.0, i.e. display of 
                       initial/undeformed shape)
         '''
+        outputHandler= self.getOutputHandler(self.setsToDispDspRot)
         for st in self.setsToDispLoads:
-          self.displayLoad(setToDisplay= st,caption= caption,fName= fName,defFScale= defFScale)
+          outputHandler.displayLoads(setToDisplay= st,caption= caption,fName= fName,defFScale= defFScale)
         for st in self.setsToDispBeamLoads:
-          self.dispLoadCaseBeamEl(setToDisplay=st, fileName= fName, defFScale= defFScale)
+          outputHandler.displayLoads(setToDisplay=st, fileName= fName, defFScale= defFScale)
 
     def displayReactionsOnSets(self, fileName=None,defFScale=0.0):
         '''displays the reactions as vector on affected nodes
@@ -260,11 +236,9 @@ class RecordDisp(OuputUnits):
                 by this factor. (Defaults to 0.0, i.e. display of 
                 initial/undeformed shape)
         '''
-        qg= QGrph.QuickGraphics()
+        outputHandler= self.getOutputHandler(self.setsToDispDspRot)
         for st in self.setsToDispReactions:
-            unDesc= '[m,kN]'
-            scaleFact= self.scaleDispReactions[0]
-            qg.displayReactions(setToDisplay= st,fConvUnits= self.unitsScaleLoads,scaleFactor= scaleFact, unitDescription= unDesc, viewDef= self.cameraParameters, fileName= fileName, defFScale= defFScale)
+            outputHandler.displayReactions(setToDisplay= st, fileName= fileName, defFScale= defFScale)
             
     def displayEigenvectorsOnSets(self, eigenMode, fileName=None,defFScale=0.0):
         '''displays the reactions as vector on affected nodes
@@ -277,11 +251,8 @@ class RecordDisp(OuputUnits):
                 by this factor. (Defaults to 0.0, i.e. display of 
                 initial/undeformed shape)
         '''
-        qg= QGrph.QuickGraphics()
-        for st in self.setsToDispEigenvectors:
-            unDesc= ''
-            scaleFact= self.scaleDispEigenvectors[0]
-            qg.displayEigenvectors(setToDisplay= st,fConvUnits= 1.0,scaleFactor= scaleFact, viewDef= self.cameraParameters, fileName= fileName, defFScale= defFScale)
+        outputHandler= self.getOutputHandler(self.setsToDispEigenvectors[0])
+        outputHandler.displayEigenvectorsOnSets(eigenMode,self.setsToDispEigenvectors, fileName,defFScale)
 
 class RecordLoadCaseDisp(RecordDisp):
   '''Generation of graphic files and adding to report-tex files for a load case
@@ -316,20 +287,25 @@ class RecordLoadCaseDisp(RecordDisp):
       '''
       preprocessor=FEcase.getPreprocessor
       labl=self.loadCaseName
+      lcs=QGrph.LoadCaseResults(FEcase)
       for st in self.setsToDispLoads:
-        grfname=pathGr+self.loadCaseName+st.name
-        capt=self.getDescription() + ', ' + st.description + ', '  + self.unitsLoads
-        QGrph.display_load(preprocessor=preprocessor,setToDisplay=st,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads, viewDef= self.cameraParameters,caption= capt,fileName=grfname+'.jpg')
-        QGrph.display_load(preprocessor=preprocessor,setToDisplay=st,loadCaseNm=self.loadCaseName,unitsScale=self.unitsScaleLoads,vectorScale=self.vectorScaleLoads, multByElemArea=self.multByElemAreaLoads, viewDef= self.cameraParameters,caption= capt,fileName=grfname+'.eps')
-        insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt,labl=labl) 
+          grfname=pathGr+self.loadCaseName+st.name
+          capt= self.getDescription() + ', ' + st.description + ', '  + self.unitsLoads
+          jpegFileName= grfname+'.jpg'
+          lcs.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)
+          epsFileName= grfname+'.eps'
+          im= Image.open(jpegFileName)
+          im.save(epsFileName)
+          insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt,labl=labl) 
       for st in self.setsToDispBeamLoads:
-        grfname=pathGr+self.loadCaseName+st.name
-        capt=self.getDescription() + ', ' + st.description + ', '  + self.unitsLoads
-        lcs=QGrph.LoadCaseResults(FEcase)
-        lcs.dispLoadCaseBeamEl(loadCaseName=self.loadCaseName,setToDisplay=st,fUnitConv=self.unitsScaleLoads,elLoadComp=self.compElLoad,elLoadScaleF=self.vectorScaleLoads,nodLoadScaleF=self.vectorScalePointLoads, viewDef= self.cameraParameters,caption= capt,fileName=grfname+'.jpg')
-        lcs.dispLoadCaseBeamEl(loadCaseName=self.loadCaseName,setToDisplay=st,fUnitConv=self.unitsScaleLoads,elLoadComp=self.compElLoad,elLoadScaleF=self.vectorScaleLoads,nodLoadScaleF=self.vectorScalePointLoads, viewDef= self.cameraParameters,caption= capt,fileName=grfname+'.eps')
-        insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt,labl=labl) 
-      return
+          grfname=pathGr+self.loadCaseName+st.name
+          capt=self.getDescription() + ', ' + st.description + ', '  + self.unitsLoads
+          jpegFileName= grfname+'.jpg'
+          lcs.displayLoads(elLoadComp=self.compElLoad,setToDisplay=st,caption= capt,fileName=jpegFileName)
+          epsFileName= grfname+'.eps'
+          im= Image.open(jpegFileName)
+          im.save(epsFileName)
+          insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt,labl=labl) 
 
   def simplLCReports(self,FEproblem,pathGr,texFile,grWdt,capStdTexts):
       '''Creates the graphics files of displacements and internal forces 
@@ -348,52 +324,37 @@ class RecordLoadCaseDisp(RecordDisp):
       #Displacements and rotations displays
       for st in self.setsToDispDspRot:
           for arg in self.listDspRot:
-              if arg[0]=='u':
-                  fcUn=self.unitsScaleDispl
-                  unDesc=self.unitsDispl
-              else:
-                  fcUn=1.0
-                  unDesc=''
               grfname=pathGr+self.loadCaseName+st.name+arg
-              lcs.displayDispRot(itemToDisp=arg,setToDisplay=st,fConvUnits=fcUn,unitDescription=unDesc, viewDef= self.cameraParameters,fileName=grfname+'.jpg')
-              lcs.displayDispRot(itemToDisp=arg,setToDisplay=st,fConvUnits=fcUn,unitDescription=unDesc, viewDef= self.cameraParameters,fileName=grfname+'.eps')
+              jpegFileName= grfname+'.jpg'
+              lcs.displayDispRot(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
+              epsFileName= grfname+'.eps'
+              im= Image.open(jpegFileName)
+              im.save(epsFileName)
               capt=self.getDescription() + '. ' + st.description.capitalize() + ', ' + capStdTexts[arg] + ' ' + unDesc
               insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt)
       #Internal forces displays on sets of «shell» elements
       for st in self.setsToDispIntForc:
           for arg in self.listIntForc:
-              if arg[0]=='M':
-                  fcUn=self.unitsScaleMom
-                  unDesc=self.unitsMom
-              else:
-                  fcUn=self.unitsScaleForc
-                  unDesc=self.unitsForc
               grfname=pathGr+self.loadCaseName+st.name+arg
-              lcs.displayIntForc(itemToDisp=arg,setToDisplay=st,fConvUnits= fcUn,unitDescription=unDesc, viewDef= self.cameraParameters,fileName=grfname+'.jpg')
-              lcs.displayIntForc(itemToDisp=arg,setToDisplay=st,fConvUnits= fcUn,unitDescription=unDesc, viewDef= self.cameraParameters,fileName=grfname+'.eps')
-              capt=self.getDescription() + '. ' + st.description.capitalize() + ', ' + capStdTexts[arg] + ' ' + unDesc
+              jpegFileName= grfname+'.jpg'
+              lcs.displayIntForc(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
+              epsFileName= grfname+'.eps'
+              im= Image.open(jpegFileName)
+              im.save(epsFileName)
+              capt= self.getDescription() + '. ' + st.description.capitalize() + ', ' + capStdTexts[arg] + ' ' + unDesc
               insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt)
       #Internal forces displays on sets of «beam» elements
       for st in self.setsToDispBeamIntForc:
           for arg in self.listBeamIntForc:
-              if arg[0]=='M':
-                  fcUn=self.unitsScaleMom
-                  unDesc=self.unitsMom
-                  scaleFact=self.scaleDispBeamIntForc[2]
-              else:
-                  fcUn=self.unitsScaleForc
-                  unDesc=self.unitsForc
-                  if arg[0]=='N':
-                    scaleFact=self.scaleDispBeamIntForc[0]
-                  else:
-                    scaleFact=self.scaleDispBeamIntForc[1]
               grfname=pathGr+self.loadCaseName+st.name+arg
-              lcs.displayIntForcDiag(itemToDisp=arg,setToDisplay=st,fConvUnits= fcUn,scaleFactor=scaleFact,unitDescription=unDesc, viewDef= self.cameraParametersBeams,fileName=grfname+'.jpg')
-              lcs.displayIntForcDiag(itemToDisp=arg,setToDisplay=st,fConvUnits= fcUn,scaleFactor=scaleFact,unitDescription=unDesc, viewDef= self.cameraParametersBeams,fileName=grfname+'.eps')
+              jpegFileName= grfname+'.jpg'
+              lcs.displayIntForcDiag(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
+              epsFileName= grfname+'.eps'
+              im= Image.open(jpegFileName)
+              im.save(epsFileName)
               capt=self.getDescription() + '. ' + st.description.capitalize() + ', ' + capStdTexts[arg] + ' ' + unDesc
               insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=grWdt,capText=capt)
       texFile.write('\\clearpage\n')
-      return
 
 
 def checksReports(limitStateLabel,setsShEl,argsShEl,capTexts,pathGr,texReportFile,grWdt,setsBmElView=[],argsBmElScale=[]):
@@ -483,9 +444,4 @@ def getRecordLoadCaseDispFromLoadPattern(loadPattern, unitsScaleLoads= 1e-3, uni
         setsToDispIntForc= [xcTotalSet]
   name= loadPattern.name
   retval= RecordLoadCaseDisp(name,loadPattern.description,'1.0*'+name,setsToDispLoads,setsToDispDspRot,setsToDispIntForc)
-  retval.unitsScaleLoads=1e-3
-  retval.unitsScaleForc=1e-3
-  retval.unitsScaleMom=1e-3
-  retval.unitsScaleDispl=1e3
-  retval.unitsDispl='[mm]'
   return retval

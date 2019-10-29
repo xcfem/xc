@@ -11,7 +11,7 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import vtk
 from miscUtils import LogMessages as lmsg
-from postprocess.xcVtk import field_base as fb
+from postprocess.xcVtk.fields import field_base as fb
 from postprocess import extrapolate_elem_attr
 from postprocess import control_vars as cv
 

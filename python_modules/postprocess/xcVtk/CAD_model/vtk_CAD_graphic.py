@@ -13,7 +13,7 @@ import vtk
 from postprocess.xcVtk import cad_mesh
 from postprocess.xcVtk import vtk_graphic_base
 from miscUtils import LogMessages as lmsg
-from postprocess.xcVtk import local_axes_vector_field as lavf
+from postprocess.xcVtk.fields import local_axes_vector_field as lavf
 
 class RecordDefDisplayCAD(vtk_graphic_base.RecordDefDisplay):
     ''' Define graphic output.'''
