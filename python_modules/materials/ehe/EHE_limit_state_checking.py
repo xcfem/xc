@@ -1509,3 +1509,133 @@ class BlockMember(object):
         :param fyd: steel yield strength.
       '''
       return self.getUbd(Nd)/min(fyd,400e6)
+
+
+class LongShearJoints(object):
+    '''Verification of ultimate limit state due to longitudinal shear stress 
+    at joints between concretes according to art. 47 EHE.
+    
+    :ivar concrete: weakest EHE concrete type (ex: EHE_materials.HA25)
+    :ivar reinfsteel: EHE reinforcing steel (ex: EHE_materials.B500S)
+    :ivar contactSurf: Contact surface per unit length. This shall not extend 
+                      to zones where the penetrating width is less than 20 mm 
+                      or the maximum diameter of the edge or with a cover of 
+                      less than 30 mm
+    :ivar roughness: roughness of surface ('L' for low degree of roughness,
+                     'H' for high degree of roughness). Defaults to 'L'
+    :ivar dynamic: low fatigue or dynamic stresses consideration ('Y' if
+                  considered, 'N' for not considered). Defaults to 'N'
+    :ivar sigma_cd: External design tensile stress perpendicular to the plane of the joint.
+                    (<0 for compression tensions) (if sigma_cd > 0, beta, fct_d=0). 
+                    Defaults to 0.
+    :ivar Ast: Cross-section of effectively anchored steel bars, closing 
+               the joint (area of 1 those rebars, spacement is given also as a 
+               parameter). Defaults to None = no reinforcement, in this case 
+               all parameters attached to reinforcement are ignored .
+    :ivar spacement: distance between the closing bars along the joint plane.
+                     (defaults to None)
+    :ivar angRebars: Angle formed by the joining bars with the plane of the joint (degrees). 
+                   Reinforcements with α > 135° or α < 45° shall not be incorporated.
+                   Defaults to 90º
+    '''
+
+    def __init__(self,concrete,reinfsteel,contactSurf,roughness='L',dynamic='N',sigma_cd=0,Ast=None,spacement=None,angRebars=90):
+        self.concrete=concrete
+        self.reinfsteel=reinfsteel
+        self.contactSurf=contactSurf
+        self.roughness=roughness
+        self.dynamic=dynamic
+        self.sigma_cd=sigma_cd
+        self.Ast=Ast
+        self.spacement=spacement
+        self.angRebars=angRebars
+
+    def getBetaCoef(self):
+        ''' Return beta coefficient depending on the roughness of contact surfaces 
+        (art. 47.2.1 EHE and table 47.2.2.2):
+
+              -0.80 in rough contact surfaces of composite sections that are 
+              interconnected so that one composite section may not overhang the 
+              other, for example, are dovetailed, and if the surface is open and 
+              rough, e.g. like joists as left by a floor laying machine.
+              -0.40 in intentionally rough surfaces with a high degree of roughness.
+              -0.20 in unintentionally rough surfaces with a low degree of roughness
+              - at low fatigue or dynamic stresses beta shall be reduced by 50%.
+        '''
+        if self.sigma_cd > 0: #tension
+            beta=0
+        else:
+            if self.roughness[0].lower()=='l':
+                beta=0.2
+            else:
+                beta=0.8
+            if self.dynamic[0].lower()=='y':
+                beta*=0.5
+        return beta
+    
+    def getUltShearStressWithoutReinf(self):
+        '''Return the ultimate longitudinal shear stress in a section 
+        without any transverse reinforcement
+        '''
+        beta=self.getBetaCoef()
+        tao_ru_1=beta*(1.30-0.30*abs(self.concrete.fck*1e-6)/25.)*self.concrete.fctd()
+        tao_ru_2=0.7*beta*self.concrete.fctd()
+        return max(tao_ru_1,tao_ru_2)
+
+    def getMuCoefCase1(self):
+        ''' Return mu coefficient depending of roughness, for calculation of ultimate shear 
+        stress at a joint in case 1 (art. 47.2.1 EHE, table 47.2.2.2):
+        '''
+        if self.roughness[0].lower()=='l':
+            mu=0.3
+        else:
+            mu=0.6
+        return mu
+
+    def getMuCoefCase2(self):
+        ''' Return mu coefficient depending of roughness, for calculation of ultimate shear 
+        stress at a joint in case 2 (art. 47.2.1 EHE, table 47.2.2.2):
+        '''
+        if self.roughness[0].lower()=='l':
+            mu=0.6
+        else:
+            mu=0.9
+        return mu
+
+    def getUltShearStressWithReinf(self,tao_rd):
+        '''Return the ultimate longitudinal shear stress at a joint between
+           concrete sections with transverse reinforcement.
+
+        :param tao_rd: design longitudinal shear stress at a joint between
+                       concrete.
+        '''
+        beta=self.getBetaCoef()
+        compVal=2.5*beta*(1.30-0.30*abs(self.concrete.fck*1e-6)/25.)*self.concrete.fctd()
+        alpha=math.radians(self.angRebars)
+        f_yalphd=min(self.reinfsteel.fyd(),400e6)
+        if tao_rd <= compVal:  #case 1
+            mu=self.getMuCoefCase1()
+            term1=compVal/2.5
+        else: #case 2
+            mu=self.getMuCoefCase2()
+        term_aux=mu*math.sin(alpha)+math.cos(alpha)
+        tao_ru=self.Ast/(self.spacement*self.contactSurf)*f_yalphd*term_aux-mu*self.sigma_cd
+        if tao_rd <= compVal:
+            tao_ru+=compVal/2.5
+        tao_ru_max=0.25*abs(self.concrete.fcd())
+        return min(tao_ru, tao_ru_max)
+
+    def checkShearStressJoints(self,tao_rd):
+        '''Verify the ultimate limit state due to longitudinal shear stress.
+
+        :param tao_rd: design longitudinal shear stress at a joint between
+                       concrete.
+        '''
+        if self.Ast > 0:
+            tao_ru=self.getUltShearStressWithReinf(tao_rd)
+        else:
+            tao_ru=self.getUltShearStressWithoutReinf()
+        if tao_rd<=tao_ru:
+            print ("OK!")
+
+

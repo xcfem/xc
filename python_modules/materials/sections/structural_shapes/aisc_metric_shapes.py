@@ -1021,7 +1021,9 @@ for item in HSS:
   shape['G']= shape['E']/(2*(1+shape['nu']))
   shape['AreaQz']= 2*0.7*shape['b_flat']*shape['t']
   shape['AreaQy']= 2*0.7*shape['h_flat']*shape['t']
-
+  shape['Avz']=shape['AreaQz']
+  shape['Avy']=shape['AreaQy']
+  
 from materials.sections import structural_steel
 
 class WShape(structural_steel.IShape):
