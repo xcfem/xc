@@ -11,7 +11,7 @@ from miscUtils import LogMessages as lmsg
 from postprocess.xcVtk import vtk_graphic_base
 from postprocess.xcVtk.CAD_model import vtk_CAD_graphic
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
-from postprocess.xcVtk.FE_model import Fields
+from postprocess.xcVtk.fields import Fields
 from postprocess.xcVtk.fields import vector_field as vf
 from postprocess.xcVtk.fields import load_vector_field as lvf
 from postprocess.xcVtk.diagrams import control_var_diagram as cvd
@@ -289,7 +289,7 @@ class OutputHandler(object):
             scaleFactor*=0.15*LrefModSize/(maxAbs*fConvUnits)
         loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
         captionText= loadCaseName+' '+itemToDisp+' '+unitDescription +' '+setToDisplay.description
-        diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[setToDispRes],attributeName= attributeName,component= component)
+        diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[setToDisplay],attributeName= "intForce",component= itemToDisp)
         diagram.addDiagram()
         defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
         defDisplay.cameraParameters= self.getCameraParameters()

@@ -387,3 +387,49 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
             sp= spIter.next()
         return
                     
+def VtkCargaIdsNodes(recordGrid):
+    '''Not yet implemented.'''
+    VtkCreaStrArraySetData(recordGrid.setName,"nodes","etiqNod","tag")()
+    nmbUGrid.GetPointData().SetStrings(etiqNod)
+
+def VtkDibujaIdsNodes(recordGrid, renderer):
+    '''Display node labels (not implemented yet)'''
+    ids= vtk.vtkIdFilter()
+    ids.SetInput(recordGrid.uGrid)
+    ids.CellIdsOff()
+    ids.PointIdsOff()
+
+    VtkCargaIdsNodes(recordGrid)
+
+    visPts= vtk.vtkSelectVisiblePoints()
+    visPts.SetInput("ids")
+    visPts.SetRenderer(renderer)
+    visPts.SelectionWindowOff()
+
+    #Create the mapper to display the point ids.  Specify the format to
+    #   use for the labels.  Also create the associated actor.
+    ldm= vtk.vtkLabeledShStrMapper()
+    ldm.SetInput("visPts")
+    ldm.LabelTextProperty().SetColor(0.1,0.1,0.1)
+    nodeLabels= vtk.vtkActor2D().SetMapper(ldm)
+    renderer.AddActor2D(nodeLabels)
+
+def VtkDibujaIdsElementos(ids):
+    '''Dibuja las etiquetas de los elementos. Not implemented yet.'''
+    cc= vtk.vtkCellCenters()
+    vtk.SetInput(ids) #  Centroides de las celdas. 
+
+    visCells= vtk.vtkSelectVisiblePoints()
+    visCells.SetInput(cc)
+    visCells.SetRenderer("renderer")
+    visCells.SelectionWindowOff()
+
+    #Create the mapper to display the cell ids.  Specify the format to
+    # use for the labels.  Also create the associated actor.
+
+    cellMapper= vtk.vtkLabeledShStrMapper
+    cellMapper.SetInput(visCells)
+    cellMapper.LabelTextProperty().SetColor(0,0,0.9)
+
+    cellLabels= vtk.vtkActor2D()
+    cellLabels.SetMapper(cellMapper)

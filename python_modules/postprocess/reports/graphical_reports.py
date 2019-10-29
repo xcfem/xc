@@ -12,7 +12,7 @@ import xc_base
 import geom
 import xc
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
-from postprocess.xcVtk.FE_model import Fields
+from postprocess.xcVtk.fields import Fields
 from postprocess import utils_display
 from postprocess.xcVtk.diagrams import control_var_diagram as cvd
 from postprocess.xcVtk import vtk_graphic_base
