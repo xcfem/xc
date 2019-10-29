@@ -983,9 +983,10 @@ def extrapolate_control_var(elemSet,propName,argument,initialValue= 0.0):
         for i in range(0,sz):
             n= elemNodes[i]
             controlVar= e.getProp(propName)
-            value= controlVar(argument)
-            oldValue= n.getProp(nodePropName)
-            n.setProp(nodePropName,oldValue+value)
+            if(controlVar):
+                value= controlVar(argument)
+                oldValue= n.getProp(nodePropName)
+                n.setProp(nodePropName,oldValue+value)
     #Divide by number of elements in the set that touch the node.
     preprocessor= elemSet.owner.getPreprocessor
     for tag in nodeTags:
