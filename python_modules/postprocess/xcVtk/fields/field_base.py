@@ -9,7 +9,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import vtk
-from postprocess.xcVtk import vtk_lut_field
+from postprocess.xcVtk.fields import vtk_lut_field
 
 class FieldBase(vtk_lut_field.LUTField):
   '''Scalar field defined at nodes.'''

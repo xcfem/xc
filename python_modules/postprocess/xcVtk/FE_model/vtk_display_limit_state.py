@@ -10,7 +10,7 @@ __email__= "ana.Ortega@ciccp.es    l.pereztato@ciccp.es"
 
 from postprocess.xcVtk import vtk_graphic_base
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
-from postprocess.xcVtk.FE_model import Fields
+from postprocess.xcVtk.fields import Fields
 
 def displayFieldDirs1and2Base(limitStateLabel,argument,elementSet,genDescr,sectDescr,component,fUnitConv,fileName,captionTexts,defFScale=0.0,viewDef= vtk_graphic_base.CameraParameters('XYZPos'),rgMinMax=None):
   '''Display a field defined over bi-dimensional elements in its two directions.

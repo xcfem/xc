@@ -220,7 +220,7 @@ class WallStabilityResults(object):
     outputFile.write("\\hline\n")
     outputFile.write("Overturning:  & " + fmt.Factor.format(self.Foverturning) +" & 1.00 & "+self.FoverturningComb+'\\\\\n')
     outputFile.write("Sliding:  & " + fmt.Factor.format(self.Fsliding) +" & 1.00 & "+self.FslidingComb+'\\\\\n')
-    outputFile.write("Bearign capacity:  & " + fmt.Factor.format(self.Fbearing) +" & 1.00 & "+self.FbearingComb+'\\\\\n')
+    outputFile.write("Bearing capacity:  & " + fmt.Factor.format(self.Fbearing) +" & 1.00 & "+self.FbearingComb+'\\\\\n')
     if(self.FadmPressureComb!=''):
       outputFile.write("Adm. pressure:  & " + fmt.Factor.format(self.FadmPressure) +" & 1.00 & "+self.FadmPressureComb+'\\\\\n')
     outputFile.write("\\hline\n")
@@ -369,7 +369,7 @@ class StemReinforcement(ReinforcementMap):
     CExtStemBottom= self.getSectionExtStemBottom()
     VdMaxEncastrement= self.wallGeom.internalForcesULS.VdMaxEncastrement(self.wallGeom.stemBottomWidth)
     MdMaxEncastrement= self.wallGeom.internalForcesULS.MdMaxEncastrement(self.wallGeom.footingThickness)
-    outputFile.write("\\textbf{Reinforcement "+str(self.extStemBottomIndex)+" (ouside reinforcement dowels) :} \\\\\n")
+    outputFile.write("\\textbf{Reinforcement "+str(self.extStemBottomIndex)+" (outside reinforcement dowels) :} \\\\\n")
     NdEncastrement= 0.0 #we neglect axial force
     CExtStemBottom.writeResultFlexion(outputFile,NdEncastrement, MdMaxEncastrement,VdMaxEncastrement)
     CExtStemBottom.writeResultStress(outputFile,MdMaxEncastrement)
@@ -900,13 +900,13 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     '''Solution and result retrieval routine.'''
     preprocessor= self.feProblem.getPreprocessor   
     preprocessor.resetLoadCase()
-    preprocessor.getLoadHandler.getLoadCombinations.addToDomain(nmbComb)
+    preprocessor.getLoadHandler.addToDomain(nmbComb)
     #Solution
     solution= predefined_solutions.SolutionProcedure()
     analysis= solution.simpleStaticLinear(self.feProblem)
     result= analysis.analyze(1)
     reactions= self.getReactions()
-    preprocessor.getLoadHandler.getLoadCombinations.removeFromDomain(nmbComb)
+    preprocessor.getLoadHandler.removeFromDomain(nmbComb)
     return reactions
   
   def performStabilityAnalysis(self,combinations,foundationSoilModel, sg_adm= None): 

@@ -25,10 +25,18 @@ class PredefinedSpace(object):
         self.setPreprocessor(nodes.getPreprocessor)
         nodes.dimSpace= dimSpace
         nodes.numDOFs= numDOFs
-        # Graphic stuff.
-        self.cameraParameters= None
-        self.outputUnits=None
 
+    def getIntForceComponentFromName(self,componentName):
+        if componentName[0] in ['N','M']:
+            return componentName.lower()
+        elif componentName == 'Q1':
+            return 'q13'
+        elif componentName == 'Q2':
+            return 'q23'
+        else: #LCPT I don't like this too much, I prefer let the user make the program to crass. Maybe a Warning? 
+            lmsg.error('Item '+str(componentName) +'is not a valid component. Available components are: N1, N2, N12, M1, M2, M12, Q1, Q2')
+            return 'N1'
+        
     def setPreprocessor(self,preprocessor):
         '''Sets suitable values for the members from the dimension of the space 
          and the number of DOFs for each node obtained from the argument.
@@ -38,6 +46,10 @@ class PredefinedSpace(object):
         self.preprocessor= preprocessor
         self.constraints= self.preprocessor.getBoundaryCondHandler
 
+    def getSpaceDimension(self):
+        ''' Return the dimensions of the problem space.'''
+        return self.preprocessor.getNodeHandler.dimSpace
+    
     def setPrescribedDisplacements(self,nodeTag,prescDisplacements):
         '''Prescribe displacement for node DOFs.
 
@@ -215,128 +227,6 @@ class PredefinedSpace(object):
         '''Return the set that contains all the defined
            entities.'''
         return self.preprocessor.getSets.getSet("total")
-
-    def getDefaultCameraParameters(self):
-        '''Return the default camera parameters.'''
-        from postprocess.xcVtk import vtk_graphic_base # avoid import if not needed
-        return vtk_graphic_base.CameraParameters('XYZPos')
-
-    def getDefaultOuputUnits(self):
-        ''' Default output units conversion'''
-        return OuputUnits(1e-3,'kN',1.0,'m',1e3,'mm',1e3,'x1E3 rad')
-
-    def displayBlocks(self, setToDisplay= None, caption= None):
-        '''Display the blocks (points, lines, surfaces and volumes)
-           of the set.
-
-           :param setToDisplay: set to display.
-           :param caption: title of the graphic.
-        '''
-        from postprocess.xcVtk.CAD_model import vtk_CAD_graphic  # avoid import if not needed
-        if(setToDisplay==None):
-            setToDisplay= self.getTotalSet()
-        if(caption==None):
-            caption= setToDisplay.name+' set; blocks'
-        if(self.cameraParameters==None):
-            self.cameraParameters= self.getDefaultCameraParameters()
-        defDisplay= vtk_CAD_graphic.RecordDefDisplayCAD()
-        defDisplay.cameraParameters= self.cameraParameters
-        defDisplay.displayBlocks(setToDisplay,caption= caption)
-
-    def displayFEMesh(self, setsToDisplay= None, caption= None, scaleConstr=0.20):
-        '''Display the mesh (nodes, elements and constraints)
-           of the set.
-
-           :param setToDisplay: set to display.
-           :param caption: title of the graphic.
-        '''
-        from postprocess.xcVtk.FE_model import vtk_FE_graphic # avoid import if not needed
-        if(setsToDisplay==None):
-            setsToDisplay= [self.getTotalSet()]
-        if(caption==None):
-            caption= 'mesh'
-        if(self.cameraParameters==None):
-            self.cameraParameters= self.getDefaultCameraParameters()
-        defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-        defDisplay.cameraParameters= self.cameraParameters
-        defDisplay.displayMesh(xcSets=setsToDisplay,caption= caption, scaleConstr=scaleConstr)
-        
-    def displayLocalAxes(self, vectorScale=1.0, setToDisplay= None, caption= None):
-        '''Display the local axes of the elements contained in the set.
-
-           :param setToDisplay: set to display.
-           :param caption: title of the graphic.
-           :param vectorScale: scale factor applied to the vectors.
-        '''
-        from postprocess.xcVtk.FE_model import vtk_FE_graphic # avoid import if not needed
-        if(setToDisplay==None):
-            setToDisplay= self.getTotalSet()
-        if(caption==None):
-            caption= setToDisplay.name+' set; local axes'
-        if(self.cameraParameters==None):
-            self.cameraParameters= self.getDefaultCameraParameters()
-        defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-        defDisplay.cameraParameters= self.cameraParameters
-        defDisplay.displayLocalAxes(setToDisplay,caption= caption, vectorScale= vectorScale)
-
-    def displayStrongWeakAxis(self, vectorScale= 1.0, setToDisplay= None, caption= None):
-        '''Display the local axes of the elements contained in the set.
-
-           :param setToDisplay: set to display.
-           :param caption: title of the graphic.
-           :param vectorScale: scale factor applied to the vectors.
-        '''
-        from postprocess.xcVtk.FE_model import vtk_FE_graphic # avoid import if not needed
-        if(setToDisplay==None):
-            setToDisplay= self.getTotalSet()
-        if(caption==None):
-            caption= setToDisplay.name+' set; strong and weak axis'
-        if(self.cameraParameters==None):
-            self.cameraParameters= self.getDefaultCameraParameters()
-        defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-        defDisplay.cameraParameters= self.cameraParameters
-        defDisplay.displayStrongWeakAxis(setToDisplay,caption= caption, vectorScale= vectorScale)
-        
-    def initQGraph(self,setToDisplay):
-        '''Initialize a quick graphic'''
-        from postprocess.xcVtk.FE_model import quick_graphics as QGrph
-        if(setToDisplay==None):
-            setToDisplay= self.getTotalSet()
-        if(self.cameraParameters==None):
-            self.cameraParameters= self.getDefaultCameraParameters()
-        if(self.outputUnits==None):
-            self.outputUnits= self.getDefaultOuputUnits()
-        return setToDisplay,QGrph.QuickGraphics()
-        
-    def displayUx(self,setToDisplay= None):
-        '''Display results in X-displacement from a load case previously calculated'''
-        setToDisplay,gr=self.initQGraph(setToDisplay)
-        gr.displayDispRot(itemToDisp='uX',setToDisplay=setToDisplay,fConvUnits=self.outputUnits.scaleUnitsDispl,unitDescription=self.outputUnits.textUnitsDispl,viewDef=self.cameraParameters)
-        
-    def displayUy(self,setToDisplay= None):
-        '''Display results in Y-displacement from a load case previously calculated'''
-        setToDisplay,gr=self.initQGraph(setToDisplay)
-        gr.displayDispRot(itemToDisp='uY',setToDisplay=setToDisplay,fConvUnits=self.outputUnits.scaleUnitsDispl,unitDescription=self.outputUnits.textUnitsDispl,viewDef=self.cameraParameters)
-        
-    def displayUz(self,setToDisplay= None):
-        '''Display results in Z-displacement from a load case previously calculated'''
-        setToDisplay,gr=self.initQGraph(setToDisplay)
-        gr.displayDispRot(itemToDisp='uZ',setToDisplay=setToDisplay,fConvUnits=self.outputUnits.scaleUnitsDispl,unitDescription=self.outputUnits.textUnitsDispl,viewDef=self.cameraParameters)
-        
-    def displayRotX(self,setToDisplay= None):
-        '''Display results in X-rotation from a load case previously calculated'''
-        setToDisplay,gr=self.initQGraph(setToDisplay)
-        gr.displayDispRot(itemToDisp='rotX',setToDisplay=setToDisplay,fConvUnits=self.outputUnits.scaleUnitsRot,unitDescription=self.outputUnits.textUnitsRot,viewDef=self.cameraParameters)
-
-    def displayRotY(self,setToDisplay= None):
-        '''Display results in X-rotation from a load case previously calculated'''
-        setToDisplay,gr=self.initQGraph(setToDisplay)
-        gr.displayDispRot(itemToDisp='rotY',setToDisplay=setToDisplay,fConvUnits=self.outputUnits.scaleUnitsRot,unitDescription=self.outputUnits.textUnitsRot,viewDef=self.cameraParameters)
-
-    def displayRotZ(self,setToDisplay= None):
-        '''Display results in X-rotation from a load case previously calculated'''
-        setToDisplay,gr=self.initQGraph(setToDisplay)
-        gr.displayDispRot(itemToDisp='rotZ',setToDisplay=setToDisplay,fConvUnits=self.outputUnits.scaleUnitsRot,unitDescription=self.outputUnits.textUnitsRot,viewDef=self.cameraParameters)
         
 
 def getModelSpace(preprocessor):
@@ -362,6 +252,18 @@ class SolidMechanics2D(PredefinedSpace):
         self.Ux= 0
         self.Uy= 1
         
+    def getDispComponentFromName(self,compName):
+        '''Return the component index from the
+           displacement name.'''
+        retval= 0
+        if compName == 'uX':
+            retval= self.Ux
+        elif compName == 'uY':
+            retval= self.Uy
+        else:
+            lmsg.error('Item '+str(compName) +'is not a valid component. Available components are: uX, uY')
+        return retval
+
     def getDisplacementDOFs(self):
         ''' Return the indices of the displacement DOFs.'''
         return [self.Ux,self.Uy]
@@ -395,6 +297,20 @@ class StructuralMechanics2D(PredefinedSpace):
         self.Ux= 0
         self.Uy= 1
         self.Theta= 2
+        
+    def getDispComponentFromName(self,compName):
+        '''Return the component index from the
+           displacement name.'''
+        retval= 0
+        if compName == 'uX':
+            retval= self.Ux
+        elif compName == 'uY':
+            retval= self.Uy
+        elif compName == 'rotZ':
+            retval= self.Theta
+        else:
+            lmsg.error('Item '+str(compName) +'is not a valid component. Available components are: uX, uY, rotZ')
+        return retval
         
     def getDisplacementDOFs(self):
         ''' Return the indices of the displacement DOFs.'''
@@ -490,13 +406,6 @@ class StructuralMechanics2D(PredefinedSpace):
             nodeTag= line.getNodeI(i).tag
             self.fixNode000(nodeTag)
             
-    def getDefaultCameraParameters(self):
-        '''Return the default camera parameters.'''
-        from postprocess.xcVtk import vtk_graphic_base # avoid import if not needed
-        retval= vtk_graphic_base.CameraParameters('2DProblemCamera')
-        retval.viewUpVc= [0,0,1]
-        retval.posCVc= [0,-100,0]
-        return retval
 
 def getStructuralMechanics2DSpace(preprocessor):
     '''Return a PredefinedSpace from the dimension of the space 
@@ -528,6 +437,20 @@ class SolidMechanics3D(PredefinedSpace):
         self.Ux= 0
         self.Uy= 1
         self.Uz= 2
+        
+    def getDispComponentFromName(self,compName):
+        '''Return the component index from the
+           displacement name.'''
+        retval= 0
+        if compName == 'uX':
+            retval= self.Ux
+        elif compName == 'uY':
+            retval= self.Uy
+        elif compName == 'uZ':
+            retval= self.Uz
+        else:
+            lmsg.error('Item '+str(compName) +'is not a valid component. Available components are: uX, uY, uZ')
+        return retval
 
     def getDisplacementDOFs(self):
         ''' Return the indices of the displacement DOFs.'''
@@ -592,6 +515,26 @@ class StructuralMechanics3D(PredefinedSpace):
         self.ThetaX= 3
         self.ThetaY= 4
         self.ThetaZ= 5
+        
+    def getDispComponentFromName(self,compName):
+        '''Return the component index from the
+           displacement name.'''
+        retval= 0
+        if compName == 'uX':
+            retval= self.Ux
+        elif compName == 'uY':
+            retval= self.Uy
+        elif compName == 'uZ':
+            retval= self.Uz
+        elif compName == 'rotX':
+            retval= self.ThetaX
+        elif compName == 'rotY':
+            retval= self.ThetaY
+        elif compName == 'rotZ':
+            retval= self.ThetaZ
+        else:
+            lmsg.error('Item '+str(compName) +'is not a valid component. Available components are: uX, uY, uZ, rotX, rotY, rotZ')
+        return retval
         
     def getDisplacementDOFs(self):
         ''' Return the indices of the displacement DOFs.'''
@@ -877,8 +820,8 @@ class StructuralMechanics3D(PredefinedSpace):
         return elem
 
 def getStructuralMechanics3DSpace(preprocessor):
-    '''Return a PredefinedSpace from the dimension of the space 
-       and the number of DOFs for each node obtained from the preprocessor.
+    '''Return a tStructuralMechanics3DSpace from an
+       already defined preprocessor.
 
        :param preprocessor: preprocessor of the finite element problem.
     '''
@@ -887,6 +830,34 @@ def getStructuralMechanics3DSpace(preprocessor):
     assert(nodes.numDOFs==6)
     return StructuralMechanics3D(nodes)
 
+def getModelSpaceFromPreprocessor(preprocessor):
+    '''Return a PredefinedSpace from the dimension of the space 
+       and the number of DOFs for each node obtained from the preprocessor.
+
+       :param preprocessor: preprocessor of the finite element problem.
+    '''
+    retval= None
+    nodes= preprocessor.getNodeHandler
+    dimSpace= nodes.dimSpace
+    numDOFs= nodes.numDOFs
+    if(dimSpace==2):
+        if(numDOFs==2):
+            retval= SolidMechanics2D(nodes)
+        elif(numDOFs==3):
+            retval= StructuralMechanics2D(nodes)
+        else:
+            lmsg.error('cannot figure out the problem type dimSpace= '+str(dimSpace)+' numDOFs= '+str(numDOFs))
+    elif(dimSpace==3):
+        if(numDOFs==3):
+            retval= SolidMechanics3D(nodes)
+        elif(numDOFs==6):
+            retval= StructuralMechanics3D(nodes)
+        else:
+            lmsg.error('cannot figure out the problem type dimSpace= '+str(dimSpace)+' numDOFs= '+str(numDOFs))
+    else:
+       lmsg.error('cannot figure out the problem type dimSpace= '+str(dimSpace)+' numDOFs= '+str(numDOFs))
+    return retval
+      
 def gdls_resist_materiales3D(nodes):
     '''Define the dimension of the space: nodes by three coordinates (x,y,z) and six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
 
@@ -940,14 +911,3 @@ def glueSets(preprocessor,DOF2Glue,masterSet,slaveSet,onCoord=None):
             mdlSpace.constraints.newEqualDOF(n.tag,nSlave.tag,xc.ID(DOF2Glue))
   
 
-class OuputUnits(object):
-    def __init__(self,scaleUnitsForce,textUnitsForce,scaleUnitsLengthMoment,textUnitsLengthMoment,scaleUnitsDispl,textUnitsDispl,scaleUnitsRot,textUnitsRot):
-        self.scaleUnitsForce=scaleUnitsForce
-        self.textUnitsForce=textUnitsForce
-        self.scaleUnitsLengthMoment=scaleUnitsLengthMoment
-        self.textUnitsLengthMoment=textUnitsLengthMoment
-        self.scaleUnitsDispl=scaleUnitsDispl
-        self.scaleUnitsRot=scaleUnitsRot
-        self.textUnitsRot='['+textUnitsRot+']'
-        self.textUnitsDispl='['+textUnitsDispl+']'
-        self.textUnitsLoadsIntForces='units:['+textUnitsLengthMoment+','+textUnitsForce+']'

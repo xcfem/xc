@@ -709,9 +709,26 @@ int XC::ConstrContainer::getNumMRMPs(void) const
 int XC::ConstrContainer::getNumLoadPatterns(void) const
   { return activeLoadPatterns.size(); }
 
+//! @brief Return the load case description from the active
+//! load patterns.
+std::string XC::ConstrContainer::getActiveLoadCaseDescription(void) const
+  {
+    std::string retval;
+    if(!activeLoadPatterns.empty())
+      {
+	MapActiveLoadPatterns<LoadPattern>::const_iterator i= activeLoadPatterns.begin();
+	retval= i->second->getFactoredName();
+	i++;
+	for(;i!=activeLoadPatterns.end();i++)
+	  retval+= '+'+i->second->getFactoredName();
+      }
+    return retval;
+  }
+
 //! @brief Returns the number of node lockers.
 int XC::ConstrContainer::getNumNodeLockers(void) const
   { return activeNodeLockers.size(); }
+
 
 //! @brief Apply loads from active node lockers.
 void XC::ConstrContainer::applyLoad(double timeStep)

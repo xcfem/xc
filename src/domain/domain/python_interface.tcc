@@ -37,6 +37,7 @@ class_<XC::Domain, bases<XC::ObjWithRecorders>, boost::noncopyable >("Domain", n
   .add_property("getMesh", make_function( getMeshRef, return_internal_reference<>() ),"returns finite element mesh.")
   .add_property("getConstraints", make_function( getConstraintsRef, return_internal_reference<>() ),"returns mesh constraints.")
   .add_property("getTimeTracker", make_function( &XC::Domain::getTimeTracker, return_internal_reference<>() ),"returns the pseudo-time tracker of the domain.")
+  .add_property("currentCombinationName", &XC::Domain::getCurrentCombinationName,"returns current combination/load case name.")
   .def("setDeadSRF",XC::Domain::setDeadSRF,"Assigns Stress Reduction Factor for element deactivation.")
   .def("commit",&XC::Domain::commit)
   .def("revertToLastCommit",&XC::Domain::revertToLastCommit)
@@ -45,5 +46,6 @@ class_<XC::Domain, bases<XC::ObjWithRecorders>, boost::noncopyable >("Domain", n
   .def("setTime",&XC::Domain::setTime,"sets the time on the time tracker.")  
   .def("setRayleighDampingFactors",&XC::Domain::setRayleighDampingFactors,"sets the Rayleigh damping factors.")  
   .def("calculateNodalReactions",&XC::Domain::calculateNodalReactions,"triggers nodal reaction calculation.")  
-  .def("checkNodalReactions",&XC::Domain::checkNodalReactions,"checkNodalReactions(tolerande): check that reactions at nodes correspond to constrained degrees of freedom.")  
+  .def("checkNodalReactions",&XC::Domain::checkNodalReactions,"checkNodalReactions(tolerance): check that reactions at nodes correspond to constrained degrees of freedom.")
+  .def("removeAllLoadPatterns",&XC::Domain::removeAllLoadPatterns,"removeAllLoadPatterns(): remove all load patterns from domain.")
   ;

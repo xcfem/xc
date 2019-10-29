@@ -16,60 +16,73 @@ import sys
 import vtk
 import xc_base
 import geom
+import xc
+import random as rd 
 from postprocess.xcVtk import screen_annotation as sa
 from miscUtils import LogMessages as lmsg
 
 
 class RecordDefGrid(object):
-  '''Provide the variables involved in the VTK grid representation
-  
-  :ivar xcSet:     set to be represented
-  :ivar entToLabel:  entities to be labeled (defaults to "nodes")
-  :ivar cellType:    specifies the type of data cells (defaults to "nil"). 
-        Data cells are simple topological elements like points, lines, 
-        polygons and tetrahedra of which visualization data sets are composed.
-  :ivar uGrid: unstructure grid (defaults to None). An unstructure grid is a 
-        concrete implementation of a vtk data set; represents any combination 
-        of any cell types. This includes 0D (e.g. points), 1D (e.g., lines, 
-        polylines), 2D (e.g., triangles, polygons), and 3D (e.g., hexahedron, 
-        tetrahedron, polyhedron, etc.).
+    '''Provide the variables involved in the VTK grid representation
 
-  '''
-  def __init__(self):
-    self.xcSet= None
-    self.entToLabel= "nodes"
-    self.cellType= "nil"
-    self.uGrid= None
+    :ivar xcSet:     set to be represented
+    :ivar entToLabel:  entities to be labeled (defaults to "nodes")
+    :ivar cellType:    specifies the type of data cells (defaults to "nil"). 
+          Data cells are simple topological elements like points, lines, 
+          polygons and tetrahedra of which visualization data sets are composed.
+    :ivar uGrid: unstructure grid (defaults to None). An unstructure grid is a 
+          concrete implementation of a vtk data set; represents any combination 
+          of any cell types. This includes 0D (e.g. points), 1D (e.g., lines, 
+          polylines), 2D (e.g., triangles, polygons), and 3D (e.g., hexahedron, 
+          tetrahedron, polyhedron, etc.).
 
-  def getSetBND(self):
-    ''' Returns the set boundary'''
-    retval= self.xcSet.getBnd(0.0)
-    points= self.xcSet.getPoints
-    if(len(points)==0):
-      warnMsg= 'there are no points in the set: '
-      warnMsg+= self.xcSet.name
-      warnMsg+= '. Maybe you must call fillDownwards on the set to display.'
-      lmsg.warning('Warning; '+warnMsg)
-    return retval
+    '''
+    def __init__(self):
+        self.xcSet= None
+        self.entToLabel= "nodes"
+        self.cellType= "nil"
+        self.uGrid= None
 
-  def getGridBND(self):
-    ''' Returns the grid boundary'''
-    retval= geom.BND3d()
-    points= self.uGrid.GetPoints()
-    if(points.GetNumberOfPoints()>0):
-      bounds = [0]*6
-      points.GetBounds(bounds)
-      retval= geom.BND3d(geom.Pos3d(bounds[0],bounds[2],bounds[4]),geom.Pos3d(bounds[1],bounds[3],bounds[5]))
-    else:
-      warnMsg= 'there are no points in the grid: '
-      warnMsg+= self.uGrid.name
-      warnMsg+= '. Maybe you must call fillDownwards on the set to display.'
-      lmsg.warning('Warning; '+warnMsg)
-    return retval
+    def getSetBND(self):
+        ''' Returns the set boundary'''
+        retval= self.xcSet.getBnd(0.0)
+        points= self.xcSet.getPoints
+        if(len(points)==0):
+          warnMsg= 'there are no points in the set: '
+          warnMsg+= self.xcSet.name
+          warnMsg+= '. Maybe you must call fillDownwards on the set to display.'
+          lmsg.warning('Warning; '+warnMsg)
+        return retval
 
-  def getDiagonalLength(self):
-    '''Return the length of the diagonal of the bounding box.'''
-    return self.getSetBND().diagonal
+    def getGridBND(self):
+        ''' Returns the grid boundary'''
+        retval= geom.BND3d()
+        points= self.uGrid.GetPoints()
+        if(points.GetNumberOfPoints()>0):
+          bounds = [0]*6
+          points.GetBounds(bounds)
+          retval= geom.BND3d(geom.Pos3d(bounds[0],bounds[2],bounds[4]),geom.Pos3d(bounds[1],bounds[3],bounds[5]))
+        else:
+          warnMsg= 'there are no points in the grid: '
+          warnMsg+= self.uGrid.name
+          warnMsg+= '. Maybe you must call fillDownwards on the set to display.'
+          lmsg.warning('Warning; '+warnMsg)
+        return retval
+
+    def getDiagonalLength(self):
+        '''Return the length of the diagonal of the bounding box.'''
+        return self.getSetBND().diagonal
+
+    def setupSet(self,setToDisplay):
+        ''' Prepares the set to be displayed.''' 
+        if(setToDisplay):
+            self.xcSet= setToDisplay
+            self.xcSet.fillDownwards()
+            if self.xcSet.color.Norm()==0:
+                self.xcSet.color=xc.Vector([rd.random(),rd.random(),rd.random()])
+        else:
+            lmsg.error('Set to display not defined; using total set.')
+            self.xcSet= None
   
 class CameraParameters(object):
   ''' Provides the parameters to define the camera.
@@ -286,7 +299,7 @@ class RecordDefDisplay(object):
        xcSet:     set to be represented
     '''
     self.gridRecord= RecordDefGrid()
-    self.gridRecord.xcSet= xcSet
+    self.gridRecord.setupSet(xcSet)
     return self.gridRecord
 
   def displayGrid(self, caption= ''):

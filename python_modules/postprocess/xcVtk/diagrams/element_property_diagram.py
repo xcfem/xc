@@ -11,7 +11,7 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 from miscUtils import LogMessages as lmsg
 import vtk
-from postprocess.xcVtk import colored_diagram as cd
+from postprocess.xcVtk.diagrams import colored_diagram as cd
 from postprocess import extrapolate_elem_attr
 
 

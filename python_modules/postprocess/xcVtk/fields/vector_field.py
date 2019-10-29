@@ -13,8 +13,8 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 import math
 import vtk
 from miscUtils import LogMessages as lmsg
-from postprocess.xcVtk import field_base as fb
-from postprocess.xcVtk import vector_field_data as vfd
+from postprocess.xcVtk.fields import field_base as fb
+from postprocess.xcVtk.fields import vector_field_data as vfd
 
 class VectorField(fb.FieldBase):
     '''Vector field defined at points.'''

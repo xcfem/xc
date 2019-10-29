@@ -12,7 +12,7 @@ __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 
 import vtk
 from miscUtils import LogMessages as lmsg
-from postprocess.xcVtk import vector_field_data as vfd
+from postprocess.xcVtk.fields import vector_field_data as vfd
 import zlib
 
 class DirectionFieldData(vfd.VectorFieldData):

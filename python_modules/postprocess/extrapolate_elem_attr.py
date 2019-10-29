@@ -70,17 +70,18 @@ def extrapolate_elem_function_attr(elemSet,attributeName,function, argument,init
     nodeTags= create_attribute_at_nodes(elemSet,attributeName,initialValue)
     #Calculate totals.
     for e in elemSet:
-      elemNodes= e.getNodes
-      sz= len(elemNodes)
-      for i in range(0,sz):
-        n= elemNodes[i]
-        f= getattr(e,function)
-        value= f(argument)
-        oldValue= n.getProp(attributeName)
-        n.setProp(attributeName,oldValue+value)
+        elemNodes= e.getNodes
+        sz= len(elemNodes)
+        for i in range(0,sz):
+            n= elemNodes[i]
+            f= getattr(e,function)
+            value= f(argument)
+            if(value):
+                oldValue= n.getProp(attributeName)
+                n.setProp(attributeName,oldValue+value)
     #Divide by number of elements in the set that touch the node.
     preprocessor= elemSet.owner.getPreprocessor
     for tag in nodeTags:
-      n= preprocessor.getNodeHandler.getNode(tag)
-      denom= nodeTags[tag]
-      n.setProp(attributeName,n.getProp(attributeName)/denom)
+        n= preprocessor.getNodeHandler.getNode(tag)
+        denom= nodeTags[tag]
+        n.setProp(attributeName,n.getProp(attributeName)/denom)

@@ -4,7 +4,7 @@
 
 import geom
 import vtk
-from postprocess.xcVtk import colored_diagram as cd
+from postprocess.xcVtk.diagrams import colored_diagram as cd
 
 
 

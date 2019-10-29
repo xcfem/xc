@@ -120,7 +120,7 @@ XC::Domain::Domain(CommandEntity *owr,DataOutputHandler::map_output_handlers *oh
   :ObjWithRecorders(owr,oh),timeTracker(),CallbackCommit(""), dbTag(0),
    currentGeoTag(0), hasDomainChangedFlag(false), commitTag(0),
    mesh(this), constraints(this), theRegions(nullptr),
-   nmbCombActual(""), lastChannel(0), lastGeoSendTag(-1) {}
+   activeCombinations(), lastChannel(0), lastGeoSendTag(-1) {}
 
 //! @brief Constructor.
 //!
@@ -137,7 +137,7 @@ XC::Domain::Domain(CommandEntity *owr,DataOutputHandler::map_output_handlers *oh
 XC::Domain::Domain(CommandEntity *owr,int numNodes, int numElements, int numSPs, int numMPs, int numLoadPatterns,int numNodeLockers,DataOutputHandler::map_output_handlers *oh)
   :ObjWithRecorders(owr,oh),timeTracker(), CallbackCommit(""), dbTag(0),
    currentGeoTag(0), hasDomainChangedFlag(false), commitTag(0), mesh(this),
-   constraints(this), theRegions(nullptr), nmbCombActual(""), lastChannel(0),
+   constraints(this), theRegions(nullptr), activeCombinations(), lastChannel(0),
    lastGeoSendTag(-1) {}
 
 //! @brief Removes all components from domain (nodes, elements, loads &
@@ -169,7 +169,7 @@ void XC::Domain::clearAll(void)
         delete theRegions;
         theRegions= nullptr;
       }
-    nmbCombActual= "";
+    activeCombinations.clear();
 
     // set the time back to 0.0
     timeTracker.Zero();
@@ -195,7 +195,7 @@ XC::Domain::~Domain(void)
 //! @brief Prepares the domain to solve for a new load pattern.
 void XC::Domain::resetLoadCase(void)
   {
-    nmbCombActual= "";
+    //activeLoads.clear(); //??
     revertToStart();
     setCommitTag(0);
     timeTracker.Zero();
@@ -471,13 +471,7 @@ bool XC::Domain::addLoadCombination(LoadCombination *comb)
     bool retval= false;
     if(comb)
       {
-        if(nmbCombActual!= "")
-	  std::clog << getClassName() << "::" << __FUNCTION__
-	            << "; warning! "
-                    << "adding combination: " << comb->getName()
-                    << " without removing: " << nmbCombActual
-                    << ".\n";
-        nmbCombActual= comb->getName();
+        activeCombinations.push_back(comb->getName());
         if(comb->getDomain()!=this)
           comb->setDomain(this);
         retval= comb->addToDomain();
@@ -529,7 +523,7 @@ bool XC::Domain::removeNodeLocker(int tag)
     return result;
   }
 
-//! @brief Remove from domain el load pattern being passed as parameter.
+//! @brief Remove from domain the load pattern being passed as parameter.
 bool XC::Domain::removeLoadPattern(LoadPattern *lp)
   {
     bool retval= false;
@@ -538,7 +532,20 @@ bool XC::Domain::removeLoadPattern(LoadPattern *lp)
     return retval;
   }
 
-//! @brief Remove from domain el load pattern being passed as parameter.
+//! @brief Remove from all load pattenrs from domain.
+bool XC::Domain::removeAllLoadPatterns(void)
+  {
+    bool retval= true;
+    std::map<int,XC::LoadPattern *> &activeLoadPatterns= constraints.getLoadPatterns();
+    for(std::map<int,XC::LoadPattern *>::iterator i= activeLoadPatterns.begin();
+	i!=activeLoadPatterns.end();i++)
+      retval*= removeLoadPattern(i->second);
+    return retval;
+  }
+
+
+
+//! @brief Remove from domain the load pattern being passed as parameter.
 bool XC::Domain::removeNodeLocker(NodeLocker *nl)
   {
     bool retval= false;
@@ -548,8 +555,25 @@ bool XC::Domain::removeNodeLocker(NodeLocker *nl)
   }
 
 //! @brief Return the name of the current load combination.
-const std::string &XC::Domain::getCurrentCombinationName(void) const
-  { return nmbCombActual; }
+std::string XC::Domain::getCurrentCombinationName(void) const
+  {
+    std::string retval;
+    if(!activeCombinations.empty())
+      {
+	std::deque<std::string>::const_iterator i= activeCombinations.begin();
+	retval= *i;
+	i++;
+	for(;i!= activeCombinations.end();i++)
+	  retval+= '+'+*i;
+      }
+    else
+      retval= getCurrentLoadCaseDescription();
+    return retval;
+  }
+
+//! @brief Return the name of the current load case.
+std::string XC::Domain::getCurrentLoadCaseDescription(void) const
+  { return constraints.getActiveLoadCaseDescription(); }
 
 //! @brief Removes from the domain the load combination
 //! being passed as parameter.
@@ -557,16 +581,11 @@ void XC::Domain::removeLoadCombination(LoadCombination *comb)
   {
     if(comb)
       {
-        if((nmbCombActual!= comb->getName())&& (!nmbCombActual.empty()))
-	  std::clog << getClassName() << "::" << __FUNCTION__
-		    << "; WARNING - "
-                    << "removing load combination: " << comb->getName()
-                    << " without removing: " << nmbCombActual
-                    << ".\n";
-        nmbCombActual= "";
+        const std::string name= comb->getName();
         if(comb->getDomain()!=this)
           comb->setDomain(this);
         comb->removeFromDomain();
+        activeCombinations.erase(std::remove(activeCombinations.begin(), activeCombinations.end(), name), activeCombinations.end());
       }
   }
 
@@ -650,7 +669,7 @@ XC::ConstrContainer &XC::Domain::getConstraints(void)
 */
 
 //! @brief Returns true if the element identified by the
-//! tag being passed as parameter already exists en el domain.
+//! tag being passed as parameter already exists in the domain.
 bool XC::Domain::existElement(int tag)
  { return mesh.existElement(tag); }
 
@@ -878,7 +897,7 @@ int XC::Domain::update(void)
     return mesh.update();
   }
 
-//! @brief Actualiza el estado del domain.
+//! @brief Updates domain state.
 int XC::Domain::update(double newTime, double dT)
   {
     applyLoad(newTime);

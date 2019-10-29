@@ -97,7 +97,7 @@ for e in infSet.getElements:
     e.vector2dUniformLoadGlobal(xc.Vector([0.0,-load]))
 
 #We add the load case to domain.
-preprocessor.getLoadHandler.getLoadPatterns.addToDomain("load")
+preprocessor.getLoadHandler.addToDomain("load")
 
 # Solution
 # Linear static analysis.

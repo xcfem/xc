@@ -13,7 +13,7 @@ __email__= "l.pereztato@gmail.com"
 import geom
 import vtk
 from miscUtils import LogMessages as lmsg
-from postprocess.xcVtk import direction_field_data as dfd
+from postprocess.xcVtk.fields import direction_field_data as dfd
 
 class LocalAxesVectorField(object):
   '''Draws the local axes on elements.'''

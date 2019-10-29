@@ -12,7 +12,7 @@ from miscUtils import LogMessages as lmsg
 from miscUtils import string_utils as su
 from postprocess.xcVtk import vtk_graphic_base
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
-from postprocess.xcVtk.FE_model import Fields
+from postprocess.xcVtk.fields import Fields
 from postprocess.control_vars import *
 
 import matplotlib.pyplot as plt

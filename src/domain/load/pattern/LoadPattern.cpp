@@ -138,6 +138,20 @@ const std::string &XC::LoadPattern::getName(void) const
     return mhandler->getLoadPatternName(this);
   }
 
+//! @brief Returns the name of this load pattern multiplied
+//! by its combination factor.
+std::string XC::LoadPattern::getFactoredName(void) const
+  {
+    std::string retval= getName();
+    if(gamma_f!=1.0)
+      {
+        std::stringstream ss;
+        ss << std::fixed << std::setprecision(2) << gamma_f;
+        retval= ss.str()+'*'+retval;
+      }
+    return retval;
+  }
+
 //! @brief Set the time series for the pattern.
 void XC::LoadPattern::setTimeSeries(TimeSeries *theTimeSeries)
   {

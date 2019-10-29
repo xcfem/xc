@@ -13,7 +13,7 @@ from miscUtils import LogMessages as lmsg
 import xc_base
 from vtkUtils import utilsVtk
 from postprocess.xcVtk import vtk_graphic_base
-from postprocess.xcVtk import local_axes_vector_field as lavf
+from postprocess.xcVtk.fields import local_axes_vector_field as lavf
 import random as rd 
 import xc
 
@@ -24,6 +24,7 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
         super(RecordDefDisplayEF,self).__init__()
         self.nodes= None
         self.gridMapper= None
+        
     def VtkDefineElementsActor(self, reprType,field,color=xc.Vector([rd.random(),rd.random(),rd.random()])):
         ''' Define the actor to display elements
 
@@ -188,7 +189,7 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
         self.setupGrid(xcSet)
         self.displayGrid(caption)
         
-    def displayLocalAxes(self,xcSet,caption= 'local axis', vectorScale=1.0):
+    def displayLocalAxes(self,xcSet,caption= 'local axis', vectorScale=1.0, fileName= None, defFScale= 0.0):
         '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
 
         :param xcSet:   set of elements to be displayed (defaults to total set)
@@ -386,3 +387,49 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
             sp= spIter.next()
         return
                     
+def VtkCargaIdsNodes(recordGrid):
+    '''Not yet implemented.'''
+    VtkCreaStrArraySetData(recordGrid.setName,"nodes","etiqNod","tag")()
+    nmbUGrid.GetPointData().SetStrings(etiqNod)
+
+def VtkDibujaIdsNodes(recordGrid, renderer):
+    '''Display node labels (not implemented yet)'''
+    ids= vtk.vtkIdFilter()
+    ids.SetInput(recordGrid.uGrid)
+    ids.CellIdsOff()
+    ids.PointIdsOff()
+
+    VtkCargaIdsNodes(recordGrid)
+
+    visPts= vtk.vtkSelectVisiblePoints()
+    visPts.SetInput("ids")
+    visPts.SetRenderer(renderer)
+    visPts.SelectionWindowOff()
+
+    #Create the mapper to display the point ids.  Specify the format to
+    #   use for the labels.  Also create the associated actor.
+    ldm= vtk.vtkLabeledShStrMapper()
+    ldm.SetInput("visPts")
+    ldm.LabelTextProperty().SetColor(0.1,0.1,0.1)
+    nodeLabels= vtk.vtkActor2D().SetMapper(ldm)
+    renderer.AddActor2D(nodeLabels)
+
+def VtkDibujaIdsElementos(ids):
+    '''Dibuja las etiquetas de los elementos. Not implemented yet.'''
+    cc= vtk.vtkCellCenters()
+    vtk.SetInput(ids) #  Centroides de las celdas. 
+
+    visCells= vtk.vtkSelectVisiblePoints()
+    visCells.SetInput(cc)
+    visCells.SetRenderer("renderer")
+    visCells.SelectionWindowOff()
+
+    #Create the mapper to display the cell ids.  Specify the format to
+    # use for the labels.  Also create the associated actor.
+
+    cellMapper= vtk.vtkLabeledShStrMapper
+    cellMapper.SetInput(visCells)
+    cellMapper.LabelTextProperty().SetColor(0,0,0.9)
+
+    cellLabels= vtk.vtkActor2D()
+    cellLabels.SetMapper(cellMapper)

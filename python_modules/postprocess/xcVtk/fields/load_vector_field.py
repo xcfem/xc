@@ -13,7 +13,7 @@ import geom
 import xc
 import vtk
 from miscUtils import LogMessages as lmsg
-from postprocess.xcVtk import vector_field as vf
+from postprocess.xcVtk.fields import vector_field as vf
 
 class LoadOnPoints(vf.VectorField):
     '''Draws punctual loads.'''
