@@ -37,6 +37,7 @@ class UnitDefinitionPair(object):
         return '['+self.symbol+']'
 
 kilonewton= UnitDefinitionPair('kN',1e-3, 'force')
+kilonewton_meter= UnitDefinitionPair('kN/m',1e-3, 'force/length')
 meter= UnitDefinitionPair('m',1.0, 'length')
 millimeter= UnitDefinitionPair('mm',1e3, 'length')
 milliradian= UnitDefinitionPair('x1E3 rad',1e3, 'plane angle')
@@ -120,4 +121,4 @@ class OutputUnits(object):
     
     def getForceUnitsDescription(self):
         ''' Return the description for the displacement units.'''
-        return self.dynamicUnits.forceUnit.getDecoratedSymbol()
+        return self.dynamicUnits.getDecoratedUnitsText()
