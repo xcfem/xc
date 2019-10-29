@@ -46,8 +46,6 @@ elements.defaultMaterial= "memb1"
 elem= elements.newElement("ShellMITC9",xc.ID([n1.tag,n2.tag,n3.tag,n4.tag,n5.tag,n6.tag,n7.tag,n8.tag,n9.tag]))
 
 # Constraints.
-constraints= preprocessor.getBoundaryCondHandler
-
 modelSpace.fixNode000_FFF(n1.tag)
 modelSpace.fixNode000_FFF(n2.tag)
 modelSpace.fixNode000_FFF(n3.tag)
