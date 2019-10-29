@@ -20,7 +20,7 @@ class ScalarField(fb.FieldBase):
 
     :ivar rgMinMax: range (vmin,vmax) with the maximum and minimum values of 
               the field to be represented. All the values less than vmin are 
-              displayed in blue and those greater than vmax in red
+              displayed in blue and those greater than vmax iqn red
               (defaults to None)
 
   '''
@@ -28,7 +28,11 @@ class ScalarField(fb.FieldBase):
     super(ScalarField,self).__init__(name,fUnitConv)
     self.attrName= functionName
     self.attrComponent= component
-    self.rgMinMax=rgMinMax
+    if(rgMinMax):
+      self.rgMinMax= [1.0,1.0]
+      # Convert the range units.
+      self.rgMinMax[0]= rgMinMax[0]*fUnitConv
+      self.rgMinMax[1]= rgMinMax[1]*fUnitConv
     self.arr= None
 
   def fillArray(self, nodeSet):

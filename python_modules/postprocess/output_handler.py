@@ -298,7 +298,7 @@ class OutputHandler(object):
         defDisplay.appendDiagram(diagram) #Append diagram to the scene.
         defDisplay.displayScene(caption= captionText,fName= fileName)
         
-    def displayIntForc(self,itemToDisp, setToDisplay=None,fileName=None,defFScale=0.0):
+    def displayIntForc(self,itemToDisp, setToDisplay=None,fileName=None,defFScale=0.0, rgMinMax=None):
         '''displays the component of internal forces in the 
         set of entities as a scalar field (i.e. appropiated for 2D elements; 
         shells...).
@@ -314,6 +314,10 @@ class OutputHandler(object):
                 the initial position plus its displacement multiplied
                 by this factor. (Defaults to 0.0, i.e. display of 
                 initial/undeformed shape)
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values of 
+              the field to be represented. All the values less than vmin are 
+              displayed in blue and those greater than vmax in red
+              (defaults to None)
         '''
         if(setToDisplay==None):
             setToDisplay= self.modelSpace.getTotalSet()
@@ -330,7 +334,7 @@ class OutputHandler(object):
                     lmsg.warning('OutputHandler::displayIntForc; not a 2D element; ignored.')
             fConvUnits= self.outputStyle.getForceUnitsScaleFactor()
             unitDescription= self.outputStyle.getForceUnitsDescription()
-            field= Fields.ExtrapolatedProperty(propName,"getProp",setToDisplay,fUnitConv= fConvUnits)
+            field= Fields.ExtrapolatedProperty(propName,"getProp",setToDisplay,fUnitConv= fConvUnits,rgMinMax=rgMinMax)
             defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
             defDisplay.cameraParameters= self.getCameraParameters()
             loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
