@@ -46,29 +46,25 @@ class RecordDefDisplayCAD(vtk_graphic_base.RecordDefDisplay):
         #   postprocess.xcVtk.cad_mesh.VtkDibujaIdsKPts(self.gridRecord,setToDraw,renderer)
 
 
-    def grafico_cad(self,xcSet,caption= ''):
+    def grafico_cad(self,setToDisplay,caption= ''):
         ''' Establish the set of entities to be displayed and add a caption 
 
-        :param xcSet:   set to be represented
+        :param setToDisplay:   set to be represented
         :param caption: text to display in the graphic.
         '''
-        self.setupGrid(xcSet)
+        self.setupGrid(setToDisplay)
         self.displayGrid(caption)
 
-    def displayBlocks(self, xcSet, caption= '',fileName= None):
+    def displayBlocks(self, setToDisplay, caption= '',fileName= None):
         ''' Display geometric entities (points, lines, surfaces and volumes)
 
-        :param xcSet: set to be represented
-        :param diagrams: diagrams to show (optional)
-        :param fName: name of the graphic file to create (if None then -> screen window).
+        :param setToDisplay: set to be represented
         :param caption: text to display in the graphic.
+        :param fileName: name of the graphic file to create (if None then -> screen window).
         '''
-        self.setupGrid(xcSet)
+        self.setupGrid(setToDisplay)
         self.defineMeshScene()
         self.displayScene(caption,fileName)
 
-    def plotMultiBlockModel(self, xcSet, fName, caption= ''):
-        lmsg.warning('plotMultiBlockModel DEPRECATED; use displayBlocks.')
-        self.displayBlocks(xcSet,fName,caption)
 
 

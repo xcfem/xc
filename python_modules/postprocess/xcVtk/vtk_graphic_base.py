@@ -276,16 +276,16 @@ class RecordDefDisplay(object):
     iren.Initialize()
     return iren
 
-  def displayScene(self,caption= '', fName= None):
+  def displayScene(self,caption= '', fileName= None):
     ''' Displaying scene
 
     :param caption: caption to display with the scene.
-    :param fName: name of the image file, in none -> screen window.
+    :param fileName: name of the image file, in none -> screen window.
     '''
     self.setView()
     self.setupWindow(caption)
-    if(fName):
-      self.plot(fName)
+    if(fileName):
+      self.plot(fileName)
     else:
       iren= self.setupWindowInteractor() 
       iren.Start()   
@@ -310,8 +310,11 @@ class RecordDefDisplay(object):
     self.defineMeshScene(None)
     self.displayScene(caption)
 
-  def plot(self,fName):
-    '''Plots window contents'''
+  def plot(self,fileName):
+    '''Plots window contents
+
+    :param fileName: name of the image file, in none -> screen window.
+    '''
     self.renWin.Render()
 
     w2if = vtk.vtkWindowToImageFilter()
@@ -320,7 +323,7 @@ class RecordDefDisplay(object):
     w2if.ReadFrontBufferOff(); #Read from the front buffer.
     w2if.Update()
     writer= vtk.vtkJPEGWriter()
-    writer.SetFileName(fName)
+    writer.SetFileName(fileName)
     writer.SetInputConnection(w2if.GetOutputPort())
     writer.Write()
  

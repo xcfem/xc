@@ -80,7 +80,7 @@ def listaElementosTrussSet(preprocessor, setName, fileName, fmt):
     fileName.write(e.tag," & ",e.nod(0).tag," & ",e.nod(1).tag," & ",e,getMaterial().tag,"\\\\\n")
   cierraSupertabular(fileName) 
 
-def listaElementosBarraSet(preprocessor, setName, fileName, fmt):
+def listaElementosBarraSet(preprocessor, setName, fName, fmt):
   ''' Writes a list of the bar elements from the set
 
      :param setName: name of the set.

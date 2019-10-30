@@ -149,7 +149,7 @@ class RecordDisp(OuputUnits):
         outputHandler.outputStyle.cameraParameters= self.cameraParameters
         return outputHandler
         
-    def displayDispRot(self, fName= None):
+    def displayDispRot(self, fileName= None):
         '''Displays the component of the displacement or rotations
            on the set argument.
 
@@ -166,7 +166,7 @@ class RecordDisp(OuputUnits):
         outputHandler= self.getOutputHandler(self.setsToDispDspRot)
         for st in self.setsToDispDspRot:
             for arg in self.listDspRot:
-                outputHandler.displayDispRot(itemToDisp=arg,setToDisplay=st,fileName= fName)
+                outputHandler.displayDispRot(itemToDisp=arg,setToDisplay=st,fileName= fileName)
 
     def displayIntForcDiag(self,itemToDisp,fileName=None,defFScale=0.0):
         '''displays the component of internal forces as a 
@@ -205,7 +205,7 @@ class RecordDisp(OuputUnits):
           caption= 'load case: ' + self.getDescription() + ', set: ' + setToDisplay.name + ', '  + self.unitsLoads
         outputHandler.dispLoads(setToDisplay=setToDisplay,elLoadComp=self.compElLoad,caption= caption, fileName= fileName, defFScale= defFScale)
 
-    def displayLoadOnSets(self, caption= None, fName= None, defFScale= 0.0):
+    def displayLoadOnSets(self, caption= None, fileName= None, defFScale= 0.0):
         '''Displays load vectors for each of the sets in self.setsToDispLoads
 
         :param caption: text to display in the graphic. Defaults to 
@@ -221,9 +221,9 @@ class RecordDisp(OuputUnits):
         '''
         outputHandler= self.getOutputHandler(self.setsToDispDspRot)
         for st in self.setsToDispLoads:
-          outputHandler.displayLoads(setToDisplay= st,caption= caption,fName= fName,defFScale= defFScale)
+          outputHandler.displayLoads(setToDisplay= st,caption= caption,fileName= fileName,defFScale= defFScale)
         for st in self.setsToDispBeamLoads:
-          outputHandler.displayLoads(setToDisplay=st, fileName= fName, defFScale= defFScale)
+          outputHandler.displayLoads(setToDisplay=st, fileName= fileName, defFScale= defFScale)
 
     def displayReactionsOnSets(self, fileName=None,defFScale=0.0):
         '''displays the reactions as vector on affected nodes
@@ -388,14 +388,14 @@ def checksReports(limitStateLabel,setsShEl,argsShEl,capTexts,pathGr,texReportFil
             field= Fields.getScalarFieldFromControlVar(attributeName,arg,st,None,1.0,None)
             capt=capTexts[limitStateLabel] + ', ' + capTexts[arg] + '. '+ st.description.capitalize() + ', ' + 'section 1'
             grFileNm=pathGr+st.name+arg+'Sect1'
-            field.display(defDisplay=dfDisp,caption=capt,fName=grFileNm+'.jpg')
+            field.display(defDisplay=dfDisp,caption=capt,fileName=grFileNm+'.jpg')
             insertGrInTex(texFile=report,grFileNm=grFileNm,grWdt=grWdt,capText=capt)
 
             attributeName= limitStateLabel + 'Sect2'
             field= Fields.getScalarFieldFromControlVar(attributeName,arg,st,None,1.0,None)
             capt=capTexts[limitStateLabel] + ', ' + capTexts[arg] + '. '+ st.description.capitalize() + ', ' + 'section 2'
             grFileNm=pathGr+st.name+arg+'Sect2'
-            field.display(defDisplay=dfDisp,caption=capt,fName=grFileNm+'.jpg')
+            field.display(defDisplay=dfDisp,caption=capt,fileName=grFileNm+'.jpg')
             insertGrInTex(texFile=report,grFileNm=grFileNm,grWdt=grWdt,capText=capt)
     for stV in setsBmElView:
         for argS in argsBmElScale:
@@ -407,7 +407,7 @@ def checksReports(limitStateLabel,setsShEl,argsShEl,capTexts,pathGr,texReportFil
             dfDisp.appendDiagram(diagram)
             capt= capTexts[limitStateLabel] + ', ' + capTexts[argS[0]] + '. '+ stV[0].description.capitalize() + ', ' + 'section 1'
             grFileNm=pathGr+stV[0].name+argS[0]
-            dfDisp.displayScene(caption=capt,fName=grFileNm+'.jpg')
+            dfDisp.displayScene(caption=capt,fileName=grFileNm+'.jpg')
             insertGrInTex(texFile=report,grFileNm=grFileNm,grWdt=grWdt,capText=capt)
     report.close()
     return

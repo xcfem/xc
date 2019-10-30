@@ -159,10 +159,10 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
         # else:
         #   print "Entity: ", self.gridRecord.entToLabel, " unknown."
 
-    def FEmeshGraphic(self,xcSet,caption= '',cameraParameters= vtk_graphic_base.CameraParameters('XYZPos'),defFScale=0.0):
+    def FEmeshGraphic(self,setToDisplay,caption= '',cameraParameters= vtk_graphic_base.CameraParameters('XYZPos'),defFScale=0.0):
         ''' Graphic of the FE mesh
 
-        :param xcSet:   XC set of elements to be displayed
+        :param setToDisplay:   XC set of elements to be displayed
         :param caption: text to write in the graphic
         :param cameraParameters: camera parameters (position, orientation,...).
         :param defFScale: factor to apply to current displacement of nodes 
@@ -173,12 +173,12 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
         '''
         lmsg.warning('FEmeshGraphic DEPRECATED use displayFEMesh.')
         self.cameraParameters= cameraParameters
-        self.displayFEMesh(xcSet,caption,defFScale)
+        self.displayFEMesh(setToDisplay,caption,defFScale)
 
-    def displayFEMesh(self,xcSet,caption= '',defFScale=0.0):
+    def displayFEMesh(self,setToDisplay,caption= '',defFScale=0.0):
         ''' Graphic of the FE mesh
 
-        :param xcSet:   XC set of elements to be displayed
+        :param setToDisplay:   XC set of elements to be displayed
         :param caption: text to write in the graphic
         :param defFScale: factor to apply to current displacement of nodes 
                    so that the display position of each node equals to
@@ -186,33 +186,39 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
                    by this factor. (Defaults to 0.0, i.e. display of 
                    initial/undeformed shape)
         '''
-        self.setupGrid(xcSet)
+        self.setupGrid(setToDisplay)
         self.displayGrid(caption)
         
-    def displayLocalAxes(self,xcSet,caption= 'local axis', vectorScale=1.0, fileName= None, defFScale= 0.0):
+    def displayLocalAxes(self,setToDisplay,caption= 'local axis', vectorScale=1.0, fileName= None, defFScale= 0.0):
         '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
 
-        :param xcSet:   set of elements to be displayed (defaults to total set)
+        :param setToDisplay:   set of elements to be displayed (defaults to total set)
         :param caption:        text to display in the graphic 
         :param vectorScale:    factor to apply to the vectors length in the representation
+        :param fileName: file name to store the image. If none -> window on screen.
+        :param defFScale: factor to apply to current displacement of nodes 
+                   so that the display position of each node equals to
+                   the initial position plus its displacement multiplied
+                   by this factor. (Defaults to 0.0, i.e. display of 
+                   initial/undeformed shape)
         '''
-        self.setupGrid(xcSet)
-        vField=lavf.LocalAxesVectorField(xcSet.name+'_localAxes',vectorScale)
-        vField.dumpVectors(xcSet)
+        self.setupGrid(setToDisplay)
+        vField=lavf.LocalAxesVectorField(setToDisplay.name+'_localAxes',vectorScale)
+        vField.dumpVectors(setToDisplay)
         self.defineMeshScene(None) 
         vField.addToDisplay(self)
         self.displayScene(caption)
 
-    def displayStrongWeakAxis(self,xcSet,caption= 'strong and weak axis', vectorScale=1.0):
+    def displayStrongWeakAxis(self,setToDisplay,caption= 'strong and weak axis', vectorScale=1.0):
         '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
 
-        :param xcSet:   set of elements to be displayed (defaults to total set)
+        :param setToDisplay:   set of elements to be displayed (defaults to total set)
         :param caption:        text to display in the graphic 
         :param vectorScale:    factor to apply to the vectors length in the representation
         '''
-        self.setupGrid(xcSet)
-        vField=lavf.StrongWeakAxisVectorField(xcSet.name+'_strongWeakAxis',vectorScale)
-        vField.dumpVectors(xcSet)
+        self.setupGrid(setToDisplay)
+        vField=lavf.StrongWeakAxisVectorField(setToDisplay.name+'_strongWeakAxis',vectorScale)
+        vField.dumpVectors(setToDisplay)
         self.defineMeshScene(None) 
         vField.addToDisplay(self)
         self.displayScene(caption)
@@ -231,8 +237,8 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
         :param xcSets: set or list of sets to be displayed
         :param field: scalar field to show (optional)
         :param diagrams: diagrams to show (optional)
-        :param fName: name of the graphic file to create (if None -> screen window).
         :param caption: text to display in the graphic.
+        :param fileName: name of the graphic file to create (if None -> screen window).
         :param defFScale: factor to apply to current displacement of nodes 
                     so that the display position of each node equals to
                     the initial position plus its displacement multiplied
@@ -256,10 +262,6 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
             for d in diagrams:
                 self.appendDiagram(d)
         self.displayScene(caption,fileName)
-
-    def displayScalarField(self, preprocessor, xcSet, field, fName= None):
-        lmsg.warning('displayScalarField DEPRECATED; use displayMesh.')
-        self.displayMesh(xcSet, field, None, fName)
 
     def displayLoadOnNode(self, nod, color, force, moment, fScale,defFScale=0.0):
         '''Display loads on one node
@@ -363,14 +365,14 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
     def appendDiagram(self,diagram):
         diagram.addDiagramToScene(self)
 
-    def displaySPconstraints(self, xcSet,scale):
+    def displaySPconstraints(self, setToDisplay,scale):
         ''' Display single point constraints.
 
-        :param xcSet: set to be displayed
+        :param setToDisplay: set to be displayed
         :param scale: scale for SPConstraints symbols.
         '''
-        prep=xcSet.getPreprocessor
-        nodInSet=xcSet.nodes.getTags()
+        prep= setToDisplay.getPreprocessor
+        nodInSet= setToDisplay.nodes.getTags()
         #direction vectors for each DOF
         vx,vy,vz=[1,0,0],[0,1,0],[0,0,1]
         DOFdirVct=(vx,vy,vz,vx,vy,vz)

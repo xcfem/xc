@@ -104,7 +104,7 @@ class SlideDefinition(FigureBase):
     self.setupDiagrams()
     defDisplay.cameraParameters= self.cameraParameters
     if(self.field):
-      self.field.plot(preprocessor, defDisplay,fName)
+      self.field.plot(preprocessor, defDisplay,fileName)
     else:
       defDisplay.displayMesh(xcSet,None,self.diagrams,jpegName,self.getCaption())
     os.system("convert "+ jpegName + " " + epsName)

@@ -12,7 +12,7 @@ from postprocess.xcVtk import vtk_graphic_base
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
 from postprocess.xcVtk.fields import Fields
 
-def displayFieldDirs1and2Base(limitStateLabel,argument,elementSet,genDescr,sectDescr,component,fUnitConv,fileName,captionTexts,defFScale=0.0,viewDef= vtk_graphic_base.CameraParameters('XYZPos'),rgMinMax=None):
+def displayFieldDirs1and2Base(limitStateLabel,argument,elementSet,genDescr,sectDescr,component,fUnitConv,captionTexts,fileName,defFScale=0.0,viewDef= vtk_graphic_base.CameraParameters('XYZPos'),rgMinMax=None):
   '''Display a field defined over bi-dimensional elements in its two directions.
 
   :param limitStateLabel: label that identifies the limit state.
@@ -22,8 +22,8 @@ def displayFieldDirs1and2Base(limitStateLabel,argument,elementSet,genDescr,sectD
   :param sectDescr: text list to identify each direction (as ['vertical reinforcement', 'horizontal reinforcement']).
   :param component: component of the control var to represent.
   :param fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3).
-  :param fileName: file name to store the image. If none -> window on screen.
   :param captionTexts: dictionary of caption texts. 
+  :param fileName: file name to store the image. If none -> window on screen.
   :param defFScale: factor to apply to current displacement of nodes 
               so that the display position of each node equals to
               the initial position plus its displacement multiplied
@@ -40,13 +40,13 @@ def displayFieldDirs1and2Base(limitStateLabel,argument,elementSet,genDescr,sectD
   attributeName= limitStateLabel + 'Sect1'   #Normal stresses limit state direction 1.
   field= Fields.getScalarFieldFromControlVar(attributeName,argument,elementSet,component,fUnitConv,rgMinMax)
   captionBaseText= captionTexts[limitStateLabel] + ', ' + captionTexts[argument] + '. '+ genDescr.capitalize()
-  field.display(defDisplay,fName= fileName,caption=  captionBaseText + ', ' + sectDescr[0],defFScale=defFScale)
+  field.display(defDisplay,caption=  captionBaseText + ', ' + sectDescr[0], fileName= fileName, defFScale= defFScale)
 
   attributeName= limitStateLabel + 'Sect2'   #Normal stresses limit state direction 2
   field= Fields.getScalarFieldFromControlVar(attributeName,argument,elementSet,component,fUnitConv,rgMinMax)
-  field.display(defDisplay,caption= captionBaseText + ', ' + sectDescr[1],defFScale=defFScale)
+  field.display(defDisplay,caption= captionBaseText + ', ' + sectDescr[1], fileName= fileName, defFScale= defFScale)
 
-def displayFieldDirs1and2(limitStateLabel,argument,elementSet,component,fUnitConv,fileName,captionTexts,defFScale=0.0,viewDef= vtk_graphic_base.CameraParameters('XYZPos'),rgMinMax=None):
+def displayFieldDirs1and2(limitStateLabel,argument,elementSet,component,fUnitConv,captionTexts,fileName,defFScale=0.0,viewDef= vtk_graphic_base.CameraParameters('XYZPos'),rgMinMax=None):
   '''Display a field defined over bi-dimensional elements in its two directions.
 
   :param limitStateLabel: label that identifies the limit state.
@@ -54,8 +54,8 @@ def displayFieldDirs1and2(limitStateLabel,argument,elementSet,component,fUnitCon
   :param xcSet: represent the field over those elements with "genDescr" and "sectDescr" attributes.
   :param component: component of the control var to represent.
   :param fUnitConv: unit conversion factor (i.e N->kN => fUnitConv= 1e-3).
-  :param fileName: file name to store the image. If none -> window on screen.
   :param captionTexts: dictionary of caption texts. 
+  :param fileName: file name to store the image. If none -> window on screen.
   :param defFScale: factor to apply to current displacement of nodes 
               so that the display position of each node equals to
               the initial position plus its displacement multiplied
@@ -68,5 +68,5 @@ def displayFieldDirs1and2(limitStateLabel,argument,elementSet,component,fUnitCon
               in red (defaults to None)
   
   '''
-#  displayFieldDirs1and2Base(limitStateLabel,argument,elementSet,elementSet.description,elementSet.sectDescr,component,fUnitConv,fileName,captionTexts,defFScale=defFScale )  #21/07/2017 needs revision
-  displayFieldDirs1and2Base(limitStateLabel,argument,elementSet,elementSet.description,['dir. 1', 'dir. 2'],component,fUnitConv,fileName,captionTexts,defFScale=defFScale,viewDef= viewDef,rgMinMax=rgMinMax)
+#  displayFieldDirs1and2Base(limitStateLabel,argument,elementSet,elementSet.description,elementSet.sectDescr,component,fUnitConv,captionTexts, fileName,defFScale=defFScale )  #21/07/2017 needs revision
+  displayFieldDirs1and2Base(limitStateLabel,argument,elementSet,elementSet.description,['dir. 1', 'dir. 2'],component,fUnitConv, captionTexts, fileName, defFScale=defFScale,viewDef= viewDef,rgMinMax=rgMinMax)

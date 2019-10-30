@@ -49,49 +49,55 @@ class ControlVarDiagram(cd.ColoredDiagram):
         # default values
         elemVDir= elem.getJVector3d(True) #initialGeometry= True
         if self.attributeName <> "intForce":
-          attributeNameSect1= self.attributeName + 'Sect1' # Values in the start node.
-          attributeNameSect2= self.attributeName + 'Sect2' # Values in the end node.
-          if ('crack' in self.attributeName.lower()):
-            if (self.component == 'getCF'):
-              value1=elem.getProp(attributeNameSect1).getCF()
-              value2=elem.getProp(attributeNameSect2).getCF()
-            elif (self.component == 'getMaxSteelStress'):
-              value1=elem.getProp(attributeNameSect1).getMaxSteelStress()
-              value2=elem.getProp(attributeNameSect2).getMaxSteelStress()
+            attributeNameSect1= self.attributeName + 'Sect1' # Values in the start node.
+            attributeNameSect2= self.attributeName + 'Sect2' # Values in the end node.
+            prop1= elem.getProp(attributeNameSect1)
+            prop2= elem.getProp(attributeNameSect2)
+            if(prop1 and prop2):
+                if('crack' in self.attributeName.lower()):
+                    if (self.component == 'getCF'):
+                        value1=prop1.getCF()
+                        value2=prop2.getCF()
+                    elif (self.component == 'getMaxSteelStress'):
+                        value1=prop1.getMaxSteelStress()
+                        value2=prop2.getMaxSteelStress()
+                    else:
+                        value1= getattr(prop1, self.component)
+                        value2= getattr(prop2, self.component)
+                else:
+                    value1= getattr(prop1, self.component)
+                    value2= getattr(prop2, self.component)
             else:
-              value1= getattr(elem.getProp(attributeNameSect1), self.component)
-              value2= getattr(elem.getProp(attributeNameSect2), self.component)
-#              print 'component ',self.component,' not implemented'
-          else:
-            value1= getattr(elem.getProp(attributeNameSect1), self.component)
-            value2= getattr(elem.getProp(attributeNameSect2), self.component)
+                lmsg.error('attribute name: '+ self.attributeName+ ' not found.')
+                value1= None
+                value2= None
         else:
-          if(self.component == 'N'):
-            value1=elem.getN1
-            value2=elem.getN2
-          elif((self.component == 'Qy') or (self.component == 'Vy')):
-            value1=elem.getVy1
-            value2=elem.getVy2
-          elif((self.component == 'Qz') or (self.component == 'Vz')):
-            value1=elem.getVz1
-            value2=elem.getVz2
-          elif(self.component == 'My'):
-            value1=elem.getMy1
-            value2=elem.getMy2
-          elif(self.component == 'Mz'):
-            value1=elem.getMz1
-            value2=elem.getMz2
-          elif(self.component == 'T'):
-            value1=elem.getT1
-            value2=elem.getT2
+            if(self.component == 'N'):
+              value1=elem.getN1
+              value2=elem.getN2
+            elif((self.component == 'Qy') or (self.component == 'Vy')):
+              value1=elem.getVy1
+              value2=elem.getVy2
+            elif((self.component == 'Qz') or (self.component == 'Vz')):
+              value1=elem.getVz1
+              value2=elem.getVz2
+            elif(self.component == 'My'):
+              value1=elem.getMy1
+              value2=elem.getMy2
+            elif(self.component == 'Mz'):
+              value1=elem.getMz1
+              value2=elem.getMz2
+            elif(self.component == 'T'):
+              value1=elem.getT1
+              value2=elem.getT2
         if((self.component == 'Qy') or (self.component == 'Vy')):
-          elemVDir= elem.getJVector3d(True) # initialGeometry= True 
+            elemVDir= elem.getJVector3d(True) # initialGeometry= True 
         elif((self.component == 'Qz') or (self.component == 'Vz')):
-          elemVDir= elem.getKVector3d(True) # initialGeometry= True 
+            elemVDir= elem.getKVector3d(True) # initialGeometry= True 
         elif(self.component == 'My'):
-          elemVDir= elem.getKVector3d(True) # initialGeometry= True 
+            elemVDir= elem.getKVector3d(True) # initialGeometry= True 
         elif(self.component == 'Mz'):
-          elemVDir= elem.getJVector3d(True) # initialGeometry= True 
+            elemVDir= elem.getJVector3d(True) # initialGeometry= True 
         return [elemVDir,value1,value2]
 
     def getMaxAbsComp(self):

@@ -33,6 +33,8 @@ class ScalarField(fb.FieldBase):
       # Convert the range units.
       self.rgMinMax[0]= rgMinMax[0]*fUnitConv
       self.rgMinMax[1]= rgMinMax[1]*fUnitConv
+    else:
+      self.rgMinMax= None
     self.arr= None
 
   def fillArray(self, nodeSet):
@@ -91,13 +93,19 @@ class ExtrapolatedScalarField(ScalarField):
     super(ExtrapolatedScalarField,self).__init__(name,functionName,component,fUnitConv,rgMinMax)
     self.xcSet= xcSet
 
-  def display(self,defDisplay,fName= None,caption= '',defFScale=0.0):
-    defDisplay.displayMesh(self.xcSet,self,None,fName,caption,defFScale)
-    
-  def plot(self,defDisplay,fName= None,caption= '',defFScale=0.0):
-    lmsg.warning('ExtrapolatedScalarField.plot is DEPRECATED use display.')
-    self.display(defDisplay,fName,caption,defFScale)
+  def display(self,defDisplay,caption= '',fileName= None, defFScale=0.0):
+    '''Display the scalar field graphic.
 
+      :param fileName: name of the graphic file to create (if None -> screen window).
+      :param caption: text to display in the graphic.
+      :param defFScale: factor to apply to current displacement of nodes 
+                  so that the display position of each node equals to
+                  the initial position plus its displacement multiplied
+                  by this factor. (Defaults to 0.0, i.e. display of 
+                  initial/undeformed shape)
+    '''
+    defDisplay.displayMesh(xcSets= self.xcSet,field= self, diagrams= None,caption= caption, fileName= fileName, defFScale= defFScale)
+    
 class ExtrapolatedProperty(ExtrapolatedScalarField):
   '''Scalar field defined as property value at nodes.'''
   def __init__(self,name,functionName,xcSet, component= None,fUnitConv= 1.0,rgMinMax=None):
@@ -106,12 +114,15 @@ class ExtrapolatedProperty(ExtrapolatedScalarField):
   def extrapolate(self):
     extrapolate_elem_attr.extrapolate_elem_function_attr(self.xcSet.elements,self.name,"getProp", self.name)
 
-  def display(self,defDisplay,fName= None,caption= '',defFScale=0.0):
+  def display(self,defDisplay,caption= '',fileName= None, defFScale=0.0):
+    ''' Display the field.
+
+       :param fileName: name of the graphic file to create (if None -> screen window).
+      :param caption: text to display in the graphic.
+    '''
+
     self.extrapolate()
-    defDisplay.displayMesh(self.xcSet,self,None,fName,caption,defFScale)
-  def plot(self,defDisplay,fName= None,caption= ''):
-    lmsg.warning('ExtrapolatedProperty.plot is DEPRECATED use display.')
-    self.display(defDisplay,fName,caption)
+    defDisplay.displayMesh(self.xcSet,field= self, diagrams= None, caption= caption, fileName= fileName, defFScale= defFScale)
 
 def getScalarFieldFromControlVar(attributeName,argument,xcSet,component,fUnitConv,rgMinMax):
   '''return an scalar field that represents the control var over the 

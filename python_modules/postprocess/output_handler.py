@@ -173,7 +173,7 @@ class OutputHandler(object):
         captionText= loadCaseName+' '+itemToDisp+' '+unitDescription+' '+setToDisplay.description
         defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
         defDisplay.cameraParameters= self.getCameraParameters()
-        defDisplay.displayMesh(xcSets=setToDisplay,field=field, diagrams= None, fName=fileName, caption= captionText, defFScale=defFScale)
+        defDisplay.displayMesh(xcSets=setToDisplay,field=field, diagrams= None, caption= captionText, fileName=fileName, defFScale=defFScale)
         
     def displayReactions(self,setToDisplay=None,fileName=None,defFScale=0.0):
         ''' Display reactions.
@@ -258,7 +258,7 @@ class OutputHandler(object):
         defDisplay.setupGrid(setToDisplay)
         defDisplay.defineMeshScene(None,defFScale,color=setToDisplay.color)
         defDisplay.appendDiagram(diagram) #Append diagram to the scene.
-        defDisplay.displayScene(caption=caption,fName=fileName)
+        defDisplay.displayScene(caption=caption,fileName=fileName)
 
     def displayIntForcDiag(self,itemToDisp, setToDisplay=None,fileName=None,defFScale=0.0):
         '''displays the component of internal forces in the set of entities as a 
@@ -296,7 +296,7 @@ class OutputHandler(object):
         defDisplay.setupGrid(setToDisplay)
         defDisplay.defineMeshScene(None,defFScale,color= setToDisplay.color)
         defDisplay.appendDiagram(diagram) #Append diagram to the scene.
-        defDisplay.displayScene(caption= captionText,fName= fileName)
+        defDisplay.displayScene(caption= captionText,fileName= fileName)
         
     def displayIntForc(self,itemToDisp, setToDisplay=None,fileName=None,defFScale=0.0, rgMinMax=None):
         '''displays the component of internal forces in the 
@@ -339,7 +339,7 @@ class OutputHandler(object):
             defDisplay.cameraParameters= self.getCameraParameters()
             loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
             captionText= loadCaseName+' '+itemToDisp+' '+unitDescription +' '+setToDisplay.description
-            field.display(defDisplay=defDisplay,fName=fileName,caption= captionText,defFScale=defFScale)
+            field.display(defDisplay=defDisplay,caption= captionText,fileName=fileName, defFScale=defFScale)
             
     def displayLoadVectors(self, setToDisplay= None, caption= None, fileName= None, defFScale= 0.0):
         '''Displays load vectors on the set argument.
@@ -425,7 +425,7 @@ class OutputHandler(object):
             vField.addToDisplay(defDisplay,orientation= self.outputStyle.nodalLoadBarOrientation)
         if(not caption):
           caption= 'load case: ' + loadCaseName +' '+elLoadComp + ', set: ' + setToDisplay.name + ', '  + unitDescription
-        defDisplay.displayScene(caption=caption,fName=fileName)
+        defDisplay.displayScene(caption=caption,fileName=fileName)
         
     def displayNodeValueDiagram(self, itemToDisp, setToDisplay=None,caption= None,fileName=None,defFScale=0.0):
         '''displays the a displacement (uX,uY,...) or a property defined in nodes 
@@ -459,7 +459,7 @@ class OutputHandler(object):
         loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
         if(not caption):
             caption= loadCaseName+' '+itemToDisp+' '+unitDescription +' '+setToDisplay.description
-        defDisplay.displayScene(caption=caption,fName=fileName)
+        defDisplay.displayScene(caption=caption,fileName=fileName)
 
     def displayEigenvectors(self, mode= 1, setToDisplay=None, caption= None, fileName=None,defFScale=0.0):
         '''Displays the computed eigenvectors on the set argument.
@@ -603,7 +603,7 @@ class OutputHandler(object):
         defDisplay.setupGrid(setToDisplay)
         defDisplay.defineMeshScene(None,defFScale,color= setToDisplay.color)
         defDisplay.appendDiagram(diagram) #Append diagram to the scene.
-        defDisplay.displayScene(caption= caption,fName= fileName)
+        defDisplay.displayScene(caption= caption,fileName= fileName)
         
     def displayEigenvectorsOnSets(self, eigenMode, setsToDisplay, fileName=None,defFScale=0.0):
         '''displays the reactions as vector on affected nodes
