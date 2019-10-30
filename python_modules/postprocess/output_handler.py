@@ -74,7 +74,7 @@ class OutputHandler(object):
             caption= setToDisplay.name+' set; blocks'
         defDisplay= vtk_CAD_graphic.RecordDefDisplayCAD()
         defDisplay.cameraParameters= self.getCameraParameters()
-        defDisplay.displayBlocks(setToDisplay,caption= caption, fName= fileName)
+        defDisplay.displayBlocks(setToDisplay,caption= caption, fileName= fileName)
         
     def displayFEMesh(self, setsToDisplay= None, caption= None, fileName= None, defFScale= 0.0):
         '''Display the mesh (nodes, elements and constraints)
@@ -96,7 +96,7 @@ class OutputHandler(object):
             caption= 'mesh'
         defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
         defDisplay.cameraParameters= self.getCameraParameters()
-        defDisplay.displayMesh(xcSets=setsToDisplay,caption= caption, scaleConstr= self.outputStyle.constraintsScaleFactor, fName= fileName, defFScale= defFScale)
+        defDisplay.displayMesh(xcSets=setsToDisplay,caption= caption, scaleConstr= self.outputStyle.constraintsScaleFactor, fileName= fileName, defFScale= defFScale)
 
     def displayLocalAxes(self, setToDisplay= None, caption= None, fileName=None, defFScale= 0.0):
         '''Display the local axes of the elements contained in the set.

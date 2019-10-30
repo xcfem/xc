@@ -55,7 +55,7 @@ class RecordDefDisplayCAD(vtk_graphic_base.RecordDefDisplay):
         self.setupGrid(xcSet)
         self.displayGrid(caption)
 
-    def displayBlocks(self, xcSet, fName= None, caption= ''):
+    def displayBlocks(self, xcSet, caption= '',fileName= None):
         ''' Display geometric entities (points, lines, surfaces and volumes)
 
         :param xcSet: set to be represented
@@ -65,7 +65,7 @@ class RecordDefDisplayCAD(vtk_graphic_base.RecordDefDisplay):
         '''
         self.setupGrid(xcSet)
         self.defineMeshScene()
-        self.displayScene(caption,fName)
+        self.displayScene(caption,fileName)
 
     def plotMultiBlockModel(self, xcSet, fName, caption= ''):
         lmsg.warning('plotMultiBlockModel DEPRECATED; use displayBlocks.')

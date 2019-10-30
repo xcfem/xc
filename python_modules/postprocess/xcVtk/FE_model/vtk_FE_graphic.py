@@ -225,7 +225,7 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
         self.VtkDefineNodesActor(nodeSize)
         self.VtkDefineElementsActor("surface",field,elemSet.color)
 
-    def displayMesh(self, xcSets, field= None, diagrams= None, fName= None, caption= '',defFScale=0.0,nodeSize=0.01,scaleConstr=0.2):
+    def displayMesh(self, xcSets, field= None, diagrams= None, caption= '',fileName= None,defFScale=0.0,nodeSize=0.01,scaleConstr=0.2):
         '''Display the finite element mesh 
 
         :param xcSets: set or list of sets to be displayed
@@ -255,7 +255,7 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
         if(diagrams):
             for d in diagrams:
                 self.appendDiagram(d)
-        self.displayScene(caption,fName)
+        self.displayScene(caption,fileName)
 
     def displayScalarField(self, preprocessor, xcSet, field, fName= None):
         lmsg.warning('displayScalarField DEPRECATED; use displayMesh.')
