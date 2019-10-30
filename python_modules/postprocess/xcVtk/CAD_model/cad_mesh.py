@@ -3,7 +3,7 @@ import vtk
 import xc_base
 import xc
 from miscUtils import LogMessages as lmsg
-import create_array_set_data
+from postprocess.xcVtk.CAD_model import create_array_set_data
 
 __author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (AO_O)"
 __copyright__= "Copyright 2015, LCPT AO_O"
