@@ -59,11 +59,9 @@ class LoadCaseResults(QuickGraphics):
           self.prep= feProblem.getPreprocessor
 
     def solve(self):
-        self.prep.getDomain.removeAllLoadPatterns()
-        combs=self.prep.getLoadHandler.getLoadCombinations
-        lCase=combs.newLoadCombination(self.loadCaseName,self.loadCaseExpr)
-        self.prep.resetLoadCase()
-        combs.addToDomain(self.loadCaseName)
+        print('enters solve, loadcase: ', self.loadCaseName)
+        self.modelSpace.removeAllLoadPatternsFromDomain()
+        self.modelSpace.addNewLoadCaseToDomain(self.loadCaseName,self.loadCaseExpr)
         #Solution
         lmsg.warning('Here we use a simple linear static solution that is not always a suitable method.')
         analysis= predefined_solutions.simple_static_linear(self.feProblem)

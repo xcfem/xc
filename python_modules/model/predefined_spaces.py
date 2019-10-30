@@ -172,7 +172,6 @@ class PredefinedSpace(object):
             spc= constraints.newSPConstraint(newNode.tag,i,0.0)
         return newNode, newElement
 
-
     def setBearingOnX(self,iNod,bearingMaterial):
         '''Modelize a bearing on X direction.
 
@@ -227,7 +226,39 @@ class PredefinedSpace(object):
         '''Return the set that contains all the defined
            entities.'''
         return self.preprocessor.getSets.getSet("total")
+
+    def removeAllLoadPatternsFromDomain(self):
+        ''' Remove all load patterns from domain.'''
+        self.preprocessor.getDomain.removeAllLoadPatterns()
+
+    def addLoadCaseToDomain(self, loadCaseName):
+        '''Add the load case argument (load pattern or
+           combination) to the domain.
+
+           :param loadCaseName: name of the load pattern or combination.
+        '''
+        self.preprocessor.getLoadHandler.addToDomain(loadCaseName)
+
+    def removeLoadCaseFromDomain(self, loadCaseName):
+        '''Add the load case argument (load pattern or
+           combination) to the domain.
+
+           :param loadCaseName: name of the load pattern or combination.
+        '''
+        self.preprocessor.getLoadHandler.removeFromDomain(loadCaseName)
         
+    def addNewLoadCaseToDomain(self, loadCaseName, loadCaseExpression):
+        '''Defines a new combination and add it to the domain.
+
+           :param loadCaseName: name of the load pattern or combination.
+           :param loadCaseExpression: expression that defines de load case as a
+                                      combination of previously defined actions
+                                      e.g. '1.0*GselfWeight+1.0*GearthPress'
+        '''
+        combs= self.preprocessor.getLoadHandler.getLoadCombinations
+        lCase=combs.newLoadCombination(loadCaseName,loadCaseExpression)
+        self.preprocessor.resetLoadCase()
+        self.addLoadCaseToDomain(loadCaseName)
 
 def getModelSpace(preprocessor):
       '''Return a PredefinedSpace from the dimension of the space 
