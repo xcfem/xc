@@ -67,7 +67,7 @@ s.nDivJ= NumDivJ
 f1= preprocessor.getSets.getSet("f1")
 f1.genMesh(xc.meshDir.I)
 
-sides= s.getEdges
+sides= s.getSides
 #Edge iterator
 for l in sides:
   vTang= l.getEdge.getTang(0)

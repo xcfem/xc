@@ -62,7 +62,7 @@ s.nDivJ= NumDivJ
 associatedSetName= 'f'+str(s.tag)
 f0= preprocessor.getSets.getSet(associatedSetName)
 f0.genMesh(xc.meshDir.I)
-sides= s.getEdges
+sides= s.getSides
 #Edge iterator
 for l in sides:
   for i in l.getEdge.getNodeTags():

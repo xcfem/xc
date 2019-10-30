@@ -67,7 +67,7 @@ s.nDivJ= NumDivJ
 f1= preprocessor.getSets.getSet("f1")
 f1.genMesh(xc.meshDir.I)
 constraints= preprocessor.getBoundaryCondHandler
-sides= s.getEdges
+sides= s.getSides
 #Edge iterator
 for l in sides:
   for i in l.getEdge.getNodeTags():
