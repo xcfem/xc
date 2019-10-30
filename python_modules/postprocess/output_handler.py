@@ -96,7 +96,7 @@ class OutputHandler(object):
             caption= 'mesh'
         defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
         defDisplay.cameraParameters= self.getCameraParameters()
-        defDisplay.displayMesh(xcSets=setsToDisplay,caption= caption, scaleConstr= self.outputStyle.constraintsScaleFactor, fileName= fileName, defFScale= defFScale)
+        defDisplay.displayMesh(xcSets=setsToDisplay,caption= caption, scaleConstr= self.outputStyle.constraintsScaleFactor, fName= fileName, defFScale= defFScale)
 
     def displayLocalAxes(self, setToDisplay= None, caption= None, fileName=None, defFScale= 0.0):
         '''Display the local axes of the elements contained in the set.
