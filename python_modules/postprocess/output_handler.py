@@ -74,7 +74,7 @@ class OutputHandler(object):
             caption= setToDisplay.name+' set; blocks'
         defDisplay= vtk_CAD_graphic.RecordDefDisplayCAD()
         defDisplay.cameraParameters= self.getCameraParameters()
-        defDisplay.displayBlocks(setToDisplay,caption= caption, fileName= fileName, defFScale= defFScale)
+        defDisplay.displayBlocks(setToDisplay,caption= caption, fName= fileName)
         
     def displayFEMesh(self, setsToDisplay= None, caption= None, fileName= None, defFScale= 0.0):
         '''Display the mesh (nodes, elements and constraints)
