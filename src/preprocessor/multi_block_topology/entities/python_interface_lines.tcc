@@ -73,17 +73,17 @@ class_<XC::CmbEdge::Side,bases<CommandEntity> >("Side", no_init)
   .def("getTang", &XC::CmbEdge::Side::getTang, return_internal_reference<>(),"Return a vector tangent to the edge.")
   ;
 
-typedef std::deque<XC::CmbEdge::Side> dq_lados;
-class_<dq_lados, boost::noncopyable >("DqEdges", no_init)
-  .def("__iter__", boost::python::iterator<dq_lados>())
-  .add_property("size", &dq_lados::size)
+typedef std::deque<XC::CmbEdge::Side> dq_sides;
+class_<dq_sides, boost::noncopyable >("DqEdges", no_init)
+  .def("__iter__", boost::python::iterator<dq_sides>())
+  .add_property("size", &dq_sides::size)
    ;
 
 
 class_<XC::CmbEdge, bases<XC::Edge>, boost::noncopyable >("CmbEdge","Compound line",no_init)
   .add_property("getNumVertices", &XC::CmbEdge::getNumberOfVertices,"Return the number of vertices.")
   .add_property("getNumEdges", &XC::CmbEdge::getNumberOfEdges,"Return the number of edges.")
-  .add_property("getEdges", make_function( &XC::CmbEdge::getSides, return_internal_reference<>()))
+  .add_property("getSides", make_function( &XC::CmbEdge::getSides, return_internal_reference<>()))
   .def("addLines",&XC::CmbEdge::addLines, return_internal_reference<>(),"Add lines to the sequence.")
   .def("addPoints",&XC::CmbEdge::addPoints, return_internal_reference<>(),"Add points to the sequence.")
   .def("getReversed",&XC::CmbEdge::getReversed,"Return the reversed face.")
