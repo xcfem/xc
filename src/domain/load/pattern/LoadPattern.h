@@ -98,7 +98,7 @@ class LoadPattern: public NodeLocker
   private:
     std::string description; //!< Load description (self weight, wind,...)
     double loadFactor; //!< Load factor obtained from TimeSeries (see applyLoad).
-    double gamma_f; //!< Load factor imposed from current load combination.
+    double gamma_f; //!< Partial safety factor according to current load combination.
 
     TimeSeries *theSeries; //!< load variation in time.
 

@@ -139,7 +139,7 @@ const std::string &XC::LoadPattern::getName(void) const
   }
 
 //! @brief Returns the name of this load pattern multiplied
-//! by its combination factor.
+//! by its partial safety factor.
 std::string XC::LoadPattern::getFactoredName(void) const
   {
     std::string retval= getName();
@@ -386,24 +386,26 @@ void XC::LoadPattern::setLoadConstant(void)
 const double &XC::LoadPattern::getLoadFactor(void) const
   { return loadFactor; }
 
-//! @brief Returns the weighting factor set by the load combination.
+//! @brief Returns the partial safety factor according to the load combination.
 const double &XC::LoadPattern::GammaF(void) const
   { return gamma_f; }
 
-//! @brief Returns the weighting factor set by the load combination.
+//! @brief Returns the partial safety factor according to the load combination.
 double &XC::LoadPattern::GammaF(void)
   { return gamma_f; }
 
-//! @brief Sets the weighting factor set by the load combination.
+//! @brief Sets the partial safety factor according to the load combination.
 void XC::LoadPattern::setGammaF(const double &g)
   { gamma_f= g; }
 
+//! @brief Multiplies the partial safety factor.
 XC::LoadPattern &XC::LoadPattern::operator*=(const double &fact)
   {
     gamma_f*= fact;
     return *this;
   }
 
+//! @brief Divides the partial safety factor.
 XC::LoadPattern &XC::LoadPattern::operator/=(const double &fact)
   {
     gamma_f/= fact;
@@ -476,7 +478,7 @@ void XC::LoadPattern::Print(std::ostream &s, int flag)
   {
     s << "Load Pattern: " << this->getTag() << "\n";
     s << "  load factor: " << loadFactor << "\n";
-    s << "  gamma_f: " << gamma_f << "\n";
+    s << "  partial safety factor gamma_f: " << gamma_f << "\n";
     if(theSeries)
       theSeries->Print(s,flag);
     std::cerr << "  Loads: \n";
