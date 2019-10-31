@@ -83,12 +83,12 @@ class_<XC::GlueNodeToElement, bases<XC::MRMFreedom_Constraint>, boost::noncopyab
 
 typedef std::map<int,XC::LoadPattern *> map_load_patterns;
 class_<map_load_patterns, boost::noncopyable>("map_load_patterns")
-//  .def(map_indexing_suite<map_load_patterns>() )
+  .def(XC::mapptr_indexing_suite<map_load_patterns>() )
   ;
 
 typedef std::map<int,XC::NodeLocker *> map_node_locker;
 class_<map_node_locker, boost::noncopyable>("map_node_locker")
-//  .def(map_indexing_suite<map_node_locker>() )
+  .def(XC::mapptr_indexing_suite<map_node_locker>() )
   ;
 
 map_load_patterns &(XC::ConstrContainer::*getLoadPatternsPtr)(void)= &XC::ConstrContainer::getLoadPatterns;
@@ -103,5 +103,5 @@ class_<XC::ConstrContainer, bases<XC::MeshComponentContainer>, boost::noncopyabl
   .def("getNumLoadPatterns", &XC::ConstrContainer::getNumLoadPatterns,"Returns the number of load cases.")
   .def("getNumNodeLockers", &XC::ConstrContainer::getNumNodeLockers,"Returns the number of node lockers.")
   .def("getNodeLockers", make_function(getNodeLockersPtr, return_internal_reference<>() ),"Returns the node lockers container.")
-  .def("getLoadPatterns", make_function(getLoadPatternsPtr, return_internal_reference<>() ),"Returns the load pattern container.")
+  .add_property("getLoadPatterns", make_function(getLoadPatternsPtr, return_internal_reference<>() ),"Returns the load pattern container.")
   ;

@@ -409,12 +409,12 @@ class OutputHandler(object):
         # auto-scaling parameters
         LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to auto-scale)
         elLoadScaleF= self.outputStyle.loadDiagramsScaleFactor
-        diagAux=lld.LinearLoadDiagram(setToDisp=setToDisplay,scale=elLoadScaleF,fUnitConv= fConvUnits,loadPatternName= loadCaseName,component=elLoadComp)
+        diagAux=lld.LinearLoadDiagram(setToDisp=setToDisplay,scale=elLoadScaleF,fUnitConv= fConvUnits,component=elLoadComp)
         maxAbs=diagAux.getMaxAbsComp(preprocessor)
         if(maxAbs>0):
             elLoadScaleF*=LrefModSize/maxAbs*100
             #Linear loads
-            diagram= lld.LinearLoadDiagram(setToDisp=setToDisplay,scale=elLoadScaleF,fUnitConv= fConvUnits,loadPatternName= loadCaseName,component=elLoadComp)
+            diagram= lld.LinearLoadDiagram(setToDisp=setToDisplay,scale=elLoadScaleF,fUnitConv= fConvUnits,component=elLoadComp)
             diagram.addDiagram(preprocessor)
             if diagram.isValid():
                 defDisplay.appendDiagram(diagram)

@@ -27,7 +27,6 @@ class LoadOnPoints(vf.VectorField):
           components: index of the components of the load. Default: [0,1,2] 
         '''
         super(LoadOnPoints,self).__init__(loadPatternName,fUnitConv,scaleFactor,showPushing)
-        self.lpName= loadPatternName 
         self.components= components
 
     def getMaxLoad(self):
@@ -175,24 +174,20 @@ class LoadVectorField(LoadOnPoints):
         :param showElementalLoads: if true show loads over elements.
         :param showNodalLoads: if true show loads over nodes.
         '''
-        preprocessor.resetLoadCase()
-        loadPatterns= preprocessor.getLoadHandler.getLoadPatterns
-        loadPatterns.addToDomain(self.lpName)
-        lp= loadPatterns[self.lpName]
         count= 0
-        if(lp):
-          numberOfLoads= self.populateLoads(preprocessor,lp)
+        activeLoadPatterns= preprocessor.getDomain.getConstraints.getLoadPatterns
+        if(len(activeLoadPatterns)<1):
+            lmsg.warning('No active load patterns.')
+        for lp in activeLoadPatterns: #Iterate over loaded elements.
+          numberOfLoads= self.populateLoads(preprocessor,lp.data())
           if(numberOfLoads>0):
             self.data.scaleFactor/= self.getMaxLoad()
             #Iterate over loaded elements.
-            count+= self.dumpElementalPositions(preprocessor,lp)
+            count+= self.dumpElementalPositions(preprocessor,lp.data())
             #Iterate over loaded nodes.
-            count+= self.dumpNodalPositions(preprocessor,lp,defFScale)
+            count+= self.dumpNodalPositions(preprocessor,lp.data(),defFScale)
             if(count==0):
               lmsg.warning('LoadVectorField.dumpVectors: no loads defined.')
-            loadPatterns.removeFromDomain(self.lpName)
-        else:
-          lmsg.error('Load pattern: '+ self.lpName + ' not found.')
         return count
 
     def dumpNodalLoads(self, preprocessor,defFScale):

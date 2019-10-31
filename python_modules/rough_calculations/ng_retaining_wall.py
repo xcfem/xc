@@ -899,6 +899,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   def resultComb(self,nmbComb):
     '''Solution and result retrieval routine.'''
     preprocessor= self.feProblem.getPreprocessor   
+    self.modelSpace.removeAllLoadPatternsFromDomain()
     preprocessor.resetLoadCase()
     preprocessor.getLoadHandler.addToDomain(nmbComb)
     #Solution
@@ -906,7 +907,7 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
     analysis= solution.simpleStaticLinear(self.feProblem)
     result= analysis.analyze(1)
     reactions= self.getReactions()
-    preprocessor.getLoadHandler.removeFromDomain(nmbComb)
+    #preprocessor.getLoadHandler.removeFromDomain(nmbComb)
     return reactions
   
   def performStabilityAnalysis(self,combinations,foundationSoilModel, sg_adm= None): 

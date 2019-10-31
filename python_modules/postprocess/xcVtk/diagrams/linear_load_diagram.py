@@ -9,10 +9,9 @@ from miscUtils import LogMessages as lmsg
 
 class LinearLoadDiagram(cd.ColoredDiagram):
     '''Draw a load over a set of linear element (qx,qy,qz,...)'''
-    def __init__(self,setToDisp,scale,fUnitConv,loadPatternName,component):
+    def __init__(self,setToDisp,scale,fUnitConv,component):
         super(LinearLoadDiagram,self).__init__(scale,fUnitConv)
         self.setToDisp=setToDisp
-        self.lpName= loadPatternName
         self.component= component
 
     def dumpElementalLoads(self,preprocessor,lp,indxDiagram):
@@ -47,13 +46,11 @@ class LinearLoadDiagram(cd.ColoredDiagram):
         It is used for calculating auto-scale parameter
         '''
         maxV=0
-        preprocessor.resetLoadCase()
-        loadPatterns= preprocessor.getLoadHandler.getLoadPatterns
-        loadPatterns.addToDomain(self.lpName)
-        lp= loadPatterns[self.lpName]
-        #Iterate over loaded elements.
-        if(lp):
-            lIter= lp.loads.getElementalLoadIter
+        activeLoadPatterns= preprocessor.getDomain.getConstraints.getLoadPatterns
+        if(len(activeLoadPatterns)<1):
+            lmsg.warning('No active load patterns.')
+        for lp in activeLoadPatterns: #Iterate over loaded elements.
+            lIter= lp.data().loads.getElementalLoadIter
             eLoad= lIter.next()
             while(eLoad):
                 tags= eLoad.elementTags
@@ -74,15 +71,12 @@ class LinearLoadDiagram(cd.ColoredDiagram):
 
 
     def dumpLoads(self, preprocessor, indxDiagram):
-        preprocessor.resetLoadCase()
-        loadPatterns= preprocessor.getLoadHandler.getLoadPatterns
-        loadPatterns.addToDomain(self.lpName)
-        lp= loadPatterns[self.lpName]
-        #Iterate over loaded elements.
-        if(lp):
-          self.dumpElementalLoads(preprocessor,lp,indxDiagram)
-        else:
-          lmsg.error('load pattern: '+self.lpName+' not found.')
+        ''' Dump loads over elements.'''
+        activeLoadPatterns= preprocessor.getDomain.getConstraints.getLoadPatterns
+        if(len(activeLoadPatterns)<1):
+            lmsg.warning('No active load patterns.')
+        for lp in activeLoadPatterns: #Iterate over loaded elements.
+            self.dumpElementalLoads(preprocessor,lp.data(),indxDiagram)
 
     def addDiagram(self,preprocessor):
         self.creaEstrucDatosDiagrama()
