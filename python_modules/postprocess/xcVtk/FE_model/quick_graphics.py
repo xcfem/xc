@@ -59,7 +59,6 @@ class LoadCaseResults(QuickGraphics):
           self.prep= feProblem.getPreprocessor
 
     def solve(self):
-        print('enters solve, loadcase: ', self.loadCaseName)
         self.modelSpace.removeAllLoadPatternsFromDomain()
         self.modelSpace.addNewLoadCaseToDomain(self.loadCaseName,self.loadCaseExpr)
         #Solution
