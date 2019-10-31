@@ -39,7 +39,7 @@ class BasementWall(rw.RetainingWall):
     self.stability_results.writeOutput(outputFile,self.name)
     self.sls_results.writeOutput(outputFile,self.name)
     outputFile.write("\\bottomcaption{"+ self.name +" wall reinforcement} \\label{tb_"+self.name+"}\n")
-    outputFile.write("\\tablefirsthead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{self.name+" wall reinforcement}}\\\\\\hline\n}\n")
+    outputFile.write("\\tablefirsthead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{"+self.name+" wall reinforcement}}\\\\\\hline\n}\n")
     outputFile.write("\\tablehead{\\hline\n\\multicolumn{1}{|c|}{\\textsc{"+self.name+" (suite)}}\\\\\\hline\n}\n")
     outputFile.write("\\tabletail{\\hline \\multicolumn{1}{|r|}{../..}\\\\\\hline}\n")
     outputFile.write("\\tablelasttail{\\hline}\n")
