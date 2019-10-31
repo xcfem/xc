@@ -42,8 +42,8 @@ class OutputHandler(object):
             return vtk_graphic_base.CameraParameters('XYZPos')
         else: # 2D or 1D problem
             retval= vtk_graphic_base.CameraParameters('Custom')
-            retval.viewUpVc= [0,0,1]
-            retval.posCVc= [0,-100,0]
+            retval.viewUpVc= [0,1,0]#[0,0,1]
+            retval.posCVc= [0,0,100] #[0,-100,0]
             return retval
         
     def getCameraParameters(self):
