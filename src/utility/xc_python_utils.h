@@ -39,6 +39,12 @@ std::vector<int> vector_int_from_py_object(const boost::python::object &);
 m_double m_double_from_py_object(const boost::python::object &);
 
 
+// Solution to export std::map<key, T *> to Python as iterable
+// objects.
+ 
+// CREDITS: Taken from a post of Phil in stackoverflow
+// https://stackoverflow.com/users/2904770/phil
+ 
 //Forward declaration
 template <class Container, bool NoProxy, class DerivedPolicies>
 class mapptr_indexing_suite;
