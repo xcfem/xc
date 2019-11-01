@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 ''' Anchor design according to EOTA TR029'''
 
+from __future__ import division
+from __future__ import print_function
+
 __author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2015, AO_O and LCPT"
 __license__= "GPL"
@@ -105,15 +108,37 @@ def getFactor1N(C, CcrN):
     '''
     return min(0.7+0.3*C/CcrN,1)
 
-def getScrN(hEf):
-  '''
-  SideLength del influence area of an individual anchor
-   according to clause 5.2.2.4 b) (equation 5.3b) del
-   clause 5.2.2.4 b) of EOTA TR029.
+def getFactor3N(d, spacing, n, hEf, tauRk, fck_cube,cracked):
+    '''
+    Factor that takes into account the influence of the failure surface
+    for anchor groups according to expression 5.2f of clause 5.2.2.3 d).
 
-   :param hEf: effective anchorage depth (m).
-  '''
-  return 3*hEf
+     :param d: anchor diameter (m).
+     :param spacing: spacing of the anchor group.
+     :param n: number of anchors in a group.
+     :param hEf: effective anchorage depth (m).
+     :param tauRk: Characteristic bond resistance (must be taken from relevant ETA) (Pa).
+     :param fck_cube: characteristic concrete compression strength measured 
+                    on cubes with a side length of 150 mm (value of concrete 
+                    strength class according to ENV 206) (Pa).
+     :param cracked: true if cracked concrete.
+    '''
+    sqrtn= math.sqrt(n)
+    k= 2.3
+    if(not cracked): k= 3.2
+    psi_0g_Np= max(sqrtn-(sqrtn-1.0)*math.pow(d*tauRk/(k*math.sqrt(hEf*fck_cube)),1.5),1.0)
+    ratio= spacing/getScrNp(d, hEf, tauRk)
+    return psi_0g_Np-math.pow(ratio,0.5)*(psi_0g_Np-1.0)
+    
+def getScrN(hEf):
+    '''
+    SideLength del influence area of an individual anchor
+     according to clause 5.2.2.4 b) (equation 5.3b) del
+     clause 5.2.2.4 b) of EOTA TR029.
+
+     :param hEf: effective anchorage depth (m).
+    '''
+    return 3*hEf
 
 def getA0cN(anchorPosition, hEf):
     '''
@@ -213,7 +238,7 @@ def shearResistanceGroupWithoutLeverArm(As, fuk, nr):
 
 def shearResistanceConcretePryOut(NRkp, NRkc, hEf):
     '''
-    Shear strength of a bolt por desprendimiento de cuña de hormigón
+    Shear strength of a bolt by concrete pry-out failure
      according to expressions 5.7 y 5.7a of clause 5.2.3.3 of EOTA TR029.
 
      :param NRkp: Characteristic resistance of combined pull-out and
@@ -335,32 +360,61 @@ def AcV2PernosC2(h, c1, c2, s2):
   '''
   return (1.5*c1+c2+min(s2,3*c1))*min(1.5*c1,h)
 
-def k1Expr58A(descr):
-  '''
-  Coeficiente que introduce la influencia de la fisuración del hormigón en la expresión 5.8a of EOTA TR029.
+def k1Expr58A(cracked):
+    '''
+    Factor that introduces the influence of the concrete cracking in expression
+    5.8a of EOTA TR029.
 
-  :param descr: Descriptor que puede tomar los valores:
-    1\: anclaje en cracked concrete.
-    2\: anclaje en non-cracked concrete.
-  '''
-  return ifte(descr<=1,1.7,2.4)
+    :param cracked: True if placed on cracked concrete:
+    '''
+    retval= 1.7
+    if(not cracked):
+        retval= 2.4
+    return retval
 
-def VRkC0Expr58(k1, d, hEf, fckCube, c1):
-  '''
-  Initial value of the characteristic resistance of an anchor placed in cracked
-  or non-cracked concrete and loaded perpendicular to the edge according to 
-  expression 5.8a of clause 5.2.3.4 (a) of EOTA TR029.
+def VRkC0Expr58(d, hEf, fckCube, c1, cracked):
+    '''
+    Initial value of the characteristic resistance of an anchor placed in cracked
+    or non-cracked concrete and loaded perpendicular to the edge according to 
+    expression 5.8a of clause 5.2.3.4 (a) of EOTA TR029.
 
-  :param d: anchor diameter.
-  :param hEf: effective anchorage depth.
-  :param fckCube: characteristic concrete compression strength measured 
-                  on cubes with a side length of 150 mm (value of concrete 
-                  strength class according to ENV 206) (Pa).
-  :param c1: edge distance in direction 1; in case of anchorages close to an 
-             edge loaded in shear c 1 is the edge distance in direction of 
-             the shear load (see Figure 2.1b and Figure 5.7of EOTA TR029).
-  '''
-  alpha= tonum(0.1*(hEf/c1)^1.5)
-  beta= tonum(0.1*(d/c1)^0.2)
-  return k1*pow(d*1000,alpha)*pow(hEf*1000,beta)*sqrt(fckCube/1e6)*pow(c1*1000,1.5)
+    :param d: anchor diameter.
+    :param hEf: effective anchorage depth.
+    :param fckCube: characteristic concrete compression strength measured 
+                    on cubes with a side length of 150 mm (value of concrete 
+                    strength class according to ENV 206) (Pa).
+    :param c1: edge distance in direction 1; in case of anchorages close to an 
+               edge loaded in shear c 1 is the edge distance in direction of 
+               the shear load (see Figure 2.1b and Figure 5.7of EOTA TR029).
+    :param cracked: True if placed on cracked concrete:
+    '''
+    k1=  k1Expr58A(cracked)
+    alpha= 0.1*math.pow(hEf/c1,0.5)
+    beta= 0.1*math.pow(d/c1,0.2)
+    return k1*pow(d*1000,alpha)*pow(hEf*1000,beta)*math.sqrt(fckCube/1e6)*pow(c1*1000,1.5)
+
+def memberThicknessFactor(h,c1):
+    '''
+    Factor that introduces the influence of the act that the shear 
+    resistance does not decrease proportionally to the member thickness as 
+    assumed by the ratio A c,V / A c,V
+
+    :param h: Concrete part thickness.
+    :param c1: edge distance in direction 1; in case of anchorages close to an 
+               edge loaded in shear c 1 is the edge distance in direction of 
+               the shear load (see Figure 2.1b and Figure 5.7of EOTA TR029).
+    '''
+    return max(math.sqrt(1.5*c1/h),1.0)
+
+def angleFactor(alpha_v):
+    '''
+    Factor that introduces the influence of angle alpha_v between the load 
+    applied, V, and the direction perpendicular to the free edge of the 
+    concrete member (alpha_v≤ 90°, see Figure 4.7c onf EOTA TR029).
+
+    :param alpha_v: angle between the load  applied, V, and the direction 
+                    perpendicular to the free edge of the concrete member
+    '''
+    ratio= 1.0/(math.cos(alpha_v)+(math.sin(alpha_v)/2.5)**2)
+    return max(math.sqrt(ratio),1.0)
 
