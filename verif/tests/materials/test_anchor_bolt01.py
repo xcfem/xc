@@ -13,22 +13,19 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-def sqr(a):
-  return a*a
-
 # Datos
 gammaMs= 1.4 # Partial safety factor for steel.
 gammaMc= 2.1 # Partial safety factor for concrete.
-diamBarra= 25e-3 # Bar diameter in meters.
-areaBarra= math.pi*sqr(diamBarra/2.0) # Bar area in square meters.
+barDiameter= 25e-3 # Bar diameter in meters.
+barArea= math.pi*(barDiameter/2.0)**2 # Bar area in square meters.
 h= 274e-3 # Concrete element thickness.
 hef= 210e-3 # Effective anchor depth.
-posAnc=  geom.Pos2d(.135,0) # Anchor position
-contornoPiezaSoporte=  geom.Polygon2d() # Contour of concrete element.
-contornoPiezaSoporte.appendVertex(geom.Pos2d(0,-1))
-contornoPiezaSoporte.appendVertex(geom.Pos2d(1,-1))
-contornoPiezaSoporte.appendVertex(geom.Pos2d(1,1))
-contornoPiezaSoporte.appendVertex(geom.Pos2d(0,1))    
+anchorPosition=  geom.Pos2d(.135,0) # Anchor position
+baseMaterialContour=  geom.Polygon2d() # Contour of concrete element.
+baseMaterialContour.appendVertex(geom.Pos2d(0,-1))
+baseMaterialContour.appendVertex(geom.Pos2d(1,-1))
+baseMaterialContour.appendVertex(geom.Pos2d(1,1))
+baseMaterialContour.appendVertex(geom.Pos2d(0,1))    
 
 
 fuk= 550e6 # Characteristic steel ultimate tensile strength (Pa).
@@ -37,13 +34,13 @@ tauRkUcr= 7.5e6 # Characteristic bond strength for non-cracked concrete.
 k1= 10.1 # 7.2 for cracked concrete and 10.1 for non-cracked concrete.
 fckCube= 25e6 # Caracteristic concrete compression strength measured on cubes with a side length of 150 mm.
 # Strength of the anchor itself.
-NRds= EOTA_TR029_limit_state_checking.axialResistanceSteelFailure(areaBarra,fuk)/gammaMs
+NRds= EOTA_TR029_limit_state_checking.axialResistanceSteelFailure(barArea,fuk)/gammaMs
 
 
 # Edge distance influence
-CcrN= EOTA_TR029_limit_state_checking.getCcrNp(diamBarra,hef,tauRkUcr)
-C= contornoPiezaSoporte.getRecubrimiento(posAnc) 
-Cmin= 5*diamBarra+10e-3
+CcrN= EOTA_TR029_limit_state_checking.getCcrNp(barDiameter,hef,tauRkUcr)
+C= baseMaterialContour.getRecubrimiento(anchorPosition) 
+Cmin= 5*barDiameter+10e-3
 
 if (C<Cmin):
   print "Too little concrete cover for the anchor."
@@ -51,22 +48,22 @@ if (C<Cmin):
 f1N= EOTA_TR029_limit_state_checking.getFactor1N(C,CcrN)
 
 # Extraction gross area.
-plgA0pN= EOTA_TR029_limit_state_checking.getA0pN(diamBarra,posAnc,hef,tauRkUcr)
+plgA0pN= EOTA_TR029_limit_state_checking.getA0pN(barDiameter,anchorPosition,hef,tauRkUcr)
 A0pN= plgA0pN.getArea()
 # Área neta pull-out
 plgApN= plgA0pN
-plgApN.clipUsingPolygon(contornoPiezaSoporte)
+plgApN.clipUsingPolygon(baseMaterialContour)
 ApN= plgApN.getArea()
 f2pN= EOTA_TR029_limit_state_checking.getFactor2pN(A0pN,ApN)
-N0Rdp= EOTA_TR029_limit_state_checking.axialInitialResistancePullOut(diamBarra,hef,tauRk)/gammaMc
+N0Rdp= EOTA_TR029_limit_state_checking.axialInitialResistancePullOut(barDiameter,hef,tauRk)/gammaMc
 NRdp= N0Rdp*f1N*f2pN # Extraction
 
 # Cone extraction gross area.
-plgA0cN= EOTA_TR029_limit_state_checking.getA0cN(posAnc,hef)
+plgA0cN= EOTA_TR029_limit_state_checking.getA0cN(anchorPosition,hef)
 A0cN= plgA0cN.getArea()
 # Cone extraction effective area.
 plgAcN= plgA0cN
-plgAcN.clipUsingPolygon(contornoPiezaSoporte)
+plgAcN.clipUsingPolygon(baseMaterialContour)
 AcN= plgAcN.getArea()
 f2cN= EOTA_TR029_limit_state_checking.getFactor2cN(A0cN,AcN)
 N0Rdc= EOTA_TR029_limit_state_checking.axialInitialResistanceConeFailure(k1,fckCube,hef)/gammaMc
@@ -77,11 +74,11 @@ CcrSp= EOTA_TR029_limit_state_checking.getCcrSpHiltiHY150(h,hef)
 ScrSp= 2*CcrSp
 f1Nsp= EOTA_TR029_limit_state_checking.getFactor1N(C,CcrSp)
 # Splitting gross area.
-plgA0spN= EOTA_TR029_limit_state_checking.getA0spN(posAnc,CcrSp)
+plgA0spN= EOTA_TR029_limit_state_checking.getA0spN(anchorPosition,CcrSp)
 A0spN= plgA0spN.getArea()
 # Splitting effective area.
 plgAspN= plgA0spN
-plgAspN.clipUsingPolygon(contornoPiezaSoporte)
+plgAspN.clipUsingPolygon(baseMaterialContour)
 AspN= plgAspN.getArea()
 f2spN= EOTA_TR029_limit_state_checking.getFactor2spN(A0spN,AspN)
 N0RdSp= N0Rdc
@@ -97,15 +94,15 @@ ratio1= abs(NRds-192900)/192900
 ratio2= abs(N0Rdp-58.9e3)/58.9e3
 ratio3= abs(N0Rdc-73.2e3)/73.2e3
 ratio4= abs(f1N-0.828571)/0.828571
-f2pNTeor= (sqr(2*CcrN)-(CcrN-C)*2*CcrN)/sqr(2*CcrN)
+f2pNTeor= ((2*CcrN)**2-(CcrN-C)*2*CcrN)/(2*CcrN)**2
 ratio5= abs(f2pN-f2pNTeor)/f2pNTeor
 CcrNc= EOTA_TR029_limit_state_checking.getScrN(hef)/2
-f2cNTeor= (sqr(2*CcrNc)-(CcrNc-C)*2*CcrNc)/sqr(2*CcrNc)
+f2cNTeor= ((2*CcrNc)**2-(CcrNc-C)*2*CcrNc)/(2*CcrNc)**2
 ratio6= abs(f2cN-f2cNTeor)/f2cNTeor
 ratio7= abs(NRd-34.8621e3)/34.8621e3
 
 '''
-print "A_s= ",areaBarra*1e6," mm2\n"
+print "A_s= ",barArea*1e6," mm2\n"
 print "C_{cr,N}= ",CcrN," m\n"
 print "C= ",C," m\n"
 print "C/C_{cr,N}= ",C/CcrN
