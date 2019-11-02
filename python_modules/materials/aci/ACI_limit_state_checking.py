@@ -23,23 +23,6 @@ from materials.sections import stressCalc as sc
 from miscUtils import LogMessages as lmsg
 from postprocess.reports import common_formats as fmt
 
-def getMaximumShearTransferStrength(concrete, Ac, monolithic= True):
-    ''' Return the maximum shear-transfer strength permitted
-        across a shear plane monolithically according to table 22.9.4.4
-        of ACI-318-14
-
-        :param Ac: area of the shear plane
-    '''
-    fck= -concrete.fck
-    lim1= 0.2*fck*Ac # (a) and (d) in table
-    lim2= Ac*1600*ACI_materials.toPascal
-    if(not monolithic):
-        lim2*=0.5 #(c) in table
-    retval= min(lim1,lim2)
-    if(monolithic):
-        retval= min(retval,(480.0*ACI_materials.toPascal+0.08*fck)*Ac)
-    return retval
-
 class RebarController(object):
     '''Control of some parameters as development lenght 
        minimum reinforcement and so on.
@@ -163,11 +146,11 @@ class ShearController(lsc.ShearControllerBase):
     def __init__(self,limitStateLabel):
         super(ShearController,self).__init__(limitStateLabel)
     def setSection(self,rcSection):
-        self.concrete= rcSection.concrType #Arreglar
+        self.concrete= rcSection.concrType #Fix
         self.steel= rcSection.reinfSteelType
         self.width= rcSection.b
         self.effectiveDepth= 0.9*rcSection.h
-        self.mechanicLeverArm= 0.9*self.effectiveDepth #Mejorar
+        self.mechanicLeverArm= 0.9*self.effectiveDepth #Enhance
         self.AsTrsv= rcSection.shReinfY.getAs()
         self.s= rcSection.shReinfY.shReinfSpacing
         self.Vc= 0.0 # Concrete contribution to the shear strength.
@@ -384,3 +367,198 @@ class ACIDoubleRebarFamily(rf.DoubleRebarFamily):
         self.writeDef(outputFile,concrete)
         outputFile.write("  area: As= "+ fmt.Areas.format(self.getAs()*1e4) + " cm2/m areaMin: " + fmt.Areas.format(AsMin*1e4) + " cm2/m")
         rf.writeF(outputFile,"  F(As)", self.getAs()/AsMin)
+
+class ShearPlane(object):
+    ''' Shear plane according to seciont 22.9 of ACI 318-14
+
+    :ivar phi: strength reduction factor
+    :ivar concrete: concrete material.
+    :ivar reinfSteel: reinforcement steel material.
+    :ivar Avf: area of reinforcement crossing the shear plane.
+    :ivar alpha: angle between the reinforcement and the shear plane.
+    :ivar lambda_c: 1.0 for normal weight concrete
+    :ivar monolithic: true if no construction joint in the shear plane.
+    :ivar contact_condition: contact condition as in table 22.9.4.2
+    '''
+    phi= 0.75
+    def __init__(self, concrete, steel,avf,alpha= math.pi/2.0, lambda_c= 1.0, monolithic= True, contact_condition= 'a'):
+        ''' Constructor.
+
+        :param concrete: concrete material.
+        :param steel: reinforcement steel material.
+        :param avf: area of reinforcement crossing the shear plane.
+        :param alpha: angle between the reinforcement and the shear plane.
+        :param lambda_c: 1.0 for normal weight concrete
+        :param monolithic: true if no construction joint in the shear plane.
+        :param contact_condition: contact condition as in table 22.9.4.2
+        '''
+        self.concrete= concrete
+        self.reinfSteel= steel
+        self.Avf= avf
+        self.alpha= alpha
+        self.lambda_c= lambda_c
+        self.monolithic= monolithic
+        self.contact_condition= contact_condition
+
+    def getCoefficientOfFriction(self):
+        ''' Return the coefficient of friction according to
+            table 22.9.4.2 for ACI 318-14.'''
+        retval= 1.0
+        if(self.contact_condition=='a'): # Concrete placed monolithically
+            retval= 1.4
+        elif(self.contact_condition=='b'): # Concrete placed against hardened
+                                      # concrete that is clean, free of
+                                      # laitance, and intentionally roughened
+                                      # to a full amplitude of approximately
+                                      # 1/4 in.
+            retval= 1.0
+        elif(self.contact_condition=='c'):  # Concrete placed against hardened
+                                       # concrete that is clean, free of
+                                       # laitance, but not  intentionally
+                                       # roughened
+            retval= 0.6
+        elif(self.contact_condition=='d'):  # Concrete placed against as-rolled
+                                       # structural steel that is clean, free
+                                       # of paint, and with shear transferred
+                                       # across the contact surface by headed
+                                       # studs or by welded deformed bars or
+                                       # wires.
+            retval= 0.7
+        return retval*self.lambda_c
+        
+    def getMaximumShearTransferStrength(self, Ac):
+        ''' Return the maximum shear-transfer strength permitted
+            across a shear plane monolithically according to table 22.9.4.4
+            of ACI-318-14
+
+            :param Ac: area of the shear plane.
+        '''
+        fck= -self.concrete.fck
+        lim1= 0.2*fck # (a) and (d) in table
+        lim2= 1600*ACI_materials.toPascal
+        if(not self.monolithic):
+            lim2*=0.5 #(c) in table
+        retval= min(lim1,lim2)
+        if(self.monolithic):
+            retval= min(retval,(480.0*ACI_materials.toPascal+0.08*fck))
+        return retval*Ac
+
+    def getNominalShearStrength(self):
+        ''' Return the nominal shear strength according to section
+            22.9.4.3 of ACI 318-14.'''
+        # Steel stress limitation according to table 20.2.2.4a
+        fy= min(413.6856e6,self.reinfSteel.fyk)
+        mu= self.getCoefficientOfFriction()
+        return self.Avf*fy*(mu*math.sin(self.alpha)+math.cos(self.alpha))
+    
+    def getShearCapacityFactor(self, Vd):
+        ''' Return the capacity factor for shear according
+            to section 16.5.4.4 of ACI 318-14.
+
+        :param Vd: design shear force.
+        '''
+        Vn= self.getNominalShearStrength()*self.phi
+        return Vd/Vn
+        
+
+class Corbel(ShearPlane):
+    ''' Reinforcing concrete corbel design to ACI 318
+
+    :ivar width: width of corbel.
+    :ivar thickness: total thickness of corbel.
+    :ivar depth: depth to main reinforcement.
+    '''
+    def __init__(self, concrete, steel, width, thickness, depth, Asc, Ah, alpha= math.pi/2.0, lambda_c= 1.0, monolithic= True, contact_condition= 'a'):
+        ''' Constructor.
+
+        :param concrete: concrete material.
+        :param steel: reinforcement steel material.
+        :param width: width of corbel.
+        :param thickness: total thickness of corbel.
+        :param depth: depth to main reinforcement.
+        :param Asc: area of primary reinforcement.
+        :param Ah: area of shear reinforcement.
+        :param alpha: angle between the reinforcement and the shear plane.
+        :param lambda_c: 1.0 for normal weight concrete
+        :param monolithic: true if no construction joint in the shear plane.
+        :param contact_condition: contact condition as in table 22.9.4.2
+
+        '''
+        super(Corbel,self).__init__(concrete, steel,Ah,alpha, lambda_c, monolithic, contact_condition)
+        self.width= width
+        self.thickness= thickness
+        self.depth= depth
+        self.monolithic= True
+        self.Asc= Asc        
+
+    def getNominalVerticalLoadCapacity(self):
+        ''' Return the nominal vertical load capacity of the corbel
+            according to section 16.5.2.4 of ACI 318-14.
+        '''
+        Ac= self.width*self.depth
+        return self.getMaximumShearTransferStrength(Ac)
+
+    def getBendingMoment(self,Vd,Nd,av):
+        ''' Return the bending moment on the corbel.
+
+        :param Vd: design value of vertical load.
+        :param Nd: design value of axial load.
+        :param av: eccentricity of the vertical load with respect
+                   to the corbel shear plane.
+        '''
+        N= max(Nd,0.2*Vd)
+        return Vd*av+N*(self.thickness-self.depth)
+
+    def getAn(self,Nd):
+        ''' Return the area or the required reinforcement
+            according to section 16.5.4.3 of ACI 318-14.
+
+        :param Nd: design value of axial load.
+        '''
+        return Nd/self.reinfSteel.fyk/self.phi
+
+    def getRequiredPrimaryReinforcement(self, Vd, Nd, av):
+        ''' Return the area or the required reinforcement
+            according to sections 16.5.4.3 and 16.5.4.5
+            of ACI 318-14.
+
+        :param Vd: design value of vertical load.
+        :param Nd: design value of axial load.
+        :param av: eccentricity of the vertical load with respect
+                   to the corbel shear plane.
+        '''
+        fy= self.reinfSteel.fyk
+        An= Nd/fy/self.phi
+        Md= self.getBendingMoment(Vd,Nd,av)
+        j= 0.85 # Balanced condition
+        Af= Md/(self.phi*fy*j*self.depth)
+        return An+Af
+        
+    def getMinimumPrimaryReinforcement(self, Vd, Nd, av):
+        ''' Return the minimum area of the primary reinforcement
+            according to section 16.5.5.1 of ACI 318-14.
+
+        :param Vd: design value of vertical load.
+        :param Nd: design value of axial load.
+        :param av: eccentricity of the vertical load with respect
+                   to the corbel shear plane.
+        '''
+        retval= self.getRequiredPrimaryReinforcement(Vd, Nd, av)
+        retval= max(retval,2.0/3.0*self.Avf+self.getAn(Nd))
+        Ac= self.width*self.depth
+        retval= max(retval,0.04*self.concrete.fck/self.reinfSteel.fyk*Ac)
+        return retval
+
+    def getMinimumShearReinforcement(self, Vd, Nd, av):
+        ''' Return the minimum area of shear reinforcement
+            according to section 16.5.5.2 of ACI 318-14.
+
+        :param Vd: design value of vertical load.
+        :param Nd: design value of axial load.
+        :param av: eccentricity of the vertical load with respect
+                   to the corbel shear plane.
+        '''
+        Asc= self.getMinimumPrimaryReinforcement(Vd, Nd, av)
+        An= self.getAn(Nd)
+        return 0.5*(Asc-An)
+
