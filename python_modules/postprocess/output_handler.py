@@ -166,9 +166,9 @@ class OutputHandler(object):
         nodSet= setToDisplay.nodes
         for n in nodSet:
             n.setProp('propToDisp',n.getDisp[vCompDisp])
-        fConvUnits, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
+        unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
 
-        field= Fields.ScalarField(name='propToDisp',functionName="getProp",component=None,fUnitConv=fConvUnits,rgMinMax=rgMinMax)
+        field= Fields.ScalarField(name='propToDisp',functionName="getProp",component=None,fUnitConv=unitConversionFactor,rgMinMax=rgMinMax)
         loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
         captionText= loadCaseName+' '+itemToDisp+' '+unitDescription+' '+setToDisplay.description
         defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
@@ -210,17 +210,17 @@ class OutputHandler(object):
             modR= max(modF3d,modF3d)
             if(modR>maxAbs):
                 maxAbs=modR
-        fConvUnits= self.outputStyle.getForceUnitsScaleFactor()
+        unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
         unitDescription= self.outputStyle.getForceUnitsDescription()
         
         scaleFactor= self.outputStyle.reactionVectorsScaleFactor
         if(maxAbs>0):
-            scaleFactor*=0.15*LrefModSize/(maxAbs*fConvUnits)
+            scaleFactor*=0.15*LrefModSize/(maxAbs*unitConversionFactor)
 
         loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
         captionText= loadCaseName+' Reactions'+ ' '+unitDescription +' '+ setToDisplay.description
-        vFieldF= vf.VectorField(name='Freact',fUnitConv=fConvUnits,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()) # Force
-        vFieldM= vf.VectorField(name='Mreact',fUnitConv=fConvUnits,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()) # Moment
+        vFieldF= vf.VectorField(name='Freact',fUnitConv=unitConversionFactor,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()) # Force
+        vFieldM= vf.VectorField(name='Mreact',fUnitConv=unitConversionFactor,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()) # Moment
         vFieldF.populateFromPairList(forcePairs)
         vFieldM.populateFromPairList(momentPairs)
 
@@ -251,7 +251,7 @@ class OutputHandler(object):
                     by this factor. (Defaults to 0.0, i.e. display of 
                     initial/undeformed shape)
         '''
-        diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[setToDispRes],attributeName= attributeName,component= component)
+        diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDispRes],attributeName= attributeName,component= component)
         diagram.addDiagram()
         defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
         defDisplay.cameraParameters=cameraParameters
@@ -281,15 +281,15 @@ class OutputHandler(object):
         #auto-scale parameters
         LrefModSize= setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to autoscale)
         scaleFactor= self.outputStyle.internalForcesDiagramScaleFactor
-        fConvUnits= self.outputStyle.getForceUnitsScaleFactor()
+        unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
         unitDescription= self.outputStyle.getForceUnitsDescription()
-        diagAux=cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[setToDisplay],attributeName= "intForce",component= itemToDisp)
+        diagAux=cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDisplay],attributeName= "intForce",component= itemToDisp)
         maxAbs=diagAux.getMaxAbsComp()
         if maxAbs > 0:
-            scaleFactor*=0.15*LrefModSize/(maxAbs*fConvUnits)
+            scaleFactor*=0.15*LrefModSize/(maxAbs*unitConversionFactor)
         loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
         captionText= loadCaseName+' '+itemToDisp+' '+unitDescription +' '+setToDisplay.description
-        diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[setToDisplay],attributeName= "intForce",component= itemToDisp)
+        diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDisplay],attributeName= "intForce",component= itemToDisp)
         diagram.addDiagram()
         defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
         defDisplay.cameraParameters= self.getCameraParameters()
@@ -332,9 +332,9 @@ class OutputHandler(object):
                     e.setProp(propName,mat.getMeanGeneralizedStressByName(vCompDisp))
                 else:
                     lmsg.warning('OutputHandler::displayIntForc; not a 2D element; ignored.')
-            fConvUnits= self.outputStyle.getForceUnitsScaleFactor()
+            unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
             unitDescription= self.outputStyle.getForceUnitsDescription()
-            field= Fields.ExtrapolatedProperty(propName,"getProp",setToDisplay,fUnitConv= fConvUnits,rgMinMax=rgMinMax)
+            field= Fields.ExtrapolatedProperty(propName,"getProp",setToDisplay,fUnitConv= unitConversionFactor,rgMinMax=rgMinMax)
             defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
             defDisplay.cameraParameters= self.getCameraParameters()
             loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
@@ -360,13 +360,13 @@ class OutputHandler(object):
             setToDisplay= self.modelSpace.getTotalSet()
         preprocessor= self.modelSpace.preprocessor
         loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
-        fConvUnits= self.outputStyle.getForceUnitsScaleFactor()
+        unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
         unitDescription= self.outputStyle.getForceUnitsDescription()
         if(not caption):
           caption= 'load case: ' + loadCaseName + ', set: ' + setToDisplay.name + ', '  + unitDescription
         LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to auto-scale)
         vectorScale= self.outputStyle.loadVectorsScaleFactor*LrefModSize/10.
-        vField= lvf.LoadVectorField(loadCaseName,setToDisplay,fConvUnits,vectorScale)
+        vField= lvf.LoadVectorField(loadCaseName,setToDisplay,unitConversionFactor,vectorScale)
         vField.multiplyByElementArea= self.outputStyle.multLoadsByElemArea
         defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
         defDisplay.cameraParameters= self.getCameraParameters()
@@ -399,7 +399,7 @@ class OutputHandler(object):
             setToDisplay= self.modelSpace.getTotalSet()
         preprocessor= self.modelSpace.preprocessor
         loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
-        fConvUnits= self.outputStyle.getForceUnitsScaleFactor()
+        unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
         unitDescription= self.outputStyle.getForceUnitsDescription()
         preprocessor= setToDisplay.getPreprocessor
         defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
@@ -409,17 +409,17 @@ class OutputHandler(object):
         # auto-scaling parameters
         LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to auto-scale)
         elLoadScaleF= self.outputStyle.loadDiagramsScaleFactor
-        diagAux=lld.LinearLoadDiagram(setToDisp=setToDisplay,scale=elLoadScaleF,fUnitConv= fConvUnits,component=elLoadComp)
+        diagAux=lld.LinearLoadDiagram(setToDisp=setToDisplay,scale=elLoadScaleF,fUnitConv= unitConversionFactor,component=elLoadComp)
         maxAbs=diagAux.getMaxAbsComp(preprocessor)
         if(maxAbs>0):
             elLoadScaleF*=LrefModSize/maxAbs*100
             #Linear loads
-            diagram= lld.LinearLoadDiagram(setToDisp=setToDisplay,scale=elLoadScaleF,fUnitConv= fConvUnits,component=elLoadComp)
+            diagram= lld.LinearLoadDiagram(setToDisp=setToDisplay,scale=elLoadScaleF,fUnitConv= unitConversionFactor,component=elLoadComp)
             diagram.addDiagram(preprocessor)
             if diagram.isValid():
                 defDisplay.appendDiagram(diagram)
         # nodal loads
-        vField= lvf.LoadVectorField(loadPatternName=loadCaseName,setToDisp=setToDisplay,fUnitConv= fConvUnits,scaleFactor=self.outputStyle.loadVectorsScaleFactor,showPushing= self.outputStyle.showLoadsPushing)
+        vField= lvf.LoadVectorField(loadPatternName=loadCaseName,setToDisp=setToDisplay,fUnitConv= unitConversionFactor,scaleFactor=self.outputStyle.loadVectorsScaleFactor,showPushing= self.outputStyle.showLoadsPushing)
         count=vField.dumpNodalLoads(preprocessor,defFScale=defFScale)
         if(count >0):
             vField.addToDisplay(defDisplay,orientation= self.outputStyle.nodalLoadBarOrientation)
@@ -444,11 +444,11 @@ class OutputHandler(object):
          '''
         if(setToDisplay==None):
             setToDisplay= self.modelSpace.getTotalSet()
-        fConvUnits, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
+        unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
         lmsg.warning("Auto scale not implemented yet.")
         LrefModSize= setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to autoscale)
-        scaleFactor= LrefModSize/fConvUnits 
-        diagram= npd.NodePropertyDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[setToDisplay],attributeName= itemToDisp)
+        scaleFactor= LrefModSize/unitConversionFactor 
+        diagram= npd.NodePropertyDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDisplay],attributeName= itemToDisp)
         diagram.addDiagram()
         defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
         defDisplay.cameraParameters= self.getCameraParameters()
@@ -583,11 +583,11 @@ class OutputHandler(object):
         #auto-scale parameters
         LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to autoscale)
         lstArgVal=[e.getProp(attributeName+'Sect1')(itemToDisp) for e in beamSetDispRes.elements]
-        fConvUnits, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
+        unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
         scaleFactor= 1.0
         maxAbs=max(abs(max(lstArgVal)),abs(min(lstArgVal)))
         if(maxAbs>0):
-            scaleFactor*=0.15*LrefModSize/(maxAbs*fConvUnits)
+            scaleFactor*=0.15*LrefModSize/(maxAbs*unitConversionFactor)
         if not setToDisplay:
             setToDisplay= beamSetDispRes
         if not caption:
@@ -621,4 +621,38 @@ class OutputHandler(object):
         for st in setsToDisplay:
             self.displayEigenvectors(mode= eigenMode, setToDisplay= st,fileName= fileName, defFScale= defFScale)
 
+    def displayFieldDirs1and2(self,limitStateLabel, argument, component, setToDisplay, fileName, defFScale=0.0, rgMinMax=None):
+        '''Display a field defined over bi-dimensional elements in its two 
+           directions.
 
+        :param limitStateLabel: label that identifies the limit state.
+        :param argument: name of the control var to represent.
+        :param component: component of the control var to represent.
+        :param setToDisplay: represent the field over those elements.
+        :param fileName: file name to store the image. If none -> window on screen.
+        :param defFScale: factor to apply to current displacement of nodes 
+                    so that the display position of each node equals to
+                    the initial position plus its displacement multiplied
+                    by this factor. (Defaults to 0.0, i.e. display of 
+                    initial/undeformed shape)
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values  
+                    of the scalar field (if any) to be represented. All the values 
+                    less than vmin are displayed in blue and those greater than vmax 
+                    in red (defaults to None)
+        '''
+        if(setToDisplay==None):
+            setToDisplay= self.modelSpace.getTotalSet()
+        defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
+        defDisplay.cameraParameters= self.getCameraParameters()
+        attributeName= limitStateLabel + 'Sect1'   #Normal stresses limit state direction 1.
+        fUnitConv, unitDescription= self.outputStyle.getUnitParameters(argument)
+
+        field= Fields.getScalarFieldFromControlVar(attributeName,argument,setToDisplay,component,fUnitConv,rgMinMax)
+        captionTexts= self.outputStyle.getCaptionTextsDict()
+        sectDescr= self.outputStyle.directionDescription
+        captionBaseText= captionTexts[limitStateLabel] + ', ' + captionTexts[argument] + unitDescription + '. '+ setToDisplay.description.capitalize()
+        field.display(defDisplay,caption=  captionBaseText + ', ' + sectDescr[0], fileName= fileName, defFScale= defFScale)
+
+        attributeName= limitStateLabel + 'Sect2'   #Normal stresses limit state direction 2
+        field= Fields.getScalarFieldFromControlVar(attributeName,argument,setToDisplay,component,fUnitConv,rgMinMax)
+        field.display(defDisplay,caption= captionBaseText + ', ' + sectDescr[1], fileName= fileName, defFScale= defFScale)

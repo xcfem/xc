@@ -58,7 +58,7 @@ class DynamicsUnits(object):
         self.lengthUnit= lengthUnit
         
     def getDecoratedUnitsText(self):
-        return 'units:['+self.lengthUnit.symbol+','+self.forceUnit.symbol+']'
+        return 'units:['+self.lengthUnit.symbol+', '+self.forceUnit.symbol+']'
         
 defaultDynamicUnits= DynamicsUnits(kilonewton,meter)
 
