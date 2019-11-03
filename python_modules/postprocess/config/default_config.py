@@ -1,13 +1,31 @@
 # -*- coding: utf-8 -*-
 
+import os
 import xc_base
 import geom
 import xc
-from postprocess import output_styles as os
+from postprocess import output_styles
 from postprocess import limit_state_data as lsd
 
+def findWorkingDirectory():
+    '''Search upwards to find the directory where the file
+       env_config.py is.'''
+    working_dir= os.getcwd()
+    file_name= 'env_config.py'
+    while True:
+        file_list = os.listdir(working_dir)
+        parent_dir = os.path.dirname(working_dir)
+        if file_name in file_list:
+            break
+        else:
+            if working_dir == parent_dir: #if dir is root dir
+                working_dir= None
+                break
+            else:
+                working_dir = parent_dir
+    return working_dir
 
-class envConfig(os.OutputStyle):
+class envConfig(output_styles.OutputStyle):
     '''Generic configuration of environment variables.
 
        :ivar intForcPath: full path of the directory where results of 
