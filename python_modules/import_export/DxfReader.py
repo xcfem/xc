@@ -9,6 +9,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com" "anaOrtegaOrt@gmail.com"
 
+import math
 import dxfgrabber
 import xc_base
 import geom
@@ -98,7 +99,7 @@ def decompose_polyline(polyline, tol= .01):
     '''
     retval= list()
     if((len(polyline.points)>2) and polyline.is_closed):
-        # Compute the principal axis.
+        # Compute the local axis.
         points= list()
         for pt in polyline.points:
             points.append([pt[0],pt[1],pt[2]])            
@@ -123,17 +124,34 @@ def decompose_polyline(polyline, tol= .01):
 
     return retval
 
+def get_polyface_points_axis(polyface_points):
+    ''' Return the axis for the polyface.'''
+    p= geom.Plane3d()
+    p.linearLeastSquaresFitting(polyface_points)
+    global_z= geom.Vector3d(0.0,0.0,1.0)
+    local_z= p.getNormal()
+    angle= local_z.getAngle(global_z)
+    local_y= global_z
+    global_y= geom.Vector3d(0.0,1.0,0.0)    
+    if(abs(angle)<1e-3 or abs(angle-math.pi)<1e-3):
+        local_y= global_y
+    local_x= local_y.cross(local_z)
+    local_y= local_z.cross(local_x)
+    org= polyface_points[0]
+    return geom.Ref3d3d(org,local_x,local_y)    
+    
 def decompose_polyface(polyface, tol= .01):
     '''Return the quadrilateral surfaces that
        compose the polyface.
     '''
     # Compute the principal axis.
-    points= list()
+    points= geom.polyPos3d()
     for face in polyface:
         for pt in face:
-            points.append([pt[0],pt[1],pt[2]])
+            points.append(geom.Pos3d(pt[0],pt[1],pt[2]))
     #sisRef= get_polygon_axis(points,tol)
-    sisRef= pa.get_principal_axis_3D(points)
+    #sisRef= pa.get_principal_axis_3D(points)
+    sisRef= get_polyface_points_axis(points)
 
     # Create candidate surfaces.
     candidates= get_candidate_2Dquads(sisRef,points, tol)
