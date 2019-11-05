@@ -110,7 +110,7 @@ XC::Joint2D::Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING has incorrect space dimension \n"
-		  << "                                    space dimension not supported by XC::Joint2D";
+		  << "  space dimension not supported by Joint2D";
         return;
       }
 
@@ -124,7 +124,7 @@ XC::Joint2D::Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; WARNING has incorrect degrees of freedom \n"
-		  << "                                    DOF not supported by XC::Joint2D";
+		  << "  DOF not supported by Joint2D";
         return;
       }
 
@@ -172,7 +172,7 @@ XC::Joint2D::Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag
       {
         if(getDomain()->addNode( theNodes[4] ) == false ) // add internal nodes to domain
           std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; unable to add internal nodeto domain\n";
+		    << "; unable to add internal node to domain\n";
       }
 
 
