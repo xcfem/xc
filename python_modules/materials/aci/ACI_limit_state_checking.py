@@ -562,3 +562,77 @@ class Corbel(ShearPlane):
         An= self.getAn(Nd)
         return 0.5*(Asc-An)
 
+class AnchorBolt(object):
+    ''' Anchor bolt design according to ACI 349-97
+
+    :ivar ca1: distance from the center of an anchor shaft to the edge of 
+               concrete in one direction. If shear is applied to anchor, ca1 
+               is taken in the direc-tion of the applied shear. If the
+               tension isapplied to the anchor, ca1 is the minimum edge 
+               distance.
+    :ivar ca2: distance from center of an anchor shaft to the edge of concrete
+               in the direction orthogonal to ca1.
+    :ivar ha: thickness  of  member  in  which  an  anchor  is
+              located, measured parallel to anchor axis.
+
+    :ivar concrete: concrete material.
+    :ivar steel: anchor steel.
+    :ivar diam: anchor diameter.
+    :ivar hef: effective embedment depth of anchor.
+    :ivar cast_in: true if cast-in anchor false for post-installed
+                        anchors.
+    '''
+    def __init__(self, ca1, ca2, ha, concrete, steel, diam, hef, cast_in= False):
+        ''' Constructor.
+
+        :parameter ca1: distance from the center of an anchor shaft to the 
+                   edge of concrete in one direction. If shear is applied to 
+                   anchor, ca1 is taken in the direc-tion of the applied shear.
+                   If the tension isapplied to the anchor, ca1 is the minimum
+                   edge distance.
+        :parameter ca2: distance from center of an anchor shaft to the edge of
+                   concrete in the direction orthogonal to ca1.
+        :parameter ha: thickness  of  member  in  which  an  anchor  is
+                  located, measured parallel to anchor axis.
+
+        :parameter concrete: concrete material.
+        :parameter steel: anchor steel.
+        :parameter diam: anchor diameter.
+        :parameter hef: effective embedment depth of anchor.
+        :parameter cast_in: true if cast-in anchor false for post-installed
+                            anchors.
+        '''
+        self.ca1= ca1
+        self.ca2= ca2
+        self.ha= ha
+        self.concrete= concrete
+        self.steel= steel
+        self.diam= diam
+        self.hef= hef
+        self.cast_in= cast_in
+
+    def getAnchorArea(self):
+        ''' Return the anchor area.'''
+        return math.pi*(self.diam/2.0)**2
+    def getNominalSteelStrength(self):
+        ''' Return the nominal steel strength of the anchor
+            according to section D.3.6.1.'''
+        return self.getAnchorArea()*self.steel.fmaxk()
+
+    def getDesignSteelStrength(self):
+        ''' Return the design steel strength of the anchor
+            according to section D.3.6.1.'''
+        phi= 0.8 # partial safety factor for tension
+        return phi*self.getNominalSteelStrength()
+
+    def getBasicConcreteBreakoutStrength(self):
+        ''' Return the asic concrete breakout strength of a single
+            anchor in tension in cracked concrete.'''
+        kc= 17.0
+        if(self.cast_in):
+            kc= 24.0
+        hef_in= self.hef/0.0254
+        fc_psi= -self.concrete.fck*ACI_materials.fromPascal
+        return kc*math.sqrt(fc_psi)*math.pow(hef_in,1.5)*ACI_materials.pound2Newton
+    
+

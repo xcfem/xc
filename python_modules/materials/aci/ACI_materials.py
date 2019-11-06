@@ -2,6 +2,10 @@
 ''' Reinforced concrete materials according to ACI 318. 
 VERIFICATION TESTS REQUIRED!!!.'''
 
+from __future__ import print_function
+from __future__ import division
+
+
 import math
 from materials import concrete_base
 from miscUtils import LogMessages as lmsg
@@ -15,6 +19,7 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 toPascal= 6894.757 #Conversion from Pa to lb/inch2
 fromPascal= 1.0/toPascal #Conversion from lb/inch2 to Pa
+pound2Newton= 4.44822 # pound-force to Newton
 
 aciRCLimitStrains= concrete_base.ReinforcedConcreteLimitStrains(EpsCU= -3.0e-3,EpsC0= -2.0e-3,SMaxStrain= 10e-3);
 
@@ -82,6 +87,9 @@ c4000= ACIConcrete(concreteName="C4000",fck=-4000*toPascal,gammaC=1.667)
 
 A615G60= concrete_base.ReinforcingSteel(steelName="A615G60", fyk=415e6, emax=0.08,gammaS=1.15)
 A706G60= concrete_base.ReinforcingSteel(steelName="A706G60", fyk=415e6, emax=0.08,gammaS=1.15)
+# A108 and A29 material properties per AWS D1.1, 2006, Table 7.1, TypeB
+A108= concrete_base.ReinforcingSteel(steelName="A108", fyk=351.63276e6, emax=0.08,gammaS=1.15, k= 65.0/51)
+A29= concrete_base.ReinforcingSteel(steelName="A29", fyk=351.63276e6, emax=0.08,gammaS=1.15, k= 65.0/51)
 
 
 #Bar areas in square meters.
