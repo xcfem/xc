@@ -124,36 +124,27 @@ int XC::MapOfTaggedObjects::setSize(int newSize)
 //! duplicate keys to be added. 
 bool XC::MapOfTaggedObjects::addComponent(TaggedObject *newComponent)
   {
-    int tag = newComponent->getTag();
+    bool retval= false;
+    const int tag = newComponent->getTag();
 
-    // check if the ele already in map, if not we add
-    iterator theEle = theMap.find(tag);
-    if(theEle==end())
+    const std::pair<iterator,bool> res= theMap.insert(value_type(tag,newComponent));
+    if(res.second==false) // tag occupied
       {
-        newComponent->set_owner(this);
-	theMap.insert(value_type(tag,newComponent));
-        transmitIDs= true; //Component added.
-		      
-	// check if successfuly added 
-	theEle = theMap.find(tag);
-	if(theEle == theMap.end())
-         {
-	   std::cerr << getClassName() << "::" << __FUNCTION__
-		     << "; map STL failed to add object with tag : " << 
-	     newComponent->getTag() << "\n";
-	   return false;
-	 }
+	// if ele already there map cannot add even if allowMultiple is true
+	// as the map template does not allow multiple entries with the same
+	// tag.
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; not adding as one with similar tag exists, tag: "
+		  << newComponent->getTag() << "\n";
+        retval= false;
       }
-    // if ele already there map cannot add even if allowMultiple is true
-    // as the map template does not allow multiple entries with the same tag
     else
       {	
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; not adding as one with similar tag exists, tag: " <<
-	  newComponent->getTag() << "\n";
-        return false;
+        newComponent->set_owner(this);
+        transmitIDs= true; //Component added.
+        retval= true;
       }
-    return true;  // o.k.
+    return retval;  // o.k.
   }
 
 //! @brief Adds a component to the container.
@@ -173,7 +164,7 @@ bool XC::MapOfTaggedObjects::removeComponent(int tag)
     if(theEle!=end()) // the object has not been removed
       { // the object exists so we remove it
 	tmp= (*theEle).second;
-	int ok= theMap.erase(tag);
+	const int ok= theMap.erase(tag);
         delete tmp;
         retval= true;
         transmitIDs= true; //Component removed.
