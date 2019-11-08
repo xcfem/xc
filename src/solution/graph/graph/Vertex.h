@@ -104,7 +104,9 @@ class Vertex: public TaggedObject, public MovableObject
     virtual int addEdge(int otherTag);
     virtual int getDegree(void) const;
     virtual const std::set<int> &getAdjacency(void) const;
-
+    virtual void setAdjacency(const  std::set<int> &adj)
+      { myAdjacency = adj; }
+    
     virtual void Print(std::ostream &os, int flag =0);
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
