@@ -61,7 +61,6 @@
 #include <solution/graph/graph/Graph.h>
 #include <solution/graph/graph/Vertex.h>
 #include <solution/graph/graph/VertexIter.h>
-#include <f2c.h>
 #include <cmath>
 
 XC::FullGenEigenSOE::FullGenEigenSOE(AnalysisAggregation *owr)
