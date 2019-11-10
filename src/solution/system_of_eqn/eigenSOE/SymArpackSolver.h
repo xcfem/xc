@@ -69,7 +69,6 @@ class SymArpackSolver : public EigenSolver
     bool setEigenSOE(EigenSOE *theSOE);
   public:
     virtual int solve(void);
-    virtual int solve(int numModes) {return this->solve();};    
     virtual int setSize(void);
     const int &getSize(void) const;
 

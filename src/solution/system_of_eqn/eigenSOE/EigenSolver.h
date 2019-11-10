@@ -71,7 +71,7 @@ class EigenSolver : public Solver
       {}
 
     virtual int solve(void) =0;
-    virtual int solve(int numModes) =0;
+    virtual int solve(int numModes);
 
     const int &getNumModes(void) const
       { return numModes; }

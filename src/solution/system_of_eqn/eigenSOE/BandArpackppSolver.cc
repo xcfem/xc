@@ -40,10 +40,6 @@ XC::BandArpackppSolver::BandArpackppSolver(const int &nModes)
  :EigenSolver(EigenSOLVER_TAGS_BandArpackppSolver,nModes),
  theSOE(nullptr), eigenvalues(nModes), eigenvectors(nModes,Vector()) {}
 
-//! @brief Compute all the eigenvalues.
-int XC::BandArpackppSolver::solve(void)
-  { return solve(theSOE->size);}
-
 ARbdNonSymMatrix<double, double> creaARbdNonSymMatrix(const msp_double &m,XC::Vector &v)
   {
     const size_t ndiagL= m.ndiagL();
@@ -77,8 +73,8 @@ ARluNonSymGenEig<double> getEigenProblem(const int &nmodes,ARbdNonSymMatrix<doub
       return ARluNonSymGenEig<double>(nmodes, ak, am,shift); //Eigenvalues nearest to shift.
   }
 
-
-int XC::BandArpackppSolver::solve(int nModes)
+//! @brief Compute eigenvalues.
+int XC::BandArpackppSolver::solve(void)
   {
     int retval= 0;
     if(!theSOE)
@@ -89,7 +85,6 @@ int XC::BandArpackppSolver::solve(int nModes)
       }
     else
       {
-        numModes = nModes; // Set number of modes
         const int n= theSOE->size; // Number of equations
 	if(which!="LM")
 	  std::cerr << getClassName() << "::" << __FUNCTION__

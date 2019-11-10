@@ -275,6 +275,7 @@ int XC::BandArpackSolver::dsaupd_loop(const int &ncv, const int &nev, ArpackAuxV
       }
     return info;
   }
+
 //! @brief Solves the eigenproblem.
 int XC::BandArpackSolver::solve(void)
   {
@@ -384,12 +385,6 @@ int XC::BandArpackSolver::solve(void)
     theSOE->factored = true;
 
     return 0;
-  }
-
-int XC::BandArpackSolver::solve(int nModes)
-  {
-    numModes = nModes;
-    return solve();
   }
 
 //! @brief Compute a suitable value for ncv.

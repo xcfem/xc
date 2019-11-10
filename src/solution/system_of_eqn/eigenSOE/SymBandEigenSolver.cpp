@@ -93,9 +93,6 @@ extern "C" int dpbcon_(const char *uplo, const int *n, const int *kd,
 		       double *rcond, double *work, int *iwork, int *INFO);
 
 int XC::SymBandEigenSolver::solve(void)
-  {return this->solve(theSOE->size);}
-
-int XC::SymBandEigenSolver::solve(int nModes)
   {
     if(!theSOE)
       {
@@ -104,9 +101,6 @@ int XC::SymBandEigenSolver::solve(int nModes)
         return -1;
       }
   
-    // Set number of modes
-    numModes= nModes;
-    
     if(which!="LM")
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; computation of: " << which

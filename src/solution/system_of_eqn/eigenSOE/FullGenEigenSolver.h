@@ -90,7 +90,6 @@ class FullGenEigenSolver: public EigenSolver
   public:
 
     virtual int solve(void);
-    virtual int solve(int numEigen);    
     virtual int setSize(void);
     const int &getSize(void) const;
     virtual bool setEigenSOE(FullGenEigenSOE &theSOE);

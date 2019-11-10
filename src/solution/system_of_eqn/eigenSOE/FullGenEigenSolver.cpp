@@ -159,11 +159,8 @@ XC::FullGenEigenSolver::FullGenEigenSolver(void)
  {}
 
 
+//! @brief Compute eigenvalues.
 int XC::FullGenEigenSolver::solve(void)
-  {return this->solve(theSOE->size);}
-
-
-int XC::FullGenEigenSolver::solve(int nEigen)
   {
     if(!theSOE)
       {
@@ -172,18 +169,11 @@ int XC::FullGenEigenSolver::solve(int nEigen)
         return -1;
       }
 
-    // check for quick return
-    if(nEigen < 1)
-      {
-        numModes = 0;
-        return 0;
-      }
 
     // get the number of equations
     int n= theSOE->size;
 
-    // set the number of eigenvalues
-    numModes= nEigen;
+    // check the number of eigenvalues
     if(numModes > n)
       {
 	std::clog << getClassName() << "::" << __FUNCTION__

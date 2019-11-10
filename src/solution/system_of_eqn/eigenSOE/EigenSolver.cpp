@@ -50,6 +50,19 @@
 XC::EigenSolver::EigenSolver(const int &classTag,const int &nModes)
   :Solver(classTag), numModes(nModes), which("LM") {}
 
+int XC::EigenSolver::solve(int nEigen)
+  {
+    // check for quick return
+    if(nEigen < 1)
+      {
+        numModes = 0;
+        return 0;
+      }
+    else
+      numModes= nEigen;
+    return this->solve();
+  }
+
 //! @brief Return the angular frequency for the i-th mode.
 double XC::EigenSolver::getAngularFrequency(int i) const
   { return sqrt(getEigenvalue(i)); }
