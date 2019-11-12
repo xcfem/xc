@@ -11,7 +11,6 @@ from materials import typical_materials
 from materials.sections.structural_shapes import arcelor_metric_shapes
 from materials.sections import structural_steel
 from materials.ec3 import EC3_materials
-from postprocess import def_params_control as dp
 from postprocess import def_vars_control as vc
 from postprocess import callback_controls as cc
 
@@ -51,7 +50,7 @@ elements.defaultTransformation= "lin"
 elements.defaultMaterial= HE400B.sectionName
 elem= elements.newElement("ElasticBeam3d",xc.ID([1,2]))
 elem.rho= HE400B.get('P')
-dp.defSteelShapeElasticRangeElementParameters(elem,HE400B)
+vc.defSteelShapeElasticRangeElementParameters(elem,HE400B)
 vc.defVarsControlTensRegElastico3d([elem])
 
 
