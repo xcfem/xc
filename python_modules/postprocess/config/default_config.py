@@ -25,8 +25,8 @@ def findWorkingDirectory():
                 working_dir = parent_dir
     return working_dir
 
-class envConfig(output_styles.OutputStyle):
-    '''Generic configuration of XC environment variables.
+class ProjectDirTree(object):
+    ''' Paths to project directories.
 
        :ivar intForcPath: full path of the directory where results of 
                      internal forces are placed.
@@ -34,6 +34,97 @@ class envConfig(output_styles.OutputStyle):
                      limit state  verifications are placed
        :ivar annexPath: full path of the directory where to place graphic and 
                      text files for the generation of the annex
+    '''
+    def __init__(self,intForcPath,verifPath,annexPath):
+        '''
+        :param intForcPath: full path of the directory where results of 
+                      internal forces are placed.
+        :param verifPath: full path of the directory where results of 
+                      limit state  verifications are placed
+        :param annexPath: full path of the directory where to place graphic and 
+                      text files for the generation of the annex
+                            
+        '''
+        #default names of files with data for FE model generation, results of
+        #limit state verifications, ..
+        self.workingDirectory= findWorkingDirectory()
+        self.intForcPath= intForcPath
+        self.verifPath= verifPath
+        self.annexPath= annexPath
+
+    def getFullVerifPath(self):
+        return self.workingDirectory+'/'+self.verifPath
+    def getFullReportPath(self):
+        return self.workingDirectory+'/'+self.annexPath+'text/'
+    def getFullGraphicsPath(self):
+        return self.getFullReportPath()+'graphics/'
+    
+    def getVerifNormStrFile(self):
+        return self.getFullVerifPath()+'verifRsl_normStrsULS.py'    
+    def getReportNormStrFile(self):
+        return self.getFullReportPath()+'report_normStrsULS.tex'
+    def getReportNormStrGrPath(self):
+        return self.getFullGraphicsPath()+'normStrsULS/'
+        
+    def getVerifShearFile(self):
+        return self.getFullVerifPath()+'verifRsl_shearULS.py'
+    def getReportShearFile(self):
+        return self.getFullGraphicsPath()+'report_shearULS.tex'
+    def getReportShearGrPath(self):
+        return self.getFullGraphicsPath()+'shearULS/'
+
+    def getVerifCrackFreqFile(self):
+        return self.getFullVerifPath()+'verifRsl_crackingSLS_freq.py'
+    def getReportCrackFreqFile(self):
+        return self.getFullReportPath()+'report_crackingSLS_freq.tex'
+    def getReportCrackFreqGrPath(self):
+        return self.getFullGraphicsPath()+'crackingSLS_freq/' 
+        
+    def getVerifCrackQpermFile(self):
+        return self.getFullVerifPath()+'verifRsl_crackingSLS_qperm.py'
+    def getReportCrackQpermFile(self):
+        return self.getFullReportPath()+'report_crackingSLS_qperm.tex'
+    def getReportCrackQpermGrPath(self):
+        return self.getFullGraphicsPath()+'crackingSLS_qperm/' 
+        
+    def getVerifFatigueFile(self):
+        return self.getFullVerifPath()+'verifRsl_fatigueULS.py'
+    def getReportFatigueFile(self):
+        return self.getFullReportPath()+'report_fatigueStrsULS.tex' 
+    def getReportFatigueGrPath(self):
+        return self.getFullGraphicsPath()+'fatigueStrsULS/'
+
+    def getReportSimplLCFile(self):
+        return self.getFullReportPath()+'report_resSimplLC.tex'
+    def getReportSimplLCGrPath(self):
+        return self.getFullGraphicsPath()+'resSimplLC/'
+
+    def getPathList(self):
+        ''' Create the project directory tree.'''
+        retval= list()
+        retval.append(self.getFullVerifPath())
+        retval.append(self.getFullReportPath())
+        retval.append(self.getFullGraphicsPath())
+        retval.append(self.getReportNormStrGrPath())
+        retval.append(self.getReportShearGrPath())
+        retval.append(self.getReportCrackFreqGrPath())
+        retval.append(self.getReportCrackQpermGrPath())
+        retval.append(self.getReportFatigueGrPath())
+        retval.append(self.getReportSimplLCGrPath())
+        return retval
+        
+    def createTree(self):
+        ''' Create the project directory tree.'''
+        paths= self.getPathList()
+        for pth in paths:
+            if(not os.path.exists(pth)):
+                os.makedirs(pth)
+
+
+
+class envConfig(output_styles.OutputStyle):
+    '''Generic configuration of XC environment variables.
+
        :ivar grWidth: size of the graphics to be included in the annex          
     '''
     def __init__(self,language,intForcPath,verifPath,annexPath,grWidth='120mm'):
@@ -51,35 +142,39 @@ class envConfig(output_styles.OutputStyle):
         super(envConfig,self).__init__(language= language)
         #default names of files with data for FE model generation, results of
         #limit state verifications, ..
+        self.projectDirTree= ProjectDirTree(intForcPath,verifPath,annexPath)
 
         lsd.LimitStateData.internal_forces_results_directory= intForcPath
         lsd.LimitStateData.check_results_directory= verifPath
 
-        self.intForcPath=intForcPath
-        self.verifPath=verifPath
-        
-        self.verifNormStrFile=verifPath+'verifRsl_normStrsULS.py'
-        self.reportNormStrFile=annexPath+'text/report_normStrsULS.tex'
-        self.reportNormStrGrPath=annexPath+'text/graphics/normStrsULS/'
-        
-        self.verifShearFile=verifPath+'verifRsl_shearULS.py'
-        self.reportShearFile=annexPath+'text/graphics/report_shearULS.tex'
-        self.reportShearGrPath=annexPath+'text/graphics/shearULS/'
-        
-        self.verifCrackFreqFile=verifPath+'verifRsl_crackingSLS_freq.py'
-        self.reportCrackFreqFile=annexPath+'text/report_crackingSLS_freq.tex'
-        self.reportCrackFreqGrPath=annexPath+'text/graphics/crackingSLS_freq/' 
-        
-        self.verifCrackQpermFile=verifPath+'verifRsl_crackingSLS_qperm.py'
-        self.reportCrackQpermFile=annexPath+'text/report_crackingSLS_qperm.tex'
-        self.reportCrackQpermGrPath=annexPath+'text/graphics/crackingSLS_qperm/' 
-        
-        self.verifFatigueFile=verifPath+'verifRsl_fatigueULS.py'
-        self.reportFatigueFile=annexPath+'text/report_fatigueStrsULS.tex' 
-        self.reportFatigueGrPath=annexPath+'text/graphics/fatigueStrsULS/'
+        # self.intForcPath=intForcPath
+        # self.verifPath=verifPath
 
-        self.reportSimplLCFile=annexPath+'text/report_resSimplLC.tex'
-        self.reportSimplLCGrPath=annexPath+'text/graphics/resSimplLC/'
+        # All these variables will be DEPRECATED in a future version
+        # of the module
+        self.verifNormStrFile= self.projectDirTree.getVerifNormStrFile()
+        self.reportNormStrFile= self.projectDirTree.getReportNormStrFile()
+        self.reportNormStrGrPath= self.projectDirTree.getReportNormStrGrPath()
+        
+        self.verifShearFile= self.projectDirTree.getVerifShearFile()
+        self.reportShearFile= self.projectDirTree.getReportShearFile()
+        self.reportShearFile= self.projectDirTree.getReportShearGrPath()
+        
+        self.verifCrackFreqFile= self.projectDirTree.getVerifCrackFreqFile()
+        self.reportCrackFreqFile= self.projectDirTree.getReportCrackFreqFile()
+        self.reportCrackFreqFile= self.projectDirTree.getReportCrackFreqGrPath()
+        
+        self.verifCrackQpermFile= self.projectDirTree.getVerifCrackQpermFile()
+        self.reportCrackQpermFile= self.projectDirTree.getReportCrackQpermFile()
+        self.reportCrackQpermFile= self.projectDirTree.getReportCrackQpermGrPath()
+        
+        self.verifFatigueFile= self.projectDirTree.getVerifFatigueFile()
+        self.reportFatigueFile= self.projectDirTree.getReportFatigueFile()
+        self.reportFatigueFile= self.projectDirTree.getReportFatigueGrPath()
+
+        self.reportSimplLCFile= self.projectDirTree.getReportSimplLCFile()
+        self.reportSimplLCFile= self.projectDirTree.getReportSimplLCGrPath()
+        # End of the variables to deprecate
 
         self.capTexts= self.getCaptionTextsDict()
         self.colors=setBasicColors
