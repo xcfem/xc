@@ -18,7 +18,6 @@ import re
 from scipy.spatial.distance import cdist
 from import_export import BlockTopologyEntities as bte
 from miscUtils import LogMessages as lmsg
-from geom_utils import principal_axis as pa
 
 class FloatList(list):
     '''List of floats that are more than
@@ -144,13 +143,11 @@ def decompose_polyface(polyface, tol= .01):
     '''Return the quadrilateral surfaces that
        compose the polyface.
     '''
-    # Compute the principal axis.
+    # Compute the reference axis.
     points= geom.polyPos3d()
     for face in polyface:
         for pt in face:
             points.append(geom.Pos3d(pt[0],pt[1],pt[2]))
-    #sisRef= get_polygon_axis(points,tol)
-    #sisRef= pa.get_principal_axis_3D(points)
     sisRef= get_polyface_points_axis(points)
 
     # Create candidate surfaces.

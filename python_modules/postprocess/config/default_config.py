@@ -26,7 +26,7 @@ def findWorkingDirectory():
     return working_dir
 
 class envConfig(output_styles.OutputStyle):
-    '''Generic configuration of environment variables.
+    '''Generic configuration of XC environment variables.
 
        :ivar intForcPath: full path of the directory where results of 
                      internal forces are placed.

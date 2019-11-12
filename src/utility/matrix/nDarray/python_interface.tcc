@@ -31,7 +31,21 @@ class_<XC::Cosseratstraintensor , bases<XC::BJtensor>, boost::noncopyable >("Cos
 
 class_<XC::Cosseratstresstensor , bases<XC::BJtensor>, boost::noncopyable >("Cosseratstresstensor", no_init);
 
-class_<XC::straintensor , bases<XC::BJtensor>, boost::noncopyable >("straintensor", no_init);
+class_<XC::straintensor , bases<XC::BJtensor> >("straintensor");
 
-class_<XC::stresstensor , bases<XC::BJtensor>, boost::noncopyable >("stresstensor", no_init);
+class_<XC::stresstensor , bases<XC::BJtensor> >("stresstensor")
+  .def(init<int,double>())
+  .def(init<boost::python::list>())
+  .def(self_ns::str(self_ns::self))
+  .def("Iinvariant1",&XC::stresstensor::Iinvariant1)
+  .def("Iinvariant2",&XC::stresstensor::Iinvariant2)
+  .def("Iinvariant3",&XC::stresstensor::Iinvariant3)
+  .def("Jinvariant1",&XC::stresstensor::Jinvariant1)
+  .def("Jinvariant2",&XC::stresstensor::Jinvariant2)
+  .def("Jinvariant3",&XC::stresstensor::Jinvariant3)
+  .def("deviator",&XC::stresstensor::deviator)
+  .def("principal",&XC::stresstensor::principal)
+  .def("sigma_octahedral",&XC::stresstensor::sigma_octahedral)
+  .def("tau_octahedral",&XC::stresstensor::tau_octahedral)
+  ;
 

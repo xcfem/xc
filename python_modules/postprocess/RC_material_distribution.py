@@ -11,7 +11,7 @@ from solution import predefined_solutions
 from postprocess import phantom_model as phm
 from materials.sections import RCsectionsContainer as sc
 from model.sets import sets_mng as sUtils
-from postprocess.config import output_config as oc
+from postprocess import limit_state_data as lsd
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2016, LCPT and AO_O"
@@ -105,7 +105,7 @@ class RCMaterialDistribution(object):
       self.sectionDefinition= pickle.load(f)
     f.close()
 
-  def runChecking(self,limitStateData,matDiagType,threeDim= True,outputCfg=oc.verifOutVars()):
+  def runChecking(self,limitStateData,matDiagType,threeDim= True,outputCfg= lsd.VerifOutVars()):
     '''Creates the phantom model and runs the verification on it.
 
     :param limitStateData: object that contains the name of the file
@@ -117,7 +117,7 @@ class RCMaterialDistribution(object):
            k: characteristic).
     :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
            false if it's 2D (Fx,Fy,Mz).
-    :param outputCfg: instance of class 'verifOutVars' which defines the 
+    :param outputCfg: instance of class 'VerifOutVars' which defines the 
                variables that control the output of the checking (set of 
                elements to be analyzed, append or not the results to a file,
                generation or not of lists, ...)
@@ -148,7 +148,7 @@ class RCMaterialDistribution(object):
                            for the combinations analyzed and the
                            controller to use for the checking.
     :param matDiagType: type of the material diagram (d: design, k: characteristic).
-    :param outputCfg: instance of class 'verifOutVars' which defines the 
+    :param outputCfg: instance of class 'VerifOutVars' which defines the 
                variables that control the output of the checking (set of 
                elements to be analyzed, append or not the results to a file,
                generation or not of lists, ...)

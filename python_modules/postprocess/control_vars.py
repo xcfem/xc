@@ -804,7 +804,7 @@ def writeControlVarsFromPhantomElements(controlVarName,preprocessor,outputFileNa
     :param controlVarName: name of the control var. 
     :param preprocessor:   preprocessor from FEA model.
     :param outputFileName: name to the files (.py and .tex)
-    :param outputCfg: instance of class 'verifOutVars' which defines the 
+    :param outputCfg: instance of class 'VerifOutVars' which defines the 
            variables that control the output of the checking (append or not
            the results to a file, generation or not of lists, ...)
     '''
@@ -865,7 +865,7 @@ def writeControlVarsFromElements(controlVarName,preprocessor,outputFileName,outp
     :param controlVarName: name of the control var (e.g. 'ULS_normalStressesResistance' )
     :param preprocessor:    preprocessor from FEA model.
     :param outputFileName: name of the files to write (.py and .tex)
-    :param outputCfg: instance of class 'verifOutVars' which defines the 
+    :param outputCfg: instance of class 'VerifOutVars' which defines the 
            variables that control the output of the checking (set of 
            elements to be analyzed [defaults to 'total'], append or not the 
            results to the result file [defatults to 'N'], generation or not of 

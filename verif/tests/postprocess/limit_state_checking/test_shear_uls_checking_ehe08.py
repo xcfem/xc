@@ -13,7 +13,6 @@ from postprocess import RC_material_distribution
 from postprocess import element_section_map
 from postprocess import phantom_model
 from solution import predefined_solutions
-from postprocess.config import output_config
 from miscUtils import LogMessages as lmsg
 
 
@@ -95,7 +94,7 @@ limit_state_data.LimitStateData.internal_forces_results_directory= pth+'/'
 limit_state_data.LimitStateData.check_results_directory= '/tmp/'
 limit_state_data.normalStressesResistance.outputDataBaseFileName= 'resVerif'
 
-outCfg=output_config.verifOutVars(listFile='N',calcMeanCF='Y')
+outCfg= limit_state_data.VerifOutVars(listFile='N',calcMeanCF='Y')
 
 (FEcheckedModel,meanFCs)= reinfConcreteSectionDistribution.runChecking(limit_state_data.shearResistance, matDiagType="d",threeDim= True,outputCfg=outCfg)  
 

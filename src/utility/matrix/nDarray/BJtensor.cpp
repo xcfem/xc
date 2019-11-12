@@ -112,6 +112,9 @@ XC::BJtensor::BJtensor(int rank_of_BJtensor,const double &initval)
 XC::BJtensor::BJtensor(int rank_of_BJtensor, const int *pdim, double *values)
   : nDarray(rank_of_BJtensor, pdim, values), indices1(""), indices2("") {}
 
+//! @brief Constructor
+XC::BJtensor::BJtensor(int rank_of_BJtensor, const int *pdim, const boost::python::list &l)
+  : nDarray(rank_of_BJtensor, pdim, l), indices1(""), indices2("") {}
 
 //! @brief Constructor
 XC::BJtensor::BJtensor(int rank_of_BJtensor, const int *pdim,const double &initvalue)

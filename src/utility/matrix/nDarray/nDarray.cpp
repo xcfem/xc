@@ -156,7 +156,7 @@ XC::nDarray::nDarray(int rank_of_nDarray, double initval)
 
 //##############################################################################
 XC::nDarray::nDarray(int rank_of_nDarray, const int *pdim, double *values)
-{
+  {
  // create the structure:
    pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 2
    pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
@@ -176,7 +176,7 @@ XC::nDarray::nDarray(int rank_of_nDarray, const int *pdim, double *values)
      }
 
 
-// allocate memory for the actual XC::nDarray as XC::nDarray
+// allocate memory for the actual nDarray as nDarray
    pc_nDarray_rep->pd_nDdata = new double [(size_t)pc_nDarray_rep->total_numb];
      if (!pc_nDarray_rep->pd_nDdata)
        {
@@ -192,11 +192,48 @@ XC::nDarray::nDarray(int rank_of_nDarray, const int *pdim, double *values)
 
 }
 
+//! @brief Constructor.
+XC::nDarray::nDarray(int rank_of_nDarray, const int *pdim, const boost::python::list &l)
+  {
+     // create the structure:
+       pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 3
+       pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
+
+    // in the case of nDarray_rank=0 add one to get right thing from the
+    // operator new
+       int one_or0 = 0;
+       if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
+       pc_nDarray_rep->dim = new int[pc_nDarray_rep->nDarray_rank+one_or0];// array for
+								     // dimensions
+
+       pc_nDarray_rep->total_numb = 1;
+       for( int idim = 0 ; idim < pc_nDarray_rep->nDarray_rank ; idim++ )
+	 {
+	   pc_nDarray_rep->dim[idim] = pdim[idim];
+	   pc_nDarray_rep->total_numb *= pc_nDarray_rep->dim[idim];
+	 }
+
+
+    // allocate memory for the actual nDarray as nDarray
+       pc_nDarray_rep->pd_nDdata = new double [(size_t)pc_nDarray_rep->total_numb];
+	 if (!pc_nDarray_rep->pd_nDdata)
+	   {
+	     ::fprintf(stderr,"\a\nInsufficient memory for array\n");
+	     ::exit(1);
+	   }
+
+
+       pc_nDarray_rep->n = 1;  // so far, there's one reference
+
+	for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
+	  pc_nDarray_rep->pd_nDdata[i] =boost::python::extract<double>(l[i]);
+  }
+
 //##############################################################################
 XC::nDarray::nDarray(int rank_of_nDarray, const int *pdim, double initvalue)
 {
  // create the structure:
-   pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 3
+   pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 4
    pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
 
 // in the case of nDarray_rank=0 add one to get right thing from the
@@ -234,7 +271,7 @@ XC::nDarray::nDarray(int rank_of_nDarray, const int *pdim, double initvalue)
 XC::nDarray::nDarray(int rank_of_nDarray, int rows, int cols, double *values)
 {
 // create the structure:
-  pc_nDarray_rep =  new nDarray_rep; // this 'new' is overloaded 4
+  pc_nDarray_rep =  new nDarray_rep; // this 'new' is overloaded 5
   pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
 
 // not needed for XC::BJmatrix or XC::BJvector but who knows #
@@ -269,7 +306,7 @@ XC::nDarray::nDarray(int rank_of_nDarray, int rows, int cols, double *values)
 XC::nDarray::nDarray(int rank_of_nDarray, int rows, int cols, double values)
 {
 // create the structure:
-  pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 5
+  pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 6
   pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
 
 // not needed for XC::BJmatrix or XC::BJvector but who knows #
@@ -354,7 +391,7 @@ XC::nDarray::nDarray(const std::string &flag, int rank_of_nDarray, const int *pd
     ::exit( 1 );
    }
  // create the structure:
-   pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 6
+   pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 7
    pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
 
 // in the case of nDarray_rank=0 add one to get right thing from the

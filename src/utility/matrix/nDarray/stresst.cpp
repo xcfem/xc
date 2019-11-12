@@ -116,9 +116,13 @@ XC::stresstensor::stresstensor (int rank_of_tensor, double initval):
   BJtensor(rank_of_tensor, def_dim_2, initval) {  } // default constructor
 
 
-//##############################################################################
-XC::stresstensor::stresstensor ( double *values ):
-  BJtensor( 2, def_dim_2, values) {  }
+//! @brief Constructor.
+XC::stresstensor::stresstensor ( double *values )
+  : BJtensor( 2, def_dim_2, values) {  }
+
+//! @brief Constructor
+XC::stresstensor::stresstensor(const boost::python::list &l)
+  : BJtensor( 2, def_dim_2, l) {  }
 
 //##############################################################################
 XC::stresstensor::stresstensor ( double initvalue ):

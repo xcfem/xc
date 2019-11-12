@@ -119,6 +119,7 @@ class BJtensor: public nDarray
   public: // just send appropriate arguments to the base constructor
     BJtensor(int rank_of_BJtensor=1,const double &initval=0); // default constructor
     BJtensor(int rank_of_BJtensor, const int *pdim, double *values);
+    BJtensor(int rank_of_BJtensor, const int *pdim, const boost::python::list &l);    
     BJtensor(int rank_of_BJtensor, const int *pdim,const double &initvalue);
     BJtensor(const std::string &flag, int rank_of_BJtensor, const int *pdim);  // create a unit nDarray
     BJtensor(const std::string &flag);   //this one used to send "NO" message

@@ -16,7 +16,7 @@ from materials.sections import RCsectionsContainer as sc
 from solution import predefined_solutions
 from materials.sia262 import SIA262_limit_state_checking #Change SIA262->EHE
 from postprocess import limit_state_data as lsd
-from postprocess.config import output_config as oc
+
 import logging
 
 
@@ -76,7 +76,7 @@ lsd.LimitStateData.check_results_directory= '/tmp/'
 lsd.normalStressesResistance.outputDataBaseFileName= 'ppTN'
 #intForceFileName= lsd.normalStressesResistance.getInternalForcesFileName()
 
-outCfg=oc.verifOutVars(listFile='N',calcMeanCF='Y')
+outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
 
 meanFCs= reinfConcreteSections.internalForcesVerification3D(lsd.normalStressesResistance,"d",outCfg)
 

@@ -67,8 +67,7 @@ XC::FirstPrincipalCurvature::FirstPrincipalCurvature()
 {
 }
 
-int
-XC::FirstPrincipalCurvature::computeCurvatures(ReliabilityDomain *theReliabilityDomain)
+int XC::FirstPrincipalCurvature::computeCurvatures(ReliabilityDomain *theReliabilityDomain)
 {
 
 	// "Download" limit-state function from reliability domain
@@ -109,10 +108,7 @@ XC::FirstPrincipalCurvature::computeCurvatures(ReliabilityDomain *theReliability
 }
 
 
- XC::Vector
-XC::FirstPrincipalCurvature::getCurvatures()
-{
-	return curvatures;
-}
+XC::Vector XC::FirstPrincipalCurvature::getCurvatures()
+  { return curvatures; }
 
 

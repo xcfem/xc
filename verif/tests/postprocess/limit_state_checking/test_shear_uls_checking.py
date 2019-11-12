@@ -24,7 +24,7 @@ from postprocess import RC_material_distribution
 from materials.sections.fiber_section import defSimpleRCSection
 import sys
 import logging
-from postprocess.config import output_config as oc
+
 from miscUtils import LogMessages as lmsg
 
 #Hide INFO messages from modules.
@@ -129,7 +129,7 @@ lsd.shearResistance.controller.analysisToPerform= predefined_solutions.simple_ne
 lsd.LimitStateData.check_results_directory= '/tmp/'
 lsd.normalStressesResistance.outputDataBaseFileName= 'resVerif'
 
-outCfg=oc.verifOutVars(listFile='N',calcMeanCF='Y')
+outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
 
 (FEcheckedModel,meanFCs)= reinfConcreteSectionDistribution.runChecking(lsd.shearResistance, matDiagType="d",threeDim= True,outputCfg=outCfg)  
 

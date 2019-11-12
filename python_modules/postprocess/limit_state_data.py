@@ -16,13 +16,32 @@ from materials.sections import internal_forces
 from collections import defaultdict
 import csv
 from postprocess import control_vars as cv
-from postprocess.config import output_config as oc
+
 
 def defaultAnalysis(feProb,steps= 1):
     '''Default analysis procedure for saveAll method.'''
     analysis= predefined_solutions.simple_static_linear(feProb)
     result= analysis.analyze(steps) #Same with the number of steps.
     return result
+
+class VerifOutVars(object):
+    '''Variables that control the output of limit state verifications.
+
+    :param setCalc: set of elements to be analyzed (defaults to 'None' which 
+           means that all the elements in the file of internal forces
+           results are analyzed) 
+    :param appendToResFile:  'Yes','Y','y',.., if results are appended to 
+           existing file of results (defaults to 'N')
+    :param listFile: 'Yes','Y','y',.., if latex listing file of results 
+           is desired to be generated (defaults to 'N')
+    :param calcMeanCF: 'Yes','Y','y',.., if mean capacity factor is desired
+           to be calculated (defaults to 'N')
+    '''
+    def __init__(self,setCalc=None,appendToResFile='N',listFile='N',calcMeanCF='N'):
+        self.setCalc=setCalc
+        self.appendToResFile=appendToResFile
+        self.listFile=listFile
+        self.calcMeanCF=calcMeanCF
 
 class LimitStateData(object):
     check_results_directory= './' #Path to verifRsl* files.
@@ -114,7 +133,7 @@ class LimitStateData(object):
         elements and the associated limit state verification is run.
         The results are written to a file in order to be displayed or listed.
 
-        :param outputCfg: instance of class 'verifOutVars' which defines the 
+        :param outputCfg: instance of class 'VerifOutVars' which defines the 
                variables that control the output of the checking (set of 
                elements to be analyzed, append or not the results to the 
                result file [defatults to 'N'], generation or not
@@ -156,13 +175,13 @@ class NormalStressesRCLimitStateData(LimitStateData):
         combContainer.ULS.perm.dumpCombinations(loadCombinations)
         return loadCombinations
 
-    def check(self,reinfConcreteSections,outputCfg=oc.verifOutVars()):
+    def check(self,reinfConcreteSections,outputCfg= VerifOutVars()):
         '''Checking of normal stresses in ultimate limit states
         (see self.dumpCombinations).
 
         :param reinfConcreteSections: Reinforced concrete sections on each 
                element.
-        :param outputCfg: instance of class 'verifOutVars' which defines the 
+        :param outputCfg: instance of class 'VerifOutVars' which defines the 
                variables that control the output of the checking (set of 
                elements to be analyzed, append or not the results to a file,
                generation or not of lists, ...)
@@ -186,13 +205,13 @@ class ShearResistanceRCLimitStateData(LimitStateData):
         loadCombinations.clear()
         combContainer.ULS.perm.dumpCombinations(loadCombinations)
         return loadCombinations
-    def check(self,reinfConcreteSections,outputCfg=oc.verifOutVars()):
+    def check(self,reinfConcreteSections,outputCfg= VerifOutVars()):
         '''Checking of shear resistance in ultimate limit states 
         (see self.dumpCombinations).
 
         :param reinfConcreteSections: Reinforced concrete sections on each 
                element.
-        :param outputCfg: instance of class 'verifOutVars' which defines the 
+        :param outputCfg: instance of class 'VerifOutVars' which defines the 
                variables that control the output of the checking (set of 
                elements to be analyzed, append or not the results to a file,
                generation or not of lists, ...)
@@ -215,13 +234,13 @@ class FreqLoadsCrackControlRCLimitStateData(LimitStateData):
         loadCombinations.clear()
         combContainer.SLS.freq.dumpCombinations(loadCombinations)
         return loadCombinations
-    def check(self,reinfConcreteSections,outputCfg=oc.verifOutVars()):
+    def check(self,reinfConcreteSections,outputCfg= VerifOutVars()):
         '''Checking of crack width under frequent loads in serviceability limit states 
            (see self.dumpCombinations).
 
         :param reinfConcreteSections: Reinforced concrete sections on each 
                element.
-        :param outputCfg: instance of class verifOutVars which defines the 
+        :param outputCfg: instance of class VerifOutVars which defines the 
                variables that control the output of the checking (set of 
                elements to be analyzed, append or not the results to file,
                generation or not of lists, ...)
@@ -245,13 +264,13 @@ class QPLoadsCrackControlRCLimitStateData(LimitStateData):
         combContainer.SLS.qp.dumpCombinations(loadCombinations)
         return loadCombinations
 
-    def check(self,reinfConcreteSections,outputCfg=oc.verifOutVars()):
+    def check(self,reinfConcreteSections,outputCfg= VerifOutVars()):
         '''Checking of crack width under quasi-permanent loads in
         serviceability limit states (see self.dumpCombinations).
 
         :param reinfConcreteSections: Reinforced concrete sections on each 
                element.
-        :param outputCfg: instance of class verifOutVars which defines the 
+        :param outputCfg: instance of class VerifOutVars which defines the 
                variables that control the output of the checking (set of 
                elements to be analyzed, append or not the results to file,
                generation or not of lists, ...)
@@ -301,13 +320,13 @@ class FatigueResistanceRCLimitStateData(LimitStateData):
         combContainer.ULS.fatigue.dumpCombinations(loadCombinations)
         return loadCombinations
     
-    def check(self,reinfConcreteSections,outputCfg=oc.verifOutVars()):
+    def check(self,reinfConcreteSections,outputCfg= VerifOutVars()):
         '''Checking of fatigue under fatigue combinations loads in
         ultimate limit states (see self.dumpCombinations).
 
         :param reinfConcreteSections: Reinforced concrete sections on each 
                element.
-        :param outputCfg: instance of class 'verifOutVars' which defines the 
+        :param outputCfg: instance of class 'VerifOutVars' which defines the 
                variables that control the output of the checking (set of 
                elements to be analyzed, append or not the results to a file,
                generation or not of lists, ...)

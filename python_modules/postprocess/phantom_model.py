@@ -210,7 +210,7 @@ class PhantomModel(object):
 
     :param controller:     object that controls limit state in elements
     :param outputFileName: base name of output file (extensions .py and .tex)
-    :param outputCfg: instance of class 'verifOutVars' which defines the 
+    :param outputCfg: instance of class 'VerifOutVars' which defines the 
            variables that control the output of the checking (append or not
            the results to a file, generation or not of lists, ...)
     '''
@@ -224,7 +224,7 @@ class PhantomModel(object):
                            obtained for each element 
                            for the combinations analyzed and the
                            controller to use for the checking.
-    :param outputCfg: instance of class 'verifOutVars' which defines the 
+    :param outputCfg: instance of class 'VerifOutVars' which defines the 
                variables that control the output of the checking (set of 
                elements to be analyzed, append or not the results to a file,
                generation or not of lists, ...)

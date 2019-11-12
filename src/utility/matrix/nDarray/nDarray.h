@@ -93,6 +93,7 @@
 
 #include "utility/matrix/nDarray/basics.h"
 #include <string>
+#include <boost/python.hpp>
 
 // forward reference
 namespace XC {
@@ -181,6 +182,7 @@ class nDarray
   public:
     nDarray(int rank_of_nDarray=1, double initval=0.0);// default constructor
     nDarray(int rank_of_nDarray, const int *pdim, double *values);
+    nDarray(int rank_of_nDarray, const int *pdim, const boost::python::list &);
     nDarray(int rank_of_nDarray, const int *pdim, double initvalue);
 //..//  for skyBJmatrix --v
 //..    nDarray(int dim);

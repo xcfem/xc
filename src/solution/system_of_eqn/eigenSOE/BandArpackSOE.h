@@ -51,8 +51,8 @@ class BandArpackSolver;
 class BandArpackSOE: public ArpackSOE
   {
   private:
-    int numSuperD; //Numero de diagonales por encima de la principal.
-    int numSubD; //Numero de diagonales por debajo de la principal.
+    int numSuperD; //!< Number of diagonals above the principal.
+    int numSubD; //!< Number of diagonals below the principal.
     Vector A;
   protected:
     bool setSolver(EigenSolver *);
