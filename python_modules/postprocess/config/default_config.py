@@ -59,6 +59,11 @@ class ProjectDirTree(object):
     def getFullGraphicsPath(self):
         return self.getFullReportPath()+'graphics/'
 
+    def getReportSectionsFile(self):
+        return self.getFullReportPath()+'sectReport.tex'
+    def getReportSectionsGrPath(self):
+        return self.getFullReportPath()+'sections/'
+
     def getReportLoadsFile(self):
         return self.getFullReportPath()+'report_loads.tex'
     def getReportLoadsGrPath(self):
