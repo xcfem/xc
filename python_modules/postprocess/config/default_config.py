@@ -58,6 +58,11 @@ class ProjectDirTree(object):
         return self.workingDirectory+'/'+self.annexPath+'text/'
     def getFullGraphicsPath(self):
         return self.getFullReportPath()+'graphics/'
+
+    def getReportLoadsFile(self):
+        return self.getFullReportPath()+'report_loads.tex'
+    def getReportLoadsGrPath(self):
+        return self.getFullGraphicsPath()+'loads/'
     
     def getVerifNormStrFile(self):
         return self.getFullVerifPath()+'verifRsl_normStrsULS.py'    
