@@ -138,6 +138,18 @@ bool XC::Pnt::isConnectedTo(const Body &b) const
     return false;
   }
 
+//! @brief Returns the faces connected with the point.
+const std::set<const XC::Face *> XC::Pnt::getConnectedSurfaces(void) const
+  {
+    std::set<const Face *> retval;
+    for(std::set<const Edge *>::const_iterator i= lines_pt.begin(); i!=lines_pt.end();i++)
+      {
+	const std::set<const Face *> tmp= (*i)->getConnectedSurfaces();
+        retval.insert(tmp.begin(), tmp.end());
+      }
+    return retval;
+  }
+
 //! @brief Return the squared distance to the position
 //! being passed as parameter.
 double XC::Pnt::getSquaredDistanceTo(const Pos3d &pt) const
@@ -383,5 +395,32 @@ const XC::Edge *XC::find_edge_const_ptr_by_endpoints(const Pnt &pA,const Pnt &pB
           retval= (*i);
           break;
         }
+    return retval;
+  }
+
+XC::Face *XC::find_face_ptr_by_vertices(const Pnt &pA,const Pnt &pB,const Pnt &pC,const Pnt &pD)
+  {
+    const Face *retval= find_face_const_ptr_by_vertices(pA,pB,pC,pD);
+    return const_cast<Face *>(retval);
+  }
+const XC::Face *XC::find_face_const_ptr_by_vertices(const Pnt &pA,const Pnt &pB,const Pnt &pC,const Pnt &pD)
+  {
+    const Face *retval=nullptr;
+    std::set<const Face *> pA_faces= pA.getConnectedSurfaces();
+    std::set<const Face *> pB_faces= pB.getConnectedSurfaces();
+    std::set<const Face *> tmp1;
+    std::set_intersection(pA_faces.begin(),pA_faces.end(),pB_faces.begin(),pB_faces.end(), std::inserter(tmp1, tmp1.begin()));
+    std::set<const Face *> pC_faces= pC.getConnectedSurfaces();
+    std::set<const Face *> tmp2;
+    std::set_intersection(tmp1.begin(),tmp1.end(),pC_faces.begin(),pC_faces.end(), std::inserter(tmp2, tmp2.begin()));
+    std::set<const Face *> pD_faces= pD.getConnectedSurfaces();
+    std::set<const Face *> tmp3;
+    std::set_intersection(tmp2.begin(),tmp2.end(),pD_faces.begin(),pD_faces.end(), std::inserter(tmp3,tmp3.begin()));
+    if(tmp3.size()>1)
+      std::cerr << __FUNCTION__
+	        << "; there are two surfaces that connect the points."
+		<< std::endl;
+    if(tmp3.size()>0)
+      retval= *tmp3.begin();
     return retval;
   }

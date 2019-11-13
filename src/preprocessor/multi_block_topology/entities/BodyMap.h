@@ -34,6 +34,8 @@
 
 namespace XC {
 
+class Block;
+
 //! @ingroup MultiBlockTopology
 //
 //! @brief Body container. 
@@ -53,10 +55,11 @@ class BodyMap: public EntityMap<Body>
     template <class B>
     Body *New(void);
 
+    Block *newBlockPts(const size_t &, const size_t &,const size_t &,const size_t &,const size_t &, const size_t &,const size_t &,const size_t &);
   };
 
 
-//! @brief Creates a new cuerpo.
+//! @brief Creates a new body
 template <class B>
 Body *BodyMap::New(void)
   {

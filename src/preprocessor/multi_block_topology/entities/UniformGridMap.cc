@@ -58,7 +58,7 @@ void XC::UniformGridMap::UpdateSets(UniformGrid *new_unif_grid) const
   }
 
 //! @brief New uniform grid.
-XC::UniformGrid *XC::UniformGridMap::Nueva(void)
+XC::UniformGrid *XC::UniformGridMap::New(void)
   {
     UniformGrid *retval= busca(getTag());
     if(!retval) //new grid.

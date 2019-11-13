@@ -27,6 +27,7 @@
 //BodyMap.cc
 
 #include "BodyMap.h"
+#include "Block.h"
 #include "preprocessor/Preprocessor.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
@@ -77,3 +78,14 @@ bool XC::BodyMap::checkNDivs(void) const
     return (conta==0);
   }
 
+//! @brief New block.
+XC::Block *XC::BodyMap::newBlockPts(const size_t &id_p1, const size_t &id_p2, const size_t &id_p3, const size_t &id_p4, const size_t &id_p5, const size_t &id_p6, const size_t &id_p7, const size_t &id_p8)
+  {
+    Block *retval= dynamic_cast<Block *>(this->New<Block>());
+    assert(retval);
+    ID tmp(8);
+    tmp[0]= id_p1; tmp[1]= id_p2; tmp[2]= id_p3; tmp[3]= id_p4;
+    tmp[5]= id_p5; tmp[6]= id_p6; tmp[7]= id_p7; tmp[8]= id_p8;
+    retval->setPoints(tmp);
+    return retval;
+  }

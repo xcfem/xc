@@ -50,13 +50,13 @@ XC::TrfGeom *XC::MapTrfGeom::newTransformation(const std::string &type)
   {
     TrfGeom *retval= nullptr;
     if(type == "rotation") //Creates a new rotation.
-      retval= Nueva<Rotation>();
+      retval= this->New<Rotation>();
     else if(type == "reflection") //Creates a new reflection.
-      retval= Nueva<Reflection>();
+      retval= this->New<Reflection>();
     else if(type == "scaling") //Creates a new scaling.
-      retval= Nueva<Scaling>();
+      retval= this->New<Scaling>();
     else if(type == "translation") //Crea una nueva translation.
-      retval= Nueva<Translation>();
+      retval= this->New<Translation>();
     else
       std::cerr << "Transformation type: '" << type
                 << "' unknown." << std::endl;

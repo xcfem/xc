@@ -52,7 +52,8 @@ class SurfaceMap: public EntityMap<Face>
     bool checkNDivs(void) const;
 
     template <class F>
-    Face *Nueva(void);
+    Face *New(void);
+    Face *createFace(Pnt *,Pnt *,Pnt *,Pnt *);
 
     QuadSurface *newQuadSurfacePts(const size_t &, const size_t &,const size_t &,const size_t &);
     QuadSurface *newQuadSurfaceLines(const size_t &, const size_t &,const size_t &,const size_t &);
@@ -62,7 +63,7 @@ class SurfaceMap: public EntityMap<Face>
 
 //! @brief Creates a new surface.
 template <class F>
-Face *SurfaceMap::Nueva(void)
+Face *SurfaceMap::New(void)
   {
     Face *retval= busca(getTag());
     if(!retval) //Surface is new.

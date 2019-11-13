@@ -28,7 +28,7 @@ numElem= 0
 feProblem= xc.FEProblem()
 feProblem.logFileName= "/tmp/erase.log" # Ignore warning messages
 feProblem.errFileName= "/tmp/erase.err" # Ignore warning messages
-preprocessor=  feProblem.getPreprocessor
+preprocessor= feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)

@@ -110,7 +110,7 @@ void XC::LineMap::UpdateSets(Edge *nueva_linea) const
       }
   }
 
-//! @brief Creates a new line between the points being passed as parameters
+//! @brief Find a line between the points or creates a new one.
 //! and inserts it on the container
 //! @param pA: pointer to back end of the line.
 //! @param pB: pointer to front end of the line.
@@ -126,7 +126,7 @@ XC::Edge *XC::LineMap::createLine(Pnt *pA,Pnt *pB)
                     << pB->getName() 
                     << "), are the same." << std::endl;
         tmp= find_edge_ptr_by_endpoints(*pA,*pB);
-        if(!tmp)
+        if(!tmp) //Line doesn't exists.
           {
             assert(getPreprocessor());
             tmp= New<Line>();

@@ -75,10 +75,49 @@ bool XC::SurfaceMap::checkNDivs(void) const
     return (conta==0);
   }
 
+//! @brief Find a face between the points or creates a new one.
+//! and inserts it on the container
+XC::Face *XC::SurfaceMap::createFace(Pnt *pA,Pnt *pB,Pnt *pC,Pnt *pD)
+  {
+    Face *retval= nullptr;
+    if(pA && pB)
+      {
+	if((pA==pB) or (pA==pC) or (pA==pD) or
+	   (pB==pC) or (pB==pD) or
+	   (pC==pD))
+	      std::cerr << getClassName() << __FUNCTION__
+			<< "; vertices of the face: ("
+			<< pA->getName() << ","
+			<< pB->getName() 
+			<< "), are the same." << std::endl;
+	retval= find_face_ptr_by_vertices(*pA,*pB,*pC,*pD);
+        if(!retval) //Face doesn't exists.
+          {
+            assert(getPreprocessor());
+            retval= New<QuadSurface>();
+            assert(retval);
+            retval->SetVertice(1,pA);
+            retval->SetVertice(2,pB);
+            retval->SetVertice(3,pC);
+            retval->SetVertice(4,pD);
+          }
+        if(!retval)
+	  std::cerr << getClassName() << __FUNCTION__
+		    << "; can't get a line"
+                    << " between points: " << pA->getName()
+                    << " and " << pB->getName() << std::endl;
+      }
+    else
+      std::cerr << getClassName() << __FUNCTION__
+		<< "; error, null pointer to point (A, B or both)."
+		<< std::endl;
+    return retval;    
+  }
+
 //! @brief New quadrilateral surface.
 XC::QuadSurface *XC::SurfaceMap::newQuadSurfacePts(const size_t &id_p1, const size_t &id_p2, const size_t &id_p3, const size_t &id_p4)
   {
-    QuadSurface *retval= dynamic_cast<QuadSurface *>(Nueva<QuadSurface>());
+    QuadSurface *retval= dynamic_cast<QuadSurface *>(this->New<QuadSurface>());
     assert(retval);
     ID tmp(4);
     tmp[0]= id_p1; tmp[1]= id_p2; tmp[2]= id_p3; tmp[3]= id_p4;
@@ -89,7 +128,7 @@ XC::QuadSurface *XC::SurfaceMap::newQuadSurfacePts(const size_t &id_p1, const si
 //! @brief New quadrilateral surface.
 XC::QuadSurface *XC::SurfaceMap::newQuadSurfaceLines(const size_t &id_p1, const size_t &id_p2, const size_t &id_p3, const size_t &id_p4)
   {
-    QuadSurface *retval= dynamic_cast<QuadSurface *>(Nueva<QuadSurface>());
+    QuadSurface *retval= dynamic_cast<QuadSurface *>(this->New<QuadSurface>());
     assert(retval);
     ID tmp(4);
     tmp[0]= id_p1; tmp[1]= id_p2; tmp[2]= id_p3; tmp[3]= id_p4;
@@ -100,7 +139,7 @@ XC::QuadSurface *XC::SurfaceMap::newQuadSurfaceLines(const size_t &id_p1, const 
 //! @brief New quadrilateral surface.
 XC::QuadSurface *XC::SurfaceMap::newQuadSurfaceGridPoints(const boost::python::list &l)
   {
-    QuadSurface *retval= dynamic_cast<QuadSurface *>(Nueva<QuadSurface>());
+    QuadSurface *retval= dynamic_cast<QuadSurface *>(this->New<QuadSurface>());
     assert(retval);
     retval->defGridPoints(l);
     return retval;

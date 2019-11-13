@@ -60,7 +60,7 @@
 XC::MultiBlockTopology::MultiBlockTopology(Preprocessor *prep)
   : PreprocessorContainer(prep), reference_systems(this),
     geometric_transformations(this),
-    points(this), edges(this), faces(this), cuerpos(this), unif_grid(this),
+    points(this), edges(this), faces(this), bodies(this), unif_grid(this),
     framework2d(this), framework3d(this) {}
 
 //! @brief Assign indexes to the objects (nodes,elements,points,...)
@@ -70,7 +70,7 @@ void XC::MultiBlockTopology::numera(void)
     points.numera();
     edges.numera();
     faces.numera();
-    cuerpos.numera();
+    bodies.numera();
   }
 
 //! @brief Return the «edge» that has as end points those
@@ -173,7 +173,7 @@ void XC::MultiBlockTopology::clearAll(void)
     framework3d.clearAll();
 
     unif_grid.clearAll();
-    cuerpos.clearAll();
+    bodies.clearAll();
     faces.clearAll();
     edges.clearAll();
     points.clearAll();

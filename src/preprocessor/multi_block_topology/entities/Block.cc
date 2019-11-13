@@ -109,6 +109,25 @@ const XC::Block::BodyFace *XC::Block::getFace(const size_t &i) const
 XC::Block::BodyFace *XC::Block::getFace(const size_t &i)
   { return &sups[i-1]; }
 
+//! @brief Creates a new face between the points being passed as parameters
+//! and inserts it on the faces set.
+XC::Face *XC::Block::newFace(Pnt *pA,Pnt *pB,Pnt *pC,Pnt *pD)
+  {
+    Face *retval= nullptr;
+    assert(getPreprocessor());
+    retval= dynamic_cast<Face *>(getPreprocessor()->getMultiBlockTopology().getSurfaces().createFace(pA,pB,pC,pD));
+    if(retval)
+      { insert(retval); }    
+    else
+       std::cerr << getClassName() << "::" << __FUNCTION__
+		 << "; surface with vertices: "
+                 << pA->getName() << ", " << pB->getName()
+                 << pC->getName() << " and " << pB->getName()
+		 << " not found in definition of block: '"
+                 << getName() << "'" << std::endl;
+    return retval;
+  }
+
 //! @brief Return the i-th edge of the solid.
 const XC::CmbEdge::Side *XC::Block::getEdge(const size_t &i) const
   {
@@ -210,7 +229,7 @@ size_t XC::Block::index(Face *s) const
     return retval;
   }
 
-//! @brief Put the sur!face as solid limit.
+//! @brief Put the surface as solid limit.
 void XC::Block::put(const size_t &i,Face *s)
   {
     size_t first= 1;
@@ -276,6 +295,12 @@ void XC::Block::insert(const size_t &i)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; surface: " << i
 		<< " not found." << std::endl;
+  }
+
+void XC::Block::insert(Face *)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << " not implemented yet." << std::endl;
   }
 
 //! @brief Create and insert the faces from the indices passed
@@ -487,3 +512,10 @@ void XC::Block::genMesh(meshing_dir dm)
     if(verbosity>3)
       std::clog << "done." << std::endl;
   }
+
+void XC::Block::setPoints(const ID &)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << " not implemented yet." << std::endl;
+  }
+

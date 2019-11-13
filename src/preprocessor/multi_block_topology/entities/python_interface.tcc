@@ -182,6 +182,10 @@ class_<map_bodies, bases<map_cm_bodies>, boost::noncopyable >("map_bodies", no_i
    ;
 
 class_<XC::BodyMap, bases<map_bodies>, boost::noncopyable >("MapBodies", no_init)
+   .def("newBlockPts", &XC::BodyMap::newBlockPts, return_internal_reference<>(),"Creates a hexahedrical block.")
+   .def("get", &XC::BodyMap::get, return_internal_reference<>(),"Return the i-th face.")
+   .def("conciliaNDivs", &XC::BodyMap::conciliaNDivs)
+   .def("checkNDivs",&XC::BodyMap::checkNDivs,"Check the number of divisions.")
    ;
 
 typedef XC::ModelComponentContainer<XC::Body> map_cm_ugrids;
@@ -197,7 +201,7 @@ typedef XC::EntityMap<XC::UniformGrid> map_ugrids;
 class_<map_ugrids, bases<map_cm_ugrids>, boost::noncopyable >("map_ugrids", no_init)
    ;
 
-XC::UniformGrid *(XC::UniformGridMap::*newUniformGrid)(void)= &XC::UniformGridMap::Nueva;
+XC::UniformGrid *(XC::UniformGridMap::*newUniformGrid)(void)= &XC::UniformGridMap::New;
 
 class_<XC::UniformGridMap, bases<map_ugrids>, boost::noncopyable >("UniformGridMap", no_init)
    .def("newUniformGrid", newUniformGrid, return_internal_reference<>(),"Creates a uniform grid.")

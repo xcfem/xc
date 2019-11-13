@@ -45,13 +45,13 @@ class MapTrfGeom: public ModelComponentContainer<TrfGeom>
     MapTrfGeom(MultiBlockTopology *mbt= nullptr);
 
     template <class T>
-    TrfGeom *Nueva(void);
+    TrfGeom *New(void);
     TrfGeom *newTransformation(const std::string &type);
   };
 
 //! @brief Creates a new geometric transformation.
 template <class T>
-XC::TrfGeom *XC::MapTrfGeom::Nueva(void)
+XC::TrfGeom *XC::MapTrfGeom::New(void)
   {
     TrfGeom *retval= busca(getTag());
     if(!retval) //Doesn't already exist.

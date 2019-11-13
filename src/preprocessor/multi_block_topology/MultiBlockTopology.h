@@ -78,7 +78,7 @@ class MultiBlockTopology: public PreprocessorContainer
     PntMap points; //!< Points container.
     LineMap edges; //!< Edges container.
     SurfaceMap faces; //!< Surfaces container.
-    BodyMap cuerpos; //!< Bodys container.
+    BodyMap bodies; //!< Bodys container.
     UniformGridMap unif_grid; //!< Uniform grids container.
     Framework2d framework2d; //!< Bi-dimensional framework container.
     Framework3d framework3d; //!< Three-dimensional framework container.
@@ -111,6 +111,10 @@ class MultiBlockTopology: public PreprocessorContainer
       { return faces; }
     inline SurfaceMap &getSurfaces(void)
       { return faces; }
+    inline const BodyMap &getBodies(void) const
+      { return bodies; }
+    inline BodyMap &getBodies(void)
+      { return bodies; }
     inline const MapTrfGeom &getGeometricTransformations(void) const
       { return geometric_transformations; }
     inline MapTrfGeom &getGeometricTransformations(void)

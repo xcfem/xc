@@ -548,7 +548,7 @@ void XC::CmbEdge::close(void)
   }
 
 //! @brief Creates a new line between the points being passed as parameters
-//! and inserts it on the edge set set.
+//! and inserts it on the edges set.
 XC::Edge *XC::CmbEdge::newLine(Pnt *pA,Pnt *pB)
   {
     Line *retval= nullptr;

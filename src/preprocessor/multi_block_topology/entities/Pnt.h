@@ -102,6 +102,8 @@ class Pnt: public EntMdlr
     bool isConnectedTo(const Body &b) const;
     double getSquaredDistanceTo(const Pos3d &pt) const;
 
+    const std::set<const Face *> getConnectedSurfaces(void) const;
+    
     void Move(const Vector3d &);
     void Transform(const TrfGeom &trf);
     void Transform(const size_t &indice_trf);
@@ -122,6 +124,9 @@ Edge *find_edge_ptr_by_endpoints(const Pnt &pA,const Pnt &pB);
 Edge *find_edge_ptr_by_endpoints(const Pnt &,const Pnt &,const Pnt &);
 const Edge *find_edge_const_ptr_by_endpoints(const Pnt &pA,const Pnt &pB);
 const Edge *find_edge_const_ptr_by_endpoints(const Pnt &,const Pnt &,const Pnt &);
+
+Face *find_face_ptr_by_vertices(const Pnt &pA,const Pnt &pB,const Pnt &pC,const Pnt &pD);
+const Face *find_face_const_ptr_by_vertices(const Pnt &pA,const Pnt &pB,const Pnt &pC,const Pnt &pD);
 
 } //end of XC namespace
 
