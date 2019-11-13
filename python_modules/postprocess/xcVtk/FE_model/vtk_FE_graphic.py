@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 ''' Graphics of the finite element model.
 '''
+
+from __future__ import division
+from __future__ import print_function
+
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, LCPT, AO_O"
 __license__= "GPL"
@@ -157,7 +161,7 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
         # elif(self.gridRecord.entToLabel=="nodes"):
         #   vtk_define_mesh_nodes.VtkDibujaIdsNodes(self.renderer)
         # else:
-        #   print "Entity: ", self.gridRecord.entToLabel, " unknown."
+        #   print("Entity: ", self.gridRecord.entToLabel, " unknown.")
 
     def FEmeshGraphic(self,setToDisplay,caption= '',cameraParameters= vtk_graphic_base.CameraParameters('XYZPos'),defFScale=0.0):
         ''' Graphic of the FE mesh
