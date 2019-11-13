@@ -30,6 +30,7 @@
 #include "preprocessor/multi_block_topology/matrices/NodePtrArray3d.h"
 #include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
 #include "domain/mesh/node/Node.h"
+#include "vtkCellType.h"
 
 //! @brief Constructor
 XC::BrickBase::BrickBase(int classTag)
@@ -95,3 +96,5 @@ XC::ElemPtrArray3d XC::BrickBase::put_on_mesh(const XC::NodePtrArray3d &nodes,me
     return retval;
   }
 
+int XC::BrickBase::getVtkCellType(void) const
+  { return VTK_HEXAHEDRON; }
