@@ -12,7 +12,7 @@ It's all about developing tools that allow us to keep going forward (much in the
 
 
 ## Dependencies
-The program is based on:
+Don't worry, if you have a decent *nix system the installation is straightforward. The program is based on:
 <ul>
 <li> <a href="http://www.python.org/" target="_new">Python.</a> </li>
 <li> <a href="http://opensees.berkeley.edu" target="_new">OpenSees.</a> </li>
@@ -58,7 +58,12 @@ The main capabilities of the program:
 ## Installation
 See <a href="https://github.com/xcfem/xc/blob/master/install/install.txt" target="_new">install</a>
 
+## Where to start
+The programs lacks of a user manual (would you help us with that?). Anyway you can start with some simple examples you'll find <a href= "https://github.com/xcfem/xc_examples" target="_new"> here</a>.
 
 ## Links
 You can take a look to the project <a href="https://sites.google.com/site/xcfemanalysis/" target="_new">home</a>, to the <a href="https://xcfem.github.io/XCmanual/" target="_new">Python documentation</a> or the <a href="https://codedocs.xyz/lcpt/xc/index.html" target="_new">C++ API documentation</a> or to our <a href="http://www.xcengineering.xyz/html_files/software.html" target="_new"> XC page in the company site.</a> (all of them are work in progress ;-). 
 
+
+<!--  LocalWords:  XC
+ -->
