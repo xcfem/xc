@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-'''8 node brick element Patch test.'''
+'''8 node brick element Patch test.
+
+Reference: MacNeal & Harder, “A Proposed Standard Set of Problems to Test Finite Element Accuracy”, Finite Elements in Analysis and Design, 1 (1985) 3-20
+'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -42,7 +45,6 @@ nod10.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]) )
 nod11.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]) )
 nod12.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]) )
 
-nod9.fix(xc.ID([0,1,2]),xc.Vector([0,0,0]) )
 nod10.fix(xc.ID([0,1,2]),xc.Vector([0.001,0.0005,0.0005]) )
 nod11.fix(xc.ID([0,1,2]),xc.Vector([0.0015,0.0015,0.001]) )
 nod12.fix(xc.ID([0,1,2]),xc.Vector([0.0005,0.001,0.0005]) )
