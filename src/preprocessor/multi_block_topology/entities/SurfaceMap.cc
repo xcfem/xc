@@ -95,11 +95,12 @@ XC::Face *XC::SurfaceMap::createFace(Pnt *pA,Pnt *pB,Pnt *pC,Pnt *pD)
           {
             assert(getPreprocessor());
             retval= New<QuadSurface>();
-            assert(retval);
-            retval->SetVertice(1,pA);
-            retval->SetVertice(2,pB);
-            retval->SetVertice(3,pC);
-            retval->SetVertice(4,pD);
+	    QuadSurface *tmp= dynamic_cast<QuadSurface *>(retval);
+            assert(tmp);
+	    PntPtrArray points(2,2);
+	    points(0,0)= pA; points(0,1)= pB;
+	    points(1,0)= pC; points(1,1)= pD;
+	    tmp->setPoints(points);
           }
         if(!retval)
 	  std::cerr << getClassName() << __FUNCTION__

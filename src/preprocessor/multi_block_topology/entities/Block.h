@@ -43,7 +43,6 @@ class Block: public Body
     void put(const size_t &i,Face *s);
   protected:
     void insert(const size_t &);
-    virtual void insert(Face *);
     //XXX void add_points(const std::vector<size_t> &);
     void append_faces(const std::vector<size_t> &);
     void create_face_nodes(void);
@@ -60,12 +59,13 @@ class Block: public Body
     void update_topology(void);
     virtual std::set<const Face *> getSurfaces(void);
     const BodyFace *getFace(const size_t &i) const;
-    Face *newFace(Pnt *,Pnt *,Pnt *,Pnt *);
+    Face *newFace(const size_t &i,Pnt *,Pnt *,Pnt *,Pnt *);
     const CmbEdge::Side *getEdge(const size_t &i) const;
     Pnt *getVertex(const size_t &i);
     const Pnt *getVertex(const size_t &i) const;
     int getVtkCellType(void) const;
 
+    void addPoints(const ID &);
     void setPoints(const ID &);
     
     size_t NDivI(void) const;

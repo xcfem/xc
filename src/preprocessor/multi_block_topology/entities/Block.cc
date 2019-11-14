@@ -59,12 +59,12 @@
 // Numbering of faces:
 //
 //                
-//       +--------+         0: Bottom face; vertices 1,2,3,4.
-//      /   5    /|         1: Left-side face; vertices 1,2,6,5.
-//     /        / |         2: Front face; vertices 2,3,7,6.
-//    +--------+  |         3: Right-side face; vertices 3,4,8,7.
-//    |        | 3|         4: Dorsal face; vertices 1,4,8,5.
-//    |        |  +         5: Top face; vertices 5,6,7,8.
+//       +--------+         0: Bottom face; vertices 1,4,3,2. (0,3,2,1)
+//      /   5    /|         1: Left-side face; vertices 1,2,6,5. (0,1,5,4)
+//     /        / |         2: Front face; vertices 2,3,7,6. (1,2,6,5)
+//    +--------+  |         3: Right-side face; vertices 3,4,8,7. (2,3,7,6)
+//    |        | 3|         4: Back face; vertices 1,5,8,4. (0,4,7,3)
+//    |        |  +         5: Top face; vertices 5,6,7,8. (4,5,6,7)
 //    |   2    | /
 //    |        |/
 //    +--------+
@@ -111,13 +111,13 @@ XC::Block::BodyFace *XC::Block::getFace(const size_t &i)
 
 //! @brief Creates a new face between the points being passed as parameters
 //! and inserts it on the faces set.
-XC::Face *XC::Block::newFace(Pnt *pA,Pnt *pB,Pnt *pC,Pnt *pD)
+XC::Face *XC::Block::newFace(const size_t &i,Pnt *pA,Pnt *pB,Pnt *pC,Pnt *pD)
   {
     Face *retval= nullptr;
     assert(getPreprocessor());
     retval= dynamic_cast<Face *>(getPreprocessor()->getMultiBlockTopology().getSurfaces().createFace(pA,pB,pC,pD));
     if(retval)
-      { insert(retval); }    
+      { put(i,retval); }
     else
        std::cerr << getClassName() << "::" << __FUNCTION__
 		 << "; surface with vertices: "
@@ -162,21 +162,17 @@ const XC::CmbEdge::Side *XC::Block::getEdge(const size_t &i) const
 //! @brief Return the i-th vertex of the solid.
 const XC::Pnt *XC::Block::getVertex(const size_t &i) const
   {
-    if(i<=4)
-      return sups[0].getVertex(i);
-    else if(i<=8)
-      return sups[5].getVertex(i-4);
-    else
-      return nullptr;
+    Block *this_no_const= const_cast<Block *>(this);
+    return this_no_const->getVertex(i);
   }
 
 //! @brief Return the i-th vertex of the solid.
 XC::Pnt *XC::Block::getVertex(const size_t &i)
   {
     if(i<=4)
-      return sups[0].getVertex(i);
+      return sups[0].getVertex(i); //Bottom
     else if(i<=8)
-      return sups[5].getVertex(i-4);
+      return sups[5].getVertex(i-4); //Top
     else
       return nullptr;
   }
@@ -297,12 +293,6 @@ void XC::Block::insert(const size_t &i)
 		<< " not found." << std::endl;
   }
 
-void XC::Block::insert(Face *)
-  {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << " not implemented yet." << std::endl;
-  }
-
 //! @brief Create and insert the faces from the indices passed
 //! as parameter.
 void XC::Block::append_faces(const std::vector<size_t> &face_indexes)
@@ -387,10 +377,10 @@ void XC::Block::create_nodes(void)
     if(ttzNodes.Null())
       {
         create_face_nodes();
-        BodyFace &base= sups[0];
-        BodyFace &tapa= sups[5];
-        BodyFace &latIzdo= sups[1];
-        BodyFace &latDcho= sups[3];
+        BodyFace &bottom= sups[0];
+        BodyFace &top= sups[5];
+        BodyFace &leftFace= sups[1];
+        BodyFace &rightFace= sups[3];
         BodyFace &frontFace= sups[2];
         BodyFace &backFace= sups[4];
 
@@ -423,11 +413,11 @@ void XC::Block::create_nodes(void)
     std::cout << "n_rows= " << n_rows << std::endl;
     std::cout << "cols= " << cols << std::endl;
 
-    std::cout << "base" << std::endl;
-        //Linking with the nodes of the base i=1
-        ID IJK1= base.Surface()->getNodeIndices(n1);
-        ID IJK2= base.Surface()->getNodeIndices(n2);
-        ID IJK4= base.Surface()->getNodeIndices(n4);
+    std::cout << "bottom" << std::endl;
+        //Linking with the nodes of the bottom i=1
+        ID IJK1= bottom.Surface()->getNodeIndices(n1);
+        ID IJK2= bottom.Surface()->getNodeIndices(n2);
+        ID IJK4= bottom.Surface()->getNodeIndices(n4);
         size_t ind_i= 0, ind_j= 0;
         if((IJK2[1]-IJK1[1])>0)
           { ind_i= 1; ind_j= 2; }
@@ -447,9 +437,9 @@ void XC::Block::create_nodes(void)
               size_t J= (IJK2[ind_i]-IJK1[ind_i])/(nf-1)*(i-1)+IJK1[ind_i];
               size_t K= (IJK4[ind_j]-IJK1[ind_j])/(nc-1)*(j-1)+IJK1[ind_j];
               if(ind_i<ind_j)
-                ttzNodes(1,J,K)= base.getNode(i,j);
+                ttzNodes(1,J,K)= bottom.getNode(i,j);
               else
-                ttzNodes(1,J,K)= base.getNode(j,i);
+                ttzNodes(1,J,K)= bottom.getNode(j,i);
               d2= dist2(ttzNodes(1,J,K)->getInitialPosition3d(),node_pos(1,J,K));
               if(d2>1e-4)
 		std::cerr << getClassName() << "::" << __FUNCTION__
@@ -460,27 +450,27 @@ void XC::Block::create_nodes(void)
 			  << " dist2= " << d2 << std::endl;
             }
 	/*
-    std::cout << "tapa" << std::endl;
-        //Tapa i=n_layers
-        IJK1= tapa.Surface()->getNodeIndices(n5);
-        IJK2= tapa.Surface()->getNodeIndices(n7);
+    std::cout << "top" << std::endl;
+        //Top i=n_layers
+        IJK1= top.Surface()->getNodeIndices(n5);
+        IJK2= top.Surface()->getNodeIndices(n7);
         for(size_t i=1;i<=n_rows;i++)
           for(size_t j=1;j<=cols;j++)
             {
               size_t J= (IJK2[1]-IJK1[1])/(n_rows-1)*(i-1)+IJK1[1];
               size_t K= (IJK2[2]-IJK1[2])/(cols-1)*(j-1)+IJK1[2];
-              ttzNodes(n_layers,J,K)= tapa.getNode(i,j);
+              ttzNodes(n_layers,J,K)= top.getNode(i,j);
             }
 
         //Lateral izquierdo j=1.
-        IJK1= latIzdo.Surface()->getNodeIndices(n1);
-        IJK2= latIzdo.Surface()->getNodeIndices(n6);
+        IJK1= leftFace.Surface()->getNodeIndices(n1);
+        IJK2= leftFace.Surface()->getNodeIndices(n6);
         for(size_t i=1;i<=n_rows;i++)
           for(size_t j=1;j<=cols;j++)
             {
               size_t J= (IJK2[1]-IJK1[1])/(n_rows-1)*(j-1)+IJK1[1];
               size_t K= (IJK2[2]-IJK1[2])/(n_rows-1)*(j-1)+IJK1[2];
-              ttzNodes(n_layers,J,K)= tapa.getNode(i,j);
+              ttzNodes(n_layers,J,K)= top.getNode(i,j);
             }
 	*/
 
@@ -512,10 +502,55 @@ void XC::Block::genMesh(meshing_dir dm)
     if(verbosity>3)
       std::clog << "done." << std::endl;
   }
-
-void XC::Block::setPoints(const ID &)
+//! @brief Creates and inserts the the faces that link the points
+//! from the indexes being passed as parameter.
+void XC::Block::addPoints(const ID &point_indexes)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << " not implemented yet." << std::endl;
+    const size_t np= point_indexes.Size(); //Number of indexes.
+    if(np==8)
+      {
+	std::vector<Pnt *> pntPtrs(8,nullptr);
+	for(size_t i= 0;i<np;i++)
+	  {
+
+	    Pnt *p= BuscaPnt(point_indexes(i));
+	    if(!p)
+	      std::cerr << getClassName() << "::" << __FUNCTION__
+			<< "; point: " << point_indexes(i-1)
+			<< " not found in definition of surface: '"
+			<< getName() << "'" << std::endl;
+	    pntPtrs[i]= p;
+	  }
+	newFace(0,pntPtrs[0],pntPtrs[3],pntPtrs[2],pntPtrs[1]); //Bottom
+	newFace(1,pntPtrs[0],pntPtrs[1],pntPtrs[5],pntPtrs[4]); //Left-side face
+	newFace(2,pntPtrs[1],pntPtrs[2],pntPtrs[6],pntPtrs[5]); //Front face
+	newFace(3,pntPtrs[2],pntPtrs[3],pntPtrs[7],pntPtrs[6]); //Right-side face
+	newFace(4,pntPtrs[0],pntPtrs[4],pntPtrs[7],pntPtrs[3]); //Back face
+	newFace(5,pntPtrs[4],pntPtrs[5],pntPtrs[6],pntPtrs[7]); //Top
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; exactly eight points are needed, we got: "
+		<< np << std::endl;
+  }
+
+//! @brief Creates and inserts the faces from the points identified
+//! by the indexes being passed as parameter.
+void XC::Block::setPoints(const ID &point_indexes)
+  {
+    const size_t np= point_indexes.Size(); //Number of indexes.
+    if(np!=8)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; block definition needs "
+                << 8 << " points, we got: " << np << ".\n";
+    else
+      {
+        if(getNumberOfFaces()>0)
+          std::cerr << getClassName() << "::" << __FUNCTION__
+	            << "; warning redefinition of block: '"
+                    << getName() << "'.\n";
+
+	addPoints(point_indexes);
+      }
   }
 
