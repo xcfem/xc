@@ -56,6 +56,7 @@ class Block: public Body
     virtual size_t getNumberOfLines(void) const;
     virtual size_t getNumberOfVertices(void) const;
     virtual size_t getNumberOfFaces(void) const;
+    size_t getNumberOfDefinedFaces(void) const;
     void update_topology(void);
     virtual std::set<const Face *> getSurfaces(void);
     const BodyFace *getFace(const size_t &i) const;

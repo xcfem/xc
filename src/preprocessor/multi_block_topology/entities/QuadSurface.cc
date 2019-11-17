@@ -245,14 +245,15 @@ void XC::QuadSurface::setPoints(const ID &point_indexes)
 	Face::addPoints(point_indexes);
         close();
       }
-    int tagV1= getVertex(1)->GetTag();
+    int tagV1= getVertex(1)->getTag();
     if(tagV1!=point_indexes(0))
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; surface: " << GetTag()
+		<< "; surface: " << getTag()
                 << "is inverted." << std::endl;
   }
 
-//! @brief Creates and inserts the lines from the points being passed as parameter.
+//! @brief Creates and inserts the lines from the points being
+//! passed as parameter.
 void XC::QuadSurface::setPoints(const PntPtrArray &pntPtrs)
   {
     const size_t nf= pntPtrs.getNumberOfRows(); //No. de rows of points.

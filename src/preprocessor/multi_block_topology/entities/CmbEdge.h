@@ -74,7 +74,7 @@ class CmbEdge: public Edge
 	  { forward= !forward; }
         void SetNDiv(const size_t &nd);
         size_t NDiv(void) const;
-        size_t GetTag(void) const;
+        size_t getTag(void) const;
         Pos3dArray get_positions(void) const;
         std::vector<int> getTagsNodesForward(void) const;
         std::vector<int> getTagsNodesReverse(void) const;

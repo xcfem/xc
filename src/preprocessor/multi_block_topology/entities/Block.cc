@@ -101,6 +101,16 @@ size_t XC::Block::getNumberOfVertices(void) const
 size_t XC::Block::getNumberOfFaces(void) const
   { return 6; }
 
+//! @brief Return the number of already defined faces.
+size_t XC::Block::getNumberOfDefinedFaces(void) const
+  {
+    size_t retval= 0;
+    for(size_t i= 0;i<6;i++)
+      if(sups[i].Surface()) retval++;
+    return retval;
+  }
+
+
 //! @brief Return the face with the index passed as parameter.
 const XC::Block::BodyFace *XC::Block::getFace(const size_t &i) const
   { return &sups[i-1]; }
@@ -115,7 +125,7 @@ XC::Face *XC::Block::newFace(const size_t &i,Pnt *pA,Pnt *pB,Pnt *pC,Pnt *pD)
   {
     Face *retval= nullptr;
     assert(getPreprocessor());
-    retval= dynamic_cast<Face *>(getPreprocessor()->getMultiBlockTopology().getSurfaces().createFace(pA,pB,pC,pD));
+    retval= dynamic_cast<Face *>(getPreprocessor()->getMultiBlockTopology().getSurfaces().findOrCreateFace(pA,pB,pC,pD));
     if(retval)
       { put(i,retval); }
     else
@@ -229,13 +239,13 @@ size_t XC::Block::index(Face *s) const
 void XC::Block::put(const size_t &i,Face *s)
   {
     size_t first= 1;
-    int sentido= 1;
+    int sense= 1;
     if( (i>0) && (i<5)) //Is a side face.
       {
         const Face *base= sups[0].Surface();
         first= s->CommonEdge(*base); //Index of the line in common with the base.
-        const Edge *linea= base->getSide(i)->getEdge();
-        sentido= base->SenseOfEdge(linea,*s);
+        const Edge *line= s->getSide(first)->getEdge();
+        sense= base->SenseOfEdge(line,*s);
       }
     if(i == 5) //Is the top face
       {
@@ -255,7 +265,7 @@ void XC::Block::put(const size_t &i,Face *s)
             if(first) //They have a common edge.
               {
                 const Edge *linea= face->getSide(first)->getEdge();
-                sentido= -face->SenseOfEdge(linea,*s);
+                sense= -face->SenseOfEdge(linea,*s);
               }
             else //They don't share a common edge.
               {
@@ -268,10 +278,10 @@ void XC::Block::put(const size_t &i,Face *s)
           }
       }
     bool forward= true;
-    if(sentido==1)
+    if(sense==1)
       forward= true;
     else
-      if(sentido==-1)
+      if(sense==-1)
         forward= false;
       else
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -545,7 +555,7 @@ void XC::Block::setPoints(const ID &point_indexes)
                 << 8 << " points, we got: " << np << ".\n";
     else
       {
-        if(getNumberOfFaces()>0)
+        if(getNumberOfDefinedFaces()>0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; warning redefinition of block: '"
                     << getName() << "'.\n";

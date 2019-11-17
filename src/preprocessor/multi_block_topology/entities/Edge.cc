@@ -427,7 +427,8 @@ size_t XC::calcula_ndiv_lados(const std::set<const XC::Edge *> &lados)
 bool XC::Edge::isConnectedTo(const Face &s) const
   {
     std::set<const Face *>::const_iterator i= surfaces_line.find(&s);
-    return (i!=surfaces_line.end());
+    bool retval= i!=surfaces_line.end();
+    return retval;
   }
 
 //! @brief Return true if the line touches the body.
@@ -604,8 +605,8 @@ std::vector<int> XC::Edge::getIndicesVertices(void) const
 XC::ID XC::Edge::getKPoints(void) const
   {
     ID retval(2);
-    retval[0]= P1()->GetTag();
-    retval[1]= P2()->GetTag();
+    retval[0]= P1()->getTag();
+    retval[1]= P2()->getTag();
     return retval;
   }
 

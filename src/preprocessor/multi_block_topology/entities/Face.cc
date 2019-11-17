@@ -79,23 +79,27 @@ void XC::Face::update_topology(void)
 
 //! @brief Returns the index of the edge in common with the surface
 //! being passed as parameter (if it exists).
-size_t XC::Face::CommonEdge(const Face &otra) const
+size_t XC::Face::CommonEdge(const Face &other) const
   {
+    size_t retval= 0;
     size_t cont= 1;
-    if(this == &otra) return cont; //Son la misma todos los bordes son comunes.
+    if(this == &other) return cont; //All border are common.
     for(std::deque<Side>::const_iterator i=lines.begin();i!=lines.end();i++,cont++)
       {
-        if((*i).getEdge()->isConnectedTo(otra))
-          return cont;
+        if((*i).getEdge()->isConnectedTo(other))
+	  {
+            retval= cont;
+	    break;
+	  }
       }
-    return 0;
+    return retval;
   }
 
 //! Returns:
 //! - 1 if the line belongs to both surfaces and the orientation is the same.
 //! - -1 if the line belongs to both surfaces and the orientation is the opposite.
 //! - 0 line doesn't belongs to both surfaces.
-int XC::Face::SenseOfEdge(const Edge *l,const Face &otra) const
+int XC::Face::SenseOfEdge(const Edge *l,const Face &other) const
   {
     //Searching for the line indices in this face 
     const size_t ind_l_esta= IndiceEdge(l);
@@ -107,19 +111,19 @@ int XC::Face::SenseOfEdge(const Edge *l,const Face &otra) const
 		  << getName() << std::endl;
         return 0;
       }
-    const size_t ind_l_otra= otra.IndiceEdge(l);
-    if(ind_l_otra == 0)
+    const size_t ind_l_other= other.IndiceEdge(l);
+    if(ind_l_other == 0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; line :" << l->getName() 
                   << " is not an edge of the surface: "
-		  << otra.getName() << std::endl;
+		  << other.getName() << std::endl;
         return 0;
       }
     //Search the edges on each surface;
     const Side *l_esta= getSide(ind_l_esta);
-    const Side *l_otra= otra.getSide(ind_l_otra);
-    if(l_esta->P2() == l_otra->P2())
+    const Side *l_other= other.getSide(ind_l_other);
+    if(l_esta->P2() == l_other->P2())
       return 1;
     else
       return -1;

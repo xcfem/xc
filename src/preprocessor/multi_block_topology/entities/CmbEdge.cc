@@ -231,8 +231,8 @@ size_t XC::CmbEdge::Side::NDiv(void) const
   { return edge->NDiv(); }
 
 //! @brief Return the identifier of the line.
-size_t XC::CmbEdge::Side::GetTag(void) const
-  { return edge->GetTag(); }
+size_t XC::CmbEdge::Side::getTag(void) const
+  { return edge->getTag(); }
 
 //! @brief Operador de igualdad.
 bool XC::operator==(const XC::CmbEdge::Side &il1,const XC::CmbEdge::Side &il2)
@@ -737,7 +737,7 @@ XC::ID XC::CmbEdge::getKPoints(void) const
     const size_t numVertices= getNumberOfVertices();
     ID retval(numVertices);
     for(size_t i= 0;i<numVertices;i++)
-      retval[i]= getSide(i+1)->P1()->GetTag();
+      retval[i]= getSide(i+1)->P1()->getTag();
     return retval;
   }
 
