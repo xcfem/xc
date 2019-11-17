@@ -63,7 +63,7 @@ struct SideSequence
 //! @brief Six-faced solid.
 class Body: public EntMdlr
   {
-  protected:
+  public:
     //! @ingroup Geom
     //!
     //! @brief Surface that limits the body (face as seen by the body).
@@ -91,6 +91,7 @@ class Body: public EntMdlr
         Node *getNode(const size_t &,const size_t &);
       };
 
+  protected:
     void set_surf(Face *s);
 
     virtual BodyFace *getFace(const size_t &i)= 0;

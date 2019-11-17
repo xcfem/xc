@@ -75,12 +75,19 @@ class_<XC::QuadSurface, XC::QuadSurface *, bases<XC::Face>, boost::noncopyable >
    ;
 
 
+XC::Face *(XC::Body::BodyFace::*getSurfacePtr)(void)= &XC::Body::BodyFace::Surface;
+class_<XC::Body::BodyFace, XC::Body::BodyFace*, bases<CommandEntity>, boost::noncopyable >("BodyFace","body faced." ,no_init)
+  .def("getSurface",make_function(getSurfacePtr,return_internal_reference<>()),"Return the surface corresponding to the body face.")
+   ;
 
 class_<XC::Body, XC::Body *, bases<XC::EntMdlr>, boost::noncopyable >("Body","Six-faced body." ,no_init)
   .add_property("getIdxVertices",&XC::Edge::getIndicesVertices)
    ;
 
-class_<XC::Block, XC::Block *, bases<XC::Body>, boost::noncopyable >("Block", "Six-faced solid.",no_init);
+const XC::Body::BodyFace *(XC::Block::*getFacePtr)(const size_t &) const= &XC::Block::getFace;
+class_<XC::Block, XC::Block *, bases<XC::Body>, boost::noncopyable >("Block", "Six-faced solid.",no_init)
+  .def("getFace",make_function(getFacePtr,return_internal_reference<>()),"Return the face corresponding to the indes argument.")
+  ;
 
 class_<XC::UniformGrid, XC::UniformGrid *, bases<XC::EntMdlr>, boost::noncopyable >("UniformGrid", no_init)
   .add_property("org", make_function(&XC::UniformGrid::getOrg, return_internal_reference<>() ), &XC::UniformGrid::setOrg)
