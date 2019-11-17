@@ -74,7 +74,7 @@ XC::EntMdlrBase &XC::EntMdlrBase::operator*=(const EntMdlrBase &other)
   }
 
 //! @brief Return the object identifier in the model (tag).
-size_t XC::EntMdlrBase::GetTag(void) const
+size_t XC::EntMdlrBase::getTag(void) const
   {
     const std::string tmp= getName().substr(1);
     return boost::lexical_cast<size_t>(tmp);

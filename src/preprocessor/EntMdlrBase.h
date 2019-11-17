@@ -60,7 +60,7 @@ class EntMdlrBase: public NamedEntity, public MovableObject
     const Preprocessor *getPreprocessor(void) const;
     Preprocessor *getPreprocessor(void);
 
-    size_t GetTag(void) const;
+    size_t getTag(void) const;
 
     Pnt *BuscaPnt(const size_t &);    
     const Pnt *BuscaPnt(const size_t &) const;
