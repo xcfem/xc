@@ -86,7 +86,7 @@ XC::Pnt *XC::PntPtrArray::findPoint(const size_t &tag)
           tmp= operator()(j,k);
           if(tmp)
             {
-              if(tag == tmp->GetTag())
+              if(tag == tmp->getTag())
                 {
                   retval= tmp;
                   break;
@@ -146,7 +146,7 @@ const XC::Pnt *XC::PntPtrArray::findPoint(const size_t &tag) const
           tmp= operator()(j,k);
           if(tmp)
             {
-              if(tag == tmp->GetTag())
+              if(tag == tmp->getTag())
                 {
                   retval= tmp;
                   break;
@@ -199,7 +199,7 @@ m_int XC::PntPtrArray::getTags(void) const
         {
           const Pnt *ptr= operator()(j,k);
           if(ptr)
-            retval(j,k)= ptr->GetTag();
+            retval(j,k)= ptr->getTag();
         }
     return retval;
   }
@@ -248,7 +248,7 @@ std::deque<size_t> XC::PntPtrArray::copyPoints(const MatrixRange &rango,const st
             {
               Pnt *newPt= mbt->getPoints().Copy(p,vectorOffset);
               (*this)(i+offsetIndices[0],j+offsetIndices[1])= newPt;
-              retval.push_back(newPt->GetTag());
+              retval.push_back(newPt->getTag());
             }
         }
     return retval;

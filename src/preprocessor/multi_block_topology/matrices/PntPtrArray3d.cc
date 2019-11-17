@@ -208,7 +208,7 @@ std::deque<size_t> XC::PntPtrArray3d::copyPoints(const Array3dRange &rango,const
               {
                 Pnt *newPt= mbt->getPoints().Copy(p,vectorOffset);
                 (*this)(i+offsetIndices[0],j+offsetIndices[1],k+offsetIndices[2])= newPt;
-                retval.push_back(newPt->GetTag());
+                retval.push_back(newPt->getTag());
               }
           }
     return retval;
@@ -344,7 +344,7 @@ XC::PntPtrArray XC::PntPtrArray3d::getCellPoints(const size_t &i,const size_t &j
 //               {
 //                 Pnt *newPt= mbt->getPoints().Copy(p,vectorOffset);
 //                 (*this)(i+offsetIndices[0],j+offsetIndices[1],k+offsetIndices[2])= newPt;
-//                 retval.push_back(newPt->GetTag());
+//                 retval.push_back(newPt->getTag());
 //               }
 //           }
 //     return retval;
@@ -360,7 +360,7 @@ void XC::PntPtrArray3d::Print(std::ostream &os) const
         for(size_t j=1;j<=numberOfRows;j++)
           {
             for(size_t k=1;k<=numberOfColumns;k++)
-	      os << (*this)(i,j,k)->GetTag() << " ";
+	      os << (*this)(i,j,k)->getTag() << " ";
 	    os << std::endl;
           }
         os << std::endl;
@@ -397,7 +397,7 @@ std::vector<size_t> XC::getIdPointsQuad(const PntPtrArray3d::constant_i_layer_co
     const Pnt *ptr= points(j,k);
     if(ptr)
       {
-        retval[0]= ptr->GetTag();
+        retval[0]= ptr->getTag();
         if(retval[0]<0)
           std::cerr << "PntPtrArray3d::" << __FUNCTION__
 		    << "; error when obtaining the point identifier ("
@@ -409,7 +409,7 @@ std::vector<size_t> XC::getIdPointsQuad(const PntPtrArray3d::constant_i_layer_co
     ptr= points(j,k+1);
     if(ptr)
       {
-        retval[1]= ptr->GetTag();
+        retval[1]= ptr->getTag();
         if(retval[1]<0)
           std::cerr << "PntPtrArray3d::" << __FUNCTION__
 		    << "; error when obtaining the point identifier ("
@@ -421,7 +421,7 @@ std::vector<size_t> XC::getIdPointsQuad(const PntPtrArray3d::constant_i_layer_co
     ptr= points(j+1,k+1);
     if(ptr)
       {
-        retval[2]= ptr->GetTag();
+        retval[2]= ptr->getTag();
         if(retval[2]<0)
           std::cerr << "PntPtrArray3d::" << __FUNCTION__
 		    << "; error when obtaining the point identifier ("
@@ -433,7 +433,7 @@ std::vector<size_t> XC::getIdPointsQuad(const PntPtrArray3d::constant_i_layer_co
     ptr= points(j+1,k);
     if(ptr)
       {
-        retval[3]=ptr->GetTag();
+        retval[3]=ptr->getTag();
         if(retval[3]<0)
           std::cerr << "PntPtrArray3d::" << __FUNCTION__
 		    << "; error when obtaining the point identifier ("

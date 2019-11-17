@@ -225,8 +225,8 @@ int XC::CircularArc::getVtkCellType(void) const
 XC::ID XC::CircularArc::getKPoints(void) const
   {
     ID retval(3);
-    retval[0]= P1()->GetTag();
-    retval[1]= P2()->GetTag();
-    retval[2]= P2()->GetTag();
+    retval[0]= P1()->getTag();
+    retval[1]= P2()->getTag();
+    retval[2]= P2()->getTag();
     return retval;
   }
