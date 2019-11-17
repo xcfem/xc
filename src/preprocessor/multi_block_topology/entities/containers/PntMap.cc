@@ -143,7 +143,7 @@ bool XC::PntMap::checkPosition(const Pos3d &newPos)
 	      {
 		std::clog << getClassName() << "::" << __FUNCTION__
 			  << "; new point at position: " << newPos
-			  << " is very close to point: " << tmp->GetTag()
+			  << " is very close to point: " << tmp->getTag()
 			  << " at position: " << pos
 			  << " distance: " << sqrt(d2)
 			  << std::endl;

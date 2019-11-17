@@ -30,7 +30,7 @@
 #define MAPSurfaces_H
 
 #include "EntityMap.h"
-#include "Face.h"
+#include "preprocessor/multi_block_topology/entities/Face.h"
 
 namespace XC {
   class QuadSurface;
@@ -53,7 +53,7 @@ class SurfaceMap: public EntityMap<Face>
 
     template <class F>
     Face *New(void);
-    Face *createFace(Pnt *,Pnt *,Pnt *,Pnt *);
+    Face *findOrCreateFace(Pnt *,Pnt *,Pnt *,Pnt *);
 
     QuadSurface *newQuadSurfacePts(const size_t &, const size_t &,const size_t &,const size_t &);
     QuadSurface *newQuadSurfaceLines(const size_t &, const size_t &,const size_t &,const size_t &);

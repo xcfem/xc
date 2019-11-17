@@ -27,7 +27,7 @@
 //BodyMap.cc
 
 #include "BodyMap.h"
-#include "Block.h"
+#include "preprocessor/multi_block_topology/entities/Block.h"
 #include "preprocessor/Preprocessor.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"

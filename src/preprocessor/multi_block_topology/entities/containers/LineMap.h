@@ -30,14 +30,13 @@
 #define LINEMAP_H
 
 #include "EntityMap.h"
-#include "Edge.h"
+#include "preprocessor/multi_block_topology/entities/Edge.h"
 
 class Line3d;
 class Plane;
 
 namespace XC {
 
-class Edge;
 class Line;
 class DividedLine;
 class CmbEdge;

@@ -30,7 +30,7 @@
 #define BodyMap_H
 
 #include "EntityMap.h"
-#include "Body.h"
+#include "preprocessor/multi_block_topology/entities/Body.h"
 
 namespace XC {
 

@@ -30,7 +30,7 @@
 #define MAPENT_H
 
 #include "preprocessor/multi_block_topology/ModelComponentContainer.h"
-#include "EntMdlr.h"
+#include "preprocessor/multi_block_topology/entities/EntMdlr.h"
 #include <map>
 
 namespace XC {

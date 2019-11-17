@@ -77,10 +77,10 @@ bool XC::SurfaceMap::checkNDivs(void) const
 
 //! @brief Find a face between the points or creates a new one.
 //! and inserts it on the container
-XC::Face *XC::SurfaceMap::createFace(Pnt *pA,Pnt *pB,Pnt *pC,Pnt *pD)
+XC::Face *XC::SurfaceMap::findOrCreateFace(Pnt *pA,Pnt *pB,Pnt *pC,Pnt *pD)
   {
     Face *retval= nullptr;
-    if(pA && pB)
+    if(pA && pB && pC && pD)
       {
 	if((pA==pB) or (pA==pC) or (pA==pD) or
 	   (pB==pC) or (pB==pD) or
@@ -92,25 +92,20 @@ XC::Face *XC::SurfaceMap::createFace(Pnt *pA,Pnt *pB,Pnt *pC,Pnt *pD)
 			<< "), are the same." << std::endl;
 	retval= find_face_ptr_by_vertices(*pA,*pB,*pC,*pD);
         if(!retval) //Face doesn't exists.
-          {
-            assert(getPreprocessor());
-            retval= New<QuadSurface>();
-	    QuadSurface *tmp= dynamic_cast<QuadSurface *>(retval);
-            assert(tmp);
-	    PntPtrArray points(2,2);
-	    points(0,0)= pA; points(0,1)= pB;
-	    points(1,0)= pC; points(1,1)= pD;
-	    tmp->setPoints(points);
-          }
+          retval= newQuadSurfacePts(pA->getTag(),pB->getTag(),pC->getTag(),pD->getTag());
         if(!retval)
 	  std::cerr << getClassName() << __FUNCTION__
-		    << "; can't get a line"
+		    << "; can't get a surface"
                     << " between points: " << pA->getName()
-                    << " and " << pB->getName() << std::endl;
+                    << ", " << pB->getName()
+                    << ", " << pC->getName()
+                    << " and " << pD->getName()
+		    << std::endl;
       }
     else
       std::cerr << getClassName() << __FUNCTION__
-		<< "; error, null pointer to point (A, B or both)."
+		<< "; error, null pointer to one of more"
+	        << " points."
 		<< std::endl;
     return retval;    
   }
