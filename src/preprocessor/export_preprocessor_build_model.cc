@@ -30,7 +30,7 @@ void export_preprocessor_build_model(void)
 
 XC::Preprocessor *(XC::EntMdlrBase::*getPreprocessorRef)(void)= &XC::EntMdlrBase::getPreprocessor;
 class_<XC::EntMdlrBase, bases<NamedEntity>, boost::noncopyable >("EntMdlrBase", no_init)
-  .add_property("tag", &XC::EntMdlrBase::GetTag, "Return the object identifier.")
+  .add_property("tag", &XC::EntMdlrBase::getTag, "Return the object identifier.")
   .add_property("getPreprocessor", make_function( getPreprocessorRef, return_internal_reference<>() ),"Return the preprocessor that built this object.")
    ;
 
