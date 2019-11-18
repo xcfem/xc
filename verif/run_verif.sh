@@ -250,6 +250,7 @@ python tests/preprocessor/geom_entities/test_nearest_element_01.py
 python tests/preprocessor/geom_entities/split_line_01.py
 python tests/preprocessor/geom_entities/split_line_02.py
 python tests/preprocessor/geom_entities/split_line_03.py
+python tests/preprocessor/geom_entities/test_block_definition.py
 echo "$BLEU" "  Meshing routines tests." "$NORMAL"
 python tests/preprocessor/meshing/test_surface_axes_01.py
 python tests/preprocessor/meshing/test_surface_meshing_01.py
@@ -260,7 +261,6 @@ python tests/preprocessor/meshing/test_surface_meshing_05.py
 python tests/preprocessor/meshing/test_surface_meshing_06.py
 python tests/preprocessor/meshing/test_imposed_meshing.py
 python tests/preprocessor/meshing/test_truss_generator_01.py
-python tests/preprocessor/meshing/test_block_definition.py
 
 echo "$BLEU" "  Sets handling tests." "$NORMAL"
 python tests/preprocessor/sets/test_exist_set.py
