@@ -62,10 +62,10 @@ class QuadSurface: public Face
     Vector3d getKVector(void) const;
     Matrix getLocalAxes(void) const;
 
-    void SetNDiv(const Edge *l,const size_t &nd);
+    void setNDiv(const Edge *l,const size_t &nd);
     virtual void ConciliaNDivIJ(void);
-    virtual void SetNDivI(const size_t &ndi);
-    virtual void SetNDivJ(const size_t &ndi);
+    virtual void setNDivI(const size_t &ndi);
+    virtual void setNDivJ(const size_t &ndi);
     void SetElemSizeI(const double &sz);
     void SetElemSizeJ(const double &sz);
     void SetElemSizeIJ(const double &,const double &);

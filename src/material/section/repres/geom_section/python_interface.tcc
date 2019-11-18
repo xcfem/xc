@@ -34,7 +34,7 @@ XC::Spot *(XC::Axis::*getSpot2)(void)= &XC::Axis::P2;
 class_<XC::Axis, bases<XC::EntGeomSection>, boost::noncopyable >("Axis", no_init)
   .add_property("p1",make_function(getSpot1,return_internal_reference<>()))
   .add_property("p2",make_function(getSpot2,return_internal_reference<>()))
-  .add_property("nDiv",&XC::Axis::NDiv,&XC::Axis::SetNDiv)
+  .add_property("nDiv",&XC::Axis::NDiv,&XC::Axis::setNDiv)
   .add_property("numVertices",&XC::Axis::getNumberOfVertices)
   ;
 

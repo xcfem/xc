@@ -189,6 +189,36 @@ Pos3dArray XC::Body::BodyFace::get_positions(void) const
 bool XC::Body::BodyFace::checkNDivs(void) const
   { return surface->checkNDivs(); }
 
+//! @brief Get the number of divisions in direction I.
+size_t XC::Body::BodyFace::NDivI(void) const
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << " not implemented yet." << std::endl;
+    return 0;
+  }
+  
+//! @brief Set the number of divisions in direction I.
+void XC::Body::BodyFace::setNDivI(const size_t &ndi)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << " not implemented yet." << std::endl;
+  }
+
+//! @brief Set the number of divisions in direction I.
+size_t XC::Body::BodyFace::NDivJ(void) const
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << " not implemented yet." << std::endl;
+    return 0;
+  }
+
+//! @brief Set the number of divisions in direction I.
+void XC::Body::BodyFace::setNDivJ(const size_t &)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << " not implemented yet." << std::endl;
+  }
+
 //! @brief Trigger the creation of nodes on faces.
 void XC::Body::BodyFace::create_nodes(void)
   {

@@ -223,8 +223,8 @@ void XC::CmbEdge::Side::genMesh(meshing_dir dm)
   { edge->genMesh(dm); }
 
 //! @brief Set el number of divisions of the line.
-void XC::CmbEdge::Side::SetNDiv(const size_t &nd)
-  { edge->SetNDiv(nd); }
+void XC::CmbEdge::Side::setNDiv(const size_t &nd)
+  { edge->setNDiv(nd); }
 
 //! @brief Return the number of divisions of the line.
 size_t XC::CmbEdge::Side::NDiv(void) const
@@ -406,7 +406,7 @@ size_t XC::CmbEdge::NDiv(void) const
 //! @brief Sets the number of divisions for the whole object.
 //!
 //! @param nd: number of divisions.
-void XC::CmbEdge::SetNDiv(const size_t &nd)
+void XC::CmbEdge::setNDiv(const size_t &nd)
   {
     const size_t nl= getNumberOfEdges();
     if(nl>0)
@@ -419,7 +419,7 @@ void XC::CmbEdge::SetNDiv(const size_t &nd)
                     << nl << ")." << std::endl;
         const size_t q= nd/nl;
         for(std::deque<Side>::iterator i=lines.begin();i!=lines.end();i++)
-          (*i).SetNDiv(q);
+          (*i).setNDiv(q);
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__

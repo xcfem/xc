@@ -66,7 +66,7 @@ class Axis: public EntGeomSection
     virtual Spot *getVertex(const size_t &i)= 0;
     virtual void SetVertice(const size_t &,Spot *)= 0;
 
-    virtual void SetNDiv(const size_t &nd)
+    virtual void setNDiv(const size_t &nd)
       { ndiv= nd; }
     virtual size_t NDiv(void) const
       { return ndiv; }

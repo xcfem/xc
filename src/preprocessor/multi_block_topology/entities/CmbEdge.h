@@ -72,7 +72,7 @@ class CmbEdge: public Edge
           { return forward; }
         inline void reverse(void)
 	  { forward= !forward; }
-        void SetNDiv(const size_t &nd);
+        void setNDiv(const size_t &nd);
         size_t NDiv(void) const;
         size_t getTag(void) const;
         Pos3dArray get_positions(void) const;
@@ -125,7 +125,7 @@ class CmbEdge: public Edge
     void addPoints(const ID &);
     void addLines(const ID &);
     size_t NDiv(void) const;
-    void SetNDiv(const size_t &nd);
+    void setNDiv(const size_t &nd);
 
     //! @brief Return the number of edges.
     size_t getNumberOfEdges(void) const

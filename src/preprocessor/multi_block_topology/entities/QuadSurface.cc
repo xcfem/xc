@@ -116,7 +116,7 @@ const XC::Edge *XC::QuadSurface::get_lado_homologo(const Edge *l) const
 
 
 //! @brief Set the number of divisions on the i axis.
-void XC::QuadSurface::SetNDivI(const size_t &ndi)
+void XC::QuadSurface::setNDivI(const size_t &ndi)
   {
     if(lines.size()<4)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -129,15 +129,15 @@ void XC::QuadSurface::SetNDivI(const size_t &ndi)
         const size_t ndc= calc_ndiv(edge0,edge2,ndi);
         if(ndc>0)
           {
-            Face::SetNDivI(ndc);
-            edge0->SetNDiv(ndc);
-            edge2->SetNDiv(ndc);
+            Face::setNDivI(ndc);
+            edge0->setNDiv(ndc);
+            edge2->setNDiv(ndc);
           }
       }
   }
 
 //! @brief Set the number of divisions on the j axis.
-void XC::QuadSurface::SetNDivJ(const size_t &ndj)
+void XC::QuadSurface::setNDivJ(const size_t &ndj)
   {
     if(lines.size()<4)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -150,9 +150,9 @@ void XC::QuadSurface::SetNDivJ(const size_t &ndj)
         const size_t ndc= calc_ndiv(edge1,edge3,ndj);
         if(ndc>0)
           {
-            Face::SetNDivJ(ndc);
-            edge1->SetNDiv(ndc);
-            edge3->SetNDiv(ndc);
+            Face::setNDivJ(ndc);
+            edge1->setNDiv(ndc);
+            edge3->setNDiv(ndc);
           }
       }
   }
@@ -163,8 +163,8 @@ void XC::QuadSurface::ConciliaNDivIJ(void)
   {
     if(checkNDivs())
       {
-	Face::SetNDivI(lines[0].getEdge()->NDiv());
-	Face::SetNDivJ(lines[1].getEdge()->NDiv());
+	Face::setNDivI(lines[0].getEdge()->NDiv());
+	Face::setNDivJ(lines[1].getEdge()->NDiv());
       }
   }
 
@@ -202,7 +202,7 @@ void XC::QuadSurface::SetElemSizeI(const double &sz)
     const double l1= lines[0].getLength();
     const double l2= lines[2].getLength();
     const size_t n= ceil(std::max(l1,l2)/sz);
-    SetNDivI(n);
+    setNDivI(n);
   }
 
 //! @brief Computes the number of divisions on the j axis
@@ -213,7 +213,7 @@ void XC::QuadSurface::SetElemSizeJ(const double &sz)
     const double l1= lines[1].getLength();
     const double l2= lines[3].getLength();
     const size_t n= ceil(std::max(l1,l2)/sz);
-    SetNDivJ(n);
+    setNDivJ(n);
   }
 
 

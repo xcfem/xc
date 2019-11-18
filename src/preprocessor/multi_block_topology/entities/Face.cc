@@ -58,11 +58,11 @@ XC::Face::Face(const std::string &nombre,Preprocessor *m,const size_t &ndivI, co
   : CmbEdge(nombre,m,ndivI), ndivj(ndivJ) {}
 
 //! @brief Sets the number of divisions for direction I.
-void XC::Face::SetNDivI(const size_t &ndi)
+void XC::Face::setNDivI(const size_t &ndi)
   { CmbEdge::ndiv= ndi; }
 
 //! @brief Sets the number of divisions for direction J.
-void XC::Face::SetNDivJ(const size_t &ndj)
+void XC::Face::setNDivJ(const size_t &ndj)
   { ndivj= ndj; }
 
 //! @brief Inserts the body being passed as parameter neighbors

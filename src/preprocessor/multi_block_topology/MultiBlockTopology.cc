@@ -139,7 +139,7 @@ void XC::MultiBlockTopology::conciliaNDivs(void)
             for(std::set<const Edge *>::const_iterator i= homologous.begin();i!=homologous.end();i++)
               {
                 Edge *tmp= const_cast<Edge *>(*i);
-                tmp->SetNDiv(nd);
+                tmp->setNDiv(nd);
                 tmp_edges.erase(tmp);
               }
             conta++;

@@ -167,7 +167,7 @@ bool XC::Edge::Out(const GeomObj3d &geomObj, const double &tol) const
 //! @brief Assigns the number of of divisions.
 //!
 //! @param nd: number of divisions.
-void XC::Edge::SetNDiv(const size_t &nd)
+void XC::Edge::setNDiv(const size_t &nd)
   {
     if(ndiv!=nd) //If number of divisions changes
       {
@@ -205,7 +205,7 @@ void XC::Edge::SetElemSize(const double &sz)
   {
     const double l= getLength();
     const size_t n= ceil(l/sz);
-    SetNDiv(n);
+    setNDiv(n);
   }
 
 //! @brief Create points along the line.

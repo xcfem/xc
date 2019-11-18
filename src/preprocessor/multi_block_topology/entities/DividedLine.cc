@@ -46,7 +46,7 @@ XC::SetEstruct *XC::DividedLine::getCopy(void) const
 void XC::DividedLine::setLengths(const Vector &ls)
   {
     lengths= vector_to_std_vector(ls);
-    SetNDiv(lengths.size());
+    setNDiv(lengths.size());
   }
 
 //! @brief Return ndiv+1 positions along the line spaced
