@@ -87,15 +87,15 @@ void XC::MeshRegion::free_mem(void)
     theElements= nullptr;
   }
 
-void XC::MeshRegion::copy(const MeshRegion &otra) 
+void XC::MeshRegion::copy(const MeshRegion &other) 
   {
     free_mem();
-    if(otra.theNodes)
+    if(other.theNodes)
       {
-        size_t numNodes = otra.theNodes->Size();
+        size_t numNodes = other.theNodes->Size();
         theNodes = new IDVarSize(0, numNodes);
         for(size_t i=0;i<numNodes;i++)
-          theNodes[i]= otra.theNodes[i];
+          theNodes[i]= other.theNodes[i];
       }
   }
 
@@ -108,19 +108,19 @@ XC::MeshRegion::MeshRegion(int tag, int cTag)
    currentGeoTag(0), lastGeoSendTag(-1) {}
 
 //! @brief Copy constructor
-XC::MeshRegion::MeshRegion(const MeshRegion &otra) 
-  :ContinuaReprComponent(otra), rayFactors(otra.rayFactors), theNodes(nullptr), theElements(nullptr),
-   currentGeoTag(otra.currentGeoTag), lastGeoSendTag(otra.lastGeoSendTag)
-  { copy(otra); }
+XC::MeshRegion::MeshRegion(const MeshRegion &other) 
+  :ContinuaReprComponent(other), rayFactors(other.rayFactors), theNodes(nullptr), theElements(nullptr),
+   currentGeoTag(other.currentGeoTag), lastGeoSendTag(other.lastGeoSendTag)
+  { copy(other); }
 
 //! @brief Assignment operator.
-XC::MeshRegion &XC::MeshRegion::operator=(const MeshRegion &otra)
+XC::MeshRegion &XC::MeshRegion::operator=(const MeshRegion &other)
   {
-    ContinuaReprComponent::operator=(otra);
-    rayFactors= otra.rayFactors;
-    currentGeoTag= otra.currentGeoTag;
-    lastGeoSendTag= otra.lastGeoSendTag;
-    copy(otra);
+    ContinuaReprComponent::operator=(other);
+    rayFactors= other.rayFactors;
+    currentGeoTag= other.currentGeoTag;
+    lastGeoSendTag= other.lastGeoSendTag;
+    copy(other);
     return *this;
   }
 

@@ -80,7 +80,7 @@ class LoadCombination: public LoadPatternCombination
     LoadCombination operator/(const float &) const;
     bool operator==(const LoadCombination &) const;
     bool operator!=(const LoadCombination &) const;
-    bool dominaA(const LoadCombination &otra) const;
+    bool dominaA(const LoadCombination &other) const;
 
     const LoadCombination *getPtrCombPrevia(void) const;
     const std::string getNombreCombPrevia(void) const;

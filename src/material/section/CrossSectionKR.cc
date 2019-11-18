@@ -57,18 +57,18 @@ void XC::CrossSectionKR::alloc(const size_t &dim)
   }
 
 //! @brief Copy data.
-void XC::CrossSectionKR::copy(const CrossSectionKR &otra)
+void XC::CrossSectionKR::copy(const CrossSectionKR &other)
   {
     free_mem();
-    rData[0]= otra.rData[0]; rData[1]= otra.rData[1];
-    rData[2]= otra.rData[2]; rData[3]= otra.rData[3];
+    rData[0]= other.rData[0]; rData[1]= other.rData[1];
+    rData[2]= other.rData[2]; rData[3]= other.rData[3];
 
-    kData[0]= otra.kData[0]; kData[1]= otra.kData[1]; kData[2]= otra.kData[2]; kData[3]= otra.kData[3];
-    kData[4]= otra.kData[4]; kData[5]= otra.kData[5]; kData[6]= otra.kData[6]; kData[7]= otra.kData[7];
-    kData[8]= otra.kData[8]; kData[9]= otra.kData[9]; kData[10]= otra.kData[10]; kData[11]= otra.kData[11];
-    kData[12]= otra.kData[12]; kData[13]= otra.kData[13]; kData[14]= otra.kData[14]; kData[15]= otra.kData[15];
+    kData[0]= other.kData[0]; kData[1]= other.kData[1]; kData[2]= other.kData[2]; kData[3]= other.kData[3];
+    kData[4]= other.kData[4]; kData[5]= other.kData[5]; kData[6]= other.kData[6]; kData[7]= other.kData[7];
+    kData[8]= other.kData[8]; kData[9]= other.kData[9]; kData[10]= other.kData[10]; kData[11]= other.kData[11];
+    kData[12]= other.kData[12]; kData[13]= other.kData[13]; kData[14]= other.kData[14]; kData[15]= other.kData[15];
 
-    alloc(otra.dim());
+    alloc(other.dim());
   }
 
 void XC::CrossSectionKR::zero(void)
@@ -91,10 +91,10 @@ XC::CrossSectionKR::CrossSectionKR(const size_t &dim)
   }
 
 //! @brief Copy constructor.
-XC::CrossSectionKR::CrossSectionKR(const CrossSectionKR &otra)
+XC::CrossSectionKR::CrossSectionKR(const CrossSectionKR &other)
   :  MovableObject(0), R(nullptr), K(nullptr)
   {
-    copy(otra);
+    copy(other);
   }
 
 //! @brief Assignment operator.

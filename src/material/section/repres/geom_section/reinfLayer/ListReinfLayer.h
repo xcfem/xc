@@ -61,7 +61,7 @@ class ListReinfLayer: public std::list<ReinfLayer *>, public SectionMassProperti
   private:
     void free_mem(void);
     void free_mem(const size_t i);
-    void copy(const ListReinfLayer &otra);
+    void copy(const ListReinfLayer &other);
   protected:
 
     MaterialHandler *material_handler; //!< Material definition handler (searching,...).

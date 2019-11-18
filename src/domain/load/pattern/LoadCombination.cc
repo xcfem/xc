@@ -271,14 +271,14 @@ XC::LoadCombination XC::LoadCombination::operator/(const float &fact) const
   }
 
 //! @brief Not equal operator.
-bool XC::LoadCombination::operator!=(const LoadCombination &otra) const
+bool XC::LoadCombination::operator!=(const LoadCombination &other) const
   {
     bool retval= false;
     for(const_iterator i= begin();i!=end();i++)
       {
         const LoadPattern *lPattern= (*i).getLoadPattern();
         const float f1= (*i).Factor();
-        const float f2= otra.getLoadPatternFactor(lPattern);
+        const float f2= other.getLoadPatternFactor(lPattern);
         if(f1!=f2)
           {
             retval= true;
@@ -289,14 +289,14 @@ bool XC::LoadCombination::operator!=(const LoadCombination &otra) const
   }
 
 //! @brief Equal operator.
-bool XC::LoadCombination::operator==(const LoadCombination &otra) const
+bool XC::LoadCombination::operator==(const LoadCombination &other) const
   {
     bool retval= true;
     for(const_iterator i= begin();i!=end();i++)
       {
         const LoadPattern *lPattern= (*i).getLoadPattern();
         const float f1= (*i).Factor();
-        const float f2= otra.getLoadPatternFactor(lPattern);
+        const float f2= other.getLoadPatternFactor(lPattern);
         if(f1!=f2)
           {
             retval= false;
@@ -309,12 +309,12 @@ bool XC::LoadCombination::operator==(const LoadCombination &otra) const
 //! @brief Returns true if the factors that weight all the
 //! load patterns of this load combination are greater that
 //! those in the combination being passed as parameter.
-bool XC::LoadCombination::dominaA(const LoadCombination &otra) const
+bool XC::LoadCombination::dominaA(const LoadCombination &other) const
   {
     bool retval= true;
-    if(this == &otra)
+    if(this == &other)
       retval= false;
-    else if(otra.size()>size())
+    else if(other.size()>size())
       retval= false;
     else
       {
@@ -322,14 +322,14 @@ bool XC::LoadCombination::dominaA(const LoadCombination &otra) const
           {
             const LoadPattern *lPattern= (*i).getLoadPattern();
             const float f1= (*i).Factor();
-            const float f2= otra.getLoadPatternFactor(lPattern);
+            const float f2= other.getLoadPatternFactor(lPattern);
             if(f1<f2)
               {
                 retval= false;
                 break;
               }
           }
-        for(const_iterator i= otra.begin();i!=otra.end();i++)
+        for(const_iterator i= other.begin();i!=other.end();i++)
           {
             const LoadPattern *lPattern= (*i).getLoadPattern();
             const float f1= getLoadPatternFactor(lPattern);

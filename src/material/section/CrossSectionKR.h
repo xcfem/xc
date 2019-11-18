@@ -50,7 +50,7 @@ class CrossSectionKR: public CommandEntity, public MovableObject
   protected:
     void free_mem(void);
     void alloc(const size_t &dim);
-    void copy(const CrossSectionKR &otra);
+    void copy(const CrossSectionKR &other);
 
     int sendData(CommParameters &);  
     int recvData(const CommParameters &);
@@ -115,7 +115,7 @@ class CrossSectionKR: public CommandEntity, public MovableObject
 
   public:
     CrossSectionKR(const size_t &dim);
-    CrossSectionKR(const CrossSectionKR &otra);
+    CrossSectionKR(const CrossSectionKR &other);
     CrossSectionKR &operator=(const CrossSectionKR &);
     virtual ~CrossSectionKR(void);
 

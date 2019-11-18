@@ -50,10 +50,10 @@ void XC::ListReinfLayer::free_mem(void)
   }
 
 //! @brief Copy the layers from another container.
-void XC::ListReinfLayer::copy(const ListReinfLayer &otra)
+void XC::ListReinfLayer::copy(const ListReinfLayer &other)
   {
     free_mem();
-    for(const_iterator i=otra.begin();i!=otra.end();i++)
+    for(const_iterator i=other.begin();i!=other.end();i++)
       push_back(*(*i)->getCopy());
   }
 

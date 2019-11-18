@@ -59,8 +59,8 @@ XC::FiberSection3dBase::FiberSection3dBase(int classTag, int dim,XC::MaterialHan
   FiberSectionBase(0, classTag,dim,mat_ldr) {}
 
 //! @brief Copy constructor.
-XC::FiberSection3dBase::FiberSection3dBase(const FiberSection3dBase &otra)
-  : FiberSectionBase(otra) {}
+XC::FiberSection3dBase::FiberSection3dBase(const FiberSection3dBase &other)
+  : FiberSectionBase(other) {}
 
 //! @brief Assignment operator.
 XC::FiberSection3dBase &XC::FiberSection3dBase::operator=(const FiberSection3dBase &other)

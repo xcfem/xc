@@ -95,8 +95,8 @@ class Mesh: public MeshComponentContainer
     void add_nodes_to_domain(void);
     void add_elements_to_domain(void);
 
-    Mesh(const Mesh &otra);
-    Mesh &operator=(const Mesh &otra);
+    Mesh(const Mesh &other);
+    Mesh &operator=(const Mesh &other);
   protected:
     void free_mem(void);
     DbTagData &getDbTagData(void) const;

@@ -53,10 +53,10 @@ void XC::RegionContainer::free_mem(void)
   }
 
 //! @brief Copy the regions from another container.
-void XC::RegionContainer::copy(const RegionContainer &otra)
+void XC::RegionContainer::copy(const RegionContainer &other)
   {
     free_mem();
-    for(const_iterator i=otra.begin();i!=otra.end();i++)
+    for(const_iterator i=other.begin();i!=other.end();i++)
       push_back(*(*i)->getCopy());
   }
 
