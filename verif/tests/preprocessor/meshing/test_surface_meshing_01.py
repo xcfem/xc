@@ -27,7 +27,7 @@ numElem= 0
 # Problem type
 feProblem= xc.FEProblem()
 feProblem.logFileName= "/tmp/erase.log" # Ignore warning messages
-feProblem.errFileName= "/tmp/erase.err" # Ignore warning messages
+feProblem.errFileName= "/tmp/erase.err" # Ignore error messages
 preprocessor= feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
