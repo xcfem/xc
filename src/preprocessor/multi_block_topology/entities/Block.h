@@ -70,8 +70,11 @@ class Block: public Body
     void setPoints(const ID &);
     
     size_t NDivI(void) const;
+    void setNDivI(const size_t &nDiv);
     size_t NDivJ(void) const;
+    void setNDivJ(const size_t &nDiv);
     size_t NDivK(void) const;
+    void setNDivK(const size_t &nDiv);
     bool checkNDivs(void) const;
     void create_nodes(void);
     void genMesh(meshing_dir dm);

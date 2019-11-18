@@ -371,13 +371,37 @@ Pos3dArray3d XC::Block::get_positions(void) const
 size_t XC::Block::NDivI(void) const
   { return getEdge(1)->NDiv(); }
 
+void XC::Block::setNDivI(const size_t &nDiv)
+  {
+    sups[0].setNDivI(nDiv); // Bottom face. ??
+    sups[1].setNDivI(nDiv); // Left face. ??
+    sups[3].setNDivI(nDiv); // Right face. ??
+    sups[5].setNDivI(nDiv); // Top face. ??
+  }
+
 //! @brief Return the number of divisions along the edge 2->3.
 size_t XC::Block::NDivJ(void) const
   { return getEdge(2)->NDiv(); }
 
+void XC::Block::setNDivJ(const size_t &nDiv)
+  {
+    sups[0].setNDivJ(nDiv); // Bottom face. ??
+    sups[2].setNDivI(nDiv); // Front face. ??
+    sups[5].setNDivJ(nDiv); // Top face. ??
+    sups[4].setNDivI(nDiv); // Back face. ??
+  }
+
 //! @brief Return the number of divisions along the edge 1->5.
 size_t XC::Block::NDivK(void) const
   { return getEdge(5)->NDiv(); }
+
+void XC::Block::setNDivK(const size_t &nDiv)
+  {
+    sups[1].setNDivJ(nDiv); // Left face. ??
+    sups[2].setNDivJ(nDiv); // Front face. ??
+    sups[3].setNDivJ(nDiv); // Right face. ??
+    sups[4].setNDivJ(nDiv); // Back face. ??
+  }
 
 //! @brief Create nodes for the block.
 void XC::Block::create_nodes(void)
