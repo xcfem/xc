@@ -222,9 +222,19 @@ const XC::Node *XC::CmbEdge::Side::getNode(const size_t &i) const
 void XC::CmbEdge::Side::genMesh(meshing_dir dm)
   { edge->genMesh(dm); }
 
-//! @brief Set el number of divisions of the line.
+//! @brief Set the number of divisions of the side
+//! and the number of divisions of its homologous
+//! edges.
+void XC::CmbEdge::Side::setNDivHomologousEdges(const size_t &nd)
+  {
+    edge->setNDivHomologousEdges(nd);
+  }
+
+//! @brief Set the number of divisions of the side.
 void XC::CmbEdge::Side::setNDiv(const size_t &nd)
-  { edge->setNDiv(nd); }
+  {
+    edge->setNDiv(nd);
+  }
 
 //! @brief Return the number of divisions of the line.
 size_t XC::CmbEdge::Side::NDiv(void) const

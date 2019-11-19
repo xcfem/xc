@@ -164,7 +164,26 @@ bool XC::Edge::Out(const GeomObj3d &geomObj, const double &tol) const
     return retval;
   }
 
-//! @brief Assigns the number of of divisions.
+
+//! @brief Assigns the number of divisions of this
+//! edge and all its homologous.
+//!
+//! @param nd: number of divisions.
+void XC::Edge::setNDivHomologousEdges(const size_t &nd)
+  {
+    std::cout << "edge: " << getName() << std::endl;
+    std::set<const XC::Edge *> homologous= getHomologousSides(homologous);
+    for(std::set<const Edge *>::const_iterator i= homologous.begin();i!=homologous.end();i++)
+      {
+        Edge *tmp= const_cast<Edge *>(*i);
+	std::cout << "homologous: " << tmp->getName() << std::endl;
+        tmp->ndiv= nd;
+      }
+    ndiv= nd;
+  }
+
+//! @brief Assigns the number of of divisions if it is
+//! compatible with the homologous edges.
 //!
 //! @param nd: number of divisions.
 void XC::Edge::setNDiv(const size_t &nd)

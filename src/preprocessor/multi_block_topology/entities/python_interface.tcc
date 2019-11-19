@@ -78,8 +78,6 @@ class_<XC::QuadSurface, XC::QuadSurface *, bases<XC::Face>, boost::noncopyable >
 XC::Face *(XC::Body::BodyFace::*getSurfacePtr)(void)= &XC::Body::BodyFace::Surface;
 class_<XC::Body::BodyFace, XC::Body::BodyFace*, bases<CommandEntity>, boost::noncopyable >("BodyFace","body faced." ,no_init)
   .def("getSurface",make_function(getSurfacePtr,return_internal_reference<>()),"Return the surface corresponding to the body face.")
-  .add_property("nDivI", &XC::Body::BodyFace::NDivI, &XC::Body::BodyFace::setNDivI)
-  .add_property("nDivJ", &XC::Body::BodyFace::NDivJ, &XC::Body::BodyFace::setNDivJ)
    ;
 
 class_<XC::Body, XC::Body *, bases<XC::EntMdlr>, boost::noncopyable >("Body","Six-faced body." ,no_init)

@@ -72,6 +72,7 @@ class CmbEdge: public Edge
           { return forward; }
         inline void reverse(void)
 	  { forward= !forward; }
+        void setNDivHomologousEdges(const size_t &);
         void setNDiv(const size_t &nd);
         size_t NDiv(void) const;
         size_t getTag(void) const;

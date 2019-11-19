@@ -139,9 +139,9 @@ XC::Face *XC::Block::newFace(const size_t &i,Pnt *pA,Pnt *pB,Pnt *pC,Pnt *pD)
   }
 
 //! @brief Return the i-th edge of the solid.
-const XC::CmbEdge::Side *XC::Block::getEdge(const size_t &i) const
+XC::CmbEdge::Side *XC::Block::getEdge(const size_t &i)
   {
-    const CmbEdge::Side *retval(nullptr);
+    CmbEdge::Side *retval(nullptr);
     switch(i)
       {
         case 1:
@@ -167,6 +167,12 @@ const XC::CmbEdge::Side *XC::Block::getEdge(const size_t &i) const
           break;
       }
     return retval;
+  }
+//! @brief Return the i-th edge of the solid.
+const XC::CmbEdge::Side *XC::Block::getEdge(const size_t &i) const
+  {
+    Block *this_no_const= const_cast<Block *>(this);
+    return this_no_const->getEdge(i);
   }
 
 //! @brief Return the i-th vertex of the solid.
@@ -372,36 +378,21 @@ size_t XC::Block::NDivI(void) const
   { return getEdge(1)->NDiv(); }
 
 void XC::Block::setNDivI(const size_t &nDiv)
-  {
-    sups[0].setNDivI(nDiv); // Bottom face. ??
-    sups[1].setNDivI(nDiv); // Left face. ??
-    sups[3].setNDivI(nDiv); // Right face. ??
-    sups[5].setNDivI(nDiv); // Top face. ??
-  }
+  { getEdge(1)->setNDivHomologousEdges(nDiv); }
 
 //! @brief Return the number of divisions along the edge 2->3.
 size_t XC::Block::NDivJ(void) const
   { return getEdge(2)->NDiv(); }
 
 void XC::Block::setNDivJ(const size_t &nDiv)
-  {
-    sups[0].setNDivJ(nDiv); // Bottom face. ??
-    sups[2].setNDivI(nDiv); // Front face. ??
-    sups[5].setNDivJ(nDiv); // Top face. ??
-    sups[4].setNDivI(nDiv); // Back face. ??
-  }
+  { getEdge(2)->setNDivHomologousEdges(nDiv); }
 
 //! @brief Return the number of divisions along the edge 1->5.
 size_t XC::Block::NDivK(void) const
   { return getEdge(5)->NDiv(); }
 
 void XC::Block::setNDivK(const size_t &nDiv)
-  {
-    sups[1].setNDivJ(nDiv); // Left face. ??
-    sups[2].setNDivJ(nDiv); // Front face. ??
-    sups[3].setNDivJ(nDiv); // Right face. ??
-    sups[4].setNDivJ(nDiv); // Back face. ??
-  }
+  { getEdge(5)->setNDivHomologousEdges(nDiv); }
 
 //! @brief Create nodes for the block.
 void XC::Block::create_nodes(void)
@@ -420,32 +411,32 @@ void XC::Block::create_nodes(void)
 
         const size_t n_layers= NDivK()+1;
         const size_t n_rows= NDivJ()+1;
-        const size_t cols= NDivI()+1;
-        ttzNodes = NodePtrArray3d(n_layers,n_rows,cols); //Pointers to node.
+        const size_t n_cols= NDivI()+1;
+        ttzNodes = NodePtrArray3d(n_layers,n_rows,n_cols); //Pointers to node.
         Pos3dArray3d node_pos= get_positions(); //Node positions.
 
         //Vertices.
 	ttzNodes(1,1,1)= getVertex(1)->getNode();
         ttzNodes(1,n_rows,1)= getVertex(2)->getNode();
-	ttzNodes(1,n_rows,cols)= getVertex(3)->getNode();
-        ttzNodes(1,1,cols)= getVertex(4)->getNode();
+	ttzNodes(1,n_rows,n_cols)= getVertex(3)->getNode();
+        ttzNodes(1,1,n_cols)= getVertex(4)->getNode();
 	ttzNodes(n_layers,1,1)= getVertex(5)->getNode();
         ttzNodes(n_layers,n_rows,1)= getVertex(6)->getNode();
-	ttzNodes(n_layers,n_rows,cols)= getVertex(7)->getNode();
-        ttzNodes(n_layers,1,cols)= getVertex(8)->getNode();
+	ttzNodes(n_layers,n_rows,n_cols)= getVertex(7)->getNode();
+        ttzNodes(n_layers,1,n_cols)= getVertex(8)->getNode();
 
         const Node *n1= ttzNodes(1,1,1);
         const Node *n2= ttzNodes(1,n_rows,1);
-        const Node *n3= ttzNodes(1,n_rows,cols);
-        const Node *n4= ttzNodes(1,1,cols);
+        const Node *n3= ttzNodes(1,n_rows,n_cols);
+        const Node *n4= ttzNodes(1,1,n_cols);
         const Node *n5= ttzNodes(n_layers,1,1);
         const Node *n6= ttzNodes(n_layers,n_rows,1);
-        const Node *n7= ttzNodes(n_layers,n_rows,cols);
-        const Node *n8= ttzNodes(n_layers,1,cols);
+        const Node *n7= ttzNodes(n_layers,n_rows,n_cols);
+        const Node *n8= ttzNodes(n_layers,1,n_cols);
 
     std::cout << "n_layers= " << n_layers << std::endl;
     std::cout << "n_rows= " << n_rows << std::endl;
-    std::cout << "cols= " << cols << std::endl;
+    std::cout << "n_cols= " << n_cols << std::endl;
 
     std::cout << "bottom" << std::endl;
         //Linking with the nodes of the bottom i=1
@@ -489,10 +480,10 @@ void XC::Block::create_nodes(void)
         IJK1= top.Surface()->getNodeIndices(n5);
         IJK2= top.Surface()->getNodeIndices(n7);
         for(size_t i=1;i<=n_rows;i++)
-          for(size_t j=1;j<=cols;j++)
+          for(size_t j=1;j<=n_cols;j++)
             {
               size_t J= (IJK2[1]-IJK1[1])/(n_rows-1)*(i-1)+IJK1[1];
-              size_t K= (IJK2[2]-IJK1[2])/(cols-1)*(j-1)+IJK1[2];
+              size_t K= (IJK2[2]-IJK1[2])/(n_cols-1)*(j-1)+IJK1[2];
               ttzNodes(n_layers,J,K)= top.getNode(i,j);
             }
 
@@ -500,7 +491,7 @@ void XC::Block::create_nodes(void)
         IJK1= leftFace.Surface()->getNodeIndices(n1);
         IJK2= leftFace.Surface()->getNodeIndices(n6);
         for(size_t i=1;i<=n_rows;i++)
-          for(size_t j=1;j<=cols;j++)
+          for(size_t j=1;j<=n_cols;j++)
             {
               size_t J= (IJK2[1]-IJK1[1])/(n_rows-1)*(j-1)+IJK1[1];
               size_t K= (IJK2[2]-IJK1[2])/(n_rows-1)*(j-1)+IJK1[2];
@@ -510,7 +501,7 @@ void XC::Block::create_nodes(void)
 
         for(size_t k= 2;k<n_layers;k++) //interior layers.
           for(size_t j= 2;j<n_rows;j++) //interior rows.
-            for(size_t i= 2;i<cols;i++) //interior columns.
+            for(size_t i= 2;i<n_cols;i++) //interior columns.
               create_node(node_pos(i,j,k),i,j,k);
       }
     else

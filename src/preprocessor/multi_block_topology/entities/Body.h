@@ -89,10 +89,6 @@ class Body: public EntMdlr
         void create_nodes(void);
 	
         bool checkNDivs(void) const;
-        size_t NDivI(void) const;
-        void setNDivI(const size_t &ndi);
-        size_t NDivJ(void) const;
-        void setNDivJ(const size_t &);
 	
         Node *getNode(const size_t &,const size_t &);
       };

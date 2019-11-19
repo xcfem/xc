@@ -79,6 +79,7 @@ class Edge: public EntMdlr
     std::vector<int> getIndicesVertices(void) const;
     virtual ID getKPoints(void) const;
 
+    void setNDivHomologousEdges(const size_t &);
     virtual void setNDiv(const size_t &);
     inline virtual size_t NDiv(void) const
       { return ndiv; }

@@ -88,26 +88,28 @@ size_t XC::Body::BodyFace::getNumberOfVertices(void) const
 //! @brief Return the pointer to the side face whose index is passed as parameter.
 const XC::CmbEdge::Side *XC::Body::BodyFace::getSide(const size_t &i) const
   {
-    if(!surface) return nullptr;
     const CmbEdge::Side *retval(nullptr);
-    const size_t idx= (i-1)%4+1;
-    switch(idx)
+    if(surface)
       {
-        case 1:
-          retval= surface->getSide(sec_lados.l1);
-          break;
-        case 2:
-          retval= surface->getSide(sec_lados.l2);
-          break;
-        case 3:
-          retval= surface->getSide(sec_lados.l3);
-          break;
-        case 4:
-          retval= surface->getSide(sec_lados.l4);
-          break;
-        default:
-          retval= nullptr;
-          break;
+	const size_t idx= (i-1)%4+1;
+	switch(idx)
+	  {
+	    case 1:
+	      retval= surface->getSide(sec_lados.l1);
+	      break;
+	    case 2:
+	      retval= surface->getSide(sec_lados.l2);
+	      break;
+	    case 3:
+	      retval= surface->getSide(sec_lados.l3);
+	      break;
+	    case 4:
+	      retval= surface->getSide(sec_lados.l4);
+	      break;
+	    default:
+	      retval= nullptr;
+	      break;
+	  }
       }
     return retval;
   }
@@ -189,35 +191,6 @@ Pos3dArray XC::Body::BodyFace::get_positions(void) const
 bool XC::Body::BodyFace::checkNDivs(void) const
   { return surface->checkNDivs(); }
 
-//! @brief Get the number of divisions in direction I.
-size_t XC::Body::BodyFace::NDivI(void) const
-  {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << " not implemented yet." << std::endl;
-    return 0;
-  }
-  
-//! @brief Set the number of divisions in direction I.
-void XC::Body::BodyFace::setNDivI(const size_t &ndi)
-  {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << " not implemented yet." << std::endl;
-  }
-
-//! @brief Set the number of divisions in direction I.
-size_t XC::Body::BodyFace::NDivJ(void) const
-  {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << " not implemented yet." << std::endl;
-    return 0;
-  }
-
-//! @brief Set the number of divisions in direction I.
-void XC::Body::BodyFace::setNDivJ(const size_t &)
-  {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << " not implemented yet." << std::endl;
-  }
 
 //! @brief Trigger the creation of nodes on faces.
 void XC::Body::BodyFace::create_nodes(void)

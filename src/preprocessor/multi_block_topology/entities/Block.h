@@ -61,6 +61,7 @@ class Block: public Body
     virtual std::set<const Face *> getSurfaces(void);
     const BodyFace *getFace(const size_t &i) const;
     Face *newFace(const size_t &i,Pnt *,Pnt *,Pnt *,Pnt *);
+    CmbEdge::Side *getEdge(const size_t &i);
     const CmbEdge::Side *getEdge(const size_t &i) const;
     Pnt *getVertex(const size_t &i);
     const Pnt *getVertex(const size_t &i) const;

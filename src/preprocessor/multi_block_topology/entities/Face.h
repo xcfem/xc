@@ -61,10 +61,10 @@ class Face: public CmbEdge
     void update_topology(void);
     inline size_t NDivI(void) const
       { return ndiv; }
-    virtual void setNDivI(const size_t &ndi);
+    virtual void setNDivI(const size_t &);
     inline size_t NDivJ(void) const
       { return ndivj; }
-    virtual void setNDivJ(const size_t &ndj);
+    virtual void setNDivJ(const size_t &);
     virtual void ConciliaNDivIJ(void)= 0;
     //! @brief Returns the number of vertices.
     size_t getNumberOfVertices(void) const
