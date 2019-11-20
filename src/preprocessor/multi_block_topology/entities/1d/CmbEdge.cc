@@ -27,8 +27,8 @@
 //CmbEdge.cc
 
 #include "CmbEdge.h"
-#include "Pnt.h"
-#include "Line.h"
+#include "preprocessor/multi_block_topology/entities/0d/Pnt.h"
+#include "preprocessor/multi_block_topology/entities/1d/Line.h"
 #include "CircularArc.h"
 #include "preprocessor/Preprocessor.h"
 #include "xc_utils/src/geom/d3/BND3d.h"

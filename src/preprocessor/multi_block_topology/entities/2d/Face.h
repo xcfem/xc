@@ -30,7 +30,7 @@
 #ifndef FACE_H
 #define FACE_H
 
-#include "CmbEdge.h"
+#include "preprocessor/multi_block_topology/entities/1d/CmbEdge.h"
 
 namespace XC {
 class Body;

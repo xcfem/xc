@@ -31,9 +31,9 @@
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 
-#include "preprocessor/multi_block_topology/entities/Pnt.h"
-#include "preprocessor/multi_block_topology/entities/Face.h"
-#include "preprocessor/multi_block_topology/entities/QuadSurface.h"
+#include "preprocessor/multi_block_topology/entities/0d/Pnt.h"
+#include "preprocessor/multi_block_topology/entities/2d/Face.h"
+#include "preprocessor/multi_block_topology/entities/2d/QuadSurface.h"
 #include "preprocessor/set_mgmt/Set.h"
 
 

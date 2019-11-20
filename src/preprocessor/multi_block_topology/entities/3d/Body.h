@@ -30,8 +30,8 @@
 #ifndef BODY_H
 #define BODY_H
 
-#include "EntMdlr.h"
-#include "CmbEdge.h"
+#include "preprocessor/multi_block_topology/entities/EntMdlr.h"
+#include "preprocessor/multi_block_topology/entities/1d/CmbEdge.h"
 
 
 class Pos3d;

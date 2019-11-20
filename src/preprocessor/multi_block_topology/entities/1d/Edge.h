@@ -29,7 +29,7 @@
 #ifndef EDGE_H
 #define EDGE_H
 
-#include "EntMdlr.h"
+#include "preprocessor/multi_block_topology/entities/EntMdlr.h"
 
 
 class BND3d;

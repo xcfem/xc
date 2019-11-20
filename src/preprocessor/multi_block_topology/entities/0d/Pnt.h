@@ -30,7 +30,7 @@
 #ifndef PNT_H
 #define PNT_H
 
-#include "EntMdlr.h"
+#include "preprocessor/multi_block_topology/entities/EntMdlr.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
 
 namespace XC {

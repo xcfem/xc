@@ -34,7 +34,7 @@
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 
-#include "preprocessor/multi_block_topology/entities/Pnt.h"
+#include "preprocessor/multi_block_topology/entities/0d/Pnt.h"
 #include "preprocessor/set_mgmt/Set.h"
 
 

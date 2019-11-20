@@ -28,7 +28,7 @@
 
 #include "PntPtrArray.h"
 #include "PntPtrArray3d.h"
-#include "preprocessor/multi_block_topology/entities/Pnt.h"
+#include "preprocessor/multi_block_topology/entities/0d/Pnt.h"
 #include "domain/domain/Domain.h"
 #include "domain/constraints/SFreedom_Constraint.h"
 

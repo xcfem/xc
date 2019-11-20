@@ -27,8 +27,8 @@
 //Edge.cc
 
 #include "Edge.h"
-#include "Face.h"
-#include "Pnt.h"
+#include "preprocessor/multi_block_topology/entities/2d/Face.h"
+#include "preprocessor/multi_block_topology/entities/0d/Pnt.h"
 #include "domain/mesh/node/Node.h"
 #include "utility/matrix/util_matrix.h"
 #include "xc_utils/src/matrices/m_int.h"

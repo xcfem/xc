@@ -27,15 +27,14 @@
 //BodyMap.cc
 
 #include "BodyMap.h"
-#include "preprocessor/multi_block_topology/entities/Block.h"
 #include "preprocessor/Preprocessor.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 
-#include "preprocessor/multi_block_topology/entities/Pnt.h"
-#include "preprocessor/multi_block_topology/entities/Body.h"
-#include "preprocessor/multi_block_topology/entities/Block.h"
-#include "preprocessor/multi_block_topology/entities/QuadSurface.h"
+#include "preprocessor/multi_block_topology/entities/0d/Pnt.h"
+#include "preprocessor/multi_block_topology/entities/3d/Body.h"
+#include "preprocessor/multi_block_topology/entities/3d/Block.h"
+#include "preprocessor/multi_block_topology/entities/2d/QuadSurface.h"
 #include "preprocessor/set_mgmt/Set.h"
 
 

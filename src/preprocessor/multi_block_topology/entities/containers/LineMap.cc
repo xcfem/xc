@@ -31,12 +31,12 @@
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 
-#include "preprocessor/multi_block_topology/entities/Edge.h"
-#include "preprocessor/multi_block_topology/entities/Pnt.h"
-#include "preprocessor/multi_block_topology/entities/Line.h"
-#include "preprocessor/multi_block_topology/entities/DividedLine.h"
-#include "preprocessor/multi_block_topology/entities/CmbEdge.h"
-#include "preprocessor/multi_block_topology/entities/CircularArc.h"
+#include "preprocessor/multi_block_topology/entities/1d/Edge.h"
+#include "preprocessor/multi_block_topology/entities/0d/Pnt.h"
+#include "preprocessor/multi_block_topology/entities/1d/Line.h"
+#include "preprocessor/multi_block_topology/entities/1d/DividedLine.h"
+#include "preprocessor/multi_block_topology/entities/1d/CmbEdge.h"
+#include "preprocessor/multi_block_topology/entities/1d/CircularArc.h"
 #include "preprocessor/set_mgmt/Set.h"
 
 

@@ -30,7 +30,7 @@
 #define LINEMAP_H
 
 #include "EntityMap.h"
-#include "preprocessor/multi_block_topology/entities/Edge.h"
+#include "preprocessor/multi_block_topology/entities/1d/Edge.h"
 
 class Line3d;
 class Plane;

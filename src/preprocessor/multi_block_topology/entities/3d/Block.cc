@@ -27,12 +27,10 @@
 //Block.cc
 
 #include "Block.h"
-#include "Pnt.h"
-#include "QuadSurface.h"
+#include "preprocessor/multi_block_topology/entities/0d/Pnt.h"
+#include "preprocessor/multi_block_topology/entities/2d/QuadSurface.h"
 #include "xc_utils/src/matrices/m_int.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
-#include "Face.h"
-
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 

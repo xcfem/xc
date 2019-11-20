@@ -27,7 +27,7 @@
 //PntPtrArray3d.cc
 
 #include "PntPtrArray3d.h"
-#include "preprocessor/multi_block_topology/entities/Pnt.h"
+#include "preprocessor/multi_block_topology/entities/0d/Pnt.h"
 #include "xc_utils/src/functions/algebra/num_integration.h"
 
 #include "domain/domain/Domain.h"

@@ -27,7 +27,7 @@
 //Pnt.cc
 
 #include "Pnt.h"
-#include "Edge.h"
+#include "preprocessor/multi_block_topology/entities/1d/Edge.h"
 #include "preprocessor/multi_block_topology/trf/TrfGeom.h"
 #include "preprocessor/Preprocessor.h"
 #include "preprocessor/set_mgmt/Set.h"

@@ -28,8 +28,8 @@
 
 #include "EntMdlrBase.h"
 #include "preprocessor/Preprocessor.h"
-#include "preprocessor/multi_block_topology/entities/Pnt.h"
-#include "preprocessor/multi_block_topology/entities/Edge.h"
+#include "preprocessor/multi_block_topology/entities/0d/Pnt.h"
+#include "preprocessor/multi_block_topology/entities/1d/Edge.h"
 
 #include "utility/actor/actor/MovableID.h"
 #include "utility/actor/actor/MovableVector.h"

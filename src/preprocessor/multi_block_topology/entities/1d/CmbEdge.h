@@ -31,7 +31,7 @@
 #define CMBEDGE_H
 
 #include <deque>
-#include "Edge.h"
+#include "preprocessor/multi_block_topology/entities/1d/Edge.h"
 
 class Polyline3d;
 

@@ -28,7 +28,7 @@
 
 #include "CartesianReferenceFrame3d.h"
 #include "preprocessor/Preprocessor.h"
-#include "preprocessor/multi_block_topology/entities/Pnt.h"
+#include "preprocessor/multi_block_topology/entities/0d/Pnt.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 
 #include "domain/mesh/element/Element.h"

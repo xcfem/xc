@@ -30,7 +30,7 @@
 #define MAPSurfaces_H
 
 #include "EntityMap.h"
-#include "preprocessor/multi_block_topology/entities/Face.h"
+#include "preprocessor/multi_block_topology/entities/2d/Face.h"
 
 namespace XC {
   class QuadSurface;
@@ -42,9 +42,6 @@ class SurfaceMap: public EntityMap<Face>
   {
   private:
     void UpdateSets(Face *) const;
-  protected:
-
-
   public:
     SurfaceMap(MultiBlockTopology *mbt= nullptr);
 

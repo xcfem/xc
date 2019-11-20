@@ -313,8 +313,15 @@ SET(unittest unittest/unittest)
 
 SET(preprocessor_mbt_trf preprocessor/multi_block_topology/trf/TrfGeom preprocessor/multi_block_topology/trf/MapTrfGeom preprocessor/multi_block_topology/trf/Rotation preprocessor/multi_block_topology/trf/Scaling preprocessor/multi_block_topology/trf/Reflection preprocessor/multi_block_topology/trf/Translation)
 
+SET(preprocessor_mbt_0d_entities preprocessor/multi_block_topology/entities/0d/Pnt)
 
-SET(preprocessor_mbt_entities preprocessor/multi_block_topology/entities/EntMdlr preprocessor/multi_block_topology/entities/Pnt preprocessor/multi_block_topology/entities/Edge preprocessor/multi_block_topology/entities/LineBase preprocessor/multi_block_topology/entities/Line preprocessor/multi_block_topology/entities/DividedLine preprocessor/multi_block_topology/entities/CircularArc preprocessor/multi_block_topology/entities/CmbEdge preprocessor/multi_block_topology/entities/Face preprocessor/multi_block_topology/entities/QuadSurface preprocessor/multi_block_topology/entities/Body preprocessor/multi_block_topology/entities/Block preprocessor/multi_block_topology/entities/UniformGrid)
+SET(preprocessor_mbt_1d_entities preprocessor/multi_block_topology/entities/1d/Edge preprocessor/multi_block_topology/entities/1d/LineBase preprocessor/multi_block_topology/entities/1d/Line preprocessor/multi_block_topology/entities/1d/DividedLine preprocessor/multi_block_topology/entities/1d/CircularArc preprocessor/multi_block_topology/entities/1d/CmbEdge)
+
+SET(preprocessor_mbt_2d_entities preprocessor/multi_block_topology/entities/2d/Face preprocessor/multi_block_topology/entities/2d/QuadSurface)
+
+SET(preprocessor_mbt_3d_entities preprocessor/multi_block_topology/entities/3d/Body preprocessor/multi_block_topology/entities/3d/Block preprocessor/multi_block_topology/entities/3d/UniformGrid)
+
+SET(preprocessor_mbt_entities preprocessor/multi_block_topology/entities/EntMdlr ${preprocessor_mbt_0d_entities} ${preprocessor_mbt_1d_entities} ${preprocessor_mbt_2d_entities} ${preprocessor_mbt_3d_entities})
 
 SET(preprocessor_mbt_entities_containers preprocessor/multi_block_topology/entities/containers/PntMap preprocessor/multi_block_topology/entities/containers/LineMap preprocessor/multi_block_topology/entities/containers/SurfaceMap preprocessor/multi_block_topology/entities/containers/BodyMap preprocessor/multi_block_topology/entities/containers/UniformGridMap)
 

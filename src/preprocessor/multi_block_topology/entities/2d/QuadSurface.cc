@@ -27,7 +27,7 @@
 //QuadSurface.cc
 
 #include "QuadSurface.h"
-#include "Pnt.h"
+#include "preprocessor/multi_block_topology/entities/0d/Pnt.h"
 #include "preprocessor/multi_block_topology/MultiBlockTopology.h"
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/pos_vec/Pos3dArray.h"
