@@ -23,20 +23,20 @@ elast= typical_materials.defElasticIsotropic3d(preprocessor, "elast3d",1e6,0.25,
 
 nodes= preprocessor.getNodeHandler 
 modelSpace= predefined_spaces.SolidMechanics3D(nodes)
-nod9= nodes.newNodeIDXYZ(9,0,0,0)
-nod10= nodes.newNodeIDXYZ(10,1,0,0)
-nod11= nodes.newNodeIDXYZ(11,1,1,0)
-nod12= nodes.newNodeIDXYZ(12,0,1,0)
-nod13= nodes.newNodeIDXYZ(13,0,0,1)
-nod14= nodes.newNodeIDXYZ(14,1,0,1)
-nod15= nodes.newNodeIDXYZ(15,1,1,1)
-nod16= nodes.newNodeIDXYZ(16,0,1,1)
+nod9= nodes.newNodeXYZ(0,0,0)
+nod10= nodes.newNodeXYZ(1,0,0)
+nod11= nodes.newNodeXYZ(1,1,0)
+nod12= nodes.newNodeXYZ(0,1,0)
+nod13= nodes.newNodeXYZ(0,0,1)
+nod14= nodes.newNodeXYZ(1,0,1)
+nod15= nodes.newNodeXYZ(1,1,1)
+nod16= nodes.newNodeXYZ(0,1,1)
 
 
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= "elast3d"
 elements.defaultTag= 1 #Tag for the next element.
-brick= elements.newElement("Brick",xc.ID([9,10,11,12,13,14,15,16]))
+brick= elements.newElement("Brick",xc.ID([nod9.tag,nod10.tag,nod11.tag,nod12.tag,nod13.tag,nod14.tag,nod15.tag,nod16.tag]))
 
 constraints= preprocessor.getBoundaryCondHandler
 #Constrain the displacement of node 1.
@@ -55,10 +55,10 @@ lPatterns.currentTimeSeries= "ts"
 #Load case definition
 lp0= lPatterns.newLoadPattern("default","0")
 #lPatterns.currentLoadPattern= "0"
-lp0.newNodalLoad(13, xc.Vector([0,0,-1]))
-lp0.newNodalLoad(14, xc.Vector([0,0,-1]))
-lp0.newNodalLoad(15, xc.Vector([0,0,-1]))
-lp0.newNodalLoad(16, xc.Vector([0,0,-1]))
+lp0.newNodalLoad(nod13.tag, xc.Vector([0,0,-1]))
+lp0.newNodalLoad(nod14.tag, xc.Vector([0,0,-1]))
+lp0.newNodalLoad(nod15.tag, xc.Vector([0,0,-1]))
+lp0.newNodalLoad(nod16.tag, xc.Vector([0,0,-1]))
 #We add the load case to domain.
 lPatterns.addToDomain(lp0.name)
 
