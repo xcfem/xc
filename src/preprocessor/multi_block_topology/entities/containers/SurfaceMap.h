@@ -40,14 +40,72 @@ namespace XC {
 //! @brief Model points container.
 class SurfaceMap: public EntityMap<Face>
   {
+  protected:
+    class Graph
+      {
+      public:
+	typedef const Edge *vertex_type;
+	typedef std::list<vertex_type> vertex_list;
+	typedef std::map<vertex_type, vertex_list > graph_container;
+	typedef std::pair<vertex_type, vertex_list> map_pair;
+      protected:
+	graph_container edges;
+      public:
+	typedef graph_container::iterator iterator;
+	typedef graph_container::const_iterator const_iterator;
+
+	const_iterator find(const vertex_type &v) const
+  	  { return edges.find(v); }
+	const_iterator begin(void) const
+  	  { return edges.begin(); }
+	const_iterator end(void) const
+  	  { return edges.end(); }
+        void add_vertex(const Edge *);
+	void add_edge(vertex_type v,vertex_type w)
+	  {
+	    edges[v].push_back(w);
+	    edges[w].push_back(v);
+	  }
+
+	std::set<const Edge *> breadth_first_search(vertex_type s) const
+	  {
+	    std::set<const Edge *> retval;
+	    std::map<vertex_type,bool> visited;
+	    std::list<vertex_type> q;
+	    visited[s]= true;
+	    q.push_back(s);
+	    while(!q.empty())
+	      {
+		s = q.front();
+		retval.insert(s);
+		q.pop_front();
+		//std::cout << "s= " << s << " i= " << i << std::endl;
+		const_iterator i_edges= find(s);
+		for(auto i : i_edges->second)
+		  {
+		    if(!visited[i])
+		      {
+			visited[i] = true;
+			q.push_back(i);
+		      }
+		  }
+	      }
+            return retval;
+	  }
+
+      };
   private:
-    void UpdateSets(Face *) const;
+    Graph edgeGraph;
+    void add_graph_vertex(const Edge *e);
+    void updateGraph(const QuadSurface &);
+    void updateSets(Face *) const;
   public:
     SurfaceMap(MultiBlockTopology *mbt= nullptr);
 
     bool conciliaNDivs(void);
     bool checkNDivs(void) const;
-
+    std::set<const XC::Edge *> getHomologousSides(const Edge *) const;
+    
     template <class F>
     Face *New(void);
     Face *findOrCreateFace(Pnt *,Pnt *,Pnt *,Pnt *);
@@ -71,11 +129,12 @@ Face *SurfaceMap::New(void)
           {
             retval->Name()= "f"+boost::lexical_cast<std::string>(getTag());
             (*this)[getTag()]= retval;
-            UpdateSets(retval);
+            updateSets(retval);
             tag++;
 	  }
       }
     return retval;
   }
+
 } //end of XC namespace
 #endif

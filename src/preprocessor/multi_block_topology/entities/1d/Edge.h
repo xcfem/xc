@@ -84,7 +84,7 @@ class Edge: public EntMdlr
     inline virtual size_t NDiv(void) const
       { return ndiv; }
     void SetElemSize(const double &sz);
-    std::set<const XC::Edge *> getHomologousSides(const std::set<const XC::Edge *> &) const;
+    std::set<const XC::Edge *> getHomologousSides(void) const;
     void update_topology(void);
 
     //! @brief Return the surfaces that touch the line.

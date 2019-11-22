@@ -171,12 +171,10 @@ bool XC::Edge::Out(const GeomObj3d &geomObj, const double &tol) const
 //! @param nd: number of divisions.
 void XC::Edge::setNDivHomologousEdges(const size_t &nd)
   {
-    std::cout << "edge: " << getName() << std::endl;
-    std::set<const XC::Edge *> homologous= getHomologousSides(homologous);
+    std::set<const XC::Edge *> homologous= getHomologousSides();
     for(std::set<const Edge *>::const_iterator i= homologous.begin();i!=homologous.end();i++)
       {
         Edge *tmp= const_cast<Edge *>(*i);
-	std::cout << "homologous: " << tmp->getName() << std::endl;
         tmp->ndiv= nd;
       }
     ndiv= nd;
@@ -399,36 +397,12 @@ const std::string &XC::Edge::getConnectedSurfacesNames(void) const
   }
 
 //! @brief Return the homologous sides to that passed as a parameter.
-std::set<const XC::Edge *> XC::Edge::getHomologousSides(const std::set<const XC::Edge *> &lh) const
+std::set<const XC::Edge *> XC::Edge::getHomologousSides(void) const
   {
-    std::set<const Edge *> retval;
-    std::set<const Edge *> new_adyacentes;
-
-    if(!surfaces_line.empty())
-      {
-        for(std::set<const Face *>::const_iterator i= surfaces_line.begin();i!=surfaces_line.end();i++)
-          {
-            const Edge *h= (*i)->get_lado_homologo(this);
-            if(h!=this)
-              {
-                std::set<const Edge *>::const_iterator k= lh.find(h);
-                if(k==lh.end()) //Not already added
-                  new_adyacentes.insert(h);
-              }
-          }
-      }
-    for(std::set<const XC::Edge *>::const_iterator i= new_adyacentes.begin();i!=new_adyacentes.end();i++)
-      retval.insert(*i);
-    if(retval.size()>lh.size()) //There are new edges.
-      {
-        for(std::set<const Edge *>::const_iterator i= new_adyacentes.begin();i!=new_adyacentes.end();i++)
-          {
-            std::set<const Edge *> tmp= (*i)->getHomologousSides(retval); //Recursive call
-            for(std::set<const Edge *>::const_iterator j= tmp.begin();j!=tmp.end();j++)
-              if(this!=*j) retval.insert(*j);
-          }
-        new_adyacentes.erase(new_adyacentes.begin(),new_adyacentes.end());
-      }
+    const Preprocessor *preprocessor= getPreprocessor();
+    const MultiBlockTopology &mbt= preprocessor->getMultiBlockTopology();
+    std::set<const XC::Edge *> retval= mbt.getHomologousSides(this);
+    retval.erase(this);
     return retval;
   }
 

@@ -40,10 +40,28 @@
 
 //! @brief Constructor.
 XC::SurfaceMap::SurfaceMap(MultiBlockTopology *mbt)
-  : EntityMap<Face>(mbt) {}
+  : EntityMap<Face>(mbt), edgeGraph() {}
+
+void XC::SurfaceMap::Graph::add_vertex(const Edge *e)
+  { edges.insert(Graph::map_pair(e,Graph::vertex_list())); }
+
+//! @brief Update the edge connectivity.
+void XC::SurfaceMap::updateGraph(const QuadSurface &qs)
+  {
+    const Edge *e0= qs.getSide(1)->getEdge();
+    edgeGraph.add_vertex(e0);
+    const Edge *e1= qs.getSide(2)->getEdge();
+    edgeGraph.add_vertex(e1);
+    const Edge *e2= qs.getSide(3)->getEdge();
+    edgeGraph.add_vertex(e2);
+    const Edge *e3= qs.getSide(4)->getEdge();
+    edgeGraph.add_vertex(e3);
+    edgeGraph.add_edge(e0,e2);
+    edgeGraph.add_edge(e1,e3);
+  }
 
 //! @brief Insert the new line in the total and the sets that are open.
-void XC::SurfaceMap::UpdateSets(Face *nueva_face) const
+void XC::SurfaceMap::updateSets(Face *nueva_face) const
   {
     Preprocessor *preprocessor= const_cast<Preprocessor *>(getPreprocessor());
     preprocessor->get_sets().get_set_total()->getSurfaces().push_back(nueva_face);
@@ -73,6 +91,16 @@ bool XC::SurfaceMap::checkNDivs(void) const
       for(const_iterator i= begin();i!=end();i++)
         if(!(*i).second->checkNDivs()) conta++;
     return (conta==0);
+  }
+
+//! @brief Return the homologous sides to that passed as a parameter.
+std::set<const XC::Edge *> XC::SurfaceMap::getHomologousSides(const Edge *edge) const
+  {
+    std::set<const Edge *> retval;
+    Graph::const_iterator i= edgeGraph.find(edge);
+    if(i!= edgeGraph.end())
+      retval= edgeGraph.breadth_first_search(edge);
+    return retval;
   }
 
 //! @brief Find a face between the points or creates a new one.
@@ -118,6 +146,7 @@ XC::QuadSurface *XC::SurfaceMap::newQuadSurfacePts(const size_t &id_p1, const si
     ID tmp(4);
     tmp[0]= id_p1; tmp[1]= id_p2; tmp[2]= id_p3; tmp[3]= id_p4;
     retval->setPoints(tmp);
+    updateGraph(*retval);
     return retval;
   }
 
@@ -129,6 +158,7 @@ XC::QuadSurface *XC::SurfaceMap::newQuadSurfaceLines(const size_t &id_p1, const 
     ID tmp(4);
     tmp[0]= id_p1; tmp[1]= id_p2; tmp[2]= id_p3; tmp[3]= id_p4;
     retval->addLines(tmp);
+    updateGraph(*retval);
     return retval;
   }
 
@@ -138,5 +168,6 @@ XC::QuadSurface *XC::SurfaceMap::newQuadSurfaceGridPoints(const boost::python::l
     QuadSurface *retval= dynamic_cast<QuadSurface *>(this->New<QuadSurface>());
     assert(retval);
     retval->defGridPoints(l);
+    updateGraph(*retval);
     return retval;
   }
