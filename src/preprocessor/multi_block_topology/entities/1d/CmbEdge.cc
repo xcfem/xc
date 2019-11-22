@@ -716,7 +716,7 @@ XC::CmbEdge::Side *XC::CmbEdge::getSideByPoints(const size_t &idP1,const size_t 
   }
 
 //! @brief Return the deque of lines that define the edges.
-std::deque<XC::Edge *> XC::CmbEdge::GetEdges(void)
+std::deque<XC::Edge *> XC::CmbEdge::getEdges(void)
   {
     std::deque<XC::Edge *> retval;
     for(std::deque<Side>::iterator i=lines.begin();i!=lines.end();i++)
@@ -724,6 +724,16 @@ std::deque<XC::Edge *> XC::CmbEdge::GetEdges(void)
     return retval;
   }
 
+//! @brief Return the deque of lines that define the edges.
+std::deque<const XC::Edge *> XC::CmbEdge::getEdges(void) const
+  {
+    std::deque<const XC::Edge *> retval;
+    for(std::deque<Side>::const_iterator i=lines.begin();i!=lines.end();i++)
+      retval.push_back((*i).getEdge());
+    return retval;
+  }
+
+  
 //! @brief Return the i-th vertex.
 const XC::Pnt *XC::CmbEdge::getVertex(const size_t &i) const
   {
@@ -733,6 +743,15 @@ const XC::Pnt *XC::CmbEdge::getVertex(const size_t &i) const
       return P2();
   }
 
+//! @brief Return the vertices.
+std::set<const XC::Pnt *> XC::CmbEdge::getVertices(void) const
+  {
+    std::set<const XC::Pnt *> retval;
+    for(std::deque<Side>::const_iterator i=lines.begin();i!=lines.end();i++)
+      retval.insert((*i).P1());
+    retval.insert(P2()); //Last vertex.
+    return retval;
+  }
 
 //! @brief Sets the i-th vertex.
 void XC::CmbEdge::SetVertice(const size_t &,Pnt *)

@@ -135,7 +135,7 @@ XC::Face *XC::SurfaceMap::findOrCreateFace(Pnt *pA,Pnt *pB,Pnt *pC,Pnt *pD)
 		<< "; error, null pointer to one of more"
 	        << " points."
 		<< std::endl;
-    return retval;    
+    return retval;
   }
 
 //! @brief New quadrilateral surface.

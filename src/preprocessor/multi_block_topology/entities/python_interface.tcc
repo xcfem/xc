@@ -80,8 +80,10 @@ class_<XC::Body::BodyFace, XC::Body::BodyFace*, bases<CommandEntity>, boost::non
   .def("getSurface",make_function(getSurfacePtr,return_internal_reference<>()),"Return the surface corresponding to the body face.")
    ;
 
+const XC::Pnt *(XC::Body::*getVertexPtr)(const size_t &) const= &XC::Body::getVertex;
 class_<XC::Body, XC::Body *, bases<XC::EntMdlr>, boost::noncopyable >("Body","Six-faced body." ,no_init)
   .add_property("getIdxVertices",&XC::Edge::getIndicesVertices)
+  .def("getVertex",make_function(getVertexPtr,return_internal_reference<>()),"Return the vertex corresponding to the index argument.")
    ;
 
 const XC::Body::BodyFace *(XC::Block::*getFacePtr)(const size_t &) const= &XC::Block::getFace;

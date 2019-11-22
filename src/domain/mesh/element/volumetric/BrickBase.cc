@@ -81,15 +81,15 @@ XC::ElemPtrArray3d XC::BrickBase::put_on_mesh(const XC::NodePtrArray3d &nodes,me
             for(size_t k=1;k<numberOfColumns;k++)
               {
 	        XC::Element *tmp= this->getCopy();
-                const int &Nd1= nodes(i,j,k)->getTag();
-                const int &Nd2= nodes(i,j,k+1)->getTag();
-                const int &Nd3= nodes(i,j+1,k+1)->getTag();
-                const int &Nd4= nodes(i,j+1,k)->getTag();
-                const int &Nd5= nodes(i+1,j,k)->getTag();
-                const int &Nd6= nodes(i+1,j,k+1)->getTag();
-                const int &Nd7= nodes(i+1,j+1,k+1)->getTag();
-                const int &Nd8= nodes(i+1,j+1,k)->getTag();
-                tmp->getNodePtrs().set_id_nodes(Nd1,Nd2,Nd3,Nd4,Nd5,Nd6,Nd7,Nd8);
+                const Node *Nd1= nodes(i,j,k);
+                const Node *Nd2= nodes(i,j+1,k);
+                const Node *Nd3= nodes(i,j+1,k+1);
+                const Node *Nd4= nodes(i,j,k+1);
+                const Node *Nd5= nodes(i+1,j,k);
+                const Node *Nd6= nodes(i+1,j+1,k);
+                const Node *Nd7= nodes(i+1,j+1,k+1);
+                const Node *Nd8= nodes(i+1,j,k+1);
+                tmp->getNodePtrs().set_id_nodes(Nd1->getTag(),Nd2->getTag(),Nd3->getTag(),Nd4->getTag(),Nd5->getTag(),Nd6->getTag(),Nd7->getTag(),Nd8->getTag());
                 retval(i,j,k)= tmp;
               }
       }

@@ -155,8 +155,10 @@ class CmbEdge: public Edge
     Side *getSideByPoints(const Pnt *,const Pnt *);
     const Side *getSideByPoints(const size_t &,const size_t &) const;
     Side *getSideByPoints(const size_t &,const size_t &);
-    std::deque<Edge *> GetEdges(void);
+    std::deque<Edge *> getEdges(void);
+    std::deque<const Edge *> getEdges(void) const;
     virtual const Pnt *getVertex(const size_t &i) const;
+    std::set<const Pnt *> getVertices(void) const;
     virtual void SetVertice(const size_t &,Pnt *);
     virtual ID getKPoints(void) const;
     Polyline3d getPolyline(void) const;

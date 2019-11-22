@@ -180,15 +180,34 @@ const XC::Pnt *XC::Block::getVertex(const size_t &i) const
     return this_no_const->getVertex(i);
   }
 
+//       +--------+         0: Bottom face; vertices 1,4,3,2. (0,3,2,1)
+//      /   5    /|         1: Left-side face; vertices 1,2,6,5. (0,1,5,4)
+//     /        / |         2: Front face; vertices 2,3,7,6. (1,2,6,5)
+//    +--------+  |         3: Right-side face; vertices 3,4,8,7. (2,3,7,6)
+//    |        | 3|         4: Back face; vertices 1,5,8,4. (0,4,7,3)
+//    |        |  +         5: Top face; vertices 5,6,7,8. (4,5,6,7)
+
 //! @brief Return the i-th vertex of the solid.
 XC::Pnt *XC::Block::getVertex(const size_t &i)
   {
+    Pnt *retval= nullptr;
     if(i<=4)
-      return sups[0].getVertex(i); //Bottom
-    else if(i<=8)
-      return sups[5].getVertex(i-4); //Top
-    else
-      return nullptr;
+      retval= sups[0].getVertex(i); //Bottom
+    else if(i<=8) //Top
+      {
+        std::set<const Pnt *> intersection;
+        if(i==5)
+	  intersection= getCommonVertex(*sups[1].Surface(),*sups[4].Surface(),*sups[5].Surface());
+	else if(i==6)
+	  intersection= getCommonVertex(*sups[1].Surface(),*sups[2].Surface(),*sups[5].Surface());
+	else if(i==7)
+	  intersection= getCommonVertex(*sups[2].Surface(),*sups[3].Surface(),*sups[5].Surface());
+	else if(i==8)
+	  intersection= getCommonVertex(*sups[3].Surface(),*sups[4].Surface(),*sups[5].Surface());
+	assert(intersection.size()==1);
+	return retval= const_cast<Pnt *>(*intersection.begin()); 
+      }
+    return retval;
   }
 
 //! @brief Return the surfaces that close the solid.
@@ -255,7 +274,7 @@ void XC::Block::put(const size_t &i,Face *s)
       {
         //Seek for an assigned face.
         size_t iFace= 1;
-        Face *face= sups[1].Surface();
+        Face *face= sups[iFace].Surface();
         if(!face) { iFace=2; face= sups[iFace].Surface(); }
         if(!face) { iFace=3; face= sups[iFace].Surface(); }
         if(!face) { iFace=4; face= sups[iFace].Surface(); }
@@ -376,21 +395,33 @@ size_t XC::Block::NDivI(void) const
   { return getEdge(1)->NDiv(); }
 
 void XC::Block::setNDivI(const size_t &nDiv)
-  { getEdge(1)->setNDivHomologousEdges(nDiv); }
+  {
+    getEdge(1)->setNDivHomologousEdges(nDiv);
+    for(size_t i= 0;i<6;i++)
+      sups[i].Surface()->ConciliaNDivIJ();
+  }
 
 //! @brief Return the number of divisions along the edge 2->3.
 size_t XC::Block::NDivJ(void) const
   { return getEdge(2)->NDiv(); }
 
 void XC::Block::setNDivJ(const size_t &nDiv)
-  { getEdge(2)->setNDivHomologousEdges(nDiv); }
+  {
+    getEdge(2)->setNDivHomologousEdges(nDiv);
+    for(size_t i= 0;i<6;i++)
+      sups[i].Surface()->ConciliaNDivIJ();
+  }
 
 //! @brief Return the number of divisions along the edge 1->5.
 size_t XC::Block::NDivK(void) const
   { return getEdge(5)->NDiv(); }
 
 void XC::Block::setNDivK(const size_t &nDiv)
-  { getEdge(5)->setNDivHomologousEdges(nDiv); }
+  {
+    getEdge(5)->setNDivHomologousEdges(nDiv);
+    for(size_t i= 0;i<6;i++)
+      sups[i].Surface()->ConciliaNDivIJ();
+  }
 
 //! @brief Create nodes for the block.
 void XC::Block::create_nodes(void)
@@ -415,11 +446,15 @@ void XC::Block::create_nodes(void)
 
         //Vertices.
 	ttzNodes(1,1,1)= getVertex(1)->getNode();
+        std::cout << "Nd1= " << ttzNodes(1,1,1)->getInitialPosition3d() << std::endl;
         ttzNodes(1,n_rows,1)= getVertex(2)->getNode();
+        std::cout << "Nd2= " << ttzNodes(1,n_rows,1)->getInitialPosition3d() << std::endl;
 	ttzNodes(1,n_rows,n_cols)= getVertex(3)->getNode();
         ttzNodes(1,1,n_cols)= getVertex(4)->getNode();
 	ttzNodes(n_layers,1,1)= getVertex(5)->getNode();
+        std::cout << "Nd5= " << ttzNodes(n_layers,1,1)->getInitialPosition3d() << std::endl;
         ttzNodes(n_layers,n_rows,1)= getVertex(6)->getNode();
+        std::cout << "Nd6= " << ttzNodes(n_layers,n_rows,1)->getInitialPosition3d() << std::endl;
 	ttzNodes(n_layers,n_rows,n_cols)= getVertex(7)->getNode();
         ttzNodes(n_layers,1,n_cols)= getVertex(8)->getNode();
 
@@ -441,6 +476,9 @@ void XC::Block::create_nodes(void)
         ID IJK1= bottom.Surface()->getNodeIndices(n1);
         ID IJK2= bottom.Surface()->getNodeIndices(n2);
         ID IJK4= bottom.Surface()->getNodeIndices(n4);
+	std::cout << "IJK1= " << IJK1 << std::endl;
+	std::cout << "IJK2= " << IJK2 << std::endl;
+	std::cout << "IJK4= " << IJK4 << std::endl;
         size_t ind_i= 0, ind_j= 0;
         if((IJK2[1]-IJK1[1])>0)
           { ind_i= 1; ind_j= 2; }
@@ -448,9 +486,6 @@ void XC::Block::create_nodes(void)
           { ind_j= 1; ind_i= 2; }
         const size_t nf= abs(IJK2[ind_i]-IJK1[ind_i])+1;
         const size_t nc= abs(IJK4[ind_j]-IJK1[ind_j])+1;
-	std::cout << "IJK1= " << IJK1 << std::endl;
-	std::cout << "IJK2= " << IJK2 << std::endl;
-	std::cout << "IJK4= " << IJK4 << std::endl;
 	std::cout << "ind_i= " << ind_i << " nf= " << nf << std::endl;
 	std::cout << "ind_j= " << ind_j << " nc= " << nc << std::endl;
         double d2= 0;

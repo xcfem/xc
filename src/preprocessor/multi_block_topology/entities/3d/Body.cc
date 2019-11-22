@@ -121,15 +121,16 @@ XC::CmbEdge::Side *XC::Body::BodyFace::getSide(const size_t &i)
 //! @brief Return a pointer to the i-th vertex of the face.
 const XC::Pnt *XC::Body::BodyFace::getVertex(const size_t &i) const
   {
+    const XC::Pnt *retval= nullptr;
     const CmbEdge::Side *l= getSide(i);
     if(l)
       {
         if(sec_lados.isDirect())
-          return l->P1();
+          retval= l->P1();
         else
-          return l->P2();
+          retval= l->P2();
       }
-    return nullptr;
+    return retval;
   }
 
 //! @brief Return a pointer to the i-th vertex of the face.

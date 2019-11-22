@@ -200,7 +200,7 @@ void XC::SetEntities::fillDownwards(SetMeshComp &mc)
     for(sup_iterator i=surfaces.begin();i!=surfaces.end();i++)
       {
         //Lines.
-        lst_line_pointers ll((*i)->GetEdges());
+        lst_line_pointers ll((*i)->getEdges());
         lines.insert_unique(lines.end(),ll.begin(),ll.end());
 
         //Elements.

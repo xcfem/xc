@@ -48,7 +48,7 @@ class Face: public CmbEdge
     Node *getNode(const size_t &i);
     const Node *getNode(const size_t &i) const;
   protected:
-    size_t ndivj; //number of divisions in the j axis.
+    size_t ndivj; //!< number of divisions in the j axis.
     virtual const Edge *get_lado_homologo(const Edge *l) const= 0;
 
   public:
@@ -92,6 +92,7 @@ class Face: public CmbEdge
   };
 
 std::set<const Face *> getConnectedSurfaces(const Edge &l);
+std::set<const Pnt *> getCommonVertex(const Face &,const Face &, const Face &);
 
 } //end of XC namespace.
 
