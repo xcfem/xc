@@ -56,7 +56,7 @@ XC::SFreedom_Constraint *XC::BoundaryCondHandler::addSFreedom_Constraint(const i
       {
         sp->setNodeTag(tag_nod);
         getDomain()->addSFreedom_Constraint(sp);
-        getPreprocessor()->UpdateSets(sp);
+        getPreprocessor()->updateSets(sp);
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -72,7 +72,7 @@ XC::SFreedom_Constraint *XC::BoundaryCondHandler::addSFreedom_Constraint(const i
     if(sp)
       {
         getDomain()->addSFreedom_Constraint(sp);
-        getPreprocessor()->UpdateSets(sp);
+        getPreprocessor()->updateSets(sp);
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -92,7 +92,7 @@ XC::MFreedom_Constraint *XC::BoundaryCondHandler::newMPConstraint(const int &mas
     if(mp)
       {
         getDomain()->addMFreedom_Constraint(mp);
-        getPreprocessor()->UpdateSets(mp);
+        getPreprocessor()->updateSets(mp);
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -113,7 +113,7 @@ XC::MFreedom_Constraint *XC::BoundaryCondHandler::newEqualDOF(const int &masterN
       {
         mp->setup(getDomain());
         getDomain()->addMFreedom_Constraint(mp);
-        getPreprocessor()->UpdateSets(mp);
+        getPreprocessor()->updateSets(mp);
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -129,7 +129,7 @@ XC::MFreedom_Constraint *XC::BoundaryCondHandler::newRigidBeam(const int &master
       {
         mp->setup(getDomain());
         getDomain()->addMFreedom_Constraint(mp);
-        getPreprocessor()->UpdateSets(mp);
+        getPreprocessor()->updateSets(mp);
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -145,7 +145,7 @@ XC::MFreedom_Constraint *XC::BoundaryCondHandler::newRigidRod(const int &masterN
       {
         mp->setup(getDomain());
         getDomain()->addMFreedom_Constraint(mp);
-        getPreprocessor()->UpdateSets(mp);
+        getPreprocessor()->updateSets(mp);
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -161,7 +161,7 @@ XC::MRMFreedom_Constraint *XC::BoundaryCondHandler::newMRMPConstraint(const ID &
     if(mrmp)
       {
         getDomain()->addMRMFreedom_Constraint(mrmp);
-        getPreprocessor()->UpdateSets(mrmp);
+        getPreprocessor()->updateSets(mrmp);
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -176,7 +176,7 @@ XC::MRMFreedom_Constraint *XC::BoundaryCondHandler::newGlueNodeToElement(const N
     if(mrmp)
       {
         getDomain()->addMRMFreedom_Constraint(mrmp);
-        getPreprocessor()->UpdateSets(mrmp);
+        getPreprocessor()->updateSets(mrmp);
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__

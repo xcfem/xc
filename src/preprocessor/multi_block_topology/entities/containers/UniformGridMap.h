@@ -44,7 +44,7 @@ class UniformGrid;
 class UniformGridMap: public EntityMap<UniformGrid>
   {
   private:
-    void UpdateSets(UniformGrid *) const;
+    void updateSets(UniformGrid *) const;
   protected:
 
 

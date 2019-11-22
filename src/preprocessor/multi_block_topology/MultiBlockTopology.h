@@ -94,6 +94,8 @@ class MultiBlockTopology: public PreprocessorContainer
     const Edge *find_edge_by_endpoints(const PntMap::Indice &,const PntMap::Indice &) const;
     
     void conciliaNDivs(void);
+    inline std::set<const XC::Edge *> getHomologousSides(const Edge *e) const
+      { return faces.getHomologousSides(e); }
 
     void clearAll(void);
     //! @brief Destructor.

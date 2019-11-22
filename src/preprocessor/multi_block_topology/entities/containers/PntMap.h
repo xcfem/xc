@@ -52,7 +52,7 @@ class PntMap: public EntityMap<Pnt>
   {
     const double tol= 0.01;
   private:
-    void UpdateSets(Pnt *) const;
+    void updateSets(Pnt *) const;
   protected:
     Pnt *Crea(void);
   public:

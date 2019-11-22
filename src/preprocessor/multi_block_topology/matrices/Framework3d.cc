@@ -50,7 +50,7 @@ XC::PntPtrArray3d *XC::Framework3d::makeNew(void)
         retval= new PntPtrArray3d();
         retval->set_owner(this);
         (*this)[getTag()]= retval;
-        //UpdateSets(retval);
+        //updateSets(retval);
         tag++;
       }
     return retval;

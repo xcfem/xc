@@ -92,8 +92,8 @@ class Preprocessor: public CommandEntity, public MovableObject
     friend class ElementHandler;
     friend class BoundaryCondHandler;
     friend class FEProblem;
-    void UpdateSets(Element *);
-    void UpdateSets(Constraint *);
+    void updateSets(Element *);
+    void updateSets(Constraint *);
 
     SetEstruct *busca_set_estruct(const std::string &nmb);
   public:
@@ -104,7 +104,7 @@ class Preprocessor: public CommandEntity, public MovableObject
       { return domain; }
     FE_Datastore *getDataBase(void);
 
-    void UpdateSets(Node *);
+    void updateSets(Node *);
 
     MapSet &get_sets(void)
       { return sets; }

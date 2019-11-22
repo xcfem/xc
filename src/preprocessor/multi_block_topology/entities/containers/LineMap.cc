@@ -95,7 +95,7 @@ XC::CmbEdge *XC::LineMap::newLineSequence(void)
   }
 
 //! @brief Insert the new line in the total and the opened sets.
-void XC::LineMap::UpdateSets(Edge *nueva_linea) const
+void XC::LineMap::updateSets(Edge *nueva_linea) const
   {
     MultiBlockTopology *mbt= const_cast<MultiBlockTopology *>(dynamic_cast<const MultiBlockTopology *>(Owner()));
     Preprocessor *preprocessor= mbt->getPreprocessor();
@@ -239,7 +239,7 @@ XC::Edge *XC::LineMap::createCopy(const Edge *l)
           {
             retval->Name()= "l"+boost::lexical_cast<std::string>(getTag());
             (*this)[getTag()]= retval;
-            UpdateSets(retval);
+            updateSets(retval);
             tag++;
 	  }
         else

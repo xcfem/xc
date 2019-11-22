@@ -48,7 +48,7 @@ class CircularArc;
 class LineMap: public EntityMap<Edge>
   {
   private:
-    void UpdateSets(Edge *) const;
+    void updateSets(Edge *) const;
   protected:
     template <class E>
     Edge *Crea(void);
@@ -84,7 +84,7 @@ Edge *XC::LineMap::Crea(void)
     Edge *retval= new E(preprocessor);
     retval->Name()= "l"+boost::lexical_cast<std::string>(getTag());
     (*this)[getTag()]= retval;
-    UpdateSets(retval);
+    updateSets(retval);
     tag++;
     return retval;
   }

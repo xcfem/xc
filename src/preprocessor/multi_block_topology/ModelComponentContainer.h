@@ -39,7 +39,7 @@ namespace XC {
 //
 //! @brief Container for model entities.
 template <class T>
- class ModelComponentContainer: public ModelComponentContainerBase, public std::map<ModelComponentContainerBase::Indice,T *>
+class ModelComponentContainer: public ModelComponentContainerBase, public std::map<ModelComponentContainerBase::Indice,T *>
   {
   public:
     typedef typename std::map<Indice,T *> map_base;

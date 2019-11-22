@@ -101,7 +101,7 @@ XC::Node *XC::NodeHandler::duplicateNode(const int &orgNodeTag)
         if(retval)
           {
             getDomain()->addNode(retval);
-            getPreprocessor()->UpdateSets(retval);
+            getPreprocessor()->updateSets(retval);
           }
       }
     return retval;
@@ -119,7 +119,7 @@ XC::Node *XC::NodeHandler::newNode(const double &x,const double &y,const double 
     if(retval)
       {
         getDomain()->addNode(retval);
-        getPreprocessor()->UpdateSets(retval);
+        getPreprocessor()->updateSets(retval);
       }
     return retval;
   }
@@ -136,7 +136,7 @@ XC::Node *XC::NodeHandler::newNode(const double &x,const double &y)
     if(retval)
       {
         getDomain()->addNode(retval);
-        getPreprocessor()->UpdateSets(retval);
+        getPreprocessor()->updateSets(retval);
       }
     return retval;
   }
@@ -154,7 +154,7 @@ XC::Node *XC::NodeHandler::newNode(const double &x)
     if(retval)
       {
         getDomain()->addNode(retval);
-        getPreprocessor()->UpdateSets(retval);
+        getPreprocessor()->updateSets(retval);
       }
     return retval;
   }

@@ -42,7 +42,7 @@ class Block;
 class BodyMap: public EntityMap<Body>
   {
   private:
-    void UpdateSets(Body *) const;
+    void updateSets(Body *) const;
   protected:
 
 
@@ -72,7 +72,7 @@ Body *BodyMap::New(void)
           {
             retval->Name()= "f"+boost::lexical_cast<std::string>(getTag());
             (*this)[getTag()]= retval;
-            UpdateSets(retval);
+            updateSets(retval);
             tag++;
 	  }
       }

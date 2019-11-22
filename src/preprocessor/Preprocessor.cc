@@ -66,7 +66,7 @@ XC::Preprocessor &XC::Preprocessor::operator=(const Preprocessor &other)
 
 //! @brief Insert the pointer to the node in the "total" set and in the 
 //! sets that are currently opened.
-void XC::Preprocessor::UpdateSets(Node *new_node)
+void XC::Preprocessor::updateSets(Node *new_node)
   {
     sets.get_set_total()->addNode(new_node);
     MapSet::map_sets &open_sets= sets.get_open_sets();
@@ -80,7 +80,7 @@ void XC::Preprocessor::UpdateSets(Node *new_node)
 
 //! @brief Insert the pointer to the element in the "total" set and in the 
 //! sets that are currently opened.
-void XC::Preprocessor::UpdateSets(Element *new_elem)
+void XC::Preprocessor::updateSets(Element *new_elem)
   {
     sets.get_set_total()->addElement(new_elem);
     MapSet::map_sets &open_sets= sets.get_open_sets();
@@ -94,7 +94,7 @@ void XC::Preprocessor::UpdateSets(Element *new_elem)
 
 //! @brief Insert the pointer to the constraint in the "total" set and in the 
 //! sets that are currently opened.
-void XC::Preprocessor::UpdateSets(Constraint *new_constraint)
+void XC::Preprocessor::updateSets(Constraint *new_constraint)
   {
     sets.get_set_total()->GetConstraints().push_back(new_constraint);
     MapSet::map_sets &open_sets= sets.get_open_sets();

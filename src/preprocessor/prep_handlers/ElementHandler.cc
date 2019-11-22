@@ -136,6 +136,6 @@ void XC::ElementHandler::Add(Element *e)
 void XC::ElementHandler::new_element(Element *e)
   {
     getDomain()->addElement(e);
-    getPreprocessor()->UpdateSets(e);
+    getPreprocessor()->updateSets(e);
   }
 

@@ -43,7 +43,7 @@ XC::UniformGridMap::UniformGridMap(MultiBlockTopology *mbt)
   : EntityMap<UniformGrid>(mbt) {}
 
 //! @brief Insert the new line in the total and the opened sets.
-void XC::UniformGridMap::UpdateSets(UniformGrid *new_unif_grid) const
+void XC::UniformGridMap::updateSets(UniformGrid *new_unif_grid) const
   {
     Preprocessor *preprocessor= const_cast<Preprocessor *>(getPreprocessor());
     preprocessor->get_sets().get_set_total()->getUniformGrids().push_back(new_unif_grid);
@@ -66,7 +66,7 @@ XC::UniformGrid *XC::UniformGridMap::New(void)
         Preprocessor *preprocessor= getPreprocessor();
         retval= new UniformGrid(preprocessor);
         (*this)[getTag()]= retval;
-        UpdateSets(retval);
+        updateSets(retval);
         tag++;
       }
     return retval;

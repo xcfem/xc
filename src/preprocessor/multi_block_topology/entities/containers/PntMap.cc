@@ -45,7 +45,7 @@ XC::PntMap::PntMap(MultiBlockTopology *mbt)
 
 
 //! @brief Insert the new point in the total and the opened sets.
-void XC::PntMap::UpdateSets(Pnt *new_point) const
+void XC::PntMap::updateSets(Pnt *new_point) const
   {
     MultiBlockTopology *mbt= const_cast<MultiBlockTopology *>(dynamic_cast<const MultiBlockTopology *>(Owner()));
     Preprocessor *preprocessor= mbt->getPreprocessor();
@@ -123,7 +123,7 @@ XC::Pnt *XC::PntMap::Crea(void)
     assert(preprocessor);
     Pnt *retval= new Pnt("p"+boost::lexical_cast<std::string>(getTag()),preprocessor);
     (*this)[getTag()]= retval;
-    UpdateSets(retval);
+    updateSets(retval);
     tag++;
     return retval;
   }
@@ -227,7 +227,7 @@ XC::Pnt *XC::PntMap::Copy(const Pnt *p,const Vector3d &v= Vector3d())
               retval->Pos()+= v;
             retval->Name()= "p"+boost::lexical_cast<std::string>(getTag());
             (*this)[getTag()]= retval;
-            UpdateSets(retval);
+            updateSets(retval);
             tag++;
 	  }
         else

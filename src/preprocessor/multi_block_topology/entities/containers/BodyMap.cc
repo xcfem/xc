@@ -45,7 +45,7 @@ XC::BodyMap::BodyMap(MultiBlockTopology *mbt)
 
 //! @brief Inserts the new body in the total set and in the set
 //! that are open.
-void XC::BodyMap::UpdateSets(Body *newBody) const
+void XC::BodyMap::updateSets(Body *newBody) const
   {
     Preprocessor *preprocessor= const_cast<Preprocessor *>(getPreprocessor());
     preprocessor->get_sets().get_set_total()->getBodies().push_back(newBody);
