@@ -41,8 +41,6 @@ namespace XC {
 template <class Entity>
 class EntityMap: public ModelComponentContainer<Entity>
   {
-  protected:
-
   public:
     typedef typename ModelComponentContainer<Entity>::iterator iterator;
     typedef typename ModelComponentContainer<Entity>::const_iterator const_iterator;
