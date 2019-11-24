@@ -308,6 +308,28 @@ class SolidMechanics2D(PredefinedSpace):
         nod= self.preprocessor.getNodeHandler.getNode(nodeTag)
         disp= nod.getDisp
         return xc.Vector([disp[self.Ux],disp[self.Uy]])
+    
+    def fixNode00(self, nodeTag):
+        '''Restrain all three node DOFs (i. e. make them zero).
+
+         :param nodeTag: node identifier.
+        '''
+        self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
+        self.constraints.newSPConstraint(nodeTag,1,0.0)
+
+    def fixNode0F(self, nodeTag):
+        '''Restrain only displacement DOFs (i. e. Ux= 0 and Uy= 0).
+
+         :param nodeTag: node identifier.
+        '''
+        self.constraints.newSPConstraint(nodeTag,0,0.0) # nodeTag, DOF, constrValue
+        
+    def fixNodeF0(self, nodeTag):
+        '''Restrain only displacement DOFs (i. e. Ux= 0 and Uy= 0).
+
+         :param nodeTag: node identifier.
+        '''
+        self.constraints.newSPConstraint(nodeTag,1,0.0) # nodeTag, DOF, constrValue
 
 def gdls_elasticidad2D(nodes):
     '''Defines the dimension of the space: nodes by two coordinates (x,y) and two DOF for each node (Ux,Uy)

@@ -142,15 +142,15 @@ class ShellMaterialInternalForces:
   def setFromAverageInShellElement(self,element,fConv= 1.0):
     '''Extracts the average internal forces from the element.'''
     element.getResistingForce()
-    mat= element.getPhysicalProperties.getVectorMaterials
-    self.n1= mat.getMeanGeneralizedStressByName("n1")*fConv
-    self.n2= mat.getMeanGeneralizedStressByName("n2")*fConv
-    self.n12= mat.getMeanGeneralizedStressByName("n12")*fConv
-    self.m1= mat.getMeanGeneralizedStressByName("m1")*fConv
-    self.m2= mat.getMeanGeneralizedStressByName("m2")*fConv
-    self.m12= mat.getMeanGeneralizedStressByName("m12")*fConv
-    self.q13= mat.getMeanGeneralizedStressByName("q13")*fConv
-    self.q23= mat.getMeanGeneralizedStressByName("q23")*fConv
+    physProp= element.getPhysicalProperties
+    self.n1= physProp.getMeanGeneralizedStressByName("n1")*fConv
+    self.n2= physProp.getMeanGeneralizedStressByName("n2")*fConv
+    self.n12= physProp.getMeanGeneralizedStressByName("n12")*fConv
+    self.m1= physProp.getMeanGeneralizedStressByName("m1")*fConv
+    self.m2= physProp.getMeanGeneralizedStressByName("m2")*fConv
+    self.m12= physProp.getMeanGeneralizedStressByName("m12")*fConv
+    self.q13= physProp.getMeanGeneralizedStressByName("q13")*fConv
+    self.q23= physProp.getMeanGeneralizedStressByName("q23")*fConv
     if(element.hasProp('theta')):
       theta= element.getProp('theta')
       self.transform(theta)

@@ -87,8 +87,10 @@ class MaterialVector: public std::vector<MAT *>, public CommandEntity, public Mo
     const Vector &getMeanGeneralizedStrain(void) const;
     double getMeanGeneralizedStrain(const int &defID) const;
     double getMeanGeneralizedStress(const int &defID) const;
-    double getMeanGeneralizedStrainByName(const std::string &) const;
-    double getMeanGeneralizedStressByName(const std::string &) const;
+    
+    Vector getGeneralizedStrainAtGaussPoints(const int &) const;
+    Vector getGeneralizedStressAtGaussPoints(const int &) const;
+    
     m_double getGeneralizedStrain(const int &defID) const;
     m_double getGeneralizedStress(const int &defID) const;
 
@@ -334,33 +336,25 @@ double MaterialVector<MAT>::getMeanGeneralizedStrain(const int &defID) const
     return retval;
   }
 
-//! @brief Returns the component of the average strain vector which has the code being passed as parameter.
-//! @param cod component code.
+//! @brief Returns the defID component of the strain vector at Gauss points.
+//! @param defID component index.
 template <class MAT>
-double MaterialVector<MAT>::getMeanGeneralizedStrainByName(const std::string &cod) const
+XC::Vector MaterialVector<MAT>::getGeneralizedStrainAtGaussPoints(const int &defID) const
   {
-    double retval= 0.0;
-    if(cod == "n1")
-      retval= this->getMeanGeneralizedStrain(MEMBRANE_RESPONSE_n1);
-    else if(cod == "n2")
-      retval= this->getMeanGeneralizedStrain(MEMBRANE_RESPONSE_n2);
-    else if(cod == "m1") //Bending around the axis 1.
-      retval= this->getMeanGeneralizedStrain(PLATE_RESPONSE_m1);
-    else if(cod == "m2") //Bending around the axis 2.
-      retval= this->getMeanGeneralizedStrain(PLATE_RESPONSE_m2);
-    else if(cod == "q13")
-      retval= this->getMeanGeneralizedStrain(PLATE_RESPONSE_q13);
-    else if(cod == "q23")
-      retval= this->getMeanGeneralizedStrain(PLATE_RESPONSE_q23);
-    else if(cod == "m12")
-      retval= this->getMeanGeneralizedStrain(PLATE_RESPONSE_m12);
-    else if(cod == "n12")
-      retval= this->getMeanGeneralizedStrain(MEMBRANE_RESPONSE_n12);
-    else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "stress code: '" << cod << " unknown." << std::endl;
+    const size_t nMat= this->size();
+    const ResponseId &code= (*this)[0]->getType();
+    const int order= code.Size();
+    Vector retval(nMat);
+    for(size_t i= 0;i<nMat;i++)
+      {
+        const Vector &e= (*this)[i]->getGeneralizedStrain(); //Strain at i-th Gauss point.
+        for(register int j= 0;j<order;j++) // Searching for the component.
+	  if(code(j) == defID)
+	    retval(i)= e(j);
+      }
     return retval;
   }
+
 
 //! @brief Returns the defID component of the average generalized stress vector.
 //! @param defID component index.
@@ -376,32 +370,23 @@ double MaterialVector<MAT>::getMeanGeneralizedStress(const int &defID) const
         retval+= f(i);
     return retval;
   }
-
-//! @brief Returns the component of the average generalized stress vector which corresponds to the code being passed as parameter.
-//! @param cod component code (n1,n2,n12,m1,m2,m12,q13,q23)
+ 
+//! @brief Returns the defID component of the stress vector at Gauss points.
+//! @param defID component index.
 template <class MAT>
-double MaterialVector<MAT>::getMeanGeneralizedStressByName(const std::string &cod) const
+XC::Vector MaterialVector<MAT>::getGeneralizedStressAtGaussPoints(const int &defID) const
   {
-    double retval= 0.0;
-    if(cod == "n1") //Esfuerzo axil medio per unit length, parallel to the axis 1.
-      retval= this->getMeanGeneralizedStress(MEMBRANE_RESPONSE_n1);
-    else if(cod == "n2") //Esfuerzo axil medio per unit length, parallel to the axis 2.
-      retval= this->getMeanGeneralizedStress(MEMBRANE_RESPONSE_n2);
-    else if(cod == "n12")
-      retval= this->getMeanGeneralizedStress(MEMBRANE_RESPONSE_n12);
-    else if(cod == "m1") //Flector medio per unit length, around the axis 1.
-      retval= this->getMeanGeneralizedStress(PLATE_RESPONSE_m1);
-    else if(cod == "m2") //Flector medio per unit length, around the axis 2.
-      retval= this->getMeanGeneralizedStress(PLATE_RESPONSE_m2);
-    else if(cod == "m12")
-      retval= this->getMeanGeneralizedStress(PLATE_RESPONSE_m12);
-    else if(cod == "q13")
-      retval= this->getMeanGeneralizedStress(PLATE_RESPONSE_q13);
-    else if(cod == "q23")
-      retval= this->getMeanGeneralizedStress(PLATE_RESPONSE_q23);
-    else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "stress code: '" << cod << " unknown." << std::endl;
+    const size_t nMat= this->size();
+    const ResponseId &code= (*this)[0]->getType();
+    const int order= code.Size();
+    Vector retval(nMat);
+    for(size_t i= 0;i<nMat;i++)
+      {
+        const Vector &e= (*this)[i]->getGeneralizedStress(); //Stress at i-th Gauss point.
+        for(register int j= 0;j<order;j++) // Searching for the component.
+	  if(code(j) == defID)
+	    retval(i)= e(j);
+      }
     return retval;
   }
 

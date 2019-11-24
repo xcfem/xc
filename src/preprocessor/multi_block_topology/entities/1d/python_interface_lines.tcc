@@ -23,7 +23,7 @@
 
 XC::Node *(XC::Edge::*getFirstNodePtr)(void)= &XC::Edge::getFirstNode;
 XC::Node *(XC::Edge::*getLastNodePtr)(void)= &XC::Edge::getLastNode;
-class_<XC::Edge, bases<XC::EntMdlr>, boost::noncopyable >("Edge","Base class for one-dimensional geometry objects." ,no_init)
+class_<XC::Edge, XC::Edge*, bases<XC::EntMdlr>, boost::noncopyable >("Edge","Base class for one-dimensional geometry objects." ,no_init)
   .add_property("nDiv", &XC::Edge::NDiv, &XC::Edge::setNDiv,"Number of divisions.")
   .def("setElemSize",&XC::Edge::SetElemSize,"Set the element size")
   .add_property("getNumVertices", &XC::Edge::getNumberOfVertices,"Return the number of vertices.")

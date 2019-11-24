@@ -59,6 +59,8 @@ class_<PhysicalProperties_SectionFDMat,  bases<XC::MovableObject>, boost::noncop
 class_<XC::SectionFDPhysicalProperties, bases<PhysicalProperties_SectionFDMat>, boost::noncopyable  >("SectionFDPhysicalProperties", no_init)
     .def("getMeanInternalForce",&XC::SectionFDPhysicalProperties::getMeanInternalForce)
     .def("getMeanInternalDeformation",&XC::SectionFDPhysicalProperties::getMeanInternalDeformation)
+    .def("getMeanGeneralizedStressByName", &XC::SectionFDPhysicalProperties::getMeanGeneralizedStressByName)
+    .def("getMeanGeneralizedStrainByName", &XC::SectionFDPhysicalProperties::getMeanGeneralizedStrainByName)
    ;
 
 

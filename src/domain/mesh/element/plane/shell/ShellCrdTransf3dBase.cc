@@ -101,7 +101,8 @@ Pos3d XC::ShellCrdTransf3dBase::getProj(const Pos3d &p)
 XC::Matrix XC::ShellCrdTransf3dBase::getLocalAxes(bool initialGeometry) const
   {
     if(!initialGeometry)
-      std::cerr << "ShellCrdTransf3dBase::getLocalAxes for deformed geometry not implemented."
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; for deformed geometry not implemented."
                 << std::endl;
     return getTrfMatrix();
   }
@@ -110,7 +111,8 @@ XC::Matrix XC::ShellCrdTransf3dBase::getLocalAxes(bool initialGeometry) const
 Ref2d3d XC::ShellCrdTransf3dBase::getLocalReference(bool initialGeometry) const
   {
     if(!initialGeometry)
-      std::cerr << "ShellCrdTransf3dBase::getLocalReference for deformed geometry not implemented."
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< ";  for deformed geometry not implemented."
                 << std::endl;
     const Vector &vO= getVPosCentroide();
     const Pos3d O(vO[0],vO[1],vO[2]);

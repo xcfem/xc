@@ -42,10 +42,6 @@ class_<material_vector_SectionFDMat,bases<vectorSectionForceDeformation,CommandE
   .def("revertToStart", &material_vector_SectionFDMat::revertToStart,"Returns the material to its initial state.")
   .def("getGeneralizedStresses", &material_vector_SectionFDMat::getGeneralizedStresses)
   .def("getGeneralizedStrains", &material_vector_SectionFDMat::getGeneralizedStrains)
-//.def("getMeanGeneralizedStress", &material_vector_SectionFDMat::getMeanGeneralizedStress)
-//.def("getMeanGeneralizedStrain", &material_vector_SectionFDMat::getMeanGeneralizedStrain)
-  .def("getMeanGeneralizedStressByName", &material_vector_SectionFDMat::getMeanGeneralizedStressByName)
-  .def("getMeanGeneralizedStrainByName", &material_vector_SectionFDMat::getMeanGeneralizedStrainByName)
   .def("getNames",&material_vector_SectionFDMat::getNamesPy,"Returns the names of the materials.")
   ;
 

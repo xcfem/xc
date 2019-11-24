@@ -328,8 +328,8 @@ class OutputHandler(object):
             for e in elSet:
                 if(e.getDimension==2):
                     e.getResistingForce()
-                    mat= e.getPhysicalProperties.getVectorMaterials
-                    e.setProp(propName,mat.getMeanGeneralizedStressByName(vCompDisp))
+                    physProp= e.getPhysicalProperties
+                    e.setProp(propName,physProp.getMeanGeneralizedStressByName(vCompDisp))
                 else:
                     lmsg.warning('OutputHandler::displayIntForc; not a 2D element; ignored.')
             unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()

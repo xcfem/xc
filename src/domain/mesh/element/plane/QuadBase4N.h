@@ -59,7 +59,10 @@ class QuadBase4N : public PlaneElement<4,PhysProp>
 
     void zeroLoad(void);	
     int addLoad(ElementalLoad *theLoad, double loadFactor);
-
+    
+    Matrix getTrfMatrix(void) const;
+    Matrix getLocalAxes(bool initialGeometry= true) const;
+    static Matrix &getExtrapolationMatrix(void);
   };
 
 //! @brief Constructor
@@ -198,6 +201,97 @@ template <class PhysProp>
 int XC::QuadBase4N<PhysProp>::getVtkCellType(void) const
   { return VTK_QUAD; }
 
+//! @brief Returns a matrix with the axes of the element as matrix rows
+//! [[x1,y1,z1],[x2,y2,z2],...·]
+template <class PhysProp>
+XC::Matrix XC::QuadBase4N<PhysProp>::getTrfMatrix(void) const
+  {
+    static Vector v1(2);
+    static Vector v2(2);
 
+    //get two vectors (v1, v2) in plane of shell by
+    // nodal coordinate differences
+
+    const NodePtrsWithIDs &theNodes= PlaneElement<4,PhysProp>::getNodePtrs();
+    const Vector &coor0= theNodes[0]->getCrds();
+    const Vector &coor1= theNodes[1]->getCrds();
+    const Vector &coor2= theNodes[2]->getCrds();
+    const Vector &coor3= theNodes[3]->getCrds();
+
+    v1.Zero( );
+    //v1= 0.5 * ( coor2 + coor1 - coor3 - coor0 );
+    v1= coor2;
+    v1+= coor1;
+    v1-= coor3;
+    v1-= coor0;
+    v1*= 0.50;
+
+    //normalize v1
+    //double length= LovelyNorm( v1 );
+    double length= v1.Norm( );
+    v1/= length;
+
+    v2.Zero( );
+    //v2= 0.5 * ( coor3 + coor2 - coor1 - coor0 );
+    v2= coor3;
+    v2+= coor2;
+    v2-= coor1;
+    v2-= coor0;
+    v2*= 0.50;
+
+    //Gram-Schmidt process for v2
+
+    //double alpha= LovelyInnerProduct( v2, v1 );
+    const double alpha= v2^v1;
+
+    //v2 -= alpha*v1;
+    static Vector temp(3);
+    temp= v1;
+    temp*= alpha;
+    v2-= temp;
+
+
+    //normalize v2
+    //length= LovelyNorm( v2 );
+    length= v2.Norm( );
+    v2/= length;
+
+    Matrix R(2,2);
+    // Fill in transformation matrix
+    R(0,0)= v1(0); R(0,1)= v1(1);
+    R(1,0)= v2(0); R(1,1)= v2(1);
+    return R;
+  }
+ 
+//! @brief Returns a matrix with the axes of the element as matrix rows
+//! [[x1,y1,z1],[x2,y2,z2],...·]
+template <class PhysProp>
+XC::Matrix XC::QuadBase4N<PhysProp>::getLocalAxes(bool initialGeometry) const
+  {
+    if(!initialGeometry)
+      std::cerr << this->getClassName() << "::" << __FUNCTION__
+	        << "; for deformed geometry not implemented."
+                << std::endl;
+    return getTrfMatrix();
+  }
+
+
+//! @brief Returns the matrix that can be used to extrapolate
+//! the results from the Gauss points to the element nodes.
+template <class PhysProp>
+XC::Matrix &XC::QuadBase4N<PhysProp>::getExtrapolationMatrix(void)
+  {
+    const double r3div2= sqrt(3)/2.0;
+    const double dg= 1.0+r3div2;
+    const double m= 1.0-r3div2;
+    static Matrix retval(4,4); // 4 nodes 4 gauss points
+    // Fill in transformation matrix
+    retval(0,0)= dg;   retval(0,1)= -0.5; retval(0,2)= m;  retval(0,3)= -0.5;  
+    retval(1,0)= -0.5; retval(1,1)= dg; retval(1,2)= -0.5; retval(1,3)= m;  
+    retval(2,0)= m;    retval(2,1)= -0.5; retval(2,2)= dg; retval(2,3)= -0.5;       retval(3,0)= -0.5; retval(3,1)= m; retval(3,2)= -0.5;  retval(3,3)= dg;  
+    return retval;
+    
+  }
+ 
 } // end of XC namespace
 #endif

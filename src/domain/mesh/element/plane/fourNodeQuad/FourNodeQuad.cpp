@@ -149,7 +149,7 @@ int XC::FourNodeQuad::update(void)
     u[0][3] = disp4(0);
     u[1][3] = disp4(1);
 
-    static XC::Vector eps(3);
+    static Vector eps(3);
 
     int ret = 0;
 
@@ -335,7 +335,9 @@ const XC::GaussModel &XC::FourNodeQuad::getGaussModel(void) const
 //! @brief Adds a load over element.
 int XC::FourNodeQuad::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
-    std::cerr << "XC::FourNodeQuad::addLoad - load type unknown for ele with tag: " << this->getTag() << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; load type unknown for ele with tag: "
+	      << this->getTag() << std::endl;
     return -1;
   }
 
@@ -359,7 +361,8 @@ int XC::FourNodeQuad::addInertiaLoadToUnbalance(const XC::Vector &accel)
 
     if(2 != Raccel1.Size() || 2 != Raccel2.Size() || 2 != Raccel3.Size() || 2 != Raccel4.Size())
       {
-        std::cerr << "XC::FourNodeQuad::addInertiaLoadToUnbalance matrix and vector sizes are incompatible\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; matrix and vector sizes are incompatible.\n";
         return -1;
       }
 

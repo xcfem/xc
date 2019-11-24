@@ -121,6 +121,116 @@ double XC::SectionFDPhysicalProperties::getMeanInternalDeformation(const std::st
     return retval;
   }
 
+//! @brief Returns the component of the average strain vector which has the code being passed as parameter.
+//! @param cod component code.
+double XC::SectionFDPhysicalProperties::getMeanGeneralizedStrainByName(const std::string &cod) const
+  {
+    double retval= 0.0;
+    if(cod == "n1")
+      retval= theMaterial.getMeanGeneralizedStrain(MEMBRANE_RESPONSE_n1);
+    else if(cod == "n2")
+      retval= theMaterial.getMeanGeneralizedStrain(MEMBRANE_RESPONSE_n2);
+    else if(cod == "m1") //Bending around the axis 1.
+      retval= theMaterial.getMeanGeneralizedStrain(PLATE_RESPONSE_m1);
+    else if(cod == "m2") //Bending around the axis 2.
+      retval= theMaterial.getMeanGeneralizedStrain(PLATE_RESPONSE_m2);
+    else if(cod == "q13")
+      retval= theMaterial.getMeanGeneralizedStrain(PLATE_RESPONSE_q13);
+    else if(cod == "q23")
+      retval= theMaterial.getMeanGeneralizedStrain(PLATE_RESPONSE_q23);
+    else if(cod == "m12")
+      retval= theMaterial.getMeanGeneralizedStrain(PLATE_RESPONSE_m12);
+    else if(cod == "n12")
+      retval= theMaterial.getMeanGeneralizedStrain(MEMBRANE_RESPONSE_n12);
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "stress code: '" << cod << " unknown." << std::endl;
+    return retval;
+  }
+
+//! @brief Returns the components of the strain vector which has the code being passed as parameter.
+//! @param cod component code.
+XC::Vector XC::SectionFDPhysicalProperties::getGeneralizedStrainAtGaussPointsByName(const std::string &cod) const
+  {
+    const size_t nMat= theMaterial.size();
+    Vector retval(nMat);
+    if(cod == "n1")
+      retval= theMaterial.getGeneralizedStrainAtGaussPoints(MEMBRANE_RESPONSE_n1);
+    else if(cod == "n2")
+      retval= theMaterial.getGeneralizedStrainAtGaussPoints(MEMBRANE_RESPONSE_n2);
+    else if(cod == "m1") //Bending around the axis 1.
+      retval= theMaterial.getGeneralizedStrainAtGaussPoints(PLATE_RESPONSE_m1);
+    else if(cod == "m2") //Bending around the axis 2.
+      retval= theMaterial.getGeneralizedStrainAtGaussPoints(PLATE_RESPONSE_m2);
+    else if(cod == "q13")
+      retval= theMaterial.getGeneralizedStrainAtGaussPoints(PLATE_RESPONSE_q13);
+    else if(cod == "q23")
+      retval= theMaterial.getGeneralizedStrainAtGaussPoints(PLATE_RESPONSE_q23);
+    else if(cod == "m12")
+      retval= theMaterial.getGeneralizedStrainAtGaussPoints(PLATE_RESPONSE_m12);
+    else if(cod == "n12")
+      retval= theMaterial.getGeneralizedStrainAtGaussPoints(MEMBRANE_RESPONSE_n12);
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "stress code: '" << cod << " unknown." << std::endl;
+    return retval;
+  }
+
+//! @brief Returns the component of the average generalized stress vector which corresponds to the code being passed as parameter.
+//! @param cod component code (n1,n2,n12,m1,m2,m12,q13,q23)
+double XC::SectionFDPhysicalProperties::getMeanGeneralizedStressByName(const std::string &cod) const
+  {
+    double retval= 0.0;
+    if(cod == "n1") //Esfuerzo axil medio per unit length, parallel to the axis 1.
+      retval= theMaterial.getMeanGeneralizedStress(MEMBRANE_RESPONSE_n1);
+    else if(cod == "n2") //Esfuerzo axil medio per unit length, parallel to the axis 2.
+      retval= theMaterial.getMeanGeneralizedStress(MEMBRANE_RESPONSE_n2);
+    else if(cod == "n12")
+      retval= theMaterial.getMeanGeneralizedStress(MEMBRANE_RESPONSE_n12);
+    else if(cod == "m1") //Flector medio per unit length, around the axis 1.
+      retval= theMaterial.getMeanGeneralizedStress(PLATE_RESPONSE_m1);
+    else if(cod == "m2") //Flector medio per unit length, around the axis 2.
+      retval= theMaterial.getMeanGeneralizedStress(PLATE_RESPONSE_m2);
+    else if(cod == "m12")
+      retval= theMaterial.getMeanGeneralizedStress(PLATE_RESPONSE_m12);
+    else if(cod == "q13")
+      retval= theMaterial.getMeanGeneralizedStress(PLATE_RESPONSE_q13);
+    else if(cod == "q23")
+      retval= theMaterial.getMeanGeneralizedStress(PLATE_RESPONSE_q23);
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "stress code: '" << cod << " unknown." << std::endl;
+    return retval;
+  }
+ 
+//! @brief Returns the components of the stress vector which has the code being passed as parameter.
+//! @param cod component code.
+XC::Vector XC::SectionFDPhysicalProperties::getGeneralizedStressAtGaussPointsByName(const std::string &cod) const
+  {
+    const size_t nMat= theMaterial.size();
+    Vector retval(nMat);
+    if(cod == "n1")
+      retval= theMaterial.getGeneralizedStressAtGaussPoints(MEMBRANE_RESPONSE_n1);
+    else if(cod == "n2")
+      retval= theMaterial.getGeneralizedStressAtGaussPoints(MEMBRANE_RESPONSE_n2);
+    else if(cod == "m1") //Bending around the axis 1.
+      retval= theMaterial.getGeneralizedStressAtGaussPoints(PLATE_RESPONSE_m1);
+    else if(cod == "m2") //Bending around the axis 2.
+      retval= theMaterial.getGeneralizedStressAtGaussPoints(PLATE_RESPONSE_m2);
+    else if(cod == "q13")
+      retval= theMaterial.getGeneralizedStressAtGaussPoints(PLATE_RESPONSE_q13);
+    else if(cod == "q23")
+      retval= theMaterial.getGeneralizedStressAtGaussPoints(PLATE_RESPONSE_q23);
+    else if(cod == "m12")
+      retval= theMaterial.getGeneralizedStressAtGaussPoints(PLATE_RESPONSE_m12);
+    else if(cod == "n12")
+      retval= theMaterial.getGeneralizedStressAtGaussPoints(MEMBRANE_RESPONSE_n12);
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "stress code: '" << cod << " unknown." << std::endl;
+    return retval;
+  }
+
 //! @brief check to see if have mass
 bool XC::SectionFDPhysicalProperties::haveRho(void) const
   {

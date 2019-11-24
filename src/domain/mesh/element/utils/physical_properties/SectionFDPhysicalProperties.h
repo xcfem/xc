@@ -44,6 +44,11 @@ class SectionFDPhysicalProperties : public PhysicalProperties<SectionForceDeform
 
     double getMeanInternalForce(const std::string &) const;
     double getMeanInternalDeformation(const std::string &) const;
+    double getMeanGeneralizedStrainByName(const std::string &) const;
+    double getMeanGeneralizedStressByName(const std::string &) const;
+    Vector getGeneralizedStrainAtGaussPointsByName(const std::string &) const;
+    Vector getGeneralizedStressAtGaussPointsByName(const std::string &) const;
+
 
     bool haveRho(void) const;
     Vector getRhoi(void) const;
