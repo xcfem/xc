@@ -24,8 +24,10 @@
 //Elasticity.
 
 material_vector_NDMat &(PhysicalProperties_NDMat::*getNDMatVector)(void) = &PhysicalProperties_NDMat::getMaterialsVector;
+void (PhysicalProperties_NDMat::*setMaterialPtr)(const XC::NDMaterial *)= &PhysicalProperties_NDMat::setMaterial;
 class_<PhysicalProperties_NDMat,  bases<XC::MovableObject>, boost::noncopyable >("PhysicalProperties_NDMat", no_init)
   .add_property("getVectorMaterials",make_function(getNDMatVector,return_internal_reference<>() ),"Returns materials at Gauss points.")
+  .def("setMaterial",setMaterialPtr,"Set material.")
    ;
 
 const XC::Vector &(XC::NDMaterialPhysicalProperties::*getCommittedStrainVector)(const size_t &) const= &XC::NDMaterialPhysicalProperties::getCommittedStrain;

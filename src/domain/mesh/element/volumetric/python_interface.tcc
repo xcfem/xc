@@ -24,9 +24,13 @@ typedef XC::ElementBase<8> element_base_8n;
 class_<element_base_8n, bases<XC::Element>, boost::noncopyable >("element_base_8n", no_init);
 
 typedef XC::ElemWithMaterial<8,XC::NDMaterialPhysicalProperties> brick_base_8n;
-class_<brick_base_8n, bases<element_base_8n>, boost::noncopyable >("brick_base_8n", no_init);
+class_<brick_base_8n, bases<element_base_8n>, boost::noncopyable >("brick_base_8n", no_init)  
+  ;
 
-class_<XC::BrickBase , bases<brick_base_8n>, boost::noncopyable >("BrickBase", no_init);
+XC::NDMaterialPhysicalProperties &(XC::BrickBase::*getPhysicalPropertiesPtr)(void) = &brick_base_8n::getPhysicalProperties;
+class_<XC::BrickBase , bases<brick_base_8n>, boost::noncopyable >("BrickBase", no_init)
+  .add_property("physicalProperties",make_function(getPhysicalPropertiesPtr,return_internal_reference<>() ),"Returns element physical propertis (material).")
+  ;
 
 typedef XC::ElementBase<20> element_base_20n;
 class_<element_base_20n, bases<XC::Element>, boost::noncopyable >("element_base_20n", no_init);

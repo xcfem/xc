@@ -21,6 +21,10 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
+class_<XC::ModelComponentContainerBase, bases<CommandEntity>, boost::noncopyable >("ModelComponentContainerBase", no_init)
+   .add_property("defaultTag", &XC::ModelComponentContainerBase::getTag, &XC::ModelComponentContainerBase::setTag)
+   ;
+
 typedef XC::ModelComponentContainer<XC::Pnt> cm_point_map;
 class_<cm_point_map, bases<XC::ModelComponentContainerBase>, boost::noncopyable >("CMPointMap", no_init)
   .def(XC::mapptr_indexing_suite<cm_point_map>() )
