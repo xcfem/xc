@@ -282,28 +282,32 @@ XC::Node *XC::EntMdlr::create_node(const Pos3d &pos,size_t i,size_t j, size_t k)
 void XC::EntMdlr::create_nodes(const Pos3dArray3d &positions)
   {
     const size_t n_layers= positions.getNumberOfLayers();
-    if(n_layers<1) return;
-    if(ttzNodes.Null())
+    if(n_layers>0)
       {
-        const size_t n_rows= positions(1).getNumberOfRows();
-        const size_t cols= positions(1).getNumberOfColumns();
-        ttzNodes = NodePtrArray3d(n_layers,n_rows,cols);
+	if(ttzNodes.Null())
+	  {
+	    const size_t n_rows= positions(1).getNumberOfRows();
+	    const size_t n_cols= positions(1).getNumberOfColumns();
+	    ttzNodes = NodePtrArray3d(n_layers,n_rows,n_cols);
 
-        if(!getPreprocessor()) return;
-        for(register size_t i= 1;i<=n_layers;i++)
-          for(register size_t j= 1;j<=n_rows;j++)
-            for(register size_t k= 1;k<=cols;k++)
-              create_node(positions(i,j,k),i,j,k);
-        if(verbosity>5)
-	  std::cerr << getClassName() << "::" << __FUNCTION__
-		    << "; created " << ttzNodes.NumPtrs() << " node(s)."
-		    << std::endl;
+	    if(getPreprocessor())
+	      {
+		for(register size_t i= 1;i<=n_layers;i++)
+		  for(register size_t j= 1;j<=n_rows;j++)
+		    for(register size_t k= 1;k<=n_cols;k++)
+		      create_node(positions(i,j,k),i,j,k);
+		if(verbosity>5)
+		  std::cerr << getClassName() << "::" << __FUNCTION__
+			    << "; created " << ttzNodes.NumPtrs() << " node(s)."
+			    << std::endl;
+	      }
+	  }
+	else
+	  if(verbosity>2)
+	    std::clog << getClassName() << "::" << __FUNCTION__
+		      << "; nodes from entity: '" << getName()
+		      << "' already exist." << std::endl;
       }
-    else
-      if(verbosity>2)
-        std::clog << getClassName() << "::" << __FUNCTION__
-	          << "; nodes from entity: '" << getName()
-		  << "' already exist." << std::endl;
   }
 
 //! @brief Creates elements on the nodes created
