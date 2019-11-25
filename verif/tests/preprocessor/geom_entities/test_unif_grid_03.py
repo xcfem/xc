@@ -21,19 +21,6 @@ ndivZ= 2
 # Problem type
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-# Define materials
-elast3d= typical_materials.defElasticIsotropic3d(preprocessor, "elast3d",30e6,0.3,0.0)
-
-nodes= preprocessor.getNodeHandler
-modelSpace= predefined_spaces.SolidMechanics3D(nodes)
-
-
-nodes.newSeedNode()
-seedElemHandler= preprocessor.getElementHandler.seedElemHandler
-seedElemHandler.defaultMaterial= "elast3d"
-seedElemHandler.dimElem= 3 # Dimension of element space
-seedElemHandler.defaultTag= 1 #Tag for the next element.
-brick= seedElemHandler.newElement("Brick",xc.ID([0,0,0,0,0,0,0,0]))
 
 unifGrids= preprocessor.getMultiBlockTopology.getUniformGrids
 uGrid= unifGrids.newUniformGrid()
@@ -45,6 +32,19 @@ uGrid.nDivX= ndivX
 uGrid.nDivY= ndivY
 uGrid.nDivZ= ndivZ
 
+# Define materials
+elast3d= typical_materials.defElasticIsotropic3d(preprocessor, "elast3d",30e6,0.3,0.0)
+
+nodes= preprocessor.getNodeHandler
+modelSpace= predefined_spaces.SolidMechanics3D(nodes)
+
+# Mesh generation
+nodes.newSeedNode()
+seedElemHandler= preprocessor.getElementHandler.seedElemHandler
+seedElemHandler.defaultMaterial= "elast3d"
+seedElemHandler.dimElem= 3 # Dimension of element space
+seedElemHandler.defaultTag= 1 #Tag for the next element.
+brick= seedElemHandler.newElement("Brick",xc.ID([0,0,0,0,0,0,0,0]))
 
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)
