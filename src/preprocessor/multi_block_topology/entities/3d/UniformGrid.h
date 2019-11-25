@@ -76,18 +76,18 @@ class UniformGrid: public EntMdlr
     inline double getLz(void) const
       { return Lz; }
 
-    inline void setNDivX(const size_t &l)
-      { ndiv_x= l; }
+    inline void setNDivX(const size_t &n)
+      { ndiv_x= n; }
     inline size_t getNDivX(void) const
-      { return Lx; }
-    inline void setNDivY(const size_t &l)
-      { ndiv_y= l; }
+      { return ndiv_x; }
+    inline void setNDivY(const size_t &n)
+      { ndiv_y= n; }
     inline size_t getNDivY(void) const
-      { return Ly; }
-    inline void setNDivZ(const size_t &l)
-      { ndiv_z= l; }
+      { return ndiv_y; }
+    inline void setNDivZ(const size_t &n)
+      { ndiv_z= n; }
     inline size_t getNDivZ(void) const
-      { return Lz; }
+      { return ndiv_z; }
 
     virtual BND3d Bnd(void) const;
     Pos3d getCenter(void) const;
