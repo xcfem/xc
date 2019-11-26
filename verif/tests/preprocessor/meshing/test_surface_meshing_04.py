@@ -25,12 +25,13 @@ area= 0
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
+nodes= preprocessor.getNodeHandler
+modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 matPrb= typical_materials.defElasticMembranePlateSection(preprocessor, "matPrb",E,nu,rho,0.25)
 
-nodes= preprocessor.getNodeHandler
-nodes.newSeedNode()
+
 
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= "matPrb"

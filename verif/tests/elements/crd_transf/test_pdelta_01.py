@@ -46,7 +46,7 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
-nodes.newSeedNode()
+
 
 # Materials definition
 scc= typical_materials.defElasticSection2d(preprocessor, "scc",area,Es,Iz)

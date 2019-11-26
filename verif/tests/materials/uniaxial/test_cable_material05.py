@@ -33,7 +33,7 @@ nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
 # Model definition
-nodes.newSeedNode()
+
 
     
 # Define materials

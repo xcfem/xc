@@ -40,7 +40,7 @@ modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
 # Define materials
 kY= typical_materials.defElastNoTensMaterial(preprocessor, "kY",k*L/numDiv)
-nodes.newSeedNode()
+
 # Geometric transformations
 lin= modelSpace.newLinearCrdTransf("lin")
 scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)

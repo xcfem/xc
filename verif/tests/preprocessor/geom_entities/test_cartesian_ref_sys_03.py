@@ -26,7 +26,6 @@ rs= geom.Ref3d3d(pt1.getPos,pt2.getPos,pt3.getPos)
 p= rs.getPosGlobal(geom.Pos3d(7, 0, 0))
 
 nodes= preprocessor.getNodeHandler
-nodes.defaultTag= 1 #First node number.
 nod1= nodes.newNodeXYZ(p.x,p.y,p.z)
 coord= nod1.getCoo
 

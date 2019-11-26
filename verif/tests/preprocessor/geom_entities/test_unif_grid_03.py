@@ -39,7 +39,7 @@ nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 
 # Mesh generation
-nodes.newSeedNode()
+
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= "elast3d"
 seedElemHandler.dimElem= 3 # Dimension of element space

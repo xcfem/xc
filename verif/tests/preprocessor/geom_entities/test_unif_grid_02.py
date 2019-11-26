@@ -27,7 +27,7 @@ nodes= preprocessor.getNodeHandler
 
 nodes.dimSpace= 3 # 3 coordinates for each node.
 nodes.numDOFs= 2 # Two degrees of freedom for each node.
-nodes.newSeedNode()
+
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= "elast2d"
 seedElemHandler.dimElem= 3 # Dimension of element space

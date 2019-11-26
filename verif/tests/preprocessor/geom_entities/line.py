@@ -28,7 +28,7 @@ modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 # Material
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
-nodes.newSeedNode()
+
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.dimElem= 3 #Bars defined in a three dimensional space.
 seedElemHandler.defaultMaterial= "elast"

@@ -31,7 +31,7 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
-nodes.newSeedNode()
+
 # Materials definition
 matPrb= typical_materials.defElasticMembranePlateSection(preprocessor, "matPrb",E,nu,rho,0.25)
 

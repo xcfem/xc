@@ -32,7 +32,7 @@ modelSpace= predefined_spaces.SolidMechanics3D(nodes)
 # Define materials
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
-nodes.newSeedNode()
+
 
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= "elast"
@@ -75,17 +75,17 @@ l2.genMesh(xc.meshDir.I)
 
 nnodes= l1.getNumNodes+l2.getNumNodes-1
 nodes= preprocessor.getNodeHandler
-nod3= nodes.getNode(3)
-x3= nod3.get3dCoo[0]
-y3= nod3.get3dCoo[1]
-nod5= nodes.getNode(5)
-x5= nod5.get3dCoo[0]
-y5= nod5.get3dCoo[1]
+nod2= nodes.getNode(2)
+x2= nod2.get3dCoo[0]
+y2= nod2.get3dCoo[1]
+nod4= nodes.getNode(4)
+x4= nod4.get3dCoo[0]
+y4= nod4.get3dCoo[1]
 
 
 nnodteor= 2*NumDiv+1
 ratio1= (nnodteor/nnodes)
-ratio2= (y5-x3)**2+(y3-x5)**2
+ratio2= (y4-x2)**2+(y2-x4)**2
 
 ''' 
 print "ratio1= ",(ratio1)

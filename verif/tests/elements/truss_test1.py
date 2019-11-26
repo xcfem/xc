@@ -28,10 +28,10 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
-n1= nodes.newNodeXYZ(0,0,0)
-n2= nodes.newNodeXYZ(0,l-a-b,0)
-n3= nodes.newNodeXYZ(0,l-a,0)
-n4= nodes.newNodeXYZ(0,l,0)
+n1= nodes.newNodeXY(0,0)
+n2= nodes.newNodeXY(0,l-a-b)
+n3= nodes.newNodeXY(0,l-a)
+n4= nodes.newNodeXY(0,l)
 
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 

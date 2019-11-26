@@ -51,7 +51,7 @@ s.nDivI= 1
 s.nDivJ= NumDiv
 
 
-nodes.newSeedNode()
+
 
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= "elast"

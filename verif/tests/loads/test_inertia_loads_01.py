@@ -36,9 +36,8 @@ nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
-#nodes.defaultTag= 1 #First node number.
-n1= nodes.newNodeXYZ(0,0,0)
-n2= nodes.newNodeXYZ(l,0,0)
+n1= nodes.newNodeXY(0,0)
+n2= nodes.newNodeXY(l,0)
 
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)

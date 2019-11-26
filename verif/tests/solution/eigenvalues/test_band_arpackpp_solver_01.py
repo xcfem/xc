@@ -37,7 +37,7 @@ modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 
-nodes.newSeedNode()
+
 
 # Geometric transformation(s)
 lin= modelSpace.newLinearCrdTransf("lin")

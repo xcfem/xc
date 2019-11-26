@@ -34,9 +34,9 @@ nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
 #nodes.defaultTag= 1 #First node number.
-n1= nodes.newNodeXYZ(0,0,0)
-n2= nodes.newNodeXYZ(a/2,-b,0)
-n3= nodes.newNodeXYZ(a,0,0)
+n1= nodes.newNodeXY(0,0)
+n2= nodes.newNodeXY(a/2,-b)
+n3= nodes.newNodeXY(a,0)
 
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)

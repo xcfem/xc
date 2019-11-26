@@ -28,8 +28,8 @@ nodes.dimSpace= 1 # One coordinate for each node.
 nodes.numDOFs= 1 # One degree of freedom for each node.
 
 nodes.defaultTag= 1 #First node number.
-nod= nodes.newNodeXY(1,0)
-nod= nodes.newNodeXY(1.0+l,0)
+nod= nodes.newNodeX(1)
+nod= nodes.newNodeX(1.0+l)
 
 # Materials definition
 concrAux= EHE_materials.HA25

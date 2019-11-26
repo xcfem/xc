@@ -42,7 +42,7 @@ feProblem.logFileName= "/tmp/erase.log" # Don't pring warnings
 nodes= preprocessor.getNodeHandler
 
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
-nodes.newSeedNode()
+
 
 
 # Define materials

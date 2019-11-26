@@ -32,7 +32,7 @@ nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 
-nodes.newSeedNode()
+
 
 # Define materials
 typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,0.0)

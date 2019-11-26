@@ -27,7 +27,7 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 
 nodes= preprocessor.getNodeHandler
 modelSpace= predefined_spaces.SolidMechanics3D(nodes)
-nodes.newSeedNode()
+
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= "elast"
 seedElemHandler.dimElem= 3 # Dimension of element space

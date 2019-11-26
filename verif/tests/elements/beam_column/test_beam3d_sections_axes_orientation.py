@@ -44,6 +44,7 @@ from materials.sia262 import SIA262_limit_state_checking
 from model import model_inquiry as minq
 from misc import matrixUtils
 from postprocess.control_vars import *
+from postprocess.config import default_config
 import logging
 
 #Hide INFO messages from modules.
@@ -207,7 +208,9 @@ lcZbeam.newNodalLoad(3,xc.Vector([F/math.sqrt(2),-F/math.sqrt(2),0,M/math.sqrt(2
 combContainer= combs.CombContainer()
 combContainer.ULS.perm.add('allLoads', '1.0*lcXbeam+1.0*lcYbeam+1.0*lcZbeam')
 totalSet= preprocessor.getSets.getSet('total')
-lsd.LimitStateData.internal_forces_results_directory= '/tmp/'
+cfg=default_config.EnvConfig(language='en',intForcPath= '',verifPath= '',annexPath= 'annex/',grWidth='120mm')
+cfg.projectDirTree.workingDirectory= '/tmp/'
+lsd.LimitStateData.envConfig= cfg
 lsd.normalStressesResistance.saveAll(feProblem,combContainer,totalSet) 
 
 # Spatial distribution of reinforced concrete sections.
@@ -216,7 +219,6 @@ reinfConcreteSectionDistribution.assign(elemSet=totalSet.getElements,setRCSects=
 #Checking normal stresses.
 limitStateLabel= lsd.normalStressesResistance.label
 lsd.normalStressesResistance.controller= SIA262_limit_state_checking.BiaxialBendingNormalStressController(limitStateLabel)
-lsd.LimitStateData.check_results_directory= '/tmp/'
 lsd.normalStressesResistance.outputDataBaseFileName= 'resVerif'
 
 # Using runChecking method we create the phantom model and run the checking on it. Unlike other check methods that also creates the phantom model this one doesn't clear the model after carrying out the verification. This method returns a tuple with the FE model (phantom model) and the result of verification

@@ -34,7 +34,7 @@ preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
-nodes.newSeedNode()
+
 
 # Materials definition
 typical_materials.defCableMaterial(preprocessor, "cable",E,sigmaPret,Mass)

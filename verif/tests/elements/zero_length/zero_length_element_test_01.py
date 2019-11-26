@@ -25,8 +25,8 @@ nodeHandler= preprocessor.getNodeHandler
 nodeHandler.dimSpace= 1 # One coordinate for each node.
 nodeHandler.numDOFs= 1 # One degree of freedom for each node.
 
-n1= nodeHandler.newNodeXY(1,0)
-n2= nodeHandler.newNodeXY(1.0+l,0)
+n1= nodeHandler.newNodeX(1)
+n2= nodeHandler.newNodeX(1.0+l)
 
 # Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",K)

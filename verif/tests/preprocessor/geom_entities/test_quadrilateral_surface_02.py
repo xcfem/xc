@@ -34,7 +34,7 @@ modelSpace= predefined_spaces.SolidMechanics2D(nodes)# Materials definition
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
 
-nodes.newSeedNode()
+
 
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= "elast2d"
