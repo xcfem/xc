@@ -613,7 +613,6 @@ class RetainingWall(retaining_wall_geometry.CantileverRetainingWallGeometry):
   def genMesh(self,nodes,springMaterials):
     '''Generate finite element mesh.'''
     self.defineWireframeModel(nodes)
-    nodes.newSeedNode()
     preprocessor= self.modelSpace.preprocessor    
     trfs= preprocessor.getTransfCooHandler
     transformationName= self.name+'LinearTrf'
