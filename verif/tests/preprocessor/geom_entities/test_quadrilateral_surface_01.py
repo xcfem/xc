@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import division
+from __future__ import print_function
+
 import xc_base
 import geom
 import xc
@@ -17,6 +19,8 @@ __email__= "l.pereztato@gmail.com"
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
+# Problem type
+modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
 feProblem.logFileName= "/tmp/erase.log" # Nicely avoid warning messages.
 NumDivI= 3
@@ -26,10 +30,8 @@ E= 30e6 # Young modulus (psi)
 nu= 0.3 # Poisson's ratio
 rho= 0.0 # Density
 
-# Problem type
-modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 
-nodes.newSeedNode()
+
 
 elast= typical_materials.defElasticMaterial(preprocessor, "elast",3000)
 elast2d= typical_materials.defElasticIsotropicPlaneStress(preprocessor, "elast2d",E,nu,rho)
@@ -107,7 +109,7 @@ import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<=1e-10) & (ratio2<=1e-10) & (ratio3<=1e-10) & (ratio4<=1e-10) & (ratio5<=1e-10):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 
