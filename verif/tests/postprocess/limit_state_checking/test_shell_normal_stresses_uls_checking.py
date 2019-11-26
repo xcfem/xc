@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+from __future__ import division
+
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2015, LCPT and AO_O"
 __license__= "GPL"
@@ -16,6 +19,8 @@ from materials.sections import RCsectionsContainer as sc
 from solution import predefined_solutions
 from materials.sia262 import SIA262_limit_state_checking #Change SIA262->EHE
 from postprocess import limit_state_data as lsd
+from postprocess.config import default_config
+import shutil
 
 import logging
 
@@ -62,18 +67,23 @@ deckSections.dir1NegatvRebarRows= [defSimpleRCSection.MainReinfLayer(rebarsDiam=
 deckSections.creaTwoSections()
 sections.append(deckSections)
 
-
 import os
 pth= os.path.dirname(__file__)
 #print "pth= ", pth
 if(not pth):
   pth= "."
+fname= os.path.basename(__file__)
 
 #Checking normal stresses.
 lsd.normalStressesResistance.controller= SIA262_limit_state_checking.BiaxialBendingNormalStressController('ULS_normalStress')
-lsd.LimitStateData.internal_forces_results_directory= pth+'/'
-lsd.LimitStateData.check_results_directory= '/tmp/'
-lsd.normalStressesResistance.outputDataBaseFileName= 'ppTN'
+cfg=default_config.EnvConfig(language='en',intForcPath= 'results/internalForces/',verifPath= 'results/verifications/',annexPath= 'annex/',grWidth='120mm')
+cfg.projectDirTree.workingDirectory= '/tmp/'+os.path.splitext(fname)[0]
+cfg.projectDirTree.createTree()
+lsd.LimitStateData.envConfig= cfg
+shutil.copy(pth+'/intForce_ULS_normalStressesResistance.csv',lsd.normalStressesResistance.getInternalForcesFileName())
+#lsd.LimitStateData.internal_forces_results_directory= pth+'/'
+#lsd.LimitStateData.check_results_directory= '/tmp/'
+#lsd.normalStressesResistance.outputDataBaseFileName= 'ppTN'
 #intForceFileName= lsd.normalStressesResistance.getInternalForcesFileName()
 
 outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')
@@ -98,8 +108,7 @@ print "ratio2= ",ratio2
 feProblem.errFileName= "cerr" # Display errors if any.
 import os
 from miscUtils import LogMessages as lmsg
-fname= os.path.basename(__file__)
 if (ratio1<0.01) & (ratio2<0.01):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

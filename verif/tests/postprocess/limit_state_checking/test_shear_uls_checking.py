@@ -22,6 +22,7 @@ from actions import combinations as combs
 from postprocess import limit_state_data as lsd
 from postprocess import RC_material_distribution
 from materials.sections.fiber_section import defSimpleRCSection
+from postprocess.config import default_config
 import sys
 import logging
 
@@ -87,7 +88,9 @@ lPatterns.addToDomain(lp0.getName())
 combContainer= combs.CombContainer()
 combContainer.ULS.perm.add('allLoads', '1.0*lp0')
 totalSet= preprocessor.getSets.getSet('total')
-lsd.LimitStateData.internal_forces_results_directory= '/tmp/'
+cfg=default_config.EnvConfig(language='en',intForcPath= '',verifPath= '',annexPath= 'annex/',grWidth='120mm')
+cfg.projectDirTree.workingDirectory= '/tmp/'
+lsd.LimitStateData.envConfig= cfg
 lsd.shearResistance.saveAll(feProblem,combContainer,totalSet) 
 
 # Define available sections for the elements (spatial distribution of RC sections).
@@ -126,7 +129,6 @@ reinfConcreteSectionDistribution.assign(elemSet=totalSet.getElements,setRCSects=
 #Checking shear.
 lsd.shearResistance.controller= EHE_limit_state_checking.ShearController(limitStateLabel= lsd.shearResistance.label)
 lsd.shearResistance.controller.analysisToPerform= predefined_solutions.simple_newton_raphson
-lsd.LimitStateData.check_results_directory= '/tmp/'
 lsd.normalStressesResistance.outputDataBaseFileName= 'resVerif'
 
 outCfg= lsd.VerifOutVars(listFile='N',calcMeanCF='Y')

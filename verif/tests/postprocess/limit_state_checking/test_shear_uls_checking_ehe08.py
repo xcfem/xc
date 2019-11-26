@@ -12,9 +12,10 @@ from postprocess import limit_state_data
 from postprocess import RC_material_distribution
 from postprocess import element_section_map
 from postprocess import phantom_model
+from postprocess.config import default_config
 from solution import predefined_solutions
 from miscUtils import LogMessages as lmsg
-
+import shutil
 
 
 diamPilas=1.0
@@ -51,8 +52,8 @@ preprocessor=  feProblem.getPreprocessor
 nodeHandler= preprocessor.getNodeHandler
 nodeHandler.dimSpace= 1 # One coordinate for each node.
 nodeHandler.numDOFs= 1 # One degree of freedom for each node.
-n1= nodeHandler.newNodeXY(1,0)
-n2= nodeHandler.newNodeXY(2,0)
+n1= nodeHandler.newNodeX(1)
+n2= nodeHandler.newNodeX(2)
 elementHandler= preprocessor.getElementHandler
 elementHandler.dimElem= 1 #Bars defined in a two dimensional space.
 fakeMaterial= typical_materials.defElasticMaterial(preprocessor, "fakeMaterial",10)
@@ -86,13 +87,19 @@ pth= os.path.dirname(__file__)
 #print "pth= ", pth
 if(not pth):
   pth= "."
+fname= os.path.basename(__file__)
 
 limit_state_data.shearResistance.controller= EHE_limit_state_checking.ShearController(limitStateLabel= limit_state_data.shearResistance.label)
 limit_state_data.shearResistance.controller.verbose= False # Don't display log messages.
 limit_state_data.shearResistance.controller.analysisToPerform=custom_newton_raphson
-limit_state_data.LimitStateData.internal_forces_results_directory= pth+'/'
-limit_state_data.LimitStateData.check_results_directory= '/tmp/'
-limit_state_data.normalStressesResistance.outputDataBaseFileName= 'resVerif'
+cfg=default_config.EnvConfig(language='en',intForcPath= 'results/internalForces/',verifPath= 'results/verifications/',annexPath= 'annex/',grWidth='120mm')
+cfg.projectDirTree.workingDirectory= '/tmp/'+os.path.splitext(fname)[0]
+cfg.projectDirTree.createTree()
+limit_state_data.LimitStateData.envConfig= cfg
+shutil.copy(pth+'/intForce_ULS_shearResistance.csv',limit_state_data.shearResistance.getInternalForcesFileName())
+#limit_state_data.LimitStateData.internal_forces_results_directory= pth+'/'
+#limit_state_data.LimitStateData.check_results_directory= '/tmp/'
+#limit_state_data.normalStressesResistance.outputDataBaseFileName= 'resVerif'
 
 outCfg= limit_state_data.VerifOutVars(listFile='N',calcMeanCF='Y')
 
@@ -109,7 +116,6 @@ print("ratio2= ",ratio2)
 
 import os
 from miscUtils import LogMessages as lmsg
-fname= os.path.basename(__file__)
 if (ratio1<1e-4) and (ratio2<1e-4):
   print "test ",fname,": ok."
 else:
