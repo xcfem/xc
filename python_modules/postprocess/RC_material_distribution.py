@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+from __future__ import division
+
 import element_section_map
 import pickle
 from miscUtils import LogMessages as lmsg
@@ -73,7 +76,7 @@ class RCMaterialDistribution(object):
     if tagElem in self.sectionDistribution.keys():
       return self.sectionDistribution[tagElem]
     else:
-      lmsg.error("element with tag: "+str(tagElem)+" not found.")
+      lmsg.error("RCMaterialDistribution::getSectionNamesForElement; element with tag: "+str(tagElem)+" not found.")
       return None
 
   def getSectionDefinition(self,sectionName):

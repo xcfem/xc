@@ -151,10 +151,10 @@ class SectionProperties(object):
     '''
     materiales= preprocessor.getMaterialHandler
     if(materiales.materialExists(self.sectionName)):
-      sys.stderr.write("Section: "+self.sectionName+" is already defined.")
+      sys.stderr.write("section: "+self.sectionName+" is already defined.")
     else:
       retval= typical_materials.defElasticShearSection3d(preprocessor,self.sectionName,self.A(),material.E,material.G(),self.Iz(),self.Iy(),self.J(),self.alphaY(), rho= material.rho)
-      return retval
+    return retval
     
   def defElasticSection2d(self,preprocessor,material):
     '''elastic section appropiate for 2D beam analysis, including shear deformations
