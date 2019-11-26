@@ -17,7 +17,6 @@ from materials import buckling_base
 
 class ASTMSteel(steel_base.BasicSteel):
     '''ASTM structural steel.'''
-    rho= 7850 # kg/m3
     def __init__(self, fy= 250e6, fu= 400e6, gammaM= 1.0):
         super(ASTMSteel,self).__init__(200e9,0.3,fy,fu,gammaM)
 

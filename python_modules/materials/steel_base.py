@@ -13,18 +13,20 @@ from materials import typical_materials
 from miscUtils import LogMessages as lmsg
 
 class BasicSteel(typical_materials.BasicElasticMaterial):
-  '''Base class for structural steels.
+    '''Base class for structural steels.
 
-    :ivar fy:  Yield stress.
-    :ivar fu: ultimate stress.
-    :ivar gammaM: partial factor for cross-section resistance.
-  '''
+      :ivar rho: material density
+      :ivar fy:  Yield stress.
+      :ivar fu: ultimate stress.
+      :ivar gammaM: partial factor for cross-section resistance.
+    '''
+    rho= 7850 # kg/m3
 
-  def __init__(self, E, nu, fy, fu, gammaM):
-    super(BasicSteel,self).__init__(E,nu)
-    self.fy= fy
-    self.fu= fu
-    self.gammaM= gammaM
+    def __init__(self, E, nu, fy, fu, gammaM):
+        super(BasicSteel,self).__init__(E,nu)
+        self.fy= fy
+        self.fu= fu
+        self.gammaM= gammaM
 
-  def fyd(self):
-    return self.fy/self.gammaM
+    def fyd(self):
+        return self.fy/self.gammaM
