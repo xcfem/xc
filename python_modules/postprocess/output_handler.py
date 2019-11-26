@@ -596,7 +596,7 @@ class OutputHandler(object):
             else:
                 descrSet=''
             caption= attributeName + ', ' + itemToDisp + '. '+ descrSet
-        diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= fConvUnits,sets=[beamSetDispRes],attributeName= attributeName,component= itemToDisp)
+        diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[beamSetDispRes],attributeName= attributeName,component= itemToDisp)
         diagram.addDiagram()
         defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
         defDisplay.cameraParameters= self.getCameraParameters()
