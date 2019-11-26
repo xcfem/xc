@@ -52,6 +52,11 @@ class ProjectDirTree(object):
         self.verifPath= verifPath
         self.annexPath= annexPath
 
+    def getInternalForcesResultsPath(self):
+        ''' Return the path for the files that contains
+            the internal forces.'''
+        return self.workingDirectory+'/'+self.intForcPath
+    
     def getFullVerifPath(self):
         return self.workingDirectory+'/'+self.verifPath
     def getFullReportPath(self):
@@ -112,13 +117,14 @@ class ProjectDirTree(object):
     def getPathList(self):
         ''' Create the project directory tree.'''
         retval= list()
+        retval.append(self.getInternalForcesResultsPath())
         retval.append(self.getFullVerifPath())
         retval.append(self.getFullReportPath())
         retval.append(self.getFullGraphicsPath())
-        retval.append(self.getReportSectionsFile(self))
-        retval.append(self.getReportSectionsGrPath(self))
-        retval.append(self.getReportLoadsFile(self))
-        retval.append(self.getReportLoadsGrPath(self))
+        retval.append(self.getReportSectionsFile())
+        retval.append(self.getReportSectionsGrPath())
+        retval.append(self.getReportLoadsFile())
+        retval.append(self.getReportLoadsGrPath())
         retval.append(self.getReportNormStrGrPath())
         retval.append(self.getReportShearGrPath())
         retval.append(self.getReportCrackFreqGrPath())
@@ -136,7 +142,7 @@ class ProjectDirTree(object):
 
 
 
-class envConfig(output_styles.OutputStyle):
+class EnvConfig(output_styles.OutputStyle):
     '''Generic configuration of XC environment variables.
 
        :ivar grWidth: size of the graphics to be included in the annex          
@@ -153,7 +159,7 @@ class envConfig(output_styles.OutputStyle):
         :param grWidth: size of the graphics to be included in the annex
                             
         '''
-        super(envConfig,self).__init__(language= language)
+        super(EnvConfig,self).__init__(language= language)
         #default names of files with data for FE model generation, results of
         #limit state verifications, ..
         self.projectDirTree= ProjectDirTree(intForcPath,verifPath,annexPath)
@@ -164,31 +170,6 @@ class envConfig(output_styles.OutputStyle):
         # self.intForcPath=intForcPath
         # self.verifPath=verifPath
 
-        # All these variables will be DEPRECATED in a future version
-        # of the module
-        self.verifNormStrFile= self.projectDirTree.getVerifNormStrFile()
-        self.reportNormStrFile= self.projectDirTree.getReportNormStrFile()
-        self.reportNormStrGrPath= self.projectDirTree.getReportNormStrGrPath()
-        
-        self.verifShearFile= self.projectDirTree.getVerifShearFile()
-        self.reportShearFile= self.projectDirTree.getReportShearFile()
-        self.reportShearFile= self.projectDirTree.getReportShearGrPath()
-        
-        self.verifCrackFreqFile= self.projectDirTree.getVerifCrackFreqFile()
-        self.reportCrackFreqFile= self.projectDirTree.getReportCrackFreqFile()
-        self.reportCrackFreqFile= self.projectDirTree.getReportCrackFreqGrPath()
-        
-        self.verifCrackQpermFile= self.projectDirTree.getVerifCrackQpermFile()
-        self.reportCrackQpermFile= self.projectDirTree.getReportCrackQpermFile()
-        self.reportCrackQpermFile= self.projectDirTree.getReportCrackQpermGrPath()
-        
-        self.verifFatigueFile= self.projectDirTree.getVerifFatigueFile()
-        self.reportFatigueFile= self.projectDirTree.getReportFatigueFile()
-        self.reportFatigueFile= self.projectDirTree.getReportFatigueGrPath()
-
-        self.reportSimplLCFile= self.projectDirTree.getReportSimplLCFile()
-        self.reportSimplLCFile= self.projectDirTree.getReportSimplLCGrPath()
-        # End of the variables to deprecate
 
         self.capTexts= self.getCaptionTextsDict()
         self.colors=setBasicColors
