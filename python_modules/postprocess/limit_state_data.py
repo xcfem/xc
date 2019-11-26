@@ -44,8 +44,7 @@ class VerifOutVars(object):
         self.calcMeanCF=calcMeanCF
 
 class LimitStateData(object):
-    check_results_directory= './' #Path to verifRsl* files.
-    internal_forces_results_directory= './' #Path to esf_el* f
+    envConfig= None
     def __init__(self,limitStateLabel,outputDataBaseFileName):
         '''Limit state data constructor
         label; limit state check label; Something like "Fatigue" or "CrackControl"
@@ -58,14 +57,14 @@ class LimitStateData(object):
     def getInternalForcesFileName(self):
         '''Return the file name to read: combination name, element number and 
         internal forces.'''
-        return self.internal_forces_results_directory+'intForce_'+ self.label +'.csv'
+        return self.envConfig.projectDirTree.getInternalForcesResultsPath()+'intForce_'+ self.label +'.csv'
     def getDisplacementsFileName(self):
         '''Return the file name to read: combination name, node number and 
         displacements (ux,uy,uz,rotX,rotY,rotZ).'''
-        return self.internal_forces_results_directory+'displ_'+ self.label +'.csv'
+        return self.envConfig.projectDirTree.getInternalForcesResultsPath()+'displ_'+ self.label +'.csv'
     def getOutputDataBaseFileName(self):
         '''Return the output file name without extension.'''
-        return self.check_results_directory+self.outputDataBaseFileName
+        return self.envConfig.projectDirTree.getFullVerifPath()+self.outputDataBaseFileName
     def getOutputDataFileName(self):
         '''Return the Python executable file name.'''
         return self.getOutputDataBaseFileName() + '.py'
@@ -94,6 +93,7 @@ class LimitStateData(object):
         loadCombinations= self.dumpCombinations(combContainer,loadCombinations)
         elemSet= setCalc.elements
         nodSet= setCalc.nodes
+        self.envConfig.projectDirTree.createTree()
         fNameInfForc= self.getInternalForcesFileName()
         fNameDispl= self.getDisplacementsFileName()
         os.system("rm -f " + fNameInfForc) #Clear obsolete files.
