@@ -155,8 +155,8 @@ void XC::ForceBeamColumn3d::setDomain(Domain *theDomain)
     NLForceBeamColumn3dBase::setDomain(theDomain);
 
     // ensure connected nodes have correct number of dof's
-    int dofNode1 = theNodes[0]->getNumberDOF();
-    int dofNode2 = theNodes[1]->getNumberDOF();
+    const int dofNode1 = theNodes[0]->getNumberDOF();
+    const int dofNode2 = theNodes[1]->getNumberDOF();
 
     if((dofNode1 != NND) || (dofNode2 != NND))
       {

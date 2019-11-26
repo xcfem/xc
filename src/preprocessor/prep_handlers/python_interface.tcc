@@ -25,6 +25,7 @@ class_<XC::PrepHandler, bases<XC::PreprocessorContainer,XC::MovableObject>, boos
 
 XC::Node *(XC::NodeHandler::*newNodeFromXYZ)(const double &x,const double &y,const double &z)= &XC::NodeHandler::newNode;
 XC::Node *(XC::NodeHandler::*newNodeFromXY)(const double &x,const double &y)= &XC::NodeHandler::newNode;
+XC::Node *(XC::NodeHandler::*newNodeFromX)(const double &x)= &XC::NodeHandler::newNode;
 XC::Node *(XC::NodeHandler::*newNodeFromVector)(const XC::Vector &)= &XC::NodeHandler::newNode;
 class_<XC::NodeHandler, bases<XC::PrepHandler>, boost::noncopyable >("NodeHandler", no_init)
   .add_property("numDOFs", &XC::NodeHandler::getNumDOFs, &XC::NodeHandler::setNumDOFs,"Number of degrees ocf freedom per node.")
@@ -38,6 +39,7 @@ class_<XC::NodeHandler, bases<XC::PrepHandler>, boost::noncopyable >("NodeHandle
   .def("newNodeXY", newNodeFromXY,return_internal_reference<>(),"\n""newNodeXY(x,y)\n""Create a node from global coordinates (x,y).")
   .def("newNodeIDXY", &XC::NodeHandler::newNodeIDXY,return_internal_reference<>(),"\n""newNodeIDXY(tag,x,y)""Create a node whose ID=tag from global coordinates (x,y).")
   .def("newNodeIDV", &XC::NodeHandler::newNodeIDV,return_internal_reference<>(),"\n""newNodeIDV(tag,vector)""Create a node whose ID=tag from the vector passed as parameter.")
+  .def("newNodeX", newNodeFromX,return_internal_reference<>(),"\n""newNodeX(x)\n""Create a node from global coordinate (x).")
   .def("newSeedNode", &XC::NodeHandler::newSeedNode,return_internal_reference<>(),"\n""newSeedNode()\n""Defines the seed node.")
   .def("duplicateNode", &XC::NodeHandler::duplicateNode,return_internal_reference<>(),"\n""duplicateNode(orgNodeTag) \n" "Create a duplicate copy of node with ID=orgNodeTag")
   ;

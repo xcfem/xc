@@ -36,8 +36,9 @@ XC::NodePtrsWithIDs::NodePtrsWithIDs(Element *owr,size_t numNodes)
     // ensure the connectedExternalNode XC::ID is of correct size & set values
     if(size_t(connectedExternalNodes.Size()) != numNodes)
       {
-        std::cerr << "FATAL NodePtrsWithIDs::NodePtrsWithIDs - " <<
-          "failed to create an ID of size " << numNodes << "\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; FATAL - "
+		  << " failed to create an ID of size " << numNodes << "\n";
         exit(-1);
       }
   }
@@ -206,11 +207,14 @@ bool XC::NodePtrsWithIDs::equalNumDOF(void)
       {
         const int nDOF= (*this)[0]->getNumberDOF();
         for(register size_t i= 1;i<numNodes;i++)
-          if((*this)[0]->getNumberDOF()!=nDOF)
-            {
-              retval= false;
-              break;
-            }
+	  {
+	    const int nDOFi=  (*this)[i]->getNumberDOF();
+            if(nDOFi!=nDOF)
+              {
+                retval= false;
+                break;
+              }
+	  }
       }
     return retval;
   }
@@ -222,12 +226,13 @@ bool XC::NodePtrsWithIDs::checkNumDOF(const size_t &numDOF, const size_t &elemTa
     if(size()>0)
       {
         const bool equalNumDof= equalNumDOF();
-
         const size_t dofNd1= (*this)[0]->getNumberDOF();
         if((dofNd1!=numDOF) || !equalNumDof)
           {
-            std::cerr << "ERROR, element (tag: " << elemTag 
-                      << "), has a different number of DOFs in its nodes." << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; ERROR, element (tag: " << elemTag 
+                      << "), has a different number of DOFs in its nodes."
+		      << std::endl;
             retval= false;
           }
       }
@@ -241,7 +246,7 @@ void XC::NodePtrsWithIDs::Print(std::ostream &os) const
     const size_t numNodes= NodePtrs::size();
     for(register size_t i= 0;i<numNodes;i++)
       os << " tag: " << (*this)[i]->getTag()
-         << " num dofs: " << (*this)[0]->getNumberDOF() << std::endl;
+         << " num dofs: " << (*this)[i]->getNumberDOF() << std::endl;
   }
 
 std::ostream &XC::operator<<(std::ostream &os,const XC::NodePtrsWithIDs &nodePtrs)
@@ -273,7 +278,8 @@ int XC::NodePtrsWithIDs::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag(cp);
     res+= cp.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "NodePtrsWithIDs::send - ch failed to send data.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; ch failed to send data.\n";
     return res;
   }
 
@@ -283,7 +289,8 @@ int XC::NodePtrsWithIDs::recvSelf(const CommParameters &cp)
     inicComm(1);
     int res= cp.receiveIdData(getDbTagData(),getDbTag());
     if(res<0)
-      std::cerr << "NodePtrsWithIDs::recv - ch failed to recv the initial ID\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; ch failed to recv the initial ID\n";
     else
       res+= recvData(cp);
     return res;

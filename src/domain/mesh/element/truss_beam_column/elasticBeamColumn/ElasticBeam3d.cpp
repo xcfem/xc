@@ -225,19 +225,22 @@ void XC::ElasticBeam3d::setDomain(Domain *theDomain)
   {
     ProtoBeam3d::setDomain(theDomain);
 
-    int dofNd1 = theNodes[0]->getNumberDOF();
-    int dofNd2 = theNodes[1]->getNumberDOF();
-
+    const int dofNd1 = theNodes[0]->getNumberDOF();
     if(dofNd1 != 6)
       {
-        std::cerr << "XC::ElasticBeam3d::setDomain -- Node 1: " << theNodes.getTagNode(0)
-                  << " has incorrect number of DOF\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; Node 1: " << theNodes.getTagNode(0)
+                  << " has incorrect number of DOF: "
+	          << dofNd1 << " instead of 6.\n";
         exit(-1);
       }
+    const int dofNd2 = theNodes[1]->getNumberDOF();
     if(dofNd2 != 6)
       {
-        std::cerr << "XC::ElasticBeam3d::setDomain -- Node 2: " << theNodes.getTagNode(1)
-                  << " has incorrect number of DOF\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; Node 1: " << theNodes.getTagNode(1)
+                  << " has incorrect number of DOF: "
+	          << dofNd2 << " instead of 6.\n";
         exit(-1);
       }
 

@@ -42,8 +42,6 @@ class Node;
 class NodeHandler: public PrepHandler
   {
   private:
-    size_t ndof_def_node; //!< Default number of DOFs for new nodes.
-    size_t ncoo_def_node; //!< Number of coordinates for new nodes (1,2 or 3).
     Node *seed_node; //!< Seed node for semi-automatic meshing.
     void free_mem(void);
     Node *new_node(const int &tag,const size_t &dim,const int &ndof,const double &x,const double &y=0.0,const double &z=0.0);
@@ -58,20 +56,16 @@ class NodeHandler: public PrepHandler
     Node *newNode(const Pos3d &p);
     Node *newNode(const Pos2d &p);
     Node *newNode(const Vector &);
-    Node *newSeedNode(void);
+    Node *newSeedNode(const size_t &dim= 2, const size_t ndof= 3);
     Node *newNodeIDXYZ(const int &,const double &,const double &,const double &);
     Node *newNodeIDXY(const int &,const double &,const double &);
     Node *newNodeIDV(const int &,const Vector &);
     Node *duplicateNode(const int &);
 
-    size_t getSpaceDim(void) const
-      { return ncoo_def_node; }
-    void setSpaceDim(const size_t &dim)
-      { ncoo_def_node= dim; }
-    void setNumDOFs(const size_t &ndof)
-      { ndof_def_node= ndof; }
-    size_t getNumDOFs(void) const
-      { return ndof_def_node; }
+    size_t getSpaceDim(void) const;
+    void setSpaceDim(const size_t &);
+    void setNumDOFs(const size_t &);
+    size_t getNumDOFs(void) const;
     Node *getNode(const int &tag);
     int getDefaultTag(void) const;
     void setDefaultTag(const int &tag);

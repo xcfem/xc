@@ -273,7 +273,19 @@ XC::Vector XC::EntMdlr::getSimpsonWeights(const std::string &ijk,const std::stri
 //! @brief Creates a node at the position being passed as parameter.
 XC::Node *XC::EntMdlr::create_node(const Pos3d &pos,size_t i,size_t j, size_t k)
   {
-    Node *retval= getPreprocessor()->getNodeHandler().newNode(pos);
+    Node *retval= nullptr;
+    NodeHandler &nh= getPreprocessor()->getNodeHandler();
+    const size_t dim= nh.getSpaceDim();
+    if(dim==3)
+      retval= nh.newNode(pos);
+    else if(dim==2)
+      retval= nh.newNode(pos.x(), pos.y());
+    else if(dim==1)
+      retval= nh.newNode(pos.x());
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; space dimension: " << dim
+	        << " not implemented." << std::endl;
     ttzNodes(i,j,k)= retval;
     return retval;
   }

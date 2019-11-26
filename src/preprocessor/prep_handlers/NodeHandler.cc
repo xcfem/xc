@@ -46,7 +46,8 @@ void XC::NodeHandler::free_mem(void)
   }
 
 XC::NodeHandler::NodeHandler(Preprocessor *preprocessor)
-  : PrepHandler(preprocessor), ndof_def_node(2),ncoo_def_node(3),seed_node(nullptr) {}
+  : PrepHandler(preprocessor), seed_node(nullptr)
+  {}
 
 //! @brief Destructor.
 XC::NodeHandler::~NodeHandler(void)
@@ -111,9 +112,13 @@ XC::Node *XC::NodeHandler::newNode(const double &x,const double &y,const double 
   {
     const int tg= getDefaultTag(); //Before seed node creation.
     if(!seed_node)
-      seed_node= new_node(0,ncoo_def_node,ndof_def_node,0.0,0.0,0.0);
-
+      newSeedNode(3);
     const size_t dim= seed_node->getDim();
+    if(dim!=3)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; using three coordinates in a "
+	        << dim << "-dimensional space. Some coordinates"
+	        << " will be ignored." << std::endl;
     const int ndof= seed_node->getNumberDOF();
     Node *retval= new_node(tg,dim,ndof,x,y,z);
     if(retval)
@@ -128,9 +133,14 @@ XC::Node *XC::NodeHandler::newNode(const double &x,const double &y)
   {
     const int tg= getDefaultTag(); //Before seed node creation.
     if(!seed_node)
-      seed_node= new_node(0,ncoo_def_node,ndof_def_node,0.0,0.0);
+      newSeedNode(2);
 
     const size_t dim= seed_node->getDim();
+    if(dim!=2)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; using two coordinates in a "
+	        << dim << "-dimensional space. Some coordinates"
+	        << " will be ignored." << std::endl;
     const int ndof= seed_node->getNumberDOF();
     Node *retval= new_node(tg,dim,ndof,x,y);
     if(retval)
@@ -146,9 +156,14 @@ XC::Node *XC::NodeHandler::newNode(const double &x)
   {
     const int tg= getDefaultTag(); //Before seed node creation.
     if(!seed_node)
-      seed_node= new_node(0,ncoo_def_node,ndof_def_node,0.0);
+      newSeedNode();
 
     const size_t dim= seed_node->getDim();
+    if(dim!=1)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; using one coordinate in a "
+	        << dim << "-dimensional space."
+		<< std::endl;
     const int ndof= seed_node->getNumberDOF();
     Node *retval= new_node(tg,dim,ndof,x);
     if(retval)
@@ -184,11 +199,42 @@ XC::Node *XC::NodeHandler::newNode(const Vector &coo)
     return retval;
   }
 
-//! @brief Defines the seed node.
-XC::Node *XC::NodeHandler::newSeedNode(void)
+size_t XC::NodeHandler::getSpaceDim(void) const
   {
-    free_mem();
-    seed_node= new_node(0,ncoo_def_node,ndof_def_node,0.0,0.0,0.0);
+    size_t retval= 2; // default value.
+    if(seed_node)
+      retval= seed_node->getDim();
+    return retval;
+  }
+void XC::NodeHandler::setSpaceDim(const size_t &dim)
+  { newSeedNode(dim,getNumDOFs()); }
+void XC::NodeHandler::setNumDOFs(const size_t &ndof)
+  { newSeedNode(getSpaceDim(),ndof); }
+size_t XC::NodeHandler::getNumDOFs(void) const
+  {
+    size_t retval= 3; // default value.
+    if(seed_node)
+      retval= seed_node->getNumberDOF();
+    return retval;
+  }
+
+//! @brief Defines the seed node.
+XC::Node *XC::NodeHandler::newSeedNode(const size_t &dim, const size_t ndof)
+  {
+    const int tg= getDefaultTag(); //Before seed node creation.
+    if(!seed_node)
+      seed_node= new_node(-1,dim,ndof,0.0,0.0,0.0);
+    else
+      {
+	const size_t oldDim= seed_node->getDim();
+	const size_t oldNDOFs= seed_node->getNumberDOF();
+	if((dim!=oldDim) || (ndof!=oldNDOFs))
+	  {
+            free_mem();
+            seed_node= new_node(-1,dim,ndof,0.0,0.0,0.0);
+	  }
+      }
+    setDefaultTag(tg); // seed node doesn't change current node tag. 
     return seed_node;
   }
 

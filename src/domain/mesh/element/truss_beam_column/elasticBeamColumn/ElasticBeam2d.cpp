@@ -217,21 +217,23 @@ void XC::ElasticBeam2d::setDomain(Domain *theDomain)
     ProtoBeam2d::setDomain(theDomain);
 
 
-    int dofNd1 = theNodes[0]->getNumberDOF();
-    int dofNd2 = theNodes[1]->getNumberDOF();
+    const int dofNd1 = theNodes[0]->getNumberDOF();
     if(dofNd1 != 3)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; Node 1: " << theNodes.getTagNode(0)
-                  << " has incorrect number of DOF.\n";
+                  << " has incorrect number of DOF: "
+	          << dofNd1 << " instead of 3.\n";
         exit(-1);
       }
 
+    const int dofNd2 = theNodes[1]->getNumberDOF();
     if(dofNd2 != 3)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; Node 2: " << theNodes.getTagNode(1)
-               << " has incorrect number of DOF.\n";
+                  << " has incorrect number of DOF: "
+	          << dofNd2 << " instead of 3.\n";
         exit(-1);
       }
     if(theCoordTransf)

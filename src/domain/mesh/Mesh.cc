@@ -320,7 +320,7 @@ void XC::Mesh::add_nodes_to_domain(void)
 //! node was added, otherwise an error is printed and false is returned.
 bool XC::Mesh::addNode(Node * node)
   {
-    int nodTag = node->getTag();
+    const int nodTag = node->getTag();
 
     TaggedObject *other = theNodes->getComponentPtr(nodTag);
     if(other)
