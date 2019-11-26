@@ -44,39 +44,40 @@ modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 # Materials definition
 scc= typical_materials.defElasticShearSection3d(preprocessor, "scc",A,E,G,Iz,Iy,J,1)
 
-nodes.newSeedNode()
+
 # Geometric transformation(s)
 lin= modelSpace.newPDeltaCrdTransf("lin",xc.Vector([0,1,0]))
 # Seed element definition
 seedElemHandler= preprocessor.getElementHandler.seedElemHandler
 seedElemHandler.defaultMaterial= "scc"
 seedElemHandler.defaultTransformation= "lin"
-seedElemHandler.defaultTag= 1 #Tag for the next element.
 beam3d= seedElemHandler.newElement("ElasticBeam3d",xc.ID([0,0]))
 beam3d.rho= 0.0
 
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
-pt= points.newPntIDPos3d(2,geom.Pos3d(0.0,0.0,L))
+pt1= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))
+pt2= points.newPntIDPos3d(2,geom.Pos3d(0.0,0.0,L))
 lines= preprocessor.getMultiBlockTopology.getLines
-lines.defaultTag= 1
-l= lines.newLine(1,2)
+l= lines.newLine(pt1.tag,pt2.tag)
 l.nDiv= NumDiv
 
 
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)
+n1= pt1.getNode() # Back end node.
+n2= pt2.getNode() # Front end node.
+
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
 
 #
-spc= constraints.newSPConstraint(1,0,0.0) # Node 2,gdl 0 # Back end node.
-spc= constraints.newSPConstraint(1,1,0.0) # Node 2,gdl 1
-spc= constraints.newSPConstraint(1,2,0.0) # Node 2,gdl 2
-spc= constraints.newSPConstraint(1,5,0.0) # Node 2,gdl 5
-spc= constraints.newSPConstraint(2,0,0.0) # Node 2,gdl 0 # Front end node.
-spc= constraints.newSPConstraint(2,1,0.0) # Node 2,gdl 1
+spc= constraints.newSPConstraint(n1.tag,0,0.0) # Node 2,gdl 0 # Back end node.
+spc= constraints.newSPConstraint(n1.tag,1,0.0) # Node 2,gdl 1
+spc= constraints.newSPConstraint(n1.tag,2,0.0) # Node 2,gdl 2
+spc= constraints.newSPConstraint(n1.tag,5,0.0) # Node 2,gdl 5
+spc= constraints.newSPConstraint(n2.tag,0,0.0) # Node 2,gdl 0 # Front end node.
+spc= constraints.newSPConstraint(n2.tag,1,0.0) # Node 2,gdl 1
 
 # Loads definition
 loadHandler= preprocessor.getLoadHandler
@@ -88,7 +89,7 @@ ts= lPatterns.newTimeSeries("constant_ts","ts")
 lPatterns.currentTimeSeries= "ts"
 #Load case definition
 lp0= lPatterns.newLoadPattern("default","0")
-lp0.newNodalLoad(2,xc.Vector([0,0,P,0,0,0]))
+lp0.newNodalLoad(n2.tag,xc.Vector([0,0,P,0,0,0]))
 
 #We add the load case to domain.
 lPatterns.addToDomain(lp0.name)
@@ -106,8 +107,7 @@ execfile(pth+"/../../aux/solu_linear_buckling.py")
 
 eig1= analysis.getEigenvalue(1)
 
-nod2= nodes.getNode(2)
-deltay= nod2.getDisp[2] 
+deltay= n2.getDisp[2] 
   
 
 deltayTeor= P*L/(E*A)
