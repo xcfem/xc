@@ -162,6 +162,9 @@ class Element: public MeshComponent
     //! setDomain()} method. 
     virtual int getNumDOF(void) const= 0;
     virtual size_t getDimension(void) const;
+    virtual double getLength(bool initialGeometry= true) const;
+    virtual double getArea(bool initialGeometry= true) const;
+    virtual double getVolume(bool initialGeometry= true) const;
     virtual void setIdNodes(const std::vector<int> &inodes);
     virtual void setIdNodes(const ID &inodes);
     void setDomain(Domain *theDomain);

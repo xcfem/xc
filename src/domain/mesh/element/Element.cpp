@@ -176,6 +176,30 @@ size_t XC::Element::getDimension(void) const
     return 0;
   }
 
+//! @brief Return the element length
+double XC::Element::getLength(bool initialGeometry) const
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "is not implemented.\n";
+    return 0.0;
+  }
+
+//! @brief Return the element area
+double XC::Element::getArea(bool initialGeometry) const
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "is not implemented.\n";
+    return 0.0;
+  }
+
+//! @brief Return the element volume
+double XC::Element::getVolume(bool initialGeometry) const
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "is not implemented.\n";
+    return 0.0;
+  }
+
 //! @brief Set the nodes.
 void XC::Element::setIdNodes(const std::vector<int> &inodes)
   { getNodePtrs().set_id_nodes(inodes); }

@@ -83,6 +83,7 @@ class Element1D : public ElementBase<2>
     double getDist(const Pos3d &p,bool initialGeometry= true) const;
 
     size_t getDimension(void) const;
+    double getLength(bool initialGeometry= true) const;
     int getVtkCellType(void) const;
 
     virtual void computeTributaryLengths(bool initialGeometry= true) const;
@@ -103,8 +104,6 @@ class Element1D : public ElementBase<2>
     void vector3dPointLoadGlobal(const Vector &,const Vector &);
     void vector3dPointLoadLocal(const Vector &,const Vector &);
     void strainLoad(const DeformationPlane &p1, const DeformationPlane &p2);
-
-
   };
 
 } //end of XC namespace

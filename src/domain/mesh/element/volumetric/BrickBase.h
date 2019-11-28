@@ -50,6 +50,7 @@ class BrickBase : public ElemWithMaterial<8,NDMaterialPhysicalProperties>
     BrickBase(int tag,int classTag,const NDMaterialPhysicalProperties &);
     BrickBase(int tag, int classTag,int nd1, int nd2, int nd3, int nd4,int nd5,int nd6,int nd7,int nd8, const NDMaterialPhysicalProperties &);
     size_t getDimension(void) const;
+    double getVolume(bool initialGeometry= true) const;
     BoolArray3d getNodePattern(void) const;
     int getVtkCellType(void) const;
   };

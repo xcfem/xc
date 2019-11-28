@@ -100,9 +100,9 @@ class CorotTruss: public CorotTrussBase
     const Material *getMaterial(void) const;
     Material *getMaterial(void);
     virtual double getRho(void) const;
-    inline const double &getArea(void) const
+    inline const double &getSectionArea(void) const
       { return A; }
-    inline void setArea(const double &a)
+    inline void setSectionArea(const double &a)
       { A= a; }
 
     // public methods to obtain stiffness, mass, damping and residual information    

@@ -78,6 +78,7 @@ class DqPtrsElem: public DqPtrsKDTree<Element,KDTreeElements>
     DqPtrsElem pickElemsOfDimension(const size_t &);
     DqPtrsElem pickElemsOfMaterial(const std::string &);
     void numera(void);
+    double getAverageSize(bool initialGeometry= true) const;
     
     void createInertiaLoads(const Vector &);
   };

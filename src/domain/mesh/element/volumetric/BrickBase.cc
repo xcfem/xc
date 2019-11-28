@@ -31,6 +31,7 @@
 #include "preprocessor/multi_block_topology/matrices/ElemPtrArray3d.h"
 #include "domain/mesh/node/Node.h"
 #include "vtkCellType.h"
+#include "xc_utils/src/geom/d3/3d_polyhedrons/Tetrahedron3d.h"
 
 //! @brief Constructor
 XC::BrickBase::BrickBase(int classTag)
@@ -54,6 +55,34 @@ XC::BrickBase::BrickBase(int tag, int classTag, int node1, int node2, int node3,
 size_t XC::BrickBase::getDimension(void) const
   { return 3; }
 
+//! @brief Return the element volume.
+double XC::BrickBase::getVolume(bool initialGeometry) const
+  {
+    double factor= 1.0;
+    if(initialGeometry)
+      factor= 0.0;
+    const Pos3d p1= theNodes[0]->getCurrentPosition3d(factor);
+    const Pos3d p2= theNodes[1]->getCurrentPosition3d(factor);
+    const Pos3d p3= theNodes[2]->getCurrentPosition3d(factor);
+    const Pos3d p4= theNodes[3]->getCurrentPosition3d(factor);
+    const Pos3d p5= theNodes[4]->getCurrentPosition3d(factor);
+    const Pos3d p6= theNodes[5]->getCurrentPosition3d(factor);
+    const Pos3d p7= theNodes[6]->getCurrentPosition3d(factor);
+    const Pos3d p8= theNodes[7]->getCurrentPosition3d(factor);
+
+    double retval= 0.0;
+    const Tetrahedron3d tet1(p8,p6,p5,p1);
+    retval+= tet1.getVolume();
+    const Tetrahedron3d tet2(p8,p7,p6,p3); 
+    retval+= tet2.getVolume();
+    const Tetrahedron3d tet3(p8,p6,p1,p3); 
+    retval+= tet3.getVolume();
+    const Tetrahedron3d tet4(p1,p3,p4,p8); 
+    retval+= tet4.getVolume();
+    const Tetrahedron3d tet5(p1,p2,p3,p6); 
+    retval+= tet5.getVolume();
+    return retval;
+  }
 
 //! @brief Return a grid of booleans, one for each of the
 //! element nodes. If there is a node that doesn't exist

@@ -642,6 +642,15 @@ Segment3d XC::Element1D::getLineSegment(bool initialGeometry) const
       return Segment3d(theNodes[0]->getCurrentPosition3d(),theNodes[1]->getCurrentPosition3d());
   }
 
+//! @brief Return the segment defined by the element.
+double XC::Element1D::getLength(bool initialGeometry) const
+  {
+    if(initialGeometry)
+      return dist(theNodes[0]->getInitialPosition3d(),theNodes[1]->getInitialPosition3d());
+    else
+      return dist(theNodes[0]->getCurrentPosition3d(),theNodes[1]->getCurrentPosition3d());
+  }
+
 //! @brief Return the squared distance from the element to the point
 //! being passed as parameter.
 double XC::Element1D::getDist2(const Pos2d &p,bool initialGeometry) const

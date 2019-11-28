@@ -132,7 +132,7 @@ size_t XC::DqPtrsElem::getNumDeadElements(void) const
     return retval;
   }
 
-//!  @brief Set indices to the objects to allow its use in VTK.
+//! @brief Set indices to the objects to allow its use in VTK.
 void XC::DqPtrsElem::numera(void)
   {
     size_t idx= 0;
@@ -141,6 +141,34 @@ void XC::DqPtrsElem::numera(void)
 	Element *ptr= *i;
         ptr->set_index(idx);
       }
+  }
+
+//! @brief Return the average size of the elements.
+double XC::DqPtrsElem::getAverageSize(bool initialGeometry) const
+  {
+    double retval= 0.0;
+    size_t count= 0;
+    for(const_iterator i= begin();i!=end();i++)
+      {
+	Element *ptr= *i;
+	if(ptr->getDimension()==1)
+	  {
+	    retval+= ptr->getLength(initialGeometry);
+	    count++;
+	  }
+	else if(ptr->getDimension()==2)
+	  {
+	    retval+= sqrt(ptr->getArea(initialGeometry));
+	    count++;
+	  }
+	else if(ptr->getDimension()==3)
+	  {
+	    retval+= pow(ptr->getVolume(initialGeometry),1.0/3.0);
+	    count++;
+	  }
+      }
+    retval/=(size());
+    return retval;
   }
 
 //! @brief Creates the inertia load that corresponds to the

@@ -123,12 +123,12 @@ class Truss : public TrussBase
     Material *getMaterial(void);
     void setRho(const double &);
     virtual double getRho(void) const;
-    inline const double &getArea(void) const
+    inline const double &getSectionArea(void) const
       { return A; }
-    inline void setArea(const double &a)
+    inline void setSectionArea(const double &a)
       { A= a; }
     inline double getLinearRho(void) const
-      { return getArea()*getRho(); }
+      { return getSectionArea()*getRho(); }
 
     // public methods to obtain stiffness, mass, damping and residual information    
     const Matrix &getKi(void);
