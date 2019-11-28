@@ -229,7 +229,7 @@ class TrussBase(TrussGeometry):
         seedElemHandler.defaultMaterial= self.diagonalMaterial.name  # Material name.
         seedElemHandler.dimElem= 3 #Bars defined ina a three-dimensional space.
         trussElem= seedElemHandler.newElement('Truss',xc.ID([0,0]));
-        trussElem.area= self.diagonalArea
+        trussElem.sectionArea= self.diagonalArea
         self.diagonalSet.genMesh(xc.meshDir.I)  # Generate the elements.
         # End posts
         seedElemHandler.defaultMaterial= self.postsMaterial.name  # Material name.

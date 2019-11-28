@@ -81,6 +81,14 @@ class PredefinedSpace(object):
         '''
         return self.constraints.newRigidRod(nodeTagA,nodeTagB)
 
+    def newEqualDOF(self,nodeTagA, nodeTagB,dofs):
+        '''Create an equal DOF constraint between the nodes.
+
+        :param   nodeTagA: tag of the master node.
+        :param   nodeTagB: tag of the slave node.
+        '''
+        return self.constraints.newEqualDOF(nodeTagA,nodeTagB,dofs)
+    
     def setFulcrumBetweenNodes(self,nodeTagA, pivotNode):
         '''Create a fulcrum between the nodes passed as parameters.
 
@@ -869,7 +877,7 @@ class StructuralMechanics3D(PredefinedSpace):
         elements.dimElem= 3
         elements.defaultMaterial= matName
         elem= elements.newElement("Truss",xc.ID([nodeTagA,nodeTagB]))
-        elem.area=A
+        elem.sectionArea=A
         return elem
 
 def getStructuralMechanics3DSpace(preprocessor):

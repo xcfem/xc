@@ -170,7 +170,7 @@ class PrestressTendon(object):
             nEnd1=nodes.getNode(nEnd2.tag)
             nEnd2=nodes.newNodeXYZ(self.fineCoordMtr[0][i],self.fineCoordMtr[1][i],self.fineCoordMtr[2][i])
             elem=elems.newElement(elemTypeName,xc.ID([nEnd1.tag,nEnd2.tag]))
-            elem.area=areaTendon
+            elem.sectionArea=areaTendon
             tendonSet.nodes.append(nEnd2)
             tendonSet.elements.append(elem)
             self.lstOrderedElems.append(elem)
