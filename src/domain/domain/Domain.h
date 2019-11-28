@@ -76,8 +76,7 @@ class Preprocessor;
 class ElementIter;
 class NodeIter;
 
-class SingleDomEleIter;
-class SingleDomNodIter;
+class SingleDomParamIter;
 
 class LoadCombination;
 
@@ -129,10 +128,17 @@ class Domain: public ObjWithRecorders, public DistributedBase
     Vector modalParticipationFactors; //!< Modal participation factors.
     DqMeshRegion *theRegions;
     std::deque<std::string> activeCombinations;//!< load combinations currently active.
+    
+    TaggedObjectStorage  *theParameters;        
+    SingleDomParamIter *theParamIter;
+    std::deque<int> paramIndex;
 
     int lastChannel;
     int lastGeoSendTag; //!< the value of currentGeoTag when sendSelf was last invoked
 
+    void alloc_containers(void);
+    void alloc_iters(void);
+    bool check_containers(void) const;
   protected:
     virtual int buildEleGraph(Graph &theEleGraph);
     virtual int buildNodeGraph(Graph &theNodeGraph);
@@ -159,6 +165,7 @@ class Domain: public ObjWithRecorders, public DistributedBase
     virtual bool isLoadPatternActive(LoadPattern *);
     virtual bool addNodeLocker(NodeLocker *);
     virtual bool addLoadCombination(LoadCombination *);
+    virtual bool addParameter(Parameter *);            
 
     void setNodeReactionException(const int &);
     bool checkNodalReactions(const double &);
@@ -209,6 +216,8 @@ class Domain: public ObjWithRecorders, public DistributedBase
     virtual Node *getNode(int tag);
     virtual const Node *getNode(int tag) const;
 
+    virtual Parameter *getParameter(int tag);        
+    virtual const Parameter *getParameter(int tag) const;        
 
     // methods to query the state of the domain
     inline const PseudoTimeTracker &getTimeTracker(void) const

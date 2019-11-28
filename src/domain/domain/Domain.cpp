@@ -99,15 +99,48 @@
 #include "utility/actor/objectBroker/FEM_ObjectBroker.h"
 
 #include "preprocessor/Preprocessor.h"
-
-
 #include "utility/actor/actor/CommMetaData.h"
-
+#include "domain/component/Parameter.h"
+#include "domain/domain/single/SingleDomParamIter.h"
 
 void XC::Domain::free_mem(void)
   {
     //delete the objects in the domain
     clearAll();
+    
+    if(theParamIter) delete theParamIter;
+    theParamIter= nullptr;
+    if(theParameters) delete theParameters;
+    theParameters= nullptr;
+  }
+
+//! @brief Allocates memory for containers.
+void XC::Domain::alloc_containers(void)
+  {
+    // init the arrays for storing the mesh components
+    theParameters= new MapOfTaggedObjects(this,"parameter");
+    check_containers();
+  }
+
+//! @brief Allocates memory for iterators.
+void XC::Domain::alloc_iters(void)
+  {
+    // init the iters
+    theParamIter= new SingleDomParamIter(theParameters);
+  }
+
+//! @brief Check that there is enough memory for the containers.
+bool XC::Domain::check_containers(void) const
+  {
+    // check that there was space to create the data structures
+    if(theParameters == nullptr)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; out of memory.\n";
+        return false;
+      }
+    else
+      return true;
   }
 
 //! @brief Constructor.
@@ -120,7 +153,11 @@ XC::Domain::Domain(CommandEntity *owr,DataOutputHandler::map_output_handlers *oh
   :ObjWithRecorders(owr,oh),timeTracker(),CallbackCommit(""), dbTag(0),
    currentGeoTag(0), hasDomainChangedFlag(false), commitTag(0),
    mesh(this), constraints(this), theRegions(nullptr),
-   activeCombinations(), lastChannel(0), lastGeoSendTag(-1) {}
+   activeCombinations(), lastChannel(0), lastGeoSendTag(-1)
+  {
+    alloc_containers();
+    alloc_iters();
+  }
 
 //! @brief Constructor.
 //!
@@ -138,7 +175,11 @@ XC::Domain::Domain(CommandEntity *owr,int numNodes, int numElements, int numSPs,
   :ObjWithRecorders(owr,oh),timeTracker(), CallbackCommit(""), dbTag(0),
    currentGeoTag(0), hasDomainChangedFlag(false), commitTag(0), mesh(this),
    constraints(this), theRegions(nullptr), activeCombinations(), lastChannel(0),
-   lastGeoSendTag(-1) {}
+   lastGeoSendTag(-1)
+  {
+    alloc_containers();
+    alloc_iters();    
+  }
 
 //! @brief Removes all components from domain (nodes, elements, loads &
 //! constraints).
@@ -479,6 +520,55 @@ bool XC::Domain::addLoadCombination(LoadCombination *comb)
     return retval;
   }
 
+bool XC::Domain::addParameter(Parameter *theParam)
+  {
+    const int paramTag = theParam->getTag();
+
+    if(paramTag == 0)
+      {
+        // don't add it .. just invoke setDomain on the parameter
+        theParam->setDomain(this);
+        return true;
+      }
+
+    // check if a Parameter with a similar tag already exists in the Domain
+    TaggedObject *other= theParameters->getComponentPtr(paramTag);
+    if(other!=0)
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; parameter with tag "
+		  << paramTag << "already exists in model\n"; 
+        return false;
+      }
+
+    // add the param to the container object for the parameters
+    bool result = theParameters->addComponent(theParam);
+
+    if(!result)
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; parameter " << paramTag
+		  << "could not be added to container\n";
+        theParam->setDomain(this);
+        return result;
+      }
+
+    // mark the Domain as having been changed
+    //    this->domainChange();
+
+    // Add to index
+    paramIndex.push_back(paramTag);
+    theParam->setGradIndex(paramIndex.size()-1);
+
+    if(theParam->getType()=="FEModel")
+      {
+        //theParam->setGradIndex(-1);
+      }
+
+    theParam->setDomain(this);
+    return result;
+  }
+
 //! @brief Remove from domain el load pattern identified by the argument.
 //!
 //! To remove the LoadPattern whose tag is given by \p tag from the
@@ -706,6 +796,31 @@ XC::Node *XC::Domain::getNode(int tag)
 //! @param tag: node identifier.
 const XC::Node *XC::Domain::getNode(int tag) const
   { return mesh.getNode(tag); }
+
+
+//! @brief Return a pointer to the parameter identified by the argument.
+//!
+//! @param tag: parameter identifier.
+XC::Parameter *XC::Domain::getParameter(int tag)
+  {
+    Parameter *result= nullptr;
+    TaggedObject *mc= theParameters->getComponentPtr(tag);
+
+    // if not there return 0 otherwise perform a cast and return that
+    if(mc)
+      result= dynamic_cast<Parameter *>(mc);
+    return result;
+  }
+
+//! @brief Return a pointer to the parameter identified by the argument.
+//!
+//! @param tag: parameter identifier.
+const XC::Parameter *XC::Domain::getParameter(int tag) const
+  {
+    Domain *this_no_const= const_cast<Domain *>(this);
+    return this_no_const->getParameter(tag);
+  }
+  
 
 int XC::Domain::getCommitTag(void) const
   { return commitTag; }

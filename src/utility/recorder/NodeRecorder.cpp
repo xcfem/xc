@@ -73,6 +73,7 @@
 #include <deque>
 #include "xc_utils/src/utils/text/text_string.h"
 #include "boost/lexical_cast.hpp"
+#include "domain/component/Parameter.h"
 
 //! @brief store copy of dof's to be recorder, verifying dof are valid, i.e. >= 0
 void XC::NodeRecorder::setup_dofs(const ID &dofs)
@@ -118,8 +119,8 @@ void XC::NodeRecorder::setup_nodes(const ID &nodes)
 void XC::NodeRecorder::setupDataFlag(const std::string &dataToStore)
   {
     std::deque<std::string> fields= separa_cadena(dataToStore," ");
-    int entero= -1;
-    if(fields.size()>1) entero= boost::lexical_cast<int>(fields[1]);
+    int intValue= -1;
+    if(fields.size()>1) intValue= boost::lexical_cast<int>(fields[1]);
 
     if(dataToStore.size() == 0 || (fields[0]== "disp"))
       { dataFlag = 0; }
@@ -142,7 +143,7 @@ void XC::NodeRecorder::setupDataFlag(const std::string &dataToStore)
       { dataFlag = 8; }
     else if(fields[0] == "eigen")
       {
-        int mode= entero;
+        int mode= intValue;
         if(mode > 0)
           dataFlag = 10 + mode;
         else
@@ -150,27 +151,48 @@ void XC::NodeRecorder::setupDataFlag(const std::string &dataToStore)
       }
     else if(fields[0] == "sensitivity")
       {
-        int grad= entero;
-        if(grad > 0)
-          dataFlag = 1000 + grad;
-        else
-          dataFlag = 6;
+       if(fields.size()>11)
+	  {
+	    const int paramTag= boost::lexical_cast<int>(fields[11]);
+	    Parameter *theParameter= theDomain->getParameter(paramTag);
+	    int grad= -1;
+	    if(theParameter)
+	      grad= theParameter->getGradIndex();
+	    if(grad > 0)
+	      dataFlag= 1000 + grad;
+	    else
+	      dataFlag= 10;
+	  }
       }
     else if(fields[0] == "velSensitivity")
       {
-        int grad= entero;
-        if(grad > 0)
-          dataFlag = 2000 + grad;
-        else
-          dataFlag = 6;
+        if(fields.size()>14)
+	  {
+	    const int paramTag= boost::lexical_cast<int>(fields[14]);
+	    Parameter *theParameter= theDomain->getParameter(paramTag);
+	    int grad= -1;
+	    if(theParameter)
+	      grad= theParameter->getGradIndex();
+	    if(grad > 0)
+	      dataFlag= 2000 + grad;
+	    else
+	      dataFlag= 10;
+	  }
       }
     else if(fields[0] == "accSensitivity")
-      {
-        int grad= entero;
-        if(grad > 0)
-          dataFlag = 3000 + grad;
-        else
-          dataFlag = 6;
+      {	
+        if(fields.size()>14)
+	  {
+	    const int paramTag= boost::lexical_cast<int>(fields[14]);
+	    Parameter *theParameter= theDomain->getParameter(paramTag);
+	    int grad= -1;
+	    if(theParameter)
+	      grad= theParameter->getGradIndex();
+	    if(grad > 0)
+	      dataFlag = 3000 + grad;
+	    else
+	      dataFlag = 6;
+	  }
       }
     else
       {
@@ -183,16 +205,16 @@ void XC::NodeRecorder::setupDataFlag(const std::string &dataToStore)
 
 XC::NodeRecorder::NodeRecorder(void)
   :NodeRecorderBase(RECORDER_TAGS_NodeRecorder),
-   response(0),sensitivity(0)
+   response(0),gradIndex(-1)
   {}
 
 XC::NodeRecorder::NodeRecorder(const ID &dofs, const ID &nodes, 
-			       int psensitivity, const std::string &dataToStore,
+			       int pgradIndex, const std::string &dataToStore,
                                Domain &theDom, DataOutputHandler &theOutputHandler,
                                double dT, bool timeFlag)
   :NodeRecorderBase(RECORDER_TAGS_NodeRecorder,dofs,nodes,theDom,theOutputHandler,dT,timeFlag),
    response(1 + nodes.Size()*dofs.Size()), 
-   sensitivity(psensitivity)
+   gradIndex(pgradIndex)
   {
     setup_dofs(dofs);
     setup_nodes(nodes);
@@ -249,11 +271,11 @@ int XC::NodeRecorder::record(int commitTag, double timeStamp)
         for(int i=0; i<numValidNodes; i++)
           {
             int cnt = i*numDOF + timeOffset; 
-            Node *theNode = theNodes[i];
+            const Node *theNode = theNodes[i];
             if(dataFlag == 0)
               {
                 // AddingSensitivity:BEGIN ///////////////////////////////////
-                if(sensitivity==0)
+                if(gradIndex<0)
                   {
                     const Vector &theResponse = theNode->getTrialDisp();
                     for(int j=0; j<numDOF; j++)
@@ -271,7 +293,7 @@ int XC::NodeRecorder::record(int commitTag, double timeStamp)
                     for(int j=0;j<numDOF;j++)
                       {
                         const int dof= (*theDofs)(j);
-                        response(cnt) = theNode->getDispSensitivity(dof+1, sensitivity);
+                        response(cnt) = theNode->getDispSensitivity(dof+1, gradIndex);
                         cnt++;
                       }
                   }
@@ -407,8 +429,7 @@ int XC::NodeRecorder::record(int commitTag, double timeStamp)
               for(int j=0; j<numDOF; j++)
                 {
                   int dof= (*theDofs)(j);
-                  dof+= 1; // Terje uses 1 through DOF for the dof indexing; the fool then subtracts 1 
-                            // his code!!
+                  dof+= 1; // Terje uses 1 through DOF for the dof indexing
                   response(cnt) = theNode->getDispSensitivity(dof, grad);
                   cnt++;
                 }
@@ -419,8 +440,7 @@ int XC::NodeRecorder::record(int commitTag, double timeStamp)
               for(int j=0; j<numDOF; j++)
                 {
                   int dof= (*theDofs)(j);
-                  dof+= 1; // Terje uses 1 through DOF for the dof indexing; the fool then subtracts 1 
-                            // his code!!
+                  dof+= 1; // Terje uses 1 through DOF for the dof indexing
                   response(cnt) = theNode->getVelSensitivity(dof, grad);
                   cnt++;
                 }
@@ -433,8 +453,7 @@ int XC::NodeRecorder::record(int commitTag, double timeStamp)
               for(int j=0; j<numDOF; j++)
                 {
                   int dof= (*theDofs)(j);
-                  dof+= 1; // Terje uses 1 through DOF for the dof indexing; the fool then subtracts 1 
-                            // his code!!
+                  dof+= 1; // Terje uses 1 through DOF for the dof indexing
                   response(cnt) = theNode->getAccSensitivity(dof, grad);
                   cnt++;
                 }
@@ -457,7 +476,7 @@ int XC::NodeRecorder::record(int commitTag, double timeStamp)
 int XC::NodeRecorder::sendData(CommParameters &cp)
   {
     int res= NodeRecorderBase::sendData(cp);
-    setDbTagDataPos(14,sensitivity);
+    setDbTagDataPos(14,gradIndex);
     return res;
   }
 
@@ -466,7 +485,7 @@ int XC::NodeRecorder::sendData(CommParameters &cp)
 int XC::NodeRecorder::receiveData(const CommParameters &cp)
   {
     int res= NodeRecorderBase::receiveData(cp);
-    sensitivity= getDbTagDataPos(14);
+    gradIndex= getDbTagDataPos(14);
     return res;
   }
 

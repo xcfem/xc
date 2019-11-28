@@ -77,7 +77,7 @@ class NodeRecorder: public NodeRecorderBase
     Vector response;
 
     // AddingSensitivity:BEGIN //////////////////////////////
-    int sensitivity;
+    int gradIndex;
     // AddingSensitivity:END ////////////////////////////////
 
     void setup_dofs(const ID &dofs);

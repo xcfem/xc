@@ -122,7 +122,7 @@ class Node: public MeshComponent
     Matrix R; //!< nodal (modal?) participation matrix
     Matrix mass; //!< mass matrix
     mutable Vector unbalLoad; //!< unbalanced load
-    Vector unbalLoadWithInertia;       
+    mutable Vector unbalLoadWithInertia; //!< unbalanced load with inertia
     mutable Vector reaction;
     double alphaM; //!< rayleigh damping factor
     mutable double tributary; //!< Tributary length, area or volume.
@@ -254,8 +254,8 @@ class Node: public MeshComponent
     virtual void zeroUnbalancedLoad(void);
     virtual int addUnbalancedLoad(const Vector &load, double fact = 1.0); 
     virtual int addInertiaLoadToUnbalance(const Vector &accel, double fact = 1.0);    
-    virtual const Vector &getUnbalancedLoad(void);     
-    virtual const Vector &getUnbalancedLoadIncInertia(void);        
+    virtual const Vector &getUnbalancedLoad(void) const;     
+    virtual const Vector &getUnbalancedLoadIncInertia(void) const;        
 
     // public methods dealing with the committed state of the node
     virtual int commitState();
@@ -263,14 +263,14 @@ class Node: public MeshComponent
     virtual int revertToStart();        
 
     // public methods for dynamic analysis
-    virtual const Matrix &getMass(void);
+    virtual const Matrix &getMass(void) const;
     virtual int setMass(const Matrix &theMass);
     virtual int setNumColR(int numCol);
     virtual int setR(int row, int col, double Value);
     virtual const Vector &getRV(const Vector &V);
 
     virtual int setRayleighDampingFactor(double alphaM);
-    virtual const Matrix &getDamp(void);
+    virtual const Matrix &getDamp(void) const;
 
     void addTributary(const double &) const;
     void resetTributary(void) const;
@@ -283,7 +283,7 @@ class Node: public MeshComponent
       { return theEigenvectors.noCols(); }
     virtual Vector getEigenvector(int ) const;
     Vector getNormalizedEigenvector(int ) const;
-    virtual const Matrix &getEigenvectors(void);
+    virtual const Matrix &getEigenvectors(void) const;
     Matrix getNormalizedEigenvectors(void) const;
     Pos2d getEigenPosition2d(const double &, int) const;
     Pos3d getEigenPosition3d(const double &, int) const;
@@ -346,13 +346,13 @@ class Node: public MeshComponent
 
     // AddingSensitivity:BEGIN /////////////////////////////////////////
     int addInertiaLoadSensitivityToUnbalance(const Vector &accel, double fact = 1.0, bool tag=false);    
-    Matrix getMassSensitivity(void);
-    virtual const Matrix &getDampSensitivity(void);
-    int getCrdsSensitivity(void);
+    Matrix getMassSensitivity(void) const;
+    virtual const Matrix &getDampSensitivity(void) const;
+    int getCrdsSensitivity(void) const;
     int saveSensitivity(Vector *v, Vector *vdot, Vector *vdotdot, int gradNum, int numGrads);
-    double getDispSensitivity(int dof, int gradNum);
-    double getVelSensitivity(int dof, int gradNum);
-    double getAccSensitivity(int dof, int gradNum);
+    double getDispSensitivity(int dof, int gradNum) const;
+    double getVelSensitivity(int dof, int gradNum) const;
+    double getAccSensitivity(int dof, int gradNum) const;
     int setParameter(const std::vector<std::string> &argv, Parameter &param);
     int updateParameter(int parameterID, Information &info);
     int activateParameter(int parameterID);

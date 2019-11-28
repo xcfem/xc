@@ -93,12 +93,11 @@ int XC::DummyNode::getNumberDOF(void) const
 
 //! @brief Returns the result of invoking getMass() on its associated
 //! node object. 
-const XC::Matrix &XC::DummyNode::getMass(void) 
+const XC::Matrix &XC::DummyNode::getMass(void) const
   { return theRealNode->getMass(); }
 
-
-
-
+//! @brief Returns the result of invoking setMass() on its associated
+//! node object. 
 int XC::DummyNode::setMass(const XC::Matrix &m)
   { return theRealNode->setMass(m); }
 

@@ -1066,7 +1066,7 @@ int XC::Node::addInertiaLoadSensitivityToUnbalance(const XC::Vector &accelG, dou
 //! @brief Returns unbalanced load vector.
 //!
 //! Returns the current unbalanced load. 
-const XC::Vector &XC::Node::getUnbalancedLoad(void)
+const XC::Vector &XC::Node::getUnbalancedLoad(void) const
   { return unbalLoad; }
 
 
@@ -1075,7 +1075,7 @@ const XC::Vector &XC::Node::getUnbalancedLoad(void)
 //! Returns the current unbalanced load Vector, as defined above,
 //! MINUS the product of the nodes mass matrix and the trial nodal
 //! accelerations. The result is saved in another vector which is returned. 
-const XC::Vector &XC::Node::getUnbalancedLoadIncInertia(void)
+const XC::Vector &XC::Node::getUnbalancedLoadIncInertia(void) const
   {
     unbalLoadWithInertia= this->getUnbalancedLoad();
 
@@ -1158,7 +1158,7 @@ int XC::Node::revertToStart(void)
 //! has been allocated for the mass, a matrix is now created. An error
 //! message is printed and the program terminated if no space is available
 //! on the heap for this matrix.
-const XC::Matrix &XC::Node::getMass(void)
+const XC::Matrix &XC::Node::getMass(void) const
   { return mass; }
 
 //! @brief Sets the Rayleigh dumping factor.
@@ -1170,7 +1170,7 @@ int XC::Node::setRayleighDampingFactor(double alpham)
 
 
 //! @brief Return the damping matrix of the node.
-const XC::Matrix &XC::Node::getDamp(void)
+const XC::Matrix &XC::Node::getDamp(void) const
   {
     // make sure it was created before we return it
     if(alphaM == 0.0)
@@ -1200,7 +1200,7 @@ void XC::Node::resetTributary(void) const
 const double &XC::Node::getTributary(void) const
   { return tributary; }
 
-const XC::Matrix &XC::Node::getDampSensitivity(void)
+const XC::Matrix &XC::Node::getDampSensitivity(void) const
   {
     // make sure it was created before we return it
     if(alphaM == 0.0)
@@ -1363,7 +1363,7 @@ XC::Vector XC::Node::getAngularFrequencies(void) const
   }
 
 //! @brief Returns the eigenvectors that correspond to the node.
-const XC::Matrix &XC::Node::getEigenvectors(void)
+const XC::Matrix &XC::Node::getEigenvectors(void) const
   { return theEigenvectors; }
 
 //! @brief Returns the eigenvector that corresponds to i-th mode.
@@ -1791,7 +1791,7 @@ void XC::Node::Print(std::ostream &s, int flag)
 
 // AddingSensitivity:BEGIN ///////////////////////////////////////
 
-XC::Matrix XC::Node::getMassSensitivity(void)
+XC::Matrix XC::Node::getMassSensitivity(void) const
   {
     Matrix massSens(mass.noRows(),mass.noCols());
     if( (parameterID == 1) || (parameterID == 2) || (parameterID == 3) )
@@ -1800,7 +1800,7 @@ XC::Matrix XC::Node::getMassSensitivity(void)
   }
 
 
-int XC::Node::getCrdsSensitivity(void)
+int XC::Node::getCrdsSensitivity(void) const
   {
     if( (parameterID == 4) || (parameterID == 5) || (parameterID == 6) )
       { return (parameterID-3);        }
@@ -1919,7 +1919,8 @@ int XC::Node::saveSensitivity(Vector *v,Vector *vdot,Vector *vdotdot, int gradNu
     return 0;
   }
 
-double XC::Node::getDispSensitivity(int dof, int gradNum)
+//! @brief Return displacement sensitivity.
+double XC::Node::getDispSensitivity(int dof, int gradNum) const
   {
     double result= 0.0;
     if(!dispSensitivity.isEmpty())
@@ -1927,7 +1928,8 @@ double XC::Node::getDispSensitivity(int dof, int gradNum)
     return result;
   }
 
-double XC::Node::getVelSensitivity(int dof, int gradNum)
+//! @brief Return velocity sensitivity.
+double XC::Node::getVelSensitivity(int dof, int gradNum) const
   {
     double result= 0.0;
     if(!velSensitivity.isEmpty())
@@ -1935,7 +1937,8 @@ double XC::Node::getVelSensitivity(int dof, int gradNum)
     return result;
   }
 
-double XC::Node::getAccSensitivity(int dof, int gradNum)
+//! @brief Return acceleration sensitivity.
+double XC::Node::getAccSensitivity(int dof, int gradNum) const
   {
     double result= 0.0;
     if(!accSensitivity.isEmpty())

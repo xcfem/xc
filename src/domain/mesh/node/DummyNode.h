@@ -97,7 +97,7 @@ class DummyNode: public Node
     DOF_Group *getDOF_GroupPtr(void);
     int  getNumberDOF(void) const;
 
-    const Matrix &getMass(void);
+    const Matrix &getMass(void) const;
     int setMass(const Matrix &);
     
     const Vector &getCrds(void) const;

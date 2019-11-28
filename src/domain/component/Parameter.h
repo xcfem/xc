@@ -102,6 +102,9 @@ class Parameter : public TaggedObject, public MovableObject
     void setGradIndex(int gradInd) {gradIndex = gradInd;}
     int getGradIndex(void) {return gradIndex;}
 
+    virtual inline std::string getType(void)
+      { return "FEModel"; }
+
     virtual void setDomain(Domain *theDomain);
     virtual int sendSelf(CommParameters &);  
     virtual int recvSelf(const CommParameters &);
