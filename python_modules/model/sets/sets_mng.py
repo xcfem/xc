@@ -306,10 +306,11 @@ def get_nodes_wire(setBusq,lstPtsWire,tol=0.01):
     nodAux= setBusq.nodes
     retval= list() 
     for i in range(0,len(lstPtsWire)-1):
-        segmAux= geom.Line3d(lstPtsWire[i],lstPtsWire[i+1])
+        
+        segmAux= geom.Segment3d(lstPtsWire[i],lstPtsWire[i+1])
         for n in nodAux:
             p= n.getInitialPos3d
-            d= p.distLine3d(segmAux)
+            d= p.distSegment3d(segmAux)
             if(d<tol):
                 retval.append(n)
     retval= list(set(retval))       #clear duplicated nodes
