@@ -39,7 +39,7 @@ elements= preprocessor.getElementHandler
 elements.dimElem= 2 #Bars defined in a two dimensional space.
 elements.defaultMaterial= "elast"
 truss= elements.newElement("Truss",xc.ID([n1.tag,n2.tag]))
-truss.area= 1
+truss.sectionArea= 1
 
 vI= truss.getIVector3d(True)
 vJ= truss.getJVector3d(True)

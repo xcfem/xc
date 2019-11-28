@@ -130,7 +130,7 @@ for l in tendonSet.getLines:
 tendon_mesh=fem.LinSetToMesh(linSet=tendonSet,matSect=prestressingSteel,elemSize=None,vDirLAxZ=xc.Vector([1,0,0]),elemType='Truss',dimElemSpace=3,coordTransfType=None)
 tendon_mesh.generateMesh(prep)
 for e in tendonSet.getElements:
-    e.area=Aps
+    e.sectionArea=Aps
 
 # Connection between tendon and beam
 gluedDOFs= [0,1,2,3,4,5]

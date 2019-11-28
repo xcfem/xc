@@ -47,7 +47,7 @@ seedElemHandler.defaultMaterial= "cable"
 seedElemHandler.dimElem= 3 # Dimension of element space
 seedElemHandler.defaultTag= 1 #Number for the next element will be 1.
 truss= seedElemHandler.newElement("CorotTruss",xc.ID([1,2]))
-truss.area= area
+truss.sectionArea= area
 # seed element definition ends
 
 points= preprocessor.getMultiBlockTopology.getPoints

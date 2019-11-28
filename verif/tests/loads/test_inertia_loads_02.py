@@ -58,7 +58,7 @@ elements= preprocessor.getElementHandler
 elements.dimElem= 3 # Three-dimensional space.
 elements.defaultMaterial= "elast"
 truss= elements.newElement("Truss",xc.ID([n1.tag,n2.tag]))
-truss.area= A
+truss.sectionArea= A
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "section"
 beam= elements.newElement("ElasticBeam3d",xc.ID([n1.tag,n2.tag]))
@@ -99,7 +99,7 @@ result= analisis.analyze(1)
 
 nodes.calculateNodalReactions(True,1e-7)
 R= n2.getReaction[1]
-R_ref= 0.5*truss.area*truss.getMaterial().rho*l*9.81
+R_ref= 0.5*truss.sectionArea*truss.getMaterial().rho*l*9.81
 R_ref+= 0.5*beam.sectionProperties.A*truss.getMaterial().rho*l*9.81
 
 ratio1= abs(R-R_ref)/(-R_ref)

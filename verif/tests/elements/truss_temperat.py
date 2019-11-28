@@ -46,7 +46,7 @@ elements.defaultMaterial= "elast"
 elements.dimElem= 2 # Dimension of element space
 elements.defaultTag= 1 #Tag for the next element.
 truss= elements.newElement("Truss",xc.ID([nod1.tag,nod2.tag]))
-truss.area= A
+truss.sectionArea= A
 
     
 # Constraints

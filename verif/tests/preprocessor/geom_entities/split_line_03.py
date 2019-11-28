@@ -32,7 +32,7 @@ seedElemHandler.dimElem= 3 #Bars defined in a three dimensional space.
 seedElemHandler.defaultMaterial= "elast"
 seedElemHandler.defaultTag= 1 #Number for the next element will be 1.
 truss= seedElemHandler.newElement("Truss",xc.ID([0,0]))
-truss.area= 10
+truss.sectionArea= 10
 
 points= preprocessor.getMultiBlockTopology.getPoints
 pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,0.0,0.0))

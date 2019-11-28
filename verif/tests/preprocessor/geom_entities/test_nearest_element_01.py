@@ -34,7 +34,7 @@ elements.dimElem= 2 # Dimension of element space
 elements.defaultTag= 1 #Tag for the next element.
 for i in range(1,numElements):
   truss= elements.newElement("Truss",xc.ID([i,i+1]))
-  truss.area= 1
+  truss.sectionArea= 1
 
 mesh= feProblem.getDomain.getMesh
 # print "creados ",nnod," nodes.\n"

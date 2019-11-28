@@ -34,7 +34,7 @@ seedElemHandler.defaultMaterial= "elast"
 seedElemHandler.dimElem= 3 # Dimension of element space
 seedElemHandler.defaultTag= 1 #Tag for the next element.
 truss= seedElemHandler.newElement("Truss",xc.ID([0,0]))
-truss.area= 10.0
+truss.sectionArea= 10.0
 points= preprocessor.getMultiBlockTopology.getPoints
 pt= points.newPntIDPos3d(1,geom.Pos3d(0.0,R,0.0))
 points.newPntFromPos3d(geom.Pos3d((R*cos135),(R*sin135),0.0))

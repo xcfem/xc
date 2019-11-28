@@ -46,7 +46,7 @@ elements= preprocessor.getElementHandler
 elements.defaultMaterial= "cable"
 elements.dimElem= 2 # Dimension of element space
 truss= elements.newElement("CorotTruss",xc.ID([1,2]))
-truss.area= area
+truss.sectionArea= area
     
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler

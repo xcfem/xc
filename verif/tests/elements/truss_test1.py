@@ -43,11 +43,11 @@ elements= preprocessor.getElementHandler
 elements.dimElem= 2 #Bars defined ina a two dimensional space.
 elements.defaultMaterial= "elast"
 truss= elements.newElement("Truss",xc.ID([n1.tag,n2.tag]))
-truss.area= 1
+truss.sectionArea= 1
 truss= elements.newElement("Truss",xc.ID([n2.tag,n3.tag]))
-truss.area= 1
+truss.sectionArea= 1
 truss= elements.newElement("Truss",xc.ID([n3.tag,n4.tag]))
-truss.area= 1
+truss.sectionArea= 1
 
 constraints= preprocessor.getBoundaryCondHandler
 #Constrain the displacement of node 1.
