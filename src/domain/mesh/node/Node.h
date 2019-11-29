@@ -336,6 +336,7 @@ class Node: public MeshComponent
     Vector3d get3dMomentComponents(const Vector &) const;
     
     virtual const Vector &getReaction(void) const;
+    void setReaction(const Vector &);
     Vector3d getReactionForce3d(void) const;
     Vector3d getReactionMoment3d(void) const;
     const Vector &getResistingForce(const ElementConstPtrSet &,const bool &) const;

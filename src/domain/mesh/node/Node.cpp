@@ -2075,6 +2075,21 @@ SlidingVectorsSystem3d XC::Node::getResistingSlidingVectorsSystem3d(const std::s
 const XC::Vector &XC::Node::getReaction(void) const
   { return reaction; }
 
+//! @brief Set the node reaction
+void XC::Node::setReaction(const Vector &r)
+  {
+    std::clog << getClassName() << "::" << __FUNCTION__
+	      << "; setting reaction value is not an standard"
+              << " procedure (you're at your own)" << std::endl;
+    const int sz= reaction.Size();
+    if(r.Size()!=sz)
+      std::clog << getClassName() << "::" << __FUNCTION__
+	        << "; vector argument has a size of: "
+	        << r.Size() << " a vector of size: "
+	        << sz << " was expected." << std::endl;
+    reaction= r;
+  }
+
 //! @brief Return the reaction force in a 3D vector.
 Vector3d XC::Node::getReactionForce3d(void) const
   { return get3dForceComponents(reaction); }

@@ -58,6 +58,7 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   .add_property("getReactionForce3d", &XC::Node::getReactionForce3d, "Return the reaction force at this node as a 3D vector.")
   .add_property("getReactionMoment3d", &XC::Node::getReactionMoment3d, "Return the reaction moment at this node as a 3D vector.")
   .def("checkReactionForce", &XC::Node::checkReactionForce, "checkReactionForce(tolerance): return true if reactions correspond to constrained degrees of freedom, false otherwise.")
+  .def("setReaction", &XC::Node::setReaction, "Set the reaction at this node (not an standard procedure).")
   .add_property("getDisp", make_function( &XC::Node::getDisp, return_value_policy<copy_const_reference>() ),"Return the displacement vector.")
   .add_property("getDispXYZ", &XC::Node::getDispXYZ, "Return the translational components of the displacement.")
   .add_property("getRotXYZ", &XC::Node::getRotXYZ, "Return the rotational components of the displacement.")
