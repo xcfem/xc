@@ -162,7 +162,8 @@ size_t XC::Brick::getVectorIndex(const size_t &i,const size_t &j)
     return retval;
   }
 
-//! @brief Return the componente (i,j) de la tensión media in the element.
+//! @brief Return the (i,j) component (i,j) of the average stress
+//! in the element.
 double XC::Brick::getAvgStress(const size_t &i,const size_t &j) const
   {
     const size_t iComp= getVectorIndex(i,j);
@@ -173,7 +174,7 @@ double XC::Brick::getAvgStress(const size_t &i,const size_t &j) const
 XC::Vector XC::Brick::getAvgStrain(void) const
   { return physicalProperties.getCommittedAvgStrain(); }
 
-//! @brief Return the componente (i,j) de la average strain in the element.
+//! @brief Return the (i,j) component of the average strain in the element.
 double XC::Brick::getAvgStrain(const size_t &i,const size_t &j) const
   {
     const size_t iComp= getVectorIndex(i,j);
@@ -181,71 +182,72 @@ double XC::Brick::getAvgStrain(const size_t &i,const size_t &j) const
   }
 
 //print out element data
-void  XC::Brick::Print( std::ostream &s, int flag )
-{
-
-  if(flag == 2) {
-
-    s << "#Brick\n";
-
-    int i;
-    const int numNodes = 8;
-
-    for(i=0; i<numNodes; i++)
+void XC::Brick::Print(std::ostream &s, int flag )
+  {
+    if(flag == 2)
       {
-        const Vector &nodeCrd = theNodes[i]->getCrds();
-        const Vector &nodeDisp = theNodes[i]->getDisp();
-        s << "#NODE " << nodeCrd(0) << " " << nodeCrd(1) << " " << nodeCrd(2)
-          << " " << nodeDisp(0) << " " << nodeDisp(1) << " " << nodeDisp(2) << std::endl;
-     }
 
-    // spit out the section location & invoke print on the scetion
-    static Vector avgStress(brick_nstress);
-    static Vector avgStrain(brick_nstress);
-    avgStress= physicalProperties.getCommittedAvgStress();
-    avgStrain= physicalProperties.getCommittedAvgStrain();
+	s << "#Brick\n";
 
-    s << "#AVERAGE_STRESS ";
-    for(i=0; i<brick_nstress; i++)
-      s << avgStress(i) << " ";
-    s << std::endl;
+	int i;
+	const int numNodes = 8;
 
-    s << "#AVERAGE_STRAIN ";
-    for(i=0; i<brick_nstress; i++)
-      s << avgStrain(i) << " ";
-    s << std::endl;
+	for(i=0; i<numNodes; i++)
+	  {
+	    const Vector &nodeCrd = theNodes[i]->getCrds();
+	    const Vector &nodeDisp = theNodes[i]->getDisp();
+	    s << "#NODE " << nodeCrd(0) << " " << nodeCrd(1) << " " << nodeCrd(2)
+	      << " " << nodeDisp(0) << " " << nodeDisp(1) << " " << nodeDisp(2) << std::endl;
+	 }
 
-    /*
-    physicalProperties.Print(s,flag);
-    */
+	// spit out the section location & invoke print on the scetion
+	static Vector avgStress(brick_nstress);
+	static Vector avgStrain(brick_nstress);
+	avgStress= physicalProperties.getCommittedAvgStress();
+	avgStrain= physicalProperties.getCommittedAvgStrain();
 
-  } else {
+	s << "#AVERAGE_STRESS ";
+	for(i=0; i<brick_nstress; i++)
+	  s << avgStress(i) << " ";
+	s << std::endl;
 
-    s << "Standard Eight Node XC::Brick \n";
-    s << "Element Number: " << this->getTag() << std::endl;
-    s << "Nodes: " << theNodes;
+	s << "#AVERAGE_STRAIN ";
+	for(i=0; i<brick_nstress; i++)
+	  s << avgStrain(i) << " ";
+	s << std::endl;
 
-    s << "Material XC::Information : \n ";
-    physicalProperties.Print( s, flag );
+	/*
+	physicalProperties.Print(s,flag);
+	*/
 
-    s << std::endl;
-    s << this->getTag() << " " << theNodes.getTagNode(0)
-      << " " << theNodes.getTagNode(1)
-          << " " <<theNodes.getTagNode(2)
-          << " " <<theNodes.getTagNode(3)
-          << " " <<theNodes.getTagNode(4)
-          << " " <<theNodes.getTagNode(5)
-          << " " <<theNodes.getTagNode(6)
-          << " " <<theNodes.getTagNode(7)
-      << std::endl;
+      }
+    else
+      {
+	s << "Standard Eight Node Brick \n";
+	s << "Element Number: " << this->getTag() << std::endl;
+	s << "Nodes: " << theNodes;
 
-    s << "Resisting Force (no inertia): " << this->getResistingForce();
+	s << "Material Information : \n ";
+	physicalProperties.Print( s, flag );
+
+	s << std::endl;
+	s << this->getTag() << " " << theNodes.getTagNode(0)
+	  << " " << theNodes.getTagNode(1)
+	      << " " <<theNodes.getTagNode(2)
+	      << " " <<theNodes.getTagNode(3)
+	      << " " <<theNodes.getTagNode(4)
+	      << " " <<theNodes.getTagNode(5)
+	      << " " <<theNodes.getTagNode(6)
+	      << " " <<theNodes.getTagNode(7)
+	  << std::endl;
+
+	s << "Resisting Force (no inertia): " << this->getResistingForce();
+      }
   }
-}
 
 
 //return stiffness matrix
-const XC::Matrix&  XC::Brick::getTangentStiff(void) const
+const XC::Matrix &XC::Brick::getTangentStiff(void) const
   {
     int tang_flag = 1; //get the tangent
     //do tangent and residual here

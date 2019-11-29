@@ -53,6 +53,7 @@ class BrickBase : public ElemWithMaterial<8,NDMaterialPhysicalProperties>
     double getVolume(bool initialGeometry= true) const;
     BoolArray3d getNodePattern(void) const;
     int getVtkCellType(void) const;
+    static Matrix &getExtrapolationMatrix(void);
   };
 
 } // end of XC namespace

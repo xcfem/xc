@@ -127,3 +127,30 @@ XC::ElemPtrArray3d XC::BrickBase::put_on_mesh(const XC::NodePtrArray3d &nodes,me
 
 int XC::BrickBase::getVtkCellType(void) const
   { return VTK_HEXAHEDRON; }
+
+//! @brief Returns the matrix that can be used to extrapolate
+//! the results from the Gauss points to the element nodes.
+//!
+//! Reference: INTRODUCTION TO THE FINITE ELEMENT METHOD
+//! G. P. Nikishkov
+//! 2004 Lecture Notes. University of Aizu, Aizu-Wakamatsu
+//! 965-8580, Japanniki@u-aizu.ac.jp section 4.3.7
+XC::Matrix &XC::BrickBase::getExtrapolationMatrix(void)
+  {
+    const double sqrt3= sqrt(3);
+    const double A= (5.0+sqrt3)/4.0;
+    const double B= -(sqrt3+1)/4.0;
+    const double C= (sqrt3-1)/4.0;
+    const double D= (5-sqrt3)/4.0;
+    static Matrix retval(8,8); // 8 nodes 8 gauss points
+    // Fill in transformation matrix
+    retval(0,0)=A; retval(0,1)=B; retval(0,2)=C; retval(0,3)=B; retval(0,4)=B; retval(0,5)=C; retval(0,6)=D; retval(0,7)=C;
+    retval(1,0)=B; retval(1,1)=A; retval(1,2)=B; retval(1,3)=C; retval(1,4)=C; retval(1,5)=B; retval(1,6)=C; retval(1,7)=D;
+    retval(2,0)=C; retval(2,1)=B; retval(2,2)=A; retval(2,3)=B; retval(2,4)=D; retval(2,5)=C; retval(2,6)=B; retval(2,7)=C;
+    retval(3,0)=B; retval(3,1)=C; retval(3,2)=B; retval(3,3)=A; retval(3,4)=C; retval(3,5)=D; retval(3,6)=C; retval(3,7)=B;
+    retval(4,0)=B; retval(4,1)=C; retval(4,2)=D; retval(4,3)=C; retval(4,4)=A; retval(4,5)=B; retval(4,6)=C; retval(4,7)=B;
+    retval(5,0)=C; retval(5,1)=B; retval(5,2)=C; retval(5,3)=D; retval(5,4)=B; retval(5,5)=A; retval(5,6)=B; retval(5,7)=C;
+    retval(6,0)=D; retval(6,1)=C; retval(6,2)=B; retval(6,3)=C; retval(6,4)=C; retval(6,5)=B; retval(6,6)=A; retval(6,7)=B;
+    retval(7,0)=C; retval(7,1)=D; retval(7,2)=C; retval(7,3)=B; retval(7,4)=B; retval(7,5)=C; retval(7,6)=B; retval(7,7)=A;
+    return retval;
+  }
