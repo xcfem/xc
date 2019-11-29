@@ -42,7 +42,7 @@ class OutputStyle(object):
        :ivar language: english, spanish, french 
        :ivar directionDescr: text list to identify each direction (as ['vertical reinforcement', 'horizontal reinforcement']).
     '''
-    def __init__(self, cameraParameters= None, outputUnits= output_units.OutputUnits(), constraintsScaleFactor= 0.2, localAxesVectorScaleFactor= 0.5, language= None):
+    def __init__(self, cameraParameters= None, outputUnits= output_units.OutputUnits(), constraintsScaleFactor= 0.4, localAxesVectorScaleFactor= 0.5, language= None):
         '''Defines the dimension of the space and the number 
          of DOFs for each node.
 

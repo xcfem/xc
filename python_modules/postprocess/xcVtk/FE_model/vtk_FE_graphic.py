@@ -377,6 +377,7 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
         '''
         prep= setToDisplay.getPreprocessor
         nodInSet= setToDisplay.nodes.getTags()
+        elementAvgSize= setToDisplay.elements.getAverageSize(False)
         #direction vectors for each DOF
         vx,vy,vz=[1,0,0],[0,1,0],[0,0,1]
         DOFdirVct=(vx,vy,vz,vx,vy,vz)
@@ -386,10 +387,10 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
             nod=sp.getNode
             if nod.tag in nodInSet:
                 dof= sp.getDOFNumber
-                if dof < 3:
-                    utilsVtk.drawVtkSymb(symbType='cone',renderer=self.renderer, RGBcolor=[0,0,1], vPos=nod.getInitialPos3d, vDir=DOFdirVct[dof], scale=scale)
+                if dof < 3: # This is not true in 2D problems.
+                    utilsVtk.drawVtkSymb(symbType='cone',renderer=self.renderer, RGBcolor=[0,0,1], vPos=nod.getInitialPos3d, vDir=DOFdirVct[dof], scale=scale*elementAvgSize)
                 else:
-                    utilsVtk.drawVtkSymb(symbType='doubleCone',renderer=self.renderer, RGBcolor=[0,1,0], vPos=nod.getInitialPos3d, vDir=DOFdirVct[dof], scale=scale)
+                    utilsVtk.drawVtkSymb(symbType='shaftkey',renderer=self.renderer, RGBcolor=[0,1,0], vPos=nod.getInitialPos3d, vDir=DOFdirVct[dof], scale=scale*elementAvgSize)
             sp= spIter.next()
         return
                     
