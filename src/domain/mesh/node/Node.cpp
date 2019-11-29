@@ -2079,7 +2079,7 @@ const XC::Vector &XC::Node::getReaction(void) const
 void XC::Node::setReaction(const Vector &r)
   {
     std::clog << getClassName() << "::" << __FUNCTION__
-	      << "; setting reaction value is not an standard"
+	      << "; setting reaction value is not a standard"
               << " procedure (you're at your own)" << std::endl;
     const int sz= reaction.Size();
     if(r.Size()!=sz)
