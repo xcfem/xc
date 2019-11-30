@@ -54,13 +54,13 @@
 #ifndef FiniteDeformationElastic3D_h
 #define FiniteDeformationElastic3D_h
 
-#include <material/nD/NDMaterial.h>
+#include "FiniteDeformationMaterial.h"
 
 namespace XC {
 //! @ingroup FDNDMat
 //
 //! @brief 3D finite deformation elastic material.
-class FiniteDeformationElastic3D : public NDMaterial
+class FiniteDeformationElastic3D : public FiniteDeformationMaterial
   {
   protected:
     double rho; //!< Material density.
@@ -103,8 +103,8 @@ class FiniteDeformationElastic3D : public NDMaterial
     virtual int setParameter(const std::vector<std::string> &argv, Parameter &param);
     virtual int updateParameter(int parameterID, Information &info);
 
-    virtual const  stresstensor getPK1StressTensor(void);
-    virtual const  stresstensor getCauchyStressTensor(void);
+    const  stresstensor getPK1StressTensor(void) const;
+    const  stresstensor getCauchyStressTensor(void) const;
   };
 } // end of XC namespace
 

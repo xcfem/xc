@@ -66,16 +66,16 @@ using namespace XC;
 XC::FiniteDeformationElastic3D::FiniteDeformationElastic3D(int tag,
                                                        int classTag,
                                                        double rho_in= 0.0)
-:XC::NDMaterial(tag, classTag), rho(rho_in)
+:XC::FiniteDeformationMaterial(tag, classTag), rho(rho_in)
   {}
 
 XC::FiniteDeformationElastic3D::FiniteDeformationElastic3D(int tag)
-  : XC::NDMaterial(tag,ND_TAG_FiniteDeformationElastic3D), rho(0.0)
+  : FiniteDeformationMaterial(tag,ND_TAG_FiniteDeformationElastic3D), rho(0.0)
   {}
 
 //------------------------------------------------------------------------------------------------------------------------------------------------
 XC::FiniteDeformationElastic3D::FiniteDeformationElastic3D( )
-:XC::NDMaterial(0, 0), rho(0.0)
+: FiniteDeformationMaterial(0, 0), rho(0.0)
 {}
 
 //! @brief Return material density.
@@ -169,7 +169,7 @@ const XC::stresstensor &XC::FiniteDeformationElastic3D::getStressTensor(void) co
     return ret;
   }
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-const XC::stresstensor XC::FiniteDeformationElastic3D::getPK1StressTensor(void)
+const XC::stresstensor XC::FiniteDeformationElastic3D::getPK1StressTensor(void) const
   {
     std::cerr << "FiniteDeformationElastic3D-- subclass responsibility\n";
     exit(-1);
@@ -177,13 +177,13 @@ const XC::stresstensor XC::FiniteDeformationElastic3D::getPK1StressTensor(void)
     return ret;
   }
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-const XC::stresstensor XC::FiniteDeformationElastic3D::getCauchyStressTensor(void)
-{
+const XC::stresstensor XC::FiniteDeformationElastic3D::getCauchyStressTensor(void) const
+  {
    std::cerr << "FiniteDeformationElastic3D-- subclass responsibility\n";
    exit(-1);
    XC::stresstensor ret; 
    return ret;
-}
+  }
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 int XC::FiniteDeformationElastic3D::commitState(void)
 {
@@ -238,7 +238,7 @@ int XC::FiniteDeformationElastic3D::getOrder(void) const
 //! @brief Send object members through the channel being passed as parameter.
 int XC::FiniteDeformationElastic3D::sendData(CommParameters &cp)
   {
-    int res= NDMaterial::sendData(cp);
+    int res= FiniteDeformationMaterial::sendData(cp);
     res+= cp.sendDouble(rho,getDbTagData(),CommMetaData(1));
     return res;
   }
@@ -246,7 +246,7 @@ int XC::FiniteDeformationElastic3D::sendData(CommParameters &cp)
 //! @brief Receives object members through the channel being passed as parameter.
 int XC::FiniteDeformationElastic3D::recvData(const CommParameters &cp)
   {
-    int res= NDMaterial::recvData(cp);
+    int res= FiniteDeformationMaterial::recvData(cp);
     res+= cp.receiveDouble(rho,getDbTagData(),CommMetaData(1));
     return res;
   }

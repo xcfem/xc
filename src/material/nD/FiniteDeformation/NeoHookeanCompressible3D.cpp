@@ -143,7 +143,7 @@ const XC::stresstensor &XC::NeoHookeanCompressible3D::getStressTensor(void) cons
   { return thisPK2Stress; }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-const XC::stresstensor XC::NeoHookeanCompressible3D::getPK1StressTensor(void)
+const XC::stresstensor XC::NeoHookeanCompressible3D::getPK1StressTensor(void) const
   {
     XC::stresstensor thisSPKStress;
     XC::stresstensor thisFPKStress;
@@ -163,7 +163,7 @@ const XC::stresstensor XC::NeoHookeanCompressible3D::getPK1StressTensor(void)
   }
 
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-const XC::stresstensor XC::NeoHookeanCompressible3D::getCauchyStressTensor(void)
+const XC::stresstensor XC::NeoHookeanCompressible3D::getCauchyStressTensor(void) const
 {
    XC::stresstensor thisSPKStress;
    XC::stresstensor thisCauchyStress;

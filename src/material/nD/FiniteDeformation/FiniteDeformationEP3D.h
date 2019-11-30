@@ -52,7 +52,7 @@
 #ifndef FiniteDeformationEP3D_H
 #define FiniteDefornationEP3D_H
 
-#include <material/nD/NDMaterial.h>
+#include "FiniteDeformationMaterial.h"
 
 namespace XC {
   class FDEPState;
@@ -67,11 +67,11 @@ namespace XC {
 //! @ingroup FDNDMat
 //
 //! @brief Finite deformation elasto-plastic 3D material.
-class FiniteDeformationEP3D: public NDMaterial
+class FiniteDeformationEP3D: public FiniteDeformationMaterial
   {
 
   private:
-    NDMaterial *fde3d;
+    FiniteDeformationMaterial *fde3d;
     fdYield *fdy;
     fdFlow *fdf;
     fdEvolution_S *fdEvolutionS;
@@ -105,26 +105,26 @@ class FiniteDeformationEP3D: public NDMaterial
     FiniteDeformationEP3D(int tag= 0);
     // Constructor 01
     FiniteDeformationEP3D(int tag,
-                          NDMaterial *fde3d_in,
+                          FiniteDeformationMaterial *fde3d_in,
 			fdYield *fdy_in,
 			fdFlow *fdf_in,
 			fdEvolution_S *fdEvolutionS_in,
 			fdEvolution_T *fdEvolutionT_in);
     // Constructor 02
     FiniteDeformationEP3D(int tag,
-                          NDMaterial *fde3d_in,
+                          FiniteDeformationMaterial *fde3d_in,
 			fdYield *fdy_in,
 			fdFlow *fdf_in,
 			fdEvolution_S *fdEvolutionS_in);
     // Constructor 03
     FiniteDeformationEP3D(int tag,
-                          NDMaterial *fde3d_in,
+                          FiniteDeformationMaterial *fde3d_in,
 			fdYield *fdy_in,
 			fdFlow *fdf_in,
 			fdEvolution_T *fdEvolutionT_in);
     // Constructor 04
     FiniteDeformationEP3D(int tag,
-                          NDMaterial *fde3d_in,
+                          FiniteDeformationMaterial *fde3d_in,
 			fdYield *fdy_in,
 			fdFlow *fdf_in);
     // Destructor

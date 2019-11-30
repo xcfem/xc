@@ -152,8 +152,8 @@ class FDdecoupledElastic3D: public FiniteDeformationElastic3D
 //    int setParameter(const std::vector<std::string> &argv, Parameter &param);
 //    int updateParameter(int parameterID, Information &info);
 
-    const  stresstensor getPK1StressTensor(void) ;
-    const  stresstensor getCauchyStressTensor(void) ;
+    const  stresstensor getPK1StressTensor(void) const;
+    const  stresstensor getCauchyStressTensor(void) const;
   };
 } // end of XC namespace
 

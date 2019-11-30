@@ -385,8 +385,8 @@ const XC::straintensor &XC::FDdecoupledElastic3D::getStrainTensor(void) const
 const XC::stresstensor &XC::FDdecoupledElastic3D::getStressTensor(void) const
   { return thisPK2Stress; }
 //! @brief 
-const XC::stresstensor XC::FDdecoupledElastic3D::getPK1StressTensor(void)
-{
+const XC::stresstensor XC::FDdecoupledElastic3D::getPK1StressTensor(void) const
+  {
    XC::stresstensor thisSPKStress;
    XC::stresstensor thisFPKStress;
 
@@ -401,10 +401,11 @@ const XC::stresstensor XC::FDdecoupledElastic3D::getPK1StressTensor(void)
    }
 
     return thisFPKStress;
-}
+  }
+
 //! @brief 
-const XC::stresstensor XC::FDdecoupledElastic3D::getCauchyStressTensor(void)
-{
+const XC::stresstensor XC::FDdecoupledElastic3D::getCauchyStressTensor(void) const
+  {
    XC::stresstensor thisSPKStress;
    XC::stresstensor thisCauchyStress;
 
@@ -419,7 +420,7 @@ const XC::stresstensor XC::FDdecoupledElastic3D::getCauchyStressTensor(void)
    }
 
     return thisCauchyStress;
-}
+  }
 //! @brief 
 int XC::FDdecoupledElastic3D::commitState(void)
   { return 0; }

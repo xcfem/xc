@@ -71,7 +71,7 @@ XC::BJtensor tensorZ4(4, def_dim_4, 0.0);
 
 //! @brief Constructor 00
 XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag)
-  : XC::NDMaterial(tag,ND_TAG_FiniteDeformationEP3D)
+  : FiniteDeformationMaterial(tag,ND_TAG_FiniteDeformationEP3D)
   {
     fde3d = 0;
     fdy = 0;
@@ -86,15 +86,15 @@ XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag)
 
 //! @brief Constructor 01
 XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag,
-                                         XC::NDMaterial *fde3d_in,
+                                         XC::FiniteDeformationMaterial *fde3d_in,
                                          fdYield *fdy_in,
                                          fdFlow *fdf_in,
                                          fdEvolution_S *fdEvolutionS_in,
                                          fdEvolution_T *fdEvolutionT_in)
-  :XC::NDMaterial(tag, ND_TAG_FiniteDeformationEP3D)
+  : FiniteDeformationMaterial(tag, ND_TAG_FiniteDeformationEP3D)
   {
     if(fde3d_in)
-      fde3d = fde3d_in->getCopy();
+      fde3d = dynamic_cast<FiniteDeformationMaterial *>(fde3d_in->getCopy());
     else
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -136,14 +136,14 @@ XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag,
 
 //! @brief Constructor 02
 XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag,
-                                         XC::NDMaterial *fde3d_in,
+                                         XC::FiniteDeformationMaterial *fde3d_in,
                                          fdYield *fdy_in,
                                          fdFlow *fdf_in,
                                          fdEvolution_S *fdEvolutionS_in)
-:XC::NDMaterial(tag, ND_TAG_FiniteDeformationEP3D)
+: FiniteDeformationMaterial(tag, ND_TAG_FiniteDeformationEP3D)
 {
     if(fde3d_in)
-      fde3d = fde3d_in->getCopy();
+      fde3d = dynamic_cast<FiniteDeformationMaterial *>(fde3d_in->getCopy());
     else {
       std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; failed to construct the fdElastic3D\n";
@@ -180,14 +180,14 @@ XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag,
 
 //! @brief Constructor 03
 XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag,
-                                         NDMaterial *fde3d_in,
+                                         FiniteDeformationMaterial *fde3d_in,
                                          fdYield *fdy_in,
                                          fdFlow *fdf_in,
                                          fdEvolution_T *fdEvolutionT_in)
-:XC::NDMaterial(tag, ND_TAG_FiniteDeformationEP3D)
+: FiniteDeformationMaterial(tag, ND_TAG_FiniteDeformationEP3D)
 {
     if(fde3d_in)
-      fde3d = fde3d_in->getCopy();
+      fde3d = dynamic_cast<FiniteDeformationMaterial *>(fde3d_in->getCopy());
     else
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -227,13 +227,13 @@ XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag,
 
 //! @brief Constructor 04
 XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag,
-                                         NDMaterial *fde3d_in,
+                                         FiniteDeformationMaterial *fde3d_in,
                                          fdYield *fdy_in,
                                          fdFlow *fdf_in)
-  :XC::NDMaterial(tag, ND_TAG_FiniteDeformationEP3D)
+  : FiniteDeformationMaterial(tag, ND_TAG_FiniteDeformationEP3D)
   {
     if(fde3d_in)
-      fde3d = fde3d_in->getCopy();
+      fde3d = dynamic_cast<FiniteDeformationMaterial *>(fde3d_in->getCopy());
     else
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
