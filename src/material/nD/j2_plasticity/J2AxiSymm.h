@@ -147,15 +147,6 @@ class J2AxiSymm: public J2Plasticity
   const Matrix& getTangent(void) const;
   const Matrix& getInitialTangent(void) const;
 
-  //this is mike's problem
-  int setTrialStrain(const Tensor &v) ;
-  int setTrialStrain(const Tensor &v, const Tensor &r) ;    
-  int setTrialStrainIncr(const Tensor &v) ;
-  int setTrialStrainIncr(const Tensor &v, const Tensor &r) ;
-  const Tensor& getTangentTensor(void) const;
-//jeremic@ucdavis.edu 22jan2001  const Tensor& getStressTensor( ) ;
-//jeremic@ucdavis.edu 22jan2001  const Tensor& getStrainTensor( ) ;  
-
   //swap history variables
   int commitState( ) ; 
   int revertToLastCommit( ) ;
@@ -164,11 +155,7 @@ class J2AxiSymm: public J2Plasticity
   //sending and receiving
   int sendSelf(CommParameters &) ;  
   int recvSelf(const CommParameters &) ;
-
-  
-
- 				     
-} ; //end of J2AxiSymm declarations
+  }; //end of J2AxiSymm declarations
 
 } //end of XC namespace
 

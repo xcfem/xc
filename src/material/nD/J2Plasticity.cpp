@@ -81,10 +81,6 @@
 #include <material/nD/j2_plasticity/J2ThreeDimensional.h> 
 #include "material/nD/NDMaterialType.h"
 
-//this is mike's problem
-XC::Tensor XC::J2Plasticity::rank2(2, def_dim_2, 0.0 ) ;
-XC::Tensor XC::J2Plasticity::rank4(2, def_dim_2, 0.0 ) ;
-
 //parameters
 const double XC::J2Plasticity::one3   = 1.0 / 3.0 ;
 const double XC::J2Plasticity::two3   = 2.0 / 3.0 ;

@@ -245,8 +245,8 @@ const XC::Vector &XC::J2PlaneStress::getStress(void) const
 //send back the tangent 
 const XC::Matrix &XC::J2PlaneStress::getTangent(void) const
   {
-  // matrix to XC::BJtensor mapping
-  //  XC::Matrix      XC::Tensor
+  // matrix to tensor mapping
+  //  Matrix      Tensor
   // -------     -------
   //   0           0 0
   //   1           1 1
@@ -273,8 +273,8 @@ const XC::Matrix &XC::J2PlaneStress::getTangent(void) const
 //send back the tangent 
 const XC::Matrix &XC::J2PlaneStress::getInitialTangent(void) const
 {
-  // matrix to XC::BJtensor mapping
-  //  XC::Matrix      XC::Tensor
+  // matrix to tensor mapping
+  //  Matrix      Tensor
   // -------     -------
   //   0           0 0
   //   1           1 1
@@ -298,40 +298,6 @@ const XC::Matrix &XC::J2PlaneStress::getInitialTangent(void) const
 
   return tangent_matrix ;
 } 
-
-//this is mike's problem
-int XC::J2PlaneStress::setTrialStrain(const XC::Tensor &v) 
-{
-  return -1 ;
-}
-
-int XC::J2PlaneStress::setTrialStrain(const XC::Tensor &v, const XC::Tensor &r)     
-{
-  return -1 ;
-}
-
-int XC::J2PlaneStress::setTrialStrainIncr(const XC::Tensor &v) 
-{
-  return -1 ;
-}
-
-int XC::J2PlaneStress::setTrialStrainIncr(const XC::Tensor &v, const XC::Tensor &r) 
-{
-  return -1 ;
-}
-
-const XC::Tensor &XC::J2PlaneStress::getTangentTensor(void) const
-  { return rank4; }
-
-//jeremic@ucdavis.edu 22jan2001const XC::Tensor& J2PlaneStress::getStressTensor( ) 
-//jeremic@ucdavis.edu 22jan2001{
-//jeremic@ucdavis.edu 22jan2001  return rank2 ;
-//jeremic@ucdavis.edu 22jan2001}
-//jeremic@ucdavis.edu 22jan2001
-//jeremic@ucdavis.edu 22jan2001const XC::Tensor& J2PlaneStress::getStrainTensor( ) 
-//jeremic@ucdavis.edu 22jan2001{
-//jeremic@ucdavis.edu 22jan2001  return rank2 ;
-//jeremic@ucdavis.edu 22jan2001}
 
 int XC::J2PlaneStress::commitState( ) 
 {
@@ -407,12 +373,12 @@ int XC::J2PlaneStress::recvSelf(const CommParameters &cp)
   }
 
 
-//matrix_index ---> BJtensor indices i,j
+//matrix_index --->tensor indices i,j
 // plane stress different because of condensation on tangent
 // case 3 switched to 1-2 and case 4 to 3-3 
-void XC::J2PlaneStress::index_map( int matrix_index, int &i, int &j )
+void XC::J2PlaneStress::index_map(int matrix_index, int &i, int &j )
 {
-  switch( matrix_index+1 ) { //add 1 for standard XC::BJtensor indices
+  switch( matrix_index+1 ) { //add 1 for standard tensor indices
 
     case 1 :
       i = 1 ; 

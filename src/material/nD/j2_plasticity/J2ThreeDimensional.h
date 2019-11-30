@@ -89,9 +89,16 @@ namespace XC{
 //
 //! @brief J2 Isotropic hardening material class
 //! for 3D problems.
-class J2ThreeDimensional : public J2Plasticity {
+class J2ThreeDimensional : public J2Plasticity
+  {
 
 //-------------------Declarations-------------------------------
+  private :
+
+  //static vectors and matrices
+  static Vector strain_vec ;     //strain in vector notation
+  static Vector stress_vec ;     //stress in vector notation
+  static Matrix tangent_matrix ; //material tangent in matrix notation
 
   public : 
 
@@ -141,21 +148,6 @@ class J2ThreeDimensional : public J2Plasticity {
   const Matrix& getTangent(void) const;
   const Matrix& getInitialTangent(void) const;
 
-  //this is mike's problem
-  int setTrialStrain(const Tensor &v);
-  int setTrialStrain(const Tensor &v, const Tensor &r);    
-  int setTrialStrainIncr(const Tensor &v);
-  int setTrialStrainIncr(const Tensor &v, const Tensor &r);
-  const Tensor& getTangentTensor(void) const;
-//jeremic@ucdavis.edu 22jan2001  const Tensor& getStressTensor( );
-//jeremic@ucdavis.edu 22jan2001  const Tensor& getStrainTensor( );  
-
-  private :
-
-  //static vectors and matrices
-  static Vector strain_vec ;     //strain in vector notation
-  static Vector stress_vec ;     //stress in vector notation
-  static Matrix tangent_matrix ; //material tangent in matrix notation
 
 } ; //end of J2ThreeDimensional declarations
 

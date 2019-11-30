@@ -192,8 +192,8 @@ const XC::Vector& XC::J2AxiSymm::getStress(void)
 //send back the tangent 
 const XC::Matrix& XC::J2AxiSymm::getTangent(void) const
 {
-  // matrix to XC::BJtensor mapping
-  //  XC::Matrix      XC::Tensor
+  // matrix to tensor mapping
+  //  Matrix      Tensor
   // -------     -------
   //   0           0 0
   //   1           1 1
@@ -220,8 +220,8 @@ const XC::Matrix& XC::J2AxiSymm::getTangent(void) const
 //send back the tangent 
 const XC::Matrix& XC::J2AxiSymm::getInitialTangent(void) const
 {
-  // matrix to XC::BJtensor mapping
-  //  XC::Matrix      XC::Tensor
+  // matrix to tensor mapping
+  //  Matrix      Tensor
   // -------     -------
   //   0           0 0
   //   1           1 1
@@ -247,48 +247,15 @@ const XC::Matrix& XC::J2AxiSymm::getInitialTangent(void) const
   return tangent_matrix ;
 } 
 
-//this is mike's problem
-int XC::J2AxiSymm::setTrialStrain(const XC::Tensor &v) 
-{
-  return -1 ;
-}
 
-int XC::J2AxiSymm::setTrialStrain(const XC::Tensor &v, const XC::Tensor &r)     
-{
-  return -1 ;
-}
-
-int XC::J2AxiSymm::setTrialStrainIncr(const XC::Tensor &v) 
-{
-  return -1 ;
-}
-
-int XC::J2AxiSymm::setTrialStrainIncr(const XC::Tensor &v, const XC::Tensor &r) 
-{
-  return -1 ;
-}
-
-const XC::Tensor& XC::J2AxiSymm::getTangentTensor(void) const
-  { return rank4 ; }
-
-//jeremic@ucdavis.edu 22jan2001const XC::Tensor& XC::J2AxiSymm::getStressTensor( ) 
-//jeremic@ucdavis.edu 22jan2001{
-//jeremic@ucdavis.edu 22jan2001  return rank2 ;
-//jeremic@ucdavis.edu 22jan2001}
-//jeremic@ucdavis.edu 22jan2001
-//jeremic@ucdavis.edu 22jan2001const XC::Tensor& XC::J2AxiSymm::getStrainTensor( ) 
-//jeremic@ucdavis.edu 22jan2001{
-//jeremic@ucdavis.edu 22jan2001  return rank2 ;
-//jeremic@ucdavis.edu 22jan2001}
 
 //swap history variables
 int XC::J2AxiSymm::commitState( )  
-{
-  epsilon_p_n = epsilon_p_nplus1 ;
-  xi_n        = xi_nplus1 ;
-
-  return 0 ;
-}
+  {
+    epsilon_p_n = epsilon_p_nplus1 ;
+    xi_n        = xi_nplus1 ;
+    return 0 ;
+  }
 
 
 //revert to last saved state

@@ -205,8 +205,8 @@ const XC::Vector &XC::J2PlaneStrain::getStress(void) const
 //send back the tangent 
 const XC::Matrix &XC::J2PlaneStrain::getTangent(void) const
 {
-  // matrix to XC::BJtensor mapping
-  //  XC::Matrix      XC::Tensor
+  // matrix to tensor mapping
+  //  Matrix      Tensor
   // -------     -------
   //   0           0 0
   //   1           1 1
@@ -233,8 +233,8 @@ const XC::Matrix &XC::J2PlaneStrain::getTangent(void) const
 //send back the tangent 
 const XC::Matrix &XC::J2PlaneStrain::getInitialTangent(void) const
 {
-  // matrix to XC::BJtensor mapping
-  //  XC::Matrix      XC::Tensor
+  // matrix to tensor mapping
+  //  Matrix      Tensor
   // -------     -------
   //   0           0 0
   //   1           1 1
@@ -258,40 +258,6 @@ const XC::Matrix &XC::J2PlaneStrain::getInitialTangent(void) const
 
   return tangent_matrix ;
 } 
-
-//this is mike's problem
-int XC::J2PlaneStrain::setTrialStrain(const XC::Tensor &v) 
-{
-  return -1 ;
-}
-
-int XC::J2PlaneStrain::setTrialStrain(const XC::Tensor &v, const XC::Tensor &r)     
-{
-  return -1 ;
-}
-
-int XC::J2PlaneStrain::setTrialStrainIncr(const XC::Tensor &v) 
-{
-  return -1 ;
-}
-
-int XC::J2PlaneStrain::setTrialStrainIncr(const XC::Tensor &v, const XC::Tensor &r) 
-{
-  return -1 ;
-}
-
-const XC::Tensor &XC::J2PlaneStrain::getTangentTensor( ) 
-{ return rank4; }
-
-//jeremic@ucdavis.edu 22jan2001const XC::Tensor& J2PlaneStrain::getStressTensor( ) 
-//jeremic@ucdavis.edu 22jan2001{
-//jeremic@ucdavis.edu 22jan2001  return rank2 ;
-//jeremic@ucdavis.edu 22jan2001}
-//jeremic@ucdavis.edu 22jan2001
-//jeremic@ucdavis.edu 22jan2001const XC::Tensor& J2PlaneStrain::getStrainTensor( ) 
-//jeremic@ucdavis.edu 22jan2001{
-//jeremic@ucdavis.edu 22jan2001  return rank2 ;
-//jeremic@ucdavis.edu 22jan2001}
 
 int XC::J2PlaneStrain::commitState( ) 
 {

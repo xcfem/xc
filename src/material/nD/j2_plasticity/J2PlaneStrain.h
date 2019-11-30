@@ -140,16 +140,6 @@ class J2PlaneStrain : public J2Plasticity
      const Matrix& getTangent(void) const;
      const Matrix& getInitialTangent(void) const;
 
-     //this is mike's problem
-     int setTrialStrain(const Tensor &v) ;
-     int setTrialStrain(const Tensor &v, const Tensor &r) ;    
-     int setTrialStrainIncr(const Tensor &v) ;
-     int setTrialStrainIncr(const Tensor &v, const Tensor &r) ;
-     const Tensor& getTangentTensor( ) ;
-     
-     //jeremic@ucdavis.edu 22jan2001  const Tensor& getStressTensor( ) ;
-     //jeremic@ucdavis.edu 22jan2001  const Tensor& getStrainTensor( ) ;  
-
      //swap history variables
      int commitState( ) ; 
      int revertToLastCommit( ) ;
