@@ -1061,9 +1061,9 @@ void XC::EightNodeBrick::set_strain_stress_tensor(FILE *fp, double * u)
                 stress= Constitutive("ijkl") * strain("kl");   //<<<<<<<<<<<<<<<
                 stress.null_indices();
 
-		std::cerr << "\n  strain XC::BJtensor at GAUSS point " <<  where+1 << std::endl;
+		std::cerr << "\n  strain tensor at GAUSS point " <<  where+1 << std::endl;
                 strain.reportshort("");
-		std::cerr << "\n  stress XC::BJtensor at GAUSS point " <<  where+1 << std::endl;
+		std::cerr << "\n  stress tensor at GAUSS point " <<  where+1 << std::endl;
                 stress.reportshort("");
               }
           }
