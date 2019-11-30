@@ -59,7 +59,7 @@
 namespace XC {
 //! @ingroup ElemVol
 //
-//! @brief Eight node exahedron.
+//! @brief Eight node hexahedron.
 class Brick : public BrickBase
   {
   private : 
@@ -105,7 +105,6 @@ class Brick : public BrickBase
     int recvData(const CommParameters &cp);
   public :
     
-    //null constructor
     Brick(void);
     Brick(int tag,const NDMaterial *ptr_mat);
   
@@ -125,9 +124,9 @@ class Brick : public BrickBase
     int update(void);
 
     //return stiffness matrix 
-    const Matrix &getTangentStiff() const;
-    const Matrix &getInitialStiff() const;    
-    const Matrix &getMass() const;    
+    const Matrix &getTangentStiff(void) const;
+    const Matrix &getInitialStiff(void) const;    
+    const Matrix &getMass(void) const;    
 
     Vector getAvgStress(void) const;
     double getAvgStress(const size_t &,const size_t &) const;

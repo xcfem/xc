@@ -61,6 +61,7 @@
 #define NUM_OF_SUB_INCR 30
 #define KK 1000.0
 
+#include "utility/matrix/nDarray/Tensor.h"
 #include "material/nD/Template3Dep/Template3Dep.h"
 #include "material/nD/NDMaterialType.h"
 

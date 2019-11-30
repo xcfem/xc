@@ -52,7 +52,7 @@
 //#                    Sept2005  Zhao shortens the codes
 //===============================================================================
 
-#include <domain/mesh/element/volumetric/TotalLagrangianFD20NodeBrick/TotalLagrangianFD20NodeBrick.h>
+#include "TotalLagrangianFD20NodeBrick.h"
 #include <utility/matrix/nDarray/basics.h>
 #include <utility/matrix/nDarray/nDarray.h>
 #include <utility/matrix/Vector.h>
@@ -62,6 +62,7 @@
 #include <utility/matrix/nDarray/straint.h>
 
 #include <material/nD/NDMaterial.h>
+#include <material/nD/FiniteDeformation/FiniteDeformationMaterial.h>
 
 #include <domain/mesh/element/utils/Information.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
@@ -161,7 +162,8 @@ int XC::TotalLagrangianFD20NodeBrick::update(void)
           currentF = CurrentNodesDisp("Ia") * dH_dX("Ib");
             currentF.null_indices();
           updatedF = currentF + I_ij;
-          ret += physicalProperties[where]->setTrialF(updatedF);
+	  FiniteDeformationMaterial *fdMaterial= dynamic_cast<FiniteDeformationMaterial *>(physicalProperties[where]);
+          ret += fdMaterial->setTrialF(updatedF);
         }
       }
     }
@@ -253,9 +255,11 @@ XC::BJtensor XC::TotalLagrangianFD20NodeBrick::getStiffnessTensor(void) const
                 det_of_Jacobian  = Jacobian.determinant();
                 dhGlobal = this->dh_Global(dh);
                 weight = rw * sw * tw * det_of_Jacobian;
-                PK2Stress = physicalProperties[where]->getStressTensor();
-                L2= physicalProperties[where]->getTangentTensor();
-                F= physicalProperties[where]->getF();
+	        const FiniteDeformationMaterial *fdMaterial= dynamic_cast<const FiniteDeformationMaterial *>(physicalProperties[where]);
+
+                PK2Stress = fdMaterial->getStressTensor();
+                L2= fdMaterial->getTangentTensor();
+                F= fdMaterial->getF();
 
                 //K1
                 temp04 = dhGlobal("Pb") * tI2("mn");
@@ -332,7 +336,8 @@ XC::BJtensor XC::TotalLagrangianFD20NodeBrick::getStiffnessTensor(void) const
           dhGlobal = this->dh_Global(dh);
           weight = rw * sw * tw * det_of_Jacobian;
           PK2Stress = physicalProperties[where]->getStressTensor();
-          F = physicalProperties[where]->getF();
+          const FiniteDeformationMaterial *fdMaterial= dynamic_cast<const FiniteDeformationMaterial *>(physicalProperties[where]);
+          F = fdMaterial->getF();
           temp01 = PK2Stress("ik") * F("jk");
             temp01.null_indices();
           temp02 = dhGlobal("Pj") * temp01("ij") * weight;
@@ -624,19 +629,20 @@ void XC::TotalLagrangianFD20NodeBrick::Print(std::ostream &s, int flag)
 
     int i;
     for(i=0; i<NumTotalGaussPts; i++)
-    {
-      sigma = physicalProperties[i]->getCauchyStressTensor();
-      P00(0) = sigma.val(1,1);
-      P00(1) = sigma.val(2,2);
-      P00(2) = sigma.val(3,3);
-      P00(3) = sigma.val(2,3);
-      P00(4) = sigma.val(3,1);
-      P00(5) = sigma.val(1,2);
+      {
+        const FiniteDeformationMaterial *fdMaterial= dynamic_cast<const FiniteDeformationMaterial *>(physicalProperties[i]);
+        sigma = fdMaterial->getCauchyStressTensor();
+        P00(0) = sigma.val(1,1);
+        P00(1) = sigma.val(2,2);
+        P00(2) = sigma.val(3,3);
+        P00(3) = sigma.val(2,3);
+        P00(4) = sigma.val(3,1);
+        P00(5) = sigma.val(1,2);
 
-      s << "\n where = " << i << std::endl;
-      s << " Stress (Cauchy): xx yy zz yz zx xy) " << P00 << std::endl;
-    }
-}
+        s << "\n where = " << i << std::endl;
+        s << " Stress (Cauchy): xx yy zz yz zx xy) " << P00 << std::endl;
+      }
+  }
 
 //=============================================================================
  XC::Response * XC::TotalLagrangianFD20NodeBrick::setResponse(const std::vector<std::string> &argv, Information &eleInfo)
@@ -681,15 +687,17 @@ int XC::TotalLagrangianFD20NodeBrick::getResponse (int responseID, Information &
      case 3: {
         Vector P0(NumTotalGaussPts*6);
         BJtensor sigma;
-        for(i=0; i<NumTotalGaussPts; i++) {
-          sigma = physicalProperties[i]->getCauchyStressTensor();
-          P0(i*6 +0 ) = sigma.val(1,1);
-          P0(i*6 +1 ) = sigma.val(2,2);
-          P0(i*6 +2 ) = sigma.val(3,3);
-          P0(i*6 +3 ) = sigma.val(2,3);
-          P0(i*6 +4 ) = sigma.val(3,1);
-          P0(i*6 +5 ) = sigma.val(1,2);
-        }
+        for(i=0; i<NumTotalGaussPts; i++)
+	  {
+            const FiniteDeformationMaterial *fdMaterial= dynamic_cast<const FiniteDeformationMaterial *>(physicalProperties[i]);
+	    sigma = fdMaterial->getCauchyStressTensor();
+	    P0(i*6 +0 ) = sigma.val(1,1);
+	    P0(i*6 +1 ) = sigma.val(2,2);
+	    P0(i*6 +2 ) = sigma.val(3,3);
+	    P0(i*6 +3 ) = sigma.val(2,3);
+	    P0(i*6 +4 ) = sigma.val(3,1);
+	    P0(i*6 +5 ) = sigma.val(1,2);
+	  }
         return eleInfo.setVector(P0);
      }
 
@@ -715,19 +723,21 @@ int XC::TotalLagrangianFD20NodeBrick::getResponse (int responseID, Information &
         BJtensor E;
         BJtensor F;
         BJtensor tI2("I", 2, def_dim_2);
-        for(i=0; i<NumTotalGaussPts; i++) {
-          E = physicalProperties[i]->getStrainTensor();
-          F = physicalProperties[i]->getF();
-          F = F.inverse();
-          e = F("ki")*F("kj"); e.null_indices();
-          e = (tI2-e) *0.5;
-          P0(i*6 +0 ) = e.val(1,1);
-          P0(i*6 +1 ) = e.val(2,2);
-          P0(i*6 +2 ) = e.val(3,3);
-          P0(i*6 +3 ) = e.val(2,3);
-          P0(i*6 +4 ) = e.val(3,1);
-          P0(i*6 +5 ) = e.val(1,2);
-        }
+        for(i=0; i<NumTotalGaussPts; i++)
+	  {
+            const FiniteDeformationMaterial *fdMaterial= dynamic_cast<const FiniteDeformationMaterial *>(physicalProperties[i]);
+            E = fdMaterial->getStrainTensor();
+            F = fdMaterial->getF();
+            F = F.inverse();
+            e = F("ki")*F("kj"); e.null_indices();
+            e = (tI2-e) *0.5;
+            P0(i*6 +0 ) = e.val(1,1);
+            P0(i*6 +1 ) = e.val(2,2);
+            P0(i*6 +2 ) = e.val(3,3);
+            P0(i*6 +3 ) = e.val(2,3);
+            P0(i*6 +4 ) = e.val(3,1);
+            P0(i*6 +5 ) = e.val(1,2);
+          }
         return eleInfo.setVector(P0);
      }
 

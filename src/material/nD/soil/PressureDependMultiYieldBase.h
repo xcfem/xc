@@ -173,11 +173,6 @@ class PressureDependMultiYieldBase: public PressureMultiYieldBase
      const Vector &getCommittedStress (void);
      const Vector &getCommittedStrain (void);
 
-     int setTrialStrain(const Tensor &v) {return 0;}
-     int setTrialStrain(const Tensor &v, const Tensor &r) {return 0;}
-     int setTrialStrainIncr(const Tensor &v) {return 0;}
-     int setTrialStrainIncr(const Tensor &v, const Tensor &r) {return 0;}
-
      // Accepts the current trial strain values as being on the solution path, and updates 
      // all model parameters related to stress/strain states. Return 0 on success.
      int commitState(void);

@@ -318,10 +318,10 @@ void XC::MatPoint3D::report(const std::string &msg) const
       {
         std::cerr << (*matmodel);
 
-        XC::stresstensor tmpstress = matmodel->getStressTensor();
+        stresstensor tmpstress = matmodel->getStressTensor();
         tmpstress.report("stress at this Gauss-Legendre point\n");
 
-        XC::straintensor tmpstrain = matmodel->getStrainTensor();
+        straintensor tmpstrain = matmodel->getStrainTensor();
         tmpstrain.report("strain at this Gauss-Legendre point\n");
       }
     else

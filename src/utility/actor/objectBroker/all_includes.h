@@ -312,6 +312,8 @@
 #include "utility/matrix/nDarray/BJmatrix.h"
 #include "utility/matrix/nDarray/BJvector.h"
 #include "utility/matrix/nDarray/BJtensor.h"
+#include "utility/matrix/nDarray/straint.h"
+#include "utility/matrix/nDarray/stresst.h"
 #include "utility/matrix/nDarray/Cosseratstraint.h"
 #include "utility/matrix/nDarray/Cosseratstresst.h"
 

@@ -66,6 +66,7 @@ class PotentialSurface;
 class EvolutionLaw_S;
 class EvolutionLaw_T;
 class EPState;
+class Tensor;
 
 //! @ingroup NDMat
 //!

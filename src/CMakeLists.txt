@@ -148,7 +148,7 @@ SET(remote utility/remote/remote)
 
 SET(tagged utility/tagged/storage/TaggedObjectStorage utility/tagged/storage/ArrayOfTaggedObjects utility/tagged/storage/ArrayOfTaggedObjectsIter utility/tagged/storage/MapOfTaggedObjects utility/tagged/storage/MapOfTaggedObjectsIter utility/tagged/TaggedObject)
 
-SET(nDarray utility/matrix/nDarray/basics utility/matrix/nDarray/BJtensor utility/matrix/nDarray/Cosseratstresst utility/matrix/nDarray/stresst utility/matrix/nDarray/BJvector utility/matrix/nDarray/nDarray utility/matrix/nDarray/BJmatrix utility/matrix/nDarray/Cosseratstraint utility/matrix/nDarray/straint)
+SET(nDarray utility/matrix/nDarray/basics utility/matrix/nDarray/BJtensor utility/matrix/nDarray/Cosseratstresst utility/matrix/nDarray/stress_strain_tensor utility/matrix/nDarray/stresst utility/matrix/nDarray/BJvector utility/matrix/nDarray/nDarray utility/matrix/nDarray/BJmatrix utility/matrix/nDarray/Cosseratstraint utility/matrix/nDarray/straint)
 
 SET(matrix utility/matrix/ID utility/matrix/IDVarSize utility/matrix/IntPtrWrapper utility/matrix/AuxMatrix utility/matrix/Matrix utility/matrix/DqMatrices utility/matrix/Vector utility/matrix/DqVectors utility/matrix/util_matrix ${nDarray})
 
@@ -265,7 +265,7 @@ SET(fdFlow material/nD/FiniteDeformation/fdFlow/fdFlow material/nD/FiniteDeforma
 
 SET(fdYield material/nD/FiniteDeformation/fdYield/fdYield material/nD/FiniteDeformation/fdYield/fdYieldDP material/nD/FiniteDeformation/fdYield/fdYieldVM)
 
-SET(finiteDeformation material/nD/FiniteDeformation/NeoHookeanCompressible3D material/nD/FiniteDeformation/FDEPState material/nD/FiniteDeformation/FDdecoupledElastic3D material/nD/FiniteDeformation/FiniteDeformationEP3D material/nD/FiniteDeformation/FiniteDeformationElastic3D  ${fdEvolution} ${fdFlow} ${fdYield} ${WEnergy})
+SET(finiteDeformation material/nD/FiniteDeformation/FiniteDeformationMaterial  material/nD/FiniteDeformation/NeoHookeanCompressible3D material/nD/FiniteDeformation/FDEPState material/nD/FiniteDeformation/FDdecoupledElastic3D material/nD/FiniteDeformation/FiniteDeformationEP3D material/nD/FiniteDeformation/FiniteDeformationElastic3D  ${fdEvolution} ${fdFlow} ${fdYield} ${WEnergy})
 
 SET(nD_soil material/nD/soil/FluidSolidPorousMaterial material/nD/soil/MultiYieldSurface material/nD/soil/PressureMultiYieldBase material/nD/soil/PressureDependMultiYieldBase material/nD/soil/PressureDependMultiYield material/nD/soil/PressureDependMultiYield02 material/nD/soil/PressureIndependMultiYield material/nD/soil/T2Vector material/nD/soil/cyclicSoil/MultiaxialCyclicPlasticity material/nD/soil/cyclicSoil/MultiaxialCyclicPlasticity3D material/nD/soil/cyclicSoil/MultiaxialCyclicPlasticityAxiSymm material/nD/soil/cyclicSoil/MultiaxialCyclicPlasticityPlaneStrain)
 

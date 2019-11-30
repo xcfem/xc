@@ -71,15 +71,17 @@
 // What: "@(#) NDMaterial.h, revA"
 
 #include <material/Material.h>
-#include <utility/matrix/nDarray/stresst.h>
+#include "utility/matrix/nDarray/stresst.h"
 
 namespace XC {
 class Matrix;
 class ID;
 class Vector;
-class Tensor;
 class Information;
 class Response;
+class straintensor;
+class stresstensor;
+class Tensor;
 
 //! @ingroup Mat
 //!
@@ -99,9 +101,6 @@ class NDMaterial: public Material
   private:
     static Matrix errMatrix;
     static Vector errVector;
-    static Tensor errTensor;
-    static stresstensor errstresstensor;
-    static straintensor errstraintensor;
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
@@ -133,34 +132,20 @@ class NDMaterial: public Material
     inline const Vector &getGeneralizedStrain(void) const
       { return getStrain(); }
 
+    virtual int setTrialStrain(const Tensor &);
+    virtual int setTrialStrain(const Tensor &, const Tensor &);
+    virtual int setTrialStrainIncr(const Tensor &);
+    virtual int setTrialStrainIncr(const Tensor &, const Tensor &);
+    const Tensor &getTangentTensor(void) const;
+    virtual const stresstensor &getStressTensor(void) const;
+    virtual const straintensor &getStrainTensor(void) const;
+    virtual const straintensor &getPlasticStrainTensor(void) const; //Added Joey Aug. 13, 2001
+
     virtual void setInitialGeneralizedStrain(const Vector &);
     const Vector &getInitialGeneralizedStrain(void) const;
 
     virtual const Vector &getCommittedStress(void);
     virtual const Vector &getCommittedStrain(void);
-
-    // methods to set and retrieve state using the Tensor class
-    virtual int setTrialStrain(const Tensor &v);
-    virtual int setTrialStrain(const Tensor &v, const Tensor &r);
-    virtual int setTrialStrainIncr(const Tensor &v);
-    virtual int setTrialStrainIncr(const Tensor &v, const Tensor &r);
-    virtual const Tensor &getTangentTensor(void) const;
-    virtual const stresstensor &getStressTensor(void) const;
-    virtual const straintensor &getStrainTensor(void) const;
-    virtual const straintensor &getPlasticStrainTensor(void) const; //Added Joey Aug. 13, 2001
-
-//Zhao (zcheng@ucdavis.edu)
-// added Sept 22 2003 for Large Deformation, F is the Deformation Gradient
-    virtual int setTrialF(const straintensor &f);
-    virtual int setTrialFIncr(const straintensor &df);
-    virtual int setTrialC(const straintensor &c);
-    virtual int setTrialCIncr(const straintensor &dc);
-    virtual const stresstensor getPK1StressTensor(void);
-    virtual const stresstensor getCauchyStressTensor(void);
-    virtual const straintensor &getF(void) const;
-    virtual const straintensor &getC(void) const;
-    virtual const straintensor getFp(void);
-// Only For Large Deformation, END////////////////////////////////////////
 
     //! @brief Virtual constructor.
     virtual NDMaterial *getCopy(void) const= 0;
