@@ -190,29 +190,25 @@ XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(const std::string &type) c
 
 int XC::ElasticIsotropicMaterial::setTrialStrain(const Vector &v)
   {
-    epsilon = v;
+    epsilon= v;
     return 0;
   }
 
 int XC::ElasticIsotropicMaterial::setTrialStrain(const Vector &v, const XC::Vector &rate)
   {
-    epsilon = v;
+    epsilon= v;
     return 0;
   }
 
 int XC::ElasticIsotropicMaterial::setTrialStrainIncr(const Vector &v)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
-    exit(-1);
-    return -1;
+    epsilon+= v;
+    return 0;
   }
 
 int XC::ElasticIsotropicMaterial::setTrialStrainIncr(const Vector &v, const XC::Vector &rate)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
-    exit(-1);
+    epsilon+= v;
     return -1;
   }
 
@@ -220,18 +216,18 @@ int XC::ElasticIsotropicMaterial::setTrialStrainIncr(const Vector &v, const XC::
 const XC::Matrix &XC::ElasticIsotropicMaterial::getTangent(void) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
+              << "; subclass responsibility.\n";
     exit(-1);
 
     // Just to make it compile
-    XC::Matrix *ret = new Matrix();
-    return *ret;
+    static Matrix ret;
+    return ret;
   }
 
 const XC::Matrix &XC::ElasticIsotropicMaterial::getInitialTangent(void) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
+              << "; subclass responsibility.\n";
     exit(-1);
 
     // Just to make it compile
@@ -242,7 +238,7 @@ const XC::Matrix &XC::ElasticIsotropicMaterial::getInitialTangent(void) const
 const XC::Vector &XC::ElasticIsotropicMaterial::getStress(void) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
+              << "; subclass responsibility.\n";
     exit(-1);
     
     // Just to make it compile
@@ -253,91 +249,13 @@ const XC::Vector &XC::ElasticIsotropicMaterial::getStress(void) const
 const XC::Vector &XC::ElasticIsotropicMaterial::getStrain(void) const
   { return epsilon; }
 
-int XC::ElasticIsotropicMaterial::setTrialStrain(const Tensor &v)
-  {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
-    exit(-1);
-
-    return -1;
-  }
-
-int XC::ElasticIsotropicMaterial::setTrialStrain(const Tensor &v, const XC::Tensor &r)
-  {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
-    exit(-1);
-
-    return -1;
-  }
-
-int XC::ElasticIsotropicMaterial::setTrialStrainIncr(const Tensor &v)
-  {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
-    exit(-1);
-
-    return -1;
-  }
-
-int XC::ElasticIsotropicMaterial::setTrialStrainIncr(const Tensor &v, const XC::Tensor &r)
-  {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
-    return -1;
-  }
-
-const XC::Tensor &XC::ElasticIsotropicMaterial::getTangentTensor(void) const
-  {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
-    exit(-1);
-  
-    // Just to make it compile
-    static Tensor t;
-    return t;
-  }
-
-const XC::stresstensor &XC::ElasticIsotropicMaterial::getStressTensor(void) const
-  {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
-    exit(-1);
-
-    // Just to make it compile
-    static stresstensor t;
-    return t;
-  }
-
-const XC::straintensor &XC::ElasticIsotropicMaterial::getStrainTensor(void) const
-  {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << ";subclass responsibility\n";
-    exit(-1);
-
-    // Just to make it compile
-    static XC::straintensor t;
-    return t;
-  }
-
-const XC::straintensor &XC::ElasticIsotropicMaterial::getPlasticStrainTensor(void) const
-  {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; subclass responsibility\n";
-    exit(-1);
-        
-    // Just to make it compile
-    static straintensor t;
-    return t;
-  }
-
 //! @brief To accept the current value of the trial strain vector
 //! as being on the solution path. To return \f$0\f$ if
 //! successful, a negative number if not.
 int XC::ElasticIsotropicMaterial::commitState(void)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
+              << "; subclass responsibility.\n";
     exit(-1);
     return -1;
   }
@@ -347,7 +265,7 @@ int XC::ElasticIsotropicMaterial::commitState(void)
 int XC::ElasticIsotropicMaterial::revertToLastCommit(void)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
+              << "; subclass responsibility.\n";
     exit(-1);
     
     return -1;
@@ -358,16 +276,14 @@ int XC::ElasticIsotropicMaterial::revertToLastCommit(void)
 //! number if not.
 int XC::ElasticIsotropicMaterial::revertToStart(void)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
-    exit(-1);
-    return -1;
+    epsilon.Zero();
+    return 0;
   }
 
 XC::NDMaterial *XC::ElasticIsotropicMaterial::getCopy(void) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
+              << "; subclass responsibility.\n";
     exit(-1);
     return 0;
   }
@@ -376,7 +292,7 @@ const std::string &XC::ElasticIsotropicMaterial::getType(void) const
   {
     static std::string retval= "";
     std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
+              << "; subclass responsibility.\n";
     exit(-1);
     return retval;
   }
@@ -384,7 +300,7 @@ const std::string &XC::ElasticIsotropicMaterial::getType(void) const
 int XC::ElasticIsotropicMaterial::getOrder(void) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; subclass responsibility\n";
+              << "; subclass responsibility.\n";
     exit(-1);
     return -1;
   }

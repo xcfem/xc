@@ -76,11 +76,10 @@ namespace XC {
 class ElasticIsotropicPlaneStress2D: public ElasticIsotropic2D
   {
   private:
-    static Vector sigma; //!< Stress vector ... class-wide for returns
+    static Vector sigma; //!< Stress vector ... class-wide for returns [sigma_xx, sigma_yy, tau_xy]
   public:
+    ElasticIsotropicPlaneStress2D(int tag= 0);
     ElasticIsotropicPlaneStress2D(int tag, double E, double nu, double rho);
-    ElasticIsotropicPlaneStress2D(int tag);
-    ElasticIsotropicPlaneStress2D(void);
 
     int setTrialStrainIncr(const Vector &v);
     int setTrialStrainIncr(const Vector &v, const Vector &r);

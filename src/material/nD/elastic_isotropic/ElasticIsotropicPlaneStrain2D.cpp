@@ -54,7 +54,7 @@
 #include <utility/matrix/Matrix.h>
 #include "material/nD/NDMaterialType.h"
 
-XC::Vector XC::ElasticIsotropicPlaneStrain2D::sigma(3);
+XC::Vector XC::ElasticIsotropicPlaneStrain2D::sigma(3); //Stress vector: [sigma_xx, sigma_yy, tau_xy]
 
 //! @brief Constructor.
 //!
@@ -65,26 +65,25 @@ XC::Vector XC::ElasticIsotropicPlaneStrain2D::sigma(3);
 //! @param tag: material identifier.
 //! @param E: material Young's modulus.
 //! @param nu: material Poisson's ratio.
+//! @param rho: material density.
 XC::ElasticIsotropicPlaneStrain2D::ElasticIsotropicPlaneStrain2D(int tag, double E, double nu, double rho)
-  : ElasticIsotropic2D(tag, ND_TAG_ElasticIsotropicPlaneStrain2d, E, nu, rho)
-  {}
+  : ElasticIsotropic2D(tag, ND_TAG_ElasticIsotropicPlaneStrain2d, E, nu, rho) {}
 
 //! @brief Constructor.
 //!
 //! @param tag: material identifier.
 XC::ElasticIsotropicPlaneStrain2D::ElasticIsotropicPlaneStrain2D(int tag)
-  : ElasticIsotropic2D(tag, ND_TAG_ElasticIsotropicPlaneStrain2d, 0.0, 0.0, 0.0)
-  {}
+  : ElasticIsotropic2D(tag, ND_TAG_ElasticIsotropicPlaneStrain2d, 0.0, 0.0, 0.0) {}
 
-int XC::ElasticIsotropicPlaneStrain2D::setTrialStrainIncr(const XC::Vector &strain)
+int XC::ElasticIsotropicPlaneStrain2D::setTrialStrainIncr(const Vector &strain)
   {
     epsilon+= strain;
     return 0;
   }
 
-int XC::ElasticIsotropicPlaneStrain2D::setTrialStrainIncr(const XC::Vector &strain, const XC::Vector &rate)
+int XC::ElasticIsotropicPlaneStrain2D::setTrialStrainIncr(const Vector &strain, const Vector &rate)
   {
-    epsilon += strain;
+    epsilon+= strain;
     return 0;
   }
 
@@ -114,6 +113,7 @@ const XC::Matrix &XC::ElasticIsotropicPlaneStrain2D::getTangent(void) const
     return D;
   }
 
+//! @brief Returns the material initial tangent stiffness matrix, \f$D\f$.
 const XC::Matrix &XC::ElasticIsotropicPlaneStrain2D::getInitialTangent(void) const
   {
     const double mu2= E/(1.0+v);
@@ -137,7 +137,7 @@ const XC::Matrix &XC::ElasticIsotropicPlaneStrain2D::getInitialTangent(void) con
 //!        \sigma_{xx}
 //!        \sigma_{yy}
 //!        \tau_{xy}   
-//!    \end{array} 
+//!    \end{array}
 //!  \right]
 //! \end{displaymath}
 //! \f]
@@ -153,25 +153,28 @@ const XC::Vector &XC::ElasticIsotropicPlaneStrain2D::getStress(void) const
     mu2+= lam;
 
     //sigma = D*epsilon;
-    sigma(0) = mu2*eps0 + lam*eps1;
-    sigma(1) = lam*eps0 + mu2*eps1;
-    sigma(2) = mu*epsilon(2);
+    sigma(0) = mu2*eps0 + lam*eps1; //sigma_xx
+    sigma(1) = lam*eps0 + mu2*eps1; //sigma_yy
+    sigma(2) = mu*epsilon(2); //tau_xy
     return sigma;
   }
 
+//! @brief Commit the material state.
 int XC::ElasticIsotropicPlaneStrain2D::commitState(void)
   { return 0; }
 
+//! @brief Revert the material to its last committed state.
 int XC::ElasticIsotropicPlaneStrain2D::revertToLastCommit(void)
   { return 0; }
 
+//! @brief Revert the material to its initial state.
 int XC::ElasticIsotropicPlaneStrain2D::revertToStart(void)
   {
     epsilon.Zero();
     return 0;
   }
 
-//ª @brief Virtual constructor.
+//! @brief @brief Virtual constructor.
 XC::NDMaterial *XC::ElasticIsotropicPlaneStrain2D::getCopy(void) const
   { return new ElasticIsotropicPlaneStrain2D(*this); }
 

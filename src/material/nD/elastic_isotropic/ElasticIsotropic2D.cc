@@ -56,10 +56,12 @@
 
 XC::Matrix XC::ElasticIsotropic2D::D(3,3);
 
+//! @brief Constructor.
 XC::ElasticIsotropic2D::ElasticIsotropic2D(int tag, int classTag, double E, double nu, double rho)
   : ElasticIsotropicMaterial(tag, classTag, 3, E, nu, rho)
   {}
 
+//! @brief Constructor.
 XC::ElasticIsotropic2D::ElasticIsotropic2D(int tag, int classTag)
   : ElasticIsotropicMaterial(tag, classTag,3, 0.0, 0.0)
   {}

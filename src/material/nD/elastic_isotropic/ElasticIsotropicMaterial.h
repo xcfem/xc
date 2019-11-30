@@ -126,16 +126,6 @@ class ElasticIsotropicMaterial: public NDMaterial
     virtual const Vector &getStress(void) const;
     virtual const Vector &getStrain(void) const;
 
-    int setTrialStrain(const Tensor &v);
-    int setTrialStrain(const Tensor &v, const Tensor &r);
-    int setTrialStrainIncr(const Tensor &v);
-    int setTrialStrainIncr(const Tensor &v, const Tensor &r);
-    const Tensor &getTangentTensor(void) const;
-    const stresstensor &getStressTensor(void) const;
-    const straintensor &getStrainTensor(void) const;
-    const straintensor &getPlasticStrainTensor(void) const;
-    
-    
     virtual int commitState(void);
     virtual int revertToLastCommit(void);
     virtual int revertToStart(void);
@@ -160,8 +150,6 @@ class ElasticIsotropicMaterial: public NDMaterial
 
     virtual int setParameter(const std::vector<std::string> &argv, Parameter &param);
     virtual int updateParameter(int parameterID, Information &info);
-
-
   };
 } // end of XC namespace
 

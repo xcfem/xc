@@ -75,8 +75,8 @@ namespace XC {
 class ElasticIsotropicPlaneStrain2D : public ElasticIsotropic2D
   {
   private:
-    static Vector sigma;        // Stress vector ... class-wide for returns
-    Vector epsilon;	        // Trial strains
+    static Vector sigma; //!< Stress vector ... class-wide for returns
+    Vector epsilon; //! Trial strains
   public:
     ElasticIsotropicPlaneStrain2D(int tag, double E, double nu, double rho);
     ElasticIsotropicPlaneStrain2D(int tag= 0);

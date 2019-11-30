@@ -57,11 +57,6 @@
 	 
 #include <material/nD/elastic_isotropic/ElasticIsotropicMaterial.h>
 
-#include <utility/matrix/nDarray/straint.h>
-#include <utility/matrix/nDarray/stresst.h>
-#include <utility/matrix/nDarray/Tensor.h>
-
-
 namespace XC {
 //! @ingroup NDMat
 //
@@ -70,32 +65,18 @@ class ElasticIsotropic3D : public ElasticIsotropicMaterial
   {
   private:
     static Vector sigma; //!< Stress vector
-    static Matrix D;     //!< Elastic constantsVector sigma;
+    static Matrix D; //!< Elastic constantsVector sigma;
+    Vector Cepsilon; //!< Committed strain
 
-    mutable Tensor Dt;	 //!< Elastic constants tensor
-    static stresstensor Stress;	//!< Stress tensor    
-    straintensor Strain;	//!< Strain tensor    
   public:
+    ElasticIsotropic3D(int tag= 0);
     ElasticIsotropic3D(int tag, double E, double nu, double rho);
-    ElasticIsotropic3D(int tag);
-    ElasticIsotropic3D(void);
 
-    int setTrialStrainIncr(const Vector &v);
-    int setTrialStrainIncr(const Vector &v, const Vector &r);
     const Matrix &getTangent(void) const;
     const Matrix &getInitialTangent(void) const;
 
     const Vector &getStress(void) const;
     
-    int setTrialStrain(const Tensor &v);
-    int setTrialStrain(const Tensor &v, const Tensor &r);
-    int setTrialStrainIncr(const Tensor &v);
-    int setTrialStrainIncr(const Tensor &v, const Tensor &r);
-    const Tensor &getTangentTensor (void) const;
-    const stresstensor &getStressTensor(void) const;
-    const straintensor &getStrainTensor(void) const;
-    const straintensor &getPlasticStrainTensor(void) const;
-
     int commitState (void);
     int revertToLastCommit (void);
     int revertToStart (void);
@@ -105,7 +86,6 @@ class ElasticIsotropic3D : public ElasticIsotropicMaterial
     int getOrder(void) const;
 
     void Print(std::ostream &s, int flag =0);
-    void setInitElasticStiffness(void) const;
   };
 } // end of XC namespace
 

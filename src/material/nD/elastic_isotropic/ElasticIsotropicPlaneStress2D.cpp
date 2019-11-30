@@ -55,7 +55,7 @@
 #include <utility/matrix/Matrix.h>
 #include "material/nD/NDMaterialType.h"
 
-XC::Vector XC::ElasticIsotropicPlaneStress2D::sigma(3);
+XC::Vector XC::ElasticIsotropicPlaneStress2D::sigma(3); //Stress vector: [sigma_xx, sigma_yy, tau_xy]
 
 //! @brief Constructor.
 //! 
@@ -75,23 +75,21 @@ XC::ElasticIsotropicPlaneStress2D::ElasticIsotropicPlaneStress2D(int tag)
   : ElasticIsotropic2D(tag, ND_TAG_ElasticIsotropicPlaneStress2d, 0.0, 0.0, 0.0)
   {}
 
-XC::ElasticIsotropicPlaneStress2D::ElasticIsotropicPlaneStress2D():
-  ElasticIsotropic2D(0, ND_TAG_ElasticIsotropicPlaneStress2d,0.0, 0.0, 0.0)
-  {}
-
+//! @brief Increments the strain vector [epsilon_xx, epsilon_yy, epsilon_xy]
 int XC::ElasticIsotropicPlaneStress2D::setTrialStrainIncr(const Vector &strain)
   {
-    epsilon += strain;
+    epsilon+= strain;
     return 0;
   }
 
+//! @brief Increments the strain vector [epsilon_xx, epsilon_yy, epsilon_xy]
 int XC::ElasticIsotropicPlaneStress2D::setTrialStrainIncr(const Vector &strain, const Vector &rate)
   {
-    epsilon += strain;
+    epsilon+= strain;
     return 0;
   }
 
-//! Returns the material tangent stiffness matrix, \f$\D\f$.
+//! @brief Returns the material tangent stiffness matrix, \f$\D\f$.
 //!
 //! \f[
 //! \begin{displaymath}
@@ -117,11 +115,12 @@ const XC::Matrix &XC::ElasticIsotropicPlaneStress2D::getTangent(void) const
     return D;
   }
 
+//! @brief Returns the material tangent stiffness matrix, \f$\D\f$.
 const XC::Matrix &XC::ElasticIsotropicPlaneStress2D::getInitialTangent(void) const
   {
-    double d00 = E/(1.0-v*v);
-    double d01 = v*d00;
-    double d22 = 0.5*(d00-d01);
+    const double d00 = E/(1.0-v*v);
+    const double d01 = v*d00;
+    const double d22 = 0.5*(d00-d01);
 
     D(0,0) = D(1,1) = d00;
     D(1,0) = D(0,1) = d01;
@@ -130,8 +129,8 @@ const XC::Matrix &XC::ElasticIsotropicPlaneStress2D::getInitialTangent(void) con
     return D;
   }
 
-//! Returns the material stress vector, \f$\mysigma\f$, for the current
-//! trial strain.
+//! Returns the material stress vector, \f$\sigma\f$, for the current
+//! trial strain: [epsilon_xx, epsilon_yy, epsilon_xy]
 //!
 //! \f[
 //! \begin{displaymath}
@@ -150,7 +149,7 @@ const XC::Vector &XC::ElasticIsotropicPlaneStress2D::getStress(void) const
     const double d01= v*d00;
     const double d22= 0.5*(d00-d01);
 
-    const double eps0= epsilon(0);
+    const double eps0= epsilon(0); //epsilon_xx
     const double eps1= epsilon(1);
 
     //sigma = D*epsilon;

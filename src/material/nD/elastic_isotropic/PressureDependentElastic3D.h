@@ -69,13 +69,14 @@ class PressureDependentElastic3D : public ElasticIsotropicMaterial
     static Vector sigma; //!< Stress vector
     static Matrix D; //!< Elastic constants
 
-    double exp; //!< exponent usually 0.6
+    double exp0; //!< exponent usually 0.6
     double p_ref; //!< Reference pressure, usually atmosphere pressure, i.e. 100kPa
     double p_cutoff; //!< Cutoff pressure of this material point
+    Vector Cepsilon;
 
-    mutable Tensor Dt; //!< Elastic constants tensor
-    mutable stresstensor Stress; //!< Stress tensor
-    straintensor Strain; //!< Strain tensor
+    double p_n; // committed pressure
+    mutable double p_n1; // trial pressure
+
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
@@ -87,22 +88,10 @@ class PressureDependentElastic3D : public ElasticIsotropicMaterial
                                 double expp = 0.6,
                                 double pr = 100.0,
                                 double pop = 0.5);
-    PressureDependentElastic3D(int tag);
-    PressureDependentElastic3D();
+    PressureDependentElastic3D(int tag= 0);
 
-    int setTrialStrainIncr(const Vector &v);
-    int setTrialStrainIncr(const Vector &v, const Vector &r);
     const Matrix &getTangent(void) const;
     const Vector &getStress(void) const;
-
-    int setTrialStrain(const Tensor &v);
-    int setTrialStrain(const Tensor &v, const Tensor &r);
-    int setTrialStrainIncr(const Tensor &v);
-    int setTrialStrainIncr(const Tensor &v, const Tensor &r);
-    const Tensor &getTangentTensor(void) const;
-    const stresstensor &getStressTensor(void) const;
-    const straintensor &getStrainTensor(void) const;
-    const straintensor &getPlasticStrainTensor(void) const;
 
     int commitState(void);
     int revertToLastCommit(void);
@@ -116,7 +105,6 @@ class PressureDependentElastic3D : public ElasticIsotropicMaterial
     int recvSelf(const CommParameters &);
 
     void Print(std::ostream &s, int flag =0);
-    void ComputeElasticStiffness(void) const;
   };
 } // end of XC namespace
 #endif
