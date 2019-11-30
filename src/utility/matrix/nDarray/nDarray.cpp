@@ -118,79 +118,117 @@
 #include "nDarray.h"
 #include <iostream>
 
-//##############################################################################
+//! @brief Constructor.
 XC::nDarray::nDarray(int rank_of_nDarray, double initval)
-{
- // create the structure:
-   pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 1
-   pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
-
-// in the case of nDarray_rank=0 add one to get right thing from the
-// operator new
-   int one_or0 = 0;
-   if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
-   pc_nDarray_rep->dim = new int[pc_nDarray_rep->nDarray_rank+one_or0];// array for
-                                                                       // dimensions
-   const int default_dim  = 1;
-   pc_nDarray_rep->total_numb = 1;
-   for( int idim = 0 ; idim < pc_nDarray_rep->nDarray_rank ; idim++ )
-     {
-       pc_nDarray_rep->dim[idim] = default_dim;
-       pc_nDarray_rep->total_numb *= pc_nDarray_rep->dim[idim];
-     }
-
-// allocate memory for the actual XC::nDarray as XC::nDarray
-   pc_nDarray_rep->pd_nDdata = new double [(size_t) pc_nDarray_rep->total_numb];
-     if (!pc_nDarray_rep->pd_nDdata)
-       {
-         ::fprintf(stderr,"\a\nInsufficient memory for array\n");
-         ::exit(1);
-       }
-
-   pc_nDarray_rep->n = 1;  // so far, there's one reference
-
-    for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
-       pc_nDarray_rep->pd_nDdata[i] = initval;
-
-}
-
-//##############################################################################
-XC::nDarray::nDarray(int rank_of_nDarray, const int *pdim, double *values)
   {
- // create the structure:
-   pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 2
-   pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
+   // create the structure:
+     pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 1
+     pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
 
-// in the case of nDarray_rank=0 add one to get right thing from the
-// operator new
-   int one_or0 = 0;
-   if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
-   pc_nDarray_rep->dim = new int[pc_nDarray_rep->nDarray_rank+one_or0];// array for
-                                                                 // dimensions
-
-   pc_nDarray_rep->total_numb = 1;
-   for( int idim = 0 ; idim < pc_nDarray_rep->nDarray_rank ; idim++ )
-     {
-       pc_nDarray_rep->dim[idim] = pdim[idim];
-       pc_nDarray_rep->total_numb *= pc_nDarray_rep->dim[idim];
-     }
-
-
-// allocate memory for the actual nDarray as nDarray
-   pc_nDarray_rep->pd_nDdata = new double [(size_t)pc_nDarray_rep->total_numb];
-     if (!pc_nDarray_rep->pd_nDdata)
+  // in the case of nDarray_rank=0 add one to get right thing from the
+  // operator new
+     int one_or0 = 0;
+     if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
+     pc_nDarray_rep->dim = new int[pc_nDarray_rep->nDarray_rank+one_or0];// array for
+									 // dimensions
+     const int default_dim  = 1;
+     pc_nDarray_rep->total_numb = 1;
+     for( int idim = 0 ; idim < pc_nDarray_rep->nDarray_rank ; idim++ )
        {
-         ::fprintf(stderr,"\a\nInsufficient memory for array\n");
-         ::exit(1);
+	 pc_nDarray_rep->dim[idim] = default_dim;
+	 pc_nDarray_rep->total_numb *= pc_nDarray_rep->dim[idim];
+       }
+
+  // allocate memory for the actual XC::nDarray as XC::nDarray
+     pc_nDarray_rep->pd_nDdata = new double [(size_t) pc_nDarray_rep->total_numb];
+       if (!pc_nDarray_rep->pd_nDdata)
+	 {
+	   ::fprintf(stderr,"\a\nInsufficient memory for array\n");
+	   ::exit(1);
+	 }
+
+     pc_nDarray_rep->n = 1;  // so far, there's one reference
+
+      for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
+	 pc_nDarray_rep->pd_nDdata[i]= initval;
+
+  }
+
+//! @brief Constructor.
+XC::nDarray::nDarray(int rank_of_nDarray, const int *pdim, const double *values)
+  {
+   // create the structure:
+     pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 2
+     pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
+
+  // in the case of nDarray_rank=0 add one to get right thing from the
+  // operator new
+     int one_or0 = 0;
+     if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
+     pc_nDarray_rep->dim = new int[pc_nDarray_rep->nDarray_rank+one_or0];// array for
+								         // dimensions
+
+     pc_nDarray_rep->total_numb = 1;
+     for( int idim = 0 ; idim < pc_nDarray_rep->nDarray_rank ; idim++ )
+       {
+	 pc_nDarray_rep->dim[idim] = pdim[idim];
+	 pc_nDarray_rep->total_numb *= pc_nDarray_rep->dim[idim];
        }
 
 
-   pc_nDarray_rep->n = 1;  // so far, there's one reference
+  // allocate memory for the actual nDarray as nDarray
+     pc_nDarray_rep->pd_nDdata = new double [(size_t)pc_nDarray_rep->total_numb];
+       if (!pc_nDarray_rep->pd_nDdata)
+	 {
+	   ::fprintf(stderr,"\a\nInsufficient memory for array\n");
+	   ::exit(1);
+	 }
 
-    for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
-      pc_nDarray_rep->pd_nDdata[i] = values[i];
 
-}
+     pc_nDarray_rep->n = 1;  // so far, there's one reference
+
+      for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
+	pc_nDarray_rep->pd_nDdata[i] = values[i];
+
+  }
+
+//! @brief Constructor.
+XC::nDarray::nDarray(int rank_of_nDarray, const int *pdim, const std::vector<double> &values)
+  {
+   // create the structure:
+     pc_nDarray_rep = new nDarray_rep; // this 'new' is overloaded 2
+     pc_nDarray_rep->nDarray_rank = rank_of_nDarray;  //rank_of_nDarray;
+
+  // in the case of nDarray_rank=0 add one to get right thing from the
+  // operator new
+     int one_or0 = 0;
+     if(!pc_nDarray_rep->nDarray_rank) one_or0 = 1;
+     pc_nDarray_rep->dim = new int[pc_nDarray_rep->nDarray_rank+one_or0];// array for
+								         // dimensions
+
+     pc_nDarray_rep->total_numb = 1;
+     for( int idim = 0 ; idim < pc_nDarray_rep->nDarray_rank ; idim++ )
+       {
+	 pc_nDarray_rep->dim[idim] = pdim[idim];
+	 pc_nDarray_rep->total_numb *= pc_nDarray_rep->dim[idim];
+       }
+
+
+  // allocate memory for the actual nDarray as nDarray
+     pc_nDarray_rep->pd_nDdata = new double [(size_t)pc_nDarray_rep->total_numb];
+       if (!pc_nDarray_rep->pd_nDdata)
+	 {
+	   ::fprintf(stderr,"\a\nInsufficient memory for array\n");
+	   ::exit(1);
+	 }
+
+
+     pc_nDarray_rep->n = 1;  // so far, there's one reference
+
+      for ( int i=0 ; i<pc_nDarray_rep->total_numb ; i++ )
+	pc_nDarray_rep->pd_nDdata[i] = values[i];
+
+  }
 
 //! @brief Constructor.
 XC::nDarray::nDarray(int rank_of_nDarray, const int *pdim, const boost::python::list &l)

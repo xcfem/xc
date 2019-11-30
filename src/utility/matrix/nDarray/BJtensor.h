@@ -109,6 +109,7 @@ namespace XC {
 //
 class BJtensor: public nDarray
   {
+    friend class stressstraintensor;
     friend class stresstensor;
     friend class straintensor;
 //  private:
@@ -118,7 +119,8 @@ class BJtensor: public nDarray
                                     //  then operator will be identified
   public: // just send appropriate arguments to the base constructor
     BJtensor(int rank_of_BJtensor=1,const double &initval=0); // default constructor
-    BJtensor(int rank_of_BJtensor, const int *pdim, double *values);
+    BJtensor(int rank_of_BJtensor, const int *pdim, const double *values);
+    BJtensor(int rank_of_BJtensor, const int *pdim, const std::vector<double> &values);
     BJtensor(int rank_of_BJtensor, const int *pdim, const boost::python::list &l);    
     BJtensor(int rank_of_BJtensor, const int *pdim,const double &initvalue);
     BJtensor(const std::string &flag, int rank_of_BJtensor, const int *pdim);  // create a unit nDarray

@@ -127,6 +127,7 @@ class nDarray_rep
 //    friend class skyBJmatrix;
     friend class stiffness_matrix;
     friend class BJvector;
+    friend class stressstraintensor;
     friend class stresstensor;
     friend class straintensor;
 
@@ -165,6 +166,7 @@ class nDarray
     friend class BJvector;
     friend class stiffness_matrix;
 
+    friend class stressstraintensor;
     friend class stresstensor;
     friend class straintensor;
 
@@ -181,7 +183,8 @@ class nDarray
 
   public:
     nDarray(int rank_of_nDarray=1, double initval=0.0);// default constructor
-    nDarray(int rank_of_nDarray, const int *pdim, double *values);
+    nDarray(int rank_of_nDarray, const int *pdim, const double *values);
+    nDarray(int rank_of_nDarray, const int *pdim, const std::vector<double> &);
     nDarray(int rank_of_nDarray, const int *pdim, const boost::python::list &);
     nDarray(int rank_of_nDarray, const int *pdim, double initvalue);
 //..//  for skyBJmatrix --v

@@ -109,7 +109,11 @@ XC::BJtensor::BJtensor(int rank_of_BJtensor,const double &initval)
   : nDarray(rank_of_BJtensor, initval), indices1(""), indices2("") {}
 
 //! @brief Constructor
-XC::BJtensor::BJtensor(int rank_of_BJtensor, const int *pdim, double *values)
+XC::BJtensor::BJtensor(int rank_of_BJtensor, const int *pdim, const double *values)
+  : nDarray(rank_of_BJtensor, pdim, values), indices1(""), indices2("") {}
+
+//! @brief Constructor
+XC::BJtensor::BJtensor(int rank_of_BJtensor, const int *pdim, const std::vector<double> &values)
   : nDarray(rank_of_BJtensor, pdim, values), indices1(""), indices2("") {}
 
 //! @brief Constructor

@@ -56,7 +56,7 @@
 #ifndef STRESSTENSOR_H
 #define STRESSTENSOR_H
 
-#include "utility/matrix/nDarray/BJtensor.h"
+#include "stress_strain_tensor.h"
 #include <iostream>
 
 namespace XC {
@@ -65,8 +65,8 @@ class Material_Model;
 
 //! @ingroup Matrix
 //
-class stresstensor : public BJtensor
-{
+class stresstensor : public stressstraintensor
+  {
   public:
     friend class Material_Model;
 
@@ -74,8 +74,10 @@ class stresstensor : public BJtensor
     // just send appropriate arguments to the base constructor
     stresstensor(int rank_of_tensor=2, double initval=0.0); // default constructor
     stresstensor(const boost::python::list &l);
-    stresstensor(double *values );
+    stresstensor(const double *values );
+    stresstensor(const std::vector<double> &values );
     stresstensor(double initvalue );
+    explicit stresstensor(const Vector &);
 
     stresstensor(const stresstensor & x );
     stresstensor(const BJtensor & x); // copy-initializer
@@ -99,30 +101,11 @@ class stresstensor : public BJtensor
     //___                              short tr, short ts, short tt  );
     
 
-    double Iinvariant1( ) const;
-    double Iinvariant2( ) const;
-    double Iinvariant3( ) const;
-
-    double Jinvariant1( ) const;
-    double Jinvariant2( ) const;
-    double Jinvariant3( ) const;
-
     stresstensor deviator( ) const;
     stresstensor principal( ) const;
 
-    double sigma_octahedral( ) const;
-    double tau_octahedral( ) const;
-
-    double ksi( )     const;
     double xi( )      const;
-    double ro( )      const;
-    double rho( )      const;
-    double theta()   const;
-    double thetaPI( ) const;
-
-    double p_hydrostatic( ) const;
-    double q_deviatoric( ) const;
-
+    
     BJtensor dpoverds( void  ) const;
     BJtensor dqoverds( void ) const;
     BJtensor dthetaoverds( void ) const;

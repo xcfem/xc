@@ -56,7 +56,7 @@
 #ifndef STRAINTENSOR_HH
 #define STRAINTENSOR_HH
 
-#include "utility/matrix/nDarray/BJtensor.h"
+#include "stress_strain_tensor.h"
 #include <iostream>
 
 namespace XC {
@@ -64,15 +64,17 @@ namespace XC {
 //! @ingroup Matrix
 //
 //! @brief Strain tensor
-class straintensor : public BJtensor
+class straintensor : public stressstraintensor
   {
   public: // just send appropriate arguments to the base constructor
 //    straintensor (int rank_of_tensor=2, double initval=0.00000003141528);
     straintensor (int rank_of_tensor=2, double initval=0.0);
 // default constructor           // this is just PI/10^8 to check default constructor
 
-    straintensor(double *values);
+    straintensor(const double *values);
+    straintensor(const std::vector<double> &values);
     straintensor(double initvalue);
+    explicit straintensor(const Vector &);
 
     straintensor(const straintensor & x );
     straintensor(const BJtensor & x); // copy-initializer
@@ -92,29 +94,12 @@ class straintensor : public BJtensor
 //___    straintensor & operator()(short ir, short is, short it,
 //___                              short tr, short ts, short tt  );
  
-    double Iinvariant1(void) const;
-    double Iinvariant2(void) const;
-    double Iinvariant3(void) const;
-
-    double Jinvariant1(void) const;
-    double Jinvariant2(void) const;
-    double Jinvariant3(void) const;
 
     double equivalent(void) const;	  //Zhaohui added 09-02-2000
 
     straintensor deviator(void) const;
     straintensor principal(void) const;
 
-    double sigma_octahedral(void) const;
-    double tau_octahedral(void) const;
-
-    double ksi(void) const;
-    double ro(void) const;
-    double theta(void) const;
-    double thetaPI(void) const;
-
-    double p_hydrostatic(void) const;
-    double q_deviatoric(void) const;
 
 
     straintensor pqtheta2strain( double, double, double );
