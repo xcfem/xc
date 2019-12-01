@@ -43,6 +43,7 @@ class NDMaterial;
 //! @brief Base class for hexahedra.
 class BrickBase : public ElemWithMaterial<8,NDMaterialPhysicalProperties>
   {
+    static Matrix &compute_extrapolation_matrix(void);
   protected:
     ElemPtrArray3d put_on_mesh(const NodePtrArray3d &,meshing_dir dm) const;
   public:
@@ -53,7 +54,7 @@ class BrickBase : public ElemWithMaterial<8,NDMaterialPhysicalProperties>
     double getVolume(bool initialGeometry= true) const;
     BoolArray3d getNodePattern(void) const;
     int getVtkCellType(void) const;
-    static Matrix &getExtrapolationMatrix(void);
+    const Matrix &getExtrapolationMatrix(void) const;
   };
 
 } // end of XC namespace

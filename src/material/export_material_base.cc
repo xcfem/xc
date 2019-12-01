@@ -33,6 +33,8 @@ void export_material_base(void)
         .def("revertToLastCommit", &XC::Material::revertToLastCommit,"Returns the material to the last committed state.")
         .def("revertToStart", &XC::Material::revertToStart,"Returns the material to its initial state.")
         .def("getName",&XC::Material::getName,"Returns the name of the material.")
+      .def("getGeneralizedStress", make_function(&XC::Material::getGeneralizedStress, return_internal_reference<>() ),"Return the stress in this material point.")
+      .def("getGeneralizedStrain", make_function(&XC::Material::getGeneralizedStrain, return_internal_reference<>() ),"Return the strain in this material point.")
        ;
   }
 

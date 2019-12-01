@@ -97,8 +97,6 @@ class Brick : public BrickBase
     //compute B matrix
     const Matrix& computeB( int node, const double shp[4][8]) const;
   
-    //Matrix transpose
-    Matrix transpose( int dim1, int dim2, const Matrix &M );
     static size_t getVectorIndex(const size_t &,const size_t &);
   protected:
     int sendData(CommParameters &cp);

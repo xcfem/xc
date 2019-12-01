@@ -55,7 +55,7 @@ class Vector;
 //
 //! @ingroup FEMisc
 //
-//! @brief Pointers to nodes.
+//! @brief Element pointers to nodes.
 class NodePtrs: public CommandEntity, public std::vector<Node *>
   {
   public:

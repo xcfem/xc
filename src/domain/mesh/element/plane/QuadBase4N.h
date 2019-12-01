@@ -43,6 +43,7 @@ namespace XC {
 template <class PhysProp>
 class QuadBase4N : public PlaneElement<4,PhysProp>
   {
+    static Matrix &compute_extrapolation_matrix(void);
   protected:
     ElemPtrArray3d put_on_mesh(const NodePtrArray3d &,meshing_dir dm) const;
   public:
@@ -62,7 +63,7 @@ class QuadBase4N : public PlaneElement<4,PhysProp>
     
     Matrix getTrfMatrix(void) const;
     Matrix getLocalAxes(bool initialGeometry= true) const;
-    static Matrix &getExtrapolationMatrix(void);
+    const Matrix &getExtrapolationMatrix(void) const;
   };
 
 //! @brief Constructor
@@ -276,10 +277,10 @@ XC::Matrix XC::QuadBase4N<PhysProp>::getLocalAxes(bool initialGeometry) const
   }
 
 
-//! @brief Returns the matrix that can be used to extrapolate
+//! @brief Compute the matrix that can be used to extrapolate
 //! the results from the Gauss points to the element nodes.
 template <class PhysProp>
-XC::Matrix &XC::QuadBase4N<PhysProp>::getExtrapolationMatrix(void)
+XC::Matrix &XC::QuadBase4N<PhysProp>::compute_extrapolation_matrix(void)
   {
     const double r3div2= sqrt(3)/2.0;
     const double dg= 1.0+r3div2;
@@ -291,6 +292,15 @@ XC::Matrix &XC::QuadBase4N<PhysProp>::getExtrapolationMatrix(void)
     retval(2,0)= m;    retval(2,1)= -0.5; retval(2,2)= dg; retval(2,3)= -0.5;       retval(3,0)= -0.5; retval(3,1)= m; retval(3,2)= -0.5;  retval(3,3)= dg;  
     return retval;
     
+  }
+ 
+//! @brief Return the matrix that can be used to extrapolate
+//! the results from the Gauss points to the element nodes.
+template <class PhysProp>
+const XC::Matrix &XC::QuadBase4N<PhysProp>::getExtrapolationMatrix(void) const
+  {
+    static const Matrix retval= compute_extrapolation_matrix();
+    return retval;
   }
  
 } // end of XC namespace

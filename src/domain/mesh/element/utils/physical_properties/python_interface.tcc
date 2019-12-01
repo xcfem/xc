@@ -27,6 +27,8 @@ material_vector_NDMat &(PhysicalProperties_NDMat::*getNDMatVector)(void) = &Phys
 void (PhysicalProperties_NDMat::*setMaterialPtr)(const XC::NDMaterial *)= &PhysicalProperties_NDMat::setMaterial;
 class_<PhysicalProperties_NDMat,  bases<XC::MovableObject>, boost::noncopyable >("PhysicalProperties_NDMat", no_init)
   .add_property("getVectorMaterials",make_function(getNDMatVector,return_internal_reference<>() ),"Returns materials at Gauss points.")
+  .add_property("generalizedStrains",&PhysicalProperties_NDMat::getGeneralizedStrains,"Returns a matrix with strain values for each gauss point.")
+  .add_property("generalizedStresses",&PhysicalProperties_NDMat::getGeneralizedStresses,"Returns a matrix with stress values for each gauss point.")
   .def("setMaterial",setMaterialPtr,"Set material.")
    ;
 

@@ -664,7 +664,7 @@ int XC::Element::addResistingForceToNodalReaction(bool inclInertia)
     return result;
   }
 
-//! @brief Returns interpolattion factors for a material point.
+//! @brief Returns interpolation factors for a material point.
 XC::Vector XC::Element::getInterpolationFactors(const ParticlePos3d &) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
@@ -674,7 +674,7 @@ XC::Vector XC::Element::getInterpolationFactors(const ParticlePos3d &) const
     return Vector(numberNodes);
   }
 
-//! @brief Returns interpolattion factors for a material point.
+//! @brief Returns interpolation factors for a material point.
 XC::Vector XC::Element::getInterpolationFactors(const Pos3d &) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__

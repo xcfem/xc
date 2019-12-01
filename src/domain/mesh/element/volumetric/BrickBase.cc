@@ -128,14 +128,14 @@ XC::ElemPtrArray3d XC::BrickBase::put_on_mesh(const XC::NodePtrArray3d &nodes,me
 int XC::BrickBase::getVtkCellType(void) const
   { return VTK_HEXAHEDRON; }
 
-//! @brief Returns the matrix that can be used to extrapolate
+//! @brief Create the matrix that can be used to extrapolate
 //! the results from the Gauss points to the element nodes.
 //!
 //! Reference: INTRODUCTION TO THE FINITE ELEMENT METHOD
 //! G. P. Nikishkov
 //! 2004 Lecture Notes. University of Aizu, Aizu-Wakamatsu
 //! 965-8580, Japanniki@u-aizu.ac.jp section 4.3.7
-XC::Matrix &XC::BrickBase::getExtrapolationMatrix(void)
+XC::Matrix &XC::BrickBase::compute_extrapolation_matrix(void)
   {
     const double sqrt3= sqrt(3);
     const double A= (5.0+sqrt3)/4.0;
@@ -152,5 +152,18 @@ XC::Matrix &XC::BrickBase::getExtrapolationMatrix(void)
     retval(5,0)=C; retval(5,1)=B; retval(5,2)=C; retval(5,3)=D; retval(5,4)=B; retval(5,5)=A; retval(5,6)=B; retval(5,7)=C;
     retval(6,0)=D; retval(6,1)=C; retval(6,2)=B; retval(6,3)=C; retval(6,4)=C; retval(6,5)=B; retval(6,6)=A; retval(6,7)=B;
     retval(7,0)=C; retval(7,1)=D; retval(7,2)=C; retval(7,3)=B; retval(7,4)=B; retval(7,5)=C; retval(7,6)=B; retval(7,7)=A;
+    return retval;
+  }
+
+//! @brief Return the matrix that can be used to extrapolate
+//! the results from the Gauss points to the element nodes.
+//!
+//! Reference: INTRODUCTION TO THE FINITE ELEMENT METHOD
+//! G. P. Nikishkov
+//! 2004 Lecture Notes. University of Aizu, Aizu-Wakamatsu
+//! 965-8580, Japanniki@u-aizu.ac.jp section 4.3.7
+const XC::Matrix &XC::BrickBase::getExtrapolationMatrix(void) const
+  {
+    static const Matrix retval= compute_extrapolation_matrix();
     return retval;
   }

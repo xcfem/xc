@@ -39,8 +39,8 @@ class_<material_vector_NDMat,bases<vectorNDMaterial,CommandEntity>,boost::noncop
   .def("commitState", &material_vector_NDMat::commitState,"Commits materials state.")
   .def("revertToLastCommit", &material_vector_NDMat::revertToLastCommit,"Returns the material to its last committed state.")
   .def("revertToStart", &material_vector_NDMat::revertToStart,"Returns the material to its initial state.")
-  .def("getGeneralizedStresses", &material_vector_NDMat::getGeneralizedStresses)
-  .def("getGeneralizedStrains", &material_vector_NDMat::getGeneralizedStrains)
+  .add_property("generalizedStresses", &material_vector_NDMat::getGeneralizedStresses)
+  .add_property("generalizedStrains", &material_vector_NDMat::getGeneralizedStrains)
   .def("getNames",&material_vector_NDMat::getNamesPy,"Returns the names of the materials.")
   ;
 

@@ -63,6 +63,9 @@ class ElemWithMaterial : public ElementBase<NNODOS>
     void setPhysicalProperties(const PhysProp &);
     inline virtual std::set<std::string> getMaterialNames(void) const
       { return physicalProperties.getMaterialNames(); }
+    
+    virtual const Matrix &getExtrapolationMatrix(void) const;
+    Matrix getExtrapolatedValues(const Matrix &) const;
   };
 
 template <int NNODOS,class PhysProp>
@@ -111,6 +114,23 @@ void ElemWithMaterial<NNODOS, PhysProp>::zeroInitialGeneralizedStrains(void)
 template <int NNODOS,class PhysProp>
 void ElemWithMaterial<NNODOS, PhysProp>::setPhysicalProperties(const PhysProp &physProp)
   { physicalProperties= physProp; }
+
+//! @brief Return the matrix that extrapolates results at
+//! material points to results at nodes
+template <int NNODOS,class PhysProp>
+const Matrix &ElemWithMaterial<NNODOS, PhysProp>::getExtrapolationMatrix(void) const
+  {
+    std::cerr << this->getClassName() << "::" << __FUNCTION__
+              << "; must be overloaded in derived classes."
+              << std::endl;
+    static const Matrix retval;
+    return retval;
+  }
+
+//! @brief Extrapolate from Gauss points to nodes.
+template <int NNODOS,class PhysProp>
+Matrix ElemWithMaterial<NNODOS, PhysProp>::getExtrapolatedValues(const Matrix &values) const
+  { return getExtrapolationMatrix()*values; }
 
 
 //! @brief Send members through the channel being passed as parameter.

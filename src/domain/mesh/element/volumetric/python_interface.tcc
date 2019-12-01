@@ -24,7 +24,9 @@ typedef XC::ElementBase<8> element_base_8n;
 class_<element_base_8n, bases<XC::Element>, boost::noncopyable >("element_base_8n", no_init);
 
 typedef XC::ElemWithMaterial<8,XC::NDMaterialPhysicalProperties> brick_base_8n;
-class_<brick_base_8n, bases<element_base_8n>, boost::noncopyable >("brick_base_8n", no_init)  
+class_<brick_base_8n, bases<element_base_8n>, boost::noncopyable >("brick_base_8n", no_init)
+  .add_property("extrapolationMatrix",make_function(&brick_base_8n::getExtrapolationMatrix,return_internal_reference<>() ),"Returns the element extrapolation matrix.")
+  .def("getExtrapolatedValues", &brick_base_8n::getExtrapolatedValues,"Return the values at nodes from the values at the Gauss points")
   ;
 
 XC::NDMaterialPhysicalProperties &(XC::BrickBase::*getPhysicalPropertiesPtr)(void) = &brick_base_8n::getPhysicalProperties;

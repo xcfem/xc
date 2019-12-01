@@ -34,6 +34,7 @@
 #include "material/section/ResponseId.h"
 #include "utility/actor/actor/MovableID.h"
 #include "utility/matrix/Vector.h"
+#include "utility/matrix/Matrix.h"
 
 
 namespace XC {
@@ -81,8 +82,8 @@ class MaterialVector: public std::vector<MAT *>, public CommandEntity, public Mo
 
     size_t getGeneralizedStressSize(void) const;
     size_t getGeneralizedStrainSize(void) const;
-    m_double getGeneralizedStresses(void) const;
-    m_double getGeneralizedStrains(void) const;
+    Matrix getGeneralizedStresses(void) const;
+    Matrix getGeneralizedStrains(void) const;
     const Vector &getMeanGeneralizedStress(void) const;
     const Vector &getMeanGeneralizedStrain(void) const;
     double getMeanGeneralizedStrain(const int &defID) const;
@@ -91,8 +92,8 @@ class MaterialVector: public std::vector<MAT *>, public CommandEntity, public Mo
     Vector getGeneralizedStrainAtGaussPoints(const int &) const;
     Vector getGeneralizedStressAtGaussPoints(const int &) const;
     
-    m_double getGeneralizedStrain(const int &defID) const;
-    m_double getGeneralizedStress(const int &defID) const;
+    Matrix getGeneralizedStrain(const int &defID) const;
+    Matrix getGeneralizedStress(const int &defID) const;
 
     std::set<std::string> getNames(void) const;
     boost::python::list getNamesPy(void) const;
@@ -265,11 +266,11 @@ size_t MaterialVector<MAT>::getGeneralizedStrainSize(void) const
 
 //! @brief Returns generalized stress values on each integration point.
 template <class MAT>
-m_double MaterialVector<MAT>::getGeneralizedStresses(void) const
+Matrix MaterialVector<MAT>::getGeneralizedStresses(void) const
   {
     const size_t ncol= getGeneralizedStressSize();
     const size_t nMat= this->size();
-    m_double retval(nMat,ncol,0.0);
+    Matrix retval(nMat,ncol);
     for(size_t i= 0;i<nMat;i++)
       {
         const Vector &s= (*this)[i]->getGeneralizedStress();
@@ -281,11 +282,11 @@ m_double MaterialVector<MAT>::getGeneralizedStresses(void) const
 
 //! @brief Returns generalized strain values on each integration point.
 template <class MAT>
-m_double MaterialVector<MAT>::getGeneralizedStrains(void) const
+Matrix MaterialVector<MAT>::getGeneralizedStrains(void) const
   {
     const size_t ncol= getGeneralizedStrainSize();
     const size_t nMat= this->size();
-    m_double retval(nMat,ncol,0.0);
+    Matrix retval(nMat,ncol);
     for(size_t i= 0;i<nMat;i++)
       {
         const Vector &s= (*this)[i]->getGeneralizedStrain();
@@ -393,10 +394,10 @@ XC::Vector MaterialVector<MAT>::getGeneralizedStressAtGaussPoints(const int &def
 //! @brief Returns the defID component of generalized stress vector on each integration point.
 //! @param defID component index.
 template <class MAT>
-m_double MaterialVector<MAT>::getGeneralizedStress(const int &defID) const
+Matrix MaterialVector<MAT>::getGeneralizedStress(const int &defID) const
   {
     const size_t nMat= this->size();
-    m_double retval(nMat,1,0.0);
+    Matrix retval(nMat,1);
     const ResponseId &code= (*this)[0]->getType();
     const int order= code.Size();
     for(size_t i= 0;i<nMat;i++)
@@ -412,10 +413,10 @@ m_double MaterialVector<MAT>::getGeneralizedStress(const int &defID) const
 //! @brief Returns the defID component of generalized strain vector on each integration point.
 //! @param defID component index.
 template <class MAT>
-m_double MaterialVector<MAT>::getGeneralizedStrain(const int &defID) const
+Matrix MaterialVector<MAT>::getGeneralizedStrain(const int &defID) const
   {
     const size_t nMat= this->size();
-    m_double retval(nMat,1,0.0);
+    Matrix retval(nMat,1);
     const ResponseId &code= (*this)[0]->getType();
     const int order= code.Size();
     for(size_t i= 0;i<nMat;i++)

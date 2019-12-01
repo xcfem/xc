@@ -83,10 +83,17 @@ class PhysicalProperties: public CommandEntity, public MovableObject
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
 
+    //! @brief Return the generalized stresses at material points.
+    inline Matrix getGeneralizedStresses(void) const
+      { return theMaterial.getGeneralizedStresses(); }
+    //! @brief Return the generalized strains at material points.
+    inline Matrix getGeneralizedStrains(void) const
+      { return theMaterial.getGeneralizedStrains(); }
+
     virtual void Print(std::ostream &s, int);
   };
 
-template <class MAT>
+ template <class MAT>
 PhysicalProperties<MAT>::PhysicalProperties(const size_t &nMat,const MAT *matModel)
   : MovableObject(0), theMaterial(nMat, matModel) {}
 
@@ -146,7 +153,8 @@ int PhysicalProperties<MAT>::sendSelf(CommParameters &cp)
     const int dataTag= getDbTag();
     res += cp.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << "PhysicalProperties::sendSelf -- failed to send ID data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; failed to send ID data\n";
     return res;
   }
 
@@ -159,7 +167,8 @@ int PhysicalProperties<MAT>::recvSelf(const CommParameters &cp)
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "PhysicalProperties::recvSelf -- failed to receive ID data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ID data\n";
     else
       res+= this->recvData(cp);
     return res;
@@ -169,8 +178,9 @@ int PhysicalProperties<MAT>::recvSelf(const CommParameters &cp)
 template <class MAT>
 void PhysicalProperties<MAT>::Print(std::ostream &, int)
   {
-    std::cerr << "PhysicalProperties::Print -- not implemented\n";
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented.\n";
   }  
-
+ 
 } //end of XC namespace
 #endif
