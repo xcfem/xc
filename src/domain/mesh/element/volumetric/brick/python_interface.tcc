@@ -28,6 +28,7 @@ double (XC::Brick::*getAvgStressIJPtr)(const size_t &,const size_t &) const= &XC
 XC::Vector (XC::Brick::*getAvgStrainPtr)(void) const= &XC::Brick::getAvgStrain;
 double (XC::Brick::*getAvgStrainIJPtr)(const size_t &,const size_t &) const= &XC::Brick::getAvgStrain;
 class_<XC::Brick , bases<XC::BrickBase>, boost::noncopyable >("Brick", no_init)
+  .add_property("gaussPointsPositions",&XC::Brick::getGaussPointsPositions,"Return the local coordinates of the Gauss points.")
   .def("getAvgStress", getAvgStressPtr,"Return the average stress on the element.")
   .def("getAvgStressIJ", getAvgStressIJPtr,"Return (i,j) component of the average stress on the element.")
   .def("getAvgStrain", getAvgStrainPtr,"Return the average strain on the element.")

@@ -62,9 +62,20 @@ namespace XC {
 //! @brief Eight node hexahedron.
 class Brick : public BrickBase
   {
-  private : 
+  private :
+    // static constants
+    static const int numberNodes= 8; //!< Number of nodes.
+    static const int numberGauss= 8; //!< Number of Gauss points.
+    static const int ndm= 3; //!< Space dimension
+    static const int ndf= 3; //!< Number of DOFs per node.
+    static const int nShape = 4;
+    
     BodyForces3D bf; //!< Body forces
+    double appliedB[ndf];	//!< Body forces applied with load
+    bool applyLoad;
+    
     mutable Matrix *Ki;
+    void shape_functions_loop(void) const;
 
     //
     // static attributes
@@ -74,13 +85,17 @@ class Brick : public BrickBase
     static Vector resid;
     static Matrix mass;
     static Matrix damping;
+    static double gaussPoint[numberGauss][ndm]; //!< Gauss points coordinates.
+    static double dvol[numberGauss]; //!< volume element
+    static double shp[nShape][numberNodes]; //!< shape functions at a gauss point
+    static double Shape[nShape][numberNodes][numberGauss]; //!< all the shape functions
 
-    //quadrature data
+    // quadrature data
     static const double sg[2];
-    static const double wg[8];
+    static const double wg[numberGauss];
   
     //local nodal coordinates, three coordinates for each of eight nodes
-    static double xl[3][8];
+    static double xl[ndm][numberNodes];
 
     //
     // private methods
@@ -121,6 +136,7 @@ class Brick : public BrickBase
     // update
     int update(void);
 
+    Matrix getGaussPointsPositions(void) const;
     //return stiffness matrix 
     const Matrix &getTangentStiff(void) const;
     const Matrix &getInitialStiff(void) const;    
@@ -134,11 +150,9 @@ class Brick : public BrickBase
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
 
-    //get residual
-    const Vector &getResistingForce(void) const;
     
-    //get residual with inertia terms
-    const Vector &getResistingForceIncInertia(void) const;
+    const Vector &getResistingForce(void) const; //get residual
+    const Vector &getResistingForceIncInertia(void) const; //get residual with inertia terms
 
     // public methods for element output
     virtual int sendSelf(CommParameters &);

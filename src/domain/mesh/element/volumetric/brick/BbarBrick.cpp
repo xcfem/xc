@@ -138,24 +138,24 @@ int XC::BbarBrick::getNumDOF(void) const
 
 //print out element data
 void  XC::BbarBrick::Print( std::ostream &s, int flag )
-{
-  s << std::endl ;
-  s << "Volume/Pressure Eight XC::Node XC::BbarBrick \n" ;
-  s << "Element Number: " << this->getTag() << std::endl ;
-  s << "Node 1 : " << theNodes.getTagNode(0) << std::endl ;
-  s << "Node 2 : " << theNodes.getTagNode(1) << std::endl ;
-  s << "Node 3 : " << theNodes.getTagNode(2) << std::endl ;
-  s << "Node 4 : " << theNodes.getTagNode(3) << std::endl ;
-  s << "Node 5 : " << theNodes.getTagNode(4) << std::endl ;
-  s << "Node 6 : " << theNodes.getTagNode(5) << std::endl ;
-  s << "Node 7 : " << theNodes.getTagNode(6) << std::endl ;
-  s << "Node 8 : " << theNodes.getTagNode(7) << std::endl ;
+  {
+    s << std::endl ;
+    s << "Volume/Pressure Eight XC::Node XC::BbarBrick \n" ;
+    s << "Element Number: " << this->getTag() << std::endl ;
+    s << "Node 1 : " << theNodes.getTagNode(0) << std::endl ;
+    s << "Node 2 : " << theNodes.getTagNode(1) << std::endl ;
+    s << "Node 3 : " << theNodes.getTagNode(2) << std::endl ;
+    s << "Node 4 : " << theNodes.getTagNode(3) << std::endl ;
+    s << "Node 5 : " << theNodes.getTagNode(4) << std::endl ;
+    s << "Node 6 : " << theNodes.getTagNode(5) << std::endl ;
+    s << "Node 7 : " << theNodes.getTagNode(6) << std::endl ;
+    s << "Node 8 : " << theNodes.getTagNode(7) << std::endl ;
 
-  s << "Material Information : \n " ;
-  physicalProperties.Print( s, flag ) ;
+    s << "Material Information : \n " ;
+    physicalProperties.Print( s, flag ) ;
 
-  s << std::endl ;
-}
+    s << std::endl ;
+  }
 
 //return stiffness matrix
 const XC::Matrix &XC::BbarBrick::getTangentStiff(void) const

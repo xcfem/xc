@@ -120,7 +120,7 @@ INCLUDE_DIRECTORIES(${LIBXC_SOURCE_DIR})
 #ADD_DEFINITIONS(-Wall -O0 -frounding-math -g)
 #Para RELEASE
 ADD_DEFINITIONS(-Wall -O3 -march=native -frounding-math -pedantic -Wno-unused-but-set-variable)
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++0x")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 #Errores en arpack++
 set_source_files_properties(solution/system_of_eqn/eigenSOE/BandArpackppSolver.cc PROPERTIES COMPILE_FLAGS -fpermissive)
 

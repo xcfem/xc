@@ -128,6 +128,28 @@ XC::ElemPtrArray3d XC::BrickBase::put_on_mesh(const XC::NodePtrArray3d &nodes,me
 int XC::BrickBase::getVtkCellType(void) const
   { return VTK_HEXAHEDRON; }
 
+//! @brief Return the gauss point orderto node order permutation matrix
+//!
+//! gauss points order: [0,1,2,3,4,5,6,7]
+//! node order: [0 4 3 7 1 5 2 6]
+const XC::Matrix &XC::BrickBase::getPermutationMatrix(void)
+  {
+    //Reorder rows according to gauss point ordering -> node ordering
+    // gauss points order: [0 4 6 2 1 5 7 3]
+    // node order: [0,1,2,3,4,5,6,7]
+    //Permutation matrix:
+    static Matrix perm(8,8); // permutation matrix
+    perm(0,0)= 1.0;
+    perm(1,4)= 1.0;
+    perm(2,6)= 1.0;
+    perm(3,2)= 1.0;
+    perm(4,1)= 1.0;
+    perm(5,5)= 1.0;
+    perm(6,7)= 1.0;
+    perm(7,3)= 1.0;
+    return perm;
+  }
+
 //! @brief Create the matrix that can be used to extrapolate
 //! the results from the Gauss points to the element nodes.
 //!
@@ -152,6 +174,11 @@ XC::Matrix &XC::BrickBase::compute_extrapolation_matrix(void)
     retval(5,0)=C; retval(5,1)=B; retval(5,2)=C; retval(5,3)=D; retval(5,4)=B; retval(5,5)=A; retval(5,6)=B; retval(5,7)=C;
     retval(6,0)=D; retval(6,1)=C; retval(6,2)=B; retval(6,3)=C; retval(6,4)=C; retval(6,5)=B; retval(6,6)=A; retval(6,7)=B;
     retval(7,0)=C; retval(7,1)=D; retval(7,2)=C; retval(7,3)=B; retval(7,4)=B; retval(7,5)=C; retval(7,6)=B; retval(7,7)=A;
+    //Reorder rows according to gauss point ordering -> node ordering
+    // gauss points order: [0,1,2,3,4,5,6,7]
+    // node order: [0 4 3 7 1 5 2 6]
+    //Permutation matrix:
+    retval= retval*getPermutationMatrix(); // permutation matrix
     return retval;
   }
 

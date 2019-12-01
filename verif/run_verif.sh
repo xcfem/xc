@@ -159,6 +159,7 @@ echo "$BLEU" "  Solid elements tests." "$NORMAL"
 python tests/elements/volume/test_brick_00.py
 python tests/elements/volume/test_brick_01.py
 python tests/elements/volume/test_brick_02.py
+python tests/elements/volume/test_extrapolate_values_brick.py
 
 echo "$BLEU" "  Misc elements tests." "$NORMAL"
 python tests/elements/spring_test_01.py
