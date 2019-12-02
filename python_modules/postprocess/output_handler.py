@@ -139,7 +139,33 @@ class OutputHandler(object):
         defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
         defDisplay.cameraParameters= self.getCameraParameters()
         defDisplay.displayStrongWeakAxis(setToDisplay,caption= caption, vectorScale= self.outputStyle.localAxesVectorsScaleFactor, fileName= fileName, defFScale= defFScale)
-        
+
+    def displayScalarProperty(self,propToDisp, fUnitConv, unitDescription, captionText, setToDisplay, fileName=None, defFScale=0.0, rgMinMax=None):
+        '''displays the component of the displacement or rotations in the 
+        set of entities.
+
+        :param propeToDisp: scalar property defined at nodes. 
+        :param fUnitConv: conversion factor for units
+        :param unitDescription: unit(s) symbol(s)
+        :param setToDisplay: set of entities to be represented.
+        :param fileName: name of the file to plot the graphic. Defaults to 
+                    None, in that case an screen display is generated
+        :param defFScale: factor to apply to current displacement of nodes 
+                so that the display position of each node equals to
+                the initial position plus its displacement multiplied
+                by this factor. (Defaults to 0.0, i.e. display of 
+                initial/undeformed shape)
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values of 
+              the field to be represented. All the values less than vmin are 
+              displayed in blue and those greater than vmax in red
+              (defaults to None)
+
+        '''
+        field= Fields.ScalarField(name=propToDisp,functionName="getProp",component=None,fUnitConv= fUnitConv,rgMinMax=rgMinMax)
+        defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
+        defDisplay.cameraParameters= self.getCameraParameters()
+        defDisplay.displayMesh(xcSets=setToDisplay,field=field, diagrams= None, caption= captionText, fileName=fileName, defFScale=defFScale)
+
     def displayDispRot(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None):
         '''displays the component of the displacement or rotations in the 
         set of entities.
@@ -160,20 +186,88 @@ class OutputHandler(object):
               (defaults to None)
 
         '''
+        # Define the property at nodes.
+        propertyName= 'disp'+itemToDisp
         vCompDisp= self.modelSpace.getDispComponentFromName(itemToDisp)
         if(setToDisplay==None):
             setToDisplay= self.modelSpace.getTotalSet()
         nodSet= setToDisplay.nodes
         for n in nodSet:
-            n.setProp('propToDisp',n.getDisp[vCompDisp])
+            n.setProp(propertyName,n.getDisp[vCompDisp])
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
 
-        field= Fields.ScalarField(name='propToDisp',functionName="getProp",component=None,fUnitConv=unitConversionFactor,rgMinMax=rgMinMax)
         loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
         captionText= loadCaseName+' '+itemToDisp+' '+unitDescription+' '+setToDisplay.description
-        defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-        defDisplay.cameraParameters= self.getCameraParameters()
-        defDisplay.displayMesh(xcSets=setToDisplay,field=field, diagrams= None, caption= captionText, fileName=fileName, defFScale=defFScale)
+        self.displayScalarProperty(propertyName, fUnitConv= unitConversionFactor, unitDescription= unitDescription, captionText= captionText, setToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax= rgMinMax)
+
+    def displayStresses(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None):
+        '''displays the component of the displacement or rotations in the 
+        set of entities.
+
+        :param itemToDisp: component of the stress ('sigma_11', 'sigma_22'...)
+        :param setToDisplay: set of entities to be represented.
+        :param fileName: name of the file to plot the graphic. Defaults to 
+                    None, in that case an screen display is generated
+        :param defFScale: factor to apply to current displacement of nodes 
+                so that the display position of each node equals to
+                the initial position plus its displacement multiplied
+                by this factor. (Defaults to 0.0, i.e. display of 
+                initial/undeformed shape)
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values of 
+              the field to be represented. All the values less than vmin are 
+              displayed in blue and those greater than vmax in red
+              (defaults to None)
+
+        '''
+        # Define the property at nodes.
+        if(setToDisplay==None):
+            setToDisplay= self.modelSpace.getTotalSet()
+        self.modelSpace.computeStressesAtNodes(setToDisplay)
+        propertyName= 'stress'+itemToDisp
+        vCompStress= self.modelSpace.getStressComponentFromName(itemToDisp)
+        nodSet= setToDisplay.nodes
+        for n in nodSet:
+            n.setProp(propertyName,n.getProp('stress')[vCompStress])
+        unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
+
+        loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
+        captionText= loadCaseName+' '+itemToDisp+' '+unitDescription+' '+setToDisplay.description
+        self.displayScalarProperty(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
+
+    def displayStrains(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None):
+        '''displays the component of the displacement or rotations in the 
+        set of entities.
+
+        :param itemToDisp: component of the stress ('sigma_11', 'sigma_22'...)
+        :param setToDisplay: set of entities to be represented.
+        :param fileName: name of the file to plot the graphic. Defaults to 
+                    None, in that case an screen display is generated
+        :param defFScale: factor to apply to current displacement of nodes 
+                so that the display position of each node equals to
+                the initial position plus its displacement multiplied
+                by this factor. (Defaults to 0.0, i.e. display of 
+                initial/undeformed shape)
+        :param rgMinMax: range (vmin,vmax) with the maximum and minimum values of 
+              the field to be represented. All the values less than vmin are 
+              displayed in blue and those greater than vmax in red
+              (defaults to None)
+
+        '''
+        # Define the property at nodes.
+        if(setToDisplay==None):
+            setToDisplay= self.modelSpace.getTotalSet()
+        self.modelSpace.computeStrainsAtNodes(setToDisplay)
+        propertyName= 'strain'+itemToDisp
+        vCompStrain= self.modelSpace.getStrainComponentFromName(itemToDisp)
+        nodSet= setToDisplay.nodes
+        for n in nodSet:
+            n.setProp(propertyName,n.getProp('strain')[vCompStrain])
+        unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
+
+        loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
+        captionText= loadCaseName+' '+itemToDisp+' '+unitDescription+' '+setToDisplay.description
+        self.displayScalarProperty(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
+
         
     def displayReactions(self,setToDisplay=None,fileName=None,defFScale=0.0):
         ''' Display reactions.

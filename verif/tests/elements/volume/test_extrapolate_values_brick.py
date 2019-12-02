@@ -100,6 +100,9 @@ for i in range(0,sz):
 sZerr/= 8.0
 tauErr/= 8.0
 
+#oh.displayDispRot('uZ')
+#oh.displayStresses('sigma_zz')
+#oh.displayStrains('epsilon_xx')
 
 '''
 gaussPoints= brick.gaussPointsPositions

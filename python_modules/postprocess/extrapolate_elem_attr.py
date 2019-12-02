@@ -41,21 +41,28 @@ def create_attribute_at_nodes(xcSet,attributeName,initialValue):
     :param attributeName: name of the attribute to define.
     :param initialValue: initial value to assign to the attribute.
     '''
-    nodeTags= {}
+    touchedNodesTags= {}
     for e in xcSet:
       elemNodes= e.getNodes
       sz= len(elemNodes)
       for i in range(0,sz):
         n= elemNodes[i]
         tag= n.tag
-        if tag not in nodeTags:
-          nodeTags[tag]= 1
+        if tag not in touchedNodesTags:
+          touchedNodesTags[tag]= 1
           if(n.hasProp(attributeName)):
             lmsg.warning('node: '+ str(n.tag) + ' already has a property named: \'' + attributeName +'\'.')
           n.setProp(attributeName,initialValue)
         else:
-          nodeTags[tag]+=1
-    return nodeTags
+          touchedNodesTags[tag]+=1
+    return touchedNodesTags
+
+def average_on_nodes(preprocessor, touchedNodesTags, attributeName):
+    ''' Divide by number of elements in the set that touch the node.'''
+    for tag in touchedNodesTags:
+        n= preprocessor.getNodeHandler.getNode(tag)
+        denom= touchedNodesTags[tag]
+        n.setProp(attributeName,n.getProp(attributeName)*(1.0/denom))
 
 def extrapolate_elem_function_attr(elemSet,attributeName,function, argument,initialValue= 0.0):
     '''Extrapolate element's function values to the nodes.
@@ -64,10 +71,10 @@ def extrapolate_elem_function_attr(elemSet,attributeName,function, argument,init
     :param attributeName: name of the property which will be defined
      at the nodes.
     :param function: name of the function to call for each element.
-    :param argument: name of the argument to send to the function (optional).
+    :param argument: name of the argument for the function call function (optional).
     :param initialValue: initial value for the attribute defined at the nodes.
     '''
-    nodeTags= create_attribute_at_nodes(elemSet,attributeName,initialValue)
+    touchedNodesTags= create_attribute_at_nodes(elemSet,attributeName,initialValue)
     #Calculate totals.
     for e in elemSet:
         elemNodes= e.getNodes
@@ -81,7 +88,38 @@ def extrapolate_elem_function_attr(elemSet,attributeName,function, argument,init
                 n.setProp(attributeName,oldValue+value)
     #Divide by number of elements in the set that touch the node.
     preprocessor= elemSet.owner.getPreprocessor
-    for tag in nodeTags:
-        n= preprocessor.getNodeHandler.getNode(tag)
-        denom= nodeTags[tag]
-        n.setProp(attributeName,n.getProp(attributeName)/denom)
+    average_on_nodes(preprocessor,touchedNodesTags, attributeName)
+
+def extrapolate_elem_data_to_nodes(elemSet,attributeName, function, argument= None, initialValue= 0.0):
+    '''Extrapolate element's function values to the nodes.
+
+    :param elemSet: set of elements.
+    :param attributeName: name of the property which will be defined
+     at the nodes.
+    :param method: name of the method to call for each element.
+    :param argument: name of the argument for the function call function (optional).
+    :param initialValue: initial value for the attribute defined at the nodes.
+    '''
+    touchedNodesTags= create_attribute_at_nodes(elemSet,attributeName,initialValue)
+    #Calculate totals.
+    for e in elemSet:
+        elemNodes= e.getNodes
+        value= None
+        if(argument):
+            value= function(e, argument)
+        else:
+            value= function(e)
+        sz= len(elemNodes)
+        for i in range(0,sz):
+            n= elemNodes[i]
+            valueAtNode= None
+            if(hasattr(value,'getRow')): # Matrix
+                valueAtNode= value.getRow(i)
+            else: # Vector or list
+                valueAtNode= value[i]
+            if(valueAtNode):
+                oldValue= n.getProp(attributeName)
+                n.setProp(attributeName,oldValue+valueAtNode)
+    #Divide by number of elements in the set that touch the node.
+    preprocessor= elemSet.owner.getPreprocessor
+    average_on_nodes(preprocessor,touchedNodesTags, attributeName)

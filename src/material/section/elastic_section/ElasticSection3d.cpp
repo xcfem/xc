@@ -100,9 +100,9 @@ XC::ElasticSection3d::ElasticSection3d(int tag, double EA_in, double EIz_in, dou
 //!   \begin{array}{c}
 //!       P
 //!       M_z
-//!       M_z
+//!       M_y
 //!       V_y
-//!       V_y
+//!       V_z
 //!       T
 //!   \end{array} 
 //! \right]

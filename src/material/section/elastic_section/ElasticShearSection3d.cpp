@@ -73,7 +73,7 @@ const XC::Vector &XC::ElasticShearSection3d::getStressResultant(void) const
     s(3) = ctes_scc.EIy()*e(3);
     s(5) = ctes_scc.GJ()*e(5);
 
-    const double GA= ctes_scc.GAAlpha();
+    const double GA= ctes_scc.GAAlpha(); //shear.
     s(2)= GA*e(2);
     s(4)= GA*e(4);
     return s;
