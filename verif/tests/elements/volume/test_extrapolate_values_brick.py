@@ -106,6 +106,7 @@ tauErr/= 8.0
 
 '''
 gaussPoints= brick.gaussPointsPositions
+print(elementStresses)
 print(nodeStresses)
 print(sZnodes)
 print(gaussPoints)

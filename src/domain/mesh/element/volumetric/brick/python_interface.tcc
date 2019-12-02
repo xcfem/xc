@@ -33,5 +33,4 @@ class_<XC::Brick , bases<XC::BrickBase>, boost::noncopyable >("Brick", no_init)
   .def("getAvgStressIJ", getAvgStressIJPtr,"Return (i,j) component of the average stress on the element.")
   .def("getAvgStrain", getAvgStrainPtr,"Return the average strain on the element.")
   .def("getAvgStrainIJ", getAvgStrainIJPtr,"Return (i,j) component of the average strain on the element.")
-
   ;
