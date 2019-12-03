@@ -26,11 +26,9 @@ datosScc1LosC.concrType= EHE_materials.HA25
 datosScc1LosC.depth= 0.25
 datosScc1LosC.width= 1.0
 datosScc1LosC.reinfSteelType= EHE_materials.B500S
-rebNeg=defSimpleRCSection.MainReinfLayer()
-rebNeg.setUp(nRebars= 5, areaRebar= EHE_materials.Fi10,cover=0.025+0.010+0.010/2.0)
+rebNeg=defSimpleRCSection.MainReinfLayer(nRebars= 5, areaRebar= EHE_materials.Fi10,nominalCover=0.025+0.010,width=0.999)
 datosScc1LosC.negatvRebarRows=[rebNeg]
-rebPos=defSimpleRCSection.MainReinfLayer()
-rebNeg.setUp(nRebars= 5, areaRebar= EHE_materials.Fi10,cover=0.025+0.010/2.0)
+rebPos=defSimpleRCSection.MainReinfLayer(nRebars= 5, areaRebar= EHE_materials.Fi10,nominalCover=0.025,width=0.999)
 datosScc1LosC.positvRebarRows=[rebPos]
 
 # datosScc1LosC.nRebarsNeg= 5

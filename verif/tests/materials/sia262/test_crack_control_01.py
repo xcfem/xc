@@ -33,13 +33,17 @@ concr= EHE_materials.HA30
 concr.alfacc=0.85 #f_maxd= 0.85*fcd
 datosScc1LosC.concrType= concr
 datosScc1LosC.h= 0.35
-datosScc1LosC.b= 1.0
+datosScc1LosC.b= 1.0001
 datosScc1LosC.reinfSteelType= EHE_materials.B500S
-negRebRow=defSimpleRCSection.MainReinfLayer()
-negRebRow.setUp(nRebars=0,rebarsDiam=0.0,areaRebar=0.0,width=datosScc1LosC.b,cover=0.1)
+negRebRow=defSimpleRCSection.MainReinfLayer(nRebars=2,rebarsDiam=10e-10,width=datosScc1LosC.b)
+#negRebRow=defSimpleRCSection.MainReinfLayer()
+#negRebRow=defSimpleRCSection.MainReinfLayer(rebarsDiam=10e-3,areaRebar= EHE_materials.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03)
+#negRebRow.setUp(nRebars=0,rebarsDiam=0.0,areaRebar=0.0,width=datosScc1LosC.b,cover=0.1)
 datosScc1LosC.negatvRebarRows=[negRebRow]
-posRebRow=defSimpleRCSection.MainReinfLayer()
-posRebRow.setUp(nRebars=6,rebarsDiam=26e-3,areaRebar=(areaFi22+areaFi26)/2.0,width=datosScc1LosC.b,cover=0.05+0.026/2.0)
+posRebRow=defSimpleRCSection.MainReinfLayer(nRebars=6,rebarsDiam=26e-3,areaRebar=(areaFi22+areaFi26)/2.0,width=datosScc1LosC.b,nominalCover=0.05,nominalLatCover=0.08333-26e-3/2.)
+#posRebRow=defSimpleRCSection.MainReinfLayer()
+#posRebRow=defSimpleRCSection.MainReinfLayer(rebarsDiam=10e-3,areaRebar= EHE_materials.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03)
+#posRebRow.setUp(nRebars=6,rebarsDiam=26e-3,areaRebar=(areaFi22+areaFi26)/2.0,width=datosScc1LosC.b,cover=0.05+0.026/2.0)
 datosScc1LosC.positvRebarRows=[posRebRow]
 
 #datosScc1LosC.negatvRebars.setUp(0,0.0,0.0,datosScc1LosC.b,0.1)
@@ -97,7 +101,7 @@ scc= ele1.getSection()
 sigma_s= secHAParamsFis.calcRebarStress(scc)
 
 
-ratio1= (sigma_s-166.925177095e6)/166.925177095
+ratio1= (sigma_s-166.925177095e6)/166.925177095e6
 
 
 ''' 
