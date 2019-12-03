@@ -96,6 +96,14 @@ class OutputStyle(object):
         ''' Return the description for the displacement units.'''
         return self.outputUnits.getForceUnitsDescription()
 
+    def getPressureUnitsScaleFactor(self):
+        ''' Return the scale factor for the displacement units.'''
+        return self.outputUnits.getPressureUnitsScaleFactor()
+    
+    def getPressureUnitsDescription(self):
+        ''' Return the description for the displacement units.'''
+        return self.outputUnits.getPressureUnitsDescription()
+
     def getUnitParameters(self, itemToDisp):
         ''' Return the pair (scale factor, description) for
             the argument parameter.
@@ -111,6 +119,12 @@ class OutputStyle(object):
         elif(itemToDisp=='CF'):
             fConvUnits= 1.0
             unitDescription=''
+        elif(itemToDisp.startswith('sigma_')):
+            fConvUnits= self.getPressureUnitsScaleFactor()
+            unitDescription= self.getPressureUnitsDescription()
+        elif(itemToDisp.startswith('epsilon_')):
+            fConvUnits= 1.0
+            unitDescription= '-'
         else:
             fConvUnits= self.getForceUnitsScaleFactor()
             unitDescription= self.getForceUnitsDescription()

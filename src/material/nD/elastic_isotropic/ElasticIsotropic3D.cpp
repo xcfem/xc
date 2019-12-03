@@ -165,11 +165,11 @@ int XC::ElasticIsotropic3D::getOrder(void) const
 
 void XC::ElasticIsotropic3D::Print(std::ostream &s, int flag)
   {
-	s << strTypeElasticIsotropic3D << std::endl;
-	s << "\ttag: " << this->getTag() << std::endl;
-	s << "\tE: " << E << std::endl;
-	s << "\tv: " << v << std::endl;
-	s << "\trho: " << rho << std::endl;
+    s << strTypeElasticIsotropic3D << std::endl;
+    s << "\ttag: " << this->getTag() << std::endl;
+    s << "\tE: " << E << std::endl;
+    s << "\tv: " << v << std::endl;
+    s << "\trho: " << rho << std::endl;
   }
 
 

@@ -41,6 +41,7 @@ kilonewton_meter= UnitDefinitionPair('kN/m',1e-3, 'force/length')
 meter= UnitDefinitionPair('m',1.0, 'length')
 millimeter= UnitDefinitionPair('mm',1e3, 'length')
 milliradian= UnitDefinitionPair('x1E3 rad',1e3, 'plane angle')
+megapascal= UnitDefinitionPair('MPa',1e-6,'pressure')
 
 class DynamicsUnits(object):
     ''' Units to use for the output of forces
@@ -48,7 +49,7 @@ class DynamicsUnits(object):
         :ivar forceUnit: unit to express forces.
         :ivar lengthUnit: unit to express lengths.
     '''
-    def __init__(self, forceUnit= kilonewton, lengthUnit= meter):
+    def __init__(self, forceUnit= kilonewton, lengthUnit= meter, pressureUnit= megapascal):
         ''' Constructor.
 
             :param forceUnit: unit to express forces.
@@ -56,9 +57,12 @@ class DynamicsUnits(object):
         '''
         self.forceUnit= forceUnit
         self.lengthUnit= lengthUnit
+        self.pressureUnit= pressureUnit
         
-    def getDecoratedUnitsText(self):
+    def getDecoratedForceUnitsText(self):
         return 'units:['+self.lengthUnit.symbol+', '+self.forceUnit.symbol+']'
+    def getDecoratedPressureUnitsText(self):
+        return 'units:['+self.pressureUnit.symbol+']'
         
 defaultDynamicUnits= DynamicsUnits(kilonewton,meter)
 
@@ -121,4 +125,12 @@ class OutputUnits(object):
     
     def getForceUnitsDescription(self):
         ''' Return the description for the displacement units.'''
-        return self.dynamicUnits.getDecoratedUnitsText()
+        return self.dynamicUnits.getDecoratedForceUnitsText()
+    
+    def getPressureUnitsScaleFactor(self):
+        ''' Return the scale factor for the displacement units.'''
+        return self.dynamicUnits.pressureUnit.scaleFactor
+    
+    def getPressureUnitsDescription(self):
+        ''' Return the description for the displacement units.'''
+        return self.dynamicUnits.getDecoratedPressureUnitsText()

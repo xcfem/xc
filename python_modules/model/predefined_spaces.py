@@ -12,6 +12,7 @@ import numpy as np
 from miscUtils import LogMessages as lmsg
 import geom
 from materials import typical_materials as tm
+from postprocess import extrapolate_elem_attr
 
 class PredefinedSpace(object):
     def __init__(self,nodes,dimSpace,numDOFs):
@@ -34,7 +35,7 @@ class PredefinedSpace(object):
         elif componentName == 'Q2':
             return 'q23'
         else: #LCPT I don't like this too much, I prefer let the user make the program to crass. Maybe a Warning? 
-            lmsg.error('Item '+str(componentName) +'is not a valid component. Available components are: N1, N2, N12, M1, M2, M12, Q1, Q2')
+            lmsg.error('Item '+str(componentName) + ' is not a valid component. Available components are: N1, N2, N12, M1, M2, M12, Q1, Q2')
             return 'N1'
         
     def setPreprocessor(self,preprocessor):
@@ -268,6 +269,7 @@ class PredefinedSpace(object):
         self.preprocessor.resetLoadCase()
         self.addLoadCaseToDomain(loadCaseName)
 
+
 def getModelSpace(preprocessor):
       '''Return a PredefinedSpace from the dimension of the space 
        and the number of DOFs for each node obtained from the preprocessor.
@@ -288,8 +290,14 @@ class SolidMechanics2D(PredefinedSpace):
          :param nodes: preprocessor nodes handler
         '''
         super(SolidMechanics2D,self).__init__(nodes,2,2)
-        self.Ux= 0
+        self.Ux= 0 # Displacement components
         self.Uy= 1
+        self.epsilon_11= 0 # Strain components
+        self.epsilon_22= 1
+        self.epsilon_12= 2
+        self.sigma_11= 0 # Stress components
+        self.sigma_22= 1
+        self.sigma_12= 2
         
     def getDispComponentFromName(self,compName):
         '''Return the component index from the
@@ -300,7 +308,37 @@ class SolidMechanics2D(PredefinedSpace):
         elif compName == 'uY':
             retval= self.Uy
         else:
-            lmsg.error('Item '+str(compName) +'is not a valid component. Available components are: uX, uY')
+            lmsg.error('Item '+str(compName) + ' is not a valid component. Available components are: uX, uY')
+        return retval
+
+    def getStrainComponentFromName(self, compName):
+        '''Return the component index from the
+           strain name.'''
+        retval= 0
+        if((compName == 'epsilon_xx') or (compName == 'epsilon_11')):
+            retval= self.epsilon_11
+        elif((compName == 'epsilon_yy') or (compName == 'epsilon_22')):
+            retval= self.epsilon_22
+        elif((compName == 'epsilon_xy') or (compName == 'epsilon_12')
+             or (compName == 'epsilon_yx') or (compName == 'epsilon_21')):
+            retval= self.epsilon_12
+        else:
+            lmsg.error('Item '+str(compName) + ' is not a valid component. Available components are: epsilon_11, epsilon_22, epsilon_12')
+        return retval
+
+    def getStressComponentFromName(self, compName):
+        '''Return the component index from the
+           stress name.'''
+        retval= 0
+        if((compName == 'sigma_xx') or (compName == 'sigma_11')):
+            retval= self.sigma_11
+        elif((compName == 'sigma_yy') or (compName == 'sigma_22')):
+            retval= self.sigma_22
+        elif((compName == 'sigma_xy') or (compName == 'sigma_12')
+             or (compName == 'sigma_yx') or (compName == 'sigma_21')):
+            retval= self.sigma_12
+        else:
+            lmsg.error('Item '+str(compName) + ' is not a valid component. Available components are: sigma_11, sigma_22, sigma_12')
         return retval
 
     def getDisplacementDOFs(self):
@@ -355,9 +393,15 @@ class StructuralMechanics2D(PredefinedSpace):
          :param nodes: preprocessor nodes handler
         '''
         super(StructuralMechanics2D,self).__init__(nodes,2,3)
-        self.Ux= 0
+        self.Ux= 0 # displacement components
         self.Uy= 1
         self.Theta= 2
+        self.epsilon= 0 # generalized strain components; axial,
+        self.kappa= 1 # bending,
+        self.gamma= 2 # shear
+        self.N= 0 # generalized stress components; axial,
+        self.M= 1 # bending,
+        self.Q= 2 # shear.
         
     def getDispComponentFromName(self,compName):
         '''Return the component index from the
@@ -370,9 +414,37 @@ class StructuralMechanics2D(PredefinedSpace):
         elif compName == 'rotZ':
             retval= self.Theta
         else:
-            lmsg.error('Item '+str(compName) +'is not a valid component. Available components are: uX, uY, rotZ')
+            lmsg.error('Item '+str(compName) + ' is not a valid component. Available components are: uX, uY, rotZ')
         return retval
-        
+
+    def getStrainComponentFromName(self, compName):
+        '''Return the component index from the
+           generalized strain name.'''
+        retval= 0
+        if(compName == 'epsilon'): # axial
+            retval= self.epsilon
+        elif(compName == 'kappa'): # bending
+            retval= self.kappa
+        elif(compName == 'gamma'): # shear
+            retval= self.gamma
+        else:
+            lmsg.error('Item '+str(compName) + ' is not a valid component. Available components are: epsilon, kappa, gamma')
+        return retval
+
+    def getStressComponentFromName(self, compName):
+        '''Return the component index from the
+           stress name.'''
+        retval= 0
+        if((compName == 'N') or (compName == 'P')):
+            retval= self.N
+        elif(compName == 'M'):
+            retval= self.M
+        elif((compName == 'Q') or (compName == 'V')):
+            retval= self.Q
+        else:
+            lmsg.error('Item '+str(compName) + ' is not a valid component. Available components are: N, M, Q')
+        return retval
+
     def getDisplacementDOFs(self):
         ''' Return the indices of the displacement DOFs.'''
         return [self.Ux,self.Uy]
@@ -495,9 +567,22 @@ class SolidMechanics3D(PredefinedSpace):
          :param nodes: preprocessor nodes handler
         '''
         super(SolidMechanics3D,self).__init__(nodes,3,3)
-        self.Ux= 0
+        self.Ux= 0 # displacement components.
         self.Uy= 1
         self.Uz= 2
+        self.epsilon_11= 0 # Strain components
+        self.epsilon_22= 1
+        self.epsilon_33= 2
+        self.epsilon_12= 3
+        self.epsilon_23= 4
+        self.epsilon_13= 5
+        self.sigma_11= 0 # Stress components
+        self.sigma_22= 1
+        self.sigma_33= 2
+        self.sigma_12= 3
+        self.sigma_23= 4
+        self.sigma_13= 5
+
         
     def getDispComponentFromName(self,compName):
         '''Return the component index from the
@@ -510,9 +595,55 @@ class SolidMechanics3D(PredefinedSpace):
         elif compName == 'uZ':
             retval= self.Uz
         else:
-            lmsg.error('Item '+str(compName) +'is not a valid component. Available components are: uX, uY, uZ')
+            lmsg.error('Item '+str(compName) + ' is not a valid component. Available components are: uX, uY, uZ')
+        return retval
+    
+    def getStrainComponentFromName(self, compName):
+        '''Return the component index from the
+           strain name.'''
+        retval= 0
+        if((compName == 'epsilon_xx') or (compName == 'epsilon_11')):
+            retval= self.epsilon_11
+        elif((compName == 'epsilon_yy') or (compName == 'epsilon_22')):
+            retval= self.epsilon_22
+        elif((compName == 'epsilon_zz') or (compName == 'epsilon_33')):
+            retval= self.epsilon_33
+        elif((compName == 'epsilon_xy') or (compName == 'epsilon_12')
+             or (compName == 'epsilon_yx') or (compName == 'epsilon_21')):
+            retval= self.epsilon_12
+        elif((compName == 'epsilon_xz') or (compName == 'epsilon_13')
+             or (compName == 'epsilon_zx') or (compName == 'epsilon_31')):
+            retval= self.epsilon_13
+        elif((compName == 'epsilon_yz') or (compName == 'epsilon_23')
+             or (compName == 'epsilon_zy') or (compName == 'epsilon_32')):
+            retval= self.epsilon_23
+        else:
+            lmsg.error('Item '+str(compName) + ' is not a valid component. Available components are: epsilon_11, epsilon_22, epsilon_33, epsilon_12, epsilon_13, epsilon_23')
         return retval
 
+    def getStressComponentFromName(self, compName):
+        '''Return the component index from the
+           stress name.'''
+        retval= 0
+        if((compName == 'sigma_xx') or (compName == 'sigma_11')):
+            retval= self.sigma_11
+        elif((compName == 'sigma_yy') or (compName == 'sigma_22')):
+            retval= self.sigma_22
+        elif((compName == 'sigma_zz') or (compName == 'sigma_33')):
+            retval= self.sigma_33
+        elif((compName == 'sigma_xy') or (compName == 'sigma_12')
+             or (compName == 'sigma_yx') or (compName == 'sigma_21')):
+            retval= self.sigma_12
+        elif((compName == 'sigma_xz') or (compName == 'sigma_13')
+             or (compName == 'sigma_zx') or (compName == 'sigma_31')):
+            retval= self.sigma_13
+        elif((compName == 'sigma_yz') or (compName == 'sigma_23')
+             or (compName == 'sigma_zy') or (compName == 'sigma_32')):
+            retval= self.sigma_23
+        else:
+            lmsg.error('Item '+str(compName) + ' is not a valid component. Available components are: sigma_11, sigma_22, sigma_33, sigma_12, sigma_13, sigma_23')
+        return retval
+    
     def getDisplacementDOFs(self):
         ''' Return the indices of the displacement DOFs.'''
         return [self.Ux,self.Uy,self.Uz]
@@ -552,6 +683,41 @@ class SolidMechanics3D(PredefinedSpace):
         for nc in DOFtoConstr:
             self.constraints.newSPConstraint(nodeTag,nc,0.0)
 
+    def getStressesAtNodes(self, element):
+        ''' Return the stresses at each of the element nodes.
+
+         :param element: element which the stresses at its nodes will be calculated.
+        '''
+        elementStresses= element.physicalProperties.getVectorMaterials.generalizedStresses
+        return element.getExtrapolatedValues(elementStresses)
+    
+    def computeStressesAtNodes(self, setToCompute, propToDefine= 'stress'):
+        ''' Extrapolate the stresses to the nodes of the set argument and
+            stores them in the property "propToDefine".
+
+        :param setToDefine: set of elements to be processed.
+        :param propToDefine: name of the property to define at the nodes.
+        '''
+        extrapolate_elem_attr.extrapolate_elem_data_to_nodes(setToCompute.getElements,propToDefine,self.getStressesAtNodes, initialValue= xc.Vector([0.0,0.0,0.0,0.0,0.0,0.0]))
+
+    def getStrainsAtNodes(self, element):
+        ''' Return the strains at each of the element nodes.
+
+         :param element: element which the strains at its nodes will be calculated.
+        '''
+        elementStrains= element.physicalProperties.getVectorMaterials.generalizedStrains
+        return element.getExtrapolatedValues(elementStrains)
+    
+    def computeStrainsAtNodes(self, setToCompute, propToDefine= 'strain'):
+        ''' Extrapolate the strains to the nodes of the set argument and
+            stores them in the property "propToDefine".
+
+        :param setToDefine: set of elements to be processed.
+        :param propToDefine: name of the property to define at the nodes.
+        '''
+        extrapolate_elem_attr.extrapolate_elem_data_to_nodes(setToCompute.getElements,propToDefine,self.getStrainsAtNodes, initialValue= xc.Vector([0.0,0.0,0.0,0.0,0.0,0.0]))
+
+
 def gdls_elasticidad3D(nodes):
     '''Defines the dimension of the space: nodes by three coordinates (x,y,z) 
        and three DOF for each node (Ux,Uy,Uz)
@@ -570,12 +736,24 @@ class StructuralMechanics3D(PredefinedSpace):
         :param nodes: preprocessor nodes handler
         '''
         super(StructuralMechanics3D,self).__init__(nodes,3,6)
-        self.Ux= 0
+        self.Ux= 0 # displacement components
         self.Uy= 1
         self.Uz= 2
         self.ThetaX= 3
         self.ThetaY= 4
         self.ThetaZ= 5
+        self.epsilon= 0 # generalized strains; axial strain,
+        self.kappa_z= 1 # curvature about z-axis,
+        self.gamma_y= 2 # shear along y-axis.
+        self.kappa_y= 3 # curvature about y-axis,
+        self.gamma_z= 4 # shear along z-axis.
+        self.theta= 5 # torsion along x-axis.
+        self.N= 0 # generalized strains; axial strain,
+        self.Mz= 1 # curvature about z-axis,
+        self.Vy= 2 # shear along y-axis.
+        self.My= 3 # curvature about y-axis,
+        self.Vz= 4 # shear along z-axis.
+        self.T= 5 # torsion along x-axis.
         
     def getDispComponentFromName(self,compName):
         '''Return the component index from the
@@ -594,7 +772,55 @@ class StructuralMechanics3D(PredefinedSpace):
         elif compName == 'rotZ':
             retval= self.ThetaZ
         else:
-            lmsg.error('Item '+str(compName) +'is not a valid component. Available components are: uX, uY, uZ, rotX, rotY, rotZ')
+            lmsg.error('Item '+str(compName) + ' is not a valid component. Available components are: uX, uY, uZ, rotX, rotY, rotZ')
+        return retval
+    
+    def getStrainComponentFromName(self, compName):
+        '''Return the component index from the
+           generalized strain name.'''
+        lmsg.warning('getStrainComponentFromName not tested yet.')
+        retval= 0        
+        if(compName == 'epsilon'): # axial
+            retval= self.epsilon
+        elif(compName == 'kappa_z'): # bending about local z axis
+            retval= self.kappa_z
+        elif(compName == 'gamma_y'): # shear along y-axis.
+            retval= self.gamma_y
+        elif(compName == 'kappa_y'): # bending about local y axis
+            retval= self.kappa_y
+        elif(compName == 'gamma_z'): # shear along z-axis.
+            retval= self.gamma_z
+        elif(compName == 'theta'): # torsion along x-axis.
+            retval= self.theta
+        else:
+            lmsg.error('Item '+str(compName) + ' is not a valid component. Available components are: epsilon, kappa_z, gamma_y, kappa_y, gamma_z, theta')
+        return retval
+
+    def getStressComponentFromName(self, compName):
+        '''Return the component index from the
+           stress name.'''
+        lmsg.warning('getStressComponentFromName not tested yet.')
+        retval= 0
+        self.N= 0 # generalized strains; axial strain,
+        self.Mz= 1 # curvature about z-axis,
+        self.Vy= 2 # shear along y-axis.
+        self.My= 3 # curvature about y-axis,
+        self.Vz= 4 # shear along z-axis.
+        self.T= 5 # torsion along x-axis.
+        if((compName == 'N') or (compName == 'P')):
+            retval= self.N
+        elif(compName == 'Mz'):
+            retval= self.Mz
+        elif((compName == 'Qy') or (compName == 'Vy')):
+            retval= self.Qy
+        elif(compName == 'My'):
+            retval= self.My
+        elif((compName == 'Qz') or (compName == 'Vz')):
+            retval= self.Qz
+        elif(compName == 'T'):
+            retval= self.Qz
+        else:
+            lmsg.error('Item '+str(compName) + ' is not a valid component. Available components are: N, Mz, Qy, My, Qz, T.')
         return retval
         
     def getDisplacementDOFs(self):

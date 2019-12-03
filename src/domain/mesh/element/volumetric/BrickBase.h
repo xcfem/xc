@@ -46,7 +46,6 @@ class BrickBase : public ElemWithMaterial<8,NDMaterialPhysicalProperties>
     static Matrix &compute_extrapolation_matrix(void);
   protected:
     ElemPtrArray3d put_on_mesh(const NodePtrArray3d &,meshing_dir dm) const;
-    static const Matrix &getPermutationMatrix(void);
   public:
     BrickBase(int classTag);
     BrickBase(int tag,int classTag,const NDMaterialPhysicalProperties &);

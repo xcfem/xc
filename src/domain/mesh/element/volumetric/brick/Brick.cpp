@@ -274,13 +274,23 @@ XC::Matrix XC::Brick::getGaussPointsPositions(void) const
         retval(i,1)= gaussPoint[i][1];
         retval(i,2)= gaussPoint[i][2];
       }
-    retval= getPermutationMatrix()*retval; //reorder positions.
     return retval;
   }
 
 //! @brief Gauss loop to compute and save shape functions
 void XC::Brick::shape_functions_loop(void) const
   {
+    //compute basis vectors and local nodal coordinates
+    computeBasis();
+
+    // Gauss points coordinates:
+    gaussPoint[0][0]= -one_over_root3; gaussPoint[0][1]= -one_over_root3; gaussPoint[0][2]= -one_over_root3;
+    gaussPoint[1][0]= one_over_root3; gaussPoint[1][1]= -one_over_root3; gaussPoint[1][2]= -one_over_root3;
+    gaussPoint[2][0]= one_over_root3; gaussPoint[2][1]= one_over_root3; gaussPoint[2][2]= -one_over_root3;
+    gaussPoint[3][0]= -one_over_root3; gaussPoint[3][1]= one_over_root3; gaussPoint[3][2]= -one_over_root3;
+    gaussPoint[4][0]= -one_over_root3; gaussPoint[4][1]= -one_over_root3; gaussPoint[4][2]= one_over_root3;
+    gaussPoint[5][0]= one_over_root3; gaussPoint[5][1]= -one_over_root3; gaussPoint[5][2]= one_over_root3;
+    gaussPoint[6][0]= one_over_root3; gaussPoint[6][1]= one_over_root3; gaussPoint[6][2]= one_over_root3;       gaussPoint[7][0]= -one_over_root3; gaussPoint[7][1]= one_over_root3; gaussPoint[7][2]= one_over_root3;
     //double volume= 0.0; // volume of the element
     double xsj= 0.0;  // determinant jacaobian matrix
     int count = 0; //Gauss point index
@@ -290,10 +300,6 @@ void XC::Brick::shape_functions_loop(void) const
 	  {
 	    for(int k= 0; k < 2; k++ )
 	      {
-		gaussPoint[count][0] = sg[i];
-		gaussPoint[count][1] = sg[j];
-		gaussPoint[count][2] = sg[k];
-
 		//get shape functions
 		shp3d( gaussPoint[count], xsj, shp, xl );
 
@@ -337,9 +343,6 @@ const XC::Matrix &XC::Brick::getInitialStiff(void) const
 
 	//zero stiffness and residual
 	stiff.Zero( );
-
-	//compute basis vectors and local nodal coordinates
-	computeBasis( );
 
 	//gauss loop to compute and save shape functions
 	shape_functions_loop();
@@ -524,8 +527,6 @@ void XC::Brick::formInertiaTerms( int tangFlag ) const
 
     //zero mass
     mass.Zero( );
-    //compute basis vectors and local nodal coordinates
-    computeBasis( );
 
     //gauss loop to compute and save shape functions
     shape_functions_loop();
@@ -610,9 +611,6 @@ int XC::Brick::update(void)
     static Matrix BJtranD(ndf,brick_nstress);
     //-------------------------------------------------------
 
-
-    //compute basis vectors and local nodal coordinates
-    computeBasis( );
 
     //gauss loop to compute and save shape functions
     shape_functions_loop();
@@ -722,9 +720,6 @@ void  XC::Brick::formResidAndTangent( int tang_flag ) const
     //zero stiffness and residual
     stiff.Zero( );
     resid.Zero( );
-
-    //compute basis vectors and local nodal coordinates
-    computeBasis( );
 
     //gauss loop to compute and save shape functions
     shape_functions_loop();
