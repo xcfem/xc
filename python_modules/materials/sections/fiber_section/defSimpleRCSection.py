@@ -54,7 +54,7 @@ class MainReinfLayer(object):
   :ivar rebarsDiam:    diameter of the bars (if omitted, the diameter is calculated from the rebar area) 
   :ivar areaRebar:     cross-sectional area of the bar (if omitted, the area is calculated from the rebar diameter)
   :ivar rebarsSpacing: spacing between bars (not considered if nRebars is defined)
-  :ivar nRebars:  number of rebars to be placed in the row
+  :ivar nRebars:  number of rebars to be placed in the row (>1)
   :ivar width: width of the cross-section (defautls to 1m)
   :ivar nominalCover:  nominal cover (defaults to 0.03m)
   :ivar nominalLatCover: nominal lateral cover (only considered if nRebars is defined, defaults to 0.03)
@@ -83,7 +83,7 @@ class MainReinfLayer(object):
       nRebarsTeor= width/rebarsSpacing
       self.nRebars= int(math.floor(nRebarsTeor))
     else:
-      lmsg.warning('You must define either the number of rebars or the rebar sepacing')
+      lmsg.warning('You must define either the number of rebars or the rebar spacing')
     self.cover= nominalCover+self.rebarsDiam/2.0
     self.centerRebars(width)
     
@@ -111,6 +111,7 @@ class MainReinfLayer(object):
       self.reinfLayer.p1= p1
       self.reinfLayer.p2= p2
       return self.reinfLayer
+    
 
 class BasicRecordRCSection(section_properties.RectangularSection):
   '''
