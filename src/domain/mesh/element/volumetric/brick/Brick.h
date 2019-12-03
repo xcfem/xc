@@ -137,6 +137,7 @@ class Brick : public BrickBase
     int update(void);
 
     Matrix getGaussPointsPositions(void) const;
+    Matrix getLocalAxes(bool initialGeometry= true) const;
     //return stiffness matrix 
     const Matrix &getTangentStiff(void) const;
     const Matrix &getInitialStiff(void) const;    
@@ -147,6 +148,7 @@ class Brick : public BrickBase
     Vector getAvgStrain(void) const;
     double getAvgStrain(const size_t &,const size_t &) const;
 
+    void zeroLoad(void);
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
 

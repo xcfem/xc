@@ -142,12 +142,11 @@ void  XC::Brick::setDomain(Domain *theDomain)
     BrickBase::setDomain(theDomain);
   }
 
-
 //! @brief return number of dofs
 int XC::Brick::getNumDOF(void) const
   { return 24 ; }
 
-//! @brief Return the tensión media in the element.
+//! @brief Return the average stress in the element.
 XC::Vector XC::Brick::getAvgStress(void) const
   { return physicalProperties.getCommittedAvgStress(); }
 
@@ -189,68 +188,6 @@ double XC::Brick::getAvgStrain(const size_t &i,const size_t &j) const
     return physicalProperties.getCommittedAvgStress(iComp);
   }
 
-//! @brief Print out element data
-void XC::Brick::Print(std::ostream &s, int flag )
-  {
-    if(flag == 2)
-      {
-
-	s << "#Brick\n";
-
-	const int numNodes = 8;
-
-	for(int i=0; i<numNodes; i++)
-	  {
-	    const Vector &nodeCrd = theNodes[i]->getCrds();
-	    const Vector &nodeDisp = theNodes[i]->getDisp();
-	    s << "#NODE " << nodeCrd(0) << " " << nodeCrd(1) << " " << nodeCrd(2)
-	      << " " << nodeDisp(0) << " " << nodeDisp(1) << " " << nodeDisp(2) << std::endl;
-	 }
-
-	// spit out the section location & invoke print on the scetion
-	static Vector avgStress(brick_nstress);
-	static Vector avgStrain(brick_nstress);
-	avgStress= physicalProperties.getCommittedAvgStress();
-	avgStrain= physicalProperties.getCommittedAvgStrain();
-
-	s << "#AVERAGE_STRESS ";
-	for(int i=0; i<brick_nstress; i++)
-	  s << avgStress(i) << " ";
-	s << std::endl;
-
-	s << "#AVERAGE_STRAIN ";
-	for(int i=0; i<brick_nstress; i++)
-	  s << avgStrain(i) << " ";
-	s << std::endl;
-
-	/*
-	physicalProperties.Print(s,flag);
-	*/
-
-      }
-    else
-      {
-	s << "Standard Eight Node Brick \n";
-	s << "Element Number: " << this->getTag() << std::endl;
-	s << "Nodes: " << theNodes;
-
-	s << "Material Information : \n ";
-	physicalProperties.Print( s, flag );
-
-	s << std::endl;
-	s << this->getTag() << " " << theNodes.getTagNode(0)
-	  << " " << theNodes.getTagNode(1)
-	      << " " <<theNodes.getTagNode(2)
-	      << " " <<theNodes.getTagNode(3)
-	      << " " <<theNodes.getTagNode(4)
-	      << " " <<theNodes.getTagNode(5)
-	      << " " <<theNodes.getTagNode(6)
-	      << " " <<theNodes.getTagNode(7)
-	  << std::endl;
-
-	s << "Resisting Force (no inertia): " << this->getResistingForce();
-      }
-  }
 
 
 //! @brief Return stiffness matrix
@@ -283,15 +220,6 @@ void XC::Brick::shape_functions_loop(void) const
     //compute basis vectors and local nodal coordinates
     computeBasis();
 
-    // Gauss points coordinates:
-    gaussPoint[0][0]= -one_over_root3; gaussPoint[0][1]= -one_over_root3; gaussPoint[0][2]= -one_over_root3;
-    gaussPoint[1][0]= one_over_root3; gaussPoint[1][1]= -one_over_root3; gaussPoint[1][2]= -one_over_root3;
-    gaussPoint[2][0]= one_over_root3; gaussPoint[2][1]= one_over_root3; gaussPoint[2][2]= -one_over_root3;
-    gaussPoint[3][0]= -one_over_root3; gaussPoint[3][1]= one_over_root3; gaussPoint[3][2]= -one_over_root3;
-    gaussPoint[4][0]= -one_over_root3; gaussPoint[4][1]= -one_over_root3; gaussPoint[4][2]= one_over_root3;
-    gaussPoint[5][0]= one_over_root3; gaussPoint[5][1]= -one_over_root3; gaussPoint[5][2]= one_over_root3;
-    gaussPoint[6][0]= one_over_root3; gaussPoint[6][1]= one_over_root3; gaussPoint[6][2]= one_over_root3;       gaussPoint[7][0]= -one_over_root3; gaussPoint[7][1]= one_over_root3; gaussPoint[7][2]= one_over_root3;
-    //double volume= 0.0; // volume of the element
     double xsj= 0.0;  // determinant jacaobian matrix
     int count = 0; //Gauss point index
     for(int i= 0; i < 2; i++ )
@@ -300,6 +228,11 @@ void XC::Brick::shape_functions_loop(void) const
 	  {
 	    for(int k= 0; k < 2; k++ )
 	      {
+		//Gauss points coordinates.
+		gaussPoint[count][0]= sg[i];        
+		gaussPoint[count][1]= sg[j];        
+		gaussPoint[count][2]= sg[k];
+		
 		//get shape functions
 		shp3d( gaussPoint[count], xsj, shp, xl );
 
@@ -354,11 +287,11 @@ const XC::Matrix &XC::Brick::getInitialStiff(void) const
 	    for(int p = 0; p < nShape; p++ )
 	      {
 	         for(int q = 0; q < numberNodes; q++ )
-		    shp[p][q]  = Shape[p][q][i];
+		    shp[p][q]= Shape[p][q][i];
 	      } // end for p
 
-	    dd = physicalProperties[i]->getInitialTangent( );
-	    dd *= dvol[i];
+	    dd= physicalProperties[i]->getInitialTangent( );
+	    dd*= dvol[i];
 
 	    int jj= 0;
 	    for(int j= 0; j < numberNodes; j++ )
@@ -392,17 +325,17 @@ const XC::Matrix &XC::Brick::getInitialStiff(void) const
 		  } // end for k loop
 		jj+= ndf;
 	      } // end for j loop
-	} //end for i gauss loop
+  	  } //end for i gauss loop
 
-	Ki = new Matrix(stiff);
-      }
-    if(isDead())
-      stiff*=dead_srf;
-  return stiff;
-}
+	  Ki= new Matrix(stiff);
+        }
+      if(isDead())
+        stiff*=dead_srf;
+    return stiff;
+  }
 
 
-//! @brief Return mass matrix
+//! @brief Return mass matrix.
 const XC::Matrix &XC::Brick::getMass(void) const
   {
     int tangFlag = 1;
@@ -412,7 +345,19 @@ const XC::Matrix &XC::Brick::getMass(void) const
     return mass;
   }
 
+//! Remove element loads. 
+void XC::Brick::zeroLoad(void)
+  {
+    BrickBase::zeroLoad();
+    bf[0]= 0.0;
+    bf[1]= 0.0;
+    bf[2]= 0.0;
+    applyLoad= false;
 
+    appliedB[0]= 0.0;
+    appliedB[1]= 0.0;
+    appliedB[2]= 0.0;
+  }
 
 int XC::Brick::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
@@ -843,19 +788,50 @@ void  XC::Brick::formResidAndTangent( int tang_flag ) const
   }
 
 
-//************************************************************************
-//compute local coordinates and basis
-
+//! @brief compute local coordinates and basis
 void XC::Brick::computeBasis(void) const
   {
     //nodal coordinates
     for(int i = 0; i < 8; i++ )
       {
-         const Vector &coorI= theNodes[i]->getCrds( );
+         const Vector &coorI= theNodes[i]->getCrds();
          xl[0][i] = coorI(0);
          xl[1][i] = coorI(1);
          xl[2][i] = coorI(2);
       }  //end for i
+  }
+
+//! @brief Return the element local axes.
+XC::Matrix XC::Brick::getLocalAxes(bool initialGeometry) const
+  {
+    Matrix retval(3,3);
+    if(!initialGeometry)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; for deformed geometry not implemented."
+                << std::endl;
+    
+    const Vector &coor1= theNodes[1]->getCrds();
+    const Vector &coor2= theNodes[2]->getCrds();
+    const Vector &coor3= theNodes[3]->getCrds();
+    const Vector &coor4= theNodes[4]->getCrds();
+    const Vector &coor5= theNodes[5]->getCrds();
+    const Vector &coor6= theNodes[6]->getCrds();
+    const Vector &coor7= theNodes[7]->getCrds();
+
+    const Vector pR= (coor1+coor2+coor6+coor5)*0.25; //R face.
+    const Vector pS= (coor2+coor3+coor7+coor6)*0.25; //S face.
+    const Vector pT= (coor4+coor5+coor6+coor7)*0.25; //T face.
+    const Vector vCenter= getCenterOfMassCoordinates();
+
+    const Vector r= pR-vCenter;
+    const Vector s= pS-vCenter;
+    const Vector t= pT-vCenter;
+
+    // Fill in matrix
+    retval(0,0)= r(0); retval(0,1)= r(1); retval(0,2)= r(2);
+    retval(1,0)= s(0); retval(1,1)= s(1); retval(1,2)= s(2);
+    retval(2,0)= t(0); retval(2,1)= t(1); retval(2,2)= t(2);
+    return retval;
   }
 
 //! @brief Compute B matrix.
@@ -988,3 +964,65 @@ int XC::Brick::getResponse(int responseID, Information &eleInfo)
       return -1;
   }
 
+//! @brief Print out element data
+void XC::Brick::Print(std::ostream &s, int flag )
+  {
+    if(flag == 2)
+      {
+
+	s << "#Brick\n";
+
+	const int numNodes = 8;
+
+	for(int i=0; i<numNodes; i++)
+	  {
+	    const Vector &nodeCrd = theNodes[i]->getCrds();
+	    const Vector &nodeDisp = theNodes[i]->getDisp();
+	    s << "#NODE " << nodeCrd(0) << " " << nodeCrd(1) << " " << nodeCrd(2)
+	      << " " << nodeDisp(0) << " " << nodeDisp(1) << " " << nodeDisp(2) << std::endl;
+	 }
+
+	// spit out the section location & invoke print on the scetion
+	static Vector avgStress(brick_nstress);
+	static Vector avgStrain(brick_nstress);
+	avgStress= physicalProperties.getCommittedAvgStress();
+	avgStrain= physicalProperties.getCommittedAvgStrain();
+
+	s << "#AVERAGE_STRESS ";
+	for(int i=0; i<brick_nstress; i++)
+	  s << avgStress(i) << " ";
+	s << std::endl;
+
+	s << "#AVERAGE_STRAIN ";
+	for(int i=0; i<brick_nstress; i++)
+	  s << avgStrain(i) << " ";
+	s << std::endl;
+
+	/*
+	physicalProperties.Print(s,flag);
+	*/
+
+      }
+    else
+      {
+	s << "Standard Eight Node Brick \n";
+	s << "Element Number: " << this->getTag() << std::endl;
+	s << "Nodes: " << theNodes;
+
+	s << "Material Information : \n ";
+	physicalProperties.Print( s, flag );
+
+	s << std::endl;
+	s << this->getTag() << " " << theNodes.getTagNode(0)
+  	                    << " " << theNodes.getTagNode(1)
+			    << " " << theNodes.getTagNode(2)
+			    << " " << theNodes.getTagNode(3)
+			    << " " << theNodes.getTagNode(4)
+			    << " " << theNodes.getTagNode(5)
+			    << " " << theNodes.getTagNode(6)
+			    << " " << theNodes.getTagNode(7)
+	                    << std::endl;
+
+	s << "Resisting Force (no inertia): " << this->getResistingForce();
+      }
+  }
