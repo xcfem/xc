@@ -16,6 +16,7 @@ import math
 from materials.ehe import EHE_materials
 from materials.sections import stressCalc as sc
 import sys
+from miscUtils import LogMessages as lmsg
 
 class RecordShearReinforcement(object):
   ''' Definition of the variables that make up a family of shear 
@@ -50,34 +51,41 @@ class MainReinfLayer(object):
   ''' Definition of the variables that make up a family (row) of main 
   (longitudinal) reinforcing bars.
   
-  :ivar rebarsDiam:    diameter of the bars
-  :ivar rebarsSpacing: spacing between bars
-  :ivar nRebars:       number of rebars to be placed in the row
-  :ivar areaRebar:     cross-sectional area of the bar
-  :ivar nominalCover:  clear cover 
-  :ivar cover:         effective cover (nominalCover+fi/2)
-
-  Note: If we define the instance variable 'nRebars' that value overrides the 
-  'rebarsSpacing'
+  :ivar rebarsDiam:    diameter of the bars (if omitted, the diameter is calculated from the rebar area) 
+  :ivar areaRebar:     cross-sectional area of the bar (if omitted, the area is calculated from the rebar diameter)
+  :ivar rebarsSpacing: spacing between bars (not considered if nRebars is defined)
+  :ivar nRebars:  number of rebars to be placed in the row
+  :ivar width: width of the cross-section (defautls to 1m)
+  :ivar nominalCover:  nominal cover (defaults to 0.03m)
+  :ivar nominalLatCover: nominal lateral cover (only considered if nRebars is defined, defaults to 0.03)
   '''
-  def __init__(self,rebarsDiam=10e-3,areaRebar= EHE_materials.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03):
-    self.rebarsDiam= rebarsDiam
-    self.rebarsSpacing= rebarsSpacing
-    nRebarsTeor= width/self.rebarsSpacing
-    self.nRebars= int(math.floor(nRebarsTeor))
-    self.areaRebar= areaRebar
+  def __init__(self,rebarsDiam=None,areaRebar= None,rebarsSpacing=None,nRebars=None,width=1.0,nominalCover=0.03,nominalLatCover=0.03):
+    if rebarsDiam:
+      self.rebarsDiam= rebarsDiam
+    elif areaRebar:
+      self.areaRebar= areaRebar
+      self.rebarsDiam=2*math.sqrt(areaRebar/math.pi)
+    else:
+      lmsg.warning('You must define either the diameter or the area of rebars')
+    if areaRebar:
+      self.areaRebar= areaRebar
+    elif rebarsDiam:
+      self.areaRebar=math.pi*rebarsDiam**2/4.
+    else:
+      lmsg.warning('You must define either the diameter or the area of rebars')
+    if nRebars:
+      self.nRebars= nRebars
+      if width==1.0:
+        lmsg.warning('Spacing is calculated using a section width = 1 m')
+      self.rebarsSpacing= (width-2*nominalLatCover-self.rebarsDiam)/(nRebars-1)
+    elif rebarsSpacing:
+      self.rebarsSpacing= rebarsSpacing
+      nRebarsTeor= width/rebarsSpacing
+      self.nRebars= int(math.floor(nRebarsTeor))
+    else:
+      lmsg.warning('You must define either the number of rebars or the rebar sepacing')
     self.cover= nominalCover+self.rebarsDiam/2.0
     self.centerRebars(width)
-  def setUp(self,nRebars= 5, rebarsDiam=10e-3,areaRebar= EHE_materials.Fi10,width=1.0,cover=0.03):
-    self.nRebars= nRebars
-    self.rebarsDiam= rebarsDiam
-    if(self.nRebars!=0.0):
-      self.rebarsSpacing= width/self.nRebars
-      self.centerRebars(width)
-    else:
-      self.rebarsSpacing= 100.0
-    self.areaRebar= areaRebar
-    self.cover= cover
     
   def getAs(self):
     '''returns the total cross-sectional area of reinforcing steel in the family
@@ -863,10 +871,7 @@ def rebLayerByNumFi_mm(n,fi,c,latC,L):
   :param fi: bar diameter [mm]
   :param c: nominal cover [mm]
   :param latC: nominal lateral cover [mm]
-  :param L: length where the n rebars and two lateral covers are inserted
+  :param L: length where the n rebars and two lateral covers are inserted [mm]
   '''
-  s=(L-2*latC-fi)/(n-1)
-  rl=MainReinfLayer(rebarsDiam=fi*1e-3,areaRebar= math.pi*(fi*1e-3)**2/4.0,rebarsSpacing=s*1e-3,width=L,nominalCover=c*1e-3)
-  rl.nRebars=n
-  rl.centerRebars(L*1e-3)
+  rl=MainReinfLayer(rebarsDiam=fi*1e-3,areaRebar= math.pi*(fi*1e-3)**2/4.0,nRebars=n,width=L*1e-3,nominalCover=c*1e-3,nominalLatCover=latC*1e-3)
   return rl
