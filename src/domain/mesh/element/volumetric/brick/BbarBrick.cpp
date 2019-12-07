@@ -68,12 +68,9 @@
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include "domain/mesh/element/utils/gauss_models/GaussModel.h"
 
-//static data
-double  XC::BbarBrick::xl[3][8] ;
-
- XC::Matrix  XC::BbarBrick::stiff(24,24) ;
- XC::Vector  XC::BbarBrick::resid(24) ;
- XC::Matrix  XC::BbarBrick::mass(24,24) ;
+XC::Matrix  XC::BbarBrick::stiff(24,24) ;
+XC::Vector  XC::BbarBrick::resid(24) ;
+XC::Matrix  XC::BbarBrick::mass(24,24) ;
 
 
 //quadrature data
@@ -785,22 +782,6 @@ void  XC::BbarBrick::formResidAndTangent( int tang_flag ) const
   return ;
 }
 
-
-//************************************************************************
-//compute local coordinates and basis
-
-void XC::BbarBrick::computeBasis(void) const
-  {
-    //nodal coordinates
-    int i ;
-    for( i = 0; i < 8; i++ )
-      {
-        const XC::Vector &coorI = theNodes[i]->getCrds( ) ;
-        xl[0][i] = coorI(0) ;
-        xl[1][i] = coorI(1) ;
-        xl[2][i] = coorI(2) ;
-      }  //end for i
-  }
 
 //*************************************************************************
 //compute B

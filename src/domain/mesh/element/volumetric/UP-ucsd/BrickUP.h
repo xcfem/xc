@@ -92,15 +92,10 @@ class BrickUP : public BrickBase
     static const double wg[8] ;
 
 
-    //local nodal coordinates, three coordinates for each of four nodes
-    //    static double xl[3][8] ;
-    static double xl[][8] ;
-
     void formInertiaTerms(int tangFlag) const;
     void formDampingTerms(int tangFlag) const;
     void formResidAndTangent(int tang_flag) const;
     double mixtureRho(int ipt) const;
-    void computeBasis(void) const;
     const Matrix& computeBbar(int node,const double shp[4][8],const double shpBar[4][8] ) ;
     const Matrix& computeB( int node, const double shp[4][8] ) const;
     Matrix transpose( int dim1, int dim2, const Matrix &M ) ;

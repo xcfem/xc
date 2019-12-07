@@ -34,7 +34,28 @@
 
 namespace XC {
 class NDMaterial;
+class ParticlePos3d;
+//              hexahedron
+//
+//                        s              
+//                       /               
+//            t         /                
+//            | 5---------4             
+//            |/.        /|             
+//            / .       / |             
+//           /  .      /  |             
+//          6---------7   |             
+//          |   .     |   |             
+//          |   1.....|...0            
+//          |  .      |  /              
+//          | .       | /--- r                
+//          |.        |/                
+//          2---------3            
+//
+// Inverse mapping code taken from the file trilinearintepolator.c
+// created by Dirk-Philip van Herwaarden on 4/21/17.
 
+ 
 //! @ingroup Elem
 //!
 //! @defgroup ElemVol Three-dimensional elements.
@@ -43,9 +64,20 @@ class NDMaterial;
 //! @brief Base class for hexahedra.
 class BrickBase : public ElemWithMaterial<8,NDMaterialPhysicalProperties>
   {
+  public:
+    static const int numberNodes= 8; //!< Number of nodes.
+    static const int ndm= 3; //!< Space dimension
+    static const int ndf= 3; //!< Number of DOFs per node.
+    static const double mNodesR[]; //!< Natural coordinates of nodes (r)
+    static const double mNodesS[]; //!< Natural coordinates of nodes (s)
+    static const double mNodesT[]; //!< Natural coordinates of nodes (t)
+  private:
     static Matrix &compute_extrapolation_matrix(void);
   protected:
+    //local nodal coordinates, three coordinates for each of eight nodes
+    static double xl[ndm][numberNodes];
     ElemPtrArray3d put_on_mesh(const NodePtrArray3d &,meshing_dir dm) const;
+    void computeBasis(void) const; //compute coordinate system
   public:
     BrickBase(int classTag);
     BrickBase(int tag,int classTag,const NDMaterialPhysicalProperties &);
@@ -54,6 +86,10 @@ class BrickBase : public ElemWithMaterial<8,NDMaterialPhysicalProperties>
     double getVolume(bool initialGeometry= true) const;
     BoolArray3d getNodePattern(void) const;
     int getVtkCellType(void) const;
+
+    Matrix getLocalAxes(bool initialGeometry= true) const;
+    Pos3d getGlobalCoordinates(const double &r, const double &s, const double &t) const;   
+    ParticlePos3d getNaturalCoordinates(const Pos3d &) const;
     const Matrix &getExtrapolationMatrix(void) const;
   };
 

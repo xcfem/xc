@@ -108,8 +108,6 @@ class ShellCrdTransf3dBase: public CommandEntity, public MovableObject
     Ref2d3d getLocalReference(bool initialGeometry= true) const;
     Pos2d getLocalCoordinates(const Pos3d &) const;
     ParticlePos3d getNaturalCoordinates(const Pos3d &,double xl[2][4]) const;    
-
-
   };
 
 } // end of XC namespace

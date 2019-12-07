@@ -64,10 +64,7 @@ class Brick : public BrickBase
   {
   private :
     // static constants
-    static const int numberNodes= 8; //!< Number of nodes.
     static const int numberGauss= 8; //!< Number of Gauss points.
-    static const int ndm= 3; //!< Space dimension
-    static const int ndf= 3; //!< Number of DOFs per node.
     static const int nShape = 4;
     
     BodyForces3D bf; //!< Body forces
@@ -94,9 +91,6 @@ class Brick : public BrickBase
     static const double sg[2];
     static const double wg[numberGauss];
   
-    //local nodal coordinates, three coordinates for each of eight nodes
-    static double xl[ndm][numberNodes];
-
     //
     // private methods
     //
@@ -105,9 +99,6 @@ class Brick : public BrickBase
     void formInertiaTerms(int tangFlag) const;
     //form residual and tangent					  
     void formResidAndTangent(int tang_flag) const;
-
-    //compute coordinate system
-    void computeBasis(void) const;
 
     //compute B matrix
     const Matrix& computeB( int node, const double shp[4][8]) const;
@@ -137,7 +128,6 @@ class Brick : public BrickBase
     int update(void);
 
     Matrix getGaussPointsPositions(void) const;
-    Matrix getLocalAxes(bool initialGeometry= true) const;
     //return stiffness matrix 
     const Matrix &getTangentStiff(void) const;
     const Matrix &getInitialStiff(void) const;    

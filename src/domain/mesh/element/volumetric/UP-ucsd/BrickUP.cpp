@@ -78,12 +78,11 @@
 
 namespace XC{
 //static data
-double  BrickUP::xl[4][8] ;
 
- XC::Matrix  BrickUP::stiff(32,32) ;
- XC::Vector  BrickUP::resid(32) ;
- XC::Matrix  BrickUP::mass(32,32) ;
- XC::Matrix  BrickUP::damp(32,32) ;
+XC::Matrix  BrickUP::stiff(32,32) ;
+XC::Vector  BrickUP::resid(32) ;
+XC::Matrix  BrickUP::mass(32,32) ;
+XC::Matrix  BrickUP::damp(32,32) ;
 
 //quadrature data
 const double  BrickUP::sg[] = { -one_over_root3,
@@ -915,22 +914,6 @@ double XC::BrickUP::mixtureRho(int i) const
     //n = e / (1.0 + e);
     //return n * rho_f + (1.0-n) * rhoi;
     return rhoi;
-  }
-
-//************************************************************************
-//compute local coordinates and basis
-
-void XC::BrickUP::computeBasis(void) const
-  {
-    //nodal coordinates
-    int i ;
-    for(i= 0;i<8;i++ )
-      {
-        const XC::Vector &coorI = theNodes[i]->getCrds( ) ;
-         xl[0][i] = coorI(0) ;
-         xl[1][i] = coorI(1) ;
-         xl[2][i] = coorI(2) ;
-      }  //end for i
   }
 
 //*************************************************************************

@@ -68,17 +68,13 @@
 #include "domain/load/ElementalLoad.h"
 
 //static data
-const int XC::Brick::numberNodes; //!< Number of nodes.
 const int XC::Brick::numberGauss; //!< Number of Gauss points.
-const int XC::Brick::ndm; //!< Space dimension
-const int XC::Brick::ndf; //!< Number of DOFs per node.
 const int XC::Brick::nShape;
-double XC::Brick::gaussPoint[XC::Brick::numberGauss][XC::Brick::ndm];
+double XC::Brick::gaussPoint[XC::Brick::numberGauss][XC::BrickBase::ndm];
 double XC::Brick::dvol[XC::Brick::numberGauss];
-double XC::Brick::shp[XC::Brick::nShape][XC::Brick::numberNodes];
-double XC::Brick::Shape[XC::Brick::nShape][XC::Brick::numberNodes][XC::Brick::numberGauss];
+double XC::Brick::shp[XC::Brick::nShape][XC::BrickBase::numberNodes];
+double XC::Brick::Shape[XC::Brick::nShape][XC::BrickBase::numberNodes][XC::Brick::numberGauss];
 
-double XC::Brick::xl[3][8] ;
 
 XC::Matrix  XC::Brick::stiff(24,24) ;
 XC::Vector  XC::Brick::resid(24) ;
@@ -785,53 +781,6 @@ void  XC::Brick::formResidAndTangent( int tang_flag ) const
 
 
     } //end for i gauss loop
-  }
-
-
-//! @brief compute local coordinates and basis
-void XC::Brick::computeBasis(void) const
-  {
-    //nodal coordinates
-    for(int i = 0; i < 8; i++ )
-      {
-         const Vector &coorI= theNodes[i]->getCrds();
-         xl[0][i] = coorI(0);
-         xl[1][i] = coorI(1);
-         xl[2][i] = coorI(2);
-      }  //end for i
-  }
-
-//! @brief Return the element local axes.
-XC::Matrix XC::Brick::getLocalAxes(bool initialGeometry) const
-  {
-    Matrix retval(3,3);
-    if(!initialGeometry)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; for deformed geometry not implemented."
-                << std::endl;
-    
-    const Vector &coor1= theNodes[1]->getCrds();
-    const Vector &coor2= theNodes[2]->getCrds();
-    const Vector &coor3= theNodes[3]->getCrds();
-    const Vector &coor4= theNodes[4]->getCrds();
-    const Vector &coor5= theNodes[5]->getCrds();
-    const Vector &coor6= theNodes[6]->getCrds();
-    const Vector &coor7= theNodes[7]->getCrds();
-
-    const Vector pR= (coor1+coor2+coor6+coor5)*0.25; //R face.
-    const Vector pS= (coor2+coor3+coor7+coor6)*0.25; //S face.
-    const Vector pT= (coor4+coor5+coor6+coor7)*0.25; //T face.
-    const Vector vCenter= getCenterOfMassCoordinates();
-
-    const Vector r= pR-vCenter;
-    const Vector s= pS-vCenter;
-    const Vector t= pT-vCenter;
-
-    // Fill in matrix
-    retval(0,0)= r(0); retval(0,1)= r(1); retval(0,2)= r(2);
-    retval(1,0)= s(0); retval(1,1)= s(1); retval(1,2)= s(2);
-    retval(2,0)= t(0); retval(2,1)= t(1); retval(2,2)= t(2);
-    return retval;
   }
 
 //! @brief Compute B matrix.

@@ -32,6 +32,15 @@
 #include "domain/mesh/node/Node.h"
 #include "vtkCellType.h"
 #include "xc_utils/src/geom/d3/3d_polyhedrons/Tetrahedron3d.h"
+#include "domain/mesh/element/utils/ParticlePos3d.h"
+
+const int XC::BrickBase::numberNodes; //!< Number of nodes.
+const int XC::BrickBase::ndm; //!< Space dimension
+const int XC::BrickBase::ndf; //!< Number of DOFs per node.
+double XC::BrickBase::xl[XC::BrickBase::ndm][XC::BrickBase::numberNodes];
+const double XC::BrickBase::mNodesR[]= {+1, -1, -1, +1, +1, -1, -1, +1};
+const double XC::BrickBase::mNodesS[]= {+1, +1, -1, -1, +1, +1, -1, -1};
+const double XC::BrickBase::mNodesT[]= {-1, -1, -1, -1, +1, +1, +1, +1};
 
 //! @brief Constructor
 XC::BrickBase::BrickBase(int classTag)
@@ -165,5 +174,291 @@ XC::Matrix &XC::BrickBase::compute_extrapolation_matrix(void)
 const XC::Matrix &XC::BrickBase::getExtrapolationMatrix(void) const
   {
     static const Matrix retval= compute_extrapolation_matrix();
+    return retval;
+  }
+
+// Taken from the file trilinearintepolator.c
+// created by Dirk-Philip van Herwaarden on 4/21/17.
+
+////////////////////// Linear Algebra Helper Functions ///////////////////////////
+// Transpose of 3 by 3 matrix
+void transpose(double m[3][3], double mTranspose[3][3])
+  {
+    for(int i=0;i<3;i++)
+      {
+        for(int j=0;j<3; j++)
+            mTranspose[j][i] = m[i][j];
+      }
+  }
+
+//determinant of a 3 by 3 matrix
+double determinant(double m[3][3])
+{
+    double det = m[0][0] * (m[1][1] * m[2][2] - m[2][1] * m[1][2]) -
+                 m[0][1] * (m[1][0] * m[2][2] - m[1][2] * m[2][0]) +
+                 m[0][2] * (m[1][0] * m[2][1] - m[1][1] * m[2][0]);
+    return det;
+}
+
+// Inverse of a 3 by 3 matrix
+void mInverse(double m[3][3], double minv[3][3], double det)
+{
+    double invdet = 1 / det;
+    minv[0][0] = (m[1][1] * m[2][2] - m[2][1] * m[1][2]) * invdet;
+    minv[0][1] = (m[0][2] * m[2][1] - m[0][1] * m[2][2]) * invdet;
+    minv[0][2] = (m[0][1] * m[1][2] - m[0][2] * m[1][1]) * invdet;
+    minv[1][0] = (m[1][2] * m[2][0] - m[1][0] * m[2][2]) * invdet;
+    minv[1][1] = (m[0][0] * m[2][2] - m[0][2] * m[2][0]) * invdet;
+    minv[1][2] = (m[1][0] * m[0][2] - m[0][0] * m[1][2]) * invdet;
+    minv[2][0] = (m[1][0] * m[2][1] - m[2][0] * m[1][1]) * invdet;
+    minv[2][1] = (m[2][0] * m[0][1] - m[0][0] * m[2][1]) * invdet;
+    minv[2][2] = (m[0][0] * m[1][1] - m[1][0] * m[0][1]) * invdet;
+}
+
+// Dot product of Dn and xl to compute jacobian
+void dot_product_matrix_matrix(double Dn[3][8], double xl[3][8], double jac[3][3])
+  {
+    double sum= 0.0;
+    for(int q= 0;q<3; q++)
+      {
+        for(int j=0;j<3;j++)
+          {
+            sum= 0.0;
+            for(int i= 0;i<8;i++)
+                sum+= Dn[q][i] * xl[j][i];
+            jac[q][j] = sum;
+          }
+      }
+  }
+
+// dot product of jac_t and objective function to get update to solution
+void dot_product_matrix_vector(double Jac_transpose[3][3],
+                               double objective_function[3], double solution[3])
+  {
+    double sum= 0.0;
+    for(int i=0;i<3; i++)
+      {
+        sum= 0.0;
+        for(int j=0;j<3;j++)
+          sum+= Jac_transpose[i][j] * objective_function[j];
+        solution[i] = sum;
+      }
+  }
+
+double referenceToElementMapping(double v0, double v1, double v2, double v3,
+                                 double v4, double v5, double v6, double v7,
+                                 double r, double s, double t)
+ {
+    return v0 + 0.5 * (r + 1.0) * (-v0 + v3) +
+                0.5 * (s + 1.0) * (-v0 + v1 - 0.5 * (r + 1.0) * (-v0 + v3) +
+                0.5 * (r + 1.0) * (-v1 + v2)) +
+                0.5 * (t + 1.0) * (-v0 + v4 - 0.5 * (r + 1.0) * (-v0 + v3) +
+                0.5 * (r + 1.0) * (-v4 + v5) -
+                0.5 * (s + 1.0) * (-v0 + v1 - 0.5 * (r + 1.0) * (-v0 + v3) +
+                0.5 * (r + 1.0) * (-v1 + v2)) +
+                0.5 * (s + 1.0) * (-v4 + v7 - 0.5 * (r + 1.0) * (-v4 + v5) +
+                0.5 * (r + 1.0) * (v6 - v7)));
+  }
+
+// Taken from the file trilinearintepolator.c
+// created by Dirk-Philip van Herwaarden on 4/21/17.
+// https://github.com/eth-csem/csemlibcsemlib/src/trilinearinterpolator.c
+
+void coordinateTransform(double pnt[], double xl[3][8], double solution[])
+  {
+    
+    solution[0]= referenceToElementMapping(xl[0][0], xl[0][1], xl[0][2], xl[0][3], xl[0][4],
+                                           xl[0][5], xl[0][6], xl[0][7], pnt[0], pnt[1], pnt[2]);
+    solution[1]= referenceToElementMapping(xl[1][0], xl[1][1], xl[1][2], xl[1][3], xl[1][4],
+                                           xl[1][5], xl[1][6], xl[1][7], pnt[0], pnt[1], pnt[2]);
+    solution[2]= referenceToElementMapping(xl[2][0], xl[2][1], xl[2][2], xl[2][3], xl[2][4],
+                                           xl[2][5], xl[2][6], xl[2][7], pnt[0], pnt[1], pnt[2]);
+  }
+
+void interpolateAtPoint(double pnt[], double interpolator[])
+  {
+    double r, s, t;
+    r = pnt[0];
+    s = pnt[1];
+    t = pnt[2];
+
+    interpolator[0] = -0.125 * r * s * t + 0.125 * r * s + 0.125 * r * t - 0.125 * r + \
+		      0.125 * s * t - 0.125 * s - 0.125 * t + 0.125;
+    interpolator[1] = +0.125 * r * s * t - 0.125 * r * s + 0.125 * r * t - 0.125 * r - \
+		      0.125 * s * t + 0.125 * s - 0.125 * t + 0.125;
+    interpolator[2] = -0.125 * r * s * t + 0.125 * r * s - 0.125 * r * t + 0.125 * r - \
+		      0.125 * s * t + 0.125 * s - 0.125 * t + 0.125;
+    interpolator[3] = +0.125 * r * s * t - 0.125 * r * s - 0.125 * r * t + 0.125 * r + \
+		      0.125 * s * t - 0.125 * s - 0.125 * t + 0.125;
+    interpolator[4] = +0.125 * r * s * t + 0.125 * r * s - 0.125 * r * t - 0.125 * r - \
+		      0.125 * s * t - 0.125 * s + 0.125 * t + 0.125;
+    interpolator[5] = -0.125 * r * s * t - 0.125 * r * s + 0.125 * r * t + 0.125 * r - \
+		      0.125 * s * t - 0.125 * s + 0.125 * t + 0.125;
+    interpolator[6] = +0.125 * r * s * t + 0.125 * r * s + 0.125 * r * t + 0.125 * r + \
+		      0.125 * s * t + 0.125 * s + 0.125 * t + 0.125;
+    interpolator[7] = -0.125 * r * s * t - 0.125 * r * s - 0.125 * r * t - 0.125 * r + \
+		      0.125 * s * t + 0.125 * s + 0.125 * t + 0.125;
+  }
+double dNdR(int N, double S, double T)
+  {
+    return 0.125 * XC::BrickBase::mNodesR[N] * (S * XC::BrickBase::mNodesS[N] + 1) * (T * XC::BrickBase::mNodesT[N] + 1);
+  }
+
+double dNdS(int N, double R, double T)
+  {
+    return 0.125 * XC::BrickBase::mNodesS[N] * (R * XC::BrickBase::mNodesR[N] + 1) * (T * XC::BrickBase::mNodesT[N] + 1);
+  }
+
+double dNdT(int N, double R, double S)
+  {
+    return 0.125 * XC::BrickBase::mNodesT[N] * (R * XC::BrickBase::mNodesR[N] + 1) * (S * XC::BrickBase::mNodesS[N] + 1);
+  }
+
+// Computes inverse jacobian
+void inverseJacobianAtPoint(double pnt[3], double xl[3][8], double invJac[3][3])
+  {
+
+      // Initializing variables
+      const double &R= pnt[0];
+      const double &S= pnt[1];
+      const double &T= pnt[2];
+      double det = 0;
+      double Dn[XC::BrickBase::ndm][XC::BrickBase::numberNodes];
+      double jac[3][3];
+
+      for(int J= 0;J< XC::BrickBase::numberNodes;J++)
+        {
+	  for(int I= 0;I<XC::BrickBase::ndm; I++)
+	    {
+	      if (I == 0)
+		  Dn[I][J] = dNdR(J, S, T);
+	      else if (I == 1)
+		  Dn[I][J] = dNdS(J, R, T);
+	      else if (I == 2)
+		  Dn[I][J] = dNdT(J, R, S);
+	    }
+        }
+      dot_product_matrix_matrix(Dn, xl, jac); //places product into jac
+      det = determinant(jac);                  //computes determinant of jac
+      mInverse(jac, invJac, det);              //computes inverse of jac and places into invJac
+  }
+
+// Gets reference coordinates for pnt in xl and stores them in solution
+int inverseCoordinateTransform(double pnt[3], double xl[3][8], double solution[3])
+  {
+    double scalexy;
+    double scale;
+    int max_iter = 15;
+    double tol;
+    int num_iter = 0;
+    double update[3];
+    double jacobian_inverse[3][3];
+    double jacobian_inverse_t[3][3];
+    double T[3];
+    double objective_function[3];
+    int i;
+
+    // Initialize solution with zeros
+    for (i = 0; i < XC::BrickBase::ndm;i++)
+        solution[i] = 0;
+
+    scalexy = fabs((xl[0][1] - xl[0][0])) > fabs((xl[1][1] - xl[1][0])) ?
+              fabs(xl[0][1] - xl[0][0]) : fabs(xl[1][1] - xl[1][0]);
+    scale = fabs((xl[2][1] - xl[2][0])) > scalexy ? fabs(xl[2][1] - xl[2][0]) : scalexy;
+
+    tol = 1e-10 * scale;
+    while(num_iter < max_iter)
+      {
+        coordinateTransform(solution, xl, T);
+
+        for (i = 0; i < XC::BrickBase::ndm;i++)
+            objective_function[i] = pnt[i] - T[i];
+
+        if ((fabs(objective_function[0]) < tol) && (fabs(objective_function[1]) < tol)
+                && (fabs(objective_function[0]) < tol))
+            return 1;
+        else
+          {
+            inverseJacobianAtPoint(solution, xl, jacobian_inverse);  //compute inverse of jacobian
+            transpose(jacobian_inverse, jacobian_inverse_t);
+            dot_product_matrix_vector(jacobian_inverse_t, objective_function, update);
+
+            for (i = 0; i < XC::BrickBase::ndm;i++)
+                solution[i] = solution[i] + update[i];
+          }
+        num_iter = num_iter + 1;
+      }
+    return 0;
+  }
+
+//! @brief compute local coordinates and basis
+void XC::BrickBase::computeBasis(void) const
+  {
+    //nodal coordinates
+    for(int i = 0; i < 8; i++ )
+      {
+         const Vector &coorI= theNodes[i]->getCrds();
+         xl[0][i] = coorI(0);
+         xl[1][i] = coorI(1);
+         xl[2][i] = coorI(2);
+      }  //end for i
+  }
+
+//! @brief Return the element local axes.
+XC::Matrix XC::BrickBase::getLocalAxes(bool initialGeometry) const
+  {
+    Matrix retval(3,3);
+    if(!initialGeometry)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; for deformed geometry not implemented."
+                << std::endl;
+    
+    const Vector &coor1= theNodes[1]->getCrds();
+    const Vector &coor2= theNodes[2]->getCrds();
+    const Vector &coor3= theNodes[3]->getCrds();
+    const Vector &coor4= theNodes[4]->getCrds();
+    const Vector &coor5= theNodes[5]->getCrds();
+    const Vector &coor6= theNodes[6]->getCrds();
+    const Vector &coor7= theNodes[7]->getCrds();
+
+    const Vector pR= (coor1+coor2+coor6+coor5)*0.25; //R face.
+    const Vector pS= (coor2+coor3+coor7+coor6)*0.25; //S face.
+    const Vector pT= (coor4+coor5+coor6+coor7)*0.25; //T face.
+    const Vector vCenter= getCenterOfMassCoordinates();
+
+    const Vector r= pR-vCenter;
+    const Vector s= pS-vCenter;
+    const Vector t= pT-vCenter;
+
+    // Fill in matrix
+    retval(0,0)= r(0); retval(0,1)= r(1); retval(0,2)= r(2);
+    retval(1,0)= s(0); retval(1,1)= s(1); retval(1,2)= s(2);
+    retval(2,0)= t(0); retval(2,1)= t(1); retval(2,2)= t(2);
+    return retval;
+  }
+
+Pos3d XC::BrickBase::getGlobalCoordinates(const double &r, const double &s, const double &t) const
+  {
+    Pos3d retval;
+    double pnt[ndm]= {r,s,t};
+    double solution[ndm]= {0.0,0.0,0.0};
+    computeBasis();
+    coordinateTransform(pnt,xl,solution);
+    retval= Pos3d(solution[0],solution[1],solution[2]);
+    return retval;
+  }
+  
+XC::ParticlePos3d XC::BrickBase::getNaturalCoordinates(const Pos3d &pos) const
+  {
+    ParticlePos3d retval;
+    double pnt[ndm]= {pos.x(),pos.y(),pos.z()};
+    double solution[ndm]= {0.0,0.0,0.0}; // {r,s,t}
+    computeBasis();
+    if(inverseCoordinateTransform(pnt, xl, solution))
+      retval= ParticlePos3d(solution[0],solution[1],solution[2]);
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+                << "; natural coordinates of point: "
+                << pos << " not found." << std::endl;
     return retval;
   }
