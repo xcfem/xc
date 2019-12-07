@@ -241,7 +241,7 @@ const XC::Matrix&  XC::BrickUP::getInitialStiff(void) const
   int jj, kk ;
 
   static double volume ;
-  static double xsj ;  // determinant jacaobian matrix
+  static double xsj ;  // determinant jacobian matrix
   static double dvol[numberGauss] ; //volume element
   static double gaussPoint[ndm] ;
   static XC::Vector strain(nstress) ;  //strain
@@ -395,7 +395,7 @@ void XC::BrickUP::formDampingTerms(int tangFlag) const
   static const int numberDOFs = 32 ;
   static const int nShape = 4 ;
   static double volume ;
-  static double xsj ;  // determinant jacaobian matrix
+  static double xsj ;  // determinant jacobian matrix
   static double dvol[numberGauss] ; //volume element
   static double shp[nShape][numberNodes] ;  //shape functions at a gauss point
   static double Shape[nShape][numberNodes][numberGauss] ; //all the shape functions
@@ -601,7 +601,7 @@ void   XC::BrickUP::formInertiaTerms(int tangFlag) const
   static const int nShape = 4 ;
   static const int massIndex = nShape - 1 ;
   static double volume ;
-  static double xsj ;  // determinant jacaobian matrix
+  static double xsj ;  // determinant jacobian matrix
   static double dvol[numberGauss] ; //volume element
   static double shp[nShape][numberNodes] ;  //shape functions at a gauss point
   static double Shape[nShape][numberNodes][numberGauss] ; //all the shape functions
@@ -730,7 +730,7 @@ void  XC::BrickUP::formResidAndTangent(int tang_flag) const
   int success ;
 
   static double volume ;
-  static double xsj ;  // determinant jacaobian matrix
+  static double xsj ;  // determinant jacobian matrix
   static double dvol[numberGauss] ; //volume element
   static double gaussPoint[ndm] ;
   static XC::Vector strain(nstress) ;  //strain

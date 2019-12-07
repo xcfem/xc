@@ -546,7 +546,7 @@ void XC::ShellMITC4Base::formResidAndTangent(int tang_flag) const
     
     double volume= 0.0;
 
-    static double xsj;  // determinant jacaobian matrix 
+    static double xsj;  // determinant jacobian matrix 
     static double dvol[ngauss]; //volume element
     static Vector strain(nstress);  //strain
     static double shp[3][numnodes];  //shape functions at a gauss point

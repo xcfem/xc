@@ -190,7 +190,7 @@ const XC::Matrix &XC::BbarBrick::getInitialStiff(void) const
     int jj, kk ;
 
     static double volume ;
-    static double xsj ;  // determinant jacaobian matrix
+    static double xsj ;  // determinant jacobian matrix
     static double dvol[numberGauss] ; //volume element
     static double gaussPoint[ndm] ;
     static XC::Vector strain(nstress) ;  //strain
@@ -433,7 +433,7 @@ void XC::BbarBrick::formInertiaTerms( int tangFlag ) const
 
   static const int massIndex = nShape - 1 ;
 
-  double xsj ;  // determinant jacaobian matrix
+  double xsj ;  // determinant jacobian matrix
 
   double dvol[numberGauss] ; //volume element
 
@@ -578,7 +578,7 @@ void  XC::BbarBrick::formResidAndTangent( int tang_flag ) const
 
   static double volume ;
 
-  static double xsj ;  // determinant jacaobian matrix
+  static double xsj ;  // determinant jacobian matrix
 
   static double dvol[numberGauss] ; //volume element
 

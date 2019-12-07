@@ -132,7 +132,9 @@ Pos2d XC::ShellCrdTransf3dBase::getLocalCoordinates(const Pos3d &p) const
 //! @brief Return natural coordinates for point xyz (in cartesian coord.)
 //! based on \$ 23.6 from Felippa book:"Introduction to Finite Element Methods"
 //! see IFEM.Ch23.pdf
-//! @param p position in element's local coordinates.
+//!
+//! @param p: position in global coordinates.
+//! @param xl: local coordinates of the nodes
 XC::ParticlePos3d XC::ShellCrdTransf3dBase::getNaturalCoordinates(const Pos3d &pg,double xl[2][4]) const
   {
     ParticlePos3d retval;

@@ -373,7 +373,7 @@ const XC::Matrix&  XC::TwentyEightNodeBrickUP::getStiff(int flag) const
 
         int i, j ;
 
-        static double xsj ;  // determinant jacaobian matrix
+        static double xsj ;  // determinant jacobian matrix
         double volume = 0.;
         //-------------------------------------------------------
         int j3, j3m1, j3m2, ik, ib, jk, jb;
@@ -507,7 +507,7 @@ const XC::Matrix&  XC::TwentyEightNodeBrickUP::getDamp(void) const
 
 void XC::TwentyEightNodeBrickUP::formDampingTerms( int tangFlag ) const
   {
-    static double xsj ;  // determinant jacaobian matrix
+    static double xsj ;  // determinant jacobian matrix
     int i, j, k, m, ik, jk;
     double volume = 0.;
     //zero damp
@@ -832,7 +832,7 @@ const XC::Vector&  XC::TwentyEightNodeBrickUP::getResistingForceIncInertia(void)
 
 void   XC::TwentyEightNodeBrickUP::formInertiaTerms( int tangFlag ) const
 {
-    static double xsj ;  // determinant jacaobian matrix
+    static double xsj ;  // determinant jacobian matrix
     int i, j, k, ik, m, jk;
     double Nrho;
 

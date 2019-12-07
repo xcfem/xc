@@ -194,7 +194,7 @@ const XC::Matrix&  XC::EnhancedQuad::getInitialStiff(void) const
   int i, j, k, p, q ;
   int jj, kk ;
 
-  static double xsj[numberGauss] ;  // determinant jacaobian matrix
+  static double xsj[numberGauss] ;  // determinant jacobian matrix
 
   static double dvol[numberGauss] ; //volume element
 
@@ -553,7 +553,7 @@ void XC::EnhancedQuad::formInertiaTerms( int tangFlag ) const
 
   static const int massIndex = nShape - 1 ;
 
-  double xsj ;  // determinant jacaobian matrix
+  double xsj ;  // determinant jacobian matrix
 
   double dvol ; //volume element
 
@@ -664,7 +664,7 @@ void  XC::EnhancedQuad::formResidAndTangent(int tang_flag) const
 
   int success ;
 
-  static double xsj[numberGauss] ;  // determinant jacaobian matrix
+  static double xsj[numberGauss] ;  // determinant jacobian matrix
 
   static double dvol[numberGauss] ; //volume element
 

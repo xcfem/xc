@@ -148,7 +148,7 @@ int XC::ConstantPressureVolumeQuad::update( )
 
   static double vol_avg_shp[3][4]; // volume averaged shape functions
 
-  double xsj;  // determinant jacaobian matrix
+  double xsj;  // determinant jacobian matrix
 
   static Matrix sx(2,2); // inverse jacobian matrix
 
@@ -312,7 +312,7 @@ const XC::Matrix& XC::ConstantPressureVolumeQuad::getInitialStiff(void) const
 
   static double vol_avg_shp[3][4]; // volume averaged shape functions
 
-  double xsj;  // determinant jacaobian matrix
+  double xsj;  // determinant jacobian matrix
 
   static XC::Matrix sx(2,2); // inverse jacobian matrix
 
@@ -650,7 +650,7 @@ void   XC::ConstantPressureVolumeQuad::formInertiaTerms( int tangFlag ) const
 
   static const int massIndex = nShape - 1;
 
-  double xsj;  // determinant jacaobian matrix
+  double xsj;  // determinant jacobian matrix
 
   double dvol; //volume element
 
@@ -757,7 +757,7 @@ void XC::ConstantPressureVolumeQuad::formResidAndTangent( int tang_flag ) const
 
   static double vol_avg_shp[3][4]; // volume averaged shape functions
 
-  double xsj;  // determinant jacaobian matrix
+  double xsj;  // determinant jacobian matrix
 
   static XC::Matrix sx(2,2); // inverse jacobian matrix
 

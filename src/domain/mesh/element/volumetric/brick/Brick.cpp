@@ -220,7 +220,7 @@ void XC::Brick::shape_functions_loop(void) const
     //compute basis vectors and local nodal coordinates
     computeBasis();
 
-    double xsj= 0.0;  // determinant jacaobian matrix
+    double xsj= 0.0;  // determinant jacobian matrix
     int count = 0; //Gauss point index
     for(int i= 0; i < 2; i++ )
       {
