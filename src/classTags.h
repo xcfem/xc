@@ -239,6 +239,7 @@
 #define ELE_TAG_TwentyNodeBrick_u_p_U            7004
 #define ELE_TAG_FourNodeQuadUP  7005
 #define ELE_TAG_TotalLagrangianFD20NodeBrick 7006 // ZC added
+#define ELE_TAG_TotalLagrangianFD8NodeBrick 7007
 #define ELE_TAG_TwentySevenNodeBrick   7010
 #define ELE_TAG_BrickUP         7011
 #define ELE_TAG_Nine_Four_Node_QuadUP         7012

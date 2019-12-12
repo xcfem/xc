@@ -93,7 +93,7 @@ int node_numb_13, int node_numb_14, int node_numb_15, int node_numb_16,
 int node_numb_17, int node_numb_18, int node_numb_19, int node_numb_20,
 
 XC::NDMaterial &m, const BodyForces3D &bForces)
-  :ElemWithMaterial<20,NDMaterialPhysicalProperties>(tag, ELE_TAG_TotalLagrangianFD20NodeBrick,NDMaterialPhysicalProperties(27,&m)),
+  :ElemWithMaterial<20,NDMaterialPhysicalProperties>(tag, ELE_TAG_TotalLagrangianFD20NodeBrick,NDMaterialPhysicalProperties(20,&m)),
   bf(bForces), Ki(nullptr)
   {
     theNodes.set_id_nodes(node_numb_1,node_numb_2,node_numb_3,node_numb_4,node_numb_5,node_numb_6,node_numb_7,node_numb_8,node_numb_9,node_numb_10,node_numb_11,node_numb_12,node_numb_13,node_numb_14,node_numb_15,node_numb_16,node_numb_17,node_numb_18,node_numb_19,node_numb_20);
@@ -602,17 +602,17 @@ const XC::Vector &XC::TotalLagrangianFD20NodeBrick::getResistingForceIncInertia(
 
 //=============================================================================
 int XC::TotalLagrangianFD20NodeBrick::sendSelf(CommParameters &cp)
-{
+  {
      // Not implemtented yet
      return 0;
-}
+  }
 
 //=============================================================================
 int XC::TotalLagrangianFD20NodeBrick::recvSelf(const CommParameters &cp)
-{
+  {
      // Not implemtented yet
      return 0;
-}
+  }
 
 
 //=============================================================================
@@ -645,8 +645,8 @@ void XC::TotalLagrangianFD20NodeBrick::Print(std::ostream &s, int flag)
   }
 
 //=============================================================================
- XC::Response * XC::TotalLagrangianFD20NodeBrick::setResponse(const std::vector<std::string> &argv, Information &eleInfo)
-{
+XC::Response * XC::TotalLagrangianFD20NodeBrick::setResponse(const std::vector<std::string> &argv, Information &eleInfo)
+  {
     if(argv[0] == "force" || argv[0] == "forces")
       return new ElementResponse(this, 1, Vector(NumElemDof));
 
@@ -667,12 +667,12 @@ void XC::TotalLagrangianFD20NodeBrick::Print(std::ostream &s, int flag)
       return new ElementResponse(this, 6, Vector(NumTotalGaussPts*6));
 
     else
-      return 0;
-}
+      return nullptr;
+  }
 
 //=============================================================================
-int XC::TotalLagrangianFD20NodeBrick::getResponse (int responseID, Information &eleInfo)
-{
+int XC::TotalLagrangianFD20NodeBrick::getResponse(int responseID, Information &eleInfo)
+  {
     int i;
         static XC::Vector P0(NumTotalGaussPts*6);
 

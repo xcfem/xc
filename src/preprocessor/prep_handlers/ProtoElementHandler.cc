@@ -67,6 +67,7 @@
 #include "domain/mesh/element/volumetric/20nbrick/Twenty_Node_Brick.h"
 #include "domain/mesh/element/volumetric/27nbrick/TwentySevenNodeBrick.h"
 #include "domain/mesh/element/volumetric/TotalLagrangianFD20NodeBrick/TotalLagrangianFD20NodeBrick.h"
+#include "domain/mesh/element/volumetric/TotalLagrangianFD20NodeBrick/TotalLagrangianFD8NodeBrick.h"
 #include "domain/mesh/element/volumetric/upU/EightNodeBrick_u_p_U.h"
 #include "domain/mesh/element/volumetric/upU/TwentyNodeBrick_u_p_U.h"
 #include "domain/mesh/element/volumetric/UP-ucsd/BrickUP.h"
@@ -403,6 +404,12 @@ XC::Element *XC::ProtoElementHandler::create_element(const std::string &cmd,int 
         if(!retval)
 	  materialNotSuitableMsg(errHeader,material_name,cmd);
       }
+    // else if(cmd == "TotalLagrangianFD8NodeBrick")
+    //   {
+    //     retval= new_element_mat<TotalLagrangianFD8NodeBrick,NDMaterial>(tag_elem, get_ptr_material());
+    //     if(!retval)
+    // 	  materialNotSuitableMsg(errHeader,material_name,cmd);
+    //   }
     else
       std::cerr << errHeader
 		<< "; element type: " << cmd << " unknown."
