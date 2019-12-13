@@ -268,16 +268,16 @@ class DXFImport(object):
         return retval
 
     def selectKPoints(self):
-      '''Selects the k-points to be used in the model. All the points that
-         are closer than the threshold distance are melted into one k-point.
-      '''
-      points= self.extractPoints()
-      self.kPoints= [points[0]]
-      for p in points:
-        nearestPoint= self.getNearestPoint(p)
-        dist= cdist([p],[nearestPoint])[0][0]
-        if(dist>self.threshold):
-          self.kPoints.append(p)
+        '''Selects the k-points to be used in the model. All the points that
+           are closer than the threshold distance are melted into one k-point.
+        '''
+        points= self.extractPoints()
+        self.kPoints= [points[0]]
+        for p in points:
+            nearestPoint= self.getNearestPoint(p)
+            dist= cdist([p],[nearestPoint])[0][0]
+            if(dist>self.threshold):
+                self.kPoints.append(p)
 
     def importPoints(self):
       ''' Import points from DXF.'''
@@ -310,12 +310,12 @@ class DXFImport(object):
             vertices[0]= self.getIndexNearestPoint(p1)
             vertices[1]= self.getIndexNearestPoint(p2)
             if(vertices[0]==vertices[1]):
-              lmsg.error('Error in line '+lineName+' vertices are equal: '+vertices)
+              lmsg.error('Error in line '+lineName+' vertices are equal: '+str(vertices))
             if(length>self.threshold):
               self.lines[lineName]= vertices
               self.labelDict[lineName]= [layerName]
             else:
-              lmsg.error('line too short: '+str(p1)+','+str(p2)+length)
+              lmsg.error('line too short: '+str(p1)+','+str(p2)+str(length))
           elif((type == 'POLYLINE') or (type == 'LWPOLYLINE')):
               if(not self.polylinesAsSurfaces): # Import as lines
                   vertices= set()
@@ -375,6 +375,9 @@ class DXFImport(object):
                         id= obj.handle+'_'+str(count)
                         self.labelDict[id]= [layerName]
                         facesDict[id]= vertices
+            elif(type == 'LINE'):
+                count= 0
+                # Nothing to do with lines for the moment.
             else:
               lmsg.log('Entity of type: '+type+' ignored.')      
 
