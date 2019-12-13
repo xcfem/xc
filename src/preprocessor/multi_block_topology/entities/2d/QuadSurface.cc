@@ -45,9 +45,9 @@ XC::QuadSurface::QuadSurface(Preprocessor *m,const size_t &ndivI, const size_t &
 XC::SetEstruct *XC::QuadSurface::getCopy(void) const
   { return new QuadSurface(*this); }
 
-size_t calc_ndiv(const XC::Edge *edgeA,const XC::Edge *edgeB,const size_t &ndj)
+size_t calc_ndiv(const XC::Edge *edgeA,const XC::Edge *edgeB,const size_t &nd)
   {
-    size_t retval= 0;
+    size_t retval= nd;
     const size_t ndA= edgeA->NDiv();
     const size_t ndB= edgeB->NDiv();
     if(edgeA->hasNodes() && edgeB->hasNodes())
@@ -62,28 +62,26 @@ size_t calc_ndiv(const XC::Edge *edgeA,const XC::Edge *edgeB,const size_t &ndj)
       }
     else if(edgeA->hasNodes()) //A edge already meshed.
       {
-        if(ndA!=ndj)
+        if(ndA!=nd)
           {
 	    std::clog << __FUNCTION__ << "; edge: "
                       << edgeA->getName()
                       << " is already meshed, division number can't be changed."
-                      << " to " << ndj << " keeping NDiv= " << ndA << std::endl;
+                      << " to " << nd << " keeping NDiv= " << ndA << std::endl;
             retval= ndA;
           }
       }
     else if(edgeB->hasNodes()) //B edge already meshed.
       {
-        if(ndB!=ndj)
+        if(ndB!=nd)
           {
 	    std::clog << __FUNCTION__ << "; edge: "
                       << edgeB->getName()
                       << " is already meshed, division number can't be changed."
-                      << " to " << ndj << " keeping NDiv= " << ndB << std::endl;
+                      << " to " << nd << " keeping NDiv= " << ndB << std::endl;
             retval= ndB;
           }
       }
-    else //Nor A nor B are meshed.
-      retval= ndj;
     return retval;
   }
 
@@ -114,9 +112,8 @@ const XC::Edge *XC::QuadSurface::get_lado_homologo(const Edge *l) const
     return retval;
   }
 
-
-//! @brief Set the number of divisions on the i axis.
-void XC::QuadSurface::setNDivI(const size_t &ndi)
+//! @brief Set the number of divisions for the sides A and B.
+void XC::QuadSurface::setNDiv(const size_t &A, const size_t &B, const size_t &nd)
   {
     if(lines.size()<4)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -124,37 +121,40 @@ void XC::QuadSurface::setNDivI(const size_t &ndi)
                 << lines.size() << " sides." << std::endl;
     else
       {
-        Edge *edge0= lines[0].getEdge();
-        Edge *edge2= lines[2].getEdge();
-        const size_t ndc= calc_ndiv(edge0,edge2,ndi);
+        Edge *edgeA= lines[A].getEdge();
+        Edge *edgeB= lines[B].getEdge();
+        const size_t ndc= calc_ndiv(edgeA,edgeB,nd);
+	if(ndc!=nd)
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; cannot set the number of divisions"
+		    << " to " << nd << " using " << ndc
+	            << " instead." << std::endl;
         if(ndc>0)
           {
-            Face::setNDivI(ndc);
-            edge0->setNDiv(ndc);
-            edge2->setNDiv(ndc);
+	    if((A==0) && (B==2))
+	      { Face::setNDivI(ndc); }
+	    else if((A==1) && (B==3))
+	      { Face::setNDivJ(ndc); }
+	    else
+	      std::cerr << getClassName() << "::" << __FUNCTION__
+			<< "; ERROR sides: " << A << " and " << B
+		        << " are adjacent." << std::endl;
+            edgeA->setNDiv(ndc);
+            edgeB->setNDiv(ndc);
           }
       }
+  }
+
+//! @brief Set the number of divisions on the i axis.
+void XC::QuadSurface::setNDivI(const size_t &ndi)
+  {
+    setNDiv(0,2,ndi);
   }
 
 //! @brief Set the number of divisions on the j axis.
 void XC::QuadSurface::setNDivJ(const size_t &ndj)
   {
-    if(lines.size()<4)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; surface is not a quadrilateral, it has " 
-                << lines.size() << " sides." << std::endl;
-    else
-      {
-        Edge *edge1= lines[1].getEdge();
-        Edge *edge3= lines[3].getEdge();
-        const size_t ndc= calc_ndiv(edge1,edge3,ndj);
-        if(ndc>0)
-          {
-            Face::setNDivJ(ndc);
-            edge1->setNDiv(ndc);
-            edge3->setNDiv(ndc);
-          }
-      }
+    setNDiv(1,3,ndj);
   }
 
 //! @brief Conciliate lines division numbers with

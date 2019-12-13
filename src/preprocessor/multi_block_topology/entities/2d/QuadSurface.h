@@ -64,6 +64,7 @@ class QuadSurface: public Face
 
     void setNDiv(const Edge *l,const size_t &nd);
     virtual void ConciliaNDivIJ(void);
+    virtual void setNDiv(const size_t &, const size_t &, const size_t &);
     virtual void setNDivI(const size_t &ndi);
     virtual void setNDivJ(const size_t &ndi);
     void SetElemSizeI(const double &sz);

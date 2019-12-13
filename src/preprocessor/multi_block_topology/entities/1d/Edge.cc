@@ -190,20 +190,20 @@ void XC::Edge::setNDiv(const size_t &nd)
       {
         if(ttzNodes.empty()) //Not meshed.
           {
-            const size_t ns= surfaces_line.size();
-            if(ns>1)
-              {
-// 	        std::clog << getClassName() << "::" << __FUNCTION__
-//		          << "; " << getName()
-//                           << " is an edge of the surfaces: "
-//                           << getConnectedSurfacesNames()
-//                           << ". Number of divisions"
-//                           << " was " << ndiv
-//                           << " we adopt: " << nd << std::endl;
-                ndiv= std::max(ndiv,nd);
-              }
-            else
-              ndiv= nd;
+            // const size_t ns= surfaces_line.size();
+            // if(ns>1)
+            //   {
+	    //     // std::clog << getClassName() << "::" << __FUNCTION__
+	    // 	//           << "; " << getName()
+            //     //           << " is an edge of the surfaces: "
+            //     //           << getConnectedSurfacesNames()
+            //     //           << ". Number of divisions"
+            //     //           << " was " << ndiv
+            //     //           << " we adopt: " << nd << std::endl;
+            //     ndiv= std::max(ndiv,nd);
+            //   }
+            // else
+            ndiv= nd;
           }
         else
           std::cerr << getClassName() << "::" << __FUNCTION__
@@ -410,10 +410,16 @@ std::set<const XC::Edge *> XC::Edge::getHomologousSides(void) const
 //! to make it compatible with adjacent surface meshing.
 size_t XC::calcula_ndiv_lados(const std::set<const XC::Edge *> &lados)
   {
-    size_t nd= 0;
-    for(std::set<const XC::Edge *>::const_iterator i= lados.begin();i!=lados.end();i++)
-      nd= std::max(nd,(*i)->NDiv());
-    return nd;
+    size_t retval= 0;
+    if(!lados.empty())
+      {
+        std::set<const XC::Edge *>::const_iterator i= lados.begin();
+        retval= (*i)->NDiv();
+        i++;
+        for(;i!=lados.end();i++)
+	  { retval= std::max(retval,(*i)->NDiv()); }
+      }
+    return retval;
   }
 
 //! @brief Return true if the line touches the surface (neighbor).
