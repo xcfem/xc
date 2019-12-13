@@ -133,21 +133,29 @@ void XC::MultiBlockTopology::conciliaNDivs(void)
           {
             const Edge *lado= *tmp_edges.begin();
 	    std::set<const Edge *> homologous= lado->getHomologousSides();
-            homologous.insert(lado);
-            const size_t nd= calcula_ndiv_lados(homologous);
-            for(std::set<const Edge *>::const_iterator i= homologous.begin();i!=homologous.end();i++)
-              {
-                Edge *tmp= const_cast<Edge *>(*i);
-                tmp->setNDiv(nd);
-                tmp_edges.erase(tmp);
-              }
-            conta++;
-            if(conta>max_num_iter)
-              {
-		std::cerr << getClassName() << "::" << __FUNCTION__
-			  << "; too much iterations." << std::endl;
-                break;
-              }
+	    if(homologous.empty()) // nothing to do
+	      {
+		Edge *tmp= const_cast<Edge *>(lado);
+	        tmp_edges.erase(tmp);
+	      }
+	    else
+	      {
+		homologous.insert(lado);
+		const size_t nd= calcula_ndiv_lados(homologous);
+		for(std::set<const Edge *>::const_iterator i= homologous.begin();i!=homologous.end();i++)
+		  {
+		    Edge *tmp= const_cast<Edge *>(*i);
+		    tmp->setNDiv(nd);
+		    tmp_edges.erase(tmp);
+		  }
+		conta++;
+		if(conta>max_num_iter)
+		  {
+		    std::cerr << getClassName() << "::" << __FUNCTION__
+			      << "; too much iterations." << std::endl;
+		    break;
+		  }
+	      }
           }
         for(SurfaceMap::iterator i=faces.begin();i!= faces.end();i++)
           (*i).second->ConciliaNDivIJ();        
