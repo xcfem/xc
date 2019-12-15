@@ -132,10 +132,10 @@ void XC::EntMdlr::BorraPtrNodElem(void)
 //! @param k: index of the column.
 XC::Node *XC::EntMdlr::getNode(const size_t &i,const size_t &j,const size_t &k)
   {
+    Node *retval= nullptr;
     if(!ttzNodes.Null())
-      return ttzNodes(i,j,k);
-    else
-      return nullptr;
+      retval= ttzNodes(i,j,k);
+    return retval;
   }
 
 //! @brief Returns a pointer to the node which indexes are
@@ -146,10 +146,9 @@ XC::Node *XC::EntMdlr::getNode(const size_t &i,const size_t &j,const size_t &k)
 //! @param k: index of the column.
 const XC::Node *XC::EntMdlr::getNode(const size_t &i,const size_t &j,const size_t &k) const
   {
-    if(!ttzNodes.Null())
-      return ttzNodes(i,j,k);
-    else
-      return nullptr;
+    EntMdlr *this_no_const= const_cast<EntMdlr *>(this);
+    const Node *retval= this_no_const->getNode(i,j,k);
+    return retval;
   }
 
 //! @brief Return the node closest to the point being passed as parameter.

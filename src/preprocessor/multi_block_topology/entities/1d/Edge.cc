@@ -258,7 +258,12 @@ XC::Node *XC::Edge::getNode(const size_t &i)
 //!
 //! @param i: index of the layer.
 const XC::Node *XC::Edge::getNode(const size_t &i) const
-  { return ttzNodes.getAtI(i); }
+  {
+    Node *retval= nullptr;
+    if(!ttzNodes.Null())
+      retval= ttzNodes.getAtI(i);
+    return retval;
+  }
 
 //! @brief Returns the node whose ordinal index is passed as
 //! parameter, starting from the beginning.
@@ -291,19 +296,14 @@ const XC::Node *XC::Edge::getNodeReverse(const size_t &i) const
 //! @brief Return the first node of the line.
 const XC::Node *XC::Edge::getFirstNode(void) const
   { 
-    const Node *retval= getNode(1);
-    if(!retval)
-      {
-        const Pnt *p1= P1();
-        if(p1)
-          retval= p1->getNode();
-      }
+    Edge *this_no_const= const_cast<Edge *>(this);
+    const Node *retval= this_no_const->getFirstNode();
     return retval;
   }
 
 //! @brief Return the first node of the line.
 XC::Node *XC::Edge::getFirstNode(void)
-  { 
+  {
     Node *retval= getNode(1);
     if(!retval)
       {
@@ -317,13 +317,8 @@ XC::Node *XC::Edge::getFirstNode(void)
 //! @brief Return the last node of the line.
 const XC::Node *XC::Edge::getLastNode(void) const
   { 
-    const Node *retval= getNodeReverse(1);
-    if(!retval)
-      {
-        const Pnt *p2= P2();
-        if(p2)
-          retval= p2->getNode();
-      }
+    Edge *this_no_const= const_cast<Edge *>(this);
+    const Node *retval= this_no_const->getLastNode();
     return retval;
   }
 
