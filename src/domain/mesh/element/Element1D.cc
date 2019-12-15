@@ -760,7 +760,7 @@ XC::CrdTransf3d *XC::Element1D::recvCoordTransf3d(int posFlag,const int &posClas
   }
 
 
-//! @brief Interfaz con VTK.
+//! @brief VTK interface.
 int XC::Element1D::getVtkCellType(void) const
   { return VTK_LINE; }
 

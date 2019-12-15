@@ -48,6 +48,7 @@ class RigidBase: public MFreedom_Constraint
     RigidBase(int tag,const int &, const int &, int classTag);
     ~RigidBase(void);
     void setDomain(Domain *theDomain);
+    int getVtkCellType(void) const;
   };
 } // end of XC namespace
 

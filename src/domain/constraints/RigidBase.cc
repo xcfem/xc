@@ -30,6 +30,7 @@
 #include "RigidBase.h"
 #include "domain/mesh/node/Node.h"
 #include "domain/domain/Domain.h"
+#include "vtkCellType.h"
 
 //! @brief Sets the domain for the constraint.
 void XC::RigidBase::setDomain(Domain *theDomain)
@@ -86,3 +87,7 @@ XC::RigidBase::~RigidBase(void)
     if(nodeC)
       nodeC->disconnect(this);
   }
+
+//! @brief VTK interface.
+int XC::RigidBase::getVtkCellType(void) const
+  { return VTK_LINE; }

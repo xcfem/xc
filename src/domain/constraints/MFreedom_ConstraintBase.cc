@@ -174,3 +174,23 @@ void XC::MFreedom_ConstraintBase::Print(std::ostream &s, int flag)
   }
 
 
+std::vector<int> XC::MFreedom_ConstraintBase::getIdxNodes(void) const
+  {
+    
+    Domain *theDomain= getDomain();
+    const int constrainedNodeTag= getNodeConstrained();
+    const Node *constrainedNode= theDomain->getNode(constrainedNodeTag);   
+    std::vector<Node *> retainedNodes= getPointersToRetainedNodes();   
+
+    const size_t sz= retainedNodes.size()+1;
+    std::vector<int> retval(sz,-1);
+    if(constrainedNode)
+      retval[0]= constrainedNode->getIdx();
+    for(size_t i=1; i<sz; i++)
+      {
+	const Node *retainedNode= retainedNodes[i-1];
+        if(retainedNode)
+          retval[i]= retainedNode->getIdx();
+      }
+    return retval;     
+  }

@@ -87,6 +87,7 @@ class MFreedom_ConstraintBase: public Constraint
     virtual const Matrix &getConstraint(void) const;
     virtual size_t getNumRetainedNodes(void) const= 0;
     virtual std::vector<XC::Node *> getPointersToRetainedNodes(void) const= 0;
+    std::vector<int> getIdxNodes(void) const;
 
     bool isTimeVarying(void) const;
 

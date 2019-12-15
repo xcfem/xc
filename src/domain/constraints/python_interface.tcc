@@ -47,7 +47,9 @@ class_<XC::ImposedMotionSP , bases<XC::ImposedMotionBase>, boost::noncopyable >(
 
 class_<XC::ImposedMotionSP1 , bases<XC::ImposedMotionBase>, boost::noncopyable >("ImposedMotionSP1", no_init);
 
-class_<XC::MFreedom_ConstraintBase, bases<XC::Constraint>, boost::noncopyable >("MFreedom_ConstraintBase", no_init);
+class_<XC::MFreedom_ConstraintBase, bases<XC::Constraint>, boost::noncopyable >("MFreedom_ConstraintBase", no_init)
+  .add_property("getIdxNodes",&XC::MFreedom_ConstraintBase::getIdxNodes,"Return the node indices for its use in VTK arrays.")
+  ;
 
 
 class_<XC::MFreedom_Constraint, bases<XC::MFreedom_ConstraintBase>, boost::noncopyable >("MFreedom_Constraint", no_init);
