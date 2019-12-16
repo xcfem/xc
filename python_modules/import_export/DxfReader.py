@@ -318,12 +318,19 @@ class DXFImport(object):
               lmsg.error('line too short: '+str(p1)+','+str(p2)+str(length))
           elif((type == 'POLYLINE') or (type == 'LWPOLYLINE')):
               if(not self.polylinesAsSurfaces): # Import as lines
-                  vertices= set()
+                  vertices= list()
                   for p in obj.points:
                     rCoo= self.getRelativeCoo(p)
-                    vertices.add(self.getIndexNearestPoint(rCoo))
-                    self.polylines[lineName]= vertices
-                    self.labelDict[lineName]= [layerName]
+                    vertices.append(self.getIndexNearestPoint(rCoo))
+                  v1= vertices[0]
+                  for v2 in vertices[1:]:
+                      if(vertices[0]==vertices[1]):
+                          lmsg.error('Error in line '+lineName+' vertices are equal: '+str(vertices))
+                      else:
+                          name= lineName+str(v1)+str(v2)
+                          self.lines[name]= [v1,v2]
+                          self.labelDict[name]= [layerName]
+                      v1= v2
 
     def importFaces(self):
       ''' Import 3D faces from DXF.'''
@@ -397,7 +404,7 @@ class DXFImport(object):
             block= bte.BlockRecord(counter,'line',line,self.labelDict[key])
             retval.appendBlock(block)
             counter+= 1
-
+            
         for name in self.layersToImport:
             fg= self.facesByLayer[name]
             for key in fg:
