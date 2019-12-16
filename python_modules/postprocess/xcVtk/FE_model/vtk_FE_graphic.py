@@ -133,12 +133,13 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
                 self.gridRecord.uGrid.InsertNextCell(e.getVtkCellType,vtx)
         setConstraints= eSet.getConstraints
         for c in setConstraints:
-            vertices= xc_base.vector_int_to_py_list(c.getIdxNodes)
-            vtx= vtk.vtkIdList()
-            for vIndex in vertices:
-                vtx.InsertNextId(vIndex)
-            if(c.getVtkCellType!= vtk.VTK_VERTEX):
-                self.gridRecord.uGrid.InsertNextCell(c.getVtkCellType,vtx)
+            if(hasattr(c,'getIdxNodes')):
+                vertices= xc_base.vector_int_to_py_list(c.getIdxNodes)
+                vtx= vtk.vtkIdList()
+                for vIndex in vertices:
+                    vtx.InsertNextId(vIndex)
+                if(c.getVtkCellType!= vtk.VTK_VERTEX):
+                    self.gridRecord.uGrid.InsertNextCell(c.getVtkCellType,vtx)
 
     def defineMeshScene(self, field,defFScale=0.0,eigenMode=None,color=xc.Vector([rd.random(),rd.random(),rd.random()])):
         '''Define the scene for the mesh
