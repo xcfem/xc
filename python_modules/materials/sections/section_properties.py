@@ -138,8 +138,10 @@ class SectionProperties(object):
     :param material:      material (for which E is the Young's modulus and G() the shear modulus)  
     '''
     materiales= preprocessor.getMaterialHandler
+    retval=None
     if(materiales.materialExists(self.sectionName)):
-      sys.stderr.write("Section: "+self.sectionName+" is already defined.")
+      lmsg.warning("Section: "+self.sectionName+" is already defined.")
+      retval= materiales.getMaterial(self.sectionName)
     else:
       retval= typical_materials.defElasticSection3d(preprocessor,self.sectionName,self.A(),material.E,material.G(),self.Iz(),self.Iy(),self.J(), rho= material.rho)
       return retval
@@ -150,8 +152,10 @@ class SectionProperties(object):
     :param material:      material (for which E is the Young's modulus and G() the shear modulus)  
     '''
     materiales= preprocessor.getMaterialHandler
+    retval=None
     if(materiales.materialExists(self.sectionName)):
-      sys.stderr.write("section: "+self.sectionName+" is already defined.")
+      lmsg.warning("section: "+self.sectionName+" is already defined.")
+      retval= materiales.getMaterial(self.sectionName)
     else:
       retval= typical_materials.defElasticShearSection3d(preprocessor,self.sectionName,self.A(),material.E,material.G(),self.Iz(),self.Iy(),self.J(),self.alphaY(), rho= material.rho)
     return retval
@@ -165,8 +169,10 @@ class SectionProperties(object):
     '''
 
     materiales= preprocessor.getMaterialHandler
+    retval=None
     if(materiales.materialExists(self.sectionName)):
-      sys.stderr.write("Section: "+self.sectionName+" is already defined.")
+      lmsg.warning("Section: "+self.sectionName+" is already defined.")
+      retval= materiales.getMaterial(self.sectionName)
     else:
       retval= typical_materials.defElasticSection2d(preprocessor,self.sectionName,self.A(),material.E,self.Iz(), rho= material.rho)
       return retval
@@ -178,8 +184,10 @@ class SectionProperties(object):
                      E is the Young's modulus and G() the shear modulus).
     '''
     materiales= preprocessor.getMaterialHandler
+    retval=None
     if(materiales.materialExists(self.sectionName)):
-      sys.stderr.write("Section: "+self.sectionName+" is already defined.")
+      lmsg.warning("Section: "+self.sectionName+" is already defined.")
+      retval= materiales.getMaterial(self.sectionName)
     else:
       retval= typical_materials.defElasticShearSection2d(preprocessor,self.sectionName,self.A(),material.E,material.G(),self.Iz(),self.alphaY(), rho= material.rho)
       return retval
