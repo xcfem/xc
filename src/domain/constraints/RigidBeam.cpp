@@ -54,7 +54,7 @@
 // Written: fmk 12/99
 // Revised:
 //
-// Purpose: This file contains the class implementation for XC::RigidBeam.
+// Purpose: This file contains the class implementation for RigidBeam.
 
 
 #include "RigidBeam.h"
@@ -104,17 +104,15 @@ XC::Matrix XC::RigidBeam::setup_matrix(int numDOF,const Vector &crdR,const Vecto
     // if there are rotational dof - we must modify Ccr DONE ASSUMING SMALL ROTATIONS
     if(dimR != numDOF)
       {
+        const double deltaX= crdC(0)-crdR(0);
+        const double deltaY= crdC(1)-crdR(1);
         if(dimR == 2 && numDOF == 3)
           {
-            double deltaX= crdC(0) - crdR(0);
-            double deltaY= crdC(1) - crdR(1);
             retval(0,2)= -deltaY;
             retval(1,2)= deltaX;
           }
         else if(dimR == 3 && numDOF == 6)
           {
-            const double deltaX= crdC(0) - crdR(0);
-            const double deltaY= crdC(1) - crdR(1);
             const double deltaZ= crdC(2) - crdR(2);
             // rotation about z/3 axis
             retval(0,5)= -deltaY;
@@ -161,8 +159,8 @@ void XC::RigidBeam::setup(Domain *theDomain)
         if(numDOF != nodeC->getNumberDOF())
           {
             std::cerr << "RigidBeam::RigidBeam - mismatch in numDOF "
-                      << " between constrained XC::Node " 
-                      <<  getNodeConstrained() <<  " and Retained node"
+                      << " between constrained node " 
+                      <<  getNodeConstrained() <<  " and retained node"
                       << getNodeRetained() << std::endl;
           }
         else
@@ -174,7 +172,7 @@ void XC::RigidBeam::setup(Domain *theDomain)
             const Vector &crdR = nodeR->getCrds();
             const Vector &crdC = nodeC->getCrds();
  
-            Matrix mat= setup_matrix(numDOF,crdR,crdC,id);
+            const Matrix mat= setup_matrix(numDOF,crdR,crdC,id);
             set_constraint(mat);
             set_constrained_retained_dofs(id,id);
 	  }

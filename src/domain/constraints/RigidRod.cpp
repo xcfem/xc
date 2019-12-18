@@ -82,7 +82,7 @@ void XC::RigidRod::setup(Domain *theDomain)
       }
 
     // check the number of dof at each node is the same
-    int numDOF = nodeR->getNumberDOF();
+    const int numDOF = nodeR->getNumberDOF();
     if(numDOF != nodeC->getNumberDOF())
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
