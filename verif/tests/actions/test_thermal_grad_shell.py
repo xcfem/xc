@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+
+from __future__ import print_function
+from __future__ import division
+
 ''' home made test
     This test reproduces shell_grad_strain_load_02.py test by using a
     straight load case generation
@@ -62,7 +66,6 @@ spc= constraints.newSPConstraint(nod4.tag,0,0.0)
 spc= constraints.newSPConstraint(nod4.tag,1,0.0)
 spc= constraints.newSPConstraint(nod4.tag,2,0.0)
 spc= constraints.newSPConstraint(nod4.tag,4,0.0)
-
 elSet=preprocessor.getSets.getSet('total')
 
 from actions.roadway_trafic import standard_load_models as slm
@@ -90,16 +93,16 @@ ratio1=uz_n2-deltaz_theor
 ratio2=uz_n3-deltaz_theor
 
 '''
-print "uz_n2= ",uz_n2
-print "uz_n3= ",uz_n3
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
+print("uz_n2= ",uz_n2)
+print("uz_n3= ",uz_n3)
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
 '''
 
 import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<2e-7) & (abs(ratio2)<2e-7):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
