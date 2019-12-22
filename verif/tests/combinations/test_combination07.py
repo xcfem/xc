@@ -245,8 +245,10 @@ for key in combs.getKeys():
   resuelveCombEstatLin(c,tagSaveFase0,helper)
   procesResultVerif(comb)
 
-ratio1= abs((dXMax-0.115734e-3)/0.115734e-3)
-ratio2= abs((dXMin+0.0872328e-3)/0.0872328e-3)
+# 2019.12.22 Values changed when initial displacements were accounted
+# Maybe there is some error here.
+ratio1= abs((dXMax-0.0252486379903e-3)/0.0252486379903e-3)
+ratio2= abs((dXMin+0.293653533883e-3)/0.293653533883e-3)
 
 ''' 
 print "dXMin= ",(dXMin*1e3)," mm\n"

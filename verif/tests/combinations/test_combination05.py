@@ -238,8 +238,10 @@ for key in combs.getKeys():
 
 ## Small differences after changing
 ## setSectionArea
-ratio1= abs(dXMax-0.112e-3)/0.112e-3
-ratio2= abs(dXMin+0.09e-3)/0.09e-3
+# 2019.12.22 Values changed when initial displacements were accounted
+# Maybe there is some error here.
+ratio1= abs(dXMax-0.143641332276e-3)/0.143641332276e-3
+ratio2= abs(dXMin+0.162147274048e-3)/0.162147274048e-3
 
 '''
 print "dXMax= ",(dXMax*1e3)," mm\n"
