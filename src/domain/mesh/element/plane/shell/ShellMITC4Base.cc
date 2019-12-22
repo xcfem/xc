@@ -78,19 +78,19 @@ XC::ShellBData XC::ShellMITC4Base::BData;
 
 //! @brief Constructor
 XC::ShellMITC4Base::ShellMITC4Base(int classTag, const ShellCrdTransf3dBase *crdTransf)
-  : Shell4NBase(classTag,crdTransf), Ktt(0.0), p0(), initDisp(4,Vector())
-  {}
+  : Shell4NBase(classTag,crdTransf), Ktt(0.0), p0()
+  { }
 
 //! @brief Constructor
 XC::ShellMITC4Base::ShellMITC4Base(int tag, int classTag,const SectionForceDeformation *ptr_mat, const ShellCrdTransf3dBase *crdTransf)
   : Shell4NBase(tag,classTag,ptr_mat,crdTransf), Ktt(0.0),
-    p0(), initDisp(4,Vector())
-  {}
+    p0()
+  { }
 
 //! @brief Constructor
 XC::ShellMITC4Base::ShellMITC4Base(int tag, int classTag,int node1,int node2,int node3,int node4,const SectionFDPhysicalProperties &physProp, const ShellCrdTransf3dBase *crdTransf)
-  : Shell4NBase(tag,node1,node2,node3,node4,classTag,physProp,crdTransf), Ktt(0.0), p0(), initDisp(4,Vector())
-  {}
+  : Shell4NBase(tag,node1,node2,node3,node4,classTag,physProp,crdTransf), Ktt(0.0), p0()
+  { }
 
 
 //! @brief set domain
@@ -121,26 +121,8 @@ void XC::ShellMITC4Base::setDomain(Domain *theDomain)
 
     //basis vectors and local coordinates
     computeBasis(); 
-    setupInitDisp();
   }
 
-void XC::ShellMITC4Base::setupInitDisp(void)
-  {
-    capturaInitDisp(); //Sets suitable sizes.
-    zeroInitDisp(); //Initializes all.
-  }
-
-void XC::ShellMITC4Base::capturaInitDisp(void)
-  {
-    for(size_t i= 0;i<4;i++)
-      initDisp[i]= theCoordTransf->getBasicTrialDisp(i);
-  }
-
-void XC::ShellMITC4Base::zeroInitDisp(void)
-  {
-    for(std::vector<Vector>::iterator i= initDisp.begin();i!=initDisp.end();i++)
-      (*i).Zero();
-  }
 
 //! @brief Reactivates the element.
 void XC::ShellMITC4Base::alive(void)
@@ -151,7 +133,7 @@ void XC::ShellMITC4Base::alive(void)
         Ki.Zero();
         revertToStart(); //Eliminate possible strains and stresses
 	                 //on the element (melt and then solidify).
-        capturaInitDisp(); //Node displacements at element activation.
+        catchInitDisp(); //Node displacements at element activation.
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -671,7 +653,7 @@ void XC::ShellMITC4Base::formResidAndTangent(int tang_flag) const
               }//end for p
 
             //nodal "displacements" 
-            const Vector &ul= theCoordTransf->getBasicTrialDisp(j);
+            const Vector &ul= theCoordTransf->getBasicTrialDisp(j)-initDisp[j];
 
             //compute the strain
             //strain += (BJ*ul); 
@@ -1051,9 +1033,8 @@ const XC::Matrix &XC::ShellMITC4Base::computeBbend( int node, const double shp[3
 int XC::ShellMITC4Base::sendData(CommParameters &cp)
   {
     int res= Shell4NBase::sendData(cp);
-    res+=cp.sendDoubles(Ktt,xl[0][0],xl[0][1],xl[0][2],xl[0][3],getDbTagData(),CommMetaData(15));
-    res+= p0.sendData(cp,getDbTagData(),CommMetaData(16));
-    res+= cp.sendVectors(initDisp,getDbTagData(),CommMetaData(17));
+    res+=cp.sendDoubles(Ktt,xl[0][0],xl[0][1],xl[0][2],xl[0][3],getDbTagData(),CommMetaData(16));
+    res+= p0.sendData(cp,getDbTagData(),CommMetaData(17));
     return res;
   }
 
@@ -1061,9 +1042,8 @@ int XC::ShellMITC4Base::sendData(CommParameters &cp)
 int XC::ShellMITC4Base::recvData(const CommParameters &cp)
   {
     int res= Shell4NBase::recvData(cp);
-    res+=cp.receiveDoubles(Ktt,xl[0][0],xl[0][1],xl[0][2],xl[0][3],getDbTagData(),CommMetaData(15));
-    res+= p0.receiveData(cp,getDbTagData(),CommMetaData(16));
-    res+= cp.receiveVectors(initDisp,getDbTagData(),CommMetaData(17));
+    res+=cp.receiveDoubles(Ktt,xl[0][0],xl[0][1],xl[0][2],xl[0][3],getDbTagData(),CommMetaData(16));
+    res+= p0.receiveData(cp,getDbTagData(),CommMetaData(17));
     return res;
   }
 

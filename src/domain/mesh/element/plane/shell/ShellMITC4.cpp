@@ -48,6 +48,7 @@
 // $Date: 2003/02/25 23:33:01 $
 // $Source: /usr/local/cvs/OpenSees/SRC/element/plane/shell/ShellMITC4.cpp,v $
 
+// Original implementation: Ed "C++" Love
 // Written: Leopoldo Tesser, Diego A. Talledo, Véronique Le Corvec
 //
 // Bathe MITC 4 four node shell element with membrane and drill

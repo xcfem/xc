@@ -104,27 +104,29 @@ void XC::Shell4NBase::alloc(const ShellCrdTransf3dBase *crdTransf)
 
 //! @brief Constructor
 XC::Shell4NBase::Shell4NBase(int classTag, const ShellCrdTransf3dBase *crdTransf)
-  : QuadBase4N<SectionFDPhysicalProperties>(0,classTag,SectionFDPhysicalProperties(4,nullptr)), theCoordTransf(nullptr), applyLoad(0) 
+  : QuadBase4N<SectionFDPhysicalProperties>(0,classTag,SectionFDPhysicalProperties(4,nullptr)), theCoordTransf(nullptr), applyLoad(0), initDisp(4,Vector(6))
   {
     alloc(crdTransf);
     appliedB[0]= 0.0;
     appliedB[1]= 0.0;
     appliedB[2]= 0.0;
+    zeroInitDisp();
   }
 
 //! @brief Constructor
 XC::Shell4NBase::Shell4NBase(int tag, int classTag,const SectionForceDeformation *ptr_mat, const ShellCrdTransf3dBase *crdTransf)
-  : QuadBase4N<SectionFDPhysicalProperties>(tag,classTag,SectionFDPhysicalProperties(4,ptr_mat)), theCoordTransf(nullptr), applyLoad(0)
+  : QuadBase4N<SectionFDPhysicalProperties>(tag,classTag,SectionFDPhysicalProperties(4,ptr_mat)), theCoordTransf(nullptr), applyLoad(0), initDisp(4,Vector(6))
   {
     alloc(crdTransf);
     appliedB[0]= 0.0;
     appliedB[1]= 0.0;
     appliedB[2]= 0.0;
+    zeroInitDisp();
   }
 
 //! @brief Constructor
 XC::Shell4NBase::Shell4NBase(int tag, int classTag,int node1,int node2,int node3,int node4,const SectionFDPhysicalProperties &physProp, const ShellCrdTransf3dBase *crdTransf)
-  : QuadBase4N<SectionFDPhysicalProperties>(tag,classTag,physProp), theCoordTransf(nullptr), applyLoad(0)
+  : QuadBase4N<SectionFDPhysicalProperties>(tag,classTag,physProp), theCoordTransf(nullptr), applyLoad(0), initDisp(4,Vector(6))
   {
     theNodes.set_id_nodes(node1,node2,node3,node4);
     alloc(crdTransf);
@@ -132,16 +134,18 @@ XC::Shell4NBase::Shell4NBase(int tag, int classTag,int node1,int node2,int node3
     appliedB[0]= 0.0;
     appliedB[1]= 0.0;
     appliedB[2]= 0.0;
+    zeroInitDisp();
   }
 
 //! @brief Copy constructor.
 XC::Shell4NBase::Shell4NBase(const Shell4NBase &other)
-  : QuadBase4N<SectionFDPhysicalProperties>(other), theCoordTransf(nullptr), applyLoad(other.applyLoad)
+  : QuadBase4N<SectionFDPhysicalProperties>(other), theCoordTransf(nullptr), applyLoad(other.applyLoad), initDisp(4,Vector(6))
   {
     alloc(other.theCoordTransf);
     appliedB[0]= other.appliedB[0];
     appliedB[1]= other.appliedB[1];
     appliedB[2]= other.appliedB[2];
+    initDisp= other.initDisp;
   }
 
 //! @brief Assignment operator.
@@ -153,6 +157,7 @@ XC::Shell4NBase &XC::Shell4NBase::operator=(const Shell4NBase &other)
     appliedB[0]= other.appliedB[0];
     appliedB[1]= other.appliedB[1];
     appliedB[2]= other.appliedB[2];
+    initDisp= other.initDisp;
     return *this;
   }
 
@@ -591,10 +596,24 @@ void XC::Shell4NBase::formInertiaTerms( int tangFlag ) const
       } //end for i gauss loop
   }
 
+//! @brief Get the displacement of the nodes at element birth.
+void XC::Shell4NBase::catchInitDisp(void)
+  {
+    for(size_t i= 0;i<4;i++)
+      initDisp[i]= theNodes[i]->getTrialDisp();
+  }
+
+//! @brief Set initial displacements to zero.
+void XC::Shell4NBase::zeroInitDisp(void)
+  {
+    for(std::vector<Vector>::iterator i= initDisp.begin();i!=initDisp.end();i++)
+      (*i).Zero();
+  }
 
 //! @brief compute local coordinates and basis
 void XC::Shell4NBase::computeBasis(void)
   {
+    catchInitDisp();
     theCoordTransf->initialize(theNodes);
     theCoordTransf->setup_nodal_local_coordinates();
   }
@@ -710,6 +729,7 @@ int XC::Shell4NBase::sendData(CommParameters &cp)
     res+= sendCoordTransf(10,11,12,cp);
     res+= cp.sendInt(applyLoad,getDbTagData(),CommMetaData(13));
     res+= cp.sendDoubles(appliedB[0],appliedB[1],appliedB[2],getDbTagData(),CommMetaData(14));
+    res+= cp.sendVectors(initDisp,getDbTagData(),CommMetaData(15));
     return res;
   }
 
@@ -722,6 +742,7 @@ int XC::Shell4NBase::recvData(const CommParameters &cp)
     res+= recvCoordTransf(10,11,12,cp);
     res+= cp.receiveInt(applyLoad,getDbTagData(),CommMetaData(13));
     res+= cp.receiveDoubles(appliedB[0],appliedB[1],appliedB[2],getDbTagData(),CommMetaData(14));
+    res+= cp.receiveVectors(initDisp,getDbTagData(),CommMetaData(15));
     return res;
   }
 

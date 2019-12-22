@@ -70,21 +70,10 @@ int XC::ShellUpBasisCrdTransf3d::update(void)
     // nodal coordinate differences
     const ShellMITC4Base *element= dynamic_cast<const ShellMITC4Base *>(Owner());
     const std::vector<Vector> &initDisp= element->getInitDisp();
-    Vector id0(6), id1(6), id2(6), id3(6);
-    if(initDisp[0].Size()>0)
-      {
-    	for(int dof= 0; dof < 6; dof++)
-    	  {
-    	    id0(dof)= initDisp[0][dof];
-    	    id1(dof)= initDisp[1][dof];
-    	    id2(dof)= initDisp[2][dof];
-    	    id3(dof)= initDisp[3][dof];
-    	  }
-      }
-    const Vector &coor0= (*theNodes)[0]->getCrds( ) + (*theNodes)[0]->getTrialDisp() - id0;
-    const Vector &coor1= (*theNodes)[1]->getCrds( ) + (*theNodes)[1]->getTrialDisp() - id1;
-    const Vector &coor2= (*theNodes)[2]->getCrds( ) + (*theNodes)[2]->getTrialDisp() - id2;
-    const Vector &coor3= (*theNodes)[3]->getCrds( ) + (*theNodes)[3]->getTrialDisp() - id3;
+    const Vector &coor0= (*theNodes)[0]->getCrds( ) + (*theNodes)[0]->getTrialDisp() - initDisp[0];
+    const Vector &coor1= (*theNodes)[1]->getCrds( ) + (*theNodes)[1]->getTrialDisp() - initDisp[1];
+    const Vector &coor2= (*theNodes)[2]->getCrds( ) + (*theNodes)[2]->getTrialDisp() - initDisp[2];
+    const Vector &coor3= (*theNodes)[3]->getCrds( ) + (*theNodes)[3]->getTrialDisp() - initDisp[3];
 
     v1.Zero( );
     //v1= 0.5 * ( coor2 + coor1 - coor3 - coor0 );

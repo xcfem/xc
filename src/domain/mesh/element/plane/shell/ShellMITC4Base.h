@@ -41,13 +41,9 @@ class ShellMITC4Base : public Shell4NBase
   protected:
     double Ktt; //!<drilling stiffness
     FVectorShell p0; //!< Reactions in the basic system due to element loads
-    std::vector<Vector> initDisp; //!< Initial displacements.
 
     static ShellBData BData; //!< B-bar data
 
-    void setupInitDisp(void);
-    void capturaInitDisp(void);
-    void zeroInitDisp(void);
 
     void formResidAndTangent(int tang_flag) const;
     const Matrix calculateG(void) const;
@@ -64,10 +60,6 @@ class ShellMITC4Base : public Shell4NBase
     ShellMITC4Base(int tag,int classTag,const SectionForceDeformation *ptr_mat,const ShellCrdTransf3dBase *); 
     //full constructor
     ShellMITC4Base(int tag,int classTag, int node1, int node2, int node3, int node4, const SectionFDPhysicalProperties &,const ShellCrdTransf3dBase *);
-
-    //! @brief Return initial displacements.
-    inline const std::vector<Vector> &getInitDisp(void) const
-      { return initDisp; }
 
     //set domain because frank is a dumb ass 
     void setDomain(Domain *theDomain);
