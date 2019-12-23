@@ -423,6 +423,10 @@ class Header(sp.RectangularSection):
         mat= self.defXCMaterial()
         self.xc_section= super(Header,self).defElasticShearSection2d(preprocessor,mat)
         return self.xc_section
+    def defElasticShearSection3d(self, preprocessor):
+        mat= self.defXCMaterial()
+        self.xc_section= super(Header,self).defElasticShearSection3d(preprocessor,mat)
+        return self.xc_section
 
 
 # Properties of LSL beams and headers taken from:
