@@ -203,9 +203,9 @@ class DXFImport(object):
         self.polylineQuads= dict()
         self.getRelativeCoo= getRelativeCoo
         self.threshold= threshold
-        self.selectKPoints()
         self.labelDict= {}
-        self.points= self.importPoints()
+        self.kPointsNames= self.selectKPoints()
+        self.importPoints()
         if(self.impLines):
             self.importLines()
         else:
@@ -222,76 +222,121 @@ class DXFImport(object):
         return self.kPoints[self.getIndexNearestPoint(pt)]
 
     def getLayersToImport(self, namesToImport):
-      '''Return the layers names that will be imported according to the
-         regular expressions contained in the second argument.
+        '''Return the layers names that will be imported according to the
+           regular expressions contained in the second argument.
 
-         :param namesToImport: list of regular expressions to be tested.
-      '''
-      retval= []
-      for layer in self.dxfFile.layers:
-          layerName= layer.name
-          if(layerToImport(layer.name,namesToImport)):
-              retval.append(layer.name)
-      return retval
+           :param namesToImport: list of regular expressions to be tested.
+        '''
+        retval= []
+        for layer in self.dxfFile.layers:
+            layerName= layer.name
+            if(layerToImport(layer.name,namesToImport)):
+                retval.append(layer.name)
+        if(len(retval)==0):
+            lmsg.warning('No layers to import.')
+        return retval
 
     def extractPoints(self):
         '''Extract the points from the entities argument.'''
-        retval= []
+        retval_pos= []
+        retval_layers= []
+        count= 0
         for obj in self.dxfFile.entities:
             type= obj.dxftype
             layerName= obj.layer
+            objName= obj.handle
+            pointName= objName
             if(layerName in self.layersToImport):
                 if(type == 'POINT'):
-                    retval.append(self.getRelativeCoo(obj.point))
+                    count+= 1
+                    pointName+= str(count)
+                    retval_pos.append(self.getRelativeCoo(obj.point))
+                    retval_layers.append((layerName, pointName))
                 if(self.impSurfaces):
                     if(type == '3DFACE'):
                         for pt in obj.points:
-                            retval.append(self.getRelativeCoo(pt))
+                            count+= 1
+                            pointName+= str(count)
+                            retval_pos.append(self.getRelativeCoo(pt))
+                            retval_layers.append((layerName, pointName))
                     elif(type == 'POLYFACE'):
-                        self.polyfaceQuads[obj.handle]= decompose_polyface(obj, tol= self.tolerance)
-                        for q in self.polyfaceQuads[obj.handle]:
+                        self.polyfaceQuads[objName]= decompose_polyface(obj, tol= self.tolerance)
+                        for q in self.polyfaceQuads[objName]:
                             for pt in q:
-                                retval.append(self.getRelativeCoo(pt))
+                                count+= 1
+                                pointName+= str(count)
+                                retval_pos.append(self.getRelativeCoo(pt))
+                                retval_layers.append((layerName, pointName))
                 if(type == 'LINE'):
                     for pt in [obj.start,obj.end]:
-                        retval.append(self.getRelativeCoo(pt))
+                        count+= 1
+                        pointName+= str(count)
+                        retval_pos.append(self.getRelativeCoo(pt))
+                        retval_layers.append((layerName, pointName))
                 elif((type == 'POLYLINE') or (type == 'LWPOLYLINE')):
                     if(self.polylinesAsSurfaces):
-                        self.polylineQuads[obj.handle]= decompose_polyline(obj, tol= self.tolerance)
-                        for q in self.polylineQuads[obj.handle]:
+                        self.polylineQuads[objName]= decompose_polyline(obj, tol= self.tolerance)
+                        for q in self.polylineQuads[objName]:
                             for pt in q:
-                                retval.append(self.getRelativeCoo(pt))                        
+                                count+= 1
+                                pointName+= str(count)
+                                retval_pos.append(self.getRelativeCoo(pt))
+                                retval_layers.append((layerName, pointName))
                     else:
                         pts= obj.points
                         for pt in pts:
-                            retval.append(self.getRelativeCoo(pt))
-        return retval
+                            count+= 1
+                            pointName+= str(count)
+                            retval_pos.append(self.getRelativeCoo(pt))
+                            retval_layers.append((layerName, pointName))
+        return retval_pos, retval_layers
 
     def selectKPoints(self):
         '''Selects the k-points to be used in the model. All the points that
            are closer than the threshold distance are melted into one k-point.
         '''
-        points= self.extractPoints()
-        self.kPoints= [points[0]]
-        for p in points:
-            nearestPoint= self.getNearestPoint(p)
-            dist= cdist([p],[nearestPoint])[0][0]
-            if(dist>self.threshold):
-                self.kPoints.append(p)
+        points, layers= self.extractPoints()
+        if(len(points)>0):
+            self.kPoints= [points[0]]
+            pointName= layers[0][1]
+            layerName= layers[0][0]
+            self.labelDict[pointName]= [layerName]
+            indexDict= dict()
+            indexDict[0]= pointName
+            for p, l in zip(points, layers):
+                pointName= l[1]
+                layerName= l[0]
+                indexNearestPoint= self.getIndexNearestPoint(p)
+                nearestPoint= self.kPoints[indexNearestPoint]
+                dist= cdist([p],[nearestPoint])[0][0]
+                if(dist>self.threshold):
+                    indexNearestPoint= len(self.kPoints) # The point itself.
+                    self.kPoints.append(p)
+                    self.labelDict[pointName]= [layerName]
+                    indexDict[indexNearestPoint]= pointName
+                else:
+                    pointName= indexDict[indexNearestPoint]
+                    layers= self.labelDict[pointName]
+                    if(not layerName in layers):
+                        layers.append(layerName)
+        else:
+            lmsg.warning('No points in DXF file.')
+        return indexDict
 
     def importPoints(self):
       ''' Import points from DXF.'''
-      retval= {}
+      self.points= dict()
       for obj in self.dxfFile.entities:
         type= obj.dxftype
+        pointName= obj.handle
         layerName= obj.layer
         if(layerName in self.layersToImport):
           if(type == 'POINT'):
             vertices= [-1]
             p= self.getRelativeCoo(obj.point)
-            vertices[0]= self.getIndexNearestPoint(p,kPoints)
-            retval[obj.handle]= (layerName, vertices)
-      return retval
+            vertices[0]= self.getIndexNearestPoint(p)
+            self.points[pointName]= vertices
+            self.labelDict[pointName]= [layerName]
 
     def importLines(self):
       ''' Import lines from DXF.'''
@@ -395,7 +440,8 @@ class DXFImport(object):
 
         counter= 0
         for p in self.kPoints:
-            retval.appendPoint(id= counter,x= p[0],y= p[1],z= p[2])
+            key= self.kPointsNames[counter]
+            retval.appendPoint(id= counter,x= p[0],y= p[1],z= p[2], labels= self.labelDict[key])
             counter+= 1
 
         counter= 0

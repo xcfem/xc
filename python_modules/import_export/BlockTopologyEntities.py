@@ -31,6 +31,8 @@ class PointRecord(me.NodeRecord):
   def getStrXCCommand(self,pointHandlerName):
     strId= str(self.id)
     strCommand= '.newPntIDPos3d(' + strId + ',geom.Pos3d(' + str(self.coords[0]) + ',' + str(self.coords[1]) +','+ str(self.coords[2])+'))'
+    if(self.labels):
+      strCommand+= '; pt'+strId+'.setProp("labels",'+str(self.labels)+')'
     return 'pt' + strId + '= ' + pointHandlerName + strCommand
 
 class PointDict(me.NodeDict):
@@ -183,6 +185,7 @@ class BlockData(object):
 
 
   def appendPoint(self,id,x,y,z,labels= None):
+    print(labels)
     self.points[id]= PointRecord(int(id),[x,y,z],labels)
   def appendBlock(self,block):
     self.blocks[block.id]= block
