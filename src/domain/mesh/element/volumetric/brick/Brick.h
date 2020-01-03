@@ -142,6 +142,7 @@ class Brick : public BrickBase
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
 
+    Vector getShapeFunctionsValues(const double &r, const double &s, const double &t) const;
     
     const Vector &getResistingForce(void) const; //get residual
     const Vector &getResistingForceIncInertia(void) const; //get residual with inertia terms

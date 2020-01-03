@@ -210,6 +210,22 @@ XC::Matrix XC::Brick::getGaussPointsPositions(void) const
     return retval;
   }
 
+//! @brief Return the values of the shape functions.
+XC::Vector XC::Brick::getShapeFunctionsValues(const double &r, const double &s, const double &t) const
+  {
+    Vector retval(8);
+    double natural_coord[3];
+    natural_coord[0]= r;
+    natural_coord[1]= s;
+    natural_coord[2]= t;
+    double xsj= 0.0; // determinant jacobian matrix at point (r,s,t)
+    //get shape functions values
+    shp3d(natural_coord, xsj, shp, xl);
+    for(int i= 0;i<8;i++)
+      retval[i]= shp[3][i];
+    return retval;
+  }
+
 //! @brief Gauss loop to compute and save shape functions
 void XC::Brick::shape_functions_loop(void) const
   {
