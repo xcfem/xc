@@ -88,7 +88,6 @@ class Brick : public BrickBase
     static double Shape[nShape][numberNodes][numberGauss]; //!< all the shape functions
 
     // quadrature data
-    static const double sg[2];
     static const double wg[numberGauss];
   
     //

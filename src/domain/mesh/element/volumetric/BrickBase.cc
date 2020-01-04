@@ -38,8 +38,8 @@ const int XC::BrickBase::numberNodes; //!< Number of nodes.
 const int XC::BrickBase::ndm; //!< Space dimension
 const int XC::BrickBase::ndf; //!< Number of DOFs per node.
 double XC::BrickBase::xl[XC::BrickBase::ndm][XC::BrickBase::numberNodes];
-const double XC::BrickBase::mNodesR[]= {+1, -1, -1, +1, +1, -1, -1, +1};
-const double XC::BrickBase::mNodesS[]= {+1, +1, -1, -1, +1, +1, -1, -1};
+const double XC::BrickBase::mNodesR[]= {-1, +1, +1, -1, -1, +1, +1, -1};
+const double XC::BrickBase::mNodesS[]= {-1, -1, +1, +1, -1, -1, +1, +1};
 const double XC::BrickBase::mNodesT[]= {-1, -1, -1, -1, +1, +1, +1, +1};
 
 //! @brief Constructor

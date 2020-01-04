@@ -70,7 +70,8 @@
 //static data
 const int XC::Brick::numberGauss; //!< Number of Gauss points.
 const int XC::Brick::nShape;
-double XC::Brick::gaussPoint[XC::Brick::numberGauss][XC::BrickBase::ndm];
+//Gauss points coordinates.
+double XC::Brick::gaussPoint[XC::Brick::numberGauss][XC::BrickBase::ndm]= {{-one_over_root3,-one_over_root3,-one_over_root3}, {one_over_root3,-one_over_root3,-one_over_root3}, {one_over_root3,one_over_root3,-one_over_root3}, {-one_over_root3,one_over_root3,-one_over_root3}, {-one_over_root3,-one_over_root3,+one_over_root3}, {one_over_root3,-one_over_root3,+one_over_root3}, {one_over_root3,one_over_root3,+one_over_root3}, {-one_over_root3,one_over_root3,+one_over_root3}};
 double XC::Brick::dvol[XC::Brick::numberGauss];
 double XC::Brick::shp[XC::Brick::nShape][XC::BrickBase::numberNodes];
 double XC::Brick::Shape[XC::Brick::nShape][XC::BrickBase::numberNodes][XC::Brick::numberGauss];
@@ -83,10 +84,7 @@ XC::Matrix  XC::Brick::mass(24,24) ;
 
 //quadrature data
 
-const double  XC::Brick::sg[] = { -one_over_root3,
-                               one_over_root3  } ;
-
-const double  XC::Brick::wg[] = { 1.0, 1.0, 1.0, 1.0,
+const double XC::Brick::wg[] = { 1.0, 1.0, 1.0, 1.0,
                               1.0, 1.0, 1.0, 1.0  } ;
 
 
@@ -240,13 +238,8 @@ void XC::Brick::shape_functions_loop(void) const
 	  {
 	    for(int k= 0; k < 2; k++ )
 	      {
-		//Gauss points coordinates.
-		gaussPoint[count][0]= sg[i];        
-		gaussPoint[count][1]= sg[j];        
-		gaussPoint[count][2]= sg[k];
-		
-		//get shape functions
-		shp3d( gaussPoint[count], xsj, shp, xl );
+		//get shape functions values at Gauss points
+		shp3d( gaussPoint[count], xsj, shp, xl);
 
 		//save shape functions
 		for(int p = 0; p < nShape; p++ )
