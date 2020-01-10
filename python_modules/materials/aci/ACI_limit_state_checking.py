@@ -23,6 +23,14 @@ from materials.sections import stressCalc as sc
 from miscUtils import LogMessages as lmsg
 from postprocess.reports import common_formats as fmt
 
+
+in2m= 0.0254 #inches to meters
+m2in=1/in2m
+kip2N= 4.4482216e3
+N2kip=1/kip2N
+lb2N=4.4482216
+N2lb=1/lb2N
+
 class RebarController(object):
     '''Control of some parameters as development lenght 
        minimum reinforcement and so on.
@@ -625,7 +633,63 @@ class AnchorBolt(object):
         phi= 0.8 # partial safety factor for tension
         return phi*self.getNominalSteelStrength()
 
-    def getBasicConcreteBreakoutStrength(self):
+    def getANc(self):
+        '''Return the projected concrete failure area of a single anchor 
+        that shall be approximated as the base of the rectilinear geometrical 
+        figure that results from projecting the failure surface outward 1.5hef 
+        from the centerlines of the anchor, or in the case of a group of 
+        anchors, from a line through a row of adjacent anchors.
+        Note: For now, only single stud away from edge case is considered
+        '''
+        ANc=9*(self.hef)**2
+        return ANc
+    
+    def getANco(self):
+        '''he projected concrete failure area of a single
+        anchor with an edge distance equal to or greater than 1.5hef
+        '''
+        ANco=9*(self.hef)**2
+        return ANco
+
+    def getFactorEdgeN(self):
+        '''Return the modification factor for edge effect for a
+        single anchor or group of anchors loaded in tension
+        '''
+        ca_min=min(self.ca1,self.ca2)
+        if ca_min >= 1.5*self.hef:
+            psi_ed_N=1.0
+        else:
+            psi_ed_N=0.7+0.3*ca_min/(1.5*self.hef)
+        return psi_ed_N
+
+    def getFactorCrackingN(self,cracking=True):
+        '''Return a modification factor depending on the cracking in 
+        concrete 
+
+        :param cracking: True for anchors located in a region of a concrete 
+               member where analysis indicates cracking. (Defaults to True)
+        '''
+        if cracking:
+            psi_c_N=1.0
+        else:
+            if self.cast_in:
+                psi_c_N=1.25
+            else:
+                psi_c_N=1.40
+        return psi_c_N
+    
+
+    def getFactorModifN(self,cracking=True):
+        '''
+        '''
+        if cracking or self.cast_in:
+            psi_cp_N=1.0
+        else:
+            lmsg.error('This case is not yet implemented. See art. D.5.2.7')
+        return psi_cp_N
+                             
+    
+    def getBasicConcreteBreakoutStrengthTension(self):
         ''' Return the asic concrete breakout strength of a single
             anchor in tension in cracked concrete.'''
         kc= 17.0
@@ -634,5 +698,156 @@ class AnchorBolt(object):
         hef_in= self.hef/0.0254
         fc_psi= -self.concrete.fck*ACI_materials.fromPascal
         return kc*math.sqrt(fc_psi)*math.pow(hef_in,1.5)*ACI_materials.pound2Newton
-    
+                             
 
+    def getConcrBreakoutStrengthTension(self,cracking=True):
+        '''Return the nominal concrete breakout strength  of a single anchor
+        in tension
+
+        :param cracking: True for anchors located in a region of a concrete 
+               member where analysis indicates cracking. (Defaults to True)
+        '''
+        ANc=self.getANc()
+        ANco=self.getANco()
+        psi_ed_N=self.getFactorEdgeN()
+        psi_c_N=self.getFactorCrackingN(cracking)
+        psi_cp_N=self.getFactorModifN(cracking)
+        Nb=self.getBasicConcreteBreakoutStrengthTension()
+        Ncb= ANc/ANco*psi_ed_N*psi_c_N*psi_cp_N*Nb
+        return Ncb
+
+    def getPulloutStrengthTension(self,Abearing,cracking=True):
+        '''Return the nominal pullout strength of a single anchor
+        in tension to check head of the stud
+
+        :param Abearing: bearing area (see tables 4, 5, 6 Appendix A) 
+        :param cracking: True for anchors located in a region of a concrete 
+               member where analysis indicates cracking. (Defaults to True)
+        '''
+        if cracking:
+            psi_c_P=1.0
+        else:
+            psi_c_P=1.4
+        Np=8*Abearing*(-self.concrete.fck)
+        Npn=psi_c_P*Np
+        return Npn
+        
+                                           
+    def getFuta(self):
+        '''Return the the tensile strength of an anchor that meets the tensile 
+        strength requirement futa <= min(1.9fya,125 ksi)
+        '''
+        futa=min(self.steel.fmaxk(),1.9*self.steel.fyk,125e3*ACI_materials.toPascal)
+        return futa
+    
+    def getSteelStrengthShear(self,sleeveTrhShearPlane=True):
+        '''Return the nominal strength of an anchor in shear as governed by 
+        steel.
+
+        :param sleeveTrhShearPlane: True if sleeves extend through the shear 
+               plane (defaults to True)
+ 
+        '''
+        futa=self.getFuta()
+        Vsa=self.getAnchorArea()*futa
+        if not self.cast_in or not sleeveTrhShearPlane:
+            Vsa*=0.6
+        return Vsa
+
+    def getAvc(self):
+         '''Return the projected area the projected area of the failure 
+         surface on the side of the concrete member at its edge for a single 
+         anchor.
+         It is evaluated as the base of a truncated
+         half-pyramid projected on the side face of the member where
+         the top of the half-pyramid is given by the axis of the anchor
+         row selected as critical. 
+         Only case when edges are supposed far enough away in considered
+         (see article D.6.2.1 for other cases).
+         '''
+         Avc=4.5*(self.ca1)**2
+         return Avc
+     
+    def getAvco(self):
+         '''Return the projected area for a single anchor in a deep
+         member with a distance from edges equal or greater than
+         1.5ca1 the direction perpendicular to the shear force. 
+         It is evaluated as the base of a half-pyramid with
+         a side length parallel to the edge of 3ca1 and a depth of 1.5ca1
+         '''
+         Avco=4.5*(self.ca1)**2
+         return Avco
+
+    
+    def getBasicConrBreakoutStrengthShear(self):
+         '''Return the basic concrete breakout strength in shear of
+         a single anchor in cracked concrete.
+         '''
+         le=min(self.hef,8*self.diam)
+         Vb=8*(le/self.diam)**0.2*(self.diam*m2in)**0.5*(abs(self.concrete.fck*ACI_materials.fromPascal))**0.5*(self.ca1*m2in)**(1.5)
+         return Vb*lb2N
+
+    def getFactorEdgeV(self):
+        '''Return the modification factor for edge effect for a
+        single anchor or group of anchors loaded in shear
+        '''
+        if self.ca2 >= 1.5*self.ca1:
+            psi_ed_V=1.0
+        else:
+            psi_ed_V=0.7+0.3*self.ca2/(1.5*self.ca1)
+        return psi_ed_V
+
+    def getFactorCrackingV(self,cracking=True,reinfBarDiam=0):
+        '''Return a modification factor depending on the cracking in 
+        concrete and the reinforcement.
+
+        :param cracking: True for anchors located in a region of a concrete 
+               member where analysis indicates cracking. (Defaults to True)
+        :param reinfBarDiam: Diameter of the inforcement bars (Defaults to
+               0 == no reinforcement)
+        '''
+        if cracking:
+            if reinfBarDiam < 0.0127:
+                psi_c_V=1.0
+            else:
+                psi_c_V=1.2
+        else:
+            psi_c_V=1.4
+        return psi_c_V
+    
+    def getConcrBreakoutStrengthShear(self,ShForcPerp=True,cracking=True,reinfBarDiam=0):
+         '''Return the nominal concrete breakout strength in shear of a single 
+         anchor.
+
+         :param ShForcPerp: True for shear force perpendicular to the edge, 
+                            False for shear force parallel to the edge
+        :param cracking: True for anchors located in a region of a concrete 
+               member where analysis indicates cracking. (Defaults to True)
+        :param reinfBarDiam: Diameter of the inforcement bars (Defaults to
+               0 == no reinforcement)
+          '''
+         Avc=self.getAvc()
+         Avco=self.getAvco()
+         psi_ed_V=self.getFactorEdgeV()
+         psi_c_V=self.getFactorCrackingV(cracking,reinfBarDiam)
+         Vb=self.getBasicConrBreakoutStrengthShear()
+         Vcb=Avc/Avco*psi_ed_V*psi_c_V*Vb
+         if not ShForcPerp:
+             Vcb*=2
+         return Vcb
+     
+    def getPryoutStrengthShear(self,cracking=True):
+        '''Return the nominal pryout strength, for a single anchor in shear
+
+        :param cracking: True for anchors located in a region of a concrete 
+               member where analysis indicates cracking. (Defaults to True)
+        '''
+        if self.hef<2.5*in2m:
+            kcp=1.0
+        else:
+            kcp=2.0
+        Ncb=self.getConcrBreakoutStrengthTension(cracking)
+        Vcp=kcp*Ncb
+        return Vcp
+    
+        
