@@ -28,6 +28,7 @@
 
 #include "NodePtrArray3d.h"
 #include "domain/mesh/node/Node.h"
+#include "domain/mesh/element/plane/PlaneElement.h"
 #include "xc_utils/src/functions/algebra/num_integration.h"
 
 #include "domain/domain/Domain.h"
@@ -327,11 +328,12 @@ std::vector<int> XC::getNodeIdsQuad4N(const XC::NodePtrArray3d::constant_i_layer
 
     Polygon3d tmp(positions.begin(),positions.end());
     const double area= tmp.getArea();
-    if(area<1e-3)
+    if(area<elem_warning_area)
       {
-        std::cerr << "Area for (" << j << ',' << k
-                  << ") cell is too small (" << area << ").\n";
-        std::cerr << " polygon " << tmp << std::endl;
+        std::clog << __FUNCTION__
+		  << "; area for (" << j << ',' << k
+                  << ") cell is too small (" << area << ").\n"
+		  << " polygon " << tmp << std::endl;
       }
     return retval;
   }
