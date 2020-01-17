@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 # COMPANION TO THE AISC STEEL CONSTRUCTION MANUAL
 # Volume 1: Design Examples
-# EXAMPLE F.1-1A W-SHAPE FLEXURAL MEMBER DESIGN IN MAJOR AXIS BENDING,
-# CONTINUOUSLY BRACED
+# EXAMPLE G.1A W-SHAPE IN STRONG AXIS SHEAR
 
 from __future__ import division
 from __future__ import print_function
 
+import math
 import xc_base
 import geom
 import xc
@@ -32,10 +32,9 @@ nodes= preprocessor.getNodeHandler
 #Materials
 ## Steel material
 steel= ASTM_materials.A992
-hss= ASTM_materials.WShape(steel,'W18X50')
 steel.gammaM= 1.00
 ## Profile geometry
-profile= ASTM_materials.WShape(steel,'W18X50')
+profile= ASTM_materials.WShape(steel,'W24X62')
 xcSection= profile.defElasticShearSection2d(preprocessor,steel)
 
 # Model geometry
@@ -73,16 +72,18 @@ loadCaseNames= ['deadLoad','liveLoad']
 loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 
 ## Dead load.
-deadLoad= xc.Vector([0.0,-0.45e3*kip2kN/foot2meter, 0.0])
+deadLoad= -48.0*kip2kN*span/2.0
+deadLoadVector= xc.Vector([0.0,deadLoad, 0.0])
 cLC= loadCaseManager.setCurrentLoadCase('deadLoad')
 for e in xcTotalSet.elements:
-  e.vector2dUniformLoadGlobal(deadLoad)
+    e.vector2dUniformLoadGlobal(deadLoadVector)
   
 ## Live load.
-liveLoad= xc.Vector([0.0,-0.75e3*kip2kN/foot2meter, 0.0])
+liveLoad= -145.0*kip2kN*span/2.0
+liveLoadVector= xc.Vector([0.0,liveLoad, 0.0])
 cLC= loadCaseManager.setCurrentLoadCase('liveLoad')
 for e in xcTotalSet.elements:
-  e.vector2dUniformLoadGlobal(liveLoad)
+    e.vector2dUniformLoadGlobal(liveLoadVector)
 
 ## Load combinations
 combContainer= combs.CombContainer()
@@ -100,18 +101,7 @@ combContainer.dumpCombinations(preprocessor)
 ## Linear static analysis.
 analysis= predefined_solutions.simple_static_linear(steelBeam)
 
-## Deflection linit
-preprocessor.getLoadHandler.addToDomain('combSLS01')
-result= analysis.analyze(1)
-midSpan1= span/2
-midPos1= geom.Pos3d(midSpan1,0.0,0.0)
-n1= l1.getNearestNode(geom.Pos3d(midSpan1,0.0,0.0))
-d1= n1.getDisp[1]
-refD1= -1.17*746/800*inch2meter
-ratio1= abs((refD1-d1)/refD1)
-deflection= d1/span # Deflection
-
-## Flexural strength
+## Shear strength
 preprocessor.resetLoadCase()
 preprocessor.getLoadHandler.addToDomain('combULS01')
 result= analysis.analyze(1)
@@ -125,32 +115,36 @@ for e in xcTotalSet.elements:
   VMin= min(VMin,min(e.getV1, e.getV2))
   MMax= max(MMax,max(e.getM1, e.getM2))
   MMin= min(MMin,min(e.getM1, e.getM2))
-MMaxRef= -(1.2*deadLoad[1]+1.6*liveLoad[1])*span**2/8.0
-ratio2= abs((MMax-MMaxRef)/MMaxRef)
+VMaxRef= -(1.2*deadLoad+1.6*liveLoad)*span/2.0
+ratio1= abs((VMax-VMaxRef)/VMaxRef)
 
-# Because the beam is continuously braced and compact, only the
-# yielding limit state applies.
-Phi_b= 0.90 # LRFD
-Mu= Phi_b*profile.getWz()*profile.steelType.fy
-MuRef= Phi_b*421e3*kip2kN*foot2meter
-ratio3= abs((Mu-MuRef)/MuRef)
+Aw= profile.getAw()
+AwRef= 10.2*inch2meter**2
+ratio2= abs((Aw-AwRef)/AwRef)
+Phi_v= 1.0 # LRFD AISC Specification section G2.1a
+Vu= Phi_v*profile.getNominalShearStrengthWithoutTensionFieldAction()
+VuRef= 306e3*kip2kN
+ratio3= abs((Vu-VuRef)/VuRef)
+
 
 '''
-print(refD1)
+print('VMax= ',VMax/1e3,' kN /', VMax*kN2kips/1e3, 'kips')
+print('VMaxRef= ',VMaxRef/1e3,' kN /', VMaxRef*kN2kips/1e3, 'kips')
 print('ratio1= ',ratio1)
-print('dY= ',d1*1e3,' mm/', d1/inch2meter,' in; ratio= L/', 1/deflection, 'L= ', span, ' m')
-print('MMaxRef= ',MMaxRef/1e3,' kN m')
-print('MMax= ',MMax/1e3,' kN m')
+print('d= ', profile.d()*1e3,'mm / ', profile.d()/inch2meter, 'in')
+print('tw= ', profile.get('tw')/inch2meter, 'in')
+print('Aw= ',Aw*1e4,' cm2')
+print('AwRef= ',AwRef*1e4,' cm2')
 print('ratio2= ',ratio2)
-print('Mu= ',Mu/1e3,' kN m')
-print('MuRef= ',MuRef/1e3,' kN m')
+print('Vu= ',Vu/1e3,' kN m')
+print('VuRef= ',VuRef/1e3,' kN m')
 print('ratio3= ',ratio3)
 '''
 
 import os
 from miscUtils import LogMessages as lmsg
 fname= os.path.basename(__file__)
-if(ratio1<5e-4 and ratio2<1e-7 and ratio2<5e-3):
+if(ratio1<5e-4 and ratio2<5e-3 and ratio3<5e-3):
   print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

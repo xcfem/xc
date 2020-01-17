@@ -1023,7 +1023,8 @@ for item in HSS:
   shape['AreaQy']= 2*0.7*shape['h_flat']*shape['t']
   shape['Avz']=shape['AreaQz']
   shape['Avy']=shape['AreaQy']
-  
+
+import math
 from materials.sections import structural_steel
 
 class WShape(structural_steel.IShape):
@@ -1034,10 +1035,44 @@ class WShape(structural_steel.IShape):
         :param name: shape name (i.e. W40X431).
         '''
         super(WShape,self).__init__(steel,name,W)
-        
+
+    def h(self):
+        ''' Return overall depth of member (d in AISC tables).'''
+        return self.get('h')
     def d(self):
-        '''Return internal web height'''
+        ''' Return internal web height: clear distance between flanges
+            less the fillet at each flange (h in AISC tables).'''
         return self.get('d')
+    def getAw(self):
+        ''' Return A_w according to AISC specification Section G2.1b'''
+        return self.h()*self.get('tw')
+    def getShearResistanceFactor(self):
+        ''' Return the resistance factor for shear according to
+            section G2.1a.'''
+        return 1.0
+    def getWebShearStrengthCoefficient(self):
+        ''' Return the web shear stress coefficient Cv1 according
+            to equations G2-2, G2-3 and G2-4 of "Specification for 
+            Structural Steel Buildings, July 7, 2016 AISC"
+        '''
+        Cv1= 1.0
+        h_tw= self.get('d')/self.get('tw')
+        h_tw_threshold= 2.24*math.sqrt(self.get('E')/self.steelType.fy)
+        if(h_tw<h_tw_threshold):
+            Cv1= 1.0;
+        else:
+            lmsg.error('getWebShearStrengthCoefficient not implemented yet for this type of sections.')
+            Cv1= 0.0;
+        return Cv1
+          
+    def getNominalShearStrengthWithoutTensionFieldAction(self):
+        ''' Return the nominal shear strength according to equation
+            2.1 of "Specification for Structural Steel Buildings,
+            July 7, 2016 AISC"
+        '''
+        #
+        Cv1= self.getWebShearStrengthCoefficient()
+        return 0.6*self.steelType.fy*self.getAw()*Cv1
 
 class CShape(structural_steel.UShape):
     def __init__(self,steel,name):
