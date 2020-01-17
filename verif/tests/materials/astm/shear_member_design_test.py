@@ -25,7 +25,7 @@ m2Toin2= 1.0/inch2meter**2
 
 # Problem type
 steelBeam= xc.FEProblem()
-steelBeam.title= 'Example F.1-1A'
+steelBeam.title= 'Example G.1A'
 preprocessor= steelBeam.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
