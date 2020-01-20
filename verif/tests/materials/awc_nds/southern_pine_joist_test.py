@@ -23,7 +23,7 @@ span= 16*foot2meter
 designLoad= 77.3*pound2Newton/foot2meter # Design load
 designMoment= designLoad*span**2/8.0
 
-joist= mat.SouthernPineDimensionLumber(name= '2x6',b= 1.5*inch2meter, h= 9.25*inch2meter, grade= 'no_2', sub_grade= '')
+joist= mat.SouthernPineDimensionLumber(name= '2x10',b= 1.5*inch2meter, h= 9.25*inch2meter, grade= 'no_2', sub_grade= '')
 
 S= joist.Wzel() # Section modulus
 I= joist.Iz() # Moment of inertia
