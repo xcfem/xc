@@ -524,6 +524,7 @@ echo "$BLEU" "    AWC NDS tests." "$NORMAL"
 python tests/materials/awc_nds/awc_nds2018_test01.py
 python tests/materials/awc_nds/rsdg_exemple_5_1.py
 python tests/materials/awc_nds/plywood_sheating_test.py
+python tests/materials/awc_nds/southern_pine_joist_test.py
 echo "$BLEU" "    ASTM/AISC tests." "$NORMAL"
 python tests/materials/astm/hss12x8_test.py
 python tests/materials/astm/hss8x8_test.py
