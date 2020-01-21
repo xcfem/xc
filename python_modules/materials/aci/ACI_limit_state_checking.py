@@ -3,11 +3,11 @@
 from __future__ import division
 from __future__ import print_function
 
-__author__= "Luis C. Pérez Tato (LCPT)"
-__copyright__= "Copyright 2016, LCPT"
+__author__= "Luis C. Pérez Tato (LCPT), Ana Ortega (AO_O)"
+__copyright__= "Copyright 2019, LCPT, AO_O"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com"
+__email__= "l.pereztato@gmail.com, ana.ortega.ort@gmail.com"
 
 from materials.aci import ACI_materials
 from materials.sections import rebar_family as rf
@@ -622,7 +622,7 @@ class AnchorBolt(object):
     def getAnchorArea(self):
         ''' Return the anchor area.'''
         return math.pi*(self.diam/2.0)**2
-    def getNominalSteelStrength(self):
+    def getNominalSteelStrengthTension(self):
         ''' Return the nominal steel strength of the anchor
             according to section D.3.6.1.'''
         return self.getAnchorArea()*self.steel.fmaxk()
@@ -631,7 +631,7 @@ class AnchorBolt(object):
         ''' Return the design steel strength of the anchor
             according to section D.3.6.1.'''
         phi= 0.8 # partial safety factor for tension
-        return phi*self.getNominalSteelStrength()
+        return phi*self.getNominalSteelStrengthTension()
 
     def getANc(self):
         '''Return the projected concrete failure area of a single anchor 
@@ -695,10 +695,10 @@ class AnchorBolt(object):
         kc= 17.0
         if(self.cast_in):
             kc= 24.0
-        hef_in= self.hef/0.0254
-        fc_psi= -self.concrete.fck*ACI_materials.fromPascal
-        return kc*math.sqrt(fc_psi)*math.pow(hef_in,1.5)*ACI_materials.pound2Newton
-                             
+        hef_in= self.hef*m2in
+        fc_psi= abs(self.concrete.fck*ACI_materials.fromPascal)
+        Nb=kc*math.sqrt(fc_psi)*math.pow(hef_in,1.5)*ACI_materials.pound2Newton
+        return Nb
 
     def getConcrBreakoutStrengthTension(self,cracking=True):
         '''Return the nominal concrete breakout strength  of a single anchor
@@ -718,7 +718,7 @@ class AnchorBolt(object):
 
     def getPulloutStrengthTension(self,Abearing,cracking=True):
         '''Return the nominal pullout strength of a single anchor
-        in tension to check head of the stud
+        in tension to check head of the stud (article D.5.3 ACI-349.2R)
 
         :param Abearing: bearing area (see tables 4, 5, 6 Appendix A) 
         :param cracking: True for anchors located in a region of a concrete 
@@ -732,7 +732,49 @@ class AnchorBolt(object):
         Npn=psi_c_P*Np
         return Npn
         
-                                           
+    def getDesignStrengthTension(self,Abearing,ductility,cracking=True,reinfBarDiam=0):
+        '''Return the design strength of a single anchor in tension. 
+        It must be greater than the factored applied load.
+        Strength reduction factors are based on art. D.4.5
+        assuming that load combinations used are those referenced
+        in Appendix C of ACI-318 code
+
+        :param Abearing: bearing area (see tables 4, 5, 6 Appendix A) 
+        :param ductility: True if ductile steel element, False if brittle steel element
+        :param cracking: True for anchors located in a region of a concrete 
+               member where analysis indicates cracking. (Defaults to True)
+        :param reinfBarDiam: Diameter of the inforcement bars (Defaults to
+               0 == no reinforcement)
+        '''
+        Nsa=self.getNominalSteelStrengthTension()
+        Ncb=self.getConcrBreakoutStrengthTension(cracking)
+        Npn=self.getPulloutStrengthTension(Abearing,cracking)
+        if ductility:
+            fi1=0.8
+        else:
+            fi1=0.7
+        if reinfBarDiam>0:
+            fi2=0.85
+        else:
+            fi2=0.75
+        Nnd=min(fi1*Nsa,fi2*Ncb,fi2*Npn)
+        return Nnd
+
+    def getStrengthDuctilityTension(self,Abearing,cracking=True):
+        '''Return the design strength of a single anchor in tension
+        to check ductility 
+        (if greater than the factored applied load -> ductility OK.
+
+        :param Abearing: bearing area (see tables 4, 5, 6 Appendix A) 
+        :param cracking: True for anchors located in a region of a concrete 
+               member where analysis indicates cracking. (Defaults to True)
+        '''
+        Ncb=self.getConcrBreakoutStrengthTension(cracking)
+        Npn=self.getPulloutStrengthTension(Abearing,cracking)
+        Ndd=min(0.85*Ncb,0.85*Npn)
+        return Ndd
+
+    
     def getFuta(self):
         '''Return the the tensile strength of an anchor that meets the tensile 
         strength requirement futa <= min(1.9fya,125 ksi)
@@ -742,7 +784,7 @@ class AnchorBolt(object):
     
     def getSteelStrengthShear(self,sleeveTrhShearPlane=True):
         '''Return the nominal strength of an anchor in shear as governed by 
-        steel.
+        steel (art. D.6.1. ACI-349.2R)
 
         :param sleeveTrhShearPlane: True if sleeves extend through the shear 
                plane (defaults to True)
@@ -817,7 +859,7 @@ class AnchorBolt(object):
     
     def getConcrBreakoutStrengthShear(self,ShForcPerp=True,cracking=True,reinfBarDiam=0):
          '''Return the nominal concrete breakout strength in shear of a single 
-         anchor.
+         anchor (art. D.6.2. ACI-349.2R)
 
          :param ShForcPerp: True for shear force perpendicular to the edge, 
                             False for shear force parallel to the edge
@@ -838,7 +880,7 @@ class AnchorBolt(object):
      
     def getPryoutStrengthShear(self,cracking=True):
         '''Return the nominal pryout strength, for a single anchor in shear
-
+        (article D.6.3. ACI-349.2R)
         :param cracking: True for anchors located in a region of a concrete 
                member where analysis indicates cracking. (Defaults to True)
         '''
@@ -850,4 +892,53 @@ class AnchorBolt(object):
         Vcp=kcp*Ncb
         return Vcp
     
+    def getDesignStrengthShear(self,ductility,sleeveTrhShearPlane=True,ShForcPerp=True,cracking=True,reinfBarDiam=0):
+        '''Return the design strength of a single anchor in shear. 
+        It must be greater than the factored applied load.
+        Strength reduction factors are based on art. D.4.5
+        assuming that load combinations used are those referenced
+        in Appendix C of ACI-318 code
+
+        :param ductility: True if ductile steel element, False if brittle steel element
+        :param sleeveTrhShearPlane: True if sleeves extend through the shear 
+               plane (defaults to True)
+         :param ShForcPerp: True for shear force perpendicular to the edge, 
+                            False for shear force parallel to the edge
+        :param cracking: True for anchors located in a region of a concrete 
+               member where analysis indicates cracking. (Defaults to True)
+        :param reinfBarDiam: Diameter of the inforcement bars (Defaults to
+               0 == no reinforcement)
+         '''
+        Vsa=self.getSteelStrengthShear(sleeveTrhShearPlane)
+        Vcb=self.getConcrBreakoutStrengthShear(ShForcPerp,cracking,reinfBarDiam)
+        Vcp=self.getPryoutStrengthShear(cracking)
+        if ductility:
+            fi1=0.75
+        else:
+            fi1=0.65
+        if reinfBarDiam>0:
+            fi2=0.85
+        else:
+            fi2=0.75
+        Vnd=min(0.75*Vsa,0.75*Vcb,0.75*Vcp)
+        return Vnd
+
+    def getStrengthDuctilityShear(self,ShForcPerp=True,cracking=True,reinfBarDiam=0):
+        '''Return the design strength of a single anchor in shear
+        to check ductility 
+        (if greater than the factored applied load -> ductility OK.
+
+        :param ShForcPerp: True for shear force perpendicular to the edge, 
+                            False for shear force parallel to the edge
+        :param cracking: True for anchors located in a region of a concrete 
+               member where analysis indicates cracking. (Defaults to True)
+        :param reinfBarDiam: Diameter of the inforcement bars (Defaults to
+               0 == no reinforcement)
+        '''
+        Vcb=self.getConcrBreakoutStrengthShear(ShForcPerp,cracking,reinfBarDiam)
+        Vcp=self.getPryoutStrengthShear(cracking)
+        Vdd=min(0.85*Vcb,0.85*Vcp)
+        return Vdd
         
+
+ 
