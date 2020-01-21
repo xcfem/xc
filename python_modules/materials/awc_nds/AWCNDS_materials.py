@@ -370,18 +370,89 @@ class Member(object):
         val393+= fb2/(Fb2_adj*(1-min(fc/FcE2,1.0)-min(fb1/FbE,1.0)**2))
         val394= fc/FcE2+(fb1/FbE)**2 #Equation 3-9-4
         return max(val393,val394)
-        
+
+class WoodPanel(sp.RectangularSection):
+    ''' Plywood structural panel.'''
+    def __init__(self, name, b, h, shear_constant):
+        super(WoodPanel,self).__init__(name, b, h)
+        self.shearConstant= shear_constant
+    def getSpanRating(self):
+        ''' Return the span rating from the panel thickness according
+            to the table B of the documents:
+            "Design Capacities for Oriented Strand Board V1.0 – 01/2008"
+            and "Design Capacities for Structural Plywood V1.0 – 01/2008"
+            both from PFS TECO • 1507 Matt Pass, Cottage Grove, WI 53527, USA
+        '''
+        spanRating= 'unknown'
+        if(self.sectionName=='3/8'):
+            spanRating= '24/0'
+        elif(self.sectionName=='7/16'):
+            spanRating= '24/16'
+        elif(self.sectionName=='15/32'):
+            spanRating= '32/16'
+        elif(self.sectionName=='1/2'):
+            spanRating= '32/16'
+        elif(self.sectionName=='19/32'):
+            spanRating= '40/20'
+        elif(self.sectionName=='5/8'):
+            spanRating= '40/20'
+        elif(self.sectionName=='23/32'):
+            spanRating= '48/24'
+        elif(self.sectionName=='3/4'):
+            spanRating= '48/24'
+        elif(self.sectionName=='7/8'):
+            spanRating= '48/24'
+        elif(self.sectionName=='1'):
+            spanRating= '48/24'
+        elif(self.sectionName=='1-1/8'):
+            spanRating= '48/24'
+        else:
+            lmsg.error('name: ', self.sectionName, 'unknown')
+        return spanRating
+    def getAPARatedSturdIFloor(self):
+        ''' Return the APA rated Sturd-I-Floor from the panel thickness 
+            according to the table B of the documents:
+            "Design Capacities for Oriented Strand Board V1.0 – 01/2008"
+            and "Design Capacities for Structural Plywood V1.0 – 01/2008"
+            both from PFS TECO • 1507 Matt Pass, Cottage Grove, WI 53527, USA
+        '''
+        spanRating= 'unknown'
+        if(self.sectionName=='3/8'):
+            spanRating= '0oc'
+        elif(self.sectionName=='7/16'):
+            spanRating= '0oc'
+        elif(self.sectionName=='15/32'):
+            spanRating= '0oc'
+        elif(self.sectionName=='1/2'):
+            spanRating= '0oc'
+        elif(self.sectionName=='19/32'):
+            spanRating= '20oc'
+        elif(self.sectionName=='5/8'):
+            spanRating= '20oc'
+        elif(self.sectionName=='23/32'):
+            spanRating= '24oc'
+        elif(self.sectionName=='3/4'):
+            spanRating= '24oc'
+        elif(self.sectionName=='7/8'):
+            spanRating= '32oc'
+        elif(self.sectionName=='1'):
+            spanRating= '32oc'
+        elif(self.sectionName=='1-1/8'):
+            spanRating= '48oc'
+        else:
+            lmsg.error('name: ', self.sectionName, 'unknown')
+        return spanRating
+
 
 # Properties of Plywood structural panels taken from:
 # http://www.pfsteco.com/techtips/pdf/tt_plywooddesigncapacities
 # table C.
 
-class PlywoodPanel(sp.RectangularSection):
+class PlywoodPanel(WoodPanel):
     ''' Plywood structural panel.'''
     rho= 577.941243312 # density kg/m3
     def __init__(self, name, b, h, shear_constant):
-        super(PlywoodPanel,self).__init__(name, b, h)
-        self.shearConstant= shear_constant
+        super(PlywoodPanel,self).__init__(name, b, h, shear_constant)
     def getArealDensity(self):
         return self.rho*self.h
 
@@ -399,6 +470,198 @@ PlywoodPanels['3/4']= PlywoodPanel('3/4',b= 1.0, h= 0.750*in2meter, shear_consta
 PlywoodPanels['7/8']= PlywoodPanel('7/8',b= 1.0, h= 0.875*in2meter, shear_constant= 7.00) #, 'CrossSectionalArea':10.500, 'MomentOfInertia':0.670, 'SectionModulus':1.531, 'StaticalMoment':1.148
 PlywoodPanels['1']= PlywoodPanel('1',b= 1.0, h= 1.000*in2meter, shear_constant= 8.00) #,  'CrossSectionalArea':12.000, 'MomentOfInertia':1.000, 'SectionModulus':2.000, 'StaticalMoment':1.500
 PlywoodPanels['1-1/8']= PlywoodPanel('1-1/8',b= 1.0, h= 1.125*in2meter, shear_constant= 9.00) #,  'CrossSectionalArea':13.500, 'MomentOfInertia':1.424, 'SectionModulus':2.531, 'StaticalMoment':1.898
+
+# Oriented strand board panels according to document:
+# "Panel design specification" Form No. D510C/Revised May 2012/0300
+
+class OSBPanel(WoodPanel):
+    ''' Oriented strand board panel.'''
+    rho= 632.62 # average density kg/m3 Table 12
+    def __init__(self, name, b, h, shear_constant):
+        super(OSBPanel,self).__init__(name, b, h, shear_constant)
+    def getArealDensity(self):
+        return self.rho*self.h
+    def getFb(self, angle= math.pi/2.0):
+        ''' Return the bending stress Fb or the panel according
+            to the table A of the document:
+            "Design Capacities for Oriented Strand Board V1.0 – 01/2008"
+            from PFS TECO • 1507 Matt Pass, Cottage Grove, WI 53527, USA
+
+            angle: angle of the stress with the strength axis.
+        '''
+        spanRating= self.getAPARatedSturdIFloor()
+        FbS= 0.0
+        if((angle!=0.0) and (angle!=math.pi/2.0)):
+            lmsg.error('angle must be 0 or PI/2')
+        if(spanRating!='unknown'):
+            if(spanRating=='16oc'):
+                if(angle==0.0):
+                    FbS= 500.0
+                else:
+                    FbS= 180.0
+            elif(spanRating=='20oc'):
+                if(angle==0.0):
+                    FbS= 575.0
+                else:
+                    FbS= 250.0
+            elif(spanRating=='24oc'):
+                if(angle==0.0):
+                    FbS= 770.0
+                else:
+                    FbS= 385.0                
+            elif(spanRating=='32oc'):
+                if(angle==0.0):
+                    FbS= 1050.0
+                else:
+                    FbS= 685.0                
+            elif(spanRating=='48oc'):
+                if(angle==0.0):
+                    FbS= 1900.0
+                else:
+                    FbS= 1200.0                
+        else:
+            spanRating= self.getSpanRating()
+            if(spanRating=='24/0'):
+                if(angle==0.0):
+                    FbS= 300.0
+                else:
+                    FbS= 97.0
+            elif(spanRating=='24/16'):
+                if(angle==0.0):
+                    FbS= 385.0
+                else:
+                    FbS= 115.0
+            elif(spanRating=='32/16'):
+                if(angle==0.0):
+                    FbS= 445.0
+                else:
+                    FbS= 165.0                
+            elif(spanRating=='40/20'):
+                if(angle==0.0):
+                    FbS= 750.0
+                else:
+                    FbS= 270.0                
+            elif(spanRating=='48/24'):
+                if(angle==0.0):
+                    FbS= 1000.0
+                else:
+                    FbS= 405.0
+        Fb= FbS/self.Wzel()*4.44822*0.0254/0.3048
+        return Fb
+    def getFv(self):
+        ''' Return the bending stress Fb or the panel according
+            to the table A of the document:
+            "Design Capacities for Oriented Strand Board V1.0 – 01/2008"
+            from PFS TECO • 1507 Matt Pass, Cottage Grove, WI 53527, USA
+        '''
+        spanRating= self.getAPARatedSturdIFloor()
+        Fvtv= 0.0
+        if(spanRating!='unknown'):
+            if(spanRating=='16oc'):
+                Fvtv= 170.0
+            elif(spanRating=='20oc'):
+                Fvtv= 195.0
+            elif(spanRating=='24oc'):
+                Fvtv= 215.0
+            elif(spanRating=='32oc'):
+                Fvtv= 230.0
+            elif(spanRating=='48oc'):
+                Fvtv= 305.0
+        else:
+            spanRating= self.getSpanRating()
+            if(spanRating=='24/0'):
+                Fvtv= 155.0
+            elif(spanRating=='24/16'):
+                Fvtv= 165.0
+            elif(spanRating=='32/16'):
+                Fvtv= 180.0
+            elif(spanRating=='40/20'):
+                Fvtv= 195.0
+            elif(spanRating=='48/24'):
+                Fvtv= 220.0
+        Fv= Fvtv/self.h*4.44822/0.3048
+        return Fv
+    def getE(self, angle= math.pi/2.0):
+        ''' Return the bending stress Fb or the panel according
+            to the table A of the document:
+            "Design Capacities for Oriented Strand Board V1.0 – 01/2008"
+            from PFS TECO • 1507 Matt Pass, Cottage Grove, WI 53527, USA
+
+            angle: angle of the stress with the strength axis.
+        '''
+        spanRating= self.getAPARatedSturdIFloor()
+        EI= 0.0
+        if((angle!=0.0) and (angle!=math.pi/2.0)):
+            lmsg.error('angle must be 0 or PI/2')
+        if(spanRating!='unknown'):
+            if(spanRating=='16oc'):
+                if(angle==0.0):
+                    EI= 150e3
+                else:
+                    EI= 34e3
+            elif(spanRating=='20oc'):
+                if(angle==0.0):
+                    EI= 210e3
+                else:
+                    EI= 40.5e3
+            elif(spanRating=='24oc'):
+                if(angle==0.0):
+                    EI= 300e3
+                else:
+                    EI= 80.5e3
+            elif(spanRating=='32oc'):
+                if(angle==0.0):
+                    EI= 650e3
+                else:
+                    EI= 235e3
+            elif(spanRating=='48oc'):
+                if(angle==0.0):
+                    EI= 1150e3
+                else:
+                    EI= 495e3
+        else:
+            spanRating= self.getSpanRating()
+            if(spanRating=='24/0'):
+                if(angle==0.0):
+                    EI= 60e3
+                else:
+                    EI= 11e3
+            elif(spanRating=='24/16'):
+                if(angle==0.0):
+                    EI= 78e3
+                else:
+                    EI= 16e3
+            elif(spanRating=='32/16'):
+                if(angle==0.0):
+                    EI= 115e3
+                else:
+                    EI= 25e3
+            elif(spanRating=='40/20'):
+                if(angle==0.0):
+                    EI= 225e3
+                else:
+                    EI= 56e3
+            elif(spanRating=='48/24'):
+                if(angle==0.0):
+                    EI= 400e3
+                else:
+                    EI= 91.5e3
+        E= EI/self.Iz()*4.44822*0.0254**2/0.3048
+        return E
+
+OSBPanels= dict()
+
+OSBPanels['3/8']= OSBPanel('3/8',b= 1.0, h= 0.375*in2meter, shear_constant= 3.00)
+OSBPanels['7/16']= OSBPanel('7/16',b= 1.0, h= 0.437*in2meter, shear_constant= 3.50)
+OSBPanels['15/32']= OSBPanel('15/32',b= 1.0, h= 0.469*in2meter, shear_constant= 3.75)
+OSBPanels['1/2']= OSBPanel('1/2',b= 1.0, h= 0.500*in2meter, shear_constant= 4.00)
+OSBPanels['19/32']= OSBPanel('19/32',b= 1.0, h= 0.594*in2meter, shear_constant= 4.75)
+OSBPanels['5/8']= OSBPanel('5/8',b= 1.0, h= 0.625*in2meter, shear_constant= 5.00)
+OSBPanels['23/32']= OSBPanel('23/32',b= 1.0, h= 0.719*in2meter, shear_constant= 5.75)
+OSBPanels['3/4']= OSBPanel('3/4',b= 1.0, h= 0.750*in2meter, shear_constant= 6.00)
+OSBPanels['7/8']= OSBPanel('7/8',b= 1.0, h= 0.875*in2meter, shear_constant= 7.00)
+OSBPanels['1']= OSBPanel('1',b= 1.0, h= 1.000*in2meter, shear_constant= 8.00)
+OSBPanels['1-1/8']= OSBPanel('1-1/8',b= 1.0, h= 1.125*in2meter, shear_constant= 9.00)
 
 class Header(sp.RectangularSection):
     ''' Structural beam/header.'''
@@ -428,6 +691,7 @@ class Header(sp.RectangularSection):
         self.xc_section= super(Header,self).defElasticShearSection3d(preprocessor,mat)
         return self.xc_section
 
+    
 
 # Properties of LSL beams and headers taken from:
 # LP SolidStart LSL Beam & Header Technical Guide
