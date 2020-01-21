@@ -148,22 +148,22 @@ double XC::DqPtrsElem::getAverageSize(bool initialGeometry) const
   {
     double retval= 0.0;
     size_t count= 0;
+    int dim= 0;
+    double fictitiousLength= 0.0;
     for(const_iterator i= begin();i!=end();i++)
       {
-	Element *ptr= *i;
-	if(ptr->getDimension()==1)
+	const Element *ptr= *i;
+        dim= ptr->getDimension();
+	if((dim>0) and (dim<=3))
 	  {
-	    retval+= ptr->getLength(initialGeometry);
-	    count++;
-	  }
-	else if(ptr->getDimension()==2)
-	  {
-	    retval+= sqrt(ptr->getArea(initialGeometry));
-	    count++;
-	  }
-	else if(ptr->getDimension()==3)
-	  {
-	    retval+= pow(ptr->getVolume(initialGeometry),1.0/3.0);
+	    fictitiousLength= 0.0;
+	    if(dim==1)
+	      fictitiousLength= ptr->getLength(initialGeometry);
+	    else if(dim==2)
+	      fictitiousLength= sqrt(ptr->getArea(initialGeometry));
+	    else if(dim==3)
+	      fictitiousLength= pow(ptr->getVolume(initialGeometry),1.0/3.0);
+	    retval+= fictitiousLength;
 	    count++;
 	  }
       }

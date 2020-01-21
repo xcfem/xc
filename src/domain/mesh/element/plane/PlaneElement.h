@@ -38,6 +38,8 @@
 #include "domain/mesh/node/Node.h"
 
 namespace XC {
+
+const double elem_warning_area= 1e-6; // If area smaller than this trig a warning.
 //! @ingroup Elem
 //!
 //! @defgroup PlaneElements Bidimensional elements (plane problems, shells,...).
@@ -82,21 +84,23 @@ template <int NNODES,class PhysProp>
 void XC::PlaneElement<NNODES, PhysProp>::checkElem(void)
   {
     if(this->getNodePtrs().hasNull())
-      std::cerr << "the element: " << this->getTag()
+      std::cerr << this->getClassName() << "::" << __FUNCTION__
+		<< "; the element: " << this->getTag()
                 << " pointers to nodes not set." << std::endl;
     else
       {
         const double area= this->getArea();
-        if(area<1e-3)
+        if(area<elem_warning_area)
           {
-            std::cerr << "Element: " << this->getTag() << " with nodes: [";
+            std::clog << this->getClassName() << "::" << __FUNCTION__
+		      << "; element: " << this->getTag() << " with nodes: [";
             const std::vector<int> inodes= this->getNodePtrs().getTags();
             std::vector<int>::const_iterator i= inodes.begin();
-            std::cerr << *i;
+            std::clog << *i;
             i++;
             for(;i!=inodes.end();i++)
-	      std::cerr << "," << *i;
-            std::cerr << "] has a very little area (" << area << ").\n";
+	      std::clog << "," << *i;
+            std::clog << "] has a very little area (" << area << ").\n";
           }
       }
   }
@@ -109,7 +113,8 @@ void XC::PlaneElement<NNODES, PhysProp>::setDomain(Domain *theDomain)
     if(theDomain)
       checkElem();
     else
-      std::cerr << "PlaneElement::setDomain -- Domain is null\n";
+      std::cerr << this->getClassName() << "::" << __FUNCTION__
+	        << "; Domain is null\n";
   }
 
 //! @brief Return the position of the element centroid.

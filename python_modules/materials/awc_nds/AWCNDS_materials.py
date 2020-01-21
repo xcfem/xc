@@ -569,3 +569,254 @@ LVLHeaders['7x11-7/8']= LVL_2900Fb2E_Header('7x11-7/8', b= 7*in2meter, h= 11.875
 LVLHeaders['7x14']= LVL_2900Fb2E_Header('7x14', b= 7*in2meter, h= 14*in2meter, Ms= 54057*pound2N*foot2meter, Vs= 18620*pound2N, linearDensity= 28*pound2kg)
 LVLHeaders['7x16']= LVL_2900Fb2E_Header('7x16', b= 7*in2meter, h= 16*in2meter, Ms= 69272*pound2N*foot2meter, Vs= 21280*pound2N, linearDensity= 32*pound2kg)
 LVLHeaders['7x18']= LVL_2900Fb2E_Header('7x18', b= 7*in2meter, h= 18*in2meter, Ms= 86209*pound2N*foot2meter, Vs= 23940*pound2N, linearDensity= 36.1*pound2kg)
+
+# Southern Pine reference design values based on SPIB grading rules
+# and AWC National Design Specification
+
+southern_pine_wide_values= [0.000, 0.038, 0.140, 0.184, 0.235, 0.286]
+southern_pine_no_1_Fb= [10.30E+06, 10.30E+06, 9.30E+06, 8.60E+06, 7.20E+06, 6.90E+06]
+southern_pine_no_1_Ft= [6.90E+06, 6.90E+06, 6.00E+06, 5.50E+06, 4.80E+06, 4.50E+06]
+southern_pine_no_1_Fv= 1.2e6
+southern_pine_no_1_Fct= 3.9e6
+southern_pine_no_1_Fc= [11.40E+06, 11.40E+06, 10.70E+06, 10.30E+06, 10.00E+06, 9.70E+06]
+southern_pine_no_1_E= 11e9
+southern_pine_no_1_Emin= 4e9
+
+southern_pine_no_1_dense_Fb= [11.40E+06, 11.40E+06, 10.30E+06, 9.30E+06, 8.30E+06, 7.60E+06]
+southern_pine_no_1_dense_Ft= [7.60E+06, 7.60E+06, 6.90E+06, 6.20E+06, 5.50E+06, 5.20E+06]
+southern_pine_no_1_dense_Fv= 1.2e6
+southern_pine_no_1_dense_Fct= 4.6e6
+southern_pine_no_1_dense_Fc= [12.10E+06, 12.10E+06, 11.40E+06, 11.00E+06, 10.70E+06, 10.30E+06]
+southern_pine_no_1_dense_E= 12.4e9
+southern_pine_no_1_dense_Emin= 4.6e9
+
+southern_pine_no_1_non_dense_Fb= [9.00E+06, 9.00E+06, 8.30E+06, 7.60E+06, 6.60E+06, 6.20E+06]
+southern_pine_no_1_non_dense_Ft= [6.00E+06, 6.00E+06, 5.30E+06, 4.80E+06, 4.30E+06, 4.00E+06]
+southern_pine_no_1_non_dense_Fv= 1.2e6
+southern_pine_no_1_non_dense_Fct= 3.3e6
+southern_pine_no_1_non_dense_Fc= [10.70E+06, 10.70E+06, 10.00E+06, 9.70E+06, 9.70E+06, 9.30E+06]
+southern_pine_no_1_non_dense_E= 9.7e9
+southern_pine_no_1_non_dense_Emin= 3.5e9
+
+southern_pine_no_2_Fb= [7.60E+06, 7.60E+06, 6.90E+06, 6.40E+06, 5.50E+06, 5.20E+06]
+southern_pine_no_2_Ft= [4.70E+06, 4.70E+06, 4.10E+06, 3.80E+06, 3.30E+06, 3.10E+06]
+southern_pine_no_2_Fv= 1.2e6
+southern_pine_no_2_Fct= 3.9e6
+southern_pine_no_2_Fc= [10.00E+06, 10.00E+06, 9.70E+06, 9.30E+06, 9.00E+06, 8.60E+06]
+southern_pine_no_2_E= 9.7e9
+southern_pine_no_2_Emin= 3.5e9
+
+southern_pine_no_2_dense_Fb= [8.30E+06, 8.30E+06, 7.20E+06, 6.70E+06, 5.90E+06, 5.50E+06]
+southern_pine_no_2_dense_Ft= [5.20E+06, 5.20E+06, 4.50E+06, 4.10E+06, 3.60E+06, 3.40E+06]
+southern_pine_no_2_dense_Fv= 1.2e6
+southern_pine_no_2_dense_Fct= 4.6e6
+southern_pine_no_2_dense_Fc= [10.30E+06, 10.30E+06, 10.00E+06, 9.70E+06, 9.30E+06, 9.00E+06]
+southern_pine_no_2_dense_E= 11e9
+southern_pine_no_2_dense_Emin= 4e9
+
+southern_pine_no_2_non_dense_Fb= [7.20E+06, 7.20E+06, 6.60E+06, 6.00E+06, 5.20E+06, 4.80E+06]
+southern_pine_no_2_non_dense_Ft= [4.10E+06, 4.10E+06, 3.60E+06, 3.40E+06, 2.90E+06, 2.80E+06]
+southern_pine_no_2_non_dense_Fv= 1.2e6
+southern_pine_no_2_non_dense_Fct= 3.3e6
+southern_pine_no_2_non_dense_Fc= [10.00E+06, 10.00E+06, 9.30E+06, 9.00E+06, 8.60E+06, 8.60E+06]
+southern_pine_no_2_non_dense_E= 9e9
+southern_pine_no_2_non_dense_Emin= 3.2e9
+
+southern_pine_no_3_Fb= [4.50E+06, 4.50E+06, 4.00E+06, 3.60E+06, 3.30E+06, 3.10E+06]
+southern_pine_no_3_Ft= [2.80E+06, 2.80E+06, 2.40E+06, 2.20E+06, 1.90E+06, 1.70E+06]
+southern_pine_no_3_Fv= 1.2e6
+southern_pine_no_3_Fct= [3.90E+06, 3.90E+06, 3.90E+06, 3.90E+06, 3.90E+06, 3.90E+06]
+southern_pine_no_3_Fc= [5.90E+06, 5.90E+06, 5.50E+06, 5.30E+06, 5.20E+06, 5.00E+06]
+southern_pine_no_3_E= 9e9
+southern_pine_no_3_Emin= 3.2e9
+
+southern_pine_stud_Fb= southern_pine_no_3_Fb
+southern_pine_stud_Ft= southern_pine_no_3_Ft
+southern_pine_stud_Fv= southern_pine_no_3_Fv
+southern_pine_stud_Fct= southern_pine_no_3_Fct
+southern_pine_stud_Fc= southern_pine_no_3_Fc
+southern_pine_stud_E= southern_pine_no_3_E
+southern_pine_stud_Emin= southern_pine_no_3_Emin
+
+southern_pine_structural_Fb= [16.20E+06, 16.20E+06, 14.50E+06, 13.40E+06, 11.70E+06, 11.00E+06]
+southern_pine_structural_Ft= [11.40E+06, 11.40E+06, 10.00E+06, 9.30E+06, 7.90E+06, 7.60E+06]
+southern_pine_structural_Fv= 1.2e6
+southern_pine_structural_Fct= 3.9e6
+southern_pine_structural_Fc= [13.10E+06, 13.10E+06, 12.40E+06, 11.70E+06, 11.40E+06, 11.40E+06]
+southern_pine_structural_E= 12.4e9
+southern_pine_structural_Emin= 4.6e9
+
+southern_pine_structural_dense_Fb= [18.60E+06, 18.60E+06, 16.50E+06, 15.20E+06, 13.40E+06, 12.40E+06]
+southern_pine_structural_dense_Ft= [13.10E+06, 13.10E+06, 11.40E+06, 10.70E+06, 9.00E+06, 8.60E+06]
+southern_pine_structural_dense_Fv= 1.2e6
+southern_pine_structural_dense_Fct= 4.6e6
+southern_pine_structural_dense_Fc= [14.10E+06, 14.10E+06, 13.10E+06, 12.80E+06, 12.40E+06, 12.10E+06]
+southern_pine_structural_dense_E= 13.1e9
+southern_pine_structural_dense_Emin= 4.8e9
+
+southern_pine_structural_non_dense_Fb= [14.10E+06, 14.10E+06, 12.80E+06, 11.70E+06, 10.30E+06, 9.70E+06]
+southern_pine_structural_non_dense_Ft= [10.00E+06, 10.00E+06, 9.00E+06, 8.30E+06, 7.20E+06, 6.70E+06]
+southern_pine_structural_non_dense_Fv= 1.2e6
+southern_pine_structural_non_dense_Fct= 3.3e6
+southern_pine_structural_non_dense_Fc= [12.40E+06, 12.40E+06, 11.70E+06, 11.40E+06, 11.00E+06, 10.70E+06]
+southern_pine_structural_non_dense_E= 11e9
+southern_pine_structural_non_dense_Emin= 4e9
+
+southern_pine_no_1_Fb_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_no_1_Fb)
+southern_pine_no_1_Ft_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_no_1_Ft)
+southern_pine_no_1_Fc_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_no_1_Fc)
+
+southern_pine_no_1_dense_Fb_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_no_1_dense_Fb)
+southern_pine_no_1_dense_Ft_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_no_1_dense_Ft)
+southern_pine_no_1_dense_Fc_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_no_1_dense_Fc)
+
+southern_pine_no_1_non_dense_Fb_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_no_1_non_dense_Fb)
+southern_pine_no_1_non_dense_Ft_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_no_1_non_dense_Ft)
+southern_pine_no_1_non_dense_Fc_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_no_1_non_dense_Fc)
+
+southern_pine_no_2_Fb_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_no_2_Fb)
+southern_pine_no_2_Ft_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_no_2_Ft)
+southern_pine_no_2_Fc_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_no_2_Fc)
+
+southern_pine_no_2_dense_Fb_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_no_2_dense_Fb)
+southern_pine_no_2_dense_Ft_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_no_2_dense_Ft)
+southern_pine_no_2_dense_Fc_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_no_2_dense_Fc)
+
+southern_pine_no_2_non_dense_Fb_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_no_2_non_dense_Fb)
+southern_pine_no_2_non_dense_Ft_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_no_2_non_dense_Ft)
+southern_pine_no_2_non_dense_Fc_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_no_2_non_dense_Fc)
+
+southern_pine_no_3_Fb_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_no_3_Fb)
+southern_pine_no_3_Ft_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_no_3_Ft)
+southern_pine_no_3_Fc_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_no_3_Fc)
+
+southern_pine_stud_Fb_interp= southern_pine_no_3_Fb_interp 
+southern_pine_stud_Ft_interp= southern_pine_no_3_Ft_interp 
+southern_pine_stud_Fc_interp= southern_pine_no_3_Fc_interp 
+
+southern_pine_structural_Fb_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_structural_Fb)
+southern_pine_structural_Ft_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_structural_Ft)
+southern_pine_structural_Fc_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_structural_Fc)
+
+southern_pine_structural_dense_Fb_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_structural_dense_Fb)
+southern_pine_structural_dense_Ft_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_structural_dense_Ft)
+southern_pine_structural_dense_Fc_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_structural_dense_Fc)
+
+southern_pine_structural_non_dense_Fb_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_structural_non_dense_Fb)
+southern_pine_structural_non_dense_Ft_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_structural_non_dense_Ft)
+southern_pine_structural_non_dense_Fc_interp= scipy.interpolate.interp1d(southern_pine_wide_values,southern_pine_structural_non_dense_Fc)
+
+southern_pine_no_1_E= 11e9
+southern_pine_no_1_Emin= 4e9
+
+class SouthernPineDimensionLumber(sp.RectangularSection):
+    ''' Southern pine dimension lumber.'''
+    nu= 0.2
+    def __init__(self, name, b, h, grade= 'no_2', sub_grade= ''):
+        '''Constructor.'''
+        super(SouthernPineDimensionLumber,self).__init__(name, b, h)
+        self.rho= (657+577)/2.0 # kg/m3
+        self.xc_material_name= 'southern_pine_'+grade+'_'+sub_grade
+        self.xc_material= None
+        self.xc_section= None
+        if(grade=='structural'):
+            if(sub_grade==''):
+                self.Fb= southern_pine_structural_Fb_interp
+                self.Ft= southern_pine_structural_Ft_interp
+                self.Fv= southern_pine_structural_Fv
+                self.Fct= southern_pine_structural_Fct
+                self.Fc= southern_pine_structural_Fc_interp
+                self.E= southern_pine_structural_E
+                self.Emin= southern_pine_structural_Emin
+            elif(sub_grade=='dense'):
+                self.Fb= southern_pine_structural_dense_Fb_interp
+                self.Ft= southern_pine_structural_dense_Ft_interp
+                self.Fv= southern_pine_structural_dense_Fv
+                self.Fct= southern_pine_structural_dense_Fct
+                self.Fc= southern_pine_structural_dense_Fc_interp
+                self.E= southern_pine_structural_dense_E
+                self.Emin= southern_pine_structural_dense_Emin
+            elif(sub_grade=='non_dense'):
+                self.Fb= southern_pine_structural_non_dense_Fb_interp
+                self.Ft= southern_pine_structural_non_dense_Ft_interp
+                self.Fv= southern_pine_structural_non_dense_Fv
+                self.Fct= southern_pine_structural_non_dense_Fct
+                self.Fc= southern_pine_structural_non_dense_Fc_interp
+                self.E= southern_pine_structural_non_dense_E
+                self.Emin= southern_pine_structural_non_dense_Emin
+        elif(grade=='no_1'):
+            if(sub_grade==''):
+                self.Fb= southern_pine_no_1_Fb_interp
+                self.Ft= southern_pine_no_1_Ft_interp
+                self.Fv= southern_pine_no_1_Fv
+                self.Fct= southern_pine_no_1_Fct
+                self.Fc= southern_pine_no_1_Fc_interp
+                self.E= southern_pine_no_1_E
+                self.Emin= southern_pine_no_1_Emin
+            elif(sub_grade=='dense'):
+                self.Fb= southern_pine_no_1_dense_Fb_interp
+                self.Ft= southern_pine_no_1_dense_Ft_interp
+                self.Fv= southern_pine_no_1_dense_Fv
+                self.Fct= southern_pine_no_1_dense_Fct
+                self.Fc= southern_pine_no_1_dense_Fc_interp
+                self.E= southern_pine_no_1_dense_E
+                self.Emin= southern_pine_no_1_dense_Emin
+            elif(sub_grade=='non_dense'):
+                self.Fb= southern_pine_no_1_non_dense_Fb_interp
+                self.Ft= southern_pine_no_1_non_dense_Ft_interp
+                self.Fv= southern_pine_no_1_non_dense_Fv
+                self.Fct= southern_pine_no_1_non_dense_Fct
+                self.Fc= southern_pine_no_1_non_dense_Fc_interp
+                self.E= southern_pine_no_1_non_dense_E
+                self.Emin= southern_pine_no_1_non_dense_Emin
+        elif(grade=='no_2'):
+            if(sub_grade==''):
+                self.Fb= southern_pine_no_2_Fb_interp
+                self.Ft= southern_pine_no_2_Ft_interp
+                self.Fv= southern_pine_no_2_Fv
+                self.Fct= southern_pine_no_2_Fct
+                self.Fc= southern_pine_no_2_Fc_interp
+                self.E= southern_pine_no_2_E
+                self.Emin= southern_pine_no_2_Emin
+            elif(sub_grade=='dense'):
+                self.Fb= southern_pine_no_2_dense_Fb_interp
+                self.Ft= southern_pine_no_2_dense_Ft_interp
+                self.Fv= southern_pine_no_2_dense_Fv
+                self.Fct= southern_pine_no_2_dense_Fct
+                self.Fc= southern_pine_no_2_dense_Fc_interp
+                self.E= southern_pine_no_2_dense_E
+                self.Emin= southern_pine_no_2_dense_Emin
+            elif(sub_grade=='non_dense'):
+                self.Fb= southern_pine_no_2_non_dense_Fb_interp
+                self.Ft= southern_pine_no_2_non_dense_Ft_interp
+                self.Fv= southern_pine_no_2_non_dense_Fv
+                self.Fct= southern_pine_no_2_non_dense_Fct
+                self.Fc= southern_pine_no_2_non_dense_Fc_interp
+                self.E= southern_pine_no_2_non_dense_E
+                self.Emin= southern_pine_no_2_non_dense_Emin
+        elif(grade=='no_3' or grade=='stud'):
+            if(sub_grade==''):
+                self.Fb= southern_pine_no_3_Fb_interp
+                self.Ft= southern_pine_no_3_Ft_interp
+                self.Fv= southern_pine_no_3_Fv
+                self.Fct= southern_pine_no_3_Fct
+                self.Fc= southern_pine_no_3_Fc_interp
+                self.E= southern_pine_no_3_E
+                self.Emin= southern_pine_no_3_Emin
+            else:
+                lmsg.error('number 3 and stud grades have not sub grades.')
+    def getFb(self):
+        return self.Fb(self.h)
+    def defXCMaterial(self):
+        '''Defines the material in XC.'''
+        if(not self.xc_material):
+            self.xc_material= typical_materials.MaterialData(name= self.xc_material_name, E= self.E, nu= self.nu, rho= self.rho)
+        return self.xc_material
+    def defElasticShearSection2d(self, preprocessor):
+        mat= self.defXCMaterial()
+        self.xc_section= super(Header,self).defElasticShearSection2d(preprocessor,mat)
+        return self.xc_section
+    def defElasticShearSection3d(self, preprocessor):
+        mat= self.defXCMaterial()
+        self.xc_section= super(Header,self).defElasticShearSection3d(preprocessor,mat)
+        return self.xc_section
