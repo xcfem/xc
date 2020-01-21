@@ -518,6 +518,7 @@ python tests/materials/aci/test_aci_corbel_design.py
 echo "$BLEU" "    ACI 349 tests." "$NORMAL"
 python tests/materials/aci/test_aci_anchor_tension.py
 python tests/materials/aci/test_aci_anchor_shear.py
+python tests/materials/aci/test_aci_anchor_comb_tension_shear.py
 echo "$BLEU" "    TM 5-809-3 tests." "$NORMAL"
 python tests/materials/tm5_809_3/test_equivalent_wall_thickness.py
 python tests/materials/tm5_809_3/tm_5_809_3_test01.py
