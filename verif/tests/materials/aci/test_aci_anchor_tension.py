@@ -62,7 +62,7 @@ ratio4=abs((Npn_kips-18.88)/18.88)
 #Check ductility
 Ndd=stud.getStrengthDuctilityTension(Abearing,cracking=True)
 Ndd_kips=Ndd/kip2N
-ratio6=abs((Ndd_kips-13.10446)/13.10446)
+ratio5=abs((Ndd_kips-13.10446)/13.10446)
 '''
 if Ndd >= Nua:
     print ('Ndd >= Nua -> ductility OK')
@@ -71,9 +71,9 @@ else:
 '''
 
 #Check design strength of stud in tension
-Nnd=stud.getDesignStrengthTension(Abearing,ductility=True)
+Nnd=stud.getDesignStrengthTension(Abearing,ductility=True,loadCombAlt=True)
 Nnd_kips=Nnd/kip2N
-ratio5=abs((Nnd_kips-10.21018)/10.21018)
+ratio6=abs((Nnd_kips-10.21018)/10.21018)
 '''
 if Nnd >= Nua:
     print ('Nnd >= Nua -> design strength checking OK')

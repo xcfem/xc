@@ -75,7 +75,7 @@ else:
 '''
 
 # Check design strength of stud in shear
-Vnd=stud.getDesignStrengthShear(ductility=True)
+Vnd=stud.getDesignStrengthShear(ductility=True,loadCombAlt=True)
 Vnd_kips=Vnd/kip2N
 ratio6=abs((Vnd_kips-9.57204)/9.57204)
 '''
