@@ -648,6 +648,14 @@ class OSBPanel(WoodPanel):
                     EI= 91.5e3
         E= EI/self.Iz()*4.44822*0.0254**2/0.3048
         return E
+    def defElasticShearSection2d(self,preprocessor, angle= math.pi/2.0):
+        ''' Defines a elastic shear section for two-dimensional
+            problems.'''
+        matName= self.sectionName+'_'+'osbMaterial'
+        osbMaterial= typical_materials.MaterialData(name= matName,E= self.getE(angle), nu=0.2, rho=self.rho)
+        retval= super(OSBPanel,self).defElasticShearSection2d(preprocessor,osbMaterial)
+        return retval
+
 
 OSBPanels= dict()
 
