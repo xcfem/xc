@@ -71,7 +71,7 @@ else:
 '''
 
 #Check design strength of stud in tension
-Nnd=stud.getDesignStrengthTension(Abearing,ductility=True)
+Nnd=stud.getDesignStrengthTension(Abearing,ductility=True,loadCombAlt=True)
 Nnd_kips=Nnd/kip2N
 ratio5=abs((Nnd_kips-10.21018)/10.21018)
 '''

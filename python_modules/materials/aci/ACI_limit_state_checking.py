@@ -731,16 +731,18 @@ class AnchorBolt(object):
         Np=8*Abearing*(-self.concrete.fck)
         Npn=psi_c_P*Np
         return Npn
+
         
-    def getDesignStrengthTension(self,Abearing,ductility,cracking=True,reinfBarDiam=0):
+    def getDesignStrengthTension(self,Abearing,ductility,loadCombAlt=False,cracking=True,reinfBarDiam=0):
         '''Return the design strength of a single anchor in tension. 
         It must be greater than the factored applied load.
-        Strength reduction factors are based on art. D.4.5
-        assuming that load combinations used are those referenced
-        in Appendix C of ACI-318 code
+        Strength reduction factors are based on art. D.4.5.
 
         :param Abearing: bearing area (see tables 4, 5, 6 Appendix A) 
         :param ductility: True if ductile steel element, False if brittle steel element
+        :param loadCombAlt: True if load combinations of Appendix C of ACI-31 are used,
+                            False if load combinations of art. 9.2. of ACI-31 are used
+                            (defaults to False)
         :param cracking: True for anchors located in a region of a concrete 
                member where analysis indicates cracking. (Defaults to True)
         :param reinfBarDiam: Diameter of the inforcement bars (Defaults to
@@ -749,14 +751,13 @@ class AnchorBolt(object):
         Nsa=self.getNominalSteelStrengthTension()
         Ncb=self.getConcrBreakoutStrengthTension(cracking)
         Npn=self.getPulloutStrengthTension(Abearing,cracking)
-        if ductility:
-            fi1=0.8
+        if loadCombAlt:
+            fi1=(0.8 if ductility else 0.70)
+            fi2=(0.85 if reinfBarDiam>0 else 0.75)
         else:
-            fi1=0.7
-        if reinfBarDiam>0:
-            fi2=0.85
-        else:
-            fi2=0.75
+            fi1=(0.75 if ductility else 0.65)
+            fi2=(0.75 if reinfBarDiam>0 else 0.70)
+            if not self.cast_in: fi2=0.65
         Nnd=min(fi1*Nsa,fi2*Ncb,fi2*Npn)
         return Nnd
 
@@ -892,14 +893,15 @@ class AnchorBolt(object):
         Vcp=kcp*Ncb
         return Vcp
     
-    def getDesignStrengthShear(self,ductility,sleeveTrhShearPlane=True,ShForcPerp=True,cracking=True,reinfBarDiam=0):
+    def getDesignStrengthShear(self,ductility,loadCombAlt=False,sleeveTrhShearPlane=True,ShForcPerp=True,cracking=True,reinfBarDiam=0):
         '''Return the design strength of a single anchor in shear. 
         It must be greater than the factored applied load.
-        Strength reduction factors are based on art. D.4.5
-        assuming that load combinations used are those referenced
-        in Appendix C of ACI-318 code
+        Strength reduction factors are based on art. D.4.5.
 
         :param ductility: True if ductile steel element, False if brittle steel element
+         :param loadCombAlt: True if load combinations of Appendix C of ACI-31 are used,
+                            False if load combinations of art. 9.2. of ACI-31 are used
+                            (defaults to False)
         :param sleeveTrhShearPlane: True if sleeves extend through the shear 
                plane (defaults to True)
          :param ShForcPerp: True for shear force perpendicular to the edge, 
@@ -912,14 +914,12 @@ class AnchorBolt(object):
         Vsa=self.getSteelStrengthShear(sleeveTrhShearPlane)
         Vcb=self.getConcrBreakoutStrengthShear(ShForcPerp,cracking,reinfBarDiam)
         Vcp=self.getPryoutStrengthShear(cracking)
-        if ductility:
-            fi1=0.75
+        if loadCombAlt:
+            fi1=(0.75 if ductility else 0.65)
+            fi2=(0.85 if reinfBarDiam>0 else 0.75)
         else:
-            fi1=0.65
-        if reinfBarDiam>0:
-            fi2=0.85
-        else:
-            fi2=0.75
+            fi1=(0.65 if ductility else 0.60)
+            fi2=(0.75 if reinfBarDiam>0 else 0.70)
         Vnd=min(0.75*Vsa,0.75*Vcb,0.75*Vcp)
         return Vnd
 
