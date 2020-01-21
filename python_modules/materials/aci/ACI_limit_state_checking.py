@@ -878,4 +878,41 @@ class AnchorBolt(object):
         Vcp=kcp*Ncb
         return Vcp
     
+    def getDesignStrengthShear(self,sleeveTrhShearPlane=True,ShForcPerp=True,cracking=True,reinfBarDiam=0):
+        '''Return the design strength of a single anchor in shear. 
+        It must be greater than the factored applied load.
+
+        :param sleeveTrhShearPlane: True if sleeves extend through the shear 
+               plane (defaults to True)
+         :param ShForcPerp: True for shear force perpendicular to the edge, 
+                            False for shear force parallel to the edge
+        :param cracking: True for anchors located in a region of a concrete 
+               member where analysis indicates cracking. (Defaults to True)
+        :param reinfBarDiam: Diameter of the inforcement bars (Defaults to
+               0 == no reinforcement)
+         '''
+        Vsa=self.getSteelStrengthShear(sleeveTrhShearPlane)
+        Vcb=self.getConcrBreakoutStrengthShear(ShForcPerp,cracking,reinfBarDiam)
+        Vcp=self.getPryoutStrengthShear(cracking)
+        Vnd=min(0.75*Vsa,0.75*Vcb,0.75*Vcp)
+        return Vnd
+
+    def getStrengthDuctilityShear(self,ShForcPerp=True,cracking=True,reinfBarDiam=0):
+        '''Return the design strength of a single anchor in shear
+        to check ductility 
+        (if greater than the factored applied load -> ductility OK.
+
+        :param ShForcPerp: True for shear force perpendicular to the edge, 
+                            False for shear force parallel to the edge
+        :param cracking: True for anchors located in a region of a concrete 
+               member where analysis indicates cracking. (Defaults to True)
+        :param reinfBarDiam: Diameter of the inforcement bars (Defaults to
+               0 == no reinforcement)
+        '''
+        Vcb=self.getConcrBreakoutStrengthShear(ShForcPerp,cracking,reinfBarDiam)
+        Vcp=self.getPryoutStrengthShear(cracking)
+        Vdd=min(0.85*Vcb,0.85*Vcp)
+        return Vdd
         
+
+ 
