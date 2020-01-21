@@ -10,6 +10,12 @@ import math
 from materials.aci import ACI_materials
 from materials.aci import ACI_limit_state_checking
 
+__author__= "Ana Ortega (AO_O)"
+__copyright__= "Copyright 2019, AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "ana.ortega.ort@gmail.com"
+
 #units
 in2m= 0.0254
 m2in=1/in2m
