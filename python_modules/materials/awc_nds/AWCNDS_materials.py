@@ -363,11 +363,12 @@ class Member(object):
                     of member).
         '''
         val393= (fc/Fc_adj)**2 #Equation 3-9-3
-        FcE1= self.getFcE1(E_adj)
+        FcE1= self.getFcE1(E_adj) #Critical buckling design values.
         FcE2= self.getFcE2(E_adj)
         FbE= self.getFbE(E_adj)
-        val393+= fb1/(Fb1_adj*(1-min(fc/FcE1,1.0)))
-        val393+= fb2/(Fb2_adj*(1-min(fc/FcE2,1.0)-min(fb1/FbE,1.0)**2))
+        almostOne= 1-1e-15
+        val393+= fb1/(Fb1_adj*(1-min(fc/FcE1,almostOne)))
+        val393+= fb2/(Fb2_adj*(1-min(fc/FcE2,almostOne)-min(fb1/FbE,almostOne)**2))
         val394= fc/FcE2+(fb1/FbE)**2 #Equation 3-9-4
         return max(val393,val394)
 
