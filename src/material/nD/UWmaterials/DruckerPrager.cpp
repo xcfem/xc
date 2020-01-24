@@ -416,7 +416,7 @@ void XC::DruckerPrager:: plastic_integrator( )
 
 		// check trial state
 		int count = 1;
-		if ((f1<=fTOL) && (f2<=fTOL) || (mElastFlag < 2)) {
+		if (((f1<=fTOL) && (f2<=fTOL)) || (mElastFlag < 2)) {
 
 			okay = true;
 			// trial state = elastic state - don't need to do any updates.
