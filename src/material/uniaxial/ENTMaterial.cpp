@@ -162,18 +162,21 @@ int XC::ENTMaterial::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::ENTMaterial::Print(std::ostream &s, int flag)
+void XC::ENTMaterial::Print(std::ostream &os, int flag)
   {
-    s << "ENTMaterial, tag: " << this->getTag() << std::endl;
-    s << "  E: " << E << std::endl;
+    os << getClassName() << ", tag: " << this->getTag() << std::endl
+       << "  E: " << E << std::endl;
   }
 
 int XC::ENTMaterial::setParameter(const std::vector<std::string > &argv, Parameter &param)
   {
+    int retval= -1;
     if(argv[0] == "E")
-      return param.addObject(1, this);
-    else
-      return -1;
+      {
+        param.setValue(E);
+        retval= param.addObject(1, this);
+      }
+    return retval;
   }
 
 int XC::ENTMaterial::updateParameter(int parameterID, Information &info)
