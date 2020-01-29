@@ -53,8 +53,6 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
-#include <domain/mesh/element/utils/Information.h>
-#include "domain/component/Parameter.h"
 
 XC::HingeEndpointBeamIntegration::HingeEndpointBeamIntegration(double lpi,double lpj)
   : PlasticLengthsBeamIntegration(BEAM_INTEGRATION_TAG_HingeEndpoint,lpi,lpj) {}
@@ -95,48 +93,7 @@ void XC::HingeEndpointBeamIntegration::getSectionWeights(int numSections, double
 XC::BeamIntegration *XC::HingeEndpointBeamIntegration::getCopy(void) const
   { return new HingeEndpointBeamIntegration(*this); }
 
-int XC::HingeEndpointBeamIntegration::setParameter(const std::vector<std::string> &argv, Parameter &param)
-  {
-    if(argv[0] == "lpI")
-      return param.addObject(1, this);
-    else if(argv[0] == "lpJ")
-      return param.addObject(2, this);
-    else if(argv[0] == "lp")
-      return param.addObject(3, this);
-    else 
-      return -1;
-  }
-
-int
-XC::HingeEndpointBeamIntegration::updateParameter(int parameterID,
-                                              Information &info)
-{
-  switch (parameterID) {
-  case 1:
-    lpI = info.theDouble;
-    return 0;
-  case 2:
-    lpJ = info.theDouble;
-    return 0;
-  case 3:
-    lpI = lpJ = info.theDouble;
-    return 0;
-  default:
-    return -1;
-  }
-}
-
-int
-XC::HingeEndpointBeamIntegration::activateParameter(int paramID)
-{
-  parameterID = paramID;
-
-  // For Terje to do
-  return 0;
-}
-
-void
-XC::HingeEndpointBeamIntegration::Print(std::ostream &s, int flag)
+void XC::HingeEndpointBeamIntegration::Print(std::ostream &s, int flag)
 {
   s << "HingeEndpoint" << std::endl;
   s << " lpI = " << lpI;
@@ -145,9 +102,7 @@ XC::HingeEndpointBeamIntegration::Print(std::ostream &s, int flag)
   return;
 }
 
-void 
-XC::HingeEndpointBeamIntegration::getLocationsDeriv(int numSections, double L,
-                                                double dLdh, double *dptsdh)
+void XC::HingeEndpointBeamIntegration::getLocationsDeriv(int numSections, double L, double dLdh, double *dptsdh)
 {
   double oneOverL = 1.0/L;
   //double halfOneOverL = 0.5*oneOverL;
@@ -182,9 +137,7 @@ XC::HingeEndpointBeamIntegration::getLocationsDeriv(int numSections, double L,
   return;
 }
 
-void
-XC::HingeEndpointBeamIntegration::getWeightsDeriv(int numSections, double L,
-                                              double dLdh, double *dwtsdh)
+void XC::HingeEndpointBeamIntegration::getWeightsDeriv(int numSections, double L, double dLdh, double *dwtsdh)
 {
   double oneOverL = 1.0/L;
 

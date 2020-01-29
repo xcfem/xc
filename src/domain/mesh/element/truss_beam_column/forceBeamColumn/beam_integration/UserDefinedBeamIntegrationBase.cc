@@ -49,8 +49,9 @@
 // $Source: /usr/local/cvs/OpenSees/SRC/element/forceBeamColumn/UserDefinedBeamIntegrationBase.cpp,v $
 
 #include "UserDefinedBeamIntegrationBase.h"
-
 #include <utility/matrix/Vector.h>
+#include <domain/mesh/element/utils/Information.h>
+#include "domain/component/Parameter.h"
 
 XC::UserDefinedBeamIntegrationBase::UserDefinedBeamIntegrationBase(int classTag,
 						       const Vector &pt,
@@ -129,6 +130,50 @@ int XC::UserDefinedBeamIntegrationBase::sendSelf(CommParameters &cp)
 int XC::UserDefinedBeamIntegrationBase::recvSelf(const CommParameters &cp)
   { return -1; }
 
+//! @brief Assigns to the param the value identified by the string in argv.
+int XC::UserDefinedBeamIntegrationBase::setParameter(const std::vector<std::string> &argv, Parameter &param)
+  {
+    int retval= -1;
+    const size_t sz= argv.size();
+    if(sz>2)
+      {
+	const int point= atoi(argv[1]);
+	if(point>=1)
+	  {
+  	    const int Np= wts.Size();
+	    if(argv[0]=="pt")
+	      {
+	        param.setValue(pts(point-1));
+	        retval= param.addObject(point, this);
+	      }
+	    else if((argv[0]=="wt") && (point <= Np))
+	      {
+	        param.setValue(wts(point-1));
+	        retval= param.addObject(10+point, this);
+	      }
+          }
+      }
+    return retval;
+  }
+
+//! @brief Update the value of the parameter.
+int XC::UserDefinedBeamIntegrationBase::updateParameter(int parameterID,Information &info)
+  {
+    if(parameterID <= 10)
+      { // pt
+        pts(parameterID-1) = info.theDouble;
+        return 0;
+      }
+    else if(parameterID <= 20)
+      { // wt
+        wts(parameterID-10-1) = info.theDouble;
+        return 0;
+      }
+    else
+      return -1;
+  }
+
+//! @brief Print stuff.
 void XC::UserDefinedBeamIntegrationBase::Print(std::ostream &s, int flag)
   {
     s << " Points: " << pts;

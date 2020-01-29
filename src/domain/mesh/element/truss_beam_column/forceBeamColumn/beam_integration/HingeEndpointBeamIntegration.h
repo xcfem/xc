@@ -58,10 +58,8 @@ namespace XC {
 //! @ingroup BeamInteg
 //
 //! @brief ??.
-class HingeEndpointBeamIntegration : public PlasticLengthsBeamIntegration
+class HingeEndpointBeamIntegration: public PlasticLengthsBeamIntegration
   {
-  private:
-    int parameterID;
   public:
     HingeEndpointBeamIntegration(double lpI, double lpJ);
     HingeEndpointBeamIntegration(void);
@@ -70,10 +68,6 @@ class HingeEndpointBeamIntegration : public PlasticLengthsBeamIntegration
     void getSectionWeights(int numSections, double L, double *wt) const;
   
     BeamIntegration *getCopy(void) const;
-
-    int setParameter(const std::vector<std::string> &argv, Parameter &param);
-    int updateParameter(int parameterID, Information &info);
-    int activateParameter(int parameterID);
 
     void Print(std::ostream &s, int flag = 0);
 

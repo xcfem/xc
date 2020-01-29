@@ -62,8 +62,6 @@ class ElementalLoad;
 //! @brief Radau integration.
 class HingeRadauTwoBeamIntegration: public PlasticLengthsBeamIntegration
   {
-  private:
-    int parameterID;
   public:
     HingeRadauTwoBeamIntegration(double lpI, double lpJ);
     HingeRadauTwoBeamIntegration(void);
@@ -72,10 +70,6 @@ class HingeRadauTwoBeamIntegration: public PlasticLengthsBeamIntegration
     void getSectionWeights(int numSections, double L, double *wt) const;
   
     BeamIntegration *getCopy(void) const;
-
-    int setParameter(const std::vector<std::string> &argv, Parameter &param);
-    int updateParameter(int parameterID, Information &info);
-    int activateParameter(int parameterID);
 
     void Print(std::ostream &s, int flag = 0);
 

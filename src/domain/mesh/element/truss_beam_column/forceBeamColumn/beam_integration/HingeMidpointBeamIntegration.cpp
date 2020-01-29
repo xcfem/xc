@@ -53,8 +53,6 @@
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
-#include <domain/mesh/element/utils/Information.h>
-#include "domain/component/Parameter.h"
 
 XC::HingeMidpointBeamIntegration::HingeMidpointBeamIntegration(double lpi,double lpj)
   : PlasticLengthsBeamIntegration(BEAM_INTEGRATION_TAG_HingeMidpoint,lpi,lpj) {}
@@ -97,45 +95,8 @@ XC::BeamIntegration *XC::HingeMidpointBeamIntegration::getCopy(void) const
 
 
 
-int XC::HingeMidpointBeamIntegration::setParameter(const std::vector<std::string> &argv, Parameter &param)
-  {
-    if(argv[0] == "lpI")
-      return param.addObject(1, this);
-    else if(argv[0] == "lpJ")
-      return param.addObject(2, this);
-    else if(argv[0] == "lp")
-      return param.addObject(3, this);
-    else 
-      return -1;
-  }
 
-int XC::HingeMidpointBeamIntegration::updateParameter(int parameterID,Information &info)
-{
-  switch (parameterID) {
-  case 1:
-    lpI = info.theDouble;
-    return 0;
-  case 2:
-    lpJ = info.theDouble;
-    return 0;
-  case 3:
-    lpI = lpJ = info.theDouble;
-    return 0;
-  default:
-    return -1;
-  }
-}
-
-int XC::HingeMidpointBeamIntegration::activateParameter(int paramID)
-{
-  parameterID = paramID;
-
-  // For Terje to do
-  return 0;
-}
-
-void
-XC::HingeMidpointBeamIntegration::Print(std::ostream &s, int flag)
+void XC::HingeMidpointBeamIntegration::Print(std::ostream &s, int flag)
 {
   s << "HingeMidpoint" << std::endl;
   s << " lpI = " << lpI;

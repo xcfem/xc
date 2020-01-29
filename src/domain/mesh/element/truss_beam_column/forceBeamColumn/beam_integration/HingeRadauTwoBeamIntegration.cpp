@@ -52,8 +52,6 @@
 
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
-#include <domain/mesh/element/utils/Information.h>
-#include "domain/component/Parameter.h"
 
 XC::HingeRadauTwoBeamIntegration::HingeRadauTwoBeamIntegration(double lpi,double lpj)
   : PlasticLengthsBeamIntegration(BEAM_INTEGRATION_TAG_HingeRadauTwo,lpi,lpj) {}
@@ -98,51 +96,14 @@ void XC::HingeRadauTwoBeamIntegration::getSectionWeights(int numSections, double
 XC::BeamIntegration *XC::HingeRadauTwoBeamIntegration::getCopy(void) const
   { return new HingeRadauTwoBeamIntegration(*this); }
 
-int XC::HingeRadauTwoBeamIntegration::setParameter(const std::vector<std::string> &argv, Parameter &param)
-  {
-    if(argv[0] == "lpI")
-      return param.addObject(1, this);
-    else if(argv[0] == "lpJ")
-      return param.addObject(2, this);
-    else if(argv[0] == "lp")
-      return param.addObject(3, this);
-    else 
-      return -1;
-  }
-
-int XC::HingeRadauTwoBeamIntegration::updateParameter(int parameterID, Information &info)
-{
-  switch (parameterID) {
-  case 1:
-    lpI = info.theDouble;
-    return 0;
-  case 2:
-    lpJ = info.theDouble;
-    return 0;
-  case 3:
-    lpI = lpJ = info.theDouble;
-    return 0;
-  default:
-    return -1;
-  }
-}
-
-int XC::HingeRadauTwoBeamIntegration::activateParameter(int paramID)
-  {
-    parameterID = paramID;
-
-    // For Terje to do
-    return 0;
-  }
-
 void XC::HingeRadauTwoBeamIntegration::Print(std::ostream &s, int flag)
-{
-  s << "HingeRadauTwo" << std::endl;
-  s << " lpI = " << lpI;
-  s << " lpJ = " << lpJ << std::endl;
+  {
+    s << "HingeRadauTwo" << std::endl;
+    s << " lpI = " << lpI;
+    s << " lpJ = " << lpJ << std::endl;
 
-  return;
-}
+    return;
+  }
 
 void XC::HingeRadauTwoBeamIntegration::getLocationsDeriv(int numSections,double L, double dLdh,double *dptsdh)
 {

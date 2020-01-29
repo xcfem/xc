@@ -74,21 +74,20 @@ void XC::DistHingeIntegration::copy(const BeamIntegration *bi)
 
 
 XC::DistHingeIntegration::DistHingeIntegration(double lpi,double lpj,const BeamIntegration &bi)
-  : PlasticLengthsBeamIntegration(BEAM_INTEGRATION_TAG_HingeMidpoint,lpi,lpj), beamInt(nullptr), parameterID(0)
+  : PlasticLengthsBeamIntegration(BEAM_INTEGRATION_TAG_HingeMidpoint,lpi,lpj), beamInt(nullptr)
   { copy(&bi); }
 
 XC::DistHingeIntegration::DistHingeIntegration(void)
-  : PlasticLengthsBeamIntegration(BEAM_INTEGRATION_TAG_HingeMidpoint), beamInt(nullptr), parameterID(0)
+  : PlasticLengthsBeamIntegration(BEAM_INTEGRATION_TAG_HingeMidpoint), beamInt(nullptr)
   {}
 
 XC::DistHingeIntegration::DistHingeIntegration(const DistHingeIntegration &other)
-  : PlasticLengthsBeamIntegration(other), beamInt(nullptr), parameterID(other.parameterID)
+  : PlasticLengthsBeamIntegration(other), beamInt(nullptr)
   { copy(other.beamInt); }
 
 XC::DistHingeIntegration &XC::DistHingeIntegration::operator=(const DistHingeIntegration &other)
   {
     PlasticLengthsBeamIntegration::operator=(other);
-    parameterID= other.parameterID;
     copy(other.beamInt);
     return *this;
   }
@@ -116,12 +115,12 @@ void XC::DistHingeIntegration::getSectionLocations(int numSections, double L,dou
 
 void XC::DistHingeIntegration::getSectionWeights(int numSections, double L,double *wt) const
   {
-    int numPerHinge = numSections/2;
+    const int numPerHinge = numSections/2;
 
     beamInt->getSectionWeights(numPerHinge, L, wt);
 
-    double betaI = lpI/L;
-    double betaJ = lpJ/L;
+    const double betaI = lpI/L;
+    const double betaJ = lpJ/L;
   
     // Map from [0,lpI] to [L-lpJ,L]
     for(int i = 0; i < numPerHinge; i++)
@@ -129,43 +128,18 @@ void XC::DistHingeIntegration::getSectionWeights(int numSections, double L,doubl
         wt[numSections-1-i] = betaJ*wt[i];
         wt[i] *= betaI;
       }
-    std::cerr << "XC::DistHingeIntegration::getSectionWeights -- implementation for interior not yet finished" << std::endl;
+    wt[numSections-2] = 0.5*(1.0-betaI-betaJ);
+    wt[numSections-1] = wt[numSections-2];
+
+    //for (int i = 0; i < numSections; i++) {
+    //  std::cerr << wt[i] << ' ';
+    //}
+    //std::cerr << endln;
   }
 
 XC::BeamIntegration *XC::DistHingeIntegration::getCopy(void) const
   { return new DistHingeIntegration(*this); }
 
-int XC::DistHingeIntegration::setParameter(const std::vector<std::string> &argv, Parameter &param)
-  {
-    if(argv[0] == "lpI")
-      return param.addObject(1, this);
-    else if(argv[0] == "lpJ")
-      return param.addObject(2, this);
-    else 
-      return -1;
-  }
-
-int XC::DistHingeIntegration::updateParameter(int parameterID, Information &info)
-  {
-    switch (parameterID)
-      {
-      case 1:
-        lpI = info.theDouble;
-        return 0;
-      case 2:
-        lpJ = info.theDouble;
-        return 0;
-      default:
-        return -1;
-      }
-  }
-
-int XC::DistHingeIntegration::activateParameter(int paramID)
-  {
-    parameterID = paramID;
-    // For Terje to do
-    return 0;
-  }
 
 void XC::DistHingeIntegration::Print(std::ostream &s, int flag)
   {

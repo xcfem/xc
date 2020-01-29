@@ -60,8 +60,6 @@ namespace XC {
 //! @brief ??.
 class HingeMidpointBeamIntegration: public PlasticLengthsBeamIntegration
   {
-  private:
-   int parameterID;
   public:
     HingeMidpointBeamIntegration(double lpI, double lpJ);
     HingeMidpointBeamIntegration();
@@ -70,10 +68,6 @@ class HingeMidpointBeamIntegration: public PlasticLengthsBeamIntegration
     void getSectionWeights(int numSections, double L, double *wt) const;
   
     BeamIntegration *getCopy(void) const;
-
-    int setParameter(const std::vector<std::string> &argv, Parameter &param);
-    int updateParameter(int parameterID, Information &info);
-    int activateParameter(int parameterID);
 
     void Print(std::ostream &s, int flag = 0);
 

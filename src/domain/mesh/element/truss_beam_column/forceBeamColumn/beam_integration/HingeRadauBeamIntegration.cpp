@@ -103,7 +103,6 @@ XC::BeamIntegration *XC::HingeRadauBeamIntegration::getCopy(void) const
 int XC::HingeRadauBeamIntegration::sendData(CommParameters &cp)
   {
     int res= PlasticLengthsBeamIntegration::sendData(cp);
-    res+= cp.sendInt(parameterID,getDbTagData(),CommMetaData(2));
     return res;
   }
 
@@ -111,7 +110,6 @@ int XC::HingeRadauBeamIntegration::sendData(CommParameters &cp)
 int XC::HingeRadauBeamIntegration::recvData(const CommParameters &cp)
   {
     int res= PlasticLengthsBeamIntegration::recvData(cp);
-    res+= cp.receiveInt(parameterID,getDbTagData(),CommMetaData(2));
     return res;
   }
 
@@ -146,43 +144,6 @@ int XC::HingeRadauBeamIntegration::recvSelf(const CommParameters &cp)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }
     return res;
-  }
-
-int XC::HingeRadauBeamIntegration::setParameter(const std::vector<std::string> &argv, Parameter &param)
-  {
-    if(argv[0] == "lpI")
-      return param.addObject(1, this);
-    else if(argv[0] == "lpJ")
-      return param.addObject(2, this);
-    else if(argv[0] == "lp")
-      return param.addObject(3, this);
-    else 
-      return -1;
-  }
-
-int XC::HingeRadauBeamIntegration::updateParameter(int parameterID,Information &info)
-{
-  switch (parameterID) {
-  case 1:
-    lpI = info.theDouble;
-    return 0;
-  case 2:
-    lpJ = info.theDouble;
-    return 0;
-  case 3:
-    lpI = lpJ = info.theDouble;
-    return 0;
-  default:
-    return -1;
-  }
-}
-
-int XC::HingeRadauBeamIntegration::activateParameter(int paramID)
-  {
-    parameterID = paramID;
-
-    // For Terje to do
-    return 0;
   }
 
 void XC::HingeRadauBeamIntegration::Print(std::ostream &s, int flag)

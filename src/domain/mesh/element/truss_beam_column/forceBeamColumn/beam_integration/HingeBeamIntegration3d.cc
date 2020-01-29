@@ -50,16 +50,11 @@ void XC::HingeBeamIntegration3d::addElasticDeformations(ElementalLoad *theLoad,d
 
 int XC::HingeBeamIntegration3d::setParameter(const std::vector<std::string> &argv, Parameter &param)
   {
-    std::cerr << "Se pasa a null pointer." << std::endl;
-    int tmp= ctes_scc.setParameter(argv,param, nullptr);
-    if(tmp > 0)
-      return tmp;
-    else if(argv[0] == "lpI")
-      return param.addObject(4, this);
-    else if(argv[0] == "lpJ")
-      return param.addObject(5, this);
-    else 
-      return -1;
+    std::cerr << "Passing null pointer." << std::endl;
+    int retval= ctes_scc.setParameter(argv,param, nullptr);
+    if(retval <= 0)
+      retval= PlasticLengthsBeamIntegration::setParameter(argv, param);
+    return retval;
   }
 
 int XC::HingeBeamIntegration3d::updateParameter(int parameterID, Information &info)
@@ -67,17 +62,7 @@ int XC::HingeBeamIntegration3d::updateParameter(int parameterID, Information &in
     if(parameterID<=6)
       return ctes_scc.updateParameter(parameterID,info);
     else
-     switch (parameterID)
-        {
-        case 7:
-          lpI = info.theDouble;
-          return 0;
-        case 8:
-          lpJ = info.theDouble;
-          return 0;
-        default:
-          return -1;
-        }
+      return PlasticLengthsBeamIntegration::updateParameter(parameterID-6, info);
   }
 
 int XC::HingeBeamIntegration3d::activateParameter(int parameterID)

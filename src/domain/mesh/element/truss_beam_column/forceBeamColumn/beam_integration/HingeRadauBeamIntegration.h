@@ -60,8 +60,6 @@ namespace XC {
 //! @brief Base class for Radau integration on beam with hinges.
 class HingeRadauBeamIntegration: public PlasticLengthsBeamIntegration
   {
-  private:
-    int parameterID;
   protected:
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
@@ -76,10 +74,6 @@ class HingeRadauBeamIntegration: public PlasticLengthsBeamIntegration
 
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
-
-    int setParameter(const std::vector<std::string> &argv, Parameter &param);
-    int updateParameter(int parameterID, Information &info);
-    int activateParameter(int parameterID);
 
     void Print(std::ostream &s, int flag = 0);
 

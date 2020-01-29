@@ -63,7 +63,6 @@ class DistHingeIntegration : public PlasticLengthsBeamIntegration
   private:
     BeamIntegration *beamInt;
 
-    int parameterID;
     void free_mem(void);
     void copy(const BeamIntegration *bi);
   public:
@@ -77,10 +76,6 @@ class DistHingeIntegration : public PlasticLengthsBeamIntegration
     void getSectionWeights(int numSections, double L, double *wt) const;
   
     BeamIntegration *getCopy(void) const;
-
-    int setParameter(const std::vector<std::string> &argv, Parameter &param);
-    int updateParameter(int parameterID, Information &info);
-    int activateParameter(int parameterID);
 
     void Print(std::ostream &s, int flag = 0);
 

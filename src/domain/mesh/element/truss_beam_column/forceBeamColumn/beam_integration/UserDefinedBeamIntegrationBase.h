@@ -51,6 +51,9 @@ class UserDefinedBeamIntegrationBase : public BeamIntegration
     
     void getSectionLocations(int nIP, double L, double *xi) const;
     void getSectionWeights(int nIP, double L, double *wt) const;
+    
+    int setParameter(const std::vector<std::string> &argv, Parameter &param);
+    int updateParameter(int parameterID, Information &info);
 
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);

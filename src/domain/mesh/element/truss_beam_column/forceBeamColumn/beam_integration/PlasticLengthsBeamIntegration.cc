@@ -31,18 +31,21 @@
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include "utility/matrix/ID.h"
 #include "utility/actor/actor/MovableVector.h"
+#include <domain/mesh/element/utils/Information.h>
+#include "domain/component/Parameter.h"
 
 XC::PlasticLengthsBeamIntegration::PlasticLengthsBeamIntegration(int classTag,double lpi,double lpj)
-  : BeamIntegration(classTag), lpI(lpi), lpJ(lpj) {}
+  : BeamIntegration(classTag), lpI(lpi), lpJ(lpj), parameterID(0) {}
 
 XC::PlasticLengthsBeamIntegration::PlasticLengthsBeamIntegration(int classTag)
-  : BeamIntegration(classTag), lpI(0.0), lpJ(0.0) {}
+  : BeamIntegration(classTag), lpI(0.0), lpJ(0.0), parameterID(0) {}
 
 
 //! @brief Send object members through the channel being passed as parameter.
 int XC::PlasticLengthsBeamIntegration::sendData(CommParameters &cp)
   {
     int res= cp.sendDoubles(lpI,lpJ,getDbTagData(),CommMetaData(1));
+    res+= cp.sendInt(parameterID,getDbTagData(),CommMetaData(2));
     return res;
   }
 
@@ -50,6 +53,7 @@ int XC::PlasticLengthsBeamIntegration::sendData(CommParameters &cp)
 int XC::PlasticLengthsBeamIntegration::recvData(const CommParameters &cp)
   {
     int res= cp.receiveDoubles(lpI,lpJ,getDbTagData(),CommMetaData(1));
+    res+= cp.receiveInt(parameterID,getDbTagData(),CommMetaData(2));
     return res;
   }
 
@@ -84,6 +88,59 @@ int XC::PlasticLengthsBeamIntegration::recvSelf(const CommParameters &cp)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }
     return res;
+  }
+
+//! @brief Assigns to the param the value identified by the string in argv.
+int XC::PlasticLengthsBeamIntegration::setParameter(const std::vector<std::string> &argv, Parameter &param)
+  {
+    int retval= -1;
+    const size_t sz= argv.size();
+    if(sz>0)
+      {
+	if(argv[0] == "lpI")
+	  {
+	    param.setValue(lpI);
+	    retval= param.addObject(1, this);
+	  }
+	else if(argv[0] == "lpJ")
+	  {
+	    param.setValue(lpJ);
+  	    retval= param.addObject(2, this);
+	  }
+	else if(argv[0] == "lp")
+	  {
+	    param.setValue(lpI);
+	    retval= param.addObject(3, this);
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Update the value of the parameter.
+int XC::PlasticLengthsBeamIntegration::updateParameter(int parameterID,Information &info)
+  {
+    switch (parameterID)
+      {
+      case 1:
+	lpI = info.theDouble;
+	return 0;
+      case 2:
+	lpJ = info.theDouble;
+	return 0;
+      case 3:
+	lpI = lpJ = info.theDouble;
+	return 0;
+      default:
+	return -1;
+    }
+  }
+
+//! @brief Activate parameter.
+int XC::PlasticLengthsBeamIntegration::activateParameter(int paramID)
+  {
+    parameterID = paramID;
+    // For Terje to do
+    return 0;
   }
 
 void XC::PlasticLengthsBeamIntegration::Print(std::ostream &s, int flag)

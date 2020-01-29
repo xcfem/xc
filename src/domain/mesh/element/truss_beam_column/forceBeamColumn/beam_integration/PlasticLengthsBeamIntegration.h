@@ -41,12 +41,17 @@ class PlasticLengthsBeamIntegration: public BeamIntegration
   protected:
     double lpI;
     double lpJ;
+    int parameterID;
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
   public:
     PlasticLengthsBeamIntegration(int classTag,double lpI, double lpJ);
     PlasticLengthsBeamIntegration(int classTag);
 
+    int setParameter(const std::vector<std::string> &argv, Parameter &param);
+    int updateParameter(int parameterID, Information &info);
+    int activateParameter(int parameterID);
+    
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
 
