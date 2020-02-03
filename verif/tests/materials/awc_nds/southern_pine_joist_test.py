@@ -6,6 +6,7 @@
 from __future__ import division
 from __future__ import print_function
 from materials.awc_nds import AWCNDS_materials as mat
+from materials.awc_nds import dimensional_lumber
 from materials.sections import section_properties as sp
 from rough_calculations import ng_simple_beam as sb
 
@@ -23,14 +24,15 @@ span= 16*foot2meter
 designLoad= 77.3*pound2Newton/foot2meter # Design load
 designMoment= designLoad*span**2/8.0
 
-joist= mat.SouthernPineDimensionLumber(name= '2x10',b= 1.5*inch2meter, h= 9.25*inch2meter, grade= 'no_2', sub_grade= '')
+wood= dimensional_lumber.SouthernPineWood(name='SouthernPine', grade= 'no_2', sub_grade= '')
+joist= mat.DimensionLumber(name= '2x10',b= 1.5*inch2meter, h= 9.25*inch2meter, woodMaterial= wood)
 
 S= joist.Wzel() # Section modulus
 I= joist.Iz() # Moment of inertia
 fb= designMoment/S # Bendign stress
 Fb= joist.getFb()
-E= joist.E
-Fv= joist.Fv
+E= joist.wood.E
+Fv= joist.wood.Fv
 
 beam= sb.SimpleBeam(E,I,span)
 delta= beam.getDeflectionUnderUniformLoad(designLoad,beam.l/2.0)

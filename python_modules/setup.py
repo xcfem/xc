@@ -48,5 +48,6 @@ setup(name='XCModules',
       version='0.12.0',
       author='Luis C. Pérez Tato',
       packages=['rough_calculations','solution', 'model', 'model/boundary_cond','model/geometry', 'model/mesh','model/sets','postprocess','import_export','import_export/sciaXML','import_export/sciaXML/xml_basics','import_export/sciaXML/scia_loads','postprocess/config','postprocess/reports','postprocess/elastic_beam_3d','postprocess/quick_inquiry',"actions","actions/basic_loads","actions/quake","actions/earth_pressure","actions/railway_trafic","actions/roadway_trafic","actions/snow","actions/weight","actions/wind","actions/prestress","actions/imposed_strain",'actions/utils','materials',"materials/aci","materials/astm","materials/ec2","materials/ec3","materials/ec5","materials/ceb","materials/ehe","materials/eae","materials/sections","materials/sections/fiber_section","materials/sections/structural_shapes","materials/sia262","materials/sia263","materials/eota","materials/prestressing","materials/awc_nds","materials/tm5_809_3","import_export","misc","postprocess/xcVtk","postprocess/xcVtk/fields","postprocess/xcVtk/diagrams","postprocess/xcVtk/FE_model","postprocess/xcVtk/CAD_model"],
+      package_data={'': ['*.pickle']},
       data_files=[(pth_to_libs, ['extensions/xc.so'])]
      )
