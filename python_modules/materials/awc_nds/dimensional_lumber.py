@@ -58,8 +58,7 @@ class DimensionLumberWood(mat.Wood):
         return self.xc_material
     def getBendingFlatUseFactor(self, b, h):
         ''' Return the flat use factor for the bending design
-            value Fb according to National Design Specification table 4A
-            on page 32.'''
+            value Fb according to National Design Specification table 4A.'''
         retval= 1.0
         if(b>h): # flat use
             f= self.flat_use_interp_3
@@ -69,8 +68,7 @@ class DimensionLumberWood(mat.Wood):
         return retval;
     def getBendingSizeFactor(self, b, h):
         ''' Return the size factor for the bending design
-            value Fb according to National Design Specification table 4A
-            on page 32.'''
+            value Fb according to National Design Specification table 4A.'''
         width= max(b,h)
         thickness= min(b,h)
         retval= 1.0
@@ -90,8 +88,7 @@ class DimensionLumberWood(mat.Wood):
         return retval;
     def getTensionSizeFactor(self, b, h):
         ''' Return the size factor for the tension design
-            value Ft according to National Design Specification table 4A
-            on page 32.'''
+            value Ft according to National Design Specification table 4A.'''
         width= max(b,h)
         thickness= min(b,h)
         retval= 1.0
@@ -109,8 +106,7 @@ class DimensionLumberWood(mat.Wood):
         return retval;
     def getCompressionSizeFactor(self, b, h):
         ''' Return the size factor for the compression design
-            value Ft according to National Design Specification table 4A
-            on page 32.'''
+            value Ft according to National Design Specification table 4A.'''
         width= max(b,h)
         thickness= min(b,h)
         retval= 1.0
@@ -128,8 +124,10 @@ class DimensionLumberWood(mat.Wood):
         return retval;
     def getFbAdj(self, b, h, Cr= 1.0):
         ''' Return the adjusted value of Fb according
-            to National Design Specification table 4A
-            on page 32.'''
+            to National Design Specification table 4A.
+
+        :param Cr: repetitive member factor
+        '''
         C= Cr # Repetitive member factor.
         # Wet service factor
         threshold= 1150.0*mat.psi2Pa/0.85
@@ -140,34 +138,33 @@ class DimensionLumberWood(mat.Wood):
         return C*self.Fb
     def getFtAdj(self, b, h):
         ''' Return the adjusted value of Ft according
-            to National Design Specification table 4A
-            on page 32.'''
+            to National Design Specification table 4A.'''
         C= 1.0 # Wet service factor.
         # No flat use far tension
         C*= self.getTensionSizeFactor(b,h) # Size factor
         return C*self.Ft
     def getFvAdj(self):
         ''' Return the adjusted value of Fv according
-            to National Design Specification table 4A
-            on page 32.'''
+            to National Design Specification table 4A.'''
         C= 1.0
         # Wet service factor
         if(self.wet):
             C*=0.97
         return C*self.Fv
-    def getFc_perpAdj(self):
-        ''' Return the adjusted value of Fv according
-            to National Design Specification table 4A
-            on page 32.'''
-        C= 1.0
+    def getFc_perpAdj(self, Cb= 1.0):
+        ''' Return the adjusted value of Fc_perp according
+            to National Design Specification table 4A.
+
+        :param Cb: bearing area factor
+        '''
+        C= Cb # bearing area factor
         # Wet service factor
         if(self.wet):
             C*=0.67
         return C*self.Fct
     def getFcAdj(self, b, h):
         ''' Return the adjusted value of Fc according
-            to National Design Specification table 4A
-            on page 32.'''
+            to National Design Specification table 4A.'''
         C= 1.0 # Wet service factor.
         # Wet service factor
         threshold= 750.0*mat.psi2Pa/0.8
@@ -177,8 +174,7 @@ class DimensionLumberWood(mat.Wood):
         return C*self.Fc
     def getEAdj(self):
         ''' Return the adjusted value of E according
-            to National Design Specification table 4A
-            on page 32.'''
+            to National Design Specification table 4A.'''
         C= 1.0
         # Wet service factor
         if(self.wet):
@@ -186,8 +182,7 @@ class DimensionLumberWood(mat.Wood):
         return C*self.E
     def getEminAdj(self):
         ''' Return the adjusted value of Emin according
-            to National Design Specification table 4A
-            on page 32.'''
+            to National Design Specification table 4A.'''
         C= 1.0
         # Wet service factor
         if(self.wet):

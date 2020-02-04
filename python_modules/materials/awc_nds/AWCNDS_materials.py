@@ -768,7 +768,10 @@ class DimensionLumber(sp.RectangularSection):
             value Fc.'''
         return self.wood.getCompressionSizeFactor(self.b,self.h)
     def getFbAdj(self, Cr= 1.0):
-        ''' Return the adjusted value of Fb.'''
+        ''' Return the adjusted value of Fb.
+
+        :param Cr: repetitive member factor
+        '''
         return self.wood.getFbAdj(self.b,self.h, Cr)
     def getFtAdj(self):
         ''' Return the adjusted value of Ft.'''
@@ -776,9 +779,12 @@ class DimensionLumber(sp.RectangularSection):
     def getFvAdj(self):
         ''' Return the adjusted value of Fv.'''
         return self.wood.getFvAdj()
-    def getFc_perpAdj(self):
-        ''' Return the adjusted value of Fv.'''
-        return self.wood.getFc_perpAdj()
+    def getFc_perpAdj(self, Cb= 1.0):
+        ''' Return the adjusted value of Fc_perp.
+
+        :param Cb: bearing area factor
+        '''
+        return self.wood.getFc_perpAdj(Cb)
     def getFcAdj(self):
         ''' Return the adjusted value of Fc.'''
         return self.wood.getFcAdj(self.b,self.h)
