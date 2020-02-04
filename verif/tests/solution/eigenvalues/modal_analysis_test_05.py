@@ -71,7 +71,7 @@ for n in nodes:
   n.fix(n.getProp("gdlsCoartados"),xc.Vector([0,0,0]))
 
 # Materials definition
-materiales= preprocessor.getMaterialHandler
+materialHandler= preprocessor.getMaterialHandler
 #scc= typical_materials.defElasticSection2d(preprocessor, "scc",A,E,I)
 
 sccPlBaja= typical_materials.defElasticSection2d(preprocessor, "sccPlBaja",20*Bbaja*Bbaja,Ehorm,20*Ibaja)

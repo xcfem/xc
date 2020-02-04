@@ -59,8 +59,8 @@ for_each_region
   print "num. teselas: ",numCells
 '''
            
-materiales= preprocessor.getMaterialHandler
-rectang= materiales.newMaterial("fiber_section_3d","rectang")
+materialHandler= preprocessor.getMaterialHandler
+rectang= materialHandler.newMaterial("fiber_section_3d","rectang")
 fiberSectionRepr= rectang.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomRectang")
 rectang.setupFibers()

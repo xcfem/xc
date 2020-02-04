@@ -51,8 +51,8 @@ reinforcement.initAngle= 0.0
 reinforcement.finalAngle= 2*math.pi
 reinforcement.radius= concrete.extRad-cover
 
-materiales= preprocessor.getMaterialHandler
-secHA= materiales.newMaterial("fiber_section_3d","secHA")
+materialHandler= preprocessor.getMaterialHandler
+secHA= materialHandler.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("pileGeometry")
 secHA.setupFibers()
@@ -61,7 +61,7 @@ fibras= secHA.getFibers()
 param= xc.InteractionDiagramParameters()
 param.concreteTag= EHE_materials.HA30.matTagD
 param.reinforcementTag= EHE_materials.B500S.matTagD
-diagIntsecHA= materiales.calcInteractionDiagram("secHA",param)
+diagIntsecHA= materialHandler.calcInteractionDiagram("secHA",param)
 
 fc1= diagIntsecHA.getCapacityFactor(geom.Pos3d(1850e3,0,0))
 fc2= diagIntsecHA.getCapacityFactor(geom.Pos3d(-152e3,530e3,0))

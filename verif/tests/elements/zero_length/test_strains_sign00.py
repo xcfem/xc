@@ -79,8 +79,8 @@ fibras= rectang.getFibers()
 
 
 # Torsion and shear responses.
-materiales= preprocessor.getMaterialHandler
-agg= materiales.newMaterial("section_aggregator","sa")
+materialHandler= preprocessor.getMaterialHandler
+agg= materialHandler.newMaterial("section_aggregator","sa")
 agg.setSection("quadFibers")
 agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 

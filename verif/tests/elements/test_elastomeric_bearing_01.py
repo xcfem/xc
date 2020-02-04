@@ -38,7 +38,7 @@ preprocessor=  feProblem.getPreprocessor
 neop= bridge_bearings.ElastomericBearing(G,a,b,e)
 neop.defineMaterials(preprocessor)
 
-materiales= preprocessor.getMaterialHandler
+materialHandler= preprocessor.getMaterialHandler
 KX= neop.getMaterial(0).E
 KY= neop.getMaterial(1).E
 KZ= neop.getMaterial(2).E

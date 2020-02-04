@@ -61,8 +61,8 @@ fiberSectionRepr.setGeomNamed("geomRectang")
 rectang.setupFibers()
 extractFiberSectionProperties(rectang,scc10x20)
 
-materiales= preprocessor.getMaterialHandler
-agg= materiales.newMaterial("section_aggregator","sa")
+materialHandler= preprocessor.getMaterialHandler
+agg= materialHandler.newMaterial("section_aggregator","sa")
 agg.setSection("rectang")
 agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 

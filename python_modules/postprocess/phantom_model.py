@@ -120,7 +120,7 @@ class PhantomModel(object):
         self.modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
         elements= self.preprocessor.getElementHandler
         constraints= self.preprocessor.getBoundaryCondHandler
-        # Definimos materiales
+        # Define materials
         fkSection= sccFICT.defElasticShearSection3d(self.preprocessor,matSccFICT) # The problem is isostatic, so the section is not a matter
         elements.dimElem= 1
         self.tagsNodesToLoad= defaultdict(list)

@@ -19,8 +19,8 @@ FCs= []
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 # Define materials
-materiales= preprocessor.getMaterialHandler
-diagInteg= materiales.newInteractionDiagram("diagInteg")
+materialHandler= preprocessor.getMaterialHandler
+diagInteg= materialHandler.newInteractionDiagram("diagInteg")
 diagInteg.readFrom("/tmp/interaction_diagram_test_02.dat")
 
 FCs.append(diagInteg.getCapacityFactor(geom.Pos3d(2185.5e3,0,0)))

@@ -16,8 +16,8 @@ __email__= "l.pereztato@gmail.com"
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
-materiales= preprocessor.getMaterialHandler
-diagInteg= materiales.newInteractionDiagram("diagInteg")
+materialHandler= preprocessor.getMaterialHandler
+diagInteg= materialHandler.newInteractionDiagram("diagInteg")
 diagInteg.readFrom("/tmp/interaction_diagram_test_01.dat")
 
 ratio1= diagInteg.getCapacityFactor(geom.Pos3d(352877,0,0))-1

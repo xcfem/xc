@@ -37,8 +37,8 @@ if(not pth):
 #print "pth= ", pth
 execfile(pth+"/prestressed_concrete_section_02.py")
 
-materiales= preprocessor.getMaterialHandler
-secHP= materiales.newMaterial("fiber_section_3d","secHP")
+materialHandler= preprocessor.getMaterialHandler
+secHP= materialHandler.newMaterial("fiber_section_3d","secHP")
 fiberSectionRepr= secHP.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("prestressedConcretSectionGeom02")
 secHP.setupFibers()

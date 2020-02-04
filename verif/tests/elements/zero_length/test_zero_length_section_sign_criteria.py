@@ -69,13 +69,13 @@ elast.nDivIJ= nDivIJ
 elast.nDivJK= nDivJK
 elast.pMin= geom.Pos2d(y0-y1,z0-z1)
 elast.pMax= geom.Pos2d(y0+y1,z0+z1)
-materiales= preprocessor.getMaterialHandler
-quadFibers= materiales.newMaterial("fiber_section_3d","quadFibers")
+materialHandler= preprocessor.getMaterialHandler
+quadFibers= materialHandler.newMaterial("fiber_section_3d","quadFibers")
 fiberSectionRepr= quadFibers.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("testQuadRegion")
 quadFibers.setupFibers()
 
-sa= materiales.newMaterial("section_aggregator","sa")
+sa= materialHandler.newMaterial("section_aggregator","sa")
 sa.setSection("quadFibers")
 sa.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
 

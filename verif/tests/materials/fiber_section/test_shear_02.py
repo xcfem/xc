@@ -47,7 +47,7 @@ numRamas= 4
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 # Materials definition
-materiales= preprocessor.getMaterialHandler
+materialHandler= preprocessor.getMaterialHandler
 
 # Materials definition
 concr= EHE_materials.HA30
@@ -83,7 +83,7 @@ reinforcementSup.barArea= areaBarra
 reinforcementSup.p1= geom.Pos2d(cover-width/2.0,depth/2.0-cover) # top layer.
 reinforcementSup.p2= geom.Pos2d(width/2.0-cover,depth/2.0-cover)
 
-secHA= materiales.newMaterial("fiberSectionShear3d","secHA")
+secHA= materialHandler.newMaterial("fiberSectionShear3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomSecHA")
 secHA.setupFibers()

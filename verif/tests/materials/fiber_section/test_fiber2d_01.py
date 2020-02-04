@@ -46,8 +46,8 @@ TK21= 0.0 ; TEIy= 0.0
 
 elast0= typical_materials.defElasticMaterial(preprocessor, "elast0",Es)
 # Sections
-materiales= preprocessor.getMaterialHandler
-fiberSectionTest= materiales.newMaterial("fiber_section_2d","fiberSectionTest")
+materialHandler= preprocessor.getMaterialHandler
+fiberSectionTest= materialHandler.newMaterial("fiber_section_2d","fiberSectionTest")
 fiber= fiberSectionTest.addFiber("elast0",Area,xc.Vector([yF]))
 
 A= fiberSectionTest.getArea()

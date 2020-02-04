@@ -23,7 +23,7 @@ prep= prueba.getPreprocessor
 nodos= prep.getNodeHandler
 
 # Problem type
-predefined_spaces.gdls_resist_materiales3D(nodos)
+predefined_spaces.gdls_resist_materials3D(nodos)
 nodos.newNodeIDXYZ(1,0,0,0)
 nodos.newNodeIDXYZ(2,1,0,0)
 nodos.newNodeIDXYZ(3,1,1,0)

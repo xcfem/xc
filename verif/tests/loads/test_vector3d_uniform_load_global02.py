@@ -60,14 +60,14 @@ pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
 execfile(pth+"/../aux/testQuadRegion.py")
-materiales= preprocessor.getMaterialHandler
-quadFibers= materiales.newMaterial("fiber_section_3d","quadFibers")
+materialHandler= preprocessor.getMaterialHandler
+quadFibers= materialHandler.newMaterial("fiber_section_3d","quadFibers")
 fiberSectionRepr= quadFibers.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("testQuadRegion")
 quadFibers.setupFibers()
 A= quadFibers.getFibers().getArea(1.0)
 
-agg= materiales.newMaterial("section_aggregator","agg")
+agg= materialHandler.newMaterial("section_aggregator","agg")
 agg.setSection("quadFibers")
 agg.setAdditions(["T","Vy","Vz"],["respT","respVy","respVz"])
  # Torsion and shear responses.

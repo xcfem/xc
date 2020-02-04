@@ -18,7 +18,7 @@ prep= prueba.getPreprocessor
 nodos= prep.getNodeHandler
 
 # Problem type
-predefined_spaces.gdls_resist_materiales3D(nodos)
+predefined_spaces.gdls_resist_materials3D(nodos)
 delta= 10.1
 nodos.newNodeIDXYZ(1,0+delta,0+delta,0)
 nodos.newNodeIDXYZ(2,1+delta,0+delta,0)

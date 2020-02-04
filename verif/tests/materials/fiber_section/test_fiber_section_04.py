@@ -89,8 +89,8 @@ reinforcementSup.barArea= areaFi16
 reinforcementSup.p1= geom.Pos2d(depth/2-cover,width/2-cover) # top layer.
 reinforcementSup.p2= geom.Pos2d(depth/2-cover,cover-width/2)
 
-materiales= preprocessor.getMaterialHandler
-secHA= materiales.newMaterial("fiber_section_3d","secHA")
+materialHandler= preprocessor.getMaterialHandler
+secHA= materialHandler.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomSecHA")
 secHA.setupFibers()

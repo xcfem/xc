@@ -36,15 +36,15 @@ def getDiagIntSection2(mdlr):
   topReinforcement.barArea = areaFi12
   topReinforcement.p1 = geom.Pos2d(-ancho / 2 + recpos, canto / 2 - recpos)
   topReinforcement.p2 = geom.Pos2d(ancho / 2 - recpos, canto / 2 - recpos)
-  materiales = mdlr.getMaterialHandler
-  secHA1 = materiales.newMaterial('fiber_section_3d', 'secHA1')
+  materialHandler = mdlr.getMaterialHandler
+  secHA1 = materialHandler.newMaterial('fiber_section_3d', 'secHA1')
   fiberSectionRepr = secHA1.getFiberSectionRepr()
   fiberSectionRepr.setGeomNamed('geomSecHA1')
   secHA1.setupFibers()
   param = xc.InteractionDiagramParameters()
   param.concreteTag = EHE_materials.HA30.tagDiagD
   param.reinforcementTag = EHE_materials.B500S.tagDiagD
-  diagIntSecHA1 = materiales.calcInteractionDiagram('secHA1', param)
+  diagIntSecHA1 = materialHandler.calcInteractionDiagram('secHA1', param)
   return diagIntSecHA1
 
 
@@ -71,14 +71,14 @@ def getDiagIntSection1(mdlr):
   topReinforcement.barArea = areaFi20
   topReinforcement.p1 = geom.Pos2d(-ancho / 2 + recpos, canto / 2 - recpos)
   topReinforcement.p2 = geom.Pos2d(ancho / 2 - recpos, canto / 2 - recpos)
-  materiales = mdlr.getMaterialHandler
-  secHA2 = materiales.newMaterial('fiber_section_3d', 'secHA2')
+  materialHandler = mdlr.getMaterialHandler
+  secHA2 = materialHandler.newMaterial('fiber_section_3d', 'secHA2')
   fiberSectionRepr = secHA2.getFiberSectionRepr()
   fiberSectionRepr.setGeomNamed('geomSecHA2')
   secHA2.setupFibers()
   param = xc.InteractionDiagramParameters()
   param.concreteTag = EHE_materials.HA30.tagDiagD
   param.reinforcementTag = EHE_materials.B500S.tagDiagD
-  diagIntSecHA2 = materiales.calcInteractionDiagram('secHA2', param)
+  diagIntSecHA2 = materialHandler.calcInteractionDiagram('secHA2', param)
   return diagIntSecHA2
 

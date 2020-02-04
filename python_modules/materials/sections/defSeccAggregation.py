@@ -18,8 +18,8 @@ def defSeccAggregation3d(preprocessor,defSecc,defMat):
   typical_materials.defElasticMaterial(preprocessor,nmbRigVz,defSecc.alphaY()*defMat.G()*defSecc.A())
   nmbRigT= defSecc.sectionName+"_rigT" # Torsional stiffness.
   typical_materials.defElasticMaterial(preprocessor,nmbRigT,defMat.G()*defSecc.J())
-  materiales= preprocessor.getMaterialHandler
-  agg= materiales.newMaterial("section_aggregator",defSecc.sectionName)
+  materialHandler= preprocessor.getMaterialHandler
+  agg= materialHandler.newMaterial("section_aggregator",defSecc.sectionName)
   agg.setSection(nmbRigF)
   agg.setAdditions(["T","Vy","Vz"],[nmbRigT,nmbRigVy,nmbRigVz])
   #agg.setAddition("Vy",nmbRigVy)
@@ -36,8 +36,8 @@ def defSeccAggregation2d(preprocessor,defSecc,defMat):
   typical_materials.defElasticSection2d(preprocessor,nmbRigF,defSecc.A(),defMat.E,defSecc.Iz())
   nmbRigVy= defSecc.sectionName+"_rigVy" # Y shear stiffness.
   typical_materials.defElasticMaterial(preprocessor,nmbRigVy,defSecc.alphaY()*defMat.G()*defSecc.A())
-  materiales= preprocessor.getMaterialHandler
-  agg= materiales.newMaterial("section_aggregator",defSecc.sectionName)
+  materialHandler= preprocessor.getMaterialHandler
+  agg= materialHandler.newMaterial("section_aggregator",defSecc.sectionName)
   agg.setSection(nmbRigF)
   agg.setAdditions(["Vy"],[nmbRigVy])
   #agg.setAddition("Vy",nmbRigVy)

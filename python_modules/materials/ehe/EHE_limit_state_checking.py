@@ -1201,11 +1201,11 @@ class CrackControl(lscb.CrackControlBaseParameters):
       lmsg.log("Postprocessing combination: "+nmbComb+"\n")
 
     defParamsFisuracion("secHAParamsFisuracion")
-    materiales= preprocessor.getMaterialHandler
-    concrete= materiales.getMaterial(concreteCode)
+    materialHandler= preprocessor.getMaterialHandler
+    concrete= materialHandler.getMaterial(concreteCode)
     concrTag= concrete.getProp("matTagK")
     concrFctm= concrete.getProp("fctm")
-    reinforcement= materiales.getMaterial(reinforcementCode)
+    reinforcement= materialHandler.getMaterial(reinforcementCode)
     for e in elements:
       scc= elements.getSection()
       Ntmp= scc.N

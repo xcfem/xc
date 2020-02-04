@@ -112,8 +112,8 @@ reinforcementA.p1= geom.Pos2d(0.0,0.0) # 1 single rebar, centered in the cross-s
 #it is a generic section created to be assigned to the elements specified
 #its stress and strain state is neutral (if we ask this section for stress or strain
 #values the result is always 0)
-materiales= preprocessor.getMaterialHandler
-sctFibers= materiales.newMaterial("fiber_section_3d","sctFibers")
+materialHandler= preprocessor.getMaterialHandler
+sctFibers= materialHandler.newMaterial("fiber_section_3d","sctFibers")
 fiberSectionRepr= sctFibers.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("geomSectFibers")
 sctFibers.setupFibers()

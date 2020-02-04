@@ -21,14 +21,14 @@ p= 10
 prueba= xc.ProblemaEF()
 prep= prueba.getPreprocessor
 nodos= prep.getNodeHandler
-predefined_spaces.gdls_resist_materiales3D(nodos)
+predefined_spaces.gdls_resist_materials3D(nodos)
 nodos.defaultTag= 1; nodos.newNodeXY(0,0,0})
 nodos.defaultTag= 2; nodos.newNodeXY(L,0,0})
 nodos.defaultTag= 3; nodos.newNodeXY(L,L,0})
 nodos.defaultTag= 4; nodos.newNodeXY(0,L,0})
 
 
-# Definimos materiales
+# Material definition
 
         memb1= typical_materials.defElasticMembranePlateSection(prep,"memb1",E,nu,dens,h)
 

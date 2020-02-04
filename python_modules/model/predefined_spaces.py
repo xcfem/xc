@@ -554,12 +554,12 @@ def getStructuralMechanics2DSpace(preprocessor):
     assert(nodes.numDOFs==3)
     return StructuralMechanics2D(nodes)
 
-def gdls_resist_materiales2D(nodes):
+def gdls_resist_materials2D(nodes):
     '''Defines the dimension of the space: nodes by two coordinates (x,y) and three DOF for each node (Ux,Uy,theta)
 
     :param nodes: preprocessor nodes handler
     '''
-    lmsg.warning('gdls_resist_materiales2D DEPRECATED; use StructuralMechanics2D.')
+    lmsg.warning('gdls_resist_materials2D DEPRECATED; use StructuralMechanics2D.')
     return StructuralMechanics2D(nodes)
 
 class SolidMechanics3D(PredefinedSpace):
@@ -1148,12 +1148,12 @@ def getModelSpaceFromPreprocessor(preprocessor):
        lmsg.error('cannot figure out the problem type dimSpace= '+str(dimSpace)+' numDOFs= '+str(numDOFs))
     return retval
       
-def gdls_resist_materiales3D(nodes):
+def gdls_resist_materials3D(nodes):
     '''Define the dimension of the space: nodes by three coordinates (x,y,z) and six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
 
     :param nodes: preprocessor nodes handler
     '''
-    lmsg.warning('gdls_resist_materiales3D DEPRECATED; use StructuralMechanics3D.')
+    lmsg.warning('gdls_resist_materials3D DEPRECATED; use StructuralMechanics3D.')
     return StructuralMechanics3D(nodes)
 
 def ConstraintsForLineInteriorNodes(lineSet, constraint):
