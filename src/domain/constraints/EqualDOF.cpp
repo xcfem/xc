@@ -31,6 +31,7 @@
 #include "utility/matrix/Matrix.h"
 #include <domain/mesh/node/Node.h>
 #include <domain/domain/Domain.h>
+#include "vtkCellType.h"
 
 //! @brief Constructor.
 XC::EqualDOF::EqualDOF(int tag)
@@ -67,5 +68,6 @@ void XC::EqualDOF::setup_matrix(void)
 void XC::EqualDOF::setup(Domain *theDomain)
   {  setup_matrix(); }
 
-
-
+//! @brief VTK interface.
+int XC::EqualDOF::getVtkCellType(void) const
+  { return VTK_LINE; }

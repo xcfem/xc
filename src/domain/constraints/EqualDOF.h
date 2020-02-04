@@ -47,6 +47,8 @@ class EqualDOF: public MFreedom_Constraint
 
     void setDofs(const ID &);
     void setup(Domain *theDomain);
+    
+    int getVtkCellType(void) const;
   };
 } // end of XC namespace
 
