@@ -26,7 +26,6 @@ class PredefinedSpace(object):
         self.setPreprocessor(nodes.getPreprocessor)
         nodes.dimSpace= dimSpace
         nodes.numDOFs= numDOFs
-
     def getIntForceComponentFromName(self,componentName):
         if componentName[0] in ['N','M']:
             return componentName.lower()
@@ -47,6 +46,10 @@ class PredefinedSpace(object):
         self.preprocessor= preprocessor
         self.constraints= self.preprocessor.getBoundaryCondHandler
 
+    def getNodeHandler(self):
+        ''' Return the preprocessor node handler.'''
+        return self.preprocessor.getNodeHandler
+    
     def getSpaceDimension(self):
         ''' Return the dimensions of the problem space.'''
         return self.preprocessor.getNodeHandler.dimSpace

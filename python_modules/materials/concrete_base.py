@@ -140,6 +140,8 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
     If tensionStiffparam==None and initTensStiff=='N' (default values) no 
     tensile strength is considered; the stress strain relationship corresponds 
     to a concrete01 material (zero tensile strength).
+    :ivar xc_plate_section: pointer to plate section material.
+    :ivar xc_membrane_plate_section: pointer to membrane plate section material.
 
     '''
     nuc= 0.2 #** Poisson coefficient
@@ -160,6 +162,8 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         self.fck= fck #** characteristic (5%) cylinder strength of the concrete [Pa]
         self.gmmC= gammaC #** Partial safety factor for concrete
         self.initTensStiff='N'
+        self.xc_plate_section= None
+        self.xc_membrane_plate_section= None
 
     def density(self,reinforced= True):
         '''Return concrete density in kg/m3.'''
@@ -742,24 +746,42 @@ class Concrete(matWDKD.MaterialWithDKDiagrams):
         return sectionProperties.defElasticShearSection3d(preprocessor,self.getElasticMaterialData())
     
     def defElasticPlateSection(self, preprocessor,name,thickness):
-      '''Constructs an elastic isotropic section material appropiate 
-         for elastic analysis of plate elements.
+        '''Constructs an elastic isotropic section material appropiate 
+           for elastic analysis of plate elements.
 
-      :param  preprocessor: preprocessor name
-      :param  name:         name identifying the section
-      :param  thickness:    section thickness.
-      '''
-      return typical_materials.defElasticPlateSection(preprocessor,name,E= self.getEcm(), nu=self.nuc ,rho= self.density(),h= thickness)
+        :param  preprocessor: preprocessor name
+        :param  name:         name identifying the section
+        :param  thickness:    section thickness.
+        '''
+        if(not self.xc_plate_section):
+            materialHandler= preprocessor.getMaterialHandler
+            if(materialHandler.materialExists(self.sectionName)):
+                lmsg.warning("Section: "+self.sectionName+" already defined.")
+                self.xc_plate_section= materialHandler.getMaterial(self.sectionName)
+            else:
+                self.xc_plate_section= typical_materials.defElasticPlateSection(preprocessor,name,E= self.getEcm(), nu=self.nuc ,rho= self.density(),h= thickness)
+        else:
+            lmsg.warning('Material: ', self.name, ' already defined.')
+        return self.xc_plate_section
 
     def defElasticMembranePlateSection(self, preprocessor,name,thickness):
-      '''Constructs an elastic isotropic section material appropiate 
-         for elastic analysis of plate and shell elements
+        '''Constructs an elastic isotropic section material appropiate 
+           for elastic analysis of plate and shell elements
 
-      :param  preprocessor: preprocessor name
-      :param  name:         name identifying the section
-      :param  thickness:    section thickness.
-      '''
-      return typical_materials.defElasticMembranePlateSection(preprocessor,name,E= self.getEcm(), nu=self.nuc ,rho= self.density(),h= thickness)
+        :param  preprocessor: preprocessor name
+        :param  name:         name identifying the section
+        :param  thickness:    section thickness.
+        '''
+        if(not self.xc_membrane_plate_section):
+            materialHandler= preprocessor.getMaterialHandler
+            if(materialHandler.materialExists(self.sectionName)):
+                lmsg.warning("Section: "+self.sectionName+" already defined.")
+                self.xc_membrane_plate_section= materialHandler.getMaterial(self.sectionName)
+            else:
+                self.xc_membrane_plate_section= typical_materials.defElasticMembranePlateSection(preprocessor,name,E= self.getEcm(), nu=self.nuc ,rho= self.density(),h= thickness)
+        else:
+            lmsg.warning('Material: ', self.name, ' already defined.')
+        return self.xc_membrane_plate_section
 
 
 class paramTensStiffness(object):
@@ -931,66 +953,66 @@ def concreteDesignTangentTest(preprocessor, concreteRecord):
 # Reinforcing steel.
 
 class ReinforcingSteel(matWDKD.MaterialWithDKDiagrams):
-  '''Reinforcing steel parameters 
+    '''Reinforcing steel parameters 
 
-    :ivar fyk:      Characteristic value of the yield strength.
-    :ivar emax:     maximum strain in tension
-    :ivar gammaS:   Partial factor for material.
-    :ivar k:        fmaxk/fyk ratio (Annex C of EC2: class A k>=1,05,
-     class B k>=1,08)
-  '''
-  Es= 2e11 # Elastic modulus of the material.
-#  fmaxk= 0.0 # Characteristic ultimate stress
-  Esh= 0.0 # Slope of the line in the yielding region.
-  bsh= 0.0 # Ratio between post-yield tangent and initial elastic tangent
-  k=1.05   # fmaxk/fyk ratio (Annex C of EC2: class A k>=1,05 B , class B k>=1,08)
-  def __init__(self,steelName, fyk, emax, gammaS, k=1.05):
-    super(ReinforcingSteel,self).__init__(steelName)
-    self.fyk= fyk # Characteristic value of the yield strength
-    self.gammaS= gammaS
-    self.emax= emax # Ultimate strain (rupture strain)
-    self.k=k        # fmaxk/fyk ratio
- 
-  def fmaxk(self):
-    ''' Characteristic ultimate strength. '''
-    return self.k*self.fyk
-  def fyd(self):
-    ''' Design yield stress. '''
-    return self.fyk/self.gammaS
-  def eyk(self):
-    ''' Caracteristic strain at yield point. '''
-    return self.fyk/self.Es
-  def eyd(self):
-    ''' Design strain at yield point. '''
-    return self.fyd()/self.Es
-  def Esh(self):
-    ''' Slope of the curve in the yielding region. '''
-    return (self.fmaxk()-self.fyk)/(self.emax-self.eyk())
-  def bsh(self):
-    ''' Ratio between post-yield tangent and initial elastic tangent. '''
-    return self.Esh()/self.Es
-  def defDiagK(self,preprocessor):
-    ''' Returns XC uniaxial material (characteristic values). '''
-    self.materialDiagramK= typical_materials.defSteel01(preprocessor,self.nmbDiagK,self.Es,self.fyk,self.bsh())
-    self.matTagK= self.materialDiagramK.tag
-    return self.materialDiagramK #30160925 was 'return self.matTagK'
+      :ivar fyk:      Characteristic value of the yield strength.
+      :ivar emax:     maximum strain in tension
+      :ivar gammaS:   Partial factor for material.
+      :ivar k:        fmaxk/fyk ratio (Annex C of EC2: class A k>=1,05,
+                      class B k>=1,08)
+    '''
+    Es= 2e11 # Elastic modulus of the material.
+  #  fmaxk= 0.0 # Characteristic ultimate stress
+    Esh= 0.0 # Slope of the line in the yielding region.
+    bsh= 0.0 # Ratio between post-yield tangent and initial elastic tangent
+    k=1.05   # fmaxk/fyk ratio (Annex C of EC2: class A k>=1,05 B , class B k>=1,08)
+    def __init__(self,steelName, fyk, emax, gammaS, k=1.05):
+      super(ReinforcingSteel,self).__init__(steelName)
+      self.fyk= fyk # Characteristic value of the yield strength
+      self.gammaS= gammaS
+      self.emax= emax # Ultimate strain (rupture strain)
+      self.k=k        # fmaxk/fyk ratio
 
-  def defDiagD(self,preprocessor):
-    ''' Returns XC uniaxial material (design values). '''
-    self.materialDiagramD= typical_materials.defSteel01(preprocessor,self.nmbDiagD,self.Es,self.fyd(),self.bsh())
-    self.matTagD= self.materialDiagramD.tag
-    return self.materialDiagramD #30160925 was 'return self.matTagD'
+    def fmaxk(self):
+      ''' Characteristic ultimate strength. '''
+      return self.k*self.fyk
+    def fyd(self):
+      ''' Design yield stress. '''
+      return self.fyk/self.gammaS
+    def eyk(self):
+      ''' Caracteristic strain at yield point. '''
+      return self.fyk/self.Es
+    def eyd(self):
+      ''' Design strain at yield point. '''
+      return self.fyd()/self.Es
+    def Esh(self):
+      ''' Slope of the curve in the yielding region. '''
+      return (self.fmaxk()-self.fyk)/(self.emax-self.eyk())
+    def bsh(self):
+      ''' Ratio between post-yield tangent and initial elastic tangent. '''
+      return self.Esh()/self.Es
+    def defDiagK(self,preprocessor):
+      ''' Returns XC uniaxial material (characteristic values). '''
+      self.materialDiagramK= typical_materials.defSteel01(preprocessor,self.nmbDiagK,self.Es,self.fyk,self.bsh())
+      self.matTagK= self.materialDiagramK.tag
+      return self.materialDiagramK #30160925 was 'return self.matTagK'
 
-  def plotDesignStressStrainDiagram(self,preprocessor,path=''):
-    '''Draws the steel design diagram.'''
-    if self.materialDiagramD== None:
-      self.defDiagD(preprocessor)
-    retval= mg.UniaxialMaterialDiagramGraphic(-0.016,0.016, self.materialName + ' design stress-strain diagram')
-    retval.setupGraphic(plt,self.materialDiagramD)
-    fileName= path+self.materialName+'_design_stress_strain_diagram'
-    retval.savefig(plt,fileName+'.jpeg')
-    retval.savefig(plt,fileName+'.eps')
-    return retval
+    def defDiagD(self,preprocessor):
+      ''' Returns XC uniaxial material (design values). '''
+      self.materialDiagramD= typical_materials.defSteel01(preprocessor,self.nmbDiagD,self.Es,self.fyd(),self.bsh())
+      self.matTagD= self.materialDiagramD.tag
+      return self.materialDiagramD #30160925 was 'return self.matTagD'
+
+    def plotDesignStressStrainDiagram(self,preprocessor,path=''):
+      '''Draws the steel design diagram.'''
+      if self.materialDiagramD== None:
+        self.defDiagD(preprocessor)
+      retval= mg.UniaxialMaterialDiagramGraphic(-0.016,0.016, self.materialName + ' design stress-strain diagram')
+      retval.setupGraphic(plt,self.materialDiagramD)
+      fileName= path+self.materialName+'_design_stress_strain_diagram'
+      retval.savefig(plt,fileName+'.jpeg')
+      retval.savefig(plt,fileName+'.eps')
+      return retval
 
 def defReinfSteelCharacteristicDiagram(preprocessor, steelRecord):
   '''Characteristic stress-strain diagram.'''
@@ -1066,52 +1088,61 @@ def testReinfSteelDesignDiagram(preprocessor, matRecord):
   return errMax
 
 class PrestressingSteel(matWDKD.MaterialWithDKDiagrams):
+    '''Prestressing steel parameters 
 
-  # Points from the table 38.7.b of EHE-08 to determine
-  # relaxation at times shorter than 1000 hours.
-  ptsShortTermRelaxation= scipy.interpolate.interp1d([0, 1, 5, 20, 100, 200, 500, 1000],[0, 0.25, 0.45, 0.55, 0.7, 0.8, 0.9, 1])
-    
-  def __init__(self,steelName,fpk,fmax= 1860e6, alpha= 0.75, steelRelaxationClass=1, tendonClass= 'strand'):
-    ''' Prestressing steel base class.
- 
-       :param fpk: Elastic limit.
-       :param fmax: Steel strength.
-       :param alpha: stress-to-strength ratio.
-       :param steelRelaxationClass: Relaxation class 1: normal, 2: improved, 
+       :ivar fpk: Elastic limit.
+       :ivar fmax: Steel strength.
+       :ivar alpha: stress-to-strength ratio.
+       :ivar steelRelaxationClass: Relaxation class 1: normal, 2: improved, 
                                     and 3: relaxation for bars.
-       :param tendonClass: Tendon class wire, strand or bar.
+       :ivar tendonClass: Tendon class wire, strand or bar.
     '''
-    super(PrestressingSteel,self).__init__(steelName)
-    self.gammaS= 1.15 # partial safety factor for steel.
-    self.fpk= fpk # elastic limit.
-    self.fmax= fmax
-    self.alpha= alpha
-    self.Es= 190e9 # elastic modulus.
-    self.bsh= 0.001 # slope ration (yield branch/elastic branch)
-    self.steelRelaxationClass= steelRelaxationClass
-    self.tendonClass= tendonClass
-  def getKRelaxation(self):
-    ''' Return the value of k factor for the relaxation expression
-       from the relaxation class. See Model Code 1990 paragraph 2.3.4.5.
-    '''
-    if(self.steelRelaxationClass==1):
-      return 0.12 
-    elif(self.steelRelaxationClass==2):
-      return 0.19 
-    else:
-      lmsg.error("Relaxation class : ",self.steelRelaxationClass," not implemented.\n")
-      return 0
-  def fpd(self):
-    return self.fpk/self.gammaS
-  def tInic(self):
-    return self.alpha**2*self.fmax # Pretensado final (incial al 75 por ciento y 25 por ciento de pérdidas totales).
-  def defDiagK(self,preprocessor,initialStress):
-    '''Characteristic stress-strain diagram.'''
-    steel= typical_materials.defSteel02(preprocessor,self.nmbDiagK,self.Es,self.fpk,self.bsh,initialStress)
-    self.matTagK= steel.tag
-    return steel 
-  def defDiagD(self,preprocessor,initialStress):
-    '''Design stress-strain diagram.'''
-    steel= typical_materials.defSteel02(preprocessor,self.nmbDiagD,self.Es,self.fpd(),self.bsh,initialStress)
-    self.matTagD= steel.tag
-    return steel
+
+    # Points from the table 38.7.b of EHE-08 to determine
+    # relaxation at times shorter than 1000 hours.
+    ptsShortTermRelaxation= scipy.interpolate.interp1d([0, 1, 5, 20, 100, 200, 500, 1000],[0, 0.25, 0.45, 0.55, 0.7, 0.8, 0.9, 1])
+
+    def __init__(self,steelName,fpk,fmax= 1860e6, alpha= 0.75, steelRelaxationClass=1, tendonClass= 'strand'):
+      ''' Prestressing steel base class.
+
+         :param fpk: Elastic limit.
+         :param fmax: Steel strength.
+         :param alpha: stress-to-strength ratio.
+         :param steelRelaxationClass: Relaxation class 1: normal, 2: improved, 
+                                      and 3: relaxation for bars.
+         :param tendonClass: Tendon class wire, strand or bar.
+      '''
+      super(PrestressingSteel,self).__init__(steelName)
+      self.gammaS= 1.15 # partial safety factor for steel.
+      self.fpk= fpk # elastic limit.
+      self.fmax= fmax
+      self.alpha= alpha
+      self.Es= 190e9 # elastic modulus.
+      self.bsh= 0.001 # slope ration (yield branch/elastic branch)
+      self.steelRelaxationClass= steelRelaxationClass
+      self.tendonClass= tendonClass
+    def getKRelaxation(self):
+      ''' Return the value of k factor for the relaxation expression
+         from the relaxation class. See Model Code 1990 paragraph 2.3.4.5.
+      '''
+      if(self.steelRelaxationClass==1):
+        return 0.12 
+      elif(self.steelRelaxationClass==2):
+        return 0.19 
+      else:
+        lmsg.error("Relaxation class : ",self.steelRelaxationClass," not implemented.\n")
+        return 0
+    def fpd(self):
+      return self.fpk/self.gammaS
+    def tInic(self):
+      return self.alpha**2*self.fmax # Pretensado final (incial al 75 por ciento y 25 por ciento de pérdidas totales).
+    def defDiagK(self,preprocessor,initialStress):
+      '''Characteristic stress-strain diagram.'''
+      self.materialDiagramK= typical_materials.defSteel02(preprocessor,self.nmbDiagK,self.Es,self.fpk,self.bsh,initialStress)
+      self.matTagK= self.materialDiagramK.tag
+      return self.materialDiagramK 
+    def defDiagD(self,preprocessor,initialStress):
+      '''Design stress-strain diagram.'''
+      self.materialDiagramD= typical_materials.defSteel02(preprocessor,self.nmbDiagD,self.Es,self.fpd(),self.bsh,initialStress)
+      self.matTagD= self.materialDiagramD.tag
+      return self.materialDiagramD

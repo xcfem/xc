@@ -30,9 +30,8 @@ def defElasticMaterial(preprocessor,name,E, rho= 0.0):
   :param name:         name identifying the material
   :param E:            tangent in the stress-strain diagram
   '''
-  materials= preprocessor.getMaterialHandler
-  materials.newMaterial("elastic_material",name)
-  retval= materials.getMaterial(name)
+  materialHandler= preprocessor.getMaterialHandler
+  retval= materialHandler.newMaterial("elastic_material",name)
   retval.name= name
   retval.E= E
   retval.rho= rho
@@ -47,9 +46,8 @@ def defElasticPPMaterial(preprocessor,name,E,fyp,fyn):
   :param fyp:          stress at which material reaches plastic state in tension
   :param fyn:          stress at which material reaches plastic state in compression
   '''
-  materials= preprocessor.getMaterialHandler
-  materials.newMaterial("elasticpp_material",name)
-  retval= materials.getMaterial(name)
+  materialHandler= preprocessor.getMaterialHandler
+  retval= materialHandler.newMaterial("elasticpp_material",name)
   retval.E= E
   retval.name= name
   retval.fyp= fyp
@@ -63,9 +61,8 @@ def defElastNoTensMaterial(preprocessor,name,E):
   :param name:         name identifying the material
   :param E:            tangent in the elastic zone of the stress-strain diagram
   '''
-  materials= preprocessor.getMaterialHandler
-  materials.newMaterial("elast_no_trac_material",name)
-  retval= materials.getMaterial(name)
+  materialHandler= preprocessor.getMaterialHandler
+  retval= materialHandler.newMaterial("elast_no_trac_material",name)
   retval.name= name
   retval.E= E
   return retval
@@ -83,9 +80,8 @@ def defCableMaterial(preprocessor,name,E,prestress,rho):
   :param rho:          effective self weight (gravity component of weight per 
                   volume transverse to the cable)
   '''
-  materials= preprocessor.getMaterialHandler
-  materials.newMaterial("cable_material",name)
-  retval= materials.getMaterial(name)
+  materialHandler= preprocessor.getMaterialHandler
+  retval= materialHandler.newMaterial("cable_material",name)
   retval.name= name
   retval.E= E
   retval.prestress= prestress
@@ -104,9 +100,8 @@ def defSteel01(preprocessor,name,E,fy,b):
   :param b:            strain-hardening ratio: ratio between post-yield tangent
                   and initial elastic tangent
   '''
-  materials= preprocessor.getMaterialHandler
-  materials.newMaterial("steel01",name)
-  retval= materials.getMaterial(name)
+  materialHandler= preprocessor.getMaterialHandler
+  retval= materialHandler.newMaterial("steel01",name)
   retval.name= name
   retval.E= E
   retval.fy= fy
@@ -126,9 +121,8 @@ def defSteel02(preprocessor,name,E,fy,b,initialStress):
                   and initial elastic tangent
   :param initialStress: initial stress
   '''
-  materials= preprocessor.getMaterialHandler
-  materials.newMaterial("steel02",name)
-  retval= materials.getMaterial(name)
+  materialHandler= preprocessor.getMaterialHandler
+  retval= materialHandler.newMaterial("steel02",name)
   retval.name= name
   retval.E= E
   retval.fy= fy
@@ -150,9 +144,8 @@ def defConcrete01(preprocessor,name,epsc0,fpc,fpcu,epscu):
   :param fpcu:         concrete crushing strength 
   :param epscu:        concrete strain at crushing strength 
   '''
-  materials= preprocessor.getMaterialHandler
-  materials.newMaterial("concrete01_material",name)
-  retval= materials.getMaterial(name)
+  materialHandler= preprocessor.getMaterialHandler
+  retval= materialHandler.newMaterial("concrete01_material",name)
   retval.name= name
   retval.epsc0= epsc0
   retval.fpc= fpc
@@ -178,9 +171,8 @@ def defConcrete02(preprocessor,name,epsc0,fpc,fpcu,epscu,ratioSlope,ft,Ets):
   :param Ets:          tension softening stiffness (absolute value) (slope of the linear tension softening branch) 
 
   '''
-  materials= preprocessor.getMaterialHandler
-  materials.newMaterial("concrete02_material",name)
-  retval= materials.getMaterial(name)
+  materialHandler= preprocessor.getMaterialHandler
+  retval= materialHandler.newMaterial("concrete02_material",name)
   retval.name= name
   retval.epsc0= epsc0
   retval.fpc= fpc
@@ -203,9 +195,8 @@ def defElasticSection2d(preprocessor,name,A,E,I, rho= 0.0):
   :param E:            Young’s modulus of material
   :param I:            second moment of area about the local z-axis
   '''
-  materials= preprocessor.getMaterialHandler
-  materials.newMaterial("elastic_section_2d",name)
-  retval= materials.getMaterial(name)
+  materialHandler= preprocessor.getMaterialHandler
+  retval= materialHandler.newMaterial("elastic_section_2d",name)
   retval.name= name
   retval.sectionProperties.A= A
   retval.sectionProperties.E= E
@@ -215,78 +206,76 @@ def defElasticSection2d(preprocessor,name,A,E,I, rho= 0.0):
 
 #Elastic shear section 2d.
 def defElasticShearSection2d(preprocessor,name,A,E,G,I,alpha, rho= 0.0):
-  '''Constructs an elastic section appropiate for 2D beam analysis, 
-  including shear deformations.
+    '''Constructs an elastic section appropiate for 2D beam analysis, 
+    including shear deformations.
 
-  :param preprocessor: preprocessor
-  :param name:         name identifying the section
-  :param A:            cross-sectional area of the section
-  :param E:            Young’s modulus of the material
-  :param G:            Shear modulus of the material          
-  :param I:            second moment of area about the local z-axis
-   :param alpha:        shear shape factor
-  '''
-  materials= preprocessor.getMaterialHandler
-  materials.newMaterial("elasticShearSection2d",name)
-  retval= materials.getMaterial(name)
-  retval.name= name
-  retval.sectionProperties.A= A
-  retval.sectionProperties.E= E
-  retval.sectionProperties.G= G
-  retval.sectionProperties.I= I
-  retval.sectionProperties.Alpha= alpha
-  retval.sectionProperties.rho= rho
-  return retval
+    :param preprocessor: preprocessor
+    :param name:         name identifying the section
+    :param A:            cross-sectional area of the section
+    :param E:            Young’s modulus of the material
+    :param G:            Shear modulus of the material          
+    :param I:            second moment of area about the local z-axis
+     :param alpha:        shear shape factor
+    '''
+    materialHandler= preprocessor.getMaterialHandler
+    retval= materialHandler.newMaterial("elasticShearSection2d",name)
+    retval.name= name
+    retval.sectionProperties.A= A
+    retval.sectionProperties.E= E
+    retval.sectionProperties.G= G
+    retval.sectionProperties.I= I
+    retval.sectionProperties.Alpha= alpha
+    retval.sectionProperties.rho= rho
+    return retval
 
 def defElasticSectionFromMechProp2d(preprocessor,name,mechProp2d):
-  '''Constructs an elastic section appropiate for 2D beam analysis, 
-  taking mechanical properties of the section form a MechProp2d object.
+    '''Constructs an elastic section appropiate for 2D beam analysis, 
+    taking mechanical properties of the section form a MechProp2d object.
 
-  :param preprocessor: preprocessor
-  :param name:         name identifying the section
-  :param mechProp2d:   object of type MechProp2d that contains the mechanical 
-                  properties of the section
-  '''  
-  retval= defElasticSection2d(preprocessor,name,mechProp2d.A,mechProp2d.E,mechProp2d.I,rho= mechProp2d.rho)
-  return retval
+    :param preprocessor: preprocessor
+    :param name:         name identifying the section
+    :param mechProp2d:   object of type MechProp2d that contains the mechanical 
+                    properties of the section
+    '''  
+    retval= defElasticSection2d(preprocessor,name,mechProp2d.A,mechProp2d.E,mechProp2d.I,rho= mechProp2d.rho)
+    return retval
 
 #Elastic section 3d.
 def defElasticSection3d(preprocessor,name,A,E,G,Iz,Iy,J, rho= 0.0):
-  '''Constructs an elastic section appropiate for 3D beam analysis
+    '''Constructs an elastic section appropiate for 3D beam analysis
 
-  :param preprocessor: preprocessor
-  :param name:         name identifying the section
-  :param A:            cross-sectional area of the section
-  :param E:            Young’s modulus of the material
-  :param G:            Shear modulus of the material          
-  :param Iz:           second moment of area about the local z-axis
-  :param Iy:           second moment of area about the local y-axis
-  :param J:            torsional moment of inertia of the section
+    :param preprocessor: preprocessor
+    :param name:         name identifying the section
+    :param A:            cross-sectional area of the section
+    :param E:            Young’s modulus of the material
+    :param G:            Shear modulus of the material          
+    :param Iz:           second moment of area about the local z-axis
+    :param Iy:           second moment of area about the local y-axis
+    :param J:            torsional moment of inertia of the section
 
-  '''
-  materials= preprocessor.getMaterialHandler
-  materials.newMaterial("elastic_section_3d",name)
-  retval= materials.getMaterial(name)
-  retval.name= name
-  retval.sectionProperties.A= A
-  retval.sectionProperties.E= E
-  retval.sectionProperties.G= G
-  retval.sectionProperties.Iz= Iz
-  retval.sectionProperties.Iy= Iy
-  retval.sectionProperties.J= J
-  retval.sectionProperties.rho= rho
-  return retval
+    '''
+    materialHandler= preprocessor.getMaterialHandler
+    retval= materialHandler.newMaterial("elastic_section_3d",name)
+    retval.name= name
+    retval.sectionProperties.A= A
+    retval.sectionProperties.E= E
+    retval.sectionProperties.G= G
+    retval.sectionProperties.Iz= Iz
+    retval.sectionProperties.Iy= Iy
+    retval.sectionProperties.J= J
+    retval.sectionProperties.rho= rho
+    return retval
 
 def defElasticSectionFromMechProp3d(preprocessor,name,mechProp3d):
-  '''Constructs an elastic section appropiate for 3D beam analysis, 
-  taking mechanical properties of the section form a MechProp3d object.
+    '''Constructs an elastic section appropiate for 3D beam analysis, 
+    taking mechanical properties of the section form a MechProp3d object.
 
-  :param preprocessor: preprocessor
-  :param name:         name identifying the section
-  :param mechProp2d:   instance of the class MechProp3d that contains the 
-                       mechanical properties of the section
-  '''  
-  return defElasticSection3d(preprocessor,name,mechProp3d.A,mechProp3d.E,mechProp3d.G,mechProp3d.Iz,mechProp3d.Iy,mechProp3d.J,rho= mechProp3d.rho)
+    :param preprocessor: preprocessor
+    :param name:         name identifying the section
+    :param mechProp2d:   instance of the class MechProp3d that contains the 
+                         mechanical properties of the section
+    '''  
+    return defElasticSection3d(preprocessor,name,mechProp3d.A,mechProp3d.E,mechProp3d.G,mechProp3d.Iz,mechProp3d.Iy,mechProp3d.J,rho= mechProp3d.rho)
 
 #Elastic shear section 3d.
 def defElasticShearSection3d(preprocessor,name,A,E,G,Iz,Iy,J,alpha, rho= 0.0):
@@ -303,9 +292,8 @@ def defElasticShearSection3d(preprocessor,name,A,E,G,Iz,Iy,J,alpha, rho= 0.0):
   :param J:            torsional moment of inertia of the section
   :param alpha:        shear shape factor
   '''
-  materials= preprocessor.getMaterialHandler
-  materials.newMaterial("elasticShearSection3d",name)
-  retval= materials.getMaterial(name)
+  materialHandler= preprocessor.getMaterialHandler
+  retval= materialHandler.newMaterial("elasticShearSection3d",name)
   retval.name= name
   retval.sectionProperties.A= A
   retval.sectionProperties.E= E
@@ -328,9 +316,8 @@ def defElasticIsotropicPlaneStrain(preprocessor,name,E,nu,rho):
   :param  nu:           Poisson’s ratio
   :param  rho:          mass density, optional (defaults to 0.0)
   '''
-  materials= preprocessor.getMaterialHandler
-  materials.newMaterial("elastic_isotropic_plane_strain_2d",name)
-  retval= materials.getMaterial(name)
+  materialHandler= preprocessor.getMaterialHandler
+  retval= materialHandler.newMaterial("elastic_isotropic_plane_strain_2d",name)
   retval.name= name
   retval.E= E
   retval.nu= nu
@@ -347,9 +334,8 @@ def defElasticIsotropicPlaneStress(preprocessor,name,E,nu,rho):
   :param  nu:           Poisson’s ratio
   :param  rho:          mass density, optional (defaults to 0.0)
   '''
-  materials= preprocessor.getMaterialHandler
-  materials.newMaterial("elastic_isotropic_plane_stress_2d",name)
-  retval= materials.getMaterial(name)
+  materialHandler= preprocessor.getMaterialHandler
+  retval= materialHandler.newMaterial("elastic_isotropic_plane_stress_2d",name)
   retval.name= name
   retval.E= E
   retval.nu= nu
@@ -366,9 +352,8 @@ def defElasticIsotropic3d(preprocessor,name,E,nu,rho):
   :param  nu:           Poisson’s ratio
   :param  rho:          mass density, optional (defaults to 0.0)
   '''
-  materials= preprocessor.getMaterialHandler
-  materials.newMaterial("elastic_isotropic_3d",name)
-  retval= materials.getMaterial(name)
+  materialHandler= preprocessor.getMaterialHandler
+  retval= materialHandler.newMaterial("elastic_isotropic_3d",name)
   retval.name= name
   retval.E= E
   retval.nu= nu
@@ -387,9 +372,8 @@ def defElasticPlateSection(preprocessor,name,E,nu,rho,h):
   :param  rho:          mass density
   :param  h:            overall depth of the section
   '''
-  materials= preprocessor.getMaterialHandler
-  materials.newMaterial("elastic_plate_section",name)
-  retval= materials.getMaterial(name)
+  materialHandler= preprocessor.getMaterialHandler
+  retval= materialHandler.newMaterial("elastic_plate_section",name)
   retval.name= name
   retval.E= E
   retval.nu= nu
@@ -409,9 +393,8 @@ def defElasticMembranePlateSection(preprocessor,name,E,nu,rho,h):
   :param  rho:          mass density
   :param  h:            overall depth of the section
   '''
-  materials= preprocessor.getMaterialHandler
-  materials.newMaterial("elastic_membrane_plate_section",name)
-  retval= materials.getMaterial(name)
+  materialHandler= preprocessor.getMaterialHandler
+  retval= materialHandler.newMaterial("elastic_membrane_plate_section",name)
   retval.name= name
   retval.E= E
   retval.nu= nu
@@ -420,69 +403,89 @@ def defElasticMembranePlateSection(preprocessor,name,E,nu,rho,h):
   return retval
 
 class MaterialData(object):
-  '''Base class to construct some material definition classes
-  
-  # :ivar name:         name identifying the material
-  # :ivar E:            Young’s modulus of the material
-  # :ivar nu:           Poisson’s ratio
-  # :ivar rho:          mass density
-  '''
-  def __init__(self,name,E,nu,rho):
     '''Base class to construct some material definition classes
-  
-     :param name:         name identifying the material
-     :param E:            Young’s modulus of the material
-     :param nu:           Poisson’s ratio
-     :param rho:          mass density
+
+     :ivar name:         name identifying the material
+     :ivar E:            Young’s modulus of the material
+     :ivar nu:           Poisson’s ratio
+     :ivar rho:          mass density
+     :ivar xc_material:  pointer to XC material.    
     '''
-    self.name= name
-    self.E= E
-    self.nu= nu
-    self.rho= rho
-  def G(self):
-    '''shear modulus'''
-    return self.E/(2*(1+self.nu))
+    def __init__(self,name,E,nu,rho):
+        '''Base class to construct some material definition classes
+
+         :param name:         name identifying the material
+         :param E:            Young’s modulus of the material
+         :param nu:           Poisson’s ratio
+         :param rho:          mass density
+        '''
+        self.name= name
+        self.E= E
+        self.nu= nu
+        self.rho= rho
+        self.xc_material= None
+    def G(self):
+        '''shear modulus'''
+        return self.E/(2*(1+self.nu))
 
 class DeckMaterialData(MaterialData):
-  '''Material for Isotropic elastic sections
-  
-  :ivar name:         name identifying the section
-  :ivar thickness:    overall depth of the section
-  :ivar material:     instance of a class that defines the elastic modulus, 
-                      shear modulus and mass density of the material
-  '''
-  def __init__(self,name,thickness,material):
-    super(DeckMaterialData,self).__init__(name,material.E,material.nu,material.rho)
-    self.name=name
-    self.thickness= thickness
-    self.material=material
-  def getAreaDensity(self):
-    '''return the mass per unit area'''
-    return self.rho*self.thickness
-  def setupElasticSection(self,preprocessor):
-    '''create an elastic isotropic section appropiate for plate and shell analysis
+    '''Material for Isotropic elastic sections
+
+    :ivar name:         name identifying the section
+    :ivar thickness:    overall depth of the section
+    :ivar material:     instance of a class that defines the elastic modulus, 
+                        shear modulus and mass density of the material
     '''
-    defElasticMembranePlateSection(preprocessor,self.name,self.E,self.nu,self.getAreaDensity(),self.thickness)
+    def __init__(self,name,thickness,material):
+        super(DeckMaterialData,self).__init__(name,material.E,material.nu,material.rho)
+        self.name=name
+        self.thickness= thickness
+        self.material=material
+    def getAreaDensity(self):
+        '''return the mass per unit area'''
+        return self.rho*self.thickness
+    def setupElasticSection(self,preprocessor):
+        '''create an elastic isotropic section appropiate for plate and shell analysis
+        '''
+        if(not self.xc_material):
+            materialHandler= preprocessor.getMaterialHandler
+            if(materialHandler.materialExists(self.name)):
+                lmsg.warning("Section: "+self.name+" already defined.")
+                self.xc_material= materialHandler.getMaterial(self.name)
+            else:
+                self.xc_material= defElasticMembranePlateSection(preprocessor,self.name,self.E,self.nu,self.getAreaDensity(),self.thickness)
+        else:
+            lmsg.warning('Material: ', self.name, ' already defined.')
+        return self.xc_material
 
 class BeamMaterialData(MaterialData):
-  '''Elastic section appropiate for 3D beam analysis, including shear deformations.
-  
-  :ivar name:         name identifying the section
-  :ivar section:      instance of a class that defines the geometric and
-                      mechanical characteristiscs of a section
-                      e.g: RectangularSection, CircularSection, ISection, ...
-  :ivar material:     instance of a class that defines the elastic modulus, 
-                      shear modulus and mass density of the material
-  '''
-  def __init__(self,name,section,material):
-    super(BeamMaterialData,self).__init__(name,material.E,material.nu,material.rho)
-    self.name= name
-    self.section= section
-    self.material= material
-  def getRho(self):
-    '''return the mass per unit length'''
-    return self.rho*self.section.A()
-  def setupElasticShear3DSection(self,preprocessor):
-    '''Return an elastic section appropiate for 3D beam analysis
+    '''Elastic section appropiate for 3D beam analysis, including shear deformations.
+
+    :ivar name:         name identifying the section
+    :ivar section:      instance of a class that defines the geometric and
+                        mechanical characteristiscs of a section
+                        e.g: RectangularSection, CircularSection, ISection, ...
+    :ivar material:     instance of a class that defines the elastic modulus, 
+                        shear modulus and mass density of the material
     '''
-    return defElasticShearSection3d(preprocessor,self.name,self.section.A(),self.material.E,self.material.G(),self.section.Iz(),self.section.Iy(),self.section.J(),self.section.alphaZ())
+    def __init__(self,name,section,material):
+        super(BeamMaterialData,self).__init__(name,material.E,material.nu,material.rho)
+        self.name= name
+        self.section= section
+        self.material= material
+    def getRho(self):
+        '''return the mass per unit length'''
+        return self.rho*self.section.A()
+    def setupElasticShear3DSection(self,preprocessor):
+        '''Return an elastic section appropiate for 3D beam analysis
+        '''
+        if(not self.xc_material):
+            materialHandler= preprocessor.getMaterialHandler
+            if(materialHandler.materialExists(self.name)):
+                lmsg.warning("Section: "+self.name+" already defined.")
+                self.xc_material= materialHandler.getMaterial(self.name)
+            else:
+                self.xc_material= defElasticShearSection3d(preprocessor,self.name,self.section.A(),self.material.E,self.material.G(),self.section.Iz(),self.section.Iy(),self.section.J(),self.section.alphaZ())
+        else:
+            lmsg.warning('Material: ', self.name, ' already defined.')
+        return self.xc_material
