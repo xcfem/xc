@@ -80,7 +80,7 @@ class OutputHandler(object):
         '''Display the mesh (nodes, elements and constraints)
            of the set.
 
-           :param setToDisplay: set to display.
+           :param setsToDisplay: list of sets to display (defaults to TotalSet).
            :param caption: title of the graphic.
            :param fileName: name of the file to plot the graphic. Defaults to 
                        None, in that case an screen display is generated
