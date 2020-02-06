@@ -80,7 +80,7 @@ class OutputHandler(object):
         '''Display the mesh (nodes, elements and constraints)
            of the set.
 
-           :param setToDisplay: set to display.
+           :param setsToDisplay: list of sets to display (defaults to TotalSet).
            :param caption: title of the graphic.
            :param fileName: name of the file to plot the graphic. Defaults to 
                        None, in that case an screen display is generated
@@ -471,15 +471,15 @@ class OutputHandler(object):
         defDisplay.displayScene(caption,fileName)
         return defDisplay
         
-    def displayLoads(self, elLoadComp='transComponent', setToDisplay=None,caption= None,fileName=None,defFScale=0.0):
+    def displayLoads(self,  setToDisplay=None,elLoadComp='transComponent',fUnitConv=1,caption= None,fileName=None,defFScale=0.0):
         '''Display the loads applied on beam elements and nodes for a given load case
 
-        :param setToDisplay: set of beam elements to be represented
-        :param fUnitConv:  factor of conversion to be applied to the results
-                        (defaults to 1)
+        :param setToDisplay: set of beam elements to be represented (defaults to TotalSet)
         :param elLoadComp:  component of the loads on elements to be depicted
                      [possible components: 'axialComponent', 'transComponent', 
                       'transYComponent', 'transZComponent']
+        :param fUnitConv:  factor of conversion to be applied to the results
+                        (defaults to 1)
         :param caption:   caption for the graphic
         :param fileName:  name of the file to plot the graphic. Defaults to None,
                           in that case an screen display is generated
