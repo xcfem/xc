@@ -70,16 +70,16 @@
 
 //! @brief Constructor (it's used in FiberSectionShear3d).
 XC::FiberSection3d::FiberSection3d(int tag,int classTag,MaterialHandler *mat_ldr)
-  : FiberSection3dBase(tag, classTag,3,mat_ldr) {}
+  : FiberSection3dBase(tag, classTag, 3, mat_ldr) {}
 
 //! @brief Constructor.
 XC::FiberSection3d::FiberSection3d(int tag,const fiber_list &fiberList,XC::MaterialHandler *mat_ldr):
-  FiberSection3dBase(tag, SEC_TAG_FiberSection3d, 3,fiberList,mat_ldr)
+  FiberSection3dBase(tag, SEC_TAG_FiberSection3d, 3, fiberList, mat_ldr)
   {fibers.setup(*this,fiberList,kr);}
 
 //! @brief Constructor.
 XC::FiberSection3d::FiberSection3d(int tag,MaterialHandler *mat_ldr)
-  : FiberSection3dBase(tag, SEC_TAG_FiberSection3d,3,mat_ldr) {}
+  : FiberSection3dBase(tag, SEC_TAG_FiberSection3d, 3, mat_ldr) {}
 
 //! @brief Constructor for blank object that recvSelf needs to be invoked upon
 XC::FiberSection3d::FiberSection3d(XC::MaterialHandler *mat_ldr)

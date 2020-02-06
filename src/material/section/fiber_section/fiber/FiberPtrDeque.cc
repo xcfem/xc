@@ -119,7 +119,41 @@ bool XC::FiberPtrDeque::in(const Fiber *ptr) const
         }
     return retval;
   }
-
+//! @brief Return the fiber closest to y which has the material
+//! defined by matTag.
+XC::Fiber *XC::FiberPtrDeque::getClosestFiber(const int matTag, const double &yCoord)
+  {
+    Fiber *retval= nullptr;
+    double closestDist= 0;
+    double dy, distance;
+    // Find first fiber with specified material tag
+    const_iterator i= begin();
+    for(;i!= end();i++)
+      {
+	if((*i)->getMaterial()->getTag()==matTag)
+	  {
+	    dy = (*i)->getLocY()-yCoord;
+	    closestDist = fabs(dy);
+	    retval= *i;
+	    break;
+	  }
+      }
+    // Search the remaining fibers
+    for(;i!= end();i++)
+      {
+	if((*i)->getMaterial()->getTag()==matTag)
+	  {
+	    dy= (*i)->getLocY()-yCoord;
+	    distance= fabs(dy);
+	    if(distance < closestDist)
+	      {
+		closestDist = distance;
+		retval= *i;
+	      }
+	  }
+      }
+    return retval;
+  }
 //! @brief Returns minimal y coordinate value of the fibers.
 double XC::FiberPtrDeque::GetYMin(void) const
   {
@@ -1821,7 +1855,7 @@ int XC::FiberPtrDeque::revertToStart(FiberSection3d &Section3d,CrossSectionKR &k
 const XC::Matrix &XC::FiberPtrDeque::getInitialTangent(const FiberSection3d &Section3d) const
   {
     static double kInitialData[9];
-    static XC::Matrix kInitial(kInitialData, 3, 3);
+    static Matrix kInitial(kInitialData, 3, 3);
 
     kInitialData[0]= 0.0; kInitialData[1]= 0.0; kInitialData[2]= 0.0;
     kInitialData[3]= 0.0; kInitialData[4]= 0.0; kInitialData[5]= 0.0;
@@ -1985,7 +2019,7 @@ const XC::Matrix &XC::FiberPtrDeque::getInitialTangent(const FiberSectionGJ &Sec
     kInitialData[8]= 0.0; kInitialData[9]= 0.0; kInitialData[10]= 0.0; kInitialData[11]= 0.0;
     kInitialData[12]= 0.0; kInitialData[13]= 0.0; kInitialData[14]= 0.0; kInitialData[15]= 0.0;
 
-    static XC::Matrix kInitial(kInitialData, 4, 4);
+    static Matrix kInitial(kInitialData, 4, 4);
     UniaxialMaterial *theMat;
     double y,z,fiberArea,tangent; 
     std::deque<Fiber *>::const_iterator i= begin();
@@ -2261,6 +2295,19 @@ size_t XC::FiberPtrDeque::getFiberWithMinCoord(const Ref3d3d &r,const size_t &iC
             v_min= v;
             retval= i;
           }
+      }
+    return retval;
+  }
+
+int XC::FiberPtrDeque::setParameter(const std::vector<std::string> &argv, Parameter &param)
+  {
+    int retval= -1;
+    const size_t argc= argv.size();
+    if(argc)
+      {
+        std::deque<Fiber *>::iterator i= begin();
+        for(;i!= end();i++)
+          retval= (*i)->getMaterial()->setParameter(argv, param);
       }
     return retval;
   }

@@ -95,11 +95,10 @@ enum ClaseEsfuerzo {SIMPLE_TENSION,COMPOSED_TENSION,FLEXION_SIMPLE,FLEXION_COMPU
     friend class FiberSectionBase;
     
   public:
-
     void push_back(Fiber *f);
     inline size_t getNumFibers(void) const
       { return size(); }
-
+    
     const Fiber *findFiber(const int &tag) const;
     Fiber *findFiber(const int &tag);
     bool in(const Fiber *ptr) const;
@@ -207,6 +206,7 @@ enum ClaseEsfuerzo {SIMPLE_TENSION,COMPOSED_TENSION,FLEXION_SIMPLE,FLEXION_COMPU
     size_t getFiberWithMaxCoord(const Ref3d3d &r,const size_t &iCoo) const;
     size_t getFiberWithMinCoord(const Ref3d3d &r,const size_t &iCoo) const;
 
+    int setParameter(const std::vector<std::string> &, Parameter &);
     int setParameter(const int &,const std::vector<std::string> &, Parameter &);
     int updateParameter(const int &,int parameterID, Information &info);
     int activateParameter(int passedParameterID);
@@ -218,6 +218,7 @@ enum ClaseEsfuerzo {SIMPLE_TENSION,COMPOSED_TENSION,FLEXION_SIMPLE,FLEXION_COMPU
     Pos2d GetPMax(void) const;
     Pos2d GetPMin(void) const;
     BND2d Bnd(void) const;
+    Fiber *getClosestFiber(const int matTag, const double &yCoord);
     double getArea(const double &factor= 1.0) const;
     double getAreaHomogenizedSection(const double &E0) const;
     const Vector &getCenterOfMassHomogenizedSection(const double &E0) const;

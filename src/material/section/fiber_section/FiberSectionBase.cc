@@ -566,7 +566,6 @@ const XC::Vector &XC::FiberSectionBase::getStressResultant(void) const
 double XC::FiberSectionBase::getStressResultant(const int &i) const
   { return PrismaticBarCrossSection::getStressResultant(i); }
 
-
 //! @brief Commits state.
 int XC::FiberSectionBase::commitState(void)
   {
@@ -930,3 +929,50 @@ double XC::FiberSectionBase::getSPosHomogeneizada(const double &E0) const
 std::string XC::FiberSectionBase::getStrClaseEsfuerzo(const double &tol) const
   { return fibers.getStrClaseEsfuerzo(); }
 
+int XC::FiberSectionBase::setParameter(const std::vector<std::string> &argv, Parameter &param)
+  {
+    // Initial declarations
+    int retval= 0;
+    const int argc= argv.size();
+    if(argc>0)
+      {
+	// A material parameter
+	if(argv[0] == "material")
+	  {
+	    // Get the tag of the material
+	    const int paramMatTag= atoi(argv[1]);
+	    // Loop over fibers to find the right material(s)
+	    std::vector<std::string> argv2(argv);
+	    argv2.erase(argv2.begin(),argv2.begin()+2);
+	    const int ok= fibers.setParameter(paramMatTag,argv2, param);
+	    if(ok<0)
+	      {
+		std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; could not set parameter. " << std::endl;
+		retval= -1;
+	      }
+	    else
+	      retval= ok;
+	  }
+        // Check if it belongs to the section integration
+	else if(argv[0]=="integration")
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; section integration (from OpenSees) not implemented yet." << std::endl;
+	    // if(sectionIntegr!=nullptr)
+	    //   retval= sectionIntegr->setParameter(&argv[1], argc-1, param);
+	    // else
+	    //   retval= -1;
+	  }
+	else
+	  retval= PrismaticBarCrossSection::setParameter(argv,param);
+        // Section integration (from OpenSees) not implemented yet.
+	// if(sectionIntegr != 0)
+	//   {
+	//     int ok= sectionIntegr->setParameter(argv, argc, param);
+	//     if(ok != -1)
+	//       retval= ok;
+	//   }
+      }
+    return retval;
+  }

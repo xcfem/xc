@@ -42,7 +42,15 @@ void XC::FiberContainer::allocFibers(int numOfFibers,const Fiber *sample)
         resize(numOfFibers);
         if(sample)
           for(int i= 0;i<numOfFibers;i++)
-            (*this)[i]= sample->getCopy();
+	    {
+              (*this)[i]= sample->getCopy();
+	      if((*this)[i]==nullptr)
+		{
+		  std::cerr << getClassName() << "::" << __FUNCTION__
+		            << "; ailed to allocate Fiber pointers"
+		            << std::endl;
+		}
+	    }
       }
   }
 
@@ -55,7 +63,15 @@ void XC::FiberContainer::copy_fibers(const FiberContainer &other)
       {
         allocFibers(numFibers);
         for(register size_t i= 0;i<numFibers;i++)
-          (*this)[i]= other[i]->getCopy();
+	  {
+            (*this)[i]= other[i]->getCopy();
+	    if((*this)[i]==nullptr)
+	      {
+		std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; ailed to allocate Fiber pointers"
+			  << std::endl;
+	      }
+	  }
       }
   }
 

@@ -70,12 +70,12 @@
 #include "xc_utils/src/geom/d2/2d_polygons/Polygon2d.h"
 
 //! @brief Constructor.
-XC::FiberSectionGJ::FiberSectionGJ(int tag,const fiber_list &fiberList, double gj,XC::MaterialHandler *mat_ldr): 
-  FiberSection3dBase(tag, SEC_TAG_FiberSectionGJ,4,fiberList,mat_ldr), GJ(gj)
+XC::FiberSectionGJ::FiberSectionGJ(int tag,const fiber_list &fiberList, double gj,XC::MaterialHandler *mat_ldr)
+  : FiberSection3dBase(tag, SEC_TAG_FiberSectionGJ,4,fiberList,mat_ldr), GJ(gj)
   { fibers.setup(*this,fiberList,kr); }
 
-XC::FiberSectionGJ::FiberSectionGJ(int tag,MaterialHandler *mat_ldr): 
-  FiberSection3dBase(tag, SEC_TAG_FiberSectionGJ,4,mat_ldr),GJ(1.0) {}
+XC::FiberSectionGJ::FiberSectionGJ(int tag,MaterialHandler *mat_ldr)
+  : FiberSection3dBase(tag, SEC_TAG_FiberSectionGJ,4,mat_ldr),GJ(1.0) {}
 
 //! @brief Constructor for blank object that recvSelf needs to be invoked upon
 XC::FiberSectionGJ::FiberSectionGJ(MaterialHandler *mat_ldr):

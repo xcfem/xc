@@ -92,33 +92,6 @@ XC::Fiber *XC::FiberSection3dBase::addFiber(int tag,const MaterialHandler &ldr,c
     return retval;
   }
 
-int XC::FiberSection3dBase::setParameter(const std::vector<std::string> &argv, Parameter &param)
-  {
-    // Initial declarations
-    int ok= -1;
-
-    // A material parameter
-    if(argv[0] == "material")
-      {
-        // Get the tag of the material
-        int paramMatTag= atoi(argv[1]);
-        // Loop over fibers to find the right material(s)
-        std::vector<std::string> argv2(argv);
-        argv2.erase(argv2.begin(),argv2.begin()+2);
-        ok= fibers.setParameter(paramMatTag,argv2, param);
-        if(ok<0)
-          {
-            std::cerr << getClassName() << "::" << __FUNCTION__
-	              << "; could not set parameter. " << std::endl;
-            return -1;
-          }
-        else
-          { return ok + 100; }
-      }
-    else
-      return -1;
-  }
-
 int XC::FiberSection3dBase::updateParameter(int parameterID, Information &info)
   {
     int ok= -1;

@@ -71,7 +71,7 @@
 
 // constructors:
 XC::FiberSection2d::FiberSection2d(int tag,const fiber_list &fiberList,MaterialHandler *mat_ldr)
-  : FiberSectionBase(tag, SEC_TAG_FiberSection2d,fibers.size(),mat_ldr)
+  : FiberSectionBase(tag, SEC_TAG_FiberSection2d,2,mat_ldr)
   {
     fibers.setup(*this,fiberList,kr);
 // AddingSensitivity:BEGIN ////////////////////////////////////
@@ -80,7 +80,7 @@ XC::FiberSection2d::FiberSection2d(int tag,const fiber_list &fiberList,MaterialH
   }
 
 //! @brief Constructor.
-XC::FiberSection2d::FiberSection2d(int tag,XC::MaterialHandler *mat_ldr)
+XC::FiberSection2d::FiberSection2d(int tag, MaterialHandler *mat_ldr)
   : FiberSectionBase(tag, SEC_TAG_FiberSection2d,mat_ldr)
   {
 // AddingSensitivity:BEGIN ////////////////////////////////////
@@ -259,33 +259,41 @@ int XC::FiberSection2d::getResponse(int responseID, Information &sectInfo)
 // AddingSensitivity:BEGIN ////////////////////////////////////
 int XC::FiberSection2d::setParameter(const std::vector<std::string> &argv, Parameter &param)
   {
-    // Initial declarations
-    int parameterID= -1;
-
-    // Check if the parameter belongs to the material (only option for now)
-    if(argv[0] == "-material" || argv[0] == "material")
+    int retval= 0;
+    const int argc= argv.size();
+    if(argc>0)
       {
-        // Get the tag of the material
-        int materialTag= atoi(argv[1]);
-        std::vector<std::string> argv2(argv);
-        argv2.erase(argv2.begin(),argv2.begin()+2);
-        parameterID= fibers.setParameter(materialTag,argv2, param);
-        // Check that the parameterID is valid
-        if(parameterID < 0)
-          {
-            std::cerr <<  getClassName() << "::" << __FUNCTION__
+	// Check if the parameter belongs to a fiber
+	// unlike setResponse, only allowing 'fiber y z matTag ...' because
+	// the setResponse logic breaks down with the trailing arguments
+	if(argv[0]=="fiber")
+	  {
+	    if(argc < 5)
+	      retval= 0;
+	    else
+	      {
+	        const int matTag = atoi(argv[3]);
+	        const double yCoord = atof(argv[1]);
+	        Fiber *fiber= fibers.getClosestFiber(matTag,yCoord);
+		if(fiber)
+		  {
+	            std::vector<std::string> argv2(argv);
+	            argv2.erase(argv2.begin(),argv2.begin()+4);
+		    fiber->getMaterial()->setParameter(argv2, param);
+		  }
+	      }
+ 	    retval= fibers.setParameter(argv,param);
+	  }
+	else
+	  retval= FiberSectionBase::setParameter(argv,param);
+	if(retval<0)
+	  {
+	    std::cerr <<  getClassName() << "::" << __FUNCTION__
 		      << "; could not set parameter. " << std::endl;
-            return -1;
-          }
-        else
-          { return (parameterID + 100000*this->getTag() + 1000*materialTag); }
+	    retval= -1;
+	  }
       }
-    else
-      {
-        std::cerr <<  getClassName() << "::" << __FUNCTION__
-		  << "; could not set parameter. " << std::endl;
-        return -1;
-      }
+    return retval;
   }
 
 int XC::FiberSection2d::updateParameter (int parameterID, Information &info)
