@@ -658,15 +658,15 @@ class Header(sp.RectangularSection):
         self.Vs= Vs # Allowable shear.
         self.rho= linearDensity/b/h
         self.material= material
-        self.xc_material= None
+        self.xc_wood_material= None
         self.xc_section= None
     def getFb(self):
         return self.getVolumeFactor()*self.material.Fb_12
     def defXCMaterial(self):
         '''Defines the material in XC.'''
-        if(not self.xc_material):
-            self.xc_material= typical_materials.MaterialData(name= self.material.xc_material_name,E=self.material.E,nu=self.nu,rho=self.rho)
-        return self.xc_material
+        if(not self.xc_wood_material):
+            self.xc_wood_material= typical_materials.MaterialData(name= self.material.xc_material_name,E=self.material.E,nu=self.nu,rho=self.rho)
+        return self.xc_wood_material
     def defElasticShearSection2d(self, preprocessor):
         mat= self.defXCMaterial()
         self.xc_section= super(Header,self).defElasticShearSection2d(preprocessor,mat)

@@ -147,7 +147,7 @@ class SectionProperties(object):
             else:
                 self.xc_material= typical_materials.defElasticSection3d(preprocessor,self.sectionName,self.A(),material.E,material.G(),self.Iz(),self.Iy(),self.J(), rho= material.rho)
         else:
-            lmsg.warning('Material: ', self.name, ' already defined.')
+            lmsg.warning('Material: '+self.sectionName+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
     def defElasticShearSection3d(self,preprocessor,material):
         '''elastic section appropiate for 3D beam analysis, including shear 
@@ -164,7 +164,7 @@ class SectionProperties(object):
             else:
                 self.xc_material= typical_materials.defElasticShearSection3d(preprocessor,self.sectionName,self.A(),material.E,material.G(),self.Iz(),self.Iy(),self.J(),self.alphaY(), rho= material.rho)
         else:
-            lmsg.warning('Material: ', self.name, ' already defined.')
+            lmsg.warning('Material: '+self.sectionName+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
 
     def defElasticSection2d(self,preprocessor,material):
@@ -183,7 +183,7 @@ class SectionProperties(object):
             else:
                 self.xc_material= typical_materials.defElasticSection2d(preprocessor,self.sectionName,self.A(),material.E,self.Iz(), rho= material.rho)
         else:
-            lmsg.warning('Material: ', self.name, ' already defined.')
+            lmsg.warning('Material: '+self.sectionName+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
     def defElasticShearSection2d(self,preprocessor,material):
         '''elastic section appropiate for 2D beam analysis, including shear deformations
@@ -200,7 +200,7 @@ class SectionProperties(object):
             else:
                 self.xc_material= typical_materials.defElasticShearSection2d(preprocessor,self.sectionName,self.A(),material.E,material.G(),self.Iz(),self.alphaY(), rho= material.rho)
         else:
-            lmsg.warning('Material: ', self.name, ' already defined.')
+            lmsg.warning('Material: '+self.sectionName+' already defined as:'+str(self.xc_material))
         return self.xc_material
     def getCrossSectionProperties2D(self,material):
       '''Return a CrossSectionProperties object with the
