@@ -214,10 +214,45 @@ def getFireDesignAdjustementFactor(refValue):
 
 class Wood(object):
     '''Base class for wood materials according
-       to AWC-NDS2018.'''
-    def __init__(self, name):
-        self.name= name
+       to AWC-NDS2018.
+    
+    :ivar name: wood name.
+    :ivar specificGravity: specific gravity of the wood
+                            member.   
+    '''
+    def __init__(self, name, specificGravity= None):
+        '''Constructor.
 
+        :param name: wood name.
+        :param specificGravity: specific gravity of the wood
+                                member.   
+        '''
+        self.name= name
+        if(specificGravity):
+            self.specificGravity= specificGravity
+        else:
+            self.specificGravity= None
+    def getDowelBearingStrenght(self, diameter, theta):
+        ''' Return the dowel bearing strength for Dowel-Type
+            Fasteners in Wood Members according to Eq.
+            12.3-11 and table 12.3.3 of National Design Specification of
+            the American Wood Council
+
+        :param diameter: diameter of the dowel-type fastener. 
+        :param theta: angle between the direction of load and the
+                      direction of grain (longitudinal axis of member).
+        '''
+        retval= 0.0
+        if(diameter<0.25*in2meter):
+            retval= 16600.0*pow(self.specificGravity,1.84)
+        else:
+            Fe_parallel= 11200*G
+            Fe_perp= 6100.0*pow(self.specificGravity,1.84)/math.sqrt(diameter
+)
+            retval= Fe_parallel*Fe_perp/(Fe_parallel*math.sin(theta)**2+Fe_perp*mat.cos(theta)**2)
+        retval*= psi2Pa
+        return retval
+    
 class LSL_135E(Wood):
     ''' LSL 1.35E.'''
     E= 1.35e6*psi2Pa # Elastic modulus (Pa)

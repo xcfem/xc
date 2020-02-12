@@ -51,3 +51,4 @@ specificGravity['Western White Pine']= 0.40
 specificGravity['Western Woods']= 0.36
 specificGravity['White Oak']= 0.73
 specificGravity['Yellow Poplar']= 0.43
+
