@@ -3,6 +3,9 @@
     of "NATIONAL DESIGN SPECIFICATION FOR WOOD CONSTRUCTION 2018"
     of the American Wood Council.'''
 
+from __future__ import print_function
+from __future__ import division
+
 import math
 from materials.awc_nds import AWCNDS_materials as mat
 
@@ -20,6 +23,136 @@ class Screw(object):
         self.L= length
         self.tip= tip
         self.Fyb= bendingYieldStrength
+    def getReductionTerm(self, theta, yieldMode):
+        ''' Return the reduction term Rd according to table
+            12.3.1B of NDS-2018.
+
+        :param theta: maximum angle between the direction of load
+                      and the direction of grain (0<=theta<=PI/2) for any
+                      member in a connection.
+        :param yieldMode: yield mode.
+        '''
+        if(self.D<0.25*mat.in2meter):
+            if(self.D<0.17*mat.in2meter):
+                return 2.2
+            else:
+                return 10.0*self.D/mat.in2meter+0.5
+        else:
+            k_theta= 1+0.25*(theta/(math.pi/2.0))
+            if(yieldMode in ['Im','Is']):
+                return 4.0*k_theta
+            elif(yieldMode=='II'):
+                return 3.6*k_theta
+            elif(yieldMode in ['IIIm','IIIs, IV']):
+                return 3.2*k_theta
+            else:
+                lmsg.error('Unknown yield mode: '+yieldMode)
+    def getDiameterForYield(self):
+        ''' Return the diamterer to use in the k1, k2 and k3
+            expressions accorcing to clause 12.3.7 of NDS-2018.'''
+        return self.D
+    def getK1(self,mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s):
+        ''' Return the k1 factor according to table
+            12.3.1B of NDS-2018.
+
+        :param mainMemberWood: main member Wood object.
+        :param mainMemberWood: side member Wood object.
+        :param lm: main member dowel bearing length.
+        :param ls: side member dowel bearing length.
+        :param theta_m: angle between the direction of load and the
+                        direction of grain of the main member.
+        :param theta_s: angle between the direction of load and the
+                        direction of grain of the side member.
+        '''
+        Fem= mainMemberWood.getDowelBearingStrenght(self.D, theta_m)
+        Fes= sideMemberWood.getDowelBearingStrenght(self.D, theta_s)
+        Re= Fem/Fes
+        Rt= lm/ls
+        return (math.sqrt(Re+2.0*Re**2*(1+Rt+Rt**2)+Rt**2*Re**3)-Re*(1+Rt))/(1+Re)
+    def getK2(self,mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s):
+        ''' Return the k2 factor according to table
+            12.3.1B of NDS-2018.
+
+        :param mainMemberWood: main member Wood object.
+        :param mainMemberWood: side member Wood object.
+        :param lm: main member dowel bearing length.
+        :param ls: side member dowel bearing length.
+        :param theta_m: angle between the direction of load and the
+                        direction of grain of the main member.
+        :param theta_s: angle between the direction of load and the
+                        direction of grain of the side member.
+        '''
+        Fem= mainMemberWood.getDowelBearingStrenght(self.D, theta_m)
+        Fes= sideMemberWood.getDowelBearingStrenght(self.D, theta_s)
+        Re= Fem/Fes
+        Rt= lm/ls
+        D= self.getDiameterForYield()
+        return -1+math.sqrt(2.0*(1+Re)+(2.0*self.Fyb*(2.0+Re)*D**2)/(3.0*Fem*lm**2))
+    def getK3(self,mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s):
+        ''' Return the k3 factor according to table
+            12.3.1B of NDS-2018.
+
+        :param mainMemberWood: main member Wood object.
+        :param mainMemberWood: side member Wood object.
+        :param lm: main member dowel bearing length.
+        :param ls: side member dowel bearing length.
+        :param theta_m: angle between the direction of load and the
+                        direction of grain of the main member.
+        :param theta_s: angle between the direction of load and the
+                        direction of grain of the side member.
+        '''
+        Fem= mainMemberWood.getDowelBearingStrenght(self.D, theta_m)
+        Fes= sideMemberWood.getDowelBearingStrenght(self.D, theta_s)
+        Re= Fem/Fes
+        D= self.getDiameterForYield()
+        return -1+math.sqrt(2.0*(1+Re)/Re+(2.0*self.Fyb*(2.0+Re)*D**2)/(3.0*Fem*ls**2))
+    def getYieldLimit(self, mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s, doubleShear= False):
+        ''' Return the yield limit according to table
+            12.3.1B of NDS-2018.
+
+        :param mainMemberWood: main member Wood object.
+        :param mainMemberWood: side member Wood object.
+        :param lm: main member dowel bearing length.
+        :param ls: side member dowel bearing length.
+        :param theta_m: angle between the direction of load and the
+                        direction of grain of the main member.
+        :param theta_s: angle between the direction of load and the
+                        direction of grain of the side member.
+        :param doubleShear: double shear plane in connection.
+        '''
+        D= self.getDiameterForYield()
+        Fem= mainMemberWood.getDowelBearingStrenght(D, theta_m)
+        Rd_Im= self.getReductionTerm(theta= 0.0, yieldMode= 'Im')
+        Z_Im= D*lm*Fem/Rd_Im # Eq. (12.3-1 or 12.3-7)
+        retval= Z_Im
+        Rd_Is= self.getReductionTerm(theta= 0.0, yieldMode= 'Is')
+        Fes= sideMemberWood.getDowelBearingStrenght(D, theta_s)
+        Z_Is= D*ls*Fes/Rd_Is # Eq. (12.3-2)
+        if(doubleShear):
+            Z_Is*=2.0 # Eq. (12.3-8)
+        retval= min(retval,Z_Is)
+        Rd_II= self.getReductionTerm(theta= 0.0, yieldMode= 'II')
+        k1= self.getK1(mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s)
+        Z_II= k1*D*ls*Fes/Rd_II # Eq. (12.3-3)
+        retval= min(retval,Z_II)
+        Rd_IIIm= self.getReductionTerm(theta= 0.0, yieldMode= 'IIIm')
+        k2= self.getK2(mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s)
+        Re= Fem/Fes
+        Z_IIIm= k2*D*lm*Fem/(1+2.0*Re)/Rd_IIIm # Eq. (12.3-4)
+        retval= min(retval,Z_IIIm)
+        Rd_IIIs= self.getReductionTerm(theta= 0.0, yieldMode= 'IIIs')
+        k3= self.getK3(mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s)
+        Z_IIIs= k3*D*ls*Fem/(2+Re)/Rd_IIIs # Eq. (12.3-5)
+        if(doubleShear):
+            Z_IIIs*=2.0 # Eq. (12.3-9)
+        retval= min(retval,Z_IIIs)
+        Rd_IV= self.getReductionTerm(theta= 0.0, yieldMode= 'IV')
+        Z_IV= D**2/Rd_IV*math.sqrt(2.0*Fem*self.Fyb/(3.0*(1+Re)))# Eq. (12.3-6)
+        if(doubleShear):
+            Z_IV*=2.0 # Eq. (12.3-10)
+        retval= min(retval,Z_IV)
+        return retval
+
 
 class LagScrew(Screw):
     ''' Lag screw as defined in NDS-2018.'''
@@ -79,5 +212,9 @@ class WoodScrew(Screw):
             and the side members for double shear connection according
             to clause 12.1.5.6 of NDS-2018.'''
         return 6.0*self.D
+    def getDiameterForYield(self):
+        ''' Return the diamterer to use in the k1, k2 and k3
+            expressions accorcing to clause 12.3.7 of NDS-2018.'''
+        return self.rootDiameter
 
 
