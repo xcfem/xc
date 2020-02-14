@@ -40,8 +40,8 @@ namespace XC {
 class CentralDifferenceBase : public TransientIntegrator
   {
   protected:
-    int updateCount;    // method should only have one update per step
-    Vector Udot;       // vel response quantity at time t-1/2 delta t
+    int updateCount; //!< method should only have one update per step
+    Vector Udot; //!< vel response quantity at time t-1/2 delta t
     double deltaT;
 
     CentralDifferenceBase(AnalysisAggregation *,int classTag);
@@ -51,6 +51,8 @@ class CentralDifferenceBase : public TransientIntegrator
     int formEleTangent(FE_Element *theEle);
     int formNodTangent(DOF_Group *theDof);
 
+    inline const Vector &getVel(void) const
+      { return Udot; }
     int newStep(double deltaT);
   };
 } // end of XC namespace

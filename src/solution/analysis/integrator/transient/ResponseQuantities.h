@@ -70,6 +70,13 @@ class ResponseQuantities: public MovableObject
     void setDisp(const ID &,const Vector &);
     void setVel(const ID &,const Vector &);
     void setAccel(const ID &,const Vector &);
+    
+    inline const Vector &getDisp(void) const
+      { return R; }
+    inline const Vector &getVel(void) const
+      { return Rdot; }
+    inline const Vector &getAccel(void) const
+      { return Rdotdot; }
 
     void resize(const int &size);
     void Zero(void);
