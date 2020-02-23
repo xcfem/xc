@@ -410,7 +410,6 @@ const XC::Matrix &XC::ShellMITC4Base::getInitialStiff(void) const
     return stiff;
   }
 
-
 //! @brief Zeroes the element load vector.
 void XC::ShellMITC4Base::zeroLoad(void)
   {
