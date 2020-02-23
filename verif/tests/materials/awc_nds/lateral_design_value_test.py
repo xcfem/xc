@@ -33,7 +33,6 @@ Z= fastener.getYieldLimit(mainMemberWood, sideMemberWood, mainMemberDowelBearing
 
 ratio= abs(Z-1.03959600276e3)/1.03959600276e3
 
-'''
 print('Main member Fem= ', Fem/1e6, ' MPa (', Fem/mat.psi2Pa,' psi)')
 print('Side members Fes= ', Fes/1e6, ' MPa (', Fes/mat.psi2Pa,' psi)')
 print('fastener bending yield strengt Fyb= ', Fyb/1e6, ' MPa (', Fyb/mat.psi2Pa,' psi)')
@@ -42,6 +41,7 @@ print('reduction term Rd= ', Rd)
 print('k3= ', k3)
 print('Z= ', Z/1e3,' kN (',Z/mat.pound2N,' lbs)')
 print('ratio= ',ratio)
+'''
 '''
 
 import os

@@ -137,31 +137,26 @@ class Screw(object):
         Z_Is= D*ls*Fes/Rd_Is # Eq. (12.3-2)
         if(doubleShear):
             Z_Is*=2.0 # Eq. (12.3-8)
-        print('Z_Is= ',Z_Is)
         retval= min(retval,Z_Is)
         Rd_II= self.getReductionTerm(theta= 0.0, yieldMode= 'II')
         k1= self.getK1(mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s)
         Z_II= k1*D*ls*Fes/Rd_II # Eq. (12.3-3)
         retval= min(retval,Z_II)
-        print('Z_II= ',Z_II)
         Rd_IIIm= self.getReductionTerm(theta= 0.0, yieldMode= 'IIIm')
         k2= self.getK2(mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s)
         Re= Fem/Fes
         Z_IIIm= k2*D*lm*Fem/(1+2.0*Re)/Rd_IIIm # Eq. (12.3-4)
-        print('Z_IIIm= ',Z_IIIm)
         retval= min(retval,Z_IIIm)
         Rd_IIIs= self.getReductionTerm(theta= 0.0, yieldMode= 'IIIs')
         k3= self.getK3(mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s)
         Z_IIIs= k3*D*ls*Fem/(2+Re)/Rd_IIIs # Eq. (12.3-5)
         if(doubleShear):
             Z_IIIs*=2.0 # Eq. (12.3-9)
-        print('Z_IIIs= ',Z_IIIs)
         retval= min(retval,Z_IIIs)
         Rd_IV= self.getReductionTerm(theta= 0.0, yieldMode= 'IV')
         Z_IV= D**2/Rd_IV*math.sqrt(2.0*Fem*self.Fyb/(3.0*(1+Re)))# Eq. (12.3-6)
         if(doubleShear):
             Z_IV*=2.0 # Eq. (12.3-10)
-        print('Z_IV= ',Z_IV)
         retval= min(retval,Z_IV)
         return retval
 
@@ -217,7 +212,7 @@ class WoodScrew(Screw):
         :param rootDiameter: root diameter.
         :param threadLength: thread length.
         '''
-        super(WoodScrew,self).__init__(diameter, length, 2*diameter, bendingYieldStrength)
+        super(WoodScrew,self).__init__(diameter= diameter, length= length, tip= 2*diameter, rootDiameter= rootDiameter, bendingYieldStrength= bendingYieldStrength)
         self.headDiameter= headDiameter
         if(threadLength):
             self.threadLength= threadLength
@@ -231,7 +226,7 @@ class WoodScrew(Screw):
             to clause 12.1.5.6 of NDS-2018.'''
         return 6.0*self.D
     def getDiameterForYield(self):
-        ''' Return the diamterer to use in the k1, k2 and k3
+        ''' Return the diameter to use in the k1, k2 and k3
             expressions accorcing to clause 12.3.7 of NDS-2018.'''
         return self.rootDiameter
 

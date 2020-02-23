@@ -11,7 +11,7 @@ from materials.awc_nds import AWCNDS_materials as mat
 
 inch2meter= 0.0254
 
-fastener= fasteners.LagScrew(diameter= 0.5*inch2meter, length= 4.0*0.0254, tip= .3125*inch2meter) 
+fastener= fasteners.LagScrew(diameter= 0.5*inch2meter, length= 4.0*0.0254, tip= .3125*inch2meter, rootDiameter= 0.265*mat.in2meter) 
 G= sg.specificGravity['Southern Pine'] # Specific gravity
 sideMemberThickness= 1.5*inch2meter # Side member thickness
 screwPenetration= fastener.getScrewPenetration(sideMemberThickness) # Screw penetration into main member.
