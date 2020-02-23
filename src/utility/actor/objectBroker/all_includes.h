@@ -173,6 +173,7 @@
 #include "domain/mesh/element/plane/shell/ShellLinearCrdTransf3d.h"
 #include "domain/mesh/element/plane/shell/ShellMITC4.h"
 #include "domain/mesh/element/plane/shell/ShellMITC9.h"
+#include "domain/mesh/element/plane/shell/ShellNLDKGQ.h"
 
 #include "domain/mesh/element/truss_beam_column/elasticBeamColumn/ElasticBeam2d.h"
 #include "domain/mesh/element/truss_beam_column/elasticBeamColumn/ElasticBeam3d.h"

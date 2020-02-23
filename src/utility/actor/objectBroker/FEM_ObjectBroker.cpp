@@ -232,6 +232,9 @@ XC::Element *XC::FEM_ObjectBroker::getNewElement(int classTag)
         case ELE_TAG_ShellMITC9:
                 return new ShellMITC9();
 
+        case ELE_TAG_ShellNLDKGQ:
+                return new ShellNLDKGQ();
+
         case ELE_TAG_BbarBrick:
                 return new BbarBrick();
 

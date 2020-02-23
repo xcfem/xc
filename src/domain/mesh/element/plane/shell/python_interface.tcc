@@ -90,3 +90,6 @@ class_<XC::ShellMITC9, bases<QuadBase9N_SFD>, boost::noncopyable >("ShellMITC9",
     .add_property("getCoordTransf", make_function( getMITC9CoordTransfRef, return_internal_reference<>() ))
    ;
 
+class_<XC::ShellNLDKGQ, bases<XC::Shell4NBase>, boost::noncopyable >("ShellNLDKGQ", no_init)
+   ;
+

@@ -80,6 +80,7 @@
 
 #include "domain/mesh/element/plane/shell/ShellMITC4.h"
 #include "domain/mesh/element/plane/shell/ShellMITC9.h"
+#include "domain/mesh/element/plane/shell/ShellNLDKGQ.h"
 
 #include "domain/mesh/element/zeroLength/ZeroLength.h"
 #include "domain/mesh/element/zeroLength/ZeroLengthSection.h"
@@ -208,6 +209,7 @@ void materialNotSuitableMsg(const std::string &errHeader, const std::string &mat
 //!   for 3D problems.
 //! - ShellMITC4: Defines a shell element (ShellMITC4),
 //! - ShellMITC9: Defines a shell element (ShellMITC9),
+//! - ShellNLDKGQ: Defines a geometric non-linear shell element (ShellNLDKGQ),
 //!   for shell problems.
 //! - FourNodeQuad: Defines a four node quad (FourNodeQuad),
 //! - Tri31: Defines a three node triangle with just a Gauss point (Tri31),
@@ -377,6 +379,12 @@ XC::Element *XC::ProtoElementHandler::create_element(const std::string &cmd,int 
 	if(cmd=="shell_nl")
 	  deprecatedElementNameMsg(errHeader,cmd,"ShellMITC9");
         retval= new_element_mat<ShellMITC9,SectionForceDeformation>(tag_elem, get_ptr_material());
+        if(!retval)
+	  materialNotSuitableMsg(errHeader,material_name,cmd);
+      }
+    else if(cmd == "ShellNLDKGQ")
+      {
+        retval= new_element_mat<ShellNLDKGQ,SectionForceDeformation>(tag_elem, get_ptr_material());
         if(!retval)
 	  materialNotSuitableMsg(errHeader,material_name,cmd);
       }

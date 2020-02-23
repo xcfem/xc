@@ -248,7 +248,9 @@
 #define ELE_TAG_PlateMITC4      2023 
 #define ELE_TAG_ShellMITC4      2024 
 #define ELE_TAG_Plate1          2022 
-#define ELE_TAG_ShellMITC9         2025 
+#define ELE_TAG_ShellMITC9      2025 
+#define ELE_TAG_ShellNLDKGQ      157
+#define ELE_TAG_ShellNLDKGT      168
 #define ELE_TAG_Brick                      3458 
 #define ELE_TAG_BbarBrick                  3457 
 #define ELE_TAG_FLBrick                  3455 

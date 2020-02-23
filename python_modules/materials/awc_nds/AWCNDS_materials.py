@@ -246,10 +246,10 @@ class Wood(object):
         if(diameter<0.25*in2meter):
             retval= 16600.0*pow(self.specificGravity,1.84)
         else:
-            Fe_parallel= 11200*G
+            Fe_parallel= 11200*self.specificGravity
             Fe_perp= 6100.0*pow(self.specificGravity,1.84)/math.sqrt(diameter
 )
-            retval= Fe_parallel*Fe_perp/(Fe_parallel*math.sin(theta)**2+Fe_perp*mat.cos(theta)**2)
+            retval= Fe_parallel*Fe_perp/(Fe_parallel*math.sin(theta)**2+Fe_perp*math.cos(theta)**2)
         retval*= psi2Pa
         return retval
     

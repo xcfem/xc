@@ -181,6 +181,8 @@ XC::Element *XC::FEM_ObjectBrokerAllClasses::getNewElement(int classTag)
              return new ShellMITC4();
         case ELE_TAG_ShellMITC9:
              return new ShellMITC9();
+        case ELE_TAG_ShellNLDKGQ:
+             return new ShellNLDKGQ();
         case ELE_TAG_BbarBrick:
                 return new BbarBrick();
         case ELE_TAG_Joint2D:                                // Arash

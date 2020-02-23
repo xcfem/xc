@@ -8,20 +8,23 @@ from __future__ import division
 
 import math
 from materials.awc_nds import AWCNDS_materials as mat
+from miscUtils import LogMessages as lmsg
 
 class Screw(object):
     ''' Screw as defined in NDS-2018.'''
-    def __init__(self, diameter, length, tip, bendingYieldStrength= 45e3*mat.psi2Pa):
+    def __init__(self, diameter, length, tip, rootDiameter, bendingYieldStrength= 45e3*mat.psi2Pa):
         ''' Constructor.
  
         :param diameter: fastener diameter.
         :param length: fastener length.
+        :param rootDiameter: root diameter.
         :param bendingYieldStrength: fastener bending yield strength (see
                                      table I1 NDS-2018).
         '''
         self.D= diameter
         self.L= length
         self.tip= tip
+        self.rootDiameter= rootDiameter
         self.Fyb= bendingYieldStrength
     def getReductionTerm(self, theta, yieldMode):
         ''' Return the reduction term Rd according to table
@@ -43,10 +46,10 @@ class Screw(object):
                 return 4.0*k_theta
             elif(yieldMode=='II'):
                 return 3.6*k_theta
-            elif(yieldMode in ['IIIm','IIIs, IV']):
+            elif(yieldMode in ['IIIm','IIIs', 'IV']):
                 return 3.2*k_theta
             else:
-                lmsg.error('Unknown yield mode: '+yieldMode)
+                lmsg.error('Unknown yield mode: \''+yieldMode+'\'')
     def getDiameterForYield(self):
         ''' Return the diamterer to use in the k1, k2 and k3
             expressions accorcing to clause 12.3.7 of NDS-2018.'''
@@ -120,6 +123,10 @@ class Screw(object):
                         direction of grain of the side member.
         :param doubleShear: double shear plane in connection.
         '''
+        if(lm<0.0):
+            lmsg.error('negative main member dowel bearing length: lm= '+str(lm))
+        if(ls<0.0):
+            lmsg.error('negative side member dowel bearing length: ls= '+str(ls))
         D= self.getDiameterForYield()
         Fem= mainMemberWood.getDowelBearingStrenght(D, theta_m)
         Rd_Im= self.getReductionTerm(theta= 0.0, yieldMode= 'Im')
@@ -130,38 +137,43 @@ class Screw(object):
         Z_Is= D*ls*Fes/Rd_Is # Eq. (12.3-2)
         if(doubleShear):
             Z_Is*=2.0 # Eq. (12.3-8)
+        print('Z_Is= ',Z_Is)
         retval= min(retval,Z_Is)
         Rd_II= self.getReductionTerm(theta= 0.0, yieldMode= 'II')
         k1= self.getK1(mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s)
         Z_II= k1*D*ls*Fes/Rd_II # Eq. (12.3-3)
         retval= min(retval,Z_II)
+        print('Z_II= ',Z_II)
         Rd_IIIm= self.getReductionTerm(theta= 0.0, yieldMode= 'IIIm')
         k2= self.getK2(mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s)
         Re= Fem/Fes
         Z_IIIm= k2*D*lm*Fem/(1+2.0*Re)/Rd_IIIm # Eq. (12.3-4)
+        print('Z_IIIm= ',Z_IIIm)
         retval= min(retval,Z_IIIm)
         Rd_IIIs= self.getReductionTerm(theta= 0.0, yieldMode= 'IIIs')
         k3= self.getK3(mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s)
         Z_IIIs= k3*D*ls*Fem/(2+Re)/Rd_IIIs # Eq. (12.3-5)
         if(doubleShear):
             Z_IIIs*=2.0 # Eq. (12.3-9)
+        print('Z_IIIs= ',Z_IIIs)
         retval= min(retval,Z_IIIs)
         Rd_IV= self.getReductionTerm(theta= 0.0, yieldMode= 'IV')
         Z_IV= D**2/Rd_IV*math.sqrt(2.0*Fem*self.Fyb/(3.0*(1+Re)))# Eq. (12.3-6)
         if(doubleShear):
             Z_IV*=2.0 # Eq. (12.3-10)
+        print('Z_IV= ',Z_IV)
         retval= min(retval,Z_IV)
         return retval
 
 
 class LagScrew(Screw):
     ''' Lag screw as defined in NDS-2018.'''
-    def __init__(self, diameter, length, tip, bendingYieldStrength= 45e3*mat.psi2Pa):
+    def __init__(self, diameter, length, tip, rootDiameter, bendingYieldStrength= 45e3*mat.psi2Pa):
         ''' Constructor.
 
         :param tip: fastener tapered tip length.
         '''
-        super(LagScrew,self).__init__(diameter, length, tip, bendingYieldStrength)
+        super(LagScrew,self).__init__(diameter, length, tip, rootDiameter, bendingYieldStrength)
     def getReferenceWithdrawal(self, G):
         ''' Return reference withdrawal design value according
             to equation 12.2-1 of NDS-2018.
@@ -187,6 +199,13 @@ class LagScrew(Screw):
         W= self.getReferenceWithdrawal(G)
         pt= self.getScrewPenetration(sideMemberThickness)
         return self.getReferenceWithdrawal(G)*endGrainFactor*self.getScrewPenetration(sideMemberThickness)
+    def getMinPenetration(self):
+        ''' Return the inimum length of lag screw pentration, p_min,
+            including the length of the tapered tip where part of the 
+            penetration into the main member for single shear connections
+            and the side members for double shear connection according
+            to clause 12.1.4.6 of NDS-2018.'''
+        return 4.0*self.D
         
 class WoodScrew(Screw):
     ''' Wood screw as defined in NDS-2018.'''
@@ -200,7 +219,6 @@ class WoodScrew(Screw):
         '''
         super(WoodScrew,self).__init__(diameter, length, 2*diameter, bendingYieldStrength)
         self.headDiameter= headDiameter
-        self.rootDiameter= rootDiameter
         if(threadLength):
             self.threadLength= threadLength
         else:

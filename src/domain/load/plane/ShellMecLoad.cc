@@ -33,6 +33,7 @@
 
 #include "domain/mesh/element/plane/shell/ShellMITC4Base.h"
 #include "domain/mesh/element/plane/shell/ShellMITC9.h"
+#include "domain/mesh/element/plane/shell/ShellNLDKGQ.h"
 #include "domain/mesh/element/utils/coordTransformation/CrdTransf.h"
 #include "domain/mesh/node/Node.h"
 
@@ -143,6 +144,15 @@ const XC::Matrix &XC::ShellMecLoad::getGlobalVectors(const Matrix &localVectors)
                         << elemTag << " no tiene coordinate transformation." << std::endl;
               }
             else if(const ShellMITC9 *ptrShell= dynamic_cast<const ShellMITC9 *>(ptrElem))
+              {
+                const ShellCrdTransf3dBase *ptrTransf= ptrShell->getCoordTransf();
+                if(ptrTransf)
+                  retval= ptrTransf->getVectorGlobalCoordFromLocal(localVectors);
+                else
+		  std::cerr << "ShellMecLoad::getGlobalVectors; the element: "
+                        << elemTag << " no tiene coordinate transformation." << std::endl;
+              }
+            else if(const ShellNLDKGQ *ptrShell= dynamic_cast<const ShellNLDKGQ *>(ptrElem))
               {
                 const ShellCrdTransf3dBase *ptrTransf= ptrShell->getCoordTransf();
                 if(ptrTransf)
