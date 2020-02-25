@@ -55,8 +55,6 @@ class_<XC::ElementPropRecorder, bases<XC::PropRecorder>, boost::noncopyable >("E
   .def("setElements",&XC::ElementPropRecorder::setElements,"Assigns elements to the recorder.")
   ;
 
-// class_<XC::YsVisual , bases<XC::Recorder>, boost::noncopyable >("YsVisual", no_init);
-
 // class_<XC::DamageRecorder, bases<XC::DomainRecorderBase>, boost::noncopyable >("DamageRecorder", no_init);
 
 // class_<XC::GSA_Recorder, bases<XC::DomainRecorderBase>, boost::noncopyable >("GSA_Recorder", no_init);

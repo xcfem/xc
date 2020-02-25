@@ -508,7 +508,6 @@
 #define RECORDER_TAGS_AlgorithmIncrements	8
 #define RECORDER_TAGS_DriftRecorder		9
 #define RECORDER_TAGS_GSA_Recorder		10
-#define RECORDER_TAGS_YsVisual                  11
 #define RECORDER_TAGS_DamageRecorder		12
 #define RECORDER_TAGS_PatternRecorder		13
 #define RECORDER_TAGS_TclFeViewer		14
