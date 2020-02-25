@@ -11,7 +11,7 @@ make html
 
 We change to our local XCmanual repository
 
-cd .../some_directory/XCmanual
+cd /usr/local/src/prg/XCmanual
 
 and update the newly created/updated files:
 

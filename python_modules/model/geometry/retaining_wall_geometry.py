@@ -25,7 +25,6 @@ from postprocess.reports import common_formats as fmt
 class CantileverRetainingWallGeometry(object):
   '''Geometry of a cantilever retaining wall.
 
-    Attributes:
         :ivar name: (string) Identifier.
         :ivar stemHeight: (float) Height of the stem.
         :ivar stemBottomWidth: (float) Stem width at his contact with the footing.

@@ -1,7 +1,7 @@
 Prestress
 =========
 
-prestress_cables
+Prestress cables
 ----------------
 
 .. automodule:: actions.prestress.prestress_cables

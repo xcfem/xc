@@ -9,8 +9,8 @@ Mode loads
     :undoc-members:
     :show-inheritance:
 
-seismeSIA
----------
+seisme SIA
+----------
 
 .. automodule:: actions.quake.seismeSIA
     :members:
