@@ -22,6 +22,14 @@ Masonry vault
     :undoc-members:
     :show-inheritance:
 
+Vault
+------
+
+.. automodule:: rough_calculations.vaults_rough_calc
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Cable stayed_bridge simple model
 --------------------------------
 
@@ -71,21 +79,14 @@ Concrete slab
     :undoc-members:
     :show-inheritance:
 
-Column loads
---------------
+Column internal forces
+----------------------
 
 .. automodule:: rough_calculations.ng_column_loads
     :members:
     :undoc-members:
     :show-inheritance:
 
-Pinned fixed beam
---------------------
-
-.. automodule:: rough_calculations.ng_pinned_fixed_beam
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 
 Prestressed concrete
@@ -114,6 +115,22 @@ Reinforced concrete section
 
 
 Retaining wall
+-----------------
+
+.. automodule:: rough_calculations.ng_basement_wall
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Diaphragm wall
+-----------------
+
+.. automodule:: rough_calculations.predim_diaphragm_wall
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Basement wall
 -----------------
 
 .. automodule:: rough_calculations.ng_retaining_wall
@@ -146,15 +163,31 @@ Tied arch simple model
     :show-inheritance:
 
 
-encepados
-------------
+Pile cap
+--------
 
-.. automodule:: rough_calculations.ng_encepados
+.. automodule:: rough_calculations.ng_pile_cap
     :members:
     :undoc-members:
     :show-inheritance:
 
-suspension bridge simple model
+Pile
+----
+
+.. automodule:: rough_calculations.ng_pile_cap
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Isolated footing
+----------------
+
+.. automodule:: rough_calculations.ng_isolated_footing
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Suspension bridge simple model
 ------------------------------
 
 .. automodule:: rough_calculations.suspension_bridge_simple_model
@@ -162,10 +195,26 @@ suspension bridge simple model
     :undoc-members:
     :show-inheritance:
 
-min dim of abutment support
-------------------------------
+Minimal dimension of abutment support
+-------------------------------------
 
 .. automodule:: rough_calculations.ng_min_dim_of_abutment_support
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Earth pressure
+--------------
+
+.. automodule:: rough_calculations.ng_earth_pressure
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Profile mechanical properties
+-----------------------------
+
+.. automodule:: rough_calculations.profile_mechanical_prop
     :members:
     :undoc-members:
     :show-inheritance:

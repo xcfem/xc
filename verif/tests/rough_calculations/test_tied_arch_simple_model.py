@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-from rough_calculations import ng_tied_arch_simple_model as tiedArch
+from rough_calculations import tied_arch_simple_model as tiedArch
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2016, AOO and LCPT"
