@@ -527,10 +527,8 @@ class setRCSections2SetElVerif(object):
 
     :ivar name:       name given to the list of reinforced concrete sections
     :ivar lstRCSects: list of reinforced concrete fiber-sections that will be 
-                      associated to a set of elements in order to carry out their
-                      LS verifications.
-                      The items of the list are instances of the object 
-                      RecordRCSimpleSection
+                      associated to a set of elements in order to carry out their LS verifications.
+                      The items of the list are instances of the object *RecordRCSimpleSection*
                       lstRCSects[0]=section in 1 direction
                       lstRCSects[1]=section in 2 direction ...
 
@@ -548,8 +546,7 @@ class setRCSections2SetElVerif(object):
         identified by the sectNmb
 
         :param sectNmb: integer number identifying the section 
-                         (1 correponds to the section stored
-                          in  lstRCSects[0] ...)
+                         (1 correponds to the section stored in  lstRCSects[0] ...)
         :param nShReinfBranches: number of shear reinforcing branches
         :param areaShReinfBranch: area of the cross-section of each stirrup
         :param spacing:        spacing of the stirrups

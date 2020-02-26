@@ -74,6 +74,7 @@ def writeShearReinforcement(recordShearReinf, archTex, width):
 
 class SectionInfo(object):
     ''' Obtains the fiber section parameters for writing its report page
+
     :ivar preprocessor: preprocessor
     :ivar sectName:     section name (used as title for the table and as caption, also)
     :ivar sectDescr:    section description (used as subtitle for the table}
@@ -82,10 +83,10 @@ class SectionInfo(object):
     :ivar concrDiag:    concrete diagram 
     :ivar rfStDiag:     reinforcing steel diagram
     :ivar geomSection:  material fiber section
-    :ivar width:        width of the rectangular section (reported on the table and used to calculate 
-                        the torsional inertia, also)
-    :ivar depth:        depth of the rectangular section (reported on the table and used to calculate
-                        the torsional inertia, also)
+    :ivar width:        width of the rectangular section 
+               (reported on the table and used to calculate the torsional inertia, also)
+    :ivar depth:        depth of the rectangular section 
+               (reported on the table and used to calculate the torsional inertia, also)
     :ivar G,A,I: match center of gravity, area and inertia tensor, respectively
     :ivar B,H: match gross and homogenized sections, respectively
     :ivar cover: refers to effective cover
