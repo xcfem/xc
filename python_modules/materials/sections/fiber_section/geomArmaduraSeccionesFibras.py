@@ -10,15 +10,14 @@ __email__= "l.pereztato@gmail.com" "ana.Ortega.Ort@gmail.com"
 def gmHorizRowRebars(sectionGeom, fiberMatName, nRebars, areaRebar, depth, width, cover, h):
     '''Horizontal row of reinforcement bars, placed at a distance h 
     from the median plane (h + towards the top face)
-    Parameters:
-        sectionGeom:   geometric section
-        fiberMatName:  name identifying the material that makes up the fibers
-        nRebars:       number of reinforcing bars to be placed in the row
-        areaRebar:     cross-sectional area of each reinforcing bar
-        depth:         depth (vertical direction) of the rectangular section
-        width:         width (horizontal direction) of the rectangular section
-        cover:         effective cover
-        h:             vertical distance from the row of rebars to the horizontal
+    :param sectionGeom:   geometric section
+    :param fiberMatName:  name identifying the material that makes up the fibers
+    :param nRebars:       number of reinforcing bars to be placed in the row
+    :param areaRebar:     cross-sectional area of each reinforcing bar
+    :param depth:         depth (vertical direction) of the rectangular section
+    :param width:         width (horizontal direction) of the rectangular section
+    :param cover:         effective cover
+    :param h:         vertical distance from the row of rebars to the horizontal
                        simetry axis of the section
     '''
     reinforcement= sectionGeom.getReinfLayers

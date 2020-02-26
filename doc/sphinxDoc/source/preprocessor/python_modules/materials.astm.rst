@@ -1,7 +1,7 @@
 ASTM materials
 ==============
 
-ASTM_materials
+ASTM materials
 --------------
 
 .. automodule:: materials.astm.ASTM_materials

@@ -54,6 +54,6 @@ Timber
    :maxdepth: 1
 
    python_modules/materials.ec5
-
+   python_modules/materials.awcnds
 
 

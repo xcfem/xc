@@ -8,11 +8,11 @@ __email__= "l.pereztato@gmail.com" "ana.Ortega.Ort@gmail.com"
 
 def gmSquareSection(geomSection, fiberMatName, ld, nD):
     '''returns a square section of fibers of the same material
-    Parameters:
-      geomSection:  geometric section
-      fiberMatName: name of the material that makes up the fibers
-      ld:           edge length of the square
-      nD:           number of divisions to be used along the edges
+
+    :param geomSection:  geometric section
+    :param fiberMatName: name of the material that makes up the fibers
+    :param ld:           edge length of the square
+    :param nD:           number of divisions to be used along the edges
                     of the square
     '''
     regions= geomSection.getRegions
@@ -25,14 +25,14 @@ def gmSquareSection(geomSection, fiberMatName, ld, nD):
 
 def gmRectangSection(geomSection,fiberMatName, h, b, nDIJ, nDIK):
     '''returns a rectangular section of fibers of the same material
-    Parameters:
-      geomSection:  geometric section
-      fiberMatName: name of the material that makes up the fibers
-      h:            length of the height side of the rectangle
-      b:            length of the width side of the rectangle
-      nDIJ:         number of divisions to be used along the IJ (width)
+
+    :param geomSection:  geometric section
+    :param fiberMatName: name of the material that makes up the fibers
+    :param h:            length of the height side of the rectangle
+    :param b:            length of the width side of the rectangle
+    :param nDIJ:         number of divisions to be used along the IJ (width)
                     direction
-      nDJK:         number of divisions to be used along the JK (height)
+    :param nDJK:         number of divisions to be used along the JK (height)
                     direction
     '''
     regions= geomSection.getRegions
