@@ -10,6 +10,7 @@ __email__= "l.pereztato@gmail.com" "ana.Ortega.Ort@gmail.com"
 def gmHorizRowRebars(sectionGeom, fiberMatName, nRebars, areaRebar, depth, width, cover, h):
     '''Horizontal row of reinforcement bars, placed at a distance h 
     from the median plane (h + towards the top face)
+
     :param sectionGeom:   geometric section
     :param fiberMatName:  name identifying the material that makes up the fibers
     :param nRebars:       number of reinforcing bars to be placed in the row

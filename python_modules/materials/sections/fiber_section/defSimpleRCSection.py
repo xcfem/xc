@@ -187,12 +187,10 @@ class BasicRecordRCSection(section_properties.RectangularSection):
         return tangSteel/tangHorm
 
     def defDiagrams(self,preprocessor,matDiagType):
-        '''
-        Stress-strain diagrams definition.
+        '''Stress-strain diagrams definition.
 
         :param matDiagType: type of stress-strain diagram 
-                    (="k" for characteristic diagram, 
-                     ="d" for design diagram)
+                    ("k" for characteristic diagram, "d" for design diagram)
         '''
         self.diagType= matDiagType
         if(self.diagType=="d"):
@@ -429,8 +427,7 @@ class RecordRCSimpleSection(BasicRecordRCSection):
         with one row of rebars in the top face and another one in the bottom face
 
         :ivar matDiagType: type of stress-strain diagram 
-                     -  ="k" for characteristic diagram, 
-                     -  ="d" for design diagram
+                     ("k" for characteristic diagram, "d" for design diagram)
         '''
         self.defDiagrams(preprocessor,matDiagType)
         geomSection= preprocessor.getMaterialHandler.newSectionGeometry(self.gmSectionName())
@@ -477,8 +474,7 @@ class RecordRCSimpleSection(BasicRecordRCSection):
         top and bottom reinforcement layers.
 
         :param matDiagType: type of stress-strain diagram 
-                    (="k" for characteristic diagram, 
-                     ="d" for design diagram)
+                    ("k" for characteristic diagram, "d" for design diagram)
          '''
         self.JTorsion= self.getJTorsion()
         self.respT= self.getRespT(preprocessor,self.JTorsion) # Torsional response of the section.
@@ -568,8 +564,7 @@ class setRCSections2SetElVerif(object):
         '''Steel area in local negative face of the simple section identified by the sectNmb
 
          :param sectNmb: integer number identifying the section 
-                         (1 correponds to the section stored
-                          in  lstRCSects[0] ...)
+                         (1 correponds to the section stored in  lstRCSects[0] ...)
 
         '''
         return self.lstRCSects[sectNmb-1].getAsNeg()
@@ -578,8 +573,7 @@ class setRCSections2SetElVerif(object):
         '''Steel area in local positive face of the simple section identified by the sectNmb
 
          :param sectNmb: integer number identifying the section 
-                         (1 correponds to the section stored
-                          in  lstRCSects[0] ...)
+                         (1 correponds to the section stored in  lstRCSects[0] ...)
 
         '''
         return self.lstRCSects[sectNmb-1].getAsPos()
@@ -588,8 +582,7 @@ class setRCSections2SetElVerif(object):
         '''list of distances between bars of rows the in local positive face of the simple section identified by the sectNmb
 
           :param sectNmb: integer number identifying the section 
-                         (1 correponds to the section stored
-                          in  lstRCSects[0] ...)
+                         (1 correponds to the section stored in  lstRCSects[0] ...)
 
         '''
         return self.lstRCSects[sectNmb-1].getSPos()
@@ -598,8 +591,7 @@ class setRCSections2SetElVerif(object):
         '''list of distances between bars of rows  in the local negative face of the simple section identified by the sectNmb
 
          :param sectNmb: integer number identifying the section 
-                         (1 correponds to the section stored
-                          in  lstRCSects[0] ...)
+                         (1 correponds to the section stored in  lstRCSects[0] ...)
 
         '''
         return self.lstRCSects[sectNmb-1].getSNeg()
@@ -608,8 +600,7 @@ class setRCSections2SetElVerif(object):
         '''list of bar diameter in rows of the local negative face  of the simple section identified by the sectNmb
 
          :param sectNmb: integer number identifying the section 
-                         (1 correponds to the section stored
-                          in  lstRCSects[0] ...)
+                         (1 correponds to the section stored in  lstRCSects[0] ...)
         '''
         return self.lstRCSects[sectNmb-1].getDiamNeg()
 
@@ -617,8 +608,7 @@ class setRCSections2SetElVerif(object):
         '''list of bar diameter in rows of the local positive face of the simple section identified by the sectNmb
 
          :param sectNmb: integer number identifying the section 
-                         (1 correponds to the section stored
-                          in  lstRCSects[0] ...)
+                         (1 correponds to the section stored in  lstRCSects[0] ...)
 
         '''
         return self.lstRCSects[sectNmb-1].getDiamPos()
@@ -627,8 +617,7 @@ class setRCSections2SetElVerif(object):
         '''list of number of bars in rows of the local positive face of the simple section identified by the sectNmb
 
          :param sectNmb: integer number identifying the section 
-                         (1 correponds to the section stored
-                          in  lstRCSects[0] ...)
+                         (1 correponds to the section stored in  lstRCSects[0] ...)
         '''
         return self.lstRCSects[sectNmb-1].getNBarPos()
 
@@ -636,8 +625,7 @@ class setRCSections2SetElVerif(object):
         '''list of number of bars in rows of the local negative face of the simple section identified by the sectNmb
 
          :param sectNmb: integer number identifying the section 
-                         (1 correponds to the section stored
-                          in  lstRCSects[0] ...)
+                         (1 correponds to the section stored in  lstRCSects[0] ...)
         '''
         return self.lstRCSects[sectNmb-1].getNBarNeg()
 

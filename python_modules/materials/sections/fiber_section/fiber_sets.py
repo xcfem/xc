@@ -81,24 +81,29 @@ class RCSets(object):
                 self.tensionFibers.insert(f)
         self.tensionFibers.updateCenterOfMass()
         return self.tensionFibers
+    
     def getConcreteArea(self,factor):
         '''returns the cross section area of concrete in the set of fibers
         '''
         return self.concrFibers.fSet.getArea(factor)
+    
     def getMaxConcreteStrain(self):
         '''returns the maximum strain in the set of concrete fibers
         '''
         return self.concrFibers.fSet.getStrainMax()
+    
     def getConcreteInitialTangent(self):
         '''returns the initial tangent in the stress-strain diagram of the 
         material that makes up the fibers of concrete
         '''
         return self.concrFibers.fSet[0].getMaterial().getInitialTangent()
+    
     def getConcreteCompression(self):
         '''returns the resultant of compressive stresses in the concrete fibers
         of the section
         '''
         return self.concrFibers.fSet.getCompressionResultant()
+    
     def getNumTensionRebars(self):
         '''returns the number of reinforcing steel fibers in tension
         '''
@@ -106,7 +111,6 @@ class RCSets(object):
 
 def fiberSectionSetupRCSets(scc,concrMatTag, concrSetName,reinfMatTag, reinfSetName):
     return RCSets(scc,concrMatTag, concrSetName,reinfMatTag, reinfSetName)
-
 
 def createRCFiberSets(preprocessor, setName, concrMatTag, reinfMatTag):
     '''Constructs the sets of concrete fibers 'concrete' and reinforcing steel 
@@ -183,9 +187,9 @@ def fiberSectionSetupRC3Sets(scc,concrMatTag, concrSetName,reinfMatTag, reinfSet
 def getIMaxPropFiber(fibers,methodName):
     '''returns the fiber from a set of fibers where the maximum value of a 
     certain property is reached
-    Parameters:
-      fibers:     set of fibers
-      methodName: name of the method that returns the fiber property searched
+
+    :param fibers:     set of fibers
+    :param methodName: name of the method that returns the fiber property searched
     '''
     retval= 0
     sz= len(fibers)
@@ -204,9 +208,9 @@ def getIMaxPropFiber(fibers,methodName):
 def getIMinPropFiber(fibers,methodName):
     '''returns the fiber from a set of fibers where the minimum value of a 
     certain property is reached
-    Parameters:
-      fibers:     set of fibers
-      methodName: name of the method that returns the fiber property searched
+
+    :param  fibers:     set of fibers
+    :param  methodName: name of the method that returns the fiber property searched
     '''
     retval= 0
     sz= len(fibers)
