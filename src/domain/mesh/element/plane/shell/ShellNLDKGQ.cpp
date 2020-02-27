@@ -1328,7 +1328,11 @@ const XC::Matrix &XC::ShellNLDKGQ::computeBbend(int node ,const double shpBend[6
      Bbend(2,0)= shpBend[3][i] + shpBend[4][i];
      Bbend(2,1)= shpBend[3][j] + shpBend[4][j];
      Bbend(2,2)= shpBend[3][k] + shpBend[4][k];
-
+     /*
+     bugfix: Massimo Petracca 02/26/2020. with the original implementation, 
+     the curvatures sent to the section had the wrong sign.
+     */
+     Bbend*= -1.0;
      return Bbend;
    }
 
