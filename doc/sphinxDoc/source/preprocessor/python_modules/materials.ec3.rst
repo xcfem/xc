@@ -1,8 +1,8 @@
-Materials according to Eurocode-3 code
-======================================
+Materials according to Eurocode-3
+=================================
 
 
-EC3_materials
+EC3 materials
 -------------
 
 .. automodule:: materials.ec3.EC3_materials
@@ -10,7 +10,7 @@ EC3_materials
     :undoc-members:
     :show-inheritance:
 
-EC3Beam
+EC3 beam
 -------
 
 .. automodule:: materials.ec3.EC3Beam
@@ -18,7 +18,7 @@ EC3Beam
     :undoc-members:
     :show-inheritance:
 
-EC3_limit_state_checking
+EC3 limit state checking
 ------------------------
 
 .. automodule:: materials.ec3.EC3_limit_state_checking

@@ -13,7 +13,7 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 from materials.sections import section_properties
-from materials.sections import defSeccAggregation
+from materials.sections import def_secc_aggregation
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -36,7 +36,7 @@ matSeccTest= typical_materials.MaterialData("mattest",E=7E9,nu=0.3,rho=2500) # S
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
 # Definimos el material
-defSeccAggregation.defSeccAggregation3d(preprocessor, seccTest,matSeccTest)
+def_secc_aggregation.def_secc_aggregation3d(preprocessor, seccTest,matSeccTest)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXYZ(0,0,0)
 nod= nodes.newNodeXYZ(L,0,0)

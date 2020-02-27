@@ -6,71 +6,78 @@ from postprocess import control_vars as cv
 #Code names and descriptions of common analysis and design results.
 
 class ResultDescription(object):
-  def __init__(self,attributeName,argument,description,units= ''):
-    '''Description of an analysis or design result to display
+    def __init__(self,attributeName,argument,description,units= ''):
+        '''Description of an analysis or design result to display
 
-    :ivar attributeName: name of the attribute name to deal with
-    :ivar argument: name used to retrieve the property from de analysis object (node, element,...)
-    :ivar description: phrase describing the result to represent.
-    :ivar units: word describing the units (MPa, kN.m, kN,...)
-    ''' 
-    self.attributeName= attributeName
-    self.argument= argument
-    self.description= description
-    self.units= units
-  def __str__(self):
-    return self.argument + ' ' + self.description + ' ' + self.units
-  def getCaption(self):
-    return self.description + ' [' + self.units + ']'
-  def getReinforcementLabel(self):
-    return int(self.attributeName[-1]) #Sect[1] or Sect[2]
+        :ivar attributeName: name of the attribute name to deal with
+        :ivar argument: name used to retrieve the property from de analysis object (node, element,...)
+        :ivar description: phrase describing the result to represent.
+        :ivar units: word describing the units (MPa, kN.m, kN,...)
+        ''' 
+        self.attributeName= attributeName
+        self.argument= argument
+        self.description= description
+        self.units= units
+      
+    def __str__(self):
+        return self.argument + ' ' + self.description + ' ' + self.units
+    
+    def getCaption(self):
+        return self.description + ' [' + self.units + ']'
+    
+    def getReinforcementLabel(self):
+        return int(self.attributeName[-1]) #Sect[1] or Sect[2]
 
 class ResultsDescriptionContainer(dict):
-  ''' Results to display as figures... 
+    ''' Results to display as figures... 
 
-      :ivar limitStateData: string defining limit state check label (something like "Fatigue" or 
-           "CrackControl") and the name of the file that contains the results to display.
-       :ivar lst: list of results descriptions.
-    '''
+        :ivar limitStateData: string defining limit state check label (something like "Fatigue" or "CrackControl") and the name of the file that contains the results to display.
+         :ivar lst: list of results descriptions.
+      '''
 
-  def __init__(self,limitStateData,lst):
+    def __init__(self,limitStateData,lst):
+        self.limitStateData= limitStateData
+        for l in lst:
+            self.add(l)
 
-    self.limitStateData= limitStateData
-    for l in lst:
-      self.add(l)
-  def add(self,rd):
-    self[rd.argument]= rd
-  def getBaseOutputFileName(self,partCode):
-    '''Returns the basic part of the output file names.'''
-    return partCode+ '_results_verif_' + self.limitStateData.label
-  def getLaTeXOutputFileName(self,partCode):
-    '''Return the name of the LaTeX file to write figures into.'''
-    return self.getBaseOutputFileName(partCode)+'.tex'
-  def getLaTeXFigureListFileName(self,partCode):
-    '''Return the name of the LaTeX file to write a list explaining figures.'''
-    return self.getBaseOutputFileName(partCode)+'_figure_list.tex'
-  def getFigureDefinitionList(self,partToDisplay):
-    '''Builds a list of figures to display.
-       partToDisplay: part of the model wich will be displayed'''
-    retval= list()
-    for key in self.keys():
-      result= self[key]
-      partName= partToDisplay.partName
-      index= result.getReinforcementLabel()
-      reinforcementText= partToDisplay.reinforcementLabels[index-1]
-      print '**** key= ', key
-      print '**** label= ', self.limitStateData.label
-      figDef= utils_display.FigureDefinition(partName,self.limitStateData.label,key,result.description,reinforcementText,result.units)
-      retval.append(figDef)
-    return retval
-  def display(self,tp,partToDisplay):
-    '''Calls TakePhoto object tp to display figures corresponding to part.
-       partToDisplay: part of the model that will be displayed.'''
-    latexFigsFilename= self.getLaTeXOutputFileName(partToDisplay.getShortName())
-    print 'latexFigsFilename= ', latexFigsFilename
-    latexListFilename= self.getLaTeXFigureListFileName(partToDisplay.getShortName())
-    figList= self.getFigureDefinitionList(partToDisplay)
-    tp.displayFigures(figList,latexFigsFilename,latexListFilename)
+    def add(self,rd):
+        self[rd.argument]= rd
+
+    def getBaseOutputFileName(self,partCode):
+        '''Returns the basic part of the output file names.'''
+        return partCode+ '_results_verif_' + self.limitStateData.label
+
+    def getLaTeXOutputFileName(self,partCode):
+        '''Return the name of the LaTeX file to write figures into.'''
+        return self.getBaseOutputFileName(partCode)+'.tex'
+
+    def getLaTeXFigureListFileName(self,partCode):
+        '''Return the name of the LaTeX file to write a list explaining figures.'''
+        return self.getBaseOutputFileName(partCode)+'_figure_list.tex'
+
+    def getFigureDefinitionList(self,partToDisplay):
+        '''Builds a list of figures to display.
+           partToDisplay: part of the model wich will be displayed'''
+        retval= list()
+        for key in self.keys():
+            result= self[key]
+            partName= partToDisplay.partName
+            index= result.getReinforcementLabel()
+            reinforcementText= partToDisplay.reinforcementLabels[index-1]
+            print '**** key= ', key
+            print '**** label= ', self.limitStateData.label
+            figDef= utils_display.FigureDefinition(partName,self.limitStateData.label,key,result.description,reinforcementText,result.units)
+            retval.append(figDef)
+        return retval
+
+    def display(self,tp,partToDisplay):
+        '''Calls TakePhoto object tp to display figures corresponding to part.
+           partToDisplay: part of the model that will be displayed.'''
+        latexFigsFilename= self.getLaTeXOutputFileName(partToDisplay.getShortName())
+        print 'latexFigsFilename= ', latexFigsFilename
+        latexListFilename= self.getLaTeXFigureListFileName(partToDisplay.getShortName())
+        figList= self.getFigureDefinitionList(partToDisplay)
+        tp.displayFigures(figList,latexFigsFilename,latexListFilename)
 
 
 #Issues sous charges quasi-permanentes (fissuration)
@@ -140,7 +147,7 @@ nsr= lsd.normalStressesResistance
 cVars= cv.BiaxialBendingControlVars().getFieldNames()
 print 'cVars= ', cVars
 print 'XXX Continue here.'
-exit()
+'''
 issDRnormFrench= ResultsDescriptionContainer(nsr,[ResultDescription("FCCP1","Facteur de capacité (contraintes normales) des éléments sous charges durables (ELUT2*)"),
     ResultDescription("NCP1","Effort normal associé au facteur de capacité (contraintes normales) sous charges durables", 'kN/m'),
     ResultDescription("MyCP1","Moment de flexion associé au facteur de capacité (contraintes normales) sous charges durables", 'm.kN/m'),
@@ -273,3 +280,4 @@ issFatigueFrench= ResultsDescriptionContainer(fr,[ResultDescription("sg_sPos01",
 #     ResultDescription("Vy12","Esfuerzo cortante bajo el modelo de carga de fatiga", 'kN/m'),
 #     ResultDescription("Mu2","Valor último del momento flector", 'kN m/m'),
 #     ResultDescription("Vu2","Valor último del esfuerzo cortante", ' kN/m')])
+'''

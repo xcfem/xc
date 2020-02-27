@@ -8,7 +8,7 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 from materials.sections import section_properties
-from materials.sections import defSeccAggregation
+from materials.sections import def_secc_aggregation
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -31,7 +31,7 @@ sectionTestMaterial= typical_materials.MaterialData("sectionTestMaterial",E=7E9,
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 # Definimos el material
-defSeccAggregation.defSeccAggregation2d(preprocessor, sectionTest,sectionTestMaterial)
+def_secc_aggregation.def_secc_aggregation2d(preprocessor, sectionTest,sectionTestMaterial)
 nodes.defaultTag= 1 #First node number.
 nod= nodes.newNodeXY(0,0)
 nod= nodes.newNodeXY(L,0.0)

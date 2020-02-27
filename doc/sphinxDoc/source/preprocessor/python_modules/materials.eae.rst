@@ -2,7 +2,7 @@ Materials according to EAE code
 ===============================
 
 
-EAE_limit_state_checking
+EAE limit state checking
 ------------------------
 
 .. automodule:: materials.eae.EAE_limit_state_checking

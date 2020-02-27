@@ -2,7 +2,7 @@ Materials according to EHE code
 ===============================
 
 
-EHE_materials
+EHE materials
 -------------
 
 .. automodule:: materials.ehe.EHE_materials
@@ -10,7 +10,7 @@ EHE_materials
     :undoc-members:
     :show-inheritance:
 
-EHE_limit_state_checking
+EHE limit state checking
 ------------------------
 
 .. automodule:: materials.ehe.EHE_limit_state_checking

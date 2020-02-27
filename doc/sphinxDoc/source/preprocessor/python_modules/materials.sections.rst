@@ -23,10 +23,10 @@ momentCurvatureDiagram
     :undoc-members:
     :show-inheritance:
       
-defSeccAggregation
-------------------
+Definition of elastic materials for elements
+--------------------------------------------
 
-.. automodule:: materials.sections.defSeccAggregation
+.. automodule:: materials.sections.def_secc_aggregation
     :members:
     :undoc-members:
     :show-inheritance:

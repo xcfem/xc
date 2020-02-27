@@ -9,7 +9,7 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 from materials.sections import section_properties
-from materials.sections import defSeccAggregation
+from materials.sections import def_secc_aggregation
 
 
 h= 0.30 # Beam cross-section depth.
@@ -24,7 +24,7 @@ sectionTest= section_properties.RectangularSection("sectionTest",b,h) # Section 
 sectionTestMaterial=typical_materials.MaterialData(name='sectionTestMaterial',E=E,nu=0.3,rho=2500) # Section material.
 
 # Define materials
-defSeccAggregation.defSeccAggregation2d(preprocessor, sectionTest,sectionTestMaterial)
+def_secc_aggregation.def_secc_aggregation2d(preprocessor, sectionTest,sectionTestMaterial)
 tang= preprocessor.getMaterialHandler.getMaterial("sectionTest").getTangentStiffness()
 EI= tang.at(1,1)
 EA= tang.at(0,0)
