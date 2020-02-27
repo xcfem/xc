@@ -1,7 +1,7 @@
 Materials acccording to Eurocode 2 code
 =======================================
 
-EC2_materials
+EC2 materials
 ---------------
 
 .. automodule:: materials.ec2.EC2_materials
@@ -9,7 +9,7 @@ EC2_materials
     :undoc-members:
     :show-inheritance:
 
-EC2_limit_state_checking
+EC2 limit state checking
 -------------------------
 
 .. automodule:: materials.ec2.EC2_limit_state_checking

@@ -54,24 +54,30 @@ class LimitStateData(object):
         self.label= limitStateLabel
         self.outputDataBaseFileName= outputDataBaseFileName
         self.controller= None
+        
     def getInternalForcesFileName(self):
         '''Return the file name to read: combination name, element number and 
         internal forces.'''
         return self.envConfig.projectDirTree.getInternalForcesResultsPath()+'intForce_'+ self.label +'.csv'
+    
     def getDisplacementsFileName(self):
         '''Return the file name to read: combination name, node number and 
         displacements (ux,uy,uz,rotX,rotY,rotZ).'''
         return self.envConfig.projectDirTree.getInternalForcesResultsPath()+'displ_'+ self.label +'.csv'
+    
     def getOutputDataBaseFileName(self):
         '''Return the output file name without extension.'''
         return self.envConfig.projectDirTree.getFullVerifPath()+self.outputDataBaseFileName
+    
     def getOutputDataFileName(self):
         '''Return the Python executable file name.'''
         return self.getOutputDataBaseFileName() + '.py'
+    
     def loadPickleObject(objName):
         '''Read a Python object from a pickle file.'''
         with open(name + '.pkl', 'r') as f:
             return pickle.load(f)
+        
     def saveAll(self,feProblem,combContainer,setCalc,fConvIntForc= 1.0,analysisToPerform= defaultAnalysis,lstSteelBeams=None):
         '''Write internal forces, displacements, .., for each combination
 
@@ -81,8 +87,7 @@ class LimitStateData(object):
         :param fConvIntForc: conversion factor between the unit of force 
                                in which the calculation is performed and that 
                                one desired for the displaying of internal forces
-                               (The use of this factor won't be allowed in
-                                future versions)
+                               (The use of this factor won't be allowed in future versions)
         :param lstSteelBeams: list of steel beams to analyze (defaults to None)
         '''
         if fConvIntForc != 1.0:

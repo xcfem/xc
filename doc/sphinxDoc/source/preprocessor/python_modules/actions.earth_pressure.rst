@@ -2,8 +2,8 @@ Earth pressure
 ==============
 
 
-Soil properties
----------------
+Earth pressure models
+---------------------
 
 .. automodule:: actions.earth_pressure.earth_pressure
     :members:

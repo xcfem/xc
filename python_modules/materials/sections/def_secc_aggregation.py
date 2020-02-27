@@ -3,7 +3,7 @@
 import xc_base
 from materials import typical_materials
 
-def defSeccAggregation3d(preprocessor,defSecc,defMat):
+def def_secc_aggregation3d(preprocessor,defSecc,defMat):
   ''' Definition of a elastic material section for 3D elements
 
   :param preprocessor: preprocessor name
@@ -25,7 +25,7 @@ def defSeccAggregation3d(preprocessor,defSecc,defMat):
   #agg.setAddition("Vy",nmbRigVy)
   #agg.setAddition("Vz",nmbRigVz)
 
-def defSeccAggregation2d(preprocessor,defSecc,defMat):
+def def_secc_aggregation2d(preprocessor,defSecc,defMat):
   ''' Definition of a elastic material-section for 2D elements
 
   :param preprocessor: preprocessor name

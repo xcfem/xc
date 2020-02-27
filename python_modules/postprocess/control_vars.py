@@ -436,12 +436,9 @@ class SSBiaxialBendingControlVars(BiaxialBendingControlVars):
     :ivar Ncrd:     design resistance to axial compression
     :ivar McRdy:    design moment resistance about Y (weak) axis
     :ivar McRdz:    design moment resistance about Z (strong) axis
-    :ivar MvRdz:    reduced design moment resistance about Z (strong) axis 
-                    for shear interaction
-    :ivar MbRdz:    reduced design moment resistance about Z (strong) axis 
-                    for lateral-torsional bucking
-    :ivar chiLT:    reduction factor for lateral-torsional buckling 
-                    (defaults to 1)
+    :ivar MvRdz:    reduced design moment resistance about Z (strong) axis for shear interaction
+    :ivar MbRdz:    reduced design moment resistance about Z (strong) axis for lateral-torsional bucking
+    :ivar chiLT:    reduction factor for lateral-torsional buckling (defaults to 1)
 
     '''
     def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0,Mz= 0.0,Ncrd=0.0,McRdy=0.0,McRdz=0.0,MvRdz=0.0,MbRdz=0.0,chiLT=1.0):
@@ -628,10 +625,8 @@ class RCCrackStraightControlVars(NMyMz):
     :ivar N:        axial force
     :ivar My:       bending moment about Y axis
     :ivar Mz:       bending moment about Z axis
-    :ivar s_rmax:   maximum distance between cracks (otherwise a new crack 
-                    could occur in-between
-    :ivar eps_sm:   mean strain in the reinforcement when taking into account 
-                    the effects of tension stiffening
+    :ivar s_rmax:   maximum distance between cracks (otherwise a new crack could occur in-between
+    :ivar eps_sm:   mean strain in the reinforcement when taking into account the effects of tension stiffening
     :ivar wk:       crack width
     '''
     def __init__(self,idSection=-1,combName= 'nil',CF=-1,N= 0.0, My= 0.0, Mz= 0.0, s_rmax=0.0,eps_sm=0.0,wk=0.0):

@@ -1,12 +1,12 @@
-ArchBridgeRoughModelBase
-------------------------
+Arch bridge base 
+-----------------
 
-.. automodule:: rough_calculations.ArchBridgeRoughModelBase
+.. automodule:: rough_calculations.arch_bridge_rough_base
     :members:
     :undoc-members:
     :show-inheritance:
 
-arch_bridge_simple_model
+Arch bridge simple model
 ------------------------
 
 .. automodule:: rough_calculations.arch_bridge_simple_model
@@ -14,15 +14,23 @@ arch_bridge_simple_model
     :undoc-members:
     :show-inheritance:
 
-masonryVault
-------------------------
+Masonry vault
+-------------
 
-.. automodule:: rough_calculations.masonryVault
+.. automodule:: rough_calculations.masonry_vault
     :members:
     :undoc-members:
     :show-inheritance:
 
-cable_stayed_bridge_simple_model
+Vault
+------
+
+.. automodule:: rough_calculations.vaults_rough_calc
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Cable stayed_bridge simple model
 --------------------------------
 
 .. automodule:: rough_calculations.cable_stayed_bridge_simple_model
@@ -30,31 +38,24 @@ cable_stayed_bridge_simple_model
     :undoc-members:
     :show-inheritance:
 
-T_beam_bridges_rough_calc
--------------------------
+T beam bridges
+--------------
 
 .. automodule:: rough_calculations.T_beam_bridges_rough_calc
     :members:
     :undoc-members:
     :show-inheritance:
 
-flechas_vigas
--------------
+Beam deflection
+----------------
 
-.. automodule:: rough_calculations.flechas_vigas
+.. automodule:: rough_calculations.beam_deflection
     :members:
     :undoc-members:
     :show-inheritance:
 
-nb_poussee_terres
------------------
 
-.. automodule:: rough_calculations.nb_poussee_terres
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-ng_beam
+Beam
 -------
 
 .. automodule:: rough_calculations.ng_beam
@@ -62,7 +63,7 @@ ng_beam
     :undoc-members:
     :show-inheritance:
 
-ng_cantilever
+Cantilever
 -------------
 
 .. automodule:: rough_calculations.ng_cantilever
@@ -70,7 +71,7 @@ ng_cantilever
     :undoc-members:
     :show-inheritance:
 
-ng_concrete_slab
+Concrete slab
 ----------------
 
 .. automodule:: rough_calculations.ng_concrete_slab
@@ -78,24 +79,17 @@ ng_concrete_slab
     :undoc-members:
     :show-inheritance:
 
-ng_esf_pilares
---------------
+Column internal forces
+----------------------
 
-.. automodule:: rough_calculations.ng_esf_pilares
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-ng_pinned_fixed_beam
---------------------
-
-.. automodule:: rough_calculations.ng_pinned_fixed_beam
+.. automodule:: rough_calculations.ng_column_loads
     :members:
     :undoc-members:
     :show-inheritance:
 
 
-ng_prestressed_concrete
+
+Prestressed concrete
 -----------------------
 
 .. automodule:: rough_calculations.ng_prestressed_concrete
@@ -103,31 +97,40 @@ ng_prestressed_concrete
     :undoc-members:
     :show-inheritance:
 
-ng_punzonamiento
+Punching shear
 ----------------
 
-.. automodule:: rough_calculations.ng_punzonamiento
+.. automodule:: rough_calculations.ng_punching_shear
     :members:
     :undoc-members:
     :show-inheritance:
 
-ng_rc_section
--------------
+Reinforced concrete section
+---------------------------
 
 .. automodule:: rough_calculations.ng_rc_section
     :members:
     :undoc-members:
     :show-inheritance:
 
-ng_rebar_def
-------------
 
-.. automodule:: rough_calculations.ng_rebar_def
+Retaining wall
+-----------------
+
+.. automodule:: rough_calculations.ng_basement_wall
     :members:
     :undoc-members:
     :show-inheritance:
 
-ng_retaining_wall
+Diaphragm wall
+-----------------
+
+.. automodule:: rough_calculations.predim_diaphragm_wall
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Basement wall
 -----------------
 
 .. automodule:: rough_calculations.ng_retaining_wall
@@ -135,7 +138,7 @@ ng_retaining_wall
     :undoc-members:
     :show-inheritance:
 
-ng_simple_beam
+Simple beam
 --------------
 
 .. automodule:: rough_calculations.ng_simple_beam
@@ -143,7 +146,7 @@ ng_simple_beam
     :undoc-members:
     :show-inheritance:
 
-ng_simple_bending_reinforcement
+Simple bending reinforcement
 -------------------------------
 
 .. automodule:: rough_calculations.ng_simple_bending_reinforcement
@@ -151,24 +154,40 @@ ng_simple_bending_reinforcement
     :undoc-members:
     :show-inheritance:
 
-ng_tied_arch_simple_model
+Tied arch simple model
 -------------------------
 
-.. automodule:: rough_calculations.ng_tied_arch_simple_model
+.. automodule:: rough_calculations.tied_arch_simple_model
     :members:
     :undoc-members:
     :show-inheritance:
 
 
-ng_encepados
-------------
+Pile cap
+--------
 
-.. automodule:: rough_calculations.ng_encepados
+.. automodule:: rough_calculations.ng_pile_cap
     :members:
     :undoc-members:
     :show-inheritance:
 
-suspension_bridge_simple_model
+Pile
+----
+
+.. automodule:: rough_calculations.ng_pile_cap
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Isolated footing
+----------------
+
+.. automodule:: rough_calculations.ng_isolated_footing
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Suspension bridge simple model
 ------------------------------
 
 .. automodule:: rough_calculations.suspension_bridge_simple_model
@@ -176,10 +195,26 @@ suspension_bridge_simple_model
     :undoc-members:
     :show-inheritance:
 
-ng_min_dim_of_abutment_support
-------------------------------
+Minimal dimension of abutment support
+-------------------------------------
 
 .. automodule:: rough_calculations.ng_min_dim_of_abutment_support
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Earth pressure
+--------------
+
+.. automodule:: rough_calculations.ng_earth_pressure
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Profile mechanical properties
+-----------------------------
+
+.. automodule:: rough_calculations.profile_mechanical_prop
     :members:
     :undoc-members:
     :show-inheritance:

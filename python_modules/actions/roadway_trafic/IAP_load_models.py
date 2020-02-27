@@ -3,6 +3,13 @@ from __future__ import division
 
 '''Roadway traffic load model definition according to different standards.
 '''
+
+__author__= "Ana Ortega (AO_O) "
+__copyright__= "Copyright 2015, AO_O "
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
+
 import xc_base
 import geom
 import xc

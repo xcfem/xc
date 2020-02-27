@@ -1,9 +1,9 @@
 
 
-createFiberSets 
-----------------
+fiber_sets
+----------
 
-.. automodule:: materials.sections.fiber_section.createFiberSets
+.. automodule:: materials.sections.fiber_section.fiber_sets
     :members:
     :undoc-members:
     :show-inheritance:
@@ -24,10 +24,10 @@ geomSeccionesFibras
     :undoc-members:
     :show-inheritance:
 
-defSeccionHAPilar 
+defSimpleRCSection
 ------------------
 
-.. automodule:: materials.sections.fiber_section.defSeccionHAPilar
+.. automodule:: materials.sections.fiber_section.defSimpleRCSection
     :members:
     :undoc-members:
     :show-inheritance:

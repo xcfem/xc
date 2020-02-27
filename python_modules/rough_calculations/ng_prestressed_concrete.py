@@ -64,8 +64,7 @@ def loss_friction(s,sigma_p_0,alpha_unit,mu,unint_dev):
     :param alpha_unit: mean angular deviation per unit lenght. 
         E.g.\: Assimilating the parabolic profile of the cable to a 
         circular profile the angular deviation is constant in the beam length 
-        and can be expressed as\:
-          8*eccentricity_mid_span/Lbeam**2
+        and can be expressed as\: 8*eccentricity_mid_span/Lbeam**2
     :param unint_dev: unintentional angular deviation per unit length
     '''
     loss_prestr=sigma_p_0*(1-math.exp(-mu*(alpha_unit+unint_dev)*s))

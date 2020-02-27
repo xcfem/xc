@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import rough_calculations.ng_punzonamiento
+import rough_calculations.ng_punching_shear
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -12,7 +12,7 @@ __email__= "l.pereztato@gmail.com"
 qk=7e3    #N/m2
 A=6*6     #m2
 
-Vd=rough_calculations.ng_punzonamiento.esfuerzoPunzonamiento(qk,A)
+Vd=rough_calculations.ng_punching_shear.esfuerzoPunzonamiento(qk,A)
 #Da como resultado Vd=403 kN
 
 fck=25e6
@@ -20,13 +20,13 @@ d=0.15
 a=0.25
 b=0.25
 
-Vdmax=rough_calculations.ng_punzonamiento.punzMaximo(fck,d,a,b)
+Vdmax=rough_calculations.ng_punching_shear.punzMaximo(fck,d,a,b)
 #Da como resultado Vdmax=290 kN
 
 h=0.20
 fyd=500e6/1.15
 
-As=rough_calculations.ng_punzonamiento.reinforcementPunz(Vd,fck,d,a,b,h,fyd)
+As=rough_calculations.ng_punching_shear.reinforcementPunz(Vd,fck,d,a,b,h,fyd)
 #Da como resultado As=39 cm2
 
 ratio1= (Vd-403.2e3)/403.2e3

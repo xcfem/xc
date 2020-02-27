@@ -5,7 +5,7 @@ import math
 import sys
 import numpy as np
 import pydoc
-import rough_calculations.masonryVault as masonryVault
+import rough_calculations.masonry_vault as masonry_vault
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -28,14 +28,14 @@ hB=2.733
 a = np.array([[pow(xA,4),pow(xA,3),pow(xA,2),xA], [pow(xB,4),pow(xB,3),pow(xB,2),xB],[pow(xC,4),pow(xC,3),pow(xC,2),xC],[pow(xD,4),pow(xD,3),pow(xD,2),xD]])
 b = np.array([hA,hB,hC,hD])
 
-arcGeom=masonryVault.archGeometry()
+arcGeom=masonry_vault.archGeometry()
 arcGeom.coefPolArch=np.linalg.solve(a, b) #[f,j,k,r] coefficients of polynomial y=fx^4+jx^3+kx^2+rx+u (u=0)
 #arcGeom.XRot=[xA,xB,xC,xD]     #X coordinates rotules A,B,C,D [m]
 arcGeom.arcThick=1             #arch thickness (m)
 arcGeom.arcSpan=15             #arch span [m]
 
 
-fillChar= masonryVault.FillingCharacteristics()
+fillChar= masonry_vault.FillingCharacteristics()
 fillChar.angPhi= math.radians(30)   #internal friction angle
 fillChar.cohesion=0                 #cohésion
 fillChar.mp= 0.33                   #Correction factor.
@@ -47,19 +47,19 @@ fillChar.swSupStr=20e3    #specific weight or superstructure [N/m3]
 fillChar.fillThick=9     #thickness of filling material in the endpoint of the arch [m]
 fillChar.eqThickRoad=0.5  #equivalent thickness of road material [m]
 
-trLoad=masonryVault.trafficLoad()
+trLoad=masonry_vault.trafficLoad()
 trLoad.delta= math.radians(30)
 trLoad.fillThickKeys= 1.5 # Hauteur du remplissage sur la clé de la voûte (m).
 trLoad.Q= 160000 # Charge ponctuelle due au trafic (N).
 trLoad.qrep= 0.005e6 # Charge uniformément repartie due au trafic (Pa).
 
 
-permLoadRes=masonryVault.permLoadResult(arcGeom,fillChar)
+permLoadRes=masonry_vault.permLoadResult(arcGeom,fillChar)
 
-trafLoadRes=masonryVault.trafficLoadResult(arcGeom,trLoad)
+trafLoadRes=masonry_vault.trafficLoadResult(arcGeom,trLoad)
 
 Nadmis=-1.25e6 #Effort axial admisible
-resist= masonryVault.resistance(Nadmis,arcGeom,fillChar,trLoad,permLoadRes,trafLoadRes)
+resist= masonry_vault.resistance(Nadmis,arcGeom,fillChar,trLoad,permLoadRes,trafLoadRes)
 
 
 

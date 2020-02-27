@@ -18,6 +18,7 @@ def punzMaximo(fck,d,a,b):
         (Interpreto que este es el punzonamiento máximo si no vamos a disponer
         reinforcement de punzonamiento)
         Si el esfuerzo de punzonamiento es mayor habrá que:
+
           - Aumentar la escuadría del pilar (lo más barato)
           - Aumentar el depth de la losa (lo más efectivo)
           - Mejorar la resistencia del hormigón

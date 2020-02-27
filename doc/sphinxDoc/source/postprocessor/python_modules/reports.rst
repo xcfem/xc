@@ -9,13 +9,6 @@ common_formats
     :undoc-members:
     :show-inheritance:
 
-draw_schema_armature_mur
-------------------------
-
-.. automodule:: postprocess.reports.draw_schema_armature_mur
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 export_displacements
 --------------------
