@@ -2,7 +2,7 @@ Materials according to SIA-262 code
 ====================================
 
 
-SIA262_materials
+SIA262 materials
 ----------------
 
 .. automodule:: materials.sia262.SIA262_materials
@@ -11,7 +11,7 @@ SIA262_materials
     :show-inheritance:
 
 
-SIA262_limit_state_checking
+SIA262 limit state checking
 ---------------------------
 
 .. automodule:: materials.sia262.SIA262_limit_state_checking

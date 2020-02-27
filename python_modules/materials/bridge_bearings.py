@@ -15,16 +15,15 @@ Examples\:
         * ./verif/tests/elements/test_pot_bearing_03.py
         * ./verif/tests/materials/test_elastomeric_bearing_stiffness.py
 
-    :param x2 (list): Abcissae of the points that define the values of V2 as a function of b/a.
-    :param y2 (list): Ordinates of the points that define the values of V2 as a function of b/a.
-    :param x3 (list): Abcissae of the points that define the values of V3 as a function of b/a.
-    :param y3 (list): Ordinates of the points that define the values of V3 as a function of b/a.
-    :param x4 (list): Abcissae of the points that define the values of V4 as a function of b/a.
-    :param y4 (list): Ordinates of the points that define the values of V4 as a function of b/a.
-    :param xBeta (list): Abcissae of the points that define the values of beta (alpha in the book)
-                  as a function of b/a.
-    :param yBeta (list): Ordinates of the points that define the values of beta (alpha in the book)
-                  as a function of h/b.
+Args:
+    * x2 (list): Abcissae of the points that define the values of V2 as a function of b/a.
+    * y2 (list): Ordinates of the points that define the values of V2 as a function of b/a.
+    * x3 (list): Abcissae of the points that define the values of V3 as a function of b/a.
+    * y3 (list): Ordinates of the points that define the values of V3 as a function of b/a.
+    * x4 (list): Abcissae of the points that define the values of V4 as a function of b/a.
+    * y4 (list): Ordinates of the points that define the values of V4 as a function of b/a.
+    * xBeta (list): Abcissae of the points that define the values of beta (alpha in the book) as a function of b/a.
+    * yBeta (list): Ordinates of the points that define the values of beta (alpha in the book) as a function of h/b.
 
 Todo:
     * Extend the module to cover other bearing types.
@@ -91,18 +90,17 @@ class ElastomericBearing(Bearing):
 
     Class-wide members:
 
-        :param v2table: interpolation function for the V2 shape factor.
-        :param v3table: interpolation function for the V3 shape factor.
-        :param v4table: interpolation function for the V4 shape factor.
-        :param betaTable: interpolation function for the beta shape factor.
+        v2table: interpolation function for the V2 shape factor.
+        v3table: interpolation function for the V3 shape factor.
+        v4table: interpolation function for the V4 shape factor.
+        betaTable: interpolation function for the beta shape factor.
 
     Attributes:
 
-        :ivar G: (float) Elastomer shear modulus.
-        :ivar a: (float) Width of the bearing (parallel to bridge axis).
-        :ivar b: (float) Length of the bearing (parallel to lintel axis).
-        :ivar e: (float) Net thickness of the bearing (without
-                   steel plates).
+        G: (float) Elastomer shear modulus.
+        a: (float) Width of the bearing (parallel to bridge axis).
+        b: (float) Length of the bearing (parallel to lintel axis).
+        e: (float) Net thickness of the bearing (without steel plates).
 
     """
     # ENHANCE (FOR ALL THE INTERPOLATIONS): it will be great

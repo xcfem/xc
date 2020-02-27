@@ -29,7 +29,7 @@ class ResultDescription(object):
         return int(self.attributeName[-1]) #Sect[1] or Sect[2]
 
 class ResultsDescriptionContainer(dict):
-    ''' Results to display as figures... 
+    ''' Results to display as figures. 
 
         :ivar limitStateData: string defining limit state check label (something like "Fatigue" or "CrackControl") and the name of the file that contains the results to display.
          :ivar lst: list of results descriptions.
@@ -57,7 +57,9 @@ class ResultsDescriptionContainer(dict):
 
     def getFigureDefinitionList(self,partToDisplay):
         '''Builds a list of figures to display.
-           partToDisplay: part of the model wich will be displayed'''
+
+        param: partToDisplay: part of the model wich will be displayed
+        '''
         retval= list()
         for key in self.keys():
             result= self[key]
@@ -72,7 +74,9 @@ class ResultsDescriptionContainer(dict):
 
     def display(self,tp,partToDisplay):
         '''Calls TakePhoto object tp to display figures corresponding to part.
-           partToDisplay: part of the model that will be displayed.'''
+
+        :param partToDisplay: part of the model that will be displayed.
+        '''
         latexFigsFilename= self.getLaTeXOutputFileName(partToDisplay.getShortName())
         print 'latexFigsFilename= ', latexFigsFilename
         latexListFilename= self.getLaTeXFigureListFileName(partToDisplay.getShortName())

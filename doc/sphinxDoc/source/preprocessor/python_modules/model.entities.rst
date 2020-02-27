@@ -14,10 +14,3 @@ Nets
     :undoc-members:
     :show-inheritance:
 
-Retaining wall geometry
------------------------
-
-.. automodule:: model.geometry.retaining_wall_geometry
-    :members:
-    :undoc-members:
-    :show-inheritance:
