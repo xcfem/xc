@@ -9,7 +9,7 @@ from __future__ import division
 import math
 from materials import concrete_base
 from miscUtils import LogMessages as lmsg
-from materials.sections.fiber_section import defSimpleRCSection
+from materials.sections.fiber_section import def_simple_RC_section
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, LCPT, AO_O"
@@ -174,56 +174,56 @@ def getPsi_sFromDiameter(phi):
     return retval
 
 #Generic layers (rows of rebars)
-n2s150r45= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#2'],areaRebar= standard_bars_areas['#2'],rebarsSpacing= 0.150,width=1.0,nominalCover= 0.045)
-n2s150r50= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#2'],areaRebar= standard_bars_areas['#2'],rebarsSpacing= 0.150,width=1.0,nominalCover=0.050)
+n2s150r45= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#2'],areaRebar= standard_bars_areas['#2'],rebarsSpacing= 0.150,width=1.0,nominalCover= 0.045)
+n2s150r50= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#2'],areaRebar= standard_bars_areas['#2'],rebarsSpacing= 0.150,width=1.0,nominalCover=0.050)
 
-n3s150r45= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#3'],areaRebar= standard_bars_areas['#3'],rebarsSpacing= 0.150,width=1.0,nominalCover= 0.045)
-n3s150r50= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#3'],areaRebar= standard_bars_areas['#3'],rebarsSpacing= 0.150,width=1.0,nominalCover=0.050)
+n3s150r45= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#3'],areaRebar= standard_bars_areas['#3'],rebarsSpacing= 0.150,width=1.0,nominalCover= 0.045)
+n3s150r50= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#3'],areaRebar= standard_bars_areas['#3'],rebarsSpacing= 0.150,width=1.0,nominalCover=0.050)
 
-n4s150r45= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#4'],areaRebar= standard_bars_areas['#4'],rebarsSpacing= 0.150,width=1.0,nominalCover=0.040)
-n4s150r50= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#4'],areaRebar= standard_bars_areas['#4'],rebarsSpacing= 0.150,width=1.0,nominalCover=0.050)
+n4s150r45= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#4'],areaRebar= standard_bars_areas['#4'],rebarsSpacing= 0.150,width=1.0,nominalCover=0.040)
+n4s150r50= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#4'],areaRebar= standard_bars_areas['#4'],rebarsSpacing= 0.150,width=1.0,nominalCover=0.050)
 
-n5s150r45= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#5'],areaRebar= standard_bars_areas['#5'],rebarsSpacing= 0.150,width=1.0,nominalCover= 0.045)
-n5s150r50= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#5'],areaRebar= standard_bars_areas['#5'],rebarsSpacing= 0.150,width=1.0,nominalCover= 0.050)
+n5s150r45= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#5'],areaRebar= standard_bars_areas['#5'],rebarsSpacing= 0.150,width=1.0,nominalCover= 0.045)
+n5s150r50= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#5'],areaRebar= standard_bars_areas['#5'],rebarsSpacing= 0.150,width=1.0,nominalCover= 0.050)
 
-n6s150r45= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#6'],areaRebar= standard_bars_areas['#6'],rebarsSpacing= 0.150,width=1.0,nominalCover= 0.045)
-n6s150r50= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#6'],areaRebar= standard_bars_areas['#6'],rebarsSpacing= 0.150,width=1.0,nominalCover= 0.050)
+n6s150r45= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#6'],areaRebar= standard_bars_areas['#6'],rebarsSpacing= 0.150,width=1.0,nominalCover= 0.045)
+n6s150r50= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#6'],areaRebar= standard_bars_areas['#6'],rebarsSpacing= 0.150,width=1.0,nominalCover= 0.050)
 
-n7s150r45= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#7'],areaRebar= standard_bars_areas['#7'],rebarsSpacing= 0.150,width=1.0,nominalCover= 0.045)
-n7s150r50= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#7'],areaRebar= standard_bars_areas['#7'],rebarsSpacing= 0.150,width=1.0,nominalCover= 0.050)
+n7s150r45= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#7'],areaRebar= standard_bars_areas['#7'],rebarsSpacing= 0.150,width=1.0,nominalCover= 0.045)
+n7s150r50= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#7'],areaRebar= standard_bars_areas['#7'],rebarsSpacing= 0.150,width=1.0,nominalCover= 0.050)
 
-n8s150r45= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#8'],areaRebar= standard_bars_areas['#8'],rebarsSpacing= 0.150,width=1.0,nominalCover= 0.045)
-n8s150r50= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#8'],areaRebar= standard_bars_areas['#8'],rebarsSpacing= 0.150,width=1.0,nominalCover= 0.050)
+n8s150r45= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#8'],areaRebar= standard_bars_areas['#8'],rebarsSpacing= 0.150,width=1.0,nominalCover= 0.045)
+n8s150r50= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#8'],areaRebar= standard_bars_areas['#8'],rebarsSpacing= 0.150,width=1.0,nominalCover= 0.050)
 
-n9s150r45= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#9'],areaRebar= standard_bars_areas['#9'],rebarsSpacing= 0.150,width=1.0,nominalCover= 0.045)
-n9s150r50= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#9'],areaRebar= standard_bars_areas['#9'],rebarsSpacing= 0.150,width=1.0,nominalCover=0.050)
+n9s150r45= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#9'],areaRebar= standard_bars_areas['#9'],rebarsSpacing= 0.150,width=1.0,nominalCover= 0.045)
+n9s150r50= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#9'],areaRebar= standard_bars_areas['#9'],rebarsSpacing= 0.150,width=1.0,nominalCover=0.050)
 
-n10s150r45= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#10'],areaRebar= standard_bars_areas['#10'],rebarsSpacing= 0.150,width=1.0,nominalCover= 0.045)
-n10s150r50= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#10'],areaRebar= standard_bars_areas['#10'],rebarsSpacing= 0.150,width=1.0,nominalCover= 0.050)
+n10s150r45= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#10'],areaRebar= standard_bars_areas['#10'],rebarsSpacing= 0.150,width=1.0,nominalCover= 0.045)
+n10s150r50= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#10'],areaRebar= standard_bars_areas['#10'],rebarsSpacing= 0.150,width=1.0,nominalCover= 0.050)
 
-n2s300r45= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#2'],areaRebar= standard_bars_areas['#2'],rebarsSpacing= 0.300,width=1.0,nominalCover= 0.045)
-n2s300r50= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#2'],areaRebar= standard_bars_areas['#2'],rebarsSpacing= 0.300,width=1.0,nominalCover=0.050)
+n2s300r45= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#2'],areaRebar= standard_bars_areas['#2'],rebarsSpacing= 0.300,width=1.0,nominalCover= 0.045)
+n2s300r50= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#2'],areaRebar= standard_bars_areas['#2'],rebarsSpacing= 0.300,width=1.0,nominalCover=0.050)
 
-n3s300r45= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#3'],areaRebar= standard_bars_areas['#3'],rebarsSpacing= 0.300,width=1.0,nominalCover= 0.045)
-n3s300r50= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#3'],areaRebar= standard_bars_areas['#3'],rebarsSpacing= 0.300,width=1.0,nominalCover=0.050)
+n3s300r45= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#3'],areaRebar= standard_bars_areas['#3'],rebarsSpacing= 0.300,width=1.0,nominalCover= 0.045)
+n3s300r50= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#3'],areaRebar= standard_bars_areas['#3'],rebarsSpacing= 0.300,width=1.0,nominalCover=0.050)
 
-n4s300r45= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#4'],areaRebar= standard_bars_areas['#4'],rebarsSpacing= 0.300,width=1.0,nominalCover=0.040)
-n4s300r50= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#4'],areaRebar= standard_bars_areas['#4'],rebarsSpacing= 0.300,width=1.0,nominalCover=0.050)
+n4s300r45= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#4'],areaRebar= standard_bars_areas['#4'],rebarsSpacing= 0.300,width=1.0,nominalCover=0.040)
+n4s300r50= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#4'],areaRebar= standard_bars_areas['#4'],rebarsSpacing= 0.300,width=1.0,nominalCover=0.050)
 
-n5s300r45= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#5'],areaRebar= standard_bars_areas['#5'],rebarsSpacing= 0.300,width=1.0,nominalCover= 0.045)
-n5s300r50= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#5'],areaRebar= standard_bars_areas['#5'],rebarsSpacing= 0.300,width=1.0,nominalCover= 0.050)
+n5s300r45= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#5'],areaRebar= standard_bars_areas['#5'],rebarsSpacing= 0.300,width=1.0,nominalCover= 0.045)
+n5s300r50= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#5'],areaRebar= standard_bars_areas['#5'],rebarsSpacing= 0.300,width=1.0,nominalCover= 0.050)
 
-n6s300r45= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#6'],areaRebar= standard_bars_areas['#6'],rebarsSpacing= 0.300,width=1.0,nominalCover= 0.045)
-n6s300r50= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#6'],areaRebar= standard_bars_areas['#6'],rebarsSpacing= 0.300,width=1.0,nominalCover= 0.050)
+n6s300r45= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#6'],areaRebar= standard_bars_areas['#6'],rebarsSpacing= 0.300,width=1.0,nominalCover= 0.045)
+n6s300r50= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#6'],areaRebar= standard_bars_areas['#6'],rebarsSpacing= 0.300,width=1.0,nominalCover= 0.050)
 
-n7s300r45= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#7'],areaRebar= standard_bars_areas['#7'],rebarsSpacing= 0.300,width=1.0,nominalCover= 0.045)
-n7s300r50= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#7'],areaRebar= standard_bars_areas['#7'],rebarsSpacing= 0.300,width=1.0,nominalCover= 0.050)
+n7s300r45= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#7'],areaRebar= standard_bars_areas['#7'],rebarsSpacing= 0.300,width=1.0,nominalCover= 0.045)
+n7s300r50= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#7'],areaRebar= standard_bars_areas['#7'],rebarsSpacing= 0.300,width=1.0,nominalCover= 0.050)
 
-n8s300r45= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#8'],areaRebar= standard_bars_areas['#8'],rebarsSpacing= 0.300,width=1.0,nominalCover= 0.045)
-n8s300r50= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#8'],areaRebar= standard_bars_areas['#8'],rebarsSpacing= 0.300,width=1.0,nominalCover= 0.050)
+n8s300r45= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#8'],areaRebar= standard_bars_areas['#8'],rebarsSpacing= 0.300,width=1.0,nominalCover= 0.045)
+n8s300r50= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#8'],areaRebar= standard_bars_areas['#8'],rebarsSpacing= 0.300,width=1.0,nominalCover= 0.050)
 
-n9s300r45= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#9'],areaRebar= standard_bars_areas['#9'],rebarsSpacing= 0.300,width=1.0,nominalCover= 0.045)
-n9s300r50= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#9'],areaRebar= standard_bars_areas['#9'],rebarsSpacing= 0.300,width=1.0,nominalCover=0.050)
+n9s300r45= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#9'],areaRebar= standard_bars_areas['#9'],rebarsSpacing= 0.300,width=1.0,nominalCover= 0.045)
+n9s300r50= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#9'],areaRebar= standard_bars_areas['#9'],rebarsSpacing= 0.300,width=1.0,nominalCover=0.050)
 
-n10s300r45= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#10'],areaRebar= standard_bars_areas['#10'],rebarsSpacing= 0.300,width=1.0,nominalCover= 0.045)
-n10s300r50= defSimpleRCSection.MainReinfLayer(rebarsDiam=standard_bars_diameters['#10'],areaRebar= standard_bars_areas['#10'],rebarsSpacing= 0.300,width=1.0,nominalCover= 0.050)
+n10s300r45= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#10'],areaRebar= standard_bars_areas['#10'],rebarsSpacing= 0.300,width=1.0,nominalCover= 0.045)
+n10s300r50= def_simple_RC_section.MainReinfLayer(rebarsDiam=standard_bars_diameters['#10'],areaRebar= standard_bars_areas['#10'],rebarsSpacing= 0.300,width=1.0,nominalCover= 0.050)

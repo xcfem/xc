@@ -10,7 +10,6 @@ import scipy.interpolate
 from materials import concrete_base
 from materials.aci import ACI_materials
 from miscUtils import LogMessages as lmsg
-from materials.sections.fiber_section import defSimpleRCSection
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, LCPT, AO_O"

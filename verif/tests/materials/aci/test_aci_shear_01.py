@@ -10,7 +10,7 @@ from materials.aci import ACI_materials
 from materials.aci import ACI_limit_state_checking as lsc
 import os
 from miscUtils import LogMessages as lmsg
-from materials.sections.fiber_section import defSimpleRCSection
+from materials.sections.fiber_section import def_simple_RC_section
 from postprocess import limit_state_data as lsd
 
 __author__= "Luis Claudio Pérez Tato (LCPT"
@@ -30,8 +30,8 @@ ratio1= abs(lSqrtFck-lSqrtFckRef)/lSqrtFckRef
 
 bw= 12*0.0254 # 12 in
 d= 15*0.0254 # 15 in
-section= defSimpleRCSection.RecordRCSimpleSection(name='test',concrType=concrete, reinfSteelType=reinfSteel,width= bw, depth= d/0.9)
-section.shReinfY= defSimpleRCSection.RecordShearReinforcement(nShReinfBranches= 1.0,areaShReinfBranch= 0.592*0.0254**2,shReinfSpacing= 1.0*0.3048)
+section= def_simple_RC_section.RecordRCSimpleSection(name='test',concrType=concrete, reinfSteelType=reinfSteel,width= bw, depth= d/0.9)
+section.shReinfY= def_simple_RC_section.RecordShearReinforcement(nShReinfBranches= 1.0,areaShReinfBranch= 0.592*0.0254**2,shReinfSpacing= 1.0*0.3048)
 shearController= lsc.ShearController(lsd.shearResistance.label)
 shearController.setSection(section)
 

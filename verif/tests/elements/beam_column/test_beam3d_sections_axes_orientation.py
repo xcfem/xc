@@ -32,7 +32,7 @@ import xc
 import numpy as np
 import csv
 
-from materials.sections.fiber_section import defSimpleRCSection
+from materials.sections.fiber_section import def_simple_RC_section
 from postprocess import RC_material_distribution
 from materials.sia262 import SIA262_materials
 from model import predefined_spaces
@@ -80,14 +80,14 @@ sections= reinfConcreteSectionDistribution.sectionDefinition #creates an RC sect
 #Generic layers (rows of rebars). Other instance variables that we can define
 #for MainReinfLayers are coverLat and nRebars.If we define nRebars that
 #value overrides the rebarsSpacing
-fi10s75r30=defSimpleRCSection.MainReinfLayer(rebarsDiam=10e-3,areaRebar= areaFi10,rebarsSpacing=0.075,width=0.25,nominalCover=0.030)
-fi16s75r30=defSimpleRCSection.MainReinfLayer(rebarsDiam=16e-3,areaRebar= areaFi16,rebarsSpacing=0.075,width=0.25,nominalCover=0.030)
+fi10s75r30=def_simple_RC_section.MainReinfLayer(rebarsDiam=10e-3,areaRebar= areaFi10,rebarsSpacing=0.075,width=0.25,nominalCover=0.030)
+fi16s75r30=def_simple_RC_section.MainReinfLayer(rebarsDiam=16e-3,areaRebar= areaFi16,rebarsSpacing=0.075,width=0.25,nominalCover=0.030)
 
-#instances of defSimpleRCSection.RecordRCSlabBeamSection that defines the
+#instances of def_simple_RC_section.RecordRCSlabBeamSection that defines the
 #variables that make up THE TWO reinforced concrete sections in the two
 #reinforcement directions of a slab or the front and back ending sections
 #of a beam element
-beamRCsect=defSimpleRCSection.RecordRCSlabBeamSection(name='beamRCsect',sectionDescr='beam section',concrType=concrete, reinfSteelType=reinfSteel,width=wbeam,depth=hbeam)
+beamRCsect=def_simple_RC_section.RecordRCSlabBeamSection(name='beamRCsect',sectionDescr='beam section',concrType=concrete, reinfSteelType=reinfSteel,width=wbeam,depth=hbeam)
 beamRCsect.dir1PositvRebarRows=[fi10s75r30]
 beamRCsect.dir1NegatvRebarRows=[fi16s75r30]
 beamRCsect.dir2PositvRebarRows=[fi10s75r30]

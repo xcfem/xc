@@ -8,7 +8,7 @@ import xc
 
 from misc import scc3d_testing_bench
 from solution import predefined_solutions # Solution procedure
-from materials.sections.fiber_section import defSimpleRCSection
+from materials.sections.fiber_section import def_simple_RC_section
 # from materials.sections import section_properties
 
 
@@ -26,7 +26,7 @@ __email__= "l.pereztato@gmail.com"
 areaFi22= SIA262_materials.section_barres_courantes[22e-3]
 areaFi26= SIA262_materials.section_barres_courantes[26e-3]
 
-datosScc1LosC= defSimpleRCSection.RecordRCSimpleSection()
+datosScc1LosC= def_simple_RC_section.RecordRCSimpleSection()
 datosScc1LosC.sectionName= "secHA1LosC"
 datosScc1LosC.sectionDescr= "Deck. Central portion. Section normal to X axis."
 concr= EHE_materials.HA30
@@ -35,14 +35,14 @@ datosScc1LosC.concrType= concr
 datosScc1LosC.h= 0.35
 datosScc1LosC.b= 1.0001
 datosScc1LosC.reinfSteelType= EHE_materials.B500S
-negRebRow=defSimpleRCSection.MainReinfLayer(nRebars=2,rebarsDiam=10e-10,width=datosScc1LosC.b)
-#negRebRow=defSimpleRCSection.MainReinfLayer()
-#negRebRow=defSimpleRCSection.MainReinfLayer(rebarsDiam=10e-3,areaRebar= EHE_materials.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03)
+negRebRow=def_simple_RC_section.MainReinfLayer(nRebars=2,rebarsDiam=10e-10,width=datosScc1LosC.b)
+#negRebRow=def_simple_RC_section.MainReinfLayer()
+#negRebRow=def_simple_RC_section.MainReinfLayer(rebarsDiam=10e-3,areaRebar= EHE_materials.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03)
 #negRebRow.setUp(nRebars=0,rebarsDiam=0.0,areaRebar=0.0,width=datosScc1LosC.b,cover=0.1)
 datosScc1LosC.negatvRebarRows=[negRebRow]
-posRebRow=defSimpleRCSection.MainReinfLayer(nRebars=6,rebarsDiam=26e-3,areaRebar=(areaFi22+areaFi26)/2.0,width=datosScc1LosC.b,nominalCover=0.05,nominalLatCover=0.08333-26e-3/2.)
-#posRebRow=defSimpleRCSection.MainReinfLayer()
-#posRebRow=defSimpleRCSection.MainReinfLayer(rebarsDiam=10e-3,areaRebar= EHE_materials.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03)
+posRebRow=def_simple_RC_section.MainReinfLayer(nRebars=6,rebarsDiam=26e-3,areaRebar=(areaFi22+areaFi26)/2.0,width=datosScc1LosC.b,nominalCover=0.05,nominalLatCover=0.08333-26e-3/2.)
+#posRebRow=def_simple_RC_section.MainReinfLayer()
+#posRebRow=def_simple_RC_section.MainReinfLayer(rebarsDiam=10e-3,areaRebar= EHE_materials.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03)
 #posRebRow.setUp(nRebars=6,rebarsDiam=26e-3,areaRebar=(areaFi22+areaFi26)/2.0,width=datosScc1LosC.b,cover=0.05+0.026/2.0)
 datosScc1LosC.positvRebarRows=[posRebRow]
 

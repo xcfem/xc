@@ -1,6 +1,6 @@
 
 
-fiber_sets
+Fiber sets
 ----------
 
 .. automodule:: materials.sections.fiber_section.fiber_sets
@@ -8,26 +8,26 @@ fiber_sets
     :undoc-members:
     :show-inheritance:
 
-geomArmaduraSeccionesFibras 
-----------------------------
+Geometry fiber sections
+-----------------------
 
-.. automodule:: materials.sections.fiber_section.geomArmaduraSeccionesFibras
+.. automodule:: materials.sections.fiber_section.geom_fiber_sect
     :members:
     :undoc-members:
     :show-inheritance:
 
-geomSeccionesFibras 
---------------------
+Geometry reinforcement fiber sections
+-------------------------------------
 
-.. automodule:: materials.sections.fiber_section.geomSeccionesFibras
+.. automodule:: materials.sections.fiber_section.geom_reinf_fiber_sect
     :members:
     :undoc-members:
     :show-inheritance:
 
-defSimpleRCSection
-------------------
+Definition of reinforced concrete sections
+------------------------------------------
 
-.. automodule:: materials.sections.fiber_section.defSimpleRCSection
+.. automodule:: materials.sections.fiber_section.def_simple_RC_section
     :members:
     :undoc-members:
     :show-inheritance:

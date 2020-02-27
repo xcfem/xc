@@ -16,7 +16,7 @@ from latex import latexUtils
 from postprocess.reports import graph_material as mg
 import plot_fiber_section as pfs
 from materials.sections import section_properties as prmRect
-from materials.sections.fiber_section import  defSimpleRCSection as sHAs
+from materials.sections.fiber_section import  def_simple_RC_section as sHAs
 
 fmt3_1f= '{:3.1f}'
 fmt4_1f= '{:4.1f}'
