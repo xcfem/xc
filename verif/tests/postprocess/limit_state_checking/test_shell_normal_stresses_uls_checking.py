@@ -15,7 +15,7 @@ import xc
 from materials.ehe import EHE_materials
 from materials.sections.fiber_section import defSimpleRCSection
 from postprocess import RC_material_distribution
-from materials.sections import RCsectionsContainer as sc
+from materials.sections import RC_sections_container as sc
 from solution import predefined_solutions
 from materials.sia262 import SIA262_limit_state_checking #Change SIA262->EHE
 from postprocess import limit_state_data as lsd

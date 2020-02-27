@@ -1,24 +1,16 @@
 
-structural_steel
------------------
+Materials with characteristic (K) and design (D) diagrams
+--------------------------------------------------------
 
-.. automodule:: materials.sections.structural_steel
+.. automodule:: materials.sections.material_with_DK_diagrams
     :members:
     :undoc-members:
     :show-inheritance:
 
-materialWithDKDiagrams
-----------------------
+Moment-curvature diagram
+-----------------------
 
-.. automodule:: materials.sections.materialWithDKDiagrams
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-momentCurvatureDiagram
-----------------------
-
-.. automodule:: materials.sections.momentCurvatureDiagram
+.. automodule:: materials.sections.moment_curvature_diagram
     :members:
     :undoc-members:
     :show-inheritance:
@@ -33,7 +25,7 @@ Definition of elastic materials for elements
       
 
 
-section_properties
+Section properties
 ------------------
 
 .. automodule:: materials.sections.section_properties
@@ -41,15 +33,23 @@ section_properties
     :undoc-members:
     :show-inheritance:
 
-RCsectionsContainer
--------------------
+Structural steel
+-----------------
 
-.. automodule:: materials.sections.RCsectionsContainer
+.. automodule:: materials.sections.structural_steel
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+RC sections' container
+----------------------
+
+.. automodule:: materials.sections.RC_sections_container
     :members:
     :undoc-members:
     :show-inheritance:
       
-internal_forces
+Internal forces
 ---------------
 
 .. automodule:: materials.sections.internal_forces
