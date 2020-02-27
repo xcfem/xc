@@ -1,8 +1,8 @@
 Structural steel shapes
 =======================
 
-aisc_metric_shapes
-----------------------
+AISC steel shapes (metric)
+-------------------------
 
 .. automodule:: materials.sections.structural_shapes.aisc_metric_shapes
     :members:
@@ -10,8 +10,8 @@ aisc_metric_shapes
     :show-inheritance:
 
 
-arcelor_steel_shapes
-----------------------
+Arcelor steel shapes (metric)
+-----------------------------
 
 .. automodule:: materials.sections.structural_shapes.arcelor_metric_shapes
     :members:

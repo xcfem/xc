@@ -25,7 +25,7 @@ from materials.ec2 import EC2_materials
 from materials import concrete_base
 from materials import typical_materials
 from materials.sections.fiber_section import fiber_sets
-from materials.sections.fiber_section import sectionReport 
+from materials.sections.fiber_section import section_report 
 import numpy as np
 from materials.ec2 import EC2_limit_state_checking
 
@@ -128,7 +128,7 @@ sctFibers.setupFibers()
 
 
 # #report of the section material
-# sectParam=sectionReport.SectionInfo(preprocessor=preprocessor,sectName='example_7.3_EC2W',sectDescr='Test example 7.3 EC2 Worked examples. Section definition',concrete=concrete,rfSteel=rfSteel,concrDiag=concrDiagram,rfStDiag=steelDiagram,geomSection=geomSectFibers,width=width,depth=depth) #Obtains section parameters for report
+# sectParam=section_report.SectionInfo(preprocessor=preprocessor,sectName='example_7.3_EC2W',sectDescr='Test example 7.3 EC2 Worked examples. Section definition',concrete=concrete,rfSteel=rfSteel,concrDiag=concrDiagram,rfStDiag=steelDiagram,geomSection=geomSectFibers,width=width,depth=depth) #Obtains section parameters for report
 # sectParam.writeReport(archTex='figures/sections/secEx73.tex', pathFigura='figures/sections/secEx73.eps')
 
 
@@ -365,7 +365,7 @@ else:
 #from materials.sections.fiber_section import plotSectionGeometry as pg
 #pg.plotSectionGeometry(geomSectFibers,'./secEx74.eps')
 
-#sectInf=sectionReport.SectionInfo(preprocessor=preprocessor,section=sctFibers) #Obtains section parameters for report
+#sectInf=section_report.SectionInfo(preprocessor=preprocessor,section=sctFibers) #Obtains section parameters for report
 #sectInf.writeReport(archTex='./secEx74.tex', pathFigura='./secEx74.eps')
 
 

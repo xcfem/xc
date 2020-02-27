@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-'''sectionReport.py: report describing RC cross sections mechanical properties.'''
+'''section_report.py: report describing RC cross sections mechanical properties.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2015, LCPT and AO_O"

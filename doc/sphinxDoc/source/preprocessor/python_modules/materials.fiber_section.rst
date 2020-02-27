@@ -8,16 +8,16 @@ Fiber sets
     :undoc-members:
     :show-inheritance:
 
-Geometry fiber sections
------------------------
+Geometry of fiber sections
+--------------------------
 
 .. automodule:: materials.sections.fiber_section.geom_fiber_sect
     :members:
     :undoc-members:
     :show-inheritance:
 
-Geometry reinforcement fiber sections
--------------------------------------
+Definition of reinforcement in fiber sections
+-------------------------------------------
 
 .. automodule:: materials.sections.fiber_section.geom_reinf_fiber_sect
     :members:
@@ -32,34 +32,28 @@ Definition of reinforced concrete sections
     :undoc-members:
     :show-inheritance:
 
-defSeccionHASimple 
+
+Definition of column RC sections
+--------------------------------
+
+.. automodule:: materials.sections.fiber_section.def_column_RC_section
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Plot fiber seccions 
 -------------------
 
-.. automodule:: materials.sections.fiber_section.defSeccionHASimple
+.. automodule:: materials.sections.fiber_section.plot_fiber_section
     :members:
     :undoc-members:
     :show-inheritance:
 
-fiberUtils 
------------
+Report of cross-section mechanical properties
+----------------------------------------------
 
-.. automodule:: materials.sections.fiber_section.fiberUtils
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-plotGeomSeccion 
-----------------
-
-.. automodule:: materials.sections.fiber_section.plotGeomSeccion
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-sectionReport 
---------------
-
-.. automodule:: materials.sections.fiber_section.sectionReport
+.. automodule:: materials.sections.fiber_section.section_report
     :members:
     :undoc-members:
     :show-inheritance:
