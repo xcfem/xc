@@ -77,7 +77,9 @@ class PetscSOE;
 
 //! @ingroup SOE
 //
-//! @brief ??.
+//! @brief Linear system of equations that uses PETSc
+//! for the parallel solution of it. It uses also MPI
+//! to communicate between machines.
 class ActorPetscSOE
   {
   private:
