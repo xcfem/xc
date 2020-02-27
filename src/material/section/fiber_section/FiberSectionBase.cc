@@ -932,7 +932,7 @@ std::string XC::FiberSectionBase::getStrClaseEsfuerzo(const double &tol) const
 int XC::FiberSectionBase::setParameter(const std::vector<std::string> &argv, Parameter &param)
   {
     // Initial declarations
-    int retval= 0;
+    int retval= -1;
     const int argc= argv.size();
     if(argc>0)
       {
