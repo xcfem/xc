@@ -12,7 +12,7 @@ import xc
 # Macros
 from solution import predefined_solutions
 from postprocess import phantom_model as phm
-from materials.sections import RCsectionsContainer as sc
+from materials.sections import RC_sections_container as sc
 from model.sets import sets_mng as sUtils
 from postprocess import limit_state_data as lsd
 
@@ -33,7 +33,7 @@ class RCMaterialDistribution(object):
 
       '''
       # sectionDefinition: Container with the section definitions 
-      #                   (see RCsectionsContainer module).
+      #                   (see RC_sections_container module).
       self.sectionDefinition= sc.SectionContainer()
       # sectionDistribution: dictionary that stores a section name(s)
       #                      for each element number. This way it defines
