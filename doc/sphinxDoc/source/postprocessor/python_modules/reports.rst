@@ -1,7 +1,7 @@
 Reports
 =======
 
-common_formats
+Common formats
 --------------
 
 .. automodule:: postprocess.reports.common_formats
@@ -10,7 +10,7 @@ common_formats
     :show-inheritance:
 
 
-export_displacements
+Export displacements
 --------------------
 
 .. automodule:: postprocess.reports.export_displacements
@@ -18,7 +18,7 @@ export_displacements
     :undoc-members:
     :show-inheritance:
 
-export_internal_forces
+Export internal forces
 ----------------------
 
 .. automodule:: postprocess.reports.export_internal_forces
@@ -27,7 +27,7 @@ export_internal_forces
     :show-inheritance:
 
 
-graphical_reports
+Graphical reports
 -----------------
 
 .. automodule:: postprocess.reports.graphical_reports
@@ -35,8 +35,8 @@ graphical_reports
     :undoc-members:
     :show-inheritance:
 
-graph_material
---------------
+Matplotlib grahics of_material diagrams
+---------------------------------------
 
 .. automodule:: postprocess.reports.graph_material
     :members:
@@ -44,104 +44,104 @@ graph_material
     :show-inheritance:
 
 
-list_cable_capacity
--------------------
+Reports of cable capacity
+-------------------------
 
 .. automodule:: postprocess.reports.list_cable_capacity
     :members:
     :undoc-members:
     :show-inheritance:
 
-list_capacity_factor
---------------------
+Reports of capacity_factor
+--------------------------
 
 .. automodule:: postprocess.reports.list_capacity_factor
     :members:
     :undoc-members:
     :show-inheritance:
 
-list_cracking
--------------
+Reports of cracking results
+---------------------------
 
 .. automodule:: postprocess.reports.list_cracking
     :members:
     :undoc-members:
     :show-inheritance:
 
-list_data
----------
+Lists of data for reports
+-------------------------
 
 .. automodule:: postprocess.reports.list_data
     :members:
     :undoc-members:
     :show-inheritance:
 
-list_displacements
-------------------
+Lists of displacements for reports
+-----------------------------------
 
 .. automodule:: postprocess.reports.list_displacements
     :members:
     :undoc-members:
     :show-inheritance:
 
-list_internal_forces
---------------------
+Lists of internal forces for reports
+-------------------------------------
 
 .. automodule:: postprocess.reports.list_internal_forces
     :members:
     :undoc-members:
     :show-inheritance:
 
-list_loads
-----------
+Lists of loads for reports
+--------------------------
 
 .. automodule:: postprocess.reports.list_loads
     :members:
     :undoc-members:
     :show-inheritance:
 
-list_max_min_displacements
---------------------------
+Lists displacements maximum and minimum for reports
+---------------------------------------------------
 
 .. automodule:: postprocess.reports.list_max_min_displacements
     :members:
     :undoc-members:
     :show-inheritance:
 
-list_metal_profiles_capacity
-----------------------------
+Lists of metal-profile capacity for reports
+-------------------------------------------
 
 .. automodule:: postprocess.reports.list_metal_profiles_capacity
     :members:
     :undoc-members:
     :show-inheritance:
 
-list_N_V_beams
---------------
+Lists of axial and shear internal forces in beams for reports
+-------------------------------------------------------------
 
 .. automodule:: postprocess.reports.list_N_V_beams
     :members:
     :undoc-members:
     :show-inheritance:
 
-list_reactions
---------------
+Lists of reactions for reports
+------------------------------
 
 .. automodule:: postprocess.reports.list_reactions
     :members:
     :undoc-members:
     :show-inheritance:
 
-list_shear
-----------
+Lists of shear internal forces for reports
+------------------------------------------
 
 .. automodule:: postprocess.reports.list_shear
     :members:
     :undoc-members:
     :show-inheritance:
 
-report_material
----------------
+Reports of material properties
+------------------------------
 
 .. automodule:: postprocess.reports.report_material
     :members:

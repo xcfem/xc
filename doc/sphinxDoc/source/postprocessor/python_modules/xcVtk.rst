@@ -3,10 +3,19 @@ XC_Vtk
 
 General topics
 ---------------
-
 .. toctree::
 
     xcVtkGenTopics
+
+Fields
+---------
+.. toctree::
+    xcVtk.fields
+
+Diagrams
+---------
+.. toctree::
+    xcVtk.diagrams
 
 CAD model
 ---------

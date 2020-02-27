@@ -1,6 +1,6 @@
 
 
-quick_graphics
+Quick graphics
 --------------
 
 .. automodule:: postprocess.xcVtk.FE_model.quick_graphics
@@ -10,9 +10,8 @@ quick_graphics
 
 
 
-vtk_FE_graphic
---------------
-
+vtk FE model graphics
+---------------------
 .. automodule:: postprocess.xcVtk.FE_model.vtk_FE_graphic
     :members:
     :undoc-members:

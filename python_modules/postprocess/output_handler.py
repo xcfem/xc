@@ -11,7 +11,7 @@ from miscUtils import LogMessages as lmsg
 from postprocess.xcVtk import vtk_graphic_base
 from postprocess.xcVtk.CAD_model import vtk_CAD_graphic
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
-from postprocess.xcVtk.fields import Fields
+from postprocess.xcVtk.fields import fields
 from postprocess.xcVtk.fields import vector_field as vf
 from postprocess.xcVtk.fields import load_vector_field as lvf
 from postprocess.xcVtk.diagrams import control_var_diagram as cvd
@@ -162,7 +162,7 @@ class OutputHandler(object):
               (defaults to None)
 
         '''
-        field= Fields.ScalarField(name=propToDisp,functionName="getProp",component=None,fUnitConv= fUnitConv,rgMinMax=rgMinMax)
+        field= fields.ScalarField(name=propToDisp,functionName="getProp",component=None,fUnitConv= fUnitConv,rgMinMax=rgMinMax)
         defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
         defDisplay.cameraParameters= self.getCameraParameters()
         defDisplay.displayMesh(xcSets=setToDisplay,field=field, diagrams= None, caption= captionText, fileName=fileName, defFScale=defFScale)
@@ -429,7 +429,7 @@ class OutputHandler(object):
                     lmsg.warning('OutputHandler::displayIntForc; not a 2D element; ignored.')
             unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
             unitDescription= self.outputStyle.getForceUnitsDescription()
-            field= Fields.ExtrapolatedProperty(propName,"getProp",setToDisplay,fUnitConv= unitConversionFactor,rgMinMax=rgMinMax)
+            field= fields.ExtrapolatedProperty(propName,"getProp",setToDisplay,fUnitConv= unitConversionFactor,rgMinMax=rgMinMax)
             defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
             defDisplay.cameraParameters= self.getCameraParameters()
             loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
@@ -742,12 +742,12 @@ class OutputHandler(object):
         attributeName= limitStateLabel + 'Sect1'   #Normal stresses limit state direction 1.
         fUnitConv, unitDescription= self.outputStyle.getUnitParameters(argument)
 
-        field= Fields.getScalarFieldFromControlVar(attributeName,argument,setToDisplay,component,fUnitConv,rgMinMax)
+        field= fields.getScalarFieldFromControlVar(attributeName,argument,setToDisplay,component,fUnitConv,rgMinMax)
         captionTexts= self.outputStyle.getCaptionTextsDict()
         sectDescr= self.outputStyle.directionDescription
         captionBaseText= captionTexts[limitStateLabel] + ', ' + captionTexts[argument] + unitDescription + '. '+ setToDisplay.description.capitalize()
         field.display(defDisplay,caption=  captionBaseText + ', ' + sectDescr[0], fileName= fileName, defFScale= defFScale)
 
         attributeName= limitStateLabel + 'Sect2'   #Normal stresses limit state direction 2
-        field= Fields.getScalarFieldFromControlVar(attributeName,argument,setToDisplay,component,fUnitConv,rgMinMax)
+        field= fields.getScalarFieldFromControlVar(attributeName,argument,setToDisplay,component,fUnitConv,rgMinMax)
         field.display(defDisplay,caption= captionBaseText + ', ' + sectDescr[1], fileName= fileName, defFScale= defFScale)

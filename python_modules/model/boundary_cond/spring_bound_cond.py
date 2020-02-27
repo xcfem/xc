@@ -8,7 +8,7 @@ from model import predefined_spaces
 from materials import typical_materials
 from model.sets import sets_mng 
 from miscUtils import LogMessages as lmsg
-from postprocess.xcVtk.fields import Fields
+from postprocess.xcVtk.fields import fields
 from postprocess.xcVtk.FE_model import quick_graphics as QGrph
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
 
@@ -170,7 +170,7 @@ class ElasticFoundation(object):
         '''
         reac= self.calcPressures()
 
-        field= Fields.ExtrapolatedScalarField('soilPressure','getProp',self.foundationSet,component=2,fUnitConv= fUnitConv,rgMinMax=rgMinMax)
+        field= fields.ExtrapolatedScalarField('soilPressure','getProp',self.foundationSet,component=2,fUnitConv= fUnitConv,rgMinMax=rgMinMax)
         defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
         field.display(defDisplay,caption= caption+' '+unitDescription,fName=fileName)
 
@@ -204,7 +204,7 @@ class ElasticFoundation(object):
                 if prs > n.getProp('maxSoilPressure'):
                     n.setProp('maxSoilPressure',prs)
         #Display max. pressures
-        field= Fields.ExtrapolatedScalarField(name='maxSoilPressure',functionName='getProp',xcSet=self.foundationSet,component=None,fUnitConv=fUnitConv,rgMinMax=rgMinMax)
+        field= fields.ExtrapolatedScalarField(name='maxSoilPressure',functionName='getProp',xcSet=self.foundationSet,component=None,fUnitConv=fUnitConv,rgMinMax=rgMinMax)
         defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
         field.display(defDisplay,caption= caption+' '+unitDescription,fName=fileName)
         

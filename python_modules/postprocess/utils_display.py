@@ -12,7 +12,7 @@ from miscUtils import LogMessages as lmsg
 from miscUtils import string_utils as su
 from postprocess.xcVtk import vtk_graphic_base
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
-from postprocess.xcVtk.fields import Fields
+from postprocess.xcVtk.fields import fields
 from postprocess.control_vars import *
 
 import matplotlib.pyplot as plt
@@ -132,8 +132,8 @@ class FigureDefinition(SlideDefinition):
 
     def defField(self, xcSet):
         print '********** Enters FigureDefinition::defField; limit state: ', self.limitStateLabel, ' attributeName= ', self.attributeName, ' xcSet.name= ', xcSet.name
-        #self.field= Fields.ExtrapolatedScalarField(self.attributeName,"getProp",None,1.0,xcSet)
-        self.field= Fields.getScalarFieldFromControlVar(attributeName=self.attributeName,argument=self.argument,xcSet=xcSet,component=None,fUnitConv=1.0,rgMinMax=None)
+        #self.field= fields.ExtrapolatedScalarField(self.attributeName,"getProp",None,1.0,xcSet)
+        self.field= fields.getScalarFieldFromControlVar(attributeName=self.attributeName,argument=self.argument,xcSet=xcSet,component=None,fUnitConv=1.0,rgMinMax=None)
         print '********** Exits FigureDefinition::defField; limit state: ', self.limitStateLabel, ' attributeName= ', self.attributeName, ' xcSet.name= ', xcSet.name
 
     def genGraphicFile(self,defDisplay, xcSet, nmbFichGraf):

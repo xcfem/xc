@@ -12,7 +12,7 @@ import xc_base
 import geom
 import xc
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
-from postprocess.xcVtk.fields import Fields
+from postprocess.xcVtk.fields import fields
 from postprocess import utils_display
 from postprocess.xcVtk.diagrams import control_var_diagram as cvd
 from postprocess.xcVtk import vtk_graphic_base
@@ -385,14 +385,14 @@ def checksReports(limitStateLabel,setsShEl,argsShEl,capTexts,pathGr,texReportFil
     for st in setsShEl:
         for arg in argsShEl:
             attributeName= limitStateLabel + 'Sect1'
-            field= Fields.getScalarFieldFromControlVar(attributeName,arg,st,None,1.0,None)
+            field= fields.getScalarFieldFromControlVar(attributeName,arg,st,None,1.0,None)
             capt=capTexts[limitStateLabel] + ', ' + capTexts[arg] + '. '+ st.description.capitalize() + ', ' + 'section 1'
             grFileNm=pathGr+st.name+arg+'Sect1'
             field.display(defDisplay=dfDisp,caption=capt,fileName=grFileNm+'.jpg')
             insertGrInTex(texFile=report,grFileNm=grFileNm,grWdt=grWdt,capText=capt)
 
             attributeName= limitStateLabel + 'Sect2'
-            field= Fields.getScalarFieldFromControlVar(attributeName,arg,st,None,1.0,None)
+            field= fields.getScalarFieldFromControlVar(attributeName,arg,st,None,1.0,None)
             capt=capTexts[limitStateLabel] + ', ' + capTexts[arg] + '. '+ st.description.capitalize() + ', ' + 'section 2'
             grFileNm=pathGr+st.name+arg+'Sect2'
             field.display(defDisplay=dfDisp,caption=capt,fileName=grFileNm+'.jpg')

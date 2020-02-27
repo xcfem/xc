@@ -8,6 +8,22 @@ vtk CAD graphic
     :undoc-members:
     :show-inheritance:
 
+vtk CAD mesh
+------------
+
+.. automodule:: postprocess.xcVtk.CAD_model.cad_mesh
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+vtk array data
+--------------
+
+.. automodule:: postprocess.xcVtk.create_array_set_data
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 
 
