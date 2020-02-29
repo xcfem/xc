@@ -19,7 +19,7 @@ import math
 import xc_base
 import geom
 from materials.sections.fiber_section import fiber_sets
-from materials.sections import stressCalc as sc
+from materials.sections import stress_calc as sc
 from miscUtils import LogMessages as lmsg
 from postprocess.reports import common_formats as fmt
 

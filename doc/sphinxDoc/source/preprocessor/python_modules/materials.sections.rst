@@ -33,6 +33,14 @@ Section properties
     :undoc-members:
     :show-inheritance:
 
+Stress calculation
+------------------
+
+.. automodule:: materials.sections.stress_calc
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 Structural steel
 -----------------
 
@@ -45,6 +53,14 @@ RC sections' container
 ----------------------
 
 .. automodule:: materials.sections.RC_sections_container
+    :members:
+    :undoc-members:
+    :show-inheritance:
+      
+Rebar family
+-------------
+
+.. automodule:: materials.sections.rebar_family
     :members:
     :undoc-members:
     :show-inheritance:

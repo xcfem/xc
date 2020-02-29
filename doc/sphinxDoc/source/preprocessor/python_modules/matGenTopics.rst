@@ -9,7 +9,7 @@ Typical materials
     :show-inheritance:
 
 
-concrete_base
+Concrete base
 --------------
 
 .. automodule:: materials.concrete_base
@@ -17,7 +17,7 @@ concrete_base
     :undoc-members:
     :show-inheritance:
 
-limit_state_checking_base
+Limit state checking base
 -------------------------
 
 .. automodule:: materials.limit_state_checking_base
@@ -25,7 +25,24 @@ limit_state_checking_base
     :undoc-members:
     :show-inheritance:
       
-bridge_bearings
+Steel base
+--------------
+
+.. automodule:: materials.steel_base
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+       
+Buckling base
+-------------
+
+.. automodule:: materials.buckling_base
+    :members:
+    :undoc-members:
+    :show-inheritance:
+      
+Bridge bearings
 ---------------
 
 .. automodule:: materials.bridge_bearings

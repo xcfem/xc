@@ -14,7 +14,7 @@ from materials.sections import section_properties
 from materials import typical_materials
 import math
 from materials.ehe import EHE_materials
-from materials.sections import stressCalc as sc
+from materials.sections import stress_calc as sc
 import sys
 from miscUtils import LogMessages as lmsg
 
