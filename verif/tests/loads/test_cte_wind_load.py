@@ -1,50 +1,50 @@
 # -*- coding: utf-8 -*-
 
 
-from actions.wind import windCTE
+from actions.wind import CTE_wind
 import math
 
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 #execfile("interpolacion.lcmdm")
 
-cpPruebaF= windCTE.cpDosAguasZonaFVTrsv(5.5,math.radians(30))
-cpPruebaG= windCTE.cpDosAguasZonaGVTrsv(5.5,math.radians(-15))
-cpPruebaGL= windCTE.cpDosAguasZonaGVLong(5.5,math.radians(45))
+cpPruebaF= CTE_wind.cpDosAguasZonaFVTrsv(5.5,math.radians(30))
+cpPruebaG= CTE_wind.cpDosAguasZonaGVTrsv(5.5,math.radians(-15))
+cpPruebaGL= CTE_wind.cpDosAguasZonaGVLong(5.5,math.radians(45))
 # Paramentos verticales, zona A
-cpPruebaAPV0= windCTE.cpParamVertZonaAVTrsv(15,5,5)
-cpPruebaAPV1= windCTE.cpParamVertZonaAVTrsv(7.5,5,5)
-cpPruebaAPV2= windCTE.cpParamVertZonaAVTrsv(3.5,5,5)
-cpPruebaAPV3= windCTE.cpParamVertZonaAVTrsv(1.5,5,5)
-cpPruebaAPV4= windCTE.cpParamVertZonaAVTrsv(0.5,5,5)
+cpPruebaAPV0= CTE_wind.cpParamVertZonaAVTrsv(15,5,5)
+cpPruebaAPV1= CTE_wind.cpParamVertZonaAVTrsv(7.5,5,5)
+cpPruebaAPV2= CTE_wind.cpParamVertZonaAVTrsv(3.5,5,5)
+cpPruebaAPV3= CTE_wind.cpParamVertZonaAVTrsv(1.5,5,5)
+cpPruebaAPV4= CTE_wind.cpParamVertZonaAVTrsv(0.5,5,5)
 # Paramentos verticales, zona B
-cpPruebaBPV0= windCTE.cpParamVertZonaBVTrsv(15,5,5)
-cpPruebaBPV1= windCTE.cpParamVertZonaBVTrsv(7.5,5,5)
-cpPruebaBPV2= windCTE.cpParamVertZonaBVTrsv(3.5,5,5)
-cpPruebaBPV3= windCTE.cpParamVertZonaBVTrsv(1.5,5,5)
-cpPruebaBPV4= windCTE.cpParamVertZonaBVTrsv(0.5,5,5)
+cpPruebaBPV0= CTE_wind.cpParamVertZonaBVTrsv(15,5,5)
+cpPruebaBPV1= CTE_wind.cpParamVertZonaBVTrsv(7.5,5,5)
+cpPruebaBPV2= CTE_wind.cpParamVertZonaBVTrsv(3.5,5,5)
+cpPruebaBPV3= CTE_wind.cpParamVertZonaBVTrsv(1.5,5,5)
+cpPruebaBPV4= CTE_wind.cpParamVertZonaBVTrsv(0.5,5,5)
 # Paramentos verticales, zona C
-cpPruebaCPV0= windCTE.cpParamVertZonaCVTrsv(15,5,5)
-cpPruebaCPV1= windCTE.cpParamVertZonaCVTrsv(7.5,5,5)
-cpPruebaCPV2= windCTE.cpParamVertZonaCVTrsv(3.5,5,5)
-cpPruebaCPV3= windCTE.cpParamVertZonaCVTrsv(1.5,5,5)
-cpPruebaCPV4= windCTE.cpParamVertZonaCVTrsv(0.5,5,5)
+cpPruebaCPV0= CTE_wind.cpParamVertZonaCVTrsv(15,5,5)
+cpPruebaCPV1= CTE_wind.cpParamVertZonaCVTrsv(7.5,5,5)
+cpPruebaCPV2= CTE_wind.cpParamVertZonaCVTrsv(3.5,5,5)
+cpPruebaCPV3= CTE_wind.cpParamVertZonaCVTrsv(1.5,5,5)
+cpPruebaCPV4= CTE_wind.cpParamVertZonaCVTrsv(0.5,5,5)
 # Paramentos verticales, zona D
-cpPruebaDPV0= windCTE.cpParamVertZonaDVTrsv(15,5,5)
-cpPruebaDPV1= windCTE.cpParamVertZonaDVTrsv(7.5,5,5)
-cpPruebaDPV2= windCTE.cpParamVertZonaDVTrsv(3.5,5,5)
-cpPruebaDPV3= windCTE.cpParamVertZonaDVTrsv(1.5,5,5)
-cpPruebaDPV4= windCTE.cpParamVertZonaDVTrsv(0.5,5,5)
+cpPruebaDPV0= CTE_wind.cpParamVertZonaDVTrsv(15,5,5)
+cpPruebaDPV1= CTE_wind.cpParamVertZonaDVTrsv(7.5,5,5)
+cpPruebaDPV2= CTE_wind.cpParamVertZonaDVTrsv(3.5,5,5)
+cpPruebaDPV3= CTE_wind.cpParamVertZonaDVTrsv(1.5,5,5)
+cpPruebaDPV4= CTE_wind.cpParamVertZonaDVTrsv(0.5,5,5)
 # Paramentos verticales, zona E
-cpPruebaEPV0= windCTE.cpParamVertZonaEVTrsv(15,3,1)
-cpPruebaEPV1= windCTE.cpParamVertZonaEVTrsv(7.5,3,1)
-cpPruebaEPV2= windCTE.cpParamVertZonaEVTrsv(3.5,3,1)
-cpPruebaEPV3= windCTE.cpParamVertZonaEVTrsv(1.5,3,1)
-cpPruebaEPV4= windCTE.cpParamVertZonaEVTrsv(0.5,3,1)
+cpPruebaEPV0= CTE_wind.cpParamVertZonaEVTrsv(15,3,1)
+cpPruebaEPV1= CTE_wind.cpParamVertZonaEVTrsv(7.5,3,1)
+cpPruebaEPV2= CTE_wind.cpParamVertZonaEVTrsv(3.5,3,1)
+cpPruebaEPV3= CTE_wind.cpParamVertZonaEVTrsv(1.5,3,1)
+cpPruebaEPV4= CTE_wind.cpParamVertZonaEVTrsv(0.5,3,1)
 
 
 ratio1= (cpPruebaF+0.7596373105057561)

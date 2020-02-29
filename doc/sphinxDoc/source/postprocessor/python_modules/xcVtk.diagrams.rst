@@ -1,5 +1,19 @@
-xcVtk diagrams
-==============
+
+Colored diagram
+-------------------
+
+.. automodule:: postprocess.xcVtk.diagrams.colored_diagram
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Diagram control variables
+-------------------------
+
+.. automodule:: postprocess.xcVtk.diagrams.control_var_diagram
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 Linear load diagram
 -------------------
@@ -14,6 +28,14 @@ Node property diagram
 ---------------------
 
 .. automodule:: postprocess.xcVtk.diagrams.node_property_diagram
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Element property diagram
+---------------------
+
+.. automodule:: postprocess.xcVtk.diagrams.element_property_diagram
     :members:
     :undoc-members:
     :show-inheritance:

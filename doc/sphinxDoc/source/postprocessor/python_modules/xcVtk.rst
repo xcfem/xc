@@ -1,5 +1,5 @@
-XC_Vtk
-======
+Graphics XC_Vtk
+===============
 
 General topics
 ---------------

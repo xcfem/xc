@@ -68,7 +68,7 @@ spc= constraints.newSPConstraint(nod4.tag,2,0.0)
 spc= constraints.newSPConstraint(nod4.tag,4,0.0)
 elSet=preprocessor.getSets.getSet('total')
 
-from actions.roadway_trafic import standard_load_models as slm
+from actions.roadway_trafic import IAP_load_models as slm
 from actions.imposed_strain import imp_strain as imps
 
 lp0=slm.gradient_thermal_LC(lcName='lp0', lstGradThStrnData=[imps.gradThermalStrain(elemSet=elSet,elThick=thickness, DOF=3, alpha=alpha, Ttop=Ttop, Tbottom=Tbottom)])

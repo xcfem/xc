@@ -5,15 +5,15 @@ from __future__ import division
 
 #See Annexe 14 page 235
 
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import math
 import sys
-import rough_calculations.masonryVault
+import rough_calculations.masonry_vault
 
 #Coefficients of polynomial
 f= -1.47e-3 #-1.47e-12
@@ -48,7 +48,7 @@ b= xB-xD
 # Warning!. We change the sign of the
 # angle to make it equal to that in
 # the example (Thesis. Annexe 14. page 235).
-archGeom= rough_calculations.masonryVault.archGeometry([f,j,k,r],[xA,xC,xD,xB])
+archGeom= rough_calculations.masonry_vault.archGeometry([f,j,k,r],[xA,xC,xD,xB])
 gammaD= -archGeom.calcGamma(xD)
 hA= archGeom.yAxis(xA)
 hC= archGeom.yAxis(xC)
@@ -89,21 +89,21 @@ RzB= v*(Kp*mp*(hS*PPS*(hD*hD/2-hB*hB/2-hB*(hD-hB)))+PPR*(hR*(hD*hD/2-hB*hB/2)-hR
 
 RzD= v*(Kp*mp*(hS*PPS*(hD*(hD-hB)-hD*hD/2+hB*hB/2))+PPR*(hR*hD*(hD-hB)-hR*(hD*hD/2-hB*hB/2)-hD*(hD*hD/2-hB*hB/2)+pow(hD,3)/3-pow(hB,3)/3)+cohesion*mc*Kc*(hD*(hD-hB)-hD*hD/2+hB*hB/2))
 
-vQt= rough_calculations.masonryVault.vQtrans(v,delta,hRcle)
+vQt= rough_calculations.masonry_vault.vQtrans(v,delta,hRcle)
 qtrans= Q/vQt
-lQt= rough_calculations.masonryVault.lQtrans(a,delta,hRcle)
+lQt= rough_calculations.masonry_vault.lQtrans(a,delta,hRcle)
 X= qtrans/lQt
 
 # Résistance
 Nadmis= -1.25e6 #Effort axial admisible
-Madmis= rough_calculations.masonryVault.diagInteraction(Nadmis,d,v,alpha,beta)
-E= rough_calculations.masonryVault.calcE6p27(X,qrep,L,LR,v,lQt,a,b,hA,hB,hC,hD,xA)
-F= rough_calculations.masonryVault.calcF6p28(R,LR,a,b,eta,phiS,etaW,psiT,Madmis,Madmis,Madmis,RzB,RzD,hA,hB,hC,hD)
-G= rough_calculations.masonryVault.calcG6p29(X,qrep,L,LR,v,lQt,a,b,hA,hB,hC,hD,xA,gammaD)
-H= rough_calculations.masonryVault.calcH6p30(LR,a,eta,psi,phiS,etaW,Madmis,Madmis,Madmis,RzB,hA,hB,hC,hD,gammaD)
-n= rough_calculations.masonryVault.calcn6p32(alpha,beta,d,v,E,F,G,H)
+Madmis= rough_calculations.masonry_vault.diagInteraction(Nadmis,d,v,alpha,beta)
+E= rough_calculations.masonry_vault.calcE6p27(X,qrep,L,LR,v,lQt,a,b,hA,hB,hC,hD,xA)
+F= rough_calculations.masonry_vault.calcF6p28(R,LR,a,b,eta,phiS,etaW,psiT,Madmis,Madmis,Madmis,RzB,RzD,hA,hB,hC,hD)
+G= rough_calculations.masonry_vault.calcG6p29(X,qrep,L,LR,v,lQt,a,b,hA,hB,hC,hD,xA,gammaD)
+H= rough_calculations.masonry_vault.calcH6p30(LR,a,eta,psi,phiS,etaW,Madmis,Madmis,Madmis,RzB,hA,hB,hC,hD,gammaD)
+n= rough_calculations.masonry_vault.calcn6p32(alpha,beta,d,v,E,F,G,H)
 
-#rough_calculations.masonryVault.printVouteResults(L, f, j, k, r, a,b,gammaD,hA,hB,hC,hD,LR,d,v,hR,hS,hHalfL,alpha,beta,PPR,PPS,eta,etaW,phi,phiS,psi,psiT,mp,Kp,mc,Kc,R, RzB, RzD,qtrans,X,Nadmis,Madmis,E,F,G,H,n)
+#rough_calculations.masonry_vault.printVouteResults(L, f, j, k, r, a,b,gammaD,hA,hB,hC,hD,LR,d,v,hR,hS,hHalfL,alpha,beta,PPR,PPS,eta,etaW,phi,phiS,psi,psiT,mp,Kp,mc,Kc,R, RzB, RzD,qtrans,X,Nadmis,Madmis,E,F,G,H,n)
 
 nTeor= 8.47812250571
 ratio1= (n-nTeor)/nTeor

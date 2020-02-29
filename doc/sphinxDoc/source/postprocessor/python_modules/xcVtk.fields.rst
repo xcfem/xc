@@ -1,6 +1,3 @@
-xcVtk fields
-============
-
 
 Field base
 ----------

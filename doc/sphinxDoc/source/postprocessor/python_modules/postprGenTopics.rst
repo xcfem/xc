@@ -1,5 +1,3 @@
-General topics
-==============
 
 Callback controls
 -----------------

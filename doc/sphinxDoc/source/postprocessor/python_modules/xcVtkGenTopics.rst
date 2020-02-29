@@ -1,5 +1,3 @@
-xcVtk general topics
-====================
 
 Screen annotations
 ------------------

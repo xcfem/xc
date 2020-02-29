@@ -2,7 +2,7 @@
 # Home made test.
 
 from __future__ import division
-from actions.wind import windSIA261
+from actions.wind import SIA261_wind
 import math
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
@@ -22,8 +22,8 @@ catTerrain= "III"
 qp0= 1.1
 
 
-ch= windSIA261.Ch(z,catTerrain)
-qp= windSIA261.qp(qp0,z,catTerrain)
+ch= SIA261_wind.Ch(z,catTerrain)
+qp= SIA261_wind.qp(qp0,z,catTerrain)
 
 chTeor= 1.6*(math.pow(z/450,0.23)+0.375)**2
 ratio1= abs(ch-chTeor)/chTeor
