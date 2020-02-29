@@ -2,7 +2,7 @@
 # Home made test.
 
 from __future__ import division
-from actions.snow import snowSIA
+from actions.snow import SIA_snow
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -12,9 +12,9 @@ __email__= "l.pereztato@gmail.com"
 
 h0= 400
 
-sk= snowSIA.Sk(h0)
+sk= SIA_snow.Sk(h0)
 skTeor= max(((h0*h0/(350*350))+1)*0.4e3,0.9e3)
-qk= snowSIA.qkPont(h0,"normal")
+qk= SIA_snow.qkPont(h0,"normal")
 qkTeor= 0.8*sk
 
 ratio1= abs(sk-skTeor)/skTeor
