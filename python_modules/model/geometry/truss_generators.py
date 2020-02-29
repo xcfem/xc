@@ -219,21 +219,21 @@ class TrussBase(TrussGeometry):
         seedElemHandler.defaultTransformation= self.crdTransf.getName()  # Orientation of the element axis.
         # Lower chord
         seedElemHandler.defaultMaterial= self.lowerChordMaterial.name  # Material name.
-        beam3d= seedElemHandler.newElement("ElasticBeam3d",xc.ID([0,0]));
+        beam3d= seedElemHandler.newElement("ElasticBeam3d",xc.ID([0,0]))
         self.lowerChordSet.genMesh(xc.meshDir.I)  # Generate the elements.
         # Upper chord
         seedElemHandler.defaultMaterial= self.upperChordMaterial.name  # Material name.
-        beam3d= seedElemHandler.newElement("ElasticBeam3d",xc.ID([0,0]));
+        beam3d= seedElemHandler.newElement("ElasticBeam3d",xc.ID([0,0]))
         self.upperChordSet.genMesh(xc.meshDir.I)  # Generate the elements.
         # Diagonals
         seedElemHandler.defaultMaterial= self.diagonalMaterial.name  # Material name.
         seedElemHandler.dimElem= 3 #Bars defined ina a three-dimensional space.
-        trussElem= seedElemHandler.newElement('Truss',xc.ID([0,0]));
+        trussElem= seedElemHandler.newElement('Truss',xc.ID([0,0]))
         trussElem.sectionArea= self.diagonalArea
         self.diagonalSet.genMesh(xc.meshDir.I)  # Generate the elements.
         # End posts
         seedElemHandler.defaultMaterial= self.postsMaterial.name  # Material name.
-        beam3d= seedElemHandler.newElement("ElasticBeam3d",xc.ID([0,0]));
+        beam3d= seedElemHandler.newElement("ElasticBeam3d",xc.ID([0,0]))
         self.postsSet.genMesh(xc.meshDir.I)  # Generate the elements.
         self.fillDownwards()
 
