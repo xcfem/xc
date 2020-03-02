@@ -16,6 +16,7 @@ Actions
    python_modules/actions.wind
    python_modules/actions.snow
    python_modules/actions.imposed_strain
+   python_modules/actions.roadway_trafic
    python_modules/actions.railway_trafic
    python_modules/actions.quake
    python_modules/actions.prestress

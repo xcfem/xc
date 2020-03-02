@@ -48,10 +48,10 @@ Plane elements
 
    mesh/element/utils/coordTransformation/coordTransformation.rst
 
-.. *** Classes' import failed
-   Friction elements
-   ,,,,,,,,,,,,,,,,,
-   .. toctree::
+
+Friction elements
+,,,,,,,,,,,,,,,,,
+.. toctree::
       :maxdepth: 1
 
       mesh/element/special/frictionBearing/frictionModel/frictionModel.rst

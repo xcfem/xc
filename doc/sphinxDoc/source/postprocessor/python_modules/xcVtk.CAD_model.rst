@@ -19,7 +19,7 @@ vtk CAD mesh
 vtk array data
 --------------
 
-.. automodule:: postprocess.xcVtk.create_array_set_data
+.. automodule:: postprocess.xcVtk.CAD_model.create_array_set_data
     :members:
     :undoc-members:
     :show-inheritance:

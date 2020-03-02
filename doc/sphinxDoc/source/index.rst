@@ -45,6 +45,7 @@ Postprocessor
    :maxdepth: 1
 
    postprocessor/python_modules/postprGenTopics
+   postprocessor/python_modules/postprocess.config
    postprocessor/python_modules/xcVtk
    postprocessor/python_modules/reports
    postprocessor/utils

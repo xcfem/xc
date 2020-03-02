@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Import HSS profiles from AISC database version 15.0
+''' Import HSS profiles from AISC database version 15.0'''
 from __future__ import print_function
 import openpyxl
 from miscUtils import LogMessages as lmsg

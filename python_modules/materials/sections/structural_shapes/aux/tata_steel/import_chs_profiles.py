@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+''' Tata CHS profiles'''
+
 import csv
 
 fNameIn= 'tata_steel_chs_shapes.csv'

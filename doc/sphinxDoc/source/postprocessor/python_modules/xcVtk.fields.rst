@@ -51,7 +51,7 @@ Linear element field
 Direction field data
 ---------------------
 
-.. automodule:: postprocess.xcVtk.direction_field_data
+.. automodule:: postprocess.xcVtk.fields.direction_field_data
     :members:
     :undoc-members:
     :show-inheritance:
