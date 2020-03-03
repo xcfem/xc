@@ -15,23 +15,23 @@ Import shell internal forces from Ansys
     :undoc-members:
     :show-inheritance:
 
-scc2d_testing_bench
--------------------
+2D fiber section testing bench
+------------------------------
 
 .. automodule:: misc.scc2d_testing_bench
     :members:
     :undoc-members:
     :show-inheritance:
 
-scc3d_testing_bench
--------------------
+3D fiber section testing bench
+------------------------------
 
 .. automodule:: misc.scc3d_testing_bench
     :members:
     :undoc-members:
     :show-inheritance:
 
-shell_testing_bench
+Shell testing bench
 -------------------
 
 .. automodule:: misc.shell_testing_bench
@@ -48,7 +48,7 @@ Loads in sections
     :undoc-members:
     :show-inheritance:
 
-matrix utils
+Matrix utils
 ------------
 
 .. automodule:: misc.matrix_utils
@@ -64,10 +64,10 @@ Import beam internal forces from metal3D
     :undoc-members:
     :show-inheritance:
 
-tablaEsf
---------
+Table of internal forces
+------------------------
 
-.. automodule:: misc.tablaEsf
+.. automodule:: misc.int_forces_table
     :members:
     :undoc-members:
     :show-inheritance:
