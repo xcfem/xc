@@ -1,16 +1,16 @@
 
-ansysToEsfBarra
----------------
+Import beam internal forces from Ansys
+--------------------------------------
 
-.. automodule:: misc.ansysToEsfBarra
+.. automodule:: misc.import_Ansys_beam_intforces
     :members:
     :undoc-members:
     :show-inheritance:
 
-ansysToEsfShell
----------------
+Import shell internal forces from Ansys
+---------------------------------------
 
-.. automodule:: misc.ansysToEsfShell
+.. automodule:: misc.import_Ansys_shell_intforces
     :members:
     :undoc-members:
     :show-inheritance:
@@ -40,10 +40,10 @@ shell_testing_bench
     :show-inheritance:
 
 
-cargasSecciones
----------------
+Loads in sections
+-----------------
 
-.. automodule:: misc.cargasSecciones
+.. automodule:: misc.loads_sections
     :members:
     :undoc-members:
     :show-inheritance:
