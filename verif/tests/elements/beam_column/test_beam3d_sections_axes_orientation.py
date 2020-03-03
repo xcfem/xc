@@ -42,7 +42,7 @@ from actions import combinations as combs
 from postprocess import limit_state_data as lsd
 from materials.sia262 import SIA262_limit_state_checking
 from model import model_inquiry as minq
-from misc import matrixUtils
+from misc import matrix_utils
 from postprocess.control_vars import *
 from postprocess.config import default_config
 import logging
@@ -257,7 +257,7 @@ f.close()
 #We'll check the result of applying the coord. matrix to the vector of forces
 #applied in the GCS is equal to the internal forces read from the file
 #Local axes beam3dX 
-lAxBeamX=matrixUtils.matrixToNumpyArray(beam3dX.getLocalAxes(True))
+lAxBeamX=matrix_utils.matrixToNumpyArray(beam3dX.getLocalAxes(True))
 #Loads [Fx,Fy,Fz] applied on the element (GCS)
 FbeamXGCS=np.array([0,0,F])
 #internal forces read from the results file for elem1, section1
@@ -268,7 +268,7 @@ IFbeamXsec2=matIntForc[1]
 ratio1_1=sum(np.dot(IFbeamXsec2,lAxBeamX)-FbeamXGCS)
 
 #Local axes beam3dY 
-lAxBeamY=matrixUtils.matrixToNumpyArray(beam3dY.getLocalAxes(True))
+lAxBeamY=matrix_utils.matrixToNumpyArray(beam3dY.getLocalAxes(True))
 #Loads [Fx,Fy,Fz] applied on the element (GCS)
 FbeamYGCS=np.array([F,0,0])
 #internal forces read from the results file for elem2, section1
@@ -279,7 +279,7 @@ IFbeamYsec2=matIntForc[3]
 ratio2_1=sum(np.dot(IFbeamYsec2,lAxBeamY)-FbeamYGCS)
 
 #Local axes beam3dZ 
-lAxBeamZ=matrixUtils.matrixToNumpyArray(beam3dZ.getLocalAxes(True))
+lAxBeamZ=matrix_utils.matrixToNumpyArray(beam3dZ.getLocalAxes(True))
 #Loads [Fx,Fy,Fz] applied on the element (GCS)
 FbeamZGCS=np.array([F/math.sqrt(2),-F/math.sqrt(2),0])
 #internal forces read from the results file for elem2, section1
@@ -293,22 +293,22 @@ ratio3_1=sum(np.dot(IFbeamZsec2,lAxBeamZ)-FbeamZGCS)
 # Internal forces (expressed in local axes) must give the same
 # values for the RC section 1 in all the three beams
 elsec1x=FMeBx[0]
-Rsec1beamX=matrixUtils.vectorToNumpyArray(elsec1x.getResistingForce())
+Rsec1beamX=matrix_utils.vectorToNumpyArray(elsec1x.getResistingForce())
 elsec1y=FMeBy[0]
-Rsec1beamY=matrixUtils.vectorToNumpyArray(elsec1y.getResistingForce())
+Rsec1beamY=matrix_utils.vectorToNumpyArray(elsec1y.getResistingForce())
 elsec1z=FMeBz[0]
-Rsec1beamZ=matrixUtils.vectorToNumpyArray(elsec1z.getResistingForce())
+Rsec1beamZ=matrix_utils.vectorToNumpyArray(elsec1z.getResistingForce())
 
 ratio1=(Rsec1beamX-Rsec1beamY).sum()+(Rsec1beamX-Rsec1beamZ).sum()+(Rsec1beamY-Rsec1beamZ).sum()
 
 # Internal forces (expressed in local axes) must give the same
 # values for the RC section 2 in all the three beams
 elsec2x=FMeBx[1]
-Rsec2beamX=matrixUtils.vectorToNumpyArray(elsec2x.getResistingForce())
+Rsec2beamX=matrix_utils.vectorToNumpyArray(elsec2x.getResistingForce())
 elsec2y=FMeBy[1]
-Rsec2beamY=matrixUtils.vectorToNumpyArray(elsec2y.getResistingForce())
+Rsec2beamY=matrix_utils.vectorToNumpyArray(elsec2y.getResistingForce())
 elsec2z=FMeBz[1]
-Rsec2beamZ=matrixUtils.vectorToNumpyArray(elsec2z.getResistingForce())
+Rsec2beamZ=matrix_utils.vectorToNumpyArray(elsec2z.getResistingForce())
 
 ratio2=(Rsec2beamX-Rsec2beamY).sum()+(Rsec2beamX-Rsec2beamZ).sum()+(Rsec2beamY-Rsec2beamZ).sum()
 

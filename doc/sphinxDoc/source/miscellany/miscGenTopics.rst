@@ -48,18 +48,18 @@ Loads in sections
     :undoc-members:
     :show-inheritance:
 
-matrixUtils
------------
+matrix utils
+------------
 
-.. automodule:: misc.matrixUtils
+.. automodule:: misc.matrix_utils
     :members:
     :undoc-members:
     :show-inheritance:
 
-metal3dToEsfBarra
------------------
+Import beam internal forces from metal3D
+----------------------------------------
 
-.. automodule:: misc.metal3dToEsfBarra
+.. automodule:: misc.import_metal3_beam_intforces
     :members:
     :undoc-members:
     :show-inheritance:

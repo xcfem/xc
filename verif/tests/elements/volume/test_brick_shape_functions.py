@@ -23,7 +23,7 @@ from materials import typical_materials
 from postprocess import output_handler
 import numpy as np
 from numpy import linalg as LA
-from misc import matrixUtils
+from misc import matrix_utils
 
 # Problem type
 feProblem= xc.FEProblem()
@@ -71,7 +71,7 @@ for nc in naturalCoord:
 err= LA.norm(np.array(resultNodes)-testValues)
 
 # Verifies that Gauss Point i correspond to Node i
-gaussPointsPositions= matrixUtils.matrixToNumpyArray(brick.gaussPointsPositions)
+gaussPointsPositions= matrix_utils.matrixToNumpyArray(brick.gaussPointsPositions)
 gaussPointsPositions*= math.sqrt(3.0)
 err+= LA.norm(np.array(gaussPointsPositions)-naturalCoord)
 
