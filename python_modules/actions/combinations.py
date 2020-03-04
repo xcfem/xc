@@ -8,7 +8,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
 
-from import_export import NeutralLoadDescription as nld
+from import_export import neutral_load_description as nld
 from postprocess.reports import graphical_reports
 
 

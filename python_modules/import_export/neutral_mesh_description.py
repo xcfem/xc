@@ -2,8 +2,8 @@
 
 import os
 from dxfwrite import DXFEngine
-import MeshEntities as me
-import BlockTopologyEntities as bte
+import mesh_entities as me
+import block_topology_entities as bte
 
 
 class GroupRecord(object):

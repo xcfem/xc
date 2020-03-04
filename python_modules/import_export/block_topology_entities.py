@@ -8,8 +8,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com" "anaOrtegaOrt@gmail.com"
 
-import BasicEntities as be
-import MeshEntities as me
+import basic_entities as be
+import mesh_entities as me
 from miscUtils import LogMessages as lmsg
 from dxfwrite import DXFEngine
 
@@ -200,7 +200,7 @@ class BlockData(object):
     self.pointSupports.readFromXCSet(xcSet,self.points)
 
   def readFromDxfFile(self,fName,preprocessor,dxfLayers):
-    dxfReader= DxfReader.OldDxfReader()
+    dxfReader= dxf_reader.OldDxfReader()
     dxfReader.read(fName,preprocessor,dxfLayers)
     pointSet= preprocessor.getSets.getSet("total").getPoints
     for p in pointSet:

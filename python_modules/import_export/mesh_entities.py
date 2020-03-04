@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from collections import defaultdict
 
-import BasicEntities as be
+import basic_entities as be
 from miscUtils import LogMessages as lmsg
 from dxfwrite import DXFEngine
 
