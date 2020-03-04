@@ -17,7 +17,7 @@ from import_export.sciaXML.xml_basics import ObjectItem as oI
 from import_export.sciaXML.xml_basics import Row as rw
 import PointForceFreeProperties as pffp
 import LoadCaseContainer as lcc
-from import_export.sciaXML import NodeContainer as nc
+from import_export.sciaXML import node_container as nc
 import LoadComponentBase as lcb
 import uuid
 

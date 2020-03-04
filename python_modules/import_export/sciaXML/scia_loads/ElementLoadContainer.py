@@ -17,7 +17,7 @@ from import_export.sciaXML.xml_basics import ObjectItem as oI
 from import_export.sciaXML.xml_basics import Row as rw
 import ElementLoadProperties as elp
 import LoadCaseContainer as lcc
-from import_export.sciaXML import EPPlaneContainer as ec
+from import_export.sciaXML import ep_plane_container as ec
 import LoadComponentBase as lcb
 import uuid
 import math

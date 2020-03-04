@@ -16,7 +16,7 @@ from xml_basics import Ref as rf
 from xml_basics import EnumItem as eI
 from xml_basics import Enum as enum
 from xml_basics import PropertiesTable as propTable
-import NodeContainer as nc
+import node_container as nc
 import xml.etree.cElementTree as ET
 
 containerId= "{1cbca4de-355b-40f7-a91d-8efd26a6404d}"

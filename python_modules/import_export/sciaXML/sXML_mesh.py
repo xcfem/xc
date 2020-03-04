@@ -9,12 +9,12 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import os
-import NodeContainer as nCtr
-import EPPlaneContainer as eppc
-import NodeSupportContainer as nsc
+import node_container as nCtr
+import ep_plane_container as eppc
+import node_support_container as nsc
 from scia_loads import NodeLoadContainer as nlc
 from scia_loads import ElementLoadContainer as elc
-import sXMLBase as base
+import sXML_base as base
 
 class SXMLMesh(base.SXMLBase):
   '''Export mesh (nodes, elements, supports and loads) to

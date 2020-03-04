@@ -15,7 +15,7 @@ from xml_basics import HeaderItem as hi
 from xml_basics import Object as obj
 from xml_basics import ObjectItem as oI
 from xml_basics import Row as rw
-import MaterialProperties as mp
+import material_properties as mp
 import uuid
 
 idMaterialContainer= mp.containerId

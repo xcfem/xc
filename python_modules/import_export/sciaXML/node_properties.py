@@ -9,7 +9,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 from xml_basics import PropertiesContainer as ctr
-import NodeContainer as nc
+import node_container as nc
 from xml_basics import Property as prop
 from xml_basics import PropertiesTable as propTable
 import xml.etree.cElementTree as ET

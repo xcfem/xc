@@ -2,67 +2,67 @@ Import_export sciaXML
 =====================
 
 
-EPPlaneContainer
-----------------
-
-.. automodule:: import_export.sciaXML.EPPlaneContainer
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-EPPlaneProperties
------------------
-
-.. automodule:: import_export.sciaXML.EPPlaneProperties
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-MaterialContainer
------------------
-
-.. automodule:: import_export.sciaXML.MaterialContainer
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-MaterialProperties
+EP plane container
 ------------------
 
-.. automodule:: import_export.sciaXML.MaterialProperties
+.. automodule:: import_export.sciaXML.ep_plane_containe
     :members:
     :undoc-members:
     :show-inheritance:
 
-NodeContainer
--------------
+EP plane properties
+-------------------
 
-.. automodule:: import_export.sciaXML.NodeContainer
+.. automodule:: import_export.sciaXML.ep_plane_properties
     :members:
     :undoc-members:
     :show-inheritance:
 
-NodeProperties
+
+Material container
+------------------
+
+.. automodule:: import_export.sciaXML.material_container
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Material properties
+-------------------
+
+.. automodule:: import_export.sciaXML.material_properties
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Node container
 --------------
 
-.. automodule:: import_export.sciaXML.NodeProperties
+.. automodule:: import_export.sciaXML.node_container
     :members:
     :undoc-members:
     :show-inheritance:
 
-NodeSupportContainer
---------------------
+Node properties
+---------------
 
-.. automodule:: import_export.sciaXML.NodeSupportContainer
+.. automodule:: import_export.sciaXML.node_properties
     :members:
     :undoc-members:
     :show-inheritance:
 
-NodeSupportProperties
----------------------
+Node support container
+----------------------
 
-.. automodule:: import_export.sciaXML.NodeSupportProperties
+.. automodule:: import_export.sciaXML.node_support_container
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Node support properties
+-----------------------
+
+.. automodule:: import_export.sciaXML.node_support_properties
     :members:
     :undoc-members:
     :show-inheritance:
@@ -71,44 +71,44 @@ NodeSupportProperties
 Project
 -------
 
-.. automodule:: import_export.sciaXML.Project
+.. automodule:: import_export.sciaXML.project
     :members:
     :undoc-members:
     :show-inheritance:
 
-ProjectProperties
------------------
+Project properties
+------------------
 
-.. automodule:: import_export.sciaXML.ProjectProperties
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-
-
-sXMLBase
---------
-
-.. automodule:: import_export.sciaXML.sXMLBase
+.. automodule:: import_export.sciaXML.project_properties
     :members:
     :undoc-members:
     :show-inheritance:
 
 
-sXMLBlockTopology
------------------
 
-.. automodule:: import_export.sciaXML.sXMLBase
+
+sXML base
+---------
+
+.. automodule:: import_export.sciaXML.sXML_base
     :members:
     :undoc-members:
     :show-inheritance:
 
 
-sXMLMesh
---------
+sXML block topology
+-------------------
 
-.. automodule:: import_export.sciaXML.sXMLMesh
+.. automodule:: import_export.sciaXML.sXML_block_topology
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+sXML mesh
+---------
+
+.. automodule:: import_export.sciaXML.sXML_mesh
     :members:
     :undoc-members:
     :show-inheritance:

@@ -15,7 +15,7 @@ from xml_basics import HeaderItem as hi
 from xml_basics import Object as obj
 from xml_basics import ObjectItem as oI
 from xml_basics import Row as rw
-import NodeContainer as nc
+import node_container as nc
 
 idEPPlaneContainer= '{8708ed31-8e66-11d4-ad94-f6f5de2be344}'
 tEPPlaneContainer= "8708ed31-8e66-11d4-ad94-f6f5de2be344"

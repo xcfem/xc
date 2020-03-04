@@ -15,7 +15,7 @@ from import_export.sciaXML.xml_basics import HeaderItem as hi
 from import_export.sciaXML.xml_basics import Object as obj
 from import_export.sciaXML.xml_basics import ObjectItem as oI
 from import_export.sciaXML.xml_basics import Row as rw
-from import_export.sciaXML import NodeContainer as nc
+from import_export.sciaXML import node_container as nc
 import LoadGroupProperties as lgp
 
 idLoadGroupContainer= lgp.containerId

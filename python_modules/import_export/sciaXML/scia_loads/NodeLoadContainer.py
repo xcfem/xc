@@ -17,7 +17,7 @@ from import_export.sciaXML.xml_basics import ObjectItem as oI
 from import_export.sciaXML.xml_basics import Row as rw
 import NodeLoadProperties as nlp
 import LoadCaseContainer as lcc
-from import_export.sciaXML import NodeContainer as nc
+from import_export.sciaXML import node_container as nc
 import LoadComponentBase as lcb
 
 idNodeLoadContainer= "{F8371A21-F459-11D4-94D3-000000000000}"
