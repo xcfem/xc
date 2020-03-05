@@ -18,8 +18,8 @@ from import_export.sciaXML.xml_basics import Enum as enum
 from import_export.sciaXML.xml_basics import PropertiesTable as propTable
 from import_export.sciaXML.xml_basics import PropertiesSubTable as propSubTable
 import xml.etree.cElementTree as ET
-import LoadCaseProperties as lcp
-import NodeLoadProperties as nlp
+import load_case_properties as lcp
+import node_load_properties as nlp
 
 containerId= "{E03984FC-B420-4C03-8D2F-72EA2FAB147D}"
 containerClsId= containerId

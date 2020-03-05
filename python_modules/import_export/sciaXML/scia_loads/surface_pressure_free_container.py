@@ -11,9 +11,9 @@ __email__= "l.pereztato@gmail.com"
 import math
 import uuid
 from import_export.sciaXML.xml_basics import Container as ctr
-import SurfacePressureFreeProperties as spfp
+import surface_pressure_free_properties as spfp
 from import_export.sciaXML.xml_basics import Row as rw
-import LoadComponentBase as lcb
+import load_component_base as lcb
 from import_export.sciaXML.xml_basics import Object as obj
 from import_export.sciaXML.xml_basics import ObjectItem as oI
 from import_export.sciaXML.xml_basics import TableXMLNodes  as tb

@@ -15,10 +15,10 @@ from import_export.sciaXML.xml_basics import HeaderItem as hi
 from import_export.sciaXML.xml_basics import Object as obj
 from import_export.sciaXML.xml_basics import ObjectItem as oI
 from import_export.sciaXML.xml_basics import Row as rw
-import ElementLoadProperties as elp
-import LoadCaseContainer as lcc
+import element_load_properties as elp
+import load_case_container as lcc
 from import_export.sciaXML import ep_plane_container as ec
-import LoadComponentBase as lcb
+import load_component_base as lcb
 import uuid
 import math
 

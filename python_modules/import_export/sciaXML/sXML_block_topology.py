@@ -12,8 +12,8 @@ import os
 import node_container as nCtr
 import ep_plane_container as eppc
 import node_support_container as nsc
-from scia_loads import PointForceFreeContainer as pffc
-from scia_loads import SurfacePressureFreeContainer as spfc
+from scia_loads import point_force_free_container as pffc
+from scia_loads import surface_pressure_free_container as spfc
 import sXML_base as base
 
 class SXMLBlockTopology(base.SXMLBase):

@@ -21,8 +21,8 @@ from import_export.sciaXML.xml_basics import HeaderItem as hi
 from import_export.sciaXML.xml_basics import Object as obj
 from import_export.sciaXML.xml_basics import ObjectItem as oI
 from import_export.sciaXML.xml_basics import Row as rw
-import LoadGroupContainer as lgc
-import LoadCaseProperties as lcp
+import load_group_container as lgc
+import load_case_properties as lcp
 import uuid
 
 idLoadCaseContainer= lcp.containerId

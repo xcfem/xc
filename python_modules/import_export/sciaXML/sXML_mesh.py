@@ -12,8 +12,8 @@ import os
 import node_container as nCtr
 import ep_plane_container as eppc
 import node_support_container as nsc
-from scia_loads import NodeLoadContainer as nlc
-from scia_loads import ElementLoadContainer as elc
+from scia_loads import node_load_container as nlc
+from scia_loads import element_load_container as elc
 import sXML_base as base
 
 class SXMLMesh(base.SXMLBase):

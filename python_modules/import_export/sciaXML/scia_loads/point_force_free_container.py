@@ -15,10 +15,10 @@ from import_export.sciaXML.xml_basics import HeaderItem as hi
 from import_export.sciaXML.xml_basics import Object as obj
 from import_export.sciaXML.xml_basics import ObjectItem as oI
 from import_export.sciaXML.xml_basics import Row as rw
-import PointForceFreeProperties as pffp
-import LoadCaseContainer as lcc
+import point_force_free_properties as pffp
+import load_case_container as lcc
 from import_export.sciaXML import node_container as nc
-import LoadComponentBase as lcb
+import load_component_base as lcb
 import uuid
 
 idPointForceFreeContainer= "{E03984FC-B420-4C03-8D2F-72EA2FAB147D}"
