@@ -8,20 +8,19 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from xml_basics import Container as ctr
-from xml_basics import TableXMLNodes  as tb
-from xml_basics import Header as hdr
-from xml_basics import HeaderItem as hi
-from xml_basics import Object as obj
-from xml_basics import ObjectItem as oI
-from xml_basics import Row as rw
+from xml_basics import scxml_table_container as ctr
+from xml_basics import scxml_table_xmlnodes as tb
+from xml_basics import scxml_header_item as hi
+from xml_basics import scxml_object as obj
+from xml_basics import scxml_object_item as oI
+from xml_basics import scxml_row as rw
 import material_properties as mp
 import uuid
 
 idMaterialContainer= mp.containerId
 tMaterialContainer= mp.containerProgId
 
-class MaterialTable(tb.TableXMLNodes):
+class MaterialTable(tb.SCXMLTableXMLNodes):
   '''Material XML table.
 
   Attributes:
@@ -37,7 +36,7 @@ class MaterialTable(tb.TableXMLNodes):
     print "XXX write implementation!"
     
 
-class MaterialContainer(ctr.Container):
+class MaterialContainer(ctr.SCXMLTableContainer):
   '''Material container.
 
   Attributes:

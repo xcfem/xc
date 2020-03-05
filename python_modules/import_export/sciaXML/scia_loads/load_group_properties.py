@@ -10,12 +10,12 @@ __email__= "l.pereztato@gmail.com"
 
 #Properties for constraint nodes.
 
-from import_export.sciaXML.xml_basics import PropertiesContainer as ctr
-from import_export.sciaXML.xml_basics import Property as prop
-from import_export.sciaXML.xml_basics import Ref as rf
-from import_export.sciaXML.xml_basics import EnumItem as eI
-from import_export.sciaXML.xml_basics import Enum as enum
-from import_export.sciaXML.xml_basics import PropertiesTable as propTable
+from import_export.sciaXML.xml_basics import scxml_properties_container as ctr
+from import_export.sciaXML.xml_basics import scxml_property as prop
+from import_export.sciaXML.xml_basics import scxml_ref as rf
+from import_export.sciaXML.xml_basics import scxml_enum_item as eI
+from import_export.sciaXML.xml_basics import scxml_enum as enum
+from import_export.sciaXML.xml_basics import scxml_properties_table as propTable
 import xml.etree.cElementTree as ET
 
 containerId= "{F9D4AA72-49D5-11D4-A3CF-000000000000}"
@@ -28,14 +28,14 @@ tbClsId= containerClsId
 idName= "{4364BC01-AAB7-11D4-B3D9-00104BC3B531}"
 idLoad= "{49F9F892-83EC-11D4-B37D-000000000000}"
 
-class LoadGroupProperties(ctr.PropertiesContainer):
+class LoadGroupProperties(ctr.SCXMLPropertiesContainer):
   tableProp= None
   def __init__(self):
     super(LoadGroupProperties,self).__init__(containerId,containerClsId,tbProgId)
-    self.tableProp= propTable.PropertiesTable(tbId,'',"vertical",tbClsId,tbProgId)
-    propName= prop.Property("0","Name","string",idName)
-    propLoad= prop.Property("1","Load","enum",idLoad,"262144")
-    propLoad.value= enum.Enum([eI.EnumItem("0","Permanent")])
+    self.tableProp= propTable.SCXMLPropertiesTable(tbId,'',"vertical",tbClsId,tbProgId)
+    propName= prop.SCXMLProperty("0","Name","string",idName)
+    propLoad= prop.SCXMLProperty("1","Load","enum",idLoad,"262144")
+    propLoad.value= enum.SCXMLEnum([eI.SCXMLEnumItem("0","Permanent")])
 
     self.tableProp.properties.append(propName) #0
     self.tableProp.properties.append(propLoad) #1

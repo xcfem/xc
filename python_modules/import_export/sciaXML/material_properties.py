@@ -10,19 +10,19 @@ __email__= "l.pereztato@gmail.com"
 
 #Properties for constraint nodes.
 
-from xml_basics import PropertiesContainer as ctr
-from xml_basics import Property as prop
-from xml_basics import Ref as rf
-from xml_basics import EnumItem as eI
-from xml_basics import Enum as enum
-from xml_basics import PropertiesTable as propTable
+from xml_basics import scxml_properties_container as ctr
+from xml_basics import scxml_property as prop
+from xml_basics import scxml_ref as rf
+from xml_basics import scxml_enum_item as eI
+from xml_basics import scxml_enum as enum
+from xml_basics import scxml_properties_table as propTable
 import xml.etree.cElementTree as ET
 
 containerId= "{77705284-EEB9-11D4-B450-00104BC3B531}"
 containerClsId= containerId
 containerProgId= "EP_Material.EP_Material.1"
 
-class BasicMaterialProperties(propTable.PropertiesTable):
+class BasicMaterialProperties(propTable.SCXMLPropertiesTable):
   idName= "{4364BC01-AAB7-11D4-B3D9-00104BC3B531}"
   idUniqueId= "{EB2C0F85-7275-4F94-9EA7-E8C3DBFB0FA6}"
   idMaterialType= "{C7421D33-AF0C-11D4-BAE2-006008A4560F}"
@@ -38,18 +38,18 @@ class BasicMaterialProperties(propTable.PropertiesTable):
   idThermalConductivity= "{573962BE-2376-48E6-9527-098F1A4D736C}"
   def __init__(self,id,name,typo,clsid,progid):
     super(BasicMaterialProperties,self).__init__(id,name,typo,clsid,progid)
-    propName= prop.Property("0","Name","string",self.idName)
-    propUniqueId= prop.Property("1","UniqueID","string",self.idUniqueId)
-    propMatType= prop.Property("2","Material type","enum",self.idMaterialType,"262144")
-    propMatType.value= enum.Enum([])
-    propThermalExpansion= prop.Property("3","Thermal expansion ","real",self.idThermalExpansion)
-    propUnitMass= prop.Property("4","Unit mass","real",self.idUnitMass)
-    propYoungModulus= prop.Property("5","Young Modulus","real",self.idYoungModulus)
-    propPoissonCoeff= prop.Property("6","Poisson coeff.","real",self.idPoissonCoeff)
-    propIndependentGModulus= prop.Property("7","Independent G modulus","real",self.idIndependentGModulus)
-    propGModulus= prop.Property("8","G modulus","real",self.idGModulus)
-    propLogDecrement= prop.Property("9","Log. decrement (non-uniform damping only)","real",self.idLogDecrement)
-    propColour= prop.Property("10","Colour","integer",self.idColour)
+    propName= prop.SCXMLProperty("0","Name","string",self.idName)
+    propUniqueId= prop.SCXMLProperty("1","UniqueID","string",self.idUniqueId)
+    propMatType= prop.SCXMLProperty("2","Material type","enum",self.idMaterialType,"262144")
+    propMatType.value= enum.SCXMLEnum([])
+    propThermalExpansion= prop.SCXMLProperty("3","Thermal expansion ","real",self.idThermalExpansion)
+    propUnitMass= prop.SCXMLProperty("4","Unit mass","real",self.idUnitMass)
+    propYoungModulus= prop.SCXMLProperty("5","Young Modulus","real",self.idYoungModulus)
+    propPoissonCoeff= prop.SCXMLProperty("6","Poisson coeff.","real",self.idPoissonCoeff)
+    propIndependentGModulus= prop.SCXMLProperty("7","Independent G modulus","real",self.idIndependentGModulus)
+    propGModulus= prop.SCXMLProperty("8","G modulus","real",self.idGModulus)
+    propLogDecrement= prop.SCXMLProperty("9","Log. decrement (non-uniform damping only)","real",self.idLogDecrement)
+    propColour= prop.SCXMLProperty("10","Colour","integer",self.idColour)
 
     self.properties.append(propName) #0
     self.properties.append(propUniqueId) #1
@@ -71,8 +71,8 @@ class GenericMaterialProperties(BasicMaterialProperties):
   TableProgId= "EP_Material.EP_Material.1"
   def __init__(self):
     super(GenericMaterialProperties,self).__init__(self.TableId,"XML\default","vertical",self.TableClsId,self.TableProgId)
-    propSpecificHeat= prop.Property("11","Specific heat","real",self.idSpecificHeat)
-    propThermalConductivity= prop.Property("12","Thermal conductivity","real",self.idThermalConductivity)
+    propSpecificHeat= prop.SCXMLProperty("11","Specific heat","real",self.idSpecificHeat)
+    propThermalConductivity= prop.SCXMLProperty("12","Thermal conductivity","real",self.idThermalConductivity)
     self.properties.append(propSpecificHeat) #11
     self.properties.append(propThermalConductivity) #12
 
@@ -85,11 +85,11 @@ class SteelSIAProperties(BasicMaterialProperties):
   idYieldStrength= "{0BE3B3D2-86FA-11D4-B3AC-00104BC3B531}"
   def __init__(self):
     super(SteelSIAProperties,self).__init__(self.TableId,"XML\default","vertical",self.TableClsId,self.TableProgId)
-    propThermalExpansionFireR= prop.Property("11","Thermal expansion (for fire resistance) ","real",self.idThermalExpansionFireR)
-    propSpecificHeat= prop.Property("12","Specific heat","real",self.idSpecificHeat)
-    propThermalConductivity= prop.Property("13","Thermal conductivity","real",self.idThermalConductivity)
-    propUltimateStrength= prop.Property("14","Ultimate strength","real",self.idUltimateStrength)
-    propYieldStrength= prop.Property("15","Yield strength","real",self.idYieldStrength)
+    propThermalExpansionFireR= prop.SCXMLProperty("11","Thermal expansion (for fire resistance) ","real",self.idThermalExpansionFireR)
+    propSpecificHeat= prop.SCXMLProperty("12","Specific heat","real",self.idSpecificHeat)
+    propThermalConductivity= prop.SCXMLProperty("13","Thermal conductivity","real",self.idThermalConductivity)
+    propUltimateStrength= prop.SCXMLProperty("14","Ultimate strength","real",self.idUltimateStrength)
+    propYieldStrength= prop.SCXMLProperty("15","Yield strength","real",self.idYieldStrength)
 
     self.properties.append(propThermalExpansionFireR) #11
     self.properties.append(propSpecificHeat) #12
@@ -110,16 +110,16 @@ class ConcreteSIAProperties(BasicMaterialProperties):
   idMVMCS= "{4C74CF90-7EC1-45FA-8A23-B40CED5857FA}"
   def __init__(self):
     super(ConcreteSIAProperties,self).__init__(self.TableId,"XML\default","vertical",self.TableClsId,self.TableProgId)
-    propSpecificHeat= prop.Property("11","Specific heat","real",self.idSpecificHeat)
-    propThermalConductivity= prop.Property("12","Thermal conductivity","real",self.idThermalConductivity)
-    propOrderInCode= prop.Property("13","Order in code","integer",self.idOrderInCode)
-    propStoneDiameter= prop.Property("14","Stone diameter (dg)","real",self.idStoneDiameter)
-    propCementClass= prop.Property("15","Cement class","enum",self.idCementClass,"262144")
-    propCementClass.value= enum.Enum([])
-    propFck= prop.Property("16","Characteristic compressive  cylinder strength [28](Fck)","real",self.idFck)
-    propFctm= prop.Property("17","Mean tensile strength [28](Fctm)","real",self.idFctm)
-    propFcd= prop.Property("18","fcd","real",self.idFcd)
-    propMVMCS= prop.Property("19","Measured values of mean compressive strength (influence of ageing)","real",self.idMVMCS)
+    propSpecificHeat= prop.SCXMLProperty("11","Specific heat","real",self.idSpecificHeat)
+    propThermalConductivity= prop.SCXMLProperty("12","Thermal conductivity","real",self.idThermalConductivity)
+    propOrderInCode= prop.SCXMLProperty("13","Order in code","integer",self.idOrderInCode)
+    propStoneDiameter= prop.SCXMLProperty("14","Stone diameter (dg)","real",self.idStoneDiameter)
+    propCementClass= prop.SCXMLProperty("15","Cement class","enum",self.idCementClass,"262144")
+    propCementClass.value= enum.SCXMLEnum([])
+    propFck= prop.SCXMLProperty("16","Characteristic compressive  cylinder strength [28](Fck)","real",self.idFck)
+    propFctm= prop.SCXMLProperty("17","Mean tensile strength [28](Fctm)","real",self.idFctm)
+    propFcd= prop.SCXMLProperty("18","fcd","real",self.idFcd)
+    propMVMCS= prop.SCXMLProperty("19","Measured values of mean compressive strength (influence of ageing)","real",self.idMVMCS)
 
     self.properties.append(propSpecificHeat) #11
     self.properties.append(propThermalConductivity) #12
@@ -131,7 +131,7 @@ class ConcreteSIAProperties(BasicMaterialProperties):
     self.properties.append(propFcd) #18
     self.properties.append(propMVMCS) #19
 
-class MaterialProperties(ctr.PropertiesContainer):
+class MaterialProperties(ctr.SCXMLPropertiesContainer):
   def __init__(self):
     super(MaterialProperties,self).__init__(containerId,containerClsId,containerProgId)
     self.tables= dict()

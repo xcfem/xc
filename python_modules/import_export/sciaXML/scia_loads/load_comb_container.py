@@ -8,13 +8,11 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from import_export.sciaXML.xml_basics import Container as ctr
-from import_export.sciaXML.xml_basics import TableXMLNodes  as tb
-from import_export.sciaXML.xml_basics import Header as hdr
-from import_export.sciaXML.xml_basics import HeaderItem as hi
-from import_export.sciaXML.xml_basics import Object as obj
-from import_export.sciaXML.xml_basics import ObjectItem as oI
-from import_export.sciaXML.xml_basics import Row as rw
+from import_export.sciaXML.xml_basics import scxml_table_container as ctr
+from import_export.sciaXML.xml_basics import scxml_table_xmlnodes as tb
+from import_export.sciaXML.xml_basics import scxml_object as obj
+from import_export.sciaXML.xml_basics import scxml_object_item as oI
+from import_export.sciaXML.xml_basics import scxml_row as rw
 import load_group_container as lgc
 import load_comb_properties as lcp
 import uuid
@@ -58,50 +56,50 @@ def getLoadCombComponentRow(combComp):
   lcName= combComp.loadCaseName
   if(lcName==''):
     lcName= loadCombPrefix+id
-  p0= oI.ObjectItem(lcName) #Load case name
-  p1= oI.ObjectItem(str(combComp.coef)) #Load case coefficient
-  p2= oI.ObjectItem('',str(combComp.loadCaseId))
+  p0= oI.SCXMLObjectItem(lcName) #Load case name
+  p1= oI.SCXMLObjectItem(str(combComp.coef)) #Load case coefficient
+  p2= oI.SCXMLObjectItem('',str(combComp.loadCaseId))
   p2.n= lcName
-  return rw.RowP012(id,p0,p1,p2)
+  return rw.SCXMLRowP012(id,p0,p1,p2)
   retval.rows.append(row)
 
   return retval
 
 def getDescompObject(descomp):
-  retval= oI.ObjectItem()
+  retval= oI.SCXMLObjectItem()
   for cc in descomp:
     retval.rows.append(getLoadCombComponentRow(cc))
   return retval
 
 def getLoadCombObject(loadComb):
-  retval= obj.Object()
+  retval= obj.SCXMLObject()
   id= str(loadComb.id)
   retval.setId(id)
   name= loadComb.name
   if(name==''):
     name= loadCombPrefix+id
   retval.setNm(name)
-  retval.setP0(oI.ObjectItem(name)) #Name
-  retval.setP1(oI.ObjectItem('{'+str(uuid.uuid4())+'}')) # Unique id
-  retval.setP2(oI.ObjectItem(loadComb.desc)) #Description
+  retval.setP0(oI.SCXMLObjectItem(name)) #Name
+  retval.setP1(oI.SCXMLObjectItem('{'+str(uuid.uuid4())+'}')) # Unique id
+  retval.setP2(oI.SCXMLObjectItem(loadComb.desc)) #Description
   ctyp= getLoadCombType(loadComb.typ)
   ctypName= getLoadCombTypeName(ctyp)
-  tmp= oI.ObjectItem(str(ctyp))
+  tmp= oI.SCXMLObjectItem(str(ctyp))
   tmp.t= ctypName
   retval.setP3(tmp)
   retval.setP4(getDescompObject(loadComb.descomp))
-  retval.setP5(oI.ObjectItem('0')) #Explode
-  retval.setP6(oI.ObjectItem('-1')) #Phase
-  retval.setP7(oI.ObjectItem('0')) #Master ID
+  retval.setP5(oI.SCXMLObjectItem('0')) #Explode
+  retval.setP6(oI.SCXMLObjectItem('-1')) #Phase
+  retval.setP7(oI.SCXMLObjectItem('0')) #Master ID
   return retval
 
 
-class LoadCombContainer(ctr.Container):
+class LoadCombContainer(ctr.SCXMLTableContainer):
   def __init__(self,loadCombsDict):
     super(LoadCombContainer,self).__init__(idLoadCombContainer,tLoadCombContainer)
     loadCombs= list()
     for key in sorted(loadCombsDict):
       ns= loadCombsDict[key]
       loadCombs.append(getLoadCombObject(ns))
-    self.appendTable(tb.TableXMLNodes(idLoadCombContainerTb,tLoadCombContainerTb, 'Combinations', None,loadCombs))
+    self.appendTable(tb.SCXMLTableXMLNodes(idLoadCombContainerTb,tLoadCombContainerTb, 'Combinations', None,loadCombs))
   

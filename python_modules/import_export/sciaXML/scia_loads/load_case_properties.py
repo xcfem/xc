@@ -10,12 +10,12 @@ __email__= "l.pereztato@gmail.com"
 
 #Properties for constraint nodes.
 
-from import_export.sciaXML.xml_basics import PropertiesContainer as ctr
-from import_export.sciaXML.xml_basics import Property as prop
-from import_export.sciaXML.xml_basics import Ref as rf
-from import_export.sciaXML.xml_basics import EnumItem as eI
-from import_export.sciaXML.xml_basics import Enum as enum
-from import_export.sciaXML.xml_basics import PropertiesTable as propTable
+from import_export.sciaXML.xml_basics import scxml_properties_container as ctr
+from import_export.sciaXML.xml_basics import scxml_property as prop
+from import_export.sciaXML.xml_basics import scxml_ref as rf
+from import_export.sciaXML.xml_basics import scxml_enum_item as eI
+from import_export.sciaXML.xml_basics import scxml_enum as enum
+from import_export.sciaXML.xml_basics import scxml_properties_table as propTable
 import xml.etree.cElementTree as ET
 
 containerId= "{0908D21F-481F-11D4-AB84-00C06C452330}"
@@ -34,21 +34,21 @@ idLoadGroupReference= "{F9D4AA72-49D5-11D4-A3CF-000000000000}"
 idLoadType= "{11D48DC1-E0F4-11D4-A482-00C06C542707}"
 idDirection= "{11D48DC3-E0F4-11D4-A482-00C06C542707}"
 
-class LoadCaseProperties(ctr.PropertiesContainer):
+class LoadCaseProperties(ctr.SCXMLPropertiesContainer):
   def __init__(self):
     super(LoadCaseProperties,self).__init__(containerId,containerClsId,tbProgId)
-    self.tableProp= propTable.PropertiesTable(tbId,'',"vertical",tbClsId,tbProgId)
-    propName= prop.Property("0","Name","string",idName)
-    propUniqueId= prop.Property("1","UniqueID","string",idUniqueId)
-    propActionType= prop.Property("2","Action type","enum",idActionType,"262144")
-    propActionType.value= enum.Enum([eI.EnumItem("0","Permanent"),eI.EnumItem("1","Variable")])
-    propDescription= prop.Property("3","Description","string",idDescription)
-    propLoadGroupReference= prop.Property("4","LoadGroup","ref",idLoadGroup,"131072")
-    propLoadGroupReference.value= rf.Ref(idLoadGroupReference,"DataSetScia.EP_LoadGroup.1")
-    propLoadType= prop.Property("5","Load type","enum",idLoadType,"262144")
-    propLoadType.value= enum.Enum([eI.EnumItem("0","Poids propre"),eI.EnumItem("1","Standard"),eI.EnumItem("2","Effet primaire")])
-    propDirection= prop.Property("6","Direction","enum",idDirection,"262144")
-    propDirection.value= enum.Enum([eI.EnumItem("0","-Z"),eI.EnumItem("1","+Z"),eI.EnumItem("2","-Y"),eI.EnumItem("3","+Y"),eI.EnumItem("4","-X"),eI.EnumItem("5","+X")])
+    self.tableProp= propTable.SCXMLPropertiesTable(tbId,'',"vertical",tbClsId,tbProgId)
+    propName= prop.SCXMLProperty("0","Name","string",idName)
+    propUniqueId= prop.SCXMLProperty("1","UniqueID","string",idUniqueId)
+    propActionType= prop.SCXMLProperty("2","Action type","enum",idActionType,"262144")
+    propActionType.value= enum.SCXMLEnum([eI.SCXMLEnumItem("0","Permanent"),eI.SCXMLEnumItem("1","Variable")])
+    propDescription= prop.SCXMLProperty("3","Description","string",idDescription)
+    propLoadGroupReference= prop.SCXMLProperty("4","LoadGroup","ref",idLoadGroup,"131072")
+    propLoadGroupReference.value= rf.SCXMLRef(idLoadGroupReference,"DataSetScia.EP_LoadGroup.1")
+    propLoadType= prop.SCXMLProperty("5","Load type","enum",idLoadType,"262144")
+    propLoadType.value= enum.SCXMLEnum([eI.SCXMLEnumItem("0","Poids propre"),eI.SCXMLEnumItem("1","Standard"),eI.SCXMLEnumItem("2","Effet primaire")])
+    propDirection= prop.SCXMLProperty("6","Direction","enum",idDirection,"262144")
+    propDirection.value= enum.SCXMLEnum([eI.SCXMLEnumItem("0","-Z"),eI.SCXMLEnumItem("1","+Z"),eI.SCXMLEnumItem("2","-Y"),eI.SCXMLEnumItem("3","+Y"),eI.SCXMLEnumItem("4","-X"),eI.SCXMLEnumItem("5","+X")])
 
     self.tableProp.properties.append(propName) #0
     self.tableProp.properties.append(propUniqueId) #1

@@ -8,10 +8,9 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import Header as hdr
 import xml.etree.cElementTree as ET
 
-class ObjectItem(object):
+class SCXMLObjectItem(object):
   ''' Item of a table.'''	
   def __init__(self, v= '', i= '', n= '', t= '', h= None, rws= None):
     ''' Constructor.

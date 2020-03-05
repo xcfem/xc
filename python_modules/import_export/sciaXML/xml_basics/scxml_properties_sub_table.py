@@ -8,9 +8,9 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import PropertiesTable as tp
+import scxml_properties_table as tp
 
-class PropertiesSubTable(tp.PropertiesTable):
+class SCXMLPropertiesSubTable(tp.SCXMLPropertiesTable):
   '''SCIA XML properties sub table.'''
 
   def getXMLElementLabel(self):

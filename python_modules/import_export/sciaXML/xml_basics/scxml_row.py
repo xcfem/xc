@@ -8,23 +8,23 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import ObjBase as ob
+import scxml_obj_base as ob
 import xml.etree.cElementTree as ET
 
 
-class Row(ob.ObjBase):
+class SCXMLRow(ob.SCXMLObjBase):
   def __init__(self, id, p1, p2):
-    super(Row,self).__init__(id,p1,p2)
+    super(SCXMLRow,self).__init__(id,p1,p2)
 
 
-class RowP012(Row):
+class SCXMLRowP012(SCXMLRow):
   def __init__(self, id, p0, p1, p2):
-    super(RowP012,self).__init__(id,p1,p2)
+    super(SCXMLRowP012,self).__init__(id,p1,p2)
     self.p0= p0
 
   def populateXMLElement(self,xmlElement):
     pp0= self.p0.getXMLElement(xmlElement,0)
-    super(RowP012,self).populateXMLElement(xmlElement)
+    super(SCXMLRowP012,self).populateXMLElement(xmlElement)
 
   def getXMLElement(self,parent):
     '''Returns the corresponding XML element for the row.
@@ -35,12 +35,12 @@ class RowP012(Row):
     self.populateXMLElement(oo)
     return oo
 
-class RowP0123(RowP012):
+class SCXMLRowP0123(SCXMLRowP012):
   def __init__(self, id, p0, p1, p2, p3):
-    super(RowP0123,self).__init__(id,p0,p1,p2)
+    super(SCXMLRowP0123,self).__init__(id,p0,p1,p2)
     self.p3= p3
 
   def populateXMLElement(self,xmlElement):
-    super(RowP0123,self).populateXMLElement(xmlElement)
+    super(SCXMLRowP0123,self).populateXMLElement(xmlElement)
     pp3= self.p3.getXMLElement(xmlElement,3)
 

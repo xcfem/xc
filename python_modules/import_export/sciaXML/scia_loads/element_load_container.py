@@ -8,13 +8,11 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from import_export.sciaXML.xml_basics import Container as ctr
-from import_export.sciaXML.xml_basics import TableXMLNodes  as tb
-from import_export.sciaXML.xml_basics import Header as hdr
-from import_export.sciaXML.xml_basics import HeaderItem as hi
-from import_export.sciaXML.xml_basics import Object as obj
-from import_export.sciaXML.xml_basics import ObjectItem as oI
-from import_export.sciaXML.xml_basics import Row as rw
+from import_export.sciaXML.xml_basics import scxml_table_container as ctr
+from import_export.sciaXML.xml_basics import scxml_table_xmlnodes as tb
+from import_export.sciaXML.xml_basics import scxml_object as obj
+from import_export.sciaXML.xml_basics import scxml_object_item as oI
+from import_export.sciaXML.xml_basics import scxml_row as rw
 import element_load_properties as elp
 import load_case_container as lcc
 from import_export.sciaXML import ep_plane_container as ec
@@ -40,15 +38,15 @@ class ElementLoadComponent(lcb.LoadComponentBase):
     self.elementId= elementId
 
   def getElementReferenceItem(self):
-    retval= oI.ObjectItem()
+    retval= oI.SCXMLObjectItem()
     elementId= str(self.elementId)
     name= ec.elementPrefix+elementId
-    row= rw.RowP0123("0", oI.ObjectItem(ec.idEPPlaneContainer, None, None, None,None,None), oI.ObjectItem(ec.tEPPlaneContainerTb, None, None, None,None,None), oI.ObjectItem(elementId, None, None, None,None,None), oI.ObjectItem(name, None, None, None,None,None))
+    row= rw.SCXMLRowP0123("0", oI.SCXMLObjectItem(ec.idEPPlaneContainer, None, None, None,None,None), oI.SCXMLObjectItem(ec.tEPPlaneContainerTb, None, None, None,None,None), oI.SCXMLObjectItem(elementId, None, None, None,None,None), oI.SCXMLObjectItem(name, None, None, None,None,None))
     retval.rows.append(row)
     return retval
     
   def getObject(self):
-    retval= obj.Object()
+    retval= obj.SCXMLObject()
     loadCompId= str(self.elementLoadCompId)
     retval.setId(loadCompId)
     name= elementLoadPrefix+loadCompId
@@ -56,13 +54,13 @@ class ElementLoadComponent(lcb.LoadComponentBase):
     elementId= str(self.elementId) # Load name.
     retval.setP0(self.getElementReferenceItem()) #Reference to element.
     retval.setP1(self.getLoadCaseReferenceItem()) #Reference to load case.
-    retval.setP2(oI.ObjectItem(name)) #Name
-    retval.setP3(oI.ObjectItem('{'+str(uuid.uuid4())+'}')) #Unique id
+    retval.setP2(oI.SCXMLObjectItem(name)) #Name
+    retval.setP3(oI.SCXMLObjectItem('{'+str(uuid.uuid4())+'}')) #Unique id
     retval.setP4(self.getDirectionObjectItem()) #Direction X, Y or Z
-    retval.setP5(oI.ObjectItem('0','','','Force')) #Type 0 -> Force.
+    retval.setP5(oI.SCXMLObjectItem('0','','','Force')) #Type 0 -> Force.
     retval.setP6(self.getValueObjectItem()) #Value
     retval.setP7(self.getSystemItem()) #System 0 -> GCS, 1 -> LCS
-    retval.setP8(oI.ObjectItem('0','','','Length')) #Location.
+    retval.setP8(oI.SCXMLObjectItem('0','','','Length')) #Location.
     return retval
 
 def getElementLoadComponents(elementLoad):
@@ -97,7 +95,7 @@ def getElementLoadObjects(nl):
     retval.append(c.getObject())
   return retval
 
-class ElementLoadContainer(ctr.Container):
+class ElementLoadContainer(ctr.SCXMLTableContainer):
   def __init__(self,elementLoadsDict):
     super(ElementLoadContainer,self).__init__(idElementLoadContainer,tElementLoadContainer)
     elementLoads= list()
@@ -105,7 +103,7 @@ class ElementLoadContainer(ctr.Container):
       compObjects= getElementLoadObjects(el)
       for c in compObjects:
         elementLoads.append(c)
-    self.appendTable(tb.TableXMLNodes(idElementLoadContainerTb,tElementLoadContainerTb, 'Forces on surface', None,elementLoads))
+    self.appendTable(tb.SCXMLTableXMLNodes(idElementLoadContainerTb,tElementLoadContainerTb, 'Forces on surface', None,elementLoads))
 
   def __len__(self):
     return len(self.table)

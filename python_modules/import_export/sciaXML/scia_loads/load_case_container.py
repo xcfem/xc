@@ -14,13 +14,11 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from import_export.sciaXML.xml_basics import Container as ctr
-from import_export.sciaXML.xml_basics import TableXMLNodes  as tb
-from import_export.sciaXML.xml_basics import Header as hdr
-from import_export.sciaXML.xml_basics import HeaderItem as hi
-from import_export.sciaXML.xml_basics import Object as obj
-from import_export.sciaXML.xml_basics import ObjectItem as oI
-from import_export.sciaXML.xml_basics import Row as rw
+from import_export.sciaXML.xml_basics import scxml_table_container as ctr
+from import_export.sciaXML.xml_basics import scxml_table_xmlnodes as tb
+from import_export.sciaXML.xml_basics import scxml_object as obj
+from import_export.sciaXML.xml_basics import scxml_object_item as oI
+from import_export.sciaXML.xml_basics import scxml_row as rw
 import load_group_container as lgc
 import load_case_properties as lcp
 import uuid
@@ -49,37 +47,37 @@ def getActionTypeCode(actionType):
     return 0
 
 def getLoadCaseObject(loadCase):
-  retval= obj.Object()
+  retval= obj.SCXMLObject()
   id= str(loadCase.id)
   retval.setId(id)
   name= loadCase.name
   if(name==''):
     name= loadCasePrefix+id
   retval.setNm(name)
-  retval.setP0(oI.ObjectItem(name)) #Name
-  retval.setP1(oI.ObjectItem('{'+str(uuid.uuid4())+'}')) # Unique id
-  tmp= oI.ObjectItem(str(getActionTypeCode(loadCase.actionType)))
+  retval.setP0(oI.SCXMLObjectItem(name)) #Name
+  retval.setP1(oI.SCXMLObjectItem('{'+str(uuid.uuid4())+'}')) # Unique id
+  tmp= oI.SCXMLObjectItem(str(getActionTypeCode(loadCase.actionType)))
   tmp.t= loadCase.actionType
   retval.setP2(tmp) #??
-  retval.setP3(oI.ObjectItem(loadCase.desc)) #Description
+  retval.setP3(oI.SCXMLObjectItem(loadCase.desc)) #Description
   gId= str(loadCase.loadGroupId)
   gName= lgc.loadGroupPrefix+gId
-  tmp= oI.ObjectItem('',gId)
+  tmp= oI.SCXMLObjectItem('',gId)
   tmp.n= gName
   retval.setP4(tmp)
   ltyp= loadCase.ltyp
   ltypName= getLoadTypeName(ltyp)
-  tmp= oI.ObjectItem(str(ltyp))
+  tmp= oI.SCXMLObjectItem(str(ltyp))
   tmp.t= ltypName
   retval.setP5(tmp) #??
   return retval
 
-class LoadCaseContainer(ctr.Container):
+class LoadCaseContainer(ctr.SCXMLTableContainer):
   def __init__(self,loadCasesDict):
     super(LoadCaseContainer,self).__init__(idLoadCaseContainer,tLoadCaseContainer)
     loadCases= list()
     for key in sorted(loadCasesDict):
       ns= loadCasesDict[key]
       loadCases.append(getLoadCaseObject(ns))
-    self.appendTable(tb.TableXMLNodes(idLoadCaseContainerTb,tLoadCaseContainerTb, 'Load cases', None,loadCases))
+    self.appendTable(tb.SCXMLTableXMLNodes(idLoadCaseContainerTb,tLoadCaseContainerTb, 'Load cases', None,loadCases))
   

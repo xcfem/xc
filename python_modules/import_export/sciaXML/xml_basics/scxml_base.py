@@ -8,7 +8,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-class Base(object):
+class SCXMLBase(object):
   '''Base class for al sciaXML module objects.'''
   id= ''
   t= ''

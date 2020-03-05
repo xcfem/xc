@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 #Based on sXML-master projet on gitHub
+
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2015 LCPT"
 __license__= "GPL"
@@ -9,27 +10,25 @@ __email__= "l.pereztato@gmail.com"
 
 import xml.etree.cElementTree as ET
 
-class EnumItem(object):
-  '''Item of an enumeration.'''
-
-  def __init__(self,v,t):
+class SCXMLHeaderItem(object):
+  def __init__(self,t= ''):
     ''' Constructor.
         Parameters:
-        v: v field
         t: t field
     '''
-    self.v = v
     self.t = t
 
-  def getXMLElement(self,parent):
+  def getT(self):
+    return self.t
+  def setT(self,t):
+    self.t= t
+
+  def getXMLElement(self,parent, count):
     '''Returns the corresponding XML element for the object.
        Parameters:
-       parent: owner of this object in the XML structure.'''
-    ei= ET.SubElement(parent,"it_enum")
-    if(self.v!=''):
-      ei.set("v",self.v)
-    if(self.t!=''):
-      ei.set("t",self.t)
-    return ei
-        
-
+       parent: owner of this object in the XML structure.
+       count: counter.'''
+    itemId= 'h'+str(count) 
+    hi= ET.SubElement(parent,itemId)
+    hi.set("t",self.t)
+    return hi

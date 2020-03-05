@@ -2,14 +2,13 @@
 
 #Based on sXML-master projet on gitHub
 
-import TableBase as tBase
-import Header as hdr
+import scxml_table_base as tBase
 import xml.etree.cElementTree as ET
 
-class PropertiesTable(tBase.TableBase):
+class SCXMLPropertiesTable(tBase.SCXMLTableBase):
 
   def __init__(self,id= '',name= '',typo= '',clsid='',progid=''):
-    super(PropertiesTable,self).__init__(id,'',name)
+    super(SCXMLPropertiesTable,self).__init__(id,'',name)
     self.typo= typo
     self.clsid= clsid
     self.progid= progid
@@ -23,7 +22,7 @@ class PropertiesTable(tBase.TableBase):
        Parameters:
        parent: owner of this object in the XML structure.'''
     propTable= ET.SubElement(parent,self.getXMLElementLabel())
-    super(PropertiesTable,self).populateXMLElement(propTable)
+    super(SCXMLPropertiesTable,self).populateXMLElement(propTable)
     if(self.typo!=''):
       propTable.set("type",self.typo)
     if(self.clsid!=''):

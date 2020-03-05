@@ -8,13 +8,13 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import Base as b
+import scxml_base as b
 import xml.etree.cElementTree as ET
 
-class Ref(b.Base):
+class SCXMLRef(b.SCXMLBase):
   '''SCIA XML reference.'''
   def __init__(self,id,progid):
-    super(Ref,self).__init__(id,'')
+    super(SCXMLRef,self).__init__(id,'')
     self.progid= progid
   
   def getXMLElement(self,parent):
@@ -22,7 +22,7 @@ class Ref(b.Base):
        Parameters:
        parent: owner of this object in the XML structure.'''
     ref= ET.SubElement(parent,"def_ref")
-    super(Ref,self).populateXMLElement(ref)
+    super(SCXMLRef,self).populateXMLElement(ref)
     if(self.progid!=''):
       ref.set("progid",self.progid)
       

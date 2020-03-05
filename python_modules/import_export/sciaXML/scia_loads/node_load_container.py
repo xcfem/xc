@@ -8,13 +8,11 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from import_export.sciaXML.xml_basics import Container as ctr
-from import_export.sciaXML.xml_basics import TableXMLNodes  as tb
-from import_export.sciaXML.xml_basics import Header as hdr
-from import_export.sciaXML.xml_basics import HeaderItem as hi
-from import_export.sciaXML.xml_basics import Object as obj
-from import_export.sciaXML.xml_basics import ObjectItem as oI
-from import_export.sciaXML.xml_basics import Row as rw
+from import_export.sciaXML.xml_basics import scxml_table_container as ctr
+from import_export.sciaXML.xml_basics import scxml_table_xmlnodes as tb
+from import_export.sciaXML.xml_basics import scxml_object as obj
+from import_export.sciaXML.xml_basics import scxml_object_item as oI
+from import_export.sciaXML.xml_basics import scxml_row as rw
 import node_load_properties as nlp
 import load_case_container as lcc
 from import_export.sciaXML import node_container as nc
@@ -38,25 +36,25 @@ class NodeLoadComponent(lcb.LoadComponentBase):
     self.nodeId= nodeId
 
   def getNodeReferenceItem(self):
-    retval= oI.ObjectItem()
+    retval= oI.SCXMLObjectItem()
     nodeId= str(self.nodeId)
     name= nc.nodePrefix+nodeId
-    row= rw.RowP012("0", oI.ObjectItem(nc.idNodeContainer, None, None, None,None,None), oI.ObjectItem(nc.progIdNodes, None, None, None,None,None), oI.ObjectItem(name, None, None, None,None,None))
+    row= rw.SCXMLRowP012("0", oI.SCXMLObjectItem(nc.idNodeContainer, None, None, None,None,None), oI.SCXMLObjectItem(nc.progIdNodes, None, None, None,None,None), oI.SCXMLObjectItem(name, None, None, None,None,None))
     retval.rows.append(row)
     return retval
     
   def getObject(self):
-    retval= obj.Object()
+    retval= obj.SCXMLObject()
     loadCompId= str(self.nodeLoadCompId)
     retval.setId(loadCompId)
     name= nodeLoadPrefix+loadCompId
     retval.setNm(name)
     nodeId= str(self.nodeId) # Node id
-    retval.setP0(oI.ObjectItem(name)) #Name
+    retval.setP0(oI.SCXMLObjectItem(name)) #Name
     retval.setP1(self.getLoadCaseReferenceItem()) #Reference to load case.
     retval.setP2(self.getNodeReferenceItem()) #Reference to node.
     retval.setP3(self.getDirectionObjectItem()) #Direction X, Y or Z
-    retval.setP4(oI.ObjectItem('0','','','Force')) #Type 0 -> Force.
+    retval.setP4(oI.SCXMLObjectItem('0','','','Force')) #Type 0 -> Force.
     retval.setP5(self.getValueObjectItem()) #Value
     retval.setP6(self.getSystemItem()) #System 0 -> GCS, 1 -> LCS
     return retval
@@ -85,7 +83,7 @@ def getNodeLoadObjects(nl):
     retval.append(c.getObject())
   return retval
 
-class NodeLoadContainer(ctr.Container):
+class NodeLoadContainer(ctr.SCXMLTableContainer):
   def __init__(self,nodeLoadsDict):
     super(NodeLoadContainer,self).__init__(idNodeLoadContainer,tNodeLoadContainer)
     nodeLoads= list()
@@ -93,5 +91,5 @@ class NodeLoadContainer(ctr.Container):
       compObjects= getNodeLoadObjects(nl)
       for c in compObjects:
         nodeLoads.append(c)
-    self.appendTable(tb.TableXMLNodes(idNodeLoadContainerTb,tNodeLoadContainerTb, 'Point forces in node', None,nodeLoads))
+    self.appendTable(tb.SCXMLTableXMLNodes(idNodeLoadContainerTb,tNodeLoadContainerTb, 'Point forces in node', None,nodeLoads))
   

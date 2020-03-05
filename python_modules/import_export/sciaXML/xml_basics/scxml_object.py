@@ -8,16 +8,16 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import ObjectItem as oi
-import ObjBase as ob
+import scxml_object_item as oi
+import scxml_obj_base as ob
 import xml.etree.cElementTree as ET
 
-class Object(ob.ObjBase):
+class SCXMLObject(ob.SCXMLObjBase):
   '''XML SCIA object with 21 items (ObjectItem) p0 to p10.'''
-  def __init__(self,p0= oi.ObjectItem(), p1= oi.ObjectItem(), p2= oi.ObjectItem(), p3= oi.ObjectItem(), p4= oi.ObjectItem(), p5= oi.ObjectItem(), p6= oi.ObjectItem(), p7= oi.ObjectItem(), p8= oi.ObjectItem(), p9= oi.ObjectItem(), p10= oi.ObjectItem(), p11= oi.ObjectItem(), p12= oi.ObjectItem(), p13= oi.ObjectItem(), p14= oi.ObjectItem(), p15= oi.ObjectItem(), p16= oi.ObjectItem(), p17= oi.ObjectItem(), p18= oi.ObjectItem(), p19= oi.ObjectItem(), p20= oi.ObjectItem() ):
+  def __init__(self,p0= oi.SCXMLObjectItem(), p1= oi.SCXMLObjectItem(), p2= oi.SCXMLObjectItem(), p3= oi.SCXMLObjectItem(), p4= oi.SCXMLObjectItem(), p5= oi.SCXMLObjectItem(), p6= oi.SCXMLObjectItem(), p7= oi.SCXMLObjectItem(), p8= oi.SCXMLObjectItem(), p9= oi.SCXMLObjectItem(), p10= oi.SCXMLObjectItem(), p11= oi.SCXMLObjectItem(), p12= oi.SCXMLObjectItem(), p13= oi.SCXMLObjectItem(), p14= oi.SCXMLObjectItem(), p15= oi.SCXMLObjectItem(), p16= oi.SCXMLObjectItem(), p17= oi.SCXMLObjectItem(), p18= oi.SCXMLObjectItem(), p19= oi.SCXMLObjectItem(), p20= oi.SCXMLObjectItem() ):
     self.nm= ''
     self.p0 = p0
-    super(Object,self).__init__('',p1,p2)
+    super(SCXMLObject,self).__init__('',p1,p2)
     self.p3 = p3
     self.p4 = p4
     self.p5 = p5

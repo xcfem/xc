@@ -9,7 +9,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 
-class Definition(object):
+class SCXMLDefinition(object):
   uri= ''
 
   def __init__(self, uri):

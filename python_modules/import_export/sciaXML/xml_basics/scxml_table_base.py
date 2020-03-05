@@ -8,15 +8,14 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import Base as b
-import Header as hdr
+import scxml_base as b
 import xml.etree.cElementTree as ET
 
-class TableBase(b.Base):
+class SCXMLTableBase(b.SCXMLBase):
   '''Base class for al sciaXML tables.'''
 
   def __init__(self,id= '',t= '',name= ''):
-    super(TableBase,self).__init__(id,t)
+    super(SCXMLTableBase,self).__init__(id,t)
     self.name = name
 
   def getName(self):
@@ -25,7 +24,7 @@ class TableBase(b.Base):
     self.name = name
     
   def populateXMLElement(self,xmlElement):
-    super(TableBase,self).populateXMLElement(xmlElement)
+    super(SCXMLTableBase,self).populateXMLElement(xmlElement)
     if(self.name!=''):
       xmlElement.set("name",self.name)
 

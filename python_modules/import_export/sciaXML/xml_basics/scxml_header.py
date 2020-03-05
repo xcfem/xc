@@ -8,13 +8,13 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import HeaderItem as hi
+import scxml_header_item as hi
 import xml.etree.cElementTree as ET
 
 
-class Header(object):
+class SCXMLHeader(object):
   ''' Header for SCIA XML. '''
-  def __init__(self,h0= hi.HeaderItem(), h1= hi.HeaderItem(), h2= hi.HeaderItem(), h3= hi.HeaderItem(), h4= hi.HeaderItem(), h5= hi.HeaderItem(), h6= hi.HeaderItem(), h7= hi.HeaderItem(), h8= hi.HeaderItem(), h9= hi.HeaderItem(), h10= hi.HeaderItem(), h11= hi.HeaderItem(), h12= hi.HeaderItem(), h13= hi.HeaderItem(), h14= hi.HeaderItem(), h15= hi.HeaderItem(), h16= hi.HeaderItem(), h17= hi.HeaderItem(), h18= hi.HeaderItem(), h19= hi.HeaderItem(), h20= hi.HeaderItem()):
+  def __init__(self,h0= hi.SCXMLHeaderItem(), h1= hi.SCXMLHeaderItem(), h2= hi.SCXMLHeaderItem(), h3= hi.SCXMLHeaderItem(), h4= hi.SCXMLHeaderItem(), h5= hi.SCXMLHeaderItem(), h6= hi.SCXMLHeaderItem(), h7= hi.SCXMLHeaderItem(), h8= hi.SCXMLHeaderItem(), h9= hi.SCXMLHeaderItem(), h10= hi.SCXMLHeaderItem(), h11= hi.SCXMLHeaderItem(), h12= hi.SCXMLHeaderItem(), h13= hi.SCXMLHeaderItem(), h14= hi.SCXMLHeaderItem(), h15= hi.SCXMLHeaderItem(), h16= hi.SCXMLHeaderItem(), h17= hi.SCXMLHeaderItem(), h18= hi.SCXMLHeaderItem(), h19= hi.SCXMLHeaderItem(), h20= hi.SCXMLHeaderItem()):
       self.h0= h0
       self.h1= h1
       self.h2= h2

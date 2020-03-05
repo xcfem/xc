@@ -8,9 +8,8 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from xml_basics import Definition as df
-from xml_basics import Object as obj
-from xml_basics import Container as ctr
+from xml_basics import scxml_object as obj
+from xml_basics import table_container as ctr
 import xml.etree.cElementTree as ET
 
 class Project:    
@@ -34,7 +33,7 @@ class Project:
     if(len(nos) > 0):
       objects= list()
       for coordinate in nos:
-        o= obj.Object()
+        o= obj.SCXMLObject()
         o.setId(coordinate.getId() + self.uuid)
         o.setNm(coordinate.getName()  + self.uuid)
         o.setP0(ObjectItem(String.valueOf(coordinate.getName()  + self.uuid), None, None, None, None, None))
@@ -58,7 +57,7 @@ class Project:
     header= getDefaultBeamHeader()
     tabelaPecas= TableXMLNodes(SciaXMLConstantes.BEAM_TABLE_ID, SciaXMLConstantes.BEAM_TABLE, SciaXMLConstantes.BEAM_TABLE_NAME, header, objects)
 
-    containerPecas= ctr.Container(SciaXMLConstantes.BEAM_ID, SciaXMLConstantes.BEAM_TITLE, tabelaPecas)
+    containerPecas= ctr.SCXMLTableContainer(SciaXMLConstantes.BEAM_ID, SciaXMLConstantes.BEAM_TITLE, tabelaPecas)
 
     return containerPecas
 

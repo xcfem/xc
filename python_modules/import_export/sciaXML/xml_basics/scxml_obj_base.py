@@ -8,12 +8,12 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import ObjectItem as oi
+import scxml_object_item as oi
 import xml.etree.cElementTree as ET
 
-class ObjBase(object):
+class SCXMLObjBase(object):
 	
-  def __init__(self, id, p1= oi.ObjectItem(), p2= oi.ObjectItem()):
+  def __init__(self, id, p1= oi.SCXMLObjectItem(), p2= oi.SCXMLObjectItem()):
     self.id= id
     self.p1 = p1
     self.p2 = p2

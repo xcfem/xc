@@ -8,18 +8,18 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import Base as b
-import TableXMLNodes as tn
+import scxml_base as b
+import scxml_table_xmlnodes as tn
 import xml.etree.cElementTree as ET
 
-class Container(b.Base):
+class SCXMLTableContainer(b.SCXMLBase):
   ''' Table container. '''
   def __init__(self,id,t,table= None):
     ''' Constructor.
         Parameters:
         tables: tables to populate the container.
     '''
-    super(Container,self).__init__(id,t)
+    super(SCXMLTableContainer,self).__init__(id,t)
     self.tables= list()
     if(table):
       self.tables.append(table)
@@ -36,7 +36,7 @@ class Container(b.Base):
        Parameters:
        parent: owner of this object in the XML structure.'''
     container= ET.SubElement(parent,"container")
-    super(Container,self).populateXMLElement(container)
+    super(SCXMLTableContainer,self).populateXMLElement(container)
     print 'container id= ', self.id, ' table number: ', len(self.tables)
     for tb in self.tables:
       xmlTB= tb.getXMLElement(container)

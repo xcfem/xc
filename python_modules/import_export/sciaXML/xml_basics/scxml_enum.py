@@ -10,7 +10,7 @@ __email__= "l.pereztato@gmail.com"
 
 import xml.etree.cElementTree as ET
 
-class Enum(object):
+class SCXMLEnum(object):
   '''Enumeration for SCIA XML.'''
   def __init__(self,items):
     '''Constructor.

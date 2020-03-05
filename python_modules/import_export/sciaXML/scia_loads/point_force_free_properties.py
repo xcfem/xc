@@ -10,13 +10,13 @@ __email__= "l.pereztato@gmail.com"
 
 #Properties for constraint nodes.
 
-from import_export.sciaXML.xml_basics import PropertiesContainer as ctr
-from import_export.sciaXML.xml_basics import Property as prop
-from import_export.sciaXML.xml_basics import Ref as rf
-from import_export.sciaXML.xml_basics import EnumItem as eI
-from import_export.sciaXML.xml_basics import Enum as enum
-from import_export.sciaXML.xml_basics import PropertiesTable as propTable
-from import_export.sciaXML.xml_basics import PropertiesSubTable as propSubTable
+from import_export.sciaXML.xml_basics import scxml_properties_container as ctr
+from import_export.sciaXML.xml_basics import scxml_property as prop
+from import_export.sciaXML.xml_basics import scxml_ref as rf
+from import_export.sciaXML.xml_basics import scxml_enum_item as eI
+from import_export.sciaXML.xml_basics import scxml_enum as enum
+from import_export.sciaXML.xml_basics import scxml_properties_table as propTable
+from import_export.sciaXML.xml_basics import scxml_properties_sub_table as propSubTable
 import xml.etree.cElementTree as ET
 import load_case_properties as lcp
 import node_load_properties as nlp
@@ -45,33 +45,33 @@ idCoordUY= "{DBE9CDE0-61D0-4379-B822-085F36333AD6}"
 idCoordUZ= "{E12A9C50-CF65-4B97-8C59-46DAF880AE8A}"
 idSystem= "{A98C4369-F195-4992-ACBE-9119E1E6E0A3}"
 
-class PointForceFreeProperties(ctr.PropertiesContainer):
+class PointForceFreeProperties(ctr.SCXMLPropertiesContainer):
   '''Free point force properties in SCIA XML file.''' 
   def __init__(self):
     '''Constructor.'''
     super(PointForceFreeProperties,self).__init__(containerId,containerClsId,tbProgId)
-    self.tableProp= propTable.PropertiesTable(tbId,"XML\default","vertical",tbClsId,tbProgId)
-    propRefLoadCase= prop.Property("0","Load case","ref",idLoadCase)
-    propRefLoadCase.value= rf.Ref(idLoadCaseRef,lcp.tbName)
-    propName= prop.Property("1","Name","string",idName)
-    propUniqueID= prop.Property('2','UniqueID','string',idUniqueId)
-    propDirection= prop.Property("3","Direction","enum",idDirection,"262144")
-    propDirection.value= enum.Enum([eI.EnumItem("0","X"),eI.EnumItem("1","Y"),eI.EnumItem("2","Z")])
-    propType= prop.Property("4","Type","enum",idType)
-    propType.value= enum.Enum([eI.EnumItem("0","Force")])
-    propValidity= prop.Property("5","Validity","enum",idValidity,"262144")
-    propValidity.value= enum.Enum([eI.EnumItem("0","Tout"), eI.EnumItem("1", "-Z"), eI.EnumItem("2", "+Z"), eI.EnumItem("3", "Intervalle"), eI.EnumItem("4", "Z=0"), eI.EnumItem("5", "-Z (yc. 0)"), eI.EnumItem("6", "+Z (yc. 0)")])
-    propSelect= prop.Property("6","Select","enum",idSelect)
-    propSelect.value= enum.Enum([eI.EnumItem("0","Auto"),eI.EnumItem("1","Select")])
-    propValueF= prop.Property("7","Value - F","param",idValueF,"33619968")
-    propCoordX= prop.Property("8","Coord X","param",idCoordX,"33619968")
-    propCoordY= prop.Property("9","Coord Y","param",idCoordY,"33619968")
-    propCoordZ= prop.Property("10","Coord Z","param",idCoordZ,"33619968")
-    propCoordUX= prop.Property("11","Coord ux","real",idCoordUX,"33619968")
-    propCoordUY= prop.Property("12","Coord uy","real",idCoordUY,"33619968")
-    propCoordUZ= prop.Property("13","Coord uz","real",idCoordUZ,"33619968")
-    propSystem= prop.Property("14","System","enum",idSystem)
-    propSystem.value= enum.Enum([eI.EnumItem("0","GCS"),eI.EnumItem("1","Member LCS"),eI.EnumItem("2","Load LCS")])
+    self.tableProp= propTable.SCXMLPropertiesTable(tbId,"XML\default","vertical",tbClsId,tbProgId)
+    propRefLoadCase= prop.SCXMLProperty("0","Load case","ref",idLoadCase)
+    propRefLoadCase.value= rf.SCXMLRef(idLoadCaseRef,lcp.tbName)
+    propName= prop.SCXMLProperty("1","Name","string",idName)
+    propUniqueID= prop.SCXMLProperty('2','UniqueID','string',idUniqueId)
+    propDirection= prop.SCXMLProperty("3","Direction","enum",idDirection,"262144")
+    propDirection.value= enum.SCXMLEnum([eI.SCXMLEnumItem("0","X"),eI.SCXMLEnumItem("1","Y"),eI.SCXMLEnumItem("2","Z")])
+    propType= prop.SCXMLProperty("4","Type","enum",idType)
+    propType.value= enum.SCXMLEnum([eI.SCXMLEnumItem("0","Force")])
+    propValidity= prop.SCXMLProperty("5","Validity","enum",idValidity,"262144")
+    propValidity.value= enum.SCXMLEnum([eI.SCXMLEnumItem("0","Tout"), eI.SCXMLEnumItem("1", "-Z"), eI.SCXMLEnumItem("2", "+Z"), eI.SCXMLEnumItem("3", "Intervalle"), eI.SCXMLEnumItem("4", "Z=0"), eI.SCXMLEnumItem("5", "-Z (yc. 0)"), eI.SCXMLEnumItem("6", "+Z (yc. 0)")])
+    propSelect= prop.SCXMLProperty("6","Select","enum",idSelect)
+    propSelect.value= enum.SCXMLEnum([eI.SCXMLEnumItem("0","Auto"),eI.SCXMLEnumItem("1","Select")])
+    propValueF= prop.SCXMLProperty("7","Value - F","param",idValueF,"33619968")
+    propCoordX= prop.SCXMLProperty("8","Coord X","param",idCoordX,"33619968")
+    propCoordY= prop.SCXMLProperty("9","Coord Y","param",idCoordY,"33619968")
+    propCoordZ= prop.SCXMLProperty("10","Coord Z","param",idCoordZ,"33619968")
+    propCoordUX= prop.SCXMLProperty("11","Coord ux","real",idCoordUX,"33619968")
+    propCoordUY= prop.SCXMLProperty("12","Coord uy","real",idCoordUY,"33619968")
+    propCoordUZ= prop.SCXMLProperty("13","Coord uz","real",idCoordUZ,"33619968")
+    propSystem= prop.SCXMLProperty("14","System","enum",idSystem)
+    propSystem.value= enum.SCXMLEnum([eI.SCXMLEnumItem("0","GCS"),eI.SCXMLEnumItem("1","Member LCS"),eI.SCXMLEnumItem("2","Load LCS")])
 
     self.tableProp.properties.append(propRefLoadCase) #0
     self.tableProp.properties.append(propName) #1

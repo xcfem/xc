@@ -8,13 +8,11 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from import_export.sciaXML.xml_basics import Container as ctr
-from import_export.sciaXML.xml_basics import TableXMLNodes  as tb
-from import_export.sciaXML.xml_basics import Header as hdr
-from import_export.sciaXML.xml_basics import HeaderItem as hi
-from import_export.sciaXML.xml_basics import Object as obj
-from import_export.sciaXML.xml_basics import ObjectItem as oI
-from import_export.sciaXML.xml_basics import Row as rw
+from import_export.sciaXML.xml_basics import scxml_table_container as ctr
+from import_export.sciaXML.xml_basics import scxml_table_xmlnodes as tb
+from import_export.sciaXML.xml_basics import scxml_object as obj
+from import_export.sciaXML.xml_basics import scxml_object_item as oI
+from import_export.sciaXML.xml_basics import scxml_row as rw
 import point_force_free_properties as pffp
 import load_case_container as lcc
 from import_export.sciaXML import node_container as nc
@@ -47,25 +45,25 @@ class PointForceFreeComponent(lcb.LoadComponentBase):
 
   def getObject(self):
     '''Returns an XML object for the point force component.'''
-    retval= obj.Object() #SCIA XML basic object.
+    retval= obj.SCXMLObject() #SCIA XML basic object.
     loadCompId= str(self.pointForceFreeCompId)
     retval.setId(loadCompId)
     name= pointForceFreePrefix+loadCompId
     retval.setNm(name)
     retval.setP0(self.getLoadCaseReferenceItem()) #Reference to load case.
-    retval.setP1(oI.ObjectItem(name)) #Name
-    retval.setP2(oI.ObjectItem('{'+str(uuid.uuid4())+'}')) # Unique id
+    retval.setP1(oI.SCXMLObjectItem(name)) #Name
+    retval.setP2(oI.SCXMLObjectItem('{'+str(uuid.uuid4())+'}')) # Unique id
     retval.setP3(self.getDirectionObjectItem()) #Direction X, Y or Z
-    retval.setP4(oI.ObjectItem('0','','','Force')) #Type 0 -> Force.
-    retval.setP5(oI.ObjectItem('4','','','Z= 0')) #Validity
-    retval.setP6(oI.ObjectItem('0','','','Auto')) #Select
+    retval.setP4(oI.SCXMLObjectItem('0','','','Force')) #Type 0 -> Force.
+    retval.setP5(oI.SCXMLObjectItem('4','','','Z= 0')) #Validity
+    retval.setP6(oI.SCXMLObjectItem('0','','','Auto')) #Select
     retval.setP7(self.getValueObjectItem()) #Value
-    retval.setP8(oI.ObjectItem(str(self.x))) #X (position)
-    retval.setP9(oI.ObjectItem(str(self.y))) #Y (position)
-    retval.setP10(oI.ObjectItem(str(self.z))) #Z (position)
-    retval.setP11(oI.ObjectItem(str(self.x))) #ux (position?)
-    retval.setP12(oI.ObjectItem(str(self.y))) #uy (position?)
-    retval.setP13(oI.ObjectItem(str(self.z))) #uz (position?)
+    retval.setP8(oI.SCXMLObjectItem(str(self.x))) #X (position)
+    retval.setP9(oI.SCXMLObjectItem(str(self.y))) #Y (position)
+    retval.setP10(oI.SCXMLObjectItem(str(self.z))) #Z (position)
+    retval.setP11(oI.SCXMLObjectItem(str(self.x))) #ux (position?)
+    retval.setP12(oI.SCXMLObjectItem(str(self.y))) #uy (position?)
+    retval.setP13(oI.SCXMLObjectItem(str(self.z))) #uz (position?)
     retval.setP14(self.getSystemItem()) #System 0 -> GCS, 1 -> LCS, 2 -> Load LCS
     return retval
 
@@ -93,7 +91,7 @@ def getPointForceFreeObjects(nl):
     retval.append(c.getObject())
   return retval
 
-class PointForceFreeContainer(ctr.Container):
+class PointForceFreeContainer(ctr.SCXMLTableContainer):
   def __init__(self,pointForceFreesDict):
     super(PointForceFreeContainer,self).__init__(idPointForceFreeContainer,tPointForceFreeContainer)
     pointForceFrees= list()
@@ -101,5 +99,5 @@ class PointForceFreeContainer(ctr.Container):
       compObjects= getPointForceFreeObjects(nl)
       for c in compObjects:
         pointForceFrees.append(c)
-    self.appendTable(tb.TableXMLNodes(idPointForceFreeContainerTb,tPointForceFreeContainerTb, 'Point forces in node', None,pointForceFrees))
+    self.appendTable(tb.SCXMLTableXMLNodes(idPointForceFreeContainerTb,tPointForceFreeContainerTb, 'Point forces in node', None,pointForceFrees))
   

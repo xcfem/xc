@@ -14,7 +14,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from import_export.sciaXML.xml_basics import ObjectItem as oI
+from import_export.sciaXML.xml_basics import scxml_object_item as oI
 import load_case_container as lcc
 
 class LoadComponentBase(object):
@@ -43,7 +43,7 @@ class LoadComponentBase(object):
 
   def getLoadCaseReferenceItem(self):
     lcId= str(self.loadCaseId) #Reference to load case.
-    retval= oI.ObjectItem('',lcId)
+    retval= oI.SCXMLObjectItem('',lcId)
     retval.n= self.getLoadCaseName()
     return retval
 
@@ -54,7 +54,7 @@ class LoadComponentBase(object):
       dirId= '1'
     elif(self.direction=='Z'):
       dirId= '2'
-    return oI.ObjectItem(dirId,'','',self.direction) #Direction X, Y or Z
+    return oI.SCXMLObjectItem(dirId,'','',self.direction) #Direction X, Y or Z
 
   def getDistributionObjectItem(self):
     '''returns an item which represents the surface
@@ -66,16 +66,16 @@ class LoadComponentBase(object):
       distributionId= '2'
     elif(self.distribution=='3 points'):
       distributionId= '3'
-    return oI.ObjectItem(distributionId,'','',self.distribution) #Distribution
+    return oI.SCXMLObjectItem(distributionId,'','',self.distribution) #Distribution
   
   def getValueObjectItem(self):
     '''returns an ObjectItem which represents the value of the load component.'''
-    return oI.ObjectItem(str(self.value))
+    return oI.SCXMLObjectItem(str(self.value))
 
   def getSystemItem(self):
     '''returns an ObjectItem which represents the reference system of the load component.'''
     if(self.globalCooSys):
-      return oI.ObjectItem('0','','','GCS')
+      return oI.SCXMLObjectItem('0','','','GCS')
     else:
-      return oI.ObjectItem('1','','','LCS')
+      return oI.SCXMLObjectItem('1','','','LCS')
 

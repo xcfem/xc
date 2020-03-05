@@ -8,10 +8,10 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import Base as b
+import scxml_base as b
 import xml.etree.cElementTree as ET
 
-class PropertiesContainer(b.Base):
+class SCXMLPropertiesContainer(b.SCXMLBase):
   '''SCIA XML properties container.'''
   clsid= ''
   progid= ''
@@ -22,13 +22,13 @@ class PropertiesContainer(b.Base):
         clsid: class identifier
         progid: program identifier.
     '''
-    super(PropertiesContainer,self).__init__(cId,'')
+    super(SCXMLPropertiesContainer,self).__init__(cId,'')
     self.clsid= clsid
     self.progid= progid
   
   def populateXMLElement(self, element):
     '''Returns an XML element for the object.'''
-    super(PropertiesContainer,self).populateXMLElement(element)
+    super(SCXMLPropertiesContainer,self).populateXMLElement(element)
     element.set("clsid",self.clsid)
     if(self.progid!=''):
       element.set("progid",self.progid)

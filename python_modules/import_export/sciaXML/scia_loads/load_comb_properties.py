@@ -10,13 +10,13 @@ __email__= "l.pereztato@gmail.com"
 
 #Properties for constraint nodes.
 
-from import_export.sciaXML.xml_basics import PropertiesContainer as ctr
-from import_export.sciaXML.xml_basics import Property as prop
-from import_export.sciaXML.xml_basics import Ref as rf
-from import_export.sciaXML.xml_basics import EnumItem as eI
-from import_export.sciaXML.xml_basics import Enum as enum
-from import_export.sciaXML.xml_basics import PropertiesTable as propTable
-from import_export.sciaXML.xml_basics import PropertiesSubTable as propSubTable
+from import_export.sciaXML.xml_basics import scxml_properties_container as ctr
+from import_export.sciaXML.xml_basics import scxml_property as prop
+from import_export.sciaXML.xml_basics import scxml_ref as rf
+from import_export.sciaXML.xml_basics import scxml_enum_item as eI
+from import_export.sciaXML.xml_basics import scxml_enum as enum
+from import_export.sciaXML.xml_basics import scxml_properties_table as propTable
+from import_export.sciaXML.xml_basics import scxml_properties_sub_table as propSubTable
 import load_case_properties as lcp
 import xml.etree.cElementTree as ET
 
@@ -41,27 +41,27 @@ idExplode= "{1DC504C4-85BE-4323-B1EB-BADB2FA6A82B}"
 idPhase= "{1DC504C5-85BE-4323-B1EB-BADB2FA6A82B}"
 idMasterID= "{1DC504C6-85BE-4323-B1EB-BADB2FA6A82B}"
 
-class LoadCombProperties(ctr.PropertiesContainer):
+class LoadCombProperties(ctr.SCXMLPropertiesContainer):
   tableProp= None
   def __init__(self):
     super(LoadCombProperties,self).__init__(containerId,containerClsId,tbProgId)
-    self.tableProp= propTable.PropertiesTable(tbId,tbName,"vertical",tbClsId,tbProgId)
-    propName= prop.Property("0","Name","string",idName)
-    propUniqueId= prop.Property("1","UniqueID","string",idUniqueId)
-    propDescription= prop.Property("2","Description","string",idDescription)
-    propCombType= prop.Property("3","Type","enum",idCombType)
-    propCombType.value= enum.Enum([eI.EnumItem("0","Envelope - ultimate"),eI.EnumItem("1","Envelope - serviceability"),eI.EnumItem("2","Linear - ultimate"),eI.EnumItem("3","Linear - serviceability"),eI.EnumItem("4","France - ultimate"),eI.EnumItem("5","France - serviceability"),eI.EnumItem("6","BAEL - ultimate"),eI.EnumItem("7","BAEL - serviceability")])
-    propRefTable= prop.Property("4","Load cases","table",idLoadCases)
-    propRefTable.value= propSubTable.PropertiesSubTable('','',"vertical",'','')
-    propRefTable.value.properties.append(prop.Property("0","Name","string",idLoadCaseName))
-    propRefTable.value.properties.append(prop.Property("1","Coeff.","param",idLoadCaseCoeff))
-    propRefLoadCases= prop.Property("2","Load case ID","ref",idLoadCaseId)
-    propRefLoadCases.value= rf.Ref(idLoadCaseRef,lcp.tbName)
+    self.tableProp= propTable.SCXMLPropertiesTable(tbId,tbName,"vertical",tbClsId,tbProgId)
+    propName= prop.SCXMLProperty("0","Name","string",idName)
+    propUniqueId= prop.SCXMLProperty("1","UniqueID","string",idUniqueId)
+    propDescription= prop.SCXMLProperty("2","Description","string",idDescription)
+    propCombType= prop.SCXMLProperty("3","Type","enum",idCombType)
+    propCombType.value= enum.SCXMLEnum([eI.SCXMLEnumItem("0","Envelope - ultimate"),eI.SCXMLEnumItem("1","Envelope - serviceability"),eI.SCXMLEnumItem("2","Linear - ultimate"),eI.SCXMLEnumItem("3","Linear - serviceability"),eI.SCXMLEnumItem("4","France - ultimate"),eI.SCXMLEnumItem("5","France - serviceability"),eI.SCXMLEnumItem("6","BAEL - ultimate"),eI.SCXMLEnumItem("7","BAEL - serviceability")])
+    propRefTable= prop.SCXMLProperty("4","Load cases","table",idLoadCases)
+    propRefTable.value= propSubTable.SCXMLPropertiesSubTable('','',"vertical",'','')
+    propRefTable.value.properties.append(prop.SCXMLProperty("0","Name","string",idLoadCaseName))
+    propRefTable.value.properties.append(prop.SCXMLProperty("1","Coeff.","param",idLoadCaseCoeff))
+    propRefLoadCases= prop.SCXMLProperty("2","Load case ID","ref",idLoadCaseId)
+    propRefLoadCases.value= rf.SCXMLRef(idLoadCaseRef,lcp.tbName)
     propRefTable.value.properties.append(propRefLoadCases)
 
-    propExplode= prop.Property("5","Explode","integer",idExplode)
-    propPhase= prop.Property("6","Phase","integer",idPhase)
-    propMasterID= prop.Property("7","Master ID","integer",idMasterID)
+    propExplode= prop.SCXMLProperty("5","Explode","integer",idExplode)
+    propPhase= prop.SCXMLProperty("6","Phase","integer",idPhase)
+    propMasterID= prop.SCXMLProperty("7","Master ID","integer",idMasterID)
 
     self.tableProp.properties.append(propName) #0
     self.tableProp.properties.append(propUniqueId) #1

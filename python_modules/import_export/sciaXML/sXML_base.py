@@ -9,7 +9,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import os
-from xml_basics import Definition as df
+from xml_basics import scxml_definition
 import node_container as nCtr
 import ep_plane_container as eppc
 import node_support_container as nsc
@@ -31,7 +31,7 @@ class SXMLBase(object):
     '''
     self.xmlns= xmlns
     self.uuid= ''
-    self.defn= df.Definition(mesh.name)
+    self.defn= scxml_definition.SCXMLDefinition(mesh.name)
     print 'XXX Write material container code.'
     self.materialContainer= None
     loads= loadContainer.loads

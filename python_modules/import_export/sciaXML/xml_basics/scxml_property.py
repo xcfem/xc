@@ -8,10 +8,9 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import Header as hdr
 import xml.etree.cElementTree as ET
 
-class Property(object):  
+class SCXMLProperty(object):  
   '''SCIA XML property.'''
   def __init__(self, x= '', name= '', typo= '', id= '', flag= ''):
     self.x= x

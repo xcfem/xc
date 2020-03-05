@@ -10,13 +10,13 @@ __email__= "l.pereztato@gmail.com"
 
 #Properties for constraint nodes.
 
-from import_export.sciaXML.xml_basics import PropertiesContainer as ctr
-from import_export.sciaXML.xml_basics import Property as prop
-from import_export.sciaXML.xml_basics import Ref as rf
-from import_export.sciaXML.xml_basics import EnumItem as eI
-from import_export.sciaXML.xml_basics import Enum as enum
-from import_export.sciaXML.xml_basics import PropertiesTable as propTable
-from import_export.sciaXML.xml_basics import PropertiesSubTable as propSubTable
+from import_export.sciaXML.xml_basics import scxml_properties_container as ctr
+from import_export.sciaXML.xml_basics import scxml_property as prop
+from import_export.sciaXML.xml_basics import scxml_ref as rf
+from import_export.sciaXML.xml_basics import scxml_enum_item as eI
+from import_export.sciaXML.xml_basics import scxml_enum as enum
+from import_export.sciaXML.xml_basics import scxml_properties_table as propTable
+from import_export.sciaXML.xml_basics import scxml_properties_sub_table as propSubTable
 import xml.etree.cElementTree as ET
 import load_case_properties as lcp
 
@@ -39,27 +39,27 @@ idType= "{49F8017C-A4E5-11D4-A43A-000000000000}"
 idValueF= "{49F80183-A4E5-11D4-A43A-000000000000}"
 idSystem= "{ACC6FEC0-B7FC-11D4-ADD9-000000000000}"
 
-class NodeLoadProperties(ctr.PropertiesContainer):
+class NodeLoadProperties(ctr.SCXMLPropertiesContainer):
   tableProp= None
   def __init__(self):
     super(NodeLoadProperties,self).__init__(containerId,containerClsId,tbProgId)
-    self.tableProp= propTable.PropertiesTable(tbId,"XML\default","vertical",tbClsId,tbProgId)
-    propName= prop.Property("0","Name","string",idName)
-    propRefLoadCase= prop.Property("1","Load case","ref",idLoadCase)
-    propRefLoadCase.value= rf.Ref(idLoadCaseRef,lcp.tbName)
-    propRefTable= prop.Property("2","Reference Table","table",idRefTable)
-    propRefTable.value= propSubTable.PropertiesSubTable('','',"vertical",'','')
-    propRefTable.value.properties.append(prop.Property("0","Member Type","string",idMemberType))
-    propRefTable.value.properties.append(prop.Property("1","Member Type Name","string",idMemberTypeName))
-    propRefTable.value.properties.append(prop.Property("2","Member Name","string",idMemberName))
+    self.tableProp= propTable.SCXMLPropertiesTable(tbId,"XML\default","vertical",tbClsId,tbProgId)
+    propName= prop.SCXMLProperty("0","Name","string",idName)
+    propRefLoadCase= prop.SCXMLProperty("1","Load case","ref",idLoadCase)
+    propRefLoadCase.value= rf.SCXMLRef(idLoadCaseRef,lcp.tbName)
+    propRefTable= prop.SCXMLProperty("2","Reference Table","table",idRefTable)
+    propRefTable.value= propSubTable.SCXMLPropertiesSubTable('','',"vertical",'','')
+    propRefTable.value.properties.append(prop.SCXMLProperty("0","Member Type","string",idMemberType))
+    propRefTable.value.properties.append(prop.SCXMLProperty("1","Member Type Name","string",idMemberTypeName))
+    propRefTable.value.properties.append(prop.SCXMLProperty("2","Member Name","string",idMemberName))
 
-    propDirection= prop.Property("3","Direction","enum",idDirection,"262144")
-    propDirection.value= enum.Enum([eI.EnumItem("0","X"),eI.EnumItem("1","Y"),eI.EnumItem("2","Z")])
-    propType= prop.Property("4","Type","enum",idType,"262144")
-    propType.value= enum.Enum([eI.EnumItem("0","Force")])
-    propValueF= prop.Property("5","Value - F","param",idValueF,"33619968")
-    propSystem= prop.Property("6","System","enum",idSystem)
-    propSystem.value= enum.Enum([eI.EnumItem("0","GCS"),eI.EnumItem("1","LCS")])
+    propDirection= prop.SCXMLProperty("3","Direction","enum",idDirection,"262144")
+    propDirection.value= enum.SCXMLEnum([eI.SCXMLEnumItem("0","X"),eI.SCXMLEnumItem("1","Y"),eI.SCXMLEnumItem("2","Z")])
+    propType= prop.SCXMLProperty("4","Type","enum",idType,"262144")
+    propType.value= enum.SCXMLEnum([eI.SCXMLEnumItem("0","Force")])
+    propValueF= prop.SCXMLProperty("5","Value - F","param",idValueF,"33619968")
+    propSystem= prop.SCXMLProperty("6","System","enum",idSystem)
+    propSystem.value= enum.SCXMLEnum([eI.SCXMLEnumItem("0","GCS"),eI.SCXMLEnumItem("1","LCS")])
 
     self.tableProp.properties.append(propName) #0
     self.tableProp.properties.append(propRefLoadCase) #1
