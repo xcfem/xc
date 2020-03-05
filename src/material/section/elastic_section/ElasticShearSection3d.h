@@ -79,8 +79,6 @@ class ElasticShearSection3d : public BaseElasticSection3d
     ElasticShearSection3d(int tag, MaterialHandler *mat_ldr= nullptr);
     ElasticShearSection3d(void);
   
-    const char *getClassType(void) const {return "ElasticShearSection3d";};
-  
     const Vector &getStressResultant(void) const;
     const Matrix &getSectionTangent(void) const;
     const Matrix &getInitialTangent(void) const;
