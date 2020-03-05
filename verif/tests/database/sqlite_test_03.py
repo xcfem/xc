@@ -2,7 +2,7 @@
 
 import sqlite3 as sqlite
 from sqliteUtils import sqlite_macros
-from misc import ansysToEsfBarra
+from misc import import_Ansys_beam_intforces
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"

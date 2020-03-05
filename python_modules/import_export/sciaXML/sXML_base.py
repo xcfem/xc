@@ -10,15 +10,15 @@ __email__= "l.pereztato@gmail.com"
 
 import os
 from xml_basics import Definition as df
-import NodeContainer as nCtr
-import EPPlaneContainer as eppc
-import NodeSupportContainer as nsc
+import node_container as nCtr
+import ep_plane_container as eppc
+import node_support_container as nsc
 from scia_loads import LoadGroupContainer as lgc
 from scia_loads import LoadCaseContainer as lcc
 from scia_loads import LoadCombContainer as lcmb
 from scia_loads import NodeLoadContainer as nlc
 from scia_loads import ElementLoadContainer as elc
-import ProjectProperties as prjDef
+import project_properties as prjDef
 import xml.etree.cElementTree as ET
 
 class SXMLBase(object):

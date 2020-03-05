@@ -16,7 +16,7 @@ import geom
 import xc
 import re
 from scipy.spatial.distance import cdist
-from import_export import BlockTopologyEntities as bte
+from import_export import block_topology_entities as bte
 from miscUtils import LogMessages as lmsg
 
 class FloatList(list):

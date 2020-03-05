@@ -8,10 +8,10 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-import NodeProperties as ncd
-import MaterialProperties as mp
-import EPPlaneProperties as eppp
-import NodeSupportProperties as nsp
+import node_properties as ncd
+import material_properties as mp
+import ep_plane_properties as eppp
+import node_support_properties as nsp
 from scia_loads import LoadGroupProperties as lgp
 from scia_loads import LoadCaseProperties as lcp
 from scia_loads import LoadCombProperties as lcmbp

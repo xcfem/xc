@@ -11,7 +11,7 @@ __email__= "l.pereztato@gmail.com"
 import xc_base
 import geom
 import xc
-from import_export import NeutralLoadDescription as nld
+from import_export import neutral_load_description as nld
 from miscUtils import LogMessages as lmsg
 
 class LoadContainerBase(object):

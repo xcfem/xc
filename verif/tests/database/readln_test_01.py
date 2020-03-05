@@ -2,7 +2,7 @@
 
 import sqlite3 as sqlite
 from sqliteUtils import sqlite_macros
-from misc import ansysToEsfBarra
+from misc import import_Ansys_beam_intforces
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014, LCPT"
@@ -20,7 +20,7 @@ dbName= "/tmp/pilares.db"
 tbName= "esfPilares"
 os.system("rm -f " + dbName)
 sqlite_macros.SQLTcreaDBase(dbName)
-ansysToEsfBarra.ansysToEsfBarra(fNameIn,dbName,tbName)
+import_Ansys_beam_intforces.ansysToEsfBarra(fNameIn,dbName,tbName)
 
 idElem= 0.0
 nmbAccion= ""

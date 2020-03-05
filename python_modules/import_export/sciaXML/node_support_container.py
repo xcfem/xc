@@ -15,7 +15,7 @@ from xml_basics import HeaderItem as hi
 from xml_basics import Object as obj
 from xml_basics import ObjectItem as oI
 from xml_basics import Row as rw
-import NodeContainer as nc
+import node_container as nc
 
 idNodeSupportContainer= "{1cbca4de-355b-40f7-a91d-8efd26a6404d}"
 tNodeSupportContainer= "1cbca4de-355b-40f7-a91d-8efd26a6404d"

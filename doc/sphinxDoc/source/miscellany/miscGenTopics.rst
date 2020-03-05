@@ -1,37 +1,37 @@
 
-ansysToEsfBarra
----------------
+Import beam internal forces from Ansys
+--------------------------------------
 
-.. automodule:: misc.ansysToEsfBarra
+.. automodule:: misc.import_Ansys_beam_intforces
     :members:
     :undoc-members:
     :show-inheritance:
 
-ansysToEsfShell
----------------
+Import shell internal forces from Ansys
+---------------------------------------
 
-.. automodule:: misc.ansysToEsfShell
+.. automodule:: misc.import_Ansys_shell_intforces
     :members:
     :undoc-members:
     :show-inheritance:
 
-scc2d_testing_bench
--------------------
+2D fiber section testing bench
+------------------------------
 
 .. automodule:: misc.scc2d_testing_bench
     :members:
     :undoc-members:
     :show-inheritance:
 
-scc3d_testing_bench
--------------------
+3D fiber section testing bench
+------------------------------
 
 .. automodule:: misc.scc3d_testing_bench
     :members:
     :undoc-members:
     :show-inheritance:
 
-shell_testing_bench
+Shell testing bench
 -------------------
 
 .. automodule:: misc.shell_testing_bench
@@ -40,34 +40,34 @@ shell_testing_bench
     :show-inheritance:
 
 
-cargasSecciones
----------------
-
-.. automodule:: misc.cargasSecciones
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-matrixUtils
------------
-
-.. automodule:: misc.matrixUtils
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-metal3dToEsfBarra
+Loads in sections
 -----------------
 
-.. automodule:: misc.metal3dToEsfBarra
+.. automodule:: misc.loads_sections
     :members:
     :undoc-members:
     :show-inheritance:
 
-tablaEsf
---------
+Matrix utils
+------------
 
-.. automodule:: misc.tablaEsf
+.. automodule:: misc.matrix_utils
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Import beam internal forces from metal3D
+----------------------------------------
+
+.. automodule:: misc.import_metal3_beam_intforces
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Table of internal forces
+------------------------
+
+.. automodule:: misc.int_forces_table
     :members:
     :undoc-members:
     :show-inheritance:
