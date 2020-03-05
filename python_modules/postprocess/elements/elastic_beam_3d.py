@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 def controlTNHA():
+  ''' Callback control for normal stresses in reinforced
+      concrete sections.'''
   return """nmbComb= recorder.getCurrentCombinationName
 self.getResistingForce()
 Ntmp= self.getN1
