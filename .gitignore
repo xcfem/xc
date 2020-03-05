@@ -171,3 +171,6 @@ _build
 
 #install log for python_modules
 python_modules/installed_files_history.txt
+
+# Ignore tags created by etags, ctags, gtags (GNU global) and cscope
+TAGS
