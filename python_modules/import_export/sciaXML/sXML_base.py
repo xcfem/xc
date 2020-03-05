@@ -13,11 +13,11 @@ from xml_basics import Definition as df
 import node_container as nCtr
 import ep_plane_container as eppc
 import node_support_container as nsc
-from scia_loads import LoadGroupContainer as lgc
-from scia_loads import LoadCaseContainer as lcc
-from scia_loads import LoadCombContainer as lcmb
-from scia_loads import NodeLoadContainer as nlc
-from scia_loads import ElementLoadContainer as elc
+from scia_loads import load_group_container as lgc
+from scia_loads import load_case_container as lcc
+from scia_loads import load_comb_container as lcmb
+from scia_loads import node_load_container as nlc
+from scia_loads import element_load_container as elc
 import project_properties as prjDef
 import xml.etree.cElementTree as ET
 

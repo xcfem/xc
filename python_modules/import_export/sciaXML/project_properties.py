@@ -12,13 +12,13 @@ import node_properties as ncd
 import material_properties as mp
 import ep_plane_properties as eppp
 import node_support_properties as nsp
-from scia_loads import LoadGroupProperties as lgp
-from scia_loads import LoadCaseProperties as lcp
-from scia_loads import LoadCombProperties as lcmbp
-from scia_loads import NodeLoadProperties as nlp
-from scia_loads import ElementLoadProperties as elp
-from scia_loads import PointForceFreeProperties as pffp
-from scia_loads import SurfacePressureFreeProperties as sffp
+from scia_loads import load_group_properties as lgp
+from scia_loads import load_case_properties as lcp
+from scia_loads import load_comb_properties as lcmbp
+from scia_loads import node_load_properties as nlp
+from scia_loads import element_load_properties as elp
+from scia_loads import point_force_free_properties as pffp
+from scia_loads import surface_pressure_free_properties as sffp
 import xml.etree.cElementTree as ET
 
 class ProjectProperties(object):    

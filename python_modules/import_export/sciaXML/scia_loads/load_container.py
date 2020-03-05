@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-'''LoadContainer.py: extract loads from XC load patterns and put the in neutral data structure.'''
+'''load_container.py: extract loads from XC load patterns and put the in neutral data structure.'''
 
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2015 LCPT"
