@@ -1,36 +1,35 @@
-Import_export sciaXML. XML basics
-=================================
+XML basics
+==========
 
 
 Base
 ----
 
-.. automodule:: import_export.sciaXML.xml_basics.Base
+.. automodule:: import_export.sciaXML.xml_basics.scxml_base
     :members:
     :undoc-members:
     :show-inheritance:
 
-Container
----------
+Definition
+----------
 
-.. automodule:: import_export.sciaXML.xml_basics.Container
+.. automodule:: import_export.sciaXML.xml_basics.scxml_definition
     :members:
     :undoc-members:
     :show-inheritance:
 
+Enumeration
+-----------
 
-Enum
-----
-
-.. automodule:: import_export.sciaXML.xml_basics.Enum
+.. automodule:: import_export.sciaXML.xml_basics.scxml_enum
     :members:
     :undoc-members:
     :show-inheritance:
 
-EnumItem
---------
+Item of enumeration
+-------------------
 
-.. automodule:: import_export.sciaXML.xml_basics.EnumItem
+.. automodule:: import_export.sciaXML.xml_basics.scxml_enum_item
     :members:
     :undoc-members:
     :show-inheritance:
@@ -38,65 +37,65 @@ EnumItem
 Header
 ------
 
-.. automodule:: import_export.sciaXML.xml_basics.Header
+.. automodule:: import_export.sciaXML.xml_basics.scxml_header
     :members:
     :undoc-members:
     :show-inheritance:
 
-HeaderItem
-----------
+Header item
+-----------
 
-.. automodule:: import_export.sciaXML.xml_basics.HeaderItem
+.. automodule:: import_export.sciaXML.xml_basics.scxml_header_item
     :members:
     :undoc-members:
     :show-inheritance:
 
+
+Object base
+-----------
+
+.. automodule:: import_export.sciaXML.xml_basics.scxml_obj_base
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Object item
+-----------
+
+.. automodule:: import_export.sciaXML.xml_basics.scxml_object_item
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 Object
 ------
 
-.. automodule:: import_export.sciaXML.xml_basics.Object
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-ObjBase
--------
-
-.. automodule:: import_export.sciaXML.xml_basics.ObjBase
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-ObjectItem
-----------
-
-.. automodule:: import_export.sciaXML.xml_basics.ObjectItem
+.. automodule:: import_export.sciaXML.xml_basics.scxml_object
     :members:
     :undoc-members:
     :show-inheritance:
 
 
-PropertiesContainer
--------------------
+Properties container
+--------------------
 
-.. automodule:: import_export.sciaXML.xml_basics.PropertiesContainer
+.. automodule:: import_export.sciaXML.xml_basics.scxml_properties_container
     :members:
     :undoc-members:
     :show-inheritance:
 
-PropertiesSubTable
-------------------
+Properties sub-table
+---------------------
 
-.. automodule:: import_export.sciaXML.xml_basics.PropertiesSubTable
+.. automodule:: import_export.sciaXML.xml_basics.scxml_properties_sub_table
     :members:
     :undoc-members:
     :show-inheritance:
 
-PropertiesTable module
---------------------------------------------
+Properties table
+----------------
 
-.. automodule:: import_export.sciaXML.xml_basics.PropertiesTable
+.. automodule:: import_export.sciaXML.xml_basics.scxml_properties_table
     :members:
     :undoc-members:
     :show-inheritance:
@@ -104,15 +103,15 @@ PropertiesTable module
 Property
 --------
 
-.. automodule:: import_export.sciaXML.xml_basics.Property
+.. automodule:: import_export.sciaXML.xml_basics.scxml_property
     :members:
     :undoc-members:
     :show-inheritance:
 
-Ref
----
+Reference
+---------
 
-.. automodule:: import_export.sciaXML.xml_basics.Ref
+.. automodule:: import_export.sciaXML.xml_basics.scxml_ref
     :members:
     :undoc-members:
     :show-inheritance:
@@ -120,23 +119,33 @@ Ref
 Row
 ---
 
-.. automodule:: import_export.sciaXML.xml_basics.Row
+.. automodule:: import_export.sciaXML.xml_basics.scxml_row
     :members:
     :undoc-members:
     :show-inheritance:
 
-TableBase
----------
+Table base
+----------
 
-.. automodule:: import_export.sciaXML.xml_basics.TableBase
+.. automodule:: import_export.sciaXML.xml_basics.scxml_table_base
     :members:
     :undoc-members:
     :show-inheritance:
+
+
+Table container
+---------------
+
+.. automodule:: import_export.sciaXML.xml_basics.scxml_table_container
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 TableXMLNodes
 -------------
 
-.. automodule:: import_export.sciaXML.xml_basics.TableXMLNodes
+.. automodule:: import_export.sciaXML.xml_basics.scxml_table_xmlnodes
     :members:
     :undoc-members:
     :show-inheritance:

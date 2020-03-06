@@ -1,4 +1,4 @@
-Import_export sciaXML
+Import export sciaXML
 =====================
 
 
@@ -113,4 +113,8 @@ sXML mesh
     :undoc-members:
     :show-inheritance:
 
+.. toctree::
+   
+    import_export.sciaXML.xml_basics
+    import_export.sciaXML.scia_loads
 
