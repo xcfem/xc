@@ -486,7 +486,7 @@ python tests/materials/ehe/test_shear_stress_joints_01.py
 python tests/materials/ehe/test_shear_stress_joints_02.py
 echo "$BLEU" "    Misc. (EHE-08)." "$NORMAL"
 python tests/materials/ehe/test_concrete_corbel_ehe.py
-echo "$BLEU" "   EC2 tests." "$NORMAL"
+echo "$BLEU" "    EC2 tests." "$NORMAL"
 python tests/materials/ec2/test_EC2Concrete.py
 python tests/materials/ec2/test_EC2creep.py
 python tests/materials/ec2/test_EC2shrinkage.py
@@ -496,7 +496,7 @@ python tests/materials/ec2/test_smearedCracking_03.py
 python tests/materials/ec2/test_smearedCracking_04.py
 python tests/materials/ec2/test_smearedCracking_05.py
 python tests/materials/ec2/test_smearedCracking_06.py
-echo "$BLEU" "   EC3 tests." "$NORMAL"
+echo "$BLEU" "    EC3 tests." "$NORMAL"
 python tests/materials/ec3/test_buckling_resistance_01.py
 python tests/materials/ec3/test_lateral_torsional_buckling00.py
 python tests/materials/ec3/test_lateral_torsional_buckling01.py
