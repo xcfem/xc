@@ -406,11 +406,6 @@ python tests/materials/geom_section/test_mass_properties_02.py
 python tests/materials/geom_section/test_mass_properties_03.py
 python tests/materials/geom_section/test_mass_properties_04.py
 python tests/materials/geom_section/test_geom_params_torsion_ehe_01.py
-echo "$BLEU" "  Steel sections tests." "$NORMAL"
-python tests/materials/steel_shapes/test_aisc_w_shapes.py
-python tests/materials/steel_shapes/test_aisc_hss_shapes.py
-python tests/materials/steel_shapes/test_steel_shape_01.py
-python tests/materials/steel_shapes/test_steel_shape_02.py
 
 #Cross sections. Fiber model.
 echo "$BLEU" "  Elastic section tests." "$NORMAL"
@@ -496,16 +491,6 @@ python tests/materials/ec2/test_smearedCracking_03.py
 python tests/materials/ec2/test_smearedCracking_04.py
 python tests/materials/ec2/test_smearedCracking_05.py
 python tests/materials/ec2/test_smearedCracking_06.py
-echo "$BLEU" "    EC3 tests." "$NORMAL"
-python tests/materials/ec3/test_buckling_resistance_01.py
-python tests/materials/ec3/test_lateral_torsional_buckling00.py
-python tests/materials/ec3/test_lateral_torsional_buckling01.py
-python tests/materials/ec3/test_lateral_torsional_buckling02.py
-python tests/materials/ec3/test_lateral_torsional_buckling03.py
-python tests/materials/ec3/test_cross_section_verification.py
-python tests/materials/ec3/test_beam_contrpnt.py
-python tests/materials/ec3/test_biax_bend_coeff.py
-python tests/materials/ec3/test_classif.py
 echo "$BLEU" "    SIA 262 tests." "$NORMAL"
 python tests/materials/sia262/sia262_concrete_01.py
 python tests/materials/sia262/shear_01.py
@@ -522,6 +507,27 @@ python tests/materials/aci/test_aci_anchor_comb_tension_shear.py
 echo "$BLEU" "    TM 5-809-3 tests." "$NORMAL"
 python tests/materials/tm5_809_3/test_equivalent_wall_thickness.py
 python tests/materials/tm5_809_3/tm_5_809_3_test01.py
+
+echo "$BLEU" "  Steel sections test." "$NORMAL"
+echo "$BLEU" "    steel shapes tests." "$NORMAL"
+python tests/materials/steel_shapes/test_aisc_w_shapes.py
+python tests/materials/steel_shapes/test_aisc_hss_shapes.py
+python tests/materials/steel_shapes/test_steel_shape_01.py
+python tests/materials/steel_shapes/test_steel_shape_02.py
+echo "$BLEU" "    EC3 tests." "$NORMAL"
+python tests/materials/ec3/test_buckling_resistance_01.py
+python tests/materials/ec3/test_lateral_torsional_buckling00.py
+python tests/materials/ec3/test_lateral_torsional_buckling01.py
+python tests/materials/ec3/test_lateral_torsional_buckling02.py
+python tests/materials/ec3/test_lateral_torsional_buckling03.py
+python tests/materials/ec3/test_cross_section_verification.py
+python tests/materials/ec3/test_beam_contrpnt.py
+python tests/materials/ec3/test_biax_bend_coeff.py
+python tests/materials/ec3/test_classif.py
+echo "$BLEU" "    EAE tests." "$NORMAL"
+python tests/materials/eae/test_steel_corbel_weld.py
+python tests/materials/eae/test_simple_shear_welded_web.py
+python tests/materials/eae/test_weld_bead_strength.py
 echo "$BLEU" "    SIA 263 tests." "$NORMAL"
 python tests/materials/sia263/test_coefs_fatique_SIA263.py
 echo "$BLEU" "    AWC NDS tests." "$NORMAL"
@@ -567,11 +573,6 @@ python tests/materials/ehe/test_creep_03.py
 python tests/materials/ehe/test_shrinkage_01.py
 #python tests/materials/ehe/test_shrinkage_02.py
 python tests/materials/ehe/test_steel_relaxation_01.py
-
-echo "$BLEU" "  Steel design verifications (EAE)." "$NORMAL"
-python tests/materials/eae/test_steel_corbel_weld.py
-python tests/materials/eae/test_simple_shear_welded_web.py
-python tests/materials/eae/test_weld_bead_strength.py
 
 #Database tests
 echo "$BLEU" "Database tests (MySQL, Berkeley db, sqlite,...)." "$NORMAL"
