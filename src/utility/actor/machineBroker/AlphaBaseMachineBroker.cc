@@ -27,14 +27,10 @@
 //AlphaBaseMachineBroker.cpp
 
 #include <utility/actor/machineBroker/AlphaBaseMachineBroker.h>
-#include <stdlib.h>
-
-#include <string.h>
-#include <remote.h>
 #include <utility/actor/channel/Channel.h>
 
 XC::AlphaBaseMachineBroker::AlphaBaseMachineBroker(FEM_ObjectBroker *theBroker, int current,int maxNum)
-  :MachineBroker(theBroker), currentMachine(current),maxNumMachines(maxNum), machines(maxNum)
+  :MachineBroker(theBroker), currentMachine(current), maxNumMachines(maxNum), machines(maxNum)
   {}
 
 

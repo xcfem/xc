@@ -127,8 +127,9 @@ set_source_files_properties(solution/system_of_eqn/eigenSOE/BandArpackppSolver.c
 # Source files.
 SET(actor utility/actor/actor/Actor utility/actor/actor/DistributedBase utility/actor/actor/DistributedObj utility/actor/actor/MovableObject utility/actor/actor/CommMetaData utility/actor/actor/PtrCommMetaData utility/actor/actor/BrokedPtrCommMetaData utility/actor/actor/ArrayCommMetaData utility/actor/actor/MatrixCommMetaData utility/actor/actor/TensorCommMetaData utility/actor/actor/DbTagData utility/actor/actor/CommParameters utility/actor/actor/MovableMap utility/actor/actor/MovableDeque utility/actor/actor/MovableVector utility/actor/actor/MovableBJTensor utility/actor/actor/MovableString utility/actor/actor/MovableVectors utility/actor/actor/MovableMatrix utility/actor/actor/MovableID utility/actor/actor/MovableMatrices utility/actor/actor/MovableContainer utility/actor/actor/MovableStrings utility/actor/address/ChannelAddress utility/actor/address/SocketAddress utility/actor/channel/ChannelQueue utility/actor/channel/Channel utility/actor/channel/TCP_Socket utility/actor/channel/UDP_Socket utility/actor/channel/mySocket utility/actor/machineBroker/MachineBroker utility/actor/message/Message utility/actor/objectBroker/FEM_ObjectBroker utility/actor/objectBroker/FEM_ObjectBrokerAllClasses utility/actor/objectBroker/ObjectBroker utility/actor/ObjectWithObjBroker utility/actor/ShadowActorBase utility/actor/shadow/Shadow utility/xc_python_utils)
 
-#Those of MPI doesn't compile 24-03-2006.
 SET(mpi utility/actor/address/MPI_ChannelAddress utility/actor/channel/MPI_Channel utility/actor/machineBroker/MPI_MachineBroker)
+
+SET(alpha_broker utility/actor/machineBroker/AlphaBaseMachineBroker utility/actor/machineBroker/AlphaMachineBroker utility/actor/machineBroker/MillMachineBroker utility/actor/machineBroker/DecMachineBroker)
 
 SET(tcp utility/actor/channel/TCP_SocketNoDelay)
 
@@ -152,7 +153,7 @@ SET(nDarray utility/matrix/nDarray/basics utility/matrix/nDarray/BJtensor utilit
 
 SET(matrix utility/matrix/ID utility/matrix/IDVarSize utility/matrix/IntPtrWrapper utility/matrix/AuxMatrix utility/matrix/Matrix utility/matrix/DqMatrices utility/matrix/Vector utility/matrix/DqVectors utility/matrix/util_matrix ${nDarray})
 
-SET(utility ${actor} ${mpi}  ${database} ${handler} ${package} ${recorder} ${remote} ${tagged} ${matrix}  utility/Timer)
+SET(utility ${actor} ${mpi} ${alpha_broker} ${database} ${handler} ${package} ${recorder} ${remote} ${tagged} ${matrix}  utility/Timer)
 
 SET(post_process post_process/FieldInfo post_process/MapFields)
 

@@ -69,12 +69,10 @@
 namespace XC {
 //! @ingroup IPComm
 //
+//! @brief AlphaMachineBroker is a machine broker for use with the cluster of
+//! alpha machines in 509 Davis Hall.
 class AlphaMachineBroker: public AlphaBaseMachineBroker
   {
-  private:
-    int currentMachine;
-    int maxNumMachines;
-    std::vector<std::string> machines;
   public:
     AlphaMachineBroker(FEM_ObjectBroker *theBroker);
 

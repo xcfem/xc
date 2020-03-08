@@ -64,18 +64,19 @@
 #ifndef DecMachineBroker_h
 #define DecMachineBroker_h
 
-#include <utility/actor/machineBroker/MachineBroker.h>
+#include "utility/actor/machineBroker/AlphaBaseMachineBroker.h"
 
 namespace XC {
 //! @ingroup IPComm
 //
-//! @brief Broker for DEC machines.
-class DecMachineBroker : public AlphaBaseMachineBroker
+//! @brief DecMachineBroker is a machine broker for use with the cluster of
+//! DEC machines in 509 Davis Hall.
+class DecMachineBroker: public AlphaBaseMachineBroker
   {
   public:
     DecMachineBroker(FEM_ObjectBroker *theBroker);
 
-    virtual int startActor(char *actorProgram,Channel &theChannel,int compDemand =0);
+    virtual int startActor(const std::string &actorProgram,Channel &theChannel,int compDemand =0);
   };
 } // end of XC namespace
 

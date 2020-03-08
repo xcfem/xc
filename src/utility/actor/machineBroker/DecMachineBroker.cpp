@@ -62,69 +62,65 @@
 // What: "@(#) DecMachineBroker.h, revA"
 
 #include <utility/actor/machineBroker/DecMachineBroker.h>
-#include <stdlib.h>
+#include <cstdlib>
 
-#include <string.h>
-#include <remote.h>
-#include <utility/actor/channel/Channel.h>
+#include "utility/remote/remote.h"
+#include "utility/actor/channel/Channel.h"
 
 
 XC::DecMachineBroker::DecMachineBroker(FEM_ObjectBroker *theBroker)
-:AlphaBaseMachineBroker(theBroker,0,9)
+: AlphaBaseMachineBroker(theBroker,0,9)
   {
-    char *dec1 = "dec-1";
-    char *dec2 = "dec-2";
-    char *dec3 = "dec-3";
-    char *dec4 = "dec-4";
-    char *dec5 = "dec-5";
-    char *dec6 = "dec-6";    
-    char *dec7 = "dec-7";    
-    char *dec8 = "dec-8";        
-    char *dec9 = "dec-9";            
+    const std::string dec1= "dec-1";
+    const std::string dec2= "dec-2";
+    const std::string dec3= "dec-3";
+    const std::string dec4= "dec-4";
+    const std::string dec5= "dec-5";
+    const std::string dec6= "dec-6";    
+    const std::string dec7= "dec-7";    
+    const std::string dec8= "dec-8";        
+    const std::string dec9= "dec-9";            
     
-    char **theMachines = (char **)malloc(9*sizeof(char *));
-    theMachines[0] = dec9;
-    theMachines[1] = dec8;
-    theMachines[2] = dec7;
-    theMachines[3] = dec6;
-    theMachines[4] = dec5;
-    theMachines[5] = dec4;
-    theMachines[6] = dec3;    
-    theMachines[7] = dec2;    
-    theMachines[8] = dec1;        
+    machines[0] = dec9;
+    machines[1] = dec8;
+    machines[2] = dec7;
+    machines[3] = dec6;
+    machines[4] = dec5;
+    machines[5] = dec4;
+    machines[6] = dec3;    
+    machines[7] = dec2;    
+    machines[8] = dec1;        
     
-    machines = theMachines;
-}
+  }
 
-
-int XC::DecMachineBroker::startActor(char *actorProgram, 
-			       Channel &theChannel,
-			       int compDemand)
-{ 
-    char  remotecmd[400];
+//! @brief Lanch process in remote machine.
+int XC::DecMachineBroker::startActor(const std::string &actorProgram, Channel &theChannel, int compDemand)
+  { 
+     std::string remotecmd;
 
     // get the next machine, a round-robin approach
-    char *machine;
+    std::string machine;
     if (currentMachine < maxNumMachines)
-	machine = machines[currentMachine];
-    else {
+	machine= machines[currentMachine];
+    else
+      {
 	currentMachine = 0;
-	machine = machines[currentMachine];
-    }
+	machine= machines[currentMachine];
+      }
 
     currentMachine++;
     
-    strcpy(remotecmd,REMOTE);
-    strcat(remotecmd," ");          
-    strcat(remotecmd,machine);
-    strcat(remotecmd," ");
-    strcat(remotecmd,actorProgram);
-    strcat(remotecmd," ");
-    strcat(remotecmd,theChannel.addToProgram());    
-    strcat(remotecmd,"\n");
+    remotecmd= REMOTE;
+    remotecmd+= " ";          
+    remotecmd+= machine;
+    remotecmd+= " ";
+    remotecmd+= actorProgram;
+    remotecmd+= " ";
+    remotecmd+= theChannel.addToProgram();
+    remotecmd+= "\n";
 
-    system(remotecmd);
+    int retval= system(remotecmd.c_str());
 
-    return 0;
-}
+    return retval;
+  }
 
