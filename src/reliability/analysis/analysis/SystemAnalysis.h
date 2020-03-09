@@ -67,7 +67,10 @@
 using std::ofstream;
 
 namespace XC {
-class SystemAnalysis : public ReliabilityAnalysis
+//! @addtogroup ReliabilityAnalysis
+//!
+//! @brief ??
+class SystemAnalysis: public ReliabilityAnalysis
 {
 private:
 	double functionToIntegrate(double rho, double beta1, double beta2);

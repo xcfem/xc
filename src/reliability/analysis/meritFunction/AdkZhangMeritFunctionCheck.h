@@ -67,7 +67,7 @@ namespace XC {
 //! see section 14.3.1 "Engineering Design Reliability Handbook"
 //! Efstratios Nikolaidis, Dan M. Ghiocel, Suren Singhal CRC Press, Dec 22,
 //! 2004 ISBN 9780849311802
-class AdkZhangMeritFunctionCheck : public MeritFunctionCheck
+class AdkZhangMeritFunctionCheck: public MeritFunctionCheck
   {
   private:
     double multi, add;

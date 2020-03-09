@@ -67,7 +67,10 @@
 
 
 namespace XC {
-class TclGFunEvaluator : public GFunEvaluator
+//! @addtogroup ReliabilityAnalysis
+//!
+//! @brief ??
+class TclGFunEvaluator: public GFunEvaluator
 {
 private:
 	std::string fileName;

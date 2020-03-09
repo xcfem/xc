@@ -63,7 +63,10 @@
 #include <reliability/analysis/stepSize/StepSizeRule.h>
 
 namespace XC {
-class FixedStepSizeRule : public StepSizeRule
+//! @addtogroup ReliabilityAnalysis
+//!
+//! @brief ??
+class FixedStepSizeRule: public StepSizeRule
 {
 
 public:

@@ -68,7 +68,10 @@
 using std::ofstream;
 
 namespace XC {
-class SORMAnalysis : public ReliabilityAnalysis
+//! @addtogroup ReliabilityAnalysis
+//!
+//! @brief ??
+class SORMAnalysis: public ReliabilityAnalysis
 {
 private:
 	ReliabilityDomain *theReliabilityDomain;

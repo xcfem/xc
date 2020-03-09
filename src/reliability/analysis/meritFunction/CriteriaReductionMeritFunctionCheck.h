@@ -64,7 +64,9 @@
 #include <reliability/analysis/convergenceCheck/ReliabilityConvergenceCheck.h>
 
 namespace XC {
-  //! @brief Criteria reduction merit function check.
+//! @addtogroup ReliabilityAnalysis
+//!
+//! @brief Criteria reduction merit function check.
 class CriteriaReductionMeritFunctionCheck: public MeritFunctionCheck
   {
   private:

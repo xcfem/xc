@@ -88,22 +88,22 @@ XC::ArmijoStepSizeRule::ArmijoStepSizeRule(	GFunEvaluator *passedGFunEvaluator,
 						double Pevolution,
 						int pprintFlag)
 :StepSizeRule()
-{
-	theGFunEvaluator = passedGFunEvaluator;
-	theProbabilityTransformation = passedProbabilityTransformation;
-	theMeritFunctionCheck = passedMeritFunctionCheck;
-	theRootFindingAlgorithm = passedRootFindingAlgorithm;
-	gFunValue = 0;
-	base = Pbase; 
-	maxNumReductions = PmaxNumReductions; 
-	b0 = Pb0; 
-	numberOfShortSteps = PnumberOfShortSteps; 
-	radius = Pradius; 
-	surfaceDistance = PsurfaceDistance; 
-	evolution = Pevolution; 
-	isCloseToSphere = false;
-	printFlag = pprintFlag;
-}
+  {
+    theGFunEvaluator = passedGFunEvaluator;
+    theProbabilityTransformation = passedProbabilityTransformation;
+    theMeritFunctionCheck = passedMeritFunctionCheck;
+    theRootFindingAlgorithm = passedRootFindingAlgorithm;
+    gFunValue = 0;
+    base = Pbase; 
+    maxNumReductions = PmaxNumReductions; 
+    b0 = Pb0; 
+    numberOfShortSteps = PnumberOfShortSteps; 
+    radius = Pradius; 
+    surfaceDistance = PsurfaceDistance; 
+    evolution = Pevolution; 
+    isCloseToSphere = false;
+    printFlag = pprintFlag;
+  }
 
 double XC::ArmijoStepSizeRule::getStepSize()
 {
@@ -112,28 +112,21 @@ double XC::ArmijoStepSizeRule::getStepSize()
 
 
 
-double 
-XC::ArmijoStepSizeRule::getInitialStepSize()
-{
-	return b0;
-}
+double XC::ArmijoStepSizeRule::getInitialStepSize()
+  { return b0; }
 
 
 
-double 
-XC::ArmijoStepSizeRule::getGFunValue()
-{
-	return gFunValue;
-}
+double XC::ArmijoStepSizeRule::getGFunValue()
+  { return gFunValue; }
 
 
-int
-XC::ArmijoStepSizeRule::computeStepSize(Vector u_old, 
+int XC::ArmijoStepSizeRule::computeStepSize(Vector u_old, 
 									Vector grad_G_old, 
 									double g_old, 
 									Vector dir_old,
 									int stepNumber)
-{
+  {
 
 	// Initial declarations
 	bool isOutsideSphere;

@@ -34,7 +34,10 @@
 
 
 namespace XC {
-class TclMatlabGFunEvaluator : public GFunEvaluator
+//! @addtogroup ReliabilityAnalysis
+//!
+//! @brief ??
+class TclMatlabGFunEvaluator: public GFunEvaluator
 {
 private:
 	double g;

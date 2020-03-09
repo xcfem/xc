@@ -66,7 +66,10 @@
 using std::ofstream;
 
 namespace XC {
-class StandardReliabilityConvergenceCheck : public ReliabilityConvergenceCheck
+//! @addtogroup ReliabilityAnalysis
+//!
+//! @brief ??
+class StandardReliabilityConvergenceCheck: public ReliabilityConvergenceCheck
 {
 
 public:

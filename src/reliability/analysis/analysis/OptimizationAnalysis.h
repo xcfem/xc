@@ -67,7 +67,10 @@
 using std::ofstream;
 
 namespace XC {
-class OptimizationAnalysis : public ReliabilityAnalysis
+//! @addtogroup ReliabilityAnalysis
+//!
+//! @brief ??
+class OptimizationAnalysis: public ReliabilityAnalysis
 {
 private:
 	double f0(Vector x, double assump, double betavar);

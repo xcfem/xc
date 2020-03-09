@@ -61,7 +61,10 @@
 #define CStdLibRandGenerator_h
 
 namespace XC {
-class CStdLibRandGenerator : public RandomNumberGenerator
+//! @addtogroup ReliabilityAnalysis
+//!
+//! @brief ??
+class CStdLibRandGenerator: public RandomNumberGenerator
   {
   private:
     Vector generatedNumbers;

@@ -72,7 +72,10 @@
 using std::ofstream;
 
 namespace XC {
-class MVFOSMAnalysis : public ReliabilityAnalysis
+//! @addtogroup ReliabilityAnalysis
+//!
+//! @brief ??
+class MVFOSMAnalysis: public ReliabilityAnalysis
 {
 private:
 	ReliabilityDomain *theReliabilityDomain;

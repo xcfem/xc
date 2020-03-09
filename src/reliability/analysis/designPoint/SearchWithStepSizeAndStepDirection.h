@@ -76,7 +76,10 @@ using std::ofstream;
 namespace XC {
   class GFunEvaluator;
   class GradGEvaluator;
-class SearchWithStepSizeAndStepDirection : public FindDesignPointAlgorithm
+//! @addtogroup ReliabilityAnalysis
+//!
+//! @brief ??
+class SearchWithStepSizeAndStepDirection: public FindDesignPointAlgorithm
 {
 
 public:

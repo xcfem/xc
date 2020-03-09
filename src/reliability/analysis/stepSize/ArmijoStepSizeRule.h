@@ -66,12 +66,38 @@
 #include <reliability/analysis/rootFinding/RootFinding.h>
 
 namespace XC {
-  class GFunEvaluator;
-  class GradGEvaluator;
-class ArmijoStepSizeRule : public StepSizeRule
-{
+class GFunEvaluator;
+class GradGEvaluator;
 
-public:
+//! @addtogroup ReliabilityAnalysis
+//!
+//! @brief Implementation of Armijo rule inexact line search method.
+//!
+//! The armijo rule is employed to determine the step size as:
+//! \f$\lambda= b^k\f$. The user selects a value0.0< b <1.0, while
+//! \f$k\f$ is an integer with initial value 0. \f$k\f$ increases by unit
+//! steps until an acceptable step size is found.
+class ArmijoStepSizeRule: public StepSizeRule
+  {
+  private:
+    double stepSize;
+    GFunEvaluator *theGFunEvaluator;
+    GradGEvaluator *theGradGEvaluator;
+    ProbabilityTransformation *theProbabilityTransformation;
+    MeritFunctionCheck *theMeritFunctionCheck;
+    RootFinding *theRootFindingAlgorithm;
+    double gFunValue;
+    double base;
+    int maxNumReductions;
+    double b0;
+    int numberOfShortSteps;
+    double radius;
+    double surfaceDistance;
+    double evolution;
+    bool isCloseToSphere;
+    int printFlag;
+
+  public:
 	ArmijoStepSizeRule(GFunEvaluator *passedGFunEvaluator, 
 		ProbabilityTransformation *theProbabilityTransformation,
 		MeritFunctionCheck *theMeritFunctionCheck,
@@ -85,29 +111,11 @@ public:
 		double evolution,
 		int printFlag);
 		
-	int		computeStepSize(Vector u, Vector grad_G, double G, Vector d, int stepNumber);
-	double	getStepSize();
-	double	getInitialStepSize();
-	double  getGFunValue();
-private:
-	double stepSize;
-	GFunEvaluator *theGFunEvaluator;
-	GradGEvaluator *theGradGEvaluator;
-	ProbabilityTransformation *theProbabilityTransformation;
-	MeritFunctionCheck *theMeritFunctionCheck;
-	RootFinding *theRootFindingAlgorithm;
-	double gFunValue;
-	double base;
-	int maxNumReductions;
-	double b0;
-	int numberOfShortSteps;
-	double radius;
-	double surfaceDistance;
-	double evolution;
-	bool isCloseToSphere;
-	int printFlag;
-
-};
+    int computeStepSize(Vector u, Vector grad_G, double G, Vector d, int stepNumber);
+    double getStepSize();
+    double getInitialStepSize();
+    double getGFunValue();
+  };
 } // end of XC namespace
 
 #endif
