@@ -69,7 +69,7 @@ namespace XC {
 class GFunEvaluator;
 class GradGEvaluator;
 
-//! @addtogroup ReliabilityAnalysis
+//! @ingroup ReliabilityAnalysis Objects to perform reliability analisys.
 //!
 //! @brief Implementation of Armijo rule inexact line search method.
 //!

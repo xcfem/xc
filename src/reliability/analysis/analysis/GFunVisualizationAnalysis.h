@@ -73,7 +73,7 @@ namespace XC {
 class GFunEvaluator;
 class GradGEvaluator;
 
-//! @addtogroup ReliabilityAnalysis
+//! @ingroup ReliabilityAnalysis
 //!
 //! @brief ??
 class GFunVisualizationAnalysis: public ReliabilityAnalysis

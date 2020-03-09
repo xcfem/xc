@@ -70,7 +70,7 @@
 using std::ofstream;
 
 namespace XC {
-//! @addtogroup ReliabilityAnalysis
+//! @ingroup ReliabilityAnalysis
 //!
 //! @brief ??
 class OpenSeesGradGEvaluator: public GradGEvaluator

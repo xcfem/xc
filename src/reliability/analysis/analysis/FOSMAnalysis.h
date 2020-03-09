@@ -70,7 +70,7 @@
 #include <fstream>
 
 namespace XC {
-//! @addtogroup ReliabilityAnalysis
+//! @ingroup ReliabilityAnalysis
 //!
 //! @brief ??
 class FOSMAnalysis: public ReliabilityAnalysis

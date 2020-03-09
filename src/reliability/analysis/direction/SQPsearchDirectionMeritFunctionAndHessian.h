@@ -66,7 +66,7 @@
 #include <utility/matrix/Vector.h>
 
 namespace XC {
-//! @addtogroup ReliabilityAnalysis
+//! @ingroup ReliabilityAnalysis
 //!
 //! @brief ??
 class SQPsearchDirectionMeritFunctionAndHessian: public SearchDirection, public MeritFunctionCheck, public HessianApproximation

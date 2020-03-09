@@ -65,7 +65,7 @@
 #include <utility/matrix/Vector.h>
 
 namespace XC {
-//! @addtogroup ReliabilityAnalysis
+//! @ingroup ReliabilityAnalysis
 //!
 //! @brief ??
 class PolakHeSearchDirectionAndMeritFunction: public SearchDirection, public MeritFunctionCheck

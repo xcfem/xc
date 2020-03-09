@@ -68,7 +68,7 @@
 
 namespace XC {
   class GFunEvaluator;
-//! @addtogroup ReliabilityAnalysis
+//! @ingroup ReliabilityAnalysis
 //!
 //! @brief ??
 class GradientProjectionSearchDirection: public SearchDirection

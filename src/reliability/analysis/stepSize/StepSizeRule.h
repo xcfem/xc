@@ -63,6 +63,7 @@
 #include <utility/matrix/Vector.h>
 
 namespace XC {
+
 class StepSizeRule
 {
 

@@ -71,7 +71,7 @@ using std::ofstream;
 namespace XC {
 class GFunEvaluator;
 
-//! @addtogroup ReliabilityAnalysis
+//! @ingroup ReliabilityAnalysis
 //!
 //! @brief ??
 class SamplingAnalysis: public ReliabilityAnalysis

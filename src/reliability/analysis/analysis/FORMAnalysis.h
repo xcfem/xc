@@ -69,7 +69,7 @@
 using std::ofstream;
 
 namespace XC {
-//! @addtogroup ReliabilityAnalysis
+//! @ingroup ReliabilityAnalysis
 //!
 //! @brief ??
 class FORMAnalysis: public ReliabilityAnalysis

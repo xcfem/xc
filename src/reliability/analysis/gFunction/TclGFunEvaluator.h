@@ -67,7 +67,7 @@
 
 
 namespace XC {
-//! @addtogroup ReliabilityAnalysis
+//! @ingroup ReliabilityAnalysis
 //!
 //! @brief ??
 class TclGFunEvaluator: public GFunEvaluator
