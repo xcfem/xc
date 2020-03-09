@@ -5,7 +5,7 @@ from __future__ import division
 
 import element_section_map
 import pickle
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 import xc_base
 import geom
 import xc

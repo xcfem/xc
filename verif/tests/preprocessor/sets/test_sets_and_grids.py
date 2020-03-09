@@ -172,7 +172,7 @@ wallmat=sets.get_subset_elem_of_mat(matType='wall_mat',fromSet=overallSet,toSetN
 deckmat=sets.get_subset_elem_of_mat(matType='deck_mat',fromSet=overallSet,toSetName='deckmat')
 '''
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(ratio1==0) & (ratio2==0) & (ratio3==0) & (ratio4==0) & (ratio5==0) & (ratio6==0) & (ratio7==0) & (ratio8==0) & (ratio9==0) & (ratio10==0) & (ratio11==0):
   print("test ",fname,": ok.")

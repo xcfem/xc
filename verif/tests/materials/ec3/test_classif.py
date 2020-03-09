@@ -56,7 +56,7 @@ ratioLst=[c1_1-3,c1_2-1,c1_3-1,
           c6_1-1,c6_2-1,c6_3-1]
 
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(sum(ratioLst)/len(ratioLst))<1e-5):
   print "test ",fname,": ok."

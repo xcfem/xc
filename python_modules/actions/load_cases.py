@@ -6,7 +6,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.Ortega@ciccp.es l.pereztato@ciccp.es"
 
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 
 class LoadCase(object):
     '''Definition of a load case.

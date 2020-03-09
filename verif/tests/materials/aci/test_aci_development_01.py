@@ -5,7 +5,7 @@ from __future__ import print_function
 from materials.aci import ACI_materials
 from materials.aci import ACI_limit_state_checking
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 
 __author__= "Luis Claudio Pérez Tato (LCPT"
 __copyright__= "Copyright 2019, LCPT"

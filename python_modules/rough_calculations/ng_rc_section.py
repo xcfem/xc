@@ -7,7 +7,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 from postprocess.reports import common_formats as fmt
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 from materials.sections import rebar_family
 
 

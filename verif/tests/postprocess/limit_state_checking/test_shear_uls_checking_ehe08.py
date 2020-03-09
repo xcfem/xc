@@ -14,7 +14,7 @@ from postprocess import element_section_map
 from postprocess import phantom_model
 from postprocess.config import default_config
 from solution import predefined_solutions
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 import shutil
 
 
@@ -115,7 +115,7 @@ print("ratio2= ",ratio2)
 '''
 
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 if (ratio1<1e-4) and (ratio2<1e-4):
   print "test ",fname,": ok."
 else:

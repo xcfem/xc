@@ -37,7 +37,7 @@ ratio4=(((vCalcDW4[0]-vRefDW4[0])**2+(vCalcDW4[1]-vRefDW4[1])**2+(vCalcDW4[1]-vR
 # print 'ratio4= ', ratio4
 
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio1)<1e-15 and abs(ratio2)<1e-15 and abs(ratio3)<1e-15 and abs(ratio4)<1e-5:
   print "test ",fname,": ok."

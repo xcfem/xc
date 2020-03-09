@@ -197,7 +197,7 @@ ratio1= np.linalg.norm(residStress)/-concrAux.fmaxK()
 ratio2= np.linalg.norm(residStrain)/3.5e-3
 
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((ratio1<1e-5) and (ratio2<1e-5)) :
   print "test ",fname,": ok."

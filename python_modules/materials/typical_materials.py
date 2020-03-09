@@ -9,7 +9,7 @@ __email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
 import xc_base
 import geom
 import xc
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 
 # Typical material definition.
 

@@ -66,7 +66,7 @@ tao_u_comp=0.65
 ratio4=round(tao_u*1e-6,2)-tao_u_comp
 
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<1e-12) and (ratio2<1e-12) and (ratio3<1e-12) and (ratio4<1e-12):
   print "test ",fname,": ok."

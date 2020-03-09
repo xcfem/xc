@@ -15,7 +15,7 @@ import xc
 import math
 import numpy as np
 import matplotlib.pyplot as plt
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 
 feProblem= xc.FEProblem()
 preprocessor= feProblem.getPreprocessor
@@ -68,7 +68,7 @@ print stresses
 '''
 
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(error<1e-10):
   print "test ",fname,": ok."

@@ -12,7 +12,7 @@ __email__= "l.pereztato@gmail.com ana.Ortega.Ort@gmail.com"
 
 import math
 import scipy.interpolate
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 
 # ENHANCE: it will be great if we can store
 # the interpolation in a file to avoid repeating

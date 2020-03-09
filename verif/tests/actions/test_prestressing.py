@@ -41,7 +41,7 @@ err= math.sqrt(err)
 #print "err= ", err
   
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (err<0.01):
   print "test ",fname,": ok."

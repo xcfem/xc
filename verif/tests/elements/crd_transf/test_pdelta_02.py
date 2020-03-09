@@ -261,7 +261,7 @@ print "ratioM52= ",ratioM52
  '''
 
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratioTheta2<1e-2) & (ratioDelta6<1e-2) & (ratioM12<0.05) & (ratioM21<2e-2) & (ratioQ<0.06) & (ratioTheta6<1e-2) & (ratioTheta8<1e-2) & (ratioM61<0.05) & (ratioQ4<0.06) & (ratioM51<0.05) & (ratioM71<0.05) & (ratioM52<0.05):
   print "test ",fname,": ok."

@@ -13,7 +13,7 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import sys
 import vtk
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 import xc_base
 from vtkUtils import utilsVtk
 from postprocess.xcVtk import vtk_graphic_base

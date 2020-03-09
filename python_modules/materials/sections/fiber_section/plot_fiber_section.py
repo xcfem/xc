@@ -4,12 +4,12 @@ import math
 import cairo
 import xc_base
 import geom
-from geom_utils import auxCairoPlot
+from geom_utils import aux_cairo_plot
 
 import matplotlib.pyplot as plt
 from matplotlib.path import Path
 import matplotlib.patches as patches
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2015, LCPT and AO_O"
@@ -40,7 +40,7 @@ def plotSectionGeometry(geomSection, path):
     ctx = cairo.Context(surface)
     regions= geomSection.getRegions
     bnd= regions.getBnd
-    trf= auxCairoPlot.TransformParams(WIDTH, HEIGHT,auxCairoPlot.Boundary(bnd.getXMin,bnd.getYMin,bnd.getXMax,bnd.getYMax))
+    trf= aux_cairo_plot.TransformParams(WIDTH, HEIGHT,aux_cairo_plot.Boundary(bnd.getXMin,bnd.getYMin,bnd.getXMax,bnd.getYMax))
     trf.applyTransform(ctx)# Normalizing the canvas
     ctx.set_line_width(trf.scale/100000)
     ctx.set_source_rgb(0.0, 0.0, 0.0) # Black solid color

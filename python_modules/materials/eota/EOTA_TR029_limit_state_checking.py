@@ -13,7 +13,7 @@ __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 import xc_base
 import geom
 import math
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 
 def axialResistanceSteelFailure(As, fuk):
   '''Characteristic value of anchor bolt strength in tension

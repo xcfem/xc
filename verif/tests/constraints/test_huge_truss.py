@@ -59,7 +59,7 @@ print N
   '''
 
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if deltaX<1e-10:
   print "test ",fname,": ok."

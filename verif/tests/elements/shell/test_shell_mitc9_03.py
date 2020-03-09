@@ -140,7 +140,7 @@ print 'deltaYpt3= ', deltaYpt3, f
 print 'error= ', error*100, ' %'
 '''
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (error < 0.6/100.0) :
   print "test ",fname,": ok."

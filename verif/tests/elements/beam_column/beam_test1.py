@@ -109,7 +109,7 @@ ratio1= (delta/0.182)
 ratio2= (sigma/(-11400))
 
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1-1.0)<3e-3 and abs(ratio2-1.0)<1e-3):
   print "test ",fname,": ok."

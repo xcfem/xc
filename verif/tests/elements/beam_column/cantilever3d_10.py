@@ -131,7 +131,7 @@ print "N2teor= ",0
 print "ratioN2= ",ratioN2
  '''
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratiodx<1e-5) & (ratiody<1e-5) & (ratiodz<1e-5) & (ratioN1<1e-5) & ratioN2:
   print "test ",fname,": ok."

@@ -69,7 +69,7 @@ areaSigmAnc=interpolate.splint(0,tendon.fineScoord[-1],tckLA)
 ratio=(areaSigmFric-areaSigmAnc)-Ep*deltaL
   
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio)<1e-6) :
   print "test ",fname,": ok."

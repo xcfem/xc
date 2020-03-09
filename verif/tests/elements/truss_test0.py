@@ -54,7 +54,7 @@ ratio+= (vK-geom.Vector3d(0,0,1)).getModulus()
 #print "ratio= ",ratio
 
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio)<1e-15:
   print("test ",fname,": ok.")

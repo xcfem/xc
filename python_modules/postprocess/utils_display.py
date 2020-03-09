@@ -8,7 +8,7 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 from miscUtils import string_utils as su
 from postprocess.xcVtk import vtk_graphic_base
 from postprocess.xcVtk.FE_model import vtk_FE_graphic

@@ -10,7 +10,7 @@ __email__= "l.pereztato@gmail.com, ana.Ortega.Ort@gmail.com "
 import sys
 import math
 from materials import typical_materials
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 import scipy.interpolate
 import geom
 import xc

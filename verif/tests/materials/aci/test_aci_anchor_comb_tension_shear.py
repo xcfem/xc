@@ -126,7 +126,7 @@ if Vua > 0.2*Vnd and Nua > 0.2*Nnd:
 '''
 
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((ratio1<1e-5) and (ratio2<1e-5) and (ratio3<1e-5) and (ratio4<1e-5) and (ratio5<1e-5) and (ratio6<1e-5) and (ratio7<1e-5) and (ratio8<1e-5) and (ratio9<1e-5) and (ratio10<1e-5)):
   print("test ",fname,": ok.")

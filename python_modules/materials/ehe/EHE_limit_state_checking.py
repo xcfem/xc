@@ -14,7 +14,7 @@ from materials.ehe import EHE_materials
 from materials.sections.fiber_section import fiber_sets
 from materials import limit_state_checking_base as lscb
 from postprocess import control_vars as cv
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 import scipy.interpolate
 from solution import predefined_solutions
 from materials import concrete_base

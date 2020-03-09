@@ -12,7 +12,7 @@ __email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
 import sys
 import math
 import os
-from latex import latexUtils
+from latex import latex_utils
 from postprocess.reports import graph_material as mg
 import plot_fiber_section as pfs
 from materials.sections import section_properties as prmRect
@@ -147,7 +147,7 @@ class SectionInfo(object):
         fileHandler.write('\\begin{center}\n')
         fileHandler.write('\\begin{tabular}{|c|}\n')
         fileHandler.write('\\hline\n')
-        fileHandler.write('\\begin{large} '+latexUtils.toLaTex(self.sectName)+' \end{large}\\\\\n')
+        fileHandler.write('\\begin{large} '+latex_utils.toLaTex(self.sectName)+' \end{large}\\\\\n')
         fileHandler.write('\\hline\n')
         fileHandler.write(self.sectDescr+'\\\\\n')
         fileHandler.write('\\hline\n')
@@ -213,7 +213,7 @@ class SectionInfo(object):
         fileHandler.write('\\hline\n')
         fileHandler.write('\\end{tabular}\n')
         fileHandler.write('\\end{center}\n')
-        fileHandler.write('\\caption{'+self.sectDescr+' ('+ latexUtils.toLaTex(self.sectName) +').'+'} \\label{tb_'+self.sectName+'}\n')
+        fileHandler.write('\\caption{'+self.sectDescr+' ('+ latex_utils.toLaTex(self.sectName) +').'+'} \\label{tb_'+self.sectName+'}\n')
         fileHandler.write('\\end{table}\n')
         fileHandler.close()
 

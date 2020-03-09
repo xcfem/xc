@@ -44,7 +44,7 @@ dist211= mi.distance_2points(preprocessor, 2,11)
 
 
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(dist110-1.0)<1e-12) & (abs(dist211-1.0)<1e-12):
   print "test ",fname,": ok."

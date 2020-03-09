@@ -60,7 +60,7 @@ sz= floor1.getLines.size
 #     print l.name, l.tag, l.getKPoints(), l
 
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (sz==136):
   print "test ",fname,": ok."

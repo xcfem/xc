@@ -12,7 +12,7 @@ import xc_base
 import geom
 import xc
 from import_export import neutral_load_description as nld
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 
 class LoadContainerBase(object):
   '''Base for XML SCIA load containers.'''

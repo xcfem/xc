@@ -3,7 +3,7 @@
 import datetime
 import textwrap
 import vtk
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 from miscUtils import string_utils as su
 import xc_base
 import geom

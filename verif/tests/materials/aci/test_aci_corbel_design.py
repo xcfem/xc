@@ -9,7 +9,7 @@ from __future__ import print_function
 from materials.aci import ACI_materials
 from materials.aci import ACI_limit_state_checking as lsc
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 
 __author__= "Luis Claudio Pérez Tato (LCPT"
 __copyright__= "Copyright 2019, LCPT"
@@ -51,7 +51,7 @@ print('Ah_min= ', Ah_min*1e6,' mm2')
 print('ratio5= ', ratio5)
 '''
 
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((ratio1<1e-15) and (ratio2<1e-12) and (ratio3<1e-12) and (ratio4<1e-12) and (ratio5<1e-12)):
   print("test ",fname,": ok.")

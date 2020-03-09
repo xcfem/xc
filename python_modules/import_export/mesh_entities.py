@@ -2,7 +2,7 @@
 from collections import defaultdict
 
 import basic_entities as be
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 from dxfwrite import DXFEngine
 
 class MaterialRecord(object):

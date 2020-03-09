@@ -75,7 +75,7 @@ sqrErr= 0.0
 for i in range(0,len(vCalc)):
   sqrErr+= (vCalc[i]-vComp[i])**2
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)+'-Epscu3'
 if sqrErr<1e-8:
   print "test ",fname,": ok."

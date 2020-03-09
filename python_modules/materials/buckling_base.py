@@ -8,7 +8,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 
 class MemberConnection(object):
     '''Member connection

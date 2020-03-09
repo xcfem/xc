@@ -9,7 +9,7 @@ __version__= "3.0"
 __email__= "ana.Ortega@ciccp.es"
 
 import geom
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 
 def get_subset_inside(geomObj,fromSet,toSetName,tol=0.0):
     '''return a subset of fromSet composed by the entities inside the 

@@ -74,7 +74,7 @@ ratio1= math.sqrt(ratio1)
 # plt.show()
 
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-4):
   print "test ",fname,": ok."

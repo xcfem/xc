@@ -12,7 +12,7 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import math
 from materials import steel_base
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 from materials import buckling_base
 
 class ASTMSteel(steel_base.BasicSteel):

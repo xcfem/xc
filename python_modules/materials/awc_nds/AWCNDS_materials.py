@@ -9,7 +9,7 @@ from __future__ import print_function
 
 import math
 import scipy.interpolate
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 from materials.sections import section_properties as sp
 from materials import typical_materials
 from materials import buckling_base

@@ -66,7 +66,7 @@ ratio4= abs(Vsu-111.966e3)/111.966e3
   
 
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<0.002) and (ratio2<0.0002) and (ratio3<1e-15) and (ratio4<1e-5):
   print "test ",fname,": ok."

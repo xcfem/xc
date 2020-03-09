@@ -80,7 +80,7 @@ Laffected=tendon.projXYcoordZeroAnchLoss[0] # effective length of tendon affecte
 ratio=(xA_rough-Laffected*1e-3)/xA_rough
 
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio)<1.95e-2) :
   print "test ",fname,": ok."

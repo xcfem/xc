@@ -2,15 +2,15 @@
 
 from __future__ import print_function
 
-__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
-__copyright__= "Copyright 2015, LCPT and AOO"
+__author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
+__copyright__= "Copyright 2015, LCPT and AO_O"
 __license__= "GPL"
 __version__= "3.0"
-__email__= "l.pereztato@gmail.com" "anaOrtegaOrt@gmail.com"
+__email__= "l.pereztato@gmail.com" "ana.ortega.ort@gmail.com"
 
 import basic_entities as be
 import mesh_entities as me
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 from dxfwrite import DXFEngine
 
 class PointRecord(me.NodeRecord):

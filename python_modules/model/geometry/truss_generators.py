@@ -12,7 +12,7 @@ __email__= "ana.Ortega@ciccp.es l.pereztato@ciccp.es"
 import xc_base
 import geom
 import xc
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 import uuid 
 
 class TrussGeometry(object):

@@ -107,7 +107,7 @@ ratio2= (descompDiff=="1.0*G1+0.7*TC1V1")
 
 
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if ratio1 & ratio2 :
   print "test ",fname,": ok."

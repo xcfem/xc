@@ -104,7 +104,7 @@ print('ratio1= ', ratio1)
 '''
 
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio1)<1e-5 :
   print("test ",fname,": ok.")

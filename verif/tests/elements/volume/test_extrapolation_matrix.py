@@ -118,7 +118,7 @@ for v in values:
 #print('err= ',err)
 
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(err<1e-14):
   print("test ",fname,": ok.")

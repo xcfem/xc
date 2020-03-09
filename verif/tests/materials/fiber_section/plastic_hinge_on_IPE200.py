@@ -51,7 +51,7 @@ print 'Mp2= ', Mp2, ' Mp2Teor= ', Mp2Teor, ' ratio2= ', ratio2
 '''
 
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<0.1) & (ratio2<0.1):
   print "test ",fname,": ok."

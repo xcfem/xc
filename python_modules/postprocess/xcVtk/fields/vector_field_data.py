@@ -11,7 +11,7 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import math
 import vtk
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 from postprocess.xcVtk.fields import field_base as fb
 
 class VectorFieldData(object):

@@ -36,7 +36,7 @@ print('VR= ', VR/1e3)
 print('ratio2= ', ratio2)
 '''
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-11) and (abs(ratio2)<1e-11):
   print("test ",fname,": ok.")

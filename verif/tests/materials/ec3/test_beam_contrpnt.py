@@ -116,7 +116,7 @@ ratio4=v4CP.dist2Pos3d(p4)
 ratio5=v5CP.dist2Pos3d(p5)
 
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((ratio1<1e-5) and (ratio2<1e-5)  and (ratio3<1e-5) and (ratio4<1e-5) and (ratio5<1e-5) ):
   print "test ",fname,": ok."

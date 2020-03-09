@@ -135,7 +135,7 @@ print "ratio3= ",ratio3
  '''
 
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<0.02) & (abs(ratio2)<1e-10) & (abs(ratio3)<1e-10):
   print "test ",fname,": ok."

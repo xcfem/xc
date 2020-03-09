@@ -49,7 +49,7 @@ cumple= (abs(pos.z-4.0)<1e-5) & (cumple)
 
 
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if cumple:
   print "test ",fname,": ok."

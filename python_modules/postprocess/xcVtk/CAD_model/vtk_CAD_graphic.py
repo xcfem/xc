@@ -12,7 +12,7 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 import vtk
 from postprocess.xcVtk.CAD_model import cad_mesh
 from postprocess.xcVtk import vtk_graphic_base
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 from postprocess.xcVtk.fields import local_axes_vector_field as lavf
 
 class RecordDefDisplayCAD(vtk_graphic_base.RecordDefDisplay):

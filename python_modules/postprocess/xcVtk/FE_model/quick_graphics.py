@@ -16,7 +16,7 @@ import math
 import xc_base
 import geom
 import xc
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 from solution import predefined_solutions
 from postprocess.xcVtk import vtk_graphic_base
 from postprocess.xcVtk.FE_model import vtk_FE_graphic

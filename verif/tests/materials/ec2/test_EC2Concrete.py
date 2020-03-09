@@ -3,7 +3,7 @@
 from __future__ import division
 from materials.ec2 import EC2_materials
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 
 __author__= "Ana Ortega (AO_O) "
 __copyright__= "Copyright 2015, AO_O"

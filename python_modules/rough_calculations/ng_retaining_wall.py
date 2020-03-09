@@ -23,7 +23,7 @@ from materials.sections import section_properties
 from model.geometry import retaining_wall_geometry
 from rough_calculations import ng_rc_section
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 import geom
 import xc
 from solution import predefined_solutions

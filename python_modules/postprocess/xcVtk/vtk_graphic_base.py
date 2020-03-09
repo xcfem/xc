@@ -19,7 +19,7 @@ import geom
 import xc
 import random as rd 
 from postprocess.xcVtk import screen_annotation as sa
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 
 
 class RecordDefGrid(object):

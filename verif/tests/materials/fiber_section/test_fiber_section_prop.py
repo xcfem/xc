@@ -283,7 +283,7 @@ print 'ratio13= ', ratio13
 # use 'pickle' with XC
 # classes: https://www.boost.org/doc/libs/1_46_1/libs/python/doc/v2/pickle.html
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((abs(ratio0)<1e-7) & (abs(ratio1)<1e-1) & (abs(slopeBP)>1e15) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-5) & (abs(ratio5)<1e-5) & (abs(ratio6)<1e-5) & (abs(ratio7)<1e-5) & (abs(ratio8)<1e-5) & (abs(ratio9)<1e-5) & (abs(ratio10)<1e-5) & (abs(ratio11)<1e-5) & (abs(ratio12)<1e-5)  & (abs(ratio13)<1e-5)  )  :
   print "test ",fname,": ok."

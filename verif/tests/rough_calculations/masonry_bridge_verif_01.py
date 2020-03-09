@@ -108,7 +108,7 @@ n= rough_calculations.masonry_vault.calcn6p32(alpha,beta,d,v,E,F,G,H)
 nTeor= 8.47812250571
 ratio1= (n-nTeor)/nTeor
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio1)<1e-5:
   print "test ",fname,": ok."

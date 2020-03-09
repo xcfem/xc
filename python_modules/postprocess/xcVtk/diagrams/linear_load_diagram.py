@@ -5,7 +5,7 @@
 import geom
 import vtk
 from postprocess.xcVtk.diagrams import colored_diagram as cd
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 
 class LinearLoadDiagram(cd.ColoredDiagram):
     '''Draw a load over a set of linear element (qx,qy,qz,...)'''

@@ -41,7 +41,7 @@ sz5= s5.getPoints.size
 #print "sz= ", sz
 
 import os
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (sz3==3) and (sz4==1) and (sz5==1):
   print "test ",fname,": ok."

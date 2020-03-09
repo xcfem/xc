@@ -7,7 +7,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es "
 
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 from postprocess.xcVtk import vtk_graphic_base
 from postprocess.xcVtk.CAD_model import vtk_CAD_graphic
 from postprocess.xcVtk.FE_model import vtk_FE_graphic

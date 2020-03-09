@@ -7,7 +7,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 from postprocess import extrapolate_elem_attr as extrap
 import numpy as np
 import math

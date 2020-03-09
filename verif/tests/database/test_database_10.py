@@ -136,7 +136,7 @@ print "prestressing force= ",(tInic*A)
 print "strain= ",getStrain
 print "ratio= ",ratio
 '''
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio)<0.02:
   print "test ",fname,": ok."

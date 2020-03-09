@@ -10,7 +10,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from miscUtils import LogMessages as lmsg
+from miscUtils import log_messages as lmsg
 import xc_base
 import geom
 import xc
