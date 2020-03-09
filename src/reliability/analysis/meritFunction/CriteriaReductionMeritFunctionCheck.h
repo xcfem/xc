@@ -64,24 +64,26 @@
 #include <reliability/analysis/convergenceCheck/ReliabilityConvergenceCheck.h>
 
 namespace XC {
-class CriteriaReductionMeritFunctionCheck : public MeritFunctionCheck
-{
+//! @ingroup ReliabilityAnalysis
+//!
+//! @brief Criteria reduction merit function check.
+class CriteriaReductionMeritFunctionCheck: public MeritFunctionCheck
+  {
+  private:
+    ReliabilityConvergenceCheck *theReliabilityConvergenceCheck;
 
-public:
-	CriteriaReductionMeritFunctionCheck(ReliabilityConvergenceCheck *theReliabilityConvergenceCheck);
-	int	check(Vector u_old, 
-			  double g_old, 
-			  Vector grad_G_old, 
-			  double stepSize,
-			  Vector stepDirection,
-			  double g_new, 
-			  Vector grad_G_new);
-	double getMeritFunctionValue(Vector u, double g, Vector grad_G);
-	int updateMeritParameters(Vector u, double g, Vector grad_G);
-private:
-	ReliabilityConvergenceCheck *theReliabilityConvergenceCheck;
-
-};
+  public:
+    CriteriaReductionMeritFunctionCheck(ReliabilityConvergenceCheck *theReliabilityConvergenceCheck);
+    int	check(Vector u_old, 
+		      double g_old, 
+		      Vector grad_G_old, 
+		      double stepSize,
+		      Vector stepDirection,
+		      double g_new, 
+		      Vector grad_G_new);
+    double getMeritFunctionValue(Vector u, double g, Vector grad_G);
+    int updateMeritParameters(Vector u, double g, Vector grad_G);
+  };
 } // end of XC namespace
 
 #endif

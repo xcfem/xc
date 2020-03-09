@@ -66,7 +66,10 @@
 #include <utility/matrix/Vector.h>
 
 namespace XC {
-class SQPsearchDirectionMeritFunctionAndHessian : public SearchDirection, public MeritFunctionCheck, public HessianApproximation
+//! @ingroup ReliabilityAnalysis
+//!
+//! @brief ??
+class SQPsearchDirectionMeritFunctionAndHessian: public SearchDirection, public MeritFunctionCheck, public HessianApproximation
 {
 
 public:

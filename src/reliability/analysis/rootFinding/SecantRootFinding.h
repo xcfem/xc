@@ -66,7 +66,10 @@
 
 namespace XC {
 class GFunEvaluator;
-class SecantRootFinding : public RootFinding
+//! @ingroup ReliabilityAnalysis
+//!
+//! @brief ??
+class SecantRootFinding: public RootFinding
   {
   public:
     int maxIter;

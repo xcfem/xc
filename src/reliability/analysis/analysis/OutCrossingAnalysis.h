@@ -71,7 +71,10 @@ namespace XC {
   class GFunEvaluator;
   class GradGEvaluator;
 
-class OutCrossingAnalysis : public ReliabilityAnalysis
+//! @ingroup ReliabilityAnalysis
+//!
+//! @brief ??
+class OutCrossingAnalysis: public ReliabilityAnalysis
 {
 private:
 	ReliabilityDomain *theReliabilityDomain;

@@ -66,7 +66,10 @@
 
 namespace XC {
 class GFunEvaluator;
-class ModNewtonRootFinding : public RootFinding
+//! @ingroup ReliabilityAnalysis
+//!
+//! @brief ??
+class ModNewtonRootFinding: public RootFinding
   {
   private:
     ReliabilityDomain *theReliabilityDomain;

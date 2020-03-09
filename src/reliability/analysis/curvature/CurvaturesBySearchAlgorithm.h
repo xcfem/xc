@@ -66,7 +66,10 @@
 #include <reliability/domain/components/ReliabilityDomain.h>
 
 namespace XC {
-class CurvaturesBySearchAlgorithm : public FindCurvatures
+//! @ingroup ReliabilityAnalysis
+//!
+//! @brief ??
+class CurvaturesBySearchAlgorithm: public FindCurvatures
 {
 
 public:

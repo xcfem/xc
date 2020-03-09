@@ -24,3 +24,7 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
+
+#define REMOTE "/home/tomorrow/f/millennium/fmckenna/OOP/remote/remote "
+
+#define  remoteShadowSubdomain "/home/tomorrow/f/millennium/fmckenna/bin/ShadowSubdomainActor "

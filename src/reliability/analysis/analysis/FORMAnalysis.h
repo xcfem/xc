@@ -69,7 +69,10 @@
 using std::ofstream;
 
 namespace XC {
-class FORMAnalysis : public ReliabilityAnalysis
+//! @ingroup ReliabilityAnalysis
+//!
+//! @brief ??
+class FORMAnalysis: public ReliabilityAnalysis
 {
 private:
 	ReliabilityDomain *theReliabilityDomain;

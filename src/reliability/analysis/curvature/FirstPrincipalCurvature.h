@@ -65,7 +65,10 @@
 #include <reliability/domain/components/ReliabilityDomain.h>
 
 namespace XC {
-class FirstPrincipalCurvature : public FindCurvatures
+//! @ingroup ReliabilityAnalysis
+//!
+//! @brief ??
+class FirstPrincipalCurvature: public FindCurvatures
   {
   public:
     FirstPrincipalCurvature();

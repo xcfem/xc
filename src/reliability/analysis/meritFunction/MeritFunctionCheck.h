@@ -63,10 +63,16 @@
 #include <utility/matrix/Vector.h>
 
 namespace XC {
+//! @brief A "merit function" can be any continuous and differentiable function
+//! of vector u, whose minimum occurs at the solution of the first order
+//! reliability method (FORM) and for which \f$d_i\f$ is a descent direction at \f$u_i\f$
+//! see section 14.3.1 "Engineering Design Reliability Handbook"
+//! Efstratios Nikolaidis, Dan M. Ghiocel, Suren Singhal CRC Press, Dec 22,
+//! 2004 ISBN 9780849311802
 class MeritFunctionCheck
   {
   public:
-    MeritFunctionCheck();
+    MeritFunctionCheck(void);
     virtual int check(Vector u_old, 
 					  double g_old, 
 					  Vector grad_G_old, 

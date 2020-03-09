@@ -64,11 +64,13 @@
 #ifndef MillMachineBroker_h
 #define MillMachineBroker_h
 
-#include <utility/actor/machineBroker/MachineBroker.h>
+#include <utility/actor/machineBroker/AlphaBaseMachineBroker.h>
 
 namespace XC {
 //! @ingroup IPComm
 //
+//! @brief MillMachineBroker is a machine broker for use with the cluster of
+//! millennium machines in Soda Hall.
 class MillMachineBroker : public AlphaBaseMachineBroker
   {
   public:

@@ -61,13 +61,17 @@
 #define ReliabilityAnalysis_h
 
 namespace XC {
+//! @defgroup ReliabilityAnalysis Objects to perform reliability analisys.
+//!
+//! @ingroup ReliabilityAnalysis
+//! 
+//! @brief Base class for reliability analysis 
 class ReliabilityAnalysis
-{
-
-public:
-	ReliabilityAnalysis();
-	virtual int analyze(void) =0;    
-};
+  {
+  public:
+    ReliabilityAnalysis();
+    virtual int analyze(void) =0;    
+  };
 } // end of XC namespace
 
 #endif

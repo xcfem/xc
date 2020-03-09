@@ -66,7 +66,10 @@
 #include <reliability/analysis/misc/MatrixOperations.h>
 
 namespace XC {
-class NatafProbabilityTransformation : public ProbabilityTransformation
+//! @ingroup ReliabilityAnalysis
+//!
+//! @brief ??
+class NatafProbabilityTransformation: public ProbabilityTransformation
 {
 
 public:

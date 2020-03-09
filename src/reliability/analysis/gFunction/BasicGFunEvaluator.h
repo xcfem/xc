@@ -67,7 +67,10 @@
 
 
 namespace XC {
-class BasicGFunEvaluator : public GFunEvaluator
+//! @ingroup ReliabilityAnalysis
+//!
+//! @brief ??
+class BasicGFunEvaluator: public GFunEvaluator
 {
 
 public:

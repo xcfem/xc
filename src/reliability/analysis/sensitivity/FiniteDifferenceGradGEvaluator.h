@@ -72,7 +72,10 @@ using std::ofstream;
 
 namespace XC {
   class GFunEvaluator;
-class FiniteDifferenceGradGEvaluator : public GradGEvaluator
+//! @ingroup ReliabilityAnalysis
+//!
+//! @brief ??
+class FiniteDifferenceGradGEvaluator: public GradGEvaluator
 {
 private:
 //	int computeDgDsomething();

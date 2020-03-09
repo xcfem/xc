@@ -63,26 +63,28 @@
 #include <reliability/analysis/meritFunction/MeritFunctionCheck.h>
 
 namespace XC {
-class AdkZhangMeritFunctionCheck : public MeritFunctionCheck
-{
+//! @brief Zhang and Der Kiureghian "merit function".
+//! see section 14.3.1 "Engineering Design Reliability Handbook"
+//! Efstratios Nikolaidis, Dan M. Ghiocel, Suren Singhal CRC Press, Dec 22,
+//! 2004 ISBN 9780849311802
+class AdkZhangMeritFunctionCheck: public MeritFunctionCheck
+  {
+  private:
+    double multi, add;
+    double a;
+    double c;
+  public:
+    AdkZhangMeritFunctionCheck(double multi, double add, double a=0.5);
 
-public:
-	AdkZhangMeritFunctionCheck(double multi, double add, double a=0.5);
-
-	int	check(Vector u_old, 
-			  double g_old, 
-			  Vector grad_G_old, 
-			  double stepSize,
-			  Vector stepDirection,
-			  double g_new);
-	double getMeritFunctionValue(Vector u, double g, Vector grad_G);
-	int updateMeritParameters(Vector u, double g, Vector grad_G);
-private:
-	double multi, add;
-	double a;
-	double c;
-
-};
+    int	check(Vector u_old, 
+		      double g_old, 
+		      Vector grad_G_old, 
+		      double stepSize,
+		      Vector stepDirection,
+		      double g_new);
+    double getMeritFunctionValue(Vector u, double g, Vector grad_G);
+    int updateMeritParameters(Vector u, double g, Vector grad_G);
+  };
 } // end of XC namespace
 
 #endif

@@ -76,7 +76,7 @@ class FEM_ObjectBroker;
 class MachineBroker: public ObjectWithObjBroker
   {
   private:
-    std::vector<Channel *> actorChannels; // channels owned with running actor processes
+    std::vector<Channel *> actorChannels; //!< channels owned with running actor processes
     int numActorChannels;
     int numActiveChannels;
     ID activeChannels;

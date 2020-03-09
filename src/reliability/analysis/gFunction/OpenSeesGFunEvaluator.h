@@ -70,7 +70,10 @@ using std::ofstream;
 
 
 namespace XC {
-class OpenSeesGFunEvaluator : public GFunEvaluator
+//! @ingroup ReliabilityAnalysis
+//!
+//! @brief ??
+class OpenSeesGFunEvaluator: public GFunEvaluator
 {
 private:
 	int createRecorders();

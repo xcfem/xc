@@ -62,62 +62,48 @@
 // What: "@(#) MillMachineBroker.h, revA"
 
 #include <utility/actor/machineBroker/MillMachineBroker.h>
-#include <stdlib.h>
+#include <cstdlib>
 
-#include <string.h>
-#include <remote.h>
-#include <utility/actor/channel/Channel.h>
+#include "utility/remote/remote.h"
+#include "utility/actor/channel/Channel.h"
 
 XC::MillMachineBroker::MillMachineBroker(FEM_ObjectBroker *theBroker)
-  :AlphaBaseMachineBroker(theBroker), currentMachine(0),maxNumMachines(5)
-{
-    char *mill0 = "mill0";
-    char *mill1 = "mill1";
-    char *mill2 = "mill2";
-    char *mill3 = "mill3";
-    char *mill4 = "mill4";
-    
-    char **theMachines = (char **)malloc(5*sizeof(char *));
-    theMachines[0] = mill0;
-    theMachines[1] = mill1;
-    theMachines[2] = mill2;
-    theMachines[3] = mill3;
-    theMachines[4] = mill4;
-    
-    machines = theMachines;
-}
+  :AlphaBaseMachineBroker(theBroker,0,5)
+  {
+    machines[0] = "mill0";
+    machines[1] = "mill1";
+    machines[2] = "mill2";
+    machines[3] = "mill3";
+    machines[4] = "mill4";
+  }
 
 
-int 
-XC::MillMachineBroker::startActor(char *actorProgram, 
+int XC::MillMachineBroker::startActor(const std::string &actorProgram, 
 			       Channel &theChannel,
 			       int compDemand)
-{ 
-    char  remotecmd[400];
+  { 
 
     // get the next machine, a round-robin approach
-    char *machine;
+    std::string machine;
     if (currentMachine < maxNumMachines)
 	machine = machines[currentMachine];
-    else {
+    else
+      {
 	currentMachine = 0;
 	machine = machines[currentMachine];
-    }
-
+      }
     currentMachine++;
     
-    strcpy(remotecmd,REMOTE);
-    strcat(remotecmd," ");          
-    strcat(remotecmd,machine);
-    strcat(remotecmd," ");
-    strcat(remotecmd,actorProgram);
-    strcat(remotecmd," ");
-    strcat(remotecmd,theChannel.addToProgram());    
-    strcat(remotecmd,"\n");
+    std::string remotecmd= REMOTE;
+    remotecmd+= " ";          
+    remotecmd+= machine;
+    remotecmd+= " ";
+    remotecmd+= actorProgram;
+    remotecmd+= " ";
+    remotecmd+= theChannel.addToProgram();
+    remotecmd+= "\n";
 
-    // std::cerr << "XC::MillMachineBroker::Constructor - command\n"<< remotecmd;
-    system(remotecmd);
-
-    return 0;
-}
+    int retval= system(remotecmd.c_str());
+    return retval;
+  }
 

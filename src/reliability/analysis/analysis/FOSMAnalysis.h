@@ -70,7 +70,10 @@
 #include <fstream>
 
 namespace XC {
-class FOSMAnalysis : public ReliabilityAnalysis
+//! @ingroup ReliabilityAnalysis
+//!
+//! @brief ??
+class FOSMAnalysis: public ReliabilityAnalysis
 {
 private:
 	ReliabilityDomain *theReliabilityDomain;

@@ -34,10 +34,10 @@
 namespace XC {
 //! @ingroup IPComm
 //
-//! @brief DEC Alpha machine broker?
+//! @brief Base class for DEC Alpha machine brokers.
 class AlphaBaseMachineBroker: public MachineBroker
   {
-  private:
+  protected:
     int currentMachine;
     int maxNumMachines;
     std::vector<std::string> machines;

@@ -64,7 +64,10 @@
 #include <utility/matrix/Vector.h>
 
 namespace XC {
-class HLRFSearchDirection : public SearchDirection
+//! @ingroup ReliabilityAnalysis
+//!
+//! @brief ??
+class HLRFSearchDirection: public SearchDirection
 {
 
 public:

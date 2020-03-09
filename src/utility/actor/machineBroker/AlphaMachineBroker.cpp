@@ -55,19 +55,19 @@
 // Created: Fri Sept 20 12:27:47: 1996
 // Revision: A
 //
-// Purpose: This file contains the class definition for XC::AlphaMachineBroker.
+// Purpose: This file contains the class definition for AlphaMachineBroker.
 // AlphaMachineBroker is a machine broker for use with the cluster of
 // alpha machines in 509 Davis Hall.
 //
 // What: "@(#) AlphaMachineBroker.h, revA"
 
 #include <utility/actor/machineBroker/AlphaMachineBroker.h>
-#include <stdlib.h>
+#include <cstdlib>
 
-#include <string.h>
-#include <remote.h>
-#include <utility/actor/channel/Channel.h>
+#include "utility/remote/remote.h"
+#include "utility/actor/channel/Channel.h"
 
+//! @brief Constructor.
 XC::AlphaMachineBroker::AlphaMachineBroker(FEM_ObjectBroker *theBroker)
   :AlphaBaseMachineBroker(theBroker,0,8)
   {
@@ -81,7 +81,7 @@ XC::AlphaMachineBroker::AlphaMachineBroker(FEM_ObjectBroker *theBroker)
     machines[7]= "alpha-8";        
   }
 
-int XC::AlphaMachineBroker::startActor(char *actorProgram, Channel &theChannel, int compDemand)
+int XC::AlphaMachineBroker::startActor(const std::string &actorProgram, Channel &theChannel, int compDemand)
   { 
     // get the next machine, a round-robin approach
     std::string machine;
@@ -94,10 +94,16 @@ int XC::AlphaMachineBroker::startActor(char *actorProgram, Channel &theChannel, 
       }
     currentMachine++;
     //std::cerr << "CurrentMachine : " << machine <<  std::endl;
-    std::string remotecmd= REMOTE + " " + machine + " " + actorProgram 
-                           + " " + theChannel.addToProgram() + "\n";
+    std::string remotecmd= REMOTE;
+    remotecmd+= " ";          
+    remotecmd+= machine;
+    remotecmd+= " ";
+    remotecmd+= actorProgram;
+    remotecmd+= " ";
+    remotecmd+= theChannel.addToProgram();
+    remotecmd+= "\n";
     
-    system(remotecmd.c_str());
-    return 0;
+    int retval= system(remotecmd.c_str());
+    return retval;
   }
 
