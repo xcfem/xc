@@ -15,7 +15,7 @@ import sys
 import vtk
 from misc_utils import log_messages as lmsg
 import xc_base
-from vtk_utils import utilsVtk
+from vtk_utils import utils_vtk
 from postprocess.xcVtk import vtk_graphic_base
 from postprocess.xcVtk.fields import local_axes_vector_field as lavf
 import random as rd 
@@ -288,10 +288,10 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
         pos= nod.getCurrentPos3d(defFScale)
         absForce= force.Norm()
         if(absForce>1e-6):
-            utilsVtk.drawVtkSymb('arrow',self.renderer,color,pos,force,fScale*absForce)
+            utils_vtk.drawVtkSymb('arrow',self.renderer,color,pos,force,fScale*absForce)
         absMoment= moment.Norm()
         if(absMoment>1e-6):
-            utilsVtk.drawVtkSymb('doubleArrow',self.renderer,color,pos,moment,fScale*absMoment)
+            utils_vtk.drawVtkSymb('doubleArrow',self.renderer,color,pos,moment,fScale*absMoment)
 
     def displayNodalLoads(self, preprocessor, loadPattern, color, fScale):
         '''Display the all nodal loads defined in a load pattern
@@ -331,7 +331,7 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
             ele= preprocessor.getElementHandler.getElement(tag)
             actorName+= "%04d".format(tag) # Tag elemento.
             pos= ele.point(xForce)
-            utilsVtk.drawVtkSymb('arrow',self.renderer,color,pos,force,fScale)
+            utils_vtk.drawVtkSymb('arrow',self.renderer,color,pos,force,fScale)
 
     def displayElementUniformLoad(self, preprocessor, unifLoad,loadPattern, color, force, fScale):
         loadPatternName= loadPattern.getProp("dispName")
@@ -346,7 +346,7 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
             # for capa in points:
             #   for pos in capa: 
             #     print pos
-            #     utilsVtk.drawArrow(self.renderer,color,pos,force,fScale*force.Norm())
+            #     utils_vtk.drawArrow(self.renderer,color,pos,force,fScale*force.Norm())
             #     i+= 1
 
     def displayElementalLoads(self, preprocessor,loadPattern, color, fScale):
@@ -391,9 +391,9 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
             if nod.tag in nodInSet:
                 dof= sp.getDOFNumber
                 if dof < 3: # This is not true in 2D problems.
-                    utilsVtk.drawVtkSymb(symbType='cone',renderer=self.renderer, RGBcolor=[0,0,1], vPos=nod.getInitialPos3d, vDir=DOFdirVct[dof], scale=scale*elementAvgSize)
+                    utils_vtk.drawVtkSymb(symbType='cone',renderer=self.renderer, RGBcolor=[0,0,1], vPos=nod.getInitialPos3d, vDir=DOFdirVct[dof], scale=scale*elementAvgSize)
                 else:
-                    utilsVtk.drawVtkSymb(symbType='shaftkey',renderer=self.renderer, RGBcolor=[0,1,0], vPos=nod.getInitialPos3d, vDir=DOFdirVct[dof], scale=scale*elementAvgSize)
+                    utils_vtk.drawVtkSymb(symbType='shaftkey',renderer=self.renderer, RGBcolor=[0,1,0], vPos=nod.getInitialPos3d, vDir=DOFdirVct[dof], scale=scale*elementAvgSize)
             sp= spIter.next()
         return
                     
