@@ -11,7 +11,7 @@ EC3 materials
     :show-inheritance:
 
 EC3 beam
--------
+--------
 
 .. automodule:: materials.ec3.EC3Beam
     :members:

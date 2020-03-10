@@ -1,6 +1,6 @@
 
 Materials with characteristic (K) and design (D) diagrams
---------------------------------------------------------
+---------------------------------------------------------
 
 .. automodule:: materials.sections.material_with_DK_diagrams
     :members:
@@ -8,7 +8,7 @@ Materials with characteristic (K) and design (D) diagrams
     :show-inheritance:
 
 Moment-curvature diagram
------------------------
+-------------------------
 
 .. automodule:: materials.sections.moment_curvature_diagram
     :members:

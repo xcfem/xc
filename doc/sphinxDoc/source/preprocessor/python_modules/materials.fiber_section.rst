@@ -17,7 +17,7 @@ Geometry of fiber sections
     :show-inheritance:
 
 Definition of reinforcement in fiber sections
--------------------------------------------
+----------------------------------------------
 
 .. automodule:: materials.sections.fiber_section.geom_reinf_fiber_sect
     :members:
