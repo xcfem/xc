@@ -40,20 +40,17 @@ class Node;
 class SectionForceDeformation;
 class CrdTransf2d;
 class Response;
-class BeamIntegration;
 
 class DispBeamColumnNL2d : public DispBeamColumn2dBase
   {
   private:
     const Matrix &getInitialBasicStiff(void) const;
     void getBasicStiff(Matrix &kb, int initial = 0) const;
-    BeamIntegration *beamIntegration;
   public:
     DispBeamColumnNL2d(int tag, int nd1, int nd2,int numSections, const std::vector<PrismaticBarCrossSection *> &s,
-		     BeamIntegration &bi, CrdTransf2d &coordTransf,
+		     const BeamIntegration &bi, const CrdTransf2d &coordTransf,
 		     double rho = 0.0);
     DispBeamColumnNL2d(void);
-    ~DispBeamColumnNL2d(void);
 
     // public methods to obtain stiffness, mass, damping and residual information    
     int update(void);

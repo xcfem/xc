@@ -310,13 +310,13 @@ XC::Element *XC::ProtoElementHandler::create_element(const std::string &cmd,int 
       {
 	if(cmd=="disp_beam_column_2d")
 	  deprecatedElementNameMsg(errHeader,cmd,"DispBeamColumn2d");
-        retval=  new_element_dim_gen_mat_crd<DispBeamColumn2d>(tag_elem, dim_elem, get_ptr_material(), get_ptr_transf_coo());
+        retval=  new_element_ns_gen_mat_crd_integ<DispBeamColumn2d>(tag_elem, get_ptr_material(), num_sec, get_ptr_transf_coo(), get_ptr_beam_integrator());
       }
     else if((cmd == "disp_beam_column_3d")||(cmd == "DispBeamColumn3d"))
       {
 	if(cmd=="disp_beam_column_3d")
 	  deprecatedElementNameMsg(errHeader,cmd,"DispBeamColumn3d");
-        retval=  new_element_dim_gen_mat_crd<DispBeamColumn3d>(tag_elem, dim_elem, get_ptr_material(), get_ptr_transf_coo());
+        retval=  new_element_ns_gen_mat_crd_integ<DispBeamColumn3d>(tag_elem, get_ptr_material(), num_sec, get_ptr_transf_coo(), get_ptr_beam_integrator());
       }
     else if((cmd == "nl_beam_column_2d")||(cmd == "NLBeamColumn2d"))
       {

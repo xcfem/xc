@@ -68,13 +68,18 @@ class Node;
 class PrismaticBarCrossSection;
 class CrdTransf2d;
 class Response;
+class BeamIntegration;
 
 //! @ingroup OneDimensionalElem
 //
 //! @brief displacement based 2D beam element with PrismaticBarCrossSection type material.
 class DispBeamColumn2dBase : public BeamColumnWithSectionFDTrf2d
   {
+  private:
+    void free_mem(void);
+    void alloc(const BeamIntegration &);
   protected:
+    BeamIntegration *beamIntegration; //!< Integration along the beam length.
     mutable Vector q; //!< Basic force
     FVectorBeamColumn2d q0; //!< Fixed end forces in basic system
     FVectorBeamColumn2d p0; //!< Reactions in basic system
@@ -92,10 +97,13 @@ class DispBeamColumn2dBase : public BeamColumnWithSectionFDTrf2d
     int recvData(const CommParameters &cp);
   public:
     DispBeamColumn2dBase(int tag, int classTag, int nd1, int nd2,
-		     int numSections,const std::vector<PrismaticBarCrossSection *> &s,
-		     CrdTransf2d &coordTransf, double rho = 0.0);
+		         int numSections,const std::vector<PrismaticBarCrossSection *> &s,
+			 const BeamIntegration &bi, const CrdTransf2d &coordTransf, double rho = 0.0);
     DispBeamColumn2dBase(int tag= 0, int classTag= 0);
-    DispBeamColumn2dBase(int tag, int classTag, int numSec,const Material *theSection,const CrdTransf *coordTransf);
+    DispBeamColumn2dBase(int tag, int classTag, int numSec,const Material *theSection,const BeamIntegration *bi, const CrdTransf *coordTransf);
+    DispBeamColumn2dBase(const DispBeamColumn2dBase &);
+    DispBeamColumn2dBase &operator=(const DispBeamColumn2dBase &);
+    ~DispBeamColumn2dBase(void);
 
     int getNumDOF(void) const;
     void setDomain(Domain *theDomain);

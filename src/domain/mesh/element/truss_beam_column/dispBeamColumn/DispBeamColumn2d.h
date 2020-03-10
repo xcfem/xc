@@ -64,11 +64,6 @@
 #include "utility/matrix/Vector.h"
 
 namespace XC {
-class Node;
-class PrismaticBarCrossSection;
-class CrdTransf2d;
-class Response;
-class GaussQuadRule1d01;
 
 //! @ingroup OneDimensionalElem
 //
@@ -78,13 +73,11 @@ class DispBeamColumn2d: public DispBeamColumn2dBase
   private:
     const Matrix &getInitialBasicStiff(void) const;
     void getBasicStiff(Matrix &kb, int initial = 0) const;
-    static GaussQuadRule1d01 quadRule;
+    //static GaussQuadRule1d01 quadRule;
   public:
-    DispBeamColumn2d(int tag, int nd1, int nd2,
-		     int numSections,const std::vector<PrismaticBarCrossSection *> &s,
-		     CrdTransf2d &coordTransf, double rho = 0.0);
     DispBeamColumn2d(int tag= 0);
-    DispBeamColumn2d(int tag,int numSec,const Material *theSection,const CrdTransf *coordTransf);
+    DispBeamColumn2d(int tag, int nd1, int nd2, int numSections, const std::vector<PrismaticBarCrossSection *> &s, const CrdTransf2d &coordTransf, const BeamIntegration &bi, double rho = 0.0);
+    DispBeamColumn2d(int tag, int numSec, const Material *theSection, const CrdTransf *coordTransf, const BeamIntegration *bi);
     Element *getCopy(void) const;
 
     // public methods to obtain stiffness, mass, damping and residual information    

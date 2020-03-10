@@ -68,19 +68,16 @@
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
 #include "utility/recorder/response/ElementResponse.h"
 #include "domain/load/beam_loads/BeamMecLoad.h"
-#include <domain/mesh/element/truss_beam_column/nonlinearBeamColumn/quadrule/GaussQuadRule1d01.h>
 #include "material/section/ResponseId.h"
 #include "utility/actor/actor/MovableVector.h"
+#include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/BeamIntegration.h"
 
-XC::GaussQuadRule1d01 XC::DispBeamColumn2d::quadRule;
-
-XC::DispBeamColumn2d::DispBeamColumn2d(int tag, int nd1, int nd2,
-				       int numSec,const std::vector<PrismaticBarCrossSection *> &s, CrdTransf2d &coordTransf, double r)
-  :DispBeamColumn2dBase(tag, ELE_TAG_DispBeamColumn2d, nd1, nd2, numSec, s, coordTransf, r)
+XC::DispBeamColumn2d::DispBeamColumn2d(int tag, int nd1, int nd2, int numSec, const std::vector<PrismaticBarCrossSection *> &s, const CrdTransf2d &coordTransf, const BeamIntegration &bi, double r)
+  :DispBeamColumn2dBase(tag, ELE_TAG_DispBeamColumn2d, nd1, nd2, numSec, s, bi, coordTransf, r)
   {}
 
-XC::DispBeamColumn2d::DispBeamColumn2d(int tag,int numSec,const Material *m,const CrdTransf *trf)
-  :DispBeamColumn2dBase(tag, ELE_TAG_DispBeamColumn2d,numSec,m,trf)
+XC::DispBeamColumn2d::DispBeamColumn2d(int tag, int numSec, const Material *m, const CrdTransf *trf, const BeamIntegration *bi)
+  :DispBeamColumn2dBase(tag, ELE_TAG_DispBeamColumn2d,numSec,m,bi,trf)
   {}
 
 XC::DispBeamColumn2d::DispBeamColumn2d(int tag)
@@ -102,11 +99,11 @@ int XC::DispBeamColumn2d::update(void)
     const double L = theCoordTransf->getInitialLength();
     const double oneOverL = 1.0/L;
     const size_t numSections= getNumSections();
-    const Matrix &pts = quadRule.getIntegrPointCoords(numSections);
+    const Matrix &pts= beamIntegration->getIntegrPointCoords(numSections,L);
 
     // Loop over the integration points
-    for(size_t i = 0; i < numSections; i++) {
-
+    for(size_t i = 0; i < numSections; i++)
+      {
       int order = theSections[i]->getOrder();
       const ID &code = theSections[i]->getType();
 
@@ -139,9 +136,9 @@ void XC::DispBeamColumn2d::getBasicStiff(Matrix &kb, int initial) const
     kb.Zero();
 
     const size_t numSections= getNumSections();
-    const Matrix &pts = quadRule.getIntegrPointCoords(numSections);
-    const Vector &wts = quadRule.getIntegrPointWeights(numSections);
     const double L = theCoordTransf->getInitialLength();
+    const Matrix &pts= beamIntegration->getIntegrPointCoords(numSections,L);
+    const Vector &wts= beamIntegration->getIntegrPointWeights(numSections,L);
     const double oneOverL = 1.0/L;
 
 
@@ -203,175 +200,175 @@ void XC::DispBeamColumn2d::getBasicStiff(Matrix &kb, int initial) const
 
 const XC::Matrix &XC::DispBeamColumn2d::getTangentStiff(void) const
   {
-  static Matrix kb(3,3);
+    static Matrix kb(3,3);
 
-  this->getBasicStiff(kb);
-  // Zero for integral
-  q.Zero();
+    this->getBasicStiff(kb);
+    // Zero for integral
+    q.Zero();
 
-  const size_t numSections= getNumSections();
-  const Matrix &pts = quadRule.getIntegrPointCoords(numSections);
-  const Vector &wts = quadRule.getIntegrPointWeights(numSections);
+    const size_t numSections= getNumSections();
 
-  const double L = theCoordTransf->getInitialLength();
-  const double oneOverL = 1.0/L;
+    const double L = theCoordTransf->getInitialLength();
+    const Matrix &pts = beamIntegration->getIntegrPointCoords(numSections, L);
+    const Vector &wts= beamIntegration->getIntegrPointWeights(numSections, L);
+    const double oneOverL = 1.0/L;
 
-  // Loop over the integration points
-  for(size_t i = 0; i < numSections; i++)
-    {
-
-    int order = theSections[i]->getOrder();
-    const XC::ID &code = theSections[i]->getType();
-
-    Matrix ka(workArea, order, 3);
-    ka.Zero();
-
-    double xi6 = 6.0*pts(i,0);
-
-    // Get the section tangent stiffness and stress resultant
-    const XC::Matrix &ks = theSections[i]->getSectionTangent();
-    const XC::Vector &s = theSections[i]->getStressResultant();
-
-    // Perform numerical integration
-    //kb.addMatrixTripleProduct(1.0, *B, ks, wts(i)/L);
-    double wti = wts(i)*oneOverL;
-    double tmp;
-    int j, k;
-    for(j = 0; j < order; j++) {
-      switch(code(j)) {
-      case SECTION_RESPONSE_P:
-        for(k = 0; k < order; k++)
-          ka(k,0) += ks(k,j)*wti;
-        break;
-      case SECTION_RESPONSE_MZ:
-        for(k = 0; k < order; k++) {
-          tmp = ks(k,j)*wti;
-          ka(k,1) += (xi6-4.0)*tmp;
-          ka(k,2) += (xi6-2.0)*tmp;
-        }
-        break;
-      default:
-        break;
-      }
-    }
-    for(j = 0; j < order; j++) {
-      switch (code(j)) {
-      case SECTION_RESPONSE_P:
-        for(k = 0; k < 3; k++)
-          kb(0,k) += ka(j,k);
-        break;
-      case SECTION_RESPONSE_MZ:
-        for(k = 0; k < 3; k++) {
-          tmp = ka(j,k);
-          kb(1,k) += (xi6-4.0)*tmp;
-          kb(2,k) += (xi6-2.0)*tmp;
-        }
-        break;
-      default:
-        break;
-      }
-    }
-
-    //q.addMatrixTransposeVector(1.0, *B, s, wts(i));
-    double si;
-    for(j = 0; j < order; j++)
+    // Loop over the integration points
+    for(size_t i = 0; i < numSections; i++)
       {
-        si = s(j)*wts(i);
-        switch(code(j)) {
-        case SECTION_RESPONSE_P:
-          q(0) += si; break;
-        case SECTION_RESPONSE_MZ:
-          q(1) += (xi6-4.0)*si; q(2) += (xi6-2.0)*si; break;
-        default:
-          break;
+
+      int order = theSections[i]->getOrder();
+      const XC::ID &code = theSections[i]->getType();
+
+      Matrix ka(workArea, order, 3);
+      ka.Zero();
+
+      double xi6 = 6.0*pts(i,0);
+
+      // Get the section tangent stiffness and stress resultant
+      const XC::Matrix &ks = theSections[i]->getSectionTangent();
+      const XC::Vector &s = theSections[i]->getStressResultant();
+
+      // Perform numerical integration
+      //kb.addMatrixTripleProduct(1.0, *B, ks, wts(i)/L);
+      double wti = wts(i)*oneOverL;
+      double tmp;
+      int j, k;
+      for(j = 0; j < order; j++) {
+	switch(code(j)) {
+	case SECTION_RESPONSE_P:
+	  for(k = 0; k < order; k++)
+	    ka(k,0) += ks(k,j)*wti;
+	  break;
+	case SECTION_RESPONSE_MZ:
+	  for(k = 0; k < order; k++) {
+	    tmp = ks(k,j)*wti;
+	    ka(k,1) += (xi6-4.0)*tmp;
+	    ka(k,2) += (xi6-2.0)*tmp;
+	  }
+	  break;
+	default:
+	  break;
+	}
       }
+      for(j = 0; j < order; j++) {
+	switch (code(j)) {
+	case SECTION_RESPONSE_P:
+	  for(k = 0; k < 3; k++)
+	    kb(0,k) += ka(j,k);
+	  break;
+	case SECTION_RESPONSE_MZ:
+	  for(k = 0; k < 3; k++) {
+	    tmp = ka(j,k);
+	    kb(1,k) += (xi6-4.0)*tmp;
+	    kb(2,k) += (xi6-2.0)*tmp;
+	  }
+	  break;
+	default:
+	  break;
+	}
+      }
+
+      //q.addMatrixTransposeVector(1.0, *B, s, wts(i));
+      double si;
+      for(j = 0; j < order; j++)
+	{
+	  si = s(j)*wts(i);
+	  switch(code(j)) {
+	  case SECTION_RESPONSE_P:
+	    q(0) += si; break;
+	  case SECTION_RESPONSE_MZ:
+	    q(1) += (xi6-4.0)*si; q(2) += (xi6-2.0)*si; break;
+	  default:
+	    break;
+	}
+      }
+
     }
 
-  }
+    // Add effects of element loads, q = q(v) + q0
+    q(0) += q0[0];
+    q(1) += q0[1];
+    q(2) += q0[2];
 
-  // Add effects of element loads, q = q(v) + q0
-  q(0) += q0[0];
-  q(1) += q0[1];
-  q(2) += q0[2];
-
-    // Transform to global stiffness
-    K = theCoordTransf->getGlobalStiffMatrix(kb, q);
-    if(isDead())
-      K*=dead_srf;
-    return K;
+      // Transform to global stiffness
+      K = theCoordTransf->getGlobalStiffMatrix(kb, q);
+      if(isDead())
+	K*=dead_srf;
+      return K;
   }
 
 const XC::Matrix &XC::DispBeamColumn2d::getInitialBasicStiff(void) const
   {
     static Matrix kb(3,3);
 
-  // Zero for integral
-  kb.Zero();
+    // Zero for integral
+    kb.Zero();
 
-  const size_t numSections= getNumSections();
-  const Matrix &pts = quadRule.getIntegrPointCoords(numSections);
-  const Vector &wts = quadRule.getIntegrPointWeights(numSections);
+    const size_t numSections= getNumSections();
 
-  double L = theCoordTransf->getInitialLength();
-  double oneOverL = 1.0/L;
+    double L = theCoordTransf->getInitialLength();
+    const Matrix &pts= beamIntegration->getIntegrPointCoords(numSections,L);
+    const Vector &wts= beamIntegration->getIntegrPointWeights(numSections,L);
+    double oneOverL = 1.0/L;
 
-  // Loop over the integration points
-  for(size_t i= 0;i<numSections;i++) {
+    // Loop over the integration points
+    for(size_t i= 0;i<numSections;i++) {
 
-    int order = theSections[i]->getOrder();
-    const XC::ID &code = theSections[i]->getType();
+      int order = theSections[i]->getOrder();
+      const XC::ID &code = theSections[i]->getType();
 
-    Matrix ka(workArea, order, 3);
-    ka.Zero();
+      Matrix ka(workArea, order, 3);
+      ka.Zero();
 
-    double xi6 = 6.0*pts(i,0);
+      double xi6 = 6.0*pts(i,0);
 
-    // Get the section tangent stiffness and stress resultant
-    const XC::Matrix &ks = theSections[i]->getInitialTangent();
+      // Get the section tangent stiffness and stress resultant
+      const Matrix &ks = theSections[i]->getInitialTangent();
 
-    // Perform numerical integration
-    //kb.addMatrixTripleProduct(1.0, *B, ks, wts(i)/L);
-    double wti = wts(i)*oneOverL;
-    double tmp;
-    int j, k;
-    for(j = 0; j < order; j++) {
-      switch(code(j)) {
-      case SECTION_RESPONSE_P:
-        for(k = 0; k < order; k++)
-          ka(k,0) += ks(k,j)*wti;
-        break;
-      case SECTION_RESPONSE_MZ:
-        for(k = 0; k < order; k++) {
-          tmp = ks(k,j)*wti;
-          ka(k,1) += (xi6-4.0)*tmp;
-          ka(k,2) += (xi6-2.0)*tmp;
-        }
-        break;
-      default:
-        break;
+      // Perform numerical integration
+      //kb.addMatrixTripleProduct(1.0, *B, ks, wts(i)/L);
+      double wti = wts(i)*oneOverL;
+      double tmp;
+      int j, k;
+      for(j = 0; j < order; j++) {
+	switch(code(j)) {
+	case SECTION_RESPONSE_P:
+	  for(k = 0; k < order; k++)
+	    ka(k,0) += ks(k,j)*wti;
+	  break;
+	case SECTION_RESPONSE_MZ:
+	  for(k = 0; k < order; k++) {
+	    tmp = ks(k,j)*wti;
+	    ka(k,1) += (xi6-4.0)*tmp;
+	    ka(k,2) += (xi6-2.0)*tmp;
+	  }
+	  break;
+	default:
+	  break;
+	}
       }
-    }
-    for(j = 0; j < order; j++) {
-      switch (code(j)) {
-      case SECTION_RESPONSE_P:
-        for(k = 0; k < 3; k++)
-          kb(0,k) += ka(j,k);
-        break;
-      case SECTION_RESPONSE_MZ:
-        for(k = 0; k < 3; k++) {
-          tmp = ka(j,k);
-          kb(1,k) += (xi6-4.0)*tmp;
-          kb(2,k) += (xi6-2.0)*tmp;
-        }
-        break;
-      default:
-        break;
+      for(j = 0; j < order; j++) {
+	switch (code(j)) {
+	case SECTION_RESPONSE_P:
+	  for(k = 0; k < 3; k++)
+	    kb(0,k) += ka(j,k);
+	  break;
+	case SECTION_RESPONSE_MZ:
+	  for(k = 0; k < 3; k++) {
+	    tmp = ka(j,k);
+	    kb(1,k) += (xi6-4.0)*tmp;
+	    kb(2,k) += (xi6-2.0)*tmp;
+	  }
+	  break;
+	default:
+	  break;
+	}
       }
-    }
 
-  }
+    }
     return kb;
-}
+  }
 
 const XC::Matrix &XC::DispBeamColumn2d::getInitialStiff(void) const
   {
@@ -386,61 +383,62 @@ const XC::Matrix &XC::DispBeamColumn2d::getInitialStiff(void) const
 
 
 const XC::Vector &XC::DispBeamColumn2d::getResistingForce(void) const
-{
-  const size_t numSections= getNumSections();
-  const Matrix &pts = quadRule.getIntegrPointCoords(numSections);
-  const Vector &wts = quadRule.getIntegrPointWeights(numSections);
+  {
+    const double L = theCoordTransf->getInitialLength();
+    const size_t numSections= getNumSections();
+    const Matrix &pts= beamIntegration->getIntegrPointCoords(numSections,L);
+    const Vector &wts= beamIntegration->getIntegrPointWeights(numSections,L);
 
-  // Zero for integration
-  q.Zero();
+    // Zero for integration
+    q.Zero();
 
-  // Loop over the integration points
-  for(size_t i= 0; i < numSections; i++) {
+    // Loop over the integration points
+    for(size_t i= 0; i < numSections; i++) {
 
-    int order = theSections[i]->getOrder();
-    const XC::ID &code = theSections[i]->getType();
+      int order = theSections[i]->getOrder();
+      const ID &code = theSections[i]->getType();
 
-    double xi6 = 6.0*pts(i,0);
+      double xi6 = 6.0*pts(i,0);
 
-    // Get section stress resultant
-    const XC::Vector &s = theSections[i]->getStressResultant();
+      // Get section stress resultant
+      const XC::Vector &s = theSections[i]->getStressResultant();
 
-    // Perform numerical integration on internal force
-    //q.addMatrixTransposeVector(1.0, *B, s, wts(i));
+      // Perform numerical integration on internal force
+      //q.addMatrixTransposeVector(1.0, *B, s, wts(i));
 
-    double si;
-    for(int j = 0; j < order; j++) {
-      si = s(j)*wts(i);
-      switch(code(j)) {
-      case SECTION_RESPONSE_P:
-        q(0) += si; break;
-      case SECTION_RESPONSE_MZ:
-        q(1) += (xi6-4.0)*si; q(2) += (xi6-2.0)*si; break;
-      default:
-        break;
+      double si;
+      for(int j = 0; j < order; j++) {
+	si = s(j)*wts(i);
+	switch(code(j)) {
+	case SECTION_RESPONSE_P:
+	  q(0) += si; break;
+	case SECTION_RESPONSE_MZ:
+	  q(1) += (xi6-4.0)*si; q(2) += (xi6-2.0)*si; break;
+	default:
+	  break;
+	}
       }
+
     }
 
-  }
+    // Add effects of element loads, q = q(v) + q0
+    q(0) += q0[0];
+    q(1) += q0[1];
+    q(2) += q0[2];
 
-  // Add effects of element loads, q = q(v) + q0
-  q(0) += q0[0];
-  q(1) += q0[1];
-  q(2) += q0[2];
+    // Vector for reactions in basic system
+    Vector p0Vec= p0.getVector();
 
-  // Vector for reactions in basic system
-  Vector p0Vec= p0.getVector();
+    P = theCoordTransf->getGlobalResistingForce(q, p0Vec);
 
-  P = theCoordTransf->getGlobalResistingForce(q, p0Vec);
-
-  // Subtract other external nodal loads ... P_res = P_int - P_ext
-  //P.addVector(1.0, load, -1.0);
-  P(0) -= load(0);
-  P(1) -= load(1);
-  P(2) -= load(2);
-  P(3) -= load(3);
-  P(4) -= load(4);
-  P(5) -= load(5);
+    // Subtract other external nodal loads ... P_res = P_int - P_ext
+    //P.addVector(1.0, load, -1.0);
+    P(0) -= load(0);
+    P(1) -= load(1);
+    P(2) -= load(2);
+    P(3) -= load(3);
+    P(4) -= load(4);
+    P(5) -= load(5);
 
     if(isDead())
       P*=dead_srf;
@@ -459,35 +457,89 @@ XC::Response *XC::DispBeamColumn2d::setResponse(const std::vector<std::string> &
     // local force -
     else if(argv[0] == "localForce" || argv[0] == "localForces")
                 return new ElementResponse(this, 2, P);
-
+    // basic force -
+    else if(argv[0] == "basicForce" || argv[0] == "basicForces")
+      return new ElementResponse(this, 9, Vector(3));
+    // basic stiffness -
+    else if(argv[0] == "basicStiffness")
+      return new ElementResponse(this, 19, Matrix(3,3));
     // chord rotation -
     else if(argv[0] == "chordRotation" || argv[0] == "chordDeformation"
              || argv[0] == "basicDeformation")
       return new ElementResponse(this, 3, Vector(3));
-
     // plastic rotation -
     else if(argv[0] == "plasticRotation" || argv[0] == "plasticDeformation")
       return new ElementResponse(this, 4, Vector(3));
-
+    // rayleigh forces -
+    else if(argv[0] == "RayleighForces" || argv[0] == "rayleighForces" || argv[0] == "dampingForces")
+      return new ElementResponse(this, 12, P);
     // section response -
-    else if(argv[0] == "section" || argv[0] == "-section") {
-      if(argc <= 2)
-        return 0;
+    else if(argv[0]=="sectionX")
+      {
+	if(argc > 2)
+	  {
+	    float sectionLoc= atof(argv[1]);
 
-      size_t sectionNum = atoi(argv[1]);
-      if(sectionNum > 0 && sectionNum <= numSections)
-        {
-          std::vector<std::string> argv2(argv);
-          argv2.erase(argv2.begin(),argv2.begin()+2);
-          return theSections[sectionNum-1]->setResponse(argv2, eleInfo);
-        }
-      else
-        return 0;
-    }
+	    double xi[SectionMatrices::maxNumSections];
+            const double L = theCoordTransf->getInitialLength();
+	    beamIntegration->getSectionLocations(numSections, L, xi);
 
+	    sectionLoc/=L;
+
+	    float minDistance = fabs(xi[0]-sectionLoc);
+	    int sectionNum = 0;
+	    for(size_t i= 1; i < numSections; i++)
+	      {
+		if(fabs(xi[i]-sectionLoc) < minDistance)
+		  {
+		    minDistance = fabs(xi[i]-sectionLoc);
+		    sectionNum = i;
+		  }
+	      }
+
+	    // output.tag("GaussPointOutput");
+	    // output.attr("number",sectionNum+1);
+	    // output.attr("eta",xi[sectionNum]*L);
+	    std::vector<std::string> argv2(argv);
+	    argv2.erase(argv2.begin(),argv2.begin()+2);
+	    return theSections[sectionNum]->setResponse(argv2, eleInfo);
+	  }
+	else
+	  return 0;
+      }
+    else if(argv[0] == "section" || argv[0] == "-section")
+      {
+        if(argc <= 2)
+          return 0;
+
+	size_t sectionNum = atoi(argv[1]);
+	if(sectionNum > 0 && sectionNum <= numSections)
+	  {
+	    std::vector<std::string> argv1(argv);
+	    argv1.erase(argv1.begin(),argv1.begin()+1);
+	    return theSections[sectionNum-1]->setResponse(argv1, eleInfo);
+	  }
+	else
+	  return 0;
+      }
+    // curvature sensitivity along element length
+    else if(argv[0]=="dcurvdh")
+      return new ElementResponse(this, 5, Vector(numSections));
+    // basic deformation sensitivity
+    else if(argv[0]=="dvdh")
+      return new ElementResponse(this, 6, Vector(3));
+
+    else if(argv[0]=="integrationPoints")
+      return new ElementResponse(this, 7, Vector(numSections));
+
+    else if(argv[0]=="integrationWeights")
+      return new ElementResponse(this, 8, Vector(numSections));
+
+    else if(argv[0]== "energy") //by SAJalali
+      return new ElementResponse(this, 10, 0.0);
     else
       return 0;
-}
+  }
 
 int XC::DispBeamColumn2d::getResponse(int responseID, Information &eleInfo)
 {
@@ -527,29 +579,28 @@ int XC::DispBeamColumn2d::getResponse(int responseID, Information &eleInfo)
     return -1;
 }
 
-
 // AddingSensitivity:BEGIN ///////////////////////////////////
+
+//! @ Set value for parameter.
+//!
+//! From the parameterID value it should be possible to extract
+//! information about:
+//!  1) Which parameter is in question. The parameter could
+//!     be at element, section, or material level.
+//!  2) Which section and material number (tag) it belongs to.
+//!
+//! To accomplish this the parameterID is given the following value:
+//!     parameterID = type + 1000*matrTag + 100000*sectionTag
+//! ...where 'type' is an integer in the range (1-99) and added 100
+//! for each level (from material to section to element).
+//!
+//! Example:
+//!    If 'E0' (case 2) is random in material #3 of section #5
+//!    the value of the parameterID at this (element) level would be:
+//!    parameterID = 2 + 1000*3 + 100000*5 = 503002
+//!    As seen, all given information can be extracted from this number.
 int XC::DispBeamColumn2d::setParameter(const std::vector<std::string> &argv, Parameter &param)
   {
-    //
-    // From the parameterID value it should be possible to extract
-    // information about:
-    //  1) Which parameter is in question. The parameter could
-    //     be at element, section, or material level.
-    //  2) Which section and material number (tag) it belongs to.
-    //
-    // To accomplish this the parameterID is given the following value:
-    //     parameterID = type + 1000*matrTag + 100000*sectionTag
-    // ...where 'type' is an integer in the range (1-99) and added 100
-    // for each level (from material to section to element).
-    //
-    // Example:
-    //    If 'E0' (case 2) is random in material #3 of section #5
-    //    the value of the parameterID at this (element) level would be:
-    //    parameterID = 2 + 1000*3 + 100000*5 = 503002
-    //    As seen, all given information can be extracted from this number.
-    //
-
     // Initial declarations
     int ok = -1;
     const size_t numSections= getNumSections();
@@ -557,51 +608,66 @@ int XC::DispBeamColumn2d::setParameter(const std::vector<std::string> &argv, Par
 
         // If the parameter belongs to the element itself
         if(argv[0] == "rho")
-          return param.addObject(1, this);
+	  {
+	    param.setValue(rho);
+            return param.addObject(1, this);
+	  }
         // If the parameter is belonging to a section or lower
         else if(argv[0] == "section" || argv[0] == "-section")
           {
+	    // For now, no parameters of the section itself:
+	    if(argc<5)
+	      {
+		std::cerr << getClassName() << "::" << __FUNCTION__
+		          << "For now cannot handle parameters "
+		          << "of the section itself." << std::endl;
+		return -1;
+	      }
+	    // Get section and material tag numbers from user input
+	    int paramSectionTag = atoi(argv[1]);
 
-                // For now, no parameters of the section itself:
-                if(argc<5) {
-                        std::cerr << "For now: cannot handle parameters of the section itself." << std::endl;
-                        return -1;
-                }
+	    // Find the right section and call its setParameter method
+	    for(size_t i=0; i<numSections; i++)
+	      {
+		if(paramSectionTag == theSections[i]->getTag())
+		  {
+		    std::vector<std::string> argv2(argv);
+		    argv2.erase(argv2.begin(),argv2.begin()+2);
+		    ok = theSections[i]->setParameter(argv2, param);
+		  }
+	      }
 
-                // Get section and material tag numbers from user input
-                int paramSectionTag = atoi(argv[1]);
+	    // Check if the ok is valid
+	    if(ok < 0)
+	      {
+	        std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; could not set parameter. "
+			  << std::endl;
+	        return -1;
+	      }
+	    else
+	      {
+	        // Return the ok value (according to the above comments)
+	        return ok;
+	      }
+	  }
+        else if(argv[0] == "integration")
+	  {
+	    if(argc<2)
+	      return -1;
+	    else
+	      {
+		std::vector<std::string> argv2(argv);
+		argv2.erase(argv2.begin(),argv2.begin()+1);
+	        return beamIntegration->setParameter(argv2, param);
+	      }
+	  }
+        else // Otherwise parameter is unknown for this class
+	  { return -1; }
+  }
 
-                // Find the right section and call its setParameter method
-                for(size_t i=0; i<numSections; i++)
-                  {
-                    if(paramSectionTag == theSections[i]->getTag())
-                      {
-                        std::vector<std::string> argv2(argv);
-                        argv2.erase(argv2.begin(),argv2.begin()+2);
-                        ok = theSections[i]->setParameter(argv2, param);
-                      }
-                  }
-
-                // Check if the ok is valid
-                if(ok < 0) {
-                        std::cerr << "XC::DispBeamColumn2d::setParameter() - could not set parameter. " << std::endl;
-                        return -1;
-                }
-                else {
-                        // Return the ok value (according to the above comments)
-                        return ok;
-                }
-        }
-
-        // Otherwise parameter is unknown for this class
-        else {
-                return -1;
-        }
-}
-
-int
-XC::DispBeamColumn2d::updateParameter (int parameterID, Information &info)
-{
+int XC::DispBeamColumn2d::updateParameter(int parameterID, Information &info)
+  {
         // If the parameterID value is not equal to 1 it belongs
         // to section or material further down in the hierarchy.
 
@@ -689,177 +755,176 @@ XC::DispBeamColumn2d::getKiSensitivity(int gradNumber)
 
 const XC::Matrix &
 XC::DispBeamColumn2d::getMassSensitivity(int gradNumber)
-{
+  {
         K.Zero();
         return K;
-}
+  }
 
 
 
 const XC::Vector &XC::DispBeamColumn2d::getResistingForceSensitivity(int gradNumber)
   {
     const size_t numSections= getNumSections();
-    const Matrix &pts = quadRule.getIntegrPointCoords(numSections);
-    const Vector &wts = quadRule.getIntegrPointWeights(numSections);
+    const double L = theCoordTransf->getInitialLength();
+    const Matrix &pts= beamIntegration->getIntegrPointCoords(numSections,L);
+    const Vector &wts= beamIntegration->getIntegrPointWeights(numSections,L);
+    const double oneOverL = 1.0/L;
 
-        double L = theCoordTransf->getInitialLength();
-        double oneOverL = 1.0/L;
+    // Zero for integration
+    q.Zero();
+    static XC::Vector qsens(3);
+    qsens.Zero();
 
-        // Zero for integration
-        q.Zero();
-        static XC::Vector qsens(3);
-        qsens.Zero();
+    // Some extra declarations
+    static XC::Matrix kbmine(3,3);
+    kbmine.Zero();
 
-        // Some extra declarations
-        static XC::Matrix kbmine(3,3);
-        kbmine.Zero();
+    int j, k;
+    double d1oLdh = 0.0;
 
-        int j, k;
-        double d1oLdh = 0.0;
+    // Check if a nodal coordinate is random
+    bool randomNodeCoordinate = false;
+    static XC::ID nodeParameterID(2);
+    nodeParameterID(0) = theNodes[0]->getCrdsSensitivity();
+    nodeParameterID(1) = theNodes[1]->getCrdsSensitivity();
+    if(nodeParameterID(0) != 0 || nodeParameterID(1) != 0) {
 
-        // Check if a nodal coordinate is random
-        bool randomNodeCoordinate = false;
-        static XC::ID nodeParameterID(2);
-        nodeParameterID(0) = theNodes[0]->getCrdsSensitivity();
-        nodeParameterID(1) = theNodes[1]->getCrdsSensitivity();
-        if(nodeParameterID(0) != 0 || nodeParameterID(1) != 0) {
+	    randomNodeCoordinate = true;
 
-                randomNodeCoordinate = true;
+	    const XC::Vector &ndICoords = theNodes[0]->getCrds();
+	    const XC::Vector &ndJCoords = theNodes[1]->getCrds();
 
-                const XC::Vector &ndICoords = theNodes[0]->getCrds();
-                const XC::Vector &ndJCoords = theNodes[1]->getCrds();
+	    double dx = ndJCoords(0) - ndICoords(0);
+	    double dy = ndJCoords(1) - ndICoords(1);
 
-                double dx = ndJCoords(0) - ndICoords(0);
-                double dy = ndJCoords(1) - ndICoords(1);
+	    if(nodeParameterID(0) == 1) // here x1 is random
+	      d1oLdh = dx/(L*L*L);
+	    if(nodeParameterID(0) == 2) // here y1 is random
+	      d1oLdh = dy/(L*L*L);
 
-                if(nodeParameterID(0) == 1) // here x1 is random
-                  d1oLdh = dx/(L*L*L);
-                if(nodeParameterID(0) == 2) // here y1 is random
-                  d1oLdh = dy/(L*L*L);
+	    if(nodeParameterID(1) == 1) // here x2 is random
+	      d1oLdh = -dx/(L*L*L);
+	    if(nodeParameterID(1) == 2) // here y2 is random
+	      d1oLdh = -dy/(L*L*L);
+    }
 
-                if(nodeParameterID(1) == 1) // here x2 is random
-                  d1oLdh = -dx/(L*L*L);
-                if(nodeParameterID(1) == 2) // here y2 is random
-                  d1oLdh = -dy/(L*L*L);
-        }
+    // Loop over the integration points
+    for(size_t i= 0; i < numSections; i++) {
 
-        // Loop over the integration points
-        for(size_t i= 0; i < numSections; i++) {
+      int order = theSections[i]->getOrder();
+      const XC::ID &code = theSections[i]->getType();
 
-          int order = theSections[i]->getOrder();
-          const XC::ID &code = theSections[i]->getType();
+	    double xi6 = 6.0*pts(i,0);
+	    double wti = wts(i);
 
-                double xi6 = 6.0*pts(i,0);
-                double wti = wts(i);
+	    // Get section stress resultant gradient
+	    const XC::Vector &s = theSections[i]->getStressResultant();
+	    const XC::Vector &sens = theSections[i]->getStressResultantSensitivity(gradNumber,true);
 
-                // Get section stress resultant gradient
-                const XC::Vector &s = theSections[i]->getStressResultant();
-                const XC::Vector &sens = theSections[i]->getStressResultantSensitivity(gradNumber,true);
+	    // Perform numerical integration on internal force gradient
+	    //q.addMatrixTransposeVector(1.0, *B, s, wts(i));
 
-                // Perform numerical integration on internal force gradient
-                //q.addMatrixTransposeVector(1.0, *B, s, wts(i));
+	    double si;
+	    double sensi;
+	    for(j = 0; j < order; j++) {
+		    si = s(j)*wti;
+		    sensi = sens(j)*wti;
+		    switch(code(j)) {
+		    case SECTION_RESPONSE_P:
+			    q(0) += si;
+			    qsens(0) += sensi;
+			    break;
+		    case SECTION_RESPONSE_MZ:
+			    q(1) += (xi6-4.0)*si;
+			    q(2) += (xi6-2.0)*si;
+			    qsens(1) += (xi6-4.0)*sensi;
+			    qsens(2) += (xi6-2.0)*sensi;
+			    break;
+		    default:
+			    break;
+		    }
+	    }
 
-                double si;
-                double sensi;
-                for(j = 0; j < order; j++) {
-                        si = s(j)*wti;
-                        sensi = sens(j)*wti;
-                        switch(code(j)) {
-                        case SECTION_RESPONSE_P:
-                                q(0) += si;
-                                qsens(0) += sensi;
-                                break;
-                        case SECTION_RESPONSE_MZ:
-                                q(1) += (xi6-4.0)*si;
-                                q(2) += (xi6-2.0)*si;
-                                qsens(1) += (xi6-4.0)*sensi;
-                                qsens(2) += (xi6-2.0)*sensi;
-                                break;
-                        default:
-                                break;
-                        }
-                }
-
-                if(randomNodeCoordinate) {
+	    if(randomNodeCoordinate) {
 
 
-                        // Perform numerical integration to obtain basic stiffness matrix
-                        //kb.addMatrixTripleProduct(1.0, *B, ks, wts(i)/L);
-                        double tmp;
+		    // Perform numerical integration to obtain basic stiffness matrix
+		    //kb.addMatrixTripleProduct(1.0, *B, ks, wts(i)/L);
+		    double tmp;
 
-                        const XC::Matrix &ks = theSections[i]->getSectionTangent();
-                        Matrix ka(workArea, order, 3);
-                        ka.Zero();
+		    const XC::Matrix &ks = theSections[i]->getSectionTangent();
+		    Matrix ka(workArea, order, 3);
+		    ka.Zero();
 
-                        for(j = 0; j < order; j++) {
-                                switch(code(j)) {
-                                case SECTION_RESPONSE_P:
-                                        for(k = 0; k < order; k++) {
-                                                ka(k,0) += ks(k,j)*wti;
-                                        }
-                                        break;
-                                case SECTION_RESPONSE_MZ:
-                                        for(k = 0; k < order; k++) {
-                                                tmp = ks(k,j)*wti;
-                                                ka(k,1) += (xi6-4.0)*tmp;
-                                                ka(k,2) += (xi6-2.0)*tmp;
-                                        }
-                                        break;
-                                default:
-                                        break;
-                                }
-                        }
-                        for(j = 0; j < order; j++) {
-                                switch (code(j)) {
-                                case SECTION_RESPONSE_P:
-                                        for(k = 0; k < 3; k++) {
-                                                kbmine(0,k) += ka(j,k);
-                                        }
-                                        break;
-                                case SECTION_RESPONSE_MZ:
-                                        for(k = 0; k < 3; k++) {
-                                                tmp = ka(j,k);
-                                                kbmine(1,k) += (xi6-4.0)*tmp;
-                                                kbmine(2,k) += (xi6-2.0)*tmp;
-                                        }
-                                        break;
-                                default:
-                                        break;
-                                }
-                        }
-                }
+		    for(j = 0; j < order; j++) {
+			    switch(code(j)) {
+			    case SECTION_RESPONSE_P:
+				    for(k = 0; k < order; k++) {
+					    ka(k,0) += ks(k,j)*wti;
+				    }
+				    break;
+			    case SECTION_RESPONSE_MZ:
+				    for(k = 0; k < order; k++) {
+					    tmp = ks(k,j)*wti;
+					    ka(k,1) += (xi6-4.0)*tmp;
+					    ka(k,2) += (xi6-2.0)*tmp;
+				    }
+				    break;
+			    default:
+				    break;
+			    }
+		    }
+		    for(j = 0; j < order; j++) {
+			    switch (code(j)) {
+			    case SECTION_RESPONSE_P:
+				    for(k = 0; k < 3; k++) {
+					    kbmine(0,k) += ka(j,k);
+				    }
+				    break;
+			    case SECTION_RESPONSE_MZ:
+				    for(k = 0; k < 3; k++) {
+					    tmp = ka(j,k);
+					    kbmine(1,k) += (xi6-4.0)*tmp;
+					    kbmine(2,k) += (xi6-2.0)*tmp;
+				    }
+				    break;
+			    default:
+				    break;
+			    }
+		    }
+	    }
 
-        }
+    }
 
-        static XC::Vector dqdh(3);
-        const XC::Vector &dAdh_u = theCoordTransf->getBasicTrialDispShapeSensitivity();
-        //dqdh = (1.0/L) * (kbmine * dAdh_u);
-        dqdh.addMatrixVector(0.0, kbmine, dAdh_u, oneOverL);
+    static XC::Vector dqdh(3);
+    const XC::Vector &dAdh_u = theCoordTransf->getBasicTrialDispShapeSensitivity();
+    //dqdh = (1.0/L) * (kbmine * dAdh_u);
+    dqdh.addMatrixVector(0.0, kbmine, dAdh_u, oneOverL);
 
-        static XC::Vector dkbdh_v(3);
-        const XC::Vector &A_u = theCoordTransf->getBasicTrialDisp();
-        //dkbdh_v = (d1oLdh) * (kbmine * A_u);
-        dkbdh_v.addMatrixVector(0.0, kbmine, A_u, d1oLdh);
+    static XC::Vector dkbdh_v(3);
+    const XC::Vector &A_u = theCoordTransf->getBasicTrialDisp();
+    //dkbdh_v = (d1oLdh) * (kbmine * A_u);
+    dkbdh_v.addMatrixVector(0.0, kbmine, A_u, d1oLdh);
 
-        // Transform forces
-        static XC::Vector dummy(3);                // No distributed loads
+    // Transform forces
+    static XC::Vector dummy(3);                // No distributed loads
 
-        // Term 5
-        P = theCoordTransf->getGlobalResistingForce(qsens,dummy);
+    // Term 5
+    P = theCoordTransf->getGlobalResistingForce(qsens,dummy);
 
-        if(randomNodeCoordinate) {
-                // Term 1
-                P += theCoordTransf->getGlobalResistingForceShapeSensitivity(q,dummy);
+    if(randomNodeCoordinate) {
+	    // Term 1
+	    P += theCoordTransf->getGlobalResistingForceShapeSensitivity(q,dummy);
 
-                // Term 2
-                P += theCoordTransf->getGlobalResistingForce(dqdh,dummy);
+	    // Term 2
+	    P += theCoordTransf->getGlobalResistingForce(dqdh,dummy);
 
-                // Term 4
-                P += theCoordTransf->getGlobalResistingForce(dkbdh_v,dummy);
-        }
+	    // Term 4
+	    P += theCoordTransf->getGlobalResistingForce(dkbdh_v,dummy);
+    }
 
-        return P;
-}
+    return P;
+  }
 
 
 
@@ -867,15 +932,15 @@ const XC::Vector &XC::DispBeamColumn2d::getResistingForceSensitivity(int gradNum
 int XC::DispBeamColumn2d::commitSensitivity(int gradNumber, int numGrads)
 {
     // Get basic deformation and sensitivities
-        const XC::Vector &v = theCoordTransf->getBasicTrialDisp();
+        const Vector &v = theCoordTransf->getBasicTrialDisp();
 
-        static XC::Vector vsens(3);
+        static Vector vsens(3);
         vsens = theCoordTransf->getBasicDisplSensitivity(gradNumber);
 
         double L = theCoordTransf->getInitialLength();
         double oneOverL = 1.0/L;
   const size_t numSections= getNumSections();
-        const Matrix &pts = quadRule.getIntegrPointCoords(numSections);
+        const Matrix &pts =  beamIntegration->getIntegrPointCoords(numSections,L);
 
         // Some extra declarations
         double d1oLdh = 0.0;
