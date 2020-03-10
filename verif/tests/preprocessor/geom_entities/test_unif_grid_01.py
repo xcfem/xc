@@ -52,7 +52,7 @@ numNodesTeor= ndivZ+1
 numElemTeor= ndivZ
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(numNodesTeor-numNodes)<1e-15) & (abs(numElemTeor-numElem)<1e-15):
   print "test ",fname,": ok."

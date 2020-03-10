@@ -142,7 +142,7 @@ print('ratio3= ',ratio3)
 '''
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(ratio1<5e-4 and ratio2<5e-3 and ratio3<5e-3):
   print("test ",fname,": ok.")

@@ -9,7 +9,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega@ciccp.es"
 
 import math
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 import numpy
 from materials import limit_state_checking_base as lsc
 from postprocess import control_vars as cv

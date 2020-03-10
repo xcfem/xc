@@ -10,7 +10,7 @@ __email__= "ana.Ortega@ciccp.es"
 import xc_base
 import geom
 import xc
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 
 class SetToMesh(object):
     '''Base for classes that mesh a primitive set.

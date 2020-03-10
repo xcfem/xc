@@ -112,7 +112,7 @@ print "ratio4= ",ratio4
 
 cumple= (abs(ratio1)<5e-2) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-6)
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if cumple:
   print "test ",fname,": ok."

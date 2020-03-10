@@ -82,7 +82,7 @@ from sklearn.metrics import mean_squared_error
 ratio=mean_squared_error(stressAfterLossAnch1,np.flipud(stressAfterLossAnch2))
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio)<1e-20) :
   print "test ",fname,": ok."

@@ -59,7 +59,7 @@ diff= (seq2[0]-r_seq1[0])**2+(seq2[1]-r_seq1[1])**2+(seq2[2]-r_seq1[2])**2+(seq2
 
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (diff<=1e-20):
   print "test ",fname,": ok."

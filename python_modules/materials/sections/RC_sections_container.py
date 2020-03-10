@@ -9,7 +9,7 @@ import xc_base
 import geom
 import xc
 # Macros
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 
 # TO ENHANCE: Interactions diagrams ("d" and "k") are calculated each time we 
 # call the checking routines. Maybe it's a good idea to calculate them once and

@@ -9,7 +9,7 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 import vtk
 from postprocess.xcVtk.diagrams import colored_diagram as cd
 from postprocess import extrapolate_elem_attr

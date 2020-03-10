@@ -9,7 +9,7 @@ __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es "
 
 import xc
 import numpy as np
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 import geom
 from materials import typical_materials as tm
 from postprocess import extrapolate_elem_attr

@@ -221,7 +221,7 @@ result= math.sqrt(result)
 # print 'result= ',result
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (result<1e-10):
   print "test ",fname,": ok."

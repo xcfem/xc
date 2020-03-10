@@ -95,7 +95,7 @@ ratio2=abs(P_midspan-P_ms)/P_ms
 ratio3=abs(P_extr2-P_re)/P_re
                            
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<5.e-3 and ratio2<5.e-4  and ratio3<5.e-3):
   print "test ",fname,": ok."

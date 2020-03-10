@@ -8,7 +8,7 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es ana.ortega@ciccp.es"
 
 import math
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 from materials.sections.fiber_section import fiber_sets
 from solution import predefined_solutions
 from postprocess import control_vars as cv

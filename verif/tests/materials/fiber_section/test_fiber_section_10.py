@@ -141,7 +141,7 @@ miscOk= (abs(RN2)<1e-9) & (abs(esfMy)<1e-10) & (solicitationType == 1) & (analOk
 
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if ratiosOk & miscOk :
   print "test ",fname,": ok."

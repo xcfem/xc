@@ -34,7 +34,7 @@ ratio1= abs(Vsu-111.966e3)/111.966e3
   
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if ratio1<0.01:
   print "test ",fname,": ok."

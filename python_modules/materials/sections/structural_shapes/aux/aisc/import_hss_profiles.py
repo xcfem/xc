@@ -2,7 +2,7 @@
 ''' Import HSS profiles from AISC database version 15.0'''
 from __future__ import print_function
 import openpyxl
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 from openpyxl.utils.cell import coordinate_from_string, column_index_from_string
 import unicodedata
 

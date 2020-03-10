@@ -5,7 +5,7 @@ import geom
 import xc
 from model import predefined_spaces
 import sqlite3 as sqlite
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 
 def nuevosZeroLengthShell(nmbS, tagElem, offset):
 # Define el modelo para probar las dos sections de un elemento shell.

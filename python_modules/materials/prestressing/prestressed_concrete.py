@@ -20,7 +20,7 @@ from scipy import interpolate
 from scipy import optimize
 from scipy.spatial import distance
 import matplotlib.pyplot as plt
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 from mpl_toolkits.mplot3d import Axes3D
 
 class PrestressTendon(object):

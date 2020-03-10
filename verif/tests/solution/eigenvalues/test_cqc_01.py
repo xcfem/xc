@@ -209,7 +209,7 @@ print "ratioDispCQC= ",ratioDispCQC
    '''
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if( (ratio1<1e-3) & (ratio2<1e-2) & (ratio3<1e-5) & (ratio4<1e-3) & (ratioM1<1e-6) & (ratioM2<1e-6) & (ratioM3<1e-6) & (ratioDispCQC<1e-5) ): 
   print "test ",fname,": ok."

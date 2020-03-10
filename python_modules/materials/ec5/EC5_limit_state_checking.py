@@ -8,7 +8,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.ortega@ciccp.es "
 
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 from materials.sections import section_properties
 from postprocess import def_vars_control
 from postprocess import callback_controls

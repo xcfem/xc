@@ -9,7 +9,7 @@ from geom_utils import aux_cairo_plot
 import matplotlib.pyplot as plt
 from matplotlib.path import Path
 import matplotlib.patches as patches
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2015, LCPT and AO_O"

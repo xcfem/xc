@@ -34,7 +34,7 @@ Hreaction=astrodome.getHorizSupportReaction(q_total)
 Tring=astrodome.getTensionForceRing(q_total)
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if max(abs(span-641),abs(height-93),abs(area-350009),abs(Vreaction-7819),abs(Hreaction-12368),abs(Tring-3965300))<0.5:
   print "test ",fname,": ok."

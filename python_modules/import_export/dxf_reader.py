@@ -17,7 +17,7 @@ import xc
 import re
 from scipy.spatial.distance import cdist
 from import_export import block_topology_entities as bte
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 
 class FloatList(list):
     '''List of floats that are more than

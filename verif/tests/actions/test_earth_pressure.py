@@ -74,7 +74,7 @@ print(OK02)
 '''
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (OK01 and OK02):
   print "test ",fname,": ok."

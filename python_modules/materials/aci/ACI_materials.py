@@ -8,7 +8,7 @@ from __future__ import division
 
 import math
 from materials import concrete_base
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 from materials.sections.fiber_section import def_simple_RC_section
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "

@@ -95,7 +95,7 @@ ratio2= abs(numElem-32)
 ratio3= abs(areaTotal-4)
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((ratio1<=1e-10) & (ratio2<=1e-10) & (ratio3<=1e-15)):
   print "test ",fname,": ok."

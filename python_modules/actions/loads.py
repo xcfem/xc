@@ -12,7 +12,7 @@ __email__= "ana.Ortega@ciccp.es"
 import xc
 from actions.earth_pressure import earth_pressure as ep
 from model.sets import sets_mng as sets
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 import numpy as np
 from actions import load_cases
 from actions.imposed_strain import imp_strain as imps 

@@ -59,7 +59,7 @@ ratioLst=[alpha_IPE300-alpha_IPE300_comp,beta_IPE300-beta_IPE300_comp,
           alpha_CHS193-alpha_CHS193_comp,beta_CHS193-beta_CHS193_comp]
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(sum(ratioLst)/len(ratioLst))<1e-5):
   print "test ",fname,": ok."

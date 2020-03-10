@@ -56,7 +56,7 @@ numNodesTeor= (ndivX+1)*(ndivY+1)*(ndivZ+1)
 numElemTeor= ndivX*ndivY*ndivZ
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(numNodesTeor-numNodes)<1e-15) & (abs(numElemTeor-numElem)<1e-15):
   print "test ",fname,": ok."

@@ -7,7 +7,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
 
 import vtk
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 
 def VtkCreaStrArraySetData(setToDraw, entTypeName, attr):
   '''Creates an array of strings with information associated 

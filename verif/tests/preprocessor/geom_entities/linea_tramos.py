@@ -66,7 +66,7 @@ for e in elements:
   # print "cumple: ",(cumple)
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if cumple:
   print "test ",fname,": ok."

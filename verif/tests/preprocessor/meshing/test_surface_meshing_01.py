@@ -91,7 +91,7 @@ ratio2= abs(numElem-3)
 
 feProblem.errFileName= "cerr" #Display errors if any.
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio1<=1e-10) & (ratio2<=1e-10) :
   print "test ",fname,": ok."

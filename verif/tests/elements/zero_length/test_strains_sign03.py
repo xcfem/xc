@@ -122,7 +122,7 @@ print "vTeor= ", vTeor
 print "error= ", error
 '''
 
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (error < 1e-3):
   print "test ",fname,": ok."

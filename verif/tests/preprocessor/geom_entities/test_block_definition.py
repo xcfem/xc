@@ -60,7 +60,7 @@ for kp,kp_ref in zip(k_points,k_points_ref):
 
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(err==0) :
   print "test ",fname,": ok."

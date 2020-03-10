@@ -18,7 +18,7 @@ from materials import typical_materials
 from materials.sections import section_properties
 from postprocess import control_vars as cv
 from solution import predefined_solutions
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 from collections import defaultdict
 from postprocess import limit_state_data as lsd
 

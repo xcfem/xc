@@ -62,7 +62,7 @@ Tmax_comp=142.44
 Cmax_comp=-294.53
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if max(abs(k-k_comp),abs((zCoord-zCoord_comp).max()),abs(Nxy-Nxy_comp),abs(fc-fc_comp),abs(ft-ft_comp),abs(Tmax-Tmax_comp),abs(Cmax-Cmax_comp))<0.01:
   print "test ",fname,": ok."

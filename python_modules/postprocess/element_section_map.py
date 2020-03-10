@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2016, LCPT and AO_O"

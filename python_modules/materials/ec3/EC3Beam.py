@@ -14,7 +14,7 @@ import geom
 import xc
 from model.geometry import geom_utils as gu
 from materials.ec3 import EC3_limit_state_checking as EC3lsc
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 
 class EC3Beam(object):
     '''Steel beam defined by an arbitrary name, a cross-section shape, 

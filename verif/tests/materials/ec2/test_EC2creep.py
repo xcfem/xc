@@ -69,7 +69,7 @@ sqrErr= 0.0
 for i in range(0,len(comp)):
   sqrErr+= comp[i]**2
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)+'-fcm'
 if sqrErr<1e-6:
   print "test ",fname,": ok."

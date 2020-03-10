@@ -101,7 +101,7 @@ print('capacityFactor= ', capacityFactor)
 print(ratios)
 '''
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(max(ratios))<0.05 and abs(min(ratios))<0.05):
   print("test ",fname,": ok.")

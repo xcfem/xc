@@ -90,7 +90,7 @@ for e in elements:
   print "tag= ",e.tag," node I:",e.nod[0].tag," node J:",e.nod[1].tag
 '''
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratioA==0) & (ratioB==0) & (abs(trialSet1.getNumNodes-4)<1e-15) & (abs(trialSet1.getNumElements-2)<1e-15):
   print "test ",fname,": ok."

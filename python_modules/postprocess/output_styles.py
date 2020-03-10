@@ -8,7 +8,7 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.Ortega@ciccp.es "
 
 import locale
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 from postprocess import output_units
 from postprocess.xcVtk.CAD_model import vtk_CAD_graphic
 

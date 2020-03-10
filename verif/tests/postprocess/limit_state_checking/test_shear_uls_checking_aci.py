@@ -26,7 +26,7 @@ from materials.sections.fiber_section import def_simple_RC_section
 import sys
 import logging
 
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 
 #Hide INFO messages from modules.
 rootLogger = logging.getLogger()

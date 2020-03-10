@@ -207,7 +207,7 @@ print 'R3= ', R3, ' R3Teor= ', R3Teor, ' ratioR3= ', ratioR3
 print 'D3= ', D3, ' D3Teor= ', D3Teor, ' ratioD3= ', ratioD3
 print 'error= ', error
 
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (error < 1e-3):
   print "test ",fname,": ok."

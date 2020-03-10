@@ -107,7 +107,7 @@ sigma= elem2.getN2/A+elem2.getM2/I*h/2.0
 ratio1= (delta/0.182)
 ratio2= (sigma/(-11400))
 
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1-1.0)<3e-3) & (abs(ratio2-1.0)<1e-3):
   print "test ",fname,": ok."

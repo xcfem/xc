@@ -122,7 +122,7 @@ print "ratio1= ",ratio1
  '''
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio0)<1e-10) & (abs(ratio1)<1e-11):
   print "test ",fname,": ok."

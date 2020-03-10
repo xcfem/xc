@@ -8,7 +8,7 @@ import xc
 from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -86,7 +86,7 @@ comb= combs.newLoadCombination("COMB","1.33*A+1.5*B")
 loadHandler.addToDomain("COMB")
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 
 # Solution

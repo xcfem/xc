@@ -37,7 +37,7 @@ ratioC= (lbdC/phi-40.2777777778)/40.2777777778
 # print "ratioC= ",ratioC
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratioA)<1e-12) & (abs(ratioB)<1e-12) & (abs(ratioC)<1e-12) :
   print "test ",fname,": ok."

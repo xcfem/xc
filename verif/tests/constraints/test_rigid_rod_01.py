@@ -68,7 +68,7 @@ ratio1= math.sqrt(deltaX**2+deltaY**2+deltaZ**2)
    '''
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if ratio1<1e-11:
   print "test ",fname,": ok."

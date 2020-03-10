@@ -14,7 +14,7 @@ from materials import limit_state_checking_base as lscb
 from materials.ec2 import EC2_materials
 from materials.sections.fiber_section import fiber_sets
 from postprocess import control_vars as cv
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 from solution import predefined_solutions
 from materials import concrete_base
 

@@ -16,7 +16,7 @@ import math
 from materials.ehe import EHE_materials
 from materials.sections import stress_calc as sc
 import sys
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 
 class RecordShearReinforcement(object):
     ''' Definition of the variables that make up a family of shear 

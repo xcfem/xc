@@ -6,7 +6,7 @@ import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor   

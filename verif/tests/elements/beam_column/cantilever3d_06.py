@@ -113,7 +113,7 @@ print ratio3
  '''
 cumple= (abs(ratio1-1.0)<1e-5) & (ratio2<1e-5) & (abs(ratio3-1.0)<1e-5)
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if cumple:
   print "test ",fname,": ok."

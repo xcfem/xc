@@ -16,7 +16,7 @@ __email__= "l.pereztato@gmail.com  ana.Ortega.Ort@gmail.com"
 import math
 import sys
 from scipy.optimize import minimize
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 
 s_values= [0.1, 0.15,0.186,0.25,0.3, 0.35,0.4,0.45,0.51]
 N_values= [3388e3,1825e3,1450e3, 1088e3,1038e3,1050e3,1075e3,1175e3,538e3]

@@ -13,7 +13,7 @@ import geom
 import vtk
 from postprocess.xcVtk.diagrams import colored_diagram as cd
 from postprocess import control_vars as cv
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 
 class ControlVarDiagram(cd.ColoredDiagram):
     '''Diagram of control var values (capacity factor values, 

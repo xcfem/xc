@@ -12,7 +12,7 @@ import geom
 import vtk
 from postprocess.xcVtk.diagrams import colored_diagram as cd
 from postprocess import control_vars as cv
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 
 class InternalForceDiagram(cd.ColoredDiagram):
   '''Diagram of internal forces (N,My,Mz,T,Vy,Vz)'''

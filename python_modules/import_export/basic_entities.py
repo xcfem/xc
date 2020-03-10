@@ -8,7 +8,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 
 class ComponentSupportRecord:
   '''Constraints for x,y,z,rx,ry,rz displacements of a node/kPoint.'''

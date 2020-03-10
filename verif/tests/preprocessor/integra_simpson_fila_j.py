@@ -60,7 +60,7 @@ pesos= isimp.getSimpsonWeights(abscissae,func,10)
 suma= pesos[0]+pesos[1]+pesos[2]+pesos[3]
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(suma-(9/8.0+3+4+19/8.0))<1e-5:
   print "test ",fname,": ok."

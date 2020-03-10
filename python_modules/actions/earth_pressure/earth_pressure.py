@@ -21,7 +21,7 @@ import bisect
 import xc_base
 import geom
 import xc
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 from geotechnics import mononobe_okabe
 from model.sets import sets_mng as sets
 

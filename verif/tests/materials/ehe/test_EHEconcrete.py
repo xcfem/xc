@@ -48,7 +48,7 @@ sqrErr= 0.0
 for i in range(0,len(fcmDat)):
   sqrErr+= (fcmDat[i]-fcmCalc[i])**2
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)+'-fcm'
 if sqrErr<1e-8:
   print "test ",fname,": ok."
@@ -61,7 +61,7 @@ sqrErr= 0.0
 for i in range(0,len(fctmDat)):
   sqrErr+= (fctmDat[i]-fctmCalc[i])**2
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)+'-fctm'
 if sqrErr<1e-8:
   print "test ",fname,": ok."
@@ -75,7 +75,7 @@ sqrErr= 0.0
 for i in range(0,len(fctk005Dat)):
   sqrErr+= (fctk005Dat[i]-fctk005Calc[i])**2
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)+'-fctk005'
 if sqrErr<1e-8:
   print "test ",fname,": ok."
@@ -87,7 +87,7 @@ sqrErr= 0.0
 for i in range(0,len(fctk095Dat)):
   sqrErr+= (fctk095Dat[i]-fctk095Calc[i])**2
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)+'-fctk095'
 if sqrErr<1e-8:
   print "test ",fname,": ok."
@@ -100,7 +100,7 @@ sqrErr= 0.0
 for i in range(0,len(EcmDat)):
   sqrErr+= (EcmDat[i]-EcmCalc[i])**2
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)+'-Ecm'
 if sqrErr<1e-8:
   print "test ",fname,": ok."
@@ -114,7 +114,7 @@ sqrErr= 0.0
 for i in range(0,len(Epsc2Dat)):
   sqrErr+= (Epsc2Dat[i]-Epsc2Calc[i])**2
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)+'-Epsc2'
 if sqrErr<1e-8:
   print "test ",fname,": ok."
@@ -127,7 +127,7 @@ sqrErr= 0.0
 for i in range(0,len(Epscu2Dat)):
   sqrErr+= (Epscu2Dat[i]-Epscu2Calc[i])**2
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)+'-Epscu2'
 if sqrErr<1e-8:
   print "test ",fname,": ok."
@@ -140,7 +140,7 @@ sqrErr= 0.0
 for i in range(0,len(ExpNDat)):
   sqrErr+= (ExpNDat[i]-ExpNCalc[i])**2
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)+'-ExpN'
 if sqrErr<1e-8:
   print "test ",fname,": ok."

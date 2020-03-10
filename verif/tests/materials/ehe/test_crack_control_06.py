@@ -98,7 +98,7 @@ ratio1= secHAParamsFis.Wk
  '''
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-5):
   print "test ",fname,": ok."

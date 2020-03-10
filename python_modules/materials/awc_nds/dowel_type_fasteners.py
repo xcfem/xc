@@ -8,7 +8,7 @@ from __future__ import division
 
 import math
 from materials.awc_nds import AWCNDS_materials as mat
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 
 class Screw(object):
     ''' Screw as defined in NDS-2018.'''

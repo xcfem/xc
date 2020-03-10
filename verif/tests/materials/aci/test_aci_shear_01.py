@@ -9,7 +9,7 @@ from __future__ import print_function
 from materials.aci import ACI_materials
 from materials.aci import ACI_limit_state_checking as lsc
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 from materials.sections.fiber_section import def_simple_RC_section
 from postprocess import limit_state_data as lsd
 
@@ -66,7 +66,7 @@ print('ratio5= ', ratio5)
 '''
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((ratio1<1e-5) and (ratio2<1e-4) and (ratio3<1e-5) and (ratio4<1e-4) and (ratio5<5e-3)):
   print("test ",fname,": ok.")

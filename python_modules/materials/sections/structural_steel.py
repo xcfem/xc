@@ -11,7 +11,7 @@ __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 import math
 from materials.sections import section_properties as sp
 from postprocess import def_vars_control as vc
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 import xc_base
 import geom
 

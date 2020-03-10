@@ -134,7 +134,7 @@ print(tauErr)
 '''
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(sZerr<1e-20 and tauErr<1e-20):
   print("test ",fname,": ok.")

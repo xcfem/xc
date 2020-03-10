@@ -36,7 +36,7 @@ gs4= prep.getSets.getSet(name4)
 gs5= prep.getSets.getSet(name5)
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (gs3.name==name3) and (gs4.name==name4) and (gs5.name==name5):
   print "test ",fname,": ok."

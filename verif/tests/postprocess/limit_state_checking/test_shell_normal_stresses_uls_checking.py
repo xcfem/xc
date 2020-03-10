@@ -107,7 +107,7 @@ print "ratio2= ",ratio2
 
 feProblem.errFileName= "cerr" # Display errors if any.
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 if (ratio1<0.01) & (ratio2<0.01):
   print("test ",fname,": ok.")
 else:

@@ -34,7 +34,7 @@ dist34= mi.distance_2points(preprocessor, 3,4)
 # print "dist(3,4)= ",dist34
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (dist34<1e-12):
   print "test ",fname,": ok."

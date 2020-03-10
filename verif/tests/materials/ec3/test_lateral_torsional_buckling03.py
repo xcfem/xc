@@ -56,7 +56,7 @@ ratio2= abs(overlineLambdaLT-0.51)/0.51
 # print 'ratio2= ', ratio2
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if(ratio1<0.05 and ratio2<0.01):
   print "test ",fname,": ok."

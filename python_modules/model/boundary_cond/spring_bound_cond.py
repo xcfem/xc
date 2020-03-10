@@ -7,7 +7,7 @@ import geom
 from model import predefined_spaces
 from materials import typical_materials
 from model.sets import sets_mng 
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 from postprocess.xcVtk.fields import fields
 from postprocess.xcVtk.FE_model import quick_graphics as QGrph
 from postprocess.xcVtk.FE_model import vtk_FE_graphic

@@ -37,7 +37,7 @@ ratio1= (Md-MdTeor)/MdTeor
 # print 'Qd= ', Qd/1e3, ' kN m/m'
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if abs(ratio1)<1e-11 and abs(Qd)<1e-11:
   print "test ",fname,": ok."

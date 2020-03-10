@@ -39,7 +39,7 @@ print "ratio4= ",(ratio4)
    (the coordinates of the vertices are «computed») se pierde precisión por lo
    que ha habido que aumentar la toleracia en el ratio3 respecto al test 01
    (test_interaction_diagram01) '''
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<2e-2) & (abs(ratio4)<1e-5)):
   print "test ",fname,": ok."

@@ -11,7 +11,7 @@ __version__= "3.0"
 __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 
 import vtk
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 from postprocess.xcVtk.fields import vector_field_data as vfd
 import zlib
 

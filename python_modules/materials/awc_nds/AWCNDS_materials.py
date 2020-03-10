@@ -9,12 +9,12 @@ from __future__ import print_function
 
 import math
 import scipy.interpolate
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 from materials.sections import section_properties as sp
 from materials import typical_materials
 from materials import buckling_base
 import pickle
-from miscUtils import pickle_utils
+from misc_utils import pickle_utils
 import os
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "

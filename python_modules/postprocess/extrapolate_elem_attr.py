@@ -11,7 +11,7 @@ import xc_base
 import geom
 import xc
 import math
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 
 def flatten_attribute(elemSet,attributeName, treshold, limit):
     '''Reduce higher values which hide attribute variation over the model.

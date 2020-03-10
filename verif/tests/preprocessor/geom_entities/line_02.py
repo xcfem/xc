@@ -60,7 +60,7 @@ ratio1= abs(nnodteor-nnod)/nnodteor
 # print("ratio1= ",tonum(ratio1),"\n")
 
 import os
-from miscUtils import log_messages as lmsg
+from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if ratio1<1e-12:
   print "test ",fname,": ok."
