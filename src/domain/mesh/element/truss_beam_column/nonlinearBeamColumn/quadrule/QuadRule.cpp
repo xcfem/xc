@@ -60,8 +60,25 @@
 //
 // What: "@(#) QuadRule.C, revA"
 
-#include <domain/mesh/element/truss_beam_column/nonlinearBeamColumn/quadrule/QuadRule.h>
+#include "QuadRule.h"
+#include "domain/component/Parameter.h"
+#include "domain/mesh/element/utils/Information.h"
 
 XC::QuadRule::QuadRule(void)
   {}
 
+int XC::QuadRule::setParameter(const std::vector<std::string> &argv, XC::Parameter &param)
+  {
+    std::cerr << "QuadRule::" << __FUNCTION__
+              << "; not implemented yet." << std::endl;
+  }
+int XC::QuadRule::updateParameter(int parameterID, XC::Information &info)
+  {
+    std::cerr << "QuadRule::" << __FUNCTION__
+              << "; not implemented yet." << std::endl;
+  }
+int XC::QuadRule::activateParameter(int parameterID)
+  {
+    std::cerr << "QuadRule::" << __FUNCTION__
+              << "; not implemented yet." << std::endl;
+  }

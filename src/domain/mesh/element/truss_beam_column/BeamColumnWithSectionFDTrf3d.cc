@@ -93,7 +93,8 @@ void XC::BeamColumnWithSectionFDTrf3d::initialize_trf(void)
   {
     if(theCoordTransf->initialize(theNodes[0], theNodes[1]))
       {
-        std::cerr << "XC::BeamColumnWithSectionFDTrf3d::initialize_trf() -- failed to initialize coordinate transformation\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; failed to initialize coordinate transformation\n";
         exit(-1);
       }
   }

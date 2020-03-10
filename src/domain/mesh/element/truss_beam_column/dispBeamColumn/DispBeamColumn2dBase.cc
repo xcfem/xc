@@ -76,9 +76,41 @@
  XC::Vector XC::DispBeamColumn2dBase::P(6);
 double XC::DispBeamColumn2dBase::workArea[100];
 
-XC::DispBeamColumn2dBase::DispBeamColumn2dBase(int tag, int classTag, int nd1, int nd2, int numSec,const std::vector<PrismaticBarCrossSection *> &s, CrdTransf2d &coordTransf, double r)
-  : BeamColumnWithSectionFDTrf2d(tag, classTag,numSec), q(3)
+void XC::DispBeamColumn2dBase::free_mem(void)
   {
+    if(beamIntegration)
+      delete beamIntegration;
+    beamIntegration= nullptr;
+  }
+
+void XC::DispBeamColumn2dBase::alloc(const BeamIntegration &bi)
+  {
+    free_mem();
+    beamIntegration= bi.getCopy();
+  }
+
+//! @brief Default constructor.
+XC::DispBeamColumn2dBase::DispBeamColumn2dBase(int tag, int classTag)
+  :BeamColumnWithSectionFDTrf2d(tag, classTag,1), beamIntegration(nullptr), q(3)
+  {
+    load.reset(6);
+    q0[0] = 0.0;
+    q0[1] = 0.0;
+    q0[2] = 0.0;
+
+    p0[0] = 0.0;
+    p0[1] = 0.0;
+    p0[2] = 0.0;
+
+// AddingSensitivity:BEGIN /////////////////////////////////////
+    parameterID = 0;
+// AddingSensitivity:END //////////////////////////////////////
+  }
+
+XC::DispBeamColumn2dBase::DispBeamColumn2dBase(int tag, int classTag, int nd1, int nd2, int numSec,const std::vector<PrismaticBarCrossSection *> &s, const BeamIntegration &bi, const CrdTransf2d &coordTransf, double r)
+  : BeamColumnWithSectionFDTrf2d(tag, classTag,numSec), beamIntegration(nullptr), q(3)
+  {
+    alloc(bi);
     setRho(r);
     load.reset(6);
     setSections(s);
@@ -100,9 +132,10 @@ XC::DispBeamColumn2dBase::DispBeamColumn2dBase(int tag, int classTag, int nd1, i
 // AddingSensitivity:END //////////////////////////////////////
   }
 
-XC::DispBeamColumn2dBase::DispBeamColumn2dBase(int tag, int classTag, int numSec,const Material *m,const CrdTransf *trf)
-  :BeamColumnWithSectionFDTrf2d(tag, classTag, numSec,m,trf), q(3)
+XC::DispBeamColumn2dBase::DispBeamColumn2dBase(int tag, int classTag, int numSec,const Material *m, const BeamIntegration *bi, const CrdTransf *trf)
+  :BeamColumnWithSectionFDTrf2d(tag, classTag, numSec,m,trf), beamIntegration(nullptr), q(3)
   {
+    if(bi) alloc(*bi);
     load.reset(6);
     q0[0] = 0.0;
     q0[1] = 0.0;
@@ -117,22 +150,32 @@ XC::DispBeamColumn2dBase::DispBeamColumn2dBase(int tag, int classTag, int numSec
 // AddingSensitivity:END //////////////////////////////////////
   }
 
-XC::DispBeamColumn2dBase::DispBeamColumn2dBase(int tag, int classTag)
-  :BeamColumnWithSectionFDTrf2d(tag, classTag,1), q(3)
+//! @brief Copy constructor.
+XC::DispBeamColumn2dBase::DispBeamColumn2dBase(const DispBeamColumn2dBase &other):BeamColumnWithSectionFDTrf2d(other), beamIntegration(nullptr), q(other.q), q0(other.q0), p0(other.p0), parameterID(other.parameterID)
+  
   {
-    load.reset(6);
-    q0[0] = 0.0;
-    q0[1] = 0.0;
-    q0[2] = 0.0;
-
-    p0[0] = 0.0;
-    p0[1] = 0.0;
-    p0[2] = 0.0;
-
-// AddingSensitivity:BEGIN /////////////////////////////////////
-    parameterID = 0;
-// AddingSensitivity:END //////////////////////////////////////
+    if(other.beamIntegration)
+      alloc(*other.beamIntegration);
   }
+
+XC::DispBeamColumn2dBase &XC::DispBeamColumn2dBase::operator=(const DispBeamColumn2dBase &other)
+  {
+    //BeamColumnWithSectionFDTrf2d::operator=(other);
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; assignment operator must not be called."
+              << std::endl;
+    q= other.q;
+    q0= other.q0;
+    p0= other.p0;
+    parameterID= other.parameterID;
+    if(other.beamIntegration)
+      alloc(*other.beamIntegration);
+    return *this;
+  }
+
+//! @brief Destructor
+XC::DispBeamColumn2dBase::~DispBeamColumn2dBase(void)
+  { free_mem(); }
 
 int XC::DispBeamColumn2dBase::getNumDOF(void) const
   { return 6; }
@@ -338,10 +381,11 @@ const XC::Vector &XC::DispBeamColumn2dBase::getResistingForceIncInertia(void) co
 int XC::DispBeamColumn2dBase::sendData(CommParameters &cp)
   {
     int res= BeamColumnWithSectionFDTrf2d::sendData(cp);
-    res+= cp.sendVector(q,getDbTagData(),CommMetaData(13));
-    res+= p0.sendData(cp,getDbTagData(),CommMetaData(14));
-    res+= q0.sendData(cp,getDbTagData(),CommMetaData(15));
-    res+= cp.sendInt(parameterID,getDbTagData(),CommMetaData(16));
+    res+= sendBeamIntegrationPtr(beamIntegration,13,14,getDbTagData(),cp);
+    res+= cp.sendVector(q,getDbTagData(),CommMetaData(15));
+    res+= p0.sendData(cp,getDbTagData(),CommMetaData(16));
+    res+= q0.sendData(cp,getDbTagData(),CommMetaData(17));
+    res+= cp.sendInt(parameterID,getDbTagData(),CommMetaData(18));
     return res;
   }
 
@@ -349,16 +393,17 @@ int XC::DispBeamColumn2dBase::sendData(CommParameters &cp)
 int XC::DispBeamColumn2dBase::recvData(const CommParameters &cp)
   {
     int res= BeamColumnWithSectionFDTrf2d::recvData(cp);
-    res+= cp.receiveVector(q,getDbTagData(),CommMetaData(13));
-    res+= p0.receiveData(cp,getDbTagData(),CommMetaData(14));
-    res+= q0.receiveData(cp,getDbTagData(),CommMetaData(15));
-    res+= cp.receiveInt(parameterID,getDbTagData(),CommMetaData(16));
+    beamIntegration= receiveBeamIntegrationPtr(beamIntegration,13,14,getDbTagData(),cp);
+    res+= cp.receiveVector(q,getDbTagData(),CommMetaData(15));
+    res+= p0.receiveData(cp,getDbTagData(),CommMetaData(16));
+    res+= q0.receiveData(cp,getDbTagData(),CommMetaData(17));
+    res+= cp.receiveInt(parameterID,getDbTagData(),CommMetaData(18));
     return res;
   }
 
 int XC::DispBeamColumn2dBase::sendSelf(CommParameters &cp)
   {
-    inicComm(17);
+    inicComm(19);
     int res= sendData(cp);
 
     const int dataTag= getDbTag(cp);
@@ -371,7 +416,7 @@ int XC::DispBeamColumn2dBase::sendSelf(CommParameters &cp)
 
 int XC::DispBeamColumn2dBase::recvSelf(const CommParameters &cp)
   {
-    inicComm(17);
+    inicComm(19);
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
@@ -398,9 +443,11 @@ void XC::DispBeamColumn2dBase::Print(std::ostream &s, int flag)
       << " " << V+p0[1] << " " << M1 << std::endl;
     s << "\tEnd 2 Forces (P V M): " << P
       << " " << -V+p0[2] << " " << M2 << std::endl;
-
-    //  for(size_t i = 0; i < numSections; i++)
-    // theSections[i]->Print(s,flag);
+    
+    beamIntegration->Print(s, flag);
+    const size_t numSections= getNumSections();
+    for (int i = 0; i < numSections; i++)
+      theSections[i]->Print(s,flag);
   }
 
 

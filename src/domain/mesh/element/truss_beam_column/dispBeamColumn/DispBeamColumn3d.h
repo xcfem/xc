@@ -61,7 +61,6 @@
 #include <domain/mesh/element/truss_beam_column/BeamColumnWithSectionFDTrf3d.h>
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
-#include <domain/mesh/element/truss_beam_column/nonlinearBeamColumn/quadrule/GaussQuadRule1d01.h>
 #include "domain/mesh/element/utils/fvectors/FVectorBeamColumn3d.h"
 
 namespace XC {
@@ -69,6 +68,7 @@ class Node;
 class PrismaticBarCrossSection;
 class CrdTransf3d;
 class Response;
+class BeamIntegration;
 
 //! @ingroup OneDimensionalElem
 //
@@ -76,28 +76,36 @@ class Response;
 class DispBeamColumn3d : public BeamColumnWithSectionFDTrf3d
   {
   private:
+    void free_mem(void);
+    void alloc(const BeamIntegration &);
+    BeamIntegration *beamIntegration; //!< Integration along the beam length.
     mutable Vector q; //!< Basic force
     FVectorBeamColumn3d q0;  // Fixed end forces in basic system (no torsion)
     FVectorBeamColumn3d p0;  // Reactions in basic system (no torsion)
 
     const Matrix &getInitialBasicStiff(void) const;
 
+    // AddingSensitivity:BEGIN //////////////////////////////////////////
+    int parameterID;
+    // AddingSensitivity:END ///////////////////////////////////////////
+    
     static Matrix K;		// Element stiffness, damping, and mass Matrix
     static Vector P;		// Element resisting force vector
 
 
     static double workArea[];
 
-    static GaussQuadRule1d01 quadRule;
   protected:
     int sendData(CommParameters &cp);
     int recvData(const CommParameters &cp);
 
   public:
     DispBeamColumn3d(int tag= 0);
-    DispBeamColumn3d(int tag,int numSec,const Material *theSection,const CrdTransf *trf);
-    DispBeamColumn3d(int tag, int nd1, int nd2,
-		     int numSections,const std::vector <PrismaticBarCrossSection *> &s, CrdTransf3d &coordTransf, double rho = 0.0);
+    DispBeamColumn3d(int tag, int numSec, const Material *theSection, const CrdTransf *trf, const BeamIntegration *bi);
+    DispBeamColumn3d(int tag, int nd1, int nd2, int numSections, const std::vector <PrismaticBarCrossSection *> &, const CrdTransf3d &coordTransf, const BeamIntegration &bi, double rho = 0.0);
+    DispBeamColumn3d(const DispBeamColumn3d &);
+    DispBeamColumn3d &operator=(const DispBeamColumn3d &);
+    ~DispBeamColumn3d(void);
     Element *getCopy(void) const;
 
     int getNumDOF(void) const;
@@ -128,6 +136,15 @@ class DispBeamColumn3d : public BeamColumnWithSectionFDTrf3d
 
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInfo);
     int getResponse(int responseID, Information &eleInfo);
+    // AddingSensitivity:BEGIN //////////////////////////////////////////
+    int setParameter(const std::vector<std::string> &argv, Parameter &param);
+    int updateParameter(int parameterID, Information &info);
+    int activateParameter(int parameterID);
+    const Vector & getResistingForceSensitivity(int gradNumber);
+    const Matrix & getKiSensitivity(int gradNumber);
+    const Matrix & getMassSensitivity(int gradNumber);
+    int commitSensitivity(int gradNumber, int numGrads);
+    // AddingSensitivity:END ///////////////////////////////////////////
   };
 } // end of XC namespace
 

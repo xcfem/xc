@@ -116,6 +116,13 @@ void XC::ForceBeamColumn2d::alloc(const BeamIntegration &bi)
   {
     free_mem();
     beamIntegr= bi.getCopy();
+    if(!beamIntegr)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; could not create copy of beam integration object"
+		  << std::endl;
+        exit(-1);
+      }
   }
 
 // constructor:
@@ -166,11 +173,6 @@ XC::ForceBeamColumn2d::ForceBeamColumn2d (int tag, int nodeI, int nodeJ,
     theNodes.set_id_nodes(nodeI,nodeJ);
 
     alloc(bi);
-    if(!beamIntegr)
-      {
-        std::cerr << "Error: ForceBeamColumn2d::ForceBeamColumn2d: could not create copy of beam integration object" << std::endl;
-        exit(-1);
-      }
 
     // get copy of the transformation object
     set_transf(&coordTransf);

@@ -40,32 +40,14 @@
 
 XC::DispBeamColumnNL2d::DispBeamColumnNL2d(int tag, int nd1, int nd2,
 				   int numSec, const std::vector<PrismaticBarCrossSection *> &s,
-				   BeamIntegration &bi,
-				   CrdTransf2d &coordTransf, double r)
-  :DispBeamColumn2dBase(tag, ELE_TAG_DispBeamColumnNL2d, nd1, nd2, numSec, s, coordTransf, r), beamIntegration(nullptr)
-  {
-    beamIntegration = bi.getCopy();
-  
-    if(!beamIntegration)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; failed to copy beam integration\n";
-        exit(-1);
-      }
-  }
-
-XC::DispBeamColumnNL2d::DispBeamColumnNL2d(void)
-  : DispBeamColumn2dBase(0, ELE_TAG_DispBeamColumnNL2d), beamIntegration(nullptr)
+				   const BeamIntegration &bi,
+				   const CrdTransf2d &coordTransf, double r)
+  :DispBeamColumn2dBase(tag, ELE_TAG_DispBeamColumnNL2d, nd1, nd2, numSec, s, bi, coordTransf, r)
   {}
 
-XC::DispBeamColumnNL2d::~DispBeamColumnNL2d()
-  {    
-    if(beamIntegration)
-      {
-	delete beamIntegration;
-	beamIntegration= nullptr;
-      }
-  }
+XC::DispBeamColumnNL2d::DispBeamColumnNL2d(void)
+  : DispBeamColumn2dBase(0, ELE_TAG_DispBeamColumnNL2d)
+  {}
 
 int XC::DispBeamColumnNL2d::update(void)
   {

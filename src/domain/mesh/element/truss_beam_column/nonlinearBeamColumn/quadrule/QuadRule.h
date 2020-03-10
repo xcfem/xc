@@ -66,9 +66,14 @@
 #ifndef QuadRule_h
 #define QuadRule_h
 
+#include <vector>
+#include <string>
+
 namespace XC {
 class Vector;
 class Matrix;
+ class Parameter;
+ class Information;
 
 //! @ingroup OneDimensionalElemNL
 //!
@@ -81,11 +86,16 @@ class QuadRule
   public:
     QuadRule(void);
 
-    virtual int            setOrder           (int quadOrder) = 0;
-    virtual int            getOrder              (void) const = 0;
-    virtual int            getNumIntegrPoints    (void) const = 0;
-    virtual const Matrix & getIntegrPointCoords  (void) const = 0;
-    virtual const Vector & getIntegrPointWeights (void) const = 0; 
+    virtual int setOrder(int quadOrder) = 0;
+    virtual int getOrder(void) const = 0;
+    virtual int getNumIntegrPoints(void) const = 0;
+    virtual const Matrix & getIntegrPointCoords(void) const = 0;
+    virtual const Vector & getIntegrPointWeights(void) const = 0;
+    
+    // methods for sensitivity studies
+    virtual int setParameter(const std::vector<std::string> &argv, Parameter &param);
+    virtual int updateParameter(int parameterID, Information &info);
+    virtual int activateParameter(int parameterID);
   };
 } // end of XC namespace
 

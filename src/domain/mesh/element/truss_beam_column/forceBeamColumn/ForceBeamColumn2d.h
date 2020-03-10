@@ -71,11 +71,11 @@ class ForceBeamColumn2d: public NLForceBeamColumn2dBase
   {
   private:
     // internal data
-    BeamIntegration *beamIntegr;
-    FVectorBeamColumn2d v0; // Initial deformations due to element loads
+    BeamIntegration *beamIntegr; //!< Integration along the beam length.
+    FVectorBeamColumn2d v0; //!< Initial deformations due to element loads
 
     // following are added for subdivision of displacement increment
-    int maxSubdivisions;       // maximum number of subdivisons of dv for local iterations
+    int maxSubdivisions; //!< maximum number of subdivisons of dv for local iterations
 
     void free_mem(void);
     void alloc(const BeamIntegration &);
