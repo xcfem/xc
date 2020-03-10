@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 # home made test
 
+from __future__ import division
+from __future__ import print_function
+
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O)"
 __copyright__= "Copyright 2015, LCPT  AO_O"
 __license__= "GPL"
@@ -114,7 +117,7 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (ratio0 < 1e-12) & (ratio1 < 1e-15) & (ratio2 < 1e-12) & (ratio3 < 1e-4) & (ratio4 < 1e-6):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 
