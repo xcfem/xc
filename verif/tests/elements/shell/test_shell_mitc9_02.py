@@ -93,30 +93,31 @@ ratio0= F+R
 ratio1= (RN1-RN2)**2+(RN1-RN3)**2+(RN1-RN4)**2
 ratio2= (RN5-RN6)**2+(RN5-RN7)**2+(RN5-RN8)**2
 # Reaction values.
-ratio3= RN1-0.019444444*F
+ratio3= RN1-0.019444184*F
 ratio4= RN5+0.269444184*F
 
 ''' 
-print "RN1= ", RN1
-print "RN2= ", RN2
-print "RN3= ", RN3
-print "RN4= ", RN4
-print "RN5= ", RN5
-print "RN6= ", RN6
-print "RN7= ", RN7
-print "RN8= ", RN8
-print "R= ", R
-print "ratio0= ",ratio0
-print "ratio1= ",ratio1
-print "ratio2= ",ratio2
-print "ratio3= ",ratio3
-print "ratio4= ",ratio4
+print("RN1= ", RN1)
+print("RN2= ", RN2)
+print("RN3= ", RN3)
+print("RN4= ", RN4)
+print("RN5= ", RN5)
+print("RN6= ", RN6)
+print("RN7= ", RN7)
+print("RN8= ", RN8)
+print("R= ", R)
+print("ratio0= ",ratio0)
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
+print("ratio3= ",ratio3)
+print("ratio4= ",ratio4)
+print("ratio34= ",ratio3+ratio4)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (ratio0 < 1e-12) & (ratio1 < 1e-15) & (ratio2 < 1e-12) & (ratio3 < 1e-4) & (ratio4 < 1e-6):
+if (ratio0 < 1e-11) & (ratio1 < 1e-15) & (ratio2 < 1e-15) & (ratio3 < 1e-6) & (ratio4 < 1e-6):
   print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
