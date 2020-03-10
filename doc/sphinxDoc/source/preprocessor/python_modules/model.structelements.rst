@@ -12,7 +12,7 @@ Tensegrity
 Trusses
 -------
 
-.. automodule:: model.geometry.tensegrity
+.. automodule:: model.geometry.truss_generators
     :members:
     :undoc-members:
     :show-inheritance:

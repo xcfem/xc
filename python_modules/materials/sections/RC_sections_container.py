@@ -54,9 +54,7 @@ class SectionContainer(object):
         uses a concrete02 model, that initializes the material in order to
         check the cracking limit state (tension stiffening models).
 
-        :param matDiagType: type of stress-strain diagram 
-                    (="k" for characteristic diagram, 
-                     ="d" for design diagram)
+        :param matDiagType: type of stress-strain diagram (="k" for characteristic diagram, ="d" for design diagram)
         '''
         for s in self.sections:
           for i in range(len(s.lstRCSects)):

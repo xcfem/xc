@@ -33,7 +33,7 @@ Node property diagram
     :show-inheritance:
 
 Element property diagram
----------------------
+------------------------
 
 .. automodule:: postprocess.xcVtk.diagrams.element_property_diagram
     :members:
