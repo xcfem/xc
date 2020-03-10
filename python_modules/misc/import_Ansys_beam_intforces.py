@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import struct
 import sqlite3 as sqlite
-from sqliteUtils import sqlite_macros
+from sqlite_utils import sqlite_macros
 import re #regular expresions
 import tempfile
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import sqlite3 as sqlite
-from sqliteUtils import sqlite_macros
+from sqlite_utils import sqlite_macros
 from misc import import_Ansys_beam_intforces
 
 __author__= "Luis C. Pérez Tato (LCPT)"
