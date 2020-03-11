@@ -328,8 +328,7 @@ class ACIRebarFamily(rf.RebarFamily):
         return 2.0*self.getMinReinfAreaUnderFlexion(thickness= thickness, type= type, concrete= concrete)
 
     def getVR(self,concrete,Nd,Md,b,thickness):
-        '''Return the shear resistance carried by the concrete on a (b x thickness)
-           rectangular section according to clause 22.5.5.1 of ACI 318-14.
+        '''Return the shear resistance carried by the concrete on a (b x thickness) rectangular section according to clause 22.5.5.1 of ACI 318-14.
 
         :param concrete: concrete material.
         :param Nd: design axial force.
@@ -361,8 +360,10 @@ class ACIDoubleRebarFamily(rf.DoubleRebarFamily):
     ''' Two reinforcement bars families.'''
     def getCopy(self,barController):
         return ACIDoubleRebarFamily(self.f1, self.f2)
+    
     def getVR(self,concrete,Nd,Md,b,thickness):
-        '''Return the shear resistance of the (b x thickness) rectangular section.
+        '''Return the shear resistance of the 'b x thickness' rectangular section.
+
         :param concrete: concrete material.
         :param Nd: design axial force.
         :param Md: design bending moment.
@@ -370,6 +371,7 @@ class ACIDoubleRebarFamily(rf.DoubleRebarFamily):
         :param thickness: height of the rectangular section.
         '''
         return self.f1.getVR(concrete,Nd,Md,b,thickness)
+    
     def writeRebars(self, outputFile,concrete,AsMin):
         '''Write rebar family data.'''
         self.writeDef(outputFile,concrete)
@@ -460,8 +462,7 @@ class ShearPlane(object):
         return self.Avf*fy*(mu*math.sin(self.alpha)+math.cos(self.alpha))
     
     def getShearCapacityFactor(self, Vd):
-        ''' Return the capacity factor for shear according
-            to section 16.5.4.4 of ACI 318-14.
+        ''' Return the capacity factor for shear according to section 16.5.4.4 of ACI 318-14.
 
         :param Vd: design shear force.
         '''
@@ -518,8 +519,7 @@ class Corbel(ShearPlane):
         return Vd*av+N*(self.thickness-self.depth)
 
     def getAn(self,Nd):
-        ''' Return the area or the required reinforcement
-            according to section 16.5.4.3 of ACI 318-14.
+        ''' Return the area or the required reinforcement according to section 16.5.4.3 of ACI 318-14.
 
         :param Nd: design value of axial load.
         '''
