@@ -24,7 +24,7 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//Matrix.cpp
+//AuxMatrix.cpp
 
 #include "utility/matrix/AuxMatrix.h"
 
