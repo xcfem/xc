@@ -39,6 +39,8 @@ namespace XC {
 
 //! @ingroup Matrix
 //
+//! Double and integer arrays used for calling
+//! LAPACK routines.
 class AuxMatrix: public CommandEntity
   {
   private:
@@ -46,7 +48,6 @@ class AuxMatrix: public CommandEntity
     size_t sizeIntWork;
     Vector matrixWork;
     ID intWork;
-
 
     AuxMatrix(const AuxMatrix &);
     AuxMatrix &operator=(const AuxMatrix &);

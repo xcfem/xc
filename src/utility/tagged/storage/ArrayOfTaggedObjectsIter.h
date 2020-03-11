@@ -69,6 +69,7 @@ class ArrayOfTaggedObjects;
 
 //! @ingroup Tagged
 //
+//! @brief Array of taggeds objects iterator
 class ArrayOfTaggedObjectsIter: public TaggedObjectIter
   {
   private:
