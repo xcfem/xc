@@ -97,14 +97,14 @@ class SteelShape(sp.SectionProperties):
         '''return buckling reduction factor relative to y-axis (weak axis) 
         as defined in EC3-1-1 6.3.1
 
-           :param Leq: buckling length in XZ buckling plane.
-           :param bucklingCurve: buckling curve (a0,a,b,c or d) according 
-              to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
-              curve for a cross-section". Note that in table 6.2 Y and 
-              Z axes are swapped with respect to those used in XC. 
-              XC axes: Y->weak axis, Z->strong axis.
-           :param sectionClass: class of the section (1 to 3, 4 not yet 
-                  implemented) (defaults to 1)
+        :param Leq: buckling length in XZ buckling plane.
+        :param bucklingCurve: buckling curve (a0,a,b,c or d) according 
+           to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
+           curve for a cross-section". Note that in table 6.2 Y and 
+           Z axes are swapped with respect to those used in XC. 
+           XC axes: Y->weak axis, Z->strong axis.
+        :param sectionClass: class of the section (1 to 3, 4 not yet 
+               implemented) (defaults to 1)
         '''
         alpha= alphaImperfectionFactor(bucklingCurve)
         lmb= self.getAdimensionalSlendernessY(Leq,sectionClass= 1)
@@ -115,14 +115,13 @@ class SteelShape(sp.SectionProperties):
         '''return buckling resistance relative to y-axis (weak axis)
         according to EC3-1-1 6.3.2
 
-           :param Leq: buckling length in XZ buckling plane.
-           :param bucklingCurve: buckling curve (a0,a,b,c or d) according 
-              to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
-              curve for a cross-section". Note that in table 6.2 Y and 
-              Z axes are swapped with respect to those used in XC. 
-              XC axes: Y->weak axis, Z->strong axis.
-           :param sectionClass: class of the section (1 to 3, 4 not yet 
-                  implemented) (defaults to 1).
+        :param Leq: buckling length in XZ buckling plane.
+        :param bucklingCurve: buckling curve (a0,a,b,c or d) according 
+           to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
+           curve for a cross-section". Note that in table 6.2 Y and 
+           Z axes are swapped with respect to those used in XC. 
+           XC axes: Y->weak axis, Z->strong axis.
+        :param sectionClass: class of the section (1 to 3, 4 not yet implemented) (defaults to 1).
         '''
         X= self.getBucklingReductionFactorY(Leq,bucklingCurve,sectionClass)
         return X*self.getAeff(sectionClass)*self.steelType.fyd()
@@ -159,14 +158,14 @@ class SteelShape(sp.SectionProperties):
         '''return buckling reduction factor lative to z-axis (strong axis) 
         as defined in EC3-1-1 6.3.1
 
-           :param Leq: buckling length in XY buckling plane.
-           :param bucklingCurve: buckling curve (a0,a,b,c or d) according 
-              to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
-              curve for a cross-section". Note that in table 6.2 Y and 
-              Z axes are swapped with respect to those used in XC. 
-              XC axes: Y->weak axis, Z->strong axis.
-           :param sectionClass: class of the section (1 to 3, 4 not yet 
-                  implemented) (defaults to 1)
+        :param Leq: buckling length in XY buckling plane.
+        :param bucklingCurve: buckling curve (a0,a,b,c or d) according 
+           to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
+           curve for a cross-section". Note that in table 6.2 Y and 
+           Z axes are swapped with respect to those used in XC. 
+           XC axes: Y->weak axis, Z->strong axis.
+        :param sectionClass: class of the section (1 to 3, 4 not yet 
+               implemented) (defaults to 1)
         '''
         alpha= alphaImperfectionFactor(bucklingCurve)
         lmb= self.getAdimensionalSlendernessZ(Leq,sectionClass= 1)
@@ -177,14 +176,14 @@ class SteelShape(sp.SectionProperties):
         '''return buckling resistance relative to z-axis (strong axis)
         according to EC3-1-1 6.3.2
 
-           :param Leq: buckling length in XY buckling plane.
-           :param bucklingCurve: buckling curve (a0,a,b,c or d) according 
-              to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
-              curve for a cross-section". Note that in table 6.2 Y and 
-              Z axes are swapped with respect to those used in XC. 
-              XC axes: Y->weak axis, Z->strong axis.
-           :param sectionClass: class of the section (1 to 3, 4 not yet 
-                  implemented) (defaults to 1).
+        :param Leq: buckling length in XY buckling plane.
+        :param bucklingCurve: buckling curve (a0,a,b,c or d) according 
+           to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
+           curve for a cross-section". Note that in table 6.2 Y and 
+           Z axes are swapped with respect to those used in XC. 
+           XC axes: Y->weak axis, Z->strong axis.
+        :param sectionClass: class of the section (1 to 3, 4 not yet 
+               implemented) (defaults to 1).
         '''
         X= self.getBucklingReductionFactorZ(Leq,bucklingCurve,sectionClass)
         return X*self.getAeff(sectionClass)*self.steelType.fyd()
@@ -193,18 +192,18 @@ class SteelShape(sp.SectionProperties):
         '''return minimum of buckling resistance in XY and XZ buckling planes
         calculated according to EC3-1-1 6.3.2
 
-           :param LeqY: buckling length of the member in XZ buckling plane.
-           :param LeqZ: buckling length of the member in XY buckling plane.
-           :param bucklingCurveY: buckling curve (a0,a,b,c or d) with respect 
-              to y-axis (weak axis) according 
-              to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
-              curve for a cross-section". Note that in table 6.2 Y and 
-              Z axes are swapped with respect to those used in XC. 
-              XC axes: Y->weak axis, Z->strong axis.
-           :param bucklingCurveY: buckling curve (a0,a,b,c or d) with respect 
-              to z-axis (strong axis)
-           :param sectionClass: class of the section (1 to 3, 4 not yet 
-                  implemented) (defaults to 1)
+        :param LeqY: buckling length of the member in XZ buckling plane.
+        :param LeqZ: buckling length of the member in XY buckling plane.
+        :param bucklingCurveY: buckling curve (a0,a,b,c or d) with respect 
+           to y-axis (weak axis) according 
+           to table 6.2 of EN 1993-1-1:2005 "Selection of buckling 
+           curve for a cross-section". Note that in table 6.2 Y and 
+           Z axes are swapped with respect to those used in XC. 
+           XC axes: Y->weak axis, Z->strong axis.
+        :param bucklingCurveY: buckling curve (a0,a,b,c or d) with respect 
+           to z-axis (strong axis)
+        :param sectionClass: class of the section (1 to 3, 4 not yet 
+               implemented) (defaults to 1)
         '''
         rY= self.getBucklingResistanceY(LeqY,bucklingCurveY,sectionClass)
         rZ= self.getBucklingResistanceZ(LeqZ,bucklingCurveZ,sectionClass)
@@ -296,8 +295,8 @@ class SteelShape(sp.SectionProperties):
     def getNcr(self,LeqY,LeqZ):
         '''return theoretical critical axial force  (minimum of NcrY and NcrZ).
 
-         :param LeqY: buckling length  of the member in XZ buckling plane.
-         :param LeqZ: buckling length  of the member in XY buckling plane.
+           :param LeqY: buckling length  of the member in XZ buckling plane.
+           :param LeqZ: buckling length  of the member in XY buckling plane.
         '''
         return min(self.getNcrY(LeqY),self.getNcrZ(LeqZ))
 

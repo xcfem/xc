@@ -1567,13 +1567,11 @@ class LongShearJoints(object):
         ''' Return beta coefficient depending on the roughness of contact surfaces 
         (art. 47.2.1 EHE and table 47.2.2.2):
 
-              -0.80 in rough contact surfaces of composite sections that are 
-              interconnected so that one composite section may not overhang the 
-              other, for example, are dovetailed, and if the surface is open and 
-              rough, e.g. like joists as left by a floor laying machine.
-              -0.40 in intentionally rough surfaces with a high degree of roughness.
-              -0.20 in unintentionally rough surfaces with a low degree of roughness
+              - 0.80 in rough contact surfaces of composite sections that are interconnected so that one composite section may not overhang the other, for example, are dovetailed, and if the surface is open and rough, e.g. like joists as left by a floor laying machine.
+              - 0.40 in intentionally rough surfaces with a high degree of roughness.
+              - 0.20 in unintentionally rough surfaces with a low degree of roughness
               - at low fatigue or dynamic stresses beta shall be reduced by 50%.
+
         '''
         if self.sigma_cd > 0: #tension
             beta=0
