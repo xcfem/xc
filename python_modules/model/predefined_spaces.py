@@ -112,7 +112,6 @@ class PredefinedSpace(object):
     def setBearingBetweenNodes(self,iNodA,iNodB,bearingMaterialNames,orientation= None):
         '''Modelize a bearing between the nodes
 
-          Args:
               :param iNodA: (int) first node identifier (tag).
               :param iNodB: (int) second node identifier (tag).
               :param bearingMaterialNames: (list) material names for the zero 
@@ -152,7 +151,6 @@ class PredefinedSpace(object):
     def setBearing(self,iNod,bearingMaterialNames, orientation= None):
         '''Modelize a bearing on X, XY or XYZ directions.
 
-          Args:
               :param iNod: (int) node identifier (tag).
               :param bearingMaterialNames (list): (list) material names for the zero 
                  length element [mat1,mat2,mat3,mat4,mat5,mat6], where:
@@ -187,9 +185,8 @@ class PredefinedSpace(object):
     def setBearingOnX(self,iNod,bearingMaterial):
         '''Modelize a bearing on X direction.
 
-          Args:
-              iNod (int): node identifier (tag).
-              bearingMaterial (string): material name for the zero length
+           :param iNod (int): node identifier (tag).
+           :param bearingMaterial (string): material name for the zero length
                  element.
         '''
         return setBearing(iNod,[bearingMaterial])
@@ -197,10 +194,8 @@ class PredefinedSpace(object):
     def setBearingOnXYRigZ(self,iNod,bearingMaterialNames):
         '''Modelize a non rigid on X and Y directions and rigid on Z bearing.
 
-          Args:
-              iNod (int): node identifier (tag).
-              bearingMaterialNames (string): material names for the zero length
-                 element.
+           :param   iNod (int): node identifier (tag).
+           :param bearingMaterialNames (string): material names for the zero length element.
         '''
         newNode, newElement= self.setBearing(iNod,bearingMaterialNames)
         eDofs= self.constraints.newEqualDOF(newNode.tag,iNod,xc.ID([2]))
@@ -209,12 +204,10 @@ class PredefinedSpace(object):
     def setUniaxialBearing2D(self,iNod,bearingMaterial,direction):
         '''Modelize an uniaxial bearing on the defined direction.
 
-          Args:
-              iNod (int): node identifier (tag).
-              bearingMaterial (str): material name for the zero length
+         :param iNod (int): node identifier (tag).
+         :param  bearingMaterial (str): material name for the zero length
                  element.
-          Returns:
-              :rtype: (int, int) new node tag, new element tag.
+          :return rtype: (int, int) new node tag, new element tag.
         '''
         nodes= self.preprocessor.getNodeHandler
         newNode= nodes.duplicateNode(iNod) # new node.

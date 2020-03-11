@@ -127,8 +127,8 @@ class CantileverRetainingWallGeometry(object):
   
   def getFoundationDepth(self,toeFillDepth):
     '''Return wall foundation depth.
-        Args:
-            :toeFillDepth: (float) depht of the soil filling overt the toe.
+
+       :param toeFillDepth: (float) depht of the soil filling overt the toe.
     '''
     return toeFillDepth+self.footingThickness
 
