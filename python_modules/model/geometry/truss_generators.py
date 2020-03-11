@@ -26,7 +26,6 @@ class TrussGeometry(object):
     def __init__(self, lowerChordAxis, upperChordAxis,trussModule):
         '''Constructor.
 
-            Args:
                 :param lowerChordAxis: axis of the lower chord.
                 :param upperChordAxis: axis of the upper chord.
                 :param trussModule: (float) width of each truss.
@@ -120,7 +119,6 @@ class TrussBase(TrussGeometry):
     def __init__(self, lowerChordAxis, upperChordAxis,trussModule):
         '''Constructor.
 
-            Args:
                 :param lowerChordAxis: axis of the lower chord.
                 :param upperChordAxis: axis of the upper chord.
                 :param trussModule: (float) width of each truss.
@@ -276,7 +274,6 @@ class WarrenTruss(TrussBase):
     def __init__(self, lowerChordAxis, upperChordAxis,trussModule):
         '''Constructor.
 
-           Args:
               :param lowerChordAxis: axis of the lower chord.
               :param upperChordAxis: axis of the upper chord.
               :param trussModule: (float) width of each truss.
@@ -330,7 +327,6 @@ class FanTruss(WarrenTruss):
     def __init__(self, lowerChordAxis, upperChordAxis,trussModule):
         '''Constructor.
 
-           Args:
               :param lowerChordAxis: axis of the lower chord.
               :param upperChordAxis: axis of the upper chord.
               :param trussModule: (float) width of each truss.

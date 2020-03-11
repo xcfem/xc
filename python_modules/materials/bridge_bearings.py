@@ -73,12 +73,10 @@ class Bearing(object):
     def setBearing(self,predefinedSpace, iNodA, orientation= None):
       '''Modelize a bearing on X, XY or XYZ directions.
 
-        Args:
-             predefinedSpace: model space (object).
-             iNod: (int) node identifier (tag).
-             bearingMaterials (list): material names for the zero length element.
-        Returns:
-            :rtype: (int, int) new node tag, new element tag.
+         :param predefinedSpace: model space (object).
+         :param iNod: (int) node identifier (tag).
+         :param bearingMaterials (list): material names for the zero length element.
+         :return rtype: (int, int) new node tag, new element tag.
       '''
       return predefinedSpace.setBearing(iNodA,self.materials, orientation)
     
@@ -191,8 +189,7 @@ class ElastomericBearing(Bearing):
     def defineMaterials(self,preprocessor):
         '''Define the materials to modelize the elastomeric bearing.
 
-        Args:
-            :preprocessor: (:obj:'Preprocessor') preprocessor to use.
+            :param preprocessor: (:obj:'Preprocessor') preprocessor to use.
         '''
         self.materialHandler= preprocessor.getMaterialHandler
         # Material names.
@@ -216,10 +213,9 @@ class ElastomericBearing(Bearing):
     def putBetweenNodes(self,modelSpace,iNodA, iNodB, orientation= None):
         ''' Puts the bearing between the nodes.
 
-        Args:
-            modelSpace (:obj:'PredefinedSpace'): space dimension and number of DOFs.
-            iNodA (int): first node identifier (tag).
-            iNodB (int): second node identifier (tag).
+            :param modelSpace (:obj:'PredefinedSpace'): space dimension and number of DOFs.
+            :param iNodA (int): first node identifier (tag).
+            :param iNodB (int): second node identifier (tag).
 
         '''
         return modelSpace.setBearingBetweenNodes(iNodA,iNodB,self.materials, orientation)
@@ -264,10 +260,9 @@ class PTFEPotBearing(Bearing):
     def defineMaterials(self,preprocessor):
         '''Define the materials to modelize the pot (Teflon).
 
-        Args:
-            :preprocessor: (:obj:'Preprocessor') preprocessor to use.
-            :matKX: (str) name for the uniaxial material in direction X.
-            :matKY: (str) name for the uniaxial material in direction Y.
+            :param preprocessor: (:obj:'Preprocessor') preprocessor to use.
+            :param matKX: (str) name for the uniaxial material in direction X.
+            :param matKY: (str) name for the uniaxial material in direction Y.
         '''
         self.materialHandler= preprocessor.getMaterialHandler
         # Material names.
@@ -282,11 +277,9 @@ class PTFEPotBearing(Bearing):
     def putBetweenNodes(self,modelSpace,iNodA, iNodB):
         ''' Puts the bearing between the nodes.
 
-        Args:
-            :modelSpace: (:obj:'PredefinedSpace') space dimension and number
-                of DOFs.
-            :iNodA: (int) first node identifier (tag).
-            :iNodB: (int) second node identifier (tag).
+            :param modelSpace: (:obj:'PredefinedSpace') space dimension and number of DOFs.
+            :param iNodA: (int) first node identifier (tag).
+            :param iNodB: (int) second node identifier (tag).
         '''
         newElement= modelSpace.setBearingBetweenNodes(iNodA,iNodB,self.materials)
         eDofs= modelSpace.constraints.newEqualDOF(iNodA,iNodB,xc.ID([2]))
@@ -295,11 +288,9 @@ class PTFEPotBearing(Bearing):
     def putOnXBetweenNodes(self,modelSpace,iNodA, iNodB):
         ''' Puts the bearing between the nodes only in direction X.
 
-        Args:
-            :modelSpace: (:obj:'PredefinedSpace') space dimension and number
-                of DOFs.
-            :iNodA: (int) first node identifier (tag).
-            :iNodB: (int) second node identifier (tag).
+            :param modelSpace: (:obj:'PredefinedSpace') space dimension and number of DOFs.
+            :param iNodA: (int) first node identifier (tag).
+            :param iNodB: (int) second node identifier (tag).
         '''
         newElement= modelSpace.setBearingBetweenNodes(iNodA,iNodB,[self.matXName])
         eDofs= modelSpace.constraints.newEqualDOF(iNodA,iNodB,xc.ID([1,2]))
@@ -308,11 +299,9 @@ class PTFEPotBearing(Bearing):
     def putOnYBetweenNodes(self,modelSpace,iNodA, iNodB):
         ''' Puts the bearing between the nodes only in direction Y.
 
-        Args:
-            :modelSpace: (:obj:'PredefinedSpace') space dimension and number
-                of DOFs.
-            :iNodA: (int) first node identifier (tag).
-            :iNodB: (int) second node identifier (tag).
+            :param modelSpace: (:obj:'PredefinedSpace') space dimension and number of DOFs.
+            :param iNodA: (int) first node identifier (tag).
+            :param iNodB: (int) second node identifier (tag).
         '''
         newElement= modelSpace.setBearingBetweenNodes(iNodA,iNodB,[None,self.matYName])
         eDofs= modelSpace.constraints.newEqualDOF(iNodA,iNodB,xc.ID([0,2]))
@@ -321,10 +310,9 @@ class PTFEPotBearing(Bearing):
 def get_reaction_on_pot(preprocessor,iElem,inclInertia= False):
     ''' Return the element reaction.
 
-        Args:
-            :preprocessor: (:obj:'Preprocessor') preprocessor to use.
-            :iElem: (int) new zero length elem identifier (tag).
-            :inclInertia: (bool) true if the reaction must include inertia forces.
+            :param preprocessor: (:obj:'Preprocessor') preprocessor to use.
+            :param iElem: (int) new zero length elem identifier (tag).
+            :param inclInertia: (bool) true if the reaction must include inertia forces.
     '''
     nodes= preprocessor.getNodeHandler
     nodes.calculateNodalReactions(inclInertia, 1e-7)
