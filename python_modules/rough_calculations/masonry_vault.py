@@ -241,7 +241,7 @@ def calcn6p32(alpha,beta,d,v,E,F,G,H):
 
 class archGeometry(object):
   '''
-  Geometric definition of the arc:
+   Geometric definition of the arc:
 
    :ivar coefPolArch=[f,j,k,r]: Coefficients of polynomial y=fx^4+jx^3+kx^2+rx+u (u=0)
    :ivar XRot=[xA,xB,xC,xD]:  X coordinates of the rotules A,B,C,D [m]

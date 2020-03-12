@@ -37,12 +37,12 @@ def reinforcementPunz(Vd,fck,d,a,b,h,fyd):
         computed at the critical perimeter defined to occur at 
         d/2 from the column faces (HL.3 números gordos)
 
-        :param Vd: Desing value of the punching shear (N)
-        :param fck: characteristic strength of concrete (N/m2)
-        :param fyd: design value of reinforcement steel yield strength (Pa).
-        :param d: effective depth of the floor deck (m)
-        :param h: slab depth (m).
-        :param a,b: dimensions of the column (m)
+       :param Vd: Desing value of the punching shear (N)
+       :param fck: characteristic strength of concrete (N/m2)
+       :param fyd: design value of reinforcement steel yield strength (Pa).
+       :param d: effective depth of the floor deck (m)
+       :param h: slab depth (m).
+       :param a,b: dimensions of the column (m)
 
     Result is expressed in m2/m
     '''

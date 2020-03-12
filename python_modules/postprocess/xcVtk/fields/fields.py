@@ -84,6 +84,7 @@ class ScalarField(fb.FieldBase):
 
 class ExtrapolatedScalarField(ScalarField):
   '''Scalar field defined at nodes.
+
   :ivar rgMinMax: range (vmin,vmax) with the maximum and minimum values  
               of the scalar field (if any) to be represented. All the values 
               less than vmin are displayed in blue and those greater than vmax 
@@ -118,7 +119,7 @@ class ExtrapolatedProperty(ExtrapolatedScalarField):
     ''' Display the field.
 
        :param fileName: name of the graphic file to create (if None -> screen window).
-      :param caption: text to display in the graphic.
+       :param caption: text to display in the graphic.
     '''
 
     self.extrapolate()
