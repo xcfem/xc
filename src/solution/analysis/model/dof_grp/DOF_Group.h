@@ -159,9 +159,9 @@ class DOF_Group: public TaggedObject
     virtual const Vector &getM_Force(const Vector &x, double fact = 1.0);
 
     // methods to obtain committed responses from the nodes
-    virtual const Vector & getCommittedDisp(void);
-    virtual const Vector & getCommittedVel(void);
-    virtual const Vector & getCommittedAccel(void);
+    virtual const Vector &getCommittedDisp(void);
+    virtual const Vector &getCommittedVel(void);
+    virtual const Vector &getCommittedAccel(void);
     
     // methods to update the trial response at the nodes
     virtual void setNodeDisp(const Vector &u);
@@ -171,6 +171,10 @@ class DOF_Group: public TaggedObject
     virtual void incrNodeDisp(const Vector &u);
     virtual void incrNodeVel(const Vector &udot);
     virtual void incrNodeAccel(const Vector &udotdot);
+
+    virtual const Vector &getTrialDisp(void) const;
+    virtual const Vector &getTrialVel(void) const;
+    virtual const Vector &getTrialAccel(void) const;
 
     // methods to set the eigen vectors
     virtual void setEigenvector(int mode, const Vector &eigenvalue);

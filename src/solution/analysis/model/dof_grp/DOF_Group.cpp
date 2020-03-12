@@ -732,6 +732,47 @@ void XC::DOF_Group::incrNodeAccel(const Vector &udotdot)
       }
   }
 
+//! @brief Return trial displacement.
+const XC::Vector &XC::DOF_Group::getTrialDisp(void) const
+  {
+    if(myNode)
+      return myNode->getTrialDisp();
+    else
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << ": no associated Node "
+		  << " returning the error Vector\n";
+	return errVect;
+      }
+  }
+
+//! @brief Return trial velocity.
+const XC::Vector &XC::DOF_Group::getTrialVel(void) const
+  {
+    if(myNode)
+      return myNode->getTrialVel();
+    else
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << ": no associated Node "
+		  << " returning the error Vector\n";
+	return errVect;
+      }
+  }
+
+//! @brief Return trial acceleration.
+const XC::Vector &XC::DOF_Group::getTrialAccel(void) const
+  {
+    if(myNode)
+      return myNode->getTrialAccel();
+    else
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << ": no associated Node "
+		  << " returning the error Vector\n";
+	return errVect;
+      }
+  }
 
 
 void XC::DOF_Group::setEigenvector(int mode, const Vector &theVector)
