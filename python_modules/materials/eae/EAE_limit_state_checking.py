@@ -28,11 +28,11 @@ def getFilletWeldThroatPlaneYieldCriteriaLHS(sigmaN, tauN, tauPll):
     Returns the stress combination to use in the left hand side of the
     yield criterion checking according to clause 59.8.2 of EAE (page 256).
 
-      :param sigmaN: Normal stress in weld bead throat plane (see figure 59.8).
-      :param tauN: Tangential stress normal to weld bead axis
-            in weld bead throat plane (see figure 59.8).
-      :param tauPll: Tangential stress parallel to weld bead axis 
-            in weld bead throat plane (see figure 59.8). 
+    :param sigmaN: Normal stress in weld bead throat plane (see figure 59.8).
+    :param tauN: Tangential stress normal to weld bead axis
+          in weld bead throat plane (see figure 59.8).
+    :param tauPll: Tangential stress parallel to weld bead axis 
+          in weld bead throat plane (see figure 59.8). 
     '''
     return math.sqrt((sigmaN)**2+3*((tauN)**2+(tauPll)**2))
 
@@ -49,29 +49,24 @@ def getFilletWeldYieldCriteriaRHSValue(fu, fy, gammaM2):
     Return weld bead ultimate stress to be used for strength checking 
      according to first condition in clause 59.8.2 of EAE (page 256).
 
-      :param fu: Steel ultimate strength (table 59.8.2 page 304 EAE).
-      :param fy: limit of elasticity of the welding steel (see table 59.8.2) 
-          expressed in pascals.
-      :param gammaM2: Partial safety factor of value 1.25. 
+    :param fu: Steel ultimate strength (table 59.8.2 page 304 EAE).
+    :param fy: limit of elasticity of the welding steel (see table 59.8.2) 
+        expressed in pascals.
+    :param gammaM2: Partial safety factor of value 1.25. 
     '''
     return fu/BetaWtable(fy)/gammaM2
 
 
 def getFilletWeldThroatPlaneCondition1CapacityFactor(sigmaN, tauN, tauPll, fu, fy, gammaM2):
     '''
-    Return the capacity factor for the first condition of clause
-     59.8.2 de EAE (page 256).
+    Return the capacity factor for the first condition of clause 59.8.2 de EAE (page 256).
 
-      :param sigmaN: Normal stress in weld bead throat plane (see figure 59.8).
-      :param tauN: Tangential stress normal to weld bead axis
-            in weld bead throat plane (see figure 59.8).
-      :param tauPll: Tangential stress parallel to weld bead axis 
-            in weld bead throat plane (see figure 59.8). 
-
-      :param fu: Steel ultimate strength (table 59.8.2 page 304 EAE).
-      :param fy: limit of elasticity of the welding steel (see table 59.8.2) 
-          expressed in pascals.
-      :param gammaM2: Partial safety factor of value 1.25. 
+    :param sigmaN: Normal stress in weld bead throat plane (see figure 59.8).
+    :param tauN: Tangential stress normal to weld bead axis in weld bead throat plane (see figure 59.8).
+    :param tauPll: Tangential stress parallel to weld bead axis in weld bead throat plane (see figure 59.8). 
+    :param fu: Steel ultimate strength (table 59.8.2 page 304 EAE).
+    :param fy: limit of elasticity of the welding steel (see table 59.8.2) expressed in pascals.
+    :param gammaM2: Partial safety factor of value 1.25. 
     '''
     return getFilletWeldThroatPlaneYieldCriteriaLHS(sigmaN,tauN,tauPll)/getFilletWeldYieldCriteriaRHSValue(fu,fy,gammaM2)
 
@@ -80,10 +75,10 @@ def getFilletWeldUltimateNormalStress(fu, gammaM2):
     Return the ultimate stress of the weld bead to be used for checking the
     second condition in clause 59.8.2 of EAE (page 256).
 
-      :param fu: Steel ultimate strength (table 59.8.2 page 304 EAE).
-      :param fy: limit of elasticity of the welding steel (see table 59.8.2) 
-          expressed in pascals.
-      :param gammaM2: Partial safety factor of value 1.25. 
+    :param fu: Steel ultimate strength (table 59.8.2 page 304 EAE).
+    :param fy: limit of elasticity of the welding steel (see table 59.8.2) 
+        expressed in pascals.
+    :param gammaM2: Partial safety factor of value 1.25. 
     '''
     return 0.9*fu/gammaM2
 
@@ -92,9 +87,9 @@ def getFilletWeldThroatPlaneCondition2CapacityFactor(sigmaN, fu, gammaM2):
     Return the capacity factor that correspond to the second condition of
     clause 59.8.2 of EAE (page 256).
 
-      :param sigmaN: Normal stress in weld bead throat plane (see figure 59.8).
-      :param fu: Steel ultimate strength (table 59.8.2 page 304 EAE).
-      :param gammaM2: Partial safety factor of value 1.25. 
+    :param sigmaN: Normal stress in weld bead throat plane (see figure 59.8).
+    :param fu: Steel ultimate strength (table 59.8.2 page 304 EAE).
+    :param gammaM2: Partial safety factor of value 1.25. 
     '''
     return abs(sigmaN)/getFilletWeldUltimateNormalStress(fu,gammaM2)
 
@@ -120,8 +115,7 @@ def getSigmaNThroatPlane(n, t):
     (url={https://books.google.es/books?id=X9JIRAAACAAJ}, isbn={9788486957087}) 
     of Vicente Cudós Samblancat from Escuela de la Edificación.
 
-    :param  n: Normal stress over the rotated plane (see figure 24.1 
-               on the book from UNED).
+    :param  n: Normal stress over the rotated plane (see figure 24.1 on the book from UNED).
     :param  t: Tangential stress normal to the weld axis.
     '''
     return (n-t)/math.sqrt(2)
@@ -137,8 +131,7 @@ def getTauNThroatPlane(n, t):
     (url={https://books.google.es/books?id=X9JIRAAACAAJ}, isbn={9788486957087}) 
     of Vicente Cudós Samblancat from Escuela de la Edificación.
 
-    :param  n: Normal stress over the rotated plane (see figure 24.1 
-               on the book from UNED).
+    :param  n: Normal stress over the rotated plane (see figure 24.1 on the book from UNED).
     :param  t: Tangential stress normal to the weld axis.
     '''
     return (n+t)/math.sqrt(2)
@@ -148,9 +141,8 @@ def getFilletWeldYieldCriteriaLHS(n, tn, ta):
     Return the stress value to use in the right hand side of the yield criterion
     according to clause 59.8.2 of EAE (page 256)
 
-    :param  n: Normal stress over the rotated plane (see figure 24.1 
-               on the book from UNED).
-    :param  tn: Tangential stress over the rotated plane normal to the weld axis.
+    :param  n: Normal stress over the rotated plane (see figure 24.1 on the book from UNED).
+    :param  tn: Tangential stress over the rotated plane normal to the weld axis
     :param  ta: Tangential stress over the rotated plane parallel to 
                 the weld axis.
     '''
@@ -161,7 +153,7 @@ def getFilletWeldYieldCriteriaLHS(n, tn, ta):
 def getFilletWeldCondition1CapacityFactor(n, tn, ta, fu, fy, gammaM2):
     '''
     Return the capacity factor that correspond to the first condition
-     of clause 59.8.2 of EAE (page 256)
+    of clause 59.8.2 of EAE (page 256)
 
     :param  n: Normal stress over the rotated plane (see figure 24.1 
                on the book from UNED).
@@ -192,7 +184,7 @@ def getFilletWeldMinimumThroatDepth(t):
     Return the minimum throat depth for a fillet bead that welds a sheet 
     of thickness t according to clause 59.3.2 of EAE (page 296).
 
-      :param t: Sheet thickness.
+    :param t: Sheet thickness.
     '''
     if(t<=10e-3):
         return 3e-3
@@ -207,7 +199,7 @@ def getFilletWeldMaximumThroatDepth(t):
     Return the maximum throat thickness for a fillet bead that welds a sheet 
     of thickness t according to clause 59.3.2 of EAE (page 296).
 
-      :param t: Sheet thickness.
+    :param t: Sheet thickness.
     '''
     return 0.7*t
 
@@ -216,8 +208,8 @@ def getFilletWeldMinimumThroatDepthSheets(t1, t2):
     Return the minimum throat thickness which can be used to weld two sheets
     according to articla 59.3.2 of EAE (page 296).
 
-      :param t1: Thickness of sheet 1.
-      :param t2: Thickness of sheet 2.
+    :param t1: Thickness of sheet 1.
+    :param t2: Thickness of sheet 2.
     '''
     amin1= getFilletWeldMinimumThroatDepth(t1)
     amin2= getFilletWeldMinimumThroatDepth(t2)
@@ -228,8 +220,8 @@ def getFilletWeldMaximumThroatDepthSheets(t1, t2):
     Return the maximum throat thickness which can be used to weld two sheets
     according to articla 59.3.2 of EAE (page 296).
 
-      :param t1: Thickness of sheet 1.
-      :param t2: Thickness of sheet 2.
+    :param t1: Thickness of sheet 1.
+    :param t2: Thickness of sheet 2.
     '''
     amax1= getFilletWeldMaximumThroatDepth(t1)
     amax2= getFilletWeldMaximumThroatDepth(t2)
