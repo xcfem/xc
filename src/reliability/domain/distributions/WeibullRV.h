@@ -63,7 +63,10 @@
 #include <reliability/domain/components/RandomVariable.h>
 
 namespace XC {
-class WeibullRV : public RandomVariable
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
+class WeibullRV: public RandomVariable
 {
 
 public:

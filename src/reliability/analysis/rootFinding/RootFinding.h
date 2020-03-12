@@ -63,6 +63,8 @@
 #include "utility/matrix/Vector.h"
 
 namespace XC {
+//! @ingroup ReliabilityAnalysis
+// 
 //! @brief Base class for root finding algorithms.
 class RootFinding
   {

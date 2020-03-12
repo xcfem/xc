@@ -63,7 +63,10 @@
 #include <reliability/domain/components/RandomVariable.h>
 
 namespace XC {
-class LognormalRV : public RandomVariable
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
+class LognormalRV: public RandomVariable
 {
 
 public:

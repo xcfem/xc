@@ -63,6 +63,10 @@
 #include <utility/matrix/Matrix.h>
 
 namespace XC {
+
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
 class HessianApproximation
   {
   public:

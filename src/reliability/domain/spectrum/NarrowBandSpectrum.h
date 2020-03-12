@@ -63,7 +63,10 @@
 #include <reliability/domain/spectrum/Spectrum.h>
 
 namespace XC {
-class NarrowBandSpectrum : public Spectrum
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
+class NarrowBandSpectrum: public Spectrum
 {
 
 public:

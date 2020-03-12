@@ -64,10 +64,13 @@
 #include <utility/matrix/Matrix.h>
 
 namespace XC {
-class ProbabilityTransformation
-{
 
-public:
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
+class ProbabilityTransformation
+  {
+  public:
 	ProbabilityTransformation();
 
 	virtual int set_x(Vector x) =0;

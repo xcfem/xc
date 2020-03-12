@@ -63,6 +63,8 @@
 #include <reliability/analysis/meritFunction/MeritFunctionCheck.h>
 
 namespace XC {
+//! @ingroup ReliabilityAnalysis
+//
 //! @brief Zhang and Der Kiureghian "merit function".
 //! see section 14.3.1 "Engineering Design Reliability Handbook"
 //! Efstratios Nikolaidis, Dan M. Ghiocel, Suren Singhal CRC Press, Dec 22,

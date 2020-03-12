@@ -63,7 +63,10 @@
 #include <reliability/domain/components/RandomVariable.h>
 
 namespace XC {
-class ExponentialRV : public RandomVariable
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
+class ExponentialRV: public RandomVariable
 {
 
 public:

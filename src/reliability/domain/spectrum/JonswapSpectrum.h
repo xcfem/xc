@@ -63,7 +63,10 @@
 #include "Spectrum.h"
 
 namespace XC {
-class JonswapSpectrum : public Spectrum
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
+class JonswapSpectrum: public Spectrum
   {
 private:
 	double minFreq;

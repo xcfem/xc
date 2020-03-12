@@ -65,6 +65,7 @@
 #include <reliability/domain/components/ReliabilityDomain.h>
 
 namespace XC {
+
 class GFunEvaluator;
 //! @ingroup ReliabilityAnalysis
 //!

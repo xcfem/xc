@@ -91,12 +91,12 @@ public:
 	OpenSeesGFunEvaluator(Tcl_Interp *passedTclInterp,
 						ReliabilityDomain *passedReliabilityDomain,
 						int nsteps, double dt);
-	int		runGFunAnalysis(Vector x);
-	int		tokenizeSpecials(const std::string &theExpression);
+	int runGFunAnalysis(const Vector &x);
+	int tokenizeSpecials(const std::string &theExpression);
 
 	void    setNsteps(int nsteps);
 	double  getDt();
-};
+  };
 } // end of XC namespace
 
 #endif

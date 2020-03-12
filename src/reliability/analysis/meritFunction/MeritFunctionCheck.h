@@ -63,6 +63,8 @@
 #include <utility/matrix/Vector.h>
 
 namespace XC {
+//! @ingroup ReliabilityAnalysis
+// 
 //! @brief A "merit function" can be any continuous and differentiable function
 //! of vector u, whose minimum occurs at the solution of the first order
 //! reliability method (FORM) and for which \f$d_i\f$ is a descent direction at \f$u_i\f$

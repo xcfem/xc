@@ -63,8 +63,11 @@
 
 #include <utility/tagged/TaggedObject.h>
 namespace XC {
-class ReliabilityDomain;
 
+class ReliabilityDomain;
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
 class ReliabilityDomainComponent: public TaggedObject
   {
   public:

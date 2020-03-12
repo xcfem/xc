@@ -92,65 +92,64 @@ XC::OpenSeesGFunEvaluator::OpenSeesGFunEvaluator(Tcl_Interp *passedTclInterp,
 					ReliabilityDomain *passedReliabilityDomain,
 					int p_nsteps, double p_dt)
 :GFunEvaluator(passedTclInterp, passedReliabilityDomain)
-{
+  {
 	nsteps = p_nsteps;
 	dt = p_dt;
 	// (here the user has specified number of steps and possibly dt)
 
 	createRecorders();
-}
+  }
 
-int
-XC::OpenSeesGFunEvaluator::runGFunAnalysis(Vector x)
-{
-	// Zero out the response in the structural domain to make ready for next analysis
-	char theRevertToStartCommand[10] = "reset";
-	Tcl_Eval( theTclInterp, theRevertToStartCommand );
-
-
-	// Put random variables into the structural domain according to the RandomVariablePositioners
-	int numberOfRandomVariablePositioners = theReliabilityDomain->getNumberOfRandomVariablePositioners();
-	RandomVariablePositioner *theRandomVariablePositioner;
-	int rvNumber;
-	int i;
-	for ( i=1 ; i<=numberOfRandomVariablePositioners ; i++ )  {
-		theRandomVariablePositioner = theReliabilityDomain->getRandomVariablePositionerPtr(i);
-		rvNumber				= theRandomVariablePositioner->getRvNumber();
-		theRandomVariablePositioner->update(x(rvNumber-1));
-	}
+int XC::OpenSeesGFunEvaluator::runGFunAnalysis(const Vector &x)
+  {
+      // Zero out the response in the structural domain to make ready for next analysis
+      char theRevertToStartCommand[10] = "reset";
+      Tcl_Eval( theTclInterp, theRevertToStartCommand );
 
 
-	// Run the structural analysis according to user specified scheme
-	double result = 0;
-	if (dt==0.0 && nsteps==0 && !strcmp(fileName.c_str(),"0") ) {
-		// Run up to max time in fFuncs
-		std::cerr << "OpenSeesGFunEvaluator: The option -runToMaxTimeInGFun " << std::endl
-			<< " is not yet implemented." << std::endl;
-	}
-	else if (dt==0.0 && nsteps==0) {
-		// Read commands from file and execute them
-		// (The reason for doing it like this is that we want to check
-		// the flag returned by the analysis to see if it converged). 
-		char theAnalyzeCommand[30];
-		sprintf(theAnalyzeCommand,"[source %s]",fileName.c_str());
-		Tcl_ExprDouble( theTclInterp, theAnalyzeCommand, &result);
-	}
-	else {
-		// User has given "nsteps" and possibly "dt"
-		char theAnalyzeCommand[30];
-		if (dt == 0.0) {
-			sprintf(theAnalyzeCommand,"[analyze %d]",nsteps);
-			Tcl_ExprDouble( theTclInterp, theAnalyzeCommand, &result);
-		}
-		else {
-			sprintf(theAnalyzeCommand,"[analyze %d %10.5f]", nsteps, dt);
-			Tcl_ExprDouble( theTclInterp, theAnalyzeCommand, &result);
-		}
-	
-	}
+      // Put random variables into the structural domain according to the RandomVariablePositioners
+      int numberOfRandomVariablePositioners = theReliabilityDomain->getNumberOfRandomVariablePositioners();
+      RandomVariablePositioner *theRandomVariablePositioner;
+      int rvNumber;
+      int i;
+      for ( i=1 ; i<=numberOfRandomVariablePositioners ; i++ )  {
+	      theRandomVariablePositioner = theReliabilityDomain->getRandomVariablePositionerPtr(i);
+	      rvNumber				= theRandomVariablePositioner->getRvNumber();
+	      theRandomVariablePositioner->update(x(rvNumber-1));
+      }
 
-	return ((int)result);
-}
+
+      // Run the structural analysis according to user specified scheme
+      double result = 0;
+      if (dt==0.0 && nsteps==0 && !strcmp(fileName.c_str(),"0") ) {
+	      // Run up to max time in fFuncs
+	      std::cerr << "OpenSeesGFunEvaluator: The option -runToMaxTimeInGFun " << std::endl
+		      << " is not yet implemented." << std::endl;
+      }
+      else if (dt==0.0 && nsteps==0) {
+	      // Read commands from file and execute them
+	      // (The reason for doing it like this is that we want to check
+	      // the flag returned by the analysis to see if it converged). 
+	      char theAnalyzeCommand[30];
+	      sprintf(theAnalyzeCommand,"[source %s]",fileName.c_str());
+	      Tcl_ExprDouble( theTclInterp, theAnalyzeCommand, &result);
+      }
+      else {
+	      // User has given "nsteps" and possibly "dt"
+	      char theAnalyzeCommand[30];
+	      if (dt == 0.0) {
+		      sprintf(theAnalyzeCommand,"[analyze %d]",nsteps);
+		      Tcl_ExprDouble( theTclInterp, theAnalyzeCommand, &result);
+	      }
+	      else {
+		      sprintf(theAnalyzeCommand,"[analyze %d %10.5f]", nsteps, dt);
+		      Tcl_ExprDouble( theTclInterp, theAnalyzeCommand, &result);
+	      }
+
+      }
+
+      return ((int)result);
+  }
 
 
 

@@ -64,8 +64,10 @@
 #include "domain/mesh/element/utils/Information.h"
 
 namespace XC {
-
-class RandomVariablePositioner : public Positioner
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
+class RandomVariablePositioner: public Positioner
   {
   private:
     int rvNumber;

@@ -70,12 +70,12 @@ namespace XC {
 //! @brief ??
 class FirstPrincipalCurvature: public FindCurvatures
   {
+  private:	
+    Vector curvatures;
   public:
     FirstPrincipalCurvature();
     int	computeCurvatures(ReliabilityDomain *theReliabilityDomain);
-	Vector	getCurvatures();
-  private:	
-    Vector curvatures;
+    Vector getCurvatures();
   };
 } // end of XC namespace
 

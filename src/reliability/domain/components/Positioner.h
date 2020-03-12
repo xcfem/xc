@@ -36,8 +36,10 @@
 namespace XC {
 
 class DomainComponent;
-
-class Positioner : public ReliabilityDomainComponent
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
+class Positioner: public ReliabilityDomainComponent
   {
   protected:
     Information theInfo;

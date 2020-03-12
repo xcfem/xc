@@ -63,7 +63,10 @@
 #include <reliability/domain/modulatingFunction/ModulatingFunction.h>
 
 namespace XC {
-class TrapezoidalModulatingFunction : public ModulatingFunction
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
+class TrapezoidalModulatingFunction: public ModulatingFunction
   {
   private:
     Filter *theFilter;

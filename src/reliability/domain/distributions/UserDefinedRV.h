@@ -64,7 +64,10 @@
 #include <utility/matrix/Vector.h>
 
 namespace XC {
-class UserDefinedRV : public RandomVariable
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
+class UserDefinedRV: public RandomVariable
 {
 
 public:

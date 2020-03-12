@@ -65,6 +65,9 @@ namespace XC {
   class EquiSolnAlgo;
   class SensitivityIntegrator;
 
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
 class SensitivityAlgorithm
   {
   private:

@@ -76,9 +76,8 @@ XC::TclGFunEvaluator::TclGFunEvaluator(Tcl_Interp *passedTclInterp,
 }
 
 
-int
-XC::TclGFunEvaluator::runGFunAnalysis(Vector x)
-{	
+int XC::TclGFunEvaluator::runGFunAnalysis(const Vector &x)
+  {	
 	// Initial declarations
 	char theCommand[100];
 	int i;

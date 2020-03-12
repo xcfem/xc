@@ -66,6 +66,7 @@
 #include <reliability/analysis/rootFinding/RootFinding.h>
 
 namespace XC {
+
 class GFunEvaluator;
 class GradGEvaluator;
 

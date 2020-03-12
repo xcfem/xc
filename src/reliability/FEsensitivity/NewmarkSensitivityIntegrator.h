@@ -64,10 +64,13 @@
 #include <reliability/FEsensitivity/SensitivityIntegrator.h>
 #include <utility/matrix/Vector.h>
 namespace XC {
+
 class Information;
 
-
-class NewmarkSensitivityIntegrator : public SensitivityIntegrator , public Newmark
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
+class NewmarkSensitivityIntegrator: public SensitivityIntegrator , public Newmark
   {
   private:
     int parameterID;

@@ -68,17 +68,14 @@
 
 namespace XC {
 //! @ingroup ReliabilityAnalysis
-//!
-//! @brief ??
+//
+//! @brief Basic performance function evaluator.
 class BasicGFunEvaluator: public GFunEvaluator
-{
-
-public:
-	BasicGFunEvaluator(	Tcl_Interp *passedTclInterp, 
-						ReliabilityDomain *passedReliabilityDomain);
-
-	int		runGFunAnalysis(Vector x);
-	int		tokenizeSpecials(const std::string &theExpression);
+  {
+  public:
+    BasicGFunEvaluator(Tcl_Interp *passedTclInterp, ReliabilityDomain *passedReliabilityDomain);
+    int runGFunAnalysis(const Vector &);
+    int	tokenizeSpecials(const std::string &);
   };
 } // end of XC namespace
 

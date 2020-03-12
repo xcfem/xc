@@ -69,6 +69,7 @@
 using std::ofstream;
 
 namespace XC {
+
 class GFunEvaluator;
 class GradGEvaluator;
 

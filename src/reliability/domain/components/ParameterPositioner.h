@@ -63,7 +63,10 @@
 #include <reliability/domain/components/Positioner.h>
 
 namespace XC {
-class ParameterPositioner : public Positioner
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
+class ParameterPositioner: public Positioner
   {
   public:
     ParameterPositioner(int tag, DomainComponent *theObject, const std::vector<std::string> &argv);

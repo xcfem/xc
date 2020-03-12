@@ -64,8 +64,12 @@
 #include <utility/matrix/Matrix.h>
 
 namespace XC {
+
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
 class MatrixOperations
-{
+  {
 
 public:
 	MatrixOperations(Matrix passedMatrix);

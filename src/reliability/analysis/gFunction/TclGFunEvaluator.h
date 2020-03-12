@@ -71,18 +71,15 @@ namespace XC {
 //!
 //! @brief ??
 class TclGFunEvaluator: public GFunEvaluator
-{
-private:
-	std::string fileName;
-public:
-	TclGFunEvaluator(Tcl_Interp *passedTclInterp,
-						ReliabilityDomain *passedReliabilityDomain,
-						const std::string &fileName);
+  {
+  private:
+    std::string fileName;
+  public:
+    TclGFunEvaluator(Tcl_Interp *passedTclInterp, ReliabilityDomain *passedReliabilityDomain, const std::string &fileName);
 
-	int		runGFunAnalysis(Vector x);
-	int		tokenizeSpecials(const std::string &theExpression);
-
-};
+    int runGFunAnalysis(const Vector &x);
+    int tokenizeSpecials(const std::string &theExpression);
+  };
 } // end of XC namespace
 
 #endif

@@ -63,7 +63,10 @@
 #include <reliability/domain/components/ReliabilityDomainComponent.h>
 
 namespace XC {
-class CorrelationCoefficient : public ReliabilityDomainComponent
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
+class CorrelationCoefficient: public ReliabilityDomainComponent
   {
   public:
     CorrelationCoefficient(int tag, int rv1, int rv2, double correlation);

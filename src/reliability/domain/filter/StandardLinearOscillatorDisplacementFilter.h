@@ -63,8 +63,11 @@
 #include <reliability/domain/filter/Filter.h>
 
 namespace XC {
-class StandardLinearOscillatorDisplacementFilter : public Filter
-{
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
+class StandardLinearOscillatorDisplacementFilter: public Filter
+  {
 
 public:
 	StandardLinearOscillatorDisplacementFilter(int tag, double period, double dampingRatio);

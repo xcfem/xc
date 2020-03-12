@@ -63,7 +63,10 @@
 #include <reliability/domain/filter/Filter.h>
 
 namespace XC {
-class KooFilter : public Filter
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
+class KooFilter: public Filter
   {
   public:
 	KooFilter(int tag, double period, double dampingRatio);

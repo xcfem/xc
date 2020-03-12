@@ -63,10 +63,13 @@
 #include <utility/matrix/Vector.h>
 
 namespace XC {
-class SearchDirection
-{
 
-public:
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
+class SearchDirection
+  {
+  public:
 	SearchDirection();
 
 	virtual int computeSearchDirection(	

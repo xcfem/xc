@@ -63,7 +63,10 @@
 #include <reliability/domain/components/ReliabilityDomainComponent.h>
 
 namespace XC {
-class Spectrum : public ReliabilityDomainComponent
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
+class Spectrum: public ReliabilityDomainComponent
 {
 
 public:

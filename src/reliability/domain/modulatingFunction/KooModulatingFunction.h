@@ -63,7 +63,10 @@
 #include <reliability/domain/modulatingFunction/ModulatingFunction.h>
 
 namespace XC {
-class KooModulatingFunction : public ModulatingFunction
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
+class KooModulatingFunction: public ModulatingFunction
   {
   private:
     Filter *theFilter;

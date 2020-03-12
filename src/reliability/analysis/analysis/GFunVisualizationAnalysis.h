@@ -70,6 +70,7 @@
 
 
 namespace XC {
+
 class GFunEvaluator;
 class GradGEvaluator;
 

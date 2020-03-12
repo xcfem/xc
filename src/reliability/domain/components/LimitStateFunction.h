@@ -65,7 +65,10 @@
 #include <string>
 
 namespace XC {
-class LimitStateFunction : public ReliabilityDomainComponent
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
+class LimitStateFunction: public ReliabilityDomainComponent
   {
   private:
     int tokenizeIt(const std::string &expression);

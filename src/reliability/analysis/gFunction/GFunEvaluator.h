@@ -68,30 +68,34 @@
 using std::ofstream;
 
 namespace XC {
+
+//! @ingroup ReliabilityAnalysis
+//
+//! @brief Performance function evaluator.
 class GFunEvaluator
-{
-protected:
-	Tcl_Interp *theTclInterp;
-	ReliabilityDomain *theReliabilityDomain;
-	double g;
-	int numberOfEvaluations;
+  {
+  protected:
+    Tcl_Interp *theTclInterp;
+    ReliabilityDomain *theReliabilityDomain;
+    double g;
+    int numberOfEvaluations;
 
-public:
-	GFunEvaluator(Tcl_Interp *theTclInterp, ReliabilityDomain *theReliabilityDomain);
+  public:
+    GFunEvaluator(Tcl_Interp *theTclInterp, ReliabilityDomain *theReliabilityDomain);
 
-	// Methods provided by base class
-	int		evaluateG(Vector x);
-	double	getG();
-	int     initializeNumberOfEvaluations();
-	int     getNumberOfEvaluations();
+    // Methods provided by base class
+    int evaluateG(Vector x);
+    double getG(void);
+    int initializeNumberOfEvaluations();
+    int getNumberOfEvaluations();
 
-	// Methods to be implemented by specific classes
-	virtual int		runGFunAnalysis(Vector x)	=0;
-	virtual int tokenizeSpecials(const std::string &theExpression)	=0;
+    // Methods to be implemented by specific classes
+    virtual int runGFunAnalysis(const Vector &x)= 0;
+    virtual int tokenizeSpecials(const std::string &theExpression)	=0;
 
-	// Methods implemented by SOME specific classes (random vibrations stuff)
-	virtual void    setNsteps(int nsteps);
-	virtual double  getDt();
+    // Methods implemented by SOME specific classes (random vibrations stuff)
+    virtual void setNsteps(int nsteps);
+    virtual double getDt(void);
   };
 } // end of XC namespace
 

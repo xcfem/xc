@@ -74,17 +74,14 @@ XC::BasicGFunEvaluator::BasicGFunEvaluator(Tcl_Interp *passedTclInterp,
 {
 }
 
-int
-XC::BasicGFunEvaluator::runGFunAnalysis(Vector x)
-{
-	// Nothing to compute for this kind of gFunEvaluator
-	
-	return 0;
-}
+int XC::BasicGFunEvaluator::runGFunAnalysis(const Vector &x)
+  {
+    // Nothing to compute for this kind of gFunEvaluator
+    return 0;
+  }
 
 
-int
-XC::BasicGFunEvaluator::tokenizeSpecials(const std::string &theExpression)
+int XC::BasicGFunEvaluator::tokenizeSpecials(const std::string &theExpression)
 {
 	// No need to set additional quantities here
 	// (the basic random variables are set in the base class)

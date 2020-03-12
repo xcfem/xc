@@ -63,9 +63,12 @@
 #include <reliability/FEsensitivity/SensitivityIntegrator.h>
 #include <solution/analysis/integrator/StaticIntegrator.h>
 namespace XC {
-class AnalysisModel;
 
-class StaticSensitivityIntegrator : public SensitivityIntegrator, public StaticIntegrator
+class AnalysisModel;
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
+class StaticSensitivityIntegrator: public SensitivityIntegrator, public StaticIntegrator
   {
   private:
     int gradNumber;

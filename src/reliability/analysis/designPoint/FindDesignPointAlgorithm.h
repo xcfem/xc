@@ -64,27 +64,30 @@
 #include <utility/matrix/Vector.h>
 
 namespace XC {
+
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
 class FindDesignPointAlgorithm
-{
+  {
+  public:
+    FindDesignPointAlgorithm();
 
-public:
-	FindDesignPointAlgorithm();
+    virtual int findDesignPoint(ReliabilityDomain *theReliabilityDomain) =0;
 
-	virtual int findDesignPoint(ReliabilityDomain *theReliabilityDomain) =0;
-
-	virtual Vector get_x() =0;
-	virtual Vector get_u() =0;
-	virtual Vector get_alpha() =0;
-	virtual Vector get_gamma() =0;
-	virtual int getNumberOfSteps() =0;
-	virtual Vector getSecondLast_u() =0;
-	virtual Vector getSecondLast_alpha() =0;
-	virtual Vector getLastSearchDirection() =0;
-	virtual double getFirstGFunValue() =0;
-	virtual double getLastGFunValue() =0;
-	virtual Vector getGradientInStandardNormalSpace() =0;
-	virtual int getNumberOfEvaluations() = 0;
-};
+    virtual Vector get_x() =0;
+    virtual Vector get_u() =0;
+    virtual Vector get_alpha() =0;
+    virtual Vector get_gamma() =0;
+    virtual int getNumberOfSteps() =0;
+    virtual Vector getSecondLast_u() =0;
+    virtual Vector getSecondLast_alpha() =0;
+    virtual Vector getLastSearchDirection() =0;
+    virtual double getFirstGFunValue() =0;
+    virtual double getLastGFunValue() =0;
+    virtual Vector getGradientInStandardNormalSpace() =0;
+    virtual int getNumberOfEvaluations() = 0;
+  };
 } // end of XC namespace
 
 #endif

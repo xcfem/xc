@@ -494,9 +494,8 @@ double XC::GFunVisualizationAnalysis::findGSurface(Vector thePoint)
         return scalarDist;
 }
 
-double
-XC::GFunVisualizationAnalysis::evaluateGFunction(Vector thePoint, bool isFirstPoint)
-{
+double XC::GFunVisualizationAnalysis::evaluateGFunction(Vector thePoint, bool isFirstPoint)
+  {
         // Initial declarations
         double g;
         int result;

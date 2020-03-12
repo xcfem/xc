@@ -64,17 +64,19 @@
 
 namespace XC {
 
+//! @ingroup ReliabilityAnalysis
+//!
+//! @brief ??
 class StepSizeRule
-{
+  {
+  public:
+    StepSizeRule(void);
 
-public:
-	StepSizeRule();
-
-	virtual int		computeStepSize(Vector u, Vector grad_G, double G, Vector d, int stepNumber) =0;
-	virtual double	getStepSize() =0;
-	virtual double	getInitialStepSize() =0;
-	virtual double getGFunValue() =0;
- };
+    virtual int	computeStepSize(Vector u, Vector grad_G, double G, Vector d, int stepNumber) =0;
+    virtual double getStepSize(void) =0;
+    virtual double getInitialStepSize(void) =0;
+    virtual double getGFunValue(void) =0;
+  };
 } // end of XC namespace
 
 #endif

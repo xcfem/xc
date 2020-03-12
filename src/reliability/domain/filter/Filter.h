@@ -64,18 +64,20 @@
 #include <reliability/domain/components/ReliabilityDomainComponent.h>
 
 namespace XC {
-class Filter : public ReliabilityDomainComponent
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
+class Filter: public ReliabilityDomainComponent
   {
-
+  protected:
+    int tag;
   public:
     Filter(int tag, int classtag);
     virtual double getAmplitude(double time) = 0;
     virtual double getMaxAmplitude() = 0;
-	virtual double getTimeOfMaxAmplitude() = 0;
+    virtual double getTimeOfMaxAmplitude() = 0;
 
-protected:
-	int tag;
-};
+  };
 } // end of XC namespace
 
 #endif

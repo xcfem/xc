@@ -63,14 +63,16 @@
 #include <utility/matrix/Vector.h>
 
 namespace XC {
+
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
 class FindCurvatures
-{
-
-public:
-	FindCurvatures();
-
-	virtual int		computeCurvatures(ReliabilityDomain *theReliabilityDomain) =0;
-	virtual Vector	getCurvatures() =0;
+  {
+  public:
+    FindCurvatures(void);
+    virtual int	computeCurvatures(ReliabilityDomain *theReliabilityDomain) =0;
+    virtual Vector getCurvatures(void) =0;
   };
 } // end of XC namespace
 

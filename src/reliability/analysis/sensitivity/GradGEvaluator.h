@@ -66,6 +66,7 @@
 #include <tcl.h>
 
 namespace XC {
+
 class GradGEvaluator
   {
   public:
@@ -73,11 +74,11 @@ class GradGEvaluator
 	virtual ~GradGEvaluator();
 
 	// Methods provided by the sub-classes
-	virtual int		computeGradG(double gFunValue, Vector passed_x) =0;
-	virtual int		computeAllGradG(Vector gFunValues, Vector passed_x) =0;
+	virtual int computeGradG(double gFunValue, Vector passed_x) =0;
+	virtual int computeAllGradG(Vector gFunValues, Vector passed_x) =0;
 
-	virtual Vector	getGradG() =0;
-	virtual Matrix	getAllGradG() =0;
+	virtual Vector getGradG() =0;
+	virtual Matrix getAllGradG() =0;
 
 	// Methods that are provided by sub-classes, but rather specific to FE reliability
 	virtual Matrix  getDgDdispl();

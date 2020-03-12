@@ -62,9 +62,9 @@
 
 namespace XC {
 //! @defgroup ReliabilityAnalysis Objects to perform reliability analisys.
-//!
+//
 //! @ingroup ReliabilityAnalysis
-//! 
+// 
 //! @brief Base class for reliability analysis 
 class ReliabilityAnalysis
   {

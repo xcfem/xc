@@ -63,10 +63,13 @@
 #include <utility/matrix/Vector.h>
 
 namespace XC {
-class ReliabilityConvergenceCheck
-{
 
-public:
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
+class ReliabilityConvergenceCheck
+  {
+  public:
 	ReliabilityConvergenceCheck();
 
 	virtual int	check(Vector u, double g, Vector gradG) = 0;

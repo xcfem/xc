@@ -70,19 +70,17 @@ namespace XC {
 //!
 //! @brief ??
 class CurvaturesBySearchAlgorithm: public FindCurvatures
-{
-
-public:
-	CurvaturesBySearchAlgorithm(int numberOfCurvatures, FindDesignPointAlgorithm *theFindDesignPointAlgorithm);
+  {
+  private:	
+    Vector curvatures;
+    int numberOfCurvatures;
+    FindDesignPointAlgorithm *theFindDesignPointAlgorithm;
+  public:
+    CurvaturesBySearchAlgorithm(int numberOfCurvatures, FindDesignPointAlgorithm *theFindDesignPointAlgorithm);
 
     int computeCurvatures(ReliabilityDomain *theReliabilityDomain);
-	Vector	getCurvatures();
-private:	
-	Vector curvatures;
-	int numberOfCurvatures;
-	FindDesignPointAlgorithm *theFindDesignPointAlgorithm;
-
-};
+    Vector getCurvatures(void);
+  };
 } // end of XC namespace
 
 #endif

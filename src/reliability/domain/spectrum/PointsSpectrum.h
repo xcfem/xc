@@ -64,7 +64,10 @@
 #include <utility/matrix/Vector.h>
 
 namespace XC {
-class PointsSpectrum : public Spectrum
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
+class PointsSpectrum: public Spectrum
 {
 
 public:

@@ -64,9 +64,12 @@
 #include <reliability/domain/components/ReliabilityDomainComponent.h>
 
 namespace XC {
-class Filter;
 
-class ModulatingFunction : public ReliabilityDomainComponent
+class Filter;
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
+class ModulatingFunction: public ReliabilityDomainComponent
   {
   protected:
     int tag;

@@ -63,7 +63,10 @@
 #include <reliability/domain/filter/Filter.h>
 
 namespace XC {
-class StandardLinearOscillatorAccelerationFilter : public Filter
+//! @ingroup ReliabilityAnalysis
+// 
+//! @brief ??
+class StandardLinearOscillatorAccelerationFilter: public Filter
 {
 
 public:

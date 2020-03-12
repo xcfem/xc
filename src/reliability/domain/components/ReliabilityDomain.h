@@ -70,8 +70,12 @@
 #include <reliability/domain/spectrum/Spectrum.h>
 
 namespace XC {
+
 class TaggedObjectStorage;
 
+//! @ingroup ReliabilityAnalysis
+//
+//! @brief
 class ReliabilityDomain
   {
   public:
