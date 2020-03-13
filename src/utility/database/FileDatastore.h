@@ -102,11 +102,11 @@ typedef struct doubleData
 
 
 //! @ingroup Database
-//!
+//
 //! @brief used in the program to store/restore the geometry and state
 //! information in the domain at particular instances. This information is
 //! stored in binary form in files.
-//! 
+//
 //! An FileDatastore object is used in the program to store/restore the
 //! geometry and state information in the domain at particular instances. This
 //! information is stored in binary form in files. As no standard format is

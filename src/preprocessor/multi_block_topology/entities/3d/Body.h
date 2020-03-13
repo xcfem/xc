@@ -43,7 +43,7 @@ class Pnt;
 
 //! @ingroup MultiBlockTopologyEnt
 //!
-//! @brief Order in edges of an hexaedron face.
+//! @brief Order in edges of an hexahedron face.
 struct SideSequence
   {
     size_t l1; //!< Index edge 1.

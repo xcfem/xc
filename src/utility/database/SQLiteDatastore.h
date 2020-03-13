@@ -39,6 +39,7 @@ namespace XC {
 //
 //! @ingroup Database
 //
+//! @brief Store model data in a <a href="https://en.wikipedia.org/wiki/SQLite">SQLite</a> database.
 class SQLiteDatastore: public DBDatastore
   {
   private:

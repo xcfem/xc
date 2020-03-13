@@ -35,10 +35,6 @@
 // Written:  Jun Peng 
 //
 // Description: This file contains the class definition for OracleDatastore.
-// OracleDatastore is a concrete subclas of DBDatastore. A OracleDatastore 
-// object is used in the program to store/restore the geometry and state 
-// information in a model at a particular instance in the analysis. The
-// information is stored in ORACLE8i Database.
 //
 // What: "@(#) OracleDatastore.h, revA"
 
@@ -51,6 +47,12 @@ class FEM_ObjectBroker;
 
 //! @ingroup Database
 //
+//! @brief Store model data in a <a href="https://en.wikipedia.org/wiki/Oracle_Database">Oracle</a> database.
+//
+//! OracleDatastore is a concrete subclas of DBDatastore. A OracleDatastore 
+//! object is used in the program to store/restore the geometry and state 
+//! information in a model at a particular instance in the analysis. The
+//! information is stored in ORACLE8i Database.
 class OracleDatastore: public DBDatastore
   {
   private:

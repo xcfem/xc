@@ -68,6 +68,12 @@
 namespace XC {
 //! @ingroup Database
 //
+//! @brief Store model data in a <a href="https://en.wikipedia.org/wiki/MySQL">MySQL</a> database.
+//
+//! MySqlDatastore is a concrete subclass of DBDatastore. A MySqlDatastore 
+//! object is used in the program to store/restore the geometry and state 
+//! information in a model at a particular instance in the analysis. The
+//! information is stored in a MySQL Database which can be local or remote.
 class MySqlDatastore: public DBDatastore
   {
   private:

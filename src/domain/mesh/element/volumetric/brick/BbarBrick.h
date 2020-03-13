@@ -59,7 +59,7 @@
 namespace XC {
 //! @ingroup ElemVol
 //
-//! @brief Hexaedro.
+//! @brief Hexahedron.
 class BbarBrick : public BrickBase
  {
  private : 

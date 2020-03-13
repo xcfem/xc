@@ -56,9 +56,6 @@
 // Created: 03/04
 //
 // Description: This file contains the class definition for NeesData.
-// NeesData is a concretes subclass of FE_Datastore. NEESData datastore
-// is used to store data from the recorders in a file format that can
-// be stored in the NEES data repository.
 //
 // What: "@(#) NeesData.h, revA"
 
@@ -82,11 +79,16 @@ class FEM_ObjectBroker;
 
 //! @ingroup Database
 //
+//! @brief Store model data in a file format that can be stored in a <a href="https://datacenterhub.org/resources/395">NEES</a> data repository
+//
+//! NeesData is a concretes subclass of FE_Datastore. NEESData datastore
+//! is used to store data from the recorders in a file format that can
+//! be stored in the NEES data repository.
 class NEESData: public FE_Datastore
   {
   private:
     std::string dataBase;
-    NEES_table    *tables;
+    NEES_table *tables;
     int          numTables;
   public:
   /** @brief

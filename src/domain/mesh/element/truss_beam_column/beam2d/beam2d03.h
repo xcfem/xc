@@ -69,7 +69,7 @@ class Channel;
 
 //! @ingroup OneDimensionalElem
 //
-//! @brief 2D 03 beam element.
+//! @brief 2D beam 03 element.
 class beam2d03 : public beam2d
   {
   private:

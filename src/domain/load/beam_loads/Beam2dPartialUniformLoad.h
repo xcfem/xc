@@ -59,6 +59,10 @@
 
 namespace XC {
 
+//! @ingroup ElemLoads
+//
+//! @brief Uniform load partially distributed
+//! over 2D beam elements.
 class Beam2dPartialUniformLoad : public BeamUniformLoad
   {
   private:

@@ -35,6 +35,7 @@
 namespace XC {
 //! @ingroup Database
 //
+//! @brief Base class for classes that store model information on a database.
 class DBDatastore: public FE_Datastore
   {
   protected:

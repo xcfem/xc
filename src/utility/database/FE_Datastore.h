@@ -73,7 +73,9 @@ class Preprocessor;
 class FEM_ObjectBroker;
 
 //! @ingroup Database
-//!
+//
+//! @brief Base class for objects that store/restore model information.
+//
 //! Objects of this class are used in the program to store/restore
 //! the geometry and state information in the domain at particular
 //! instances. How, where and how the data is stored depends on the

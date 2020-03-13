@@ -64,7 +64,7 @@ namespace XC {
 
 //! @ingroup OneDimensionalElem
 //
-//! @brief 01 3D beam element.
+//! @brief 3D beam 01 element.
 class beam3d01 : public beam3dBase
   {
   private:

@@ -55,10 +55,7 @@
 // Created:  02/02
 //
 // Description: This file contains the class definition for BerkeleyDbDatastore.
-// BerkeleyDbDatastore is a concrete subclas of DBDatastore. A BerkeleyDbDatastore 
-// object is used in the program to store/restore the geometry and state 
-// information in a model at a particular instance in the analysis. The
-// information is stored using the BerkeleyDB Database.
+// BerkeleyDbDatastore is a concrete subclas of DBDatastore. 
 //
 // What: "@(#) BerkeleyDbDatastore.h, revA"
 
@@ -68,6 +65,11 @@
 namespace XC {
 //! @ingroup Database
 //
+//! @brief Store model data in a <a href="https://en.wikipedia.org/wiki/Berkeley_DB">Berkeley DB</a> database.
+//
+//! A BerkeleyDbDatastore object is used in the program to store/restore
+//! the geometry and state information in a model at a particular instance in
+//! the analysis. The information is stored using the BerkeleyDB Database.
 class BerkeleyDbDatastore: public DBDatastore
   {
   private:
