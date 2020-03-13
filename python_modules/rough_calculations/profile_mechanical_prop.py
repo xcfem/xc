@@ -6,8 +6,10 @@ import math
 
 def Iprofile(h,b,tw,tf,r):
     '''print mechanical properties of an I-shaped profile
-    Z: strong axis
-    Y: weak axis
+
+    - Z: strong axis
+    - Y: weak axis
+
     :param h: height
     :param b: widht
     :param tw: web thickness

@@ -254,7 +254,7 @@ class CFVy(ShVy):
 class ShearYControlVars(CFVy):
     '''Shear along Y axis. Limit state variables [CF,Vy].
 
-    :ivar idSection:section identifier
+    :ivar idSection: section identifier
     :ivar combName: name of the load combinations to deal with
     :ivar CF:       capacity factor (efficiency) (defaults to -1; CF<1.0 -> Ok; CF>1.0 -> KO)
     :ivar Vy:       shear along Y axis (defaults to 0.0)
@@ -283,7 +283,7 @@ class ShearYControlVars(CFVy):
 class UniaxialBendingControlVars(CFNMy):
     '''Uniaxial bending. Normal stresses limit state variables [CF,N,My].
 
-    :ivar idSection:section identifier
+    :ivar idSection: section identifier
     :ivar combName: name of the load combinations to deal with
     :ivar CF:       capacity factor (efficiency) (defaults to -1; CF<1.0 -> Ok; CF>1.0 -> KO)
     :ivar N:        axial force (defaults to 0.0)
@@ -349,7 +349,7 @@ class CFNMyMz(CFNMy):
 class AxialForceControlVars(ControlVarsBase):
     '''Axial force. Internal forces [N] for a combination.
 
-    :ivar idSection:section identifier
+    :ivar idSection: section identifier
     :ivar combName: name of the load combinations to deal with
     :ivar N:        axial force (defaults to 0.0)
     '''
@@ -388,7 +388,7 @@ class AxialForceControlVars(ControlVarsBase):
 class BiaxialBendingControlVars(UniaxialBendingControlVars):
     '''Biaxial bending. Normal stresses limit state variables. [CF,N,My,Mz].
 
-    :ivar idSection:section identifier
+    :ivar idSection: section identifier
     :ivar combName: name of the load combinations to deal with
     :ivar CF:       capacity factor (efficiency) (defaults to -1)
     :ivar N:        axial force (defaults to 0.0)
@@ -427,7 +427,7 @@ class SSBiaxialBendingControlVars(BiaxialBendingControlVars):
     '''Control variables for biaxial bending normal stresses LS 
     verification en steel-shape elements.
 
-    :ivar idSection:section identifier
+    :ivar idSection: section identifier
     :ivar combName: name of the load combinations to deal with
     :ivar CF:       capacity factor (efficiency) (defaults to -1)
     :ivar N:        axial force (defaults to 0.0)
@@ -470,10 +470,9 @@ class SSBiaxialBendingControlVars(BiaxialBendingControlVars):
     
     
 class RCShearControlVars(BiaxialBendingControlVars):
-    '''Control variables for shear limit state verification in
-    reinforced concrete elements.
+    '''Control variables for shear limit state verification in reinforced concrete elements.
 
-    :ivar idSection:section identifier
+    :ivar idSection: section identifier
     :ivar combName: name of the load combinations to deal with
     :ivar CF:       capacity factor (efficiency)
     :ivar N:        axial force
@@ -574,7 +573,7 @@ class CrackControlBaseVars(CFNMyMz):
 class CrackControlVars(ControlVarsBase):
     '''Cracking serviceability limit state control variables.
 
-    :ivar idSection:section identifier
+    :ivar idSection: section identifier
     :ivar crackControlVarsPos:     Crack control in + face.
     :ivar crackControlVarsNeg:     Crack control in - face.
     '''
@@ -620,7 +619,7 @@ class RCCrackStraightControlVars(NMyMz):
     when when considering a concrete stress-strain diagram that takes account of 
     the effects of tension stiffening.
 
-    :ivar idSection:section identifier
+    :ivar idSection: section identifier
     :ivar combName: name of the load combinations to deal with
     :ivar N:        axial force
     :ivar My:       bending moment about Y axis
