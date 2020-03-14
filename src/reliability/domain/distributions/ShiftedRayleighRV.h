@@ -65,51 +65,45 @@
 namespace XC {
 //! @ingroup ReliabilityAnalysis
 // 
-//! @brief ??
+//! @brief Shifted Rayleigh distribution random variable.
 class ShiftedRayleighRV: public RandomVariable
-{
+  {
+  private:
+    double u;
+    double x0;
+  public:
+    ShiftedRayleighRV(int tag, 
+		     double mean,
+		     double stdv,
+		     double startValue);
+    ShiftedRayleighRV(int tag, 
+		     double parameter1,
+		     double parameter2,
+		     double parameter3,
+		     double parameter4,
+		     double startValue);
+    ShiftedRayleighRV(int tag, 
+		     double mean,
+		     double stdv);
+    ShiftedRayleighRV(int tag, 
+		     double parameter1,
+		     double parameter2,
+		     double parameter3,
+		     double parameter4);
 
-public:
-	ShiftedRayleighRV(int tag, 
-			 double mean,
-			 double stdv,
-			 double startValue);
-	ShiftedRayleighRV(int tag, 
-			 double parameter1,
-			 double parameter2,
-			 double parameter3,
-			 double parameter4,
-			 double startValue);
-	ShiftedRayleighRV(int tag, 
-			 double mean,
-			 double stdv);
-	ShiftedRayleighRV(int tag, 
-			 double parameter1,
-			 double parameter2,
-			 double parameter3,
-			 double parameter4);
-
-	void Print(std::ostream &s, int flag =0);
-	double getPDFvalue(double rvValue);
-	double getCDFvalue(double rvValue);
-	double getInverseCDFvalue(double probValue);
-	const char * getType();
-	double getMean();
-	double getStdv();
-	double getParameter1();
-	double getParameter2();
-	double getParameter3();
-	double getParameter4();
-	double getStartValue();
-
-
-protected:
-
-private:
-	double u;
-	double x0;
-
-};
+    void Print(std::ostream &s, int flag =0);
+    double getPDFvalue(double rvValue);
+    double getCDFvalue(double rvValue);
+    double getInverseCDFvalue(double probValue);
+    const char * getType();
+    double getMean();
+    double getStdv();
+    double getParameter1();
+    double getParameter2();
+    double getParameter3();
+    double getParameter4();
+    double getStartValue();
+  };
 } // end of XC namespace
 
 #endif

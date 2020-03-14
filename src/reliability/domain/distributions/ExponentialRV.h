@@ -65,46 +65,49 @@
 namespace XC {
 //! @ingroup ReliabilityAnalysis
 // 
-//! @brief ??
+//! @brief Exponential distribution random variable.
+//
+//! In probability theory and statistics, the exponential distribution
+//! is the probability distribution of the time between events in a
+//! Poisson point process, i.e., a process in which events occur
+//! continuously and independently at a constant average rate.
 class ExponentialRV: public RandomVariable
-{
+  {
+  private:
+    double lambda;
+  public:
+    ExponentialRV(int tag, 
+		     double mean,
+		     double stdv,
+		     double startValue);
+    ExponentialRV(int tag, 
+		     double parameter1,
+		     double parameter2,
+		     double parameter3,
+		     double parameter4,
+		     double startValue);
+    ExponentialRV(int tag, 
+		     double mean,
+		     double stdv);
+    ExponentialRV(int tag, 
+		     double parameter1,
+		     double parameter2,
+		     double parameter3,
+		     double parameter4);
 
-public:
-	ExponentialRV(int tag, 
-			 double mean,
-			 double stdv,
-			 double startValue);
-	ExponentialRV(int tag, 
-			 double parameter1,
-			 double parameter2,
-			 double parameter3,
-			 double parameter4,
-			 double startValue);
-	ExponentialRV(int tag, 
-			 double mean,
-			 double stdv);
-	ExponentialRV(int tag, 
-			 double parameter1,
-			 double parameter2,
-			 double parameter3,
-			 double parameter4);
-
-	void Print(std::ostream &s, int flag =0);
-	double getPDFvalue(double rvValue);
-	double getCDFvalue(double rvValue);
-	double getInverseCDFvalue(double probValue);
-	const char * getType();
-	double getMean();
-	double getStdv();
-	double getParameter1();
-	double getParameter2();
-	double getParameter3();
-	double getParameter4();
-	double getStartValue();
-private:
-	double lambda;
-
-};
+    void Print(std::ostream &s, int flag =0);
+    double getPDFvalue(double rvValue);
+    double getCDFvalue(double rvValue);
+    double getInverseCDFvalue(double probValue);
+    const char *getType();
+    double getMean();
+    double getStdv();
+    double getParameter1();
+    double getParameter2();
+    double getParameter3();
+    double getParameter4();
+    double getStartValue();
+  };
 } // end of XC namespace
 
 #endif

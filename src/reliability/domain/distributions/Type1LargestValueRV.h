@@ -65,51 +65,51 @@
 namespace XC {
 //! @ingroup ReliabilityAnalysis
 // 
-//! @brief ??
+//! @brief Type 1 generalized extreme value distribution random variable.
+//
+//! In probability theory and statistics, the generalized extreme value
+//! (GEV) distribution is a family of continuous probability distributions
+//! developed within extreme value theory to combine the Gumbel, Fréchet
+//! and Weibull families also known as type I, II and III extreme value
+//! distributions
 class Type1LargestValueRV: public RandomVariable
-{
+  {
+  private:
+    double u;
+    double alpha;
+  public:
+    Type1LargestValueRV(int tag, 
+		     double mean,
+		     double stdv,
+		     double startValue);
+    Type1LargestValueRV(int tag, 
+		     double parameter1,
+		     double parameter2,
+		     double parameter3,
+		     double parameter4,
+		     double startValue);
+    Type1LargestValueRV(int tag, 
+		     double mean,
+		     double stdv);
+    Type1LargestValueRV(int tag, 
+		     double parameter1,
+		     double parameter2,
+		     double parameter3,
+		     double parameter4);
 
-public:
-	Type1LargestValueRV(int tag, 
-			 double mean,
-			 double stdv,
-			 double startValue);
-	Type1LargestValueRV(int tag, 
-			 double parameter1,
-			 double parameter2,
-			 double parameter3,
-			 double parameter4,
-			 double startValue);
-	Type1LargestValueRV(int tag, 
-			 double mean,
-			 double stdv);
-	Type1LargestValueRV(int tag, 
-			 double parameter1,
-			 double parameter2,
-			 double parameter3,
-			 double parameter4);
-
-	void Print(std::ostream &s, int flag =0);
-	double getPDFvalue(double rvValue);
-	double getCDFvalue(double rvValue);
-	double getInverseCDFvalue(double probValue);
-	const char * getType();
-	double getMean();
-	double getStdv();
-	double getParameter1();
-	double getParameter2();
-	double getParameter3();
-	double getParameter4();
-	double getStartValue();
-
-
-protected:
-
-private:
-	double u;
-	double alpha;
-
-};
+    void Print(std::ostream &s, int flag =0);
+    double getPDFvalue(double rvValue);
+    double getCDFvalue(double rvValue);
+    double getInverseCDFvalue(double probValue);
+    const char * getType();
+    double getMean();
+    double getStdv();
+    double getParameter1();
+    double getParameter2();
+    double getParameter3();
+    double getParameter4();
+    double getStartValue();
+  };
 } // end of XC namespace
 
 #endif

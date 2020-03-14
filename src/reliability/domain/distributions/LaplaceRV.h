@@ -65,46 +65,47 @@
 namespace XC {
 //! @ingroup ReliabilityAnalysis
 // 
-//! @brief ??
+//! @brief Laplace distribution random variable.
+//
+//! In probability theory and statistics, the Laplace distribution
+//! is a continuous probability distribution named after Pierre-Simon Laplace.
 class LaplaceRV: public RandomVariable
-{
-
-public:
-	LaplaceRV(int tag, 
-			 double mean,
-			 double stdv,
-			 double startValue);
-	LaplaceRV(int tag, 
-			 double parameter1,
-			 double parameter2,
-			 double parameter3,
-			 double parameter4,
-			 double startValue);
-	LaplaceRV(int tag, 
-			 double mean,
-			 double stdv);
-	LaplaceRV(int tag, 
-			 double parameter1,
-			 double parameter2,
-			 double parameter3,
-			 double parameter4);
-	void Print(std::ostream &s, int flag =0);
-	double getPDFvalue(double rvValue);
-	double getCDFvalue(double rvValue);
-	double getInverseCDFvalue(double probValue);
-	const char * getType();
-	double getMean();
-	double getStdv();
-	double getParameter1();
-	double getParameter2();
-	double getParameter3();
-	double getParameter4();
-	double getStartValue();
-private:
-	double alpha;
-	double beta;
-
-};
+  {
+  private:
+    double alpha;
+    double beta;
+  public:
+    LaplaceRV(int tag, 
+		     double mean,
+		     double stdv,
+		     double startValue);
+    LaplaceRV(int tag, 
+		     double parameter1,
+		     double parameter2,
+		     double parameter3,
+		     double parameter4,
+		     double startValue);
+    LaplaceRV(int tag, 
+		     double mean,
+		     double stdv);
+    LaplaceRV(int tag, 
+		     double parameter1,
+		     double parameter2,
+		     double parameter3,
+		     double parameter4);
+    void Print(std::ostream &s, int flag =0);
+    double getPDFvalue(double rvValue);
+    double getCDFvalue(double rvValue);
+    double getInverseCDFvalue(double probValue);
+    const char * getType();
+    double getMean();
+    double getStdv();
+    double getParameter1();
+    double getParameter2();
+    double getParameter3();
+    double getParameter4();
+    double getStartValue();
+  };
 } // end of XC namespace
 
 #endif

@@ -66,36 +66,30 @@
 namespace XC {
 //! @ingroup ReliabilityAnalysis
 // 
-//! @brief ??
+//! @brief Base class for random variables.
 class RandomVariable: public ReliabilityDomainComponent
-{
+  {
+  protected:
+    int tag;
+    double startValue;
+  public:
+    RandomVariable(int tag, int classTag);
 
-public:
-	RandomVariable(int tag, int classTag);
+    virtual void Print(std::ostream &s, int flag =0) =0;
+    virtual double getPDFvalue(double rvValue) =0;
+    virtual double getCDFvalue(double rvValue) =0;
+    virtual double getInverseCDFvalue(double rvValue) =0;    
+    virtual const char* getType() =0;
+    virtual double getMean() =0;
+    virtual double getStdv() =0;
+    virtual double getParameter1() =0;
+    virtual double getParameter2() =0;
+    virtual double getParameter3() =0;
+    virtual double getParameter4() =0;
+    virtual double getStartValue() =0;
 
-	virtual void Print(std::ostream &s, int flag =0) =0;
-	virtual double getPDFvalue(double rvValue) =0;
-	virtual double getCDFvalue(double rvValue) =0;
-	virtual double getInverseCDFvalue(double rvValue) =0;    
-	virtual const char* getType() =0;
-	virtual double getMean() =0;
-	virtual double getStdv() =0;
-	virtual double getParameter1() =0;
-	virtual double getParameter2() =0;
-	virtual double getParameter3() =0;
-	virtual double getParameter4() =0;
-	virtual double getStartValue() =0;
-
-	int setNewTag(int tag);
-
-protected:
-	int tag;
-	double startValue;
-
-private:
-
-
-};
+    int setNewTag(int tag);
+  };
 } // end of XC namespace
 
 #endif

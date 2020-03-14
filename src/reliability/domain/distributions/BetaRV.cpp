@@ -95,10 +95,8 @@ XC::BetaRV::BetaRV(int passedTag,
 }
 
 
-void
-XC::BetaRV::Print(std::ostream &s, int flag)
-{
-}
+void XC::BetaRV::Print(std::ostream &s, int flag)
+  {}
 
 
 double

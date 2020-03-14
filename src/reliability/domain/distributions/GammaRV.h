@@ -65,48 +65,49 @@
 namespace XC {
 //! @ingroup ReliabilityAnalysis
 // 
-//! @brief ??
+//! @brief Gamma distribution random variable.
+//
+//! In probability theory and statistics, the gamma distribution
+//! is a two-parameter family of continuous probability distributions. 
 class GammaRV: public RandomVariable
-{
-
-public:
-	GammaRV(int tag, 
-			 double mean,
-			 double stdv,
-			 double startValue);
-	GammaRV(int tag, 
-			 double parameter1,
-			 double parameter2,
-			 double parameter3,
-			 double parameter4,
-			 double startValue);
-	GammaRV(int tag, 
-			 double mean,
-			 double stdv);
-	GammaRV(int tag, 
-			 double parameter1,
-			 double parameter2,
-			 double parameter3,
-			 double parameter4);
-	void Print(std::ostream &s, int flag =0);
-	double getPDFvalue(double rvValue);
-	double getCDFvalue(double rvValue);
-	double getInverseCDFvalue(double probValue);
-	const char * getType();
-	double getMean();
-	double getStdv();
-	double getParameter1();
-	double getParameter2();
-	double getParameter3();
-	double getParameter4();
-	double getStartValue();
-	double gammaFunction(double x);
-	double incompleteGammaFunction(double x, double a);
-private:
-	double k;
-	double lambda;
-
-};
+  {
+  private:
+    double k;
+    double lambda;
+  public:
+    GammaRV(int tag, 
+		     double mean,
+		     double stdv,
+		     double startValue);
+    GammaRV(int tag, 
+		     double parameter1,
+		     double parameter2,
+		     double parameter3,
+		     double parameter4,
+		     double startValue);
+    GammaRV(int tag, 
+		     double mean,
+		     double stdv);
+    GammaRV(int tag, 
+		     double parameter1,
+		     double parameter2,
+		     double parameter3,
+		     double parameter4);
+    void Print(std::ostream &s, int flag =0);
+    double getPDFvalue(double rvValue);
+    double getCDFvalue(double rvValue);
+    double getInverseCDFvalue(double probValue);
+    const char * getType();
+    double getMean();
+    double getStdv();
+    double getParameter1();
+    double getParameter2();
+    double getParameter3();
+    double getParameter4();
+    double getStartValue();
+    double gammaFunction(double x);
+    double incompleteGammaFunction(double x, double a);
+  };
 } // end of XC namespace
 
 #endif

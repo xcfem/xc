@@ -65,50 +65,45 @@
 namespace XC {
 //! @ingroup ReliabilityAnalysis
 // 
-//! @brief ??
+//! @brief Gumbel distribution random variable.
+//
+//! In probability theory and statistics, the Gumbel distribution
+//! (Generalized Extreme Value distribution Type-I) is used to model
+//! the distribution of the maximum (or the minimum) of a number of
+//! samples of various distributions.  
 class GumbelRV: public RandomVariable
-{
-
-public:
-	GumbelRV(int tag, 
-			 double mean,
-			 double stdv,
-			 double startValue);
-	GumbelRV(int tag, 
-			 double parameter1,
-			 double parameter2,
-			 double parameter3,
-			 double parameter4,
-			 double startValue);
-	GumbelRV(int tag, 
-			 double mean,
-			 double stdv);
-	GumbelRV(int tag, 
-			 double parameter1,
-			 double parameter2,
-			 double parameter3,
-			 double parameter4);
-	void Print(std::ostream &s, int flag =0);
-	double getPDFvalue(double rvValue);
-	double getCDFvalue(double rvValue);
-	double getInverseCDFvalue(double probValue);
-	const char * getType();
-	double getMean();
-	double getStdv();
-	double getParameter1();
-	double getParameter2();
-	double getParameter3();
-	double getParameter4();
-	double getStartValue();
-
-
-protected:
-
-private:
-	double u;
-	double alpha;
-
-};
+  {
+  private:
+    double u;
+    double alpha;
+  public:
+    GumbelRV(int tag, double mean,
+		     double stdv,
+		     double startValue);
+    GumbelRV(int tag, double parameter1,
+		     double parameter2,
+		     double parameter3,
+		     double parameter4,
+		     double startValue);
+    GumbelRV(int tag, double mean,
+		     double stdv);
+    GumbelRV(int tag, double parameter1,
+		     double parameter2,
+		     double parameter3,
+		     double parameter4);
+    void Print(std::ostream &s, int flag =0);
+    double getPDFvalue(double rvValue);
+    double getCDFvalue(double rvValue);
+    double getInverseCDFvalue(double probValue);
+    const char * getType();
+    double getMean();
+    double getStdv();
+    double getParameter1();
+    double getParameter2();
+    double getParameter3();
+    double getParameter4();
+    double getStartValue();
+  };
 } // end of XC namespace
 
 #endif

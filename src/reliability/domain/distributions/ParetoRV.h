@@ -65,7 +65,13 @@
 namespace XC {
 //! @ingroup ReliabilityAnalysis
 // 
-//! @brief ??
+//! @brief Pareto distribution random variable.
+//
+//! The Pareto distribution, named after the Italian civil engineer,
+//! economist, and sociologist Vilfredo Pareto[1], is a power-law
+//! probability distribution that is used in description of social,
+//! scientific, geophysical, actuarial, and many other types of
+//! observable phenomena.
 class ParetoRV: public RandomVariable
 {
 

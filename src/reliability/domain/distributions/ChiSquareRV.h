@@ -65,45 +65,48 @@
 namespace XC {
 //! @ingroup ReliabilityAnalysis
 // 
-//! @brief ??
+//! @brief Chi squared distribution random variable.
+//
+//! In probability theory and statistics, the chi-squared
+//! distribution (also chi-squared or χ2-distribution) with k
+//! degrees of freedom is the distribution of a sum of the squares
+//! of k independent standard normal random variables.
 class ChiSquareRV: public RandomVariable
-{
-
-public:
-	ChiSquareRV(int tag, 
-			 double mean,
-			 double stdv,
-			 double startValue);
-	ChiSquareRV(int tag, 
-			 double parameter1,
-			 double parameter2,
-			 double parameter3,
-			 double parameter4,
-			 double startValue);
-	ChiSquareRV(int tag, 
-			 double mean,
-			 double stdv);
-	ChiSquareRV(int tag, 
-			 double parameter1,
-			 double parameter2,
-			 double parameter3,
-			 double parameter4);
-	void Print(std::ostream &s, int flag =0);
-	double getPDFvalue(double rvValue);
-	double getCDFvalue(double rvValue);
-	double getInverseCDFvalue(double probValue);
-	const char * getType();
-	double getMean();
-	double getStdv();
-	double getParameter1();
-	double getParameter2();
-	double getParameter3();
-	double getParameter4();
-	double getStartValue();
-private:
-	double nu;
-
-};
+  {
+  private:
+    double nu;
+  public:
+    ChiSquareRV(int tag, 
+		     double mean,
+		     double stdv,
+		     double startValue);
+    ChiSquareRV(int tag, 
+		     double parameter1,
+		     double parameter2,
+		     double parameter3,
+		     double parameter4,
+		     double startValue);
+    ChiSquareRV(int tag, 
+		     double mean,
+		     double stdv);
+    ChiSquareRV(int tag, 
+		     double parameter1,
+		     double parameter2,
+		     double parameter3,
+		     double parameter4);
+    void Print(std::ostream &s, int flag =0);
+    double getPDFvalue(double rvValue);
+    double getCDFvalue(double rvValue);
+    double getInverseCDFvalue(double probValue);
+    const char * getType();
+    double getMean();
+    double getStdv();
+    double getParameter1();
+    double getParameter2();
+    double getParameter3();
+    double getParameter4();
+    double getStartValue();
+  };
 } // end of XC namespace
 
 #endif

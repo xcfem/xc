@@ -65,42 +65,46 @@
 namespace XC {
 //! @ingroup ReliabilityAnalysis
 // 
-//! @brief ??
+//! @brief Beta distribution random variable.
+//
+//! In probability theory and statistics, the beta distribution is a
+//! family of continuous probability distributions defined on the
+//! interval [0, 1] parametrized by two positive shape parameters,
+//! denoted by α and β, that appear as exponents of the random variable
+//! and control the shape of the distribution.
 class BetaRV: public RandomVariable
-{
-
-public:
-	BetaRV(int tag, 
-			 double parameter1,
-			 double parameter2,
-			 double parameter3,
-			 double parameter4,
-			 double startValue);
-	BetaRV(int tag, 
-			 double parameter1,
-			 double parameter2,
-			 double parameter3,
-			 double parameter4);
-	void Print(std::ostream &s, int flag =0);
-	double getPDFvalue(double rvValue);
-	double getCDFvalue(double rvValue);
-	double getInverseCDFvalue(double probValue);
-	const char * getType();
-	double getMean();
-	double getStdv();
-	double getParameter1();
-	double getParameter2();
-	double getParameter3();
-	double getParameter4();
-	double getStartValue();
-	double betaFunction(double passed_q, double passed_r);
-private:
-	double a;
-	double b;
-	double q;
-	double r;
-
-};
+  {
+  private:
+    double a;
+    double b;
+    double q;
+    double r;
+  public:
+    BetaRV(int tag, 
+		     double parameter1,
+		     double parameter2,
+		     double parameter3,
+		     double parameter4,
+		     double startValue);
+    BetaRV(int tag, 
+		     double parameter1,
+		     double parameter2,
+		     double parameter3,
+		     double parameter4);
+    void Print(std::ostream &s, int flag =0);
+    double getPDFvalue(double rvValue);
+    double getCDFvalue(double rvValue);
+    double getInverseCDFvalue(double probValue);
+    const char * getType();
+    double getMean();
+    double getStdv();
+    double getParameter1();
+    double getParameter2();
+    double getParameter3();
+    double getParameter4();
+    double getStartValue();
+    double betaFunction(double passed_q, double passed_r);
+  };
 } // end of XC namespace
 
 #endif

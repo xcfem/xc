@@ -65,53 +65,55 @@
 namespace XC {
 //! @ingroup ReliabilityAnalysis
 // 
-//! @brief ??
+//! @brief Type II generalized extreme value distribution random variable.
+//
+//! In probability theory and statistics, the generalized extreme value
+//! (GEV) distribution is a family of continuous probability distributions
+//! developed within extreme value theory to combine the Gumbel, Fréchet
+//! and Weibull families also known as type I, II and III extreme value
+//! distributions
 class Type2LargestValueRV: public RandomVariable
-{
-
-public:
-	Type2LargestValueRV(int tag, 
-			 double mean,
-			 double stdv,
-			 double startValue);
-	Type2LargestValueRV(int tag, 
-			 double parameter1,
-			 double parameter2,
-			 double parameter3,
-			 double parameter4,
-			 double startValue);
-	Type2LargestValueRV(int tag, 
-			 double mean,
-			 double stdv);
-	Type2LargestValueRV(int tag, 
-			 double parameter1,
-			 double parameter2,
-			 double parameter3,
-			 double parameter4);
-	void Print(std::ostream &s, int flag =0);
-	double getPDFvalue(double rvValue);
-	double getCDFvalue(double rvValue);
-	double getInverseCDFvalue(double probValue);
-	const char * getType();
-	double getMean();
-	double getStdv();
-	double getParameter1();
-	double getParameter2();
-	double getParameter3();
-	double getParameter4();
-	double getStartValue();
-
-private:
-	double u;
-	double k;
-	void setParameters(double mean, double stdv);
-	void function131(double xk, double cov, double mean);
-	void function132(double xk, double cov, double mean);
-	void function133(double xk, double cov, double mean);
-	void function134(double xk, double gm1, double mean);
-
-
-};
+  {
+  private:
+    double u;
+    double k;
+    void setParameters(double mean, double stdv);
+    void function131(double xk, double cov, double mean);
+    void function132(double xk, double cov, double mean);
+    void function133(double xk, double cov, double mean);
+    void function134(double xk, double gm1, double mean);
+  public:
+    Type2LargestValueRV(int tag, 
+		     double mean,
+		     double stdv,
+		     double startValue);
+    Type2LargestValueRV(int tag, 
+		     double parameter1,
+		     double parameter2,
+		     double parameter3,
+		     double parameter4,
+		     double startValue);
+    Type2LargestValueRV(int tag, 
+		     double mean,
+		     double stdv);
+    Type2LargestValueRV(int tag, 
+		     double parameter1,
+		     double parameter2,
+		     double parameter3,
+		     double parameter4);
+    void Print(std::ostream &s, int flag =0);
+    double getPDFvalue(double rvValue);
+    double getCDFvalue(double rvValue);
+    double getInverseCDFvalue(double probValue);
+    const char * getType();
+    double getMean();
+    double getStdv();
+    double getParameter1();
+    double getParameter2();
+    double getParameter3();
+    double getParameter4();
+    double getStartValue();
+  };
 } // end of XC namespace
 
 #endif

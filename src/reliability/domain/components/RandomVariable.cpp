@@ -62,12 +62,11 @@
 
 XC::RandomVariable::RandomVariable(int tag, int classTag)
 :ReliabilityDomainComponent(tag,classTag)
-{
-}
+ {}
 
 
 int XC::RandomVariable::setNewTag(int newTag)
   {
-	this->setTag(newTag);
-	return 0;
+    this->setTag(newTag);
+    return 0;
   }
