@@ -63,7 +63,7 @@
 #include <reliability/domain/components/RandomVariable.h>
 
 namespace XC {
-//! @ingroup ReliabilityAnalysis
+//! @ingroup ProbDistributions
 // 
 //! @brief Type III generalized extreme value distribution random variable.
 //

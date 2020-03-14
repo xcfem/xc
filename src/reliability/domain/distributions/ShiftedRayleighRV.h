@@ -63,7 +63,7 @@
 #include <reliability/domain/components/RandomVariable.h>
 
 namespace XC {
-//! @ingroup ReliabilityAnalysis
+//! @ingroup ProbDistributions
 // 
 //! @brief Shifted Rayleigh distribution random variable.
 class ShiftedRayleighRV: public RandomVariable

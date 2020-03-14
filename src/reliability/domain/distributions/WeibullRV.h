@@ -63,56 +63,57 @@
 #include <reliability/domain/components/RandomVariable.h>
 
 namespace XC {
-//! @ingroup ReliabilityAnalysis
+//! @ingroup ProbDistributions
 // 
-//! @brief ??
+//! @brief Weibull distribution random variable.
+//
+//! In probability theory and statistics, the Weibull distribution
+//! is a continuous probability distribution. It is named after Swedish
+//! mathematician Waloddi Weibull, who described it in detail in 1951,
+//! although it was first identified by Fréchet (1927) and first
+//! applied by Rosin & Rammler (1933) to describe a particle size distribution.
 class WeibullRV: public RandomVariable
-{
-
-public:
-	WeibullRV(int tag, 
-			 double mean,
-			 double stdv,
-			 double startValue);
-	WeibullRV(int tag, 
-			 double parameter1,
-			 double parameter2,
-			 double parameter3,
-			 double parameter4,
-			 double startValue);
-	WeibullRV(int tag, 
-			 double mean,
-			 double stdv);
-	WeibullRV(int tag, 
-			 double parameter1,
-			 double parameter2,
-			 double parameter3,
-			 double parameter4);
-	void Print(std::ostream &s, int flag =0);
-	double getPDFvalue(double rvValue);
-	double getCDFvalue(double rvValue);
-	double getInverseCDFvalue(double probValue);
-	const char * getType();
-	double getMean();
-	double getStdv();
-	double getParameter1();
-	double getParameter2();
-	double getParameter3();
-	double getParameter4();
-	double getStartValue();
-
-
-protected:
-
-private:
-	double u;
-	double k;
-	void setParameters(double mean, double stdv);
-	void function141(double xk, double cov, double mean);
-	void function142(double xk, double cov, double mean);
-	void function143(double xk, double cov, double mean);
-	void function144(double xk, double gm1, double mean);
-};
+  {
+  private:
+    double u;
+    double k;
+    void setParameters(double mean, double stdv);
+    void function141(double xk, double cov, double mean);
+    void function142(double xk, double cov, double mean);
+    void function143(double xk, double cov, double mean);
+    void function144(double xk, double gm1, double mean);
+  public:
+    WeibullRV(int tag, 
+		     double mean,
+		     double stdv,
+		     double startValue);
+    WeibullRV(int tag, 
+		     double parameter1,
+		     double parameter2,
+		     double parameter3,
+		     double parameter4,
+		     double startValue);
+    WeibullRV(int tag, 
+		     double mean,
+		     double stdv);
+    WeibullRV(int tag, 
+		     double parameter1,
+		     double parameter2,
+		     double parameter3,
+		     double parameter4);
+    void Print(std::ostream &s, int flag =0);
+    double getPDFvalue(double rvValue);
+    double getCDFvalue(double rvValue);
+    double getInverseCDFvalue(double probValue);
+    const char * getType();
+    double getMean();
+    double getStdv();
+    double getParameter1();
+    double getParameter2();
+    double getParameter3();
+    double getParameter4();
+    double getStartValue();
+  };
 } // end of XC namespace
 
 #endif
