@@ -43,6 +43,21 @@ XC::SetBase::SetBase(const std::string &nmb,Preprocessor *md)
   : EntMdlrBase(nmb,md), color(3)
   { setColorComponents(0.0,0.0,0.0); }
 
+//! @brief Comparison operator.
+bool XC::SetBase::operator==(const SetBase &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      {
+        retval= EntMdlrBase::operator==(other);
+        if(retval)
+          retval= ((color[0]==other.color[0]) && (color[1]==other.color[1]) && (color[2]==other.color[2]));
+      }
+    return retval;
+  }
+
 //! @brief Set the color of the object (red,green,blue) as
 //! integers from 0 to 255.
 void XC::SetBase::setColorComponents(const double &r, const double &g, const double &b)

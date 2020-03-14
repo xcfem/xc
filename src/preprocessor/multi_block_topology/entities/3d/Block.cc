@@ -72,10 +72,24 @@
 XC::Block::Block(Preprocessor *m,const std::string &nombre)
   : Body(m,nombre) {}
 
+//! @brief Comparison operator.
+bool XC::Block::operator==(const Block &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      {
+        retval= Body::operator==(other);
+        if(retval)
+          retval= ((sups[0]==other.sups[0]) && (sups[1]==other.sups[1]) && (sups[2]==other.sups[2]) && (sups[3]==other.sups[3]) && (sups[4]==other.sups[4]) && (sups[5]==other.sups[5]));
+       }
+    return retval;
+  }
+
 //! @brief Virtual constructor.
 XC::SetEstruct *XC::Block::getCopy(void) const
   { return new Block(*this); }
-
 
 //! @brief Interface with VTK.
 int XC::Block::getVtkCellType(void) const

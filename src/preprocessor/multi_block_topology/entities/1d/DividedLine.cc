@@ -38,6 +38,21 @@
 XC::DividedLine::DividedLine(Preprocessor *m,const size_t &nd)
   : Line(m,nd), lengths(nd,1.0){}
 
+//! @brief Comparison operator.
+bool XC::DividedLine::operator==(const DividedLine &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      {
+        retval= Line::operator==(other);
+        if(retval)
+          retval= (lengths==other.lengths);
+       } 
+    return retval;
+  }
+
 //! @brief Virtual constructor.
 XC::SetEstruct *XC::DividedLine::getCopy(void) const
   { return new DividedLine(*this); }

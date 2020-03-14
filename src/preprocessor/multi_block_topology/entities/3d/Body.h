@@ -53,6 +53,8 @@ struct SideSequence
     bool forward; //!< Forward or reverse sequence.
 
     SideSequence(const size_t first= 1,const bool &forward= true);
+    inline bool operator==(const SideSequence &other) const
+      { return ((l1==other.l1) && (l2==other.l2) && (l3==other.l3) && (l4==other.l4)); } 
     //! @brief Return true if the edge sequence is direct (edge1 -> edge4).
     const bool &isDirect(void) const
       { return forward; }
@@ -73,6 +75,7 @@ class Body: public EntMdlr
         SideSequence sec_lados; //!< Edge sequence.
       public:
         BodyFace(Body *b= nullptr, Face *ptr= nullptr,const size_t &p=1,const bool &d=true);
+        virtual bool operator==(const BodyFace &) const;
 	Face *Surface(void);
         const Face *Surface(void) const;
         void SetSurf(Face *s);

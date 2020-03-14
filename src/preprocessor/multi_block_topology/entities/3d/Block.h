@@ -51,6 +51,7 @@ class Block: public Body
     virtual BodyFace *getFace(const size_t &i);
   public:
     Block(Preprocessor *m,const std::string &nombre= "");
+    virtual bool operator==(const Block &) const;
     SetEstruct *getCopy(void) const;
     //! @brief Return the number of lines of the object.
     virtual size_t getNumberOfLines(void) const;

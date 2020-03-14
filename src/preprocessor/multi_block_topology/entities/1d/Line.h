@@ -41,7 +41,6 @@ namespace XC {
 class Line: public LineBase
   {
   protected:
-
     Pos3dArray get_positions(void) const;
     Edge *split_at(Pnt *,const double &,const double &);
   public:

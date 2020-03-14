@@ -57,6 +57,21 @@ XC::Face::Face(Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)
 XC::Face::Face(const std::string &nombre,Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)
   : CmbEdge(nombre,m,ndivI), ndivj(ndivJ) {}
 
+//! @brief Comparison operator.
+bool XC::Face::operator==(const Face &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      {
+        retval= CmbEdge::operator==(other);
+        if(retval)
+          retval= (ndivj==other.ndivj);
+       }
+    return retval;
+  }
+
 //! @brief Sets the number of divisions for direction I.
 void XC::Face::setNDivI(const size_t &ndi)
   { CmbEdge::ndiv= ndi; }

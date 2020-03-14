@@ -53,6 +53,21 @@ XC::Edge::Edge(Preprocessor *m,const size_t &nd)
 XC::Edge::Edge(const std::string &nombre,Preprocessor *m,const size_t &nd)
   : EntMdlr(nombre,0,m), ndiv(nd) {}
 
+//! @brief Comparison operator.
+bool XC::Edge::operator==(const Edge &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      {
+        retval= EntMdlr::operator==(other);
+        if(retval)
+          retval= (ndiv==other.ndiv);
+       } 
+    return retval;
+  }
+
 //! @brief Insert a surface in contact with the line (neighbour).
 //! @param s: surface to insert.
 void XC::Edge::insert_surf(Face *s)

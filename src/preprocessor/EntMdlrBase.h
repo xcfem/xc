@@ -48,8 +48,8 @@ class EntMdlrBase: public NamedEntity, public MovableObject
     LabelContainer labels; //!< Label container.
 
     bool check_preprocessor(void) const;
-    int sendIdsEtiquetas(const int &,const int &, CommParameters &);
-    int recvIdsEtiquetas(const int &,const int &, const CommParameters &);
+    int sendIdsLabels(const int &,const int &, CommParameters &);
+    int recvIdsLabels(const int &,const int &, const CommParameters &);
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
   public:
@@ -57,6 +57,7 @@ class EntMdlrBase: public NamedEntity, public MovableObject
     EntMdlrBase &operator+=(const EntMdlrBase &);
     EntMdlrBase &operator-=(const EntMdlrBase &);
     EntMdlrBase &operator*=(const EntMdlrBase &);
+    virtual bool operator==(const EntMdlrBase &) const;
     const Preprocessor *getPreprocessor(void) const;
     Preprocessor *getPreprocessor(void);
 

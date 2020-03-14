@@ -49,6 +49,31 @@ XC::UniformGrid::UniformGrid(const std::string &nombre,Preprocessor *m,const siz
   : EntMdlr(nombre,i,m),Lx(0.0),Ly(0.0),Lz(0.0),ndiv_x(0),ndiv_y(0),ndiv_z(0)
   {}
 
+//! @brief Comparison operator.
+bool XC::UniformGrid::operator==(const UniformGrid &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      {
+        retval= EntMdlr::operator==(other);
+        if(retval)
+          retval= (Lx==other.Lx);
+        if(retval)
+          retval= (Ly==other.Ly);
+        if(retval)
+          retval= (Lz==other.Lz);
+        if(retval)
+          retval= (ndiv_x==other.ndiv_x);
+        if(retval)
+          retval= (ndiv_y==other.ndiv_y);
+        if(retval)
+          retval= (ndiv_z==other.ndiv_z);
+       } 
+    return retval;
+  }
+
 //! @brief Virtual constructor.
 XC::SetEstruct *XC::UniformGrid::getCopy(void) const
   { return new UniformGrid(*this); }

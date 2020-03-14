@@ -50,8 +50,8 @@ class MeshComponent: public ContinuaReprComponent
     LabelContainer labels; //!< Label container.
 
     void setup_matrices(std::deque<Matrix> &,const int &) const;
-    int sendIdsEtiquetas(int posDbTag,CommParameters &);
-    int recvIdsEtiquetas(int posDbTag,const CommParameters &);
+    int sendIdsLabels(int posDbTag,CommParameters &);
+    int recvIdsLabels(int posDbTag,const CommParameters &);
     int sendData(CommParameters &);
     int recvData(const CommParameters &);
 

@@ -49,10 +49,7 @@ namespace XC{
 //! @brief Three-dimensional array of pointers to nodes.
 class NodePtrArray3d: public PtrArray3dBase<NodePtrArray>
   {
-  protected:
-
   public:
-
     NodePtrArray3d(const size_t n_layers= 0);
     NodePtrArray3d(const size_t ,const size_t ,const size_t );
 

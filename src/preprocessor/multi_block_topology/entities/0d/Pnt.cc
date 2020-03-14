@@ -49,6 +49,21 @@ XC::Pnt::Pnt(Preprocessor *m,const Pos3d &pto)
 XC::Pnt::Pnt(const std::string &nombre, Preprocessor *m,const Pos3d &pto)
   : EntMdlr(nombre,0,m), p(pto) {}
 
+//! @brief Comparison operator.
+bool XC::Pnt::operator==(const Pnt &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      {
+        retval= EntMdlr::operator==(other);
+        if(retval)
+          retval= (p==other.p);
+      } 
+    return retval;
+  }
+
 //! @brief Virtual constructor.
 XC::SetEstruct *XC::Pnt::getCopy(void) const
   { return new Pnt(*this); }

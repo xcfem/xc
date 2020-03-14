@@ -46,6 +46,21 @@ XC::CircularArc::CircularArc(Preprocessor *m)
 XC::CircularArc::CircularArc(const std::string &nombre,Preprocessor *m)
   : LineBase(nombre,m), p3(nullptr) {}
 
+//! @brief Comparison operator.
+bool XC::CircularArc::operator==(const CircularArc &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      {
+        retval= LineBase::operator==(other);
+        if(retval)
+          retval= (p3==other.p3);
+       }
+    return retval;
+  }
+
 //! @brief Virtual constructor.
 XC::SetEstruct *XC::CircularArc::getCopy(void) const
   { return new CircularArc(*this); }

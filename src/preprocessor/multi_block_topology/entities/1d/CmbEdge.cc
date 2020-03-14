@@ -44,6 +44,21 @@
 XC::CmbEdge::Side::Side(Edge *ptr,const bool &s)
   : edge(ptr), forward(s) {}
 
+//! @brief Comparison operator.
+bool XC::CmbEdge::Side::equal(const XC::CmbEdge::Side &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      {
+        retval= (edge==other.edge);
+        if(retval)
+          retval= (forward==other.forward);
+       }
+    return retval;
+  }
+
 //! @brief Returns a pointer to the edge.
 XC::Edge *XC::CmbEdge::Side::getEdge(void)
   { return edge; }
@@ -244,14 +259,6 @@ size_t XC::CmbEdge::Side::NDiv(void) const
 size_t XC::CmbEdge::Side::getTag(void) const
   { return edge->getTag(); }
 
-//! @brief Operador de igualdad.
-bool XC::operator==(const XC::CmbEdge::Side &il1,const XC::CmbEdge::Side &il2)
-  {
-    if(il1.edge != il2.edge) return false;
-    if(il1.forward != il2.forward) return false;
-    return true;
-  }
-
 //! @brief Constructor.
 XC::CmbEdge::CmbEdge(void)
   : Edge(),lines(0) {}
@@ -266,6 +273,21 @@ XC::CmbEdge::CmbEdge(Preprocessor *m,const size_t &nd)
 //! @param nd: number of divisions.
 XC::CmbEdge::CmbEdge(const std::string &nombre,Preprocessor *m,const size_t &nd)
   : Edge(nombre,m,nd), lines(0) {}
+
+//! @brief Comparison operator.
+bool XC::CmbEdge::operator==(const CmbEdge &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      {
+        retval= Edge::operator==(other);
+        if(retval)
+          retval= (lines==other.lines);
+       }
+    return retval;
+  }
 
 //! @brief Virtual constructor.
 XC::SetEstruct *XC::CmbEdge::getCopy(void) const

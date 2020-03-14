@@ -56,12 +56,11 @@ class PtrArrayBase: public TMatrix<T *,std::vector<T *> >, public CommandEntity
     typedef typename m_ptr::reference reference;
     typedef typename m_ptr::const_reference const_reference;
   protected:
-
-
     //! @brief Constructor.
-  PtrArrayBase(const size_t &f=0,const size_t &c=0, const value_type &def_value= nullptr)
+    PtrArrayBase(const size_t &f=0,const size_t &c=0, const value_type &def_value= nullptr)
       : m_ptr(f,c,def_value), CommandEntity() {}
   public:
+    virtual bool operator==(const PtrArrayBase<T> &) const;
     bool Null(void) const;
     bool HasNull(void) const;
 
@@ -80,6 +79,22 @@ template <class T>
 void XC::PtrArrayBase<T>::dim(const size_t &nRows,const size_t &numberOfColumns)
   { this->resize(nRows,numberOfColumns,nullptr); }
 
+//! @brief Comparison operator.
+template <class T>
+bool XC::PtrArrayBase<T>::operator==(const PtrArrayBase<T> &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      {
+        retval= m_ptr::operator==(other);
+	retval= retval && CommandEntity::operator==(other);
+      }
+    return retval;
+  }
+
+ 
 //! @brief Returns true if it's empty or the pointers are NULL.
 template <class T>
 bool PtrArrayBase<T>::Null(void) const
@@ -87,7 +102,7 @@ bool PtrArrayBase<T>::Null(void) const
     if(this->empty())
       return true;
     else
-      return (this->operator()(1,1)== nullptr);
+      return (this->operator()(1,1)==nullptr);
   }
 
 //! @brief Returns true if it's empty or any of the pointers are NULL.

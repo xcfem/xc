@@ -35,16 +35,16 @@ namespace XC {
 
 //! @ingroup MultiBlockTopologyEnt
 //!
-//! @brief Line segment between two points.
+//! @brief Line divided in segments of specified lengths.
 class DividedLine: public Line
   {
     std::vector<double> lengths; //!< Length of the line segments.
   protected:
-
     Pos3dArray get_positions(void) const;
   public:
     DividedLine(Preprocessor *m,const size_t &ndiv= 4);
     DividedLine(const std::string &nombre= "",Preprocessor *m= nullptr,const size_t &ndiv= 4);
+    virtual bool operator==(const DividedLine &) const;
     void setLengths(const Vector &);
     virtual SetEstruct *getCopy(void) const;
 

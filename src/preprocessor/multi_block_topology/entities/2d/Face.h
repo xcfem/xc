@@ -55,6 +55,7 @@ class Face: public CmbEdge
     Face(void);
     Face(Preprocessor *m,const size_t &ndivI= 4, const size_t &ndivJ= 4);
     Face(const std::string &nombre,Preprocessor *m,const size_t &ndivI= 4, const size_t &ndivJ= 4);
+    virtual bool operator==(const Face &) const;
      //! @brief Returns the dimension of the object.
     inline virtual unsigned short int GetDimension(void) const
       { return 2; }

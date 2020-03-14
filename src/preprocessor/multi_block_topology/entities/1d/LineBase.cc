@@ -45,6 +45,23 @@ XC::LineBase::LineBase(Preprocessor *m,const size_t &nd)
 XC::LineBase::LineBase(const std::string &nombre,Preprocessor *m,const size_t &nd)
   : Edge(nombre,m,nd), p1(nullptr), p2(nullptr) {}
 
+//! @brief Comparison operator.
+bool XC::LineBase::operator==(const LineBase &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      {
+        retval= Edge::operator==(other);
+        if(retval)
+          retval= (p1==other.p1);
+        if(retval)
+          retval= (p2==other.p2);
+       } 
+    return retval;
+  }
+
 //! @brief Returns a constant pointer to start point.
 const XC::Pnt *XC::LineBase::P1(void) const
   { return p1; }

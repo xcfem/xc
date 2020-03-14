@@ -54,6 +54,7 @@ class UniformGrid: public EntMdlr
   public:
     UniformGrid(Preprocessor *m,const size_t &i= 0);
     UniformGrid(const std::string &nombre= "",Preprocessor *m= nullptr,const size_t &i= 0);
+    virtual bool operator==(const UniformGrid &) const;
     SetEstruct *getCopy(void) const;
     virtual unsigned short int GetDimension(void) const;
 

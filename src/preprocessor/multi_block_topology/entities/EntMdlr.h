@@ -76,6 +76,7 @@ class EntMdlr: public SetEstruct
     EntMdlr(const std::string &nombre= "",const size_t &i= 0,Preprocessor *m= nullptr);
     EntMdlr(const EntMdlr &);
     EntMdlr &operator=(const EntMdlr &);
+    virtual bool operator==(const EntMdlr &) const;
 
     virtual void set_index(const size_t &i);
     //! @brief Returns the index of the object for it use in VTK arrays.

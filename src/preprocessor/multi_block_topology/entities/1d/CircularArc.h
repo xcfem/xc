@@ -50,6 +50,7 @@ class CircularArc: public LineBase
   public:
     CircularArc(Preprocessor *m);
     CircularArc(const std::string &nombre= "",Preprocessor *m= nullptr);
+    virtual bool operator==(const CircularArc &) const;
     virtual SetEstruct *getCopy(void) const;
     const Pnt *P3(void) const;
 

@@ -49,6 +49,21 @@ XC::Preprocessor *XC::EntMdlrBase::getPreprocessor(void)
 XC::EntMdlrBase::EntMdlrBase(const std::string &nmb,Preprocessor *prep)
   : NamedEntity(nmb,prep), MovableObject(0) {}
 
+//! @brief Comparison operator.
+bool XC::EntMdlrBase::operator==(const EntMdlrBase &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      {
+        retval= NamedEntity::operator==(other);
+        if(retval)
+          retval= (labels==other.labels);
+      }
+    return retval;
+  }
+
 //! @brief += operator.
 XC::EntMdlrBase &XC::EntMdlrBase::operator+=(const EntMdlrBase &other)
   {
@@ -174,20 +189,20 @@ const XC::Face *XC::EntMdlrBase::BuscaFace(const size_t &id_face) const
   }
 
 //! @brief Send labels through the channel being passed as parameter.
-int XC::EntMdlrBase::sendIdsEtiquetas(const int &posSize,const int &posDbTag, CommParameters &cp)
+int XC::EntMdlrBase::sendIdsLabels(const int &posSize,const int &posDbTag, CommParameters &cp)
   {
     int res= 0;
-    static ID etiqIds;
-    const std::set<int> ids= labels.getIdsEtiquetas();
+    static ID labelIds;
+    const std::set<int> ids= labels.getIdsLabels();
     const size_t sz= ids.size();
     setDbTagDataPos(posSize,sz);
     if(sz>0)
       {
-        etiqIds.resize(sz);
+        labelIds.resize(sz);
         int conta= 0;
         for(std::set<int>::const_iterator i= ids.begin();i!=ids.end();i++,conta++)
-          etiqIds[conta]= *i;
-        res+= cp.sendID(etiqIds,getDbTagData(),CommMetaData(posDbTag));
+          labelIds[conta]= *i;
+        res+= cp.sendID(labelIds,getDbTagData(),CommMetaData(posDbTag));
       }
     else
       cp.sendInt(0,getDbTagData(),CommMetaData(posDbTag));
@@ -195,19 +210,19 @@ int XC::EntMdlrBase::sendIdsEtiquetas(const int &posSize,const int &posDbTag, Co
   }
 
 //! @brief Receive labels through the channel being passed as parameter.
-int XC::EntMdlrBase::recvIdsEtiquetas(const int &posSize,const int &posDbTag,const CommParameters &cp)
+int XC::EntMdlrBase::recvIdsLabels(const int &posSize,const int &posDbTag,const CommParameters &cp)
   {
     int res= 0;
-    static ID etiqIds;
+    static ID labelIds;
     const size_t sz= getDbTagDataPos(posSize);
     if(sz>0)
       {
-        const DiccionarioEtiquetas &dic= labels.getDiccionario();
-        res= cp.receiveID(etiqIds,getDbTagData(),CommMetaData(posDbTag));
+        const LabelDictionary &dic= labels.getDictionary();
+        res= cp.receiveID(labelIds,getDbTagData(),CommMetaData(posDbTag));
     
-        const size_t sz= etiqIds.Size();
+        const size_t sz= labelIds.Size();
         for(size_t i=0;i<sz;i++)
-          labels.addEtiqueta(dic(etiqIds[i]));
+          labels.addLabel(dic(labelIds[i]));
       }
     return res;
   }
@@ -216,7 +231,7 @@ int XC::EntMdlrBase::recvIdsEtiquetas(const int &posSize,const int &posDbTag,con
 int XC::EntMdlrBase::sendData(CommParameters &cp)
   {
     int res= cp.sendString(getName(),getDbTagData(),CommMetaData(0));
-    res+= sendIdsEtiquetas(1,2,cp);
+    res+= sendIdsLabels(1,2,cp);
     return res;
   }
 
@@ -226,7 +241,7 @@ int XC::EntMdlrBase::recvData(const CommParameters &cp)
     std::string tmp;
     int res= cp.receiveString(tmp,getDbTagData(),CommMetaData(0));
     setName(tmp);
-    res+= recvIdsEtiquetas(1,2,cp);
+    res+= recvIdsLabels(1,2,cp);
     return res;
   }
 

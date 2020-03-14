@@ -63,6 +63,23 @@ XC::SideSequence::SideSequence(const size_t first,const bool &_forward)
 XC::Body::BodyFace::BodyFace(Body *owr, Face *face_ptr,const size_t &p,const bool &d)
   : CommandEntity(owr), surface(face_ptr), sec_lados(p,d) {}
 
+//! @brief Comparison operator.
+bool XC::Body::BodyFace::operator==(const BodyFace &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      {
+        retval= CommandEntity::operator==(other);
+        if(retval)
+          retval= (surface==other.surface);
+         if(retval)
+          retval= (sec_lados==other.sec_lados);
+      }
+    return retval;
+  }
+
 //! @brief Return a pointer to the surface that limits the solid.
 XC::Face *XC::Body::BodyFace::Surface(void)
   { return surface; }

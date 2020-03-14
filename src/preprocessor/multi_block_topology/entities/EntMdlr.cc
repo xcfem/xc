@@ -70,6 +70,27 @@ XC::EntMdlr &XC::EntMdlr::operator=(const EntMdlr &other)
     return *this;
   }
 
+//! @brief Comparison operator.
+bool XC::EntMdlr::operator==(const EntMdlr &other) const
+  {
+    bool retval= false;
+    if(this==&other)
+      retval= true;
+    else
+      {
+        retval= SetEstruct::operator==(other);
+        if(retval)
+          retval= (idx==other.idx);
+	if(retval)
+	  retval= (doGenMesh==other.doGenMesh);
+	if(retval)
+	  retval= (ttzNodes==other.ttzNodes);
+	if(retval)
+          retval= (ttzElements==other.ttzElements);
+      } 
+    return retval;
+  }
+
 //! @brief Assigns the objects index for its use in
 //! VTK arrays(see numera in Set).
 void XC::EntMdlr::set_index(const size_t &i)

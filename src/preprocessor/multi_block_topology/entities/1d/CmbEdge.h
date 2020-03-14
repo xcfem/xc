@@ -41,9 +41,7 @@ namespace XC {
 //! @brief Compound line.
 class CmbEdge: public Edge
   {
-
   public:
-
     //! @ingroup Geom
     //!
     //! @brief Component of a compound line.
@@ -58,9 +56,9 @@ class CmbEdge: public Edge
       {
         Edge *edge; //!< Pointer to line.
         bool forward; //!< true: forward (P1->P2), false: reversed (P2->P1)
-    
       public:
         Side(Edge *ptr= nullptr,const bool &s=true);
+        bool equal(const Side &) const;
         Edge *getEdge(void);
         const Edge *getEdge(void) const;
         void SetEdge(Edge *l);
@@ -118,6 +116,7 @@ class CmbEdge: public Edge
     CmbEdge(void);
     CmbEdge(Preprocessor *m,const size_t &nd= 4);
     CmbEdge(const std::string &nombre,Preprocessor *m,const size_t &nd);
+    virtual bool operator==(const CmbEdge &) const;
     virtual SetEstruct *getCopy(void) const;
     virtual void insert(Edge *l);
     void insert(const size_t &i);
@@ -171,7 +170,9 @@ class CmbEdge: public Edge
 
  };
 
-bool operator==(const CmbEdge::Side &il1,const CmbEdge::Side &il2);
+//! @brief Comparison operator.
+inline bool operator==(const CmbEdge::Side &il1,const CmbEdge::Side &il2)
+  { return il1.equal(il2); }
 
 } //end of XC namespace
 
