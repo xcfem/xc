@@ -74,7 +74,7 @@ class Mesh: public MeshComponentContainer
     SingleDomNodIter *theNodIter; //!< Node iterator.
     KDTreeNodes kdtreeNodes; //!< space-partitioning data structure for organizing nodes.
     std::vector<std::string> coordinateNames; //!< Coordinate names ("X","Y","Z",...).
-    std::string nombreUnidades; //!< Units names ("cm","m","in",...).
+    std::string unitsNames; //!< Units names ("cm","m","in",...).
 
     TaggedObjectStorage *theElements;
     SingleDomEleIter *theEleIter;
@@ -167,8 +167,8 @@ class Mesh: public MeshComponentContainer
 
     inline const std::vector<std::string> &getCoordinateNames(void) const
       { return coordinateNames; }
-    inline std::string getNombreUnidades(void) const
-      { return nombreUnidades; }
+    inline std::string getUnitsNames(void) const
+      { return unitsNames; }
 
 
      // methods to get element and node graphs

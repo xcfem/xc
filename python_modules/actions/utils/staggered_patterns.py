@@ -8,7 +8,7 @@ __email__= " ana.Ortega.Ort@gmail.com l.pereztato@gmail.com"
 
 from model.geometry import grid_model as gm
 
-def listaNombresLoadPatterns(preprocessor):
+def loadPatternNamesList(preprocessor):
   '''return list of load pattern names
 
   :param preprocessor: preprocessor name

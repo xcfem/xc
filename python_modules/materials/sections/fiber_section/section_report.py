@@ -29,7 +29,7 @@ class RecordFamMainReinforcement(object):
     '''Parameters for each layer of main reinforcement
     '''
     def __init__(self,reinfLayer):
-        self.name= reinfLayer.nombre
+        self.name= reinfLayer.name
         self.nRebars= reinfLayer.numReinfBars # number of rebars
         self.rebarsDiam= reinfLayer.barDiameter # Rebars diameter
         self.areaRebar= reinfLayer.barArea # total area of reinforcement in the layer

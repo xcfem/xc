@@ -58,7 +58,7 @@ class Pnt: public EntMdlr
     void create_nodes(void);
   public:
     Pnt(Preprocessor *m,const Pos3d &pto= Pos3d());
-    Pnt(const std::string &nombre= "",Preprocessor *m= nullptr,const Pos3d &pto= Pos3d());
+    Pnt(const std::string &name= "",Preprocessor *m= nullptr,const Pos3d &pto= Pos3d());
     virtual bool operator==(const Pnt &) const;
     SetEstruct *getCopy(void) const;
     //! @brief Return the object dimension (0, 1, 2 or 3).

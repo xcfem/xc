@@ -45,7 +45,7 @@ class Segment: public Axis
 
   public:
     Segment(GeomSection *m,const size_t &ndiv= 4);
-    Segment(const std::string &nombre= "",GeomSection *m= nullptr,const size_t &ndiv= 4);
+    Segment(const std::string &name= "",GeomSection *m= nullptr,const size_t &ndiv= 4);
     Spot *P1(void);
     const Spot *P1(void) const;
     Spot *P2(void);

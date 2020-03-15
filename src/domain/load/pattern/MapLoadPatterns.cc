@@ -80,7 +80,7 @@ XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const int &dbTag)
     return retval;
   }
 
-//! @brief Returns a pointer to the TS cuyo nombre being passed as parameter.
+//! @brief Returns a pointer to the TS which name is being passed as parameter.
 const XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const int &dbTag) const
   {
     const TimeSeries *retval= nullptr;
@@ -93,7 +93,7 @@ const XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const int &dbTag) const
     return retval;
   }
 
-//! @brief Returns a pointer to the TimeSeries cuyo nombre being passed as parameter.
+//! @brief Returns a pointer to the TimeSeries which name being passed as parameter.
 XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const std::string &ts_code)
   {
     TimeSeries *retval= nullptr;
@@ -103,7 +103,7 @@ XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const std::string &ts_code)
     return retval;
   }
 
-//! @brief Returns a pointer to the TimeSeries cuyo nombre being passed as parameter.
+//! @brief Returns a pointer to the TimeSeries which name being passed as parameter.
 const XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const std::string &ts_code) const
   {
     const TimeSeries *retval= nullptr;
@@ -113,7 +113,7 @@ const XC::TimeSeries *XC::MapLoadPatterns::buscaTS(const std::string &ts_code) c
     return retval;
   }
 
-//! @brief Returns a pointer to the load pattern cuyo nombre being passed as parameter.
+//! @brief Returns a pointer to the load pattern which name being passed as parameter.
 XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const std::string &lp_code)
   {
     LoadPattern *retval= nullptr;
@@ -123,7 +123,7 @@ XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const std::string &lp_cod
     return retval;
   }
 
-//! @brief Returns a pointer to the load pattern cuyo nombre being passed as parameter.
+//! @brief Returns a pointer to the load pattern which name being passed as parameter.
 const XC::LoadPattern *XC::MapLoadPatterns::buscaLoadPattern(const std::string &lp_code) const
   {
     const LoadPattern *retval= nullptr;

@@ -338,11 +338,11 @@ int XC::MapSet::receiveSetsClassNames(int posDbTag,int size,const CommParameters
 //! @brief Send the sets through the channel being passed as parameter.
 int XC::MapSet::sendSets(int posDbTag1, int posDbTag2, int posDbTag3,CommParameters &cp)
   {
-    std::deque<std::string> nombres;
+    std::deque<std::string> names;
     for(const_iterator i= begin();i!=end();i++)
-      nombres.push_back((*i).first);
+      names.push_back((*i).first);
     DbTagData &dt= getDbTagData();
-    int res= cp.sendStrings(nombres,dt,CommMetaData(posDbTag1));
+    int res= cp.sendStrings(names,dt,CommMetaData(posDbTag1));
     res+= sendSetsDbTags(posDbTag2,cp);
     res+= sendSetsClassNames(posDbTag3,cp);
     int loc= 0;
@@ -355,13 +355,13 @@ int XC::MapSet::sendSets(int posDbTag1, int posDbTag2, int posDbTag3,CommParamet
 //! @brief Receives the sets through the channel being passed as parameter.
 int XC::MapSet::receiveSets(int posDbTag1, int posDbTag2, int posDbTag3,const int &sz,const CommParameters &cp)
   {
-    std::deque<std::string> nombres;
-    int res= cp.receiveStrings(nombres,getDbTagData(),CommMetaData(posDbTag1));
+    std::deque<std::string> names;
+    int res= cp.receiveStrings(names,getDbTagData(),CommMetaData(posDbTag1));
     res+= receiveSetsDbTags(posDbTag2,sz,cp);
     res+= receiveSetsClassNames(posDbTag3,sz,cp);
     int loc= 0;
     DbTagData tags(setsDbTags);
-    for(std::deque<std::string>::iterator i= nombres.begin();i!=nombres.end();i++,loc++)
+    for(std::deque<std::string>::iterator i= names.begin();i!=names.end();i++,loc++)
       {
         SetBase *tmp= broke_set(*i,setsClassNames[loc]);
         if(tmp)

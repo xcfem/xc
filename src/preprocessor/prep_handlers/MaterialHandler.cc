@@ -563,7 +563,7 @@ XC::InteractionDiagram *XC::MaterialHandler::calcInteractionDiagram(const std::s
             const std::string cod_diag= "diagInt"+cod_scc;
             if(interaction_diagrams.find(cod_diag)!=interaction_diagrams.end()) //Diagram exists.
               {
-	        std::clog << "MaterialHandler::calcInteractionDiagram; ¡ojo! se redefine el interaction diagram de nombre: '"
+	        std::clog << "MaterialHandler::calcInteractionDiagram; ¡ojo! se redefine el interaction diagram named: '"
                           << cod_diag << "'." << std::endl;
                 delete interaction_diagrams[cod_diag];
               }
@@ -630,7 +630,7 @@ XC::InteractionDiagram2d *XC::MaterialHandler::calcInteractionDiagramNMz(const s
             const std::string cod_diag= "diagIntNMz"+cod_scc;
             if(interaction_diagrams2D.find(cod_diag)!=interaction_diagrams2D.end()) //Diagram exists.
               {
-	        std::clog << "MaterialHandler::calcInteractionDiagramNMz; ¡ojo! se redefine el interaction diagram de nombre: '"
+	        std::clog << "MaterialHandler::calcInteractionDiagramNMz; ¡ojo! se redefine el interaction diagram named: '"
                           << cod_diag << "'." << std::endl;
                 delete interaction_diagrams2D[cod_diag];
               }
@@ -681,15 +681,15 @@ XC::MaterialHandler::iterator XC::MaterialHandler::begin(void)
 XC::MaterialHandler::iterator XC::MaterialHandler::end(void)
   { return materials.end(); }
 
-//! @brief Si encuentra el material cuyo nombre se pasa as parameter returns an iterator which points to mismo.
+//! @brief Si encuentra el material which name is being passed as parameter returns an iterator which points to mismo.
 XC::MaterialHandler::const_iterator XC::MaterialHandler::find(const std::string &nmb) const
   { return materials.find(nmb); }
 
-//! @brief Si encuentra el material cuyo nombre se pasa as parameter returns an iterator which points to mismo.
+//! @brief Si encuentra el material which name is being passed as parameter returns an iterator which points to mismo.
 XC::MaterialHandler::iterator XC::MaterialHandler::find(const std::string &nmb)
   { return materials.find(nmb); }
 
-//! @brief Si encuentra el material cuyo nombre se pasa as parameter returns a pointer al mismo,
+//! @brief Si encuentra el material which name is being passed as parameter returns a pointer al mismo,
 //! otherwise it returns nullptr.
 XC::Material *XC::MaterialHandler::find_ptr(const std::string &nmb)
   {
@@ -700,7 +700,7 @@ XC::Material *XC::MaterialHandler::find_ptr(const std::string &nmb)
       return nullptr; 
   }
 
-//! @brief Si encuentra el material cuyo nombre se pasa as parameter returns a pointer al mismo,
+//! @brief Si encuentra el material which name is being passed as parameter returns a pointer al mismo,
 //! otherwise it returns nullptr.
 const XC::Material *XC::MaterialHandler::find_ptr(const std::string &nmb) const
   {
@@ -711,7 +711,7 @@ const XC::Material *XC::MaterialHandler::find_ptr(const std::string &nmb) const
       return nullptr; 
   }
 
-//! @brief Si encuentra el material cuyo nombre se pasa as parameter returns a pointer al mismo,
+//! @brief Si encuentra el material which name is being passed as parameter returns a pointer al mismo,
 //! otherwise it returns nullptr.
 XC::Material *XC::MaterialHandler::find_ptr(const int &tag)
   {
@@ -726,7 +726,7 @@ XC::Material *XC::MaterialHandler::find_ptr(const int &tag)
     return retval;
   }
 
-//! @brief Si encuentra el material cuyo nombre se pasa as parameter returns a pointer al mismo,
+//! @brief Si encuentra el material which name is being passed as parameter returns a pointer al mismo,
 //! otherwise it returns nullptr.
 const XC::Material *XC::MaterialHandler::find_ptr(const int &tag) const
   {
@@ -755,7 +755,7 @@ std::string XC::MaterialHandler::getName(const int &tag) const
     return retval;
   }
 
-//! @brief Si encuentra el material cuyo nombre se pasa as parameter returns a pointer al mismo,
+//! @brief Si encuentra el material which name is being passed as parameter returns a pointer al mismo,
 //! otherwise it returns nullptr.
 XC::GeomSection *XC::MaterialHandler::find_ptr_geom_section(const std::string &nmb)
   {
@@ -766,7 +766,7 @@ XC::GeomSection *XC::MaterialHandler::find_ptr_geom_section(const std::string &n
       return nullptr; 
   }
 
-//! @brief Si encuentra el material cuyo nombre se pasa as parameter returns a pointer al mismo,
+//! @brief Si encuentra el material which name is being passed as parameter returns a pointer al mismo,
 //! otherwise it returns nullptr.
 const XC::GeomSection *XC::MaterialHandler::find_ptr_geom_section(const std::string &nmb) const
   {
@@ -777,7 +777,7 @@ const XC::GeomSection *XC::MaterialHandler::find_ptr_geom_section(const std::str
       return nullptr; 
   }
 
-//! @brief Si encuentra el material cuyo nombre se pasa as parameter returns a pointer al mismo,
+//! @brief Si encuentra el material which name is being passed as parameter returns a pointer al mismo,
 //! otherwise it returns nullptr.
 XC::InteractionDiagram *XC::MaterialHandler::find_ptr_interaction_diagram(const std::string &nmb)
   {
@@ -788,7 +788,7 @@ XC::InteractionDiagram *XC::MaterialHandler::find_ptr_interaction_diagram(const 
       return nullptr; 
   }
 
-//! @brief Si encuentra el material cuyo nombre se pasa as parameter returns a pointer al mismo,
+//! @brief Si encuentra el material which name is being passed as parameter returns a pointer al mismo,
 //! otherwise it returns nullptr.
 const XC::InteractionDiagram *XC::MaterialHandler::find_ptr_interaction_diagram(const std::string &nmb) const
   {
@@ -799,7 +799,7 @@ const XC::InteractionDiagram *XC::MaterialHandler::find_ptr_interaction_diagram(
       return nullptr; 
   }
 
-//! @brief Si encuentra el material cuyo nombre se pasa as parameter returns a pointer al mismo,
+//! @brief Si encuentra el material which name is being passed as parameter returns a pointer al mismo,
 //! otherwise it returns nullptr.
 XC::InteractionDiagram2d *XC::MaterialHandler::find_ptr_interaction_diagram2d(const std::string &nmb)
   {
@@ -810,7 +810,7 @@ XC::InteractionDiagram2d *XC::MaterialHandler::find_ptr_interaction_diagram2d(co
       return nullptr; 
   }
 
-//! @brief Si encuentra el material cuyo nombre se pasa as parameter returns a pointer al mismo,
+//! @brief Si encuentra el material which name is being passed as parameter returns a pointer al mismo,
 //! otherwise it returns nullptr.
 const XC::InteractionDiagram2d *XC::MaterialHandler::find_ptr_interaction_diagram2d(const std::string &nmb) const
   {

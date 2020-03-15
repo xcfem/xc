@@ -69,8 +69,8 @@
 //
 
 //! @brief Constructor.
-XC::Block::Block(Preprocessor *m,const std::string &nombre)
-  : Body(m,nombre) {}
+XC::Block::Block(Preprocessor *m,const std::string &name)
+  : Body(m,name) {}
 
 //! @brief Comparison operator.
 bool XC::Block::operator==(const Block &other) const

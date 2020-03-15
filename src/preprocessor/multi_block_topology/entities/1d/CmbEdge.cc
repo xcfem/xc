@@ -268,11 +268,11 @@ XC::CmbEdge::CmbEdge(Preprocessor *m,const size_t &nd)
   : Edge(m,nd), lines(0) {}
 
 //! @brief Constructor.
-//! @param nombre: Object identifier.
+//! @param name: Object identifier.
 //! @param m: Pointer to preprocessor.
 //! @param nd: number of divisions.
-XC::CmbEdge::CmbEdge(const std::string &nombre,Preprocessor *m,const size_t &nd)
-  : Edge(nombre,m,nd), lines(0) {}
+XC::CmbEdge::CmbEdge(const std::string &name,Preprocessor *m,const size_t &nd)
+  : Edge(name,m,nd), lines(0) {}
 
 //! @brief Comparison operator.
 bool XC::CmbEdge::operator==(const CmbEdge &other) const

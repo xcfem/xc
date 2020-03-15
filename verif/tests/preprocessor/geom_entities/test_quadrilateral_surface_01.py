@@ -59,6 +59,8 @@ s= surfaces.newQuadSurfacePts(pt1.tag,pt2.tag,pt3.tag,pt4.tag)
 s.nDivI= NumDivI
 s.nDivJ= NumDivJ
 
+testEqualOperator= (s==s)
+
 s.genMesh(xc.meshDir.I)
 
 nnodCuadr= s.getNumNodes
@@ -97,19 +99,20 @@ ratio3= abs(nnodDom-(NumDivI+1)*(NumDivJ+1))
 ratio4= abs(nelemDom-(NumDivI*NumDivJ))
 ratio5= abs(pMed-pMedTeor)
 
-# print "perim medio: ",pMed
-# print "theoretical perim medio: ",pMedTeor
-# print "ratio1= ",ratio1
-# print "ratio2= ",ratio2
-# print "ratio3= ",ratio3
-# print "ratio4= ",ratio4
-# print "ratio5= ",ratio5
+# print("perim medio: ",pMed)
+# print("theoretical perim medio: ",pMedTeor)
+# print("ratio1= ",ratio1)
+# print("ratio2= ",ratio2)
+# print("ratio3= ",ratio3)
+# print("ratio4= ",ratio4)
+# print("ratio5= ",ratio5)
+# print(testEqualOperator)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (ratio1<=1e-10) & (ratio2<=1e-10) & (ratio3<=1e-10) & (ratio4<=1e-10) & (ratio5<=1e-10):
-  print("test ",fname,": ok.")
+if((ratio1<=1e-10) & (ratio2<=1e-10) & (ratio3<=1e-10) & (ratio4<=1e-10) & (ratio5<=1e-10) & testEqualOperator):
+  print("test "+fname+": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

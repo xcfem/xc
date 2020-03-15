@@ -4,23 +4,23 @@ import os
 
 multINode= "*10000+"
 
-def getNombreAccion(str):
-  # Devuelve el nombre de la acción.
-  retval= eliminaCar(copiaDesde(":",copiaHasta(char(40),str))," ")    
-  if(re.match(".*Modo.*",str)):
-    nmbModoSismo= replaceAll(str,": Modo ","#")
-    nmbModoSismo= copiaDesde("#",nmbModoSismo)
-    nmbModoSismo= copiaHasta(char(41),nmbModoSismo)
-    retval= retval+"M"+nmbModoSismo
-  return retval
+def getActionName(str):
+    ''' Return the action name.'''
+    retval= eliminaCar(copiaDesde(":",copiaHasta(char(40),str))," ")    
+    if(re.match(".*Modo.*",str)):
+        nmbModoSismo= replaceAll(str,": Modo ","#")
+        nmbModoSismo= copiaDesde("#",nmbModoSismo)
+        nmbModoSismo= copiaHasta(char(41),nmbModoSismo)
+        retval= retval+"M"+nmbModoSismo
+    return retval
 
 
 def metal3DcreaTablaEsfBarra(nmbArch, nmbDBase, nmbTabla):
   '''
-  Importa el listado de esfuerzos en barras de metal 3D que se pasa como parámetro
-     nmbArchivo: Nombre del archivo que contiene el listado.
-     nmbDBase: Nombre de la base de datos donde se guardará la tabla.
-     nmbTabla: Nombre de la tabla que contendrá los esfuerzos.
+  Importa el listado de esfuerzos en barras de metal 3D being passed as parameter
+     nmbArchivo: Name of the file that contains the listing.
+     nmbDBase: Name of the database with will store the table.
+     nmbTabla: Name of the table which will containt the internal forces.
   '''
   os.sys("fromdos " + nmbArch)
   os.sys("csplit -s "+ nmbArch + " '/.*Esfuerzos.*/' '/.*Esfuerzos.*/'")
@@ -47,7 +47,7 @@ def metal3DcreaTablaEsfBarra(nmbArch, nmbDBase, nmbTabla):
     str1SB= str.strip()
     if(strlen(str1SB)>1):
       if(re.match(".*Hipótesis.*",str1SB)):
-        nmbAccion= getNombreAccion(str1SB)
+        nmbAccion= getActionName(str1SB)
         for j in range(1,numSec):
           xSec= tonum(replaceAll(lst[2+j],"m",""))
           idSecc= idElem*10+j
@@ -66,10 +66,10 @@ def getCodEsf(cod):
 
 def metal3DToEsfBarra(nmbArch, nmbDBase, nmbTabla):
   '''
-  Importa el listado de esfuerzos en barras de metal 3D que se pasa como parámetro
-     nmbArchivo: Nombre del archivo que contiene el listado.
-     nmbDBase: Nombre de la base de datos donde se guardará la tabla.
-     nmbTabla: Nombre de la tabla que contendrá los esfuerzos.
+  Importa el listado de esfuerzos en barras de metal 3D being passed as parameter
+     nmbArchivo: Name of the file that contains the listing.
+     nmbDBase: Name of the database with will store the table.
+     nmbTabla: Name of the table which will containt the internal forces.
   '''
   os.sys("fromdos " + nmbArch)
   os.sys("csplit -s "+ nmbArch + " '/.*Esfuerzos.*/' '/.*Esfuerzos.*/'")
@@ -99,7 +99,7 @@ def metal3DToEsfBarra(nmbArch, nmbDBase, nmbTabla):
     str1SB= str1.strip()
     if(strlen(str1SB)>1):
       if(re.match(".*Hipótesis.*",str1SB)):
-        nmbAccion= getNombreAccion(str1SB)
+        nmbAccion= getActionName(str1SB)
       else:
         csv= replace(eliminaCar(str1SB," "),"|",",")
         if(re.match(",[0-9]+/[0-9]+.*",csv)):

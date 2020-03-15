@@ -194,7 +194,7 @@ def resuelveCombEstatLin(tagComb,comb,tagSaveFase0):
   #execfile("solution/database_helper_solve.xci")
 
   ''' 
-  print "nombrePrevia= ",nombrePrevia
+  print "previousName= ",previousName
   print "tag= ",tagComb
   print "tagPrevia= ",tagPrevia
   print "descomp previa= ",getDescompCombPrevia
@@ -283,7 +283,7 @@ db.save(tagSaveFase0)
 
 db.restore(tagSaveFase0)
 
-nombrePrevia="" 
+previousName="" 
 tagPrevia= 0 
 tagSave= 0
 for key in combs.getKeys():

@@ -47,11 +47,11 @@ XC::Edge::Edge(Preprocessor *m,const size_t &nd)
   : EntMdlr(m), ndiv(nd) {}
 
 //! @brief Constructor.
-//! @param nombre: object identifier.
+//! @param name: object identifier.
 //! @param m: pointer to preprocessor.
 //! @param nd: number of divisions.
-XC::Edge::Edge(const std::string &nombre,Preprocessor *m,const size_t &nd)
-  : EntMdlr(nombre,0,m), ndiv(nd) {}
+XC::Edge::Edge(const std::string &name,Preprocessor *m,const size_t &nd)
+  : EntMdlr(name,0,m), ndiv(nd) {}
 
 //! @brief Comparison operator.
 bool XC::Edge::operator==(const Edge &other) const

@@ -49,7 +49,7 @@ class CircularArc: public LineBase
     bool check_points(void) const;
   public:
     CircularArc(Preprocessor *m);
-    CircularArc(const std::string &nombre= "",Preprocessor *m= nullptr);
+    CircularArc(const std::string &name= "",Preprocessor *m= nullptr);
     virtual bool operator==(const CircularArc &) const;
     virtual SetEstruct *getCopy(void) const;
     const Pnt *P3(void) const;

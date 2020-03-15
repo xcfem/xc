@@ -211,7 +211,7 @@ def procesResultVerif(comb):
   dXMax=max(dXMax,deltaX)
   ''' 
     print "tagComb= ",comb.tag
-    print "nmbComb= ",comb.getNombre
+    print "nmbComb= ",comb.getName
     print "dXMin= ",(dXMin*1e3)," mm\n"
     print "dXMax= ",(dXMax*1e3)," mm\n"
    '''
@@ -237,7 +237,7 @@ db.save(tagSaveFase0)
 
 
 
-nombrePrevia="" 
+previousName="" 
 tagPrevia= 0
 tagSave= 0
 for key in combs.getKeys():

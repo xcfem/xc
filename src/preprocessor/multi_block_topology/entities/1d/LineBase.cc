@@ -42,8 +42,8 @@ XC::LineBase::LineBase(Preprocessor *m,const size_t &nd)
   : Edge(m,nd), p1(nullptr), p2(nullptr) {}
 
 //! @brief Constructor.
-XC::LineBase::LineBase(const std::string &nombre,Preprocessor *m,const size_t &nd)
-  : Edge(nombre,m,nd), p1(nullptr), p2(nullptr) {}
+XC::LineBase::LineBase(const std::string &name,Preprocessor *m,const size_t &nd)
+  : Edge(name,m,nd), p1(nullptr), p2(nullptr) {}
 
 //! @brief Comparison operator.
 bool XC::LineBase::operator==(const LineBase &other) const

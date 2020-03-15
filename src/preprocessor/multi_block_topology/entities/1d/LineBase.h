@@ -52,7 +52,7 @@ class LineBase: public Edge
     virtual bool check_points(void) const;
   public:
     LineBase(Preprocessor *m,const size_t &ndiv= 4);
-    LineBase(const std::string &nombre,Preprocessor *m,const size_t &ndiv= 4);
+    LineBase(const std::string &name,Preprocessor *m,const size_t &ndiv= 4);
     virtual bool operator==(const LineBase &) const;
     const Pnt *P1(void) const;
     const Pnt *P2(void) const;

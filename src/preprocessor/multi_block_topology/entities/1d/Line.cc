@@ -43,8 +43,8 @@ XC::Line::Line(Preprocessor *m,const size_t &nd)
   : LineBase(m,nd) {}
 
 //! @brief Constructor.
-XC::Line::Line(const std::string &nombre,Preprocessor *m,const size_t &nd)
-  : LineBase(nombre,m,nd) {}
+XC::Line::Line(const std::string &name,Preprocessor *m,const size_t &nd)
+  : LineBase(name,m,nd) {}
 
 //! @brief Virtual constructor.
 XC::SetEstruct *XC::Line::getCopy(void) const

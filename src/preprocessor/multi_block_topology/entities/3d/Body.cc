@@ -221,8 +221,8 @@ void XC::Body::BodyFace::create_nodes(void)
   }
 
 //! @brief Constructor.
-XC::Body::Body(Preprocessor *m,const std::string &nombre)
-  : EntMdlr(nombre,0,m) {}
+XC::Body::Body(Preprocessor *m,const std::string &name)
+  : EntMdlr(name,0,m) {}
 
 //! @brief Returns object BND.
 BND3d XC::Body::Bnd(void) const

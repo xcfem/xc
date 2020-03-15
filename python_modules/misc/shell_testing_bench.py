@@ -10,7 +10,7 @@ from misc_utils import log_messages as lmsg
 def nuevosZeroLengthShell(nmbS, tagElem, offset):
 # Define el modelo para probar las dos sections de un elemento shell.
   '''
-    nmbS: Nombre del material.
+    nmbS: Material name.
     nodeTag: node identifier.
     tagElem: Identificador del elemento.
   '''
@@ -57,9 +57,9 @@ def nuevosZeroLengthShell(nmbS, tagElem, offset):
 def simulaShellElemFromTable(preprocessor,nmbDBase, nmbTablaElem, sectionName, offset):
   '''
   Crea los elementos a partir de la tabla creada anteriormente
-     nmbDBase: Nombre de la base de datos donde se guardará la tabla.
-     nmbTableElem: Nombre de la tabla que contiene los índices de elemento.
-     sectionName: Nombre de la sección que se asigna a cada elemento.
+     nmbDBase: Name of the database to store the tables.
+     nmbTableElem: Name of the table that stores the element indexes.
+     sectionName: Name of the section assigned to each element.
   '''
   nodes= preprocessor.getNodeHandler
   modelSpace= predefined_spaces.StructuralMechanics3D(nodes)
@@ -80,9 +80,9 @@ def simulaShellElemFromTable(preprocessor,nmbDBase, nmbTablaElem, sectionName, o
 def simulaCargasXYFromTable(nmbQuery, nmbTbEsf, idElem, offset):
   '''
   Crea las cargas sobre cada uno de los elementos a partir de las tablas creadas anteriormente
-   nmbQuery: Nombre de la consulta que se empleara para obtener las cargas.
-   nmbTbEsf: Nombre de la tabla que contiene los índices de sección.
-   idElem: Identificador del elemento shell.
+   nmbQuery: Name of the query to obtain the loads.
+   nmbTbEsf: Name ot the table that stores the internal forces.
+   idElem: identifier of the shell element.
   '''
   idSecc1= idElem*10
   iNod1= idSecc1+1

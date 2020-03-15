@@ -56,7 +56,7 @@ XC::FEProblem::FEProblem(void)
   : preprocessor(this,&output_handlers),proc_solu(this), dataBase(nullptr) {}
 
 //! @brief Database definition.
-XC::FE_Datastore *XC::FEProblem::defineDatabase(const std::string &type, const std::string &nombre)
+XC::FE_Datastore *XC::FEProblem::defineDatabase(const std::string &type, const std::string &name)
   {
     if(dataBase)
       {
@@ -64,20 +64,20 @@ XC::FE_Datastore *XC::FEProblem::defineDatabase(const std::string &type, const s
         dataBase= nullptr;
       }
     if(type == "File")
-      dataBase= new FileDatastore(nombre, preprocessor, theBroker);
+      dataBase= new FileDatastore(name, preprocessor, theBroker);
     else if(type == "MySql")
-      dataBase= new MySqlDatastore(nombre, preprocessor, theBroker);
+      dataBase= new MySqlDatastore(name, preprocessor, theBroker);
     else if(type == "BerkeleyDB")
-      dataBase= new BerkeleyDbDatastore(nombre, preprocessor, theBroker);
+      dataBase= new BerkeleyDbDatastore(name, preprocessor, theBroker);
     else if(type == "SQLite")
-      dataBase= new SQLiteDatastore(nombre, preprocessor, theBroker);
+      dataBase= new SQLiteDatastore(name, preprocessor, theBroker);
     else
       {  
         std::cerr << "WARNING No database type exists ";
         std::cerr << "for database of type:" << type << "valid database type File\n";
       }
     if(!dataBase)
-      std::cerr << "WARNING ran out of memory - database File " << nombre << std::endl;
+      std::cerr << "WARNING ran out of memory - database File " << name << std::endl;
     return dataBase; 
   }
 

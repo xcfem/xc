@@ -45,14 +45,14 @@ lines= preprocessor.getMultiBlockTopology.getLines
 lines.defaultTag= 3
 l3= lines.newLine(1,2)        
 
-# print "nombre: ",nombre," p1:",p1.nombre," p2:",p2.nombre
+# print "name: ",name," p1:",p1.name," p2:",p2.name
 lines.defaultTag= 2
 l2= lines.newLine(4,3)
-# print "nombre: ",nombre," p1:",p1.nombre," p2:",p2.nombre
+# print "name: ",name," p1:",p1.name," p2:",p2.name
 lines.defaultTag= 1
 l1= lines.newLine(2,3)
 
-# print "nombre: ",nombre," p1:",p1.nombre," p2:",p2.nombre
+# print "name: ",name," p1:",p1.name," p2:",p2.name
 lines.defaultTag= 4
 l4= lines.newLineSequence()
 l4.addLines(xc.ID([1,2,3]))
@@ -61,8 +61,8 @@ l4.nDiv= NumDiv
 ''' 
 for_each_side
 
-  print "nombre: ",edge.nombre," directo:",edge.directo
-  edge{print " p1:",p1.nombre," p2:",p2.nombre 
+  print "name: ",edge.name," directo:",edge.directo
+  edge{print " p1:",p1.name," p2:",p2.name 
 
 '''
 

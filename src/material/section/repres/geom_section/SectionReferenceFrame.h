@@ -47,8 +47,8 @@ class SectionReferenceFrame: public EntGeomSection
     //! @brief Constructor.
     SectionReferenceFrame(GeomSection *m)
       : EntGeomSection("",m) {}
-    SectionReferenceFrame(const std::string &nombre= "",GeomSection *m= nullptr)
-      : EntGeomSection(nombre,m) {}
+    SectionReferenceFrame(const std::string &name= "",GeomSection *m= nullptr)
+      : EntGeomSection(name,m) {}
 
     //! @brief Return the i-th axis unit vector 
     //! expressed in global coordinates 

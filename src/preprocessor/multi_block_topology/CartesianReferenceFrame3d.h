@@ -47,8 +47,8 @@ class CartesianReferenceFrame3d: public ReferenceFrame
     //! @brief Constructor.
     CartesianReferenceFrame3d(Preprocessor *m)
       : ReferenceFrame(m) {}
-    CartesianReferenceFrame3d(const std::string &nombre= "",Preprocessor *m= nullptr)
-      : ReferenceFrame(nombre,m) {}
+    CartesianReferenceFrame3d(const std::string &name= "",Preprocessor *m= nullptr)
+      : ReferenceFrame(name,m) {}
 
     Vector3d getAxisVDir(const size_t &,const Pos3d &) const;
 

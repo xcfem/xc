@@ -84,7 +84,7 @@ for l in sides:
 loadHandler= preprocessor.getLoadHandler
 lPatterns= loadHandler.getLoadPatterns
 ts= lPatterns.newTimeSeries("constant_ts","ts")
-# \constant_ts["ts"]{ \factor{1.0} } # Time series: constant_ts[nombre]{factor}
+# \constant_ts["ts"]{ \factor{1.0} } # Time series: constant_ts[name]{factor}
 lPatterns.currentTimeSeries= "ts"
 lp0= lPatterns.newLoadPattern("default","0") 
 #lPatterns.currentLoadPattern= "0"

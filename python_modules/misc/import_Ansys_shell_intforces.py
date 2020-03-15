@@ -5,9 +5,9 @@ import sqlite3 as sqlite
 def ansysToEsfShell(nmbArch, nmbDBase, nmbTabla):
   '''
   Importa el listado de esfuerzos en elementos shell de ansys que se pasa como parámetro
-     nmbArchivo: Nombre del archivo que contiene el listado.
-     nmbDBase: Nombre de la base de datos donde se guardará la tabla.
-     nmbTabla: Nombre de la tabla que contendrá los esfuerzos.
+     nmbArchivo: Name of the file that contains the listing.
+     nmbDBase: Name of the database with will store the table.
+     nmbTabla: Name of the table which will containt the internal forces.
   '''
   con= sqlite.connect(nmbDataBase)
   con.row_factory= sqlite.Row

@@ -78,7 +78,7 @@ class FiberSectionBase: public PrismaticBarCrossSection
     void setup_repres(void);
     inline void alloc_fibers(int numOfFibers,const Fiber *sample= nullptr)
       { fibers.allocFibers(numOfFibers,sample); }
-    void create_fiber_set(const std::string &nombre);
+    void create_fiber_set(const std::string &name);
     fiber_set_iterator get_fiber_set(const std::string &set_name);
     virtual double get_dist_to_neutral_axis(const double &,const double &) const;
     Pos3d Esf2Pos3d(void) const;

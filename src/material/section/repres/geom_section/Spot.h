@@ -59,8 +59,8 @@ class Spot: public EntGeomSection
     Spot(GeomSection *m)
       : EntGeomSection("",m) {}
     //! @brief Constructor.
-    Spot(const std::string &nombre= "",GeomSection *m= nullptr)
-      : EntGeomSection(nombre,m) {}
+    Spot(const std::string &name= "",GeomSection *m= nullptr)
+      : EntGeomSection(name,m) {}
 
   public:
     //! @brief Return the object dimension (0, 1, 2 or 3).

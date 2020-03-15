@@ -54,10 +54,10 @@ XC::IntegrationPointsCoords::IntegrationPointsCoords(const BeamIntegration &bInt
   }
 
 //! @brief Returns the mapa de valores necesario para evaluar la expresión.
-MapValores XC::IntegrationPointsCoords::getMapValores(const size_t &i,const std::vector<std::string> &nombresVariables) const
+MapValores XC::IntegrationPointsCoords::getMapValores(const size_t &i,const std::vector<std::string> &namesOfVariables) const
   {
     MapValores retval;
-    for(std::vector<std::string>::const_iterator j= nombresVariables.begin();j!=nombresVariables.end();j++)
+    for(std::vector<std::string>::const_iterator j= namesOfVariables.begin();j!=namesOfVariables.end();j++)
       {
         const std::string &nmb= *j;
         if(nmb == "r")
@@ -99,8 +99,8 @@ const XC::Vector &XC::IntegrationPointsCoords::eval(const ExprAlgebra &expr) con
     static Vector retval;
     retval.resize(nIP);
     retval.Zero();
-    std::vector<std::string> nombres= expr.getNombresVariables();
+    std::vector<std::string> names= expr.getNamesOfVariables();
     for(size_t i= 0;i<nIP;i++)
-      retval[i]= expr.ToNum(getMapValores(i,nombres));
+      retval[i]= expr.ToNum(getMapValores(i,names));
     return retval;
   }

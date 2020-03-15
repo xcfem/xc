@@ -43,8 +43,8 @@ XC::CircularArc::CircularArc(Preprocessor *m)
   : LineBase(m), p3(nullptr) {}
 
 //! @brief Constructor.
-XC::CircularArc::CircularArc(const std::string &nombre,Preprocessor *m)
-  : LineBase(nombre,m), p3(nullptr) {}
+XC::CircularArc::CircularArc(const std::string &name,Preprocessor *m)
+  : LineBase(name,m), p3(nullptr) {}
 
 //! @brief Comparison operator.
 bool XC::CircularArc::operator==(const CircularArc &other) const

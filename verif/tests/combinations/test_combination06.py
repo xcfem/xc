@@ -86,21 +86,21 @@ comb= combs.newLoadCombination("ELSCP502","1.00*G1 + 0.70*TC1V1 + 0.70*TC3V2 + 0
 comb= combs.newLoadCombination("ELSCP505","1.00*G1 + 0.70*TC1V1 + 0.70*TC2V2 + 0.60*NV")
 comb= combs.newLoadCombination("ELSCP510","1.00*G1 + 0.70*TC1V1 + 0.70*TC1V2 + 0.60*NV")
 
-nombrePrevia=""
+previousName=""
 previa= combs.getCombPrevia(combs.getComb("ELSCP001"))
 if previa!=None:
-  nombrePrevia= previa.getName
+  previousName= previa.getName
 
 diff= combs.newLoadCombination("DIFF","")
 diff.asigna("ELSCP001")
-diff.subtract(nombrePrevia)
+diff.subtract(previousName)
 descompDiff= diff.getDescomp("%3.1f")
 
-ratio1= (nombrePrevia=="")
+ratio1= (previousName=="")
 ratio2= (descompDiff=="1.0*G1+0.7*TC1V1")
 
 
-# print "nombrePrevia= ",nombrePrevia
+# print "previousName= ",previousName
 # print "descompDiff= ",descompDiff
 # print "ratio1= ",ratio1
 # print "ratio2= ",ratio2

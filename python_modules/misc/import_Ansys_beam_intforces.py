@@ -28,9 +28,9 @@ def splitActionFiles(nmbArch):
 def ansysToEsfBarra(nmbArch, nmbDBase, nmbTabla):
   '''
   Importa el listado de esfuerzos en barras de ansys que se pasa como parámetro
-     nmbArchivo: Nombre del archivo que contiene el listado.
-     nmbDBase: Nombre de la base de datos donde se guardará la tabla.
-     nmbTabla: Nombre de la tabla que contendrá los esfuerzos.
+     nmbArchivo: Name of the file that contains the listing.
+     nmbDBase: Name of the database with will store the table.
+     nmbTabla: Name of the table which will containt the internal forces.
   '''
   sqlite_macros.SQLTcreaTabla(nmbDBase,nmbTabla,"(ACCION string,ELEM integer,AXIL double,Q_1 double,Q_2 double,M_1 double,M_2 double,TORSOR double)")
   actionFiles= splitActionFiles(nmbArch)

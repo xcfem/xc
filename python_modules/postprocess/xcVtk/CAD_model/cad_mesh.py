@@ -61,11 +61,11 @@ def VtkDefineActorCells(recordGrid, renderer, tipoRepr):
   renderer.AddActor(cellActor) # Actor para las celdas
 
 def VtkCargaIdsKPts(uGrid, setToDraw):
-  etiqKPt=  create_array_set_data.VtkCreaStrArraySetData(setToDraw,'pnts','nombre')
+  etiqKPt=  create_array_set_data.VtkCreaStrArraySetData(setToDraw,'pnts','name')
   uGrid.GetPointData().AddArray(etiqKPt)
 
 def VtkCargaIdsCells(uGrid, setToDraw, entTypeName):
-  etiqCells= create_array_set_data.VtkCreaStrArraySetData(setToDraw,entTypeName,'nombre')
+  etiqCells= create_array_set_data.VtkCreaStrArraySetData(setToDraw,entTypeName,'name')
   uGrid.GetCellData().AddArray(etiqCells)
 
 def VtkDibujaIdsKPts(uGrid, setToDraw, renderer):

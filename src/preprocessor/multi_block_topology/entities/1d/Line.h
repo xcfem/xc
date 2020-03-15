@@ -45,7 +45,7 @@ class Line: public LineBase
     Edge *split_at(Pnt *,const double &,const double &);
   public:
     Line(Preprocessor *m,const size_t &ndiv= 4);
-    Line(const std::string &nombre= "",Preprocessor *m= nullptr,const size_t &ndiv= 4);
+    Line(const std::string &name= "",Preprocessor *m= nullptr,const size_t &ndiv= 4);
     virtual SetEstruct *getCopy(void) const;
 
     double getLength(void) const;

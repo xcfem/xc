@@ -46,8 +46,8 @@ XC::Pnt::Pnt(Preprocessor *m,const Pos3d &pto)
   : EntMdlr(m), p(pto) {}
 
 //! @brief Constructor.
-XC::Pnt::Pnt(const std::string &nombre, Preprocessor *m,const Pos3d &pto)
-  : EntMdlr(nombre,0,m), p(pto) {}
+XC::Pnt::Pnt(const std::string &name, Preprocessor *m,const Pos3d &pto)
+  : EntMdlr(name,0,m), p(pto) {}
 
 //! @brief Comparison operator.
 bool XC::Pnt::operator==(const Pnt &other) const

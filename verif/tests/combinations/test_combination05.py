@@ -190,7 +190,7 @@ def resuelveCombEstatLin(comb,db,dbHelp):
   dbHelp.helpSolve(comb,db)
   execfile("solution/database_helper_solve.xci")
   ''' 
-    print "nombrePrevia= ",nombrePrevia
+    print "previousName= ",previousName
     print "tag= ",comb.tag
     print "tagPrevia= ",tagPrevia
     print "descomp previa= ",getDescompCombPrevia
@@ -228,7 +228,7 @@ db= feProblem.newDatabase("BerkeleyDB","/tmp/test_combinacion_05.db")
 helper= dbHelper.DatabaseHelperSolve(db)
 
 loadHandler= preprocessor.getLoadHandler
-nombrePrevia="" 
+previousName="" 
 tagPrevia= 0 
 tagSave= 0
 for key in combs.getKeys():

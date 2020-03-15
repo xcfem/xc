@@ -47,8 +47,8 @@ class SectionCartesianReferenceFrame: public SectionReferenceFrame
     //! @brief Constructor.
     SectionCartesianReferenceFrame(GeomSection *m)
       : SectionReferenceFrame(m) {}
-    SectionCartesianReferenceFrame(const std::string &nombre= "",GeomSection *m= nullptr)
-      : SectionReferenceFrame(nombre,m) {}
+    SectionCartesianReferenceFrame(const std::string &name= "",GeomSection *m= nullptr)
+      : SectionReferenceFrame(name,m) {}
 
     Vector2d getAxisVDir(const size_t &,const Pos2d &) const;
 

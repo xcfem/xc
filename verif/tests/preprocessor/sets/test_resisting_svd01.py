@@ -164,7 +164,7 @@ def procesResultVerif(comb):
   org= resultant.getOrg
 
 
-nombrePrevia= ""
+previousName= ""
 tagPrevia= 0
 tagSave= 0
 for key in combs.getKeys():

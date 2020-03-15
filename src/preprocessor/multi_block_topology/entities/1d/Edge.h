@@ -59,7 +59,7 @@ class Edge: public EntMdlr
     void create_nodes_on_endpoints(void);
   public:
     Edge(Preprocessor *m,const size_t &nd= 4);
-    Edge(const std::string &nombre= "",Preprocessor *m= nullptr,const size_t &nd= 4);
+    Edge(const std::string &name= "",Preprocessor *m= nullptr,const size_t &nd= 4);
     virtual bool operator==(const Edge &) const;
     //! @brief Return the object dimension (0, 1, 2 or 3).
     inline virtual unsigned short int GetDimension(void) const

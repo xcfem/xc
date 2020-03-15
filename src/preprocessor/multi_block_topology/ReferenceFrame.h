@@ -52,8 +52,8 @@ class ReferenceFrame: public EntMdlrBase
     //! @brief Constructor.
     ReferenceFrame(Preprocessor *m)
       : EntMdlrBase("",m) {}
-    ReferenceFrame(const std::string &nombre= "",Preprocessor *m= nullptr)
-      : EntMdlrBase(nombre,m) {}
+    ReferenceFrame(const std::string &name= "",Preprocessor *m= nullptr)
+      : EntMdlrBase(name,m) {}
     inline virtual ~ReferenceFrame(void)
       {}
     //! @brief Returns the i-th axis unit vector

@@ -50,25 +50,30 @@ XC::Face::Face(Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)
   : CmbEdge(m,ndivI), ndivj(ndivJ) {}
 
 //! @brief Constructor.
-//! @param nombre: Object identifier.
+//! @param name: Object identifier.
 //! @param m: Pointer to preprocessor.
 //! @param ndivI: number of divisions for direction I.
 //! @param ndivJ: number of divisions for direction J.
-XC::Face::Face(const std::string &nombre,Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)
-  : CmbEdge(nombre,m,ndivI), ndivj(ndivJ) {}
+XC::Face::Face(const std::string &name,Preprocessor *m,const size_t &ndivI, const size_t &ndivJ)
+  : CmbEdge(name,m,ndivI), ndivj(ndivJ) {}
 
 //! @brief Comparison operator.
 bool XC::Face::operator==(const Face &other) const
   {
+    std::cout << getClassName() << "::" << __FUNCTION__
+              << other << std::endl;
     bool retval= false;
     if(this==&other)
       retval= true;
     else
       {
         retval= CmbEdge::operator==(other);
+	std::cout << "retval= " << retval << std::endl;
         if(retval)
           retval= (ndivj==other.ndivj);
        }
+    std::cout << getClassName() << "::" << __FUNCTION__
+              << "retval= " << retval << std::endl;
     return retval;
   }
 

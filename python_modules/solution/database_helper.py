@@ -1,22 +1,22 @@
 import os
 def salvaCombinacion(prb,nmbComb, tagComb, pth,db):
-  nombreArchivo= pth+nmbComb+".db"
-  os.system("rm -f "+nombreArchivo)
-  db= prb.newDatabase("BerkeleyDB",nombreArchivo)
+  fileName= pth+nmbComb+".db"
+  os.system("rm -f "+fileName)
+  db= prb.newDatabase("BerkeleyDB",fileName)
   db.save(tagSaveFase0)
 
 class DatabaseHelperSolve:
-  nombrePrevia= ""
+  previousName= ""
   tagPrevia= -1
   db= None
   def __init__(self,db):
-    self.nombrePrevia= ""
+    self.previousName= ""
     self.tagPrevia= .1
     self.db= db
   def helpSolve(self,comb):
     previa= comb.getCombPrevia()
     if(previa!=None):
-      self.nombrePrevia= previa.getName
+      self.previousName= previa.getName
       self.tagPrevia= previa.tag
       self.restore()  
   def restore(self):
@@ -26,7 +26,7 @@ class DatabaseHelperSolve:
     preprocessor.resetLoadCase()
     self.helpSolve(comb)
     ''' 
-    print "nombrePrevia= ",nombrePrevia
+    print "previousName= ",previousName
     print "tag= ",comb.tag
     print "tagPrevia= ",tagPrevia
     print "descomp previa= ",getDescompCombPrevia

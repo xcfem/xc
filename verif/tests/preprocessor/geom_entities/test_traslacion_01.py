@@ -32,7 +32,7 @@ ptTrfB= pts.newPntIDPos3d(11,transl.getTrfPos(ptB.getPos))
 ''' 
 for p in pts:
   pos= p.getPos
-  print "id: ",p.getNombre," x= ",pos.x,," y= ",pos.y,," z= ",pos.z
+  print "id: ",p.getName," x= ",pos.x,," y= ",pos.y,," z= ",pos.z
  ''' 
   
 

@@ -218,7 +218,7 @@ XC::DamageModel *XC::ParkAng::getCopy(void) const
 }
 
 //! @brief Returns the identifier of the variable cuyo
-//! nombre being passed as parameter.
+//! name being passed as parameter.
 int XC::ParkAng::setVariable(const std::string &argv)
   { return -1; }
 

@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import division
+from __future__ import print_function
+
 import xc_base
 import geom
 import xc
@@ -46,6 +49,8 @@ lines.defaultTag= 1
 l= lines.newLine(1,2)
 l.nDiv= NumDiv
 
+testEqualOperator= (l==l)
+
 setTotal= preprocessor.getSets.getSet("total")
 setTotal.genMesh(xc.meshDir.I)
 
@@ -66,13 +71,13 @@ nelem= mesh.getNumElements()
 vteor2= math.pow(CooMax/NumDiv,2)
 lteor= math.sqrt(3*vteor2)
 
-cumple= True
+testOK= True
 eIter= mesh.getElementIter
 elem= eIter.next()
 while not(elem is None):
 #  print elem.tag," nod. I: ",elem.getNodes[0].tag," nod. J: ",elem.getNodes[1].tag," L= ",elem.getL()
   ratio1= (lteor - elem.getL())/lteor
-  cumple= cumple and (ratio1<1e-12)
+  testOK= testOK and (ratio1<1e-12)
   elem= eIter.next()
 
 #print "number of nodes: ",nnod
@@ -81,8 +86,8 @@ while not(elem is None):
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if cumple:
-  print "test ",fname,": ok."
+if (testOK and testEqualOperator):
+  print("test "+fname+": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 

@@ -115,7 +115,7 @@ class CmbEdge: public Edge
   public:
     CmbEdge(void);
     CmbEdge(Preprocessor *m,const size_t &nd= 4);
-    CmbEdge(const std::string &nombre,Preprocessor *m,const size_t &nd);
+    CmbEdge(const std::string &name,Preprocessor *m,const size_t &nd);
     virtual bool operator==(const CmbEdge &) const;
     virtual SetEstruct *getCopy(void) const;
     virtual void insert(Edge *l);

@@ -120,10 +120,10 @@ def resuelveCombEstatLin(comb):
   preprocessor.resetLoadCase()
   previa= comb.getCombPrevia()
   if(previa!=None):
-    nombrePrevia= previa.getName
+    previousName= previa.getName
     tagPrevia= previa.tag
     ''' 
-    print "nombrePrevia= ",nombrePrevia
+    print "previousName= ",previousName
     print "tag= ",comb.tag
     print "tagPrevia= ",tagPrevia
     print "descomp previa= ",getDescompCombPrevia
@@ -163,7 +163,7 @@ import os
 os.system("rm -r -f /tmp/test_pescante_02.db")
 db= feProblem.newDatabase("BerkeleyDB","/tmp/test_pescante_02.db")
 
-nombrePrevia="" 
+previousName="" 
 tagPrevia= 0
 for c in combs.getKeys():
   resuelveCombEstatLin(combs[c])

@@ -48,11 +48,11 @@ XC::EntMdlr::EntMdlr(Preprocessor *m,const size_t &i)
   : SetEstruct("",m), idx(i), doGenMesh(true), ttzNodes(), ttzElements() {}
 
 //! @brief Constructor.
-//! @param nombre: Object identifier.
+//! @param name: Object identifier.
 //! @param i: index to be used in VTK arrays.
 //! @param m: Pointer to preprocessor.
-XC::EntMdlr::EntMdlr(const std::string &nombre,const size_t &i,Preprocessor *m)
-  : SetEstruct(nombre,m), idx(i), doGenMesh(true), ttzNodes(), ttzElements() {}
+XC::EntMdlr::EntMdlr(const std::string &name,const size_t &i,Preprocessor *m)
+  : SetEstruct(name,m), idx(i), doGenMesh(true), ttzNodes(), ttzElements() {}
 
 
 //! @brief Copy constructor.

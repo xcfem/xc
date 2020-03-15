@@ -48,7 +48,7 @@ class Axis: public EntGeomSection
 
     friend class GeomSection;
     Axis(GeomSection *sr,const size_t &nd= 4);
-    Axis(const std::string &nombre= "",GeomSection *m= nullptr,const size_t &nd= 4);
+    Axis(const std::string &name= "",GeomSection *m= nullptr,const size_t &nd= 4);
   public:
     ~Axis(void);
     //! @brief Returns the object dimension (0, 1, 2 or 3).

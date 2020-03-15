@@ -148,10 +148,10 @@ void XC::NodeLockers::removeFromDomain(const std::string &cod)
 
 void XC::NodeLockers::removeAllFromDomain(void)
   {
-    std::deque<std::string> nombres;
+    std::deque<std::string> names;
     for(map_node_lockers::iterator i= node_lockers.begin();i!=node_lockers.end();i++)
-      nombres.push_back((*i).first);
-    for(std::deque<std::string>::const_iterator i= nombres.begin();i!=nombres.end();i++)
+      names.push_back((*i).first);
+    for(std::deque<std::string>::const_iterator i= names.begin();i!=names.end();i++)
       removeFromDomain(*i);
   }
 
