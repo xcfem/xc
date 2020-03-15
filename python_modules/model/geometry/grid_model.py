@@ -1,5 +1,5 @@
+from __future__ import print_function
 # -*- coding: utf-8 -*-
-
 '''Particular geometry organization, linked to a framework of spaced points, 
 usually referenced by their indices (i,j,k) that point to the global 
 coordinates (x,y,z).
@@ -17,6 +17,7 @@ __copyright__= "Copyright 2017, AO_O"
 __license__= "GPL"
 __version__= "3.0"
 __email__= "ana.Ortega@ciccp.es"
+
 
 import xc_base
 import geom
@@ -665,6 +666,21 @@ class GridModel(object):
         setSurf.fillDownwards()    
         return setSurf
 
+    def getSubsetSurfOneRegion(self,superset,ijkRange,nameSubset):
+        '''return from the set 'superset' the set of surfaces and all the entities(lines, 
+        points, elements, nodes, ...) associated 
+        with them in a region limited by the coordinates
+        that correspond to the indices in the grid 
+        ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+        ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
+        '''
+        if self.prep.getSets.exists('auxSet'): self.prep.getSets.removeSet('auxSet') 
+        auxSet=self.getSetSurfOneRegion(ijkRange,'auxSet')
+        subset=getSetIntersSurf(superset,auxSet,nameSubset)
+        subset.fillDownwards()
+        return subset
+        
+        
     def getSetSurfOneXYZRegion(self,xyzRange,nameSet):
         '''return the set of surfaces and all the entities(lines, 
         points, elements, nodes, ...) associated 
@@ -674,6 +690,19 @@ class GridModel(object):
         ijkRange=self.getIJKrangeFromXYZrange(xyzRange)
         return self.getSetSurfOneRegion(ijkRange,nameSet)
         
+    def getSubsetSurfOneXYZRegion(self,superset,xyzRange,nameSubset):
+        '''return from the set 'superset' the set of surfaces and all the entities(lines, 
+        points, elements, nodes, ...) associated 
+        with them in a region limited by the coordinates
+        in range xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
+        '''
+        if self.prep.getSets.exists('auxSet'): self.prep.getSets.removeSet('auxSet') 
+        auxSet=self.getSetSurfOneXYZRegion(xyzRange,'auxSet')
+        subset=getSetIntersSurf(superset,auxSet,nameSubset)
+        subset.fillDownwards()
+        return subset
+
+    
     def getSetSurfMultiRegion(self,lstIJKRange,nameSet):
         '''return the set of surfaces and all the entities(lines,
         points, elements, nodes, ...) associated with them in a all
@@ -692,6 +721,21 @@ class GridModel(object):
         setSurf.fillDownwards()    
         return setSurf
 
+    def getSubsetSurfMultiRegion(self,superset,lstIJKRange,nameSubset):
+        '''return from the set 'superset' the set of surfaces and all the entities(lines,
+        points, elements, nodes, ...) associated with them in a all
+        the regions  included in the list of ijkRanges passed as parameter.
+        Each region defines a volume limited by the coordinates    
+        that correspond to the indices in the grid 
+        ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+        ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
+        '''
+        if self.prep.getSets.exists('auxSet'): self.prep.getSets.removeSet('auxSet') 
+        auxSet=self.getSetSurfMultiRegion(lstIJKRange,'auxSet')
+        subset=getSetIntersSurf(superset,auxSet,nameSubset)
+        subset.fillDownwards()
+        return subset
+    
     def getSetSurfMultiXYZRegion(self,lstXYZRange,nameSet):
         '''return the set of surfaces and all the entities(lines,
         points, elements, nodes, ...) associated with them in a all
@@ -704,6 +748,19 @@ class GridModel(object):
             lstIJKRange.append(self.getIJKrangeFromXYZrange(rg))
         return self.getSetSurfMultiRegion(lstIJKRange,nameSet)
         
+    def getSubsetSurfMultiXYZRegion(self,superset,lstXYZRange,nameSubset):
+        '''return from the set 'superset' the set of surfaces and all the entities(lines,
+        points, elements, nodes, ...) associated with them in a all
+        the regions  included in the list of xyzRanges passed as parameter.
+        Each region defines a volume limited by the coordinates    
+        that correspond to coordinates in range xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
+        '''
+        if self.prep.getSets.exists('auxSet'): self.prep.getSets.removeSet('auxSet') 
+        auxSet=self.getSetSurfMultiXYZRegion(lstXYZRange,'auxSet')
+        subset=getSetIntersSurf(superset,auxSet,nameSubset)
+        subset.fillDownwards()
+        return subset
+    
     def getSetLinOneRegion(self,ijkRange,nameSet):
         '''return the set of lines and all the entities(points, elements, 
         nodes, ...) associated with them in a region limited by the coordinates
@@ -719,6 +776,19 @@ class GridModel(object):
         setLin.fillDownwards()    
         return setLin
         
+    def getSubsetLinOneRegion(self,superset,ijkRange,nameSubset):
+        '''return from the set 'superset' the set of lines and all the entities(points, elements, 
+        nodes, ...) associated with them in a region limited by the coordinates
+        that correspond to the indices in the grid 
+        ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+        ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
+        '''
+        if self.prep.getSets.exists('auxSet'): self.prep.getSets.removeSet('auxSet') 
+        auxSet=self.getSetLinOneRegion(ijkRange,'auxSet')
+        subset=getSetIntersLin(superset,auxSet,nameSubset)
+        subset.fillDownwards()
+        return subset
+    
     def getSetLinOneXYZRegion(self,xyzRange,nameSet):
         '''return the set of lines and all the entities(points, elements, 
         nodes, ...) associated with them in a region limited by the coordinates
@@ -727,6 +797,17 @@ class GridModel(object):
         ijkRange=self.getIJKrangeFromXYZrange(xyzRange)
         return self.getSetLinOneRegion(ijkRange,nameSet)
 
+    def getSubsetLinOneXYZRegion(self,superset,xyzRange,nameSubset):
+        '''return from the set 'superset' the set of lines and all the entities(points, elements, 
+        nodes, ...) associated with them in a region limited by the coordinates
+        defined in range xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
+        '''
+        if self.prep.getSets.exists('auxSet'): self.prep.getSets.removeSet('auxSet') 
+        auxSet=self.getSetLinOneXYZRegion(xyzRange,'auxSet')
+        subset=getSetIntersLin(superset,auxSet,nameSubset)
+        subset.fillDownwards()
+        return subset
+    
     def getSetLinMultiRegion(self,lstIJKRange,nameSet):
         '''return the set of lines and all the entities(points, elements, 
         nodes, ...) associated with them in a all the regions  included in the 
@@ -745,6 +826,22 @@ class GridModel(object):
         setLin.fillDownwards()    
         return setLin
 
+    def getSubsetLinMultiRegion(self,superset,lstIJKRange,nameSubset):
+        '''return from the set 'superset' the set of lines and all the entities(points, elements, 
+        nodes, ...) associated with them in a all the regions  included in the 
+        list of ijkRanges passed as parameter.
+        Each region defines a volume limited by the coordinates    
+        that correspond to the indices in the grid 
+        ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
+        ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
+        '''
+        subset=self.prep.getSets.defSet(nameSubset)
+        if self.prep.getSets.exists('auxSet'): self.prep.getSets.removeSet('auxSet') 
+        auxSet=self.getSetLinMultiRegion(lstIJKRange,'auxSet')
+        subset=getSetIntersLin(superset,auxSet,nameSubset)
+        subset.fillDownwards()
+        return subset
+    
     def getSetLinMultiXYZRegion(self,lstXYZRange,nameSet):
         '''return the set of lines and all the entities(points, elements, 
         nodes, ...) associated with them in a all the regions  included in the 
@@ -757,6 +854,20 @@ class GridModel(object):
             lstIJKRange.append(self.getIJKrangeFromXYZrange(rg))
         return self.getSetLinMultiRegion(lstIJKRange,nameSet)
         
+    def getSubsetLinMultiXYZRegion(self,superset,lstXYZRange,nameSubset):
+        '''return from the set 'superset' the set of lines and all the entities(points, elements, 
+        nodes, ...) associated with them in a all the regions  included in the 
+        list of xyzRanges passed as parameter.
+        Each region defines a volume limited by the coordinates    
+        defined in range xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
+        '''
+        subset=self.prep.getSets.defSet(nameSubset)
+        if self.prep.getSets.exists('auxSet'): self.prep.getSets.removeSet('auxSet') 
+        auxSet=self.getSetLinMultiXYZRegion(lstXYZRange,'auxSet')
+        subset=getSetIntersLin(superset,auxSet,nameSubset)
+        subset.fillDownwards()
+        return subset
+    
     def getLstLinRange(self,ijkRange):
         '''return a list of lines in a region limited by the coordinates
         that correspond to the indices in the grid 
@@ -851,3 +962,34 @@ class GridModel(object):
         return self.getSetPntMultiRegion(lstIJKRange,setName)
 
     
+def getSetIntersSurf(set1,set2,nameSetInter):
+    '''Return a set of surfaces intersection of those in 'set1' and 'set2'
+
+    :param set1, set2: sets containing surfaces to search intersection
+    :param nameSetInter: name of the set of surfaces to return
+    '''
+    prep=set1.getPreprocessor
+    if prep.getSets.exists(nameSetInter): prep.getSets.removeSet(nameSetInter) 
+    setInters=prep.getSets.defSet(nameSetInter)
+    surfSet1=set1.getSurfaces
+    surfSet2=set2.getSurfaces
+    surfSetInters=setInters.getSurfaces
+    for s in surfSet2:
+        if s in surfSet1: surfSetInters.append(s)
+    return setInters
+
+def getSetIntersLin(set1,set2,nameSetInter):
+    '''Return a set of lines intersection of those in 'set1' and 'set2'
+
+    :param set1, set2: sets containing lines to search intersection
+    :param nameSetInter: name of the set of lines to return
+    '''
+    prep=set1.getPreprocessor
+    if prep.getSets.exists(nameSetInter): prep.getSets.removeSet(nameSetInter) 
+    setInters=prep.getSets.defSet(nameSetInter)
+    linSet1=set1.getLines
+    linSet2=set2.getLines
+    linSetInters=setInters.getLines
+    for s in linSet2:
+        if s in linSet1: linSetInters.append(s)
+    return setInters
