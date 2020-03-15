@@ -32,6 +32,8 @@ XC::Preprocessor *(XC::EntMdlrBase::*getPreprocessorRef)(void)= &XC::EntMdlrBase
 class_<XC::EntMdlrBase, bases<NamedEntity>, boost::noncopyable >("EntMdlrBase", no_init)
   .add_property("tag", &XC::EntMdlrBase::getTag, "Return the object identifier.")
   .add_property("getPreprocessor", make_function( getPreprocessorRef, return_internal_reference<>() ),"Return the preprocessor that built this object.")
+  .def("__eq__", &XC::EntMdlrBase::operator==)
+  //.def("__ne__", &XC::EntMdlrBase::operator!=)
    ;
 
 bool (XC::SetBase::*isNodeIn)(const XC::Node *) const= &XC::SetBase::In;
