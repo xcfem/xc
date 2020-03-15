@@ -303,7 +303,7 @@ int XC::ParkAng::recvSelf(const CommParameters &cp)
 
 
 void
-XC::ParkAng::Print(std::ostream &s, int flag )
+XC::ParkAng::Print(std::ostream &s, int flag ) const
 {
     s << "ParkAng tag: " << this->getTag() << std::endl;
     s << "  DeltaU: " << DeltaU << " Beta: " << Beta << "  SigmaY: " << SigmaY << std::endl;

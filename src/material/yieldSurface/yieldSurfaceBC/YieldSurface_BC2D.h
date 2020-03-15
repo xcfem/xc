@@ -75,7 +75,7 @@ class YieldSurface_BC2D: public YieldSurface_BC
 
 //    virtual Response *setResponse(const std::vector<std::string> &argv, Information &info);
 //    virtual int getResponse(int responseID, Information &info);
-    virtual void Print(std::ostream &s, int flag =0)=0;
+    virtual void Print(std::ostream &s, int flag =0) const=0;
     virtual int sendSelf(CommParameters &){return -1;}
     virtual int recvSelf(const CommParameters &){return -1;}
 

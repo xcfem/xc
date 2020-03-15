@@ -3059,7 +3059,7 @@ int XC::EightNodeBrick::recvSelf(const CommParameters &cp)
 
 
 //=============================================================================
-void XC::EightNodeBrick::Print(std::ostream &s, int flag)
+void XC::EightNodeBrick::Print(std::ostream &s, int flag) const
 {
   if(flag == 1) {
 
@@ -3597,7 +3597,7 @@ int XC::EightNodeBrick::getResponse (int responseID, Information &eleInfo)
 //
 //
 //void
-//XC::EightNodeBrick::Print (std::ostream &s, int flag)
+//XC::EightNodeBrick::Print(std::ostream &s, int flag)
 //{
 //  s << "EightNodeBrick, element id:  " << this->getTag() << std::endl;
 //  s << "Connected external nodes:  " << theNodes;

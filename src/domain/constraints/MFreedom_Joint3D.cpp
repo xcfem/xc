@@ -330,7 +330,7 @@ const XC::Matrix &XC::MFreedom_Joint3D::getConstraint(void)
   }
 
 //! @brief Printing.
-void XC::MFreedom_Joint3D::Print(std::ostream &s, int flag )
+void XC::MFreedom_Joint3D::Print(std::ostream &s, int flag ) const
   {
     s << "MFreedom_Joint3D: " << this->getTag() << "\n";
     s << "\tConstrained XC::Node: " << getNodeConstrained();

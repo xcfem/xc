@@ -306,7 +306,7 @@ int XC::HystereticEnergy::recvSelf(const CommParameters &cp)
   { return 0; }
 
 
-void XC::HystereticEnergy::Print(std::ostream &s, int flag )
+void XC::HystereticEnergy::Print(std::ostream &s, int flag ) const
   {
     s << "HystereticEnergy tag: " << this->getTag() << std::endl;
     s << "  Etotal: " << Etotal << " Cpower: " << Cpower << std::endl;

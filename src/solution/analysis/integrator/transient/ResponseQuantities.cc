@@ -134,7 +134,7 @@ int XC::ResponseQuantities::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::ResponseQuantities::Print(std::ostream &s)
+void XC::ResponseQuantities::Print(std::ostream &s) const
   {
     s << " R: " << R << " Rdot: " << Rdot << std::endl;
     s << " Rdotdot: " << Rdotdot;	    

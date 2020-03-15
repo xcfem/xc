@@ -645,7 +645,7 @@ int XC::QzSimple1::recvSelf(const CommParameters &cp)
   }
 
 /////////////////////////////////////////////////////////////////////
-void XC::QzSimple1::Print(std::ostream &s, int flag)
+void XC::QzSimple1::Print(std::ostream &s, int flag) const
   {
     s << "QzSimple1, tag: " << this->getTag() << std::endl;
     PQyzBase::Print(s,flag);

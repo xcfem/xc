@@ -269,7 +269,7 @@ void XC::MapOfTaggedObjects::clearAll(bool invokeDestructor)
   }
 
 //! @brief Print stuff.
-void XC::MapOfTaggedObjects::Print(std::ostream &s, int flag)
+void XC::MapOfTaggedObjects::Print(std::ostream &s, int flag) const
   {
     // go through the array invoking Print on non-zero entries
     const_iterator p = begin();

@@ -110,7 +110,7 @@ XC::WeibullRV::WeibullRV(int passedTag,
 }
 
 
-void XC::WeibullRV::Print(std::ostream &s, int flag)
+void XC::WeibullRV::Print(std::ostream &s, int flag) const
   {}
 
 

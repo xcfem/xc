@@ -56,8 +56,9 @@ XC::ExponReducing::ExponReducing(int tag, double kp0, double alfa, double min_fa
 }
 
 
-double XC::ExponReducing::getTrialPlasticStiffness()
-{
+//! @brief Return trial value of plastic stiffness.
+double XC::ExponReducing::getTrialPlasticStiffness(void) const
+  {
 	double K ;//= Kp0*exp(-1*val_trial*alpha);
 
 	// if x0 and Kp0 is a const:
@@ -85,7 +86,7 @@ double XC::ExponReducing::getTrialPlasticStiffness()
 }
 
 
-void XC::ExponReducing::Print(std::ostream &s, int flag)
+void XC::ExponReducing::Print(std::ostream &s, int flag) const
 {
 	s << "MultiLinear, Tag = " << getTag() << std::endl;
 	s << "Kp0 = " << Kp0 << std::endl;

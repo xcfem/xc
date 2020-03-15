@@ -85,7 +85,7 @@ class ElasticMembranePlateSection : public ElasticPlateProto<8>
     const Matrix& getSectionTangent(void) const;
     const Matrix& getInitialTangent(void) const;
 
-    void Print(std::ostream &s,int flag);
+    void Print(std::ostream &s,int flag) const;
 
     double getRho(void) const;
     void setRho(const double &);

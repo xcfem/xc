@@ -40,7 +40,7 @@ class CombinedIsoKin2D01: public PlasticHardening2D
   {
   public:
     CombinedIsoKin2D01(int tag, double iso_ratio, double kin_ratio, double shr_iso_ratio, double shr_kin_ratio,double min_iso_factor,PlasticHardeningMaterial &kpx_pos, PlasticHardeningMaterial &kpx_neg, PlasticHardeningMaterial &kpy_pos, PlasticHardeningMaterial &kpy_neg, bool isDeformable, double dir);
-    virtual void Print(std::ostream &s, int flag =0);
+    virtual void Print(std::ostream &s, int flag =0) const;
     virtual YS_Evolution *getCopy(void);
   };
 } // end of XC namespace

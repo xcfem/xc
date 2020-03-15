@@ -287,7 +287,7 @@ int XC::GenericSectionNd::recvSelf(const CommParameters &cp)
   }
 
 //! @brief Print stuff.
-void XC::GenericSectionNd::Print(std::ostream &s, int flag)
+void XC::GenericSectionNd::Print(std::ostream &s, int flag) const
   {
     s << "Generic Section Nd, tag: " << this->getTag() << std::endl;
     s << "\tsection code: " << code << std::endl;

@@ -225,7 +225,7 @@ int XC::UniaxialFiber3d::recvSelf(const CommParameters &cp)
   }
 
 
-void XC::UniaxialFiber3d::Print(std::ostream &s, int flag)
+void XC::UniaxialFiber3d::Print(std::ostream &s, int flag) const
   {
     s << "\nUniaxialFiber3d, tag: " << this->getTag() << std::endl;
     s << "\tArea: " << area << std::endl;

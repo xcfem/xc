@@ -125,6 +125,6 @@ class ConstantPressureVolumeQuad: public QuadBase4N<NDMaterialPhysicalProperties
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
 
-    void Print( std::ostream &s, int flag ) ;
+    void Print( std::ostream &s, int flag ) const;
   }; 
 } // end of XC namespace

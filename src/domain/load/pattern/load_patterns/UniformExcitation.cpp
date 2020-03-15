@@ -280,7 +280,7 @@ int XC::UniformExcitation::recvSelf(const CommParameters &cp)
   }
 
 //! @brief Prints stuff.
-void XC::UniformExcitation::Print(std::ostream &s, int flag)
+void XC::UniformExcitation::Print(std::ostream &s, int flag) const
   {
     s << getClassName() << "::" << __FUNCTION__
       << "; " << this->getTag() 

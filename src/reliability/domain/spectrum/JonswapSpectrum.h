@@ -78,7 +78,7 @@ public:
 	JonswapSpectrum(int tag, double minFreq, double maxFreq,
 			double alpha, double wp, double gamma);
 
-	void Print(std::ostream &s, int flag =0);
+	void Print(std::ostream &s, int flag =0) const;
 
 	double getMinFrequency();
 	double getMaxFrequency();

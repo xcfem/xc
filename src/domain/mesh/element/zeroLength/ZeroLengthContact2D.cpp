@@ -280,7 +280,7 @@ int XC::ZeroLengthContact2D::recvSelf(const CommParameters &cp)
   }
 
 
-void XC::ZeroLengthContact2D::Print(std::ostream &s, int flag)
+void XC::ZeroLengthContact2D::Print(std::ostream &s, int flag) const
   {
     if(flag == 0)
       { // print everything

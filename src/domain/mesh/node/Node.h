@@ -330,7 +330,7 @@ class Node: public MeshComponent
     std::set<SetBase *> get_sets(void) const;
     void add_to_sets(std::set<SetBase *> &);
 
-    virtual void Print(std::ostream &s, int flag = 0);
+    virtual void Print(std::ostream &s, int flag = 0) const;
 
     Vector3d get3dForceComponents(const Vector &) const;
     Vector3d get3dMomentComponents(const Vector &) const;

@@ -92,7 +92,7 @@ int XC::UniaxialHistoryVars::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::UniaxialHistoryVars::Print(std::ostream &s, int flag)
+void XC::UniaxialHistoryVars::Print(std::ostream &s, int flag) const
   {
     s << "UniaxialHistoryVars, min. strain: " << minStrain << std::endl;
     s << "  unload slope: " << unloadSlope << std::endl;

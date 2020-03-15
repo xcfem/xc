@@ -433,7 +433,7 @@ const XC::Matrix &XC::MembranePlateFiberSection::getSectionTangent(void) const
 }
 
 //! @brief Print out data
-void  XC::MembranePlateFiberSection::Print( std::ostream &s, int flag )
+void  XC::MembranePlateFiberSection::Print( std::ostream &s, int flag ) const
   {
     s << "MembranePlateFiberSection: \n ";
     s <<  "  Thickness h = "        <<  h  <<  std::endl;

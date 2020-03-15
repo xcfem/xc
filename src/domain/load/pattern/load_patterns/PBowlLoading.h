@@ -127,7 +127,7 @@ class PBowlLoading : public LoadPattern
 
     void setDomain(Domain *theDomain);
     void applyLoad(double time);
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
 
     // methods for o/p
     int sendSelf(CommParameters &);

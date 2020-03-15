@@ -428,7 +428,7 @@ int XC::Concrete01::recvSelf(const CommParameters &cp)
   }
 
 //! @brief Print stuff.
-void XC::Concrete01::Print (std::ostream& s, int flag)
+void XC::Concrete01::Print(std::ostream& s, int flag) const
   {
     s << "Concrete01, tag: " << this->getTag() << std::endl;
     s << "  fpc: " << fpc << std::endl;

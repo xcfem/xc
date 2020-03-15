@@ -919,11 +919,11 @@ int XC::AnalysisModel::revertDomainToLastCommit(void)
 //! To get the current time in the Domain. If no Domain has been set a
 //! warning message is printed and \f$0.0\f$ is returned, otherwise the result
 //! of invoking getCurrentTime() on the Domain is returned.
-double XC::AnalysisModel::getCurrentDomainTime(void)
+double XC::AnalysisModel::getCurrentDomainTime(void) const
   {
     // check to see there is a Domain linked to the Model
     double retval= 0.0;
-    Domain *dom= getDomainPtr();
+    const Domain *dom= getDomainPtr();
     if(!dom)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; no domain linked."

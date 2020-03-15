@@ -381,7 +381,7 @@ int XC::CollocationHybridSimulation::recvSelf(const CommParameters &cp)
   }
 
 
-void XC::CollocationHybridSimulation::Print(std::ostream &s, int flag)
+void XC::CollocationHybridSimulation::Print(std::ostream &s, int flag) const
   {
     HHTBase::Print(s,flag);
     s << "  theta: " << theta << std::endl;

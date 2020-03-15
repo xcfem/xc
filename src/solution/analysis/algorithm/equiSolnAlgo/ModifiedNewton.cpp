@@ -202,7 +202,7 @@ int XC::ModifiedNewton::solveCurrentStep(void)
   }
 
 //! @brief Sends the class name to the stream if \p flag equals \f$0\f$.
-void XC::ModifiedNewton::Print(std::ostream &s, int flag)
+void XC::ModifiedNewton::Print(std::ostream &s, int flag) const
   {
     if(flag == 0)
       { s << getClassName(); }

@@ -90,7 +90,7 @@ class MFreedom_Joint : public MFreedom_Constraint
     void setDomain(Domain *theDomain);
 
     // methods for output
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace
 

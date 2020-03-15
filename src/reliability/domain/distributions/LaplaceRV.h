@@ -93,7 +93,7 @@ class LaplaceRV: public RandomVariable
 		     double parameter2,
 		     double parameter3,
 		     double parameter4);
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
     double getPDFvalue(double rvValue);
     double getCDFvalue(double rvValue);
     double getInverseCDFvalue(double probValue);

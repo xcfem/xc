@@ -125,7 +125,7 @@ class TotalLagrangianFD8NodeBrick: public ElemWithMaterial<8,NDMaterialPhysicalP
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
 
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
 
 
 

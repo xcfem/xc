@@ -118,8 +118,7 @@ XC::TrapezoidalModulatingFunction::getMaxAmplitude()
 	return amplitude;
 }
 
-void
-XC::TrapezoidalModulatingFunction::Print(std::ostream &s, int flag)  
-{
-}
+//! @brief Print stuff.
+void XC::TrapezoidalModulatingFunction::Print(std::ostream &s, int flag) const
+  {}
 

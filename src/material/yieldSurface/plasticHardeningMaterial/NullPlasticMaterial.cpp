@@ -39,11 +39,8 @@ XC::NullPlasticMaterial::NullPlasticMaterial(int tag)
 }
 
 
-double XC::NullPlasticMaterial::getTrialPlasticStiffness()
+double XC::NullPlasticMaterial::getTrialPlasticStiffness(void) const
   { return 0; }
 
- XC::PlasticHardeningMaterial * XC::NullPlasticMaterial::getCopy()
-{
-     NullPlasticMaterial *nullPM = new  NullPlasticMaterial(this->getTag());
-     return nullPM;
-}
+XC::PlasticHardeningMaterial *XC::NullPlasticMaterial::getCopy()
+  { return new NullPlasticMaterial(*this); }

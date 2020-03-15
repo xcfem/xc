@@ -1223,12 +1223,14 @@ int XC::ShadowSubdomain::recvSelf(const CommParameters &cp)
   }
 
 
-void XC::ShadowSubdomain::Print(std::ostream &s, int flag)
+void XC::ShadowSubdomain::Print(std::ostream &s, int flag) const
   {
     msgData(0) = ShadowActorSubdomain_Print;
 
-    this->sendID(msgData);
-    this->recvID(msgData);
+    ShadowSubdomain *this_no_const= const_cast<ShadowSubdomain *>(this);
+    // I'ts weird this.
+    this_no_const->sendID(msgData);
+    this_no_const->recvID(msgData);
   }
 
 

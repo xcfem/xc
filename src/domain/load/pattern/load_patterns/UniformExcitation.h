@@ -97,7 +97,7 @@ class UniformExcitation: public EarthquakePattern
     
     void setDomain(Domain *theDomain);
     void applyLoad(double time);
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
 
     //! @brief set the affected dof.
     inline void setDof(const int &dof)

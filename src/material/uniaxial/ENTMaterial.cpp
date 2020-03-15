@@ -162,7 +162,7 @@ int XC::ENTMaterial::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::ENTMaterial::Print(std::ostream &os, int flag)
+void XC::ENTMaterial::Print(std::ostream &os, int flag) const
   {
     os << getClassName() << ", tag: " << this->getTag() << std::endl
        << "  E: " << E << std::endl;

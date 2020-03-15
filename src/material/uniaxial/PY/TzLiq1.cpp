@@ -486,7 +486,7 @@ int XC::TzLiq1::recvSelf(const CommParameters &cp)
   }
 
 /////////////////////////////////////////////////////////////////////
-void XC::TzLiq1::Print(std::ostream &s, int flag)
+void XC::TzLiq1::Print(std::ostream &s, int flag) const
   {
     s << "TzLiq1, tag: " << this->getTag() << std::endl;
     s << "  tzType: " << soilType << std::endl;

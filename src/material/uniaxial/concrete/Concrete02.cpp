@@ -311,7 +311,7 @@ int XC::Concrete02::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::Concrete02::Print(std::ostream &s, int flag)
+void XC::Concrete02::Print(std::ostream &s, int flag) const
   {
     hstv.Print(s);
   }

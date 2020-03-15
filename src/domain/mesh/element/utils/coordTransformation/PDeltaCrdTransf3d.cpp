@@ -320,7 +320,7 @@ const XC::Vector &XC::PDeltaCrdTransf3d::getPointGlobalDisplFromBasic (double xi
   }
 
 
-void XC::PDeltaCrdTransf3d::Print(std::ostream &s, int flag)
+void XC::PDeltaCrdTransf3d::Print(std::ostream &s, int flag) const
   {
     s << "\nCrdTransf: " << this->getTag() << " Type: PDeltaCrdTransf3d" << std::endl;
     s << "\tNode I offset: " << nodeIOffset(0) << " " << nodeIOffset(1) << " "<< nodeIOffset(2) << std::endl;

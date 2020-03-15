@@ -84,7 +84,7 @@ int XC::UniaxialStateVars::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::UniaxialStateVars::Print(std::ostream &s, int flag)
+void XC::UniaxialStateVars::Print(std::ostream &s, int flag) const
   {
     s << "UniaxialStateVars, strain: " << strain << std::endl;
     s << "  stress: " << stress << std::endl;

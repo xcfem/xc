@@ -612,7 +612,7 @@ int XC::PressureDependMultiYieldBase::getResponse(int responseID, Information &m
 }
 
 
-void XC::PressureDependMultiYieldBase::Print(std::ostream &s, int flag )
+void XC::PressureDependMultiYieldBase::Print(std::ostream &s, int flag ) const
 {
   s << "PressureDependMultiYieldBase" << std::endl;
 }

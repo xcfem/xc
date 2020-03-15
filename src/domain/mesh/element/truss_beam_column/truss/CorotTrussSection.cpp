@@ -531,7 +531,7 @@ int XC::CorotTrussSection::sendSelf(CommParameters &cp)
 int XC::CorotTrussSection::recvSelf(const CommParameters &cp)
   { return -1; }
 
-void XC::CorotTrussSection::Print(std::ostream &s, int flag)
+void XC::CorotTrussSection::Print(std::ostream &s, int flag) const
   {
         s << "\nCorotTrussSection, tag: " << this->getTag() << std::endl;
         s << "\tConnected Nodes: " << theNodes;

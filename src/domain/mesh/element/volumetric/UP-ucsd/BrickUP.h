@@ -113,13 +113,13 @@ class BrickUP : public BrickBase
     virtual ~BrickUP(void) ;
 
     //set domain
-    void setDomain( Domain *theDomain ) ;
+    void setDomain( Domain *theDomain );
 
     //return number of dofs
     int getNumDOF(void) const;
 
     //print out element data
-    void Print( std::ostream &s, int flag ) ;
+    void Print(std::ostream &s, int flag) const;
 
     //return stiffness matrix
     const Matrix &getTangentStiff(void) const;

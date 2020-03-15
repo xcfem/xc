@@ -86,7 +86,7 @@ class TzSimple1: public PYBase
     int sendSelf(CommParameters &);  
     int recvSelf(const CommParameters &);
     
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
 
    
   };

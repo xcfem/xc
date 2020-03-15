@@ -368,7 +368,7 @@ int XC::HHTGeneralized::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::HHTGeneralized::Print(std::ostream &s, int flag)
+void XC::HHTGeneralized::Print(std::ostream &s, int flag) const
   {
     RayleighBase::Print(s,flag);
     s << "  alphaI: " << alphaI << " alphaF: " << alphaF  << " beta: " << beta  << " gamma: " << gamma << std::endl;

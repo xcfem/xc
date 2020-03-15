@@ -679,7 +679,7 @@ int XC::BeamWithHinges3d::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::BeamWithHinges3d::Print(std::ostream &s, int flag)
+void XC::BeamWithHinges3d::Print(std::ostream &s, int flag) const
   {
     s << "\nBeamWithHinges3d, tag: " << this->getTag() << std::endl;
     s << "\tConnected Nodes: " << theNodes;

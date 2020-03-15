@@ -122,8 +122,9 @@ XC::SectionForceDeformation* XC::YS_Section2D02::getCopy(void) const
     return theCopy;
   }
 
-void XC::YS_Section2D02::Print (std::ostream &s, int flag)
-{
+//! @brief Print stuff.
+void XC::YS_Section2D02::Print(std::ostream &s, int flag) const
+  {
     s << "YS_Section2D02, tag: " << this->getTag() << std::endl;
 	s << "\tE: " << E << std::endl;
 	s << "\tA: " << A << std::endl;
@@ -132,4 +133,4 @@ void XC::YS_Section2D02::Print (std::ostream &s, int flag)
 	s << "\tPeak plastic-rotation   :" << peakPlstkRot << std::endl;
 	s << "\tMaximum plastic-rotation:" << maxPlstkRot << std::endl;
 	this->XC::YieldSurfaceSection2d::Print(s, flag);
-}
+  }

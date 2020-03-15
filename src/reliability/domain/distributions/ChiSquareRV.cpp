@@ -109,7 +109,7 @@ XC::ChiSquareRV::ChiSquareRV(int passedTag,
 
 
 void
-XC::ChiSquareRV::Print(std::ostream &s, int flag)
+XC::ChiSquareRV::Print(std::ostream &s, int flag) const
 {
 }
 

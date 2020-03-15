@@ -384,9 +384,9 @@ int XC::SingleFPSimple3d::addInertiaLoadToUnbalance(const Vector &accel)
 	return 0;
 }
 
-
-const XC::Vector& XC::SingleFPSimple3d::getResistingForce()
-{
+//! @brief Return the element resisting force.
+const XC::Vector& XC::SingleFPSimple3d::getResistingForce(void) const
+  {
     // zero the residual
     theVector.Zero();
     
@@ -415,8 +415,8 @@ const XC::Vector& XC::SingleFPSimple3d::getResistingForce()
     return theVector;
 }
 
-
-const XC::Vector& XC::SingleFPSimple3d::getResistingForceIncInertia()
+//! @brief Return the element resisting force including inertia
+const XC::Vector& XC::SingleFPSimple3d::getResistingForceIncInertia(void) const
   {	
     theVector = this->getResistingForce();
 	
@@ -487,7 +487,7 @@ int XC::SingleFPSimple3d::recvSelf(const CommParameters &cp)
   }
 
 
-void XC::SingleFPSimple3d::Print(std::ostream &s, int flag)
+void XC::SingleFPSimple3d::Print(std::ostream &s, int flag) const
 {
     if (flag == 0)  {
         // print everything

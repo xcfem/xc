@@ -77,7 +77,7 @@ const XC::Matrix &XC::YS_Section2D01::getInitialTangent(void) const
 XC::SectionForceDeformation* XC::YS_Section2D01::getCopy(void) const
   { return new YS_Section2D01(*this); }
 
-void XC::YS_Section2D01::Print(std::ostream &s, int flag)
+void XC::YS_Section2D01::Print(std::ostream &s, int flag) const
   {
     s << "YS_Section2D01, tag: " << this->getTag() << std::endl;
     s << "\tE: " << E << std::endl;

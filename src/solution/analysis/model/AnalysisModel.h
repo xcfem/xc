@@ -161,7 +161,7 @@ class AnalysisModel: public MovableObject, public CommandEntity
     virtual int newStepDomain(double dT =0.0);
     virtual int commitDomain(void);
     virtual int revertDomainToLastCommit(void);
-    virtual double getCurrentDomainTime(void);
+    virtual double getCurrentDomainTime(void) const;
     virtual void setCurrentDomainTime(double newTime);
     virtual void setRayleighDampingFactors(const RayleighDampingFactors &rF);
 

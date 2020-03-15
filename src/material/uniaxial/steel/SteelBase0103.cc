@@ -183,7 +183,7 @@ int XC::SteelBase0103::recvData(const CommParameters &cp)
   }
 
 //! @brief Print stuff.
-void XC::SteelBase0103::Print(std::ostream& s, int flag)
+void XC::SteelBase0103::Print(std::ostream& s, int flag) const
   {
     s << "SteelBase0103 tag: " << this->getTag() << std::endl;
     s << "  fy: " << fy << " ";

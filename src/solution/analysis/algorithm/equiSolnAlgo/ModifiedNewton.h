@@ -114,7 +114,7 @@ class ModifiedNewton: public NewtonBased
     virtual SolutionAlgorithm *getCopy(void) const;
   public:
     int solveCurrentStep(void);    
-    void Print(std::ostream &s, int flag =0);    
+    void Print(std::ostream &s, int flag =0) const;    
   };
 
 } // end of XC namespace

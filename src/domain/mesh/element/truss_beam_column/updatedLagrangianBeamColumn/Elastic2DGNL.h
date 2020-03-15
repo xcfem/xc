@@ -77,7 +77,7 @@ class Elastic2dGNL : public UpdatedLagrangianBeam2D
     Element *getCopy(void) const;
   
     // Prints the element info to std::ostream
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
   
     // Methods for sending and receiving the object over a ch
     int sendSelf(CommParameters &);

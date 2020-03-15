@@ -360,7 +360,7 @@ int XC::NodalLoad::recvSelf(const CommParameters &cp)
   }
 
 //! @brief Print stuff.
-void XC::NodalLoad::Print(std::ostream &s, int flag)
+void XC::NodalLoad::Print(std::ostream &s, int flag) const
   {
      s << "Nodal Load: " << loadedNode;
      s << " load : " << load;

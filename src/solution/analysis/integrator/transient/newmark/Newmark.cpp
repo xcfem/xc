@@ -482,7 +482,7 @@ int XC::Newmark::recvSelf(const CommParameters &cp)
 //! The object sends to \f$s\f$ its type, the current time, \f$\gamma\f$ and
 //! \f$\beta\f$. If Rayleigh damping is specified, the constants \f$\alpha_M\f$
 //! and \f$\beta_K\f$ are also printed.
-void XC::Newmark::Print(std::ostream &s, int flag)
+void XC::Newmark::Print(std::ostream &s, int flag) const
   {
     NewmarkBase2::Print(s,flag);
     s << "  gamma: " << gamma << "  beta: " << beta << std::endl;

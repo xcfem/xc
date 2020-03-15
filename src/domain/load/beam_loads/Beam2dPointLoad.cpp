@@ -341,7 +341,7 @@ int XC::Beam2dPointLoad::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::Beam2dPointLoad::Print(std::ostream &s, int flag)
+void XC::Beam2dPointLoad::Print(std::ostream &s, int flag) const
   {
     s << "Beam2dPointLoad - reference load : (" << pTrans()
       << ", " << pAxial() << ") acting at : " << X() << " relative to length\n";

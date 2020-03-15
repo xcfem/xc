@@ -618,7 +618,7 @@ int XC::BarSlipMaterial::sendSelf(CommParameters &cp)
 int XC::BarSlipMaterial::recvSelf(const CommParameters &cp)
   { return -1; }
 
-void XC::BarSlipMaterial::Print(std::ostream &s, int flag)
+void XC::BarSlipMaterial::Print(std::ostream &s, int flag) const
   {
     s << "BarSlipMaterial, tag: " << this-> getTag() << std::endl;
     s << "Positive Envelope : " << eP << std::endl;

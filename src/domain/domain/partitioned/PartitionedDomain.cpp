@@ -1178,7 +1178,7 @@ int XC::PartitionedDomain::removeRecorders(void)
     return 0;
   }
 
-void XC::PartitionedDomain::Print(std::ostream &s, int flag)
+void XC::PartitionedDomain::Print(std::ostream &s, int flag) const
   {
     XC::Domain::Print(s, flag);
 

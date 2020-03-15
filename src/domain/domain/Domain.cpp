@@ -1170,7 +1170,7 @@ int XC::Domain::hasDomainChanged(void)
 //!
 //! To print the state of the domain. The domain invokes {\em Print(s,flag)} on
 //! all it's container objects. 
-void XC::Domain::Print(std::ostream &s, int flag)
+void XC::Domain::Print(std::ostream &s, int flag) const
   {
 
     s << "Current Domain Information\n";
@@ -1181,7 +1181,7 @@ void XC::Domain::Print(std::ostream &s, int flag)
   }
 
 //! @brief Insertion in an output stream.
-std::ostream &XC::operator<<(std::ostream &s, XC::Domain &M)
+std::ostream &XC::operator<<(std::ostream &s, const XC::Domain &M)
   {
     M.Print(s);
     return s;

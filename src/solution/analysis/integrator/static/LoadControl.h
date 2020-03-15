@@ -140,7 +140,7 @@ class LoadControl : public BaseControl
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
 
-    void Print(std::ostream &s, int flag =0);    
+    void Print(std::ostream &s, int flag =0) const;    
   };
 inline Integrator *LoadControl::getCopy(void) const
   { return new LoadControl(*this); }

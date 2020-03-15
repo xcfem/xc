@@ -120,7 +120,7 @@ class CrossSectionProperties3d: public CrossSectionProperties2d
     int updateParameter(int parameterID, Information &info);
 
 
-    void Print (std::ostream &s, int flag = 0) const;
+    void Print(std::ostream &s, int flag = 0) const;
   };
 
 } // end of XC namespace

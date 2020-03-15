@@ -73,7 +73,7 @@ class ReliabilityDomainComponent: public TaggedObject
   public:
     virtual void setReliabilityDomain(ReliabilityDomain *theReliabilityDomain);
     virtual ReliabilityDomain *getReliabilityDomain(void) const;
-    virtual void Print(std::ostream &s, int flag =0) =0;       
+    virtual void Print(std::ostream &s, int flag =0) const=0;       
   protected:
     ReliabilityDomainComponent(int tag, int classTag);
   private:    

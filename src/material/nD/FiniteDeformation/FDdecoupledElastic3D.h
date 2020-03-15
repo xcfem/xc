@@ -147,7 +147,7 @@ class FDdecoupledElastic3D: public FiniteDeformationElastic3D
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
 
-    void Print(std::ostream &s, int flag = 0);
+    void Print(std::ostream &s, int flag = 0) const;
 
 //    int setParameter(const std::vector<std::string> &argv, Parameter &param);
 //    int updateParameter(int parameterID, Information &info);

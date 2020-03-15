@@ -35,7 +35,7 @@
 XC::NodeVelVectors::NodeVelVectors(void)
   :NodeVectors(){}
 
-void XC::NodeVelVectors::Print(std::ostream &s,int flag)
+void XC::NodeVelVectors::Print(std::ostream &s,int flag) const
   {
     if(commitData)
       s << "\tcommitVel: " << *trialData;

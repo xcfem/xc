@@ -83,7 +83,7 @@ int XC::ZeroLengthContact::recvSelf(const CommParameters &cp)
   }
 
 
-void XC::ZeroLengthContact::Print(std::ostream &s, int flag)
+void XC::ZeroLengthContact::Print(std::ostream &s, int flag) const
   {
     if(flag == 0)
       { // print everything

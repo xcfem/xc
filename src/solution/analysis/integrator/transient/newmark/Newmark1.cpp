@@ -296,7 +296,7 @@ int XC::Newmark1::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::Newmark1::Print(std::ostream &s, int flag)
+void XC::Newmark1::Print(std::ostream &s, int flag) const
   {
     NewmarkBase2::Print(s,flag);
     s << "  gamma: " << gamma << "  beta: " << beta << std::endl;

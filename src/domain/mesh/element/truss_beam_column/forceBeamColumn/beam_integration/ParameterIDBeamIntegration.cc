@@ -78,7 +78,7 @@ int XC::ParameterIDBeamIntegration::recvData(const CommParameters &cp)
     return res;
   }
 
-void XC::ParameterIDBeamIntegration::Print(std::ostream &s, int flag)
+void XC::ParameterIDBeamIntegration::Print(std::ostream &s, int flag) const
   {
     s << "ParameterID" << std::endl;
     UserDefinedBeamIntegrationBase::Print(s);

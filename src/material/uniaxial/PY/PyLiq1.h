@@ -120,7 +120,7 @@ class PyLiq1 : public PySimple1
 
     //  Command for initiating vertConsolStress from TclUpdateMaterialStageCommand
     int updateParameter(int snum, Information &eleInformation);
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
   };
 }// fin namespace
 #endif // PYLIQ1_H

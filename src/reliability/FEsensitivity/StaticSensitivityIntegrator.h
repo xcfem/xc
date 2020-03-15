@@ -82,7 +82,7 @@ class StaticSensitivityIntegrator: public SensitivityIntegrator, public StaticIn
     int setDeltaLambda(double newDeltaLambda);
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
-    void Print(std::ostream &s, int flag =0);    
+    void Print(std::ostream &s, int flag =0) const;    
 
     // Sensitivity related methods
     int formEleResidual(FE_Element *theEle);

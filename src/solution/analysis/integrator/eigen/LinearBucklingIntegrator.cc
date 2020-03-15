@@ -83,7 +83,7 @@ int XC::LinearBucklingIntegrator::formKt(void)
   }
 
 
-void XC::LinearBucklingIntegrator::Print(std::ostream &s, int flag)
+void XC::LinearBucklingIntegrator::Print(std::ostream &s, int flag) const
   {
     s << "\t XC::LinearBucklingIntegrator: \n";
   }

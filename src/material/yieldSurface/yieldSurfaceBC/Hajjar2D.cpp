@@ -177,7 +177,7 @@ XC::YieldSurface_BC *XC::Hajjar2D::getCopy(void)
     return theCopy;
   }
 
-void XC::Hajjar2D::Print(std::ostream &s, int flag)
+void XC::Hajjar2D::Print(std::ostream &s, int flag) const
   {
     s << "\nYield Surface No: " << this->getTag() << " type: Attalla2D\n";
   }

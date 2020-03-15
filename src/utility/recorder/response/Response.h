@@ -85,7 +85,7 @@ class Response
     virtual int getResponse(void) = 0;
     virtual Information &getInformation(void);
 
-    virtual void Print(std::ofstream &s, int flag = 0);
+    virtual void Print(std::ofstream &s, int flag = 0) const;
 
   };
 } // end of XC namespace

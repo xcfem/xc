@@ -79,7 +79,7 @@ class TrapezoidalModulatingFunction: public ModulatingFunction
     TrapezoidalModulatingFunction(int tag,Filter *theFilter,
 				  double t1, double t2, double t3, double t4,
 				  double amplitude);
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
 
     double getAmplitude(double time);
     double getMaxAmplitude(void);

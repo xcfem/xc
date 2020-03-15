@@ -379,7 +379,7 @@ int XC::Collocation::recvSelf(const CommParameters &cp)
   }
 
 
-void XC::Collocation::Print(std::ostream &s, int flag)
+void XC::Collocation::Print(std::ostream &s, int flag) const
   {
     RayleighBase::Print(s,flag);
     s << "  theta: " << theta << std::endl;

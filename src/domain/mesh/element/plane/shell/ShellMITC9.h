@@ -91,7 +91,7 @@ class ShellMITC9 : public QuadBase9N<SectionFDPhysicalProperties>
     int revertToStart(void);
 
     //print out element data
-    void Print(std::ostream &, int flag);
+    void Print(std::ostream &, int flag) const;
 	
     //return stiffness matrix 
     const Matrix &getTangentStiff(void) const;

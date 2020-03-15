@@ -145,7 +145,7 @@ class PressureDependMultiYield02: public PressureDependMultiYieldBase
 
      int sendSelf(CommParameters &);
      int recvSelf(const CommParameters &);
-     void Print(std::ostream &s, int flag =0);
+     void Print(std::ostream &s, int flag =0) const;
      //void setCurrentStress(const Vector stress) { currentStress=T2Vector(stress); }
 
     // RWB; PyLiq1 & TzLiq1 need to see the excess pore pressure and initial stresses.

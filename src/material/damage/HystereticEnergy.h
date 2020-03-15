@@ -98,7 +98,7 @@ class HystereticEnergy : public DamageModel
     
     int sendSelf(CommParameters &);  
     int recvSelf(const CommParameters &);
-    void Print(std::ostream &s, int flag =0);    
+    void Print(std::ostream &s, int flag =0) const;    
     
     // method for this damage model to update itself according to its new parameters
     void update(void) {return;}

@@ -112,8 +112,7 @@ XC::KooModulatingFunction::getMaxAmplitude()
 	return 1.0;
 }
 
-void
-XC::KooModulatingFunction::Print(std::ostream &s, int flag)  
-{
-}
+//! @brief Print stuff.
+void XC::KooModulatingFunction::Print(std::ostream &s, int flag) const
+  {}
 

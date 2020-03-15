@@ -143,7 +143,7 @@ int XC::PlasticLengthsBeamIntegration::activateParameter(int paramID)
     return 0;
   }
 
-void XC::PlasticLengthsBeamIntegration::Print(std::ostream &s, int flag)
+void XC::PlasticLengthsBeamIntegration::Print(std::ostream &s, int flag) const
   {
     s << "PlasticLengths" << std::endl;
     s << " lpI = " << lpI;

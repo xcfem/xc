@@ -239,7 +239,7 @@ int XC::FiberSection2d::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::FiberSection2d::Print(std::ostream &s, int flag)
+void XC::FiberSection2d::Print(std::ostream &s, int flag) const
   {
     s << "\nFiberSection2d, tag: " << this->getTag() << std::endl;
     s << "\tSection code: " << getType();

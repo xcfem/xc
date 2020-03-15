@@ -123,7 +123,7 @@ class HardeningMaterial : public UniaxialMaterial
     int sendSelf(CommParameters &);  
     int recvSelf(const CommParameters &);
     
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
     
 // AddingSensitivity:BEGIN //////////////////////////////////////////
     int    setParameter(const std::vector<std::string> &argv, Parameter &param);

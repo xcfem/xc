@@ -96,8 +96,7 @@ XC::GammaModulatingFunction::getMaxAmplitude()
 	return ( a * pow( (b/c), b) * exp(-b) );
 }
 
-void
-XC::GammaModulatingFunction::Print(std::ostream &s, int flag)  
-{
-}
+//! @brief Print stuff.
+void XC::GammaModulatingFunction::Print(std::ostream &s, int flag) const
+  {}
 

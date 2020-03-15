@@ -126,7 +126,7 @@ class LoadContainer: public CommandEntity, public MovableObject
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
 
-    virtual void Print(std::ostream &s, int flag =0);
+    virtual void Print(std::ostream &s, int flag =0) const;
 
     virtual LoadContainer *getCopy(void);
 

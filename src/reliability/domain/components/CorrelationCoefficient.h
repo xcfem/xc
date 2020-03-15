@@ -75,7 +75,7 @@ class CorrelationCoefficient: public ReliabilityDomainComponent
 	int		getRv2();
 	double	getCorrelation();
 	
-	void Print(std::ostream &s, int flag =0);
+	void Print(std::ostream &s, int flag =0) const;
 
 
 protected:

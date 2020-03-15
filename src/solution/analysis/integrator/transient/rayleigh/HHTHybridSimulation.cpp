@@ -359,7 +359,7 @@ int XC::HHTHybridSimulation::recvSelf(const CommParameters &cp)
   }
 
 
-void XC::HHTHybridSimulation::Print(std::ostream &s, int flag)
+void XC::HHTHybridSimulation::Print(std::ostream &s, int flag) const
   {
     HHTBase::Print(s,flag);
     s << "  alphaI: " << alphaI() << " alphaF: " << alphaF  << " beta: " << beta  << " gamma: " << gamma << std::endl;

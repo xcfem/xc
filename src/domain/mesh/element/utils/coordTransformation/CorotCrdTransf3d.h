@@ -154,7 +154,7 @@ class CorotCrdTransf3d: public CrdTransf3d
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
     
-    void Print(std::ostream &s, int flag = 0);
+    void Print(std::ostream &s, int flag = 0) const;
     
     // functions used in post-processing only    
     const Vector &getPointGlobalCoordFromLocal(const Vector &) const;

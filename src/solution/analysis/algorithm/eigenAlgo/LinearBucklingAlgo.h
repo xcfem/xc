@@ -86,7 +86,7 @@ class LinearBucklingAlgo : public EigenAlgorithm
     virtual SolutionAlgorithm *getCopy(void) const;
   public:
     virtual int solveCurrentStep(int numModes);
-    virtual void Print(std::ostream &s, int flag = 0);
+    virtual void Print(std::ostream &s, int flag = 0) const;
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
   };

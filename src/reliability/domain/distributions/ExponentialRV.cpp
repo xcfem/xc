@@ -105,7 +105,7 @@ XC::ExponentialRV::ExponentialRV(int passedTag,
 }
 
 
-void XC::ExponentialRV::Print(std::ostream &s, int flag)
+void XC::ExponentialRV::Print(std::ostream &s, int flag) const
 {
 }
 

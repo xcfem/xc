@@ -117,7 +117,7 @@ XC::Vector& XC::BoundingSurface2D::getEvolDirection(XC::Vector &f_new)
 }
 
 
-void XC::BoundingSurface2D::Print(std::ostream &s, int flag)
+void XC::BoundingSurface2D::Print(std::ostream &s, int flag) const
 {
 	s << "BoundingSurface2D \n";
 	s << "iso_Ratio = " << isotropicRatio << "\n";

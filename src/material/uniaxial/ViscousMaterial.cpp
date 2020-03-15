@@ -177,7 +177,7 @@ int XC::ViscousMaterial::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::ViscousMaterial::Print(std::ostream &s, int flag)
+void XC::ViscousMaterial::Print(std::ostream &s, int flag) const
   {
     s << "Viscous tag: " << this->getTag() << std::endl;
     s << "  C: " << C << std::endl;

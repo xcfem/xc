@@ -185,7 +185,7 @@ int XC::ZeroLengthMaterials::recvSelf(const CommParameters &cp)
   }
 
 
-void XC::ZeroLengthMaterials::Print(std::ostream &s, int flag)
+void XC::ZeroLengthMaterials::Print(std::ostream &s, int flag) const
   {
     for(size_t j = 0; j < size(); j++)
       {

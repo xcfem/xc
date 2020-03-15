@@ -102,7 +102,7 @@ class EquiSolnAlgo: public SolutionAlgorithm
     virtual int solveCurrentStep(void) =0;
     virtual ConvergenceTest *getConvergenceTestPtr(void);     
     virtual const ConvergenceTest *getConvergenceTestPtr(void) const;
-    virtual void Print(std::ostream &, int flag =0);    
+    virtual void Print(std::ostream &, int flag =0) const;    
 
     // the following are not protected as convergence test
     // may need access to them

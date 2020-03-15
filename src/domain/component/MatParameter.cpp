@@ -71,10 +71,10 @@ XC::MatParameter::MatParameter(void)
 
 }
 
-void XC::MatParameter::Print(std::ostream &s, int flag)  
-{
-  s << "MaterialParameter, tag = " << this->getTag() << std::endl;
-}
+void XC::MatParameter::Print(std::ostream &s, int flag) const 
+  {
+    s << "MaterialParameter, tag = " << this->getTag() << std::endl;
+  }
 
 void XC::MatParameter::setDomain(Domain *theDomain)  
 {

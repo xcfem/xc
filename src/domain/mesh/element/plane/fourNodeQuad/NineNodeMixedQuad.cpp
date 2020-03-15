@@ -119,7 +119,7 @@ int XC::NineNodeMixedQuad::getNumDOF(void) const
 
 
 //print out element data
-void XC::NineNodeMixedQuad::Print( std::ostream &s, int flag )
+void XC::NineNodeMixedQuad::Print( std::ostream &s, int flag ) const
   {
     s << std::endl;
     s << "Nine XC::Node Quad -- Mixed Pressure/Volume -- Plane Strain \n";

@@ -553,9 +553,9 @@ int XC::EQPath::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::EQPath::Print(std::ostream &s, int flag)
+void XC::EQPath::Print(std::ostream &s, int flag) const
   {
-    AnalysisModel *theModel = this->getAnalysisModelPtr();
+    const AnalysisModel *theModel = this->getAnalysisModelPtr();
     if(theModel)
       {
 	const double cLambda = getCurrentModelTime();

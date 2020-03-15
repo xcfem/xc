@@ -279,7 +279,7 @@ int XC::GenericSection1d::recvSelf(const CommParameters &cp)
 
 //! @brief Prints to the stream \p s the object's \p tag, then invokes
 //! Print() on the UniaxialMaterial.
-void XC::GenericSection1d::Print(std::ostream &s, int flag)
+void XC::GenericSection1d::Print(std::ostream &s, int flag) const
   {
     s << "GenericSection1d (Uniaxial), tag: " << this->getTag() << std::endl
       << "\tResponse code: " << code << std::endl

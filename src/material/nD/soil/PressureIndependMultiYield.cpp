@@ -557,7 +557,7 @@ void XC::PressureIndependMultiYield::getBackbone(XC::Matrix & bb)
 
 }
 
-void XC::PressureIndependMultiYield::Print(std::ostream &s, int flag )
+void XC::PressureIndependMultiYield::Print(std::ostream &s, int flag ) const
   {  s << strTypePressureIndependMultiYield << std::endl; }
 
 

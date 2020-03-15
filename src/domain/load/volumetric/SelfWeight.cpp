@@ -118,7 +118,7 @@ int XC::SelfWeight::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::SelfWeight::Print(std::ostream &s, int flag)
+void XC::SelfWeight::Print(std::ostream &s, int flag) const
   {
     s << "SelfWeight...";
     s << "  elements acted on: " << this->getElementTags();

@@ -239,7 +239,7 @@ int XC::NewtonLineSearch::sendSelf(CommParameters &cp)
 int XC::NewtonLineSearch::recvSelf(const CommParameters &cp)
   { return -1; }
 
-void XC::NewtonLineSearch::Print(std::ostream &s, int flag)
+void XC::NewtonLineSearch::Print(std::ostream &s, int flag) const
   {
     if(flag == 0)
       s << "NewtonLineSearch\n";

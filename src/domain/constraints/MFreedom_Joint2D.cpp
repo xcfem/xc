@@ -315,7 +315,7 @@ const XC::Matrix &XC::MFreedom_Joint2D::getConstraint(void) const
     return constraintMatrix;
   }
     
-void XC::MFreedom_Joint2D::Print(std::ostream &s, int flag )
+void XC::MFreedom_Joint2D::Print(std::ostream &s, int flag ) const
   {
     s << "MFreedom_Joint2D: " << this->getTag() << "\n";
     s << "\tConstrained XC::Node: " << getNodeConstrained();

@@ -93,7 +93,7 @@ XC::UserDefinedRV::~UserDefinedRV()
 
 
 void
-XC::UserDefinedRV::Print(std::ostream &s, int flag)
+XC::UserDefinedRV::Print(std::ostream &s, int flag) const
 {
 }
 

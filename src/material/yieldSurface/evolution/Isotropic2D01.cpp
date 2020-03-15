@@ -57,7 +57,7 @@ XC::YS_Evolution *XC::Isotropic2D01::getCopy(void)
 	return theCopy;
 }
 
-void XC::Isotropic2D01::Print(std::ostream &s, int flag)
+void XC::Isotropic2D01::Print(std::ostream &s, int flag) const
 {
 	s << "Isotropic2D01 \n";
 	s << "iso_Ratio = " << isotropicRatio << "\n";

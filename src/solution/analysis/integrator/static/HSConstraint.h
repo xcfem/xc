@@ -87,7 +87,7 @@ class HSConstraint: public ProtoArcLength
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
 
-    void Print(std::ostream &s, int flag =0);    
+    void Print(std::ostream &s, int flag =0) const;    
   };
 inline Integrator *HSConstraint::getCopy(void) const
   { return new HSConstraint(*this); }

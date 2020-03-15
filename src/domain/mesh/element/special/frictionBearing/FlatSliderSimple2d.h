@@ -113,14 +113,14 @@ class FlatSliderSimple2d: public FrictionElementBase
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
     
-    const Vector &getResistingForce();
-    const Vector &getResistingForceIncInertia();
+    const Vector &getResistingForce(void) const;
+    const Vector &getResistingForceIncInertia(void) const;
     
     // public methods for element output
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
     int displaySelf(Renderer &theViewer, int displayMode, float fact);    
-    void Print(std::ostream &s, int flag = 0);    
+    void Print(std::ostream &s, int flag = 0) const;    
     
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
     int getResponse(int responseID, Information &eleInformation);

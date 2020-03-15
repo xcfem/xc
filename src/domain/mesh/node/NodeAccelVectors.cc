@@ -36,7 +36,7 @@ XC::NodeAccelVectors::NodeAccelVectors(void)
   :NodeVectors() {}
 
 
-void XC::NodeAccelVectors::Print(std::ostream &s,int flag)
+void XC::NodeAccelVectors::Print(std::ostream &s,int flag) const
   {
     if(commitData)
       s << "\tcommitAccel: " << *trialData;

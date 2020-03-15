@@ -70,7 +70,7 @@ class YieldSurface_BC: public TaggedObject, public MovableObject
     YieldSurface_BC(int tag, int classtag, YS_Evolution &model,double capx, double capy, double capz);
     virtual ~YieldSurface_BC();
 
-    virtual void Print(std::ostream &s, int flag =0);
+    virtual void Print(std::ostream &s, int flag =0) const;
     void    setEleInfo(int eleTag, int loc);
     // keep transformation virtual
     virtual void    setTransformation(int xDof, int xFact);

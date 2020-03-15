@@ -271,7 +271,7 @@ void XC::RadauBeamIntegration::getSectionWeights(int numSections, double L,doubl
     wt[i] *= 0.5;
 }
 
-void XC::RadauBeamIntegration::Print(std::ostream &s, int flag)
+void XC::RadauBeamIntegration::Print(std::ostream &s, int flag) const
 {
   s << "Radau" << std::endl;
 }

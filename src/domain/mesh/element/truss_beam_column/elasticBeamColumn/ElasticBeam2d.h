@@ -150,7 +150,7 @@ class ElasticBeam2d: public ProtoBeam2d
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
     
-    void Print(std::ostream &s, int flag = 0);
+    void Print(std::ostream &s, int flag = 0) const;
     //! @brief Internal shear force in the middle of the element.
     inline double getV(void) 
       { return (q(1)+q(2))/theCoordTransf->getInitialLength(); }

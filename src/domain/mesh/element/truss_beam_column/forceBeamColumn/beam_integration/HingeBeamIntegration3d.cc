@@ -121,7 +121,7 @@ int XC::HingeBeamIntegration3d::recvSelf(const CommParameters &cp)
   }
 
 //! @brief Print stuff.
-void XC::HingeBeamIntegration3d::Print(std::ostream &s, int flag)
+void XC::HingeBeamIntegration3d::Print(std::ostream &s, int flag) const
   {
     s << "HingeMidpoint3d" << std::endl;
     ctes_scc.Print(s);

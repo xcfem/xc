@@ -236,7 +236,7 @@ int XC::ElasticPPMaterial::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::ElasticPPMaterial::Print(std::ostream &s, int flag)
+void XC::ElasticPPMaterial::Print(std::ostream &s, int flag) const
   {
     s << "ElasticPP tag: " << this->getTag() << std::endl;
     s << "  E: " << E << std::endl;

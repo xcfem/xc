@@ -110,7 +110,7 @@ class BeamIntegration: public MovableObject, public CommandEntity
   // Return 0 if there is no elastic interior, -1 otherwise
     virtual int addElasticFlexDeriv(double L, Matrix &dfedh,double dLdh = 0.0) {return 0;}
 
-    virtual void Print(std::ostream &s, int flag = 0) = 0;
+    virtual void Print(std::ostream &s, int flag = 0) const=0;
 
   };
 

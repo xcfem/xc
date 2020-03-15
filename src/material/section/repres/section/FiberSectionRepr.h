@@ -106,7 +106,7 @@ class FiberSectionRepr: public SectionRepres
     FiberSection3d getFiberSection3d(int secTag) const;
     FiberSectionGJ getFiberSectionGJ(int secTag,const double &GJ) const;
     
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
     friend std::ostream &operator<<(std::ostream &, FiberSectionRepr &);    
   };
 std::ostream &operator<<(std::ostream &, FiberSectionRepr &);

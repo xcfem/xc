@@ -65,7 +65,7 @@ class YS_Evolution: public TaggedObject, public MovableObject
     YS_Evolution(int tag, int classTag, double iso_ratio, double kin_ratio,
     			 int _dimension, double shr_iso=0.5, double shr_kin=0.5);
 //  Methods inherited
-    virtual void Print(std::ostream &s, int flag =0);
+    virtual void Print(std::ostream &s, int flag =0) const;
 
     virtual int	update(int flag=0);
     virtual int commitState(void);
@@ -81,7 +81,7 @@ class YS_Evolution: public TaggedObject, public MovableObject
     // needed by ys->add Kp
     virtual const Vector &getEquiPlasticStiffness(void)=0;
       
-    virtual double getTrialPlasticStrains(int dof)=0;
+    virtual double getTrialPlasticStrains(int dof) const=0;
     virtual double getCommitPlasticStrains(int dof)=0;
     const Vector &getGeneralizedStress(void) const;
     const Vector &getGeneralizedStrain(void) const;

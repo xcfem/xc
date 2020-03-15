@@ -101,5 +101,5 @@ double drift = phi - 1;
     return theCopy;
 }
 
-void XC::Orbison2D::Print(std::ostream &s, int flag)
+void XC::Orbison2D::Print(std::ostream &s, int flag) const
   { s << "\nYield Surface No: " << this->getTag() << " type: Attalla2D\n"; }

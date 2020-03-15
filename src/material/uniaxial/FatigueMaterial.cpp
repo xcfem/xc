@@ -312,7 +312,7 @@ int XC::FatigueMaterial::recvSelf(const CommParameters &cp)
   return 0;
 }
 
-void XC::FatigueMaterial::Print(std::ostream &s, int flag)
+void XC::FatigueMaterial::Print(std::ostream &s, int flag) const
 {
   s << "FatigueMaterial tag: " << this->getTag() << std::endl;
   s << "\tMaterial: " << theMaterial->getTag() << std::endl;

@@ -1039,7 +1039,7 @@ int XC::TotalLagrangianFD8NodeBrick::recvSelf(const CommParameters &cp)
 
 //=============================================================================
 
-void XC::TotalLagrangianFD8NodeBrick::Print(std::ostream &s, int flag)
+void XC::TotalLagrangianFD8NodeBrick::Print(std::ostream &s, int flag) const
 
   {
 

@@ -199,7 +199,7 @@ int XC::HSConstraint::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::HSConstraint::Print(std::ostream &s, int flag)
+void XC::HSConstraint::Print(std::ostream &s, int flag) const
   {
     ProtoArcLength::Print(s,flag);
     s << "  HSConstraint: " << sqrt(arcLength2) /*<<  "  alpha: ";

@@ -77,7 +77,7 @@ class ElasticPlateSection: public ElasticPlateProto<5>
     const Matrix& getSectionTangent(void) const;
     const Matrix& getInitialTangent(void) const;
 
-    void Print(std::ostream &s,int flag);
+    void Print(std::ostream &s,int flag) const;
 
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);

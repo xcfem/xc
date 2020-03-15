@@ -40,7 +40,7 @@ class LinearCyclic : public CyclicModel
   public:
     LinearCyclic(int tag);
 
-    void Print (std::ostream &, int = 0);
+    void Print(std::ostream &, int flag= 0) const;
      CyclicModel *getCopy();
   };
 } // end of XC namespace

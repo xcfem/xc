@@ -220,7 +220,7 @@ void XC::ElTawil2D::customizeInterpolate(double &xi, double &yi, double &xj, dou
     return theCopy;
 }
 
-void XC::ElTawil2D::Print(std::ostream &s, int flag)
+void XC::ElTawil2D::Print(std::ostream &s, int flag) const
 {
     s << "\nYield Surface No: " << this->getTag() << " type: ElTawil2D\n";
 	this->XC::YieldSurface_BC::Print(s, flag);

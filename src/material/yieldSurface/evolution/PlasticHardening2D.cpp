@@ -215,31 +215,32 @@ const XC::Vector &XC::PlasticHardening2D::getEquiPlasticStiffness()
 	return v2;
 }
 
-double XC::PlasticHardening2D::getTrialPlasticStrains(int dir)
-{
-	if(dir == 0 && defPosX)
-		return kpMatXPos->getTrialValue();
-	else if(dir == 0 && !defPosX)
-		return kpMatXNeg->getTrialValue();
-	else if (dir == 1 && defPosY)
-		return kpMatYPos->getTrialValue();
-	else if (dir == 1 && !defPosY)
-		return kpMatYNeg->getTrialValue();
-	else
-		std::cerr << "XC::PlasticHardening2D::getTrialPlasticStrains(double dir) - incorrect dir||condition \n";
-	return 0;
-}
+//! @brief Return trial values of plastic strains.
+double XC::PlasticHardening2D::getTrialPlasticStrains(int dir) const
+  {
+    if(dir == 0 && defPosX)
+      return kpMatXPos->getTrialValue();
+    else if(dir == 0 && !defPosX)
+      return kpMatXNeg->getTrialValue();
+    else if (dir == 1 && defPosY)
+      return kpMatYPos->getTrialValue();
+    else if (dir == 1 && !defPosY)
+      return kpMatYNeg->getTrialValue();
+    else
+      std::cerr << "XC::PlasticHardening2D::getTrialPlasticStrains(double dir) - incorrect dir||condition \n";
+    return 0;
+  }
 
 double XC::PlasticHardening2D::getCommitPlasticStrains(int dir)
-{
-	std::cerr << "XC::PlasticHardening2D::getCommitPlasticStrains(double dir) - not yet implemented \n";
-	this->getTrialPlasticStrains(dir);
-	return 0;
-}
+  {
+    std::cerr << "XC::PlasticHardening2D::getCommitPlasticStrains(double dir) - not yet implemented \n";
+    this->getTrialPlasticStrains(dir);
+    return 0;
+  }
 
 double XC::PlasticHardening2D::getIsoPlasticStiffness(int dir)
-{
-double kp =0;
+  {
+  double kp =0;
 
 	if(dir == 0)
 	{
@@ -283,7 +284,7 @@ XC::Vector& XC::PlasticHardening2D::getEvolDirection(XC::Vector &f_new)
 	return v2;
 }
 
-void XC::PlasticHardening2D::Print(std::ostream &s, int flag)
+void XC::PlasticHardening2D::Print(std::ostream &s, int flag) const
 {
 	s << "PlasticHardening2D \n";
 	s << "iso_Ratio = " << isotropicRatio << "\n";

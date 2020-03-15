@@ -1216,7 +1216,7 @@ int XC::ConstrContainer::recvSelf(const CommParameters &cp)
   }
 
 //! @brief Prints object information.
-void XC::ConstrContainer::Print(std::ostream &s, int flag)
+void XC::ConstrContainer::Print(std::ostream &s, int flag) const
   {
 
     s << "Current ConstrContainer Information\n";
@@ -1242,7 +1242,7 @@ void XC::ConstrContainer::Print(std::ostream &s, int flag)
     activeNodeLockers.Print(s, flag);
   }
 
-std::ostream &XC::operator<<(std::ostream &s, XC::ConstrContainer &o)
+std::ostream &XC::operator<<(std::ostream &s, const XC::ConstrContainer &o)
   {
     o.Print(s);
     return s;

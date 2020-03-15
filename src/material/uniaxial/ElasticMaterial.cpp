@@ -190,7 +190,7 @@ int XC::ElasticMaterial::recvSelf(const CommParameters &cp)
   }
 
 //! Prints to the stream \p s the objects \p tag and \f$E\f$ values.
-void XC::ElasticMaterial::Print(std::ostream &s, int flag)
+void XC::ElasticMaterial::Print(std::ostream &s, int flag) const
   {
     s << "Elastic tag: " << this->getTag() << std::endl;
     s << "  E: " << E << " eta: " << eta << std::endl;

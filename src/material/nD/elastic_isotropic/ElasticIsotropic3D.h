@@ -85,7 +85,7 @@ class ElasticIsotropic3D : public ElasticIsotropicMaterial
     const std::string &getType(void) const;
     int getOrder(void) const;
 
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace
 

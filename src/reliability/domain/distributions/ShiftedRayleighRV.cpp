@@ -116,7 +116,7 @@ XC::ShiftedRayleighRV::ShiftedRayleighRV(int passedTag,
 
 
 void
-XC::ShiftedRayleighRV::Print(std::ostream &s, int flag)
+XC::ShiftedRayleighRV::Print(std::ostream &s, int flag) const
 {
 }
 

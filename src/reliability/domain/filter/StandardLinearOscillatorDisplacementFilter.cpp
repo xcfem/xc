@@ -102,7 +102,6 @@ XC::StandardLinearOscillatorDisplacementFilter::getTimeOfMaxAmplitude()
 	return (atan(wd/(xi*wn))/wd);
 }
 
-void
-XC::StandardLinearOscillatorDisplacementFilter::Print(std::ostream &s, int flag)  
-{
-}
+//! @brief Print stuff.
+void XC::StandardLinearOscillatorDisplacementFilter::Print(std::ostream &s, int flag) const
+  {}

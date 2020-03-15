@@ -175,11 +175,12 @@ int XC::MultiSupportPattern::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::MultiSupportPattern::Print(std::ostream &s, int flag)
+void XC::MultiSupportPattern::Print(std::ostream &s, int flag) const
   {
     s << "MultiSupportPattern  tag: " << this->getTag() << std::endl;
     SFreedom_Constraint *sp;
-    SFreedom_ConstraintIter &theIter = this->getSPs();
+    MultiSupportPattern *this_no_const= const_cast<MultiSupportPattern *>(this);
+    SFreedom_ConstraintIter &theIter = this_no_const->getSPs();
     while ((sp = theIter()) != 0)
       sp->Print(s, flag);
   }

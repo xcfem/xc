@@ -333,7 +333,7 @@ int XC::HHTExplicit::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::HHTExplicit::Print(std::ostream &s, int flag)
+void XC::HHTExplicit::Print(std::ostream &s, int flag) const
   {
     RayleighBase::Print(s,flag);
     s << "  alpha: " << alpha << " gamma: " << gamma << std::endl;

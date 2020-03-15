@@ -174,7 +174,7 @@ int XC::UserDefinedBeamIntegrationBase::updateParameter(int parameterID,Informat
   }
 
 //! @brief Print stuff.
-void XC::UserDefinedBeamIntegrationBase::Print(std::ostream &s, int flag)
+void XC::UserDefinedBeamIntegrationBase::Print(std::ostream &s, int flag) const
   {
     s << " Points: " << pts;
     s << " Weights: " << wts;

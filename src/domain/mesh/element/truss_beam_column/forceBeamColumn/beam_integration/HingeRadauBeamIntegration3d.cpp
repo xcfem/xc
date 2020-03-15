@@ -179,7 +179,7 @@ double XC::HingeRadauBeamIntegration3d::getTangentDriftJ(double L, double LI,dou
 XC::BeamIntegration *XC::HingeRadauBeamIntegration3d::getCopy(void) const
   { return new HingeRadauBeamIntegration3d(*this); }
 
-void XC::HingeRadauBeamIntegration3d::Print(std::ostream &s, int flag)
+void XC::HingeRadauBeamIntegration3d::Print(std::ostream &s, int flag) const
   {
     s << "HingeRadau3d" << std::endl;
     ctes_scc.Print(s);

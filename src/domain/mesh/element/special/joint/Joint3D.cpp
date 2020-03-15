@@ -354,7 +354,7 @@ const XC::Matrix &XC::Joint3D::getMass(void) const
         return K;
 }
 
-void XC::Joint3D::Print(std::ostream &s, int flag )
+void XC::Joint3D::Print(std::ostream &s, int flag ) const
 {
   s << "\nElement: " << getTag() << " type: Joint3D iNode: "
     << theNodes.getTagNode(0) << " jNode: " << theNodes.getTagNode(1) << "\n"

@@ -135,7 +135,7 @@ class FluidSolidPorousMaterial: public NDMaterial
      int recvSelf(const CommParameters &);     
      Response *setResponse(const std::vector<std::string> &argv, Information &matInfo);
      int getResponse(int responseID, Information &matInformation);
-     void Print(std::ostream &s, int flag =0);
+     void Print(std::ostream &s, int flag =0) const;
 
      int updateParameter(int responseID, Information &eleInformation);
 

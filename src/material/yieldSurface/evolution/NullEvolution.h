@@ -78,7 +78,7 @@ class NullEvolution: public YS_Evolution
   /** No descriptions */
   int revertToLastCommit();
   int commitState(int status);
-  double getTrialPlasticStrains(int dof);
+  double getTrialPlasticStrains(int dof) const;
   double getCommitPlasticStrains(int dof);
   };
 } // end of XC namespace

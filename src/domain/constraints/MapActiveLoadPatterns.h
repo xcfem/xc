@@ -47,7 +47,7 @@ class MapActiveLoadPatterns: public CommandEntity, public std::map<int,T *>
     typedef typename t_map::value_type value_type;
     MapActiveLoadPatterns(CommandEntity *);
     bool in(const T *) const;
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
   };
 
 //! @brief Constructor
@@ -67,7 +67,7 @@ bool MapActiveLoadPatterns<T>::in(const T *lp) const
   }
  
 template<class T>
-void MapActiveLoadPatterns<T>::Print(std::ostream &s, int flag)
+void MapActiveLoadPatterns<T>::Print(std::ostream &s, int flag) const
   {
     // go through the array invoking Print on non-zero entries
     const_iterator p = this->begin();

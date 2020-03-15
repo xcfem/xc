@@ -417,7 +417,7 @@ int XC::FeapMaterial::recvSelf(const CommParameters &cp)
 }
     
 void
-XC::FeapMaterial::Print(std::ostream &s, int flag)
+XC::FeapMaterial::Print(std::ostream &s, int flag) const
 {
   s << "FeapMaterial, tag: " << this->getTag() << std::endl;
   s << "Material formulation: " << this->getType() << std::endl;

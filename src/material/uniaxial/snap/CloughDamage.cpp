@@ -248,7 +248,7 @@ int XC::CloughDamage::revertToStart()
         return 0;
 }
 
-void XC::CloughDamage::Print(std::ostream &s, int flag)
+void XC::CloughDamage::Print(std::ostream &s, int flag) const
 {
         if ( DEBG ==1 ) fprintf( OutputFile , "Print\n" );        // debugging
         s << "BondSlipMaterial Tag: " << this->getTag() << std::endl;

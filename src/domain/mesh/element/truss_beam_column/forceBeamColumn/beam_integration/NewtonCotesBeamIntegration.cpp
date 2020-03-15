@@ -240,7 +240,7 @@ void XC::NewtonCotesBeamIntegration::getSectionWeights(int numSections, double L
     wt[i] *= 0.5;
 }
 
-void XC::NewtonCotesBeamIntegration::Print(std::ostream &s, int flag)
+void XC::NewtonCotesBeamIntegration::Print(std::ostream &s, int flag) const
   {
     s << "NewtonCotes" << std::endl;
   }

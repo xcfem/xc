@@ -294,7 +294,7 @@ int XC::HardeningMaterial::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::HardeningMaterial::Print(std::ostream &s, int flag)
+void XC::HardeningMaterial::Print(std::ostream &s, int flag) const
   {
     s << "HardeningMaterial, tag: " << this->getTag() << std::endl;
     s << "  E: " << E << std::endl;

@@ -260,7 +260,7 @@ int XC::CableMaterial::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::CableMaterial::Print(std::ostream &s, int flag)
+void XC::CableMaterial::Print(std::ostream &s, int flag) const
   {
     s << "CableMaterial tag: " << this->getTag() << std::endl;
     s << "  E: " << E << " Prestress: " << Ps << std::endl;

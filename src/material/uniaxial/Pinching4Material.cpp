@@ -501,7 +501,7 @@ int XC::Pinching4Material::recvSelf(const CommParameters &cp)
         return -1;
 }
 
-void XC::Pinching4Material::Print(std::ostream &s, int flag)
+void XC::Pinching4Material::Print(std::ostream &s, int flag) const
 {
         s << "Pinching4Material, tag: " << this-> getTag() << std::endl;
         s << "strain: " << Tstrain << std::endl;

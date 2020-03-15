@@ -124,7 +124,7 @@ int XC::NewUniaxialMaterial::sendSelf(CommParameters &cp)
 int XC::NewUniaxialMaterial::recvSelf(const CommParameters &cp)
   { return -1; }
 
-void XC::NewUniaxialMaterial::Print(std::ostream &s, int flag)
+void XC::NewUniaxialMaterial::Print(std::ostream &s, int flag) const
   { return; }
 
 

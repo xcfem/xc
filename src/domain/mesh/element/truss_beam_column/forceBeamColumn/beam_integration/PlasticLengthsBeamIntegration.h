@@ -55,7 +55,7 @@ class PlasticLengthsBeamIntegration: public BeamIntegration
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
 
-    void Print(std::ostream &,int);
+    void Print(std::ostream &,int) const;
   };
 } // end of XC namespace
 

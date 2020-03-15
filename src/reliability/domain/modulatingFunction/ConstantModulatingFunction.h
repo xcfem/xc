@@ -78,7 +78,7 @@ class ConstantModulatingFunction: public ModulatingFunction
     double getMaxAmplitude();
     Filter *getFilter();
 
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace
 

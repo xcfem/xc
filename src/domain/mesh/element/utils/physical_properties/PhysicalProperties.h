@@ -90,7 +90,7 @@ class PhysicalProperties: public CommandEntity, public MovableObject
     inline Matrix getGeneralizedStrains(void) const
       { return theMaterial.getGeneralizedStrains(); }
 
-    virtual void Print(std::ostream &s, int);
+    virtual void Print(std::ostream &s, int) const;
   };
 
  template <class MAT>
@@ -176,7 +176,7 @@ int PhysicalProperties<MAT>::recvSelf(const CommParameters &cp)
 
 //! @brief Sends object.
 template <class MAT>
-void PhysicalProperties<MAT>::Print(std::ostream &, int)
+void PhysicalProperties<MAT>::Print(std::ostream &, int) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; not implemented.\n";

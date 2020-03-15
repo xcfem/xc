@@ -145,7 +145,7 @@ class Steel02 : public SteelBase
     int    updateParameter(int parameterID, Information &info);
 // AddingSensitivity:END ///////////////////////////////////////////
 
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace
 

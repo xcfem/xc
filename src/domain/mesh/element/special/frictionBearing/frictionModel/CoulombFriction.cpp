@@ -147,7 +147,7 @@ int XC::CoulombFriction::recvSelf(const CommParameters &cp)
   }
 
 
-void XC::CoulombFriction::Print(std::ostream  &s, int flag)
+void XC::CoulombFriction::Print(std::ostream  &s, int flag) const
   {
     s << "CoulombFriction tag: " <<  getTag() << std::endl;
     s << "  mu: " << mu << std::endl;

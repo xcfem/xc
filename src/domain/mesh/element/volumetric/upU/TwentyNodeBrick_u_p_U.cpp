@@ -488,7 +488,7 @@ int XC::TwentyNodeBrick_u_p_U::getResponse(int responseID, Information &eleInfo)
 }
 
 //=============================================================================
-void XC::TwentyNodeBrick_u_p_U::Print(std::ostream &s, int flag)
+void XC::TwentyNodeBrick_u_p_U::Print(std::ostream &s, int flag) const
 {
     s << "TwentyNodeBrick_u_p_U, element id:  " << this->getTag() << "\n";
     s << "Connected external nodes:  " << theNodes << "\n";

@@ -314,7 +314,7 @@ int XC::LoadContainer::recvSelf(const CommParameters &cp)
   }
 
 //! @brief Prints load pattern information.
-void XC::LoadContainer::Print(std::ostream &s, int flag)
+void XC::LoadContainer::Print(std::ostream &s, int flag) const
   {
     s << "  Load container\n";
     s << "    Nodal Loads: \n";

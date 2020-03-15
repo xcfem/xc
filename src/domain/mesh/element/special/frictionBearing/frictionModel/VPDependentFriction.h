@@ -72,7 +72,7 @@ class VPDependentFriction: public VDependentFriction
     double A; //!< nominal contact area
     double deltaMu; //!< pressure parameter
     double alpha; //!< pressure parameter
-    inline double muFast0(void)
+    inline const double &muFast0(void) const
       { return muFast; }
   protected:
     int sendData(CommParameters &);
@@ -92,7 +92,7 @@ class VPDependentFriction: public VDependentFriction
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
     
-    void Print(std::ostream &s, int flag = 0);
+    void Print(std::ostream &s, int flag = 0) const;
   };
 } // end of XC namespace
 

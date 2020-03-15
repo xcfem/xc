@@ -74,9 +74,9 @@ XC::JonswapSpectrum::JonswapSpectrum(int tag, double min, double max,
 	gamma = gam;
 }
 
-void XC::JonswapSpectrum::Print(std::ostream &s, int flag)  
-{
-}
+//! @brief Print stuff.
+void XC::JonswapSpectrum::Print(std::ostream &s, int flag) const
+  {}
 
 
 double

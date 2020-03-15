@@ -32,7 +32,7 @@ XC::NodeLocations::NodeLocations(int tag)
 :TaggedObject(tag), numPartitions(0)
   {}
 
-void XC::NodeLocations::Print(std::ostream &s, int flag)
+void XC::NodeLocations::Print(std::ostream &s, int flag) const
   {
     s << "NodeLocations tag: " << getTag() << " partitions: ";
     for(std::set<int>::const_iterator i= nodePartitions.begin();i!= nodePartitions.end();i++)

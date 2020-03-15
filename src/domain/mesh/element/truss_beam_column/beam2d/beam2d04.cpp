@@ -356,7 +356,7 @@ int XC::beam2d04::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::beam2d04::Print(std::ostream &s, int flag)
+void XC::beam2d04::Print(std::ostream &s, int flag) const
   {
     s << "\nElement: " << this->getTag() << " Type: beam2d04 ";
     s << "\tConnected Nodes: " << theNodes;

@@ -79,7 +79,7 @@ int XC::Integrator::updateModel(void)
 int XC::Integrator::updateModel(double newTime, double dT)
   { return getAnalysisModelPtr()->updateDomain(newTime,dT); }
 
-double XC::Integrator::getCurrentModelTime(void)
+double XC::Integrator::getCurrentModelTime(void) const
   { return getAnalysisModelPtr()->getCurrentDomainTime(); }
 
 void XC::Integrator::setCurrentModelTime(const double &t)
@@ -132,7 +132,7 @@ int XC::Integrator::domainChanged(void)
 
 //! @brief The Integrator is to send information to the stream based on the
 //! integer \p flag. 
-void XC::Integrator::Print(std::ostream &os, int flag)
+void XC::Integrator::Print(std::ostream &os, int flag) const
   {
     if(getAnalysisModelPtr())
       os << "\t " << getClassName() << "; currentLambda: "

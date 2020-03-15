@@ -113,7 +113,7 @@ class HHTGeneralized : public RayleighBase
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
     
-    void Print(std::ostream &s, int flag = 0);        
+    void Print(std::ostream &s, int flag = 0) const;        
   };
 inline Integrator *HHTGeneralized::getCopy(void) const
   { return new HHTGeneralized(*this); }

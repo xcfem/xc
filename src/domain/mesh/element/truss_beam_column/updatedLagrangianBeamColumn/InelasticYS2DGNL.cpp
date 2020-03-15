@@ -1606,7 +1606,7 @@ void XC::InelasticYS2DGNL::getLocalStiff(Matrix &K)
 */
 
 
-void XC::InelasticYS2DGNL::Print(std::ostream &s, int flag)
+void XC::InelasticYS2DGNL::Print(std::ostream &s, int flag) const
 {
     s << "\nElement No: " << this->getTag();
     s << " type: InelasticYS2DGNL  iNode: " << theNodes.getTagNode(0);

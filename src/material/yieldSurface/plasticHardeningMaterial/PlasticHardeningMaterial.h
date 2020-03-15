@@ -64,13 +64,13 @@ class PlasticHardeningMaterial : public Material
     virtual int revertToLastCommit(void);
     virtual int revertToStart(void);
 
-    virtual double getTrialPlasticStiffness()=0;
-    double getTrialValue(void);
+    virtual double getTrialPlasticStiffness() const=0;
+    double getTrialValue(void) const;
     virtual PlasticHardeningMaterial *getCopy(void)= 0;
 
     virtual Response *setResponse(const std::vector<std::string> &argv, Information &matInformation);
     virtual int getResponse (int responseID, Information &matInformation);
-    virtual void Print(std::ostream &s, int flag =0);
+    virtual void Print(std::ostream &s, int flag =0) const;
 
     virtual int sendSelf(CommParameters &)
       {return -1;}

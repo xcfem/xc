@@ -98,7 +98,7 @@ class DistributedDisplacementControl: public DisplacementControl, public Distrib
     
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
-    void Print(std::ostream &s, int flag =0);    
+    void Print(std::ostream &s, int flag =0) const;    
   };
 inline Integrator *DistributedDisplacementControl::getCopy(void) const
   { return new DistributedDisplacementControl(*this); }

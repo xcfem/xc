@@ -365,7 +365,7 @@ int XC::Concrete04::recvSelf(const CommParameters &cp)
   }
 
 //! @brief Print stuff.
-void XC::Concrete04::Print(std::ostream& s, int flag)
+void XC::Concrete04::Print(std::ostream& s, int flag) const
   {
     s << getClassName() << ", tag: " << this->getTag() << std::endl
       << "  fpc: " << fpc << std::endl

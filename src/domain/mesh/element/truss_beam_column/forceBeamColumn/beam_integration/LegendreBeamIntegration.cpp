@@ -229,7 +229,7 @@ void XC::LegendreBeamIntegration::getSectionWeights(int numSections, double L, d
       wt[i] *= 0.5;
   }
 
-void XC::LegendreBeamIntegration::Print(std::ostream &s, int flag)
+void XC::LegendreBeamIntegration::Print(std::ostream &s, int flag) const
   {
     s << "Legendre" << std::endl;
   }

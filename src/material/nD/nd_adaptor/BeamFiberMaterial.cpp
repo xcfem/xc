@@ -348,7 +348,7 @@ int XC::BeamFiberMaterial::indexMap(int i) const
   return ii;
 }
 
-void XC::BeamFiberMaterial::Print(std::ostream &s, int flag)
+void XC::BeamFiberMaterial::Print(std::ostream &s, int flag) const
   {
     s << "BeamFiberMaterial, tag: " << this->getTag() << std::endl;
     s << "\tWrapped material: "<< theMaterial->getTag() << std::endl;

@@ -71,10 +71,9 @@ XC::NarrowBandSpectrum::NarrowBandSpectrum(int tag, double min, double max, doub
 	amplitude = ampl;
 }
 
-void
-XC::NarrowBandSpectrum::Print(std::ostream &s, int flag)  
-{
-}
+//! @brief Print stuff.
+void XC::NarrowBandSpectrum::Print(std::ostream &s, int flag) const
+  {}
 
 
 double

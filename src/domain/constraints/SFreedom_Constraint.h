@@ -121,7 +121,7 @@ class SFreedom_Constraint: public Constraint
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
 
-    virtual void Print(std::ostream &s, int flag =0);
+    virtual void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace
 

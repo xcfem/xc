@@ -76,7 +76,7 @@ class StandardEigenAlgo : public EigenAlgorithm
     virtual int solveCurrentStep(int numModes);
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
-    virtual void Print(std::ostream &s, int flag = 0);
+    virtual void Print(std::ostream &s, int flag = 0) const;
   };
 inline SolutionAlgorithm *StandardEigenAlgo::getCopy(void) const
   { return new StandardEigenAlgo(*this); }

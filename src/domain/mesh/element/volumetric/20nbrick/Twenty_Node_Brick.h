@@ -138,7 +138,7 @@ class Twenty_Node_Brick : public ElemWithMaterial<20,NDMaterialPhysicalPropertie
     int getNumDOF(void) const;
 
     //print out element data
-    void Print( std::ostream &s, int flag ) ;
+    void Print(std::ostream &s, int flag) const;
 
 	int update(void);
 

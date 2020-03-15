@@ -543,7 +543,7 @@ int XC::ReinforcingSteel::recvSelf(const CommParameters &cp)
   }
 
 
-void XC::ReinforcingSteel::Print(std::ostream &s, int flag)
+void XC::ReinforcingSteel::Print(std::ostream &s, int flag) const
 {
   if(flag == 3) {
         s << converged.getStrain() << "  " << converged.getStress() << "  " << converged.getTangent() << std::endl;

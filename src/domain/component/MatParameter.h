@@ -76,7 +76,7 @@ class MatParameter : public Parameter
     MatParameter(int tag, int materialTag, const std::string &);
     MatParameter(void);
 
-    virtual void Print(std::ostream &s, int flag =0);
+    virtual void Print(std::ostream &s, int flag =0) const;
   
     virtual int sendSelf(CommParameters &);  
     virtual int recvSelf(const CommParameters &);

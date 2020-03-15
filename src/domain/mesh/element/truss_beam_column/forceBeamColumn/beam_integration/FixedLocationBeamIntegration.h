@@ -70,7 +70,7 @@ class FixedLocationBeamIntegration : public ParameterIDBeamIntegration
     int setParameter(const std::vector<std::string> &argv, Parameter &param);
     int updateParameter(int parameterID, Information &info);
 
-    void Print(std::ostream &s, int flag = 0);  
+    void Print(std::ostream &s, int flag = 0) const;  
 
     void getLocationsDeriv(int nIP, double L, double dLdh, double *dptsdh) const;
     void getWeightsDeriv(int nIP, double L, double dLdh, double *dwtsdh) const;

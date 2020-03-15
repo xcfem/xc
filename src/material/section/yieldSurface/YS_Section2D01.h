@@ -50,7 +50,7 @@ class YS_Section2D01: public YieldSurfaceSection2d
 	
     const Matrix &getInitialTangent(void) const;
     SectionForceDeformation *getCopy(void) const;
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace
 

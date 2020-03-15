@@ -88,7 +88,7 @@ XC::RayleighRV::RayleighRV(int passedTag,
 }
 
 void
-XC::RayleighRV::Print(std::ostream &s, int flag)
+XC::RayleighRV::Print(std::ostream &s, int flag) const
 {
 }
 

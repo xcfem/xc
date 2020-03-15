@@ -50,15 +50,15 @@ class BoundingSurface2D : public YS_Evolution2D
     			YieldSurface_BC &bound_surface);
 
     virtual ~BoundingSurface2D();
-    virtual int 	commitState();
-    virtual int		revertToLastCommit(void);
-    virtual const   Vector &getEquiPlasticStiffness(void)=0;
+    virtual int commitState();
+    virtual int	revertToLastCommit(void);
+    virtual const Vector &getEquiPlasticStiffness(void)=0;
 
-    virtual void	Print(std::ostream &s, int flag =0);
+    virtual void Print(std::ostream &s, int flag =0) const;
     virtual YS_Evolution *getCopy(void)=0;
 
 protected:
-    virtual void	setTrialPlasticStrains(double ep, const Vector &f, const Vector &g)=0;
+    virtual void setTrialPlasticStrains(double ep, const Vector &f, const Vector &g)=0;
     virtual double getIsoPlasticStiffness(int dir)=0;
     virtual double getKinPlasticStiffness(int dir)=0;
     virtual Vector& getEvolDirection(Vector &f_new)=0;

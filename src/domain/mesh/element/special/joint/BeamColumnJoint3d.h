@@ -179,7 +179,7 @@ class BeamColumnJoint3d : public ElemWithMaterial<4,BeamColumnJointPhysicalPrope
   int recvSelf(const CommParameters &);
   
   // print out element data
-  void Print(std::ostream &s, int flag =0);    
+  void Print(std::ostream &s, int flag =0) const;    
   
   // implemented to print into file
   Response *setResponse(const std::vector<std::string> &argv, Information &eleInfo);

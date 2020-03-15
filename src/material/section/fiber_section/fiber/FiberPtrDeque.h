@@ -260,7 +260,7 @@ enum ClaseEsfuerzo {SIMPLE_TENSION,COMPOSED_TENSION,FLEXION_SIMPLE,FLEXION_COMPU
       { return getIy(factor,zCenterOfMass)/getArea(factor); }
     size_t nearest_fiber(const double &y,const double &z) const;
 
-    void Print(std::ostream &s,const int &flag);
+    void Print(std::ostream &s,const int &flag) const;
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
   };

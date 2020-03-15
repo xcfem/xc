@@ -321,7 +321,7 @@ int XC::beam2d02::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::beam2d02::Print(std::ostream &s, int flag)
+void XC::beam2d02::Print(std::ostream &s, int flag) const
   {
     // compute current state
     this->getResistingForce();

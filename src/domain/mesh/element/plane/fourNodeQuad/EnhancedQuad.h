@@ -143,7 +143,7 @@ class EnhancedQuad : public QuadBase4N<NDMaterialPhysicalProperties>
     int update(void);
 
     //print out element data
-    void Print(std::ostream &s, int flag);
+    void Print(std::ostream &s, int flag) const;
 	
     //return stiffness matrix 
     const Matrix &getTangentStiff(void) const;

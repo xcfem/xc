@@ -41,10 +41,10 @@ class NullPlasticMaterial: public PlasticHardeningMaterial
   {
   public: 
     NullPlasticMaterial(int tag);
-    NullPlasticMaterial();
+    NullPlasticMaterial(void);
 	
-    double getTrialPlasticStiffness();
-    PlasticHardeningMaterial * getCopy();
+    double getTrialPlasticStiffness(void) const;
+    PlasticHardeningMaterial *getCopy();
   };
 } // end of XC namespace
  

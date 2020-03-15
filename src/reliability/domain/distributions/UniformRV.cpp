@@ -111,7 +111,7 @@ XC::UniformRV::UniformRV(int passedTag,
 
 
 void
-XC::UniformRV::Print(std::ostream &s, int flag)
+XC::UniformRV::Print(std::ostream &s, int flag) const
 {
 }
 

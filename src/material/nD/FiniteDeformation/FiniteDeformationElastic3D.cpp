@@ -253,7 +253,7 @@ int XC::FiniteDeformationElastic3D::recvData(const CommParameters &cp)
 
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void XC::FiniteDeformationElastic3D::Print(std::ostream &s, int flag)
+void XC::FiniteDeformationElastic3D::Print(std::ostream &s, int flag) const
 {
    std::cerr << "FiniteDeformationElastic3D-- subclass responsibility\n";
    exit(-1);

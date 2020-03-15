@@ -304,3 +304,10 @@ XC::EntMdlrBase XC::operator*(const XC::EntMdlrBase &a,const XC::EntMdlrBase &b)
     retval*= b;
     return retval;    
   }
+
+//! @brief Print stuff.
+std::ostream &XC::operator<<(std::ostream &os, const XC::EntMdlrBase &e)
+  {
+    os << e.getName() << " labels" << e.getLabels() << std::endl;
+    return os;
+  }

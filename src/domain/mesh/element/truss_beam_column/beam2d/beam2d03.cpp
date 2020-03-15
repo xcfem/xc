@@ -319,7 +319,7 @@ int XC::beam2d03::recvSelf(const CommParameters &cp)
 
 
 
-void XC::beam2d03::Print(std::ostream &s, int flag)
+void XC::beam2d03::Print(std::ostream &s, int flag) const
   {
   //    s << "\nElement: " << this->getTag() << " Type: beam2d03 ";
   //    s << "\tConnected Nodes: " << connectedExternalNodes ;

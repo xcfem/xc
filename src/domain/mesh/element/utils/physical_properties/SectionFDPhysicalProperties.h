@@ -53,7 +53,7 @@ class SectionFDPhysicalProperties : public PhysicalProperties<SectionForceDeform
     bool haveRho(void) const;
     Vector getRhoi(void) const;
 
-    void Print(std::ostream &s, int);
+    void Print(std::ostream &s, int) const;
   }; 
 
 } // end of XC namespace

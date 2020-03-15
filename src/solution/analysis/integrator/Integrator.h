@@ -105,7 +105,7 @@ class Integrator: public MovableObject, public CommandEntity
     int updateModel(void);
     int updateModel(double newTime, double dT);
     int commitModel(void);
-    double getCurrentModelTime(void);
+    double getCurrentModelTime(void) const;
     void setCurrentModelTime(const double &t);
     void setRayleighDampingFactors(const RayleighDampingFactors &rF);
     int sendData(CommParameters &);
@@ -146,7 +146,7 @@ class Integrator: public MovableObject, public CommandEntity
     virtual int getLastResponse(Vector &result, const ID &id) =0;
 
     // Method provided for Output
-    virtual void Print(std::ostream &s, int flag =0);
+    virtual void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace
 

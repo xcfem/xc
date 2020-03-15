@@ -179,7 +179,7 @@ int  XC::TwentyEightNodeBrickUP::getNumDOF(void) const
   { return 68; }
 
 //print out element data
-void  XC::TwentyEightNodeBrickUP::Print( std::ostream &s, int flag )
+void  XC::TwentyEightNodeBrickUP::Print( std::ostream &s, int flag ) const
 {
 
         if(flag == 2) {

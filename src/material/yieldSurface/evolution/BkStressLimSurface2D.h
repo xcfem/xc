@@ -72,11 +72,11 @@ class BkStressLimSurface2D : public YS_Evolution2D
     virtual int commitState();
     virtual int	revertToLastCommit(void);
 
-    virtual void Print(std::ostream &s, int flag =0);
+    virtual void Print(std::ostream &s, int flag =0) const;
     void setResidual(double res=1.0);
     virtual YS_Evolution *getCopy(void)=0;
     virtual const Vector &getEquiPlasticStiffness(void);
-    double getTrialPlasticStrains(int dof);
+    double getTrialPlasticStrains(int dof) const;
     double getCommitPlasticStrains(int dof);
   };
 } // end of XC namespace

@@ -130,7 +130,7 @@ class FourNodeQuad: public QuadBase4N<SolidMech2D>
     // public methods for element output
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
 
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
     int getResponse(int responseID, Information &eleInformation);

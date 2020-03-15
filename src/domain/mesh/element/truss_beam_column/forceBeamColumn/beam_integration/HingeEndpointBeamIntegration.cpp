@@ -93,7 +93,7 @@ void XC::HingeEndpointBeamIntegration::getSectionWeights(int numSections, double
 XC::BeamIntegration *XC::HingeEndpointBeamIntegration::getCopy(void) const
   { return new HingeEndpointBeamIntegration(*this); }
 
-void XC::HingeEndpointBeamIntegration::Print(std::ostream &s, int flag)
+void XC::HingeEndpointBeamIntegration::Print(std::ostream &s, int flag) const
 {
   s << "HingeEndpoint" << std::endl;
   s << " lpI = " << lpI;

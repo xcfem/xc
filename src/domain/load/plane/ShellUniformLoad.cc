@@ -207,7 +207,7 @@ int XC::ShellUniformLoad::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void  XC::ShellUniformLoad::Print(std::ostream &s, int flag)
+void  XC::ShellUniformLoad::Print(std::ostream &s, int flag) const
   {
     s << "ShellUniformLoad - Reference load" << std::endl;
     s << "  Transverse:  " << Trans << std::endl;

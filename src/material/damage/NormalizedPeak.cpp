@@ -260,7 +260,7 @@ int XC::NormalizedPeak::recvSelf(const CommParameters &cp)
   { return 0; }
 
 
-void XC::NormalizedPeak::Print(std::ostream &s, int flag )
+void XC::NormalizedPeak::Print(std::ostream &s, int flag ) const
   {
     s << "NormalizedPeak tag: " << this->getTag() << std::endl;
     s << "  MaximumValue: " << MaxValue << " MinimumValue: " << MinValue << std::endl;

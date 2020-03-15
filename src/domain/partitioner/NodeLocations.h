@@ -41,7 +41,7 @@ class NodeLocations: public TaggedObject
     std::set<int> nodePartitions;
     int numPartitions;
     NodeLocations(int tag);
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
     int addPartition(int partition);
   };
 } //namespace XC

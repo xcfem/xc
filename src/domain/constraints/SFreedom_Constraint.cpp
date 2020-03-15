@@ -260,7 +260,7 @@ int XC::SFreedom_Constraint::getVtkCellType(void) const
 
 
 //! @brief Prints constraint information.
-void XC::SFreedom_Constraint::Print(std::ostream &s, int flag) 
+void XC::SFreedom_Constraint::Print(std::ostream &s, int flag) const
   {
     Constraint::Print(s,flag);
     s << " DOF: " << dofNumber;

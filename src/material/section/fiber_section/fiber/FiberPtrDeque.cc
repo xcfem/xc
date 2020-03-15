@@ -2357,7 +2357,7 @@ int XC::FiberPtrDeque::activateParameter(int passedParameterID)
     return 0;
   }
 
-void XC::FiberPtrDeque::Print(std::ostream &s,const int &flag)
+void XC::FiberPtrDeque::Print(std::ostream &s,const int &flag) const
   {
     s << "\tNumber of Fibers: " << getNumFibers() << std::endl;
     s << "\tCentroid: (" << -yCenterOfMass << ", " << zCenterOfMass << ')' << std::endl;

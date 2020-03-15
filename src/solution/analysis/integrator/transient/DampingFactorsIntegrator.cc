@@ -51,7 +51,7 @@ void XC::DampingFactorsIntegrator::setRayleighDampingFactors(void)
       Integrator::setRayleighDampingFactors(rayFactors);
   }
 
-void XC::DampingFactorsIntegrator::Print(std::ostream &s, int flag)
+void XC::DampingFactorsIntegrator::Print(std::ostream &s, int flag) const
   {
     TransientIntegrator::Print(s,flag);
     s << "  Rayleigh Damping: " << rayFactors << std::endl;

@@ -392,7 +392,7 @@ int XC::Bidirectional::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::Bidirectional::Print(std::ostream &s, int flag)
+void XC::Bidirectional::Print(std::ostream &s, int flag) const
   {
     s << "Bidirectional, tag: " << this->getTag() << std::endl;
     s << "\tE:    " << E << std::endl;

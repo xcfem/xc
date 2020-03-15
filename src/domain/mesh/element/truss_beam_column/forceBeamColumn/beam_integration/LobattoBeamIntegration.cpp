@@ -247,7 +247,7 @@ void XC::LobattoBeamIntegration::getSectionWeights(int numSections, double L,dou
       wt[i]*= 0.5;
   }
 
-void XC::LobattoBeamIntegration::Print(std::ostream &s, int flag)
+void XC::LobattoBeamIntegration::Print(std::ostream &s, int flag) const
   {
     s << "Lobatto" << std::endl;
   }

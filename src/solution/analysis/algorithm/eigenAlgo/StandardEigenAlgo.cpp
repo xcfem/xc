@@ -107,7 +107,7 @@ int XC::StandardEigenAlgo::recvSelf(const CommParameters &cp)
   { return 0; }
 
 //! @brief Print.
-void XC::StandardEigenAlgo::Print(std::ostream &s, int flag)
+void XC::StandardEigenAlgo::Print(std::ostream &s, int flag) const
   {
     s << "\tStandardEigenAlgo\n";
   }

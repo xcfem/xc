@@ -142,7 +142,7 @@ double yt = 0.95, xt = 0.054029;
     return theCopy;
 }
 
-void XC::Attalla2D::Print(std::ostream &s, int flag)
+void XC::Attalla2D::Print(std::ostream &s, int flag) const
 {
     s << "\nYield Surface No: " << this->getTag() << " type: Attalla2D\n";
 }

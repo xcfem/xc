@@ -274,7 +274,7 @@ int XC::ConstantPressureVolumeQuad::update( )
 }
 
 //print out element data
-void XC::ConstantPressureVolumeQuad::Print( std::ostream &s, int flag )
+void XC::ConstantPressureVolumeQuad::Print( std::ostream &s, int flag ) const
 {
   s << std::endl;
   s << "Four XC::Node Quad -- Mixed Pressure/Volume -- Plane Strain \n";

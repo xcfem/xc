@@ -45,7 +45,7 @@ class NullYS2D : public YieldSurface_BC2D
     NullYS2D(int tag);
 
     virtual YieldSurface_BC *getCopy(void);
-    virtual void Print(std::ostream &s, int flag =0);
+    virtual void Print(std::ostream &s, int flag =0) const;
 
 //protected:
 //  For the following 2 methods, x, y already non-dimensionalized

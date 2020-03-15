@@ -242,7 +242,7 @@ int XC::NodeDispVectors::revertToLastCommit(const size_t &nDOF)
   }
 
 //! @brief Printing.
-void XC::NodeDispVectors::Print(std::ostream &s,int flag)
+void XC::NodeDispVectors::Print(std::ostream &s,int flag) const
   {
     if(commitData)
       s << "\tcommitDisps: " << *trialData;

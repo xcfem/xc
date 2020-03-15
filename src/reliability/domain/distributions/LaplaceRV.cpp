@@ -112,7 +112,7 @@ XC::LaplaceRV::LaplaceRV(int passedTag,
 
 
 void
-XC::LaplaceRV::Print(std::ostream &s, int flag)
+XC::LaplaceRV::Print(std::ostream &s, int flag) const
 {
 }
 

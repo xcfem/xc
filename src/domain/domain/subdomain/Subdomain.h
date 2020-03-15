@@ -161,7 +161,7 @@ class Subdomain: public Element, public Domain
     virtual  int barrierCheckOUT(int) {return 0;};
 #endif
 
-    virtual  void Print(std::ostream &s, int flag =0);
+    virtual  void Print(std::ostream &s, int flag =0) const;
 
     // Domain type methods unique to a Subdomain
     virtual NodeIter &getInternalNodeIter(void);

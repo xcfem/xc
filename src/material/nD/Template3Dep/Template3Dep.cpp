@@ -1082,7 +1082,7 @@ int XC::Template3Dep::recvSelf(const CommParameters &)
 
 //================================================================================
 void
-XC::Template3Dep::Print(std::ostream &s, int flag)
+XC::Template3Dep::Print(std::ostream &s, int flag) const
 {
      s << (*this);
 }

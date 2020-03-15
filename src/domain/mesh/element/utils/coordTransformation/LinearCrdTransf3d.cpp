@@ -203,7 +203,7 @@ const XC::Vector &XC::LinearCrdTransf3d::getPointGlobalDisplFromBasic(double xi,
   }
 
 
-void XC::LinearCrdTransf3d::Print(std::ostream &s, int flag)
+void XC::LinearCrdTransf3d::Print(std::ostream &s, int flag) const
   {
     s << "\nCrdTransf: " << this->getTag() << " Type: LinearCrdTransf3d";
     s << "\tNode I offset: " << nodeIOffset(0) << " " << nodeIOffset(1) << " "<< nodeIOffset(2) << std::endl;

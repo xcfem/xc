@@ -210,7 +210,7 @@ void XC::KEigenAlgo::eigen_to_model(void)
   }
 
 //! @brief Print the object
-void XC::KEigenAlgo::Print(std::ostream &s, int flag)
+void XC::KEigenAlgo::Print(std::ostream &s, int flag) const
   { s << "\t ill-conditioning algorithm \n"; }
 
 //! @brief Send.

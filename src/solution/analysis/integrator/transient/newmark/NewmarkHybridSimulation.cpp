@@ -290,7 +290,7 @@ int XC::NewmarkHybridSimulation::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::NewmarkHybridSimulation::Print(std::ostream &s, int flag)
+void XC::NewmarkHybridSimulation::Print(std::ostream &s, int flag) const
   {
     NewmarkBase2::Print(s,flag);
     s << "  gamma: " << gamma << "  beta: " << beta << std::endl;

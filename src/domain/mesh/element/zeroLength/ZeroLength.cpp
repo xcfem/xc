@@ -647,7 +647,7 @@ int XC::ZeroLength::recvSelf(const CommParameters &cp)
   }
 
 //! @brief Print information about element.
-void XC::ZeroLength::Print(std::ostream &s, int flag)
+void XC::ZeroLength::Print(std::ostream &s, int flag) const
   {
     // compute the strain and axial force in the member
     double strain=0.0;

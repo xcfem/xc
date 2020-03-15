@@ -54,7 +54,7 @@ XC::Vector XC::UniaxialMatPhysicalProperties::getStresses(void) const
   }
 
 //! @brief print out element data
-void XC::UniaxialMatPhysicalProperties::Print(std::ostream &s)
+void XC::UniaxialMatPhysicalProperties::Print(std::ostream &s) const
   {
     std::cerr << "UniaxialMatPhysicalProperties\t" << theMaterial.size() << std::endl;
   }

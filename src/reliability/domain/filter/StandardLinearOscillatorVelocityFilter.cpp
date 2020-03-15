@@ -101,5 +101,6 @@ double XC::StandardLinearOscillatorVelocityFilter::getTimeOfMaxAmplitude()
     return 0.0;
   }
 
-void XC::StandardLinearOscillatorVelocityFilter::Print(std::ostream &s, int flag)  
+//! @brief Print stuff.
+void XC::StandardLinearOscillatorVelocityFilter::Print(std::ostream &s, int flag) const
   {}

@@ -112,7 +112,7 @@ XC::ShiftedExponentialRV::ShiftedExponentialRV(int passedTag,
 
 
 void
-XC::ShiftedExponentialRV::Print(std::ostream &s, int flag)
+XC::ShiftedExponentialRV::Print(std::ostream &s, int flag) const
 {
 }
 

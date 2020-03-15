@@ -923,7 +923,7 @@ int XC::Brick::getResponse(int responseID, Information &eleInfo)
   }
 
 //! @brief Print out element data
-void XC::Brick::Print(std::ostream &s, int flag )
+void XC::Brick::Print(std::ostream &s, int flag ) const
   {
     if(flag == 2)
       {

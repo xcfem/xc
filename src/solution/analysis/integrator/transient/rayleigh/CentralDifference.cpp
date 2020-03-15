@@ -417,7 +417,7 @@ int XC::CentralDifference::recvSelf(const CommParameters &cp)
 
 //! @brief The object sends to \f$s\f$ its type, the current time,
 //! \f$\gamma\f$ and \f$\beta\f$. 
-void XC::CentralDifference::Print(std::ostream &s, int flag)
+void XC::CentralDifference::Print(std::ostream &s, int flag) const
   {
     RayleighBase::Print(s,flag);
   }

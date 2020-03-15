@@ -69,7 +69,7 @@ class beam3dBase : public ProtoBeam3d
     const Vector &getResistingForce(void) const;
     const Vector &getResistingForceIncInertia(void) const;            
     
-    void Print(std::ostream &s, int flag =0);    
+    void Print(std::ostream &s, int flag =0) const;    
   };
 } // end of XC namespace
 

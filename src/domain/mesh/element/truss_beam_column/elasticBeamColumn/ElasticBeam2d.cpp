@@ -609,7 +609,7 @@ int XC::ElasticBeam2d::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::ElasticBeam2d::Print(std::ostream &s, int flag)
+void XC::ElasticBeam2d::Print(std::ostream &s, int flag) const
   {
     if(flag == -1)
       {

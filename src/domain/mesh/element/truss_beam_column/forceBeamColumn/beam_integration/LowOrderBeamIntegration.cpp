@@ -247,7 +247,7 @@ int XC::LowOrderBeamIntegration::updateParameter(int parameterID, Information &i
       return -1;
   }
 
-void XC::LowOrderBeamIntegration::Print(std::ostream &s, int flag)
+void XC::LowOrderBeamIntegration::Print(std::ostream &s, int flag) const
   {
     s << "LowOrder" << std::endl;
     s << " Points: " << pts;

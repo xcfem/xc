@@ -179,7 +179,7 @@ class Concrete02: public RawConcrete
     int sendSelf(CommParameters &);  
     int recvSelf(const CommParameters &);    
     
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace
 

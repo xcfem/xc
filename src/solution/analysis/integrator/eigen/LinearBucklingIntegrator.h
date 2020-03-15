@@ -57,7 +57,7 @@ class LinearBucklingIntegrator : public EigenIntegrator
     // methods to form the K(t) and K(t+Dt) matrices.
     virtual int formKt(void);
     virtual int formKtplusDt(void);
-    void Print(std::ostream &,int);
+    void Print(std::ostream &,int) const;
   };
 inline Integrator *LinearBucklingIntegrator::getCopy(void) const
   { return new LinearBucklingIntegrator(*this); }

@@ -114,7 +114,7 @@ class HHTHybridSimulation : public HHTBase
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
     
-    void Print(std::ostream &s, int flag = 0);
+    void Print(std::ostream &s, int flag = 0) const;
   };
 inline Integrator *HHTHybridSimulation::getCopy(void) const
   { return new HHTHybridSimulation(*this); }

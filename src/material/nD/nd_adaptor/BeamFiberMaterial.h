@@ -95,7 +95,7 @@ class BeamFiberMaterial: public NDAdaptorMaterial
     const std::string &getType(void) const;
     int getOrder(void) const; 
 
-    void Print(std::ostream &s, int flag);
+    void Print(std::ostream &s, int flag) const;
 
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);

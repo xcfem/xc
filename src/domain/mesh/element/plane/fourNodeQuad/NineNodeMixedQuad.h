@@ -124,7 +124,7 @@ class NineNodeMixedQuad : public ElemWithMaterial<9,NDMaterialPhysicalProperties
     int getNumDOF(void) const;
 
     //print out element data
-    void Print(std::ostream &s, int flag);
+    void Print(std::ostream &s, int flag) const;
 	
     //return stiffness matrix 
     const Matrix &getTangentStiff(void) const;

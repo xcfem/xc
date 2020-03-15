@@ -107,7 +107,7 @@ class Vertex: public TaggedObject, public MovableObject
     virtual void setAdjacency(const  std::set<int> &adj)
       { myAdjacency = adj; }
     
-    virtual void Print(std::ostream &os, int flag =0);
+    virtual void Print(std::ostream &os, int flag =0) const;
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
   };

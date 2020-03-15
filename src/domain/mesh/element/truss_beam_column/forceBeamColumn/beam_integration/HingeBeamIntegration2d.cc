@@ -63,7 +63,7 @@ int XC::HingeBeamIntegration2d::recvData(const CommParameters &cp)
     return res;
   }
 
-void XC::HingeBeamIntegration2d::Print(std::ostream &s, int flag)
+void XC::HingeBeamIntegration2d::Print(std::ostream &s, int flag) const
   {
     PlasticLengthsBeamIntegration::Print(s,flag);
     s << "Hinge2d" << std::endl;

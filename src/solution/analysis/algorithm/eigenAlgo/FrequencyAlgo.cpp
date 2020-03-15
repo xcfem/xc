@@ -121,7 +121,7 @@ int XC::FrequencyAlgo::recvSelf(const CommParameters &cp)
   { return 0; }
 
 //! @brief Print the object.
-void XC::FrequencyAlgo::Print(std::ostream &s, int flag)
+void XC::FrequencyAlgo::Print(std::ostream &s, int flag) const
   { s << "\t Eigen Algorithm \n"; }
 
 

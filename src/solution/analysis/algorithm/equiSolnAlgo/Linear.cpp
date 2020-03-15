@@ -167,5 +167,5 @@ int XC::Linear::recvSelf(const CommParameters &cp)
 
 
 //! Sends the class name to the stream.
-void XC::Linear::Print(std::ostream &s, int flag)
+void XC::Linear::Print(std::ostream &s, int flag) const
   { s << "\t " << getClassName() << " algorithm"; }

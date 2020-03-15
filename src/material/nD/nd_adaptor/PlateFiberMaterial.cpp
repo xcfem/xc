@@ -314,7 +314,7 @@ int XC::PlateFiberMaterial::indexMap(int i) const
 
 
 //print out data
-void XC::PlateFiberMaterial::Print(std::ostream &s, int flag)
+void XC::PlateFiberMaterial::Print(std::ostream &s, int flag) const
 {
   s << "General Plate XC::Fiber XC::Material \n";
   s << " Tag: " << this->getTag() << "\n"; 

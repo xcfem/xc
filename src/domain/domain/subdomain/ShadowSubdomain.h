@@ -217,7 +217,7 @@ class ShadowSubdomain: public Shadow, public Subdomain
 
     virtual double getCost(void);
     
-    virtual  void Print(std::ostream &s, int flag =0);
+    virtual  void Print(std::ostream &s, int flag =0) const;
 
     // nodal methods required in domain interface for parallel interprter
     virtual double getNodeDisp(int nodeTag, int dof, int &errorFlag);

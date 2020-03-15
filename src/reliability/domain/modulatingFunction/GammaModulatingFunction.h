@@ -76,7 +76,7 @@ class GammaModulatingFunction: public ModulatingFunction
     double c;
   public:
     GammaModulatingFunction(int tag,Filter *theFilter,double a, double b,double c);
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
 
     double getAmplitude(double time);
     double getMaxAmplitude();

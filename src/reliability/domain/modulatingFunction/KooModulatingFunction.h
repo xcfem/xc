@@ -75,7 +75,7 @@ class KooModulatingFunction: public ModulatingFunction
   public:
     KooModulatingFunction(int tag,Filter *theFilter,double t1, double t2);
 
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
 
     double getAmplitude(double time);
     double getMaxAmplitude();

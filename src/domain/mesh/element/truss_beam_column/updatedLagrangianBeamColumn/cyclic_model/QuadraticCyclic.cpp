@@ -190,9 +190,9 @@ double tfactor;
 	return tfactor;
 }
 
-void XC::QuadraticCyclic::Print (std::ostream &s, int flag)
+void XC::QuadraticCyclic::Print(std::ostream &s, int flag) const
 {
-	this->XC::CyclicModel::Print (s, flag);
+	this->XC::CyclicModel::Print(s, flag);
 	s << "+QuadraticCyclic\n";
 	s << "   taskFactor = " << cycFactor << std::endl;
 	s << "   a=" << a <<", b=" << b <<", c=" << c << std::endl;

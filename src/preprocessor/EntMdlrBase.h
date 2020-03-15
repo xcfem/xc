@@ -60,6 +60,8 @@ class EntMdlrBase: public NamedEntity, public MovableObject
     virtual bool operator==(const EntMdlrBase &) const;
     const Preprocessor *getPreprocessor(void) const;
     Preprocessor *getPreprocessor(void);
+    inline const LabelContainer &getLabels(void) const
+      { return labels; }
 
     size_t getTag(void) const;
 
@@ -76,6 +78,7 @@ class EntMdlrBase: public NamedEntity, public MovableObject
 EntMdlrBase operator+(const EntMdlrBase &,const EntMdlrBase &);
 EntMdlrBase operator-(const EntMdlrBase &,const EntMdlrBase &);
 EntMdlrBase operator*(const EntMdlrBase &,const EntMdlrBase &);
+std::ostream &operator<<(std::ostream &os, const EntMdlrBase &e);
 
 } //end of XC namespace
 #endif

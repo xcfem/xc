@@ -75,7 +75,7 @@ double XC::NullYS2D::getSurfaceDrift(double x, double y)
     return theCopy;
 }
 
-void XC::NullYS2D::Print(std::ostream &s, int flag)
+void XC::NullYS2D::Print(std::ostream &s, int flag) const
 {
     s << "\nYield Surface No: " << this->getTag() << " type: NullYS2D\n";
 }

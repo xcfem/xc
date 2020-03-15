@@ -168,7 +168,7 @@ int XC::Parameter::activate(bool active)
     return ok;
   }
 
-void XC::Parameter::Print(std::ostream &s, int flag)  
+void XC::Parameter::Print(std::ostream &s, int flag) const 
   {
     s << "Parameter, tag = " << this->getTag() << std::endl;
     //s << "\tparameterID = " << parameterID << std::endl;

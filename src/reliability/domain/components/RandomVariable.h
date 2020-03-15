@@ -79,7 +79,7 @@ class RandomVariable: public ReliabilityDomainComponent
   public:
     RandomVariable(int tag, int classTag);
 
-    virtual void Print(std::ostream &s, int flag =0) =0;
+    virtual void Print(std::ostream &s, int flag =0) const=0;
     virtual double getPDFvalue(double rvValue) =0;
     virtual double getCDFvalue(double rvValue) =0;
     virtual double getInverseCDFvalue(double rvValue) =0;    

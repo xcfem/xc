@@ -295,7 +295,7 @@ int XC::Broyden::recvSelf(const CommParameters &cp)
   { return -1; }
 
 
-void XC::Broyden::Print(std::ostream &s, int flag)
+void XC::Broyden::Print(std::ostream &s, int flag) const
   {
     if(flag == 0)
       {

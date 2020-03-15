@@ -158,7 +158,7 @@ class GeomSection: public SectionMassProperties
     double getIzHomogenizedSection(const double &E0) const;
     double getPyzHomogenizedSection(const double &E0) const;
 
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
     friend std::ostream &operator<<(std::ostream &, GeomSection &);    
   };
 

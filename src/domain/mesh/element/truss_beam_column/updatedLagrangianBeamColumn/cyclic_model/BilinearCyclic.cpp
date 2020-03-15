@@ -79,15 +79,16 @@ double tfactor;
 	return tfactor;
 }
 
-void XC::BilinearCyclic::Print (std::ostream &s, int flag)
-{
-	this->XC::CyclicModel::Print (s, flag);
+//! @brief Print stuff.
+void XC::BilinearCyclic::Print(std::ostream &s, int flag) const
+  {
+	this->XC::CyclicModel::Print(s, flag);
 	s << "+BilinearCyclic\n";
 	//s << "   taskFactor = " << getTaskFactor() << std::endl;
 	s << "----------------------------------------"
       << "----------------------------------------"
 	  << std::endl;
-}
+  }
 
 
 

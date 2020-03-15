@@ -514,7 +514,7 @@ int XC::WilsonTheta::recvSelf(const CommParameters &cp)
 //! 
 //! The object sends to \f$s\f$ its type, the current time, \f$\alpha\f$,
 //! \f$\gamma\f$ and \f$\beta\f$. 
-void XC::WilsonTheta::Print(std::ostream &os, int flag)
+void XC::WilsonTheta::Print(std::ostream &os, int flag) const
   {
     RayleighBase::Print(os,flag);
     os << " theta: " << theta << std::endl;

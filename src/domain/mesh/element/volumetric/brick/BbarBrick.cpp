@@ -134,7 +134,7 @@ int XC::BbarBrick::getNumDOF(void) const
 
 
 //print out element data
-void  XC::BbarBrick::Print( std::ostream &s, int flag )
+void  XC::BbarBrick::Print( std::ostream &s, int flag ) const
   {
     s << std::endl ;
     s << "Volume/Pressure Eight XC::Node XC::BbarBrick \n" ;

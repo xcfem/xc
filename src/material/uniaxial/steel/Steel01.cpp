@@ -297,7 +297,7 @@ int XC::Steel01::recvSelf(const CommParameters &cp)
   }
 
 //! @brief Print stuff.
-void XC::Steel01::Print(std::ostream& s, int flag)
+void XC::Steel01::Print(std::ostream& s, int flag) const
   {
     s << "Steel01 tag: " << this->getTag() << std::endl;
     s << "  fy: " << fy << " ";

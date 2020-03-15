@@ -75,7 +75,7 @@ class RadauBeamIntegration : public BeamIntegration
     // These two methods do nothing
     int sendSelf(CommParameters &) {return 0;}
     int recvSelf(const CommParameters &) {return 0;}
-    void Print(std::ostream &s, int flag = 0);  
+    void Print(std::ostream &s, int flag = 0) const;  
   };
 } // end of XC namespace
 

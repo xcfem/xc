@@ -185,7 +185,7 @@ int XC::UserDefinedHingeIntegration2d::activateParameter(int parameterID)
   return 0;
   }
 
-void XC::UserDefinedHingeIntegration2d::Print(std::ostream &s, int flag)
+void XC::UserDefinedHingeIntegration2d::Print(std::ostream &s, int flag) const
   {
     s << "UserHinge2d" << std::endl;
     s << " E = " << ctes_scc.E();

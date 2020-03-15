@@ -730,7 +730,7 @@ int XC::YieldSurface_BC::checkT(void)
 int XC::YieldSurface_BC::update(int flag)
   { return 0; }
 
-void XC::YieldSurface_BC::Print(std::ostream &s, int flag)
+void XC::YieldSurface_BC::Print(std::ostream &s, int flag) const
 {
 	s << "YieldSurface_BC - tag = " << this->getTag() << std::endl;
 	s << "Element Info:\n";

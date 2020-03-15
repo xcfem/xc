@@ -125,7 +125,7 @@ class ElasticCrossAnisotropic : public NDMaterial
     const std::string &getType(void) const;
     int getOrder(void) const;
 
-    void Print(std::ostream &s, int flag = 0);
+    void Print(std::ostream &s, int flag = 0) const;
 
 //int setParameter(const std::vector<std::string> &argv, Parameter &param);
 //int updateParameter (int parameterID, Information &info);

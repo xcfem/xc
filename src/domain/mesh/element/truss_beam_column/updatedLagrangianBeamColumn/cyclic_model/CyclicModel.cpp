@@ -52,7 +52,7 @@ XC::CyclicModel::CyclicModel(int tag, int clasTag)
  state_hist(Loading), state_curr(Loading)
   {}
 
-double XC::CyclicModel::getFactor()
+double XC::CyclicModel::getFactor(void) const
   {
     if(cycFactor < 0.05)
       cycFactor= 0.05;
@@ -347,7 +347,7 @@ int XC::CyclicModel::dir(double x)
     return sgn;
   }
 
-void XC::CyclicModel::Print (std::ostream &s, int flag)
+void XC::CyclicModel::Print(std::ostream &s, int flag) const
   {
     s << "+CyclicModel, Tag: " << getTag() << std::endl;
     s << "|  f curr = " << f_curr << ", d curr = " << d_curr << std::endl;

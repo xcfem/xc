@@ -96,7 +96,7 @@ XC::BeamIntegration *XC::HingeMidpointBeamIntegration::getCopy(void) const
 
 
 
-void XC::HingeMidpointBeamIntegration::Print(std::ostream &s, int flag)
+void XC::HingeMidpointBeamIntegration::Print(std::ostream &s, int flag) const
 {
   s << "HingeMidpoint" << std::endl;
   s << " lpI = " << lpI;

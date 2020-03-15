@@ -343,7 +343,7 @@ int XC::Mehanny::recvSelf(const CommParameters &cp)
   { return 0; }
 
 
-void XC::Mehanny::Print(std::ostream &s, int flag )
+void XC::Mehanny::Print(std::ostream &s, int flag ) const
   {
     s << "CumulativePeak tag: " << this->getTag() << std::endl;
     s << "  Alpha: " << Alpha << " Beta: " << Beta << "  Gamma: " << Gamma << std::endl;

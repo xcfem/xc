@@ -50,7 +50,7 @@ int XC::PlasticHardeningMaterial::setTrialValue(double xVal, double factor)
     return 0;	
   }
 
-double XC::PlasticHardeningMaterial::getTrialValue(void)
+double XC::PlasticHardeningMaterial::getTrialValue(void) const
   { return val_trial; }
 
 int XC::PlasticHardeningMaterial::setTrialIncrValue(double dxVal)
@@ -124,7 +124,7 @@ XC::Response *XC::PlasticHardeningMaterial::setResponse(const std::vector<std::s
 int XC::PlasticHardeningMaterial::getResponse(int responseID, Information &matInformation)
   { return -1; }
 
-void XC::PlasticHardeningMaterial::Print(std::ostream &s, int flag)
+void XC::PlasticHardeningMaterial::Print(std::ostream &s, int flag) const
   {
      s << "+Plastic XC::Material: " << getTag() << std::endl;
      s << "|  sFactor =  " << sFactor << std::endl;

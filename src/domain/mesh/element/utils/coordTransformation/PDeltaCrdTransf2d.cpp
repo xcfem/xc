@@ -494,7 +494,7 @@ int XC::PDeltaCrdTransf2d::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::PDeltaCrdTransf2d::Print(std::ostream &s, int flag)
+void XC::PDeltaCrdTransf2d::Print(std::ostream &s, int flag) const
   {
     s << "\nCrdTransf: " << this->getTag() << " Type: PDeltaCrdTransf2d";
     s << "\tnodeI Offset: " << nodeIOffset(0) << ' ' << nodeIOffset(1) << std::endl;

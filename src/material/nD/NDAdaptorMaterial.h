@@ -60,7 +60,7 @@ class NDAdaptorMaterial: public NDMaterial
     int revertToLastCommit(void);
     int revertToStart(void);
 
-    void Print(std::ostream &s, int flag);
+    void Print(std::ostream &s, int flag) const;
 
   };
 } // end of XC namespace

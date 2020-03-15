@@ -460,7 +460,7 @@ int XC::PressureDependMultiYield02::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::PressureDependMultiYield02::Print(std::ostream &s, int flag )
+void XC::PressureDependMultiYield02::Print(std::ostream &s, int flag ) const
 {
   s << strTypePressureIndependMultiYield02 << std::endl;
 }

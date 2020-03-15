@@ -86,7 +86,7 @@ class Beam2dPartialUniformLoad : public BeamUniformLoad
     int sendSelf(CommParameters &cp);  
     int recvSelf(const CommParameters &cp);
     
-    void Print(std::ostream &s, int flag =0);       
+    void Print(std::ostream &s, int flag =0) const;       
 
     int setParameter(const std::vector<std::string> &argv, Parameter &param);
     int updateParameter(int parameterID, Information &info);

@@ -91,7 +91,7 @@ class LinearCrdTransf3d: public SmallDispCrdTransf3d
     
     CrdTransf3d *getCopy(void) const;
     
-    void Print(std::ostream &s, int flag = 0);
+    void Print(std::ostream &s, int flag = 0) const;
     
     // functions used in post-processing only    
     const Vector &getPointGlobalCoordFromLocal(const Vector &) const;

@@ -460,7 +460,7 @@ void XC::ArrayOfTaggedObjects::clearAll(bool invokeDestructors)
   }
 
 //! @brief Method which invokes Print on all components
-void XC::ArrayOfTaggedObjects::Print(std::ostream &s, int flag)
+void XC::ArrayOfTaggedObjects::Print(std::ostream &s, int flag) const
   {
     // go through the array invoking Print on non-zero entries
     for(int i=0; i<=positionLastEntry; i++)

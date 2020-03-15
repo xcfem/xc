@@ -96,7 +96,7 @@ void XC::HingeRadauTwoBeamIntegration::getSectionWeights(int numSections, double
 XC::BeamIntegration *XC::HingeRadauTwoBeamIntegration::getCopy(void) const
   { return new HingeRadauTwoBeamIntegration(*this); }
 
-void XC::HingeRadauTwoBeamIntegration::Print(std::ostream &s, int flag)
+void XC::HingeRadauTwoBeamIntegration::Print(std::ostream &s, int flag) const
   {
     s << "HingeRadauTwo" << std::endl;
     s << " lpI = " << lpI;

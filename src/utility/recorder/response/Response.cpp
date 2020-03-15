@@ -78,7 +78,7 @@ XC::Response::Response(const XC::Matrix &val):myInfo(val)
 XC::Response::Response(const BJtensor &val):myInfo(val)
   {}
 
-void XC::Response::Print(std::ofstream &s, int flag)
+void XC::Response::Print(std::ofstream &s, int flag) const
   { myInfo.Print(s, flag); }
 
 XC::Information &XC::Response::getInformation(void)

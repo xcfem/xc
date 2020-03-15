@@ -360,7 +360,7 @@ int XC::ElasticIsotropicMaterial::recvSelf(const CommParameters &cp)
   }
 
 //! @brief Print stuff.
-void XC::ElasticIsotropicMaterial::Print(std::ostream &s, int flag)
+void XC::ElasticIsotropicMaterial::Print(std::ostream &s, int flag) const
   {
     s << "Elastic isotropic material model" << std::endl;
     s << "\tE:  " << E << std::endl;

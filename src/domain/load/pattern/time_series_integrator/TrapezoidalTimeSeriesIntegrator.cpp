@@ -125,7 +125,7 @@ int XC::TrapezoidalTimeSeriesIntegrator::sendSelf(CommParameters &cp)
 int XC::TrapezoidalTimeSeriesIntegrator::recvSelf(const CommParameters &cp)
   { return 0; }
 
-void XC::TrapezoidalTimeSeriesIntegrator::Print(std::ostream &s, int flag)
+void XC::TrapezoidalTimeSeriesIntegrator::Print(std::ostream &s, int flag) const
   {
     // Need to implement, return for now
     return;

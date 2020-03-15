@@ -3328,7 +3328,7 @@ int XC::TwentyNodeBrick::recvSelf(const CommParameters &cp)
 
 
 //=============================================================================
-void XC::TwentyNodeBrick::Print(std::ostream &s, int flag)
+void XC::TwentyNodeBrick::Print(std::ostream &s, int flag) const
 {
     //report(" TwentyNodeBrick ");
     s << "TwentyNodeBrick, element id:  " << this->getTag() << std::endl;
@@ -4010,7 +4010,7 @@ int XC::TwentyNodeBrick::getResponse (int responseID, Information &eleInfo)
 //
 //
 //void
-//XC::TwentyNodeBrick::Print (std::ostream &s, int flag)
+//XC::TwentyNodeBrick::Print(std::ostream &s, int flag) const
 //{
 // s << "TwentyNodeBrick, element id:  " << this->getTag() << std::endl;
 // s << "Connected external nodes:  " << theNodes;

@@ -49,7 +49,7 @@ class DampingFactorsIntegrator: public TransientIntegrator
     DampingFactorsIntegrator(AnalysisAggregation *,int classTag);
     DampingFactorsIntegrator(AnalysisAggregation *,int classTag,const RayleighDampingFactors &rF);
   public:
-    void Print(std::ostream &s, int flag = 0);        
+    void Print(std::ostream &s, int flag = 0) const;        
     
   };
 } // end of XC namespace

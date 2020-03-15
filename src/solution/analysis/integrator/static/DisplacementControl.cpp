@@ -311,7 +311,7 @@ int XC::DisplacementControl::recvSelf(const CommParameters &cp)
   }
 
 //! @brief Print stuff.
-void XC::DisplacementControl::Print(std::ostream &s, int flag)
+void XC::DisplacementControl::Print(std::ostream &s, int flag) const
   {
     // TO FINISH    
   }

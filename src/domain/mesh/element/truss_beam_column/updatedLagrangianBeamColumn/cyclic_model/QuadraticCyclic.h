@@ -46,7 +46,7 @@ class QuadraticCyclic : public CyclicModel
   public:
     QuadraticCyclic(int tag, double wt=0.9, double qy=0.33);
 
-    void Print (std::ostream &, int = 0);
+    void Print(std::ostream &, int flag= 0) const;
     CyclicModel *getCopy();
   protected:
     int createFullCycleTask();

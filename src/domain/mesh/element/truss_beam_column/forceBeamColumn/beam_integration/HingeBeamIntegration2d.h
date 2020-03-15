@@ -52,7 +52,7 @@ class HingeBeamIntegration2d: public PlasticLengthsBeamIntegration
     HingeBeamIntegration2d(int classTag);
   
     void addElasticDeformations(ElementalLoad *theLoad, double loadFactor,double L,FVector &v0);
-    void Print(std::ostream &s, int flag = 0);
+    void Print(std::ostream &s, int flag = 0) const;
   };
 } // end of XC namespace
 

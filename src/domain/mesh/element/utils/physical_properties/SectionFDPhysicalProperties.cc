@@ -41,7 +41,7 @@ XC::SectionFDPhysicalProperties::SectionFDPhysicalProperties(const size_t &nMat,
 
 
 //! @brief print out element data
-void XC::SectionFDPhysicalProperties::Print(std::ostream &s, int flag )
+void XC::SectionFDPhysicalProperties::Print(std::ostream &s, int flag ) const
   {
     if(flag == -1)
       {

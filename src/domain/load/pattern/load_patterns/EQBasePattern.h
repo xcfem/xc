@@ -56,7 +56,7 @@ class EQBasePattern: public LoadPattern
     void clear(void)
       { theMotions.clear(); }
 
-    virtual void Print(std::ostream &s, int flag =0);
+    virtual void Print(std::ostream &s, int flag =0) const;
 
   };
 } // end of XC namespace

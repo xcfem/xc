@@ -1053,7 +1053,7 @@ const XC::ShellCrdTransf3dBase *XC::ShellMITC9::getCoordTransf(void) const
   { return &theCoordTransf; }
 
 //! @brief print out element data
-void XC::ShellMITC9::Print(std::ostream &s, int flag )
+void XC::ShellMITC9::Print(std::ostream &s, int flag ) const
   {
     if(flag == -1)
       {

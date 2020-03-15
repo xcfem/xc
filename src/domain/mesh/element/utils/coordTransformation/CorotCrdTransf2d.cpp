@@ -1043,7 +1043,7 @@ int XC::CorotCrdTransf2d::getLocalAxes(Vector &XAxis, Vector &YAxis) const
   }
 
 //! @brief Printing
-void XC::CorotCrdTransf2d::Print(std::ostream &s, int flag)
+void XC::CorotCrdTransf2d::Print(std::ostream &s, int flag) const
   {
     s << "\nCrdTransf: " << this->getTag() << " Type: LinearCrdTransf2d";
     s << "\tnodeI Offset: " << nodeIOffset;

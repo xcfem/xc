@@ -899,7 +899,7 @@ int XC::BeamColumnJoint2d::recvSelf(const CommParameters &cp)
     return -1;
   }
 
-void XC::BeamColumnJoint2d::Print(std::ostream &s, int flag)
+void XC::BeamColumnJoint2d::Print(std::ostream &s, int flag) const
   {
         s << "Element: " << this->getTag() << " Type: Beam Column Joint " << std::endl;
         for(int i = 0; i<4; i++)

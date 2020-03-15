@@ -371,7 +371,7 @@ int XC::Kratzig::recvSelf(const CommParameters &cp)
 
 
 void
-XC::Kratzig::Print(std::ostream &s, int flag )
+XC::Kratzig::Print(std::ostream &s, int flag ) const
 {
     s << "CumulativePeak tag: " << this->getTag() << std::endl;
         s << " UltimatePosValue: " << UltimatePosValue << " UltimateNegValue: " << UltimateNegValue << std::endl;

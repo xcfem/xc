@@ -47,7 +47,7 @@ class Attalla2D : public YieldSurface_BC2D
               double a04=-1.64, double a05=2.21, double a06=2.10);
 
     virtual YieldSurface_BC *getCopy(void);
-    virtual void Print(std::ostream &s, int flag =0);
+    virtual void Print(std::ostream &s, int flag =0) const;
 
 //protected:
 //  For the following 2 methods, x, y already non-dimensionalized

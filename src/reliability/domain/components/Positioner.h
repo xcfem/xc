@@ -49,7 +49,7 @@ class Positioner: public ReliabilityDomainComponent
   public:
     Positioner(int tag, int classTag, DomainComponent *theObject, const std::vector<std::string> &argv);
 
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
     int update(double newValue); 
     int activate(bool active);
 

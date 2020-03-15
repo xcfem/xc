@@ -112,7 +112,7 @@ class BoucWenMaterial : public UniaxialMaterial
     UniaxialMaterial *getCopy(void) const;
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
 
     // Reliability and sensitivity stuff
     double getInitialTangent(void) const;

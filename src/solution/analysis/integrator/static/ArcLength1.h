@@ -239,7 +239,7 @@ class ArcLength1 : public ArcLengthBase
     ArcLength1(AnalysisAggregation *,double arcLength, double alpha = 1.0);
     Integrator *getCopy(void) const;
   public:
-    void Print(std::ostream &s, int flag =0);    
+    void Print(std::ostream &s, int flag =0) const;    
   };
 } // end of XC namespace
 

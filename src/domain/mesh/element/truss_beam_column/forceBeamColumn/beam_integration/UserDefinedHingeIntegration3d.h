@@ -90,7 +90,7 @@ class UserDefinedHingeIntegration3d : public UserDefinedHingeIntegrationBase
     int updateParameter(int parameterID, Information &info);
     int activateParameter(int parameterID);
 
-    void Print(std::ostream &s, int flag = 0);  
+    void Print(std::ostream &s, int flag = 0) const;  
   };
 } // end of XC namespace
 

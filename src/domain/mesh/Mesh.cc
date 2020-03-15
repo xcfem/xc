@@ -854,7 +854,7 @@ void XC::Mesh::setGraphBuiltFlags(const bool &f)
   }
 
 //! @brief Imprime el domain.
-void XC::Mesh::Print(std::ostream &s, int flag)
+void XC::Mesh::Print(std::ostream &s, int flag) const
   {
 
     s << "Current Mesh Information:\n";
@@ -866,7 +866,7 @@ void XC::Mesh::Print(std::ostream &s, int flag)
     theElements->Print(s, flag);
   }
 
-std::ostream &XC::operator<<(std::ostream &s, Mesh &M)
+std::ostream &XC::operator<<(std::ostream &s, const Mesh &M)
   {
     M.Print(s);
     return s;

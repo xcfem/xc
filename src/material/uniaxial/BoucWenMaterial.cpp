@@ -288,7 +288,7 @@ int XC::BoucWenMaterial::sendSelf(CommParameters &cp)
 int XC::BoucWenMaterial::recvSelf(const CommParameters &cp)
   { return 0; }
 
-void XC::BoucWenMaterial::Print(std::ostream &s, int flag)
+void XC::BoucWenMaterial::Print(std::ostream &s, int flag) const
   {
     s << "BoucWenMaterial, tag: " << this->getTag() << std::endl;
     s << "  alpha: " << alpha << std::endl;

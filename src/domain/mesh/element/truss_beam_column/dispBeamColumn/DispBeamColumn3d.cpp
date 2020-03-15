@@ -735,7 +735,7 @@ int XC::DispBeamColumn3d::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::DispBeamColumn3d::Print(std::ostream &s, int flag)
+void XC::DispBeamColumn3d::Print(std::ostream &s, int flag) const
 {
   s << "\nDispBeamColumn3d, element id:  " << this->getTag() << std::endl;
   s << "\tConnected external nodes:  " << theNodes;

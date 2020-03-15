@@ -233,7 +233,7 @@ int XC::HingeMidpointBeamIntegration2d::activateParameter(int parameterID)
     return 0;
   }
 
-void XC::HingeMidpointBeamIntegration2d::Print(std::ostream &s, int flag)
+void XC::HingeMidpointBeamIntegration2d::Print(std::ostream &s, int flag) const
   {
     s << "HingeMidpoint2d" << std::endl;
     HingeBeamIntegration2d::Print(s);

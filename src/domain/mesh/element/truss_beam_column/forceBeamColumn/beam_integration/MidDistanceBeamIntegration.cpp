@@ -156,7 +156,7 @@ int XC::MidDistanceBeamIntegration::updateParameter(int parameterID, Information
   }
 
 
-void XC::MidDistanceBeamIntegration::Print(std::ostream &s, int flag)
+void XC::MidDistanceBeamIntegration::Print(std::ostream &s, int flag) const
   {
     s << "MidDistance" << std::endl;
     s << " Points: " << pts;

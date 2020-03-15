@@ -81,7 +81,7 @@ class InelasticYS2DGNL : public UpdatedLagrangianBeam2D
   virtual const	Matrix &getTangentStiff(void) const;
   virtual int commitState(void);
   virtual int update(void) const;
-  void Print(std::ostream &s, int flag =0);
+  void Print(std::ostream &s, int flag =0) const;
   int sendSelf(CommParameters &);
   int recvSelf(const CommParameters &);
 

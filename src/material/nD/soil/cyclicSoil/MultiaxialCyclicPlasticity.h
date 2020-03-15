@@ -237,7 +237,7 @@ class MultiaxialCyclicPlasticity: public NDMaterial
   virtual int recvSelf(const CommParameters &);
 
   //print out material data
-  void Print(std::ostream &s, int flag = 0);
+  void Print(std::ostream &s, int flag = 0) const;
 
   virtual NDMaterial *getCopy(void) const;
   virtual const std::string &getType(void) const ;

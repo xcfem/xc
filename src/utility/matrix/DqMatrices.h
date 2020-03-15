@@ -58,7 +58,7 @@ class DqMatrices: public std::deque<Matrix *>
 
     void clear(void);
 
-    void Print(std::ostream &s,const int &flag);
+    void Print(std::ostream &s,const int &flag) const;
   };
 } // end of XC namespace
 

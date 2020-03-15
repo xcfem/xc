@@ -152,7 +152,7 @@ int XC::FiberSection3d::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::FiberSection3d::Print(std::ostream &s, int flag)
+void XC::FiberSection3d::Print(std::ostream &s, int flag) const
   {
     if(flag == 2)
       fibers.Print(s,flag);

@@ -1088,7 +1088,7 @@ void XC::NLBeamColumn3d::compSectionDisplacements(std::vector<Vector> &sectionCo
   }
 
 
-void XC::NLBeamColumn3d::Print(std::ostream &s, int flag)
+void XC::NLBeamColumn3d::Print(std::ostream &s, int flag) const
   {
 
     const size_t nSections= getNumSections();
@@ -1179,7 +1179,7 @@ void XC::NLBeamColumn3d::Print(std::ostream &s, int flag)
 }
 
 
-std::ostream &XC::operator<<(std::ostream &s, NLBeamColumn3d &E)
+std::ostream &XC::operator<<(std::ostream &s, const NLBeamColumn3d &E)
   {
     E.Print(s);
     return s;

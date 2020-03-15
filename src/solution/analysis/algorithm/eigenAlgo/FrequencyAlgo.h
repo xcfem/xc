@@ -86,7 +86,7 @@ class FrequencyAlgo : public EigenAlgorithm
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
      
-    virtual void Print(std::ostream &s, int flag = 0);
+    virtual void Print(std::ostream &s, int flag = 0) const;
   };
 inline SolutionAlgorithm *FrequencyAlgo::getCopy(void) const
   { return new FrequencyAlgo(*this); }

@@ -141,8 +141,8 @@ int XC::Twenty_Node_Brick::getNumDOF(void) const
 
 
 //print out element data
-void  XC::Twenty_Node_Brick::Print( std::ostream &s, int flag )
-{
+void XC::Twenty_Node_Brick::Print(std::ostream &s, int flag) const
+  {
 
         if(flag == 2) {
 

@@ -135,7 +135,7 @@ class PressureDependMultiYield: public PressureDependMultiYieldBase
 
      int sendSelf(CommParameters &);  
      int recvSelf(const CommParameters &);
-     void Print(std::ostream &s, int flag =0);
+     void Print(std::ostream &s, int flag =0) const;
     // RWB; PyLiq1 & TzLiq1 need to see the excess pore pressure and initial stresses.
     friend class PyLiq1;
     friend class TzLiq1;

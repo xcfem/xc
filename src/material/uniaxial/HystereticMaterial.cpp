@@ -476,7 +476,7 @@ int XC::HystereticMaterial::recvSelf(const CommParameters &cp)
     return res;
   }
     
-void XC::HystereticMaterial::Print(std::ostream &s, int flag)
+void XC::HystereticMaterial::Print(std::ostream &s, int flag) const
 {
         s << "Hysteretic XC::Material, tag: " << this->getTag() << std::endl;
         s << "mom1p: " << mom1p << std::endl;

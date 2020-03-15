@@ -243,7 +243,7 @@ int XC::Information::recvSelf(const CommParameters &cp)
   }
 
 void 
-XC::Information::Print(std::ostream &s, int flag)
+XC::Information::Print(std::ostream &s, int flag) const
 {
   if(theType == IntType)
     s << theInt << " ";
@@ -270,7 +270,7 @@ XC::Information::Print(std::ostream &s, int flag)
 }
 
 
-void XC::Information::Print(std::ofstream &s, int flag)
+void XC::Information::Print(std::ofstream &s, int flag) const
   {
     if(theType == IntType)
       s << theInt << " ";

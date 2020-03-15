@@ -156,7 +156,7 @@ class BeamWithHinges3d: public BeamColumnWithSectionFDTrf3d
     int setParameter(const std::vector<std::string> &argv, Parameter &param);
     int updateParameter(int parameterID, Information &info);
     
-    void Print(std::ostream &s, int flag = 0);
+    void Print(std::ostream &s, int flag = 0) const;
   };
 } // end of XC namespace
 

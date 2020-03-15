@@ -88,7 +88,7 @@ class Parameter : public TaggedObject, public MovableObject
     Parameter(int tag, int classTag = PARAMETER_TAG_Parameter);
     Parameter();
   
-    virtual void Print(std::ostream &s, int flag =0);
+    virtual void Print(std::ostream &s, int flag =0) const;
   
     virtual int update(int newValue); 
     virtual int update(double newValue); 

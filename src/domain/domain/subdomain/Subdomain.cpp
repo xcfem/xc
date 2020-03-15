@@ -383,7 +383,7 @@ int XC::Subdomain::update(double newTime, double dT)
   { return Domain::update(newTime, dT); }
 
 //! @brief Print stuff.
-void XC::Subdomain::Print(std::ostream &os, int flag)
+void XC::Subdomain::Print(std::ostream &os, int flag) const
   {
     os << "Current Subdomain Information for Subdomain: ";
     os << this->getTag() << ".\n";

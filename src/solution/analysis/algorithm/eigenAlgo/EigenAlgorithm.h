@@ -89,7 +89,7 @@ class EigenAlgorithm : public SolutionAlgorithm
   public:
     // pure virtual functions
     virtual int solveCurrentStep(int numModes) = 0;
-    virtual void Print(std::ostream &s, int flag=0) = 0;
+    virtual void Print(std::ostream &s, int flag=0) const=0;
      
     virtual EigenIntegrator *getEigenIntegratorPtr(void);
   };

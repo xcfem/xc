@@ -235,7 +235,7 @@ int XC::Pinching::revertToStart()
 }
 
 
-void XC::Pinching::Print(std::ostream &s, int flag)
+void XC::Pinching::Print(std::ostream &s, int flag) const
 {
         if ( DEBG ==1 ) fprintf( OutputFile , "Print\n" );        // debugging
         s << "BondSlipMaterial Tag: " << this->getTag() << std::endl;

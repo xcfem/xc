@@ -101,7 +101,7 @@ double XC::ArcLength1::getDLambdaUpdate(void) const
 
 //! The object sends to \f$s\f$ its type, the current value of \f$\lambda\f$, and
 //! \f$\delta \lambda\f$. 
-void XC::ArcLength1::Print(std::ostream &s, int flag)
+void XC::ArcLength1::Print(std::ostream &s, int flag) const
   {
     ArcLengthBase::Print(s,flag);
     s << "  " << getClassName() << ": "

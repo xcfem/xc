@@ -116,7 +116,7 @@ XC::GumbelRV::GumbelRV(int passedTag,
 
 
 void
-XC::GumbelRV::Print(std::ostream &s, int flag)
+XC::GumbelRV::Print(std::ostream &s, int flag) const
 {
 }
 

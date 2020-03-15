@@ -95,7 +95,7 @@ class MFreedom_ConstraintBase: public Constraint
     bool affectsNodeAndDOF(int theNode, int theDOF) const;
     int addResistingForceToNodalReaction(bool inclInertia);
 
-    virtual void Print(std::ostream &s, int flag =0);
+    virtual void Print(std::ostream &s, int flag =0) const;
 
   };
 } // end of XC namespace

@@ -147,7 +147,7 @@ int XC::BrickUP::getNumDOF(void) const
 
 
 //print out element data
-void  XC::BrickUP::Print( std::ostream &s, int flag )
+void  XC::BrickUP::Print( std::ostream &s, int flag ) const
 {
 
   if(flag == 2) {

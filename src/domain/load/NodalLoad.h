@@ -115,7 +115,7 @@ class NodalLoad : public Load
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
     
-    virtual void Print(std::ostream &s, int flag =0);   
+    virtual void Print(std::ostream &s, int flag =0) const;   
     
     // AddingSensitivity:BEGIN //////////////////////////////////////////
     int            setParameter(const std::vector<std::string> &argv, Parameter &param);

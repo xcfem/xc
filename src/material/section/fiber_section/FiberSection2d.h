@@ -104,7 +104,7 @@ class FiberSection2d: public FiberSectionBase
     
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
-    void Print(std::ostream &s, int flag = 0);
+    void Print(std::ostream &s, int flag = 0) const;
 	    
     int getResponse(int responseID, Information &info);
 

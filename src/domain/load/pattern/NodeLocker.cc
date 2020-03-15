@@ -283,7 +283,7 @@ int XC::NodeLocker::recvSelf(const CommParameters &cp)
   }
 
 //! @brief Imprime el load pattern.
-void XC::NodeLocker::Print(std::ostream &s, int flag)
+void XC::NodeLocker::Print(std::ostream &s, int flag) const
   {
     s << "SPC Pattern: " << this->getTag() << "\n";
     std::cerr << "\n  Single Point Constraints: \n";

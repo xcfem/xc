@@ -112,7 +112,7 @@ class PlaneStressMaterial: public NDAdaptorMaterial
     const Matrix& getTangent(void) const;
 
     //print out data
-    void Print( std::ostream &s, int flag );
+    void Print( std::ostream &s, int flag ) const;
 
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);

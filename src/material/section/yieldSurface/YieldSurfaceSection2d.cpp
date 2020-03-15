@@ -240,7 +240,7 @@ int XC::YieldSurfaceSection2d::sendSelf(CommParameters &cp)
 int XC::YieldSurfaceSection2d::recvSelf(const CommParameters &)
   { return -1; }
 
-void XC::YieldSurfaceSection2d::Print(std::ostream &s, int flag)
+void XC::YieldSurfaceSection2d::Print(std::ostream &s, int flag) const
   {
     s << "YieldSurfaceSection2d, tag: " << this->getTag() << std::endl;
     s << "\tYield Surface:" << *ys << std::endl;

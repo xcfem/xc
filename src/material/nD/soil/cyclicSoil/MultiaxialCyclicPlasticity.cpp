@@ -498,7 +498,7 @@ XC::NDMaterial *XC::MultiaxialCyclicPlasticity::getCopy(const std::string &type)
   }
 
 //print out material data
-void XC::MultiaxialCyclicPlasticity::Print( std::ostream &s, int flag )
+void XC::MultiaxialCyclicPlasticity::Print( std::ostream &s, int flag ) const
 {
   s << std::endl;;
   s << "MultiaxialCyclicPlasticity : "; 

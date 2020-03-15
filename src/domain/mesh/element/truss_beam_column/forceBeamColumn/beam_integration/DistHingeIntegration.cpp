@@ -141,7 +141,7 @@ XC::BeamIntegration *XC::DistHingeIntegration::getCopy(void) const
   { return new DistHingeIntegration(*this); }
 
 
-void XC::DistHingeIntegration::Print(std::ostream &s, int flag)
+void XC::DistHingeIntegration::Print(std::ostream &s, int flag) const
   {
     s << "DistHinge" << std::endl;
     s << " lpI = " << lpI;

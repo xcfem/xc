@@ -137,7 +137,7 @@ int XC::EnhancedQuad::getNumDOF(void) const
 
 
 //print out element data
-void  XC::EnhancedQuad::Print( std::ostream &s, int flag )
+void  XC::EnhancedQuad::Print( std::ostream &s, int flag ) const
 {
   s << std::endl ;
   s << "Enhanced Strain Four XC::Node Quad \n" ;

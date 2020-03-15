@@ -151,7 +151,7 @@ class Brick : public BrickBase
     virtual int recvSelf(const CommParameters &);
       
     //print out element data
-    void Print( std::ostream &s, int flag );
+    void Print( std::ostream &s, int flag ) const;
 
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
     int getResponse(int responseID, Information &eleInformation);

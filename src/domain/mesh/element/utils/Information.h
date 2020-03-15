@@ -112,8 +112,8 @@ class Information: public MovableObject
     int sendSelf(CommParameters &);  
     int recvSelf(const CommParameters &);
 
-    virtual void Print(std::ostream &s, int flag = 0);
-    virtual void Print(std::ofstream &s, int flag = 0);
+    virtual void Print(std::ostream &s, int flag = 0) const;
+    virtual void Print(std::ofstream &s, int flag = 0) const;
     virtual const Vector &getData(void);
   };
 } // end of XC namespace

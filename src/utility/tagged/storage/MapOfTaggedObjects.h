@@ -127,7 +127,7 @@ class MapOfTaggedObjects : public TaggedObjectStorage
     TaggedObjectStorage *getEmptyCopy(void);
     void clearAll(bool invokeDestructor = true);
     
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
     friend class MapOfTaggedObjectsIter;
   };
 } // end of XC namespace

@@ -146,7 +146,7 @@ int XC::HingeRadauBeamIntegration::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::HingeRadauBeamIntegration::Print(std::ostream &s, int flag)
+void XC::HingeRadauBeamIntegration::Print(std::ostream &s, int flag) const
   {
     PlasticLengthsBeamIntegration::Print(s,flag);
     s << "HingeRadau" << std::endl;

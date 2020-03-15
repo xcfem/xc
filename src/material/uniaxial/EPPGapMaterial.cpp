@@ -252,7 +252,7 @@ int XC::EPPGapMaterial::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::EPPGapMaterial::Print(std::ostream &s, int flag)
+void XC::EPPGapMaterial::Print(std::ostream &s, int flag) const
   {
     s << "EPPGap tag: " << this->getTag() << std::endl;
     s << "  E: " << E << ", kinematic hardening ratio: " << eta << std::endl;

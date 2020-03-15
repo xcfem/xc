@@ -226,7 +226,7 @@ int XC::KrylovNewton::sendSelf(CommParameters &cp)
 int XC::KrylovNewton::recvSelf(const CommParameters &cp)
   { return -1; }
 
-void XC::KrylovNewton::Print(std::ostream &s, int flag)
+void XC::KrylovNewton::Print(std::ostream &s, int flag) const
   {
     s << "KrylovNewton";
     s << "\n\tMax subspace dimension: " << maxDimension;

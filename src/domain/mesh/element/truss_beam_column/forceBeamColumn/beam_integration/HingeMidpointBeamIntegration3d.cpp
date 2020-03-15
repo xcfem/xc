@@ -161,7 +161,7 @@ double XC::HingeMidpointBeamIntegration3d::getTangentDriftJ(double L, double LI,
       }
   }
 
-void XC::HingeMidpointBeamIntegration3d::Print(std::ostream &s, int flag)
+void XC::HingeMidpointBeamIntegration3d::Print(std::ostream &s, int flag) const
   {
     s << "HingeMidpoint3d" << std::endl;
     ctes_scc.Print(s);

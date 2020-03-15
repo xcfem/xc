@@ -83,7 +83,7 @@ bool XC::MFreedom_Joint::isTimeVarying(void) const
 
 
 //! @brief Printing.
-void XC::MFreedom_Joint::Print(std::ostream &s, int flag )
+void XC::MFreedom_Joint::Print(std::ostream &s, int flag ) const
   {
     s << "MFreedom_Joint: " << this->getTag() << "\n";
     s << "\tConstrained XC::Node: " << getNodeConstrained();

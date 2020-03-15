@@ -231,21 +231,21 @@ XC::OPS_Stream &XC::FileStream::write(const signed char*s,int n)
 
     return *this;
   }
- XC::OPS_Stream &XC::FileStream::operator<<(char c)
+ XC::OPS_Stream &XC::FileStream::operator<<(const char &c)
   {
     if(fileOpen != 0)
       theFile << c;
 
     return *this;
   }
- XC::OPS_Stream &XC::FileStream::operator<<(unsigned char c)
+ XC::OPS_Stream &XC::FileStream::operator<<(const unsigned char &c)
   {
     if(fileOpen != 0)
       theFile << c;
 
     return *this;
   }
- XC::OPS_Stream &XC::FileStream::operator<<(signed char c)
+ XC::OPS_Stream &XC::FileStream::operator<<(const signed char &c)
   {
     if(fileOpen != 0)
       theFile << c;
@@ -298,21 +298,21 @@ XC::OPS_Stream& XC::FileStream::operator<<(const unsigned char *s)
 */
     return *this;
   }
- XC::OPS_Stream &XC::FileStream::operator<<(int n)
+ XC::OPS_Stream &XC::FileStream::operator<<(const int &n)
   {
     if(fileOpen != 0)
       theFile << 1.0*n;
 
     return *this;
   }
- XC::OPS_Stream &XC::FileStream::operator<<(unsigned int n)
+ XC::OPS_Stream &XC::FileStream::operator<<(const unsigned int &n)
   {
     if(fileOpen != 0)
       theFile << 1.0*n;
 
     return *this;
   }
- XC::OPS_Stream &XC::FileStream::operator<<(long n)
+ XC::OPS_Stream &XC::FileStream::operator<<(const long &n)
   {
 /*
     if(fileOpen != 0)
@@ -320,7 +320,7 @@ XC::OPS_Stream& XC::FileStream::operator<<(const unsigned char *s)
 */
     return *this;
   }
- XC::OPS_Stream &XC::FileStream::operator<<(unsigned long n)
+ XC::OPS_Stream &XC::FileStream::operator<<(const unsigned long &n)
   {
 /*
     if(fileOpen != 0)
@@ -328,7 +328,7 @@ XC::OPS_Stream& XC::FileStream::operator<<(const unsigned char *s)
 */
     return *this;
   }
- XC::OPS_Stream &XC::FileStream::operator<<(short n)
+ XC::OPS_Stream &XC::FileStream::operator<<(const short &n)
   {
 /*
     if(fileOpen != 0)
@@ -336,7 +336,7 @@ XC::OPS_Stream& XC::FileStream::operator<<(const unsigned char *s)
 */
     return *this;
   }
- XC::OPS_Stream &XC::FileStream::operator<<(unsigned short n)
+ XC::OPS_Stream &XC::FileStream::operator<<(const unsigned short &n)
   {
 /*
     if(fileOpen != 0)
@@ -344,7 +344,7 @@ XC::OPS_Stream& XC::FileStream::operator<<(const unsigned char *s)
 */
     return *this;
   }
- XC::OPS_Stream &XC::FileStream::operator<<(bool b)
+ XC::OPS_Stream &XC::FileStream::operator<<(const bool &b)
   {
 /*
     if(fileOpen != 0)
@@ -352,14 +352,14 @@ XC::OPS_Stream& XC::FileStream::operator<<(const unsigned char *s)
 */
     return *this;
   }
- XC::OPS_Stream &XC::FileStream::operator<<(double n)
+ XC::OPS_Stream &XC::FileStream::operator<<(const double &n)
   {
     if(fileOpen != 0)
       theFile << n;
 
     return *this;
   }
- XC::OPS_Stream &XC::FileStream::operator<<(float n)
+ XC::OPS_Stream &XC::FileStream::operator<<(const float &n)
   {
     if(fileOpen != 0)
       theFile << n;

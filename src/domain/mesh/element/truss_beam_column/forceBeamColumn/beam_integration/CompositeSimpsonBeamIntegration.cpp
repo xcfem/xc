@@ -97,7 +97,7 @@ void XC::CompositeSimpsonBeamIntegration::getSectionWeights(int numSections, dou
       }
   }
 
-void XC::CompositeSimpsonBeamIntegration::Print(std::ostream &s, int flag)
+void XC::CompositeSimpsonBeamIntegration::Print(std::ostream &s, int flag) const
   {
     s << "CompositeSimpson" << std::endl;
   }

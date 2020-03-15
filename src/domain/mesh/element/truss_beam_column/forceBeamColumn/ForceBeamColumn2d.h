@@ -114,8 +114,8 @@ class ForceBeamColumn2d: public NLForceBeamColumn2dBase
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
   
-    friend std::ostream &operator<<(std::ostream &s, ForceBeamColumn2d &E);        
-    void Print(std::ostream &s, int flag =0);    
+    friend std::ostream &operator<<(std::ostream &s, const ForceBeamColumn2d &E);        
+    void Print(std::ostream &s, int flag =0) const;    
   
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
     int getResponse(int responseID, Information &eleInformation);
@@ -135,7 +135,7 @@ class ForceBeamColumn2d: public NLForceBeamColumn2dBase
     void compSectionDisplacements(std::vector<Vector> &,std::vector<Vector> &) const;
   };
 
-std::ostream &operator<<(std::ostream &, ForceBeamColumn2d &);
+std::ostream &operator<<(std::ostream &, const ForceBeamColumn2d &);
 } // end of XC namespace
 
 #endif

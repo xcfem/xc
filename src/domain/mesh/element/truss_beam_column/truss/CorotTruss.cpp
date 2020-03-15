@@ -524,7 +524,7 @@ const XC::Vector &XC::CorotTruss::getResistingForceIncInertia(void) const
   }
 
 
-void XC::CorotTruss::Print(std::ostream &s, int flag)
+void XC::CorotTruss::Print(std::ostream &s, int flag) const
   {
     s << "\nCorotTruss, tag: " << this->getTag() << std::endl;
     s << "\tConnected Nodes: " << theNodes;

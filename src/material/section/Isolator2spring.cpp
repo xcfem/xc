@@ -437,7 +437,7 @@ int XC::Isolator2spring::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::Isolator2spring::Print(std::ostream &s, int flag)
+void XC::Isolator2spring::Print(std::ostream &s, int flag) const
   {
     s << "Isolator2spring, tag: " << this->getTag() << std::endl;
     s << "\tol:    " << tol << std::endl;

@@ -84,7 +84,7 @@ class ResponseQuantities: public MovableObject
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
 
-    void Print(std::ostream &s);        
+    void Print(std::ostream &s) const;        
   };
 } // end of XC namespace
 

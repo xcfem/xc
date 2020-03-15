@@ -1769,7 +1769,7 @@ void XC::Node::add_to_sets(std::set<SetBase *> &sets)
 //!
 //! Causes the node to print out its tag, mass matrix, and committed
 //! response quantities. 
-void XC::Node::Print(std::ostream &s, int flag)
+void XC::Node::Print(std::ostream &s, int flag) const
   {
     if(flag == 0)
       { // print out everything

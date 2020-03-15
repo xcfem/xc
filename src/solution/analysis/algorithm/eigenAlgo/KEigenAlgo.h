@@ -76,7 +76,7 @@ class KEigenAlgo : public EigenAlgorithm
       { return rcond; }
     inline void setRCond(double d)
       { rcond= d; }
-    virtual void Print(std::ostream &s, int flag = 0);
+    virtual void Print(std::ostream &s, int flag = 0) const;
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
   };

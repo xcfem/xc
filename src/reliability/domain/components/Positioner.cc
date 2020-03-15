@@ -60,8 +60,8 @@ int XC::Positioner::activate(bool active)
     return 0;
   }
 
-
-void XC::Positioner::Print(std::ostream &s, int flag)  
+//! @brief Print stuff.
+void XC::Positioner::Print(std::ostream &s, int flag) const
   {}
 
 

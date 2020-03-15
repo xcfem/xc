@@ -54,7 +54,7 @@ XC::YS_Evolution *XC::Kinematic2D02::getCopy(void)
   { return new Kinematic2D02(*this); }
 
 
-void XC::Kinematic2D02::Print(std::ostream &s, int flag)
+void XC::Kinematic2D02::Print(std::ostream &s, int flag) const
   {
     s << "Kinematic2D02 \n";
 	s << "iso_Ratio = " << isotropicRatio << "\n";

@@ -122,7 +122,7 @@ int XC::ImposedMotionSP::applyConstraint(double time)
   }
 
 //! @brief Printing.
-void XC::ImposedMotionSP::Print(std::ostream &s, int flag) 
+void XC::ImposedMotionSP::Print(std::ostream &s, int flag) const 
   {
     s << "ImposedMotionSP: " << this->getTag();
     s << "\t XC::Node: " << this->getNodeTag();

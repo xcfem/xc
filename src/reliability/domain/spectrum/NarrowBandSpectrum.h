@@ -72,7 +72,7 @@ class NarrowBandSpectrum: public Spectrum
 public:
 	NarrowBandSpectrum(int tag, double minFreq, double maxFreq, double amplitude);
 
-	void Print(std::ostream &s, int flag =0);
+	void Print(std::ostream &s, int flag =0) const;
 
 	double getMinFrequency();
 	double getMaxFrequency();

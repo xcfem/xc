@@ -191,7 +191,7 @@ int XC::StaticSensitivityIntegrator::sendSelf(CommParameters &)
 int XC::StaticSensitivityIntegrator::recvSelf(const CommParameters &)
   { return 0; }
 
-void XC::StaticSensitivityIntegrator::Print(std::ostream &s, int flag)  
+void XC::StaticSensitivityIntegrator::Print(std::ostream &s, int flag) const 
   {}
 
 

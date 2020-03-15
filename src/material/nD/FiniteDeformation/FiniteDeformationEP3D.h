@@ -154,7 +154,7 @@ class FiniteDeformationEP3D: public FiniteDeformationMaterial
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
 
-    void Print(std::ostream &s, int flag);
+    void Print(std::ostream &s, int flag) const;
 
     const  stresstensor getCauchyStressTensor(void);
   };

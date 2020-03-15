@@ -160,7 +160,7 @@ int XC::PYBase::recvData(const CommParameters &cp)
   }
 
 /////////////////////////////////////////////////////////////////////
-void XC::PYBase::Print(std::ostream &s, int flag)
+void XC::PYBase::Print(std::ostream &s, int flag) const
   {
     s << "PYBase, tag: " << this->getTag() << std::endl;
     s << "  soilType: " << soilType << std::endl;

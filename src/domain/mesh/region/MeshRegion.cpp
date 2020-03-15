@@ -358,7 +358,7 @@ int XC::MeshRegion::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::MeshRegion::Print(std::ostream &s, int flag)
+void XC::MeshRegion::Print(std::ostream &s, int flag) const
   {
     s << "Region: " << this->getTag() << std::endl;
     if(theElements)

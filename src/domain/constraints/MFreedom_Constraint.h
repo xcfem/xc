@@ -154,7 +154,7 @@ class MFreedom_Constraint: public MFreedom_ConstraintBase
 
     int addResistingForceToNodalReaction(bool inclInertia);
 
-    virtual void Print(std::ostream &s, int flag =0);
+    virtual void Print(std::ostream &s, int flag =0) const;
 
   };
 } // end of XC namespace

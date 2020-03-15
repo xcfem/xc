@@ -590,7 +590,7 @@ double XC::GeomSection::getPyzGrossSection(void) const
 
 
 //! @brief Printing.
-void XC::GeomSection::Print(std::ostream &s, int flag)
+void XC::GeomSection::Print(std::ostream &s, int flag) const
   {
     s << "\nCurrent number of regions: "       << regions.size();
     s << "\nCurrent number of reinforcement layers: " << reinforcement_layers.size();

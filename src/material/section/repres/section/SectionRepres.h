@@ -99,7 +99,7 @@ class SectionRepres: public TaggedObject
     void setGeomNamed(const std::string &);
 
 
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
     friend std::ostream &operator<<(std::ostream &, SectionRepres &);    
   };
 

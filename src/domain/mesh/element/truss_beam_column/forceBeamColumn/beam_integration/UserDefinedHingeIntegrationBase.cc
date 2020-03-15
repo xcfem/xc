@@ -120,7 +120,7 @@ int XC::UserDefinedHingeIntegrationBase::recvData(const CommParameters &cp)
     return res;
   }
 
-void XC::UserDefinedHingeIntegrationBase::Print(std::ostream &s, int flag)
+void XC::UserDefinedHingeIntegrationBase::Print(std::ostream &s, int flag) const
   {
     s << "UserHinge" << std::endl;
     s << " Points left hinge I: " << ptsL();

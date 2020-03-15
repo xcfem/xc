@@ -280,7 +280,7 @@ int XC::MRMFreedom_Constraint::recvSelf(const CommParameters &cp)
   }
 
 //! @brief Printing.
-void XC::MRMFreedom_Constraint::Print(std::ostream &s, int flag)
+void XC::MRMFreedom_Constraint::Print(std::ostream &s, int flag) const
   {     
     s << "MRMFreedom_Constraint: " << this->getTag() << "\n";
     s << "\tNode Constrained: " << getNodeConstrained();

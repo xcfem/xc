@@ -312,7 +312,7 @@ int XC::AlphaOS::recvSelf(const CommParameters &cp)
   }
 
 
-void XC::AlphaOS::Print(std::ostream &s, int flag)
+void XC::AlphaOS::Print(std::ostream &s, int flag) const
   {
     AlphaOSBase::Print(s,flag);
     s << "  alpha: " << alpha << " beta: " << beta  << " gamma: " << gamma << std::endl;

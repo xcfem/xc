@@ -106,16 +106,12 @@ XC::KooFilter::getMaxAmplitude()
 	return result;
 }
 
-double
-XC::KooFilter::getTimeOfMaxAmplitude()
-{
+double XC::KooFilter::getTimeOfMaxAmplitude()
+  {
+    double wd = wn * sqrt(1.0-pow(xi,2.0));
+    return (atan(wd/(xi*wn))/wd);
+  }
 
-	double wd = wn * sqrt(1.0-pow(xi,2.0));
-
-	return (atan(wd/(xi*wn))/wd);
-}
-
-void
-XC::KooFilter::Print(std::ostream &s, int flag)  
-{
-}
+//! @brief Print stuff.
+void XC::KooFilter::Print(std::ostream &s, int flag) const
+  {}

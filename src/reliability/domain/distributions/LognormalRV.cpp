@@ -151,7 +151,7 @@ XC::LognormalRV::LognormalRV(int passedTag,
 
 
 void
-XC::LognormalRV::Print(std::ostream &s, int flag)
+XC::LognormalRV::Print(std::ostream &s, int flag) const
 {
 }
 

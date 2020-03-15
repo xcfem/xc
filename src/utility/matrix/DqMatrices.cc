@@ -57,7 +57,7 @@ void XC::DqMatrices::clear(void)
 XC::DqMatrices::~DqMatrices(void)
   { clear(); }
 
-void XC::DqMatrices::Print(std::ostream &s,const int &flag)
+void XC::DqMatrices::Print(std::ostream &s,const int &flag) const
   {
     s << "\tNumber of Matrices: " << size() << std::endl;
   }

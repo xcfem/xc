@@ -46,7 +46,7 @@ XC::Kinematic2D01::Kinematic2D01(int tag, double min_iso_factor,
 XC::YS_Evolution *XC::Kinematic2D01::getCopy(void)
   { return new Kinematic2D01(*this); }
 
-void XC::Kinematic2D01::Print(std::ostream &s, int flag)
+void XC::Kinematic2D01::Print(std::ostream &s, int flag) const
   {
 	s << "Kinematic2D01 \n";
 	s << "iso_Ratio = " << isotropicRatio << "\n";

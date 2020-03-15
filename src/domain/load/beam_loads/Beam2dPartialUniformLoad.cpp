@@ -131,7 +131,7 @@ int XC::Beam2dPartialUniformLoad::recvSelf(const CommParameters &cp)
   }
 
 //! @brief Print stuff.
-void XC::Beam2dPartialUniformLoad::Print(std::ostream &s, int flag)
+void XC::Beam2dPartialUniformLoad::Print(std::ostream &s, int flag) const
   {
     s << getClassName() << " - tag " << this->getTag() << std::endl;
     s << "  Transverse: " << Trans << std::endl;

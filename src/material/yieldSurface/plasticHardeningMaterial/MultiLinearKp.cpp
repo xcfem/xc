@@ -68,7 +68,8 @@ sumPlasDefo(sum_plas_defo.Size()+1), Kp(kp.Size()+1)
 
   }
 
-double XC::MultiLinearKp::getTrialPlasticStiffness()
+//! @brief Return trial value of plastic stiffness.
+double XC::MultiLinearKp::getTrialPlasticStiffness(void) const
   {
     double K = 0;
     double sumDisp = val_trial;
@@ -117,30 +118,30 @@ double XC::MultiLinearKp::getTrialPlasticStiffness()
 }
 
 
-void XC::MultiLinearKp::Print(std::ostream &s, int flag)
-{
+void XC::MultiLinearKp::Print(std::ostream &s, int flag) const
+  {
 	this->XC::PlasticHardeningMaterial::Print(s, flag);
 	
 	s << "+-MultiLinear" << std::endl;
 	s << "    Kp = " << this->getTrialPlasticStiffness();
 	s << "    SumPlasDefo XC::Vector = " <<  sumPlasDefo;
 	s << "    Kp XC::Vector          = " <<  Kp << std::endl;
-}
+  }
 
- XC::PlasticHardeningMaterial *XC::MultiLinearKp::getCopy(void)
-{
-	XC::Vector spd(numPoints);
-    XC::Vector kp(numPoints);
+XC::PlasticHardeningMaterial *XC::MultiLinearKp::getCopy(void)
+  {
+    Vector spd(numPoints);
+    Vector kp(numPoints);
 
     for(int i =0; i < numPoints; i++)
-    {
+      {
     	spd(i) =  sumPlasDefo(i);
     	kp(i)  =  Kp(i);
-    }
+      }
 
     // Don't want to pass the actual vectors or else the size will
     // keep on increasing by 1
- 	PlasticHardeningMaterial *theMat = new MultiLinearKp(getTag(), spd, kp);
+    PlasticHardeningMaterial *theMat = new MultiLinearKp(getTag(), spd, kp);
     return theMat;
-}
+  }
 

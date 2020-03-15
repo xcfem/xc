@@ -112,7 +112,7 @@ XC::GammaRV::GammaRV(int passedTag,
 
 
 void
-XC::GammaRV::Print(std::ostream &s, int flag)
+XC::GammaRV::Print(std::ostream &s, int flag) const
 {
 }
 

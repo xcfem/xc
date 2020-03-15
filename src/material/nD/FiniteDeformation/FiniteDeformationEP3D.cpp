@@ -391,7 +391,7 @@ int XC::FiniteDeformationEP3D::recvSelf(const CommParameters &)
 }
 
 //----------------------------------------------------------------------
-void XC::FiniteDeformationEP3D::Print(std::ostream &s, int flag)
+void XC::FiniteDeformationEP3D::Print(std::ostream &s, int flag) const
 {
     s << (*this);
 }

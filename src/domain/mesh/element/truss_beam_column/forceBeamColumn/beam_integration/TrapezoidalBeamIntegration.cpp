@@ -89,7 +89,7 @@ void XC::TrapezoidalBeamIntegration::getSectionWeights(int numSections, double L
       wt[i] *= 0.5;
   }
 
-void XC::TrapezoidalBeamIntegration::Print(std::ostream &s, int flag)
+void XC::TrapezoidalBeamIntegration::Print(std::ostream &s, int flag) const
   {
     s << "Trapezoidal" << std::endl;
   }

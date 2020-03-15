@@ -111,10 +111,11 @@ const XC::Vector & XC::NullEvolution::getEquiPlasticStiffness()
 	return vec_dim_3;
 }
 
-double XC::NullEvolution::getTrialPlasticStrains(int dof)
-{
-	return 0;
-}
+//! @brief Return trial values of plastic strains.
+double XC::NullEvolution::getTrialPlasticStrains(int dof) const
+  {
+    return 0;
+  }
 
 double XC::NullEvolution::getCommitPlasticStrains(int dof)
 {

@@ -57,7 +57,7 @@ XC::CombinedIsoKin2D01::CombinedIsoKin2D01(int tag,
 XC::YS_Evolution *XC::CombinedIsoKin2D01::getCopy(void)
   { return new CombinedIsoKin2D01(*this); }
 
-void XC::CombinedIsoKin2D01::Print(std::ostream &s, int flag)
+void XC::CombinedIsoKin2D01::Print(std::ostream &s, int flag) const
 {
 	s << "CombinedIsoKin2D01 \n";
 	s << "iso_Ratio = " << isotropicRatio << "\n";

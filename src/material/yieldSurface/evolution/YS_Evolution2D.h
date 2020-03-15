@@ -45,7 +45,7 @@ class YS_Evolution2D: public YS_Evolution
                         double iso_ratio, double kin_ratio);
 
 //  Methods inherited
-    virtual void Print(std::ostream &s, int flag =0) =0;
+    virtual void Print(std::ostream &s, int flag =0) const=0;
     virtual YS_Evolution *getCopy(void) = 0;
     virtual Response *setResponse(const std::vector<std::string> &argv, Information &info);
     virtual int getResponse(int responseID, Information &info);

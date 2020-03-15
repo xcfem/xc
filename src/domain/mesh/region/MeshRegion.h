@@ -108,7 +108,7 @@ class MeshRegion : public ContinuaReprComponent
     // methods to send & recv data for database/parallel applications
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
-    virtual void Print(std::ostream &s, int flag =0);
+    virtual void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace
 

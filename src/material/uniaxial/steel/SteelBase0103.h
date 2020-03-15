@@ -97,7 +97,7 @@ class SteelBase0103: public SteelBase
     int revertToLastCommit(void);
     int revertToStart(void);
 
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace
 

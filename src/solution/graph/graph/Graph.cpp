@@ -461,11 +461,11 @@ int XC::Graph::getVertexDiffExtrema(void) const
     return retval;
   }
 //! @brief Prints the graph.
-void XC::Graph::Print(std::ostream &os, int flag)
+void XC::Graph::Print(std::ostream &os, int flag) const
   { myVertices.Print(os, flag); }
 
 //! @brief Prints stuff.
-std::ostream &XC::operator<<(std::ostream &s, Graph &M)
+std::ostream &XC::operator<<(std::ostream &s, const Graph &M)
   {
     M.Print(s);
     return s;

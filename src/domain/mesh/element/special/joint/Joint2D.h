@@ -132,7 +132,7 @@ class Joint2D : public ElemWithMaterial<5,Joint2DPhysicalProperties>
   int getResponse(int responseID, Information &eleInformation);
   int sendSelf(CommParameters &);
   int recvSelf(const CommParameters &);
-  void Print(std::ostream &s, int flag =0);
+  void Print(std::ostream &s, int flag =0) const;
 
     // AddingSensitivity:BEGIN //////////////////////////////////////////
     int	  addInertiaLoadSensitivityToUnbalance(const Vector &accel, bool tag);

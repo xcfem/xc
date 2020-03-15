@@ -76,7 +76,7 @@ class UserDefinedRV: public RandomVariable
     UserDefinedRV(int tag, Vector xPoints, Vector PDFpoints, double startValue);
     UserDefinedRV(int tag, Vector xPoints, Vector PDFpoints);
     ~UserDefinedRV();
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
     double getPDFvalue(double rvValue);
     double getCDFvalue(double rvValue);
     double getInverseCDFvalue(double probValue);

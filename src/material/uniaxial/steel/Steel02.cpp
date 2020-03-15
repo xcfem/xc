@@ -367,7 +367,7 @@ int XC::Steel02::recvSelf(const CommParameters &cp)
   }
 
 //! @brief Print stuff.
-void XC::Steel02::Print(std::ostream &s, int flag)
+void XC::Steel02::Print(std::ostream &s, int flag) const
   { s << "Steel02:(strain, stress, tangent) " << eps << " " << sig << " " << e << std::endl; }
 
 // AddingSensitivity:BEGIN ///////////////////////////////////

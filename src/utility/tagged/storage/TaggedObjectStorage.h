@@ -158,7 +158,7 @@ class TaggedObjectStorage: public CommandEntity, public MovableObject
     int recvSelf(const CommParameters &);
     //! Invoke {\em Print(s,flag)} on all objects which have been added to
     //! the container. 
-    virtual void Print(std::ostream &s, int flag =0) =0;
+    virtual void Print(std::ostream &s, int flag =0) const=0;
   };
 
 template <class T>

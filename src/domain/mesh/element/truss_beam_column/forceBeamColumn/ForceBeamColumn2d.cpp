@@ -1126,7 +1126,7 @@ void XC::ForceBeamColumn2d::compSectionDisplacements(std::vector<Vector> &sectio
 }
 
 //! @brief Prints element information in the stream being passed as parameter.
-void XC::ForceBeamColumn2d::Print(std::ostream &s, int flag)
+void XC::ForceBeamColumn2d::Print(std::ostream &s, int flag) const
   {
     const size_t numSections= getNumSections();
     if(flag == 2)
@@ -1209,7 +1209,7 @@ void XC::ForceBeamColumn2d::Print(std::ostream &s, int flag)
   }
 
 //! @brief Prints element information in the output stream.
-std::ostream &XC::operator<<(std::ostream &s, ForceBeamColumn2d &E)
+std::ostream &XC::operator<<(std::ostream &s, const ForceBeamColumn2d &E)
   {
     E.Print(s);
     return s;

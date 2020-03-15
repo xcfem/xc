@@ -440,7 +440,7 @@ int XC::TzSimple1::recvSelf(const CommParameters &cp)
   }
 
 /////////////////////////////////////////////////////////////////////
-void XC::TzSimple1::Print(std::ostream &s, int flag)
+void XC::TzSimple1::Print(std::ostream &s, int flag) const
   {
     s << "TzSimple1" << std::endl;
     PYBase::Print(s,flag);

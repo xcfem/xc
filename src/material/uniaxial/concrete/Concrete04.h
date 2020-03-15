@@ -125,7 +125,7 @@ class Concrete04: public ConcreteBase
     int sendSelf(CommParameters &);  
     int recvSelf(const CommParameters &);
     
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
 
     // LOWES: add function for use with variable hinge lnegth model
     int getMaterialType(void);

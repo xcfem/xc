@@ -121,7 +121,7 @@ class CorotTruss: public CorotTrussBase
     // public methods for element output
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
-    void Print(std::ostream &s, int flag =0);    
+    void Print(std::ostream &s, int flag =0) const;    
 
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInfo);
     int getResponse(int responseID, Information &eleInformation);

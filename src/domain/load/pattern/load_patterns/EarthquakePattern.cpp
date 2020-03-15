@@ -211,7 +211,7 @@ int XC::EarthquakePattern::recvData(const CommParameters &cp)
   }
 
 
-void XC::EarthquakePattern::Print(std::ostream &s, int flag)
+void XC::EarthquakePattern::Print(std::ostream &s, int flag) const
   { std::cerr << "XC::EarthquakePattern::Print() - not yet implemented\n"; }
 
 // AddingSensitivity:BEGIN ////////////////////////////////////

@@ -125,7 +125,7 @@ const XC::ResponseId &XC::ElasticPlateSection::getType(void) const
   { return RespPlateMat; }
 
 //! @brief print out data
-void  XC::ElasticPlateSection::Print( std::ostream &s, int flag )
+void  XC::ElasticPlateSection::Print( std::ostream &s, int flag ) const
   {
     s << "ElasticPlateSection: \n " ;
     s <<  "  Young's Modulus E  = "  <<  E  <<  std::endl; ;

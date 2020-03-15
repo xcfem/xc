@@ -306,7 +306,7 @@ int XC::SeriesMaterial::recvSelf(const CommParameters &cp)
   }
 
 
-void XC::SeriesMaterial::Print(std::ostream &s, int flag)
+void XC::SeriesMaterial::Print(std::ostream &s, int flag) const
   {
     s << "\nSeriesMaterial, tag: " << this->getTag() << std::endl;
     s << "\tUniaxial Components" << std::endl;

@@ -481,7 +481,7 @@ int XC::PyLiq1::recvSelf(const CommParameters &cp)
   }
 
 /////////////////////////////////////////////////////////////////////
-void XC::PyLiq1::Print(std::ostream &s, int flag)
+void XC::PyLiq1::Print(std::ostream &s, int flag) const
   {
     s << "PyLiq1, tag: " << this->getTag() << std::endl;
     s << "  soilType: " << soilType << std::endl;

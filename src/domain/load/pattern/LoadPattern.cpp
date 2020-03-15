@@ -474,7 +474,7 @@ int XC::LoadPattern::recvSelf(const CommParameters &cp)
   }
 
 //! @brief Prints load pattern information.
-void XC::LoadPattern::Print(std::ostream &s, int flag)
+void XC::LoadPattern::Print(std::ostream &s, int flag) const
   {
     s << "Load Pattern: " << this->getTag() << "\n";
     s << "  load factor: " << loadFactor << "\n";

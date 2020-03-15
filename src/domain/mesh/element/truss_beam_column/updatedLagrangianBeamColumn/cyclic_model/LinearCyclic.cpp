@@ -39,9 +39,9 @@ XC::CyclicModel *XC::LinearCyclic::getCopy()
 double XC::LinearCyclic::getTaskFactor(void)
   { return resFactor; }
 
-void XC::LinearCyclic::Print (std::ostream &s, int flag)
+void XC::LinearCyclic::Print(std::ostream &s, int flag) const
   {
-    this->XC::CyclicModel::Print (s, flag);
+    this->XC::CyclicModel::Print(s, flag);
     s << "+LinearCyclic\n";
     s << "   taskFactor = " << resFactor << std::endl;
     s << "----------------------------------------"

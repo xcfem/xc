@@ -40,7 +40,8 @@ class CyclicModel : public TaggedObject, public MovableObject
     int initNewTask();
   protected:
     double resFactor;
-    double cycFactor, cycFactor_hist;
+    mutable double cycFactor;
+    double cycFactor_hist;
     double f_hist, d_hist;
     double f_curr, d_curr;
     double delT_curr, delT_hist;
@@ -68,13 +69,13 @@ class CyclicModel : public TaggedObject, public MovableObject
     void update(double f, double d, bool yield);
     virtual CyclicModel *getCopy()=0;
 	
-    virtual double getFactor(void);
+    virtual double getFactor(void) const;
     // for now ignore
     virtual int sendSelf(CommParameters &)
       {return -1;}
     virtual int recvSelf(const CommParameters &)
       {return -1;}
-    virtual void Print (std::ostream &s, int flag=0);
+    virtual void Print(std::ostream &s, int flag=0) const;
   protected:
 // virtual methods
     virtual int createFullCycleTask();

@@ -119,7 +119,7 @@ class PinchingDamage : public UniaxialMaterial
   int sendSelf(CommParameters &);  
   int recvSelf(const CommParameters &);    
   
-  void Print(std::ostream &s, int flag =0);
+  void Print(std::ostream &s, int flag =0) const;
   
  protected:
   void envelPosCap(double fy, double alfaPos, double alfaCap,

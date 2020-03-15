@@ -106,7 +106,7 @@ class HHTExplicit : public HHTRayleighBase
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
     
-    void Print(std::ostream &s, int flag = 0);
+    void Print(std::ostream &s, int flag = 0) const;
   };
 inline Integrator *HHTExplicit::getCopy(void) const
   { return new HHTExplicit(*this); }

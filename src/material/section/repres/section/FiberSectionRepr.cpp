@@ -111,7 +111,7 @@ int XC::FiberSectionRepr::getType(void) const
 
 
 
-void XC::FiberSectionRepr::Print(std::ostream &s, int flag)
+void XC::FiberSectionRepr::Print(std::ostream &s, int flag) const
   {
     SectionRepres::Print(s,flag);
   }

@@ -359,7 +359,7 @@ int XC::DistributedDisplacementControl::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::DistributedDisplacementControl::Print(std::ostream &s, int flag)
+void XC::DistributedDisplacementControl::Print(std::ostream &s, int flag) const
   {
     // TO FINISH    
   }

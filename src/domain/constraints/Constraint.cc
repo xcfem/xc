@@ -145,7 +145,7 @@ int XC::Constraint::recvData(const CommParameters &cp)
 //! @brief Prints some information about the constraint.
 //! @param s: output stream.
 //! @param flag: indicates the amount of information to be printed.
-void XC::Constraint::Print(std::ostream &s, int flag) 
+void XC::Constraint::Print(std::ostream &s, int flag) const
   {
     s << "Constraint: " << this->getTag();
     s << "\t XC::Node: " << constrNodeTag << std::endl;

@@ -662,7 +662,7 @@ XC::CrdTransf2d *XC::LinearCrdTransf2d::getCopy(void) const
   { return new LinearCrdTransf2d(*this); }
 
 
-void XC::LinearCrdTransf2d::Print(std::ostream &s, int flag)
+void XC::LinearCrdTransf2d::Print(std::ostream &s, int flag) const
   {
     s << "\nCrdTransf: " << this->getTag() << " Type: LinearCrdTransf2d";
     s << "\tnodeI Offset: " << nodeIOffset(0) << ' ' << nodeIOffset(1) << std::endl;

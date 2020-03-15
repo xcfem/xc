@@ -105,7 +105,7 @@ class EarthquakePattern : public EQBasePattern
     virtual int sendSelf(CommParameters &) =0;
     virtual int recvSelf(const CommParameters &) =0;
 
-    virtual void Print(std::ostream &s, int flag =0);        
+    virtual void Print(std::ostream &s, int flag =0) const;        
 
     // AddingSensitivity:BEGIN //////////////////////////////////////////
     virtual void applyLoadSensitivity(double pseudoTime = 0.0);

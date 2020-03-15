@@ -111,7 +111,7 @@ XC::NormalRV::NormalRV(int passedTag,
 }
 
 
-void XC::NormalRV::Print(std::ostream &s, int flag)
+void XC::NormalRV::Print(std::ostream &s, int flag) const
   {}
 
 

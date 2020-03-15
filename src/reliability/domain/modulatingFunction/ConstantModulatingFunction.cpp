@@ -81,13 +81,11 @@ XC::ConstantModulatingFunction::getFilter()
 	return theFilter;
 }
 
-double
-XC::ConstantModulatingFunction::getMaxAmplitude()
+double XC::ConstantModulatingFunction::getMaxAmplitude()
 {
 	return amplitude;
 }
 
-void
-XC::ConstantModulatingFunction::Print(std::ostream &s, int flag)  
-{
-}
+//! @brief Print stuff.
+void XC::ConstantModulatingFunction::Print(std::ostream &s, int flag) const
+  {}

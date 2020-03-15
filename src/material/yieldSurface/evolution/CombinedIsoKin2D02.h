@@ -70,7 +70,7 @@ class CombinedIsoKin2D02 : public BkStressLimSurface2D
 	);
 	
 	
-  void Print(std::ostream & s, int flag);
+  void Print(std::ostream & s, int flag) const;
   YS_Evolution * getCopy();
 
 

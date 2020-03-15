@@ -82,7 +82,7 @@ class UserDefinedHingeIntegrationBase : public UserDefinedBeamIntegrationBase
     void getSectionLocations(int numSections, double L, double *xi) const;
     void getSectionWeights(int numSections, double L, double *wt) const;
   
-    void Print(std::ostream &s, int flag = 0);
+    void Print(std::ostream &s, int flag = 0) const;
   };
 } // end of XC namespace
 

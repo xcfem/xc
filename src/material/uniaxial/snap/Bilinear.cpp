@@ -297,7 +297,7 @@ int XC::Bilinear::revertToStart()
 }
 
 
-void XC::Bilinear::Print(std::ostream &s, int flag)
+void XC::Bilinear::Print(std::ostream &s, int flag) const
 {
         if ( DEBG ==1 ) fprintf( OutputFile , "Print\n" );        // debugging
         s << "Bilinear Tag: " << this->getTag() << std::endl;

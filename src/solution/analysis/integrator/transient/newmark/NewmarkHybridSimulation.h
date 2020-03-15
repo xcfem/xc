@@ -101,7 +101,7 @@ class NewmarkHybridSimulation : public NewmarkBase2
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
     
-    void Print(std::ostream &s, int flag = 0);
+    void Print(std::ostream &s, int flag = 0) const;
   };
 inline Integrator *NewmarkHybridSimulation::getCopy(void) const
   { return new NewmarkHybridSimulation(*this); }

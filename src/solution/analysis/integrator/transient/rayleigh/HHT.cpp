@@ -510,7 +510,7 @@ int XC::HHT::recvSelf(const CommParameters &cp)
 //! The object sends to \f$s\f$ its type, the current time, \f$\alpha\f$,
 //! \f$\gamma\f$ and \f$\beta\f$. If Rayleigh damping is specified, the
 //! constants \f$\alpha_M\f$ and \f$\beta_K\f$ are also printed.
-void XC::HHT::Print(std::ostream &s, int flag)
+void XC::HHT::Print(std::ostream &s, int flag) const
   {
     HHTBase::Print(s,flag);
     s << "  alpha: " << alpha << " beta: " << beta

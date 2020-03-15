@@ -213,7 +213,7 @@ int XC::ParallelMaterial::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::ParallelMaterial::Print(std::ostream &s, int flag)
+void XC::ParallelMaterial::Print(std::ostream &s, int flag) const
   {
     s << "Parallel tag: " << this->getTag() << std::endl;
     for(size_t i=0; i<theModels.size(); i++)

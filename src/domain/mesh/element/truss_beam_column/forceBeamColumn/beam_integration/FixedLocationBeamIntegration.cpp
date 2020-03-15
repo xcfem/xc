@@ -64,7 +64,7 @@ int XC::FixedLocationBeamIntegration::updateParameter(int parameterID, Informati
     return 0;
   }
 
-void XC::FixedLocationBeamIntegration::Print(std::ostream &s, int flag)
+void XC::FixedLocationBeamIntegration::Print(std::ostream &s, int flag) const
   {
     s << "FixedLocation" << std::endl;
     ParameterIDBeamIntegration::Print(s);

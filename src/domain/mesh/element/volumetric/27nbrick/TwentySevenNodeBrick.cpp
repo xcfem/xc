@@ -3811,7 +3811,7 @@ int XC::TwentySevenNodeBrick::recvSelf(const CommParameters &cp)
 
 
 //=============================================================================
-void XC::TwentySevenNodeBrick::Print(std::ostream &s, int flag)
+void XC::TwentySevenNodeBrick::Print(std::ostream &s, int flag) const
 {
     //report(" TwentySevenNodeBrick ");
     s << "TwentySevenNodeBrick, element id:  " << this->getTag() << std::endl;
@@ -4495,7 +4495,7 @@ int XC::TwentySevenNodeBrick::getResponse (int responseID, Information &eleInfo)
 //
 //
 //void
-//XC::TwentySevenNodeBrick::Print (std::ostream &s, int flag)
+//XC::TwentySevenNodeBrick::Print(std::ostream &s, int flag) const
 //{
 //  s << "TwentySevenNodeBrick, element id:  " << this->getTag() << std::endl;
 //  s << "Connected external nodes:  " << theNodes;

@@ -482,7 +482,7 @@ int XC::FluidSolidPorousMaterial::getResponse(int responseID, Information &matIn
 }
 
 
-void XC::FluidSolidPorousMaterial::Print(std::ostream &s, int flag )
+void XC::FluidSolidPorousMaterial::Print(std::ostream &s, int flag ) const
   { s << "FluidSolidPorousMaterial" << std::endl; }
 
 

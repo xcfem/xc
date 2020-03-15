@@ -91,7 +91,8 @@ XC::PointsSpectrum::~PointsSpectrum(void)
 		delete frequencies;
   }
 
-void XC::PointsSpectrum::Print(std::ostream &s, int flag)  
+//! @brief Print stuff.
+void XC::PointsSpectrum::Print(std::ostream &s, int flag) const
   {}
 
 double XC::PointsSpectrum::getMinFrequency()

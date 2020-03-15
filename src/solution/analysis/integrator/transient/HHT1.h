@@ -104,7 +104,7 @@ class HHT1: public DampingFactorsIntegrator
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
 
-    void Print(std::ostream &s, int flag =0);        
+    void Print(std::ostream &s, int flag =0) const;        
   };
 inline Integrator *HHT1::getCopy(void) const
   { return new HHT1(*this); }

@@ -528,7 +528,7 @@ int XC::ZeroLengthSection::recvSelf(const CommParameters &cp)
   }
 
 //! @brief Prints the element node tags and section model to the stream {em s}.
-void XC::ZeroLengthSection::Print(std::ostream &s, int flag)
+void XC::ZeroLengthSection::Print(std::ostream &s, int flag) const
   {
     s << "ZeroLengthSection, tag: " << this->getTag() << std::endl;
     s << "\tConnected Nodes: " << theNodes << std::endl;

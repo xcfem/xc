@@ -68,7 +68,7 @@ class NodeDispVectors: public NodeVectors
     virtual int commitState(const size_t &nDOF);
     virtual int revertToLastCommit(const size_t &nDOF);
 
-    virtual void Print(std::ostream &s, int flag = 0);
+    virtual void Print(std::ostream &s, int flag = 0) const;
   };
 
 } // end of XC namespace

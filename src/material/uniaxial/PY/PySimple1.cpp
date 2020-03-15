@@ -651,7 +651,7 @@ int XC::PySimple1::recvSelf(const CommParameters &cp)
   }
 
 /////////////////////////////////////////////////////////////////////
-void XC::PySimple1::Print(std::ostream &s, int flag)
+void XC::PySimple1::Print(std::ostream &s, int flag) const
   {
     s << "PySimple1" << std::endl;
     PQyzBase::Print(s,flag);

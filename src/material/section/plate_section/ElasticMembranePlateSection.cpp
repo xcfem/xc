@@ -203,7 +203,7 @@ const XC::Matrix &XC::ElasticMembranePlateSection::getInitialTangent(void) const
 
 
 //print out data
-void  XC::ElasticMembranePlateSection::Print( std::ostream &s, int flag )
+void  XC::ElasticMembranePlateSection::Print( std::ostream &s, int flag ) const
   {
     s << "ElasticMembranePlateSection: \n ";
     s <<  "  Young's Modulus E = "  <<  E  <<  std::endl;;

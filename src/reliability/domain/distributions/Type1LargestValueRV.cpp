@@ -116,7 +116,7 @@ XC::Type1LargestValueRV::Type1LargestValueRV(int passedTag,
 
 
 void
-XC::Type1LargestValueRV::Print(std::ostream &s, int flag)
+XC::Type1LargestValueRV::Print(std::ostream &s, int flag) const
 {
 }
 

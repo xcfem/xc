@@ -90,7 +90,7 @@ class MultiSupportPattern: public EQBasePattern
     // methods for o/p
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
-    virtual void Print(std::ostream &s, int flag =0);        
+    virtual void Print(std::ostream &s, int flag =0) const;        
 
     int addMotion(GroundMotion &theMotion, int tag);    
     GroundMotion *getMotion(int tag);        

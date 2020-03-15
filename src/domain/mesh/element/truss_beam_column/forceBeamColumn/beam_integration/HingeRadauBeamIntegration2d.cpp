@@ -257,7 +257,7 @@ int XC::HingeRadauBeamIntegration2d::activateParameter(int parameterID)
     return 0;
   }
 
-void XC::HingeRadauBeamIntegration2d::Print(std::ostream &s, int flag)
+void XC::HingeRadauBeamIntegration2d::Print(std::ostream &s, int flag) const
   {
     s << "HingeRadau2d" << std::endl;
     HingeBeamIntegration2d::Print(s);

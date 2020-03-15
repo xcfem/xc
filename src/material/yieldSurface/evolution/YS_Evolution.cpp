@@ -243,7 +243,7 @@ void  XC::YS_Evolution::setDeformable(bool defo)
 	this->deformable = defo;
 }
 
-void XC::YS_Evolution::Print(std::ostream &s, int flag)
+void XC::YS_Evolution::Print(std::ostream &s, int flag) const
   { s << " YS_Evolution - tag = " << getTag() << std::endl; }
 
 const XC::Vector &XC::YS_Evolution::getGeneralizedStress(void) const

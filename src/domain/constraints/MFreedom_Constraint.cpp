@@ -284,7 +284,7 @@ int XC::MFreedom_Constraint::addResistingForceToNodalReaction(bool inclInertia)
   }
 
 //! @brief Printing.
-void XC::MFreedom_Constraint::Print(std::ostream &s, int flag)
+void XC::MFreedom_Constraint::Print(std::ostream &s, int flag) const
   {     
     s << "MFreedom_Constraint: " << this->getTag() << "\n";
     s << "\tNode Constrained: " << getNodeConstrained();

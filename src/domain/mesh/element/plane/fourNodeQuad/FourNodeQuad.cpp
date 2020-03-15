@@ -547,7 +547,7 @@ int XC::FourNodeQuad::recvSelf(const CommParameters &cp)
 
 
 //! @brief Prints element information.
-void XC::FourNodeQuad::Print(std::ostream &s, int flag)
+void XC::FourNodeQuad::Print(std::ostream &s, int flag) const
   {
     if(flag == 2)
       {

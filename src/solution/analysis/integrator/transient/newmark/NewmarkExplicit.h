@@ -99,7 +99,7 @@ class NewmarkExplicit : public NewmarkBase
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
     
-    void Print(std::ostream &s, int flag = 0);
+    void Print(std::ostream &s, int flag = 0) const;
   };
 inline Integrator *NewmarkExplicit::getCopy(void) const
   { return new NewmarkExplicit(*this); }

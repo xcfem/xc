@@ -111,7 +111,7 @@ XC::Type3SmallestValueRV::Type3SmallestValueRV(int passedTag,
 
 
 void
-XC::Type3SmallestValueRV::Print(std::ostream &s, int flag)
+XC::Type3SmallestValueRV::Print(std::ostream &s, int flag) const
 {
 }
 

@@ -40,7 +40,7 @@ class BilinearCyclic : public CyclicModel
     double weightFactor;
   public:
     BilinearCyclic(int tag, double weight=0.9);
-    void Print (std::ostream &, int = 0);
+    void Print(std::ostream &, int flag= 0) const;
     CyclicModel *getCopy();
   };
 } // end of XC namespace

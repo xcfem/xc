@@ -110,7 +110,7 @@ class NewtonRaphson: public NewtonBased
   public:
     int solveCurrentStep(void);    
     
-    void Print(std::ostream &s, int flag =0);    
+    void Print(std::ostream &s, int flag =0) const;    
   };
 
 inline SolutionAlgorithm *NewtonRaphson::getCopy(void) const

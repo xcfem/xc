@@ -42,7 +42,7 @@ class Orbison2D : public YieldSurface_BC2D
   public:
     Orbison2D(int tag, double xmax, double ymax, YS_Evolution &model);
     virtual YieldSurface_BC *getCopy(void);
-    virtual void Print(std::ostream &s, int flag =0);
+    virtual void Print(std::ostream &s, int flag =0) const;
 
 //protected:
 //  For the following 2 methods, x, y already non-dimensionalized

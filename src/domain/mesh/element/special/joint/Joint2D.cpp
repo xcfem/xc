@@ -559,7 +559,7 @@ const XC::Matrix &XC::Joint2D::getMass(void) const
     return K;
   }
 
-void XC::Joint2D::Print(std::ostream &s, int flag )
+void XC::Joint2D::Print(std::ostream &s, int flag ) const
 {
   s << "\nElement: " << getTag() << " type: Joint2D iNode: "
     << theNodes.getTagNode(0) << " jNode: " << theNodes.getTagNode(1) << "\n"

@@ -89,7 +89,7 @@ class PYBase: public UniaxialMaterial
     int commitState(void);
     int revertToLastCommit(void);
 
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
 
   };
 } // end of XC namespace

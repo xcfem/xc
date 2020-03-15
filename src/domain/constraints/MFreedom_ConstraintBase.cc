@@ -165,7 +165,7 @@ int XC::MFreedom_ConstraintBase::recvData(const CommParameters &cp)
 //!
 //! Prints out the MFreedom\_Constraints tag, then the tags of the constrained
 //! and retained nodes, then the two ID's and finally the constraint Matrix.
-void XC::MFreedom_ConstraintBase::Print(std::ostream &s, int flag)
+void XC::MFreedom_ConstraintBase::Print(std::ostream &s, int flag) const
   {     
     s << "MFreedom_ConstraintBase: " << this->getTag() << "\n";
     s << "\tNode Constrained: " << getNodeConstrained();

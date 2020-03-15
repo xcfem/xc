@@ -126,14 +126,14 @@ class Graph: public MovableObject
 
     virtual int merge(Graph &other);
     
-    virtual void Print(std::ostream &os, int flag =0);
+    virtual void Print(std::ostream &os, int flag =0) const;
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
 
-    friend std::ostream &operator<<(std::ostream &, Graph &);    
+    friend std::ostream &operator<<(std::ostream &, const Graph &);    
   };
 
-std::ostream &operator<<(std::ostream &, Graph &);    
+std::ostream &operator<<(std::ostream &, const Graph &);    
 } // end of XC namespace
 
 #endif

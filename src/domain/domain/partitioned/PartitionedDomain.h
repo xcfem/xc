@@ -159,7 +159,7 @@ class PartitionedDomain: public Domain
     virtual int  addRecorder(Recorder &theRecorder);    	
     virtual int  removeRecorders(void);
     
-    virtual  void Print(std::ostream &s, int flag =0);    
+    virtual  void Print(std::ostream &s, int flag =0) const;    
 
     // public member functions in addition to the standard domain
     virtual int setPartitioner(DomainPartitioner *thePartitioner);

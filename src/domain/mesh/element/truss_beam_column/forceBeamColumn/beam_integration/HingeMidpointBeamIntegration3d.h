@@ -74,7 +74,7 @@ class HingeMidpointBeamIntegration3d : public HingeBeamIntegration3d
 
     BeamIntegration *getCopy(void) const;
 
-    void Print(std::ostream &s, int flag = 0);
+    void Print(std::ostream &s, int flag = 0) const;
   };
 } // end of XC namespace
 

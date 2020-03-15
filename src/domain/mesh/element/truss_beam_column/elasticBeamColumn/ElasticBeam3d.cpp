@@ -684,7 +684,7 @@ int XC::ElasticBeam3d::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::ElasticBeam3d::Print(std::ostream &s, int flag)
+void XC::ElasticBeam3d::Print(std::ostream &s, int flag) const
   {
    if(flag == -1)
      {

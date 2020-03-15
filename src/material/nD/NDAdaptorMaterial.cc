@@ -104,7 +104,7 @@ int XC::NDAdaptorMaterial::recvData(const CommParameters &cp)
     return res;
   }
 
-void XC::NDAdaptorMaterial::Print(std::ostream &s, int flag)
+void XC::NDAdaptorMaterial::Print(std::ostream &s, int flag) const
   {
 	s << "NDAdaptorMaterial, tag: " << this->getTag() << std::endl;
 	s << "\tWrapped material: "<< theMaterial->getTag() << std::endl;

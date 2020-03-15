@@ -937,7 +937,7 @@ int XC::BeamColumnJoint3d::sendSelf(CommParameters &cp)
 int XC::BeamColumnJoint3d::recvSelf(const CommParameters &cp)
   { return -1; }
 
-void XC::BeamColumnJoint3d::Print(std::ostream &s, int flag)
+void XC::BeamColumnJoint3d::Print(std::ostream &s, int flag) const
   {
     s << "Element: " << getTag() << " Type: Beam Column Joint " << std::endl;
     for(int i = 0; i<4; i++)

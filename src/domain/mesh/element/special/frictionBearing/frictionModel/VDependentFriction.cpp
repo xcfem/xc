@@ -128,7 +128,7 @@ int XC::VDependentFriction::recvSelf(const CommParameters &cp)
   }
 
 
-void XC::VDependentFriction::Print(std::ostream &s, int flag)
+void XC::VDependentFriction::Print(std::ostream &s, int flag) const
   {
     s << "VDependentFriction tag: " << this->getTag() << std::endl;
     s << "  muSlow: " << muSlow << std::endl;

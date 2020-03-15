@@ -143,7 +143,7 @@ int XC::FiberSectionGJ::recvSelf(const CommParameters &)
     return res;
   }
 
-void XC::FiberSectionGJ::Print(std::ostream &s, int flag)
+void XC::FiberSectionGJ::Print(std::ostream &s, int flag) const
   {
     s << "\nFiberSectionGJ, tag: " << this->getTag() << std::endl;
     s << "\tSection code: " << getType();

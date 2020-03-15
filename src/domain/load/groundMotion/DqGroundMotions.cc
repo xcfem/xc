@@ -127,7 +127,7 @@ int XC::DqGroundMotions::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::DqGroundMotions::Print(std::ostream &s,const int &flag)
+void XC::DqGroundMotions::Print(std::ostream &s,const int &flag) const
   {
     s << "\tNumber of GroundMotions: " << getNumGroundMotions() << std::endl;
   }

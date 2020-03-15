@@ -139,7 +139,7 @@ class Shell4NBase: public QuadBase4N<SectionFDPhysicalProperties>
     inline const std::vector<Vector> &getInitDisp(void) const
       { return initDisp; }
 
-    void Print(std::ostream &s, int flag );
+    void Print(std::ostream &s, int flag ) const;
   }; 
 
 } // end of XC namespace

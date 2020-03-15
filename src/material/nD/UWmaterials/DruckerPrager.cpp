@@ -973,7 +973,7 @@ int XC::DruckerPrager::recvSelf(const CommParameters &)
      return 0;
   }
 
-void XC::DruckerPrager::Print(std::ostream &s, int flag )
+void XC::DruckerPrager::Print(std::ostream &s, int flag ) const
   {
     s << "DruckerPrager" << std::endl;
   }

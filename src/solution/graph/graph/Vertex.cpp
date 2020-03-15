@@ -135,7 +135,7 @@ const std::set<int> &XC::Vertex::getAdjacency(void) const
 //! and adjacency are printed. If the {\em flag =2} the vertex tag, color
 //! and adjacency are printed. If the {\em flag =3} the vertex tag,
 //! weight, color and adjacency are printed.  
-void XC::Vertex::Print(std::ostream &s, int flag)
+void XC::Vertex::Print(std::ostream &s, int flag) const
   {
     s << this->getTag() << " " ;
     s << myRef << " ";

@@ -319,7 +319,7 @@ int XC::ElasticCrossAnisotropic::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::ElasticCrossAnisotropic::Print(std::ostream &s, int flag)
+void XC::ElasticCrossAnisotropic::Print(std::ostream &s, int flag) const
 {
   s << "Elastic Cross-Anisotropic XC::Material Model\n";
   s << "\tEh:  " << Eh << "\tEv:  " << Ev << "\n";

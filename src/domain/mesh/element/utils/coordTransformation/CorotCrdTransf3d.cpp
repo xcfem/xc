@@ -2023,7 +2023,7 @@ const XC::Vector &XC::CorotCrdTransf3d::getPointGlobalDisplFromBasic(double xi, 
   }
 
 
-void XC::CorotCrdTransf3d::Print(std::ostream &s, int flag)
+void XC::CorotCrdTransf3d::Print(std::ostream &s, int flag) const
   {
     s << "\nCrdTransf: " << this->getTag() << " Type: CorotCrdTransf3d";
     s << "\tvAxis: " << vAxis;

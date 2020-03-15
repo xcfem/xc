@@ -642,7 +642,7 @@ int XC::fElement::recvSelf(const CommParameters &cp)
   }
 
 
-void XC::fElement::Print(std::ostream &s, int flag)
+void XC::fElement::Print(std::ostream &s, int flag) const
   {
     int ior = 0; int iow = 1;
     ior = -1;

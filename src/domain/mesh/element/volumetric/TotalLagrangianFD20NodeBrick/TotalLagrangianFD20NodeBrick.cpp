@@ -616,7 +616,7 @@ int XC::TotalLagrangianFD20NodeBrick::recvSelf(const CommParameters &cp)
 
 
 //=============================================================================
-void XC::TotalLagrangianFD20NodeBrick::Print(std::ostream &s, int flag)
+void XC::TotalLagrangianFD20NodeBrick::Print(std::ostream &s, int flag) const
 {
     s << "\nTotalLagrangianFD20NodeBrick, element id:  " << this->getTag() << std::endl;
     s << "\nConnected external nodes:  " << theNodes;

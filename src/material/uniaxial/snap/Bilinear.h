@@ -120,7 +120,7 @@ class Bilinear : public UniaxialMaterial
     Response* setResponse(const std::vector<std::string> &argv, Information &matInfo);
     int getResponse(int responseID, Information &matInfo);
 
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
     int setParameter(const std::vector<std::string> &argv, Parameter &param);
     int updateParameter(int parameterID, Information &info);
     int activateParameter(int parameterID);

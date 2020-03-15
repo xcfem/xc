@@ -210,7 +210,7 @@ int XC::PressureDependentElastic3D::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::PressureDependentElastic3D::Print(std::ostream &s, int flag)
+void XC::PressureDependentElastic3D::Print(std::ostream &s, int flag) const
   {
     s << "PressureDependentElastic3D" << std::endl;
     s << "\ttag: " << this->getTag() << std::endl;

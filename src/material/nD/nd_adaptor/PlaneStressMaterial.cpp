@@ -324,7 +324,7 @@ int XC::PlaneStressMaterial::indexMap(int i) const
 
 
 //print out data
-void XC::PlaneStressMaterial::Print( std::ostream &s, int flag )
+void XC::PlaneStressMaterial::Print( std::ostream &s, int flag ) const
  {
   s << "General Plane Stress XC::Material \n" ;
   s << " Tag: " << this->getTag() << "\n" ; 

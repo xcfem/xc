@@ -98,7 +98,7 @@ XC::IncrementalIntegrator *XC::EquiSolnAlgo::getIncrementalIntegratorPtr(void)
   { return dynamic_cast<IncrementalIntegrator *>(getIntegratorPtr()); }
 
 //! Send information to the stream based on the integer \p flag.
-void XC::EquiSolnAlgo::Print(std::ostream &s, int flag)
+void XC::EquiSolnAlgo::Print(std::ostream &s, int flag) const
   {
     s << getClassName() << std::endl;
   }

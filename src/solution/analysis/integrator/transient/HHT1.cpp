@@ -348,7 +348,7 @@ int XC::HHT1::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::HHT1::Print(std::ostream &s, int flag)
+void XC::HHT1::Print(std::ostream &s, int flag) const
   {
     DampingFactorsIntegrator::Print(s,flag);
     s << alpha << " gamma: " << gamma << "  beta: " << beta << std::endl;

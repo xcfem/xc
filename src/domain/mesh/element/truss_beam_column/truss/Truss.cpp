@@ -761,7 +761,7 @@ int XC::Truss::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::Truss::Print(std::ostream &s, int flag)
+void XC::Truss::Print(std::ostream &s, int flag) const
   {
     // compute the strain and axial force in the member
     const double strain = theMaterial->getStrain();

@@ -135,7 +135,7 @@ int XC::PathIndependentMaterial::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::PathIndependentMaterial::Print(std::ostream &s, int flag)
+void XC::PathIndependentMaterial::Print(std::ostream &s, int flag) const
   {
     s << "PathIndependentMaterial tag: " << this->getTag() << std::endl;
     s << "\tmaterial: " << theMaterial->getTag() << std::endl;

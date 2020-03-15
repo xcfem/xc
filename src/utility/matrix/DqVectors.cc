@@ -57,7 +57,7 @@ void XC::DqVectors::clear(void)
 XC::DqVectors::~DqVectors(void)
   { clear(); }
 
-void XC::DqVectors::Print(std::ostream &s,const int &flag)
+void XC::DqVectors::Print(std::ostream &s,const int &flag) const
   {
     s << "\tNumber of Vectors: " << size() << std::endl;
   }

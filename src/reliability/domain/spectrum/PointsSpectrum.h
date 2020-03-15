@@ -74,7 +74,7 @@ public:
 	PointsSpectrum(int tag, Vector frequencies, Vector amplitudes);
 	~PointsSpectrum();
 
-	void Print(std::ostream &s, int flag =0);
+	void Print(std::ostream &s, int flag =0) const;
 
 	double getMinFrequency();
 	double getMaxFrequency();

@@ -584,7 +584,7 @@ XC::PBowlLoading::recvSelf(const CommParameters &cp)
 
 ***************************************************************************************** */
 
-void XC::PBowlLoading::Print(std::ostream &s, int flag)
+void XC::PBowlLoading::Print(std::ostream &s, int flag) const
   {
     std::cerr << "XC::PBowlLoading::Print() - not yet implemented\n";
   }

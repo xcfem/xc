@@ -91,7 +91,7 @@ XC::ParetoRV::ParetoRV(int passedTag,
 
 
 void
-XC::ParetoRV::Print(std::ostream &s, int flag)
+XC::ParetoRV::Print(std::ostream &s, int flag) const
 {
 }
 

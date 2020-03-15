@@ -137,7 +137,7 @@ int XC::ImposedMotionSP1::recvSelf(const CommParameters &cp)
   }
 
 //! @brief Printing.
-void XC::ImposedMotionSP1::Print(std::ostream &s, int flag) 
+void XC::ImposedMotionSP1::Print(std::ostream &s, int flag) const
   {
     s << "ImposedMotionSP1: " << this->getTag();
     s << "\t XC::Node: " << this->getNodeTag();

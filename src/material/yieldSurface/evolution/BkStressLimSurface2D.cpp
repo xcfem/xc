@@ -314,18 +314,19 @@ const XC::Vector &XC::BkStressLimSurface2D::getEquiPlasticStiffness()
     return v2;
   }
 
-double XC::BkStressLimSurface2D::getTrialPlasticStrains(int dir)
+//! @brief Return trial values of plastic strains.
+double XC::BkStressLimSurface2D::getTrialPlasticStrains(int dir) const
   {
     if(dir == 0 && defPosX)
-            return isoMatXPos->getTrialValue();
+      return isoMatXPos->getTrialValue();
     else if(dir == 0 && !defPosX)
-            return isoMatXNeg->getTrialValue();
+      return isoMatXNeg->getTrialValue();
     else if (dir == 1 && defPosY)
-            return isoMatYPos->getTrialValue();
+      return isoMatYPos->getTrialValue();
     else if (dir == 1 && !defPosY)
-            return isoMatYNeg->getTrialValue();
+      return isoMatYNeg->getTrialValue();
     else
-            std::cerr << "XC::BkStressLimSurface2D::getTrialPlasticStrains(double dir) - incorrect dir||condition \n";
+      std::cerr << "XC::BkStressLimSurface2D::getTrialPlasticStrains(double dir) - incorrect dir||condition \n";
     return 0;
   }
 
@@ -378,7 +379,7 @@ XC::Vector& XC::BkStressLimSurface2D::getEvolDirection(XC::Vector &f_new)
     return v2;
   }
 
-void XC::BkStressLimSurface2D::Print(std::ostream &s, int flag)
+void XC::BkStressLimSurface2D::Print(std::ostream &s, int flag) const
   {
     s << "BkStressLimSurface2D \n";
     s << "iso_Ratio = " << isotropicRatio << "\n";

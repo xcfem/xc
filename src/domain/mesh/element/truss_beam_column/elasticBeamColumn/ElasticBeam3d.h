@@ -144,7 +144,7 @@ class ElasticBeam3d : public ProtoBeam3d
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
     
-    void Print(std::ostream &s, int flag =0);    
+    void Print(std::ostream &s, int flag =0) const;    
 
     //! @brief Axial force which acts over the element in his back end.
     //! Warning! call "calc_resisting_force" before calling this method.

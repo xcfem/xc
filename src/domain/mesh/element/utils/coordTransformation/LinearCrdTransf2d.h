@@ -100,7 +100,7 @@ class LinearCrdTransf2d: public SmallDispCrdTransf2d
     
     CrdTransf2d *getCopy(void) const;
     
-    void Print(std::ostream &s, int flag = 0);
+    void Print(std::ostream &s, int flag = 0) const;
   };
 } // end of XC namespace
 

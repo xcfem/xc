@@ -182,7 +182,7 @@ int XC::beam3dBase::recvData(const CommParameters &cp)
     return res;
   }
 
-void XC::beam3dBase::Print(std::ostream &s, int flag)
+void XC::beam3dBase::Print(std::ostream &s, int flag) const
   {
     s << "Element: " << this->getTag();
     s << " type: beam3dBase  iNode: " << theNodes.getTagNode(0);

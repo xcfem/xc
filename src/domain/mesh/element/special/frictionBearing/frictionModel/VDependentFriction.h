@@ -90,7 +90,7 @@ class VDependentFriction: public CoulombFriction
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
     
-    void Print(std::ostream &, int flag = 0);
+    void Print(std::ostream &, int flag = 0) const;
   };
 } // end of XC namespace
 

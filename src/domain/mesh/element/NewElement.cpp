@@ -179,7 +179,7 @@ int XC::NewElement::recvSelf(const CommParameters &cp)
   { return -1; }
 
 
-void XC::NewElement::Print(std::ostream &s, int flag)
+void XC::NewElement::Print(std::ostream &s, int flag) const
   { return; }
 
 

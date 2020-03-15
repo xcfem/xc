@@ -537,7 +537,7 @@ int XC::Tri31::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::Tri31::Print(std::ostream &s, int flag)                                                                
+void XC::Tri31::Print(std::ostream &s, int flag) const
   {
     if(flag == 2) 
       {

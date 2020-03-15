@@ -223,7 +223,7 @@ int XC::LoadControl::recvSelf(const CommParameters &cp)
 
 //! @brief The object sends to \f$os\f$ its type, the current value
 //! of \f$\lambda\f$, and \f$\delta \lambda\f$. 
-void XC::LoadControl::Print(std::ostream &os, int flag)
+void XC::LoadControl::Print(std::ostream &os, int flag) const
   {
     BaseControl::Print(os,flag);
     os << "  deltaLambda: " << deltaLambda << std::endl;

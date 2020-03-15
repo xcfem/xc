@@ -249,7 +249,7 @@ int XC::NeoHookeanCompressible3D::recvSelf(const CommParameters &cp)
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-void XC::NeoHookeanCompressible3D::Print(std::ostream &s, int flag)
+void XC::NeoHookeanCompressible3D::Print(std::ostream &s, int flag) const
 {
    s << "Finite Deformation Elastic 3D model" << "\n";
    s << "\trho: " << rho << "\n";

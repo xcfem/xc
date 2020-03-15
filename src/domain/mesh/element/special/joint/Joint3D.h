@@ -130,7 +130,7 @@ class Joint3D: public ElemWithMaterial<7,Joint3DPhysicalProperties>
     int getResponse(int responseID, Information &eleInformation);
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace
 

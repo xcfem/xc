@@ -74,7 +74,7 @@ class KooFilter: public Filter
 	double getMaxAmplitude();
 	double getTimeOfMaxAmplitude();
 
-	void Print(std::ostream &s, int flag =0);
+	void Print(std::ostream &s, int flag =0) const;
 
 private:
 	double wn;

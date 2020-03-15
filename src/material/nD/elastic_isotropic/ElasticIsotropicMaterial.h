@@ -146,7 +146,7 @@ class ElasticIsotropicMaterial: public NDMaterial
     virtual int sendSelf(CommParameters &);  
     virtual int recvSelf(const CommParameters &);
     
-    void Print(std::ostream &s, int flag = 0);
+    void Print(std::ostream &s, int flag = 0) const;
 
     virtual int setParameter(const std::vector<std::string> &argv, Parameter &param);
     virtual int updateParameter(int parameterID, Information &info);

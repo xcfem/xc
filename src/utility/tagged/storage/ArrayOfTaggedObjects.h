@@ -139,7 +139,7 @@ class ArrayOfTaggedObjects : public TaggedObjectStorage
     virtual TaggedObjectStorage *getEmptyCopy(void);
     virtual void clearAll(bool invokeDestructor = true);
 
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
     friend class ArrayOfTaggedObjectsIter;
   };
 

@@ -214,7 +214,7 @@ int XC::NewtonRaphson::solveCurrentStep(void)
   }
 
 //! Sends the string 'NewtonRaphson' to the stream if \p flag equals \f$0\f$.
-void XC::NewtonRaphson::Print(std::ostream &s, int flag)
+void XC::NewtonRaphson::Print(std::ostream &s, int flag) const
   {
     if(flag == 0)
       s << getClassName() << std::endl;

@@ -102,7 +102,7 @@ class Newmark1 : public NewmarkBase2
     virtual int sendSelf(CommParameters &);
     virtual int recvSelf(const CommParameters &);
 
-    void Print(std::ostream &s, int flag =0);  
+    void Print(std::ostream &s, int flag =0) const;  
   };
 inline Integrator *Newmark1::getCopy(void) const
   { return new Newmark1(*this); }

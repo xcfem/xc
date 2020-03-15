@@ -489,7 +489,7 @@ const XC::Vector &XC::Spring::getResistingForceIncInertia(void) const
   }
 
 //! @brief Print spring data.
-void XC::Spring::Print(std::ostream &s, int flag)
+void XC::Spring::Print(std::ostream &s, int flag) const
   {
     // compute the strain and axial force in the member
     const double strain= theMaterial->getStrain();

@@ -117,7 +117,7 @@ void XC::Elastic2dGNL::getLocalStiff(Matrix &K) const
 
 
 
-void XC::Elastic2dGNL::Print(std::ostream &s, int flag)
+void XC::Elastic2dGNL::Print(std::ostream &s, int flag) const
 {
     s << "\nElement No: " << this->getTag();
     s << " type: Elastic2dGNL  iNode: " << theNodes.getTagNode(0);

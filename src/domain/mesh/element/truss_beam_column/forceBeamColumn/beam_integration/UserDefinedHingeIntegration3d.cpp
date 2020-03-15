@@ -192,7 +192,7 @@ int XC::UserDefinedHingeIntegration3d::activateParameter(int parameterID)
     return 0;
   }
 
-void XC::UserDefinedHingeIntegration3d::Print(std::ostream &s, int flag)
+void XC::UserDefinedHingeIntegration3d::Print(std::ostream &s, int flag) const
   {
     s << "UserHinge3d" << std::endl;
     ctes_scc.Print(s);

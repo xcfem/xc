@@ -258,7 +258,7 @@ int XC::ZeroLengthContact3D::recvSelf(const CommParameters &cp)
   }
 
 
-void XC::ZeroLengthContact3D::Print(std::ostream &s, int flag)
+void XC::ZeroLengthContact3D::Print(std::ostream &s, int flag) const
   {
     if(flag == 0)
       { // print everything

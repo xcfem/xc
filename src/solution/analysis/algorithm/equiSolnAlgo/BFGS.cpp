@@ -348,7 +348,7 @@ int XC::BFGS::recvSelf(const CommParameters &cp)
   { return -1; }
 
 
-void XC::BFGS::Print(std::ostream &s, int flag)
+void XC::BFGS::Print(std::ostream &s, int flag) const
   {
     if(flag == 0)
       {

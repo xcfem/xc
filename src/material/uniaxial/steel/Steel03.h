@@ -133,7 +133,7 @@ class Steel03 : public SteelBase0103
     int sendSelf(CommParameters &);  
     int recvSelf(const CommParameters &);
     
-    void Print(std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace
 

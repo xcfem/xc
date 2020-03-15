@@ -163,7 +163,7 @@ const std::string &XC::ElasticIsotropic3D::getType(void) const
 int XC::ElasticIsotropic3D::getOrder(void) const
   { return 6; }
 
-void XC::ElasticIsotropic3D::Print(std::ostream &s, int flag)
+void XC::ElasticIsotropic3D::Print(std::ostream &s, int flag) const
   {
     s << strTypeElasticIsotropic3D << std::endl;
     s << "\ttag: " << this->getTag() << std::endl;

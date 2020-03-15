@@ -333,7 +333,7 @@ void XC::ElTawil2DUnSym::customizeInterpolate(double &xi, double &yi, double &xj
 }
 
 
-void XC::ElTawil2DUnSym::Print(std::ostream &s, int flag)
+void XC::ElTawil2DUnSym::Print(std::ostream &s, int flag) const
   {
     s << "\nYield Surface No: " << this->getTag() << " type: ElTawil2DUnSym\n";
   }

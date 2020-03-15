@@ -432,7 +432,7 @@ XC::NDMaterial *XC::J2Plasticity::getCopy(const std::string &type) const
   }
 
 //print out material data
-void XC::J2Plasticity::Print( std::ostream &s, int flag )
+void XC::J2Plasticity::Print( std::ostream &s, int flag ) const
   {
     s << std::endl; ;
     s << "J2-Plasticity : " ; 

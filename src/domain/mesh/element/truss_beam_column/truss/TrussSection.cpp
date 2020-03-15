@@ -508,7 +508,7 @@ int XC::TrussSection::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::TrussSection::Print(std::ostream &s, int flag)
+void XC::TrussSection::Print(std::ostream &s, int flag) const
   {
     // compute the strain and axial force in the member
     double strain, force= 0.0;

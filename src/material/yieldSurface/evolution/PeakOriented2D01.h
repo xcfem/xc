@@ -42,7 +42,7 @@ class PeakOriented2D01: public PlasticHardening2D
   public:
     PeakOriented2D01(int tag, double min_iso_factor, PlasticHardeningMaterial &kpx, PlasticHardeningMaterial &kpy );
 	
-    virtual void Print(std::ostream &s, int flag =0);
+    virtual void Print(std::ostream &s, int flag =0) const;
     virtual YS_Evolution *getCopy(void);
   };
 } // end of XC namespace

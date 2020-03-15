@@ -106,11 +106,11 @@ class TaggedObject: public CommandEntity
     void assignTag(int newTag);
     int getTag(void) const;
 
-    virtual void Print(std::ostream &, int flag =0);       
-    friend std::ostream &operator<<(std::ostream &, TaggedObject &);        
+    virtual void Print(std::ostream &, int flag =0) const;       
+    friend std::ostream &operator<<(std::ostream &, const TaggedObject &);        
   };
 
-std::ostream &operator<<(std::ostream &, TaggedObject &);        
+std::ostream &operator<<(std::ostream &, const TaggedObject &);        
 
 //! @brief Returns the tag associated with the object.
 inline int TaggedObject::getTag(void) const

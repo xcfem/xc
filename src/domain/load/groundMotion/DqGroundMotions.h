@@ -91,7 +91,7 @@ namespace XC {
     int recvSelf(const CommParameters &);
 
 
-    void Print(std::ostream &s,const int &flag);
+    void Print(std::ostream &s,const int &flag) const;
   };
 } // end of XC namespace
 

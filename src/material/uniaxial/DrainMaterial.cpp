@@ -234,7 +234,7 @@ int XC::DrainMaterial::recvSelf(const CommParameters &cp)
     return res;
   }
     
-void XC::DrainMaterial::Print(std::ostream &s, int flag)
+void XC::DrainMaterial::Print(std::ostream &s, int flag) const
   {
         s << "DrainMaterial, type: ";
         

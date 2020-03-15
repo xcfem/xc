@@ -178,7 +178,7 @@ int XC::MinMaxMaterial::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::MinMaxMaterial::Print(std::ostream &s, int flag)
+void XC::MinMaxMaterial::Print(std::ostream &s, int flag) const
   {
     s << "MinMaxMaterial tag: " << this->getTag() << std::endl;
     s << "\tMaterial: " << theMaterial->getTag() << std::endl;

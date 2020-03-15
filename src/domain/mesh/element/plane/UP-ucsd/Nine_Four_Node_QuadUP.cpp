@@ -1000,7 +1000,7 @@ int XC::NineFourNodeQuadUP::recvSelf(const CommParameters &cp)
 
 
 
-void XC::NineFourNodeQuadUP::Print(std::ostream &s, int flag)
+void XC::NineFourNodeQuadUP::Print(std::ostream &s, int flag) const
   {
         s << "\nNineFourNodeQuadUP, element id:  " << this->getTag() << std::endl;
         s << "\tConnected external nodes:  " << theNodes;

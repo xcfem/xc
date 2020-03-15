@@ -427,7 +427,7 @@ int XC::DispBeamColumn2dBase::recvSelf(const CommParameters &cp)
     return res;
   }
 
-void XC::DispBeamColumn2dBase::Print(std::ostream &s, int flag)
+void XC::DispBeamColumn2dBase::Print(std::ostream &s, int flag) const
   {
     s << "\nDispBeamColumn2dBase, element id:  " << this->getTag() << std::endl;
     s << "\tConnected external nodes:  " << theNodes;

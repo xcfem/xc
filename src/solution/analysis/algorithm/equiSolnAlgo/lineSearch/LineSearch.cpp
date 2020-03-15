@@ -99,7 +99,7 @@ int XC::LineSearch::sendSelf(CommParameters &cp)
 int XC::LineSearch::recvSelf(const CommParameters &cp)
   { return 0; }
 
-void XC::LineSearch::Print(std::ostream &s, int flag)
+void XC::LineSearch::Print(std::ostream &s, int flag) const
   {
     if(flag == 0)
       {

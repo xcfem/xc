@@ -82,7 +82,7 @@ class PeakOriented2D02 : public BkStressLimSurface2D
 					int algo
 					);
 	YS_Evolution * getCopy();
-	void Print(std::ostream & s, int flag);
+	void Print(std::ostream & s, int flag) const;
   };
 } // end of XC namespace
 

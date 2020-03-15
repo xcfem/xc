@@ -108,7 +108,7 @@ void XC::LinearBucklingAlgo::eigen_to_model(int numModes)
   }
 
 //! @brief Print the object
-void XC::LinearBucklingAlgo::Print(std::ostream &s, int flag)
+void XC::LinearBucklingAlgo::Print(std::ostream &s, int flag) const
   { s << "\t Linear Buckling Algorithm \n"; }
 
 //! @brief Send.

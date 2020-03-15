@@ -195,8 +195,8 @@ class EightNodeBrick: public ElementBase<8>
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
 
-    void Print(std::ostream &s, int flag =0);
-    //    Do nothing with void Print (std::ostream &s, int flag =0);
+    void Print(std::ostream &s, int flag =0) const;
+    //    Do nothing with void Print(std::ostream &s, int flag =0);
     //    use Brick3D report.  08/16/00
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
     int getResponse (int responseID, Information &eleInformation);

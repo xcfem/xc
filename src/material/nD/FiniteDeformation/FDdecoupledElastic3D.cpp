@@ -539,7 +539,7 @@ int XC::FDdecoupledElastic3D::recvSelf(const CommParameters &cp)
   }
 
 //! @brief 
-void XC::FDdecoupledElastic3D::Print(std::ostream &s, int flag)
+void XC::FDdecoupledElastic3D::Print(std::ostream &s, int flag) const
   {
     s << "Finite Deformation Elastic 3D model" << std::endl;
     s << "\trho: " << rho << std::endl;

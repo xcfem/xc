@@ -63,7 +63,7 @@ XC::UserDefinedBeamIntegration::UserDefinedBeamIntegration()
 XC::BeamIntegration *XC::UserDefinedBeamIntegration::getCopy(void) const
   { return new UserDefinedBeamIntegration(*this); }
 
-void XC::UserDefinedBeamIntegration::Print(std::ostream &s, int flag)
+void XC::UserDefinedBeamIntegration::Print(std::ostream &s, int flag) const
   {
     s << "UserDefined" << std::endl;
     s << " Points: " << pts;

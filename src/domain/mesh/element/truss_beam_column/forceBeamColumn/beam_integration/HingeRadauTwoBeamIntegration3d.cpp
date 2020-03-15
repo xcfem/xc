@@ -179,7 +179,7 @@ XC::BeamIntegration *XC::HingeRadauTwoBeamIntegration3d::getCopy(void) const
   { return new HingeRadauTwoBeamIntegration3d(*this); }
 
 
-void XC::HingeRadauTwoBeamIntegration3d::Print(std::ostream &s, int flag)
+void XC::HingeRadauTwoBeamIntegration3d::Print(std::ostream &s, int flag) const
   {
     s << "HingeRadauTwo3d" << std::endl;
     ctes_scc.Print(s);

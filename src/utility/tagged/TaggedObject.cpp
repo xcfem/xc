@@ -104,14 +104,14 @@ void XC::TaggedObject::assignTag(int newTag)
   }
 
 //! @brief Print stuff.
-void XC::TaggedObject::Print(std::ostream &s, int flag)
+void XC::TaggedObject::Print(std::ostream &s, int flag) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; not implemented yet." << std::endl;
   }
 
 //! @brief Inserts the object on the output stream argument.
-std::ostream &XC::operator<<(std::ostream &s, XC::TaggedObject &m)
+std::ostream &XC::operator<<(std::ostream &s, const XC::TaggedObject &m)
   {
     m.Print(s);
     return s;

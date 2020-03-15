@@ -260,7 +260,7 @@ int XC::Shell4NBase::getNumDOF(void) const
 
 
 //! @brief print out element data
-void XC::Shell4NBase::Print(std::ostream &s, int flag )
+void XC::Shell4NBase::Print(std::ostream &s, int flag ) const
   {
     if(flag == -1)
       {

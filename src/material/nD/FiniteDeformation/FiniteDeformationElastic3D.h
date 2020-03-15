@@ -98,7 +98,7 @@ class FiniteDeformationElastic3D : public FiniteDeformationMaterial
     virtual const std::string &getType(void) const;
     virtual int getOrder (void) const;
 
-    virtual void Print(std::ostream &s, int flag = 0);
+    virtual void Print(std::ostream &s, int flag = 0) const;
 
     virtual int setParameter(const std::vector<std::string> &argv, Parameter &param);
     virtual int updateParameter(int parameterID, Information &info);
