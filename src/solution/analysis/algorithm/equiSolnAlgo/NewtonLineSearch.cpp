@@ -128,6 +128,10 @@ void XC::NewtonLineSearch::copy(LineSearch *ptr)
 XC::NewtonLineSearch::~NewtonLineSearch(void)
   { free_mem(); }
 
+//! @brief Virtual constructor.
+XC::SolutionAlgorithm *XC::NewtonLineSearch::getCopy(void) const
+  { return new NewtonLineSearch(*this); }
+
 //! @brief resuelve el paso actual.
 int XC::NewtonLineSearch::solveCurrentStep(void)
   {

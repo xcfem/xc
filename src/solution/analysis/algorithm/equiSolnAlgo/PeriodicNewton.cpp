@@ -70,6 +70,10 @@
 XC::PeriodicNewton::PeriodicNewton(AnalysisAggregation *owr,int theTangentToUse, int mc)
   :NewtonBased(owr,EquiALGORITHM_TAGS_PeriodicNewton,theTangentToUse), maxCount(mc) {}
 
+//! @brief Virtual constructor.
+XC::SolutionAlgorithm *XC::PeriodicNewton::getCopy(void) const
+  { return new PeriodicNewton(*this); }
+
 //! @brief resuelve el paso actual.
 int XC::PeriodicNewton::solveCurrentStep(void)
   {

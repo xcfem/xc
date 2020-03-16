@@ -61,11 +61,15 @@
 XC::InitialInterpolatedLineSearch::InitialInterpolatedLineSearch(void)
   : LineSearch(LINESEARCH_TAGS_InitialInterpolatedLineSearch) {}
 
+//! @brief Virtual constructor.
+XC::LineSearch *XC::InitialInterpolatedLineSearch::getCopy(void) const
+  { return new InitialInterpolatedLineSearch(*this); }
+
 int XC::InitialInterpolatedLineSearch::search(double s0, 
 				      double s1, 
 				      LinearSOE &theSOE, 
 				      IncrementalIntegrator &theIntegrator)
-{
+  {
   double s = s1;
 
   //initialize r = ratio of residuals 
@@ -81,7 +85,7 @@ int XC::InitialInterpolatedLineSearch::search(double s0,
   double etaPrev = 1.0;
   double r = r0;
 
-  const XC::Vector &dU = theSOE.getX();
+  const Vector &dU = theSOE.getX();
 
   int count = 0; //initial value of iteration counter 
 

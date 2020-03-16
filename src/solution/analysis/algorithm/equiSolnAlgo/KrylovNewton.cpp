@@ -76,6 +76,10 @@ XC::KrylovNewton::KrylovNewton(AnalysisAggregation *owr,int theTangentToUse, int
    numEqns(0), maxDimension(maxDim)
   { if(maxDimension < 0) maxDimension = 0; }
 
+//! @brief Virtual constructor.
+XC::SolutionAlgorithm *XC::KrylovNewton::getCopy(void) const
+  { return new KrylovNewton(*this); }
+
 //! @brief resuelve el paso actual.
 int XC::KrylovNewton::solveCurrentStep(void)
   {

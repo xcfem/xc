@@ -62,6 +62,10 @@
 XC::BFGS::BFGS(AnalysisAggregation *owr,int theTangentToUse, int n)
   :BFBRoydenBase(owr,EquiALGORITHM_TAGS_BFGS,theTangentToUse,n) {}
 
+//! @brief Virtual constructor.
+XC::SolutionAlgorithm *XC::BFGS::getCopy(void) const
+  { return new BFGS(*this); }
+
 //! @brief Constructor.
 XC::BFGS::BFGS(AnalysisAggregation *owr,ConvergenceTest &theT, int theTangentToUse, int n)
   :BFBRoydenBase(owr,EquiALGORITHM_TAGS_BFGS,theT,theTangentToUse,n) {}

@@ -31,12 +31,22 @@
 
 #include "EquiSolnConvAlgo.h"
 #include "utility/matrix/Vector.h"
+#include <solution/analysis/integrator/IncrementalIntegrator.h>
 
 namespace XC {
 
 //! @ingroup EQSolAlgo
 //
-//! @brief ??
+//! @brief Base class for Broyden's method solution algorithms.
+//
+//! In numerical analysis, Broyden's method is a quasi-Newton method for
+//! finding roots in k variables. It was originally described by C. G.
+//! Broyden in 1965.
+//! Newton's method for solving \f$f(x) = 0\f$ uses the Jacobian matrix, J, at
+//! every iteration. However, computing this Jacobian is a difficult and
+//! expensive operation. The idea behind Broyden's method is to compute
+//! the whole Jacobian only at the first iteration and to do rank-one
+//! updates at other iterations. 
 class BFBRoydenBase: public EquiSolnConvAlgo
   {
     void free_mem(void);

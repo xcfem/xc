@@ -64,12 +64,17 @@
 
 #include "EquiSolnAlgo.h"
 #include "utility/matrix/Vector.h"
+#include "solution/analysis/integrator/IncrementalIntegrator.h"
 
 namespace XC {
 
 //! @ingroup EQSolAlgo
 //
-//! @brief KrylovNewton is a class which uses a Krylov
+//! @brief KrylovNewton algorithm object which uses a Krylov
+//! subspace accelerator to accelerate the convergence of the
+//! modified newton method.
+//
+//! KrylovNewton is a class which uses a Krylov
 //! subspace accelerator on the modified Newton method.
 //! The accelerator is described by Carlson and Miller in
 //! "Design and Application of a 1D GWMFE Code"
@@ -112,8 +117,6 @@ class KrylovNewton: public EquiSolnAlgo
     virtual int recvSelf(const CommParameters &);
     void Print(std::ostream &s, int flag =0) const;    
   };
-inline SolutionAlgorithm *KrylovNewton::getCopy(void) const
-  { return new KrylovNewton(*this); }
 } // end of XC namespace
 
 #endif

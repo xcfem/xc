@@ -71,9 +71,19 @@ class LineSearch;
 
 //! @ingroup EQSolAlgo
 //
-//! @brief performs a Newton-Raphson 
-//! with line search solution algorithm in solving the equations as outline in
-//! Crissfields book.
+//! @brief performs a Newton-Raphson with line search solution algorithm
+//! in solving the equations as outline in Crissfield's book.
+//
+//! In optimization, the line search strategy is one of two basic iterative
+//! approaches to find a local minimum \f$\mathbf{x}^*\f$ of an objective
+//! function \f$f:\mathbb {R} ^{n}\to \mathbb {R}\f$. The other approach is
+//! trust region.
+//!
+//! The line search approach first finds a descent direction along which
+//! the objective function \f$f\f$ will be reduced and then computes a step
+//! size that determines how far \f$\mathbf {x}\f$ should move along that
+//! direction. The descent direction can be computed by various methods, such
+//! as gradient descent, Newton's method and quasi-Newton method.
 class NewtonLineSearch: public EquiSolnAlgo
   {
   private:
@@ -99,10 +109,6 @@ class NewtonLineSearch: public EquiSolnAlgo
 
     void Print(std::ostream &s, int flag =0) const;    
   };
-
-inline SolutionAlgorithm *NewtonLineSearch::getCopy(void) const
-  { return new NewtonLineSearch(*this); }
-
 } // end of XC namespace
 
 #endif

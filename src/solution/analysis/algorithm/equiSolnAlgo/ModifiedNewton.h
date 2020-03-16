@@ -73,8 +73,8 @@ class ConvergenceTest;
 
 //! @ingroup EQSolAlgo
 //
-//! @brief Uses the tangent stiffness matrix computed in the
-//! first iteration until convergence is achieved.
+//! @brief Modified Newton-Raphson algorithm. Uses the tangent stiffness
+//! matrix computed in the first iteration until convergence is achieved.
 //!
 //! The ModifiedNewton class is an algorithmic class which obtains a
 //! solution to a non-linear system using the modified Newton-Raphson iteration

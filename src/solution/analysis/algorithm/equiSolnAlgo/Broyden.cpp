@@ -74,6 +74,10 @@ XC::Broyden::Broyden(AnalysisAggregation *owr,ConvergenceTest &theT, int theTang
   :BFBRoydenBase(owr,EquiALGORITHM_TAGS_Broyden,theT,theTangentToUse,n)
   {}
 
+//! @brief Virtual constructor.
+XC::SolutionAlgorithm *XC::Broyden::getCopy(void) const
+  { return new Broyden(*this); }
+
 //! @brief Computes the solution for the current step.
 int XC::Broyden::solveCurrentStep(void)
   {

@@ -68,17 +68,19 @@
 // What: "@(#)EquiSolnAlgo.h, revA"
 
 #include <solution/analysis/algorithm/SolutionAlgorithm.h>
-#include <solution/analysis/integrator/IncrementalIntegrator.h>
 #include <iostream>
 
 namespace XC {
 class AnalysisModel;
 class LinearSOE;
 class ConvergenceTest;
+class IncrementalIntegrator;
 
 //! @ingroup EQSolAlgo
 //
-//! @brief EquiSolnAlgo is an abstract base class, 
+//! @brief Base class for solution algorithms.
+//!
+//! EquiSolnAlgo is an abstract base class, 
 //! i.e. no objects of it's type can be created. An
 //! EquiSolnAlgo object defines the sequence of operations 
 //! performed by the the Integrator and the LinearSOE objects in

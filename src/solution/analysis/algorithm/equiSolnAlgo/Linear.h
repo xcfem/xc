@@ -72,8 +72,7 @@ namespace XC {
 
 //! @ingroup EQSolAlgo
 //
-//! @brief performs a linear solution algorithm
-//! to solve the equations.
+//! @brief Linear solution algorithm.
 //!
 //! The Linear class is an algorithmic class which uses the
 //! linear solution algorithm to solve the equations. This is based on
