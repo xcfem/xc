@@ -277,6 +277,7 @@ python tests/preprocessor/sets/test_get_contours_01.py
 python tests/preprocessor/sets/test_get_contours_02.py
 python tests/preprocessor/sets/test_pick_entities.py
 python tests/preprocessor/sets/test_sets_and_grids.py
+python tests/preprocessor/sets/test_sets_and_grids_02.py
 python tests/preprocessor/sets/test_get_bnd_01.py
 python tests/preprocessor/sets/test_fill_downwards_01.py
 python tests/preprocessor/sets/test_get_mesh_components_01.py
