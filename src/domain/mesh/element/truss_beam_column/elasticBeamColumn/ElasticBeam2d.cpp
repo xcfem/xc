@@ -696,6 +696,7 @@ void XC::ElasticBeam2d::Print(std::ostream &s, int flag) const
         s << "\tConnected Nodes: " << theNodes;
         s << "\tCoordTransf: " << theCoordTransf->getTag() << std::endl;
         s << "\tmass density:  " << getRho() << std::endl;
+        s << "\trelease code:  " << release << std::endl;
         const double P  = q(0);
         const double M1 = q(1);
         const double M2 = q(2);
@@ -799,6 +800,11 @@ int XC::ElasticBeam2d::updateParameter(int parameterID, Information &info)
       {
       case -1:
         return -1;
+      case 5:
+	release = static_cast<int>(info.theDouble);
+	if(release < 0 || release > 3)
+	  release = 0;
+	  return 0;				
       default:
         return ctes_scc.updateParameter(parameterID,info);
       }

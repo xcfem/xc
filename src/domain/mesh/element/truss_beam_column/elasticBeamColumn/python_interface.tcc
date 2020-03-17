@@ -25,6 +25,7 @@ class_<XC::ElasticBeam2d, bases<XC::ProtoBeam2d>, boost::noncopyable >("ElasticB
   .add_property("rho", &XC::ElasticBeam2d::getRho,&XC::ElasticBeam2d::setRho, "element density.")
   .add_property("h", &XC::ElasticBeam2d::getDepth,&XC::ElasticBeam2d::setDepth, "element section depth.")
   .add_property("initialStrain", make_function(&XC::ElasticBeam2d::getInitialStrain, return_value_policy<copy_const_reference>()),&XC::ElasticBeam2d::setInitialStrain, "initial strain")
+  .add_property("release", &XC::ElasticBeam2d::getReleaseCode,&XC::ElasticBeam2d::setReleaseCode, "element moment release code 0: no release, 1: node I, 2: node J, 2: both nodes.")
   .add_property("getV", &XC::ElasticBeam2d::getV, "Average internal shear force.")
   .add_property("getV1", &XC::ElasticBeam2d::getV1, "Internal shear force at back end.")
   .add_property("getV2", &XC::ElasticBeam2d::getV2, "Internal shear force at front end.")

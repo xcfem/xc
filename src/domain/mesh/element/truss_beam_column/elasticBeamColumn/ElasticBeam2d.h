@@ -119,6 +119,10 @@ class ElasticBeam2d: public ProtoBeam2d
     
     virtual CrdTransf *getCoordTransf(void);
     virtual const CrdTransf *getCoordTransf(void) const;
+    inline int getReleaseCode(void) const
+      { return release; }
+    inline void setReleaseCode(const int &rc)
+      { release= rc; }
 
     int commitState(void);
     int revertToLastCommit(void);        
