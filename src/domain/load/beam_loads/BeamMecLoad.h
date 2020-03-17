@@ -66,7 +66,7 @@ class BeamMecLoad : public BeamLoad
 
     virtual const Matrix &getAppliedSectionForces(const double &L,const Matrix &xi,const double &loadFactor) const;
     virtual void addReactionsInBasicSystem(const double &,const double &,FVector &) const;
-    virtual void addFixedEndForcesInBasicSystem(const double &,const double &,FVector &) const;
+    virtual void addFixedEndForcesInBasicSystem(const double &,const double &,FVector &, int release= 0) const;
     void addElasticDeformations(const double &L,const CrossSectionProperties3d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0);
     void addElasticDeformations(const double &L,const CrossSectionProperties2d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0);
 

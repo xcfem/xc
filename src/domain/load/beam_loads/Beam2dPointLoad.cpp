@@ -202,18 +202,21 @@ void XC::Beam2dPointLoad::addReactionsInBasicSystem(const double &L,const double
       }
   }
 
-//! @brief ??
+//! @brief Returns the consistent load vector (see page 108 Eugenio Oñate book).
 //! @param L Length of the element.
 //! @param loadFactor Load factor.
-//! @param q0 ??
-void XC::Beam2dPointLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &q0) const
+//! @param q0 Consistent load vector.
+//! @param release Moment release: 0=none, 1=I, 2=J, 3=I,J
+void XC::Beam2dPointLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &q0, int release) const
   {
     const double aOverL= X();
 
     if(aOverL < 0.0 || aOverL > 1.0)
       {
-        std::cerr << "XC::Beam2dPointLoad::fixedEndForcesInBasicSystem; el value of x ("
-                  << aOverL << ") es incorrecto, debe estar entre 0 y 1. Load ignored." << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; wrong value for x ("
+                  << aOverL << "), it must be between 0 and 1. Load ignored."
+		  << std::endl;
       }
     else
       {
@@ -229,8 +232,24 @@ void XC::Beam2dPointLoad::addFixedEndForcesInBasicSystem(const double &L,const d
         q0[0]-= N*aOverL;
         const double M1= -a * b2 * Py * L2;
         const double M2= a2 * b * Py * L2;
-        q0[1]+= M1;
-        q0[2]+= M2;
+	if(release == 0)
+	  {
+  	   q0[1]+= M1;
+	   q0[2]+= M2;
+          }
+	else if(release == 1)
+	  { q0[2]+= 0.5*Py*a*b*L2*(a+L); }
+        else if(release == 2)
+	  { q0[1]-= 0.5*Py*a*b*L2*(b+L); }
+        else if(release == 3)
+	  {
+	   // Nothing to do
+          }
+	else
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << " release value (" << release
+		    << ") not valid. Must be between 0 and 3."
+		    << std::endl;
       }
   }
 

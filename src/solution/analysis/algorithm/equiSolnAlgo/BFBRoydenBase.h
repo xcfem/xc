@@ -38,7 +38,7 @@ namespace XC {
 //! @ingroup EQSolAlgo
 //
 //! @brief Base class for Broyden's method solution algorithms.
-//
+//!
 //! In numerical analysis, Broyden's method is a quasi-Newton method for
 //! finding roots in k variables. It was originally described by C. G.
 //! Broyden in 1965.

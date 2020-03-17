@@ -90,7 +90,7 @@ class Beam2dPointLoad: public BeamPointLoad
 
     const Matrix &getAppliedSectionForces(const double &L,const XC::Matrix &xi,const double &loadFactor) const;
     void addReactionsInBasicSystem(const double &,const double &,FVector &) const;
-    void addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &) const;
+    void addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &, int release= 0) const;
     void addElasticDeformations(const double &L,const CrossSectionProperties2d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0);
 
     int sendSelf(CommParameters &);  
