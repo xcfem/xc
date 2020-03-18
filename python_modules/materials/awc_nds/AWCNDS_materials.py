@@ -252,10 +252,27 @@ class Wood(object):
             retval= Fe_parallel*Fe_perp/(Fe_parallel*math.sin(theta)**2+Fe_perp*math.cos(theta)**2)
         retval*= psi2Pa
         return retval
-    
-class LSL_135E(Wood):
+
+
+class LSL(Wood):
+    ''' Base class for laminated strand lumber (LSL)'''
+    def __init__(self, name= 'LSL'):
+        super(LSL,self).__init__(name)
+    def getFb(self,depth):
+        ''' Return the allowable bending stress given
+            the member depth.
+
+        :param depth: member depth.
+        '''
+        if(depth<3.5*in2meter):
+            return 1.159*self.Fb_12
+        else:
+            return math.pow((12.0/depth),0.12)*self.Fb_12
+
+class LSL_135E(LSL):
     ''' LSL 1.35E.'''
     E= 1.35e6*psi2Pa # Elastic modulus (Pa)
+    Emin= E
     Fb_12= 1730*psi2Pa # Bending stress for 12" depth.
     Fv= 410*psi2Pa # Shear stress.
     Fc_pll= 1650*psi2Pa # Compression stress (parallel to grain)
@@ -263,10 +280,21 @@ class LSL_135E(Wood):
     xc_material_name= 'LSL_135E'
     def __init__(self, name= 'LSL_135E'):
         super(LSL_135E,self).__init__(name)
+    def getFb(self,depth):
+        ''' Return the allowable bending stress given
+            the member depth.
 
-class LSL_155E(Wood):
+        :param depth: member depth.
+        '''
+        if(depth<3.5*in2meter):
+            return 1.159*Fb_12
+        else:
+            return math.pow((12.0/depth),0.12)*Fb_12
+
+class LSL_155E(LSL):
     ''' LSL 1.35E.'''
     E= 1.55e6*psi2Pa # Elastic modulus (Pa)
+    Emin= E
     Fb_12= 2360*psi2Pa # Bending stress for 12" depth.
     Fv= 410*psi2Pa # Shear stress.
     Fc_pll= 2175*psi2Pa # Compression stress (parallel to grain)
@@ -275,9 +303,10 @@ class LSL_155E(Wood):
     def __init__(self, name= 'LSL_135E'):
         super(LSL_155E,self).__init__(name)
 
-class LVL_2900Fb2E(Wood):
+class LVL_2900Fb2E(LSL):
     ''' LVL 2900Fb 2.0E structural.'''
     E= 2.0e6*psi2Pa # Elastic modulus (Pa)
+    Emin= E
     Fb_12= 2900*psi2Pa # Bending stress for 12" depth.
     Fv= 285*psi2Pa # Shear stress.
     Fc_pll= 3200*psi2Pa # Compression stress (parallel to grain)
@@ -404,7 +433,7 @@ class BeamMember(MemberBase):
            :param cantilever: if true cantilever beam otherwise single span beam.
         '''
         FbE= self.getFbECriticalBucklingDesignValue(numberOfConcentratedLoads, lateralSupport, cantilever)
-        ratio= FbE/self.section.wood.Fb
+        ratio= FbE/self.section.wood.getFb(self.section.h)
         A= (1+ratio)/1.9
         B= A**2
         C= ratio/0.95
@@ -811,21 +840,21 @@ class OSBPanelSection(WoodPanelSection):
 class HeaderSection(sp.RectangularSection):
     ''' Structural beam/header.'''
     nu= 0.2
-    def __init__(self, name, b, h, Ms, Vs, linearDensity, material):
+    def __init__(self, name, b, h, Ms, Vs, linearDensity, wood):
         '''Constructor.'''
         super(HeaderSection,self).__init__(name, b, h)
         self.Ms= Ms # Allowable moment.
         self.Vs= Vs # Allowable shear.
         self.rho= linearDensity/b/h
-        self.material= material
+        self.wood= wood
         self.xc_wood_material= None
         self.xc_section= None
     def getFb(self):
-        return self.getVolumeFactor()*self.material.Fb_12
+        return self.getVolumeFactor()*self.wood.Fb_12
     def defXCMaterial(self):
         '''Defines the material in XC.'''
         if(not self.xc_wood_material):
-            self.xc_wood_material= typical_materials.MaterialData(name= self.material.xc_material_name,E=self.material.E,nu=self.nu,rho=self.rho)
+            self.xc_wood_material= typical_materials.MaterialData(name= self.wood.xc_material_name,E=self.wood.E,nu=self.nu,rho=self.rho)
         return self.xc_wood_material
     def defElasticShearSection2d(self, preprocessor):
         mat= self.defXCMaterial()
@@ -842,9 +871,9 @@ class HeaderSection(sp.RectangularSection):
 
 class LSLHeaderSection(HeaderSection):
     ''' LSL structural beam/header.'''
-    def __init__(self, name, b, h, Ms, Vs, linearDensity, material):
+    def __init__(self, name, b, h, Ms, Vs, linearDensity, wood):
         '''Constructor.'''
-        super(LSLHeaderSection,self).__init__(name, b, h, Ms, Vs, linearDensity, material)
+        super(LSLHeaderSection,self).__init__(name, b, h, Ms, Vs, linearDensity, wood)
     def getVolumeFactor(self):
         '''Return volumen factor.'''
         retval= 1.0
@@ -859,21 +888,21 @@ class LSLHeaderSection(HeaderSection):
 class LSL_135E_HeaderSection(LSLHeaderSection):
     ''' LSL 1.35E structural beam/header.'''
     def __init__(self, name, b, h, Ms, Vs, linearDensity):
-        super(LSL_135E_HeaderSection,self).__init__(name, b, h, Ms, Vs, linearDensity, material= LSL_135E())
+        super(LSL_135E_HeaderSection,self).__init__(name, b, h, Ms, Vs, linearDensity, wood= LSL_135E())
 
 class LSL_155E_HeaderSection(LSLHeaderSection):
     ''' LSL 1.55E structural beam/header.'''
     def __init__(self, name, b, h, Ms, Vs, linearDensity):
-        super(LSL_155E_HeaderSection,self).__init__(name, b, h, Ms, Vs, linearDensity, material= LSL_155E())
+        super(LSL_155E_HeaderSection,self).__init__(name, b, h, Ms, Vs, linearDensity, wood= LSL_155E())
 
 # Properties of LVL beams and headers taken from:
 # LP SolidStart LVL Beam & Header Technical Guide
 
 class LVLHeaderSection(HeaderSection):
     ''' LVL structural beam/header.'''
-    def __init__(self, name, b, h, Ms, Vs, linearDensity, material):
+    def __init__(self, name, b, h, Ms, Vs, linearDensity, wood):
         '''Constructor.'''
-        super(LVLHeaderSection,self).__init__(name, b, h, Ms, Vs, linearDensity, material)
+        super(LVLHeaderSection,self).__init__(name, b, h, Ms, Vs, linearDensity, wood)
     def getVolumeFactor(self):
         '''Return volumen factor.'''
         retval= 1.0
@@ -891,7 +920,7 @@ class LVLHeaderSection(HeaderSection):
 class LVL_2900Fb2E_HeaderSection(LVLHeaderSection):
     ''' LVL 2900Fb 2.0E structural beam/header.'''
     def __init__(self, name, b, h, Ms, Vs, linearDensity):
-        super(LVL_2900Fb2E_HeaderSection,self).__init__(name,b,h, Ms, Vs, linearDensity, material= LVL_2900Fb2E())
+        super(LVL_2900Fb2E_HeaderSection,self).__init__(name,b,h, Ms, Vs, linearDensity, wood= LVL_2900Fb2E())
 
 
 class DimensionLumberSection(sp.RectangularSection):
