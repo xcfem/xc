@@ -74,14 +74,14 @@ class SteelShape(sp.SectionProperties):
         return math.sqrt(self.Iy()/self.A())
 
     def getSlendernessY(self,Leq):
-        '''return buckling slendernes relative to y-axis (weak axis)
+        '''return buckling slenderness relative to y-axis (weak axis)
 
            :param Leq: buckling length in XZ buckling plane.       
         '''
         return Leq/self.getGyrationRadiusY()
 
     def getAdimensionalSlendernessY(self,Leq,sectionClass= 1):
-        '''return adimensional slendernes relative to y-axis (weak axis) 
+        '''return adimensional slenderness relative to y-axis (weak axis) 
            as defined in EC3 part 1 6.3.1
 
            :param Leq: buckling length in XZ buckling plane.
@@ -135,14 +135,14 @@ class SteelShape(sp.SectionProperties):
         return math.sqrt(self.Iz()/self.A())
 
     def getSlendernessZ(self,Leq):
-        '''return buckling slendernes relative to z-axis (strong axis)
+        '''return buckling slenderness relative to z-axis (strong axis)
 
            :param Leq: buckling length in XY buckling plane.
         '''
         return Leq/self.getGyrationRadiusZ()
 
     def getAdimensionalSlendernessZ(self,Leq,sectionClass= 1):
-        '''return adimensional slendernes relative to z-axis (strong axis) 
+        '''return adimensional slenderness relative to z-axis (strong axis) 
            as defined in EC3-1-1 6.3.1
 
            :param Leq: buckling length in XY buckling plane.
