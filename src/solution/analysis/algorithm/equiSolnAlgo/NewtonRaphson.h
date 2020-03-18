@@ -73,8 +73,8 @@ namespace XC {
 
 //! @ingroup EQSolAlgo
 //
-//! @brief Uses the tangent stiffness matrix on each iteration
-//! until convergence is achieved.
+//! @brief Newton-Raphson algorgitht. Uses the tangent stiffness matrix
+//! on each iteration until convergence is achieved.
 //!
 //! The NewtonRaphson class is an algorithmic class which obtains a
 //! solution to a non-linear system using the Newton-Raphson iteration
@@ -112,9 +112,6 @@ class NewtonRaphson: public NewtonBased
     
     void Print(std::ostream &s, int flag =0) const;    
   };
-
-inline SolutionAlgorithm *NewtonRaphson::getCopy(void) const
-  { return new NewtonRaphson(*this); }
 
 } // end of XC namespace
 

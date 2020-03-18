@@ -32,6 +32,6 @@
 //! @brief Constructor.
 XC::NMPointCloudBase::NMPointCloudBase(const double &u)
   {
-    umbral= u;
+    threshold= u;
   }
 

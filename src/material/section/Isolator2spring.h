@@ -54,10 +54,7 @@
 // Updates: November 2005
 //
 // Description: This file contains the class implementation for a "two-spring isolator" 
-// material.  This material is based on the two-spring model originally developed by 
-// Koh and Kelly to represent the buckling behavior of an elastomeric bearing.  The 
-// material model has been modified to include material nonlinearity and optional 
-// strength degradation.
+// material.
 
 #ifndef Isolator2spring_h
 #define Isolator2spring_h
@@ -69,11 +66,12 @@
 namespace XC {
 //! @ingroup MATSCC
 //
-//! @brief "two-spring isolator" material. This material is based on
-//! the two-spring model originally developed by Koh and Kelly to
-//! represent the buckling behavior of an elastomeric bearing. The 
-//! material model has been modified to include material nonlinearity
-//! and optional strength degradation.
+//! @brief "two-spring isolator" material.
+
+//! This material is based on the two-spring model originally developed
+//! by Koh and Kelly to represent the buckling behavior of an elastomeric
+//! bearing. The material model has been modified to include material
+//! nonlinearity and optional strength degradation.
 class Isolator2spring : public SectionForceDeformation
   {
   private:

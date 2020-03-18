@@ -64,7 +64,7 @@ enum ClaseEsfuerzo {SIMPLE_TENSION,COMPOSED_TENSION,FLEXION_SIMPLE,FLEXION_COMPU
 //! @ingroup MATSCCFibers
 //
 //! @brief Fiber pointers container.
- class FiberPtrDeque: public CommandEntity, public std::deque<Fiber *>, public MovableObject
+class FiberPtrDeque: public CommandEntity, public std::deque<Fiber *>, public MovableObject
   {
   public:
     typedef std::deque<Fiber *> fiber_ptrs_dq;

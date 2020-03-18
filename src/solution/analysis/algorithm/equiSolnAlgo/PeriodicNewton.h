@@ -68,7 +68,7 @@ class ConvergenceTest;
 //! @ingroup EQSolAlgo
 //
 //! @brief PeriodicNewton is a class which performs a Periodic 
-//! Newton-Raphson  solution algorithm in solving the equations.
+//! Newton-Raphson solution algorithm in solving the equations.
 class PeriodicNewton: public NewtonBased
   {
   private:
@@ -88,8 +88,6 @@ class PeriodicNewton: public NewtonBased
 
     void Print(std::ostream &s, int flag =0) const;    
   };
-inline SolutionAlgorithm *PeriodicNewton::getCopy(void) const
-  { return new PeriodicNewton(*this); }
 } // end of XC namespace
 
 #endif

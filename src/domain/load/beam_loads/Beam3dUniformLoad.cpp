@@ -138,12 +138,18 @@ void XC::Beam3dUniformLoad::addReactionsInBasicSystem(const double &L,const doub
     p0[4]-= Vz;
   }
 
-//! @brief ??
+//! @brief Returns the consistent load vector (see page 108 Eugenio Oñate book).
 //! @param L Length of the element.
 //! @param loadFactor Load factor.
-//! @param q0 ??
-void XC::Beam3dUniformLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &q0) const
+//! @param q0 Consistent load vector.
+//! @param release Moment release: 0=none, 1=I, 2=J, 3=I,J
+void XC::Beam3dUniformLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &q0, int release) const
   {
+    if(release!=0)
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; release effect not implemented yet."
+		  << std::endl;
+    
     const double wy = Wy()*loadFactor;  // Transverse
     const double wz = Wz()*loadFactor;  // Transverse
     const double wx = Wx()*loadFactor;  // Axial (+ve from node I to J)

@@ -52,9 +52,7 @@
 // Created: 04/01
 //
 // Description: This file contains the class definition for
-// FiberSection3d.h. FiberSection3d provides the abstraction of a
-// 3d beam section discretized by fibers. The section stiffness and
-// stress resultants are obtained by summing fiber contributions.
+// FiberSection3d.h. 
 
 #ifndef FiberSection3d_h
 #define FiberSection3d_h
@@ -69,6 +67,10 @@ class FiberSectionRepr;
 //
 //! @brief Fiber section model in a three-dimensional space. Sections stiffness
 //! and internal forces are obtained by addition of the fibers contribution.
+//!
+//! FiberSection3d provides the abstraction of a
+//! 3d beam section discretized by fibers. The section stiffness and
+//! stress resultants are obtained by summing fiber contributions.
 class FiberSection3d: public FiberSection3dBase
   {
   private:

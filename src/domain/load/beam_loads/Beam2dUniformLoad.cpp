@@ -167,16 +167,17 @@ void XC::Beam2dUniformLoad::addReactionsInBasicSystem(const double &L,const doub
     const double P= wa*L; //Axil.
 
     // Reactions in basic system
-    p0[0]-= P; //Resta el axil. 
+    p0[0]-= P; // Substracts the axial force. 
     p0[1]-= V; //Subtracts the reaction at the back end.
     p0[2]-= V; //Subtracts the reaction at the front end.
   }
 
-//! @brief Returns the consistent load vector (see page 108 libro Eugenio Oñate).
+//! @brief Returns the consistent load vector (see page 108 Eugenio Oñate book).
 //! @param L Length of the element edge.
 //! @param loadFactor Load factor.
-//! @param q0 ??.
-void XC::Beam2dUniformLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &q0) const
+//! @param q0 Consistent load vector.
+//! @param release Moment release: 0=none, 1=I, 2=J, 3=I,J
+void XC::Beam2dUniformLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &q0, int release) const
   {
     const double wy = WTrans()*loadFactor;  // Transverse
     const double wx = WAxial()*loadFactor;  // Axial (+ve from node I to J)
@@ -187,9 +188,24 @@ void XC::Beam2dUniformLoad::addFixedEndForcesInBasicSystem(const double &L,const
 
     // Fixed end forces in basic system
     q0[0]-= 0.5*P;
-    q0[1]-= Mz;
-    q0[2]+= Mz;
-    return;
+    if(release == 0)
+      {
+        q0[1]-= Mz;
+        q0[2]+= Mz;
+      }
+    else if(release == 1)
+      { q0[2]+= wy*L*L/8;  }
+    else if(release == 2)
+      { q0[1]-= wy*L*L/8; }
+    else if(release == 3)
+      {
+        // Nothing to do
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << " release value (" << release
+	        << ") not valid. Must be between 0 and 3."
+	        << std::endl;
   }
 
 void XC::Beam2dUniformLoad::addElasticDeformations(const double &L,const CrossSectionProperties2d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0)
@@ -227,7 +243,6 @@ void XC::Beam2dUniformLoad::addElasticDeformations(const double &L,const CrossSe
         b2-= 1.0;
         v0[1]+= Le2EI*(b1*M1+b2*M2);
       }
-    return;
   }
 
 //! @brief Sends object through the channel being passed as parameter.

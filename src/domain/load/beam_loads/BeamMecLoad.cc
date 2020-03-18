@@ -62,11 +62,12 @@ void XC::BeamMecLoad::addReactionsInBasicSystem(const double &,const double &,FV
               << "; not implemented yet." << std::endl;
   }
 
-//! @brief ??
+//! @brief Returns the consistent load vector (see page 108 Eugenio Oñate book).
 //! @param L Length of the element.
 //! @param loadFactor Load factor.
-//! @param q0 ??
-void XC::BeamMecLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &) const
+//! @param q0 consistent load vector.
+//! @param release Moment release: 0=none, 1=I, 2=J, 3=I,J
+void XC::BeamMecLoad::addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &, int release) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not implemented yet." << std::endl;

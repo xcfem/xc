@@ -52,22 +52,6 @@
 // Created: 11/01
 
 // Description: This file contains the class definition for BisectinLineSearch.
-// This performs the search for U(i+1) = U(i) + eta * deltaU(i) by using the 
-// bisection method to find the best solution.
-//
-//                eta(j+1) = eta(l) + eta(u)
-//                           ---------------
-//                                2.0
-//
-// where     s(j) = U(i+1,j) ^ R(U(i+1, j))
-//
-//  and      U(i+1,j) = U(i) + eta(j)*deltaU(i)
-//
-// note eta(u) and eta(l) must bracket the solution, i.e. s(u)*s(l)<0,
-//
-//      if s(eta(j+1))*s(l) < 0 { eta(u) = eta(j+1) and s(u) = s(eta(j+1))
-//      if s(eta(j+1))*s(u) < 0 { eta(l) = eta(j+1) and s(l) = s(eta(j+1))
-//      if s(eta(j+1))*s(u) == 0  SOLN FOUND.
 
 #ifndef BisectionLineSearch_h
 #define BisectionLineSearch_h
@@ -75,11 +59,27 @@
 #include <solution/analysis/algorithm/equiSolnAlgo/lineSearch/LineSearch.h>
 
 namespace XC {
-class Vector;
 
 //! @ingroup EQSolAlgo
 //
 //! @brief Bisection line search solution algorithm.
+//
+//! This performs the search for U(i+1) = U(i) + eta * deltaU(i) by using the 
+//! bisection method to find the best solution.
+//!
+//!                eta(j+1) = eta(l) + eta(u)
+//!                           ---------------
+//!                                2.0
+//!
+//! where     s(j) = U(i+1,j) ^ R(U(i+1, j))
+//!
+//!  and      U(i+1,j) = U(i) + eta(j)*deltaU(i)
+//!
+//! note eta(u) and eta(l) must bracket the solution, i.e. s(u)*s(l)<0,
+//!
+//!      if s(eta(j+1))*s(l) < 0 { eta(u) = eta(j+1) and s(u) = s(eta(j+1))
+//!      if s(eta(j+1))*s(u) < 0 { eta(l) = eta(j+1) and s(l) = s(eta(j+1))
+//!      if s(eta(j+1))*s(u) == 0  SOLN FOUND.
 class BisectionLineSearch: public LineSearch
   {
     friend class NewtonLineSearch;
@@ -87,14 +87,11 @@ class BisectionLineSearch: public LineSearch
     BisectionLineSearch(void);
     LineSearch *getCopy(void) const;
   public:
-
     int search(double s0, 
 	       double s1, 
 	       LinearSOE &theSOE, 
 	       IncrementalIntegrator &theIntegrator);
   };
-inline LineSearch *BisectionLineSearch::getCopy(void) const
-  { return new BisectionLineSearch(*this); }
 } // end of XC namespace
 
 #endif

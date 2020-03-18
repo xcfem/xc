@@ -62,6 +62,10 @@
 XC::RegulaFalsiLineSearch::RegulaFalsiLineSearch(void)
   :LineSearch(LINESEARCH_TAGS_RegulaFalsiLineSearch) {}
 
+//! @brief Virtual constructor.
+XC::LineSearch *XC::RegulaFalsiLineSearch::getCopy(void) const
+  { return new RegulaFalsiLineSearch(*this); }
+
 int XC::RegulaFalsiLineSearch::search(double s0, double s1, LinearSOE &theSOE, IncrementalIntegrator &theIntegrator)
 {
   double r0 = 0.0;

@@ -674,7 +674,7 @@ const XC::NMPointCloud &XC::FiberSectionBase::getInteractionDiagramPointsForPlan
   {
     static NMPointCloud retval;
     retval.clear();
-    retval.setUmbral(diag_data.getUmbral());
+    retval.setThreshold(diag_data.getThreshold());
     const FiberPtrDeque &fsC= sel_mat_tag(diag_data.getConcreteSetName(),diag_data.getConcreteTag())->second;
     if(fsC.empty())
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -691,7 +691,7 @@ const XC::NMPointCloud &XC::FiberSectionBase::getInteractionDiagramPointsForPlan
       {
         static NMyMzPointCloud tmp;
         tmp.clear();
-        tmp.setUmbral(diag_data.getUmbral());
+        tmp.setThreshold(diag_data.getThreshold());
         getInteractionDiagramPointsForTheta(tmp,diag_data,fsC,fsS,theta);
         getInteractionDiagramPointsForTheta(tmp,diag_data,fsC,fsS,theta+M_PI); //theta+M_PI
         retval= tmp.getNM(theta);
@@ -708,7 +708,7 @@ const XC::NMyMzPointCloud &XC::FiberSectionBase::getInteractionDiagramPoints(con
   {
     static NMyMzPointCloud lista_esfuerzos;
     lista_esfuerzos.clear();
-    lista_esfuerzos.setUmbral(diag_data.getUmbral());
+    lista_esfuerzos.setThreshold(diag_data.getThreshold());
     const FiberPtrDeque &fsC= sel_mat_tag(diag_data.getConcreteSetName(),diag_data.getConcreteTag())->second;
     if(fsC.empty())
       std::cerr << getClassName() << "::" << __FUNCTION__

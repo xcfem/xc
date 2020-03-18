@@ -64,6 +64,7 @@
 #include <utility/matrix/Vector.h>
 #include <reliability/domain/components/ReliabilityDomain.h>
 #include <reliability/domain/components/RandomVariablePositioner.h>
+#include "solution/analysis/integrator/IncrementalIntegrator.h"
 
 
 XC::SensitivityAlgorithm::SensitivityAlgorithm(ReliabilityDomain *passedReliabilityDomain,

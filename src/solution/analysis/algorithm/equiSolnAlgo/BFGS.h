@@ -68,7 +68,16 @@ namespace XC {
 
 //! @ingroup EQSolAlgo
 //
-//! @brief ??
+//! @brief Broyden–Fletcher–Goldfarb–Shann solution algorithm.
+//!
+//! The BFGS method is one of the most effective matrix-update or
+//! quasi Newton methods for iteration on a nonlinear system of
+//! equations. The method computes new search directions at each
+//! iteration step based on the initial jacobian, and subsequent trial
+//! solutions. The unlike regular Newton-Raphson does not require the
+//! tangent matrix be reformulated and refactored at every iteration, however
+//! unlike ModifiedNewton it does not rely on the tangent matrix from a
+//! previous iteration. 
 class BFGS: public BFBRoydenBase
   {
   private:
@@ -92,8 +101,6 @@ class BFGS: public BFBRoydenBase
 
     void Print(std::ostream &s, int flag =0) const;    
   };
-inline SolutionAlgorithm *BFGS::getCopy(void) const
-  { return new BFGS(*this); }
 } // end of XC namespace
 
 #endif

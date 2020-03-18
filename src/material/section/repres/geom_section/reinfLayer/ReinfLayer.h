@@ -69,7 +69,7 @@ class GeomSection;
 
 //! @ingroup MATSCCReinforcement
 //
-//! @brief Rebar layer.
+//! @brief Reinforcement bars layer.
 class ReinfLayer: public DiscretBase
   {
   private:

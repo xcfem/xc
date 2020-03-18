@@ -81,6 +81,10 @@
 XC::NewtonRaphson::NewtonRaphson(AnalysisAggregation *owr,int theTangentToUse)
   :NewtonBased(owr,EquiALGORITHM_TAGS_NewtonRaphson,theTangentToUse) {}
 
+//! @brief Virtual constructor.
+XC::SolutionAlgorithm *XC::NewtonRaphson::getCopy(void) const
+  { return new NewtonRaphson(*this); }
+
 //! @brief Performs the Newton-Raphson iteration algorithm.
 //!
 //! When invoked the object first sets itself as the EquiSolnAlgo object

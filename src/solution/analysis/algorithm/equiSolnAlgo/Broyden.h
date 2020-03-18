@@ -70,7 +70,11 @@ namespace XC {
 
 //! @ingroup EQSolAlgo
 //
-//! @brief Algoritmo de Broyden.
+//! @brief Broyden method solution algorithm.
+//!
+//! Broyden algorithm object for general unsymmetric systems which performs
+//! successive rank-one updates of the tangent at the first iteration of the
+//! current time step. 
 class Broyden: public BFBRoydenBase
   {
   private:
@@ -92,8 +96,6 @@ class Broyden: public BFBRoydenBase
 
     void Print(std::ostream &s, int flag =0) const;    
   };
-inline SolutionAlgorithm *Broyden::getCopy(void) const
-  { return new Broyden(*this); }
 } // end of XC namespace
 
 #endif

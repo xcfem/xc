@@ -41,7 +41,7 @@ class_<XC::PivotsUltimateStrains, bases<CommandEntity>, boost::noncopyable >("Pi
   ;
 
 class_<XC::InteractionDiagramData, bases<CommandEntity>>("InteractionDiagramParameters")
-  .add_property("umbral",make_function(&XC::InteractionDiagramData::getUmbral,return_value_policy<copy_const_reference>()),&XC::InteractionDiagramData::setUmbral)
+  .add_property("threshold",make_function(&XC::InteractionDiagramData::getThreshold,return_value_policy<copy_const_reference>()),&XC::InteractionDiagramData::setThreshold)
   .add_property("incEps",make_function(&XC::InteractionDiagramData::getIncEps,return_value_policy<copy_const_reference>()),&XC::InteractionDiagramData::setIncEps)
   .add_property("incTheta",make_function(&XC::InteractionDiagramData::getIncTheta,return_value_policy<copy_const_reference>()),&XC::InteractionDiagramData::setIncTheta)
   .add_property("pivotsUltimateStrains",make_function(&XC::InteractionDiagramData::getPivotsUltimateStrains,return_internal_reference<>()),&XC::InteractionDiagramData::setPivotsUltimateStrains)

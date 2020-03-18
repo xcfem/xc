@@ -36,16 +36,14 @@ namespace XC {
 //! @ingroup MATSCCFibers
 //
 //! @brief Fiber double ended queue.
-class FiberSet : public FiberPtrDeque
+class FiberSet: public FiberPtrDeque
   {
   public:
     FiberSet(const size_t &num= 0);
     FiberSet(const FiberSet &);
     FiberSet &operator=(const FiberSet &);
     FiberSet &operator+=(const FiberSet &);
-
     void extend(const FiberSet &);
-
   };
 
 FiberSet operator+(const FiberSet &,const FiberSet &);

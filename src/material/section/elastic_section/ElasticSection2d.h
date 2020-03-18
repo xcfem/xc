@@ -75,10 +75,9 @@ class Information;
 //! @ingroup MATSCCElastica
 //
 //! @brief Cross section with linear elastic material
-//! for bi-dimensional problesm
-//! (3 degrees of freedom in each section).
+//! for bi-dimensional problems (3 degrees of freedom in each section).
 //!
-//! provides the implementation of a section which exhibits
+//! Provides the implementation of a section which exhibits
 //! uncoupled elastic behavior in axial, moment, and shear response.
 class ElasticSection2d: public BaseElasticSection2d
   {

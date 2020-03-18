@@ -81,7 +81,7 @@ class ElasticBeam2d: public ProtoBeam2d
     Vector eInic; //!< Section initial deformations
     double alpha;
     double d; //!< Section depth.
-    
+
     static Matrix K;
     static Vector P;
     
@@ -91,6 +91,7 @@ class ElasticBeam2d: public ProtoBeam2d
     FVectorBeamColumn2d p0;  // Reactions in basic system
     
     CrdTransf2d *theCoordTransf; //!< Coordinate transformation.
+    int release; //< moment release 0=none, 1=I, 2=J, 3=I,J
 
     void set_transf(const CrdTransf *trf);
   protected:
@@ -103,7 +104,7 @@ class ElasticBeam2d: public ProtoBeam2d
     ElasticBeam2d(int tag,const Material *m,const CrdTransf *trf);
     ElasticBeam2d(int tag, double A, double E, double I, 
 		  int Nd1, int Nd2, CrdTransf2d &theTransf, 
-		  double alpha = 0.0, double d = 0.0, double rho = 0.0);
+		  double alpha = 0.0, double d = 0.0, double rho = 0.0, int release= 0);
     ElasticBeam2d(const ElasticBeam2d &);
     ElasticBeam2d &operator=(const ElasticBeam2d &);
     Element *getCopy(void) const;
@@ -118,6 +119,10 @@ class ElasticBeam2d: public ProtoBeam2d
     
     virtual CrdTransf *getCoordTransf(void);
     virtual const CrdTransf *getCoordTransf(void) const;
+    inline int getReleaseCode(void) const
+      { return release; }
+    inline void setReleaseCode(const int &rc)
+      { release= rc; }
 
     int commitState(void);
     int revertToLastCommit(void);        

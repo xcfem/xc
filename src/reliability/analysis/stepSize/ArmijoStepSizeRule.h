@@ -71,7 +71,7 @@ class GFunEvaluator;
 class GradGEvaluator;
 
 //! @ingroup ReliabilityAnalysis Objects to perform reliability analisys.
-//!
+//
 //! @brief Implementation of Armijo rule inexact line search method.
 //!
 //! The armijo rule is employed to determine the step size as:

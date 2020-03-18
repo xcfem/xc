@@ -67,14 +67,29 @@
 namespace XC {
 //! @ingroup MATSCC
 //
-//! @brief ??
+//! @brief bi-directional section, which is a stress-resultant
+//! plasticity model of two coupled forces.
+//!
+//! The yield surface is circular and there is combined isotropic
+//! and kinematic hardening. The implementation is a generalization
+//! of the uniaxial return map algorithm for rate independent
+//! plasticity (page 45, Simo and Hughes, 1998) with the same input
+//! parameters as the Hardening Material uniaxial material model.
+//! The bidirectional section is a suitable base isolator model and
+//! should be used in conjunction with a ZeroLengthSection element to
+//! this end. It can also be used in a nonlinear beam element to
+//! define stress resultant plasticity at an integration point.
+//! The optional code1 and code2 values correspond to the beam cross-section
+//! analogy with respect to the local axes of the calling element (P, Vy,
+//! and Vz = force along section local x, y, and z axes, respectively; T,
+//! My, and Mz = moment about section local x, y, and z axes, respectively).
 class Bidirectional: public SectionForceDeformation
   {
   private:
-    double E;
-    double sigY;
-    double Hiso;
-    double Hkin;
+    double E; //!< Elastic modulus.
+    double sigY; //! Yield
+    double Hiso; //! isotropic hardening modulus.
+    double Hkin; //!< kinematic hardening modulus.
 
     double e_n1Trial[2]; //!< Trial strain.
     double e_n1Inic[2]; //!< Initial strain.

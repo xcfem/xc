@@ -52,13 +52,6 @@
 // Created: 11/01
 
 // Description: This file contains the class definition for LinearInterpolatedSearch.
-// This performs the search by using a form of linear interpolation to find the best solution.
-// Solution procedure follows the one in Crissfields book.
-// (M.A. Crissfield, Nonlinear Finite Element Analysis of Solid and Structures, Wiley. 97).
-// NOTE: it is not quite linear interpolation/false-position/regula-falsi as eta(0) = 0.0
-// does not change. uses eta(i) = eta(i-1)*s0
-//                                -----------
-//                                s0 - s(i-1)  to compute eta(i)
 //
 
 #ifndef InitialInterpolatedLineSearch_h
@@ -72,6 +65,14 @@ class Vector;
 //
 //! @brief This performs the search by using a form of linear
 //! interpolation to find the best solution.
+//
+//! This performs the search by using a form of linear interpolation to find the best solution.
+//! Solution procedure follows the one in Crissfields book.
+//! (M.A. Crissfield, Nonlinear Finite Element Analysis of Solid and Structures, Wiley. 97).
+//! NOTE: it is not quite linear interpolation/false-position/regula-falsi as eta(0) = 0.0
+//! does not change. uses eta(i) = eta(i-1)*s0
+//!                                -----------
+//!                                s0 - s(i-1)  to compute eta(i)
 class InitialInterpolatedLineSearch: public LineSearch
   {
     friend class FEM_ObjectBroker;
@@ -85,8 +86,6 @@ class InitialInterpolatedLineSearch: public LineSearch
 	       IncrementalIntegrator &theIntegrator);
 
   };
-inline LineSearch *InitialInterpolatedLineSearch::getCopy(void) const
-  { return new InitialInterpolatedLineSearch(*this); }
 } // end of XC namespace
 
 #endif

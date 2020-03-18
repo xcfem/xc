@@ -30,13 +30,16 @@
 #define NewtonBased_h
 
 #include <solution/analysis/algorithm/equiSolnAlgo/EquiSolnAlgo.h>
+#include "solution/analysis/integrator/IncrementalIntegrator.h"
 
 namespace XC {
 class ConvergenceTest;
 
 //! @ingroup EQSolAlgo
 //
-//! @brief Uses the tangent stiffness matrix on each
+//! @brief Base class for algorithms based on Newton method.
+//
+//! Those method use  the tangent stiffness matrix on each
 //! iteration (with or without updating) until convergence is achieved.
 class NewtonBased: public EquiSolnAlgo
   {

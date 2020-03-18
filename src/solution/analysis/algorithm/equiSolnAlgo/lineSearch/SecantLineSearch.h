@@ -52,18 +52,6 @@
 // Created: 11/01
 
 // Description: This file contains the class definition for SecantLineSearch.
-// This performs the search for U(i+1) = U(i) + eta * deltaU(i) by using the 
-// secant method to find the best solution.
-//
-//                eta(j+1) = eta(j) -  s(j) * (eta(j-1)-eta(j))
-//                                     ------------------------
-//                                           s(j-1) - s(j)
-//
-// where     s(j) = U(i+1,j) ^ R(U(i+1, j))
-//
-//  and      U(i+1,j) = U(i) + eta(j)*deltaU(i)
-// 
-// What: "@(#)NewtonLineSearch.h, revA"
 
 #ifndef SecantLineSearch_h
 #define SecantLineSearch_h
@@ -76,6 +64,19 @@ class Vector;
 //
 //! @brief performs the search for U(i+1) = U(i) + eta * deltaU(i) by
 //! using the secant method to find the best solution.
+//
+//! This performs the search for U(i+1) = U(i) + eta * deltaU(i) by using the 
+//! secant method to find the best solution.
+//!
+//!                eta(j+1) = eta(j) -  s(j) * (eta(j-1)-eta(j))
+//!                                     ------------------------
+//!                                           s(j-1) - s(j)
+//!
+//! where     s(j) = U(i+1,j) ^ R(U(i+1, j))
+//!
+//!  and      U(i+1,j) = U(i) + eta(j)*deltaU(i)
+//! 
+//! What: "@(#)NewtonLineSearch.h, revA"
 class SecantLineSearch: public LineSearch
   {
     friend class NewtonLineSearch;
@@ -88,8 +89,6 @@ class SecantLineSearch: public LineSearch
 	       LinearSOE &theSOE, 
 	       IncrementalIntegrator &theIntegrator);
   };
-inline LineSearch *SecantLineSearch::getCopy(void) const
-  { return new SecantLineSearch(*this); }
 } // end of XC namespace
 
 #endif

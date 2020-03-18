@@ -62,6 +62,10 @@
 XC::SecantLineSearch::SecantLineSearch(void)
   :LineSearch(LINESEARCH_TAGS_SecantLineSearch) {}
 
+//! @brief Virtual constructor.
+XC::LineSearch *XC::SecantLineSearch::getCopy(void) const
+  { return new SecantLineSearch(*this); }
+
 int XC::SecantLineSearch::search(double s0, double s1, LinearSOE &theSOE, IncrementalIntegrator &theIntegrator)
   {
     double r0 = 0.0;

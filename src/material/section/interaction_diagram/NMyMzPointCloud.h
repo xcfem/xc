@@ -38,7 +38,6 @@
 
 namespace XC {
 
-
 //! @ingroup MATSCCDiagInt
 //
 //! @brief (N,My,Mz) point set

@@ -52,24 +52,6 @@
 // Created: 11/01
 
 // Description: This file contains the class definition for RegulaFalsiLineSearch.
-// This performs the search for U(i+1) = U(i) + eta * deltaU(i) by using the 
-// secant method to find the best solution.
-//
-//                eta(j+1) = eta(u) -  s(u) * (eta(l) -eta(u))
-//                                     ------------------------
-//                                           s(l) - s(u)
-//
-// where     s(j) = U(i+1,j) ^ R(U(i+1, j))
-//
-//  and      U(i+1,j) = U(i) + eta(j)*deltaU(i)
-//
-// note that as we want eta(u) and eta(l) to bracket the solution, 
-// i.e. s(u)*s(l)<0, if at all possible - the lower and upper bounds 
-// change depending on sign.
-//
-//      if s(eta(j+1))*s(l) < 0 { eta(u) = eta(j+1) and s(u) = s(eta(j+1))
-//      if s(eta(j+1))*s(u) < 0 { eta(l) = eta(j+1) and s(l) = s(eta(j+1))
-//      if s(eta(j+1))*s(u) == 0  SOLN FOUND.
 
 #ifndef RegulaFalsiLineSearch_h
 #define RegulaFalsiLineSearch_h
@@ -82,6 +64,25 @@ class Vector;
 //
 //! @brief performs the search for U(i+1) = U(i) + eta * deltaU(i) by
 //! regula falsi method to find the best solution.
+//
+//! This performs the search for U(i+1) = U(i) + eta * deltaU(i) by using the 
+//! secant method to find the best solution.
+//!
+//!                eta(j+1) = eta(u) -  s(u) * (eta(l) -eta(u))
+//!                                     ------------------------
+//!                                           s(l) - s(u)
+//!
+//! where     s(j) = U(i+1,j) ^ R(U(i+1, j))
+//!
+//!  and      U(i+1,j) = U(i) + eta(j)*deltaU(i)
+//!
+//! note that as we want eta(u) and eta(l) to bracket the solution, 
+//! i.e. s(u)*s(l)<0, if at all possible - the lower and upper bounds 
+//! change depending on sign.
+//!
+//!      if s(eta(j+1))*s(l) < 0 { eta(u) = eta(j+1) and s(u) = s(eta(j+1))
+//!      if s(eta(j+1))*s(u) < 0 { eta(l) = eta(j+1) and s(l) = s(eta(j+1))
+//!      if s(eta(j+1))*s(u) == 0  SOLN FOUND.
 class RegulaFalsiLineSearch: public LineSearch
   {
     friend class NewtonLineSearch;
@@ -96,8 +97,6 @@ class RegulaFalsiLineSearch: public LineSearch
 	       IncrementalIntegrator &theIntegrator);
 
   };
-inline LineSearch *RegulaFalsiLineSearch::getCopy(void) const
-  { return new RegulaFalsiLineSearch(*this); }
 } // end of XC namespace
 
 #endif

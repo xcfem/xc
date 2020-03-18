@@ -28,7 +28,7 @@ modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 # Materials
 # Mechanical properties taken from:
 # http://www.pfsteco.com/techtips/pdf/tt_plywooddesigncapacities
-structuralPanelGeom= AWCNDS_materials.PlywoodPanel('TECO 32/16', b=1.0, h= 0.594*0.0254, shear_constant= 3)
+structuralPanelGeom= AWCNDS_materials.PlywoodPanelSection('TECO 32/16', b=1.0, h= 0.594*0.0254, shear_constant= 3)
 plywood= typical_materials.MaterialData(name='TECO 32/16',E=4161501119.15,nu=0.2,rho=500)
 section= structuralPanelGeom.defElasticShearSection2d(preprocessor,plywood)
 EI= section.sectionProperties.EI()

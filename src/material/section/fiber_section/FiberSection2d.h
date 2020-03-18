@@ -52,9 +52,7 @@
 // Created: 04/01
 //
 // Description: This file contains the class definition for 
-// FiberSection2d.h. FiberSection2d provides the abstraction of a 
-// 2d beam section discretized by fibers. The section stiffness and
-// stress resultants are obtained by summing fiber contributions.
+// FiberSection2d.h.
 
 #ifndef FiberSection2d_h
 #define FiberSection2d_h
@@ -71,6 +69,10 @@ class FiberSectionRepr;
 //
 //! @brief Fiber section model in a bi-dimensional space. Sections stiffness
 //! and internal forces are obtained by addition of the fibers contribution.
+//!
+//! FiberSection2d provides the abstraction of a 2d beam section discretized
+//! by fibers. The section stiffness and stress resultants are obtained by
+//! summing fiber contributions.
 class FiberSection2d: public FiberSectionBase
   {
   private:

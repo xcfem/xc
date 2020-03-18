@@ -108,7 +108,7 @@ void XC::ElasticBeam2d::set_transf(const CrdTransf *trf)
 
 XC::ElasticBeam2d::ElasticBeam2d(int tag)
   :ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d), eInic(2), alpha(0.0), d(0.0),
-  q(3), theCoordTransf(nullptr)
+   q(3), theCoordTransf(nullptr), release(0)
   {
     load.reset(6);
     q0[0] = 0.0;
@@ -124,7 +124,7 @@ XC::ElasticBeam2d::ElasticBeam2d(int tag)
 //! @brief Constructor.
 XC::ElasticBeam2d::ElasticBeam2d(int tag,const Material *m,const CrdTransf *trf)
   :ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d,m), eInic(2), alpha(0.0), d(0.0),
-  q(3), theCoordTransf(nullptr)
+   q(3), theCoordTransf(nullptr), release(0)
   {
     load.reset(6);
     q0[0] = 0.0;
@@ -139,11 +139,8 @@ XC::ElasticBeam2d::ElasticBeam2d(int tag,const Material *m,const CrdTransf *trf)
   }
 
 //! @brief Constructor.
-XC::ElasticBeam2d::ElasticBeam2d(int tag, double a, double e, double i, int Nd1, int Nd2,
-                                 CrdTransf2d &coordTransf, double Alpha, double depth,
-                                 double r)
-  :ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d,a,e,i,Nd1,Nd2), eInic(2), alpha(Alpha), d(depth),
-   q(3), theCoordTransf(nullptr)
+XC::ElasticBeam2d::ElasticBeam2d(int tag, double a, double e, double i, int Nd1, int Nd2, CrdTransf2d &coordTransf, double Alpha, double depth, double r, int rel)
+  : ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d,a,e,i,Nd1,Nd2), eInic(2), alpha(Alpha), d(depth), q(3), theCoordTransf(nullptr), release(rel)
   {
     setRho(r);
     load.reset(6);
@@ -162,7 +159,7 @@ XC::ElasticBeam2d::ElasticBeam2d(int tag, double a, double e, double i, int Nd1,
 //! @brief Copy constructor.
 XC::ElasticBeam2d::ElasticBeam2d(const ElasticBeam2d &other)
   :ProtoBeam2d(other), eInic(other.eInic), alpha(other.alpha), d(other.d),
-  q(other.q), theCoordTransf(nullptr)
+   q(other.q), theCoordTransf(nullptr), release(other.release)
   {
     set_transf(other.theCoordTransf);
 
@@ -184,6 +181,7 @@ XC::ElasticBeam2d &XC::ElasticBeam2d::operator=(const ElasticBeam2d &other)
     d= other.d;
     q= other.q;
     set_transf(other.theCoordTransf);
+    release= other.release;
 
     q0[0] = other.q0[0];
     q0[1] = other.q0[1];
@@ -245,7 +243,7 @@ void XC::ElasticBeam2d::setDomain(Domain *theDomain)
             exit(-1);
           }
         double L= theCoordTransf->getInitialLength();
-        if(L == 0.0)
+        if(L==0.0)
           {
             std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; element has zero length\n";
@@ -341,30 +339,57 @@ const XC::Vector &XC::ElasticBeam2d::getVDirWeakAxisGlobalCoord(bool initialGeom
       }
   }
 
-
+//! @brief getTangent stiffness matrix.
 const XC::Matrix &XC::ElasticBeam2d::getTangentStiff(void) const
   {
     const Vector &v= getSectionDeformation();
+    const double L= theCoordTransf->getInitialLength();
 
     const double EA= ctes_scc.EA(); // EA
     const double EI2= 2.0*ctes_scc.EI(); // 2EI
+    const double EI3= 3.0*ctes_scc.EI(); // 3EI
     const double EI4= 2.0*EI2; // 4EI
+    const double EAoverL= EA/L;	// EA/L
+    const double EIoverL2= EI2/L; // 2EI/L
+    const double EIoverL4= EI4/L; // 4EI/L
+    const double EIoverL3= EI3/L;
 
     // determine q = kv + q0
-    q(0) = EA*v(0);
-    q(1) = EI4*v(1) + EI2*v(2);
-    q(2) = EI2*v(1) + EI4*v(2);
-
+    q(0)= EA*v(0);
+    kb(0,0)= EAoverL;
+    if(release==0)
+      {
+	q(1)= EI4*v(1) + EI2*v(2);
+	q(2)= EI2*v(1) + EI4*v(2);
+	kb(1,1)= kb(2,2)= EIoverL4;
+	kb(2,1)= kb(1,2)= EIoverL2;    
+      }
+    else if(release==1)
+      { // release I
+	q(1)= 0.0;
+	q(2)= EI3*v(2);
+	kb(2,2)= EIoverL3;
+      }
+    else if(release==2)
+      { // release J
+	q(2)= 0.0;
+	q(1)= EI3*v(1);
+	kb(1,1)= EIoverL3;
+      }
+    else if(release==3)
+      { // release both I and J
+	q(1) = 0.0;
+	q(2) = 0.0;
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << " release value (" << release
+	        << ") not valid. Must be between 0 and 3."
+	        << std::endl;
     q(0)+= q0[0];
     q(1)+= q0[1];
     q(2)+= q0[2];
 
-    const double L = theCoordTransf->getInitialLength();
-    kb(0,0)= EA/L;
-    kb(1,1)= kb(2,2)= EI4/L;
-    kb(2,1)= kb(1,2)= EI2/L;
-
-    
     static Matrix retval;
     retval= theCoordTransf->getGlobalStiffMatrix(kb,q);
     if(isDead())
@@ -372,19 +397,36 @@ const XC::Matrix &XC::ElasticBeam2d::getTangentStiff(void) const
     return retval;
   }
 
+//! @brief Return initial stiffness matrix.
 const XC::Matrix &XC::ElasticBeam2d::getInitialStiff(void) const
   {
     const double L = theCoordTransf->getInitialLength();
-
-    const double EoverL   = ctes_scc.E()/L;
-    const double EAoverL  = ctes_scc.A()*EoverL; // EA/L
-    const double EIoverL2 = 2.0*ctes_scc.I()*EoverL; // 2EI/L
-    const double EIoverL4 = 2.0*EIoverL2; // 4EI/L
+    const double EoverL= ctes_scc.E()/L;
+    const double EAoverL= ctes_scc.A()*EoverL; // EA/L
+    const double EIoverL2= 2.0*ctes_scc.I()*EoverL; // 2EI/L
+    const double EIoverL4= 2.0*EIoverL2; // 4EI/L
 
     kb(0,0) = EAoverL;
-    kb(1,1) = kb(2,2) = EIoverL4;
-    kb(2,1) = kb(1,2) = EIoverL2;
-
+    if(release==0)
+      {
+        kb(1,1)= kb(2,2)= EIoverL4;
+        kb(2,1)= kb(1,2)= EIoverL2;
+      }
+    else if(release==1)
+      { // release I
+        kb(2,2) = 3.0*ctes_scc.I()*EoverL;
+      }
+    else if(release==2)
+      { // release J
+        kb(1,1) = 3.0*ctes_scc.I()*EoverL;
+      }
+    else if(release==3)
+      {}
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << " release value (" << release
+	        << ") not valid. Must be between 0 and 3."
+	        << std::endl;
     static Matrix retval;
     retval= theCoordTransf->getInitialGlobalStiffMatrix(kb);
     if(isDead())
@@ -445,7 +487,7 @@ int XC::ElasticBeam2d::addLoad(ElementalLoad *theLoad, double loadFactor)
         if(const BeamMecLoad *beamMecLoad= dynamic_cast<const BeamMecLoad *>(theLoad))
           {
             beamMecLoad->addReactionsInBasicSystem(L,loadFactor,p0); // Accumulate reactions in basic system
-            beamMecLoad->addFixedEndForcesInBasicSystem(L,loadFactor,q0); // Fixed end forces in basic system
+            beamMecLoad->addFixedEndForcesInBasicSystem(L,loadFactor,q0,release); // Fixed end forces in basic system
           }
         else if(const BeamStrainLoad *strainLoad= dynamic_cast<BeamStrainLoad *>(theLoad)) //Prescribed strains.
           {
@@ -498,6 +540,63 @@ int XC::ElasticBeam2d::addInertiaLoadToUnbalance(const XC::Vector &accel)
     return 0;
   }
 
+//! @brief Return the element resisting force.
+const XC::Vector &XC::ElasticBeam2d::getResistingForce(void) const
+  {
+    theCoordTransf->update();
+    
+    const Vector &v= getSectionDeformation();
+
+    const double EA= ctes_scc.EA(); // EA
+    const double EI2= 2.0*ctes_scc.EI(); // 2EI
+    const double EI4= 2.0*EI2; // 4EI
+
+
+    // determine q = kv + q0
+    q(0) = EA*v(0);
+    if(release==0)
+      {
+        q(1)= EI4*v(1) + EI2*v(2);
+        q(2)= EI2*v(1) + EI4*v(2);
+      }
+    else if(release==1)
+      {
+        q(1)= 0.0;
+        q(2)= 3.0*ctes_scc.EI()*v(2);
+      }
+    else if(release==2)
+      {
+        q(1)= 3.0*ctes_scc.EI()*v(1);
+        q(2)= 0.0;
+      }
+    else if(release==3)
+      {
+        q(1) = 0.0;
+        q(2) = 0.0;
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << " release value (" << release
+	        << ") not valid. Must be between 0 and 3."
+	        << std::endl;
+    q(0)+= q0[0];
+    q(1)+= q0[1];
+    q(2)+= q0[2];
+
+    // Vector for reactions in basic system
+    Vector p0Vec= p0.getVector();
+
+    P= theCoordTransf->getGlobalResistingForce(q, p0Vec);
+
+    // P = P - load;
+    P.addVector(1.0, load, -1.0);
+
+    if(isDead())
+      P*=dead_srf;
+    return P;
+  }
+
+//! @brief Return the element resisting force including inertia effects.
 const XC::Vector &XC::ElasticBeam2d::getResistingForceIncInertia(void) const
   {
     P= getResistingForce();
@@ -527,41 +626,11 @@ const XC::Vector &XC::ElasticBeam2d::getResistingForceIncInertia(void) const
   }
 
 
-const XC::Vector &XC::ElasticBeam2d::getResistingForce(void) const
-  {
-    const Vector &v= getSectionDeformation();
-
-    const double EA= ctes_scc.EA(); // EA
-    const double EI2= 2.0*ctes_scc.EI(); // 2EI
-    const double EI4= 2.0*EI2; // 4EI
-
-    // determine q = kv + q0
-    q(0)= EA*v(0);
-    q(1)= EI4*v(1) + EI2*v(2);
-    q(2)= EI2*v(1) + EI4*v(2);
-
-    q(0)+= q0[0];
-    q(1)+= q0[1];
-    q(2)+= q0[2];
-
-    // Vector for reactions in basic system
-    Vector p0Vec= p0.getVector();
-
-    P = theCoordTransf->getGlobalResistingForce(q, p0Vec);
-
-    // P = P - load;
-    P.addVector(1.0, load, -1.0);
-
-    if(isDead())
-      P*=dead_srf;
-    return P;
-  }
-
 //! @brief Returns a vector to store the dbTags
 //! of the class members.
 XC::DbTagData &XC::ElasticBeam2d::getDbTagData(void) const
   {
-    static DbTagData retval(12);
+    static DbTagData retval(13);
     return retval;
   }
 
@@ -571,6 +640,7 @@ int XC::ElasticBeam2d::sendData(CommParameters &cp)
     int res= ProtoBeam2d::sendData(cp);
     res+= sendCoordTransf(8,9,10,cp);
     res+= cp.sendVector(eInic,getDbTagData(),CommMetaData(11));
+    res+= cp.sendInt(release,getDbTagData(),CommMetaData(12));
     return res;
   }
 
@@ -580,12 +650,13 @@ int XC::ElasticBeam2d::recvData(const CommParameters &cp)
     int res= ProtoBeam2d::recvData(cp);
     theCoordTransf= recvCoordTransf2d(8,9,10,cp);
     res+= cp.receiveVector(eInic,getDbTagData(),CommMetaData(11));
+    res+= cp.receiveInt(release,getDbTagData(),CommMetaData(12));
     return res;
   }
 
 int XC::ElasticBeam2d::sendSelf(CommParameters &cp)
   {
-    inicComm(12);
+    inicComm(13);
     int res= sendData(cp);
 
     const int dataTag= getDbTag();
@@ -599,7 +670,7 @@ int XC::ElasticBeam2d::sendSelf(CommParameters &cp)
 int XC::ElasticBeam2d::recvSelf(const CommParameters &cp)
   {
     const int dataTag= getDbTag();
-    inicComm(12);
+    inicComm(13);
     int res = cp.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -611,7 +682,7 @@ int XC::ElasticBeam2d::recvSelf(const CommParameters &cp)
 
 void XC::ElasticBeam2d::Print(std::ostream &s, int flag) const
   {
-    if(flag == -1)
+    if(flag==-1)
       {
         int eleTag = this->getTag();
         s << "EL_BEAM\t" << eleTag << "\t";
@@ -625,6 +696,7 @@ void XC::ElasticBeam2d::Print(std::ostream &s, int flag) const
         s << "\tConnected Nodes: " << theNodes;
         s << "\tCoordTransf: " << theCoordTransf->getTag() << std::endl;
         s << "\tmass density:  " << getRho() << std::endl;
+        s << "\trelease code:  " << release << std::endl;
         const double P  = q(0);
         const double M1 = q(1);
         const double M2 = q(2);
@@ -640,18 +712,18 @@ void XC::ElasticBeam2d::Print(std::ostream &s, int flag) const
 XC::Response *XC::ElasticBeam2d::setResponse(const std::vector<std::string> &argv, Parameter &param)
   {
     // stiffness
-    if(argv[0] == "stiffness")
+    if(argv[0]=="stiffness")
         return new ElementResponse(this, 1, K);
 
     // global forces
     else
-      if(argv[0] == "force" || argv[0] == "forces" ||
-         argv[0] == "globalForce" || argv[0] == "globalForces")
+      if(argv[0]=="force" || argv[0]=="forces" ||
+         argv[0]=="globalForce" || argv[0]=="globalForces")
         return new ElementResponse(this, 2, P);
 
     // local forces
       else
-        if(argv[0] == "localForce" || argv[0] == "localForces")
+        if(argv[0]=="localForce" || argv[0]=="localForces")
           return new ElementResponse(this, 3, P);
         else
           return 0;
@@ -691,20 +763,34 @@ int XC::ElasticBeam2d::getResponse(int responseID, Information &eleInfo)
 int XC::ElasticBeam2d::setParameter(const std::vector<std::string> &argv, Parameter &param)
   {
     const size_t argc= argv.size();
-    if(argc < 1)
-    return -1;
-
-    // E of the beam interior
-    if(argv[0] == "E")
-      return param.addObject(1, this);
-
-    // A of the beam interior
-    if(argv[0] == "A")
-      return param.addObject(2, this);
-  
-    // I of the beam interior
-    if(argv[0] == "I")
-      return param.addObject(3, this);
+    if(argc > 0)
+      {
+	if(argv[0]=="E") // E of the beam interior
+	  {
+	    param.setValue(ctes_scc.E());
+	    return param.addObject(1, this);
+	  }
+	else if(argv[0]=="A") // A of the beam interior
+	  {
+	    param.setValue(ctes_scc.A());
+	    return param.addObject(2, this);
+	  }
+	else if(argv[0]=="I") // I of the beam interior
+	  {
+	    param.setValue(ctes_scc.I());
+	    return param.addObject(3, this);
+	  }
+	else if(argv[0]=="rho") // rho of the beam interior
+	  {
+	    param.setValue(ctes_scc.getRho());
+	    return param.addObject(4, this);
+	  }
+	else if(argv[0]=="release") // rho of the beam interior
+	  {
+	    param.setValue(release);
+	    return param.addObject(5, this);
+	  }
+      }
     return -1;
   }
 
@@ -714,6 +800,11 @@ int XC::ElasticBeam2d::updateParameter(int parameterID, Information &info)
       {
       case -1:
         return -1;
+      case 5:
+	release = static_cast<int>(info.theDouble);
+	if(release < 0 || release > 3)
+	  release = 0;
+	  return 0;				
       default:
         return ctes_scc.updateParameter(parameterID,info);
       }

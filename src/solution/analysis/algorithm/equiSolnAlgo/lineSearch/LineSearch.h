@@ -78,10 +78,11 @@ class LinearSOE;
 //
 //! @ingroup EQSolAlgo
 //
-//! @brief  LineSearch is an abstract base class, 
-//! i.e. no objects of it's type can be created.  Its subclasses seek
-//! to find a better solution to R(U)=0 than the solution Ui-1 + delta Ui
-//! would give, typically Ui = Ui-1 + factor * delta Ui.
+//! @brief  Base class for line search algorithms.
+//
+//! Its subclasses seek to find a better solution to \f$R(U)=0\f$ than
+//! the solution \f$U_{i-1} + \delta U_i\f$
+//! would give, typically \f$U_i = U_{i-1} + factor * \delta U_i\f$.
 class LineSearch: public MovableObject, public CommandEntity
   {
   protected:

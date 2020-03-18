@@ -62,6 +62,10 @@
 XC::BisectionLineSearch::BisectionLineSearch(void)
   :LineSearch(LINESEARCH_TAGS_BisectionLineSearch) {}
 
+//! @brief Virtual constructor.
+XC::LineSearch *XC::BisectionLineSearch::getCopy(void) const
+  { return new BisectionLineSearch(*this); }
+
 int XC::BisectionLineSearch::search(double s0, double s1, LinearSOE &theSOE, IncrementalIntegrator &theIntegrator)
   {
     double r0 = 0.0;
