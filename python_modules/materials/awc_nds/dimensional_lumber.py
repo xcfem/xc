@@ -122,6 +122,12 @@ class DimensionLumberWood(mat.Wood):
         else:
             lmsg.error('Grade: '+grade+' unknown.')
         return retval;
+    def getFb(self,h):
+        ''' Return the value of Fb. Used in BeamMember.getBeamStabilityFactor
+
+        :param h: section depth
+        '''
+        return self.Fb
     def getFbAdj(self, b, h, Cr= 1.0):
         ''' Return the adjusted value of Fb according
             to National Design Specification table 4A.
