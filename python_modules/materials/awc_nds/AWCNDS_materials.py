@@ -411,10 +411,10 @@ class Member(object):
         val394= fc/FcE2+(fb1/FbE)**2 #Equation 3-9-4
         return max(val393,val394)
 
-class WoodPanel(sp.RectangularSection):
+class WoodPanelSection(sp.RectangularSection):
     ''' Plywood structural panel.'''
     def __init__(self, name, b, h, shear_constant):
-        super(WoodPanel,self).__init__(name, b, h)
+        super(WoodPanelSection,self).__init__(name, b, h)
         self.shearConstant= shear_constant
     def getSpanRating(self):
         ''' Return the span rating from the panel thickness according
@@ -488,18 +488,18 @@ class WoodPanel(sp.RectangularSection):
 # http://www.pfsteco.com/techtips/pdf/tt_plywooddesigncapacities
 # table C.
 
-class PlywoodPanel(WoodPanel):
+class PlywoodPanelSection(WoodPanelSection):
     ''' Plywood structural panel.'''
     rho= 577.941243312 # density kg/m3
     def __init__(self, name, b, h, shear_constant):
-        super(PlywoodPanel,self).__init__(name, b, h, shear_constant)
+        super(PlywoodPanelSection,self).__init__(name, b, h, shear_constant)
     def getArealDensity(self):
         return self.rho*self.h
 
 # Oriented strand board panels according to document:
 # "Panel design specification" Form No. D510C/Revised May 2012/0300
 
-class OSBPanel(WoodPanel):
+class OSBPanel(WoodPanelSection):
     ''' Oriented strand board panel.'''
     rho= 632.62 # average density kg/m3 Table 12
     def __init__(self, name, b, h, shear_constant):
