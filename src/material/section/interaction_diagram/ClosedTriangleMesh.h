@@ -44,7 +44,8 @@ class FiberSectionBase;
 
 //! \@ingroup MATSCCDiagInt
 //
-//! @brief Interaction diagram (N,Mx,My) of a section.
+//! @brief Closed triangle mesh used to represent
+//! the interaction diagram (N,Mx,My) of a section.
 class ClosedTriangleMesh: public GeomObj3d, public MovableObject
   {
   protected:

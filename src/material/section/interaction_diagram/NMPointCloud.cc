@@ -50,7 +50,7 @@ const Pos2d *XC::NMPointCloud::append(const Pos2d &NM)
   {
     if(lastInserted)
       {
-        if(dist(NM,*lastInserted)>umbral)
+        if(dist(NM,*lastInserted)>threshold)
           lastInserted= Agrega(NM);
       }
     else

@@ -33,8 +33,7 @@
 #include <iostream>
 
 namespace XC {
-
-  class Cell;
+class Cell;
 
 //! @ingroup MATSCCCell
 //

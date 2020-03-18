@@ -56,10 +56,7 @@
 // Revision: 
 //
 // Description: This file contains the class definition for 
-// UniaxialFiber2d.h. UniaxialFiber2d provides the abstraction of a
-// uniaxial fiber whose position  is defined with only one coordinate.
-// The UniaxialFiber2d is subjected to a stress state with 
-// only one nonzero axial stress and corresponding axial strain.
+// UniaxialFiber2d.h.
 //
 // What: "@(#) UniaxialFiber2d.h, revA"
 
@@ -74,6 +71,11 @@ class UniaxialMaterial;
 //! @ingroup MATSCCFibers
 //
 //! @brief Uniaxial fiber on a bi-dimensional space.
+//!
+//! UniaxialFiber2d provides the abstraction of a
+//! uniaxial fiber whose position  is defined with only one coordinate.
+//! The UniaxialFiber2d is subjected to a stress state with 
+//! only one nonzero axial stress and corresponding axial strain.
 class UniaxialFiber2d: public UniaxialFiber
   {
   private:

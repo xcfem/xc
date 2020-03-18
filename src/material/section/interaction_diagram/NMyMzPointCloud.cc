@@ -50,7 +50,7 @@ const Pos3d *XC::NMyMzPointCloud::append(const Pos3d &NMyMz)
   {
     if(lastInserted)
       {
-        if(dist(NMyMz,*lastInserted)>umbral)
+        if(dist(NMyMz,*lastInserted)>threshold)
           lastInserted= Agrega(NMyMz);
       }
     else
@@ -60,7 +60,7 @@ const Pos3d *XC::NMyMzPointCloud::append(const Pos3d &NMyMz)
 
 XC::NMPointCloud XC::NMyMzPointCloud::getNMy(void) const
   {
-    NMPointCloud retval(umbral);
+    NMPointCloud retval(threshold);
     for(const_iterator i= begin();i!=end();i++)
       {
         Pos3d p3d= *i;
@@ -71,7 +71,7 @@ XC::NMPointCloud XC::NMyMzPointCloud::getNMy(void) const
 
 XC::NMPointCloud XC::NMyMzPointCloud::getNMz(void) const
   {
-    NMPointCloud retval(umbral);
+    NMPointCloud retval(threshold);
     for(const_iterator i= begin();i!=end();i++)
       {
         Pos3d p3d= *i;
@@ -82,7 +82,7 @@ XC::NMPointCloud XC::NMyMzPointCloud::getNMz(void) const
 
 XC::NMPointCloud XC::NMyMzPointCloud::getNM(const double &theta) const
   {
-    NMPointCloud retval(umbral);
+    NMPointCloud retval(threshold);
     const double PImed= M_PI/2.0; 
     if(theta==PImed)
       retval= getNMy();

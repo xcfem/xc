@@ -35,19 +35,19 @@ namespace XC {
 
 //! @ingroup MATSCCDiagInt
 //
-//! @brief (N,M) point set base
+//! @brief Base class for (N,M) point sets
 class NMPointCloudBase
   {
   protected:
-    double umbral;
+    double threshold;
   public:
     NMPointCloudBase(const double &u= 0.0);
-    inline void setUmbral(const double &u)
-      { umbral= u; }
-    inline const double &getUmbral(void)
-      { return umbral; }
+    inline void setThreshold(const double &u)
+      { threshold= u; }
+    inline const double &getThreshold(void)
+      { return threshold; }
     inline virtual void clear(void)
-      { umbral= 0.0; }
+      { threshold= 0.0; }
   };
 
 } // end of XC namespace

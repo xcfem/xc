@@ -40,7 +40,7 @@ namespace XC {
 //! @brief Parameters needed to obtain the interaction diagram.
 class InteractionDiagramData: public CommandEntity
   {
-    double umbral; //!< Minimal distance between diagram points.
+    double threshold; //!< Minimal distance between diagram points.
     double inc_eps; //!< Strain step size.
     double inc_t; //!< Angle step size.
     PivotsUltimateStrains agot_pivots; //!< Ultimate strains at pivots.
@@ -52,10 +52,10 @@ class InteractionDiagramData: public CommandEntity
     InteractionDiagramData(void);
     InteractionDiagramData(const double &u,const double &inc_e,const double &inc_t= M_PI/4,const PivotsUltimateStrains &agot= PivotsUltimateStrains());
 
-    inline const double &getUmbral(void) const
-      { return umbral; }
-    inline void setUmbral(const double &v)
-      { umbral= v; }
+    inline const double &getThreshold(void) const
+      { return threshold; }
+    inline void setThreshold(const double &v)
+      { threshold= v; }
     inline const double &getIncEps(void) const
       { return inc_eps; }
     inline void setIncEps(const double &v)

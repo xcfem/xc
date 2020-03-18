@@ -47,8 +47,9 @@ class SectionForceDeformation;
 
 //! @ingroup MATSCCRepres
 //
-//! @brief Mechanical (E, G) and mass properties of a section (area, moments of inertia,...)
-//! for a bi-dimensional problem (three DOF for each section).
+//! @brief Mechanical (E, G) and mass properties of a section (area,
+//! moments of inertia,...) for a bi-dimensional problem (three DOF
+//! for each section).
 class CrossSectionProperties2d: public CommandEntity, public MovableObject
   {
   private:

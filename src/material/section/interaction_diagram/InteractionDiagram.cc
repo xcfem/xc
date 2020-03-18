@@ -261,15 +261,15 @@ double XC::InteractionDiagram::getCapacityFactor(const Pos3d &esf_d) const
     assert(rMax>0.0);
     static const Pos3d O= Pos3d(0.0,0.0,0.0);
     const double d= dist(O,esf_d); //Distance from the internal force triplet to origin.
-    const double umbralMax= rMax*10.0;
+    const double maxThreshold= rMax*10.0;
     if(d<mchne_eps_dbl) //Point is almost at origin.
       retval= 0.0;//Return maximum possible capacity factor.
-    else if(d>umbralMax) //Point is far from diagram surface.
+    else if(d>maxThreshold) //Point is far from diagram surface.
       retval= d/rMax;
     else
       {
-        const double umbralMin= rMin/10.0;
-        if(d<umbralMin) //Point is inside the diagram.
+        const double minThreshold= rMin/10.0;
+        if(d<minThreshold) //Point is inside the diagram.
           retval= d/rMin;
         const GeomObj::list_Pos3d lst_intersec= get_intersection(esf_d);
         if(!lst_intersec.empty())

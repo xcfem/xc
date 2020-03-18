@@ -56,11 +56,7 @@
 // Revision: 
 //
 // Description: This file contains the class definition for 
-// UniaxialFiber3d.h. UniaxialFiber3d provides the abstraction of a
-// uniaxial fiber that forms a fiber section for 3d frame elements (the 
-// fiber position inside the section is defined by two coordinates)
-// The UniaxialFiber3d is subjected to a stress state with 
-// only one nonzero axial stress and corresponding axial strain.
+// UniaxialFiber3d.h. 
 //
 // What: "@(#) UniaxialFiber3d.h, revA"
 
@@ -78,6 +74,12 @@ class Response;
 //! @ingroup MATSCCFibers
 //
 //! @brief Uniaxial fiber on a three-dimensional space.
+//!
+//! UniaxialFiber3d provides the abstraction of a
+//! uniaxial fiber that forms a fiber section for 3d frame elements (the 
+//! fiber position inside the section is defined by two coordinates)
+//! The UniaxialFiber3d is subjected to a stress state with 
+//! only one nonzero axial stress and corresponding axial strain.
 class UniaxialFiber3d: public UniaxialFiber
   {
   private:
