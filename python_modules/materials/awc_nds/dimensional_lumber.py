@@ -435,7 +435,7 @@ class SouthernPineWood(DimensionLumberWood):
 # Spruce-Pine-Fir reference design values according to table 4A
 # of National Design Specification page 37
 class SprucePineFirWood(DimensionLumberWood):
-    ''' Spruce-pine-fir rerence design values according to
+    ''' Spruce-pine-fir refence design values according to
         table 4A of National Design Specification page 37.'''
     nu= 0.2
     def __init__(self, name='SprucePineFir', grade= 'no_2', sub_grade= ''):
@@ -467,5 +467,55 @@ class SprucePineFirWood(DimensionLumberWood):
             self.Fc= 725.0*mat.psi2Pa
             self.E= 1.2e6*mat.psi2Pa
             self.Emin= 440e3*mat.psi2Pa
+        else:
+            lmsg.error('Grade: '+grade+' unknown.')
+
+# Douglas Fir-Larch reference design values according to table 4A
+# of National Design Specification page 34
+class DouglasFirLarchWood(DimensionLumberWood):
+    ''' Douglas Fir-Larch refence design values according to
+        table 4A of National Design Specification page 34.'''
+    nu= 0.2
+    def __init__(self, name='DouglasFirLarch', grade= 'no_2', sub_grade= ''):
+        '''Constructor.'''
+        super(DouglasFirLarchWood,self).__init__(name, grade, sub_grade, rho= 500)
+        self.Fv= 180.0*mat.psi2Pa
+        self.Fct= 625.0*mat.psi2Pa
+        if(grade=='structural'):
+            self.Fb= 1500.0*mat.psi2Pa
+            self.Ft= 1000.0*mat.psi2Pa
+            self.Fc= 1700.0*mat.psi2Pa
+            self.E= 1.9e6*mat.psi2Pa
+            self.Emin= 690e3*mat.psi2Pa
+        elif(grade=='no_1_&_Btr'):
+            self.Fb= 1200.0*mat.psi2Pa
+            self.Ft= 800.0*mat.psi2Pa
+            self.Fc= 1550.0*mat.psi2Pa
+            self.E= 1.8e6*mat.psi2Pa
+            self.Emin= 660e3*mat.psi2Pa
+        elif(grade=='no_1'):
+            self.Fb= 1000.0*mat.psi2Pa
+            self.Ft= 675.0*mat.psi2Pa
+            self.Fc= 1500.0*mat.psi2Pa
+            self.E= 1.7e6*mat.psi2Pa
+            self.Emin= 620e3*mat.psi2Pa
+        elif(grade=='no_2'):
+            self.Fb= 900.0*mat.psi2Pa
+            self.Ft= 575.0*mat.psi2Pa
+            self.Fc= 1350.0*mat.psi2Pa
+            self.E= 1.6e6*mat.psi2Pa
+            self.Emin= 580e3*mat.psi2Pa
+        elif(grade=='no_3'):
+            self.Fb= 525.0*mat.psi2Pa
+            self.Ft= 325.0*mat.psi2Pa
+            self.Fc= 775.0*mat.psi2Pa
+            self.E= 1.4e6*mat.psi2Pa
+            self.Emin= 510e3*mat.psi2Pa
+        elif(grade=='stud'):
+            self.Fb= 700.0*mat.psi2Pa
+            self.Ft= 450.0*mat.psi2Pa
+            self.Fc= 850.0*mat.psi2Pa
+            self.E= 1.4e6*mat.psi2Pa
+            self.Emin= 510e3*mat.psi2Pa
         else:
             lmsg.error('Grade: '+grade+' unknown.')

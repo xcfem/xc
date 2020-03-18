@@ -296,6 +296,119 @@ class MemberBase(object):
         self.unbracedLength= unbracedLength
         self.section= section
         self.connection= connection
+        
+class BeamMember(MemberBase):
+    ''' Column member according to chapter 3.3 of NDS-2018.'''
+    def __init__(self, unbracedLength, section, connection= buckling_base.MemberConnection()):
+        ''' Constructor. '''
+        super(BeamMember,self).__init__(unbracedLength, section, connection)
+    def getEffectiveLength(self,numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False):
+        ''' Return the effective length of the beam according to table
+            3.3.3 of NDS-2018.
+
+           :param numberOfConcentratedLoads: number of concentrated loads equally
+                                             spaced along the beam (0: uniform load).
+           :param lateralSupport: if true beam has a lateral support on each load.
+           :param cantilever: if true cantilever beam otherwise single span beam.
+        '''
+        retval= self.unbracedLength
+        if(cantilever):
+            if(numberOfConcentratedLoads==0):
+                retval*= 1.33 # Uniform load
+            else:
+                retval*= 1.87 # Concentrated load at unsupported end.
+        else:
+            ratio= self.unbracedLength/self.section.h
+            if(numberOfConcentratedLoads==0):
+                if(ratio<7.0):
+                    retval*= 2.06 # Uniform load
+                else:
+                    retval= 1.63*self.unbracedLength+3.0*self.section.h
+            elif((numberOfConcentratedLoads==1) and (not lateralSupport)):
+                if(ratio<7.0):
+                    retval*= 1.80 # Uniform load
+                else:
+                    retval= 1.37*self.unbracedLength+3.0*self.section.h
+            elif(numberOfConcentratedLoads==1):
+                if(lateralSupport):
+                    retval*=1.11
+                else:
+                    lmsg.error('Load case not implemented.')
+                    retval*=10.0
+            elif(numberOfConcentratedLoads==2):
+                if(lateralSupport):
+                    retval*=1.68
+                else:
+                    lmsg.error('Load case not implemented.')
+                    retval*=10.0
+            elif(numberOfConcentratedLoads==3):
+                if(lateralSupport):
+                    retval*=1.54
+                else:
+                    lmsg.error('Load case not implemented.')
+                    retval*=10.0
+            elif(numberOfConcentratedLoads==4):
+                if(lateralSupport):
+                    retval*=1.68
+                else:
+                    lmsg.error('Load case not implemented.')
+                    retval*=10.0
+            elif(numberOfConcentratedLoads==5):
+                if(lateralSupport):
+                    retval*=1.73
+                else:
+                    lmsg.error('Load case not implemented.')
+                    retval*=10.0
+            elif(numberOfConcentratedLoads==6):
+                if(lateralSupport):
+                    retval*=1.78
+                else:
+                    lmsg.error('Load case not implemented.')
+                    retval*=10.0
+            elif(numberOfConcentratedLoads==7):
+                if(lateralSupport):
+                    retval*=1.84
+                else:
+                    lmsg.error('Load case not implemented.')
+                    retval*=10.0
+        return retval
+    def getBendingSlendernessRatio(self,numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False):
+        ''' Return the slenderness ratio according to equation
+            3.3-5 of NDS-2018.
+
+           :param numberOfConcentratedLoads: number of concentrated loads equally
+                                             spaced along the beam (0: uniform load).
+           :param lateralSupport: if true beam has a lateral support on each load.
+           :param cantilever: if true cantilever beam otherwise single span beam.
+        '''
+        le= self.getEffectiveLength(numberOfConcentratedLoads, lateralSupport, cantilever)
+        return math.sqrt(le*self.section.h/self.section.b**2)
+    def getFbECriticalBucklingDesignValue(self,numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False):
+        ''' Return the critical bucking design value for bending according to 
+            section 3.3.3.8 of NDS-2018.
+
+           :param numberOfConcentratedLoads: number of concentrated loads equally
+                                             spaced along the beam (0: uniform load).
+           :param lateralSupport: if true beam has a lateral support on each load.
+           :param cantilever: if true cantilever beam otherwise single span beam.
+        '''
+        RB= self.getBendingSlendernessRatio(numberOfConcentratedLoads, lateralSupport, cantilever)
+        return 1.2*self.section.wood.Emin/RB**2
+    def getBeamStabilityFactor(self,numberOfConcentratedLoads= 0, lateralSupport= False, cantilever= False):
+        ''' Return the beam stability factor according to equation 
+            3.3.6 of NDS-2018.
+
+           :param numberOfConcentratedLoads: number of concentrated loads equally
+                                             spaced along the beam (0: uniform load).
+           :param lateralSupport: if true beam has a lateral support on each load.
+           :param cantilever: if true cantilever beam otherwise single span beam.
+        '''
+        FbE= self.getFbECriticalBucklingDesignValue(numberOfConcentratedLoads, lateralSupport, cantilever)
+        ratio= FbE/self.section.wood.Fb
+        A= (1+ratio)/1.9
+        B= A**2
+        C= ratio/0.95
+        return A-math.sqrt(B-C)
 
 class ColumnMember(MemberBase):
     ''' Column member according to chapter 3.7 and 3.9 of NDS-2018.'''

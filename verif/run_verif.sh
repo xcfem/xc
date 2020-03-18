@@ -539,6 +539,7 @@ python tests/materials/awc_nds/southern_pine_joist_test.py
 python tests/materials/awc_nds/southern_pine_joist_test.py
 python tests/materials/awc_nds/withdrawal_design_value_test.py
 python tests/materials/awc_nds/lateral_design_value_test.py
+python tests/materials/awc_nds/test_beam_stability_factor.py
 echo "$BLEU" "    ASTM/AISC tests." "$NORMAL"
 python tests/materials/astm/hss12x8_test.py
 python tests/materials/astm/hss8x8_test.py
