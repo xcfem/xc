@@ -499,11 +499,11 @@ class PlywoodPanelSection(WoodPanelSection):
 # Oriented strand board panels according to document:
 # "Panel design specification" Form No. D510C/Revised May 2012/0300
 
-class OSBPanel(WoodPanelSection):
+class OSBPanelSection(WoodPanelSection):
     ''' Oriented strand board panel.'''
     rho= 632.62 # average density kg/m3 Table 12
     def __init__(self, name, b, h, shear_constant):
-        super(OSBPanel,self).__init__(name, b, h, shear_constant)
+        super(OSBPanelSection,self).__init__(name, b, h, shear_constant)
     def getArealDensity(self):
         return self.rho*self.h
     def getFb(self, angle= math.pi/2.0):
@@ -678,17 +678,17 @@ class OSBPanel(WoodPanelSection):
             problems.'''
         matName= self.sectionName+'_'+'osbMaterial'
         osbMaterial= typical_materials.MaterialData(name= matName,E= self.getE(angle), nu=0.2, rho=self.rho)
-        retval= super(OSBPanel,self).defElasticShearSection2d(preprocessor,osbMaterial)
+        retval= super(OSBPanelSection,self).defElasticShearSection2d(preprocessor,osbMaterial)
         return retval
 
 
 
-class Header(sp.RectangularSection):
+class HeaderSection(sp.RectangularSection):
     ''' Structural beam/header.'''
     nu= 0.2
     def __init__(self, name, b, h, Ms, Vs, linearDensity, material):
         '''Constructor.'''
-        super(Header,self).__init__(name, b, h)
+        super(HeaderSection,self).__init__(name, b, h)
         self.Ms= Ms # Allowable moment.
         self.Vs= Vs # Allowable shear.
         self.rho= linearDensity/b/h
@@ -704,22 +704,22 @@ class Header(sp.RectangularSection):
         return self.xc_wood_material
     def defElasticShearSection2d(self, preprocessor):
         mat= self.defXCMaterial()
-        self.xc_section= super(Header,self).defElasticShearSection2d(preprocessor,mat)
+        self.xc_section= super(HeaderSection,self).defElasticShearSection2d(preprocessor,mat)
         return self.xc_section
     def defElasticShearSection3d(self, preprocessor):
         mat= self.defXCMaterial()
-        self.xc_section= super(Header,self).defElasticShearSection3d(preprocessor,mat)
+        self.xc_section= super(HeaderSection,self).defElasticShearSection3d(preprocessor,mat)
         return self.xc_section
 
     
 # Properties of LSL beams and headers taken from:
 # LP SolidStart LSL Beam & Header Technical Guide
 
-class LSLHeader(Header):
+class LSLHeaderSection(HeaderSection):
     ''' LSL structural beam/header.'''
     def __init__(self, name, b, h, Ms, Vs, linearDensity, material):
         '''Constructor.'''
-        super(LSLHeader,self).__init__(name, b, h, Ms, Vs, linearDensity, material)
+        super(LSLHeaderSection,self).__init__(name, b, h, Ms, Vs, linearDensity, material)
     def getVolumeFactor(self):
         '''Return volumen factor.'''
         retval= 1.0
@@ -731,24 +731,24 @@ class LSLHeader(Header):
             retval= pow(in12/self.h,0.12)
         return retval
 
-class LSL_135E_Header(LSLHeader):
+class LSL_135E_HeaderSection(LSLHeaderSection):
     ''' LSL 1.35E structural beam/header.'''
     def __init__(self, name, b, h, Ms, Vs, linearDensity):
-        super(LSL_135E_Header,self).__init__(name, b, h, Ms, Vs, linearDensity, material= LSL_135E())
+        super(LSL_135E_HeaderSection,self).__init__(name, b, h, Ms, Vs, linearDensity, material= LSL_135E())
 
-class LSL_155E_Header(LSLHeader):
+class LSL_155E_HeaderSection(LSLHeaderSection):
     ''' LSL 1.55E structural beam/header.'''
     def __init__(self, name, b, h, Ms, Vs, linearDensity):
-        super(LSL_155E_Header,self).__init__(name, b, h, Ms, Vs, linearDensity, material= LSL_155E())
+        super(LSL_155E_HeaderSection,self).__init__(name, b, h, Ms, Vs, linearDensity, material= LSL_155E())
 
 # Properties of LVL beams and headers taken from:
 # LP SolidStart LVL Beam & Header Technical Guide
 
-class LVLHeader(Header):
+class LVLHeaderSection(HeaderSection):
     ''' LVL structural beam/header.'''
     def __init__(self, name, b, h, Ms, Vs, linearDensity, material):
         '''Constructor.'''
-        super(LVLHeader,self).__init__(name, b, h, Ms, Vs, linearDensity, material)
+        super(LVLHeaderSection,self).__init__(name, b, h, Ms, Vs, linearDensity, material)
     def getVolumeFactor(self):
         '''Return volumen factor.'''
         retval= 1.0
@@ -763,10 +763,10 @@ class LVLHeader(Header):
                 retval*= pow((in12/self.h),0.111)
         return retval
 
-class LVL_2900Fb2E_Header(LVLHeader):
+class LVL_2900Fb2E_HeaderSection(LVLHeaderSection):
     ''' LVL 2900Fb 2.0E structural beam/header.'''
     def __init__(self, name, b, h, Ms, Vs, linearDensity):
-        super(LVL_2900Fb2E_Header,self).__init__(name,b,h, Ms, Vs, linearDensity, material= LVL_2900Fb2E())
+        super(LVL_2900Fb2E_HeaderSection,self).__init__(name,b,h, Ms, Vs, linearDensity, material= LVL_2900Fb2E())
 
 
 class DimensionLumber(sp.RectangularSection):
