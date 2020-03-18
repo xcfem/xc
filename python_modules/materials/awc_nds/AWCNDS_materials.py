@@ -287,14 +287,26 @@ class LVL_2900Fb2E(Wood):
         super(LVL_2900Fb2E,self).__init__(name)
 
 
-class Member(object):
-    ''' Beam/Column according to chapter 3.7 and 3.9 of NDS-2018.'''
-    def __init__(self, unbracedLengthB, unbracedLengthH, section, connection= buckling_base.MemberConnection()):
+class MemberBase(object):
+    ''' Base class for beam and column members according to chapter 
+        3 of NDS-2018.
+    '''
+    def __init__(self, unbracedLength, section, connection= buckling_base.MemberConnection()):
         ''' Constructor. '''
-        self.unbracedLengthB= unbracedLengthB
-        self.unbracedLengthH= unbracedLengthH
+        self.unbracedLength= unbracedLength
         self.section= section
         self.connection= connection
+
+class ColumnMember(MemberBase):
+    ''' Column member according to chapter 3.7 and 3.9 of NDS-2018.'''
+    def __init__(self, unbracedLengthB, unbracedLengthH, section, connection= buckling_base.MemberConnection()):
+        ''' Constructor. '''
+        super(ColumnMember,self).__init__(unbracedLengthB, section, connection)
+        self.unbracedLengthH= unbracedLengthH
+
+    def getUnbracedLengthB(self):
+        ''' Return the B unbraced lenght.'''
+        return self.unbracedLength
 
     def getEffectiveBucklingLengthCoefficientRecommended(self):
         '''Return the column effective buckling length coefficients
@@ -303,7 +315,7 @@ class Member(object):
     def getBSlendernessRatio(self):
         ''' Return the slenderness ratio for the B dimension.'''
         Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
-        return Ke*self.unbracedLengthB/self.section.b
+        return Ke*self.getUnbracedLengthB()/self.section.b
     
     def getHSlendernessRatio(self):
         ''' Return the slenderness ratio for the H dimension.'''
@@ -313,7 +325,7 @@ class Member(object):
     def getSlendernessRatio(self):
         ''' Return the slenderness ratio.'''
         Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
-        srB= Ke*self.unbracedLengthB/self.section.b
+        srB= Ke*self.getUnbracedLengthB()/self.section.b
         srH= Ke*self.unbracedLengthH/self.section.h
         return max(srB,srH)
 
@@ -367,7 +379,7 @@ class Member(object):
         ''' Return the slenderness ratio for bending in the
             B plane.'''
         Ke= self.getEffectiveBucklingLengthCoefficientRecommended()
-        le= Ke*self.unbracedLengthB
+        le= Ke*self.getUnbracedLengthB()
         return math.sqrt(le*self.section.b/self.section.h**2)
     def getFbE(self, E_adj):
         ''' Return the value of F_{bE} as defined in section
@@ -769,22 +781,22 @@ class LVL_2900Fb2E_HeaderSection(LVLHeaderSection):
         super(LVL_2900Fb2E_HeaderSection,self).__init__(name,b,h, Ms, Vs, linearDensity, material= LVL_2900Fb2E())
 
 
-class DimensionLumber(sp.RectangularSection):
-    ''' Dimension lumber.'''
+class DimensionLumberSection(sp.RectangularSection):
+    ''' Section of a dimension lumber member.'''
     def __init__(self, name, b, h, woodMaterial):
         '''Constructor.'''
-        super(DimensionLumber,self).__init__(name, b, h)
+        super(DimensionLumberSection,self).__init__(name, b, h)
         self.wood= woodMaterial
         self.xc_section= None
     def getFb(self):
         return self.wood.Fb(self.h)
     def defElasticShearSection2d(self, preprocessor):
         mat= self.wood.defXCMaterial()
-        self.xc_section= super(DimensionLumber,self).defElasticShearSection2d(preprocessor,mat)
+        self.xc_section= super(DimensionLumberSection,self).defElasticShearSection2d(preprocessor,mat)
         return self.xc_section
     def defElasticShearSection3d(self, preprocessor):
         mat= self.wood.defXCMaterial()
-        self.xc_section= super(DimensionLumber,self).defElasticShearSection3d(preprocessor,mat)
+        self.xc_section= super(DimensionLumberSection,self).defElasticShearSection3d(preprocessor,mat)
         return self.xc_section
     def getBendingFlatUseFactor(self):
         ''' Return the flat use factor for the bending design
