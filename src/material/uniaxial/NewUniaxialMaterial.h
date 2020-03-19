@@ -64,7 +64,7 @@
 namespace XC {
 //! @ingroup MatUnx
 //
-//! @brief ??.
+//! @brief Template for new uniaxial materials.
 class NewUniaxialMaterial : public UniaxialMaterial
   {
   private:

@@ -57,13 +57,13 @@
 #ifndef DrainBilinearMaterial_h
 #define DrainBilinearMaterial_h
 
-#include <material/uniaxial/DrainMaterial.h>
+#include "material/uniaxial/drain/DrainMaterial.h"
 
 namespace XC {
-//! @ingroup MatUnx
+//! @ingroup Drain2DX
 //
-//! @brief ??.
-class DrainBilinearMaterial : public DrainMaterial
+//! @brief Wrapper for <a href="https://nisee.berkeley.edu/elibrary/getpkg?id=DRAIN2DX">DRAIN-2DX</a> bilinear hysteretic model with degradation.
+class DrainBilinearMaterial: public DrainMaterial
   {
   public:
    DrainBilinearMaterial(int tag,

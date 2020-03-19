@@ -72,7 +72,10 @@
 namespace XC {
 //! @ingroup MatUnx
 //
-//! @brief ??.
+//! @brief Reinforcing steel uniaxial material.
+//!
+//! The objects of this class are intended to be used in a reinforced
+//! concrete fiber section as the steel reinforcing material. 
 class ReinforcingSteel : public UniaxialMaterial
   {
   private:

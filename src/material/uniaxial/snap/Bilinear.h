@@ -73,9 +73,9 @@
 #include <utility/recorder/response/MaterialResponse.h>
 
 namespace XC {
-//! @ingroup MatUnx
+//! @ingroup SnapUnx
 //
-//! @brief ??.
+//! @brief Bilinear hysteretic model with degradation.
 class Bilinear : public UniaxialMaterial  
   {
  private:

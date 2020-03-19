@@ -73,59 +73,62 @@
 namespace XC {
 //! @ingroup MatUnx
 //
-//! @brief ??.
-class Pinching : public UniaxialMaterial  
-{
- protected:
-  void envelPosCap(double fy, double alfaPos, double alfaCap,
-		   double cpDsp, double d, double *f, double *ek );
+//! @defgroup SnapUnx Uniaxial materials comming from SNAP code.
+//!
+//! @ingroup SnapUnx
+//!
+//! @brief Pinching hysteretic model with degradation.
+class Pinching: public UniaxialMaterial
+  {
+  protected:
+    void envelPosCap(double fy, double alfaPos, double alfaCap,
+  		     double cpDsp, double d, double *f, double *ek );
   
-  void envelNegCap(double fy, double alfaNeg, double alfaCap,
-		   double cpDsp, double d, double *f, double *ek);
-  
-  void recordInfo(int cond =0);
-  
-  
- private:
-  
-  // Input parameters
-  double elstk,fyieldPos,fyieldNeg,alpha,Resfac; // Properties
-  double capSlope,capDispPos,capDispNeg;	 // Cap
-  double ecaps,ecapk,ecapa,ecapd,cs,ck,ca,cd;	 // Degradation parameters
-  double fpPos,fpNeg,a_pinch;                    // Pinching
-  
-  // Parameters calculated from input data
-  double dyieldPos,dyieldNeg,Enrgts,Enrgta,Enrgtk,Enrgtd;
-  
-  double hsTrial[22], hsCommit[22], hsLastCommit[22];
-  
-  FILE *OutputFile;		// For debugging
- public:
-  Pinching();
-  Pinching(int tag);
-  Pinching(int tag, Vector inputParam );
-  virtual ~Pinching();
-  
-  int setTrialStrain(double d, double strainRate = 0.0);
+    void envelNegCap(double fy, double alfaNeg, double alfaCap,
+		     double cpDsp, double d, double *f, double *ek);
 
-  double getStrain(void) const;
-  double getStress(void) const;
-  double getTangent(void) const;
-  double getInitialTangent(void) const;
+    void recordInfo(int cond =0);
 
-  int commitState(void);
-  int revertToLastCommit(void);    
-  int revertToStart(void);  
-  
-  //virtual
-  UniaxialMaterial *getCopy(void) const;
-  
-  int sendSelf(CommParameters &);  
-  int recvSelf(const CommParameters &);    
-  
-  void Print(std::ostream &s, int flag =0) const;
-  
-};
+
+  private:
+
+    // Input parameters
+    double elstk,fyieldPos,fyieldNeg,alpha,Resfac; // Properties
+    double capSlope,capDispPos,capDispNeg;	 // Cap
+    double ecaps,ecapk,ecapa,ecapd,cs,ck,ca,cd;	 // Degradation parameters
+    double fpPos,fpNeg,a_pinch;                    // Pinching
+
+    // Parameters calculated from input data
+    double dyieldPos,dyieldNeg,Enrgts,Enrgta,Enrgtk,Enrgtd;
+
+    double hsTrial[22], hsCommit[22], hsLastCommit[22];
+
+    FILE *OutputFile;		// For debugging
+  public:
+    Pinching();
+    Pinching(int tag);
+    Pinching(int tag, Vector inputParam );
+    virtual ~Pinching();
+
+    int setTrialStrain(double d, double strainRate = 0.0);
+
+    double getStrain(void) const;
+    double getStress(void) const;
+    double getTangent(void) const;
+    double getInitialTangent(void) const;
+
+    int commitState(void);
+    int revertToLastCommit(void);    
+    int revertToStart(void);  
+
+    //virtual
+    UniaxialMaterial *getCopy(void) const;
+
+    int sendSelf(CommParameters &);  
+    int recvSelf(const CommParameters &);    
+
+    void Print(std::ostream &s, int flag =0) const;
+  };
 } // end of XC namespace
 
 #endif

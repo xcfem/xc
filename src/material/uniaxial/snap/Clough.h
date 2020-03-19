@@ -71,60 +71,57 @@
 #include <stdio.h>
 
 namespace XC {
-//! @ingroup MatUnx
+//! @ingroup SnapUnx
 //
-//! @brief ??.
+//! @brief Clough type hysteretic model with degradation.
 class Clough : public UniaxialMaterial
   {
   protected:
-	void envelPosCap(double fy, double alphaPos, double alphaCap,
-		double cpDsp, double d, double *f, double *ek );
-	
-	void envelNegCap(double fy, double alphaNeg, double alphaCap,
-		double cpDsp, double d, double *f, double *ek);
-	
-	void recordInfo(int cond =0);
-	
-	
+    void envelPosCap(double fy, double alphaPos, double alphaCap,
+	    double cpDsp, double d, double *f, double *ek );
+
+    void envelNegCap(double fy, double alphaNeg, double alphaCap,
+	    double cpDsp, double d, double *f, double *ek);
+
+    void recordInfo(int cond =0);
   private:
-	// Input parameters
-	double elstk,fyieldPos,fyieldNeg,alpha,Resfac;		//	Properties
-	double capSlope,capDispPos,capDispNeg;	 // Cap
-	double ecaps,ecapk,ecapa,ecapd,cs,ck,ca,cd;	 // Degradation parameters
+    // Input parameters
+    double elstk,fyieldPos,fyieldNeg,alpha,Resfac; //!<	Properties
+    double capSlope,capDispPos,capDispNeg;	 //!< Cap
+    double ecaps,ecapk,ecapa,ecapd,cs,ck,ca,cd;	 //!> Degradation parameters
 
-	// Parameters calculated from input data
-	double dyieldPos,dyieldNeg;
-	double Enrgts,Enrgtk,Enrgta,Enrgtd;
+    // Parameters calculated from input data
+    double dyieldPos,dyieldNeg;
+    double Enrgts,Enrgtk,Enrgta,Enrgtd;
 
-	double hsTrial[24], hsCommit[24], hsLastCommit[24];
-	
-	FILE *OutputFile;		// For debugging
+    double hsTrial[24], hsCommit[24], hsLastCommit[24];
+
+    FILE *OutputFile;		// For debugging
   public:
-	Clough(void);
-	Clough(int tag);
-	Clough(int tag, Vector inputParam );
-	virtual ~Clough();
-	
-	int setTrialStrain(double d, double strainRate = 0.0);
+    Clough(void);
+    Clough(int tag);
+    Clough(int tag, Vector inputParam );
+    virtual ~Clough();
 
-	double getStrain(void) const;
-	double getStress(void) const;
-	double getTangent(void) const;
-	double getInitialTangent(void) const;
+    int setTrialStrain(double d, double strainRate = 0.0);
 
-	int commitState(void);
-	int revertToLastCommit(void);    
-	int revertToStart(void);  
-	
-	//virtual
-	UniaxialMaterial *getCopy(void) const;
-	
-	int sendSelf(CommParameters &);  
-	int recvSelf(const CommParameters &);
-	
-	void Print(std::ostream &s, int flag =0) const;
-	
-};
+    double getStrain(void) const;
+    double getStress(void) const;
+    double getTangent(void) const;
+    double getInitialTangent(void) const;
+
+    int commitState(void);
+    int revertToLastCommit(void);    
+    int revertToStart(void);  
+
+    //virtual
+    UniaxialMaterial *getCopy(void) const;
+
+    int sendSelf(CommParameters &);  
+    int recvSelf(const CommParameters &);
+
+    void Print(std::ostream &s, int flag =0) const;	
+  };
 } // end of XC namespace
 
 #endif

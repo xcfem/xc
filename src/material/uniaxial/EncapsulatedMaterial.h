@@ -33,7 +33,7 @@
 namespace XC {
 //! @ingroup MatUnx
 //
-//! @brief ??.
+//! @brief Encapsulates a copy to an uniaxial material.
 class EncapsulatedMaterial: public UniaxialMaterial
   {
   protected:

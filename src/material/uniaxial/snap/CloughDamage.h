@@ -75,7 +75,7 @@ class DamageModel;
 
 //! @ingroup MatUnx
 //
-//! @brief ??.
+//! @brief Clough type hysteretic model with degradation.
 class CloughDamage : public UniaxialMaterial
   {
   protected:

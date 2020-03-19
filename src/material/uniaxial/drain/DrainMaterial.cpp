@@ -62,7 +62,7 @@
 //    UCB/EERC-88/06, Berkeley: Earthquake Engineering Research Center,
 //    University of California, Mar. 1988, 1 vol.
 
-#include <material/uniaxial/DrainMaterial.h>
+#include "material/uniaxial/drain/DrainMaterial.h"
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/ID.h>
 

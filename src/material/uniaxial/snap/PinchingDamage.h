@@ -73,65 +73,62 @@
 namespace XC {
 class DamageModel;
 
-//! @ingroup MatUnx
+//! @ingroup SnapUnx
 //
-//! @brief ??.
+//! @brief Pinching hysteretic model with degradation.
 class PinchingDamage : public UniaxialMaterial  
   {
- private:
-  
-  // Input parameters
-  double elstk,fyieldPos,fyieldNeg,alpha,Resfac; // Properties
-  double capSlope,capDispPos,capDispNeg;	 // Cap
-  double fpPos,fpNeg,a_pinch;                    // Pinching
-  
-  // Parameters calculated from input data
-  double dyieldPos,dyieldNeg;
-  DamageModel *StrDamage;
-  DamageModel *StfDamage;
-  DamageModel *AccDamage;
-  DamageModel *CapDamage;
-  
-  
-  double hsTrial[24], hsCommit[24], hsLastCommit[24];
-  
-  FILE *OutputFile;		// For debugging
+  private:
+    // Input parameters
+    double elstk,fyieldPos,fyieldNeg,alpha,Resfac; // Properties
+    double capSlope,capDispPos,capDispNeg;	 // Cap
+    double fpPos,fpNeg,a_pinch;                    // Pinching
+
+    // Parameters calculated from input data
+    double dyieldPos,dyieldNeg;
+    DamageModel *StrDamage;
+    DamageModel *StfDamage;
+    DamageModel *AccDamage;
+    DamageModel *CapDamage;
+
+
+    double hsTrial[24], hsCommit[24], hsLastCommit[24];
+
+    FILE *OutputFile;		// For debugging
   public:
     PinchingDamage();
     PinchingDamage(int tag);
     PinchingDamage(int tag, Vector inputParam , DamageModel *strength, DamageModel *stiffness, DamageModel *accelerated, DamageModel *capping );
     virtual ~PinchingDamage();
-  
-  int setTrialStrain(double d, double strainRate = 0.0);
-  
-  double getStrain(void) const;
-  double getStress(void) const;
-  double getTangent(void) const;
-  double getInitialTangent(void) const;
 
-  int commitState(void);
-  int revertToLastCommit(void);    
-  int revertToStart(void);  
-  
-  //virtual
-  UniaxialMaterial *getCopy(void) const;
-  
-  int sendSelf(CommParameters &);  
-  int recvSelf(const CommParameters &);    
-  
-  void Print(std::ostream &s, int flag =0) const;
-  
- protected:
-  void envelPosCap(double fy, double alfaPos, double alfaCap,
-		   double cpDsp, double d, double *f, double *ek );
-  
-  void envelNegCap(double fy, double alfaNeg, double alfaCap,
-		   double cpDsp, double d, double *f, double *ek);
-  
-  void recordInfo(int cond =0);
-  
-  
-};
+    int setTrialStrain(double d, double strainRate = 0.0);
+
+    double getStrain(void) const;
+    double getStress(void) const;
+    double getTangent(void) const;
+    double getInitialTangent(void) const;
+
+    int commitState(void);
+    int revertToLastCommit(void);    
+    int revertToStart(void);  
+
+    //virtual
+    UniaxialMaterial *getCopy(void) const;
+
+    int sendSelf(CommParameters &);  
+    int recvSelf(const CommParameters &);    
+
+    void Print(std::ostream &s, int flag =0) const;
+
+  protected:
+    void envelPosCap(double fy, double alfaPos, double alfaCap,
+		     double cpDsp, double d, double *f, double *ek );
+
+    void envelNegCap(double fy, double alfaNeg, double alfaCap,
+		     double cpDsp, double d, double *f, double *ek);
+
+    void recordInfo(int cond =0);
+  };
 } // end of XC namespace
 
 #endif

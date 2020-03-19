@@ -67,20 +67,35 @@ namespace XC {
 
 //! @ingroup MatUnx
 //
-//! @brief ??.
-class BoucWenMaterial : public UniaxialMaterial
+//! @brief Bouc-Wen smooth hysteretic material model.
+//!
+//! This material model is an extension of the original Bouc-Wen
+//! model that includes stiffness and strength degradation
+//! (Baber and Noori (1985)).
+//! Parameter \f$\gamma\f$ is usually in the range from -1 to 1 and parameter
+//! \f$\beta\f$ is usually in the range from 0 to 1. Depending on the values
+//! of \f$\gamma\f$ and \f$\beta\f$ softening, hardening or quasi-linearity
+//! can be simulated. The hysteresis loop will exhibit softening for the
+//! following cases:
+//!    (a) \f$\beta\f$ + \f$\gamma\f$ > 0 and \f$\beta\f$ - \f$\gamma\f$ > 0,
+//!    (b) \f$\beta\f$+\f$\gamma\f$ >0 and \f$\beta\f$-\f$\gamma\f$ <0, and
+//!    (c) \f$\beta\f$+\f$\gamma\f$ >0 and \f$\beta\f$-\f$\gamma\f$ = 0.
+//! The hysteresis loop will exhibit hardening if \f$\beta\f$+\f$\gamma\f$ < 0
+//! and \f$\beta\f$-\f$\gamma\f$ > 0, and quasi-linearity
+//! if \f$\beta\f$+\f$\gamma\f$ = 0 and \f$\beta\f$-\f$\gamma\f$ > 0.
+class BoucWenMaterial: public UniaxialMaterial
   {
   private:
     // Material parameters
-    double alpha;
-    double ko;
-    double n;
-    double gamma;
-    double beta;
-    double Ao;
-    double deltaA;
-    double deltaNu;
-    double deltaEta;
+    double alpha; //!< ratio of post-yield stiffness to the initial elastic stiffenss (0< \f$\alpha\f$ <1) 
+    double ko; //!<initial elastic stiffness.
+    double n; //!< parameter that controls transition from linear to nonlinear range (as n increases the transition becomes sharper; n is usually grater or equal to 1) 
+    double gamma; //!< parameter that control shape of hysteresis loop; depending on the values of \f$\gamma\f$ and \f$\beta\f$ softening, hardening or quasi-linearity can be simulated. 
+    double beta; //!< parameter that control shape of hysteresis loop; depending on the values of \f$\gamma\f$ and \f$\beta\f$ softening, hardening or quasi-li nearity can be simulated.
+    double Ao; //!< parameter that control tangent stiffness.
+    double deltaA; //!< parameter that control tangent stiffness.
+    double deltaNu; //!< parameter that control material degradation.
+    double deltaEta; //!< parameter that control material degradation.
 
     // History variables(trial and committed)
     double Tstrain, Cstrain;

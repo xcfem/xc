@@ -57,12 +57,12 @@
 #ifndef DrainPinch1Material_h
 #define DrainPinch1Material_h
 
-#include <material/uniaxial/DrainMaterial.h>
+#include "material/uniaxial/drain/DrainMaterial.h"
 
 namespace XC {
-//! @ingroup MatUnx
+//! @ingroup Drain2DX
 //
-//! @brief ??
+//! @brief Wrapper for <a href="https://nisee.berkeley.edu/elibrary/getpkg?id=DRAIN2DX">DRAIN-2DX</a> pinching effect material.
 class DrainPinch1Material : public DrainMaterial
   {
   public:

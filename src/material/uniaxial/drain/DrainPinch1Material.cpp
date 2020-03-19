@@ -66,7 +66,7 @@ XC::DrainPinch1Material::DrainPinch1Material(int tag,
 	double b):
 // 15 history variables and 19 material parameters
  XC::DrainMaterial(tag, MAT_TAG_DrainPinch1, 15, 19, b)
-{
+  {
 	matParams[0]  = E;
 	matParams[1]  = fyp;
 	matParams[2]  = fyn;
@@ -89,18 +89,18 @@ XC::DrainPinch1Material::DrainPinch1Material(int tag,
 
 	// Initialize history variables
 	this->revertToStart();
-}
+  }
 
 XC::DrainPinch1Material::DrainPinch1Material(int tag, const XC::Vector &input, double b):
 // 15 history variables and 19 material parameters
  XC::DrainMaterial(tag, MAT_TAG_DrainPinch1, 15, 19, b)
-{
-	for (int i = 0; i < 19; i++)
-		matParams[i] = input(i);
+  {
+	for(int i = 0; i < 19; i++)
+	  matParams[i] = input(i);
 
 	// Initialize history variables
 	this->revertToStart();
-}
+  }
 
 //! @brief Constructor.
 XC::DrainPinch1Material::DrainPinch1Material(int tag)

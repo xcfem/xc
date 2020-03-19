@@ -54,11 +54,6 @@
 // Updated: September 2004
 //
 // Description: This file contains the class definition for
-// Pinching material which is defined by 4 points on the positive and
-// negative envelopes and a bunch of damage parameters. The material accounts for
-// 3 types of damage rules : Strength degradation, Stiffness degradation,
-// unloading stiffness degradation.
-// Updates: damage calculations and several bug fixes
 
 
 #ifndef Pinching4Material_h
@@ -71,7 +66,13 @@
 namespace XC {
 //! @ingroup MatUnx
 //
-//! @brief ??.
+//! @brief Pinching material which is defined by 4 points on the positive and
+//! negative envelopes and a bunch of damage parameters.
+//! 
+//! Pinching material which is defined by 4 points on the positive and
+//! negative envelopes and a bunch of damage parameters. The material accounts
+//! for 3 types of damage rules : Strength degradation, Stiffness degradation,
+//! unloading stiffness degradation.
 class Pinching4Material : public UniaxialMaterial
   {
   private:
