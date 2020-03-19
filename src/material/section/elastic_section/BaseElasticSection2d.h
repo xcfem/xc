@@ -53,6 +53,7 @@ class BaseElasticSection2d: public BaseElasticSection
     BaseElasticSection2d(int classTag,const size_t &dim);
 
     const CrossSectionProperties2d &getCrossSectionProperties(void) const;   
+    CrossSectionProperties2d &getCrossSectionProperties(void);   
     void setCrossSectionProperties(const CrossSectionProperties2d &);  
     void sectionGeometry(const std::string &);
 

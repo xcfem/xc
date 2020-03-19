@@ -35,6 +35,7 @@ class_<XC::CrossSectionProperties2d, bases<CommandEntity> >("CrossSectionPropert
   .add_property("I", make_function( getI, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties2d::setI, "Moment of inertia.")
   .def("EA", &XC::CrossSectionProperties2d::EA, "Tensional stiffness.")
   .def("EI", &XC::CrossSectionProperties2d::EI, "Flexural stiffness.")
+  .def("setI", &XC::CrossSectionProperties2d::setI, "Set moment of inertia value.") 
   .def(self_ns::str(self_ns::self))
   ;
 

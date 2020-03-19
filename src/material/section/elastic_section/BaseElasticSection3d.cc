@@ -75,8 +75,12 @@ void XC::BaseElasticSection3d::sectionGeometry(const std::string &cod_geom)
 		<< "; material handler not defined." << std::endl;
   }
 
-//! \brief Returns the mass properties of the section.
+//! @brief Returns the mass properties of the section.
 const XC::CrossSectionProperties3d &XC::BaseElasticSection3d::getCrossSectionProperties(void) const
+  { return ctes_scc; }
+
+//! @brief Returns the mass properties of the section.
+XC::CrossSectionProperties3d &XC::BaseElasticSection3d::getCrossSectionProperties(void)
   { return ctes_scc; }
 
 //! @brief Returns strain at position being passed as parameter.

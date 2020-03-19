@@ -72,6 +72,7 @@ class BaseElasticSection3d: public BaseElasticSection
     BaseElasticSection3d(int tag,int classTag,const size_t &dim,MaterialHandler *mat_ldr= nullptr);    
 
     const CrossSectionProperties3d &getCrossSectionProperties(void) const;
+    CrossSectionProperties3d &getCrossSectionProperties(void);
     void setCrossSectionProperties(const CrossSectionProperties3d &);  
     void sectionGeometry(const std::string &);
 

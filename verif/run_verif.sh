@@ -72,6 +72,7 @@ python tests/elements/beam_column/elastic_beam3d_sign_criteria_01.py
 python tests/elements/beam_column/elastic_beam3d_sign_criteria_02.py
 python tests/elements/beam_column/elastic_beam3d_sign_criteria_03.py
 python tests/elements/beam_column/test_beam3d_sections_axes_orientation.py
+python tests/elements/beam_column/modify_section_properties.py
 echo "$BLEU" "    Elastic beam-column 3D tests." "$NORMAL"
 python tests/elements/beam_column/beam_test1.py
 python tests/elements/beam_column/cantilever3d_01.py
