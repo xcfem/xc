@@ -64,12 +64,12 @@ class Material_Model;
 
 
 //! @ingroup Matrix
-//
-class stresstensor : public stressstraintensor
+//! 
+//! @brief Stress tensor.
+class stresstensor: public stressstraintensor
   {
   public:
     friend class Material_Model;
-
   public:
     // just send appropriate arguments to the base constructor
     stresstensor(int rank_of_tensor=2, double initval=0.0); // default constructor

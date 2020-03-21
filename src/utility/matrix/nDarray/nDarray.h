@@ -117,7 +117,8 @@ class straintensor;
 
 
 //! @ingroup Matrix
-//
+//!
+//! @brief Storage of n-dimensional array data.
 class nDarray_rep
   {
   public:
@@ -150,16 +151,18 @@ class nDarray_rep
     int n;             // reference count
   public:
 // overloading operator new and delete in nDarray_rep class  ########
-    void * operator new(size_t s); // see C++ reference manual by
+    void *operator new(size_t s); // see C++ reference manual by
     void operator delete(void *);  // by ELLIS and STROUSTRUP page 283.
                                    // and ECKEL page 529.
   };
 
 //! @ingroup Matrix
-//
+//!
+//! @brief n-dimensional array.
 class nDarray
   {
-//  public:
+  private:
+    nDarray_rep * pc_nDarray_rep;
   private:
     friend class BJtensor;
     friend class BJmatrix;
@@ -177,10 +180,6 @@ class nDarray
           // explanation why this one should be a friend instead
           // of inheriting all data through protected construct
           // see in J. Coplien "Advanced C++..." page 96.
-
-  private:
-    nDarray_rep * pc_nDarray_rep;
-
   public:
     nDarray(int rank_of_nDarray=1, double initval=0.0);// default constructor
     nDarray(int rank_of_nDarray, const int *pdim, const double *values);

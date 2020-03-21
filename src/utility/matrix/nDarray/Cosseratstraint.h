@@ -60,9 +60,14 @@
 
 namespace XC {
 //! @ingroup Matrix
-//
+//!
+//! @ brief Strain tensor of a Cosserat material.
+//!
+//! The Cosserat continuum provides a relevant description of the mechanical
+//! behavior of materials with microstructur like rocks and granular media,
+//! liquid crystals, cellular solids and composites and others.
 class Cosseratstraintensor : public BJtensor
-{
+  {
   public: // just send appropriate arguments to the base constructor
 
 //    Cosseratstraintensor (int rank_of_tensor=2, double initval=0.00000003141528);

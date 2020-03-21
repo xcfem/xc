@@ -106,7 +106,8 @@
 
 namespace XC {
 //! @ingroup Matrix
-//
+//!
+//! @brief Boris Jeremic tensor class.
 class BJtensor: public nDarray
   {
     friend class stressstraintensor;

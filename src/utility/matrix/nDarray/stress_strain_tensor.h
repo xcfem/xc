@@ -36,7 +36,8 @@ class Vector;
 
 
 //! @ingroup Matrix
-//
+//!
+//! @brief Base class for strain and stress tensors.
 class stressstraintensor : public BJtensor
   {
   public:

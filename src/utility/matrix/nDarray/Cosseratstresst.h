@@ -56,12 +56,16 @@ namespace XC {
 class Material_Model;
 
 //! @ingroup Matrix
-//
-class Cosseratstresstensor : public BJtensor
-{
+//!
+//! @ brief Stress tensor of a Cosserat material.
+//!
+//! The Cosserat continuum provides a relevant description of the mechanical
+//! behavior of materials with microstructur like rocks and granular media,
+//! liquid crystals, cellular solids and composites and others.
+class Cosseratstresstensor: public BJtensor
+  {
   public:
     friend class Material_Model;
-
   public:
     // just send appropriate arguments to the base constructor
     Cosseratstresstensor(int rank_of_tensor=2, double initval=0.0); // default constructor

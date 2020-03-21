@@ -96,7 +96,8 @@
 
 namespace XC {
 //! @ingroup Matrix
-//
+//!
+//! @brief Boris Jeremic vector class.
 class BJvector: virtual public BJmatrix
   {
     public:

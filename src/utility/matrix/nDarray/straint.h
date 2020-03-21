@@ -64,7 +64,7 @@ namespace XC {
 //! @ingroup Matrix
 //
 //! @brief Strain tensor
-class straintensor : public stressstraintensor
+class straintensor: public stressstraintensor
   {
   public: // just send appropriate arguments to the base constructor
 //    straintensor (int rank_of_tensor=2, double initval=0.00000003141528);

@@ -98,8 +98,9 @@
 
 namespace XC {
 //! @ingroup Matrix
-//
-class BJmatrix : public nDarray
+//!
+//! @brief Boris Jeremic matrix class.
+class BJmatrix: public nDarray
   {
     friend class BJvector; // explanation why this one should be a friend
                          // instead of inheriting all data through protected
@@ -210,7 +211,6 @@ class BJmatrix : public nDarray
 //       void tqli(double * d, double * e, int n, double ** z);
 //       void tred2(double ** a, int n, double * d, double * e);
 //       void eigsrt(double * d, double ** v, int n);
-          
-};
+  };
 } // end of XC namespace
 #endif 
