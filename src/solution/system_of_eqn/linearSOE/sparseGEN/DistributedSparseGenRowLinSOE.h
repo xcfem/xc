@@ -72,7 +72,7 @@ class DistributedSparseGenRowLinSolver;
 //! @ingroup SOE
 //
 //! @brief Sparse nonsymmetric matrix distributed systems of equations.
- class DistributedSparseGenRowLinSOE : public SparseGenSOEBase, public DistributedLinSOE
+ class DistributedSparseGenRowLinSOE: public SparseGenSOEBase, public DistributedLinSOE
   {
   private:
     ID colA;

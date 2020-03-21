@@ -76,7 +76,7 @@ class DamageModel;
 //! @ingroup SnapUnx
 //
 //! @brief Pinching hysteretic model with degradation.
-class PinchingDamage : public UniaxialMaterial  
+class PinchingDamage: public UniaxialMaterial  
   {
   private:
     // Input parameters

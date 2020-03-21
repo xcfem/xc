@@ -36,7 +36,7 @@
 namespace XC {
 //! @ingroup MATYS
 //! @brief Bounding 2D yield surface.
-class BoundingSurface2D : public YS_Evolution2D
+class BoundingSurface2D: public YS_Evolution2D
   {
   protected:
 //	double minIsoFactor;

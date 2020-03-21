@@ -36,7 +36,7 @@ namespace XC {
 //! @ingroup PlaneElements
 //
 //! @brief Base class for MIT C4 shell elements.
-class ShellMITC4Base : public Shell4NBase
+class ShellMITC4Base: public Shell4NBase
   {
   protected:
     double Ktt; //!<drilling stiffness

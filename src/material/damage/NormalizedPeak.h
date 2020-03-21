@@ -69,7 +69,7 @@ class DamageResponse;
 class Element;
 
 
-class NormalizedPeak : public DamageModel
+class NormalizedPeak: public DamageModel
   {
   private:
     std::string damagename;

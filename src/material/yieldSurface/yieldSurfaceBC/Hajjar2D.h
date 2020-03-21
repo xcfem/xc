@@ -38,7 +38,7 @@ namespace XC {
 //! @ingroup MATYS
 //
 //! @brief XXX??
-class Hajjar2D : public YieldSurface_BC2D
+class Hajjar2D: public YieldSurface_BC2D
   {
   public:
     double depth, width, thick, fc, fy, centroidY;

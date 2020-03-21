@@ -63,7 +63,7 @@ namespace XC {
 //! @ingroup NDMat
 //
 //! @brief ??.
-class PressureDependentElastic3D : public ElasticIsotropicMaterial
+class PressureDependentElastic3D: public ElasticIsotropicMaterial
   {
   private:
     static Vector sigma; //!< Stress vector

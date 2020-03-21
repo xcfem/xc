@@ -59,7 +59,7 @@ namespace XC {
 //! @ingroup BeamInteg
 //
 //! @brief User defined integration.
-class UserDefinedHingeIntegration2d : public UserDefinedHingeIntegrationBase
+class UserDefinedHingeIntegration2d: public UserDefinedHingeIntegrationBase
   {
   private:
     CrossSectionProperties2d ctes_scc; //Mechanical properties of the section E,A,Iy,...

@@ -59,7 +59,7 @@ namespace XC {
 //! @ingroup MatPS
 //
 //! @brief ??.
-class CAMPotentialSurface : public PotentialSurface
+class CAMPotentialSurface: public PotentialSurface
   {
   // Private vars to define the Mazari-Dafalias Potential Surface
   private:

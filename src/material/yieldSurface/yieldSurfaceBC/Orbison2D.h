@@ -37,7 +37,7 @@
 namespace XC {
 //! @ingroup MATYS
 //! @brief Orbison 2D yield surface.
-class Orbison2D : public YieldSurface_BC2D
+class Orbison2D: public YieldSurface_BC2D
   {
   public:
     Orbison2D(int tag, double xmax, double ymax, YS_Evolution &model);

@@ -89,7 +89,7 @@ class SectionForceDeformation;
 //! A UniaxialMaterial object is responsible for
 //! keeping track of stress, strain and the
 //! constitution for a particular point in the domain. 
-class UniaxialMaterial : public Material
+class UniaxialMaterial: public Material
   {
   private:
     double rho; //!< Linear mass density.

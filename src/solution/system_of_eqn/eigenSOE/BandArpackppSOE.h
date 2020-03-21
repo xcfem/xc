@@ -40,7 +40,7 @@ class BandArpackppSolver;
 //! @ingroup EigenSOE
 //
 //! @brief <a href="http://www.caam.rice.edu/software/ARPACK/" target="_new"> Arpack++</a> based band matrix eigenvalue SOE solver.
-class BandArpackppSOE : public ArpackSOE
+class BandArpackppSOE: public ArpackSOE
   {
   private:
     msp_double A;

@@ -57,7 +57,7 @@ namespace XC {
 //! @ingroup StaticIntegrator
 //
 //! @brief Equilibrium path following methods.
-class EQPath : public StaticIntegrator
+class EQPath: public StaticIntegrator
   {
     
   private:

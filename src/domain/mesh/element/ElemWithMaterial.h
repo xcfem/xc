@@ -37,7 +37,7 @@ namespace XC {
 //
 //! @brief Element with material
 template <int NNODOS,class PhysProp>
-class ElemWithMaterial : public ElementBase<NNODOS>
+class ElemWithMaterial: public ElementBase<NNODOS>
   {
   protected:
     PhysProp physicalProperties; //!< pointers to the material objects and physical properties.

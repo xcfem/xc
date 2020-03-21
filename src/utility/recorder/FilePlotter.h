@@ -71,7 +71,7 @@ class Vector;
 //
 //! @brief A FilePlotter will create a line graph using xy points
 //! found in a file. Probably to deprecate.
-class FilePlotter : public Recorder
+class FilePlotter: public Recorder
   {
   private:
 /*     ColorMap *theMap; */

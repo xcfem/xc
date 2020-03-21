@@ -58,7 +58,7 @@ namespace XC {
 //! @ingroup BeamInteg
 //
 //! @brief Trapezoidal integration scheme.
-class TrapezoidalBeamIntegration : public BeamIntegration
+class TrapezoidalBeamIntegration: public BeamIntegration
   {
   public:
     TrapezoidalBeamIntegration();

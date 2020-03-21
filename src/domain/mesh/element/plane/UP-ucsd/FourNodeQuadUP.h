@@ -57,7 +57,7 @@ class Response;
 //! coupled material, based on Biot's theory of porous medium. Each element node
 //! has 3 degrees-of-freedom (DOF): DOF 1 and 2 for solid displacement (u)
 //! and DOF 3 for fluid pressure (p).
-class FourNodeQuadUP : public QuadBase4N<SolidMech2D>
+class FourNodeQuadUP: public QuadBase4N<SolidMech2D>
   {
   private:
 

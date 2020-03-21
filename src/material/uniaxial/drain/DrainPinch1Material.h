@@ -63,7 +63,7 @@ namespace XC {
 //! @ingroup Drain2DX
 //
 //! @brief Wrapper for <a href="https://nisee.berkeley.edu/elibrary/getpkg?id=DRAIN2DX">DRAIN-2DX</a> pinching effect material.
-class DrainPinch1Material : public DrainMaterial
+class DrainPinch1Material: public DrainMaterial
   {
   public:
     DrainPinch1Material(int tag,

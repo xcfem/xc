@@ -41,7 +41,7 @@ namespace XC {
 //
 //! @brief ??.
 template <int SZ>
-class ElasticPlateProto : public ElasticPlateBase
+class ElasticPlateProto: public ElasticPlateBase
   {
   protected:
     Vector trialStrain;

@@ -79,7 +79,7 @@ namespace XC {
 //! pivoting (GEPP). The columns of A may be preordered before
 //! factorization; the preordering for sparsity is completely separate
 //! from the factorization and a number of ordering schemes are provided.
-class DistributedSuperLU : public SparseGenColLinSolver
+class DistributedSuperLU: public SparseGenColLinSolver
   {
   private:
     superlu_options_t_Distributed options;

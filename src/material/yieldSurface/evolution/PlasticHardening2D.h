@@ -37,7 +37,7 @@ namespace XC {
 //! @ingroup MATYS
 //!
 //! @brief ??
-class PlasticHardening2D : public YS_Evolution2D
+class PlasticHardening2D: public YS_Evolution2D
   {
   protected:
 // double minIsoFactor;

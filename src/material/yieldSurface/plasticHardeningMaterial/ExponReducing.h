@@ -38,7 +38,7 @@ namespace XC {
 //! @ingroup MATYS
 //
 //! @brief XXX??
-class ExponReducing : public PlasticHardeningMaterial
+class ExponReducing: public PlasticHardeningMaterial
   {
   private:
     double Kp0;

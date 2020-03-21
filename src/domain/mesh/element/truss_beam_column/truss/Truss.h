@@ -75,7 +75,7 @@ class UniaxialMaterial;
 //! This elements can be defined in one, two or three-dimesional
 //! problems. Each element is associated with two Node objects
 //! and a UniaxialMaterial object.
-class Truss : public TrussBase
+class Truss: public TrussBase
   {
   private:
     double computeCurrentStrain(void) const;

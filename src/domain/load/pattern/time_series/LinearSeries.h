@@ -74,7 +74,7 @@ namespace XC {
 //!
 //! Objects of this class represent a linear relationship between
 //! the pseudo time and the load factor.
-class LinearSeries : public CFactorSeries
+class LinearSeries: public CFactorSeries
   {
   public:
     LinearSeries(double cFactor = 1.0);

@@ -36,7 +36,7 @@
 namespace XC {
 //! @ingroup MATYS
 //! @brief ??.
-class Isotropic2D01 : public PlasticHardening2D
+class Isotropic2D01: public PlasticHardening2D
   {
   public:
     Isotropic2D01(int tag, double min_iso_factor,PlasticHardeningMaterial &kpx, PlasticHardeningMaterial  &kpy);

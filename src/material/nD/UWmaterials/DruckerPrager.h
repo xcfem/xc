@@ -72,7 +72,7 @@ namespace XC {
 //! @ingroup UWMat
 //
 //! @brief Drucker-Prager material.
-class DruckerPrager : public NDMaterial
+class DruckerPrager: public NDMaterial
   {
  protected:
   

@@ -75,7 +75,7 @@ namespace XC {
 //! @brief The file generates the 4 point envelope for both positive 
 //! and negative loading and is basically a wrapper for the
 //! Pinching4 material at it's outset.
-class BarSlipMaterial : public UniaxialMaterial
+class BarSlipMaterial: public UniaxialMaterial
   {
   private:
     int tagMat;

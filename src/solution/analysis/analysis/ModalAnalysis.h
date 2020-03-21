@@ -39,7 +39,7 @@ class Matrix;
 //! @ingroup AnalysisType
 //
 //! @brief Modal analysis.
-class ModalAnalysis : public EigenAnalysis
+class ModalAnalysis: public EigenAnalysis
   {
   protected:
     FunctionFromPointsR_R espectro;

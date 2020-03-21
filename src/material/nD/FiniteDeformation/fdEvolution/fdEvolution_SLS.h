@@ -59,7 +59,7 @@ namespace XC {
 //! @ingroup FDEVNDMat
 //
 //! @brief ??.
-class fdEvolution_SLS : public fdEvolution_S
+class fdEvolution_SLS: public fdEvolution_S
 {
  private:
     double H_linear;

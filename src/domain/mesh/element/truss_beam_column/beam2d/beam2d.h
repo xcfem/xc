@@ -37,7 +37,7 @@ class CrdTransf2d;
 //! @ingroup OneDimensionalElem
 //
 //! @brief 2D beam element.
-class beam2d : public ProtoBeam2d
+class beam2d: public ProtoBeam2d
   {
   protected:
     // protected attributes - a copy for each object of the class        

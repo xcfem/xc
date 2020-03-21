@@ -63,7 +63,7 @@ class Element;
 
 //! @ingroup Recorder
 //
-class ElementResponse : public Response
+class ElementResponse: public Response
   {
   private:
     Element *theElement; //!< to element.

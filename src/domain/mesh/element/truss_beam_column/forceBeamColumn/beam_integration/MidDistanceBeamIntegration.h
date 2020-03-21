@@ -54,7 +54,7 @@
 #include "ParameterIDBeamIntegration.h"
 namespace XC {
 
-class MidDistanceBeamIntegration : public ParameterIDBeamIntegration
+class MidDistanceBeamIntegration: public ParameterIDBeamIntegration
   {
   public:
     MidDistanceBeamIntegration(int nIP, const Vector &pt);

@@ -36,7 +36,7 @@ namespace XC {
 //! @ingroup EigenSOE
 //
 //! @brief <a href="http://www.caam.rice.edu/software/ARPACK/" target="_new"> Arpack++</a> based system of equations.
-class ArpackSOE : public EigenSOE
+class ArpackSOE: public EigenSOE
   {
   protected:
     double shift;

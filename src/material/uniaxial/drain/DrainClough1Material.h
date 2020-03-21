@@ -63,7 +63,7 @@ namespace XC {
 //! @ingroup Drain2DX
 //
 //! @brief Wrapper for <a href="https://nisee.berkeley.edu/elibrary/getpkg?id=DRAIN2DX">DRAIN-2DX</a> Clough type hysteretic model with degradation.
-class DrainClough1Material : public DrainMaterial
+class DrainClough1Material: public DrainMaterial
   {
   public:
 	DrainClough1Material(int tag,

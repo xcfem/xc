@@ -36,7 +36,7 @@ namespace XC {
 //! @ingroup ElemLoads
 //
 //! @brief Uniform load over shell elements.
-class ShellUniformLoad : public ShellMecLoad
+class ShellUniformLoad: public ShellMecLoad
   {
   protected:
     DbTagData &getDbTagData(void) const;

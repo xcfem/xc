@@ -68,7 +68,7 @@ class DiagonalSOE;
 //! @ingroup Solver
 //
 //! @brief Direct solver for diagonal matrix SOE.
-class DiagonalDirectSolver : public DiagonalSolver
+class DiagonalDirectSolver: public DiagonalSolver
   {
   protected:
     double minDiagTol;

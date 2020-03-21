@@ -49,7 +49,7 @@ class SymArpackSOE;
 //! @ingroup EigenSolver
 //
 //! @brief <a href="http://www.caam.rice.edu/software/ARPACK/" target="_new"> Arpack</a> based symmetric matrix eigenvalue SOE solver.
-class SymArpackSolver : public EigenSolver
+class SymArpackSolver: public EigenSolver
   {
   private:
     SymArpackSOE *theSOE;

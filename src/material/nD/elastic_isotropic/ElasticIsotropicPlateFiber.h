@@ -68,7 +68,7 @@ namespace XC {
 //! @ingroup EINDMat
 //
 //! @brief Elastic isotropic material for plate elements.
-class ElasticIsotropicPlateFiber : public ElasticIsotropicMaterial
+class ElasticIsotropicPlateFiber: public ElasticIsotropicMaterial
   {
   private:
     static Vector sigma; //!< Stress vector ... class-wide for returns

@@ -38,7 +38,7 @@ class ReinfBar;
 //! @ingroup MATSCCReinforcement
 //
 //! @brief Single rebar (not included in a reinforcement layer).
-class SingleBar : public ReinfLayer
+class SingleBar: public ReinfLayer
   {
   private:
     Vector posit; //!< Position of the bar center.

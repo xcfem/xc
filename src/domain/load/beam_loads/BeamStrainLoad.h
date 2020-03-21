@@ -41,7 +41,7 @@ class CrossSectionProperties3d;
 //! @ingroup ElemLoads
 //
 //! @brief Load due to restricted material expansion or contraction on beam elements.
-class BeamStrainLoad : public BeamLoad
+class BeamStrainLoad: public BeamLoad
   {
     DeformationPlane backEndDeformationsPlane; //!< Restricted generalized strains at element first node.
     DeformationPlane frontEndDeformationPlane; //!< Restricted generalized strains at element last node.

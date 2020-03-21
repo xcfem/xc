@@ -58,7 +58,7 @@ namespace XC {
 //! @ingroup BeamInteg
 //
 //! @brief ??.
-class HingeMidpointBeamIntegration3d : public HingeBeamIntegration3d
+class HingeMidpointBeamIntegration3d: public HingeBeamIntegration3d
   {
   public:
     HingeMidpointBeamIntegration3d(double E, double A, double Iz,double Iy, double G, double J,double lpI, double lpJ);

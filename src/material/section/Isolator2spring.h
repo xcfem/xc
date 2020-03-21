@@ -72,7 +72,7 @@ namespace XC {
 //! by Koh and Kelly to represent the buckling behavior of an elastomeric
 //! bearing. The material model has been modified to include material
 //! nonlinearity and optional strength degradation.
-class Isolator2spring : public SectionForceDeformation
+class Isolator2spring: public SectionForceDeformation
   {
   private:
     double tol;

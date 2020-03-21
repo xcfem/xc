@@ -136,7 +136,7 @@ namespace XC {
 //!  t}^{(i-1)}\right)
 //! - F_R\left(Ud_{t + \Delta t}^{(i-1)},U_{t + \Delta
 //!  t}^{(i-1)}\right) \]
-class Newmark : public NewmarkBase2
+class Newmark: public NewmarkBase2
   {
   protected:
     bool displ; //!< a flag indicating whether displ or accel increments.

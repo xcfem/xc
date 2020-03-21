@@ -73,7 +73,7 @@ namespace XC {
 //! @ingroup MatNDYS
 //
 //! @brief ??.
-class DPYieldSurface : public YieldSurface
+class DPYieldSurface: public YieldSurface
   {
   private:		  // Private vars to define the Drucker-Prager Yield Surface
     //double alfa1;	  // Cone orientation angle now in EPState's first scalar var 

@@ -64,7 +64,7 @@ namespace XC {
 //! @ingroup MatUnx
 //
 //! @brief Serially connected uniaxial materials.
-class SeriesMaterial : public ConnectedMaterial
+class SeriesMaterial: public ConnectedMaterial
   {
   private:
     double Tstrain;

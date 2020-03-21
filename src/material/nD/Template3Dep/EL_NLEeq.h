@@ -62,7 +62,7 @@ namespace XC {
 //! @ingroup MatNDEL
 //
 //! @brief ??.
-class EvolutionLaw_NL_Eeq : public EvolutionLaw_S
+class EvolutionLaw_NL_Eeq: public EvolutionLaw_S
   {
   // Private vars to define the evolution law
 

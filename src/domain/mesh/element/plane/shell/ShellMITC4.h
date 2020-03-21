@@ -64,7 +64,7 @@ class ShellLinearCrdTransf3d;
 //! @ingroup PlaneElements
 //
 //! @brief MIT C4 shell elements.
-class ShellMITC4 : public ShellMITC4Base
+class ShellMITC4: public ShellMITC4Base
   {
     static ShellLinearCrdTransf3d linear_trf;
   protected:

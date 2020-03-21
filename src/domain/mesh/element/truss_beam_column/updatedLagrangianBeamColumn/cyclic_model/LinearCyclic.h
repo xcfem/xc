@@ -33,7 +33,7 @@ namespace XC {
 //! @ingroup OneDimensionalElem
 //!
 //! @brief Linear model of cyclic connector behavior.
-class LinearCyclic : public CyclicModel
+class LinearCyclic: public CyclicModel
   {
   protected:
     double getTaskFactor();

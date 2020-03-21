@@ -72,7 +72,7 @@ class Node;
 //! @ingroup CContSP
 //
 //! @brief Prescribed value for a single degree of freedom.
-class ImposedMotionSP : public ImposedMotionBase
+class ImposedMotionSP: public ImposedMotionBase
   {
   private:
     Vector *theNodeResponse; //! vector for setting nodal response

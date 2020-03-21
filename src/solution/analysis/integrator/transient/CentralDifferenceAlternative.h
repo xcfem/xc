@@ -75,7 +75,7 @@ namespace XC {
 //! which is an explicit direct integration scheme as
 //! outlined in the book 'Concepts
 //! and Applications of Finite Element Analysis' by Cook, Malkus & Plesha.
-class CentralDifferenceAlternative : public CentralDifferenceBase
+class CentralDifferenceAlternative: public CentralDifferenceBase
   {
   private:
     Vector Ut, Utp1;  // disp response quantities at time t and t + deltaT

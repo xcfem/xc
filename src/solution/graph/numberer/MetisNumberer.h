@@ -77,7 +77,7 @@ namespace XC {
 //! Graph Partitioning And Sparse Matrix Ordering System', developed by
 //! G. Karypis and V. Kumar at the University of Minnesota. The metis
 //! files are found in metis-2.0 which were downloaded.
-class Metis : public GraphPartitioner
+class Metis: public GraphPartitioner
   {
   private:
     bool checkOptions(void);

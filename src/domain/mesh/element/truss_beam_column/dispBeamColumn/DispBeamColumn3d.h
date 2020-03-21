@@ -73,7 +73,7 @@ class BeamIntegration;
 //! @ingroup OneDimensionalElem
 //
 //! @brief 3D beam element with PrismaticBarCrossSection type material.
-class DispBeamColumn3d : public BeamColumnWithSectionFDTrf3d
+class DispBeamColumn3d: public BeamColumnWithSectionFDTrf3d
   {
   private:
     void free_mem(void);

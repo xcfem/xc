@@ -36,7 +36,7 @@ namespace XC {
 //! @ingroup PhysicalProperties
 //
 //! @brief Physical properties for shells.
-class BeamColumnJointPhysicalProperties : public UniaxialMatPhysicalProperties
+class BeamColumnJointPhysicalProperties: public UniaxialMatPhysicalProperties
   {
   public:
     BeamColumnJointPhysicalProperties(const size_t &nMat= 0,const UniaxialMaterial *ptr_mat= nullptr); 

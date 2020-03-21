@@ -73,7 +73,7 @@ class Vector;
 //! @ingroup LinearSolver
 //
 //! @brief Base class for conjugate gradient linear SOE solvers.
-class ConjugateGradientSolver : public LinearSOESolver
+class ConjugateGradientSolver: public LinearSOESolver
   {
   private:
     Vector r, p, Ap, x;

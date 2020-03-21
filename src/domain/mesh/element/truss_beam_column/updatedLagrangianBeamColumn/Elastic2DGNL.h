@@ -61,7 +61,7 @@ namespace XC {
 //
 //! @brief Elastic2dGNL is a subclass of UpdatedLagrangianBeam2D, that can be 
 // used to model 2d beam column elements with large deformation effects.
-class Elastic2dGNL : public UpdatedLagrangianBeam2D  
+class Elastic2dGNL: public UpdatedLagrangianBeam2D  
   {
   private:
     // Data declarations

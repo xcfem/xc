@@ -39,7 +39,7 @@ namespace XC {
 //! @ingroup OneDimensionalElem
 //
 //! @brief Beam-column element with PrismaticBarCrossSection material
-class BeamColumnWithSectionFD : public Element1D
+class BeamColumnWithSectionFD: public Element1D
   {
   protected:
     PrismaticBarCrossSectionsVector theSections; //!< pointers to the PrismaticBarCrossSection objects

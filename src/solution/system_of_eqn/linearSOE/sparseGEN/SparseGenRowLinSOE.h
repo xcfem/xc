@@ -70,7 +70,7 @@ class SparseGenRowLinSolver;
 //! @ingroup SOE
 //
 //! @brief Sparse nonsymmetric matrix linear system of equations.
-class SparseGenRowLinSOE : public SparseGenSOEBase
+class SparseGenRowLinSOE: public SparseGenSOEBase
   {
   private:
     ID colA;

@@ -69,7 +69,7 @@ class FullGenEigenSolver;
 //! @ingroup EigenSOE
 //
 //! @brief Dense matrix eigenproblem system of equations.
-class FullGenEigenSOE : public EigenSOE
+class FullGenEigenSOE: public EigenSOE
   {
   private:
     Vector A;

@@ -70,7 +70,7 @@ namespace XC {
 //! @ingroup TSeries
 //
 //! @brief Constant function over time.
-class ConstantSeries : public CFactorSeries
+class ConstantSeries: public CFactorSeries
   {
   public:
     ConstantSeries(double cf= 1.0);

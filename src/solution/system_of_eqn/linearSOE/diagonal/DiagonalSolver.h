@@ -70,7 +70,7 @@ class DiagonalSOE;
 //! @ingroup Solver
 //
 //! @brief Base class for diagonal matrix linear SOE solvers.
-class DiagonalSolver : public LinearSOESolver
+class DiagonalSolver: public LinearSOESolver
   {
   protected:
     DiagonalSOE *theSOE;

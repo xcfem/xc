@@ -106,7 +106,7 @@ class BandGenLinSolver;
 //! The \f$x\f$ and \f$b\f$ vectors are stored in 1d double arrays of length
 //! \f$N\f$. To allow the solvers access to this data, the solvers that use
 //! this class are all declared as friend classes. 
-class BandGenLinSOE : public FactoredSOEBase
+class BandGenLinSOE: public FactoredSOEBase
   {
   protected:
     int numSuperD, numSubD;    

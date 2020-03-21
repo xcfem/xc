@@ -52,7 +52,7 @@ class SymSparseLinSOE;
 //! @ingroup Solver
 //
 //! @brief Solver for symmetric sparse linear SOE.
-class SymSparseLinSolver : public LinearSOESolver
+class SymSparseLinSolver: public LinearSOESolver
   {
   private:
     SymSparseLinSOE *theSOE;

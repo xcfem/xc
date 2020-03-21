@@ -61,7 +61,7 @@ namespace XC {
 //! @ingroup FDNDMat
 //
 //! @brief ??.
-class NeoHookeanCompressible3D : public FiniteDeformationElastic3D
+class NeoHookeanCompressible3D: public FiniteDeformationElastic3D
   {
   private:
     int ComputeTrials(void);

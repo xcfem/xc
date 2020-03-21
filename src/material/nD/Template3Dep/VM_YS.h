@@ -59,7 +59,7 @@ namespace XC {
 //! @ingroup MatNDYS
 //
 //! @brief Von Mises yield surface.
-class VMYieldSurface : public YieldSurface
+class VMYieldSurface: public YieldSurface
   {
   public:
     // Create a colne of itself

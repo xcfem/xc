@@ -67,7 +67,7 @@ class SymBandEigenSolver;
 //! @ingroup EigenSOE
 //
 //! @brief Band symmetric matrix eigenvaules system of equations.
-class SymBandEigenSOE : public EigenSOE
+class SymBandEigenSOE: public EigenSOE
   {
   private:
     int numSuperD;

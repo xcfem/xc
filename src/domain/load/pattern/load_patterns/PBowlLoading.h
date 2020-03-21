@@ -78,7 +78,7 @@ class Matrix;
 //! @ingroup LPatterns
 //
 //! @brief ??.
-class PBowlLoading : public LoadPattern
+class PBowlLoading: public LoadPattern
   {
   private:
     ID *PBowlElements;   // vector containing the plastic bowling elements

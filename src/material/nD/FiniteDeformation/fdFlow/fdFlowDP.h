@@ -59,7 +59,7 @@ namespace XC {
 //! @ingroup FDFlowNDMat
 //
 //! @brief ??.
-class fdFlowDP : public fdFlow
+class fdFlowDP: public fdFlow
   {
   private:
     double DilatedAngle;

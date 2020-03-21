@@ -72,7 +72,7 @@ class UniaxialMaterial;
 //! @ingroup Elem
 //
 //! @brief Element prototype.
-class NewElement : public Element
+class NewElement: public Element
   {
   private:
     mutable Matrix theMatrix; //!< matrix to return stiff, damp & mass

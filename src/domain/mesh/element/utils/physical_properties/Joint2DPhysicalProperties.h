@@ -37,7 +37,7 @@ namespace XC {
 //! @ingroup PhysicalProperties
 //
 //! @brief Physical properties for shells.
-class Joint2DPhysicalProperties : public UniaxialMatPhysicalProperties
+class Joint2DPhysicalProperties: public UniaxialMatPhysicalProperties
   {
   protected:
     DamageModelVector theDamages;

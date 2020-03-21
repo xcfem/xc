@@ -76,7 +76,7 @@ class DamageModel;
 //! @ingroup MatUnx
 //
 //! @brief Clough type hysteretic model with degradation.
-class CloughDamage : public UniaxialMaterial
+class CloughDamage: public UniaxialMaterial
   {
   protected:
     void envelPosCap(double fy, double alphaPos, double alphaCap,

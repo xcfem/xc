@@ -37,7 +37,7 @@ namespace XC {
 class NullEvolution;
 //! @ingroup MATYS
 //! @brief Null 2D yield surface.
-class NullYS2D : public YieldSurface_BC2D
+class NullYS2D: public YieldSurface_BC2D
   {
   private:
     static NullEvolution evolModel;    

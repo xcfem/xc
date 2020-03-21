@@ -44,7 +44,7 @@ class FrictionModel;
 class UniaxialMaterial;
 class Response;
 
-class SingleFPSimple3d : public FrictionElementBase
+class SingleFPSimple3d: public FrictionElementBase
   {
   private:
     

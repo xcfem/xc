@@ -34,7 +34,7 @@ namespace XC {
 //! @ingroup MatUnx
 //
 //! @brief Base class for steel uniaxial materials.
-class SteelBase : public UniaxialMaterial
+class SteelBase: public UniaxialMaterial
   {
   protected:
     /*** Material Properties ***/

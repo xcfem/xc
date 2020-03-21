@@ -66,7 +66,7 @@ namespace XC {
 //! @ingroup EigenAlgo
 //
 //! @brief Standard eigenvalues algorithm.
-class StandardEigenAlgo : public EigenAlgorithm
+class StandardEigenAlgo: public EigenAlgorithm
   {
   protected:
     friend class AnalysisAggregation;

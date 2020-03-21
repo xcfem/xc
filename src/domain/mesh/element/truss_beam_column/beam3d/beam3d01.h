@@ -65,7 +65,7 @@ namespace XC {
 //! @ingroup OneDimensionalElem
 //
 //! @brief 3D beam 01 element.
-class beam3d01 : public beam3dBase
+class beam3d01: public beam3dBase
   {
   private:
     const Matrix &getStiff(void) const;

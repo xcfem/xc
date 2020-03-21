@@ -54,7 +54,7 @@ class Node;
 class NDMaterial;
 class Response;
 
-class NineFourNodeQuadUP : public ElemWithMaterial<9,SolidMech2D>
+class NineFourNodeQuadUP: public ElemWithMaterial<9,SolidMech2D>
   {
   private:
     BodyForces2D bf; //!< Body forces

@@ -70,7 +70,7 @@ struct ArpackAuxVars
 //! @brief Arpack solver for banded matrices.
 //! The ARnoldi PACKage, is a numerical software
 //! library written in FORTRAN 77 for solving large scale eigenvalue problems.
-class BandArpackSolver : public EigenSolver
+class BandArpackSolver: public EigenSolver
   {
   private:
     BandArpackSOE *theSOE;

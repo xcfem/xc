@@ -68,7 +68,7 @@ namespace XC {
 //! @ingroup NDMat
 //
 //! @brief Base class for elastic isotropic axisymmetric materials.
-class ElasticIsotropicAxiSymm : public ElasticIsotropicMaterial
+class ElasticIsotropicAxiSymm: public ElasticIsotropicMaterial
   {
   private:
     static Vector sigma;	// Stress vector ... class-wide for returns

@@ -231,7 +231,7 @@ class Vector;
 //! \]
 //!
 //! \end{enumerate}
-class ArcLength1 : public ArcLengthBase
+class ArcLength1: public ArcLengthBase
   {
     double getDLambdaUpdate(void) const;
   protected:

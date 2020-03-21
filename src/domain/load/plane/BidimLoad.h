@@ -37,7 +37,7 @@ namespace XC {
 //! @ingroup ElemLoads
 //
 //! @brief Load over bidimensional elements.
-class BidimLoad : public ElementBodyLoad
+class BidimLoad: public ElementBodyLoad
   {
   protected:
 

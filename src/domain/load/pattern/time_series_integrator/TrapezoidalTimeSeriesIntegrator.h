@@ -68,7 +68,7 @@ namespace XC {
 //! @ingroup TSeries
 //
 //! @brief integrates a ground motion TimeSeries using the trapezoidal rule.
-class TrapezoidalTimeSeriesIntegrator : public TimeSeriesIntegrator
+class TrapezoidalTimeSeriesIntegrator: public TimeSeriesIntegrator
   {
    public:
      TrapezoidalTimeSeriesIntegrator(void);

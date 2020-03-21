@@ -63,7 +63,7 @@ class FVector;
 //! @ingroup ElemLoads
 //
 //! @brief Uniform load over 2D beam elements.
-class Beam2dUniformLoad : public BeamUniformLoad
+class Beam2dUniformLoad: public BeamUniformLoad
   {
   private:
     static Vector data;

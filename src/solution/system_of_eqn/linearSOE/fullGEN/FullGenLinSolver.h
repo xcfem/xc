@@ -74,7 +74,7 @@ class FullGenLinSOE;
 //!
 //! Provides access for each subclass to the FullGenLinSOE object
 //! through the pointer #theSOE, which is a protected pointer.
-class FullGenLinSolver : public LinearSOESolver
+class FullGenLinSolver: public LinearSOESolver
   {
   protected:
     FullGenLinSOE *theSOE;

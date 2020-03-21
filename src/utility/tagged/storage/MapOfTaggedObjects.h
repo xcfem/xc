@@ -82,7 +82,7 @@ namespace XC {
 //! object is the TaggedObjects tag. Each MapOfTaggedObject object also contains
 //! a MapOfTaggedObjectsIter object to iterate through the objects which
 //! have been added. 
-class MapOfTaggedObjects : public TaggedObjectStorage
+class MapOfTaggedObjects: public TaggedObjectStorage
   {
     typedef std::map<int, TaggedObject *> tagged_map;
     typedef tagged_map::iterator iterator;

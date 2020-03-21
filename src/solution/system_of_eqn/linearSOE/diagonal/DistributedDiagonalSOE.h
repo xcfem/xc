@@ -71,7 +71,7 @@ class DistributedDiagonalSolver;
 //! @ingroup SOE
 //
 //! @brief Diagonal matrix distributed systems of equations.
-class DistributedDiagonalSOE : public FactoredSOEBase, public DistributedLinSOE
+class DistributedDiagonalSOE: public FactoredSOEBase, public DistributedLinSOE
   {
   private:
     Vector A;

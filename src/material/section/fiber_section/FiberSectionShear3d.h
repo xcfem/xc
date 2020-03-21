@@ -37,7 +37,7 @@ namespace XC {
 //! @brief FiberSectionShear3d decorates an MP
 //! section (couple bending and axial) with an uncoupled shear
 //! relation.
-class FiberSectionShear3d : public FiberSection3d
+class FiberSectionShear3d: public FiberSection3d
   {
   private:
     UniaxialMaterial *respVy;

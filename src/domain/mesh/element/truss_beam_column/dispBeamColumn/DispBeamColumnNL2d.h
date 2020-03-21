@@ -41,7 +41,7 @@ class SectionForceDeformation;
 class CrdTransf2d;
 class Response;
 
-class DispBeamColumnNL2d : public DispBeamColumn2dBase
+class DispBeamColumnNL2d: public DispBeamColumn2dBase
   {
   private:
     const Matrix &getInitialBasicStiff(void) const;

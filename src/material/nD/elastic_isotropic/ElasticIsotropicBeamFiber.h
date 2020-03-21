@@ -64,7 +64,7 @@ namespace XC {
 //! @ingroup EINDMat
 //
 //! @brief Elastic isotropic material for beam fibers.
-class ElasticIsotropicBeamFiber : public ElasticIsotropicMaterial
+class ElasticIsotropicBeamFiber: public ElasticIsotropicMaterial
   {
   private:
     static Vector sigma;	// Stress vector ... class-wide for returns

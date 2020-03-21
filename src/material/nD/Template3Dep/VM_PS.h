@@ -60,7 +60,7 @@ namespace XC {
 //! @ingroup MatPS
 //
 //! @brief Von Mises potential surface.
-class VMPotentialSurface : public PotentialSurface
+class VMPotentialSurface: public PotentialSurface
 {
   // Private vars to define the Von Mises Potential Surface
   private:		  

@@ -35,7 +35,7 @@ class CyclicModel;
 //! @ingroup OneDimensionalElem
 //
 //! @brief ??.
-class Inelastic2DYS02 : public InelasticYS2DGNL
+class Inelastic2DYS02: public InelasticYS2DGNL
  {
  private:
    // int cycType;

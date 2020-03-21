@@ -39,7 +39,7 @@ class CrossSectionProperties3d;
 //! @ingroup ElemLoads
 //
 //! @brief Load over beam elements.
-class BeamLoad : public ElementBodyLoad
+class BeamLoad: public ElementBodyLoad
   {
   protected:
 

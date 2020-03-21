@@ -69,7 +69,7 @@ namespace XC {
 //! @brief TCP_SocketNoDelay is a sub-class of channel. It is implemented with Berkeley
 //! stream sockets using the TCP protocol. Messages delivery is garaunteed. 
 //! Communication is full-duplex between a pair of connected sockets.
-class TCP_SocketNoDelay : public Channel
+class TCP_SocketNoDelay: public Channel
   {
   private:
     int sockfd;

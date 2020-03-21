@@ -62,7 +62,7 @@ class FEM_ObjectBroker;
 //! @ingroup BeamInteg
 //
 //! @brief Radau integration on beam elements.
-class HingeRadauBeamIntegration2d : public HingeBeamIntegration2d
+class HingeRadauBeamIntegration2d: public HingeBeamIntegration2d
   {
   public:
     HingeRadauBeamIntegration2d(double E, double A, double I,double lpI, double lpJ);

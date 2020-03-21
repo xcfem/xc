@@ -60,7 +60,7 @@ namespace XC {
 //! @ingroup FDNDMat
 //
 //! @brief ??.
-class OgdenWEnergy : public OgdenWEnergyBase
+class OgdenWEnergy: public OgdenWEnergyBase
   {
   public:
     OgdenWEnergy(int , double * , double * );

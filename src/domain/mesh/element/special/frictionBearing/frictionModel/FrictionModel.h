@@ -68,7 +68,7 @@
 namespace XC {
 class Response;
 
-class FrictionModel : public TaggedObject, public MovableObject
+class FrictionModel: public TaggedObject, public MovableObject
   {
   protected:
     double trialN;      // trial normal contact force

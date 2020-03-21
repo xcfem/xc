@@ -72,7 +72,7 @@ namespace XC {
 //! @ingroup TSeries
 //
 //! @brief ??.
-class DiscretizedRandomProcessSeries : public TimeSeries
+class DiscretizedRandomProcessSeries: public TimeSeries
   {
   private:
     int numModFuncs;

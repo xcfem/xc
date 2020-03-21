@@ -105,7 +105,7 @@ class FullGenLinSolver;
 //! The \f$x\f$ and \f$b\f$ vectors are stored in 1d double arrays of length
 //! \f$n\f$. To allow the solvers access to this data, the solvers that use
 //! this class are all declared as friend classes.
-class FullGenLinSOE : public FactoredSOEBase
+class FullGenLinSOE: public FactoredSOEBase
   {
   private:
     Vector A; //!< Storage for the system matrix.

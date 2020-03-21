@@ -38,7 +38,7 @@ class UniaxialMaterial;
 //! @ingroup TrussElem
 //
 //! @brief Base class for truss elements.
-class TrussBase : public ProtoTruss
+class TrussBase: public ProtoTruss
   {
   protected:
     double L;	    //!< length of truss based on undeformed configuration.

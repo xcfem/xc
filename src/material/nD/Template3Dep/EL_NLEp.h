@@ -65,7 +65,7 @@ namespace XC {
 //! @brief This is a nonlinear evolution law for the evoltion of a
 //! scalar variable po which depends on plastic volumetric
 //! strain i.e. dpo = (1+eo)po/(lamda-kappa)*de_p.
-class EvolutionLaw_NL_Ep : public EvolutionLaw_S
+class EvolutionLaw_NL_Ep: public EvolutionLaw_S
   {
   // Private vars to define the evolution law
 

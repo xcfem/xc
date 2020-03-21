@@ -56,7 +56,7 @@ namespace XC {
 //! @ingroup UWMat
 //
 //! @brief Drucker-Prager 3D material.
-class DruckerPrager3D : public DruckerPrager {
+class DruckerPrager3D: public DruckerPrager {
 
 //-------------------Declarations-------------------------------
 

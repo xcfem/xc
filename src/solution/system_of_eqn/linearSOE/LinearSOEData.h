@@ -38,7 +38,7 @@ namespace XC {
 //! @ingroup SOE
 //
 //! @brief Data (size, arrays,...) for linear system of equations.
-class LinearSOEData : public LinearSOE
+class LinearSOEData: public LinearSOE
   {
   protected:
     int size; //! order of A

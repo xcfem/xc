@@ -71,7 +71,7 @@ namespace XC {
 //! @ingroup GMotion
 //
 //! @brief Data from a real earthquake.
-class GroundMotionRecord : public GroundMotion
+class GroundMotionRecord: public GroundMotion
   {
   private:
     MotionHistory history;

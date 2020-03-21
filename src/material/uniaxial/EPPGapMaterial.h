@@ -88,7 +88,7 @@ namespace XC {
 //! For compression only behavior, enter negative gap and ep
 //! Damage can accumulate through specification of damage = 1 switch,
 //! otherwise damage = 0
-class EPPGapMaterial : public EPPBaseMaterial
+class EPPGapMaterial: public EPPBaseMaterial
   {
   private:
     double fy;

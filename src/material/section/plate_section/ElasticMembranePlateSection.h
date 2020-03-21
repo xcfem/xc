@@ -62,7 +62,7 @@ namespace XC {
 //! @ingroup MATPLAC
 //
 //! @brief Elastic section for membrane/plate materials.
-class ElasticMembranePlateSection : public ElasticPlateProto<8>
+class ElasticMembranePlateSection: public ElasticPlateProto<8>
   {
   private:
     double rhoH ; //!< mass per unit 2D area

@@ -133,7 +133,7 @@ namespace XC {
 //
 // \noindent note that there is no space allocated for the diagonal
 // components.
-class Metis : public GraphPartitioner, public GraphNumberer
+class Metis: public GraphPartitioner, public GraphNumberer
   {
   private:
     bool checkOptions(void);

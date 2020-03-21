@@ -35,7 +35,7 @@ namespace XC {
 //! @ingroup ElemLoads
 //
 //! @brief Load due to restricted material expansion or contraction on truss elements.
-class TrussStrainLoad : public ElementBodyLoad
+class TrussStrainLoad: public ElementBodyLoad
   {
   private:
     double e1; //!< Restricted strain in node 1	

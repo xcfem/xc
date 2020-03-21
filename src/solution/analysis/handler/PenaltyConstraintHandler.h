@@ -83,7 +83,7 @@ const double DefaultPenaltyFactor= 1e7; //10^(p/2) being p the number of decimal
 //! creating either a PenaltySFreedom\_FE or a PenaltyMFreedom\_FE object for
 //! each constraint in the Domain. It is these objects that enforce the
 //! constraints by modifying the tangent matrix and residual vector. 
-class PenaltyConstraintHandler : public FactorsConstraintHandler
+class PenaltyConstraintHandler: public FactorsConstraintHandler
   {
     friend class ModelWrapper;
     friend class FEM_ObjectBroker;

@@ -62,7 +62,7 @@ class ParticlePos3d;
 //
 //! @ingroup ElemVol
 //! @brief Base class for hexahedra.
-class BrickBase : public ElemWithMaterial<8,NDMaterialPhysicalProperties>
+class BrickBase: public ElemWithMaterial<8,NDMaterialPhysicalProperties>
   {
   public:
     static const int numberNodes= 8; //!< Number of nodes.

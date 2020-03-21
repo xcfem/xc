@@ -34,7 +34,7 @@ namespace XC {
 //! @ingroup FDNDMat
 //
 //! @brief 3D finite deformation elastic material.
-class FiniteDeformationMaterial : public NDMaterial
+class FiniteDeformationMaterial: public NDMaterial
   {
   public:    
     FiniteDeformationMaterial(int tag, int classTag);

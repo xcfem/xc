@@ -75,7 +75,7 @@ namespace XC {
 //! @ingroup AnalysisType
 //
 //! @brief Eigenproblem analysis.
-class EigenAnalysis : public Analysis
+class EigenAnalysis: public Analysis
   {
   protected:
     int domainStamp;

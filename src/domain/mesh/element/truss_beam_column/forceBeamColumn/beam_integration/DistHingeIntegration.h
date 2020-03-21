@@ -58,7 +58,7 @@ namespace XC {
 //! @ingroup BeamInteg
 //
 //! @brief ??.
-class DistHingeIntegration : public PlasticLengthsBeamIntegration
+class DistHingeIntegration: public PlasticLengthsBeamIntegration
   {
   private:
     BeamIntegration *beamInt;

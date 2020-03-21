@@ -65,7 +65,7 @@ namespace XC {
 //
 //! @brief FedeasBond2Material wraps the FEDEAS
 //! 1d material subroutine Bond_2.
-class FedeasBond2Material : public FedeasBondMaterial
+class FedeasBond2Material: public FedeasBondMaterial
   {
   public:
    FedeasBond2Material(int tag,

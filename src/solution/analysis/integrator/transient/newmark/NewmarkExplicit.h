@@ -71,7 +71,7 @@ namespace XC {
 //! @brief NewmarkExplicit is an algorithmic class for performing
 //! a transient analysis using the explicit Newmark
 //! integration scheme (beta = 0).
-class NewmarkExplicit : public NewmarkBase
+class NewmarkExplicit: public NewmarkBase
   {
   private:
     int updateCount;                // method should only have one update per step

@@ -57,7 +57,7 @@
 enum echoMode  {NONE, DATA_FILE, XML_FILE};
 
 namespace XC {
-class DataOutputFileHandler : public DataOutputHandler
+class DataOutputFileHandler: public DataOutputHandler
   {
   private:
     std::ofstream outputFile;

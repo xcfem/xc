@@ -40,7 +40,7 @@ class Matrix;
 //! @ingroup ElemLoads
 //
 //! @brief Mechanical load (forces) over bidimensional elements.
-class BidimMecLoad : public BidimLoad
+class BidimMecLoad: public BidimLoad
   {
   protected:
     double Trans; //!< Transverse load.

@@ -66,7 +66,7 @@ namespace XC {
 //! @ingroup MatPS
 //
 //! @brief ??.
-class MDPotentialSurface01 : public PotentialSurface
+class MDPotentialSurface01: public PotentialSurface
 {
   private:
     double Pc;

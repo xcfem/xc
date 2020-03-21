@@ -71,7 +71,7 @@ namespace XC {
 //
 //! @brief MillMachineBroker is a machine broker for use with the cluster of
 //! millennium machines in Soda Hall.
-class MillMachineBroker : public AlphaBaseMachineBroker
+class MillMachineBroker: public AlphaBaseMachineBroker
   {
   public:
     MillMachineBroker(FEM_ObjectBroker *theBroker);

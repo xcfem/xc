@@ -67,7 +67,7 @@ namespace XC {
 class DamageResponse;
 
 
-class ParkAng : public DamageModel
+class ParkAng: public DamageModel
   {
   private:
     double DeltaU , Beta , SigmaY;

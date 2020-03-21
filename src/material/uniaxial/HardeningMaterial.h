@@ -67,7 +67,7 @@ namespace XC {
 //! @brief HardeningMaterial provides the abstraction
 //! for a one-dimensional rate-independent plasticity model
 //! with combined isotropic and kinematic hardening.
-class HardeningMaterial : public UniaxialMaterial
+class HardeningMaterial: public UniaxialMaterial
   {
   private:
     // Material parameters

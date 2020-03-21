@@ -85,7 +85,7 @@ namespace XC {
 //! for use with the truss element. The stress strain ranges from
 //! slack (large strain at zero stress) to taught (linear with modulus E).
 //! The material has no history and is not path dependent.
-class CableMaterial : public ElasticBaseMaterial
+class CableMaterial: public ElasticBaseMaterial
   {
   private:
     double Ps; //!< Material prestress.

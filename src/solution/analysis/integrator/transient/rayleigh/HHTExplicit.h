@@ -75,7 +75,7 @@ class Vector;
 //
 //! @brief HHTExplicit is an algorithmic class for performing
 //! a transient analysis using the HHTExplicit integration scheme (beta = 0).
-class HHTExplicit : public HHTRayleighBase
+class HHTExplicit: public HHTRayleighBase
   {
   private:
     int updateCount; //!< method should only have one update per step

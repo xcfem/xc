@@ -70,7 +70,7 @@ class Channel;
 //! @ingroup OneDimensionalElem
 //
 //! @brief 2D beam 03 element.
-class beam2d03 : public beam2d
+class beam2d03: public beam2d
   {
   private:
     Matrix k; //!< the stiffness matrix

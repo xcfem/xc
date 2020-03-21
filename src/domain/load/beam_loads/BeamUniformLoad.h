@@ -36,7 +36,7 @@ namespace XC {
 //! @ingroup ElemLoads
 //
 //! @brief Uniform load over beam elements.
-class BeamUniformLoad : public BeamMecLoad
+class BeamUniformLoad: public BeamMecLoad
   {
   public:
     BeamUniformLoad(int tag, int classTag, double wTrans, double wAxial,const ID &theElementTags);

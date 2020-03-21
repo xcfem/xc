@@ -74,7 +74,7 @@ namespace XC {
 //! @ingroup EigenAlgo
 //
 //! @brief Algorithm to obtain the natural frequencies of the model.
-class FrequencyAlgo : public EigenAlgorithm
+class FrequencyAlgo: public EigenAlgorithm
   {
     friend class AnalysisAggregation;
     FrequencyAlgo(AnalysisAggregation *);

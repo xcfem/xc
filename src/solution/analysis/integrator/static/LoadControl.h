@@ -108,7 +108,7 @@ namespace XC {
 //! (U_{n} - U_{n}^{(i)})  
 //! \label{staticFormLoadControl}
 //! \end{equation} 
-class LoadControl : public BaseControl
+class LoadControl: public BaseControl
   {
   private:
     double deltaLambda;  //!< Valor de dLambda en el paso (i-1).

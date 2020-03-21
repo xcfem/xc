@@ -70,7 +70,7 @@ namespace XC {
 class DamageResponse;
 
 
-class Kratzig : public DamageModel
+class Kratzig: public DamageModel
   {
   public:
     Kratzig(int tag, double ultimatePosVal ,  double ultimateNegVal);

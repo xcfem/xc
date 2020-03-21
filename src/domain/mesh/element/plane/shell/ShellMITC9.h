@@ -34,7 +34,7 @@ namespace XC {
 //! @ingroup PlaneElements
 //
 //! @brief Lagrangian shell element with membrane and drill.
-class ShellMITC9 : public QuadBase9N<SectionFDPhysicalProperties>
+class ShellMITC9: public QuadBase9N<SectionFDPhysicalProperties>
   {
   private : 
     double Ktt;//!< drilling stiffness

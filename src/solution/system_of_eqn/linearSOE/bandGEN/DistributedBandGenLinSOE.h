@@ -71,7 +71,7 @@ class DistributedBandGenLinSolver;
 //! @ingroup SOE
 //
 //! @brief Base class for band general matrix distributed systems of equations
-class DistributedBandGenLinSOE : public BandGenLinSOE, public DistributedBandLinSOE
+class DistributedBandGenLinSOE: public BandGenLinSOE, public DistributedBandLinSOE
   {
   protected:
     void calcBand(Graph &);

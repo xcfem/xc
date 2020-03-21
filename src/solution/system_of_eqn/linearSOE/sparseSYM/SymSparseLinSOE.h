@@ -57,7 +57,7 @@ class SymSparseLinSolver;
 //! @ingroup SOE
 //
 //! @brief Sparse symmetric matrix systems of equations.
-class SymSparseLinSOE : public SparseSOEBase
+class SymSparseLinSOE: public SparseSOEBase
   {
   private:
     ID colA, rowStartA;  //These are (ADJNCY, XADJ) pair.

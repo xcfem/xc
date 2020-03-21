@@ -60,7 +60,7 @@ class FEM_ObjectBroker;
 //! @ingroup BeamInteg
 //
 //! @brief Base class for hinge user defined integration.
-class UserDefinedHingeIntegrationBase : public UserDefinedBeamIntegrationBase
+class UserDefinedHingeIntegrationBase: public UserDefinedBeamIntegrationBase
   {
   protected:
     inline Vector &ptsL(void)

@@ -73,7 +73,7 @@ class FEM_ObjectBroker;
 //
 //! @brief MPI_MachineBroker is the broker responsible for monitoring
 //! the usage of the processes in an mpi run.
-class MPI_MachineBroker : public MachineBroker
+class MPI_MachineBroker: public MachineBroker
   {
   private:
     size_t rank;

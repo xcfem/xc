@@ -69,7 +69,7 @@ class ID;
 //! @ingroup CContMP
 //
 //! @brief Base class for joint constraints.
-class MFreedom_Joint : public MFreedom_Constraint
+class MFreedom_Joint: public MFreedom_Constraint
   {
   protected:
     Node *RetainedNode; //!<  to identify the retained node

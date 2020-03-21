@@ -74,7 +74,7 @@ class ItpackLinSolver;
 //! @ingroup SOE
 //
 //! @brief <a href="http://rene.ma.utexas.edu/CNA/ITPACK/" target="_new"> ITPACK</a> based systems of equations.
-class ItpackLinSOE : public LinearSOEData
+class ItpackLinSOE: public LinearSOEData
   {
   private:
     int nnz; //!< number of non-zeros in A

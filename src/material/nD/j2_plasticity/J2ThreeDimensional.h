@@ -89,7 +89,7 @@ namespace XC{
 //
 //! @brief J2 Isotropic hardening material class
 //! for 3D problems.
-class J2ThreeDimensional : public J2Plasticity
+class J2ThreeDimensional: public J2Plasticity
   {
 
 //-------------------Declarations-------------------------------

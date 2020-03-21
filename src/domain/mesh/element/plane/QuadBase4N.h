@@ -41,7 +41,7 @@ namespace XC {
 //! @ingroup PlaneElements
 //! @brief Base class for 4 node quads.
 template <class PhysProp>
-class QuadBase4N : public PlaneElement<4,PhysProp>
+class QuadBase4N: public PlaneElement<4,PhysProp>
   {
     static Matrix &compute_extrapolation_matrix(void);
   protected:

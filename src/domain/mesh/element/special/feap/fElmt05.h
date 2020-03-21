@@ -70,7 +70,7 @@ namespace XC {
 //! @ingroup fElem
 //
 //! @brief Interface with FEAP elements.
-class fElmt05 : public fElement
+class fElmt05: public fElement
   {
   public:
     // constructor

@@ -57,7 +57,7 @@ class FourNodeQuad;
 //! @ingroup PYMat
 //
 //! @brief Uniaxial t-z material that incorporates liquefaction effects.
-class TzLiq1 : public TzSimple1
+class TzLiq1: public TzSimple1
   {
   private:
     // Committed and trial values for t, z, and ru

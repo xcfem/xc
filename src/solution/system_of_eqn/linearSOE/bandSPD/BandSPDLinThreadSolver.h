@@ -71,7 +71,7 @@ namespace XC {
 //
 //! @brief Solves the BandSPDLinSOE in parallel
 //! using solaris threads.
-class BandSPDLinThreadSolver : public BandSPDLinSolver
+class BandSPDLinThreadSolver: public BandSPDLinSolver
   {
   private:
     int NP;

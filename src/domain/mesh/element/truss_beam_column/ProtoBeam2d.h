@@ -37,7 +37,7 @@ class CrdTransf2d;
 //! @ingroup OneDimensionalElem
 //
 //! @brief Base class for 2D beam elements.
-class ProtoBeam2d : public Element1D
+class ProtoBeam2d: public Element1D
   {
   protected:
     CrossSectionProperties2d ctes_scc; //Section mechanical properties E,A,Iy,...

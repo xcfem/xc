@@ -130,7 +130,7 @@ class SparseGenColLinSolver;
 //! \f$\f$
 //! The \f$x\f$ and \f$b\f$ vectors are stored in 1d double arrays of
 //! length \f$n\f$.
-class SparseGenColLinSOE : public SparseGenSOEBase
+class SparseGenColLinSOE: public SparseGenSOEBase
   {
   protected:
     ID rowA;

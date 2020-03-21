@@ -39,7 +39,7 @@ namespace XC {
 //! @ingroup MATYS
 //!
 //! @brief ??
-class Kinematic2D02 : public BkStressLimSurface2D
+class Kinematic2D02: public BkStressLimSurface2D
   {
   public:
     Kinematic2D02(int tag, double min_iso_factor, 

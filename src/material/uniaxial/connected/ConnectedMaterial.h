@@ -36,7 +36,7 @@ namespace XC{
 //! @ingroup MatUnx
 //
 //! @brief Connected uniaxial materials (parallel or serial).
-class ConnectedMaterial : public UniaxialMaterial
+class ConnectedMaterial: public UniaxialMaterial
   {
   protected:
     DqUniaxialMaterial theModels; //!< an array of pointers to the UniaxialMaterials

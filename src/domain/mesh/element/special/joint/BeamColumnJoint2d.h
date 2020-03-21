@@ -77,7 +77,7 @@ class UniaxialMaterial;
 //! @ingroup ElemJoint
 //
 //! @brief 2D beam column joint.
-class BeamColumnJoint2d : public ElemWithMaterial<4,BeamColumnJointPhysicalProperties>
+class BeamColumnJoint2d: public ElemWithMaterial<4,BeamColumnJointPhysicalProperties>
   {
   private:
   

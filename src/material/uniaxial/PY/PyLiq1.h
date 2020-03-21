@@ -57,7 +57,7 @@ namespace XC{
 //! @ingroup PYMat
 //
 //! @brief Uniaxial p-y material that incorporates liquefaction effects.
-class PyLiq1 : public PySimple1
+class PyLiq1: public PySimple1
   {
   private:
     // other parameters in PySimple1 base class

@@ -68,7 +68,7 @@ namespace XC {
 //! PeakOriented, use PeakOriented01
 
 //! isotropic:kinematic ratio = 0.5:0.5
-class PeakOriented2D02 : public BkStressLimSurface2D
+class PeakOriented2D02: public BkStressLimSurface2D
   {
   private:
     static NullPlasticMaterial nullMat;

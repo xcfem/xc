@@ -75,7 +75,7 @@ namespace XC {
 //! @ingroup EigenAlgo
 //
 //! @brief Algorithm for linear buckling analysis.
-class LinearBucklingAlgo : public EigenAlgorithm
+class LinearBucklingAlgo: public EigenAlgorithm
   {
   protected:
     LinearBucklingIntegrator *getLinearBucklingIntegrator(void);

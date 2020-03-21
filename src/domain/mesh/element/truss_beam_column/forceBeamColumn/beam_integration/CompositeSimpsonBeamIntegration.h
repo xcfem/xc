@@ -57,7 +57,7 @@ namespace XC {
 //! @ingroup BeamInteg
 //
 //! @brief Composite Simpson integration scheme.
-class CompositeSimpsonBeamIntegration : public BeamIntegration
+class CompositeSimpsonBeamIntegration: public BeamIntegration
   {
   public:
     CompositeSimpsonBeamIntegration();

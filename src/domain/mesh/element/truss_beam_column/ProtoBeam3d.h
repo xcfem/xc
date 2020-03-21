@@ -36,7 +36,7 @@ namespace XC {
 //! @ingroup OneDimensionalElem
 //
 //! @brief Base class for 3D beams.
-class ProtoBeam3d : public Element1D
+class ProtoBeam3d: public Element1D
   {
   protected:
     CrossSectionProperties3d ctes_scc; //Section mechanical properties E,A,Iy,...

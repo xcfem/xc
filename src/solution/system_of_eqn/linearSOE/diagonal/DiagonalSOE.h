@@ -70,7 +70,7 @@ class DiagonalSolver;
 //! @ingroup SOE
 //
 //! @brief Diagonal matrix system of equations.
-class DiagonalSOE : public FactoredSOEBase
+class DiagonalSOE: public FactoredSOEBase
   {
   private:
     Vector A;

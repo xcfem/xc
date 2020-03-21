@@ -72,7 +72,7 @@ namespace XC {
 //! @ingroup LinearSolver
 //
 //! @brief Threaded <a href="https://launchpad.net/ubuntu/+source/superlu" target="_new"> SuperLU</a> based sparse general matrix linear SOE solver.
-class ThreadedSuperLU : public SparseGenColLinSolver
+class ThreadedSuperLU: public SparseGenColLinSolver
   {
   private:
     SuperMatrix A,L,U,B,AC;

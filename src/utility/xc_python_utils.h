@@ -51,7 +51,7 @@ class mapptr_indexing_suite;
 
 template <class Container, bool NoProxy>
 class final_mapptr_derived_policies
-    : public mapptr_indexing_suite<Container,
+   : public mapptr_indexing_suite<Container,
         NoProxy, final_mapptr_derived_policies<Container, NoProxy> > {};
 
 template <
@@ -60,7 +60,7 @@ template <
     class DerivedPolicies
         = final_mapptr_derived_policies<Container, NoProxy> >
 class mapptr_indexing_suite
-  : public boost::python::map_indexing_suite<
+ : public boost::python::map_indexing_suite<
     Container,
     NoProxy,
     DerivedPolicies

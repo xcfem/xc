@@ -37,7 +37,7 @@ namespace XC {
 //! @ingroup MATSCCFibers
 //
 //! @brief Fiber container.
-class FiberContainer : public FiberPtrDeque
+class FiberContainer: public FiberPtrDeque
   {
     void free_mem(void);
     void copy_fibers(const FiberContainer &);

@@ -74,7 +74,7 @@ namespace XC {
 //! @brief SectionAggregator decorates an MP
 //! section (couple bending and axial) with an uncoupled shear
 //! relation.
-class SectionAggregator : public PrismaticBarCrossSection
+class SectionAggregator: public PrismaticBarCrossSection
   {
   private:
     PrismaticBarCrossSection *theSection;

@@ -77,7 +77,7 @@ namespace XC {
 //! This class provides the abstraction of an elastic
 //! uniaxial material, i.e. the stress-strain relationship is given by the
 //! linear equation \f$\sigma = E * \epsilon\f$.
-class ElasticMaterial : public ElasticBaseMaterial
+class ElasticMaterial: public ElasticBaseMaterial
   {
   private:
     double trialStrainRate;

@@ -71,7 +71,7 @@ class SparseGenRowLinSOE;
 //
 //! @brief Base class for sparse general matrix
 //! linear SOE solvers.
-class SparseGenRowLinSolver : public LinearSOESolver
+class SparseGenRowLinSolver: public LinearSOESolver
   {
   protected:
     SparseGenRowLinSOE *theSOE;

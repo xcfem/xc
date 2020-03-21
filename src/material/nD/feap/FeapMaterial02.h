@@ -63,7 +63,7 @@ namespace XC {
 //! @ingroup FeapNDMat
 //
 //! @brief material FEAP 02.
-class FeapMaterial02 : public FeapMaterial
+class FeapMaterial02: public FeapMaterial
   {
   protected:
     int fillDArray(void);

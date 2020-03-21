@@ -58,7 +58,7 @@ namespace XC {
 //! @ingroup BeamInteg
 //
 //! @brief User defined integration over the beam.
-class UserDefinedBeamIntegration : public UserDefinedBeamIntegrationBase
+class UserDefinedBeamIntegration: public UserDefinedBeamIntegrationBase
  {
  public:
    UserDefinedBeamIntegration(int nIP, const Vector &pt, const Vector &wt);

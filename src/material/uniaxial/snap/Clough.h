@@ -74,7 +74,7 @@ namespace XC {
 //! @ingroup SnapUnx
 //
 //! @brief Clough type hysteretic model with degradation.
-class Clough : public UniaxialMaterial
+class Clough: public UniaxialMaterial
   {
   protected:
     void envelPosCap(double fy, double alphaPos, double alphaCap,

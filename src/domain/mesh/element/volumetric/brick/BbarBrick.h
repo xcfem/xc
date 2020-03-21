@@ -60,7 +60,7 @@ namespace XC {
 //! @ingroup ElemVol
 //
 //! @brief Hexahedron.
-class BbarBrick : public BrickBase
+class BbarBrick: public BrickBase
  {
  private : 
    //static data

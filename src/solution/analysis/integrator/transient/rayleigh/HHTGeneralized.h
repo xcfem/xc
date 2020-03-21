@@ -74,7 +74,7 @@ class Vector;
 //! @brief HHTGeneralized is an algorithmic class
 //! for performing a transient analysis
 //! using the HHTGeneralized integration scheme.
-class HHTGeneralized : public RayleighBase
+class HHTGeneralized: public RayleighBase
   {
   private:
     double alphaI;

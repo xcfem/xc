@@ -37,7 +37,7 @@ namespace XC {
 //! @ingroup PhysicalProperties
 //
 //! @brief Physical properties for shells.
-class UniaxialMatPhysicalProperties : public PhysicalProperties<UniaxialMaterial>
+class UniaxialMatPhysicalProperties: public PhysicalProperties<UniaxialMaterial>
   {
   public:
     UniaxialMatPhysicalProperties(const size_t &nMat= 0,const UniaxialMaterial *ptr_mat= nullptr);

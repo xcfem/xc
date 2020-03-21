@@ -65,7 +65,7 @@ namespace XC {
 //
 //! @brief FatigueMaterial wraps a UniaxialMaterial
 //! and imposes fatigue limits.
-class FatigueMaterial : public UniaxialMaterial
+class FatigueMaterial: public UniaxialMaterial
   {
   private:
     UniaxialMaterial *theMaterial;

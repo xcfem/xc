@@ -71,7 +71,7 @@ class TimeSeries;
 //! @brief Time integration of time series. A TimeSeriesIntegrator
 //! describes the numerical integration of a ground motion record
 //! used in a dynamic analysis.
-class TimeSeriesIntegrator : public MovableObject
+class TimeSeriesIntegrator: public MovableObject
   {
   public:
     TimeSeriesIntegrator(int classTag);

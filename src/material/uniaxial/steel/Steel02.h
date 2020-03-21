@@ -72,7 +72,7 @@ namespace XC {
 //
 //! @brief Uniaxial material for steel. Menegotto-Pinto steel
 //! model with Filippou isotropic hardening.
-class Steel02 : public SteelBase
+class Steel02: public SteelBase
   {
   private:
     double sigini; //!< Initial strees.

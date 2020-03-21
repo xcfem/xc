@@ -66,7 +66,7 @@ namespace XC {
 //! @ingroup MatUnx
 //
 //! @brief Viscous material.
-class ViscousMaterial : public UniaxialMaterial
+class ViscousMaterial: public UniaxialMaterial
   {
   private:
     double trialRate;

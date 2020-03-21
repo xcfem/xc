@@ -37,7 +37,7 @@ namespace XC {
 //! @ingroup NewmarkIntegrator
 //
 //! @brief Intermediate base class for Newmark type integrators.
-class NewmarkBase2 : public NewmarkBase
+class NewmarkBase2: public NewmarkBase
   {
   protected:
     double beta; //!< beta factor for the Newmark integrator.

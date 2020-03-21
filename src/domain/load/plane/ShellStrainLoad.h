@@ -35,7 +35,7 @@ namespace XC {
 //! @ingroup ElemLoads
 //
 //! @brief Load due to restricted material expansion or contraction on Shell elements.
-class ShellStrainLoad : public BidimStrainLoad
+class ShellStrainLoad: public BidimStrainLoad
   {
   public:
     ShellStrainLoad(int tag, const ID &theElementTags);

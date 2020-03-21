@@ -85,7 +85,7 @@ namespace XC{
 //
 //! @brief J2 Isotropic hardening material class
 //! for plate problems.
-class J2PlateFiber : public J2Plasticity
+class J2PlateFiber: public J2Plasticity
   {
   private : 
     //static vectors and matrices

@@ -71,7 +71,7 @@ namespace XC {
 //! @brief Collocation is an algorithmic class for 
 //! performing a transient analysis
 //! using the Collocation integration scheme.
-class Collocation : public RayleighBase
+class Collocation: public RayleighBase
   {
   private:
     double theta;

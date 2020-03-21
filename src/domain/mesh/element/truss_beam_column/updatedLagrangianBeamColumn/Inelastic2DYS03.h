@@ -33,7 +33,7 @@ namespace XC {
 //! @ingroup OneDimensionalElem
 //
 //! @brief ??.
-class Inelastic2DYS03 : public InelasticYS2DGNL
+class Inelastic2DYS03: public InelasticYS2DGNL
   {
   private:
     double Atens, Acomp, E;

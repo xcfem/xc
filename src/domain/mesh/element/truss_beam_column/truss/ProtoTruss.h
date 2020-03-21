@@ -41,7 +41,7 @@ class Material;
 //
 //! @ingroup TrussElem
 //! @brief Base class for truss elements.
-class ProtoTruss : public Element1D
+class ProtoTruss: public Element1D
   {
   protected:
     int numDOF; //!< number of dof for truss

@@ -84,7 +84,7 @@ class DOF_Group;
 //! constraining an elements node or the node; otherwise a TransformationFE
 //! element and a TransformationDOF_Group are created.It is these objects that enforce the
 //! constraints by modifying the tangent matrix and residual vector.
-class TransformationConstraintHandler : public ConstraintHandler
+class TransformationConstraintHandler: public ConstraintHandler
   {
   private:
     std::set<FE_Element *> theFEs;

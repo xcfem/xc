@@ -65,7 +65,7 @@ namespace XC {
 //! @ingroup MatUnx
 //
 //! @brief Template for new uniaxial materials.
-class NewUniaxialMaterial : public UniaxialMaterial
+class NewUniaxialMaterial: public UniaxialMaterial
   {
   private:
     double Tstrain;   // trial strain

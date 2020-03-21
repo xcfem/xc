@@ -41,7 +41,7 @@ namespace XC {
 //! @ingroup GMotion
 //
 //! @brief Seismic definitions container.
-  class DqGroundMotions : public CommandEntity, public MovableObject
+  class DqGroundMotions: public CommandEntity, public MovableObject
   {
   protected:
     typedef std::deque<GroundMotion *> dq_ptr_GroundMotions;

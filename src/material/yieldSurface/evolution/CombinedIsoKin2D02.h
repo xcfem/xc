@@ -53,7 +53,7 @@ namespace XC {
 //! @brief Kinematic model is based on back-stress
 //! Isotropic model on plastic-deformations
 //! This one is also deformable
-class CombinedIsoKin2D02 : public BkStressLimSurface2D
+class CombinedIsoKin2D02: public BkStressLimSurface2D
   {
   public: 
 	CombinedIsoKin2D02( int tag,  double min_iso_factor,

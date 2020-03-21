@@ -74,7 +74,7 @@ class FE_Element;
 //! @brief AlphaOS is an algorithmic class for performing a transient analysis
 //! using the Alpha-Operator-Splitting integration scheme.
 //! The parameter alpha corresponds to 1+alpha_{HHT}.
-class AlphaOS : public AlphaOSBase
+class AlphaOS: public AlphaOSBase
   {
   private:
     double alpha;    

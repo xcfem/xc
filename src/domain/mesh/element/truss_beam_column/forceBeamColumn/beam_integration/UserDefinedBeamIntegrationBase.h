@@ -37,7 +37,7 @@ namespace XC {
 //! @ingroup BeamInteg
 //
 //! @brief Base class for user defined integration on beam elements.
-class UserDefinedBeamIntegrationBase : public BeamIntegration
+class UserDefinedBeamIntegrationBase: public BeamIntegration
   {
   protected:
     Vector pts;

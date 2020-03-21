@@ -64,7 +64,7 @@ class FVector;
 //! @ingroup ElemLoads
 //
 //! @brief Punctual load over 3D beams.
-class Beam3dPointLoad : public BeamPointLoad
+class Beam3dPointLoad: public BeamPointLoad
   {
   private:
     double Pz; //!< magnitude of the transverse load

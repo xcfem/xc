@@ -65,7 +65,7 @@ namespace XC {
 //
 //! @brief FedeasHardeningMaterial wraps the FEDEAS
 //! 1d material subroutine Hard_1.
-class FedeasHardeningMaterial : public FedeasMaterial
+class FedeasHardeningMaterial: public FedeasMaterial
   {
   public:
     FedeasHardeningMaterial(int tag,

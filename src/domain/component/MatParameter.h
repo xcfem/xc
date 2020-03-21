@@ -59,7 +59,7 @@
 namespace XC {
 class Domain;
 
-class MatParameter : public Parameter
+class MatParameter: public Parameter
   {
   private:
     Information theMatInfo;

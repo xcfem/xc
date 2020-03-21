@@ -40,7 +40,7 @@ class LoadPattern;
 //! @ingroup CContSP
 //
 //! @brief Base class for prescribed displacements at the nodes.
-class ImposedMotionBase : public SFreedom_Constraint
+class ImposedMotionBase: public SFreedom_Constraint
   {
   private:
     int groundMotionTag;

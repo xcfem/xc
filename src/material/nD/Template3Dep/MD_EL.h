@@ -61,7 +61,7 @@ namespace XC {
 //! @ingroup MatNDEL
 //
 //! @brief ??.
-class MDEvolutionLaw : public EvolutionLaw
+class MDEvolutionLaw: public EvolutionLaw
   {
   // private to define the evolution law for Manzari-Dafalias critical state model
   public: 

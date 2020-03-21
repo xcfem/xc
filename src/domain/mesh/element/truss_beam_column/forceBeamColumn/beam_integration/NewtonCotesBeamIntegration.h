@@ -58,7 +58,7 @@ namespace XC {
 //! @ingroup BeamInteg
 //
 //! @brief Newton-Cotes integration on beam elements.
-class NewtonCotesBeamIntegration : public BeamIntegration
+class NewtonCotesBeamIntegration: public BeamIntegration
   {
   public:
     NewtonCotesBeamIntegration();

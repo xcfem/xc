@@ -36,7 +36,7 @@
 namespace XC {
 //! @ingroup MATYS
 //! @brief Atalla 2D yield surface.
-class Attalla2D : public YieldSurface_BC2D
+class Attalla2D: public YieldSurface_BC2D
   {
   protected:
     double a1, a2, a3, a4, a5, a6;

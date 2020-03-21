@@ -76,7 +76,7 @@ namespace XC {
 //!
 //! The objects of this class are intended to be used in a reinforced
 //! concrete fiber section as the steel reinforcing material. 
-class ReinforcingSteel : public UniaxialMaterial
+class ReinforcingSteel: public UniaxialMaterial
   {
   private:
     static const int LastRule_RS=20;  // must be divisable by 4!!!!!!!!!!!

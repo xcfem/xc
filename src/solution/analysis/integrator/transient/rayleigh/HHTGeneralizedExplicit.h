@@ -73,7 +73,7 @@ namespace XC {
 //! @brief HHTGeneralizedExplicit is an algorithmic class
 //! for performing a transient analysis
 //! using the HHTGeneralizedExplicit integration scheme.
-class HHTGeneralizedExplicit : public HHTBase
+class HHTGeneralizedExplicit: public HHTBase
   {
   private:
     double alphaF;

@@ -72,7 +72,7 @@ namespace XC {
 //! ElasticIsotropicPlaneStrain2D provides the implementation of an
 //! elastic isotropic material which exhibits plane strain behavior in two
 //! dimensions.
-class ElasticIsotropicPlaneStrain2D : public ElasticIsotropic2D
+class ElasticIsotropicPlaneStrain2D: public ElasticIsotropic2D
   {
   private:
     static Vector sigma; //!< Stress vector ... class-wide for returns

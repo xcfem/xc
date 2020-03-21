@@ -54,7 +54,7 @@
 #include "ParameterIDBeamIntegration.h"
 namespace XC {
 
-class LowOrderBeamIntegration : public ParameterIDBeamIntegration
+class LowOrderBeamIntegration: public ParameterIDBeamIntegration
   {
   protected:
     int Nc;

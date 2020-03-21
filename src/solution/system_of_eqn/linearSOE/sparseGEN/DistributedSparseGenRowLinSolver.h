@@ -71,7 +71,7 @@ class DistributedSparseGenRowLinSOE;
 //
 //! @brief Base class for distributed (many processors) sparse general
 //! matrix linear based SOE solver.
-class DistributedSparseGenRowLinSolver : public LinearSOESolver
+class DistributedSparseGenRowLinSolver: public LinearSOESolver
   {
   protected:
     DistributedSparseGenRowLinSOE *theSOE;

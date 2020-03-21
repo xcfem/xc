@@ -72,7 +72,7 @@ namespace XC {
 class Channel;
 class UniaxialMaterial;
 
-class Spring : public ProtoTruss
+class Spring: public ProtoTruss
   {
   private:
     // private attributes - a copy for each object of the class

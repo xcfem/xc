@@ -37,7 +37,7 @@ namespace XC {
 //! @ingroup TransientIntegrator
 //
 //! @brief Approximates velocity and acceleration by centered finite differences of displacement.
-class CentralDifferenceBase : public TransientIntegrator
+class CentralDifferenceBase: public TransientIntegrator
   {
   protected:
     int updateCount; //!< method should only have one update per step

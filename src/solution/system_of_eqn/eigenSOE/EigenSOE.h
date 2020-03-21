@@ -60,7 +60,7 @@ class ID;
 //! @ingroup EigenSOE
 //
 //! @brief Base class for eigenproblem systems of equations.
-class EigenSOE : public SystemOfEqn
+class EigenSOE: public SystemOfEqn
   {
   public:
     typedef boost::numeric::ublas::mapped_matrix<double> sparse_matrix;

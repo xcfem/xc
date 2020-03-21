@@ -61,7 +61,7 @@ namespace XC {
 //! @ingroup NDMat
 //
 //! @brief Elastic isotropic material for 3D elements.
-class ElasticIsotropic3D : public ElasticIsotropicMaterial
+class ElasticIsotropic3D: public ElasticIsotropicMaterial
   {
   private:
     static Vector sigma; //!< Stress vector

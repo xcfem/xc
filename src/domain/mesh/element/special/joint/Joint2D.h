@@ -76,7 +76,7 @@ class DamageModel;
 //! @ingroup ElemJoint
 //
 //! @brief 2D joint element.
-class Joint2D : public ElemWithMaterial<5,Joint2DPhysicalProperties>
+class Joint2D: public ElemWithMaterial<5,Joint2DPhysicalProperties>
   {
   private:
     typedef ElemWithMaterial<5,Joint2DPhysicalProperties> Joint2dBase;

@@ -67,7 +67,7 @@
 #include <domain/domain/single/SingleDomTIter.h>
 namespace XC {
 
-class SingleDomNodIter : public SingleDomTIter<NodeIter>
+class SingleDomNodIter: public SingleDomTIter<NodeIter>
   {
   public:
     SingleDomNodIter(TaggedObjectStorage *theStorage);

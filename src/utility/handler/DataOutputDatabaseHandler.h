@@ -55,7 +55,7 @@
 namespace XC {
 class FE_Datastore;
 
-class DataOutputDatabaseHandler : public DataOutputHandler
+class DataOutputDatabaseHandler: public DataOutputHandler
   {
   private:
     FE_Datastore *theDatabase;

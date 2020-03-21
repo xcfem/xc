@@ -72,7 +72,7 @@ class UmfpackGenLinSOE;
 //! @ingroup Solver
 //
 //! @brief <a href="http://faculty.cse.tamu.edu/davis/research.html" target="_new">UMFPACK </a> based sparse matrix linear SOE solver.
-class UmfpackGenLinSolver : public LinearSOESolver
+class UmfpackGenLinSolver: public LinearSOESolver
 {
   private:
     int icntl[20];

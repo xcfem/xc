@@ -82,7 +82,7 @@ namespace XC {
 //! @ingroup MatUnx
 //
 //! @brief Steel 03 uniaxial material.
-class Steel03 : public SteelBase0103
+class Steel03: public SteelBase0103
   {
   private:
     /*** Material Properties ***/

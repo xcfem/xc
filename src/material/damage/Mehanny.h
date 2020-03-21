@@ -66,7 +66,7 @@ namespace XC {
 class DamageResponse;
 
 
-class Mehanny : public DamageModel
+class Mehanny: public DamageModel
  {
  private:
    int processData (double PDefo);

@@ -77,7 +77,7 @@ class ProfileSPDLinSOE;
 //
 //! @brief A ProfileSPDLinSubstrSolver object will perform the numerical
 //! substructuring operations on a ProfileSPDLinSOE object.
-class ProfileSPDLinSubstrSolver : public ProfileSPDLinDirectSolver,
+class ProfileSPDLinSubstrSolver: public ProfileSPDLinDirectSolver,
                                   public DomainSolver
   {
   private:

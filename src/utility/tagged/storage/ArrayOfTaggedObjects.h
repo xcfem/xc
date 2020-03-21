@@ -88,7 +88,7 @@ namespace XC
 //! given by the components tag is first checked; and (3) a boolean flag is
 //! used to keep track of whether all objects have been stored at the
 //! location given by the tags.
-class ArrayOfTaggedObjects : public TaggedObjectStorage
+class ArrayOfTaggedObjects: public TaggedObjectStorage
   {
     typedef std::vector<TaggedObject *> tagged_vector;
   public:

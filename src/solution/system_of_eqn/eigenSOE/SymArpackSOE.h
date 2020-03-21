@@ -57,7 +57,7 @@ class SymArpackSolver;
 //! @ingroup EigenSOE
 //
 //! @brief Arpack system of equations for symmetric matrices.
-class SymArpackSOE : public ArpackSOE
+class SymArpackSOE: public ArpackSOE
   {
   private:
     int nnz; // number of non-zeros in A

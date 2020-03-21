@@ -63,7 +63,7 @@ namespace XC {
 //! @ingroup MatNDEL
 //
 //! @brief ??.
-class EvolutionLaw_L_Eeq : public EvolutionLaw_S
+class EvolutionLaw_L_Eeq: public EvolutionLaw_S
   {
   private:
     double  a;  //coefficient to define the linear hardening rule of a scalar hardening var

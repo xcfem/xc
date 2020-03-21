@@ -70,7 +70,7 @@ namespace XC {
 //! @ingroup TSeries
 //
 //! @brief Pulse type function.
-class PulseSeries : public PeriodSeries
+class PulseSeries: public PeriodSeries
   {
   private:
     double pWidth; //!< width of pulse series [0..1] 

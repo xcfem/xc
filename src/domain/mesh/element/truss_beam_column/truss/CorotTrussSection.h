@@ -69,7 +69,7 @@ class SectionForceDeformation;
 //! corotational space truss element, as described by Crisfield
 //! in "Nonlinear Finite Element Analysis of
 //! Solids and Structures", Vol. 1, 1991, J.T. Wiley.
-class CorotTrussSection : public CorotTrussBase
+class CorotTrussSection: public CorotTrussBase
   {
   private:
     SectionForceDeformation *theSection;  // pointer to a material

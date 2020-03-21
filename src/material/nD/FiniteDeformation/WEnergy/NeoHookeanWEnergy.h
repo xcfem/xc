@@ -64,7 +64,7 @@ namespace XC {
 //! @ingroup FDNDMat
 //
 //! @brief ??.
-class NeoHookeanWEnergy : public WEnergy
+class NeoHookeanWEnergy: public WEnergy
   {
   private:
     double K;

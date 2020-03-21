@@ -79,7 +79,7 @@ class Vector;
 //! time values. For a pseudo time not at a path point, linear interpolation
 //! is performed to determine the load factor. If the time specified is
 //! beyond the last path point a load factor of \f$0.0\f$ will be returned.
-class PathTimeSeries : public PathSeriesBase
+class PathTimeSeries: public PathSeriesBase
   {
   private:
     Vector time; //!< vector containing the time values of data points

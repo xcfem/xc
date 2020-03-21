@@ -72,7 +72,7 @@ namespace XC {
 //! @ingroup TSeries
 //
 //! @brief ??.
-class SimulatedRandomProcessSeries : public TimeSeries
+class SimulatedRandomProcessSeries: public TimeSeries
   {
   private:
     RandomNumberGenerator *theRandomNumberGenerator;

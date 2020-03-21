@@ -63,7 +63,7 @@ namespace XC {
 //! @ingroup Drain2DX
 //
 //! @brief Wrapper for <a href="https://nisee.berkeley.edu/elibrary/getpkg?id=DRAIN2DX">DRAIN-2DX</a> hardening effect material.
-class DrainHardeningMaterial : public DrainMaterial
+class DrainHardeningMaterial: public DrainMaterial
   {
   public:
     DrainHardeningMaterial(int tag,double E, double sigY, double Hiso, double Hkin, double beto = 0.0);

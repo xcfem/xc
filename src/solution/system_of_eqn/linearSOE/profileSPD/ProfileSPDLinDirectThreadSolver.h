@@ -82,7 +82,7 @@ class ProfileSPDLinSOE;
 //! a left-looking approach. Within a row block the factorization is
 //! performed by \f$NP\f$ threads. No BLAS or LAPACK routines are called 
 //! for the factorization or subsequent substitution.
-class ProfileSPDLinDirectThreadSolver : public ProfileSPDLinDirectBase
+class ProfileSPDLinDirectThreadSolver: public ProfileSPDLinDirectBase
   {
   protected:
     int NP;

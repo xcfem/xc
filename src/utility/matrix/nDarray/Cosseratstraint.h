@@ -66,7 +66,7 @@ namespace XC {
 //! The Cosserat continuum provides a relevant description of the mechanical
 //! behavior of materials with microstructur like rocks and granular media,
 //! liquid crystals, cellular solids and composites and others.
-class Cosseratstraintensor : public BJtensor
+class Cosseratstraintensor: public BJtensor
   {
   public: // just send appropriate arguments to the base constructor
 

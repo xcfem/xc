@@ -62,7 +62,7 @@ namespace XC {
 //! @ingroup FDNDMat
 //
 //! @brief ??.
-class SimoPisterWEnergy : public WEnergy
+class SimoPisterWEnergy: public WEnergy
   {
   private:
     double K;

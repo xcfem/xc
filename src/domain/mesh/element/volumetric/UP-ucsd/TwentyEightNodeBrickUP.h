@@ -57,7 +57,7 @@ namespace XC {
 //! @ingroup ElemVol
 //
 //! @brief Twenty eight node exahedron.
-class TwentyEightNodeBrickUP : public ElemWithMaterial<20,NDMaterialPhysicalProperties>
+class TwentyEightNodeBrickUP: public ElemWithMaterial<20,NDMaterialPhysicalProperties>
   {
   private:
     BodyForces3D bf; //!< Body forces

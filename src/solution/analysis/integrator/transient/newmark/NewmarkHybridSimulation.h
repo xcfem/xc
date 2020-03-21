@@ -71,7 +71,7 @@ class ConvergenceTest;
 //! @brief NewmarkHybridSimulation is an algorithmic
 //! class for performing a transient analysis
 //! using the Newmark integration scheme.
-class NewmarkHybridSimulation : public NewmarkBase2
+class NewmarkHybridSimulation: public NewmarkBase2
   {
   private:
     ConvergenceTest *theTest;       // convergence test

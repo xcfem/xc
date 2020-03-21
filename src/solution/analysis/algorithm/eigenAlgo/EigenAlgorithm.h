@@ -80,7 +80,7 @@ class EigenIntegrator;
 //! @ingroup EigenAlgo
 //
 //! @brief Solution algorithm for eigenproblem.
-class EigenAlgorithm : public SolutionAlgorithm
+class EigenAlgorithm: public SolutionAlgorithm
   {
   protected:
     virtual void eigen_to_model(int numModes);

@@ -76,7 +76,7 @@ namespace XC {
 //! @ingroup SnapUnx
 //
 //! @brief Bilinear hysteretic model with degradation.
-class Bilinear : public UniaxialMaterial  
+class Bilinear: public UniaxialMaterial  
   {
  private:
      // Input parameters

@@ -85,7 +85,7 @@ class DOF_Group;
 //! LagrangeMP\_FE object for each constraint in the Domain. It is these
 //! objects that enforce the constraints by modifying the tangent matrix
 //! and residual vector.
-class LagrangeConstraintHandler : public FactorsConstraintHandler
+class LagrangeConstraintHandler: public FactorsConstraintHandler
   {
   protected:
     friend class ModelWrapper;

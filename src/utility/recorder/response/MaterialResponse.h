@@ -64,7 +64,7 @@ class Material;
 //! @ingroup Recorder
 //
 //! @brief Recorder for material response.
-class MaterialResponse : public Response
+class MaterialResponse: public Response
   {
   private:
     Material *theMaterial; //!< pointer to material.

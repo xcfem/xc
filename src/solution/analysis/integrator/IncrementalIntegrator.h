@@ -93,7 +93,7 @@ class Vector;
 //! vectors. They also provide the method for updating the response
 //! quantities at the DOFs with appropriate values; these values being
 //! some function of the solution to the linear system of equations.
-class IncrementalIntegrator : public Integrator
+class IncrementalIntegrator: public Integrator
   {
   protected:
     LinearSOE *getLinearSOEPtr(void);

@@ -80,7 +80,7 @@ class ProfileSPDLinSOE;
 //! factored one column at a time using a left-looking approach. No BLAS
 //! or LAPACK routines are called for the factorization or subsequent
 //! substitution.
-class ProfileSPDLinDirectSolver : public ProfileSPDLinDirectBase
+class ProfileSPDLinDirectSolver: public ProfileSPDLinDirectBase
   {
   protected:
     friend class LinearSOE;

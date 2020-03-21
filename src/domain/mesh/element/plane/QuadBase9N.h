@@ -41,7 +41,7 @@ namespace XC {
 //! @ingroup PlaneElements
 //! @brief Base class for nine node quads.
 template <class PhysProp>
-class QuadBase9N : public PlaneElement<9,PhysProp>
+class QuadBase9N: public PlaneElement<9,PhysProp>
   {
   protected:
     ElemPtrArray3d put_on_mesh(const NodePtrArray3d &,meshing_dir dm) const;

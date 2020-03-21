@@ -56,7 +56,7 @@
 #include <fstream>
 
 namespace XC {
-class StandardStream : public OPS_Stream
+class StandardStream: public OPS_Stream
 {
  private:
   std::ofstream theFile;

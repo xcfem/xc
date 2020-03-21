@@ -66,7 +66,7 @@ class NDMaterial;
 //! @ingroup PlaneElements
 //
 //! @brief Nine node quad.
-class NineNodeMixedQuad : public ElemWithMaterial<9,NDMaterialPhysicalProperties>
+class NineNodeMixedQuad: public ElemWithMaterial<9,NDMaterialPhysicalProperties>
   {
   private: 
     static double xl[][9]; //!< nodal coordinates, two coordinates for each of nine nodes

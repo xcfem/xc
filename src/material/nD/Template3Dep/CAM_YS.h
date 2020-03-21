@@ -59,7 +59,7 @@ namespace XC {
 //! @ingroup MatNDYS
 //
 //! @brief ??.
-class CAMYieldSurface : public YieldSurface
+class CAMYieldSurface: public YieldSurface
   {
   // Private vars to define the Mazari-Dafalias Yield Surface
   private:

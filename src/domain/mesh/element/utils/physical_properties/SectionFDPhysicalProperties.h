@@ -37,7 +37,7 @@ namespace XC {
 //! @ingroup PhysicalProperties
 //
 //! @brief Physical properties for shells.
-class SectionFDPhysicalProperties : public PhysicalProperties<SectionForceDeformation>
+class SectionFDPhysicalProperties: public PhysicalProperties<SectionForceDeformation>
   {
   public:
     SectionFDPhysicalProperties(const size_t &nMat= 0,const SectionForceDeformation *ptr_mat= nullptr); 

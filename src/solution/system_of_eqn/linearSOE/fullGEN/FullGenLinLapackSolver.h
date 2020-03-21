@@ -75,7 +75,7 @@ namespace XC {
 //! Solver for a FullGenLinSOE object. It obtains the solution by
 //! making calls on the the LAPACK library. The class is defined
 //! to be a friend of the FullGenLinSOE class.
-class FullGenLinLapackSolver : public FullGenLinSolver
+class FullGenLinLapackSolver: public FullGenLinSolver
   {
   private:
     ID iPiv;

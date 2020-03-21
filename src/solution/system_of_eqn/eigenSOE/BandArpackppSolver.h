@@ -38,7 +38,7 @@ class BandArpackppSOE;
 //! @ingroup LinearSolver
 //
 //! @brief <a href="http://www.caam.rice.edu/software/ARPACK/" target="_new"> Arpack++</a> based band matrix eigenproblem solver.
-class BandArpackppSolver : public EigenSolver
+class BandArpackppSolver: public EigenSolver
   {
   private:
     BandArpackppSOE *theSOE;

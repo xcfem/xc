@@ -77,7 +77,7 @@ class BandSPDLinSOE;
 //! The BandSPDLinSolver
 //! class provides access for each subclass to the BandSPDLinSOE object
 //! through the pointer \p theSOE, which is a protected pointer.
-class BandSPDLinSolver : public LinearSOESolver
+class BandSPDLinSolver: public LinearSOESolver
   {
   protected:
     BandSPDLinSOE *theSOE; //!< Pointer to the solver.

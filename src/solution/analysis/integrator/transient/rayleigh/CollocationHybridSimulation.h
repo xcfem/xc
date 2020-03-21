@@ -71,7 +71,7 @@ class ConvergenceTest;
 //! @brief CollocationHybridSimulation is an algorithmic class
 //! for performing a transient analysis using the 
 //! CollocationHybridSimulation integration scheme.
-class CollocationHybridSimulation : public HHTBase
+class CollocationHybridSimulation: public HHTBase
   {
   private:
     double theta;

@@ -52,7 +52,7 @@ namespace XC {
 //! @ingroup UWMat
 //
 //! @brief Drucker-Prager plane strain material.
-class DruckerPragerPlaneStrain : public DruckerPrager
+class DruckerPragerPlaneStrain: public DruckerPrager
  {
 
   public : 

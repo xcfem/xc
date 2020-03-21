@@ -39,7 +39,7 @@ class Response;
 //!
 //
 //! @brief Plastic material with strain hardening.
-class PlasticHardeningMaterial : public Material
+class PlasticHardeningMaterial: public Material
   {
   protected:
     double val_hist, val_trial;

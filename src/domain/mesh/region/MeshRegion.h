@@ -71,7 +71,7 @@ class ElementRecorder;
 class NodeRecorder;
 class ID;
 
-class MeshRegion : public ContinuaReprComponent
+class MeshRegion: public ContinuaReprComponent
   {
   private:
     RayleighDampingFactors rayFactors; //!< Rayleigh damping factors

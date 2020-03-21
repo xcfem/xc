@@ -40,7 +40,7 @@ namespace XC {
 //! @brief Inelastic Element - concentrated hinge model, Fi - Fj interaction
 //!  at each ends using yield surfaces
 //!  *@author rkaul.
-class InelasticYS2DGNL : public UpdatedLagrangianBeam2D
+class InelasticYS2DGNL: public UpdatedLagrangianBeam2D
 {
  protected:
   static Vector elasticForce;

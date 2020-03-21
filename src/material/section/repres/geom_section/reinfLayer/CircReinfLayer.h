@@ -67,7 +67,7 @@ class ReinfBar;
 //! @ingroup MATSCCReinforcement
 //
 //! @brief Arc of a circle shaped reinforcement layer.
-class CircReinfLayer : public ReinfLayer
+class CircReinfLayer: public ReinfLayer
   {
   private:
     Pos2d centerPosit;

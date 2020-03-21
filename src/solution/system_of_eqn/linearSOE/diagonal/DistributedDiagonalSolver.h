@@ -68,7 +68,7 @@ class DistributedDiagonalSOE;
 //
 //! @brief Base class for distributed (many processors) diagonal
 //! matrix linear SOE solvers.
-class DistributedDiagonalSolver : public LinearSOESolver
+class DistributedDiagonalSolver: public LinearSOESolver
   {
   private:
     double minDiagTol;

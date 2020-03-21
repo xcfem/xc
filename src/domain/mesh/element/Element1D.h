@@ -48,7 +48,7 @@ class DeformationPlane;
 //
 //! @ingroup OneDimensionalElem
 //! @brief Base class for one-dimensional elements (beam,truss,...)
-class Element1D : public ElementBase<2>
+class Element1D: public ElementBase<2>
   {
     void unidimensional_meshing(const NodePtrArray3d &,ElemPtrArray3d &) const;
   protected:

@@ -62,7 +62,7 @@ class FEM_ObjectBroker;
 //! @ingroup BeamInteg
 //
 //! @brief Base class for Lobatto integration on beams.
-class LobattoBeamIntegration : public BeamIntegration
+class LobattoBeamIntegration: public BeamIntegration
   {
   public:
     LobattoBeamIntegration(void);

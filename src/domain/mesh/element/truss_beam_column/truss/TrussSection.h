@@ -75,7 +75,7 @@ class SectionForceDeformation;
 //! @ingroup TrussElem
 //
 //! @brief Truss element with SectionForceDeformation material.
-class TrussSection : public TrussBase
+class TrussSection: public TrussBase
   {
   private:
     SectionForceDeformation  *theSection;

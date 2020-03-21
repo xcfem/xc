@@ -38,7 +38,7 @@ namespace XC {
 //! @ingroup OneDimensionalElem
 //
 //! @brief Base class for 3D beam elements.
-class beam3dBase : public ProtoBeam3d
+class beam3dBase: public ProtoBeam3d
   {
   protected:
     double theta;

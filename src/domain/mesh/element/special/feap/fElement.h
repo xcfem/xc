@@ -78,7 +78,7 @@ class UniaxialMaterial;
 //
 //! @ingroup fElem
 //! @brief Wrapper used to call fortran element subroutines from FEAP.
-class fElement : public Element
+class fElement: public Element
   {
   private:
     // private attributes - a copy for each object of the class      

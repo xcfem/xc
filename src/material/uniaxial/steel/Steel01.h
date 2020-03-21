@@ -82,7 +82,7 @@ namespace XC {
 //! and must appear after the specification of the hardening parameters,
 //! if present. The argument matTag is used to uniquely identify the
 //! material object among material objects in the BasicBuilder object. 
-class Steel01 : public SteelBase0103
+class Steel01: public SteelBase0103
   {
   private:
     void determineTrialState(double dStrain);

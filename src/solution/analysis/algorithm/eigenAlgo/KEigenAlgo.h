@@ -36,7 +36,7 @@ class KEigenIntegrator;
 //! @ingroup EigenAlgo
 //
 //! @brief Algorithm for ill-conditioning analysis.
-class KEigenAlgo : public EigenAlgorithm
+class KEigenAlgo: public EigenAlgorithm
   {
   protected:
     int ns; //!< number of smallest eigenpairs

@@ -59,7 +59,7 @@ namespace XC {
 //! @ingroup FDYieldNDMat
 //
 //! @brief ??.
-class fdYieldVM : public fdYield
+class fdYieldVM: public fdYield
 {
   private:
     double Y0;

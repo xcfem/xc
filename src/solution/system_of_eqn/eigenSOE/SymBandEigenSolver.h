@@ -69,7 +69,7 @@ class SymBandEigenSOE;
 //
 //! @brief Base class for symmetric band matrix
 //! eigenvalue SOE solvers.
-class SymBandEigenSolver : public EigenSolver
+class SymBandEigenSolver: public EigenSolver
   {
   private:
     SymBandEigenSOE *theSOE;

@@ -39,7 +39,7 @@ namespace XC {
 //! @ingroup RayleighIntegrator
 //
 //! @brief Base class for Rayleigh integrators.
-class RayleighBase : public DampingFactorsIntegrator
+class RayleighBase: public DampingFactorsIntegrator
   {
   protected:
     double deltaT;

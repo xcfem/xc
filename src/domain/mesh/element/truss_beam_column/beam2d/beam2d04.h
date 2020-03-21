@@ -70,7 +70,7 @@ class Channel;
 //! @ingroup OneDimensionalElem
 //
 //! @brief 2D beam 04 element.
-class beam2d04 : public beam2d
+class beam2d04: public beam2d
   {
   private:    
     mutable double oneEA;

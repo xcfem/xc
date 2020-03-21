@@ -72,7 +72,7 @@ class Node;
 //! @ingroup CContSP
 //
 //! @brief Prescribed value over a single degree of freedom.
-class ImposedMotionSP1 : public ImposedMotionBase
+class ImposedMotionSP1: public ImposedMotionBase
   {
   private:
     int destroyMotion; //!< flag indicating if destructor to be invoked on GMotion when done    

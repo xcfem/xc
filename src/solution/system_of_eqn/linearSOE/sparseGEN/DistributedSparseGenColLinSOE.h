@@ -70,7 +70,7 @@ class DistributedSparseGenColLinSolver;
 //! @ingroup LinearSOE
 //
 //! @brief Sparse nonsymmetric matrix distributed system of equations.
-class DistributedSparseGenColLinSOE : public SparseGenColLinSOE, public DistributedBandLinSOE
+class DistributedSparseGenColLinSOE: public SparseGenColLinSOE, public DistributedBandLinSOE
   {
   protected:
     void calcNonZeros(Graph &);

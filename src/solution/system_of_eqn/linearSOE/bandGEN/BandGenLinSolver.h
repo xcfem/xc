@@ -77,7 +77,7 @@ class BandGenLinSOE;
 //! BandGenLinSolver is an abstract class.  The BandGenLinSolver
 //! class provides access for each subclass to the BandGenLinSOE object
 //! through the pointer #theSOE, which is a protected pointer.
-class BandGenLinSolver : public LinearSOESolver
+class BandGenLinSolver: public LinearSOESolver
   {
   protected:
     BandGenLinSOE *theSOE;

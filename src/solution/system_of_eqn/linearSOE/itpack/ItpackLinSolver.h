@@ -82,7 +82,7 @@ class ItpackLinSOE;
 //! @ingroup Solver
 //
 //! @brief <a href="http://rene.ma.utexas.edu/CNA/ITPACK/" target="_new"> ITPACK</a> based linear SOE solver.
-class ItpackLinSolver : public LinearSOESolver
+class ItpackLinSolver: public LinearSOESolver
   {
   private:
     

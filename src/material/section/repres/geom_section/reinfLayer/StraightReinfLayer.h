@@ -68,7 +68,7 @@ class ReinfBar;
 //! @ingroup MATSCCReinforcement
 //
 //! @brief Set of rebars distributed along a segment.
-class StraightReinfLayer : public ReinfLayer
+class StraightReinfLayer: public ReinfLayer
   {
   private:
     Vector initPosit; //!< Segment back end.

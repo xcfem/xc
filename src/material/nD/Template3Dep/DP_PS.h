@@ -72,7 +72,7 @@ namespace XC {
 //! @ingroup MatPS
 //
 //! @brief ??.
-class DPPotentialSurface : public PotentialSurface
+class DPPotentialSurface: public PotentialSurface
 {
   private:		  // Private vars to define the Drucker-Prager Potential Surface
     double alfa2;	  // potential surface orientation angle  

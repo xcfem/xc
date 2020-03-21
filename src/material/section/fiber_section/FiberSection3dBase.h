@@ -69,7 +69,7 @@ class FiberSectionRepr;
 //! @ingroup MATSCCFiberModel
 //
 //! @brief Base class for fiber sections in three-dimensional problems.
-class FiberSection3dBase : public FiberSectionBase
+class FiberSection3dBase: public FiberSectionBase
   {
   protected:
 

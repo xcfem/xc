@@ -88,7 +88,7 @@ class ID;
 //! equations. Each LinearSOE object will be associated with a
 //! LinearSOESolver object. It is the LinearSOESolver objects that is
 //! responsible for solving the linear system of equations.
-class LinearSOE : public SystemOfEqn
+class LinearSOE: public SystemOfEqn
   {
   private:
     LinearSOESolver *theSolver;

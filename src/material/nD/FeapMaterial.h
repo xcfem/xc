@@ -67,7 +67,7 @@ namespace XC {
 //! @ingroup FeapNDMat
 //
 //! @brief Base class for 2D and 3D FEAP materials.
-class FeapMaterial : public NDMaterial
+class FeapMaterial: public NDMaterial
   {
   public:
     FeapMaterial(int tag, int classTag, int numHV, int numData,double rho = 0.0);

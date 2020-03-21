@@ -58,7 +58,7 @@ namespace XC {
 //
 //! @brief Four-node quadrilateral element, which uses a
 //! bilinear isoparametric formulation with enhanced strain modes.
-class EnhancedQuad : public QuadBase4N<NDMaterialPhysicalProperties>
+class EnhancedQuad: public QuadBase4N<NDMaterialPhysicalProperties>
   {
   private:
 

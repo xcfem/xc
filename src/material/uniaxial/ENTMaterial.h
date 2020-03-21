@@ -71,7 +71,7 @@ namespace XC {
 //! under tension however it exhbits the following
 //!     stress = a*(tanh(strain*b))
 //!     tangent = a*(1-tanh(strain*b)*tanh(strain*b));
-class ENTMaterial : public ElasticBaseMaterial
+class ENTMaterial: public ElasticBaseMaterial
   {
     double a;
     double b;

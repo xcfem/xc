@@ -43,7 +43,7 @@ class CrossSectionProperties3d;
 //! @ingroup ElemLoads
 //
 //! @brief Mechanical loads (forces) over beam elements.
-class BeamMecLoad : public BeamLoad
+class BeamMecLoad: public BeamLoad
   {
   protected:
     double Trans; //!< Transverse load.

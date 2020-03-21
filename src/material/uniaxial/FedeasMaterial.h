@@ -71,7 +71,7 @@ namespace XC {
 //! @brief FedeasMaterial provides a FORTRAN interface
 //! for programming uniaxial material models, using the subroutine
 //! interface from the FEDEAS ML1D library, developed by F.C. Filippou.
-class FedeasMaterial : public UniaxialMaterial
+class FedeasMaterial: public UniaxialMaterial
   {
   protected:
     // Invokes the FORTRAN subroutine

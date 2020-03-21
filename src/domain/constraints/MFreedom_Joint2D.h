@@ -73,7 +73,7 @@ class ID;
 //! @ingroup CContMP
 //
 //! @brief ??.
-class MFreedom_Joint2D : public MFreedom_Joint
+class MFreedom_Joint2D: public MFreedom_Joint
   {
   private:
     int MainDOF; //!<  main degree of freedom for rotation

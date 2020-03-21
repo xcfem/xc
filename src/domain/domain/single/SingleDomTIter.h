@@ -34,7 +34,7 @@
 namespace XC {
 
 template <class TIter>
-class SingleDomTIter : public TIter
+class SingleDomTIter: public  TIter
   {
   private:
     TaggedObjectIter &myIter;

@@ -61,7 +61,7 @@ namespace XC {
 //! @ingroup FDNDMat
 //
 //! @brief ??.
-class MooneyRivlinSimoWEnergy : public WEnergy
+class MooneyRivlinSimoWEnergy: public WEnergy
   {
   private:
     double c1;

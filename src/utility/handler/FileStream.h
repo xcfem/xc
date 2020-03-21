@@ -57,7 +57,7 @@
 #include <string>
 
 namespace XC {
-class FileStream : public OPS_Stream
+class FileStream: public OPS_Stream
   {
   private:
     std::ofstream theFile;

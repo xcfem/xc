@@ -196,7 +196,7 @@ namespace XC {
 //! which is a quadratic in \f$\Delta \lambda_n^{(i)}\f$, which can be solved
 //! for two roots. The root chosen is the one which will keep a positive angle
 //! between the incremental displacement before and after this step.
-class ArcLength : public ArcLengthBase
+class ArcLength: public ArcLengthBase
   {
   protected:
     virtual double getDLambdaUpdate(void) const;

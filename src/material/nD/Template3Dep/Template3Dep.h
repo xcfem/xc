@@ -80,7 +80,7 @@ class Tensor;
 //! gauss point!! It is worthwhile noting that one model may
 //! have multiple evolution law.  Each evlotuion law is
 //! used to evolve one internal var.
-class Template3Dep : public NDMaterial
+class Template3Dep: public NDMaterial
   {
    private:
 

@@ -72,7 +72,7 @@ namespace XC {
 //! @ingroup MatNDYS
 //
 //! @brief Functions for rounded Mohr-Coulomb yield function.
-class RMC01YieldSurface : public YieldSurface
+class RMC01YieldSurface: public YieldSurface
   {
   public:
     YieldSurface *newObj();  //create a clone of itself

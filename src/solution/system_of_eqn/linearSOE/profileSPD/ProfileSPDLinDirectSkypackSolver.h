@@ -86,7 +86,7 @@ class ProfileSPDLinSOE;
 //! of the BLAS 2 and 3, work areas {\em double rw[mRows x mCols]}, {\em
 //! double tw[mRows x mRows]} and {\em int index[max(mCols,mRows)]} are 
 //! created.
-class ProfileSPDLinDirectSkypackSolver : public ProfileSPDLinSolver
+class ProfileSPDLinDirectSkypackSolver: public ProfileSPDLinSolver
   {
   private:
     int mCols, mRows;

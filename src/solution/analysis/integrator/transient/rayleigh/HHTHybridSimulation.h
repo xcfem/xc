@@ -74,7 +74,7 @@ class ConvergenceTest;
 //! @brief HHTHybridSimulation is an algorithmic class
 //! for performing a transient analysis
 //! using the HHTHybridSimulation integration scheme.
-class HHTHybridSimulation : public HHTBase
+class HHTHybridSimulation: public HHTBase
   {
   private:
     double alphaF;

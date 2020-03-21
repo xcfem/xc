@@ -73,7 +73,7 @@ namespace XC {
 //! negative envelopes and a bunch of damage parameters. The material accounts
 //! for 3 types of damage rules : Strength degradation, Stiffness degradation,
 //! unloading stiffness degradation.
-class Pinching4Material : public UniaxialMaterial
+class Pinching4Material: public UniaxialMaterial
   {
   private:
     // Backbone parameters

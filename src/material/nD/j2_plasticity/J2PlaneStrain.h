@@ -85,7 +85,7 @@ namespace XC{
 //
 //! @brief J2 Isotropic hardening material class
 //! for plane strain problems.
-class J2PlaneStrain : public J2Plasticity
+class J2PlaneStrain: public J2Plasticity
   {
   private:
     //static vectors and matrices

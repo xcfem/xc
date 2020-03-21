@@ -71,7 +71,7 @@ namespace XC {
 //! @ingroup MatPS
 //
 //! @brief Functions for rounded Mohr-Coulomb potential function.
-class RMC01PotentialSurface : public PotentialSurface
+class RMC01PotentialSurface: public PotentialSurface
   {
   public:
     RMC01PotentialSurface( ){ };   // Default constructor

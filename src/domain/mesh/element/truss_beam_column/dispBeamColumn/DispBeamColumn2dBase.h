@@ -73,7 +73,7 @@ class BeamIntegration;
 //! @ingroup OneDimensionalElem
 //
 //! @brief displacement based 2D beam element with PrismaticBarCrossSection type material.
-class DispBeamColumn2dBase : public BeamColumnWithSectionFDTrf2d
+class DispBeamColumn2dBase: public BeamColumnWithSectionFDTrf2d
   {
   private:
     void free_mem(void);

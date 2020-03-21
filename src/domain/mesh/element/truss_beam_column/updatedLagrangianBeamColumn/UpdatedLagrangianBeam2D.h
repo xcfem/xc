@@ -72,7 +72,7 @@ class Response;
 //! @ingroup OneDimensionalElem
 //
 //! @brief Lagrangian 2D beam element.
-class UpdatedLagrangianBeam2D : public Element1D
+class UpdatedLagrangianBeam2D: public Element1D
   {
   protected:
     bool    isLinear;

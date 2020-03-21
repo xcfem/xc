@@ -73,7 +73,7 @@ namespace XC {
 //! @brief Newmark1 is an algorithmic class
 //! for performing a transient analysis
 //! using the Newmark1 integration scheme.
-class Newmark1 : public NewmarkBase2
+class Newmark1: public NewmarkBase2
   {
   private:
     double c4;  //!< some constants we need to keep

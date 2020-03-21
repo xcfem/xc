@@ -59,7 +59,7 @@ namespace XC {
 //! @ingroup FDFlowNDMat
 //
 //! @brief ??.
-class fdFlowVM : public fdFlow
+class fdFlowVM: public fdFlow
 {
   private:
     double Y0;

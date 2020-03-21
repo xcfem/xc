@@ -63,7 +63,7 @@ namespace XC {
 class ID;
 class DamageModel;
 
-class DamageResponse : public Response
+class DamageResponse: public Response
   {
   private:
     DamageModel *theDamage;

@@ -58,7 +58,7 @@ namespace XC {
 //! @ingroup MatNDYS
 //
 //! @brief ??.
-class MDYieldSurface : public YieldSurface
+class MDYieldSurface: public YieldSurface
   {
   public:
     YieldSurface *newObj();                  //create a colne of itself

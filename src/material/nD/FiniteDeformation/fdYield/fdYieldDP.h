@@ -59,7 +59,7 @@ namespace XC {
 //! @ingroup FDYieldNDMat
 //
 //! @brief ??.
-class fdYieldDP : public fdYield
+class fdYieldDP: public fdYield
 {
   private:
     double FricAngle;

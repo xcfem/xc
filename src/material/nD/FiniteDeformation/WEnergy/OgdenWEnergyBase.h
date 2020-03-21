@@ -33,7 +33,7 @@ namespace XC {
 //! @ingroup FDNDMat
 //
 //! @brief ??.
-class OgdenWEnergyBase : public WEnergy
+class OgdenWEnergyBase: public WEnergy
   {
   private:
     int N_Ogden;

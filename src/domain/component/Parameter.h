@@ -62,7 +62,7 @@ class Channel;
 class FEM_ObjectBroker;
 class Domain;
 
-class Parameter : public TaggedObject, public MovableObject
+class Parameter: public TaggedObject, public MovableObject
   {
   private:
     Information theInfo;

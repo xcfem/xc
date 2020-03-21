@@ -47,7 +47,7 @@ const double elem_warning_area= 1e-6; // If area smaller than this trig a warnin
 //! @ingroup PlaneElements
 //! @brief Base class for plane elements.
 template <int NNODES,class PhysProp>
-class PlaneElement : public ElemWithMaterial<NNODES, PhysProp>
+class PlaneElement: public ElemWithMaterial<NNODES, PhysProp>
   {
   protected:
     mutable std::vector<double> tributaryAreas;

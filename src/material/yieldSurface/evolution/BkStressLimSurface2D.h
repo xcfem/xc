@@ -37,7 +37,7 @@ class YieldSurface_BC;
   
 //! @ingroup MATYS
 //! @brief ??.
-class BkStressLimSurface2D : public YS_Evolution2D
+class BkStressLimSurface2D: public YS_Evolution2D
   {
   protected:
 	virtual void	setTrialPlasticStrains(double ep, const Vector &f, const Vector &g);

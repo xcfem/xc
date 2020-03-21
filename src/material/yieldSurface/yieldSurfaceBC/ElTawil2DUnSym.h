@@ -49,7 +49,7 @@
 namespace XC {
 //! @ingroup MATYS
 //! @brief Unsymmetric 2D El Tawil yield surface.
-class ElTawil2DUnSym : public YieldSurface_BC2D
+class ElTawil2DUnSym: public YieldSurface_BC2D
   {
   protected:
 

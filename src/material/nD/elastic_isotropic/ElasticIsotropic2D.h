@@ -34,7 +34,7 @@ namespace XC {
 //! @ingroup NDMat
 //
 //! @brief Isotropic elastic material for plane problems.
-class ElasticIsotropic2D : public ElasticIsotropicMaterial
+class ElasticIsotropic2D: public ElasticIsotropicMaterial
   {
   protected:
     static Matrix D;	        // Elastic constants

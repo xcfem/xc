@@ -79,7 +79,7 @@ namespace XC {
 //! DRAIN-2DX, a computer program for the analysis of inelastic 2-dimensional
 //! structures under static and dynamic loading, with particular emphasis
 //! on seismic response
-class DrainMaterial : public UniaxialMaterial
+class DrainMaterial: public UniaxialMaterial
   {
   private:
     double epsilon; //!< Trial strain

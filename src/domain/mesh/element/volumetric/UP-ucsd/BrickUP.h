@@ -72,7 +72,7 @@ class NDMaterial;
 //! @ingroup ElemVol
 //
 //! @brief Eight node exahedron.
-class BrickUP : public BrickBase
+class BrickUP: public BrickBase
   {
   private :
     BodyForces3D bf; //!< Body forces

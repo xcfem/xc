@@ -75,7 +75,7 @@ class SectionForceDeformation;
 //! @ingroup OneDimensionalElem
 //
 //! @brief 3D elastic beam element.
-class ElasticBeam3d : public ProtoBeam3d
+class ElasticBeam3d: public ProtoBeam3d
   {
   private:
     Vector eInic; //!< section initial deformations

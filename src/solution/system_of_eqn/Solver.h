@@ -81,7 +81,7 @@ namespace XC {
 //!
 //! object is responsible for performing
 //! the numerical operations on its associated SystemOfEqn object.
-class Solver : public MovableObject, public CommandEntity
+class Solver: public MovableObject, public CommandEntity
   {
   protected:
     Solver(int classTag);    

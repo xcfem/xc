@@ -66,7 +66,7 @@ namespace XC {
 class DamageResponse;
 
 
-class HystereticEnergy : public DamageModel
+class HystereticEnergy: public DamageModel
 {
   public:
     HystereticEnergy(int tag, double Etot , double Cpow);

@@ -57,7 +57,7 @@ namespace XC {
 //! @ingroup BeamInteg
 //
 //! @brief Integration points at fixed locations.
-class ParameterIDBeamIntegration : public UserDefinedBeamIntegrationBase
+class ParameterIDBeamIntegration: public UserDefinedBeamIntegrationBase
   {
   protected:
     int parameterID;

@@ -62,7 +62,7 @@ namespace XC {
 //! @ingroup FDNDMat
 //
 //! @brief ??.
-class LogWEnergy : public WEnergy
+class LogWEnergy: public WEnergy
   {
   private:
     double K;

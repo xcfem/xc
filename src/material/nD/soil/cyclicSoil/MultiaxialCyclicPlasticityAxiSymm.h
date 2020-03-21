@@ -70,7 +70,7 @@ namespace XC{
 //! @ingroup SoilNDMat
 //
 //! @brief ??.
-class MultiaxialCyclicPlasticityAxiSymm : public MultiaxialCyclicPlasticity {
+class MultiaxialCyclicPlasticityAxiSymm: public MultiaxialCyclicPlasticity {
 
 //-------------------Declarations-------------------------------
 

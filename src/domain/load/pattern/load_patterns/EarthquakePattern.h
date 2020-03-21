@@ -76,7 +76,7 @@ class GroundMotion;
 //! and implements the applyLoad() method. It is up to the concrete
 //! subclasses to set the appropriate values of \p R at each node in
 //! the model.
-class EarthquakePattern : public EQBasePattern
+class EarthquakePattern: public EQBasePattern
   {
   private:
     Vector uDotG; //!< Velocities.

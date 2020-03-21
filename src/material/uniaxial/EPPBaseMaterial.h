@@ -35,7 +35,7 @@ namespace XC {
 //! @ingroup MatUnx
 //
 //! @brief Base class for elastic perfectly plastic materials.
-class EPPBaseMaterial : public ElasticBaseMaterial
+class EPPBaseMaterial: public ElasticBaseMaterial
   {
   protected:
     double trialStress; //!< current trial stress

@@ -56,7 +56,7 @@ class Vector;
 //! @ingroup EigenSolver
 //
 //! @brief Eigenvalue SOE solver.
-class EigenSolver : public Solver
+class EigenSolver: public Solver
   {
   protected:
     int numModes; //!< number of eigenvalues to compute.

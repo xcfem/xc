@@ -42,7 +42,7 @@ namespace XC {
 //! @ingroup MATYS
 //
 //! @brief XXX??.
-class MultiLinearKp : public PlasticHardeningMaterial
+class MultiLinearKp: public PlasticHardeningMaterial
   {
   private:
     Vector sumPlasDefo;

@@ -37,7 +37,7 @@ namespace XC {
 //! @ingroup LinearSOE
 //
 //! @brief Base class for sparse matrix systems of equations.
-class SparseSOEBase : public FactoredSOEBase
+class SparseSOEBase: public FactoredSOEBase
   {
   protected:
     int nnz; //! number of non-zeros in A
