@@ -58,7 +58,7 @@ class Inelastic2DYS02 : public InelasticYS2DGNL
  		  double Alpha, double Beta, int rf_algo=-1,
  		  bool islinear=false, double rho=0.0);
    Element *getCopy(void) const;
-   ~Inelastic2DYS02();
+   ~Inelastic2DYS02(void);
    int commitState(void);
    int update(void);
 

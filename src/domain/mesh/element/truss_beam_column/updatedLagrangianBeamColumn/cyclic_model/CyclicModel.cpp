@@ -29,9 +29,9 @@
 #include "CyclicModel.h"
 #include <cmath>
 
-const int    XC::CyclicModel::Loading(1);
-const int    XC::CyclicModel::Unloading(2);
-const int    XC::CyclicModel::Crossover(3);
+const int XC::CyclicModel::Loading(1);
+const int XC::CyclicModel::Unloading(2);
+const int XC::CyclicModel::Crossover(3);
 const double XC::CyclicModel::Tol(1e-10);
 const double XC::CyclicModel::delK(0.85);
 

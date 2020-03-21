@@ -119,7 +119,7 @@ void XC::UpdatedLagrangianBeam2D::setDomain(Domain *theDomain)
   {
     // first set the node pointers
     Element1D::setDomain(theDomain);
-    // check XC::Domain is not null - invoked when object removed from a domain
+    // check theDomain is not null - invoked when object removed from a domain
     if(theDomain == 0)
       {
         L = 0;
