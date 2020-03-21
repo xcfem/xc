@@ -32,9 +32,9 @@
 
 namespace XC {
 //! @ingroup OneDimensionalElem
-//
-//! @brief ??.
-class CyclicModel : public TaggedObject, public MovableObject
+//!
+//! @brief Cyclic behavior of semi-rigid connectors.
+class CyclicModel: public TaggedObject, public MovableObject
   {
   private:
     int initNewTask();

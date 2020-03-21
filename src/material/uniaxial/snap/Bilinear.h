@@ -80,8 +80,8 @@ class Bilinear : public UniaxialMaterial
   {
  private:
      // Input parameters
-    double elstk, fyieldPos ,fyieldNeg, alfa;            // Main properties
-    double alfaCap, capDispPos, capDispNeg, Resfac;        // Cap properties
+    double elstk, fyieldPos ,fyieldNeg, alfa; //! Main properties
+    double alfaCap, capDispPos, capDispNeg, Resfac; //! Cap properties
     int flagCapenv;
     DamageModel *StrDamage;
     DamageModel *StfDamage;

@@ -31,8 +31,8 @@
 
 namespace XC {
 //! @ingroup OneDimensionalElem
-//
-//! @brief ??.
+//!
+//! @brief Bilinear model of cyclic connector behavior.
 class BilinearCyclic : public CyclicModel
   {
   protected:

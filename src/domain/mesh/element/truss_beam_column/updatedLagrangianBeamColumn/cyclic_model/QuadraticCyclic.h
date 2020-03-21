@@ -33,9 +33,9 @@
 
 namespace XC {
 //! @ingroup OneDimensionalElem
-//
-//! @brief ??.
-class QuadraticCyclic : public CyclicModel
+//!
+//! @brief Quadratic model of cyclic connector behavior.
+class QuadraticCyclic: public CyclicModel
   {
   private:
     double a, b, c;
