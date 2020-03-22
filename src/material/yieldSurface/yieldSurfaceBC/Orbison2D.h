@@ -28,7 +28,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined ORBISON2D_H
+#ifndef ORBISON2D_H
 #define ORBISON2D_H
 
 #include "material/yieldSurface/yieldSurfaceBC/YieldSurface_BC2D.h"

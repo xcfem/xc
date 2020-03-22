@@ -28,7 +28,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined HAJJAR2D_H
+#ifndef HAJJAR2D_H
 #define HAJJAR2D_H
 
 #include "material/yieldSurface/yieldSurfaceBC/YieldSurface_BC2D.h"

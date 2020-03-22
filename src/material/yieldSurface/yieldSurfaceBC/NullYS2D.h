@@ -28,7 +28,7 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined NULLYS2D_H
+#ifndef NULLYS2D_H
 #define NULLYS2D_H
 
 #include "material/yieldSurface/yieldSurfaceBC/YieldSurface_BC2D.h"

@@ -28,8 +28,8 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined ATTALLA2D_H
-#define ATTALLA_H
+#ifndef ATTALLA2D_H
+#define ATTALLA2D_H
 
 #include "material/yieldSurface/yieldSurfaceBC/YieldSurface_BC2D.h"
 
