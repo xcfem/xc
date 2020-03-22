@@ -30,6 +30,7 @@
 
 #include "material/yieldSurface/evolution/BkStressLimSurface2D.h"
 #include <material/yieldSurface/yieldSurfaceBC/YieldSurface_BC.h>
+#include "material/yieldSurface/plasticHardeningMaterial/PlasticHardeningMaterial.h"
 #include <cmath>
 #include "xc_utils/src/utils/misc_utils/matem.h"
 

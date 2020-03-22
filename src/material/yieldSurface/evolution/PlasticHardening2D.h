@@ -28,15 +28,17 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined PLASTICHARDENING2D_H
+#ifndef PLASTICHARDENING2D_H
 #define PLASTICHARDENING2D_H
 
 #include "material/yieldSurface/evolution/YS_Evolution2D.h"
 
 namespace XC {
-//! @ingroup MATYS
+class PlasticHardeningMaterial;
+
+//! @ingroup YSEvolution
 //!
-//! @brief ??
+//! @brief Plastic hardening yield surface evolution law (2D).
 class PlasticHardening2D: public YS_Evolution2D
   {
   protected:

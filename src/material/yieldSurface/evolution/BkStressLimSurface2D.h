@@ -34,13 +34,15 @@
 #include "material/yieldSurface/evolution/YS_Evolution2D.h"
 namespace XC {
 class YieldSurface_BC;
+class PlasticHardeningMaterial;
   
-//! @ingroup MATYS
-//! @brief ??.
+//! @ingroup YSEvolution
+//!
+//! @brief  Back-strees isotropic model evolution law.
 class BkStressLimSurface2D: public YS_Evolution2D
   {
   protected:
-	virtual void	setTrialPlasticStrains(double ep, const Vector &f, const Vector &g);
+	virtual void  setTrialPlasticStrains(double ep, const Vector &f, const Vector &g);
 	virtual double getIsoPlasticStiffness(int dir);
 	virtual double getKinPlasticStiffness(int dir);
 	virtual Vector& getEvolDirection(Vector &f_new);
@@ -49,7 +51,7 @@ class BkStressLimSurface2D: public YS_Evolution2D
 	PlasticHardeningMaterial  *isoMatXPos, *isoMatXNeg;
 	PlasticHardeningMaterial  *isoMatYPos, *isoMatYNeg;
 	
-	YieldSurface_BC   *limSurface;
+	YieldSurface_BC *limSurface;
 	bool defPosX, defPosY;
 	bool resHardening, resApproach;
 	int resAlgo;

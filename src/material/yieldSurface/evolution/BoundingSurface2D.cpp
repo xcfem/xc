@@ -29,7 +29,8 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "material/yieldSurface/evolution/BoundingSurface2D.h"
-#include <math.h>
+#include "material/yieldSurface/plasticHardeningMaterial/PlasticHardeningMaterial.h"
+#include <cmath>
 #include <material/yieldSurface/yieldSurfaceBC/YieldSurface_BC.h>
 
 #define evolDebug 0

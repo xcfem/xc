@@ -33,19 +33,19 @@
 
 #define evolDebug 0
 #define KINEMATIC2D01_CLASSTAG -1
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
 
+//! @brief Constructor.
 XC::Kinematic2D01::Kinematic2D01(int tag, double min_iso_factor,
                         PlasticHardeningMaterial &kpx,
 						PlasticHardeningMaterial &kpy, double dir)
 :PlasticHardening2D(tag, KINEMATIC2D01_CLASSTAG, min_iso_factor,0, 1,
                     kpx, kpx, kpy, kpy, dir){}
 
+//! @brief Copy constructor.
 XC::YS_Evolution *XC::Kinematic2D01::getCopy(void)
   { return new Kinematic2D01(*this); }
 
+//! @brief Print stuff.
 void XC::Kinematic2D01::Print(std::ostream &s, int flag) const
   {
 	s << "Kinematic2D01 \n";

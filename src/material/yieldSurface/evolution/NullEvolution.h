@@ -47,7 +47,7 @@ plain elastic-perfectly plastic surfaces that do not evolve
   */
 
 namespace XC {
-//! @ingroup MATYS
+//! @ingroup YSEvolution
 //
 //! @brief Useful for declaring inner-surfaces or pinching surfaces or just
 //! plain elastic-perfectly plastic surfaces that do not evolve.

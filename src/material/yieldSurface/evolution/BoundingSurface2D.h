@@ -34,14 +34,17 @@
 #include "material/yieldSurface/evolution/YS_Evolution2D.h"
 
 namespace XC {
-//! @ingroup MATYS
-//! @brief Bounding 2D yield surface.
+class PlasticHardeningMaterial;
+
+//! @ingroup YSEvolution
+//!
+//! @brief Bounding 2D yield surface evolution law.
 class BoundingSurface2D: public YS_Evolution2D
   {
   protected:
 //	double minIsoFactor;
-    PlasticHardeningMaterial  *kpMatX, *kpMatY;
-    YieldSurface_BC   *boundSurface;
+    PlasticHardeningMaterial *kpMatX, *kpMatY;
+    YieldSurface_BC  *boundSurface;
   public:
     BoundingSurface2D(int tag, int classTag, double min_iso_factor, 
     			double iso_ratio, double kin_ratio,

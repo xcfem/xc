@@ -42,7 +42,11 @@ class YieldSurface_BC;
 
 //! @ingroup MATYS
 //!
-//! @brief Yield surface evolution.
+//! @defgroup YSEvolution Yield surface evolution laws.
+//!
+//! @ingroup YSEvolution
+//!
+//! @brief Yield surface evolution law.
 class YS_Evolution: public TaggedObject, public MovableObject
   {
   public:

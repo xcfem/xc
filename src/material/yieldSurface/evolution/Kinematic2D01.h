@@ -28,14 +28,15 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined KINEMATIC2D01_H
+#ifndef KINEMATIC2D01_H
 #define KINEMATIC2D01_H
 
 #include "material/yieldSurface/evolution/PlasticHardening2D.h"
 
 namespace XC {
-//! @ingroup MATYS
-//! @brief 2D kinematic yield surface.
+//! @ingroup YSEvolution
+//! 
+//! @brief 2D kinematic hardening yield surface evolution law.
 class Kinematic2D01: public PlasticHardening2D
   {
   private:

@@ -29,7 +29,8 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "material/yieldSurface/evolution/CombinedIsoKin2D01.h"
-#include <math.h>
+#include "material/yieldSurface/plasticHardeningMaterial/PlasticHardeningMaterial.h"
+#include <cmath>
 
 #define evolDebug 0
 #define COMBINEDISOKIN2D01_CLASSTAG -1

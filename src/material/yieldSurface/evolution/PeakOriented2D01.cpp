@@ -29,7 +29,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "material/yieldSurface/evolution/PeakOriented2D01.h"
-#include <math.h>
+#include <cmath>
 
 #define evolDebug 0
 #define PEAK_ORIENTED2D01_CLASSTAG -1

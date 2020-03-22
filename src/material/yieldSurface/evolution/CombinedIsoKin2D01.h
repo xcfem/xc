@@ -28,14 +28,16 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined USERDEFINED2D_H
+#ifndef USERDEFINED2D_H
 #define USERDEFINED2D_H
 
 #include "PlasticHardening2D.h"
 
 namespace XC {
-//! @ingroup MATYS
-//! @brief ??.
+  
+//! @ingroup YSEvolution
+//!
+//! @brief Combined isotropic-kinematic hardening evolution law.
 class CombinedIsoKin2D01: public PlasticHardening2D
   {
   public:

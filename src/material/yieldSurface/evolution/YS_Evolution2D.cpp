@@ -39,10 +39,7 @@
 
 XC::Vector XC::YS_Evolution2D::v2(2);
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
-
+//! @brief Constructor.
 XC::YS_Evolution2D::YS_Evolution2D(int tag, int classtag,
 							   double min_iso_factor,
                                double iso_ratio, double kin_ratio)

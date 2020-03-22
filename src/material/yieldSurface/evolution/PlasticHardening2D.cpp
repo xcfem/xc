@@ -30,7 +30,8 @@
 
 #include "material/yieldSurface/evolution/PlasticHardening2D.h"
 #include <material/yieldSurface/yieldSurfaceBC/YieldSurface_BC.h>
-#include <math.h>
+#include "material/yieldSurface/plasticHardeningMaterial/PlasticHardeningMaterial.h"
+#include <cmath>
 
 #define strnDebug 0
 #define stifDebug 0

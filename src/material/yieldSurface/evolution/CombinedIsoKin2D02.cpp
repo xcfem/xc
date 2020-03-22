@@ -37,6 +37,7 @@
  ***************************************************************************/
 
 #include "material/yieldSurface/evolution/CombinedIsoKin2D02.h"
+#include "material/yieldSurface/plasticHardeningMaterial/PlasticHardeningMaterial.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

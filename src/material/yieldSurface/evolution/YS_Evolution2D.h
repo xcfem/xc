@@ -32,14 +32,20 @@
 #define YS_EVOLUTION2D_H
 
 #include "YS_Evolution.h"
-#include "material/yieldSurface/plasticHardeningMaterial/PlasticHardeningMaterial.h"
 
 namespace XC {
-//! @ingroup MATYS
+//! @ingroup YSEvolution
 //!
-//! @brief 2D yield surface evolution.
+//! @brief 2D yield surface evolution law.
 class YS_Evolution2D: public YS_Evolution
   {
+  protected:
+//  double sumPlasticDeformX, sumPlasticDeformX_hist;
+//  double sumPlasticDeformY, sumPlasticDeformY_hist;
+    bool   softening;
+    static Vector v2;
+    double minIsoFactor;
+    YieldSurface_BC *tmpYSPtr;
   public:
     YS_Evolution2D(int tag, int classTag, double min_iso_factor,
                         double iso_ratio, double kin_ratio);
@@ -68,13 +74,6 @@ protected:
     virtual double getKinPlasticStiffness(int dir)=0;
     virtual Vector& getEvolDirection(Vector &f_new)=0;
 
-protected:
-//  double sumPlasticDeformX, sumPlasticDeformX_hist;
-//  double sumPlasticDeformY, sumPlasticDeformY_hist;
-    bool   softening;
-    static Vector v2;
-    double minIsoFactor;
-    YieldSurface_BC *tmpYSPtr;
   };
 } // end of XC namespace
 

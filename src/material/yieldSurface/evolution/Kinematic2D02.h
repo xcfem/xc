@@ -36,9 +36,9 @@
 
 //class YieldSurface_BC;
 namespace XC {
-//! @ingroup MATYS
+//! @ingroup YSEvolution
 //!
-//! @brief ??
+//! @brief 2D kinematic hardening yield surface evolution law.
 class Kinematic2D02: public BkStressLimSurface2D
   {
   public:

@@ -34,8 +34,9 @@
 #include "PlasticHardening2D.h"
 
 namespace XC {
-//! @ingroup MATYS
-//! @brief ??.
+//! @ingroup YSEvolution
+//! 
+//! @brief Isotropic hardening evolution law.
 class Isotropic2D01: public PlasticHardening2D
   {
   public:

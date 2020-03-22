@@ -28,15 +28,15 @@
 //
 //////////////////////////////////////////////////////////////////////
 
-#if !defined PEAKORIENTED2D01_H
+#ifndef PEAKORIENTED2D01_H
 #define PEAKORIENTED2D01_H
 
 #include "material/yieldSurface/evolution/PlasticHardening2D.h"
 
 namespace XC {
-//! @ingroup MATYS
+//! @ingroup YSEvolution
 //!
-//! @brief ??
+//! @brief Peak orienten hardening model evolution law.
 class PeakOriented2D01: public PlasticHardening2D
   {
   public:

@@ -24,7 +24,7 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-// YS_Evolution.cpp: implementation of the XC::YS_Evolution class.
+// YS_Evolution.cpp: implementation of the YS_Evolution class.
 //
 //////////////////////////////////////////////////////////////////////
 

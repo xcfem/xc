@@ -48,7 +48,8 @@ This one is also deformable
   */
 
 namespace XC {
-//! @ingroup MATYS
+ 
+//! @ingroup YSEvolution
 //!
 //! @brief Kinematic model is based on back-stress
 //! Isotropic model on plastic-deformations
