@@ -1550,7 +1550,7 @@ XC::BJtensor XC::TwentyNodeBrick::nodal_forces(void) const
 //out May 2004, Guanzhou  }
 
   //char *test = matpoint[where]->matmodel->getType();
-  // fmk - changing if so if into else block must be XC::Template3Dep
+  // fmk - changing if so if into else block must be Template3Dep
 //  if(strcmp(matpoint[where]->matmodel->getType(),"Template3Dep") != 0)
      stress_at_GP = matpoint[where]->getStressTensor();
 

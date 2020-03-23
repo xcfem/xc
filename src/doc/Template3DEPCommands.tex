@@ -19,7 +19,7 @@ This  command sets the yield surface variable \texttt{ys} to be
 the  specified  type.  A  list  of  parameters can be passed to
 define the yield surface and the number of parameters depend on
 the  type  of yield surface. Valid strings for YieldSurfaceType
-are \texttt{DP}, \texttt{VM}, \texttt{CC}, and \texttt{RMC01},  
+are \texttt{DP}, \texttt{VM}, \texttt{CC}, and \texttt{RoundedMohrCoulomb01},  
 which  are described in the following subsections.
 
 \subsubsection{Drucker-Prager Yield Surface} 
@@ -57,10 +57,10 @@ supplied.
 \subsubsection{Rounded Mohr-Coulomb (Willam-Warnke) Yield Surface} 
 \label{rmc01_ys}
 \begin{verbatim}
-set ys "-RMC01"
+set ys "-RoundedMohrCoulomb01"
 \end{verbatim}
 
-\texttt{RMC01} stands for rounded Mohr-Coulomb (Willam-Warnke) type, 
+\texttt{RoundedMohrCoulomb01} stands for rounded Mohr-Coulomb (Willam-Warnke) type, 
 i.e. cone shaped
 yield  surface. In this case, no parameter needs to be supplied, 
 this is similar to the Drucker-Prager yield surface.
@@ -116,10 +116,10 @@ be supplied.
 \subsubsection{Rounded Mohr-Coulomb (Willam-Warnke) Potential Surface} 
 \label{rmc01_ps}
 \begin{verbatim}
-set ps "-RMC01"
+set ps "-RoundedMohrCoulomb01"
 \end{verbatim}
 
-\texttt{RMC01} stands for rounded Mohr-Coulomb (Willam-Warnke) type, 
+\texttt{RoundedMohrCoulomb01} stands for rounded Mohr-Coulomb (Willam-Warnke) type, 
 i.e. cone shaped
 Potential  surface. In this case, no parameter needs to be supplied, 
 this is similar to the Drucker-Prager Potential surface.
