@@ -1,3 +1,4 @@
+// -*-c++-*-
 //----------------------------------------------------------------------------
 //  XC program; finite element analysis code
 //  for structural analysis and design.
@@ -30,7 +31,7 @@
 # PROJECT:           Object Oriented Finite Element Program                    #
 # PURPOSE:           General platform for elaso-plastic constitutive model     #
 #                    implementation                                            #
-# CLASS:             DPEPState (the base class for all Elasto-plastic state)   #
+# CLASS:             EPState (the base class for all Elasto-plastic state)     #
 #                                                                              #
 # VERSION:                                                                     #
 # LANGUAGE:          C++.ver >= 2.0 ( Borland C++ ver=3.00, SUN C++ ver=2.1 )  #
@@ -67,8 +68,10 @@
 
 namespace XC {
 //! @ingroup 3DEPMat
-//
-//! @brief This class is used to hold all state parameters and
+//!
+//! @brief Base class for all elasto-plastic states.
+//! 
+//! This class is used to hold all state parameters and
 //! internal variables in an elasto-plastic constitutive model. 
 class EPState
   {

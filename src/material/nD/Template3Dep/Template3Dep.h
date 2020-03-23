@@ -1,3 +1,4 @@
+// -*-c++-*-
 //----------------------------------------------------------------------------
 //  XC program; finite element analysis code
 //  for structural analysis and design.
@@ -71,9 +72,9 @@ class Tensor;
 //! @ingroup NDMat
 //!
 //! @defgroup 3DEPMat Three-dimensional elasto-plastic material.
-//
+//!
 //! @ingroup 3DEPMat
-//
+//!
 //! @brief The Template3Dep class is used to hold specific
 //! yield surface, potential surface, Evolution law(s)
 //! and EPState of a 3D elasto-plastic material model for one

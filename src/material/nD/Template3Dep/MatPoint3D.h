@@ -1,3 +1,4 @@
+// -*-c++-*-
 //----------------------------------------------------------------------------
 //  XC program; finite element analysis code
 //  for structural analysis and design.
@@ -61,7 +62,7 @@ namespace XC {
   class straintensor;
 
 //! @ingroup NDMat
-//
+//!
 //! @brief Integration point on three-dimensional space.
 class MatPoint3D: public GaussPoint
   {

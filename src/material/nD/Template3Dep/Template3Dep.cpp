@@ -65,12 +65,12 @@
 #include "material/nD/Template3Dep/Template3Dep.h"
 #include "material/nD/NDMaterialType.h"
 
-//#include <material/nD/Template3Dep/MD_YS.h>
-//#include <material/nD/Template3Dep/MD_PS.h>
-#include <material/nD/Template3Dep/YS.h>
-#include <material/nD/Template3Dep/PS.h>
-#include <material/nD/Template3Dep/EL_S.h>
-#include <material/nD/Template3Dep/EL_T.h>
+//#include <material/nD/Template3Dep/ManzariDafaliasYieldSurface.h>
+//#include <material/nD/Template3Dep/ManzariDafaliasPotentialSurface.h>
+#include <material/nD/Template3Dep/YieldSurface.h>
+#include <material/nD/Template3Dep/PotentialSurface.h>
+#include <material/nD/Template3Dep/EvolutionLaw_S.h>
+#include <material/nD/Template3Dep/EvolutionLaw_T.h>
 #include <material/nD/Template3Dep/EPState.h>
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
@@ -418,8 +418,8 @@ XC::Template3Dep::Template3Dep(int tag)
    ELS1(nullptr), ELS2(nullptr),ELS3(nullptr), ELS4(nullptr),
    ELT1(nullptr), ELT2(nullptr), ELT3(nullptr), ELT4(nullptr)
   {
-    //YS = new DPYieldSurface();
-    //PS = new DPPotentialSurface();
+    //YS = new DruckerPragerYieldSurface();
+    //PS = new DruckerPragerPotentialSurface();
     //EPS = new EPState();
   }
 
