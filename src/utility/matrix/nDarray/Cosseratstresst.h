@@ -58,7 +58,7 @@ class Material_Model;
 
 //! @ingroup Matrix
 //!
-//! @ brief Stress tensor of a Cosserat material.
+//! @brief Stress tensor of a Cosserat material.
 //!
 //! The Cosserat continuum provides a relevant description of the mechanical
 //! behavior of materials with microstructur like rocks and granular media,

@@ -62,7 +62,7 @@
 namespace XC {
 //! @ingroup Matrix
 //!
-//! @ brief Strain tensor of a Cosserat material.
+//! @brief Strain tensor of a Cosserat material.
 //!
 //! The Cosserat continuum provides a relevant description of the mechanical
 //! behavior of materials with microstructur like rocks and granular media,

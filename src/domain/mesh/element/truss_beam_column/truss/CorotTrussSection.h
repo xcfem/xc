@@ -65,7 +65,7 @@ class SectionForceDeformation;
 
 //! @ingroup TrussElem
 //
-//! @brief Truss element with corotatinal formulation and material
+//! @brief Truss element with corotational formulation and material
 //! of type SectionForceDeformation. Small strain, large displacement
 //! corotational space truss element, as described by Crisfield
 //! in "Nonlinear Finite Element Analysis of
