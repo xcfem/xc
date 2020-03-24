@@ -43,7 +43,7 @@ namespace XC {
 class Vector;
 class FiberSectionBase;
 
-//! \@ingroup MATSCCDiagInt
+//! @ingroup MATSCCDiagInt
 //
 //! @brief Closed triangle mesh used to represent
 //! the interaction diagram (N,Mx,My) of a section.
