@@ -79,21 +79,9 @@ const size_t maxOrder= 10;
 // Can increase if needed!!!
 double XC::SectionAggregator::workArea[2*maxOrder*(maxOrder+1)];
 
-//! @brief Check that pointers are not null.
-void XC::SectionAggregator::check_ptrs(void) const
-  {
-    if(!theCode || !def || !defzero || !s || !ks || !fs )
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; out of memory.\n";
-        exit(-1);
-      }        
-  }
-
 //! @brief Allocate storage for pointers.
-void XC::SectionAggregator::alloc_storage_ptrs(void)
+void XC::SectionAggregator::resize(void)
   {
-    free_storage_ptrs();
     const size_t order= getOrder();
     if(order > maxOrder)
       {
@@ -106,54 +94,19 @@ void XC::SectionAggregator::alloc_storage_ptrs(void)
     //                                          LCPT 19/09/2016
     if(order>0)
       {
-        theCode= new ResponseId(order);
-        def= new Vector(workArea, order);
-        defzero= new Vector(workArea, order);
-        s= new Vector(&workArea[maxOrder], order);
-        ks= new Matrix(&workArea[2*maxOrder], order, order);
-        fs= new Matrix(&workArea[maxOrder*(maxOrder+2)], order, order);
-        check_ptrs();
+        theCode= ResponseId(order);
+        def= Vector(workArea, order);
+        defzero= Vector(workArea, order);
+        s= Vector(&workArea[maxOrder], order);
+        ks= Matrix(&workArea[2*maxOrder], order, order);
+        fs= Matrix(&workArea[maxOrder*(maxOrder+2)], order, order);
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; 0 or negative order; order= " << order << std::endl;
   }
 
-//! @brief Free memory
-void XC::SectionAggregator::free_storage_ptrs(void)
-  {
-    if(def)
-      {
-        delete def;
-        def= nullptr;
-      }
-    if(defzero)
-      {
-        delete defzero;
-        defzero= nullptr;
-      }
-    if(s)
-      {
-        delete s;
-        s= nullptr;
-      }
-    if(ks)
-      {
-        delete ks;
-        ks= nullptr;
-      }
-    if(fs)
-      {
-        delete fs;
-        fs= nullptr;
-      }
-    if(theCode)
-      {
-        delete theCode;
-        theCode= nullptr;
-      }
-  }
-
+//! @brief Free memory.
 void XC::SectionAggregator::free_mem(void)
   {
     if(theSection)
@@ -161,9 +114,9 @@ void XC::SectionAggregator::free_mem(void)
         delete theSection;
         theSection= nullptr;
       }
-    free_storage_ptrs();
   }
 
+//! @brief Copy section from argument.
 void XC::SectionAggregator::copy_section(const SectionForceDeformation *theSec)
   {
     if(theSection)
@@ -193,44 +146,44 @@ void XC::SectionAggregator::copy_section(const SectionForceDeformation *theSec)
 
 //! @brief Constructor.
 XC::SectionAggregator::SectionAggregator(int tag, PrismaticBarCrossSection &theSec,const AggregatorAdditions &theAdds,MaterialHandler *mat_ldr)
-  : PrismaticBarCrossSection(tag, SEC_TAG_Aggregator,mat_ldr), theSection(nullptr),
-    theAdditions(theAdds,this), def(nullptr), defzero(nullptr), s(nullptr), ks(nullptr), fs(nullptr), theCode(nullptr)
+  : PrismaticBarCrossSection(tag, SEC_TAG_Aggregator,mat_ldr),
+    theSection(nullptr), theAdditions(theAdds,this)
   {
     copy_section(&theSec);
-    alloc_storage_ptrs();
+    resize();
   }
 
 //! @brief Copy constructor.
 XC::SectionAggregator::SectionAggregator(const SectionAggregator &other)
-  : PrismaticBarCrossSection(other), theSection(nullptr), theAdditions(other.theAdditions),
-    def(nullptr), defzero(nullptr), s(nullptr), ks(nullptr), fs(nullptr), theCode(nullptr)
+  : PrismaticBarCrossSection(other),
+    theSection(nullptr), theAdditions(other.theAdditions)
    {
      copy_section(other.theSection);
-     alloc_storage_ptrs();
+     resize();
    }
 
 //! @brief Constructor.
 XC::SectionAggregator::SectionAggregator(int tag, const AggregatorAdditions &theAdds,MaterialHandler *mat_ldr)
-  : PrismaticBarCrossSection(tag, SEC_TAG_Aggregator,mat_ldr), theSection(nullptr), theAdditions(theAdds,this),
-    def(nullptr), defzero(nullptr), s(nullptr), ks(nullptr), fs(nullptr), theCode(nullptr)
-  { alloc_storage_ptrs(); }
+  : PrismaticBarCrossSection(tag, SEC_TAG_Aggregator,mat_ldr),
+    theSection(nullptr), theAdditions(theAdds,this)
+  { resize(); }
 
 XC::SectionAggregator::SectionAggregator(int tag, PrismaticBarCrossSection &theSec, UniaxialMaterial &theAddition, int c,MaterialHandler *mat_ldr)
-  : PrismaticBarCrossSection(tag, SEC_TAG_Aggregator,mat_ldr), theSection(nullptr), theAdditions(this,theAddition,c),
-    def(nullptr), defzero(nullptr), s(nullptr), ks(nullptr), fs(nullptr), theCode(nullptr)
+  : PrismaticBarCrossSection(tag, SEC_TAG_Aggregator,mat_ldr),
+    theSection(nullptr), theAdditions(this,theAddition,c)
   {
     copy_section(&theSec);
-    alloc_storage_ptrs();
+    resize();
   }
 
 XC::SectionAggregator::SectionAggregator(int tag,MaterialHandler *mat_ldr)
-  : PrismaticBarCrossSection(tag, SEC_TAG_Aggregator,mat_ldr), theSection(nullptr), theAdditions(this), 
-    def(nullptr), defzero(nullptr), s(nullptr), ks(nullptr), fs(nullptr), theCode(nullptr){}
+  : PrismaticBarCrossSection(tag, SEC_TAG_Aggregator,mat_ldr),
+    theSection(nullptr), theAdditions(this) {}
 
 //! @brief Default constructor.
 XC::SectionAggregator::SectionAggregator(MaterialHandler *mat_ldr)
-  : PrismaticBarCrossSection(0, SEC_TAG_Aggregator,mat_ldr), theSection(nullptr), theAdditions(this),
-    def(nullptr), defzero(nullptr), s(nullptr), ks(nullptr), fs(nullptr), theCode(nullptr) {}
+  : PrismaticBarCrossSection(0, SEC_TAG_Aggregator,mat_ldr),
+    theSection(nullptr), theAdditions(this) {}
 
 //! @brief Assignment operator.
 XC::SectionAggregator &XC::SectionAggregator::operator=(const SectionAggregator &other)
@@ -240,19 +193,13 @@ XC::SectionAggregator &XC::SectionAggregator::operator=(const SectionAggregator 
     copy_section(other.theSection);
     theAdditions= other.theAdditions;
     theAdditions.set_owner(this);
-    if(other.theAdditions.check_ptrs())
-      {
-        alloc_storage_ptrs();
-        (*def)= (*other.def);
-        (*defzero)= (*other.defzero);
-        (*s)= (*other.s);
-        (*ks)= (*other.ks);
-        (*fs)= (*other.fs);
-        (*theCode)= (*other.theCode);
-      }
-    else
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; null pointer en matCodes." << std::endl;
+    resize();
+    def= other.def;
+    defzero= other.defzero;
+    s= other.s;
+    ks= other.ks;
+    fs= other.fs;
+    theCode= other.theCode;
     return *this;
   }
 
@@ -270,7 +217,7 @@ void XC::SectionAggregator::setSection(const std::string &sectionName)
           std::cerr << getClassName() << "::" << __FUNCTION__
                     << "; material identified by: '" << sectionName
                     << "' is not a prismatic bar cross-section material.\n";
-        alloc_storage_ptrs();
+        resize();
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -306,7 +253,7 @@ void XC::SectionAggregator::setAddtions(const std::vector<std::string> &response
                     << "; material: '" << nmbMats[i]
                     << "' not found.\n";
       }
-    alloc_storage_ptrs();
+    resize();
   }
 
 void XC::SectionAggregator::setAddtionsPyList(const boost::python::list &responseCodes,const boost::python::list &nmbMats)
@@ -384,10 +331,10 @@ const XC::Vector &XC::SectionAggregator::getInitialSectionDeformation(void) cons
         const Vector &eSec= theSection->getInitialSectionDeformation();
         theSectionOrder= theSection->getOrder();
         for(register int i= 0; i < theSectionOrder; i++)
-          (*defzero)(i)= eSec(i);
+          defzero(i)= eSec(i);
       }
-    theAdditions.getInitialStrain(*defzero,theSectionOrder);
-    return *defzero;
+    theAdditions.getInitialStrain(defzero,theSectionOrder);
+    return defzero;
   }
 
 //! @brief Returns material trial generalized strain.
@@ -399,11 +346,11 @@ const XC::Vector &XC::SectionAggregator::getSectionDeformation(void) const
         const Vector &eSec= theSection->getSectionDeformation();
         theSectionOrder= theSection->getOrder();
         for(register int i= 0; i < theSectionOrder; i++)
-          (*def)(i)= eSec(i);
+          def(i)= eSec(i);
       }
-    theAdditions.getStrain(*def,theSectionOrder);
+    theAdditions.getStrain(def,theSectionOrder);
     static Vector retval;
-    retval= (*def)-(*defzero);
+    retval= def-defzero;
     return retval;
   }
 
@@ -413,7 +360,7 @@ const XC::Matrix &XC::SectionAggregator::getSectionTangent(void) const
     int theSectionOrder= 0;
 
     // Zero before assembly
-    ks->Zero();
+    ks.Zero();
 
     if(theSection)
       {
@@ -422,10 +369,10 @@ const XC::Matrix &XC::SectionAggregator::getSectionTangent(void) const
 
         for(register int i= 0; i < theSectionOrder; i++)
           for(register int j= 0; j < theSectionOrder; j++)
-            (*ks)(i,j)= kSec(i,j);
+            ks(i,j)= kSec(i,j);
       }
-    theAdditions.getTangent(*ks,theSectionOrder);
-    return *ks;
+    theAdditions.getTangent(ks,theSectionOrder);
+    return ks;
   }
 
 //! @brief Returns the initial tangent stiffness matrix.
@@ -434,7 +381,7 @@ const XC::Matrix &XC::SectionAggregator::getInitialTangent(void) const
     int theSectionOrder= 0;
 
     // Zero before assembly
-    ks->Zero();
+    ks.Zero();
 
     if(theSection)
       {
@@ -442,10 +389,10 @@ const XC::Matrix &XC::SectionAggregator::getInitialTangent(void) const
         theSectionOrder= theSection->getOrder();
         for(register int i= 0; i < theSectionOrder; i++)
           for(register int j= 0; j < theSectionOrder; j++)
-            (*ks)(i,j)= kSec(i,j);
+            ks(i,j)= kSec(i,j);
       }
-    theAdditions.getInitialTangent(*ks,theSectionOrder);
-    return *ks;
+    theAdditions.getInitialTangent(ks,theSectionOrder);
+    return ks;
   }
 
 //! @brief Returns the flexibility matrix.
@@ -453,7 +400,7 @@ const XC::Matrix &XC::SectionAggregator::getSectionFlexibility(void) const
   {
     int theSectionOrder= 0;
     // Zero before assembly
-    fs->Zero();
+    fs.Zero();
 
     if(theSection)
       {
@@ -461,10 +408,10 @@ const XC::Matrix &XC::SectionAggregator::getSectionFlexibility(void) const
         theSectionOrder= theSection->getOrder();
         for(register int i= 0; i < theSectionOrder; i++)
           for(register int j= 0; j < theSectionOrder; j++)
-            (*fs)(i,j)= fSec(i,j);
+            fs(i,j)= fSec(i,j);
       }
-    theAdditions.getFlexibility(*fs,theSectionOrder);
-    return *fs;
+    theAdditions.getFlexibility(fs,theSectionOrder);
+    return fs;
   }
 
 //! @brief Returns the initial flexibility matrix.
@@ -473,7 +420,7 @@ const XC::Matrix &XC::SectionAggregator::getInitialFlexibility(void) const
     int theSectionOrder= 0;
 
     // Zero before assembly
-    fs->Zero();
+    fs.Zero();
 
     if(theSection)
       {
@@ -481,10 +428,10 @@ const XC::Matrix &XC::SectionAggregator::getInitialFlexibility(void) const
         theSectionOrder= theSection->getOrder();
         for(register int i= 0;i<theSectionOrder;i++)
           for(register int j= 0;j<theSectionOrder;j++)
-            (*fs)(i,j)= fSec(i,j);
+            fs(i,j)= fSec(i,j);
       }
-    theAdditions.getInitialFlexibility(*fs,theSectionOrder);
-    return *fs;
+    theAdditions.getInitialFlexibility(fs,theSectionOrder);
+    return fs;
   }
 
 //! @brief Returns the stress resultant.
@@ -497,10 +444,10 @@ const XC::Vector &XC::SectionAggregator::getStressResultant(void) const
         const Vector &sSec= theSection->getStressResultant();
         theSectionOrder= theSection->getOrder();
         for(register int i= 0; i < theSectionOrder; i++)
-          (*s)(i)= sSec(i);
+          s(i)= sSec(i);
       }
-    theAdditions.getStress(*s,theSectionOrder);
-    return *s;
+    theAdditions.getStress(s,theSectionOrder);
+    return s;
   }
 
 //! @brief Section stiffness contribution response identifiers.
@@ -512,10 +459,10 @@ const XC::ResponseId &XC::SectionAggregator::getType(void) const
         const XC::ResponseId &secType= theSection->getType();
         theSectionOrder= theSection->getOrder();
         for(register int i= 0; i < theSectionOrder; i++)
-          (*theCode)(i)= secType(i);
+          theCode(i)= secType(i);
       }
-    theAdditions.getType(*theCode,theSectionOrder);
-    return *theCode;
+    theAdditions.getType(theCode,theSectionOrder);
+    return theCode;
   }
 
 //! @brief Returns the order of the section.
@@ -567,12 +514,12 @@ int XC::SectionAggregator::sendData(CommParameters &cp)
     int res= PrismaticBarCrossSection::sendData(cp);
     res+= cp.sendBrokedPtr(theSection,getDbTagData(),BrokedPtrCommMetaData(5,6,7));
     res+= cp.sendMovable(theAdditions,getDbTagData(),CommMetaData(8));
-    res+= cp.sendVectorPtr(def,getDbTagData(),ArrayCommMetaData(9,10,11));
-    res+= cp.sendVectorPtr(defzero,getDbTagData(),ArrayCommMetaData(12,13,14));
-    res+= cp.sendVectorPtr(s,getDbTagData(),ArrayCommMetaData(15,16,17));
-    res+= cp.sendMatrixPtr(ks,getDbTagData(),MatrixCommMetaData(18,19,20,21));
-    res+= cp.sendMatrixPtr(fs,getDbTagData(),MatrixCommMetaData(22,23,24,25));
-    res+= cp.sendIDPtr(theCode,getDbTagData(),ArrayCommMetaData(26,27,28));
+    res+= cp.sendVector(def,getDbTagData(),CommMetaData(9));
+    res+= cp.sendVector(defzero,getDbTagData(),CommMetaData(10));
+    res+= cp.sendVector(s,getDbTagData(),CommMetaData(11));
+    res+= cp.sendMatrix(ks,getDbTagData(),CommMetaData(12));
+    res+= cp.sendMatrix(fs,getDbTagData(),CommMetaData(13));
+    res+= cp.sendID(theCode,getDbTagData(),CommMetaData(14));
     return res;
   }
 
@@ -582,12 +529,12 @@ int XC::SectionAggregator::recvData(const CommParameters &cp)
     int res= PrismaticBarCrossSection::recvData(cp);
     theSection= cp.getBrokedMaterial(theSection,getDbTagData(),BrokedPtrCommMetaData(5,6,7));
     res+= cp.receiveMovable(theAdditions,getDbTagData(),CommMetaData(8));
-    def= cp.receiveVectorPtr(def,getDbTagData(),ArrayCommMetaData(9,10,11));
-    defzero= cp.receiveVectorPtr(defzero,getDbTagData(),ArrayCommMetaData(12,13,14));
-    s= cp.receiveVectorPtr(s,getDbTagData(),ArrayCommMetaData(15,16,17));
-    ks= cp.receiveMatrixPtr(ks,getDbTagData(),MatrixCommMetaData(18,19,20,21));
-    fs= cp.receiveMatrixPtr(fs,getDbTagData(),MatrixCommMetaData(22,23,24,25));
-    theCode= cp.receiveResponseIdPtr(theCode,getDbTagData(),ArrayCommMetaData(26,27,28));
+    res+= cp.receiveVector(def,getDbTagData(),CommMetaData(9));
+    res+= cp.receiveVector(defzero,getDbTagData(),CommMetaData(10));
+    res+= cp.receiveVector(s,getDbTagData(),CommMetaData(11));
+    res+= cp.receiveMatrix(ks,getDbTagData(),CommMetaData(12));
+    res+= cp.receiveMatrix(fs,getDbTagData(),CommMetaData(13));
+    res+= cp.receiveID(theCode,getDbTagData(),CommMetaData(14));
     return res;
   }
 
@@ -596,7 +543,7 @@ int XC::SectionAggregator::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
     const int dataTag= getDbTag();
-    inicComm(29);
+    inicComm(15);
     int res= sendData(cp);
 
     res+= cp.sendIdData(getDbTagData(),dataTag);
@@ -610,7 +557,7 @@ int XC::SectionAggregator::sendSelf(CommParameters &cp)
 //! @brief Receives object through the channel being passed as parameter.
 int XC::SectionAggregator::recvSelf(const CommParameters &cp)
   {
-    inicComm(29);
+    inicComm(15);
     const int dataTag= getDbTag();
     int res= cp.receiveIdData(getDbTagData(),dataTag);
 

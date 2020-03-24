@@ -446,7 +446,7 @@ void XC::DispBeamColumn2dBase::Print(std::ostream &s, int flag) const
     
     beamIntegration->Print(s, flag);
     const size_t numSections= getNumSections();
-    for (int i = 0; i < numSections; i++)
+    for(size_t i= 0; i < numSections; i++)
       theSections[i]->Print(s,flag);
   }
 

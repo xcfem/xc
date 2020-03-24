@@ -81,20 +81,18 @@ class SectionAggregator: public PrismaticBarCrossSection
     PrismaticBarCrossSection *theSection;
     AggregatorAdditions theAdditions;
     
-    Vector *def; //!< Storage for section deformations
-    Vector *defzero; //!< Storage for initial section deformations
-    Vector *s; //!< Storage for stress resultants
-    Matrix *ks;//!< Storage for section stiffness
-    Matrix *fs;//!< Storage for section flexibility
-    ResponseId *theCode; //!< identifiers for stiffness contribution.
+    mutable Vector def; //!< Storage for section deformations
+    mutable Vector defzero; //!< Storage for initial section deformations
+    mutable Vector s; //!< Storage for stress resultants
+    mutable Matrix ks;//!< Storage for section stiffness
+    mutable Matrix fs;//!< Storage for section flexibility
+    mutable ResponseId theCode; //!< identifiers for stiffness contribution.
 
     static double workArea[];
     //static int codeArea[];
 
     void copy_section(const SectionForceDeformation *);
-    void check_ptrs(void) const;
-    void alloc_storage_ptrs(void);
-    void free_storage_ptrs(void);
+    void resize(void);
     void free_mem(void);
   protected:
     int sendData(CommParameters &);

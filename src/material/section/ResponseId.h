@@ -61,7 +61,7 @@ const int PLATE_RESPONSE_q23= 18; // Shear force per unit length, perpendicular 
 class ResponseId: public ID
   {
   public:
-    ResponseId(int sz);
+    ResponseId(int sz= 0);
     ResponseId(const std::deque<std::string> &indices);
     ResponseId(const std::vector<std::string> &indices);
     //ResponseId(int *, int size, bool cleanIt = false);
