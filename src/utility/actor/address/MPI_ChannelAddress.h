@@ -67,7 +67,7 @@
 
 namespace XC {
 //! @ingroup IPComm
-//
+//!
 //! @brief It is used to encapsulate the addresses used to send/recv messages
 //! using the MPI library.
 class MPI_ChannelAddress: public ChannelAddress

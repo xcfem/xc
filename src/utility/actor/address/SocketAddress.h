@@ -62,32 +62,31 @@
 #define SocketAddress_h
 
 #include "../channel/Socket.h"
-#include "utility/actor/address/ChannelAddress.h"
+#include "ChannelAddress.h"
 
 namespace XC {
 //! @ingroup IPComm
-//
+//!
 //! @brief It is used to encapsulate the addresses used to send/recv messages
 //! using Berkeley sockets. SocketAddress is needed as a friend by 
 //! UDP_Socket & TCP_Socket.
 class SocketAddress: public ChannelAddress
   {
-  public:
-    SocketAddress();
-    SocketAddress(char *, unsigned int);
-
   private:
-    union {
-      struct sockaddr_in  addr_in;
-      struct sockaddr  addr;      
-    } address;
+    union
+      {
+        struct sockaddr_in  addr_in;
+        struct sockaddr  addr;      
+      } address;
     int addrLength;    
 
     friend class UDP_Socket;
     friend class TCP_Socket;
     friend class TCP_SocketNoDelay;
-};
-
+  public:
+    SocketAddress(void);
+    SocketAddress(char *, unsigned int);
+  };
 } // end of XC namespace
 
 

@@ -67,13 +67,14 @@
 #define MPI_TYPE    2
 
 namespace XC {
+//! @brief Base class for classes that encapsulate
+//! channel addresses. 
 class ChannelAddress
   {
   private:
     int theType;
   public:
     ChannelAddress(int type);
-
     virtual int getType(void) const;
   };
 } // end of XC namespace
