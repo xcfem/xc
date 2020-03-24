@@ -1028,28 +1028,34 @@ import math
 from materials.sections import structural_steel
 
 class WShape(structural_steel.IShape):
+    '''W shape
+
+    :ivar steel: steel material.
+    :ivar name: shape name (i.e. W40X431).
+    '''
     def __init__(self,steel,name):
         ''' Constructor.
-
-        :param steel: steel material.
-        :param name: shape name (i.e. W40X431).
         '''
         super(WShape,self).__init__(steel,name,W)
 
     def h(self):
         ''' Return overall depth of member (d in AISC tables).'''
         return self.get('h')
+      
     def d(self):
         ''' Return internal web height: clear distance between flanges
-            less the fillet at each flange (h in AISC tables).'''
+        less the fillet at each flange (h in AISC tables).'''
         return self.get('d')
+      
     def getAw(self):
         ''' Return A_w according to AISC specification Section G2.1b'''
         return self.h()*self.get('tw')
+      
     def getShearResistanceFactor(self):
         ''' Return the resistance factor for shear according to
-            section G2.1a.'''
+        section G2.1a.'''
         return 1.0
+      
     def getWebShearStrengthCoefficient(self):
         ''' Return the web shear stress coefficient Cv1 according
             to equations G2-2, G2-3 and G2-4 of "Specification for 
@@ -1075,20 +1081,24 @@ class WShape(structural_steel.IShape):
         return 0.6*self.steelType.fy*self.getAw()*Cv1
 
 class CShape(structural_steel.UShape):
+    '''C shape.
+
+    :ivar steel: steel material.
+    :ivar name: shape name (i.e. C380X74).
+    '''
     def __init__(self,steel,name):
         ''' Constructor.
 
-        :param steel: steel material.
-        :param name: shape name (i.e. C380X74).
         '''
         super(CShape,self).__init__(steel,name,C)
 
 class HSSShape(structural_steel.QHShape):
-    ''' Hollow structural section.'''
+    ''' Hollow structural section.
+
+    :ivar steel: steel material.
+    :ivar name: shape name (i.e. HSS2X2X_250).
+    '''
     def __init__(self,steel,name):
         ''' Constructor.
-
-        :param steel: steel material.
-        :param name: shape name (i.e. HSS2X2X_250).
         '''
         super(HSSShape,self).__init__(steel,name,HSS)

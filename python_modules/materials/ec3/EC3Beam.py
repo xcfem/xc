@@ -21,9 +21,9 @@ class EC3Beam(object):
     its section class, the coefficients of supports and the type  
     
     :ivar ec3Shape: cross-section shape (e.g. IPNShape, IPEShape, ...)
-    :ivar sectionClass: section class (1 to 3, 4 not yet implemented)
+    :ivar sectionClass: section class (1 to 3, 4 not yet implemented) 
           (defaults to 1).
-    :ivar supportCoefs:instance of EC3_limit_state_checking.SupportCoefficients
+    :ivar supportCoefs: instance of EC3_limit_state_checking.SupportCoefficients
           that wraps the support coefficients: ky, kw, k1 and k2. where ky is 
           the lateral bending coefficient, kw the warping coefficient,  k1 and            the warping AND lateral bending coefficients at first and last ends 
           respectively (1.0 => free,  0.5 => prevented). 
@@ -58,6 +58,7 @@ class EC3Beam(object):
         factor. That moment gradient factor will be calculated following   
         the general expression proposed by A. López, D. J. Yong, 
         M. A. Serna.
+
         An attribute of EC3Beam is created, named 'contrPnt' that contains 
         a list of five tuples (elem,relativDist), each of which contains the
         element of the beam nearest to one control-point and the relative 
@@ -95,7 +96,7 @@ class EC3Beam(object):
         return
             
     def getLateralBucklingReductionFactor(self):
-        ''' Returns lateral torsional buckling reduction factor value
+        ''' Return lateral torsional buckling reduction factor value
         for the elements of the beam.'''
         if not self.contrPnt:
             self.setControlPoints()
@@ -113,7 +114,6 @@ class EC3Beam(object):
         chiLT= self.getLateralBucklingReductionFactor()
         for e in self.elemSet:
              e.setProp('chiLT',chiLT) #Lateral torsional buckling reduction factor.
-
 
     def installULSControlRecorder(self,recorderType, chiLT=1.0):
         '''Install recorder for verification of ULS criterion.'''
