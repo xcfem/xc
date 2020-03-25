@@ -65,8 +65,8 @@
 
 namespace XC {
 //! @ingroup ReliabilityAnalysis
-// 
-//! @brief ??
+//!
+//! @brief Trapezoidal modulating function used to model uncertainity.
 class TrapezoidalModulatingFunction: public ModulatingFunction
   {
   private:

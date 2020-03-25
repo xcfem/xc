@@ -65,8 +65,8 @@
 
 namespace XC {
 //! @ingroup ReliabilityAnalysis
-// 
-//! @brief ??
+//! 
+//! @brief Constant modulating function used to model uncertainity.
 class ConstantModulatingFunction: public ModulatingFunction
   {
   private:

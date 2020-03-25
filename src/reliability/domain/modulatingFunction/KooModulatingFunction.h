@@ -65,8 +65,8 @@
 
 namespace XC {
 //! @ingroup ReliabilityAnalysis
-// 
-//! @brief ??
+//!
+//! @brief Koo modulating function used to model uncertainity.
 class KooModulatingFunction: public ModulatingFunction
   {
   private:

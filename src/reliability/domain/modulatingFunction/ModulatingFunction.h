@@ -68,8 +68,8 @@ namespace XC {
 
 class Filter;
 //! @ingroup ReliabilityAnalysis
-// 
-//! @brief ??
+//!
+//! @brief Base class for the modulating functions.
 class ModulatingFunction: public ReliabilityDomainComponent
   {
   protected:

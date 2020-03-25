@@ -66,8 +66,8 @@
 
 namespace XC {
 //! @ingroup ReliabilityAnalysis
-// 
-//! @brief ??
+//!
+//! @brief Gamma modulating function used to model uncertainity.
 class GammaModulatingFunction: public ModulatingFunction
   {
   private:
