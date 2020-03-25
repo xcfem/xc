@@ -33,50 +33,54 @@ class ASTMShape(object):
     def __init__(self, name):
        '''
          Constructor.
-
        '''
        self.name=name
        
 from materials.sections.structural_shapes import aisc_metric_shapes
 
 class WShape(ASTMShape,aisc_metric_shapes.WShape):
-    """W shape with ASTM verification routines."""
+    """W shape with ASTM verification routines.
+
+    :ivar steel: steel material.
+    :ivar name: shape name (i.e. W40X431)
+
+    """
     def __init__(self,steel,name):
         ''' Constructor.
-
-        :param steel: steel material.
-        :param name: shape name (i.e. W40X431)
         '''
         ASTMShape.__init__(self,name)
         aisc_metric_shapes.WShape.__init__(self,steel,name)
 
 class CShape(ASTMShape,aisc_metric_shapes.CShape):
-    """C shape with ASTM 3 verification routines."""
+    """C shape with ASTM 3 verification routines.
+
+    :ivar steel: steel material.
+    :ivar name: shape name  (i.e. C380X74).
+    """
     def __init__(self,steel,name):
         ''' Constructor.
-
-        :param steel: steel material.
-        :param name: shape name  (i.e. C380X74).
         '''
         ASTMShape.__init__(self, name)
         aisc_metric_shapes.CShape.__init__(self,steel,name)
 
 class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
-    """HSS shape with ASTM verification routines."""
+    """HSS shape with ASTM verification routines.
+
+    :ivar steel: steel material.
+    :ivar name: shape name (i.e. HSS2X2X_250).
+    """
     def __init__(self,steel,name):
         ''' Constructor.
-
-        :param steel: steel material.
-        :param name: shape name (i.e. HSS2X2X_250).
         '''
         ASTMShape.__init__(self, name)
         aisc_metric_shapes.HSSShape.__init__(self,steel,name)
         
     def getLimitingWidthToThicknessRatio(self):
         ''' Return the Limiting Width-to-Thickness Ratio 
-            according to table B4.1A of AISC-360-16.
+        according to table B4.1A of AISC-360-16.
         '''
         return 1.4*math.sqrt(self.steelType.E/self.steelType.fy)
+    
     def getBClassification(self):
         ''' Return the classification for local buckling of the
             "b" wall of the section according to table B4.1a
@@ -88,6 +92,7 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
         if(bSlendernessRatio>lambda_r):
             retval= 'slender'
         return retval
+    
     def getHClassification(self):
         ''' Return the classification for local buckling of the
             "h" wall of the section according to table B4.1a
@@ -99,6 +104,7 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
         if(hSlendernessRatio>lambda_r):
             retval= 'slender'
         return retval
+    
     def getClassification(self):
         ''' Return the classification for local buckling of the
             section according to table B4.1a of AISC 360-16.
@@ -107,6 +113,7 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
         if((self.getHClassification()=='slender') or (self.getBClassification()=='slender')):
             retval= 'slender'
         return retval
+    
     def getReducedEffectiveH(self):
         '''Return the reduced effective width corresponding
            to the "h" walls of the shape.'''
@@ -116,6 +123,7 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
         retval= 1.92*t*rt*(1.0-0.38/h_t*rt)
         retval= min(retval,self.get('h'))
         return retval
+    
     def getReducedEffectiveB(self):
         '''Return the reduced effective width corresponding
            to the "b" walls of the shape.'''
@@ -125,6 +133,7 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
         retval= 1.92*t*rt*(1.0-0.38/b_t*rt)
         retval= min(retval,self.get('b'))
         return retval
+    
     def getEffectiveArea(self):
         '''Return the effective area.'''
         retval= self.get('A')
@@ -136,16 +145,19 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
             b_ineff= self.get('b_flat')-self.getReducedEffectiveB()
             retval-= 2.0*b_ineff*t
         return retval
+    
     def getLambdaP(self):
         ''' Return the limiting Width-to-Thickness Ratio (compact/noncompact)
             according to table B4.1b of AISC 360-16.
         '''
         return 1.12*math.sqrt(self.steelType.E/self.steelType.fy)
+    
     def getLambdaR(self):
         ''' Return the limiting Width-to-Thickness Ratio (compact/noncompact)
             according to table B4.1b of AISC 360-16.
         '''
         return 1.40*math.sqrt(self.steelType.E/self.steelType.fy)
+    
     def getBFlexureClassification(self):
         ''' Return the classification for local buckling of the
             "b" wall of the section according to table B4.1b
@@ -160,6 +172,7 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
         elif(bSlendernessRatio>lambda_R):
             retval= 'slender'
         return retval
+    
     def getHFlexureClassification(self):
         ''' Return the classification for local buckling of the
             "h" wall of the section according to table B4.1b
@@ -174,10 +187,12 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
         elif(hSlendernessRatio>lambda_R):
             retval= 'slender'
         return retval
+    
     def getZYieldingFlexuralStrength(self):
         ''' Return the plastic moment of the
             section around the z axis.'''
         return self.steelType.fy*self.get('Wzpl')
+    
     def getZFlangeLocalBucklingFlexuralStrength(self):
         ''' Return the maximum flexural strength
             due to flange local buckling.'''
@@ -197,6 +212,7 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
             Se= 2.0*Ae*z
             retval= self.steelType.fy*Se
         return retval
+    
     def getZWebLocalBucklingFlexuralStrength(self):
         ''' Return the maximum flexural strength
             due to web local buckling.'''
@@ -213,6 +229,7 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
         else: #slender
             lmsg.error("Not implemented yet.")
         return retval
+    
     def getZLimitingLaterallyUnbracedLengthForYielding(self):
         ''' Return the limiting laterally unbraced length 
             for the limit state of yielding according
@@ -223,6 +240,7 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
         Mp= self.getZYieldingFlexuralStrength()
         retval/=Mp
         return retval
+    
     def getZLimitingLaterallyUnbracedLengthForInelasticBuckling(self):
         ''' Return the limiting laterally unbraced length 
             for the limit state of inelastic lateral torsional
@@ -236,8 +254,8 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
         
     def getZLateralTorsionalBucklingFlexuralStrength(self, Lb, Cb):
         ''' Return the maximum flexural strength
-            due to web local buckling according to
-            expressions F7-10 to F7-11 of AISC 360-16
+        due to web local buckling according to
+        expressions F7-10 to F7-11 of AISC 360-16
 
         :param Lb: Length between points that are either braced 
                    against lateral displacement of compression 
@@ -263,9 +281,9 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
                 retval*= math.sqrt(self.get('It')*self.get('A'))
                 retval/= (Lb/self.get('iy'))
         return retval
+    
     def getZNominalflexuralStrength(self, Lb, Cb):
-        ''' Return the nominal flexural strength
-            around z axis.
+        ''' Return the nominal flexural strength around z axis.
         :param Lb: Length between points that are either braced 
                    against lateral displacement of compression 
                    flange or braced against twist of the cross section.
@@ -284,13 +302,13 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
         Mlt= self.getZLateralTorsionalBucklingFlexuralStrength(Lb, Cb)
         retval= min(retval,Mlt)
         return retval
+    
     def getYYieldingFlexuralStrength(self):
-        ''' Return the plastic moment of the
-            section around the z axis.'''
+        ''' Return the plastic moment of the section around the z axis.'''
         return self.steelType.fy*self.get('Wypl')
+    
     def getYFlangeLocalBucklingFlexuralStrength(self):
-        ''' Return the maximum flexural strength
-            due to flange local buckling.'''
+        ''' Return the maximum flexural strength due to flange local buckling.'''
         classif= self.getBFlexureClassification()
         Mp= self.getYYieldingFlexuralStrength()
         retval= 0.0
@@ -307,9 +325,10 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
             Se= 2.0*Ae*y
             retval= self.steelType.fy*Se
         return retval
+    
     def getYWebLocalBucklingFlexuralStrength(self):
         ''' Return the maximum flexural strength
-            due to web local buckling.'''
+        due to web local buckling.'''
         Mp= self.getYYieldingFlexuralStrength()
         retval= Mp
         classif= self.getBFlexureClassification()
@@ -323,30 +342,33 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
         else: #slender
             lmsg.error("Not implemented yet.")
         return retval
+    
     def getYLimitingLaterallyUnbracedLengthForYielding(self):
         ''' Return the limiting laterally unbraced length 
-            for the limit state of yielding according
-            to expression FT-12 of AISC 360-16.
+        for the limit state of yielding according
+        to expression FT-12 of AISC 360-16.
         '''
         retval= 0.13*self.steelType.E*self.get('iz')
         retval*= math.sqrt(self.get('It')*self.get('A'))
         Mp= self.getYYieldingFlexuralStrength()
         retval/=Mp
         return retval
+    
     def getYLimitingLaterallyUnbracedLengthForInelasticBuckling(self):
         ''' Return the limiting laterally unbraced length 
-            for the limit state of inelastic lateral torsional
-            buckling according to expression FT-13 of AISC 360-16.
+        for the limit state of inelastic lateral torsional
+        buckling according to expression FT-13 of AISC 360-16.
         '''
         retval= 2.0*self.steelType.E*self.get('iz')
         retval*= math.sqrt(self.get('It')*self.get('A'))
         M= 0.7*self.steelType.fy*self.get('Wyel')
         retval/=M
-        return retval        
+        return retval
+    
     def getYLateralTorsionalBucklingFlexuralStrength(self, Lb, Cb):
         ''' Return the maximum flexural strength
-            due to web local buckling according to
-            expressions F7-10 to F7-11 of AISC 360-16
+        due to web local buckling according to
+        expressions F7-10 to F7-11 of AISC 360-16
 
         :param Lb: Length between points that are either braced 
                    against lateral displacement of compression 
@@ -372,9 +394,11 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
                 retval*= math.sqrt(self.get('It')*self.get('A'))
                 retval/= (Lb/self.get('iz'))
         return retval
+    
     def getYNominalflexuralStrength(self, Lb, Cb):
         ''' Return the nominal flexural strength
-            around z axis.
+        around z axis.
+
         :param Lb: Length between points that are either braced 
                    against lateral displacement of compression 
                    flange or braced against twist of the cross section.
@@ -412,10 +436,11 @@ class BendingState(object):
         self.Ma= Ma
         self.Mb= Mb
         self.Mc= Mc
+        
     def getLateralTorsionalBucklingModificationFactor(self):
         ''' Return the lateral-torsional buckling modification factor Cb
-            for non uniform moment diagrams when both ends of the segment
-            are braced according to expression F1-1 of AISC 360-16.
+        for non uniform moment diagrams when both ends of the segment
+        are braced according to expression F1-1 of AISC 360-16.
         '''
         return 12.5*self.Mmax/(2.5*self.Mmax+3*self.Ma+4*self.Mb+3*self.Mc)
 
@@ -436,6 +461,7 @@ class MemberConnection(buckling_base.MemberConnection):
         super(MemberConnection, self).__init__(rotI,transI,rotJ,transJ)
         self.L= L
         self.Lb= L
+        
     def getLateralTorsionalBucklingModificationFactor(self,bendingState):
         ''' Return the lateral-torsional buckling modification factor Cb
             for non uniform moment diagrams when both ends of the segment
@@ -460,24 +486,28 @@ class Member(object):
     def __init__(self,shape,connection):
         ''' Constructor.
 
-        :param shape: structural shape.
-        :param connection: member length and connection information.
+        :ivar shape: structural shape.
+        :ivar connection: member length and connection information.
         '''
         self.shape= shape
         self.connection= connection
+        
     def getEffectiveLength(self):
         '''Return the member effective length according to
            section E2 of AISC 360-16.'''
         K= self.connection.getEffectiveBucklingLengthCoefficientRecommended()
         return  K*self.connection.L #Effective length of member.
+    
     def getSlendernessRatio(self):
         '''Return the slenderness ratio of the member.'''
         Lc= self.getEffectiveLength()
         r= min(self.shape.get('iy'),self.shape.get('iz'))
         return Lc/r
+    
     def getElasticBucklingStress(self):
         '''Return the elastic buckling stress of the member.'''
         return math.pi**2*self.shape.steelType.E/(self.getSlendernessRatio())**2
+    
     def getCriticalStress(self):
         '''Return the critical stress as definded in
            section E7 of AISC 360-16.
@@ -490,11 +520,13 @@ class Member(object):
             return math.pow(0.658,fy_fe)*self.shape.steelType.fy
         else:
             return 0.877*Fe
+        
     def getNominalCompressiveStrength(self):
         ''' Return the nominal compressive strength according to
             section E7 of AISC 360-16.
         '''
         return self.shape.getEffectiveArea()*self.getCriticalStress()
+    
     def getZLateralTorsionalBucklingFlexuralStrength(self, bendingState):
         ''' Return the maximum flexural strength
             due to web local buckling according to
@@ -504,6 +536,7 @@ class Member(object):
         '''
         cb= self.connection.getLateralTorsionalBucklingModificationFactor(bendingState)
         return self.shape.getZLateralTorsionalBucklingFlexuralStrength(Lb= self.connection.Lb, Cb= cb)
+    
     def getZNominalflexuralStrength(self, bendingState):
         ''' Return the nominal flexural strength
             around z axis.
@@ -522,15 +555,16 @@ class Member(object):
         '''
         cb= self.connection.getLateralTorsionalBucklingModificationFactor(bendingState)
         return self.shape.getYLateralTorsionalBucklingFlexuralStrength(Lb= self.connection.Lb, Cb= cb)
+    
     def getYNominalflexuralStrength(self, bendingState):
         ''' Return the nominal flexural strength
             around z axis.
-
 
             :param bendingState: bending moments along the member.
         '''
         cb= self.connection.getLateralTorsionalBucklingModificationFactor(bendingState)
         return self.shape.getYNominalflexuralStrength(Lb= self.connection.Lb, Cb= cb)
+    
     def getCapacityFactor(self,Nd,Myd,Mzd,gammaC,bendingStateY,bendingStateZ):
         ''' Return the capacity factor according to section
             H1 of AISC 360-16.
@@ -538,7 +572,6 @@ class Member(object):
         :param Lb: Length between points that are either braced 
                    against lateral displacement of compression 
                    flange or braced against twist of the cross section.
-
         :param Nd: design value for the axial load (negative for compression).
         :param Mzd: design value for the bending moment around z axis.
         :param Myd: design value for the bending moment around z axis.
