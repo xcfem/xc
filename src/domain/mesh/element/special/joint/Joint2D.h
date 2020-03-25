@@ -70,22 +70,65 @@
 
 namespace XC {
 class Node;
-class UniaxialMaterial;
 class Response;
-class DamageModel;
+class DamageModelVector;
+class SpringModels;
+
 
 //! @ingroup ElemJoint
-//
-//! @brief 2D joint element.
+//!
+//! @brief Joint element for two-dimensional problems.
+//!
+//! Joint2D is a two dimensional element, with four nodes. It generates an internal node
+//! with an extra degree of freedom to represent the shear deformation. The external nodes
+//! are connected to the internal node by multi-point constraints.
+//! 
+//! The external nodes Nd1, Nd2, Nd3 and Nd4 must be located on the mid points of a
+//! virtual parallelogram, so the joint panel can be constructed on them. They should also
+//! be entered in a clockwise or counter-clockwise order.
+//! 
+//! The tag for the internal node must be an unused tag that does not belong to any other
+//! existing node.
+//! 
+//! It is possible to introduce rotational springs at the external nodes to allow
+//! member-end rotations, or simply leave them fixed. If uniaxial materials Mat1, Mat2,
+//! Mat3 and Mat4 are not introduced, the member-end rotations will be assumed fixed and
+//! frame elements will rigidly connected to the joint panel. It is possible to introduce
+//! the springs separately or leave them fixed by entering zero as material tags.
+//! 
+//! A uniaxial material model is required for the rotational spring relating the panel
+//! shear deformation to the shear equivalent moment. MatC indicates the material tag for
+//! the shear panel and it must belong to a valid existing material tag.
+//! 
+//! The multi-point constraints are developed for the joint element and they are
+//! responsible for simulating the shear panel kinematics and maintaining a parallelogram
+//! shape for the joint element. These four multi-point constraints are automatically added
+//! to the domain and they connect the central node to external nodes.
+//! 
+//! These constraints might be set for the large deformations, using the LrgDisp flag.
+//! If the LrgDisp flag is set to zero, the element will use a constant constraint matrix,
+//! calculated based on the initial configuration and the element can not undergo the exact
+//! deformation for large deformations. Non-zero value for LrgDisp indicates a time varying
+//! constraint matrix that can go through large deformations with more precise results. In
+//! this case the constraint matrix is updated for every time step, based on the current
+//! nodal positions. Value 1 for LrgDisp indicates time varying constraint without length
+//! correction. If value 2 is chosen, the time varying constraint will be applied with
+//! length correction to maintain the initial length of the multi-point constraints.
+//! 
+//! Joint2D must be used along with 'Penalty', or 'Transformation' constraint handler
+//! to allow the multi point constraints work perfectly.
+//! 
+//! The valid queries to a Joint2D element when creating an element recorder are
+//! 'internalNode', 'deformation', `plasticDeformation`, 'force', 'deformationANDforce',
+//! 'size', 'stiff' and 'materials ...'. 	   
 class Joint2D: public ElemWithMaterial<5,Joint2DPhysicalProperties>
   {
   private:
     typedef ElemWithMaterial<5,Joint2DPhysicalProperties> Joint2dBase;
-    DamageModel *theDamages[5];
     ID	InternalConstraints;
     int	numDof, nodeDbTag, dofDbTag;
-    static	Matrix K;
-    static	Vector V;
+    static Matrix K;
+    static Vector V;
 
     // AddingSensitivity:BEGIN //////////////////////////////////////////
     int parameterID;
@@ -96,9 +139,9 @@ class Joint2D: public ElemWithMaterial<5,Joint2DPhysicalProperties>
     int recvData(const CommParameters &);
   public:
     Joint2D(void);
-    Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag, const UniaxialMaterial &spring1, const UniaxialMaterial &spring2, const UniaxialMaterial &spring3, const UniaxialMaterial &spring4, const UniaxialMaterial &springC, Domain *theDomain, int LrgDisp);
+    Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag, const SpringModels &springModels, Domain *theDomain, int LrgDisp);
   
-    Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag, const UniaxialMaterial &spring1, const UniaxialMaterial &spring2, const UniaxialMaterial &spring3, const UniaxialMaterial &spring4, const UniaxialMaterial &springC, Domain *theDomain, int LrgDisp, const DamageModel &dmg1, const DamageModel &dmg2, const DamageModel &dmg3, const DamageModel &dmg4, const DamageModel &dmgC);
+    Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag, const SpringModels &springModels, Domain *theDomain, int LrgDisp, const DamageModelVector &damageModels);
     Element *getCopy(void) const;
     ~Joint2D();
     // methods dealing with domain

@@ -31,12 +31,11 @@
 #include "utility/actor/actor/CommMetaData.h"
 
 //! @brief Make copy of the uniaxial materials for the element.
-void XC::Joint3DPhysicalProperties::setup(const UniaxialMaterial &springx, const UniaxialMaterial &springy, const UniaxialMaterial &springz)
+void XC::Joint3DPhysicalProperties::setup(const SpringModels &springModels)
   {
-    theMaterial[0] = springx.getCopy();
-    theMaterial[1] = springy.getCopy();
-    theMaterial[2] = springz.getCopy();
-    for(size_t i=0 ; i<5 ; i++ )
+    theMaterial= springModels;
+    const size_t sz= theMaterial.size();
+    for(size_t i=0; i<sz; i++ )
       {
         if( theMaterial[i] == nullptr )
           {
@@ -53,9 +52,9 @@ XC::Joint3DPhysicalProperties::Joint3DPhysicalProperties(const size_t &nMat,cons
   { }
 
 //! @brief Constructor
-XC::Joint3DPhysicalProperties::Joint3DPhysicalProperties(const UniaxialMaterial &springx, const UniaxialMaterial &springy, const UniaxialMaterial &springz)
+XC::Joint3DPhysicalProperties::Joint3DPhysicalProperties(const SpringModels &springModels)
   : UniaxialMatPhysicalProperties(3,nullptr)
-  { setup(springx,springy,springz); }
+  { setup(springModels); }
 
 int XC::Joint3DPhysicalProperties::update(const Vector &dispC,const int &offset)
   {

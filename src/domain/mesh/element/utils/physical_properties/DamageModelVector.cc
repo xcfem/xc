@@ -27,99 +27,17 @@
 //DamageModelVector.cc
 
 #include "DamageModelVector.h"
-#include "DamageModel.h"
+#include "material/damage/DamageModel.h"
 
 //! @brief Default constructor.
 XC::DamageModelVector::DamageModelVector(const size_t &nDamageModels,const DamageModel *dmgModel)
-  : std::vector<DamageModel *>(nDamageModels,nullptr), MovableObject(0)
-  {
-    if(dmgModel)
-      {
-        for(iterator i= dmg_model_vector::begin();i!=dmg_model_vector::end();i++)
-          {
-            (*i)= dmgModel->getCopy();
-            if(!(*i))
-              std::cerr<<" DamageModelVector -- failed allocate damage model model pointer\n";
-          }
-      }
-  }
+  : DamageModels(nDamageModels, dmgModel), MovableObject(0)
+  {}
 
-//! @brief Copy the damage models.
-void XC::DamageModelVector::alloc(const std::vector<DamageModel *> &dmgs)
-  {
-    clearAll();
-    const size_t nDamageModels= dmgs.size();
-    this->resize(nDamageModels);
-    for(size_t i= 0;i<nDamageModels;i++)
-      {
-        if(dmgs[i])
-          {
-            (*this)[i]= dmgs[i]->getCopy();
-            if(!(*this)[i])
-              std::cerr << getClassName() << "::" << __FUNCTION__
-			<< "; failed allocate damage model pointer\n";
-          }
-      }
-  }
-
-//! @brief Copy constructor.
-XC::DamageModelVector::DamageModelVector(const DamageModelVector &other)
-  : std::vector<DamageModel *>(other.size(),nullptr), MovableObject(0)
-  { alloc(other); }
-
-//! @brief Assignment operator.
-XC::DamageModelVector &XC::DamageModelVector::operator=(const DamageModelVector &other)
-  { 
-    alloc(other);
-    return *this;
-  }
-
-void XC::DamageModelVector::setDamageModel(const DamageModel *new_dmg)
-  {
-    borra_dmg_models();
-    if(new_dmg)
-      {
-        for(iterator i= dmg_model_vector::begin();i!=dmg_model_vector::end();i++)
-          {
-            (*i)= new_dmg->getCopy();
-            if(!(*i))
-              std::cerr<<" DamageModelVector -- failed allocate damages model pointer\n";
-          }
-      }
-  }
-
-void XC::DamageModelVector::setDamageModel(size_t i,DamageModel *dmg)
-  {
-    if((*this)[i])
-      delete (*this)[i];
-    (*this)[i]= dmg;
-  }
-
-void XC::DamageModelVector::borra_dmg_models(void)
-  {
-    for(iterator i= dmg_model_vector::begin();i!=dmg_model_vector::end();i++)
-      {
-        if(*i)
-          {
-            delete (*i);
-            (*i)= nullptr;
-          }
-      }
-  }
-
-//! @brief Returns true ifno se ha asignado damage model.
-bool XC::DamageModelVector::empty(void) const
-  {
-    if(dmg_model_vector::empty())
-      return true;
-    else
-      return ((*this)[0]==nullptr);
-  }
-
+//! @brief Removes all members.
 void XC::DamageModelVector::clearAll(void)
   {
-    borra_dmg_models();
-    std::vector<DamageModel *>::clear();
+    DamageModels::clear();
   }
 
 
@@ -154,36 +72,9 @@ int XC::DamageModelVector::commitState(const material_vector &materials)
     return result;
   }
 
-//! @brief Returns the damage models to its last committed state.
-int XC::DamageModelVector::revertToLastCommit(void)
-  {
-    int retVal= 0;
-
-    for(iterator i=dmg_model_vector::begin();i!=dmg_model_vector::end();i++)
-      {
-        DamageModel *dmg= *i;
-        if(dmg)
-         retVal+= dmg->revertToLastCommit();
-        //if(retval!=0) break;
-      }
-    return retVal;
-  }
 
 
-//! @brief Returns the estado de los dmg_models al inicial.
-int XC::DamageModelVector::revertToStart(void)
-  {
-    int retVal = 0;
 
-    for(iterator i=dmg_model_vector::begin();i!=dmg_model_vector::end();i++)
-      {
-        DamageModel *dmg= *i;
-        if(dmg)
-         retVal+= dmg->revertToStart();
-        //if(retval!=0) break;
-      }
-    return retVal;
-  }
 
 //! @brief Returns a vector to store the dbTags
 //! of the class members.

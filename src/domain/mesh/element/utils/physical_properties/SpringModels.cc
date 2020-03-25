@@ -1,4 +1,3 @@
-// -*-c++-*-
 //----------------------------------------------------------------------------
 //  XC program; finite element analysis code
 //  for structural analysis and design.
@@ -25,35 +24,11 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//SectionFDPhysicalProperties.h
 
-#ifndef Joint3DPhysicalProperties_h
-#define Joint3DPhysicalProperties_h
-
-#include "UniaxialMatPhysicalProperties.h"
-#include "DamageModelVector.h"
 #include "SpringModels.h"
+#include <material/uniaxial/UniaxialMaterial.h>
 
-namespace XC {
+//! @brief Constructor.
+XC::SpringModels::SpringModels(const size_t &sz, const UniaxialMaterial *mat)
+  : SpringModelsBase(5,mat) {}
 
-//! @ingroup PhysicalProperties
-//
-//! @brief Physical properties for shells.
-class Joint3DPhysicalProperties: public UniaxialMatPhysicalProperties
-  {
-  protected:
-    void setup(const SpringModels &springModels);
-  public:
-    Joint3DPhysicalProperties(const size_t &nMat= 0,const UniaxialMaterial *ptr_mat= nullptr); 
-    Joint3DPhysicalProperties(const SpringModels &springModels);
-
-    int update(const Vector &,const int &);
-    Vector getTangent(void) const;
-    Vector getStress(void) const;
-    Vector getStrain(void) const;
-    Vector getStrainStress(void) const;
-    Vector getResponse7(void) const;
-  }; 
-
-} // end of XC namespace
-#endif

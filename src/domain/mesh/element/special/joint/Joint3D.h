@@ -84,6 +84,38 @@ class Response;
 //! @ingroup ElemJoint
 //
 //! @brief Joint element for three-dimensional problems.
+//!
+//! Joint3D is a three dimensional element, with six nodes. It generates an internal node
+//! with three extra degrees of freedom to represent the shear modes. The external nodes
+//! are connected to the internal node by multi-point constraints.
+//! 
+//! The local x' axis is defined on nodes Nd1 and Nd2; y' and z' axes are defined on Nd3, Nd4 , and Nd5 and Nd6 respectively. The middle point of Nd3 and Nd4, and Nd5 and Nd6 must be located on the middle point of Nd1 and Nd2 so it would be possible to construct a shear block on these six nodes.
+//! 
+//! The tag for the internal node must be an unused tag that does not belong to any other
+//! existing node.
+//! 
+//! The shear modes are defined as the shear deformation of the joint block for rotations along each local axes. Three rotational springs provide the stiffness for the three shear modes. Each rotational spring is defnied in a plane which shares the same normal vector as the local axis, so the imposed moment of each spring has the same direction as its corresponding local axis.
+//! 
+//! The multi-point constraints are developed for the joint element and they are
+//! responsible for simulating the shear block kinematics and maintaining the opsite faces parallel. These six multi-point constraints are automatically added
+//! to the domain and they connect the central node to external nodes.
+//! 
+//! These constraints might be set for the large deformations, using the LrgDisp flag.
+//! If the LrgDisp flag is set to zero, the element will use a constant constraint matrix,
+//! calculated based on the initial configuration and the element can not undergo the exact
+//! deformation for large deformations. Non-zero value for LrgDisp indicates a time varying
+//! constraint matrix that can go through large deformations with more precise results. In
+//! this case the constraint matrix is updated for every time step, based on the current
+//! nodal positions. Value 1 for LrgDisp indicates time varying constraint without length
+//! correction. If value 2 is chosen, the time varying constraint will be applied with
+//! length correction to maintain the initial length of the multi-point constraints.
+//! 
+//! Joint3D must be used along with 'Penalty', or 'Transformation' constraint handler
+//! to allow the multi point constraints work perfectly.
+//! 
+//! The valid queries to a Joint3D element when creating an element recorder are
+//! 'internalNode', 'deformation', `plasticDeformation`, 'force', 'deformationANDforce',
+//! 'size', 'stiff' and 'materials ...'. 	   
 class Joint3D: public ElemWithMaterial<7,Joint3DPhysicalProperties>  
   {
   private:
@@ -98,7 +130,7 @@ class Joint3D: public ElemWithMaterial<7,Joint3DPhysicalProperties>
                     int LrgDispFlag );   
   public:
     Joint3D(void);
-    Joint3D(int tag, int nd1, int nd2, int nd3, int nd4, int nd5, int nd6, int IntNodeTag, const UniaxialMaterial &springx, const UniaxialMaterial &springy, const UniaxialMaterial &springz, Domain *theDomain, int LrgDisp);
+    Joint3D(int tag, int nd1, int nd2, int nd3, int nd4, int nd5, int nd6, int IntNodeTag, const SpringModels &springModels, Domain *theDomain, int LrgDisp);
     Element *getCopy(void) const;  
     ~Joint3D(void);
   

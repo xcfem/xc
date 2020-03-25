@@ -78,8 +78,8 @@ XC::Joint3D::Joint3D(void)
   numDof(0), nodeDbTag(0), dofDbTag(0) {}
 
 
-XC::Joint3D::Joint3D(int tag, int nd1, int nd2, int nd3, int nd4, int nd5, int nd6, int IntNodeTag, const UniaxialMaterial &springx, const UniaxialMaterial &springy, const UniaxialMaterial &springz, Domain *TheDomain, int LrgDisp)
-  :ElemWithMaterial<7,Joint3DPhysicalProperties>(tag, ELE_TAG_Joint3D,Joint3DPhysicalProperties(springx,springy,springz)), InternalConstraints(6), numDof(0), nodeDbTag(0), dofDbTag(0)
+XC::Joint3D::Joint3D(int tag, int nd1, int nd2, int nd3, int nd4, int nd5, int nd6, int IntNodeTag, const SpringModels &springModels, Domain *TheDomain, int LrgDisp)
+  :ElemWithMaterial<7,Joint3DPhysicalProperties>(tag, ELE_TAG_Joint3D,Joint3DPhysicalProperties(springModels)), InternalConstraints(6), numDof(0), nodeDbTag(0), dofDbTag(0)
   {
     int i;
     numDof  = 45;

@@ -25,35 +25,46 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//SectionFDPhysicalProperties.h
 
-#ifndef Joint3DPhysicalProperties_h
-#define Joint3DPhysicalProperties_h
+#ifndef DamageModels_h
+#define DamageModels_h
 
-#include "UniaxialMatPhysicalProperties.h"
-#include "DamageModelVector.h"
-#include "SpringModels.h"
+
+#include <vector>
 
 namespace XC {
+class DamageModel;
 
-//! @ingroup PhysicalProperties
-//
-//! @brief Physical properties for shells.
-class Joint3DPhysicalProperties: public UniaxialMatPhysicalProperties
+//! @ingroup ElemJoint
+//!
+//! @brief Damage models for Joint elements.
+class DamageModels: protected std::vector<DamageModel *>
   {
+  private:
+    void alloc(const DamageModels &);
+    void alloc(const DamageModel *);
+    void free(void);
   protected:
-    void setup(const SpringModels &springModels);
+    inline reference operator[](size_t i)
+      { return DamageModelsBase::operator[](i); }    
   public:
-    Joint3DPhysicalProperties(const size_t &nMat= 0,const UniaxialMaterial *ptr_mat= nullptr); 
-    Joint3DPhysicalProperties(const SpringModels &springModels);
+    typedef std::vector<DamageModel *> DamageModelsBase;
+    DamageModels(const size_t &sz= 5, const DamageModel *ptr= nullptr);
+    DamageModels(const DamageModels &);
+    ~DamageModels(void);
+    DamageModels &operator=(const DamageModels &);
+    bool empty(void) const;
+    void clear(void);
+    void setDamageModel(const DamageModel *);
+    void setDamageModel(size_t i,DamageModel *);
 
-    int update(const Vector &,const int &);
-    Vector getTangent(void) const;
-    Vector getStress(void) const;
-    Vector getStrain(void) const;
-    Vector getStrainStress(void) const;
-    Vector getResponse7(void) const;
-  }; 
-
+    inline const_reference operator[](size_t i) const
+      { return DamageModelsBase::operator[](i); }
+    
+    int revertToLastCommit(void);
+    int revertToStart(void);
+  };
+  
 } // end of XC namespace
+
 #endif

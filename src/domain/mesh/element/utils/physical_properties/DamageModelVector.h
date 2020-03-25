@@ -30,50 +30,35 @@
 #ifndef DamageModelVector_h
 #define DamageModelVector_h
 
+#include "DamageModels.h"
 #include "material/MaterialVector.h"
 #include "material/uniaxial/UniaxialMaterial.h"
 #include "xc_utils/src/kernel/CommandEntity.h"
 #include "utility/actor/actor/MovableID.h"
-#include "utility/matrix/Vector.h"
 
 
 namespace XC {
 
-class DamageModel;
-
 //! @ingroup damage
 //
-//! @brief Vector de pointers to damage models.
-//! se emplea en Joint2D
-class DamageModelVector: public std::vector<DamageModel *>, public CommandEntity, public MovableObject
+//! @brief Vector of pointers to damage models.
+//! it's used inJoint2D
+class DamageModelVector: public DamageModels, public CommandEntity, public MovableObject
   {
   protected:
-    void borra_dmg_models(void);
     void clearAll(void);
-    void alloc(const std::vector<DamageModel *> &);
 
     DbTagData &getDbTagData(void) const;
     int sendData(CommParameters &);  
     int recvData(const CommParameters &);
   public:
     typedef MaterialVector<UniaxialMaterial> material_vector;
-    typedef typename std::vector<DamageModel *> dmg_model_vector;
-    typedef typename dmg_model_vector::iterator iterator;
-    typedef typename dmg_model_vector::reference reference;
-    typedef typename dmg_model_vector::const_reference const_reference;
 
     DamageModelVector(const size_t &nDamageModels,const DamageModel *dmgModel= nullptr);
-    DamageModelVector(const DamageModelVector &);
-    DamageModelVector &operator=(const DamageModelVector &);
     ~DamageModelVector(void)
       { clearAll(); }
 
-    void setDamageModel(const DamageModel *);
-    void setDamageModel(size_t i,DamageModel *);
-    bool empty(void) const;
     int commitState(const material_vector &);
-    int revertToLastCommit(void);
-    int revertToStart(void);
 
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);

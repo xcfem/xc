@@ -52,7 +52,7 @@
 // Created: 03/02
 // Revision: Arash
 
-// Joint2D.cpp: implementation of the XC::Joint2D class.
+// Joint2D.cpp: implementation of the Joint2D class.
 //
 //////////////////////////////////////////////////////////////////////
 
@@ -69,19 +69,15 @@
 XC::Matrix XC::Joint2D::K(16,16);
 XC::Vector XC::Joint2D::V(16);
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
-
-
+//! @brief Default constructor.
 XC::Joint2D::Joint2D(void)
   :Joint2dBase(0, ELE_TAG_Joint2D,Joint2DPhysicalProperties(5)),
   InternalConstraints(4), numDof(0), nodeDbTag(0), dofDbTag(0)
   { }
 
 
-XC::Joint2D::Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag,const UniaxialMaterial &spring1, const UniaxialMaterial &spring2,const UniaxialMaterial &spring3, const UniaxialMaterial &spring4, const UniaxialMaterial &springC, Domain *theDomain, int LrgDisp)
-  :Joint2dBase(tag, ELE_TAG_Joint2D,Joint2DPhysicalProperties(spring1,spring2,spring3,spring4,springC)),
+XC::Joint2D::Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag,const SpringModels &springModels, Domain *theDomain, int LrgDisp)
+  :Joint2dBase(tag, ELE_TAG_Joint2D,Joint2DPhysicalProperties(springModels)),
    InternalConstraints(4), numDof(0), nodeDbTag(0), dofDbTag(0),theLoadSens(0)
   {
     int i;
@@ -216,8 +212,8 @@ XC::Joint2D::Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag
   }
 
 
-XC::Joint2D::Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag,const UniaxialMaterial &spring1, const UniaxialMaterial &spring2,const UniaxialMaterial &spring3, const UniaxialMaterial &spring4, const UniaxialMaterial &springC, Domain *theDomain, int LrgDisp, const DamageModel &dmg1, const DamageModel &dmg2, const DamageModel &dmg3, const DamageModel &dmg4, const DamageModel &dmgC)
-  :Joint2dBase(tag, ELE_TAG_Joint2D,Joint2DPhysicalProperties(spring1,spring2,spring3,spring4,springC,dmg1,dmg2,dmg3,dmg4,dmgC)), InternalConstraints(4), numDof(0), nodeDbTag(0), dofDbTag(0),theLoadSens(0)
+XC::Joint2D::Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag,const SpringModels &springModels, Domain *theDomain, int LrgDisp, const DamageModelVector &damageModels)
+  : Joint2dBase(tag, ELE_TAG_Joint2D,Joint2DPhysicalProperties(springModels)), InternalConstraints(4), numDof(0), nodeDbTag(0), dofDbTag(0), theLoadSens(0)
   {
     numDof  = 16;
 
@@ -751,17 +747,17 @@ int XC::Joint2D::getResponse(int responseID, Information &eleInformation)
                 return 0;
 
         case 8:
-                if(eleInformation.theVector!=0)
-                {
-                        for( int i=0 ; i<5 ; i++ )
-                        {
-                                (*(eleInformation.theVector))(i) = 0.0;
-                                if( theDamages[i] != nullptr ) {
-                                        (*(eleInformation.theVector))(i) = theDamages[i]->getDamage();
-                                }
-                        }
-                }
-                return 0;
+	  if(eleInformation.theVector!=0)
+  	    {
+	      for( int i=0 ; i<5 ; i++ )
+		{
+		  (*(eleInformation.theVector))(i) = 0.0;
+		  const DamageModelVector &theDamages= physicalProperties.getDamageModelVector();
+		  if(theDamages[i] != nullptr )
+		    { (*(eleInformation.theVector))(i) = theDamages[i]->getDamage(); }
+		}
+	    }
+	  return 0;
 
         default:
                 return -1;

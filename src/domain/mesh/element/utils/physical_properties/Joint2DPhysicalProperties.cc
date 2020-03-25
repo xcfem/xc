@@ -32,13 +32,14 @@
 #include "utility/actor/actor/CommMetaData.h"
 
 //! @brief Make copy of the uniaxial materials for the element.
-void XC::Joint2DPhysicalProperties::set_springs(const UniaxialMaterial &spring1, const UniaxialMaterial &spring2, const UniaxialMaterial &spring3, const UniaxialMaterial &spring4, const UniaxialMaterial &springC)
+void XC::Joint2DPhysicalProperties::set_springs(const SpringModels &springModels)
   {
-    fixedEnd[0] = 0; theMaterial[0]= spring1.getCopy();
-    fixedEnd[1] = 0; theMaterial[1]= spring2.getCopy();
-    fixedEnd[2] = 0; theMaterial[2]= spring3.getCopy();
-    fixedEnd[3] = 0; theMaterial[3]= spring4.getCopy();
-    fixedEnd[4] = 0; theMaterial[4]= springC.getCopy();
+    theMaterial= springModels;
+    fixedEnd[0] = 0;
+    fixedEnd[1] = 0;
+    fixedEnd[2] = 0;
+    fixedEnd[3] = 0;
+    fixedEnd[4] = 0;
 
     for(size_t i=0 ; i<5 ; i++ )
       {
@@ -52,14 +53,8 @@ void XC::Joint2DPhysicalProperties::set_springs(const UniaxialMaterial &spring1,
   }
 
 //! @brief Set the damage models
-void XC::Joint2DPhysicalProperties::set_damage_models(const DamageModel &dmg1, const DamageModel &dmg2, const DamageModel &dmg3, const DamageModel &dmg4, const DamageModel &dmgC)
-  {
-    theDamages[0] = dmg1.getCopy();
-    theDamages[1] = dmg2.getCopy();
-    theDamages[2] = dmg3.getCopy();
-    theDamages[3] = dmg4.getCopy();
-    theDamages[4] = dmgC.getCopy();
-  }
+void XC::Joint2DPhysicalProperties::set_damage_models(const DamageModelVector &dmgModels)
+  { theDamages= dmgModels; }
 
 //! @brief Constructor
 XC::Joint2DPhysicalProperties::Joint2DPhysicalProperties(const size_t &nMat,const UniaxialMaterial *ptr_mat)
@@ -70,23 +65,24 @@ XC::Joint2DPhysicalProperties::Joint2DPhysicalProperties(const size_t &nMat,cons
   }
 
 //! @brief Constructor
-XC::Joint2DPhysicalProperties::Joint2DPhysicalProperties(const UniaxialMaterial &spring1, const UniaxialMaterial &spring2, const UniaxialMaterial &spring3, const UniaxialMaterial &spring4, const UniaxialMaterial &springC)
+XC::Joint2DPhysicalProperties::Joint2DPhysicalProperties(const SpringModels &springModels)
   : UniaxialMatPhysicalProperties(5,nullptr), theDamages(5,nullptr), fixedEnd(5)
   {
-    set_springs(spring1,spring2,spring3,spring4,springC);
+    set_springs(springModels);
   }
 
 //! @brief Constructor
-XC::Joint2DPhysicalProperties::Joint2DPhysicalProperties(const UniaxialMaterial &spring1, const UniaxialMaterial &spring2, const UniaxialMaterial &spring3, const UniaxialMaterial &spring4, const UniaxialMaterial &springC, const DamageModel &dmg1, const DamageModel &dmg2, const DamageModel &dmg3, const DamageModel &dmg4, const DamageModel &dmgC)
+XC::Joint2DPhysicalProperties::Joint2DPhysicalProperties(const SpringModels &springModels, const DamageModelVector &dmgModels)
   : UniaxialMatPhysicalProperties(5,nullptr), theDamages(5,nullptr), fixedEnd(5)
   {
     // make copy of the uniaxial materials for the element
 
-    set_springs(spring1,spring2,spring3,spring4,springC);
-    set_damage_models(dmg1,dmg2,dmg3,dmg4,dmgC);
+    set_springs(springModels);
+    set_damage_models(dmgModels);
     theDamages.revertToStart(); //??
   }
 
+//! @brief Commit state of the springs and the damage models.
 int XC::Joint2DPhysicalProperties::commitState(void)
   {
     int retval= UniaxialMatPhysicalProperties::commitState();
