@@ -35,6 +35,12 @@
 
 namespace XC {
 
+//! @ingroup ElemVol
+//!
+//! @brief Total lagrangian formulation eight node hexahedral element
+//! for three-dimensional problems.
+//!
+//! <a href="https://en.wikiversity.org/wiki/Nonlinear_finite_elements/Total_Lagrangian_approach">Nonlinear finite elements/Total Lagrangian approach</a> 
 class TotalLagrangianFD8NodeBrick: public ElemWithMaterial<8,NDMaterialPhysicalProperties>
   {
   private:

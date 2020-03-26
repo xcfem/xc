@@ -60,7 +60,8 @@
 namespace XC{
 //! @ingroup PlaneElements
 //
-//! @brief ??.
+//! @brief Constant Presssure/Volume quadrilateral element for plane
+//! strain two-dimensional problems.
 class ConstantPressureVolumeQuad: public QuadBase4N<NDMaterialPhysicalProperties>
   {
   private: 

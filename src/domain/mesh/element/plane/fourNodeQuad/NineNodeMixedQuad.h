@@ -51,7 +51,7 @@
 
 // Ed "C++" Love
 //
-// Constant Presssure/Volume Four Node Quadrilateral
+// Mixed Presssure/Volume Nine Node Quadrilateral
 // Plane Strain (NOT PLANE STRESS)
 //
 
@@ -66,7 +66,8 @@ class NDMaterial;
 
 //! @ingroup PlaneElements
 //
-//! @brief Nine node quad.
+//! @brief Mixed pressure/volume nine node quadrilateral element
+//! for two-dimensional plane strain problems.
 class NineNodeMixedQuad: public ElemWithMaterial<9,NDMaterialPhysicalProperties>
   {
   private: 

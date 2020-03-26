@@ -63,8 +63,11 @@ class BJtensor;
 class NDMaterial;
 
 //! @ingroup ElemVol
-//
-//! @brief Twenty node hexahedron with lagrangian formulation.
+//!
+//! @brief Total lagrangian formulation twenty node hexahedral element for
+//! three-dimensional problems.
+//!
+//! <a href="https://en.wikiversity.org/wiki/Nonlinear_finite_elements/Total_Lagrangian_approach">Nonlinear finite elements/Total Lagrangian approach</a> 
 class TotalLagrangianFD20NodeBrick: public ElemWithMaterial<20,NDMaterialPhysicalProperties>
   {
   private:

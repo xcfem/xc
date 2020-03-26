@@ -71,7 +71,7 @@
 namespace XC{
 class NDMaterial;
 //! @ingroup ElemVol
-//
+//!
 //! @brief Eight node exahedron.
 class BrickUP: public BrickBase
   {

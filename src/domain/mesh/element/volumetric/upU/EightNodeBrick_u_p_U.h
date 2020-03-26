@@ -66,12 +66,17 @@
 #include "domain/mesh/element/utils/body_forces/BodyForces3D.h"
 
 namespace XC {
-  class BJtensor;
-  class NDMaterial;
+class BJtensor;
+class NDMaterial;
 
 //! @ingroup ElemVol
-//
-//! @brief Eight node exahedron.
+//!
+//! @brief Eight node hexahedral element for three-dimensional coupled problems.
+//!
+//! Coupled system:
+//! - u: solid displacement
+//! - p: pore pressure
+//! - U: absolute fluid displacement
 class EightNodeBrick_u_p_U: public BrickBase
   {
   private:

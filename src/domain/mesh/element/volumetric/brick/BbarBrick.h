@@ -59,8 +59,12 @@
 
 namespace XC {
 //! @ingroup ElemVol
-//
-//! @brief Hexahedron.
+//!
+//! @brief Eight-node mixed volume/pressure brick element, which uses
+//! a trilinear isoparametric formulation.
+//!
+//! Note: Node numbering for this element is different from that for the
+//! eight-node brick (Brick8N) element: TO FIX.
 class BbarBrick: public BrickBase
  {
  private : 

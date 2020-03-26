@@ -56,8 +56,19 @@
 
 namespace XC {
 //! @ingroup ElemVol
-//
-//! @brief Twenty eight node exahedron.
+//!
+//! @brief Twenty eight node hexahedral element for three-dimensional
+//! coupled problems.
+//!
+//! Coupled system:
+//! - u: solid displacement
+//! - p: pore pressure
+//! - U: absolute fluid displacement
+//! The eight corner nodes have 4 degrees-of-freedom (DOF) each: DOFs 1 to 3
+//! for solid displacement (u) and DOF 4 for fluid pressure (p). The other
+//! nodes have 3 DOFs each for solid displacement. This element is implemented
+//! for simulating dynamic response of solid-fluid fully coupled material,
+//! based on <a href="https://en.wikipedia.org/wiki/Poromechanics">Biot's theory of porous medium</a> . 
 class TwentyEightNodeBrickUP: public ElemWithMaterial<20,NDMaterialPhysicalProperties>
   {
   private:

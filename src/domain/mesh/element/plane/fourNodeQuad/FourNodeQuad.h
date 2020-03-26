@@ -70,7 +70,7 @@ class GaussPoint;
 
 //! @ingroup PlaneElements
 //
-//! @brief Four node quad.
+//! @brief Four node quadrilateral element for two-dimensional problems.
 class FourNodeQuad: public QuadBase4N<SolidMech2D>
   {
   private:    

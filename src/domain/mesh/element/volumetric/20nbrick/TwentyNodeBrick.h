@@ -65,14 +65,14 @@ class Node;
  class NDMaterial;
 
 //! @ingroup ElemVol
-//
-//! @brief Twenty node exahedron.
+//!
+//! @brief Twenty node hexahedral element for three-dimensional problems.
 class TwentyNodeBrick: public ElementBase<20>
   {
   private:
     // private attributes - a copy for each object of the class
 
-    int numDOF;	    		// Number of element DOF
+    int numDOF;	//!< Number of element DOF
 
     Matrix *Ki;
 

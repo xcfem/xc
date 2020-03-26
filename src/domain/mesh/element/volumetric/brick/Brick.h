@@ -59,8 +59,8 @@
 
 namespace XC {
 //! @ingroup ElemVol
-//
-//! @brief Eight node hexahedron.
+//!
+//! @brief Eight node hexahedral element for three-dimensional problems.
 class Brick: public BrickBase
   {
   private :

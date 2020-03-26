@@ -50,7 +50,7 @@
 
 // Ed "C++" Love
 //
-// Mixed Presssure/Volume Nine XC::Node Quadrilateral
+// Mixed Presssure/Volume Nine Node Quadrilateral
 // Plane Strain (NOT PLANE STRESS)
 //
 
@@ -67,15 +67,15 @@
 
 
 //static data
-XC::Matrix  XC::NineNodeMixedQuad::stiff(18,18)   ;
-XC::Vector  XC::NineNodeMixedQuad::resid(18)     ;
-XC::Matrix  XC::NineNodeMixedQuad::mass(18,18)    ;
+XC::Matrix  XC::NineNodeMixedQuad::stiff(18,18);
+XC::Vector  XC::NineNodeMixedQuad::resid(18);
+XC::Matrix  XC::NineNodeMixedQuad::mass(18,18);
 double  XC::NineNodeMixedQuad::xl[2][9];
 
 //quadrature data
-double   XC::NineNodeMixedQuad::root06 = sqrt(0.6) ;
-double   XC::NineNodeMixedQuad::sg[] = { -root06,   0.0,      root06  } ;
-double   XC::NineNodeMixedQuad::wg[] = {  5.0/9.0,  8.0/9.0,  5.0/9.0 } ;
+double   XC::NineNodeMixedQuad::root06 = sqrt(0.6);
+double   XC::NineNodeMixedQuad::sg[] = { -root06,   0.0,      root06  };
+double   XC::NineNodeMixedQuad::wg[] = {  5.0/9.0,  8.0/9.0,  5.0/9.0 };
 
 
 //null constructor
@@ -342,7 +342,7 @@ const XC::Matrix &XC::NineNodeMixedQuad::getInitialStiff(void) const
               {
                 BK = computeBbar( k, gaussPoint, shp, shpBar );
 
-                //stiffJK =  BJtranD * BK ;
+                //stiffJK =  BJtranD * BK;
                 stiffJK.addMatrixProduct(0.0,  BJtranD,BK,1.0);
                 for(p=0;p<ndf;p++)
                   {
@@ -536,7 +536,7 @@ void XC::NineNodeMixedQuad::formInertiaTerms( int tangFlag ) const
       temp = shp[massIndex][j] * dvol;
 
       for( r=0; r<ndf; r++ )
-        resid( jj+r ) += ( temp * momentum(r) ) ;
+        resid( jj+r ) += ( temp * momentum(r) );
 
 
       if( tangFlag == 1 ) {
@@ -824,7 +824,7 @@ void XC::NineNodeMixedQuad::formResidAndTangent( int tang_flag ) const
 
       //residual
       for( p=0; p<ndf; p++ )
-        resid( jj + p ) += residJ(p) ;
+        resid( jj + p ) += residJ(p);
 
 
       if( tang_flag == 1 ) {
@@ -838,7 +838,7 @@ void XC::NineNodeMixedQuad::formResidAndTangent( int tang_flag ) const
             BK = computeBbar( k, gaussPoint, shp, shpBar );
 
 
-            //stiffJK =  BJtranD * BK ;
+            //stiffJK =  BJtranD * BK;
             stiffJK.addMatrixProduct(0.0,  BJtranD,BK,1.0);
 
             for( p=0; p<ndf; p++ )  {

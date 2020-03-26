@@ -69,8 +69,14 @@ namespace XC {
   class NDMaterial;
 
 //! @ingroup ElemVol
-//
-//! @brief twenty node exahedron.
+//!
+//! @brief Twenty node hexahedral element for three-dimensional
+//! coupled problems.
+//!
+//! Coupled system:
+//! - u: solid displacement
+//! - p: pore pressure
+//! - U: absolute fluid displacement
 class TwentyNodeBrick_u_p_U: public ElemWithMaterial<20,NDMaterialPhysicalProperties>
   {
   private:

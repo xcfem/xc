@@ -65,16 +65,13 @@ class BJtensor;
 class stresstensor;
 
 //! @ingroup ElemVol
-//
-//! @brief Twenty seven node hexahedron with lagrangian formulation.
+//!
+//! @brief Twenty seven node hexahedral element for three-dimensional problems.
 class TwentySevenNodeBrick: public ElementBase<27>
   {
   private:
-
     double determinant_of_Jacobian; //!< Determinant of the jacobian.
-
     NDMaterial *mmodel; //!< pointer to GLOBAL material models
-
     int r_integration_order; //!< Gauss-Legendre integration order in r direction
     int s_integration_order; //!< Gauss-Legendre integration order in s direction
     int t_integration_order; //!< Gauss-Legendre integration order in t direction

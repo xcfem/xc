@@ -78,8 +78,8 @@ class BJtensor;
 //class QuadRule1d;
 
 //! @ingroup ElemVol
-//
-//! @brief Eight node exahedron.
+//!
+//! @brief Eight node hexahedral element for three-dimensional problems.
 class EightNodeBrick: public ElementBase<8>
   {
   private:
