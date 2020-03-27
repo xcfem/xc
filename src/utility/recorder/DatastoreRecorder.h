@@ -74,7 +74,7 @@ class FE_Datastore;
 
 //! @ingroup Recorder
 //!
-//! @brief // A DatastoreRecorder object is used in the program to invoke
+//! @brief A DatastoreRecorder object is used in the program to invoke
 //! commitState() on an FE\_datastore object when commit() is invoked on
 //! a Domain. 
 class DatastoreRecorder: public Recorder

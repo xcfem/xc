@@ -65,29 +65,27 @@
 
 namespace XC {
 //! @ingroup ReliabilityAnalysis
-// 
-//! @brief ??
+//!
+//! @brief Correlation coefficient computed in the reliability analysis.
+//!
+//! The degree of similarity between the two measurements is determined
+//! by computing a correlation coefficient.  The higher the correlation
+//! coefficient in reliability analysis, the greater the reliability.
 class CorrelationCoefficient: public ReliabilityDomainComponent
   {
+  private:
+    int rv1;
+    int rv2;
+    double correlation;
   public:
     CorrelationCoefficient(int tag, int rv1, int rv2, double correlation);
 
-	int		getRv1();
-	int		getRv2();
-	double	getCorrelation();
-	
-	void Print(std::ostream &s, int flag =0) const;
+    int getRv1(void);
+    int	getRv2(void);
+    double getCorrelation(void);
 
-
-protected:
-
-private:
-	int rv1;
-	int rv2;
-	double correlation;
-
-
-};
+    void Print(std::ostream &s, int flag =0) const;
+  };
 } // end of XC namespace
 
 #endif

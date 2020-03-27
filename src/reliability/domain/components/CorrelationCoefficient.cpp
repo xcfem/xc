@@ -64,12 +64,9 @@ XC::CorrelationCoefficient::CorrelationCoefficient(int passedTag,
 							int passedRv1,
 							int passedRv2,
 							double passedCorrelation)
-:ReliabilityDomainComponent(passedTag, CORRELATION_COEFFICIENT)
-  {
-	rv1 = passedRv1;
-	rv2 = passedRv2;
-	correlation = passedCorrelation;
-  }
+  :ReliabilityDomainComponent(passedTag, CORRELATION_COEFFICIENT),
+   rv1(passedRv1), rv2(passedRv2), correlation(passedCorrelation)
+  {}
 
 
 //! @brief Print stuff.
@@ -77,21 +74,11 @@ void XC::CorrelationCoefficient::Print(std::ostream &s, int flag) const
   {}
 
 
+int XC::CorrelationCoefficient::getRv1(void)
+  { return rv1; }
 
-int
-XC::CorrelationCoefficient::getRv1()
-{
-	return rv1;
-}
+int XC::CorrelationCoefficient::getRv2(void)
+  { return rv2; }
 
-int
-XC::CorrelationCoefficient::getRv2()
-{
-	return rv2;
-}
-
-double
-XC::CorrelationCoefficient::getCorrelation()
-{
-	return correlation;
-}
+double XC::CorrelationCoefficient::getCorrelation(void)
+  { return correlation; }

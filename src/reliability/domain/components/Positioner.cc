@@ -26,7 +26,7 @@
 //----------------------------------------------------------------------------
 //Positioner.cpp
 
-#include <reliability/domain/components/Positioner.h>
+#include "Positioner.h"
 #include <classTags.h>
 #include "domain/component/DomainComponent.h"
 
@@ -37,7 +37,7 @@ XC::Positioner::Positioner(int passedTag, int classTag,DomainComponent *object,c
     if(theObject) 
       parameterID = theObject->setParameter(argv, theParam);
     if(parameterID < 0)
-      std::cerr << "XC::Positioner::Positioner "<< this->getTag() 
+      std::cerr << "Positioner::" << __FUNCTION__ << this->getTag() 
                 <<" -- unable to set parameter" << std::endl;
   }
 

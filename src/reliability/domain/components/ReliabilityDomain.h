@@ -75,68 +75,70 @@ namespace XC {
 class TaggedObjectStorage;
 
 //! @ingroup ReliabilityAnalysis
-//
-//! @brief
+//!
+//! @brief Domain that keeps inside  the sensitivity, reliability and
+//! optimization components are kept.
+//!
+//! This reliability domain is parallel to the finite element (FE) domain
+//! in XC. Currently, the commands for stand-alone sensitivity:
+//! analysis (e.g., sensitivityIntegrator, sensitivityAlgorithm) are set
+//! in the reliability domain only and, thus, the ‘reliability’
 class ReliabilityDomain
   {
+  private:
+    TaggedObjectStorage *theRandomVariablesPtr;
+    TaggedObjectStorage *theCorrelationCoefficientsPtr;
+    TaggedObjectStorage *theLimitStateFunctionsPtr;
+    TaggedObjectStorage *theRandomVariablePositionersPtr;
+    TaggedObjectStorage *theParameterPositionersPtr;
+    TaggedObjectStorage *theModulatingFunctionsPtr;
+    TaggedObjectStorage *theFiltersPtr;
+    TaggedObjectStorage *theSpectraPtr;
+    int tagOfActiveLimitStateFunction;
   public:
     ReliabilityDomain();
-	virtual ~ReliabilityDomain();
+    virtual ~ReliabilityDomain();
 
-	// Member functions to add components to the domain
-	virtual bool addRandomVariable(RandomVariable *theRandomVariable);
-	virtual bool addCorrelationCoefficient(CorrelationCoefficient *theCorrelationCoefficient);
-	virtual bool addLimitStateFunction(LimitStateFunction *theLimitStateFunction);
-	virtual bool addRandomVariablePositioner(RandomVariablePositioner *theRandomVariablePositioner);
-	virtual bool addParameterPositioner(ParameterPositioner *theParameterPositioner);
-	virtual bool addModulatingFunction(ModulatingFunction *theModulatingFunction);
-	virtual bool addFilter(Filter *theFilter);
-	virtual bool addSpectrum(Spectrum *theSpectrum);
+    // Member functions to add components to the domain
+    virtual bool addRandomVariable(RandomVariable *theRandomVariable);
+    virtual bool addCorrelationCoefficient(CorrelationCoefficient *theCorrelationCoefficient);
+    virtual bool addLimitStateFunction(LimitStateFunction *theLimitStateFunction);
+    virtual bool addRandomVariablePositioner(RandomVariablePositioner *theRandomVariablePositioner);
+    virtual bool addParameterPositioner(ParameterPositioner *theParameterPositioner);
+    virtual bool addModulatingFunction(ModulatingFunction *theModulatingFunction);
+    virtual bool addFilter(Filter *theFilter);
+    virtual bool addSpectrum(Spectrum *theSpectrum);
 
-	// Member functions to get components from the domain
-	RandomVariable *getRandomVariablePtr(int tag);
-	CorrelationCoefficient *getCorrelationCoefficientPtr(int tag);
-	LimitStateFunction *getLimitStateFunctionPtr(int tag);
-	RandomVariablePositioner *getRandomVariablePositionerPtr(int tag);
-	ParameterPositioner *getParameterPositionerPtr(int tag);
-	ModulatingFunction *getModulatingFunction(int tag);
-	Filter *getFilter(int tag);
-	Spectrum *getSpectrum(int tag);
+    // Member functions to get components from the domain
+    RandomVariable *getRandomVariablePtr(int tag);
+    CorrelationCoefficient *getCorrelationCoefficientPtr(int tag);
+    LimitStateFunction *getLimitStateFunctionPtr(int tag);
+    RandomVariablePositioner *getRandomVariablePositionerPtr(int tag);
+    ParameterPositioner *getParameterPositionerPtr(int tag);
+    ModulatingFunction *getModulatingFunction(int tag);
+    Filter *getFilter(int tag);
+    Spectrum *getSpectrum(int tag);
 
-	// Member functions giving information about the domain
-	int getNumberOfRandomVariables(void);
-	int getNumberOfCorrelationCoefficients(void);
-	int getNumberOfLimitStateFunctions(void);
-	int getNumberOfRandomVariablePositioners(void);
-	int getNumberOfParameterPositioners(void);
-	int getNumberOfModulatingFunctions(void);
-	int getNumberOfFilters(void);
-	int getNumberOfSpectra(void);
+    // Member functions giving information about the domain
+    int getNumberOfRandomVariables(void);
+    int getNumberOfCorrelationCoefficients(void);
+    int getNumberOfLimitStateFunctions(void);
+    int getNumberOfRandomVariablePositioners(void);
+    int getNumberOfParameterPositioners(void);
+    int getNumberOfModulatingFunctions(void);
+    int getNumberOfFilters(void);
+    int getNumberOfSpectra(void);
 
-	// Member functions to set/get active limit-state function
-	int getTagOfActiveLimitStateFunction(void);
-	void setTagOfActiveLimitStateFunction(int tag);
+    // Member functions to set/get active limit-state function
+    int getTagOfActiveLimitStateFunction(void);
+    void setTagOfActiveLimitStateFunction(int tag);
 
-	// Member functions to remove single components from the domain
-	int removeRandomVariablePositioner(int tag);
-	int removeRandomVariable(int tag);
-	int removeCorrelationCoefficient(int tag);
-	int removePerformanceFunction(int tag);
-
-protected:
-
-private:
-	TaggedObjectStorage *theRandomVariablesPtr;
-	TaggedObjectStorage *theCorrelationCoefficientsPtr;
-	TaggedObjectStorage *theLimitStateFunctionsPtr;
-	TaggedObjectStorage *theRandomVariablePositionersPtr;
-	TaggedObjectStorage *theParameterPositionersPtr;
-	TaggedObjectStorage *theModulatingFunctionsPtr;
-	TaggedObjectStorage *theFiltersPtr;
-	TaggedObjectStorage *theSpectraPtr;
-	int tagOfActiveLimitStateFunction;
-
-};
+    // Member functions to remove single components from the domain
+    int removeRandomVariablePositioner(int tag);
+    int removeRandomVariable(int tag);
+    int removeCorrelationCoefficient(int tag);
+    int removePerformanceFunction(int tag);
+  };
 } // end of XC namespace
 
 #endif

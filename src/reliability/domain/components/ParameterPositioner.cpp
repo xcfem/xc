@@ -60,8 +60,8 @@
 #include <reliability/domain/components/ParameterPositioner.h>
 #include <classTags.h>
 
-
-XC::ParameterPositioner::ParameterPositioner (int passedTag,DomainComponent *object,const std::vector<std::string> &argv)
+//! @brief Constructor.
+XC::ParameterPositioner::ParameterPositioner(int passedTag,DomainComponent *object,const std::vector<std::string> &argv)
   :Positioner(passedTag, RANDOM_VARIABLE_POSITIONER,object,argv)
   {}
 

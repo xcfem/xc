@@ -62,6 +62,7 @@ class ParticlePos3d;
 //! @defgroup ElemVol Three-dimensional elements.
 //!
 //! @ingroup ElemVol
+//! 
 //! @brief Base class for hexahedral element.
 class BrickBase: public ElemWithMaterial<8,NDMaterialPhysicalProperties>
   {

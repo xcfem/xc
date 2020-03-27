@@ -67,8 +67,8 @@ namespace XC {
 
 class ReliabilityDomain;
 //! @ingroup ReliabilityAnalysis
-// 
-//! @brief ??
+//!
+//! @brief Base class for the components of a reliability domain.
 class ReliabilityDomainComponent: public TaggedObject
   {
   public:

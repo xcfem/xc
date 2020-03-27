@@ -39,7 +39,8 @@ namespace XC {
 class DomainComponent;
 //! @ingroup ReliabilityAnalysis
 // 
-//! @brief ??
+//! @brief A positioner maps a random variable to a
+//! domain component.
 class Positioner: public ReliabilityDomainComponent
   {
   protected:

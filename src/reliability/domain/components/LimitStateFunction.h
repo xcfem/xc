@@ -68,7 +68,13 @@
 namespace XC {
 //! @ingroup ReliabilityAnalysis
 // 
-//! @brief ??
+//! @brief Function that defines the failure of the structure.
+//!
+//! The limit state function for estimating the failure probability
+//! may be defined as \f$g(X)= R(X) − L(X)\f$ where R is the structure
+//! strength and L(X) is the total load over the structure. The limit
+//! state function \f$g(X)\f$ defines a failure criterion that is
+//! a function of all random variables X. 
 class LimitStateFunction: public ReliabilityDomainComponent
   {
   private:
@@ -78,7 +84,7 @@ class LimitStateFunction: public ReliabilityDomainComponent
     std::string tokenizedExpression;
     std::string expressionWithAddition;
   public:
-    // FORM analysis:
+    // FORM: first order reliability analysis:
     double GFunValueAtStartPt;
     double GFunValueAtEndPt;
     double FORMReliabilityIndexBeta;

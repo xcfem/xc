@@ -67,7 +67,12 @@
 namespace XC {
 //! @ingroup ReliabilityAnalysis
 // 
-//! @brief ??
+//! @brief Maps a random variable to an object in the finite element model
+//! which contains the uncertain variable.
+//!
+//! A random variable positioner is create by the user to identify an
+//! uncertain value in the finite element model, e.g. the elastic modulus
+//! of a specific finite element.
 class RandomVariablePositioner: public Positioner
   {
   private:

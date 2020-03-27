@@ -66,11 +66,11 @@
 
 namespace XC {
 //! @ingroup ReliabilityAnalysis
-// 
+//!
 //! @defgroup ProbDistributions Probability distributions.
-// 
+//!
 //! @ingroup ProbDistributions
-// 
+//!
 //! @brief Base class for random variables.
 class RandomVariable: public ReliabilityDomainComponent
   {

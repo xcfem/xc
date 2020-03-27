@@ -65,8 +65,9 @@
 
 namespace XC {
 //! @ingroup ReliabilityAnalysis
-// 
-//! @brief ??
+//!
+//! @brief Maps a parameter to an object in the finite element model
+//! which contains the parametrized variable.
 class ParameterPositioner: public Positioner
   {
   public:
