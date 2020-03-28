@@ -40,6 +40,13 @@ class FrictionModel;
 class UniaxialMaterial;
 class Response;
 
+//! @ingroup Elem
+//!
+//! @defgroup FrictionElementGrp Element used to represent <a href="http://en.wikipedia.org/wiki/Friction">frictional</a> contacts.
+//
+//! @ingroup FrictionElementGrp
+//
+//! @brief Base class for friction elements.
 class FrictionElementBase: public Element0D
   {
   protected:    

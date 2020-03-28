@@ -67,6 +67,13 @@
 #include "VDependentFriction.h"
 
 namespace XC {
+//! @ingroup FrictionModelGrp
+//
+//! @brief Velocity an pressure dependent friction model.
+//!
+//! References:
+//! - Tsopelas P., and Constantinou M. C. (1996). "Experimental Study of FPS System in Bridge Seismic Isolation." Earthquake Eng. and Structural Dynamics, VOL. 25, 65-78.
+//! - Constantinou M. C., Tsopelas P., Kasalanati A., and Wolff E. D. (1999). Property Modification Factors for Seismic Isolation Bearings. Technical Report MCEER-99-0012, University of Buffalo, Buffalo, New York. 
 class VPDependentFriction: public VDependentFriction
   {
   private:

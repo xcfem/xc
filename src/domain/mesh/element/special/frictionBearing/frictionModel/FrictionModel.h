@@ -68,7 +68,18 @@
 
 namespace XC {
 class Response;
-
+  
+//! @ingroup FrictionElementGrp
+//!
+//! @defgroup FrictionModelGrp Friction models.
+//
+//! @ingroup FrictionModelGrp
+//
+//! @brief Base class for friction models.
+//!
+//! A friction model object specifies the behavior of the
+//! coefficient of friction in terms of the absolute sliding
+//! velocity and the pressure on the contact area
 class FrictionModel: public TaggedObject, public MovableObject
   {
   protected:

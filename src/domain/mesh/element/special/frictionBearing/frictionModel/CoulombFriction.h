@@ -65,6 +65,10 @@
 #include "FrictionModel.h"
 
 namespace XC {
+//! @ingroup FrictionModelGrp
+//
+//! @brief "Coulomb friction" model object. Coulomb's Law of Friction
+//! states that kinetic friction is independent of the sliding velocity. 
 class CoulombFriction: public FrictionModel
   {
   protected:

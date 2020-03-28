@@ -30,9 +30,6 @@
 // Revision: A
 //
 // Description: This file contains the class definition for SingleFPSimple3d.
-// SingleFPSimple3d is a single-concave friction pendulum element defined by
-// two nodes. This simplified version uses small angle approximations and
-// accounts for the rotation of the sliding surface by shifting the shear force.
 
 #include "FrictionElementBase.h"
 #include "utility/matrix/Vector.h"
@@ -44,20 +41,25 @@ class FrictionModel;
 class UniaxialMaterial;
 class Response;
 
+//! @brief Single-concave friction pendulum element for three dimensioal problems.
+//!
+//! This simplified version uses small angle approximations and
+//! accounts for the rotation of the sliding surface by shifting the
+//! shear force. THERE IS AN ENHANCED VERSION IN OPENSEES.
 class SingleFPSimple3d: public FrictionElementBase
   {
   private:
     
     // parameters
-    double R;           // radius of concave sliding dish
-    double h;           // height of articulated slider
-    double Reff;        // length from center of dish to pivot point
+    double R; //!< radius of concave sliding dish
+    double h; //!< height of articulated slider
+    double Reff; //!< length from center of dish to pivot point
 	
     // state variables
-    Vector ubPlastic;   // plastic displacements in basic system
+    Vector ubPlastic;   //!< plastic displacements in basic system
     
     // committed history variables
-    Vector ubPlasticC;  // plastic displacements in basic system
+    Vector ubPlasticC;  //!< plastic displacements in basic system
 
     static Matrix theMatrix;
     static Vector theVector;

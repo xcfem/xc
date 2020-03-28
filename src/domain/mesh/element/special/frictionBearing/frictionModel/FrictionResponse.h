@@ -70,6 +70,9 @@ class Vector;
 class Matrix;
 class BJtensor;
 
+//! @ingroup Recorder
+//
+//! @brief Friction model response.
 class FrictionResponse: public Response
   {
   private:

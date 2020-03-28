@@ -44,6 +44,11 @@ class FrictionModel;
 class UniaxialMaterial;
 class Response;
 
+//! @brief Single-concave friction pendulum element for two dimensional problems.
+//!
+//! This simplified version uses small angle approximations and
+//! accounts for the rotation of the sliding surface by shifting the
+//! shear force. THERE IS AN ENHANCED VERSION IN OPENSEES.
 class SingleFPSimple2d: public FrictionElementBase
   {
   private:

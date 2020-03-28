@@ -66,6 +66,13 @@
 #include "CoulombFriction.h"
 
 namespace XC {
+//! @ingroup FrictionModelGrp
+//
+//! @brief Velocity dependent friction model. It is useful for modeling
+//! the behavior of <a href="https://en.wikipedia.org/wiki/Polytetrafluoroethylene">"PTFE"</a> or PTFE-like materials sliding on a stainless
+//! steel surface. For a detailed presentation on the velocity dependence
+//! of such interfaces please refer to Constantinou et al. (1999).
+//! <a href="https://www.researchgate.net/publication/276269723_Property_modification_factors_seismic_isolation_bearings">Property modification factors seismic isolation bearings.</a>
 class VDependentFriction: public CoulombFriction
   {
   protected:

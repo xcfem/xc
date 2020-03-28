@@ -71,6 +71,28 @@ class FrictionModel;
 class UniaxialMaterial;
 class Response;
 
+//! @ingroup FrictionElementGrp
+//
+//! @brief Flat slider bearing element for two dimensional problems.
+//!
+//! This element is defined by two nodes. The iNode represents the flat
+//! sliding surface and the jNode represents the slider. The element can
+//! have zero length or the appropriate bearing height. The bearing has
+//! unidirectional (2D) friction properties for the shear
+//! deformations, and force-deformation behaviors defined by UniaxialMaterials
+//! in the remaining two directions. To capture the uplift behavior of the
+//! bearing, the user-specified UniaxialMaterial in the axial direction is
+//! modified for no-tension behavior. By default (sDratio = 0.0) P-Delta
+//! moments are entirely transferred to the flat sliding surface (iNode). It
+//! is important to note that rotations of the flat sliding surface (rotations
+//! at the iNode) affect the shear behavior of the bearing. To avoid the
+//! introduction of artificial viscous damping in the isolation system
+//! (sometimes referred to as "damping leakage in the isolation system"), the
+//! bearing element does not contribute to the Rayleigh damping by default. If
+//! the element has non-zero length, the local x-axis is determined from the
+//! nodal geometry unless the optional x-axis vector is specified in which
+//! case the nodal geometry is ignored and the user-defined orientation
+//! is utilized. 
 class FlatSliderSimple2d: public FrictionElementBase
   {
   private:    
