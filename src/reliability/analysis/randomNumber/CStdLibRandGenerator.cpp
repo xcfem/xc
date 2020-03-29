@@ -57,13 +57,12 @@
 // Written by Terje Haukaas (haukaas@ce.berkeley.edu)
 //
 
-#include <reliability/analysis/randomNumber/RandomNumberGenerator.h>
-#include <reliability/analysis/randomNumber/CStdLibRandGenerator.h>
+#include "CStdLibRandGenerator.h"
 #include <reliability/domain/distributions/NormalRV.h>
 #include <utility/matrix/Vector.h>
 
 //! @brief Constructor.
-XC::CStdLibRandGenerator::CStdLibRandGenerator()
+XC::CStdLibRandGenerator::CStdLibRandGenerator(void)
   :RandomNumberGenerator(), generatedNumbers() {}
 
 int XC::CStdLibRandGenerator::generate_nIndependentUniformNumbers(int n, double lower, double upper, int seedIn)
@@ -94,8 +93,6 @@ int XC::CStdLibRandGenerator::generate_nIndependentUniformNumbers(int n, double 
     generatedNumbers= randomArray;
     return 0;
   }
-
-
 
 
 int XC::CStdLibRandGenerator::generate_nIndependentStdNormalNumbers(int n, int seedIn)
@@ -154,10 +151,10 @@ int XC::CStdLibRandGenerator::generate_nIndependentStdNormalNumbers(int n, int s
   }
 
 
-
+//! @brief Return generated numbers.
 const XC::Vector &XC::CStdLibRandGenerator::getGeneratedNumbers(void) const
   { return generatedNumbers; }
 
-
-int XC::CStdLibRandGenerator::getSeed()
+//! @brief Return seed.
+int XC::CStdLibRandGenerator::getSeed(void) const
   { return seed; }

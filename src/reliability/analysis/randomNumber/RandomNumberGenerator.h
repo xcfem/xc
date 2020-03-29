@@ -64,16 +64,18 @@
 #include "utility/matrix/Vector.h"
 
 namespace XC {
+//! @ingroup ReliabilityAnalysis
+// 
 //! @brief Base class for random number generators.
 class RandomNumberGenerator
   {
   public:
-    RandomNumberGenerator();
+    RandomNumberGenerator(void);
 
     virtual int generate_nIndependentStdNormalNumbers(int n, int seed=0) =0;
     virtual int generate_nIndependentUniformNumbers(int n, double lower, double upper, int seed=0) =0;
-    virtual const Vector &getGeneratedNumbers() const=0;
-    virtual int getSeed() =0;
+    virtual const Vector &getGeneratedNumbers(void) const=0;
+    virtual int getSeed(void) const=0;
   };
 } // end of XC namespace
 

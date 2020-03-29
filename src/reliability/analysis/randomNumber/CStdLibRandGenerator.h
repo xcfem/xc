@@ -56,15 +56,18 @@
 
 //
 // Written by Terje Haukaas (haukaas@ce.berkeley.edu)
+// Adapted to XC by LCPT
 //
 
 #ifndef CStdLibRandGenerator_h
 #define CStdLibRandGenerator_h
 
+#include "RandomNumberGenerator.h"
+
 namespace XC {
 //! @ingroup ReliabilityAnalysis
-//!
-//! @brief ??
+// 
+//! @brief C standard library random number generator.
 class CStdLibRandGenerator: public RandomNumberGenerator
   {
   private:
@@ -76,7 +79,7 @@ class CStdLibRandGenerator: public RandomNumberGenerator
     int	generate_nIndependentStdNormalNumbers(int n, int seed=0);
     int generate_nIndependentUniformNumbers(int n, double lower, double upper, int seed=0);
     const Vector &getGeneratedNumbers(void) const;
-    int getSeed();
+    int getSeed(void) const;
   };
 } // end of XC namespace
 
