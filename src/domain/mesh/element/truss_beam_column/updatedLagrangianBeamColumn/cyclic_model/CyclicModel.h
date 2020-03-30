@@ -34,7 +34,8 @@
 namespace XC {
 //! @ingroup OneDimensionalElem
 //!
-//! @brief Cyclic behavior of semi-rigid connectors.
+//! @brief Base class for object that model the cyclic
+//! behavior of semi-rigid connectors.
 class CyclicModel: public TaggedObject, public MovableObject
   {
   private:
