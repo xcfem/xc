@@ -65,108 +65,83 @@
 #include <utility/matrix/Vector.h>
 
 
-XC::CurvaturesBySearchAlgorithm::CurvaturesBySearchAlgorithm(int passedNumberOfCurvatures,
-									FindDesignPointAlgorithm *passedFindDesignPointAlgorithm)
-:FindCurvatures(), curvatures(passedNumberOfCurvatures)
-{
-	numberOfCurvatures = passedNumberOfCurvatures;
-	theFindDesignPointAlgorithm = passedFindDesignPointAlgorithm;
-}
+XC::CurvaturesBySearchAlgorithm::CurvaturesBySearchAlgorithm(int passedNumberOfCurvatures, FindDesignPointAlgorithm *passedFindDesignPointAlgorithm)
+: FindCurvatures(passedNumberOfCurvatures)
+  {
+    theFindDesignPointAlgorithm= passedFindDesignPointAlgorithm;
+  }
 
 int XC::CurvaturesBySearchAlgorithm::computeCurvatures(ReliabilityDomain *theReliabilityDomain)
-{
+  {
+    // "Download" limit-state function from reliability domain
+    int lsf= theReliabilityDomain->getTagOfActiveLimitStateFunction();
+    LimitStateFunction *theLimitStateFunction= 
+	    theReliabilityDomain->getLimitStateFunctionPtr(lsf);
 
-	// Initial declarations
-	Vector last_u;
-	Vector secondLast_u;
-	Vector lastAlpha;
-	Vector secondLastAlpha;
-	Vector lastDirection;
-	Vector uLastMinus_u = last_u - secondLast_u;
-	double signumProduct;
-	double alphaProduct;
-	double sumSquared;
-	double norm_uLastMinus_u;
+    // The design point in the original space
+    Vector x_star= theLimitStateFunction->designPoint_x_inOriginalSpace;
 
-	// "Download" limit-state function from reliability domain
-	int lsf = theReliabilityDomain->getTagOfActiveLimitStateFunction();
-	LimitStateFunction *theLimitStateFunction = 
-		theReliabilityDomain->getLimitStateFunctionPtr(lsf);
+    // Number of random variables
+    int nrv= x_star.Size();
 
-	// The design point in the original space
-	Vector x_star = theLimitStateFunction->designPoint_x_inOriginalSpace;
+    // Declare vector to store all principal axes
+    const size_t numberOfCurvatures= curvatures.Size();
+    Vector principalAxes( nrv * numberOfCurvatures );
 
-	// Number of random variables
-	int nrv = x_star.Size();
+    // Start point of new searches: Perturb x^star by 10% of each standard deviation
+    Vector startPoint(nrv);
+    RandomVariable *aRandomVariable;
+    //int numberOfRandomVariables= theReliabilityDomain->getNumberOfRandomVariables();
+    for(int i=0; i<nrv; i++)
+      {
+	aRandomVariable= theReliabilityDomain->getRandomVariablePtr(i+1);
+	startPoint(i)= aRandomVariable->getStartValue();
+      }
 
-	// Declare vector to store all principal axes
-	Vector principalAxes( nrv * numberOfCurvatures );
+    // Compute curvatures by repeated searches
+    for(size_t i=0; i<numberOfCurvatures; i++)
+      {
 
-	// Start point of new searches: Perturb x^star by 10% of each standard deviation
-	Vector startPoint(nrv);
-	RandomVariable *aRandomVariable;
-	//int numberOfRandomVariables= theReliabilityDomain->getNumberOfRandomVariables();
-	int i;
-	for(i=0; i<nrv; i++)
-          {
-            aRandomVariable = theReliabilityDomain->getRandomVariablePtr(i+1);
-	    startPoint(i) = aRandomVariable->getStartValue();
+	// Get hold of 'u', 'alpha' and search direction at the two last steps
+	const Vector last_u= theLimitStateFunction->designPoint_u_inStdNormalSpace;
+	const Vector secondLast_u= theLimitStateFunction->secondLast_u;
+	const Vector lastAlpha= theLimitStateFunction->normalizedNegativeGradientVectorAlpha;
+	const Vector secondLastAlpha= theLimitStateFunction->secondLastAlpha;
+	const Vector lastDirection= theLimitStateFunction->lastSearchDirection;
+
+	// Compute curvature according to Der Kiureghian & De Stefano (1992), Eq.26:
+
+	// Initial computations
+	const Vector uLastMinus_u= last_u - secondLast_u;
+	const double signumProduct= secondLastAlpha ^ uLastMinus_u;
+	const double alphaProduct= secondLastAlpha ^ lastAlpha;
+	double sumSquared= 0.0;
+
+	// Compute norm of the difference vector
+	for ( int k=0; k<last_u.Size(); k++ )
+	  { sumSquared += uLastMinus_u(k)*uLastMinus_u(k); }
+	const double norm_uLastMinus_u= sqrt(sumSquared);
+
+	// Check sign and compute curvature
+	if (fabs(signumProduct)==(signumProduct))
+	  { curvatures(i)= acos(alphaProduct) / norm_uLastMinus_u; }
+	else
+	  { curvatures(i)= -acos(alphaProduct) / norm_uLastMinus_u; }
+
+	// Run a new search in the subspace orthogonal to previous principal directions
+	if(i!=(numberOfCurvatures-1) )
+	  {
+	    // Store all previous principal axes in a vector
+	    for (int j=0; j<nrv; j++ )
+	      { principalAxes((i*nrv)+j)= lastDirection(j); }
+	    // To be completed...
 	  }
-
-	// Compute curvatures by repeated searches
-	for (i=0; i<numberOfCurvatures; i++) {
-
-		// Get hold of 'u', 'alpha' and search direction at the two last steps
-		last_u = theLimitStateFunction->designPoint_u_inStdNormalSpace;
-		secondLast_u = theLimitStateFunction->secondLast_u;
-		lastAlpha = theLimitStateFunction->normalizedNegativeGradientVectorAlpha;
-		secondLastAlpha = theLimitStateFunction->secondLastAlpha;
-		lastDirection = theLimitStateFunction->lastSearchDirection;
-
-		// Compute curvature according to Der Kiureghian & De Stefano (1992), Eq.26:
-
-		// Initial computations
-		uLastMinus_u = last_u - secondLast_u;
-		signumProduct = secondLastAlpha ^ uLastMinus_u;
-		alphaProduct = secondLastAlpha ^ lastAlpha;
-		sumSquared = 0.0;
-
-		// Compute norm of the difference vector
-		for ( int k=0; k<last_u.Size(); k++ ) {
-			sumSquared += uLastMinus_u(k)*uLastMinus_u(k);
-		}
-		norm_uLastMinus_u = sqrt(sumSquared);
-
-		// Check sign and compute curvature
-		if (fabs(signumProduct)==(signumProduct)) {
-			curvatures(i) = acos(alphaProduct) / norm_uLastMinus_u;
-		}
-		else {
-			curvatures(i) = -acos(alphaProduct) / norm_uLastMinus_u;
-		}
-
-		// Run a new search in the subspace orthogonal to previous principal directions
-		if ( i!=(numberOfCurvatures-1) ) {
-
-			// Store all previous principal axes in a vector
-			for (int j=0; j<nrv; j++ ) {
-				principalAxes((i*nrv)+j) = lastDirection(j);
-			}
-
-			// To be completed...
-		}
-	}
-
-	return 0;
-}
+      }
+    return 0;
+  }
 
 
 
- XC::Vector
-XC::CurvaturesBySearchAlgorithm::getCurvatures()
-{
-	return curvatures;
-}
 
 
 
