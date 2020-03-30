@@ -25,14 +25,17 @@ class SectionProperties(object):
     def __init__(self,name):
         self.sectionName= name
         self.xc_material= None
+        
     def A(self):
         '''cross-sectional area (abstract method)'''
         raise "Abstract method, please override"
         return 0.0
+    
     def Iy(self):
       '''second moment of area about the local y-axis (abstract method)'''
       raise "Abstract method, please override"
-      return 0.0    
+      return 0.0
+  
     def iy(self):
       '''Return the radius of gyration of the section around
          the axis parallel to Z that passes through section centroid.
@@ -41,24 +44,29 @@ class SectionProperties(object):
     def Iz(self):
       '''second moment of area about the local z-axis (abstract method)'''
       raise "Abstract method, please override"
-      return 0.0    
+      return 0.0
+  
     def iz(self):
       '''Return the radius of gyration of the section around
          the axis parallel to Z that passes through section centroid.
       '''
       return math.sqrt(self.Iz()/self.A())
+  
     def J(self):
       '''torsional constant of the section (abstract method)'''
       raise "Abstract method, please override"
-      return 0.0    
+      return 0.0
+  
     def Wyel(self):
       '''section modulus with respect to local y-axis (abstract method)'''
       raise "Abstract method, please override"
-      return 0.0    
+      return 0.0
+  
     def Wzel(self):
       '''section modulus with respect to local z-axis (abstract method)'''
       raise "Abstract method, please override"
       return 0.0
+  
     def SteinerY(self,z):
       '''Return the moment of inertia obtained by applying
          the parallel axis theorem (or Huygens-Steiner theorem
@@ -67,6 +75,7 @@ class SectionProperties(object):
         :param pos: position of the original section centroid
       '''
       return self.Iy()+self.A()*z**2
+  
     def SteinerZ(self,y):
       '''Return the moment of inertia obtained by applying
          the parallel axis theorem (or Huygens-Steiner theorem
@@ -75,6 +84,7 @@ class SectionProperties(object):
         :param pos: position of the original section centroid
       '''
       return self.Iz()+self.A()*y**2
+  
     def Steiner(self,pos):
       '''Return the moments of inertia obtained by applying
          the parallel axis theorem (or Huygens-Steiner theorem
@@ -88,6 +98,7 @@ class SectionProperties(object):
       newIy= self.Iy()+A*z**2
       newIz= self.Iz()+A*y**2
       return newIy,newIz
+  
     def SteinerJ(self,pos):
       '''Return the moments of inertia obtained by applying
          the parallel axis theorem (or Huygens-Steiner theorem
@@ -98,6 +109,7 @@ class SectionProperties(object):
       d2= pos.x**2+pos.y**2
       A= self.A()
       return self.J()+A*d2
+  
     def getPlasticSectionModulusY(self):
       '''Returns the plastic section modulus around Y axis.
 
@@ -107,6 +119,7 @@ class SectionProperties(object):
       '''
       lmsg.error('getPlasticSectionModulusY not implemented.')
       return 0.0
+  
     def getPlasticMomentY(self,fy):
       '''Return section plastic moment around Y axis.
 
@@ -115,6 +128,7 @@ class SectionProperties(object):
          whenever the rectangular section is homogeneous).
       '''
       return 2*self.getPlasticSectionModulusY()*fy
+  
     def getPlasticSectionModulusZ(self):
       '''Returns the plastic section modulus around Z axis.
 
@@ -124,6 +138,7 @@ class SectionProperties(object):
       '''
       lmsg.error('getPlasticSectionModulusZ not implemented.')
       return 0.0
+  
     def getPlasticMomentZ(self,fy):
       '''Return section plastic moment around Z axis.
 
@@ -149,6 +164,7 @@ class SectionProperties(object):
         else:
             lmsg.warning('Material: '+self.sectionName+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
+    
     def defElasticShearSection3d(self,preprocessor,material):
         '''elastic section appropiate for 3D beam analysis, including shear 
            deformations
@@ -172,8 +188,8 @@ class SectionProperties(object):
            including shear deformations
 
         :param preprocessor: preprocessor object.
-        :param material:     material constitutive model (for which 
-                             E is the Young's modulus)
+        :param material:     material constitutive model 
+                             (for which E is the Young's modulus)
         '''
         if(not self.xc_material):
             materialHandler= preprocessor.getMaterialHandler
@@ -185,6 +201,7 @@ class SectionProperties(object):
         else:
             lmsg.warning('Material: '+self.sectionName+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
+    
     def defElasticShearSection2d(self,preprocessor,material):
         '''elastic section appropiate for 2D beam analysis, including shear deformations
 
@@ -202,6 +219,7 @@ class SectionProperties(object):
         else:
             lmsg.warning('Material: '+self.sectionName+' already defined as:'+str(self.xc_material))
         return self.xc_material
+    
     def getCrossSectionProperties2D(self,material):
       '''Return a CrossSectionProperties object with the
          2D properties of the section.'''
@@ -235,36 +253,45 @@ class RectangularSection(SectionProperties):
       super(RectangularSection,self).__init__(name)
       self.b= b
       self.h= h
+      
     def A(self):
       '''Return cross-sectional area of the section'''
       return self.b*self.h
+  
     def Iy(self):
       '''Return second moment of area about the local y-axis'''
       return 1/12.0*self.h*self.b**3
     def Iz(self):
       '''Return second moment of area about the local z-axis'''
       return 1/12.0*self.b*self.h**3
+  
     def J(self):
       '''Return torsional constant of the section'''
       return self.getJTorsion()
+  
     def Wyel(self):
       '''Return section modulus with respect to local y-axis'''
       return self.Iy()/(self.b/2.0)
+  
     def Wzel(self):
       '''Return section modulus with respect to local z-axis'''
       return self.Iz()/(self.h/2.0)
+  
     def alphaY(self):
       '''Return shear shape factor with respect to local y-axis'''
       return 5.0/6.0 #Shear distortion constant. See E. Oñate book page 122.
+  
     def alphaZ(self):
       '''Return shear shape factor with respect to local z-axis'''
       return self.alphaY()
+  
     def getYieldMomentY(self,fy):
       '''Return section yield moment.
 
          :param fy: material yield stress.
       '''
       return 2*fy/self.b*self.Iy()
+  
     def getElasticSectionModulusY(self):
       '''Returns the plastic section modulus.
 
@@ -273,6 +300,7 @@ class RectangularSection(SectionProperties):
          rectangular section is homogeneous).
       '''
       return (self.b*self.h)*self.b/6.0
+  
     def getPlasticSectionModulusY(self):
       '''Returns the plastic section modulus.
 
@@ -281,12 +309,14 @@ class RectangularSection(SectionProperties):
          rectangular section is homogeneous).
       '''
       return (self.b*self.h/2.0)*self.b/4.0
+  
     def getYieldMomentZ(self,fy):
       '''Return section yield moment.
 
          :param fy: material yield stress.
       '''
       return 2*fy/self.h*self.Iz()
+  
     def getElasticSectionModulusZ(self):
       '''Returns the plastic section modulus.
 
@@ -295,6 +325,7 @@ class RectangularSection(SectionProperties):
          rectangular section is homogeneous).
       '''
       return (self.b*self.h)*self.h/6.0
+  
     def getPlasticSectionModulusZ(self):
       '''Returns the plastic section modulus.
 
@@ -303,6 +334,7 @@ class RectangularSection(SectionProperties):
          rectangular section is homogeneous).
       '''
       return (self.b*self.h/2.0)*self.h/4.0
+  
     def getAlphaTorsion(self):
       '''Return alpha coefficient of the section.
 
@@ -314,6 +346,7 @@ class RectangularSection(SectionProperties):
       else:
         retval= self.alphaTable(self.b/self.h)
       return retval
+  
     def getBetaTorsion(self):
       '''Return beta coefficient of the section.
 
@@ -325,6 +358,7 @@ class RectangularSection(SectionProperties):
       else:
         retval= self.betaTable(self.b/self.h)
       return retval
+  
     def getJTorsion(self):
       '''Return torsional constant of the section.
 
@@ -337,6 +371,7 @@ class RectangularSection(SectionProperties):
       else:
         retval= alphaJT*self.b*pow(self.h,3)
       return retval
+  
     def getRegion(self,gm,nmbMat):
       '''generation of a quadrilateral region from the section 
       geometry (sizes and number of divisions for the cells)
@@ -364,18 +399,23 @@ class CircularSection(SectionProperties):
       super(CircularSection,self).__init__(name)
       self.Rext= Rext
       self.Rint=Rint
+      
     def A(self):
       '''Return cross-sectional area of the section'''
       return math.pi*(self.Rext*self.Rext-self.Rint*self.Rint)
+  
     def Iy(self):
       '''Return second moment of area about the local y-axis'''
       return 1.0/4.0*math.pi*(self.Rext**4-self.Rint**4)
+  
     def Iz(self):
       '''Return second moment of area about the local z-axis'''
       return self.Iy()
+  
     def J(self):
       '''Return torsional constant of the section'''
       return 2*self.Iy()
+  
     def alphaY(self):
       '''Return distorsion coefficient with respect to local Y axis
          (see Oñate, Cálculo de estructuras por el MEF page 122)
@@ -387,6 +427,7 @@ class CircularSection(SectionProperties):
         K=c/(1+c**2)
         alpha=6/(7+20*K**2)
       return alpha
+  
     def alphaZ(self):
       '''Return distorsion coefficient with respect to local Z axis'''
       return self.alphaY()
@@ -413,27 +454,35 @@ class GenericSection(SectionProperties):
       self.W_z=W_z
       self.alphY=alphY
       self.alphZ=alphZ
+      
     def A(self):
       '''Return cross-sectional area'''
       return self.area
+  
     def Iy(self):
       '''Return second moment of area about the local y-axis'''
       return self.I_y
+  
     def Iz(self):
       '''Return second moment of area about the local z-axis'''
       return self.I_z
+  
     def J(self):
       '''Return torsional constant of the section'''
       return self.Jtors
+  
     def Wyel(self):
       '''Return section modulus with respect to local y-axis'''
       return self.W_y
+  
     def Wzel(self):
       '''Return section modulus with respect to local z-axis'''
       return self.W_z
+  
     def alphaY(self):
       '''Return shear shape factor with respect to local y-axis'''
       return self.alphY #Shear distortion constant. See E. Oñate book page 122.
+  
     def alphaZ(self):
       '''Return shear shape factor with respect to local z-axis'''
       return self.alphZ
@@ -472,15 +521,18 @@ class ISection(SectionProperties):
       self.hW=hgWeb
       self.wBF= wdBotFlange
       self.tBF= thBotFlange
+      
     def hTotal(self):
       '''Return total height (parallel to local y axis) of the section
       '''
       retval=self.tTF+self.hW+self.tBF
       return retval
+  
     def A(self):
       '''Return cross-sectional area of the section'''
       retval=self.wTF*self.tTF+self.tW*self.hW+self.wBF*self.tBF
       return retval
+  
     def hCOG(self):
       '''Return distance from the bottom fiber of the inferior flange to the 
       centre of gravity of the section
@@ -490,11 +542,13 @@ class ISection(SectionProperties):
       ABF=self.wBF*self.tBF
       retval=(ATF*(self.hTotal()-self.tTF/2.0)+AW*(self.tBF+self.hW/2.0)+ABF*self.tBF/2.0)/self.A()
       return retval
+  
     def Iy(self):
       '''Return second moment of area about the local y-axis
       '''
       retval=1/12.0*self.tTF*self.wTF**3+1/12.0*self.hW*self.tW**3+1/12.0*self.tBF*self.wBF**3
       return retval
+  
     def Iz(self):
       '''Return second moment of area about the local z-axis
       '''
@@ -507,31 +561,38 @@ class ISection(SectionProperties):
       retval1=ITF+ATF*(self.hTotal()-self.tTF/2.0-self.hCOG())**2
       retval=retval1+IW+AW*(self.tBF+self.hW/2-self.hCOG())**2+IBF+ABF*(self.tBF/2.0-self.hCOG())**2
       return retval
+  
     def J(self):
       '''Return torsional constant of the section'''
       hPrf=self.hTotal()-self.tTF/2.0-self.tBF/2.0
       retval=(self.wTF*self.tTF**3+self.wBF*self.tBF**3+hPrf*self.tW**3)/3.0
       return retval
+  
     def Wyel(self):
       '''Return section modulus with respect to local y-axis'''
       zmax=max(self.wTF/2.0,self.wBF/2.0)
       return self.Iy()/zmax
+  
     def Wzel(self):
       '''Return section modulus with respect to local z-axis'''
       ymax=max(self.hCOG(),self.hTotal()-self.hCOG())
       return self.Iz()/ymax
+  
     def Wxel(self):
       ''' Return torsional section modulus of the section.
 
       reference: article «I Beam» of Wikipedia.
       '''
       return self.J()/max(max(self.tTF,self.tBF),self.tW)
+  
     def alphaY(self):
       '''Return shear shape factor with respect to local y-axis'''
       return 0.32 #Shear distortion constant. See E. Oñate book page 122.
+  
     def alphaZ(self):
       '''Return shear shape factor with respect to local z-axis'''
       return 0.69
+  
     def getWarpingMoment(self):
       '''Return warping moment of a I-section
 
@@ -543,6 +604,7 @@ class ISection(SectionProperties):
 class PolygonalSection(SectionProperties):
     '''Polygonal section geometric parameters
 
+    :ivar name:  name of the section.
     :ivar plg:  contour of the section.
 
     '''
@@ -551,26 +613,32 @@ class PolygonalSection(SectionProperties):
         super(PolygonalSection,self).__init__(name)
         self.plg= plg
         self.reCenter()
+        
     def reCenter(self):
         '''Put the centroid of the section in the
            origin.'''
         v= geom.Pos2d(0.0,0.0)-self.plg.getCenterOfMass()
         self.plg.move(v)
+        
     def hTotal(self):
         '''Return total height (parallel to local y axis) of the section
         '''
         return self.plg.getBnd().height
+    
     def A(self):
         '''Return cross-sectional area of the section'''
         return self.plg.getArea()
+    
     def Iy(self):
         '''Return second moment of area about the local y-axis
         '''
         return self.plg.getIy()
+    
     def Iz(self):
         '''Return second moment of area about the local z-axis
         '''
         return self.plg.getIx()
+    
     def J(self):
         '''Return an approximation of the torsional constant of the section
 
@@ -578,6 +646,7 @@ class PolygonalSection(SectionProperties):
         '''
         R2= self.A()/math.pi
         return 0.5*math.pi*R2**2
+    
     def alphaY(self):
         '''Return shear shape factor with respect to local y-axis'''
         msg= 'alphaY: shear shape factor not implemented for section: '
@@ -585,6 +654,7 @@ class PolygonalSection(SectionProperties):
         msg+= '. 5/6 returned'
         lmsg.warning(msg)
         return 5.0/6.0
+    
     def alphaZ(self):
         '''Return shear shape factor with respect to local z-axis'''
         msg= 'alphaZ: shear shape factor not implemented for section: '
@@ -670,12 +740,14 @@ class CompoundSection(SectionProperties):
     def __init__(self,name, section_list):
       super(CompoundSection,self).__init__(name)
       self.sectionList= section_list
+      
     def A(self):
       '''cross-sectional area'''
       retval= 0.0
       for s in self.sectionList:
         retval+= s[1].A()
       return retval
+  
     def yCenterOfMass(self):
       '''y coordinate of the center of mass.'''
       retval= 0.0
@@ -686,6 +758,7 @@ class CompoundSection(SectionProperties):
         retval+= s[0].x*area
       retval/= totalArea
       return retval
+  
     def zCenterOfMass(self):
       '''y coordinate of the center of mass.'''
       retval= 0.0
@@ -696,6 +769,7 @@ class CompoundSection(SectionProperties):
         retval+= s[0].y*area
       retval/= totalArea
       return retval
+  
     def Iy(self):
       '''second moment of area about the local y-axis.'''
       zCenter= self.zCenterOfMass()
@@ -703,7 +777,8 @@ class CompoundSection(SectionProperties):
       for s in self.sectionList:
         z= s[0].y
         retval+= s[1].SteinerY(z-zCenter)
-      return retval    
+      return retval
+  
     def Iz(self):
       '''second moment of area about the local z-axis (abstract method)'''
       yCenter= self.yCenterOfMass()
@@ -711,7 +786,8 @@ class CompoundSection(SectionProperties):
       for s in self.sectionList:
         y= s[0].x
         retval+= s[1].SteinerZ(y-yCenter)
-      return retval    
+      return retval
+  
     def J(self):
       '''torsional constant of the section.'''
       center= geom.Pos2d(self.yCenterOfMass(), self.zCenterOfMass())
@@ -719,6 +795,7 @@ class CompoundSection(SectionProperties):
       for s in self.sectionList:
         retval+= s[1].SteinerJ(s[0].distPos2d(center))
       return retval
+  
     def alphaY(self):
       '''return shear shape factor with respect to local y-axis'''
       retval= 0.0
@@ -729,6 +806,7 @@ class CompoundSection(SectionProperties):
         retval+= s[1].alphaY()*area
       retval/= totalArea
       return retval
+  
     def alphaZ(self):
       '''return shear shape factor with respect to local z-axis'''
       retval= 0.0

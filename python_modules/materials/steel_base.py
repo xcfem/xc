@@ -16,9 +16,9 @@ class BasicSteel(typical_materials.BasicElasticMaterial):
     '''Base class for structural steels.
 
       :ivar rho: material density
-      :ivar fy:  Yield stress.
+      :ivar fy:  yield stress.
       :ivar fu: ultimate stress.
-      :ivar gammaM: partial factor for cross-section resistance.
+      :ivar gammaM: partial factor.
     '''
     rho= 7850 # kg/m3
 
