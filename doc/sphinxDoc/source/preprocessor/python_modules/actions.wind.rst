@@ -1,6 +1,16 @@
 Wind
 ====
 
+Basic wind parameters and cylindrical pressure distribution
+------------------------------------------------------------
+
+.. automodule:: actions.wind.base_wind
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+
 
 Wind action according to CTE code
 ---------------------------------
