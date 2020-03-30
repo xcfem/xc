@@ -62,53 +62,45 @@
 #include <utility/matrix/Vector.h>
 
 
-XC::FirstPrincipalCurvature::FirstPrincipalCurvature()
-:FindCurvatures(), curvatures(1)
-{
-}
+//! @brief Constructor.
+XC::FirstPrincipalCurvature::FirstPrincipalCurvature(void)
+  : FindCurvatures(1) {}
 
+//! @brief Compute curvatures.
 int XC::FirstPrincipalCurvature::computeCurvatures(ReliabilityDomain *theReliabilityDomain)
-{
+  {
+    // "Download" limit-state function from reliability domain
+    int lsf= theReliabilityDomain->getTagOfActiveLimitStateFunction();
+    LimitStateFunction *theLimitStateFunction= theReliabilityDomain->getLimitStateFunctionPtr(lsf);
 
-	// "Download" limit-state function from reliability domain
-	int lsf = theReliabilityDomain->getTagOfActiveLimitStateFunction();
-	LimitStateFunction *theLimitStateFunction = 
-		theReliabilityDomain->getLimitStateFunctionPtr(lsf);
+    // Get hold of 'u' and 'alpha' at the two last steps
+    const Vector last_u= theLimitStateFunction->designPoint_u_inStdNormalSpace;
+    const Vector secondLast_u= theLimitStateFunction->secondLast_u;
+    const Vector lastAlpha= theLimitStateFunction->normalizedNegativeGradientVectorAlpha;
+    const Vector secondLastAlpha= theLimitStateFunction->secondLastAlpha;
 
-	// Get hold of 'u' and 'alpha' at the two last steps
-	Vector last_u = theLimitStateFunction->designPoint_u_inStdNormalSpace;
-	Vector secondLast_u = theLimitStateFunction->secondLast_u;
-	Vector lastAlpha = theLimitStateFunction->normalizedNegativeGradientVectorAlpha;
-	Vector secondLastAlpha = theLimitStateFunction->secondLastAlpha;
+    // Compute curvature according to Der Kiureghian & De Stefano (1992), Eq.26:
 
-	// Compute curvature according to Der Kiureghian & De Stefano (1992), Eq.26:
+    // Initial computations
+    const Vector uLastMinus_u= last_u - secondLast_u;
+    const double signumProduct= secondLastAlpha ^ uLastMinus_u;
+    const double alphaProduct= secondLastAlpha ^ lastAlpha;
+    double sumSquared= 0.0;
 
-	// Initial computations
-	Vector uLastMinus_u = last_u - secondLast_u;
-	double signumProduct = secondLastAlpha ^ uLastMinus_u;
-	double alphaProduct = secondLastAlpha ^ lastAlpha;
-	double sumSquared = 0.0;
+    // Compute norm of the difference vector
+    for(int i=0; i<last_u.Size(); i++ )
+      { sumSquared += uLastMinus_u(i)*uLastMinus_u(i); }
 
-	// Compute norm of the difference vector
-	for ( int i=0; i<last_u.Size(); i++ ) {
-		sumSquared += uLastMinus_u(i)*uLastMinus_u(i);
-	}
+    const double norm_uLastMinus_u= sqrt(sumSquared);
 
-	double norm_uLastMinus_u = sqrt(sumSquared);
+    // Check sign and compute curvature
+    if (fabs(signumProduct)==(signumProduct))
+      { curvatures(0)= acos(alphaProduct) / norm_uLastMinus_u; }
+    else
+      { curvatures(0)= -acos(alphaProduct) / norm_uLastMinus_u; }
 
-	// Check sign and compute curvature
-	if (fabs(signumProduct)==(signumProduct)) {
-		curvatures(0) = acos(alphaProduct) / norm_uLastMinus_u;
-	}
-	else {
-		curvatures(0) = -acos(alphaProduct) / norm_uLastMinus_u;
-	}
+    return 0;
+  }
 
-	return 0;
-}
-
-
-XC::Vector XC::FirstPrincipalCurvature::getCurvatures()
-  { return curvatures; }
 
 

@@ -57,11 +57,11 @@
 // Written by Terje Haukaas (haukaas@ce.berkeley.edu)
 //
 
-#include <reliability/analysis/curvature/FindCurvatures.h>
+#include "FindCurvatures.h"
 
-XC::FindCurvatures::FindCurvatures()
-{
-}
+XC::FindCurvatures::FindCurvatures(const size_t &sz)
+  : curvatures(sz) {}
 
-
-
+//! @brief Return curvature values.
+const XC::Vector &XC::FindCurvatures::getCurvatures(void) const
+  { return curvatures; }

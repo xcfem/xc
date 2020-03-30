@@ -66,17 +66,14 @@
 #include <reliability/domain/components/ReliabilityDomain.h>
 
 namespace XC {
-//! @ingroup ReliabilityAnalysis
-//!
-//! @brief ??
+//! @ingroup RACurvatures
+//
+//! @brief Find the first principal curvature of the limit-state surface.
 class FirstPrincipalCurvature: public FindCurvatures
   {
-  private:	
-    Vector curvatures;
   public:
-    FirstPrincipalCurvature();
+    FirstPrincipalCurvature(void);
     int	computeCurvatures(ReliabilityDomain *theReliabilityDomain);
-    Vector getCurvatures();
   };
 } // end of XC namespace
 

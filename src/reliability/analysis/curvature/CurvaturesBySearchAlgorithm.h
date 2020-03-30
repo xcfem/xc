@@ -67,20 +67,18 @@
 #include <reliability/domain/components/ReliabilityDomain.h>
 
 namespace XC {
-//! @ingroup ReliabilityAnalysis
-//!
-//! @brief ??
+//! @ingroup RACurvatures
+//
+//! @brief Finds the curvatures of the limit-state surface
+//! using a search algorithm.
 class CurvaturesBySearchAlgorithm: public FindCurvatures
   {
   private:	
-    Vector curvatures;
-    int numberOfCurvatures;
     FindDesignPointAlgorithm *theFindDesignPointAlgorithm;
   public:
     CurvaturesBySearchAlgorithm(int numberOfCurvatures, FindDesignPointAlgorithm *theFindDesignPointAlgorithm);
 
     int computeCurvatures(ReliabilityDomain *theReliabilityDomain);
-    Vector getCurvatures(void);
   };
 } // end of XC namespace
 

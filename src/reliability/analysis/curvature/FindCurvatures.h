@@ -66,14 +66,21 @@
 namespace XC {
 
 //! @ingroup ReliabilityAnalysis
-// 
-//! @brief ??
+//!
+//! @defgroup RACurvatures Find curvatures in reliability analysis.
+//
+//! @ingroup RACurvatures
+//
+//! @brief Base class for objects that find the curvatures
+//! of the limit-state surface.
 class FindCurvatures
   {
+  protected:	
+    Vector curvatures;
   public:
-    FindCurvatures(void);
+    FindCurvatures(const size_t &sz= 0);
     virtual int	computeCurvatures(ReliabilityDomain *theReliabilityDomain) =0;
-    virtual Vector getCurvatures(void) =0;
+    virtual const Vector &getCurvatures(void) const;
   };
 } // end of XC namespace
 
