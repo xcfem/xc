@@ -54,7 +54,7 @@ class windParams(object):
                          
 
 class cylindrWind(object):
-    '''Distribution of wind pressures in the cylindrical body and roof of a tank (according to CIRSOC 102).
+    '''Distribution of wind pressures in the cylindrical body and roof of a tank (according to CIRSOC 102). Reference article: 'Efectos de la modelación de presiones por viento en altura sobre la estabilidad de tanques de almacenamiento de fluidos' , by Carlos A. Burgos, Rossana C. Jacab y Luis A. Godoy.
 
     :ivar diam: diameter of the cylindrical tank
     :ivar height: height of the cylindrical tank
