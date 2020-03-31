@@ -138,10 +138,21 @@
 #include "material/section/fiber_section/fiber/UniaxialFiber2d.h"
 #include "material/section/fiber_section/fiber/UniaxialFiber3d.h"
 
+// damage models
+#include "material/damage/DamageModel.h"
+#include "material/damage/HystereticEnergy.h"
+#include "material/damage/Mehanny.h"
+#include "material/damage/ParkAng.h"
+#include "material/damage/DamageResponse.h"
+#include "material/damage/Kratzig.h"
+#include "material/damage/NormalizedPeak.h"
+
 // friction models
 #include "domain/mesh/element/special/frictionBearing/frictionModel/CoulombFriction.h"
 #include "domain/mesh/element/special/frictionBearing/frictionModel/VDependentFriction.h"
 #include "domain/mesh/element/special/frictionBearing/frictionModel/VPDependentFriction.h"
+
+
 
 // element header files
 #include "domain/mesh/element/Element.h"

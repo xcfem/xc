@@ -19,22 +19,16 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//export_python_interface.cxx
+//export_material_damage.cc
 
 #include "python_interface.h"
 
-void export_material_base(void)
+void export_material_damage(void)
   {
     using namespace boost::python;
     docstring_options doc_options;
 
-    class_<XC::Material, bases<XC::MovableObject,XC::TaggedObject>, boost::noncopyable >("Material", no_init)
-        .def("commitState", &XC::Material::commitState,"Commits material's state.")
-        .def("revertToLastCommit", &XC::Material::revertToLastCommit,"Returns the material to the last committed state.")
-        .def("revertToStart", &XC::Material::revertToStart,"Returns the material to its initial state.")
-        .def("getName",&XC::Material::getName,"Returns the name of the material.")
-      .def("getGeneralizedStress", make_function(&XC::Material::getGeneralizedStress, return_internal_reference<>() ),"Return the stress in this material point.")
-      .def("getGeneralizedStrain", make_function(&XC::Material::getGeneralizedStrain, return_internal_reference<>() ),"Return the strain in this material point.")
-       ;
+#include "python_interface.tcc"
+
   }
 

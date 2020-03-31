@@ -31,6 +31,7 @@ void export_material_uniaxial(void);
 void export_material_nD(void);
 void export_material_section(void);
 void export_material_fiber_section(void);
+void export_material_damage(void);
 void export_domain(void);
 void export_domain_mesh(void);
 void export_preprocessor_prep_handlers(void);
@@ -63,18 +64,19 @@ BOOST_PYTHON_MODULE(xc)
        ;
     
 
-    export_material_base(); //Materials exposition.
-    export_material_uniaxial(); //Materials exposition.
-    export_material_nD(); //Materials exposition.
-    export_material_section(); //Materials exposition.
-    export_material_fiber_section(); //Materials exposition.
-    export_domain_mesh(); //Mesh exposition.
-    export_domain(); //Domain exposition.
-    export_preprocessor_prep_handlers();//Preprocessor exposition.
+    export_material_base(); // Materials exposition.
+    export_material_uniaxial(); // Materials exposition.
+    export_material_nD(); // Materials exposition.
+    export_material_section(); // Materials exposition.
+    export_material_fiber_section(); // Materials exposition.
+    export_material_damage(); // Damage models  exposition.
+    export_domain_mesh(); // Mesh exposition.
+    export_domain(); // Domain exposition.
+    export_preprocessor_prep_handlers();// Preprocessor exposition.
     export_preprocessor_build_model();
     export_preprocessor_sets();
     export_preprocessor_main();
-    export_solution(); //Solution routines exposition.
+    export_solution(); // Solution routines exposition.
 
 #include "post_process/python_interface.tcc"
 
