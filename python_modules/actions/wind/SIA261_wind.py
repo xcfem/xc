@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
-# Wind according to SIA 261
+
+''' Wind according to SIA 261'''
 
 import math
 

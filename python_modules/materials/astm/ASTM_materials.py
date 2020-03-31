@@ -2,7 +2,10 @@
 from __future__ import division
 from __future__ import print_function
 
-''' Structural steel as specified in ASTM standard.'''
+''' Structural steel as specified in ASTM standard.
+
+Predefined ASTM steel types: A36, A529, A572, A53, A992, A500, A307
+'''
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, LCPT, AO_O"
@@ -16,7 +19,12 @@ from misc_utils import log_messages as lmsg
 from materials import buckling_base
 
 class ASTMSteel(steel_base.BasicSteel):
-    '''ASTM structural steel.'''
+    '''ASTM structural steel.
+
+    :ivar fy: yield stress (defaults to 250e6 Pa)
+    :ivar fu: ultimate tensile strength (defaults to 400e6 Pa)
+    :ivar gammaM: partial factor (defaults to 1.0)
+    '''
     def __init__(self, fy= 250e6, fu= 400e6, gammaM= 1.0):
         super(ASTMSteel,self).__init__(200e9,0.3,fy,fu,gammaM)
 
@@ -41,7 +49,7 @@ from materials.sections.structural_shapes import aisc_metric_shapes
 class WShape(ASTMShape,aisc_metric_shapes.WShape):
     """W shape with ASTM verification routines.
 
-    :ivar steel: steel material.
+    :ivar steel: steel material (i.e. A36).
     :ivar name: shape name (i.e. W40X431)
 
     """
@@ -54,7 +62,7 @@ class WShape(ASTMShape,aisc_metric_shapes.WShape):
 class CShape(ASTMShape,aisc_metric_shapes.CShape):
     """C shape with ASTM 3 verification routines.
 
-    :ivar steel: steel material.
+    :ivar steel: steel material (i.e. A36).
     :ivar name: shape name  (i.e. C380X74).
     """
     def __init__(self,steel,name):
@@ -66,7 +74,7 @@ class CShape(ASTMShape,aisc_metric_shapes.CShape):
 class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
     """HSS shape with ASTM verification routines.
 
-    :ivar steel: steel material.
+    :ivar steel: steel material (i.e. A36).
     :ivar name: shape name (i.e. HSS2X2X_250).
     """
     def __init__(self,steel,name):
