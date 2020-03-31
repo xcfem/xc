@@ -64,6 +64,9 @@ namespace XC {
 class ID;
 class DamageModel;
 
+//! @ingroup DamageModelGrp
+//
+//! @brief Response of a damage model.
 class DamageResponse: public Response
   {
   private:

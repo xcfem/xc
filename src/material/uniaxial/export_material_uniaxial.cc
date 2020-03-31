@@ -19,7 +19,7 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-//utils_python_interface.cxx
+//export_material_uniaxial.cc
 
 #include "python_interface.h"
 

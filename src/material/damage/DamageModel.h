@@ -83,20 +83,40 @@ enum DamageType
     PlasticEnergy
   };
 
-
-class DamageModel :  public TaggedObject, public MovableObject
+//! @ingroup Mat
+//!
+//! @defgroup DamageModelGrp Damage models.
+//
+//! @ingroup DamageModelGrp
+//
+//! @brief Base class for damage models. A damage model is an
+//! operator that computes the Damage Index by a applying a
+//! specific damage rule.
+//!
+//! The damage model incorporates existing damage formulations for
+//! representing deteriorating parameters in component force-deformation
+//! relationships and for component performance  assessment. 
+//! The damage for individual elements is calculated based on element data
+//! such as element deformations,  forces,  or  dissipated  energy.  These
+//! engineering  parameters  must  be  extracted  from  the  solution  and
+//! processed  for  calculating  a  Damage  Index.  A  Damage Model is
+//! defined as an operator that calculates the Damage Index by applying
+//! a specific damage rule  (e.g.  Park-Ang  damage  model).
+//! See Arash Altoontash dissertation "Performance Assessment Of Reinforced
+//! Concrete Beam-Column Joints". August 2004.
+class DamageModel:  public TaggedObject, public MovableObject
   {
   public:
     DamageModel(int tag, int classTag);    
 
     virtual int setTrial(const Vector &trialVector) = 0;
-    virtual double getDamage (void) = 0;
-    virtual double getPosDamage (void) = 0;
-    virtual double getNegDamage (void) = 0;
+    virtual double getDamage(void) = 0;
+    virtual double getPosDamage(void) = 0;
+    virtual double getNegDamage(void) = 0;
     
-    virtual int commitState (void) = 0;
-    virtual int revertToLastCommit (void) = 0;    
-    virtual int revertToStart (void) = 0;        
+    virtual int commitState(void) = 0;
+    virtual int revertToLastCommit(void) = 0;    
+    virtual int revertToStart(void) = 0;        
     
     virtual DamageModel *getCopy(void) const= 0;
     

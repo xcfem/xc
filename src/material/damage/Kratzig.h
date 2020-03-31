@@ -70,7 +70,18 @@
 namespace XC {
 class DamageResponse;
 
-
+//! @ingroup DamageModelGrp
+//
+//! @brief Kratzig damage model.
+//!
+//! The Kratzig damage index is based on dissipated energy contributions,
+//! employing themaximum energy at the failure point under monotonic loading
+//! as the calibrating parameter (Kratzig 1989). The ultimate energy capacities
+//! for positive and negative monotonic loading (\f$E_{U}^{+}\f$ and \f$E_{U}^{-}\f$)
+//! are used as calibration parameters. The energy capacities of a member can
+//! be calculated analytically by using a fiber cross section model and
+//! considering criteria to define critical limit states, such as rebar r
+//! upture or concrete crushing. 
 class Kratzig: public DamageModel
   {
   public:
