@@ -69,7 +69,20 @@ namespace XC {
 class DamageResponse;
 class Element;
 
-
+//! @ingroup DamageModelGrp
+//
+//! @brief Normalized peak is a damage model based on the maximum (envelope) value of aresponse parameter.
+//!
+//! Normalized peak is a damage model based on the maximum (envelope) value of
+//! aresponse parameter, which makes it a non-cumulative damage model. The Norma
+//! lizedPeak damage model can be applied to a variety of response parameters, 
+//! including force, deformation, or plastic deformation. It determines the
+//! positive and negative peak values of the response envelope and calculates
+//! the damage index by normalizing the peak values with respect to ultimate
+//! response threshold. The damage accumulates monotonically, and the failure
+//! is defined when the damage index reaches 1.0. The maximum positive and
+//! minimum negative ultimate response thresholds (capacities) and the type
+//! response parameter are used to construct the Normalized Peak damage model. 
 class NormalizedPeak: public DamageModel
   {
   private:

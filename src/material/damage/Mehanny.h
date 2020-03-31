@@ -67,6 +67,19 @@ namespace XC {
 class DamageResponse;
 
 
+//! @ingroup DamageModelGrp
+//
+//! @brief Mehanny - Deierlein damage model.
+//!
+//! The Mehanny - Deierlein damage model is based on cumulative
+//! member ductility in the form of total plastic deformations.
+//! This damage model is inspired by theenergy based damage model
+//! developed by Kratzig (1989) model and the Otes (1985) concept for
+//! capturing the cyclic damage accumulation. The maximum plastic
+//! deformation capacity in positive and negative loading (\f$\theta^+_{pu}\f$
+//! and \f$\theta^-_{pu}\f$) and three positive parameters
+//! (\f$\alpha\f$, \f$\beta\f$, and \f$\gamma\f$) are used as the
+//! calibrating parameters.
 class Mehanny: public DamageModel
  {
  private:

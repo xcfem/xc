@@ -58,7 +58,7 @@
 // Revision: AA
 //
 // Description: This file contains the class definition for 
-// Cimbined damage model. It is a subclass of DamageModel
+// hysteretic energy damage model. It is a subclass of DamageModel
 //
 
 #include <material/damage/DamageModel.h>
@@ -66,9 +66,20 @@
 namespace XC {
 class DamageResponse;
 
-
+//! @ingroup DamageModelGrp
+//
+//! @brief Hysteretic energy damage model.
+//!
+//! The hysteretic energy damage model uses a cyclic deterioration
+//! formulation to calculate the damage index. The underlying
+//! deterioration formulation was originally proposed by Rahnama and
+//! Krawinkler (1993) as an index to reduce the material properties
+//! (e.g. strength or stiffness) at the end of a loading cycle. The
+//! deterioration formulation used herein is dependent on the dissipated
+//! energy of the last excursion and the total cumulative dissipated
+//! energy.
 class HystereticEnergy: public DamageModel
-{
+  {
   public:
     HystereticEnergy(int tag, double Etot , double Cpow);
     HystereticEnergy(void);  

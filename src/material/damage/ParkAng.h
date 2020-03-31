@@ -67,7 +67,15 @@
 namespace XC {
 class DamageResponse;
 
-
+//! @ingroup DamageModelGrp
+//
+//! @brief Park-Ang damage model.
+//!
+//! Park-Ang is a combined damage model, which was originally calculated
+//! for RC components (Park and Ang, 1985). The Park-Ang model calculates
+//! the damage index is a linear combination of the damage caused by
+//! excessive deformation, and repeated cyclic loading, captured in the
+//! form of dissipated energy.
 class ParkAng: public DamageModel
   {
   private:
