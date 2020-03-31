@@ -316,6 +316,51 @@ def get_nodes_wire(setBusq,lstPtsWire,tol=0.01):
     retval= list(set(retval))       #clear duplicated nodes
     return retval
 
+
+def get_set_nodes_plane_XY(setName,setBusq,zCoord,tol=1e-4):
+    '''Return a set of nodes close to a plane parallel to XY
+    within a tolerance.
+
+    :param setName: name of the set to be created 
+    :param setBusq: set from which to extract the nodes
+    :param zCoord: Z-coordinate of the plane parallel to XY
+    :param tol: tolerance (defaults to 1e-4)
+    '''
+    prep=setBusq.getPreprocessor
+    sNodBusq=setBusq.nodes
+    nodInPlane=[n for n in sNodBusq if abs(n.getCurrentPos3d(0).z-zCoord)<=tol]
+    return lstNod_to_set(prep,nodInPlane,setName)
+    
+    
+def get_set_nodes_plane_XZ(setName,setBusq,yCoord,tol=1e-4):
+    '''Return a set of nodes close to a plane parallel to XZ
+    within a tolerance.
+
+    :param setName: name of the set to be created 
+    :param setBusq: set from which to extract the nodes
+    :param yCoord: Y-coordinate of the plane parallel to XZ
+    :param tol: tolerance (defaults to 1e-4)
+    '''
+    prep=setBusq.getPreprocessor
+    sNodBusq=setBusq.nodes
+    nodInPlane=[n for n in sNodBusq if abs(n.getCurrentPos3d(0).y-yCoord)<=tol]
+    return lstNod_to_set(prep,nodInPlane,setName)
+    
+    
+def get_set_nodes_plane_YZ(setName,setBusq,xCoord,tol=1e-4):
+    '''Return a set of nodes close to a plane parallel to YZ
+    within a tolerance.
+
+    :param setName: name of the set to be created 
+    :param setBusq: set from which to extract the nodes
+    :param xCoord: X-coordinate of the plane parallel to YZ
+    :param tol: tolerance (defaults to 1e-4)
+    '''
+    prep=setBusq.getPreprocessor
+    sNodBusq=setBusq.nodes
+    nodInPlane=[n for n in sNodBusq if abs(n.getCurrentPos3d(0).x-xCoord)<=tol]
+    return lstNod_to_set(prep,nodInPlane,setName)
+
 def get_lstNod_from_lst3DPos(preprocessor,lst3DPos):
     '''return the set of the nearest nodes to the points passed as a list of
     points (expressed as geom.Pos3d(x,y,z))
