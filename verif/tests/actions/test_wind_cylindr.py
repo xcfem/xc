@@ -30,17 +30,18 @@ zg=275       #terrain exposure constant (exposure C)
 #Tanks data
 diam=3.18      # diameter
 height=20.6    # height of the cylindrical tank
-#Tank1 data
-windComp2=[1,-1] # components [x,y] of a vector in wind direction 
-zGround2=2      # ground level
-xCent2=0        # x-coordinate of the cylinder axis
-yCent2=0        # y-coordinate of the cylinder axis
 
 #Tank1 data
 windComp1=[1,0] # components [x,y] of a vector in wind direction 
 zGround1=0      # ground level
 xCent1=0        # x-coordinate of the cylinder axis
 yCent1=0        # y-coordinate of the cylinder axis
+
+#Tank2 data
+windComp2=[1,-1] # components [x,y] of a vector in wind direction 
+zGround2=2      # ground level
+xCent2=0        # x-coordinate of the cylinder axis
+yCent2=0        # y-coordinate of the cylinder axis
 
 # Comparison values
 # Velocity wind pressures at z=2 and z=10

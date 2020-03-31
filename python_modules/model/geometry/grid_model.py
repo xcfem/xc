@@ -310,6 +310,33 @@ class GridModel(object):
             pnt=points.newPntIDPos3d(self.pointCounter+inicTag,geom.Pos3d(x,y,z))
             self.indices.setPnt(i,j,k,pnt.tag)
 
+    def generateCylZPoints(self,xCent,yCent):
+        '''Point generation in the following cylindrical coordinate system:
+
+        - Origin: point of coordinates (xCent,yCent,0)
+        - Longitudinal axis: Z
+        - Azimuth expressed in degrees counterclockwise from the X-axis direction
+        
+        Coordinates are defined:
+        
+        - x: radial coordinate (radius)
+        - y: angular coordinate (degrees counterclockwise from X-axis)
+        - z: height coordinate (Z axis)
+        '''
+        points= self.prep.getMultiBlockTopology.getPoints
+        inicTag=points.defaultTag
+        lstPt=[(i+1,j+1,k+1,
+                xCent+self.gridCoo[0][i]*math.cos(math.radians(self.gridCoo[1][j])),
+                yCent+self.gridCoo[0][i]*math.sin(math.radians(self.gridCoo[1][j])),
+                self.gridCoo[2][k]) for i in range(len(self.gridCoo[0]))
+               for j in range(len(self.gridCoo[1]))
+               for k in range(len(self.gridCoo[2])) ]
+        for p in lstPt:
+            (i,j,k,x,y,z)=p
+            self.pointCounter+=1
+            pnt=points.newPntIDPos3d(self.pointCounter+inicTag,geom.Pos3d(x,y,z))
+            self.indices.setPnt(i,j,k,pnt.tag)
+
     def movePointsRange(self,ijkRange,vDisp):
         '''Move points  in a 3D grid-region limited by 
         ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
@@ -423,10 +450,10 @@ class GridModel(object):
             p.getPos.z= zOrig+scale*(zpt-zOrig)
         sPtZscale.clear()
 
-    def movePointsRangeToZcylinder(self,ijkRange,xCent,yCent,R):
+    def movePointsRangeToZcylinder(self,ijkRange,xCent,yCent,R,angInit,angEnd):
         '''Moves the points in the range to make them belong to 
         a cylinder with radius R and axis parallel to global Z passing 
-        through the point (xCent,yCent,0)
+        through the point (xCent,yCent,0).
         '''
         vCent=geom.Vector2d(xCent,yCent)
         setPnt=self.getSetPntRange(ijkRange,'setPnt')
