@@ -38,8 +38,8 @@ class Vector;
 
 //! @ingroup RayleighIntegrator
 //
-//! @brief AlphaOSBase is an algorithmic class for performing a transient analysis
-//! using the Alpha-Operator-Splitting integration scheme.
+//! @brief AlphaOSBase is an algorithmic class for performing a transient
+//! analysis using the Alpha-Operator-Splitting integration scheme.
 //! The parameter alpha corresponds to 1+alpha_{HHT}.
 class AlphaOSBase: public HHTBase
   {

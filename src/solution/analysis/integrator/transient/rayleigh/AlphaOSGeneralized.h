@@ -72,9 +72,9 @@ class FE_Element;
 
 //! @ingroup RayleighIntegrator
 //
-//! @brief AlphaOSGeneralized is an algorithmic class for performing a transient analysis
-//! using the generalized Alpha-Operator-Splitting integration scheme.
-//! The parameters alpha correspond to 1+alpha_{HHT}.
+//! @brief AlphaOSGeneralized is an algorithmic class for performing a
+//! transient analysis using the generalized Alpha-Operator-Splitting
+//! integration scheme. The parameters alpha correspond to \f$1+\alpha_{HHT}\f$.
 class AlphaOSGeneralized: public AlphaOSBase
   {
   private:

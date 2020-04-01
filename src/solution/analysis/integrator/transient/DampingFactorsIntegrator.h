@@ -37,7 +37,8 @@ namespace XC {
 
 //! @ingroup TransientIntegrator
 //
-//! @brief ??.
+//! @brief Base class for the integrators that make use of
+//! Rayleigh damping factors.
 class DampingFactorsIntegrator: public TransientIntegrator
   {
   protected:
