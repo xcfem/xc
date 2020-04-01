@@ -21,7 +21,8 @@ class BasicSteel(typical_materials.BasicElasticMaterial):
       :ivar gammaM: partial factor.
     '''
     rho= 7850 # kg/m3
-
+    alpha=1.2e-5 #coefficient of thermal expansion (1/ºC)
+    
     def __init__(self, E, nu, fy, fu, gammaM):
         super(BasicSteel,self).__init__(E,nu)
         self.fy= fy
