@@ -52,12 +52,15 @@
 #ifndef _DataOutputFileHandler
 #define _DataOutputFileHandler
 
-#include <utility/handler/DataOutputHandler.h>
-#include <utility/handler/FileStream.h>
+#include "DataOutputHandler.h"
+#include "FileStream.h"
 
 enum echoMode  {NONE, DATA_FILE, XML_FILE};
 
 namespace XC {
+//! @ingroup DOHandlersGrp
+//
+//! @brief Manages output to a file.
 class DataOutputFileHandler: public DataOutputHandler
   {
   private:

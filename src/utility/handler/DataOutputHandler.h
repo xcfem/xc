@@ -52,13 +52,20 @@
 #ifndef _DataOutputHandler
 #define _DataOutputHandler
 
-#include <utility/actor/actor/MovableObject.h>
+#include "utility/actor/actor/MovableObject.h"
 #include "xc_utils/src/kernel/CommandEntity.h"
 #include <map>
 
 namespace XC {
 class Vector;
 
+//! @ingroup Utils
+//!
+//! @defgroup DOHandlersGrp Data output handlers.
+//
+//! @ingroup DOHandlersGrp
+//
+//! @brief Base class for data output handlers.
 class DataOutputHandler: public MovableObject, public CommandEntity
   {
   public:
