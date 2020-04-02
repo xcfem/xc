@@ -80,8 +80,10 @@ int XC::BFGS::solveCurrentStep(void)
  
     if((theModel == 0) || (theIntegrator == 0) || (theSysOfEqn == 0) || (theTest == 0))
       {
-	std::cerr << "WARNING XC::BFGS::solveCurrentStep() - setLinks() has";
-	std::cerr << "no se ha asignado modelo, integrator o system of equations.\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; WARNING - setLinks() "
+		  << " analysis model, integrator or sytem of equations "
+	          << " not assigned yet." << std::endl;
 	return -5;
       }	
 
@@ -89,8 +91,8 @@ int XC::BFGS::solveCurrentStep(void)
     theTest->set_owner(getAnalysisAggregation());
     if(theTest->start() < 0)
       {
-        std::cerr << "XC::BFGS::solveCurrentStep() -"
-                  << "the ConvergenceTest object failed in start()\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; the ConvergenceTest object failed in start()\n";
         return -3;
       }
 
@@ -103,35 +105,36 @@ int XC::BFGS::solveCurrentStep(void)
     int count = 0;
     do
       {
-        // std::cerr << "      BFGS -- Forming New_ Tangent" << std::endl;
+        // std::cerr << getClassName() << "::" << __FUNCTION__
+	//           << "      BFGS -- Forming New_ Tangent" << std::endl;
         //form the initial tangent
         if(theIntegrator->formTangent(tangent) < 0)
           {
-            std::cerr << "WARNING BFGS::solveCurrentStep() -";
-            std::cerr << "the Integrator failed in formTangent()\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING the Integrator failed in formTangent()\n";
             return -1; 
           }
 
         //form the initial residual 
         if(theIntegrator->formUnbalance() < 0)
           {
-            std::cerr << "WARNING BFGS::solveCurrentStep() -";
-            std::cerr << "the Integrator failed in formUnbalance()\n";	
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING the Integrator failed in formUnbalance()\n";	
           }	    
 
         //solve
         if(theSysOfEqn->solve() < 0)
           {
-	    std::cerr << "WARNING BFGS::solveCurrentStep() -";
-	    std::cerr << "the LinearSysOfEqn failed in solve()\n";	
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING the LinearSysOfEqn failed in solve()\n";	
 	    return -3;
 	  }	    
 
         //update
         if(theIntegrator->update(theSysOfEqn->getX() ) < 0)
           {
-	    std::cerr << "WARNING BFGS::solveCurrentStep() -";
-	    std::cerr << "the Integrator failed in update()\n";	
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING the Integrator failed in update()\n";	
 	    return -4;
           }	        
 
@@ -153,8 +156,8 @@ int XC::BFGS::solveCurrentStep(void)
         //form the residual again
         if(theIntegrator->formUnbalance() < 0)
           {
-            std::cerr << "WARNING XC::BFGS::solveCurrentStep() -";
-            std::cerr << "the XC::Integrator failed in formUnbalance()\n";	
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING the integrator failed in formUnbalance()\n";	
           }	    
 
         if(residNew.isEmpty()) 
@@ -180,8 +183,8 @@ int XC::BFGS::solveCurrentStep(void)
             //solve
             if(theSysOfEqn->solve() < 0)
               {
-	        std::cerr << "WARNING BFGS::solveCurrentStep() -";
-	        std::cerr << "the LinearSysOfEqn failed in solve()\n";	
+	        std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; WARNING the LinearSysOfEqn failed in solve()\n";	
 	        return -3;
               }	    
 
@@ -196,12 +199,13 @@ int XC::BFGS::solveCurrentStep(void)
 
             if(theIntegrator->update(du) < 0)
               {
-	        std::cerr << "WARNING XC::BFGS::solveCurrentStep() -";
-	        std::cerr << "the XC::Integrator failed in update()\n";	
+	        std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; WARNING the integrator failed in update()\n";	
 	        return -4;
               }	        
 
-	    /* std::cerr << "        BFGS Iteration " << nBFGS 
+	    /* std::cerr << getClassName() << "::" << __FUNCTION__ 
+                         << "        BFGS Iteration " << nBFGS 
                 << " Residual Norm = " 
                 << sqrt( (*residNew) ^ (*residNew) ) << std::endl;
 	    */
@@ -218,8 +222,8 @@ int XC::BFGS::solveCurrentStep(void)
             //form the residual again
             if(theIntegrator->formUnbalance() < 0)
               {
-                std::cerr << "WARNING BFGS::solveCurrentStep() -";
-                std::cerr << "the XC::Integrator failed in formUnbalance()\n";	
+                std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; WARNING the integrator failed in formUnbalance()\n";	
               }	    
             result = localTest->test();
           
@@ -233,9 +237,9 @@ int XC::BFGS::solveCurrentStep(void)
 
     if(result == -2)
       {
-        std::cerr << "XC::BFGS::solveCurrentStep() -"
-                  << "the XC::ConvergenceTest object failed in test()\n"
-                  << "convergence test message: "
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; the ConvergenceTest object failed in test()\n"
+                  << "Convergence test message: "
 		  << theTest->getStatusMsg(1) << std::endl;	  
         return -3;
       }
@@ -259,8 +263,8 @@ void  XC::BFGS::BFGSUpdate(IncrementalIntegrator *theIntegrator, LinearSOE *theS
 
 
     if(theSOE->solve() < 0)
-        std::cerr << "WARNING XC::BFGS::solveCurrentStep() -"
-                  << "the LinearSysOfEqn failed in solve()\n";	
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING the LinearSysOfEqn failed in solve()\n";	
   
     z[nBFGS]= theSOE->getX(); 
     //  z[nBFGS] *= (-1.0);
