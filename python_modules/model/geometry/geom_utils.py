@@ -15,94 +15,94 @@ import geom
 from model.geometry import grid_model as gm
 
 class LineWrapper(object):
-  def __init__(self,line):
-    self.line= line
+    def __init__(self,line):
+        self.line= line
 
-  def getOrderedNodes(self):
-    '''Returns line's interior nodes.'''
-    nNodes= self.line.getNumNodes
-    retval= []
-    for i in range(0,nNodes):
-      retval.append(self.line.getNodeI(i+1))
-    return retval
+    def getOrderedNodes(self):
+        '''Return line interior nodes.'''
+        nNodes= self.line.getNumNodes
+        retval= []
+        for i in range(0,nNodes):
+            retval.append(self.line.getNodeI(i+1))
+        return retval
 
-  def getElements(self):
-    return self.line.elements
+    def getElements(self):
+        return self.line.elements
 
-  def getNodeAbcissae(self):
-    '''Returns node's abcissae; first node x= 0.0 last node x= lengthOfLine.'''
-    retval= list()
-    nodes= self.getOrderedNodes()
-    for n in nodes:
-      retval.append(self.line.getLambda(n.getInitialPos3d))
-    return retval
+    def getNodeAbcissae(self):
+        '''Return node abcissae; first node x= 0.0 last node x= lengthOfLine.'''
+        retval= list()
+        nodes= self.getOrderedNodes()
+        for n in nodes:
+            retval.append(self.line.getLambda(n.getInitialPos3d))
+        return retval
 
-  def getNodeAttrOrdinates(self,attributeName):
-    '''Return a list with the values of attribute at each node.'''
-    retval= list()
-    nodes= self.getOrderedNodes()
-    for n in nodes:
-      retval.append(n.getProp(attributeName))
-    return retval
+    def getNodeAttrOrdinates(self,attributeName):
+        '''Return a list with the values of attribute at each node.'''
+        retval= list()
+        nodes= self.getOrderedNodes()
+        for n in nodes:
+            retval.append(n.getProp(attributeName))
+        return retval
 
-  def getElementFunctionOrdinates(self,factor0, funcName0, factor1, funcName1):
-    '''Return a list with the values of attribute extrapolated at each node.'''
-    retval= list()
-    indices= dict()
-    nodes= self.getOrderedNodes()
-    count= 0
-    for n in nodes:
-      retval.append(0.0) #Initialize values
-      indices[n.tag]= count
-      count+= 1
-    for e in self.elements:
-      f0= factor0*getattr(e, funcName0)
-      f1= factor1*getattr(e, funcName1)
-      i0= indices[e.getNodes[0].tag]
-      retval[i0]+= 0.5*f0
-      i1= indices[e.getNodes[1].tag]
-      retval[i1]+= 0.5*f1
-    retval[0]*=2 #Extreme nodes.
-    retval[-1]*=2
-    return retval
+    def getElementFunctionOrdinates(self,factor0, funcName0, factor1, funcName1):
+        '''Return a list with the values of attribute extrapolated at each node.'''
+        retval= list()
+        indices= dict()
+        nodes= self.getOrderedNodes()
+        count= 0
+        for n in nodes:
+            retval.append(0.0) #Initialize values
+            indices[n.tag]= count
+            count+= 1
+        for e in self.elements:
+            f0= factor0*getattr(e, funcName0)
+            f1= factor1*getattr(e, funcName1)
+            i0= indices[e.getNodes[0].tag]
+            retval[i0]+= 0.5*f0
+            i1= indices[e.getNodes[1].tag]
+            retval[i1]+= 0.5*f1
+        retval[0]*=2 #Extreme nodes.
+        retval[-1]*=2
+        return retval
 
-  def getInteriorNodes(self):
-    '''Returns line's interior nodes.'''
-    nNodes= self.line.getNumNodes
-    retval= []
-    for i in range(2,nNodes):
-      n= self.line.getNodeI(i)
-      retval.append(n)
-    return retval
+    def getInteriorNodes(self):
+        '''Returns line's interior nodes.'''
+        nNodes= self.line.getNumNodes
+        retval= []
+        for i in range(2,nNodes):
+            n= self.line.getNodeI(i)
+            retval.append(n)
+        return retval
 
-  def getFirstNode(self):
-    '''Returns line's first node.'''
-    return self.line.getNodeI(1)
+    def getFirstNode(self):
+        '''Returns line's first node.'''
+        return self.line.getNodeI(1)
 
-  def getLastNode(self):
-    '''Return line's last node.'''
-    nNodes= self.line.getNumNodes
-    return self.line.getNodeI(nNodes-1)
+    def getLastNode(self):
+        '''Return line's last node.'''
+        nNodes= self.line.getNumNodes
+        return self.line.getNodeI(nNodes-1)
   
 
 def getInteriorNodes(line):
-  '''DEPRECATED; returns line's interior nodes.'''
-  lmsg.warning('getInteriorNodes DEPRECATED; use LineWrapper.getInteriorNodes.')
-  lw= LineWrapper(line)
-  return lw.getInteriorNodes()
+    '''DEPRECATED; returns line's interior nodes.'''
+    lmsg.warning('getInteriorNodes DEPRECATED; use LineWrapper.getInteriorNodes.')
+    lw= LineWrapper(line)
+    return lw.getInteriorNodes()
 
 def getFirstNode(line):
-  '''DEPRECATED; returns line's first node.'''
-  lmsg.warning('getFirstNode DEPRECATED; use LineWrapper.getFirstNode.')
-  lw= LineWrapper(line)
-  return lw.getFirstNode()
+    '''DEPRECATED; returns line's first node.'''
+    lmsg.warning('getFirstNode DEPRECATED; use LineWrapper.getFirstNode.')
+    lw= LineWrapper(line)
+    return lw.getFirstNode()
 
-# Returns line's last node.
+# Return line's last node.
 def getLastNode(line):
-  '''DEPRECATED; returns line's last node.'''
-  lmsg.warning('getLastNode DEPRECATED; use LineWrapper.getLastNode.')
-  lw= LineWrapper(line)
-  return lw.getLastNode()
+    '''DEPRECATED; returns line's last node.'''
+    lmsg.warning('getLastNode DEPRECATED; use LineWrapper.getLastNode.')
+    lw= LineWrapper(line)
+    return lw.getLastNode()
 
 #Exact parabola
 def fit_parabola(x, y):
@@ -152,7 +152,7 @@ def def_rg_cooLim(XYZLists,Xcoo,Ycoo,Zcoo):
     zLst=XYZLists[2]
     rg=gm.IJKRange((xLst.index(Xcoo[0]),yLst.index(Ycoo[0]),zLst.index(Zcoo[0])),(xLst.index(Xcoo[1]),yLst.index(Ycoo[1]),zLst.index(Zcoo[1])))
     return rg
-                                                                                
+
 def lstP3d_from_lstLns(lstLns):
     '''Return an ordered list of vertex (3DPos) from the ordered list of 
     consecutive lines 'lstLns' given as parameter. 
@@ -236,3 +236,18 @@ def lines_on_path(preprocessor, path, elementLength):
         newLine.setElemSize(elementLength)
         retval.append(newLine)
     return retval
+
+def create_set_lines_from_pairs_points(preprocessor,lstPairPoints,setName):
+    '''Return a set of lines created between the pairs of points in list
+    'lstPairPoints'
+
+    :param preprocessor: preprocessor
+    :param lstPairPoints: list of point pairs [[pnt1,pnt2],[pnt3,pnt4], ...]
+    :param setName: name of the set to be created
+    '''
+    setLin=preprocessor.getSets.defSet(setName)
+    lines= preprocessor.getMultiBlockTopology.getLines
+    for pairPnt in lstPairPoints:
+        l=lines.newLine(pairPnt[0].tag,pairPnt[1].tag)
+        setLin.getLines.append(l)
+    return setLin
