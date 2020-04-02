@@ -52,58 +52,28 @@
 #ifndef _FileStream
 #define _FileStream
 
-#include <utility/handler/OPS_Stream.h>
+#include "OPS_Stream.h"
 
-#include <fstream>
 #include <string>
 
 namespace XC {
+//! @ingroup StreamsGrp
+//
+//! @brief File stream.
 class FileStream: public OPS_Stream
   {
   private:
-    std::ofstream theFile;
-    int fileOpen;
     std::string fileName;
   public:
     FileStream(void);
-    virtual ~FileStream(void);
 
-
-    //int setFile(const char *fileName, openMode mode = OVERWRITE);
-    int setFile(const std::string &fileName, openMode mode = OVERWRITE);
     int open(void);
-    int close(void);
 
-    int setPrecision(int precision);
-    int setFloatField(floatField);
-    int precision(int precision) {return 0;};
-    int width(int width) {return 0;};
     inline const std::string &getFileName(void) const
       {return fileName;}
     std::ostream &stream(void)
       { return theFile; }
    
-    OPS_Stream& write(const char *s, int n);
-    OPS_Stream& write(const unsigned char *s, int n);
-    OPS_Stream& write(const signed char *s, int n);
-    OPS_Stream& write(const void *s, int n);
-    OPS_Stream& operator<<(const char &c);
-    OPS_Stream& operator<<(const unsigned char &c);
-    OPS_Stream& operator<<(const signed char &c);
-    OPS_Stream& operator<<(const char *s);
-    OPS_Stream& operator<<(const std::string &s);
-    OPS_Stream& operator<<(const unsigned char *s);
-    OPS_Stream& operator<<(const signed char *s);
-    OPS_Stream& operator<<(const void *p);
-    OPS_Stream& operator<<(const int &n);
-    OPS_Stream& operator<<(const unsigned int &n);
-    OPS_Stream& operator<<(const long &n);
-    OPS_Stream& operator<<(const unsigned long &n);
-    OPS_Stream& operator<<(const short &n);
-    OPS_Stream& operator<<(const unsigned short &n);
-    OPS_Stream& operator<<(const bool &b);
-    OPS_Stream& operator<<(const double &n);
-    OPS_Stream& operator<<(const float &n);
     // OPS_Stream& operator<<(const __omanip func);
     // OPS_Stream& operator<<(const __manip func);
     // OPS_Stream& operator<<(const streambuf*);

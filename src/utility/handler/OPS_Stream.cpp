@@ -48,10 +48,300 @@
 // $Date: 2003/02/14 22:56:59 $
 // $Source: /usr/local/cvs/OpenSees/SRC/handler/OPS_Stream.cpp,v $
 
-#include <utility/handler/OPS_Stream.h>
+#include "OPS_Stream.h"
+#include <iostream>
+#include <iomanip>
 
-XC::OPS_Stream::OPS_Stream()
-{
+XC::OPS_Stream::OPS_Stream(void)
+  :fileOpen(false) {}
 
-}
+XC::OPS_Stream::~OPS_Stream()
+  {
+    if(fileOpen)
+      theFile.close();
+  }
+
+int XC::OPS_Stream::setFile(const std::string &fileName, openMode mode)
+  {
+    if(fileOpen)
+      {
+        theFile.close();
+        fileOpen= false;
+      }
+
+    if(mode == OVERWRITE) 
+      theFile.open(fileName, std::ios::out);
+    else
+      theFile.open(fileName, std::ios::out| std::ios::app);
+
+    if(theFile.bad())
+      {
+        std::cerr << "WARNING - StandardStream::" << __FUNCTION__
+	          << " - could not open file " << fileName << std::endl;
+        return -1;
+      }
+    else
+      fileOpen= true;
+    return 0;
+  }
+
+//! @brief Close stream.
+int XC::OPS_Stream::close(void)
+  {
+    if(fileOpen)
+      theFile.close();
+    fileOpen= false;
+    return 0;
+  }
+
+//! @brief Sets the decimal precision to be used to format
+//! floating-point values on output operations.
+int XC::OPS_Stream::setPrecision(int prec)
+  {
+    if(fileOpen)
+      theFile << std::setprecision(prec);
+    return 0;
+  }
+
+int XC::OPS_Stream::setFloatField(floatField field)
+  {
+    if(field == FIXEDD)
+      {
+        if(fileOpen != 0)
+          theFile << std::setiosflags(std::ios::fixed);
+      }
+    else if(field == SCIENTIFIC)
+      {
+        if(fileOpen != 0)
+          theFile << std::setiosflags(std::ios::scientific);
+      }
+    return 0;
+  }
+
+XC::OPS_Stream &XC::OPS_Stream::write(const char *s,int n)
+  {
+    if(fileOpen)
+      theFile.write(s, n);
+    return *this;
+  }
+
+XC::OPS_Stream &XC::OPS_Stream::write(const unsigned char*s,int n)
+  {
+    if(fileOpen)
+      theFile.write((const char *) s, n);
+    return *this;
+  }
+
+XC::OPS_Stream &XC::OPS_Stream::write(const signed char*s,int n)
+  {
+    if(fileOpen)
+      theFile.write((const char *) s, n);
+
+    return *this;
+  }
+ 
+XC::OPS_Stream &XC::OPS_Stream::write(const void *s, int n)
+  {
+    if(fileOpen)
+      theFile.write((const char *) s, n);
+
+    return *this;
+  }
+
+XC::OPS_Stream &XC::OPS_Stream::write(const char &c)
+  {
+    if(fileOpen)
+      theFile << c;
+
+    return *this;
+  }
+XC::OPS_Stream &XC::OPS_Stream::write(const unsigned char &c)
+  {
+    if(fileOpen)
+      theFile << c;
+
+    return *this;
+  }
+XC::OPS_Stream &XC::OPS_Stream::write(const signed char &c)
+  {
+    if(fileOpen)
+      theFile << c;
+
+    return *this;
+  }
+
+XC::OPS_Stream &XC::OPS_Stream::write(const char *s)
+    {
+      // note that we do the flush so that a "/n" before
+      // a crash will cause a flush() - similar to what 
+      if(fileOpen)
+        {
+          theFile << s;
+          theFile.flush();
+        }
+      return *this;
+    }
+
+XC::OPS_Stream &XC::OPS_Stream::write(const std::string &s)
+    {
+      // note that we do the flush so that a "/n" before
+      // a crash will cause a flush() - similar to what 
+      if(fileOpen)
+        {
+          theFile << s.c_str();
+          theFile.flush();
+        }
+      return *this;
+    }
+
+XC::OPS_Stream&XC::OPS_Stream::write(const unsigned char *s)
+    {
+      if(fileOpen)
+        theFile << s;
+      return *this;
+    }
+ 
+XC::OPS_Stream &XC::OPS_Stream::write(const signed char *s)
+  {
+    if(fileOpen)
+      theFile << s;
+
+    return *this;
+  }
+ 
+XC::OPS_Stream &XC::OPS_Stream::write(const void *p)
+  {
+/*
+    if(fileOpen)
+      theFile << p;
+*/
+    return *this;
+  }
+ 
+XC::OPS_Stream &XC::OPS_Stream::write(const int &n)
+  {
+    if(fileOpen)
+      theFile << 1.0*n;
+
+    return *this;
+  }
+ 
+XC::OPS_Stream &XC::OPS_Stream::write(const unsigned int &n)
+  {
+    if(fileOpen)
+      theFile << 1.0*n;
+
+    return *this;
+  }
+ 
+XC::OPS_Stream &XC::OPS_Stream::write(const long &n)
+  {
+/*
+    if(fileOpen)
+      theFile << n;
+*/
+    return *this;
+  }
+ 
+XC::OPS_Stream &XC::OPS_Stream::write(const unsigned long &n)
+  {
+/*
+    if(fileOpen)
+      theFile << n;
+*/
+    return *this;
+  }
+ 
+XC::OPS_Stream &XC::OPS_Stream::write(const short &n)
+  {
+/*
+    if(fileOpen)
+      theFile << n;
+*/
+    return *this;
+  }
+ 
+XC::OPS_Stream &XC::OPS_Stream::write(const unsigned short &n)
+  {
+/*
+    if(fileOpen)
+      theFile << n;
+*/
+    return *this;
+  }
+XC::OPS_Stream &XC::OPS_Stream::write(const bool &b)
+  {
+/*
+    if(fileOpen)
+      theFile << b;
+*/
+    return *this;
+  }
+ 
+XC::OPS_Stream &XC::OPS_Stream::write(const double &n)
+  {
+    if(fileOpen)
+      theFile << n;
+
+    return *this;
+  }
+
+XC::OPS_Stream &XC::OPS_Stream::write(const float &n)
+  {
+    if(fileOpen)
+      theFile << n;
+
+    return *this;
+  }
+ 
+XC::OPS_Stream &XC::OPS_Stream::operator<<(const char &c)
+  { return write(c); }
+
+XC::OPS_Stream &XC::OPS_Stream::operator<<(const unsigned char &c)
+  { return write(c); }
+
+XC::OPS_Stream &XC::OPS_Stream::operator<<(const signed char &c)
+  { return write(c); }
+
+XC::OPS_Stream &XC::OPS_Stream::operator<<(const char *s)
+  { return write(s); }
+
+XC::OPS_Stream &XC::OPS_Stream::operator<<(const std::string &s)
+  { return write(s); }
+
+XC::OPS_Stream&XC::OPS_Stream::operator<<(const unsigned char *s)
+  { return write(s); }
+
+XC::OPS_Stream &XC::OPS_Stream::operator<<(const signed char *s)
+  { return write(s); }
+
+XC::OPS_Stream &XC::OPS_Stream::operator<<(const void *p)
+  { return write(p); }
+
+XC::OPS_Stream &XC::OPS_Stream::operator<<(const int &n)
+  { return write(n); }
+
+XC::OPS_Stream &XC::OPS_Stream::operator<<(const unsigned int &n)
+  { return write(n); }
+
+XC::OPS_Stream &XC::OPS_Stream::operator<<(const long &n)
+  { return write(n); }
+
+XC::OPS_Stream &XC::OPS_Stream::operator<<(const unsigned long &n)
+  { return write(n); }
+
+XC::OPS_Stream &XC::OPS_Stream::operator<<(const short &n)
+  { return write(n); }
+
+XC::OPS_Stream &XC::OPS_Stream::operator<<(const unsigned short &n)
+  { return write(n); }
+
+XC::OPS_Stream &XC::OPS_Stream::operator<<(const bool &b)
+  { return write(b); }
+
+XC::OPS_Stream &XC::OPS_Stream::operator<<(const double &d)
+  { return write(d); }
+
+XC::OPS_Stream &XC::OPS_Stream::operator<<(const float &f)
+  { return write(f); }
 

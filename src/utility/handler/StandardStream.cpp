@@ -55,281 +55,163 @@ using std::cerr;
 using std::ios;
 using std::setiosflags;
 
-XC::StandardStream::StandardStream()
-  :fileOpen(0) {}
-XC::StandardStream::~StandardStream()
+XC::StandardStream::StandardStream(void)
+  {}
+
+
+
+XC::OPS_Stream &XC::StandardStream::write(const char *s,int n)
   {
-    if(fileOpen == 1)
-      theFile.close();
+    std::cerr.write(s, n);
+    OPS_Stream::write(s,n);
+    return *this;
   }
-
-int XC::StandardStream::setFile(const char *fileName, openMode mode)
-{
-  if (fileOpen == 1) {
-    theFile.close();
-    fileOpen = 0;
-  }
-
-  if (mode == OVERWRITE) 
-    theFile.open(fileName, ios::out);
-  else
-    theFile.open(fileName, ios::out| ios::app);
-
-  if (theFile.bad()) {
-    std::cerr << "WARNING - XC::StandardStream::setFile()";
-    std::cerr << " - could not open file " << fileName << std::endl;
-
-    return -1;
-  } else
-    fileOpen = 1;
-
-  return 0;
-}
-
-
-int 
-XC::StandardStream::setPrecision(int prec)
-{
-  cerr << std::setprecision(prec);
-
-  if (fileOpen != 0)
-    theFile << std::setprecision(prec);
-
-  return 0;
-}
-
-int 
-XC::StandardStream::setFloatField(floatField field)
-{
-  if (field == FIXEDD) {
-	  cerr << setiosflags(ios::fixed);
-    if (fileOpen != 0)
-      theFile << setiosflags(ios::fixed);
-  }
-  else if (field == SCIENTIFIC) {
-    cerr << setiosflags(ios::scientific);
-    if (fileOpen != 0)
-      theFile << setiosflags(ios::scientific);
-  }
-
-  return 0;
-}
-
-
-
- XC::OPS_Stream& 
-XC::StandardStream::write(const char *s,int n)
-{
-  cerr.write(s, n);
-
-  if (fileOpen != 0)
-    theFile.write(s, n);
-  
-  return *this;
-}
 
  XC::OPS_Stream& 
 XC::StandardStream::write(const unsigned char*s, int n)
-{
-  cerr.write((const char *) s, n);
-
-  if (fileOpen != 0)
-    theFile.write((const char *) s, n);
-
-  return *this;
-}
- XC::OPS_Stream& 
-XC::StandardStream::write(const signed char*s, int n)
-{
-  cerr.write((const char *)s, n);
-
-  if (fileOpen != 0)
-    theFile.write((const char *) s, n);
-
-  return *this;
-}
- XC::OPS_Stream& 
-XC::StandardStream::write(const void *s, int n)
-{
-  cerr.write((const char *)s, n);
-
-  if (fileOpen != 0)
-   theFile.write((const char *) s, n);
-
-  return *this;
-}
- XC::OPS_Stream& 
-XC::StandardStream::operator<<(char c)
-{
-  cerr << c;
-
-  if (fileOpen != 0)
-    theFile << c;
-
- return *this;
-}
- XC::OPS_Stream& 
-XC::StandardStream::operator<<(unsigned char c)
-{
-  cerr << c;
-
-  if (fileOpen != 0)
-    theFile << c;
-
- return *this;
-}
- XC::OPS_Stream& 
-XC::StandardStream::operator<<(signed char c)
-{
-
-  cerr << c;
-
-  if (fileOpen != 0)
-    theFile << c;
-
-  return *this;
-}
- XC::OPS_Stream& 
-XC::StandardStream::operator<<(const char *s)
-{
-  // note that we do the flush so that a "/n" before
-  // a crash will cause a flush() - similar to what 
-  cerr << s;
-  cerr.flush();
-
-  if (fileOpen != 0) {
-    theFile << s;
-    theFile.flush();
+  {
+    std::cerr.write((const char *) s, n);
+    OPS_Stream::write(s,n);
+    return *this;
+  }
+XC::OPS_Stream &XC::StandardStream::write(const signed char*s, int n)
+  {
+    std::cerr.write((const char *)s, n);
+    OPS_Stream::write(s,n);
+    return *this;
   }
 
-  return *this;
-}
+XC::OPS_Stream &XC::StandardStream::write(const void *s, int n)
+  {
+    std::cerr.write((const char *)s, n);
+    OPS_Stream::write(s,n);
+    return *this;
+  }
 
- XC::OPS_Stream& 
-XC::StandardStream::operator<<(const unsigned char *s)
-{
-  cerr << s;
+XC::OPS_Stream &XC::StandardStream::write(const char &c)
+  {
+    std::cerr << c;
+    OPS_Stream::write(c);
+    return *this;
+  }
+XC::OPS_Stream &XC::StandardStream::write(const unsigned char &c)
+  {
+    std::cerr << c;
+    OPS_Stream::write(c);
+    return *this;
+  }
+XC::OPS_Stream &XC::StandardStream::write(const signed char &c)
+  {
+    std::cerr << c;
+    OPS_Stream::write(c);
+    return *this;
+  }
 
-  if (fileOpen != 0)
-    theFile << s;
+XC::OPS_Stream &XC::StandardStream::write(const char *s)
+    {
+      std::cerr << s;
+      std::cerr.flush();
+      OPS_Stream::write(s);
+      return *this;
+    }
 
-  return *this;
-}
- XC::OPS_Stream& 
-XC::StandardStream::operator<<(const signed char *s)
-{
-  cerr << s;
+XC::OPS_Stream &XC::StandardStream::write(const std::string &s)
+    {
+      // note that we do the flush so that a "/n" before
+      // a crash will cause a flush() - similar to what 
+      std::cerr << s;
+      std::cerr.flush();
+      OPS_Stream::write(s);
+      return *this;
+    }
 
-  if (fileOpen != 0)
-    theFile << s;
-
-  return *this;
-}
- XC::OPS_Stream& 
-XC::StandardStream::operator<<(const void *p)
-{
+XC::OPS_Stream&XC::StandardStream::write(const unsigned char *s)
+    {
+      if(fileOpen)
+        theFile << s;
+      return *this;
+    }
+ 
+XC::OPS_Stream &XC::StandardStream::write(const signed char *s)
+  {
+    std::cerr << s;
+    OPS_Stream::write(s);
+    return *this;
+  }
+ 
+XC::OPS_Stream &XC::StandardStream::write(const void *p)
+  {
 /*
-//  cerr << p;
-
-  if (fileOpen != 0)
-    theFile << p;
-*/
-  return *this;
-}
- XC::OPS_Stream& 
-XC::StandardStream::operator<<(int n)
-{
-  cerr <<  1.0*n;
-
-  if (fileOpen != 0)
-    theFile << 1.0*n;
-
-  return *this;
-}
-
- XC::OPS_Stream& 
-XC::StandardStream::operator<<(unsigned int n)
-{
-  cerr << 1.0*n;
-
-  if (fileOpen != 0)
-    theFile << 1.0*n;
-
-  return *this;
-}
- XC::OPS_Stream& 
-XC::StandardStream::operator<<(long n)
-{
+    std::cerr << p;
+    OPS_Stream::write(p);
+*/    return *this;
+  }
+ 
+XC::OPS_Stream &XC::StandardStream::write(const int &n)
+  {
+    std::cerr << 1.0*n;
+    OPS_Stream::write(1.0*n);
+    return *this;
+  }
+ 
+XC::OPS_Stream &XC::StandardStream::write(const unsigned int &n)
+  {
+    std::cerr << 1.0*n;
+    OPS_Stream::write(1.0*n);
+    return *this;
+  }
+ 
+XC::OPS_Stream &XC::StandardStream::write(const long &n)
+  {
 /*
-cerr << n;
-
-if (fileOpen != 0)
-  theFile << n;
-*/
-  return *this;
-}
- XC::OPS_Stream& 
-XC::StandardStream::operator<<(unsigned long n)
-{
+    std::cerr << n;
+    OPS_Stream::write(n);
+*/    return *this;
+  }
+ 
+XC::OPS_Stream &XC::StandardStream::write(const unsigned long &n)
+  {
 /*
-  cerr << n;
-
-  if (fileOpen != 0)
-    theFile << n;
-*/
-  return *this;
-}
- XC::OPS_Stream& 
-XC::StandardStream::operator<<(short n)
-{
+    std::cerr << n;
+    OPS_Stream::write(n);
+*/    return *this;
+  }
+ 
+XC::OPS_Stream &XC::StandardStream::write(const short &n)
+  {
 /*
-  cerr << n;
-
-  if (fileOpen != 0)
-    theFile << n;
-*/
-  return *this;
-}
- XC::OPS_Stream& 
-XC::StandardStream::operator<<(unsigned short n)
-{
+    std::cerr << n;
+    OPS_Stream::write(n);
+*/    return *this;
+  }
+ 
+XC::OPS_Stream &XC::StandardStream::write(const unsigned short &n)
+  {
 /*
-  cerr << n;
-
-  if (fileOpen != 0)
-    theFile << n;
-*/
-return *this;
-}
-
- XC::OPS_Stream& 
-XC::StandardStream::operator<<(bool b)
-{
+    std::cerr << n;
+    OPS_Stream::write(n);
+*/    return *this;
+  }
+XC::OPS_Stream &XC::StandardStream::write(const bool &b)
+  {
 /*
-  cerr << b;
+    std::cerr << b;
+    OPS_Stream::write(b);
+*/    return *this;
+  }
+ 
+XC::OPS_Stream &XC::StandardStream::write(const double &n)
+  {
+    std::cerr << n;
+    OPS_Stream::write(n);
+    return *this;
+  }
 
-  if (fileOpen != 0)
-    theFile << b;
-*/
- return *this;
-}
- XC::OPS_Stream& 
-XC::StandardStream::operator<<(double n)
-{
-  cerr << n;
+XC::OPS_Stream &XC::StandardStream::write(const float &n)
+  {
+    std::cerr << n;
+    OPS_Stream::write(n);
+    return *this;
+  }
 
-  if (fileOpen != 0)
-    theFile << n;
 
- return *this;
-}
- XC::OPS_Stream& 
-XC::StandardStream::operator<<(float n)
-{
-  cerr << n;
-
-  if (fileOpen != 0)
-    theFile << n;
-
- return *this;
-}

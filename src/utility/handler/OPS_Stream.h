@@ -53,45 +53,83 @@
 #define _OPS_Stream
 
 #include <string>
+#include <fstream>
 
 namespace XC{
 enum openMode  {OVERWRITE, APPEND};
 enum floatField {FIXEDD, SCIENTIFIC};
 
+//! @ingroup Utils
+//!
+//! @defgroup StreamsGrp OpenSees streams abstraction.
+//
+//! @ingroup StreamsGrp
+//
+//! @brief Base class for OpenSees streams.
 class OPS_Stream
-{
- public:
-  OPS_Stream();
+  {
+  protected:
+    std::ofstream theFile;
+    bool fileOpen;
+  public:
+    OPS_Stream(void);
+    virtual ~OPS_Stream(void);
 
-  virtual int setFile(const char *fileName, openMode mode = OVERWRITE) {return 0;};
-  virtual int setPrecision(int precision) {return 0;};
-  virtual int setFloatField(floatField) {return 0;};
-  virtual int precision(int precision) {return 0;};
-  virtual int width(int width) {return 0;};
+    int close(void);
+    
+    virtual int setFile(const std::string &fileName, openMode mode = OVERWRITE);
+    virtual int setPrecision(int precision);
+    virtual int setFloatField(floatField);
+    virtual int precision(int precision) {return 0;};
+    virtual int width(int width) {return 0;};
 
-  virtual OPS_Stream& write(const char *s, int n) {return *this;};
-  virtual OPS_Stream& write(const unsigned char *s, int n) {return *this;};
-  virtual OPS_Stream& write(const signed char *s, int n) {return *this;};
-  virtual OPS_Stream& write(const void *s, int n) {return *this;};
+    virtual OPS_Stream &write(const char *s, int n);
+    virtual OPS_Stream &write(const unsigned char *s, int n);
+    virtual OPS_Stream &write(const signed char *s, int n);
+    virtual OPS_Stream &write(const void *s, int n);
+    virtual OPS_Stream &write(const char &c);
+    virtual OPS_Stream &write(const unsigned char &c);
+    virtual OPS_Stream &write(const signed char &c);
+    virtual OPS_Stream &write(const char *s);
+    virtual OPS_Stream &write(const std::string &s);
+    virtual OPS_Stream &write(const unsigned char *s);
+    virtual OPS_Stream &write(const signed char *s);
+    virtual OPS_Stream &write(const void *p);
+    virtual OPS_Stream &write(const int &n);
+    virtual OPS_Stream &write(const unsigned int &n);
+    virtual OPS_Stream &write(const long &n);
+    virtual OPS_Stream &write(const unsigned long &n);
+    virtual OPS_Stream &write(const short &n);
+    virtual OPS_Stream &write(const unsigned short &n);
+    virtual OPS_Stream &write(const bool &b);
+    virtual OPS_Stream &write(const double &d);
+    virtual OPS_Stream &write(const float &f);
 
-  virtual OPS_Stream& operator<<(char c) {return *this;};
-  virtual OPS_Stream& operator<<(unsigned char c) {return *this;};
-  virtual OPS_Stream& operator<<(signed char c) {return *this;};
-  virtual OPS_Stream& operator<<(const char *s) {return *this;};
-  virtual OPS_Stream& operator<<(const std::string &s) {return *this;};
-  virtual OPS_Stream& operator<<(const unsigned char *s) {return *this;};
-  virtual OPS_Stream& operator<<(const signed char *s) {return *this;};
-  virtual OPS_Stream& operator<<(const void *p) {return *this;};
-  virtual OPS_Stream& operator<<(int n) {return *this;};
-  virtual OPS_Stream& operator<<(unsigned int n) {return *this;};
-  virtual OPS_Stream& operator<<(long n) {return *this;};
-  virtual OPS_Stream& operator<<(unsigned long n) {return *this;};
-  virtual OPS_Stream& operator<<(short n) {return *this;};
-  virtual OPS_Stream& operator<<(unsigned short n) {return *this;};
-  virtual OPS_Stream& operator<<(bool b) {return *this;};
-  virtual OPS_Stream& operator<<(double n) {return *this;};
-  virtual OPS_Stream& operator<<(float n) {return *this;};
-};
+    OPS_Stream& operator<<(const char &c);
+    OPS_Stream& operator<<(const unsigned char &c);
+    OPS_Stream& operator<<(const signed char &c);
+    OPS_Stream& operator<<(const char *s);
+    OPS_Stream& operator<<(const std::string &s);
+    OPS_Stream& operator<<(const unsigned char *s);
+    OPS_Stream& operator<<(const signed char *s);
+    OPS_Stream& operator<<(const void *p);
+    OPS_Stream& operator<<(const int &n);
+    OPS_Stream& operator<<(const unsigned int &n);
+    OPS_Stream& operator<<(const long &n);
+    OPS_Stream& operator<<(const unsigned long &n);
+    OPS_Stream& operator<<(const short &n);
+    OPS_Stream& operator<<(const unsigned short &n);
+    OPS_Stream& operator<<(const bool &b);
+    OPS_Stream& operator<<(const double &n);
+    OPS_Stream& operator<<(const float &n);
+    
+    // OPS_Stream& operator<<(__omanip func);
+    // OPS_Stream& operator<<(__manip func);
+    // OPS_Stream& operator<<(streambuf*);
+    // OPS_Stream& ends(OPS_Stream& outs);
+    // OPS_Stream& flush(OPS_Stream& outs);
+    // OPS_Stream& (OPS_Stream& outs);
+  };
 
 } //end of XC namespace
 
