@@ -52,10 +52,13 @@
 #ifndef _DataOutputStreamHandler
 #define _DataOutputStreamHandler
 
-#include <utility/handler/DataOutputHandler.h>
-#include <utility/handler/StandardStream.h>
+#include "DataOutputHandler.h"
+#include "StandardStream.h"
 
 namespace XC {
+//! @ingroup DOHandlersGrp
+//
+//! @brief Manages output to a stream.
 class DataOutputStreamHandler: public DataOutputHandler
   {
   private:

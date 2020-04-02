@@ -52,10 +52,13 @@
 #ifndef _DataOutputDatabaseHandler
 #define _DataOutputDatabaseHandler
 
-#include <utility/handler/DataOutputHandler.h>
+#include "DataOutputHandler.h"
 namespace XC {
 class FE_Datastore;
 
+//! @ingroup DOHandlersGrp
+//
+//! @brief Manages output to a database table.
 class DataOutputDatabaseHandler: public DataOutputHandler
   {
   private:

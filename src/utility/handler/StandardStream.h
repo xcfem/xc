@@ -52,56 +52,42 @@
 #ifndef _StandardStream
 #define _StandardStream
 
-#include <utility/handler/OPS_Stream.h>
-
-#include <fstream>
+#include "OPS_Stream.h"
 
 namespace XC {
+//! @ingroup StreamsGrp
+//
+//! @brief C++ standard stream wrapper.
 class StandardStream: public OPS_Stream
-{
- private:
-  std::ofstream theFile;
-  int fileOpen;
- public:
-  StandardStream();
-  virtual ~StandardStream();
+  {
+   public:
+    StandardStream(void);
 
-  int setFile(const char *fileName, openMode mode = OVERWRITE);
-  int setPrecision(int precision);
-  int setFloatField(floatField);
-  int precision(int precision) {return 0;};
-  int width(int width) {return 0;};
-  std::ofstream &stream(void)
-    { return theFile; }
+    std::ofstream &stream(void)
+      { return theFile; }
 
-  OPS_Stream& write(const char *s, int n);
-  OPS_Stream& write(const unsigned char *s, int n);
-  OPS_Stream& write(const signed char *s, int n);
-  OPS_Stream& write(const void *s, int n);
-  OPS_Stream& operator<<(char c);
-  OPS_Stream& operator<<(unsigned char c);
-  OPS_Stream& operator<<(signed char c);
-  OPS_Stream& operator<<(const char *s);
-  OPS_Stream& operator<<(const unsigned char *s);
-  OPS_Stream& operator<<(const signed char *s);
-  OPS_Stream& operator<<(const void *p);
-  OPS_Stream& operator<<(int n);
-  OPS_Stream& operator<<(unsigned int n);
-  OPS_Stream& operator<<(long n);
-  OPS_Stream& operator<<(unsigned long n);
-  OPS_Stream& operator<<(short n);
-  OPS_Stream& operator<<(unsigned short n);
-  OPS_Stream& operator<<(bool b);
-  OPS_Stream& operator<<(double n);
-  OPS_Stream& operator<<(float n);
-  // OPS_Stream& operator<<(__omanip func);
-  // OPS_Stream& operator<<(__manip func);
-  // OPS_Stream& operator<<(streambuf*);
-  // OPS_Stream& ends(OPS_Stream& outs);
-  // OPS_Stream& flush(OPS_Stream& outs);
-  // OPS_Stream& (OPS_Stream& outs);
-
-};
+    OPS_Stream &write(const char *s, int n);
+    OPS_Stream &write(const unsigned char *s, int n);
+    OPS_Stream &write(const signed char *s, int n);
+    OPS_Stream &write(const void *s, int n);
+    OPS_Stream &write(const char &c);
+    OPS_Stream &write(const unsigned char &c);
+    OPS_Stream &write(const signed char &c);
+    OPS_Stream &write(const char *s);
+    OPS_Stream &write(const std::string &s);
+    OPS_Stream &write(const unsigned char *s);
+    OPS_Stream &write(const signed char *s);
+    OPS_Stream &write(const void *p);
+    OPS_Stream &write(const int &n);
+    OPS_Stream &write(const unsigned int &n);
+    OPS_Stream &write(const long &n);
+    OPS_Stream &write(const unsigned long &n);
+    OPS_Stream &write(const short &n);
+    OPS_Stream &write(const unsigned short &n);
+    OPS_Stream &write(const bool &b);
+    OPS_Stream &write(const double &d);
+    OPS_Stream &write(const float &f);
+  };
 } // end of XC namespace
 
 #endif
