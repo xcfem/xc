@@ -73,7 +73,8 @@ class Vector;
 //! @ingroup TSeries
 //
 //! @brief Time-dependent function that linear interpolates the
-//! load factor using user specified control points provided in a vector object.
+//! load factor using user specified control points provided in
+//! a vector object.
 //!
 //! The relationship between the pseudo time and the load factor follows
 //! a user specified path. The path points are specified at user specified

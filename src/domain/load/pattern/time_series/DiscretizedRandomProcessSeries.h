@@ -72,7 +72,11 @@ namespace XC {
 
 //! @ingroup TSeries
 //
-//! @brief ??.
+//! @brief Stochastic ground motion created by means of a
+//! discretized random process.
+//!
+//! References: User's Guide to Reliability, Optimization, and
+//! Response Sensitivity Analysis in OpenSees.
 class DiscretizedRandomProcessSeries: public TimeSeries
   {
   private:
@@ -85,9 +89,6 @@ class DiscretizedRandomProcessSeries: public TimeSeries
     Vector randomVariables;
     Vector kickInTimes;
     int parameterID;
-
-  protected:
-
   public:
     DiscretizedRandomProcessSeries(int num, const std::vector<ModulatingFunction *> &theModFuncs,double p_mean,double targetStdv);
     TimeSeries *getCopy(void) const;

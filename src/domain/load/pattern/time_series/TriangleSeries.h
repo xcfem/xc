@@ -75,8 +75,6 @@ namespace XC {
 //! @brief Series de ondas triangulares.
 class TriangleSeries: public PeriodSeries
   {
-  protected:
-
   public:
     // constructors
     TriangleSeries(double tStart, double tFinish,

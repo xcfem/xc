@@ -66,13 +66,22 @@
 #include "utility/matrix/Vector.h"
 
 namespace XC {
-  class Spectrum;
-  class RandomNumberGenerator;
-  class Vector;
+class Spectrum;
+class RandomNumberGenerator;
+class Vector;
 
 //! @ingroup TSeries
 //
-//! @brief ??.
+//! @brief Time series obtained from a simulated random process.
+//!
+//! In probability theory and related fields, a stochastic or random
+//! process is a mathematical object usually defined as a family of random
+//! variables. Historically, the random variables were associated with or
+//! indexed by a set of numbers, usually viewed as points in time, giving the
+//! interpretation of a stochastic process representing numerical values of
+//! some system randomly changing over time, such as the growth of a bacterial
+//! population, an electrical current fluctuating due to thermal noise, or
+//! the movement of a gas molecule.
 class SimulatedRandomProcessSeries: public TimeSeries
   {
   private:

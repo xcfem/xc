@@ -65,14 +65,14 @@
 #include <reliability/domain/spectrum/Spectrum.h>
 #include <reliability/analysis/randomNumber/RandomNumberGenerator.h>
 #include <classTags.h>
+#include <math.h>
 
-XC::SimulatedRandomProcessSeries::SimulatedRandomProcessSeries(
-								RandomNumberGenerator *theRandNumGenerator,
+XC::SimulatedRandomProcessSeries::SimulatedRandomProcessSeries(RandomNumberGenerator *theRandNumGenerator,
 								Spectrum *theSpectr,
 								int numFreqInt,
 								double pmean)
-:TimeSeries(TSERIES_TAG_SimulatedRandomProcessSeries)
-{
+  : TimeSeries(TSERIES_TAG_SimulatedRandomProcessSeries)
+  {
 	theRandomNumberGenerator = theRandNumGenerator;
 	theSpectrum = theSpectr;
 	numFreqIntervals = numFreqInt;
@@ -80,7 +80,7 @@ XC::SimulatedRandomProcessSeries::SimulatedRandomProcessSeries(
 
 	
 	// Generate random numbers, uniformly distributed between 0 and 2pi
-	double pi = 3.14159265358979;
+	const double pi= M_PI;
 	theRandomNumberGenerator->generate_nIndependentUniformNumbers(numFreqIntervals,0.0,(2*pi));
 	Vector theta1 = theRandomNumberGenerator->getGeneratedNumbers();
 	theta= Vector(theta1);
@@ -94,8 +94,6 @@ XC::SimulatedRandomProcessSeries::SimulatedRandomProcessSeries(
 
 	// Length of each interval
 	deltaW = (theSpectrum->getMaxFrequency()-theSpectrum->getMinFrequency())/numFreqIntervals;
-
-
   }
 
 //! @brief Return load factor at specified time.

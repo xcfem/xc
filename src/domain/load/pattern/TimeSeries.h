@@ -76,9 +76,11 @@ namespace XC {
 //
 //! @ingroup TSeries
 //
-//! @brief Time variation of loads. A TimeSeries object is used to
-//! determine the load factor to be applied to the loads in a pettern.
-//! to the model. 
+//! @brief Time variation of loads.
+//!
+//! Time series objects are used in OpenSees (XC) to describe time variation
+//! of earthquake ground motions or nodal loads. This is made by changing
+//! determine the load factor to be applied to the loads in a pattern.
 class TimeSeries: public MovableObject, public CommandEntity
   {
   public:

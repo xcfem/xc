@@ -66,16 +66,26 @@
 #include <classTags.h>
 #include "domain/mesh/element/utils/Information.h"
 
-
+//! @brief Constructor.
+//!
+//! @param p_mean: The mean argument is used to specify a constant mean which
+//!                is added to the generated process.
+//! @param p_maxStdv: The maxStdv argument is used to specify the target
+//!                   maximum standard deviation over all time points with
+//!                   random pulses.
+//! @param num: Number of modulating functions.
+//! @param theModFuncs: Pointers to modulating functions.
 XC::DiscretizedRandomProcessSeries::DiscretizedRandomProcessSeries(int num, const std::vector<ModulatingFunction *> &theModFuncs,
                                                                double p_mean,
                                                                double p_maxStdv)
   :TimeSeries(TSERIES_TAG_DiscretizedRandomProcessSeries), numModFuncs(num), c(0.0), mean(p_mean), maxStdv(p_maxStdv), theModulatingFunctions(theModFuncs)
   {}
 
+//! @brief Virtual constructor.
 XC::TimeSeries *XC::DiscretizedRandomProcessSeries::getCopy(void) const
   {
-    std::cerr << "DiscretizedRandomProcessSeries::getCopy not implemented. " << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; not implemented yet." << std::endl;
     return nullptr;
   }
 
