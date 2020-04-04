@@ -45,7 +45,7 @@
 XC::DispBase::DispBase(AnalysisAggregation *owr,int classTag,const int &numIncr) 
   :BaseControl(owr,classTag,numIncr){}
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::DispBase::sendData(CommParameters &cp)
   {
     int res= BaseControl::sendData(cp);
@@ -53,7 +53,7 @@ int XC::DispBase::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::DispBase::recvData(const CommParameters &cp)
   {
     int res= BaseControl::recvData(cp);

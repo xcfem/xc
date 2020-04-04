@@ -53,7 +53,7 @@
 
 
 
-#include <solution/analysis/integrator/static/HSConstraint.h>
+#include "HSConstraint.h"
 #include <solution/analysis/model/AnalysisModel.h>
 #include <solution/system_of_eqn/linearSOE/LinearSOE.h>
 #include <cmath>
@@ -63,6 +63,10 @@
 XC::HSConstraint::HSConstraint(AnalysisAggregation *owr,double arcLength, double psi_u, double psi_f, double u_ref)
   :ProtoArcLength(owr,INTEGRATOR_TAGS_HSConstraint,arcLength),
    psi_u2(psi_u*psi_u), psi_f2(psi_f*psi_f), u_ref2(u_ref*u_ref) {}
+
+//! @brief Virtual constructor.
+XC::Integrator *XC::HSConstraint::getCopy(void) const
+  { return new HSConstraint(*this); }
 
 //! @brief Returns the value of dLambda for the newStep method.
 double XC::HSConstraint::getDLambdaNewStep(void) const
@@ -75,7 +79,7 @@ double XC::HSConstraint::getDLambdaNewStep(void) const
 // out temp BJ 
 //    double retval = sqrt(arcLength2/((psi_u2/u_ref2*fabs(dUhat^dUhat))+psi_f2));
 // old version with fext
-    double retval = sqrt(arcLength2/( (psi_u2/u_ref2*fabs(dUhat^dUhat) ) + psi_f2*(f_ext^f_ext)  ));
+    double retval= sqrt(arcLength2/( (psi_u2/u_ref2*fabs(dUhat^dUhat) ) + psi_f2*(f_ext^f_ext)  ));
     retval *= signLastDeltaLambdaStep; // base sign of load change
                                         // on what was happening last step
     return retval;
@@ -149,7 +153,7 @@ double XC::HSConstraint::getDLambdaUpdate(void) const
   }
 
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::HSConstraint::sendData(CommParameters &cp)
   {
     int res= ProtoArcLength::sendData(cp);
@@ -158,7 +162,7 @@ int XC::HSConstraint::sendData(CommParameters &cp)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::HSConstraint::recvData(const CommParameters &cp)
   {
     int res= ProtoArcLength::recvData(cp);
@@ -167,6 +171,7 @@ int XC::HSConstraint::recvData(const CommParameters &cp)
     return res;
   }
 
+//! @brief Sends object data through the communicator argument.
 int XC::HSConstraint::sendSelf(CommParameters &cp)
   {
     setDbTag(cp);
@@ -180,7 +185,7 @@ int XC::HSConstraint::sendSelf(CommParameters &cp)
     return res;
   }
 
-
+//! @brief Receives object data through the communicator argument.
 int XC::HSConstraint::recvSelf(const CommParameters &cp)
   {
     inicComm(23);

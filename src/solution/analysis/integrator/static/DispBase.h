@@ -37,7 +37,7 @@ namespace XC {
 
 //! @ingroup StaticIntegrator
 //
-//! @brief ??
+//! @brief Base class for the displacement control static integrators.
 class DispBase: public BaseControl
   {
   protected:

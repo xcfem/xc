@@ -68,8 +68,8 @@ class Domain;
 
 //! @ingroup StaticIntegrator
 //
-//! @brief DisplacementControl is an algorithmic class for performing a static
-//! analysis using the displacement control method.
+//! @brief Algorithmic class for performing a static analysis
+//! using the displacement control method.
 //!
 //! DisplacementControl is a subclass of StaticIntegrator, it is
 //! used to when performing a static analysis on the FE\_Model using the

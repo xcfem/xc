@@ -58,15 +58,10 @@
 #include "utility/matrix/Matrix.h"
 
 namespace XC {
-class LinearSOE;
-class AnalysisModel;
-class FE_Element;
-class Vector;
-class Matrix;
 
 //! @ingroup StaticIntegrator
 //
-//! @brief ??.
+//! @brief Hyper-spherical constraint arc-length integrator.
 class HSConstraint: public ProtoArcLength
   {
   private:
@@ -84,14 +79,12 @@ class HSConstraint: public ProtoArcLength
     HSConstraint(AnalysisAggregation *,double arcLength, double psi_u=1.0, double psi_f=1.0, double u_ref=1.0);
     Integrator *getCopy(void) const;
   public:
-
     int sendSelf(CommParameters &);
     int recvSelf(const CommParameters &);
 
     void Print(std::ostream &s, int flag =0) const;    
   };
-inline Integrator *HSConstraint::getCopy(void) const
-  { return new HSConstraint(*this); }
+  
 } // end of XC namespace
 
 #endif
