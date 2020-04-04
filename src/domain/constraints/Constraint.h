@@ -52,8 +52,8 @@ class Constraint: public ContinuaReprComponent
   protected:
     int constrNodeTag; //!< constrained node tag
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     // constructors
     Constraint(int classTag);        

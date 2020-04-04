@@ -814,7 +814,7 @@ bool XC::Subdomain::doesIndependentAnalysis(void)
   }
 
 //! @brief Send itself.
-int XC::Subdomain::sendSelf(CommParameters &cp)
+int XC::Subdomain::sendSelf(Communicator &comm)
   {
     int dataTag = this->getDbTag();
     if(theAnalysis)
@@ -822,9 +822,9 @@ int XC::Subdomain::sendSelf(CommParameters &cp)
         ID data(2);
         data(0) = theAnalysis->getClassTag();
         data(1) = 0;
-        cp.sendIdData(Element::getDbTagData(),dataTag);
+        comm.sendIdData(Element::getDbTagData(),dataTag);
 
-        return theAnalysis->sendSelf(cp);
+        return theAnalysis->sendSelf(comm);
       }
     else
       std::cerr << Domain::getClassName() << "::" << __FUNCTION__
@@ -833,16 +833,16 @@ int XC::Subdomain::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receive itself.
-int XC::Subdomain::recvSelf(const CommParameters &cp)
+int XC::Subdomain::recvSelf(const Communicator &comm)
   {
     int dataTag = this->getDbTag();
     ID data(2);
-    cp.receiveIdData(Element::getDbTagData(),dataTag);
+    comm.receiveIdData(Element::getDbTagData(),dataTag);
     if(data(1) == 0)
       {
-        theAnalysis = cp.getNewDomainDecompAnalysis(Element::getDbTagDataPos(0),*this);
+        theAnalysis = comm.getNewDomainDecompAnalysis(Element::getDbTagDataPos(0),*this);
         if(theAnalysis)
-          return theAnalysis->recvSelf(cp);
+          return theAnalysis->recvSelf(comm);
       }
     return -1;
   }

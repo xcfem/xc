@@ -89,8 +89,8 @@ class DistributedSparseGenColLinSOE: public SparseGenColLinSOE, public Distribut
     int solve(void);
 
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     friend class SuperLU;    
     friend class ThreadedSuperLU;        
     friend class DistributedSuperLU;        

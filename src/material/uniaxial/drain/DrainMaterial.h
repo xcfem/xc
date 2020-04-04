@@ -103,8 +103,8 @@ class DrainMaterial: public UniaxialMaterial
 
     // Invokes the Drain subroutine
     virtual int invokeSubroutine(void);
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     DrainMaterial(int tag, int classTag, int numHV, int numData, double beto = 0.0);
 
@@ -125,8 +125,8 @@ class DrainMaterial: public UniaxialMaterial
     // also override the getCopy method to return a pointer to the derived class!!!
     virtual UniaxialMaterial *getCopy(void) const;
 
-    virtual int sendSelf(CommParameters &);  
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);  
+    virtual int recvSelf(const Communicator &);
     
     virtual void Print(std::ostream &s, int flag = 0) const;
   };

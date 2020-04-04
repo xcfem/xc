@@ -163,29 +163,29 @@ double XC::PathSeries::getDuration(void) const
   { return thePath.Size() * pathTimeIncr; }
 
 //! @brief Sends object data.
-int XC::PathSeries::sendData(CommParameters &cp)
+int XC::PathSeries::sendData(Communicator &comm)
   {
-    int res= PathSeriesBase::sendData(cp);
-    res+= cp.sendDouble(pathTimeIncr,getDbTagData(),CommMetaData(5));
+    int res= PathSeriesBase::sendData(comm);
+    res+= comm.sendDouble(pathTimeIncr,getDbTagData(),CommMetaData(5));
     return res;
   }
 
 //! @brief Receives object data.
-int XC::PathSeries::recvData(const CommParameters &cp)
+int XC::PathSeries::recvData(const Communicator &comm)
   {
-    int res= PathSeriesBase::recvData(cp);
-    res+= cp.receiveDouble(pathTimeIncr,getDbTagData(),CommMetaData(5));
+    int res= PathSeriesBase::recvData(comm);
+    res+= comm.receiveDouble(pathTimeIncr,getDbTagData(),CommMetaData(5));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::PathSeries::sendSelf(CommParameters &cp)
+int XC::PathSeries::sendSelf(Communicator &comm)
   {
     inicComm(6);
-    int result= sendData(cp);
+    int result= sendData(comm);
 
     const int dataTag= getDbTag();
-    result+= cp.sendIdData(getDbTagData(),dataTag);
+    result+= comm.sendIdData(getDbTagData(),dataTag);
     if(result < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; ch failed to send data\n";
@@ -193,17 +193,17 @@ int XC::PathSeries::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::PathSeries::recvSelf(const CommParameters &cp)
+int XC::PathSeries::recvSelf(const Communicator &comm)
   {
     inicComm(6);
 
     const int dataTag = this->getDbTag();  
-    int result = cp.receiveIdData(getDbTagData(),dataTag);
+    int result = comm.receiveIdData(getDbTagData(),dataTag);
     if(result<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; ch failed to receive data\n";
     else
-      result+= recvData(cp);
+      result+= recvData(comm);
     return result;    
   }
 

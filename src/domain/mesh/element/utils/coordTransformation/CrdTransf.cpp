@@ -206,15 +206,15 @@ const XC::Vector &XC::CrdTransf::getBasicTrialDispShapeSensitivity(void)
   }
 
 //! @brief Sends object members through the channel being passed as parameter.
-int XC::CrdTransf::sendData(CommParameters &cp)
+int XC::CrdTransf::sendData(Communicator &comm)
   {
     //data(0)= getTag();
-    int res= cp.sendDouble(L,getDbTagData(),CommMetaData(1));
-    res+= cp.sendVector(nodeIOffset,getDbTagData(),CommMetaData(2));
-    res+= cp.sendVector(nodeJOffset,getDbTagData(),CommMetaData(3));
-    res+= cp.sendVector(nodeIInitialDisp,getDbTagData(),CommMetaData(4));
-    res+= cp.sendVector(nodeJInitialDisp,getDbTagData(),CommMetaData(5));
-    res+= cp.sendBool(initialDispChecked,getDbTagData(),CommMetaData(6));
+    int res= comm.sendDouble(L,getDbTagData(),CommMetaData(1));
+    res+= comm.sendVector(nodeIOffset,getDbTagData(),CommMetaData(2));
+    res+= comm.sendVector(nodeJOffset,getDbTagData(),CommMetaData(3));
+    res+= comm.sendVector(nodeIInitialDisp,getDbTagData(),CommMetaData(4));
+    res+= comm.sendVector(nodeJInitialDisp,getDbTagData(),CommMetaData(5));
+    res+= comm.sendBool(initialDispChecked,getDbTagData(),CommMetaData(6));
     if(res<0)
       std::cerr << "CrdTransf::" << __FUNCTION__
 		<< "; failed to send data.\n";
@@ -222,15 +222,15 @@ int XC::CrdTransf::sendData(CommParameters &cp)
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::CrdTransf::recvData(const CommParameters &cp)
+int XC::CrdTransf::recvData(const Communicator &comm)
   {
     //setTag(data(0));
-    int res= cp.receiveDouble(L,getDbTagData(),CommMetaData(1));
-    res+= cp.receiveVector(nodeIOffset,getDbTagData(),CommMetaData(2));
-    res+= cp.receiveVector(nodeJOffset,getDbTagData(),CommMetaData(3));
-    res+= cp.receiveVector(nodeIInitialDisp,getDbTagData(),CommMetaData(4));
-    res+= cp.receiveVector(nodeJInitialDisp,getDbTagData(),CommMetaData(5));
-    res+= cp.receiveBool(initialDispChecked,getDbTagData(),CommMetaData(6));
+    int res= comm.receiveDouble(L,getDbTagData(),CommMetaData(1));
+    res+= comm.receiveVector(nodeIOffset,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveVector(nodeJOffset,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveVector(nodeIInitialDisp,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveVector(nodeJInitialDisp,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveBool(initialDispChecked,getDbTagData(),CommMetaData(6));
     if(res<0)
       std::cerr << "CrdTransf::" << __FUNCTION__
 		<< "; failed to receive data.\n";

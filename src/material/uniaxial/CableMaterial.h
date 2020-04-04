@@ -98,8 +98,8 @@ class CableMaterial: public ElasticBaseMaterial
     double evalStress(double stress);
   protected:
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public:
     CableMaterial(int tag, double Prestress, double E, double unitWeightEff, double L_Element);
@@ -131,8 +131,8 @@ class CableMaterial: public ElasticBaseMaterial
 
     UniaxialMaterial *getCopy(void) const;
     
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag =0) const;
 

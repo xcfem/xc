@@ -241,53 +241,53 @@ XC::UniaxialMaterial *XC::HardeningMaterial::getCopy(void) const
   { return new HardeningMaterial(*this); }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::HardeningMaterial::sendData(CommParameters &cp)
+int XC::HardeningMaterial::sendData(Communicator &comm)
   {
-    int res= UniaxialMaterial::sendData(cp);
-    res+= cp.sendDoubles(E,sigmaY,Hiso,Hkin,eta,getDbTagData(),CommMetaData(2));
-    res+= cp.sendDoubles(CplasticStrain,CbackStress,Chardening,TplasticStrain,TbackStress,Thardening,getDbTagData(),CommMetaData(3));
-    res+= cp.sendDoubles(Tstrain,Tstress,Ttangent,getDbTagData(),CommMetaData(4));
+    int res= UniaxialMaterial::sendData(comm);
+    res+= comm.sendDoubles(E,sigmaY,Hiso,Hkin,eta,getDbTagData(),CommMetaData(2));
+    res+= comm.sendDoubles(CplasticStrain,CbackStress,Chardening,TplasticStrain,TbackStress,Thardening,getDbTagData(),CommMetaData(3));
+    res+= comm.sendDoubles(Tstrain,Tstress,Ttangent,getDbTagData(),CommMetaData(4));
     setDbTagDataPos(5,parameterID);
-    res+= cp.sendMatrixPtr(SHVs,getDbTagData(),MatrixCommMetaData(6,7,8,9));
+    res+= comm.sendMatrixPtr(SHVs,getDbTagData(),MatrixCommMetaData(6,7,8,9));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::HardeningMaterial::recvData(const CommParameters &cp)
+int XC::HardeningMaterial::recvData(const Communicator &comm)
   {
-    int res= UniaxialMaterial::recvData(cp);
-    res+= cp.receiveDoubles(E,sigmaY,Hiso,Hkin,eta,getDbTagData(),CommMetaData(2));
-    res+= cp.receiveDoubles(CplasticStrain,CbackStress,Chardening,TplasticStrain,TbackStress,Thardening,getDbTagData(),CommMetaData(3));
-    res+= cp.receiveDoubles(Tstrain,Tstress,Ttangent,getDbTagData(),CommMetaData(4));
+    int res= UniaxialMaterial::recvData(comm);
+    res+= comm.receiveDoubles(E,sigmaY,Hiso,Hkin,eta,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveDoubles(CplasticStrain,CbackStress,Chardening,TplasticStrain,TbackStress,Thardening,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveDoubles(Tstrain,Tstress,Ttangent,getDbTagData(),CommMetaData(4));
     parameterID= getDbTagDataPos(5);
-    SHVs= cp.receiveMatrixPtr(SHVs,getDbTagData(),MatrixCommMetaData(6,7,8,9));
+    SHVs= comm.receiveMatrixPtr(SHVs,getDbTagData(),MatrixCommMetaData(6,7,8,9));
     return res;
   }
 
-int XC::HardeningMaterial::sendSelf(CommParameters &cp)
+int XC::HardeningMaterial::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(10); 
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "HardeningMaterial::sendSelf - failed to send data.\n";
     return res;
   }
 
-int XC::HardeningMaterial::recvSelf(const CommParameters &cp)
+int XC::HardeningMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(10);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "HardeningMaterial::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
            std::cerr << "HardeningMaterial::recvSelf - failed to receive data.\n";
       }

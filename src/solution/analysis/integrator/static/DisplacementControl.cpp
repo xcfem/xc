@@ -297,14 +297,14 @@ int XC::DisplacementControl::domainChanged(void)
     return 0;
   }
 
-int XC::DisplacementControl::sendSelf(CommParameters &cp)
+int XC::DisplacementControl::sendSelf(Communicator &comm)
   {
     // TO FINISH
     return 0;
   }
 
 
-int XC::DisplacementControl::recvSelf(const CommParameters &cp)
+int XC::DisplacementControl::recvSelf(const Communicator &comm)
   {
     // TO FINISH
     return 0;

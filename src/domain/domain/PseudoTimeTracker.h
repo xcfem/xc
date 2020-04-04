@@ -55,16 +55,16 @@ class PseudoTimeTracker: public MovableObject
     void Zero(void);
 
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     const double &getCurrentTime(void) const;
     const double &getCommittedTime(void) const;
     const double &getDt(void) const;
     const double &getEigenValueTimeSet(void) const;
 
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
 
     void Print(std::ostream &s, int flag =0) const;
   };

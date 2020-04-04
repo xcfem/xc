@@ -47,8 +47,8 @@ class CorotTrussBase: public ProtoTruss
 
     Matrix R;//!< Rotation matrix
 
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     CorotTrussBase(int tag, int classTag, int dim,int Nd1, int Nd2);
     CorotTrussBase(int tag, int classTag,int dimension);

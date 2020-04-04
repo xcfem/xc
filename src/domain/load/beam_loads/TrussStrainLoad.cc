@@ -55,31 +55,31 @@ const XC::Vector &XC::TrussStrainLoad::getData(int &type, const double &loadFact
     return data;
   }
 
-int XC::TrussStrainLoad::sendSelf(CommParameters &cp)
+int XC::TrussStrainLoad::sendSelf(Communicator &comm)
   {
     static ID data(2);
-    int res= sendData(cp);
-    res+= cp.sendDoubles(e1,e2,getDbTagData(),CommMetaData(1));
+    int res= sendData(comm);
+    res+= comm.sendDoubles(e1,e2,getDbTagData(),CommMetaData(1));
     const int dataTag= getDbTag();
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send extra data\n";    
     return res;
   }
 
-int XC::TrussStrainLoad::recvSelf(const CommParameters &cp)
+int XC::TrussStrainLoad::recvSelf(const Communicator &comm)
   {
     static ID data(2);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; data could not be received\n" ;
     else
       {
-        res+= recvData(cp);
-        res+= cp.receiveDoubles(e1,e2,getDbTagData(),CommMetaData(1));
+        res+= recvData(comm);
+        res+= comm.receiveDoubles(e1,e2,getDbTagData(),CommMetaData(1));
       }
     return res;
   }

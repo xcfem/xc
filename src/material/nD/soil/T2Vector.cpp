@@ -276,52 +276,52 @@ XC::T2Vector::isZero(void) const
 }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::T2Vector::sendData(CommParameters &cp)
+int XC::T2Vector::sendData(Communicator &comm)
   {
     //setDbTagDataPos(0,getTag());
-    int res= cp.sendDouble(theVolume,getDbTagData(),CommMetaData(0));
-    res+= cp.sendVector(theT2Vector,getDbTagData(),CommMetaData(1));
-    res+= cp.sendVector(theDeviator,getDbTagData(),CommMetaData(2));
+    int res= comm.sendDouble(theVolume,getDbTagData(),CommMetaData(0));
+    res+= comm.sendVector(theT2Vector,getDbTagData(),CommMetaData(1));
+    res+= comm.sendVector(theDeviator,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::T2Vector::recvData(const CommParameters &cp)
+int XC::T2Vector::recvData(const Communicator &comm)
   {
     //setTag(getDbTagDataPos(0));
-    int res= cp.receiveDouble(theVolume,getDbTagData(),CommMetaData(0));
-    res+= cp.receiveVector(theT2Vector,getDbTagData(),CommMetaData(1));
-    res+= cp.receiveVector(theDeviator,getDbTagData(),CommMetaData(2));
+    int res= comm.receiveDouble(theVolume,getDbTagData(),CommMetaData(0));
+    res+= comm.receiveVector(theT2Vector,getDbTagData(),CommMetaData(1));
+    res+= comm.receiveVector(theDeviator,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::T2Vector::sendSelf(CommParameters &cp)
+int XC::T2Vector::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(3);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "T2Vector::sendSelf() - failed to send data\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::T2Vector::recvSelf(const CommParameters &cp)
+int XC::T2Vector::recvSelf(const Communicator &comm)
   {
     inicComm(3);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << "T2Vector::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << "T2Vector::recvSelf - failed to receive data.\n";
       }

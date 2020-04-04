@@ -1208,14 +1208,14 @@ double XC::ShadowSubdomain::getCost(void)
   }
 
 
-int XC::ShadowSubdomain::sendSelf(CommParameters &cp)
+int XC::ShadowSubdomain::sendSelf(Communicator &comm)
   {
     std::cerr << "XC::ShadowSubdomain::sendSelf() ";
     std::cerr << " - NOT YET IMPLEMENTED\n";
     return -1;
   }
 
-int XC::ShadowSubdomain::recvSelf(const CommParameters &cp)
+int XC::ShadowSubdomain::recvSelf(const Communicator &comm)
   {
     std::cerr << "XC::ShadowSubdomain::recvSelf() ";
     std::cerr << " - NOT YET IMPLEMENTED\n";

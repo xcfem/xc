@@ -73,8 +73,8 @@ class beam3d02: public beam3dBase
     const Matrix &getStiff(void) const;    
     void formVar(void);
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);	
+    int sendData(Communicator &);
+    int recvData(const Communicator &);	
   public:
     beam3d02(int tag= 0);        
     beam3d02(int tag, double A, double E, double G,double Jx, double Iy, double Iz, int Nd1, int Nd2, double theta);
@@ -82,8 +82,8 @@ class beam3d02: public beam3dBase
 
     void setDomain(Domain *theDomain);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);    
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);    
   };
 } // end of XC namespace
 

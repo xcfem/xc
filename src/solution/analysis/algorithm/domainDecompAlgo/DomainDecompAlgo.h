@@ -96,8 +96,8 @@ class DomainDecompAlgo: public SolutionAlgorithm
   public:
     // public functions defined for subclasses
     int solveCurrentStep(void);
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 
 inline SolutionAlgorithm *DomainDecompAlgo::getCopy(void) const

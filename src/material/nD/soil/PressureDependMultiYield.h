@@ -80,8 +80,8 @@ class PressureDependMultiYield: public PressureDependMultiYieldBase
      int stressCorrection(int crossedSurface) const;
 
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
      // Initialization constructor
      PressureDependMultiYield(int tag, 
@@ -134,8 +134,8 @@ class PressureDependMultiYield: public PressureDependMultiYieldBase
      // Return the string "PressureDependMultiYield".
      const std::string &getType(void) const ;
 
-     int sendSelf(CommParameters &);  
-     int recvSelf(const CommParameters &);
+     int sendSelf(Communicator &);  
+     int recvSelf(const Communicator &);
      void Print(std::ostream &s, int flag =0) const;
     // RWB; PyLiq1 & TzLiq1 need to see the excess pore pressure and initial stresses.
     friend class PyLiq1;

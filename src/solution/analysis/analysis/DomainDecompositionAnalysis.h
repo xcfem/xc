@@ -146,8 +146,8 @@ class DomainDecompositionAnalysis: public Analysis, public MovableObject
     virtual const Subdomain *getSubdomain(void) const;
     virtual Subdomain *getSubdomain(void);
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
 
     // methods to change the analysis aggregates
     virtual int setAlgorithm(EquiSolnAlgo &theAlgorithm);

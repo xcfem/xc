@@ -314,54 +314,54 @@ int XC::HHTGeneralized::commit(void)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::HHTGeneralized::sendData(CommParameters &cp)
+int XC::HHTGeneralized::sendData(Communicator &comm)
   {
-    int res= RayleighBase::sendData(cp);
-    res+= cp.sendDoubles(alphaI,alphaF,beta,gamma,getDbTagData(),CommMetaData(4));
-    res+= cp.sendDoubles(c1,c2,c3,getDbTagData(),CommMetaData(5));
-    res+= cp.sendMovable(Ut,getDbTagData(),CommMetaData(6));
-    res+= cp.sendMovable(U,getDbTagData(),CommMetaData(7));
-    res+= cp.sendMovable(Ualpha,getDbTagData(),CommMetaData(8));
+    int res= RayleighBase::sendData(comm);
+    res+= comm.sendDoubles(alphaI,alphaF,beta,gamma,getDbTagData(),CommMetaData(4));
+    res+= comm.sendDoubles(c1,c2,c3,getDbTagData(),CommMetaData(5));
+    res+= comm.sendMovable(Ut,getDbTagData(),CommMetaData(6));
+    res+= comm.sendMovable(U,getDbTagData(),CommMetaData(7));
+    res+= comm.sendMovable(Ualpha,getDbTagData(),CommMetaData(8));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::HHTGeneralized::recvData(const CommParameters &cp)
+int XC::HHTGeneralized::recvData(const Communicator &comm)
   {
-    int res= RayleighBase::recvData(cp);
-    res+= cp.receiveDoubles(alphaI,alphaF,beta,gamma,getDbTagData(),CommMetaData(4));
-    res+= cp.receiveDoubles(c1,c2,c3,getDbTagData(),CommMetaData(5));
-    res+= cp.receiveMovable(Ut,getDbTagData(),CommMetaData(6));
-    res+= cp.receiveMovable(U,getDbTagData(),CommMetaData(7));
-    res+= cp.receiveMovable(Ualpha,getDbTagData(),CommMetaData(8));
+    int res= RayleighBase::recvData(comm);
+    res+= comm.receiveDoubles(alphaI,alphaF,beta,gamma,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveDoubles(c1,c2,c3,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveMovable(Ut,getDbTagData(),CommMetaData(6));
+    res+= comm.receiveMovable(U,getDbTagData(),CommMetaData(7));
+    res+= comm.receiveMovable(Ualpha,getDbTagData(),CommMetaData(8));
     return res;
   }
 
-int XC::HHTGeneralized::sendSelf(CommParameters &cp)
+int XC::HHTGeneralized::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(9);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
-int XC::HHTGeneralized::recvSelf(const CommParameters &cp)
+int XC::HHTGeneralized::recvSelf(const Communicator &comm)
   {
     inicComm(9);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

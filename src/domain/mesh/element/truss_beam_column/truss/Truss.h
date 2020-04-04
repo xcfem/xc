@@ -94,8 +94,8 @@ class Truss: public TrussBase
     void initialize(void);
   protected:
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
     void free_material(void);
     void free_load_sens(void);
     void free_mem(void);
@@ -148,8 +148,8 @@ class Truss: public TrussBase
     const Vector &getResistingForceIncInertia(void) const;            
 
     // public methods for element output
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;    
 
 

@@ -334,10 +334,10 @@ void XC::SymArpackSOE::identityM(void)
     EigenSOE::identityM();
   }
 
-int XC::SymArpackSOE::sendSelf(CommParameters &cp)
+int XC::SymArpackSOE::sendSelf(Communicator &comm)
   { return 0; }
 
-int XC::SymArpackSOE::recvSelf(const CommParameters &cp)
+int XC::SymArpackSOE::recvSelf(const Communicator &comm)
   { return 0; }
 
 

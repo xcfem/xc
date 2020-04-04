@@ -81,17 +81,17 @@ int XC::Load::getLoadPatternTag(void) const
   { return loadPatternTag; }
 
 //! @brief Send data through the channel being passed as parameter.
-int XC::Load::sendData(CommParameters &cp)
+int XC::Load::sendData(Communicator &comm)
   {
     setDbTagDataPos(0,getTag());
-    int res= cp.sendInt(loadPatternTag,getDbTagData(),CommMetaData(1));
+    int res= comm.sendInt(loadPatternTag,getDbTagData(),CommMetaData(1));
     return res;
   }
 
 //! @brief Receive data through the channel being passed as parameter.
-int XC::Load::recvData(const CommParameters &cp)
+int XC::Load::recvData(const Communicator &comm)
   {
     setTag(getDbTagDataPos(0));
-    int res= cp.receiveInt(loadPatternTag,getDbTagData(),CommMetaData(1));
+    int res= comm.receiveInt(loadPatternTag,getDbTagData(),CommMetaData(1));
     return res;
   }

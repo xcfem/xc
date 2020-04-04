@@ -172,9 +172,9 @@ void XC::DiagonalSOE::zeroA(void)
   }
 
 
-int XC::DiagonalSOE::sendSelf(CommParameters &cp)
+int XC::DiagonalSOE::sendSelf(Communicator &comm)
   { return 0; }
 
 
-int XC::DiagonalSOE::recvSelf(const CommParameters &cp)
+int XC::DiagonalSOE::recvSelf(const Communicator &comm)
   { return 0; }

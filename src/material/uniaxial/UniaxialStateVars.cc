@@ -40,44 +40,44 @@ int XC::UniaxialStateVars::revertToStart(const double &E)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::UniaxialStateVars::sendData(CommParameters &cp)
+int XC::UniaxialStateVars::sendData(Communicator &comm)
   {
-    int res= cp.sendDoubles(strain,stress,tangent,getDbTagData(),CommMetaData(0));
+    int res= comm.sendDoubles(strain,stress,tangent,getDbTagData(),CommMetaData(0));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::UniaxialStateVars::recvData(const CommParameters &cp)
+int XC::UniaxialStateVars::recvData(const Communicator &comm)
   {
-    int res= cp.receiveDoubles(strain,stress,tangent,getDbTagData(),CommMetaData(0));
+    int res= comm.receiveDoubles(strain,stress,tangent,getDbTagData(),CommMetaData(0));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::UniaxialStateVars::sendSelf(CommParameters &cp)
+int XC::UniaxialStateVars::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(10); 
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "UniaxialStateVars::sendSelf - failed to send data.\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::UniaxialStateVars::recvSelf(const CommParameters &cp)
+int XC::UniaxialStateVars::recvSelf(const Communicator &comm)
   {
     inicComm(10);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "UniaxialStateVars::recvSelf - failed to receive ids.\n";
     else
       {
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
            std::cerr << "UniaxialStateVars::recvSelf - failed to receive data.\n";
       }

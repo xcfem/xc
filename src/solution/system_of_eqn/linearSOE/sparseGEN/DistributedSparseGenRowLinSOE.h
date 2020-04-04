@@ -104,8 +104,8 @@ class DistributedSparseGenRowLinSolver;
     int addA(const Matrix &, const ID &, double fact = 1.0);
     int addB(const Vector &, const ID &, double fact = 1.0);
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     friend class DistributedSuperLU;
   };
 inline SystemOfEqn *DistributedSparseGenRowLinSOE::getCopy(void) const

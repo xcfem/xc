@@ -207,32 +207,32 @@ XC::DbTagData &XC::SFreedom_Constraint::getDbTagData(void) const
   }
 
 //! @brief Sends data through the channel being passed as parameter.
-int XC::SFreedom_Constraint::sendData(CommParameters &cp)
+int XC::SFreedom_Constraint::sendData(Communicator &comm)
   {
-    int res= Constraint::sendData(cp);
-    res+= cp.sendInts(dofNumber,loadPatternTag,getDbTagData(),CommMetaData(3));
-    res+= cp.sendDoubles(valueC,valueR,getDbTagData(),CommMetaData(4));
-    res+= cp.sendBool(isConstant,getDbTagData(),CommMetaData(5));
+    int res= Constraint::sendData(comm);
+    res+= comm.sendInts(dofNumber,loadPatternTag,getDbTagData(),CommMetaData(3));
+    res+= comm.sendDoubles(valueC,valueR,getDbTagData(),CommMetaData(4));
+    res+= comm.sendBool(isConstant,getDbTagData(),CommMetaData(5));
     return res;
   }
 
 //! @brief Receives data through the channel being passed as parameter.
-int XC::SFreedom_Constraint::recvData(const CommParameters &cp)
+int XC::SFreedom_Constraint::recvData(const Communicator &comm)
   {
-    int res= Constraint::recvData(cp);
-    res+= cp.receiveInts(dofNumber,loadPatternTag,getDbTagData(),CommMetaData(3));
-    res+= cp.receiveDoubles(valueC,valueR,getDbTagData(),CommMetaData(4));
-    res+= cp.receiveBool(isConstant,getDbTagData(),CommMetaData(5));
+    int res= Constraint::recvData(comm);
+    res+= comm.receiveInts(dofNumber,loadPatternTag,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveDoubles(valueC,valueR,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveBool(isConstant,getDbTagData(),CommMetaData(5));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::SFreedom_Constraint::sendSelf(CommParameters &cp)
+int XC::SFreedom_Constraint::sendSelf(Communicator &comm)
   {
     inicComm(7);
-    int result= sendData(cp);
+    int result= sendData(comm);
     const int dbTag= getDbTag();
-    result+= cp.sendIdData(getDbTagData(),dbTag);
+    result+= comm.sendIdData(getDbTagData(),dbTag);
     if(result < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send extra data.\n";
@@ -240,16 +240,16 @@ int XC::SFreedom_Constraint::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::SFreedom_Constraint::recvSelf(const CommParameters &cp)
+int XC::SFreedom_Constraint::recvSelf(const Communicator &comm)
   {
     inicComm(7);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; data could not be received.\n" ;
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

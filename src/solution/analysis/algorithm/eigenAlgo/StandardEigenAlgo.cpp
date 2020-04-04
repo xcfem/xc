@@ -99,11 +99,11 @@ int XC::StandardEigenAlgo::solveCurrentStep(int numModes)
   }
 
 //! @brief Send.
-int XC::StandardEigenAlgo::sendSelf(CommParameters &cp)
+int XC::StandardEigenAlgo::sendSelf(Communicator &comm)
   { return 0; }
 
 //! @brief Receive.
-int XC::StandardEigenAlgo::recvSelf(const CommParameters &cp)
+int XC::StandardEigenAlgo::recvSelf(const Communicator &comm)
   { return 0; }
 
 //! @brief Print.

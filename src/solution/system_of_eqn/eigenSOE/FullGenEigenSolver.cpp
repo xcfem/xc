@@ -395,11 +395,11 @@ const double &XC::FullGenEigenSolver::getEigenvalue(int mode) const
   }
 
 
-int XC::FullGenEigenSolver::sendSelf(CommParameters &cp)
+int XC::FullGenEigenSolver::sendSelf(Communicator &comm)
   { return 0; }
 
 
-int XC::FullGenEigenSolver::recvSelf(const CommParameters &cp)
+int XC::FullGenEigenSolver::recvSelf(const Communicator &comm)
   { return 0; }
 
 

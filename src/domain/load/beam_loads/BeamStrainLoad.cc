@@ -49,43 +49,43 @@ const XC::Vector &XC::BeamStrainLoad::getData(int &type, const double &loadFacto
   }
 
 //! @brief Send data through the channel being passed as parameter.
-int XC::BeamStrainLoad::sendData(CommParameters &cp)
+int XC::BeamStrainLoad::sendData(Communicator &comm)
   {
-    int res= BeamLoad::sendData(cp);
-    res+= cp.sendMovable(backEndDeformationsPlane,getDbTagData(),CommMetaData(5));
-    res+= cp.sendMovable(frontEndDeformationPlane,getDbTagData(),CommMetaData(6));
+    int res= BeamLoad::sendData(comm);
+    res+= comm.sendMovable(backEndDeformationsPlane,getDbTagData(),CommMetaData(5));
+    res+= comm.sendMovable(frontEndDeformationPlane,getDbTagData(),CommMetaData(6));
     return res;
   }
 
 //! @brief Receive data through the channel being passed as parameter.
-int XC::BeamStrainLoad::recvData(const CommParameters &cp)
+int XC::BeamStrainLoad::recvData(const Communicator &comm)
   {
-    int res= BeamLoad::recvData(cp);
-    res+= cp.receiveMovable(backEndDeformationsPlane,getDbTagData(),CommMetaData(5));;
-    res+= cp.receiveMovable(frontEndDeformationPlane,getDbTagData(),CommMetaData(6));;
+    int res= BeamLoad::recvData(comm);
+    res+= comm.receiveMovable(backEndDeformationsPlane,getDbTagData(),CommMetaData(5));;
+    res+= comm.receiveMovable(frontEndDeformationPlane,getDbTagData(),CommMetaData(6));;
     return res;
   }
 
-int XC::BeamStrainLoad::sendSelf(CommParameters &cp)
+int XC::BeamStrainLoad::sendSelf(Communicator &comm)
   {
     static ID data(3);
-    int res= sendData(cp);
+    int res= sendData(comm);
     const int dataTag= getDbTag();
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "BeamStrainLoad::sendSelf() - failed to send extra data\n";    
     return res;
   }
 
-int XC::BeamStrainLoad::recvSelf(const CommParameters &cp)
+int XC::BeamStrainLoad::recvSelf(const Communicator &comm)
   {
     static ID data(3);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "BeamStrainLoad::recvSelf() - data could not be received\n" ;
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

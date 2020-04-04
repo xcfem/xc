@@ -250,10 +250,10 @@ void XC::BandArpackSOE::identityM(void)
   }
 
 
-int XC::BandArpackSOE::sendSelf(CommParameters &cp)
+int XC::BandArpackSOE::sendSelf(Communicator &comm)
   { return 0; }
 
-int XC::BandArpackSOE::recvSelf(const CommParameters &cp)
+int XC::BandArpackSOE::recvSelf(const Communicator &comm)
   { return 0; }
 
 //! @brief Save the SOE matrices and vectors to file.

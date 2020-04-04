@@ -40,17 +40,17 @@ XC::beam2d::beam2d(int tag, int class_tag, double a, double e, double i, int Nd1
   {}
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::beam2d::sendData(CommParameters &cp)
+int XC::beam2d::sendData(Communicator &comm)
   {
-    int res= ProtoBeam2d::sendData(cp);
-    res+= cp.sendDoubles(L,sn,cs,getDbTagData(),CommMetaData(9));
+    int res= ProtoBeam2d::sendData(comm);
+    res+= comm.sendDoubles(L,sn,cs,getDbTagData(),CommMetaData(9));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::beam2d::recvData(const CommParameters &cp)
+int XC::beam2d::recvData(const Communicator &comm)
   {
-    int res= ProtoBeam2d::recvData(cp);
-    res+= cp.receiveDoubles(L,sn,cs,getDbTagData(),CommMetaData(9));
+    int res= ProtoBeam2d::recvData(comm);
+    res+= comm.receiveDoubles(L,sn,cs,getDbTagData(),CommMetaData(9));
     return res;
   }

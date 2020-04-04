@@ -238,31 +238,31 @@ XC::DbTagData &XC::NodeLocker::getDbTagData(void) const
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::NodeLocker::sendData(CommParameters &cp)
+int XC::NodeLocker::sendData(Communicator &comm)
   {
     setDbTagDataPos(0,getTag());
-    int res= cp.sendInts(nextTag,currentGeoTag,lastGeoSendTag,getDbTagData(),CommMetaData(1));
-    res+= cp.sendMovable(*theSPs,getDbTagData(),CommMetaData(2));
+    int res= comm.sendInts(nextTag,currentGeoTag,lastGeoSendTag,getDbTagData(),CommMetaData(1));
+    res+= comm.sendMovable(*theSPs,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::NodeLocker::recvData(const CommParameters &cp)
+int XC::NodeLocker::recvData(const Communicator &comm)
   {
     setTag(getDbTagDataPos(0));
-    int res= cp.receiveInts(nextTag,currentGeoTag,lastGeoSendTag,getDbTagData(),CommMetaData(1));
+    int res= comm.receiveInts(nextTag,currentGeoTag,lastGeoSendTag,getDbTagData(),CommMetaData(1));
     const int dbTagSPs= getDbTagDataPos(2);
-    res+= theSPs->receive<SFreedom_Constraint>(dbTagSPs,cp,&FEM_ObjectBroker::getNewSP);
+    res+= theSPs->receive<SFreedom_Constraint>(dbTagSPs,comm,&FEM_ObjectBroker::getNewSP);
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::NodeLocker::sendSelf(CommParameters &cp)
+int XC::NodeLocker::sendSelf(Communicator &comm)
   {
     inicComm(3);
-    int res= sendData(cp);
-    const int dataTag= getDbTag(cp);
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    int res= sendData(comm);
+    const int dataTag= getDbTag(comm);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "NodeLocker::sendSelf() - failed to send extra data\n";    
     return res;
@@ -270,15 +270,15 @@ int XC::NodeLocker::sendSelf(CommParameters &cp)
 
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::NodeLocker::recvSelf(const CommParameters &cp)
+int XC::NodeLocker::recvSelf(const Communicator &comm)
   {
     inicComm(3);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "NodeLocker::recvSelf() - data could not be received.\n" ;
     else
-      res+=recvData(cp);
+      res+=recvData(comm);
     return res;
   }
 

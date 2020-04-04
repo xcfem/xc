@@ -72,15 +72,15 @@ class HSConstraint: public ProtoArcLength
   protected:
     double getDLambdaNewStep(void) const;
     double getDLambdaUpdate(void) const;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     friend class AnalysisAggregation ;
     HSConstraint(AnalysisAggregation *,double arcLength, double psi_u=1.0, double psi_f=1.0, double u_ref=1.0);
     Integrator *getCopy(void) const;
   public:
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
     void Print(std::ostream &s, int flag =0) const;    
   };

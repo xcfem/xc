@@ -47,8 +47,8 @@ class BeamColumnWithSectionFDTrf2d: public BeamColumnWithSectionFD
   protected:  
     CrdTransf2d *theCoordTransf;
 
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
     void set_transf(const CrdTransf *trf);
 

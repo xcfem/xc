@@ -170,10 +170,10 @@ void XC::UserDefinedHingeIntegration3d::addElasticDeformations(ElementalLoad *th
 XC::BeamIntegration *XC::UserDefinedHingeIntegration3d::getCopy(void) const
   { return new UserDefinedHingeIntegration3d(*this); }
 
-int XC::UserDefinedHingeIntegration3d::sendSelf(CommParameters &cp)
+int XC::UserDefinedHingeIntegration3d::sendSelf(Communicator &comm)
   { return -1; }
 
-int XC::UserDefinedHingeIntegration3d::recvSelf(const CommParameters &cp)
+int XC::UserDefinedHingeIntegration3d::recvSelf(const Communicator &comm)
   { return -1; }
 
 int XC::UserDefinedHingeIntegration3d::setParameter(const std::vector<std::string> &argv, Parameter &param)

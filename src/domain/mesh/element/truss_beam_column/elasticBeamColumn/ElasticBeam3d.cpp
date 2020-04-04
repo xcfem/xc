@@ -631,56 +631,56 @@ XC::DbTagData &XC::ElasticBeam3d::getDbTagData(void) const
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::ElasticBeam3d::sendData(CommParameters &cp)
+int XC::ElasticBeam3d::sendData(Communicator &comm)
   {
     DbTagData &dt= getDbTagData();
-    int res= ProtoBeam3d::sendData(cp);
-    res+= sendCoordTransf(8,9,10,cp);
-    res+= cp.sendVector(eInic,dt,CommMetaData(11));
-    res+= cp.sendInt(sectionTag,dt,CommMetaData(12));
-    res+= sendEsfBeamColumn3d(q,13,dt,cp);
-    res+= p0.sendData(cp,dt,CommMetaData(14));
-    res+= q0.sendData(cp,dt,CommMetaData(15));
+    int res= ProtoBeam3d::sendData(comm);
+    res+= sendCoordTransf(8,9,10,comm);
+    res+= comm.sendVector(eInic,dt,CommMetaData(11));
+    res+= comm.sendInt(sectionTag,dt,CommMetaData(12));
+    res+= sendEsfBeamColumn3d(q,13,dt,comm);
+    res+= p0.sendData(comm,dt,CommMetaData(14));
+    res+= q0.sendData(comm,dt,CommMetaData(15));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::ElasticBeam3d::recvData(const CommParameters &cp)
+int XC::ElasticBeam3d::recvData(const Communicator &comm)
   {
     DbTagData &dt= getDbTagData();
-    int res= ProtoBeam3d::recvData(cp);
-    theCoordTransf= recvCoordTransf3d(8,9,10,cp);
-    res+= cp.receiveVector(eInic,dt,CommMetaData(11));
-    res+= cp.receiveInt(sectionTag,dt,CommMetaData(12));
-    res+= receiveEsfBeamColumn3d(q,13,dt,cp);
-    res+= p0.receiveData(cp,dt,CommMetaData(14));
-    res+= q0.receiveData(cp,dt,CommMetaData(15));
+    int res= ProtoBeam3d::recvData(comm);
+    theCoordTransf= recvCoordTransf3d(8,9,10,comm);
+    res+= comm.receiveVector(eInic,dt,CommMetaData(11));
+    res+= comm.receiveInt(sectionTag,dt,CommMetaData(12));
+    res+= receiveEsfBeamColumn3d(q,13,dt,comm);
+    res+= p0.receiveData(comm,dt,CommMetaData(14));
+    res+= q0.receiveData(comm,dt,CommMetaData(15));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::ElasticBeam3d::sendSelf(CommParameters &cp)
+int XC::ElasticBeam3d::sendSelf(Communicator &comm)
   {
     inicComm(17);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
     const int dataTag= getDbTag();
-    res= cp.sendIdData(getDbTagData(),dataTag);
+    res= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "ElasticBeam3d::sendSelf -- could not send data Vector\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::ElasticBeam3d::recvSelf(const CommParameters &cp)
+int XC::ElasticBeam3d::recvSelf(const Communicator &comm)
   {
     inicComm(17);
     const int dataTag= getDbTag();
-    int res = cp.receiveIdData(getDbTagData(),dataTag);
+    int res = comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "ElasticBeam3d::recvSelf() - failed to send ID data\n";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

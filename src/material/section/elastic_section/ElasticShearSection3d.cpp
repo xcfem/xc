@@ -101,46 +101,46 @@ int XC::ElasticShearSection3d::getOrder(void) const
   { return 6; }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::ElasticShearSection3d::sendData(CommParameters &cp)
+int XC::ElasticShearSection3d::sendData(Communicator &comm)
   {
-    int res= BaseElasticSection3d::sendData(cp);
+    int res= BaseElasticSection3d::sendData(comm);
     setDbTagDataPos(9,parameterID);
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::ElasticShearSection3d::recvData(const CommParameters &cp)
+int XC::ElasticShearSection3d::recvData(const Communicator &comm)
   {
-    int res= BaseElasticSection3d::recvData(cp);
+    int res= BaseElasticSection3d::recvData(comm);
     parameterID= getDbTagDataPos(9);
     return res;
   }
 
-int XC::ElasticShearSection3d::sendSelf(CommParameters &cp)
+int XC::ElasticShearSection3d::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(3);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
-int XC::ElasticShearSection3d::recvSelf(const CommParameters &cp)
+int XC::ElasticShearSection3d::recvSelf(const Communicator &comm)
   {
     inicComm(3);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

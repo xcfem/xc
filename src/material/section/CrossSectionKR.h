@@ -53,8 +53,8 @@ class CrossSectionKR: public CommandEntity, public MovableObject
     void alloc(const size_t &dim);
     void copy(const CrossSectionKR &other);
 
-    int sendData(CommParameters &);  
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);  
+    int recvData(const Communicator &);
 
     inline void updateNMz(const double &f,const double &y)
       {
@@ -133,8 +133,8 @@ class CrossSectionKR: public CommandEntity, public MovableObject
     inline Matrix &Stiffness(void)
       { return *K; }
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 
 } // end of XC namespace

@@ -335,36 +335,36 @@ int XC::Bidirectional::getOrder(void) const
   { return 2; }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::Bidirectional::sendData(CommParameters &cp)
+int XC::Bidirectional::sendData(Communicator &comm)
   {
-    int res= SectionForceDeformation::sendData(cp);
-    res+= cp.sendDoubles(E,sigY,Hiso,Hkin,getDbTagData(),CommMetaData(5));
-    res+= cp.sendDoubles(e_n1Trial[0],e_n1Trial[1],e_n1Inic[0],e_n1Inic[1],getDbTagData(),CommMetaData(6));
-    res+= cp.sendDoubles(eP_n[0],eP_n[1],eP_n1[0],eP_n1[1],getDbTagData(),CommMetaData(7));
-    res+= cp.sendDoubles(q_n[0],q_n[1],q_n1[0],q_n1[1],alpha_n,alpha_n1,getDbTagData(),CommMetaData(7));
+    int res= SectionForceDeformation::sendData(comm);
+    res+= comm.sendDoubles(E,sigY,Hiso,Hkin,getDbTagData(),CommMetaData(5));
+    res+= comm.sendDoubles(e_n1Trial[0],e_n1Trial[1],e_n1Inic[0],e_n1Inic[1],getDbTagData(),CommMetaData(6));
+    res+= comm.sendDoubles(eP_n[0],eP_n[1],eP_n1[0],eP_n1[1],getDbTagData(),CommMetaData(7));
+    res+= comm.sendDoubles(q_n[0],q_n[1],q_n1[0],q_n1[1],alpha_n,alpha_n1,getDbTagData(),CommMetaData(7));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::Bidirectional::recvData(const CommParameters &cp)
+int XC::Bidirectional::recvData(const Communicator &comm)
   {
-    int res= SectionForceDeformation::recvData(cp);
-    res+= cp.receiveDoubles(E,sigY,Hiso,Hkin,getDbTagData(),CommMetaData(5));
-    res+= cp.receiveDoubles(e_n1Trial[0],e_n1Trial[1],e_n1Inic[0],e_n1Inic[1],getDbTagData(),CommMetaData(6));
-    res+= cp.receiveDoubles(eP_n[0],eP_n[1],eP_n1[0],eP_n1[1],getDbTagData(),CommMetaData(7));
-    res+= cp.receiveDoubles(q_n[0],q_n[1],q_n1[0],q_n1[1],alpha_n,alpha_n1,getDbTagData(),CommMetaData(7));
+    int res= SectionForceDeformation::recvData(comm);
+    res+= comm.receiveDoubles(E,sigY,Hiso,Hkin,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveDoubles(e_n1Trial[0],e_n1Trial[1],e_n1Inic[0],e_n1Inic[1],getDbTagData(),CommMetaData(6));
+    res+= comm.receiveDoubles(eP_n[0],eP_n[1],eP_n1[0],eP_n1[1],getDbTagData(),CommMetaData(7));
+    res+= comm.receiveDoubles(q_n[0],q_n[1],q_n1[0],q_n1[1],alpha_n,alpha_n1,getDbTagData(),CommMetaData(7));
     return res;
   }
 
 //! @brief Send object through the communicator argument.
-int XC::Bidirectional::sendSelf(CommParameters &cp)
+int XC::Bidirectional::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(8);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; failed to send data.\n";
@@ -372,11 +372,11 @@ int XC::Bidirectional::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receive object through the communicator argument.
-int XC::Bidirectional::recvSelf(const CommParameters &cp)
+int XC::Bidirectional::recvSelf(const Communicator &comm)
   {
     inicComm(8);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -384,7 +384,7 @@ int XC::Bidirectional::recvSelf(const CommParameters &cp)
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

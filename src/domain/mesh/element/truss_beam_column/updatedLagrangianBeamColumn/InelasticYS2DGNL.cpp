@@ -1614,12 +1614,12 @@ void XC::InelasticYS2DGNL::Print(std::ostream &s, int flag) const
     //s << "\nElement Forces ";
 }
 
-int XC::InelasticYS2DGNL::sendSelf(CommParameters &cp)
+int XC::InelasticYS2DGNL::sendSelf(Communicator &comm)
 {
         return -1;
 }
 
-int XC::InelasticYS2DGNL::recvSelf(const CommParameters &cp)
+int XC::InelasticYS2DGNL::recvSelf(const Communicator &comm)
 {
         return -1;
 }

@@ -926,52 +926,52 @@ void   XC::TwentyEightNodeBrickUP::computeBasis(void) const
 }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::TwentyEightNodeBrickUP::sendData(CommParameters &cp)
+int XC::TwentyEightNodeBrickUP::sendData(Communicator &comm)
   {
-    int res= ElemWithMaterial<20,NDMaterialPhysicalProperties>::sendData(cp);
-    res+= cp.sendDoubles(bf[0],bf[1],bf[2],rho_f,kc,getDbTagData(),CommMetaData(8));
-    res+= cp.sendDoubles(perm[0],perm[1],perm[2],getDbTagData(),CommMetaData(9));
-    res+= cp.sendMatrixPtr(Ki,getDbTagData(),MatrixCommMetaData(12,13,14,15));
+    int res= ElemWithMaterial<20,NDMaterialPhysicalProperties>::sendData(comm);
+    res+= comm.sendDoubles(bf[0],bf[1],bf[2],rho_f,kc,getDbTagData(),CommMetaData(8));
+    res+= comm.sendDoubles(perm[0],perm[1],perm[2],getDbTagData(),CommMetaData(9));
+    res+= comm.sendMatrixPtr(Ki,getDbTagData(),MatrixCommMetaData(12,13,14,15));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::TwentyEightNodeBrickUP::recvData(const CommParameters &cp)
+int XC::TwentyEightNodeBrickUP::recvData(const Communicator &comm)
   {
-    int res= ElemWithMaterial<20,NDMaterialPhysicalProperties>::recvData(cp);
-    res+= cp.receiveDoubles(bf[0],bf[1],bf[2],rho_f,kc,getDbTagData(),CommMetaData(8));
-    res+= cp.receiveDoubles(perm[0],perm[1],perm[2],getDbTagData(),CommMetaData(9));
-    Ki= cp.receiveMatrixPtr(Ki,getDbTagData(),MatrixCommMetaData(12,13,14,15));
+    int res= ElemWithMaterial<20,NDMaterialPhysicalProperties>::recvData(comm);
+    res+= comm.receiveDoubles(bf[0],bf[1],bf[2],rho_f,kc,getDbTagData(),CommMetaData(8));
+    res+= comm.receiveDoubles(perm[0],perm[1],perm[2],getDbTagData(),CommMetaData(9));
+    Ki= comm.receiveMatrixPtr(Ki,getDbTagData(),MatrixCommMetaData(12,13,14,15));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int  XC::TwentyEightNodeBrickUP::sendSelf(CommParameters &cp)
+int  XC::TwentyEightNodeBrickUP::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(16);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::TwentyEightNodeBrickUP::recvSelf(const CommParameters &cp)
+int XC::TwentyEightNodeBrickUP::recvSelf(const Communicator &comm)
   {
     inicComm(16);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

@@ -1098,54 +1098,54 @@ double XC::NineNodeMixedQuad::shape1d( int code, int node, double xi )
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::NineNodeMixedQuad::sendData(CommParameters &cp)
+int XC::NineNodeMixedQuad::sendData(Communicator &comm)
   {
-    int res= ElemWithMaterial<9,NDMaterialPhysicalProperties>::sendData(cp);
-    res+= cp.sendDoubles(xl[0][0],xl[0][1],xl[0][2],xl[0][3],xl[0][4],xl[0][5],getDbTagData(),CommMetaData(8));
-    res+= cp.sendDoubles(xl[0][6],xl[0][7],xl[0][8],xl[1][0],xl[1][1],xl[1][2],getDbTagData(),CommMetaData(9));
-    res+= cp.sendDoubles(xl[1][3],xl[1][4],xl[1][5],xl[1][6],xl[1][7],xl[1][8],getDbTagData(),CommMetaData(10));
-    res+= cp.sendMatrixPtr(Ki,getDbTagData(),MatrixCommMetaData(13,14,15,16));
+    int res= ElemWithMaterial<9,NDMaterialPhysicalProperties>::sendData(comm);
+    res+= comm.sendDoubles(xl[0][0],xl[0][1],xl[0][2],xl[0][3],xl[0][4],xl[0][5],getDbTagData(),CommMetaData(8));
+    res+= comm.sendDoubles(xl[0][6],xl[0][7],xl[0][8],xl[1][0],xl[1][1],xl[1][2],getDbTagData(),CommMetaData(9));
+    res+= comm.sendDoubles(xl[1][3],xl[1][4],xl[1][5],xl[1][6],xl[1][7],xl[1][8],getDbTagData(),CommMetaData(10));
+    res+= comm.sendMatrixPtr(Ki,getDbTagData(),MatrixCommMetaData(13,14,15,16));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::NineNodeMixedQuad::recvData(const CommParameters &cp)
+int XC::NineNodeMixedQuad::recvData(const Communicator &comm)
   {
-    int res= ElemWithMaterial<9,NDMaterialPhysicalProperties>::recvData(cp);
-    res+= cp.receiveDoubles(xl[0][0],xl[0][1],xl[0][2],xl[0][3],xl[0][4],xl[0][5],getDbTagData(),CommMetaData(6));
-    res+= cp.receiveDoubles(xl[0][6],xl[0][7],xl[0][8],xl[1][0],xl[1][1],xl[1][2],getDbTagData(),CommMetaData(9));
-    res+= cp.receiveDoubles(xl[1][3],xl[1][4],xl[1][5],xl[1][6],xl[1][7],xl[1][8],getDbTagData(),CommMetaData(10));
-    Ki= cp.receiveMatrixPtr(Ki,getDbTagData(),MatrixCommMetaData(13,14,15,16));
+    int res= ElemWithMaterial<9,NDMaterialPhysicalProperties>::recvData(comm);
+    res+= comm.receiveDoubles(xl[0][0],xl[0][1],xl[0][2],xl[0][3],xl[0][4],xl[0][5],getDbTagData(),CommMetaData(6));
+    res+= comm.receiveDoubles(xl[0][6],xl[0][7],xl[0][8],xl[1][0],xl[1][1],xl[1][2],getDbTagData(),CommMetaData(9));
+    res+= comm.receiveDoubles(xl[1][3],xl[1][4],xl[1][5],xl[1][6],xl[1][7],xl[1][8],getDbTagData(),CommMetaData(10));
+    Ki= comm.receiveMatrixPtr(Ki,getDbTagData(),MatrixCommMetaData(13,14,15,16));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::NineNodeMixedQuad::sendSelf(CommParameters &cp)
+int XC::NineNodeMixedQuad::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(17);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
 
-int XC::NineNodeMixedQuad::recvSelf(const CommParameters &cp)
+int XC::NineNodeMixedQuad::recvSelf(const Communicator &comm)
   {
     inicComm(17);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

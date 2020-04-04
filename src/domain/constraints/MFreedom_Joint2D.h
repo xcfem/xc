@@ -92,8 +92,8 @@ class MFreedom_Joint2D: public MFreedom_Joint
     virtual const Matrix &getConstraint(void) const;
 
     // methods for output
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace

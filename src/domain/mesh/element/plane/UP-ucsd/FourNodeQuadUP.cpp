@@ -602,48 +602,48 @@ const XC::Vector &XC::FourNodeQuadUP::getResistingForceIncInertia(void) const
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::FourNodeQuadUP::sendData(CommParameters &cp)
+int XC::FourNodeQuadUP::sendData(Communicator &comm)
   {
-    int res= QuadBase4N<SolidMech2D>::sendData(cp);
-    res+= cp.sendDoubles(bf[0],bf[1],getDbTagData(),CommMetaData(2));
-    res+= cp.sendDoubles(pressure,kc,perm[0],perm[1],getDbTagData(),CommMetaData(3));
+    int res= QuadBase4N<SolidMech2D>::sendData(comm);
+    res+= comm.sendDoubles(bf[0],bf[1],getDbTagData(),CommMetaData(2));
+    res+= comm.sendDoubles(pressure,kc,perm[0],perm[1],getDbTagData(),CommMetaData(3));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::FourNodeQuadUP::recvData(const CommParameters &cp)
+int XC::FourNodeQuadUP::recvData(const Communicator &comm)
   {
-    int res= QuadBase4N<SolidMech2D>::recvData(cp);
-    res+= cp.receiveDoubles(bf[0],bf[1],getDbTagData(),CommMetaData(2));
-    res+= cp.receiveDoubles(pressure,kc,perm[0],perm[1],getDbTagData(),CommMetaData(3));
+    int res= QuadBase4N<SolidMech2D>::recvData(comm);
+    res+= comm.receiveDoubles(bf[0],bf[1],getDbTagData(),CommMetaData(2));
+    res+= comm.receiveDoubles(pressure,kc,perm[0],perm[1],getDbTagData(),CommMetaData(3));
     return res;
   }
 
-int XC::FourNodeQuadUP::sendSelf(CommParameters &cp)
+int XC::FourNodeQuadUP::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(3);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
-int XC::FourNodeQuadUP::recvSelf(const CommParameters &cp)
+int XC::FourNodeQuadUP::recvSelf(const Communicator &comm)
   {
     inicComm(3);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

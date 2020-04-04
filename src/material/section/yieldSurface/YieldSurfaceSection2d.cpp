@@ -234,10 +234,10 @@ const XC::ResponseId &XC::YieldSurfaceSection2d::getType(void) const
 int XC::YieldSurfaceSection2d::getOrder(void) const
   { return 2; }
 
-int XC::YieldSurfaceSection2d::sendSelf(CommParameters &cp)
+int XC::YieldSurfaceSection2d::sendSelf(Communicator &comm)
   { return -1; }
 
-int XC::YieldSurfaceSection2d::recvSelf(const CommParameters &)
+int XC::YieldSurfaceSection2d::recvSelf(const Communicator &)
   { return -1; }
 
 void XC::YieldSurfaceSection2d::Print(std::ostream &s, int flag) const

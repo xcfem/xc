@@ -73,8 +73,8 @@ class ShellMITC9: public QuadBase9N<SectionFDPhysicalProperties>
     static void shape2d( double ss, double tt, const double x[2][9], double shp[3][9], double &xsj );
   protected:
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public:
     //null constructor
@@ -113,8 +113,8 @@ class ShellMITC9: public QuadBase9N<SectionFDPhysicalProperties>
     virtual const ShellCrdTransf3dBase *getCoordTransf(void) const;
     double getArea(bool initialGeometry= true) const;
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
   };
 } // end of XC namespace

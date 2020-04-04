@@ -100,8 +100,8 @@ class ElasticSection3d: public BaseElasticSection3d
     const ResponseId &getType(void) const;
     int getOrder(void) const;
     
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag = 0) const;
   };

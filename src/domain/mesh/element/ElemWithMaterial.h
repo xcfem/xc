@@ -43,8 +43,8 @@ class ElemWithMaterial: public ElementBase<NNODOS>
   protected:
     PhysProp physicalProperties; //!< pointers to the material objects and physical properties.
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public:
     ElemWithMaterial(int tag, int classTag);
@@ -136,19 +136,19 @@ Matrix ElemWithMaterial<NNODOS, PhysProp>::getExtrapolatedValues(const Matrix &v
 
 //! @brief Send members through the channel being passed as parameter.
 template <int NNODOS,class PhysProp>
-  int ElemWithMaterial<NNODOS, PhysProp>::sendData(CommParameters &cp)
+  int ElemWithMaterial<NNODOS, PhysProp>::sendData(Communicator &comm)
   {
-    int res= ElementBase<NNODOS>::sendData(cp);
-    res+= cp.sendMovable(physicalProperties,this->getDbTagData(),CommMetaData(7));
+    int res= ElementBase<NNODOS>::sendData(comm);
+    res+= comm.sendMovable(physicalProperties,this->getDbTagData(),CommMetaData(7));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
 template <int NNODOS,class PhysProp>
-int ElemWithMaterial<NNODOS, PhysProp>::recvData(const CommParameters &cp)
+int ElemWithMaterial<NNODOS, PhysProp>::recvData(const Communicator &comm)
   {
-    int res= ElementBase<NNODOS>::recvData(cp);
-    res+= cp.receiveMovable(physicalProperties,this->getDbTagData(),CommMetaData(7));
+    int res= ElementBase<NNODOS>::recvData(comm);
+    res+= comm.receiveMovable(physicalProperties,this->getDbTagData(),CommMetaData(7));
     return res;
   }
 

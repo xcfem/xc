@@ -90,8 +90,8 @@ class DistributedBandGenLinSOE: public BandGenLinSOE, public DistributedBandLinS
     const Vector &getB(void) const;
     int solve(void);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     friend class BandGenLinLapackSolver;
 
   };

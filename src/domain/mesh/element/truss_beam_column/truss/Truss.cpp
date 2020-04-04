@@ -705,36 +705,36 @@ XC::DbTagData &XC::Truss::getDbTagData(void) const
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::Truss::sendData(CommParameters &cp)
+int XC::Truss::sendData(Communicator &comm)
   {
-    int res= TrussBase::sendData(cp);
-    res+= cp.sendBrokedPtr(theMaterial,getDbTagData(),BrokedPtrCommMetaData(20,21,22));
-    res+= cp.sendDouble(A,getDbTagData(),CommMetaData(23));
-    res+= cp.sendInt(parameterID,getDbTagData(),CommMetaData(24));
-    res+= cp.sendVectorPtr(theLoadSens,getDbTagData(),ArrayCommMetaData(25,26,27)); 
+    int res= TrussBase::sendData(comm);
+    res+= comm.sendBrokedPtr(theMaterial,getDbTagData(),BrokedPtrCommMetaData(20,21,22));
+    res+= comm.sendDouble(A,getDbTagData(),CommMetaData(23));
+    res+= comm.sendInt(parameterID,getDbTagData(),CommMetaData(24));
+    res+= comm.sendVectorPtr(theLoadSens,getDbTagData(),ArrayCommMetaData(25,26,27)); 
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::Truss::recvData(const CommParameters &cp)
+int XC::Truss::recvData(const Communicator &comm)
   {
-    int res= TrussBase::recvData(cp);
-    theMaterial= cp.getBrokedMaterial(theMaterial,getDbTagData(),BrokedPtrCommMetaData(20,21,22));
-    res+= cp.receiveDouble(A,getDbTagData(),CommMetaData(23));
-    res+= cp.receiveInt(parameterID,getDbTagData(),CommMetaData(24));
-    theLoadSens= cp.receiveVectorPtr(theLoadSens,getDbTagData(),ArrayCommMetaData(25,26,27));
+    int res= TrussBase::recvData(comm);
+    theMaterial= comm.getBrokedMaterial(theMaterial,getDbTagData(),BrokedPtrCommMetaData(20,21,22));
+    res+= comm.receiveDouble(A,getDbTagData(),CommMetaData(23));
+    res+= comm.receiveInt(parameterID,getDbTagData(),CommMetaData(24));
+    theLoadSens= comm.receiveVectorPtr(theLoadSens,getDbTagData(),ArrayCommMetaData(25,26,27));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::Truss::sendSelf(CommParameters &cp)
+int XC::Truss::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(28);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data.\n";
@@ -742,18 +742,18 @@ int XC::Truss::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::Truss::recvSelf(const CommParameters &cp)
+int XC::Truss::recvSelf(const Communicator &comm)
   {
     inicComm(28);
     
     const int dbTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dbTag);
+    int res= comm.receiveIdData(getDbTagData(),dbTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to receive ids.\n";
     else
       {
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
            std::cerr << getClassName() << "::" << __FUNCTION__
 		     << "; failed to receive data.\n";

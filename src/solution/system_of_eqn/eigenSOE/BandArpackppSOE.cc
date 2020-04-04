@@ -217,9 +217,9 @@ void XC::BandArpackppSOE::identityM(void)
   }
 
 
-int XC::BandArpackppSOE::sendSelf(CommParameters &cp)
+int XC::BandArpackppSOE::sendSelf(Communicator &comm)
   { return 0; }
     
-int XC::BandArpackppSOE::recvSelf(const CommParameters &cp)
+int XC::BandArpackppSOE::recvSelf(const Communicator &comm)
   { return 0; }
 

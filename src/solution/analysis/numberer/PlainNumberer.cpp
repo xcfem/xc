@@ -217,11 +217,11 @@ int XC::PlainNumberer::numberDOF(int lastDOF)
   }
 
 //! @brief Does nothing.
-int XC::PlainNumberer::sendSelf(CommParameters &cp)
+int XC::PlainNumberer::sendSelf(Communicator &comm)
   { return 0; }
 
 //! @brief Does nothing.
-int XC::PlainNumberer::recvSelf(const CommParameters &cp)
+int XC::PlainNumberer::recvSelf(const Communicator &comm)
   { return 0; }
 
 

@@ -197,8 +197,8 @@ class MultiaxialCyclicPlasticity: public NDMaterial
 
 
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public : 
     //null constructor
     MultiaxialCyclicPlasticity();
@@ -234,8 +234,8 @@ class MultiaxialCyclicPlasticity: public NDMaterial
   virtual int revertToStart(void);
 
   //sending and receiving
-  virtual int sendSelf(CommParameters &);  
-  virtual int recvSelf(const CommParameters &);
+  virtual int sendSelf(Communicator &);  
+  virtual int recvSelf(const Communicator &);
 
   //print out material data
   void Print(std::ostream &s, int flag = 0) const;

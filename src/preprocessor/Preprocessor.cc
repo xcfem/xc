@@ -177,48 +177,48 @@ XC::DbTagData &XC::Preprocessor::getDbTagData(void) const
   }
 
 //! @brief Send data through the channel being passed as parameter.
-int XC::Preprocessor::sendData(CommParameters &cp)
+int XC::Preprocessor::sendData(Communicator &comm)
   {
-    //res+= cp.sendMovable(materialHandler,getDbTagData(),CommMetaData(0));
-    //res+= cp.sendMovable(transf,getDbTagData(),CommMetaData(1));
-    //res+= cp.sendMovable(beamIntegrators,getDbTagData(),CommMetaData(2));
-    //res+= cp.sendMovable(nodes,getDbTagData(),CommMetaData(3));
-    //res+= cp.sendMovable(elements,getDbTagData(),CommMetaData(4));
-    int res= cp.sendMovable(loads,getDbTagData(),CommMetaData(5));
-    //res+= cp.sendMovable(constraints,getDbTagData(),CommMetaData(6));
-    //res+= cp.sendMovable(mbt,getDbTagData(),CommMetaData(7));
+    //res+= comm.sendMovable(materialHandler,getDbTagData(),CommMetaData(0));
+    //res+= comm.sendMovable(transf,getDbTagData(),CommMetaData(1));
+    //res+= comm.sendMovable(beamIntegrators,getDbTagData(),CommMetaData(2));
+    //res+= comm.sendMovable(nodes,getDbTagData(),CommMetaData(3));
+    //res+= comm.sendMovable(elements,getDbTagData(),CommMetaData(4));
+    int res= comm.sendMovable(loads,getDbTagData(),CommMetaData(5));
+    //res+= comm.sendMovable(constraints,getDbTagData(),CommMetaData(6));
+    //res+= comm.sendMovable(mbt,getDbTagData(),CommMetaData(7));
     assert(domain);
-    res+= sendDomain(*domain,8,getDbTagData(),cp);
-    res+= cp.sendMovable(sets,getDbTagData(),CommMetaData(9));
+    res+= sendDomain(*domain,8,getDbTagData(),comm);
+    res+= comm.sendMovable(sets,getDbTagData(),CommMetaData(9));
     return res;
   }
 
 //! @brief Receive data through the channel being passed as parameter.
-int XC::Preprocessor::recvData(const CommParameters &cp)
+int XC::Preprocessor::recvData(const Communicator &comm)
   {
-    //res+= cp.receiveMovable(materialHandler,getDbTagData(),CommMetaData(0));
-    //res+= cp.receiveMovable(transf,getDbTagData(),CommMetaData(1));
-    //res+= cp.receiveMovable(beamIntegrators,getDbTagData(),CommMetaData(2));
-    //res+= cp.receiveMovable(nodes,getDbTagData(),CommMetaData(3));
-    //res+= cp.receiveMovable(elements,getDbTagData(),CommMetaData(4));
-    int res= cp.receiveMovable(loads,getDbTagData(),CommMetaData(5));
-    //res+= cp.receiveMovable(constraints,getDbTagData(),CommMetaData(6));
-    //res+= cp.receiveMovable(mbt,getDbTagData(),CommMetaData(7));
+    //res+= comm.receiveMovable(materialHandler,getDbTagData(),CommMetaData(0));
+    //res+= comm.receiveMovable(transf,getDbTagData(),CommMetaData(1));
+    //res+= comm.receiveMovable(beamIntegrators,getDbTagData(),CommMetaData(2));
+    //res+= comm.receiveMovable(nodes,getDbTagData(),CommMetaData(3));
+    //res+= comm.receiveMovable(elements,getDbTagData(),CommMetaData(4));
+    int res= comm.receiveMovable(loads,getDbTagData(),CommMetaData(5));
+    //res+= comm.receiveMovable(constraints,getDbTagData(),CommMetaData(6));
+    //res+= comm.receiveMovable(mbt,getDbTagData(),CommMetaData(7));
     assert(domain);
-    res+= receiveDomain(*domain,8,getDbTagData(),cp);
-    res+= cp.receiveMovable(sets,getDbTagData(),CommMetaData(9));
+    res+= receiveDomain(*domain,8,getDbTagData(),comm);
+    res+= comm.receiveMovable(sets,getDbTagData(),CommMetaData(9));
     return res;
   }
 
 //! @brief Send object through the channel being passed as parameter.
-int XC::Preprocessor::sendSelf(CommParameters &cp)
+int XC::Preprocessor::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(10);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data\n";
@@ -226,11 +226,11 @@ int XC::Preprocessor::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receive object through the channel being passed as parameter.
-int XC::Preprocessor::recvSelf(const CommParameters &cp)
+int XC::Preprocessor::recvSelf(const Communicator &comm)
   {
     inicComm(10);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -238,7 +238,7 @@ int XC::Preprocessor::recvSelf(const CommParameters &cp)
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

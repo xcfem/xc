@@ -80,8 +80,8 @@ class ElementalLoad: public Load
   protected:
     ID elemTags; //!< Tags of loaded elements.
 
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     ElementalLoad(int tag= 0, int classTag= 0);
     ElementalLoad(int tag, int classTag,const ID &);

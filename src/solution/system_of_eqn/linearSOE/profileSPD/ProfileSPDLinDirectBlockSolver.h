@@ -97,8 +97,8 @@ class ProfileSPDLinDirectBlockSolver: public ProfileSPDLinDirectBase
 
     virtual int setProfileSOE(ProfileSPDLinSOE &theSOE);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 
 inline LinearSOESolver *ProfileSPDLinDirectBlockSolver::getCopy(void) const

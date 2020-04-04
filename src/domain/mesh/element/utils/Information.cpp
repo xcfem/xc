@@ -181,61 +181,61 @@ int XC::Information::setTensor(const Tensor &newTensor)
 }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::Information::sendData(CommParameters &cp)
+int XC::Information::sendData(Communicator &comm)
   {
     //setDbTagDataPos(0,getTag());
     int IT= theType;
-    int res= cp.sendInts(IT,theInt,getDbTagData(),CommMetaData(1));
-    res+= cp.sendDouble(theDouble,getDbTagData(),CommMetaData(2));
-    res+= cp.sendIDPtr(theID,getDbTagData(),ArrayCommMetaData(3,4,5));
-    res+= cp.sendVectorPtr(theVector,getDbTagData(),ArrayCommMetaData(6,7,8));
-    res+= cp.sendMatrixPtr(theMatrix,getDbTagData(),MatrixCommMetaData(9,10,11,12));
-    res+= cp.sendTensorPtr(theTensor,getDbTagData(),TensorCommMetaData(13,14,15,16));
+    int res= comm.sendInts(IT,theInt,getDbTagData(),CommMetaData(1));
+    res+= comm.sendDouble(theDouble,getDbTagData(),CommMetaData(2));
+    res+= comm.sendIDPtr(theID,getDbTagData(),ArrayCommMetaData(3,4,5));
+    res+= comm.sendVectorPtr(theVector,getDbTagData(),ArrayCommMetaData(6,7,8));
+    res+= comm.sendMatrixPtr(theMatrix,getDbTagData(),MatrixCommMetaData(9,10,11,12));
+    res+= comm.sendTensorPtr(theTensor,getDbTagData(),TensorCommMetaData(13,14,15,16));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::Information::recvData(const CommParameters &cp)
+int XC::Information::recvData(const Communicator &comm)
   {
     //setTag(getDbTagDataPos(0));
     int IT= theType;
-    int res= cp.receiveInts(IT,theInt,getDbTagData(),CommMetaData(1));
+    int res= comm.receiveInts(IT,theInt,getDbTagData(),CommMetaData(1));
     theType= InfoType(IT);
-    res+= cp.receiveDouble(theDouble,getDbTagData(),CommMetaData(2));
-    theID= cp.receiveIDPtr(theID,getDbTagData(),ArrayCommMetaData(3,4,5));
-    theVector= cp.receiveVectorPtr(theVector,getDbTagData(),ArrayCommMetaData(6,7,8));
-    theMatrix= cp.receiveMatrixPtr(theMatrix,getDbTagData(),MatrixCommMetaData(9,10,11,12));
-    theTensor= cp.receiveTensorPtr(theTensor,getDbTagData(),TensorCommMetaData(13,14,15,16));
+    res+= comm.receiveDouble(theDouble,getDbTagData(),CommMetaData(2));
+    theID= comm.receiveIDPtr(theID,getDbTagData(),ArrayCommMetaData(3,4,5));
+    theVector= comm.receiveVectorPtr(theVector,getDbTagData(),ArrayCommMetaData(6,7,8));
+    theMatrix= comm.receiveMatrixPtr(theMatrix,getDbTagData(),MatrixCommMetaData(9,10,11,12));
+    theTensor= comm.receiveTensorPtr(theTensor,getDbTagData(),TensorCommMetaData(13,14,15,16));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::Information::sendSelf(CommParameters &cp)
+int XC::Information::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(11);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "Information::sendSelf() - failed to send data\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::Information::recvSelf(const CommParameters &cp)
+int XC::Information::recvSelf(const Communicator &comm)
   {
     inicComm(11);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << "Information::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << "Information::recvSelf - failed to receive data.\n";
       }

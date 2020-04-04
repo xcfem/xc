@@ -37,7 +37,7 @@
 namespace XC {
 
 class Graph;
-class CommParameters;
+class Communicator;
 
 //! @ingroup IPComm
 //
@@ -52,7 +52,7 @@ class DistributedObj: public DistributedBase
     DistributedObj(void);
     DistributedObj(const ChannelQueue &theC);
 
-    bool buscaCanal(const CommParameters &,int &);
+    bool buscaCanal(const Communicator &,int &);
     int setProcessID(int processTag);
     int setChannels(const ChannelQueue &theChannels);
   };

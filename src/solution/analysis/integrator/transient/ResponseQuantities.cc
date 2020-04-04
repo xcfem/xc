@@ -82,52 +82,52 @@ void XC::ResponseQuantities::Zero(void)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::ResponseQuantities::sendData(CommParameters &cp)
+int XC::ResponseQuantities::sendData(Communicator &comm)
   {
-    int res= 0;//MovableObject::sendData(cp);
-    res+= cp.sendVector(R,getDbTagData(),CommMetaData(1));
-    res+= cp.sendVector(Rdot,getDbTagData(),CommMetaData(2));
-    res+= cp.sendVector(Rdotdot,getDbTagData(),CommMetaData(3));
+    int res= 0;//MovableObject::sendData(comm);
+    res+= comm.sendVector(R,getDbTagData(),CommMetaData(1));
+    res+= comm.sendVector(Rdot,getDbTagData(),CommMetaData(2));
+    res+= comm.sendVector(Rdotdot,getDbTagData(),CommMetaData(3));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::ResponseQuantities::recvData(const CommParameters &cp)
+int XC::ResponseQuantities::recvData(const Communicator &comm)
   {
-    int res= 0;//MovableObject::receiveData(cp);
-    res+= cp.receiveVector(R,getDbTagData(),CommMetaData(1));
-    res+= cp.receiveVector(Rdot,getDbTagData(),CommMetaData(2));
-    res+= cp.receiveVector(Rdotdot,getDbTagData(),CommMetaData(3));
+    int res= 0;//MovableObject::receiveData(comm);
+    res+= comm.receiveVector(R,getDbTagData(),CommMetaData(1));
+    res+= comm.receiveVector(Rdot,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveVector(Rdotdot,getDbTagData(),CommMetaData(3));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::ResponseQuantities::sendSelf(CommParameters &cp)
+int XC::ResponseQuantities::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(27);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "ResponseQuantities::sendSelf() - failed to send data\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::ResponseQuantities::recvSelf(const CommParameters &cp)
+int XC::ResponseQuantities::recvSelf(const Communicator &comm)
   {
     inicComm(27);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << "ResponseQuantities::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << "ResponseQuantities::recvSelf - failed to receive data.\n";
       }

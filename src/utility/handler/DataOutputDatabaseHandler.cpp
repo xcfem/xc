@@ -198,12 +198,12 @@ int XC::DataOutputDatabaseHandler::setDatabase(FE_Datastore &database, const std
   }
 
 
-int XC::DataOutputDatabaseHandler::sendSelf(CommParameters &)
+int XC::DataOutputDatabaseHandler::sendSelf(Communicator &)
   {
     std::cerr << "XC::DataOutputDatabaseHandler::sendSelf() - not yet implemented\n";
     return -1;
   }
-int XC::DataOutputDatabaseHandler::recvSelf(const CommParameters &)
+int XC::DataOutputDatabaseHandler::recvSelf(const Communicator &)
   {
     std::cerr << "XC::DataOutputDatabaseHandler::sendSelf() - not yet implemented\n";
     return -1;

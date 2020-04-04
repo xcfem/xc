@@ -133,8 +133,8 @@ class J2Plasticity: public NDMaterial
     //matrix index to tensor index mapping
     virtual void index_map( int matrix_index, int &i, int &j ) const;
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     //null constructor
     J2Plasticity();
@@ -161,8 +161,8 @@ class J2Plasticity: public NDMaterial
     virtual int revertToStart(void);
 
     //sending and receiving
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
 
     //print out material data
     void Print(std::ostream &s, int flag = 0) const;

@@ -109,29 +109,29 @@ XC::UniaxialMaterial *XC::PathIndependentMaterial::getCopy(void) const
   { return new PathIndependentMaterial(*this); }
 
 
-int XC::PathIndependentMaterial::sendSelf(CommParameters &cp)
+int XC::PathIndependentMaterial::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(4); 
-    int res= EncapsulatedMaterial::sendData(cp);
+    int res= EncapsulatedMaterial::sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "PathIndependentMaterial::sendSelf() - failed to send the ID.\n";
     return res;
 
   }
 
-int XC::PathIndependentMaterial::recvSelf(const CommParameters &cp)
+int XC::PathIndependentMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(4);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "PathIndependentMaterial::recvSelf() - failed to get the ID\n";
     else
-      res+= EncapsulatedMaterial::recvData(cp);
+      res+= EncapsulatedMaterial::recvData(comm);
     return res;
   }
 

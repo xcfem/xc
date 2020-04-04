@@ -115,8 +115,8 @@ class LoadControl: public BaseControl
     double deltaLambda;  //!< Valor de dLambda en el paso (i-1).
     double dLambdaMin, dLambdaMax; //!< Maximum and minimum values for dlambda at i-th step.
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
 
     friend class AnalysisAggregation;
@@ -138,8 +138,8 @@ class LoadControl: public BaseControl
       { return dLambdaMax; }
 
     // Public methods for Output
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
     void Print(std::ostream &s, int flag =0) const;    
   };

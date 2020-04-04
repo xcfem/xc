@@ -93,29 +93,29 @@ double XC::PulseSeries::getFactor(double pseudoTime) const
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::PulseSeries::sendData(CommParameters &cp)
+int XC::PulseSeries::sendData(Communicator &comm)
   {
-    int res= PeriodSeries::sendData(cp);
-    res+= cp.sendDouble(pWidth,getDbTagData(),CommMetaData(3));
+    int res= PeriodSeries::sendData(comm);
+    res+= comm.sendDouble(pWidth,getDbTagData(),CommMetaData(3));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::PulseSeries::recvData(const CommParameters &cp)
+int XC::PulseSeries::recvData(const Communicator &comm)
   {
-    int res= PeriodSeries::recvData(cp);
-    res+= cp.receiveDouble(pWidth,getDbTagData(),CommMetaData(3));
+    int res= PeriodSeries::recvData(comm);
+    res+= comm.receiveDouble(pWidth,getDbTagData(),CommMetaData(3));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::PulseSeries::sendSelf(CommParameters &cp)
+int XC::PulseSeries::sendSelf(Communicator &comm)
   {
     static ID data(4);
-    int result= sendData(cp);
+    int result= sendData(comm);
 
     const int dataTag= getDbTag();
-    result+= cp.sendIdData(getDbTagData(),dataTag);
+    result+= comm.sendIdData(getDbTagData(),dataTag);
     if(result < 0)
       std::cerr << "PulseSeries::sendSelf() - ch failed to send data\n";
     return result;
@@ -124,16 +124,16 @@ int XC::PulseSeries::sendSelf(CommParameters &cp)
 
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::PulseSeries::recvSelf(const CommParameters &cp)
+int XC::PulseSeries::recvSelf(const Communicator &comm)
   {
     static ID data(4);
 
     const int dataTag = this->getDbTag();  
-    int result = cp.receiveIdData(getDbTagData(),dataTag);
+    int result = comm.receiveIdData(getDbTagData(),dataTag);
     if(result<0)
       std::cerr << "PulseSeries::sendSelf() - ch failed to receive data\n";
     else
-      result+= recvData(cp);
+      result+= recvData(comm);
     return result;    
   }
 

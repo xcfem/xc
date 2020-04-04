@@ -189,7 +189,7 @@ const XC::Face *XC::EntMdlrBase::BuscaFace(const size_t &id_face) const
   }
 
 //! @brief Send labels through the channel being passed as parameter.
-int XC::EntMdlrBase::sendIdsLabels(const int &posSize,const int &posDbTag, CommParameters &cp)
+int XC::EntMdlrBase::sendIdsLabels(const int &posSize,const int &posDbTag, Communicator &comm)
   {
     int res= 0;
     static ID labelIds;
@@ -202,15 +202,15 @@ int XC::EntMdlrBase::sendIdsLabels(const int &posSize,const int &posDbTag, CommP
         int conta= 0;
         for(std::set<int>::const_iterator i= ids.begin();i!=ids.end();i++,conta++)
           labelIds[conta]= *i;
-        res+= cp.sendID(labelIds,getDbTagData(),CommMetaData(posDbTag));
+        res+= comm.sendID(labelIds,getDbTagData(),CommMetaData(posDbTag));
       }
     else
-      cp.sendInt(0,getDbTagData(),CommMetaData(posDbTag));
+      comm.sendInt(0,getDbTagData(),CommMetaData(posDbTag));
     return res;
   }
 
 //! @brief Receive labels through the channel being passed as parameter.
-int XC::EntMdlrBase::recvIdsLabels(const int &posSize,const int &posDbTag,const CommParameters &cp)
+int XC::EntMdlrBase::recvIdsLabels(const int &posSize,const int &posDbTag,const Communicator &comm)
   {
     int res= 0;
     static ID labelIds;
@@ -218,7 +218,7 @@ int XC::EntMdlrBase::recvIdsLabels(const int &posSize,const int &posDbTag,const 
     if(sz>0)
       {
         const LabelDictionary &dic= labels.getDictionary();
-        res= cp.receiveID(labelIds,getDbTagData(),CommMetaData(posDbTag));
+        res= comm.receiveID(labelIds,getDbTagData(),CommMetaData(posDbTag));
     
         const size_t sz= labelIds.Size();
         for(size_t i=0;i<sz;i++)
@@ -228,32 +228,32 @@ int XC::EntMdlrBase::recvIdsLabels(const int &posSize,const int &posDbTag,const 
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::EntMdlrBase::sendData(CommParameters &cp)
+int XC::EntMdlrBase::sendData(Communicator &comm)
   {
-    int res= cp.sendString(getName(),getDbTagData(),CommMetaData(0));
-    res+= sendIdsLabels(1,2,cp);
+    int res= comm.sendString(getName(),getDbTagData(),CommMetaData(0));
+    res+= sendIdsLabels(1,2,comm);
     return res;
   }
 
 //! @brief Receive members through the channel being passed as parameter.
-int XC::EntMdlrBase::recvData(const CommParameters &cp)
+int XC::EntMdlrBase::recvData(const Communicator &comm)
   {
     std::string tmp;
-    int res= cp.receiveString(tmp,getDbTagData(),CommMetaData(0));
+    int res= comm.receiveString(tmp,getDbTagData(),CommMetaData(0));
     setName(tmp);
-    res+= recvIdsLabels(1,2,cp);
+    res+= recvIdsLabels(1,2,comm);
     return res;
   }
 
 //! @brief Send objects through the channel being passed as parameter.
-int XC::EntMdlrBase::sendSelf(CommParameters &cp)
+int XC::EntMdlrBase::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(3);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data.\n";
@@ -261,11 +261,11 @@ int XC::EntMdlrBase::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receive objects through the channel being passed as parameter.
-int XC::EntMdlrBase::recvSelf(const CommParameters &cp)
+int XC::EntMdlrBase::recvSelf(const Communicator &comm)
   {
     inicComm(3);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -273,7 +273,7 @@ int XC::EntMdlrBase::recvSelf(const CommParameters &cp)
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

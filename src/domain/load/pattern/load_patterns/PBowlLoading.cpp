@@ -433,14 +433,14 @@ XC::PBowlLoading::applyLoad(double time)
 }
 
 int
-XC::PBowlLoading::sendSelf(CommParameters &cp)
+XC::PBowlLoading::sendSelf(Communicator &comm)
 {
   std::cerr << "XC::PBowlLoading::sendSelf() - not yet implemented\n";
   return 0;
 }
 
 int
-XC::PBowlLoading::recvSelf(const CommParameters &cp)
+XC::PBowlLoading::recvSelf(const Communicator &comm)
 {
   std::cerr << "XC::PBowlLoading::recvSelf() - not yet implemented\n";
   return 0;
@@ -448,7 +448,7 @@ XC::PBowlLoading::recvSelf(const CommParameters &cp)
 
 /* **********************************************************************************************
 int
-XC::PBowlLoading::sendSelf(CommParameters &cp)
+XC::PBowlLoading::sendSelf(Communicator &comm)
 {
   // first send the tag and info about the number of ground motions
   int myDbTag = this->getDbTag();
@@ -490,7 +490,7 @@ XC::PBowlLoading::sendSelf(CommParameters &cp)
 }
 
 int
-XC::PBowlLoading::recvSelf(const CommParameters &cp)
+XC::PBowlLoading::recvSelf(const Communicator &comm)
 {
   // first get the tag and info about the number of ground motions from the canal
   int myDbTag = this->getDbTag();

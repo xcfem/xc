@@ -160,33 +160,33 @@ int XC::ProtoArcLength::domainChanged(void)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::ProtoArcLength::sendData(CommParameters &cp)
+int XC::ProtoArcLength::sendData(Communicator &comm)
   {
-    int res= StaticIntegrator::sendData(cp);
-    res+= cp.sendDouble(arcLength2,getDbTagData(),CommMetaData(1));
-    res+= cp.sendMovable(vectors,getDbTagData(),CommMetaData(2));
-    res+= cp.sendInt(signLastDeltaLambdaStep,getDbTagData(),CommMetaData(3));
+    int res= StaticIntegrator::sendData(comm);
+    res+= comm.sendDouble(arcLength2,getDbTagData(),CommMetaData(1));
+    res+= comm.sendMovable(vectors,getDbTagData(),CommMetaData(2));
+    res+= comm.sendInt(signLastDeltaLambdaStep,getDbTagData(),CommMetaData(3));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::ProtoArcLength::recvData(const CommParameters &cp)
+int XC::ProtoArcLength::recvData(const Communicator &comm)
   {
-    int res= StaticIntegrator::recvData(cp);
-    res+= cp.receiveDouble(arcLength2,getDbTagData(),CommMetaData(1));
-    res+= cp.receiveMovable(vectors,getDbTagData(),CommMetaData(2));
-    res+= cp.receiveInt(signLastDeltaLambdaStep,getDbTagData(),CommMetaData(7));
+    int res= StaticIntegrator::recvData(comm);
+    res+= comm.receiveDouble(arcLength2,getDbTagData(),CommMetaData(1));
+    res+= comm.receiveMovable(vectors,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveInt(signLastDeltaLambdaStep,getDbTagData(),CommMetaData(7));
     return res;
   }
 
-int XC::ProtoArcLength::sendSelf(CommParameters &cp)
+int XC::ProtoArcLength::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(8);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; failed to send data\n";
@@ -194,11 +194,11 @@ int XC::ProtoArcLength::sendSelf(CommParameters &cp)
   }
 
 
-int XC::ProtoArcLength::recvSelf(const CommParameters &cp)
+int XC::ProtoArcLength::recvSelf(const Communicator &comm)
   {
     inicComm(8);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -206,7 +206,7 @@ int XC::ProtoArcLength::recvSelf(const CommParameters &cp)
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
            std::cerr << getClassName() << "::" << __FUNCTION__
                      << "; failed to receive ids.\n";

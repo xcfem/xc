@@ -53,8 +53,8 @@ class beam3dBase: public ProtoBeam3d
 
     virtual const Matrix &getStiff(void) const= 0;
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     beam3dBase(int classTag, int tag= 0);        
     beam3dBase(int tag, int classTag, double A, double E, double G, double Jx, double Iy, double Iz, int Nd1, int Nd2, double theta);

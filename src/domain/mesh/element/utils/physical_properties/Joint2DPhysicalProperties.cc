@@ -112,48 +112,48 @@ XC::DbTagData &XC::Joint2DPhysicalProperties::getDbTagData(void) const
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::Joint2DPhysicalProperties::sendData(CommParameters &cp)
+int XC::Joint2DPhysicalProperties::sendData(Communicator &comm)
   {
-    int res= UniaxialMatPhysicalProperties::sendData(cp);
-    res+= cp.sendMovable(theDamages,getDbTagData(),CommMetaData(2));
-    res+= cp.sendID(fixedEnd,getDbTagData(),CommMetaData(3));
+    int res= UniaxialMatPhysicalProperties::sendData(comm);
+    res+= comm.sendMovable(theDamages,getDbTagData(),CommMetaData(2));
+    res+= comm.sendID(fixedEnd,getDbTagData(),CommMetaData(3));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::Joint2DPhysicalProperties::recvData(const CommParameters &cp)
+int XC::Joint2DPhysicalProperties::recvData(const Communicator &comm)
   {
-    int res= UniaxialMatPhysicalProperties::recvData(cp);
-    res+= cp.receiveMovable(theDamages,getDbTagData(),CommMetaData(2));
-    res+= cp.receiveID(fixedEnd,getDbTagData(),CommMetaData(3));
+    int res= UniaxialMatPhysicalProperties::recvData(comm);
+    res+= comm.receiveMovable(theDamages,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveID(fixedEnd,getDbTagData(),CommMetaData(3));
     return res;
   }
 
 //! @brief Sends object.
-int XC::Joint2DPhysicalProperties::sendSelf(CommParameters &cp)
+int XC::Joint2DPhysicalProperties::sendSelf(Communicator &comm)
   {
     inicComm(DBTAGS_SIZE);
 
-    int res= this->sendData(cp);
+    int res= this->sendData(comm);
 
     const int dataTag= getDbTag();
-    res += cp.sendIdData(getDbTagData(),dataTag);
+    res += comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "Joint2DPhysicalProperties::sendSelf -- failed to send ID data\n";
     return res;
   }
 
 //! @brief Receives object
-int XC::Joint2DPhysicalProperties::recvSelf(const CommParameters &cp)
+int XC::Joint2DPhysicalProperties::recvSelf(const Communicator &comm)
   {
     inicComm(DBTAGS_SIZE);
 
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "Joint2DPhysicalProperties::recvSelf -- failed to receive ID data\n";
     else
-      res+= this->recvData(cp);
+      res+= this->recvData(comm);
     return res;
   }
 

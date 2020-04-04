@@ -612,25 +612,25 @@ XC::DbTagData &XC::SetMeshComp::getDbTagData(void) const
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::SetMeshComp::sendData(CommParameters &cp)
+int XC::SetMeshComp::sendData(Communicator &comm)
   {
-    int res= SetBase::sendData(cp);
-    res+= nodes.sendTags(3,4,getDbTagData(),cp);
-    res+= elements.sendTags(5,6,getDbTagData(),cp);
-    res+= constraints.sendTags(7,8,getDbTagData(),cp);
+    int res= SetBase::sendData(comm);
+    res+= nodes.sendTags(3,4,getDbTagData(),comm);
+    res+= elements.sendTags(5,6,getDbTagData(),comm);
+    res+= constraints.sendTags(7,8,getDbTagData(),comm);
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::SetMeshComp::recvData(const CommParameters &cp)
+int XC::SetMeshComp::recvData(const Communicator &comm)
   {
     ID tmp;
-    int res= SetBase::recvData(cp);
-    tmp= nodes.receiveTags(3,4,getDbTagData(),cp);
+    int res= SetBase::recvData(comm);
+    tmp= nodes.receiveTags(3,4,getDbTagData(),comm);
     sel_nodes_from_list(tmp);
-    tmp= elements.receiveTags(5,6,getDbTagData(),cp);
+    tmp= elements.receiveTags(5,6,getDbTagData(),comm);
     sel_elements_from_list(tmp);
-    tmp= constraints.receiveTags(7,8,getDbTagData(),cp);
+    tmp= constraints.receiveTags(7,8,getDbTagData(),comm);
     sel_constraints_from_list(tmp);
     return res;
   }
@@ -640,32 +640,32 @@ XC::SetMeshComp::~SetMeshComp(void)
   { clearAll(); }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::SetMeshComp::sendSelf(CommParameters &cp)
+int XC::SetMeshComp::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(19);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::sendSelf() - failed to send data\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::SetMeshComp::recvSelf(const CommParameters &cp)
+int XC::SetMeshComp::recvSelf(const Communicator &comm)
   {
     inicComm(19);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

@@ -95,17 +95,17 @@ const XC::Vector &XC::ElementalLoad::getSensitivityData(const int &gradIndex) co
   }
 
 //! @brief Send data through the channel being passed as parameter.
-int XC::ElementalLoad::sendData(CommParameters &cp)
+int XC::ElementalLoad::sendData(Communicator &comm)
   {
-    int res= Load::sendData(cp);
-    res+= cp.sendID(elemTags,getDbTagData(),CommMetaData(2));
+    int res= Load::sendData(comm);
+    res+= comm.sendID(elemTags,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 //! @brief Receive data through the channel being passed as parameter.
-int XC::ElementalLoad::recvData(const CommParameters &cp)
+int XC::ElementalLoad::recvData(const Communicator &comm)
   {
-    int res= Load::recvData(cp);
-    res+= cp.receiveID(elemTags,getDbTagData(),CommMetaData(2));
+    int res= Load::recvData(comm);
+    res+= comm.receiveID(elemTags,getDbTagData(),CommMetaData(2));
     return res;
   }

@@ -92,8 +92,8 @@ class EarthquakePattern: public EQBasePattern
   protected:
     void copy(const Vector *,const Vector *);
     int addMotion(GroundMotion &);
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     EarthquakePattern(int tag, int classTag);
 
@@ -103,8 +103,8 @@ class EarthquakePattern: public EQBasePattern
     virtual bool addElementalLoad(ElementalLoad *);
 
     // methods for o/p
-    virtual int sendSelf(CommParameters &) =0;
-    virtual int recvSelf(const CommParameters &) =0;
+    virtual int sendSelf(Communicator &) =0;
+    virtual int recvSelf(const Communicator &) =0;
 
     virtual void Print(std::ostream &s, int flag =0) const;        
 

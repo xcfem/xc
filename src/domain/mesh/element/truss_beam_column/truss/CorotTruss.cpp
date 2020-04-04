@@ -573,31 +573,31 @@ int XC::CorotTruss::getResponse(int responseID, Information &eleInfo)
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::CorotTruss::sendData(CommParameters &cp)
+int XC::CorotTruss::sendData(Communicator &comm)
   {
-    int res= CorotTrussBase::sendData(cp);
-    res+= cp.sendBrokedPtr(theMaterial,getDbTagData(),BrokedPtrCommMetaData(18,19,20));
-    res+= cp.sendDouble(A,getDbTagData(),CommMetaData(21));
+    int res= CorotTrussBase::sendData(comm);
+    res+= comm.sendBrokedPtr(theMaterial,getDbTagData(),BrokedPtrCommMetaData(18,19,20));
+    res+= comm.sendDouble(A,getDbTagData(),CommMetaData(21));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::CorotTruss::recvData(const CommParameters &cp)
+int XC::CorotTruss::recvData(const Communicator &comm)
   {
-    int res= CorotTrussBase::recvData(cp);
-    theMaterial= cp.getBrokedMaterial(theMaterial,getDbTagData(),BrokedPtrCommMetaData(18,19,20));
-    res+= cp.receiveDouble(A,getDbTagData(),CommMetaData(21));
+    int res= CorotTrussBase::recvData(comm);
+    theMaterial= comm.getBrokedMaterial(theMaterial,getDbTagData(),BrokedPtrCommMetaData(18,19,20));
+    res+= comm.receiveDouble(A,getDbTagData(),CommMetaData(21));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::CorotTruss::sendSelf(CommParameters &cp)
+int XC::CorotTruss::sendSelf(Communicator &comm)
   {
     inicComm(22);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    const int dataTag= getDbTag(cp);
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    const int dataTag= getDbTag(comm);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send ID data\n";
@@ -606,15 +606,15 @@ int XC::CorotTruss::sendSelf(CommParameters &cp)
 
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::CorotTruss::recvSelf(const CommParameters &cp)
+int XC::CorotTruss::recvSelf(const Communicator &comm)
   {
     inicComm(22);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to recv ID data";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }

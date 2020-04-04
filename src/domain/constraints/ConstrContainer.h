@@ -109,12 +109,12 @@ class ConstrContainer: public MeshComponentContainer
 
     void free_mem(void);
     DbTagData &getDbTagData(void) const;
-    int sendLPatternsTags(const int &,const int &,CommParameters &);
-    int recvLPatternsTags(const int &,const int &,const CommParameters &);
-    int sendNLockersTags(const int &,const int &,CommParameters &cp);
-    int recvNLockersTags(const int &,const int &,const CommParameters &cp);
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendLPatternsTags(const int &,const int &,Communicator &);
+    int recvLPatternsTags(const int &,const int &,const Communicator &);
+    int sendNLockersTags(const int &,const int &,Communicator &comm);
+    int recvNLockersTags(const int &,const int &,const Communicator &comm);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     ConstrContainer(Domain *owr);
 
@@ -171,8 +171,8 @@ class ConstrContainer: public MeshComponentContainer
 
     virtual int calculateNodalReactions(bool inclInertia, const double &);
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
 
     virtual void Print(std::ostream &s, int flag =0) const;
     friend std::ostream &operator<<(std::ostream &, const ConstrContainer &);

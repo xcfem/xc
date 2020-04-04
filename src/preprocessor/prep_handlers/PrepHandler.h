@@ -49,8 +49,8 @@ class PrepHandler: public PreprocessorContainer, public MovableObject
   public:
     PrepHandler(Preprocessor *owr);
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
   };
 
 } // end of XC namespace

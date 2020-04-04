@@ -397,145 +397,145 @@ XC::UniaxialMaterial * XC::ReinforcingSteel::getCopy(void) const
   { return new ReinforcingSteel(*this); }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::ReinforcingSteel::sendData(CommParameters &cp)
+int XC::ReinforcingSteel::sendData(Communicator &comm)
   {
-    int res= UniaxialMaterial::sendData(cp);
+    int res= UniaxialMaterial::sendData(comm);
     // Strength degradation parameters
-    res+= cp.sendVector(T_ePlastic,getDbTagData(),CommMetaData(2));
-    res+= cp.sendVector(C_ePlastic,getDbTagData(),CommMetaData(3));
+    res+= comm.sendVector(T_ePlastic,getDbTagData(),CommMetaData(2));
+    res+= comm.sendVector(C_ePlastic,getDbTagData(),CommMetaData(3));
     // Converged Menegotto-Pinto Equation parameters
-    res+= cp.sendVector(CR,getDbTagData(),CommMetaData(4));
-    res+= cp.sendVector(Cfch,getDbTagData(),CommMetaData(5));
-    res+= cp.sendVector(CQ,getDbTagData(),CommMetaData(6));
-    res+= cp.sendVector(CEsec,getDbTagData(),CommMetaData(7));
-    res+= cp.sendVector(Cea,getDbTagData(),CommMetaData(8));
-    res+= cp.sendVector(Cfa,getDbTagData(),CommMetaData(9));
-    res+= cp.sendVector(CEa,getDbTagData(),CommMetaData(10));
-    res+= cp.sendVector(Ceb,getDbTagData(),CommMetaData(11));
-    res+= cp.sendVector(Cfb,getDbTagData(),CommMetaData(12));
-    res+= cp.sendVector(CEb,getDbTagData(),CommMetaData(13));
+    res+= comm.sendVector(CR,getDbTagData(),CommMetaData(4));
+    res+= comm.sendVector(Cfch,getDbTagData(),CommMetaData(5));
+    res+= comm.sendVector(CQ,getDbTagData(),CommMetaData(6));
+    res+= comm.sendVector(CEsec,getDbTagData(),CommMetaData(7));
+    res+= comm.sendVector(Cea,getDbTagData(),CommMetaData(8));
+    res+= comm.sendVector(Cfa,getDbTagData(),CommMetaData(9));
+    res+= comm.sendVector(CEa,getDbTagData(),CommMetaData(10));
+    res+= comm.sendVector(Ceb,getDbTagData(),CommMetaData(11));
+    res+= comm.sendVector(Cfb,getDbTagData(),CommMetaData(12));
+    res+= comm.sendVector(CEb,getDbTagData(),CommMetaData(13));
 
-    res+= cp.sendDoubles(ZeroTol,reduction,fsu_fraction,beta,getDbTagData(),CommMetaData(14));
+    res+= comm.sendDoubles(ZeroTol,reduction,fsu_fraction,beta,getDbTagData(),CommMetaData(14));
     // natural stress-strain variables
-    res+= cp.sendDoubles(p,Esp,eshp,fshp,Eshp,getDbTagData(),CommMetaData(15));
-    res+= cp.sendDoubles(esup,fsup,Esup,getDbTagData(),CommMetaData(16));
-    res+= cp.sendDoubles(Eypp,fint,eyp,fyp,getDbTagData(),CommMetaData(17));
+    res+= comm.sendDoubles(p,Esp,eshp,fshp,Eshp,getDbTagData(),CommMetaData(15));
+    res+= comm.sendDoubles(esup,fsup,Esup,getDbTagData(),CommMetaData(16));
+    res+= comm.sendDoubles(Eypp,fint,eyp,fyp,getDbTagData(),CommMetaData(17));
 
 
 
-    res+= cp.sendDoubles(esh,Esh,eshpa,Eshpb,getDbTagData(),CommMetaData(18));
+    res+= comm.sendDoubles(esh,Esh,eshpa,Eshpb,getDbTagData(),CommMetaData(18));
 
-    res+= cp.sendDoubles(a1,hardLim,THardFact,CHardFact,getDbTagData(),CommMetaData(19));
-    res+= cp.sendDoubles(TFatDamage,CFatDamage,LDratio,Fat1,Fat2,getDbTagData(),CommMetaData(20));
-    res+= cp.sendDoubles(Deg1,BackStress,re,rE1,rE2,getDbTagData(),CommMetaData(21));
+    res+= comm.sendDoubles(a1,hardLim,THardFact,CHardFact,getDbTagData(),CommMetaData(19));
+    res+= comm.sendDoubles(TFatDamage,CFatDamage,LDratio,Fat1,Fat2,getDbTagData(),CommMetaData(20));
+    res+= comm.sendDoubles(Deg1,BackStress,re,rE1,rE2,getDbTagData(),CommMetaData(21));
 
 
 
     // Menegotto-Pinto Calibration Constants
-    res+= cp.sendDoubles(RC1,RC2,RC3,getDbTagData(),CommMetaData(22));
+    res+= comm.sendDoubles(RC1,RC2,RC3,getDbTagData(),CommMetaData(22));
 
     // Menegotto-Pinto Equation parameters
-    res+= cp.sendDoubles(TR,Tfch,TQ,TEsec,Tea,Tfa,getDbTagData(),CommMetaData(23));
-    res+= cp.sendDoubles(TEa,Teb,Tfb,TEb,getDbTagData(),CommMetaData(24));
+    res+= comm.sendDoubles(TR,Tfch,TQ,TEsec,Tea,Tfa,getDbTagData(),CommMetaData(23));
+    res+= comm.sendDoubles(TEa,Teb,Tfb,TEb,getDbTagData(),CommMetaData(24));
 
-    res+= cp.sendDoubles(Teo_p,Teo_n,Temax,Temin,getDbTagData(),CommMetaData(25));
-    res+= cp.sendDoubles(TeAbsMax,TeAbsMin,TeCumPlastic,getDbTagData(),CommMetaData(26));
+    res+= comm.sendDoubles(Teo_p,Teo_n,Temax,Temin,getDbTagData(),CommMetaData(25));
+    res+= comm.sendDoubles(TeAbsMax,TeAbsMin,TeCumPlastic,getDbTagData(),CommMetaData(26));
 
     // Converged History Variables
-    res+= cp.sendDoubles(Ceo_p,Ceo_n,Cemax,Cemin,getDbTagData(),CommMetaData(27));
-    res+= cp.sendDoubles(CeAbsMax,CeAbsMin,CeCumPlastic,getDbTagData(),CommMetaData(28));
+    res+= comm.sendDoubles(Ceo_p,Ceo_n,Cemax,Cemin,getDbTagData(),CommMetaData(27));
+    res+= comm.sendDoubles(CeAbsMax,CeAbsMin,CeCumPlastic,getDbTagData(),CommMetaData(28));
 
-    res+= cp.sendMovable(converged,getDbTagData(),CommMetaData(29));
-    res+= cp.sendMovable(trial,getDbTagData(),CommMetaData(30));
+    res+= comm.sendMovable(converged,getDbTagData(),CommMetaData(29));
+    res+= comm.sendMovable(trial,getDbTagData(),CommMetaData(30));
 
-    res+= cp.sendInts(theBarFailed,BuckleModel,TBranchMem,TBranchNum,CBranchNum,getDbTagData(),CommMetaData(31));
+    res+= comm.sendInts(theBarFailed,BuckleModel,TBranchMem,TBranchNum,CBranchNum,getDbTagData(),CommMetaData(31));
 
     return res;
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::ReinforcingSteel::recvData(const CommParameters &cp)
+int XC::ReinforcingSteel::recvData(const Communicator &comm)
   {
-    int res= UniaxialMaterial::recvData(cp);
+    int res= UniaxialMaterial::recvData(comm);
     // Strength degradation parameters
-    res+= cp.receiveVector(T_ePlastic,getDbTagData(),CommMetaData(2));
-    res+= cp.receiveVector(C_ePlastic,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveVector(T_ePlastic,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveVector(C_ePlastic,getDbTagData(),CommMetaData(3));
     // Converged Menegotto-Pinto Equation parameters
-    res+= cp.receiveVector(CR,getDbTagData(),CommMetaData(4));
-    res+= cp.receiveVector(Cfch,getDbTagData(),CommMetaData(5));
-    res+= cp.receiveVector(CQ,getDbTagData(),CommMetaData(6));
-    res+= cp.receiveVector(CEsec,getDbTagData(),CommMetaData(7));
-    res+= cp.receiveVector(Cea,getDbTagData(),CommMetaData(8));
-    res+= cp.receiveVector(Cfa,getDbTagData(),CommMetaData(9));
-    res+= cp.receiveVector(CEa,getDbTagData(),CommMetaData(10));
-    res+= cp.receiveVector(Ceb,getDbTagData(),CommMetaData(11));
-    res+= cp.receiveVector(Cfb,getDbTagData(),CommMetaData(12));
-    res+= cp.receiveVector(CEb,getDbTagData(),CommMetaData(13));
+    res+= comm.receiveVector(CR,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveVector(Cfch,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveVector(CQ,getDbTagData(),CommMetaData(6));
+    res+= comm.receiveVector(CEsec,getDbTagData(),CommMetaData(7));
+    res+= comm.receiveVector(Cea,getDbTagData(),CommMetaData(8));
+    res+= comm.receiveVector(Cfa,getDbTagData(),CommMetaData(9));
+    res+= comm.receiveVector(CEa,getDbTagData(),CommMetaData(10));
+    res+= comm.receiveVector(Ceb,getDbTagData(),CommMetaData(11));
+    res+= comm.receiveVector(Cfb,getDbTagData(),CommMetaData(12));
+    res+= comm.receiveVector(CEb,getDbTagData(),CommMetaData(13));
 
-    res+= cp.receiveDoubles(ZeroTol,reduction,fsu_fraction,beta,getDbTagData(),CommMetaData(14));
+    res+= comm.receiveDoubles(ZeroTol,reduction,fsu_fraction,beta,getDbTagData(),CommMetaData(14));
     // natural stress-strain variables
-    res+= cp.receiveDoubles(p,Esp,eshp,fshp,Eshp,getDbTagData(),CommMetaData(15));
-    res+= cp.receiveDoubles(esup,fsup,Esup,getDbTagData(),CommMetaData(16));
-    res+= cp.receiveDoubles(Eypp,fint,eyp,fyp,getDbTagData(),CommMetaData(17));
+    res+= comm.receiveDoubles(p,Esp,eshp,fshp,Eshp,getDbTagData(),CommMetaData(15));
+    res+= comm.receiveDoubles(esup,fsup,Esup,getDbTagData(),CommMetaData(16));
+    res+= comm.receiveDoubles(Eypp,fint,eyp,fyp,getDbTagData(),CommMetaData(17));
 
 
 
-    res+= cp.receiveDoubles(esh,Esh,eshpa,Eshpb,getDbTagData(),CommMetaData(18));
+    res+= comm.receiveDoubles(esh,Esh,eshpa,Eshpb,getDbTagData(),CommMetaData(18));
 
-    res+= cp.receiveDoubles(a1,hardLim,THardFact,CHardFact,getDbTagData(),CommMetaData(19));
-    res+= cp.receiveDoubles(TFatDamage,CFatDamage,LDratio,Fat1,Fat2,getDbTagData(),CommMetaData(20));
-    res+= cp.receiveDoubles(Deg1,BackStress,re,rE1,rE2,getDbTagData(),CommMetaData(21));
+    res+= comm.receiveDoubles(a1,hardLim,THardFact,CHardFact,getDbTagData(),CommMetaData(19));
+    res+= comm.receiveDoubles(TFatDamage,CFatDamage,LDratio,Fat1,Fat2,getDbTagData(),CommMetaData(20));
+    res+= comm.receiveDoubles(Deg1,BackStress,re,rE1,rE2,getDbTagData(),CommMetaData(21));
 
 
 
     // Menegotto-Pinto Calibration Constants
-    res+= cp.receiveDoubles(RC1,RC2,RC3,getDbTagData(),CommMetaData(22));
+    res+= comm.receiveDoubles(RC1,RC2,RC3,getDbTagData(),CommMetaData(22));
 
     // Menegotto-Pinto Equation parameters
-    res+= cp.receiveDoubles(TR,Tfch,TQ,TEsec,Tea,Tfa,getDbTagData(),CommMetaData(23));
-    res+= cp.receiveDoubles(TEa,Teb,Tfb,TEb,getDbTagData(),CommMetaData(24));
+    res+= comm.receiveDoubles(TR,Tfch,TQ,TEsec,Tea,Tfa,getDbTagData(),CommMetaData(23));
+    res+= comm.receiveDoubles(TEa,Teb,Tfb,TEb,getDbTagData(),CommMetaData(24));
 
-    res+= cp.receiveDoubles(Teo_p,Teo_n,Temax,Temin,getDbTagData(),CommMetaData(25));
-    res+= cp.receiveDoubles(TeAbsMax,TeAbsMin,TeCumPlastic,getDbTagData(),CommMetaData(26));
+    res+= comm.receiveDoubles(Teo_p,Teo_n,Temax,Temin,getDbTagData(),CommMetaData(25));
+    res+= comm.receiveDoubles(TeAbsMax,TeAbsMin,TeCumPlastic,getDbTagData(),CommMetaData(26));
 
     // Converged History Variables
-    res+= cp.receiveDoubles(Ceo_p,Ceo_n,Cemax,Cemin,getDbTagData(),CommMetaData(27));
-    res+= cp.receiveDoubles(CeAbsMax,CeAbsMin,CeCumPlastic,getDbTagData(),CommMetaData(28));
+    res+= comm.receiveDoubles(Ceo_p,Ceo_n,Cemax,Cemin,getDbTagData(),CommMetaData(27));
+    res+= comm.receiveDoubles(CeAbsMax,CeAbsMin,CeCumPlastic,getDbTagData(),CommMetaData(28));
 
-    res+= cp.receiveMovable(converged,getDbTagData(),CommMetaData(29));
-    res+= cp.receiveMovable(trial,getDbTagData(),CommMetaData(30));
+    res+= comm.receiveMovable(converged,getDbTagData(),CommMetaData(29));
+    res+= comm.receiveMovable(trial,getDbTagData(),CommMetaData(30));
 
-    res+= cp.receiveInts(theBarFailed,BuckleModel,TBranchMem,TBranchNum,CBranchNum,getDbTagData(),CommMetaData(31));
+    res+= comm.receiveInts(theBarFailed,BuckleModel,TBranchMem,TBranchNum,CBranchNum,getDbTagData(),CommMetaData(31));
 
     return res;
   }
 //! @brief Sends object through the channel being passed as parameter.
-int XC::ReinforcingSteel::sendSelf(CommParameters &cp)
+int XC::ReinforcingSteel::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(32);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::ReinforcingSteel::recvSelf(const CommParameters &cp)
+int XC::ReinforcingSteel::recvSelf(const Communicator &comm)
   {
     inicComm(32);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

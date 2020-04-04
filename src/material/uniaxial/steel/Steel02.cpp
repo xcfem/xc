@@ -311,55 +311,55 @@ XC::DbTagData &XC::Steel02::getDbTagData(void) const
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::Steel02::sendData(CommParameters &cp)
+int XC::Steel02::sendData(Communicator &comm)
   {
-    int res= SteelBase::sendData(cp);
-    res+= cp.sendDoubles(sigini,R0,cR1,cR2,epsminP,epsmaxP,getDbTagData(),CommMetaData(4));
-    res+= cp.sendDoubles(epsplP,epss0P,sigs0P,epssrP,sigsrP,epsP,getDbTagData(),CommMetaData(5));
-    res+= cp.sendInts(konP,kon,getDbTagData(),CommMetaData(6));
-    res+= cp.sendDoubles(sigP,eP,epsmin,epsmax,epspl,epss0,getDbTagData(),CommMetaData(7));
-    res+= cp.sendDoubles(sigs0,epsr,sigr,sig,e,eps,getDbTagData(),CommMetaData(8));
+    int res= SteelBase::sendData(comm);
+    res+= comm.sendDoubles(sigini,R0,cR1,cR2,epsminP,epsmaxP,getDbTagData(),CommMetaData(4));
+    res+= comm.sendDoubles(epsplP,epss0P,sigs0P,epssrP,sigsrP,epsP,getDbTagData(),CommMetaData(5));
+    res+= comm.sendInts(konP,kon,getDbTagData(),CommMetaData(6));
+    res+= comm.sendDoubles(sigP,eP,epsmin,epsmax,epspl,epss0,getDbTagData(),CommMetaData(7));
+    res+= comm.sendDoubles(sigs0,epsr,sigr,sig,e,eps,getDbTagData(),CommMetaData(8));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::Steel02::recvData(const CommParameters &cp)
+int XC::Steel02::recvData(const Communicator &comm)
   {
-    int res= SteelBase::recvData(cp);
-    res+= cp.receiveDoubles(sigini,R0,cR1,cR2,epsminP,epsmaxP,getDbTagData(),CommMetaData(4));
-    res+= cp.receiveDoubles(epsplP,epss0P,sigs0P,epssrP,sigsrP,epsP,getDbTagData(),CommMetaData(5));
-    res+= cp.receiveInts(konP,kon,getDbTagData(),CommMetaData(6));
-    res+= cp.receiveDoubles(sigP,eP,epsmin,epsmax,epspl,epss0,getDbTagData(),CommMetaData(7));
-    res+= cp.receiveDoubles(sigs0,epsr,sigr,sig,e,eps,getDbTagData(),CommMetaData(8));
+    int res= SteelBase::recvData(comm);
+    res+= comm.receiveDoubles(sigini,R0,cR1,cR2,epsminP,epsmaxP,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveDoubles(epsplP,epss0P,sigs0P,epssrP,sigsrP,epsP,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveInts(konP,kon,getDbTagData(),CommMetaData(6));
+    res+= comm.receiveDoubles(sigP,eP,epsmin,epsmax,epspl,epss0,getDbTagData(),CommMetaData(7));
+    res+= comm.receiveDoubles(sigs0,epsr,sigr,sig,e,eps,getDbTagData(),CommMetaData(8));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::Steel02::sendSelf(CommParameters &cp)
+int XC::Steel02::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(9);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::Steel02::recvSelf(const CommParameters &cp)
+int XC::Steel02::recvSelf(const Communicator &comm)
   {
     inicComm(9);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

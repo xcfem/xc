@@ -58,11 +58,11 @@ class Element1D: public ElementBase<2>
     ElemPtrArray3d put_on_mesh(const NodePtrArray3d &,meshing_dir dm) const;
     ElemPtrArray3d sew(const SetEstruct &f1,const SetEstruct &f2) const;
 
-    int sendCoordTransf(int posFlag,const int &,const int &,CommParameters &);
-    CrdTransf *recvCoordTransf(int posFlag,const int &,const int &,const CommParameters &);
-    CrdTransf2d *recvCoordTransf2d(int posFlag,const int &,const int &,const CommParameters &);
+    int sendCoordTransf(int posFlag,const int &,const int &,Communicator &);
+    CrdTransf *recvCoordTransf(int posFlag,const int &,const int &,const Communicator &);
+    CrdTransf2d *recvCoordTransf2d(int posFlag,const int &,const int &,const Communicator &);
 
-    CrdTransf3d *recvCoordTransf3d(int posFlag,const int &,const int &,const CommParameters &);
+    CrdTransf3d *recvCoordTransf3d(int posFlag,const int &,const int &,const Communicator &);
 
   public:
     Element1D(int tag, int classTag);

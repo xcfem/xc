@@ -60,7 +60,7 @@
 // What: "@(#) MovableObject.C, revA"
 
 #include "MovableObject.h"
-#include "utility/actor/actor/CommParameters.h"
+#include "utility/actor/actor/Communicator.h"
 #include "utility/actor/channel/Channel.h"
 #include "utility/matrix/ID.h"
 
@@ -100,10 +100,10 @@ int XC::MovableObject::getDbTag(void) const
   { return dbTag; }
 
 //! @brief Return the object identifier in the database.
-int XC::MovableObject::getDbTag(CommParameters &cp)
+int XC::MovableObject::getDbTag(Communicator &comm)
   {
     if(dbTag==0)
-      dbTag = cp.getDbTag();
+      dbTag = comm.getDbTag();
     return dbTag;
   }
 
@@ -113,10 +113,10 @@ void XC::MovableObject::setDbTag(int newTag)
 
 //! @brief Sets the object identifier in the database if not
 //! already set.
-void XC::MovableObject::setDbTag(CommParameters &cp)
+void XC::MovableObject::setDbTag(Communicator &comm)
   {
     if(dbTag==0)
-      dbTag = cp.getDbTag();
+      dbTag = comm.getDbTag();
   }
 
 //! @brief Sets the value \p param to the parameter \p argv. 

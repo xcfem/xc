@@ -837,7 +837,7 @@ int XC::DruckerPrager::getResponse (int responseID, Information &matInfo)
 // 	return 0;
 // }
 
-int XC::DruckerPrager::sendSelf(CommParameters &)
+int XC::DruckerPrager::sendSelf(Communicator &)
   {
     std::cerr << "DruckerPrager::sendSelf not yet implemented" << std::endl;
 // 	int res = 0;
@@ -903,7 +903,7 @@ int XC::DruckerPrager::sendSelf(CommParameters &)
      return 0;
  }
 
-int XC::DruckerPrager::recvSelf(const CommParameters &)    
+int XC::DruckerPrager::recvSelf(const Communicator &)    
  {
     std::cerr << "DruckerPrager::sendSelf not yet implemented" << std::endl;
 // 	int res = 0;

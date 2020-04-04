@@ -406,20 +406,20 @@ XC::ElemPtrArray3d XC::Element0D::sew(const SetEstruct &f1,const SetEstruct &f2)
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::Element0D::sendData(CommParameters &cp)
+int XC::Element0D::sendData(Communicator &comm)
   {
-    int res= ElementBase<2>::sendData(cp);
-    res+= cp.sendInts(dimension,numDOF,getDbTagData(),CommMetaData(7));
-    res+= cp.sendMatrix(transformation,getDbTagData(),CommMetaData(8));
+    int res= ElementBase<2>::sendData(comm);
+    res+= comm.sendInts(dimension,numDOF,getDbTagData(),CommMetaData(7));
+    res+= comm.sendMatrix(transformation,getDbTagData(),CommMetaData(8));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::Element0D::recvData(const CommParameters &cp)
+int XC::Element0D::recvData(const Communicator &comm)
   {
-    int res= ElementBase<2>::recvData(cp);
-    res+= cp.receiveInts(dimension,numDOF,getDbTagData(),CommMetaData(7));
-    res+= cp.receiveMatrix(transformation,getDbTagData(),CommMetaData(8));
+    int res= ElementBase<2>::recvData(comm);
+    res+= comm.receiveInts(dimension,numDOF,getDbTagData(),CommMetaData(7));
+    res+= comm.receiveMatrix(transformation,getDbTagData(),CommMetaData(8));
     return res;
   }
 

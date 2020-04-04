@@ -307,7 +307,7 @@ void XC::PrismaticBarCrossSectionsVector::setTrialSectionDeformations(const std:
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::PrismaticBarCrossSectionsVector::sendData(CommParameters &cp)
+int XC::PrismaticBarCrossSectionsVector::sendData(Communicator &comm)
   {
     const size_t sz= size();
     setDbTagDataPos(0,sz);
@@ -315,22 +315,22 @@ int XC::PrismaticBarCrossSectionsVector::sendData(CommParameters &cp)
     inicComm(sz*2);
     int res= 0;
     for(size_t i= 0;i<sz;i++)
-      res+= cp.sendBrokedPtr((*this)[i],cpMat,BrokedPtrCommMetaData(i,0,i+sz));
-    res+= cpMat.send(getDbTagData(),cp,CommMetaData(1));
+      res+= comm.sendBrokedPtr((*this)[i],cpMat,BrokedPtrCommMetaData(i,0,i+sz));
+    res+= cpMat.send(getDbTagData(),comm,CommMetaData(1));
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::PrismaticBarCrossSectionsVector::recvData(const CommParameters &cp)
+int XC::PrismaticBarCrossSectionsVector::recvData(const Communicator &comm)
   {
     const size_t sz= getDbTagDataPos(0);
     DbTagData cpMat(sz*2);
     inicComm(sz*2);
-    int res= cpMat.receive(getDbTagData(),cp,CommMetaData(1));
+    int res= cpMat.receive(getDbTagData(),comm,CommMetaData(1));
     for(size_t i= 0;i<sz;i++)
       {
         // Receive the material
-        (*this)[i]= cp.getBrokedMaterial((*this)[i],cpMat,BrokedPtrCommMetaData(i,0,i+sz));
+        (*this)[i]= comm.getBrokedMaterial((*this)[i],cpMat,BrokedPtrCommMetaData(i,0,i+sz));
         if(!(*this)[i])
           std::cerr << "PrismaticBarCrossSectionsVector::recvData() - material "
                     << i << " failed to recv itself\n";
@@ -339,32 +339,32 @@ int XC::PrismaticBarCrossSectionsVector::recvData(const CommParameters &cp)
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::PrismaticBarCrossSectionsVector::sendSelf(CommParameters &cp)
+int XC::PrismaticBarCrossSectionsVector::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(2);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::PrismaticBarCrossSectionsVector::recvSelf(const CommParameters &cp)
+int XC::PrismaticBarCrossSectionsVector::recvSelf(const Communicator &comm)
   {
     inicComm(2);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

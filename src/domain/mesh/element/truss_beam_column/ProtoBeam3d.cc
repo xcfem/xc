@@ -65,19 +65,19 @@ int XC::ProtoBeam3d::getNumDOF(void) const
   { return 12; }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::ProtoBeam3d::sendData(CommParameters &cp)
+int XC::ProtoBeam3d::sendData(Communicator &comm)
   {
     DbTagData &dt= getDbTagData();
-    int res= Element1D::sendData(cp);
-    res+= cp.sendMovable(ctes_scc,dt,CommMetaData(7));
+    int res= Element1D::sendData(comm);
+    res+= comm.sendMovable(ctes_scc,dt,CommMetaData(7));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::ProtoBeam3d::recvData(const CommParameters &cp)
+int XC::ProtoBeam3d::recvData(const Communicator &comm)
   {
-    int res= Element1D::recvData(cp);
-    res+= cp.receiveMovable(ctes_scc,getDbTagData(),CommMetaData(7));
+    int res= Element1D::recvData(comm);
+    res+= comm.receiveMovable(ctes_scc,getDbTagData(),CommMetaData(7));
     return res;
   }
 

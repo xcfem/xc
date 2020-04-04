@@ -46,17 +46,17 @@ XC::RayleighBase::RayleighBase(AnalysisAggregation *owr,int classTag,const Rayle
 
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::RayleighBase::sendData(CommParameters &cp)
+int XC::RayleighBase::sendData(Communicator &comm)
   {
-    int res= DampingFactorsIntegrator::sendData(cp);
-    res+= cp.sendDouble(deltaT,getDbTagData(),CommMetaData(3));
+    int res= DampingFactorsIntegrator::sendData(comm);
+    res+= comm.sendDouble(deltaT,getDbTagData(),CommMetaData(3));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::RayleighBase::recvData(const CommParameters &cp)
+int XC::RayleighBase::recvData(const Communicator &comm)
   {
-    int res= DampingFactorsIntegrator::recvData(cp);
-    res+= cp.receiveDouble(deltaT,getDbTagData(),CommMetaData(3));
+    int res= DampingFactorsIntegrator::recvData(comm);
+    res+= comm.receiveDouble(deltaT,getDbTagData(),CommMetaData(3));
     return res;
   }

@@ -103,50 +103,50 @@ void XC::MatParameter::setDomain(Domain *theDomain)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::MatParameter::sendData(CommParameters &cp)
+int XC::MatParameter::sendData(Communicator &comm)
   {
     setDbTagDataPos(0,getTag());
-    int res= cp.sendMovable(theMatInfo,getDbTagData(),CommMetaData(1));
-    res+= cp.sendString(theParameterName,getDbTagData(),CommMetaData(2));
-    res+= cp.sendInts(theMaterialTag,theParameterID,getDbTagData(),CommMetaData(3));
+    int res= comm.sendMovable(theMatInfo,getDbTagData(),CommMetaData(1));
+    res+= comm.sendString(theParameterName,getDbTagData(),CommMetaData(2));
+    res+= comm.sendInts(theMaterialTag,theParameterID,getDbTagData(),CommMetaData(3));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::MatParameter::recvData(const CommParameters &cp)
+int XC::MatParameter::recvData(const Communicator &comm)
   {
     setTag(getDbTagDataPos(0));
-    int res= cp.receiveMovable(theMatInfo,getDbTagData(),CommMetaData(1));
-    res+= cp.receiveString(theParameterName,getDbTagData(),CommMetaData(2));
-    res+= cp.receiveInts(theMaterialTag,theParameterID,getDbTagData(),CommMetaData(3));
+    int res= comm.receiveMovable(theMatInfo,getDbTagData(),CommMetaData(1));
+    res+= comm.receiveString(theParameterName,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveInts(theMaterialTag,theParameterID,getDbTagData(),CommMetaData(3));
     return res;
   }
 
-int XC::MatParameter::sendSelf(CommParameters &cp)
+int XC::MatParameter::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(4);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
-int XC::MatParameter::recvSelf(const CommParameters &cp)
+int XC::MatParameter::recvSelf(const Communicator &comm)
   {
     inicComm(3);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

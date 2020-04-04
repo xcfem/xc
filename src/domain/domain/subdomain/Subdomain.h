@@ -209,8 +209,8 @@ class Subdomain: public Element, public Domain
     virtual int newStep(double deltaT);
     virtual bool doesIndependentAnalysis(void);
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
 
     virtual double getCost(void);
   };

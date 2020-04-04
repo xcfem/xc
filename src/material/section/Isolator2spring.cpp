@@ -381,56 +381,56 @@ int XC::Isolator2spring::getOrder(void) const
   { return 3; }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::Isolator2spring::sendData(CommParameters &cp)
+int XC::Isolator2spring::sendData(Communicator &comm)
   {
-    int res= SectionForceDeformation::sendData(cp);
-    res+= cp.sendDoubles(tol,k1,Fyo,kbo,kvo,h,getDbTagData(),CommMetaData(5));
-    res+= cp.sendDoubles(Pe,po,utptTrial[0],utptTrial[1],utptInic[0],utptInic[1],getDbTagData(),CommMetaData(6));
-    res+= cp.sendDoubles(sP_n,sP_n1,q_n,q_n1,H,pcr,getDbTagData(),CommMetaData(7));
-    res+= cp.sendVector(x0,getDbTagData(),CommMetaData(8));
-    res+= cp.sendMatrix(ks,getDbTagData(),CommMetaData(9));
-    res+= cp.sendVector(f0,getDbTagData(),CommMetaData(10));
+    int res= SectionForceDeformation::sendData(comm);
+    res+= comm.sendDoubles(tol,k1,Fyo,kbo,kvo,h,getDbTagData(),CommMetaData(5));
+    res+= comm.sendDoubles(Pe,po,utptTrial[0],utptTrial[1],utptInic[0],utptInic[1],getDbTagData(),CommMetaData(6));
+    res+= comm.sendDoubles(sP_n,sP_n1,q_n,q_n1,H,pcr,getDbTagData(),CommMetaData(7));
+    res+= comm.sendVector(x0,getDbTagData(),CommMetaData(8));
+    res+= comm.sendMatrix(ks,getDbTagData(),CommMetaData(9));
+    res+= comm.sendVector(f0,getDbTagData(),CommMetaData(10));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::Isolator2spring::recvData(const CommParameters &cp)
+int XC::Isolator2spring::recvData(const Communicator &comm)
   {
-    int res= SectionForceDeformation::recvData(cp);
-    res+= cp.receiveDoubles(tol,k1,Fyo,kbo,kvo,h,getDbTagData(),CommMetaData(5));
-    res+= cp.receiveDoubles(Pe,po,utptTrial[0],utptTrial[1],utptInic[0],utptInic[1],getDbTagData(),CommMetaData(6));
-    res+= cp.receiveDoubles(sP_n,sP_n1,q_n,q_n1,H,pcr,getDbTagData(),CommMetaData(7));
-    res+= cp.receiveVector(x0,getDbTagData(),CommMetaData(8));
-    res+= cp.receiveMatrix(ks,getDbTagData(),CommMetaData(9));
-    res+= cp.receiveVector(f0,getDbTagData(),CommMetaData(10));
+    int res= SectionForceDeformation::recvData(comm);
+    res+= comm.receiveDoubles(tol,k1,Fyo,kbo,kvo,h,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveDoubles(Pe,po,utptTrial[0],utptTrial[1],utptInic[0],utptInic[1],getDbTagData(),CommMetaData(6));
+    res+= comm.receiveDoubles(sP_n,sP_n1,q_n,q_n1,H,pcr,getDbTagData(),CommMetaData(7));
+    res+= comm.receiveVector(x0,getDbTagData(),CommMetaData(8));
+    res+= comm.receiveMatrix(ks,getDbTagData(),CommMetaData(9));
+    res+= comm.receiveVector(f0,getDbTagData(),CommMetaData(10));
     return res;
   }
 
-int XC::Isolator2spring::sendSelf(CommParameters &cp)
+int XC::Isolator2spring::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(11);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
-int XC::Isolator2spring::recvSelf(const CommParameters &cp)
+int XC::Isolator2spring::recvSelf(const Communicator &comm)
   {
     inicComm(11);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

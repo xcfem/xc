@@ -74,8 +74,8 @@ class UserDefinedHingeIntegrationBase: public UserDefinedBeamIntegrationBase
       { return wts; }
     Vector ptsR;
     Vector wtsR;
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     UserDefinedHingeIntegrationBase(int classTag, const Vector &, const Vector &, const Vector &, const Vector &);
     UserDefinedHingeIntegrationBase(int classTag);

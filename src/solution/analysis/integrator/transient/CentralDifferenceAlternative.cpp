@@ -178,10 +178,10 @@ int XC::CentralDifferenceAlternative::commit(void)
     return commitModel();
   }
 
-int XC::CentralDifferenceAlternative::sendSelf(CommParameters &cp)
+int XC::CentralDifferenceAlternative::sendSelf(Communicator &comm)
   { return 0; }
 
-int XC::CentralDifferenceAlternative::recvSelf(const CommParameters &cp)
+int XC::CentralDifferenceAlternative::recvSelf(const Communicator &comm)
   { return 0; }
 
 

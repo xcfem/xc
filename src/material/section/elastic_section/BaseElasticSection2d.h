@@ -45,8 +45,8 @@ class BaseElasticSection2d: public BaseElasticSection
   protected:
     CrossSectionProperties2d ctes_scc; //!< Mechanical properties of the section.
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public:
     BaseElasticSection2d(int tag,int classTag,const size_t &dim, const double &E, const double &A, const double &I,double G, const double &alpha);

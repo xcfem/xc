@@ -89,8 +89,8 @@ class beam2d04: public beam2d
     const Matrix &getStiff(void) const;    
     void formVar(void) const;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     beam2d04(int tag= 0);        
     beam2d04(int tag, double A, double E, double I, int Nd1, int Nd2);
@@ -107,8 +107,8 @@ class beam2d04: public beam2d
     const Vector &getResistingForce(void) const;
     const Vector &getResistingForceIncInertia(void) const;            
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag =0) const;    
   };

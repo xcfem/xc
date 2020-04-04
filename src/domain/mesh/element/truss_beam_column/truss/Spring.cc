@@ -588,43 +588,43 @@ int XC::Spring::getResponse(int responseID, Information &eleInfo)
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::Spring::sendData(CommParameters &cp)
+int XC::Spring::sendData(Communicator &comm)
   {
-    int res= ProtoTruss::sendData(cp);
-    res+= cp.sendBrokedPtr(theMaterial,getDbTagData(),BrokedPtrCommMetaData(16,17,18));
-    res+= cp.sendDoubles(cosX[0],cosX[1],cosX[2],getDbTagData(),CommMetaData(19));
+    int res= ProtoTruss::sendData(comm);
+    res+= comm.sendBrokedPtr(theMaterial,getDbTagData(),BrokedPtrCommMetaData(16,17,18));
+    res+= comm.sendDoubles(cosX[0],cosX[1],cosX[2],getDbTagData(),CommMetaData(19));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::Spring::recvData(const CommParameters &cp)
+int XC::Spring::recvData(const Communicator &comm)
   {
-    int res= ProtoTruss::recvData(cp);
-    theMaterial= cp.getBrokedMaterial(theMaterial,getDbTagData(),BrokedPtrCommMetaData(16,17,18));
-    res+= cp.receiveDoubles(cosX[0],cosX[1],cosX[2],getDbTagData(),CommMetaData(19));
+    int res= ProtoTruss::recvData(comm);
+    theMaterial= comm.getBrokedMaterial(theMaterial,getDbTagData(),BrokedPtrCommMetaData(16,17,18));
+    res+= comm.receiveDoubles(cosX[0],cosX[1],cosX[2],getDbTagData(),CommMetaData(19));
     return res;
   }
 
-int XC::Spring::sendSelf(CommParameters &cp)
+int XC::Spring::sendSelf(Communicator &comm)
   {
     inicComm(21);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    const int dataTag= getDbTag(cp);
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    const int dataTag= getDbTag(comm);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "Spring::sendSelf -- failed to send ID data\n";
     return res;
   }
 
-int XC::Spring::recvSelf(const CommParameters &cp)
+int XC::Spring::recvSelf(const Communicator &comm)
   {
     inicComm(21);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "Spring::recvSelf() - failed to recv ID data";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }

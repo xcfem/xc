@@ -349,10 +349,10 @@ void  XC::BFGS::BFGSUpdate(IncrementalIntegrator *theIntegrator, LinearSOE *theS
   }
 
 
-int XC::BFGS::sendSelf(CommParameters &cp)
+int XC::BFGS::sendSelf(Communicator &comm)
   { return -1; }
 
-int XC::BFGS::recvSelf(const CommParameters &cp)
+int XC::BFGS::recvSelf(const Communicator &comm)
   { return -1; }
 
 

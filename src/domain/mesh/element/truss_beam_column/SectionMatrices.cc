@@ -67,35 +67,35 @@ void XC::SectionMatrices::initialize(const size_t &i,const int &order)
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::SectionMatrices::sendSelf(CommParameters &cp)
+int XC::SectionMatrices::sendSelf(Communicator &comm)
   {
     inicComm(3);
 
-    int res= cp.sendVectors(vsSubdivide,getDbTagData(),CommMetaData(0));
-    res+= cp.sendMatrices(fsSubdivide,getDbTagData(),CommMetaData(1));
-    res+= cp.sendVectors(SsrSubdivide,getDbTagData(),CommMetaData(2));
+    int res= comm.sendVectors(vsSubdivide,getDbTagData(),CommMetaData(0));
+    res+= comm.sendMatrices(fsSubdivide,getDbTagData(),CommMetaData(1));
+    res+= comm.sendVectors(SsrSubdivide,getDbTagData(),CommMetaData(2));
 
-    const int dataTag= getDbTag(cp);
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    const int dataTag= getDbTag(comm);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "SectionMatrices::sendSelf -- failed to send ID data\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::SectionMatrices::recvSelf(const CommParameters &cp)
+int XC::SectionMatrices::recvSelf(const Communicator &comm)
   {
     inicComm(3);
 
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "SectionMatrices::recvSelf -- failed to receive ID data\n";
     else
       {
-        res+= cp.receiveVectors(vsSubdivide,getDbTagData(),CommMetaData(0));
-        res+= cp.receiveMatrices(fsSubdivide,getDbTagData(),CommMetaData(1));
-        res+= cp.receiveVectors(SsrSubdivide,getDbTagData(),CommMetaData(2));
+        res+= comm.receiveVectors(vsSubdivide,getDbTagData(),CommMetaData(0));
+        res+= comm.receiveMatrices(fsSubdivide,getDbTagData(),CommMetaData(1));
+        res+= comm.receiveVectors(SsrSubdivide,getDbTagData(),CommMetaData(2));
       }
     return res;
   }

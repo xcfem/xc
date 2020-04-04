@@ -159,30 +159,30 @@ int XC::PressureDependentElastic3D::getOrder(void) const
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::PressureDependentElastic3D::sendData(CommParameters &cp)
+int XC::PressureDependentElastic3D::sendData(Communicator &comm)
   {
-    int res= ElasticIsotropicMaterial::sendData(cp);
-    res+= cp.sendDoubles(exp0,p_ref,p_cutoff,getDbTagData(),CommMetaData(3));
+    int res= ElasticIsotropicMaterial::sendData(comm);
+    res+= comm.sendDoubles(exp0,p_ref,p_cutoff,getDbTagData(),CommMetaData(3));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::PressureDependentElastic3D::recvData(const CommParameters &cp)
+int XC::PressureDependentElastic3D::recvData(const Communicator &comm)
   {
-    int res= ElasticIsotropicMaterial::recvData(cp);
-    res+= cp.receiveDoubles(exp0,p_ref,p_cutoff,getDbTagData(),CommMetaData(3));
+    int res= ElasticIsotropicMaterial::recvData(comm);
+    res+= comm.receiveDoubles(exp0,p_ref,p_cutoff,getDbTagData(),CommMetaData(3));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::PressureDependentElastic3D::sendSelf(CommParameters &cp)
+int XC::PressureDependentElastic3D::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(4);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; failed to send data\n";
@@ -190,11 +190,11 @@ int XC::PressureDependentElastic3D::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::PressureDependentElastic3D::recvSelf(const CommParameters &cp)
+int XC::PressureDependentElastic3D::recvSelf(const Communicator &comm)
    {
     inicComm(4);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -202,7 +202,7 @@ int XC::PressureDependentElastic3D::recvSelf(const CommParameters &cp)
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

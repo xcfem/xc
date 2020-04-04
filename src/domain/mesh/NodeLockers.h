@@ -53,8 +53,8 @@ class NodeLockers: public CommandEntity, public MovableObject
     void borraNodeLocker(const std::string &nmb);
 
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
     NodeLockers(Mesh *owr);
     ~NodeLockers(void);
@@ -75,8 +75,8 @@ class NodeLockers: public CommandEntity, public MovableObject
     const int &getTag(void) const
       { return tag; }
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
   };
 
 } // end of XC namespace

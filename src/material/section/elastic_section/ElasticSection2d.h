@@ -100,8 +100,8 @@ class ElasticSection2d: public BaseElasticSection2d
     const ResponseId &getType(void) const;
     int getOrder(void) const;
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     
 
     void Print(std::ostream &s, int flag =0) const;

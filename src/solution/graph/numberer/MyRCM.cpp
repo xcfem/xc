@@ -206,12 +206,12 @@ const XC::ID &XC::MyRCM::number(Graph &theGraph, int startVertex)
 
 
 int
-XC::MyRCM::sendSelf(CommParameters &cp)
+XC::MyRCM::sendSelf(Communicator &comm)
 {
     return 0;
 }
 
-int XC::MyRCM::recvSelf(const CommParameters &cp)
+int XC::MyRCM::recvSelf(const Communicator &comm)
   { return 0; }
 
 

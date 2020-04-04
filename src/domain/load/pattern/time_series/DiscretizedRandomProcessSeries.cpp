@@ -185,11 +185,11 @@ double XC::DiscretizedRandomProcessSeries::getFactorSensitivity(double time)
   }
 
 
-int XC::DiscretizedRandomProcessSeries::sendSelf(CommParameters &cp)
+int XC::DiscretizedRandomProcessSeries::sendSelf(Communicator &comm)
   { return 0; }
 
 
-int XC::DiscretizedRandomProcessSeries::recvSelf(const CommParameters &cp)
+int XC::DiscretizedRandomProcessSeries::recvSelf(const Communicator &comm)
   { return 0; }
 
 

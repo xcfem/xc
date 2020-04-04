@@ -50,8 +50,8 @@ class BeamMecLoad: public BeamLoad
     double Trans; //!< Transverse load.
     double Axial; //!< Axial load.
 
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     BeamMecLoad(int tag, int classTag,const double &Trans,const double &Axial,const ID &theElementTags);
     BeamMecLoad(int tag, int classTag);

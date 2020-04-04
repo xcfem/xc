@@ -62,8 +62,8 @@ class ParameterIDBeamIntegration: public UserDefinedBeamIntegrationBase
   {
   protected:
     int parameterID;
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     ParameterIDBeamIntegration(int classTag, const Vector &, const Vector &);
     ParameterIDBeamIntegration(int classTag, const Vector &);

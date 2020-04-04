@@ -135,41 +135,41 @@ void XC::NLForceBeamColumn3dBase::initializeSectionHistoryVariables(void)
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::NLForceBeamColumn3dBase::sendData(CommParameters &cp)
+int XC::NLForceBeamColumn3dBase::sendData(Communicator &comm)
   {
-    int res= BeamColumnWithSectionFDTrf3d::sendData(cp);
-    res+= cp.sendDouble(tol,getDbTagData(),CommMetaData(13));
-    res+= cp.sendInts(maxIters,initialFlag,getDbTagData(),CommMetaData(14));
-    res+= cp.sendBool(isTorsion,getDbTagData(),CommMetaData(15));
-    res+= cp.sendMatrix(kv,getDbTagData(),CommMetaData(16));
-    res+= cp.sendVector(Se,getDbTagData(),CommMetaData(17));
-    res+= cp.sendMatrix(kvcommit,getDbTagData(),CommMetaData(18));
-    res+= cp.sendVector(Secommit,getDbTagData(),CommMetaData(19));
-    res+= cp.sendMatrices(fs,getDbTagData(),CommMetaData(20));
-    res+= cp.sendVectors(vs,getDbTagData(),CommMetaData(21));
-    res+= cp.sendVectors(Ssr,getDbTagData(),CommMetaData(22));
-    res+= cp.sendVectors(vscommit,getDbTagData(),CommMetaData(23));
-    res+= cp.sendMatrix(sp,getDbTagData(),CommMetaData(24));
-    res+= p0.sendData(cp,getDbTagData(),CommMetaData(25));
+    int res= BeamColumnWithSectionFDTrf3d::sendData(comm);
+    res+= comm.sendDouble(tol,getDbTagData(),CommMetaData(13));
+    res+= comm.sendInts(maxIters,initialFlag,getDbTagData(),CommMetaData(14));
+    res+= comm.sendBool(isTorsion,getDbTagData(),CommMetaData(15));
+    res+= comm.sendMatrix(kv,getDbTagData(),CommMetaData(16));
+    res+= comm.sendVector(Se,getDbTagData(),CommMetaData(17));
+    res+= comm.sendMatrix(kvcommit,getDbTagData(),CommMetaData(18));
+    res+= comm.sendVector(Secommit,getDbTagData(),CommMetaData(19));
+    res+= comm.sendMatrices(fs,getDbTagData(),CommMetaData(20));
+    res+= comm.sendVectors(vs,getDbTagData(),CommMetaData(21));
+    res+= comm.sendVectors(Ssr,getDbTagData(),CommMetaData(22));
+    res+= comm.sendVectors(vscommit,getDbTagData(),CommMetaData(23));
+    res+= comm.sendMatrix(sp,getDbTagData(),CommMetaData(24));
+    res+= p0.sendData(comm,getDbTagData(),CommMetaData(25));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::NLForceBeamColumn3dBase::recvData(const CommParameters &cp)
+int XC::NLForceBeamColumn3dBase::recvData(const Communicator &comm)
   {
-    int res= BeamColumnWithSectionFDTrf3d::recvData(cp);
-    res+= cp.receiveDouble(tol,getDbTagData(),CommMetaData(13));
-    res+= cp.receiveInts(maxIters,initialFlag,getDbTagData(),CommMetaData(14));
-    res+= cp.receiveBool(isTorsion,getDbTagData(),CommMetaData(15));
-    res+= cp.receiveMatrix(kv,getDbTagData(),CommMetaData(16));
-    res+= cp.receiveVector(Se,getDbTagData(),CommMetaData(17));
-    res+= cp.receiveMatrix(kvcommit,getDbTagData(),CommMetaData(18));
-    res+= cp.receiveVector(Secommit,getDbTagData(),CommMetaData(19));
-    res+= cp.receiveMatrices(fs,getDbTagData(),CommMetaData(20));
-    res+= cp.receiveVectors(vs,getDbTagData(),CommMetaData(21));
-    res+= cp.receiveVectors(Ssr,getDbTagData(),CommMetaData(22));
-    res+= cp.receiveVectors(vscommit,getDbTagData(),CommMetaData(23));
-    res+= cp.receiveMatrix(sp,getDbTagData(),CommMetaData(24));
-    res+= p0.receiveData(cp,getDbTagData(),CommMetaData(25));
+    int res= BeamColumnWithSectionFDTrf3d::recvData(comm);
+    res+= comm.receiveDouble(tol,getDbTagData(),CommMetaData(13));
+    res+= comm.receiveInts(maxIters,initialFlag,getDbTagData(),CommMetaData(14));
+    res+= comm.receiveBool(isTorsion,getDbTagData(),CommMetaData(15));
+    res+= comm.receiveMatrix(kv,getDbTagData(),CommMetaData(16));
+    res+= comm.receiveVector(Se,getDbTagData(),CommMetaData(17));
+    res+= comm.receiveMatrix(kvcommit,getDbTagData(),CommMetaData(18));
+    res+= comm.receiveVector(Secommit,getDbTagData(),CommMetaData(19));
+    res+= comm.receiveMatrices(fs,getDbTagData(),CommMetaData(20));
+    res+= comm.receiveVectors(vs,getDbTagData(),CommMetaData(21));
+    res+= comm.receiveVectors(Ssr,getDbTagData(),CommMetaData(22));
+    res+= comm.receiveVectors(vscommit,getDbTagData(),CommMetaData(23));
+    res+= comm.receiveMatrix(sp,getDbTagData(),CommMetaData(24));
+    res+= p0.receiveData(comm,getDbTagData(),CommMetaData(25));
     return res;
   }

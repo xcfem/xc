@@ -237,9 +237,9 @@ const XC::EigenSOE *XC::EigenIntegrator::getEigenSOEPtr(void) const
     return sm->getEigenSOEPtr();
   }
 
-int XC::EigenIntegrator::sendSelf(CommParameters &cp)
+int XC::EigenIntegrator::sendSelf(Communicator &comm)
   { return 0; }
 
-int XC::EigenIntegrator::recvSelf(const CommParameters &cp)
+int XC::EigenIntegrator::recvSelf(const Communicator &comm)
   { return 0; }
 

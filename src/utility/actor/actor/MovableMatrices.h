@@ -51,8 +51,8 @@ class MovableMatrices: public MovableObject
     const std::vector<Matrix> &getMatrices(void) const
       { return vectors; }
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
   };
 
 } // end of XC namespace

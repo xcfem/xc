@@ -825,31 +825,31 @@ const XC::Matrix &XC::Brick::computeB( int node, const double shp[4][8]) const
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::Brick::sendData(CommParameters &cp)
+int XC::Brick::sendData(Communicator &comm)
   {
-    int res= BrickBase::sendData(cp);
-    res+= cp.sendDoubles(bf[0],bf[1],bf[2],getDbTagData(),CommMetaData(8));
-    res+= cp.sendMatrixPtr(Ki,getDbTagData(),MatrixCommMetaData(11,12,13,14));
+    int res= BrickBase::sendData(comm);
+    res+= comm.sendDoubles(bf[0],bf[1],bf[2],getDbTagData(),CommMetaData(8));
+    res+= comm.sendMatrixPtr(Ki,getDbTagData(),MatrixCommMetaData(11,12,13,14));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::Brick::recvData(const CommParameters &cp)
+int XC::Brick::recvData(const Communicator &comm)
   {
-    int res= BrickBase::recvData(cp);
-    res+= cp.receiveDoubles(bf[0],bf[1],bf[2],getDbTagData(),CommMetaData(8));
-    Ki= cp.receiveMatrixPtr(Ki,getDbTagData(),MatrixCommMetaData(11,12,13,14));
+    int res= BrickBase::recvData(comm);
+    res+= comm.receiveDoubles(bf[0],bf[1],bf[2],getDbTagData(),CommMetaData(8));
+    Ki= comm.receiveMatrixPtr(Ki,getDbTagData(),MatrixCommMetaData(11,12,13,14));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::Brick::sendSelf(CommParameters &cp)
+int XC::Brick::sendSelf(Communicator &comm)
   {
     inicComm(15);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
     const int dataTag= getDbTag();
-    res= cp.sendIdData(getDbTagData(),dataTag);
+    res= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; could not send data.\n";
@@ -857,16 +857,16 @@ int XC::Brick::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::Brick::recvSelf(const CommParameters &cp)
+int XC::Brick::recvSelf(const Communicator &comm)
   {
     const int dataTag= getDbTag();
     ID data(15);
-    int res = cp.receiveIdData(getDbTagData(),dataTag);
+    int res = comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to receive ID data.\n";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

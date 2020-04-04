@@ -178,13 +178,13 @@ bool XC::UmfpackGenLinSolver::setLinearSOE(LinearSOE *soe)
 bool XC::UmfpackGenLinSolver::setLinearSOE(UmfpackGenLinSOE &theLinearSOE)
   { return setLinearSOE(&theLinearSOE); }
 
-int XC::UmfpackGenLinSolver::sendSelf(CommParameters &cp)
+int XC::UmfpackGenLinSolver::sendSelf(Communicator &comm)
   {
     // nothing to do
     return 0;
   }
 
-int XC::UmfpackGenLinSolver::recvSelf(const CommParameters &cp)
+int XC::UmfpackGenLinSolver::recvSelf(const Communicator &comm)
   {
     // nothing to do
     return 0;

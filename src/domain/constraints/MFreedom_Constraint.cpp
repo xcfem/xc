@@ -199,30 +199,30 @@ int XC::MFreedom_Constraint::applyConstraint(double timeStamp)
   }
 
 //! @brief Sends data through the channel being passed as parameter.
-int XC::MFreedom_Constraint::sendData(CommParameters &cp)
+int XC::MFreedom_Constraint::sendData(Communicator &comm)
   {
-    int res= MFreedom_ConstraintBase::sendData(cp);
-    res+= cp.sendID(retainDOF,getDbTagData(),CommMetaData(5));
-    res+= cp.sendInt(retainedNodeTag,getDbTagData(),CommMetaData(6));
+    int res= MFreedom_ConstraintBase::sendData(comm);
+    res+= comm.sendID(retainDOF,getDbTagData(),CommMetaData(5));
+    res+= comm.sendInt(retainedNodeTag,getDbTagData(),CommMetaData(6));
     return res;
   }
 
 //! @brief Receives data through the channel being passed as parameter.
-int XC::MFreedom_Constraint::recvData(const CommParameters &cp)
+int XC::MFreedom_Constraint::recvData(const Communicator &comm)
   {
-    int res= MFreedom_ConstraintBase::recvData(cp);
-    res+= cp.receiveID(retainDOF,getDbTagData(),CommMetaData(5));
-    res+= cp.receiveInt(retainedNodeTag,getDbTagData(),CommMetaData(6));
+    int res= MFreedom_ConstraintBase::recvData(comm);
+    res+= comm.receiveID(retainDOF,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveInt(retainedNodeTag,getDbTagData(),CommMetaData(6));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::MFreedom_Constraint::sendSelf(CommParameters &cp)
+int XC::MFreedom_Constraint::sendSelf(Communicator &comm)
   {
     inicComm(14);
-    int result= sendData(cp);
+    int result= sendData(comm);
     const int dataTag= getDbTag();
-    result = cp.sendIdData(getDbTagData(),dataTag);
+    result = comm.sendIdData(getDbTagData(),dataTag);
     if(result < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; WARNING - error sending ID data\n";
@@ -231,16 +231,16 @@ int XC::MFreedom_Constraint::sendSelf(CommParameters &cp)
 
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::MFreedom_Constraint::recvSelf(const CommParameters &cp)
+int XC::MFreedom_Constraint::recvSelf(const Communicator &comm)
   {
     inicComm(14);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; data could not be received.\n" ;
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

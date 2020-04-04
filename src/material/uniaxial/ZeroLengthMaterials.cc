@@ -143,39 +143,39 @@ void XC::ZeroLengthMaterials::push_front(const int &dir,const UniaxialMaterial *
       }
   }
 
-int XC::ZeroLengthMaterials::sendSelf(CommParameters &cp)
+int XC::ZeroLengthMaterials::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(3); 
     const size_t sz= size();
 
-    int res= sendData(cp);
+    int res= sendData(comm);
     ID direction(sz);
     for(size_t i= 0;i<sz;i++)
       direction[i]= directions[i];
-    res+= cp.sendID(direction,getDbTagData(),CommMetaData(2));
+    res+= comm.sendID(direction,getDbTagData(),CommMetaData(2));
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; failed to send.\n";
     return res;
   }
 
-int XC::ZeroLengthMaterials::recvSelf(const CommParameters &cp)
+int XC::ZeroLengthMaterials::recvSelf(const Communicator &comm)
   {
     inicComm(3);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; failed to receive.\n";
     else
       {
-        res+= recvData(cp);
+        res+= recvData(comm);
         ID direction;
-        res+= cp.receiveID(direction,getDbTagData(),CommMetaData(2));
+        res+= comm.receiveID(direction,getDbTagData(),CommMetaData(2));
         const size_t sz= direction.Size();
         directions.resize(sz);
         for(size_t i= 0;i<sz;i++)

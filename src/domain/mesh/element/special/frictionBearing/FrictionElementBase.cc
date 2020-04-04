@@ -110,37 +110,37 @@ XC::FrictionElementBase::~FrictionElementBase()
 
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::FrictionElementBase::sendData(CommParameters &cp)
+int XC::FrictionElementBase::sendData(Communicator &comm)
   {
-    int res= Element0D::sendData(cp);
+    int res= Element0D::sendData(comm);
     std::cerr<< "FrictionElementBase::sendData incomplete (materials and friction model undefined)." << std::endl;
-    res+= cp.sendDoubles(uy,mass,tol,L,getDbTagData(),CommMetaData(9));
-    res+= cp.sendVector(x,getDbTagData(),CommMetaData(10));
-    res+= cp.sendVector(y,getDbTagData(),CommMetaData(11));
-    res+= cp.sendInt(maxIter,getDbTagData(),CommMetaData(12));
-    res+= cp.sendVector(ub,getDbTagData(),CommMetaData(13));
-    res+= cp.sendVector(qb,getDbTagData(),CommMetaData(14));
-    res+= cp.sendMatrix(kb,getDbTagData(),CommMetaData(15));
-    res+= cp.sendVector(ul,getDbTagData(),CommMetaData(16));
-    res+= cp.sendMatrix(Tgl,getDbTagData(),CommMetaData(17));
-    res+= cp.sendMatrix(Tlb,getDbTagData(),CommMetaData(18));
+    res+= comm.sendDoubles(uy,mass,tol,L,getDbTagData(),CommMetaData(9));
+    res+= comm.sendVector(x,getDbTagData(),CommMetaData(10));
+    res+= comm.sendVector(y,getDbTagData(),CommMetaData(11));
+    res+= comm.sendInt(maxIter,getDbTagData(),CommMetaData(12));
+    res+= comm.sendVector(ub,getDbTagData(),CommMetaData(13));
+    res+= comm.sendVector(qb,getDbTagData(),CommMetaData(14));
+    res+= comm.sendMatrix(kb,getDbTagData(),CommMetaData(15));
+    res+= comm.sendVector(ul,getDbTagData(),CommMetaData(16));
+    res+= comm.sendMatrix(Tgl,getDbTagData(),CommMetaData(17));
+    res+= comm.sendMatrix(Tlb,getDbTagData(),CommMetaData(18));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::FrictionElementBase::recvData(const CommParameters &cp)
+int XC::FrictionElementBase::recvData(const Communicator &comm)
   {
-    int res= Element0D::recvData(cp);
+    int res= Element0D::recvData(comm);
     std::cerr<< "FrictionElementBase::recvData incomplete (materials and friction model undefined)." << std::endl;
-    res+= cp.receiveDoubles(uy,mass,tol,L,getDbTagData(),CommMetaData(9));
-    res+= cp.receiveVector(x,getDbTagData(),CommMetaData(10));
-    res+= cp.receiveVector(y,getDbTagData(),CommMetaData(11));
-    res+= cp.receiveInt(maxIter,getDbTagData(),CommMetaData(12));
-    res+= cp.receiveVector(ub,getDbTagData(),CommMetaData(13));
-    res+= cp.receiveVector(qb,getDbTagData(),CommMetaData(14));
-    res+= cp.receiveMatrix(kb,getDbTagData(),CommMetaData(15));
-    res+= cp.receiveVector(ul,getDbTagData(),CommMetaData(16));
-    res+= cp.receiveMatrix(Tgl,getDbTagData(),CommMetaData(17));
-    res+= cp.receiveMatrix(Tlb,getDbTagData(),CommMetaData(18));
+    res+= comm.receiveDoubles(uy,mass,tol,L,getDbTagData(),CommMetaData(9));
+    res+= comm.receiveVector(x,getDbTagData(),CommMetaData(10));
+    res+= comm.receiveVector(y,getDbTagData(),CommMetaData(11));
+    res+= comm.receiveInt(maxIter,getDbTagData(),CommMetaData(12));
+    res+= comm.receiveVector(ub,getDbTagData(),CommMetaData(13));
+    res+= comm.receiveVector(qb,getDbTagData(),CommMetaData(14));
+    res+= comm.receiveMatrix(kb,getDbTagData(),CommMetaData(15));
+    res+= comm.receiveVector(ul,getDbTagData(),CommMetaData(16));
+    res+= comm.receiveMatrix(Tgl,getDbTagData(),CommMetaData(17));
+    res+= comm.receiveMatrix(Tlb,getDbTagData(),CommMetaData(18));
     return res;
   }

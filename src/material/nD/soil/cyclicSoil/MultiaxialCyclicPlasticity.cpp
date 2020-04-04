@@ -747,84 +747,84 @@ int XC::MultiaxialCyclicPlasticity::revertToStart( )
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::MultiaxialCyclicPlasticity::sendData(CommParameters &cp)
+int XC::MultiaxialCyclicPlasticity::sendData(Communicator &comm)
   {
-    int res= NDMaterial::sendData(cp);
-    res+= cp.sendDoubles(K0,bulk_K0,shear_K0,bulk,shear,getDbTagData(),CommMetaData(1));
-    res+= cp.sendDoubles(density,R,Ho,h,m,beta,getDbTagData(),CommMetaData(2));
-    res+= cp.sendInts(flagjustunload,flagfirstload,icounter,iternum,getDbTagData(),CommMetaData(3));
-    res+= cp.sendInts(plasticflag,plasticflag_n,EleTag,getDbTagData(),CommMetaData(4));
-    res+= cp.sendDoubles(eta,kappa,Psi,X[0],X[1],X[2],getDbTagData(),CommMetaData(5));
-    res+= cp.sendDoubles(alp,load,getDbTagData(),CommMetaData(6));
-    res+= cp.sendMatrix(strain,getDbTagData(),CommMetaData(7));
-    res+= cp.sendMatrix(stress,getDbTagData(),CommMetaData(8));
-    res+= cp.sendMatrix(backs,getDbTagData(),CommMetaData(9));
-    res+= cp.sendMatrix(so,getDbTagData(),CommMetaData(10));
-    res+= cp.sendMatrix(strain_n,getDbTagData(),CommMetaData(11));
-    res+= cp.sendMatrix(stress_n,getDbTagData(),CommMetaData(12));
-    res+= cp.sendMatrix(backs_n,getDbTagData(),CommMetaData(13));
-    res+= cp.sendMatrix(so_n,getDbTagData(),CommMetaData(14));
+    int res= NDMaterial::sendData(comm);
+    res+= comm.sendDoubles(K0,bulk_K0,shear_K0,bulk,shear,getDbTagData(),CommMetaData(1));
+    res+= comm.sendDoubles(density,R,Ho,h,m,beta,getDbTagData(),CommMetaData(2));
+    res+= comm.sendInts(flagjustunload,flagfirstload,icounter,iternum,getDbTagData(),CommMetaData(3));
+    res+= comm.sendInts(plasticflag,plasticflag_n,EleTag,getDbTagData(),CommMetaData(4));
+    res+= comm.sendDoubles(eta,kappa,Psi,X[0],X[1],X[2],getDbTagData(),CommMetaData(5));
+    res+= comm.sendDoubles(alp,load,getDbTagData(),CommMetaData(6));
+    res+= comm.sendMatrix(strain,getDbTagData(),CommMetaData(7));
+    res+= comm.sendMatrix(stress,getDbTagData(),CommMetaData(8));
+    res+= comm.sendMatrix(backs,getDbTagData(),CommMetaData(9));
+    res+= comm.sendMatrix(so,getDbTagData(),CommMetaData(10));
+    res+= comm.sendMatrix(strain_n,getDbTagData(),CommMetaData(11));
+    res+= comm.sendMatrix(stress_n,getDbTagData(),CommMetaData(12));
+    res+= comm.sendMatrix(backs_n,getDbTagData(),CommMetaData(13));
+    res+= comm.sendMatrix(so_n,getDbTagData(),CommMetaData(14));
     size_t conta= 15;
     for(size_t i=0;i<3;i++)
       for(size_t j=0;j<3;j++)
          for(size_t k=0;k<3;k++)
-            res+= cp.sendDoubles(tangent[i][j][k][0],tangent[i][j][k][1],tangent[i][j][k][2],getDbTagData(),CommMetaData(conta++));
+            res+= comm.sendDoubles(tangent[i][j][k][0],tangent[i][j][k][1],tangent[i][j][k][2],getDbTagData(),CommMetaData(conta++));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::MultiaxialCyclicPlasticity::recvData(const CommParameters &cp)
+int XC::MultiaxialCyclicPlasticity::recvData(const Communicator &comm)
   {
-    int res= NDMaterial::recvData(cp);
-    res+= cp.receiveDoubles(K0,bulk_K0,shear_K0,bulk,shear,getDbTagData(),CommMetaData(1));
-    res+= cp.receiveDoubles(density,R,Ho,h,m,beta,getDbTagData(),CommMetaData(2));
-    res+= cp.receiveInts(flagjustunload,flagfirstload,icounter,iternum,getDbTagData(),CommMetaData(3));
-    res+= cp.receiveInts(plasticflag,plasticflag_n,EleTag,getDbTagData(),CommMetaData(4));
-    res+= cp.receiveDoubles(eta,kappa,Psi,X[0],X[1],X[2],getDbTagData(),CommMetaData(5));
-    res+= cp.receiveDoubles(alp,load,getDbTagData(),CommMetaData(6));
-    res+= cp.receiveMatrix(strain,getDbTagData(),CommMetaData(7));
-    res+= cp.receiveMatrix(stress,getDbTagData(),CommMetaData(8));
-    res+= cp.receiveMatrix(backs,getDbTagData(),CommMetaData(9));
-    res+= cp.receiveMatrix(so,getDbTagData(),CommMetaData(10));
-    res+= cp.receiveMatrix(strain_n,getDbTagData(),CommMetaData(11));
-    res+= cp.receiveMatrix(stress_n,getDbTagData(),CommMetaData(12));
-    res+= cp.receiveMatrix(backs_n,getDbTagData(),CommMetaData(13));
-    res+= cp.receiveMatrix(so_n,getDbTagData(),CommMetaData(14));
+    int res= NDMaterial::recvData(comm);
+    res+= comm.receiveDoubles(K0,bulk_K0,shear_K0,bulk,shear,getDbTagData(),CommMetaData(1));
+    res+= comm.receiveDoubles(density,R,Ho,h,m,beta,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveInts(flagjustunload,flagfirstload,icounter,iternum,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveInts(plasticflag,plasticflag_n,EleTag,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveDoubles(eta,kappa,Psi,X[0],X[1],X[2],getDbTagData(),CommMetaData(5));
+    res+= comm.receiveDoubles(alp,load,getDbTagData(),CommMetaData(6));
+    res+= comm.receiveMatrix(strain,getDbTagData(),CommMetaData(7));
+    res+= comm.receiveMatrix(stress,getDbTagData(),CommMetaData(8));
+    res+= comm.receiveMatrix(backs,getDbTagData(),CommMetaData(9));
+    res+= comm.receiveMatrix(so,getDbTagData(),CommMetaData(10));
+    res+= comm.receiveMatrix(strain_n,getDbTagData(),CommMetaData(11));
+    res+= comm.receiveMatrix(stress_n,getDbTagData(),CommMetaData(12));
+    res+= comm.receiveMatrix(backs_n,getDbTagData(),CommMetaData(13));
+    res+= comm.receiveMatrix(so_n,getDbTagData(),CommMetaData(14));
     size_t conta= 15;
     for(size_t i=0;i<3;i++)
       for(size_t j=0;j<3;j++)
          for(size_t k=0;k<3;k++)
-            res+= cp.receiveDoubles(tangent[i][j][k][0],tangent[i][j][k][1],tangent[i][j][k][2],getDbTagData(),CommMetaData(conta++));
+            res+= comm.receiveDoubles(tangent[i][j][k][0],tangent[i][j][k][1],tangent[i][j][k][2],getDbTagData(),CommMetaData(conta++));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::MultiaxialCyclicPlasticity::sendSelf(CommParameters &cp)
+int XC::MultiaxialCyclicPlasticity::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(96);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::MultiaxialCyclicPlasticity::recvSelf(const CommParameters &cp)
+int XC::MultiaxialCyclicPlasticity::recvSelf(const Communicator &comm)
   {
     inicComm(88);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

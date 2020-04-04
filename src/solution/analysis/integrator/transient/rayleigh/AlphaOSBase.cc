@@ -100,19 +100,19 @@ int XC::AlphaOSBase::revertToLastStep(void)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::AlphaOSBase::sendData(CommParameters &cp)
+int XC::AlphaOSBase::sendData(Communicator &comm)
   {
-    int res= HHTBase::sendData(cp);
-    res+= cp.sendMovable(Upt,getDbTagData(),CommMetaData(9));
-    res+= cp.sendInt(updateCount,getDbTagData(),CommMetaData(10));
+    int res= HHTBase::sendData(comm);
+    res+= comm.sendMovable(Upt,getDbTagData(),CommMetaData(9));
+    res+= comm.sendInt(updateCount,getDbTagData(),CommMetaData(10));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::AlphaOSBase::recvData(const CommParameters &cp)
+int XC::AlphaOSBase::recvData(const Communicator &comm)
   {
-    int res= HHTBase::recvData(cp);
-    res+= cp.receiveMovable(Upt,getDbTagData(),CommMetaData(9));
-    res+= cp.receiveInt(updateCount,getDbTagData(),CommMetaData(10));
+    int res= HHTBase::recvData(comm);
+    res+= comm.receiveMovable(Upt,getDbTagData(),CommMetaData(9));
+    res+= comm.receiveInt(updateCount,getDbTagData(),CommMetaData(10));
     return res;
   }

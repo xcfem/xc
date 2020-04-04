@@ -87,8 +87,8 @@ class DistributedProfileSPDLinSOE: public ProfileSPDLinSOE, public DistributedBa
     int solve(void);
     const Vector &getB(void) const;
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     friend class ProfileSPDLinSolver;    
     friend class ProfileSPDLinDirectSolver;
     friend class ProfileSPDLinDirectBlockSolver;

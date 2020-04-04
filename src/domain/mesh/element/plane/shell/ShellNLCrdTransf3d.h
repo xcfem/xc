@@ -60,8 +60,8 @@ class ShellNLCrdTransf3d: public ShellCrdTransf3dBase
 
     virtual const Vector &getGlobalResistingForce(const Vector &p0) const;
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 
 } // end of XC namespace

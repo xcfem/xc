@@ -70,7 +70,7 @@ XC::MeshComponent::MeshComponent(int tag, int classTag)
   : ContinuaReprComponent(tag,classTag), index(-1){}
 
 //! @brief Send labelsthrough the channel being passed as parameter.
-int XC::MeshComponent::sendIdsLabels(int posDbTag,CommParameters &cp)
+int XC::MeshComponent::sendIdsLabels(int posDbTag,Communicator &comm)
   {
     int res= 0;
     static ID labelIds;
@@ -82,7 +82,7 @@ int XC::MeshComponent::sendIdsLabels(int posDbTag,CommParameters &cp)
         int conta= 0;
         for(std::set<int>::const_iterator i= ids.begin();i!=ids.end();i++,conta++)
           labelIds[conta]= *i;
-        res+= cp.sendID(labelIds,getDbTagData(),CommMetaData(posDbTag));
+        res+= comm.sendID(labelIds,getDbTagData(),CommMetaData(posDbTag));
       }
     else
       setDbTagDataPos(posDbTag,0);
@@ -90,14 +90,14 @@ int XC::MeshComponent::sendIdsLabels(int posDbTag,CommParameters &cp)
   }
 
 //! @brief Receive labels through the channel being passed as parameter.
-int XC::MeshComponent::recvIdsLabels(int posDbTag,const CommParameters &cp)
+int XC::MeshComponent::recvIdsLabels(int posDbTag,const Communicator &comm)
   {
     int res= 0;
     static ID labelIds;
     if(getDbTagDataPos(posDbTag)!= 0)
       {
         const LabelDictionary &dic= labels.getDictionary();
-        res= cp.receiveID(labelIds,getDbTagData(),CommMetaData(posDbTag));
+        res= comm.receiveID(labelIds,getDbTagData(),CommMetaData(posDbTag));
     
         const size_t sz= labelIds.Size();
         for(size_t i=0;i<sz;i++)
@@ -107,20 +107,20 @@ int XC::MeshComponent::recvIdsLabels(int posDbTag,const CommParameters &cp)
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::MeshComponent::sendData(CommParameters &cp)
+int XC::MeshComponent::sendData(Communicator &comm)
   {
-    int res= ContinuaReprComponent::sendData(cp);
-    cp.sendInt(index,getDbTagData(),CommMetaData(2));
-    res+= sendIdsLabels(3,cp);
+    int res= ContinuaReprComponent::sendData(comm);
+    comm.sendInt(index,getDbTagData(),CommMetaData(2));
+    res+= sendIdsLabels(3,comm);
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::MeshComponent::recvData(const CommParameters &cp)
+int XC::MeshComponent::recvData(const Communicator &comm)
   {
-    int res= ContinuaReprComponent::recvData(cp);
-    cp.receiveInt(index,getDbTagData(),CommMetaData(2));
-    res+= recvIdsLabels(3,cp);
+    int res= ContinuaReprComponent::recvData(comm);
+    comm.receiveInt(index,getDbTagData(),CommMetaData(2));
+    res+= recvIdsLabels(3,comm);
     return res;
   }
 

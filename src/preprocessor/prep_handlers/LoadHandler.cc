@@ -96,35 +96,35 @@ XC::DbTagData &XC::LoadHandler::getDbTagData(void) const
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::LoadHandler::sendData(CommParameters &cp)
+int XC::LoadHandler::sendData(Communicator &comm)
   {
-    int res= sendMap(ground_motions,cp,getDbTagData(),CommMetaData(0));
-    res+= cp.sendMovable(lpatterns,getDbTagData(),CommMetaData(1));
-    res+= cp.sendInt(tag_lp,getDbTagData(),CommMetaData(2));
-    res+= cp.sendMovable(combinations,getDbTagData(),CommMetaData(3));
+    int res= sendMap(ground_motions,comm,getDbTagData(),CommMetaData(0));
+    res+= comm.sendMovable(lpatterns,getDbTagData(),CommMetaData(1));
+    res+= comm.sendInt(tag_lp,getDbTagData(),CommMetaData(2));
+    res+= comm.sendMovable(combinations,getDbTagData(),CommMetaData(3));
     return res;
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::LoadHandler::recvData(const CommParameters &cp)
+int XC::LoadHandler::recvData(const Communicator &comm)
   {
-    int res= receiveMap(ground_motions,cp,getDbTagData(),CommMetaData(0),&FEM_ObjectBroker::getNewGroundMotion);
-    res+= cp.receiveMovable(lpatterns,getDbTagData(),CommMetaData(1));
-    res+= cp.receiveInt(tag_lp,getDbTagData(),CommMetaData(2));
-    res+= cp.receiveMovable(combinations,getDbTagData(),CommMetaData(3));
+    int res= receiveMap(ground_motions,comm,getDbTagData(),CommMetaData(0),&FEM_ObjectBroker::getNewGroundMotion);
+    res+= comm.receiveMovable(lpatterns,getDbTagData(),CommMetaData(1));
+    res+= comm.receiveInt(tag_lp,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveMovable(combinations,getDbTagData(),CommMetaData(3));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::LoadHandler::sendSelf(CommParameters &cp)
+int XC::LoadHandler::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     DbTagData &dbTagData= getDbTagData();
     inicComm(dbTagData.Size());
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::sendSelf() - failed to send data\n";
     return res;
@@ -132,19 +132,19 @@ int XC::LoadHandler::sendSelf(CommParameters &cp)
 
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::LoadHandler::recvSelf(const CommParameters &cp)
+int XC::LoadHandler::recvSelf(const Communicator &comm)
   {
     DbTagData &dbTagData= getDbTagData();
     inicComm(dbTagData.Size());
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

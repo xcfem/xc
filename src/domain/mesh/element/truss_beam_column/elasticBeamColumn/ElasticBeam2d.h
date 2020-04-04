@@ -97,8 +97,8 @@ class ElasticBeam2d: public ProtoBeam2d
     void set_transf(const CrdTransf *trf);
   protected:
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
   public:
     ElasticBeam2d(int tag= 0);
@@ -153,8 +153,8 @@ class ElasticBeam2d: public ProtoBeam2d
     const Vector &getResistingForce(void) const;
     const Vector &getResistingForceIncInertia(void) const;            
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag = 0) const;
     //! @brief Internal shear force in the middle of the element.

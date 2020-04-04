@@ -94,8 +94,8 @@ class PyLiq1: public PySimple1
     double getEffectiveStress(void);
     static Vector stressV3;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     PyLiq1(int tag, int classtag, int soilType, double pult, double y50, double drag,
            double dashpot, double pRes, int solidElem1, int solidElem2, Domain *theDomain);
@@ -116,8 +116,8 @@ class PyLiq1: public PySimple1
 
     UniaxialMaterial *getCopy(void) const;
     
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
 
     //  Command for initiating vertConsolStress from TclUpdateMaterialStageCommand
     int updateParameter(int snum, Information &eleInformation);

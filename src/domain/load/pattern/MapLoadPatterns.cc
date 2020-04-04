@@ -312,44 +312,44 @@ XC::DbTagData &XC::MapLoadPatterns::getDbTagData(void) const
   }
 
 //! @brief Send members through the channel passed as parameter.
-int XC::MapLoadPatterns::sendData(CommParameters &cp)
+int XC::MapLoadPatterns::sendData(Communicator &comm)
   {
-    int res= sendMap(tseries,cp,getDbTagData(),CommMetaData(0));
-    res+= cp.sendString(time_series_name,getDbTagData(),CommMetaData(1));
-    res+= sendMap(loadpatterns,cp,getDbTagData(),CommMetaData(2));
-    res+= cp.sendString(lpcode,getDbTagData(),CommMetaData(3));
-    res+= cp.sendInts(tag_el,tag_nl,tag_spc,getDbTagData(),CommMetaData(4));
+    int res= sendMap(tseries,comm,getDbTagData(),CommMetaData(0));
+    res+= comm.sendString(time_series_name,getDbTagData(),CommMetaData(1));
+    res+= sendMap(loadpatterns,comm,getDbTagData(),CommMetaData(2));
+    res+= comm.sendString(lpcode,getDbTagData(),CommMetaData(3));
+    res+= comm.sendInts(tag_el,tag_nl,tag_spc,getDbTagData(),CommMetaData(4));
     return res;
   }
 
 //! @brief Send members through the channel passed as parameter.
-int XC::MapLoadPatterns::recvData(const CommParameters &cp)
+int XC::MapLoadPatterns::recvData(const Communicator &comm)
   {
     clear();
-    int res= receiveMap(tseries,cp,getDbTagData(),CommMetaData(0),&FEM_ObjectBroker::getNewTimeSeries);
-    res+= cp.receiveString(time_series_name,getDbTagData(),CommMetaData(1));
-    res+= receiveMap(loadpatterns,cp,getDbTagData(),CommMetaData(2),&FEM_ObjectBroker::getNewLoadPattern);
+    int res= receiveMap(tseries,comm,getDbTagData(),CommMetaData(0),&FEM_ObjectBroker::getNewTimeSeries);
+    res+= comm.receiveString(time_series_name,getDbTagData(),CommMetaData(1));
+    res+= receiveMap(loadpatterns,comm,getDbTagData(),CommMetaData(2),&FEM_ObjectBroker::getNewLoadPattern);
     for(iterator i= begin();i!= end();i++)
       (*i).second->set_owner(this);
-    res+= cp.receiveString(lpcode,getDbTagData(),CommMetaData(3));
-    res+= cp.receiveInts(tag_el,tag_nl,tag_spc,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveString(lpcode,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveInts(tag_el,tag_nl,tag_spc,getDbTagData(),CommMetaData(4));
     return res;
   }
 
 //! @brief Sends object through the channel passed as parameter.
-int XC::MapLoadPatterns::sendSelf(CommParameters &cp)
+int XC::MapLoadPatterns::sendSelf(Communicator &comm)
   {
     inicComm(5);
-    int res= sendData(cp);
-    const int dataTag= getDbTag(cp);
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    int res= sendData(comm);
+    const int dataTag= getDbTag(comm);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "MapLoadPatterns::sendSelf() - failed to send data.\n";    
     return res;
   }
 
 //! @brief Receives object through the channel passed as parameter.
-int XC::MapLoadPatterns::recvSelf(const CommParameters &cp)
+int XC::MapLoadPatterns::recvSelf(const Communicator &comm)
   {
     inicComm(5);
     int res= 0;
@@ -357,11 +357,11 @@ int XC::MapLoadPatterns::recvSelf(const CommParameters &cp)
     if(empty())
       {
         const int dataTag= getDbTag();
-        res= cp.receiveIdData(getDbTagData(),dataTag);
+        res= comm.receiveIdData(getDbTagData(),dataTag);
         if(res<0)
           std::cerr << "MapLoadPatterns::recvSelf() - data could not be received.\n" ;
         else
-          res+= recvData(cp);
+          res+= recvData(comm);
       }
     return res;
   }

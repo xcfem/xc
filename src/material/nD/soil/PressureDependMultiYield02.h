@@ -82,8 +82,8 @@ class PressureDependMultiYield02: public PressureDependMultiYieldBase
     //return 1 if stress locked; o/w return 0.
     int stressCorrection(int crossedSurface) const;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     // Initialization constructor
     PressureDependMultiYield02 (int tag,
@@ -144,8 +144,8 @@ class PressureDependMultiYield02: public PressureDependMultiYieldBase
      // Return the string "PressureDependMultiYield02".
      const std::string &getType(void) const ;
 
-     int sendSelf(CommParameters &);
-     int recvSelf(const CommParameters &);
+     int sendSelf(Communicator &);
+     int recvSelf(const Communicator &);
      void Print(std::ostream &s, int flag =0) const;
      //void setCurrentStress(const Vector stress) { currentStress=T2Vector(stress); }
 

@@ -69,8 +69,8 @@ class ElasticMembranePlateSection: public ElasticPlateProto<8>
     double rhoH ; //!< mass per unit 2D area
   protected:
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public : 
     ElasticMembranePlateSection(void);
@@ -91,8 +91,8 @@ class ElasticMembranePlateSection: public ElasticPlateProto<8>
     double getRho(void) const;
     void setRho(const double &);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 
 } // end of XC namespace

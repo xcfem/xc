@@ -97,8 +97,8 @@ class NodalLoad: public Load
 
   protected:
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     NodalLoad(int tag, int theClassTag=  LOAD_TAG_NodalLoad);
     NodalLoad(int tag, int node, int classTag);
@@ -113,8 +113,8 @@ class NodalLoad: public Load
     const Vector &getForce(void) const;
     const Vector &getMoment(void) const;
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
     
     virtual void Print(std::ostream &s, int flag =0) const;   
     

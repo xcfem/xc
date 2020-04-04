@@ -27,7 +27,7 @@
 //DbTagData.cc
 
 #include "DbTagData.h"
-#include "CommParameters.h"
+#include "Communicator.h"
 #include "xc_utils/src/utils/misc_utils/print_trace.h"
 
 //! @brief Constructor.
@@ -91,20 +91,20 @@ void XC::DbTagData::setDbTagDataPos(const size_t &i,const int &v)
   }
 
 //! @brief Convenience function.
-int XC::DbTagData::sendIdData(CommParameters &cp,const int &dataTag) const
-  { return cp.sendID(data,dataTag); }
+int XC::DbTagData::sendIdData(Communicator &comm,const int &dataTag) const
+  { return comm.sendID(data,dataTag); }
 
 //! @brief Convenience function.
-int XC::DbTagData::receiveIdData(const CommParameters &cp,const int &dataTag)
-  { return cp.receiveID(data,dataTag); }
+int XC::DbTagData::receiveIdData(const Communicator &comm,const int &dataTag)
+  { return comm.receiveID(data,dataTag); }
 
 //! @brief Sends the object.
-int XC::DbTagData::send(DbTagData &dt,CommParameters &cp, const CommMetaData &meta) const
-  { return cp.sendID(data,dt,meta); }
+int XC::DbTagData::send(DbTagData &dt,Communicator &comm, const CommMetaData &meta) const
+  { return comm.sendID(data,dt,meta); }
 
 //! @brief Receive the object.
-int XC::DbTagData::receive(DbTagData &dt,const CommParameters &cp, const CommMetaData &meta)
-  { return cp.receiveID(data,dt,meta); }
+int XC::DbTagData::receive(DbTagData &dt,const Communicator &comm, const CommMetaData &meta)
+  { return comm.receiveID(data,dt,meta); }
 
 //! @brief Print stuff.
 void XC::DbTagData::Print(std::ostream &os) const

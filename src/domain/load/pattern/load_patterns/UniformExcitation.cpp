@@ -223,34 +223,34 @@ void XC::UniformExcitation::applyLoadSensitivity(double time)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::UniformExcitation::sendData(CommParameters &cp)
+int XC::UniformExcitation::sendData(Communicator &comm)
   {
-    int res= EarthquakePattern::sendData(cp);
-    res+= cp.sendInt(theDof,getDbTagData(),CommMetaData(23));
-    res+= cp.sendDoubles(vel0,fact,getDbTagData(),CommMetaData(24));
-    res+= sendGroundMotionPtr(theMotion,getDbTagData(),cp,BrokedPtrCommMetaData(25,26,27));
+    int res= EarthquakePattern::sendData(comm);
+    res+= comm.sendInt(theDof,getDbTagData(),CommMetaData(23));
+    res+= comm.sendDoubles(vel0,fact,getDbTagData(),CommMetaData(24));
+    res+= sendGroundMotionPtr(theMotion,getDbTagData(),comm,BrokedPtrCommMetaData(25,26,27));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::UniformExcitation::recvData(const CommParameters &cp)
+int XC::UniformExcitation::recvData(const Communicator &comm)
   {
-    int res= EarthquakePattern::recvData(cp);
-    res+= cp.receiveInt(theDof,getDbTagData(),CommMetaData(23));
-    res+= cp.receiveDoubles(vel0,fact,getDbTagData(),CommMetaData(24));
-    theMotion= receiveGroundMotionPtr(theMotion,getDbTagData(),cp,BrokedPtrCommMetaData(25,26,27));
+    int res= EarthquakePattern::recvData(comm);
+    res+= comm.receiveInt(theDof,getDbTagData(),CommMetaData(23));
+    res+= comm.receiveDoubles(vel0,fact,getDbTagData(),CommMetaData(24));
+    theMotion= receiveGroundMotionPtr(theMotion,getDbTagData(),comm,BrokedPtrCommMetaData(25,26,27));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::UniformExcitation::sendSelf(CommParameters &cp)
+int XC::UniformExcitation::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(3);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << ";failed to send data\n";
@@ -259,11 +259,11 @@ int XC::UniformExcitation::sendSelf(CommParameters &cp)
 
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::UniformExcitation::recvSelf(const CommParameters &cp)
+int XC::UniformExcitation::recvSelf(const Communicator &comm)
   {
     inicComm(3);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -271,7 +271,7 @@ int XC::UniformExcitation::recvSelf(const CommParameters &cp)
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
                     << ";failed to receive data\n";

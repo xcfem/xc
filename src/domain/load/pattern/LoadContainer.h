@@ -93,8 +93,8 @@ class LoadContainer: public CommandEntity, public MovableObject
     void free(void);
   protected:
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
     // methods to add loads
     virtual bool addNodalLoad(NodalLoad *);
@@ -124,8 +124,8 @@ class LoadContainer: public CommandEntity, public MovableObject
 
 
     // methods for o/p
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
 
     virtual void Print(std::ostream &s, int flag =0) const;
 

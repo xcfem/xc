@@ -46,8 +46,8 @@ class NDAdaptorMaterial: public NDMaterial
     NDMaterial *theMaterial;
     Vector strain;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     NDAdaptorMaterial(int classTag,int tag, NDMaterial &theMat, int strain_size);
     NDAdaptorMaterial(int classTag,int tag, int strain_size);

@@ -340,33 +340,33 @@ int XC::Analysis::setAlgorithm(SolutionAlgorithm &theNewAlgorithm)
       return 0;
   }
 
-void XC::Analysis::brokeConstraintHandler(const CommParameters &cp,const ID &data)
-  { solution_method->getModelWrapperPtr()->brokeConstraintHandler(cp,data); }
+void XC::Analysis::brokeConstraintHandler(const Communicator &comm,const ID &data)
+  { solution_method->getModelWrapperPtr()->brokeConstraintHandler(comm,data); }
 
-void XC::Analysis::brokeNumberer(const CommParameters &cp,const ID &data)
-  { solution_method->getModelWrapperPtr()->brokeNumberer(cp,data); }
+void XC::Analysis::brokeNumberer(const Communicator &comm,const ID &data)
+  { solution_method->getModelWrapperPtr()->brokeNumberer(comm,data); }
 
-void XC::Analysis::brokeAnalysisModel(const CommParameters &cp,const ID &data)
-  { solution_method->getModelWrapperPtr()->brokeAnalysisModel(cp,data); }
+void XC::Analysis::brokeAnalysisModel(const Communicator &comm,const ID &data)
+  { solution_method->getModelWrapperPtr()->brokeAnalysisModel(comm,data); }
 
-void XC::Analysis::brokeDDLinearSOE(const CommParameters &cp,const ID &data)
-  { solution_method->brokeDDLinearSOE(cp,data); }
+void XC::Analysis::brokeDDLinearSOE(const Communicator &comm,const ID &data)
+  { solution_method->brokeDDLinearSOE(comm,data); }
 
-void XC::Analysis::brokeLinearSOE(const CommParameters &cp,const ID &data)
-  { solution_method->brokeLinearSOE(cp,data); }
+void XC::Analysis::brokeLinearSOE(const Communicator &comm,const ID &data)
+  { solution_method->brokeLinearSOE(comm,data); }
 
-void XC::Analysis::brokeIncrementalIntegrator(const CommParameters &cp,const ID &data)
-  { solution_method->brokeIncrementalIntegrator(cp,data); }
+void XC::Analysis::brokeIncrementalIntegrator(const Communicator &comm,const ID &data)
+  { solution_method->brokeIncrementalIntegrator(comm,data); }
 
-void XC::Analysis::brokeStaticIntegrator(const CommParameters &cp,const ID &data)
-  { solution_method->brokeStaticIntegrator(cp,data); }
+void XC::Analysis::brokeStaticIntegrator(const Communicator &comm,const ID &data)
+  { solution_method->brokeStaticIntegrator(comm,data); }
 
-void XC::Analysis::brokeTransientIntegrator(const CommParameters &cp,const ID &data)
-  { solution_method->brokeTransientIntegrator(cp,data); }
+void XC::Analysis::brokeTransientIntegrator(const Communicator &comm,const ID &data)
+  { solution_method->brokeTransientIntegrator(comm,data); }
 
-void XC::Analysis::brokeDomainDecompAlgo(const CommParameters &cp,const ID &data)
-  { solution_method->brokeDomainDecompAlgo(cp,data); }
+void XC::Analysis::brokeDomainDecompAlgo(const Communicator &comm,const ID &data)
+  { solution_method->brokeDomainDecompAlgo(comm,data); }
 
-void XC::Analysis::brokeEquiSolnAlgo(const CommParameters &cp,const ID &data)
-  { solution_method->brokeEquiSolnAlgo(cp,data); }
+void XC::Analysis::brokeEquiSolnAlgo(const Communicator &comm,const ID &data)
+  { solution_method->brokeEquiSolnAlgo(comm,data); }
 

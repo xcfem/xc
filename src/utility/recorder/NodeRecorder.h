@@ -84,8 +84,8 @@ class NodeRecorder: public NodeRecorderBase
     void setup_dofs(const ID &dofs);
     void setup_nodes(const ID &nodes);
   protected:
-    int sendData(CommParameters &);  
-    int receiveData(const CommParameters &);
+    int sendData(Communicator &);  
+    int receiveData(const Communicator &);
 
   public:
     NodeRecorder(void);
@@ -97,8 +97,8 @@ class NodeRecorder: public NodeRecorderBase
     void setupDataFlag(const std::string &dataToStore);
     int record(int commitTag, double timeStamp);
 
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

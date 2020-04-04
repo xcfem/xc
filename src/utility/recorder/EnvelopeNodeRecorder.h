@@ -80,8 +80,8 @@ class EnvelopeNodeRecorder: public NodeRecorderBase
 
     EnvelopeData envelope;
   protected:
-    int sendData(CommParameters &);  
-    int receiveData(const CommParameters &);
+    int sendData(Communicator &);  
+    int receiveData(const Communicator &);
   public:
     EnvelopeNodeRecorder(void);
     EnvelopeNodeRecorder(const ID &theDof, const ID &theNodes, const char *dataToStore,
@@ -94,8 +94,8 @@ class EnvelopeNodeRecorder: public NodeRecorderBase
     int record(int commitTag, double timeStamp);
     int restart(void);    
 
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

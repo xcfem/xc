@@ -69,8 +69,8 @@ class Set: public SetMeshComp
     void create_copy(const std::string &,const Vector3d &v);
 
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
 
     void move(const Vector3d &);
@@ -171,8 +171,8 @@ class Set: public SetMeshComp
     void Transform(const TrfGeom &trf);
     void Transform(const size_t &indice_trf);
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
 
     Set &operator+=(const Set &);
     Set &operator-=(const Set &);

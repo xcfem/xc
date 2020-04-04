@@ -77,8 +77,8 @@ class TrapezoidalTimeSeriesIntegrator: public TimeSeriesIntegrator
      TimeSeries* integrate(TimeSeries *theTimeSeries, double delta);
 
      // methods for output    
-     int sendSelf(CommParameters &);
-     int recvSelf(const CommParameters &);
+     int sendSelf(Communicator &);
+     int recvSelf(const Communicator &);
      void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace

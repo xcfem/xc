@@ -173,48 +173,48 @@ int XC::PeriodicNewton::solveCurrentStep(void)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::PeriodicNewton::sendData(CommParameters &cp)
+int XC::PeriodicNewton::sendData(Communicator &comm)
   {
-    int res= NewtonBased::sendData(cp);
-    res+= cp.sendDouble(maxCount,getDbTagData(),CommMetaData(3));
+    int res= NewtonBased::sendData(comm);
+    res+= comm.sendDouble(maxCount,getDbTagData(),CommMetaData(3));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::PeriodicNewton::recvData(const CommParameters &cp)
+int XC::PeriodicNewton::recvData(const Communicator &comm)
   {
-    int res= NewtonBased::recvData(cp);
+    int res= NewtonBased::recvData(comm);
     double tmp= maxCount;
-    res+= cp.receiveDouble(tmp,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveDouble(tmp,getDbTagData(),CommMetaData(3));
     maxCount= tmp;
     return res;
   }
 
-int XC::PeriodicNewton::sendSelf(CommParameters &cp)
+int XC::PeriodicNewton::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(4);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
-int XC::PeriodicNewton::recvSelf(const CommParameters &cp)
+int XC::PeriodicNewton::recvSelf(const Communicator &comm)
   {
     inicComm(4);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

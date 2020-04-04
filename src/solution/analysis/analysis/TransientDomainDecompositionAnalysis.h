@@ -105,8 +105,8 @@ class TransientDomainDecompositionAnalysis: public DomainDecompositionAnalysis
     int setLinearSOE(LinearSOE &theSOE);
 
     // methods to send/receive
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 
 //! @brief Virtual constructor.

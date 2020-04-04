@@ -82,8 +82,8 @@ class ForceBeamColumn2d: public NLForceBeamColumn2dBase
     void alloc(const BeamIntegration &);
   
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     ForceBeamColumn2d(int tag= 0);
     ForceBeamColumn2d(const ForceBeamColumn2d &);
@@ -112,8 +112,8 @@ class ForceBeamColumn2d: public NLForceBeamColumn2dBase
   
     const Vector &getResistingForceIncInertia(void) const;            
   
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   
     friend std::ostream &operator<<(std::ostream &s, const ForceBeamColumn2d &E);        
     void Print(std::ostream &s, int flag =0) const;    

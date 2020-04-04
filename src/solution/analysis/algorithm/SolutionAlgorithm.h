@@ -95,8 +95,8 @@ class SolutionAlgorithm: public MovableObject, public ObjWithRecorders
     const AnalysisAggregation *getAnalysisAggregation(void) const;
 
     virtual Domain *get_domain_ptr(void);
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     SolutionAlgorithm(AnalysisAggregation *,int classTag);
     friend class AnalysisAggregation;

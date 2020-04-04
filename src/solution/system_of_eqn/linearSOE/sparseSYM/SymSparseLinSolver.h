@@ -69,8 +69,8 @@ class SymSparseLinSolver: public LinearSOESolver
 
     bool setLinearSOE(SymSparseLinSOE &theSOE); 
 	
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     
   };
 

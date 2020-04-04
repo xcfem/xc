@@ -63,8 +63,8 @@ class ClosedTriangleMesh: public GeomObj3d, public MovableObject
   protected:
     void getPositionsMatrix(Matrix &);
     virtual void setPositionsMatrix(const Matrix &);
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     ClosedTriangleMesh(void);
     ClosedTriangleMesh(const Pos3d &org,const Triang3dMesh &mll);
@@ -97,8 +97,8 @@ class ClosedTriangleMesh: public GeomObj3d, public MovableObject
     const_iterator findTrihedron(const Pos3d &p) const;
     const Trihedron *findTrihedronPtr(const Pos3d &p) const;
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     void write(std::ofstream &);
     void read(std::ifstream &);
     void writeTo(const std::string &);

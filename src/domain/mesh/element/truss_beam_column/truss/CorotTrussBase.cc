@@ -66,19 +66,19 @@ const double &XC::CorotTrussBase::getLn(void) const
   { return Ln; }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::CorotTrussBase::sendData(CommParameters &cp)
+int XC::CorotTrussBase::sendData(Communicator &comm)
   {
-    int res= ProtoTruss::sendData(cp);
-    res+= cp.sendDoubles(Lo,Ln,d21[0],d21[1],d21[2],getDbTagData(),CommMetaData(16));
-    res+= cp.sendMatrix(R,getDbTagData(),CommMetaData(17)); 
+    int res= ProtoTruss::sendData(comm);
+    res+= comm.sendDoubles(Lo,Ln,d21[0],d21[1],d21[2],getDbTagData(),CommMetaData(16));
+    res+= comm.sendMatrix(R,getDbTagData(),CommMetaData(17)); 
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::CorotTrussBase::recvData(const CommParameters &cp)
+int XC::CorotTrussBase::recvData(const Communicator &comm)
   {
-    int res= ProtoTruss::recvData(cp);
-    res+= cp.receiveDoubles(Lo,Ln,d21[0],d21[1],d21[2],getDbTagData(),CommMetaData(16));
-    res+= cp.receiveMatrix(R,getDbTagData(),CommMetaData(17)); 
+    int res= ProtoTruss::recvData(comm);
+    res+= comm.receiveDoubles(Lo,Ln,d21[0],d21[1],d21[2],getDbTagData(),CommMetaData(16));
+    res+= comm.receiveMatrix(R,getDbTagData(),CommMetaData(17)); 
     return res;
   }

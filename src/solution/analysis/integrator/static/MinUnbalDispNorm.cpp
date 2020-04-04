@@ -236,31 +236,31 @@ int XC::MinUnbalDispNorm::domainChanged(void)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::MinUnbalDispNorm::sendData(CommParameters &cp)
+int XC::MinUnbalDispNorm::sendData(Communicator &comm)
   {
-    int res= DispBase::sendData(cp);
-    res+= cp.sendDoubles(dLambda1LastStep,dLambda1min,dLambda1max,signLastDeterminant,getDbTagData(),CommMetaData(17));
-    res+= cp.sendInts(signLastDeltaLambdaStep,signFirstStepMethod,getDbTagData(),CommMetaData(18));
+    int res= DispBase::sendData(comm);
+    res+= comm.sendDoubles(dLambda1LastStep,dLambda1min,dLambda1max,signLastDeterminant,getDbTagData(),CommMetaData(17));
+    res+= comm.sendInts(signLastDeltaLambdaStep,signFirstStepMethod,getDbTagData(),CommMetaData(18));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::MinUnbalDispNorm::recvData(const CommParameters &cp)
+int XC::MinUnbalDispNorm::recvData(const Communicator &comm)
   {
-    int res= DispBase::recvData(cp);
-    res+= cp.receiveDoubles(dLambda1LastStep,dLambda1min,dLambda1max,signLastDeterminant,getDbTagData(),CommMetaData(17));
-    res+= cp.receiveInts(signLastDeltaLambdaStep,signFirstStepMethod,getDbTagData(),CommMetaData(18));
+    int res= DispBase::recvData(comm);
+    res+= comm.receiveDoubles(dLambda1LastStep,dLambda1min,dLambda1max,signLastDeterminant,getDbTagData(),CommMetaData(17));
+    res+= comm.receiveInts(signLastDeltaLambdaStep,signFirstStepMethod,getDbTagData(),CommMetaData(18));
     return res;
   }
 
-int XC::MinUnbalDispNorm::sendSelf(CommParameters &cp)
+int XC::MinUnbalDispNorm::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(19);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data\n";
@@ -268,11 +268,11 @@ int XC::MinUnbalDispNorm::sendSelf(CommParameters &cp)
   }
 
 
-int XC::MinUnbalDispNorm::recvSelf(const CommParameters &cp)
+int XC::MinUnbalDispNorm::recvSelf(const Communicator &comm)
   {
     inicComm(19);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -280,7 +280,7 @@ int XC::MinUnbalDispNorm::recvSelf(const CommParameters &cp)
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

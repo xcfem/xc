@@ -275,52 +275,52 @@ XC::UniaxialMaterial* XC::Steel03::getCopy(void) const
   { return new Steel03(*this); }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::Steel03::sendData(CommParameters &cp)
+int XC::Steel03::sendData(Communicator &comm)
   {
-    int res= SteelBase0103::sendData(cp);
-    res+= cp.sendDoubles(r,cR1,cR2,CbStrain,CbStress,getDbTagData(),CommMetaData(8));
-    res+= cp.sendDoubles(CrStrain,CrStress,Cplastic,CcurR,TcurR,getDbTagData(),CommMetaData(9));
-    res+= cp.sendDoubles(TbStrain,TbStress,TrStrain,TrStress,Tplastic,getDbTagData(),CommMetaData(10));
+    int res= SteelBase0103::sendData(comm);
+    res+= comm.sendDoubles(r,cR1,cR2,CbStrain,CbStress,getDbTagData(),CommMetaData(8));
+    res+= comm.sendDoubles(CrStrain,CrStress,Cplastic,CcurR,TcurR,getDbTagData(),CommMetaData(9));
+    res+= comm.sendDoubles(TbStrain,TbStress,TrStrain,TrStress,Tplastic,getDbTagData(),CommMetaData(10));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::Steel03::recvData(const CommParameters &cp)
+int XC::Steel03::recvData(const Communicator &comm)
   {
-    int res= SteelBase0103::recvData(cp);
-    res+= cp.receiveDoubles(r,cR1,cR2,CbStrain,CbStress,getDbTagData(),CommMetaData(8));
-    res+= cp.receiveDoubles(CrStrain,CrStress,Cplastic,CcurR,TcurR,getDbTagData(),CommMetaData(9));
-    res+= cp.receiveDoubles(TbStrain,TbStress,TrStrain,TrStress,Tplastic,getDbTagData(),CommMetaData(10));
+    int res= SteelBase0103::recvData(comm);
+    res+= comm.receiveDoubles(r,cR1,cR2,CbStrain,CbStress,getDbTagData(),CommMetaData(8));
+    res+= comm.receiveDoubles(CrStrain,CrStress,Cplastic,CcurR,TcurR,getDbTagData(),CommMetaData(9));
+    res+= comm.receiveDoubles(TbStrain,TbStress,TrStrain,TrStress,Tplastic,getDbTagData(),CommMetaData(10));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::Steel03::sendSelf(CommParameters &cp)
+int XC::Steel03::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(11);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::Steel03::recvSelf(const CommParameters &cp)
+int XC::Steel03::recvSelf(const Communicator &comm)
   {
     inicComm(11);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

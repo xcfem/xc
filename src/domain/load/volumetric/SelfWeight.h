@@ -48,8 +48,8 @@ class SelfWeight: public ElementBodyLoad
     double yFact;
     double zFact;
   protected:
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
   public:
     SelfWeight(int tag, double xf, double yf, double zf, const ID &theElementTags);
@@ -64,8 +64,8 @@ class SelfWeight: public ElementBodyLoad
     inline const double &getZFact(void) const
       { return zFact; }
 
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;       
   };
 } // end of XC namespace

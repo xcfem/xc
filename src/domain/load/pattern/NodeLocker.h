@@ -59,8 +59,8 @@ class NodeLocker: public ForceReprComponent
     SingleDomSFreedom_Iter *theSpIter; //!< Constraint iterator.
 
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
 
     friend class NodeLockers;
@@ -90,8 +90,8 @@ class NodeLocker: public ForceReprComponent
     virtual void applyLoad(const double &pseudoTime= 0.0,const double &factor= 1.0);
 
     // methods for o/p
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
 
     virtual void Print(std::ostream &s, int flag =0) const;
 

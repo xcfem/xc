@@ -279,9 +279,9 @@ int XC::PlainHandler::handle(const ID *nodesLast)
   }
 
 //! @brief Sends this object through the communicator (not implemented yet).
-int XC::PlainHandler::sendSelf(CommParameters &cp)
+int XC::PlainHandler::sendSelf(Communicator &comm)
   { return 0; }
 
 //! @brief Receives this object through the communicator (not implemented yet).
-int XC::PlainHandler::recvSelf(const CommParameters &cp)
+int XC::PlainHandler::recvSelf(const Communicator &comm)
   { return 0; }

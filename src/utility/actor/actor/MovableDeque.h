@@ -35,7 +35,7 @@
 #include "MovableID.h"
 #include <deque>
 #include "utility/tagged/TaggedObject.h"
-#include "CommParameters.h"
+#include "Communicator.h"
 
 namespace XC {
 
@@ -51,8 +51,8 @@ class MovableDeque: public MovablePointerContainer<T>
     typedef typename deque_objects::iterator iterator;
     deque_objects objects;
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     MovableDeque(const deque_objects &deque,T *(FEM_ObjectBroker::*pF)(int));
     const deque_objects &getDeque(void) const
@@ -68,7 +68,7 @@ XC::MovableDeque<T>::MovableDeque(const deque_objects &deque,T *(FEM_ObjectBroke
 
 //! @brief Send members through the channel being passed as parameter.
 template <class T>
-int XC::MovableDeque<T>::sendData(CommParameters &cp)
+int XC::MovableDeque<T>::sendData(Communicator &comm)
   {
     const size_t sz= objects.size();
     this->setDbTagDataPos(0,sz);
@@ -83,22 +83,22 @@ int XC::MovableDeque<T>::sendData(CommParameters &cp)
 	    if(obj)
 	      {
 	        classTags(i)= obj->getClassTag();
-	        res+= cp.sendMovable(*obj,dbTags,CommMetaData(i));
+	        res+= comm.sendMovable(*obj,dbTags,CommMetaData(i));
 	      }
 	    else
 	      std::cerr << "MovableDeque::sendData; found null"
 		        << " pointer in position: " << i << std::endl;
 	  }
 	DbTagData &dbTagData= this->getDbTagData();
-        res+= dbTags.send(dbTagData,cp,CommMetaData(1));
-        res+= cp.sendID(classTags,dbTagData,CommMetaData(2));
+        res+= dbTags.send(dbTagData,comm,CommMetaData(1));
+        res+= comm.sendID(classTags,dbTagData,CommMetaData(2));
       }
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
 template <class T>
-int MovableDeque<T>::recvData(const CommParameters &cp)
+int MovableDeque<T>::recvData(const Communicator &comm)
   {
     const size_t sz= this->getDbTagDataPos(0);
     int res= 0;
@@ -106,17 +106,17 @@ int MovableDeque<T>::recvData(const CommParameters &cp)
       {
 	DbTagData &dbTagData= this->getDbTagData();
         DbTagData dbTags(sz);
-        res+= dbTags.receive(dbTagData,cp,CommMetaData(1));
+        res+= dbTags.receive(dbTagData,comm,CommMetaData(1));
         ID classTags(sz);
-        res+= cp.receiveID(classTags,dbTagData,CommMetaData(2));
+        res+= comm.receiveID(classTags,dbTagData,CommMetaData(2));
         T *tmp= nullptr;
 	for(size_t i= 0;i<sz;i++)
 	  {
             const int dbTag= dbTags.getDbTagDataPos(i);
-            tmp= this->getBrokedObject(dbTag,classTags(i),cp);
+            tmp= this->getBrokedObject(dbTag,classTags(i),comm);
             if(tmp)
               {
-		 res+= tmp->recvSelf(cp);
+		 res+= tmp->recvSelf(comm);
                  objects[i]= tmp;
               }
             else
@@ -129,17 +129,17 @@ int MovableDeque<T>::recvData(const CommParameters &cp)
 
 
 template <class T>
-int sendDeque(const std::deque<T *> &m,CommParameters &cp,DbTagData &dt,const CommMetaData &meta)
+int sendDeque(const std::deque<T *> &m,Communicator &comm,DbTagData &dt,const CommMetaData &meta)
   {
     MovableDeque<T> mm(m,nullptr);
-    return cp.sendMovable(mm,dt,meta);
+    return comm.sendMovable(mm,dt,meta);
   }
 
 template <class T>
-int receiveDeque(std::deque<T *> &v,const CommParameters &cp,DbTagData &dt,const CommMetaData &meta,T *(FEM_ObjectBroker::*ptrFunc)(int))
+int receiveDeque(std::deque<T *> &v,const Communicator &comm,DbTagData &dt,const CommMetaData &meta,T *(FEM_ObjectBroker::*ptrFunc)(int))
   {
     MovableDeque<T> mm(v,ptrFunc);
-    int res= cp.receiveMovable(mm,dt,meta);
+    int res= comm.receiveMovable(mm,dt,meta);
     v= mm.getDeque();
     return res;
   } 

@@ -73,9 +73,9 @@ class PlasticHardeningMaterial: public Material
     virtual int getResponse (int responseID, Information &matInformation);
     virtual void Print(std::ostream &s, int flag =0) const;
 
-    virtual int sendSelf(CommParameters &)
+    virtual int sendSelf(Communicator &)
       {return -1;}
-    virtual int recvSelf(const CommParameters &)
+    virtual int recvSelf(const Communicator &)
       {return -1;}
   };
 } // end of XC namespace

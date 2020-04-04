@@ -43,8 +43,8 @@ class ElasticBaseMaterial: public UniaxialMaterial
     double E; //!< Elastic modulus.
     double ezero; //!< Initial deformation.
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     inline virtual double def_total(void) const { return trialStrain-ezero; }
   public:
@@ -63,8 +63,8 @@ class ElasticBaseMaterial: public UniaxialMaterial
     inline double getInitialTangent(void) const
       {return E;}
 
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
 
 
   };

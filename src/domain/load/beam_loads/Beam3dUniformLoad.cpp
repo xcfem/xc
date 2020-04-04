@@ -223,41 +223,41 @@ XC::DbTagData &XC::Beam3dUniformLoad::getDbTagData(void) const
   }
 
 //! @brief Send data through the channel being passed as parameter.
-int XC::Beam3dUniformLoad::sendData(CommParameters &cp)
+int XC::Beam3dUniformLoad::sendData(Communicator &comm)
   {
-    int res= BeamUniformLoad::sendData(cp);
-    res+= cp.sendDoubles(wz,tx,getDbTagData(),CommMetaData(6));
+    int res= BeamUniformLoad::sendData(comm);
+    res+= comm.sendDoubles(wz,tx,getDbTagData(),CommMetaData(6));
     return res;
   }
 
 //! @brief Receive data through the channel being passed as parameter.
-int XC::Beam3dUniformLoad::recvData(const CommParameters &cp)
+int XC::Beam3dUniformLoad::recvData(const Communicator &comm)
   {
-    int res= BeamUniformLoad::recvData(cp);
-    res+= cp.receiveDoubles(wz,tx,getDbTagData(),CommMetaData(6));
+    int res= BeamUniformLoad::recvData(comm);
+    res+= comm.receiveDoubles(wz,tx,getDbTagData(),CommMetaData(6));
     return res;
   }
 
-int XC::Beam3dUniformLoad::sendSelf(CommParameters &cp)
+int XC::Beam3dUniformLoad::sendSelf(Communicator &comm)
   {
     inicComm(7);
-    int result= sendData(cp);
+    int result= sendData(comm);
     const int dbTag= getDbTag();
-    result+= cp.sendIdData(getDbTagData(),dbTag);
+    result+= comm.sendIdData(getDbTagData(),dbTag);
     if(result < 0)
       std::cerr << "Beam3dUniformLoad::sendSelf() - failed to send extra data\n";
     return result;
   }
 
-int XC::Beam3dUniformLoad::recvSelf(const CommParameters &cp)
+int XC::Beam3dUniformLoad::recvSelf(const Communicator &comm)
   {
     inicComm(7);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "Beam3dUniformLoad::recvSelf() - data could not be received\n" ;
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

@@ -67,8 +67,8 @@ class EQPath: public StaticIntegrator
     Vector *du,*du0, *uq, *uq0, *uqn, *ur;
     Vector *q;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     EQPath(AnalysisAggregation *owr,double arcLeng,int type);
 
@@ -79,8 +79,8 @@ class EQPath: public StaticIntegrator
     int domainChanged(void);
     
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
     void Print(std::ostream &s, int flag =0) const;  
   };

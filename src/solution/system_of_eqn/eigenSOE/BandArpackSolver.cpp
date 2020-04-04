@@ -590,10 +590,10 @@ double XC::BandArpackSolver::getRCond(const char &c)
     return retval;
   }
 
-int XC::BandArpackSolver::sendSelf(CommParameters &cp)
+int XC::BandArpackSolver::sendSelf(Communicator &comm)
   { return 0; }
 
-int XC::BandArpackSolver::recvSelf(const CommParameters &cp)
+int XC::BandArpackSolver::recvSelf(const Communicator &comm)
   {
     // nothing to do
     return 0;

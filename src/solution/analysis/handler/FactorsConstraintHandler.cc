@@ -67,30 +67,30 @@ XC::FactorsConstraintHandler::FactorsConstraintHandler(ModelWrapper *owr,int cla
   :ConstraintHandler(owr,classTag), alphaSP(sp), alphaMP(mp) {}
 
 //! @brief Send object members through the channel passed as parameter.
-int XC::FactorsConstraintHandler::sendData(CommParameters &cp)
+int XC::FactorsConstraintHandler::sendData(Communicator &comm)
   {
-    int res= ConstraintHandler::sendData(cp);
-    res+= cp.sendDoubles(alphaSP,alphaMP,getDbTagData(),CommMetaData(2));
+    int res= ConstraintHandler::sendData(comm);
+    res+= comm.sendDoubles(alphaSP,alphaMP,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 //! @brief Receive object members through the channel passed as parameter.
-int XC::FactorsConstraintHandler::recvData(const CommParameters &cp)
+int XC::FactorsConstraintHandler::recvData(const Communicator &comm)
   {
-    int res= ConstraintHandler::recvData(cp);
-    res+= cp.receiveDoubles(alphaSP,alphaMP,getDbTagData(),CommMetaData(2));
+    int res= ConstraintHandler::recvData(comm);
+    res+= comm.receiveDoubles(alphaSP,alphaMP,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 //! @brief Send object through the channel passed as parameter.
-int XC::FactorsConstraintHandler::sendSelf(CommParameters &cp)
+int XC::FactorsConstraintHandler::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(3);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << __FUNCTION__
                 << "; failed to send data\n";
@@ -98,11 +98,11 @@ int XC::FactorsConstraintHandler::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receive object through the channel passed as parameter.
-int XC::FactorsConstraintHandler::recvSelf(const CommParameters &cp)  
+int XC::FactorsConstraintHandler::recvSelf(const Communicator &comm)  
   {
     inicComm(3);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << __FUNCTION__
@@ -110,7 +110,7 @@ int XC::FactorsConstraintHandler::recvSelf(const CommParameters &cp)
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << __FUNCTION__
                     << "; failed to receive data.\n";

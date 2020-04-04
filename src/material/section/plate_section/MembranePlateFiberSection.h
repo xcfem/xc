@@ -81,8 +81,8 @@ class MembranePlateFiberSection: public PlateBase
     static Vector stressResultant;
     static Matrix tangent;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public : 
     MembranePlateFiberSection(int tag);
     MembranePlateFiberSection(void);
@@ -112,8 +112,8 @@ class MembranePlateFiberSection: public PlateBase
     //print out data
     void Print( std::ostream &s, int flag ) const;
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   }; //end of MembranePlateFiberSection declarations
 
 } // end of XC namespace

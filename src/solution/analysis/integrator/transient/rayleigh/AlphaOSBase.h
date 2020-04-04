@@ -47,8 +47,8 @@ class AlphaOSBase: public HHTBase
     int updateCount; //! method should only have one update per step
     ResponseQuantities Upt; //!< predictor quantities at time t
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     AlphaOSBase(AnalysisAggregation *,int classTag);
     AlphaOSBase(AnalysisAggregation *,int classTag,double beta, double gamma);

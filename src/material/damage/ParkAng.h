@@ -112,8 +112,8 @@ class ParkAng: public DamageModel
     Response *setResponse(const std::vector<std::string> &argv, Information &info);
     int getResponse(int responseID, Information &info);
 
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;    
 
     // method for this damage model to update itself according to its new parameters

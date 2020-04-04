@@ -97,8 +97,8 @@ class Recorder: public MovableObject, public CommandEntity
     virtual int playback(int commitTag);
     virtual int restart(void);
     virtual int setDomain(Domain &theDomain);
-    virtual int sendSelf(CommParameters &);  
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);  
+    virtual int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

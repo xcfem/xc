@@ -122,13 +122,13 @@ double XC::SimulatedRandomProcessSeries::getFactor(double time) const
 
 
 
-int XC::SimulatedRandomProcessSeries::sendSelf(CommParameters &cp)
+int XC::SimulatedRandomProcessSeries::sendSelf(Communicator &comm)
 {
 	return 0;
 }
 
 
-int XC::SimulatedRandomProcessSeries::recvSelf(const CommParameters &cp)
+int XC::SimulatedRandomProcessSeries::recvSelf(const Communicator &comm)
   { return 0; }
 
 

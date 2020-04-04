@@ -117,8 +117,8 @@ class MFreedom_Constraint: public MFreedom_ConstraintBase
     void set_retained_dofs(const ID &);
     void set_constrained_retained_dofs(const ID &constrainedDOF,const ID &retainedDOF);
   protected:
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     // constructors        
     MFreedom_Constraint(int tag , int classTag ); // Arash
@@ -148,8 +148,8 @@ class MFreedom_Constraint: public MFreedom_ConstraintBase
     virtual int applyConstraint(double pseudoTime);
 
     // methods for output
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
     
     int getVtkCellType(void) const;
 

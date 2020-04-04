@@ -311,47 +311,47 @@ int XC::HHTHybridSimulation::commit(void)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::HHTHybridSimulation::sendData(CommParameters &cp)
+int XC::HHTHybridSimulation::sendData(Communicator &comm)
   {
-    int res= HHTBase::sendData(cp);
-    res+= cp.sendDouble(alphaF,getDbTagData(),CommMetaData(9));
+    int res= HHTBase::sendData(comm);
+    res+= comm.sendDouble(alphaF,getDbTagData(),CommMetaData(9));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::HHTHybridSimulation::recvData(const CommParameters &cp)
+int XC::HHTHybridSimulation::recvData(const Communicator &comm)
   {
-    int res= HHTBase::recvData(cp);
-    res+= cp.receiveDouble(alphaF,getDbTagData(),CommMetaData(9));
+    int res= HHTBase::recvData(comm);
+    res+= comm.receiveDouble(alphaF,getDbTagData(),CommMetaData(9));
     return res;
   }
 
-int XC::HHTHybridSimulation::sendSelf(CommParameters &cp)
+int XC::HHTHybridSimulation::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(10);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
 
-int XC::HHTHybridSimulation::recvSelf(const CommParameters &cp)
+int XC::HHTHybridSimulation::recvSelf(const Communicator &comm)
   {
     inicComm(10);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

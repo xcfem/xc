@@ -81,8 +81,8 @@ class Elastic2dGNL: public UpdatedLagrangianBeam2D
     void Print(std::ostream &s, int flag =0) const;
   
     // Methods for sending and receiving the object over a ch
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   
   
   protected:

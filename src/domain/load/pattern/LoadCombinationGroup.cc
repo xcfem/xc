@@ -189,14 +189,14 @@ XC::DbTagData &XC::LoadCombinationGroup::getDbTagData(void) const
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::LoadCombinationGroup::sendData(CommParameters &cp)
-  { return sendMap(*this,cp,getDbTagData(),CommMetaData(0)); }
+int XC::LoadCombinationGroup::sendData(Communicator &comm)
+  { return sendMap(*this,comm,getDbTagData(),CommMetaData(0)); }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::LoadCombinationGroup::recvData(const CommParameters &cp)
+int XC::LoadCombinationGroup::recvData(const Communicator &comm)
   {
     clear();
-    int res= receiveMap(*this,cp,getDbTagData(),CommMetaData(0),&FEM_ObjectBroker::getNewLoadCombination);
+    int res= receiveMap(*this,comm,getDbTagData(),CommMetaData(0),&FEM_ObjectBroker::getNewLoadCombination);
     for(iterator i= begin();i!= end();i++)
       {
         (*i).second->set_owner(this);
@@ -207,12 +207,12 @@ int XC::LoadCombinationGroup::recvData(const CommParameters &cp)
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::LoadCombinationGroup::sendSelf(CommParameters &cp)
+int XC::LoadCombinationGroup::sendSelf(Communicator &comm)
   {
     inicComm(1);
-    int res= sendData(cp);
-    const int dataTag= getDbTag(cp);
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    int res= sendData(comm);
+    const int dataTag= getDbTag(comm);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "LoadCombinationGroup::sendSelf() - failed to send data.\n";    
     return res;
@@ -220,7 +220,7 @@ int XC::LoadCombinationGroup::sendSelf(CommParameters &cp)
 
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::LoadCombinationGroup::recvSelf(const CommParameters &cp)
+int XC::LoadCombinationGroup::recvSelf(const Communicator &comm)
   {
     int res= 0;
     //If it's not empty we suppose that current definitions are OK.
@@ -228,11 +228,11 @@ int XC::LoadCombinationGroup::recvSelf(const CommParameters &cp)
       {
         inicComm(1);
         const int dataTag= getDbTag();
-        res= cp.receiveIdData(getDbTagData(),dataTag);
+        res= comm.receiveIdData(getDbTagData(),dataTag);
         if(res<0)
           std::cerr << "LoadCombinationGroup::recvSelf() - data could not be received.\n" ;
         else
-          res+= recvData(cp);
+          res+= recvData(comm);
       }
     return res;
   }

@@ -60,8 +60,8 @@ class CrossSectionProperties2d: public CommandEntity, public MovableObject
     static Matrix ks3;
   protected:
     virtual DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public:
     CrossSectionProperties2d(double E, double A, double I, double G= 0.0,double alpha= 0.0, double rho= 0.0);
@@ -131,8 +131,8 @@ class CrossSectionProperties2d: public CommandEntity, public MovableObject
     const Matrix &getSectionFlexibility3x3(void) const;
     const Matrix &getInitialFlexibility3x3(void) const;
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     
     int setParameter(const std::vector<std::string> &,Parameter &,SectionForceDeformation *);
     int updateParameter(int parameterID, Information &info);

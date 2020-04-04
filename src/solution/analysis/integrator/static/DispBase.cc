@@ -46,18 +46,18 @@ XC::DispBase::DispBase(AnalysisAggregation *owr,int classTag,const int &numIncr)
   :BaseControl(owr,classTag,numIncr){}
 
 //! @brief Send object members through the communicator argument.
-int XC::DispBase::sendData(CommParameters &cp)
+int XC::DispBase::sendData(Communicator &comm)
   {
-    int res= BaseControl::sendData(cp);
-    res+= cp.sendMovable(vectors,getDbTagData(),CommMetaData(1));
+    int res= BaseControl::sendData(comm);
+    res+= comm.sendMovable(vectors,getDbTagData(),CommMetaData(1));
     return res;
   }
 
 //! @brief Receives object members through the communicator argument.
-int XC::DispBase::recvData(const CommParameters &cp)
+int XC::DispBase::recvData(const Communicator &comm)
   {
-    int res= BaseControl::recvData(cp);
-    res+= cp.receiveMovable(vectors,getDbTagData(),CommMetaData(1));
+    int res= BaseControl::recvData(comm);
+    res+= comm.receiveMovable(vectors,getDbTagData(),CommMetaData(1));
     return res;
   }
 

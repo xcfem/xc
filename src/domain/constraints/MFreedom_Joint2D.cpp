@@ -230,10 +230,10 @@ int XC::MFreedom_Joint2D::applyConstraint(double timeStamp)
    }
 
 //! @brief Sends the object through the channel being passed as parameter.
-int XC::MFreedom_Joint2D::sendSelf(CommParameters &cp)
+int XC::MFreedom_Joint2D::sendSelf(Communicator &comm)
   {
     static ID data(18);
-    int result= sendData(cp);
+    int result= sendData(comm);
     data(13) = MainDOF;
     data(14) = AuxDOF;
     data(15) = FixedEnd;
@@ -241,7 +241,7 @@ int XC::MFreedom_Joint2D::sendSelf(CommParameters &cp)
     data(17) = Length0;
 
     const int dataTag= getDbTag();
-    result = cp.sendIdData(getDbTagData(),dataTag);
+    result = comm.sendIdData(getDbTagData(),dataTag);
     if(result<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; error sending ID data\n";
@@ -250,17 +250,17 @@ int XC::MFreedom_Joint2D::sendSelf(CommParameters &cp)
 
 
 //! @brief Receives the object through the channel being passed as parameter.
-int XC::MFreedom_Joint2D::recvSelf(const CommParameters &cp)
+int XC::MFreedom_Joint2D::recvSelf(const Communicator &comm)
   {
     static ID data(18);
     const int dataTag= getDbTag();
-    int result = cp.receiveIdData(getDbTagData(),dataTag);
+    int result = comm.receiveIdData(getDbTagData(),dataTag);
     if(result < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; error receiving ID data\n";
     else
       {
-        result+= recvData(cp);
+        result+= recvData(comm);
         MainDOF= data(13);
         AuxDOF= data(14);
         FixedEnd= data(15);

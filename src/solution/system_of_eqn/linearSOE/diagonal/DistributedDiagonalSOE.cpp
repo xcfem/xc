@@ -331,9 +331,9 @@ void XC::DistributedDiagonalSOE::zeroA(void)
     factored = false;
   }
 
-int XC::DistributedDiagonalSOE::sendSelf(CommParameters &cp)
-  { return send(cp); }
+int XC::DistributedDiagonalSOE::sendSelf(Communicator &comm)
+  { return send(comm); }
 
-int XC::DistributedDiagonalSOE::recvSelf(const CommParameters &cp)
-  { return receive(cp); }
+int XC::DistributedDiagonalSOE::recvSelf(const Communicator &comm)
+  { return receive(comm); }
 

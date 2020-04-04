@@ -95,8 +95,8 @@ class ElasticBeam3d: public ProtoBeam3d
     void set_transf(const CrdTransf *trf);
   protected:
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     ElasticBeam3d(int tag= 0);
     ElasticBeam3d(int tag,const Material *m,const CrdTransf *trf);
@@ -142,8 +142,8 @@ class ElasticBeam3d: public ProtoBeam3d
     const Vector &getVDirStrongAxisGlobalCoord(bool initialGeometry) const;
     const Vector &getVDirWeakAxisGlobalCoord(bool initialGeometry) const;
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag =0) const;    
 

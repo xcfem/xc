@@ -86,8 +86,8 @@ class ForceBeamColumn3d: public NLForceBeamColumn3dBase
   protected:
     void setSectionPointers(const std::vector<PrismaticBarCrossSection *> &secPtrs);
     int getInitialFlexibility(Matrix &fe) const;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     ForceBeamColumn3d(int tag= 0);
     ForceBeamColumn3d(const ForceBeamColumn3d &);
@@ -117,8 +117,8 @@ class ForceBeamColumn3d: public NLForceBeamColumn3dBase
   
     const Vector &getResistingForceIncInertia(void) const;            
   
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
  
     friend std::ostream &operator<<(std::ostream &, const ForceBeamColumn3d &);        
     void Print(std::ostream &s, int flag =0) const;    

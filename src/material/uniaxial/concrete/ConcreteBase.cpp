@@ -56,26 +56,26 @@ double XC::ConcreteBase::getTangent(void) const
   { return trialState.getTangent(); }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::ConcreteBase::sendData(CommParameters &cp)
+int XC::ConcreteBase::sendData(Communicator &comm)
   {
-    int res= RawConcrete::sendData(cp);
-    res+= cp.sendMovable(convergedState,getDbTagData(),CommMetaData(2));
-    res+= cp.sendMovable(trialState,getDbTagData(),CommMetaData(3));
-    res+= cp.sendMovable(convergedHistory,getDbTagData(),CommMetaData(4));
-    res+= cp.sendMovable(trialHistory,getDbTagData(),CommMetaData(5));
-    res+= cp.sendDoubles(fpc,epsc0,epscu,getDbTagData(),CommMetaData(6));
+    int res= RawConcrete::sendData(comm);
+    res+= comm.sendMovable(convergedState,getDbTagData(),CommMetaData(2));
+    res+= comm.sendMovable(trialState,getDbTagData(),CommMetaData(3));
+    res+= comm.sendMovable(convergedHistory,getDbTagData(),CommMetaData(4));
+    res+= comm.sendMovable(trialHistory,getDbTagData(),CommMetaData(5));
+    res+= comm.sendDoubles(fpc,epsc0,epscu,getDbTagData(),CommMetaData(6));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::ConcreteBase::recvData(const CommParameters &cp)
+int XC::ConcreteBase::recvData(const Communicator &comm)
   {
-    int res= RawConcrete::recvData(cp);
-    res+= cp.receiveMovable(convergedState,getDbTagData(),CommMetaData(2));
-    res+= cp.receiveMovable(trialState,getDbTagData(),CommMetaData(3));
-    res+= cp.receiveMovable(convergedHistory,getDbTagData(),CommMetaData(4));
-    res+= cp.receiveMovable(trialHistory,getDbTagData(),CommMetaData(5));
-    res+= cp.receiveDoubles(fpc,epsc0,epscu,getDbTagData(),CommMetaData(6));
+    int res= RawConcrete::recvData(comm);
+    res+= comm.receiveMovable(convergedState,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveMovable(trialState,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveMovable(convergedHistory,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveMovable(trialHistory,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveDoubles(fpc,epsc0,epscu,getDbTagData(),CommMetaData(6));
     return res;
   }
 

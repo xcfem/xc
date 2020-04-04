@@ -87,8 +87,8 @@ class SeriesMaterial: public ConnectedMaterial
     bool initialFlag;
 
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     SeriesMaterial(int tag,const DqUniaxialMaterial &theMaterials, int maxIter = 1, double tol = 1.0e-10);
     SeriesMaterial(int tag= 0);
@@ -106,8 +106,8 @@ class SeriesMaterial: public ConnectedMaterial
 
     UniaxialMaterial *getCopy(void) const;
     
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag =0) const;
 

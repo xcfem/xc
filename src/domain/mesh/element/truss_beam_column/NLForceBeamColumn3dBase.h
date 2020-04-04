@@ -83,8 +83,8 @@ class NLForceBeamColumn3dBase: public BeamColumnWithSectionFDTrf3d
     void resizeMatrices(const size_t &nSections);
     void initializeSectionHistoryVariables(void);
 
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
   public:
     NLForceBeamColumn3dBase(int tag,int classTag,int numSec= 0);

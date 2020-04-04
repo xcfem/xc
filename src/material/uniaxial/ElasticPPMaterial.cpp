@@ -193,46 +193,46 @@ XC::UniaxialMaterial *XC::ElasticPPMaterial::getCopy(void) const
   { return new ElasticPPMaterial(*this); }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::ElasticPPMaterial::sendData(CommParameters &cp)
+int XC::ElasticPPMaterial::sendData(Communicator &comm)
   {
-    int res= EPPBaseMaterial::sendData(cp);
-    res+= cp.sendDoubles(fyp, fyn,getDbTagData(),CommMetaData(4));
+    int res= EPPBaseMaterial::sendData(comm);
+    res+= comm.sendDoubles(fyp, fyn,getDbTagData(),CommMetaData(4));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::ElasticPPMaterial::recvData(const CommParameters &cp)
+int XC::ElasticPPMaterial::recvData(const Communicator &comm)
   {
-    int res= EPPBaseMaterial::recvData(cp);
-    res+= cp.receiveDoubles(fyp, fyn,getDbTagData(),CommMetaData(4));
+    int res= EPPBaseMaterial::recvData(comm);
+    res+= comm.receiveDoubles(fyp, fyn,getDbTagData(),CommMetaData(4));
     return res;
   }
 
-int XC::ElasticPPMaterial::sendSelf(CommParameters &cp)
+int XC::ElasticPPMaterial::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(5);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "WARNING ElasticPPMaterial::sendSelf() - " 
                 << dataTag << " failed to send.";
     return res;
   }
 
-int XC::ElasticPPMaterial::recvSelf(const CommParameters &cp)
+int XC::ElasticPPMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(5);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << "WARNING ElasticPPMaterial::recvSelf() - "
                 << dataTag << " failed to receive ID\n";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

@@ -126,8 +126,8 @@ class FullGenLinSOE: public FactoredSOEBase
     
     friend class FullGenLinLapackSolver;    
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

@@ -113,18 +113,18 @@ XC::HHTBase::HHTBase(AnalysisAggregation *owr,int classTag,double _alpha, double
 
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::HHTBase::sendData(CommParameters &cp)
+int XC::HHTBase::sendData(Communicator &comm)
   {
-    int res= HHTRayleighBase::sendData(cp);
-    res+= cp.sendDoubles(beta,c1,getDbTagData(),CommMetaData(8));
+    int res= HHTRayleighBase::sendData(comm);
+    res+= comm.sendDoubles(beta,c1,getDbTagData(),CommMetaData(8));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::HHTBase::recvData(const CommParameters &cp)
+int XC::HHTBase::recvData(const Communicator &comm)
   {
-    int res= HHTRayleighBase::recvData(cp);
-    res+= cp.receiveDoubles(beta,c1,getDbTagData(),CommMetaData(8));
+    int res= HHTRayleighBase::recvData(comm);
+    res+= comm.receiveDoubles(beta,c1,getDbTagData(),CommMetaData(8));
     return res;
   }
 

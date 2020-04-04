@@ -104,17 +104,17 @@ const XC::CrdTransf *XC::BeamColumnWithSectionFDTrf2d::getCoordTransf(void) cons
   { return theCoordTransf; }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::BeamColumnWithSectionFDTrf2d::sendData(CommParameters &cp)
+int XC::BeamColumnWithSectionFDTrf2d::sendData(Communicator &comm)
   {
-    int res= BeamColumnWithSectionFD::sendData(cp);
-    res+= sendCoordTransf(10,11,12,cp);
+    int res= BeamColumnWithSectionFD::sendData(comm);
+    res+= sendCoordTransf(10,11,12,comm);
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::BeamColumnWithSectionFDTrf2d::recvData(const CommParameters &cp)
+int XC::BeamColumnWithSectionFDTrf2d::recvData(const Communicator &comm)
   {
-    int res= BeamColumnWithSectionFD::recvData(cp);
-    theCoordTransf= recvCoordTransf2d(10,11,12,cp);
+    int res= BeamColumnWithSectionFD::recvData(comm);
+    theCoordTransf= recvCoordTransf2d(10,11,12,comm);
     return res;
   }

@@ -236,8 +236,8 @@ class ReinforcingSteel: public UniaxialMaterial
     void updateHardeningLoaction(double PlasticStrain);
     void updateHardeningLoactionParams(void);
   protected:
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     ReinforcingSteel(int tag, double fyield, double fultimate, double youngs, double youngs_hard, 
 		   double estrainhard, double eultimate, int buckModel, double slenderness, double alpha, double r, 
@@ -256,8 +256,8 @@ class ReinforcingSteel: public UniaxialMaterial
   
     UniaxialMaterial *getCopy(void) const;
   
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
   
     void Print(std::ostream &s, int flag =0) const;
   };

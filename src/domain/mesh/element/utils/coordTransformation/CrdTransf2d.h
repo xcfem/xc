@@ -93,8 +93,8 @@ class CrdTransf2d: public CrdTransf
     void nodes_init_disp(void);
     int computeElemtLengthAndOrient(void) const;
 
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     CrdTransf2d(int tag, int classTag);
     inline virtual int getDimension(void) const

@@ -90,8 +90,8 @@ class Information: public MovableObject
     Matrix	*theMatrix;// pointer to a Matrix object, created elsewhere
     BJtensor    *theTensor;// pointer to a Tensor object, created elsewhere
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     Information(void);
     Information(int val);
@@ -110,8 +110,8 @@ class Information: public MovableObject
     virtual int setMatrix(const Matrix &newMatrix);
     virtual int setTensor(const BJtensor &newTensor);
     
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
 
     virtual void Print(std::ostream &s, int flag = 0) const;
     virtual void Print(std::ofstream &s, int flag = 0) const;

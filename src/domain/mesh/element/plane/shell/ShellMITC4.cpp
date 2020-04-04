@@ -108,13 +108,13 @@ XC::DbTagData &XC::ShellMITC4::getDbTagData(void) const
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::ShellMITC4::sendSelf(CommParameters &cp)
+int XC::ShellMITC4::sendSelf(Communicator &comm)
   {
     inicComm(getDbTagData().Size());
-    int res= sendData(cp);
+    int res= sendData(comm);
 
     const int dataTag= getDbTag();
-    res= cp.sendIdData(getDbTagData(),dataTag);
+    res= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; failed to send ID data\n";
@@ -122,17 +122,17 @@ int XC::ShellMITC4::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::ShellMITC4::recvSelf(const CommParameters &cp)
+int XC::ShellMITC4::recvSelf(const Communicator &comm)
   {
     inicComm(getDbTagData().Size());
 
     const int dataTag= getDbTag();
-    int res = cp.receiveIdData(getDbTagData(),dataTag);
+    int res = comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to receive ID data\n";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

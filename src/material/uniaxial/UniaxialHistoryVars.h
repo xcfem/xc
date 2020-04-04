@@ -44,8 +44,8 @@ class UniaxialHistoryVars: public MovableObject
     double endStrain; //!< Strain at the end of unloading from CminStrain
 
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     UniaxialHistoryVars(void);
 
@@ -65,8 +65,8 @@ class UniaxialHistoryVars: public MovableObject
     int revertToStart(const double &);
     void zero(void);
 
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag =0) const;
     

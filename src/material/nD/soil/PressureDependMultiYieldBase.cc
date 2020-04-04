@@ -448,52 +448,52 @@ int XC::PressureDependMultiYieldBase::updateParameter(int responseID, Informatio
 }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::PressureDependMultiYieldBase::sendData(CommParameters &cp)
+int XC::PressureDependMultiYieldBase::sendData(Communicator &comm)
   {
-    int res= PressureMultiYieldBase::sendData(cp);
-    res+= cp.sendDoubles(modulusFactor,initPress,getDbTagData(),CommMetaData(8));
-    res+= cp.sendMovable(subStrainRate,getDbTagData(),CommMetaData(9));
-    res+= cp.sendDoubles(pressureD,pressureDCommitted,strainPTOcta,PPZSize,PPZSizeCommitted,getDbTagData(),CommMetaData(10));
-    res+= cp.sendInts(onPPZ,onPPZCommitted,getDbTagData(),CommMetaData(11));
-    res+= cp.sendDoubles(cumuDilateStrainOcta,maxCumuDilateStrainOcta,cumuTranslateStrainOcta,getDbTagData(),CommMetaData(12));
-    res+= cp.sendDoubles(prePPZStrainOcta,oppoPrePPZStrainOcta,cumuDilateStrainOctaCommitted,getDbTagData(),CommMetaData(13));
-    res+= cp.sendMovable(PPZPivot,getDbTagData(),CommMetaData(14));
-    res+= cp.sendMovable(PPZCenter,getDbTagData(),CommMetaData(15));
-    res+= cp.sendDoubles(maxCumuDilateStrainOctaCommitted,cumuTranslateStrainOctaCommitted,getDbTagData(),CommMetaData(16));
-    res+= cp.sendDoubles(prePPZStrainOctaCommitted,oppoPrePPZStrainOctaCommitted,maxPress,getDbTagData(),CommMetaData(17));
-    res+= cp.sendMovable(PPZPivotCommitted,getDbTagData(),CommMetaData(18));
-    res+= cp.sendMovable(PPZCenterCommitted,getDbTagData(),CommMetaData(19));
+    int res= PressureMultiYieldBase::sendData(comm);
+    res+= comm.sendDoubles(modulusFactor,initPress,getDbTagData(),CommMetaData(8));
+    res+= comm.sendMovable(subStrainRate,getDbTagData(),CommMetaData(9));
+    res+= comm.sendDoubles(pressureD,pressureDCommitted,strainPTOcta,PPZSize,PPZSizeCommitted,getDbTagData(),CommMetaData(10));
+    res+= comm.sendInts(onPPZ,onPPZCommitted,getDbTagData(),CommMetaData(11));
+    res+= comm.sendDoubles(cumuDilateStrainOcta,maxCumuDilateStrainOcta,cumuTranslateStrainOcta,getDbTagData(),CommMetaData(12));
+    res+= comm.sendDoubles(prePPZStrainOcta,oppoPrePPZStrainOcta,cumuDilateStrainOctaCommitted,getDbTagData(),CommMetaData(13));
+    res+= comm.sendMovable(PPZPivot,getDbTagData(),CommMetaData(14));
+    res+= comm.sendMovable(PPZCenter,getDbTagData(),CommMetaData(15));
+    res+= comm.sendDoubles(maxCumuDilateStrainOctaCommitted,cumuTranslateStrainOctaCommitted,getDbTagData(),CommMetaData(16));
+    res+= comm.sendDoubles(prePPZStrainOctaCommitted,oppoPrePPZStrainOctaCommitted,maxPress,getDbTagData(),CommMetaData(17));
+    res+= comm.sendMovable(PPZPivotCommitted,getDbTagData(),CommMetaData(18));
+    res+= comm.sendMovable(PPZCenterCommitted,getDbTagData(),CommMetaData(19));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::PressureDependMultiYieldBase::recvData(const CommParameters &cp)
+int XC::PressureDependMultiYieldBase::recvData(const Communicator &comm)
   {
-    int res= PressureMultiYieldBase::recvData(cp);
-    res+= cp.receiveDoubles(modulusFactor,initPress,getDbTagData(),CommMetaData(8));
-    res+= cp.receiveMovable(subStrainRate,getDbTagData(),CommMetaData(9));
-    res+= cp.receiveDoubles(pressureD,pressureDCommitted,strainPTOcta,PPZSize,PPZSizeCommitted,getDbTagData(),CommMetaData(10));
-    res+= cp.receiveInts(onPPZ,onPPZCommitted,getDbTagData(),CommMetaData(11));
-    res+= cp.receiveDoubles(cumuDilateStrainOcta,maxCumuDilateStrainOcta,cumuTranslateStrainOcta,getDbTagData(),CommMetaData(12));
-    res+= cp.receiveDoubles(prePPZStrainOcta,oppoPrePPZStrainOcta,cumuDilateStrainOctaCommitted,getDbTagData(),CommMetaData(13));
-    res+= cp.receiveMovable(PPZPivot,getDbTagData(),CommMetaData(14));
-    res+= cp.receiveMovable(PPZCenter,getDbTagData(),CommMetaData(15));
-    res+= cp.receiveDoubles(maxCumuDilateStrainOctaCommitted,cumuTranslateStrainOctaCommitted,getDbTagData(),CommMetaData(16));
-    res+= cp.receiveDoubles(prePPZStrainOctaCommitted,oppoPrePPZStrainOctaCommitted,maxPress,getDbTagData(),CommMetaData(17));
-    res+= cp.receiveMovable(PPZPivotCommitted,getDbTagData(),CommMetaData(18));
-    res+= cp.receiveMovable(PPZCenterCommitted,getDbTagData(),CommMetaData(19));
+    int res= PressureMultiYieldBase::recvData(comm);
+    res+= comm.receiveDoubles(modulusFactor,initPress,getDbTagData(),CommMetaData(8));
+    res+= comm.receiveMovable(subStrainRate,getDbTagData(),CommMetaData(9));
+    res+= comm.receiveDoubles(pressureD,pressureDCommitted,strainPTOcta,PPZSize,PPZSizeCommitted,getDbTagData(),CommMetaData(10));
+    res+= comm.receiveInts(onPPZ,onPPZCommitted,getDbTagData(),CommMetaData(11));
+    res+= comm.receiveDoubles(cumuDilateStrainOcta,maxCumuDilateStrainOcta,cumuTranslateStrainOcta,getDbTagData(),CommMetaData(12));
+    res+= comm.receiveDoubles(prePPZStrainOcta,oppoPrePPZStrainOcta,cumuDilateStrainOctaCommitted,getDbTagData(),CommMetaData(13));
+    res+= comm.receiveMovable(PPZPivot,getDbTagData(),CommMetaData(14));
+    res+= comm.receiveMovable(PPZCenter,getDbTagData(),CommMetaData(15));
+    res+= comm.receiveDoubles(maxCumuDilateStrainOctaCommitted,cumuTranslateStrainOctaCommitted,getDbTagData(),CommMetaData(16));
+    res+= comm.receiveDoubles(prePPZStrainOctaCommitted,oppoPrePPZStrainOctaCommitted,maxPress,getDbTagData(),CommMetaData(17));
+    res+= comm.receiveMovable(PPZPivotCommitted,getDbTagData(),CommMetaData(18));
+    res+= comm.receiveMovable(PPZCenterCommitted,getDbTagData(),CommMetaData(19));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::PressureDependMultiYieldBase::sendSelf(CommParameters &cp)
+int XC::PressureDependMultiYieldBase::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(20);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
@@ -501,18 +501,18 @@ int XC::PressureDependMultiYieldBase::sendSelf(CommParameters &cp)
 
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::PressureDependMultiYieldBase::recvSelf(const CommParameters &cp)    
+int XC::PressureDependMultiYieldBase::recvSelf(const Communicator &comm)    
   {
     inicComm(20);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

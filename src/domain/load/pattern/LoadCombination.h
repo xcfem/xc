@@ -89,8 +89,8 @@ class LoadCombination: public LoadPatternCombination
     const std::string getDescompCombPrevia(void) const;
     const std::string getDescompRestoSobrePrevia(void) const;
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 
 std::ostream &operator<<(std::ostream &os,const LoadCombination &);

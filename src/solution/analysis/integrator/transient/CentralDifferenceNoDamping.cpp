@@ -179,9 +179,9 @@ int XC::CentralDifferenceNoDamping::commit(void)
     return commitModel();
   }
 
-int XC::CentralDifferenceNoDamping::sendSelf(CommParameters &cp)
+int XC::CentralDifferenceNoDamping::sendSelf(Communicator &comm)
   { return 0; }
 
-int XC::CentralDifferenceNoDamping::recvSelf(const CommParameters &cp)
+int XC::CentralDifferenceNoDamping::recvSelf(const Communicator &comm)
   { return 0; }
 

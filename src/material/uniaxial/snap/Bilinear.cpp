@@ -396,14 +396,14 @@ double XC::Bilinear::getStrain(void) const
   }
 
 
-int XC::Bilinear::recvSelf(const CommParameters &cp)
+int XC::Bilinear::recvSelf(const Communicator &comm)
 {
         if ( DEBG ==1 ) fprintf( OutputFile , "Receive self\n" );        // debugging
         return 0;
 }
 
 
-int XC::Bilinear::sendSelf(CommParameters &cp)
+int XC::Bilinear::sendSelf(Communicator &comm)
 {
         if ( DEBG ==1 ) fprintf( OutputFile , "Send self\n" );        // debugging
         return 0;

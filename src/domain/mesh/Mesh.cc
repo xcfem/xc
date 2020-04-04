@@ -1059,37 +1059,37 @@ XC::DbTagData &XC::Mesh::getDbTagData(void) const
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::Mesh::sendData(CommParameters &cp)
+int XC::Mesh::sendData(Communicator &comm)
   {
-    int res=cp.sendMovable(*theNodes,getDbTagData(),CommMetaData(0));
-    res+= cp.sendMovable(*theElements,getDbTagData(),CommMetaData(1));
-    res+= cp.sendVector(theBounds,getDbTagData(),CommMetaData(2));
-    res+= cp.sendInt(tagNodeCheckReactionException,getDbTagData(),CommMetaData(3));
-    res+= cp.sendMovable(lockers,getDbTagData(),CommMetaData(4));
+    int res=comm.sendMovable(*theNodes,getDbTagData(),CommMetaData(0));
+    res+= comm.sendMovable(*theElements,getDbTagData(),CommMetaData(1));
+    res+= comm.sendVector(theBounds,getDbTagData(),CommMetaData(2));
+    res+= comm.sendInt(tagNodeCheckReactionException,getDbTagData(),CommMetaData(3));
+    res+= comm.sendMovable(lockers,getDbTagData(),CommMetaData(4));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::Mesh::recvData(const CommParameters &cp)
+int XC::Mesh::recvData(const Communicator &comm)
   {
-    int res= theNodes->receive<Node>(getDbTagDataPos(0),cp,&FEM_ObjectBroker::getNewNode);
+    int res= theNodes->receive<Node>(getDbTagDataPos(0),comm,&FEM_ObjectBroker::getNewNode);
     add_nodes_to_domain();
-    res+= theElements->receive<Element>(getDbTagDataPos(1),cp,&FEM_ObjectBroker::getNewElement);
+    res+= theElements->receive<Element>(getDbTagDataPos(1),comm,&FEM_ObjectBroker::getNewElement);
     add_elements_to_domain();
 
-    res+= cp.receiveVector(theBounds,getDbTagData(),CommMetaData(2));
-    res+= cp.receiveInt(tagNodeCheckReactionException,getDbTagData(),CommMetaData(3));
-    res+= cp.receiveMovable(lockers,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveVector(theBounds,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveInt(tagNodeCheckReactionException,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveMovable(lockers,getDbTagData(),CommMetaData(4));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::Mesh::sendSelf(CommParameters &cp)
+int XC::Mesh::sendSelf(Communicator &comm)
   {
     inicComm(5); 
-    int res= sendData(cp);
-    const int dataTag= getDbTag(cp);
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    int res= sendData(comm);
+    const int dataTag= getDbTag(comm);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
               << "; channel failed to send data.\n";
@@ -1098,16 +1098,16 @@ int XC::Mesh::sendSelf(CommParameters &cp)
 
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::Mesh::recvSelf(const CommParameters &cp)
+int XC::Mesh::recvSelf(const Communicator &comm)
   {
     // first we get the data about the state of the mesh for this cTag
     inicComm(5);
-    int res= cp.receiveIdData(getDbTagData(),getDbTag());
+    int res= comm.receiveIdData(getDbTagData(),getDbTag());
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
               << "; channel failed to recv the initial ID.\n";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
   

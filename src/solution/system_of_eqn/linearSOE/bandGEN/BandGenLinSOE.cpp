@@ -304,11 +304,11 @@ void XC::BandGenLinSOE::zeroA(void)
     factored = false;
   }
 
-int XC::BandGenLinSOE::sendSelf(CommParameters &cp)
+int XC::BandGenLinSOE::sendSelf(Communicator &comm)
   { return 0; }
 
 
-int XC::BandGenLinSOE::recvSelf(const CommParameters &cp)
+int XC::BandGenLinSOE::recvSelf(const Communicator &comm)
   { return 0; }
 
 

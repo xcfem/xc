@@ -365,54 +365,54 @@ const std::string &XC::PressureDependMultiYield::getType(void) const
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::PressureDependMultiYield::sendData(CommParameters &cp)
+int XC::PressureDependMultiYield::sendData(Communicator &comm)
   {
-    int res= PressureDependMultiYieldBase::sendData(cp);
-    res+= cp.sendMovable(reversalStress,getDbTagData(),CommMetaData(20));
-    res+= cp.sendMovable(lockStress,getDbTagData(),CommMetaData(21));
-    res+= cp.sendMovable(reversalStressCommitted,getDbTagData(),CommMetaData(22));
-    res+= cp.sendMovable(lockStressCommitted,getDbTagData(),CommMetaData(23));
+    int res= PressureDependMultiYieldBase::sendData(comm);
+    res+= comm.sendMovable(reversalStress,getDbTagData(),CommMetaData(20));
+    res+= comm.sendMovable(lockStress,getDbTagData(),CommMetaData(21));
+    res+= comm.sendMovable(reversalStressCommitted,getDbTagData(),CommMetaData(22));
+    res+= comm.sendMovable(lockStressCommitted,getDbTagData(),CommMetaData(23));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::PressureDependMultiYield::recvData(const CommParameters &cp)
+int XC::PressureDependMultiYield::recvData(const Communicator &comm)
   {
-    int res= PressureDependMultiYieldBase::recvData(cp);
-    res+= cp.receiveMovable(reversalStress,getDbTagData(),CommMetaData(20));
-    res+= cp.receiveMovable(lockStress,getDbTagData(),CommMetaData(21));
-    res+= cp.receiveMovable(reversalStressCommitted,getDbTagData(),CommMetaData(22));
-    res+= cp.receiveMovable(lockStressCommitted,getDbTagData(),CommMetaData(23));
+    int res= PressureDependMultiYieldBase::recvData(comm);
+    res+= comm.receiveMovable(reversalStress,getDbTagData(),CommMetaData(20));
+    res+= comm.receiveMovable(lockStress,getDbTagData(),CommMetaData(21));
+    res+= comm.receiveMovable(reversalStressCommitted,getDbTagData(),CommMetaData(22));
+    res+= comm.receiveMovable(lockStressCommitted,getDbTagData(),CommMetaData(23));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::PressureDependMultiYield::sendSelf(CommParameters &cp)
+int XC::PressureDependMultiYield::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(24);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::PressureDependMultiYield::recvSelf(const CommParameters &cp)    
+int XC::PressureDependMultiYield::recvSelf(const Communicator &comm)    
   {
     inicComm(24);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

@@ -35,7 +35,7 @@
 
 namespace XC {
 
-class CommParameters;
+class Communicator;
 class CommMetaData;
 
 //! @ingroup IPComm
@@ -47,9 +47,9 @@ class DbTagData
     ID data;
     mutable std::set<size_t> visitados;
 
-    friend class CommParameters;
-    int sendIdData(CommParameters &,const int &) const;
-    int receiveIdData(const CommParameters &,const int &);
+    friend class Communicator;
+    int sendIdData(Communicator &,const int &) const;
+    int receiveIdData(const Communicator &,const int &);
   public:
     DbTagData(const int &dataSize= 0);
     explicit DbTagData(const ID &);
@@ -59,8 +59,8 @@ class DbTagData
       { return data.Size(); }
     const int &getDbTagDataPos(const size_t &i) const;
     void setDbTagDataPos(const size_t &i,const int &v);
-    int send(DbTagData &,CommParameters &, const CommMetaData &) const;
-    int receive(DbTagData &,const CommParameters &,const CommMetaData &);
+    int send(DbTagData &,Communicator &, const CommMetaData &) const;
+    int receive(DbTagData &,const Communicator &,const CommMetaData &);
     void Print(std::ostream &os) const;
   };
 

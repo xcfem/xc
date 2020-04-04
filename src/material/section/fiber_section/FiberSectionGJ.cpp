@@ -131,13 +131,13 @@ int XC::FiberSectionGJ::revertToLastCommit(void)
 int XC::FiberSectionGJ::revertToStart(void)
   { return fibers.revertToStart(*this,kr); }
 
-int XC::FiberSectionGJ::sendSelf(CommParameters &cp)
+int XC::FiberSectionGJ::sendSelf(Communicator &comm)
   {
     int res= 0;
     return res;
   }
 
-int XC::FiberSectionGJ::recvSelf(const CommParameters &)
+int XC::FiberSectionGJ::recvSelf(const Communicator &)
   {
     int res= 0;
     return res;

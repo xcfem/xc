@@ -274,46 +274,46 @@ const XC::Vector &XC::beam2d03::getResistingForceIncInertia(void) const
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::beam2d03::sendData(CommParameters &cp)
+int XC::beam2d03::sendData(Communicator &comm)
   {
-    int res= beam2d::sendData(cp);
-    res+= cp.sendMatrix(k,getDbTagData(),CommMetaData(10));
-    res+= cp.sendVector(rForce,getDbTagData(),CommMetaData(11));
-    res+= cp.sendMatrix(trans,getDbTagData(),CommMetaData(12));
+    int res= beam2d::sendData(comm);
+    res+= comm.sendMatrix(k,getDbTagData(),CommMetaData(10));
+    res+= comm.sendVector(rForce,getDbTagData(),CommMetaData(11));
+    res+= comm.sendMatrix(trans,getDbTagData(),CommMetaData(12));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::beam2d03::recvData(const CommParameters &cp)
+int XC::beam2d03::recvData(const Communicator &comm)
   {
-    int res= beam2d::recvData(cp);
-    res+= cp.receiveMatrix(k,getDbTagData(),CommMetaData(10));
-    res+= cp.receiveVector(rForce,getDbTagData(),CommMetaData(11));
-    res+= cp.receiveMatrix(trans,getDbTagData(),CommMetaData(12));
+    int res= beam2d::recvData(comm);
+    res+= comm.receiveMatrix(k,getDbTagData(),CommMetaData(10));
+    res+= comm.receiveVector(rForce,getDbTagData(),CommMetaData(11));
+    res+= comm.receiveMatrix(trans,getDbTagData(),CommMetaData(12));
     return res;
   }
 
-int XC::beam2d03::sendSelf(CommParameters &cp)
+int XC::beam2d03::sendSelf(Communicator &comm)
   {
     inicComm(13);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
     const int dataTag= getDbTag();
-    res= cp.sendIdData(getDbTagData(),dataTag);
+    res= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "beam2d03::sendSelf -- could not send data Vector\n";
     return res;
   }
 
-int XC::beam2d03::recvSelf(const CommParameters &cp)
+int XC::beam2d03::recvSelf(const Communicator &comm)
   {
     inicComm(13);
     const int dataTag= getDbTag();
-    int res = cp.receiveIdData(getDbTagData(),dataTag);
+    int res = comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "beam2d03::recvSelf() - failed to send ID data\n";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

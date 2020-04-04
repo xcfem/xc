@@ -73,7 +73,7 @@ XC::NormalizedPeak::NormalizedPeak(int tag, double maxVal, double minVal , const
       exit (-1);
     }
   
-  damagename= argv; //strcpy ( damagename, argv);
+  damagename= argv;
   
   
   if( (damagename == "force") || (damagename == "Force") )
@@ -252,11 +252,11 @@ int XC::NormalizedPeak::getResponse(int responseID, Information &info)
 }
 
 
-int XC::NormalizedPeak::sendSelf(CommParameters &cp)
+int XC::NormalizedPeak::sendSelf(Communicator &comm)
   { return 0; }
 
 
-int XC::NormalizedPeak::recvSelf(const CommParameters &cp)
+int XC::NormalizedPeak::recvSelf(const Communicator &comm)
   { return 0; }
 
 

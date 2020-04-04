@@ -103,8 +103,8 @@ class Isolator2spring: public SectionForceDeformation
     static Vector s;
     static Vector s3;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     Isolator2spring(int tag, double tol_in, double k1_in, double Fy_in, double kb_in, double kvo_in, double hb_in, double Pe_in, double po_in);
     Isolator2spring(int tag);
@@ -128,8 +128,8 @@ class Isolator2spring: public SectionForceDeformation
     const ResponseId &getType(void) const;
     int getOrder(void) const;
     
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
 
     void Print(std::ostream &s, int flag = 0) const;
   };

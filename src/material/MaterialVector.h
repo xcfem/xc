@@ -54,8 +54,8 @@ class MaterialVector: public std::vector<MAT *>, public CommandEntity, public Mo
 
 
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &);  
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);  
+    int recvData(const Communicator &);
   public:
     typedef typename std::vector<MAT *> mat_vector;
     typedef typename mat_vector::iterator iterator;
@@ -99,8 +99,8 @@ class MaterialVector: public std::vector<MAT *>, public CommandEntity, public Mo
     std::set<std::string> getNames(void) const;
     boost::python::list getNamesPy(void) const;
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 
 //! @brief Default constructor.
@@ -480,7 +480,7 @@ XC::DbTagData &MaterialVector<MAT>::getDbTagData(void) const
 
 //! @brief Send object members through the channel being passed as parameter.
 template <class MAT>
-int MaterialVector<MAT>::sendData(CommParameters &cp)
+int MaterialVector<MAT>::sendData(Communicator &comm)
   {
     int res= 0;
     if(this->empty())
@@ -492,15 +492,15 @@ int MaterialVector<MAT>::sendData(CommParameters &cp)
         DbTagData cpMat(nMat*3);
 
         for(size_t i= 0;i<nMat;i++)
-          res+= cp.sendBrokedPtr((*this)[i],cpMat,BrokedPtrCommMetaData(i,i+nMat,i+2*nMat));
-        res+= cpMat.send(getDbTagData(),cp,CommMetaData(1));
+          res+= comm.sendBrokedPtr((*this)[i],cpMat,BrokedPtrCommMetaData(i,i+nMat,i+2*nMat));
+        res+= cpMat.send(getDbTagData(),comm,CommMetaData(1));
       }
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
 template <class MAT>
-int MaterialVector<MAT>::recvData(const CommParameters &cp)
+int MaterialVector<MAT>::recvData(const Communicator &comm)
   {
     const int flag = getDbTagDataPos(0);
     int res= 0;
@@ -508,13 +508,13 @@ int MaterialVector<MAT>::recvData(const CommParameters &cp)
       {
         const size_t nMat= this->size();
         DbTagData cpMat(nMat*3);
-        res+= cpMat.receive(getDbTagData(),cp,CommMetaData(1));
+        res+= cpMat.receive(getDbTagData(),comm,CommMetaData(1));
 
         for(size_t i= 0;i<nMat;i++)
           {
             const BrokedPtrCommMetaData meta(i,i+nMat,i+2*nMat);
             // Receive the material
-            (*this)[i]= cp.getBrokedMaterial((*this)[i],cpMat,meta);
+            (*this)[i]= comm.getBrokedMaterial((*this)[i],cpMat,meta);
           }
       }
     return res;
@@ -543,12 +543,12 @@ boost::python::list MaterialVector<MAT>::getNamesPy(void) const
 
 //! @brief Sends object through the channel being passed as parameter.
 template <class MAT>
-int MaterialVector<MAT>::sendSelf(CommParameters &cp)
+int MaterialVector<MAT>::sendSelf(Communicator &comm)
   {
     inicComm(2);
-    int res= sendData(cp);
+    int res= sendData(comm);
     const int dataTag=getDbTag();
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
                 << dataTag << " failed to send ID";
@@ -557,16 +557,16 @@ int MaterialVector<MAT>::sendSelf(CommParameters &cp)
 
 //! @brief Receives object through the channel being passed as parameter.
 template <class MAT>
-int MaterialVector<MAT>::recvSelf(const CommParameters &cp)
+int MaterialVector<MAT>::recvSelf(const Communicator &comm)
   {
     const int dataTag= this->getDbTag();
     inicComm(2);
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
                 << dataTag << " failed to receive ID\n";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

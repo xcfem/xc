@@ -78,8 +78,8 @@ class NewmarkExplicit: public NewmarkBase
     int updateCount;                // method should only have one update per step
     ResponseQuantities Ut;  // response quantities at time t
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     friend class AnalysisAggregation;
     NewmarkExplicit(AnalysisAggregation *);
@@ -97,8 +97,8 @@ class NewmarkExplicit: public NewmarkBase
     int revertToLastStep(void);            
     int update(const Vector &aiPlusOne);
     
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag = 0) const;
   };

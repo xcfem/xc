@@ -178,13 +178,13 @@ const XC::Vector &XC::ShellLinearCrdTransf3d::getGlobalResistingForce(const Vect
   { return local_to_global_resisting_force(p0); }
 
 //! @brief Send the object through the channel being passed as parameter.
-int XC::ShellLinearCrdTransf3d::sendSelf(CommParameters &cp)
+int XC::ShellLinearCrdTransf3d::sendSelf(Communicator &comm)
   {
     inicComm(3);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
     const int dataTag= getDbTag();
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; data could not be sent.\n";
@@ -193,15 +193,15 @@ int XC::ShellLinearCrdTransf3d::sendSelf(CommParameters &cp)
 
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::ShellLinearCrdTransf3d::recvSelf(const CommParameters &cp)
+int XC::ShellLinearCrdTransf3d::recvSelf(const Communicator &comm)
   {
     inicComm(3);
-    int res= cp.receiveIdData(getDbTagData(),getDbTag());
+    int res= comm.receiveIdData(getDbTagData(),getDbTag());
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; data could not be received.\n";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

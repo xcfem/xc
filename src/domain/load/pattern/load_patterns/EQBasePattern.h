@@ -46,8 +46,8 @@ class EQBasePattern: public LoadPattern
     DqGroundMotions theMotions;
 
     int addMotion(GroundMotion &theMotion);
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     EQBasePattern(int tag, int classTag);
 

@@ -292,10 +292,10 @@ void  XC::Broyden::BroydenUpdate( IncrementalIntegrator *theIntegrator, LinearSO
   }
 
 
-int XC::Broyden::sendSelf(CommParameters &cp)
+int XC::Broyden::sendSelf(Communicator &comm)
   { return -1; }
 
-int XC::Broyden::recvSelf(const CommParameters &cp)
+int XC::Broyden::recvSelf(const Communicator &comm)
   { return -1; }
 
 

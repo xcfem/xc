@@ -247,9 +247,9 @@ int XC::DistributedDisplacementControl::domainChanged(void)
 
     if(processID != 0)
       {
-        CommParameters cp(0,*theChannels[0]);
-        cp.sendInt(theDofID,DistributedObj::getDbTagData(),CommMetaData(0)); 
-        cp.receiveInt(theDofID,DistributedObj::getDbTagData(),CommMetaData(0)); //??
+        Communicator comm(0,*theChannels[0]);
+        comm.sendInt(theDofID,DistributedObj::getDbTagData(),CommMetaData(0)); 
+        comm.receiveInt(theDofID,DistributedObj::getDbTagData(),CommMetaData(0)); //??
       } 
     else
       {
@@ -257,13 +257,13 @@ int XC::DistributedDisplacementControl::domainChanged(void)
         const size_t numChannels= theChannels.size();
         for(size_t j=0; j<numChannels; j++)
           {
-            CommParameters cp(0,*theChannels[j]);
-            cp.receiveInt(theDofID,DistributedObj::getDbTagData(),CommMetaData(0));
+            Communicator comm(0,*theChannels[j]);
+            comm.receiveInt(theDofID,DistributedObj::getDbTagData(),CommMetaData(0));
           }
         for(size_t k=0; k<numChannels; k++)
           {
-            CommParameters cp(0,*theChannels[k]);
-            cp.sendInt(theDofID,DistributedObj::getDbTagData(),CommMetaData(0));
+            Communicator comm(0,*theChannels[k]);
+            comm.sendInt(theDofID,DistributedObj::getDbTagData(),CommMetaData(0));
           }
       }
     vectors.domainChanged(size,*this,*theLinSOE);
@@ -277,22 +277,22 @@ int XC::DistributedDisplacementControl::domainChanged(void)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::DistributedDisplacementControl::sendData(CommParameters &cp)
+int XC::DistributedDisplacementControl::sendData(Communicator &comm)
   {
-    int res= DispBase::sendData(cp);
-    res+= cp.sendBool(allHaveDofID,DistributedObj::getDbTagData(),CommMetaData(17));
+    int res= DispBase::sendData(comm);
+    res+= comm.sendBool(allHaveDofID,DistributedObj::getDbTagData(),CommMetaData(17));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::DistributedDisplacementControl::recvData(const CommParameters &cp)
+int XC::DistributedDisplacementControl::recvData(const Communicator &comm)
   {
-    int res= DispBase::recvData(cp);
-    res+= cp.receiveBool(allHaveDofID,DistributedObj::getDbTagData(),CommMetaData(17));
+    int res= DispBase::recvData(comm);
+    res+= comm.receiveBool(allHaveDofID,DistributedObj::getDbTagData(),CommMetaData(17));
     return res;
   }
 
-int XC::DistributedDisplacementControl::sendSelf(CommParameters &cp)
+int XC::DistributedDisplacementControl::sendSelf(Communicator &comm)
   {					 
     int sendID =0;
 
@@ -304,13 +304,13 @@ int XC::DistributedDisplacementControl::sendSelf(CommParameters &cp)
     if(processID == 0)
       {
         // check if already using this object
-        bool found= buscaCanal(cp,sendID);
+        bool found= buscaCanal(comm,sendID);
 
         // if new_ object, enlarge XC::Channel pointers to hold new_ channel * & allocate new_ ID
         if(found == false)
           {
-            assert(cp.getChannel());
-            theChannels.push_back(cp.getChannel());
+            assert(comm.getChannel());
+            theChannels.push_back(comm.getChannel());
             const int numChannels= theChannels.size();
             // allocate new_ processID for remote object
             sendID = numChannels;
@@ -321,13 +321,13 @@ int XC::DistributedDisplacementControl::sendSelf(CommParameters &cp)
       sendID = processID;
 
     // send remotes processID & info about node, dof and numIncr
-    int res= cp.sendInts(sendID,theNodeTag,theDof,DistributedObj::getDbTagData(),CommMetaData(18));
+    int res= comm.sendInts(sendID,theNodeTag,theDof,DistributedObj::getDbTagData(),CommMetaData(18));
     if(res < 0)
       {
         std::cerr <<"WARNING DistributedDisplacementControl::sendSelf() - failed to send data\n";
         return -1;
       }
-    res+= cp.sendDoubles(theIncrement,minIncrement,maxIncrement,specNumIncrStep,numIncrLastStep,DistributedObj::getDbTagData(),CommMetaData(19));
+    res+= comm.sendDoubles(theIncrement,minIncrement,maxIncrement,specNumIncrStep,numIncrLastStep,DistributedObj::getDbTagData(),CommMetaData(19));
     if(res < 0)
       {
         std::cerr <<"WARNING DistributedDisplacementControl::recvSelf() - failed to recv vector data\n";
@@ -337,16 +337,16 @@ int XC::DistributedDisplacementControl::sendSelf(CommParameters &cp)
   }
 
 
-int XC::DistributedDisplacementControl::recvSelf(const CommParameters &cp)
+int XC::DistributedDisplacementControl::recvSelf(const Communicator &comm)
   {
     int sendID =0;
-    int res= cp.receiveInts(sendID,theNodeTag,theDof,DistributedObj::getDbTagData(),CommMetaData(18));
+    int res= comm.receiveInts(sendID,theNodeTag,theDof,DistributedObj::getDbTagData(),CommMetaData(18));
     if(res < 0)
       {
         std::cerr <<"WARNING XC::DistributedDisplacementControl::recvSelf() - failed to recv id data\n";
         return -1;
       }	      
-    res+= cp.receiveDoubles(theIncrement,minIncrement,maxIncrement,specNumIncrStep,numIncrLastStep,DistributedObj::getDbTagData(),CommMetaData(19));
+    res+= comm.receiveDoubles(theIncrement,minIncrement,maxIncrement,specNumIncrStep,numIncrLastStep,DistributedObj::getDbTagData(),CommMetaData(19));
 
     if(res < 0)
       {
@@ -355,7 +355,7 @@ int XC::DistributedDisplacementControl::recvSelf(const CommParameters &cp)
       }	        
 
     theChannels.clear();
-    theChannels.push_back(const_cast<CommParameters &>(cp).getChannel());
+    theChannels.push_back(const_cast<Communicator &>(comm).getChannel());
     return res;
   }
 

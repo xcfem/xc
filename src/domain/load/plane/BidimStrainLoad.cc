@@ -110,42 +110,42 @@ XC::DbTagData &XC::BidimStrainLoad::getDbTagData(void) const
   }
 
 //! @brief Send data through the channel being passed as parameter.
-int XC::BidimStrainLoad::sendData(CommParameters &cp)
+int XC::BidimStrainLoad::sendData(Communicator &comm)
   {
-    int res= BidimLoad::sendData(cp);
-    res+= cp.sendVectors(strains,getDbTagData(),CommMetaData(5));
+    int res= BidimLoad::sendData(comm);
+    res+= comm.sendVectors(strains,getDbTagData(),CommMetaData(5));
     return res;
   }
 
 //! @brief Receive data through the channel being passed as parameter.
-int XC::BidimStrainLoad::recvData(const CommParameters &cp)
+int XC::BidimStrainLoad::recvData(const Communicator &comm)
   {
-    int res= BidimLoad::recvData(cp);
-    res+= cp.receiveVectors(strains,getDbTagData(),CommMetaData(5));
+    int res= BidimLoad::recvData(comm);
+    res+= comm.receiveVectors(strains,getDbTagData(),CommMetaData(5));
     return res;
   }
 
-int XC::BidimStrainLoad::sendSelf(CommParameters &cp)
+int XC::BidimStrainLoad::sendSelf(Communicator &comm)
   {
     inicComm(6);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    const int dataTag= getDbTag(cp);
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    const int dataTag= getDbTag(comm);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "BidimStrainLoad::sendSelf() - failed to send data\n";    
     return res;
   }
 
-int XC::BidimStrainLoad::recvSelf(const CommParameters &cp)
+int XC::BidimStrainLoad::recvSelf(const Communicator &comm)
   {
     inicComm(6);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "TrussStrainLoad::recvSelf() - data could not be received\n" ;
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

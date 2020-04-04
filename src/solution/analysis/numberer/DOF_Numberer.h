@@ -104,8 +104,8 @@ class DOF_Numberer: public MovableObject, public CommandEntity
     const AnalysisModel *getAnalysisModelPtr(void) const;
     const GraphNumberer *getGraphNumbererPtr(void) const;
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
     void alloc(const std::string &);
     void copy(const GraphNumberer &);
     void free_mem(void);
@@ -125,8 +125,8 @@ class DOF_Numberer: public MovableObject, public CommandEntity
 
     void useAlgorithm(const std::string &);
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

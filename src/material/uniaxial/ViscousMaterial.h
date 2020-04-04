@@ -74,8 +74,8 @@ class ViscousMaterial: public UniaxialMaterial
     double C;
     double Alpha;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     ViscousMaterial(int tag= 0); 
     ViscousMaterial(int tag, double C, double Alpha);    
@@ -95,8 +95,8 @@ class ViscousMaterial: public UniaxialMaterial
 
     UniaxialMaterial *getCopy(void) const;
     
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag =0) const;
   };

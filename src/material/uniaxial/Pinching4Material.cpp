@@ -491,12 +491,12 @@ XC::UniaxialMaterial* XC::Pinching4Material::getCopy(void) const
         return theCopy;
 }
 
-int XC::Pinching4Material::sendSelf(CommParameters &cp)
+int XC::Pinching4Material::sendSelf(Communicator &comm)
 {
         return -1;
 }
 
-int XC::Pinching4Material::recvSelf(const CommParameters &cp)
+int XC::Pinching4Material::recvSelf(const Communicator &comm)
 {
         return -1;
 }

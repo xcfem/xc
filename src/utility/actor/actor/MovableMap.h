@@ -37,7 +37,7 @@
 #include <string>
 #include <map>
 #include "utility/tagged/TaggedObject.h"
-#include "CommParameters.h"
+#include "Communicator.h"
 
 namespace XC {
 
@@ -52,8 +52,8 @@ class MovableMap: public MovablePointerContainer<T>
     typedef typename map_objects::iterator iterator;
     map_objects objects;
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     MovableMap(const map_objects &map,T *(FEM_ObjectBroker::*pF)(int));
     const map_objects &getMap(void) const
@@ -69,7 +69,7 @@ MovableMap<T>::MovableMap(const map_objects &map,T *(FEM_ObjectBroker::*pF)(int)
 
 //! @brief Send members through the channel being passed as parameter.
 template <class T>
-int XC::MovableMap<T>::sendData(CommParameters &cp)
+int XC::MovableMap<T>::sendData(Communicator &comm)
   {
     const size_t sz= objects.size();
     this->setDbTagDataPos(0,sz);
@@ -82,21 +82,21 @@ int XC::MovableMap<T>::sendData(CommParameters &cp)
         int loc= 0;
         for(iterator i=objects.begin();i!=objects.end();i++,loc++)
           {
-            res+= cp.sendString((*i).first,labelData,CommMetaData(loc));
+            res+= comm.sendString((*i).first,labelData,CommMetaData(loc));
             classTags(loc)= (*i).second->getClassTag();
-            res+= cp.sendMovable(*(*i).second,dbTags,CommMetaData(loc));
+            res+= comm.sendMovable(*(*i).second,dbTags,CommMetaData(loc));
           }
 	DbTagData &dbTagData= this->getDbTagData();
-        res+= labelData.send(dbTagData,cp,CommMetaData(1));
-        res+= dbTags.send(dbTagData,cp,CommMetaData(2));
-        res+= cp.sendID(classTags,dbTagData,CommMetaData(3));
+        res+= labelData.send(dbTagData,comm,CommMetaData(1));
+        res+= dbTags.send(dbTagData,comm,CommMetaData(2));
+        res+= comm.sendID(classTags,dbTagData,CommMetaData(3));
       }
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
 template <class T>
-int MovableMap<T>::recvData(const CommParameters &cp)
+int MovableMap<T>::recvData(const Communicator &comm)
   {
     const size_t sz= this->getDbTagDataPos(0);
     int res= 0;
@@ -104,21 +104,21 @@ int MovableMap<T>::recvData(const CommParameters &cp)
       {
 	DbTagData &dbTagData= this->getDbTagData();
         DbTagData labelData(sz);
-        int res= labelData.receive(dbTagData,cp,CommMetaData(1));
+        int res= labelData.receive(dbTagData,comm,CommMetaData(1));
         DbTagData dbTags(sz);
-        res+= dbTags.receive(dbTagData,cp,CommMetaData(2));
+        res+= dbTags.receive(dbTagData,comm,CommMetaData(2));
         ID classTags(sz);
-        res+= cp.receiveID(classTags,dbTagData,CommMetaData(3));
+        res+= comm.receiveID(classTags,dbTagData,CommMetaData(3));
         std::string label;
         T *tmp= nullptr;
         for(size_t i= 0;i<sz;i++)
           {
-            res+= cp.receiveString(label,labelData,CommMetaData(i));
+            res+= comm.receiveString(label,labelData,CommMetaData(i));
             const int dbTag= dbTags.getDbTagDataPos(i);
-            tmp= this->getBrokedObject(dbTag,classTags(i),cp);
+            tmp= this->getBrokedObject(dbTag,classTags(i),comm);
             if(tmp)
               {
-		 res+= tmp->recvSelf(cp);
+		 res+= tmp->recvSelf(comm);
                  objects[label]= tmp;
               }
             else
@@ -130,17 +130,17 @@ int MovableMap<T>::recvData(const CommParameters &cp)
   }
 
 template <class T>
-int sendMap(const std::map<std::string,T *> &m,CommParameters &cp,DbTagData &dt,const CommMetaData &meta)
+int sendMap(const std::map<std::string,T *> &m,Communicator &comm,DbTagData &dt,const CommMetaData &meta)
   {
     MovableMap<T> mm(m,nullptr);
-    return cp.sendMovable(mm,dt,meta);
+    return comm.sendMovable(mm,dt,meta);
   }
 
 template <class T>
-int receiveMap(std::map<std::string,T *> &v,const CommParameters &cp,DbTagData &dt,const CommMetaData &meta,T *(FEM_ObjectBroker::*ptrFunc)(int))
+int receiveMap(std::map<std::string,T *> &v,const Communicator &comm,DbTagData &dt,const CommMetaData &meta,T *(FEM_ObjectBroker::*ptrFunc)(int))
   {
     MovableMap<T> mm(v,ptrFunc);
-    int res= cp.receiveMovable(mm,dt,meta);
+    int res= comm.receiveMovable(mm,dt,meta);
     v= mm.getMap();
     return res;
   } 

@@ -43,8 +43,8 @@ class DispBase: public BaseControl
   protected:
     IntegratorVectors vectors;
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     DispBase(AnalysisAggregation *,int classTag,const int &numIncr= 1);
   };

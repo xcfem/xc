@@ -53,29 +53,29 @@ double XC::ArcLengthBase::getDLambdaNewStep(void) const
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::ArcLengthBase::sendData(CommParameters &cp)
+int XC::ArcLengthBase::sendData(Communicator &comm)
   {
-    int res= ProtoArcLength::sendData(cp);
-    res+= cp.sendDouble(alpha2,getDbTagData(),CommMetaData(18));
+    int res= ProtoArcLength::sendData(comm);
+    res+= comm.sendDouble(alpha2,getDbTagData(),CommMetaData(18));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::ArcLengthBase::recvData(const CommParameters &cp)
+int XC::ArcLengthBase::recvData(const Communicator &comm)
   {
-    int res= ProtoArcLength::recvData(cp);
-    res+= cp.receiveDouble(alpha2,getDbTagData(),CommMetaData(18));
+    int res= ProtoArcLength::recvData(comm);
+    res+= comm.receiveDouble(alpha2,getDbTagData(),CommMetaData(18));
     return res;
   }
 
-int XC::ArcLengthBase::sendSelf(CommParameters &cp)
+int XC::ArcLengthBase::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(19);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data\n";
@@ -83,11 +83,11 @@ int XC::ArcLengthBase::sendSelf(CommParameters &cp)
   }
 
 
-int XC::ArcLengthBase::recvSelf(const CommParameters &cp)
+int XC::ArcLengthBase::recvSelf(const Communicator &comm)
   {
     inicComm(19);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -95,7 +95,7 @@ int XC::ArcLengthBase::recvSelf(const CommParameters &cp)
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

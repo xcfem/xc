@@ -92,8 +92,8 @@ class ShellNLDKGQ: public Shell4NBase
     //shape function routine for bending
     static void shapeBend(double ss, double tt, const double x[2][4], double sx[2][2], double shpBend[6][12]);
     
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public:
     ShellNLDKGQ(void);
@@ -129,8 +129,8 @@ class ShellNLDKGQ: public Shell4NBase
     const Vector &getResistingForceIncInertia(void) const;
 
     // public methods for element output
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
       
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
     int getResponse(int responseID, Information &eleInformation);

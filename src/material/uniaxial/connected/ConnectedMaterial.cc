@@ -87,20 +87,20 @@ XC::ConnectedMaterial &XC::ConnectedMaterial::operator=(const ConnectedMaterial 
 
 
 //! @brief Send its members through the channel being passed as parameter.
-int XC::ConnectedMaterial::sendData(CommParameters &cp)
+int XC::ConnectedMaterial::sendData(Communicator &comm)
   {
-    int res= UniaxialMaterial::sendData(cp);
-    res+= cp.sendMovable(theModels,getDbTagData(),CommMetaData(2));
+    int res= UniaxialMaterial::sendData(comm);
+    res+= comm.sendMovable(theModels,getDbTagData(),CommMetaData(2));
     if(res<0)
       std::cerr << "ConnectedMaterial::sendData -- failed to send.\n";
     return res;
   }
 
 //! @brief Receives its members through the channel being passed as parameter.
-int XC::ConnectedMaterial::recvData(const CommParameters &cp)
+int XC::ConnectedMaterial::recvData(const Communicator &comm)
   {
-    int res= UniaxialMaterial::recvData(cp);
-    res+= cp.receiveMovable(theModels,getDbTagData(),CommMetaData(2));
+    int res= UniaxialMaterial::recvData(comm);
+    res+= comm.receiveMovable(theModels,getDbTagData(),CommMetaData(2));
     if(res<0)
       std::cerr << "ConnectedMaterial::recvData -- failed to receive.\n";
     return res;

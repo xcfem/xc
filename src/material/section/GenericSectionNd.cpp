@@ -230,35 +230,35 @@ XC::SectionForceDeformation *XC::GenericSectionNd::getCopy(void) const
   { return new GenericSectionNd(*this); }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::GenericSectionNd::sendData(CommParameters &cp)
+int XC::GenericSectionNd::sendData(Communicator &comm)
   {
-    int res= SectionForceDeformation::sendData(cp);
+    int res= SectionForceDeformation::sendData(comm);
     setDbTagDataPos(5,order);
-    res+= cp.sendBrokedPtr(theModel,getDbTagData(),BrokedPtrCommMetaData(6,7,8));
-    res+= cp.sendIDPtr(code,getDbTagData(),ArrayCommMetaData(9,10,11));
+    res+= comm.sendBrokedPtr(theModel,getDbTagData(),BrokedPtrCommMetaData(6,7,8));
+    res+= comm.sendIDPtr(code,getDbTagData(),ArrayCommMetaData(9,10,11));
     return res;
   }
 
 //! @brief Receives object members through the channel
 //! being passed as parameter.
-int XC::GenericSectionNd::recvData(const CommParameters &cp)
+int XC::GenericSectionNd::recvData(const Communicator &comm)
   {
-    int res= SectionForceDeformation::recvData(cp);
+    int res= SectionForceDeformation::recvData(comm);
     order= getDbTagDataPos(5);
-    theModel= cp.getBrokedMaterial(theModel,getDbTagData(),BrokedPtrCommMetaData(6,7,8));
-    code= cp.receiveResponseIdPtr(code,getDbTagData(),ArrayCommMetaData(9,10,11));
+    theModel= comm.getBrokedMaterial(theModel,getDbTagData(),BrokedPtrCommMetaData(6,7,8));
+    code= comm.receiveResponseIdPtr(code,getDbTagData(),ArrayCommMetaData(9,10,11));
     return res;
   }
 
 //! @brief Sends the object
-int XC::GenericSectionNd::sendSelf(CommParameters &cp)
+int XC::GenericSectionNd::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(12);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data\n";
@@ -266,11 +266,11 @@ int XC::GenericSectionNd::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives the object.
-int XC::GenericSectionNd::recvSelf(const CommParameters &cp)
+int XC::GenericSectionNd::recvSelf(const Communicator &comm)
   {
     inicComm(12);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -278,7 +278,7 @@ int XC::GenericSectionNd::recvSelf(const CommParameters &cp)
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 	            << "; failed to receive data.\n";

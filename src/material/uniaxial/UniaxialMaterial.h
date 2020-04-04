@@ -95,8 +95,8 @@ class UniaxialMaterial: public Material
   private:
     double rho; //!< Linear mass density.
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     UniaxialMaterial(int tag, int classTag);
         
@@ -148,7 +148,7 @@ class UniaxialMaterial: public Material
     virtual int    commitSensitivity(double strainGradient, int gradNumber, int numGrads);
 // AddingSensitivity:END ///////////////////////////////////////////
   };
-UniaxialMaterial *receiveUniaxialMaterialPtr(UniaxialMaterial *,DbTagData &,const CommParameters &,const BrokedPtrCommMetaData &);
+UniaxialMaterial *receiveUniaxialMaterialPtr(UniaxialMaterial *,DbTagData &,const Communicator &,const BrokedPtrCommMetaData &);
 
 } // end of XC namespace
 

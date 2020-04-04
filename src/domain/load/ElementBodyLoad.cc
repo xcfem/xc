@@ -94,15 +94,15 @@ void XC::ElementBodyLoad::Print(std::ostream &s, int flag) const
   }
 
 //! @brief Send data through the channel being passed as parameter.
-int XC::ElementBodyLoad::sendData(CommParameters &cp)
+int XC::ElementBodyLoad::sendData(Communicator &comm)
   {
-    int res= ElementalLoad::sendData(cp);
+    int res= ElementalLoad::sendData(comm);
     return res;
   }
 
 //! @brief Receive data through the channel being passed as parameter.
-int XC::ElementBodyLoad::recvData(const CommParameters &cp)
+int XC::ElementBodyLoad::recvData(const Communicator &comm)
   {
-    int res= ElementalLoad::recvData(cp);
+    int res= ElementalLoad::recvData(comm);
     return res;
   }

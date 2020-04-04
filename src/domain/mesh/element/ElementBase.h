@@ -52,8 +52,8 @@ class ElementBase: public Element
     template <class TIPOMAT>
     TIPOMAT *cast_material(const Material *ptr_mat);
 
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
   public:
     ElementBase(int tag, int classTag);
@@ -138,19 +138,19 @@ TIPOMAT *ElementBase<NNODES>::cast_material(const Material *ptr_mat)
 
 //! @brief Send members through the channel being passed as parameter.
 template <int NNODES>
-int XC::ElementBase<NNODES>::sendData(CommParameters &cp)
+int XC::ElementBase<NNODES>::sendData(Communicator &comm)
   {
-    int res= Element::sendData(cp);
-    res+= cp.sendMovable(theNodes,getDbTagData(),CommMetaData(6));
+    int res= Element::sendData(comm);
+    res+= comm.sendMovable(theNodes,getDbTagData(),CommMetaData(6));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
 template <int NNODES>
-int XC::ElementBase<NNODES>::recvData(const CommParameters &cp)
+int XC::ElementBase<NNODES>::recvData(const Communicator &comm)
   {
-    int res= Element::recvData(cp);
-    res+= cp.receiveMovable(theNodes,getDbTagData(),CommMetaData(6));
+    int res= Element::recvData(comm);
+    res+= comm.receiveMovable(theNodes,getDbTagData(),CommMetaData(6));
     return res;
   }
 

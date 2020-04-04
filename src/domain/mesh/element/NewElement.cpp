@@ -172,10 +172,10 @@ const XC::Vector &XC::NewElement::getResistingForceIncInertia(void) const
   { return theVector; }
 
 
-int XC::NewElement::sendSelf(CommParameters &cp)
+int XC::NewElement::sendSelf(Communicator &comm)
   { return -1; }
 
-int XC::NewElement::recvSelf(const CommParameters &cp)
+int XC::NewElement::recvSelf(const Communicator &comm)
   { return -1; }
 
 

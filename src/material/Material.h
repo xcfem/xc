@@ -124,8 +124,8 @@ class Material: public TaggedObject, public MovableObject
 
   };
 
-int sendMaterialPtr(Material *,DbTagData &,CommParameters &cp,const BrokedPtrCommMetaData &);
-Material *receiveMaterialPtr(Material *,DbTagData &,const CommParameters &cp,const BrokedPtrCommMetaData &);
+int sendMaterialPtr(Material *,DbTagData &,Communicator &comm,const BrokedPtrCommMetaData &);
+Material *receiveMaterialPtr(Material *,DbTagData &,const Communicator &comm,const BrokedPtrCommMetaData &);
 
 } // end of XC namespace
 

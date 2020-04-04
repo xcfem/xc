@@ -931,10 +931,10 @@ const XC::Vector &XC::BeamColumnJoint3d::getResistingForceIncInertia(void) const
     return getResistingForce();
   }
 
-int XC::BeamColumnJoint3d::sendSelf(CommParameters &cp)
+int XC::BeamColumnJoint3d::sendSelf(Communicator &comm)
   { return -1; }
 
-int XC::BeamColumnJoint3d::recvSelf(const CommParameters &cp)
+int XC::BeamColumnJoint3d::recvSelf(const Communicator &comm)
   { return -1; }
 
 void XC::BeamColumnJoint3d::Print(std::ostream &s, int flag) const

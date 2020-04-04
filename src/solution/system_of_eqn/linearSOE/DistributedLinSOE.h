@@ -39,7 +39,7 @@ namespace XC {
 
 class ID;
 class Graph;
-class CommParameters;
+class Communicator;
 
 //! @ingroup SOE
 //
@@ -53,9 +53,9 @@ class DistributedLinSOE: public DistributedObj
     int getSubGraphs(Graph &);
     int sendSizeData(const ID &);
     void calcLocalMap(const int &);
-    int getSendID(CommParameters &);
-    int send(CommParameters &);
-    int receive(const CommParameters &);
+    int getSendID(Communicator &);
+    int send(Communicator &);
+    int receive(const Communicator &);
 
     DistributedLinSOE(void);
   public:

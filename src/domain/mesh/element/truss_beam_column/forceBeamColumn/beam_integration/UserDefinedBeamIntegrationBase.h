@@ -43,8 +43,8 @@ class UserDefinedBeamIntegrationBase: public BeamIntegration
   protected:
     Vector pts;
     Vector wts;
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     UserDefinedBeamIntegrationBase(int , const Vector &, const Vector &);
     UserDefinedBeamIntegrationBase(int , const Vector &);
@@ -56,8 +56,8 @@ class UserDefinedBeamIntegrationBase: public BeamIntegration
     int setParameter(const std::vector<std::string> &argv, Parameter &param);
     int updateParameter(int parameterID, Information &info);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
     void Print(std::ostream &s, int flag = 0) const;  
  };

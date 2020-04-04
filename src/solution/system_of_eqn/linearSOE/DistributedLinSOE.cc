@@ -47,11 +47,11 @@ XC::DistributedLinSOE::DistributedLinSOE(void)
 int XC::DistributedLinSOE::sendGraph(Graph &theGraph,ID &data)
   {
     int res= 0;
-    CommParameters cp(0,*theChannels[0]);
+    Communicator comm(0,*theChannels[0]);
     inicComm(3);
-    res+= cp.sendMovable(theGraph,getDbTagData(),CommMetaData(0));
+    res+= comm.sendMovable(theGraph,getDbTagData(),CommMetaData(0));
     
-    res+= cp.receiveID(data,getDbTagData(),CommMetaData(1));
+    res+= comm.receiveID(data,getDbTagData(),CommMetaData(1));
 
     ID subMap(theGraph.getNumVertex());
     localCol[0]= subMap;
@@ -60,7 +60,7 @@ int XC::DistributedLinSOE::sendGraph(Graph &theGraph,ID &data)
     int cnt = 0;
     while((vertex = theSubVertices()) != 0) 
       (subMap)(cnt++) = vertex->getTag();
-    res+= cp.sendID(subMap,getDbTagData(),CommMetaData(2));
+    res+= comm.sendID(subMap,getDbTagData(),CommMetaData(2));
     return res;
   }
 
@@ -72,11 +72,11 @@ int XC::DistributedLinSOE::getSubGraphs(Graph &theGraph)
     const int numChannels= theChannels.size();
     for(int j=0; j<numChannels; j++)
       {
-        CommParameters cp(0,*theChannels[j],theBroker);
+        Communicator comm(0,*theChannels[j],theBroker);
         inicComm(1);
 
         Graph theSubGraph;
-        cp.receiveMovable(theSubGraph,getDbTagData(),CommMetaData(0));//XXX assign position.
+        comm.receiveMovable(theSubGraph,getDbTagData(),CommMetaData(0));//XXX assign position.
         theGraph.merge(theSubGraph);
         const int numSubVertex= theSubGraph.getNumVertex();
         ID subMap(numSubVertex);
@@ -94,10 +94,10 @@ int XC::DistributedLinSOE::sendSizeData(const ID &data)
     const int numChannels= theChannels.size();
     for(int j=0; j<numChannels; j++)
       {
-        CommParameters cp(0,*theChannels[j],theBroker);
+        Communicator comm(0,*theChannels[j],theBroker);
         inicComm(3);
-        res+= cp.sendID(data,getDbTagData(),CommMetaData(1));
-        res+= cp.receiveID(localCol[j],getDbTagData(),CommMetaData(2));
+        res+= comm.sendID(data,getDbTagData(),CommMetaData(1));
+        res+= comm.receiveID(localCol[j],getDbTagData(),CommMetaData(2));
       }
     return res;
   }
@@ -116,7 +116,7 @@ void XC::DistributedLinSOE::calcLocalMap(const int &size)
       }
   }
 
-int XC::DistributedLinSOE::getSendID(CommParameters &cp)
+int XC::DistributedLinSOE::getSendID(Communicator &comm)
   {
     int retval =0;
 
@@ -127,13 +127,13 @@ int XC::DistributedLinSOE::getSendID(CommParameters &cp)
     if(processID == 0)
       {
         // check if already using this object
-        bool found= buscaCanal(cp,retval);
+        bool found= buscaCanal(comm,retval);
 
         // if new_ object, enlarge Channel pointers to hold new_ channel * & allocate new_ ID
         if(found == false)
           {
-            assert(cp.getChannel());
-            theChannels.push_back(cp.getChannel());
+            assert(comm.getChannel());
+            theChannels.push_back(comm.getChannel());
             const int numChannels= theChannels.size();
             localCol.resize(numChannels);
             // allocate new_ processID for remote object
@@ -145,14 +145,14 @@ int XC::DistributedLinSOE::getSendID(CommParameters &cp)
     return retval;
   }
 
-int XC::DistributedLinSOE::send(CommParameters &cp)
+int XC::DistributedLinSOE::send(Communicator &comm)
   {
-    const int sendID= getSendID(cp);
+    const int sendID= getSendID(comm);
 
     // send remotes processID
     ID idData(1);
     idData(0)= sendID;
-    int res= cp.sendID(idData,getDbTagData(),CommMetaData(0));//XXX assign position.
+    int res= comm.sendID(idData,getDbTagData(),CommMetaData(0));//XXX assign position.
     if(res < 0)
       {
         std::cerr << "DistributedLinSOE::" << __FUNCTION__
@@ -162,10 +162,10 @@ int XC::DistributedLinSOE::send(CommParameters &cp)
     return res;
   }
 
-int XC::DistributedLinSOE::receive(const CommParameters &cp)
+int XC::DistributedLinSOE::receive(const Communicator &comm)
   {
     ID idData(1);
-    int res= cp.receiveID(idData,getDbTagData(),CommMetaData(0));//XXX assign position.
+    int res= comm.receiveID(idData,getDbTagData(),CommMetaData(0));//XXX assign position.
     if(res < 0)
       {
         std::cerr << "DistributedLinSOE::" << __FUNCTION__
@@ -174,7 +174,7 @@ int XC::DistributedLinSOE::receive(const CommParameters &cp)
       }	      
     processID = idData(0);
 
-    theChannels.push_back(const_cast<CommParameters &>(cp).getChannel());
+    theChannels.push_back(const_cast<Communicator &>(comm).getChannel());
     const int numChannels= theChannels.size();
     localCol.resize(numChannels);
     return res;

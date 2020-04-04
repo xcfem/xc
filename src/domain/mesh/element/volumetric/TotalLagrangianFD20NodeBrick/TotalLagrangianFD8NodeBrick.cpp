@@ -1022,7 +1022,7 @@ const XC::Vector &XC::TotalLagrangianFD8NodeBrick::getResistingForceIncInertia(v
 
 //=============================================================================
 
-int XC::TotalLagrangianFD8NodeBrick::sendSelf(CommParameters &cp)
+int XC::TotalLagrangianFD8NodeBrick::sendSelf(Communicator &comm)
   {
      // Not implemtented yet
      return 0;
@@ -1031,7 +1031,7 @@ int XC::TotalLagrangianFD8NodeBrick::sendSelf(CommParameters &cp)
 
 //=============================================================================
 
-int XC::TotalLagrangianFD8NodeBrick::recvSelf(const CommParameters &cp)
+int XC::TotalLagrangianFD8NodeBrick::recvSelf(const Communicator &comm)
   {
      // Not implemtented yet
      return 0;

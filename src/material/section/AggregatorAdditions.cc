@@ -77,30 +77,30 @@ void XC::AggregatorAdditions::Print(std::ostream &s, int flag) const
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::AggregatorAdditions::sendData(CommParameters &cp)
+int XC::AggregatorAdditions::sendData(Communicator &comm)
   {
-    int res= DqUniaxialMaterial::sendData(cp);
-    res+= cp.sendID(matCodes,getDbTagData(),CommMetaData(2));
+    int res= DqUniaxialMaterial::sendData(comm);
+    res+= comm.sendID(matCodes,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::AggregatorAdditions::recvData(const CommParameters &cp)
+int XC::AggregatorAdditions::recvData(const Communicator &comm)
   {
-    int res= DqUniaxialMaterial::recvData(cp);
-    res+= cp.receiveID(matCodes,getDbTagData(),CommMetaData(2));
+    int res= DqUniaxialMaterial::recvData(comm);
+    res+= comm.receiveID(matCodes,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::AggregatorAdditions::sendSelf(CommParameters &cp)
+int XC::AggregatorAdditions::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(3);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data\n";
@@ -108,11 +108,11 @@ int XC::AggregatorAdditions::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::AggregatorAdditions::recvSelf(const CommParameters &cp)
+int XC::AggregatorAdditions::recvSelf(const Communicator &comm)
   {
     inicComm(3);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -120,7 +120,7 @@ int XC::AggregatorAdditions::recvSelf(const CommParameters &cp)
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

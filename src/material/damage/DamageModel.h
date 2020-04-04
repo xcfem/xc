@@ -129,8 +129,8 @@ class DamageModel:  public TaggedObject, public MovableObject
     virtual int getResponse(int responseID, Information &info) = 0;
     
     
-    virtual int sendSelf(CommParameters &) = 0;  
-    virtual int recvSelf(const CommParameters &) = 0;
+    virtual int sendSelf(Communicator &) = 0;  
+    virtual int recvSelf(const Communicator &) = 0;
     virtual void Print(std::ostream &s, int flag =0) const=0;
   };
 

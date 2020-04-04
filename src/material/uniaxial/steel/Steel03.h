@@ -113,8 +113,8 @@ class Steel03: public SteelBase0103
     void determineTrialState(double dStrain);
     double getR(double x_in);
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
     int setup_parameters(void);
   public:
     Steel03(int tag, double fy, double E0, double b, double r, double cR1, double cR2,
@@ -131,8 +131,8 @@ class Steel03: public SteelBase0103
 
     UniaxialMaterial *getCopy(void) const;
     
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag =0) const;
   };

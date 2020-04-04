@@ -86,8 +86,8 @@ class FrictionModel: public TaggedObject, public MovableObject
     double trialN;      // trial normal contact force
     double trialVel;    // trial velocity
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     // constructor
     FrictionModel(int tag, int classTag);

@@ -149,8 +149,8 @@ class Node: public MeshComponent
   protected:
 
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     // typedefs.
     typedef std::set<Element *> ElementPtrSet; //!< Container of element pointers.
@@ -325,8 +325,8 @@ class Node: public MeshComponent
     Vector getMaxModalAccelerationForDOFs(int mode,const double &,const boost::python::list &dofs) const;
 
     // public methods for output
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
 
     std::set<SetBase *> get_sets(void) const;
     void add_to_sets(std::set<SetBase *> &);

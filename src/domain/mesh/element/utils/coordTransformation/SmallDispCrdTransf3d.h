@@ -63,8 +63,8 @@ class SmallDispCrdTransf3d: public CrdTransf3d
 
     const Matrix &getInitialGlobalStiffMatrix(const Matrix &basicStiff) const;
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

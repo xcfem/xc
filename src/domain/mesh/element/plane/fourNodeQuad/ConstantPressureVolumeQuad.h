@@ -99,8 +99,8 @@ class ConstantPressureVolumeQuad: public QuadBase4N<NDMaterialPhysicalProperties
 		  Matrix &sx ) ;
 
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public :
     ConstantPressureVolumeQuad(void) ;
     ConstantPressureVolumeQuad(int tag, int node1,int node2,int node3,int node4, NDMaterial &theMaterial);
@@ -124,8 +124,8 @@ class ConstantPressureVolumeQuad: public QuadBase4N<NDMaterialPhysicalProperties
     const Vector &getResistingForce(void) const;
     const Vector &getResistingForceIncInertia(void) const;
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
 
     void Print( std::ostream &s, int flag ) const;
   }; 

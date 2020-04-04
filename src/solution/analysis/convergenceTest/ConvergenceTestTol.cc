@@ -59,47 +59,47 @@ double XC::ConvergenceTestTol::getTolerance(void) const
 
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::ConvergenceTestTol::sendData(CommParameters &cp)
+int XC::ConvergenceTestTol::sendData(Communicator &comm)
   {
-    int res= ConvergenceTest::sendData(cp);
-    res+= cp.sendDouble(tol,getDbTagData(),CommMetaData(3));
+    int res= ConvergenceTest::sendData(comm);
+    res+= comm.sendDouble(tol,getDbTagData(),CommMetaData(3));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::ConvergenceTestTol::recvData(const CommParameters &cp)
+int XC::ConvergenceTestTol::recvData(const Communicator &comm)
   {
-    int res= ConvergenceTest::recvData(cp);
-    res+= cp.receiveDouble(tol,getDbTagData(),CommMetaData(3));
+    int res= ConvergenceTest::recvData(comm);
+    res+= comm.receiveDouble(tol,getDbTagData(),CommMetaData(3));
     return res;
   }
 
-int XC::ConvergenceTestTol::sendSelf(CommParameters &cp)
+int XC::ConvergenceTestTol::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(4);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
 
-int XC::ConvergenceTestTol::recvSelf(const CommParameters &cp)
+int XC::ConvergenceTestTol::recvSelf(const Communicator &comm)
   {
     inicComm(4);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

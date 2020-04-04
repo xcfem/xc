@@ -102,10 +102,10 @@ const XC::ID &XC::SimpleNumberer::number(Graph &theGraph, int lastVertex)
   }
 
 
-int XC::SimpleNumberer::sendSelf(CommParameters &cp)
+int XC::SimpleNumberer::sendSelf(Communicator &comm)
   { return 0; }
 
-int XC::SimpleNumberer::recvSelf(const CommParameters &cp)
+int XC::SimpleNumberer::recvSelf(const Communicator &comm)
   { return 0; }
 
 const XC::ID &XC::SimpleNumberer::number(Graph &theGraph, const XC::ID &startVertices)

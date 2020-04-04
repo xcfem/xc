@@ -259,52 +259,52 @@ int XC::Concrete02::revertToStart(void)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::Concrete02::sendData(CommParameters &cp)
+int XC::Concrete02::sendData(Communicator &comm)
   {
-    int res= RawConcrete::sendData(cp);
-    res+= cp.sendDoubles(fpc,epsc0,fpcu,epscu,getDbTagData(),CommMetaData(2));
-    res+= cp.sendDoubles(rat,ft,Ets,hstvP.ecmin,hstvP.dept,getDbTagData(),CommMetaData(3));
-    res+= cp.sendDoubles(hstvP.eps,hstvP.sig,hstvP.e,hstv.ecmin,hstv.dept,hstv.sig,getDbTagData(),CommMetaData(4));
-    res+= cp.sendDoubles(hstv.e,hstv.eps,getDbTagData(),CommMetaData(5));
+    int res= RawConcrete::sendData(comm);
+    res+= comm.sendDoubles(fpc,epsc0,fpcu,epscu,getDbTagData(),CommMetaData(2));
+    res+= comm.sendDoubles(rat,ft,Ets,hstvP.ecmin,hstvP.dept,getDbTagData(),CommMetaData(3));
+    res+= comm.sendDoubles(hstvP.eps,hstvP.sig,hstvP.e,hstv.ecmin,hstv.dept,hstv.sig,getDbTagData(),CommMetaData(4));
+    res+= comm.sendDoubles(hstv.e,hstv.eps,getDbTagData(),CommMetaData(5));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::Concrete02::recvData(const CommParameters &cp)
+int XC::Concrete02::recvData(const Communicator &comm)
   {
-    int res= RawConcrete::recvData(cp);
-    res+= cp.receiveDoubles(fpc,epsc0,fpcu,epscu,getDbTagData(),CommMetaData(2));
-    res+= cp.receiveDoubles(rat,ft,Ets,hstvP.ecmin,hstvP.dept,getDbTagData(),CommMetaData(3));
-    res+= cp.receiveDoubles(hstvP.eps,hstvP.sig,hstvP.e,hstv.ecmin,hstv.dept,hstv.sig,getDbTagData(),CommMetaData(4));
-    res+= cp.receiveDoubles(hstv.e,hstv.eps,getDbTagData(),CommMetaData(5));
+    int res= RawConcrete::recvData(comm);
+    res+= comm.receiveDoubles(fpc,epsc0,fpcu,epscu,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveDoubles(rat,ft,Ets,hstvP.ecmin,hstvP.dept,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveDoubles(hstvP.eps,hstvP.sig,hstvP.e,hstv.ecmin,hstv.dept,hstv.sig,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveDoubles(hstv.e,hstv.eps,getDbTagData(),CommMetaData(5));
     return res;
   }
 
-int XC::Concrete02::sendSelf(CommParameters &cp)
+int XC::Concrete02::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(6);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
-int XC::Concrete02::recvSelf(const CommParameters &cp)
+int XC::Concrete02::recvSelf(const Communicator &comm)
   {
     inicComm(6);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

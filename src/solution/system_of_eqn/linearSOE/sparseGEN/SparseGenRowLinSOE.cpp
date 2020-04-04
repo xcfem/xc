@@ -228,9 +228,9 @@ XC::SparseGenRowLinSOE::addA(const XC::Matrix &m, const XC::ID &id, double fact)
 }
 
     
-int XC::SparseGenRowLinSOE::sendSelf(CommParameters &cp)
+int XC::SparseGenRowLinSOE::sendSelf(Communicator &comm)
   { return 0; }
 
-int XC::SparseGenRowLinSOE::recvSelf(const CommParameters &cp)  
+int XC::SparseGenRowLinSOE::recvSelf(const Communicator &comm)  
   { return 0; }
 

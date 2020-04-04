@@ -88,28 +88,28 @@ size_t XC::Beam2dPartialUniformLoad::getMomentVectorDimension(void) const
   { return 1; }
 
 //! @brief Send data through the channel being passed as parameter.
-int XC::Beam2dPartialUniformLoad::sendData(CommParameters &cp)
+int XC::Beam2dPartialUniformLoad::sendData(Communicator &comm)
   {
-    int res= BeamLoad::sendData(cp);
-    res+= cp.sendDoubles(aOverL,bOverL,getDbTagData(),CommMetaData(6));
+    int res= BeamLoad::sendData(comm);
+    res+= comm.sendDoubles(aOverL,bOverL,getDbTagData(),CommMetaData(6));
     return res;
   }
 
 //! @brief Receive data through the channel being passed as parameter.
-int XC::Beam2dPartialUniformLoad::recvData(const CommParameters &cp)
+int XC::Beam2dPartialUniformLoad::recvData(const Communicator &comm)
   {
-    int res= BeamLoad::recvData(cp);
-    res+= cp.receiveDoubles(aOverL,bOverL,getDbTagData(),CommMetaData(6));
+    int res= BeamLoad::recvData(comm);
+    res+= comm.receiveDoubles(aOverL,bOverL,getDbTagData(),CommMetaData(6));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::Beam2dPartialUniformLoad::sendSelf(XC::CommParameters &cp)
+int XC::Beam2dPartialUniformLoad::sendSelf(XC::Communicator &comm)
   {
     inicComm(7);
-    int result= sendData(cp);
+    int result= sendData(comm);
     const int dbTag= getDbTag();
-    result+= cp.sendIdData(getDbTagData(),dbTag);
+    result+= comm.sendIdData(getDbTagData(),dbTag);
     if(result < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; failed to send extra data\n";
@@ -117,16 +117,16 @@ int XC::Beam2dPartialUniformLoad::sendSelf(XC::CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::Beam2dPartialUniformLoad::recvSelf(const CommParameters &cp)
+int XC::Beam2dPartialUniformLoad::recvSelf(const Communicator &comm)
   {
     inicComm(7);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; data could not be received\n" ;
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

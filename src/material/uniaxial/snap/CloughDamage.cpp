@@ -303,14 +303,14 @@ double XC::CloughDamage::getStrain(void) const
 }
 
 
-int XC::CloughDamage::recvSelf(const CommParameters &cp)
+int XC::CloughDamage::recvSelf(const Communicator &comm)
 {
         if ( DEBG ==1 ) fprintf( OutputFile , "Receive self\n" );        // debugging
         return 0;
 }
 
 
-int XC::CloughDamage::sendSelf(CommParameters &cp)
+int XC::CloughDamage::sendSelf(Communicator &comm)
 {
         if ( DEBG ==1 ) fprintf( OutputFile , "Send self\n" );        // debugging
         return 0;

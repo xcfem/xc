@@ -47,8 +47,8 @@ class SteelBase: public UniaxialMaterial
     double a3;  //!< coefficient for isotropic hardening in tension
     double a4;  //!< coefficient for isotropic hardening in tension
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     virtual int setup_parameters(void)= 0;    
   public:

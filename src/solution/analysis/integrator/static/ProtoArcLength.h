@@ -51,8 +51,8 @@ class ProtoArcLength: public StaticIntegrator
 
     virtual double getDLambdaNewStep(void) const= 0;
     virtual double getDLambdaUpdate(void) const= 0;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     ProtoArcLength(AnalysisAggregation *,int classTag,double ArcLength);
   public:
@@ -61,8 +61,8 @@ class ProtoArcLength: public StaticIntegrator
     int update(const Vector &deltaU);
     int domainChanged(void);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

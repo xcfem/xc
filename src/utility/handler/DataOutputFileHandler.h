@@ -70,8 +70,8 @@ class DataOutputFileHandler: public DataOutputHandler
     openMode theOpenMode;
     int numColumns;
   protected:
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
   public:
     DataOutputFileHandler(const std::string &fileName =0, echoMode = NONE, openMode mode = OVERWRITE);
@@ -79,8 +79,8 @@ class DataOutputFileHandler: public DataOutputHandler
     int open(const std::vector<std::string> &dataDescription);
     int write(Vector &data);
 
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

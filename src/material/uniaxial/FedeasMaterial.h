@@ -87,8 +87,8 @@ class FedeasMaterial: public UniaxialMaterial
     UniaxialStateVars converged; //!< Committed state
     UniaxialStateVars trial; //!< Trial state
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     FedeasMaterial(int tag, int classTag, int numHV, int numData);
     virtual ~FedeasMaterial(void);
@@ -103,8 +103,8 @@ class FedeasMaterial: public UniaxialMaterial
     virtual int revertToLastCommit(void);    
     virtual int revertToStart(void);
   
-    virtual int sendSelf(CommParameters &);  
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);  
+    virtual int recvSelf(const Communicator &);
   
     virtual void Print(std::ostream &s, int flag = 0) const;
   };

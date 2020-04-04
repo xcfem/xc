@@ -161,24 +161,24 @@ int XC::SteelBase0103::revertToStart(void)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::SteelBase0103::sendData(CommParameters &cp)
+int XC::SteelBase0103::sendData(Communicator &comm)
   {
-    int res= SteelBase::sendData(cp);
-    res+= cp.sendDoubles(Cstrain,Cstress,Ctangent,Tstrain,Tstress,Ttangent,getDbTagData(),CommMetaData(4));
-    res+= cp.sendDoubles(CminStrain,CmaxStrain,CshiftP,CshiftN,getDbTagData(),CommMetaData(5));
-    res+= cp.sendInts(Cloading,Tloading,getDbTagData(),CommMetaData(6));
-    res+= cp.sendDoubles(TminStrain,TmaxStrain,TshiftP,TshiftN,getDbTagData(),CommMetaData(7));
+    int res= SteelBase::sendData(comm);
+    res+= comm.sendDoubles(Cstrain,Cstress,Ctangent,Tstrain,Tstress,Ttangent,getDbTagData(),CommMetaData(4));
+    res+= comm.sendDoubles(CminStrain,CmaxStrain,CshiftP,CshiftN,getDbTagData(),CommMetaData(5));
+    res+= comm.sendInts(Cloading,Tloading,getDbTagData(),CommMetaData(6));
+    res+= comm.sendDoubles(TminStrain,TmaxStrain,TshiftP,TshiftN,getDbTagData(),CommMetaData(7));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::SteelBase0103::recvData(const CommParameters &cp)
+int XC::SteelBase0103::recvData(const Communicator &comm)
   {
-    int res= SteelBase::recvData(cp);
-    res+= cp.receiveDoubles(Cstrain,Cstress,Ctangent,Tstrain,Tstress,Ttangent,getDbTagData(),CommMetaData(4));
-    res+= cp.receiveDoubles(CminStrain,CmaxStrain,CshiftP,CshiftN,getDbTagData(),CommMetaData(5));
-    res+= cp.receiveInts(Cloading,Tloading,getDbTagData(),CommMetaData(6));
-    res+= cp.receiveDoubles(TminStrain,TmaxStrain,TshiftP,TshiftN,getDbTagData(),CommMetaData(7));
+    int res= SteelBase::recvData(comm);
+    res+= comm.receiveDoubles(Cstrain,Cstress,Ctangent,Tstrain,Tstress,Ttangent,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveDoubles(CminStrain,CmaxStrain,CshiftP,CshiftN,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveInts(Cloading,Tloading,getDbTagData(),CommMetaData(6));
+    res+= comm.receiveDoubles(TminStrain,TmaxStrain,TshiftP,TshiftN,getDbTagData(),CommMetaData(7));
     return res;
   }
 

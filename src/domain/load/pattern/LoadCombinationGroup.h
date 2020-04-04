@@ -51,8 +51,8 @@ class LoadCombinationGroup: public LoadHandlerMember, public LoadCombinationMap
     friend class LoadHandler;
 
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
   public:
     LoadCombinationGroup(LoadHandler *owr);
@@ -78,8 +78,8 @@ class LoadCombinationGroup: public LoadHandlerMember, public LoadCombinationMap
     const std::string getNombreCombPrevia(const std::string &) const;
     int getTagCombPrevia(const std::string &) const;
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 
 } // end of XC namespace

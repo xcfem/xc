@@ -92,8 +92,8 @@ class MinUnbalDispNorm: public DispBase
   protected:
     double getDLambdaNewStep(void) const;
     double getDLambdaUpdate(void) const;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
 
     friend class AnalysisAggregation;
@@ -107,8 +107,8 @@ class MinUnbalDispNorm: public DispBase
     int update(const Vector &deltaU);
     int domainChanged(void);
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
   };
 } // end of XC namespace

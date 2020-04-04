@@ -123,8 +123,8 @@ class TwentyEightNodeBrickUP: public ElemWithMaterial<20,NDMaterialPhysicalPrope
     void Jacobian3d(int gaussPoint, double& xsj, int mode) const;
     const Matrix &getStiff( int flag) const;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public :
     //null constructor
     TwentyEightNodeBrickUP( ) ;
@@ -181,8 +181,8 @@ class TwentyEightNodeBrickUP: public ElemWithMaterial<20,NDMaterialPhysicalPrope
     const Vector &getResistingForce(void) const;
     const Vector &getResistingForceIncInertia(void) const;
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
 
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
     int getResponse(int responseID, Information &eleInformation);

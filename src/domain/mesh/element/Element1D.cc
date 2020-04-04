@@ -678,7 +678,7 @@ double XC::Element1D::getDist(const Pos3d &p,bool initialGeometry) const
   }
 
 //! @brief Send the coordinate transformation through the channel being passed as parameter.
-int XC::Element1D::sendCoordTransf(int posFlag,const int &posClassTag,const int &posDbTag,CommParameters &cp)
+int XC::Element1D::sendCoordTransf(int posFlag,const int &posClassTag,const int &posDbTag,Communicator &comm)
   {
     int retval= 0;
     CrdTransf *ptr= getCoordTransf();
@@ -689,13 +689,13 @@ int XC::Element1D::sendCoordTransf(int posFlag,const int &posClassTag,const int 
       {
         setDbTagDataPos(posFlag,0);
         setDbTagDataPos(posClassTag,ptr->getClassTag());
-        cp.sendMovable(*ptr,dt,CommMetaData(posDbTag));
+        comm.sendMovable(*ptr,dt,CommMetaData(posDbTag));
       }
     return retval;
   }
 
 //! @brief Receives the coordinate transformation through the channel being passed as parameter.
-XC::CrdTransf *XC::Element1D::recvCoordTransf(int posFlag,const int &posClassTag,const int &posDbTag,const CommParameters &cp)
+XC::CrdTransf *XC::Element1D::recvCoordTransf(int posFlag,const int &posClassTag,const int &posDbTag,const Communicator &comm)
   {
     CrdTransf *ptr= getCoordTransf();
     DbTagData &dt= getDbTagData();
@@ -704,14 +704,14 @@ XC::CrdTransf *XC::Element1D::recvCoordTransf(int posFlag,const int &posClassTag
         // make some room and read in the vector
         if(!ptr)
           {
-            ptr= cp.getNewCrdTransf(getDbTagDataPos(posClassTag));
+            ptr= comm.getNewCrdTransf(getDbTagDataPos(posClassTag));
             if(!ptr)
               std::cerr << getClassName() << "::" << __FUNCTION__
 			<< "; ran out of memory\n";
           }
         if(ptr)
           {
-            int res= cp.receiveMovable(*ptr,dt,CommMetaData(posDbTag));
+            int res= comm.receiveMovable(*ptr,dt,CommMetaData(posDbTag));
             ptr->revertToLastCommit();// Revert the crdtrasf to its last committed state
             if(res<0)
               std::cerr << getClassName() << "::" << __FUNCTION__
@@ -722,10 +722,10 @@ XC::CrdTransf *XC::Element1D::recvCoordTransf(int posFlag,const int &posClassTag
   }
 
 //! @brief Receive a 2D coordinate transformation through the channel being passed as parameter.
-XC::CrdTransf2d *XC::Element1D::recvCoordTransf2d(int posFlag,const int &posClassTag,const int &posDbTag,const CommParameters &cp)
+XC::CrdTransf2d *XC::Element1D::recvCoordTransf2d(int posFlag,const int &posClassTag,const int &posDbTag,const Communicator &comm)
   {
     CrdTransf2d *retval= nullptr;
-    CrdTransf *tmp= recvCoordTransf(posFlag,posClassTag,posDbTag,cp);
+    CrdTransf *tmp= recvCoordTransf(posFlag,posClassTag,posDbTag,comm);
     if(tmp)
       {
         retval= dynamic_cast<CrdTransf2d *>(tmp);
@@ -741,10 +741,10 @@ XC::CrdTransf2d *XC::Element1D::recvCoordTransf2d(int posFlag,const int &posClas
   }
 
 //! @brief Receive a 3D coordinate transformation through the channel being passed as parameter.
-XC::CrdTransf3d *XC::Element1D::recvCoordTransf3d(int posFlag,const int &posClassTag,const int &posDbTag,const CommParameters &cp)
+XC::CrdTransf3d *XC::Element1D::recvCoordTransf3d(int posFlag,const int &posClassTag,const int &posDbTag,const Communicator &comm)
   {
     CrdTransf3d *retval= nullptr;
-    CrdTransf *tmp= recvCoordTransf(posFlag,posClassTag,posDbTag,cp);
+    CrdTransf *tmp= recvCoordTransf(posFlag,posClassTag,posDbTag,comm);
     if(tmp)
       {
         retval= dynamic_cast<CrdTransf3d *>(tmp);

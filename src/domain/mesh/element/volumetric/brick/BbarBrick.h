@@ -87,8 +87,8 @@ class BbarBrick: public BrickBase
    const Matrix& computeBbar(int node, const double shp[4][8], const double shpBar[4][8]) const;
    Matrix transpose( int dim1, int dim2, const Matrix &M ) ;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public :  
     //null constructor
     BbarBrick( ) ;
@@ -128,8 +128,8 @@ class BbarBrick: public BrickBase
     const Vector &getResistingForce(void) const;
     const Vector &getResistingForceIncInertia(void) const;
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
       
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
     int getResponse(int responseID, Information &eleInformation);

@@ -116,8 +116,8 @@ class ShadowPetscSOE: public LinearSOE
 
     int setSolver(PetscSolver &);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 inline SystemOfEqn *ShadowPetscSOE::getCopy(void) const
   { return new ShadowPetscSOE(*this); }

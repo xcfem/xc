@@ -87,8 +87,8 @@ class HHTHybridSimulation: public HHTBase
     ConvergenceTest *theTest; //!< convergence test
     double rFact; //!< displacement increment reduction factor
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     friend class AnalysisAggregation;
     HHTHybridSimulation(AnalysisAggregation *);
@@ -112,8 +112,8 @@ class HHTHybridSimulation: public HHTBase
     int update(const Vector &deltaU);
     int commit(void);
     
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag = 0) const;
   };

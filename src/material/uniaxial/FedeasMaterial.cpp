@@ -193,57 +193,57 @@ int XC::FedeasMaterial::revertToStart(void)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::FedeasMaterial::sendData(CommParameters &cp)
+int XC::FedeasMaterial::sendData(Communicator &comm)
   {
-    int res= UniaxialMaterial::sendData(cp);
+    int res= UniaxialMaterial::sendData(comm);
     setDbTagDataPos(4,numData);
-    res+= cp.sendDoublePtr(matParams,getDbTagData(),ArrayCommMetaData(2,3,4));
+    res+= comm.sendDoublePtr(matParams,getDbTagData(),ArrayCommMetaData(2,3,4));
     setDbTagDataPos(7,numHstv);
-    res+= cp.sendDoublePtr(hstv,getDbTagData(),ArrayCommMetaData(5,6,7));
-    res+= cp.sendMovable(converged,getDbTagData(),CommMetaData(8));
-    res+= cp.sendMovable(trial,getDbTagData(),CommMetaData(9));
+    res+= comm.sendDoublePtr(hstv,getDbTagData(),ArrayCommMetaData(5,6,7));
+    res+= comm.sendMovable(converged,getDbTagData(),CommMetaData(8));
+    res+= comm.sendMovable(trial,getDbTagData(),CommMetaData(9));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::FedeasMaterial::recvData(const CommParameters &cp)
+int XC::FedeasMaterial::recvData(const Communicator &comm)
   {
-    int res= UniaxialMaterial::recvData(cp);
+    int res= UniaxialMaterial::recvData(comm);
     numData= getDbTagDataPos(4);
-    matParams= cp.receiveDoublePtr(matParams,getDbTagData(),ArrayCommMetaData(2,3,4));
+    matParams= comm.receiveDoublePtr(matParams,getDbTagData(),ArrayCommMetaData(2,3,4));
     numHstv= getDbTagDataPos(7);
-    hstv= cp.receiveDoublePtr(hstv,getDbTagData(),ArrayCommMetaData(5,6,7));
-    res+= cp.receiveMovable(converged,getDbTagData(),CommMetaData(8));
-    res+= cp.receiveMovable(trial,getDbTagData(),CommMetaData(9));
+    hstv= comm.receiveDoublePtr(hstv,getDbTagData(),ArrayCommMetaData(5,6,7));
+    res+= comm.receiveMovable(converged,getDbTagData(),CommMetaData(8));
+    res+= comm.receiveMovable(trial,getDbTagData(),CommMetaData(9));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::FedeasMaterial::sendSelf(CommParameters &cp)
+int XC::FedeasMaterial::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(10); 
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "FedeasMaterial::sendSelf - failed to send data.\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::FedeasMaterial::recvSelf(const CommParameters &cp)
+int XC::FedeasMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(10);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "FedeasMaterial::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
            std::cerr << "FedeasMaterial::recvSelf - failed to receive data.\n";
       }

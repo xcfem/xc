@@ -3044,14 +3044,14 @@ const XC::Vector &XC::EightNodeBrick::getResistingForceIncInertia(void) const
   }
 
 //=============================================================================
-int XC::EightNodeBrick::sendSelf(CommParameters &cp)
+int XC::EightNodeBrick::sendSelf(Communicator &comm)
 {
      // Not implemtented yet
      return 0;
 }
 
 //=============================================================================
-int XC::EightNodeBrick::recvSelf(const CommParameters &cp)
+int XC::EightNodeBrick::recvSelf(const Communicator &comm)
 {
      // Not implemtented yet
      return 0;

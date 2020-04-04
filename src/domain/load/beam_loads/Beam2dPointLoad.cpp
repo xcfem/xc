@@ -335,28 +335,28 @@ void XC::Beam2dPointLoad::addElasticDeformations(const double &L,const CrossSect
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::Beam2dPointLoad::sendSelf(CommParameters &cp)
+int XC::Beam2dPointLoad::sendSelf(Communicator &comm)
   {
     inicComm(7);
-    int result= sendData(cp);
+    int result= sendData(comm);
 
     const int dbTag= getDbTag();
-    result+= cp.sendIdData(getDbTagData(),dbTag);
+    result+= comm.sendIdData(getDbTagData(),dbTag);
     if(result < 0)
       std::cerr << "Beam2dPointLoad::sendSelf() - failed to send extra data\n";
     return result;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::Beam2dPointLoad::recvSelf(const CommParameters &cp)
+int XC::Beam2dPointLoad::recvSelf(const Communicator &comm)
   {
     inicComm(7);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "Beam2dPointLoad::recvSelf() - data could not be received\n" ;
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

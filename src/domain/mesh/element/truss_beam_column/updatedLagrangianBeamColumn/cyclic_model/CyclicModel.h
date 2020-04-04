@@ -73,9 +73,9 @@ class CyclicModel: public TaggedObject, public MovableObject
 	
     virtual double getFactor(void) const;
     // for now ignore
-    virtual int sendSelf(CommParameters &)
+    virtual int sendSelf(Communicator &)
       {return -1;}
-    virtual int recvSelf(const CommParameters &)
+    virtual int recvSelf(const Communicator &)
       {return -1;}
     virtual void Print(std::ostream &s, int flag=0) const;
   protected:

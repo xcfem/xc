@@ -121,8 +121,8 @@ class EnhancedQuad: public QuadBase4N<NDMaterialPhysicalProperties>
 
     bool check_material_type(const std::string &type) const;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
 
   //full constructor
@@ -158,7 +158,7 @@ class EnhancedQuad: public QuadBase4N<NDMaterialPhysicalProperties>
     const Vector &getResistingForce(void) const;
     const Vector &getResistingForceIncInertia(void) const;
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
   }; 
 } // end of XC namespace

@@ -53,8 +53,8 @@ class NodeRecorderBase: public MeshCompRecorder
     int numValidNodes;
 
   protected:
-    int sendData(CommParameters &);  
-    int receiveData(const CommParameters &);
+    int sendData(Communicator &);  
+    int receiveData(const Communicator &);
 
   public:
     NodeRecorderBase(int classTag);

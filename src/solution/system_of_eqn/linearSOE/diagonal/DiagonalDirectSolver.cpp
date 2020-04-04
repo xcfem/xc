@@ -191,12 +191,12 @@ int XC::DiagonalDirectSolver::setDiagonalSOE(DiagonalSOE &theNewSOE)
 }
 
 
-int XC::DiagonalDirectSolver::sendSelf(CommParameters &cp)
-  { return cp.sendDouble(minDiagTol,getDbTagData(),CommMetaData(0)); }
+int XC::DiagonalDirectSolver::sendSelf(Communicator &comm)
+  { return comm.sendDouble(minDiagTol,getDbTagData(),CommMetaData(0)); }
 
 
-int XC::DiagonalDirectSolver::recvSelf(const CommParameters &cp)
-  { return cp.receiveDouble(minDiagTol,getDbTagData(),CommMetaData(0)); }
+int XC::DiagonalDirectSolver::recvSelf(const Communicator &comm)
+  { return comm.receiveDouble(minDiagTol,getDbTagData(),CommMetaData(0)); }
 
 
 

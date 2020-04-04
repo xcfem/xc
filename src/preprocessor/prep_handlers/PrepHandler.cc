@@ -40,7 +40,7 @@ XC::PrepHandler::PrepHandler(Preprocessor *owr)
   {}
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::PrepHandler::sendSelf(CommParameters &cp)
+int XC::PrepHandler::sendSelf(Communicator &comm)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not implemented.\n";    
@@ -49,7 +49,7 @@ int XC::PrepHandler::sendSelf(CommParameters &cp)
 
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::PrepHandler::recvSelf(const CommParameters &cp)
+int XC::PrepHandler::recvSelf(const Communicator &comm)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not implemented.\n";    

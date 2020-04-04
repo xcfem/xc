@@ -1932,21 +1932,21 @@ XC::CrdTransf3d *XC::CorotCrdTransf3d::getCopy(void) const
   { return new CorotCrdTransf3d(*this); }
 
 //! @brief Sends object members through the channel being passed as parameter.
-int XC::CorotCrdTransf3d::sendData(CommParameters &cp)
+int XC::CorotCrdTransf3d::sendData(Communicator &comm)
   {
-    int res= CrdTransf3d::sendData(cp);
-    res+=cp.sendVector(vAxis,getDbTagData(),CommMetaData(10));
-    res+=cp.sendVector(xAxis,getDbTagData(),CommMetaData(11));
-    res+= cp.sendDouble(Ln,getDbTagData(),CommMetaData(12));;
-    res+=cp.sendVector(alphaIq,getDbTagData(),CommMetaData(13));
-    res+=cp.sendVector(alphaJq,getDbTagData(),CommMetaData(14));
-    res+=cp.sendVector(alphaIqcommit,getDbTagData(),CommMetaData(15));
-    res+=cp.sendVector(alphaJqcommit,getDbTagData(),CommMetaData(16));
-    res+=cp.sendVector(alphaI,getDbTagData(),CommMetaData(17));
-    res+=cp.sendVector(alphaJ,getDbTagData(),CommMetaData(18));
-    res+=cp.sendVector(ul,getDbTagData(),CommMetaData(19));
-    res+=cp.sendVector(ulcommit,getDbTagData(),CommMetaData(20));
-    res+=cp.sendVector(ulpr,getDbTagData(),CommMetaData(21));
+    int res= CrdTransf3d::sendData(comm);
+    res+=comm.sendVector(vAxis,getDbTagData(),CommMetaData(10));
+    res+=comm.sendVector(xAxis,getDbTagData(),CommMetaData(11));
+    res+= comm.sendDouble(Ln,getDbTagData(),CommMetaData(12));;
+    res+=comm.sendVector(alphaIq,getDbTagData(),CommMetaData(13));
+    res+=comm.sendVector(alphaJq,getDbTagData(),CommMetaData(14));
+    res+=comm.sendVector(alphaIqcommit,getDbTagData(),CommMetaData(15));
+    res+=comm.sendVector(alphaJqcommit,getDbTagData(),CommMetaData(16));
+    res+=comm.sendVector(alphaI,getDbTagData(),CommMetaData(17));
+    res+=comm.sendVector(alphaJ,getDbTagData(),CommMetaData(18));
+    res+=comm.sendVector(ul,getDbTagData(),CommMetaData(19));
+    res+=comm.sendVector(ulcommit,getDbTagData(),CommMetaData(20));
+    res+=comm.sendVector(ulpr,getDbTagData(),CommMetaData(21));
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -1955,34 +1955,34 @@ int XC::CorotCrdTransf3d::sendData(CommParameters &cp)
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::CorotCrdTransf3d::recvData(const CommParameters &cp)
+int XC::CorotCrdTransf3d::recvData(const Communicator &comm)
   {
-    int res= CrdTransf3d::recvData(cp);
-    res+= cp.receiveVector(vAxis,getDbTagData(),CommMetaData(10));
-    res+= cp.receiveVector(xAxis,getDbTagData(),CommMetaData(11));
-    res+= cp.receiveDouble(Ln,getDbTagData(),CommMetaData(12));
-    res+= cp.receiveVector(alphaIq,getDbTagData(),CommMetaData(13));
-    res+= cp.receiveVector(alphaJq,getDbTagData(),CommMetaData(14));
-    res+= cp.receiveVector(alphaIqcommit,getDbTagData(),CommMetaData(15));
-    res+= cp.receiveVector(alphaJqcommit,getDbTagData(),CommMetaData(16));
-    res+= cp.receiveVector(alphaI,getDbTagData(),CommMetaData(17));
-    res+= cp.receiveVector(alphaJ,getDbTagData(),CommMetaData(18));
-    res+= cp.receiveVector(ul,getDbTagData(),CommMetaData(19));
-    res+= cp.receiveVector(ulcommit,getDbTagData(),CommMetaData(20));
-    res+= cp.receiveVector(ulpr,getDbTagData(),CommMetaData(21));
+    int res= CrdTransf3d::recvData(comm);
+    res+= comm.receiveVector(vAxis,getDbTagData(),CommMetaData(10));
+    res+= comm.receiveVector(xAxis,getDbTagData(),CommMetaData(11));
+    res+= comm.receiveDouble(Ln,getDbTagData(),CommMetaData(12));
+    res+= comm.receiveVector(alphaIq,getDbTagData(),CommMetaData(13));
+    res+= comm.receiveVector(alphaJq,getDbTagData(),CommMetaData(14));
+    res+= comm.receiveVector(alphaIqcommit,getDbTagData(),CommMetaData(15));
+    res+= comm.receiveVector(alphaJqcommit,getDbTagData(),CommMetaData(16));
+    res+= comm.receiveVector(alphaI,getDbTagData(),CommMetaData(17));
+    res+= comm.receiveVector(alphaJ,getDbTagData(),CommMetaData(18));
+    res+= comm.receiveVector(ul,getDbTagData(),CommMetaData(19));
+    res+= comm.receiveVector(ulcommit,getDbTagData(),CommMetaData(20));
+    res+= comm.receiveVector(ulpr,getDbTagData(),CommMetaData(21));
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to receive data.\n";
     return res;
   }
 
-int XC::CorotCrdTransf3d::sendSelf(CommParameters &cp)
+int XC::CorotCrdTransf3d::sendSelf(Communicator &comm)
   {
     static ID data(22);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
     const int dataTag= getDbTag();
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send ID.\n";
@@ -1990,16 +1990,16 @@ int XC::CorotCrdTransf3d::sendSelf(CommParameters &cp)
   }
 
 
-int XC::CorotCrdTransf3d::recvSelf(const CommParameters &cp)
+int XC::CorotCrdTransf3d::recvSelf(const Communicator &comm)
   {
     static ID data(22);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; data could not be received\n" ;
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;            
   }
 

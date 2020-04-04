@@ -43,8 +43,8 @@ class PlasticLengthsBeamIntegration: public BeamIntegration
     double lpI;
     double lpJ;
     int parameterID;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     PlasticLengthsBeamIntegration(int classTag,double lpI, double lpJ);
     PlasticLengthsBeamIntegration(int classTag);
@@ -53,8 +53,8 @@ class PlasticLengthsBeamIntegration: public BeamIntegration
     int updateParameter(int parameterID, Information &info);
     int activateParameter(int parameterID);
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
     void Print(std::ostream &,int) const;
   };

@@ -69,8 +69,8 @@ class BeamColumnWithSectionFDTrf3d: public BeamColumnWithSectionFD
   protected:
     CrdTransf3d *theCoordTransf;
 
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
     void set_transf(const CrdTransf *trf);
   public:

@@ -47,8 +47,8 @@ class ConnectedMaterial: public UniaxialMaterial
     ConnectedMaterial(const ConnectedMaterial &);
     ConnectedMaterial &operator=(const ConnectedMaterial &);
 
-    int sendData(CommParameters &);  
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);  
+    int recvData(const Communicator &);
   };
 } // end of XC namespace
 

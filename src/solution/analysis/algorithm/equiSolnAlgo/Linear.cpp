@@ -158,11 +158,11 @@ int XC::Linear::setConvergenceTest(ConvergenceTest *theNewTest)
   { return 0; }
 
 //! Does  nothing. Returns 0.
-int XC::Linear::sendSelf(CommParameters &cp)
+int XC::Linear::sendSelf(Communicator &comm)
   { return 0; }
 
 //! Does nothing. Returns 0.
-int XC::Linear::recvSelf(const CommParameters &cp)
+int XC::Linear::recvSelf(const Communicator &comm)
   { return 0; }
 
 

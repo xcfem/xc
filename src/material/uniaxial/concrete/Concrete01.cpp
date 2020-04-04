@@ -374,53 +374,53 @@ XC::UniaxialMaterial* XC::Concrete01::getCopy(void) const
   { return new Concrete01(*this); }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::Concrete01::sendData(CommParameters &cp)
+int XC::Concrete01::sendData(Communicator &comm)
   {
-    int res= ConcreteBase::sendData(cp);
+    int res= ConcreteBase::sendData(comm);
     const double PI= parameterID;
-    res+= cp.sendDoubles(fpcu,PI,getDbTagData(),CommMetaData(7));
-    res+= cp.sendMatrix(SHVs,getDbTagData(),CommMetaData(8));
+    res+= comm.sendDoubles(fpcu,PI,getDbTagData(),CommMetaData(7));
+    res+= comm.sendMatrix(SHVs,getDbTagData(),CommMetaData(8));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::Concrete01::recvData(const CommParameters &cp)
+int XC::Concrete01::recvData(const Communicator &comm)
   {
-    int res= ConcreteBase::recvData(cp);
+    int res= ConcreteBase::recvData(comm);
     double PI;
-    res+= cp.receiveDoubles(fpcu,PI,getDbTagData(),CommMetaData(7));
+    res+= comm.receiveDoubles(fpcu,PI,getDbTagData(),CommMetaData(7));
     parameterID= PI;
-    res+= cp.receiveMatrix(SHVs,getDbTagData(),CommMetaData(8));
+    res+= comm.receiveMatrix(SHVs,getDbTagData(),CommMetaData(8));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::Concrete01::sendSelf(CommParameters &cp)
+int XC::Concrete01::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(12);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::Concrete01::recvSelf(const CommParameters &cp)
+int XC::Concrete01::recvSelf(const Communicator &comm)
   {
     inicComm(12);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

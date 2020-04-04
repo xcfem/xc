@@ -88,8 +88,8 @@ class PlainHandler: public ConstraintHandler
   public:
     int handle(const ID *nodesNumberedLast =0);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

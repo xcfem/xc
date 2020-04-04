@@ -63,8 +63,8 @@ class BandArpackppSolver: public EigenSolver
     virtual const Vector &getEigenvector(int mode) const;
     virtual const double &getEigenvalue(int mode) const;
   
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 
 inline EigenSolver *BandArpackppSolver::getCopy(void) const

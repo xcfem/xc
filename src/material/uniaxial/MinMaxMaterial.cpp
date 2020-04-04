@@ -145,32 +145,32 @@ int XC::MinMaxMaterial::revertToStart(void)
 XC::UniaxialMaterial *XC::MinMaxMaterial::getCopy(void) const
   { return new MinMaxMaterial(*this); }
 
-int XC::MinMaxMaterial::sendSelf(CommParameters &cp)
+int XC::MinMaxMaterial::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(6); 
-    int res= EncapsulatedMaterial::sendData(cp);
-    res+= cp.sendDoubles(minStrain,maxStrain,getDbTagData(),CommMetaData(4));
+    int res= EncapsulatedMaterial::sendData(comm);
+    res+= comm.sendDoubles(minStrain,maxStrain,getDbTagData(),CommMetaData(4));
     setDbTagDataPos(5,Cfailed);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "MinMaxMaterial::sendSelf() - failed to send the XC::ID\n";
     return res;
   }
 
-int XC::MinMaxMaterial::recvSelf(const CommParameters &cp)
+int XC::MinMaxMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(6);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "MinMaxMaterial::recvSelf() - failed to get the ID\n";
     else
       {
-        res+= EncapsulatedMaterial::recvData(cp);
-        res+= cp.receiveDoubles(minStrain,maxStrain,getDbTagData(),CommMetaData(4));
+        res+= EncapsulatedMaterial::recvData(comm);
+        res+= comm.receiveDoubles(minStrain,maxStrain,getDbTagData(),CommMetaData(4));
         Cfailed= getDbTagDataPos(5);
         Tfailed = Cfailed;
 

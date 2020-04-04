@@ -41,8 +41,8 @@ class InternalParamsLRIn: public InternalParamsLR
   protected:
     double RLeft; //!< p at start of current plastic loading cycle - left side
     double RRight; //!< p at start of current plastic loading cycle - right side
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     InternalParamsLRIn(const double &V= 0.0,const double &r= 0.0,const double &t= 0.0,const double &yl= 0.0,const double &yr= 0.0,const double &pl= 0.0,const double &pr= 0.0);
     inline const double &yleftIn(void) const //Para PySimple1
@@ -77,8 +77,8 @@ class InternalParamsLRIn: public InternalParamsLR
       { return RRight; }
     inline double &QrightIn(void) //Para QzSimple1
       { return RRight; }
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

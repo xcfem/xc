@@ -56,8 +56,8 @@ class DeformationPlane: public Plane, public MovableObject
   protected:
     bool check_positions(const Pos2d &,const Pos2d &, const Pos2d &);
     bool check_positions(const Pos3d &,const Pos3d &, const Pos3d &);
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
     friend class SectionForceDeformation;
     friend class FiberPtrDeque;
     friend class FiberSectionBase; //Erase this line.
@@ -84,8 +84,8 @@ class DeformationPlane: public Plane, public MovableObject
     HalfPlane2d getCompressedHalfPlane(void) const;
     HalfPlane2d getCompressedHalfPlane(const Line2d &) const;
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 
 } // end of XC namespace

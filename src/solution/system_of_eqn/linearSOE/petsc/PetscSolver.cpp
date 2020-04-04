@@ -138,9 +138,9 @@ int XC::PetscSolver::solve(void)
         const size_t numChannels= theChannels.size();
         if(processID != 0)
           {
-            CommParameters cp(0,*theChannels[0]);
-            cp.sendVector(vectB,getDbTagData(),CommMetaData(0));
-            cp.receiveVector(vectB,getDbTagData(),CommMetaData(0));
+            Communicator comm(0,*theChannels[0]);
+            comm.sendVector(vectB,getDbTagData(),CommMetaData(0));
+            comm.receiveVector(vectB,getDbTagData(),CommMetaData(0));
           }
         else
           {
@@ -148,14 +148,14 @@ int XC::PetscSolver::solve(void)
               recvVector.resize(size);
             for(size_t j=0; j<numChannels; j++)
               {
-                CommParameters cp(0,*theChannels[j]);
-                cp.receiveVector(recvVector,getDbTagData(),CommMetaData(1));
+                Communicator comm(0,*theChannels[j]);
+                comm.receiveVector(recvVector,getDbTagData(),CommMetaData(1));
                 vectB += recvVector;
               }
             for(size_t j=0; j<numChannels; j++)
               {
-                CommParameters cp(0,*theChannels[0]);
-                cp.sendVector(vectB,getDbTagData(),CommMetaData(0));
+                Communicator comm(0,*theChannels[0]);
+                comm.sendVector(vectB,getDbTagData(),CommMetaData(0));
               }
           }
       }
@@ -180,9 +180,9 @@ int XC::PetscSolver::solve(void)
       
         if(processID != 0)
           {
-            CommParameters cp(0,*theChannels[0]);
-            cp.sendVector(vectX,getDbTagData(),CommMetaData(2));
-            cp.receiveVector(vectX,getDbTagData(),CommMetaData(2));
+            Communicator comm(0,*theChannels[0]);
+            comm.sendVector(vectX,getDbTagData(),CommMetaData(2));
+            comm.receiveVector(vectX,getDbTagData(),CommMetaData(2));
           }
         else
           {
@@ -191,8 +191,8 @@ int XC::PetscSolver::solve(void)
 
             for(size_t j=0; j<numChannels; j++)
               {
-                CommParameters cp(0,*theChannels[j]);
-                cp.receiveVector(recvVector,getDbTagData(),CommMetaData(3));
+                Communicator comm(0,*theChannels[j]);
+                comm.receiveVector(recvVector,getDbTagData(),CommMetaData(3));
                 vectX += recvVector;
               }
             for(size_t j=0; j<numChannels; j++)
@@ -265,7 +265,7 @@ bool XC::PetscSolver::setLinearSOE(PetscSOE &theSys)
   { return setLinearSOE(&theSys); }
 
 
-int XC::PetscSolver::sendSelf(CommParameters &cp)
+int XC::PetscSolver::sendSelf(Communicator &comm)
   {
     static ID idData(3);
     idData(0) = maxIts;
@@ -301,15 +301,15 @@ int XC::PetscSolver::sendSelf(CommParameters &cp)
         return -1;
        }
 
-    cp.sendID(idData,getDbTagData(),CommMetaData(0));
-    cp.sendDoubles(rTol,aTol,dTol,getDbTagData(),CommMetaData(1));
+    comm.sendID(idData,getDbTagData(),CommMetaData(0));
+    comm.sendDoubles(rTol,aTol,dTol,getDbTagData(),CommMetaData(1));
     return 0;
   }
 
-int XC::PetscSolver::recvSelf(const CommParameters &cp)
+int XC::PetscSolver::recvSelf(const Communicator &comm)
   {
     static ID idData(3);
-    cp.receiveID(idData,getDbTagData(),CommMetaData(0));
+    comm.receiveID(idData,getDbTagData(),CommMetaData(0));
     maxIts = idData(0);
     if(idData(1) == 0) 
       method= KSPCG;
@@ -342,7 +342,7 @@ int XC::PetscSolver::recvSelf(const CommParameters &cp)
         std::cerr << "PetscSolver::sendSelf() - unknown preconditioner set\n";
         return -1;
       }
-    cp.receiveDoubles(rTol,aTol,dTol,getDbTagData(),CommMetaData(1));
+    comm.receiveDoubles(rTol,aTol,dTol,getDbTagData(),CommMetaData(1));
     return 0;
   }
 

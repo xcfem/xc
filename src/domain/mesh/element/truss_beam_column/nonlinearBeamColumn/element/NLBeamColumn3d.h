@@ -90,8 +90,8 @@ class NLBeamColumn3d: public  NLForceBeamColumn3dBase
     void compSectionDisplacements(std::vector<Vector> &,std::vector<Vector> &) const;
 
   protected:
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     NLBeamColumn3d(int tag= 0);
     NLBeamColumn3d(int tag,int numSec,const Material *theSection,const CrdTransf *coordTransf);
@@ -117,8 +117,8 @@ class NLBeamColumn3d: public  NLForceBeamColumn3dBase
 
     const Vector &getResistingForceIncInertia(void) const;            
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     
     friend std::ostream &operator<<(std::ostream &, const NLBeamColumn3d &);        
     void Print(std::ostream &s, int flag =0) const;    

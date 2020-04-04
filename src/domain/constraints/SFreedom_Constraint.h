@@ -92,8 +92,8 @@ class SFreedom_Constraint: public Constraint
     int  loadPatternTag;
 
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
   public:
     // constructors
@@ -119,8 +119,8 @@ class SFreedom_Constraint: public Constraint
 
     int getVtkCellType(void) const;
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
     virtual void Print(std::ostream &s, int flag =0) const;
   };

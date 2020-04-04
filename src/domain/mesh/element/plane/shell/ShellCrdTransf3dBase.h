@@ -55,8 +55,8 @@ class ShellCrdTransf3dBase: public CommandEntity, public MovableObject
     Vector g2; //!< Vector 2 of the reference trihedron.
     Vector g3; //!< Vector 3 of the reference trihedron.
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     Vector local_to_global(const Matrix &,const Vector &) const;
     Matrix local_to_global(const Matrix &,const Matrix &) const;

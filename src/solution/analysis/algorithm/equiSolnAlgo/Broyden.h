@@ -92,8 +92,8 @@ class Broyden: public BFBRoydenBase
     int solveCurrentStep(void);
 
     
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
 
     void Print(std::ostream &s, int flag =0) const;    
   };

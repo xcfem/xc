@@ -595,35 +595,35 @@ XC::DbTagData &XC::SetEntities::getDbTagData(void) const
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::SetEntities::sendData(CommParameters &cp)
+int XC::SetEntities::sendData(Communicator &comm)
   {
     int res= 0;
     std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not implemented yet." << std::endl;
-//     res+= points.sendTags(9,10,getDbTagData(),cp);
-//     res+= lines.sendTags(11,12,getDbTagData(),cp);
-//     res+= surfaces.sendTags(13,14,getDbTagData(),cp);
-//     res+= bodies.sendTags(15,16,getDbTagData(),cp);
-//     res+= uniform_grids.sendTags(17,18,getDbTagData(),cp);
+//     res+= points.sendTags(9,10,getDbTagData(),comm);
+//     res+= lines.sendTags(11,12,getDbTagData(),comm);
+//     res+= surfaces.sendTags(13,14,getDbTagData(),comm);
+//     res+= bodies.sendTags(15,16,getDbTagData(),comm);
+//     res+= uniform_grids.sendTags(17,18,getDbTagData(),comm);
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::SetEntities::recvData(const CommParameters &cp)
+int XC::SetEntities::recvData(const Communicator &comm)
   {
     ID tmp;
     int res= 0;
     std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not implemented yet." << std::endl;
-//     tmp= points.receiveTags(9,10,getDbTagData(),cp);
+//     tmp= points.receiveTags(9,10,getDbTagData(),comm);
 //     sel_points_lista(tmp);
-//     tmp= lines.receiveTags(11,12,getDbTagData(),cp);
+//     tmp= lines.receiveTags(11,12,getDbTagData(),comm);
 //     sel_lines_list(tmp);
-//     tmp= surfaces.receiveTags(13,14,getDbTagData(),cp);
+//     tmp= surfaces.receiveTags(13,14,getDbTagData(),comm);
 //     sel_surfaces_lst(tmp);
-//     tmp= bodies.receiveTags(15,16,getDbTagData(),cp);
+//     tmp= bodies.receiveTags(15,16,getDbTagData(),comm);
 //     sel_cuerpos_lista(tmp);
-//     tmp= uniform_grids.receiveTags(17,18,getDbTagData(),cp);
+//     tmp= uniform_grids.receiveTags(17,18,getDbTagData(),comm);
     return res;
   }
 
@@ -632,14 +632,14 @@ XC::SetEntities::~SetEntities(void)
   { clearAll(); }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::SetEntities::sendSelf(CommParameters &cp)
+int XC::SetEntities::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(19);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; failed to send data\n";
@@ -647,11 +647,11 @@ int XC::SetEntities::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::SetEntities::recvSelf(const CommParameters &cp)
+int XC::SetEntities::recvSelf(const Communicator &comm)
   {
     inicComm(19);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -659,7 +659,7 @@ int XC::SetEntities::recvSelf(const CommParameters &cp)
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

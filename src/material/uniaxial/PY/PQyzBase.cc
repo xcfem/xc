@@ -88,26 +88,26 @@ int XC::PQyzBase::revertToLastCommit(void)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::PQyzBase::sendData(CommParameters &cp)
+int XC::PQyzBase::sendData(Communicator &comm)
   {
-    int res= PYBase::sendData(cp);
-    res+= cp.sendDoubles(NFkrig,Elast,nd,getDbTagData(),CommMetaData(9));
-    res+= cp.sendMovable(CNF,getDbTagData(),CommMetaData(10));
-    res+= cp.sendMovable(TNF,getDbTagData(),CommMetaData(11));
-    res+= cp.sendMovable(CGap,getDbTagData(),CommMetaData(12));
-    res+= cp.sendMovable(TGap,getDbTagData(),CommMetaData(13));
+    int res= PYBase::sendData(comm);
+    res+= comm.sendDoubles(NFkrig,Elast,nd,getDbTagData(),CommMetaData(9));
+    res+= comm.sendMovable(CNF,getDbTagData(),CommMetaData(10));
+    res+= comm.sendMovable(TNF,getDbTagData(),CommMetaData(11));
+    res+= comm.sendMovable(CGap,getDbTagData(),CommMetaData(12));
+    res+= comm.sendMovable(TGap,getDbTagData(),CommMetaData(13));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::PQyzBase::recvData(const CommParameters &cp)
+int XC::PQyzBase::recvData(const Communicator &comm)
   {
-    int res= PYBase::recvData(cp);
-    res+= cp.receiveDoubles(NFkrig,Elast,nd,getDbTagData(),CommMetaData(9));
-    res+= cp.receiveMovable(CNF,getDbTagData(),CommMetaData(10));
-    res+= cp.receiveMovable(TNF,getDbTagData(),CommMetaData(11));
-    res+= cp.receiveMovable(CGap,getDbTagData(),CommMetaData(12));
-    res+= cp.receiveMovable(TGap,getDbTagData(),CommMetaData(13));
+    int res= PYBase::recvData(comm);
+    res+= comm.receiveDoubles(NFkrig,Elast,nd,getDbTagData(),CommMetaData(9));
+    res+= comm.receiveMovable(CNF,getDbTagData(),CommMetaData(10));
+    res+= comm.receiveMovable(TNF,getDbTagData(),CommMetaData(11));
+    res+= comm.receiveMovable(CGap,getDbTagData(),CommMetaData(12));
+    res+= comm.receiveMovable(TGap,getDbTagData(),CommMetaData(13));
     return res;
   }
 

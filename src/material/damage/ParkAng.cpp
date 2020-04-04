@@ -294,11 +294,11 @@ XC::ParkAng::getResponse(int responseID, Information &info)
 }
 
 
-int XC::ParkAng::sendSelf(CommParameters &cp)
+int XC::ParkAng::sendSelf(Communicator &comm)
   { return 0; }
 
 
-int XC::ParkAng::recvSelf(const CommParameters &cp)
+int XC::ParkAng::recvSelf(const Communicator &comm)
   { return 0; }
 
 

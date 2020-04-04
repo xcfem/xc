@@ -48,8 +48,8 @@ class EnvelopeData: public MovableObject
     void alloc(const size_t &);
     void free(void);
   protected:
-    int sendData(CommParameters &);  
-    int receiveData(const CommParameters &);
+    int sendData(Communicator &);  
+    int receiveData(const Communicator &);
   public:
     EnvelopeData(void);
     ~EnvelopeData(void);
@@ -69,8 +69,8 @@ class EnvelopeData: public MovableObject
 
     int restart(void); 
 
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

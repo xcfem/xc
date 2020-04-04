@@ -108,8 +108,8 @@ class TransformationConstraintHandler: public ConstraintHandler
     int enforceSPs(void);    
     int doneNumberingDOF(void);        
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

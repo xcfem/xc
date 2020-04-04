@@ -94,8 +94,8 @@ class FeapMaterial: public NDMaterial
   virtual const std::string &getType(void) const;
   virtual int getOrder(void) const;
   
-  virtual int sendSelf(CommParameters &);  
-  virtual int recvSelf(const CommParameters &);    
+  virtual int sendSelf(Communicator &);  
+  virtual int recvSelf(const Communicator &);    
   
   virtual void Print(std::ostream &s, int flag = 0) const;
   

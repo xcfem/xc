@@ -63,18 +63,18 @@ int XC::ParameterIDBeamIntegration::activateParameter(int paramID)
   }
 
 //! @brief Send object members through the channel defined in cp.
-int XC::ParameterIDBeamIntegration::sendData(CommParameters &cp)
+int XC::ParameterIDBeamIntegration::sendData(Communicator &comm)
   {
-    int res= UserDefinedBeamIntegrationBase::sendData(cp);
-    res+= cp.sendInt(parameterID,getDbTagData(),CommMetaData(5));
+    int res= UserDefinedBeamIntegrationBase::sendData(comm);
+    res+= comm.sendInt(parameterID,getDbTagData(),CommMetaData(5));
     return res;
   }
 
 //! @brief Receives object members through the channel defined in cp.
-int XC::ParameterIDBeamIntegration::recvData(const CommParameters &cp)
+int XC::ParameterIDBeamIntegration::recvData(const Communicator &comm)
   {
-    int res= UserDefinedBeamIntegrationBase::recvData(cp);
-    res+= cp.receiveInt(parameterID,getDbTagData(),CommMetaData(5));
+    int res= UserDefinedBeamIntegrationBase::recvData(comm);
+    res+= comm.receiveInt(parameterID,getDbTagData(),CommMetaData(5));
     return res;
   }
 

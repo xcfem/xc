@@ -279,9 +279,9 @@ int XC::SparseGenColLinSOE::addA(const Matrix &m, const ID &id, double fact)
   }
 
     
-int XC::SparseGenColLinSOE::sendSelf(CommParameters &cp)
+int XC::SparseGenColLinSOE::sendSelf(Communicator &comm)
   { return 0; }
 
-int XC::SparseGenColLinSOE::recvSelf(const CommParameters &cp)  
+int XC::SparseGenColLinSOE::recvSelf(const Communicator &comm)  
   { return 0; }
 

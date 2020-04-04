@@ -50,7 +50,7 @@
                                                                         
 // $Revision: 1.17 $                                                              
 // $Date: 2004/07/20 22:39:02 $                                                                  
-// $Source: /usr/local/cvs/OpenSees/SRC/material/nD/XC::NDMaterial.cpp,v $                                                                
+// $Source: /usr/local/cvs/OpenSees/SRC/material/nD/NDMaterial.cpp,v $                                                                
                                                                         
 // File: ~/material/XC::NDMaterial.C
 //
@@ -58,7 +58,7 @@
 // Created: Feb 2000
 // Revision: A
 //
-// Description: This file contains the class implementation for XC::NDMaterial.
+// Description: This file contains the class implementation for NDMaterial.
 //
 // What: "@(#) XC::NDMaterial.C, revA"
 
@@ -285,14 +285,14 @@ int XC::NDMaterial::getResponse(int responseID, Information &matInfo)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::NDMaterial::sendData(CommParameters &cp)
+int XC::NDMaterial::sendData(Communicator &comm)
   {
     setDbTagDataPos(0,getTag());
     return 0;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::NDMaterial::recvData(const CommParameters &cp)
+int XC::NDMaterial::recvData(const Communicator &comm)
   {
     setTag(getDbTagDataPos(0));
     return 0;
@@ -340,11 +340,11 @@ int XC::NDMaterial::commitSensitivity(XC::Vector & strainSensitivity, int gradNu
 // AddingSensitivity:END //////////////////////////////////////////
 
 //! @brief Receive a pointer to material through the channel being passed as parameter.
-XC::NDMaterial *XC::receiveNDMaterialPtr(NDMaterial *ptr,DbTagData &dt,const CommParameters &cp,const BrokedPtrCommMetaData &md)
+XC::NDMaterial *XC::receiveNDMaterialPtr(NDMaterial *ptr,DbTagData &dt,const Communicator &comm,const BrokedPtrCommMetaData &md)
   {
     NDMaterial *retval= nullptr;
     Material *tmp= nullptr;
-    tmp= receiveMaterialPtr(ptr,dt,cp,md);
+    tmp= receiveMaterialPtr(ptr,dt,comm,md);
     if(tmp)
       {
         retval= dynamic_cast<NDMaterial *>(tmp);

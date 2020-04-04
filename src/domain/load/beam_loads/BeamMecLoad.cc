@@ -191,17 +191,17 @@ void XC::BeamMecLoad::Print(std::ostream &s, int flag) const
   }
 
 //! @brief Send data through the channel being passed as parameter.
-int XC::BeamMecLoad::sendData(CommParameters &cp)
+int XC::BeamMecLoad::sendData(Communicator &comm)
   {
-    int res= BeamLoad::sendData(cp);
-    res+= cp.sendDoubles(Trans,Axial,getDbTagData(),CommMetaData(5));
+    int res= BeamLoad::sendData(comm);
+    res+= comm.sendDoubles(Trans,Axial,getDbTagData(),CommMetaData(5));
     return res;
   }
 
 //! @brief Receive data through the channel being passed as parameter.
-int XC::BeamMecLoad::recvData(const CommParameters &cp)
+int XC::BeamMecLoad::recvData(const Communicator &comm)
   {
-    int res= BeamLoad::recvData(cp);
-    res+= cp.receiveDoubles(Trans,Axial,getDbTagData(),CommMetaData(5));
+    int res= BeamLoad::recvData(comm);
+    res+= comm.receiveDoubles(Trans,Axial,getDbTagData(),CommMetaData(5));
     return res;
   }

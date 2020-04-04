@@ -63,20 +63,20 @@ double XC::SteelBase::getFy(void) const
 
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::SteelBase::sendData(CommParameters &cp)
+int XC::SteelBase::sendData(Communicator &comm)
   {
-    int res= UniaxialMaterial::sendData(cp);
-    res+= cp.sendDoubles(fy,E0,b,getDbTagData(),CommMetaData(2));
-    res+= cp.sendDoubles(a1,a2,a3,a4,getDbTagData(),CommMetaData(3));
+    int res= UniaxialMaterial::sendData(comm);
+    res+= comm.sendDoubles(fy,E0,b,getDbTagData(),CommMetaData(2));
+    res+= comm.sendDoubles(a1,a2,a3,a4,getDbTagData(),CommMetaData(3));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::SteelBase::recvData(const CommParameters &cp)
+int XC::SteelBase::recvData(const Communicator &comm)
   {
-    int res= UniaxialMaterial::recvData(cp);
-    res+= cp.receiveDoubles(fy,E0,b,getDbTagData(),CommMetaData(2));
-    res+= cp.receiveDoubles(a1,a2,a3,a4,getDbTagData(),CommMetaData(3));
+    int res= UniaxialMaterial::recvData(comm);
+    res+= comm.receiveDoubles(fy,E0,b,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveDoubles(a1,a2,a3,a4,getDbTagData(),CommMetaData(3));
     return res;
   }
 

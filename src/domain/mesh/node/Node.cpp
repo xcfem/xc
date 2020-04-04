@@ -1646,45 +1646,45 @@ XC::DbTagData &XC::Node::getDbTagData(void) const
   }
 
 //! @brief Sends object members through the channel being passed as parameter.
-int XC::Node::sendData(CommParameters &cp)
+int XC::Node::sendData(Communicator &comm)
   {
-    int res= MeshComponent::sendData(cp);
-    res+= cp.sendInt(numberDOF,getDbTagData(),CommMetaData(4));
-    res+= cp.sendMatrix(mass,getDbTagData(),CommMetaData(5));
-    res+= cp.sendVector(reaction,getDbTagData(),CommMetaData(6));
-    res+= cp.sendVector(unbalLoad,getDbTagData(),CommMetaData(7));
-    res+= cp.sendVector(unbalLoadWithInertia,getDbTagData(),CommMetaData(8));
-    res+= cp.sendVector(Crd,getDbTagData(),CommMetaData(9));
-    res+= cp.sendMatrix(R,getDbTagData(),CommMetaData(10));
-    res+= cp.sendDoubles(alphaM,tributary,getDbTagData(),CommMetaData(11)); //Arreglar.
-    res+= cp.sendMatrix(theEigenvectors,getDbTagData(),CommMetaData(12));
-    res+=cp.sendMovable(disp,getDbTagData(),CommMetaData(13));
-    res+=cp.sendMovable(vel,getDbTagData(),CommMetaData(14));
-    res+=cp.sendMovable(accel,getDbTagData(),CommMetaData(15));
-    res+= cp.sendID(get_id_constraints(),getDbTagData(),CommMetaData(16));
+    int res= MeshComponent::sendData(comm);
+    res+= comm.sendInt(numberDOF,getDbTagData(),CommMetaData(4));
+    res+= comm.sendMatrix(mass,getDbTagData(),CommMetaData(5));
+    res+= comm.sendVector(reaction,getDbTagData(),CommMetaData(6));
+    res+= comm.sendVector(unbalLoad,getDbTagData(),CommMetaData(7));
+    res+= comm.sendVector(unbalLoadWithInertia,getDbTagData(),CommMetaData(8));
+    res+= comm.sendVector(Crd,getDbTagData(),CommMetaData(9));
+    res+= comm.sendMatrix(R,getDbTagData(),CommMetaData(10));
+    res+= comm.sendDoubles(alphaM,tributary,getDbTagData(),CommMetaData(11)); //Arreglar.
+    res+= comm.sendMatrix(theEigenvectors,getDbTagData(),CommMetaData(12));
+    res+=comm.sendMovable(disp,getDbTagData(),CommMetaData(13));
+    res+=comm.sendMovable(vel,getDbTagData(),CommMetaData(14));
+    res+=comm.sendMovable(accel,getDbTagData(),CommMetaData(15));
+    res+= comm.sendID(get_id_constraints(),getDbTagData(),CommMetaData(16));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as
 //! parameter.
-int XC::Node::recvData(const CommParameters &cp)
+int XC::Node::recvData(const Communicator &comm)
   {
-    int res= MeshComponent::recvData(cp);
-    res+= cp.receiveInt(numberDOF,getDbTagData(),CommMetaData(4));
-    res+= cp.receiveMatrix(mass,getDbTagData(),CommMetaData(5));
-    res+= cp.receiveVector(reaction,getDbTagData(),CommMetaData(6));
-    res+= cp.receiveVector(unbalLoad,getDbTagData(),CommMetaData(7));
-    res+= cp.receiveVector(unbalLoadWithInertia,getDbTagData(),CommMetaData(8));
-    res+= cp.receiveVector(Crd,getDbTagData(),CommMetaData(9));
-    res+= cp.receiveMatrix(R,getDbTagData(),CommMetaData(10));
-    res+= cp.receiveDoubles(alphaM,tributary,getDbTagData(),CommMetaData(11));
-    res+= cp.receiveMatrix(theEigenvectors,getDbTagData(),CommMetaData(12));
+    int res= MeshComponent::recvData(comm);
+    res+= comm.receiveInt(numberDOF,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveMatrix(mass,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveVector(reaction,getDbTagData(),CommMetaData(6));
+    res+= comm.receiveVector(unbalLoad,getDbTagData(),CommMetaData(7));
+    res+= comm.receiveVector(unbalLoadWithInertia,getDbTagData(),CommMetaData(8));
+    res+= comm.receiveVector(Crd,getDbTagData(),CommMetaData(9));
+    res+= comm.receiveMatrix(R,getDbTagData(),CommMetaData(10));
+    res+= comm.receiveDoubles(alphaM,tributary,getDbTagData(),CommMetaData(11));
+    res+= comm.receiveMatrix(theEigenvectors,getDbTagData(),CommMetaData(12));
     index= -1;
-    res+= cp.receiveMovable(disp,getDbTagData(),CommMetaData(13));
-    res+= cp.receiveMovable(vel,getDbTagData(),CommMetaData(14));
-    res+= cp.receiveMovable(accel,getDbTagData(),CommMetaData(15));
+    res+= comm.receiveMovable(disp,getDbTagData(),CommMetaData(13));
+    res+= comm.receiveMovable(vel,getDbTagData(),CommMetaData(14));
+    res+= comm.receiveMovable(accel,getDbTagData(),CommMetaData(15));
     ID tmp;
-    res+= cp.receiveID(tmp,getDbTagData(),CommMetaData(16));
+    res+= comm.receiveID(tmp,getDbTagData(),CommMetaData(16));
     set_id_constraints(tmp);
     setup_matrices(theMatrices,numberDOF);
     return res;
@@ -1693,7 +1693,7 @@ int XC::Node::recvData(const CommParameters &cp)
 //! @brief Send the object through the channel being passed as parameter.
 //!
 //! Causes the Node object to send the data needed to init itself on a
-//! remote machine to the CommParameters object \p cp. 
+//! remote machine to the Communicator object \p cp. 
 //! The data sent includes the tag, number of dof, coordinates, committed
 //! response quantities, unbalanced load, mass and participation matrix. 
 //! To do this the Node creates an ID object into which it stores its tag,
@@ -1705,13 +1705,13 @@ int XC::Node::recvData(const CommParameters &cp)
 //! of a particular size using it's own database tags -- additional tags
 //! are needed when multiple objects of the same size are needed.
 //! The objects that have been created are then sent.
-int XC::Node::sendSelf(CommParameters &cp)
+int XC::Node::sendSelf(Communicator &comm)
   {
     inicComm(22);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
     const int dataTag= getDbTag();
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send ID data.\n";
@@ -1727,16 +1727,16 @@ int XC::Node::sendSelf(CommParameters &cp)
 //! Matrix and Vector objects to store the Nodes data and asks the cp
 //! object to fill these with data. The data placed here by the cp
 //! object correspond to the data put there by the sending Node object.
-int XC::Node::recvSelf(const CommParameters &cp)
+int XC::Node::recvSelf(const Communicator &comm)
   {
     const int dataTag= getDbTag();
     inicComm(22);
-    int res = cp.receiveIdData(getDbTagData(),dataTag);
+    int res = comm.receiveIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to receive ID data\n";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

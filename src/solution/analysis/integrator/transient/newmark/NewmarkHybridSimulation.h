@@ -79,8 +79,8 @@ class NewmarkHybridSimulation: public NewmarkBase2
     double rFact;                   // displacement increment reduction factor
     ResponseQuantities Ut;  // response quantities at time t
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     friend class AnalysisAggregation;
     NewmarkHybridSimulation(AnalysisAggregation *);
@@ -99,8 +99,8 @@ class NewmarkHybridSimulation: public NewmarkBase2
     int revertToLastStep(void);
     int update(const Vector &deltaU);
     
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag = 0) const;
   };

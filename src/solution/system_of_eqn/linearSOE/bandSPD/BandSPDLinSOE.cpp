@@ -270,9 +270,9 @@ void XC::BandSPDLinSOE::zeroA(void)
     factored = false;
   }
 
-int XC::BandSPDLinSOE::sendSelf(CommParameters &cp)
+int XC::BandSPDLinSOE::sendSelf(Communicator &comm)
   { return 0; }
 
 
-int XC::BandSPDLinSOE::recvSelf(const CommParameters &cp)
+int XC::BandSPDLinSOE::recvSelf(const Communicator &comm)
   { return 0; }

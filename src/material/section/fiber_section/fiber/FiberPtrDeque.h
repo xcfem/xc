@@ -75,8 +75,8 @@ class FiberPtrDeque: public CommandEntity, public std::deque<Fiber *>, public Mo
     double yCenterOfMass; //!< Y coordinate of the centroid.
     double zCenterOfMass; //!< Z coordinate of the centroid.
 
-    int sendData(CommParameters &);  
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);  
+    int recvData(const Communicator &);
 
     mutable std::deque<std::list<Polygon2d> > dq_ac_effective; //!< (Where appropriate) effective concrete areas for each fiber.
     mutable std::deque<double> recubs; //! Cover for each fiber.
@@ -262,8 +262,8 @@ class FiberPtrDeque: public CommandEntity, public std::deque<Fiber *>, public Mo
     size_t nearest_fiber(const double &y,const double &z) const;
 
     void Print(std::ostream &s,const int &flag) const;
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

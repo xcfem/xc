@@ -116,8 +116,8 @@ class CentralDifference: public RayleighBase
     ResponseQuantities Ut; //!< response quantities at time t
     ResponseQuantities U; //!< response quantities at time t+deltaT
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     friend class AnalysisAggregation;
     friend class FEM_ObjectBroker;
@@ -135,8 +135,8 @@ class CentralDifference: public RayleighBase
     int update(const Vector &U);
     int commit(void);
     
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag = 0) const;        
   };

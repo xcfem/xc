@@ -98,8 +98,8 @@ class GroundMotionRecord: public GroundMotion
     inline MotionHistory &getHistory(void)
       { return history; }        
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   
     // AddingSensitivity:BEGIN //////////////////////////////////////////
     virtual double getAccelSensitivity(double time);

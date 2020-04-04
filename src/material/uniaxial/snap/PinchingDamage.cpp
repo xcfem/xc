@@ -314,13 +314,13 @@ double XC::PinchingDamage::getStrain (void) const
 }
 
 
-int XC::PinchingDamage::recvSelf(const CommParameters &cp)
+int XC::PinchingDamage::recvSelf(const Communicator &comm)
 {
         return 0;
 }
 
 
-int XC::PinchingDamage::sendSelf(CommParameters &cp)
+int XC::PinchingDamage::sendSelf(Communicator &comm)
 {
         return 0;
 }

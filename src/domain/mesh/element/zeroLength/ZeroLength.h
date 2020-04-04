@@ -130,8 +130,8 @@ class ZeroLength: public Element0D
   protected:
     void setUpType(const size_t &);
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public:
     // Constructor for a single 1d material model
@@ -171,8 +171,8 @@ class ZeroLength: public Element0D
     const Vector &getResistingForceIncInertia(void) const;            
 
     // public methods for element output
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;    
 
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);

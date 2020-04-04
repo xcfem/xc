@@ -97,8 +97,8 @@ class ProfileSPDLinDirectSolver: public ProfileSPDLinDirectBase
     virtual int factor(int n);
     virtual int setProfileSOE(ProfileSPDLinSOE &theSOE);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 
 //! @brief Virtual constructor.

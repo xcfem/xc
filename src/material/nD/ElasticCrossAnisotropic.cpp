@@ -261,58 +261,58 @@ int XC::ElasticCrossAnisotropic::getOrder(void) const
   { return 6; }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::ElasticCrossAnisotropic::sendData(CommParameters &cp)
+int XC::ElasticCrossAnisotropic::sendData(Communicator &comm)
   {
-    int res= NDMaterial::sendData(cp);
-    res+= cp.sendVector(Tepsilon,getDbTagData(),CommMetaData(1));
-    res+= cp.sendVector(Cepsilon,getDbTagData(),CommMetaData(2));
-    res+= cp.sendTensor(Dt,getDbTagData(),CommMetaData(3));
-    res+= cp.sendTensor(Stress,getDbTagData(),CommMetaData(4));
-    res+= cp.sendTensor(Strain,getDbTagData(),CommMetaData(5));
-    res+= cp.sendDoubles(Eh,Ev,nuhv,nuhh,Ghv,rho,getDbTagData(),CommMetaData(6));
+    int res= NDMaterial::sendData(comm);
+    res+= comm.sendVector(Tepsilon,getDbTagData(),CommMetaData(1));
+    res+= comm.sendVector(Cepsilon,getDbTagData(),CommMetaData(2));
+    res+= comm.sendTensor(Dt,getDbTagData(),CommMetaData(3));
+    res+= comm.sendTensor(Stress,getDbTagData(),CommMetaData(4));
+    res+= comm.sendTensor(Strain,getDbTagData(),CommMetaData(5));
+    res+= comm.sendDoubles(Eh,Ev,nuhv,nuhh,Ghv,rho,getDbTagData(),CommMetaData(6));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::ElasticCrossAnisotropic::recvData(const CommParameters &cp)
+int XC::ElasticCrossAnisotropic::recvData(const Communicator &comm)
   {
-    int res= NDMaterial::recvData(cp);
-    res+= cp.receiveVector(Tepsilon,getDbTagData(),CommMetaData(1));
-    res+= cp.receiveVector(Cepsilon,getDbTagData(),CommMetaData(2));
-    res+= cp.receiveTensor(Dt,getDbTagData(),CommMetaData(3));
-    res+= cp.receiveTensor(Stress,getDbTagData(),CommMetaData(4));
-    res+= cp.receiveTensor(Strain,getDbTagData(),CommMetaData(5));
-    res+= cp.receiveDoubles(Eh,Ev,nuhv,nuhh,Ghv,rho,getDbTagData(),CommMetaData(6));
+    int res= NDMaterial::recvData(comm);
+    res+= comm.receiveVector(Tepsilon,getDbTagData(),CommMetaData(1));
+    res+= comm.receiveVector(Cepsilon,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveTensor(Dt,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveTensor(Stress,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveTensor(Strain,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveDoubles(Eh,Ev,nuhv,nuhh,Ghv,rho,getDbTagData(),CommMetaData(6));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::ElasticCrossAnisotropic::sendSelf(CommParameters &cp)
+int XC::ElasticCrossAnisotropic::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(7);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::ElasticCrossAnisotropic::recvSelf(const CommParameters &cp)
+int XC::ElasticCrossAnisotropic::recvSelf(const Communicator &comm)
   {
     inicComm(7);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

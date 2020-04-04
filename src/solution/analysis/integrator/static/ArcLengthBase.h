@@ -49,14 +49,14 @@ class ArcLengthBase: public ProtoArcLength
 
 
     double getDLambdaNewStep(void) const;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     ArcLengthBase(AnalysisAggregation *,int classTag,double ArcLength, double alpha = 1.0);
   public:
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

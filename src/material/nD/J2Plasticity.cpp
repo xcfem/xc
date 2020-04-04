@@ -781,51 +781,51 @@ int XC::J2Plasticity::revertToStart( )
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::J2Plasticity::sendData(CommParameters &cp)
+int XC::J2Plasticity::sendData(Communicator &comm)
   {
-    int res= NDMaterial::sendData(cp);
-    res+= cp.sendDoubles(bulk,shear,sigma_0,sigma_infty,delta,getDbTagData(),CommMetaData(1));
-    res+= cp.sendDoubles(Hard,eta,xi_n,xi_nplus1,getDbTagData(),CommMetaData(2));
-    res+= cp.sendMatrix(epsilon_p_n,getDbTagData(),CommMetaData(3));
-    res+= cp.sendMatrix(epsilon_p_nplus1,getDbTagData(),CommMetaData(4));
-    res+= cp.sendMatrix(stress,getDbTagData(),CommMetaData(5));
-    res+= cp.sendMatrix(strain,getDbTagData(),CommMetaData(6));
+    int res= NDMaterial::sendData(comm);
+    res+= comm.sendDoubles(bulk,shear,sigma_0,sigma_infty,delta,getDbTagData(),CommMetaData(1));
+    res+= comm.sendDoubles(Hard,eta,xi_n,xi_nplus1,getDbTagData(),CommMetaData(2));
+    res+= comm.sendMatrix(epsilon_p_n,getDbTagData(),CommMetaData(3));
+    res+= comm.sendMatrix(epsilon_p_nplus1,getDbTagData(),CommMetaData(4));
+    res+= comm.sendMatrix(stress,getDbTagData(),CommMetaData(5));
+    res+= comm.sendMatrix(strain,getDbTagData(),CommMetaData(6));
     size_t conta= 7;
     for(size_t i=0;i<3;i++)
       for(size_t j=0;j<3;j++)
          for(size_t k=0;k<3;k++)
-            res+= cp.sendDoubles(tangent[i][j][k][0],tangent[i][j][k][1],tangent[i][j][k][2],getDbTagData(),CommMetaData(conta++));
+            res+= comm.sendDoubles(tangent[i][j][k][0],tangent[i][j][k][1],tangent[i][j][k][2],getDbTagData(),CommMetaData(conta++));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::J2Plasticity::recvData(const CommParameters &cp)
+int XC::J2Plasticity::recvData(const Communicator &comm)
   {
-    int res= NDMaterial::recvData(cp);
-    res+= cp.receiveDoubles(bulk,shear,sigma_0,sigma_infty,delta,getDbTagData(),CommMetaData(1));
-    res+= cp.receiveDoubles(Hard,eta,xi_n,xi_nplus1,getDbTagData(),CommMetaData(2));
-    res+= cp.receiveMatrix(epsilon_p_n,getDbTagData(),CommMetaData(3));
-    res+= cp.receiveMatrix(epsilon_p_nplus1,getDbTagData(),CommMetaData(4));
-    res+= cp.receiveMatrix(stress,getDbTagData(),CommMetaData(5));
-    res+= cp.receiveMatrix(strain,getDbTagData(),CommMetaData(6));
+    int res= NDMaterial::recvData(comm);
+    res+= comm.receiveDoubles(bulk,shear,sigma_0,sigma_infty,delta,getDbTagData(),CommMetaData(1));
+    res+= comm.receiveDoubles(Hard,eta,xi_n,xi_nplus1,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveMatrix(epsilon_p_n,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveMatrix(epsilon_p_nplus1,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveMatrix(stress,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveMatrix(strain,getDbTagData(),CommMetaData(6));
     size_t conta= 7;
     for(size_t i=0;i<3;i++)
       for(size_t j=0;j<3;j++)
          for(size_t k=0;k<3;k++)
-            res+= cp.receiveDoubles(tangent[i][j][k][0],tangent[i][j][k][1],tangent[i][j][k][2],getDbTagData(),CommMetaData(conta++));
+            res+= comm.receiveDoubles(tangent[i][j][k][0],tangent[i][j][k][1],tangent[i][j][k][2],getDbTagData(),CommMetaData(conta++));
 
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::J2Plasticity::sendSelf(CommParameters &cp)
+int XC::J2Plasticity::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(88);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data.\n";
@@ -833,11 +833,11 @@ int XC::J2Plasticity::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::J2Plasticity::recvSelf(const CommParameters &cp)
+int XC::J2Plasticity::recvSelf(const Communicator &comm)
   {
     inicComm(88);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -845,7 +845,7 @@ int XC::J2Plasticity::recvSelf(const CommParameters &cp)
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

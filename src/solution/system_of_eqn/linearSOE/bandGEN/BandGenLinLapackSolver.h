@@ -88,8 +88,8 @@ class BandGenLinLapackSolver: public BandGenLinSolver
     int setSize(void);
     double getRCond(const char &);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 
 inline LinearSOESolver *BandGenLinLapackSolver::getCopy(void) const

@@ -66,7 +66,7 @@ bool XC::TaggedObjectStorage::existComponent(int tag)
   { return (getComponentPtr(tag)!=nullptr); }
 
 //! @brief Returns the DBTags of the objects.
-const XC::ID &XC::TaggedObjectStorage::getDBTags(CommParameters &cp)
+const XC::ID &XC::TaggedObjectStorage::getDBTags(Communicator &comm)
   {
     static ID retval;
     const int size= getNumComponents();
@@ -80,7 +80,7 @@ const XC::ID &XC::TaggedObjectStorage::getDBTags(CommParameters &cp)
         while((ptr= theIter()) != nullptr)
           {
             MovableObject *tmp= dynamic_cast<MovableObject *>(ptr);
-            retval(loc)= tmp->getDbTag(cp);
+            retval(loc)= tmp->getDbTag(comm);
             loc++;
           }        
       }
@@ -142,18 +142,18 @@ XC::DbTagData &XC::TaggedObjectStorage::getDbTagData(void) const
   }
 
 //! @brief Returns the dbTags y classTags of the objects through the channel being passed as parameter.
-int XC::TaggedObjectStorage::sendObjectTags(CommParameters &cp)
+int XC::TaggedObjectStorage::sendObjectTags(Communicator &comm)
   {
     const int size= getNumComponents();
     int res= 0;
     if(size>0)
       {
-        dbTags= getDBTags(cp);
-        res+= cp.sendID(dbTags,getDbTagData(),CommMetaData(posDbTag1));
+        dbTags= getDBTags(comm);
+        res+= comm.sendID(dbTags,getDbTagData(),CommMetaData(posDbTag1));
         classTags= getClassTags();
-        res+= cp.sendID(classTags,getDbTagData(),CommMetaData(posDbTag2));
+        res+= comm.sendID(classTags,getDbTagData(),CommMetaData(posDbTag2));
         objTags= getObjTags();
-        res+= cp.sendID(objTags,getDbTagData(),CommMetaData(posDbTag3));
+        res+= comm.sendID(objTags,getDbTagData(),CommMetaData(posDbTag3));
       }
     if(res<0)
       std::cerr << "TaggedObjectStorage::sendObjectTags - channel failed to send the IDs.\n";
@@ -161,14 +161,14 @@ int XC::TaggedObjectStorage::sendObjectTags(CommParameters &cp)
   }
 
 //! @brief Receives the dbTags or classTags of the objects through the channel being passed as parameter.
-const XC::ID &XC::TaggedObjectStorage::receiveTags(int posDbTag,int sz,const CommParameters &cp)
+const XC::ID &XC::TaggedObjectStorage::receiveTags(int posDbTag,int sz,const Communicator &comm)
   {
     static ID retVal;
     int res= 0;
     if(sz>0)
       {
         retVal.resize(sz);
-        res= cp.receiveID(retVal,getDbTagData(),CommMetaData(posDbTag));
+        res= comm.receiveID(retVal,getDbTagData(),CommMetaData(posDbTag));
       }
     if(res<0)
       std::cerr << "TaggedObjectStorage::receiveTags - channel failed to receive the IDs.\n";
@@ -176,17 +176,17 @@ const XC::ID &XC::TaggedObjectStorage::receiveTags(int posDbTag,int sz,const Com
   }
 
 //! @brief Receive object tags through the channel being passed as parameter.
-int XC::TaggedObjectStorage::receiveObjectTags(const int &sz,const CommParameters &cp)
+int XC::TaggedObjectStorage::receiveObjectTags(const int &sz,const Communicator &comm)
   {
     int res= 0;
-    dbTags= receiveTags(posDbTag1,sz,cp);
-    classTags= receiveTags(posDbTag2,sz,cp);
-    objTags= receiveTags(posDbTag3,sz,cp);
+    dbTags= receiveTags(posDbTag1,sz,comm);
+    classTags= receiveTags(posDbTag2,sz,comm);
+    objTags= receiveTags(posDbTag3,sz,comm);
     return res;
   }
 
 //! @brief Send objects through the channel being passed as parameter.
-int XC::TaggedObjectStorage::sendObjects(CommParameters &cp)
+int XC::TaggedObjectStorage::sendObjects(Communicator &comm)
   {
     const int size= getNumComponents();
     int res= 0;
@@ -200,8 +200,8 @@ int XC::TaggedObjectStorage::sendObjects(CommParameters &cp)
             MovableObject *tmp= dynamic_cast<MovableObject *>(ptr);
             if(tmp)
               {
-                tmp->setDbTag(cp);
-                res= tmp->sendSelf(cp);
+                tmp->setDbTag(comm);
+                res= tmp->sendSelf(comm);
                 if(res<0)
                   {
                     std::cerr << getClassName() << "::" << __FUNCTION__
@@ -220,7 +220,7 @@ int XC::TaggedObjectStorage::sendObjects(CommParameters &cp)
 
 //! @brief Receive the objects through the communicator being
 //! passed as parameter.
-int XC::TaggedObjectStorage::receiveObjects(const CommParameters &cp)
+int XC::TaggedObjectStorage::receiveObjects(const Communicator &comm)
   {
     TaggedObject *ptr= nullptr;
     TaggedObjectIter &theIter= getComponents();
@@ -230,7 +230,7 @@ int XC::TaggedObjectStorage::receiveObjects(const CommParameters &cp)
         MovableObject *tmp= dynamic_cast<MovableObject *>(ptr);
         if(tmp)
           {
-            res= tmp->recvSelf(cp);
+            res= tmp->recvSelf(comm);
             if(res<0)
               {
                 std::cerr << "TaggedObjectStorage::receive - object with tag "
@@ -248,9 +248,9 @@ int XC::TaggedObjectStorage::receiveObjects(const CommParameters &cp)
 
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::TaggedObjectStorage::sendData(CommParameters &cp)
+int XC::TaggedObjectStorage::sendData(Communicator &comm)
   {
-    const int dbTag= getDbTag(cp);
+    const int dbTag= getDbTag(comm);
     const int sz= getNumComponents();
     setDbTagDataPos(0,dbTag);
     setDbTagDataPos(1,sz);
@@ -258,29 +258,29 @@ int XC::TaggedObjectStorage::sendData(CommParameters &cp)
     int res= 0;
     if(sz>0)
       {
-        res+= sendObjects(cp);
+        res+= sendObjects(comm);
         if(transmitIDs)
           {
-            res+= sendObjectTags(cp);
+            res+= sendObjectTags(comm);
             transmitIDs= false; //Ya se han enviado.
           }
       }
     return res;
   }
 
-int XC::TaggedObjectStorage::sendSelf(CommParameters &cp)
+int XC::TaggedObjectStorage::sendSelf(Communicator &comm)
   {
     inicComm(5);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    const int dbTag= getDbTag(cp);
-    res+= cp.sendIdData(getDbTagData(),dbTag);
+    const int dbTag= getDbTag(comm);
+    res+= comm.sendIdData(getDbTagData(),dbTag);
     if(res<0)
       std::cerr << "TaggedObjectStorage::sendSelf() - failed to send data.\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::TaggedObjectStorage::recvSelf(const CommParameters &cp)
-  { return receiveObjects(cp); }
+int XC::TaggedObjectStorage::recvSelf(const Communicator &comm)
+  { return receiveObjects(comm); }
 

@@ -33,46 +33,46 @@ XC::InternalParamsLRIn::InternalParamsLRIn(const double &V,const double &r,const
   : InternalParamsLR(V,r,t,yl,yr), RLeft(pl), RRight(pr) {}
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::InternalParamsLRIn::sendData(CommParameters &cp)
+int XC::InternalParamsLRIn::sendData(Communicator &comm)
   {
-    int res= InternalParamsLR::sendData(cp);
-    res+= cp.sendDoubles(RLeft,RRight,getDbTagData(),CommMetaData(2));
+    int res= InternalParamsLR::sendData(comm);
+    res+= comm.sendDoubles(RLeft,RRight,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::InternalParamsLRIn::recvData(const CommParameters &cp)
+int XC::InternalParamsLRIn::recvData(const Communicator &comm)
   {
-    int res= InternalParamsLR::recvData(cp);
-    res+= cp.receiveDoubles(RLeft,RRight,getDbTagData(),CommMetaData(2));
+    int res= InternalParamsLR::recvData(comm);
+    res+= comm.receiveDoubles(RLeft,RRight,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::InternalParamsLRIn::sendSelf(CommParameters &cp)
+int XC::InternalParamsLRIn::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(2); 
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "InternalParamsLRIn::sendSelf - failed to send data.\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::InternalParamsLRIn::recvSelf(const CommParameters &cp)
+int XC::InternalParamsLRIn::recvSelf(const Communicator &comm)
   {
     inicComm(2);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "InternalParamsLRIn::recvSelf - failed to receive ids.\n";
     else
       {
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
            std::cerr << "InternalParamsLRIn::recvSelf - failed to receive data.\n";
       }

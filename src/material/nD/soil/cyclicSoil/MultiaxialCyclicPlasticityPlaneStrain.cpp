@@ -41,7 +41,7 @@
                                                                         
 /*----+----+----+----+----+----+----+----+----+----+----+----+----+----+----*
  |                                                                          | 
- |              MultiaxialCyclicPlasticity  XC::NDMaterial                      |
+ |              MultiaxialCyclicPlasticity  NDMaterial                      |
  +                                                                          +
  |--------------------------------------------------------------------------|
  |                                                                          |
@@ -302,14 +302,14 @@ XC::MultiaxialCyclicPlasticityPlaneStrain::revertToStart( )
  
 
 int
-XC::MultiaxialCyclicPlasticityPlaneStrain::sendSelf(CommParameters &cp)
+XC::MultiaxialCyclicPlasticityPlaneStrain::sendSelf(Communicator &comm)
 {
  
   return -1;
 }
 
 int
-XC::MultiaxialCyclicPlasticityPlaneStrain::recvSelf(const CommParameters &cp)
+XC::MultiaxialCyclicPlasticityPlaneStrain::recvSelf(const Communicator &comm)
 {
   
   return -1;

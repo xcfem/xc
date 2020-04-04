@@ -109,20 +109,20 @@ void XC::PathSeriesBase::Print(std::ostream &s, int flag) const
 
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::PathSeriesBase::sendData(CommParameters &cp)
+int XC::PathSeriesBase::sendData(Communicator &comm)
   {
-    int res= sendData(cp);
-    res+= cp.sendVector(thePath,getDbTagData(),CommMetaData(1));
-    res+= cp.sendInt(lastSendCommitTag,getDbTagData(),CommMetaData(2));
+    int res= sendData(comm);
+    res+= comm.sendVector(thePath,getDbTagData(),CommMetaData(1));
+    res+= comm.sendInt(lastSendCommitTag,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::PathSeriesBase::recvData(const CommParameters &cp)
+int XC::PathSeriesBase::recvData(const Communicator &comm)
   {
-    int res= recvData(cp);
-    res+= cp.receiveVector(thePath,getDbTagData(),CommMetaData(1));
-    res+= cp.receiveInt(lastSendCommitTag,getDbTagData(),CommMetaData(2));
+    int res= recvData(comm);
+    res+= comm.receiveVector(thePath,getDbTagData(),CommMetaData(1));
+    res+= comm.receiveInt(lastSendCommitTag,getDbTagData(),CommMetaData(2));
     return res;
   }
 

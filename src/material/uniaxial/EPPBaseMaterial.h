@@ -42,8 +42,8 @@ class EPPBaseMaterial: public ElasticBaseMaterial
     double trialStress; //!< current trial stress
     double trialTangent; //!< current trial tangent
     double commitStrain; //!< plastic strain at last commit
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public:
     EPPBaseMaterial(int tag, int classtag, double E= 0.0, double e0= 0.0);

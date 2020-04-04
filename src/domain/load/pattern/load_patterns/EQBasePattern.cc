@@ -47,17 +47,17 @@ void XC::EQBasePattern::Print(std::ostream &s, int flag) const
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::EQBasePattern::sendData(CommParameters &cp)
+int XC::EQBasePattern::sendData(Communicator &comm)
   {
-    int res= EQBasePattern::sendData(cp);
-    res+= cp.sendMovable(theMotions,getDbTagData(),CommMetaData(16));
+    int res= EQBasePattern::sendData(comm);
+    res+= comm.sendMovable(theMotions,getDbTagData(),CommMetaData(16));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::EQBasePattern::recvData(const CommParameters &cp)
+int XC::EQBasePattern::recvData(const Communicator &comm)
   {
-    int res= EQBasePattern::recvData(cp);
-    res+= cp.receiveMovable(theMotions,getDbTagData(),CommMetaData(16));
+    int res= EQBasePattern::recvData(comm);
+    res+= comm.receiveMovable(theMotions,getDbTagData(),CommMetaData(16));
     return res;
   }

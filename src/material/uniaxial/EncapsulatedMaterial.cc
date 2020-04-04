@@ -77,17 +77,17 @@ double XC::EncapsulatedMaterial::getStrain(void) const
 double XC::EncapsulatedMaterial::getStrainRate(void) const
   { return theMaterial->getStrainRate(); }
 
-int XC::EncapsulatedMaterial::sendData(CommParameters &cp)
+int XC::EncapsulatedMaterial::sendData(Communicator &comm)
   {
     setDbTagDataPos(0,getTag());
-    int res= sendMaterialPtr(theMaterial,getDbTagData(),cp,BrokedPtrCommMetaData(1,2,3));
+    int res= sendMaterialPtr(theMaterial,getDbTagData(),comm,BrokedPtrCommMetaData(1,2,3));
     return res;
   }
 
-int XC::EncapsulatedMaterial::recvData(const CommParameters &cp)
+int XC::EncapsulatedMaterial::recvData(const Communicator &comm)
   {
-    int res= UniaxialMaterial::recvData(cp);
-    theMaterial= dynamic_cast<UniaxialMaterial *>(receiveMaterialPtr(theMaterial,getDbTagData(),cp,BrokedPtrCommMetaData(1,2,3)));
+    int res= UniaxialMaterial::recvData(comm);
+    theMaterial= dynamic_cast<UniaxialMaterial *>(receiveMaterialPtr(theMaterial,getDbTagData(),comm,BrokedPtrCommMetaData(1,2,3)));
     
     return res;
   }

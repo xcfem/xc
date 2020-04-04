@@ -44,8 +44,8 @@ class HingeBeamIntegration3d: public PlasticLengthsBeamIntegration
   protected:
     CrossSectionProperties3d ctes_scc; //!< Mechanical properties of the section E,A,Iy,...
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     HingeBeamIntegration3d(int classTag, double E, double A, double Iz,double Iy, double G, double J,double lpI, double lpJ);
     HingeBeamIntegration3d(int classTag, const CrossSectionProperties3d &cts= CrossSectionProperties3d(),const double &lpi=0.0,const double &lpj=0.0);
@@ -56,8 +56,8 @@ class HingeBeamIntegration3d: public PlasticLengthsBeamIntegration
     int updateParameter(int parameterID, Information &info);
     int activateParameter(int parameterID);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
     void Print(std::ostream &s, int flag = 0) const;
   };

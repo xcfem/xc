@@ -51,8 +51,8 @@ class PhysicalProperties: public CommandEntity, public MovableObject
     material_vector theMaterial; //!< pointers to the material objects
 
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public:
     PhysicalProperties(const size_t &nMat= 0,const MAT *matModel= nullptr);
@@ -81,8 +81,8 @@ class PhysicalProperties: public CommandEntity, public MovableObject
     inline const MAT *operator[](const size_t &i) const
       { return theMaterial[i]; }
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
     //! @brief Return the generalized stresses at material points.
     inline Matrix getGeneralizedStresses(void) const
@@ -129,30 +129,30 @@ DbTagData &PhysicalProperties<MAT>::getDbTagData(void) const
 
 //! @brief Send members through the channel being passed as parameter.
 template <class MAT>
-int PhysicalProperties<MAT>::sendData(CommParameters &cp)
+int PhysicalProperties<MAT>::sendData(Communicator &comm)
   {
-    int res= cp.sendMovable(theMaterial,this->getDbTagData(),CommMetaData(1));
+    int res= comm.sendMovable(theMaterial,this->getDbTagData(),CommMetaData(1));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
 template <class MAT>
-int PhysicalProperties<MAT>::recvData(const CommParameters &cp)
+int PhysicalProperties<MAT>::recvData(const Communicator &comm)
   {
-    int res= cp.receiveMovable(theMaterial,this->getDbTagData(),CommMetaData(1));
+    int res= comm.receiveMovable(theMaterial,this->getDbTagData(),CommMetaData(1));
     return res;
   }
 
 //! @brief Sends object.
 template <class MAT>
-int PhysicalProperties<MAT>::sendSelf(CommParameters &cp)
+int PhysicalProperties<MAT>::sendSelf(Communicator &comm)
   {
     inicComm(2);
 
-    int res= this->sendData(cp);
+    int res= this->sendData(comm);
 
     const int dataTag= getDbTag();
-    res += cp.sendIdData(getDbTagData(),dataTag);
+    res += comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; failed to send ID data\n";
@@ -161,17 +161,17 @@ int PhysicalProperties<MAT>::sendSelf(CommParameters &cp)
 
 //! @brief Receives object
 template <class MAT>
-int PhysicalProperties<MAT>::recvSelf(const CommParameters &cp)
+int PhysicalProperties<MAT>::recvSelf(const Communicator &comm)
   {
     inicComm(2);
 
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to receive ID data\n";
     else
-      res+= this->recvData(cp);
+      res+= this->recvData(comm);
     return res;
   }
 

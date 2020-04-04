@@ -86,8 +86,8 @@ class UniaxialFiber2d: public UniaxialFiber
     static Matrix ks; //!< static class wide matrix object for returns
     static Vector fs; //!< static class wide vector object for returns
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public:
     UniaxialFiber2d(void);   
@@ -102,8 +102,8 @@ class UniaxialFiber2d: public UniaxialFiber
     int getOrder(void) const;
     const ResponseId &getType(void) const;
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;
     
     Response *setResponse(const std::vector<std::string> &argv, Information &info);

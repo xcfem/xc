@@ -220,13 +220,13 @@ int XC::BandSPDLinThreadSolver::setSize()
 }
 
 
-int XC::BandSPDLinThreadSolver::sendSelf(CommParameters &cp)
+int XC::BandSPDLinThreadSolver::sendSelf(Communicator &comm)
 {
     // nothing to do
     return 0;
 }
 
-int XC::BandSPDLinThreadSolver::recvSelf(const CommParameters &cp)
+int XC::BandSPDLinThreadSolver::recvSelf(const Communicator &comm)
 {
     // nothing to do
     return 0;

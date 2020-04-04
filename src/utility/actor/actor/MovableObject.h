@@ -72,14 +72,14 @@
 #include <vector>
 #include "utility/actor/objectBroker/FEM_ObjectBroker.h"
 #include <iostream>
-#include "CommParameters.h"
+#include "Communicator.h"
 
 namespace XC {
 class Channel;
 class FEM_ObjectBroker;
 class Parameter;
 class Information;
-class CommParameters;
+class Communicator;
 class CommMetaData;
 
 //! @ingroup Utils
@@ -110,9 +110,9 @@ class MovableObject: public DistributedBase
 
     int getClassTag(void) const;
     int getDbTag(void) const;
-    int getDbTag(CommParameters &);
+    int getDbTag(Communicator &);
     void setDbTag(int dbTag);
-    void setDbTag(CommParameters &);
+    void setDbTag(Communicator &);
 
     //! @brief Send the object.
     //!
@@ -125,7 +125,7 @@ class MovableObject: public DistributedBase
     //! receiveSelf() to receive the data. Returns 0 if successful
     //! (successful in that the data got to the channel), or a - if no
     //! data was sent.
-    virtual int sendSelf(CommParameters &cp) =0;
+    virtual int sendSelf(Communicator &comm) =0;
     
     //! @brief Receive the object.
     //!
@@ -135,7 +135,7 @@ class MovableObject: public DistributedBase
     //! aggregation containing other objects, new objects of the correct type
     //! can be constructed using #theBroker. To return 0 if successful
     //! or a -1 if not.
-    virtual int recvSelf(const CommParameters &cp) =0;
+    virtual int recvSelf(const Communicator &comm) =0;
 
     // methods for sensitivity studies
     virtual int setParameter(const std::vector<std::string> &argv, Parameter &param);
@@ -149,9 +149,9 @@ class MovableObject: public DistributedBase
 
 //! @brief Returns an empty object of the class identified by classTag.
 template <class T>
-T *getBrokedMovable(const int &dbTag,const int &classTag,const CommParameters &cp,T *(FEM_ObjectBroker::*ptrFunc)(int))
+T *getBrokedMovable(const int &dbTag,const int &classTag,const Communicator &comm,T *(FEM_ObjectBroker::*ptrFunc)(int))
   {
-    T *retval=cp.getBrokedPtr(classTag,ptrFunc);
+    T *retval=comm.getBrokedPtr(classTag,ptrFunc);
   
     if(retval)
       retval->setDbTag(dbTag);

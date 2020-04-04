@@ -44,8 +44,8 @@ class BrickSelfWeight: public ElementBodyLoad
   private:
     static Vector data;
   protected:
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
   public:
     BrickSelfWeight(int tag, const ID &theElementTags);
@@ -54,8 +54,8 @@ class BrickSelfWeight: public ElementBodyLoad
 
     const Vector &getData(int &type, const double &loadFactor) const;
 
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;       
   };
 } // end of XC namespace

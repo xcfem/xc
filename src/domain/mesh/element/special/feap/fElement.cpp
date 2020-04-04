@@ -629,13 +629,13 @@ const XC::Vector &XC::fElement::getResistingForceIncInertia(void) const
   }
 
 
-int XC::fElement::sendSelf(CommParameters &cp)
+int XC::fElement::sendSelf(Communicator &comm)
   {
     std::cerr << "XC::fElement::sendSelf() - not yet implemented\n";
     return -1;
   }
 
-int XC::fElement::recvSelf(const CommParameters &cp)
+int XC::fElement::recvSelf(const Communicator &comm)
   {
     std::cerr << "XC::fElement::recvSelf() - not yet implemented\n";
     return -1;

@@ -107,8 +107,8 @@ class Parameter: public TaggedObject, public MovableObject
       { return "FEModel"; }
 
     virtual void setDomain(Domain *theDomain);
-    virtual int sendSelf(CommParameters &);  
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);  
+    virtual int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

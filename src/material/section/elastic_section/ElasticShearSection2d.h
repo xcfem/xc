@@ -72,8 +72,8 @@ class ElasticShearSection2d: public BaseElasticSection2d
     static Vector s;
     int parameterID;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     //ElasticShearSection2d(int tag, double E, double A, double I,double G, double alpha);
     ElasticShearSection2d(void);
@@ -89,8 +89,8 @@ class ElasticShearSection2d: public BaseElasticSection2d
     const ResponseId &getType(void) const;
     int getOrder(void) const;
   
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   
     int setParameter(const std::vector<std::string> &argv, Parameter &param);
     int updateParameter(int parameterID, Information &info);

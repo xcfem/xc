@@ -257,7 +257,7 @@ int XC::ProfileSPDLinDirectSkypackSolver::setProfileSOE(ProfileSPDLinSOE &theNew
     return 0;
   }
 	
-int XC::ProfileSPDLinDirectSkypackSolver::sendSelf(CommParameters &cp)
+int XC::ProfileSPDLinDirectSkypackSolver::sendSelf(Communicator &comm)
   {
     if(size != 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -266,7 +266,7 @@ int XC::ProfileSPDLinDirectSkypackSolver::sendSelf(CommParameters &cp)
   }
 
 
-int XC::ProfileSPDLinDirectSkypackSolver::recvSelf(const CommParameters &cp)
+int XC::ProfileSPDLinDirectSkypackSolver::recvSelf(const Communicator &comm)
   {
     return 0;
   }

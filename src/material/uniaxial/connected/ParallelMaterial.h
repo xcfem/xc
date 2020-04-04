@@ -80,8 +80,8 @@ class ParallelMaterial: public ConnectedMaterial
     double trialStrain;
     double trialStrainRate;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     ParallelMaterial(int tag, const DqUniaxialMaterial &theMaterials);
     ParallelMaterial(int tag);
@@ -101,8 +101,8 @@ class ParallelMaterial: public ConnectedMaterial
 
     UniaxialMaterial *getCopy(void) const;
     
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag =0) const;
 

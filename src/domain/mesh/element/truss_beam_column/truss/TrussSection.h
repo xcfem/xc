@@ -82,8 +82,8 @@ class TrussSection: public TrussBase
     SectionForceDeformation  *theSection;
     double computeCurrentStrain(void) const;    
   protected:
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     TrussSection(int tag, int dimension, int Nd1, int Nd2, SectionForceDeformation &theSection);
     TrussSection(int tag,int dimension,const Material *ptr_mat);    
@@ -116,8 +116,8 @@ class TrussSection: public TrussBase
     const Vector &getResistingForceIncInertia(void) const;            
 
     // public methods for element output
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;    
     
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);

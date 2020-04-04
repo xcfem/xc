@@ -158,21 +158,21 @@ int XC::LoadPath::update(const Vector &deltaU)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::LoadPath::sendData(CommParameters &cp)
+int XC::LoadPath::sendData(Communicator &comm)
   {
-    int res= StaticIntegrator::sendData(cp);
-    res+= cp.sendInt(currentStep,getDbTagData(),CommMetaData(1));
-    res+= cp.sendVector(loadPath,getDbTagData(),CommMetaData(2));
+    int res= StaticIntegrator::sendData(comm);
+    res+= comm.sendInt(currentStep,getDbTagData(),CommMetaData(1));
+    res+= comm.sendVector(loadPath,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as
 //! parameter.
-int XC::LoadPath::recvData(const CommParameters &cp)
+int XC::LoadPath::recvData(const Communicator &comm)
   {
-    int res= StaticIntegrator::recvData(cp);
-    res+= cp.receiveInt(currentStep,getDbTagData(),CommMetaData(1));
-    res+= cp.receiveVector(loadPath,getDbTagData(),CommMetaData(2));
+    int res= StaticIntegrator::recvData(comm);
+    res+= comm.receiveInt(currentStep,getDbTagData(),CommMetaData(1));
+    res+= comm.receiveVector(loadPath,getDbTagData(),CommMetaData(2));
     return res;
   }
 
@@ -180,14 +180,14 @@ int XC::LoadPath::recvData(const CommParameters &cp)
 //! ID. Then sends the Vector \p path. Returns \f$0\f$ if successful, a
 //! warning message is printed and a \f$-1\f$ is returned if \p theChannel
 //! fails to send the ID or the Vector. 
-int XC::LoadPath::sendSelf(CommParameters &cp)
+int XC::LoadPath::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(5);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data.\n";
@@ -199,11 +199,11 @@ int XC::LoadPath::sendSelf(CommParameters &cp)
 //! Creates a new Vector and receives the Vector from the Channel. 
 //! Returns \f$0\f$ if successful, a warning message is printed and a \f$-1\f$
 //! is returned if \p theChannel fails to receive the Vector or the ID.
-int XC::LoadPath::recvSelf(const CommParameters &cp)
+int XC::LoadPath::recvSelf(const Communicator &comm)
   {
     inicComm(5);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -211,7 +211,7 @@ int XC::LoadPath::recvSelf(const CommParameters &cp)
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

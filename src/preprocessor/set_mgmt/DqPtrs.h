@@ -116,8 +116,8 @@ class DqPtrs: public CommandEntity, protected std::deque<T *>
       }
 
     
-    int sendTags(int posSz,int posDbTag,DbTagData &dt,CommParameters &cp);
-    const ID &receiveTags(int posSz,int pDbTg,DbTagData &dt,const CommParameters &cp);
+    int sendTags(int posSz,int posDbTag,DbTagData &dt,Communicator &comm);
+    const ID &receiveTags(int posSz,int pDbTg,DbTagData &dt,const Communicator &comm);
 
   };
 
@@ -270,14 +270,14 @@ const ID &DqPtrs<T>::getTags(void) const
 
 //! @brief Sends the dbTags of the sets trough the channel being passed as parameter.
 template <class T>
-int DqPtrs<T>::sendTags(int posSz,int posDbTag,DbTagData &dt,CommParameters &cp)
+int DqPtrs<T>::sendTags(int posSz,int posDbTag,DbTagData &dt,Communicator &comm)
   {
     const int sz= size();
-    int res= cp.sendInt(sz,dt,CommMetaData(posSz));
+    int res= comm.sendInt(sz,dt,CommMetaData(posSz));
     if(sz>0)
       {
         const ID &tags= getTags();
-        res+= cp.sendID(tags,dt,CommMetaData(posDbTag));
+        res+= comm.sendID(tags,dt,CommMetaData(posDbTag));
       }
     if(res<0)
       std::cerr << "DqPtrs<T>::sendDbTags - failed to send the IDs.\n";
@@ -286,15 +286,15 @@ int DqPtrs<T>::sendTags(int posSz,int posDbTag,DbTagData &dt,CommParameters &cp)
 
 //! @brief Sends the dbTags of the sets through the channel being passed as parameter.
 template <class T>
-const ID &DqPtrs<T>::receiveTags(int posSz,int posDbTag,DbTagData &dt,const CommParameters &cp)
+const ID &DqPtrs<T>::receiveTags(int posSz,int posDbTag,DbTagData &dt,const Communicator &comm)
   {
     static ID retval;
     int sz= 0;
-    int res= cp.receiveInt(sz,dt,CommMetaData(posSz));
+    int res= comm.receiveInt(sz,dt,CommMetaData(posSz));
     if(sz>0)
       {
         retval.resize(sz);
-        res= cp.receiveID(retval,dt,CommMetaData(posDbTag));
+        res= comm.receiveID(retval,dt,CommMetaData(posDbTag));
       }
     if(res<0)
       std::cerr << "DqPtrs<T>::receiveTags - failed to receive the IDs.\n";

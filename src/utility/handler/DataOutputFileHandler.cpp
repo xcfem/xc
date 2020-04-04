@@ -180,35 +180,35 @@ int XC::DataOutputFileHandler::write(Vector &data)
   }
 
 //! @brief Sends object members through the communicator being passed as parameter.
-int XC::DataOutputFileHandler::sendData(CommParameters &cp)
+int XC::DataOutputFileHandler::sendData(Communicator &comm)
   {
-    int res= cp.sendString(fileName,getDbTagData(),CommMetaData(0));
+    int res= comm.sendString(fileName,getDbTagData(),CommMetaData(0));
 
     if(theEchoMode == NONE)
-      res+= cp.sendInt(0,getDbTagData(),CommMetaData(1));
+      res+= comm.sendInt(0,getDbTagData(),CommMetaData(1));
     else if (theEchoMode == DATA_FILE)
-      res+= cp.sendInt(1,getDbTagData(),CommMetaData(1));
+      res+= comm.sendInt(1,getDbTagData(),CommMetaData(1));
     else
-      res+= cp.sendInt(2,getDbTagData(),CommMetaData(1));
+      res+= comm.sendInt(2,getDbTagData(),CommMetaData(1));
 
     if(theOpenMode == OVERWRITE)
-      res+= cp.sendInt(0,getDbTagData(),CommMetaData(2));
+      res+= comm.sendInt(0,getDbTagData(),CommMetaData(2));
     else
-      res+= cp.sendInt(1,getDbTagData(),CommMetaData(2));
+      res+= comm.sendInt(1,getDbTagData(),CommMetaData(2));
 
-    res+= cp.sendInt(numColumns,getDbTagData(),CommMetaData(3));
+    res+= comm.sendInt(numColumns,getDbTagData(),CommMetaData(3));
     return res;
   }
 
 //! @brief Receives object members through the communicator being passed as parameter.
-int XC::DataOutputFileHandler::recvData(const CommParameters &cp)
+int XC::DataOutputFileHandler::recvData(const Communicator &comm)
   {
-    int res= cp.receiveString(fileName,getDbTagData(),CommMetaData(0));
+    int res= comm.receiveString(fileName,getDbTagData(),CommMetaData(0));
     int em;
-    res+= cp.receiveInt(em,getDbTagData(),CommMetaData(1));
+    res+= comm.receiveInt(em,getDbTagData(),CommMetaData(1));
     int om;
-    res+= cp.receiveInt(om,getDbTagData(),CommMetaData(2));
-    res+= cp.receiveInt(numColumns,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveInt(om,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveInt(numColumns,getDbTagData(),CommMetaData(3));
     if(om==0)
       theOpenMode= OVERWRITE;
     else
@@ -224,14 +224,14 @@ int XC::DataOutputFileHandler::recvData(const CommParameters &cp)
   }
 
 //! @brief Send the object through the communicator argument.
-int XC::DataOutputFileHandler::sendSelf(CommParameters &cp)
+int XC::DataOutputFileHandler::sendSelf(Communicator &comm)
   {
     inicComm(4);
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "WARNING DataOutputFileHandler::sendSelf() - " 
                 << dataTag << " failed to send.";
@@ -239,16 +239,16 @@ int XC::DataOutputFileHandler::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receive the object through the communicator argument.
-int XC::DataOutputFileHandler::recvSelf(const CommParameters &cp)
+int XC::DataOutputFileHandler::recvSelf(const Communicator &comm)
   {
     inicComm(4);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << "WARNING DataOutputFileHandler::recvSelf() - "
                 << dataTag << " failed to receive ID\n";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }

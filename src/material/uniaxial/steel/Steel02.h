@@ -109,8 +109,8 @@ class Steel02: public SteelBase
   protected:
     int setup_parameters(void);
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public:
     Steel02(int tag, double fy, double E0, double b,
@@ -139,8 +139,8 @@ class Steel02: public SteelBase
       { return sigini; }
 
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 // AddingSensitivity:BEGIN //////////////////////////////////////////
     int    setParameter(const std::vector<std::string> &argv, Parameter &param);
     int    updateParameter(int parameterID, Information &info);

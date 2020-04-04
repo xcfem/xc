@@ -191,22 +191,22 @@ bool XC::EarthquakePattern::addElementalLoad(ElementalLoad *)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::EarthquakePattern::sendData(CommParameters &cp)
+int XC::EarthquakePattern::sendData(Communicator &comm)
   {
-    int res= EQBasePattern::sendData(cp);
-    res+= cp.sendVector(uDotG,getDbTagData(),CommMetaData(17));
-    res+= cp.sendVector(uDotDotG,getDbTagData(),CommMetaData(18));
-    res+= cp.sendDouble(currentTime,getDbTagData(),CommMetaData(19));
+    int res= EQBasePattern::sendData(comm);
+    res+= comm.sendVector(uDotG,getDbTagData(),CommMetaData(17));
+    res+= comm.sendVector(uDotDotG,getDbTagData(),CommMetaData(18));
+    res+= comm.sendDouble(currentTime,getDbTagData(),CommMetaData(19));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::EarthquakePattern::recvData(const CommParameters &cp)
+int XC::EarthquakePattern::recvData(const Communicator &comm)
   {
-    int res= EQBasePattern::recvData(cp);
-    res+= cp.receiveVector(uDotG,getDbTagData(),CommMetaData(17));
-    res+= cp.receiveVector(uDotDotG,getDbTagData(),CommMetaData(18));
-    res+= cp.receiveDouble(currentTime,getDbTagData(),CommMetaData(19));
+    int res= EQBasePattern::recvData(comm);
+    res+= comm.receiveVector(uDotG,getDbTagData(),CommMetaData(17));
+    res+= comm.receiveVector(uDotDotG,getDbTagData(),CommMetaData(18));
+    res+= comm.receiveDouble(currentTime,getDbTagData(),CommMetaData(19));
     return res;
   }
 

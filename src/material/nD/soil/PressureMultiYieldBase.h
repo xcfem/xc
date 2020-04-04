@@ -75,8 +75,8 @@ class PressureMultiYieldBase: public NDMaterial
 
   protected:
      void setup(int nd, double r, double frictionAng,double peakShearStra, double refPress, double pressDependCoe, double cohesi,int numberOfYieldSurf);
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
      // Initialization constructor
      PressureMultiYieldBase (int tag, int classTag, int nd, double rho, double frictionAng, double peakShearStra, double refPress, double pressDependCoe, double cohesi = 0.1,int numberOfYieldSurf = 20),

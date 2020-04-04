@@ -80,8 +80,8 @@ class PDeltaCrdTransf2d: public SmallDispCrdTransf2d
     double ul14; //!< Transverse local displacement offset of P-Delta
 
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     PDeltaCrdTransf2d(int tag);
     PDeltaCrdTransf2d(int tag, const Vector &rigJntOffsetI, const Vector &rigJntOffsetJ);
@@ -100,8 +100,8 @@ class PDeltaCrdTransf2d: public SmallDispCrdTransf2d
     
     CrdTransf2d *getCopy(void) const;
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag = 0) const;
   };

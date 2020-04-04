@@ -96,43 +96,43 @@ int XC::ImposedMotionSP1::applyConstraint(double time)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::ImposedMotionSP1::sendData(CommParameters &cp)
+int XC::ImposedMotionSP1::sendData(Communicator &comm)
   {
-    int result= ImposedMotionBase::sendData(cp);
-    result+= cp.sendInt(destroyMotion,getDbTagData(),CommMetaData(9));
+    int result= ImposedMotionBase::sendData(comm);
+    result+= comm.sendInt(destroyMotion,getDbTagData(),CommMetaData(9));
     return result;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::ImposedMotionSP1::recvData(const CommParameters &cp)
+int XC::ImposedMotionSP1::recvData(const Communicator &comm)
   {
-    int res= ImposedMotionBase::recvData(cp);
-    res+= cp.receiveInt(destroyMotion,getDbTagData(),CommMetaData(9));
+    int res= ImposedMotionBase::recvData(comm);
+    res+= comm.receiveInt(destroyMotion,getDbTagData(),CommMetaData(9));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::ImposedMotionSP1::sendSelf(CommParameters &cp)
+int XC::ImposedMotionSP1::sendSelf(Communicator &comm)
   {
     static ID data(10);
-    int result= sendData(cp);
+    int result= sendData(comm);
     const int dbTag = this->getDbTag();
-    result+= cp.sendIdData(getDbTagData(),dbTag);
+    result+= comm.sendIdData(getDbTagData(),dbTag);
     if(result < 0)
       std::cerr << "ImposedMotionSP1::sendSelf() - failed to send extra data\n";
     return result;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::ImposedMotionSP1::recvSelf(const CommParameters &cp)
+int XC::ImposedMotionSP1::recvSelf(const Communicator &comm)
   {
     static ID data(10);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "ImposedMotionSP1::recvSelf() - data could not be received\n" ;
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

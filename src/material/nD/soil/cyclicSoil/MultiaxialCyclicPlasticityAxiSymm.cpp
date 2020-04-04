@@ -41,7 +41,7 @@
                                                                         
 /*----+----+----+----+----+----+----+----+----+----+----+----+----+----+----*
  |                                                                          | 
- |              MultiaxialCyclicPlasticity  XC::NDMaterial                      |
+ |              MultiaxialCyclicPlasticity  NDMaterial                      |
  +                                                                          +
  |--------------------------------------------------------------------------|
  |                                                                          |
@@ -339,13 +339,13 @@ int XC::MultiaxialCyclicPlasticityAxiSymm::revertToStart( )
 
 
 int
-XC::MultiaxialCyclicPlasticityAxiSymm::sendSelf(CommParameters &cp)
+XC::MultiaxialCyclicPlasticityAxiSymm::sendSelf(Communicator &comm)
 {
   return -1;
 }
 
 int
-XC::MultiaxialCyclicPlasticityAxiSymm::recvSelf(const CommParameters &cp)
+XC::MultiaxialCyclicPlasticityAxiSymm::recvSelf(const Communicator &comm)
 {
   return -1;
 }

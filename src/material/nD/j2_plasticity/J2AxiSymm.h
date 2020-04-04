@@ -100,8 +100,8 @@ class J2AxiSymm: public J2Plasticity
     double commitEps01;
     double commitEps22;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public: 
     //null constructor
     J2AxiSymm( ) ;
@@ -154,8 +154,8 @@ class J2AxiSymm: public J2Plasticity
   int revertToStart( ) ;
 
   //sending and receiving
-  int sendSelf(CommParameters &) ;  
-  int recvSelf(const CommParameters &) ;
+  int sendSelf(Communicator &) ;  
+  int recvSelf(const Communicator &) ;
   }; //end of J2AxiSymm declarations
 
 } //end of XC namespace

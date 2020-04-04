@@ -635,48 +635,48 @@ XC::DbTagData &XC::ElasticBeam2d::getDbTagData(void) const
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::ElasticBeam2d::sendData(CommParameters &cp)
+int XC::ElasticBeam2d::sendData(Communicator &comm)
   {
-    int res= ProtoBeam2d::sendData(cp);
-    res+= sendCoordTransf(8,9,10,cp);
-    res+= cp.sendVector(eInic,getDbTagData(),CommMetaData(11));
-    res+= cp.sendInt(release,getDbTagData(),CommMetaData(12));
+    int res= ProtoBeam2d::sendData(comm);
+    res+= sendCoordTransf(8,9,10,comm);
+    res+= comm.sendVector(eInic,getDbTagData(),CommMetaData(11));
+    res+= comm.sendInt(release,getDbTagData(),CommMetaData(12));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::ElasticBeam2d::recvData(const CommParameters &cp)
+int XC::ElasticBeam2d::recvData(const Communicator &comm)
   {
-    int res= ProtoBeam2d::recvData(cp);
-    theCoordTransf= recvCoordTransf2d(8,9,10,cp);
-    res+= cp.receiveVector(eInic,getDbTagData(),CommMetaData(11));
-    res+= cp.receiveInt(release,getDbTagData(),CommMetaData(12));
+    int res= ProtoBeam2d::recvData(comm);
+    theCoordTransf= recvCoordTransf2d(8,9,10,comm);
+    res+= comm.receiveVector(eInic,getDbTagData(),CommMetaData(11));
+    res+= comm.receiveInt(release,getDbTagData(),CommMetaData(12));
     return res;
   }
 
-int XC::ElasticBeam2d::sendSelf(CommParameters &cp)
+int XC::ElasticBeam2d::sendSelf(Communicator &comm)
   {
     inicComm(13);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
     const int dataTag= getDbTag();
-    res= cp.sendIdData(getDbTagData(),dataTag);
+    res= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; could not send data.\n";
     return res;
   }
 
-int XC::ElasticBeam2d::recvSelf(const CommParameters &cp)
+int XC::ElasticBeam2d::recvSelf(const Communicator &comm)
   {
     const int dataTag= getDbTag();
     inicComm(13);
-    int res = cp.receiveIdData(getDbTagData(),dataTag);
+    int res = comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to receive ID data.\n";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

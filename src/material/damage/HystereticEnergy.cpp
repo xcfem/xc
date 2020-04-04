@@ -298,11 +298,11 @@ int XC::HystereticEnergy::getResponse(int responseID, Information &info)
 }
 
 
-int XC::HystereticEnergy::sendSelf(CommParameters &cp)
+int XC::HystereticEnergy::sendSelf(Communicator &comm)
   { return 0; }
 
 
-int XC::HystereticEnergy::recvSelf(const CommParameters &cp)
+int XC::HystereticEnergy::recvSelf(const Communicator &comm)
   { return 0; }
 
 

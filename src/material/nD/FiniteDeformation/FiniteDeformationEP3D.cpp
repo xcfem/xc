@@ -50,8 +50,6 @@
 //#                                     for nearly quadratic convergence rate
 //===============================================================================
 
-#ifndef FiniteDeformationEP3D_CPP
-#define FiniteDefornationEP3D_CPP
 
 #include "material/nD/FiniteDeformation/FDEPState.h"
 #include "material/nD/FiniteDeformation/FiniteDeformationEP3D.h"
@@ -377,14 +375,14 @@ int XC::FiniteDeformationEP3D::getOrder(void) const
 }
 
 //----------------------------------------------------------------------
-int XC::FiniteDeformationEP3D::sendSelf(CommParameters &cp)
+int XC::FiniteDeformationEP3D::sendSelf(Communicator &comm)
 {
     // Not yet implemented
     return 0;
 }
 
 //----------------------------------------------------------------------
-int XC::FiniteDeformationEP3D::recvSelf(const CommParameters &)
+int XC::FiniteDeformationEP3D::recvSelf(const Communicator &)
 {
     // Not yet implemented
     return 0;
@@ -1420,5 +1418,3 @@ int XC::FiniteDeformationEP3D::SemiImplicitAlgorithm()
     return 0;
 }
 
-
-#endif

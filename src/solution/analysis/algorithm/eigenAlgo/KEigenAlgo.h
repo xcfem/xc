@@ -78,8 +78,8 @@ class KEigenAlgo: public EigenAlgorithm
     inline void setRCond(double d)
       { rcond= d; }
     virtual void Print(std::ostream &s, int flag = 0) const;
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
   };
 inline SolutionAlgorithm *KEigenAlgo::getCopy(void) const
   { return new KEigenAlgo(*this); }

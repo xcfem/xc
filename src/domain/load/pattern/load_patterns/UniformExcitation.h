@@ -87,8 +87,8 @@ class UniformExcitation: public EarthquakePattern
     UniformExcitation(const UniformExcitation &);
     UniformExcitation &operator=(const UniformExcitation &);
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public:
     UniformExcitation(int tag= 0);
@@ -118,8 +118,8 @@ class UniformExcitation: public EarthquakePattern
     //! @brief return multiplication factor.
     inline double getFactor(void) const
       { return fact; }
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
     // AddingSensitivity:BEGIN /////////////////////////////////
     void applyLoadSensitivity(double time);

@@ -595,84 +595,84 @@ const XC::Vector &XC::BeamWithHinges3d::getResistingForceIncInertia(void) const
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::BeamWithHinges3d::sendData(CommParameters &cp)
+int XC::BeamWithHinges3d::sendData(Communicator &comm)
   {
-    int res= BeamColumnWithSectionFDTrf3d::sendData(cp);
-    res+= cp.sendDoubles(beta1,beta2,getDbTagData(),CommMetaData(13));
-    res+= cp.sendMatrix(fs[0],getDbTagData(),CommMetaData(14));
-    res+= cp.sendMatrix(fs[1],getDbTagData(),CommMetaData(15));
-    res+= cp.sendVector(sr[0],getDbTagData(),CommMetaData(16));
-    res+= cp.sendVector(sr[1],getDbTagData(),CommMetaData(17));
-    res+= cp.sendVector(e[0],getDbTagData(),CommMetaData(18));
-    res+= cp.sendVector(e[1],getDbTagData(),CommMetaData(19));
-    res+= cp.sendMatrix(kb,getDbTagData(),CommMetaData(20));
-    res+= cp.sendVector(q,getDbTagData(),CommMetaData(21));
-    res+= cp.sendMatrix(kbCommit,getDbTagData(),CommMetaData(22));
-    res+= cp.sendVector(qCommit,getDbTagData(),CommMetaData(23));
-    res+= cp.sendVector(eCommit[0],getDbTagData(),CommMetaData(24));
-    res+= cp.sendVector(eCommit[1],getDbTagData(),CommMetaData(25));
-    res+= cp.sendInts(initialFlag,maxIter,getDbTagData(),CommMetaData(26));
-    res+= cp.sendDouble(tolerance,getDbTagData(),CommMetaData(27));
-    res+= cp.sendMatrixPtr(applied_sf,getDbTagData(),MatrixCommMetaData(28,29,30,31));
-    res+= p0.sendData(cp,getDbTagData(),CommMetaData(32));
-    res+= v0.sendData(cp,getDbTagData(),CommMetaData(33));
-    res+= cp.sendMovable(ctes_scc,getDbTagData(),CommMetaData(34));
+    int res= BeamColumnWithSectionFDTrf3d::sendData(comm);
+    res+= comm.sendDoubles(beta1,beta2,getDbTagData(),CommMetaData(13));
+    res+= comm.sendMatrix(fs[0],getDbTagData(),CommMetaData(14));
+    res+= comm.sendMatrix(fs[1],getDbTagData(),CommMetaData(15));
+    res+= comm.sendVector(sr[0],getDbTagData(),CommMetaData(16));
+    res+= comm.sendVector(sr[1],getDbTagData(),CommMetaData(17));
+    res+= comm.sendVector(e[0],getDbTagData(),CommMetaData(18));
+    res+= comm.sendVector(e[1],getDbTagData(),CommMetaData(19));
+    res+= comm.sendMatrix(kb,getDbTagData(),CommMetaData(20));
+    res+= comm.sendVector(q,getDbTagData(),CommMetaData(21));
+    res+= comm.sendMatrix(kbCommit,getDbTagData(),CommMetaData(22));
+    res+= comm.sendVector(qCommit,getDbTagData(),CommMetaData(23));
+    res+= comm.sendVector(eCommit[0],getDbTagData(),CommMetaData(24));
+    res+= comm.sendVector(eCommit[1],getDbTagData(),CommMetaData(25));
+    res+= comm.sendInts(initialFlag,maxIter,getDbTagData(),CommMetaData(26));
+    res+= comm.sendDouble(tolerance,getDbTagData(),CommMetaData(27));
+    res+= comm.sendMatrixPtr(applied_sf,getDbTagData(),MatrixCommMetaData(28,29,30,31));
+    res+= p0.sendData(comm,getDbTagData(),CommMetaData(32));
+    res+= v0.sendData(comm,getDbTagData(),CommMetaData(33));
+    res+= comm.sendMovable(ctes_scc,getDbTagData(),CommMetaData(34));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::BeamWithHinges3d::recvData(const CommParameters &cp)
+int XC::BeamWithHinges3d::recvData(const Communicator &comm)
   {
-    int res= BeamColumnWithSectionFDTrf3d::recvData(cp);
-    res+= cp.receiveDoubles(beta1,beta2,getDbTagData(),CommMetaData(13));
-    res+= cp.receiveMatrix(fs[0],getDbTagData(),CommMetaData(14));
-    res+= cp.receiveMatrix(fs[1],getDbTagData(),CommMetaData(15));
-    res+= cp.receiveVector(sr[0],getDbTagData(),CommMetaData(16));
-    res+= cp.receiveVector(sr[1],getDbTagData(),CommMetaData(17));
-    res+= cp.receiveVector(e[0],getDbTagData(),CommMetaData(18));
-    res+= cp.receiveVector(e[1],getDbTagData(),CommMetaData(19));
-    res+= cp.receiveMatrix(kb,getDbTagData(),CommMetaData(20));
-    res+= cp.receiveVector(q,getDbTagData(),CommMetaData(21));
-    res+= cp.receiveMatrix(kbCommit,getDbTagData(),CommMetaData(22));
-    res+= cp.receiveVector(qCommit,getDbTagData(),CommMetaData(23));
-    res+= cp.receiveVector(eCommit[0],getDbTagData(),CommMetaData(24));
-    res+= cp.receiveVector(eCommit[1],getDbTagData(),CommMetaData(25));
-    res+= cp.receiveInts(initialFlag,maxIter,getDbTagData(),CommMetaData(26));
-    res+= cp.receiveDouble(tolerance,getDbTagData(),CommMetaData(27));
-    applied_sf= cp.receiveMatrixPtr(applied_sf,getDbTagData(),MatrixCommMetaData(28,29,30,31));
-    res+= p0.receiveData(cp,getDbTagData(),CommMetaData(31));
-    res+= v0.receiveData(cp,getDbTagData(),CommMetaData(32));
-    res+= cp.receiveMovable(ctes_scc,getDbTagData(),CommMetaData(33));
+    int res= BeamColumnWithSectionFDTrf3d::recvData(comm);
+    res+= comm.receiveDoubles(beta1,beta2,getDbTagData(),CommMetaData(13));
+    res+= comm.receiveMatrix(fs[0],getDbTagData(),CommMetaData(14));
+    res+= comm.receiveMatrix(fs[1],getDbTagData(),CommMetaData(15));
+    res+= comm.receiveVector(sr[0],getDbTagData(),CommMetaData(16));
+    res+= comm.receiveVector(sr[1],getDbTagData(),CommMetaData(17));
+    res+= comm.receiveVector(e[0],getDbTagData(),CommMetaData(18));
+    res+= comm.receiveVector(e[1],getDbTagData(),CommMetaData(19));
+    res+= comm.receiveMatrix(kb,getDbTagData(),CommMetaData(20));
+    res+= comm.receiveVector(q,getDbTagData(),CommMetaData(21));
+    res+= comm.receiveMatrix(kbCommit,getDbTagData(),CommMetaData(22));
+    res+= comm.receiveVector(qCommit,getDbTagData(),CommMetaData(23));
+    res+= comm.receiveVector(eCommit[0],getDbTagData(),CommMetaData(24));
+    res+= comm.receiveVector(eCommit[1],getDbTagData(),CommMetaData(25));
+    res+= comm.receiveInts(initialFlag,maxIter,getDbTagData(),CommMetaData(26));
+    res+= comm.receiveDouble(tolerance,getDbTagData(),CommMetaData(27));
+    applied_sf= comm.receiveMatrixPtr(applied_sf,getDbTagData(),MatrixCommMetaData(28,29,30,31));
+    res+= p0.receiveData(comm,getDbTagData(),CommMetaData(31));
+    res+= v0.receiveData(comm,getDbTagData(),CommMetaData(32));
+    res+= comm.receiveMovable(ctes_scc,getDbTagData(),CommMetaData(33));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::BeamWithHinges3d::sendSelf(CommParameters &cp)
+int XC::BeamWithHinges3d::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(34);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::BeamWithHinges3d::recvSelf(const CommParameters &cp)
+int XC::BeamWithHinges3d::recvSelf(const Communicator &comm)
   {
     inicComm(34);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

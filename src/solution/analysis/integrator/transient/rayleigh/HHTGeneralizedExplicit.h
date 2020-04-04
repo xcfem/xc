@@ -84,8 +84,8 @@ class HHTGeneralizedExplicit: public HHTBase
     inline double &alphaI(void)
       { return alpha; }
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     friend class AnalysisAggregation;
     HHTGeneralizedExplicit(AnalysisAggregation *);
@@ -107,8 +107,8 @@ class HHTGeneralizedExplicit: public HHTBase
     int update(const Vector &aiPlusOne);
     int commit(void);
     
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag = 0) const;        
   };

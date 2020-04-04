@@ -270,11 +270,11 @@ void XC::FullGenEigenSOE::identityM(void)
   }
 
 
-int XC::FullGenEigenSOE::sendSelf(CommParameters &cp)
+int XC::FullGenEigenSOE::sendSelf(Communicator &comm)
   { return 0; }
 
 
-int XC::FullGenEigenSOE::recvSelf(const CommParameters &cp)
+int XC::FullGenEigenSOE::recvSelf(const Communicator &comm)
   { return 0; }
 
 //! @brief Save the SOE matrices and vectors to file.

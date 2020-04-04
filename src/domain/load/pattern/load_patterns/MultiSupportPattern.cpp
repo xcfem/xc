@@ -125,50 +125,50 @@ bool XC::MultiSupportPattern::addElementalLoad(ElementalLoad *)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::MultiSupportPattern::sendData(CommParameters &cp)
+int XC::MultiSupportPattern::sendData(Communicator &comm)
   {
-    int res= EQBasePattern::sendData(cp);
-    res+= cp.sendID(theMotionTags,getDbTagData(),CommMetaData(17));
-    res+= cp.sendInt(dbMotions,getDbTagData(),CommMetaData(18));
+    int res= EQBasePattern::sendData(comm);
+    res+= comm.sendID(theMotionTags,getDbTagData(),CommMetaData(17));
+    res+= comm.sendInt(dbMotions,getDbTagData(),CommMetaData(18));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::MultiSupportPattern::recvData(const CommParameters &cp)
+int XC::MultiSupportPattern::recvData(const Communicator &comm)
   {
-    int res= EQBasePattern::recvData(cp);
-    res+= cp.receiveID(theMotionTags,getDbTagData(),CommMetaData(17));
-    res+= cp.receiveInt(dbMotions,getDbTagData(),CommMetaData(18));
+    int res= EQBasePattern::recvData(comm);
+    res+= comm.receiveID(theMotionTags,getDbTagData(),CommMetaData(17));
+    res+= comm.receiveInt(dbMotions,getDbTagData(),CommMetaData(18));
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::MultiSupportPattern::sendSelf(CommParameters &cp)
+int XC::MultiSupportPattern::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(3);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::MultiSupportPattern::recvSelf(const CommParameters &cp)
+int XC::MultiSupportPattern::recvSelf(const Communicator &comm)
   {
     inicComm(3);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

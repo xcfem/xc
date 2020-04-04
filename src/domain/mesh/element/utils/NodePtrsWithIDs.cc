@@ -264,34 +264,34 @@ XC::DbTagData &XC::NodePtrsWithIDs::getDbTagData(void) const
   }
 
 //! @brief Sends object members through the channel being passed as parameter.
-int XC::NodePtrsWithIDs::sendData(CommParameters &cp)
-  { return cp.sendID(connectedExternalNodes,getDbTagData(),CommMetaData(0));  }
+int XC::NodePtrsWithIDs::sendData(Communicator &comm)
+  { return comm.sendID(connectedExternalNodes,getDbTagData(),CommMetaData(0));  }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::NodePtrsWithIDs::recvData(const CommParameters &cp)
-  { return cp.receiveID(connectedExternalNodes,getDbTagData(),CommMetaData(0)); }
+int XC::NodePtrsWithIDs::recvData(const Communicator &comm)
+  { return comm.receiveID(connectedExternalNodes,getDbTagData(),CommMetaData(0)); }
 
-int XC::NodePtrsWithIDs::sendSelf(CommParameters &cp)
+int XC::NodePtrsWithIDs::sendSelf(Communicator &comm)
   {
     inicComm(1); 
-    int res= sendData(cp);
-    const int dataTag= getDbTag(cp);
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    int res= sendData(comm);
+    const int dataTag= getDbTag(comm);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; ch failed to send data.\n";
     return res;
   }
 
-int XC::NodePtrsWithIDs::recvSelf(const CommParameters &cp)
+int XC::NodePtrsWithIDs::recvSelf(const Communicator &comm)
   {
     // first we get the data about the state of the mesh for this cTag
     inicComm(1);
-    int res= cp.receiveIdData(getDbTagData(),getDbTag());
+    int res= comm.receiveIdData(getDbTagData(),getDbTag());
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; ch failed to recv the initial ID\n";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }

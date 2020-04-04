@@ -909,33 +909,33 @@ const XC::Vector &XC::ForceBeamColumn2d::getResistingForceIncInertia(void) const
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::ForceBeamColumn2d::sendData(CommParameters &cp)
+int XC::ForceBeamColumn2d::sendData(Communicator &comm)
   {
-    int res= NLForceBeamColumn2dBase::sendData(cp);
-    res+= sendBeamIntegrationPtr(beamIntegr,25,26,getDbTagData(),cp);
-    res+= v0.sendData(cp,getDbTagData(),CommMetaData(27));
-    res+= cp.sendInt(maxSubdivisions,getDbTagData(),CommMetaData(28));
+    int res= NLForceBeamColumn2dBase::sendData(comm);
+    res+= sendBeamIntegrationPtr(beamIntegr,25,26,getDbTagData(),comm);
+    res+= v0.sendData(comm,getDbTagData(),CommMetaData(27));
+    res+= comm.sendInt(maxSubdivisions,getDbTagData(),CommMetaData(28));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::ForceBeamColumn2d::recvData(const CommParameters &cp)
+int XC::ForceBeamColumn2d::recvData(const Communicator &comm)
   {
-    int res= NLForceBeamColumn2dBase::recvData(cp);
-    beamIntegr= receiveBeamIntegrationPtr(beamIntegr,25,26,getDbTagData(),cp);
-    res+= v0.receiveData(cp,getDbTagData(),CommMetaData(27));
-    res+= cp.receiveInt(maxSubdivisions,getDbTagData(),CommMetaData(28));
+    int res= NLForceBeamColumn2dBase::recvData(comm);
+    beamIntegr= receiveBeamIntegrationPtr(beamIntegr,25,26,getDbTagData(),comm);
+    res+= v0.receiveData(comm,getDbTagData(),CommMetaData(27));
+    res+= comm.receiveInt(maxSubdivisions,getDbTagData(),CommMetaData(28));
     return res;
   }
 
 //! @brief Send the object.
-int XC::ForceBeamColumn2d::sendSelf(CommParameters &cp)
+int XC::ForceBeamColumn2d::sendSelf(Communicator &comm)
   {
     inicComm(29);
-    int res= sendData(cp);
+    int res= sendData(comm);
     
     const int dataTag= getDbTag();
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "ForceBeamColumn2d::sendSelf() - failed to send ID data.\n";
     return res;
@@ -943,16 +943,16 @@ int XC::ForceBeamColumn2d::sendSelf(CommParameters &cp)
 
 
 //! @brief Send the object.
-int XC::ForceBeamColumn2d::recvSelf(const CommParameters &cp)
+int XC::ForceBeamColumn2d::recvSelf(const Communicator &comm)
   {
     inicComm(29);
 
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "ForceBeamColumn3d::recvSelf -- failed to receive ID data\n";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

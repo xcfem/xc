@@ -89,8 +89,8 @@ class GenericSection1d: public PrismaticBarCrossSection
     static Matrix ks;
     static ResponseId c;
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     GenericSection1d(int tag, UniaxialMaterial& m, int code);
     GenericSection1d(int tag);
@@ -117,8 +117,8 @@ class GenericSection1d: public PrismaticBarCrossSection
     const ResponseId &getType(void) const;
     int getOrder(void) const;
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag = 0) const;
   };

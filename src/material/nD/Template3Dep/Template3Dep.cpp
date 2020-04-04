@@ -53,9 +53,6 @@
 ################################################################################
 */
 
-#ifndef Template3Dep_CPP
-#define Template3Dep_CPP
-
 #define ITMAX 30
 #define MAX_STEP_COUNT 30
 #define NUM_OF_SUB_INCR 30
@@ -1067,14 +1064,14 @@ int XC::Template3Dep::getOrder(void) const
   { return 6; }
 
 //================================================================================
-int XC::Template3Dep::sendSelf(CommParameters &cp)
+int XC::Template3Dep::sendSelf(Communicator &comm)
   {
     // Not yet implemented
     return 0;
   }
 
 //================================================================================
-int XC::Template3Dep::recvSelf(const CommParameters &)
+int XC::Template3Dep::recvSelf(const Communicator &)
   {
     // Not yet implemented
     return 0;
@@ -3519,7 +3516,7 @@ std::ostream& XC::operator<<(std::ostream &os, const XC::Template3Dep & MP)
 //
 //  if( (fabs(f) <= tol1) && residual <= tol2 ) {
 //
-//        XC::straintensor elastic_strain = backwardEPS.getElasticStrain();
+//        straintensor elastic_strain = backwardEPS.getElasticStrain();
 //        elastic_strain = elastic_strain + strain_incr;
 //          backwardEPS.setElasticStrain(elastic_strain);
 //        backwardEPS.setEep(E);
@@ -3538,7 +3535,7 @@ std::ostream& XC::operator<<(std::ostream &os, const XC::Template3Dep & MP)
 //
 //}
 //
-#endif
+
 
 
 

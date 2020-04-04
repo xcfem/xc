@@ -1714,32 +1714,32 @@ void XC::ShellNLDKGQ::shapeBend(double ss, double tt, const double x[2][4],
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::ShellNLDKGQ::sendData(CommParameters &cp)
+int XC::ShellNLDKGQ::sendData(Communicator &comm)
   {
-    int res= Shell4NBase::sendData(cp);
-    res+= cp.sendVector(CstrainGauss,getDbTagData(),CommMetaData(16));
-    res+= cp.sendVector(TstrainGauss,getDbTagData(),CommMetaData(17));
+    int res= Shell4NBase::sendData(comm);
+    res+= comm.sendVector(CstrainGauss,getDbTagData(),CommMetaData(16));
+    res+= comm.sendVector(TstrainGauss,getDbTagData(),CommMetaData(17));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::ShellNLDKGQ::recvData(const CommParameters &cp)
+int XC::ShellNLDKGQ::recvData(const Communicator &comm)
   {
-    int res= Shell4NBase::recvData(cp);
-    res+= cp.receiveVector(CstrainGauss,getDbTagData(),CommMetaData(16));
-    res+= cp.receiveVector(TstrainGauss,getDbTagData(),CommMetaData(17));
+    int res= Shell4NBase::recvData(comm);
+    res+= comm.receiveVector(CstrainGauss,getDbTagData(),CommMetaData(16));
+    res+= comm.receiveVector(TstrainGauss,getDbTagData(),CommMetaData(17));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int  XC::ShellNLDKGQ::sendSelf(CommParameters &cp)
+int  XC::ShellNLDKGQ::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(18);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; failed to send data.\n";
@@ -1747,18 +1747,18 @@ int  XC::ShellNLDKGQ::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int  XC::ShellNLDKGQ::recvSelf(const CommParameters &cp)
+int  XC::ShellNLDKGQ::recvSelf(const Communicator &comm)
   {
     inicComm(18);
 
     const int dbTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dbTag);
+    int res= comm.receiveIdData(getDbTagData(),dbTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; failed to receive ids.\n";
     else
       {
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
            std::cerr << getClassName() << "::" << __FUNCTION__
                      << "; failed to receive data.\n";

@@ -294,54 +294,54 @@ int XC::HHT1::commit(void)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::HHT1::sendData(CommParameters &cp)
+int XC::HHT1::sendData(Communicator &comm)
   {
-    int res= DampingFactorsIntegrator::sendData(cp);
-    res+= cp.sendDoubles(alpha,beta,gamma,c1,c2,c3,getDbTagData(),CommMetaData(3));
-    res+= cp.sendMovable(Ut,getDbTagData(),CommMetaData(4));
-    res+= cp.sendMovable(U,getDbTagData(),CommMetaData(5));
-    res+= cp.sendMovable(Ualpha,getDbTagData(),CommMetaData(6));
+    int res= DampingFactorsIntegrator::sendData(comm);
+    res+= comm.sendDoubles(alpha,beta,gamma,c1,c2,c3,getDbTagData(),CommMetaData(3));
+    res+= comm.sendMovable(Ut,getDbTagData(),CommMetaData(4));
+    res+= comm.sendMovable(U,getDbTagData(),CommMetaData(5));
+    res+= comm.sendMovable(Ualpha,getDbTagData(),CommMetaData(6));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::HHT1::recvData(const CommParameters &cp)
+int XC::HHT1::recvData(const Communicator &comm)
   {
-    int res= DampingFactorsIntegrator::recvData(cp);
-    res+= cp.receiveDoubles(alpha,beta,gamma,c1,c2,c3,getDbTagData(),CommMetaData(3));
-    res+= cp.receiveMovable(Ut,getDbTagData(),CommMetaData(4));
-    res+= cp.receiveMovable(U,getDbTagData(),CommMetaData(5));
-    res+= cp.receiveMovable(Ualpha,getDbTagData(),CommMetaData(6));
+    int res= DampingFactorsIntegrator::recvData(comm);
+    res+= comm.receiveDoubles(alpha,beta,gamma,c1,c2,c3,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveMovable(Ut,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveMovable(U,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveMovable(Ualpha,getDbTagData(),CommMetaData(6));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::HHT1::sendSelf(CommParameters &cp)
+int XC::HHT1::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(27);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::HHT1::recvSelf(const CommParameters &cp)
+int XC::HHT1::recvSelf(const Communicator &comm)
   {
     inicComm(27);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

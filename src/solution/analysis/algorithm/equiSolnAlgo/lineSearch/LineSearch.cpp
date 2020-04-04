@@ -93,10 +93,10 @@ int XC::LineSearch::newStep(LinearSOE &theSOE)
     return 0;
   }
 
-int XC::LineSearch::sendSelf(CommParameters &cp)
+int XC::LineSearch::sendSelf(Communicator &comm)
   { return 0; }
 
-int XC::LineSearch::recvSelf(const CommParameters &cp)
+int XC::LineSearch::recvSelf(const Communicator &comm)
   { return 0; }
 
 void XC::LineSearch::Print(std::ostream &s, int flag) const

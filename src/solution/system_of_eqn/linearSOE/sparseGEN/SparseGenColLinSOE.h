@@ -148,8 +148,8 @@ class SparseGenColLinSOE: public SparseGenSOEBase
     virtual int setSize(Graph &theGraph);
     virtual int addA(const Matrix &, const ID &, double fact = 1.0);
     
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
 #ifdef _PARALLEL_PROCESSING
     friend class SuperLU;    
     friend class ThreadedSuperLU;        

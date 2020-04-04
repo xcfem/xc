@@ -41,8 +41,8 @@ namespace XC {
 class FiberSets: public std::map<std::string,FiberSet>, public CommandEntity, public MovableObject
   {
   protected:
-    int sendData(CommParameters &);  
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);  
+    int recvData(const Communicator &);
   public:
     FiberSets(void); 
 
@@ -52,8 +52,8 @@ class FiberSets: public std::map<std::string,FiberSet>, public CommandEntity, pu
     iterator sel_mat_tag(FiberSet &, const std::string &,const int &);
     iterator resel_mat_tag(const std::string &,const std::string &,const int &);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

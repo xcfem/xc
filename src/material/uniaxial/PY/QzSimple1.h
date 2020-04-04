@@ -77,8 +77,8 @@ class QzSimple1: public PQyzBase
     void getSuction(double zlast, double zy);
     void getNearField(double zlast, double dz, double dz_old);
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public:
     QzSimple1(int tag, int qzType, double Qult, double z50, double suction,double dashpot);
@@ -98,8 +98,8 @@ class QzSimple1: public PQyzBase
 
     UniaxialMaterial *getCopy(void) const;
     
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag =0) const;
 

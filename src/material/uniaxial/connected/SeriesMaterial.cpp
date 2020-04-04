@@ -245,60 +245,60 @@ XC::UniaxialMaterial *XC::SeriesMaterial::getCopy(void) const
   { return new SeriesMaterial(*this); }
 
 //! @brief Send its members through the channel being passed as parameter.
-int XC::SeriesMaterial::sendData(CommParameters &cp)
+int XC::SeriesMaterial::sendData(Communicator &comm)
   {
-    int res= ConnectedMaterial::sendData(cp);
-    res+= cp.sendDoubles(Tstrain,Cstrain,Tstress,Cstress,Ttangent,Ctangent,getDbTagData(),CommMetaData(3));
-    res+= cp.sendInts(maxIterations,initialFlag,getDbTagData(),CommMetaData(4));
-    res+= cp.sendDouble(tolerance,getDbTagData(),CommMetaData(5));
-    res+= cp.sendVector(stress,getDbTagData(),CommMetaData(6));
-    res+= cp.sendVector(flex,getDbTagData(),CommMetaData(7));
-    res+= cp.sendVector(strain,getDbTagData(),CommMetaData(8));
+    int res= ConnectedMaterial::sendData(comm);
+    res+= comm.sendDoubles(Tstrain,Cstrain,Tstress,Cstress,Ttangent,Ctangent,getDbTagData(),CommMetaData(3));
+    res+= comm.sendInts(maxIterations,initialFlag,getDbTagData(),CommMetaData(4));
+    res+= comm.sendDouble(tolerance,getDbTagData(),CommMetaData(5));
+    res+= comm.sendVector(stress,getDbTagData(),CommMetaData(6));
+    res+= comm.sendVector(flex,getDbTagData(),CommMetaData(7));
+    res+= comm.sendVector(strain,getDbTagData(),CommMetaData(8));
     return res;
   }
 
 //! @brief Receives its members through the channel being passed as parameter.
-int XC::SeriesMaterial::recvData(const CommParameters &cp)
+int XC::SeriesMaterial::recvData(const Communicator &comm)
   {
-    int res= ConnectedMaterial::recvData(cp);
-    res+= cp.receiveDoubles(Tstrain,Cstrain,Tstress,Cstress,Ttangent,Ctangent,getDbTagData(),CommMetaData(3));
+    int res= ConnectedMaterial::recvData(comm);
+    res+= comm.receiveDoubles(Tstrain,Cstrain,Tstress,Cstress,Ttangent,Ctangent,getDbTagData(),CommMetaData(3));
     int iFlag;
-    res+= cp.receiveInts(maxIterations,iFlag,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveInts(maxIterations,iFlag,getDbTagData(),CommMetaData(4));
     initialFlag= iFlag;
-    res+= cp.receiveDouble(tolerance,getDbTagData(),CommMetaData(5));
-    res+= cp.receiveVector(stress,getDbTagData(),CommMetaData(6));
-    res+= cp.receiveVector(flex,getDbTagData(),CommMetaData(7));
-    res+= cp.receiveVector(strain,getDbTagData(),CommMetaData(8));
+    res+= comm.receiveDouble(tolerance,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveVector(stress,getDbTagData(),CommMetaData(6));
+    res+= comm.receiveVector(flex,getDbTagData(),CommMetaData(7));
+    res+= comm.receiveVector(strain,getDbTagData(),CommMetaData(8));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::SeriesMaterial::sendSelf(CommParameters &cp)
+int XC::SeriesMaterial::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(9);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::SeriesMaterial::recvSelf(const CommParameters &cp)
+int XC::SeriesMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(9);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

@@ -53,12 +53,12 @@ XC::DbTagData &XC::MovableMatrix::getDbTagData(void) const
   }
 
 //! @brief Send the matrix through the channel being passed as parameter.
-int XC::MovableMatrix::sendSelf(CommParameters &cp)
+int XC::MovableMatrix::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dbTag= getDbTag();
     inicComm(3);
-    const int dataTag= cp.getDbTag();
+    const int dataTag= comm.getDbTag();
     const int nr= noRows();
     const int nc= noCols();
     const int sz= nr*nc;
@@ -66,23 +66,23 @@ int XC::MovableMatrix::sendSelf(CommParameters &cp)
     setDbTagDataPos(1,nc);
     setDbTagDataPos(2,dataTag);
 
-    int res= cp.sendIdData(getDbTagData(),dbTag);
+    int res= comm.sendIdData(getDbTagData(),dbTag);
     if(res<0)
       std::cerr << "MovableMatrix::sendSelf() - failed to send ID data\n";
     if(sz>0)
       {
-        res+= cp.sendMatrix(*this,dataTag);
+        res+= comm.sendMatrix(*this,dataTag);
         if(res<0)
           std::cerr << "MovableMatrix::sendSelf() - failed to send Disp data\n";
       }
     return res;
   }
 
-int XC::MovableMatrix::recvSelf(const CommParameters &cp)
+int XC::MovableMatrix::recvSelf(const Communicator &comm)
   {
     inicComm(3);
     const int dbTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dbTag);
+    int res= comm.receiveIdData(getDbTagData(),dbTag);
     if(res < 0)
       {
         std::cerr << "MovableVector::recvSelf() - failed to receive ID data\n";
@@ -96,7 +96,7 @@ int XC::MovableMatrix::recvSelf(const CommParameters &cp)
         if((nr>0)&&(nc>0))
           {
             const int dataTag= getDbTagDataPos(2);
-            res= cp.receiveMatrix(*this,dataTag);
+            res= comm.receiveMatrix(*this,dataTag);
           }
       }
     if(res<0)

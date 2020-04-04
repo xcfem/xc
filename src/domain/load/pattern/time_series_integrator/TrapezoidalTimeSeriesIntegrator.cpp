@@ -119,10 +119,10 @@ XC::TimeSeries *XC::TrapezoidalTimeSeriesIntegrator::integrate(TimeSeries *theSe
     return returnSeries;
   }
 
-int XC::TrapezoidalTimeSeriesIntegrator::sendSelf(CommParameters &cp)
+int XC::TrapezoidalTimeSeriesIntegrator::sendSelf(Communicator &comm)
   { return 0; }
 
-int XC::TrapezoidalTimeSeriesIntegrator::recvSelf(const CommParameters &cp)
+int XC::TrapezoidalTimeSeriesIntegrator::recvSelf(const Communicator &comm)
   { return 0; }
 
 void XC::TrapezoidalTimeSeriesIntegrator::Print(std::ostream &s, int flag) const

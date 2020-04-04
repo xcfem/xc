@@ -71,16 +71,16 @@ class MatParameter: public Parameter
 
     Domain *theDomain;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     MatParameter(int tag, int materialTag, const std::string &);
     MatParameter(void);
 
     virtual void Print(std::ostream &s, int flag =0) const;
   
-    virtual int sendSelf(CommParameters &);  
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);  
+    virtual int recvSelf(const Communicator &);
 
     virtual void setDomain(Domain *theDomain);
   };

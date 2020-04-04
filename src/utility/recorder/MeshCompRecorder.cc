@@ -41,17 +41,17 @@ XC::MeshCompRecorder::MeshCompRecorder(int classTag,Domain &theDom,
 
 //! @brief Send the object mediante el communicator
 //! being passed as parameter.
-int XC::MeshCompRecorder::sendData(CommParameters &cp)
+int XC::MeshCompRecorder::sendData(Communicator &comm)
   {
-    int res= HandlerRecorder::sendData(cp);
-    res+= cp.sendDoubles(deltaT,nextTimeStampToRecord,getDbTagData(),CommMetaData(5));
+    int res= HandlerRecorder::sendData(comm);
+    res+= comm.sendDoubles(deltaT,nextTimeStampToRecord,getDbTagData(),CommMetaData(5));
     return res;
   }
 
 //! @brief Receives object through the communicator being passed as parameter.
-int XC::MeshCompRecorder::receiveData(const CommParameters &cp)
+int XC::MeshCompRecorder::receiveData(const Communicator &comm)
   {
-    int res= HandlerRecorder::receiveData(cp);
-    res+= cp.receiveDoubles(deltaT,nextTimeStampToRecord,getDbTagData(),CommMetaData(5));
+    int res= HandlerRecorder::receiveData(comm);
+    res+= comm.receiveDoubles(deltaT,nextTimeStampToRecord,getDbTagData(),CommMetaData(5));
     return res;
   }

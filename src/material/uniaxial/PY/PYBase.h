@@ -63,8 +63,8 @@ class PYBase: public UniaxialMaterial
 
     void getFarField(const double &y);
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
 
   public:

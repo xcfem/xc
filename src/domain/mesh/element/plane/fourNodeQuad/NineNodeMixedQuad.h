@@ -104,8 +104,8 @@ class NineNodeMixedQuad: public ElemWithMaterial<9,NDMaterialPhysicalProperties>
     static double shape1d( int code, int node, double xi );
 
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public :
     
     //null constructor
@@ -142,7 +142,7 @@ class NineNodeMixedQuad: public ElemWithMaterial<9,NDMaterialPhysicalProperties>
     //get residual with inertia terms
     const Vector &getResistingForceIncInertia(void) const;
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
   }; 
 } // end of XC namespace

@@ -70,8 +70,8 @@ class SingleFPSimple2d: public FrictionElementBase
     static Matrix theMatrix;
     static Vector theVector;
     
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     // constructors
     SingleFPSimple2d(int tag, int Nd1, int Nd2,const FrictionModel &theFrnMdl,const double &R,const double &h,const double &uy,const std::vector<UniaxialMaterial *> &theMaterials, const Vector &y= Vector(), const Vector &x= Vector(),const double &mass= 0.0,const int &maxIter= 20,const double &tol= 1E-8);
@@ -99,8 +99,8 @@ class SingleFPSimple2d: public FrictionElementBase
     const Vector &getResistingForceIncInertia(void) const;
     
     // public methods for element output
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     void Print(std::ostream &, int flag = 0) const;    
 	
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);

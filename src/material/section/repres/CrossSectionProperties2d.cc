@@ -263,22 +263,22 @@ XC::DbTagData &XC::CrossSectionProperties2d::getDbTagData(void) const
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::CrossSectionProperties2d::sendData(CommParameters &cp)
-  { return cp.sendDoubles(e,g,a,i,alpha,rho,getDbTagData(),CommMetaData(0)); }
+int XC::CrossSectionProperties2d::sendData(Communicator &comm)
+  { return comm.sendDoubles(e,g,a,i,alpha,rho,getDbTagData(),CommMetaData(0)); }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::CrossSectionProperties2d::recvData(const CommParameters &cp)
-  { return cp.receiveDoubles(e,g,a,i,alpha,rho,getDbTagData(),CommMetaData(0)); }
+int XC::CrossSectionProperties2d::recvData(const Communicator &comm)
+  { return comm.receiveDoubles(e,g,a,i,alpha,rho,getDbTagData(),CommMetaData(0)); }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::CrossSectionProperties2d::sendSelf(CommParameters &cp)
+int XC::CrossSectionProperties2d::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(1);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data.\n";
@@ -286,11 +286,11 @@ int XC::CrossSectionProperties2d::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::CrossSectionProperties2d::recvSelf(const CommParameters &cp)
+int XC::CrossSectionProperties2d::recvSelf(const Communicator &comm)
   {
     inicComm(1);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -298,7 +298,7 @@ int XC::CrossSectionProperties2d::recvSelf(const CommParameters &cp)
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

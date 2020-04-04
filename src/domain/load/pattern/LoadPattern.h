@@ -115,8 +115,8 @@ class LoadPattern: public NodeLocker
   protected:
     bool isConstant; //!< to indicate whether setConstant has been called
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     LoadPattern(int tag= 0);
     LoadPattern(int tag, int classTag); // for subclasses
@@ -183,8 +183,8 @@ class LoadPattern: public NodeLocker
     LoadPattern &operator*=(const double &fact);
     LoadPattern &operator/=(const double &fact); 
     // methods for o/p
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
 
     virtual void Print(std::ostream &s, int flag =0) const;
 

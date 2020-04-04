@@ -303,36 +303,36 @@ HalfPlane2d XC::DeformationPlane::getCompressedHalfPlane(void) const
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::DeformationPlane::sendData(CommParameters &cp)
+int XC::DeformationPlane::sendData(Communicator &comm)
   {
     //setDbTagDataPos(0,getTag());
     Vector ec_gen(4);
     GeneralEquationOfPlane ec= getGeneralEquation();
     ec_gen(0)= ec.a(); ec_gen(1)= ec.b(); ec_gen(2)= ec.c(); ec_gen(3)= ec.d(); 
-    int res= cp.sendVector(ec_gen,getDbTagData(),CommMetaData(1));
+    int res= comm.sendVector(ec_gen,getDbTagData(),CommMetaData(1));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::DeformationPlane::recvData(const CommParameters &cp)
+int XC::DeformationPlane::recvData(const Communicator &comm)
   {
     //setTag(getDbTagDataPos(0));
     Vector ec_gen(4);
-    int res= cp.receiveVector(ec_gen,getDbTagData(),CommMetaData(1));
+    int res= comm.receiveVector(ec_gen,getDbTagData(),CommMetaData(1));
     GeneralEquationOfPlane ec(ec_gen(0),ec_gen(1),ec_gen(2),ec_gen(3));
     GeneralEquation(ec);
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::DeformationPlane::sendSelf(CommParameters &cp)
+int XC::DeformationPlane::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(2);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data.\n";
@@ -340,11 +340,11 @@ int XC::DeformationPlane::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::DeformationPlane::recvSelf(const CommParameters &cp)
+int XC::DeformationPlane::recvSelf(const Communicator &comm)
   {
     inicComm(3);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -352,7 +352,7 @@ int XC::DeformationPlane::recvSelf(const CommParameters &cp)
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

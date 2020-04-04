@@ -107,7 +107,7 @@ double XC::GroundMotionRecord::getVel(double time) const
 double XC::GroundMotionRecord::getDisp(double time) const
   { return history.getDisp(time); }
 
-int XC::GroundMotionRecord::sendSelf(CommParameters &cp)
+int XC::GroundMotionRecord::sendSelf(Communicator &comm)
   {
     std::cerr << "XC::GroundMotionRecord::sendSelf not implemented." << std::endl;
 //   int dbTag = this->getDbTag();
@@ -147,7 +147,7 @@ int XC::GroundMotionRecord::sendSelf(CommParameters &cp)
 //   } else
 //     idData(4) = -1;
 
-//   int res = cp.sendIdData(getDbTagData(),dbTag);
+//   int res = comm.sendIdData(getDbTagData(),dbTag);
 //   if (res < 0) {
 //     std::cerr << "XC::GroundMotionRecord::sendSelf() - ch failed to send data\n";
 //     return res;
@@ -182,12 +182,12 @@ int XC::GroundMotionRecord::sendSelf(CommParameters &cp)
 }
 
 
-int XC::GroundMotionRecord::recvSelf(const CommParameters &cp)
+int XC::GroundMotionRecord::recvSelf(const Communicator &comm)
   {
     std::cerr << "XC::GroundMotionRecord::recvSelf not implemented." << std::endl;
 //   int dbTag = this->getDbTag();
 //   static XC::ID idData(6);
-//   int res = cp.receiveIdData(dbTag);
+//   int res = comm.receiveIdData(dbTag);
 //   if (res < 0) {
 //     std::cerr << "XC::UniformExcitation::sendSelf() - ch failed to send data\n";
 //     return res;

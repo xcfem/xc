@@ -42,8 +42,8 @@ class SolidMech2D: public NDMaterialPhysicalProperties
     double thickness; //!< Element thickness
 
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public:
     SolidMech2D(const size_t &nMat= 0, const NDMaterial *ptr_mat= nullptr, const double &t=0.0, const double &r= 0.0);
@@ -54,8 +54,8 @@ class SolidMech2D: public NDMaterialPhysicalProperties
     inline void setThickness(const double &t)
       { thickness= t; }
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 
 } // end of XC namespace

@@ -95,8 +95,8 @@ class Steel01: public SteelBase0103
 // AddingSensitivity:END ///////////////////////////////////////////
 
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     int setup_parameters(void);
   public:
@@ -111,8 +111,8 @@ class Steel01: public SteelBase0103
 
     int revertToStart(void);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;
 
 // AddingSensitivity:BEGIN //////////////////////////////////////////

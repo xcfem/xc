@@ -107,27 +107,27 @@ void XC::UserDefinedBeamIntegrationBase::getSectionWeights(int numSections,doubl
   }
 
 //! @brief Send object members through the channel defined in cp.
-int XC::UserDefinedBeamIntegrationBase::sendData(CommParameters &cp)
+int XC::UserDefinedBeamIntegrationBase::sendData(Communicator &comm)
   {
     //setDbTagDataPos(0,getTag()); Not tagged.
-    int res= cp.sendVector(pts,getDbTagData(),CommMetaData(1));
-    res+= cp.sendVector(wts,getDbTagData(),CommMetaData(2));
+    int res= comm.sendVector(pts,getDbTagData(),CommMetaData(1));
+    res+= comm.sendVector(wts,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 //! @brief Receives object members through the channel defined in cp.
-int XC::UserDefinedBeamIntegrationBase::recvData(const CommParameters &cp)
+int XC::UserDefinedBeamIntegrationBase::recvData(const Communicator &comm)
   {
     //setTag(getDbTagDataPos(0)); Not tagged.
-    int res= cp.receiveVector(pts,getDbTagData(),CommMetaData(1));
-    res+= cp.receiveVector(wts,getDbTagData(),CommMetaData(2));
+    int res= comm.receiveVector(pts,getDbTagData(),CommMetaData(1));
+    res+= comm.receiveVector(wts,getDbTagData(),CommMetaData(2));
     return res;
   }
 
-int XC::UserDefinedBeamIntegrationBase::sendSelf(CommParameters &cp)
+int XC::UserDefinedBeamIntegrationBase::sendSelf(Communicator &comm)
   { return -1; }
 
-int XC::UserDefinedBeamIntegrationBase::recvSelf(const CommParameters &cp)
+int XC::UserDefinedBeamIntegrationBase::recvSelf(const Communicator &comm)
   { return -1; }
 
 //! @brief Assigns to the param the value identified by the string in argv.

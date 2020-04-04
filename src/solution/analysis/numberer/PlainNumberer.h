@@ -96,8 +96,8 @@ class PlainNumberer: public DOF_Numberer
     int numberDOF(int lastDOF = -1);
     int numberDOF(ID &lastDOFs);    
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

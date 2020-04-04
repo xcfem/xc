@@ -518,9 +518,9 @@ int XC::Joint3D::getResponse(int responseID, Information &eleInformation)
 }
 
 
-int XC::Joint3D::sendSelf(CommParameters &cp)
+int XC::Joint3D::sendSelf(Communicator &comm)
   { return 0; }
 
-int XC::Joint3D::recvSelf(const CommParameters &cp)
+int XC::Joint3D::recvSelf(const Communicator &comm)
   { return 0; }
 

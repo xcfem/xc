@@ -58,17 +58,17 @@ void XC::DampingFactorsIntegrator::Print(std::ostream &s, int flag) const
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::DampingFactorsIntegrator::sendData(CommParameters &cp)
+int XC::DampingFactorsIntegrator::sendData(Communicator &comm)
   {
-    int res= TransientIntegrator::sendData(cp);
-    res+= cp.sendMovable(rayFactors,getDbTagData(),CommMetaData(2));
+    int res= TransientIntegrator::sendData(comm);
+    res+= comm.sendMovable(rayFactors,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::DampingFactorsIntegrator::recvData(const CommParameters &cp)
+int XC::DampingFactorsIntegrator::recvData(const Communicator &comm)
   {
-    int res= TransientIntegrator::recvData(cp);
-    res+= cp.receiveMovable(rayFactors,getDbTagData(),CommMetaData(2));
+    int res= TransientIntegrator::recvData(comm);
+    res+= comm.receiveMovable(rayFactors,getDbTagData(),CommMetaData(2));
     return res;
   }

@@ -465,14 +465,14 @@ XC::DbTagData &XC::SmallDispCrdTransf3d::getDbTagData(void) const
   }
 
 //! @brief Sends object members through the channel being passed as parameter.
-int XC::SmallDispCrdTransf3d::sendSelf(CommParameters &cp)
+int XC::SmallDispCrdTransf3d::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(10);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data\n";
@@ -481,11 +481,11 @@ int XC::SmallDispCrdTransf3d::sendSelf(CommParameters &cp)
 
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::SmallDispCrdTransf3d::recvSelf(const CommParameters &cp)
+int XC::SmallDispCrdTransf3d::recvSelf(const Communicator &comm)
   {
     inicComm(10);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -493,7 +493,7 @@ int XC::SmallDispCrdTransf3d::recvSelf(const CommParameters &cp)
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << __FUNCTION__
 		    << "; failed to receive data.\n";

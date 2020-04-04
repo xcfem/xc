@@ -76,8 +76,8 @@ class BeamFiberMaterial: public NDAdaptorMaterial
 
     int indexMap(int i) const;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     BeamFiberMaterial(int tag, NDMaterial &theMat);
     BeamFiberMaterial(void);
@@ -98,8 +98,8 @@ class BeamFiberMaterial: public NDAdaptorMaterial
 
     void Print(std::ostream &s, int flag) const;
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

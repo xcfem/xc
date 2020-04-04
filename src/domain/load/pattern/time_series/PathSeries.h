@@ -85,8 +85,8 @@ class PathSeries: public PathSeriesBase
   private:
     double pathTimeIncr; //!< Time step.
   protected:
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
   public:
     // constructors
@@ -107,8 +107,8 @@ class PathSeries: public PathSeriesBase
 
     void readFromFile(const std::string &fileName);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
 
     void Print(std::ostream &s, int flag =0) const;

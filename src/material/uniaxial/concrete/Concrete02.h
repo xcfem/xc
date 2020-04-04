@@ -144,8 +144,8 @@ class Concrete02: public RawConcrete
     void Tens_Envlp(double epsc, double &sigc, double &Ect);
     void Compr_Envlp(double epsc, double &sigc, double &Ect);
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
     void setup_parameters(void);
   public:
     Concrete02(int tag, double _fpc, double _epsc0, double _fpcu,
@@ -177,8 +177,8 @@ class Concrete02: public RawConcrete
     int revertToLastCommit(void);    
     int revertToStart(void);
     
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);    
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);    
     
     void Print(std::ostream &s, int flag =0) const;
   };

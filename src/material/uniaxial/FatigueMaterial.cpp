@@ -302,12 +302,12 @@ XC::UniaxialMaterial *XC::FatigueMaterial::getCopy(void) const
   return theCopy;
 }
 
-int XC::FatigueMaterial::sendSelf(CommParameters &cp)
+int XC::FatigueMaterial::sendSelf(Communicator &comm)
 {
   return 0;
 }
 
-int XC::FatigueMaterial::recvSelf(const CommParameters &cp)
+int XC::FatigueMaterial::recvSelf(const Communicator &comm)
 {
   return 0;
 }

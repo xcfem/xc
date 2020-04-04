@@ -990,45 +990,45 @@ const XC::Vector &XC::ForceBeamColumn3d::getResistingForceIncInertia(void) const
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::ForceBeamColumn3d::sendData(CommParameters &cp)
+int XC::ForceBeamColumn3d::sendData(Communicator &comm)
   {
-    int res= NLForceBeamColumn3dBase::sendData(cp);
-    res+= sendBeamIntegrationPtr(beamIntegr,25,26,getDbTagData(),cp);
+    int res= NLForceBeamColumn3dBase::sendData(comm);
+    res+= sendBeamIntegrationPtr(beamIntegr,25,26,getDbTagData(),comm);
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::ForceBeamColumn3d::recvData(const CommParameters &cp)
+int XC::ForceBeamColumn3d::recvData(const Communicator &comm)
   {
-    int res= NLForceBeamColumn3dBase::recvData(cp);
-    beamIntegr= receiveBeamIntegrationPtr(beamIntegr,25,26,getDbTagData(),cp);
+    int res= NLForceBeamColumn3dBase::recvData(comm);
+    beamIntegr= receiveBeamIntegrationPtr(beamIntegr,25,26,getDbTagData(),comm);
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::ForceBeamColumn3d::sendSelf(CommParameters &cp)
+int XC::ForceBeamColumn3d::sendSelf(Communicator &comm)
   {
     inicComm(27);
-    int res= sendData(cp);
+    int res= sendData(comm);
     
     const int dataTag= getDbTag();
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "ForceBeamColumn3d::sendSelf() - failed to send ID data.\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::ForceBeamColumn3d::recvSelf(const CommParameters &cp)
+int XC::ForceBeamColumn3d::recvSelf(const Communicator &comm)
   {
     inicComm(27);
 
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "ForceBeamColumn3d::recvSelf -- failed to receive ID data\n";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

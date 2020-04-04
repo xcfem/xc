@@ -137,21 +137,21 @@ void XC::ProtoTruss::setup_matrix_vector_ptrs(int dofNd1)
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::ProtoTruss::sendData(CommParameters &cp)
+int XC::ProtoTruss::sendData(Communicator &comm)
   {
-    int res= Element1D::sendData(cp);
-    res+= cp.sendInts(numDOF,dimSpace,getDbTagData(),CommMetaData(7));
-    res+= cp.sendMatrixPtr(theMatrix,getDbTagData(),MatrixCommMetaData(8,9,10,11)); 
-    res+= cp.sendVectorPtr(theVector,getDbTagData(),ArrayCommMetaData(12,13,14)); 
+    int res= Element1D::sendData(comm);
+    res+= comm.sendInts(numDOF,dimSpace,getDbTagData(),CommMetaData(7));
+    res+= comm.sendMatrixPtr(theMatrix,getDbTagData(),MatrixCommMetaData(8,9,10,11)); 
+    res+= comm.sendVectorPtr(theVector,getDbTagData(),ArrayCommMetaData(12,13,14)); 
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::ProtoTruss::recvData(const CommParameters &cp)
+int XC::ProtoTruss::recvData(const Communicator &comm)
   {
-    int res= Element1D::recvData(cp);
-    res+= cp.receiveInts(numDOF,dimSpace,getDbTagData(),CommMetaData(7));
-    theMatrix= cp.receiveMatrixPtr(theMatrix,getDbTagData(),MatrixCommMetaData(8,9,10,11)); 
-    theVector= cp.receiveVectorPtr(theVector,getDbTagData(),ArrayCommMetaData(12,13,14)); 
+    int res= Element1D::recvData(comm);
+    res+= comm.receiveInts(numDOF,dimSpace,getDbTagData(),CommMetaData(7));
+    theMatrix= comm.receiveMatrixPtr(theMatrix,getDbTagData(),MatrixCommMetaData(8,9,10,11)); 
+    theVector= comm.receiveVectorPtr(theVector,getDbTagData(),ArrayCommMetaData(12,13,14)); 
     return res;
   }

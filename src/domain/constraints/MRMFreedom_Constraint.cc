@@ -236,28 +236,28 @@ int XC::MRMFreedom_Constraint::addResistingForceToNodalReaction(bool inclInertia
 
 
 //! @brief Send data through the channel being passed as parameter.
-int XC::MRMFreedom_Constraint::sendData(CommParameters &cp)
+int XC::MRMFreedom_Constraint::sendData(Communicator &comm)
   {
-    int res= MFreedom_ConstraintBase::sendData(cp);
-    res+= cp.sendID(retainedNodeTags,getDbTagData(),CommMetaData(5));
+    int res= MFreedom_ConstraintBase::sendData(comm);
+    res+= comm.sendID(retainedNodeTags,getDbTagData(),CommMetaData(5));
     return res;
   }
 
 //! @brief Receive data through the channel being passed as parameter.
-int XC::MRMFreedom_Constraint::recvData(const CommParameters &cp)
+int XC::MRMFreedom_Constraint::recvData(const Communicator &comm)
   {
-    int res= MFreedom_ConstraintBase::recvData(cp);
-    res+= cp.receiveID(retainedNodeTags,getDbTagData(),CommMetaData(5));
+    int res= MFreedom_ConstraintBase::recvData(comm);
+    res+= comm.receiveID(retainedNodeTags,getDbTagData(),CommMetaData(5));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::MRMFreedom_Constraint::sendSelf(CommParameters &cp)
+int XC::MRMFreedom_Constraint::sendSelf(Communicator &comm)
   {
     inicComm(10);
-    int result= sendData(cp);
+    int result= sendData(comm);
     const int dataTag= getDbTag();
-    result = cp.sendIdData(getDbTagData(),dataTag);
+    result = comm.sendIdData(getDbTagData(),dataTag);
     if(result < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; error sending ID data\n";
@@ -266,16 +266,16 @@ int XC::MRMFreedom_Constraint::sendSelf(CommParameters &cp)
 
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::MRMFreedom_Constraint::recvSelf(const CommParameters &cp)
+int XC::MRMFreedom_Constraint::recvSelf(const Communicator &comm)
   {
     inicComm(10);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; error receiving ID data\n";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

@@ -503,29 +503,29 @@ int XC::EQPath::domainChanged(void)
     return 0;
   }
 
-int XC::EQPath::sendData(CommParameters &cp)
+int XC::EQPath::sendData(Communicator &comm)
   {
-    int res= StaticIntegrator::sendData(cp);
-    res+= cp.sendDoubles(arclen,dl,sign,getDbTagData(),CommMetaData(1));
+    int res= StaticIntegrator::sendData(comm);
+    res+= comm.sendDoubles(arclen,dl,sign,getDbTagData(),CommMetaData(1));
     return res;
   }
 
 
-int XC::EQPath::recvData(const CommParameters &cp)
+int XC::EQPath::recvData(const Communicator &comm)
   {
-    int res= StaticIntegrator::recvData(cp);
-    res+= cp.receiveDoubles(arclen,dl,sign,getDbTagData(),CommMetaData(1));
+    int res= StaticIntegrator::recvData(comm);
+    res+= comm.receiveDoubles(arclen,dl,sign,getDbTagData(),CommMetaData(1));
     return res;
   }
 
-int XC::EQPath::sendSelf(CommParameters &cp)
+int XC::EQPath::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(3);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data\n";
@@ -533,11 +533,11 @@ int XC::EQPath::sendSelf(CommParameters &cp)
   }
 
 
-int XC::EQPath::recvSelf(const CommParameters &cp)
+int XC::EQPath::recvSelf(const Communicator &comm)
   {
     inicComm(3);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -545,7 +545,7 @@ int XC::EQPath::recvSelf(const CommParameters &cp)
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

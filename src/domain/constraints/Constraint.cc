@@ -126,19 +126,19 @@ bool XC::Constraint::affectsNodeAndDOF(int nodeTag, int theDOF) const
 
 //! @brief Send members through the channel being passed as parameter.
 //! @param cp: definition of the communication parameters.
-int XC::Constraint::sendData(CommParameters &cp)
+int XC::Constraint::sendData(Communicator &comm)
   {
-    int res= ContinuaReprComponent::sendData(cp);
-    res+= cp.sendInt(constrNodeTag,getDbTagData(),CommMetaData(2));
+    int res= ContinuaReprComponent::sendData(comm);
+    res+= comm.sendInt(constrNodeTag,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
 //! @param cp: definition of the communication parameters.
-int XC::Constraint::recvData(const CommParameters &cp)
+int XC::Constraint::recvData(const Communicator &comm)
   {
-    int res= ContinuaReprComponent::recvData(cp);
-    res+= cp.receiveInt(constrNodeTag,getDbTagData(),CommMetaData(2));
+    int res= ContinuaReprComponent::recvData(comm);
+    res+= comm.receiveInt(constrNodeTag,getDbTagData(),CommMetaData(2));
     return res;
   }
 

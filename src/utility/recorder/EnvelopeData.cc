@@ -69,32 +69,32 @@ int XC::EnvelopeData::restart(void)
 
 //! @brief Send the object through the communicator
 //! being passed as parameter.
-int XC::EnvelopeData::sendData(CommParameters &cp)
+int XC::EnvelopeData::sendData(Communicator &comm)
   {
-    int res= cp.sendMatrixPtr(data,getDbTagData(),MatrixCommMetaData(0,1,2,3));
-    res+= cp.sendVectorPtr(currentData,getDbTagData(),ArrayCommMetaData(4,5,6));
+    int res= comm.sendMatrixPtr(data,getDbTagData(),MatrixCommMetaData(0,1,2,3));
+    res+= comm.sendVectorPtr(currentData,getDbTagData(),ArrayCommMetaData(4,5,6));
     setDbTagDataPos(7,first);
     return res;
   }
 
 //! @brief Receive the object through the communicator
 //! being passed as parameter.
-int XC::EnvelopeData::receiveData(const CommParameters &cp)
+int XC::EnvelopeData::receiveData(const Communicator &comm)
   {
-    data= cp.receiveMatrixPtr(data,getDbTagData(),MatrixCommMetaData(0,1,2,3));
-    currentData= cp.receiveVectorPtr(currentData,getDbTagData(),ArrayCommMetaData(4,5,6));
+    data= comm.receiveMatrixPtr(data,getDbTagData(),MatrixCommMetaData(0,1,2,3));
+    currentData= comm.receiveVectorPtr(currentData,getDbTagData(),ArrayCommMetaData(4,5,6));
     first= getDbTagDataPos(7);
     return 0;
   }
 
   
-int XC::EnvelopeData::sendSelf(CommParameters &cp)
+int XC::EnvelopeData::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(8);
-    int res= sendData(cp);
-    if(cp.sendIdData(getDbTagData(),dataTag)< 0)
+    int res= sendData(comm);
+    if(comm.sendIdData(getDbTagData(),dataTag)< 0)
       {
         std::cerr << "EnvelopeData::sendSelf() "
                   << "- failed to send data\n";
@@ -104,14 +104,14 @@ int XC::EnvelopeData::sendSelf(CommParameters &cp)
   }
 
 
-int XC::EnvelopeData::recvSelf(const CommParameters &cp)
+int XC::EnvelopeData::recvSelf(const Communicator &comm)
   {
     inicComm(8);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "EnvelopeElementRecorder::recvSelf() - failed to recv data\n";
     else
-      res= receiveData(cp);
+      res= receiveData(comm);
     return res;
   }

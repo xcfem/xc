@@ -39,33 +39,33 @@ XC::MovableMatrices::MovableMatrices(std::vector<Matrix> &v)
   : MovableObject(0), vectors(v) {}
 
 //! @brief Envia el vector through the channel being passed as parameter.
-int XC::MovableMatrices::sendSelf(CommParameters &cp)
+int XC::MovableMatrices::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(2);
     const int sz= vectors.size();
     setDbTagDataPos(0,sz);
 
-    int res= cp.sendMatrices(vectors,getDbTagData(),CommMetaData(1));
+    int res= comm.sendMatrices(vectors,getDbTagData(),CommMetaData(1));
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "MovableMatrices::sendSelf() - failed to send ID.\n";
     return res;
   }
 
 //! @brief Receive the vector through the channel being passed as parameter.
-int XC::MovableMatrices::recvSelf(const CommParameters &cp)
+int XC::MovableMatrices::recvSelf(const Communicator &comm)
   {
     inicComm(2);
     const int dataTag = getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "MovableMatrices::" << __FUNCTION__
 	        << "; failed to receive ID data.\n";
     else
-      res= cp.receiveMatrices(vectors,getDbTagData(),CommMetaData(1));
+      res= comm.receiveMatrices(vectors,getDbTagData(),CommMetaData(1));
     if(res<0)
       {
         std::cerr << "MovableMatrices::" << __FUNCTION__

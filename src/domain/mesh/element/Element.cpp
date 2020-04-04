@@ -1119,19 +1119,19 @@ boost::python::list XC::Element::getMaterialNamesPy(void) const
   }
 
 //! @brief Sends object members through the channel being passed as parameter.
-int XC::Element::sendData(CommParameters &cp)
+int XC::Element::sendData(Communicator &comm)
   {
-    int res= MeshComponent::sendData(cp);
+    int res= MeshComponent::sendData(comm);
     setDbTagDataPos(4,nodeIndex);
-    res+= cp.sendVector(load,getDbTagData(),CommMetaData(5));
+    res+= comm.sendVector(load,getDbTagData(),CommMetaData(5));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::Element::recvData(const CommParameters &cp)
+int XC::Element::recvData(const Communicator &comm)
   {
-    int res= MeshComponent::recvData(cp);
+    int res= MeshComponent::recvData(comm);
     nodeIndex= getDbTagDataPos(4);
-    res+= cp.receiveVector(load,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveVector(load,getDbTagData(),CommMetaData(5));
     return res;
   }

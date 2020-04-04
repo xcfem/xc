@@ -98,8 +98,8 @@ class HardeningMaterial: public UniaxialMaterial
     Matrix *SHVs;
 // AddingSensitivity:END ///////////////////////////////////////////
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     HardeningMaterial(int tag, double E, double sigmaY,
 		      double K, double H, double eta = 0.0);
@@ -121,8 +121,8 @@ class HardeningMaterial: public UniaxialMaterial
 
     UniaxialMaterial *getCopy(void) const;
     
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag =0) const;
     

@@ -78,43 +78,43 @@ const XC::Vector &XC::SelfWeight::getData(int &type, const double &loadFactor) c
 
 //! @brief Send members of the object through the
 //! communicator being passed as parameter.
-int XC::SelfWeight::sendData(CommParameters &cp)
+int XC::SelfWeight::sendData(Communicator &comm)
   {
-    int res= ElementBodyLoad::sendData(cp);
-    res+= cp.sendDoubles(xFact, yFact, zFact,getDbTagData(),CommMetaData(3));
+    int res= ElementBodyLoad::sendData(comm);
+    res+= comm.sendDoubles(xFact, yFact, zFact,getDbTagData(),CommMetaData(3));
     return res;
   }
 
 //! @brief Receives members of the object through the
 //! communicator being passed as parameter.
-int XC::SelfWeight::recvData(const CommParameters &cp)
+int XC::SelfWeight::recvData(const Communicator &comm)
   {        
-    int res= ElementBodyLoad::recvData(cp);
-    res+= cp.receiveDoubles(xFact, yFact, zFact,getDbTagData(),CommMetaData(3));
+    int res= ElementBodyLoad::recvData(comm);
+    res+= comm.receiveDoubles(xFact, yFact, zFact,getDbTagData(),CommMetaData(3));
     return res;
   }
 
-int XC::SelfWeight::sendSelf(CommParameters &cp)
+int XC::SelfWeight::sendSelf(Communicator &comm)
   {
     static ID data(4);
-    int result= sendData(cp);
+    int result= sendData(comm);
     
     const int dataTag= getDbTag();
-    result+= cp.sendIdData(getDbTagData(),dataTag);
+    result+= comm.sendIdData(getDbTagData(),dataTag);
     if(result < 0)
       std::cerr << "SelfWeight::sendSelf - failed to send data\n";
     return result;
   }
 
-int XC::SelfWeight::recvSelf(const CommParameters &cp)
+int XC::SelfWeight::recvSelf(const Communicator &comm)
   {
     static ID data(4);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "SelfWeight::recvSelf() - failed to recv data\n";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

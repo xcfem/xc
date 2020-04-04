@@ -91,8 +91,8 @@ class Fiber: public TaggedObject, public MovableObject
   {
     bool dead; //!< True if fiber is inactive.
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public:
     Fiber(int tag, int classTag);

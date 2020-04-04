@@ -85,8 +85,8 @@ class MeshRegion: public ContinuaReprComponent
 
     void free_mem(void);
     void copy(const MeshRegion &other);
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     MeshRegion(int tag);
     MeshRegion(int tag, int classTag);    
@@ -107,8 +107,8 @@ class MeshRegion: public ContinuaReprComponent
     virtual int setRayleighDampingFactors(const RayleighDampingFactors &rF);
 
     // methods to send & recv data for database/parallel applications
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
     virtual void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace

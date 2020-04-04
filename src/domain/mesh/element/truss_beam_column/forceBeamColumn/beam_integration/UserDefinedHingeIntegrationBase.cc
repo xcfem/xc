@@ -103,20 +103,20 @@ void XC::UserDefinedHingeIntegrationBase::getSectionWeights(int numSections,doub
   }
 
 //! @brief Send object members through the channel defined in cp.
-int XC::UserDefinedHingeIntegrationBase::sendData(CommParameters &cp)
+int XC::UserDefinedHingeIntegrationBase::sendData(Communicator &comm)
   {
-    int res= UserDefinedBeamIntegrationBase::sendData(cp);
-    res+= cp.sendVector(ptsR,getDbTagData(),CommMetaData(3));
-    res+= cp.sendVector(wtsR,getDbTagData(),CommMetaData(4));
+    int res= UserDefinedBeamIntegrationBase::sendData(comm);
+    res+= comm.sendVector(ptsR,getDbTagData(),CommMetaData(3));
+    res+= comm.sendVector(wtsR,getDbTagData(),CommMetaData(4));
     return res;
   }
 
 //! @brief Receives object members through the channel defined in cp.
-int XC::UserDefinedHingeIntegrationBase::recvData(const CommParameters &cp)
+int XC::UserDefinedHingeIntegrationBase::recvData(const Communicator &comm)
   {
-    int res= UserDefinedBeamIntegrationBase::recvData(cp);
-    res+= cp.receiveVector(ptsR,getDbTagData(),CommMetaData(3));
-    res+= cp.receiveVector(wtsR,getDbTagData(),CommMetaData(4));
+    int res= UserDefinedBeamIntegrationBase::recvData(comm);
+    res+= comm.receiveVector(ptsR,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveVector(wtsR,getDbTagData(),CommMetaData(4));
     return res;
   }
 

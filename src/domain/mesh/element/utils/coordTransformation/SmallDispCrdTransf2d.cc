@@ -181,14 +181,14 @@ XC::DbTagData &XC::SmallDispCrdTransf2d::getDbTagData(void) const
   }
 
 //! @brief Send the object through the channel being passed as parameter.
-int XC::SmallDispCrdTransf2d::sendSelf(CommParameters &cp)
+int XC::SmallDispCrdTransf2d::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(10);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
@@ -196,18 +196,18 @@ int XC::SmallDispCrdTransf2d::sendSelf(CommParameters &cp)
 
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::SmallDispCrdTransf2d::recvSelf(const CommParameters &cp)
+int XC::SmallDispCrdTransf2d::recvSelf(const Communicator &comm)
   {
     inicComm(10);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

@@ -194,14 +194,14 @@ bool XC::PetscSparseSeqSolver::setLinearSOE(SparseGenRowLinSOE &theSystem)
 
 
 int
-XC::PetscSparseSeqSolver::sendSelf(CommParameters &cp)
+XC::PetscSparseSeqSolver::sendSelf(Communicator &comm)
 {
     // nothing to do
     return 0;
 }
 
 int
-XC::PetscSparseSeqSolver::recvSelf(const CommParameters &cp)
+XC::PetscSparseSeqSolver::recvSelf(const Communicator &comm)
 {
     // nothing to do
     return 0;

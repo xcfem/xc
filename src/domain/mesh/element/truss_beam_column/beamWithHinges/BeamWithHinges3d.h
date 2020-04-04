@@ -109,8 +109,8 @@ class BeamWithHinges3d: public BeamColumnWithSectionFDTrf3d
     
 
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);  
+    int sendData(Communicator &);
+    int recvData(const Communicator &);  
  public:
     BeamWithHinges3d(int tag, int nodeI, int nodeJ,
 		   double E, double A, double Iz, double Iy, double G, double J,
@@ -148,8 +148,8 @@ class BeamWithHinges3d: public BeamColumnWithSectionFDTrf3d
     const Vector &getResistingForce(void) const;
     const Vector &getResistingForceIncInertia(void) const;
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     
     Response *setResponse(const std::vector<std::string> &argv, Information &);
     int getResponse(int responseID, Information &info);

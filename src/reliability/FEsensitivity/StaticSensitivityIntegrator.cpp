@@ -185,10 +185,10 @@ int XC::StaticSensitivityIntegrator::update(const XC::Vector &deltaU)
 int XC::StaticSensitivityIntegrator::setDeltaLambda(double newDeltaLambda)
   { return 0; }
 
-int XC::StaticSensitivityIntegrator::sendSelf(CommParameters &)
+int XC::StaticSensitivityIntegrator::sendSelf(Communicator &)
   { return 0; }
 
-int XC::StaticSensitivityIntegrator::recvSelf(const CommParameters &)
+int XC::StaticSensitivityIntegrator::recvSelf(const Communicator &)
   { return 0; }
 
 void XC::StaticSensitivityIntegrator::Print(std::ostream &s, int flag) const 

@@ -193,8 +193,8 @@ int XC::BandArpackppSolver::setSize(void)
 const int &XC::BandArpackppSolver::getSize(void) const
   { return theSOE->size; }
 
-int XC::BandArpackppSolver::sendSelf(CommParameters &cp)
+int XC::BandArpackppSolver::sendSelf(Communicator &comm)
   { return 0; }
 
-int XC::BandArpackppSolver::recvSelf(const CommParameters &cp)
+int XC::BandArpackppSolver::recvSelf(const Communicator &comm)
   { return 0; }

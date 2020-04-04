@@ -167,8 +167,8 @@ class BeamColumnJoint2d: public ElemWithMaterial<4,BeamColumnJointPhysicalProper
   const Vector &getResistingForceIncInertia(void) const;            
   
   // public methods for element output for parallel and database processing
-  int sendSelf(CommParameters &);
-  int recvSelf(const CommParameters &);
+  int sendSelf(Communicator &);
+  int recvSelf(const Communicator &);
   
   // print out element data
   void Print(std::ostream &s, int flag =0) const;    

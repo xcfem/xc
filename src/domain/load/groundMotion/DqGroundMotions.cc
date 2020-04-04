@@ -69,29 +69,29 @@ XC::DqGroundMotions::~DqGroundMotions(void)
   { clear(); }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::DqGroundMotions::sendData(CommParameters &cp)
+int XC::DqGroundMotions::sendData(Communicator &comm)
   {
     const size_t sz= getNumGroundMotions();
     setDbTagDataPos(0,sz);
     DbTagData cpGM(sz*2);
     int res= 0;
     for(size_t i= 0;i<sz;i++)
-      res+= cp.sendBrokedPtr((*this)[i],cpGM,BrokedPtrCommMetaData(i,0,i+sz));
-    res+= cpGM.send(getDbTagData(),cp,CommMetaData(1));
+      res+= comm.sendBrokedPtr((*this)[i],cpGM,BrokedPtrCommMetaData(i,0,i+sz));
+    res+= cpGM.send(getDbTagData(),comm,CommMetaData(1));
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::DqGroundMotions::recvData(const CommParameters &cp)
+int XC::DqGroundMotions::recvData(const Communicator &comm)
   {
     const size_t sz= getDbTagDataPos(0);
     DbTagData cpGM(sz*2);
-    int res= cpGM.receive(getDbTagData(),cp,CommMetaData(1));
+    int res= cpGM.receive(getDbTagData(),comm,CommMetaData(1));
 
     for(size_t i= 0;i<sz;i++)
       {
         // Receive the ground motion
-        (*this)[i]= cp.getBrokedGroundMotion((*this)[i],cpGM,BrokedPtrCommMetaData(i,0,i+sz));
+        (*this)[i]= comm.getBrokedGroundMotion((*this)[i],cpGM,BrokedPtrCommMetaData(i,0,i+sz));
         if(!(*this)[i])
           std::cerr << "DqGroundMotions::recvSelf() - ground motion "
                     << i << "failed to recv itself\n";
@@ -100,13 +100,13 @@ int XC::DqGroundMotions::recvData(const CommParameters &cp)
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::DqGroundMotions::sendSelf(CommParameters &cp)
+int XC::DqGroundMotions::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "WARNING DqGroundMotions::sendSelf() - " 
                 << dataTag << " failed to send.";
@@ -114,16 +114,16 @@ int XC::DqGroundMotions::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::DqGroundMotions::recvSelf(const CommParameters &cp)
+int XC::DqGroundMotions::recvSelf(const Communicator &comm)
   {
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << "WARNING DqGroundMotions::recvSelf() - "
                 << dataTag << " failed to receive ID\n";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

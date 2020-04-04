@@ -442,42 +442,42 @@ void  XC::MembranePlateFiberSection::Print( std::ostream &s, int flag ) const
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::MembranePlateFiberSection::sendData(CommParameters &cp)
+int XC::MembranePlateFiberSection::sendData(Communicator &comm)
   {
-    int res= PlateBase::sendData(cp);
-    res+= cp.sendDouble(h,getDbTagData(),CommMetaData(6));
-    res+= cp.sendBrokedPtr(theFibers[0],getDbTagData(),BrokedPtrCommMetaData(7,8,9));
-    res+= cp.sendBrokedPtr(theFibers[1],getDbTagData(),BrokedPtrCommMetaData(10,11,12));
-    res+= cp.sendBrokedPtr(theFibers[2],getDbTagData(),BrokedPtrCommMetaData(13,14,15));
-    res+= cp.sendBrokedPtr(theFibers[3],getDbTagData(),BrokedPtrCommMetaData(16,17,18));
-    res+= cp.sendBrokedPtr(theFibers[4],getDbTagData(),BrokedPtrCommMetaData(19,20,21));
-    res+= cp.sendVector(strainResultant,getDbTagData(),CommMetaData(22));
+    int res= PlateBase::sendData(comm);
+    res+= comm.sendDouble(h,getDbTagData(),CommMetaData(6));
+    res+= comm.sendBrokedPtr(theFibers[0],getDbTagData(),BrokedPtrCommMetaData(7,8,9));
+    res+= comm.sendBrokedPtr(theFibers[1],getDbTagData(),BrokedPtrCommMetaData(10,11,12));
+    res+= comm.sendBrokedPtr(theFibers[2],getDbTagData(),BrokedPtrCommMetaData(13,14,15));
+    res+= comm.sendBrokedPtr(theFibers[3],getDbTagData(),BrokedPtrCommMetaData(16,17,18));
+    res+= comm.sendBrokedPtr(theFibers[4],getDbTagData(),BrokedPtrCommMetaData(19,20,21));
+    res+= comm.sendVector(strainResultant,getDbTagData(),CommMetaData(22));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::MembranePlateFiberSection::recvData(const CommParameters &cp)
+int XC::MembranePlateFiberSection::recvData(const Communicator &comm)
   {
-    int res= PlateBase::recvData(cp);
-    res+= cp.receiveDouble(h,getDbTagData(),CommMetaData(6));
-    theFibers[0]= cp.getBrokedMaterial(theFibers[0],getDbTagData(),BrokedPtrCommMetaData(7,8,9));
-    theFibers[1]= cp.getBrokedMaterial(theFibers[1],getDbTagData(),BrokedPtrCommMetaData(10,11,12));
-    theFibers[2]= cp.getBrokedMaterial(theFibers[2],getDbTagData(),BrokedPtrCommMetaData(13,14,15));
-    theFibers[3]= cp.getBrokedMaterial(theFibers[3],getDbTagData(),BrokedPtrCommMetaData(16,17,18));
-    theFibers[4]= cp.getBrokedMaterial(theFibers[4],getDbTagData(),BrokedPtrCommMetaData(19,20,21));
-    res+= cp.receiveVector(strainResultant,getDbTagData(),CommMetaData(22));
+    int res= PlateBase::recvData(comm);
+    res+= comm.receiveDouble(h,getDbTagData(),CommMetaData(6));
+    theFibers[0]= comm.getBrokedMaterial(theFibers[0],getDbTagData(),BrokedPtrCommMetaData(7,8,9));
+    theFibers[1]= comm.getBrokedMaterial(theFibers[1],getDbTagData(),BrokedPtrCommMetaData(10,11,12));
+    theFibers[2]= comm.getBrokedMaterial(theFibers[2],getDbTagData(),BrokedPtrCommMetaData(13,14,15));
+    theFibers[3]= comm.getBrokedMaterial(theFibers[3],getDbTagData(),BrokedPtrCommMetaData(16,17,18));
+    theFibers[4]= comm.getBrokedMaterial(theFibers[4],getDbTagData(),BrokedPtrCommMetaData(19,20,21));
+    res+= comm.receiveVector(strainResultant,getDbTagData(),CommMetaData(22));
     return res;
   }
 
 //! @brief Send object itself through the communicator argument.
-int XC::MembranePlateFiberSection::sendSelf(CommParameters &cp)
+int XC::MembranePlateFiberSection::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(3);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data.\n";
@@ -486,11 +486,11 @@ int XC::MembranePlateFiberSection::sendSelf(CommParameters &cp)
 
 
 //! @brief Receive object itself through the communicator argument.
-int XC::MembranePlateFiberSection::recvSelf(const CommParameters &cp)
+int XC::MembranePlateFiberSection::recvSelf(const Communicator &comm)
   {
     inicComm(3);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -498,7 +498,7 @@ int XC::MembranePlateFiberSection::recvSelf(const CommParameters &cp)
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

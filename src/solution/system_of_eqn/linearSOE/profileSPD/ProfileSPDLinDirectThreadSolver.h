@@ -102,8 +102,8 @@ class ProfileSPDLinDirectThreadSolver: public ProfileSPDLinDirectBase
 
     virtual int setProfileSOE(ProfileSPDLinSOE &theSOE);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 
 } // end of XC namespace

@@ -269,29 +269,29 @@ XC::DbTagData &XC::LoadContainer::getDbTagData(void) const
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::LoadContainer::sendData(CommParameters &cp)
+int XC::LoadContainer::sendData(Communicator &comm)
   {
-    int res= cp.sendMovable(*theNodalLoads,getDbTagData(),CommMetaData(0));
-    res+= cp.sendMovable(*theElementalLoads,getDbTagData(),CommMetaData(1));
+    int res= comm.sendMovable(*theNodalLoads,getDbTagData(),CommMetaData(0));
+    res+= comm.sendMovable(*theElementalLoads,getDbTagData(),CommMetaData(1));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::LoadContainer::recvData(const CommParameters &cp)
+int XC::LoadContainer::recvData(const Communicator &comm)
   {
     clearAll();
-    int res= theNodalLoads->receive<NodalLoad>(getDbTagDataPos(0),cp,&FEM_ObjectBroker::getNewNodalLoad);
-    res+= theElementalLoads->receive<ElementalLoad>(getDbTagDataPos(1),cp,&FEM_ObjectBroker::getNewElementalLoad);
+    int res= theNodalLoads->receive<NodalLoad>(getDbTagDataPos(0),comm,&FEM_ObjectBroker::getNewNodalLoad);
+    res+= theElementalLoads->receive<ElementalLoad>(getDbTagDataPos(1),comm,&FEM_ObjectBroker::getNewElementalLoad);
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::LoadContainer::sendSelf(CommParameters &cp)
+int XC::LoadContainer::sendSelf(Communicator &comm)
   {
     inicComm(2);
-    int res= sendData(cp);
-    const int dataTag= getDbTag(cp);
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    int res= sendData(comm);
+    const int dataTag= getDbTag(comm);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; failed to send data.\n";    
@@ -300,16 +300,16 @@ int XC::LoadContainer::sendSelf(CommParameters &cp)
 
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::LoadContainer::recvSelf(const CommParameters &cp)
+int XC::LoadContainer::recvSelf(const Communicator &comm)
   {
     inicComm(2);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; data could not be received.\n" ;
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

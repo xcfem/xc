@@ -68,8 +68,8 @@ class MapLoadPatterns: public LoadHandlerMember
     void clear_time_series(void);
 
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     MapLoadPatterns(LoadHandler *owr);
     ~MapLoadPatterns(void);
@@ -128,8 +128,8 @@ class MapLoadPatterns: public LoadHandlerMember
     inline void setCurrentNodeLoadTag(const int &n)
       { tag_nl= n; }
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
 
   };

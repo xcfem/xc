@@ -70,9 +70,9 @@ class NewtonCotesBeamIntegration: public BeamIntegration
     BeamIntegration *getCopy(void) const;
 
     // These two methods do nothing
-    int sendSelf(CommParameters &)
+    int sendSelf(Communicator &)
       {return 0;}
-    int recvSelf(const CommParameters &)
+    int recvSelf(const Communicator &)
       {return 0;}
 
     void Print(std::ostream &s, int flag = 0) const;  

@@ -236,18 +236,18 @@ int XC::FiniteDeformationElastic3D::getOrder(void) const
 }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::FiniteDeformationElastic3D::sendData(CommParameters &cp)
+int XC::FiniteDeformationElastic3D::sendData(Communicator &comm)
   {
-    int res= FiniteDeformationMaterial::sendData(cp);
-    res+= cp.sendDouble(rho,getDbTagData(),CommMetaData(1));
+    int res= FiniteDeformationMaterial::sendData(comm);
+    res+= comm.sendDouble(rho,getDbTagData(),CommMetaData(1));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::FiniteDeformationElastic3D::recvData(const CommParameters &cp)
+int XC::FiniteDeformationElastic3D::recvData(const Communicator &comm)
   {
-    int res= FiniteDeformationMaterial::recvData(cp);
-    res+= cp.receiveDouble(rho,getDbTagData(),CommMetaData(1));
+    int res= FiniteDeformationMaterial::recvData(comm);
+    res+= comm.receiveDouble(rho,getDbTagData(),CommMetaData(1));
     return res;
   }
 

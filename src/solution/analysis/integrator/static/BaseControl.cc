@@ -94,17 +94,17 @@ void XC::BaseControl::setup_numIncr(const int &numIncr)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::BaseControl::sendData(CommParameters &cp)
+int XC::BaseControl::sendData(Communicator &comm)
   {
-    int res= StaticIntegrator::sendData(cp);
-    res+= cp.sendDoubles(specNumIncrStep,numIncrLastStep,getDbTagData(),CommMetaData(1));
+    int res= StaticIntegrator::sendData(comm);
+    res+= comm.sendDoubles(specNumIncrStep,numIncrLastStep,getDbTagData(),CommMetaData(1));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::BaseControl::recvData(const CommParameters &cp)
+int XC::BaseControl::recvData(const Communicator &comm)
   {
-    int res= StaticIntegrator::recvData(cp);
-    res+= cp.receiveDoubles(specNumIncrStep,numIncrLastStep,getDbTagData(),CommMetaData(1));
+    int res= StaticIntegrator::recvData(comm);
+    res+= comm.receiveDoubles(specNumIncrStep,numIncrLastStep,getDbTagData(),CommMetaData(1));
     return res;
   }

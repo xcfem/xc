@@ -347,7 +347,7 @@ int XC::FeapMaterial::getOrder(void) const
   }
 }
 
-int XC::FeapMaterial::sendSelf(CommParameters &cp)
+int XC::FeapMaterial::sendSelf(Communicator &comm)
   {
     int res = 0;
   
@@ -358,7 +358,7 @@ int XC::FeapMaterial::sendSelf(CommParameters &cp)
     idData(2) = numData;
     idData(3) = myFormulation;
   
-    res+= cp.sendIdData(this->getDbTag());
+    res+= comm.sendIdData(this->getDbTag());
     if(res < 0) 
       std::cerr << "FeapMaterial::sendSelf() - failed to send XC::ID data\n";
   
@@ -379,13 +379,13 @@ int XC::FeapMaterial::sendSelf(CommParameters &cp)
     return res;
   }
 
-int XC::FeapMaterial::recvSelf(const CommParameters &cp)
+int XC::FeapMaterial::recvSelf(const Communicator &comm)
 {
   int res = 0;
   
   static ID idData(4);
   
-  res += cp.receiveIdData(this->getDbTag());
+  res += comm.receiveIdData(this->getDbTag());
   if(res < 0) {
     std::cerr << "FeapMaterial::recvSelf() - failed to receive XC::ID data\n";
     return res;

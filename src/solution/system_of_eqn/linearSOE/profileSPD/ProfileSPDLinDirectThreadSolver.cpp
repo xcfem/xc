@@ -321,7 +321,7 @@ XC::ProfileSPDLinDirectThreadSolver::setProfileSOE(ProfileSPDLinSOE &theNewSOE)
     return 0;
 }
 	
-int XC::ProfileSPDLinDirectThreadSolver::sendSelf(CommParameters &cp)
+int XC::ProfileSPDLinDirectThreadSolver::sendSelf(Communicator &comm)
 {
     if (size != 0)
 	std::cerr << "XC::ProfileSPDLinDirectThreadSolver::sendSelf - does not send itself YET\n"; 
@@ -330,7 +330,7 @@ int XC::ProfileSPDLinDirectThreadSolver::sendSelf(CommParameters &cp)
 
 
 int 
-XC::ProfileSPDLinDirectThreadSolver::recvSelf(const CommParameters &cp)
+XC::ProfileSPDLinDirectThreadSolver::recvSelf(const Communicator &comm)
 {
     return 0;
 }

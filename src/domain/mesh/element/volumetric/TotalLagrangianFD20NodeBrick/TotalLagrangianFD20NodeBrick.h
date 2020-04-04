@@ -130,8 +130,8 @@ class TotalLagrangianFD20NodeBrick: public ElemWithMaterial<20,NDMaterialPhysica
     const Vector &getResistingForce(void) const;
     const Vector &getResistingForceIncInertia(void) const;
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
 
     void Print(std::ostream &s, int flag =0) const;
 

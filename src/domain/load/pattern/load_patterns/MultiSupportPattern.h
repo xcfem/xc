@@ -77,8 +77,8 @@ class MultiSupportPattern: public EQBasePattern
     int dbMotions;
     MultiSupportPattern(const MultiSupportPattern &);    
     MultiSupportPattern &operator=(const MultiSupportPattern &);
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     MultiSupportPattern(int tag, int classTag);
     MultiSupportPattern(int tag);    
@@ -89,8 +89,8 @@ class MultiSupportPattern: public EQBasePattern
     virtual bool addElementalLoad(ElementalLoad *);
     
     // methods for o/p
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
     virtual void Print(std::ostream &s, int flag =0) const;        
 
     int addMotion(GroundMotion &theMotion, int tag);    

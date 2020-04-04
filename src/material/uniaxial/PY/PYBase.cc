@@ -129,33 +129,33 @@ int XC::PYBase::revertToLastCommit(void)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::PYBase::sendData(CommParameters &cp)
+int XC::PYBase::sendData(Communicator &comm)
   {
-    int res= UniaxialMaterial::sendData(cp);
-    res+= cp.sendMovable(C,getDbTagData(),CommMetaData(2));
-    res+= cp.sendMovable(T,getDbTagData(),CommMetaData(3));
-    res+= cp.sendDouble(TvRate,getDbTagData(),CommMetaData(4));
-    res+= cp.sendMovable(CFar,getDbTagData(),CommMetaData(5));
-    res+= cp.sendMovable(TFar,getDbTagData(),CommMetaData(6));
+    int res= UniaxialMaterial::sendData(comm);
+    res+= comm.sendMovable(C,getDbTagData(),CommMetaData(2));
+    res+= comm.sendMovable(T,getDbTagData(),CommMetaData(3));
+    res+= comm.sendDouble(TvRate,getDbTagData(),CommMetaData(4));
+    res+= comm.sendMovable(CFar,getDbTagData(),CommMetaData(5));
+    res+= comm.sendMovable(TFar,getDbTagData(),CommMetaData(6));
     const double st= soilType;
-    res+= cp.sendDoubles(initialTangent,st,matCapacity,v50,getDbTagData(),CommMetaData(7));
-    res+= cp.sendDoubles(vRef,np,dashpot,getDbTagData(),CommMetaData(8));
+    res+= comm.sendDoubles(initialTangent,st,matCapacity,v50,getDbTagData(),CommMetaData(7));
+    res+= comm.sendDoubles(vRef,np,dashpot,getDbTagData(),CommMetaData(8));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::PYBase::recvData(const CommParameters &cp)
+int XC::PYBase::recvData(const Communicator &comm)
   {
-    int res= UniaxialMaterial::recvData(cp);
-    res+= cp.receiveMovable(C,getDbTagData(),CommMetaData(2));
-    res+= cp.receiveMovable(T,getDbTagData(),CommMetaData(3));
-    res+= cp.receiveDouble(TvRate,getDbTagData(),CommMetaData(4));
-    res+= cp.receiveMovable(CFar,getDbTagData(),CommMetaData(5));
-    res+= cp.receiveMovable(TFar,getDbTagData(),CommMetaData(6));
+    int res= UniaxialMaterial::recvData(comm);
+    res+= comm.receiveMovable(C,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveMovable(T,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveDouble(TvRate,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveMovable(CFar,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveMovable(TFar,getDbTagData(),CommMetaData(6));
     double st;
-    res+= cp.receiveDoubles(initialTangent,st,matCapacity,v50,getDbTagData(),CommMetaData(7));
+    res+= comm.receiveDoubles(initialTangent,st,matCapacity,v50,getDbTagData(),CommMetaData(7));
     soilType= st;
-    res+= cp.receiveDoubles(vRef,np,dashpot,getDbTagData(),CommMetaData(8));
+    res+= comm.receiveDoubles(vRef,np,dashpot,getDbTagData(),CommMetaData(8));
     return res;
   }
 

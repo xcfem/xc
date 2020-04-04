@@ -66,10 +66,10 @@ class ImposedMotionBase: public SFreedom_Constraint
 
     int getMotion(void);
 
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

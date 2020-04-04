@@ -454,35 +454,35 @@ int XC::WilsonTheta::commit(void)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::WilsonTheta::sendData(CommParameters &cp)
+int XC::WilsonTheta::sendData(Communicator &comm)
   {
-    int res= RayleighBase::sendData(cp);
-    res+= cp.sendDoubles(theta,c1,c2,c3,getDbTagData(),CommMetaData(4));
-    res+= cp.sendMovable(Ut,getDbTagData(),CommMetaData(5));
-    res+= cp.sendMovable(U,getDbTagData(),CommMetaData(6));
+    int res= RayleighBase::sendData(comm);
+    res+= comm.sendDoubles(theta,c1,c2,c3,getDbTagData(),CommMetaData(4));
+    res+= comm.sendMovable(Ut,getDbTagData(),CommMetaData(5));
+    res+= comm.sendMovable(U,getDbTagData(),CommMetaData(6));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed
 //! as parameter.
-int XC::WilsonTheta::recvData(const CommParameters &cp)
+int XC::WilsonTheta::recvData(const Communicator &comm)
   {
-    int res= RayleighBase::recvData(cp);
-    res+= cp.receiveDoubles(theta,c1,c2,c3,getDbTagData(),CommMetaData(4));
-    res+= cp.receiveMovable(Ut,getDbTagData(),CommMetaData(5));
-    res+= cp.receiveMovable(U,getDbTagData(),CommMetaData(6));
+    int res= RayleighBase::recvData(comm);
+    res+= comm.receiveDoubles(theta,c1,c2,c3,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveMovable(Ut,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveMovable(U,getDbTagData(),CommMetaData(6));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::WilsonTheta::sendSelf(CommParameters &cp)
+int XC::WilsonTheta::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(7);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data\n";
@@ -490,11 +490,11 @@ int XC::WilsonTheta::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::WilsonTheta::recvSelf(const CommParameters &cp)
+int XC::WilsonTheta::recvSelf(const Communicator &comm)
   {
     inicComm(7);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -502,7 +502,7 @@ int XC::WilsonTheta::recvSelf(const CommParameters &cp)
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

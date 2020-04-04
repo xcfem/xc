@@ -157,17 +157,17 @@ XC::LoadPattern *XC::DomainComponent::getCurrentLoadPattern(void)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::DomainComponent::sendData(CommParameters &cp)
+int XC::DomainComponent::sendData(Communicator &comm)
   {
     setDbTagDataPos(0,getTag());
-    int res= cp.sendSzt(idx,getDbTagData(),CommMetaData(1));
+    int res= comm.sendSzt(idx,getDbTagData(),CommMetaData(1));
     return res;
   }
 
 //! @brief Receive object members through the channel being passed as parameter.
-int XC::DomainComponent::recvData(const CommParameters &cp)
+int XC::DomainComponent::recvData(const Communicator &comm)
   {
     setTag(getDbTagDataPos(0));
-    int res= cp.receiveSzt(idx,getDbTagData(),CommMetaData(1));
+    int res= comm.receiveSzt(idx,getDbTagData(),CommMetaData(1));
     return res;
   }

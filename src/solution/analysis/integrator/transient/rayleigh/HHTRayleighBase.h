@@ -53,8 +53,8 @@ class HHTRayleighBase: public RayleighBase
     ResponseQuantities U; //!< response quantities at time t + delta t
     ResponseQuantities Ualpha; //!< response quantities at time t+alpha delta t
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     HHTRayleighBase(AnalysisAggregation *,int classTag);
     HHTRayleighBase(AnalysisAggregation *,int classTag,double alpha);

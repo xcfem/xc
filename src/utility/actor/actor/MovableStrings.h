@@ -43,8 +43,8 @@ class MovableStrings: public MovableContainer<std::deque<std::string> >
   {
   public:
     explicit MovableStrings(std::deque<std::string> &);
-    int sendItem(const std::string &s,CommParameters &,DbTagData &, const CommMetaData &);
-    int receiveItem(std::string &s,const CommParameters &,DbTagData &, const CommMetaData &);
+    int sendItem(const std::string &s,Communicator &,DbTagData &, const CommMetaData &);
+    int receiveItem(std::string &s,const Communicator &,DbTagData &, const CommMetaData &);
 
     const std::deque<std::string> &getStrings(void) const
       { return container; }

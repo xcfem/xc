@@ -239,51 +239,51 @@ int XC::NewmarkHybridSimulation::update(const XC::Vector &deltaU)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::NewmarkHybridSimulation::sendData(CommParameters &cp)
+int XC::NewmarkHybridSimulation::sendData(Communicator &comm)
   {
-    int res= NewmarkBase2::sendData(cp);
-    res+= cp.sendMovablePtr(theTest,getDbTagData(),PtrCommMetaData(14,15));
-    res+= cp.sendMovable(Ut,getDbTagData(),CommMetaData(16));
-    res+= cp.sendDouble(rFact,getDbTagData(),CommMetaData(17));
+    int res= NewmarkBase2::sendData(comm);
+    res+= comm.sendMovablePtr(theTest,getDbTagData(),PtrCommMetaData(14,15));
+    res+= comm.sendMovable(Ut,getDbTagData(),CommMetaData(16));
+    res+= comm.sendDouble(rFact,getDbTagData(),CommMetaData(17));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::NewmarkHybridSimulation::recvData(const CommParameters &cp)
+int XC::NewmarkHybridSimulation::recvData(const Communicator &comm)
   {
-    int res= NewmarkBase2::recvData(cp);
+    int res= NewmarkBase2::recvData(comm);
     //XXX arreglar.
-    //theTest= cp.receiveMovablePtr(theTest,getDbTagData(),PtrCommMetaData(14,15));
-    res+= cp.receiveMovable(Ut,getDbTagData(),CommMetaData(16));
-    res+= cp.receiveDouble(rFact,getDbTagData(),CommMetaData(17));
+    //theTest= comm.receiveMovablePtr(theTest,getDbTagData(),PtrCommMetaData(14,15));
+    res+= comm.receiveMovable(Ut,getDbTagData(),CommMetaData(16));
+    res+= comm.receiveDouble(rFact,getDbTagData(),CommMetaData(17));
     return res;
   }
 
-int XC::NewmarkHybridSimulation::sendSelf(CommParameters &cp)
+int XC::NewmarkHybridSimulation::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(18);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
-int XC::NewmarkHybridSimulation::recvSelf(const CommParameters &cp)
+int XC::NewmarkHybridSimulation::recvSelf(const Communicator &comm)
   {
     inicComm(18);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

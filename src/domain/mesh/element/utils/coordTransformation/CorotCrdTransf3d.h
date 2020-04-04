@@ -122,8 +122,8 @@ class CorotCrdTransf3d: public CrdTransf3d
     Vector &basic_to_local_element_force(const Vector &p0) const;
     const Vector &local_to_global_element_force(const Vector &) const;
   protected:    
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
     virtual int computeLocalAxis(void) const;
   public:
     CorotCrdTransf3d(int tag= 0);
@@ -152,8 +152,8 @@ class CorotCrdTransf3d: public CrdTransf3d
     
     CrdTransf3d *getCopy(void) const;
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag = 0) const;
     

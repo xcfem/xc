@@ -43,8 +43,8 @@ class InternalParamsA: public MovableObject
     double R; //!< Force.
     double Tang; //!< Combined tangent
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     InternalParamsA(const double &V= 0.0,const double &r= 0.0,const double &t= 0.0);
     inline const double &y(void) const //For PySimple1
@@ -81,8 +81,8 @@ class InternalParamsA: public MovableObject
 
     void revertToStart(const double &tg);
 
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

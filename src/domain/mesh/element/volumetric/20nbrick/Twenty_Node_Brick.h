@@ -98,8 +98,8 @@ class Twenty_Node_Brick: public ElemWithMaterial<20,NDMaterialPhysicalProperties
     const Matrix &getStiff( int flag ) const;
 
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public :
     //null constructor
     Twenty_Node_Brick( ) ;
@@ -157,8 +157,8 @@ class Twenty_Node_Brick: public ElemWithMaterial<20,NDMaterialPhysicalProperties
     const Vector &getResistingForceIncInertia(void) const;
 
     // public methods for element output
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
     int getResponse(int responseID, Information &eleInformation);

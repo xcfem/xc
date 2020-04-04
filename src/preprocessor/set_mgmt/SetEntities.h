@@ -96,8 +96,8 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     void intersect_lists(const SetEntities &);
 
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     //Mesh generation.
     void point_meshing(meshing_dir dm);
@@ -184,8 +184,8 @@ class SetEntities: public PreprocessorContainer, public MovableObject
 
     void genMesh(const std::string &, meshing_dir dm);
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
 
     SetEntities &operator+=(const SetEntities &);
     SetEntities &operator-=(const SetEntities &);

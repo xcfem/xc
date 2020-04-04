@@ -144,17 +144,17 @@ const double &XC::TrussBase::getL(void) const
   { return L; }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::TrussBase::sendData(CommParameters &cp)
+int XC::TrussBase::sendData(Communicator &comm)
   {
-    int res= ProtoTruss::sendData(cp);
-    res+= cp.sendDoubles(L,cosX[0],cosX[1],cosX[2],getDbTagData(),CommMetaData(16));
+    int res= ProtoTruss::sendData(comm);
+    res+= comm.sendDoubles(L,cosX[0],cosX[1],cosX[2],getDbTagData(),CommMetaData(16));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::TrussBase::recvData(const CommParameters &cp)
+int XC::TrussBase::recvData(const Communicator &comm)
   {
-    int res= ProtoTruss::recvData(cp);
-    res+= cp.receiveDoubles(L,cosX[0],cosX[1],cosX[2],getDbTagData(),CommMetaData(16));
+    int res= ProtoTruss::recvData(comm);
+    res+= comm.receiveDoubles(L,cosX[0],cosX[1],cosX[2],getDbTagData(),CommMetaData(16));
     return res;
   }

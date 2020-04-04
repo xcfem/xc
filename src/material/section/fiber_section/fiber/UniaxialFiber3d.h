@@ -90,8 +90,8 @@ class UniaxialFiber3d: public UniaxialFiber
 
     void set_position(const Vector &position);
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public:
     UniaxialFiber3d(int classTag= FIBER_TAG_Uniaxial3d);    
@@ -106,8 +106,8 @@ class UniaxialFiber3d: public UniaxialFiber
     int getOrder(void) const;
     const ResponseId &getType(void) const;
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;
     
     Response *setResponse(const std::vector<std::string> &argv, Information &info);

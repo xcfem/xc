@@ -126,7 +126,7 @@ void XC::Elastic2dGNL::Print(std::ostream &s, int flag) const
         else                 s << "(2nd-Order):\n";
 }
 
-int XC::Elastic2dGNL::sendSelf(CommParameters &cp)
+int XC::Elastic2dGNL::sendSelf(Communicator &comm)
 {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; [" << getTag() <<"]\n"
@@ -134,7 +134,7 @@ int XC::Elastic2dGNL::sendSelf(CommParameters &cp)
         return -1;
 }
 
-int XC::Elastic2dGNL::recvSelf(const CommParameters &cp)
+int XC::Elastic2dGNL::recvSelf(const Communicator &comm)
 {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; [" << getTag() <<"]\n"

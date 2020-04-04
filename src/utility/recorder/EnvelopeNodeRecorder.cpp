@@ -371,36 +371,36 @@ int XC::EnvelopeNodeRecorder::restart(void)
 
 //! @brief Send the object through the communicator
 //! being passed as parameter.
-int XC::EnvelopeNodeRecorder::sendData(CommParameters &cp)
+int XC::EnvelopeNodeRecorder::sendData(Communicator &comm)
   {
-    int res= NodeRecorderBase::sendData(cp);
-    res+= cp.sendMovable(envelope,getDbTagData(),CommMetaData(14));
+    int res= NodeRecorderBase::sendData(comm);
+    res+= comm.sendMovable(envelope,getDbTagData(),CommMetaData(14));
     return res;
   }
 
 //! @brief Receive the object through the communicator
 //! being passed as parameter.
-int XC::EnvelopeNodeRecorder::receiveData(const CommParameters &cp)
+int XC::EnvelopeNodeRecorder::receiveData(const Communicator &comm)
   {
-    int res= NodeRecorderBase::receiveData(cp);
-    res+= cp.receiveMovable(envelope,getDbTagData(),CommMetaData(14));
+    int res= NodeRecorderBase::receiveData(comm);
+    res+= comm.receiveMovable(envelope,getDbTagData(),CommMetaData(14));
     return res;
   }
 
 //! @brief Send the object through the communicator
 //! being passed as parameter.
-int XC::EnvelopeNodeRecorder::sendSelf(CommParameters &cp)
+int XC::EnvelopeNodeRecorder::sendSelf(Communicator &comm)
   {
     int res= 0;
-    if(cp.isDatastore() == 1)
+    if(comm.isDatastore() == 1)
       std::cerr << "EnvelopeNodeRecorder::sendSelf() - does not send data to a datastore\n";
     else
       {
-        setDbTag(cp);
+        setDbTag(comm);
         const int dataTag= getDbTag();
         inicComm(15);
-        res= sendData(cp);
-        if(cp.sendIdData(getDbTagData(),dataTag)< 0)
+        res= sendData(comm);
+        if(comm.sendIdData(getDbTagData(),dataTag)< 0)
           {
             std::cerr << "EnvelopeNodeRecorder::sendSelf() "
                       << "- failed to send idData\n";
@@ -412,22 +412,22 @@ int XC::EnvelopeNodeRecorder::sendSelf(CommParameters &cp)
 
 //! @brief Receive the object through the communicator
 //! being passed as parameter.
-int XC::EnvelopeNodeRecorder::recvSelf(const CommParameters &cp)
+int XC::EnvelopeNodeRecorder::recvSelf(const Communicator &comm)
   {
     int res= 0;
-    if(cp.isDatastore() == 1)
+    if(comm.isDatastore() == 1)
       std::cerr << "EnvelopeNodeRecorder::recvSelf() - does not recv data to a datastore\n";
     else
       {
         inicComm(15);
         const int dataTag= getDbTag();
-        res= cp.receiveIdData(getDbTagData(),dataTag);
+        res= comm.receiveIdData(getDbTagData(),dataTag);
         if(res < 0)
           {
             std::cerr << "EnvelopeNodeRecorder::recvSelf() - failed to recv idData\n";
             return res;
           }
-        res= receiveData(cp);
+        res= receiveData(comm);
       }
     return res;
   }

@@ -224,32 +224,32 @@ XC::SectionForceDeformation *XC::GenericSection1d::getCopy(void) const
   { return new GenericSection1d(*this); }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::GenericSection1d::sendData(CommParameters &cp)
+int XC::GenericSection1d::sendData(Communicator &comm)
   {
-    int res= PrismaticBarCrossSection::sendData(cp);
+    int res= PrismaticBarCrossSection::sendData(comm);
     setDbTagDataPos(5,code);
-    res+= cp.sendBrokedPtr(theModel,getDbTagData(),BrokedPtrCommMetaData(6,7,8));
+    res+= comm.sendBrokedPtr(theModel,getDbTagData(),BrokedPtrCommMetaData(6,7,8));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::GenericSection1d::recvData(const CommParameters &cp)
+int XC::GenericSection1d::recvData(const Communicator &comm)
   {
-    int res= PrismaticBarCrossSection::recvData(cp);
+    int res= PrismaticBarCrossSection::recvData(comm);
     code= getDbTagDataPos(5);
-    theModel= cp.getBrokedMaterial(theModel,getDbTagData(),BrokedPtrCommMetaData(6,7,8));
+    theModel= comm.getBrokedMaterial(theModel,getDbTagData(),BrokedPtrCommMetaData(6,7,8));
     return res;
   }
 
 //! @brief Sends object members through the channel being passed as parameter.
-int XC::GenericSection1d::sendSelf(CommParameters &cp)
+int XC::GenericSection1d::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(9);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data\n";
@@ -257,11 +257,11 @@ int XC::GenericSection1d::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::GenericSection1d::recvSelf(const CommParameters &cp)
+int XC::GenericSection1d::recvSelf(const Communicator &comm)
   {
     inicComm(9);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -269,7 +269,7 @@ int XC::GenericSection1d::recvSelf(const CommParameters &cp)
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

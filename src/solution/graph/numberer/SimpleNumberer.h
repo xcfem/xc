@@ -84,8 +84,8 @@ class SimpleNumberer: public BaseNumberer
     const ID &number(Graph &theGraph, int lastVertex = -1);
     const ID &number(Graph &theGraph, const ID &startVertices);
     
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);    
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);    
   };
 } // end of XC namespace
 

@@ -282,10 +282,10 @@ XC::UniaxialMaterial *XC::BoucWenMaterial::getCopy(void) const
     return theCopy;
   }
 
-int XC::BoucWenMaterial::sendSelf(CommParameters &cp)
+int XC::BoucWenMaterial::sendSelf(Communicator &comm)
   { return 0; }
 
-int XC::BoucWenMaterial::recvSelf(const CommParameters &cp)
+int XC::BoucWenMaterial::recvSelf(const Communicator &comm)
   { return 0; }
 
 void XC::BoucWenMaterial::Print(std::ostream &s, int flag) const

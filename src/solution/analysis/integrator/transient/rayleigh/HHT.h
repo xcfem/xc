@@ -106,8 +106,8 @@ namespace XC {
 class HHT: public HHTBase
   {
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     friend class AnalysisAggregation;
     friend class FEM_ObjectBroker;
@@ -129,8 +129,8 @@ class HHT: public HHTBase
     int update(const Vector &deltaU);
     int commit(void);
     
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag = 0) const;        
   };

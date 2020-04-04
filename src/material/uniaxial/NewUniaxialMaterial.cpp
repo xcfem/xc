@@ -118,10 +118,10 @@ int XC::NewUniaxialMaterial::revertToStart(void)
 XC::UniaxialMaterial *XC::NewUniaxialMaterial::getCopy(void) const
   { return new NewUniaxialMaterial(this->getTag()); }
 
-int XC::NewUniaxialMaterial::sendSelf(CommParameters &cp)
+int XC::NewUniaxialMaterial::sendSelf(Communicator &comm)
   { return -1; }
 
-int XC::NewUniaxialMaterial::recvSelf(const CommParameters &cp)
+int XC::NewUniaxialMaterial::recvSelf(const Communicator &comm)
   { return -1; }
 
 void XC::NewUniaxialMaterial::Print(std::ostream &s, int flag) const

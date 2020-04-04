@@ -77,8 +77,8 @@ class SteelBase0103: public SteelBase
     virtual void determineTrialState(double dStrain)= 0;
 
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     virtual int setup_parameters(void);
   public:

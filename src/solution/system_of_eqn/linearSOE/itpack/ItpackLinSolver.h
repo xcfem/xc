@@ -115,8 +115,8 @@ class ItpackLinSolver: public LinearSOESolver
     int setSize(void);
     bool setLinearSOE(ItpackLinSOE &theSOE);
   
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 
 inline LinearSOESolver *ItpackLinSolver::getCopy(void) const

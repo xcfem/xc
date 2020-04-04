@@ -78,8 +78,8 @@ class ShellUniformLoad: public ShellMecLoad
 
     virtual SlidingVectorsSystem3d getResultant(const Pos3d &p= Pos3d(), bool initialGeometry= true) const;
 
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;
 
   };

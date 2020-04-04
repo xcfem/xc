@@ -237,10 +237,10 @@ int XC::NewtonLineSearch::solveCurrentStep(void)
     return result;
   }
 
-int XC::NewtonLineSearch::sendSelf(CommParameters &cp)
+int XC::NewtonLineSearch::sendSelf(Communicator &comm)
   { return -1; }
 
-int XC::NewtonLineSearch::recvSelf(const CommParameters &cp)
+int XC::NewtonLineSearch::recvSelf(const Communicator &comm)
   { return -1; }
 
 void XC::NewtonLineSearch::Print(std::ostream &s, int flag) const

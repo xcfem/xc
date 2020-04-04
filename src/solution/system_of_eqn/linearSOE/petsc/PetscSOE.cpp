@@ -326,9 +326,9 @@ bool XC::PetscSOE::setSolver(PetscSolver *newSolver)
   }
 
 
-int XC::PetscSOE::sendSelf(CommParameters &cp)
-  { return send(cp); }
+int XC::PetscSOE::sendSelf(Communicator &comm)
+  { return send(comm); }
 
 
-int XC::PetscSOE::recvSelf(const CommParameters &cp)
-  { return receive(cp); }
+int XC::PetscSOE::recvSelf(const Communicator &comm)
+  { return receive(comm); }

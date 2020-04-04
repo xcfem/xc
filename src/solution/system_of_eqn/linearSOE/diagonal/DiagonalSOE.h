@@ -88,8 +88,8 @@ class DiagonalSOE: public FactoredSOEBase
     
     void zeroA(void);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
     friend class DiagonalSolver;    
     friend class DiagonalDirectSolver;

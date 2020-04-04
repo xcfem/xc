@@ -266,14 +266,14 @@ double XC::Clough::getStrain(void) const
   }
 
 
-int XC::Clough::recvSelf(const CommParameters &cp)
+int XC::Clough::recvSelf(const Communicator &comm)
 {
         if ( DEBG ==1 ) fprintf( OutputFile , "Receive self\n" );        // debugging
         return 0;
 }
 
 
-int XC::Clough::sendSelf(CommParameters &cp)
+int XC::Clough::sendSelf(Communicator &comm)
 {
         if ( DEBG ==1 ) fprintf( OutputFile , "Send self\n" );        // debugging
         return 0;

@@ -335,11 +335,11 @@ int XC::Mehanny::getResponse(int responseID, Information &info)
   }
 
 
-int XC::Mehanny::sendSelf(CommParameters &cp)
+int XC::Mehanny::sendSelf(Communicator &comm)
   { return 0; }
 
 
-int XC::Mehanny::recvSelf(const CommParameters &cp)
+int XC::Mehanny::recvSelf(const Communicator &comm)
   { return 0; }
 
 

@@ -465,41 +465,41 @@ const XC::Vector &XC::ZeroLengthSection::getVDirWeakAxisGlobalCoord(bool initial
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::ZeroLengthSection::sendData(CommParameters &cp)
+int XC::ZeroLengthSection::sendData(Communicator &comm)
   {
 
-    int res= Element0D::sendData(cp);
-    res+= cp.sendInt(order,getDbTagData(),CommMetaData(9));
-    res+= cp.sendMatrix(A,getDbTagData(),CommMetaData(10));
-    res+= cp.sendVector(v,getDbTagData(),CommMetaData(11));
-    res+= cp.sendMatrixPtr(K,getDbTagData(),MatrixCommMetaData(17,18,19,20));
-    res+= cp.sendVectorPtr(P,getDbTagData(),ArrayCommMetaData(21,22,23));
-    res+= cp.sendBrokedPtr(theSection,getDbTagData(),BrokedPtrCommMetaData(24,25,26));
+    int res= Element0D::sendData(comm);
+    res+= comm.sendInt(order,getDbTagData(),CommMetaData(9));
+    res+= comm.sendMatrix(A,getDbTagData(),CommMetaData(10));
+    res+= comm.sendVector(v,getDbTagData(),CommMetaData(11));
+    res+= comm.sendMatrixPtr(K,getDbTagData(),MatrixCommMetaData(17,18,19,20));
+    res+= comm.sendVectorPtr(P,getDbTagData(),ArrayCommMetaData(21,22,23));
+    res+= comm.sendBrokedPtr(theSection,getDbTagData(),BrokedPtrCommMetaData(24,25,26));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::ZeroLengthSection::recvData(const CommParameters &cp)
+int XC::ZeroLengthSection::recvData(const Communicator &comm)
   {
-    int res= Element0D::recvData(cp);
-    res+= cp.receiveInt(order,getDbTagData(),CommMetaData(9));
-    res+= cp.receiveMatrix(A,getDbTagData(),CommMetaData(10));
-    res+= cp.receiveVector(v,getDbTagData(),CommMetaData(14));
-    K= cp.receiveMatrixPtr(K,getDbTagData(),MatrixCommMetaData(17,18,19,20));
-    P= cp.receiveVectorPtr(P,getDbTagData(),ArrayCommMetaData(21,22,23));
-    theSection= cp.getBrokedMaterial(theSection,getDbTagData(),BrokedPtrCommMetaData(24,25,26));
+    int res= Element0D::recvData(comm);
+    res+= comm.receiveInt(order,getDbTagData(),CommMetaData(9));
+    res+= comm.receiveMatrix(A,getDbTagData(),CommMetaData(10));
+    res+= comm.receiveVector(v,getDbTagData(),CommMetaData(14));
+    K= comm.receiveMatrixPtr(K,getDbTagData(),MatrixCommMetaData(17,18,19,20));
+    P= comm.receiveVectorPtr(P,getDbTagData(),ArrayCommMetaData(21,22,23));
+    theSection= comm.getBrokedMaterial(theSection,getDbTagData(),BrokedPtrCommMetaData(24,25,26));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::ZeroLengthSection::sendSelf(CommParameters &cp)
+int XC::ZeroLengthSection::sendSelf(Communicator &comm)
   {
     inicComm(27);
 
-    int res= sendData(cp);
+    int res= sendData(comm);
 
     const int dataTag= getDbTag();
-    res += cp.sendIdData(getDbTagData(),dataTag);
+    res += comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send ID data\n";
@@ -507,11 +507,11 @@ int XC::ZeroLengthSection::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::ZeroLengthSection::recvSelf(const CommParameters &cp)
+int XC::ZeroLengthSection::recvSelf(const Communicator &comm)
   {
     inicComm(27);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -519,7 +519,7 @@ int XC::ZeroLengthSection::recvSelf(const CommParameters &cp)
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

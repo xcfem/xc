@@ -594,38 +594,38 @@ XC::UniaxialMaterial *XC::PySimple1::getCopy(void) const
   { return new PySimple1(*this); }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::PySimple1::sendData(CommParameters &cp)
+int XC::PySimple1::sendData(Communicator &comm)
   {
-    int res= PQyzBase::sendData(cp);
-    res+= cp.sendDouble(drag,getDbTagData(),CommMetaData(14));
-    res+= cp.sendMovable(CDrag,getDbTagData(),CommMetaData(15));
-    res+= cp.sendMovable(TDrag,getDbTagData(),CommMetaData(16));
-    res+= cp.sendMovable(CClose,getDbTagData(),CommMetaData(17));
-    res+= cp.sendMovable(TClose,getDbTagData(),CommMetaData(18));
+    int res= PQyzBase::sendData(comm);
+    res+= comm.sendDouble(drag,getDbTagData(),CommMetaData(14));
+    res+= comm.sendMovable(CDrag,getDbTagData(),CommMetaData(15));
+    res+= comm.sendMovable(TDrag,getDbTagData(),CommMetaData(16));
+    res+= comm.sendMovable(CClose,getDbTagData(),CommMetaData(17));
+    res+= comm.sendMovable(TClose,getDbTagData(),CommMetaData(18));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::PySimple1::recvData(const CommParameters &cp)
+int XC::PySimple1::recvData(const Communicator &comm)
   {
-    int res= PQyzBase::recvData(cp);
-    res+= cp.receiveDouble(drag,getDbTagData(),CommMetaData(14));
-    res+= cp.receiveMovable(CDrag,getDbTagData(),CommMetaData(15));
-    res+= cp.receiveMovable(TDrag,getDbTagData(),CommMetaData(16));
-    res+= cp.receiveMovable(CClose,getDbTagData(),CommMetaData(17));
-    res+= cp.receiveMovable(TClose,getDbTagData(),CommMetaData(18));
+    int res= PQyzBase::recvData(comm);
+    res+= comm.receiveDouble(drag,getDbTagData(),CommMetaData(14));
+    res+= comm.receiveMovable(CDrag,getDbTagData(),CommMetaData(15));
+    res+= comm.receiveMovable(TDrag,getDbTagData(),CommMetaData(16));
+    res+= comm.receiveMovable(CClose,getDbTagData(),CommMetaData(17));
+    res+= comm.receiveMovable(TClose,getDbTagData(),CommMetaData(18));
     return res;
   }
 
 /////////////////////////////////////////////////////////////////////
-int XC::PySimple1::sendSelf(CommParameters &cp)
+int XC::PySimple1::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(19);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
@@ -633,17 +633,17 @@ int XC::PySimple1::sendSelf(CommParameters &cp)
 
 
 /////////////////////////////////////////////////////////////////////
-int XC::PySimple1::recvSelf(const CommParameters &cp)
+int XC::PySimple1::recvSelf(const Communicator &comm)
   {
     inicComm(19);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

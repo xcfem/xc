@@ -49,8 +49,8 @@ class BeamColumnWithSectionFD: public Element1D
     SectionMatrices section_matrices;
     double rho;	//!< Density per unit length
 
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     BeamColumnWithSectionFD(int tag, int classTag,const size_t &numSecc= 1);
     BeamColumnWithSectionFD(int tag, int classTag,const size_t &numSecc,const Material *m);

@@ -78,8 +78,8 @@ class ShellMITC4: public ShellMITC4Base
     Element *getCopy(void) const;
 
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
       
   }; 
 

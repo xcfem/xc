@@ -112,32 +112,32 @@ XC::BeamIntegration *XC::MidDistanceBeamIntegration::getCopy(void) const
   { return new MidDistanceBeamIntegration(*this); }
 
 //! @brief Sends object through the channel defined in cp.
-int XC::MidDistanceBeamIntegration::sendSelf(CommParameters &cp)
+int XC::MidDistanceBeamIntegration::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(6);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
 //! @brief Receives object through the channel defined in cp.
-int XC::MidDistanceBeamIntegration::recvSelf(const CommParameters &cp)
+int XC::MidDistanceBeamIntegration::recvSelf(const Communicator &comm)
   {
     inicComm(6);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

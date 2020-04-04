@@ -93,29 +93,29 @@ double XC::TriangleSeries::getFactor(double pseudoTime) const
       return 0;
   }
 
-int XC::TriangleSeries::sendSelf(CommParameters &cp)
+int XC::TriangleSeries::sendSelf(Communicator &comm)
   {
     static ID data(3);
-    int result= sendData(cp);
+    int result= sendData(comm);
 
     const int dataTag= getDbTag();
-    result+= cp.sendIdData(getDbTagData(),dataTag);
+    result+= comm.sendIdData(getDbTagData(),dataTag);
     if(result < 0)
       std::cerr << "PeriodSeries::sendSelf() - ch failed to send data\n";
     return result;
   }
 
 
-int XC::TriangleSeries::recvSelf(const CommParameters &cp)
+int XC::TriangleSeries::recvSelf(const Communicator &comm)
   {
     static ID data(3);
 
     const int dataTag = this->getDbTag();  
-    int result = cp.receiveIdData(getDbTagData(),dataTag);
+    int result = comm.receiveIdData(getDbTagData(),dataTag);
     if(result<0)
       std::cerr << "PeriodSeries::sendSelf() - ch failed to receive data\n";
     else
-      result+= recvData(cp);
+      result+= recvData(comm);
     return result;
   }
 

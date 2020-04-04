@@ -107,18 +107,18 @@ int XC::FrictionModel::revertToStart(void)
   }
 
 //! @brief Send data through the channel being passed as parameter.
-int XC::FrictionModel::sendData(CommParameters &cp)
+int XC::FrictionModel::sendData(Communicator &comm)
   {
     setDbTagDataPos(0,getTag());
-    int res= cp.sendDoubles(trialN,trialVel,getDbTagData(),CommMetaData(1));
+    int res= comm.sendDoubles(trialN,trialVel,getDbTagData(),CommMetaData(1));
     return res;
   }
 
 
 //! @brief Receive data through the channel being passed as parameter.
-int XC::FrictionModel::recvData(const CommParameters &cp)
+int XC::FrictionModel::recvData(const Communicator &comm)
   {
     setTag(getDbTagDataPos(0));
-    int res= cp.receiveDoubles(trialN,trialVel,getDbTagData(),CommMetaData(1));
+    int res= comm.receiveDoubles(trialN,trialVel,getDbTagData(),CommMetaData(1));
     return res;
   }

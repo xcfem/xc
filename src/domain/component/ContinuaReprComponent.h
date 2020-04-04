@@ -39,8 +39,8 @@ class ContinuaReprComponent: public DomainComponent
   {
     bool dead; //!< True if domain component is not active.
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     // constructors
     ContinuaReprComponent(int classTag);

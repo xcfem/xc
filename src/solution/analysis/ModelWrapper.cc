@@ -262,21 +262,21 @@ const XC::Integrator *XC::ModelWrapper::getIntegratorPtr(void) const
     return sm->getIntegratorPtr();
   }
 
-void XC::ModelWrapper::brokeConstraintHandler(const CommParameters &cp,const ID &data)
+void XC::ModelWrapper::brokeConstraintHandler(const Communicator &comm,const ID &data)
   {
-    theHandler= cp.brokeConstraintHandler(data(0));
+    theHandler= comm.brokeConstraintHandler(data(0));
     theHandler->set_owner(this);
   }
 
-void XC::ModelWrapper::brokeNumberer(const CommParameters &cp,const ID &data)
+void XC::ModelWrapper::brokeNumberer(const Communicator &comm,const ID &data)
   { 
-    theDOFNumberer= cp.brokeNumberer(data(1));
+    theDOFNumberer= comm.brokeNumberer(data(1));
     theDOFNumberer->set_owner(this);
   }
 
-void XC::ModelWrapper::brokeAnalysisModel(const CommParameters &cp,const ID &data)
+void XC::ModelWrapper::brokeAnalysisModel(const Communicator &comm,const ID &data)
   {
-    theModel= cp.brokeAnalysisModel(data(2));
+    theModel= comm.brokeAnalysisModel(data(2));
     theModel->set_owner(this);
   }
 

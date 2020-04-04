@@ -102,8 +102,8 @@ class PetscSparseSeqSolver: public SparseGenRowLinSolver
     int getNumIterations(void);
     virtual bool setLinearSOE(SparseGenRowLinSOE &theSOE);
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 
 inline LinearSOESolver *PetscSparseSeqSolver::getCopy(void) const

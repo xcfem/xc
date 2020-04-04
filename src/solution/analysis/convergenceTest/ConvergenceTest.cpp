@@ -216,31 +216,31 @@ double XC::ConvergenceTest::getEnergyProduct(void) const
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::ConvergenceTest::sendData(CommParameters &cp)
+int XC::ConvergenceTest::sendData(Communicator &comm)
   {
     //setDbTagDataPos(0,getTag());
-    int res= cp.sendInts(currentIter,maxNumIter,printFlag,nType,getDbTagData(),CommMetaData(1));
-    res+= cp.sendVector(norms,getDbTagData(),CommMetaData(2));
+    int res= comm.sendInts(currentIter,maxNumIter,printFlag,nType,getDbTagData(),CommMetaData(1));
+    res+= comm.sendVector(norms,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::ConvergenceTest::recvData(const CommParameters &cp)
+int XC::ConvergenceTest::recvData(const Communicator &comm)
   {
     //setTag(getDbTagDataPos(0));
-    int res= cp.receiveInts(currentIter,maxNumIter,printFlag,nType,getDbTagData(),CommMetaData(1));
-    res+= cp.receiveVector(norms,getDbTagData(),CommMetaData(2));
+    int res= comm.receiveInts(currentIter,maxNumIter,printFlag,nType,getDbTagData(),CommMetaData(1));
+    res+= comm.receiveVector(norms,getDbTagData(),CommMetaData(2));
     return res;
   }
 
-int XC::ConvergenceTest::sendSelf(CommParameters &cp)
+int XC::ConvergenceTest::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(3);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data\n";
@@ -248,11 +248,11 @@ int XC::ConvergenceTest::sendSelf(CommParameters &cp)
   }
 
 
-int XC::ConvergenceTest::recvSelf(const CommParameters &cp)
+int XC::ConvergenceTest::recvSelf(const Communicator &comm)
   {
     inicComm(3);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -260,7 +260,7 @@ int XC::ConvergenceTest::recvSelf(const CommParameters &cp)
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to receive data.\n";

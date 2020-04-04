@@ -83,8 +83,8 @@ class Preprocessor: public CommandEntity, public MovableObject
     Preprocessor &operator=(const Preprocessor &);
   protected:
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     friend class EntMdlr;
     friend class MapSet;
@@ -150,8 +150,8 @@ class Preprocessor: public CommandEntity, public MovableObject
 
     static void setDeadSRF(const double &);
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
 
 
     virtual ~Preprocessor(void);

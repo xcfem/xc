@@ -195,14 +195,14 @@ int XC::ElasticSection2d::getOrder(void) const
   { return 2; }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::ElasticSection2d::sendSelf(CommParameters &cp)
+int XC::ElasticSection2d::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(3);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to send data\n";
@@ -210,11 +210,11 @@ int XC::ElasticSection2d::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::ElasticSection2d::recvSelf(const CommParameters &cp)
+int XC::ElasticSection2d::recvSelf(const Communicator &comm)
   {
     inicComm(3);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -222,7 +222,7 @@ int XC::ElasticSection2d::recvSelf(const CommParameters &cp)
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

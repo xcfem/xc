@@ -47,8 +47,8 @@ class UniaxialFiber: public Fiber
     UniaxialMaterial *theMaterial; //!< pointer to a material
     double area; //!< area of the fiber 
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public:
     UniaxialFiber(int classTag);

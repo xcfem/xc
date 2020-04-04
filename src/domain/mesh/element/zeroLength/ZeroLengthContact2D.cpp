@@ -267,13 +267,13 @@ const XC::Vector &XC::ZeroLengthContact2D::getResistingForceIncInertia(void) con
   }
 
 
-int XC::ZeroLengthContact2D::sendSelf(CommParameters &cp)
+int XC::ZeroLengthContact2D::sendSelf(Communicator &comm)
   {
     // doing nothing here
     return 0;
   }
 
-int XC::ZeroLengthContact2D::recvSelf(const CommParameters &cp)
+int XC::ZeroLengthContact2D::recvSelf(const Communicator &comm)
   {
     // doing nothing here
     return 0;

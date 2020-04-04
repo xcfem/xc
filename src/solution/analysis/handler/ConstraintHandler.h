@@ -102,8 +102,8 @@ class ConstraintHandler: public MovableObject, public CommandEntity
     AnalysisModel *getAnalysisModelPtr(void);
     Integrator *getIntegratorPtr(void);
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     friend class ModelWrapper;
     ConstraintHandler(ModelWrapper *,int classTag);

@@ -90,8 +90,8 @@ class SetMeshComp: public SetBase
     void clearAll(void);
 
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
 
     void calc_resisting_force(void);
@@ -225,8 +225,8 @@ class SetMeshComp: public SetBase
 
     void createInertiaLoads(const Vector &);
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
 
 
     ~SetMeshComp(void);

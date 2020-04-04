@@ -105,8 +105,8 @@ class NLBeamColumn2d: public NLForceBeamColumn2dBase
     static GaussLobattoQuadRule1d01 quadRule;
 
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     NLBeamColumn2d(int tag= 0);
     NLBeamColumn2d(int tag,int numSec,const Material *theSection,const CrdTransf *coordTransf);
@@ -135,8 +135,8 @@ class NLBeamColumn2d: public NLForceBeamColumn2dBase
     
     bool isSubdomain(void);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
     friend std::ostream &operator<<(std::ostream &, const NLBeamColumn2d &);        
     void Print(std::ostream &s, int flag =0) const;    

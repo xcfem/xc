@@ -58,13 +58,13 @@ XC::EsfBeamColumn3d &XC::EsfBeamColumn3d::operator=(const EsfBeamColumn3d &other
     return *this;
   }
 
-int XC::sendEsfBeamColumn3d(const EsfBeamColumn3d &esf,int posDbTag,DbTagData &dt,CommParameters &cp)
-  { return cp.sendVector(esf,dt,CommMetaData(posDbTag)); }
+int XC::sendEsfBeamColumn3d(const EsfBeamColumn3d &esf,int posDbTag,DbTagData &dt,Communicator &comm)
+  { return comm.sendVector(esf,dt,CommMetaData(posDbTag)); }
 
-int XC::receiveEsfBeamColumn3d(EsfBeamColumn3d &esf,int posDbTag,DbTagData &dt,const CommParameters &cp)
+int XC::receiveEsfBeamColumn3d(EsfBeamColumn3d &esf,int posDbTag,DbTagData &dt,const Communicator &comm)
   {
     Vector tmp= esf;
-    int res= cp.receiveVector(tmp,dt,CommMetaData(posDbTag));
+    int res= comm.receiveVector(tmp,dt,CommMetaData(posDbTag));
     esf= EsfBeamColumn3d(tmp);
     return res;
   }

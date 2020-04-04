@@ -45,8 +45,8 @@ class RayleighBase: public DampingFactorsIntegrator
   protected:
     double deltaT;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     RayleighBase(AnalysisAggregation *,int classTag);
     RayleighBase(AnalysisAggregation *,int classTag,const RayleighDampingFactors &);

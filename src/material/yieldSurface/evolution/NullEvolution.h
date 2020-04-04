@@ -74,8 +74,8 @@ class NullEvolution: public YS_Evolution
   int getResponse(int responseID, Information & info);
   Response* setResponse(const std::vector<std::string> &argv, Information & info);
   
-  virtual int sendSelf(CommParameters &) {return -1;}
-  virtual int recvSelf(const CommParameters &){return -1;}
+  virtual int sendSelf(Communicator &) {return -1;}
+  virtual int recvSelf(const Communicator &){return -1;}
   /** No descriptions */
   int revertToLastCommit();
   int commitState(int status);

@@ -80,8 +80,8 @@ class NLForceBeamColumn2dBase: public BeamColumnWithSectionFDTrf2d
     void resizeMatrices(const size_t &nSections);
     void initializeSectionHistoryVariables(void);
 
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
   public:
     NLForceBeamColumn2dBase(int tag,int classTag,int numSec= 0);

@@ -99,8 +99,8 @@ class CentralDifferenceNoDamping: public CentralDifferenceBase
 
     int commit(void);
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
   };
 inline Integrator *CentralDifferenceNoDamping::getCopy(void) const
   { return new CentralDifferenceNoDamping(*this); }

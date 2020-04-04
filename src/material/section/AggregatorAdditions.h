@@ -47,8 +47,8 @@ class AggregatorAdditions: public DqUniaxialMaterial
   {
     ResponseId matCodes; //!< Response for each material.
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public:
     AggregatorAdditions(CommandEntity *owner= nullptr);
@@ -64,8 +64,8 @@ class AggregatorAdditions: public DqUniaxialMaterial
 
     void getType(ResponseId &retval,const size_t &offset) const;
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
     void Print(std::ostream &s, int flag =0) const;
 

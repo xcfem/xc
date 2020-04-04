@@ -92,8 +92,8 @@ class ElasticIsotropicMaterial: public NDMaterial
     double rho ; //!< mass per unit 3D volume
     Vector epsilon; //!< Strain vector
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public:
     // Only called by subclasses to pass their tags to NDMaterialModel
@@ -144,8 +144,8 @@ class ElasticIsotropicMaterial: public NDMaterial
 
     virtual int getOrder(void) const;
     
-    virtual int sendSelf(CommParameters &);  
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);  
+    virtual int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag = 0) const;
 

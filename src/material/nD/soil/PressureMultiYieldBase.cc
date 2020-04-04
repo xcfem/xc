@@ -172,30 +172,30 @@ XC::PressureMultiYieldBase::PressureMultiYieldBase(const PressureMultiYieldBase 
 
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::PressureMultiYieldBase::sendData(CommParameters &cp)
+int XC::PressureMultiYieldBase::sendData(Communicator &comm)
   {
-    int res= NDMaterial::sendData(cp);
-    res+= cp.sendInts(matN,e2p,activeSurfaceNum,committedActiveSurf,getDbTagData(),CommMetaData(1));
+    int res= NDMaterial::sendData(comm);
+    res+= comm.sendInts(matN,e2p,activeSurfaceNum,committedActiveSurf,getDbTagData(),CommMetaData(1));
     //theSurfaces; // XXX not send (position 2 reserved).
     //committedSurfaces;  // XXX not send (position 2 reserved).
-    res+= cp.sendMovable(currentStress,getDbTagData(),CommMetaData(4));
-    res+= cp.sendMovable(trialStress,getDbTagData(),CommMetaData(5));
-    res+= cp.sendMovable(currentStrain,getDbTagData(),CommMetaData(6));
-    res+= cp.sendMovable(strainRate,getDbTagData(),CommMetaData(7));
+    res+= comm.sendMovable(currentStress,getDbTagData(),CommMetaData(4));
+    res+= comm.sendMovable(trialStress,getDbTagData(),CommMetaData(5));
+    res+= comm.sendMovable(currentStrain,getDbTagData(),CommMetaData(6));
+    res+= comm.sendMovable(strainRate,getDbTagData(),CommMetaData(7));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::PressureMultiYieldBase::recvData(const CommParameters &cp)
+int XC::PressureMultiYieldBase::recvData(const Communicator &comm)
   {
-    int res= NDMaterial::recvData(cp);
-    res+= cp.receiveInts(matN,e2p,activeSurfaceNum,committedActiveSurf,getDbTagData(),CommMetaData(1));
+    int res= NDMaterial::recvData(comm);
+    res+= comm.receiveInts(matN,e2p,activeSurfaceNum,committedActiveSurf,getDbTagData(),CommMetaData(1));
     //theSurfaces; // XXX not received (position 2 reserved).
     //committedSurfaces;  // XXX not received (position 3 reserved).
-    res+= cp.receiveMovable(currentStress,getDbTagData(),CommMetaData(4));
-    res+= cp.receiveMovable(trialStress,getDbTagData(),CommMetaData(5));
-    res+= cp.receiveMovable(currentStrain,getDbTagData(),CommMetaData(6));
-    res+= cp.receiveMovable(strainRate,getDbTagData(),CommMetaData(7));
+    res+= comm.receiveMovable(currentStress,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveMovable(trialStress,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveMovable(currentStrain,getDbTagData(),CommMetaData(6));
+    res+= comm.receiveMovable(strainRate,getDbTagData(),CommMetaData(7));
     return res;
   }
 

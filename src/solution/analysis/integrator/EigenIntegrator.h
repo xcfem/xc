@@ -116,8 +116,8 @@ class EigenIntegrator: public Integrator
     
     virtual int getLastResponse(Vector &result, const ID &id);
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);     
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);     
   };
 inline Integrator *EigenIntegrator::getCopy(void) const
   { return new EigenIntegrator(*this); }

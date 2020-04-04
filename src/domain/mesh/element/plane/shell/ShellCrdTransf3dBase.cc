@@ -361,19 +361,19 @@ XC::DbTagData &XC::ShellCrdTransf3dBase::getDbTagData(void) const
   }
 
 //! @brief Sends object members through the channel being passed as parameter.
-int XC::ShellCrdTransf3dBase::sendData(CommParameters &cp)
+int XC::ShellCrdTransf3dBase::sendData(Communicator &comm)
   {
-    int res=cp.sendVector(g1,getDbTagData(),CommMetaData(0));
-    res+=cp.sendVector(g2,getDbTagData(),CommMetaData(1));
-    res+=cp.sendVector(g3,getDbTagData(),CommMetaData(2));
+    int res=comm.sendVector(g1,getDbTagData(),CommMetaData(0));
+    res+=comm.sendVector(g2,getDbTagData(),CommMetaData(1));
+    res+=comm.sendVector(g3,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::ShellCrdTransf3dBase::recvData(const CommParameters &cp)
+int XC::ShellCrdTransf3dBase::recvData(const Communicator &comm)
   {
-    int res= cp.receiveVector(g1,getDbTagData(),CommMetaData(0));
-    res+= cp.receiveVector(g2,getDbTagData(),CommMetaData(1));
-    res+= cp.receiveVector(g3,getDbTagData(),CommMetaData(2));
+    int res= comm.receiveVector(g1,getDbTagData(),CommMetaData(0));
+    res+= comm.receiveVector(g2,getDbTagData(),CommMetaData(1));
+    res+= comm.receiveVector(g3,getDbTagData(),CommMetaData(2));
     return res;    
   }

@@ -143,13 +143,13 @@ void XC::Material::zeroInitialGeneralizedStrain(void)
 //! @brief Sends a pointer to material through the communicator being passed as parameter.
 //! @param posClassTag: Index of the material class identifier.
 //! @param posDbTag: Index of the dbTag.
-int XC::sendMaterialPtr(Material *ptr,DbTagData &dt,CommParameters &cp,const BrokedPtrCommMetaData &md)
+int XC::sendMaterialPtr(Material *ptr,DbTagData &dt,Communicator &comm,const BrokedPtrCommMetaData &md)
   {
     int res= 0;
     if(ptr)
       {
         dt.setDbTagDataPos(md.getPosClassTag(),ptr->getClassTag());
-        res= cp.sendMovable(*ptr,dt,md);
+        res= comm.sendMovable(*ptr,dt,md);
       }
     if(res < 0)
       std::cerr << "Material::" << __FUNCTION__
@@ -160,7 +160,7 @@ int XC::sendMaterialPtr(Material *ptr,DbTagData &dt,CommParameters &cp,const Bro
 //! @brief Receives a pointer to material through the communicator being passed as parameter.
 //! @param posClassTag: Index of the material class identifier.
 //! @param posDbTag: Index of the dbTag.
-XC::Material *XC::receiveMaterialPtr(Material* ptr,DbTagData &dt,const CommParameters &cp,const BrokedPtrCommMetaData &md)
+XC::Material *XC::receiveMaterialPtr(Material* ptr,DbTagData &dt,const Communicator &comm,const BrokedPtrCommMetaData &md)
   {
     Material *retval= nullptr;
     const int matClass= dt.getDbTagDataPos(md.getPosClassTag());
@@ -174,7 +174,7 @@ XC::Material *XC::receiveMaterialPtr(Material* ptr,DbTagData &dt,const CommParam
         if(ptr) // if old one .. delete it
           delete ptr;
         ptr= nullptr;
-        retval= cp.getBrokedMaterial(ptr,dt,md);
+        retval= comm.getBrokedMaterial(ptr,dt,md);
       }
     return retval;
   }

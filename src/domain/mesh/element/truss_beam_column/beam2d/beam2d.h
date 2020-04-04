@@ -46,8 +46,8 @@ class beam2d: public ProtoBeam2d
     mutable double sn;
     mutable double cs;
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public:
     beam2d(int tag, int class_tag);

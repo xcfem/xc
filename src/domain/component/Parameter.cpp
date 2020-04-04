@@ -191,8 +191,8 @@ int XC::Parameter::addObject(int paramID, MovableObject *object)
 void XC::Parameter::setDomain(Domain *theDomain)
   { return; }
 
-int XC::Parameter::sendSelf(CommParameters &cp)
+int XC::Parameter::sendSelf(Communicator &comm)
   { return 0; }
 
-int XC::Parameter::recvSelf(const CommParameters &cp)
+int XC::Parameter::recvSelf(const Communicator &comm)
   { return 0; }

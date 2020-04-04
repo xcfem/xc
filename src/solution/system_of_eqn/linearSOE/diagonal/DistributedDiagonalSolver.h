@@ -85,8 +85,8 @@ class DistributedDiagonalSolver: public LinearSOESolver
     virtual int solve(void);
     virtual int setSize(void);
     virtual bool setLinearSOE(DistributedDiagonalSOE &theSOE);
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);    
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);    
   };
 
 inline LinearSOESolver *DistributedDiagonalSolver::getCopy(void) const

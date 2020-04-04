@@ -99,8 +99,8 @@ class CorotCrdTransf2d: public CrdTransf2d
     void getTransfMatrixBasicLocal(Matrix &Tbl) const;
     const Matrix &getGeomStiffMatrix(const Vector &pb) const;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     CorotCrdTransf2d(int tag= 0);
     CorotCrdTransf2d(int tag, const Vector &rigJntOffsetI, const Vector &rigJntOffsetJ);
@@ -135,8 +135,8 @@ class CorotCrdTransf2d: public CrdTransf2d
 
     CrdTransf2d *getCopy(void) const;
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag = 0) const;
     

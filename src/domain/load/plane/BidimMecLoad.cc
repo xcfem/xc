@@ -60,17 +60,17 @@ SlidingVectorsSystem3d XC::BidimMecLoad::getResultant(const Pos3d &centro, bool 
   }
 
 //! @brief Send data through the channel being passed as parameter.
-int XC::BidimMecLoad::sendData(CommParameters &cp)
+int XC::BidimMecLoad::sendData(Communicator &comm)
   {
-    int res= BidimLoad::sendData(cp);
-    res+= cp.sendDoubles(Trans,Axial1,Axial2,getDbTagData(),CommMetaData(5));
+    int res= BidimLoad::sendData(comm);
+    res+= comm.sendDoubles(Trans,Axial1,Axial2,getDbTagData(),CommMetaData(5));
     return res;
   }
 
 //! @brief Receive data through the channel being passed as parameter.
-int XC::BidimMecLoad::recvData(const CommParameters &cp)
+int XC::BidimMecLoad::recvData(const Communicator &comm)
   {
-    int res= BidimLoad::recvData(cp);
-    res+= cp.receiveDoubles(Trans,Axial1,Axial2,getDbTagData(),CommMetaData(5));
+    int res= BidimLoad::recvData(comm);
+    res+= comm.receiveDoubles(Trans,Axial1,Axial2,getDbTagData(),CommMetaData(5));
     return res;
   }

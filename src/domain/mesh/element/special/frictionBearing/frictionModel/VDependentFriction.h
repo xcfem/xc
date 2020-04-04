@@ -80,8 +80,8 @@ class VDependentFriction: public CoulombFriction
     double muFast; //!< coefficient of friction at high velocity
     double transRate; //!< transition rate from low to high velocity
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     // constructor
     VDependentFriction(int classTag= FRN_TAG_VDependentFriction);
@@ -95,8 +95,8 @@ class VDependentFriction: public CoulombFriction
     
     FrictionModel *getCopy(void) const;
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     
     void Print(std::ostream &, int flag = 0) const;
   };

@@ -430,47 +430,47 @@ const XC::Vector &XC::FlatSliderSimple3d::getResistingForceIncInertia(void) cons
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::FlatSliderSimple3d::sendData(CommParameters &cp)
+int XC::FlatSliderSimple3d::sendData(Communicator &comm)
   {
-    int res= FrictionElementBase::sendData(cp);
-    res+= cp.sendVector(ubPlastic,getDbTagData(),CommMetaData(19));
-    res+= cp.sendVector(ubPlasticC,getDbTagData(),CommMetaData(20));
+    int res= FrictionElementBase::sendData(comm);
+    res+= comm.sendVector(ubPlastic,getDbTagData(),CommMetaData(19));
+    res+= comm.sendVector(ubPlasticC,getDbTagData(),CommMetaData(20));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::FlatSliderSimple3d::recvData(const CommParameters &cp)
+int XC::FlatSliderSimple3d::recvData(const Communicator &comm)
   {
-    int res= FrictionElementBase::recvData(cp);
-    res+= cp.receiveVector(ubPlastic,getDbTagData(),CommMetaData(19));
-    res+= cp.receiveVector(ubPlasticC,getDbTagData(),CommMetaData(20));
+    int res= FrictionElementBase::recvData(comm);
+    res+= comm.receiveVector(ubPlastic,getDbTagData(),CommMetaData(19));
+    res+= comm.receiveVector(ubPlasticC,getDbTagData(),CommMetaData(20));
     return res;
   }
 
-int XC::FlatSliderSimple3d::sendSelf(CommParameters &cp)
+int XC::FlatSliderSimple3d::sendSelf(Communicator &comm)
   {
     inicComm(21);
 
-    int res= sendData(cp);
+    int res= sendData(comm);
 
     const int dataTag= getDbTag();
-    res += cp.sendIdData(getDbTagData(),dataTag);
+    res += comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "ZeroLength::sendSelf -- failed to send ID data\n";
     return res;
   }
 
 
-int XC::FlatSliderSimple3d::recvSelf(const CommParameters &cp)
+int XC::FlatSliderSimple3d::recvSelf(const Communicator &comm)
   {
     inicComm(21);
 
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "ZeroLength::recvSelf -- failed to receive ID data\n";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

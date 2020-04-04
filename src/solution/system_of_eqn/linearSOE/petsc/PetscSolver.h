@@ -101,8 +101,8 @@ class PetscSolver: public LinearSOESolver
     int setSize(void);
     virtual bool setLinearSOE(PetscSOE &theSOE);
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);    
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);    
 
     friend class ActorPetscSOE;
     friend class ShadowPetscSOE;

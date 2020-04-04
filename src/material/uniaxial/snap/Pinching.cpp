@@ -277,13 +277,13 @@ double XC::Pinching::getStrain(void) const
   { return hsTrial[0]; }
 
 
-int XC::Pinching::recvSelf(const CommParameters &cp)
+int XC::Pinching::recvSelf(const Communicator &comm)
 {
         return 0;
 }
 
 
-int XC::Pinching::sendSelf(CommParameters &cp)
+int XC::Pinching::sendSelf(Communicator &comm)
 {
         return 0;
 }

@@ -73,7 +73,7 @@ class MapSetBase: public std::map<std::string,SetBase *>
     const std::deque<std::string> &getSetsClassNames(void);
     const std::deque<std::string> &getSetsNames(void);
     DbTagData &getDbTagData(void) const;
-    const ID &getSetsDBTags(CommParameters &cp);
+    const ID &getSetsDBTags(Communicator &comm);
 
     friend class Preprocessor;
   public:

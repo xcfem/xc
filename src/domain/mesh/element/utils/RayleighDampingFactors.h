@@ -63,8 +63,8 @@ class RayleighDampingFactors: public CommandEntity, public MovableObject
     double betaK0; //!< factor applied to elements initial stiffness matrix. 
     double betaKc; //!< factor applied to elements committed stiffness matrix.
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public:
     RayleighDampingFactors(void);
@@ -111,8 +111,8 @@ class RayleighDampingFactors: public CommandEntity, public MovableObject
       { return (betaK == 0.0 && betaK0 == 0.0 && betaKc == 0.0); }
     int updateParameter(int parameterID, Information &info);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
     void Print(std::ostream &s, int flag= 0) const;
 

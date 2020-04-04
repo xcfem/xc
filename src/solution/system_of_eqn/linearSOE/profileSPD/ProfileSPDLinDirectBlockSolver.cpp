@@ -362,7 +362,7 @@ int XC::ProfileSPDLinDirectBlockSolver::setProfileSOE(ProfileSPDLinSOE &theNewSO
     return 0;
   }
 	
-int XC::ProfileSPDLinDirectBlockSolver::sendSelf(CommParameters &cp)
+int XC::ProfileSPDLinDirectBlockSolver::sendSelf(Communicator &comm)
   {
     if(size != 0)
 	std::cerr << getClassName() << "::" << __FUNCTION__
@@ -371,7 +371,7 @@ int XC::ProfileSPDLinDirectBlockSolver::sendSelf(CommParameters &cp)
   }
 
 
-int XC::ProfileSPDLinDirectBlockSolver::recvSelf(const CommParameters &cp)
+int XC::ProfileSPDLinDirectBlockSolver::recvSelf(const Communicator &comm)
   { return 0; }
 
 

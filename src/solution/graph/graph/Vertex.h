@@ -87,8 +87,8 @@ class Vertex: public TaggedObject, public MovableObject
     int myTmp;
     std::set<int> myAdjacency;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public:
     Vertex(int tag= 0, int ref= 0, double weight=0, int color =0);
@@ -109,8 +109,8 @@ class Vertex: public TaggedObject, public MovableObject
       { myAdjacency = adj; }
     
     virtual void Print(std::ostream &os, int flag =0) const;
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

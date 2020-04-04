@@ -112,10 +112,10 @@ void XC::LinearBucklingAlgo::Print(std::ostream &s, int flag) const
   { s << "\t Linear Buckling Algorithm \n"; }
 
 //! @brief Send.
-int XC::LinearBucklingAlgo::sendSelf(CommParameters &cp)
+int XC::LinearBucklingAlgo::sendSelf(Communicator &comm)
   { return 0; }
 
 //! @brief Receive.
-int XC::LinearBucklingAlgo::recvSelf(const CommParameters &cp)
+int XC::LinearBucklingAlgo::recvSelf(const Communicator &comm)
   { return 0; }
 

@@ -81,8 +81,8 @@ class StaticSensitivityIntegrator: public SensitivityIntegrator, public StaticIn
     int newStep(void);    
     int update(const Vector &deltaU);
     int setDeltaLambda(double newDeltaLambda);
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;    
 
     // Sensitivity related methods

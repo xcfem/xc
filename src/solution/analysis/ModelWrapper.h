@@ -40,7 +40,7 @@ class ConstraintHandler;
 class DOF_Numberer;
 class FEM_ObjectBroker;
 class ID;
-class CommParameters;
+class Communicator;
 class AnalysisAggregation;
 class Integrator;
 
@@ -114,9 +114,9 @@ class ModelWrapper: public CommandEntity
     inline const AnalysisModel *getAnalysisModelPtr(void) const
       { return theModel; }
     int setNumberer(DOF_Numberer &theNumberer);
-    void brokeConstraintHandler(const CommParameters &,const ID &);
-    void brokeNumberer(const CommParameters &,const ID &);
-    void brokeAnalysisModel(const CommParameters &,const ID &);
+    void brokeConstraintHandler(const Communicator &,const ID &);
+    void brokeNumberer(const Communicator &,const ID &);
+    void brokeAnalysisModel(const Communicator &,const ID &);
     bool CheckPointers(void);
 
     DOF_Numberer &newNumberer(const std::string &);

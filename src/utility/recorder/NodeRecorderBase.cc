@@ -50,22 +50,22 @@ XC::NodeRecorderBase::~NodeRecorderBase(void)
 
 //! @brief Send the object through the communicator
 //! being passed as parameter.
-int XC::NodeRecorderBase::sendData(CommParameters &cp)
+int XC::NodeRecorderBase::sendData(Communicator &comm)
   {
-    int res= MeshCompRecorder::sendData(cp);
-    res+= cp.sendIDPtr(theDofs,getDbTagData(),ArrayCommMetaData(6,7,8));
-    res+= cp.sendIDPtr(theNodalTags,getDbTagData(),ArrayCommMetaData(9,10,11));
-    res+= cp.sendInts(dataFlag,numValidNodes,getDbTagData(),CommMetaData(12));
+    int res= MeshCompRecorder::sendData(comm);
+    res+= comm.sendIDPtr(theDofs,getDbTagData(),ArrayCommMetaData(6,7,8));
+    res+= comm.sendIDPtr(theNodalTags,getDbTagData(),ArrayCommMetaData(9,10,11));
+    res+= comm.sendInts(dataFlag,numValidNodes,getDbTagData(),CommMetaData(12));
     return res;
   }
 
 //! @brief Receive the object through the communicator
 //! being passed as parameter.
-int XC::NodeRecorderBase::receiveData(const CommParameters &cp)
+int XC::NodeRecorderBase::receiveData(const Communicator &comm)
   {
-    int res= MeshCompRecorder::receiveData(cp);
-    theDofs= cp.receiveIDPtr(theDofs,getDbTagData(),ArrayCommMetaData(6,7,8));
-    theNodalTags= cp.receiveIDPtr(theNodalTags,getDbTagData(),ArrayCommMetaData(9,10,11));
-    res+= cp.receiveInts(dataFlag,numValidNodes,getDbTagData(),CommMetaData(12));
+    int res= MeshCompRecorder::receiveData(comm);
+    theDofs= comm.receiveIDPtr(theDofs,getDbTagData(),ArrayCommMetaData(6,7,8));
+    theNodalTags= comm.receiveIDPtr(theNodalTags,getDbTagData(),ArrayCommMetaData(9,10,11));
+    res+= comm.receiveInts(dataFlag,numValidNodes,getDbTagData(),CommMetaData(12));
     return res;
   }

@@ -280,44 +280,44 @@ const XC::Vector &XC::beam2d02::getResistingForceIncInertia(void) const
 
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::beam2d02::sendData(CommParameters &cp)
+int XC::beam2d02::sendData(Communicator &comm)
   {
-    int res= beam2d::sendData(cp);
-    res+= cp.sendDoubles(L,sn,cs,getDbTagData(),CommMetaData(10));
+    int res= beam2d::sendData(comm);
+    res+= comm.sendDoubles(L,sn,cs,getDbTagData(),CommMetaData(10));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::beam2d02::recvData(const CommParameters &cp)
+int XC::beam2d02::recvData(const Communicator &comm)
   {
-    int res= beam2d::recvData(cp);
-    res+= cp.receiveDoubles(L,sn,cs,getDbTagData(),CommMetaData(10));
+    int res= beam2d::recvData(comm);
+    res+= comm.receiveDoubles(L,sn,cs,getDbTagData(),CommMetaData(10));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::beam2d02::sendSelf(CommParameters &cp)
+int XC::beam2d02::sendSelf(Communicator &comm)
   {
     static ID data(10);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
     const int dataTag= getDbTag();
-    res= cp.sendIdData(getDbTagData(),dataTag);
+    res= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "beam2d02::sendSelf -- could not send data Vector\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::beam2d02::recvSelf(const CommParameters &cp)
+int XC::beam2d02::recvSelf(const Communicator &comm)
   {
     static ID data(10);
     const int dataTag= getDbTag();
-    int res = cp.receiveIdData(getDbTagData(),dataTag);
+    int res = comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "beam2d02::recvSelf() - failed to send ID data\n";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

@@ -1019,28 +1019,28 @@ XC::DbTagData &XC::ShellMITC9::getDbTagData(void) const
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::ShellMITC9::sendData(CommParameters &cp)
+int XC::ShellMITC9::sendData(Communicator &comm)
   {
-    int res= QuadBase9N<SectionFDPhysicalProperties>::sendData(cp);
-    res+=cp.sendDoubles(Ktt,xl[0][0],xl[0][1],xl[0][2],xl[0][3],getDbTagData(),CommMetaData(8));
-    res+=cp.sendDoubles(xl[1][0],xl[1][1],xl[1][2],xl[1][3],getDbTagData(),CommMetaData(9));
-    res+=cp.sendMovable(theCoordTransf,getDbTagData(),CommMetaData(10));
-    res+= p0.sendData(cp,getDbTagData(),CommMetaData(11));
-    res+= cp.sendMatrix(Ki,getDbTagData(),CommMetaData(14));
-    //res+= cp.sendVectors(initDisp,getDbTagData(),CommMetaData(18));
+    int res= QuadBase9N<SectionFDPhysicalProperties>::sendData(comm);
+    res+=comm.sendDoubles(Ktt,xl[0][0],xl[0][1],xl[0][2],xl[0][3],getDbTagData(),CommMetaData(8));
+    res+=comm.sendDoubles(xl[1][0],xl[1][1],xl[1][2],xl[1][3],getDbTagData(),CommMetaData(9));
+    res+=comm.sendMovable(theCoordTransf,getDbTagData(),CommMetaData(10));
+    res+= p0.sendData(comm,getDbTagData(),CommMetaData(11));
+    res+= comm.sendMatrix(Ki,getDbTagData(),CommMetaData(14));
+    //res+= comm.sendVectors(initDisp,getDbTagData(),CommMetaData(18));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::ShellMITC9::recvData(const CommParameters &cp)
+int XC::ShellMITC9::recvData(const Communicator &comm)
   {
-    int res= QuadBase9N<SectionFDPhysicalProperties>::recvData(cp);
-    res+=cp.receiveDoubles(Ktt,xl[0][0],xl[0][1],xl[0][2],xl[0][3],getDbTagData(),CommMetaData(8));
-    res+=cp.receiveDoubles(xl[1][0],xl[1][1],xl[1][2],xl[1][3],getDbTagData(),CommMetaData(9));
-    res+= cp.receiveMovable(theCoordTransf,getDbTagData(),CommMetaData(10));
-    res+= p0.receiveData(cp,getDbTagData(),CommMetaData(11));
-    res+= cp.receiveMatrix(Ki,getDbTagData(),CommMetaData(14));
-    //res+= cp.receiveVectors(initDisp,getDbTagData(),CommMetaData(18));
+    int res= QuadBase9N<SectionFDPhysicalProperties>::recvData(comm);
+    res+=comm.receiveDoubles(Ktt,xl[0][0],xl[0][1],xl[0][2],xl[0][3],getDbTagData(),CommMetaData(8));
+    res+=comm.receiveDoubles(xl[1][0],xl[1][1],xl[1][2],xl[1][3],getDbTagData(),CommMetaData(9));
+    res+= comm.receiveMovable(theCoordTransf,getDbTagData(),CommMetaData(10));
+    res+= p0.receiveData(comm,getDbTagData(),CommMetaData(11));
+    res+= comm.receiveMatrix(Ki,getDbTagData(),CommMetaData(14));
+    //res+= comm.receiveVectors(initDisp,getDbTagData(),CommMetaData(18));
     return res;
   }
 
@@ -1106,30 +1106,30 @@ void XC::ShellMITC9::Print(std::ostream &s, int flag ) const
       }
   }
 
-int XC::ShellMITC9::sendSelf(CommParameters &cp)
+int XC::ShellMITC9::sendSelf(Communicator &comm)
   {
     inicComm(getDbTagData().Size());
-    int res= sendData(cp);
+    int res= sendData(comm);
 
     const int dataTag= getDbTag();
-    res= cp.sendIdData(getDbTagData(),dataTag);
+    res= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "getClassName()" << "::" << __FUNCTION__
 	        << "; failed to send ID data\n";
     return res;
   }
     
-int  XC::ShellMITC9::recvSelf(const CommParameters &cp)
+int  XC::ShellMITC9::recvSelf(const Communicator &comm)
   {
     inicComm(getDbTagData().Size());
 
     const int dataTag= getDbTag();
-    int res = cp.receiveIdData(getDbTagData(),dataTag);
+    int res = comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "getClassName()" << "::" << __FUNCTION__
 		<< "; failed to receive ID data\n";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

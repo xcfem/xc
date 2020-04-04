@@ -181,29 +181,29 @@ XC::DbTagData &XC::ShellUniformLoad::getDbTagData(void) const
     return retval;
   }
 
-int XC::ShellUniformLoad::sendSelf(CommParameters &cp)
+int XC::ShellUniformLoad::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(6);
-    int result= sendData(cp);
+    int result= sendData(comm);
 
-    result+= cp.sendIdData(getDbTagData(),dataTag);
+    result+= comm.sendIdData(getDbTagData(),dataTag);
     if(result < 0)
       std::cerr << "ShellUniformLoad::sendSelf() - failed to send extra data\n";
     return result;
   }
 
-int XC::ShellUniformLoad::recvSelf(const CommParameters &cp)
+int XC::ShellUniformLoad::recvSelf(const Communicator &comm)
   {
     inicComm(6);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; data could not be received.\n" ;
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

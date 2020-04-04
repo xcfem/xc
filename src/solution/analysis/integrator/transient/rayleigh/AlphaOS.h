@@ -80,8 +80,8 @@ class AlphaOS: public AlphaOSBase
   private:
     double alpha;    
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
     virtual int formElementResidual(void);
 
     friend class AnalysisAggregation;
@@ -104,8 +104,8 @@ class AlphaOS: public AlphaOSBase
     int update(const Vector &deltaU);
     int commit(void);
     
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag = 0) const;        
   };

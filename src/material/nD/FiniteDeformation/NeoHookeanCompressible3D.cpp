@@ -233,7 +233,7 @@ int XC::NeoHookeanCompressible3D::getOrder(void) const
 }
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-int XC::NeoHookeanCompressible3D::sendSelf(CommParameters &cp)
+int XC::NeoHookeanCompressible3D::sendSelf(Communicator &comm)
 {
    int res = 0;
    // not yet implemented
@@ -241,7 +241,7 @@ int XC::NeoHookeanCompressible3D::sendSelf(CommParameters &cp)
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-int XC::NeoHookeanCompressible3D::recvSelf(const CommParameters &cp)
+int XC::NeoHookeanCompressible3D::recvSelf(const Communicator &comm)
 {
    int res = 0;
    // not yet implemented

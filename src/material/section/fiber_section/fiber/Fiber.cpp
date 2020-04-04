@@ -95,7 +95,7 @@ Pos2d XC::Fiber::getPos(void) const
   { return Pos2d(getLocY(),getLocZ()); }
 
 //! @brief Send data through the channel being passed as parameter.
-int XC::Fiber::sendData(CommParameters &cp)
+int XC::Fiber::sendData(Communicator &comm)
   {
     setDbTagDataPos(0,getTag());
     setDbTagDataPos(1,dead);
@@ -103,7 +103,7 @@ int XC::Fiber::sendData(CommParameters &cp)
   }
 
 //! @brief Receive data through the channel being passed as parameter.
-int XC::Fiber::recvData(const CommParameters &cp)
+int XC::Fiber::recvData(const Communicator &comm)
   {    
     setTag(getDbTagDataPos(0));
     dead= static_cast<bool>(getDbTagDataPos(1));

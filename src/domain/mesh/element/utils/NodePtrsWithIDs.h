@@ -49,8 +49,8 @@ class NodePtrsWithIDs: public NodePtrs, public MovableObject
     ID connectedExternalNodes; //!< contains the tags of the end nodes.
 
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
 
     friend class Element;
@@ -86,8 +86,8 @@ class NodePtrsWithIDs: public NodePtrs, public MovableObject
     void set_id_nodes(const std::vector<int> &inodes);
     void set_id_nodes(const ID &inodes);
     void Print(std::ostream &os) const;
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     bool equalNumDOF(void);
     bool checkNumDOF(const size_t &, const size_t &);
     

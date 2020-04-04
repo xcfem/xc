@@ -203,18 +203,18 @@ const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirWeakAxisGlobalCoord(c
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::BeamColumnWithSectionFDTrf3d::sendData(CommParameters &cp)
+int XC::BeamColumnWithSectionFDTrf3d::sendData(Communicator &comm)
   {
-    int res= BeamColumnWithSectionFD::sendData(cp);
-    res+= sendCoordTransf(10,11,12,cp);
+    int res= BeamColumnWithSectionFD::sendData(comm);
+    res+= sendCoordTransf(10,11,12,comm);
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::BeamColumnWithSectionFDTrf3d::recvData(const CommParameters &cp)
+int XC::BeamColumnWithSectionFDTrf3d::recvData(const Communicator &comm)
   {
-    int res= BeamColumnWithSectionFD::recvData(cp);
-    theCoordTransf= recvCoordTransf3d(10,11,12,cp);
+    int res= BeamColumnWithSectionFD::recvData(comm);
+    theCoordTransf= recvCoordTransf3d(10,11,12,comm);
     return res;
   }
 

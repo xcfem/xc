@@ -471,48 +471,48 @@ int XC::FDdecoupledElastic3D::getOrder(void) const
   { return 6; }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::FDdecoupledElastic3D::sendData(CommParameters &cp)
+int XC::FDdecoupledElastic3D::sendData(Communicator &comm)
   {
-    int res= FiniteDeformationElastic3D::sendData(cp);
+    int res= FiniteDeformationElastic3D::sendData(comm);
     //XXX Falta enviar pointer to WEnergy (W). Position 2 reserved;
-    res+= cp.sendTensor(F,getDbTagData(),CommMetaData(3));
-    res+= cp.sendTensor(C,getDbTagData(),CommMetaData(4));
-    res+= cp.sendTensor(Cinv,getDbTagData(),CommMetaData(5));
-    res+= cp.sendDoubles(J,lambda1,lambda2,lambda3,getDbTagData(),CommMetaData(6));
-    res+= cp.sendDoubles(lambda_wave1, lambda_wave2, lambda_wave3,getDbTagData(),CommMetaData(7));
-    res+= cp.sendInts(caseIndex,FromForC,getDbTagData(),CommMetaData(8));
-    res+= cp.sendTensor(Stiffness,getDbTagData(),CommMetaData(9));
-    res+= cp.sendTensor(thisGreenStrain,getDbTagData(),CommMetaData(10));
-    res+= cp.sendTensor(thisPK2Stress,getDbTagData(),CommMetaData(10));
+    res+= comm.sendTensor(F,getDbTagData(),CommMetaData(3));
+    res+= comm.sendTensor(C,getDbTagData(),CommMetaData(4));
+    res+= comm.sendTensor(Cinv,getDbTagData(),CommMetaData(5));
+    res+= comm.sendDoubles(J,lambda1,lambda2,lambda3,getDbTagData(),CommMetaData(6));
+    res+= comm.sendDoubles(lambda_wave1, lambda_wave2, lambda_wave3,getDbTagData(),CommMetaData(7));
+    res+= comm.sendInts(caseIndex,FromForC,getDbTagData(),CommMetaData(8));
+    res+= comm.sendTensor(Stiffness,getDbTagData(),CommMetaData(9));
+    res+= comm.sendTensor(thisGreenStrain,getDbTagData(),CommMetaData(10));
+    res+= comm.sendTensor(thisPK2Stress,getDbTagData(),CommMetaData(10));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::FDdecoupledElastic3D::recvData(const CommParameters &cp)
+int XC::FDdecoupledElastic3D::recvData(const Communicator &comm)
   {
-    int res= FiniteDeformationElastic3D::recvData(cp);
+    int res= FiniteDeformationElastic3D::recvData(comm);
     //XXX Falta recibir pointer to WEnergy (W). Position 2 reserved;
-    res+= cp.receiveTensor(F,getDbTagData(),CommMetaData(3));
-    res+= cp.receiveTensor(C,getDbTagData(),CommMetaData(4));
-    res+= cp.receiveTensor(Cinv,getDbTagData(),CommMetaData(5));
-    res+= cp.receiveDoubles(J,lambda1,lambda2,lambda3,getDbTagData(),CommMetaData(6));
-    res+= cp.receiveDoubles(lambda_wave1, lambda_wave2, lambda_wave3,getDbTagData(),CommMetaData(7));
-    res+= cp.receiveInts(caseIndex,FromForC,getDbTagData(),CommMetaData(8));
-    res+= cp.receiveTensor(Stiffness,getDbTagData(),CommMetaData(9));
-    res+= cp.receiveTensor(thisGreenStrain,getDbTagData(),CommMetaData(10));
-    res+= cp.receiveTensor(thisPK2Stress,getDbTagData(),CommMetaData(10));
+    res+= comm.receiveTensor(F,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveTensor(C,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveTensor(Cinv,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveDoubles(J,lambda1,lambda2,lambda3,getDbTagData(),CommMetaData(6));
+    res+= comm.receiveDoubles(lambda_wave1, lambda_wave2, lambda_wave3,getDbTagData(),CommMetaData(7));
+    res+= comm.receiveInts(caseIndex,FromForC,getDbTagData(),CommMetaData(8));
+    res+= comm.receiveTensor(Stiffness,getDbTagData(),CommMetaData(9));
+    res+= comm.receiveTensor(thisGreenStrain,getDbTagData(),CommMetaData(10));
+    res+= comm.receiveTensor(thisPK2Stress,getDbTagData(),CommMetaData(10));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::FDdecoupledElastic3D::sendSelf(CommParameters &cp)
+int XC::FDdecoupledElastic3D::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(3);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
@@ -520,18 +520,18 @@ int XC::FDdecoupledElastic3D::sendSelf(CommParameters &cp)
 
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::FDdecoupledElastic3D::recvSelf(const CommParameters &cp)
+int XC::FDdecoupledElastic3D::recvSelf(const Communicator &comm)
   {
     inicComm(3);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

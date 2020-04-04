@@ -401,19 +401,19 @@ double XC::SectionForceDeformation::getSectionDeformationByName(const std::strin
     return retval;
   }
 
-//! @brief Send object members through the channel defined in cp.
-int XC::SectionForceDeformation::sendData(CommParameters &cp)
+//! @brief Send object members through the communicator argument.
+int XC::SectionForceDeformation::sendData(Communicator &comm)
   {
     setDbTagDataPos(0,getTag());
-    int res= cp.sendMatrixPtr(fDefault,getDbTagData(),MatrixCommMetaData(1,2,3,4));
+    int res= comm.sendMatrixPtr(fDefault,getDbTagData(),MatrixCommMetaData(1,2,3,4));
     return res;
   }
 
-//! @brief Receives object members through the channel defined in cp.
-int XC::SectionForceDeformation::recvData(const CommParameters &cp)
+//! @brief Receives object members through the communicator argument.
+int XC::SectionForceDeformation::recvData(const Communicator &comm)
   {
     setTag(getDbTagDataPos(0));
-    fDefault= cp.receiveMatrixPtr(fDefault,getDbTagData(),MatrixCommMetaData(1,2,3,4));
+    fDefault= comm.receiveMatrixPtr(fDefault,getDbTagData(),MatrixCommMetaData(1,2,3,4));
     return 0;
   }
 

@@ -56,8 +56,8 @@ class HHTBase: public HHTRayleighBase
     double beta; //! \beta parameter
     double c1;   //!< some constants we need to keep
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     HHTBase(AnalysisAggregation *,int classTag);
     HHTBase(AnalysisAggregation *,int classTag,double alpha);

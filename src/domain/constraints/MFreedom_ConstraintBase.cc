@@ -144,20 +144,20 @@ const XC::Matrix &XC::MFreedom_ConstraintBase::getConstraint(void) const
   { return constraintMatrix; }
 
 //! @brief Send data through the channel being passed as parameter.
-int XC::MFreedom_ConstraintBase::sendData(CommParameters &cp)
+int XC::MFreedom_ConstraintBase::sendData(Communicator &comm)
   {
-    int res= Constraint::sendData(cp);
-    res+= cp.sendMatrix(constraintMatrix,getDbTagData(),CommMetaData(3));
-    res+= cp.sendID(constrDOF,getDbTagData(),CommMetaData(4));
+    int res= Constraint::sendData(comm);
+    res+= comm.sendMatrix(constraintMatrix,getDbTagData(),CommMetaData(3));
+    res+= comm.sendID(constrDOF,getDbTagData(),CommMetaData(4));
     return res;
   }
 
 //! @brief Receive data through the channel being passed as parameter.
-int XC::MFreedom_ConstraintBase::recvData(const CommParameters &cp)
+int XC::MFreedom_ConstraintBase::recvData(const Communicator &comm)
   {
-    int res= Constraint::recvData(cp);
-    res+= cp.receiveMatrix(constraintMatrix,getDbTagData(),CommMetaData(3));
-    res+= cp.receiveID(constrDOF,getDbTagData(),CommMetaData(4));
+    int res= Constraint::recvData(comm);
+    res+= comm.receiveMatrix(constraintMatrix,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveID(constrDOF,getDbTagData(),CommMetaData(4));
     return res;
   }
 

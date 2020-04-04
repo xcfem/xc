@@ -75,8 +75,8 @@ class SectionMatrices: public MovableObject
 
     void initialize(const size_t &i,const int &order);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 
 } //end of XC namespace

@@ -508,13 +508,13 @@ int XC::ProfileSPDLinDirectSolver::factor(int n)
 }
 */
 
-int XC::ProfileSPDLinDirectSolver::sendSelf(CommParameters &cp)
+int XC::ProfileSPDLinDirectSolver::sendSelf(Communicator &comm)
   {
     return 0;
   }
 
 
-int XC::ProfileSPDLinDirectSolver::recvSelf(const CommParameters &cp)
+int XC::ProfileSPDLinDirectSolver::recvSelf(const Communicator &comm)
   {
     return 0;
   }

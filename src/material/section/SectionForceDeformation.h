@@ -90,8 +90,8 @@ class SectionForceDeformation: public Material
     mutable Matrix *fDefault; //!< Default flexibility matrix.
     MaterialHandler *material_handler; //!< Material definition handler (search,...).
 
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     SectionForceDeformation(int tag,int classTag,MaterialHandler *mat_ldr= nullptr);
     SectionForceDeformation(const SectionForceDeformation &);

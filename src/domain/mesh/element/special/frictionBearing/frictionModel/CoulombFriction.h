@@ -74,8 +74,8 @@ class CoulombFriction: public FrictionModel
   protected:
     double mu; //!< coefficient of friction
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     // constructor
     CoulombFriction(int classTag= FRN_TAG_CoulombFriction);
@@ -92,8 +92,8 @@ class CoulombFriction: public FrictionModel
     
     FrictionModel *getCopy(void) const;
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag = 0) const;
 };

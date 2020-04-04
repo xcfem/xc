@@ -72,8 +72,8 @@ class DataOutputStreamHandler: public DataOutputHandler
     int open(const std::vector<std::string> &dataDescription);
     int write(Vector &data);
 
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

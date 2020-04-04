@@ -94,8 +94,8 @@ class FourNodeQuadUP: public QuadBase4N<SolidMech2D>
 
     mutable Matrix *Ki;
   protected:
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     FourNodeQuadUP(int tag, int nd1, int nd2, int nd3, int nd4, NDMaterial &m,const std::string &type, double t, double bulk, double rhof, double perm1, double perm2,const BodyForces2D &bForces= BodyForces2D(), double p = 0.0);
     Element *getCopy(void) const;
@@ -120,8 +120,8 @@ class FourNodeQuadUP: public QuadBase4N<SolidMech2D>
     const Vector &getResistingForceIncInertia(void) const;
 
     // public methods for element output
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;
 
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);

@@ -612,10 +612,10 @@ XC::UniaxialMaterial* XC::BarSlipMaterial::getCopy(void) const
     return theCopy;
   }
 
-int XC::BarSlipMaterial::sendSelf(CommParameters &cp)
+int XC::BarSlipMaterial::sendSelf(Communicator &comm)
   { return -1; }
 
-int XC::BarSlipMaterial::recvSelf(const CommParameters &cp)
+int XC::BarSlipMaterial::recvSelf(const Communicator &comm)
   { return -1; }
 
 void XC::BarSlipMaterial::Print(std::ostream &s, int flag) const

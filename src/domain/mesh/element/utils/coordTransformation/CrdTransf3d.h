@@ -98,8 +98,8 @@ class CrdTransf3d: public CrdTransf
     virtual int computeElemtLengthAndOrient(void) const= 0;
     virtual int computeLocalAxis(void) const= 0;
 
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     CrdTransf3d(int tag, int classTag);
     CrdTransf3d(int tag, int classTag, const Vector &vecInLocXZPlane);

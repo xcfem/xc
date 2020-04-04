@@ -79,14 +79,14 @@ int XC::Recorder::restart(void)
 int XC::Recorder::setDomain(Domain &theDomain)
   { return 0; }
 
-int XC::Recorder::sendSelf(CommParameters &cp)
+int XC::Recorder::sendSelf(Communicator &comm)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
               << "; not yet implemented.\n";
     return 0;
   }
 
-int XC::Recorder::recvSelf(const CommParameters &cp)
+int XC::Recorder::recvSelf(const Communicator &comm)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; not yet implemented.\n";

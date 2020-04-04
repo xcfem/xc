@@ -86,7 +86,7 @@ XC::DbTagData &XC::DamageModelVector::getDbTagData(void) const
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::DamageModelVector::sendData(CommParameters &cp)
+int XC::DamageModelVector::sendData(Communicator &comm)
   {
     int res= 0;
     std::cerr << "XC::DamageModelVector::sendData not implemented." << std::endl;
@@ -94,7 +94,7 @@ int XC::DamageModelVector::sendData(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::DamageModelVector::recvData(const CommParameters &cp)
+int XC::DamageModelVector::recvData(const Communicator &comm)
   {
     int res= 0;
     //const int flag = getDbTagDataPos(0);
@@ -103,12 +103,12 @@ int XC::DamageModelVector::recvData(const CommParameters &cp)
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::DamageModelVector::sendSelf(CommParameters &cp)
+int XC::DamageModelVector::sendSelf(Communicator &comm)
   {
     inicComm(2);
-    int res= sendData(cp);
+    int res= sendData(comm);
     const int dataTag=getDbTag();
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "WARNING XC::DamageModelVector::sendSelf() - " 
                 << dataTag << " failed to send ID";
@@ -116,15 +116,15 @@ int XC::DamageModelVector::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::DamageModelVector::recvSelf(const CommParameters &cp)
+int XC::DamageModelVector::recvSelf(const Communicator &comm)
   {
     const int dataTag= this->getDbTag();
     inicComm(2);
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "WARNING XC::DamageModelVector::recvSelf() - "
                 << dataTag << " failed to receive ID\n";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }

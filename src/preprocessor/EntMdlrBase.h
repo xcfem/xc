@@ -49,10 +49,10 @@ class EntMdlrBase: public NamedEntity, public MovableObject
     LabelContainer labels; //!< Label container.
 
     bool check_preprocessor(void) const;
-    int sendIdsLabels(const int &,const int &, CommParameters &);
-    int recvIdsLabels(const int &,const int &, const CommParameters &);
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendIdsLabels(const int &,const int &, Communicator &);
+    int recvIdsLabels(const int &,const int &, const Communicator &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     EntMdlrBase(const std::string &nmb="",Preprocessor *preprocessor= nullptr);
     EntMdlrBase &operator+=(const EntMdlrBase &);
@@ -72,8 +72,8 @@ class EntMdlrBase: public NamedEntity, public MovableObject
     const Edge *BuscaEdge(const size_t &) const;
     Face *BuscaFace(const size_t &);    
     const Face *BuscaFace(const size_t &) const;
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
   };
 
 EntMdlrBase operator+(const EntMdlrBase &,const EntMdlrBase &);

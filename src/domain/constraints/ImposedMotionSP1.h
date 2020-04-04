@@ -78,8 +78,8 @@ class ImposedMotionSP1: public ImposedMotionBase
   private:
     int destroyMotion; //!< flag indicating if destructor to be invoked on GMotion when done    
   protected:
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     // constructors    
     ImposedMotionSP1(void);        
@@ -88,8 +88,8 @@ class ImposedMotionSP1: public ImposedMotionBase
     int applyConstraint(double loadFactor);    
     bool isHomogeneous(void) const;
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace

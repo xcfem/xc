@@ -42,8 +42,8 @@ class PeriodSeries: public PulseBaseSeries
     double period; //!< period of pulse series (sec)
     double shift;  //!< phase shift of pulse series (sec)
 
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
   public:
     // constructors

@@ -73,8 +73,8 @@ class Beam2dPartialUniformLoad: public BeamUniformLoad
 
     int parameterID;
   protected:
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);    
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);    
   public:
     Beam2dPartialUniformLoad(int tag, double wTrans, double wAxial, double aL, double bL, const ID &theElementTags);
     Beam2dPartialUniformLoad(int tag= 0);    
@@ -84,8 +84,8 @@ class Beam2dPartialUniformLoad: public BeamUniformLoad
     size_t getForceVectorDimension(void) const;
     size_t getMomentVectorDimension(void) const;
 
-    int sendSelf(CommParameters &cp);  
-    int recvSelf(const CommParameters &cp);
+    int sendSelf(Communicator &comm);  
+    int recvSelf(const Communicator &comm);
     
     void Print(std::ostream &s, int flag =0) const;       
 

@@ -91,21 +91,21 @@ class TaggedObjectStorage: public CommandEntity, public MovableObject
     static const int posDbTag1= 2;
     static const int posDbTag2= 3;
     static const int posDbTag3= 4;
-    const ID &getDBTags(CommParameters &);
-    int sendObjectTags(CommParameters &);
-    const ID &receiveTags(int posDbTag,int size,const CommParameters &);
-    int receiveObjectTags(const int &sz,const CommParameters &);
-    int sendObjects(CommParameters &);
+    const ID &getDBTags(Communicator &);
+    int sendObjectTags(Communicator &);
+    const ID &receiveTags(int posDbTag,int size,const Communicator &);
+    int receiveObjectTags(const int &sz,const Communicator &);
+    int sendObjects(Communicator &);
     template <class T>
-    int createObjects(const CommParameters &,T *(FEM_ObjectBroker::*p)(int));
-    int receiveObjects(const CommParameters &);
+    int createObjects(const Communicator &,T *(FEM_ObjectBroker::*p)(int));
+    int receiveObjects(const Communicator &);
   protected:
     std::string containerName; //!< Container name.
     bool transmitIDs;
     DbTagData &getDbTagData(void) const;
 
     template <class T>
-    int receiveData(const CommParameters &,T *(FEM_ObjectBroker::*p)(int));
+    int receiveData(const Communicator &,T *(FEM_ObjectBroker::*p)(int));
     void copy(const TaggedObjectStorage &);
   public:
     TaggedObjectStorage(CommandEntity *owr,const std::string &containerName);
@@ -152,18 +152,18 @@ class TaggedObjectStorage: public CommandEntity, public MovableObject
     const ID &getObjTags(void) const;
     bool getTransmitIDsFlag(void) const
       { return transmitIDs; }
-    virtual int sendData(CommParameters &);
+    virtual int sendData(Communicator &);
     template <class T>
-    int receive(int dbTag,const CommParameters &,T *(FEM_ObjectBroker::*p)(int));
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int receive(int dbTag,const Communicator &,T *(FEM_ObjectBroker::*p)(int));
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     //! Invoke {\em Print(s,flag)} on all objects which have been added to
     //! the container. 
     virtual void Print(std::ostream &s, int flag =0) const=0;
   };
 
 template <class T>
-int TaggedObjectStorage::createObjects(const CommParameters &cp,T *(FEM_ObjectBroker::*ptrFunc)(int))
+int TaggedObjectStorage::createObjects(const Communicator &comm,T *(FEM_ObjectBroker::*ptrFunc)(int))
   {
     int retval= 0;
     const int size= dbTags.Size();
@@ -176,7 +176,7 @@ int TaggedObjectStorage::createObjects(const CommParameters &cp,T *(FEM_ObjectBr
         for(int i=0; i<size; i++)
           {
             T *ptr= nullptr;
-            ptr= cp.getBrokedTagged(ptr,dbTags(loc),objTags(loc),classTags(loc),ptrFunc);
+            ptr= comm.getBrokedTagged(ptr,dbTags(loc),objTags(loc),classTags(loc),ptrFunc);
             if(ptr)
               {
                 if(!addComponent(ptr))
@@ -204,7 +204,7 @@ int TaggedObjectStorage::createObjects(const CommParameters &cp,T *(FEM_ObjectBr
 
 //! @brief Receives members through the channel being passed as parameter.
 template <class T>
-int TaggedObjectStorage::receiveData(const CommParameters &cp,T *(FEM_ObjectBroker::*ptrFunc)(int))
+int TaggedObjectStorage::receiveData(const Communicator &comm,T *(FEM_ObjectBroker::*ptrFunc)(int))
   {
     setDbTag(getDbTagDataPos(0));
     int sz= getDbTagDataPos(1);
@@ -214,26 +214,26 @@ int TaggedObjectStorage::receiveData(const CommParameters &cp,T *(FEM_ObjectBrok
         if(transmitIDs)
           {
             clearAll();
-            receiveObjectTags(sz,cp);
-            res+= this->createObjects(cp,ptrFunc);
+            receiveObjectTags(sz,comm);
+            res+= this->createObjects(comm,ptrFunc);
           }
-        res+= this->receiveObjects(cp);
+        res+= this->receiveObjects(comm);
       }
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
 template <class T>
-int TaggedObjectStorage::receive(int dbTag,const CommParameters &cp,T *(FEM_ObjectBroker::*ptrFunc)(int))
+int TaggedObjectStorage::receive(int dbTag,const Communicator &comm,T *(FEM_ObjectBroker::*ptrFunc)(int))
   {
     inicComm(5);
     setDbTag(dbTag);
-    int res= cp.receiveIdData(getDbTagData(),getDbTag());
+    int res= comm.receiveIdData(getDbTagData(),getDbTag());
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to recv the initial ID\n";
     else
-      res+= TaggedObjectStorage::receiveData(cp,ptrFunc);
+      res+= TaggedObjectStorage::receiveData(comm,ptrFunc);
     return res;
   }
 

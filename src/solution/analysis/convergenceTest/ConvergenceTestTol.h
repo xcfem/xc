@@ -46,8 +46,8 @@ class ConvergenceTestTol: public ConvergenceTest
   protected:
     double tol; //!< the tol on the energy used to test for convergence
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     // constructors
     ConvergenceTestTol(CommandEntity *owr,int classTag);	    	
@@ -55,8 +55,8 @@ class ConvergenceTestTol: public ConvergenceTest
 
     void setTolerance(double newTol);
     double getTolerance(void) const;
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
 
     std::string getRatioMessage(const std::string &) const;
     std::string getDispIncrMessage(void) const;

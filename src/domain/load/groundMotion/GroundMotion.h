@@ -107,8 +107,8 @@ class GroundMotion: public MovableObject, public CommandEntity
 /*     void setIntegrator(TimeSeriesIntegrator *integrator); */
 /*     TimeSeries *integrate(TimeSeries *theSeries, double delta = 0.01);  */
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     
     // AddingSensitivity:BEGIN //////////////////////////////////////////
     virtual double getAccelSensitivity(double time)= 0;
@@ -119,8 +119,8 @@ class GroundMotion: public MovableObject, public CommandEntity
 
   };
 
-int sendGroundMotionPtr(GroundMotion *,DbTagData &,CommParameters &cp,const BrokedPtrCommMetaData &);
-GroundMotion *receiveGroundMotionPtr(GroundMotion *,DbTagData &,const CommParameters &cp,const BrokedPtrCommMetaData &);
+int sendGroundMotionPtr(GroundMotion *,DbTagData &,Communicator &comm,const BrokedPtrCommMetaData &);
+GroundMotion *receiveGroundMotionPtr(GroundMotion *,DbTagData &,const Communicator &comm,const BrokedPtrCommMetaData &);
 
 
 } // end of XC namespace

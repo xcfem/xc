@@ -591,40 +591,40 @@ const XC::Vector &XC::ZeroLength::getResistingForceIncInertia(void) const
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::ZeroLength::sendData(CommParameters &cp)
+int XC::ZeroLength::sendData(Communicator &comm)
   {
-    int res= Element0D::sendData(cp);
-    res+= cp.sendInt(elemType,getDbTagData(),CommMetaData(9));
-    res+= cp.sendMatrixPtr(theMatrix,getDbTagData(),MatrixCommMetaData(10,11,12,13));
-    res+= cp.sendVectorPtr(theVector,getDbTagData(),ArrayCommMetaData(14,15,16));
-    res+= cp.sendMovable(theMaterial1d,getDbTagData(),CommMetaData(17));
-    res+= cp.sendMatrix(t1d,getDbTagData(),CommMetaData(18));
+    int res= Element0D::sendData(comm);
+    res+= comm.sendInt(elemType,getDbTagData(),CommMetaData(9));
+    res+= comm.sendMatrixPtr(theMatrix,getDbTagData(),MatrixCommMetaData(10,11,12,13));
+    res+= comm.sendVectorPtr(theVector,getDbTagData(),ArrayCommMetaData(14,15,16));
+    res+= comm.sendMovable(theMaterial1d,getDbTagData(),CommMetaData(17));
+    res+= comm.sendMatrix(t1d,getDbTagData(),CommMetaData(18));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::ZeroLength::recvData(const CommParameters &cp)
+int XC::ZeroLength::recvData(const Communicator &comm)
   {
-    int res= Element0D::recvData(cp);
+    int res= Element0D::recvData(comm);
     int et= elemType;
-    res+= cp.receiveInt(et,getDbTagData(),CommMetaData(9));
+    res+= comm.receiveInt(et,getDbTagData(),CommMetaData(9));
     elemType= Etype(et);
-    theMatrix= cp.receiveMatrixPtr(theMatrix,getDbTagData(),MatrixCommMetaData(10,11,12,13));
-    theVector= cp.receiveVectorPtr(theVector,getDbTagData(),ArrayCommMetaData(14,15,16));
-    res+= cp.receiveMovable(theMaterial1d,getDbTagData(),CommMetaData(17));
-    res+= cp.receiveMatrix(t1d,getDbTagData(),CommMetaData(18));
+    theMatrix= comm.receiveMatrixPtr(theMatrix,getDbTagData(),MatrixCommMetaData(10,11,12,13));
+    theVector= comm.receiveVectorPtr(theVector,getDbTagData(),ArrayCommMetaData(14,15,16));
+    res+= comm.receiveMovable(theMaterial1d,getDbTagData(),CommMetaData(17));
+    res+= comm.receiveMatrix(t1d,getDbTagData(),CommMetaData(18));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::ZeroLength::sendSelf(CommParameters &cp)
+int XC::ZeroLength::sendSelf(Communicator &comm)
   {
     inicComm(22);
 
-    int res= sendData(cp);
+    int res= sendData(comm);
 
     const int dataTag= getDbTag();
-    res += cp.sendIdData(getDbTagData(),dataTag);
+    res += comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send ID data.\n";
@@ -632,17 +632,17 @@ int XC::ZeroLength::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::ZeroLength::recvSelf(const CommParameters &cp)
+int XC::ZeroLength::recvSelf(const Communicator &comm)
   {
     inicComm(22);
 
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to receive ID data.\n";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

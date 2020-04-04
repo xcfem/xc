@@ -94,8 +94,8 @@ class TzLiq1: public TzSimple1
     double getEffectiveStress(void);
     static Vector stressV3;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     TzLiq1(int tag, int classtag, int tzType, double tult, double z50,
     	      double dashpot, int solidElem1, int solidElem2, Domain *theDomain);
@@ -116,8 +116,8 @@ class TzLiq1: public TzSimple1
 
     UniaxialMaterial *getCopy(void) const;
     
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
 
     //  Command for initiating vertConsolStress from TclUpdateMaterialStageCommand
     int updateParameter(int snum, Information &eleInformation);

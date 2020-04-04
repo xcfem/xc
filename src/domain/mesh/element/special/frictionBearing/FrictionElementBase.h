@@ -77,8 +77,8 @@ class FrictionElementBase: public Element0D
     
     void free_friction_model(void);
     void alloc_friction_model(const FrictionModel &);
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     // constructors
     FrictionElementBase(int tag, int classTag, int Nd1, int Nd2,const size_t &dim,const FrictionModel &theFrnMdl, const UniaxialMatPhysicalProperties &, const double &uy= 0.0, const Vector &y= Vector(), const Vector &x= Vector(),const double &mass = 0.0,const int &maxIter= 20,const double &tol= 1E-8);

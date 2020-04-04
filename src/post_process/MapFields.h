@@ -57,8 +57,8 @@ class MapFields: public PreprocessorContainer, public MovableObject, public std:
 
   protected:
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
     friend class Preprocessor;
   public:
     MapFields(Preprocessor *preprocessor= nullptr);
@@ -67,8 +67,8 @@ class MapFields: public PreprocessorContainer, public MovableObject, public std:
 
     const_iterator buscaField(const std::string &nmb) const;
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

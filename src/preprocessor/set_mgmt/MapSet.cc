@@ -277,14 +277,14 @@ XC::DbTagData &XC::MapSet::getDbTagData(void) const
   }
 
 //! @brief Send the dbTags of the sets through the channel being passed as parameter.
-int XC::MapSet::sendSetsDbTags(int posDbTag,CommParameters &cp)
+int XC::MapSet::sendSetsDbTags(int posDbTag,Communicator &comm)
   {
     const int size= MapSetBase::size();
     int res= 0;
     if(size>0)
       {
-        setsDbTags= getSetsDBTags(cp);
-        res+= cp.sendID(setsDbTags,getDbTagData(),CommMetaData(posDbTag));
+        setsDbTags= getSetsDBTags(comm);
+        res+= comm.sendID(setsDbTags,getDbTagData(),CommMetaData(posDbTag));
       }
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -294,14 +294,14 @@ int XC::MapSet::sendSetsDbTags(int posDbTag,CommParameters &cp)
 
 //! @brief Send the names of the classes of the sets through
 //! the channel being passed as parameter.
-int XC::MapSet::sendSetsClassNames(int posDbTag,CommParameters &cp)
+int XC::MapSet::sendSetsClassNames(int posDbTag,Communicator &comm)
   {
     const int size= MapSetBase::size();
     int res= 0;
     if(size>0)
       {
         setsClassNames= getSetsClassNames();
-        res+= cp.sendStrings(setsClassNames,getDbTagData(),CommMetaData(posDbTag));
+        res+= comm.sendStrings(setsClassNames,getDbTagData(),CommMetaData(posDbTag));
       }
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -310,12 +310,12 @@ int XC::MapSet::sendSetsClassNames(int posDbTag,CommParameters &cp)
   }
 
 //! @brief Receives the dbTags of the sets through the channel being passed as parameter.
-int XC::MapSet::receiveSetsDbTags(int posDbTag,int size,const CommParameters &cp)
+int XC::MapSet::receiveSetsDbTags(int posDbTag,int size,const Communicator &comm)
   {
     setsDbTags.resize(size);
     int res= 0;
     if(size>0)
-      res= cp.receiveID(setsDbTags,getDbTagData(),CommMetaData(posDbTag));
+      res= comm.receiveID(setsDbTags,getDbTagData(),CommMetaData(posDbTag));
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; ch failed to receive the IDs.\n";
@@ -323,12 +323,12 @@ int XC::MapSet::receiveSetsDbTags(int posDbTag,int size,const CommParameters &cp
   }
 
 //! @brief Receives the class names of the sets through the channel being passed as parameter.
-int XC::MapSet::receiveSetsClassNames(int posDbTag,int size,const CommParameters &cp)
+int XC::MapSet::receiveSetsClassNames(int posDbTag,int size,const Communicator &comm)
   {
     setsClassNames.resize(size);
     int res= 0;
     if(size>0)
-      res= cp.receiveStrings(setsClassNames,getDbTagData(),CommMetaData(posDbTag));
+      res= comm.receiveStrings(setsClassNames,getDbTagData(),CommMetaData(posDbTag));
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; ch failed to receive the IDs.\n";
@@ -336,36 +336,36 @@ int XC::MapSet::receiveSetsClassNames(int posDbTag,int size,const CommParameters
   }
 
 //! @brief Send the sets through the channel being passed as parameter.
-int XC::MapSet::sendSets(int posDbTag1, int posDbTag2, int posDbTag3,CommParameters &cp)
+int XC::MapSet::sendSets(int posDbTag1, int posDbTag2, int posDbTag3,Communicator &comm)
   {
     std::deque<std::string> names;
     for(const_iterator i= begin();i!=end();i++)
       names.push_back((*i).first);
     DbTagData &dt= getDbTagData();
-    int res= cp.sendStrings(names,dt,CommMetaData(posDbTag1));
-    res+= sendSetsDbTags(posDbTag2,cp);
-    res+= sendSetsClassNames(posDbTag3,cp);
+    int res= comm.sendStrings(names,dt,CommMetaData(posDbTag1));
+    res+= sendSetsDbTags(posDbTag2,comm);
+    res+= sendSetsClassNames(posDbTag3,comm);
     int loc= 0;
     DbTagData tags(setsDbTags);
     for(iterator i= begin();i!=end();i++,loc++)
-      res+= cp.sendMovable(*(*i).second,tags,CommMetaData(loc));
+      res+= comm.sendMovable(*(*i).second,tags,CommMetaData(loc));
     return res;
   }
 
 //! @brief Receives the sets through the channel being passed as parameter.
-int XC::MapSet::receiveSets(int posDbTag1, int posDbTag2, int posDbTag3,const int &sz,const CommParameters &cp)
+int XC::MapSet::receiveSets(int posDbTag1, int posDbTag2, int posDbTag3,const int &sz,const Communicator &comm)
   {
     std::deque<std::string> names;
-    int res= cp.receiveStrings(names,getDbTagData(),CommMetaData(posDbTag1));
-    res+= receiveSetsDbTags(posDbTag2,sz,cp);
-    res+= receiveSetsClassNames(posDbTag3,sz,cp);
+    int res= comm.receiveStrings(names,getDbTagData(),CommMetaData(posDbTag1));
+    res+= receiveSetsDbTags(posDbTag2,sz,comm);
+    res+= receiveSetsClassNames(posDbTag3,sz,comm);
     int loc= 0;
     DbTagData tags(setsDbTags);
     for(std::deque<std::string>::iterator i= names.begin();i!=names.end();i++,loc++)
       {
         SetBase *tmp= broke_set(*i,setsClassNames[loc]);
         if(tmp)
-          cp.receiveMovable(*tmp,tags,CommMetaData(loc));
+          comm.receiveMovable(*tmp,tags,CommMetaData(loc));
         else
 	  std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; error receiving set: '" << *i << "'.\n";
@@ -373,28 +373,28 @@ int XC::MapSet::receiveSets(int posDbTag1, int posDbTag2, int posDbTag3,const in
     return res;
   }
 //! @brief Send members through the channel being passed as parameter.
-int XC::MapSet::sendOpenSets(int posDbTag1, int posDbTag2,CommParameters &cp)
+int XC::MapSet::sendOpenSets(int posDbTag1, int posDbTag2,Communicator &comm)
   {
     const size_t sz= open_sets.size();
-    int res= cp.sendInt(sz,getDbTagData(),CommMetaData(posDbTag1));
+    int res= comm.sendInt(sz,getDbTagData(),CommMetaData(posDbTag1));
     if(!open_sets.empty())
       {
         std::deque<std::string> open_sets_names;
         for(const_iterator i= open_sets.begin();i!=open_sets.end();i++)
           open_sets_names.push_back((*i).first);
-        res+= cp.sendStrings(open_sets_names,getDbTagData(),CommMetaData(posDbTag2));
+        res+= comm.sendStrings(open_sets_names,getDbTagData(),CommMetaData(posDbTag2));
       }
     return res;
   }
 //! @brief Receives members through the channel being passed as parameter.
-int XC::MapSet::receiveOpenSets(int posDbTag1, int posDbTag2,const CommParameters &cp)
+int XC::MapSet::receiveOpenSets(int posDbTag1, int posDbTag2,const Communicator &comm)
   {
      int sz_open_sets= 0;
-     int res= cp.receiveInt(sz_open_sets,getDbTagData(),CommMetaData(posDbTag1));
+     int res= comm.receiveInt(sz_open_sets,getDbTagData(),CommMetaData(posDbTag1));
      if(sz_open_sets>0)
        {
          std::deque<std::string> open_sets_names;
-         res+= cp.receiveStrings(open_sets_names,getDbTagData(),CommMetaData(posDbTag2));
+         res+= comm.receiveStrings(open_sets_names,getDbTagData(),CommMetaData(posDbTag2));
          for(std::deque<std::string>::const_iterator i= open_sets_names.begin();i!=open_sets_names.end();i++)
            abre_set(*i);
        }
@@ -402,42 +402,42 @@ int XC::MapSet::receiveOpenSets(int posDbTag1, int posDbTag2,const CommParameter
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::MapSet::sendData(CommParameters &cp)
+int XC::MapSet::sendData(Communicator &comm)
   {
     const size_t sz= MapSetBase::size();
-    int res= cp.sendInt(sz,getDbTagData(),CommMetaData(0)); //number of sets
+    int res= comm.sendInt(sz,getDbTagData(),CommMetaData(0)); //number of sets
     if(sz>0)
       {
-        res+= sendSets(1,2,3,cp);
-        res+= sendOpenSets(4,5,cp);
+        res+= sendSets(1,2,3,comm);
+        res+= sendOpenSets(4,5,comm);
       }
     //XX Entities sending (points, lines, surfaces,...) pending.
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::MapSet::recvData(const CommParameters &cp)
+int XC::MapSet::recvData(const Communicator &comm)
   {
     int sz= 0;
-    int res= cp.receiveInt(sz,getDbTagData(),CommMetaData(0)); //Number of sets.
+    int res= comm.receiveInt(sz,getDbTagData(),CommMetaData(0)); //Number of sets.
     if(sz>0)
       {
-        res+= receiveSets(1,2,3,sz,cp);
-        res+= receiveOpenSets(4,5,cp);
+        res+= receiveSets(1,2,3,sz,comm);
+        res+= receiveOpenSets(4,5,comm);
       }
     //XX Entities receiving (points, lines, surfaces,...) pending.
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::MapSet::sendSelf(CommParameters &cp)
+int XC::MapSet::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(6);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data\n";
@@ -445,11 +445,11 @@ int XC::MapSet::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::MapSet::recvSelf(const CommParameters &cp)
+int XC::MapSet::recvSelf(const Communicator &comm)
   {
     inicComm(6);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -457,7 +457,7 @@ int XC::MapSet::recvSelf(const CommParameters &cp)
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

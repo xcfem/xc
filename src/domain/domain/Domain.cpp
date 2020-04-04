@@ -1251,12 +1251,12 @@ XC::DbTagData &XC::Domain::getDbTagData(void) const
   }
 
 //! @brief Send data through the channel being passed as parameter.
-int XC::Domain::sendData(CommParameters &cp)
+int XC::Domain::sendData(Communicator &comm)
   {
-    int res= ObjWithRecorders::sendData(cp);
-    res+= cp.sendMovable(timeTracker,getDbTagData(),CommMetaData(2));
-    res+= cp.sendInt(currentGeoTag,getDbTagData(),CommMetaData(3));
-    const int tagChannel= cp.getChannel()->getTag();
+    int res= ObjWithRecorders::sendData(comm);
+    res+= comm.sendMovable(timeTracker,getDbTagData(),CommMetaData(2));
+    res+= comm.sendInt(currentGeoTag,getDbTagData(),CommMetaData(3));
+    const int tagChannel= comm.getChannel()->getTag();
     if(lastChannel != tagChannel || lastGeoSendTag != currentGeoTag)
       {
         lastChannel= tagChannel;
@@ -1266,23 +1266,23 @@ int XC::Domain::sendData(CommParameters &cp)
         //
         lastGeoSendTag= currentGeoTag;// now so that we don't do this next time if nothing in the domain has changed
       }
-    res+= cp.sendMovable(mesh,getDbTagData(),CommMetaData(4));
-    res+= cp.sendMovable(constraints,getDbTagData(),CommMetaData(5));
-    res+= cp.sendVector(theEigenvalues,getDbTagData(),CommMetaData(6));
-    res+= cp.sendVector(modalParticipationFactors,getDbTagData(),CommMetaData(7));
+    res+= comm.sendMovable(mesh,getDbTagData(),CommMetaData(4));
+    res+= comm.sendMovable(constraints,getDbTagData(),CommMetaData(5));
+    res+= comm.sendVector(theEigenvalues,getDbTagData(),CommMetaData(6));
+    res+= comm.sendVector(modalParticipationFactors,getDbTagData(),CommMetaData(7));
     return res;
   }
 
 //! @brief Receive data through the channel being passed as parameter.
-int XC::Domain::recvData(const CommParameters &cp)
+int XC::Domain::recvData(const Communicator &comm)
   {
-    int res= ObjWithRecorders::recvData(cp);
-    res+= cp.receiveMovable(timeTracker,getDbTagData(),CommMetaData(2));
+    int res= ObjWithRecorders::recvData(comm);
+    res+= comm.receiveMovable(timeTracker,getDbTagData(),CommMetaData(2));
     //
     // now if the currentGeoTag does not agree with what's in the domain
     // we must wipe everything in the domain and recreate the domain based on the info from the channel
     //
-    const int tagChannel= cp.getChannel()->getTag();
+    const int tagChannel= comm.getChannel()->getTag();
     const int geoTag= getDbTagDataPos(3);
     if(currentGeoTag == 0 || lastChannel != tagChannel  || geoTag != currentGeoTag)
       {
@@ -1299,28 +1299,28 @@ int XC::Domain::recvData(const CommParameters &cp)
         hasDomainChangedFlag= false;
       }
 
-    res+= cp.receiveMovable(mesh,getDbTagData(),CommMetaData(4));
-    res+= cp.receiveMovable(constraints,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveMovable(mesh,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveMovable(constraints,getDbTagData(),CommMetaData(5));
     // now set the domains lastGeoSendTag and currentDomainChangedFlag
     lastGeoSendTag = currentGeoTag;
-    res+= cp.receiveVector(theEigenvalues,getDbTagData(),CommMetaData(6));
-    res+= cp.receiveVector(modalParticipationFactors,getDbTagData(),CommMetaData(7));
+    res+= comm.receiveVector(theEigenvalues,getDbTagData(),CommMetaData(6));
+    res+= comm.receiveVector(modalParticipationFactors,getDbTagData(),CommMetaData(7));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::Domain::sendSelf(CommParameters &cp)
+int XC::Domain::sendSelf(Communicator &comm)
   {
     // update the commitTag and currentGeoTag
-    commitTag= cp.getCommitTag();
+    commitTag= comm.getCommitTag();
     hasDomainChanged();
 
     inicComm(9);
-    int retval= sendData(cp);
+    int retval= sendData(comm);
 
     if(dbTag==0)
-      dbTag = cp.getChannel()->getDbTag();
-    retval+= cp.sendIdData(getDbTagData(),dbTag);
+      dbTag = comm.getChannel()->getDbTag();
+    retval+= comm.sendIdData(getDbTagData(),dbTag);
     if(retval < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; channel failed to send data.\n";
@@ -1329,21 +1329,21 @@ int XC::Domain::sendSelf(CommParameters &cp)
 
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::Domain::recvSelf(const CommParameters &cp)
+int XC::Domain::recvSelf(const Communicator &comm)
   {
     // set the commitTag in the domain to cTag & update the getTag if needed
-    commitTag= cp.getCommitTag();
+    commitTag= comm.getCommitTag();
     hasDomainChanged();
   
     // first we get the data about the state of the domain for this commitTag
     inicComm(9);
 
-    int retval= cp.receiveIdData(getDbTagData(),dbTag);
+    int retval= comm.receiveIdData(getDbTagData(),dbTag);
     if(retval < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; channel failed to recv the initial ID.\n";
     else
-      retval+= recvData(cp);
+      retval+= recvData(comm);
     if(retval<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; data could not be received.\n" ;
@@ -1398,18 +1398,18 @@ XC::Preprocessor *XC::Domain::getPreprocessor(void)
   }
 
 //! @brief Sends domain through the specified channel.
-int XC::sendDomain(Domain &dom,int posDbTag,DbTagData &dt,CommParameters &cp)
+int XC::sendDomain(Domain &dom,int posDbTag,DbTagData &dt,Communicator &comm)
   {
-    int retval= dom.sendSelf(cp);
-    retval+= cp.sendInt(dom.dbTag,dt,CommMetaData(posDbTag));
+    int retval= dom.sendSelf(comm);
+    retval+= comm.sendInt(dom.dbTag,dt,CommMetaData(posDbTag));
     return retval;
   }
 
 //! @brief Receives the domain through the specified channel.
-int XC::receiveDomain(Domain &dom,int posDbTag,DbTagData &dt,const CommParameters &cp)
+int XC::receiveDomain(Domain &dom,int posDbTag,DbTagData &dt,const Communicator &comm)
   {
-    int res= cp.receiveInt(dom.dbTag,dt,CommMetaData(posDbTag));
-    res+= dom.recvSelf(cp);
+    int res= comm.receiveInt(dom.dbTag,dt,CommMetaData(posDbTag));
+    res+= dom.recvSelf(comm);
     if(res < 0)
       std::cerr << __FUNCTION__
 		<< "; failed to receive vector data.\n";

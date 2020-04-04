@@ -385,35 +385,35 @@ void XC::ClosedTriangleMesh::read(std::ifstream &is)
   }
 
 //! @brief Sends object members through the channel being passed as parameter.
-int XC::ClosedTriangleMesh::sendData(CommParameters &cp)
+int XC::ClosedTriangleMesh::sendData(Communicator &comm)
   {
-    int res= 0; //MovableObject::sendData(cp);
-    res+= cp.sendDoubles(tol,rMax,rMin,getDbTagData(),CommMetaData(1));
+    int res= 0; //MovableObject::sendData(comm);
+    res+= comm.sendDoubles(tol,rMax,rMin,getDbTagData(),CommMetaData(1));
     Matrix m;
     getPositionsMatrix(m);
-    res+= cp.sendMatrix(m,getDbTagData(),CommMetaData(2));
+    res+= comm.sendMatrix(m,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::ClosedTriangleMesh::recvData(const CommParameters &cp)
+int XC::ClosedTriangleMesh::recvData(const Communicator &comm)
   {
     int res= 0;
-    res+= cp.receiveDoubles(tol,rMax,rMin,getDbTagData(),CommMetaData(1));
+    res+= comm.receiveDoubles(tol,rMax,rMin,getDbTagData(),CommMetaData(1));
     Matrix m;
-    res+= cp.receiveMatrix(m,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveMatrix(m,getDbTagData(),CommMetaData(2));
     setPositionsMatrix(m);
     return res;
   }
 
 //! @brief Send the object through the channel being passed as parameter.
-int XC::ClosedTriangleMesh::sendSelf(CommParameters &cp)
+int XC::ClosedTriangleMesh::sendSelf(Communicator &comm)
   {
     inicComm(3);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
     const int dataTag= getDbTag();
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send ID data\n";
@@ -421,16 +421,16 @@ int XC::ClosedTriangleMesh::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::ClosedTriangleMesh::recvSelf(const CommParameters &cp)
+int XC::ClosedTriangleMesh::recvSelf(const Communicator &comm)
   {
     const int dataTag= getDbTag();
     inicComm(3);
-    int res = cp.receiveIdData(getDbTagData(),dataTag);
+    int res = comm.receiveIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to receive ID data\n";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

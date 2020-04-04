@@ -66,8 +66,8 @@ class FiniteDeformationElastic3D: public FiniteDeformationMaterial
   protected:
     double rho; //!< Material density.
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     
     FiniteDeformationElastic3D(int tag, int classTag, double );

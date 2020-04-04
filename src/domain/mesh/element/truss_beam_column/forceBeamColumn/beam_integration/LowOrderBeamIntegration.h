@@ -60,8 +60,8 @@ class LowOrderBeamIntegration: public ParameterIDBeamIntegration
   protected:
     int Nc;
     bool computed;
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     LowOrderBeamIntegration(int nIP, const Vector &pt, int nc, const Vector &wt);
     LowOrderBeamIntegration();
@@ -71,8 +71,8 @@ class LowOrderBeamIntegration: public ParameterIDBeamIntegration
 
     BeamIntegration *getCopy(void) const;
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
     int setParameter(const std::vector<std::string> &argv, Parameter &param);
     int updateParameter(int parameterID, Information &info);

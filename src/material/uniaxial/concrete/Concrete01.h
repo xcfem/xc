@@ -98,8 +98,8 @@ class Concrete01: public ConcreteBase
     Matrix SHVs;
 // AddingSensitivity:END ///////////////////////////////////////////
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     void calcula_trial_state(const double &strain);
   public:
@@ -124,8 +124,8 @@ class Concrete01: public ConcreteBase
 
     UniaxialMaterial *getCopy(void) const;
     
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag =0) const;
 

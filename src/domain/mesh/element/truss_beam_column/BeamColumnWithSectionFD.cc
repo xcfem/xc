@@ -122,22 +122,22 @@ int XC::BeamColumnWithSectionFD::setSectionParameter(PrismaticBarCrossSection *t
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::BeamColumnWithSectionFD::sendData(CommParameters &cp)
+int XC::BeamColumnWithSectionFD::sendData(Communicator &comm)
   {
-    int res= Element1D::sendData(cp);
-    res+= cp.sendMovable(theSections,getDbTagData(),CommMetaData(7));
-    res+= cp.sendMovable(section_matrices,getDbTagData(),CommMetaData(8));
-    res+= cp.sendDouble(rho,getDbTagData(),CommMetaData(9));
+    int res= Element1D::sendData(comm);
+    res+= comm.sendMovable(theSections,getDbTagData(),CommMetaData(7));
+    res+= comm.sendMovable(section_matrices,getDbTagData(),CommMetaData(8));
+    res+= comm.sendDouble(rho,getDbTagData(),CommMetaData(9));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::BeamColumnWithSectionFD::recvData(const CommParameters &cp)
+int XC::BeamColumnWithSectionFD::recvData(const Communicator &comm)
   {
-    int res= Element1D::recvData(cp);
-    res+= cp.receiveMovable(theSections,getDbTagData(),CommMetaData(7));
-    res+= cp.receiveMovable(section_matrices,getDbTagData(),CommMetaData(8));
-    res+= cp.receiveDouble(rho,getDbTagData(),CommMetaData(9));
+    int res= Element1D::recvData(comm);
+    res+= comm.receiveMovable(theSections,getDbTagData(),CommMetaData(7));
+    res+= comm.receiveMovable(section_matrices,getDbTagData(),CommMetaData(8));
+    res+= comm.receiveDouble(rho,getDbTagData(),CommMetaData(9));
     return res;
   }
 

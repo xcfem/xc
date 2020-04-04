@@ -209,16 +209,16 @@ int XC::DummyNode::getColor(void) const
     return 0;
   }
 
-int XC::DummyNode::sendSelf(CommParameters &cp)
+int XC::DummyNode::sendSelf(Communicator &comm)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
               << ";should never be called\n"
 	      << "sending actual node\n";    
     
-    return theRealNode->sendSelf(cp);
+    return theRealNode->sendSelf(comm);
   }
 
-int XC::DummyNode::recvSelf(const CommParameters &cp)
+int XC::DummyNode::recvSelf(const Communicator &comm)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
 	      << "; should never be called\n";

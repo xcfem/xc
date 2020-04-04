@@ -125,12 +125,12 @@ int XC::LoadCombination::recvDescomp(void)
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::LoadCombination::sendSelf(CommParameters &cp)
+int XC::LoadCombination::sendSelf(Communicator &comm)
   {
     inicComm(4);
-    int res= sendData(cp);
-    const int dataTag= getDbTag(cp);
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    int res= sendData(comm);
+    const int dataTag= getDbTag(comm);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data.\n";    
@@ -138,16 +138,16 @@ int XC::LoadCombination::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::LoadCombination::recvSelf(const CommParameters &cp)
+int XC::LoadCombination::recvSelf(const Communicator &comm)
   {
     inicComm(4);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; data could not be received.\n" ;
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

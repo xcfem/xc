@@ -132,8 +132,8 @@ class SubdomainAnalysis: public Analysis, public MovableObject
     virtual const Vector &getResidual(void);
     virtual const Vector &getTangVectProduct(void);
     
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
   };
 
 //! @brief Virtual constructor.

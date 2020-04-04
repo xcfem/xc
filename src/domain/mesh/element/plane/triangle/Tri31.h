@@ -92,8 +92,8 @@ class Tri31: public TriBase3N<SolidMech2D>
     void setPressureLoadAtNodes(void);
 
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public:
     Tri31(int tag, int nd1, int nd2, int nd3,
@@ -135,8 +135,8 @@ class Tri31: public TriBase3N<SolidMech2D>
     const Vector &getResistingForceIncInertia(void) const;            
 
     // public methods for element output
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;
 
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);

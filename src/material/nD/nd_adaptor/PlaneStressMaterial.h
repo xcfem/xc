@@ -77,8 +77,8 @@ class PlaneStressMaterial: public NDAdaptorMaterial
 
     int indexMap(int i) const;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public: 
     PlaneStressMaterial(int tag= 0);
     PlaneStressMaterial(int tag, NDMaterial &the3DMaterial );
@@ -115,8 +115,8 @@ class PlaneStressMaterial: public NDAdaptorMaterial
     //print out data
     void Print( std::ostream &s, int flag ) const;
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
   }; //end of PlaneStressMaterial declarations
 

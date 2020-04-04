@@ -70,13 +70,13 @@ int XC::ZeroLengthContact::addInertiaLoadToUnbalance(const Vector &accel)
     return 0;
   }
 
-int XC::ZeroLengthContact::sendSelf(CommParameters &cp)
+int XC::ZeroLengthContact::sendSelf(Communicator &comm)
   {
     // doing nothing here
     return 0;
   }
 
-int XC::ZeroLengthContact::recvSelf(const CommParameters &cp)
+int XC::ZeroLengthContact::recvSelf(const Communicator &comm)
   {
     // doing nothing here
     return 0;

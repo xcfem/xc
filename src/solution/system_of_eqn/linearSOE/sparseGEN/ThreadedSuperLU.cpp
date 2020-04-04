@@ -201,13 +201,13 @@ int XC::ThreadedSuperLU::setSize()
     return 0;
   }
 
-int XC::ThreadedSuperLU::sendSelf(CommParameters &cp)
+int XC::ThreadedSuperLU::sendSelf(Communicator &comm)
   {
     // nothing to do
     return 0;
   }
 
-int XC::ThreadedSuperLU::recvSelf(const CommParameters &cp)
+int XC::ThreadedSuperLU::recvSelf(const Communicator &comm)
   {
     // nothing to do
     return 0;

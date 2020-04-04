@@ -46,8 +46,8 @@ class Joint2DPhysicalProperties: public UniaxialMatPhysicalProperties
     ID fixedEnd;
 
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
     void set_springs(const SpringModels &);
     void set_damage_models(const DamageModelVector &);
   public:
@@ -65,8 +65,8 @@ class Joint2DPhysicalProperties: public UniaxialMatPhysicalProperties
     int revertToLastCommit(void);
     int revertToStart(void);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   }; 
 
 } // end of XC namespace

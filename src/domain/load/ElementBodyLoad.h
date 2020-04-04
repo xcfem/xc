@@ -47,8 +47,8 @@ class ElementBodyLoad: public ElementalLoad
     ElementPtrs theElements; //!< Loaded elements.
   protected:
 
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
   public:
     ElementBodyLoad(int tag, int classTag, const ID &theElementTags);

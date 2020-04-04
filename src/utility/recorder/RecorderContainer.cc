@@ -223,14 +223,14 @@ void XC::RecorderContainer::setLinks(Domain *ptr_dom)
 void XC::RecorderContainer::SetOutputHandlers(DataOutputHandler::map_output_handlers *oh)
   { output_handlers= oh; }
 
-int XC::RecorderContainer::sendData(CommParameters &cp)
+int XC::RecorderContainer::sendData(Communicator &comm)
   {
     //Position 1 and 2 are reserved for members of
     //this class.
     return 0;
   }
 
-int XC::RecorderContainer::recvData(const CommParameters &cp)
+int XC::RecorderContainer::recvData(const Communicator &comm)
   {
     //Position 1 and 2 are reserved for members of
     //this class.

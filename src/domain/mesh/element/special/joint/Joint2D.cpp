@@ -766,32 +766,32 @@ int XC::Joint2D::getResponse(int responseID, Information &eleInformation)
 
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::Joint2D::sendData(CommParameters &cp)
+int XC::Joint2D::sendData(Communicator &comm)
   {
-    int res= Joint2dBase::sendData(cp);
-    res+=cp.sendID(InternalConstraints,getDbTagData(),CommMetaData(8));
-    res+= cp.sendInts(numDof, nodeDbTag, dofDbTag,getDbTagData(),CommMetaData(10));
+    int res= Joint2dBase::sendData(comm);
+    res+=comm.sendID(InternalConstraints,getDbTagData(),CommMetaData(8));
+    res+= comm.sendInts(numDof, nodeDbTag, dofDbTag,getDbTagData(),CommMetaData(10));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::Joint2D::recvData(const CommParameters &cp)
+int XC::Joint2D::recvData(const Communicator &comm)
   {
-    int res= Joint2dBase::recvData(cp);
-    res+=cp.receiveID(InternalConstraints,getDbTagData(),CommMetaData(8));
-    res+= cp.receiveInts(numDof, nodeDbTag, dofDbTag,getDbTagData(),CommMetaData(10));
+    int res= Joint2dBase::recvData(comm);
+    res+=comm.receiveID(InternalConstraints,getDbTagData(),CommMetaData(8));
+    res+= comm.receiveInts(numDof, nodeDbTag, dofDbTag,getDbTagData(),CommMetaData(10));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::Joint2D::sendSelf(CommParameters &cp)
+int XC::Joint2D::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(10);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data\n";
@@ -799,11 +799,11 @@ int XC::Joint2D::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::Joint2D::recvSelf(const CommParameters &cp)
+int XC::Joint2D::recvSelf(const Communicator &comm)
   {
     inicComm(15);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -811,7 +811,7 @@ int XC::Joint2D::recvSelf(const CommParameters &cp)
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

@@ -240,47 +240,47 @@ int XC::AlphaOSGeneralized::commit(void)
   }    
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::AlphaOSGeneralized::sendData(CommParameters &cp)
+int XC::AlphaOSGeneralized::sendData(Communicator &comm)
   {
-    int res= AlphaOSBase::sendData(cp);
-    res+= cp.sendDoubles(alphaI,alphaF,getDbTagData(),CommMetaData(11));
+    int res= AlphaOSBase::sendData(comm);
+    res+= comm.sendDoubles(alphaI,alphaF,getDbTagData(),CommMetaData(11));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::AlphaOSGeneralized::recvData(const CommParameters &cp)
+int XC::AlphaOSGeneralized::recvData(const Communicator &comm)
   {
-    int res= AlphaOSBase::recvData(cp);
-    res+= cp.receiveDoubles(alphaI,alphaF,getDbTagData(),CommMetaData(11));
+    int res= AlphaOSBase::recvData(comm);
+    res+= comm.receiveDoubles(alphaI,alphaF,getDbTagData(),CommMetaData(11));
     return res;
   }
 
-int XC::AlphaOSGeneralized::sendSelf(CommParameters &cp)
+int XC::AlphaOSGeneralized::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(12);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
 
-int XC::AlphaOSGeneralized::recvSelf(const CommParameters &cp)
+int XC::AlphaOSGeneralized::recvSelf(const Communicator &comm)
   {
     inicComm(12);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

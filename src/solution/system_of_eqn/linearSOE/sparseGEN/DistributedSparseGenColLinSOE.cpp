@@ -107,9 +107,9 @@ int XC::DistributedSparseGenColLinSOE::setSize(Graph &theGraph)
         ID rowAdata(rowA);
         ID colStartAdata(colStartA);
         FEM_ObjectBroker theBroker;
-        CommParameters cp(0,*theChannels[0],theBroker);
-        cp.receiveID(rowAdata,DistributedBandLinSOE::getDbTagData(),CommMetaData(3));
-        cp.receiveID(colStartAdata,DistributedBandLinSOE::getDbTagData(),CommMetaData(4));
+        Communicator comm(0,*theChannels[0],theBroker);
+        comm.receiveID(rowAdata,DistributedBandLinSOE::getDbTagData(),CommMetaData(3));
+        comm.receiveID(colStartAdata,DistributedBandLinSOE::getDbTagData(),CommMetaData(4));
       }
     else
      {
@@ -185,9 +185,9 @@ int XC::DistributedSparseGenColLinSOE::setSize(Graph &theGraph)
        ID colStartAdata(colStartA);
        for(size_t j=0; j<theChannels.size(); j++)
          {
-           CommParameters cp(0,*theChannels[j]);
-           cp.sendID(rowAdata,DistributedBandLinSOE::getDbTagData(),CommMetaData(3));//XXX assign position.
-           cp.sendID(colStartAdata,DistributedBandLinSOE::getDbTagData(),CommMetaData(4));//XXX assign position.
+           Communicator comm(0,*theChannels[j]);
+           comm.sendID(rowAdata,DistributedBandLinSOE::getDbTagData(),CommMetaData(3));//XXX assign position.
+           comm.sendID(colStartAdata,DistributedBandLinSOE::getDbTagData(),CommMetaData(4));//XXX assign position.
          }
       }
     if(nnz > A.Size())
@@ -315,14 +315,14 @@ int XC::DistributedSparseGenColLinSOE::solve(void)
          for(size_t j=0; j<theChannels.size(); j++)
            {
              // get X & add
-             CommParameters cp(0,*theChannels[j]);
-             receiveX(cp);
+             Communicator comm(0,*theChannels[j]);
+             receiveX(comm);
              SparseGenColLinSOE::addB(getX());
 
              if(!factored)
                {
                  Vector vectA(workArea);
-                 cp.receiveVector(vectA,CommMetaData(1));//XXX assign position.
+                 comm.receiveVector(vectA,CommMetaData(1));//XXX assign position.
                  for(int i=0; i<nnz; i++)
                    A[i]+= workArea[i];
                }
@@ -357,10 +357,10 @@ const XC::Vector &XC::DistributedSparseGenColLinSOE::getB(void) const
     DistributedSparseGenColLinSOE *this_no_const= const_cast<DistributedSparseGenColLinSOE *>(this);
     if(processID != 0)
       {
-        CommParameters cp(0,*theChannels[0]);
+        Communicator comm(0,*theChannels[0]);
         // send B & recv merged B
-        cp.sendVector(myVectB,CommMetaData(0));//XXX assign position.
-        this_no_const->receiveB(cp);
+        comm.sendVector(myVectB,CommMetaData(0));//XXX assign position.
+        this_no_const->receiveB(comm);
       }
     else
       {
@@ -372,16 +372,16 @@ const XC::Vector &XC::DistributedSparseGenColLinSOE::getB(void) const
   }
 
   
-int XC::DistributedSparseGenColLinSOE::sendSelf(CommParameters &cp)
+int XC::DistributedSparseGenColLinSOE::sendSelf(Communicator &comm)
   {
-    const int retval= send(cp);
+    const int retval= send(comm);
     return retval;
   }
 
 
-int XC::DistributedSparseGenColLinSOE::recvSelf(const CommParameters &cp)
+int XC::DistributedSparseGenColLinSOE::recvSelf(const Communicator &comm)
   {
-    const int retval= receive(cp);
+    const int retval= receive(comm);
     return retval;
   }
 

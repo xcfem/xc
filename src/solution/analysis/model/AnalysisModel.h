@@ -231,8 +231,8 @@ class AnalysisModel: public MovableObject, public CommandEntity
     virtual void setEigenvalues(const Vector &);
     virtual void setModalParticipationFactors(const Vector &);
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
 
     Domain *getDomainPtr(void);
     const Domain *getDomainPtr(void) const;

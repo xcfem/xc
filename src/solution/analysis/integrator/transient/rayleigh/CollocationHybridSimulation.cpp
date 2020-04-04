@@ -332,48 +332,48 @@ int XC::CollocationHybridSimulation::commit(void)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::CollocationHybridSimulation::sendData(CommParameters &cp)
+int XC::CollocationHybridSimulation::sendData(Communicator &comm)
   {
-    int res= HHTBase::sendData(cp);
-    res+= cp.sendDoubles(theta,rFact,getDbTagData(),CommMetaData(9));
+    int res= HHTBase::sendData(comm);
+    res+= comm.sendDoubles(theta,rFact,getDbTagData(),CommMetaData(9));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::CollocationHybridSimulation::recvData(const CommParameters &cp)
+int XC::CollocationHybridSimulation::recvData(const Communicator &comm)
   {
-    int res= HHTBase::recvData(cp);
-    res+= cp.receiveDoubles(theta,rFact,getDbTagData(),CommMetaData(9));
+    int res= HHTBase::recvData(comm);
+    res+= comm.receiveDoubles(theta,rFact,getDbTagData(),CommMetaData(9));
     return res;
   }
 
 
-int XC::CollocationHybridSimulation::sendSelf(CommParameters &cp)
+int XC::CollocationHybridSimulation::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(7);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
 
-int XC::CollocationHybridSimulation::recvSelf(const CommParameters &cp)
+int XC::CollocationHybridSimulation::recvSelf(const Communicator &comm)
   {
     inicComm(7);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

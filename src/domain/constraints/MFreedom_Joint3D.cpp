@@ -262,7 +262,7 @@ int XC::MFreedom_Joint3D::applyConstraint(double timeStamp)
 
 
 //! @brief Sends the object through the channel being passed as parameter.
-int XC::MFreedom_Joint3D::sendSelf(CommParameters &cp)
+int XC::MFreedom_Joint3D::sendSelf(Communicator &comm)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
               << ": not implemented." << std::endl;
@@ -270,7 +270,7 @@ int XC::MFreedom_Joint3D::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives the object through the channel being passed as parameter.
-int XC::MFreedom_Joint3D::recvSelf(const CommParameters &cp)
+int XC::MFreedom_Joint3D::recvSelf(const Communicator &comm)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
               << ": not implemented." << std::endl;

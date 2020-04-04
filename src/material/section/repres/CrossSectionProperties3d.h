@@ -47,8 +47,8 @@ class CrossSectionProperties3d: public CrossSectionProperties2d
     static Matrix ks6;
   protected:
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public:
     CrossSectionProperties3d(double E, double A, double Iz, double Iy, double G, double J);
@@ -115,8 +115,8 @@ class CrossSectionProperties3d: public CrossSectionProperties2d
 
     void rotate(const double &theta);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     
     int setParameter(const std::vector<std::string> &argv,Parameter &param,SectionForceDeformation *scc);
     int updateParameter(int parameterID, Information &info);

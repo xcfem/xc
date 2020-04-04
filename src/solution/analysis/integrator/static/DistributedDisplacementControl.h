@@ -84,8 +84,8 @@ class DistributedDisplacementControl: public DisplacementControl, public Distrib
   private:
     bool allHaveDofID;
     
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     friend class AnalysisAggregation;
     DistributedDisplacementControl(AnalysisAggregation *);
@@ -97,8 +97,8 @@ class DistributedDisplacementControl: public DisplacementControl, public Distrib
     int update(const Vector &deltaU);
     int domainChanged(void);
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;    
   };
 inline Integrator *DistributedDisplacementControl::getCopy(void) const

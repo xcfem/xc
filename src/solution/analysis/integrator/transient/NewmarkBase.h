@@ -51,8 +51,8 @@ class NewmarkBase: public DampingFactorsIntegrator
     ResponseQuantities U; //!< response quantities at time t+deltaT = predicted + corrected
 
     void PopulateUs(XC::AnalysisModel *model);
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     NewmarkBase(AnalysisAggregation *,int classTag);
     NewmarkBase(AnalysisAggregation *,int classTag,double gamma);

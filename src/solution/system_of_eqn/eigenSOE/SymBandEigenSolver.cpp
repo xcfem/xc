@@ -418,9 +418,9 @@ double XC::SymBandEigenSolver::getRCond(const char &c)
       }
   }
 
-int XC::SymBandEigenSolver::sendSelf(CommParameters &cp)
+int XC::SymBandEigenSolver::sendSelf(Communicator &comm)
   { return 0; }
 
-int XC::SymBandEigenSolver::recvSelf(const CommParameters &cp)
+int XC::SymBandEigenSolver::recvSelf(const Communicator &comm)
   { return 0; }
 

@@ -129,7 +129,7 @@ XC::MapSetBase::~MapSetBase(void)
   { clearSets(); }
 
 //! @brief Return the DBTags of the sets.
-const XC::ID &XC::MapSetBase::getSetsDBTags(CommParameters &cp)
+const XC::ID &XC::MapSetBase::getSetsDBTags(Communicator &comm)
   {
     static ID retval;
     const int sz= size();
@@ -140,7 +140,7 @@ const XC::ID &XC::MapSetBase::getSetsDBTags(CommParameters &cp)
         // loop over sets in map adding their dbTag to the ID
         for(const_iterator i= begin();i!=end();i++)
           {
-            retval[loc]= (*i).second->getDbTag(cp);
+            retval[loc]= (*i).second->getDbTag(comm);
             loc++;
           }        
       }

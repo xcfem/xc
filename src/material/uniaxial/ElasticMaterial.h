@@ -84,8 +84,8 @@ class ElasticMaterial: public ElasticBaseMaterial
     double trialStrainRate;
     double eta; //!< Damping tangent.
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
 
   public:
@@ -106,8 +106,8 @@ class ElasticMaterial: public ElasticBaseMaterial
 
     UniaxialMaterial *getCopy(void) const;
     
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
     
 
     void Print(std::ostream &s, int flag =0) const;

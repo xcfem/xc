@@ -311,34 +311,34 @@ XC::DbTagData &XC::NodalLoad::getDbTagData(void) const
 
 //! @brief Sends object member through the communicator
 //! being passed as parameter.
-int XC::NodalLoad::sendData(CommParameters &cp)
+int XC::NodalLoad::sendData(Communicator &comm)
   {
-    int res= Load::sendData(cp);
-    res+= cp.sendInts(loadedNode,parameterID,getDbTagData(),CommMetaData(2));
-    res+= cp.sendVector(load,getDbTagData(),CommMetaData(3));
-    res+= cp.sendBool(konstant,getDbTagData(),CommMetaData(4));
+    int res= Load::sendData(comm);
+    res+= comm.sendInts(loadedNode,parameterID,getDbTagData(),CommMetaData(2));
+    res+= comm.sendVector(load,getDbTagData(),CommMetaData(3));
+    res+= comm.sendBool(konstant,getDbTagData(),CommMetaData(4));
     return res;
   }
 
 //! @brief Receives object member through the communicator
 //! being passed as parameter.
-int XC::NodalLoad::recvData(const CommParameters &cp)
+int XC::NodalLoad::recvData(const Communicator &comm)
   {
-    int res= Load::recvData(cp);
-    res+= cp.receiveInts(loadedNode,parameterID,getDbTagData(),CommMetaData(2));
-    res+= cp.receiveVector(load,getDbTagData(),CommMetaData(3));
-    res+= cp.receiveBool(konstant,getDbTagData(),CommMetaData(4));
+    int res= Load::recvData(comm);
+    res+= comm.receiveInts(loadedNode,parameterID,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveVector(load,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveBool(konstant,getDbTagData(),CommMetaData(4));
     return res;
   }
 
 //! @brief Sends the object.
-int XC::NodalLoad::sendSelf(CommParameters &cp)
+int XC::NodalLoad::sendSelf(Communicator &comm)
   {
     inicComm(7);
-    int result= sendData(cp);
+    int result= sendData(comm);
     
     const int dataTag= getDbTag();
-    result+= cp.sendIdData(getDbTagData(),dataTag);
+    result+= comm.sendIdData(getDbTagData(),dataTag);
     if(result < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data.\n";
@@ -346,16 +346,16 @@ int XC::NodalLoad::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives.
-int XC::NodalLoad::recvSelf(const CommParameters &cp)
+int XC::NodalLoad::recvSelf(const Communicator &comm)
   {        
     inicComm(7);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to recv data.\n";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

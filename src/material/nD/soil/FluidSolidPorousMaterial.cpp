@@ -386,54 +386,54 @@ int XC::FluidSolidPorousMaterial::getOrder(void) const
 
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::FluidSolidPorousMaterial::sendData(CommParameters &cp)
+int XC::FluidSolidPorousMaterial::sendData(Communicator &comm)
   {
-    int res= NDMaterial::sendData(cp);
-    res+= cp.sendDoubles(trialExcessPressure,currentExcessPressure,trialVolumeStrain,getDbTagData(),CommMetaData(1));
-    res+= cp.sendDoubles(currentVolumeStrain,initMaxPress,getDbTagData(),CommMetaData(2));
-    res+= cp.sendInts(matN,e2p,getDbTagData(),CommMetaData(3));
-    res+= cp.sendBrokedPtr(theSoilMaterial,getDbTagData(),BrokedPtrCommMetaData(4,5,6));
+    int res= NDMaterial::sendData(comm);
+    res+= comm.sendDoubles(trialExcessPressure,currentExcessPressure,trialVolumeStrain,getDbTagData(),CommMetaData(1));
+    res+= comm.sendDoubles(currentVolumeStrain,initMaxPress,getDbTagData(),CommMetaData(2));
+    res+= comm.sendInts(matN,e2p,getDbTagData(),CommMetaData(3));
+    res+= comm.sendBrokedPtr(theSoilMaterial,getDbTagData(),BrokedPtrCommMetaData(4,5,6));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::FluidSolidPorousMaterial::recvData(const CommParameters &cp)
+int XC::FluidSolidPorousMaterial::recvData(const Communicator &comm)
   {
-    int res= NDMaterial::recvData(cp);
-    res+= cp.receiveDoubles(trialExcessPressure,currentExcessPressure,trialVolumeStrain,getDbTagData(),CommMetaData(1));
-    res+= cp.receiveDoubles(currentVolumeStrain,initMaxPress,getDbTagData(),CommMetaData(2));
-    res+= cp.receiveInts(matN,e2p,getDbTagData(),CommMetaData(3));
-    theSoilMaterial= cp.getBrokedMaterial(theSoilMaterial,getDbTagData(),BrokedPtrCommMetaData(4,5,6));
+    int res= NDMaterial::recvData(comm);
+    res+= comm.receiveDoubles(trialExcessPressure,currentExcessPressure,trialVolumeStrain,getDbTagData(),CommMetaData(1));
+    res+= comm.receiveDoubles(currentVolumeStrain,initMaxPress,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveInts(matN,e2p,getDbTagData(),CommMetaData(3));
+    theSoilMaterial= comm.getBrokedMaterial(theSoilMaterial,getDbTagData(),BrokedPtrCommMetaData(4,5,6));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::FluidSolidPorousMaterial::sendSelf(CommParameters &cp)
+int XC::FluidSolidPorousMaterial::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(7);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::FluidSolidPorousMaterial::recvSelf(const CommParameters &cp)    
+int XC::FluidSolidPorousMaterial::recvSelf(const Communicator &comm)    
   {
     inicComm(7);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

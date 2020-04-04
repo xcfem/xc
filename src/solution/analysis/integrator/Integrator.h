@@ -109,8 +109,8 @@ class Integrator: public MovableObject, public CommandEntity
     double getCurrentModelTime(void) const;
     void setCurrentModelTime(const double &t);
     void setRayleighDampingFactors(const RayleighDampingFactors &rF);
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     virtual AnalysisModel *getAnalysisModelPtr(void);
     virtual const AnalysisModel *getAnalysisModelPtr(void) const;

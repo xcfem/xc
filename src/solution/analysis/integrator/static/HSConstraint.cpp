@@ -154,50 +154,50 @@ double XC::HSConstraint::getDLambdaUpdate(void) const
 
 
 //! @brief Send object members through the communicator argument.
-int XC::HSConstraint::sendData(CommParameters &cp)
+int XC::HSConstraint::sendData(Communicator &comm)
   {
-    int res= ProtoArcLength::sendData(cp);
-    res+= cp.sendDoubles(psi_u2,psi_f2,u_ref2,getDbTagData(),CommMetaData(18));
-    res+= cp.sendMatrix(scalingMatrix,getDbTagData(),CommMetaData(19));
+    int res= ProtoArcLength::sendData(comm);
+    res+= comm.sendDoubles(psi_u2,psi_f2,u_ref2,getDbTagData(),CommMetaData(18));
+    res+= comm.sendMatrix(scalingMatrix,getDbTagData(),CommMetaData(19));
     return res;
   }
 
 //! @brief Receives object members through the communicator argument.
-int XC::HSConstraint::recvData(const CommParameters &cp)
+int XC::HSConstraint::recvData(const Communicator &comm)
   {
-    int res= ProtoArcLength::recvData(cp);
-    res+= cp.receiveDoubles(psi_u2,psi_f2,u_ref2,getDbTagData(),CommMetaData(18));
-    res+= cp.receiveMatrix(scalingMatrix,getDbTagData(),CommMetaData(19));
+    int res= ProtoArcLength::recvData(comm);
+    res+= comm.receiveDoubles(psi_u2,psi_f2,u_ref2,getDbTagData(),CommMetaData(18));
+    res+= comm.receiveMatrix(scalingMatrix,getDbTagData(),CommMetaData(19));
     return res;
   }
 
 //! @brief Sends object data through the communicator argument.
-int XC::HSConstraint::sendSelf(CommParameters &cp)
+int XC::HSConstraint::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(23);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
 //! @brief Receives object data through the communicator argument.
-int XC::HSConstraint::recvSelf(const CommParameters &cp)
+int XC::HSConstraint::recvSelf(const Communicator &comm)
   {
     inicComm(23);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

@@ -44,8 +44,8 @@ class ResponseQuantities: public MovableObject
   private:
     Vector R, Rdot, Rdotdot; //!< Response quantities
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     ResponseQuantities(const int &size= 0);
 
@@ -82,8 +82,8 @@ class ResponseQuantities: public MovableObject
     void resize(const int &size);
     void Zero(void);
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
 
     void Print(std::ostream &s) const;        
   };

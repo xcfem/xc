@@ -286,27 +286,27 @@ double XC::UniaxialMaterial::getInitialTangent(void) const
 // AddingSensitivity:END //////////////////////////////////////////
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::UniaxialMaterial::sendData(CommParameters &cp)
+int XC::UniaxialMaterial::sendData(Communicator &comm)
   {
     setDbTagDataPos(0,getTag());
-    int res= cp.sendDouble(rho,getDbTagData(),CommMetaData(1));
+    int res= comm.sendDouble(rho,getDbTagData(),CommMetaData(1));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::UniaxialMaterial::recvData(const CommParameters &cp)
+int XC::UniaxialMaterial::recvData(const Communicator &comm)
   {
     setTag(getDbTagDataPos(0));
-    int res= cp.receiveDouble(rho,getDbTagData(),CommMetaData(1));
+    int res= comm.receiveDouble(rho,getDbTagData(),CommMetaData(1));
     return res;
   }
 
 //! @brief Receives a pointer to uniaxial material through the channel being passed as parameter.
-XC::UniaxialMaterial *XC::receiveUniaxialMaterialPtr(UniaxialMaterial *ptr,DbTagData &dt,const CommParameters &cp,const BrokedPtrCommMetaData &md)
+XC::UniaxialMaterial *XC::receiveUniaxialMaterialPtr(UniaxialMaterial *ptr,DbTagData &dt,const Communicator &comm,const BrokedPtrCommMetaData &md)
   {
     UniaxialMaterial *retval= nullptr;
     Material *tmp= nullptr;
-    tmp= receiveMaterialPtr(ptr,dt,cp,md);
+    tmp= receiveMaterialPtr(ptr,dt,comm,md);
     if(tmp)
       {
         retval= dynamic_cast<UniaxialMaterial *>(tmp);

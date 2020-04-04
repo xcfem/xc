@@ -77,8 +77,8 @@ class FluidSolidPorousMaterial: public NDMaterial
     void free_mem(void);
     void alloc(const NDMaterial *);
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
      // Initialization constructor
      FluidSolidPorousMaterial(int tag= 0);
@@ -132,8 +132,8 @@ class FluidSolidPorousMaterial: public NDMaterial
      // Return 3 or 6.
      int getOrder(void) const ;
 
-     int sendSelf(CommParameters &);  
-     int recvSelf(const CommParameters &);     
+     int sendSelf(Communicator &);  
+     int recvSelf(const Communicator &);     
      Response *setResponse(const std::vector<std::string> &argv, Information &matInfo);
      int getResponse(int responseID, Information &matInformation);
      void Print(std::ostream &s, int flag =0) const;

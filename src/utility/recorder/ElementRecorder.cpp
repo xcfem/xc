@@ -272,9 +272,9 @@ int XC::ElementRecorder::initialize(void)
   }
 
 
-int XC::ElementRecorder::sendSelf(CommParameters &cp)
-  { return ElementRecorderBase::sendSelf(cp); }
+int XC::ElementRecorder::sendSelf(Communicator &comm)
+  { return ElementRecorderBase::sendSelf(comm); }
 
-int XC::ElementRecorder::recvSelf(const CommParameters &cp)
-  { return ElementRecorderBase::recvSelf(cp); }
+int XC::ElementRecorder::recvSelf(const Communicator &comm)
+  { return ElementRecorderBase::recvSelf(comm); }
 

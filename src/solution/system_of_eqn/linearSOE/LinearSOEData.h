@@ -81,11 +81,11 @@ class LinearSOEData: public LinearSOE
     virtual Vector &getB(void);
     virtual double normRHS(void) const;
 
-    void receiveB(const CommParameters &);
-    void receiveX(const CommParameters &);
-    void receiveBX(const CommParameters &);
-    void sendB(CommParameters &) const;
-    void sendBX(CommParameters &) const;
+    void receiveB(const Communicator &);
+    void receiveX(const Communicator &);
+    void receiveBX(const Communicator &);
+    void sendB(Communicator &) const;
+    void sendBX(Communicator &) const;
   };
 } // end of XC namespace
 

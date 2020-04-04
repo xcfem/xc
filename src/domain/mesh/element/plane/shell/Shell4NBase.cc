@@ -678,7 +678,7 @@ void XC::Shell4NBase::shape2d(const double &ss, const double &tt,const double x[
   }
 
 //! @brief Send the coordinate transformation through the channel being passed as parameter.
-int XC::Shell4NBase::sendCoordTransf(int posFlag,const int &posClassTag,const int &posDbTag,CommParameters &cp)
+int XC::Shell4NBase::sendCoordTransf(int posFlag,const int &posClassTag,const int &posDbTag,Communicator &comm)
   {
     int retval= 0;
     DbTagData &data= getDbTagData();
@@ -688,13 +688,13 @@ int XC::Shell4NBase::sendCoordTransf(int posFlag,const int &posClassTag,const in
       {
         data.setDbTagDataPos(posFlag,0);
         data.setDbTagDataPos(posClassTag,theCoordTransf->getClassTag());
-        cp.sendMovable(*theCoordTransf,data,CommMetaData(posDbTag));
+        comm.sendMovable(*theCoordTransf,data,CommMetaData(posDbTag));
       }
     return retval;
   }
 
 //! @brief Receives the coordinate transformation through the channel being passed as parameter.
-int XC::Shell4NBase::recvCoordTransf(int posFlag,const int &posClassTag,const int &posDbTag,const CommParameters &cp)
+int XC::Shell4NBase::recvCoordTransf(int posFlag,const int &posClassTag,const int &posDbTag,const Communicator &comm)
   {
     int res= 0;
     DbTagData &data= getDbTagData();
@@ -703,14 +703,14 @@ int XC::Shell4NBase::recvCoordTransf(int posFlag,const int &posClassTag,const in
       {
         if(!theCoordTransf)
           {
-            theCoordTransf= cp.getNewShellCrdTransf3d(data.getDbTagDataPos(posClassTag));
+            theCoordTransf= comm.getNewShellCrdTransf3d(data.getDbTagDataPos(posClassTag));
             if(!theCoordTransf)
               std::cerr << getClassName() << "::" << __FUNCTION__
 			<< "; ran out of memory\n";
           }
         if(theCoordTransf)
           {
-            cp.receiveMovable(*theCoordTransf,data,CommMetaData(posDbTag));
+            comm.receiveMovable(*theCoordTransf,data,CommMetaData(posDbTag));
             theCoordTransf->revertToLastCommit();// Revert the crdtransf to its last committed state
             if(res<0)
               std::cerr << getClassName() << "::" << __FUNCTION__
@@ -721,28 +721,28 @@ int XC::Shell4NBase::recvCoordTransf(int posFlag,const int &posClassTag,const in
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::Shell4NBase::sendData(CommParameters &cp)
+int XC::Shell4NBase::sendData(Communicator &comm)
   {
-    int res= QuadBase4N<SectionFDPhysicalProperties>::sendData(cp);
-    res+= cp.sendDoubles(xl[1][0],xl[1][1],xl[1][2],xl[1][3],getDbTagData(),CommMetaData(8));
-    res+= cp.sendMatrix(Ki,getDbTagData(),CommMetaData(9));
-    res+= sendCoordTransf(10,11,12,cp);
-    res+= cp.sendInt(applyLoad,getDbTagData(),CommMetaData(13));
-    res+= cp.sendDoubles(appliedB[0],appliedB[1],appliedB[2],getDbTagData(),CommMetaData(14));
-    res+= cp.sendVectors(initDisp,getDbTagData(),CommMetaData(15));
+    int res= QuadBase4N<SectionFDPhysicalProperties>::sendData(comm);
+    res+= comm.sendDoubles(xl[1][0],xl[1][1],xl[1][2],xl[1][3],getDbTagData(),CommMetaData(8));
+    res+= comm.sendMatrix(Ki,getDbTagData(),CommMetaData(9));
+    res+= sendCoordTransf(10,11,12,comm);
+    res+= comm.sendInt(applyLoad,getDbTagData(),CommMetaData(13));
+    res+= comm.sendDoubles(appliedB[0],appliedB[1],appliedB[2],getDbTagData(),CommMetaData(14));
+    res+= comm.sendVectors(initDisp,getDbTagData(),CommMetaData(15));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::Shell4NBase::recvData(const CommParameters &cp)
+int XC::Shell4NBase::recvData(const Communicator &comm)
   {
-    int res= QuadBase4N<SectionFDPhysicalProperties>::recvData(cp);
-    res+= cp.receiveDoubles(xl[1][0],xl[1][1],xl[1][2],xl[1][3],getDbTagData(),CommMetaData(8));
-    res+= cp.receiveMatrix(Ki,getDbTagData(),CommMetaData(9));
-    res+= recvCoordTransf(10,11,12,cp);
-    res+= cp.receiveInt(applyLoad,getDbTagData(),CommMetaData(13));
-    res+= cp.receiveDoubles(appliedB[0],appliedB[1],appliedB[2],getDbTagData(),CommMetaData(14));
-    res+= cp.receiveVectors(initDisp,getDbTagData(),CommMetaData(15));
+    int res= QuadBase4N<SectionFDPhysicalProperties>::recvData(comm);
+    res+= comm.receiveDoubles(xl[1][0],xl[1][1],xl[1][2],xl[1][3],getDbTagData(),CommMetaData(8));
+    res+= comm.receiveMatrix(Ki,getDbTagData(),CommMetaData(9));
+    res+= recvCoordTransf(10,11,12,comm);
+    res+= comm.receiveInt(applyLoad,getDbTagData(),CommMetaData(13));
+    res+= comm.receiveDoubles(appliedB[0],appliedB[1],appliedB[2],getDbTagData(),CommMetaData(14));
+    res+= comm.receiveVectors(initDisp,getDbTagData(),CommMetaData(15));
     return res;
   }
 

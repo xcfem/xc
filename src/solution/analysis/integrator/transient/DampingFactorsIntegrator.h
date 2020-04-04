@@ -45,8 +45,8 @@ class DampingFactorsIntegrator: public TransientIntegrator
     RayleighDampingFactors rayFactors; //!< Rayleigh damping factors
 
     void setRayleighDampingFactors(void);
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     DampingFactorsIntegrator(AnalysisAggregation *,int classTag);
     DampingFactorsIntegrator(AnalysisAggregation *,int classTag,const RayleighDampingFactors &rF);

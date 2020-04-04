@@ -382,13 +382,13 @@ int XC::SuperLU::setSize(void)
     return 0;
   }
 
-int XC::SuperLU::sendSelf(CommParameters &cp)
+int XC::SuperLU::sendSelf(Communicator &comm)
   {
     // nothing to do
     return 0;
   }
 
-int XC::SuperLU::recvSelf(const CommParameters &cp)
+int XC::SuperLU::recvSelf(const Communicator &comm)
   {
     // nothing to do
     return 0;

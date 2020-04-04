@@ -161,8 +161,8 @@ class Joint3D: public ElemWithMaterial<7,Joint3DPhysicalProperties>
     // method for obtaining information specific to an element
     Response* setResponse(const std::vector<std::string> &argv, Information &eleInformation);
     int getResponse(int responseID, Information &eleInformation);
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace

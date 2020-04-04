@@ -73,47 +73,47 @@ XC::FrictionModel* XC::VPDependentFriction::getCopy(void) const
   { return new VPDependentFriction(*this); }
 
 //! @brief Send data through the channel being passed as parameter.
-int XC::VPDependentFriction::sendData(CommParameters &cp)
+int XC::VPDependentFriction::sendData(Communicator &comm)
   {
-    int res= VDependentFriction::sendData(cp);
-    res+= cp.sendDoubles(A,deltaMu,alpha,getDbTagData(),CommMetaData(4));
+    int res= VDependentFriction::sendData(comm);
+    res+= comm.sendDoubles(A,deltaMu,alpha,getDbTagData(),CommMetaData(4));
     return res;
   }
 
 
 //! @brief Receive data through the channel being passed as parameter.
-int XC::VPDependentFriction::recvData(const CommParameters &cp)
+int XC::VPDependentFriction::recvData(const Communicator &comm)
   {
-    int res= VDependentFriction::recvData(cp);
-    res+= cp.receiveDoubles(A,deltaMu,alpha,getDbTagData(),CommMetaData(4));
+    int res= VDependentFriction::recvData(comm);
+    res+= comm.receiveDoubles(A,deltaMu,alpha,getDbTagData(),CommMetaData(4));
     return res;
   }
 
-int XC::VPDependentFriction::sendSelf(CommParameters &cp)
+int XC::VPDependentFriction::sendSelf(Communicator &comm)
   {
     inicComm(5);
   
-    int res= sendData(cp);
+    int res= sendData(comm);
 
     const int dbTag= getDbTag();
-    res+= cp.sendIdData(getDbTagData(),dbTag);
+    res+= comm.sendIdData(getDbTagData(),dbTag);
     if(res < 0)
       std::cerr << "VPDependentFriction::sendSelf - failed to send data.\n";
     return res;
   }
 
 
-int XC::VPDependentFriction::recvSelf(const CommParameters &cp)
+int XC::VPDependentFriction::recvSelf(const Communicator &comm)
   {
     inicComm(5);
     
     const int dbTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dbTag);
+    int res= comm.receiveIdData(getDbTagData(),dbTag);
     if(res<0)
       std::cerr << "VPDependentFriction::recvSelf - failed to receive ids.\n";
     else
       {
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
            std::cerr << "VPDependentFriction::recvSelf - failed to receive data.\n";
       }

@@ -44,8 +44,8 @@ class NewmarkBase2: public NewmarkBase
     double beta; //!< beta factor for the Newmark integrator.
     double c1;  //!< some constants we need to keep
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     NewmarkBase2(AnalysisAggregation *,int classTag);
     NewmarkBase2(AnalysisAggregation *,int classTag,double gamma, double beta);

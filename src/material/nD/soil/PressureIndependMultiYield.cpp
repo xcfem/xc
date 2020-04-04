@@ -419,48 +419,48 @@ int XC::PressureIndependMultiYield::updateParameter(int responseID, Information 
 }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::PressureIndependMultiYield::sendData(CommParameters &cp)
+int XC::PressureIndependMultiYield::sendData(Communicator &comm)
   {
-    int res= PressureMultiYieldBase::sendData(cp);
-    res+= cp.sendDoubles(refShearModulus,refBulkModulus,getDbTagData(),CommMetaData(8));
+    int res= PressureMultiYieldBase::sendData(comm);
+    res+= comm.sendDoubles(refShearModulus,refBulkModulus,getDbTagData(),CommMetaData(8));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::PressureIndependMultiYield::recvData(const CommParameters &cp)
+int XC::PressureIndependMultiYield::recvData(const Communicator &comm)
   {
-    int res= PressureMultiYieldBase::recvData(cp);
-    res+= cp.receiveDoubles(refShearModulus,refBulkModulus,getDbTagData(),CommMetaData(8));
+    int res= PressureMultiYieldBase::recvData(comm);
+    res+= comm.receiveDoubles(refShearModulus,refBulkModulus,getDbTagData(),CommMetaData(8));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::PressureIndependMultiYield::sendSelf(CommParameters &cp)
+int XC::PressureIndependMultiYield::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(20);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::PressureIndependMultiYield::recvSelf(const CommParameters &cp)    
+int XC::PressureIndependMultiYield::recvSelf(const Communicator &comm)    
   {
     inicComm(20);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

@@ -81,18 +81,18 @@ double XC::BaseElasticSection2d::getStrain(const double &y,const double &z) cons
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::BaseElasticSection2d::sendData(CommParameters &cp)
+int XC::BaseElasticSection2d::sendData(Communicator &comm)
   {
-    int res= BaseElasticSection::sendData(cp);
-    res+= cp.sendMovable(ctes_scc,getDbTagData(),CommMetaData(8));
+    int res= BaseElasticSection::sendData(comm);
+    res+= comm.sendMovable(ctes_scc,getDbTagData(),CommMetaData(8));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::BaseElasticSection2d::recvData(const CommParameters &cp)
+int XC::BaseElasticSection2d::recvData(const Communicator &comm)
   {
-    int res= BaseElasticSection::recvData(cp);
-    res+= cp.receiveMovable(ctes_scc,getDbTagData(),CommMetaData(8));
+    int res= BaseElasticSection::recvData(comm);
+    res+= comm.receiveMovable(ctes_scc,getDbTagData(),CommMetaData(8));
     return res;
   }
 

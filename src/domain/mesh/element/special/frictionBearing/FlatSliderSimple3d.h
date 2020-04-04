@@ -80,8 +80,8 @@ class FlatSliderSimple3d: public FrictionElementBase
     // private methods
     void setUp();
     double sgn(double x);
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
     
   public:
     // constructor
@@ -110,8 +110,8 @@ class FlatSliderSimple3d: public FrictionElementBase
     const Vector &getResistingForceIncInertia(void) const;
     
     // public methods for element output
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag = 0) const;    
     
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);

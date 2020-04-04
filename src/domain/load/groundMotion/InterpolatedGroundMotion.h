@@ -105,8 +105,8 @@ class InterpolatedGroundMotion: public GroundMotion
     virtual double getDisp(double time) const;
     virtual const  Vector &getDispVelAccel(double time) const;
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
     // AddingSensitivity:BEGIN //////////////////////////////////////////
     virtual double getAccelSensitivity(double time);

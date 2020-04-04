@@ -350,7 +350,7 @@ const XC::Vector &XC::StaticDomainDecompositionAnalysis::getTangVectProduct(void
     return errVector;
   }
     
-int XC::StaticDomainDecompositionAnalysis::sendSelf(CommParameters &cp)
+int XC::StaticDomainDecompositionAnalysis::sendSelf(Communicator &comm)
   {
     // receive the data identifyng the objects in the aggregation
     getDbTag();
@@ -377,30 +377,30 @@ int XC::StaticDomainDecompositionAnalysis::sendSelf(CommParameters &cp)
   else
     data(7) = -1;
 
-    cp.sendID(data,getDbTagData(),CommMetaData(0));  
+    comm.sendID(data,getDbTagData(),CommMetaData(0));  
 
   // invoke sendSelf() on all the objects
-  if (getConstraintHandlerPtr()->sendSelf(cp) != 0) {
+  if (getConstraintHandlerPtr()->sendSelf(comm) != 0) {
     std::cerr << "XC::StaticDomainDecompositionAnalysis::sendSelf() - failed to send handler\n";
     return -1;
   }
 
-  if(getDOF_NumbererPtr()->sendSelf(cp) != 0) {
+  if(getDOF_NumbererPtr()->sendSelf(comm) != 0) {
     std::cerr << "XC::StaticDomainDecompositionAnalysis::sendSelf() - failed to send numberer\n";
     return -1;
   }
 
-  if (getAnalysisModelPtr()->sendSelf(cp) != 0) {
+  if (getAnalysisModelPtr()->sendSelf(comm) != 0) {
     std::cerr << "XC::StaticDomainDecompositionAnalysis::sendSelf() - failed to send model\n";
     return -1;
   }
 
-  if (getEquiSolutionAlgorithmPtr()->sendSelf(cp) != 0) {
+  if (getEquiSolutionAlgorithmPtr()->sendSelf(comm) != 0) {
     std::cerr << "XC::StaticDomainDecompositionAnalysis::sendSelf() - failed to send algorithm\n";
     return -1;
   }
 
-  if(getLinearSOEPtr()->sendSelf(cp) != 0)
+  if(getLinearSOEPtr()->sendSelf(comm) != 0)
     {
       std::cerr << "XC::StaticDomainDecompositionAnalysis::sendSelf() - failed to send SOE\n";
       return -1;
@@ -408,18 +408,18 @@ int XC::StaticDomainDecompositionAnalysis::sendSelf(CommParameters &cp)
     ;
   //    theSOE->setAnalysisModel(*theAnalysisModel);
 
-  if (theSolver->sendSelf(cp) != 0) {
+  if (theSolver->sendSelf(comm) != 0) {
     std::cerr << "XC::StaticDomainDecompositionAnalysis::sendSelf() - failed to send XC::Solver\n";
     return -1;
   }
 
-  if (getStaticIntegratorPtr()->sendSelf(cp) != 0) {
+  if (getStaticIntegratorPtr()->sendSelf(comm) != 0) {
     std::cerr << "XC::StaticDomainDecompositionAnalysis::sendSelf() - failed to send integrator\n";
     return -1;
   }
 
   if(solution_method->getConvergenceTestPtr())
-    if(solution_method->getConvergenceTestPtr()->sendSelf(cp) != 0) {
+    if(solution_method->getConvergenceTestPtr()->sendSelf(comm) != 0) {
       std::cerr << "XC::StaticDomainDecompositionAnalysis::sendSelf() - failed to send integrator\n";
       return -1;
   }
@@ -427,14 +427,14 @@ int XC::StaticDomainDecompositionAnalysis::sendSelf(CommParameters &cp)
   return 0;
 }
 
-int XC::StaticDomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
+int XC::StaticDomainDecompositionAnalysis::recvSelf(const Communicator &comm)
   {
     //Domain *the_Domain = this->getSubdomainPtr();
 
     // receive the data identifyng the objects in the aggregation
     static ID data(8);
     getDbTag();
-    cp.receiveID(data,getDbTagData(),CommMetaData(0));
+    comm.receiveID(data,getDbTagData(),CommMetaData(0));
 
     // for all objects in the aggregation:
     //  1. make sure objects exist & are of correct type; create new_ objects if not
@@ -444,7 +444,7 @@ int XC::StaticDomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
         if(getConstraintHandlerPtr() != 0)
           delete getConstraintHandlerPtr();
     
-        brokeConstraintHandler(cp,data);
+        brokeConstraintHandler(comm,data);
         if(getConstraintHandlerPtr() == 0)
           {
             std::cerr << "StaticDomainDecompositionAnalysis::recvSelf";
@@ -452,14 +452,14 @@ int XC::StaticDomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
             return -1;
           }
       }
-    getConstraintHandlerPtr()->recvSelf(cp);
+    getConstraintHandlerPtr()->recvSelf(comm);
   
     if(getDOF_NumbererPtr() == 0 || getDOF_NumbererPtr()->getClassTag() != data(1))
       {
         if(getDOF_NumbererPtr())
           delete getDOF_NumbererPtr();
     
-        brokeNumberer(cp,data);
+        brokeNumberer(comm,data);
         if(getDOF_NumbererPtr() == 0)
           {
             std::cerr << "StaticDomainDecompositionAnalysis::recvSelf";
@@ -467,14 +467,14 @@ int XC::StaticDomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
             return -1;
           }
       }
-    getDOF_NumbererPtr()->recvSelf(cp);
+    getDOF_NumbererPtr()->recvSelf(comm);
 
     if(getAnalysisModelPtr() == 0 || getAnalysisModelPtr()->getClassTag() != data(2))
       {
         if(getAnalysisModelPtr())
           delete getAnalysisModelPtr();
     
-        brokeAnalysisModel(cp,data);
+        brokeAnalysisModel(comm,data);
         if(getAnalysisModelPtr() == 0)
           {
             std::cerr << "XC::StaticDomainDecompositionAnalysis::recvSelf";
@@ -482,14 +482,14 @@ int XC::StaticDomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
             return -1;
           }
       }
-    getAnalysisModelPtr()->recvSelf(cp);
+    getAnalysisModelPtr()->recvSelf(comm);
 
     if(getEquiSolutionAlgorithmPtr() == 0 || getEquiSolutionAlgorithmPtr()->getClassTag() != data(3))
       {
         if(getEquiSolutionAlgorithmPtr())
           delete getEquiSolutionAlgorithmPtr();
     
-        brokeEquiSolnAlgo(cp,data);
+        brokeEquiSolnAlgo(comm,data);
         if(getEquiSolutionAlgorithmPtr() == 0)
           {
             std::cerr << "XC::StaticDomainDecompositionAnalysis::recvSelf";
@@ -497,13 +497,13 @@ int XC::StaticDomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
             return -1;
           }
       }
-    getEquiSolutionAlgorithmPtr()->recvSelf(cp);
+    getEquiSolutionAlgorithmPtr()->recvSelf(comm);
 
     if(getLinearSOEPtr() == 0 || getLinearSOEPtr()->getClassTag() != data(4))
       {
         if(getLinearSOEPtr() != 0)
           delete getLinearSOEPtr();
-        brokeLinearSOE(cp,data);
+        brokeLinearSOE(comm,data);
         if(getLinearSOEPtr() == 0)
           {
             std::cerr << "XC::StaticDomainDecompositionAnalysis::recvSelf";
@@ -512,9 +512,9 @@ int XC::StaticDomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
           }
       } 
 
-    getLinearSOEPtr()->recvSelf(cp);
+    getLinearSOEPtr()->recvSelf(comm);
     LinearSOESolver *theSolver = getLinearSOEPtr()->getSolver();
-    theSolver->recvSelf(cp);  
+    theSolver->recvSelf(comm);  
     //  theSOE->setAnalysisModel(*theAnalysisModel);
 
 
@@ -523,7 +523,7 @@ int XC::StaticDomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
         if(getStaticIntegratorPtr() != 0)
           delete getStaticIntegratorPtr();
     
-        brokeStaticIntegrator(cp,data);
+        brokeStaticIntegrator(comm,data);
         if(getStaticIntegratorPtr() == 0)
           {
             std::cerr << "StaticDomainDecompositionAnalysis::recvSelf";
@@ -531,7 +531,7 @@ int XC::StaticDomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
             return -1;
           }
       }
-    getStaticIntegratorPtr()->recvSelf(cp);
+    getStaticIntegratorPtr()->recvSelf(comm);
 
 
     if(solution_method->getConvergenceTestPtr() == 0 || solution_method->getConvergenceTestPtr()->getClassTag() != data(7))
@@ -542,7 +542,7 @@ int XC::StaticDomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
     
 //         if(data(7) != -1)
 //           {
-//   	    ConvergenceTest *tmp= cp.getNewConvergenceTest(this,data(7));
+//   	    ConvergenceTest *tmp= comm.getNewConvergenceTest(this,data(7));
 //             if(!tmp)
 //               {
 // 	        std::cerr << "XC::StaticDomainDecompositionAnalysis::recvSelf";
@@ -554,7 +554,7 @@ int XC::StaticDomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
 //           }
        }
      if(solution_method->getConvergenceTestPtr() != 0)
-        solution_method->getConvergenceTestPtr()->recvSelf(cp);
+        solution_method->getConvergenceTestPtr()->recvSelf(comm);
 
      // set up the links needed by the elements in the aggregation
      set_all_links();

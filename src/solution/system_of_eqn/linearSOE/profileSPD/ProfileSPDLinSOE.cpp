@@ -327,9 +327,9 @@ void XC::ProfileSPDLinSOE::zeroA(void)
   }
 
 
-int XC::ProfileSPDLinSOE::sendSelf(CommParameters &cp)
+int XC::ProfileSPDLinSOE::sendSelf(Communicator &comm)
   { return 0; }
 
 
-int XC::ProfileSPDLinSOE::recvSelf(const CommParameters &cp)
+int XC::ProfileSPDLinSOE::recvSelf(const Communicator &comm)
   { return 0; }

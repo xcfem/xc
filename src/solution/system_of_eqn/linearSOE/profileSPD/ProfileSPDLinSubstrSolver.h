@@ -105,8 +105,8 @@ class ProfileSPDLinSubstrSolver: public ProfileSPDLinDirectSolver,
 
     int setSize(void);
     int getClassTag() const;
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 
 inline LinearSOESolver *ProfileSPDLinSubstrSolver::getCopy(void) const

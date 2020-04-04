@@ -52,8 +52,8 @@ class EncapsulatedMaterial: public UniaxialMaterial
     double getStrain(void) const;          
     double getStrainRate(void) const;
     
-    int sendData(CommParameters &);  
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);  
+    int recvData(const Communicator &);
   };
 } // end of XC namespace
 

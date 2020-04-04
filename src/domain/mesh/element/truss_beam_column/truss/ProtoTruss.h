@@ -62,8 +62,8 @@ class ProtoTruss: public Element1D
     static Vector trussV6;   // class wide Vector for size 6
     static Vector trussV12;  // class wide Vector for size 12
 
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
     void setup_matrix_vector_ptrs(int dofNd1);
 
   public:

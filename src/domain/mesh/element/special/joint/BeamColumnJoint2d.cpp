@@ -887,13 +887,13 @@ const XC::Vector &XC::BeamColumnJoint2d::getResistingForceIncInertia(void) const
     return getResistingForce();
   }
 
-int XC::BeamColumnJoint2d::sendSelf(CommParameters &cp)
+int XC::BeamColumnJoint2d::sendSelf(Communicator &comm)
   {
     // yet to do.
     return -1;
   }
 
-int XC::BeamColumnJoint2d::recvSelf(const CommParameters &cp)
+int XC::BeamColumnJoint2d::recvSelf(const Communicator &comm)
   {
     // yet to do.
     return -1;

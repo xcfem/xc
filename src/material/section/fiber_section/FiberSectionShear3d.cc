@@ -387,30 +387,30 @@ int XC::FiberSectionShear3d::revertToStart(void)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::FiberSectionShear3d::sendData(CommParameters &cp)
+int XC::FiberSectionShear3d::sendData(Communicator &comm)
   {
-    int res= FiberSection3d::sendData(cp);
+    int res= FiberSection3d::sendData(comm);
     std::cerr << getClassName() << "::" << __FUNCTION__ << " - not implemented.\n";
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::FiberSectionShear3d::recvData(const CommParameters &cp)
+int XC::FiberSectionShear3d::recvData(const Communicator &comm)
   {
-    int res= FiberSection3d::recvData(cp);
+    int res= FiberSection3d::recvData(comm);
     std::cerr << getClassName() << "::" << __FUNCTION__ << " - not implemented.\n";
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::FiberSectionShear3d::sendSelf(CommParameters &cp)
+int XC::FiberSectionShear3d::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(29);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
@@ -418,18 +418,18 @@ int XC::FiberSectionShear3d::sendSelf(CommParameters &cp)
 
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::FiberSectionShear3d::recvSelf(const CommParameters &cp)
+int XC::FiberSectionShear3d::recvSelf(const Communicator &comm)
   {
     inicComm(29);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

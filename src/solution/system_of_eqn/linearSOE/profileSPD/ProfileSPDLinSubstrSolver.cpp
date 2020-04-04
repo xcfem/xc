@@ -518,7 +518,7 @@ int XC::ProfileSPDLinSubstrSolver::solveXint(void)
 int XC::ProfileSPDLinSubstrSolver::getClassTag(void) const
   { return SOLVER_TAGS_ProfileSPDLinSubstrSolver; }
 
-int XC::ProfileSPDLinSubstrSolver::sendSelf(CommParameters &cp)
+int XC::ProfileSPDLinSubstrSolver::sendSelf(Communicator &comm)
   {
     if(size != 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -527,5 +527,5 @@ int XC::ProfileSPDLinSubstrSolver::sendSelf(CommParameters &cp)
   }
 
 
-int XC::ProfileSPDLinSubstrSolver::recvSelf(const CommParameters &cp)
+int XC::ProfileSPDLinSubstrSolver::recvSelf(const Communicator &comm)
   { return 0; }

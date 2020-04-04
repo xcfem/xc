@@ -55,8 +55,8 @@ namespace XC {
 
 
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     
   public:
@@ -88,8 +88,8 @@ namespace XC {
 
     void clear(void);
 
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
 
 
     void Print(std::ostream &s,const int &flag) const;

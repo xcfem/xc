@@ -176,11 +176,11 @@ int XC::DistributedDiagonalSolver::solve(void)
   return 0;
 }
 
-int XC::DistributedDiagonalSolver::sendSelf(CommParameters &cp)
-  { return cp.sendDouble(minDiagTol,getDbTagData(),CommMetaData(0)); }
+int XC::DistributedDiagonalSolver::sendSelf(Communicator &comm)
+  { return comm.sendDouble(minDiagTol,getDbTagData(),CommMetaData(0)); }
 
 
-int XC::DistributedDiagonalSolver::recvSelf(const CommParameters &cp)
-  { return cp.receiveDouble(minDiagTol,getDbTagData(),CommMetaData(0)); }
+int XC::DistributedDiagonalSolver::recvSelf(const Communicator &comm)
+  { return comm.receiveDouble(minDiagTol,getDbTagData(),CommMetaData(0)); }
 
 

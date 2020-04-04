@@ -33,32 +33,32 @@ XC::NewtonBased::NewtonBased(AnalysisAggregation *owr,int classTag,int theTangen
   :EquiSolnAlgo(owr,classTag), tangent(theTangentToUse) {}
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::NewtonBased::sendData(CommParameters &cp)
+int XC::NewtonBased::sendData(Communicator &comm)
   {
-    int res= EquiSolnAlgo::sendData(cp);
-    res+= cp.sendDouble(tangent,getDbTagData(),CommMetaData(2));
+    int res= EquiSolnAlgo::sendData(comm);
+    res+= comm.sendDouble(tangent,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::NewtonBased::recvData(const CommParameters &cp)
+int XC::NewtonBased::recvData(const Communicator &comm)
   {
-    int res= EquiSolnAlgo::recvData(cp);
+    int res= EquiSolnAlgo::recvData(comm);
     double tmp= tangent;
-    res+= cp.receiveDouble(tmp,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveDouble(tmp,getDbTagData(),CommMetaData(2));
     tangent= tmp;
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::NewtonBased::sendSelf(CommParameters &cp)
+int XC::NewtonBased::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(3);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; failed to send data\n";
@@ -66,11 +66,11 @@ int XC::NewtonBased::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::NewtonBased::recvSelf(const CommParameters &cp)
+int XC::NewtonBased::recvSelf(const Communicator &comm)
   {
     inicComm(3);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -78,7 +78,7 @@ int XC::NewtonBased::recvSelf(const CommParameters &cp)
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName()  << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

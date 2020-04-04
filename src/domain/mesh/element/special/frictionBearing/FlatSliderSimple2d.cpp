@@ -396,46 +396,46 @@ const XC::Vector& XC::FlatSliderSimple2d::getResistingForceIncInertia(void) cons
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::FlatSliderSimple2d::sendData(CommParameters &cp)
+int XC::FlatSliderSimple2d::sendData(Communicator &comm)
   {
-    int res= FrictionElementBase::sendData(cp);
-    res+= cp.sendDoubles(ubPlastic,ubPlasticC,getDbTagData(),CommMetaData(19));
+    int res= FrictionElementBase::sendData(comm);
+    res+= comm.sendDoubles(ubPlastic,ubPlasticC,getDbTagData(),CommMetaData(19));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::FlatSliderSimple2d::recvData(const CommParameters &cp)
+int XC::FlatSliderSimple2d::recvData(const Communicator &comm)
   {
-    int res= FrictionElementBase::recvData(cp);
-    res+= cp.receiveDoubles(ubPlastic,ubPlasticC,getDbTagData(),CommMetaData(19));
+    int res= FrictionElementBase::recvData(comm);
+    res+= comm.receiveDoubles(ubPlastic,ubPlasticC,getDbTagData(),CommMetaData(19));
     return res;
   }
 
 
-int XC::FlatSliderSimple2d::sendSelf(CommParameters &cp)
+int XC::FlatSliderSimple2d::sendSelf(Communicator &comm)
   {
     inicComm(20);
 
-    int res= sendData(cp);
+    int res= sendData(comm);
 
     const int dataTag= getDbTag();
-    res += cp.sendIdData(getDbTagData(),dataTag);
+    res += comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "ZeroLength::sendSelf -- failed to send ID data\n";
     return res;
   }
 
 
-int XC::FlatSliderSimple2d::recvSelf(const CommParameters &cp)
+int XC::FlatSliderSimple2d::recvSelf(const Communicator &comm)
   {
     inicComm(20);
 
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "ZeroLength::recvSelf -- failed to receive ID data\n";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

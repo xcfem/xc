@@ -96,8 +96,8 @@ class ItpackLinSOE: public LinearSOEData
     
     void zeroA(void);
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
     friend class ItpackLinSolver;
   };

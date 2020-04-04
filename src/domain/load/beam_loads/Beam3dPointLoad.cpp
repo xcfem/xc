@@ -404,31 +404,31 @@ XC::DbTagData &XC::Beam3dPointLoad::getDbTagData(void) const
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::Beam3dPointLoad::sendSelf(CommParameters &cp)
+int XC::Beam3dPointLoad::sendSelf(Communicator &comm)
   {
     inicComm(8);
-    int result= sendData(cp);
-    result+= cp.sendDouble(Pz,getDbTagData(),CommMetaData(7));
+    int result= sendData(comm);
+    result+= comm.sendDouble(Pz,getDbTagData(),CommMetaData(7));
 
     const int dbTag= getDbTag();
-    result+= cp.sendIdData(getDbTagData(),dbTag);
+    result+= comm.sendIdData(getDbTagData(),dbTag);
     if(result < 0)
       std::cerr << "Beam3dPointLoad::sendSelf() - failed to send extra data\n";
     return result;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::Beam3dPointLoad::recvSelf(const CommParameters &cp)
+int XC::Beam3dPointLoad::recvSelf(const Communicator &comm)
   {
     inicComm(8);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "Beam3dPointLoad::recvSelf() - data could not be received\n" ;
     else
       {
-        res+= recvData(cp);
-        res+= cp.receiveDouble(Pz,getDbTagData(),CommMetaData(7));
+        res+= recvData(comm);
+        res+= comm.receiveDouble(Pz,getDbTagData(),CommMetaData(7));
       }
     return res;
   }

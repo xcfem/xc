@@ -132,8 +132,8 @@ class DummyNode: public Node
     void setColor(int newColor);
     int getColor(void) const;
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);    
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);    
   };
  
 std::ostream &operator<<(std::ostream &, const DummyNode &);

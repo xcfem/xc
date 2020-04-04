@@ -101,8 +101,8 @@ class Graph: public MovableObject
 
     void inic(const size_t &);
     void copy(const Graph &other);
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public:
     Graph(int numVertices= 32);    
@@ -128,8 +128,8 @@ class Graph: public MovableObject
     virtual int merge(Graph &other);
     
     virtual void Print(std::ostream &os, int flag =0) const;
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
     friend std::ostream &operator<<(std::ostream &, const Graph &);    
   };

@@ -49,8 +49,8 @@ class DamageModelVector: public DamageModels, public CommandEntity, public Movab
     void clearAll(void);
 
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &);  
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);  
+    int recvData(const Communicator &);
   public:
     typedef MaterialVector<UniaxialMaterial> material_vector;
 
@@ -60,8 +60,8 @@ class DamageModelVector: public DamageModels, public CommandEntity, public Movab
 
     int commitState(const material_vector &);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 
 

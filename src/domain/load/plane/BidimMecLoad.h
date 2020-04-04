@@ -48,8 +48,8 @@ class BidimMecLoad: public BidimLoad
     double Axial1; //!< Axial load on axis 1.
     double Axial2; //!< Axial load on axis 2.
 
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
   public:
     BidimMecLoad(int tag, int classTag,const double &Trans,const double &,const double &,const ID &theElementTags);

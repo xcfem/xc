@@ -56,8 +56,8 @@ class LoadHandler: public PrepHandler
     friend class Domain;
  
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     LoadHandler(Preprocessor *owr);
     ~LoadHandler(void);
@@ -83,8 +83,8 @@ class LoadHandler: public PrepHandler
 
     void clearAll(void);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
   };
 

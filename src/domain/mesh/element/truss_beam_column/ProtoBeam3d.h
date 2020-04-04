@@ -41,8 +41,8 @@ class ProtoBeam3d: public Element1D
   {
   protected:
     CrossSectionProperties3d ctes_scc; //Section mechanical properties E,A,Iy,...
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
     void set_material(const Material *m);
 
   public:

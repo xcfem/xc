@@ -99,8 +99,8 @@ class ParallelNumberer: public DOF_Numberer, public DistributedObj
     int numberDOF(int lastDOF = -1);
     int numberDOF(ID &lastDOFs);
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
 
   };
 } // end of XC namespace

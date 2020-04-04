@@ -112,8 +112,8 @@ class BeamWithHinges2d: public BeamColumnWithSectionFDTrf2d
     void getForceInterpMatrix(Matrix &b, double x, const ID &c);
     void getDistrLoadInterpMatrix(Matrix &bp, double x, const ID &c);
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);  
+    int sendData(Communicator &);
+    int recvData(const Communicator &);  
   public:
     BeamWithHinges2d(int tag, int nodeI, int nodeJ,
 	  	   double E, double A, double I,
@@ -148,8 +148,8 @@ class BeamWithHinges2d: public BeamColumnWithSectionFDTrf2d
     const Vector &getResistingForce(void) const;
     const Vector &getResistingForceIncInertia(void) const;
   
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   
     Response *setResponse(const std::vector<std::string> &argv, Information &info);
     int getResponse(int responseID, Information &info);

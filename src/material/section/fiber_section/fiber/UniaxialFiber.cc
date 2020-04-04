@@ -154,21 +154,21 @@ int XC::UniaxialFiber::revertToStart(void)
 
 
 //! @brief Send data through the channel being passed as parameter.
-int XC::UniaxialFiber::sendData(CommParameters &cp)
+int XC::UniaxialFiber::sendData(Communicator &comm)
   {
-    int res= Fiber::sendData(cp);
-    res+= cp.sendBrokedPtr(theMaterial,getDbTagData(),BrokedPtrCommMetaData(2,3,4));
-    res+= cp.sendDouble(area,getDbTagData(),CommMetaData(5));
+    int res= Fiber::sendData(comm);
+    res+= comm.sendBrokedPtr(theMaterial,getDbTagData(),BrokedPtrCommMetaData(2,3,4));
+    res+= comm.sendDouble(area,getDbTagData(),CommMetaData(5));
 
     return res;
   }
 
 
 //! @brief Receive data through the channel being passed as parameter.
-int XC::UniaxialFiber::recvData(const CommParameters &cp)
+int XC::UniaxialFiber::recvData(const Communicator &comm)
   {    
-    int res= Fiber::recvData(cp);
-    theMaterial= cp.getBrokedMaterial(theMaterial,getDbTagData(),BrokedPtrCommMetaData(2,3,4));
-    res+= cp.receiveDouble(area,getDbTagData(),CommMetaData(5));
+    int res= Fiber::recvData(comm);
+    theMaterial= comm.getBrokedMaterial(theMaterial,getDbTagData(),BrokedPtrCommMetaData(2,3,4));
+    res+= comm.receiveDouble(area,getDbTagData(),CommMetaData(5));
     return res;
   }

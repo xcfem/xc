@@ -80,17 +80,17 @@ class Domain;
     MapSet &operator=(const MapSet &);
   protected:
     DbTagData &getDbTagData(void) const;
-    int sendSetsDbTags(int posDbTag,CommParameters &cp);
-    int sendSetsClassNames(int posDbTag,CommParameters &cp);
-    int receiveSetsDbTags(int posDbTag,int size,const CommParameters &cp);
-    int receiveSetsClassNames(int pDbTg,int sz,const CommParameters &cp);
-    int sendSets(int posDbTag1, int posDbTag2, int posDbTag3,CommParameters &cp);
-    int receiveSets(int posDbTag1, int posDbTag2, int posDbTag3,const int &,const CommParameters &cp);
-    int sendOpenSets(int posDbTag1, int posDbTag2,CommParameters &cp);
-    int receiveOpenSets(int posDbTag1, int posDbTag2,const CommParameters &cp);
+    int sendSetsDbTags(int posDbTag,Communicator &comm);
+    int sendSetsClassNames(int posDbTag,Communicator &comm);
+    int receiveSetsDbTags(int posDbTag,int size,const Communicator &comm);
+    int receiveSetsClassNames(int pDbTg,int sz,const Communicator &comm);
+    int sendSets(int posDbTag1, int posDbTag2, int posDbTag3,Communicator &comm);
+    int receiveSets(int posDbTag1, int posDbTag2, int posDbTag3,const int &,const Communicator &comm);
+    int sendOpenSets(int posDbTag1, int posDbTag2,Communicator &comm);
+    int receiveOpenSets(int posDbTag1, int posDbTag2,const Communicator &comm);
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     friend class Preprocessor;
     MapSet(Preprocessor *preprocessor= nullptr);
@@ -114,8 +114,8 @@ class Domain;
     const SetBase *busca_set(const std::string &nmb) const;
     SetBase &getSet(const std::string &nmb);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

@@ -74,8 +74,8 @@ class ElasticShearSection3d: public BaseElasticSection3d
 
     int parameterID;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     ElasticShearSection3d(int tag, MaterialHandler *mat_ldr= nullptr);
     ElasticShearSection3d(void);
@@ -90,8 +90,8 @@ class ElasticShearSection3d: public BaseElasticSection3d
     const ResponseId &getType(void) const;
     int getOrder(void) const;
   
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   
     void Print(std::ostream &s, int flag = 0) const;
   

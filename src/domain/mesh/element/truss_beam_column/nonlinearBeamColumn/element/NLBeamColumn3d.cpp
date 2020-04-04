@@ -958,41 +958,41 @@ const XC::Vector &XC::NLBeamColumn3d::getResistingForceIncInertia(void) const
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::NLBeamColumn3d::sendData(CommParameters &cp)
+int XC::NLBeamColumn3d::sendData(Communicator &comm)
   {
-    int res= NLForceBeamColumn3dBase::sendData(cp);
+    int res= NLForceBeamColumn3dBase::sendData(comm);
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::NLBeamColumn3d::recvData(const CommParameters &cp)
+int XC::NLBeamColumn3d::recvData(const Communicator &comm)
   {
-    int res= NLForceBeamColumn3dBase::recvData(cp);
+    int res= NLForceBeamColumn3dBase::recvData(comm);
     return res;
   }
 
-int XC::NLBeamColumn3d::sendSelf(CommParameters &cp)
+int XC::NLBeamColumn3d::sendSelf(Communicator &comm)
   {
     inicComm(29);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    const int dataTag= getDbTag(cp);
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    const int dataTag= getDbTag(comm);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "NLBeamColumn3d::sendSelf -- failed to send ID data\n";
     return res;
   }
 
 
-int XC::NLBeamColumn3d::recvSelf(const CommParameters &cp)
+int XC::NLBeamColumn3d::recvSelf(const Communicator &comm)
   {
     inicComm(29);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "NLBeamColumn3d::recvSelf() - failed to recv ID data";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

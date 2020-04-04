@@ -77,7 +77,7 @@ void XC::MapFields::clearAll(void)
   { clear(); }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::MapFields::sendData(CommParameters &cp)
+int XC::MapFields::sendData(Communicator &comm)
   {
     std::cerr << getClassName() << ":: " << __FUNCTION__
               << " not implemented." << std::endl;
@@ -85,7 +85,7 @@ int XC::MapFields::sendData(CommParameters &cp)
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::MapFields::recvData(const CommParameters &cp)
+int XC::MapFields::recvData(const Communicator &comm)
   {
     std::cerr << getClassName() << ":: " << __FUNCTION__
               << " not implemented." << std::endl;
@@ -93,14 +93,14 @@ int XC::MapFields::recvData(const CommParameters &cp)
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::MapFields::sendSelf(CommParameters &cp)
+int XC::MapFields::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(6);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr <<  getClassName() << ":: " << __FUNCTION__
 		<< "; failed to send data\n";
@@ -108,11 +108,11 @@ int XC::MapFields::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::MapFields::recvSelf(const CommParameters &cp)
+int XC::MapFields::recvSelf(const Communicator &comm)
   {
     inicComm(6);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr <<  getClassName() << ":: " << __FUNCTION__
@@ -120,7 +120,7 @@ int XC::MapFields::recvSelf(const CommParameters &cp)
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr <<  getClassName() << ":: " << __FUNCTION__
 		    << "; failed to receive data.\n";

@@ -154,24 +154,24 @@ void XC::Vertex::Print(std::ostream &s, int flag) const
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::Vertex::sendData(CommParameters &cp)
+int XC::Vertex::sendData(Communicator &comm)
   {
     setDbTagDataPos(0,getTag());
-    int res= cp.sendDouble(myWeight,getDbTagData(),CommMetaData(1));
-    res+= cp.sendInts(myRef,myColor,myDegree,myTmp,getDbTagData(),CommMetaData(2));
+    int res= comm.sendDouble(myWeight,getDbTagData(),CommMetaData(1));
+    res+= comm.sendInts(myRef,myColor,myDegree,myTmp,getDbTagData(),CommMetaData(2));
     const ID tmp(myAdjacency);
-    res+= cp.sendID(tmp,getDbTagData(),CommMetaData(3));
+    res+= comm.sendID(tmp,getDbTagData(),CommMetaData(3));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::Vertex::recvData(const CommParameters &cp)
+int XC::Vertex::recvData(const Communicator &comm)
   {
     setTag(getDbTagDataPos(0));
-    int res= cp.receiveDouble(myWeight,getDbTagData(),CommMetaData(1));
-    res+= cp.receiveInts(myRef,myColor,myDegree,myTmp,getDbTagData(),CommMetaData(2));
+    int res= comm.receiveDouble(myWeight,getDbTagData(),CommMetaData(1));
+    res+= comm.receiveInts(myRef,myColor,myDegree,myTmp,getDbTagData(),CommMetaData(2));
     ID tmp;
-    res+= cp.receiveID(tmp,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveID(tmp,getDbTagData(),CommMetaData(3));
     const int sz= tmp.Size();
     for(int i= 0;i<sz;i++)
       myAdjacency.insert(tmp[i]);
@@ -179,14 +179,14 @@ int XC::Vertex::recvData(const CommParameters &cp)
   }
 
 //! @brief Send vertex data.
-int XC::Vertex::sendSelf(CommParameters &cp)
+int XC::Vertex::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(4);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << __FUNCTION__
 		<< "; failed to send data\n";
@@ -194,11 +194,11 @@ int XC::Vertex::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives vertex data.
-int XC::Vertex::recvSelf(const CommParameters &cp)
+int XC::Vertex::recvSelf(const Communicator &comm)
   {
     inicComm(4);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << __FUNCTION__
@@ -206,7 +206,7 @@ int XC::Vertex::recvSelf(const CommParameters &cp)
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << __FUNCTION__
 		    << "; failed to receive data.\n";

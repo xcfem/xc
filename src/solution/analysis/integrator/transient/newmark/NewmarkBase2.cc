@@ -56,18 +56,18 @@ XC::NewmarkBase2::NewmarkBase2(AnalysisAggregation *owr,int classTag,double theG
   :NewmarkBase(owr,classTag,theGamma,rF), beta(theBeta), c1(0.0) {}
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::NewmarkBase2::sendData(CommParameters &cp)
+int XC::NewmarkBase2::sendData(Communicator &comm)
   {
-    int res= NewmarkBase::sendData(cp);
-    res+= cp.sendDoubles(beta,c1,getDbTagData(),CommMetaData(13));
+    int res= NewmarkBase::sendData(comm);
+    res+= comm.sendDoubles(beta,c1,getDbTagData(),CommMetaData(13));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::NewmarkBase2::recvData(const CommParameters &cp)
+int XC::NewmarkBase2::recvData(const Communicator &comm)
   {
-    int res= NewmarkBase::recvData(cp);
-    res+= cp.receiveDoubles(beta,c1,getDbTagData(),CommMetaData(13));
+    int res= NewmarkBase::recvData(comm);
+    res+= comm.receiveDoubles(beta,c1,getDbTagData(),CommMetaData(13));
     return res;
   }
 

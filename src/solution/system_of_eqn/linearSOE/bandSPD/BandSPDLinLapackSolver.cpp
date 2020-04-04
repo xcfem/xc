@@ -142,14 +142,14 @@ int XC::BandSPDLinLapackSolver::setSize()
   }
 
 //! @brief Does nothing but return \f$0\f$.
-int XC::BandSPDLinLapackSolver::sendSelf(CommParameters &cp)
+int XC::BandSPDLinLapackSolver::sendSelf(Communicator &comm)
   {
     // nothing to do
     return 0;
   }
 
 //! @brief Does nothing but return \f$0\f$.
-int XC::BandSPDLinLapackSolver::recvSelf(const CommParameters &cp)
+int XC::BandSPDLinLapackSolver::recvSelf(const Communicator &comm)
   {
     // nothing to do
     return 0;

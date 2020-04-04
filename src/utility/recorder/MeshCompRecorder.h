@@ -47,8 +47,8 @@ class MeshCompRecorder: public HandlerRecorder
     double deltaT;
     double nextTimeStampToRecord;
 
-    int sendData(CommParameters &);  
-    int receiveData(const CommParameters &);
+    int sendData(Communicator &);  
+    int receiveData(const Communicator &);
 
   public:
     MeshCompRecorder(int classTag);

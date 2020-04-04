@@ -64,8 +64,8 @@ class MFreedom_ConstraintBase: public Constraint
     void set_constraint(const Matrix &c);
     void set_constrained_dofs(const ID &);
   protected:
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     // constructors        
     MFreedom_ConstraintBase(int tag , int classTag ); // Arash

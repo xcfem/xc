@@ -73,8 +73,8 @@ class T2Vector: public MovableObject
     double theVolume;
     static Vector engrgStrain;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     // constructors
     T2Vector();
@@ -105,8 +105,8 @@ class T2Vector: public MovableObject
 
     int operator == (const T2Vector & a) const;
     int isZero(void) const;
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

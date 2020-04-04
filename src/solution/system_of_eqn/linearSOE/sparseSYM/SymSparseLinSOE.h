@@ -87,8 +87,8 @@ class SymSparseLinSOE: public SparseSOEBase
 
     int setSymSparseLinSolver(SymSparseLinSolver *);    
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
     friend class SymSparseLinSolver;
   };

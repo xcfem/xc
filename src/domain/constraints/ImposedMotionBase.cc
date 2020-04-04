@@ -111,42 +111,42 @@ int XC::ImposedMotionBase::getMotion(void)
   }
 
 //! @brief Sends object members through the channel being passed as parameter.
-int XC::ImposedMotionBase::sendData(CommParameters &cp)
+int XC::ImposedMotionBase::sendData(Communicator &comm)
   {
-    int result= SFreedom_Constraint::sendData(cp);
-    result+= cp.sendInts(groundMotionTag,patternTag,getDbTagData(),CommMetaData(7));
+    int result= SFreedom_Constraint::sendData(comm);
+    result+= comm.sendInts(groundMotionTag,patternTag,getDbTagData(),CommMetaData(7));
     return result;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::ImposedMotionBase::recvData(const CommParameters &cp)
+int XC::ImposedMotionBase::recvData(const Communicator &comm)
   {
-    int res= SFreedom_Constraint::recvData(cp);
-    res+= cp.receiveInts(groundMotionTag,patternTag,getDbTagData(),CommMetaData(7));
+    int res= SFreedom_Constraint::recvData(comm);
+    res+= comm.receiveInts(groundMotionTag,patternTag,getDbTagData(),CommMetaData(7));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::ImposedMotionBase::sendSelf(CommParameters &cp)
+int XC::ImposedMotionBase::sendSelf(Communicator &comm)
   {
     static ID data(8);
-    int result= sendData(cp);
+    int result= sendData(comm);
     const int dbTag= getDbTag();
-    result+= cp.sendIdData(getDbTagData(),dbTag);
+    result+= comm.sendIdData(getDbTagData(),dbTag);
     if(result < 0)
       std::cerr << "ImposedMotionBase::sendSelf() - failed to send extra data\n";
     return result;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::ImposedMotionBase::recvSelf(const CommParameters &cp)
+int XC::ImposedMotionBase::recvSelf(const Communicator &comm)
   {
     static ID data(8);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "ImposedMotionBase::recvSelf() - data could not be received\n" ;
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }

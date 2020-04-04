@@ -494,20 +494,20 @@ void XC::CrdTransf3d::gira(const double &theta)
   { set_xz_vector(m_double_to_matrix(GiroX(-theta))*get_xz_vector()); }
 
 //! @brief Sends object members through the channel being passed as parameter.
-int XC::CrdTransf3d::sendData(CommParameters &cp)
+int XC::CrdTransf3d::sendData(Communicator &comm)
   {
-    int res= CrdTransf::sendData(cp);
-    res+=cp.sendMatrix(R,getDbTagData(),CommMetaData(9));
+    int res= CrdTransf::sendData(comm);
+    res+=comm.sendMatrix(R,getDbTagData(),CommMetaData(9));
     if(res<0)
       std::cerr << "CrdTransf3d::sendData - failed to send data.\n";
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::CrdTransf3d::recvData(const CommParameters &cp)
+int XC::CrdTransf3d::recvData(const Communicator &comm)
   {
-    int res= CrdTransf::recvData(cp);
-    res+= cp.receiveMatrix(R,getDbTagData(),CommMetaData(9));
+    int res= CrdTransf::recvData(comm);
+    res+= comm.receiveMatrix(R,getDbTagData(),CommMetaData(9));
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
               << "; failed to receive data.\n";

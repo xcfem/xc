@@ -503,11 +503,11 @@ int XC::DOF_Numberer::numberDOF(ID &lastDOFs)
 //! GraphNumberer in a ID to the channel, if no GraphNumberer is
 //! associated a \f$-1\f$ is sent as the class tag. The object then invokes
 //! sendSelf() on the GraphNumberer. 
-int XC::DOF_Numberer::sendData(CommParameters &cp)
+int XC::DOF_Numberer::sendData(Communicator &comm)
   {
     //setDbTagDataPos(0,getTag());
     // XXX arreglar.
-    int res= cp.sendMovablePtr(theGraphNumberer,getDbTagData(),PtrCommMetaData(1,2));
+    int res= comm.sendMovablePtr(theGraphNumberer,getDbTagData(),PtrCommMetaData(1,2));
     return res;
   }
 
@@ -519,23 +519,23 @@ int XC::DOF_Numberer::sendData(CommParameters &cp)
 //! theBroker} for a GraphNumberer with that class identifier, it sets the
 //! database tag for the GraphNumberer and it then invokes {\em
 //! recvSelf()} on that GraphNumberer.  
-int XC::DOF_Numberer::recvData(const CommParameters &cp)
+int XC::DOF_Numberer::recvData(const Communicator &comm)
   {
     //setTag(getDbTagDataPos(0));
     // XXX arreglar.
-    //theGraphNumberer= cp.receiveMovablePtr(theGraphNumberer,getDbTagData(),PtrCommMetaData(1,2));
+    //theGraphNumberer= comm.receiveMovablePtr(theGraphNumberer,getDbTagData(),PtrCommMetaData(1,2));
     return 0;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::DOF_Numberer::sendSelf(CommParameters &cp)
+int XC::DOF_Numberer::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(3);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data\n";
@@ -543,11 +543,11 @@ int XC::DOF_Numberer::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::DOF_Numberer::recvSelf(const CommParameters &cp)
+int XC::DOF_Numberer::recvSelf(const Communicator &comm)
   {
     inicComm(3);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName()  << "::" << __FUNCTION__
@@ -555,7 +555,7 @@ int XC::DOF_Numberer::recvSelf(const CommParameters &cp)
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

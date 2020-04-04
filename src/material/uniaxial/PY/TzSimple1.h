@@ -65,8 +65,8 @@ class TzSimple1: public PYBase
     // Functions to get t & z for elastic & plastic components
     void getNearField(double zlast, double dz, double dz_old);
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     
   public:
@@ -84,8 +84,8 @@ class TzSimple1: public PYBase
 
     UniaxialMaterial *getCopy(void) const;
     
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag =0) const;
 

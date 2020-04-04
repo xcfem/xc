@@ -165,10 +165,10 @@ int XC::ItpackLinSolver::setSize(void)
   return 0;
   }
 
-int XC::ItpackLinSolver::sendSelf(CommParameters &cp)
+int XC::ItpackLinSolver::sendSelf(Communicator &comm)
   { return -1; }
 
-int XC::ItpackLinSolver::recvSelf(const CommParameters &cp)
+int XC::ItpackLinSolver::recvSelf(const Communicator &comm)
   { return -1; }
 
 extern "C" int dfault_(int *iparm, double *rparm);

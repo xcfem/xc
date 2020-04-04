@@ -286,7 +286,7 @@ XC::DbTagData &XC::NodeVectors::getDbTagData(void) const
     return retval;
   }
 //! @brief Sends object members through the channel being passed as parameter.
-int XC::NodeVectors::sendData(CommParameters &cp)
+int XC::NodeVectors::sendData(Communicator &comm)
   {
     int res= 0;
     ID idData(3);
@@ -295,24 +295,24 @@ int XC::NodeVectors::sendData(CommParameters &cp)
     else
       {
         idData(0)= 0;
-        idData(1)= cp.getDbTag();
+        idData(1)= comm.getDbTag();
         idData(2)= commitData->Size();
-        res+= cp.sendVector(*commitData,idData(1));
+        res+= comm.sendVector(*commitData,idData(1));
         if(res < 0)
           {
             std::cerr << "NodeVectors::sendSelf() - failed to send Disp data\n";
             return res;
           }
       }
-    res+= cp.sendID(idData,getDbTagData(),CommMetaData(1));
+    res+= comm.sendID(idData,getDbTagData(),CommMetaData(1));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::NodeVectors::recvData(const CommParameters &cp)
+int XC::NodeVectors::recvData(const Communicator &comm)
   {
     ID idData(3);
-    int res= cp.receiveID(idData,getDbTagData(),CommMetaData(1));
+    int res= comm.receiveID(idData,getDbTagData(),CommMetaData(1));
 
 
     const int dbTag1= idData(1);
@@ -323,7 +323,7 @@ int XC::NodeVectors::recvData(const CommParameters &cp)
         // create the disp vectors if node is a total blank
         createData(nDOF);
         // recv the data
-        if(cp.receiveVector(*commitData,dbTag1) < 0)
+        if(comm.receiveVector(*commitData,dbTag1) < 0)
           {
             std::cerr << getClassName() << "::" << __FUNCTION__
                       << "; - failed to receive data\n";
@@ -344,30 +344,30 @@ int XC::NodeVectors::recvData(const CommParameters &cp)
   }
 
 //! @brief Sends the vector through the communicator.
-int XC::NodeVectors::sendSelf(CommParameters &cp)
+int XC::NodeVectors::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(2);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
-int XC::NodeVectors::recvSelf(const CommParameters &cp)
+int XC::NodeVectors::recvSelf(const Communicator &comm)
   {
     inicComm(2);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

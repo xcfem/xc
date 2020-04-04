@@ -381,17 +381,17 @@ int XC::DriftRecorder::initialize(void)
 
 
 //! @brief Sends the object through the communicator being passed as parameter.
-int XC::DriftRecorder::sendSelf(CommParameters &cp)
+int XC::DriftRecorder::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(12);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIDPtr(ndI,getDbTagData(),ArrayCommMetaData(5,6,7));
-    res+= cp.sendIDPtr(ndJ,getDbTagData(),ArrayCommMetaData(8,9,10));
-    res+= cp.sendInts(dof,perpDirn,getDbTagData(),CommMetaData(11));
-    if(cp.sendIdData(getDbTagData(),dataTag)<0)
+    res+= comm.sendIDPtr(ndI,getDbTagData(),ArrayCommMetaData(5,6,7));
+    res+= comm.sendIDPtr(ndJ,getDbTagData(),ArrayCommMetaData(8,9,10));
+    res+= comm.sendInts(dof,perpDirn,getDbTagData(),CommMetaData(11));
+    if(comm.sendIdData(getDbTagData(),dataTag)<0)
       {
         std::cerr << "DriftRecorder::sendSelf() - failed to send data\n";
         return -1;
@@ -400,11 +400,11 @@ int XC::DriftRecorder::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives the object through the communicator being passed as parameter.
-int XC::DriftRecorder::recvSelf(const CommParameters &cp)
+int XC::DriftRecorder::recvSelf(const Communicator &comm)
   {
     inicComm(12);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       {
@@ -413,10 +413,10 @@ int XC::DriftRecorder::recvSelf(const CommParameters &cp)
       }
     else
       {
-        res= receiveData(cp);       
-        ndI= cp.receiveIDPtr(ndI,getDbTagData(),ArrayCommMetaData(5,6,7));
-        ndJ= cp.receiveIDPtr(ndJ,getDbTagData(),ArrayCommMetaData(8,9,10));
-        res+= cp.receiveInts(dof,perpDirn,getDbTagData(),CommMetaData(11));
+        res= receiveData(comm);       
+        ndI= comm.receiveIDPtr(ndI,getDbTagData(),ArrayCommMetaData(5,6,7));
+        ndJ= comm.receiveIDPtr(ndJ,getDbTagData(),ArrayCommMetaData(8,9,10));
+        res+= comm.receiveInts(dof,perpDirn,getDbTagData(),CommMetaData(11));
       }
     return 0;
   }

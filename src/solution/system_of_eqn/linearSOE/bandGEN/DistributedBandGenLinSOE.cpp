@@ -291,10 +291,10 @@ const XC::Vector &XC::DistributedBandGenLinSOE::getB(void) const
     DistributedBandGenLinSOE *this_no_const= const_cast<DistributedBandGenLinSOE *>(this);
     if(processID != 0)
       {
-        CommParameters cp(0,*theChannels[0]);
+        Communicator comm(0,*theChannels[0]);
         // send B & recv merged B
-        cp.sendVector(myVectB,CommMetaData(0));//XXX Assign position.
-        this_no_const->receiveB(cp);
+        comm.sendVector(myVectB,CommMetaData(0));//XXX Assign position.
+        this_no_const->receiveB(comm);
       }
     else
       {
@@ -307,16 +307,16 @@ const XC::Vector &XC::DistributedBandGenLinSOE::getB(void) const
   }	
 
   
-int XC::DistributedBandGenLinSOE::sendSelf(CommParameters &cp)
+int XC::DistributedBandGenLinSOE::sendSelf(Communicator &comm)
   {
-    const int retval= send(cp);
+    const int retval= send(comm);
     return retval;
   }
 
 
-int XC::DistributedBandGenLinSOE::recvSelf(const CommParameters &cp)
+int XC::DistributedBandGenLinSOE::recvSelf(const Communicator &comm)
   {
-    const int retval= receive(cp);
+    const int retval= receive(comm);
     return retval;
   }
 

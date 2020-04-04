@@ -106,8 +106,8 @@ class Bidirectional: public SectionForceDeformation
     static Vector s;
     static Matrix ks;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     Bidirectional(int tag, double E, double sigY, double Hiso, double Hkin);
     Bidirectional(int tag= 0);
@@ -130,8 +130,8 @@ class Bidirectional: public SectionForceDeformation
     const ResponseId &getType(void) const;
     int getOrder(void) const;
     
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
 
     void Print(std::ostream &s, int flag = 0) const;
   };

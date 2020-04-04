@@ -120,7 +120,7 @@ int XC::ParallelNumberer::numberDOF(int lastDOF)
     // ID back containing dof tags & start id numbers.
     if(processID != 0)
       {
-        CommParameters cp(0,*theChannels[0]);
+        Communicator comm(0,*theChannels[0]);
         const int numVertex = theGraph.getNumVertex();
 
         /*
@@ -128,11 +128,11 @@ int XC::ParallelNumberer::numberDOF(int lastDOF)
         theChannel->recvID(0, 0, test);
         */
 
-        cp.sendMovable(theGraph,DistributedObj::getDbTagData(),CommMetaData(1));
+        comm.sendMovable(theGraph,DistributedObj::getDbTagData(),CommMetaData(1));
 
         // recv iD
         ID theID(2*numVertex);
-        cp.receiveID(theID,DistributedObj::getDbTagData(),CommMetaData(2));
+        comm.receiveID(theID,DistributedObj::getDbTagData(),CommMetaData(2));
 
         // set vertex numbering based on ID received
         for(int i=0; i<numVertex; i ++)
@@ -158,7 +158,7 @@ int XC::ParallelNumberer::numberDOF(int lastDOF)
               }
             //const ID &theDOFID= dofPtr->getID();
           }
-        cp.sendID(theID,DistributedObj::getDbTagData(),CommMetaData(2));
+        comm.sendID(theID,DistributedObj::getDbTagData(),CommMetaData(2));
       } 
     else
       {
@@ -193,14 +193,14 @@ int XC::ParallelNumberer::numberDOF(int lastDOF)
 
         for(int j=0; j<numChannels; j++)
           {
-            CommParameters cp(0,*theChannels[j]);
+            Communicator comm(0,*theChannels[j]);
             Graph theSubGraph;
 
             /*
             static XC::ID test(2); test(0)= processID; test(1)= 25;
             theChannel->sendID(0, 0, test);
             */
-            cp.receiveMovable(theSubGraph,DistributedObj::getDbTagData(),CommMetaData(3));
+            comm.receiveMovable(theSubGraph,DistributedObj::getDbTagData(),CommMetaData(3));
             theSubdomainIDs[j]= ID(theSubGraph.getNumVertex()*2);
             this->mergeSubGraph(theGraph, theSubGraph, vertexTags, vertexRefs, theSubdomainIDs[j]);
           }
@@ -281,7 +281,7 @@ int XC::ParallelNumberer::numberDOF(int lastDOF)
     // it's own graph
     for(int k=0; k<numChannels; k++)
      {
-        CommParameters cp(0,*theChannels[k]);
+        Communicator comm(0,*theChannels[k]);
         ID &theSubdomain= theSubdomainIDs[k];
         int numVertexSubdomain= theSubdomain.Size()/2;
 
@@ -292,8 +292,8 @@ int XC::ParallelNumberer::numberDOF(int lastDOF)
             int startDOF= vertexPtr->getTmp();
             theSubdomain[i+numVertexSubdomain]= startDOF;
           }
-        cp.sendID(theSubdomain,DistributedObj::getDbTagData(),CommMetaData(4));
-        cp.receiveID(theSubdomain,DistributedObj::getDbTagData(),CommMetaData(4));
+        comm.sendID(theSubdomain,DistributedObj::getDbTagData(),CommMetaData(4));
+        comm.receiveID(theSubdomain,DistributedObj::getDbTagData(),CommMetaData(4));
       }      
   }
 
@@ -370,7 +370,7 @@ int XC::ParallelNumberer::mergeSubGraph(Graph &theGraph, Graph &theSubGraph, ID 
 }
 
 
-int XC::ParallelNumberer::sendSelf(CommParameters &cp)
+int XC::ParallelNumberer::sendSelf(Communicator &comm)
   {
     int sendID =0;
 
@@ -382,12 +382,12 @@ int XC::ParallelNumberer::sendSelf(CommParameters &cp)
     if(processID == 0)
       {
         // check if already using this object
-        bool found= buscaCanal(cp,sendID);
+        bool found= buscaCanal(comm,sendID);
 
         // if new_ object, enlarge channel pointers to hold new_ channel * & allocate new_ ID
         if(found == false)
           {
-            theChannels.push_back(cp.getChannel());
+            theChannels.push_back(comm.getChannel());
             // allocate new_ processID for remote object
             sendID= theChannels.size();
           }
@@ -400,7 +400,7 @@ int XC::ParallelNumberer::sendSelf(CommParameters &cp)
     ID idData(1);
     idData(0)= sendID;
   
-    int res= cp.sendID(idData,DistributedObj::getDbTagData(),CommMetaData(0));
+    int res= comm.sendID(idData,DistributedObj::getDbTagData(),CommMetaData(0));
     if(res < 0)
       {
         std::cerr <<"WARNING XC::DistributedSparseGenColLinSOE::sendSelf() - failed to send data\n";
@@ -409,10 +409,10 @@ int XC::ParallelNumberer::sendSelf(CommParameters &cp)
     return 0;
   }
 
-int XC::ParallelNumberer::recvSelf(const CommParameters &cp)
+int XC::ParallelNumberer::recvSelf(const Communicator &comm)
   {
     ID idData(1);
-    int res= cp.receiveID(idData,DistributedObj::getDbTagData(),CommMetaData(0));
+    int res= comm.receiveID(idData,DistributedObj::getDbTagData(),CommMetaData(0));
     if(res < 0)
       {
         std::cerr <<"WARNING XC::Parallel::recvSelf() - failed to send data\n";
@@ -421,7 +421,7 @@ int XC::ParallelNumberer::recvSelf(const CommParameters &cp)
     processID= idData(0);
 
     theChannels.resize(1);
-    theChannels[0]= const_cast<Channel *>(cp.getChannel());
+    theChannels[0]= const_cast<Channel *>(comm.getChannel());
     return 0;
   }
 
@@ -448,11 +448,11 @@ int XC::ParallelNumberer::numberDOF(ID &lastDOFs)
   // ID back containing dof tags & start id numbers.
     if(processID != 0)
       {
-        CommParameters cp(0,*theChannels[0]);
+        Communicator comm(0,*theChannels[0]);
         int numVertex= theGraph.getNumVertex();
-        cp.sendMovable(theGraph,DistributedObj::getDbTagData(),CommMetaData(5));
+        comm.sendMovable(theGraph,DistributedObj::getDbTagData(),CommMetaData(5));
         ID theID(2*numVertex);
-        cp.receiveID(theID,DistributedObj::getDbTagData(),CommMetaData(6));
+        comm.receiveID(theID,DistributedObj::getDbTagData(),CommMetaData(6));
     for(int i=0; i<numVertex; i += 2) {
       int dofTag= theID(i);
       int startID= theID(i+1);
@@ -496,9 +496,9 @@ int XC::ParallelNumberer::numberDOF(ID &lastDOFs)
     // merge all subdomain graphs
     for(int j=0; j<numChannels; j++)
       {
-        CommParameters cp(0,*theChannels[j]);
+        Communicator comm(0,*theChannels[j]);
         Graph theSubGraph;
-        cp. receiveMovable(theSubGraph,DistributedObj::getDbTagData(),CommMetaData(6));
+        comm.receiveMovable(theSubGraph,DistributedObj::getDbTagData(),CommMetaData(6));
         theSubdomainIDs[j]= ID(theSubGraph.getNumVertex()*2);
         this->mergeSubGraph(theGraph, theSubGraph, vertexTags, vertexRefs, theSubdomainIDs[j]);
       }

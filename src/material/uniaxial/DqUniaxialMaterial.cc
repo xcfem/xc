@@ -346,7 +346,7 @@ void XC::DqUniaxialMaterial::push_front(const UniaxialMaterial *t,SectionForceDe
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::DqUniaxialMaterial::sendData(CommParameters &cp)
+int XC::DqUniaxialMaterial::sendData(Communicator &comm)
   {
     const size_t sz= size();
     setDbTagDataPos(0,sz);
@@ -354,23 +354,23 @@ int XC::DqUniaxialMaterial::sendData(CommParameters &cp)
     inicComm(sz*2);
     int res= 0;
     for(size_t i= 0;i<sz;i++)
-      res+= cp.sendBrokedPtr((*this)[i],cpMat,BrokedPtrCommMetaData(i,0,i+sz));
-    res+= cpMat.send(getDbTagData(),cp,CommMetaData(1));
+      res+= comm.sendBrokedPtr((*this)[i],cpMat,BrokedPtrCommMetaData(i,0,i+sz));
+    res+= cpMat.send(getDbTagData(),comm,CommMetaData(1));
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::DqUniaxialMaterial::recvData(const CommParameters &cp)
+int XC::DqUniaxialMaterial::recvData(const Communicator &comm)
   {
     const size_t sz= getDbTagDataPos(0);
     DbTagData cpMat(sz*2);
     inicComm(sz*2);
-    int res= cpMat.receive(getDbTagData(),cp,CommMetaData(1));
+    int res= cpMat.receive(getDbTagData(),comm,CommMetaData(1));
 
     for(size_t i= 0;i<sz;i++)
       {
         // Receive the material
-        (*this)[i]= cp.getBrokedMaterial((*this)[i],cpMat,BrokedPtrCommMetaData(i,0,i+sz));
+        (*this)[i]= comm.getBrokedMaterial((*this)[i],cpMat,BrokedPtrCommMetaData(i,0,i+sz));
         if(!(*this)[i])
           std::cerr << "MaterialVector::recvSelf() - material "
                     << i << "failed to recv itself\n";
@@ -379,13 +379,13 @@ int XC::DqUniaxialMaterial::recvData(const CommParameters &cp)
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::DqUniaxialMaterial::sendSelf(CommParameters &cp)
+int XC::DqUniaxialMaterial::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "WARNING DqUniaxialMaterial::sendSelf() - " 
                 << dataTag << " failed to send.";
@@ -393,16 +393,16 @@ int XC::DqUniaxialMaterial::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::DqUniaxialMaterial::recvSelf(const CommParameters &cp)
+int XC::DqUniaxialMaterial::recvSelf(const Communicator &comm)
   {
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << "WARNING DqUniaxialMaterial::recvSelf() - "
                 << dataTag << " failed to receive ID\n";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

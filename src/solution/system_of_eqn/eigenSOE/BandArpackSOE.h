@@ -72,8 +72,8 @@ class BandArpackSOE: public ArpackSOE
     virtual void zeroM(void);
     virtual void identityM(void);
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     
     virtual void save(void) const;
     virtual void restore(void);

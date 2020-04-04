@@ -73,28 +73,28 @@ int XC::RayleighDampingFactors::updateParameter(int parameterID, Information &in
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::RayleighDampingFactors::sendData(CommParameters &cp)
+int XC::RayleighDampingFactors::sendData(Communicator &comm)
   {
-    int res=cp.sendDoubles(alphaM,betaK,betaK0,betaKc,getDbTagData(),CommMetaData(1));
+    int res=comm.sendDoubles(alphaM,betaK,betaK0,betaKc,getDbTagData(),CommMetaData(1));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::RayleighDampingFactors::recvData(const CommParameters &cp)
+int XC::RayleighDampingFactors::recvData(const Communicator &comm)
   {
-    int res= cp.receiveDoubles(alphaM,betaK,betaK0,betaKc,getDbTagData(),CommMetaData(1));
+    int res= comm.receiveDoubles(alphaM,betaK,betaK0,betaKc,getDbTagData(),CommMetaData(1));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::RayleighDampingFactors::sendSelf(CommParameters &cp)
+int XC::RayleighDampingFactors::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(2);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; failed to send data\n";
@@ -102,11 +102,11 @@ int XC::RayleighDampingFactors::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::RayleighDampingFactors::recvSelf(const CommParameters &cp)
+int XC::RayleighDampingFactors::recvSelf(const Communicator &comm)
   {
     inicComm(2);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -114,7 +114,7 @@ int XC::RayleighDampingFactors::recvSelf(const CommParameters &cp)
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

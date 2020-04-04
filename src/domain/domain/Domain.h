@@ -148,8 +148,8 @@ class Domain: public ObjWithRecorders, public DistributedBase
 
     void free_mem(void);
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     Domain(CommandEntity *owr,DataOutputHandler::map_output_handlers *oh);
     Domain(CommandEntity *owr,int numNods, int numElements, int numSPs, int numMPs,int numLPatterns,int numNLockers,DataOutputHandler::map_output_handlers *oh);
@@ -283,10 +283,10 @@ class Domain: public ObjWithRecorders, public DistributedBase
     virtual void Print(std::ostream &s, int flag =0) const;
     friend std::ostream &operator<<(std::ostream &, const Domain &);
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
-    friend int sendDomain(Domain &, int posDbTag,DbTagData &,CommParameters &cp);
-    friend int receiveDomain(Domain &, int posDbTag,DbTagData &,const CommParameters &cp);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
+    friend int sendDomain(Domain &, int posDbTag,DbTagData &,Communicator &comm);
+    friend int receiveDomain(Domain &, int posDbTag,DbTagData &,const Communicator &comm);
 
     const Preprocessor *getPreprocessor(void) const;
     Preprocessor *getPreprocessor(void);
@@ -302,8 +302,8 @@ class Domain: public ObjWithRecorders, public DistributedBase
   };
 
 std::ostream &operator<<(std::ostream &, const Domain &);
-int sendDomain(Domain &,int posDbTag,DbTagData &,CommParameters &cp);
-int receiveDomain(Domain &, int posDbTag,DbTagData &,const CommParameters &cp);
+int sendDomain(Domain &,int posDbTag,DbTagData &,Communicator &comm);
+int receiveDomain(Domain &, int posDbTag,DbTagData &,const Communicator &comm);
 
 
 } // end of XC namespace

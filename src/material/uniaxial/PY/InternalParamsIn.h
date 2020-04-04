@@ -41,8 +41,8 @@ class InternalParamsIn: public InternalParamsA
   protected:
     double Rin; //!<  R at start of current plastic loading cycle
     double vin; //!<  v (y or z) at start of current plastic loading cycle
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     InternalParamsIn(const double &V= 0.0,const double &r= 0.0,const double &t= 0.0,const double &Vin= 0.0,const double &rin= 0.0);
     inline const double &yin(void) const //Para PySimple1
@@ -66,8 +66,8 @@ class InternalParamsIn: public InternalParamsA
     inline double &Tin(void) //Para TzSimple1
       { return Rin; }
     void revertToStart(const double &tg);
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

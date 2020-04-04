@@ -27,7 +27,7 @@
 //DistributedObj.cc
 
 #include "DistributedObj.h"
-#include "CommParameters.h"
+#include "Communicator.h"
 
 XC::DistributedObj::DistributedObj(void)
   : processID(0) {}
@@ -35,13 +35,13 @@ XC::DistributedObj::DistributedObj(void)
 XC::DistributedObj::DistributedObj(const ChannelQueue &theC)
   : processID(0), theChannels(theC) {}
 
-bool XC::DistributedObj::buscaCanal(const CommParameters &cp,int &sendID)
+bool XC::DistributedObj::buscaCanal(const Communicator &comm,int &sendID)
   {
     // check if already using this object
     bool found = false;
     const int numChannels= theChannels.size();
     for(int i=0; i<numChannels; i++)
-      if(theChannels[i] == cp.getChannel())
+      if(theChannels[i] == comm.getChannel())
         {
           sendID= i+1;
 	  found = true;

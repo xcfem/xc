@@ -59,8 +59,8 @@ class YS_Evolution2D: public YS_Evolution
     
     virtual int update(int flag);
 
-    virtual int  sendSelf(CommParameters &){return -1;}
-    virtual int  recvSelf(const CommParameters &){return -1;}
+    virtual int  sendSelf(Communicator &){return -1;}
+    virtual int  recvSelf(const Communicator &){return -1;}
 
     virtual int commitState();
     virtual int revertToLastCommit(void);

@@ -169,8 +169,8 @@ class DruckerPrager: public NDMaterial
   Response *setResponse(const std::vector<std::string> &argv, Information &matInfo);
   int getResponse (int responseID, Information &matInformation);
   
-  int sendSelf(CommParameters &);  
-  int recvSelf(const CommParameters &); 
+  int sendSelf(Communicator &);  
+  int recvSelf(const Communicator &); 
   
   void Print(std::ostream &, int flag =0) const;
 

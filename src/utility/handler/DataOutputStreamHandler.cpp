@@ -115,9 +115,9 @@ int XC::DataOutputStreamHandler::write(Vector &data)
   }
 
 //! @brief Send the object through the communicator argument.
-int XC::DataOutputStreamHandler::sendSelf(CommParameters &cp)
+int XC::DataOutputStreamHandler::sendSelf(Communicator &comm)
   { return 0; }
 
 //! @brief Receive the object through the communicator argument.
-int XC::DataOutputStreamHandler::recvSelf(const CommParameters &cp)
+int XC::DataOutputStreamHandler::recvSelf(const Communicator &comm)
   { return 0; }

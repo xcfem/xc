@@ -647,20 +647,20 @@ const XC::Vector &XC::CrdTransf2d::getCooPoint(const double &xrel) const
   }
 
 //! @brief Sends object members through the channel being passed as parameter.
-int XC::CrdTransf2d::sendData(CommParameters &cp)
+int XC::CrdTransf2d::sendData(Communicator &comm)
   {
-    int res= CrdTransf::sendData(cp);
-    res+= cp.sendDoubles(cosTheta,sinTheta,getDbTagData(),CommMetaData(9));
+    int res= CrdTransf::sendData(comm);
+    res+= comm.sendDoubles(cosTheta,sinTheta,getDbTagData(),CommMetaData(9));
     if(res<0)
       std::cerr << "CrdTransf2d::sendData - failed to send data.\n";
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::CrdTransf2d::recvData(const CommParameters &cp)
+int XC::CrdTransf2d::recvData(const Communicator &comm)
   {
-    int res= CrdTransf::recvData(cp);
-    res+= cp.receiveDoubles(cosTheta,sinTheta,getDbTagData(),CommMetaData(9));
+    int res= CrdTransf::recvData(comm);
+    res+= comm.receiveDoubles(cosTheta,sinTheta,getDbTagData(),CommMetaData(9));
     if(res<0)
       std::cerr << "CrdTransf2d::recvData - failed to receive data.\n";
     return res;    

@@ -42,8 +42,8 @@ class BidimStrainLoad: public BidimLoad
     std::vector<Vector> strains; //!< Restricted strains on each Gauss point.	
   protected:
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
   public:
     BidimStrainLoad(int tag, const std::vector<Vector> &, const ID &theElementTags);
@@ -66,8 +66,8 @@ class BidimStrainLoad: public BidimLoad
     const Vector &getData(int &type, const double &loadFactor) const;
 
   
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;       
 
   };

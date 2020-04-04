@@ -46,13 +46,13 @@ class NewtonBased: public EquiSolnAlgo
   {
   protected:
     int tangent;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     NewtonBased(AnalysisAggregation *,int classTag,int tangent = CURRENT_TANGENT);
   public:
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

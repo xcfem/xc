@@ -40,44 +40,44 @@ XC::DbTagData &XC::BodyForces::getDbTagData(void) const
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::BodyForces::sendData(CommParameters &cp)
+int XC::BodyForces::sendData(Communicator &comm)
   {
-    int res= cp.sendVector(forces,this->getDbTagData(),CommMetaData(1));
+    int res= comm.sendVector(forces,this->getDbTagData(),CommMetaData(1));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::BodyForces::recvData(const CommParameters &cp)
+int XC::BodyForces::recvData(const Communicator &comm)
   {
-    int res= cp.receiveVector(forces,this->getDbTagData(),CommMetaData(1));
+    int res= comm.receiveVector(forces,this->getDbTagData(),CommMetaData(1));
     return res;
   }
 
 //! @brief Sends object.
-int XC::BodyForces::sendSelf(CommParameters &cp)
+int XC::BodyForces::sendSelf(Communicator &comm)
   {
     inicComm(2);
 
-    int res= this->sendData(cp);
+    int res= this->sendData(comm);
 
     const int dataTag= getDbTag();
-    res += cp.sendIdData(getDbTagData(),dataTag);
+    res += comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "BodyForces::sendSelf -- failed to send ID data\n";
     return res;
   }
 
 //! @brief Receives object
-int XC::BodyForces::recvSelf(const CommParameters &cp)
+int XC::BodyForces::recvSelf(const Communicator &comm)
   {
     inicComm(2);
 
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "BodyForces::recvSelf -- failed to receive ID data\n";
     else
-      res+= this->recvData(cp);
+      res+= this->recvData(comm);
     return res;
   }
 

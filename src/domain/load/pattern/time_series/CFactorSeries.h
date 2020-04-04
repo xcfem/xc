@@ -42,14 +42,14 @@ class CFactorSeries: public TimeSeries
     double cFactor; //!< factor that multiplies series values.
 
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
   public:
     CFactorSeries(int classTag,double cf= 1.0);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
     //! @brief Return load factor at specified time.
     inline double getFactor(double pseudoTime) const

@@ -62,8 +62,8 @@ class MRMFreedom_Constraint: public MFreedom_ConstraintBase
     ID retainedNodeTags; //!< Retained nodes tags.
 
   protected:
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     // constructors        
     MRMFreedom_Constraint(int tag , int classTag ); // Arash
@@ -103,8 +103,8 @@ class MRMFreedom_Constraint: public MFreedom_ConstraintBase
     int addResistingForceToNodalReaction(bool inclInertia);
 
     // methods for output
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
     
     int getVtkCellType(void) const;
 

@@ -981,43 +981,43 @@ bool XC::NLBeamColumn2d::isSubdomain(void)
 
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::NLBeamColumn2d::sendData(CommParameters &cp)
+int XC::NLBeamColumn2d::sendData(Communicator &comm)
   {
-    int res= NLForceBeamColumn2dBase::sendData(cp);
-    res+= cp.sendInt(maxSubdivisions,getDbTagData(),CommMetaData(25));
+    int res= NLForceBeamColumn2dBase::sendData(comm);
+    res+= comm.sendInt(maxSubdivisions,getDbTagData(),CommMetaData(25));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::NLBeamColumn2d::recvData(const CommParameters &cp)
+int XC::NLBeamColumn2d::recvData(const Communicator &comm)
   {
-    int res= NLForceBeamColumn2dBase::recvData(cp);
-    res+= cp.receiveInt(maxSubdivisions,getDbTagData(),CommMetaData(25));
+    int res= NLForceBeamColumn2dBase::recvData(comm);
+    res+= comm.receiveInt(maxSubdivisions,getDbTagData(),CommMetaData(25));
     return res;
   }
 
-int XC::NLBeamColumn2d::sendSelf(CommParameters &cp)
+int XC::NLBeamColumn2d::sendSelf(Communicator &comm)
   {
     inicComm(26);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    const int dataTag= getDbTag(cp);
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    const int dataTag= getDbTag(comm);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "NLBeamColumn2d::sendSelf -- failed to send ID data\n";
     return res;
   }
 
 
-int XC::NLBeamColumn2d::recvSelf(const CommParameters &cp)
+int XC::NLBeamColumn2d::recvSelf(const Communicator &comm)
   {
     inicComm(26);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "NLBeamColumn2d::recvSelf() - failed to recv ID data";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

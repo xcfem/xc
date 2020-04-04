@@ -263,8 +263,8 @@ void XC::ItpackLinSOE::zeroA(void)
     Aformed = false;
   }
 
-int XC::ItpackLinSOE::sendSelf(CommParameters &cp)
+int XC::ItpackLinSOE::sendSelf(Communicator &comm)
   { return -1; }
 
-int XC::ItpackLinSOE::recvSelf(const CommParameters &cp)
+int XC::ItpackLinSOE::recvSelf(const Communicator &comm)
   { return -1; }

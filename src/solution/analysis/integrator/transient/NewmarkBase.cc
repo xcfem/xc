@@ -90,20 +90,20 @@ void XC::NewmarkBase::PopulateUs(AnalysisModel *model)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::NewmarkBase::sendData(CommParameters &cp)
+int XC::NewmarkBase::sendData(Communicator &comm)
   {
-    int res= DampingFactorsIntegrator::sendData(cp);
-    res+= cp.sendDoubles(gamma,c2,c3,getDbTagData(),CommMetaData(3));
-    res+= cp.sendMovable(U,getDbTagData(),CommMetaData(4));
+    int res= DampingFactorsIntegrator::sendData(comm);
+    res+= comm.sendDoubles(gamma,c2,c3,getDbTagData(),CommMetaData(3));
+    res+= comm.sendMovable(U,getDbTagData(),CommMetaData(4));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::NewmarkBase::recvData(const CommParameters &cp)
+int XC::NewmarkBase::recvData(const Communicator &comm)
   {
-    int res= DampingFactorsIntegrator::recvData(cp);
-    res+= cp.receiveDoubles(gamma,c2,c3,getDbTagData(),CommMetaData(3));
-    res+= cp.receiveMovable(U,getDbTagData(),CommMetaData(4));
+    int res= DampingFactorsIntegrator::recvData(comm);
+    res+= comm.receiveDoubles(gamma,c2,c3,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveMovable(U,getDbTagData(),CommMetaData(4));
     return res;
   }
 

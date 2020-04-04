@@ -109,8 +109,8 @@ class NeoHookeanCompressible3D: public FiniteDeformationElastic3D
     const std::string &getType(void) const;
     int getOrder (void) const;
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
     void Print(std::ostream &s, int flag = 0) const;
 

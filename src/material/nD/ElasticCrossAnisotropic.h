@@ -90,8 +90,8 @@ class ElasticCrossAnisotropic: public NDMaterial
     void setInitElasticStiffness(void);
     void convertD2TensorEijkl(void);
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     ElasticCrossAnisotropic(int tag, double Ehp, double Evp, double nuhvp,double nuhhp, double Ghvp, double rhop = 0.0);
     ElasticCrossAnisotropic(int tag);
@@ -131,8 +131,8 @@ class ElasticCrossAnisotropic: public NDMaterial
 //int setParameter(const std::vector<std::string> &argv, Parameter &param);
 //int updateParameter (int parameterID, Information &info);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

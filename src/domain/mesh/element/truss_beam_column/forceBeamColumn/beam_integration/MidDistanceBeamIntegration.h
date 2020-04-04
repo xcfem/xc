@@ -66,8 +66,8 @@ class MidDistanceBeamIntegration: public ParameterIDBeamIntegration
 
     BeamIntegration *getCopy(void) const;
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
     int setParameter(const std::vector<std::string> &argv, Parameter &param);
     int updateParameter(int parameterID, Information &info);

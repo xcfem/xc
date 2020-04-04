@@ -52,8 +52,8 @@ class ElementRecorderBase: public MeshCompRecorder
     std::vector<Response *> theResponses;
     std::vector<std::string> responseArgs;
 
-    int sendData(CommParameters &);  
-    int receiveData(const CommParameters &);
+    int sendData(Communicator &);  
+    int receiveData(const Communicator &);
     void setup_responses(const std::string &);
 
   public:
@@ -67,8 +67,8 @@ class ElementRecorderBase: public MeshCompRecorder
     ~ElementRecorderBase(void);
     inline size_t getNumArgs(void) const
       { return responseArgs.size(); }
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

@@ -59,8 +59,8 @@ class FVectorData: public FVector
     const Vector &getVector(void) const;
     void putVector(const Vector &v);
     std::string getClassName(void) const;
-    int sendData(CommParameters &cp,DbTagData &dt,const CommMetaData &);
-    int receiveData(const CommParameters &cp,DbTagData &dt,const CommMetaData &);
+    int sendData(Communicator &comm,DbTagData &dt,const CommMetaData &);
+    int receiveData(const Communicator &comm,DbTagData &dt,const CommMetaData &);
 
   };
 
@@ -86,14 +86,14 @@ std::string FVectorData<SZ>::getClassName(void) const
   { return typeid(*this).name(); }
  
 template <size_t SZ>
-int FVectorData<SZ>::sendData(CommParameters &cp,DbTagData &dt,const CommMetaData &md)
-  { return cp.sendVector(getVector(),dt,md); }
+int FVectorData<SZ>::sendData(Communicator &comm,DbTagData &dt,const CommMetaData &md)
+  { return comm.sendVector(getVector(),dt,md); }
 
 template <size_t SZ>
-int FVectorData<SZ>::receiveData(const CommParameters &cp,DbTagData &dt,const CommMetaData &md)
+int FVectorData<SZ>::receiveData(const Communicator &comm,DbTagData &dt,const CommMetaData &md)
   {
     Vector tmp= getVector();
-    int res= cp.receiveVector(tmp,dt,md);
+    int res= comm.receiveVector(tmp,dt,md);
     putVector(tmp);
     return res;
   }

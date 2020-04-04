@@ -86,10 +86,10 @@ int XC::DistributedProfileSPDLinSOE::setSize(Graph &theGraph)
         if(size > B.Size())
           iDiagLoc.resize(size);
      
-        CommParameters cp(0,*theChannels[0]);
+        Communicator comm(0,*theChannels[0]);
         // receive my iDiagLoad
         ID iLoc(size);
-        cp.receiveID(iLoc,DistributedBandLinSOE::getDbTagData(),CommMetaData(0));//XXX Assign position.
+        comm.receiveID(iLoc,DistributedBandLinSOE::getDbTagData(),CommMetaData(0));//XXX Assign position.
 
         Vertex *vertex;
         VertexIter &theSubVertices = theGraph.getVertices();
@@ -114,7 +114,7 @@ int XC::DistributedProfileSPDLinSOE::setSize(Graph &theGraph)
         sizeLocal(0) = myProfileSize;
 
         // send local mapping & profile size to P0
-        cp.sendID(sizeLocal,DistributedBandLinSOE::getDbTagData(),CommMetaData(0));
+        comm.sendID(sizeLocal,DistributedBandLinSOE::getDbTagData(),CommMetaData(0));
       }
     else
       {
@@ -343,8 +343,8 @@ int XC::DistributedProfileSPDLinSOE::solve(void)
         for(size_t j=0; j<theChannels.size(); j++)
           {
             // get X & add
-            CommParameters cp(0,*theChannels[j]);
-            receiveX(cp);
+            Communicator comm(0,*theChannels[j]);
+            receiveX(comm);
             ProfileSPDLinSOE::addB(getX());
 
             //get A & add using local map
@@ -354,7 +354,7 @@ int XC::DistributedProfileSPDLinSOE::solve(void)
 	        int localSize = sizeLocal(j);
                 workArea.resize(localSize);
 	        Vector vectA(workArea);    
-	        cp.receiveVector(vectA,CommMetaData(1));//XXX Assign position.
+	        comm.receiveVector(vectA,CommMetaData(1));//XXX Assign position.
 		int loc = 0;
 	        for(int i=0; i<localMap.Size(); i++)
                   {
@@ -402,10 +402,10 @@ const XC::Vector &XC::DistributedProfileSPDLinSOE::getB(void) const
     DistributedProfileSPDLinSOE *this_no_const= const_cast<DistributedProfileSPDLinSOE *>(this);
     if(processID)
       {
-        CommParameters cp(0,*theChannels[0]);
+        Communicator comm(0,*theChannels[0]);
         // send B & recv merged B
-        cp.sendVector(myVectB,CommMetaData(0));//XXX Assign position.
-        this_no_const->receiveB(cp);
+        comm.sendVector(myVectB,CommMetaData(0));//XXX Assign position.
+        this_no_const->receiveB(comm);
       }
     else
       {
@@ -420,9 +420,9 @@ const XC::Vector &XC::DistributedProfileSPDLinSOE::getB(void) const
 }	
 
   
-int XC::DistributedProfileSPDLinSOE::sendSelf(CommParameters &cp)
+int XC::DistributedProfileSPDLinSOE::sendSelf(Communicator &comm)
   {
-    const int res= send(cp);
+    const int res= send(comm);
 
     if(processID == 0)
       { sizeLocal= ID(theChannels.size()); }
@@ -430,9 +430,9 @@ int XC::DistributedProfileSPDLinSOE::sendSelf(CommParameters &cp)
   }
 
 
-int XC::DistributedProfileSPDLinSOE::recvSelf(const CommParameters &cp)
+int XC::DistributedProfileSPDLinSOE::recvSelf(const Communicator &comm)
   {
-    const int res= receive(cp);
+    const int res= receive(comm);
     sizeLocal= ID(theChannels.size());
     return res;
   }

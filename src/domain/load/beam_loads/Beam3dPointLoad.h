@@ -102,8 +102,8 @@ class Beam3dPointLoad: public BeamPointLoad
     void addFixedEndForcesInBasicSystem(const double &L,const double &loadFactor,FVector &, int release= 0) const;
     void addElasticDeformations(const double &L,const CrossSectionProperties3d &ctes_scc,const double &lpI,const double &lpJ,const double &loadFactor,FVector &v0);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;
 
   };

@@ -129,15 +129,15 @@ int XC::Channel::getTag(void) const
 //! @brief Send \p theObject.
 int XC::Channel::sendMovable(int commitTag, MovableObject &theObject)
   {
-    CommParameters cp(commitTag,*this);
-    return theObject.sendSelf(cp);
+    Communicator comm(commitTag,*this);
+    return theObject.sendSelf(comm);
   }
 
 //! @brief Receive \p theObject.
 int XC::Channel::receiveMovable(int commitTag, MovableObject &theObject, FEM_ObjectBroker &theBroker)
   {
-    CommParameters cp(commitTag,*this, theBroker);
-    return theObject.recvSelf(cp);
+    Communicator comm(commitTag,*this, theBroker);
+    return theObject.recvSelf(comm);
   }
 
 

@@ -86,8 +86,8 @@ class GenericSectionNd: public SectionForceDeformation
 
     void free(void);
     void alloc(const NDMaterial *,const ResponseId *);
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     GenericSectionNd(int tag, const NDMaterial &m,const ResponseId &mCode);
     GenericSectionNd(int tag= 0);
@@ -113,8 +113,8 @@ class GenericSectionNd: public SectionForceDeformation
     const ResponseId &getType(void) const;
     int getOrder(void) const;
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
     void Print(std::ostream &s, int flag = 0) const;
   };

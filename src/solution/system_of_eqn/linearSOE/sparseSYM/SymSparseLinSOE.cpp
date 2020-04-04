@@ -458,14 +458,14 @@ int XC::SymSparseLinSOE::setSymSparseLinSolver(SymSparseLinSolver *newSolver)
   }
 
 
-int XC::SymSparseLinSOE::sendSelf(CommParameters &cp)
+int XC::SymSparseLinSOE::sendSelf(Communicator &comm)
   {
     // not implemented.
     return 0;
   }
 
 
-int XC::SymSparseLinSOE::recvSelf(const CommParameters &cp)
+int XC::SymSparseLinSOE::recvSelf(const Communicator &comm)
   {
     // not implemented.
     return 0;

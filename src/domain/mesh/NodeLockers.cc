@@ -210,7 +210,7 @@ XC::DbTagData &XC::NodeLockers::getDbTagData(void) const
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::NodeLockers::sendData(CommParameters &cp)
+int XC::NodeLockers::sendData(Communicator &comm)
   {
     setDbTagDataPos(0,getTag());
     const size_t sz= node_lockers.size();      
@@ -223,18 +223,18 @@ int XC::NodeLockers::sendData(CommParameters &cp)
         int loc= 0;
         for(std::map<std::string,NodeLocker *>::iterator i=node_lockers.begin();i!=node_lockers.end();i++,loc++)
           {
-            res+= cp.sendString((*i).first,labelData,CommMetaData(loc));
-            res+= cp.sendMovable(*(*i).second,objData,CommMetaData(loc));
+            res+= comm.sendString((*i).first,labelData,CommMetaData(loc));
+            res+= comm.sendMovable(*(*i).second,objData,CommMetaData(loc));
           }
-        res+= labelData.send(getDbTagData(),cp,CommMetaData(2));
-        res+= objData.send(getDbTagData(),cp,CommMetaData(3));
+        res+= labelData.send(getDbTagData(),comm,CommMetaData(2));
+        res+= objData.send(getDbTagData(),comm,CommMetaData(3));
       }
-    res+= cp.sendString(code,getDbTagData(),CommMetaData(4));
+    res+= comm.sendString(code,getDbTagData(),CommMetaData(4));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::NodeLockers::recvData(const CommParameters &cp)
+int XC::NodeLockers::recvData(const Communicator &comm)
   {
     tag= getDbTagDataPos(0);
     const size_t sz= getDbTagDataPos(1);
@@ -242,49 +242,49 @@ int XC::NodeLockers::recvData(const CommParameters &cp)
     if(sz>0)
       {
         DbTagData labelData(sz);
-        res+= labelData.receive(getDbTagData(),cp,CommMetaData(2));
+        res+= labelData.receive(getDbTagData(),comm,CommMetaData(2));
         DbTagData objData(sz);
-        res+= objData.receive(getDbTagData(),cp,CommMetaData(3));
+        res+= objData.receive(getDbTagData(),comm,CommMetaData(3));
         std::string label;
         NodeLocker *tmp= nullptr;
         for(size_t i= 0;i<sz;i++)
           {
-            res+= cp.receiveString(label,labelData,CommMetaData(i));
+            res+= comm.receiveString(label,labelData,CommMetaData(i));
             tmp= newNodeLocker(label);
             if(tmp)
-              res+= cp.receiveMovable(*tmp,objData,CommMetaData(i));
+              res+= comm.receiveMovable(*tmp,objData,CommMetaData(i));
             else
 	      std::cerr << "Error en NodeLockers::recvData label= " 
                         << label << std::endl;
           }
       }
-    res+= cp.receiveString(code,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveString(code,getDbTagData(),CommMetaData(4));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::NodeLockers::sendSelf(CommParameters &cp)
+int XC::NodeLockers::sendSelf(Communicator &comm)
   {
     inicComm(5);
-    int result= sendData(cp);
+    int result= sendData(comm);
 
     const int dataTag= getDbTag();
-    result+= cp.sendIdData(getDbTagData(),dataTag);
+    result+= comm.sendIdData(getDbTagData(),dataTag);
     if(result < 0)
       std::cerr << "NodeLockers::sendSelf() - ch failed to send data\n";
     return result;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::NodeLockers::recvSelf(const CommParameters &cp)
+int XC::NodeLockers::recvSelf(const Communicator &comm)
   {
     inicComm(5);
 
     const int dataTag = this->getDbTag();  
-    int result = cp.receiveIdData(getDbTagData(),dataTag);
+    int result = comm.receiveIdData(getDbTagData(),dataTag);
     if(result<0)
       std::cerr << "NodeLockers::sendSelf() - ch failed to receive data\n";
     else
-      result+= recvData(cp);
+      result+= recvData(comm);
     return result;    
   }

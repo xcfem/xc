@@ -116,8 +116,8 @@ class TimeSeries: public MovableObject, public CommandEntity
     // AddingSensitivity:BEGIN //////////////////////////////////////////
   };
 
-int sendTimeSeriesPtr(TimeSeries *,int posClassTag, int posDbTag,DbTagData &,CommParameters &cp);
-TimeSeries *receiveTimeSeriesPtr(TimeSeries *,int posClassTag, int posDbTag,DbTagData &,const CommParameters &cp);
+int sendTimeSeriesPtr(TimeSeries *,int posClassTag, int posDbTag,DbTagData &,Communicator &comm);
+TimeSeries *receiveTimeSeriesPtr(TimeSeries *,int posClassTag, int posDbTag,DbTagData &,const Communicator &comm);
 
 } // end of XC namespace
 

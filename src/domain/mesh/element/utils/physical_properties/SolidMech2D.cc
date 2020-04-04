@@ -54,45 +54,45 @@ XC::DbTagData &XC::SolidMech2D::getDbTagData(void) const
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::SolidMech2D::sendData(CommParameters &cp)
+int XC::SolidMech2D::sendData(Communicator &comm)
   {
-    int res= NDMaterialPhysicalProperties::sendData(cp);
-    res+= cp.sendDouble(thickness,getDbTagData(),CommMetaData(2));
+    int res= NDMaterialPhysicalProperties::sendData(comm);
+    res+= comm.sendDouble(thickness,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::SolidMech2D::recvData(const CommParameters &cp)
+int XC::SolidMech2D::recvData(const Communicator &comm)
   {
-    int res= NDMaterialPhysicalProperties::recvData(cp);
-    res+= cp.receiveDouble(thickness,getDbTagData(),CommMetaData(2));
+    int res= NDMaterialPhysicalProperties::recvData(comm);
+    res+= comm.receiveDouble(thickness,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 //! @brief Sends object.
-int XC::SolidMech2D::sendSelf(CommParameters &cp)
+int XC::SolidMech2D::sendSelf(Communicator &comm)
   {
     inicComm(DBTAGS_SIZE);
 
-    int res= this->sendData(cp);
+    int res= this->sendData(comm);
 
     const int dataTag= getDbTag();
-    res += cp.sendIdData(getDbTagData(),dataTag);
+    res += comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "SolidMech2D::sendSelf -- failed to send ID data\n";
     return res;
   }
 
 //! @brief Receives object
-int XC::SolidMech2D::recvSelf(const CommParameters &cp)
+int XC::SolidMech2D::recvSelf(const Communicator &comm)
   {
     inicComm(DBTAGS_SIZE);
 
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "SolidMech2D::recvSelf -- failed to receive ID data\n";
     else
-      res+= this->recvData(cp);
+      res+= this->recvData(comm);
     return res;
   }

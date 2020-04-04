@@ -64,8 +64,8 @@ class Element0D: public ElementBase<2>
     virtual void setUp(int Nd1, int Nd2,const Vector &x,const Vector &y);
     ElemPtrArray3d sew(const SetEstruct &f1,const SetEstruct &f2) const;
 
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     Element0D(int tag, int classTag,int Nd1,int Nd2);
     Element0D(int tag, int classTag,int Nd1,int Nd2, int dim);

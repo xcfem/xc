@@ -601,14 +601,14 @@ const XC::Vector &XC::TotalLagrangianFD20NodeBrick::getResistingForceIncInertia(
   }
 
 //=============================================================================
-int XC::TotalLagrangianFD20NodeBrick::sendSelf(CommParameters &cp)
+int XC::TotalLagrangianFD20NodeBrick::sendSelf(Communicator &comm)
   {
      // Not implemtented yet
      return 0;
   }
 
 //=============================================================================
-int XC::TotalLagrangianFD20NodeBrick::recvSelf(const CommParameters &cp)
+int XC::TotalLagrangianFD20NodeBrick::recvSelf(const Communicator &comm)
   {
      // Not implemtented yet
      return 0;

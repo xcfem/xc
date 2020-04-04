@@ -100,46 +100,46 @@ XC::BeamIntegration *XC::HingeRadauBeamIntegration::getCopy(void) const
   { return new HingeRadauBeamIntegration(*this); }
 
 //! @brief Send object members through the channel defined in cp.
-int XC::HingeRadauBeamIntegration::sendData(CommParameters &cp)
+int XC::HingeRadauBeamIntegration::sendData(Communicator &comm)
   {
-    int res= PlasticLengthsBeamIntegration::sendData(cp);
+    int res= PlasticLengthsBeamIntegration::sendData(comm);
     return res;
   }
 
 //! @brief Receives object members through the channel defined in cp.
-int XC::HingeRadauBeamIntegration::recvData(const CommParameters &cp)
+int XC::HingeRadauBeamIntegration::recvData(const Communicator &comm)
   {
-    int res= PlasticLengthsBeamIntegration::recvData(cp);
+    int res= PlasticLengthsBeamIntegration::recvData(comm);
     return res;
   }
 
 //! @brief Sends object through the channel defined in cp.
-int XC::HingeRadauBeamIntegration::sendSelf(CommParameters &cp)
+int XC::HingeRadauBeamIntegration::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(3);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
 //! @brief Receives object through the channel defined in cp.
-int XC::HingeRadauBeamIntegration::recvSelf(const CommParameters &cp)
+int XC::HingeRadauBeamIntegration::recvSelf(const Communicator &comm)
   {
     inicComm(3);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

@@ -74,8 +74,8 @@ class DataOutputDatabaseHandler: public DataOutputHandler
     int write(Vector &data);
   
     int setDatabase(FE_Datastore &theDatabase, const std::string &tableName);
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

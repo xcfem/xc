@@ -54,8 +54,8 @@ class DqUniaxialMaterial: public CommandEntity, public MovableObject, public std
     typedef lst_ptr::size_type size_type;
   protected:
     void copy_list(const DqUniaxialMaterial &,SectionForceDeformation *s= nullptr);
-    int sendData(CommParameters &);  
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);  
+    int recvData(const Communicator &);
 
 
   public:
@@ -104,8 +104,8 @@ class DqUniaxialMaterial: public CommandEntity, public MovableObject, public std
     inline const_reference operator[](const size_t i) const
       { return lst_ptr::operator[](i); }
 
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
 
     void Print(std::ostream &s, int flag =0) const;
 

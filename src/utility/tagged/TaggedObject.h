@@ -95,7 +95,7 @@ class TaggedObject: public CommandEntity
     int theTag; //!< object identifier.
   protected:
     friend class ElementHandler;
-    friend class CommParameters;
+    friend class Communicator;
     template <class T> friend T *getBrokedTagged(const int &,const int &,const int &,FEM_ObjectBroker &,T *(FEM_ObjectBroker::*ptrFunc)(int));
     void setTag(int newTag);  // CAUTION: this is a dangerous method to call
 

@@ -139,8 +139,8 @@ class ProfileSPDLinSOE: public FactoredSOEBase
     
     virtual void zeroA(void);
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
 
     friend class ProfileSPDLinSolver;    
     friend class ProfileSPDLinDirectSolver;

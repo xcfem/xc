@@ -96,18 +96,18 @@ void XC::BaseElasticSection3d::setCrossSectionProperties(const CrossSectionPrope
 
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::BaseElasticSection3d::sendData(CommParameters &cp)
+int XC::BaseElasticSection3d::sendData(Communicator &comm)
   {
-    int res= BaseElasticSection::sendData(cp);
-    res+= cp.sendMovable(ctes_scc,getDbTagData(),CommMetaData(8));
+    int res= BaseElasticSection::sendData(comm);
+    res+= comm.sendMovable(ctes_scc,getDbTagData(),CommMetaData(8));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::BaseElasticSection3d::recvData(const CommParameters &cp)
+int XC::BaseElasticSection3d::recvData(const Communicator &comm)
   {
-    int res= BaseElasticSection::recvData(cp);
-    res+= cp.receiveMovable(ctes_scc,getDbTagData(),CommMetaData(8));
+    int res= BaseElasticSection::recvData(comm);
+    res+= comm.receiveMovable(ctes_scc,getDbTagData(),CommMetaData(8));
     return res;
   }
 

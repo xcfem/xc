@@ -688,50 +688,50 @@ const XC::Vector &XC::DispBeamColumn3d::getResistingForceIncInertia(void) const
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::DispBeamColumn3d::sendData(CommParameters &cp)
+int XC::DispBeamColumn3d::sendData(Communicator &comm)
   {
-    int res= BeamColumnWithSectionFDTrf3d::sendData(cp);
-    res+= sendBeamIntegrationPtr(beamIntegration,13,14,getDbTagData(),cp);
-    res+= cp.sendVector(q,getDbTagData(),CommMetaData(15));
-    res+= p0.sendData(cp,getDbTagData(),CommMetaData(16));
-    res+= q0.sendData(cp,getDbTagData(),CommMetaData(17));
-    res+= cp.sendInt(parameterID,getDbTagData(),CommMetaData(18));
+    int res= BeamColumnWithSectionFDTrf3d::sendData(comm);
+    res+= sendBeamIntegrationPtr(beamIntegration,13,14,getDbTagData(),comm);
+    res+= comm.sendVector(q,getDbTagData(),CommMetaData(15));
+    res+= p0.sendData(comm,getDbTagData(),CommMetaData(16));
+    res+= q0.sendData(comm,getDbTagData(),CommMetaData(17));
+    res+= comm.sendInt(parameterID,getDbTagData(),CommMetaData(18));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::DispBeamColumn3d::recvData(const CommParameters &cp)
+int XC::DispBeamColumn3d::recvData(const Communicator &comm)
   {
-    int res= BeamColumnWithSectionFDTrf3d::recvData(cp);
-    beamIntegration= receiveBeamIntegrationPtr(beamIntegration,13,14,getDbTagData(),cp);
-    res+= cp.receiveVector(q,getDbTagData(),CommMetaData(15));
-    res+= p0.receiveData(cp,getDbTagData(),CommMetaData(16));
-    res+= q0.receiveData(cp,getDbTagData(),CommMetaData(17));
-    res+= cp.receiveInt(parameterID,getDbTagData(),CommMetaData(18));
+    int res= BeamColumnWithSectionFDTrf3d::recvData(comm);
+    beamIntegration= receiveBeamIntegrationPtr(beamIntegration,13,14,getDbTagData(),comm);
+    res+= comm.receiveVector(q,getDbTagData(),CommMetaData(15));
+    res+= p0.receiveData(comm,getDbTagData(),CommMetaData(16));
+    res+= q0.receiveData(comm,getDbTagData(),CommMetaData(17));
+    res+= comm.receiveInt(parameterID,getDbTagData(),CommMetaData(18));
     return res;
   }
 
-int XC::DispBeamColumn3d::sendSelf(CommParameters &cp)
+int XC::DispBeamColumn3d::sendSelf(Communicator &comm)
   {
     inicComm(19);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    const int dataTag= getDbTag(cp);
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    const int dataTag= getDbTag(comm);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "NLBeamColumn3d::sendSelf -- failed to send ID data\n";
     return res;
   }
 
-int XC::DispBeamColumn3d::recvSelf(const CommParameters &cp)
+int XC::DispBeamColumn3d::recvSelf(const Communicator &comm)
   {
     inicComm(19);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "NLBeamColumn3d::recvSelf() - failed to recv ID data";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

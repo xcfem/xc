@@ -214,10 +214,10 @@ void XC::KEigenAlgo::Print(std::ostream &s, int flag) const
   { s << "\t ill-conditioning algorithm \n"; }
 
 //! @brief Send.
-int XC::KEigenAlgo::sendSelf(CommParameters &cp)
+int XC::KEigenAlgo::sendSelf(Communicator &comm)
   { return 0; }
 
 //! @brief Receive.
-int XC::KEigenAlgo::recvSelf(const CommParameters &cp)
+int XC::KEigenAlgo::recvSelf(const Communicator &comm)
   { return 0; }
 

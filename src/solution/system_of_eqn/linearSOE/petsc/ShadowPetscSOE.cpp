@@ -417,14 +417,14 @@ bool XC::ShadowPetscSOE::setSolver(PetscSolver &newSolver)
   }
 
 
-int XC::ShadowPetscSOE::sendSelf(CommParameters &cp)
+int XC::ShadowPetscSOE::sendSelf(Communicator &comm)
   {
     std::cerr << "WARNING XC::ShadowPetscSOE::sendSelf - does not send itself YET\n";
     return 0;
   }
 
 
-int XC::ShadowPetscSOE::recvSelf(const CommParameters &cp)
+int XC::ShadowPetscSOE::recvSelf(const Communicator &comm)
   {
     std::cerr << "WARNING XC::ShadowPetscSOE::sendSelf - does not receive itself YET\n";
     return 0;

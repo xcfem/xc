@@ -83,8 +83,8 @@ class InelasticYS2DGNL: public UpdatedLagrangianBeam2D
   virtual int commitState(void);
   virtual int update(void) const;
   void Print(std::ostream &s, int flag =0) const;
-  int sendSelf(CommParameters &);
-  int recvSelf(const CommParameters &);
+  int sendSelf(Communicator &);
+  int recvSelf(const Communicator &);
 
   virtual Response *setResponse(const std::vector<std::string> &argv,Information &eleInformation);
   virtual int getResponse(int responseID, Information &eleInformation);

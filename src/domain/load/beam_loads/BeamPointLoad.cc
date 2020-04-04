@@ -66,17 +66,17 @@ std::string XC::BeamPointLoad::Categoria(void) const
   { return "punctual"; }
 
 //! @brief Send data through the channel being passed as parameter.
-int XC::BeamPointLoad::sendData(CommParameters &cp)
+int XC::BeamPointLoad::sendData(Communicator &comm)
   {
-    int res= BeamMecLoad::sendData(cp);
-    res+= cp.sendDouble(x,getDbTagData(),CommMetaData(6));
+    int res= BeamMecLoad::sendData(comm);
+    res+= comm.sendDouble(x,getDbTagData(),CommMetaData(6));
     return res;
   }
 
 //! @brief Receive data through the channel being passed as parameter.
-int XC::BeamPointLoad::recvData(const CommParameters &cp)
+int XC::BeamPointLoad::recvData(const Communicator &comm)
   {
-    int res= BeamMecLoad::recvData(cp);
-    res+= cp.receiveDouble(x,getDbTagData(),CommMetaData(6));
+    int res= BeamMecLoad::recvData(comm);
+    res+= comm.receiveDouble(x,getDbTagData(),CommMetaData(6));
     return res;
   }

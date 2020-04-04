@@ -100,8 +100,8 @@ class J2PlaneStress: public J2Plasticity
     // condensation on tangent
     void index_map( int matrix_index, int &i, int &j );
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public : 
     //null constructor
     J2PlaneStress( ) ;
@@ -154,8 +154,8 @@ class J2PlaneStress: public J2Plasticity
     int revertToStart( );
 
     //sending and receiving
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
     
 
 

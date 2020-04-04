@@ -546,16 +546,16 @@ int XC::DistributedSparseGenRowLinSOE::addA(const XC::Matrix &m, const XC::ID &i
     return 0;
 }
 
-int XC::DistributedSparseGenRowLinSOE::sendSelf(CommParameters &cp)
+int XC::DistributedSparseGenRowLinSOE::sendSelf(Communicator &comm)
   {
-    const int retval= send(cp);
+    const int retval= send(comm);
     return retval;
   }
 
 
-int XC::DistributedSparseGenRowLinSOE::recvSelf(const CommParameters &cp)
+int XC::DistributedSparseGenRowLinSOE::recvSelf(const Communicator &comm)
   {
-    const int retval= receive(cp);
+    const int retval= receive(comm);
     return retval;
   }
 

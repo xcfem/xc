@@ -71,10 +71,10 @@ class Shell4NBase: public QuadBase4N<SectionFDPhysicalProperties>
     void formInertiaTerms(int tangFlag) const;
     virtual void formResidAndTangent(int tang_flag) const= 0;
     static void shape2d(const double &,const double &, const double x[2][4], double shp[3][4], double &xsj, double sx[2][2]);
-    int sendCoordTransf(int posFlag,const int &,const int &,CommParameters &);
-    int recvCoordTransf(int posFlag,const int &posClassTag,const int &posDbTag,const CommParameters &);
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendCoordTransf(int posFlag,const int &,const int &,Communicator &);
+    int recvCoordTransf(int posFlag,const int &posClassTag,const int &posDbTag,const Communicator &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     friend class ShellCrdTransf3dBase;
     friend class ShellLinearCrdTransf3d;

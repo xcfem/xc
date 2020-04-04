@@ -424,34 +424,34 @@ int XC::Newmark::update(const XC::Vector &deltaU)
   }    
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::Newmark::sendData(CommParameters &cp)
+int XC::Newmark::sendData(Communicator &comm)
   {
-    int res= NewmarkBase2::sendData(cp);
-    res+= cp.sendBool(displ,getDbTagData(),CommMetaData(14));
-    res+= cp.sendMovable(Ut,getDbTagData(),CommMetaData(15));
-    res+= cp.sendBool(determiningMass,getDbTagData(),CommMetaData(16));
+    int res= NewmarkBase2::sendData(comm);
+    res+= comm.sendBool(displ,getDbTagData(),CommMetaData(14));
+    res+= comm.sendMovable(Ut,getDbTagData(),CommMetaData(15));
+    res+= comm.sendBool(determiningMass,getDbTagData(),CommMetaData(16));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::Newmark::recvData(const CommParameters &cp)
+int XC::Newmark::recvData(const Communicator &comm)
   {
-    int res= NewmarkBase2::recvData(cp);
-    res+= cp.receiveBool(displ,getDbTagData(),CommMetaData(14));
-    res+= cp.receiveMovable(Ut,getDbTagData(),CommMetaData(15));
-    res+= cp.receiveBool(determiningMass,getDbTagData(),CommMetaData(16));
+    int res= NewmarkBase2::recvData(comm);
+    res+= comm.receiveBool(displ,getDbTagData(),CommMetaData(14));
+    res+= comm.receiveMovable(Ut,getDbTagData(),CommMetaData(15));
+    res+= comm.receiveBool(determiningMass,getDbTagData(),CommMetaData(16));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::Newmark::sendSelf(CommParameters &cp)
+int XC::Newmark::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(25);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data\n";
@@ -459,11 +459,11 @@ int XC::Newmark::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::Newmark::recvSelf(const CommParameters &cp)
+int XC::Newmark::recvSelf(const Communicator &comm)
   {
     inicComm(25);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -471,7 +471,7 @@ int XC::Newmark::recvSelf(const CommParameters &cp)
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

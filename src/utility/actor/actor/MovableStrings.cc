@@ -33,9 +33,9 @@ XC::MovableStrings::MovableStrings(std::deque<std::string> &v)
   : MovableContainer<std::deque<std::string> >(v) {}
 
 //! @brief Sends a container intem.
-int XC::MovableStrings::sendItem(const std::string &s,CommParameters &cp,DbTagData &dt, const CommMetaData &meta)
-  { return cp.sendString(s,dt,meta); }
+int XC::MovableStrings::sendItem(const std::string &s,Communicator &comm,DbTagData &dt, const CommMetaData &meta)
+  { return comm.sendString(s,dt,meta); }
 
 //! @brief Receives a container item.
-int XC::MovableStrings::receiveItem(std::string &s,const CommParameters &cp,DbTagData &dt, const CommMetaData &meta)
-  { return cp.receiveString(s,dt,meta); }
+int XC::MovableStrings::receiveItem(std::string &s,const Communicator &comm,DbTagData &dt, const CommMetaData &meta)
+  { return comm.receiveString(s,dt,meta); }

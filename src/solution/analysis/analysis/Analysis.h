@@ -98,7 +98,7 @@ class ConvergenceTest;
 class FEM_ObjectBroker;
 class ID;
 
-class CommParameters;
+class Communicator;
 
 
 //! @ingroup Analysis
@@ -172,19 +172,19 @@ class Analysis: public CommandEntity
     virtual int setIntegrator(Integrator &theNewIntegrator);
     virtual int setAlgorithm(SolutionAlgorithm &theNewAlgorithm);
 
-    void brokeConstraintHandler(const CommParameters &,const ID &);
-    void brokeNumberer(const CommParameters &,const ID &);
-    void brokeAnalysisModel(const CommParameters &,const ID &);
+    void brokeConstraintHandler(const Communicator &,const ID &);
+    void brokeNumberer(const Communicator &,const ID &);
+    void brokeAnalysisModel(const Communicator &,const ID &);
 
-    void brokeDDLinearSOE(const CommParameters &,const ID &);
-    void brokeLinearSOE(const CommParameters &,const ID &);
+    void brokeDDLinearSOE(const Communicator &,const ID &);
+    void brokeLinearSOE(const Communicator &,const ID &);
 
-    void brokeIncrementalIntegrator(const CommParameters &,const ID &);
-    void brokeStaticIntegrator(const CommParameters &,const ID &);
-    void brokeTransientIntegrator(const CommParameters &,const ID &);
+    void brokeIncrementalIntegrator(const Communicator &,const ID &);
+    void brokeStaticIntegrator(const Communicator &,const ID &);
+    void brokeTransientIntegrator(const Communicator &,const ID &);
 
-    void brokeDomainDecompAlgo(const CommParameters &,const ID &);
-    void brokeEquiSolnAlgo(const CommParameters &,const ID &);
+    void brokeDomainDecompAlgo(const Communicator &,const ID &);
+    void brokeEquiSolnAlgo(const Communicator &,const ID &);
 
     inline int getAnalysisResult(void) const
       { return analysis_result; }

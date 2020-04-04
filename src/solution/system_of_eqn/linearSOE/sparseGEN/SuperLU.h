@@ -124,8 +124,8 @@ class SuperLU: public SparseGenColLinSolver
     int solve(void);
     int setSize(void);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
     void Print(std::ostream &os) const;
   };

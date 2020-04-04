@@ -81,18 +81,18 @@ XC::PeriodSeries::PeriodSeries(int classTag)
   : PulseBaseSeries(classTag,1.0), period(1.0),shift(0.0) {}
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::PeriodSeries::sendData(CommParameters &cp)
+int XC::PeriodSeries::sendData(Communicator &comm)
   {
-    int res= PulseBaseSeries::sendData(cp);
-    res+= cp.sendDoubles(period,shift,getDbTagData(),CommMetaData(2));
+    int res= PulseBaseSeries::sendData(comm);
+    res+= comm.sendDoubles(period,shift,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::PeriodSeries::recvData(const CommParameters &cp)
+int XC::PeriodSeries::recvData(const Communicator &comm)
   {
-    int res= PulseBaseSeries::recvData(cp);
-    res+= cp.receiveDoubles(period,shift,getDbTagData(),CommMetaData(2));
+    int res= PulseBaseSeries::recvData(comm);
+    res+= comm.receiveDoubles(period,shift,getDbTagData(),CommMetaData(2));
     return res;
   }
 

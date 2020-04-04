@@ -48,18 +48,18 @@ void XC::HingeBeamIntegration2d::addElasticDeformations(ElementalLoad *theLoad,d
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::HingeBeamIntegration2d::sendData(CommParameters &cp)
+int XC::HingeBeamIntegration2d::sendData(Communicator &comm)
   {
-    int res= PlasticLengthsBeamIntegration::sendData(cp);
-    res+= cp.sendDoubles(E,A,I,getDbTagData(),CommMetaData(2));
+    int res= PlasticLengthsBeamIntegration::sendData(comm);
+    res+= comm.sendDoubles(E,A,I,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::HingeBeamIntegration2d::recvData(const CommParameters &cp)
+int XC::HingeBeamIntegration2d::recvData(const Communicator &comm)
   {
-    int res= PlasticLengthsBeamIntegration::recvData(cp);
-    res+= cp.receiveDoubles(E,A,I,getDbTagData(),CommMetaData(2));
+    int res= PlasticLengthsBeamIntegration::recvData(comm);
+    res+= comm.receiveDoubles(E,A,I,getDbTagData(),CommMetaData(2));
     return res;
   }
 

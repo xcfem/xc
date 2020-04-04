@@ -150,50 +150,50 @@ XC::BeamIntegration *XC::LowOrderBeamIntegration::getCopy(void) const
   { return new LowOrderBeamIntegration(*this); }
 
 //! @brief Send object members through the channel defined in cp.
-int XC::LowOrderBeamIntegration::sendData(CommParameters &cp)
+int XC::LowOrderBeamIntegration::sendData(Communicator &comm)
   {
-    int res= ParameterIDBeamIntegration::sendData(cp);
-    res+= cp.sendInt(Nc,getDbTagData(),CommMetaData(6));
-    res+= cp.sendBool(computed,getDbTagData(),CommMetaData(7));
+    int res= ParameterIDBeamIntegration::sendData(comm);
+    res+= comm.sendInt(Nc,getDbTagData(),CommMetaData(6));
+    res+= comm.sendBool(computed,getDbTagData(),CommMetaData(7));
     return res;
   }
 
 //! @brief Receives object members through the channel defined in cp.
-int XC::LowOrderBeamIntegration::recvData(const CommParameters &cp)
+int XC::LowOrderBeamIntegration::recvData(const Communicator &comm)
   {
-    int res= ParameterIDBeamIntegration::recvData(cp);
-    res+= cp.receiveInt(Nc,getDbTagData(),CommMetaData(6));
-    res+= cp.receiveBool(computed,getDbTagData(),CommMetaData(7));
+    int res= ParameterIDBeamIntegration::recvData(comm);
+    res+= comm.receiveInt(Nc,getDbTagData(),CommMetaData(6));
+    res+= comm.receiveBool(computed,getDbTagData(),CommMetaData(7));
     return res;
   }
 
 //! @brief Sends object through the channel defined in cp.
-int XC::LowOrderBeamIntegration::sendSelf(CommParameters &cp)
+int XC::LowOrderBeamIntegration::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(8);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
 //! @brief Receives object through the channel defined in cp.
-int XC::LowOrderBeamIntegration::recvSelf(const CommParameters &cp)
+int XC::LowOrderBeamIntegration::recvSelf(const Communicator &comm)
   {
     inicComm(8);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

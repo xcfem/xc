@@ -51,8 +51,8 @@ class MovableVector: public Vector, public MovableObject
 
     void setVector(const Vector &);
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
 
   };
 

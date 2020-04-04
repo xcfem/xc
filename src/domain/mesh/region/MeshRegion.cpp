@@ -306,52 +306,52 @@ int XC::MeshRegion::setRayleighDampingFactors(const RayleighDampingFactors &rF)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::MeshRegion::sendData(CommParameters &cp)
+int XC::MeshRegion::sendData(Communicator &comm)
   {
-    int res= ContinuaReprComponent::sendData(cp);
-    res+= cp.sendMovable(rayFactors,getDbTagData(),CommMetaData(2));
-    res+= cp.sendIDPtr(theNodes,getDbTagData(),ArrayCommMetaData(3,4,5));
-    res+= cp.sendIDPtr(theElements,getDbTagData(),ArrayCommMetaData(6,7,8));
-    res+= cp.sendInts(currentGeoTag,lastGeoSendTag,getDbTagData(),CommMetaData(9));
+    int res= ContinuaReprComponent::sendData(comm);
+    res+= comm.sendMovable(rayFactors,getDbTagData(),CommMetaData(2));
+    res+= comm.sendIDPtr(theNodes,getDbTagData(),ArrayCommMetaData(3,4,5));
+    res+= comm.sendIDPtr(theElements,getDbTagData(),ArrayCommMetaData(6,7,8));
+    res+= comm.sendInts(currentGeoTag,lastGeoSendTag,getDbTagData(),CommMetaData(9));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::MeshRegion::recvData(const CommParameters &cp)
+int XC::MeshRegion::recvData(const Communicator &comm)
   {
-    int res= ContinuaReprComponent::recvData(cp);
-    res+= cp.receiveMovable(rayFactors,getDbTagData(),CommMetaData(2));
-    theNodes= cp.receiveIDPtr(theNodes,getDbTagData(),ArrayCommMetaData(3,4,5));
-    theElements= cp.receiveIDPtr(theElements,getDbTagData(),ArrayCommMetaData(6,7,8));
-    res+= cp.receiveInts(currentGeoTag,lastGeoSendTag,getDbTagData(),CommMetaData(9));
+    int res= ContinuaReprComponent::recvData(comm);
+    res+= comm.receiveMovable(rayFactors,getDbTagData(),CommMetaData(2));
+    theNodes= comm.receiveIDPtr(theNodes,getDbTagData(),ArrayCommMetaData(3,4,5));
+    theElements= comm.receiveIDPtr(theElements,getDbTagData(),ArrayCommMetaData(6,7,8));
+    res+= comm.receiveInts(currentGeoTag,lastGeoSendTag,getDbTagData(),CommMetaData(9));
     return res;
   }
 
-int XC::MeshRegion::sendSelf(CommParameters &cp)
+int XC::MeshRegion::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(9);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
-int XC::MeshRegion::recvSelf(const CommParameters &cp)
+int XC::MeshRegion::recvSelf(const Communicator &comm)
   {
     inicComm(9);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

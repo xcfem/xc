@@ -165,48 +165,48 @@ XC::UniaxialMaterial * XC::ParallelMaterial::getCopy(void) const
   { return new ParallelMaterial(*this); }
 
 //! @brief Send its members through the channel being passed as parameter.
-int XC::ParallelMaterial::sendData(CommParameters &cp)
+int XC::ParallelMaterial::sendData(Communicator &comm)
   {
-    int res= ConnectedMaterial::sendData(cp);
-    res+= cp.sendDoubles(trialStrain,trialStrainRate,getDbTagData(),CommMetaData(3));
+    int res= ConnectedMaterial::sendData(comm);
+    res+= comm.sendDoubles(trialStrain,trialStrainRate,getDbTagData(),CommMetaData(3));
     return res;
   }
 
 //! @brief Receives its members through the channel being passed as parameter.
-int XC::ParallelMaterial::recvData(const CommParameters &cp)
+int XC::ParallelMaterial::recvData(const Communicator &comm)
   {
-    int res= ConnectedMaterial::recvData(cp);
-    res+= cp.receiveDoubles(trialStrain,trialStrainRate,getDbTagData(),CommMetaData(3));
+    int res= ConnectedMaterial::recvData(comm);
+    res+= comm.receiveDoubles(trialStrain,trialStrainRate,getDbTagData(),CommMetaData(3));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::ParallelMaterial::sendSelf(CommParameters &cp)
+int XC::ParallelMaterial::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(4);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::ParallelMaterial::recvSelf(const CommParameters &cp)
+int XC::ParallelMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(4);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

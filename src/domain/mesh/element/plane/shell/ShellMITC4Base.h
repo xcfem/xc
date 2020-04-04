@@ -52,8 +52,8 @@ class ShellMITC4Base: public Shell4NBase
     const Matrix& assembleB(const Matrix &Bmembrane, const Matrix &Bbend, const Matrix &Bshear) const;
     const Matrix& computeBmembrane(int node, const double shp[3][4] ) const;
     const Matrix& computeBbend(int node, const double shp[3][4] ) const;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public:
     //null constructor

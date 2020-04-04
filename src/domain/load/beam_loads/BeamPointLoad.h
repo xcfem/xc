@@ -41,8 +41,8 @@ class BeamPointLoad: public BeamMecLoad
   protected:
     double x; //!< relative distance (x/L) along length from end 1 of element
 
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
   public:
     BeamPointLoad(int tag, int classTag, double Pt, double x,const ID &theElementTags, double Pa = 0.0);

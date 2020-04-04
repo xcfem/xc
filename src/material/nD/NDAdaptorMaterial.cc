@@ -84,23 +84,23 @@ const XC::Vector& XC::NDAdaptorMaterial::getStrain(void)
   { return strain; }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::NDAdaptorMaterial::sendData(CommParameters &cp)
+int XC::NDAdaptorMaterial::sendData(Communicator &comm)
   {
-    int res= NDMaterial::sendData(cp);
-    res+= cp.sendDoubles(Tstrain22,Cstrain22,getDbTagData(),CommMetaData(1));
-    res+= cp.sendVector(strain,getDbTagData(),CommMetaData(2));
-    res+= cp.sendBrokedPtr(theMaterial,getDbTagData(),BrokedPtrCommMetaData(3,4,5));
+    int res= NDMaterial::sendData(comm);
+    res+= comm.sendDoubles(Tstrain22,Cstrain22,getDbTagData(),CommMetaData(1));
+    res+= comm.sendVector(strain,getDbTagData(),CommMetaData(2));
+    res+= comm.sendBrokedPtr(theMaterial,getDbTagData(),BrokedPtrCommMetaData(3,4,5));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::NDAdaptorMaterial::recvData(const CommParameters &cp)
+int XC::NDAdaptorMaterial::recvData(const Communicator &comm)
   {
-    int res= NDMaterial::recvData(cp);
-    res+= cp.receiveDoubles(Tstrain22,Cstrain22,getDbTagData(),CommMetaData(1));
-    res+= cp.receiveVector(strain,getDbTagData(),CommMetaData(2));
+    int res= NDMaterial::recvData(comm);
+    res+= comm.receiveDoubles(Tstrain22,Cstrain22,getDbTagData(),CommMetaData(1));
+    res+= comm.receiveVector(strain,getDbTagData(),CommMetaData(2));
     if(theMaterial) delete theMaterial;
-    theMaterial= cp.getBrokedMaterial(theMaterial,getDbTagData(),BrokedPtrCommMetaData(3,4,5));
+    theMaterial= comm.getBrokedMaterial(theMaterial,getDbTagData(),BrokedPtrCommMetaData(3,4,5));
     return res;
   }
 

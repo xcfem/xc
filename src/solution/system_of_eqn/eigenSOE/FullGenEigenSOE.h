@@ -95,8 +95,8 @@ class FullGenEigenSOE: public EigenSOE
     virtual void save(void) const;
     virtual void restore(void);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 inline SystemOfEqn *FullGenEigenSOE::getCopy(void) const
   { return new FullGenEigenSOE(*this); }

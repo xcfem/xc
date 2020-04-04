@@ -300,31 +300,31 @@ double XC::PathTimeSeries::getDuration(void) const
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::PathTimeSeries::sendData(CommParameters &cp)
+int XC::PathTimeSeries::sendData(Communicator &comm)
   {
-    int res= PathSeriesBase::sendData(cp);
-    res+= cp.sendVector(time,getDbTagData(),CommMetaData(5));
-    res+= cp.sendInt(currentTimeLoc,getDbTagData(),CommMetaData(6));
+    int res= PathSeriesBase::sendData(comm);
+    res+= comm.sendVector(time,getDbTagData(),CommMetaData(5));
+    res+= comm.sendInt(currentTimeLoc,getDbTagData(),CommMetaData(6));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::PathTimeSeries::recvData(const CommParameters &cp)
+int XC::PathTimeSeries::recvData(const Communicator &comm)
   {
-    int res= PathSeriesBase::recvData(cp);
-    res+= cp.receiveVector(time,getDbTagData(),CommMetaData(5));
-    res+= cp.receiveInt(currentTimeLoc,getDbTagData(),CommMetaData(6));
+    int res= PathSeriesBase::recvData(comm);
+    res+= comm.receiveVector(time,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveInt(currentTimeLoc,getDbTagData(),CommMetaData(6));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::PathTimeSeries::sendSelf(CommParameters &cp)
+int XC::PathTimeSeries::sendSelf(Communicator &comm)
   {
     inicComm(9);
-    int result= sendData(cp);
+    int result= sendData(comm);
 
     const int dataTag= getDbTag();
-    result+= cp.sendIdData(getDbTagData(),dataTag);
+    result+= comm.sendIdData(getDbTagData(),dataTag);
     if(result < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; ch failed to send data.\n";
@@ -333,17 +333,17 @@ int XC::PathTimeSeries::sendSelf(CommParameters &cp)
 
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::PathTimeSeries::recvSelf(const CommParameters &cp)
+int XC::PathTimeSeries::recvSelf(const Communicator &comm)
   {
     inicComm(9);
 
     const int dataTag= this->getDbTag();  
-    int result= cp.receiveIdData(getDbTagData(),dataTag);
+    int result= comm.receiveIdData(getDbTagData(),dataTag);
     if(result<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; ch failed to receive data.\n";
     else
-      result+= recvData(cp);
+      result+= recvData(comm);
     return result;    
   }
 

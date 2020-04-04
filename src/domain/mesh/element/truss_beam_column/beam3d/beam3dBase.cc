@@ -161,24 +161,24 @@ const XC::Vector &XC::beam3dBase::getResistingForce(void) const
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::beam3dBase::sendData(CommParameters &cp)
+int XC::beam3dBase::sendData(Communicator &comm)
   {
-    int res= ProtoBeam3d::sendData(cp);
-    res+= cp.sendDoubles(theta,L,getDbTagData(),CommMetaData(8));
-    res+= cp.sendMatrix(k,getDbTagData(),CommMetaData(9));
-    res+= cp.sendVector(rForce,getDbTagData(),CommMetaData(10));
-    res+= cp.sendBool(isStiffFormed,getDbTagData(),CommMetaData(11));
+    int res= ProtoBeam3d::sendData(comm);
+    res+= comm.sendDoubles(theta,L,getDbTagData(),CommMetaData(8));
+    res+= comm.sendMatrix(k,getDbTagData(),CommMetaData(9));
+    res+= comm.sendVector(rForce,getDbTagData(),CommMetaData(10));
+    res+= comm.sendBool(isStiffFormed,getDbTagData(),CommMetaData(11));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::beam3dBase::recvData(const CommParameters &cp)
+int XC::beam3dBase::recvData(const Communicator &comm)
   {
-    int res= ProtoBeam3d::recvData(cp);
-    res+= cp.receiveDoubles(theta,L,getDbTagData(),CommMetaData(8));
-    res+= cp.receiveMatrix(k,getDbTagData(),CommMetaData(9));
-    res+= cp.receiveVector(rForce,getDbTagData(),CommMetaData(10));
-    res+= cp.receiveBool(isStiffFormed,getDbTagData(),CommMetaData(11));
+    int res= ProtoBeam3d::recvData(comm);
+    res+= comm.receiveDoubles(theta,L,getDbTagData(),CommMetaData(8));
+    res+= comm.receiveMatrix(k,getDbTagData(),CommMetaData(9));
+    res+= comm.receiveVector(rForce,getDbTagData(),CommMetaData(10));
+    res+= comm.receiveBool(isStiffFormed,getDbTagData(),CommMetaData(11));
     return res;
   }
 

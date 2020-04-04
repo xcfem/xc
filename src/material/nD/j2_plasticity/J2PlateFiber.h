@@ -100,8 +100,8 @@ class J2PlateFiber: public J2Plasticity
     // condensation on tangent
     void index_map( int matrix_index, int &i, int &j ) const;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public : 
 
     J2PlateFiber(int tag);
@@ -156,8 +156,8 @@ class J2PlateFiber: public J2Plasticity
     int revertToStart( );
 
     //sending and receiving
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
   };
 
 }//end of XC namespace

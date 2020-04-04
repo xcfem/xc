@@ -63,17 +63,17 @@ int XC::ElasticPlateBase::revertToStart(void)
   { return 0; }
 
 //! @brief Send data through the channel being passed as parameter.
-int XC::ElasticPlateBase::sendData(CommParameters &cp)
+int XC::ElasticPlateBase::sendData(Communicator &comm)
   {
-    int res= PlateBase::sendData(cp);
-    res+= cp.sendDoubles(E,nu,h,getDbTagData(),CommMetaData(5));
+    int res= PlateBase::sendData(comm);
+    res+= comm.sendDoubles(E,nu,h,getDbTagData(),CommMetaData(5));
     return res;
   }
 
 //! @brief Receive data through the channel being passed as parameter.
-int XC::ElasticPlateBase::recvData(const CommParameters &cp)
+int XC::ElasticPlateBase::recvData(const Communicator &comm)
   {
-    int res= PlateBase::recvData(cp);
-    res+= cp.receiveDoubles(E,nu,h,getDbTagData(),CommMetaData(5));
+    int res= PlateBase::recvData(comm);
+    res+= comm.receiveDoubles(E,nu,h,getDbTagData(),CommMetaData(5));
     return res;
   }

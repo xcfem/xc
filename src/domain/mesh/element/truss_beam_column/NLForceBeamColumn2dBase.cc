@@ -129,39 +129,39 @@ void XC::NLForceBeamColumn2dBase::initializeSectionHistoryVariables(void)
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::NLForceBeamColumn2dBase::sendData(CommParameters &cp)
+int XC::NLForceBeamColumn2dBase::sendData(Communicator &comm)
   {
-    int res= BeamColumnWithSectionFDTrf2d::sendData(cp);
-    res+= cp.sendDouble(tol,getDbTagData(),CommMetaData(13));
-    res+= cp.sendInts(maxIters,initialFlag,getDbTagData(),CommMetaData(14));
-    res+= cp.sendMatrix(kv,getDbTagData(),CommMetaData(15));
-    res+= cp.sendVector(Se,getDbTagData(),CommMetaData(16));
-    res+= cp.sendMatrix(kvcommit,getDbTagData(),CommMetaData(17));
-    res+= cp.sendVector(Secommit,getDbTagData(),CommMetaData(18));
-    res+= cp.sendMatrices(fs,getDbTagData(),CommMetaData(19));;
-    res+= cp.sendVectors(vs,getDbTagData(),CommMetaData(20));
-    res+= cp.sendVectors(Ssr,getDbTagData(),CommMetaData(21));
-    res+= cp.sendVectors(vscommit,getDbTagData(),CommMetaData(22));
-    res+= cp.sendMatrix(sp,getDbTagData(),CommMetaData(23));
-    res+= p0.sendData(cp,getDbTagData(),CommMetaData(24));
+    int res= BeamColumnWithSectionFDTrf2d::sendData(comm);
+    res+= comm.sendDouble(tol,getDbTagData(),CommMetaData(13));
+    res+= comm.sendInts(maxIters,initialFlag,getDbTagData(),CommMetaData(14));
+    res+= comm.sendMatrix(kv,getDbTagData(),CommMetaData(15));
+    res+= comm.sendVector(Se,getDbTagData(),CommMetaData(16));
+    res+= comm.sendMatrix(kvcommit,getDbTagData(),CommMetaData(17));
+    res+= comm.sendVector(Secommit,getDbTagData(),CommMetaData(18));
+    res+= comm.sendMatrices(fs,getDbTagData(),CommMetaData(19));;
+    res+= comm.sendVectors(vs,getDbTagData(),CommMetaData(20));
+    res+= comm.sendVectors(Ssr,getDbTagData(),CommMetaData(21));
+    res+= comm.sendVectors(vscommit,getDbTagData(),CommMetaData(22));
+    res+= comm.sendMatrix(sp,getDbTagData(),CommMetaData(23));
+    res+= p0.sendData(comm,getDbTagData(),CommMetaData(24));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::NLForceBeamColumn2dBase::recvData(const CommParameters &cp)
+int XC::NLForceBeamColumn2dBase::recvData(const Communicator &comm)
   {
-    int res= BeamColumnWithSectionFDTrf2d::recvData(cp);
-    res+= cp.receiveDouble(tol,getDbTagData(),CommMetaData(13));
-    res+= cp.receiveInts(maxIters,initialFlag,getDbTagData(),CommMetaData(14));
-    res+= cp.receiveMatrix(kv,getDbTagData(),CommMetaData(15));
-    res+= cp.receiveVector(Se,getDbTagData(),CommMetaData(16));
-    res+= cp.receiveMatrix(kvcommit,getDbTagData(),CommMetaData(17));
-    res+= cp.receiveVector(Secommit,getDbTagData(),CommMetaData(18));
-    res+= cp.receiveMatrices(fs,getDbTagData(),CommMetaData(19));;
-    res+= cp.receiveVectors(vs,getDbTagData(),CommMetaData(20));
-    res+= cp.receiveVectors(Ssr,getDbTagData(),CommMetaData(21));
-    res+= cp.receiveVectors(vscommit,getDbTagData(),CommMetaData(22));
-    res+= cp.receiveMatrix(sp,getDbTagData(),CommMetaData(23));
-    res+= p0.receiveData(cp,getDbTagData(),CommMetaData(24));
+    int res= BeamColumnWithSectionFDTrf2d::recvData(comm);
+    res+= comm.receiveDouble(tol,getDbTagData(),CommMetaData(13));
+    res+= comm.receiveInts(maxIters,initialFlag,getDbTagData(),CommMetaData(14));
+    res+= comm.receiveMatrix(kv,getDbTagData(),CommMetaData(15));
+    res+= comm.receiveVector(Se,getDbTagData(),CommMetaData(16));
+    res+= comm.receiveMatrix(kvcommit,getDbTagData(),CommMetaData(17));
+    res+= comm.receiveVector(Secommit,getDbTagData(),CommMetaData(18));
+    res+= comm.receiveMatrices(fs,getDbTagData(),CommMetaData(19));;
+    res+= comm.receiveVectors(vs,getDbTagData(),CommMetaData(20));
+    res+= comm.receiveVectors(Ssr,getDbTagData(),CommMetaData(21));
+    res+= comm.receiveVectors(vscommit,getDbTagData(),CommMetaData(22));
+    res+= comm.receiveMatrix(sp,getDbTagData(),CommMetaData(23));
+    res+= p0.receiveData(comm,getDbTagData(),CommMetaData(24));
     return res;
   }

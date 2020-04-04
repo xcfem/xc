@@ -89,8 +89,8 @@ class DomainComponent: public TaggedObject, public MovableObject
     size_t idx; //!< Index of the object (to be used in VTK arrays).
   protected:
     DomainComponent(int tag, int classTag);
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     ~DomainComponent(void);
     //! @brief Returns the index of the object (to be used in VTK arrays).

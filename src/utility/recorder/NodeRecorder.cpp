@@ -473,37 +473,37 @@ int XC::NodeRecorder::record(int commitTag, double timeStamp)
 
 //! @brief Send the object through the communicator
 //! being passed as parameter.
-int XC::NodeRecorder::sendData(CommParameters &cp)
+int XC::NodeRecorder::sendData(Communicator &comm)
   {
-    int res= NodeRecorderBase::sendData(cp);
+    int res= NodeRecorderBase::sendData(comm);
     setDbTagDataPos(14,gradIndex);
     return res;
   }
 
 //! @brief Receive the object through the communicator
 //! being passed as parameter.
-int XC::NodeRecorder::receiveData(const CommParameters &cp)
+int XC::NodeRecorder::receiveData(const Communicator &comm)
   {
-    int res= NodeRecorderBase::receiveData(cp);
+    int res= NodeRecorderBase::receiveData(comm);
     gradIndex= getDbTagDataPos(14);
     return res;
   }
 
 //! @brief Send the object through the communicator
 //! being passed as parameter.
-int XC::NodeRecorder::sendSelf(CommParameters &cp)
+int XC::NodeRecorder::sendSelf(Communicator &comm)
   {
     int res= 0;
-    if(cp.isDatastore() == 1)
+    if(comm.isDatastore() == 1)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; does not send data to a datastore\n";
     else
       {
-        setDbTag(cp);
+        setDbTag(comm);
         const int dataTag= getDbTag();
         inicComm(14);
-        res= sendData(cp);
-        if(cp.sendIdData(getDbTagData(),dataTag)< 0)
+        res= sendData(comm);
+        if(comm.sendIdData(getDbTagData(),dataTag)< 0)
           {
             std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; failed to send data\n";
@@ -515,24 +515,24 @@ int XC::NodeRecorder::sendSelf(CommParameters &cp)
 
 //! @brief Receive the object through the communicator
 //! being passed as parameter.
-int XC::NodeRecorder::recvSelf(const CommParameters &cp)
+int XC::NodeRecorder::recvSelf(const Communicator &comm)
   {
     int res= 0;
-    if(cp.isDatastore() == 1)
+    if(comm.isDatastore() == 1)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; does not recv data to a datastore\n";
     else
       {
         inicComm(14);
         const int dataTag= getDbTag();
-        res= cp.receiveIdData(getDbTagData(),dataTag);
+        res= comm.receiveIdData(getDbTagData(),dataTag);
         if(res < 0)
           {
             std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; failed to recv data\n";
             return res;
           }
-        res= receiveData(cp);
+        res= receiveData(comm);
       }
     return res;
   }

@@ -178,56 +178,56 @@ XC::UniaxialMaterial *XC::DrainMaterial::getCopy(void) const
 
 
 //! @brief Send its members through the channel being passed as parameter.
-int XC::DrainMaterial::sendData(CommParameters &cp)
+int XC::DrainMaterial::sendData(Communicator &comm)
   {
-    int res= UniaxialMaterial::sendData(cp);
-    res+= cp.sendDoubles(epsilon,epsilonDot,sigma,tangent,getDbTagData(),CommMetaData(3));
-    res+= cp.sendVector(matParams,getDbTagData(),CommMetaData(4));
-    res+= cp.sendVector(hstv,getDbTagData(),CommMetaData(5));
-    res+= cp.sendInts(numData,numHstv,getDbTagData(),CommMetaData(6));
-    res+= cp.sendDoubles(epsilonP,sigmaP,tangentP,beto,initialTangent,getDbTagData(),CommMetaData(7));
+    int res= UniaxialMaterial::sendData(comm);
+    res+= comm.sendDoubles(epsilon,epsilonDot,sigma,tangent,getDbTagData(),CommMetaData(3));
+    res+= comm.sendVector(matParams,getDbTagData(),CommMetaData(4));
+    res+= comm.sendVector(hstv,getDbTagData(),CommMetaData(5));
+    res+= comm.sendInts(numData,numHstv,getDbTagData(),CommMetaData(6));
+    res+= comm.sendDoubles(epsilonP,sigmaP,tangentP,beto,initialTangent,getDbTagData(),CommMetaData(7));
     return res;
   }
 
 //! @brief Receives its members through the channel being passed as parameter.
-int XC::DrainMaterial::recvData(const CommParameters &cp)
+int XC::DrainMaterial::recvData(const Communicator &comm)
   {
-    int res= UniaxialMaterial::recvData(cp);
-    res+= cp.receiveDoubles(epsilon,epsilonDot,sigma,tangent,getDbTagData(),CommMetaData(3));
-    res+= cp.receiveVector(matParams,getDbTagData(),CommMetaData(4));
-    res+= cp.receiveVector(hstv,getDbTagData(),CommMetaData(5));
-    res+= cp.receiveInts(numData,numHstv,getDbTagData(),CommMetaData(6));
-    res+= cp.receiveDoubles(epsilonP,sigmaP,tangentP,beto,initialTangent,getDbTagData(),CommMetaData(7));
+    int res= UniaxialMaterial::recvData(comm);
+    res+= comm.receiveDoubles(epsilon,epsilonDot,sigma,tangent,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveVector(matParams,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveVector(hstv,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveInts(numData,numHstv,getDbTagData(),CommMetaData(6));
+    res+= comm.receiveDoubles(epsilonP,sigmaP,tangentP,beto,initialTangent,getDbTagData(),CommMetaData(7));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::DrainMaterial::sendSelf(CommParameters &cp)
+int XC::DrainMaterial::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(8);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::DrainMaterial::recvSelf(const CommParameters &cp)
+int XC::DrainMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(8);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

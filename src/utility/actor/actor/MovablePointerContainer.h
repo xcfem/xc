@@ -32,7 +32,7 @@
 #define MovablePointerContainer_h
 
 #include "MovableObject.h"
-#include "CommParameters.h"
+#include "Communicator.h"
 
 namespace XC {
 
@@ -46,13 +46,13 @@ class MovablePointerContainer: public MovableObject
     T *(FEM_ObjectBroker::*ptrFunc)(int);
 
     DbTagData &getDbTagData(void) const;
-    T *getBrokedObject(const int &,const int &,const CommParameters &);
-    virtual int sendData(CommParameters &)= 0;
-    virtual int recvData(const CommParameters &)= 0;
+    T *getBrokedObject(const int &,const int &,const Communicator &);
+    virtual int sendData(Communicator &)= 0;
+    virtual int recvData(const Communicator &)= 0;
   public:
     MovablePointerContainer(const int &, T *(FEM_ObjectBroker::*pF)(int));
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 
 
@@ -72,18 +72,18 @@ XC::DbTagData &XC::MovablePointerContainer<T>::getDbTagData(void) const
 
 //! @brief Returns an empty object of the class identified by classTag.
 template <class T>
-T *XC::MovablePointerContainer<T>::getBrokedObject(const int &dbTag,const int &classTag,const CommParameters &cp)
-  { return getBrokedMovable(dbTag,classTag,cp,this->ptrFunc); }
+T *XC::MovablePointerContainer<T>::getBrokedObject(const int &dbTag,const int &classTag,const Communicator &comm)
+  { return getBrokedMovable(dbTag,classTag,comm,this->ptrFunc); }
  
 //! @brief Send the object through the channel being passed as parameter.
 template <class T>
-int XC::MovablePointerContainer<T>::sendSelf(CommParameters &cp)
+int XC::MovablePointerContainer<T>::sendSelf(Communicator &comm)
   {
     inicComm(5);
-    int result= this->sendData(cp);
+    int result= this->sendData(comm);
 
-    const int dataTag= getDbTag(cp);
-    result+= cp.sendIdData(getDbTagData(),dataTag);
+    const int dataTag= getDbTag(comm);
+    result+= comm.sendIdData(getDbTagData(),dataTag);
     if(result < 0)
       std::cerr << "MovablePointerContainer::sendSelf() - failed to send data\n";
     return result;
@@ -91,15 +91,15 @@ int XC::MovablePointerContainer<T>::sendSelf(CommParameters &cp)
 
 //! @brief Receives object through the channel being passed as parameter.
 template <class T>
-int MovablePointerContainer<T>::recvSelf(const CommParameters &cp)
+int MovablePointerContainer<T>::recvSelf(const Communicator &comm)
   {
     inicComm(5);
     const int dataTag = getDbTag();  
-    int result= cp.receiveIdData(getDbTagData(),dataTag);
+    int result= comm.receiveIdData(getDbTagData(),dataTag);
     if(result<0)
       std::cerr << "MovablePointerContainer::recvSelf() - failed to receive data\n";
     else
-      result+= recvData(cp);
+      result+= recvData(comm);
     return result;
   }
 

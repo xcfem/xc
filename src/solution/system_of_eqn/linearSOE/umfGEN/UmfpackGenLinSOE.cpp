@@ -263,12 +263,12 @@ void XC::UmfpackGenLinSOE::zeroA(void)
     factored = false;
   }
 
-int XC::UmfpackGenLinSOE::sendSelf(CommParameters &cp)
+int XC::UmfpackGenLinSOE::sendSelf(Communicator &comm)
   {
     return 0;
   }
 
-int XC::UmfpackGenLinSOE::recvSelf(const CommParameters &cp)
+int XC::UmfpackGenLinSOE::recvSelf(const Communicator &comm)
   {
     return 0;
   }

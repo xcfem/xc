@@ -42,24 +42,24 @@ void XC::HandlerRecorder::SetOutputHandler(DataOutputHandler *tH)
 
 
 //! @brief Sends object through the communicator being passed as parameter.
-int XC::HandlerRecorder::sendData(CommParameters &cp)
+int XC::HandlerRecorder::sendData(Communicator &comm)
   {
-    cp.sendBrokedPtr(theHandler,getDbTagData(),BrokedPtrCommMetaData(0,1,2));
-    cp.sendBool(echoTimeFlag,getDbTagData(),CommMetaData(3));
-    cp.sendBool(initializationDone,getDbTagData(),CommMetaData(4));
+    comm.sendBrokedPtr(theHandler,getDbTagData(),BrokedPtrCommMetaData(0,1,2));
+    comm.sendBool(echoTimeFlag,getDbTagData(),CommMetaData(3));
+    comm.sendBool(initializationDone,getDbTagData(),CommMetaData(4));
     return 0;
   }
 
 //! @brief Receives object through the communicator being passed as parameter.
-int XC::HandlerRecorder::receiveData(const CommParameters &cp)
+int XC::HandlerRecorder::receiveData(const Communicator &comm)
   {
     if(theHandler)
       {
         delete theHandler;
         theHandler= nullptr;
       }
-    theHandler= cp.getBrokedDataOutputHandler(theHandler,getDbTagData(),BrokedPtrCommMetaData(0,1,2));
-    cp.receiveBool(echoTimeFlag,getDbTagData(),CommMetaData(3));
-    cp.receiveBool(initializationDone,getDbTagData(),CommMetaData(4));
+    theHandler= comm.getBrokedDataOutputHandler(theHandler,getDbTagData(),BrokedPtrCommMetaData(0,1,2));
+    comm.receiveBool(echoTimeFlag,getDbTagData(),CommMetaData(3));
+    comm.receiveBool(initializationDone,getDbTagData(),CommMetaData(4));
     return 0;
   }

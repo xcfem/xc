@@ -458,39 +458,39 @@ int XC::HHT::commit(void)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::HHT::sendData(CommParameters &cp)
+int XC::HHT::sendData(Communicator &comm)
   {
-    int res= HHTBase::sendData(cp);
+    int res= HHTBase::sendData(comm);
     return res;
   }
 
 //! @brief Receives object members through the channel being passed
 //! as parameter.
-int XC::HHT::recvData(const CommParameters &cp)
+int XC::HHT::recvData(const Communicator &comm)
   {
-    int res= HHTBase::recvData(cp);
+    int res= HHTBase::recvData(comm);
     return res;
   }
 
-int XC::HHT::sendSelf(CommParameters &cp)
+int XC::HHT::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(9);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data\n";
     return res;
   }
 
-int XC::HHT::recvSelf(const CommParameters &cp)
+int XC::HHT::recvSelf(const Communicator &comm)
   {
     inicComm(9);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -498,7 +498,7 @@ int XC::HHT::recvSelf(const CommParameters &cp)
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

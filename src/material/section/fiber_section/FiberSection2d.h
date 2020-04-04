@@ -83,8 +83,8 @@ class FiberSection2d: public FiberSectionBase
     friend class FiberPtrDeque;
     double get_strain(const double &y) const;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     FiberSection2d(MaterialHandler *mat_ldr= nullptr); 
     FiberSection2d(int tag,MaterialHandler *mat_ldr= nullptr); 
@@ -105,8 +105,8 @@ class FiberSection2d: public FiberSectionBase
     const ResponseId &getType (void) const;
     int getOrder(void) const;
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag = 0) const;
 	    
     int getResponse(int responseID, Information &info);

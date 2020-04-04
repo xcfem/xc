@@ -37,7 +37,7 @@
 namespace XC {
 
 class Graph;
-class CommParameters;
+class Communicator;
 class LinearSOEData;
 class BandGenLinSOE;
 class FactoredSOEBase;

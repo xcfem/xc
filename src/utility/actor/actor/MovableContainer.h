@@ -50,15 +50,15 @@ class MovableContainer: public MovableObject
   protected:
     C &container;
     DbTagData &getDbTagData(void) const;
-    virtual int sendItem(const_reference s,CommParameters &,DbTagData &, const CommMetaData &)= 0;
-    virtual int receiveItem(reference s,const CommParameters &,DbTagData &, const CommMetaData &)= 0;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    virtual int sendItem(const_reference s,Communicator &,DbTagData &, const CommMetaData &)= 0;
+    virtual int receiveItem(reference s,const Communicator &,DbTagData &, const CommMetaData &)= 0;
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     explicit MovableContainer(C &);
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
   };
 
 //! @brief Constructor.
@@ -78,7 +78,7 @@ XC::DbTagData &XC::MovableContainer<C>::getDbTagData(void) const
 
 //! @brief Send data through the channel being passed as parameter.
 template <class C>
-int XC::MovableContainer<C>::sendData(CommParameters &cp)
+int XC::MovableContainer<C>::sendData(Communicator &comm)
   {
     const size_t sz= container.size();
     DbTagData &dt= getDbTagData();
@@ -90,8 +90,8 @@ int XC::MovableContainer<C>::sendData(CommParameters &cp)
     int res= 0;
     int loc= 0;
     for(const_iterator i= container.begin();i!=container.end();i++)
-      res+= this->sendItem(*i,cp,dbTags,CommMetaData(loc++));
-    res+= dbTags.send(dt,cp,CommMetaData(1));
+      res+= this->sendItem(*i,comm,dbTags,CommMetaData(loc++));
+    res+= dbTags.send(dt,comm,CommMetaData(1));
     if(res<0)
       std::cerr << "MovableContainer::sendSelf() - failed to send ID.\n";
     return res;
@@ -99,7 +99,7 @@ int XC::MovableContainer<C>::sendData(CommParameters &cp)
 
 //! @brief Receive data through the channel being passed as parameter.
 template <class C>
-int XC::MovableContainer<C>::recvData(const CommParameters &cp)
+int XC::MovableContainer<C>::recvData(const Communicator &comm)
   {
     DbTagData &dt= getDbTagData();
     const int sz= dt.getDbTagDataPos(0);
@@ -107,23 +107,23 @@ int XC::MovableContainer<C>::recvData(const CommParameters &cp)
     DbTagData dbTags(sz);
 
 
-    int res= dbTags.receive(dt,cp,CommMetaData(1));
+    int res= dbTags.receive(dt,comm,CommMetaData(1));
     int loc= 0;
     for(iterator i= container.begin();i!=container.end();i++)
-      res+= this->receiveItem(*i,cp,dbTags,CommMetaData(loc++));
+      res+= this->receiveItem(*i,comm,dbTags,CommMetaData(loc++));
     return res;
   }
 
 //! @brief Sends container through the channel being passed as parameter.
 template <class C>
-int XC::MovableContainer<C>::sendSelf(CommParameters &cp)
+int XC::MovableContainer<C>::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     this->inicComm(2);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "MovableContainer::sendSelf() - failed to send data\n";
     return res;
@@ -131,18 +131,18 @@ int XC::MovableContainer<C>::sendSelf(CommParameters &cp)
 
 //! @brief Receive the container through the channel being passed as parameter.
 template <class C>
-int XC::MovableContainer<C>::recvSelf(const CommParameters &cp)
+int XC::MovableContainer<C>::recvSelf(const Communicator &comm)
   {
     this->inicComm(2);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << "MovableContainer::" << __FUNCTION__
 		<< "; failed to receive ids.\n";
     else
       {
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << "MovableContainer::" << __FUNCTION__
 	            << "; failed to receive data.\n";

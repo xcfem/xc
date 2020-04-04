@@ -116,9 +116,9 @@ int XC::DomainDecompAlgo::solveCurrentStep(void)
       }
   }
 
-int XC::DomainDecompAlgo::sendSelf(CommParameters &cp)
+int XC::DomainDecompAlgo::sendSelf(Communicator &comm)
   { return 0; }
 
-int XC::DomainDecompAlgo::recvSelf(const CommParameters &cp)
+int XC::DomainDecompAlgo::recvSelf(const Communicator &comm)
   { return 0; }
 

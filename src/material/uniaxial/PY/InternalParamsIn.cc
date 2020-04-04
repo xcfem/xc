@@ -40,46 +40,46 @@ void XC::InternalParamsIn::revertToStart(const double &tg)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::InternalParamsIn::sendData(CommParameters &cp)
+int XC::InternalParamsIn::sendData(Communicator &comm)
   {
-    int res= InternalParamsA::sendData(cp);
-    res+= cp.sendDoubles(Rin,vin,getDbTagData(),CommMetaData(1));
+    int res= InternalParamsA::sendData(comm);
+    res+= comm.sendDoubles(Rin,vin,getDbTagData(),CommMetaData(1));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::InternalParamsIn::recvData(const CommParameters &cp)
+int XC::InternalParamsIn::recvData(const Communicator &comm)
   {
-    int res= InternalParamsA::recvData(cp);
-    res+= cp.receiveDoubles(Rin,vin,getDbTagData(),CommMetaData(1));
+    int res= InternalParamsA::recvData(comm);
+    res+= comm.receiveDoubles(Rin,vin,getDbTagData(),CommMetaData(1));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::InternalParamsIn::sendSelf(CommParameters &cp)
+int XC::InternalParamsIn::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(2); 
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "InternalParamsIn::sendSelf - failed to send data.\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::InternalParamsIn::recvSelf(const CommParameters &cp)
+int XC::InternalParamsIn::recvSelf(const Communicator &comm)
   {
     inicComm(2);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "InternalParamsIn::recvSelf - failed to receive ids.\n";
     else
       {
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
            std::cerr << "InternalParamsIn::recvSelf - failed to receive data.\n";
       }

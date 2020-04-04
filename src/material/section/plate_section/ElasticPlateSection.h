@@ -80,8 +80,8 @@ class ElasticPlateSection: public ElasticPlateProto<5>
 
     void Print(std::ostream &s,int flag) const;
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 
 } // end of XC namespace

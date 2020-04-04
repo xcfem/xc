@@ -50,8 +50,8 @@ class ElasticPlateProto: public ElasticPlateBase
     static Vector stress;
     static Matrix tangent;
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public : 
     ElasticPlateProto(int tag,int classTag);
     ElasticPlateProto(int classTag);
@@ -137,21 +137,21 @@ int XC::ElasticPlateProto<SZ>::revertToStart(void)
 
 //! @brief Send data through the channel being passed as parameter.
 template <int SZ>
-int XC::ElasticPlateProto<SZ>::sendData(CommParameters &cp)
+int XC::ElasticPlateProto<SZ>::sendData(Communicator &comm)
   {
-    int res= ElasticPlateBase::sendData(cp);
-    res+= cp.sendVector(trialStrain,getDbTagData(),CommMetaData(6));
-    res+= cp.sendVector(initialStrain,getDbTagData(),CommMetaData(7));
+    int res= ElasticPlateBase::sendData(comm);
+    res+= comm.sendVector(trialStrain,getDbTagData(),CommMetaData(6));
+    res+= comm.sendVector(initialStrain,getDbTagData(),CommMetaData(7));
     return res;
   }
 
 //! @brief Receive data through the channel being passed as parameter.
 template <int SZ>
-  int XC::ElasticPlateProto<SZ>::recvData(const CommParameters &cp)
+  int XC::ElasticPlateProto<SZ>::recvData(const Communicator &comm)
   {
-    int res= ElasticPlateBase::recvData(cp);
-    res+= cp.receiveVector(trialStrain,getDbTagData(),CommMetaData(6));
-    res+= cp.receiveVector(initialStrain,getDbTagData(),CommMetaData(7));
+    int res= ElasticPlateBase::recvData(comm);
+    res+= comm.receiveVector(trialStrain,getDbTagData(),CommMetaData(6));
+    res+= comm.receiveVector(initialStrain,getDbTagData(),CommMetaData(7));
     return res;
   }
 

@@ -147,8 +147,8 @@ int XC::FE_Datastore::commitState(int commitTag)
     clearDbTags();
     if(getPreprocessor())
       {
-        CommParameters cp(commitTag,*this);
-        res = getPreprocessor()->sendSelf(cp);
+        Communicator comm(commitTag,*this);
+        res = getPreprocessor()->sendSelf(comm);
         if(res < 0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; preprocessor failed to sendSelf\n";
@@ -191,8 +191,8 @@ int XC::FE_Datastore::restoreState(int commitTag)
       {
         if(getPreprocessor())
           {
-            CommParameters cp(commitTag,*this,*theObjectBroker);
-            res= getPreprocessor()->recvSelf(cp);
+            Communicator comm(commitTag,*this,*theObjectBroker);
+            res= getPreprocessor()->recvSelf(comm);
             if(res < 0)
               std::cerr << getClassName() << "::" << __FUNCTION__
 	                << "; preprocessor failed to recvSelf\n";

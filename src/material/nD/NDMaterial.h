@@ -103,8 +103,8 @@ class NDMaterial: public Material
     static Matrix errMatrix;
     static Vector errVector;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     NDMaterial();
     NDMaterial(int tag, int classTag);
@@ -172,7 +172,7 @@ class NDMaterial: public Material
 
   };
 
-NDMaterial *receiveNDMaterialPtr(NDMaterial *,DbTagData &,const CommParameters &,const BrokedPtrCommMetaData &);
+NDMaterial *receiveNDMaterialPtr(NDMaterial *,DbTagData &,const Communicator &,const BrokedPtrCommMetaData &);
 
 } // end of XC namespace
 

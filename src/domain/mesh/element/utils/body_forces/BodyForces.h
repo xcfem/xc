@@ -44,8 +44,8 @@ class BodyForces: public MovableObject
     Vector forces; //!< Body force components.
 
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public:
     BodyForces(const size_t &sz);
@@ -62,8 +62,8 @@ class BodyForces: public MovableObject
     inline const double &operator()(const size_t &i) const
       { return forces(i); }
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
     virtual void Print(std::ostream &s) const;
   };

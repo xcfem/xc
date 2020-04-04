@@ -224,10 +224,10 @@ int XC::KrylovNewton::solveCurrentStep(void)
     return result;
   }
 
-int XC::KrylovNewton::sendSelf(CommParameters &cp)
+int XC::KrylovNewton::sendSelf(Communicator &comm)
   { return -1; }
 
-int XC::KrylovNewton::recvSelf(const CommParameters &cp)
+int XC::KrylovNewton::recvSelf(const Communicator &comm)
   { return -1; }
 
 void XC::KrylovNewton::Print(std::ostream &s, int flag) const

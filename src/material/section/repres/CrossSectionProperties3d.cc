@@ -299,30 +299,30 @@ XC::DbTagData &XC::CrossSectionProperties3d::getDbTagData(void) const
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::CrossSectionProperties3d::sendData(CommParameters &cp)
+int XC::CrossSectionProperties3d::sendData(Communicator &comm)
   {
-    int res= CrossSectionProperties2d::sendData(cp);
-    res+= cp.sendDoubles(iy,iyz,j,getDbTagData(),CommMetaData(1));
+    int res= CrossSectionProperties2d::sendData(comm);
+    res+= comm.sendDoubles(iy,iyz,j,getDbTagData(),CommMetaData(1));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::CrossSectionProperties3d::recvData(const CommParameters &cp)
+int XC::CrossSectionProperties3d::recvData(const Communicator &comm)
   {
-    int res= CrossSectionProperties2d::recvData(cp); 
-    res+= cp.receiveDoubles(iy,iyz,j,getDbTagData(),CommMetaData(1));
+    int res= CrossSectionProperties2d::recvData(comm); 
+    res+= comm.receiveDoubles(iy,iyz,j,getDbTagData(),CommMetaData(1));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::CrossSectionProperties3d::sendSelf(CommParameters &cp)
+int XC::CrossSectionProperties3d::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(2);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data.\n";
@@ -330,11 +330,11 @@ int XC::CrossSectionProperties3d::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::CrossSectionProperties3d::recvSelf(const CommParameters &cp)
+int XC::CrossSectionProperties3d::recvSelf(const Communicator &comm)
   {
     inicComm(2);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -342,7 +342,7 @@ int XC::CrossSectionProperties3d::recvSelf(const CommParameters &cp)
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

@@ -82,24 +82,24 @@ XC::HHTRayleighBase::HHTRayleighBase(AnalysisAggregation *owr,int classTag,doubl
 
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::HHTRayleighBase::sendData(CommParameters &cp)
+int XC::HHTRayleighBase::sendData(Communicator &comm)
   {
-    int res= RayleighBase::sendData(cp);
-    res+= cp.sendMovable(Ut,getDbTagData(),CommMetaData(4));
-    res+= cp.sendMovable(U,getDbTagData(),CommMetaData(5));
-    res+= cp.sendMovable(Ualpha,getDbTagData(),CommMetaData(6));
-    res+= cp.sendDoubles(alpha,gamma,c2,c3,getDbTagData(),CommMetaData(7));
+    int res= RayleighBase::sendData(comm);
+    res+= comm.sendMovable(Ut,getDbTagData(),CommMetaData(4));
+    res+= comm.sendMovable(U,getDbTagData(),CommMetaData(5));
+    res+= comm.sendMovable(Ualpha,getDbTagData(),CommMetaData(6));
+    res+= comm.sendDoubles(alpha,gamma,c2,c3,getDbTagData(),CommMetaData(7));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::HHTRayleighBase::recvData(const CommParameters &cp)
+int XC::HHTRayleighBase::recvData(const Communicator &comm)
   {
-    int res= RayleighBase::recvData(cp);
-    res+= cp.receiveMovable(Ut,getDbTagData(),CommMetaData(4));
-    res+= cp.receiveMovable(U,getDbTagData(),CommMetaData(5));
-    res+= cp.receiveMovable(Ualpha,getDbTagData(),CommMetaData(6));
-    res+= cp.receiveDoubles(alpha,gamma,c2,c3,getDbTagData(),CommMetaData(7));
+    int res= RayleighBase::recvData(comm);
+    res+= comm.receiveMovable(Ut,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveMovable(U,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveMovable(Ualpha,getDbTagData(),CommMetaData(6));
+    res+= comm.receiveDoubles(alpha,gamma,c2,c3,getDbTagData(),CommMetaData(7));
     return res;
   }
 

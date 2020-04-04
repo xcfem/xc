@@ -914,45 +914,45 @@ int XC::AnalysisAggregation::setConvergenceTest(ConvergenceTest &theNewTest)
     return 0;
   }
 
-void XC::AnalysisAggregation::brokeDDLinearSOE(const CommParameters &cp,const ID &data)
+void XC::AnalysisAggregation::brokeDDLinearSOE(const Communicator &comm,const ID &data)
   {
-    theSOE= cp.brokeDDLinearSOE(data(5),data(6));
+    theSOE= comm.brokeDDLinearSOE(data(5),data(6));
     theSOE->set_owner(this);
   }
 
-void XC::AnalysisAggregation::brokeLinearSOE(const CommParameters &cp,const ID &data)
+void XC::AnalysisAggregation::brokeLinearSOE(const Communicator &comm,const ID &data)
   {
-    theSOE= cp.brokeLinearSOE(data(4),data(5));
+    theSOE= comm.brokeLinearSOE(data(4),data(5));
     theSOE->set_owner(this);
   }
 
-void XC::AnalysisAggregation::brokeIncrementalIntegrator(const CommParameters &cp,const ID &data)
+void XC::AnalysisAggregation::brokeIncrementalIntegrator(const Communicator &comm,const ID &data)
   {
-    theIntegrator= cp.brokeIncrementalIntegrator(data(4));
+    theIntegrator= comm.brokeIncrementalIntegrator(data(4));
     theIntegrator->set_owner(this);
   }
 
-void XC::AnalysisAggregation::brokeStaticIntegrator(const CommParameters &cp,const ID &data)
+void XC::AnalysisAggregation::brokeStaticIntegrator(const Communicator &comm,const ID &data)
   {
-    theIntegrator= cp.brokeStaticIntegrator(data(6));
+    theIntegrator= comm.brokeStaticIntegrator(data(6));
     theIntegrator->set_owner(this);
   }
 
-void XC::AnalysisAggregation::brokeTransientIntegrator(const CommParameters &cp,const ID &data)
+void XC::AnalysisAggregation::brokeTransientIntegrator(const Communicator &comm,const ID &data)
   {
-    theIntegrator= cp.brokeTransientIntegrator(data(6));
+    theIntegrator= comm.brokeTransientIntegrator(data(6));
     theIntegrator->set_owner(this);
   }
 
-void XC::AnalysisAggregation::brokeDomainDecompAlgo(const CommParameters &cp,const ID &data)
+void XC::AnalysisAggregation::brokeDomainDecompAlgo(const Communicator &comm,const ID &data)
   {
-    theSolnAlgo= cp.brokeDomainDecompAlgo(data(3));
+    theSolnAlgo= comm.brokeDomainDecompAlgo(data(3));
     theSolnAlgo->set_owner(this);
   }
 
-void XC::AnalysisAggregation::brokeEquiSolnAlgo(const CommParameters &cp,const ID &data)
+void XC::AnalysisAggregation::brokeEquiSolnAlgo(const Communicator &comm,const ID &data)
   {
-    theSolnAlgo= cp.brokeEquiSolnAlgo(data(3));
+    theSolnAlgo= comm.brokeEquiSolnAlgo(data(3));
     theSolnAlgo->set_owner(this);
   }
 

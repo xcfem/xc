@@ -257,10 +257,10 @@ void XC::SymBandEigenSOE::identityM(void)
       M(i)= 1.0;
   }
 
-int XC::SymBandEigenSOE::sendSelf(CommParameters &cp)
+int XC::SymBandEigenSOE::sendSelf(Communicator &comm)
   { return 0; }
     
-int XC::SymBandEigenSOE::recvSelf(const CommParameters &cp)
+int XC::SymBandEigenSOE::recvSelf(const Communicator &comm)
   { return 0; }
 
 //! @brief Save the SOE matrices and vectors to file.

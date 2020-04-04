@@ -306,32 +306,32 @@ int XC::ElasticIsotropicMaterial::getOrder(void) const
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::ElasticIsotropicMaterial::sendData(CommParameters &cp)
+int XC::ElasticIsotropicMaterial::sendData(Communicator &comm)
   {
-    int res= NDMaterial::sendData(cp);
-    res+= cp.sendDoubles(E,v,rho,getDbTagData(),CommMetaData(1));
-    res+= cp.sendVector(epsilon,getDbTagData(),CommMetaData(2));
+    int res= NDMaterial::sendData(comm);
+    res+= comm.sendDoubles(E,v,rho,getDbTagData(),CommMetaData(1));
+    res+= comm.sendVector(epsilon,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::ElasticIsotropicMaterial::recvData(const CommParameters &cp)
+int XC::ElasticIsotropicMaterial::recvData(const Communicator &comm)
   {
-    int res= NDMaterial::recvData(cp);
-    res+= cp.receiveDoubles(E,v,rho,getDbTagData(),CommMetaData(1));
-    res+= cp.receiveVector(epsilon,getDbTagData(),CommMetaData(2));
+    int res= NDMaterial::recvData(comm);
+    res+= comm.receiveDoubles(E,v,rho,getDbTagData(),CommMetaData(1));
+    res+= comm.receiveVector(epsilon,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::ElasticIsotropicMaterial::sendSelf(CommParameters &cp)
+int XC::ElasticIsotropicMaterial::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(3);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; failed to send data\n";
@@ -339,11 +339,11 @@ int XC::ElasticIsotropicMaterial::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::ElasticIsotropicMaterial::recvSelf(const CommParameters &cp)
+int XC::ElasticIsotropicMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(3);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -351,7 +351,7 @@ int XC::ElasticIsotropicMaterial::recvSelf(const CommParameters &cp)
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
                     << "; failed to receive data.\n";

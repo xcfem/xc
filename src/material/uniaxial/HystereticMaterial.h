@@ -137,8 +137,8 @@ class HystereticMaterial: public UniaxialMaterial
     void positiveIncrement(double dStrain);
     void negativeIncrement(double dStrain);
   protected:
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     HystereticMaterial(int tag,
     	double mom1p, double rot1p, double mom2p, double rot2p,
@@ -169,8 +169,8 @@ class HystereticMaterial: public UniaxialMaterial
 
     UniaxialMaterial *getCopy(void) const;
     
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace

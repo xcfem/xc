@@ -135,8 +135,8 @@ class Joint2D: public ElemWithMaterial<5,Joint2DPhysicalProperties>
     Vector *theLoadSens;
     // AddingSensitivity:END ///////////////////////////////////////////
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     Joint2D(void);
     Joint2D(int tag, int nd1, int nd2, int nd3, int nd4, int IntNodeTag, const SpringModels &springModels, Domain *theDomain, int LrgDisp);
@@ -174,8 +174,8 @@ class Joint2D: public ElemWithMaterial<5,Joint2DPhysicalProperties>
   // method for obtaining information specific to an element
   Response* setResponse(const std::vector<std::string> &argv, Information &eleInformation);
   int getResponse(int responseID, Information &eleInformation);
-  int sendSelf(CommParameters &);
-  int recvSelf(const CommParameters &);
+  int sendSelf(Communicator &);
+  int recvSelf(const Communicator &);
   void Print(std::ostream &s, int flag =0) const;
 
     // AddingSensitivity:BEGIN //////////////////////////////////////////

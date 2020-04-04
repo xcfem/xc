@@ -171,13 +171,13 @@ double XC::BeamIntegration::getIntegral(const ExprAlgebra &expr,int nIP,const Cr
 //! passed as parameter.
 //! @param posClassTag: index of the class tags in the data vector
 //! @param posDbTag: index of the dbTag in the data vector
-int XC::sendBeamIntegrationPtr(BeamIntegration *ptr,int posClassTag, int posDbTag,DbTagData &dt,CommParameters &cp)
+int XC::sendBeamIntegrationPtr(BeamIntegration *ptr,int posClassTag, int posDbTag,DbTagData &dt,Communicator &comm)
   {
     int res= 0;
     if(ptr)
       {
         dt.setDbTagDataPos(posClassTag,ptr->getClassTag());
-        res= cp.sendMovable(*ptr,dt,CommMetaData(posDbTag));
+        res= comm.sendMovable(*ptr,dt,CommMetaData(posDbTag));
       }
     if(res < 0)
       std::cerr << __FUNCTION__ << "; WARNING "
@@ -188,7 +188,7 @@ int XC::sendBeamIntegrationPtr(BeamIntegration *ptr,int posClassTag, int posDbTa
 //! @brief Receive a pointer to beam integration through the channel being passed as parameter.
 //! @param posClassTag: index of the class tags in the data vector
 //! @param posDbTag: index of the dbTag in the data vector
-XC::BeamIntegration *XC::receiveBeamIntegrationPtr(BeamIntegration* ptr,int posClassTag, int posDbTag,DbTagData &dt,const CommParameters &cp)
+XC::BeamIntegration *XC::receiveBeamIntegrationPtr(BeamIntegration* ptr,int posClassTag, int posDbTag,DbTagData &dt,const Communicator &comm)
   {
     BeamIntegration *retval= nullptr;
     const int matClass= dt.getDbTagDataPos(posClassTag);
@@ -205,11 +205,11 @@ XC::BeamIntegration *XC::receiveBeamIntegrationPtr(BeamIntegration* ptr,int posC
 	    ptr= nullptr;
 	  }
         // create a new_ material object
-        retval= cp.getNewBeamIntegration(matClass);
+        retval= comm.getNewBeamIntegration(matClass);
       }
     if(retval)
       {
-        int res= cp.receiveMovable(*retval,dt,CommMetaData(posDbTag));
+        int res= comm.receiveMovable(*retval,dt,CommMetaData(posDbTag));
         if(res<0)
           std::cerr << __FUNCTION__ << "; WARNING " 
                     << "failed to receive material.\n";

@@ -46,8 +46,8 @@ class HingeBeamIntegration2d: public PlasticLengthsBeamIntegration
     double A;
     double I;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     HingeBeamIntegration2d(int classTag,double E, double A, double I,double lpI, double lpJ);
     HingeBeamIntegration2d(int classTag);

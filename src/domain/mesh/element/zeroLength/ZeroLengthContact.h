@@ -72,8 +72,8 @@ class ZeroLengthContact: public Element0D
     int addInertiaLoadToUnbalance(const Vector &);
 
     // public methods for element output
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     void Print(std::ostream &os, int flag =0) const;
   };
 

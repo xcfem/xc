@@ -362,11 +362,11 @@ XC::Kratzig::getResponse(int responseID, Information &info)
 }
 
 
-int XC::Kratzig::sendSelf(CommParameters &cp)
+int XC::Kratzig::sendSelf(Communicator &comm)
   { return 0; }
 
 
-int XC::Kratzig::recvSelf(const CommParameters &cp)
+int XC::Kratzig::recvSelf(const Communicator &comm)
   { return 0; }
 
 

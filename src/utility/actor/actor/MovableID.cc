@@ -54,23 +54,23 @@ XC::DbTagData &XC::MovableID::getDbTagData(void) const
   }
 
 //! @brief Envia el ID with the parameters (channel,...) being passed as argument.
-int XC::MovableID::sendSelf(CommParameters &cp)
+int XC::MovableID::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dbTag= getDbTag();
     inicComm(2);
-    const int dataTag= cp.getDbTag();
+    const int dataTag= comm.getDbTag();
     const int sz= Size();
     setDbTagDataPos(0,sz);
     setDbTagDataPos(1,dataTag);
 
-    int res= cp.sendIdData(getDbTagData(),dbTag);
+    int res= comm.sendIdData(getDbTagData(),dbTag);
     if(res < 0)
       std::cerr << "MovableID::sendSelf() - failed to send ID data\n";
 
     if(sz>0)
       {
-        res+= cp.sendID(*this,dataTag);
+        res+= comm.sendID(*this,dataTag);
         if(res<0)
           std::cerr << "MovableID::sendSelf() - failed to send Disp data\n";
       }
@@ -78,11 +78,11 @@ int XC::MovableID::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives the ID through the communicator being passed as argument.
-int XC::MovableID::recvSelf(const CommParameters &cp)
+int XC::MovableID::recvSelf(const Communicator &comm)
   {
     inicComm(2);
     const int dbTag= getDbTag();
-    int res = cp.receiveIdData(getDbTagData(),dbTag);
+    int res = comm.receiveIdData(getDbTagData(),dbTag);
     if(res < 0)
       std::cerr << "MovableID::recvSelf() - failed to receive ID data\n";
     else
@@ -93,7 +93,7 @@ int XC::MovableID::recvSelf(const CommParameters &cp)
           {
             const int dataTag= getDbTagDataPos(1);
             if(sz>0)
-              res+= cp.receiveID(*this,dataTag);
+              res+= comm.receiveID(*this,dataTag);
             if(res<0)
               std::cerr << "MovableID::recvSelf - failed to receive data\n";
           }

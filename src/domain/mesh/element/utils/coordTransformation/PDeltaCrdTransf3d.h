@@ -77,8 +77,8 @@ class PDeltaCrdTransf3d: public SmallDispCrdTransf3d
     double ul17; //!< Transverse local displacement offsets of P-Delta
     double ul28;
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     PDeltaCrdTransf3d(int tag);
     PDeltaCrdTransf3d(int tag, const Vector &vecInLocXZPlane);
@@ -97,8 +97,8 @@ class PDeltaCrdTransf3d: public SmallDispCrdTransf3d
     
     CrdTransf3d *getCopy(void) const;
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag = 0) const;
     

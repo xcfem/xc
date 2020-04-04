@@ -83,8 +83,8 @@ class VPDependentFriction: public VDependentFriction
     inline const double &muFast0(void) const
       { return muFast; }
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     // constructor
     VPDependentFriction(void);
@@ -97,8 +97,8 @@ class VPDependentFriction: public VDependentFriction
     
     FrictionModel *getCopy(void) const;
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     
     void Print(std::ostream &s, int flag = 0) const;
   };

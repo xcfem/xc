@@ -174,7 +174,7 @@ int XC::FullGenLinLapackSolver::setSize(void)
   }
 
 //! @brief Does nothing.
-int XC::FullGenLinLapackSolver::sendSelf(CommParameters &)
+int XC::FullGenLinLapackSolver::sendSelf(Communicator &)
 
   {
     // nothing to do
@@ -182,7 +182,7 @@ int XC::FullGenLinLapackSolver::sendSelf(CommParameters &)
   }
 
 //! @brief Does nothing.
-int XC::FullGenLinLapackSolver::recvSelf(const CommParameters &)
+int XC::FullGenLinLapackSolver::recvSelf(const Communicator &)
   {
     // nothing to do
     return 0;

@@ -43,8 +43,8 @@ class BaseControl: public StaticIntegrator
     double specNumIncrStep; //!< Jd factor relating load increment at subsequent time steps. (optional, default: 1.0)
     double numIncrLastStep; //!< J(i-1). 
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     void setup_numIncr(const int &);
 

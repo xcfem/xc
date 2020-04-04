@@ -91,8 +91,8 @@ class RCM: public BaseNumberer
     const ID &number(Graph &theGraph, int lastVertex = -1);
     const ID &number(Graph &theGraph, const ID &lastVertices);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

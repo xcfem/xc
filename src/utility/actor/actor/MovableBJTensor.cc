@@ -31,7 +31,7 @@
 #include "utility/actor/channel/Channel.h"
 #include "utility/actor/objectBroker/FEM_ObjectBroker.h"
 #include "utility/matrix/ID.h"
-#include "CommParameters.h"
+#include "Communicator.h"
 #include "CommMetaData.h"
 
 //! @brief Constructor.
@@ -48,7 +48,7 @@ void XC::MovableBJTensor::setBJTensor(const BJtensor &v)
   { BJtensor::operator=(v); }
 
 //! @brief Sends the tensor through the channel being passed as parameter.
-int XC::MovableBJTensor::sendSelf(CommParameters &cp)
+int XC::MovableBJTensor::sendSelf(Communicator &comm)
   {
     std::cerr << "MovableBJTensor::" << __FUNCTION__
               << "; not implemented.\n";
@@ -56,7 +56,7 @@ int XC::MovableBJTensor::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receive the tensor through the channel being passed as parameter.
-int XC::MovableBJTensor::recvSelf(const CommParameters &cp)
+int XC::MovableBJTensor::recvSelf(const Communicator &comm)
   {
     std::cerr << "MovableBJTensor::" << __FUNCTION__
 	      << "; not implemented.\n";

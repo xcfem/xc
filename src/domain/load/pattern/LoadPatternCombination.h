@@ -92,8 +92,8 @@ class LoadPatternCombination: public ForceReprComponent
     iterator findLoadPattern(const LoadPattern *);
 
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
     iterator begin(void)
       { return descomp.begin(); }

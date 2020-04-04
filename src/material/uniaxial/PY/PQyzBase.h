@@ -52,8 +52,8 @@ class PQyzBase: public PYBase
     double Elast; //!< (p/matCapacity) when yielding first occurs in virgin loading
     double nd; //!< exponent for hardening shape of drag component
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     PQyzBase(int tag, int classtag, int soilType, double rult, double v50,double dashpot);
     PQyzBase(int tag, int classtag);

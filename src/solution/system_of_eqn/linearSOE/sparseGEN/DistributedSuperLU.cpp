@@ -268,7 +268,7 @@ int XC::DistributedSuperLU::setChannels(int nChannels, Channel **theC)
   }
 
 int
-XC::DistributedSuperLU::sendSelf(CommParameters &cp)
+XC::DistributedSuperLU::sendSelf(Communicator &comm)
 {
   int sendID =0;
 
@@ -308,7 +308,7 @@ XC::DistributedSuperLU::sendSelf(CommParameters &cp)
     idData(0) = sendID;
     idData(1) = npRow;
     idData(2) = npCol;
-    int res = cp.sendIdData(0);
+    int res = comm.sendIdData(0);
    if (res < 0) {
     std::cerr <<"WARNING XC::DistributedSuperLU::sendSelf() - failed to send data\n";
     return -1;
@@ -316,11 +316,11 @@ XC::DistributedSuperLU::sendSelf(CommParameters &cp)
   return 0;
 }
 
-int XC::DistributedSuperLU::recvSelf(const CommParameters &cp)
+int XC::DistributedSuperLU::recvSelf(const Communicator &comm)
   {
     static ID idData(3);
 
-    int res = cp.receiveIdData(0);
+    int res = comm.receiveIdData(0);
     if(res < 0)
       {
         std::cerr <<"WARNING XC::DistributedSuperLU::recvSelf() - failed to receive data\n";

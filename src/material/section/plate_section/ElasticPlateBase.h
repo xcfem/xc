@@ -47,8 +47,8 @@ class ElasticPlateBase: public PlateBase
 
     static const double five6; // =5/6 = shear correction factor
 
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
   public : 
     ElasticPlateBase(int tag,int classTag);

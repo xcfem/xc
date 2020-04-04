@@ -525,10 +525,10 @@ const XC::Vector &XC::CorotTrussSection::getResistingForceIncInertia(void) const
     return *theVector;
   }
 
-int XC::CorotTrussSection::sendSelf(CommParameters &cp)
+int XC::CorotTrussSection::sendSelf(Communicator &comm)
   { return -1; }
 
-int XC::CorotTrussSection::recvSelf(const CommParameters &cp)
+int XC::CorotTrussSection::recvSelf(const Communicator &comm)
   { return -1; }
 
 void XC::CorotTrussSection::Print(std::ostream &s, int flag) const

@@ -84,8 +84,8 @@ class DiagonalDirectSolver: public DiagonalSolver
     
     virtual int setDiagonalSOE(DiagonalSOE &theSOE);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 
 inline LinearSOESolver *DiagonalDirectSolver::getCopy(void) const

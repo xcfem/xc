@@ -55,8 +55,8 @@ class NodeVectors: public CommandEntity, public MovableObject
     Vector values; //!< double array holding the displacement/velocity/acceleration.
 
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
     int createData(const size_t &);
     void free_mem(void);
     void copy(const NodeVectors &);
@@ -87,8 +87,8 @@ class NodeVectors: public CommandEntity, public MovableObject
     virtual int revertToLastCommit(const size_t &nDOF);    
     virtual int revertToStart(const size_t &nDOF);        
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
   };
 
 } // end of XC namespace

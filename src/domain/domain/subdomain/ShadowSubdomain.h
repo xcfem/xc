@@ -213,8 +213,8 @@ class ShadowSubdomain: public Shadow, public Subdomain
     virtual int computeNodalResponse(void);    
     virtual int newStep(double deltaT);
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);    
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);    
 
     virtual double getCost(void);
     

@@ -90,8 +90,8 @@ class FourNodeQuad: public QuadBase4N<SolidMech2D>
     void setPressureLoadAtNodes(void);
 
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
     bool check_material_type(const std::string &type) const;
   public:
     FourNodeQuad(int tag, int nd1, int nd2, int nd3, int nd4, NDMaterial &m, const std::string &type, double t, double pressure = 0.0, double rho = 0.0, const BodyForces2D &bForces= BodyForces2D());
@@ -129,8 +129,8 @@ class FourNodeQuad: public QuadBase4N<SolidMech2D>
     const Vector &getResistingForceIncInertia(void) const;            
 
     // public methods for element output
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;
 
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);

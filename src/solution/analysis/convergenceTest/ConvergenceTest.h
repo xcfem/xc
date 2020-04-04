@@ -105,8 +105,8 @@ class ConvergenceTest: public MovableObject, public EntityWithOwner
     double getEnergyProduct(void) const;
 
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
   public:
     ConvergenceTest(CommandEntity *owr,int classTag);	
@@ -142,8 +142,8 @@ class ConvergenceTest: public MovableObject, public EntityWithOwner
     virtual int getMaxNumTests(void) const;        
     virtual double getRatioNumToMax(void) const;            
     virtual const Vector &getNorms(void) const;
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
     std::string getTestIterationMessage(void) const;
     std::string getFailedToConvergeMessage(void) const;

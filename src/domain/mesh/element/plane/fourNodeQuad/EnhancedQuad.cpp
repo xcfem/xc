@@ -1306,50 +1306,50 @@ const XC::Matrix &XC::EnhancedQuad::transpose(const XC::Matrix &M )
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::EnhancedQuad::sendData(CommParameters &cp)
+int XC::EnhancedQuad::sendData(Communicator &comm)
   {
-    int res= QuadBase4N<NDMaterialPhysicalProperties>::sendData(cp);
-    res+= cp.sendVector(alpha,getDbTagData(),CommMetaData(8));
-    res+= cp.sendMatrixPtr(Ki,getDbTagData(),MatrixCommMetaData(11,12,13,14));
+    int res= QuadBase4N<NDMaterialPhysicalProperties>::sendData(comm);
+    res+= comm.sendVector(alpha,getDbTagData(),CommMetaData(8));
+    res+= comm.sendMatrixPtr(Ki,getDbTagData(),MatrixCommMetaData(11,12,13,14));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::EnhancedQuad::recvData(const CommParameters &cp)
+int XC::EnhancedQuad::recvData(const Communicator &comm)
   {
-    int res= QuadBase4N<NDMaterialPhysicalProperties>::recvData(cp);
-    res+= cp.receiveVector(alpha,getDbTagData(),CommMetaData(8));
-    Ki= cp.receiveMatrixPtr(Ki,getDbTagData(),MatrixCommMetaData(11,12,13,14));
+    int res= QuadBase4N<NDMaterialPhysicalProperties>::recvData(comm);
+    res+= comm.receiveVector(alpha,getDbTagData(),CommMetaData(8));
+    Ki= comm.receiveMatrixPtr(Ki,getDbTagData(),MatrixCommMetaData(11,12,13,14));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int  XC::EnhancedQuad::sendSelf(CommParameters &cp)
+int  XC::EnhancedQuad::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(15);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::EnhancedQuad::recvSelf(const CommParameters &cp)
+int XC::EnhancedQuad::recvSelf(const Communicator &comm)
   {
     inicComm(15);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

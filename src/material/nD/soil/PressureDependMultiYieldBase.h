@@ -116,8 +116,8 @@ class PressureDependMultiYieldBase: public PressureMultiYieldBase
      // Return 1 if crossing the active surface; return 0 o/w
      int  isCrossingNextSurface(void) const;  
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
      // Initialization constructor
      PressureDependMultiYieldBase (int tag, int classTag, 
@@ -186,8 +186,8 @@ class PressureDependMultiYieldBase: public PressureMultiYieldBase
      // Return ndm.
      int getOrder(void) const;
 
-     int sendSelf(CommParameters &);  
-     int recvSelf(const CommParameters &);
+     int sendSelf(Communicator &);  
+     int recvSelf(const Communicator &);
      Response *setResponse(const std::vector<std::string> &argv, Information &matInfo);
      int getResponse (int responseID, Information &matInformation);
      void Print(std::ostream &s, int flag =0) const;

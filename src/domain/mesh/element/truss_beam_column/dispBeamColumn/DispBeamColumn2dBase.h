@@ -94,8 +94,8 @@ class DispBeamColumn2dBase: public BeamColumnWithSectionFDTrf2d
 
     static double workArea[];
 
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     DispBeamColumn2dBase(int tag, int classTag, int nd1, int nd2,
 		         int numSections,const std::vector<PrismaticBarCrossSection *> &s,
@@ -124,8 +124,8 @@ class DispBeamColumn2dBase: public BeamColumnWithSectionFDTrf2d
     const Vector &getResistingForceIncInertia(void) const;            
 
     // public methods for element output
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;
 
   };

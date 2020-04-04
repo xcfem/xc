@@ -85,8 +85,8 @@ class Load: public DomainComponent
   private:
     int loadPatternTag; //!< Identifier of the pattern to which the load belongs.
   protected:
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
   public:
     Load(int tag, int classTag);

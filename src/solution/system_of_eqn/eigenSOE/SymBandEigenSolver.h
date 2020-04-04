@@ -95,8 +95,8 @@ class SymBandEigenSolver: public EigenSolver
     
     double getRCond(const char &);
   
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 
 inline EigenSolver *SymBandEigenSolver::getCopy(void) const

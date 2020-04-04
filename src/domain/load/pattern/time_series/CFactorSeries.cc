@@ -82,21 +82,21 @@ XC::DbTagData &XC::CFactorSeries::getDbTagData(void) const
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::CFactorSeries::sendData(CommParameters &cp)
-  { return cp.sendDouble(cFactor,getDbTagData(),CommMetaData(0)); }
+int XC::CFactorSeries::sendData(Communicator &comm)
+  { return comm.sendDouble(cFactor,getDbTagData(),CommMetaData(0)); }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::CFactorSeries::recvData(const CommParameters &cp)
-  { return cp.receiveDouble(cFactor,getDbTagData(),CommMetaData(0)); }
+int XC::CFactorSeries::recvData(const Communicator &comm)
+  { return comm.receiveDouble(cFactor,getDbTagData(),CommMetaData(0)); }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::CFactorSeries::sendSelf(CommParameters &cp)
+int XC::CFactorSeries::sendSelf(Communicator &comm)
   {
     inicComm(1);
-    int result= sendData(cp);
+    int result= sendData(comm);
 
-    const int dataTag= getDbTag(cp);
-    result+= cp.sendIdData(getDbTagData(),dataTag);
+    const int dataTag= getDbTag(comm);
+    result+= comm.sendIdData(getDbTagData(),dataTag);
     if(result < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; ch failed to send data.\n";
@@ -104,16 +104,16 @@ int XC::CFactorSeries::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::CFactorSeries::recvSelf(const CommParameters &cp)
+int XC::CFactorSeries::recvSelf(const Communicator &comm)
   {
     inicComm(1);
 
     const int dataTag = this->getDbTag();  
-    int result = cp.receiveIdData(getDbTagData(),dataTag);
+    int result = comm.receiveIdData(getDbTagData(),dataTag);
     if(result<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; ch failed to receive data.\n";
     else
-      result+= recvData(cp);
+      result+= recvData(comm);
     return result;    
   }

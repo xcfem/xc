@@ -43,47 +43,47 @@ int XC::ElasticBaseMaterial::setInitialStrain(double strain)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::ElasticBaseMaterial::sendData(CommParameters &cp)
+int XC::ElasticBaseMaterial::sendData(Communicator &comm)
   {
-    int res= UniaxialMaterial::sendData(cp);
-    res+= cp.sendDoubles(trialStrain,E,ezero,getDbTagData(),CommMetaData(2));
+    int res= UniaxialMaterial::sendData(comm);
+    res+= comm.sendDoubles(trialStrain,E,ezero,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::ElasticBaseMaterial::recvData(const CommParameters &cp)
+int XC::ElasticBaseMaterial::recvData(const Communicator &comm)
   {
-    int res= UniaxialMaterial::recvData(cp);
-    res+= cp.receiveDoubles(trialStrain,E,ezero,getDbTagData(),CommMetaData(2));
+    int res= UniaxialMaterial::recvData(comm);
+    res+= comm.receiveDoubles(trialStrain,E,ezero,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::ElasticBaseMaterial::sendSelf(CommParameters &cp)
+int XC::ElasticBaseMaterial::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(3); 
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "ElasticBaseMaterial::sendSelf - failed to send data.\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::ElasticBaseMaterial::recvSelf(const CommParameters &cp)
+int XC::ElasticBaseMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(3);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "ElasticBaseMaterial::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
            std::cerr << "ElasticBaseMaterial::recvSelf - failed to receive data.\n";
       }

@@ -355,38 +355,38 @@ int XC::CentralDifference::commit(void)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::CentralDifference::sendData(CommParameters &cp)
+int XC::CentralDifference::sendData(Communicator &comm)
   {
-    int res= RayleighBase::sendData(cp);
-    res+= cp.sendInt(updateCount,getDbTagData(),CommMetaData(4));
-    res+= cp.sendDoubles(c2,c3,getDbTagData(),CommMetaData(5));
-    res+= cp.sendVector(Utm1,getDbTagData(),CommMetaData(6));
-    res+= cp.sendMovable(Ut,getDbTagData(),CommMetaData(7));
-    res+= cp.sendMovable(U,getDbTagData(),CommMetaData(8));
+    int res= RayleighBase::sendData(comm);
+    res+= comm.sendInt(updateCount,getDbTagData(),CommMetaData(4));
+    res+= comm.sendDoubles(c2,c3,getDbTagData(),CommMetaData(5));
+    res+= comm.sendVector(Utm1,getDbTagData(),CommMetaData(6));
+    res+= comm.sendMovable(Ut,getDbTagData(),CommMetaData(7));
+    res+= comm.sendMovable(U,getDbTagData(),CommMetaData(8));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::CentralDifference::recvData(const CommParameters &cp)
+int XC::CentralDifference::recvData(const Communicator &comm)
   {
-    int res= RayleighBase::recvData(cp);
-    res+= cp.receiveInt(updateCount,getDbTagData(),CommMetaData(4));
-    res+= cp.receiveDoubles(c2,c3,getDbTagData(),CommMetaData(5));
-    res+= cp.receiveVector(Utm1,getDbTagData(),CommMetaData(6));
-    res+= cp.receiveMovable(Ut,getDbTagData(),CommMetaData(7));
-    res+= cp.receiveMovable(U,getDbTagData(),CommMetaData(8));
+    int res= RayleighBase::recvData(comm);
+    res+= comm.receiveInt(updateCount,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveDoubles(c2,c3,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveVector(Utm1,getDbTagData(),CommMetaData(6));
+    res+= comm.receiveMovable(Ut,getDbTagData(),CommMetaData(7));
+    res+= comm.receiveMovable(U,getDbTagData(),CommMetaData(8));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::CentralDifference::sendSelf(CommParameters &cp)
+int XC::CentralDifference::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(9);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data\n";
@@ -395,11 +395,11 @@ int XC::CentralDifference::sendSelf(CommParameters &cp)
 
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::CentralDifference::recvSelf(const CommParameters &cp)
+int XC::CentralDifference::recvSelf(const Communicator &comm)
   {
     inicComm(9);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -407,7 +407,7 @@ int XC::CentralDifference::recvSelf(const CommParameters &cp)
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

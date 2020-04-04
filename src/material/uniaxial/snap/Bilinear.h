@@ -115,8 +115,8 @@ class Bilinear: public UniaxialMaterial
     //virtual
     UniaxialMaterial *getCopy(void) const;
   
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
   
     Response* setResponse(const std::vector<std::string> &argv, Information &matInfo);
     int getResponse(int responseID, Information &matInfo);

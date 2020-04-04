@@ -481,11 +481,11 @@ const XC::Vector &XC::DomainDecompositionAnalysis::getTangVectProduct()
   }
 
 //! @brief Sends the object.
-int XC::DomainDecompositionAnalysis::sendSelf(CommParameters &cp)
+int XC::DomainDecompositionAnalysis::sendSelf(Communicator &comm)
   {
     // determine the type of each object in the aggregation,
     // store it in an ID and send the info off.
-    getDbTag(cp);
+    getDbTag(comm);
     ID data(14);
     data(0)= getConstraintHandlerPtr()->getClassTag();
     data(1)= getDOF_NumbererPtr()->getClassTag();
@@ -503,38 +503,38 @@ int XC::DomainDecompositionAnalysis::sendSelf(CommParameters &cp)
     data(12)= getLinearSOEPtr()->getDbTag();    
     data(13)= theSolver->getDbTag();        
 
-    cp.sendID(data,getDbTagData(),CommMetaData(0));
+    comm.sendID(data,getDbTagData(),CommMetaData(0));
 
     // invoke sendSelf on each object in the aggregation
     
-    getConstraintHandlerPtr()->sendSelf(cp);
-    getDOF_NumbererPtr()->sendSelf(cp);
-    getAnalysisModelPtr()->sendSelf(cp);
-    getDomainDecompSolutionAlgorithmPtr()->sendSelf(cp);
-    getIncrementalIntegratorPtr()->sendSelf(cp);    
-    getLinearSOEPtr()->sendSelf(cp);    
-    theSolver->sendSelf(cp);            
+    getConstraintHandlerPtr()->sendSelf(comm);
+    getDOF_NumbererPtr()->sendSelf(comm);
+    getAnalysisModelPtr()->sendSelf(comm);
+    getDomainDecompSolutionAlgorithmPtr()->sendSelf(comm);
+    getIncrementalIntegratorPtr()->sendSelf(comm);    
+    getLinearSOEPtr()->sendSelf(comm);    
+    theSolver->sendSelf(comm);            
     return 0;
   }
 
 //! @brief Receives the object.
-int XC::DomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
+int XC::DomainDecompositionAnalysis::recvSelf(const Communicator &comm)
   {
     // receive the data identifyng the objects in the aggregation
     ID data(14);
     getDbTag();
-    cp.receiveID(data,getDbTagData(),CommMetaData(0));
+    comm.receiveID(data,getDbTagData(),CommMetaData(0));
 
     //
     // now ask the object broker an object of each type
     // and invoke recvSelf() on the object to init it.
     //
 
-    brokeConstraintHandler(cp,ID(data(0)));
+    brokeConstraintHandler(comm,ID(data(0)));
     if(getConstraintHandlerPtr())
       {
 	getConstraintHandlerPtr()->setDbTag(data(7));
-	getConstraintHandlerPtr()->recvSelf(cp);
+	getConstraintHandlerPtr()->recvSelf(comm);
       }
     else
       {
@@ -543,11 +543,11 @@ int XC::DomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
 	return -1;
       }
 
-    brokeNumberer(cp,data);
+    brokeNumberer(comm,data);
     if(getDOF_NumbererPtr())
       {
 	getDOF_NumbererPtr()->setDbTag(data(8));	
-	getDOF_NumbererPtr()->recvSelf(cp);
+	getDOF_NumbererPtr()->recvSelf(comm);
       }
     else
       {
@@ -557,11 +557,11 @@ int XC::DomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
       }
 
 
-    brokeAnalysisModel(cp,ID(data(2)));
+    brokeAnalysisModel(comm,ID(data(2)));
     if(getAnalysisModelPtr())
       {
 	getAnalysisModelPtr()->setDbTag(data(9));
-	getAnalysisModelPtr()->recvSelf(cp);
+	getAnalysisModelPtr()->recvSelf(comm);
       }
     else {
 	std::cerr << getClassName() << "::" << __FUNCTION__
@@ -570,11 +570,11 @@ int XC::DomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
     }        
 
 
-    brokeDomainDecompAlgo(cp,data);
+    brokeDomainDecompAlgo(comm,data);
     if(getDomainDecompSolutionAlgorithmPtr())
       {
 	getDomainDecompSolutionAlgorithmPtr()->setDbTag(data(10));
-	getDomainDecompSolutionAlgorithmPtr()->recvSelf(cp);
+	getDomainDecompSolutionAlgorithmPtr()->recvSelf(comm);
       }
     else
       {
@@ -583,11 +583,11 @@ int XC::DomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
 	return -1;
       }            
 
-    brokeIncrementalIntegrator(cp,data);
+    brokeIncrementalIntegrator(comm,data);
     if(getIncrementalIntegratorPtr())
       {
 	getIncrementalIntegratorPtr()->setDbTag(data(11));
-	getIncrementalIntegratorPtr()->recvSelf(cp);
+	getIncrementalIntegratorPtr()->recvSelf(comm);
       }
     else
       {
@@ -596,8 +596,8 @@ int XC::DomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
 	return -1;
       }        	
 
-    brokeDDLinearSOE(cp,ID(data(5)));
-    theSolver= cp.getNewDomainSolver();
+    brokeDDLinearSOE(comm,ID(data(5)));
+    theSolver= comm.getNewDomainSolver();
 
     if(getLinearSOEPtr() == 0 || theSolver == 0)
       {
@@ -609,8 +609,8 @@ int XC::DomainDecompositionAnalysis::recvSelf(const CommParameters &cp)
       {
 	getLinearSOEPtr()->setDbTag(data(12));
 	theSolver->setDbTag(data(13));
-	getLinearSOEPtr()->recvSelf(cp);
-	theSolver->recvSelf(cp);
+	getLinearSOEPtr()->recvSelf(comm);
+	theSolver->recvSelf(comm);
       }
 
     // set the links in all the objects

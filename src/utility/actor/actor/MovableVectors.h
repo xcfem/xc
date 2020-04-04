@@ -44,8 +44,8 @@ class MovableVectors: public MovableContainer<std::vector<Vector> >
   {
   public:
     explicit MovableVectors(std::vector<Vector> &);
-    int sendItem(const Vector &s,CommParameters &,DbTagData &, const CommMetaData &);
-    int receiveItem(Vector &,const CommParameters &,DbTagData &, const CommMetaData &);
+    int sendItem(const Vector &s,Communicator &,DbTagData &, const CommMetaData &);
+    int receiveItem(Vector &,const Communicator &,DbTagData &, const CommMetaData &);
 
     const std::vector<Vector> &getVectores(void) const
       { return container; }

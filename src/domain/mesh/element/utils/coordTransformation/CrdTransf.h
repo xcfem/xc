@@ -97,8 +97,8 @@ class CrdTransf: public TaggedObject, public MovableObject
 
     int set_node_ptrs(Node *nodeIPointer, Node *nodeJPointer);
 
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
     virtual void set_rigid_joint_offsetI(const Vector &rigJntOffsetI)= 0;
     virtual void set_rigid_joint_offsetJ(const Vector &rigJntOffsetJ)= 0;
   public:

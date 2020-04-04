@@ -72,8 +72,8 @@ class EnvelopeElementRecorder: public ElementRecorderBase
     int initialize(void);
     EnvelopeData envelope;
   protected:
-    int sendData(CommParameters &);  
-    int receiveData(const CommParameters &);
+    int sendData(Communicator &);  
+    int receiveData(const Communicator &);
   public:
     EnvelopeElementRecorder(void);
     EnvelopeElementRecorder(const ID &eleID, 
@@ -89,8 +89,8 @@ class EnvelopeElementRecorder: public ElementRecorderBase
     int record(int commitTag, double timeStamp);
     int restart(void);    
 
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

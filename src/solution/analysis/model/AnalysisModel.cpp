@@ -1009,10 +1009,10 @@ XC::ConstraintHandler *XC::AnalysisModel::getHandlerPtr(void)
 //! as they are not MovableObjects. AnalysisModel objects are only sent
 //! when setting up a DomainDecompAnalysis on a remote process; only type
 //! info and whatever subclasses might need need to be sent.
-int XC::AnalysisModel::sendSelf(CommParameters &cp)
+int XC::AnalysisModel::sendSelf(Communicator &comm)
   { return 0; }
 
 //! Returns \f$0\f$.
-int XC::AnalysisModel::recvSelf(const CommParameters &cp) 
+int XC::AnalysisModel::recvSelf(const Communicator &comm) 
   { return 0; }
 

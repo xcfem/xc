@@ -83,8 +83,8 @@ class Spring: public ProtoTruss
     double computeCurrentStrain(void) const;
     double computeCurrentStrainRate(void) const;
 
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
     void initialize(void);
   public:
     Spring(int tag, int dimension, int Nd1, int Nd2, UniaxialMaterial &theMaterial, double A);
@@ -123,8 +123,8 @@ class Spring: public ProtoTruss
     const Vector &getResistingForceIncInertia(void) const;            
 
     // public methods for element output
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;    
 
 

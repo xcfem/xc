@@ -46,8 +46,8 @@ class IntegratorVectors: public MovableObject
     double deltaLambdaStep, currentLambda;
 
     void resize(const int &size);
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     IntegratorVectors(void);
 
@@ -95,8 +95,8 @@ class IntegratorVectors: public MovableObject
     void update(const double &);
     void domainChanged(const size_t &sz,IncrementalIntegrator &,LinearSOE &);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

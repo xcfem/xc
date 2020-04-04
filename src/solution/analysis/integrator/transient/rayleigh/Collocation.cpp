@@ -327,51 +327,51 @@ int XC::Collocation::commit(void)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::Collocation::sendData(CommParameters &cp)
+int XC::Collocation::sendData(Communicator &comm)
   {
-    int res= RayleighBase::sendData(cp);
-    res+= cp.sendMovable(Ut,getDbTagData(),CommMetaData(4));
-    res+= cp.sendMovable(U,getDbTagData(),CommMetaData(5));
-    res+= cp.sendDoubles(theta,beta,gamma,c1,c2,c3,getDbTagData(),CommMetaData(6));
+    int res= RayleighBase::sendData(comm);
+    res+= comm.sendMovable(Ut,getDbTagData(),CommMetaData(4));
+    res+= comm.sendMovable(U,getDbTagData(),CommMetaData(5));
+    res+= comm.sendDoubles(theta,beta,gamma,c1,c2,c3,getDbTagData(),CommMetaData(6));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::Collocation::recvData(const CommParameters &cp)
+int XC::Collocation::recvData(const Communicator &comm)
   {
-    int res= RayleighBase::recvData(cp);
-    res+= cp.receiveMovable(Ut,getDbTagData(),CommMetaData(4));
-    res+= cp.receiveMovable(U,getDbTagData(),CommMetaData(5));
-    res+= cp.receiveDoubles(theta,beta,gamma,c1,c2,c3,getDbTagData(),CommMetaData(6));
+    int res= RayleighBase::recvData(comm);
+    res+= comm.receiveMovable(Ut,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveMovable(U,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveDoubles(theta,beta,gamma,c1,c2,c3,getDbTagData(),CommMetaData(6));
     return res;
   }
 
-int XC::Collocation::sendSelf(CommParameters &cp)
+int XC::Collocation::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(7);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "sendSelf() - failed to send data\n";
     return res;
   }
 
 
-int XC::Collocation::recvSelf(const CommParameters &cp)
+int XC::Collocation::recvSelf(const Communicator &comm)
   {
     inicComm(7);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
       }

@@ -217,36 +217,36 @@ int XC::EPPGapMaterial::revertToStart(void)
 XC::UniaxialMaterial *XC::EPPGapMaterial::getCopy(void) const
   { return new EPPGapMaterial(*this); }
 
-int XC::EPPGapMaterial::sendSelf(CommParameters &cp)
+int XC::EPPGapMaterial::sendSelf(Communicator &comm)
   {
     int res = 0;
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(4); 
 
     setDbTagDataPos(0,this->getTag());
-    res+= cp.sendDoubles(commitStrain,E,fy,gap,getDbTagData(),CommMetaData(1));
-    res+= cp.sendDoubles(eta,maxElasticYieldStrain,minElasticYieldStrain,getDbTagData(),CommMetaData(2));
+    res+= comm.sendDoubles(commitStrain,E,fy,gap,getDbTagData(),CommMetaData(1));
+    res+= comm.sendDoubles(eta,maxElasticYieldStrain,minElasticYieldStrain,getDbTagData(),CommMetaData(2));
     setDbTagDataPos(3,damage);
 
-    res = cp.sendIdData(getDbTagData(),dataTag);
+    res = comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0) 
       std::cerr << "XC::EPPGapMaterial::sendSelf() - failed to send data\n";
     return res;
   }
 
-int XC::EPPGapMaterial::recvSelf(const CommParameters &cp)
+int XC::EPPGapMaterial::recvSelf(const Communicator &comm)
   {
     int res = 0;
     inicComm(3);
     const int dataTag= getDbTag();
-    res= cp.receiveIdData(getDbTagData(),dataTag);
+    res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "XC::EPPGapMaterial::recvSelf() - failed to recv data\n";
     else
       {
-        res+= cp.receiveDoubles(commitStrain,E,fy,gap,getDbTagData(),CommMetaData(1));
-        res+= cp.receiveDoubles(eta,maxElasticYieldStrain,minElasticYieldStrain,getDbTagData(),CommMetaData(2));
+        res+= comm.receiveDoubles(commitStrain,E,fy,gap,getDbTagData(),CommMetaData(1));
+        res+= comm.receiveDoubles(eta,maxElasticYieldStrain,minElasticYieldStrain,getDbTagData(),CommMetaData(2));
         damage= getDbTagDataPos(3);
       }
     return res;

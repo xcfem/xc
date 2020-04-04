@@ -355,13 +355,13 @@ const double &XC::SymArpackSolver::getEigenvalue(int mode) const
   }
 
 
-int XC::SymArpackSolver::sendSelf(CommParameters &cp)
+int XC::SymArpackSolver::sendSelf(Communicator &comm)
   {
     // nothing to do
     return 0;
   }
 
-int XC::SymArpackSolver::recvSelf(const CommParameters &cp)
+int XC::SymArpackSolver::recvSelf(const Communicator &comm)
   {
     // nothing to do
     return 0;

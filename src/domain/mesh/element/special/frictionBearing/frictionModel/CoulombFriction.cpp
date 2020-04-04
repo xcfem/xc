@@ -99,47 +99,47 @@ XC::FrictionModel* XC::CoulombFriction::getCopy(void) const
 
 
 //! @brief Send data through the channel being passed as parameter.
-int XC::CoulombFriction::sendData(CommParameters &cp)
+int XC::CoulombFriction::sendData(Communicator &comm)
   {
-    int res= FrictionModel::sendData(cp);
-    res+= cp.sendDouble(mu,getDbTagData(),CommMetaData(2));
+    int res= FrictionModel::sendData(comm);
+    res+= comm.sendDouble(mu,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 
 //! @brief Receive data through the channel being passed as parameter.
-int XC::CoulombFriction::recvData(const CommParameters &cp)
+int XC::CoulombFriction::recvData(const Communicator &comm)
   {
-    int res= FrictionModel::recvData(cp);
-    res+= cp.receiveDouble(mu,getDbTagData(),CommMetaData(2));
+    int res= FrictionModel::recvData(comm);
+    res+= comm.receiveDouble(mu,getDbTagData(),CommMetaData(2));
     return res;
   }
 
-int XC::CoulombFriction::sendSelf(CommParameters &cp)
+int XC::CoulombFriction::sendSelf(Communicator &comm)
   {
     inicComm(3);
   
-    int res= sendData(cp);
+    int res= sendData(comm);
 
     const int dbTag= getDbTag();
-    res+= cp.sendIdData(getDbTagData(),dbTag);
+    res+= comm.sendIdData(getDbTagData(),dbTag);
     if(res < 0)
       std::cerr << "CoulombFriction::sendSelf - failed to send data.\n";
     return res;
   }
 
 
-int XC::CoulombFriction::recvSelf(const CommParameters &cp)
+int XC::CoulombFriction::recvSelf(const Communicator &comm)
   {
     inicComm(3);
     
     const int dbTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dbTag);
+    int res= comm.receiveIdData(getDbTagData(),dbTag);
     if(res<0)
       std::cerr << "CoulombFriction::recvSelf - failed to receive ids.\n";
     else
       {
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
            std::cerr << "CoulombFriction::recvSelf - failed to receive data.\n";
       }

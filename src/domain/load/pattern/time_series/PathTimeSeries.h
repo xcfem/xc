@@ -87,8 +87,8 @@ class PathTimeSeries: public PathSeriesBase
     Vector time; //!< vector containing the time values of data points
     mutable int currentTimeLoc; //!< current location in time
   protected:
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
   public:
     // constructors  
@@ -118,8 +118,8 @@ class PathTimeSeries: public PathSeriesBase
     void readFromFiles(const std::string &filePathName,const std::string &fileTimeName);
 
     // methods for output
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace

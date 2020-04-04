@@ -54,8 +54,8 @@ class MovableID: public ID, public MovableObject
 
     void setID(const ID &);
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
 
   };
 

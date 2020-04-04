@@ -412,64 +412,64 @@ XC::UniaxialMaterial *XC::HystereticMaterial::getCopy(void) const
   { return new HystereticMaterial(*this); }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::HystereticMaterial::sendData(CommParameters &cp)
+int XC::HystereticMaterial::sendData(Communicator &comm)
   {
-    int res= UniaxialMaterial::sendData(cp);
-    res+= cp.sendDoubles(pinchX,pinchY,damfc1,damfc2,beta,energyA,getDbTagData(),CommMetaData(2));
-    res+= cp.sendDoubles(mom1p,rot1p,mom2p,rot2p,mom3p,rot3p,getDbTagData(),CommMetaData(3));
-    res+= cp.sendDoubles(mom1n,rot1n,mom2n,rot2n,mom3n,rot3n,getDbTagData(),CommMetaData(4));
-    res+= cp.sendDoubles(CrotMax,CrotMin,CrotPu,CrotNu,CenergyD,getDbTagData(),CommMetaData(5));
-    res+= cp.sendDoubles(TrotMax,TrotMin,TrotPu,TrotNu,TenergyD,getDbTagData(),CommMetaData(6));
-    res+= cp.sendMovable(converged,getDbTagData(),CommMetaData(7));
-    res+= cp.sendMovable(trial,getDbTagData(),CommMetaData(8));
-    res+= cp.sendDoubles(E1p,E1n,E2p,E2n,E3p,E3n,getDbTagData(),CommMetaData(9));
-    res+= cp.sendInts(CloadIndicator,TloadIndicator,getDbTagData(),CommMetaData(10));
+    int res= UniaxialMaterial::sendData(comm);
+    res+= comm.sendDoubles(pinchX,pinchY,damfc1,damfc2,beta,energyA,getDbTagData(),CommMetaData(2));
+    res+= comm.sendDoubles(mom1p,rot1p,mom2p,rot2p,mom3p,rot3p,getDbTagData(),CommMetaData(3));
+    res+= comm.sendDoubles(mom1n,rot1n,mom2n,rot2n,mom3n,rot3n,getDbTagData(),CommMetaData(4));
+    res+= comm.sendDoubles(CrotMax,CrotMin,CrotPu,CrotNu,CenergyD,getDbTagData(),CommMetaData(5));
+    res+= comm.sendDoubles(TrotMax,TrotMin,TrotPu,TrotNu,TenergyD,getDbTagData(),CommMetaData(6));
+    res+= comm.sendMovable(converged,getDbTagData(),CommMetaData(7));
+    res+= comm.sendMovable(trial,getDbTagData(),CommMetaData(8));
+    res+= comm.sendDoubles(E1p,E1n,E2p,E2n,E3p,E3n,getDbTagData(),CommMetaData(9));
+    res+= comm.sendInts(CloadIndicator,TloadIndicator,getDbTagData(),CommMetaData(10));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::HystereticMaterial::recvData(const CommParameters &cp)
+int XC::HystereticMaterial::recvData(const Communicator &comm)
   {
-    int res= UniaxialMaterial::recvData(cp);
-    res+= cp.receiveDoubles(pinchX,pinchY,damfc1,damfc2,beta,energyA,getDbTagData(),CommMetaData(2));
-    res+= cp.receiveDoubles(mom1p,rot1p,mom2p,rot2p,mom3p,rot3p,getDbTagData(),CommMetaData(3));
-    res+= cp.receiveDoubles(mom1n,rot1n,mom2n,rot2n,mom3n,rot3n,getDbTagData(),CommMetaData(4));
-    res+= cp.receiveDoubles(CrotMax,CrotMin,CrotPu,CrotNu,CenergyD,getDbTagData(),CommMetaData(5));
-    res+= cp.receiveDoubles(TrotMax,TrotMin,TrotPu,TrotNu,TenergyD,getDbTagData(),CommMetaData(6));
-    res+= cp.receiveMovable(converged,getDbTagData(),CommMetaData(7));
-    res+= cp.receiveMovable(trial,getDbTagData(),CommMetaData(8));
-    res+= cp.receiveDoubles(E1p,E1n,E2p,E2n,E3p,E3n,getDbTagData(),CommMetaData(9));
-    res+= cp.receiveInts(CloadIndicator,TloadIndicator,getDbTagData(),CommMetaData(10));
+    int res= UniaxialMaterial::recvData(comm);
+    res+= comm.receiveDoubles(pinchX,pinchY,damfc1,damfc2,beta,energyA,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveDoubles(mom1p,rot1p,mom2p,rot2p,mom3p,rot3p,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveDoubles(mom1n,rot1n,mom2n,rot2n,mom3n,rot3n,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveDoubles(CrotMax,CrotMin,CrotPu,CrotNu,CenergyD,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveDoubles(TrotMax,TrotMin,TrotPu,TrotNu,TenergyD,getDbTagData(),CommMetaData(6));
+    res+= comm.receiveMovable(converged,getDbTagData(),CommMetaData(7));
+    res+= comm.receiveMovable(trial,getDbTagData(),CommMetaData(8));
+    res+= comm.receiveDoubles(E1p,E1n,E2p,E2n,E3p,E3n,getDbTagData(),CommMetaData(9));
+    res+= comm.receiveInts(CloadIndicator,TloadIndicator,getDbTagData(),CommMetaData(10));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::HystereticMaterial::sendSelf(CommParameters &cp)
+int XC::HystereticMaterial::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(12); 
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0) 
       std::cerr << "HystereticMaterial::sendSelf() - failed to send data\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::HystereticMaterial::recvSelf(const CommParameters &cp)
+int XC::HystereticMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(12);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << "HystereticMaterial::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << "HystereticMaterial::recvSelf - failed to receive data.\n";
       }

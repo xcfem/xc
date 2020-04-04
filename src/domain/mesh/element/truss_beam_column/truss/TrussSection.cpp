@@ -469,42 +469,42 @@ const XC::Vector &XC::TrussSection::getResistingForceIncInertia(void) const
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::TrussSection::sendData(CommParameters &cp)
+int XC::TrussSection::sendData(Communicator &comm)
   {
-    int res= TrussBase::sendData(cp);
-    res+= cp.sendBrokedPtr(theSection,getDbTagData(),BrokedPtrCommMetaData(20,21,22));
+    int res= TrussBase::sendData(comm);
+    res+= comm.sendBrokedPtr(theSection,getDbTagData(),BrokedPtrCommMetaData(20,21,22));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::TrussSection::recvData(const CommParameters &cp)
+int XC::TrussSection::recvData(const Communicator &comm)
   {
-    int res= TrussBase::recvData(cp);
-    theSection= cp.getBrokedMaterial(theSection,getDbTagData(),BrokedPtrCommMetaData(20,21,22));
+    int res= TrussBase::recvData(comm);
+    theSection= comm.getBrokedMaterial(theSection,getDbTagData(),BrokedPtrCommMetaData(20,21,22));
     return res;
   }
 
-int XC::TrussSection::sendSelf(CommParameters &cp)
+int XC::TrussSection::sendSelf(Communicator &comm)
   {
     inicComm(23);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    const int dataTag= getDbTag(cp);
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    const int dataTag= getDbTag(comm);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "TrussSection::sendSelf -- failed to send ID data\n";
     return res;
   }
 
-int XC::TrussSection::recvSelf(const CommParameters &cp)
+int XC::TrussSection::recvSelf(const Communicator &comm)
   {
     inicComm(23);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "TrussSection::recvSelf() - failed to recv ID data";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

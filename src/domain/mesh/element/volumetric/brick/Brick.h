@@ -105,8 +105,8 @@ class Brick: public BrickBase
   
     static size_t getVectorIndex(const size_t &,const size_t &);
   protected:
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public :
     
     Brick(void);
@@ -148,8 +148,8 @@ class Brick: public BrickBase
     const Vector &getResistingForceIncInertia(void) const; //get residual with inertia terms
 
     // public methods for element output
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
       
     //print out element data
     void Print( std::ostream &s, int flag ) const;

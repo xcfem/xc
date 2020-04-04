@@ -433,10 +433,10 @@ void XC::TransformationConstraintHandler::clearAll(void)
     ConstraintHandler::clearAll();
   }
 
-int XC::TransformationConstraintHandler::sendSelf(CommParameters &cp)
+int XC::TransformationConstraintHandler::sendSelf(Communicator &comm)
   { return 0; }
 
-int XC::TransformationConstraintHandler::recvSelf(const CommParameters &cp)
+int XC::TransformationConstraintHandler::recvSelf(const Communicator &comm)
   { return 0; }
 
 

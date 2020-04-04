@@ -141,55 +141,55 @@ void XC::IntegratorVectors::domainChanged(const size_t &sz,IncrementalIntegrator
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::IntegratorVectors::sendData(CommParameters &cp)
+int XC::IntegratorVectors::sendData(Communicator &comm)
   {
-    int res= cp.sendDoubles(deltaLambdaStep,currentLambda,getDbTagData(),CommMetaData(1));
-    res+= cp.sendVector(deltaUhat,getDbTagData(),CommMetaData(2));
-    res+= cp.sendVector(deltaUbar,getDbTagData(),CommMetaData(3));
-    res+= cp.sendVector(deltaU,getDbTagData(),CommMetaData(4));
-    res+= cp.sendVector(deltaUstep,getDbTagData(),CommMetaData(5));
-    res+= cp.sendVector(phat,getDbTagData(),CommMetaData(6));
+    int res= comm.sendDoubles(deltaLambdaStep,currentLambda,getDbTagData(),CommMetaData(1));
+    res+= comm.sendVector(deltaUhat,getDbTagData(),CommMetaData(2));
+    res+= comm.sendVector(deltaUbar,getDbTagData(),CommMetaData(3));
+    res+= comm.sendVector(deltaU,getDbTagData(),CommMetaData(4));
+    res+= comm.sendVector(deltaUstep,getDbTagData(),CommMetaData(5));
+    res+= comm.sendVector(phat,getDbTagData(),CommMetaData(6));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::IntegratorVectors::recvData(const CommParameters &cp)
+int XC::IntegratorVectors::recvData(const Communicator &comm)
   {
-    int res= cp.receiveDoubles(deltaLambdaStep,currentLambda,getDbTagData(),CommMetaData(1));
-    res+= cp.receiveVector(deltaUhat,getDbTagData(),CommMetaData(2));
-    res+= cp.receiveVector(deltaUbar,getDbTagData(),CommMetaData(3));
-    res+= cp.receiveVector(deltaU,getDbTagData(),CommMetaData(4));
-    res+= cp.receiveVector(deltaUstep,getDbTagData(),CommMetaData(5));
-    res+= cp.receiveVector(phat,getDbTagData(),CommMetaData(6));
+    int res= comm.receiveDoubles(deltaLambdaStep,currentLambda,getDbTagData(),CommMetaData(1));
+    res+= comm.receiveVector(deltaUhat,getDbTagData(),CommMetaData(2));
+    res+= comm.receiveVector(deltaUbar,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveVector(deltaU,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveVector(deltaUstep,getDbTagData(),CommMetaData(5));
+    res+= comm.receiveVector(phat,getDbTagData(),CommMetaData(6));
     return res;
   }
 
-int XC::IntegratorVectors::sendSelf(CommParameters &cp)
+int XC::IntegratorVectors::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(7);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "IntegratorVectors::sendSelf() - failed to send data\n";
     return res;
   }
 
 
-int XC::IntegratorVectors::recvSelf(const CommParameters &cp)
+int XC::IntegratorVectors::recvSelf(const Communicator &comm)
   {
     inicComm(7);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << "IntegratorVectors::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << "IntegratorVectors::recvSelf - failed to receive data.\n";
       }

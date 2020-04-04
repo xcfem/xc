@@ -38,7 +38,7 @@ namespace XC {
 class DbTagData;
 
 class FEM_ObjectBroker;
-class CommParameters;
+class Communicator;
 
 //! @ingroup OneDimensionalElem
 //
@@ -105,8 +105,8 @@ class EsfBeamColumn3d: public Vector
     inline double T2(void) const
       { return T(); }
   };
-int sendEsfBeamColumn3d(const EsfBeamColumn3d &, int posDbTag,DbTagData &dt, CommParameters &cp);
-int receiveEsfBeamColumn3d(EsfBeamColumn3d &v, int posDbTag,DbTagData &dt,const CommParameters &cp);
+int sendEsfBeamColumn3d(const EsfBeamColumn3d &, int posDbTag,DbTagData &dt, Communicator &comm);
+int receiveEsfBeamColumn3d(EsfBeamColumn3d &v, int posDbTag,DbTagData &dt,const Communicator &comm);
 
 } // end of XC namespace
 

@@ -48,8 +48,8 @@ class ConcreteBase: public RawConcrete
     UniaxialHistoryVars trialHistory; //!< TRIAL history Variables
     UniaxialStateVars trialState;//!< TRIAL state Variables
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     void commit_to_trial_history(void);
     void commit_to_trial_state(void);

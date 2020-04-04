@@ -45,8 +45,8 @@ class TrussBase: public ProtoTruss
     double L;	    //!< length of truss based on undeformed configuration.
     double cosX[3]; //!< Cosenos directories.
 
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
     void initialize(void);
     void setup_L_cos_dir(void);
     void set_load(const Vector &);

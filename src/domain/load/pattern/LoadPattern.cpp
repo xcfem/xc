@@ -421,37 +421,37 @@ XC::DbTagData &XC::LoadPattern::getDbTagData(void) const
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::LoadPattern::sendData(CommParameters &cp)
+int XC::LoadPattern::sendData(Communicator &comm)
   {
-    int res= NodeLocker::sendData(cp);
-    res+= cp.sendDoubles(loadFactor,gamma_f,getDbTagData(),CommMetaData(7));
-    res+= sendTimeSeriesPtr(theSeries,8,9,getDbTagData(),cp);
-    res+= cp.sendMovable(theLoads,getDbTagData(),CommMetaData(10));
+    int res= NodeLocker::sendData(comm);
+    res+= comm.sendDoubles(loadFactor,gamma_f,getDbTagData(),CommMetaData(7));
+    res+= sendTimeSeriesPtr(theSeries,8,9,getDbTagData(),comm);
+    res+= comm.sendMovable(theLoads,getDbTagData(),CommMetaData(10));
 
-    res+= cp.sendVector(randomLoads,getDbTagData(),CommMetaData(11));
-    res+= cp.sendBools(RVisRandomProcessDiscretizer,isConstant,getDbTagData(),CommMetaData(12));
+    res+= comm.sendVector(randomLoads,getDbTagData(),CommMetaData(11));
+    res+= comm.sendBools(RVisRandomProcessDiscretizer,isConstant,getDbTagData(),CommMetaData(12));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::LoadPattern::recvData(const CommParameters &cp)
+int XC::LoadPattern::recvData(const Communicator &comm)
   {
-    int res= NodeLocker::recvData(cp);
-    res+= cp.receiveDoubles(loadFactor,gamma_f,getDbTagData(),CommMetaData(7));
-    theSeries= receiveTimeSeriesPtr(theSeries,8,9,getDbTagData(),cp);
-    res+= cp.receiveMovable(theLoads,getDbTagData(),CommMetaData(10));
-    res+= cp.receiveVector(randomLoads,getDbTagData(),CommMetaData(11));
-    res+= cp.receiveBools(RVisRandomProcessDiscretizer,isConstant,getDbTagData(),CommMetaData(12));
+    int res= NodeLocker::recvData(comm);
+    res+= comm.receiveDoubles(loadFactor,gamma_f,getDbTagData(),CommMetaData(7));
+    theSeries= receiveTimeSeriesPtr(theSeries,8,9,getDbTagData(),comm);
+    res+= comm.receiveMovable(theLoads,getDbTagData(),CommMetaData(10));
+    res+= comm.receiveVector(randomLoads,getDbTagData(),CommMetaData(11));
+    res+= comm.receiveBools(RVisRandomProcessDiscretizer,isConstant,getDbTagData(),CommMetaData(12));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::LoadPattern::sendSelf(CommParameters &cp)
+int XC::LoadPattern::sendSelf(Communicator &comm)
   {
     inicComm(15);
-    int res= sendData(cp);
-    const int dataTag= getDbTag(cp);
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    int res= sendData(comm);
+    const int dataTag= getDbTag(comm);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; failed to send data.\n";    
@@ -460,16 +460,16 @@ int XC::LoadPattern::sendSelf(CommParameters &cp)
 
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::LoadPattern::recvSelf(const CommParameters &cp)
+int XC::LoadPattern::recvSelf(const Communicator &comm)
   {
     inicComm(15);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << ";  data could not be received.\n" ;
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

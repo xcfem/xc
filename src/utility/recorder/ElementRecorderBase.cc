@@ -70,37 +70,37 @@ XC::ElementRecorderBase::~ElementRecorderBase(void)
   }
 
 //! @brief Send the object to another process.
-int XC::ElementRecorderBase::sendData(CommParameters &cp)
+int XC::ElementRecorderBase::sendData(Communicator &comm)
   {
-    int res= MeshCompRecorder::sendData(cp);
-    res+= cp.sendID(eleID,getDbTagData(),CommMetaData(6));
-    res+= cp.sendStrings(responseArgs,getDbTagData(),CommMetaData(7));
+    int res= MeshCompRecorder::sendData(comm);
+    res+= comm.sendID(eleID,getDbTagData(),CommMetaData(6));
+    res+= comm.sendStrings(responseArgs,getDbTagData(),CommMetaData(7));
     return res;
   }
 
 //! @brief Receive the object from other process.
-int XC::ElementRecorderBase::receiveData(const CommParameters &cp)
+int XC::ElementRecorderBase::receiveData(const Communicator &comm)
   {
-    int res= MeshCompRecorder::receiveData(cp);
-    res+= cp.receiveID(eleID,getDbTagData(),CommMetaData(6));
-    res+= cp.receiveStrings(responseArgs,getDbTagData(),CommMetaData(7));
+    int res= MeshCompRecorder::receiveData(comm);
+    res+= comm.receiveID(eleID,getDbTagData(),CommMetaData(6));
+    res+= comm.receiveStrings(responseArgs,getDbTagData(),CommMetaData(7));
     return res;
   }
 
 //! @brief Send the object to other process.
-int XC::ElementRecorderBase::sendSelf(CommParameters &cp)
+int XC::ElementRecorderBase::sendSelf(Communicator &comm)
   {
     int res= 0;
-    if(cp.isDatastore() == 1)
+    if(comm.isDatastore() == 1)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; does not send data to a datastore\n";
     else
       {
-        setDbTag(cp);
+        setDbTag(comm);
         const int dataTag= getDbTag();
         inicComm(8);
-        res= sendData(cp);
-        if(cp.sendIdData(getDbTagData(),dataTag)< 0)
+        res= sendData(comm);
+        if(comm.sendIdData(getDbTagData(),dataTag)< 0)
           {
             std::cerr << getClassName() << "::" << __FUNCTION__
                       << "; failed to send idData\n";
@@ -111,24 +111,24 @@ int XC::ElementRecorderBase::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receive the object from other process.
-int XC::ElementRecorderBase::recvSelf(const CommParameters &cp)
+int XC::ElementRecorderBase::recvSelf(const Communicator &comm)
   {
     int res= 0;
-    if(cp.isDatastore() == 1)
+    if(comm.isDatastore() == 1)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; does not recv data to a datastore\n";
     else
       {
         inicComm(8);
         const int dataTag= getDbTag();
-        res= cp.receiveIdData(getDbTagData(),dataTag);
+        res= comm.receiveIdData(getDbTagData(),dataTag);
         if(res < 0)
           {
             std::cerr << getClassName() << "::" << __FUNCTION__
 		      << "; failed to recv idData\n";
             return res;
           }
-        res= receiveData(cp);
+        res= receiveData(comm);
       }
     return res;
   }

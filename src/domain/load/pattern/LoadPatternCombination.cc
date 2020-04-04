@@ -356,22 +356,22 @@ XC::DbTagData &XC::LoadPatternCombination::getDbTagData(void) const
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::LoadPatternCombination::sendData(CommParameters &cp)
+int XC::LoadPatternCombination::sendData(Communicator &comm)
   {
-    int res= ForceReprComponent::sendData(cp);
-    res+= cp.sendString(name,getDbTagData(),CommMetaData(2));
-    res+= cp.sendString(getString(),getDbTagData(),CommMetaData(3));
+    int res= ForceReprComponent::sendData(comm);
+    res+= comm.sendString(name,getDbTagData(),CommMetaData(2));
+    res+= comm.sendString(getString(),getDbTagData(),CommMetaData(3));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::LoadPatternCombination::recvData(const CommParameters &cp)
+int XC::LoadPatternCombination::recvData(const Communicator &comm)
   {
-    int res= ForceReprComponent::recvData(cp);
-    res+= cp.receiveString(name,getDbTagData(),CommMetaData(2));
+    int res= ForceReprComponent::recvData(comm);
+    res+= comm.receiveString(name,getDbTagData(),CommMetaData(2));
     //Teporary storage for decomposition.
     std::string tmp;
-    res+= cp.receiveString(tmp,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveString(tmp,getDbTagData(),CommMetaData(3));
     map_str_descomp[getDbTag()]= tmp;
     //Decomposition is established later (in LoadCombinationGroup::recvData),
     //after setting up the object's owner and the pointer to LoadHandler.

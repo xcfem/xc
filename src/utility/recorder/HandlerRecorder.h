@@ -47,8 +47,8 @@ class HandlerRecorder: public DomainRecorderBase
     bool initializationDone;
     bool echoTimeFlag;   // flag indicating whether time to be included in o/p
   protected:
-    int sendData(CommParameters &);  
-    int receiveData(const CommParameters &);
+    int sendData(Communicator &);  
+    int receiveData(const Communicator &);
 
   public:
     HandlerRecorder(int classTag);

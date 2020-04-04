@@ -1029,20 +1029,20 @@ const XC::Matrix &XC::ShellMITC4Base::computeBbend( int node, const double shp[3
   }
 
 //! @brief Send members through the channel being passed as parameter.
-int XC::ShellMITC4Base::sendData(CommParameters &cp)
+int XC::ShellMITC4Base::sendData(Communicator &comm)
   {
-    int res= Shell4NBase::sendData(cp);
-    res+=cp.sendDoubles(Ktt,xl[0][0],xl[0][1],xl[0][2],xl[0][3],getDbTagData(),CommMetaData(16));
-    res+= p0.sendData(cp,getDbTagData(),CommMetaData(17));
+    int res= Shell4NBase::sendData(comm);
+    res+=comm.sendDoubles(Ktt,xl[0][0],xl[0][1],xl[0][2],xl[0][3],getDbTagData(),CommMetaData(16));
+    res+= p0.sendData(comm,getDbTagData(),CommMetaData(17));
     return res;
   }
 
 //! @brief Receives members through the channel being passed as parameter.
-int XC::ShellMITC4Base::recvData(const CommParameters &cp)
+int XC::ShellMITC4Base::recvData(const Communicator &comm)
   {
-    int res= Shell4NBase::recvData(cp);
-    res+=cp.receiveDoubles(Ktt,xl[0][0],xl[0][1],xl[0][2],xl[0][3],getDbTagData(),CommMetaData(16));
-    res+= p0.receiveData(cp,getDbTagData(),CommMetaData(17));
+    int res= Shell4NBase::recvData(comm);
+    res+=comm.receiveDoubles(Ktt,xl[0][0],xl[0][1],xl[0][2],xl[0][3],getDbTagData(),CommMetaData(16));
+    res+= p0.receiveData(comm,getDbTagData(),CommMetaData(17));
     return res;
   }
 

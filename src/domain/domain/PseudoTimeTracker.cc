@@ -81,46 +81,46 @@ XC::DbTagData &XC::PseudoTimeTracker::getDbTagData(void) const
   }
 
 //! @brief Send data through the channel being passed as parameter.
-int XC::PseudoTimeTracker::sendData(CommParameters &cp)
+int XC::PseudoTimeTracker::sendData(Communicator &comm)
   {
-    int res= cp.sendDoubles(currentTime,committedTime,dT,eigenvalueTimeSet,getDbTagData(),CommMetaData(1));
+    int res= comm.sendDoubles(currentTime,committedTime,dT,eigenvalueTimeSet,getDbTagData(),CommMetaData(1));
     return res;
   }
 
 //! @brief Receive data through the channel being passed as parameter.
-int XC::PseudoTimeTracker::recvData(const CommParameters &cp)
+int XC::PseudoTimeTracker::recvData(const Communicator &comm)
   {
-    int res= cp.receiveDoubles(currentTime,committedTime,dT,eigenvalueTimeSet,getDbTagData(),CommMetaData(1));
+    int res= comm.receiveDoubles(currentTime,committedTime,dT,eigenvalueTimeSet,getDbTagData(),CommMetaData(1));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::PseudoTimeTracker::sendSelf(CommParameters &cp)
+int XC::PseudoTimeTracker::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(2);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << "PseudoTimeTracker::sendSelf() - failed to send data\n";
     return res;
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::PseudoTimeTracker::recvSelf(const CommParameters &cp)
+int XC::PseudoTimeTracker::recvSelf(const Communicator &comm)
   {
     inicComm(2);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << "PseudoTimeTracker::recvSelf - failed to receive ids.\n";
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << "PseudoTimeTracker::recvSelf - failed to receive data.\n";
       }

@@ -101,8 +101,8 @@ class Mesh: public MeshComponentContainer
   protected:
     void free_mem(void);
     DbTagData &getDbTagData(void) const;
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     Mesh(CommandEntity *owr);
     Mesh(CommandEntity *owr,TaggedObjectStorage &theNodesStorage, TaggedObjectStorage &theElementsStorage);
@@ -194,8 +194,8 @@ class Mesh: public MeshComponentContainer
     virtual void Print(std::ostream &s, int flag =0) const;
     friend std::ostream &operator<<(std::ostream &, const Mesh &);
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
 
     // nodal methods required in mesh interface for parallel interprter
     virtual double getNodeDisp(int nodeTag, int dof, int &errorFlag);

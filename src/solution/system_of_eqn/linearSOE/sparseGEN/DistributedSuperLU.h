@@ -110,8 +110,8 @@ class DistributedSuperLU: public SparseGenColLinSolver
 
     virtual int setProcessID(int domainTag);
     virtual int setChannels(int numChannels, Channel **theChannels);
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

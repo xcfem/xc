@@ -162,10 +162,10 @@ void XC::ConstraintHandler::clearAll(void)
   }
 
 //! @brief Send object members through the channel passed as parameter.
-int XC::ConstraintHandler::sendData(CommParameters &cp)
+int XC::ConstraintHandler::sendData(Communicator &comm)
   { return 0; }
 
 //! @brief Receive object members through the channel passed as parameter.
-int XC::ConstraintHandler::recvData(const CommParameters &cp)
+int XC::ConstraintHandler::recvData(const Communicator &comm)
   { return 0; }
 

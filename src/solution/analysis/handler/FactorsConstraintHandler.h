@@ -47,8 +47,8 @@ class FactorsConstraintHandler: public ConstraintHandler
     double alphaSP; //!< Factor used with the single freedom constraints.
     double alphaMP; //!< Factor used with the multi-freedom constraints.
 
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
     FactorsConstraintHandler(ModelWrapper *,int classTag,const double &alphaSP,const double &alphaMP);
   public:
     //! @brief Set the factor used with single freedom constraints.
@@ -64,8 +64,8 @@ class FactorsConstraintHandler: public ConstraintHandler
     double getAlphaMP(void) const
       { return alphaMP; }
     
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

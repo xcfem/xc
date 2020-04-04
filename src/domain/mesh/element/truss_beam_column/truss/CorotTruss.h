@@ -77,8 +77,8 @@ class CorotTruss: public CorotTrussBase
 
     double A;//!< area of CorotTruss element.
   protected:
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
   public:
     CorotTruss(int tag, int dim,int Nd1, int Nd2, UniaxialMaterial &theMaterial,double A);
@@ -120,8 +120,8 @@ class CorotTruss: public CorotTrussBase
     const Vector &getResistingForceIncInertia(void) const;            
 
     // public methods for element output
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;    
 
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInfo);

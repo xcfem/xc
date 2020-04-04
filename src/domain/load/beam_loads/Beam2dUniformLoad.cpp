@@ -246,12 +246,12 @@ void XC::Beam2dUniformLoad::addElasticDeformations(const double &L,const CrossSe
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::Beam2dUniformLoad::sendSelf(CommParameters &cp)
+int XC::Beam2dUniformLoad::sendSelf(Communicator &comm)
   {
     inicComm(6);
-    int result= sendData(cp);
+    int result= sendData(comm);
     const int dbTag= getDbTag();
-    result+= cp.sendIdData(getDbTagData(),dbTag);
+    result+= comm.sendIdData(getDbTagData(),dbTag);
     if(result < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; failed to send extra data\n";
@@ -259,15 +259,15 @@ int XC::Beam2dUniformLoad::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::Beam2dUniformLoad::recvSelf(const CommParameters &cp)
+int XC::Beam2dUniformLoad::recvSelf(const Communicator &comm)
   {
     inicComm(6);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; data could not be received\n" ;
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }

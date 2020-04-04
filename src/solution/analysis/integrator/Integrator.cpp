@@ -143,13 +143,13 @@ void XC::Integrator::Print(std::ostream &os, int flag) const
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::Integrator::sendData(CommParameters &cp)
+int XC::Integrator::sendData(Communicator &comm)
   {
     return 0;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::Integrator::recvData(const CommParameters &cp)
+int XC::Integrator::recvData(const Communicator &comm)
   {
     return 0;
   }

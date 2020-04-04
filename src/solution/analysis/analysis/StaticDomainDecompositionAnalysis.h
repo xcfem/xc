@@ -107,8 +107,8 @@ class StaticDomainDecompositionAnalysis: public DomainDecompositionAnalysis
     int setLinearSOE(LinearSOE &theSOE);
 
     // methods to send/receive
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 inline Analysis *StaticDomainDecompositionAnalysis::getCopy(void) const
   { return new StaticDomainDecompositionAnalysis(*this); }

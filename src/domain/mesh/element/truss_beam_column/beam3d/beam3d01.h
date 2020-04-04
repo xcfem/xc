@@ -76,8 +76,8 @@ class beam3d01: public beam3dBase
     Element *getCopy(void) const;
 
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

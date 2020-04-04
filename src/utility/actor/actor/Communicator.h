@@ -27,8 +27,8 @@
 //----------------------------------------------------------------------------
                                                                         
                                                                         
-#ifndef CommParameters_h
-#define CommParameters_h
+#ifndef Communicator_h
+#define Communicator_h
 
 #include "utility/matrix/ID.h"
 #include <string>
@@ -63,15 +63,15 @@ class BeamIntegration;
 //! @ingroup IPComm
 //
 //! @brief Communication parameters between processes.
-class CommParameters
+class Communicator
   {
   private:
     int commitTag;
     Channel *canal;
     FEM_ObjectBroker *broker;
   public:
-    CommParameters(int cTag, Channel &);
-    CommParameters(int cTag, Channel &, FEM_ObjectBroker &);
+    Communicator(int cTag, Channel &);
+    Communicator(int cTag, Channel &, FEM_ObjectBroker &);
 
     inline const int &getCommitTag(void) const
       { return commitTag; }
@@ -229,7 +229,7 @@ class CommParameters
   };
 
 template <class T>
-T *CommParameters::getBrokedPtr(const int &classTag,T *(FEM_ObjectBroker::*ptrFunc)(int)) const
+T *Communicator::getBrokedPtr(const int &classTag,T *(FEM_ObjectBroker::*ptrFunc)(int)) const
   {
     assert(broker);
     T *retval=((*broker).*ptrFunc)(classTag);  
@@ -237,7 +237,7 @@ T *CommParameters::getBrokedPtr(const int &classTag,T *(FEM_ObjectBroker::*ptrFu
   }
 
 template <class MAT>
-MAT *CommParameters::getBrokedMaterial(MAT* &ptr,DbTagData &dbTagData, const BrokedPtrCommMetaData &md) const
+MAT *Communicator::getBrokedMaterial(MAT* &ptr,DbTagData &dbTagData, const BrokedPtrCommMetaData &md) const
   {
     if(!ptr)
       {
@@ -257,7 +257,7 @@ MAT *CommParameters::getBrokedMaterial(MAT* &ptr,DbTagData &dbTagData, const Bro
             else
               {
                 delete tmp;
-                std::cerr << "CommParameters::getBrokedMaterial "
+                std::cerr << "Communicator::getBrokedMaterial "
                           << " el material es de clase inadecuada."
                           << std::endl;
               }
@@ -271,7 +271,7 @@ MAT *CommParameters::getBrokedMaterial(MAT* &ptr,DbTagData &dbTagData, const Bro
   }
 
 template <class HDL>
-HDL *CommParameters::getBrokedDataOutputHandler(HDL* &ptr,DbTagData &dbTagData, const BrokedPtrCommMetaData &md) const
+HDL *Communicator::getBrokedDataOutputHandler(HDL* &ptr,DbTagData &dbTagData, const BrokedPtrCommMetaData &md) const
   {
     if(!ptr)
       {
@@ -292,7 +292,7 @@ HDL *CommParameters::getBrokedDataOutputHandler(HDL* &ptr,DbTagData &dbTagData, 
   }
 
 template <class GM>
-GM *CommParameters::getBrokedGroundMotion(GM* &ptr,DbTagData &dbTagData, const BrokedPtrCommMetaData &md) const
+GM *Communicator::getBrokedGroundMotion(GM* &ptr,DbTagData &dbTagData, const BrokedPtrCommMetaData &md) const
   {
     if(!ptr)
       {
@@ -313,7 +313,7 @@ GM *CommParameters::getBrokedGroundMotion(GM* &ptr,DbTagData &dbTagData, const B
   }
 
 template <class T>
-T *CommParameters::getBrokedTagged(T* &ptr,const int &dbTag,const int &objTag,const int &classTag,T *(FEM_ObjectBroker::*ptrFunc)(int)) const
+T *Communicator::getBrokedTagged(T* &ptr,const int &dbTag,const int &objTag,const int &classTag,T *(FEM_ObjectBroker::*ptrFunc)(int)) const
   {
     if(!ptr)
       {
@@ -334,7 +334,7 @@ T *CommParameters::getBrokedTagged(T* &ptr,const int &dbTag,const int &objTag,co
   }
 
 template <class MOV>
-MOV *CommParameters::receiveMovablePtr(MOV* &ptr,DbTagData &dbTagData, const PtrCommMetaData &meta) const
+MOV *Communicator::receiveMovablePtr(MOV* &ptr,DbTagData &dbTagData, const PtrCommMetaData &meta) const
   {
     if(dbTagData.getDbTagDataPos(meta.getPosFlag()) == 0)
       {

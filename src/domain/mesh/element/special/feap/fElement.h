@@ -160,8 +160,8 @@ class fElement: public Element
     virtual const Vector &getResistingForceIncInertia(void) const;            
 
     // public methods for output
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
     virtual void Print(std::ostream &s, int flag =0) const;    
  };
 } // end of XC namespace

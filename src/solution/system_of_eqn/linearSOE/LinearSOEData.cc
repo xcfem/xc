@@ -250,31 +250,31 @@ double XC::LinearSOEData::normRHS(void) const
     return sqrt(norm);
   }    
 
-void XC::LinearSOEData::receiveB(const CommParameters &cp)
+void XC::LinearSOEData::receiveB(const Communicator &comm)
   {
-    cp.receiveVector(B,CommMetaData(0)); //XXX assign position.
+    comm.receiveVector(B,CommMetaData(0)); //XXX assign position.
   }
 
-void XC::LinearSOEData::receiveX(const CommParameters &cp)
+void XC::LinearSOEData::receiveX(const Communicator &comm)
   {
-    cp.receiveVector(X,CommMetaData(0));//XXX assign position.
+    comm.receiveVector(X,CommMetaData(0));//XXX assign position.
   }
 
-void XC::LinearSOEData::receiveBX(const CommParameters &cp)
+void XC::LinearSOEData::receiveBX(const Communicator &comm)
   {
-    receiveX(cp);
-    receiveB(cp);
+    receiveX(comm);
+    receiveB(comm);
   }
 
-void XC::LinearSOEData::sendB(CommParameters &cp) const
+void XC::LinearSOEData::sendB(Communicator &comm) const
   {
-    cp.sendVector(B,CommMetaData(0));//XXX assign position.
+    comm.sendVector(B,CommMetaData(0));//XXX assign position.
   }
 
-void XC::LinearSOEData::sendBX(CommParameters &cp) const
+void XC::LinearSOEData::sendBX(Communicator &comm) const
   {
-    cp.sendVector(X,CommMetaData(0));//XXX assign position.
-    sendB(cp);
+    comm.sendVector(X,CommMetaData(0));//XXX assign position.
+    sendB(comm);
   }
 
 

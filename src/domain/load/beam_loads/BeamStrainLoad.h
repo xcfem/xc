@@ -47,8 +47,8 @@ class BeamStrainLoad: public BeamLoad
     DeformationPlane backEndDeformationsPlane; //!< Restricted generalized strains at element first node.
     DeformationPlane frontEndDeformationPlane; //!< Restricted generalized strains at element last node.
   protected:
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
   public:
     BeamStrainLoad(int tag, const ID &theElementTags);
@@ -66,8 +66,8 @@ class BeamStrainLoad: public BeamLoad
     const Vector &getSection2Deformation(const size_t &order,const ResponseId &code) const;
     const Vector &getData(int &type, const double &loadFactor) const;
 
-    int sendSelf(CommParameters &);  
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);  
+    int recvSelf(const Communicator &);
 
     //void Print(std::ostream &s, int flag =0) const;
 

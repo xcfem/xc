@@ -222,30 +222,30 @@ XC::DbTagData &XC::ElasticMembranePlateSection::getDbTagData(void) const
   }
 
 //! @brief Send data through the channel being passed as parameter.
-int XC::ElasticMembranePlateSection::sendData(CommParameters &cp)
+int XC::ElasticMembranePlateSection::sendData(Communicator &comm)
   {
-    int res= ElasticPlateProto<8>::sendData(cp);
-    res+= cp.sendDouble(rhoH,getDbTagData(),CommMetaData(8));
+    int res= ElasticPlateProto<8>::sendData(comm);
+    res+= comm.sendDouble(rhoH,getDbTagData(),CommMetaData(8));
     return res;
   }
 
 //! @brief Receive data through the channel being passed as parameter.
-int XC::ElasticMembranePlateSection::recvData(const CommParameters &cp)
+int XC::ElasticMembranePlateSection::recvData(const Communicator &comm)
   {
-    int res= ElasticPlateProto<8>::recvData(cp);
-    res+= cp.receiveDouble(rhoH,getDbTagData(),CommMetaData(8));
+    int res= ElasticPlateProto<8>::recvData(comm);
+    res+= comm.receiveDouble(rhoH,getDbTagData(),CommMetaData(8));
     return res;
   }
 
 //! @brief Send the object itself through the communicator argument.
-int XC::ElasticMembranePlateSection::sendSelf(CommParameters &cp) 
+int XC::ElasticMembranePlateSection::sendSelf(Communicator &comm) 
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(9);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; failed to send data.\n";
@@ -253,18 +253,18 @@ int XC::ElasticMembranePlateSection::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receive the object itself through the communicator argument.
-int XC::ElasticMembranePlateSection::recvSelf(const CommParameters &cp)
+int XC::ElasticMembranePlateSection::recvSelf(const Communicator &comm)
   {
     inicComm(9);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to receive ids.\n";
     else
       {
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

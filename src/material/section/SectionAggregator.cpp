@@ -87,7 +87,7 @@ void XC::SectionAggregator::resize(void)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; order too big, need to modify the maxOrder value"
-	          << " in SectionAggregator.cpp to: " << order << std::endl;
+	          << " in SectionAggregator to: " << order << std::endl;
         exit(-1);
       }
     //theCode= new ResponseId(codeArea, order); Not sharing area anymore
@@ -509,44 +509,44 @@ int XC::SectionAggregator::revertToStart(void)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::SectionAggregator::sendData(CommParameters &cp)
+int XC::SectionAggregator::sendData(Communicator &comm)
   {
-    int res= PrismaticBarCrossSection::sendData(cp);
-    res+= cp.sendBrokedPtr(theSection,getDbTagData(),BrokedPtrCommMetaData(5,6,7));
-    res+= cp.sendMovable(theAdditions,getDbTagData(),CommMetaData(8));
-    res+= cp.sendVector(def,getDbTagData(),CommMetaData(9));
-    res+= cp.sendVector(defzero,getDbTagData(),CommMetaData(10));
-    res+= cp.sendVector(s,getDbTagData(),CommMetaData(11));
-    res+= cp.sendMatrix(ks,getDbTagData(),CommMetaData(12));
-    res+= cp.sendMatrix(fs,getDbTagData(),CommMetaData(13));
-    res+= cp.sendID(theCode,getDbTagData(),CommMetaData(14));
+    int res= PrismaticBarCrossSection::sendData(comm);
+    res+= comm.sendBrokedPtr(theSection,getDbTagData(),BrokedPtrCommMetaData(5,6,7));
+    res+= comm.sendMovable(theAdditions,getDbTagData(),CommMetaData(8));
+    res+= comm.sendVector(def,getDbTagData(),CommMetaData(9));
+    res+= comm.sendVector(defzero,getDbTagData(),CommMetaData(10));
+    res+= comm.sendVector(s,getDbTagData(),CommMetaData(11));
+    res+= comm.sendMatrix(ks,getDbTagData(),CommMetaData(12));
+    res+= comm.sendMatrix(fs,getDbTagData(),CommMetaData(13));
+    res+= comm.sendID(theCode,getDbTagData(),CommMetaData(14));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::SectionAggregator::recvData(const CommParameters &cp)
+int XC::SectionAggregator::recvData(const Communicator &comm)
   {
-    int res= PrismaticBarCrossSection::recvData(cp);
-    theSection= cp.getBrokedMaterial(theSection,getDbTagData(),BrokedPtrCommMetaData(5,6,7));
-    res+= cp.receiveMovable(theAdditions,getDbTagData(),CommMetaData(8));
-    res+= cp.receiveVector(def,getDbTagData(),CommMetaData(9));
-    res+= cp.receiveVector(defzero,getDbTagData(),CommMetaData(10));
-    res+= cp.receiveVector(s,getDbTagData(),CommMetaData(11));
-    res+= cp.receiveMatrix(ks,getDbTagData(),CommMetaData(12));
-    res+= cp.receiveMatrix(fs,getDbTagData(),CommMetaData(13));
-    res+= cp.receiveID(theCode,getDbTagData(),CommMetaData(14));
+    int res= PrismaticBarCrossSection::recvData(comm);
+    theSection= comm.getBrokedMaterial(theSection,getDbTagData(),BrokedPtrCommMetaData(5,6,7));
+    res+= comm.receiveMovable(theAdditions,getDbTagData(),CommMetaData(8));
+    res+= comm.receiveVector(def,getDbTagData(),CommMetaData(9));
+    res+= comm.receiveVector(defzero,getDbTagData(),CommMetaData(10));
+    res+= comm.receiveVector(s,getDbTagData(),CommMetaData(11));
+    res+= comm.receiveMatrix(ks,getDbTagData(),CommMetaData(12));
+    res+= comm.receiveMatrix(fs,getDbTagData(),CommMetaData(13));
+    res+= comm.receiveID(theCode,getDbTagData(),CommMetaData(14));
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::SectionAggregator::sendSelf(CommParameters &cp)
+int XC::SectionAggregator::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(15);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to send data\n";
@@ -555,11 +555,11 @@ int XC::SectionAggregator::sendSelf(CommParameters &cp)
 
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::SectionAggregator::recvSelf(const CommParameters &cp)
+int XC::SectionAggregator::recvSelf(const Communicator &comm)
   {
     inicComm(15);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -567,7 +567,7 @@ int XC::SectionAggregator::recvSelf(const CommParameters &cp)
     else
       {
         setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << getClassName() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

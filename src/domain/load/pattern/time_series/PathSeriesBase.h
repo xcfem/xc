@@ -48,8 +48,8 @@ class PathSeriesBase: public CFactorSeries
 
     static size_t load_vector_from_file(Vector &v,std::istream &is);
 
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
     // constructors
     PathSeriesBase(int classTag,const double &cf= 1.0);

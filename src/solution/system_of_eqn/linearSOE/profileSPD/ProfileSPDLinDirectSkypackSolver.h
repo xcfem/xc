@@ -109,8 +109,8 @@ class ProfileSPDLinDirectSkypackSolver: public ProfileSPDLinSolver
 
     virtual int setProfileSOE(ProfileSPDLinSOE &theSOE);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 
 inline LinearSOESolver *ProfileSPDLinDirectSkypackSolver::getCopy(void) const

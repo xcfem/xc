@@ -70,8 +70,8 @@ class BandArpackppSOE: public ArpackSOE
     inline const msp_double &getM(void) const
       { return M; }
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);    
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);    
 
     friend class BandArpackppSolver;
   };

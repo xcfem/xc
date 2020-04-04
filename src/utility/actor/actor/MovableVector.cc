@@ -31,7 +31,7 @@
 #include "utility/actor/channel/Channel.h"
 #include "utility/actor/objectBroker/FEM_ObjectBroker.h"
 #include "utility/matrix/ID.h"
-#include "CommParameters.h"
+#include "Communicator.h"
 #include "CommMetaData.h"
 
 //! @brief Constructor.
@@ -55,23 +55,23 @@ XC::DbTagData &XC::MovableVector::getDbTagData(void) const
   }
 
 //! @brief Envia el vector through the channel being passed as parameter.
-int XC::MovableVector::sendSelf(CommParameters &cp)
+int XC::MovableVector::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dbTag= getDbTag();
     inicComm(2);
-    const int dataTag= cp.getDbTag();
+    const int dataTag= comm.getDbTag();
     const int sz= Size();
     setDbTagDataPos(0,sz);
     setDbTagDataPos(1,dataTag);
 
-    int res= cp.sendIdData(getDbTagData(),dbTag);
+    int res= comm.sendIdData(getDbTagData(),dbTag);
     if(res<0)
       std::cerr << "MovableVector::sendSelf() - failed to send ID data\n";
 
     if(sz>0)
       {
-        res+= cp.sendVector(*this,dataTag);
+        res+= comm.sendVector(*this,dataTag);
         if(res<0)
           std::cerr << "MovableVector::sendSelf() - failed to send Disp data\n";
       }
@@ -79,11 +79,11 @@ int XC::MovableVector::sendSelf(CommParameters &cp)
   }
 
 //! @brief Receive the vector through the channel being passed as parameter.
-int XC::MovableVector::recvSelf(const CommParameters &cp)
+int XC::MovableVector::recvSelf(const Communicator &comm)
   {
     inicComm(2);
     const int dbTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dbTag);
+    int res= comm.receiveIdData(getDbTagData(),dbTag);
     if(res<0)
       std::cerr << "MovableVector::recvSelf() - failed to receive ID data\n";
     else
@@ -93,7 +93,7 @@ int XC::MovableVector::recvSelf(const CommParameters &cp)
         if(sz>0)
           {
             const int dataTag= getDbTagDataPos(1);
-            res+= cp.receiveVector(*this,dataTag);
+            res+= comm.receiveVector(*this,dataTag);
             if(res<0)
               std::cerr << "MovableVector::recvSelf - failed to receive data\n";
           }

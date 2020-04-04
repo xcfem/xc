@@ -87,8 +87,8 @@ class FDdecoupledElastic3D: public FiniteDeformationElastic3D
      void free_mem(void);
      void alloc(const WEnergy *);
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   private:
     const WEnergy *getWEnergy(void) const;
 
@@ -145,8 +145,8 @@ class FDdecoupledElastic3D: public FiniteDeformationElastic3D
     const std::string &getType(void) const;
     int getOrder (void) const;
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
     void Print(std::ostream &s, int flag = 0) const;
 

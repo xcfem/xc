@@ -102,8 +102,8 @@ class LoadPath: public StaticIntegrator
     Vector loadPath; //!< vector that defines the load path.
     int currentStep; //!< current step number.
   protected:
-    int sendData(CommParameters &);
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
 
     friend class AnalysisAggregation;
     LoadPath(AnalysisAggregation *);
@@ -115,8 +115,8 @@ class LoadPath: public StaticIntegrator
     int update(const Vector &deltaU);
 
     // Public methods for Output
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 

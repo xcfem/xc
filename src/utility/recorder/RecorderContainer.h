@@ -52,8 +52,8 @@ class RecorderContainer
     DataOutputHandler::map_output_handlers *output_handlers; //!< output handlers.
 
   protected:
-    int sendData(CommParameters &cp);
-    int recvData(const CommParameters &cp);
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
 
     //! @brief Returns the number of recorders already defined.
     inline size_t getNumRecorders(void) const

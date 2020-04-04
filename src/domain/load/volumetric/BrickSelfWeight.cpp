@@ -81,41 +81,41 @@ const XC::Vector &XC::BrickSelfWeight::getData(int &type, const double &loadFact
 
 //! @brief Send members of the object through the
 //! communicator being passed as parameter.
-int XC::BrickSelfWeight::sendData(CommParameters &cp)
+int XC::BrickSelfWeight::sendData(Communicator &comm)
   {
-    int res= ElementBodyLoad::sendData(cp);
+    int res= ElementBodyLoad::sendData(comm);
     return res;
   }
 
 //! @brief Receives members of the object through the
 //! communicator being passed as parameter.
-int XC::BrickSelfWeight::recvData(const CommParameters &cp)
+int XC::BrickSelfWeight::recvData(const Communicator &comm)
   {        
-    int res= ElementBodyLoad::recvData(cp);
+    int res= ElementBodyLoad::recvData(comm);
     return res;
   }
 
-int XC::BrickSelfWeight::sendSelf(CommParameters &cp)
+int XC::BrickSelfWeight::sendSelf(Communicator &comm)
   {
     static ID data(5);
-    int result= sendData(cp);
+    int result= sendData(comm);
     
     const int dataTag= getDbTag();
-    result+= cp.sendIdData(getDbTagData(),dataTag);
+    result+= comm.sendIdData(getDbTagData(),dataTag);
     if(result < 0)
       std::cerr << "BrickSelfWeight::sendSelf - failed to send data\n";
     return result;
   }
 
-int XC::BrickSelfWeight::recvSelf(const CommParameters &cp)
+int XC::BrickSelfWeight::recvSelf(const Communicator &comm)
   {
     static ID data(5);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << "BrickSelfWeight::recvSelf() - failed to recv data\n";
     else
-      res+= recvData(cp);
+      res+= recvData(comm);
     return res;
   }
 

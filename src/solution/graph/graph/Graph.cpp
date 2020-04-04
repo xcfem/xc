@@ -472,32 +472,32 @@ std::ostream &XC::operator<<(std::ostream &s, const Graph &M)
   }
 
 //! @brief Send object members through the channel being passed as parameter.
-int XC::Graph::sendData(CommParameters &cp)
+int XC::Graph::sendData(Communicator &comm)
   {
     //setDbTagDataPos(0,getTag());
-    int res= cp.sendInts(numEdge,nextFreeTag,getDbTagData(),CommMetaData(2));
-    res+= cp.sendMovable(myVertices,getDbTagData(),CommMetaData(3));
+    int res= comm.sendInts(numEdge,nextFreeTag,getDbTagData(),CommMetaData(2));
+    res+= comm.sendMovable(myVertices,getDbTagData(),CommMetaData(3));
     return res;
   }
 
 //! @brief Receives object members through the channel being passed as parameter.
-int XC::Graph::recvData(const CommParameters &cp)
+int XC::Graph::recvData(const Communicator &comm)
   {
     //setTag(getDbTagDataPos(0));
-    int res= cp.receiveInts(numEdge,nextFreeTag,getDbTagData(),CommMetaData(2));
-    res+= myVertices.receive<Vertex>(getDbTagDataPos(3),cp,&FEM_ObjectBroker::getNewVertex);
+    int res= comm.receiveInts(numEdge,nextFreeTag,getDbTagData(),CommMetaData(2));
+    res+= myVertices.receive<Vertex>(getDbTagDataPos(3),comm,&FEM_ObjectBroker::getNewVertex);
     return res;
   }
 
 //! @brief Sends object through the channel being passed as parameter.
-int XC::Graph::sendSelf(CommParameters &cp)
+int XC::Graph::sendSelf(Communicator &comm)
   {
-    setDbTag(cp);
+    setDbTag(comm);
     const int dataTag= getDbTag();
     inicComm(3);
-    int res= sendData(cp);
+    int res= sendData(comm);
 
-    res+= cp.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
       std::cerr << typeid(Graph).name() << "::" << __FUNCTION__
 		<< "; failed to send data\n";
@@ -506,11 +506,11 @@ int XC::Graph::sendSelf(CommParameters &cp)
 
 
 //! @brief Receives object through the channel being passed as parameter.
-int XC::Graph::recvSelf(const CommParameters &cp) 
+int XC::Graph::recvSelf(const Communicator &comm) 
   {
     inicComm(3);
     const int dataTag= getDbTag();
-    int res= cp.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
       std::cerr << typeid(Graph).name() << "::" << __FUNCTION__
@@ -518,7 +518,7 @@ int XC::Graph::recvSelf(const CommParameters &cp)
     else
       {
         //setTag(getDbTagDataPos(0));
-        res+= recvData(cp);
+        res+= recvData(comm);
         if(res<0)
           std::cerr << typeid(Graph).name() << "::" << __FUNCTION__
 		    << "; failed to receive data.\n";

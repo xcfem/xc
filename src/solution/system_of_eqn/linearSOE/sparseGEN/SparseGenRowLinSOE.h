@@ -86,8 +86,8 @@ class SparseGenRowLinSOE: public SparseGenSOEBase
     int setSize(Graph &theGraph);
     int addA(const Matrix &, const ID &, double fact = 1.0);
     
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
     friend class PetscSparseSeqSolver;    
   };
 inline SystemOfEqn *SparseGenRowLinSOE::getCopy(void) const

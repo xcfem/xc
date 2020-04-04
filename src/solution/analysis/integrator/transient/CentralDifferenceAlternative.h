@@ -92,8 +92,8 @@ class CentralDifferenceAlternative: public CentralDifferenceBase
 
     int commit(void);
 
-    virtual int sendSelf(CommParameters &);
-    virtual int recvSelf(const CommParameters &);
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
 
   };
 inline Integrator *CentralDifferenceAlternative::getCopy(void) const

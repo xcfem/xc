@@ -249,10 +249,10 @@ int XC::BandGenLinLapackSolver::setSize()
     return 0;
   }
 
-int XC::BandGenLinLapackSolver::sendSelf(CommParameters &cp)
+int XC::BandGenLinLapackSolver::sendSelf(Communicator &comm)
   { return 0; }
 
-int XC::BandGenLinLapackSolver::recvSelf(const CommParameters &cp)
+int XC::BandGenLinLapackSolver::recvSelf(const Communicator &comm)
   {
     // nothing to do
     return 0;

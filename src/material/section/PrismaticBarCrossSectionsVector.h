@@ -52,8 +52,8 @@ class PrismaticBarCrossSectionsVector: public CommandEntity, public std::vector<
     void clear_sections(void);
     void clearAll(void);
     PrismaticBarCrossSectionsVector &operator=(const PrismaticBarCrossSectionsVector &);
-    int sendData(CommParameters &);  
-    int recvData(const CommParameters &);
+    int sendData(Communicator &);  
+    int recvData(const Communicator &);
 
   public:
     typedef std::vector<PrismaticBarCrossSection *> mat_vector;
@@ -82,8 +82,8 @@ class PrismaticBarCrossSectionsVector: public CommandEntity, public std::vector<
     int revertToLastCommit(void);
     int revertToStart(void);
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
 
   };
 

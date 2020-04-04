@@ -48,8 +48,8 @@ class SmallDispCrdTransf2d: public CrdTransf2d
     const Vector &getPointGlobalCoordFromLocal(const Vector &) const;
     const Vector &getPointGlobalDisplFromBasic(double xi, const Vector &) const;
 
-    int sendSelf(CommParameters &);
-    int recvSelf(const CommParameters &);
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 } // end of XC namespace
 
