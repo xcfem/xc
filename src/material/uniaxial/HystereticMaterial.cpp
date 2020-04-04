@@ -411,7 +411,7 @@ int XC::HystereticMaterial::revertToStart(void)
 XC::UniaxialMaterial *XC::HystereticMaterial::getCopy(void) const
   { return new HystereticMaterial(*this); }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::HystereticMaterial::sendData(Communicator &comm)
   {
     int res= UniaxialMaterial::sendData(comm);
@@ -427,7 +427,7 @@ int XC::HystereticMaterial::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::HystereticMaterial::recvData(const Communicator &comm)
   {
     int res= UniaxialMaterial::recvData(comm);
@@ -443,7 +443,7 @@ int XC::HystereticMaterial::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::HystereticMaterial::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -457,7 +457,7 @@ int XC::HystereticMaterial::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::HystereticMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(12);

@@ -143,7 +143,7 @@ void XC::TrussBase::setup_L_cos_dir(void)
 const double &XC::TrussBase::getL(void) const
   { return L; }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::TrussBase::sendData(Communicator &comm)
   {
     int res= ProtoTruss::sendData(comm);
@@ -151,7 +151,7 @@ int XC::TrussBase::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::TrussBase::recvData(const Communicator &comm)
   {
     int res= ProtoTruss::recvData(comm);

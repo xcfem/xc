@@ -1713,7 +1713,7 @@ void XC::ShellNLDKGQ::shapeBend(double ss, double tt, const double x[2][4],
       }//end for i
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::ShellNLDKGQ::sendData(Communicator &comm)
   {
     int res= Shell4NBase::sendData(comm);
@@ -1722,7 +1722,7 @@ int XC::ShellNLDKGQ::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::ShellNLDKGQ::recvData(const Communicator &comm)
   {
     int res= Shell4NBase::recvData(comm);
@@ -1731,7 +1731,7 @@ int XC::ShellNLDKGQ::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int  XC::ShellNLDKGQ::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -1746,7 +1746,7 @@ int  XC::ShellNLDKGQ::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int  XC::ShellNLDKGQ::recvSelf(const Communicator &comm)
   {
     inicComm(18);

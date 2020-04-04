@@ -441,7 +441,7 @@ void  XC::MembranePlateFiberSection::Print( std::ostream &s, int flag ) const
     return;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::MembranePlateFiberSection::sendData(Communicator &comm)
   {
     int res= PlateBase::sendData(comm);
@@ -455,7 +455,7 @@ int XC::MembranePlateFiberSection::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::MembranePlateFiberSection::recvData(const Communicator &comm)
   {
     int res= PlateBase::recvData(comm);

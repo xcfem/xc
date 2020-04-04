@@ -260,7 +260,7 @@ const std::string &XC::ElasticCrossAnisotropic::getType(void) const
 int XC::ElasticCrossAnisotropic::getOrder(void) const
   { return 6; }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::ElasticCrossAnisotropic::sendData(Communicator &comm)
   {
     int res= NDMaterial::sendData(comm);
@@ -273,7 +273,7 @@ int XC::ElasticCrossAnisotropic::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::ElasticCrossAnisotropic::recvData(const Communicator &comm)
   {
     int res= NDMaterial::recvData(comm);
@@ -286,7 +286,7 @@ int XC::ElasticCrossAnisotropic::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::ElasticCrossAnisotropic::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -300,7 +300,7 @@ int XC::ElasticCrossAnisotropic::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::ElasticCrossAnisotropic::recvSelf(const Communicator &comm)
   {
     inicComm(7);

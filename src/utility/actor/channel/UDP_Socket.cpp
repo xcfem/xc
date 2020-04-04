@@ -195,9 +195,8 @@ int XC::UDP_Socket::setUpConnection(void)
 }    
 
 
-int
-XC::UDP_Socket::setNextAddress(const XC::ChannelAddress &theAddress)
-{	
+int XC::UDP_Socket::setNextAddress(const XC::ChannelAddress &theAddress)
+  {	
     SocketAddress *theSocketAddress = 0;
     if (theAddress.getType() == SOCKET_TYPE) {
 	theSocketAddress = (SocketAddress *)(&theAddress);    

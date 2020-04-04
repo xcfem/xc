@@ -1645,7 +1645,7 @@ XC::DbTagData &XC::Node::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Sends object members through the channel being passed as parameter.
+//! @brief Sends object members through the communicator argument.
 int XC::Node::sendData(Communicator &comm)
   {
     int res= MeshComponent::sendData(comm);
@@ -1665,8 +1665,7 @@ int XC::Node::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as
-//! parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::Node::recvData(const Communicator &comm)
   {
     int res= MeshComponent::recvData(comm);
@@ -1690,7 +1689,7 @@ int XC::Node::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Send the object through the channel being passed as parameter.
+//! @brief Send the object through the communicator argument.
 //!
 //! Causes the Node object to send the data needed to init itself on a
 //! remote machine to the Communicator object \p cp. 
@@ -1718,7 +1717,7 @@ int XC::Node::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 //!
 //! Invoked on a remote machine to read its data that was sent by a node
 //! object in another actor when sendSelf() was invoked. As in {\em

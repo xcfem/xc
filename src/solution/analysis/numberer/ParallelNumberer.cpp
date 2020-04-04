@@ -51,7 +51,7 @@
 // Written: fmk 
 // Revision: A
 //
-// Description: This file contains the implementation for XC::ParallelNumberer.
+// Description: This file contains the implementation for ParallelNumberer.
 //
 // What: "@(#) ParallelNumberer.C, revA"
 

@@ -135,7 +135,7 @@ int XC::ElasticPlateProto<SZ>::revertToStart(void)
     return ElasticPlateBase::revertToStart();
   }
 
-//! @brief Send data through the channel being passed as parameter.
+//! @brief Send data through the communicator argument.
 template <int SZ>
 int XC::ElasticPlateProto<SZ>::sendData(Communicator &comm)
   {
@@ -145,7 +145,7 @@ int XC::ElasticPlateProto<SZ>::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receive data through the channel being passed as parameter.
+//! @brief Receive data through the communicator argument.
 template <int SZ>
   int XC::ElasticPlateProto<SZ>::recvData(const Communicator &comm)
   {

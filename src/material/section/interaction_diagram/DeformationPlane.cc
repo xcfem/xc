@@ -302,7 +302,7 @@ HalfPlane2d XC::DeformationPlane::getCompressedHalfPlane(void) const
     return retval;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::DeformationPlane::sendData(Communicator &comm)
   {
     //setDbTagDataPos(0,getTag());
@@ -313,7 +313,7 @@ int XC::DeformationPlane::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::DeformationPlane::recvData(const Communicator &comm)
   {
     //setTag(getDbTagDataPos(0));
@@ -324,7 +324,7 @@ int XC::DeformationPlane::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::DeformationPlane::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -339,7 +339,7 @@ int XC::DeformationPlane::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::DeformationPlane::recvSelf(const Communicator &comm)
   {
     inicComm(3);

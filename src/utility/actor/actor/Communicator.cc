@@ -82,7 +82,7 @@ int XC::Communicator::receiveID(ID &v,const int &dataTag) const
     return canal->recvID(dataTag,commitTag,v);
   }
 
-//! @brief Sends an ID object through the channel being passed as parameter.
+//! @brief Sends an ID object through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::sendID(const ID &v,DbTagData &dt, const CommMetaData &meta)
@@ -91,7 +91,7 @@ int XC::Communicator::sendID(const ID &v,DbTagData &dt, const CommMetaData &meta
     return sendMovable(mov,dt,meta);
   }
 
-//! @brief Receives an ID object through the channel being passed as parameter.
+//! @brief Receives an ID object through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::receiveID(ID &v,DbTagData &dt, const CommMetaData &meta) const
@@ -150,47 +150,47 @@ XC::ID *XC::Communicator::receiveIDPtr(ID* &ptr,DbTagData &dt, const ArrayCommMe
     return ptr;
   }
 
-//! @brief Sends a MovableID pointer through the channel being passed as parameter.
+//! @brief Sends a MovableID pointer through the communicator argument.
 //! @param ptr: MovableID pointer to send.
 //! @param meta: indexes where the data are stored. 
 int XC::Communicator::sendMovableIDPtr(MovableID *ptr,DbTagData &dt, const PtrCommMetaData &meta)
   { return sendMovablePtr(ptr,dt,meta); }
 
 
-//! @brief Receives a MovableID pointer through the channel being passed as parameter.
+//! @brief Receives a MovableID pointer through the communicator argument.
 //! @param ptr: MovableID pointer to receive.
 //! @param meta: indexes where the data are stored. 
 XC::MovableID *XC::Communicator::receiveMovableIDPtr(MovableID* &ptr,DbTagData &dt, const PtrCommMetaData &meta)
   { return receiveMovablePtr(ptr,dt,meta); }
 
-//! @brief Sends a MovableVector pointer through the channel being passed as parameter.
+//! @brief Sends a MovableVector pointer through the communicator argument.
 //! @param ptr: MovableVector pointer to send.
 //! @param meta: indexes where the data are stored. 
 int XC::Communicator::sendMovableVectorPtr(MovableVector *ptr,DbTagData &dt, const PtrCommMetaData &meta)
   { return sendMovablePtr(ptr,dt,meta); }
 
 
-//! @brief Receives a MovableVector pointer through the channel being passed as parameter.
+//! @brief Receives a MovableVector pointer through the communicator argument.
 //! @param ptr: MovableVector pointer to receive.
 //! @param meta: indexes where the data are stored. 
 XC::MovableVector *XC::Communicator::receiveMovableVectorPtr(MovableVector* &ptr,DbTagData &dt, const PtrCommMetaData &meta)
   { return receiveMovablePtr(ptr,dt,meta); }
 
-//! @brief Send the matrix through the channel being passed as parameter.
+//! @brief Send the matrix through the communicator argument.
 int XC::Communicator::sendMatrix(const Matrix &v,const int &dataTag)
   {
     assert(canal);
     return canal->sendMatrix(dataTag,commitTag,v);
   }
 
-//! @brief Receives the matrix through the channel being passed as parameter.
+//! @brief Receives the matrix through the communicator argument.
 int XC::Communicator::receiveMatrix(Matrix &v,const int &dataTag) const
   {
     assert(canal);
     return canal->recvMatrix(dataTag,commitTag,v);
   }
 
-//! @brief Send the matrix through the channel being passed as parameter
+//! @brief Send the matrix through the communicator argument
 //!.
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::sendMatrix(const Matrix &m,DbTagData &dt, const CommMetaData &meta)
@@ -199,7 +199,7 @@ int XC::Communicator::sendMatrix(const Matrix &m,DbTagData &dt, const CommMetaDa
     return sendMovable(mov,dt,meta);
   }
 
-//! @brief Receives the matrix through the channel being passed as parameter.
+//! @brief Receives the matrix through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::receiveMatrix(Matrix &m,DbTagData &dt, const CommMetaData &meta) const
@@ -210,7 +210,7 @@ int XC::Communicator::receiveMatrix(Matrix &m,DbTagData &dt, const CommMetaData 
     return res;
   }
 
-//! @brief Send a pointer to the matrix through the channel being passed as parameter.
+//! @brief Send a pointer to the matrix through the communicator argument.
 //!
 //! @param meta: index where the object dbTag, number of rows and number of columns are stored.
 int XC::Communicator::sendMatrixPtr(Matrix *ptr,DbTagData &dt, const MatrixCommMetaData &meta)
@@ -230,7 +230,7 @@ int XC::Communicator::sendMatrixPtr(Matrix *ptr,DbTagData &dt, const MatrixCommM
     return retval;
   }
 
-//! @brief Receives a pointer to the matrix through the channel being passed as parameter.
+//! @brief Receives a pointer to the matrix through the communicator argument.
 //!
 //! @param meta: index where the object dbTag, number of rows and number of columns are stored.
 XC::Matrix *XC::Communicator::receiveMatrixPtr(Matrix* &ptr,DbTagData &dt, const MatrixCommMetaData &meta) const
@@ -259,7 +259,7 @@ XC::Matrix *XC::Communicator::receiveMatrixPtr(Matrix* &ptr,DbTagData &dt, const
     return ptr;
   }
 
-//! @brief Send a pointer to the tensor through the channel being passed as parameter.
+//! @brief Send a pointer to the tensor through the communicator argument.
 int XC::Communicator::sendTensorPtr(BJtensor *ptr,DbTagData &dt, const TensorCommMetaData &)
   {
     int retval= 0;
@@ -267,20 +267,20 @@ int XC::Communicator::sendTensorPtr(BJtensor *ptr,DbTagData &dt, const TensorCom
     return retval;
   }
 
-//! @brief Receives a pointer to tensor through the channel being passed as parameter.
+//! @brief Receives a pointer to tensor through the communicator argument.
 XC::BJtensor *XC::Communicator::receiveTensorPtr(BJtensor* &ptr,DbTagData &dt, const TensorCommMetaData &) const
   {
     std::cerr << "Communicator::receiveTensorPtr not implemented." << std::endl;
     return ptr;
   }
 
-//! @brief Sends a MovableMatrix pointer through the channel being passed as parameter.
+//! @brief Sends a MovableMatrix pointer through the communicator argument.
 //! @param ptr: MovableMatrix pointer to send.
 //! @param meta: indexes where the data are stored. 
 int XC::Communicator::sendMovableMatrixPtr(MovableMatrix *ptr,DbTagData &dt, const PtrCommMetaData &meta)
   { return sendMovablePtr(ptr,dt,meta); }
 
-//! @brief Receives a MovableMatrix pointer through the channel being passed as parameter.
+//! @brief Receives a MovableMatrix pointer through the communicator argument.
 //! @param ptr: MovableMatrix pointer to receive.
 //! @param meta: indexes where the data are stored. 
 XC::MovableMatrix *XC::Communicator::receiveMovableMatrixPtr(MovableMatrix* &ptr,DbTagData &dt, const PtrCommMetaData &meta)
@@ -321,7 +321,7 @@ int XC::Communicator::receiveMatrices(std::vector<Matrix> &matrices,DbTagData &d
     return res;
   }
 
-//! @brief Send the text string through the channel being passed as parameter.
+//! @brief Send the text string through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::sendString(const std::string &str,DbTagData &dt, const CommMetaData &meta)
@@ -330,7 +330,7 @@ int XC::Communicator::sendString(const std::string &str,DbTagData &dt, const Com
     return sendMovable(mv,dt,meta);
   }
 
-//! @brief Receives la text string through the channel being passed as parameter.
+//! @brief Receives la text string through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::receiveString(std::string &str,DbTagData &dt, const CommMetaData &meta) const
@@ -341,7 +341,7 @@ int XC::Communicator::receiveString(std::string &str,DbTagData &dt, const CommMe
     return res;
   }
 
-//! @brief Sends tensor through the channel being passed as parameter.
+//! @brief Sends tensor through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::sendTensor(const BJtensor &t,DbTagData &dt, const CommMetaData &meta)
@@ -350,7 +350,7 @@ int XC::Communicator::sendTensor(const BJtensor &t,DbTagData &dt, const CommMeta
     return sendMovable(mv,dt,meta);
   }
 
-//! @brief Receives el tensor through the channel being passed as parameter.
+//! @brief Receives el tensor through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::receiveTensor(BJtensor &t,DbTagData &dt, const CommMetaData &meta) const
@@ -361,7 +361,7 @@ int XC::Communicator::receiveTensor(BJtensor &t,DbTagData &dt, const CommMetaDat
     return res;
   }
 
-//! @brief Sends the string container through the channel being passed as parameter.
+//! @brief Sends the string container through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::sendStrings(std::deque<std::string> &strings,DbTagData &dt, const CommMetaData &meta)
@@ -370,7 +370,7 @@ int XC::Communicator::sendStrings(std::deque<std::string> &strings,DbTagData &dt
     return sendMovable(mv,dt,meta);
   }
 
-//! @brief Receives the string container through the channel being passed as parameter.
+//! @brief Receives the string container through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::receiveStrings(std::deque<std::string> &strings,DbTagData &dt, const CommMetaData &meta) const
@@ -381,7 +381,7 @@ int XC::Communicator::receiveStrings(std::deque<std::string> &strings,DbTagData 
     return res;
   }
 
-//! @brief Sends the string container through the channel being passed as parameter.
+//! @brief Sends the string container through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::sendStrings(std::vector<std::string> &strings,DbTagData &dt, const CommMetaData &meta)
@@ -393,7 +393,7 @@ int XC::Communicator::sendStrings(std::vector<std::string> &strings,DbTagData &d
     return sendStrings(tmp,dt,meta);
   }
 
-//! @brief Receives the string container through the channel being passed as parameter.
+//! @brief Receives the string container through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::receiveStrings(std::vector<std::string> &strings,DbTagData &dt, const CommMetaData &meta) const
@@ -406,11 +406,11 @@ int XC::Communicator::receiveStrings(std::vector<std::string> &strings,DbTagData
     return res;
   }
 
-//! @brief Sends miembro data through the channel being passed as parameter.
+//! @brief Sends miembro data through the communicator argument.
 int XC::Communicator::sendIdData(const DbTagData &data,const int &dataTag)
   { return data.sendIdData(*this,dataTag); }
 
-//! @brief Receives el miembro data through the channel being passed as parameter.
+//! @brief Receives el miembro data through the communicator argument.
 int XC::Communicator::receiveIdData(DbTagData &data,const int &dataTag) const
   { return data.receiveIdData(*this,dataTag); }
 
@@ -465,7 +465,7 @@ int XC::Communicator::receiveVector(std::vector<double> &v,DbTagData &dt, const 
     return res;
   }
 
-//! @brief Sends the vector container through the channel being passed as parameter.
+//! @brief Sends the vector container through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::sendVectors(std::vector<Vector> &vectors,DbTagData &dt, const CommMetaData &meta)
@@ -474,7 +474,7 @@ int XC::Communicator::sendVectors(std::vector<Vector> &vectors,DbTagData &dt, co
     return sendMovable(mv,dt,meta);
   }
 
-//! @brief Receives the vector container through the channel being passed as parameter.
+//! @brief Receives the vector container through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::receiveVectors(std::vector<Vector> &vectors,DbTagData &dt, const CommMetaData &meta) const
@@ -485,7 +485,7 @@ int XC::Communicator::receiveVectors(std::vector<Vector> &vectors,DbTagData &dt,
     return res;
   }
 
-//! @brief Sends the Vector pointed by ptr through the channel being passed as parameter.
+//! @brief Sends the Vector pointed by ptr through the communicator argument.
 //! @param ptr: pointer to the vector to send.
 //! @param meta: index where the object dbTag and size are stored.
 int XC::Communicator::sendVectorPtr(Vector *ptr,DbTagData &dt, const ArrayCommMetaData &meta)
@@ -503,7 +503,7 @@ int XC::Communicator::sendVectorPtr(Vector *ptr,DbTagData &dt, const ArrayCommMe
     return retval;
   }
 
-//! @brief Receives a Vector pointed by ptr through the channel being passed as parameter.
+//! @brief Receives a Vector pointed by ptr through the communicator argument.
 //! @param ptr: pointer to the vector to receive.
 //! @param meta: index where the object dbTag and size are stored.
 XC::Vector *XC::Communicator::receiveVectorPtr(Vector* &ptr,DbTagData &dt, const ArrayCommMetaData &meta) const
@@ -530,7 +530,7 @@ XC::Vector *XC::Communicator::receiveVectorPtr(Vector* &ptr,DbTagData &dt, const
     return ptr;
   }
 
-//! @brief Send the array data through the channel being passed as parameter.
+//! @brief Send the array data through the communicator argument.
 //!
 //! @param meta: index where the object dbTag and size are stored.
 int XC::Communicator::sendDoublePtr(double *ptr,DbTagData &dt, const ArrayCommMetaData &meta)
@@ -547,7 +547,7 @@ int XC::Communicator::sendDoublePtr(double *ptr,DbTagData &dt, const ArrayCommMe
     return retval;
   }
 
-//! @brief Receive the array data through the channel being passed as parameter.
+//! @brief Receive the array data through the communicator argument.
 //!
 //! @param meta: index where the object dbTag and size are stored.
 double *XC::Communicator::receiveDoublePtr(double* &ptr,DbTagData &dt, const ArrayCommMetaData &meta) const
@@ -575,7 +575,7 @@ double *XC::Communicator::receiveDoublePtr(double* &ptr,DbTagData &dt, const Arr
   }
 
 
-//! @brief Sends a double through the channel being passed as parameter.
+//! @brief Sends a double through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::sendDouble(const double &db1,DbTagData &dt, const CommMetaData &meta)
@@ -585,7 +585,7 @@ int XC::Communicator::sendDouble(const double &db1,DbTagData &dt, const CommMeta
     return sendMovable(v,dt,meta);
   }
 
-//! @brief Send the doubles through the channel being passed as parameter.
+//! @brief Send the doubles through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::sendDoubles(const double &db1,const double &db2,DbTagData &dt, const CommMetaData &meta)
@@ -595,7 +595,7 @@ int XC::Communicator::sendDoubles(const double &db1,const double &db2,DbTagData 
     return sendMovable(v,dt,meta);
   }
 
-//! @brief Send the doubles through the channel being passed as parameter.
+//! @brief Send the doubles through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::sendDoubles(const double &db1,const double &db2,const double &db3,DbTagData &dt, const CommMetaData &meta)
@@ -605,7 +605,7 @@ int XC::Communicator::sendDoubles(const double &db1,const double &db2,const doub
     return sendMovable(v,dt,meta);
   }
 
-//! @brief Send the doubles through the channel being passed as parameter.
+//! @brief Send the doubles through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::sendDoubles(const double &db1,const double &db2,const double &db3,const double &db4,DbTagData &dt, const CommMetaData &meta)
@@ -615,7 +615,7 @@ int XC::Communicator::sendDoubles(const double &db1,const double &db2,const doub
     return sendMovable(v,dt,meta);
   }
 
-//! @brief Send the doubles through the channel being passed as parameter.
+//! @brief Send the doubles through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::sendDoubles(const double &db1,const double &db2,const double &db3,const double &db4,const double &db5,DbTagData &dt, const CommMetaData &meta)
@@ -625,7 +625,7 @@ int XC::Communicator::sendDoubles(const double &db1,const double &db2,const doub
     return sendMovable(v,dt,meta);
   }
 
-//! @brief Send the doubles through the channel being passed as parameter.
+//! @brief Send the doubles through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::sendDoubles(const double &db1,const double &db2,const double &db3,const double &db4,const double &db5,const double &db6,DbTagData &dt, const CommMetaData &meta)
@@ -635,7 +635,7 @@ int XC::Communicator::sendDoubles(const double &db1,const double &db2,const doub
     return sendMovable(v,dt,meta);
   }
 
-//! @brief Receives el double through the channel being passed as parameter.
+//! @brief Receives el double through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::receiveDouble(double &db1,DbTagData &dt, const CommMetaData &meta) const
@@ -648,7 +648,7 @@ int XC::Communicator::receiveDouble(double &db1,DbTagData &dt, const CommMetaDat
     return res;
   }
 
-//! @brief Receives the doubles through the channel being passed as parameter.
+//! @brief Receives the doubles through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::receiveDoubles(double &db1,double &db2,DbTagData &dt, const CommMetaData &meta) const
@@ -661,7 +661,7 @@ int XC::Communicator::receiveDoubles(double &db1,double &db2,DbTagData &dt, cons
     return res;
   }
 
-//! @brief Receives the doubles through the channel being passed as parameter.
+//! @brief Receives the doubles through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::receiveDoubles(double &db1,double &db2,double &db3,DbTagData &dt, const CommMetaData &meta) const
@@ -675,7 +675,7 @@ int XC::Communicator::receiveDoubles(double &db1,double &db2,double &db3,DbTagDa
   }
 
 
-//! @brief Receives the doubles through the channel being passed as parameter.
+//! @brief Receives the doubles through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::receiveDoubles(double &db1,double &db2,double &db3,double &db4,DbTagData &dt, const CommMetaData &meta) const
@@ -688,7 +688,7 @@ int XC::Communicator::receiveDoubles(double &db1,double &db2,double &db3,double 
     return res;
   }
 
-//! @brief Receives the doubles through the channel being passed as parameter.
+//! @brief Receives the doubles through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::receiveDoubles(double &db1,double &db2,double &db3,double &db4,double &db5,DbTagData &dt, const CommMetaData &meta) const
@@ -701,7 +701,7 @@ int XC::Communicator::receiveDoubles(double &db1,double &db2,double &db3,double 
     return res;
   }
 
-//! @brief Receives the doubles through the channel being passed as parameter.
+//! @brief Receives the doubles through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::receiveDoubles(double &db1,double &db2,double &db3,double &db4,double &db5,double &db6,DbTagData &dt, const CommMetaData &meta) const
@@ -715,13 +715,13 @@ int XC::Communicator::receiveDoubles(double &db1,double &db2,double &db3,double 
   }
 
 
-//! @brief Sends bool through the channel being passed as parameter.
+//! @brief Sends bool through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::sendBool(const bool &b,DbTagData &dt, const CommMetaData &meta)
   { return sendInt(b,dt,meta); }
 
-//! @brief Sends the bools through the channel being passed as parameter.
+//! @brief Sends the bools through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::sendBools(const bool &b1,const bool &b2,DbTagData &dt, const CommMetaData &meta)
@@ -731,7 +731,7 @@ int XC::Communicator::sendBools(const bool &b1,const bool &b2,DbTagData &dt, con
     return sendMovable(v,dt,meta);
   }
 
-//! @brief Sends the bools through the channel being passed as parameter.
+//! @brief Sends the bools through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::sendBools(const bool &b1,const bool &b2,const bool &b3,DbTagData &dt, const CommMetaData &meta)
@@ -741,7 +741,7 @@ int XC::Communicator::sendBools(const bool &b1,const bool &b2,const bool &b3,DbT
     return sendMovable(v,dt,meta);
   }
 
-//! @brief Sends the bools through the channel being passed as parameter.
+//! @brief Sends the bools through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::sendBools(const bool &b1,const bool &b2,const bool &b3,const bool &b4,DbTagData &dt, const CommMetaData &meta)
@@ -751,7 +751,7 @@ int XC::Communicator::sendBools(const bool &b1,const bool &b2,const bool &b3,con
     return sendMovable(v,dt,meta);
   }
 
-//! @brief Sends the bools through the channel being passed as parameter.
+//! @brief Sends the bools through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::sendBools(const bool &b1,const bool &b2,const bool &b3,const bool &b4,const bool &b5,DbTagData &dt, const CommMetaData &meta)
@@ -761,7 +761,7 @@ int XC::Communicator::sendBools(const bool &b1,const bool &b2,const bool &b3,con
     return sendMovable(v,dt,meta);
   }
 
-//! @brief Sends the bools through the channel being passed as parameter.
+//! @brief Sends the bools through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::sendBools(const bool &b1,const bool &b2,const bool &b3,const bool &b4,const bool &b5,const bool &b6,DbTagData &dt, const CommMetaData &meta)
@@ -771,7 +771,7 @@ int XC::Communicator::sendBools(const bool &b1,const bool &b2,const bool &b3,con
     return sendMovable(v,dt,meta);
   }
 
-//! @brief Sends the bool through the channel being passed as parameter.
+//! @brief Sends the bool through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::receiveBool(bool &b,DbTagData &dt, const CommMetaData &meta) const
@@ -782,7 +782,7 @@ int XC::Communicator::receiveBool(bool &b,DbTagData &dt, const CommMetaData &met
     return res;
   }
 
-//! @brief Receives the bools through the channel being passed as parameter.
+//! @brief Receives the bools through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::receiveBools(bool &b1,bool &b2,DbTagData &dt, const CommMetaData &meta) const
@@ -795,7 +795,7 @@ int XC::Communicator::receiveBools(bool &b1,bool &b2,DbTagData &dt, const CommMe
     return res;
   }
 
-//! @brief Receives the bools through the channel being passed as parameter.
+//! @brief Receives the bools through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::receiveBools(bool &b1,bool &b2,bool &b3,DbTagData &dt, const CommMetaData &meta) const
@@ -809,7 +809,7 @@ int XC::Communicator::receiveBools(bool &b1,bool &b2,bool &b3,DbTagData &dt, con
   }
 
 
-//! @brief Receives the bools through the channel being passed as parameter.
+//! @brief Receives the bools through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::receiveBools(bool &b1,bool &b2,bool &b3,bool &b4,DbTagData &dt, const CommMetaData &meta) const
@@ -822,7 +822,7 @@ int XC::Communicator::receiveBools(bool &b1,bool &b2,bool &b3,bool &b4,DbTagData
     return res;
   }
 
-//! @brief Receives the bools through the channel being passed as parameter.
+//! @brief Receives the bools through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::receiveBools(bool &b1,bool &b2,bool &b3,bool &b4,bool &b5,DbTagData &dt, const CommMetaData &meta) const
@@ -835,7 +835,7 @@ int XC::Communicator::receiveBools(bool &b1,bool &b2,bool &b3,bool &b4,bool &b5,
     return res;
   }
 
-//! @brief Receives the bools through the channel being passed as parameter.
+//! @brief Receives the bools through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::receiveBools(bool &b1,bool &b2,bool &b3,bool &b4,bool &b5,bool &b6,DbTagData &dt, const CommMetaData &meta) const
@@ -848,7 +848,7 @@ int XC::Communicator::receiveBools(bool &b1,bool &b2,bool &b3,bool &b4,bool &b5,
     return res;
   }
 
-//! @brief Sends the integer through the channel being passed as parameter.
+//! @brief Sends the integer through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::sendInt(const int &i,DbTagData &dt, const CommMetaData &meta)
@@ -858,7 +858,7 @@ int XC::Communicator::sendInt(const int &i,DbTagData &dt, const CommMetaData &me
     return sendMovable(v,dt,meta);
   }
 
-//! @brief Sends the integers through the channel being passed as parameter.
+//! @brief Sends the integers through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::sendInts(const int &i1,const int &i2,DbTagData &dt, const CommMetaData &meta)
@@ -868,7 +868,7 @@ int XC::Communicator::sendInts(const int &i1,const int &i2,DbTagData &dt, const 
     return sendMovable(v,dt,meta);
   }
 
-//! @brief Sends the integers through the channel being passed as parameter.
+//! @brief Sends the integers through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::sendInts(const int &i1,const int &i2,const int &i3,DbTagData &dt, const CommMetaData &meta)
@@ -878,7 +878,7 @@ int XC::Communicator::sendInts(const int &i1,const int &i2,const int &i3,DbTagDa
     return sendMovable(v,dt,meta);
   }
 
-//! @brief Sends the integers through the channel being passed as parameter.
+//! @brief Sends the integers through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::sendInts(const int &i1,const int &i2,const int &i3,const int &i4,DbTagData &dt, const CommMetaData &meta)
@@ -888,7 +888,7 @@ int XC::Communicator::sendInts(const int &i1,const int &i2,const int &i3,const i
     return sendMovable(v,dt,meta);
   }
 
-//! @brief Sends the integers through the channel being passed as parameter.
+//! @brief Sends the integers through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::sendInts(const int &i1,const int &i2,const int &i3,const int &i4,const int &i5,DbTagData &dt, const CommMetaData &meta)
@@ -898,7 +898,7 @@ int XC::Communicator::sendInts(const int &i1,const int &i2,const int &i3,const i
     return sendMovable(v,dt,meta);
   }
 
-//! @brief Sends the integers through the channel being passed as parameter.
+//! @brief Sends the integers through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::sendInts(const int &i1,const int &i2,const int &i3,const int &i4,const int &i5,const int &i6,DbTagData &dt, const CommMetaData &meta)
@@ -908,7 +908,7 @@ int XC::Communicator::sendInts(const int &i1,const int &i2,const int &i3,const i
     return sendMovable(v,dt,meta);
   }
 
-//! @brief Receives the integers through the channel being passed as parameter.
+//! @brief Receives the integers through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::receiveInt(int &i,DbTagData &dt, const CommMetaData &meta) const
@@ -921,7 +921,7 @@ int XC::Communicator::receiveInt(int &i,DbTagData &dt, const CommMetaData &meta)
     return res;
   }
 
-//! @brief Receives the integers through the channel being passed as parameter.
+//! @brief Receives the integers through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::receiveInts(int &i1,int &i2,DbTagData &dt, const CommMetaData &meta) const
@@ -934,7 +934,7 @@ int XC::Communicator::receiveInts(int &i1,int &i2,DbTagData &dt, const CommMetaD
     return res;
   }
 
-//! @brief Receives the integers through the channel being passed as parameter.
+//! @brief Receives the integers through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::receiveInts(int &i1,int &i2,int &i3,DbTagData &dt, const CommMetaData &meta) const
@@ -948,7 +948,7 @@ int XC::Communicator::receiveInts(int &i1,int &i2,int &i3,DbTagData &dt, const C
   }
 
 
-//! @brief Receives the integers through the channel being passed as parameter.
+//! @brief Receives the integers through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::receiveInts(int &i1,int &i2,int &i3,int &i4,DbTagData &dt, const CommMetaData &meta) const
@@ -961,7 +961,7 @@ int XC::Communicator::receiveInts(int &i1,int &i2,int &i3,int &i4,DbTagData &dt,
     return res;
   }
 
-//! @brief Receives the integers through the channel being passed as parameter.
+//! @brief Receives the integers through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::receiveInts(int &i1,int &i2,int &i3,int &i4,int &i5,DbTagData &dt, const CommMetaData &meta) const
@@ -974,7 +974,7 @@ int XC::Communicator::receiveInts(int &i1,int &i2,int &i3,int &i4,int &i5,DbTagD
     return res;
   }
 
-//! @brief Receives the integers through the channel being passed as parameter.
+//! @brief Receives the integers through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::receiveInts(int &i1,int &i2,int &i3,int &i4,int &i5,int &i6,DbTagData &dt, const CommMetaData &meta) const
@@ -987,13 +987,13 @@ int XC::Communicator::receiveInts(int &i1,int &i2,int &i3,int &i4,int &i5,int &i
     return res;
   }
 
-//! @brief Sends entero through the channel being passed as parameter.
+//! @brief Sends entero through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 size_t XC::Communicator::sendSzt(const size_t &i,DbTagData &dt, const CommMetaData &meta)
   { return sendDouble(i,dt,meta); }
 
-//! @brief Sends the integers through the channel being passed as parameter.
+//! @brief Sends the integers through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 size_t XC::Communicator::sendSzts(const size_t &i1,const size_t &i2,DbTagData &dt, const CommMetaData &meta)
@@ -1003,7 +1003,7 @@ size_t XC::Communicator::sendSzts(const size_t &i1,const size_t &i2,DbTagData &d
     return sendMovable(v,dt,meta);
   }
 
-//! @brief Sends the integers through the channel being passed as parameter.
+//! @brief Sends the integers through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 size_t XC::Communicator::sendSzts(const size_t &i1,const size_t &i2,const size_t &i3,DbTagData &dt, const CommMetaData &meta)
@@ -1013,7 +1013,7 @@ size_t XC::Communicator::sendSzts(const size_t &i1,const size_t &i2,const size_t
     return sendMovable(v,dt,meta);
   }
 
-//! @brief Sends the integers through the channel being passed as parameter.
+//! @brief Sends the integers through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 size_t XC::Communicator::sendSzts(const size_t &i1,const size_t &i2,const size_t &i3,const size_t &i4,DbTagData &dt, const CommMetaData &meta)
@@ -1023,7 +1023,7 @@ size_t XC::Communicator::sendSzts(const size_t &i1,const size_t &i2,const size_t
     return sendMovable(v,dt,meta);
   }
 
-//! @brief Sends the integers through the channel being passed as parameter.
+//! @brief Sends the integers through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 size_t XC::Communicator::sendSzts(const size_t &i1,const size_t &i2,const size_t &i3,const size_t &i4,const size_t &i5,DbTagData &dt, const CommMetaData &meta)
@@ -1033,7 +1033,7 @@ size_t XC::Communicator::sendSzts(const size_t &i1,const size_t &i2,const size_t
     return sendMovable(v,dt,meta);
   }
 
-//! @brief Sends the integers through the channel being passed as parameter.
+//! @brief Sends the integers through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 size_t XC::Communicator::sendSzts(const size_t &i1,const size_t &i2,const size_t &i3,const size_t &i4,const size_t &i5,const size_t &i6,DbTagData &dt, const CommMetaData &meta)
@@ -1043,7 +1043,7 @@ size_t XC::Communicator::sendSzts(const size_t &i1,const size_t &i2,const size_t
     return sendMovable(v,dt,meta);
   }
 
-//! @brief Receives the integers through the channel being passed as parameter.
+//! @brief Receives the integers through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 size_t XC::Communicator::receiveSzt(size_t &i,DbTagData &dt, const CommMetaData &meta) const
@@ -1054,7 +1054,7 @@ size_t XC::Communicator::receiveSzt(size_t &i,DbTagData &dt, const CommMetaData 
     return res;
   }
 
-//! @brief Receives the integers through the channel being passed as parameter.
+//! @brief Receives the integers through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 size_t XC::Communicator::receiveSzts(size_t &i1,size_t &i2,DbTagData &dt, const CommMetaData &meta) const
@@ -1067,7 +1067,7 @@ size_t XC::Communicator::receiveSzts(size_t &i1,size_t &i2,DbTagData &dt, const 
     return res;
   }
 
-//! @brief Receives the integers through the channel being passed as parameter.
+//! @brief Receives the integers through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 size_t XC::Communicator::receiveSzts(size_t &i1,size_t &i2,size_t &i3,DbTagData &dt, const CommMetaData &meta) const
@@ -1081,7 +1081,7 @@ size_t XC::Communicator::receiveSzts(size_t &i1,size_t &i2,size_t &i3,DbTagData 
   }
 
 
-//! @brief Receives the integers through the channel being passed as parameter.
+//! @brief Receives the integers through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 size_t XC::Communicator::receiveSzts(size_t &i1,size_t &i2,size_t &i3,size_t &i4,DbTagData &dt, const CommMetaData &meta) const
@@ -1094,7 +1094,7 @@ size_t XC::Communicator::receiveSzts(size_t &i1,size_t &i2,size_t &i3,size_t &i4
     return res;
   }
 
-//! @brief Receives the integers through the channel being passed as parameter.
+//! @brief Receives the integers through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 size_t XC::Communicator::receiveSzts(size_t &i1,size_t &i2,size_t &i3,size_t &i4,size_t &i5,DbTagData &dt, const CommMetaData &meta) const
@@ -1107,7 +1107,7 @@ size_t XC::Communicator::receiveSzts(size_t &i1,size_t &i2,size_t &i3,size_t &i4
     return res;
   }
 
-//! @brief Receives the integers through the channel being passed as parameter.
+//! @brief Receives the integers through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 size_t XC::Communicator::receiveSzts(size_t &i1,size_t &i2,size_t &i3,size_t &i4,size_t &i5,size_t &i6,DbTagData &dt, const CommMetaData &meta) const
@@ -1136,7 +1136,7 @@ XC::ResponseId *XC::Communicator::receiveResponseIdPtr(ResponseId* &ri,DbTagData
     return ri;
   }
 
-//! @brief Sends a movable object through the channel being passed as parameter.
+//! @brief Sends a movable object through the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::sendMovable(MovableObject &mv,DbTagData &dt, const CommMetaData &meta)
@@ -1147,7 +1147,7 @@ int XC::Communicator::sendMovable(MovableObject &mv,DbTagData &dt, const CommMet
     return retval;
   }
 
-//! @brief Receives a movable object trhrough the channel being passed as parameter.
+//! @brief Receives a movable object trhrough the communicator argument.
 //!
 //! @param meta: index where the object dbTag is stored.
 int XC::Communicator::receiveMovable(MovableObject &mv,DbTagData &dt, const CommMetaData &meta) const
@@ -1160,7 +1160,7 @@ int XC::Communicator::receiveMovable(MovableObject &mv,DbTagData &dt, const Comm
     return res;
   }
 
-//! @brief Sends a pointer to movable object through the channel being passed as parameter.
+//! @brief Sends a pointer to movable object through the communicator argument.
 //!
 //! @param meta: indexes where the flag and the dbTag are stored.
 int XC::Communicator::sendMovablePtr(MovableObject *ptr,DbTagData &dt, const PtrCommMetaData &meta)
@@ -1177,7 +1177,7 @@ int XC::Communicator::sendMovablePtr(MovableObject *ptr,DbTagData &dt, const Ptr
   }
 
 
-//! @brief Sends a pointer to movable object through the channel being passed as parameter.
+//! @brief Sends a pointer to movable object through the communicator argument.
 //!
 //! @param meta: indexes where the flag and the dbTag are stored.
 int XC::Communicator::sendBrokedPtr(MovableObject *ptr,DbTagData &dt, const BrokedPtrCommMetaData &meta)

@@ -299,7 +299,7 @@ double XC::PathTimeSeries::getDuration(void) const
     return(time(lastIndex-1));
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::PathTimeSeries::sendData(Communicator &comm)
   {
     int res= PathSeriesBase::sendData(comm);
@@ -308,7 +308,7 @@ int XC::PathTimeSeries::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::PathTimeSeries::recvData(const Communicator &comm)
   {
     int res= PathSeriesBase::recvData(comm);
@@ -317,7 +317,7 @@ int XC::PathTimeSeries::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::PathTimeSeries::sendSelf(Communicator &comm)
   {
     inicComm(9);
@@ -332,7 +332,7 @@ int XC::PathTimeSeries::sendSelf(Communicator &comm)
   }
 
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::PathTimeSeries::recvSelf(const Communicator &comm)
   {
     inicComm(9);

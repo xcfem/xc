@@ -71,7 +71,7 @@ int XC::HingeBeamIntegration3d::activateParameter(int parameterID)
     return 0;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::HingeBeamIntegration3d::sendData(Communicator &comm)
   {
     int res= PlasticLengthsBeamIntegration::sendData(comm);
@@ -79,7 +79,7 @@ int XC::HingeBeamIntegration3d::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::HingeBeamIntegration3d::recvData(const Communicator &comm)
   {
     int res= PlasticLengthsBeamIntegration::recvData(comm);
@@ -87,7 +87,7 @@ int XC::HingeBeamIntegration3d::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::HingeBeamIntegration3d::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -101,7 +101,7 @@ int XC::HingeBeamIntegration3d::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::HingeBeamIntegration3d::recvSelf(const Communicator &comm)
   {
     inicComm(3);

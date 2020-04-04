@@ -355,7 +355,7 @@ XC::DbTagData &XC::LoadPatternCombination::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::LoadPatternCombination::sendData(Communicator &comm)
   {
     int res= ForceReprComponent::sendData(comm);
@@ -364,7 +364,7 @@ int XC::LoadPatternCombination::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::LoadPatternCombination::recvData(const Communicator &comm)
   {
     int res= ForceReprComponent::recvData(comm);

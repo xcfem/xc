@@ -161,11 +161,11 @@ void XC::ConstraintHandler::clearAll(void)
       theDomain->clearDOF_GroupPtr();
   }
 
-//! @brief Send object members through the channel passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::ConstraintHandler::sendData(Communicator &comm)
   { return 0; }
 
-//! @brief Receive object members through the channel passed as parameter.
+//! @brief Receive object members through the communicator argument.
 int XC::ConstraintHandler::recvData(const Communicator &comm)
   { return 0; }
 

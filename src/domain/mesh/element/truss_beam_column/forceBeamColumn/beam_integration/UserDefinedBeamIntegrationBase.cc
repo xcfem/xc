@@ -106,7 +106,7 @@ void XC::UserDefinedBeamIntegrationBase::getSectionWeights(int numSections,doubl
       wt[i] = 1.0;
   }
 
-//! @brief Send object members through the channel defined in cp.
+//! @brief Send object members through the communicator argument.
 int XC::UserDefinedBeamIntegrationBase::sendData(Communicator &comm)
   {
     //setDbTagDataPos(0,getTag()); Not tagged.
@@ -115,7 +115,7 @@ int XC::UserDefinedBeamIntegrationBase::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel defined in cp.
+//! @brief Receives object members through the communicator argument.
 int XC::UserDefinedBeamIntegrationBase::recvData(const Communicator &comm)
   {
     //setTag(getDbTagDataPos(0)); Not tagged.

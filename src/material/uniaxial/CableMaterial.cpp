@@ -209,7 +209,7 @@ XC::DbTagData &XC::CableMaterial::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::CableMaterial::sendData(Communicator &comm)
   {
     int res= ElasticBaseMaterial::sendData(comm);
@@ -217,7 +217,7 @@ int XC::CableMaterial::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::CableMaterial::recvData(const Communicator &comm)
   {
     int res= ElasticBaseMaterial::recvData(comm);
@@ -225,7 +225,7 @@ int XC::CableMaterial::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::CableMaterial::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -240,7 +240,7 @@ int XC::CableMaterial::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::CableMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(4);

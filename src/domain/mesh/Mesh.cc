@@ -1058,7 +1058,7 @@ XC::DbTagData &XC::Mesh::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::Mesh::sendData(Communicator &comm)
   {
     int res=comm.sendMovable(*theNodes,getDbTagData(),CommMetaData(0));
@@ -1069,7 +1069,7 @@ int XC::Mesh::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::Mesh::recvData(const Communicator &comm)
   {
     int res= theNodes->receive<Node>(getDbTagDataPos(0),comm,&FEM_ObjectBroker::getNewNode);
@@ -1083,7 +1083,7 @@ int XC::Mesh::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::Mesh::sendSelf(Communicator &comm)
   {
     inicComm(5); 
@@ -1092,12 +1092,12 @@ int XC::Mesh::sendSelf(Communicator &comm)
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; channel failed to send data.\n";
+              << "; communicator failed to send data.\n";
     return res;
   }
 
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::Mesh::recvSelf(const Communicator &comm)
   {
     // first we get the data about the state of the mesh for this cTag
@@ -1105,7 +1105,7 @@ int XC::Mesh::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),getDbTag());
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; channel failed to recv the initial ID.\n";
+              << "; communicator failed to recv the initial ID.\n";
     else
       res+= recvData(comm);
     return res;

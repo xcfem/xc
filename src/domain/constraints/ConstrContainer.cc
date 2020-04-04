@@ -1044,7 +1044,7 @@ XC::DbTagData &XC::ConstrContainer::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send the active load patterns tags through the channel being passed as parameter.
+//! @brief Send the active load patterns tags through the communicator argument.
 int XC::ConstrContainer::sendLPatternsTags(const int &posFlag,const int &posDbTag,Communicator &comm)
   {
     int res= 0;
@@ -1064,7 +1064,7 @@ int XC::ConstrContainer::sendLPatternsTags(const int &posFlag,const int &posDbTa
     return res;
   }
 
-//! @brief Receives the active load patterns tags through the channel being passed as parameter.
+//! @brief Receives the active load patterns tags through the communicator argument.
 int XC::ConstrContainer::recvLPatternsTags(const int &posFlag,const int &posDbTag,const Communicator &comm)
   {
     Domain *dom= getDomain();
@@ -1111,7 +1111,7 @@ int XC::ConstrContainer::recvLPatternsTags(const int &posFlag,const int &posDbTa
     return res;
   }
 
-//! @brief Send the node lockers tags through the channel being passed as parameter.
+//! @brief Send the node lockers tags through the communicator argument.
 int XC::ConstrContainer::sendNLockersTags(const int &posFlag,const int &posDbTag,Communicator &comm)
   {
     int res= 0;
@@ -1131,7 +1131,7 @@ int XC::ConstrContainer::sendNLockersTags(const int &posFlag,const int &posDbTag
     return res;
   }
 
-//! @brief Receives the node lockers tags through the channel being passed as parameter.
+//! @brief Receives the node lockers tags through the communicator argument.
 int XC::ConstrContainer::recvNLockersTags(const int &posFlag,const int &posDbTag,const Communicator &comm)
   {
     Domain *dom= getDomain();
@@ -1163,7 +1163,7 @@ int XC::ConstrContainer::recvNLockersTags(const int &posFlag,const int &posDbTag
     return res;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::ConstrContainer::sendData(Communicator &comm)
   {
     int res= comm.sendMovable(*theSPs,getDbTagData(),CommMetaData(0));
@@ -1175,7 +1175,7 @@ int XC::ConstrContainer::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::ConstrContainer::recvData(const Communicator &comm)
   {
     int res= theSPs->receive<SFreedom_Constraint>(getDbTagDataPos(0),comm,&FEM_ObjectBroker::getNewSP);
@@ -1186,7 +1186,7 @@ int XC::ConstrContainer::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::ConstrContainer::sendSelf(Communicator &comm)
   {
     inicComm(7);
@@ -1196,12 +1196,12 @@ int XC::ConstrContainer::sendSelf(Communicator &comm)
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< " - channel failed to send the initial ID\n";
+		<< " - communicator failed to send the initial ID\n";
     return res;
   }
 
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::ConstrContainer::recvSelf(const Communicator &comm)
   {
     // first we get the data about the state of the cc for this cTag
@@ -1209,7 +1209,7 @@ int XC::ConstrContainer::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),getDbTag());
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< " - channel failed to recv the initial ID\n";
+		<< " - communicator failed to recv the initial ID\n";
     else
       res+= recvData(comm);
     return res;

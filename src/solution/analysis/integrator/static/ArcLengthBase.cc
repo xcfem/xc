@@ -52,7 +52,7 @@ double XC::ArcLengthBase::getDLambdaNewStep(void) const
     return retval;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::ArcLengthBase::sendData(Communicator &comm)
   {
     int res= ProtoArcLength::sendData(comm);
@@ -60,7 +60,7 @@ int XC::ArcLengthBase::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::ArcLengthBase::recvData(const Communicator &comm)
   {
     int res= ProtoArcLength::recvData(comm);

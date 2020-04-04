@@ -587,7 +587,7 @@ int XC::Spring::getResponse(int responseID, Information &eleInfo)
       }
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::Spring::sendData(Communicator &comm)
   {
     int res= ProtoTruss::sendData(comm);
@@ -596,7 +596,7 @@ int XC::Spring::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::Spring::recvData(const Communicator &comm)
   {
     int res= ProtoTruss::recvData(comm);

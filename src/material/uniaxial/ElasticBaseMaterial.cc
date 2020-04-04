@@ -42,7 +42,7 @@ int XC::ElasticBaseMaterial::setInitialStrain(double strain)
     return 0;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::ElasticBaseMaterial::sendData(Communicator &comm)
   {
     int res= UniaxialMaterial::sendData(comm);
@@ -50,7 +50,7 @@ int XC::ElasticBaseMaterial::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::ElasticBaseMaterial::recvData(const Communicator &comm)
   {
     int res= UniaxialMaterial::recvData(comm);
@@ -58,7 +58,7 @@ int XC::ElasticBaseMaterial::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::ElasticBaseMaterial::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -72,7 +72,7 @@ int XC::ElasticBaseMaterial::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::ElasticBaseMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(3);

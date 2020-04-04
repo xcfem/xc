@@ -39,14 +39,14 @@ XC::DbTagData &XC::BodyForces::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::BodyForces::sendData(Communicator &comm)
   {
     int res= comm.sendVector(forces,this->getDbTagData(),CommMetaData(1));
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::BodyForces::recvData(const Communicator &comm)
   {
     int res= comm.receiveVector(forces,this->getDbTagData(),CommMetaData(1));

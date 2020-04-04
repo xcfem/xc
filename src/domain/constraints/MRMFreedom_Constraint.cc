@@ -235,7 +235,7 @@ int XC::MRMFreedom_Constraint::addResistingForceToNodalReaction(bool inclInertia
   }
 
 
-//! @brief Send data through the channel being passed as parameter.
+//! @brief Send data through the communicator argument.
 int XC::MRMFreedom_Constraint::sendData(Communicator &comm)
   {
     int res= MFreedom_ConstraintBase::sendData(comm);
@@ -243,7 +243,7 @@ int XC::MRMFreedom_Constraint::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receive data through the channel being passed as parameter.
+//! @brief Receive data through the communicator argument.
 int XC::MRMFreedom_Constraint::recvData(const Communicator &comm)
   {
     int res= MFreedom_ConstraintBase::recvData(comm);
@@ -251,7 +251,7 @@ int XC::MRMFreedom_Constraint::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::MRMFreedom_Constraint::sendSelf(Communicator &comm)
   {
     inicComm(10);
@@ -265,7 +265,7 @@ int XC::MRMFreedom_Constraint::sendSelf(Communicator &comm)
   }
 
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::MRMFreedom_Constraint::recvSelf(const Communicator &comm)
   {
     inicComm(10);

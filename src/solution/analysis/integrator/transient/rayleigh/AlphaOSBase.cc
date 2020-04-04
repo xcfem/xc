@@ -99,7 +99,7 @@ int XC::AlphaOSBase::revertToLastStep(void)
     return 0;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::AlphaOSBase::sendData(Communicator &comm)
   {
     int res= HHTBase::sendData(comm);
@@ -108,7 +108,7 @@ int XC::AlphaOSBase::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::AlphaOSBase::recvData(const Communicator &comm)
   {
     int res= HHTBase::recvData(comm);

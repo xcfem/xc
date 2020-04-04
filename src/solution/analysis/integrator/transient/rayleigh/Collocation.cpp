@@ -326,7 +326,7 @@ int XC::Collocation::commit(void)
     return commitModel();
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::Collocation::sendData(Communicator &comm)
   {
     int res= RayleighBase::sendData(comm);
@@ -336,7 +336,7 @@ int XC::Collocation::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::Collocation::recvData(const Communicator &comm)
   {
     int res= RayleighBase::recvData(comm);

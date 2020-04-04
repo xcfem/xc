@@ -63,7 +63,6 @@
 
 #include <solution/system_of_eqn/linearSOE/bandSPD/BandSPDLinSOE.h>
 #include "solution/system_of_eqn/linearSOE/DistributedBandLinSOE.h"
-#include "utility/actor/channel/ChannelQueue.h"
 
 namespace XC {
 class DistributedBandSPDLinSolver;

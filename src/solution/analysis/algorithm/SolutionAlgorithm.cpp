@@ -201,13 +201,13 @@ XC::Domain *XC::SolutionAlgorithm::get_domain_ptr(void)
     return sm->getDomainPtr();
   }
 
-//! @brief Send object members through the channel passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::SolutionAlgorithm::sendData(Communicator &comm)
   {
     return 0;
   }
 
-//! @brief Receive object members through the channel passed as parameter.
+//! @brief Receive object members through the communicator argument.
 int XC::SolutionAlgorithm::recvData(const Communicator &comm)
   {
     return 0;

@@ -134,7 +134,7 @@ Matrix ElemWithMaterial<NNODOS, PhysProp>::getExtrapolatedValues(const Matrix &v
   { return getExtrapolationMatrix()*values; }
 
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 template <int NNODOS,class PhysProp>
   int ElemWithMaterial<NNODOS, PhysProp>::sendData(Communicator &comm)
   {
@@ -143,7 +143,7 @@ template <int NNODOS,class PhysProp>
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 template <int NNODOS,class PhysProp>
 int ElemWithMaterial<NNODOS, PhysProp>::recvData(const Communicator &comm)
   {

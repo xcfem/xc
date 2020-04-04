@@ -62,7 +62,7 @@ double XC::SteelBase::getFy(void) const
   { return fy; }
 
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::SteelBase::sendData(Communicator &comm)
   {
     int res= UniaxialMaterial::sendData(comm);
@@ -71,7 +71,7 @@ int XC::SteelBase::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::SteelBase::recvData(const Communicator &comm)
   {
     int res= UniaxialMaterial::recvData(comm);

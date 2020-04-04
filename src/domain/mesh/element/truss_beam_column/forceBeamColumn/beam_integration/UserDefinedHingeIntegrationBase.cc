@@ -102,7 +102,7 @@ void XC::UserDefinedHingeIntegrationBase::getSectionWeights(int numSections,doub
       wt[i] = 1.0;
   }
 
-//! @brief Send object members through the channel defined in cp.
+//! @brief Send object members through the communicator argument.
 int XC::UserDefinedHingeIntegrationBase::sendData(Communicator &comm)
   {
     int res= UserDefinedBeamIntegrationBase::sendData(comm);
@@ -111,7 +111,7 @@ int XC::UserDefinedHingeIntegrationBase::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel defined in cp.
+//! @brief Receives object members through the communicator argument.
 int XC::UserDefinedHingeIntegrationBase::recvData(const Communicator &comm)
   {
     int res= UserDefinedBeamIntegrationBase::recvData(comm);

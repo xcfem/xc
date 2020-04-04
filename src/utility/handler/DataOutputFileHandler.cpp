@@ -59,7 +59,6 @@
 #include "utility/handler/DataOutputFileHandler.h"
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/ID.h>
-#include <utility/actor/channel/Channel.h>
 #include <utility/actor/message/Message.h>
 #include <fstream>
 #include "utility/actor/actor/CommMetaData.h"

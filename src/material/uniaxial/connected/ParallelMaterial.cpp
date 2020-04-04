@@ -164,7 +164,7 @@ int XC::ParallelMaterial::revertToStart(void)
 XC::UniaxialMaterial * XC::ParallelMaterial::getCopy(void) const
   { return new ParallelMaterial(*this); }
 
-//! @brief Send its members through the channel being passed as parameter.
+//! @brief Send its members through the communicator argument.
 int XC::ParallelMaterial::sendData(Communicator &comm)
   {
     int res= ConnectedMaterial::sendData(comm);
@@ -172,7 +172,7 @@ int XC::ParallelMaterial::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives its members through the channel being passed as parameter.
+//! @brief Receives its members through the communicator argument.
 int XC::ParallelMaterial::recvData(const Communicator &comm)
   {
     int res= ConnectedMaterial::recvData(comm);
@@ -180,7 +180,7 @@ int XC::ParallelMaterial::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::ParallelMaterial::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -194,7 +194,7 @@ int XC::ParallelMaterial::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::ParallelMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(4);

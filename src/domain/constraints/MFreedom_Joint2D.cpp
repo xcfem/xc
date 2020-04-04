@@ -229,7 +229,7 @@ int XC::MFreedom_Joint2D::applyConstraint(double timeStamp)
     return 0;
    }
 
-//! @brief Sends the object through the channel being passed as parameter.
+//! @brief Sends the object through the communicator argument.
 int XC::MFreedom_Joint2D::sendSelf(Communicator &comm)
   {
     static ID data(18);
@@ -249,7 +249,7 @@ int XC::MFreedom_Joint2D::sendSelf(Communicator &comm)
   }
 
 
-//! @brief Receives the object through the channel being passed as parameter.
+//! @brief Receives the object through the communicator argument.
 int XC::MFreedom_Joint2D::recvSelf(const Communicator &comm)
   {
     static ID data(18);

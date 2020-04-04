@@ -57,7 +57,7 @@ void XC::DampingFactorsIntegrator::Print(std::ostream &s, int flag) const
     s << "  Rayleigh Damping: " << rayFactors << std::endl;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::DampingFactorsIntegrator::sendData(Communicator &comm)
   {
     int res= TransientIntegrator::sendData(comm);
@@ -65,7 +65,7 @@ int XC::DampingFactorsIntegrator::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::DampingFactorsIntegrator::recvData(const Communicator &comm)
   {
     int res= TransientIntegrator::recvData(comm);

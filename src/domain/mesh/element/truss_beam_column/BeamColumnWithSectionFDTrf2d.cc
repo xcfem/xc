@@ -103,7 +103,7 @@ XC::CrdTransf *XC::BeamColumnWithSectionFDTrf2d::getCoordTransf(void)
 const XC::CrdTransf *XC::BeamColumnWithSectionFDTrf2d::getCoordTransf(void) const
   { return theCoordTransf; }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::BeamColumnWithSectionFDTrf2d::sendData(Communicator &comm)
   {
     int res= BeamColumnWithSectionFD::sendData(comm);
@@ -111,7 +111,7 @@ int XC::BeamColumnWithSectionFDTrf2d::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::BeamColumnWithSectionFDTrf2d::recvData(const Communicator &comm)
   {
     int res= BeamColumnWithSectionFD::recvData(comm);

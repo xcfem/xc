@@ -39,21 +39,21 @@ int XC::UniaxialStateVars::revertToStart(const double &E)
     return 0;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::UniaxialStateVars::sendData(Communicator &comm)
   {
     int res= comm.sendDoubles(strain,stress,tangent,getDbTagData(),CommMetaData(0));
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::UniaxialStateVars::recvData(const Communicator &comm)
   {
     int res= comm.receiveDoubles(strain,stress,tangent,getDbTagData(),CommMetaData(0));
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::UniaxialStateVars::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -67,7 +67,7 @@ int XC::UniaxialStateVars::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::UniaxialStateVars::recvSelf(const Communicator &comm)
   {
     inicComm(10);

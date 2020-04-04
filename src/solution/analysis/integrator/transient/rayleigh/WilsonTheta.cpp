@@ -453,7 +453,7 @@ int XC::WilsonTheta::commit(void)
     return commitModel();
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::WilsonTheta::sendData(Communicator &comm)
   {
     int res= RayleighBase::sendData(comm);
@@ -463,8 +463,7 @@ int XC::WilsonTheta::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed
-//! as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::WilsonTheta::recvData(const Communicator &comm)
   {
     int res= RayleighBase::recvData(comm);
@@ -474,7 +473,7 @@ int XC::WilsonTheta::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::WilsonTheta::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -489,7 +488,7 @@ int XC::WilsonTheta::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::WilsonTheta::recvSelf(const Communicator &comm)
   {
     inicComm(7);

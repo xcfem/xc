@@ -692,7 +692,7 @@ const XC::Vector &XC::BeamWithHinges2d::getResistingForceIncInertia(void) const
     return theVector;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::BeamWithHinges2d::sendData(Communicator &comm)
   {
     int res= BeamColumnWithSectionFDTrf2d::sendData(comm);
@@ -718,7 +718,7 @@ int XC::BeamWithHinges2d::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::BeamWithHinges2d::recvData(const Communicator &comm)
   {
     int res= BeamColumnWithSectionFDTrf2d::recvData(comm);
@@ -744,7 +744,7 @@ int XC::BeamWithHinges2d::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::BeamWithHinges2d::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -759,7 +759,7 @@ int XC::BeamWithHinges2d::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::BeamWithHinges2d::recvSelf(const Communicator &comm)
   {
     inicComm(31);

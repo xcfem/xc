@@ -373,7 +373,7 @@ int XC::Concrete01::revertToStart(void)
 XC::UniaxialMaterial* XC::Concrete01::getCopy(void) const
   { return new Concrete01(*this); }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::Concrete01::sendData(Communicator &comm)
   {
     int res= ConcreteBase::sendData(comm);
@@ -383,7 +383,7 @@ int XC::Concrete01::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::Concrete01::recvData(const Communicator &comm)
   {
     int res= ConcreteBase::recvData(comm);
@@ -394,7 +394,7 @@ int XC::Concrete01::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::Concrete01::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -408,7 +408,7 @@ int XC::Concrete01::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::Concrete01::recvSelf(const Communicator &comm)
   {
     inicComm(12);

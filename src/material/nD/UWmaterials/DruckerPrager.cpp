@@ -42,9 +42,6 @@
 #include <utility/recorder/response/MaterialResponse.h>
 #include <domain/component/Parameter.h>
 
-//#include <string.h>
-//#include <Channel.h>
-
 
 const double XC::DruckerPrager::one3= 1.0 / 3.0 ;
 const double XC::DruckerPrager::two3= 2.0 / 3.0 ;
@@ -894,9 +891,9 @@ int XC::DruckerPrager::sendSelf(Communicator &)
 // 	data(43) = mState(3);
 // 	data(44) = mState(4);
 	
-// 	res = theChannel.sendVector(this->getDbTag(), commitTag, data);
+// 	res = comm.sendVector(this->getDbTag(), commitTag, data);
 // 	if (res < 0) {
-// 		std::cerr << "WARNING: XC::DruckerPrager::sendSelf - failed to send vector to channel" << std::endl;
+// 		std::cerr << "WARNING: XC::DruckerPrager::sendSelf - failed to send vector to communicator" << std::endl;
 // 		return -1;
 //     }
     
@@ -910,9 +907,9 @@ int XC::DruckerPrager::recvSelf(const Communicator &)
 
 // 	// receive data
 // 	static Vector data(45);
-// 	res = theChannel.recvVector(this->getDbTag(), commitTag, data);
+// 	res = comm.recvVector(this->getDbTag(), commitTag, data);
 // 	if (res < 0) {
-// 		std::cerr << "WARNING: XC::DruckerPrager::recvSelf - failed to receive vector from channel" << std::endl;
+// 		std::cerr << "WARNING: XC::DruckerPrager::recvSelf - failed to receive vector from communicator" << std::endl;
 // 		return -1;
 // 	}
 

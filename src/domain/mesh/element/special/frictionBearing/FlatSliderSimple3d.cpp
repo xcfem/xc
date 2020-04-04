@@ -429,7 +429,7 @@ const XC::Vector &XC::FlatSliderSimple3d::getResistingForceIncInertia(void) cons
     return theVector;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::FlatSliderSimple3d::sendData(Communicator &comm)
   {
     int res= FrictionElementBase::sendData(comm);
@@ -438,7 +438,7 @@ int XC::FlatSliderSimple3d::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::FlatSliderSimple3d::recvData(const Communicator &comm)
   {
     int res= FrictionElementBase::recvData(comm);

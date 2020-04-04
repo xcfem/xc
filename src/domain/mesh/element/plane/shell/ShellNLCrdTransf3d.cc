@@ -236,7 +236,7 @@ const XC::Vector &XC::ShellNLCrdTransf3d::getGlobalResistingForce(const Vector &
     return retval;
   }
 
-//! @brief Send the object through the channel being passed as parameter.
+//! @brief Send the object through the communicator argument.
 int XC::ShellNLCrdTransf3d::sendSelf(Communicator &comm)
   {
     inicComm(3);
@@ -251,7 +251,7 @@ int XC::ShellNLCrdTransf3d::sendSelf(Communicator &comm)
   }
 
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::ShellNLCrdTransf3d::recvSelf(const Communicator &comm)
   {
     inicComm(3);

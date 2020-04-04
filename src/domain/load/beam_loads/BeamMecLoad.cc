@@ -190,7 +190,7 @@ void XC::BeamMecLoad::Print(std::ostream &s, int flag) const
     BeamLoad::Print(s,flag);
   }
 
-//! @brief Send data through the channel being passed as parameter.
+//! @brief Send data through the communicator argument.
 int XC::BeamMecLoad::sendData(Communicator &comm)
   {
     int res= BeamLoad::sendData(comm);
@@ -198,7 +198,7 @@ int XC::BeamMecLoad::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receive data through the channel being passed as parameter.
+//! @brief Receive data through the communicator argument.
 int XC::BeamMecLoad::recvData(const Communicator &comm)
   {
     int res= BeamLoad::recvData(comm);

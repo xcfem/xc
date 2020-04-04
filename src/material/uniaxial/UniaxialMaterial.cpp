@@ -285,7 +285,7 @@ double XC::UniaxialMaterial::getInitialTangent(void) const
 
 // AddingSensitivity:END //////////////////////////////////////////
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::UniaxialMaterial::sendData(Communicator &comm)
   {
     setDbTagDataPos(0,getTag());
@@ -293,7 +293,7 @@ int XC::UniaxialMaterial::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::UniaxialMaterial::recvData(const Communicator &comm)
   {
     setTag(getDbTagDataPos(0));
@@ -301,7 +301,7 @@ int XC::UniaxialMaterial::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Receives a pointer to uniaxial material through the channel being passed as parameter.
+//! @brief Receives a pointer to uniaxial material through the communicator argument.
 XC::UniaxialMaterial *XC::receiveUniaxialMaterialPtr(UniaxialMaterial *ptr,DbTagData &dt,const Communicator &comm,const BrokedPtrCommMetaData &md)
   {
     UniaxialMaterial *retval= nullptr;

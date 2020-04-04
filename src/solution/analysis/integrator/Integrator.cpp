@@ -142,13 +142,13 @@ void XC::Integrator::Print(std::ostream &os, int flag) const
 	<< "; no associated AnalysisModel.\n"; 
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::Integrator::sendData(Communicator &comm)
   {
     return 0;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::Integrator::recvData(const Communicator &comm)
   {
     return 0;

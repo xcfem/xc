@@ -128,7 +128,7 @@ XC::UniaxialMaterial *XC::ViscousMaterial::getCopy(void) const
   { return new ViscousMaterial(*this); }
 
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::ViscousMaterial::sendData(Communicator &comm)
   {
     int res= UniaxialMaterial::sendData(comm);
@@ -136,7 +136,7 @@ int XC::ViscousMaterial::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::ViscousMaterial::recvData(const Communicator &comm)
   {
     int res= UniaxialMaterial::recvData(comm);
@@ -144,7 +144,7 @@ int XC::ViscousMaterial::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::ViscousMaterial::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -158,7 +158,7 @@ int XC::ViscousMaterial::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::ViscousMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(3);

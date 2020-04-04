@@ -677,7 +677,7 @@ void XC::Shell4NBase::shape2d(const double &ss, const double &tt,const double x[
     return;
   }
 
-//! @brief Send the coordinate transformation through the channel being passed as parameter.
+//! @brief Send the coordinate transformation through the communicator argument.
 int XC::Shell4NBase::sendCoordTransf(int posFlag,const int &posClassTag,const int &posDbTag,Communicator &comm)
   {
     int retval= 0;
@@ -693,7 +693,7 @@ int XC::Shell4NBase::sendCoordTransf(int posFlag,const int &posClassTag,const in
     return retval;
   }
 
-//! @brief Receives the coordinate transformation through the channel being passed as parameter.
+//! @brief Receives the coordinate transformation through the communicator argument.
 int XC::Shell4NBase::recvCoordTransf(int posFlag,const int &posClassTag,const int &posDbTag,const Communicator &comm)
   {
     int res= 0;
@@ -720,7 +720,7 @@ int XC::Shell4NBase::recvCoordTransf(int posFlag,const int &posClassTag,const in
     return res;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::Shell4NBase::sendData(Communicator &comm)
   {
     int res= QuadBase4N<SectionFDPhysicalProperties>::sendData(comm);
@@ -733,7 +733,7 @@ int XC::Shell4NBase::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::Shell4NBase::recvData(const Communicator &comm)
   {
     int res= QuadBase4N<SectionFDPhysicalProperties>::recvData(comm);

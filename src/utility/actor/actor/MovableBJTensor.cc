@@ -47,7 +47,7 @@ XC::MovableBJTensor::MovableBJTensor(const BJtensor &v)
 void XC::MovableBJTensor::setBJTensor(const BJtensor &v)
   { BJtensor::operator=(v); }
 
-//! @brief Sends the tensor through the channel being passed as parameter.
+//! @brief Sends the tensor through the communicator argument.
 int XC::MovableBJTensor::sendSelf(Communicator &comm)
   {
     std::cerr << "MovableBJTensor::" << __FUNCTION__
@@ -55,7 +55,7 @@ int XC::MovableBJTensor::sendSelf(Communicator &comm)
     return 0;
   }
 
-//! @brief Receive the tensor through the channel being passed as parameter.
+//! @brief Receive the tensor through the communicator argument.
 int XC::MovableBJTensor::recvSelf(const Communicator &comm)
   {
     std::cerr << "MovableBJTensor::" << __FUNCTION__

@@ -305,7 +305,7 @@ int XC::MeshRegion::setRayleighDampingFactors(const RayleighDampingFactors &rF)
     return 0;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::MeshRegion::sendData(Communicator &comm)
   {
     int res= ContinuaReprComponent::sendData(comm);
@@ -316,7 +316,7 @@ int XC::MeshRegion::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::MeshRegion::recvData(const Communicator &comm)
   {
     int res= ContinuaReprComponent::recvData(comm);

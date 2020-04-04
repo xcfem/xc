@@ -97,7 +97,7 @@ const XC::ResponseId &XC::ElasticShearSection2d::getType(void) const
 int XC::ElasticShearSection2d::getOrder(void) const
   { return 3; }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::ElasticShearSection2d::sendData(Communicator &comm)
   {
     int res= BaseElasticSection2d::sendData(comm);
@@ -105,7 +105,7 @@ int XC::ElasticShearSection2d::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::ElasticShearSection2d::recvData(const Communicator &comm)
   {
     int res= BaseElasticSection2d::recvData(comm);

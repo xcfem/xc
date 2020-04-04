@@ -1118,7 +1118,7 @@ boost::python::list XC::Element::getMaterialNamesPy(void) const
     return retval;
   }
 
-//! @brief Sends object members through the channel being passed as parameter.
+//! @brief Sends object members through the communicator argument.
 int XC::Element::sendData(Communicator &comm)
   {
     int res= MeshComponent::sendData(comm);
@@ -1127,7 +1127,7 @@ int XC::Element::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::Element::recvData(const Communicator &comm)
   {
     int res= MeshComponent::recvData(comm);

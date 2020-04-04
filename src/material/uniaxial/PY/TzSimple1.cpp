@@ -388,7 +388,7 @@ int XC::TzSimple1::revertToStart(void)
 XC::UniaxialMaterial *XC::TzSimple1::getCopy(void) const
   { return new TzSimple1(*this); }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::TzSimple1::sendData(Communicator &comm)
   {
     int res= PYBase::sendData(comm);
@@ -397,7 +397,7 @@ int XC::TzSimple1::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::TzSimple1::recvData(const Communicator &comm)
   {
     int res= PYBase::recvData(comm);
@@ -406,7 +406,7 @@ int XC::TzSimple1::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::TzSimple1::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -420,7 +420,7 @@ int XC::TzSimple1::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::TzSimple1::recvSelf(const Communicator &comm)
   {
     inicComm(3);

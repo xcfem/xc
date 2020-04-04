@@ -112,7 +112,7 @@ int XC::ENTMaterial::revertToStart(void)
 XC::UniaxialMaterial *XC::ENTMaterial::getCopy(void) const
   { return new ENTMaterial(*this); }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::ENTMaterial::sendData(Communicator &comm)
   {
     int res= ElasticBaseMaterial::sendData(comm);
@@ -121,7 +121,7 @@ int XC::ENTMaterial::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::ENTMaterial::recvData(const Communicator &comm)
   {
     int res= ElasticBaseMaterial::recvData(comm);
@@ -130,7 +130,7 @@ int XC::ENTMaterial::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::ENTMaterial::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -144,7 +144,7 @@ int XC::ENTMaterial::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::ENTMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(5);

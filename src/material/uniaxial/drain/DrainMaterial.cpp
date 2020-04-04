@@ -177,7 +177,7 @@ XC::UniaxialMaterial *XC::DrainMaterial::getCopy(void) const
   { return new DrainMaterial(*this); }
 
 
-//! @brief Send its members through the channel being passed as parameter.
+//! @brief Send its members through the communicator argument.
 int XC::DrainMaterial::sendData(Communicator &comm)
   {
     int res= UniaxialMaterial::sendData(comm);
@@ -189,7 +189,7 @@ int XC::DrainMaterial::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives its members through the channel being passed as parameter.
+//! @brief Receives its members through the communicator argument.
 int XC::DrainMaterial::recvData(const Communicator &comm)
   {
     int res= UniaxialMaterial::recvData(comm);
@@ -201,7 +201,7 @@ int XC::DrainMaterial::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::DrainMaterial::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -215,7 +215,7 @@ int XC::DrainMaterial::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::DrainMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(8);

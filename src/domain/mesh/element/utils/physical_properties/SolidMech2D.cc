@@ -53,7 +53,7 @@ XC::DbTagData &XC::SolidMech2D::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::SolidMech2D::sendData(Communicator &comm)
   {
     int res= NDMaterialPhysicalProperties::sendData(comm);
@@ -61,7 +61,7 @@ int XC::SolidMech2D::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::SolidMech2D::recvData(const Communicator &comm)
   {
     int res= NDMaterialPhysicalProperties::recvData(comm);

@@ -87,7 +87,7 @@ size_t XC::Beam2dPartialUniformLoad::getForceVectorDimension(void) const
 size_t XC::Beam2dPartialUniformLoad::getMomentVectorDimension(void) const
   { return 1; }
 
-//! @brief Send data through the channel being passed as parameter.
+//! @brief Send data through the communicator argument.
 int XC::Beam2dPartialUniformLoad::sendData(Communicator &comm)
   {
     int res= BeamLoad::sendData(comm);
@@ -95,7 +95,7 @@ int XC::Beam2dPartialUniformLoad::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receive data through the channel being passed as parameter.
+//! @brief Receive data through the communicator argument.
 int XC::Beam2dPartialUniformLoad::recvData(const Communicator &comm)
   {
     int res= BeamLoad::recvData(comm);
@@ -103,7 +103,7 @@ int XC::Beam2dPartialUniformLoad::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::Beam2dPartialUniformLoad::sendSelf(XC::Communicator &comm)
   {
     inicComm(7);
@@ -116,7 +116,7 @@ int XC::Beam2dPartialUniformLoad::sendSelf(XC::Communicator &comm)
     return result;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::Beam2dPartialUniformLoad::recvSelf(const Communicator &comm)
   {
     inicComm(7);

@@ -261,7 +261,7 @@ int XC::MFreedom_Joint3D::applyConstraint(double timeStamp)
 
 
 
-//! @brief Sends the object through the channel being passed as parameter.
+//! @brief Sends the object through the communicator argument.
 int XC::MFreedom_Joint3D::sendSelf(Communicator &comm)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
@@ -269,7 +269,7 @@ int XC::MFreedom_Joint3D::sendSelf(Communicator &comm)
     return 0;
   }
 
-//! @brief Receives the object through the channel being passed as parameter.
+//! @brief Receives the object through the communicator argument.
 int XC::MFreedom_Joint3D::recvSelf(const Communicator &comm)
   {
     std::cerr << getClassName() << "::" << __FUNCTION__

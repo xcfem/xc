@@ -32,7 +32,7 @@
 XC::InternalParamsLRIn::InternalParamsLRIn(const double &V,const double &r,const double &t,const double &yl,const double &yr,const double &pl,const double &pr)
   : InternalParamsLR(V,r,t,yl,yr), RLeft(pl), RRight(pr) {}
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::InternalParamsLRIn::sendData(Communicator &comm)
   {
     int res= InternalParamsLR::sendData(comm);
@@ -40,7 +40,7 @@ int XC::InternalParamsLRIn::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::InternalParamsLRIn::recvData(const Communicator &comm)
   {
     int res= InternalParamsLR::recvData(comm);
@@ -48,7 +48,7 @@ int XC::InternalParamsLRIn::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::InternalParamsLRIn::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -62,7 +62,7 @@ int XC::InternalParamsLRIn::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::InternalParamsLRIn::recvSelf(const Communicator &comm)
   {
     inicComm(2);

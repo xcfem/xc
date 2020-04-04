@@ -484,7 +484,7 @@ const XC::Vector &XC::Tri31::getResistingForceIncInertia() const
     return P;
  }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::Tri31::sendData(Communicator &comm)
   {
     int res= TriBase3N<SolidMech2D>::sendData(comm);
@@ -494,7 +494,7 @@ int XC::Tri31::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::Tri31::recvData(const Communicator &comm)
   {
     int res= TriBase3N<SolidMech2D>::recvData(comm);
@@ -503,7 +503,7 @@ int XC::Tri31::recvData(const Communicator &comm)
     Ki= comm.receiveMatrixPtr(Ki,getDbTagData(),MatrixCommMetaData(10,11,12,13));
     return res;
   }
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::Tri31::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -518,7 +518,7 @@ int XC::Tri31::sendSelf(Communicator &comm)
   }
 
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::Tri31::recvSelf(const Communicator &comm)
   {
     inicComm(14);

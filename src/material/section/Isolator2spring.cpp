@@ -380,7 +380,7 @@ const XC::ResponseId &XC::Isolator2spring::getType(void) const
 int XC::Isolator2spring::getOrder(void) const
   { return 3; }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::Isolator2spring::sendData(Communicator &comm)
   {
     int res= SectionForceDeformation::sendData(comm);
@@ -393,7 +393,7 @@ int XC::Isolator2spring::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::Isolator2spring::recvData(const Communicator &comm)
   {
     int res= SectionForceDeformation::recvData(comm);

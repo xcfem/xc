@@ -976,7 +976,7 @@ const XC::Matrix &XC::BrickUP::computeB( int node, const double shp[4][8] ) cons
   return Mtran ;
 }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::BrickUP::sendData(Communicator &comm)
   {
     int res= BrickBase::sendData(comm);
@@ -986,7 +986,7 @@ int XC::BrickUP::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::BrickUP::recvData(const Communicator &comm)
   {
     int res= BrickBase::recvData(comm);
@@ -996,7 +996,7 @@ int XC::BrickUP::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int  XC::BrickUP::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -1010,7 +1010,7 @@ int  XC::BrickUP::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int  XC::BrickUP::recvSelf(const Communicator &comm)
   {
     inicComm(14);

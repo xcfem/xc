@@ -284,14 +284,14 @@ int XC::NDMaterial::getResponse(int responseID, Information &matInfo)
       }
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::NDMaterial::sendData(Communicator &comm)
   {
     setDbTagDataPos(0,getTag());
     return 0;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::NDMaterial::recvData(const Communicator &comm)
   {
     setTag(getDbTagDataPos(0));
@@ -339,7 +339,7 @@ int XC::NDMaterial::commitSensitivity(XC::Vector & strainSensitivity, int gradNu
   { return 0; }
 // AddingSensitivity:END //////////////////////////////////////////
 
-//! @brief Receive a pointer to material through the channel being passed as parameter.
+//! @brief Receive a pointer to material through the communicator argument.
 XC::NDMaterial *XC::receiveNDMaterialPtr(NDMaterial *ptr,DbTagData &dt,const Communicator &comm,const BrokedPtrCommMetaData &md)
   {
     NDMaterial *retval= nullptr;

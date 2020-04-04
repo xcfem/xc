@@ -360,7 +360,7 @@ XC::DbTagData &XC::ShellCrdTransf3dBase::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Sends object members through the channel being passed as parameter.
+//! @brief Sends object members through the communicator argument.
 int XC::ShellCrdTransf3dBase::sendData(Communicator &comm)
   {
     int res=comm.sendVector(g1,getDbTagData(),CommMetaData(0));
@@ -369,7 +369,7 @@ int XC::ShellCrdTransf3dBase::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::ShellCrdTransf3dBase::recvData(const Communicator &comm)
   {
     int res= comm.receiveVector(g1,getDbTagData(),CommMetaData(0));

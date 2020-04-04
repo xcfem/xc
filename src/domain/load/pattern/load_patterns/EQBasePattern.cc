@@ -46,7 +46,7 @@ void XC::EQBasePattern::Print(std::ostream &s, int flag) const
 	      << "; not yet implemented\n";
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::EQBasePattern::sendData(Communicator &comm)
   {
     int res= EQBasePattern::sendData(comm);
@@ -54,7 +54,7 @@ int XC::EQBasePattern::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::EQBasePattern::recvData(const Communicator &comm)
   {
     int res= EQBasePattern::recvData(comm);

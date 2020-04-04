@@ -646,7 +646,7 @@ const XC::Vector &XC::CrdTransf2d::getCooPoint(const double &xrel) const
     return retval;
   }
 
-//! @brief Sends object members through the channel being passed as parameter.
+//! @brief Sends object members through the communicator argument.
 int XC::CrdTransf2d::sendData(Communicator &comm)
   {
     int res= CrdTransf::sendData(comm);
@@ -656,7 +656,7 @@ int XC::CrdTransf2d::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::CrdTransf2d::recvData(const Communicator &comm)
   {
     int res= CrdTransf::recvData(comm);

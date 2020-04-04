@@ -65,7 +65,7 @@ int XC::ProtoBeam2d::getNumDOF(void) const
   { return 6; }
 
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::ProtoBeam2d::sendData(Communicator &comm)
   {
     DbTagData &dt= getDbTagData();
@@ -74,7 +74,7 @@ int XC::ProtoBeam2d::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::ProtoBeam2d::recvData(const Communicator &comm)
   {
     int res= Element1D::recvData(comm);

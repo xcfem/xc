@@ -202,7 +202,7 @@ int TaggedObjectStorage::createObjects(const Communicator &comm,T *(FEM_ObjectBr
     return retval;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 template <class T>
 int TaggedObjectStorage::receiveData(const Communicator &comm,T *(FEM_ObjectBroker::*ptrFunc)(int))
   {
@@ -222,7 +222,7 @@ int TaggedObjectStorage::receiveData(const Communicator &comm,T *(FEM_ObjectBrok
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 template <class T>
 int TaggedObjectStorage::receive(int dbTag,const Communicator &comm,T *(FEM_ObjectBroker::*ptrFunc)(int))
   {

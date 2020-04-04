@@ -276,7 +276,7 @@ int XC::DistributedDisplacementControl::domainChanged(void)
     return 0;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::DistributedDisplacementControl::sendData(Communicator &comm)
   {
     int res= DispBase::sendData(comm);
@@ -284,7 +284,7 @@ int XC::DistributedDisplacementControl::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::DistributedDisplacementControl::recvData(const Communicator &comm)
   {
     int res= DispBase::recvData(comm);

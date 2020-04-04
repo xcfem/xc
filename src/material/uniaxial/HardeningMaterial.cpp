@@ -240,7 +240,7 @@ int XC::HardeningMaterial::revertToStart(void)
 XC::UniaxialMaterial *XC::HardeningMaterial::getCopy(void) const
   { return new HardeningMaterial(*this); }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::HardeningMaterial::sendData(Communicator &comm)
   {
     int res= UniaxialMaterial::sendData(comm);
@@ -252,7 +252,7 @@ int XC::HardeningMaterial::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::HardeningMaterial::recvData(const Communicator &comm)
   {
     int res= UniaxialMaterial::recvData(comm);

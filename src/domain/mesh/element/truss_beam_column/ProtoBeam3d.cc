@@ -64,7 +64,7 @@ XC::ProtoBeam3d::ProtoBeam3d(int tag, int class_tag, double a, double e, double 
 int XC::ProtoBeam3d::getNumDOF(void) const
   { return 12; }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::ProtoBeam3d::sendData(Communicator &comm)
   {
     DbTagData &dt= getDbTagData();
@@ -73,7 +73,7 @@ int XC::ProtoBeam3d::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::ProtoBeam3d::recvData(const Communicator &comm)
   {
     int res= Element1D::recvData(comm);

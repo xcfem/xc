@@ -358,7 +358,7 @@ XC::DbTagData &XC::Set::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::Set::sendData(Communicator &comm)
   {
     int res= SetMeshComp::sendData(comm);
@@ -366,7 +366,7 @@ int XC::Set::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::Set::recvData(const Communicator &comm)
   {
     ID tmp;
@@ -379,7 +379,7 @@ int XC::Set::recvData(const Communicator &comm)
 XC::Set::~Set(void)
   { clearAll(); }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::Set::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -394,7 +394,7 @@ int XC::Set::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::Set::recvSelf(const Communicator &comm)
   {
     inicComm(19);

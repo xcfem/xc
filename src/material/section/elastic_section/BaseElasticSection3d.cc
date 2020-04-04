@@ -95,7 +95,7 @@ void XC::BaseElasticSection3d::setCrossSectionProperties(const CrossSectionPrope
   { ctes_scc= cs; }
 
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::BaseElasticSection3d::sendData(Communicator &comm)
   {
     int res= BaseElasticSection::sendData(comm);
@@ -103,7 +103,7 @@ int XC::BaseElasticSection3d::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::BaseElasticSection3d::recvData(const Communicator &comm)
   {
     int res= BaseElasticSection::recvData(comm);

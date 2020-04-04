@@ -121,7 +121,7 @@ int XC::BeamColumnWithSectionFD::setSectionParameter(PrismaticBarCrossSection *t
     return retval;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::BeamColumnWithSectionFD::sendData(Communicator &comm)
   {
     int res= Element1D::sendData(comm);
@@ -131,7 +131,7 @@ int XC::BeamColumnWithSectionFD::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::BeamColumnWithSectionFD::recvData(const Communicator &comm)
   {
     int res= Element1D::recvData(comm);

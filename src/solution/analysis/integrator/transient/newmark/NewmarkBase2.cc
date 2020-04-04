@@ -55,7 +55,7 @@ XC::NewmarkBase2::NewmarkBase2(AnalysisAggregation *owr,int classTag, double the
 XC::NewmarkBase2::NewmarkBase2(AnalysisAggregation *owr,int classTag,double theGamma, double theBeta,const RayleighDampingFactors &rF)
   :NewmarkBase(owr,classTag,theGamma,rF), beta(theBeta), c1(0.0) {}
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::NewmarkBase2::sendData(Communicator &comm)
   {
     int res= NewmarkBase::sendData(comm);
@@ -63,7 +63,7 @@ int XC::NewmarkBase2::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::NewmarkBase2::recvData(const Communicator &comm)
   {
     int res= NewmarkBase::recvData(comm);

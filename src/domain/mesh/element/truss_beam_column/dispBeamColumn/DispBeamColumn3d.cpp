@@ -687,7 +687,7 @@ const XC::Vector &XC::DispBeamColumn3d::getResistingForceIncInertia(void) const
     return P;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::DispBeamColumn3d::sendData(Communicator &comm)
   {
     int res= BeamColumnWithSectionFDTrf3d::sendData(comm);
@@ -699,7 +699,7 @@ int XC::DispBeamColumn3d::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::DispBeamColumn3d::recvData(const Communicator &comm)
   {
     int res= BeamColumnWithSectionFDTrf3d::recvData(comm);

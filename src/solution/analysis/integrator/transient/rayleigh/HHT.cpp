@@ -457,21 +457,21 @@ int XC::HHT::commit(void)
     return commitModel();
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::HHT::sendData(Communicator &comm)
   {
     int res= HHTBase::sendData(comm);
     return res;
   }
 
-//! @brief Receives object members through the channel being passed
-//! as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::HHT::recvData(const Communicator &comm)
   {
     int res= HHTBase::recvData(comm);
     return res;
   }
 
+//! @brief Send object through the communicator argument.
 int XC::HHT::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -486,6 +486,7 @@ int XC::HHT::sendSelf(Communicator &comm)
     return res;
   }
 
+//! @brief Receives object through the communicator argument.
 int XC::HHT::recvSelf(const Communicator &comm)
   {
     inicComm(9);

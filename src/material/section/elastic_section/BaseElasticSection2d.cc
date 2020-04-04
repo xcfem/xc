@@ -80,7 +80,7 @@ double XC::BaseElasticSection2d::getStrain(const double &y,const double &z) cons
     return (def(0) + y*def(1));
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::BaseElasticSection2d::sendData(Communicator &comm)
   {
     int res= BaseElasticSection::sendData(comm);
@@ -88,7 +88,7 @@ int XC::BaseElasticSection2d::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::BaseElasticSection2d::recvData(const Communicator &comm)
   {
     int res= BaseElasticSection::recvData(comm);

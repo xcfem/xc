@@ -237,7 +237,7 @@ XC::DbTagData &XC::NodeLocker::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::NodeLocker::sendData(Communicator &comm)
   {
     setDbTagDataPos(0,getTag());
@@ -246,7 +246,7 @@ int XC::NodeLocker::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::NodeLocker::recvData(const Communicator &comm)
   {
     setTag(getDbTagDataPos(0));
@@ -256,7 +256,7 @@ int XC::NodeLocker::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::NodeLocker::sendSelf(Communicator &comm)
   {
     inicComm(3);
@@ -269,7 +269,7 @@ int XC::NodeLocker::sendSelf(Communicator &comm)
   }
 
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::NodeLocker::recvSelf(const Communicator &comm)
   {
     inicComm(3);

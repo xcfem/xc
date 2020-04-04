@@ -630,7 +630,7 @@ XC::DbTagData &XC::ElasticBeam3d::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::ElasticBeam3d::sendData(Communicator &comm)
   {
     DbTagData &dt= getDbTagData();
@@ -644,7 +644,7 @@ int XC::ElasticBeam3d::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::ElasticBeam3d::recvData(const Communicator &comm)
   {
     DbTagData &dt= getDbTagData();
@@ -658,7 +658,7 @@ int XC::ElasticBeam3d::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::ElasticBeam3d::sendSelf(Communicator &comm)
   {
     inicComm(17);
@@ -671,7 +671,7 @@ int XC::ElasticBeam3d::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::ElasticBeam3d::recvSelf(const Communicator &comm)
   {
     inicComm(17);

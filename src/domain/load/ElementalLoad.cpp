@@ -94,7 +94,7 @@ const XC::Vector &XC::ElementalLoad::getSensitivityData(const int &gradIndex) co
     return trash;
   }
 
-//! @brief Send data through the channel being passed as parameter.
+//! @brief Send data through the communicator argument.
 int XC::ElementalLoad::sendData(Communicator &comm)
   {
     int res= Load::sendData(comm);
@@ -102,7 +102,7 @@ int XC::ElementalLoad::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receive data through the channel being passed as parameter.
+//! @brief Receive data through the communicator argument.
 int XC::ElementalLoad::recvData(const Communicator &comm)
   {
     int res= Load::recvData(comm);

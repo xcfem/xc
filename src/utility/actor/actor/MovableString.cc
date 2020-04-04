@@ -31,7 +31,7 @@
 #include "utility/actor/objectBroker/FEM_ObjectBroker.h"
 #include "utility/matrix/ID.h"
 
-//! @brief Send the text string through the channel being passed as parameter.
+//! @brief Send the text string through the communicator argument.
 const XC::ID &stringToId(const std::string &str)
   {
     static XC::ID retval;
@@ -42,7 +42,7 @@ const XC::ID &stringToId(const std::string &str)
     return retval;
   }
 
-//! @brief Receive the text string through the channel being passed as parameter.
+//! @brief Receive the text string through the communicator argument.
 const std::string &idToString(const XC::ID &id)
   {
     static std::string retval;

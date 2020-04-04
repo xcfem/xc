@@ -273,7 +273,7 @@ const XC::Vector &XC::beam2d03::getResistingForceIncInertia(void) const
     return rForce;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::beam2d03::sendData(Communicator &comm)
   {
     int res= beam2d::sendData(comm);
@@ -283,7 +283,7 @@ int XC::beam2d03::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::beam2d03::recvData(const Communicator &comm)
   {
     int res= beam2d::recvData(comm);

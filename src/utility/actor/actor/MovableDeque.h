@@ -66,7 +66,7 @@ template <class T>
 XC::MovableDeque<T>::MovableDeque(const deque_objects &deque,T *(FEM_ObjectBroker::*pF)(int))
   : MovablePointerContainer<T>(0,pF), objects(deque) {}
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 template <class T>
 int XC::MovableDeque<T>::sendData(Communicator &comm)
   {
@@ -96,7 +96,7 @@ int XC::MovableDeque<T>::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 template <class T>
 int MovableDeque<T>::recvData(const Communicator &comm)
   {

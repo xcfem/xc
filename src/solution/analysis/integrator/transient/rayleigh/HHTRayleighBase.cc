@@ -81,7 +81,7 @@ XC::HHTRayleighBase::HHTRayleighBase(AnalysisAggregation *owr,int classTag,doubl
     Ut(0), U(0), Ualpha(0) {}
 
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::HHTRayleighBase::sendData(Communicator &comm)
   {
     int res= RayleighBase::sendData(comm);
@@ -92,7 +92,7 @@ int XC::HHTRayleighBase::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::HHTRayleighBase::recvData(const Communicator &comm)
   {
     int res= RayleighBase::recvData(comm);

@@ -178,7 +178,7 @@ int XC::PathSeries::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::PathSeries::sendSelf(Communicator &comm)
   {
     inicComm(6);
@@ -192,7 +192,7 @@ int XC::PathSeries::sendSelf(Communicator &comm)
     return result;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::PathSeries::recvSelf(const Communicator &comm)
   {
     inicComm(6);

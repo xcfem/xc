@@ -185,7 +185,7 @@ int XC::FiberSection2d::revertToStart(void)
     return fibers.revertToStart(*this,kr);
   }
 
-//! @brief Send data through the channel being passed as parameter.
+//! @brief Send data through the communicator argument.
 int XC::FiberSection2d::sendData(Communicator &comm)
   {
     int res= FiberSectionBase::sendData(comm);
@@ -194,7 +194,7 @@ int XC::FiberSection2d::sendData(Communicator &comm)
   }
 
 
-//! @brief Receive data through the channel being passed as parameter.
+//! @brief Receive data through the communicator argument.
 int XC::FiberSection2d::recvData(const Communicator &comm)
   {    
     int res= FiberSectionBase::recvData(comm);

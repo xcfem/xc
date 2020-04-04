@@ -38,7 +38,7 @@
 XC::MovableMatrices::MovableMatrices(std::vector<Matrix> &v)
   : MovableObject(0), vectors(v) {}
 
-//! @brief Envia el vector through the channel being passed as parameter.
+//! @brief Envia el vector through the communicator argument.
 int XC::MovableMatrices::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -55,7 +55,7 @@ int XC::MovableMatrices::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receive the vector through the channel being passed as parameter.
+//! @brief Receive the vector through the communicator argument.
 int XC::MovableMatrices::recvSelf(const Communicator &comm)
   {
     inicComm(2);

@@ -268,7 +268,7 @@ const ID &DqPtrs<T>::getTags(void) const
     return retval;
   }
 
-//! @brief Sends the dbTags of the sets trough the channel being passed as parameter.
+//! @brief Sends the dbTags of the sets trough the communicator argument.
 template <class T>
 int DqPtrs<T>::sendTags(int posSz,int posDbTag,DbTagData &dt,Communicator &comm)
   {
@@ -284,7 +284,7 @@ int DqPtrs<T>::sendTags(int posSz,int posDbTag,DbTagData &dt,Communicator &comm)
     return res;
   }
 
-//! @brief Sends the dbTags of the sets through the channel being passed as parameter.
+//! @brief Sends the dbTags of the sets through the communicator argument.
 template <class T>
 const ID &DqPtrs<T>::receiveTags(int posSz,int posDbTag,DbTagData &dt,const Communicator &comm)
   {

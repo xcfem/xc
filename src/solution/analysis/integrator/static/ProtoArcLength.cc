@@ -159,7 +159,7 @@ int XC::ProtoArcLength::domainChanged(void)
     return 0;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::ProtoArcLength::sendData(Communicator &comm)
   {
     int res= StaticIntegrator::sendData(comm);
@@ -169,7 +169,7 @@ int XC::ProtoArcLength::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::ProtoArcLength::recvData(const Communicator &comm)
   {
     int res= StaticIntegrator::recvData(comm);

@@ -62,7 +62,7 @@ int XC::ParameterIDBeamIntegration::activateParameter(int paramID)
     return 0;
   }
 
-//! @brief Send object members through the channel defined in cp.
+//! @brief Send object members through the communicator argument.
 int XC::ParameterIDBeamIntegration::sendData(Communicator &comm)
   {
     int res= UserDefinedBeamIntegrationBase::sendData(comm);
@@ -70,7 +70,7 @@ int XC::ParameterIDBeamIntegration::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel defined in cp.
+//! @brief Receives object members through the communicator argument.
 int XC::ParameterIDBeamIntegration::recvData(const Communicator &comm)
   {
     int res= UserDefinedBeamIntegrationBase::recvData(comm);

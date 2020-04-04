@@ -75,7 +75,7 @@ template <class T>
 T *XC::MovablePointerContainer<T>::getBrokedObject(const int &dbTag,const int &classTag,const Communicator &comm)
   { return getBrokedMovable(dbTag,classTag,comm,this->ptrFunc); }
  
-//! @brief Send the object through the channel being passed as parameter.
+//! @brief Send the object through the communicator argument.
 template <class T>
 int XC::MovablePointerContainer<T>::sendSelf(Communicator &comm)
   {
@@ -89,7 +89,7 @@ int XC::MovablePointerContainer<T>::sendSelf(Communicator &comm)
     return result;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 template <class T>
 int MovablePointerContainer<T>::recvSelf(const Communicator &comm)
   {

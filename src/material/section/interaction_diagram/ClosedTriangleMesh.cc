@@ -384,7 +384,7 @@ void XC::ClosedTriangleMesh::read(std::ifstream &is)
     setPositionsMatrix(m);
   }
 
-//! @brief Sends object members through the channel being passed as parameter.
+//! @brief Sends object members through the communicator argument.
 int XC::ClosedTriangleMesh::sendData(Communicator &comm)
   {
     int res= 0; //MovableObject::sendData(comm);
@@ -395,7 +395,7 @@ int XC::ClosedTriangleMesh::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::ClosedTriangleMesh::recvData(const Communicator &comm)
   {
     int res= 0;
@@ -406,7 +406,7 @@ int XC::ClosedTriangleMesh::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Send the object through the channel being passed as parameter.
+//! @brief Send the object through the communicator argument.
 int XC::ClosedTriangleMesh::sendSelf(Communicator &comm)
   {
     inicComm(3);
@@ -420,7 +420,7 @@ int XC::ClosedTriangleMesh::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::ClosedTriangleMesh::recvSelf(const Communicator &comm)
   {
     const int dataTag= getDbTag();

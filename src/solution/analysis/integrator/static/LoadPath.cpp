@@ -157,7 +157,7 @@ int XC::LoadPath::update(const Vector &deltaU)
     return 0;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::LoadPath::sendData(Communicator &comm)
   {
     int res= StaticIntegrator::sendData(comm);
@@ -166,8 +166,7 @@ int XC::LoadPath::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as
-//! parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::LoadPath::recvData(const Communicator &comm)
   {
     int res= StaticIntegrator::recvData(comm);
@@ -176,10 +175,7 @@ int XC::LoadPath::recvData(const Communicator &comm)
     return res;
   }
 
-//! Places the size if \p path and the index in an ID of size 5 and send this
-//! ID. Then sends the Vector \p path. Returns \f$0\f$ if successful, a
-//! warning message is printed and a \f$-1\f$ is returned if \p theChannel
-//! fails to send the ID or the Vector. 
+//! @brief Send object through the communicator argument.
 int XC::LoadPath::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -195,10 +191,7 @@ int XC::LoadPath::sendSelf(Communicator &comm)
   }
 
 
-//! Receives in a ID of size 2 the size of the vector and current index.
-//! Creates a new Vector and receives the Vector from the Channel. 
-//! Returns \f$0\f$ if successful, a warning message is printed and a \f$-1\f$
-//! is returned if \p theChannel fails to receive the Vector or the ID.
+//! @brief Receives object members through the communicator argument.
 int XC::LoadPath::recvSelf(const Communicator &comm)
   {
     inicComm(5);

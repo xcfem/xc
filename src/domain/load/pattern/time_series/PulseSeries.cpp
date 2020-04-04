@@ -92,7 +92,7 @@ double XC::PulseSeries::getFactor(double pseudoTime) const
       return 0;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::PulseSeries::sendData(Communicator &comm)
   {
     int res= PeriodSeries::sendData(comm);
@@ -100,7 +100,7 @@ int XC::PulseSeries::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::PulseSeries::recvData(const Communicator &comm)
   {
     int res= PeriodSeries::recvData(comm);
@@ -108,7 +108,7 @@ int XC::PulseSeries::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::PulseSeries::sendSelf(Communicator &comm)
   {
     static ID data(4);
@@ -123,7 +123,7 @@ int XC::PulseSeries::sendSelf(Communicator &comm)
 
 
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::PulseSeries::recvSelf(const Communicator &comm)
   {
     static ID data(4);

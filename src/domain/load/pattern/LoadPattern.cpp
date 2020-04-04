@@ -420,7 +420,7 @@ XC::DbTagData &XC::LoadPattern::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::LoadPattern::sendData(Communicator &comm)
   {
     int res= NodeLocker::sendData(comm);
@@ -433,7 +433,7 @@ int XC::LoadPattern::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::LoadPattern::recvData(const Communicator &comm)
   {
     int res= NodeLocker::recvData(comm);
@@ -445,7 +445,7 @@ int XC::LoadPattern::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::LoadPattern::sendSelf(Communicator &comm)
   {
     inicComm(15);
@@ -459,7 +459,7 @@ int XC::LoadPattern::sendSelf(Communicator &comm)
   }
 
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::LoadPattern::recvSelf(const Communicator &comm)
   {
     inicComm(15);

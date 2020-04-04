@@ -1097,7 +1097,7 @@ double XC::NineNodeMixedQuad::shape1d( int code, int node, double xi )
     return result;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::NineNodeMixedQuad::sendData(Communicator &comm)
   {
     int res= ElemWithMaterial<9,NDMaterialPhysicalProperties>::sendData(comm);
@@ -1108,7 +1108,7 @@ int XC::NineNodeMixedQuad::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::NineNodeMixedQuad::recvData(const Communicator &comm)
   {
     int res= ElemWithMaterial<9,NDMaterialPhysicalProperties>::recvData(comm);
@@ -1119,7 +1119,7 @@ int XC::NineNodeMixedQuad::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::NineNodeMixedQuad::sendSelf(Communicator &comm)
   {
     setDbTag(comm);

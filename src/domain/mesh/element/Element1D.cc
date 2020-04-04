@@ -677,7 +677,7 @@ double XC::Element1D::getDist(const Pos3d &p,bool initialGeometry) const
     return sg.dist(p);
   }
 
-//! @brief Send the coordinate transformation through the channel being passed as parameter.
+//! @brief Send the coordinate transformation through the communicator argument.
 int XC::Element1D::sendCoordTransf(int posFlag,const int &posClassTag,const int &posDbTag,Communicator &comm)
   {
     int retval= 0;
@@ -694,7 +694,7 @@ int XC::Element1D::sendCoordTransf(int posFlag,const int &posClassTag,const int 
     return retval;
   }
 
-//! @brief Receives the coordinate transformation through the channel being passed as parameter.
+//! @brief Receives the coordinate transformation through the communicator argument.
 XC::CrdTransf *XC::Element1D::recvCoordTransf(int posFlag,const int &posClassTag,const int &posDbTag,const Communicator &comm)
   {
     CrdTransf *ptr= getCoordTransf();
@@ -721,7 +721,7 @@ XC::CrdTransf *XC::Element1D::recvCoordTransf(int posFlag,const int &posClassTag
     return ptr;
   }
 
-//! @brief Receive a 2D coordinate transformation through the channel being passed as parameter.
+//! @brief Receive a 2D coordinate transformation through the communicator argument.
 XC::CrdTransf2d *XC::Element1D::recvCoordTransf2d(int posFlag,const int &posClassTag,const int &posDbTag,const Communicator &comm)
   {
     CrdTransf2d *retval= nullptr;
@@ -740,7 +740,7 @@ XC::CrdTransf2d *XC::Element1D::recvCoordTransf2d(int posFlag,const int &posClas
     return retval;
   }
 
-//! @brief Receive a 3D coordinate transformation through the channel being passed as parameter.
+//! @brief Receive a 3D coordinate transformation through the communicator argument.
 XC::CrdTransf3d *XC::Element1D::recvCoordTransf3d(int posFlag,const int &posClassTag,const int &posDbTag,const Communicator &comm)
   {
     CrdTransf3d *retval= nullptr;

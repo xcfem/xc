@@ -497,10 +497,10 @@ int XC::DOF_Numberer::numberDOF(ID &lastDOFs)
 }
 
 
-//! @brief Send object members through the channel passed as parameter.
+//! @brief Send object members through the communicator argument.
 //!
 //! The DOF\_Numberer sends the class identifier and database tag of the
-//! GraphNumberer in a ID to the channel, if no GraphNumberer is
+//! GraphNumberer in a ID to the communicator, if no GraphNumberer is
 //! associated a \f$-1\f$ is sent as the class tag. The object then invokes
 //! sendSelf() on the GraphNumberer. 
 int XC::DOF_Numberer::sendData(Communicator &comm)
@@ -511,10 +511,10 @@ int XC::DOF_Numberer::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 //! 
 //! The DOF\_Numberer receives the class identifier and database tag of
-//! the GraphNumberer in an ID from the channel, if no GraphNumberer is
+//! the GraphNumberer in an ID from the communicator, if no GraphNumberer is
 //! associated a \f$-1\f$ is received. The DOF\_Numberer will then ask {\em
 //! theBroker} for a GraphNumberer with that class identifier, it sets the
 //! database tag for the GraphNumberer and it then invokes {\em
@@ -527,7 +527,7 @@ int XC::DOF_Numberer::recvData(const Communicator &comm)
     return 0;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::DOF_Numberer::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -542,7 +542,7 @@ int XC::DOF_Numberer::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::DOF_Numberer::recvSelf(const Communicator &comm)
   {
     inicComm(3);

@@ -54,7 +54,7 @@ XC::DbTagData &XC::MovableVector::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Envia el vector through the channel being passed as parameter.
+//! @brief Envia el vector through the communicator argument.
 int XC::MovableVector::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -78,7 +78,7 @@ int XC::MovableVector::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receive the vector through the channel being passed as parameter.
+//! @brief Receive the vector through the communicator argument.
 int XC::MovableVector::recvSelf(const Communicator &comm)
   {
     inicComm(2);

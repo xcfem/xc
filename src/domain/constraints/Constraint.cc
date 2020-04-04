@@ -124,7 +124,7 @@ bool XC::Constraint::affectsNodeAndDOF(int nodeTag, int theDOF) const
     return retval;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 //! @param cp: definition of the communication parameters.
 int XC::Constraint::sendData(Communicator &comm)
   {
@@ -133,7 +133,7 @@ int XC::Constraint::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 //! @param cp: definition of the communication parameters.
 int XC::Constraint::recvData(const Communicator &comm)
   {

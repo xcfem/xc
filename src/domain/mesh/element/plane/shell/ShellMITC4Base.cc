@@ -1028,7 +1028,7 @@ const XC::Matrix &XC::ShellMITC4Base::computeBbend( int node, const double shp[3
       return Bbend;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::ShellMITC4Base::sendData(Communicator &comm)
   {
     int res= Shell4NBase::sendData(comm);
@@ -1037,7 +1037,7 @@ int XC::ShellMITC4Base::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::ShellMITC4Base::recvData(const Communicator &comm)
   {
     int res= Shell4NBase::recvData(comm);

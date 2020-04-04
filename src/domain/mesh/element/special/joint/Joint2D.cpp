@@ -765,7 +765,7 @@ int XC::Joint2D::getResponse(int responseID, Information &eleInformation)
 }
 
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::Joint2D::sendData(Communicator &comm)
   {
     int res= Joint2dBase::sendData(comm);
@@ -774,7 +774,7 @@ int XC::Joint2D::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::Joint2D::recvData(const Communicator &comm)
   {
     int res= Joint2dBase::recvData(comm);
@@ -783,7 +783,7 @@ int XC::Joint2D::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::Joint2D::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -798,7 +798,7 @@ int XC::Joint2D::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::Joint2D::recvSelf(const Communicator &comm)
   {
     inicComm(15);

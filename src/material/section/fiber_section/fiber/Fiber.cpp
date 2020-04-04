@@ -94,7 +94,7 @@ double XC::Fiber::getStrain(void) const
 Pos2d XC::Fiber::getPos(void) const
   { return Pos2d(getLocY(),getLocZ()); }
 
-//! @brief Send data through the channel being passed as parameter.
+//! @brief Send data through the communicator argument.
 int XC::Fiber::sendData(Communicator &comm)
   {
     setDbTagDataPos(0,getTag());
@@ -102,7 +102,7 @@ int XC::Fiber::sendData(Communicator &comm)
     return 0;
   }
 
-//! @brief Receive data through the channel being passed as parameter.
+//! @brief Receive data through the communicator argument.
 int XC::Fiber::recvData(const Communicator &comm)
   {    
     setTag(getDbTagDataPos(0));

@@ -478,7 +478,7 @@ XC::DbTagData &MaterialVector<MAT>::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 template <class MAT>
 int MaterialVector<MAT>::sendData(Communicator &comm)
   {
@@ -498,7 +498,7 @@ int MaterialVector<MAT>::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 template <class MAT>
 int MaterialVector<MAT>::recvData(const Communicator &comm)
   {
@@ -541,7 +541,7 @@ boost::python::list MaterialVector<MAT>::getNamesPy(void) const
     return retval;
   }  
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 template <class MAT>
 int MaterialVector<MAT>::sendSelf(Communicator &comm)
   {
@@ -555,7 +555,7 @@ int MaterialVector<MAT>::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 template <class MAT>
 int MaterialVector<MAT>::recvSelf(const Communicator &comm)
   {

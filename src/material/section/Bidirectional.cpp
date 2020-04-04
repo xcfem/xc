@@ -334,7 +334,7 @@ const XC::ResponseId &XC::Bidirectional::getType(void) const
 int XC::Bidirectional::getOrder(void) const
   { return 2; }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::Bidirectional::sendData(Communicator &comm)
   {
     int res= SectionForceDeformation::sendData(comm);
@@ -345,7 +345,7 @@ int XC::Bidirectional::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::Bidirectional::recvData(const Communicator &comm)
   {
     int res= SectionForceDeformation::recvData(comm);

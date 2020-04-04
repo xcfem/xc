@@ -188,7 +188,7 @@ const XC::Face *XC::EntMdlrBase::BuscaFace(const size_t &id_face) const
     return retval;
   }
 
-//! @brief Send labels through the channel being passed as parameter.
+//! @brief Send labels through the communicator argument.
 int XC::EntMdlrBase::sendIdsLabels(const int &posSize,const int &posDbTag, Communicator &comm)
   {
     int res= 0;
@@ -209,7 +209,7 @@ int XC::EntMdlrBase::sendIdsLabels(const int &posSize,const int &posDbTag, Commu
     return res;
   }
 
-//! @brief Receive labels through the channel being passed as parameter.
+//! @brief Receive labels through the communicator argument.
 int XC::EntMdlrBase::recvIdsLabels(const int &posSize,const int &posDbTag,const Communicator &comm)
   {
     int res= 0;
@@ -227,7 +227,7 @@ int XC::EntMdlrBase::recvIdsLabels(const int &posSize,const int &posDbTag,const 
     return res;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::EntMdlrBase::sendData(Communicator &comm)
   {
     int res= comm.sendString(getName(),getDbTagData(),CommMetaData(0));
@@ -235,7 +235,7 @@ int XC::EntMdlrBase::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receive members through the channel being passed as parameter.
+//! @brief Receive members through the communicator argument.
 int XC::EntMdlrBase::recvData(const Communicator &comm)
   {
     std::string tmp;
@@ -245,7 +245,7 @@ int XC::EntMdlrBase::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Send objects through the channel being passed as parameter.
+//! @brief Send objects through the communicator argument.
 int XC::EntMdlrBase::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -260,7 +260,7 @@ int XC::EntMdlrBase::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receive objects through the channel being passed as parameter.
+//! @brief Receive objects through the communicator argument.
 int XC::EntMdlrBase::recvSelf(const Communicator &comm)
   {
     inicComm(3);

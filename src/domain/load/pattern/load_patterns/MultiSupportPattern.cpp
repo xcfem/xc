@@ -124,7 +124,7 @@ bool XC::MultiSupportPattern::addElementalLoad(ElementalLoad *)
     return false;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::MultiSupportPattern::sendData(Communicator &comm)
   {
     int res= EQBasePattern::sendData(comm);
@@ -133,7 +133,7 @@ int XC::MultiSupportPattern::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::MultiSupportPattern::recvData(const Communicator &comm)
   {
     int res= EQBasePattern::recvData(comm);
@@ -142,7 +142,7 @@ int XC::MultiSupportPattern::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::MultiSupportPattern::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -156,7 +156,7 @@ int XC::MultiSupportPattern::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::MultiSupportPattern::recvSelf(const Communicator &comm)
   {
     inicComm(3);

@@ -285,7 +285,7 @@ XC::DbTagData &XC::NodeVectors::getDbTagData(void) const
     static DbTagData retval(2);
     return retval;
   }
-//! @brief Sends object members through the channel being passed as parameter.
+//! @brief Sends object members through the communicator argument.
 int XC::NodeVectors::sendData(Communicator &comm)
   {
     int res= 0;
@@ -308,7 +308,7 @@ int XC::NodeVectors::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::NodeVectors::recvData(const Communicator &comm)
   {
     ID idData(3);

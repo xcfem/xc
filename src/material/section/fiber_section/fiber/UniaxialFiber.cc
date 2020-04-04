@@ -153,7 +153,7 @@ int XC::UniaxialFiber::revertToStart(void)
   { return theMaterial->revertToStart(); }
 
 
-//! @brief Send data through the channel being passed as parameter.
+//! @brief Send data through the communicator argument.
 int XC::UniaxialFiber::sendData(Communicator &comm)
   {
     int res= Fiber::sendData(comm);
@@ -164,7 +164,7 @@ int XC::UniaxialFiber::sendData(Communicator &comm)
   }
 
 
-//! @brief Receive data through the channel being passed as parameter.
+//! @brief Receive data through the communicator argument.
 int XC::UniaxialFiber::recvData(const Communicator &comm)
   {    
     int res= Fiber::recvData(comm);

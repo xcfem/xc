@@ -98,7 +98,7 @@ XC::FrictionModel* XC::CoulombFriction::getCopy(void) const
   { return new CoulombFriction(*this); }
 
 
-//! @brief Send data through the channel being passed as parameter.
+//! @brief Send data through the communicator argument.
 int XC::CoulombFriction::sendData(Communicator &comm)
   {
     int res= FrictionModel::sendData(comm);
@@ -107,7 +107,7 @@ int XC::CoulombFriction::sendData(Communicator &comm)
   }
 
 
-//! @brief Receive data through the channel being passed as parameter.
+//! @brief Receive data through the communicator argument.
 int XC::CoulombFriction::recvData(const Communicator &comm)
   {
     int res= FrictionModel::recvData(comm);

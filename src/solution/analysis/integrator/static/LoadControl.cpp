@@ -171,7 +171,7 @@ void XC::LoadControl::setDeltaLambdaMin(const double &d)
 void XC::LoadControl::setDeltaLambdaMax(const double &d)
   { dLambdaMax= d; }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::LoadControl::sendData(Communicator &comm)
   {
     int res= BaseControl::sendData(comm);
@@ -179,7 +179,7 @@ int XC::LoadControl::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::LoadControl::recvData(const Communicator &comm)
   {
     int res= BaseControl::recvData(comm);

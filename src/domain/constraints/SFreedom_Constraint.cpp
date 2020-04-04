@@ -206,7 +206,7 @@ XC::DbTagData &XC::SFreedom_Constraint::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Sends data through the channel being passed as parameter.
+//! @brief Sends data through the communicator argument.
 int XC::SFreedom_Constraint::sendData(Communicator &comm)
   {
     int res= Constraint::sendData(comm);
@@ -216,7 +216,7 @@ int XC::SFreedom_Constraint::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives data through the channel being passed as parameter.
+//! @brief Receives data through the communicator argument.
 int XC::SFreedom_Constraint::recvData(const Communicator &comm)
   {
     int res= Constraint::recvData(comm);
@@ -226,7 +226,7 @@ int XC::SFreedom_Constraint::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::SFreedom_Constraint::sendSelf(Communicator &comm)
   {
     inicComm(7);
@@ -239,7 +239,7 @@ int XC::SFreedom_Constraint::sendSelf(Communicator &comm)
     return result;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::SFreedom_Constraint::recvSelf(const Communicator &comm)
   {
     inicComm(7);

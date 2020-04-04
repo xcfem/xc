@@ -1147,7 +1147,7 @@ void XC::ConstantPressureVolumeQuad::shape2d( double ss, double tt,
   return;
 }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::ConstantPressureVolumeQuad::sendData(Communicator &comm)
   {
     int res= QuadBase4N<NDMaterialPhysicalProperties>::sendData(comm);
@@ -1156,7 +1156,7 @@ int XC::ConstantPressureVolumeQuad::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::ConstantPressureVolumeQuad::recvData(const Communicator &comm)
   {
     int res= QuadBase4N<NDMaterialPhysicalProperties>::recvData(comm);
@@ -1165,7 +1165,7 @@ int XC::ConstantPressureVolumeQuad::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::ConstantPressureVolumeQuad::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -1179,7 +1179,7 @@ int XC::ConstantPressureVolumeQuad::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::ConstantPressureVolumeQuad::recvSelf(const Communicator &comm)
   {
     inicComm(10);

@@ -279,7 +279,7 @@ const XC::Vector &XC::beam2d02::getResistingForceIncInertia(void) const
 
 
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::beam2d02::sendData(Communicator &comm)
   {
     int res= beam2d::sendData(comm);
@@ -287,7 +287,7 @@ int XC::beam2d02::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::beam2d02::recvData(const Communicator &comm)
   {
     int res= beam2d::recvData(comm);
@@ -295,7 +295,7 @@ int XC::beam2d02::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::beam2d02::sendSelf(Communicator &comm)
   {
     static ID data(10);
@@ -308,7 +308,7 @@ int XC::beam2d02::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::beam2d02::recvSelf(const Communicator &comm)
   {
     static ID data(10);

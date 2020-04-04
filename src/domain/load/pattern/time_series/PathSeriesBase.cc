@@ -108,7 +108,7 @@ void XC::PathSeriesBase::Print(std::ostream &s, int flag) const
   }
 
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::PathSeriesBase::sendData(Communicator &comm)
   {
     int res= sendData(comm);
@@ -117,7 +117,7 @@ int XC::PathSeriesBase::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::PathSeriesBase::recvData(const Communicator &comm)
   {
     int res= recvData(comm);

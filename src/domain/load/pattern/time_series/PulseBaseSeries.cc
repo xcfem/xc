@@ -39,7 +39,7 @@
 XC::PulseBaseSeries::PulseBaseSeries(int classTag,const double &startTime,const double &finishTime,const double &factor)
   : CFactorSeries(classTag,factor), tStart(startTime),tFinish(finishTime) {}
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::PulseBaseSeries::sendData(Communicator &comm)
   {
     int res= CFactorSeries::sendData(comm);
@@ -47,7 +47,7 @@ int XC::PulseBaseSeries::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::PulseBaseSeries::recvData(const Communicator &comm)
   {
     int res= CFactorSeries::recvData(comm);
@@ -56,7 +56,7 @@ int XC::PulseBaseSeries::recvData(const Communicator &comm)
   }
 
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::PulseBaseSeries::sendSelf(Communicator &comm)
   {
     inicComm(2);
@@ -69,7 +69,7 @@ int XC::PulseBaseSeries::sendSelf(Communicator &comm)
     return result;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::PulseBaseSeries::recvSelf(const Communicator &comm)
   {
     inicComm(2);

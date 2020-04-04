@@ -76,7 +76,7 @@ XC::DbTagData &XC::MovableContainer<C>::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send data through the channel being passed as parameter.
+//! @brief Send data through the communicator argument.
 template <class C>
 int XC::MovableContainer<C>::sendData(Communicator &comm)
   {
@@ -97,7 +97,7 @@ int XC::MovableContainer<C>::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receive data through the channel being passed as parameter.
+//! @brief Receive data through the communicator argument.
 template <class C>
 int XC::MovableContainer<C>::recvData(const Communicator &comm)
   {
@@ -114,7 +114,7 @@ int XC::MovableContainer<C>::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends container through the channel being passed as parameter.
+//! @brief Sends container through the communicator argument.
 template <class C>
 int XC::MovableContainer<C>::sendSelf(Communicator &comm)
   {
@@ -129,7 +129,7 @@ int XC::MovableContainer<C>::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receive the container through the channel being passed as parameter.
+//! @brief Receive the container through the communicator argument.
 template <class C>
 int XC::MovableContainer<C>::recvSelf(const Communicator &comm)
   {

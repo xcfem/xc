@@ -244,7 +244,7 @@ int XC::SeriesMaterial::revertToStart(void)
 XC::UniaxialMaterial *XC::SeriesMaterial::getCopy(void) const
   { return new SeriesMaterial(*this); }
 
-//! @brief Send its members through the channel being passed as parameter.
+//! @brief Send its members through the communicator argument.
 int XC::SeriesMaterial::sendData(Communicator &comm)
   {
     int res= ConnectedMaterial::sendData(comm);
@@ -257,7 +257,7 @@ int XC::SeriesMaterial::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives its members through the channel being passed as parameter.
+//! @brief Receives its members through the communicator argument.
 int XC::SeriesMaterial::recvData(const Communicator &comm)
   {
     int res= ConnectedMaterial::recvData(comm);
@@ -272,7 +272,7 @@ int XC::SeriesMaterial::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::SeriesMaterial::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -286,7 +286,7 @@ int XC::SeriesMaterial::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::SeriesMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(9);

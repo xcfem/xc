@@ -1250,7 +1250,7 @@ XC::DbTagData &XC::Domain::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send data through the channel being passed as parameter.
+//! @brief Send data through the communicator argument.
 int XC::Domain::sendData(Communicator &comm)
   {
     int res= ObjWithRecorders::sendData(comm);
@@ -1261,7 +1261,8 @@ int XC::Domain::sendData(Communicator &comm)
       {
         lastChannel= tagChannel;
         //
-        // into an ID we are gonna place the class and db tags for each node so can rebuild
+        // into an ID we are gonna place the class and db tags
+	// for each node so can rebuild
         // this ID we then send to the channel
         //
         lastGeoSendTag= currentGeoTag;// now so that we don't do this next time if nothing in the domain has changed
@@ -1273,14 +1274,15 @@ int XC::Domain::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receive data through the channel being passed as parameter.
+//! @brief Receive data through the communicator argument.
 int XC::Domain::recvData(const Communicator &comm)
   {
     int res= ObjWithRecorders::recvData(comm);
     res+= comm.receiveMovable(timeTracker,getDbTagData(),CommMetaData(2));
     //
     // now if the currentGeoTag does not agree with what's in the domain
-    // we must wipe everything in the domain and recreate the domain based on the info from the channel
+    // we must wipe everything in the domain and recreate the domain
+    // based on the info from the channel.
     //
     const int tagChannel= comm.getChannel()->getTag();
     const int geoTag= getDbTagDataPos(3);
@@ -1308,7 +1310,7 @@ int XC::Domain::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::Domain::sendSelf(Communicator &comm)
   {
     // update the commitTag and currentGeoTag
@@ -1323,12 +1325,12 @@ int XC::Domain::sendSelf(Communicator &comm)
     retval+= comm.sendIdData(getDbTagData(),dbTag);
     if(retval < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; channel failed to send data.\n";
+		<< "; communicator failed to send data.\n";
     return retval;
   }
 
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::Domain::recvSelf(const Communicator &comm)
   {
     // set the commitTag in the domain to cTag & update the getTag if needed
@@ -1341,7 +1343,7 @@ int XC::Domain::recvSelf(const Communicator &comm)
     int retval= comm.receiveIdData(getDbTagData(),dbTag);
     if(retval < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; channel failed to recv the initial ID.\n";
+		<< "; communicator failed to recv the initial ID.\n";
     else
       retval+= recvData(comm);
     if(retval<0)
@@ -1397,7 +1399,7 @@ XC::Preprocessor *XC::Domain::getPreprocessor(void)
     return retval;
   }
 
-//! @brief Sends domain through the specified channel.
+//! @brief Sends domain through the specified communicator.
 int XC::sendDomain(Domain &dom,int posDbTag,DbTagData &dt,Communicator &comm)
   {
     int retval= dom.sendSelf(comm);
@@ -1405,7 +1407,7 @@ int XC::sendDomain(Domain &dom,int posDbTag,DbTagData &dt,Communicator &comm)
     return retval;
   }
 
-//! @brief Receives the domain through the specified channel.
+//! @brief Receives the domain through the specified communicator.
 int XC::receiveDomain(Domain &dom,int posDbTag,DbTagData &dt,const Communicator &comm)
   {
     int res= comm.receiveInt(dom.dbTag,dt,CommMetaData(posDbTag));

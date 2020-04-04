@@ -32,7 +32,7 @@
 XC::NewtonBased::NewtonBased(AnalysisAggregation *owr,int classTag,int theTangentToUse)
   :EquiSolnAlgo(owr,classTag), tangent(theTangentToUse) {}
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::NewtonBased::sendData(Communicator &comm)
   {
     int res= EquiSolnAlgo::sendData(comm);
@@ -40,7 +40,7 @@ int XC::NewtonBased::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::NewtonBased::recvData(const Communicator &comm)
   {
     int res= EquiSolnAlgo::recvData(comm);
@@ -50,7 +50,7 @@ int XC::NewtonBased::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::NewtonBased::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -65,7 +65,7 @@ int XC::NewtonBased::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::NewtonBased::recvSelf(const Communicator &comm)
   {
     inicComm(3);

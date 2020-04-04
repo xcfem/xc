@@ -80,7 +80,7 @@ void XC::Load::setLoadPatternTag(int tag)
 int XC::Load::getLoadPatternTag(void) const
   { return loadPatternTag; }
 
-//! @brief Send data through the channel being passed as parameter.
+//! @brief Send data through the communicator argument.
 int XC::Load::sendData(Communicator &comm)
   {
     setDbTagDataPos(0,getTag());
@@ -88,7 +88,7 @@ int XC::Load::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receive data through the channel being passed as parameter.
+//! @brief Receive data through the communicator argument.
 int XC::Load::recvData(const Communicator &comm)
   {
     setTag(getDbTagDataPos(0));

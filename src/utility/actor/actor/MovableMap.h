@@ -67,7 +67,7 @@ template <class T>
 MovableMap<T>::MovableMap(const map_objects &map,T *(FEM_ObjectBroker::*pF)(int))
   : MovablePointerContainer<T>(0,pF), objects(map) {}
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 template <class T>
 int XC::MovableMap<T>::sendData(Communicator &comm)
   {
@@ -94,7 +94,7 @@ int XC::MovableMap<T>::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 template <class T>
 int MovableMap<T>::recvData(const Communicator &comm)
   {

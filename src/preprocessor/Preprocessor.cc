@@ -176,7 +176,7 @@ XC::DbTagData &XC::Preprocessor::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send data through the channel being passed as parameter.
+//! @brief Send data through the communicator argument.
 int XC::Preprocessor::sendData(Communicator &comm)
   {
     //res+= comm.sendMovable(materialHandler,getDbTagData(),CommMetaData(0));
@@ -193,7 +193,7 @@ int XC::Preprocessor::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receive data through the channel being passed as parameter.
+//! @brief Receive data through the communicator argument.
 int XC::Preprocessor::recvData(const Communicator &comm)
   {
     //res+= comm.receiveMovable(materialHandler,getDbTagData(),CommMetaData(0));
@@ -210,7 +210,7 @@ int XC::Preprocessor::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Send object through the channel being passed as parameter.
+//! @brief Send object through the communicator argument.
 int XC::Preprocessor::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -225,7 +225,7 @@ int XC::Preprocessor::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receive object through the channel being passed as parameter.
+//! @brief Receive object through the communicator argument.
 int XC::Preprocessor::recvSelf(const Communicator &comm)
   {
     inicComm(10);

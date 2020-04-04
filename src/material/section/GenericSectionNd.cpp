@@ -229,7 +229,7 @@ int XC::GenericSectionNd::getOrder(void) const
 XC::SectionForceDeformation *XC::GenericSectionNd::getCopy(void) const
   { return new GenericSectionNd(*this); }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::GenericSectionNd::sendData(Communicator &comm)
   {
     int res= SectionForceDeformation::sendData(comm);
@@ -239,8 +239,7 @@ int XC::GenericSectionNd::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel
-//! being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::GenericSectionNd::recvData(const Communicator &comm)
   {
     int res= SectionForceDeformation::recvData(comm);

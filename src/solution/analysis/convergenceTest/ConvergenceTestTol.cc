@@ -58,7 +58,7 @@ double XC::ConvergenceTestTol::getTolerance(void) const
   { return tol; }
 
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::ConvergenceTestTol::sendData(Communicator &comm)
   {
     int res= ConvergenceTest::sendData(comm);
@@ -66,7 +66,7 @@ int XC::ConvergenceTestTol::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::ConvergenceTestTol::recvData(const Communicator &comm)
   {
     int res= ConvergenceTest::recvData(comm);

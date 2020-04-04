@@ -76,7 +76,7 @@ XC::FieldInfo &XC::MapFields::newField(const std::string &field_name)
 void XC::MapFields::clearAll(void)
   { clear(); }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::MapFields::sendData(Communicator &comm)
   {
     std::cerr << getClassName() << ":: " << __FUNCTION__
@@ -84,7 +84,7 @@ int XC::MapFields::sendData(Communicator &comm)
     return 0;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::MapFields::recvData(const Communicator &comm)
   {
     std::cerr << getClassName() << ":: " << __FUNCTION__
@@ -92,7 +92,7 @@ int XC::MapFields::recvData(const Communicator &comm)
     return 0;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::MapFields::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -107,7 +107,7 @@ int XC::MapFields::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::MapFields::recvSelf(const Communicator &comm)
   {
     inicComm(6);

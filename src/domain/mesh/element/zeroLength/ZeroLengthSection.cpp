@@ -464,7 +464,7 @@ const XC::Vector &XC::ZeroLengthSection::getVDirWeakAxisGlobalCoord(bool initial
     return retval;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::ZeroLengthSection::sendData(Communicator &comm)
   {
 
@@ -478,7 +478,7 @@ int XC::ZeroLengthSection::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::ZeroLengthSection::recvData(const Communicator &comm)
   {
     int res= Element0D::recvData(comm);
@@ -491,7 +491,7 @@ int XC::ZeroLengthSection::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::ZeroLengthSection::sendSelf(Communicator &comm)
   {
     inicComm(27);
@@ -506,7 +506,7 @@ int XC::ZeroLengthSection::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::ZeroLengthSection::recvSelf(const Communicator &comm)
   {
     inicComm(27);

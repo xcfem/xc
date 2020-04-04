@@ -171,7 +171,7 @@ XC::PressureMultiYieldBase::PressureMultiYieldBase(const PressureMultiYieldBase 
   }
 
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::PressureMultiYieldBase::sendData(Communicator &comm)
   {
     int res= NDMaterial::sendData(comm);
@@ -185,7 +185,7 @@ int XC::PressureMultiYieldBase::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::PressureMultiYieldBase::recvData(const Communicator &comm)
   {
     int res= NDMaterial::recvData(comm);

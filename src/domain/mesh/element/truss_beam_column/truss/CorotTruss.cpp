@@ -572,7 +572,7 @@ int XC::CorotTruss::getResponse(int responseID, Information &eleInfo)
       }
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::CorotTruss::sendData(Communicator &comm)
   {
     int res= CorotTrussBase::sendData(comm);
@@ -581,7 +581,7 @@ int XC::CorotTruss::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::CorotTruss::recvData(const Communicator &comm)
   {
     int res= CorotTrussBase::recvData(comm);
@@ -590,7 +590,7 @@ int XC::CorotTruss::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::CorotTruss::sendSelf(Communicator &comm)
   {
     inicComm(22);
@@ -605,7 +605,7 @@ int XC::CorotTruss::sendSelf(Communicator &comm)
   }
 
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::CorotTruss::recvSelf(const Communicator &comm)
   {
     inicComm(22);

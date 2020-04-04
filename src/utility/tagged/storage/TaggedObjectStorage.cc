@@ -141,7 +141,7 @@ XC::DbTagData &XC::TaggedObjectStorage::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Returns the dbTags y classTags of the objects through the channel being passed as parameter.
+//! @brief Returns the dbTags y classTags of the objects through the communicator argument.
 int XC::TaggedObjectStorage::sendObjectTags(Communicator &comm)
   {
     const int size= getNumComponents();
@@ -156,11 +156,12 @@ int XC::TaggedObjectStorage::sendObjectTags(Communicator &comm)
         res+= comm.sendID(objTags,getDbTagData(),CommMetaData(posDbTag3));
       }
     if(res<0)
-      std::cerr << "TaggedObjectStorage::sendObjectTags - channel failed to send the IDs.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; communicator failed to send the IDs.\n";
     return res;
   }
 
-//! @brief Receives the dbTags or classTags of the objects through the channel being passed as parameter.
+//! @brief Receives the dbTags or classTags of the objects through the communicator argument.
 const XC::ID &XC::TaggedObjectStorage::receiveTags(int posDbTag,int sz,const Communicator &comm)
   {
     static ID retVal;
@@ -171,11 +172,11 @@ const XC::ID &XC::TaggedObjectStorage::receiveTags(int posDbTag,int sz,const Com
         res= comm.receiveID(retVal,getDbTagData(),CommMetaData(posDbTag));
       }
     if(res<0)
-      std::cerr << "TaggedObjectStorage::receiveTags - channel failed to receive the IDs.\n";
+      std::cerr << "TaggedObjectStorage::receiveTags - communicator failed to receive the IDs.\n";
     return retVal;
   }
 
-//! @brief Receive object tags through the channel being passed as parameter.
+//! @brief Receive object tags through the communicator argument.
 int XC::TaggedObjectStorage::receiveObjectTags(const int &sz,const Communicator &comm)
   {
     int res= 0;
@@ -185,7 +186,7 @@ int XC::TaggedObjectStorage::receiveObjectTags(const int &sz,const Communicator 
     return res;
   }
 
-//! @brief Send objects through the channel being passed as parameter.
+//! @brief Send objects through the communicator argument.
 int XC::TaggedObjectStorage::sendObjects(Communicator &comm)
   {
     const int size= getNumComponents();
@@ -247,7 +248,7 @@ int XC::TaggedObjectStorage::receiveObjects(const Communicator &comm)
 
 
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::TaggedObjectStorage::sendData(Communicator &comm)
   {
     const int dbTag= getDbTag(comm);
@@ -280,7 +281,7 @@ int XC::TaggedObjectStorage::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::TaggedObjectStorage::recvSelf(const Communicator &comm)
   { return receiveObjects(comm); }
 

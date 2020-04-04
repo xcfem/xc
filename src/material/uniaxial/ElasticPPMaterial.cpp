@@ -192,7 +192,7 @@ int XC::ElasticPPMaterial::revertToStart(void)
 XC::UniaxialMaterial *XC::ElasticPPMaterial::getCopy(void) const
   { return new ElasticPPMaterial(*this); }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::ElasticPPMaterial::sendData(Communicator &comm)
   {
     int res= EPPBaseMaterial::sendData(comm);
@@ -200,7 +200,7 @@ int XC::ElasticPPMaterial::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::ElasticPPMaterial::recvData(const Communicator &comm)
   {
     int res= EPPBaseMaterial::recvData(comm);

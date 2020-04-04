@@ -275,7 +275,7 @@ XC::T2Vector::isZero(void) const
   return 1;
 }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::T2Vector::sendData(Communicator &comm)
   {
     //setDbTagDataPos(0,getTag());
@@ -285,7 +285,7 @@ int XC::T2Vector::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::T2Vector::recvData(const Communicator &comm)
   {
     //setTag(getDbTagDataPos(0));
@@ -295,7 +295,7 @@ int XC::T2Vector::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::T2Vector::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -309,7 +309,7 @@ int XC::T2Vector::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::T2Vector::recvSelf(const Communicator &comm)
   {
     inicComm(3);

@@ -385,7 +385,7 @@ int XC::FluidSolidPorousMaterial::getOrder(void) const
 }
 
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::FluidSolidPorousMaterial::sendData(Communicator &comm)
   {
     int res= NDMaterial::sendData(comm);
@@ -396,7 +396,7 @@ int XC::FluidSolidPorousMaterial::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::FluidSolidPorousMaterial::recvData(const Communicator &comm)
   {
     int res= NDMaterial::recvData(comm);
@@ -407,7 +407,7 @@ int XC::FluidSolidPorousMaterial::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::FluidSolidPorousMaterial::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -421,7 +421,7 @@ int XC::FluidSolidPorousMaterial::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::FluidSolidPorousMaterial::recvSelf(const Communicator &comm)    
   {
     inicComm(7);

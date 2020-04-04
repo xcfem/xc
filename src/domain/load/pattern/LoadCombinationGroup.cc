@@ -188,11 +188,11 @@ XC::DbTagData &XC::LoadCombinationGroup::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::LoadCombinationGroup::sendData(Communicator &comm)
   { return sendMap(*this,comm,getDbTagData(),CommMetaData(0)); }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::LoadCombinationGroup::recvData(const Communicator &comm)
   {
     clear();
@@ -206,7 +206,7 @@ int XC::LoadCombinationGroup::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::LoadCombinationGroup::sendSelf(Communicator &comm)
   {
     inicComm(1);
@@ -219,7 +219,7 @@ int XC::LoadCombinationGroup::sendSelf(Communicator &comm)
   }
 
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::LoadCombinationGroup::recvSelf(const Communicator &comm)
   {
     int res= 0;

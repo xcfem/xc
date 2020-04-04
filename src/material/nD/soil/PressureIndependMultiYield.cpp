@@ -418,7 +418,7 @@ int XC::PressureIndependMultiYield::updateParameter(int responseID, Information 
   return 0;
 }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::PressureIndependMultiYield::sendData(Communicator &comm)
   {
     int res= PressureMultiYieldBase::sendData(comm);
@@ -426,7 +426,7 @@ int XC::PressureIndependMultiYield::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::PressureIndependMultiYield::recvData(const Communicator &comm)
   {
     int res= PressureMultiYieldBase::recvData(comm);
@@ -434,7 +434,7 @@ int XC::PressureIndependMultiYield::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::PressureIndependMultiYield::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -448,7 +448,7 @@ int XC::PressureIndependMultiYield::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::PressureIndependMultiYield::recvSelf(const Communicator &comm)    
   {
     inicComm(20);

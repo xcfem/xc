@@ -296,7 +296,7 @@ const XC::Matrix &XC::beam3d01::getStiff(void) const
   }
 
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::beam3d01::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -310,7 +310,7 @@ int XC::beam3d01::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::beam3d01::recvSelf(const Communicator &comm)
   {
     inicComm(3);

@@ -99,21 +99,21 @@ void XC::HingeRadauBeamIntegration::getSectionWeights(int numSections, double L,
 XC::BeamIntegration *XC::HingeRadauBeamIntegration::getCopy(void) const
   { return new HingeRadauBeamIntegration(*this); }
 
-//! @brief Send object members through the channel defined in cp.
+//! @brief Send object members through the communicator argument.
 int XC::HingeRadauBeamIntegration::sendData(Communicator &comm)
   {
     int res= PlasticLengthsBeamIntegration::sendData(comm);
     return res;
   }
 
-//! @brief Receives object members through the channel defined in cp.
+//! @brief Receives object members through the communicator argument.
 int XC::HingeRadauBeamIntegration::recvData(const Communicator &comm)
   {
     int res= PlasticLengthsBeamIntegration::recvData(comm);
     return res;
   }
 
-//! @brief Sends object through the channel defined in cp.
+//! @brief Sends object through the communicator argument.
 int XC::HingeRadauBeamIntegration::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -127,7 +127,7 @@ int XC::HingeRadauBeamIntegration::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel defined in cp.
+//! @brief Receives object through the communicator argument.
 int XC::HingeRadauBeamIntegration::recvSelf(const Communicator &comm)
   {
     inicComm(3);

@@ -89,7 +89,7 @@ void XC::NewmarkBase::PopulateUs(AnalysisModel *model)
       }
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::NewmarkBase::sendData(Communicator &comm)
   {
     int res= DampingFactorsIntegrator::sendData(comm);
@@ -98,7 +98,7 @@ int XC::NewmarkBase::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::NewmarkBase::recvData(const Communicator &comm)
   {
     int res= DampingFactorsIntegrator::recvData(comm);

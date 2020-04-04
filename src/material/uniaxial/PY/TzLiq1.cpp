@@ -429,7 +429,7 @@ XC::TzLiq1::updateParameter(int snum,Information &eleInformation)
         return clone;
 }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::TzLiq1::sendData(Communicator &comm)
   {
     int res= TzSimple1::sendData(comm);
@@ -441,7 +441,7 @@ int XC::TzLiq1::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::TzLiq1::recvData(const Communicator &comm)
   {
     int res= TzSimple1::recvData(comm);

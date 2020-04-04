@@ -202,7 +202,7 @@ const XC::Vector &XC::BeamColumnWithSectionFDTrf3d::getVDirWeakAxisGlobalCoord(c
       }
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::BeamColumnWithSectionFDTrf3d::sendData(Communicator &comm)
   {
     int res= BeamColumnWithSectionFD::sendData(comm);
@@ -210,7 +210,7 @@ int XC::BeamColumnWithSectionFDTrf3d::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::BeamColumnWithSectionFDTrf3d::recvData(const Communicator &comm)
   {
     int res= BeamColumnWithSectionFD::recvData(comm);

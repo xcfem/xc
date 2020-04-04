@@ -85,7 +85,7 @@ XC::DbTagData &XC::DamageModelVector::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::DamageModelVector::sendData(Communicator &comm)
   {
     int res= 0;
@@ -93,7 +93,7 @@ int XC::DamageModelVector::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::DamageModelVector::recvData(const Communicator &comm)
   {
     int res= 0;
@@ -102,7 +102,7 @@ int XC::DamageModelVector::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::DamageModelVector::sendSelf(Communicator &comm)
   {
     inicComm(2);
@@ -115,7 +115,7 @@ int XC::DamageModelVector::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::DamageModelVector::recvSelf(const Communicator &comm)
   {
     const int dataTag= this->getDbTag();

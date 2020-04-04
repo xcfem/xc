@@ -262,15 +262,15 @@ XC::DbTagData &XC::CrossSectionProperties2d::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::CrossSectionProperties2d::sendData(Communicator &comm)
   { return comm.sendDoubles(e,g,a,i,alpha,rho,getDbTagData(),CommMetaData(0)); }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::CrossSectionProperties2d::recvData(const Communicator &comm)
   { return comm.receiveDoubles(e,g,a,i,alpha,rho,getDbTagData(),CommMetaData(0)); }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::CrossSectionProperties2d::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -285,7 +285,7 @@ int XC::CrossSectionProperties2d::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::CrossSectionProperties2d::recvSelf(const Communicator &comm)
   {
     inicComm(1);

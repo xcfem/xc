@@ -406,7 +406,7 @@ const std::string &XC::PressureDependMultiYield02::getType(void) const
     return (ndm == 2) ? strTypePlaneStrain : strTypeThreeDimensional;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::PressureDependMultiYield02::sendData(Communicator &comm)
   {
     int res= PressureDependMultiYieldBase::sendData(comm);
@@ -417,7 +417,7 @@ int XC::PressureDependMultiYield02::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::PressureDependMultiYield02::recvData(const Communicator &comm)
   {
     int res= PressureDependMultiYieldBase::recvData(comm);

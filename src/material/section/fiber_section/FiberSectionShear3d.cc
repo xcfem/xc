@@ -386,7 +386,7 @@ int XC::FiberSectionShear3d::revertToStart(void)
     return err;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::FiberSectionShear3d::sendData(Communicator &comm)
   {
     int res= FiberSection3d::sendData(comm);
@@ -394,7 +394,7 @@ int XC::FiberSectionShear3d::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::FiberSectionShear3d::recvData(const Communicator &comm)
   {
     int res= FiberSection3d::recvData(comm);
@@ -402,7 +402,7 @@ int XC::FiberSectionShear3d::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::FiberSectionShear3d::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -417,7 +417,7 @@ int XC::FiberSectionShear3d::sendSelf(Communicator &comm)
   }
 
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::FiberSectionShear3d::recvSelf(const Communicator &comm)
   {
     inicComm(29);

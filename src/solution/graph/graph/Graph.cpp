@@ -471,7 +471,7 @@ std::ostream &XC::operator<<(std::ostream &s, const Graph &M)
     return s;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::Graph::sendData(Communicator &comm)
   {
     //setDbTagDataPos(0,getTag());
@@ -480,7 +480,7 @@ int XC::Graph::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::Graph::recvData(const Communicator &comm)
   {
     //setTag(getDbTagDataPos(0));
@@ -489,7 +489,7 @@ int XC::Graph::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::Graph::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -505,7 +505,7 @@ int XC::Graph::sendSelf(Communicator &comm)
   }
 
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::Graph::recvSelf(const Communicator &comm) 
   {
     inicComm(3);

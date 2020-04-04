@@ -518,7 +518,7 @@ const XC::Matrix &XC::beam3d02::getStiff(void) const
     return k;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::beam3d02::sendData(Communicator &comm)
   {
     int res= beam3dBase::sendData(comm);
@@ -527,7 +527,7 @@ int XC::beam3d02::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::beam3d02::recvData(const Communicator &comm)
   {
     int res= beam3dBase::recvData(comm);

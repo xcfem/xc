@@ -61,8 +61,8 @@
 #include "solution/graph/graph/Graph.h"
 #include <solution/graph/graph/Vertex.h>
 #include <solution/graph/graph/VertexIter.h>
-#include <utility/actor/channel/Channel.h>
 #include <utility/actor/objectBroker/FEM_ObjectBroker.h>
+#include "utility/actor/channel/ChannelQueue.h"
 
 XC::DistributedBandSPDLinSOE::DistributedBandSPDLinSOE(AnalysisAggregation *owr)
   :BandSPDLinSOE(owr,LinSOE_TAGS_DistributedBandSPDLinSOE), DistributedBandLinSOE() {}

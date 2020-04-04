@@ -110,7 +110,7 @@ XC::CrossSectionKR::~CrossSectionKR(void)
     free_mem();
   }
 
-//! @brief Send data through the channel being passed as parameter.
+//! @brief Send data through the communicator argument.
 int XC::CrossSectionKR::sendData(Communicator &comm)
   {
     int res= comm.sendDoubles(rData[0],rData[1],rData[2],rData[3],getDbTagData(),CommMetaData(0));
@@ -122,7 +122,7 @@ int XC::CrossSectionKR::sendData(Communicator &comm)
   }
 
 
-//! @brief Receive data through the channel being passed as parameter.
+//! @brief Receive data through the communicator argument.
 int XC::CrossSectionKR::recvData(const Communicator &comm)
   {    
     int res= comm.receiveDoubles(rData[0],rData[1],rData[2],rData[3],getDbTagData(),CommMetaData(0));

@@ -246,7 +246,7 @@ int XC::NewmarkExplicit::update(const XC::Vector &aiPlusOne)
     return 0;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::NewmarkExplicit::sendData(Communicator &comm)
   {
     int res= NewmarkBase::sendData(comm);
@@ -255,7 +255,7 @@ int XC::NewmarkExplicit::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::NewmarkExplicit::recvData(const Communicator &comm)
   {
     int res= NewmarkBase::recvData(comm);

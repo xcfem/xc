@@ -245,7 +245,7 @@ void XC::Beam2dUniformLoad::addElasticDeformations(const double &L,const CrossSe
       }
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::Beam2dUniformLoad::sendSelf(Communicator &comm)
   {
     inicComm(6);
@@ -258,7 +258,7 @@ int XC::Beam2dUniformLoad::sendSelf(Communicator &comm)
     return result;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::Beam2dUniformLoad::recvSelf(const Communicator &comm)
   {
     inicComm(6);

@@ -276,7 +276,7 @@ XC::DbTagData &XC::MapSet::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send the dbTags of the sets through the channel being passed as parameter.
+//! @brief Send the dbTags of the sets through the communicator argument.
 int XC::MapSet::sendSetsDbTags(int posDbTag,Communicator &comm)
   {
     const int size= MapSetBase::size();
@@ -293,7 +293,7 @@ int XC::MapSet::sendSetsDbTags(int posDbTag,Communicator &comm)
   }
 
 //! @brief Send the names of the classes of the sets through
-//! the channel being passed as parameter.
+//! the communicator argument.
 int XC::MapSet::sendSetsClassNames(int posDbTag,Communicator &comm)
   {
     const int size= MapSetBase::size();
@@ -309,7 +309,7 @@ int XC::MapSet::sendSetsClassNames(int posDbTag,Communicator &comm)
     return res;
   }
 
-//! @brief Receives the dbTags of the sets through the channel being passed as parameter.
+//! @brief Receives the dbTags of the sets through the communicator argument.
 int XC::MapSet::receiveSetsDbTags(int posDbTag,int size,const Communicator &comm)
   {
     setsDbTags.resize(size);
@@ -322,7 +322,7 @@ int XC::MapSet::receiveSetsDbTags(int posDbTag,int size,const Communicator &comm
     return res;
   }
 
-//! @brief Receives the class names of the sets through the channel being passed as parameter.
+//! @brief Receives the class names of the sets through the communicator argument.
 int XC::MapSet::receiveSetsClassNames(int posDbTag,int size,const Communicator &comm)
   {
     setsClassNames.resize(size);
@@ -335,7 +335,7 @@ int XC::MapSet::receiveSetsClassNames(int posDbTag,int size,const Communicator &
     return res;
   }
 
-//! @brief Send the sets through the channel being passed as parameter.
+//! @brief Send the sets through the communicator argument.
 int XC::MapSet::sendSets(int posDbTag1, int posDbTag2, int posDbTag3,Communicator &comm)
   {
     std::deque<std::string> names;
@@ -352,7 +352,7 @@ int XC::MapSet::sendSets(int posDbTag1, int posDbTag2, int posDbTag3,Communicato
     return res;
   }
 
-//! @brief Receives the sets through the channel being passed as parameter.
+//! @brief Receives the sets through the communicator argument.
 int XC::MapSet::receiveSets(int posDbTag1, int posDbTag2, int posDbTag3,const int &sz,const Communicator &comm)
   {
     std::deque<std::string> names;
@@ -372,7 +372,7 @@ int XC::MapSet::receiveSets(int posDbTag1, int posDbTag2, int posDbTag3,const in
       }
     return res;
   }
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::MapSet::sendOpenSets(int posDbTag1, int posDbTag2,Communicator &comm)
   {
     const size_t sz= open_sets.size();
@@ -386,7 +386,7 @@ int XC::MapSet::sendOpenSets(int posDbTag1, int posDbTag2,Communicator &comm)
       }
     return res;
   }
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::MapSet::receiveOpenSets(int posDbTag1, int posDbTag2,const Communicator &comm)
   {
      int sz_open_sets= 0;
@@ -401,7 +401,7 @@ int XC::MapSet::receiveOpenSets(int posDbTag1, int posDbTag2,const Communicator 
     return res;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::MapSet::sendData(Communicator &comm)
   {
     const size_t sz= MapSetBase::size();
@@ -415,7 +415,7 @@ int XC::MapSet::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::MapSet::recvData(const Communicator &comm)
   {
     int sz= 0;
@@ -429,7 +429,7 @@ int XC::MapSet::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::MapSet::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -444,7 +444,7 @@ int XC::MapSet::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::MapSet::recvSelf(const Communicator &comm)
   {
     inicComm(6);

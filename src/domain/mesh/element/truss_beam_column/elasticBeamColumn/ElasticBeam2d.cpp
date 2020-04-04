@@ -634,7 +634,7 @@ XC::DbTagData &XC::ElasticBeam2d::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::ElasticBeam2d::sendData(Communicator &comm)
   {
     int res= ProtoBeam2d::sendData(comm);
@@ -644,7 +644,7 @@ int XC::ElasticBeam2d::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::ElasticBeam2d::recvData(const Communicator &comm)
   {
     int res= ProtoBeam2d::recvData(comm);

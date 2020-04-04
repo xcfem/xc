@@ -55,7 +55,7 @@ double XC::ConcreteBase::getStrain(void) const
 double XC::ConcreteBase::getTangent(void) const
   { return trialState.getTangent(); }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::ConcreteBase::sendData(Communicator &comm)
   {
     int res= RawConcrete::sendData(comm);
@@ -67,7 +67,7 @@ int XC::ConcreteBase::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::ConcreteBase::recvData(const Communicator &comm)
   {
     int res= RawConcrete::recvData(comm);

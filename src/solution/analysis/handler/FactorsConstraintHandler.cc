@@ -66,7 +66,7 @@
 XC::FactorsConstraintHandler::FactorsConstraintHandler(ModelWrapper *owr,int classTag,const double &sp,const double &mp)
   :ConstraintHandler(owr,classTag), alphaSP(sp), alphaMP(mp) {}
 
-//! @brief Send object members through the channel passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::FactorsConstraintHandler::sendData(Communicator &comm)
   {
     int res= ConstraintHandler::sendData(comm);
@@ -74,7 +74,7 @@ int XC::FactorsConstraintHandler::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receive object members through the channel passed as parameter.
+//! @brief Receive object members through the communicator argument.
 int XC::FactorsConstraintHandler::recvData(const Communicator &comm)
   {
     int res= ConstraintHandler::recvData(comm);
@@ -82,7 +82,7 @@ int XC::FactorsConstraintHandler::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Send object through the channel passed as parameter.
+//! @brief Send object through the communicator argument.
 int XC::FactorsConstraintHandler::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -97,7 +97,7 @@ int XC::FactorsConstraintHandler::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receive object through the channel passed as parameter.
+//! @brief Receive object through the communicator argument.
 int XC::FactorsConstraintHandler::recvSelf(const Communicator &comm)  
   {
     inicComm(3);

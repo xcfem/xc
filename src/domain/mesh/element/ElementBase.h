@@ -136,7 +136,7 @@ TIPOMAT *ElementBase<NNODES>::cast_material(const Material *ptr_mat)
     return retval;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 template <int NNODES>
 int XC::ElementBase<NNODES>::sendData(Communicator &comm)
   {
@@ -145,7 +145,7 @@ int XC::ElementBase<NNODES>::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 template <int NNODES>
 int XC::ElementBase<NNODES>::recvData(const Communicator &comm)
   {

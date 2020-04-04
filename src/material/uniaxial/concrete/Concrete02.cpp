@@ -258,7 +258,7 @@ int XC::Concrete02::revertToStart(void)
     return 0;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::Concrete02::sendData(Communicator &comm)
   {
     int res= RawConcrete::sendData(comm);
@@ -269,7 +269,7 @@ int XC::Concrete02::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::Concrete02::recvData(const Communicator &comm)
   {
     int res= RawConcrete::recvData(comm);

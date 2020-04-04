@@ -47,7 +47,7 @@ void XC::HingeBeamIntegration2d::addElasticDeformations(ElementalLoad *theLoad,d
     return;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::HingeBeamIntegration2d::sendData(Communicator &comm)
   {
     int res= PlasticLengthsBeamIntegration::sendData(comm);
@@ -55,7 +55,7 @@ int XC::HingeBeamIntegration2d::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::HingeBeamIntegration2d::recvData(const Communicator &comm)
   {
     int res= PlasticLengthsBeamIntegration::recvData(comm);

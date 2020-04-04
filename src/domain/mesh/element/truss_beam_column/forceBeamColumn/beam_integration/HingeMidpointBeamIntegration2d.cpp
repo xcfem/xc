@@ -152,7 +152,7 @@ XC::BeamIntegration *XC::HingeMidpointBeamIntegration2d::getCopy(void) const
   { return new HingeMidpointBeamIntegration2d(*this); }
 
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::HingeMidpointBeamIntegration2d::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -166,7 +166,7 @@ int XC::HingeMidpointBeamIntegration2d::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::HingeMidpointBeamIntegration2d::recvSelf(const Communicator &comm)
   {
     inicComm(3);

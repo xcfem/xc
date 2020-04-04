@@ -352,7 +352,7 @@ const XC::Vector &XC::TransientDomainDecompositionAnalysis::getTangVectProduct(v
     return errVector;
   }
   
-//! @brief Sends object through the channel being passed as parameter.  
+//! @brief Sends object through the communicator argument.  
 int XC::TransientDomainDecompositionAnalysis::sendSelf(Communicator &comm)
   {
 

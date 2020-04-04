@@ -160,7 +160,7 @@ int XC::SteelBase0103::revertToStart(void)
     return 0;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::SteelBase0103::sendData(Communicator &comm)
   {
     int res= SteelBase::sendData(comm);
@@ -171,7 +171,7 @@ int XC::SteelBase0103::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::SteelBase0103::recvData(const Communicator &comm)
   {
     int res= SteelBase::recvData(comm);

@@ -127,7 +127,7 @@ DbTagData &PhysicalProperties<MAT>::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 template <class MAT>
 int PhysicalProperties<MAT>::sendData(Communicator &comm)
   {
@@ -135,7 +135,7 @@ int PhysicalProperties<MAT>::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 template <class MAT>
 int PhysicalProperties<MAT>::recvData(const Communicator &comm)
   {

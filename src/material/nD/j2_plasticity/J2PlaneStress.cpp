@@ -323,7 +323,7 @@ int XC::J2PlaneStress::revertToStart( )
     return 0;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::J2PlaneStress::sendData(Communicator &comm)
   {
     int res= J2Plasticity::sendData(comm);
@@ -331,7 +331,7 @@ int XC::J2PlaneStress::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::J2PlaneStress::recvData(const Communicator &comm)
   {
     int res= J2Plasticity::recvData(comm);
@@ -339,7 +339,7 @@ int XC::J2PlaneStress::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::J2PlaneStress::sendSelf(Communicator &comm)
    {
     setDbTag(comm);
@@ -353,7 +353,7 @@ int XC::J2PlaneStress::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::J2PlaneStress::recvSelf(const Communicator &comm)
   {
     inicComm(89);

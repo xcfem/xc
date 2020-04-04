@@ -112,7 +112,7 @@ XC::HHTBase::HHTBase(AnalysisAggregation *owr,int classTag,double _alpha, double
     : HHTRayleighBase(owr,classTag,_alpha,_gamma,rF), beta(_beta), c1(0.0) {}
 
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::HHTBase::sendData(Communicator &comm)
   {
     int res= HHTRayleighBase::sendData(comm);
@@ -120,7 +120,7 @@ int XC::HHTBase::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::HHTBase::recvData(const Communicator &comm)
   {
     int res= HHTRayleighBase::recvData(comm);

@@ -925,7 +925,7 @@ void   XC::TwentyEightNodeBrickUP::computeBasis(void) const
 
 }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::TwentyEightNodeBrickUP::sendData(Communicator &comm)
   {
     int res= ElemWithMaterial<20,NDMaterialPhysicalProperties>::sendData(comm);
@@ -935,7 +935,7 @@ int XC::TwentyEightNodeBrickUP::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::TwentyEightNodeBrickUP::recvData(const Communicator &comm)
   {
     int res= ElemWithMaterial<20,NDMaterialPhysicalProperties>::recvData(comm);
@@ -945,7 +945,7 @@ int XC::TwentyEightNodeBrickUP::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int  XC::TwentyEightNodeBrickUP::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -959,7 +959,7 @@ int  XC::TwentyEightNodeBrickUP::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::TwentyEightNodeBrickUP::recvSelf(const Communicator &comm)
   {
     inicComm(16);

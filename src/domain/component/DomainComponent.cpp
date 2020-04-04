@@ -156,7 +156,7 @@ XC::LoadPattern *XC::DomainComponent::getCurrentLoadPattern(void)
     return retval;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::DomainComponent::sendData(Communicator &comm)
   {
     setDbTagDataPos(0,getTag());
@@ -164,7 +164,7 @@ int XC::DomainComponent::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receive object members through the channel being passed as parameter.
+//! @brief Receive object members through the communicator argument.
 int XC::DomainComponent::recvData(const Communicator &comm)
   {
     setTag(getDbTagDataPos(0));

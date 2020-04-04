@@ -2377,7 +2377,7 @@ void XC::FiberPtrDeque::Print(std::ostream &s,const int &flag) const
         }
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::FiberPtrDeque::sendData(Communicator &comm)
   {
     int res= comm.sendDoubles(yCenterOfMass,zCenterOfMass,getDbTagData(),CommMetaData(0));
@@ -2387,7 +2387,7 @@ int XC::FiberPtrDeque::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::FiberPtrDeque::recvData(const Communicator &comm)
   {
     int res= comm.receiveDoubles(yCenterOfMass,zCenterOfMass,getDbTagData(),CommMetaData(0));
@@ -2397,7 +2397,7 @@ int XC::FiberPtrDeque::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::FiberPtrDeque::sendSelf(Communicator &comm)
   {
     inicComm(2);
@@ -2411,7 +2411,7 @@ int XC::FiberPtrDeque::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::FiberPtrDeque::recvSelf(const Communicator &comm)
   {
     const int dataTag= this->getDbTag();

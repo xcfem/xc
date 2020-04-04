@@ -423,7 +423,7 @@ int XC::Newmark::update(const XC::Vector &deltaU)
     return 0;
   }    
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::Newmark::sendData(Communicator &comm)
   {
     int res= NewmarkBase2::sendData(comm);
@@ -433,7 +433,7 @@ int XC::Newmark::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::Newmark::recvData(const Communicator &comm)
   {
     int res= NewmarkBase2::recvData(comm);
@@ -443,7 +443,7 @@ int XC::Newmark::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::Newmark::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -458,7 +458,7 @@ int XC::Newmark::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::Newmark::recvSelf(const Communicator &comm)
   {
     inicComm(25);

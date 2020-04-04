@@ -356,7 +356,7 @@ void XC::BeamFiberMaterial::Print(std::ostream &s, int flag) const
     theMaterial->Print(s, flag);
 }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::BeamFiberMaterial::sendData(Communicator &comm)
   {
     int res= NDAdaptorMaterial::sendData(comm);
@@ -364,7 +364,7 @@ int XC::BeamFiberMaterial::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::BeamFiberMaterial::recvData(const Communicator &comm)
   {
     int res= NDAdaptorMaterial::recvData(comm);
@@ -372,7 +372,7 @@ int XC::BeamFiberMaterial::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::BeamFiberMaterial::sendSelf(Communicator &comm) 
   {
     setDbTag(comm);
@@ -386,7 +386,7 @@ int XC::BeamFiberMaterial::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::BeamFiberMaterial::recvSelf(const Communicator &comm)
   {
     inicComm(7);

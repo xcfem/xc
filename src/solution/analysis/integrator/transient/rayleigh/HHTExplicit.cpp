@@ -285,7 +285,7 @@ int XC::HHTExplicit::commit(void)
     return commitModel();
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::HHTExplicit::sendData(Communicator &comm)
   {
     int res= HHTRayleighBase::sendData(comm);
@@ -293,7 +293,7 @@ int XC::HHTExplicit::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::HHTExplicit::recvData(const Communicator &comm)
   {
     int res= HHTRayleighBase::recvData(comm);

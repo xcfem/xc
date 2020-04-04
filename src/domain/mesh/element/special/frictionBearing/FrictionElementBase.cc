@@ -109,7 +109,7 @@ XC::FrictionElementBase::~FrictionElementBase()
   }
 
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::FrictionElementBase::sendData(Communicator &comm)
   {
     int res= Element0D::sendData(comm);
@@ -127,7 +127,7 @@ int XC::FrictionElementBase::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::FrictionElementBase::recvData(const Communicator &comm)
   {
     int res= Element0D::recvData(comm);

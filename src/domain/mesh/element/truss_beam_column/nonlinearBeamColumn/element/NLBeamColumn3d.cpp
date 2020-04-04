@@ -957,14 +957,14 @@ const XC::Vector &XC::NLBeamColumn3d::getResistingForceIncInertia(void) const
     return theVector;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::NLBeamColumn3d::sendData(Communicator &comm)
   {
     int res= NLForceBeamColumn3dBase::sendData(comm);
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::NLBeamColumn3d::recvData(const Communicator &comm)
   {
     int res= NLForceBeamColumn3dBase::recvData(comm);

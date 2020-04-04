@@ -268,7 +268,7 @@ XC::DbTagData &XC::LoadContainer::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::LoadContainer::sendData(Communicator &comm)
   {
     int res= comm.sendMovable(*theNodalLoads,getDbTagData(),CommMetaData(0));
@@ -276,7 +276,7 @@ int XC::LoadContainer::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::LoadContainer::recvData(const Communicator &comm)
   {
     clearAll();
@@ -285,7 +285,7 @@ int XC::LoadContainer::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::LoadContainer::sendSelf(Communicator &comm)
   {
     inicComm(2);
@@ -299,7 +299,7 @@ int XC::LoadContainer::sendSelf(Communicator &comm)
   }
 
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::LoadContainer::recvSelf(const Communicator &comm)
   {
     inicComm(2);

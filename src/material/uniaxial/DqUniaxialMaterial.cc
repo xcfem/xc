@@ -345,7 +345,7 @@ void XC::DqUniaxialMaterial::push_front(const UniaxialMaterial *t,SectionForceDe
       }
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::DqUniaxialMaterial::sendData(Communicator &comm)
   {
     const size_t sz= size();
@@ -359,7 +359,7 @@ int XC::DqUniaxialMaterial::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::DqUniaxialMaterial::recvData(const Communicator &comm)
   {
     const size_t sz= getDbTagDataPos(0);
@@ -378,7 +378,7 @@ int XC::DqUniaxialMaterial::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::DqUniaxialMaterial::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -392,7 +392,7 @@ int XC::DqUniaxialMaterial::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::DqUniaxialMaterial::recvSelf(const Communicator &comm)
   {
     const int dataTag= getDbTag();

@@ -81,15 +81,15 @@ XC::DbTagData &XC::CFactorSeries::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::CFactorSeries::sendData(Communicator &comm)
   { return comm.sendDouble(cFactor,getDbTagData(),CommMetaData(0)); }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::CFactorSeries::recvData(const Communicator &comm)
   { return comm.receiveDouble(cFactor,getDbTagData(),CommMetaData(0)); }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::CFactorSeries::sendSelf(Communicator &comm)
   {
     inicComm(1);
@@ -103,7 +103,7 @@ int XC::CFactorSeries::sendSelf(Communicator &comm)
     return result;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::CFactorSeries::recvSelf(const Communicator &comm)
   {
     inicComm(1);

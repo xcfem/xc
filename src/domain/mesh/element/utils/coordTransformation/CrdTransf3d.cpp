@@ -493,7 +493,7 @@ const XC::Vector &XC::CrdTransf3d::getCooPoint(const double &xrel) const
 void XC::CrdTransf3d::gira(const double &theta)
   { set_xz_vector(m_double_to_matrix(GiroX(-theta))*get_xz_vector()); }
 
-//! @brief Sends object members through the channel being passed as parameter.
+//! @brief Sends object members through the communicator argument.
 int XC::CrdTransf3d::sendData(Communicator &comm)
   {
     int res= CrdTransf::sendData(comm);
@@ -503,7 +503,7 @@ int XC::CrdTransf3d::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::CrdTransf3d::recvData(const Communicator &comm)
   {
     int res= CrdTransf::recvData(comm);

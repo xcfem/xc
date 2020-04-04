@@ -980,7 +980,7 @@ bool XC::NLBeamColumn2d::isSubdomain(void)
   { return false; }
 
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::NLBeamColumn2d::sendData(Communicator &comm)
   {
     int res= NLForceBeamColumn2dBase::sendData(comm);
@@ -988,7 +988,7 @@ int XC::NLBeamColumn2d::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::NLBeamColumn2d::recvData(const Communicator &comm)
   {
     int res= NLForceBeamColumn2dBase::recvData(comm);

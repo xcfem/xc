@@ -62,7 +62,7 @@ int XC::ElasticPlateBase::revertToLastCommit(void)
 int XC::ElasticPlateBase::revertToStart(void)
   { return 0; }
 
-//! @brief Send data through the channel being passed as parameter.
+//! @brief Send data through the communicator argument.
 int XC::ElasticPlateBase::sendData(Communicator &comm)
   {
     int res= PlateBase::sendData(comm);
@@ -70,7 +70,7 @@ int XC::ElasticPlateBase::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receive data through the channel being passed as parameter.
+//! @brief Receive data through the communicator argument.
 int XC::ElasticPlateBase::recvData(const Communicator &comm)
   {
     int res= PlateBase::recvData(comm);

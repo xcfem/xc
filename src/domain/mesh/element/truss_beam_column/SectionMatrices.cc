@@ -66,7 +66,7 @@ void XC::SectionMatrices::initialize(const size_t &i,const int &order)
     SsrSubdivide[i]= Vector(order);
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::SectionMatrices::sendSelf(Communicator &comm)
   {
     inicComm(3);
@@ -82,7 +82,7 @@ int XC::SectionMatrices::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::SectionMatrices::recvSelf(const Communicator &comm)
   {
     inicComm(3);

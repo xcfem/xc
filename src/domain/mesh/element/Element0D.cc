@@ -405,7 +405,7 @@ XC::ElemPtrArray3d XC::Element0D::sew(const SetEstruct &f1,const SetEstruct &f2)
     return retval;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::Element0D::sendData(Communicator &comm)
   {
     int res= ElementBase<2>::sendData(comm);
@@ -414,7 +414,7 @@ int XC::Element0D::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives members through the channel being passed as parameter.
+//! @brief Receives members through the communicator argument.
 int XC::Element0D::recvData(const Communicator &comm)
   {
     int res= ElementBase<2>::recvData(comm);

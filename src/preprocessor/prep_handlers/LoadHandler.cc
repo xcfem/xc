@@ -95,7 +95,7 @@ XC::DbTagData &XC::LoadHandler::getDbTagData(void) const
     return retval;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::LoadHandler::sendData(Communicator &comm)
   {
     int res= sendMap(ground_motions,comm,getDbTagData(),CommMetaData(0));
@@ -105,7 +105,7 @@ int XC::LoadHandler::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Send members through the channel being passed as parameter.
+//! @brief Send members through the communicator argument.
 int XC::LoadHandler::recvData(const Communicator &comm)
   {
     int res= receiveMap(ground_motions,comm,getDbTagData(),CommMetaData(0),&FEM_ObjectBroker::getNewGroundMotion);
@@ -115,7 +115,7 @@ int XC::LoadHandler::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::LoadHandler::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -131,7 +131,7 @@ int XC::LoadHandler::sendSelf(Communicator &comm)
   }
 
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::LoadHandler::recvSelf(const Communicator &comm)
   {
     DbTagData &dbTagData= getDbTagData();

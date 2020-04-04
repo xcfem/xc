@@ -96,7 +96,7 @@ XC::FiberSectionBase &XC::FiberSectionBase::operator=(const FiberSectionBase &ot
     return *this;
   }
 
-//! @brief Send data through the channel being passed as parameter.
+//! @brief Send data through the communicator argument.
 int XC::FiberSectionBase::sendData(Communicator &comm)
   {
     int res= PrismaticBarCrossSection::sendData(comm);
@@ -110,7 +110,7 @@ int XC::FiberSectionBase::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receive data through the channel being passed as parameter.
+//! @brief Receive data through the communicator argument.
 int XC::FiberSectionBase::recvData(const Communicator &comm)
   {    
     int res= PrismaticBarCrossSection::recvData(comm);

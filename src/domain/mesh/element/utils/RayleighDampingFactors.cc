@@ -72,21 +72,21 @@ int XC::RayleighDampingFactors::updateParameter(int parameterID, Information &in
       }
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::RayleighDampingFactors::sendData(Communicator &comm)
   {
     int res=comm.sendDoubles(alphaM,betaK,betaK0,betaKc,getDbTagData(),CommMetaData(1));
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::RayleighDampingFactors::recvData(const Communicator &comm)
   {
     int res= comm.receiveDoubles(alphaM,betaK,betaK0,betaKc,getDbTagData(),CommMetaData(1));
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::RayleighDampingFactors::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -101,7 +101,7 @@ int XC::RayleighDampingFactors::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::RayleighDampingFactors::recvSelf(const Communicator &comm)
   {
     inicComm(2);

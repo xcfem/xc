@@ -306,7 +306,7 @@ void XC::PrismaticBarCrossSectionsVector::setTrialSectionDeformations(const std:
       (*this)[i]->setTrialSectionDeformation(vs[i]);
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::PrismaticBarCrossSectionsVector::sendData(Communicator &comm)
   {
     const size_t sz= size();
@@ -320,7 +320,7 @@ int XC::PrismaticBarCrossSectionsVector::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::PrismaticBarCrossSectionsVector::recvData(const Communicator &comm)
   {
     const size_t sz= getDbTagDataPos(0);
@@ -338,7 +338,7 @@ int XC::PrismaticBarCrossSectionsVector::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::PrismaticBarCrossSectionsVector::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -352,7 +352,7 @@ int XC::PrismaticBarCrossSectionsVector::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::PrismaticBarCrossSectionsVector::recvSelf(const Communicator &comm)
   {
     inicComm(2);

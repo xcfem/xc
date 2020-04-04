@@ -593,7 +593,7 @@ double XC::PySimple1::getDragResistanceFactor(void) const
 XC::UniaxialMaterial *XC::PySimple1::getCopy(void) const
   { return new PySimple1(*this); }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::PySimple1::sendData(Communicator &comm)
   {
     int res= PQyzBase::sendData(comm);
@@ -605,7 +605,7 @@ int XC::PySimple1::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::PySimple1::recvData(const Communicator &comm)
   {
     int res= PQyzBase::recvData(comm);

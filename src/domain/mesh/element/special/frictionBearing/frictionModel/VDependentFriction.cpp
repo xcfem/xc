@@ -78,7 +78,7 @@ int XC::VDependentFriction::revertToStart(void)
 XC::FrictionModel *XC::VDependentFriction::getCopy(void) const
   { return new VDependentFriction(*this); }
 
-//! @brief Send data through the channel being passed as parameter.
+//! @brief Send data through the communicator argument.
 int XC::VDependentFriction::sendData(Communicator &comm)
   {
     int res= CoulombFriction::sendData(comm);
@@ -87,7 +87,7 @@ int XC::VDependentFriction::sendData(Communicator &comm)
   }
 
 
-//! @brief Receive data through the channel being passed as parameter.
+//! @brief Receive data through the communicator argument.
 int XC::VDependentFriction::recvData(const Communicator &comm)
   {
     int res= CoulombFriction::recvData(comm);

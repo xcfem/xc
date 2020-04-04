@@ -198,7 +198,7 @@ int XC::MFreedom_Constraint::applyConstraint(double timeStamp)
     return 0;
   }
 
-//! @brief Sends data through the channel being passed as parameter.
+//! @brief Sends data through the communicator argument.
 int XC::MFreedom_Constraint::sendData(Communicator &comm)
   {
     int res= MFreedom_ConstraintBase::sendData(comm);
@@ -207,7 +207,7 @@ int XC::MFreedom_Constraint::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives data through the channel being passed as parameter.
+//! @brief Receives data through the communicator argument.
 int XC::MFreedom_Constraint::recvData(const Communicator &comm)
   {
     int res= MFreedom_ConstraintBase::recvData(comm);
@@ -216,7 +216,7 @@ int XC::MFreedom_Constraint::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::MFreedom_Constraint::sendSelf(Communicator &comm)
   {
     inicComm(14);
@@ -230,7 +230,7 @@ int XC::MFreedom_Constraint::sendSelf(Communicator &comm)
   }
 
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::MFreedom_Constraint::recvSelf(const Communicator &comm)
   {
     inicComm(14);

@@ -491,7 +491,7 @@ const XC::Vector &XC::FourNodeQuad::getResistingForceIncInertia(void) const
     return P;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::FourNodeQuad::sendData(Communicator &comm)
   {
     int res= QuadBase4N<SolidMech2D>::sendData(comm);
@@ -501,7 +501,7 @@ int XC::FourNodeQuad::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::FourNodeQuad::recvData(const Communicator &comm)
   {
     int res= QuadBase4N<SolidMech2D>::recvData(comm);
@@ -511,7 +511,7 @@ int XC::FourNodeQuad::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::FourNodeQuad::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -526,7 +526,7 @@ int XC::FourNodeQuad::sendSelf(Communicator &comm)
   }
 
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::FourNodeQuad::recvSelf(const Communicator &comm)
   {
     inicComm(14);

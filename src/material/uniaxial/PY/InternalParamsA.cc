@@ -53,21 +53,21 @@ void XC::InternalParamsA::revertToStart(const double &tg)
     Tang= tg;
   }
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::InternalParamsA::sendData(Communicator &comm)
   {
     int res= comm.sendDoubles(v,R,Tang,getDbTagData(),CommMetaData(0));
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::InternalParamsA::recvData(const Communicator &comm)
   {
     int res= comm.receiveDoubles(v,R,Tang,getDbTagData(),CommMetaData(0));
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int XC::InternalParamsA::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -81,7 +81,7 @@ int XC::InternalParamsA::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int XC::InternalParamsA::recvSelf(const Communicator &comm)
   {
     inicComm(1);

@@ -903,7 +903,7 @@ const XC::Matrix &XC::BbarBrick::computeBbar( int node,
 
 
 
-//! @brief Send object members through the channel being passed as parameter.
+//! @brief Send object members through the communicator argument.
 int XC::BbarBrick::sendData(Communicator &comm)
   {
     int res= BrickBase::sendData(comm);
@@ -912,7 +912,7 @@ int XC::BbarBrick::sendData(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object members through the channel being passed as parameter.
+//! @brief Receives object members through the communicator argument.
 int XC::BbarBrick::recvData(const Communicator &comm)
   {
     int res= BrickBase::recvData(comm);
@@ -921,7 +921,7 @@ int XC::BbarBrick::recvData(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object through the channel being passed as parameter.
+//! @brief Sends object through the communicator argument.
 int  XC::BbarBrick::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
@@ -935,7 +935,7 @@ int  XC::BbarBrick::sendSelf(Communicator &comm)
     return res;
   }
 
-//! @brief Receives object through the channel being passed as parameter.
+//! @brief Receives object through the communicator argument.
 int  XC::BbarBrick::recvSelf(const Communicator &comm)
   {
     inicComm(15);
