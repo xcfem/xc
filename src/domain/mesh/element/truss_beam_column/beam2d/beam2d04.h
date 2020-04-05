@@ -68,7 +68,7 @@
 namespace XC {
 class Channel;
 
-//! @ingroup OneDimensionalElem
+//! @ingroup BeamColumnElemGrp
 //
 //! @brief 2D beam 04 element.
 class beam2d04: public beam2d

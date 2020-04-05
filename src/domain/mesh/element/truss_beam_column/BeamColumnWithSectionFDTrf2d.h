@@ -38,7 +38,7 @@ class Node;
 class CrdTransf;
 class CrdTransf2d;
 
-//! @ingroup OneDimensionalElem
+//! @ingroup BeamColumnElemGrp
 //
 //! @brief 2D beam element with SectionForceDeformation type material.
 class BeamColumnWithSectionFDTrf2d: public BeamColumnWithSectionFD

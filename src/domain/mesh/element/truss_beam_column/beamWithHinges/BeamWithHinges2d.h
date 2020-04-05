@@ -68,7 +68,7 @@ class CrdTransf2d;
 class Response;
 class Renderer;
 
-//! @ingroup OneDimensionalElem
+//! @ingroup BeamColumnElemGrp
 //
 //! @brief 2D beam with hinges in both ends.
 //!

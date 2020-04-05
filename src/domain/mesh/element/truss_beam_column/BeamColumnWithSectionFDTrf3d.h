@@ -60,7 +60,7 @@ class Node;
 class CrdTransf;
 class CrdTransf3d;
 
-//! @ingroup OneDimensionalElem
+//! @ingroup BeamColumnElemGrp
 //
 //! @brief 3D beam colun element with PrismaticBarCrossSection material type.
 class BeamColumnWithSectionFDTrf3d: public BeamColumnWithSectionFD

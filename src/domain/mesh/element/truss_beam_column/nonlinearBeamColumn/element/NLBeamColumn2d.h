@@ -83,11 +83,11 @@ namespace XC {
 class Response;
 class CrdTransf2d;
 
-//! @ingroup OneDimensionalElem
+//! @ingroup BeamColumnElemGrp
 //!
 //! @defgroup OneDimensionalElemNL Nonlinear beam-column bidimensional elements.
 //
-//! @ingroup OneDimensionalElemNL
+//! @ingroup BeamColumnElemGrpNL
 //! @brief Nonlinear beam-column bidimensional elements.
 class NLBeamColumn2d: public NLForceBeamColumn2dBase
   {

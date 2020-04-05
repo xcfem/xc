@@ -63,7 +63,7 @@
 
 namespace XC {
 
-//! @ingroup OneDimensionalElem
+//! @ingroup BeamColumnElemGrp
 //
 //! @brief 3D beam 02 element.
 class beam3d02: public beam3dBase

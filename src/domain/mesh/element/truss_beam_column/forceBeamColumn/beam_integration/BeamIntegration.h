@@ -65,7 +65,7 @@ class FVector;
 class CrdTransf;
 class Vector;
 
-//! @ingroup OneDimensionalElemF
+//! @ingroup BeamColumnElemGrpF
 //!
 //! @defgroup BeamInteg Function integration over the element domain.
 //

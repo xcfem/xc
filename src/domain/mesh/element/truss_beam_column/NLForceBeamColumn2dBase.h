@@ -38,7 +38,7 @@
 
 namespace XC {
 
-//! @ingroup OneDimensionalElem Nonlinear beam-column bidimensional elements.
+//! @ingroup BeamColumnElemGrp Nonlinear beam-column bidimensional elements.
 //
 //! @brief Nonlinear beam-column bidimensional elements.
 class NLForceBeamColumn2dBase: public BeamColumnWithSectionFDTrf2d

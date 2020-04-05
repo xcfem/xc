@@ -75,7 +75,7 @@ namespace XC {
 class Response;
 class GaussLobattoQuadRule1d01;
 
-//! @ingroup OneDimensionalElemNL
+//! @ingroup BeamColumnElemGrpNL
 //
 //! @brief 3D materially nonlinear flexibility based frame element.
 class NLBeamColumn3d: public  NLForceBeamColumn3dBase

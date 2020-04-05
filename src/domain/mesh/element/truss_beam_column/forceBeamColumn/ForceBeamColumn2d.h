@@ -62,11 +62,11 @@ class ElementalLoad;
 class BeamIntegration;
 class PrismaticBarCrossSection;
 
-//! @ingroup OneDimensionalElem
+//! @ingroup BeamColumnElemGrp
 //!
 //! @defgroup OneDimensionalElemF Force based nonlinear beam-column element.
 //
-//! @ingroup OneDimensionalElemF
+//! @ingroup BeamColumnElemGrpF
 //! @brief Force based 2D beam column element with PrismaticBarCrossSection type nonlinear material.
 class ForceBeamColumn2d: public NLForceBeamColumn2dBase
   {

@@ -73,7 +73,7 @@ class Information;
 class Response;
 class SectionForceDeformation;
 
-//! @ingroup OneDimensionalElem
+//! @ingroup BeamColumnElemGrp
 //
 //! @brief 3D elastic beam element.
 class ElasticBeam3d: public ProtoBeam3d

@@ -33,7 +33,7 @@
 #include <utility/matrix/Matrix.h>
 
 namespace XC {
-//! @ingroup OneDimensionalElem
+//! @ingroup BeamColumnElemGrp
 //!
 //! @brief Quadratic model of cyclic connector behavior.
 class QuadraticCyclic: public CyclicModel

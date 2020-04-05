@@ -32,7 +32,7 @@
 #include <utility/actor/actor/MovableObject.h>
 
 namespace XC {
-//! @ingroup OneDimensionalElem
+//! @ingroup BeamColumnElemGrp
 //!
 //! @brief Base class for object that model the cyclic
 //! behavior of semi-rigid connectors.

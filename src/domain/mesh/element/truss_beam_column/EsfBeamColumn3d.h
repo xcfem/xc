@@ -40,7 +40,7 @@ class DbTagData;
 class FEM_ObjectBroker;
 class Communicator;
 
-//! @ingroup OneDimensionalElem
+//! @ingroup BeamColumnElemGrp
 //
 //! @brief 3D beam column internal forces.
 class EsfBeamColumn3d: public Vector

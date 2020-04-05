@@ -68,7 +68,7 @@
 namespace XC {
 class CrdTransf2d;
 
-//! @ingroup OneDimensionalElem
+//! @ingroup BeamColumnElemGrp
 //
 //! @brief 2D beam 02 element.
 class beam2d02: public beam2d

@@ -31,7 +31,7 @@
 #include "domain/mesh/element/truss_beam_column/updatedLagrangianBeamColumn/InelasticYS2DGNL.h"
 
 namespace XC {
-//! @ingroup OneDimensionalElem
+//! @ingroup BeamColumnElemGrp
 //
 //! @brief ??.
 class Inelastic2DYS01: public InelasticYS2DGNL

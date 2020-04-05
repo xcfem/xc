@@ -76,7 +76,7 @@ class Matrix;
  class Parameter;
  class Information;
 
-//! @ingroup OneDimensionalElemNL
+//! @ingroup BeamColumnElemGrpNL
 //!
 //! @defgroup Quadrature Function integration over the element domain.
 //

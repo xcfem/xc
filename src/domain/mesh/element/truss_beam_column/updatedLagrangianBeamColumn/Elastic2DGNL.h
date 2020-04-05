@@ -58,7 +58,7 @@
 #include "domain/mesh/element/truss_beam_column/updatedLagrangianBeamColumn/UpdatedLagrangianBeam2D.h"
 
 namespace XC {
-//! @ingroup OneDimensionalElem
+//! @ingroup BeamColumnElemGrp
 //
 //! @brief Elastic2dGNL is a subclass of UpdatedLagrangianBeam2D, that can be 
 // used to model 2d beam column elements with large deformation effects.

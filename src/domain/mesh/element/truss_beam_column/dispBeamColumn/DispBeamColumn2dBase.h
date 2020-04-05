@@ -71,7 +71,7 @@ class CrdTransf2d;
 class Response;
 class BeamIntegration;
 
-//! @ingroup OneDimensionalElem
+//! @ingroup BeamColumnElemGrp
 //!
 //! @defroup DispBeamColumnGrp Finite elements based on displacement
 //!                            formulation.

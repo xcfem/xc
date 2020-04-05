@@ -34,7 +34,7 @@
 #include "material/section/repres/CrossSectionProperties3d.h"
 
 namespace XC {
-//! @ingroup OneDimensionalElem
+//! @ingroup BeamColumnElemGrp
 //
 //! @brief Base class for 3D beams.
 class ProtoBeam3d: public Element1D

@@ -31,7 +31,7 @@
 #include "CyclicModel.h"
 
 namespace XC {
-//! @ingroup OneDimensionalElem
+//! @ingroup BeamColumnElemGrp
 //!
 //! @brief Linear model of cyclic connector behavior.
 class LinearCyclic: public CyclicModel

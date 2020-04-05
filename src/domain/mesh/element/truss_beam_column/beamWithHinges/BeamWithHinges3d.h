@@ -68,7 +68,7 @@ class PrismaticBarCrossSection;
 class Response;
 class Renderer;
 
-//! @ingroup OneDimensionalElem
+//! @ingroup BeamColumnElemGrp
 //
 //! @brief 3D beam with hinges in both ends.
 class BeamWithHinges3d: public BeamColumnWithSectionFDTrf3d

@@ -70,7 +70,7 @@
 namespace XC {
 class Response;
 
-//! @ingroup OneDimensionalElem
+//! @ingroup BeamColumnElemGrp
 //
 //! @brief Lagrangian 2D beam element.
 class UpdatedLagrangianBeam2D: public Element1D
