@@ -66,9 +66,10 @@
 
 namespace XC {
 
-//! @ingroup OneDimensionalElem
+//! @ingroup DispBeamColumnGrp
 //
-//! @brief displacement based 2D beam element with PrismaticBarCrossSection type material.
+//! @brief Displacement based 2D beam element with
+//! PrismaticBarCrossSection type material.
 class DispBeamColumn2d: public DispBeamColumn2dBase
   {
   private:

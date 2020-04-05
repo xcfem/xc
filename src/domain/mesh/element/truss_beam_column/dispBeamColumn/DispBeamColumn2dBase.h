@@ -72,8 +72,11 @@ class Response;
 class BeamIntegration;
 
 //! @ingroup OneDimensionalElem
+//!
+//! @defroup DispBeamColumnGrp Finite elements based on displacement
+//!                            formulation.
 //
-//! @brief displacement based 2D beam element with PrismaticBarCrossSection type material.
+//! @brief Base class for displacement based 2D beam elements.
 class DispBeamColumn2dBase: public BeamColumnWithSectionFDTrf2d
   {
   private:

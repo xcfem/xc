@@ -71,7 +71,7 @@ class CrdTransf3d;
 class Response;
 class BeamIntegration;
 
-//! @ingroup OneDimensionalElem
+//! @ingroup DispBeamColumnGrp
 //
 //! @brief 3D beam element with PrismaticBarCrossSection type material.
 class DispBeamColumn3d: public BeamColumnWithSectionFDTrf3d
