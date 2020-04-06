@@ -58,7 +58,10 @@ namespace XC {
 
 //! @ingroup BeamInteg
 //
-//! @brief User defined integration over the beam.
+//! @brief User defined integration on beam elements.
+//!
+//! This option allows the user to specify locations and weights of the
+//! integration points.
 class UserDefinedBeamIntegration: public UserDefinedBeamIntegrationBase
  {
  public:

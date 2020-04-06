@@ -55,6 +55,16 @@
 #include "ParameterIDBeamIntegration.h"
 namespace XC {
 
+//! @ingroup BeamInteg
+//
+//! @brief Generalization of the Fixed Location and User Defined
+//! integration formulas.
+//!
+//! This option is a generalization of the Fixed Location and User Defined
+//! integration approaches and is useful for moving load analysis. The
+//! locations of the integration points are user-defined, while a selected
+//! number of weights are specified and the remaining weights are computed
+//! by the method of undetermined coefficients.
 class LowOrderBeamIntegration: public ParameterIDBeamIntegration
   {
   protected:

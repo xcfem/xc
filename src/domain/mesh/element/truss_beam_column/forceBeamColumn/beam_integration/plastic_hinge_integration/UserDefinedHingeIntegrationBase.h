@@ -46,44 +46,44 @@
 ** ****************************************************************** */
 
 // $Revision: 1.1 $
-// $Date: 2006/01/17 21:12:56 $
-// $Source: /usr/local/cvs/OpenSees/SRC/element/forceBeamColumn/LegendreBeamIntegration.h,v $
+// $Date: 2006/01/18 21:58:24 $
+// $Source: /usr/local/cvs/OpenSees/SRC/element/forceBeamColumn/UserDefinedHingeIntegrationBase.h,v $
 
-#ifndef LegendreBeamIntegration_h
-#define LegendreBeamIntegration_h
+#ifndef UserDefinedHingeIntegrationBase_h
+#define UserDefinedHingeIntegrationBase_h
 
-#include <domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/BeamIntegration.h>
+#include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/UserDefinedBeamIntegrationBase.h"
 
 namespace XC {
-class Matrix;
-class ElementalLoad;
 class Channel;
 class FEM_ObjectBroker;
 
-//! @ingroup BeamInteg
+//! @ingroup PlasticHingeBeamInteg
 //
-//! @brief Gauss-Legendre integration on beam elements.
-//!
-//! Gauss-Legendre integration is more accurate than Gauss-Lobatto; however,
-//! it is not common in force-based elements because there are no integration
-//! points at the element ends.
-//! See <a href="https://en.wikipedia.org/wiki/Gaussian_quadrature#Gauss%E2%80%93Legendre_quadrature">Gauss-Legendre quadrature</a> 
-class LegendreBeamIntegration: public BeamIntegration
+//! @brief Base class for user defined hinge integration.
+class UserDefinedHingeIntegrationBase: public UserDefinedBeamIntegrationBase
   {
+  protected:
+    inline Vector &ptsL(void)
+      { return pts; }
+    inline const Vector &ptsL(void) const
+      { return pts; }
+    inline Vector &wtsL(void)
+      { return wts; }
+    inline const Vector &wtsL(void) const
+      { return wts; }
+    Vector ptsR;
+    Vector wtsR;
+    int sendData(Communicator &comm);
+    int recvData(const Communicator &comm);
   public:
-    LegendreBeamIntegration(void);
-
-    void getSectionLocations(int nIP, double L, double *xi) const;
-    void getSectionWeights(int nIP, double L, double *wt) const;
-
-    BeamIntegration *getCopy(void) const;
-
-    // These two methods do nothing
-    int sendSelf(Communicator &)
-      {return 0;}
-    int recvSelf(const Communicator &)
-      {return 0;}
-    void Print(std::ostream &s, int flag = 0) const;  
+    UserDefinedHingeIntegrationBase(int classTag, const Vector &, const Vector &, const Vector &, const Vector &);
+    UserDefinedHingeIntegrationBase(int classTag);
+    
+    void getSectionLocations(int numSections, double L, double *xi) const;
+    void getSectionWeights(int numSections, double L, double *wt) const;
+  
+    void Print(std::ostream &s, int flag = 0) const;
   };
 } // end of XC namespace
 

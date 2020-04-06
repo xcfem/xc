@@ -40,12 +40,12 @@
 #include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/RadauBeamIntegration.h"
 #include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/NewtonCotesBeamIntegration.h"
 #include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/UserDefinedBeamIntegration.h"
-#include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/HingeMidpointBeamIntegration.h"
-#include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/HingeEndpointBeamIntegration.h"
-#include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/HingeRadauBeamIntegration.h"
-#include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/HingeRadauTwoBeamIntegration.h"
-#include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/UserDefinedHingeIntegration.h"
-#include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/DistHingeIntegration.h"
+#include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/plastic_hinge_integration/HingeMidpointBeamIntegration.h"
+#include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/plastic_hinge_integration/HingeEndpointBeamIntegration.h"
+#include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/plastic_hinge_integration/HingeRadauBeamIntegration.h"
+#include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/plastic_hinge_integration/HingeRadauTwoBeamIntegration.h"
+#include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/plastic_hinge_integration/UserDefinedHingeIntegration.h"
+#include "domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/plastic_hinge_integration/DistHingeIntegration.h"
 
 
 

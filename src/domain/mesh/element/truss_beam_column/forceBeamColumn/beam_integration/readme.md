@@ -1,0 +1,1 @@
+Nuumerical integration options available in OpenSees(XC) to represent distributed plasticity or non-prismatic section details in force-based beam-column elements, i.e., across the entire element domain [0, L].

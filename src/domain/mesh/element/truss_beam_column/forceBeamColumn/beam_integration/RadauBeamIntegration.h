@@ -62,7 +62,11 @@ class FEM_ObjectBroker;
 
 //! @ingroup BeamInteg
 //
-//! @brief Base class for Radau integration on beam elements.
+//! @brief Gauss-Radau integration on beam elements.
+//!
+//! Gauss-Radau integration is not common in force-based elements because
+//! it places an integration point at only one end of the element; however,
+//! it forms the basis for optimal plastic hinge integration methods.
 class RadauBeamIntegration: public BeamIntegration
   {
   public:

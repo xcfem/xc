@@ -48,9 +48,10 @@
 // $Date: 2003/06/10 00:36:09 $
 // $Source: /usr/local/cvs/OpenSees/SRC/element/forceBeamColumn/LobattoBeamIntegration.cpp,v $
 
-#include <domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/LobattoBeamIntegration.h>
+#include "LobattoBeamIntegration.h"
 #include <iostream>
 
+//! @brief Default constructor.
 XC::LobattoBeamIntegration::LobattoBeamIntegration(void)
   : BeamIntegration(BEAM_INTEGRATION_TAG_Lobatto) {}
 

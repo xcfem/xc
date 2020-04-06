@@ -55,6 +55,14 @@
 #include "ParameterIDBeamIntegration.h"
 namespace XC {
 
+//! @ingroup BeamInteg
+//
+//! @brief Mid-Distance integration on beam elements.
+//!
+//! This option allows user-specified locations of the integration points. The
+//! associated integration weights are determined from the midpoints between
+//! adjacent integration point locations.
+//! \f$w_i = (x_{i+1} − x_{i−1})/2 for i = 2. . . N-1, w_1 = (x_1 + x_2)/2, and w_N = 1 − (x_{N −1}+ x_N)/2\f$.
 class MidDistanceBeamIntegration: public ParameterIDBeamIntegration
   {
   public:

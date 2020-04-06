@@ -1,4 +1,3 @@
-// -*-c++-*-
 //----------------------------------------------------------------------------
 //  XC program; finite element analysis code
 //  for structural analysis and design.
@@ -46,45 +45,25 @@
 ** ****************************************************************** */
 
 // $Revision: 1.1 $
-// $Date: 2006/01/17 21:12:56 $
-// $Source: /usr/local/cvs/OpenSees/SRC/element/forceBeamColumn/LegendreBeamIntegration.h,v $
+// $Date: 2006/01/18 21:58:24 $
+// $Source: /usr/local/cvs/OpenSees/SRC/element/forceBeamColumn/UserDefinedHingeIntegration.cpp,v $
 
-#ifndef LegendreBeamIntegration_h
-#define LegendreBeamIntegration_h
+#include "UserDefinedHingeIntegration.h"
+#include <utility/matrix/Matrix.h>
+#include <utility/matrix/Vector.h>
 
-#include <domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/BeamIntegration.h>
+XC::UserDefinedHingeIntegration::UserDefinedHingeIntegration(int npL,
+							 const XC::Vector &ptL,
+							 const XC::Vector &wtL,
+							 int npR,
+							 const XC::Vector &ptR,
+							 const XC::Vector &wtR):
+  UserDefinedHingeIntegrationBase(BEAM_INTEGRATION_TAG_UserHinge,ptL,wtL,ptR,wtR)
+  {}
 
-namespace XC {
-class Matrix;
-class ElementalLoad;
-class Channel;
-class FEM_ObjectBroker;
+XC::UserDefinedHingeIntegration::UserDefinedHingeIntegration():
+  UserDefinedHingeIntegrationBase(BEAM_INTEGRATION_TAG_UserHinge)
+  {}
 
-//! @ingroup BeamInteg
-//
-//! @brief Gauss-Legendre integration on beam elements.
-//!
-//! Gauss-Legendre integration is more accurate than Gauss-Lobatto; however,
-//! it is not common in force-based elements because there are no integration
-//! points at the element ends.
-//! See <a href="https://en.wikipedia.org/wiki/Gaussian_quadrature#Gauss%E2%80%93Legendre_quadrature">Gauss-Legendre quadrature</a> 
-class LegendreBeamIntegration: public BeamIntegration
-  {
-  public:
-    LegendreBeamIntegration(void);
-
-    void getSectionLocations(int nIP, double L, double *xi) const;
-    void getSectionWeights(int nIP, double L, double *wt) const;
-
-    BeamIntegration *getCopy(void) const;
-
-    // These two methods do nothing
-    int sendSelf(Communicator &)
-      {return 0;}
-    int recvSelf(const Communicator &)
-      {return 0;}
-    void Print(std::ostream &s, int flag = 0) const;  
-  };
-} // end of XC namespace
-
-#endif
+XC::BeamIntegration* XC::UserDefinedHingeIntegration::getCopy(void) const
+  { return new UserDefinedHingeIntegration(*this); }

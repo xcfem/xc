@@ -45,44 +45,52 @@
 **                                                                    **
 ** ****************************************************************** */
 
-// $Revision: 1.1 $
-// $Date: 2006/01/17 21:12:56 $
-// $Source: /usr/local/cvs/OpenSees/SRC/element/forceBeamColumn/LegendreBeamIntegration.h,v $
+// $Revision: 1.3 $
+// $Date: 2003/06/10 00:36:10 $
+// $Source: /usr/local/cvs/OpenSees/SRC/element/forceBeamColumn/UserDefinedHingeIntegration3d.h,v $
 
-#ifndef LegendreBeamIntegration_h
-#define LegendreBeamIntegration_h
+#ifndef UserDefinedHingeIntegration3d_h
+#define UserDefinedHingeIntegration3d_h
 
-#include <domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/BeamIntegration.h>
+#include "UserDefinedHingeIntegrationBase.h"
+
+#include <utility/matrix/Vector.h>
+#include "material/section/repres/CrossSectionProperties3d.h"
 
 namespace XC {
-class Matrix;
-class ElementalLoad;
-class Channel;
-class FEM_ObjectBroker;
 
-//! @ingroup BeamInteg
+//! @ingroup PlasticHingeBeamInteg
 //
-//! @brief Gauss-Legendre integration on beam elements.
-//!
-//! Gauss-Legendre integration is more accurate than Gauss-Lobatto; however,
-//! it is not common in force-based elements because there are no integration
-//! points at the element ends.
-//! See <a href="https://en.wikipedia.org/wiki/Gaussian_quadrature#Gauss%E2%80%93Legendre_quadrature">Gauss-Legendre quadrature</a> 
-class LegendreBeamIntegration: public BeamIntegration
+//! @brief 3D hinge user defined integration.
+class UserDefinedHingeIntegration3d: public UserDefinedHingeIntegrationBase
   {
+  protected:
+    CrossSectionProperties3d ctes_scc; //Mechanical properties of the section E,A,Iy,...
   public:
-    LegendreBeamIntegration(void);
+    UserDefinedHingeIntegration3d(int npL, const Vector &ptL, const Vector &wtL,
+				int npR, const Vector &ptR, const Vector &wtR,
+				double E, double A, double Iz,
+				double Iy, double G, double J);
+    UserDefinedHingeIntegration3d(int npL, const Vector &ptL, const Vector &wtL,
+				  int npR, const Vector &ptR, const Vector &wtR,
+				  const CrossSectionProperties3d &cts);
+    UserDefinedHingeIntegration3d(const CrossSectionProperties3d &cts= CrossSectionProperties3d());
+  
+    void getSectionLocations(int numSections, double L, double *xi) const;
+    void getSectionWeights(int numSections, double L, double *wt) const;
 
-    void getSectionLocations(int nIP, double L, double *xi) const;
-    void getSectionWeights(int nIP, double L, double *wt) const;
+    void addElasticDeformations(ElementalLoad *theLoad, double loadFactor,double L, double *v0);
+    int addElasticFlexibility(double L, Matrix &fe);
 
     BeamIntegration *getCopy(void) const;
 
-    // These two methods do nothing
-    int sendSelf(Communicator &)
-      {return 0;}
-    int recvSelf(const Communicator &)
-      {return 0;}
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
+
+    int setParameter(const std::vector<std::string> &argv, Parameter &param);
+    int updateParameter(int parameterID, Information &info);
+    int activateParameter(int parameterID);
+
     void Print(std::ostream &s, int flag = 0) const;  
   };
 } // end of XC namespace
