@@ -261,11 +261,15 @@ class GridModel(object):
         '''
         return 'l'+'%04.0f' % pt1 +'%04.0f' % pt2
 
-    def getNmSurfInRange(self,ijkRange):
+    def getNmSurfInRange(self,ijkRange,closeCyl='N'):
         '''Return a list with the names of the surfaces limited by a volume 
         defined by the coordinates that correspond to the indices in the grid 
         ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
         ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
+
+        :param ijkRange: instance of IJKRange class
+        :param closeCyl: 'Y' to close cylinder when using cylindrical coordinate system
+                        (defaults to 'N')
         '''
         (imin,jmin,kmin)=ijkRange.ijkMin
         (imax,jmax,kmax)=ijkRange.ijkMax
@@ -277,6 +281,9 @@ class GridModel(object):
         nmSurfXZ=[self.getNameQuadGridSurface(indPtsQs) for indPtsQs in indPtSurfXZ]
         'surfaces in YZ plane'
         indPtSurfYZ=[((i,j,k),(i,j+1,k),(i,j+1,k+1),(i,j,k+1)) for k in range(kmin,kmax) for j in range(jmin,jmax) for i in range(imin,imax+1)]
+        if closeCyl.lower()[0]=='y':
+            print ('closeCyl= ',closeCyl)
+            indPtSurfYZ+=[((i,jmax,k),(i,jmin,k),(i,jmin,k+1),(i,jmax,k+1)) for k in range(kmin,kmax) for i in range(imin,imax+1)]
         nmSurfYZ=[self.getNameQuadGridSurface(indPtsQs) for indPtsQs in indPtSurfYZ]
         return (nmSurfXY+nmSurfXZ+nmSurfYZ)
 
@@ -514,7 +521,7 @@ class GridModel(object):
 
         :param ind4Pnt: tuple of ordered points defined by their grid indices 
                         (i,j,k)
-        return the quadrangle surface
+        :return: the quadrangle surface
         '''
         (pto1,pto2,pto3,pto4)=tuple([self.getTagPntGrid(ind4Pnt[i]) for i in range(4)])
         nameSurf= self.gridSurfName(pto1,pto2,pto3,pto4)
@@ -548,42 +555,59 @@ class GridModel(object):
         return ln
 
 
-    def appendSurfRange(self,ijkRange,setSurf):
+    def appendSurfRange(self,ijkRange,setSurf,closeCyl='N'):
         '''generate the surfaces limited by a region defined by the coordinates
         that correspond to the indices in the grid 
         ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
         ijkRange.ijkMax=(indXmax,indYmax,indZmax)
         and append them to the set named 'nameSet'.
         Add those surfaces to the dictionary dicQuadSurf.
+
+        :param ijkRange: instance of IJKRange class
+        :param setSurf: name of the set
+        :param closeCyl: 'Y' to close cylinder when using cylindrical coordinate system
+                        (defaults to 'N')
+        
         '''
-        nmSurfinRang=self.getNmSurfInRange(ijkRange)
+        nmSurfinRang=self.getNmSurfInRange(ijkRange,closeCyl)
         for nameSurf in nmSurfinRang:
             s= self.newQuadGridSurface(nameSurf)
             self.dicQuadSurf[nameSurf]= s
             setSurf.getSurfaces.append(s)
 
-    def genSurfOneRegion(self,ijkRange,nameSet):
+    def genSurfOneRegion(self,ijkRange,nameSet,closeCyl='N'):
         '''generate the surfaces limited by a region defined by the coordinates
         that correspond to the indices in the grid 
         ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
         ijkRange.ijkMax=(indXmax,indYmax,indZmax).
         Return a set with the surfaces generated.
         Add those surfaces to the dictionary dicQuadSurf.
+
+        :param ijkRange: instance of IJKRange class
+        :param nameSet: name of the set
+        :param closeCyl: 'Y' to close cylinder when using cylindrical coordinate system
+                        (defaults to 'N')
+ 
         '''
         setSurf= self.prep.getSets.defSet(nameSet)
-        self.appendSurfRange(ijkRange,setSurf)
+        self.appendSurfRange(ijkRange,setSurf,closeCyl)
         return setSurf
     
-    def genSurfOneXYZRegion(self,xyzRange,nameSet):
+    def genSurfOneXYZRegion(self,xyzRange,nameSet,closeCyl='N'):
         '''generate the surfaces limited by a region defined by the coordinates
         defined in the range  xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
         Return a set with the surfaces generated.
         Add those surfaces to the dictionary dicQuadSurf.
-        '''
-        ijkRange=self.getIJKrangeFromXYZrange(xyzRange)
-        return self.genSurfOneRegion(ijkRange,nameSet)
 
-    def genSurfMultiRegion(self,lstIJKRange,nameSet):
+        :param xyzRange: range xyz
+        :param nameSet: name of the set
+        :param closeCyl: 'Y' to close cylinder when using cylindrical coordinate system
+                        (defaults to 'N')
+         '''
+        ijkRange=self.getIJKrangeFromXYZrange(xyzRange)
+        return self.genSurfOneRegion(ijkRange,nameSet,closeCyl)
+
+    def genSurfMultiRegion(self,lstIJKRange,nameSet,closeCyl='N'):
         '''generate the surfaces limited by all the regions included in the 
         list of ijkRanges passed as parameter.
         Each region defines a volume limited by the coordinates    
@@ -592,24 +616,34 @@ class GridModel(object):
         ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
         Return a set with the surfaces generated.
         Add those surfaces to the dictionary dicQuadSurf.
+
+        :param lstIJKRange: list of instances of IJKRange class
+        :param nameSet: name of the set
+        :param closeCyl: 'Y' to close cylinder when using cylindrical coordinate system
+                        (defaults to 'N')
         '''
         setSurf= self.prep.getSets.defSet(nameSet)
         for rg in lstIJKRange:
-            self.appendSurfRange(rg,setSurf)
+            self.appendSurfRange(rg,setSurf,closeCyl)
         return setSurf
 
-    def genSurfMultiXYZRegion(self,lstXYZRange,nameSet):
+    def genSurfMultiXYZRegion(self,lstXYZRange,nameSet,closeCyl='N'):
         '''generate the surfaces limited by all the regions included in the 
         list of xyzRanges passed as parameter.
         Each region defines a volume limited by the coordinates    
         that correspond to the coordinates in ranges xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
         Return a set with the surfaces generated.
         Add those surfaces to the dictionary dicQuadSurf.
-        '''
+
+        :param lstXYZRange: list of ranges xyz
+        :param nameSet: name of the set
+        :param closeCyl: 'Y' to close cylinder when using cylindrical coordinate system
+                        (defaults to 'N')
+         '''
         lstIJKRange=list()
         for rg in lstXYZRange:
             lstIJKRange.append(self.getIJKrangeFromXYZrange(rg))
-        return self.genSurfMultiRegion(lstIJKRange,nameSet)
+        return self.genSurfMultiRegion(lstIJKRange,nameSet,closeCyl)
         
     def appendLinRange(self,ijkRange,nameSet):
         '''generate the lines limited by a region defined by the coordinates
@@ -677,23 +711,28 @@ class GridModel(object):
             lstIJKRange.append(self.getIJKrangeFromXYZrange(rg))
         return self.genLinMultiRegion(lstIJKRange,nameSet)
         
-    def getSetSurfOneRegion(self,ijkRange,nameSet):
+    def getSetSurfOneRegion(self,ijkRange,nameSet,closeCyl='N'):
         '''return the set of surfaces and all the entities(lines, 
         points, elements, nodes, ...) associated 
         with them in a region limited by the coordinates
         that correspond to the indices in the grid 
         ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
-        ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
+        ijkRange.ijkMax=(indXmax,indYmax,indZmax).
+
+        :param ijkRange: instance of IJKRange class
+        :param nameSet: name of the set
+        :param closeCyl: 'Y' to close cylinder when using cylindrical coordinate system
+                        (defaults to 'N')
         '''
         setSurf= self.prep.getSets.defSet(nameSet)
-        nmSurfinRang=self.getNmSurfInRange(ijkRange)
+        nmSurfinRang=self.getNmSurfInRange(ijkRange,closeCyl)
         for nameSurf in nmSurfinRang:
             if nameSurf in self.dicQuadSurf:
                 setSurf.getSurfaces.append(self.dicQuadSurf[nameSurf])
         setSurf.fillDownwards()    
         return setSurf
 
-    def getSubsetSurfOneRegion(self,superset,ijkRange,nameSubset):
+    def getSubsetSurfOneRegion(self,superset,ijkRange,nameSubset,closeCyl='N'):
         '''return from the set 'superset' the set of surfaces and all the entities(lines, 
         points, elements, nodes, ...) associated 
         with them in a region limited by the coordinates
@@ -702,35 +741,34 @@ class GridModel(object):
         ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
         '''
         if self.prep.getSets.exists('auxSet'): self.prep.getSets.removeSet('auxSet') 
-        auxSet=self.getSetSurfOneRegion(ijkRange,'auxSet')
+        auxSet=self.getSetSurfOneRegion(ijkRange,'auxSet',closeCyl)
         subset=getSetIntersSurf(superset,auxSet,nameSubset)
         subset.fillDownwards()
         return subset
         
-        
-    def getSetSurfOneXYZRegion(self,xyzRange,nameSet):
+    def getSetSurfOneXYZRegion(self,xyzRange,nameSet,closeCyl='N'):
         '''return the set of surfaces and all the entities(lines, 
         points, elements, nodes, ...) associated 
         with them in a region limited by the coordinates
         in range xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
         '''
         ijkRange=self.getIJKrangeFromXYZrange(xyzRange)
-        return self.getSetSurfOneRegion(ijkRange,nameSet)
+        return self.getSetSurfOneRegion(ijkRange,nameSet,closeCyl)
         
-    def getSubsetSurfOneXYZRegion(self,superset,xyzRange,nameSubset):
+    def getSubsetSurfOneXYZRegion(self,superset,xyzRange,nameSubset,closeCyl='N'):
         '''return from the set 'superset' the set of surfaces and all the entities(lines, 
         points, elements, nodes, ...) associated 
         with them in a region limited by the coordinates
         in range xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
         '''
         if self.prep.getSets.exists('auxSet'): self.prep.getSets.removeSet('auxSet') 
-        auxSet=self.getSetSurfOneXYZRegion(xyzRange,'auxSet')
+        auxSet=self.getSetSurfOneXYZRegion(xyzRange,'auxSet',closeCyl)
         subset=getSetIntersSurf(superset,auxSet,nameSubset)
         subset.fillDownwards()
         return subset
 
     
-    def getSetSurfMultiRegion(self,lstIJKRange,nameSet):
+    def getSetSurfMultiRegion(self,lstIJKRange,nameSet,closeCyl='N'):
         '''return the set of surfaces and all the entities(lines,
         points, elements, nodes, ...) associated with them in a all
         the regions  included in the list of ijkRanges passed as parameter.
@@ -738,17 +776,22 @@ class GridModel(object):
         that correspond to the indices in the grid 
         ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
         ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
+
+        :param lstIJKRange: list of instances of IJKRange class
+        :param nameSet: name of the set
+        :param closeCyl: 'Y' to close cylinder when using cylindrical coordinate system
+                        (defaults to 'N')
         '''
         setSurf= self.prep.getSets.defSet(nameSet)
         for rg in lstIJKRange:
-            nmSurfinRang=self.getNmSurfInRange(rg)
+            nmSurfinRang=self.getNmSurfInRange(rg,closeCyl)
             for nameSurf in nmSurfinRang:
                 if nameSurf in self.dicQuadSurf:
                     setSurf.getSurfaces.append(self.dicQuadSurf[nameSurf])
         setSurf.fillDownwards()    
         return setSurf
 
-    def getSubsetSurfMultiRegion(self,superset,lstIJKRange,nameSubset):
+    def getSubsetSurfMultiRegion(self,superset,lstIJKRange,nameSubset,closeCyl='N'):
         '''return from the set 'superset' the set of surfaces and all the entities(lines,
         points, elements, nodes, ...) associated with them in a all
         the regions  included in the list of ijkRanges passed as parameter.
@@ -758,12 +801,12 @@ class GridModel(object):
         ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
         '''
         if self.prep.getSets.exists('auxSet'): self.prep.getSets.removeSet('auxSet') 
-        auxSet=self.getSetSurfMultiRegion(lstIJKRange,'auxSet')
+        auxSet=self.getSetSurfMultiRegion(lstIJKRange,'auxSet',closeCyl)
         subset=getSetIntersSurf(superset,auxSet,nameSubset)
         subset.fillDownwards()
         return subset
     
-    def getSetSurfMultiXYZRegion(self,lstXYZRange,nameSet):
+    def getSetSurfMultiXYZRegion(self,lstXYZRange,nameSet,closeCyl='N'):
         '''return the set of surfaces and all the entities(lines,
         points, elements, nodes, ...) associated with them in a all
         the regions  included in the list of xyzRanges passed as parameter.
@@ -773,9 +816,9 @@ class GridModel(object):
         lstIJKRange=list()
         for rg in lstXYZRange:
             lstIJKRange.append(self.getIJKrangeFromXYZrange(rg))
-        return self.getSetSurfMultiRegion(lstIJKRange,nameSet)
+        return self.getSetSurfMultiRegion(lstIJKRange,nameSet,closeCyl)
         
-    def getSubsetSurfMultiXYZRegion(self,superset,lstXYZRange,nameSubset):
+    def getSubsetSurfMultiXYZRegion(self,superset,lstXYZRange,nameSubset,closeCyl='N'):
         '''return from the set 'superset' the set of surfaces and all the entities(lines,
         points, elements, nodes, ...) associated with them in a all
         the regions  included in the list of xyzRanges passed as parameter.
@@ -783,7 +826,7 @@ class GridModel(object):
         that correspond to coordinates in range xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
         '''
         if self.prep.getSets.exists('auxSet'): self.prep.getSets.removeSet('auxSet') 
-        auxSet=self.getSetSurfMultiXYZRegion(lstXYZRange,'auxSet')
+        auxSet=self.getSetSurfMultiXYZRegion(lstXYZRange,'auxSet',closeCyl)
         subset=getSetIntersSurf(superset,auxSet,nameSubset)
         subset.fillDownwards()
         return subset
