@@ -1,0 +1,2 @@
+# Plastic Hinge Integration Methods
+Plastic hinge integration methods confine material yielding to regions of the element of specified length while the remainder of the element is linear elastic. A summary of plastic hinge integration methods is found in "Plastic hinge integration methods for force-based beam-column elements. Journal of Structural Engineering, 132(2):244–252, February 2006. M. H. Scott and G. L. Fenves."

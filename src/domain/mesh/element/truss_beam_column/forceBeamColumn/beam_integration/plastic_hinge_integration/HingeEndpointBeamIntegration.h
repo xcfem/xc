@@ -46,44 +46,38 @@
 ** ****************************************************************** */
 
 // $Revision: 1.1 $
-// $Date: 2006/01/17 21:12:56 $
-// $Source: /usr/local/cvs/OpenSees/SRC/element/forceBeamColumn/LegendreBeamIntegration.h,v $
+// $Date: 2006/01/17 21:32:35 $
+// $Source: /usr/local/cvs/OpenSees/SRC/element/forceBeamColumn/HingeEndpointBeamIntegration.h,v $
 
-#ifndef LegendreBeamIntegration_h
-#define LegendreBeamIntegration_h
+#ifndef HingeEndpointBeamIntegration_h
+#define HingeEndpointBeamIntegration_h
 
-#include <domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/BeamIntegration.h>
+#include "PlasticLengthsBeamIntegration.h"
 
 namespace XC {
-class Matrix;
-class ElementalLoad;
-class Channel;
-class FEM_ObjectBroker;
 
-//! @ingroup BeamInteg
+//! @ingroup PlasticHingeBeamInteg
 //
-//! @brief Gauss-Legendre integration on beam elements.
+//! @brief Endpoint hinge integration method.
 //!
-//! Gauss-Legendre integration is more accurate than Gauss-Lobatto; however,
-//! it is not common in force-based elements because there are no integration
-//! points at the element ends.
-//! See <a href="https://en.wikipedia.org/wiki/Gaussian_quadrature#Gauss%E2%80%93Legendre_quadrature">Gauss-Legendre quadrature</a> 
-class LegendreBeamIntegration: public BeamIntegration
+//! Endpoint integration over each hinge region moves the integration points
+//! to the element ends; however, there is a large integration error for
+//! linear curvature distributions along the element.
+class HingeEndpointBeamIntegration: public PlasticLengthsBeamIntegration
   {
   public:
-    LegendreBeamIntegration(void);
-
-    void getSectionLocations(int nIP, double L, double *xi) const;
-    void getSectionWeights(int nIP, double L, double *wt) const;
-
+    HingeEndpointBeamIntegration(double lpI, double lpJ);
+    HingeEndpointBeamIntegration(void);
+  
+    void getSectionLocations(int numSections, double L, double *xi) const;
+    void getSectionWeights(int numSections, double L, double *wt) const;
+  
     BeamIntegration *getCopy(void) const;
 
-    // These two methods do nothing
-    int sendSelf(Communicator &)
-      {return 0;}
-    int recvSelf(const Communicator &)
-      {return 0;}
-    void Print(std::ostream &s, int flag = 0) const;  
+    void Print(std::ostream &s, int flag = 0) const;
+
+    void getLocationsDeriv(int nIP, double L, double dLdh, double *dptsdh);
+    void getWeightsDeriv(int nIP, double L, double dLdh, double *dwtsdh); 
   };
 } // end of XC namespace
 

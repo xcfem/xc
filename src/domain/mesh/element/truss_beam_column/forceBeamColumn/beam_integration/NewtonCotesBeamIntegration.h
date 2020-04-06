@@ -59,6 +59,10 @@ namespace XC {
 //! @ingroup BeamInteg
 //
 //! @brief Newton-Cotes integration on beam elements.
+//!
+//! Newton-Cotes places integration points uniformly along the element,
+//! including a point at each end of the element.
+//! See <a href="https://en.wikipedia.org/wiki/Newton%E2%80%93Cotes_formulas">Newton-Cotes formulas</a> 
 class NewtonCotesBeamIntegration: public BeamIntegration
   {
   public:

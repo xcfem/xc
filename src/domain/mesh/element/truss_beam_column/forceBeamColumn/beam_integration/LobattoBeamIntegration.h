@@ -62,7 +62,13 @@ class FEM_ObjectBroker;
 
 //! @ingroup BeamInteg
 //
-//! @brief Base class for Lobatto integration on beams.
+//! @brief Gauss-Lobatto integration on beam elements.
+//!
+//! Gauss-Lobatto integration is the most common approach for evaluating
+//! the response of force-based elements [3] because it places an integration
+//! point at each end of the element, where bending moments are largest in
+//! the absence of interior element loads.
+//! See <a href="https://en.wikipedia.org/wiki/Gaussian_quadrature#Gauss%E2%80%93Lobatto_rules">Gauss-Lobatto quadrature</a>. 
 class LobattoBeamIntegration: public BeamIntegration
   {
   public:

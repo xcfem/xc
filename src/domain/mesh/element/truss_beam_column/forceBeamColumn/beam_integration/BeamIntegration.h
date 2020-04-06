@@ -70,7 +70,13 @@ class Vector;
 //! @defgroup BeamInteg Function integration over the element domain.
 //
 //! @ingroup BeamInteg
+//!
 //! @brief Base class for integration on beam elements.
+//!
+//! A wide range of numerical integration options are available in
+//! OpenSees(XC) to represent distributed plasticity or non-prismatic
+//! section details in force-based beam-column elements, i.e.,
+//! across the entire element domain [0, L].
 class BeamIntegration: public MovableObject, public CommandEntity
   {
   public:

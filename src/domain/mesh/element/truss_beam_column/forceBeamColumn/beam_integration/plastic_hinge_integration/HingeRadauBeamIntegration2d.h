@@ -45,14 +45,14 @@
 **                                                                    **
 ** ****************************************************************** */
 
-// $Revision: 1.1 $
-// $Date: 2006/01/17 21:12:56 $
-// $Source: /usr/local/cvs/OpenSees/SRC/element/forceBeamColumn/LegendreBeamIntegration.h,v $
+// $Revision: 1.5 $
+// $Date: 2003/06/10 00:36:09 $
+// $Source: /usr/local/cvs/OpenSees/SRC/element/forceBeamColumn/HingeRadauBeamIntegration2d.h,v $
 
-#ifndef LegendreBeamIntegration_h
-#define LegendreBeamIntegration_h
+#ifndef HingeRadauBeamIntegration2d_h
+#define HingeRadauBeamIntegration2d_h
 
-#include <domain/mesh/element/truss_beam_column/forceBeamColumn/beam_integration/BeamIntegration.h>
+#include "HingeBeamIntegration2d.h"
 
 namespace XC {
 class Matrix;
@@ -60,30 +60,32 @@ class ElementalLoad;
 class Channel;
 class FEM_ObjectBroker;
 
-//! @ingroup BeamInteg
+//! @ingroup PlasticHingeBeamInteg
 //
-//! @brief Gauss-Legendre integration on beam elements.
-//!
-//! Gauss-Legendre integration is more accurate than Gauss-Lobatto; however,
-//! it is not common in force-based elements because there are no integration
-//! points at the element ends.
-//! See <a href="https://en.wikipedia.org/wiki/Gaussian_quadrature#Gauss%E2%80%93Legendre_quadrature">Gauss-Legendre quadrature</a> 
-class LegendreBeamIntegration: public BeamIntegration
+//! @brief Radau hinge integration on beam elements.
+class HingeRadauBeamIntegration2d: public HingeBeamIntegration2d
   {
   public:
-    LegendreBeamIntegration(void);
+    HingeRadauBeamIntegration2d(double E, double A, double I,double lpI, double lpJ);
+    HingeRadauBeamIntegration2d();
+  
+    void getSectionLocations(int numSections, double L, double *xi) const;
+    void getSectionWeights(int numSections, double L, double *wt) const;
+  
+    int addElasticFlexibility(double L, Matrix &fe);
 
-    void getSectionLocations(int nIP, double L, double *xi) const;
-    void getSectionWeights(int nIP, double L, double *wt) const;
+    double getTangentDriftI(double L, double LI, double q2, double q3);
+    double getTangentDriftJ(double L, double LI, double q2, double q3);
 
     BeamIntegration *getCopy(void) const;
 
-    // These two methods do nothing
-    int sendSelf(Communicator &)
-      {return 0;}
-    int recvSelf(const Communicator &)
-      {return 0;}
-    void Print(std::ostream &s, int flag = 0) const;  
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
+
+    int setParameter(const std::vector<std::string> &argv, Parameter &param);
+    int updateParameter(int parameterID, Information &info);
+    int activateParameter(int parameterID);
+    void Print(std::ostream &s, int flag = 0) const;
   };
 } // end of XC namespace
 

@@ -57,7 +57,12 @@ namespace XC {
 
 //! @ingroup BeamInteg
 //
-//! @brief Integration points at fixed locations.
+//! @brief Integration rule that allows the user to set the integration
+//! points at fixed locations.
+//!
+//! This option allows user-specified locations of the integration points. The
+//! associated integration weights are computed by the method of undetermined
+//! coefficients (Vandermonde system).
 class FixedLocationBeamIntegration: public ParameterIDBeamIntegration
   {
   private:
