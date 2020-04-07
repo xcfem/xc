@@ -77,6 +77,7 @@ using std::map;
 namespace XC {
 class FEM_ObjectBroker;
 
+//! @brief Output file stream wrapper.
 typedef struct fileDatastoreOutputFile
   {
     fstream *theFile;
@@ -88,6 +89,7 @@ typedef map<int, FileDatastoreOutputFile *>      MAP_FILES;
 typedef MAP_FILES::value_type                    MAP_FILES_TYPE;
 typedef MAP_FILES::iterator                      MAP_FILES_ITERATOR;
 
+//! @brief Integer array wrapper.
 typedef struct intData
   {
     int *dbTag;
@@ -95,6 +97,7 @@ typedef struct intData
   } IntData;
 
 
+//! @brief Double array wrapper.
 typedef struct doubleData
   {
     int *dbTag;
