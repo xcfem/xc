@@ -39,6 +39,7 @@ class Vector;
 
 //! @ingroup Matrix
 //
+//! @brief Dynamically allocated vectors deque container.
 class DqVectors: public std::deque<Vector *>
   {
   private:

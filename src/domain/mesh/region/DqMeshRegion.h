@@ -37,7 +37,9 @@ namespace XC {
 
 class MeshRegion;
 
-//! @brief Vector de celdas.
+//! @ingroup Mesh
+//
+//! @brief Dinamically allocated mesh region deque container.
 class DqMeshRegion: protected std::deque<MeshRegion *>
   {
   public:

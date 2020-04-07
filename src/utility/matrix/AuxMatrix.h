@@ -40,7 +40,7 @@ namespace XC {
 
 //! @ingroup Matrix
 //
-//! Double and integer arrays used for calling
+//! @brief Double and integer arrays used for calling
 //! LAPACK routines.
 class AuxMatrix: public CommandEntity
   {

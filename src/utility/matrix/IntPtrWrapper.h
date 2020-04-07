@@ -36,6 +36,7 @@
 namespace XC {
 //! @ingroup Matrix
 //
+//! @brief Integer array wrapper class.
 class IntPtrWrapper: public CommandEntity
   {
   private:

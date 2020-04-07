@@ -38,6 +38,7 @@
 namespace XC {
 //! @ingroup Matrix
 //
+//! @brief Vector of integers to store constrained node tags.
 class IDVarSize: public ID
   {
     int defaultValue;

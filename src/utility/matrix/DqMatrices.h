@@ -40,6 +40,7 @@ class Matrix;
 
 //! @ingroup Matrix
 //
+//! @brief Dynamically allocated matrices deque container.
 class DqMatrices: public std::deque<Matrix *>
   {
   private:
