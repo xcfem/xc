@@ -65,7 +65,6 @@
 
 #include <domain/mesh/element/Element.h>
 #include <domain/mesh/node/Node.h>
-#include "utility/matrix/IDVarSize.h"
 #include <domain/domain/Domain.h>
 #include <utility/recorder/NodeRecorder.h>
 #include <utility/recorder/ElementRecorder.h>
@@ -77,84 +76,42 @@
 
 
 
-void XC::MeshRegion::free_mem(void) 
-  {
-    if(theNodes)
-      delete theNodes;
-    theNodes= nullptr;
-    if(theElements)
-      delete theElements;
-    theElements= nullptr;
-  }
-
-void XC::MeshRegion::copy(const MeshRegion &other) 
-  {
-    free_mem();
-    if(other.theNodes)
-      {
-        size_t numNodes = other.theNodes->Size();
-        theNodes = new IDVarSize(0, numNodes);
-        for(size_t i=0;i<numNodes;i++)
-          theNodes[i]= other.theNodes[i];
-      }
-  }
-
 XC::MeshRegion::MeshRegion(int tag) 
-  :ContinuaReprComponent(tag, REGION_TAG_MeshRegion), rayFactors(), theNodes(nullptr), theElements(nullptr),
+  :ContinuaReprComponent(tag, REGION_TAG_MeshRegion), rayFactors(),
+   theNodes(), theElements(),
    currentGeoTag(0), lastGeoSendTag(-1) {}
 
 XC::MeshRegion::MeshRegion(int tag, int cTag) 
-  :ContinuaReprComponent(tag, cTag), rayFactors(), theNodes(nullptr), theElements(nullptr),
+  :ContinuaReprComponent(tag, cTag), rayFactors(),
+   theNodes(), theElements(),
    currentGeoTag(0), lastGeoSendTag(-1) {}
-
-//! @brief Copy constructor
-XC::MeshRegion::MeshRegion(const MeshRegion &other) 
-  :ContinuaReprComponent(other), rayFactors(other.rayFactors), theNodes(nullptr), theElements(nullptr),
-   currentGeoTag(other.currentGeoTag), lastGeoSendTag(other.lastGeoSendTag)
-  { copy(other); }
-
-//! @brief Assignment operator.
-XC::MeshRegion &XC::MeshRegion::operator=(const MeshRegion &other)
-  {
-    ContinuaReprComponent::operator=(other);
-    rayFactors= other.rayFactors;
-    currentGeoTag= other.currentGeoTag;
-    lastGeoSendTag= other.lastGeoSendTag;
-    copy(other);
-    return *this;
-  }
 
 //! @brief Virtual constructor.
 XC::MeshRegion *XC::MeshRegion::getCopy(void) const
   { return new MeshRegion(*this); }
 
+//! @brief Destructor.
 XC::MeshRegion::~MeshRegion(void) 
-  { free_mem(); }
+  {}
 
-int XC::MeshRegion::setNodes(const XC::ID &theNods)
+int XC::MeshRegion::setNodes(const ID &theNods)
   {
-    free_mem();
-
     //
     // create new element & node lists
     //
 
     // create empty lists
     Domain *theDomain = this->getDomain();
-    if(!theDomain == 0)
+    if(!theDomain)
       {
-	std::cerr << "XC::MeshRegion::setNodes() - no domain yet set\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; no domain set yet.\n";
         return -1;
       }
 
     int numNodes = theNods.Size();
-    theNodes = new ID(0,numNodes);
-    theElements = new ID(0, numNodes);
-    if(theNodes == 0 || theElements == 0)
-      {
-        std::cerr << "XC::MeshRegion::setElements() - ran out of memory\n";
-        return -1;
-      }
+    theNodes= ID(0,numNodes);
+    theElements= ID(0, numNodes);
 
     // add nodes to the node list if in the domain
     int loc = 0;
@@ -164,8 +121,8 @@ int XC::MeshRegion::setNodes(const XC::ID &theNods)
         Node *theNode = theDomain->getNode(nodeTag);
         if(theNode)
           {
-            if (theNodes->getLocation(nodeTag) < 0)
-	    (*theNodes)[loc++] = nodeTag;      
+            if(theNodes.getLocation(nodeTag) < 0)
+	      theNodes[loc++] = nodeTag;      
           }
       }
 
@@ -182,13 +139,13 @@ int XC::MeshRegion::setNodes(const XC::ID &theNods)
         int eleTag = theEle->getTag();
         // check to see if all external nodes in node list
         bool in = true;
-        const XC::ID &theEleNodes = theEle->getNodePtrs().getExternalNodes();
+        const ID &theEleNodes = theEle->getNodePtrs().getExternalNodes();
         int numNodes = theEleNodes.Size();
 
         for(int i=0; i<numNodes; i++)
           {
             int nodeTag = theEleNodes(i);
-            if(theNodes->getLocation(nodeTag) < 0)
+            if(theNodes.getLocation(nodeTag) < 0)
               {
 	        in = false;
 	        i = numNodes;
@@ -196,26 +153,19 @@ int XC::MeshRegion::setNodes(const XC::ID &theNods)
           }
         // if they are all in the node list add the ele to ele list
         if(in == true) 
-          (*theElements)[loc++] = eleTag;
+          theElements[loc++] = eleTag;
       }
     return 0;
   }
 
 
-int XC::MeshRegion::setElements(const XC::ID &theEles)
+int XC::MeshRegion::setElements(const ID &theEles)
   {
-    free_mem();
-
     // create new element & node lists
 
-    int numEle = theEles.Size();
-    theElements= new ID(0, numEle); // don't copy yet .. make sure ele in domain
-    theNodes= new ID(0, numEle); // initial guess at size of XC::ID
-    if(theElements == 0 || theNodes == 0)
-      {
-	std::cerr << "XC::MeshRegion::setElements() - ran out of memory\n";
-        return -1;
-      }
+    const int numEle = theEles.Size();
+    theElements= ID(0, numEle); // don't copy yet .. make sure ele in domain
+    theNodes= ID(0, numEle); // initial guess at size of ID
 
     // now loop over the elements in ele XC::ID passed in to create the node & ele list
     // NOTE - only add those elements to the list that are in the domain
@@ -227,7 +177,8 @@ int XC::MeshRegion::setElements(const XC::ID &theEles)
     Domain *theDomain = this->getDomain();
     if(!theDomain)
       {
-	std::cerr << "XC::MeshRegion::setElements() - no domain yet set\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; no domain set yet.\n";
         return -1;
       }
 
@@ -238,16 +189,16 @@ int XC::MeshRegion::setElements(const XC::ID &theEles)
         theEle = theDomain->getElement(eleTag);
         if(theEle)
           {
-            if(theElements->getLocation(eleTag) < 0)
-	      (*theElements)[locEle++] = eleTag;
+            if(theElements.getLocation(eleTag) < 0)
+	      theElements[locEle++]= eleTag;
 
-            const XC::ID &theEleNodes = theEle->getNodePtrs().getExternalNodes();
+            const ID &theEleNodes= theEle->getNodePtrs().getExternalNodes();
             for(int i=0; i<theEleNodes.Size(); i++)
               {
                 int nodeTag = theEleNodes(i);
                 // add the node tag if not already there
-                if(theNodes->getLocation(nodeTag) < 0)
-                  (*theNodes)[locNode++] = nodeTag;
+                if(theNodes.getLocation(nodeTag) < 0)
+                  theNodes[locNode++] = nodeTag;
               }
           }
       }
@@ -256,18 +207,10 @@ int XC::MeshRegion::setElements(const XC::ID &theEles)
 
 
 const XC::ID &XC::MeshRegion::getNodes(void)
-  {
-    if(!theNodes)
-      std::cerr << "XC::FATAL::XC::MeshRegion::getNodes(void) - no nodes yet set\n";
-    return *theNodes;
-  }
+  { return theNodes; }
 
 const XC::ID &XC::MeshRegion::getElements(void)
-  {
-    if(!theElements)
-      std::cerr << "XC::FATAL::XC::MeshRegion::getElements(void) - no elements yet set\n";
-    return *theElements;
-  }
+  { return theElements; }
 
 
 int XC::MeshRegion::setRayleighDampingFactors(const RayleighDampingFactors &rF)
@@ -278,28 +221,31 @@ int XC::MeshRegion::setRayleighDampingFactors(const RayleighDampingFactors &rF)
     Domain *theDomain = this->getDomain();
     if(!theDomain)
       {
-        std::cerr << "XC::MeshRegion::setRayleighDampingFactors() - no domain yet set\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; no domain set yet.\n";
         return -1;
       }
-    if(theElements)
+    const size_t numElem= theElements.Size();
+    if(numElem>0)
       {
-        for(int i=0; i<theElements->Size(); i++)
+        for(size_t i=0; i<numElem; i++)
           {
-            int eleTag = (*theElements)(i);
+            const int eleTag = theElements(i);
             Element *theEle = theDomain->getElement(eleTag);
             if(theEle)
               theEle->setRayleighDampingFactors(rayFactors);
           }
       }
 
-    if(theNodes)
+    const size_t numNodes= theNodes.Size();
+    if(numNodes>0)
       {
-        for(int i=0; i<theNodes->Size(); i++)
+        for(size_t i=0; i<numNodes; i++)
           {
-           int nodTag = (*theNodes)(i);
-           Node *theNode = theDomain->getNode(nodTag);
-           if(theNode)
-	     theNode->setRayleighDampingFactor(rayFactors.getAlphaM());
+            const int nodTag = theNodes(i);
+            Node *theNode= theDomain->getNode(nodTag);
+            if(theNode)
+	      theNode->setRayleighDampingFactor(rayFactors.getAlphaM());
           }
       }
     return 0;
@@ -310,9 +256,9 @@ int XC::MeshRegion::sendData(Communicator &comm)
   {
     int res= ContinuaReprComponent::sendData(comm);
     res+= comm.sendMovable(rayFactors,getDbTagData(),CommMetaData(2));
-    res+= comm.sendIDPtr(theNodes,getDbTagData(),ArrayCommMetaData(3,4,5));
-    res+= comm.sendIDPtr(theElements,getDbTagData(),ArrayCommMetaData(6,7,8));
-    res+= comm.sendInts(currentGeoTag,lastGeoSendTag,getDbTagData(),CommMetaData(9));
+    res+= comm.sendID(theNodes,getDbTagData(),CommMetaData(3));
+    res+= comm.sendID(theElements,getDbTagData(),CommMetaData(4));
+    res+= comm.sendInts(currentGeoTag,lastGeoSendTag,getDbTagData(),CommMetaData(5));
     return res;
   }
 
@@ -321,9 +267,9 @@ int XC::MeshRegion::recvData(const Communicator &comm)
   {
     int res= ContinuaReprComponent::recvData(comm);
     res+= comm.receiveMovable(rayFactors,getDbTagData(),CommMetaData(2));
-    theNodes= comm.receiveIDPtr(theNodes,getDbTagData(),ArrayCommMetaData(3,4,5));
-    theElements= comm.receiveIDPtr(theElements,getDbTagData(),ArrayCommMetaData(6,7,8));
-    res+= comm.receiveInts(currentGeoTag,lastGeoSendTag,getDbTagData(),CommMetaData(9));
+    res+= comm.receiveID(theNodes,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveID(theElements,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveInts(currentGeoTag,lastGeoSendTag,getDbTagData(),CommMetaData(5));
     return res;
   }
 
@@ -331,29 +277,32 @@ int XC::MeshRegion::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
     const int dataTag= getDbTag();
-    inicComm(9);
+    inicComm(5);
     int res= sendData(comm);
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data\n";
     return res;
   }
 
 int XC::MeshRegion::recvSelf(const Communicator &comm)
   {
-    inicComm(9);
+    inicComm(5);
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }
@@ -361,9 +310,7 @@ int XC::MeshRegion::recvSelf(const Communicator &comm)
 void XC::MeshRegion::Print(std::ostream &s, int flag) const
   {
     s << "Region: " << this->getTag() << std::endl;
-    if(theElements)
-      s << "Elements: "<< *theElements;
-    if(theNodes)
-      s << "Nodes: "<< *theNodes;
+    s << "Elements: "<< theElements;
+    s << "Nodes: "<< theNodes;
     rayFactors.Print(s,flag);
   }

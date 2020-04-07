@@ -72,26 +72,25 @@ class ElementRecorder;
 class NodeRecorder;
 class ID;
 
+//! @ingroup Mesh
+//
+//! @brief Nodes and elements of a mesh region.
 class MeshRegion: public ContinuaReprComponent
   {
   private:
     RayleighDampingFactors rayFactors; //!< Rayleigh damping factors
 
-    ID *theNodes;
-    ID *theElements;
+    ID theNodes; //!< Nodes of the region.
+    ID theElements; //!< Elements of the region.
 
     int	currentGeoTag;
     int lastGeoSendTag;
 
-    void free_mem(void);
-    void copy(const MeshRegion &other);
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
     MeshRegion(int tag);
     MeshRegion(int tag, int classTag);    
-    MeshRegion(const MeshRegion &);
-    MeshRegion &operator=(const MeshRegion &);
     virtual ~MeshRegion(void);
     virtual MeshRegion *getCopy(void) const;
 
