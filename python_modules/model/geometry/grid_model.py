@@ -275,6 +275,8 @@ class GridModel(object):
         (imax,jmax,kmax)=ijkRange.ijkMax
         'surfaces in XY plane'
         indPtSurfXY=[((i,j,k),(i+1,j,k),(i+1,j+1,k),(i,j+1,k)) for j in range(jmin,jmax) for i in range(imin,imax) for k in range (kmin,kmax+1)]
+        if closeCyl.lower()[0]=='y':
+            indPtSurfXY+=[((i,jmax,k),(i+1,jmax,k),(i+1,jmin,k),(i,jmin,k)) for i in range(imin,imax) for k in range (kmin,kmax+1)]
         nmSurfXY=[self.getNameQuadGridSurface(indPtsQs) for indPtsQs in indPtSurfXY]
         'surfaces in XZ plane'
         indPtSurfXZ=[((i,j,k),(i,j,k+1),(i+1,j,k+1),(i+1,j,k)) for k in range(kmin,kmax) for i in range(imin,imax) for j in range(jmin,jmax+1)]
