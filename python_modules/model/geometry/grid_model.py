@@ -282,7 +282,6 @@ class GridModel(object):
         'surfaces in YZ plane'
         indPtSurfYZ=[((i,j,k),(i,j+1,k),(i,j+1,k+1),(i,j,k+1)) for k in range(kmin,kmax) for j in range(jmin,jmax) for i in range(imin,imax+1)]
         if closeCyl.lower()[0]=='y':
-            print ('closeCyl= ',closeCyl)
             indPtSurfYZ+=[((i,jmax,k),(i,jmin,k),(i,jmin,k+1),(i,jmax,k+1)) for k in range(kmin,kmax) for i in range(imin,imax+1)]
         nmSurfYZ=[self.getNameQuadGridSurface(indPtsQs) for indPtsQs in indPtSurfYZ]
         return (nmSurfXY+nmSurfXZ+nmSurfYZ)
