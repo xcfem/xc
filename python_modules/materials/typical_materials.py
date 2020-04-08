@@ -14,14 +14,25 @@ from misc_utils import log_messages as lmsg
 # Typical material definition.
 
 class BasicElasticMaterial(object):
-  '''Basic elastic material'''
+    '''Basic elastic material
 
-  def __init__(self, E, nu):
-    self.E= E
-    self.nu= nu
+     :ivar E:            Young’s modulus of the material
+     :ivar nu:           Poisson’s ratio
+     :ivar rho:          mass density
+    '''
+    def __init__(self, E, nu, rho= 0.0):
+        '''Base class to construct some material definition classes
 
-  def G(self):
-    return self.E/(2*(1+self.nu))
+         :param E:            Young’s modulus of the material
+         :param nu:           Poisson’s ratio
+         :param rho:          mass density
+        '''
+        self.E= E
+        self.nu= nu
+        self.rho= rho
+    def G(self):
+        '''shear modulus'''
+        return self.E/(2*(1+self.nu))
 
 def defElasticMaterial(preprocessor,name,E, rho= 0.0):
   '''Constructs an elastic uniaxial material.
@@ -402,13 +413,10 @@ def defElasticMembranePlateSection(preprocessor,name,E,nu,rho,h):
   retval.h= h
   return retval
 
-class MaterialData(object):
+class MaterialData(BasicElasticMaterial):
     '''Base class to construct some material definition classes
 
      :ivar name:         name identifying the material
-     :ivar E:            Young’s modulus of the material
-     :ivar nu:           Poisson’s ratio
-     :ivar rho:          mass density
      :ivar xc_material:  pointer to XC material.    
     '''
     def __init__(self,name,E,nu,rho):
@@ -419,14 +427,9 @@ class MaterialData(object):
          :param nu:           Poisson’s ratio
          :param rho:          mass density
         '''
+        super(MaterialData,self).__init__(E,nu,rho)
         self.name= name
-        self.E= E
-        self.nu= nu
-        self.rho= rho
         self.xc_material= None
-    def G(self):
-        '''shear modulus'''
-        return self.E/(2*(1+self.nu))
 
 class DeckMaterialData(MaterialData):
     '''Material for Isotropic elastic sections
