@@ -178,6 +178,14 @@ class GridModel(object):
     Several grids can coexist in a FE problem.
 
     :ivar prep: preprocessor
+    :ivar xList: ordered list of x-coordinates for the grid 
+                 (radius in cylindrical coordinate system)
+    :ivar yList: ordered list of y-coordinates for the grid 
+                 (angle in degrees counterclockwise from the X-axis directio for cylindrical coordinate system)
+    :ivar xList: ordered list of z-coordinates for the grid.
+    :ivar xCentCyl, yCentCy: x and y coordinates of the points of the
+          Z axis for the cylindrical coordinate system 
+          (both coordinates default to 0)
     :ivar dicLin: dictionary with all the lines linked to the grid. 
           Each key is the name of a line, the value associated is the line 
           itself.
@@ -185,8 +193,9 @@ class GridModel(object):
           Each key is the name of a surface, the value associated is the surface 
           itself.
 
+
     '''
-    def __init__(self,prep,xList,yList,zList):
+    def __init__(self,prep,xList,yList,zList,xCentCyl=0,yCentCyl=0):
         self.gridCoo= list()
         self.gridCoo.append(xList)
         self.gridCoo.append(yList)
@@ -197,6 +206,8 @@ class GridModel(object):
         self.pointCounter=0
         self.dicQuadSurf=dict()
         self.dicLin=dict()
+        self.xCentCyl=xCentCyl
+        self.yCentCyl=yCentCyl
 
     def lastXIndex(self):
         return len(self.gridCoo[0])-1
@@ -318,10 +329,10 @@ class GridModel(object):
             pnt=points.newPntIDPos3d(self.pointCounter+inicTag,geom.Pos3d(x,y,z))
             self.indices.setPnt(i,j,k,pnt.tag)
 
-    def generateCylZPoints(self,xCent,yCent):
+    def generateCylZPoints(self):
         '''Point generation in the following cylindrical coordinate system:
 
-        - Origin: point of coordinates (xCent,yCent,0)
+        - Origin: point of coordinates (xCentCyl,yCentCyl,0)
         - Longitudinal axis: Z
         - Azimuth expressed in degrees counterclockwise from the X-axis direction
         
@@ -334,8 +345,8 @@ class GridModel(object):
         points= self.prep.getMultiBlockTopology.getPoints
         inicTag=points.defaultTag
         lstPt=[(i+1,j+1,k+1,
-                xCent+self.gridCoo[0][i]*math.cos(math.radians(self.gridCoo[1][j])),
-                yCent+self.gridCoo[0][i]*math.sin(math.radians(self.gridCoo[1][j])),
+                self.xCentCyl+self.gridCoo[0][i]*math.cos(math.radians(self.gridCoo[1][j])),
+                self.yCentCyl+self.gridCoo[0][i]*math.sin(math.radians(self.gridCoo[1][j])),
                 self.gridCoo[2][k]) for i in range(len(self.gridCoo[0]))
                for j in range(len(self.gridCoo[1]))
                for k in range(len(self.gridCoo[2])) ]
@@ -344,6 +355,18 @@ class GridModel(object):
             self.pointCounter+=1
             pnt=points.newPntIDPos3d(self.pointCounter+inicTag,geom.Pos3d(x,y,z))
             self.indices.setPnt(i,j,k,pnt.tag)
+
+    def moveCylPointsRadius(self,ijkRange,radius):
+        '''Move points in a 3D grid-region limited by the ijkRange 
+        in the cylindrical coordinate system to radius coordinate 
+        given as parameter
+        '''
+        sPtMove=self.getSetPntRange(ijkRange,'sPtMove')
+        for p in sPtMove.getPoints:
+            vdir=geom.Vector2d(p.getPos.x-self.xCentCyl,p.getPos.y-self.yCentCyl,).normalized()
+            p.getPos.x= radius*vdir.x
+            p.getPos.y= radius*vdir.y
+        sPtMove.clear()
 
     def movePointsRange(self,ijkRange,vDisp):
         '''Move points  in a 3D grid-region limited by 
