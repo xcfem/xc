@@ -60,14 +60,18 @@ set(version_file "${DIR_FUENTES_XC}src/version.cc")
 
 enable_language(Fortran)
 INCLUDE(${DIR_FUENTES_XC}CMake/find_packages.cmake)
-MESSAGE(STATUS "Boost_LIBRARIES: " ${Boost_LIBRARIES})
+#MESSAGE(STATUS "Boost_LIBRARIES: " ${Boost_LIBRARIES})
 
 #HDF5 library
 include_directories(${HDF5_HEADER_INCLUDE_DIR})
 
+# Python libraries
+SET(XC_UTILS_BOOST_LIBRARIES ${Boost_LIBRARIES})
+list(APPEND XC_UTILS_BOOST_LIBRARIES ${XC_UTILS_BOOST_PYTHON_LIBRARIES})
+list(REMOVE_DUPLICATES XC_UTILS_BOOST_LIBRARIES)
+#MESSAGE(STATUS "Boost_LIBRARIES = ${XC_UTILS_BOOST_LIBRARIES}")
 
-#VTK library
-#vtk
+# VTK library
 IF(USE_VTK_FILE)
   INCLUDE(${USE_VTK_FILE})
   message(STATUS "vtk file: " ${USE_VTK_FILE})
@@ -76,11 +80,9 @@ IF(USE_VTK_FILE)
 ENDIF(USE_VTK_FILE)
 include_directories(${VTK_INCLUDE_DIRS})
 
-#CGAL library
-IF(CGAL_USE_FILE)
-  INCLUDE(${CGAL_USE_FILE})
-  message(STATUS "cgal file: " ${CGAL_USE_FILE})
-ENDIF(CGAL_USE_FILE)
+# CGAL library
+INCLUDE_DIRECTORIES(${CGAL_INCL_DIR})
+INCLUDE_DIRECTORIES(${CGAL_INCL_CONF_DIR})
 
 #GLIB (para gts) library
 INCLUDE_DIRECTORIES(${GLIB2_INCLUDE_DIRS})
@@ -116,11 +118,20 @@ INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIRS})
 #XC library
 INCLUDE_DIRECTORIES(${LIBXC_SOURCE_DIR})
 
-#Para DEBUG
+# For DEBUG
 #ADD_DEFINITIONS(-Wall -O0 -frounding-math -g)
-#Para RELEASE
-ADD_DEFINITIONS(-Wall -O3 -march=native -frounding-math -pedantic -Wno-unused-but-set-variable)
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
+# For RELEASE
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 ${CMAKE_CXX_FLAGS_RELEASE} -Wall -march=native -pedantic -fPIC -Wno-unused-but-set-variable")
+set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fPIC")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+MESSAGE(STATUS "**** compiler fortran flags ${CMAKE_Fortran_FLAGS}")
+MESSAGE(STATUS "**** compiler c flags ${CMAKE_C_FLAGS}")
+MESSAGE(STATUS "**** compiler cxx flags ${CMAKE_CXX_FLAGS}")
+MESSAGE(STATUS "**** linker flags ${CMAKE_EXE_LINKER_FLAGS}")
+#set(CMAKE_VERBOSE_MAKEFILE ON)
+
 #Errores en arpack++
 set_source_files_properties(solution/system_of_eqn/eigenSOE/BandArpackppSolver.cc PROPERTIES COMPILE_FLAGS -fpermissive)
 
@@ -340,7 +351,7 @@ SET(solution solution/analysis/ModelWrapper solution/AnalysisAggregation solutio
 add_library(XcBib SHARED ${utility} ${material} ${siseq} ${analysis} ${convergenceTest} ${coordTransformation} ${damage} ${domain} ${gauss_models} ${cyclic_model} ${element} ${graph} ${modelbuilder} ${reliability} ${unitest} ${preprocessor} ${solution} ${post_process} version FEProblem)
 
 #Python interface
-TARGET_LINK_LIBRARIES(XcBib xc_utils xc_basic_utils ${VTK_BIB} ${CGAL_LIBRARIES} ${Plot_LIBRARY} ${MPFR_LIBRARIES} ${GMP_LIBRARY} ${MYSQL_LIBRARY} ${MySQLpp_LIBRARIES} ${SQLITE3_LIBRARY} ${GNUGTS_LIBRARIES} ${BerkeleyDB_LIBRARIES} ${ARPACK_LIB} ${ARPACKPP_LIB} ${LAPACK_LIBRARIES} ${SUPERLU_LIBRARIES} ${BLAS_LIBRARIES} ${PETSC_LIB_PETSC} ${METIS_LIBRARIES} ${TCL_LIBRARY} boost_python ${Boost_LIBRARIES} ${PYTHON_LIBRARIES})
+TARGET_LINK_LIBRARIES(XcBib xc_utils xc_basic_utils OpenMP::OpenMP_CXX ${VTK_BIB} CGAL::CGAL CGAL::CGAL_Core ${Plot_LIBRARY} ${MPFR_LIBRARIES} ${GMP_LIBRARY} ${MYSQL_LIBRARY} ${MySQLpp_LIBRARIES} ${SQLITE3_LIBRARY} ${GNUGTS_LIBRARIES} ${BerkeleyDB_LIBRARIES} ${ARPACK_LIB} ${ARPACKPP_LIB} ${LAPACK_LIBRARIES} ${SUPERLU_LIBRARIES} ${BLAS_LIBRARIES} ${PETSC_LIB_PETSC} ${METIS_LIBRARIES} ${TCL_LIBRARY} ${XC_UTILS_BOOST_LIBRARIES} ${PYTHON_LIBRARIES})
 add_definitions(-fno-strict-aliasing)
 # Define the wrapper library that wraps our library
 add_library(xc SHARED utility/export_utility material/export_material_base material/uniaxial/export_material_uniaxial material/nD/export_material_nD material/section/export_material_section material/section/export_material_fiber_section  material/damage/export_material_damage domain/export_domain domain/mesh/export_domain_mesh preprocessor/export_preprocessor_handlers preprocessor/export_preprocessor_build_model  preprocessor/export_preprocessor_sets preprocessor/export_preprocessor_main solution/export_solution python_interface)
