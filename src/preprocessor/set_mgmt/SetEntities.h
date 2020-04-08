@@ -49,6 +49,18 @@ class TrfGeom;
 class SFreedom_Constraint;
 class ID;
 
+//! @brief Reference to the intersection of two edges
+//! (see SetEntities::getLineIntersections). 
+struct EdgeIntersectionRef
+  {
+    Edge *first; //!< first edge.
+    Edge *second; //!< second edge.
+    Pos3d intersectionPos; //!< intersection point.
+    inline EdgeIntersectionRef(Edge *a= nullptr, Edge *b= nullptr, const Pos3d &p= Pos3d())
+      : first(a), second(b), intersectionPos(p) {}
+  };
+typedef std::deque<EdgeIntersectionRef> edge_intersection_pairs;
+
 //!  @ingroup SetEntities
 //! 
 //!  @brief Object set.
@@ -76,15 +88,17 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     typedef lst_surface_ptrs::iterator sup_iterator; //!< surface set iterator.
     typedef lst_surface_ptrs::const_iterator sup_const_iterator; //!< surface set const iterator.
 
-    typedef DqPtrsEntities<Body> lst_ptr_cuerpos; //!< body set.
-
+    typedef DqPtrsEntities<Body> lst_body_pointers; //!< body set.
+    typedef lst_body_pointers::iterator body_iterator; //!< body set iterator.
+    typedef lst_body_pointers::const_iterator body_const_iterator; //!< body set const iterator.
+    
     typedef DqPtrsEntities<UniformGrid> lst_ptr_uniform_grids; //!< Unifrom grid set.
 
   protected:
     lst_ptr_points points; //!< point set.
     lst_line_pointers lines; //!< line set.
     lst_surface_ptrs surfaces; //!< surface set.
-    lst_ptr_cuerpos bodies; //!< body set.
+    lst_body_pointers bodies; //!< body set.
     lst_ptr_uniform_grids uniform_grids; //! Uniform mesh set.
 
     friend class Set;
@@ -139,6 +153,7 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     void sel_lines_list(const ID &);
     bool In(const Edge *) const;
     SetEntities pickLinesInside(const GeomObj3d &, const double &tol= 0.0) const;
+    edge_intersection_pairs getLineIntersections(void) const;
 
     //! @brief Returns a const reference to the surface container.
     virtual const lst_surface_ptrs &getSurfaces(void) const
@@ -154,13 +169,13 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     SetEntities pickSurfacesInside(const GeomObj3d &, const double &tol= 0.0) const;
 
     //! @brief Return a const reference to the body container.
-    virtual const lst_ptr_cuerpos &getBodies(void) const
+    virtual const lst_body_pointers &getBodies(void) const
       { return bodies; }
     //! @brief Return a reference to the body container.
-    virtual lst_ptr_cuerpos &getBodies(void)
+    virtual lst_body_pointers &getBodies(void)
       { return bodies; }
     //! @brief Assigns the bodies set.
-    void setBodies(const lst_ptr_cuerpos &bds)
+    void setBodies(const lst_body_pointers &bds)
       { bodies= bds; }
     bool In(const Body *) const;
     SetEntities pickBodiesInside(const GeomObj3d &, const double &tol= 0.0) const;

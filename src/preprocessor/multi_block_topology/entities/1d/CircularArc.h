@@ -77,6 +77,7 @@ class CircularArc: public LineBase
     virtual BND3d Bnd(void) const;
     int getVtkCellType(void) const;
     virtual ID getKPoints(void) const;
+    virtual std::deque<Segment3d> getSegments(void) const;
   };
 
 } //end of XC namespace

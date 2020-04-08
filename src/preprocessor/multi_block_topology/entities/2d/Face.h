@@ -43,7 +43,7 @@ class Face: public CmbEdge
   {
     friend class Edge;
     friend class Body;
-    std::set<const Body *> cuerpos_sup; //!< Bodies that touch this surface (neighbors).
+    std::set<const Body *> bodies_surf; //!< Bodies that touch this surface (neighbors).
 
     void insert_body(Body *b);
     Node *getNode(const size_t &i);
@@ -75,7 +75,7 @@ class Face: public CmbEdge
     Polyline3d getContour(void) const;
     //! @brief Return the bodies that touch this surface (neighbors).
     const std::set<const Body *> &getConnectedBodies(void) const
-      { return cuerpos_sup; }
+      { return bodies_surf; }
     size_t CommonEdge(const Face &other) const;
     int SenseOfEdge(const Edge *l,const Face &other) const;
     bool isConnectedTo(const Body &b) const;

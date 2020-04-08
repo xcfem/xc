@@ -31,6 +31,7 @@
 #define EDGE_H
 
 #include "preprocessor/multi_block_topology/entities/EntMdlr.h"
+#include "xc_utils/src/geom/d1/Segment3d.h"
 
 
 class BND3d;
@@ -80,6 +81,7 @@ class Edge: public EntMdlr
     virtual void SetVertice(const size_t &,Pnt *)= 0;
     std::vector<int> getIndicesVertices(void) const;
     virtual ID getKPoints(void) const;
+    virtual std::deque<Segment3d> getSegments(void) const;
 
     void setNDivHomologousEdges(const size_t &);
     virtual void setNDiv(const size_t &);

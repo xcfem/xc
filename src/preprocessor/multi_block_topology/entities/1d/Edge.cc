@@ -597,7 +597,7 @@ void XC::Edge::add_to_sets(std::set<SetBase *> &sets)
       }
   }
 
-//! Return indices of the vertices.
+//! @brief Return indices of the vertices.
 std::vector<int> XC::Edge::getIndicesVertices(void) const
   {
     const size_t nv= getNumberOfVertices();
@@ -606,6 +606,27 @@ std::vector<int> XC::Edge::getIndicesVertices(void) const
       {
         for(size_t i=0;i<nv;i++)
           retval[i]= getVertex(i+1)->getIdx();
+      }
+    return retval;
+  }
+
+//! @brief Return the segments that compose the edge.
+std::deque<Segment3d> XC::Edge::getSegments(void) const
+  {
+    const size_t nv= getNumberOfVertices(); // Number of vertices.
+    const size_t ns= nv-1; // Number of segments.
+    std::deque<Segment3d> retval(ns);
+    Edge *this_no_const= const_cast<Edge *>(this);
+    if(nv>=1)
+      {
+        for(size_t i=0;i<ns;i++)
+	  {
+	    const Pos3d &p0= getVertex(i)->GetPos();
+	    const Pos3d &p1= getVertex(i+1)->GetPos();
+	    Segment3d s(p0,p1);
+	    s.set_owner(this_no_const);
+	    retval[i]= s;
+	  }
       }
     return retval;
   }

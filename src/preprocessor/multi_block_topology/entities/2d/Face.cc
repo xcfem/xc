@@ -88,7 +88,7 @@ void XC::Face::setNDivJ(const size_t &ndj)
 //! @brief Inserts the body being passed as parameter neighbors
 //! container of this surface.
 void XC::Face::insert_body(Body *b)
-  { cuerpos_sup.insert(b); }
+  { bodies_surf.insert(b); }
 
 //! @brief Updates topology.
 void XC::Face::update_topology(void)
@@ -173,8 +173,8 @@ std::set<const XC::Face *> XC::getConnectedSurfaces(const Edge &p)
 //! @brief Returns true if the lines touches the body (neighbor).
 bool XC::Face::isConnectedTo(const XC::Body &b) const
   {
-    std::set<const Body *>::const_iterator i= cuerpos_sup.find(&b);
-    return (i!=cuerpos_sup.end());
+    std::set<const Body *>::const_iterator i= bodies_surf.find(&b);
+    return (i!=bodies_surf.end());
   }
 
 //! @brief Returns the sets that contains this surface.

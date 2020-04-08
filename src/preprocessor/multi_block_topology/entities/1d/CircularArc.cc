@@ -245,3 +245,12 @@ XC::ID XC::CircularArc::getKPoints(void) const
     retval[2]= P2()->getTag();
     return retval;
   }
+
+//! @brief Return the segments that compose the edge.
+std::deque<Segment3d> XC::CircularArc::getSegments(void) const
+  {
+    std::deque<Segment3d> retval;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; not implemented." << std::endl;
+    return retval;
+  }

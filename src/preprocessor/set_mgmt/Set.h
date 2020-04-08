@@ -140,13 +140,13 @@ class Set: public SetMeshComp
     Set pickSurfacesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);
 
     //! @brief Return a const reference to the body container.
-    virtual const SetEntities::lst_ptr_cuerpos &getBodies(void) const
+    virtual const SetEntities::lst_body_pointers &getBodies(void) const
       { return entities.getBodies(); }
     //! @brief Return a reference to the body container.
-    virtual SetEntities::lst_ptr_cuerpos &getBodies(void)
+    virtual SetEntities::lst_body_pointers &getBodies(void)
       { return entities.getBodies(); }
     //! @brief Assigns the bodies set.
-    void setBodies(const SetEntities::lst_ptr_cuerpos &bds)
+    void setBodies(const SetEntities::lst_body_pointers &bds)
       { entities.setBodies(bds); }
     bool In(const Body *) const;
     Set pickBodiesInside(const std::string &, const GeomObj3d &, const double &tol= 0.0);

@@ -39,6 +39,7 @@
 #include "utility/matrix/ID.h"
 
 #include "xc_utils/src/geom/pos_vec/SlidingVectorsSystem3d.h"
+#include "xc_utils/src/geom/d1/Segment3d.h"
 #include "xc_utils/src/geom/d2/Plane.h"
 #include "xc_utils/src/geom/d3/HalfSpace3d.h"
 
@@ -192,7 +193,7 @@ void XC::SetEntities::clearAll(void)
 //! of those entities that are already in the set.
 void XC::SetEntities::fillDownwards(SetMeshComp &mc)
   {
-//     for(lst_cuerpos::iterator i=bodies.begin();i!=bodies.end();i++)
+//     for(lst_bodies::iterator i=bodies.begin();i!=bodies.end();i++)
 //       {
 //         lst_surfaces ss= (*i)->getSurfaces();
 //         surfaces.insert_unique(surfaces.end(),ss.begin(),ss.end());
@@ -252,7 +253,7 @@ void XC::SetEntities::fillUpwards(const SetMeshComp &mc)
       }
 //     for(lst_surfaces::iterator i=surfaces.begin();i!=surfaces.end();i++)
 //       {
-//         lst_cuerpos bb= getConnectedBodies(**i);
+//         lst_bodies bb= getConnectedBodies(**i);
 //         bodies.insert_unique(bodies.end(),bb.begin(),bb.end());
 //       }
   }
@@ -366,7 +367,7 @@ void XC::SetEntities::body_meshing(meshing_dir dm)
   {
     if(verbosity>2)
       std::clog << "Meshing bodies...";
-    for(lst_ptr_cuerpos::iterator i= bodies.begin();i!=bodies.end();i++)
+    for(lst_body_pointers::iterator i= bodies.begin();i!=bodies.end();i++)
       (*i)->genMesh(dm);
     if(verbosity>2)
       std::clog << "done." << std::endl;
@@ -428,8 +429,43 @@ XC::SetEntities XC::SetEntities::pickPointsInside(const GeomObj3d &geomObj, cons
 bool XC::SetEntities::In(const Edge *e) const
   { return lines.in(e); }
 
-//! @brief Return a new set that contains the lines that lie insiof the
-//! geometric object.
+//! @brief Return the intersections between the lines of the model.
+XC::edge_intersection_pairs XC::SetEntities::getLineIntersections(void) const
+  {
+    edge_intersection_pairs retval;
+    std::deque<Segment3d> segments;
+    for(lst_line_pointers::const_iterator i= lines.begin();i!=lines.end();i++)
+      {
+	const Edge &line= **i;
+	const std::deque<Segment3d> edgeSegments= line.getSegments();
+	segments.insert(segments.end(), edgeSegments.begin(),edgeSegments.end());     }
+    int_pair_deque intersections= getIntersections(segments);
+    for(int_pair_deque::const_iterator i= intersections.begin();i!=intersections.end();i++)
+      {
+	int_pair intPair= *i;
+	const int first= intPair.first;
+	const int second= intPair.second;
+	Segment3d s1= segments[first];
+	Segment3d s2= segments[second];
+	Edge *a= dynamic_cast<Edge *>(s1.Owner());
+	Edge *b= dynamic_cast<Edge *>(s2.Owner());
+	const GeomObj3d::list_Pos3d points= s1.getIntersection(s2);
+        if(!points.empty()) // Intersection exists.
+	  {
+            const Pos3d &p= *points.begin();
+ 	    retval.push_back(EdgeIntersectionRef(a,b,p));
+	  }
+	else
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+	              << "; intersection not found." << std::endl;
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Return a new set that contains the lines that lie inside
+//! of the geometric object.
 //!
 //! @param geomObj: geometric object that must contain the nodes.
 //! @param tol: tolerance for "In" function.
@@ -620,9 +656,9 @@ int XC::SetEntities::recvData(const Communicator &comm)
 //     tmp= lines.receiveTags(11,12,getDbTagData(),comm);
 //     sel_lines_list(tmp);
 //     tmp= surfaces.receiveTags(13,14,getDbTagData(),comm);
-//     sel_surfaces_lst(tmp);
+//     sel_surfaces_list(tmp);
 //     tmp= bodies.receiveTags(15,16,getDbTagData(),comm);
-//     sel_cuerpos_lista(tmp);
+//     sel_bodies_list(tmp);
 //     tmp= uniform_grids.receiveTags(17,18,getDbTagData(),comm);
     return res;
   }

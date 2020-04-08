@@ -199,21 +199,21 @@ class_<XC::SetEntities::lst_surface_ptrs, bases<dq_ptrs_surfaces> >("lstSurfaces
   .def("getBnd", &XC::SetEntities::lst_surface_ptrs::Bnd, "Returns surfaces boundary.")
    ;
 
-typedef XC::DqPtrs<XC::Body> dq_ptrs_cuerpos;
-class_<dq_ptrs_cuerpos, bases<CommandEntity>, boost::noncopyable >("dq_ptrs_cuerpos",no_init)
-  .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_cuerpos::indBegin, &dq_ptrs_cuerpos::indEnd))
-  .def("at",make_function(&dq_ptrs_cuerpos::get, return_internal_reference<>() ), "Access specified body with bounds checking.")
-  .def("__getitem__",make_function(&dq_ptrs_cuerpos::get, return_internal_reference<>() ), "Access specified body with bounds checking.")
-  .def("clear",&dq_ptrs_cuerpos::clear,"Removes all items.")
+typedef XC::DqPtrs<XC::Body> dq_body_ptrs;
+class_<dq_body_ptrs, bases<CommandEntity>, boost::noncopyable >("dq_body_ptrs",no_init)
+  .def("__iter__", range<return_internal_reference<> >(&dq_body_ptrs::indBegin, &dq_body_ptrs::indEnd))
+  .def("at",make_function(&dq_body_ptrs::get, return_internal_reference<>() ), "Access specified body with bounds checking.")
+  .def("__getitem__",make_function(&dq_body_ptrs::get, return_internal_reference<>() ), "Access specified body with bounds checking.")
+  .def("clear",&dq_body_ptrs::clear,"Removes all items.")
    ;
 
-class_<XC::SetEntities::lst_ptr_cuerpos, bases<dq_ptrs_cuerpos> >("lstBodies",no_init)
-  .def("append", &XC::SetEntities::lst_ptr_cuerpos::push_back,"Appends body at the end of the list.")
-  .def("pushFront", &XC::SetEntities::lst_ptr_cuerpos::push_front,"Push body at the beginning of the list.")
-  .add_property("size", &XC::SetEntities::lst_ptr_cuerpos::size, "Returns list size.")
-  .def("__len__",&XC::SetEntities::lst_ptr_cuerpos::size, "Returns list size.")
-  .def("pickBodiesInside",&XC::SetEntities::lst_ptr_cuerpos::pickEntitiesInside,"pickBodiesInside(geomObj,tol) return the nodes inside the geometric object.") 
-  .def("getBnd", &XC::SetEntities::lst_ptr_cuerpos::Bnd, "Returns bodies boundary.")
+class_<XC::SetEntities::lst_body_pointers, bases<dq_body_ptrs> >("lstBodies",no_init)
+  .def("append", &XC::SetEntities::lst_body_pointers::push_back,"Appends body at the end of the list.")
+  .def("pushFront", &XC::SetEntities::lst_body_pointers::push_front,"Push body at the beginning of the list.")
+  .add_property("size", &XC::SetEntities::lst_body_pointers::size, "Returns list size.")
+  .def("__len__",&XC::SetEntities::lst_body_pointers::size, "Returns list size.")
+  .def("pickBodiesInside",&XC::SetEntities::lst_body_pointers::pickEntitiesInside,"pickBodiesInside(geomObj,tol) return the nodes inside the geometric object.") 
+  .def("getBnd", &XC::SetEntities::lst_body_pointers::Bnd, "Returns bodies boundary.")
    ;
 
 class_<XC::SetEntities, bases<XC::PreprocessorContainer> >("SetEntities",no_init)
@@ -227,7 +227,7 @@ XC::SetMeshComp &(XC::Set::*getMeshComponents)(void)= &XC::Set::getMeshComp;
 XC::SetEntities::lst_ptr_points &(XC::Set::*getPoints)(void)= &XC::Set::getPoints;
 XC::SetEntities::lst_line_pointers &(XC::Set::*getLines)(void)= &XC::Set::getLines;
 XC::SetEntities::lst_surface_ptrs &(XC::Set::*getSurfaces)(void)= &XC::Set::getSurfaces;
-XC::SetEntities::lst_ptr_cuerpos &(XC::Set::*getBodies)(void)= &XC::Set::getBodies;
+XC::SetEntities::lst_body_pointers &(XC::Set::*getBodies)(void)= &XC::Set::getBodies;
 class_<XC::Set, bases<XC::SetMeshComp> >("Set")
   .add_property("description", make_function( &XC::Set::getDescription, return_value_policy<copy_const_reference>() ), &XC::Set::setDescription,"Description (string) of the set.")
   .add_property("getEntities", make_function(getEntities, return_internal_reference<>() ),"return the entities (points, lines, surfaces,...) of the set.")

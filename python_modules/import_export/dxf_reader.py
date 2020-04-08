@@ -199,21 +199,24 @@ class DXFImport(object):
         self.impSurfaces= importSurfaces
         self.polylinesAsSurfaces= polylinesAsSurfaces
         self.layersToImport= self.getLayersToImport(layerNamesToImport)
-        self.polyfaceQuads= dict()
-        self.polylineQuads= dict()
-        self.getRelativeCoo= getRelativeCoo
-        self.threshold= threshold
-        self.labelDict= {}
-        self.kPointsNames= self.selectKPoints()
-        self.importPoints()
-        if(self.impLines):
-            self.importLines()
+        if(len(self.layersToImport)):
+            self.polyfaceQuads= dict()
+            self.polylineQuads= dict()
+            self.getRelativeCoo= getRelativeCoo
+            self.threshold= threshold
+            self.labelDict= {}
+            self.kPointsNames= self.selectKPoints()
+            self.importPoints()
+            if(self.impLines):
+                self.importLines()
+            else:
+                self.lines= {}
+            if(self.impSurfaces):
+                self.importFaces()
+            else:
+                self.facesByLayer= {}
         else:
-            self.lines= {}
-        if(self.impSurfaces):
-            self.importFaces()
-        else:
-            self.facesByLayer= {}
+            self.kPoints= None
 
     def getIndexNearestPoint(self, pt):
         return cdist([pt], self.kPoints).argmin()
@@ -230,10 +233,11 @@ class DXFImport(object):
         retval= []
         for layer in self.dxfFile.layers:
             layerName= layer.name
+            print('layer name:'+layerName)
             if(layerToImport(layer.name,namesToImport)):
                 retval.append(layer.name)
         if(len(retval)==0):
-            lmsg.warning('No layers to import.')
+            lmsg.warning('No layers to import (names to import: '+str(namesToImport)+')')
         return retval
 
     def extractPoints(self):
@@ -439,25 +443,28 @@ class DXFImport(object):
         retval.name= name
 
         counter= 0
-        for p in self.kPoints:
-            key= self.kPointsNames[counter]
-            retval.appendPoint(id= counter,x= p[0],y= p[1],z= p[2], labels= self.labelDict[key])
-            counter+= 1
+        if(self.kPoints):
+            for p in self.kPoints:
+                key= self.kPointsNames[counter]
+                retval.appendPoint(id= counter,x= p[0],y= p[1],z= p[2], labels= self.labelDict[key])
+                counter+= 1
 
-        counter= 0
-        for key in self.lines:
-            line= self.lines[key]
-            block= bte.BlockRecord(counter,'line',line,self.labelDict[key])
-            retval.appendBlock(block)
-            counter+= 1
-            
-        for name in self.layersToImport:
-            fg= self.facesByLayer[name]
-            for key in fg:
-                face= fg[key]
-                block= bte.BlockRecord(counter,'face',face,self.labelDict[key])
+            counter= 0
+            for key in self.lines:
+                line= self.lines[key]
+                block= bte.BlockRecord(counter,'line',line,self.labelDict[key])
                 retval.appendBlock(block)
                 counter+= 1
+
+            for name in self.layersToImport:
+                fg= self.facesByLayer[name]
+                for key in fg:
+                    face= fg[key]
+                    block= bte.BlockRecord(counter,'face',face,self.labelDict[key])
+                    retval.appendBlock(block)
+                    counter+= 1
+        else:
+            lmsg.warning('Nothing to export.')
         return retval
     
 
