@@ -351,6 +351,151 @@ const XC::Vector &XC::TransformationDOF_Group::getCommittedResponse(const Vector
       }
   }
 
+const XC::Vector &XC::TransformationDOF_Group::getTrialDisp(void)
+  {
+    const Vector &responseC= myNode->getTrialDisp();
+
+    if(!mfc)
+      return responseC;
+    else
+      {
+        Vector &modUnbalance= unbalAndTangentMod.getResidual();
+	const std::vector<Node *> ptrsToRetainedNodes= getPointersToRetainedNodes();
+	const size_t numRetainedNodes= ptrsToRetainedNodes.size();
+	if(numRetainedNodes==1)
+	  {
+	    //int retainedNode = mfc->getNodeRetained();
+	    //Domain *theDomain = myNode->getDomain();
+	    Node *retainedNodePtr= ptrsToRetainedNodes[0];
+	    const Vector &responseR = retainedNodePtr->getTrialDisp();
+	    const ID &retainedDOF = mfc->getRetainedDOFs();
+	    const ID &constrainedDOF = mfc->getConstrainedDOFs();    	
+	    int numCNodeDOF = myNode->getNumberDOF();
+	    int numRetainedNodeDOF = retainedDOF.Size();
+	    int loc = 0;
+	    for (int i=0; i<numCNodeDOF; i++)
+	      {
+		if(constrainedDOF.getLocation(i) < 0)
+		  {
+		    modUnbalance(loc) = responseC(i);
+		    loc++;
+		  } 
+	      }
+	    for (int j=0; j<numRetainedNodeDOF; j++)
+	      {
+		int dof = retainedDOF(j);
+		modUnbalance(loc) = responseR(dof);
+		loc++;
+	      }
+	  }
+	else
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+	              << "not implemented for more than one"
+		      << " retained nodes (there are: "
+		      << numRetainedNodes << ").\n";
+	  }
+        return modUnbalance;
+      }
+  }
+
+const XC::Vector &XC::TransformationDOF_Group::getTrialVel(void)
+  {
+    const Vector &responseC = myNode->getTrialVel();
+    if(!mfc)
+      return responseC;
+    else
+      {
+        Vector &modUnbalance= unbalAndTangentMod.getResidual();
+	const std::vector<Node *> ptrsToRetainedNodes= getPointersToRetainedNodes();
+	const size_t numRetainedNodes= ptrsToRetainedNodes.size();
+	if(numRetainedNodes==1)
+	  {
+	    //int retainedNode = mfc->getNodeRetained();
+	    //Domain *theDomain = myNode->getDomain();
+	    Node *retainedNodePtr= ptrsToRetainedNodes[0];
+	    const Vector &responseR = retainedNodePtr->getTrialVel();
+	    const ID &retainedDOF = mfc->getRetainedDOFs();
+	    const ID &constrainedDOF = mfc->getConstrainedDOFs();    	
+	    int numCNodeDOF = myNode->getNumberDOF();
+	    int numRetainedNodeDOF = retainedDOF.Size();
+	    int loc = 0;
+	    for(int i=0; i<numCNodeDOF; i++)
+	      {
+		if(constrainedDOF.getLocation(i) < 0)
+		  {
+		    modUnbalance(loc) = responseC(i);
+		    loc++;
+		  } 
+	      }
+	    for(int j=0; j<numRetainedNodeDOF; j++)
+	      {
+		int dof = retainedDOF(j);
+		modUnbalance(loc) = responseR(dof);
+		loc++;
+	      }
+	  }
+	else
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+	              << "not implemented for more than one"
+		      << " retained nodes (there are: "
+		      << numRetainedNodes << ").\n";
+	  }
+        return modUnbalance;
+      }
+  }
+
+//! @brief Returnt trial acceleration.
+const XC::Vector &XC::TransformationDOF_Group::getTrialAccel(void)
+  {
+    const Vector &responseC = myNode->getTrialAccel();
+
+    if(!mfc)
+      return responseC;
+    else
+      {
+        Vector &modUnbalance= unbalAndTangentMod.getResidual();
+	const std::vector<Node *> ptrsToRetainedNodes= getPointersToRetainedNodes();
+	const size_t numRetainedNodes= ptrsToRetainedNodes.size();
+	if(numRetainedNodes==1)
+	  {
+	    //int retainedNode = mfc->getNodeRetained();
+	    //Domain *theDomain = myNode->getDomain();
+	    Node *retainedNodePtr= ptrsToRetainedNodes[0];
+	    const Vector &responseR = retainedNodePtr->getTrialAccel();
+	    const ID &retainedDOF = mfc->getRetainedDOFs();
+	    const ID &constrainedDOF = mfc->getConstrainedDOFs();    	
+	    int numCNodeDOF = myNode->getNumberDOF();
+	    int numRetainedNodeDOF = retainedDOF.Size();
+
+	    int loc = 0;
+	    for(int i=0; i<numCNodeDOF; i++)
+	      {
+		if(constrainedDOF.getLocation(i) < 0)
+		  {
+		    modUnbalance(loc) = responseC(i);
+		    loc++;
+		  }
+	      }
+	    for(int j=0; j<numRetainedNodeDOF; j++)
+	      {
+		int dof = retainedDOF(j);
+		modUnbalance(loc) = responseR(dof);
+		loc++;
+	      }
+	  }
+	else
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+	              << "not implemented for more than one"
+		      << " retained nodes (there are: "
+		      << numRetainedNodes << ").\n";
+	  }
+        return modUnbalance;
+      }
+  }
+
 //! @brief Returns the committed value for the displacement.
 const XC::Vector &XC::TransformationDOF_Group::getCommittedDisp(void)
   { return getCommittedResponse(&Node::getDisp); }

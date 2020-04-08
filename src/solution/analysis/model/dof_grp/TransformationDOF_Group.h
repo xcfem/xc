@@ -139,6 +139,11 @@ class TransformationDOF_Group: public DOF_Group
     const Vector &getC_Force(const Vector &x, double fact = 1.0);
     const Vector &getM_Force(const Vector &x, double fact = 1.0);
     
+    // methods to obtain trial responses from the nodes
+    const Vector &getTrialDisp(void);
+    const Vector &getTrialVel(void);
+    const Vector &getTrialAccel(void);
+
     // methods to obtain committed responses from the nodes
     const Vector &getCommittedDisp(void);
     const Vector &getCommittedVel(void);
