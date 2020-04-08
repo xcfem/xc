@@ -83,7 +83,8 @@ XC::ReliabilityDomain::ReliabilityDomain()
     tagOfActiveLimitStateFunction = 1;
   }
 
-XC::ReliabilityDomain::~ReliabilityDomain()
+//! @brief Destructor.
+XC::ReliabilityDomain::~ReliabilityDomain(void)
   {
     if(theRandomVariablesPtr) delete theRandomVariablesPtr;
     if(theCorrelationCoefficientsPtr) delete theCorrelationCoefficientsPtr;
@@ -93,6 +94,14 @@ XC::ReliabilityDomain::~ReliabilityDomain()
     if(theModulatingFunctionsPtr) delete theModulatingFunctionsPtr;
     if(theSpectraPtr) delete theSpectraPtr;
     if(theFiltersPtr) delete theFiltersPtr;
+  }
+
+//! @brief Clear object members.
+void XC::ReliabilityDomain::clearAll(void)
+  {
+    if(theRandomVariablesPtr)
+      theRandomVariablesPtr->clearAll();
+    // Need to do the other stuff -- MHS
   }
 
 

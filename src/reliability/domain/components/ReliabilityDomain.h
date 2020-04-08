@@ -134,6 +134,7 @@ class ReliabilityDomain
     void setTagOfActiveLimitStateFunction(int tag);
 
     // Member functions to remove single components from the domain
+    void clearAll(void);
     int removeRandomVariablePositioner(int tag);
     int removeRandomVariable(int tag);
     int removeCorrelationCoefficient(int tag);
