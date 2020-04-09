@@ -39,7 +39,7 @@
 namespace XC {
 
 //! @ingroup MATSCC
-//!  @defgroup MATPLAC Materials for bidimensional materials (plates, membranes, shells,...).
+//!  @defgroup MATPLAC Materials for bidimensional elements (plates, membranes, shells,...).
 //
 //! @ingroup MATPLAC
 //
@@ -57,7 +57,7 @@ class PlateBase: public SectionForceDeformation
 
     inline double getH(void) const
       { return h; }
-    void setH(const double &d)
+    inline void setH(const double &d)
       { h= d; }
   };
 } // end of XC namespace

@@ -70,11 +70,11 @@
 
 namespace XC {
 //! @ingroup Drain2DX
-//
-//! @defgroup Drain2DX Drain-2DX materials wrappers.
 //!
+//! @defgroup Drain2DX Drain-2DX materials wrappers.
+//
 //! @ingroup Drain2DX
-//! 
+// 
 //! @brief Base class for wrappers for <a href="https://nisee.berkeley.edu/elibrary/getpkg?id=DRAIN2DX">DRAIN-2DX</a> FORTRAN routines.
 //!
 //! DRAIN-2DX, a computer program for the analysis of inelastic 2-dimensional
