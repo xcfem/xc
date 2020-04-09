@@ -27,6 +27,7 @@ class_<XC::Edge, XC::Edge*, bases<XC::EntMdlr>, boost::noncopyable >("Edge","Bas
   .add_property("nDiv", &XC::Edge::NDiv, &XC::Edge::setNDiv,"Number of divisions.")
   .def("setElemSize",&XC::Edge::SetElemSize,"Set the element size")
   .add_property("getNumVertices", &XC::Edge::getNumberOfVertices,"Return the number of vertices.")
+  .add_property("getNumConnectedSurfaces", &XC::Edge::getNumConnectedSurfaces,"Return the number of connected surfaces.")
   .add_property("getIdxVertices",&XC::Edge::getIndicesVertices,"Return the IDs of the vertices")
   .add_property("firstNode",make_function(getFirstNodePtr, return_internal_reference<>()),"Return the first node of the edge")
   .add_property("lastNode",make_function(getLastNodePtr, return_internal_reference<>()),"Return the last node of the edge")
@@ -50,7 +51,7 @@ class_<XC::LineBase, bases<XC::Edge>, boost::noncopyable >("LineBase", no_init)
 class_<XC::Line, bases<XC::LineBase>, boost::noncopyable >("Line", no_init)
   .def("splitAtPoint", make_function(&XC::Line::splitAtPoint, return_internal_reference<>()),"Breaks the line at the point.")
   .def("splitAtLambda", make_function(&XC::Line::splitAtLambda, return_internal_reference<>()),"Breaks the line at the point defined by the paramenter (0.0->L).")
-  .def("splitAtNaturalCoordinate", make_function(&XC::Line::splitAtCooNatural, return_internal_reference<>()),"Breaks the line at the point defined by the natural coordinate (0.0->1.0).")
+  .def("splitAtNaturalCoordinate", make_function(&XC::Line::splitAtNaturalCoord, return_internal_reference<>()),"Breaks the line at the point defined by the natural coordinate (0.0->1.0).")
    ;
 
 class_<XC::DividedLine, bases<XC::Line>, boost::noncopyable >("DividedLine", "Line segment between two points.",no_init)

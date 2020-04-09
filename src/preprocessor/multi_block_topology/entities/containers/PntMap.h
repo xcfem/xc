@@ -72,8 +72,6 @@ class PntMap: public EntityMap<Pnt>
     void Copy(const std::vector<PntMap::Indice> &);
     void Transform(const TrfGeom &trf,const std::vector<PntMap::Indice> &);
     double Dist(const Indice &i,const Indice &j) const;
-
-
   };
 
 } //end of XC namespace

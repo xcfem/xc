@@ -31,7 +31,6 @@
 #define FRAMEWORK3D_H
 
 #include "preprocessor/multi_block_topology/ModelComponentContainer.h"
-#include "boost/lexical_cast.hpp"
 
 
 namespace XC {

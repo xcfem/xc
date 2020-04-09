@@ -91,10 +91,8 @@ class Edge: public EntMdlr
     std::set<const XC::Edge *> getHomologousSides(void) const;
     void update_topology(void);
 
-    //! @brief Return the surfaces that touch the line.
-    const std::set<const Face *> &getConnectedSurfaces(void) const
-      { return surfaces_line; }
-    //! @brief Return the surface names that touch the line.
+    const size_t getNumConnectedSurfaces(void) const;
+    const std::set<const Face *> &getConnectedSurfaces(void) const;
     const std::string &getConnectedSurfacesNames(void) const;
     bool isConnectedTo(const Face &s) const;
     bool isConnectedTo(const Body &b) const;
@@ -129,7 +127,10 @@ class Edge: public EntMdlr
 
     virtual const Vector &getTang(const double &) const;
     void divide(void);
-
+    virtual Edge *splitAtPoint(Pnt *p);
+    virtual Edge *splitAtLambda(const double &);
+    virtual Edge *splitAtNaturalCoord(const double &);
+    virtual Edge *splitAtPos3d(const Pos3d &, const double &tol= 1e-6);
   };
 
 std::set<const Edge *> getConnectedLines(const Pnt &p);

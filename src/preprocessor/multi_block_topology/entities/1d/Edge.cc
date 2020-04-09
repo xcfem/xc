@@ -247,6 +247,45 @@ void XC::Edge::divide(void)
     create_points(positions);
   }
 
+//! @brief Divides the line by the point being passed as parameter.
+XC::Edge *XC::Edge::splitAtPoint(Pnt *p)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet."
+	      << std::endl;
+    return nullptr;
+  }
+
+//! @brief Divides the line by the point obtained by: p1+lambda*VDir().
+XC::Edge *XC::Edge::splitAtLambda(const double &)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet."
+	      << std::endl;
+    return nullptr;
+  }
+
+//! @brief Divides the line by the point obtained by: p1+lambda*VDir().
+XC::Edge *XC::Edge::splitAtNaturalCoord(const double &)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet."
+	      << std::endl;
+    return nullptr;
+  }
+
+
+//! @brief Divides the edge at the point argument. Returns the new
+//! Edge.
+XC::Edge *XC::Edge::splitAtPos3d(const Pos3d &p, const double &tol)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet."
+	      << std::endl;
+    return nullptr;
+  }
+
+
 //! @brief Return a pointer to node whose indices are passed as parameters.
 //!
 //! @param i: index of the layer.
@@ -389,6 +428,14 @@ Pos3dArray XC::Edge::getNodePosReverse(void) const
       retval(i,1)= pos_node(*getNode(nn-i+1));
     return retval;
   }
+
+//! @brief Return the number of surfaces that touch the line.
+const size_t XC::Edge::getNumConnectedSurfaces(void) const
+  { return surfaces_line.size(); }
+
+//! @brief Return the surfaces that touch the line.
+const std::set<const XC::Face *> &XC::Edge::getConnectedSurfaces(void) const
+  { return surfaces_line; }
 
 //! @brief Return names of the surfaces that touch the line (neighbors).
 const std::string &XC::Edge::getConnectedSurfacesNames(void) const
@@ -626,6 +673,9 @@ std::deque<Segment3d> XC::Edge::getSegments(void) const
 	    Segment3d s(p0,p1);
 	    s.set_owner(this_no_const);
 	    retval[i]= s;
+	    std::cout << "this: " << this_no_const << std::endl;
+	    std::cout << "s owner: " << s.Owner() << std::endl;	    
+	    std::cout << "retval[i] owner: " << retval[i].Owner() << std::endl;
 	  }
       }
     return retval;

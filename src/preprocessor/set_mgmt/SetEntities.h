@@ -154,6 +154,7 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     bool In(const Edge *) const;
     SetEntities pickLinesInside(const GeomObj3d &, const double &tol= 0.0) const;
     edge_intersection_pairs getLineIntersections(void) const;
+    void splitLinesAtIntersections(void);
 
     //! @brief Returns a const reference to the surface container.
     virtual const lst_surface_ptrs &getSurfaces(void) const

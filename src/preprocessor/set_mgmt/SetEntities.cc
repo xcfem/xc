@@ -446,7 +446,9 @@ XC::edge_intersection_pairs XC::SetEntities::getLineIntersections(void) const
 	const int first= intPair.first;
 	const int second= intPair.second;
 	Segment3d s1= segments[first];
+	std::cout << "s1 owner: " << s1.Owner() << std::endl;
 	Segment3d s2= segments[second];
+	std::cout << "s2 owner: " << s2.Owner() << std::endl;
 	Edge *a= dynamic_cast<Edge *>(s1.Owner());
 	Edge *b= dynamic_cast<Edge *>(s2.Owner());
 	const GeomObj3d::list_Pos3d points= s1.getIntersection(s2);
@@ -462,6 +464,20 @@ XC::edge_intersection_pairs XC::SetEntities::getLineIntersections(void) const
 	  }
       }
     return retval;
+  }
+
+//! @brief Split the lines of the set at its intersection points.
+void XC::SetEntities::splitLinesAtIntersections(void)
+  {
+    edge_intersection_pairs intersections= getLineIntersections();
+    for(edge_intersection_pairs::iterator i= intersections.begin();
+	i!=intersections.end();i++)
+      {
+	EdgeIntersectionRef ir= *i;
+	const Pos3d p= ir.intersectionPos;
+	ir.first->splitAtPos3d(p);
+	ir.second->splitAtPos3d(p);
+      }
   }
 
 //! @brief Return a new set that contains the lines that lie inside

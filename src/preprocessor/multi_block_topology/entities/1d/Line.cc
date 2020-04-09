@@ -121,6 +121,10 @@ XC::Edge *XC::Line::split_at(Pnt *p,const double &lambda,const double &length)
 //! @brief Divides the line by the point being passed as parameter.
 XC::Edge *XC::Line::splitAtPoint(Pnt *p)
   {
+    if(getNumConnectedSurfaces()!=0)
+      std::clog << getClassName() << "::" << __FUNCTION__
+	          << "; warning this line is a surface edge."
+                  << std::endl;
     Edge *retval= nullptr;
     if(p)
       {
@@ -142,23 +146,49 @@ XC::Edge *XC::Line::splitAtPoint(Pnt *p)
 //! @brief Divides the line by the point obtained by: p1+lambda*VDir().
 XC::Edge *XC::Line::splitAtLambda(const double &lambda)
   {
+    if(getNumConnectedSurfaces()!=0)
+      std::clog << getClassName() << "::" << __FUNCTION__
+	          << "; warning this line is a surface edge."
+                  << std::endl;
     Edge *retval= nullptr;
     const Segment3d s= getLineSegment();
     const Pos3d pN= s.PtoParametricas(lambda);
-    Pnt *p= create_point(pN);
-    const double l= s.getLength();
-    retval= split_at(p,lambda,l);
+    retval= splitAtPos3d(pN);
     return retval;
   }
 
 //! @brief Divides the line by the point obtained by: p1+lambda*VDir().
-XC::Edge *XC::Line::splitAtCooNatural(const double &chi)
+XC::Edge *XC::Line::splitAtNaturalCoord(const double &chi)
   {
+    if(getNumConnectedSurfaces()!=0)
+      std::clog << getClassName() << "::" << __FUNCTION__
+	          << "; warning this line is a surface edge."
+                  << std::endl;
     Edge *retval= nullptr;
     const Segment3d s= getLineSegment();
-    const Pos3d pN= s.PtoCooNatural(chi);
-    Pnt *p= create_point(pN);
-    retval= split_at(p,s.getParamCooNatural(chi),s.getLength());
+    const Pos3d pN= s.getPointNaturalCoord(chi);
+    retval= splitAtPos3d(pN);
+    return retval;
+  }
+
+//! @brief Divides the edge at the point argument. Returns the new
+//! Edge.
+XC::Edge *XC::Line::splitAtPos3d(const Pos3d &p, const double &tol)
+  {
+    XC::Edge *retval= nullptr;
+    if(getNumConnectedSurfaces()==0)
+      {
+	Pnt *pnt= create_point_if_needed(p);
+	retval= splitAtPoint(pnt);
+      }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; surface division not implemented yet."
+		<< std::endl;
+    if(!retval)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; error splitting line at point: "
+	        << p << std::endl;
     return retval;
   }
 

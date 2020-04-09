@@ -68,6 +68,7 @@ class EntMdlr: public SetEstruct
     Node *create_node(const Pos3d &pos,size_t i=1,size_t j=1, size_t k=1);
     bool create_elements(meshing_dir dm);
     Pnt *create_point(const Pos3d &);
+    Pnt *create_point_if_needed(const Pos3d &, const double &tol= 1e-6);
     void create_points(const Pos3dArray &);
     SetEstruct *create_row_set(const Array3dRange &,const std::string &);
 

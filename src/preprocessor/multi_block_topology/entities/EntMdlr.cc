@@ -38,7 +38,7 @@
 #include "preprocessor/set_mgmt/IRowSet.h"
 #include "preprocessor/set_mgmt/JRowSet.h"
 #include "preprocessor/set_mgmt/KRowSet.h"
-
+#include "preprocessor/multi_block_topology/entities/0d/Pnt.h"
 
 
 #include "vtkCellType.h"
@@ -402,6 +402,25 @@ const bool &XC::EntMdlr::getGenMesh(void) const
 //! @brief Creates a point at the position being passed as parameter.
 XC::Pnt *XC::EntMdlr::create_point(const Pos3d &pos)
   { return getPreprocessor()->getMultiBlockTopology().getPoints().New(pos); }
+
+//! @brief Creates a point if there is no other existing point at
+//! a distance less that tol.
+XC::Pnt *XC::EntMdlr::create_point_if_needed(const Pos3d &pos, const double &tol)
+  {
+    Pnt *retval= nullptr;
+    MultiBlockTopology &topology= getPreprocessor()->getMultiBlockTopology();
+    PntMap &points= topology.getPoints();
+    if(!points.empty()) //There is at least one point.
+       {
+         retval= points.getNearest(pos);
+         const double d2= dist2(pos,retval->GetPos());
+         if(d2>tol*tol) // Create new point.
+           { retval= create_point(pos); }
+       }
+     else
+       { retval= create_point(pos); }
+    return retval;
+  }
 
 //! @brief Creates points at the positions being passed as parameters.
 void XC::EntMdlr::create_points(const Pos3dArray &positions)

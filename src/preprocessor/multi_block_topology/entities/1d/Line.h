@@ -53,7 +53,8 @@ class Line: public LineBase
     Pos3d getCentroid(void) const;
     Edge *splitAtPoint(Pnt *p);
     Edge *splitAtLambda(const double &);
-    Edge *splitAtCooNatural(const double &);
+    Edge *splitAtNaturalCoord(const double &);
+    Edge *splitAtPos3d(const Pos3d &, const double &tol= 1e-6);
 
     double getLambda(const Pos3d &) const;
     

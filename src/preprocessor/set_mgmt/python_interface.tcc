@@ -220,6 +220,7 @@ class_<XC::SetEntities, bases<XC::PreprocessorContainer> >("SetEntities",no_init
   .def("getBnd", &XC::SetEntities::Bnd, "return entities boundary.")
   .def("fillUpwards", &XC::SetEntities::fillUpwards,"add entities upwards.")
   .def("fillDownwards", &XC::SetEntities::fillDownwards,"add entities downwards.")
+  .def("splitLinesAtIntersections",&XC::SetEntities::splitLinesAtIntersections,"divide the lines of the set at intersection points.")
   ;
 
 XC::SetEntities &(XC::Set::*getEntities)(void)= &XC::Set::getEntities;
