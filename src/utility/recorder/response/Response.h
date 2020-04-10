@@ -68,7 +68,16 @@ class BJtensor;
 
 
 //! @ingroup Recorder
+//!
+//! @defgroup ResponseGrp Domain objects response.
 //
+//! @ingroup ResponseGrp
+//
+//! @brief Base class response objects.
+//!
+//! Response objects are used to inquiry responses (displacements,
+//! internal forces, stresses, strains,...) from the objects
+//! of the domain.
 class Response
   {
   protected:
@@ -87,7 +96,6 @@ class Response
     virtual Information &getInformation(void);
 
     virtual void Print(std::ofstream &s, int flag = 0) const;
-
   };
 } // end of XC namespace
 

@@ -56,47 +56,26 @@
 #include "FiberResponse.h"
 #include "material/section/fiber_section/fiber/Fiber.h"
 
-XC::FiberResponse::FiberResponse(Fiber *fib, int id):
- XC::Response(), theFiber(fib), responseID(id)
-{
+XC::FiberResponse::FiberResponse(Fiber *fib, int id)
+  : Response(), theFiber(fib), responseID(id) {}
 
-}
+XC::FiberResponse::FiberResponse(Fiber *fib, int id, int val)
+  : Response(val), theFiber(fib), responseID(id) {}
 
-XC::FiberResponse::FiberResponse(Fiber *fib, int id, int val):
- XC::Response(val), theFiber(fib), responseID(id)
-{
+XC::FiberResponse::FiberResponse(Fiber *fib, int id, double val)
+ : Response(val), theFiber(fib), responseID(id) {}
 
-}
+XC::FiberResponse::FiberResponse(Fiber *fib, int id, const XC::ID &val)
+ : Response(val), theFiber(fib), responseID(id) {}
 
-XC::FiberResponse::FiberResponse(Fiber *fib, int id, double val):
- XC::Response(val), theFiber(fib), responseID(id)
-{
+XC::FiberResponse::FiberResponse(Fiber *fib, int id, const XC::Vector &val)
+ : Response(val), theFiber(fib), responseID(id) {}
 
-}
+XC::FiberResponse::FiberResponse(Fiber *fib, int id, const XC::Matrix &val)
+ : Response(val), theFiber(fib), responseID(id) {}
 
-XC::FiberResponse::FiberResponse(Fiber *fib, int id, const XC::ID &val):
- XC::Response(val), theFiber(fib), responseID(id)
-{
-
-}
-
-XC::FiberResponse::FiberResponse(Fiber *fib, int id, const XC::Vector &val):
- XC::Response(val), theFiber(fib), responseID(id)
-{
-
-}
-
-XC::FiberResponse::FiberResponse(Fiber *fib, int id, const XC::Matrix &val):
- XC::Response(val), theFiber(fib), responseID(id)
-{
-
-}
-
-XC::FiberResponse::FiberResponse(Fiber *fib, int id, const BJtensor &val):
- XC::Response(val), theFiber(fib), responseID(id)
-{
-
-}
+XC::FiberResponse::FiberResponse(Fiber *fib, int id, const BJtensor &val)
+ : Response(val), theFiber(fib), responseID(id) {}
 
 int XC::FiberResponse::getResponse(void)
   { return theFiber->getResponse(responseID, myInfo); }

@@ -51,38 +51,31 @@
 // Written: MHS 
 // Created: Oct 2000
 //
-// Description: This file contains the XC::ElementResponse class implementation
+// Description: This file contains the ElementResponse class implementation
 
 #include <utility/recorder/response/ElementResponse.h>
 #include <domain/mesh/element/Element.h>
 
-XC::ElementResponse::ElementResponse(Element *ele, int id):
- XC::Response(), theElement(ele), responseID(id)
-{}
+XC::ElementResponse::ElementResponse(Element *ele, int id)
+ : Response(), theElement(ele), responseID(id) {}
 
-XC::ElementResponse::ElementResponse(Element *ele, int id, int val):
- XC::Response(val), theElement(ele), responseID(id)
-{}
+XC::ElementResponse::ElementResponse(Element *ele, int id, int val)
+ : Response(val), theElement(ele), responseID(id) {}
 
-XC::ElementResponse::ElementResponse(Element *ele, int id, double val):
- XC::Response(val), theElement(ele), responseID(id)
-{}
+XC::ElementResponse::ElementResponse(Element *ele, int id, double val)
+ : Response(val), theElement(ele), responseID(id) {}
 
-XC::ElementResponse::ElementResponse(Element *ele, int id, const XC::ID &val):
- XC::Response(val), theElement(ele), responseID(id)
-{}
+XC::ElementResponse::ElementResponse(Element *ele, int id, const ID &val)
+ : Response(val), theElement(ele), responseID(id) {}
 
-XC::ElementResponse::ElementResponse(Element *ele, int id, const XC::Vector &val):
- XC::Response(val), theElement(ele), responseID(id)
-{}
+XC::ElementResponse::ElementResponse(Element *ele, int id, const Vector &val)
+ : Response(val), theElement(ele), responseID(id) {}
 
-XC::ElementResponse::ElementResponse(Element *ele, int id, const XC::Matrix &val):
- XC::Response(val), theElement(ele), responseID(id)
-{}
+XC::ElementResponse::ElementResponse(Element *ele, int id, const Matrix &val)
+ : Response(val), theElement(ele), responseID(id){}
 
-XC::ElementResponse::ElementResponse(Element *ele, int id, const BJtensor &val):
- XC::Response(val), theElement(ele), responseID(id)
-{}
+XC::ElementResponse::ElementResponse(Element *ele, int id, const BJtensor &val)
+ : Response(val), theElement(ele), responseID(id) {}
 
 int XC::ElementResponse::getResponse(void)
   { return theElement->getResponse(responseID, myInfo); }

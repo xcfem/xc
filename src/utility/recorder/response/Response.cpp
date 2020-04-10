@@ -53,30 +53,30 @@
 //
 // Description: This file contains the XC::Response class implementation
 
-#include <utility/recorder/response/Response.h>
+#include "Response.h"
 #include <iostream>
 
 XC::Response::Response(void)
   :myInfo()
   {}
 
-XC::Response::Response(int val):myInfo(val)
-  {}
+XC::Response::Response(int val)
+  : myInfo(val) {}
 
-XC::Response::Response(double val):myInfo(val)
-  {}
+XC::Response::Response(double val)
+  : myInfo(val) {}
 
-XC::Response::Response(const XC::ID &val):myInfo(val)
-  {}
+XC::Response::Response(const ID &val)
+  : myInfo(val) {}
 
-XC::Response::Response(const XC::Vector &val):myInfo(val)
-  {}
+XC::Response::Response(const Vector &val)
+  : myInfo(val) {}
 
-XC::Response::Response(const XC::Matrix &val):myInfo(val)
-  {}
+XC::Response::Response(const Matrix &val)
+  : myInfo(val) {}
 
-XC::Response::Response(const BJtensor &val):myInfo(val)
-  {}
+XC::Response::Response(const BJtensor &val)
+  : myInfo(val) {}
 
 void XC::Response::Print(std::ofstream &s, int flag) const
   { myInfo.Print(s, flag); }

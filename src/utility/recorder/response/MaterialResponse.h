@@ -62,7 +62,7 @@
 namespace XC {
 class Material;
 
-//! @ingroup Recorder
+//! @ingroup ResponseGrp
 //
 //! @brief Recorder for material response.
 class MaterialResponse: public Response

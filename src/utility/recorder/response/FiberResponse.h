@@ -62,22 +62,22 @@
 namespace XC {
 class Fiber;
 
-//! @ingroup Recorder
+//! @ingroup ResponseGrp
 //
-//! @brief Recorder for fiber response.
+//! @brief Response of a fiber object.
 class FiberResponse: public Response
   {
   private:
-   Fiber *theFiber;
-   int responseID;
-public:
-	FiberResponse(Fiber *fib, int id);
-	FiberResponse(Fiber *fib, int id, int val);
-	FiberResponse(Fiber *fib, int id, double val);
-	FiberResponse(Fiber *fib, int id, const ID &val);
-	FiberResponse(Fiber *fib, int id, const Vector &val);
-	FiberResponse(Fiber *fib, int id, const Matrix &val);
-	FiberResponse(Fiber *fib, int id, const BJtensor &val);
+    Fiber *theFiber;
+    int responseID;
+  public:
+    FiberResponse(Fiber *fib, int id);
+    FiberResponse(Fiber *fib, int id, int val);
+    FiberResponse(Fiber *fib, int id, double val);
+    FiberResponse(Fiber *fib, int id, const ID &val);
+    FiberResponse(Fiber *fib, int id, const Vector &val);
+    FiberResponse(Fiber *fib, int id, const Matrix &val);
+    FiberResponse(Fiber *fib, int id, const BJtensor &val);
     int getResponse(void);
   };
 } // end of XC namespace

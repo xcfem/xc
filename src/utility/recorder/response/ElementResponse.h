@@ -57,13 +57,14 @@
 #ifndef ElementResponse_h
 #define ElementResponse_h
 
-#include <utility/recorder/response/Response.h>
+#include "Response.h"
 
 namespace XC {
 class Element;
 
-//! @ingroup Recorder
-//
+//! @ingroup ResponseGrp
+//!
+//! @brief Response of an element.
 class ElementResponse: public Response
   {
   private:

@@ -36,17 +36,21 @@ class Vector;
 class Matrix;
 
 #include "Response.h"
+#include <deque>
 
 namespace XC {
 
-//! @ingroup Recorder
+//! @ingroup ResponseGrp
 //
-//! @brief Recorder for fiber response.
+//! @brief Container holding a number of response objects.
 class CompositeResponse: public Response
   {
-  private:
-    Response **theResponses;
-    int numResponses;
+  public:
+    typedef std::deque<Response *> response_container;
+    typedef response_container::iterator iterator;
+    typedef response_container::const_iterator const_iterator;
+  protected:
+    response_container theResponses;
   public:
     CompositeResponse(void);
     virtual ~CompositeResponse();

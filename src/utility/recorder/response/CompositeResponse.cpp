@@ -26,143 +26,133 @@
 // Created: 05/10
 //
 // Description: This file contains the CompositeResponse class interface.
-// A CompositeResponse is a container holding a number of response objects.
 
 #include "CompositeResponse.h"
 #include "utility/matrix/Vector.h"
 #include "utility/matrix/ID.h"
 
 XC::CompositeResponse::CompositeResponse(void)
-  :Response(), theResponses(nullptr), numResponses(0)
-  {}
+  : Response(), theResponses(0,nullptr) {}
 
 XC::CompositeResponse::~CompositeResponse(void)
   {
-    for (int i=0; i<numResponses; i++)
+    const size_t sz= theResponses.size();
+    for(size_t i= 0;i<sz; i++)
       {
         delete theResponses[i];
         theResponses[i]= nullptr;
       }
-    delete [] theResponses;
-    theResponses= nullptr;
+    theResponses.clear();
   }
 
-
+//! @brief Add response to the container.
 int XC::CompositeResponse::addResponse(Response *nextResponse)
   {
+    int retval= 0;
+    if(nextResponse)
+      {
+	//
+	// check valid type double, Vector, int, ID only
+	// resize theType accordiingly (vector or ID)
+	//
 
-    if (nextResponse == 0)
-      return 0;
+	Information& otherType= nextResponse->getInformation();
 
-    //
-    // check valid type double, Vector, int, ID only
-    // resize theType accordiingly (vector or ID)
-    //
+	if(otherType.theType == DoubleType || otherType.theType == VectorType)
+	  {
 
-    Information&otherType = nextResponse->getInformation();
+	    if(myInfo.theType == UnknownType)
+	      {
+		myInfo.theType = VectorType;
+		myInfo.theVector= new Vector();
+	      }
 
-    if (otherType.theType == DoubleType || 
-	otherType.theType == VectorType) {
+	    if(myInfo.theType != VectorType)
+	      {
+		std::cerr << "WARNING: CompositeResponse::addResponse() - mismatching type, no responses will be addeed\n";
+		return -1;
+	      }
 
-      if (myInfo.theType == UnknownType) {
-	myInfo.theType = VectorType;
-	myInfo.theVector = new Vector();
+	    int curSize = myInfo.theVector->Size();
+
+	    if(otherType.theType == DoubleType)
+	      curSize++;
+	    else
+	      curSize += otherType.theVector->Size();
+
+	    myInfo.theVector->resize(curSize);
+
+	  }
+	else if(otherType.theType == IntType || otherType.theType == IdType)
+	  {
+
+	    if(myInfo.theType == UnknownType)
+	      {
+	        myInfo.theID = new ID();
+	        myInfo.theType = IdType;    
+	      }
+
+	    if(myInfo.theType != IdType)
+	      {
+		std::cerr << "CompositeResponse::" << __FUNCTION__
+		          << "; WARNING: mismatching type, "
+		          << "no responses will be addeed\n";
+		return -1;
+	      }
+
+	    int curSize = myInfo.theID->Size();
+	    if (otherType.theType == IntType)
+	      curSize++;
+	    else
+	      curSize += otherType.theID->Size();
+
+	    myInfo.theID->resize(curSize);
+	  }
+	// now add the response to the array
+        theResponses.push_back(nextResponse);
+	retval= theResponses.size();
       }
-
-      if (myInfo.theType != VectorType) {
-	std::cerr << "WARNING: CompositeResponse::addResponse() - mismatching type, no responses will be addeed\n";
-	return -1;
-      }
-
-      int curSize = myInfo.theVector->Size();
-
-      if (otherType.theType == DoubleType)
-	curSize++;
-      else
-	curSize += otherType.theVector->Size();
-
-      myInfo.theVector->resize(curSize);
-
-    } else if (otherType.theType == IntType || 
-	       otherType.theType == IdType) {
-
-      if (myInfo.theType == UnknownType) {
-	myInfo.theID = new ID();
-	myInfo.theType = IdType;    
-      }
-
-      if (myInfo.theType != IdType) {
-	std::cerr << "WARNING: CompositeResponse::addResponse() - mismatching type, no responses will be addeed\n";
-	return -1;
-      }
-
-      int curSize = myInfo.theID->Size();
-      if (otherType.theType == IntType)
-	curSize++;
-      else
-	curSize += otherType.theID->Size();
-
-      myInfo.theID->resize(curSize);
-    }
-
-
-    //
-    // now add the response to the array
-    //
-
-    Response **theNextResponses = new Response *[numResponses+1];
-    if (theNextResponses == 0) {
-      std::cerr << "WARNING: CompositeResponse::addResponse() - out of memory, no responses will be added\n";
-      return -1;
-    }
-
-    for (int i=0; i<numResponses; i++)
-      theNextResponses[i] = theResponses[i];
-    if (theResponses != 0)
-      delete [] theResponses;
-    theResponses = theNextResponses;
-    theResponses[numResponses] = nextResponse;
-    numResponses++;
-
-    return numResponses;
+    return retval;
   }
 
-
+//! @brief Invoke getResponse on all responses & add the data to myInfo
 int XC::CompositeResponse::getResponse(void)
   {
     int res = 0;
 
-    //
     // invoke getResponse on all responses & add the data to myInfo
-    //
-
     int currentLoc = 0;
-    for (int i=0; i<numResponses; i++) {
-      Response *theResponse = theResponses[i];
-      res += theResponse->getResponse();
+    const size_t sz= theResponses.size();
+    for(size_t i= 0;i<sz; i++)
+      {
+        Response *theResponse= theResponses[i];
+        res+= theResponse->getResponse();
 
-      Information&otherType = theResponse->getInformation();
+        Information &otherType= theResponse->getInformation();
 
-      if (otherType.theType == DoubleType || otherType.theType == VectorType) {
-	if (otherType.theType == DoubleType)
-	  (*myInfo.theVector)(currentLoc++) = otherType.theDouble;
-	else {
-	  int otherSize = otherType.theVector->Size();
-	  for (int i=0; i<otherSize; i++, currentLoc++) 
-	    (*myInfo.theVector)(currentLoc) = (*otherType.theVector)(i);
-	}
-      } else if (otherType.theType == IntType || otherType.theType == IdType) {
-	if (otherType.theType == IntType) {
-	  (*myInfo.theID)(currentLoc++) = otherType.theInt;
-	}
-	else {
-	  int otherSize = otherType.theID->Size();
-	  for (int i=0; i<otherSize; i++, currentLoc++) 
-	    (*myInfo.theID)(currentLoc) = (*otherType.theID)(i);
-	}    
-      }    
-    }
-
+        if(otherType.theType == DoubleType || otherType.theType == VectorType)
+	  {
+	    if(otherType.theType == DoubleType)
+	      (*myInfo.theVector)(currentLoc++) = otherType.theDouble;
+	    else
+	      {
+	        const int otherSize= otherType.theVector->Size();
+	        for(int i=0; i<otherSize; i++, currentLoc++) 
+	          (*myInfo.theVector)(currentLoc) = (*otherType.theVector)(i);
+	      }
+          }
+	else if(otherType.theType == IntType || otherType.theType == IdType)
+	  {
+	    if(otherType.theType == IntType)
+	      { (*myInfo.theID)(currentLoc++) = otherType.theInt; }
+	    else
+	      {
+	        const int otherSize = otherType.theID->Size();
+	        for(int i=0; i<otherSize; i++, currentLoc++) 
+	          (*myInfo.theID)(currentLoc) = (*otherType.theID)(i);
+	      }    
+	  }
+      }
     return res;
   }
 
