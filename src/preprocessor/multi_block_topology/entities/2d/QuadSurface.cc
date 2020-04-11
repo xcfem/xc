@@ -389,7 +389,7 @@ Pos3dArray XC::QuadSurface::get_positions(void) const
     return retval;
   }
 
-//! @brief Returns a vector int the direction of the local
+//! @brief Returns a vector in the direction of the local
 //! X axis.
 Vector3d XC::QuadSurface::getIVector(void) const
   {
@@ -402,7 +402,7 @@ Vector3d XC::QuadSurface::getIVector(void) const
     return retval;
   }
 
-//! @brief Returns a vector int the direction of the local
+//! @brief Returns a vector in the direction of the local
 //! Y axis.
 Vector3d XC::QuadSurface::getJVector(void) const
   {
@@ -418,7 +418,7 @@ Vector3d XC::QuadSurface::getJVector(void) const
     return k.getCross(i);
   }
 
-//! @brief Returns a vector int the direction of the local
+//! @brief Returns a vector in the direction of the local
 //! Z axis.
 Vector3d XC::QuadSurface::getKVector(void) const
   {
