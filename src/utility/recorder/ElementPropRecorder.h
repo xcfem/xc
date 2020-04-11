@@ -38,7 +38,8 @@ class Element;
 
 //! @ingroup Recorder
 //
-//! @brief Objects to record element data at each commit.
+//! @brief  Record values of element properties (data stored in the
+//! Python dictionary of the object) at each commit.
 class ElementPropRecorder: public PropRecorder
   {
   public:

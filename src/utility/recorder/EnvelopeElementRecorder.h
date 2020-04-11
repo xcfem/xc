@@ -66,6 +66,8 @@ class Element;
 
 //! @ingroup Recorder
 //
+//! @brief Record the envelope of a magnitude
+//! (stress, strain, internal forces,...).
 class EnvelopeElementRecorder: public ElementRecorderBase
   {
   private:	

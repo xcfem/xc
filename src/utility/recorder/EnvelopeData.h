@@ -37,6 +37,8 @@ class Matrix;
 
 //! @ingroup Recorder
 //
+//! @brief Stores the data corresponding to the
+//! envelope of a magnitude.
 class EnvelopeData: public MovableObject
   {
   private:	

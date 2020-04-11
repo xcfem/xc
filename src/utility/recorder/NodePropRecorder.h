@@ -38,6 +38,8 @@ class Node;
 
 //! @ingroup Recorder
 //
+//! @brief Record values of node properties (data
+//! stored in the Python dictionary of the object).
 class NodePropRecorder: public PropRecorder
   {
   public:
