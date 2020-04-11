@@ -270,6 +270,18 @@ class PredefinedSpace(object):
         self.preprocessor.resetLoadCase()
         self.addLoadCaseToDomain(loadCaseName)
 
+    def createSelfWeightLoad(self,xcSet, gravityVector):
+        ''' Creates the self-weight load on the elements.
+
+         :param xcSet: set with the lines to load.
+        '''
+        for l in xcSet.getLines:
+            if(l.hasProp('section')):
+                section= l.getProp('section')
+                if(section):
+                    for e in l.getElements:
+                        e.vector3dUniformLoadGlobal(section.rho*gravityVector)
+
 
 def getModelSpace(preprocessor):
       '''Return a PredefinedSpace from the dimension of the space 
@@ -539,6 +551,26 @@ class StructuralMechanics2D(PredefinedSpace):
         for i in range(1,nn+1):
             nodeTag= line.getNodeI(i).tag
             self.fixNode000(nodeTag)
+            
+    def createTrusses(self, xcSet, material, area):
+        ''' Meshes the lines of the set argument with Truss
+            elements.
+
+        :param xcSet: set with the lines to mesh.
+        :param material: material to assign to the elements.
+        :param area: area to assign to the elements.
+        '''
+        seedElemHandler= self.preprocessor.getElementHandler.seedElemHandler
+        seedElemHandler.defaultMaterial= material.name
+        seedElemHandler.dimElem= 2
+        for l in xcSet.getLines:
+            l.nDiv= 1
+            l.setProp('material',material)
+            l.setProp('area',area)
+            elem= seedElemHandler.newElement("Truss",xc.ID([0,0]))
+            elem.sectionArea= area
+            l.genMesh(xc.meshDir.I)
+        xcSet.fillDownwards()
             
 
 def getStructuralMechanics2DSpace(preprocessor):
@@ -841,7 +873,7 @@ class StructuralMechanics3D(PredefinedSpace):
         disp= nod.getDisp
         return xc.Vector([disp[self.Ux],disp[self.Uy],disp[self.Uz]])
 
-    def newLinearCrdTransf(self, trfName,xzVector):
+    def newLinearCrdTransf(self, trfName, xzVector):
         ''' Creates a new 3D linear transformation.
 
           :param trfName: name for the new transformation.
@@ -1052,7 +1084,6 @@ class StructuralMechanics3D(PredefinedSpace):
         '''Constraint the nodes in the list passed as parameter 
         according to given 6-values set of constraints conditions
 
-        :param preprocessor: preprocessor
         :param lstNodes:     list of nodes to which apply the 
                            constraints
         :param constrCond:   list of constraint conditions, expressed as 
@@ -1066,6 +1097,48 @@ class StructuralMechanics3D(PredefinedSpace):
             for i in range(0,6):
                 if(constrCond[i] <> 'free'):
                     self.constraints.newSPConstraint(n.tag,i,constrCond[i])
+                    
+    def createElasticBeams(self, xcSet, section, trf, xzVector= None):
+        ''' Meshes the lines of the set argument with ElasticBeam3d
+            elements.
+
+        :param xcSet: set with the lines to mesh.
+        :param section: section to assign to the elements.
+        :param trf: coordinate transformation to assign to the elements.
+        :param xzVector: vector defining transformation XZ plane.
+        '''
+        seedElemHandler= self.preprocessor.getElementHandler.seedElemHandler
+        seedElemHandler.defaultMaterial= section.name
+        for l in xcSet.getLines:
+            l.setProp('section',section)
+            vDir= l.getTang(0.0)
+            if(xzVector):
+                trf.xzVector= xzVector
+            else:
+                trf.xzVector= l.getKVector
+            elem= seedElemHandler.newElement("ElasticBeam3d",xc.ID([0,0]))
+            l.genMesh(xc.meshDir.I)
+        xcSet.fillDownwards()
+                    
+    def createTrusses(self, xcSet, material, area):
+        ''' Meshes the lines of the set argument with Truss
+            elements.
+
+        :param xcSet: set with the lines to mesh.
+        :param material: material to assign to the elements.
+        :param area: area to assign to the elements.
+        '''
+        seedElemHandler= self.preprocessor.getElementHandler.seedElemHandler
+        seedElemHandler.defaultMaterial= material.name
+        seedElemHandler.dimElem= 3
+        for l in xcSet.getLines:
+            l.nDiv= 1
+            l.setProp('material',material)
+            l.setProp('area',area)
+            elem= seedElemHandler.newElement("Truss",xc.ID([0,0]))
+            elem.sectionArea= area
+            l.genMesh(xc.meshDir.I)
+        xcSet.fillDownwards()
                     
     def setHugeBeamBetweenNodes(self,nodeTagA, nodeTagB, nmbTransf):
         '''
