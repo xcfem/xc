@@ -10,6 +10,7 @@ import xc_base
 import geom
 import xc
 from misc_utils import log_messages as lmsg
+import uuid
 
 # Typical material definition.
 
@@ -33,20 +34,31 @@ class BasicElasticMaterial(object):
     def G(self):
         '''shear modulus'''
         return self.E/(2*(1+self.nu))
+    def defElasticMaterial(self, preprocessor, name= None):
+        ''' Return an elastic material appropiate for example for
+            truss elements
 
-def defElasticMaterial(preprocessor,name,E, rho= 0.0):
-  '''Constructs an elastic uniaxial material.
+        :param  preprocessor: preprocessor object.
+        '''        
+        materialHandler= preprocessor.getMaterialHandler
+        matName= name
+        if(not matName):
+            matName= uuid.uuid1().hex
+        retval= materialHandler.newMaterial("elastic_material",matName)
+        retval.name= matName
+        retval.E= self.E
+        retval.rho= self.rho
+        return retval
 
-  :param preprocessor: preprocessor
-  :param name:         name identifying the material
-  :param E:            tangent in the stress-strain diagram
-  '''
-  materialHandler= preprocessor.getMaterialHandler
-  retval= materialHandler.newMaterial("elastic_material",name)
-  retval.name= name
-  retval.E= E
-  retval.rho= rho
-  return retval
+def defElasticMaterial(preprocessor,name, E, rho= 0.0, nu= 0.3):
+    '''Constructs an elastic uniaxial material.
+
+    :param preprocessor: preprocessor
+    :param name:         name identifying the material
+    :param E:            tangent in the stress-strain diagram
+    '''
+    tmp= BasicElasticMaterial(E, nu, rho)
+    return tmp.defElasticMaterial(preprocessor, name)
 
 def defElasticPPMaterial(preprocessor,name,E,fyp,fyn):
   '''Constructs an elastic perfectly-plastic uniaxial material.
