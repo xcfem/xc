@@ -233,7 +233,6 @@ class DXFImport(object):
         retval= []
         for layer in self.dxfFile.layers:
             layerName= layer.name
-            print('layer name:'+layerName)
             if(layerToImport(layer.name,namesToImport)):
                 retval.append(layer.name)
         if(len(retval)==0):

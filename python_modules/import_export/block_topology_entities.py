@@ -185,7 +185,6 @@ class BlockData(object):
 
 
   def appendPoint(self,id,x,y,z,labels= None):
-    print(labels)
     self.points[id]= PointRecord(int(id),[x,y,z],labels)
   def appendBlock(self,block):
     self.blocks[block.id]= block
