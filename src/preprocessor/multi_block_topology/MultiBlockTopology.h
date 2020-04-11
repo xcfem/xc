@@ -66,9 +66,13 @@ class ReferenceFrame;
 //! points, lines, surfaces, bodies, etc.
 //!
 //! Maintain containers for this entities.
-class MultiBlockTopology: public PreprocessorContainer
+class MultiBlockTopology: public PreprocessorContainer, public MovableObject
   {
     friend class Preprocessor;
+  protected:
+    DbTagData &getDbTagData(void) const;
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   private:
     template <class L>
     static void numera_lista(L &l);
@@ -138,6 +142,9 @@ class MultiBlockTopology: public PreprocessorContainer
       { return unif_grid; }
     inline UniformGridMap &getUniformGrids(void)
       { return unif_grid; }
+    
+    virtual int sendSelf(Communicator &);
+    virtual int recvSelf(const Communicator &);
   };
 
 

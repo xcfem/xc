@@ -58,7 +58,7 @@
 
 //! @brief Constructor.
 XC::MultiBlockTopology::MultiBlockTopology(Preprocessor *prep)
-  : PreprocessorContainer(prep), reference_systems(this),
+  : PreprocessorContainer(prep), MovableObject(0), reference_systems(this),
     geometric_transformations(this),
     points(this), edges(this), faces(this), bodies(this), unif_grid(this),
     framework2d(this), framework3d(this) {}
@@ -175,6 +175,7 @@ XC::SetEstruct *XC::MultiBlockTopology::busca_set_estruct(const UniformGridMap::
 void XC::MultiBlockTopology::clearAll(void)
   {
     reference_systems.clearAll();
+    geometric_transformations.clearAll();
 
     framework2d.clearAll();
     framework3d.clearAll();
@@ -188,4 +189,83 @@ void XC::MultiBlockTopology::clearAll(void)
 
 XC::MultiBlockTopology::~MultiBlockTopology(void)
   { clearAll(); }
+
+//! @brief Return a vector to store the dbTags
+//! of the class members
+XC::DbTagData &XC::MultiBlockTopology::getDbTagData(void) const
+  {
+    static DbTagData retval(8);
+    return retval;
+  }
+
+//! @brief Send data through the communicator argument.
+int XC::MultiBlockTopology::sendData(Communicator &comm)
+  {
+    int res= 0;
+    //int res= comm.sendMovable(reference_systems,getDbTagData(),CommMetaData(0));
+    //res+= comm.sendMovable(geometric_transformations,getDbTagData(),CommMetaData(1));
+    //res+= comm.sendMovable(framework2d,getDbTagData(),CommMetaData(2));
+    //res+= comm.sendMovable(framework3d,getDbTagData(),CommMetaData(3));
+
+    //res+= comm.sendMovable(unif_grid,getDbTagData(),CommMetaData(4));
+    //res+= comm.sendMovable(bodies,getDbTagData(),CommMetaData(5));
+    //res+= comm.sendMovable(faces,getDbTagData(),CommMetaData(6));
+    //res+= comm.sendMovable(edges,getDbTagData(),CommMetaData(7));
+    //res+= comm.sendMovable(points,getDbTagData(),CommMetaData(8));
+
+    return res;
+  }
+
+//! @brief Receive data through the communicator argument.
+int XC::MultiBlockTopology::recvData(const Communicator &comm)
+  {
+    int res= 0;
+    // int res= comm.receIvemovable(reference_systems,getDbTagData(),CommMetaData(0));
+    // res+= comm.receiveMovable(geometric_transformations,getDbTagData(),CommMetaData(1));
+    // res+= comm.receiveMovable(framework2d,getDbTagData(),CommMetaData(2));
+    // res+= comm.receiveMovable(framework3d,getDbTagData(),CommMetaData(3));
+
+    //res+= comm.receiveMovable(points,getDbTagData(),CommMetaData(8));
+    //res+= comm.receiveMovable(edges,getDbTagData(),CommMetaData(7));
+    //res+= comm.receiveMovable(faces,getDbTagData(),CommMetaData(6));
+    //res+= comm.receiveMovable(bodies,getDbTagData(),CommMetaData(5));
+    //res+= comm.receiveMovable(unif_grid,getDbTagData(),CommMetaData(4));
+    return res;
+  }
+
+//! @brief Send object through the communicator argument.
+int XC::MultiBlockTopology::sendSelf(Communicator &comm)
+  {
+    setDbTag(comm);
+    const int dataTag= getDbTag();
+    inicComm(getDbTagData().Size());
+    int res= sendData(comm);
+
+    res+= comm.sendIdData(getDbTagData(),dataTag);
+    if(res < 0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data\n";
+    return res;
+  }
+
+//! @brief Receive object through the communicator argument.
+int XC::MultiBlockTopology::recvSelf(const Communicator &comm)
+  {
+    inicComm(getDbTagData().Size());
+    const int dataTag= getDbTag();
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
+
+    if(res<0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
+    else
+      {
+        //setTag(getDbTagDataPos(0));
+        res+= recvData(comm);
+        if(res<0)
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
+      }
+    return res;
+  }
 

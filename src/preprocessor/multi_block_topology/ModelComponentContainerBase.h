@@ -31,6 +31,7 @@
 #define ModelComponentContainerBase_H
 
 #include "xc_utils/src/kernel/CommandEntity.h"
+#include "utility/actor/actor/MovableObject.h"
 
 namespace XC {
 
@@ -40,16 +41,15 @@ class MultiBlockTopology;
 //! @ingroup MultiBlockTopology
 //
 //! @brief Base class for model component containers.
-class ModelComponentContainerBase: public CommandEntity
+class ModelComponentContainerBase: public CommandEntity, public MovableObject
   {
   public:
     typedef size_t Indice;
-
   protected:
     Indice tag; //! Default identifier for new component.
-
-
-
+    
+    int sendData(Communicator &);
+    int recvData(const Communicator &);
   public:
     ModelComponentContainerBase(MultiBlockTopology *mbt= nullptr);
 
@@ -61,9 +61,9 @@ class ModelComponentContainerBase: public CommandEntity
     inline size_t getTag(void) const
       { return tag; }
     void setTag(const size_t &t)
-      { tag= t; }
-
-
+      { tag= t; }    
+    int sendSelf(Communicator &);
+    int recvSelf(const Communicator &);
   };
 
 } //end of XC namespace

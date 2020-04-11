@@ -42,6 +42,12 @@ namespace XC {
 template <class T>
 class ModelComponentContainer: public ModelComponentContainerBase, public std::map<ModelComponentContainerBase::Indice,T *>
   {
+  private:
+    int sendObjects(Communicator &);
+    int receiveObjects(const size_t &sz,const Communicator &);
+  protected:
+    virtual int sendData(Communicator &);
+    virtual int recvData(const Communicator &);
   public:
     typedef typename std::map<Indice,T *> map_base;
     typedef typename std::pair<Indice,T *> pair;
@@ -132,6 +138,80 @@ boost::python::list ModelComponentContainer<T>::getKeys(void) const
 template <class T>
 ModelComponentContainer<T>::~ModelComponentContainer(void)
   { clearAll(); }
+
+//! @brief Send objects through the communicator argument.
+template <class T>
+int ModelComponentContainer<T>::sendObjects(Communicator &comm)
+  {
+    const int size= this->size();
+    int res= 0;
+    if(size>0)
+      {
+        for(const_iterator i=this->begin();i!=this->end();i++)
+	  {
+            T *ptr= (*i).second;
+            MovableObject *tmp= dynamic_cast<MovableObject *>(ptr);
+            if(tmp)
+              {
+                tmp->setDbTag(comm);
+                res= tmp->sendSelf(comm);
+                if(res<0)
+                  {
+                    std::cerr << getClassName() << "::" << __FUNCTION__
+    		              << "; object failed in sendSelf.\n";
+                    break;
+                  }
+              }
+            else
+    	      std::cerr << getClassName() << "::" << __FUNCTION__
+			<< "; the object is not movable." << std::endl;
+	  }
+      }
+    return res;
+  }
+  
+//! @brief Receive the objects through the communicator being
+//! passed as parameter.
+template <class T>
+int XC::ModelComponentContainer<T>::receiveObjects(const size_t &sz, const Communicator &comm)
+  {
+    int res= 0;
+
+    // We need to "broke" the object here just as they do
+    // with TaggedObjectStorage.
+    // static T t_object= T();
+    // for(size_t i= 0;i<sz;i++)
+    //   {
+    // 	res+= t_object.recvSelf(comm);
+    // 	T *ptr= dynamic_cast<T *>(t_object.getCopy());
+    //     (*this)[t_object.getTag()]= ptr;
+    //   }
+    return res;
+  }
+  
+//! @brief Send members through the communicator argument.
+template <class T>
+int ModelComponentContainer<T>::sendData(Communicator &comm)
+  {
+    int res= ModelComponentContainerBase::sendData(comm);
+    const size_t sz= this->size();
+    res+= comm.sendSzt(sz,getDbTagData(),CommMetaData(1));
+    if(sz>0)
+      { res+= sendObjects(comm); }
+    return res;
+  }
+
+//! @brief Receive data through the communicator argument.
+template <class T>
+int ModelComponentContainer<T>::recvData(const Communicator &comm)
+  {
+    int res= ModelComponentContainerBase::recvData(comm);
+    size_t sz= 0;
+    res+= comm.receiveSzt(sz,getDbTagData(),CommMetaData(1));
+    if(sz>0)
+      { res+= receiveObjects(sz, comm); }
+    return res;
+  }
 
 } //end of XC namespace
 #endif

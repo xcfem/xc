@@ -34,7 +34,7 @@
 
 //! @brief Constructor.
 XC::ModelComponentContainerBase::ModelComponentContainerBase(MultiBlockTopology *mbt)
-  : CommandEntity(mbt), tag(0) {}
+  : CommandEntity(mbt), MovableObject(0), tag(0) {}
 
 //! @brief Return a pointer to MultiBlockTopology.
 const XC::MultiBlockTopology *XC::ModelComponentContainerBase::getMultiBlockTopology(void) const
@@ -58,3 +58,52 @@ const XC::Preprocessor *XC::ModelComponentContainerBase::getPreprocessor(void) c
 XC::Preprocessor *XC::ModelComponentContainerBase::getPreprocessor(void)
   { return getMultiBlockTopology()->getPreprocessor(); }
 
+//! @brief Send data through the communicator argument.
+int XC::ModelComponentContainerBase::sendData(Communicator &comm)
+  {
+    int res= comm.sendSzt(tag,getDbTagData(),CommMetaData(0));
+    return res;
+  }
+
+//! @brief Receive data through the communicator argument.
+int XC::ModelComponentContainerBase::recvData(const Communicator &comm)
+  {
+    int res= comm.receiveSzt(tag,getDbTagData(),CommMetaData(0));
+    return res;
+  }
+
+//! @brief Send object through the communicator argument.
+int XC::ModelComponentContainerBase::sendSelf(Communicator &comm)
+  {
+    setDbTag(comm);
+    const int dataTag= getDbTag();
+    inicComm(getDbTagData().Size());
+    int res= sendData(comm);
+
+    res+= comm.sendIdData(getDbTagData(),dataTag);
+    if(res < 0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data\n";
+    return res;
+  }
+
+//! @brief Receive object through the communicator argument.
+int XC::ModelComponentContainerBase::recvSelf(const Communicator &comm)
+  {
+    inicComm(getDbTagData().Size());
+    const int dataTag= getDbTag();
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
+
+    if(res<0)
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
+    else
+      {
+        //setTag(getDbTagDataPos(0));
+        res+= recvData(comm);
+        if(res<0)
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
+      }
+    return res;
+  }

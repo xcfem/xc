@@ -186,7 +186,7 @@ int XC::Preprocessor::sendData(Communicator &comm)
     //res+= comm.sendMovable(elements,getDbTagData(),CommMetaData(4));
     int res= comm.sendMovable(loads,getDbTagData(),CommMetaData(5));
     //res+= comm.sendMovable(constraints,getDbTagData(),CommMetaData(6));
-    //res+= comm.sendMovable(mbt,getDbTagData(),CommMetaData(7));
+    res+= comm.sendMovable(mbt,getDbTagData(),CommMetaData(7));
     assert(domain);
     res+= sendDomain(*domain,8,getDbTagData(),comm);
     res+= comm.sendMovable(sets,getDbTagData(),CommMetaData(9));
@@ -203,7 +203,7 @@ int XC::Preprocessor::recvData(const Communicator &comm)
     //res+= comm.receiveMovable(elements,getDbTagData(),CommMetaData(4));
     int res= comm.receiveMovable(loads,getDbTagData(),CommMetaData(5));
     //res+= comm.receiveMovable(constraints,getDbTagData(),CommMetaData(6));
-    //res+= comm.receiveMovable(mbt,getDbTagData(),CommMetaData(7));
+    res+= comm.receiveMovable(mbt,getDbTagData(),CommMetaData(7));
     assert(domain);
     res+= receiveDomain(*domain,8,getDbTagData(),comm);
     res+= comm.receiveMovable(sets,getDbTagData(),CommMetaData(9));
