@@ -30,10 +30,14 @@ class RecordDefDisplayCAD(vtk_graphic_base.RecordDefDisplay):
           self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
           cad_mesh.VtkDefineActorKPoint(self.gridRecord,self.renderer,0.02)
           cad_mesh.VtkDefineActorCells(self.gridRecord,self.renderer,"wireframe")
-          #Experimental yet (31/07/2018) LCPT
-          vField=lavf.QuadSurfacesLocalAxesVectorField(setToDraw.name+'_localAxes',1)#vectorScale)
-          vField.dumpVectors(setToDraw)
-          vField.addToDisplay(self)
+          # Draw lines local axes.
+          lineAxesField= lavf.LinesLocalAxesVectorField(setToDraw.name+'_lineLocalAxes',1)
+          lineAxesField.dumpVectors(setToDraw)
+          lineAxesField.addToDisplay(self)
+          # Draw quad surfaces local axes.
+          surfAxesField= lavf.QuadSurfacesLocalAxesVectorField(setToDraw.name+'_surfLocalAxes',1)
+          surfAxesField.dumpVectors(setToDraw)
+          surfAxesField.addToDisplay(self)
           #End of the experiment
           self.renderer.ResetCamera()
         else:
