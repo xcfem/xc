@@ -433,6 +433,9 @@ class DXFImport(object):
             elif(type == 'LINE'):
                 count= 0
                 # Nothing to do with lines for the moment.
+            elif(type == 'POINT'):
+                count= 0
+                # Nothing to do with points for the moment.
             else:
               lmsg.log('Entity of type: '+type+' ignored.')      
 
