@@ -116,6 +116,64 @@ const XC::Pnt *XC::Edge::P2(void) const
     return nullptr;
   }
 
+//! @brief Return the centroid of the edge.
+Pos3d XC::Edge::getCentroid(void) const
+  {
+    Pos3d retval;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; this function must be redefined on"
+              << " derived classes, meaningless value returned;"
+	      << std::endl;
+    return retval;
+  }
+
+//! @brief Returns a vector in the direction of the local
+//! X axis.
+Vector3d XC::Edge::getIVector(void) const
+  {
+    Vector3d retval;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; this function must be redefined on"
+              << " derived classes, meaningless value returned;"
+	      << std::endl;
+    return retval;
+  }
+
+//! @brief Returns a vector in the direction of the local
+//! Y axis.
+Vector3d XC::Edge::getJVector(void) const
+  {
+    Vector3d retval;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; this function must be redefined on"
+              << " derived classes, meaningless value returned;"
+	      << std::endl;
+    return retval;
+  }
+
+//! @brief Returns a vector in the direction of the local
+//! Z axis
+Vector3d XC::Edge::getKVector(void) const
+  {
+    const Vector3d vI= getIVector();
+    const Vector3d vJ= getJVector();
+    return vI.getCross(vJ);
+  }
+
+//! @brief Returns a matrix with the axes of the surface as matrix rows
+//! [[x1,y1,z1],[x2,y2,z2],...·]
+XC::Matrix XC::Edge::getLocalAxes(void) const
+  {
+    Matrix retval(3,3);
+    const Vector3d vectorI= getIVector();
+    retval(0,0)= vectorI(1); retval(0,1)= vectorI(2); retval(0,2)= vectorI(3);
+    const Vector3d vectorJ= getJVector();
+    retval(1,0)= vectorJ(1); retval(1,1)= vectorJ(2); retval(1,2)= vectorJ(3);
+    const Vector3d vectorK= vectorI.getCross(vectorJ);    
+    retval(2,0)= vectorK(1); retval(2,1)= vectorK(2); retval(2,2)= vectorK(3);
+    return retval;
+  }
+
 //! @brief Returns true if the points passed as parameters
 //! are the ends of the edge.
 //!
@@ -673,9 +731,6 @@ std::deque<Segment3d> XC::Edge::getSegments(void) const
 	    Segment3d s(p0,p1);
 	    s.set_owner(this_no_const);
 	    retval[i]= s;
-	    std::cout << "this: " << this_no_const << std::endl;
-	    std::cout << "s owner: " << s.Owner() << std::endl;	    
-	    std::cout << "retval[i] owner: " << retval[i].Owner() << std::endl;
 	  }
       }
     return retval;

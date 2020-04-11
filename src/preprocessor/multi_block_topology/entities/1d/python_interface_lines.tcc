@@ -38,6 +38,10 @@ class_<XC::Edge, XC::Edge*, bases<XC::EntMdlr>, boost::noncopyable >("Edge","Bas
   .def("getKPoints",&XC::Edge::getKPoints,"Return the end points of the edge.")
   .def("getTagsNodes",&XC::Edge::getTagsNodesForward,"Return node tags in forward order.")
   .def("getTagsNodesReverse",&XC::Edge::getTagsNodesReverse,"Return node tags in reverse order.")
+  .add_property("getIVector", &XC::Edge::getIVector,"Return the local x vector.")
+  .add_property("getJVector", &XC::Edge::getJVector,"Return the local x vector.")
+  .add_property("getKVector", &XC::Edge::getKVector,"Return the local x vector.")
+  .def("getLocalAxes",&XC::Edge::getLocalAxes,"Return the surface local axes as matrix rows: [[x1,y1,z1],[x2,y2,z2],...·] .")
    ;
 
 const XC::Pnt *(XC::LineBase::*getFirstVertex)(void) const= &XC::LineBase::P1;

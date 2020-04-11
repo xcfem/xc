@@ -68,6 +68,34 @@ Pos3d XC::Line::getCentroid(void) const
     return retval;
   }
 
+//! @brief Returns a vector in the direction of the local
+//! X axis.
+Vector3d XC::Line::getIVector(void) const
+  {
+    const Pos3d pt1= p1->GetPos();
+    const Pos3d pt2= p2->GetPos();
+    Vector3d retval= pt2-pt1;
+    retval.Normalize();
+    return retval;
+  }
+
+//! @brief Returns a vector in the direction of the local
+//! Y axis.
+Vector3d XC::Line::getJVector(void) const
+  {
+    const Vector3d i= getIVector();
+    const Vector3d K(0.0,0.0,1.0); //Global Z.
+    Vector3d retval= K.getCross(i);
+    const double d= retval.GetModulus2();
+    if(d<1e-12) // parallel to z axis.
+      {
+	const Vector3d J(0.0,1.0,0.0); //Global Y.
+        Vector3d retval= J.getCross(i);
+      }
+    retval.Normalize();
+    return retval;
+  }
+
 //! @brief Returns the parameter of the point in the line (distance to the line's first point measured over the line)
 double XC::Line::getLambda(const Pos3d &p) const
   {
@@ -94,51 +122,62 @@ double XC::Line::getSquaredDistanceTo(const Pos3d &pt) const
 //! @brief Divides the line by the point being passed as parameter.
 XC::Edge *XC::Line::split_at(Pnt *p,const double &lambda,const double &length)
   {
-    MultiBlockTopology &mbt= getPreprocessor()->getMultiBlockTopology();
-    Edge *tmp= nullptr;
-    if(lambda<0)
-      tmp= mbt.getLines().createLine(p,P1());
-    else if(lambda>length)
-      tmp= mbt.getLines().createLine(P2(),p);
-    else
+    Pnt *pt1= P1();
+    Pnt *pt2= P2();
+    Line *retval= nullptr;
+    if((p!=pt1) and (p!=pt2))
       {
-        tmp= mbt.getLines().createLine(p,p2);
-        SetVertices(p1,p);
+        MultiBlockTopology &mbt= getPreprocessor()->getMultiBlockTopology();
+	Edge *tmp= nullptr;
+	if(lambda<0)
+	  tmp= mbt.getLines().createLine(p,pt1);
+	else if(lambda>length)
+	  tmp= mbt.getLines().createLine(pt2,p);
+	else
+	  {
+	    tmp= mbt.getLines().createLine(p,p2);
+	    SetVertices(p1,p);
+	  }
+	retval= dynamic_cast<Line *>(tmp);
+	assert(retval);
+	//Settint the number of divisions so
+	//the element size remains almost constant.
+	const double sz_elem= length/NDiv();
+	setNDiv(ceil(getLength()/sz_elem));
+	retval->setNDiv(ceil(retval->getLength()/sz_elem));
+	//copying sets.
+	std::set<SetBase *> sets= get_sets();
+	retval->add_to_sets(sets);
       }
-    Line *retval= dynamic_cast<Line *>(tmp);
-    assert(retval);
-    //Settint the number of divisions so
-    //the element size remains almost constant.
-    const double sz_elem= length/NDiv();
-    setNDiv(ceil(getLength()/sz_elem));
-    retval->setNDiv(ceil(retval->getLength()/sz_elem));
-    //copying sets.
-    std::set<SetBase *> sets= get_sets();
-    retval->add_to_sets(sets);
     return retval;
   }
 
 //! @brief Divides the line by the point being passed as parameter.
 XC::Edge *XC::Line::splitAtPoint(Pnt *p)
   {
-    if(getNumConnectedSurfaces()!=0)
-      std::clog << getClassName() << "::" << __FUNCTION__
-	          << "; warning this line is a surface edge."
-                  << std::endl;
+    Pnt *pt1= P1();
+    Pnt *pt2= P2();
     Edge *retval= nullptr;
-    if(p)
+    if((p!=pt1) and (p!=pt2))
       {
-        const Pos3d pN= p->GetPos();
-        const Segment3d s= getLineSegment();
-        const double lambda= s.getLambda(pN);
-        const double l= s.getLength();
-        retval= split_at(p,lambda,l);
-      }
-    else
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-	          << "; pointer to point is null."
-                  << std::endl;
+	if(getNumConnectedSurfaces()!=0)
+	  std::clog << getClassName() << "::" << __FUNCTION__
+		      << "; warning this line is a surface edge."
+		      << std::endl;
+	if(p)
+	  {
+	    const Pos3d pN= p->GetPos();
+	    const Segment3d s= getLineSegment();
+	    const double lambda= s.getLambda(pN);
+	    const double l= s.getLength();
+	    retval= split_at(p,lambda,l);
+	  }
+	else
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; pointer to point is null."
+		      << std::endl;
+	  }
       }
     return retval;
   }
@@ -185,10 +224,6 @@ XC::Edge *XC::Line::splitAtPos3d(const Pos3d &p, const double &tol)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; surface division not implemented yet."
 		<< std::endl;
-    if(!retval)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; error splitting line at point: "
-	        << p << std::endl;
     return retval;
   }
 

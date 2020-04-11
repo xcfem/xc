@@ -51,6 +51,8 @@ class Line: public LineBase
 
     double getLength(void) const;
     Pos3d getCentroid(void) const;
+    virtual Vector3d getIVector(void) const;
+    virtual Vector3d getJVector(void) const;
     Edge *splitAtPoint(Pnt *p);
     Edge *splitAtLambda(const double &);
     Edge *splitAtNaturalCoord(const double &);

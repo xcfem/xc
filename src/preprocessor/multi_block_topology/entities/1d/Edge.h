@@ -76,6 +76,11 @@ class Edge: public EntMdlr
     virtual size_t getNumberOfVertices(void) const= 0;
 
     virtual double getLength(void) const= 0;
+    virtual Pos3d getCentroid(void) const;
+    virtual Vector3d getIVector(void) const;
+    virtual Vector3d getJVector(void) const;
+    virtual Vector3d getKVector(void) const;
+    virtual Matrix getLocalAxes(void) const;
 
     virtual const Pnt *getVertex(const size_t &i) const= 0;
     virtual void SetVertice(const size_t &,Pnt *)= 0;
