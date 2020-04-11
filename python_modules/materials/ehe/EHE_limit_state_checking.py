@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
+from __future__ import print_function
+
 ''' Limit state checking according to structural concrete spanish standard EHE-08.'''
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, LCPT, AO_O"
@@ -276,13 +278,13 @@ class ShearDesignParameters(object):
 
   def printParams(self):
     '''Print shear checking values.'''
-    print "area of tensioned rebars; As= ",self.tensionedRebarsArea*1e4," cm2"
-    print "transverse reinforcement area; AsTrsv= ",self.areaShReinfBranchsTrsv*1e4," cm2"
-    print "design value of normal stress; sigmaXD= ",self.sigmaXD/1e6," MPa"
-    print "effective depth; d= ",self.effectiveDepth," m"
-    print "minimal width; b0= ",self.widthMin," m"
-    print "mechanic lever arm; z= ",self.mechanicLeverArm," m"
-    print "shear strength; Vu= ",self.ultimateShearStrength/1e3," kN"
+    print("area of tensioned rebars; As= ",self.tensionedRebarsArea*1e4," cm2")
+    print("transverse reinforcement area; AsTrsv= ",self.areaShReinfBranchsTrsv*1e4," cm2")
+    print("design value of normal stress; sigmaXD= ",self.sigmaXD/1e6," MPa")
+    print("effective depth; d= ",self.effectiveDepth," m")
+    print("minimal width; b0= ",self.widthMin," m")
+    print("mechanic lever arm; z= ",self.mechanicLeverArm," m")
+    print("shear strength; Vu= ",self.ultimateShearStrength/1e3," kN")
 
 def getF1cdEHE08(fck,fcd):
     '''getF1cdEHE08(fck,fcd)
@@ -569,7 +571,7 @@ def getBetaVcuEHE08(theta,thetaE):
             if cotgTheta<=2.0:
                 retval= (cotgTheta-2)/(cotgThetaE-2)
             else:
-                print"getBetaVcuEHE08; theta angle is too big."
+                print("getBetaVcuEHE08; theta angle is too big.")
     return retval
   
 
@@ -915,7 +917,7 @@ class ShearController(lscb.ShearControllerBase):
       TTmp= scc.getStressResultantComponent("Mx")
       #Searching for the best theta angle (concrete strut inclination).
       #We calculate Vu for several values of theta and chose the highest Vu with its associated theta
-#      print '\n VTmp=',VTmp
+#      print('\n VTmp=',VTmp)
       thetaVuTmp=list()
       self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp)
       thetaVuTmp.append([self.theta,self.Vu])
@@ -936,15 +938,15 @@ class ShearController(lscb.ShearControllerBase):
         self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp)
         thetaVuTmp.append([self.theta,self.Vu])
       self.theta,self.Vu=max(thetaVuTmp, key=lambda item: item[1])
-#      print 'thetaFisuras=',self.thetaFisuras
-#      print 'theta=',self.theta
-#      print 'Vu=', self.Vu
+#      print('thetaFisuras=',self.thetaFisuras)
+#      print('theta=',self.theta)
+#      print('Vu=', self.Vu)
       VuTmp= self.Vu
       if(VuTmp!=0.0):
         FCtmp= VTmp/VuTmp
       else:
         FCtmp= 1e99
-#      print 'FCtmp=', FCtmp
+#      print('FCtmp=', FCtmp)
       Mu= 0.0 #Apparently EHE doesn't use Mu
       if(FCtmp>=e.getProp(self.limitStateLabel).CF):
         e.setProp(self.limitStateLabel,cv.RCShearControlVars(idSection,nmbComb,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,self.theta,self.Vcu,self.Vsu,VuTmp)) # Worst case
@@ -1024,24 +1026,24 @@ class CrackStraightController(lscb.LimitStateControllerBase):
       rfSteel=EHE_materials.steelOfName[sctCrkProp.rsteelName]
       k1=self.EHE_k1(sctCrkProp.eps1,sctCrkProp.eps2)
       '''
-      print 'element= ', e.tag
-      print 'Resisting force: [', R[0] , ',', R[1] , ',', R[2] , ',', R[3] , ',', R[4] , ',', R[5], ',',R[6],']'
-      print 'N= ', sct.getStressResultantComponent("N")
-      print 'My= ',sct.getStressResultantComponent("My")
-      print 'Mz= ',sct.getStressResultantComponent("Mz")
-      print 'hceff= ',hceff
-      print 'Acgross= ',Acgross
-      print 'Aceff= ',Aceff
-      print 'concrete=',concrete
-      print 'eps1=',sctCrkProp.eps1
-      print 'eps2=',sctCrkProp.eps2
-      print 'As= ', sctCrkProp.As
-      print 'cover= ',sctCrkProp.cover
-      print 'spacing= ',sctCrkProp.spacing
-      print 'fiEqu= ',sctCrkProp.fiEqu
+      print('element= ', e.tag)
+      print('Resisting force: [', R[0] , ',', R[1] , ',', R[2] , ',', R[3] , ',', R[4] , ',', R[5], ',',R[6],']')
+      print('N= ', sct.getStressResultantComponent("N"))
+      print('My= ',sct.getStressResultantComponent("My"))
+      print('Mz= ',sct.getStressResultantComponent("Mz"))
+      print('hceff= ',hceff)
+      print('Acgross= ',Acgross)
+      print('Aceff= ',Aceff)
+      print('concrete=',concrete)
+      print('eps1=',sctCrkProp.eps1)
+      print('eps2=',sctCrkProp.eps2)
+      print('As= ', sctCrkProp.As)
+      print('cover= ',sctCrkProp.cover)
+      print('spacing= ',sctCrkProp.spacing)
+      print('fiEqu= ',sctCrkProp.fiEqu)
       rfset=sct.getFiberSets()["reinfSetFb"]
       eps_sm=rfset.getStrainMax()
-      print 'max. strain= ', eps_sm
+      print('max. strain= ', eps_sm)
       '''
       if Aceff<=0:
         s_rmax=0
@@ -1056,9 +1058,9 @@ class CrackStraightController(lscb.LimitStateControllerBase):
         ftdiag=concrete.tensionStiffparam.pointOnsetCracking()['ft']      #stress at the adopted point for concrete onset cracking
         Etsdiag=abs(concrete.tensionStiffparam.regresLine()['slope'])
         '''
-        print 'effective ratio of reinforcement=', ro_s_eff
-        print 'ft=',ftdiag*1e-6
-        print 'Ets0=', Etsdiag*1e-6
+        print('effective ratio of reinforcement=', ro_s_eff)
+        print('ft=',ftdiag*1e-6)
+        print('Ets0=', Etsdiag*1e-6)
         '''
         fiber_sets.redefTensStiffConcr(setOfTenStffConcrFibSect=sctCrkProp.setsRC.concrFibers,ft=ftdiag,Ets=Etsdiag)
       e.setProp('ResF',R)   #vector resisting force
@@ -1071,17 +1073,17 @@ class CrackStraightController(lscb.LimitStateControllerBase):
       eps_sm=rfset.getStrainMax()
       srmax=e.getProp("s_rmax")
       wk=srmax*eps_sm
-#      print ' eps_sm= ',eps_sm, ' srmax= ', srmax, ' wk= ',wk
+#      print(' eps_sm= ',eps_sm, ' srmax= ', srmax, ' wk= ',wk)
       if (wk>e.getProp(self.limitStateLabel).wk):
 #        e.setProp(self.limitStateLabel,cv.RCCrackStraightControlVars(idSection,nmbComb,NTmp,MyTmp,MzTmp,srmax,eps_sm,wk))
         R=e.getProp('ResF')
         e.setProp(self.limitStateLabel,cv.RCCrackStraightControlVars(idSection=e.getProp("idSection"),combName=nmbComb,N=-R[0],My=-R[4],Mz=-R[5],s_rmax=srmax,eps_sm=eps_sm,wk=wk))
       '''
-      print 'element= ', e.tag
-      print 'max. strain= ', eps_sm
-      print 'crack widths: ',wk*1e3, ' mm'
+      print('element= ', e.tag)
+      print('max. strain= ', eps_sm)
+      print('crack widths: ',wk*1e3, ' mm')
       R=e.getResistingForce()
-      print 'Resisting force: [', R[0] , ',', R[1] , ',', R[2] , ',', R[3] , ',', R[4] , ',', R[5], ',',R[6],']'
+      print('Resisting force: [', R[0] , ',', R[1] , ',', R[2] , ',', R[3] , ',', R[4] , ',', R[5], ',',R[6],']')
       '''
       
 class CrackControl(lscb.CrackControlBaseParameters):
@@ -1114,17 +1116,17 @@ class CrackControl(lscb.CrackControlBaseParameters):
   def printParams(self):
     ''' Prints crack control parameters.'''
     self.tensionedRebars.printParams()    
-    print "Maximum concrete strain in the cracked section inside the tensioned zone; eps1= ",self.eps1*1e3," per mil.\n"
-    print "Minimum concrete strain in the cracked section inside the tensioned zone; eps2= ",self.eps2*1e3," per mil.\n"
-    print "Effect of the tension diagram; k1= ",self.k1,"\n"
-    print "Mechanic depth; h= ",self.depthMecanico," m\n"
-    print "Lever arm; z= ",self.mechanicLeverArm," m\n"
-    print "Mechanical width; b= ",self.widthMecanico," m\n"
-    print "Aspect ratio; r= ",self.aspectRatio,"\n"
-    print "Maximum depth for effective area; hEfMax= ",self.hEfMax," m\n"
-    print "Average tensile strength of the concrete; fctm= ",self.fctmFis/1e6," MPa\n"
-    print "Concrete tangent stiffness; E0= ",self.E0/1e9," GPa\n"
-    print "Characteristic crack opening; Wk= ",self.Wk*1e3," mm\n"
+    print("Maximum concrete strain in the cracked section inside the tensioned zone; eps1= ",self.eps1*1e3," per mil.\n")
+    print("Minimum concrete strain in the cracked section inside the tensioned zone; eps2= ",self.eps2*1e3," per mil.\n")
+    print("Effect of the tension diagram; k1= ",self.k1,"\n")
+    print("Mechanic depth; h= ",self.depthMecanico," m\n")
+    print("Lever arm; z= ",self.mechanicLeverArm," m\n")
+    print("Mechanical width; b= ",self.widthMecanico," m\n")
+    print("Aspect ratio; r= ",self.aspectRatio,"\n")
+    print("Maximum depth for effective area; hEfMax= ",self.hEfMax," m\n")
+    print("Average tensile strength of the concrete; fctm= ",self.fctmFis/1e6," MPa\n")
+    print("Concrete tangent stiffness; E0= ",self.E0/1e9," GPa\n")
+    print("Characteristic crack opening; Wk= ",self.Wk*1e3," mm\n")
 
   def computeWkOnBars(self,tensionedReinforcement):
     '''Compute the characteristic crack opening on each bar and return
@@ -1195,6 +1197,7 @@ class CrackControl(lscb.CrackControlBaseParameters):
       self.tensionedRebars.setup(tensionedReinforcement)
       self.Wk= self.computeWkOnBars(tensionedReinforcement)
 
+
   def check(self,elements,nmbComb):
     ''' Crack control of concrete sections.'''
     if(self.verbose):
@@ -1225,20 +1228,20 @@ class CrackControl(lscb.CrackControlBaseParameters):
 
 def printParamFisBarra():
   '''Prints crack control parameters of a bar.'''
-  print "\niBarra= ",iBarra,"\n"
-  print "Effective area Acef= ",AcEfBarra*1e4," cm2\n"
-  print "Bar area As= ",AsBarra*1e4," cm2\n"
-  print "Bar position: (",yBarra,",",zBarra,")\n"
-  print "Bar cover c= ",coverBarra," m\n"
-  print "Bar diameter fi= ",diamBarra,"\n"
-  print "Bar stress= ",sigmaBarra/1e6," MPa\n"
-  print "Bar stress_SR= ",sigmaSRBarra/1e6," MPa\n"
-  print "Bar spacement s= ",sepBarra," m\n"
-  print "k1= ",k1,"\n"
-  print "smFisurasBarra= ",smFisurasBarra," m\n"
-  print "Maximum bar elongation: ",maxBarElongation*1e3," por mil.\n"
-  print "Average bar elongation: ",averageBarElongation*1e3," por mil.\n"
-  print "Characteristic crack width= ",WkBarra*1e3," mm\n\n"
+  print("\niBarra= ",iBarra,"\n")
+  print("Effective area Acef= ",AcEfBarra*1e4," cm2\n")
+  print("Bar area As= ",AsBarra*1e4," cm2\n")
+  print("Bar position: (",yBarra,",",zBarra,")\n")
+  print("Bar cover c= ",coverBarra," m\n")
+  print("Bar diameter fi= ",diamBarra,"\n")
+  print("Bar stress= ",sigmaBarra/1e6," MPa\n")
+  print("Bar stress_SR= ",sigmaSRBarra/1e6," MPa\n")
+  print("Bar spacement s= ",sepBarra," m\n")
+  print("k1= ",k1,"\n")
+  print("smFisurasBarra= ",smFisurasBarra," m\n")
+  print("Maximum bar elongation: ",maxBarElongation*1e3," por mil.\n")
+  print("Average bar elongation: ",averageBarElongation*1e3," por mil.\n")
+  print("Characteristic crack width= ",WkBarra*1e3," mm\n\n")
 
 
 class TorsionParameters(object):
@@ -1647,6 +1650,6 @@ class LongShearJoints(object):
         else:
             tao_ru=self.getUltShearStressWithoutReinf()
         if tao_rd<=tao_ru:
-            print ("OK!")
+            print("OK!")
 
 
