@@ -2,6 +2,9 @@
 ''' Reinforced concrete section. Crack control verification test.
    Pure tension. '''
 
+from __future__ import print_function
+from __future__ import division
+
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
 __license__= "GPL"
@@ -82,8 +85,6 @@ lp0.newNodalLoad(2,xc.Vector([NDato,0,0,0,MyDato,MzDato]))
 #We add the load case to domain.
 lPatterns.addToDomain(lp0.name)
 
-
-
 # Solution procedure
 analisis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analisis.analyze(10)
@@ -112,6 +113,6 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-5):
-  print "test ",fname,": ok."
+  print("test "+fname+": ok.")
 else:
   lmsg.error(fname+' ERROR.')

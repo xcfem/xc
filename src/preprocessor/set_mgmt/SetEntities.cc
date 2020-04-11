@@ -430,7 +430,7 @@ bool XC::SetEntities::In(const Edge *e) const
   { return lines.in(e); }
 
 //! @brief Return the intersections between the lines of the model.
-XC::edge_intersection_pairs XC::SetEntities::getLineIntersections(void) const
+XC::edge_intersection_pairs XC::SetEntities::getLineIntersections(const double &tol) const
   {
     edge_intersection_pairs retval;
     std::deque<Segment3d> segments;
@@ -446,12 +446,10 @@ XC::edge_intersection_pairs XC::SetEntities::getLineIntersections(void) const
 	const int first= intPair.first;
 	const int second= intPair.second;
 	Segment3d s1= segments[first];
-	std::cout << "s1 owner: " << s1.Owner() << std::endl;
 	Segment3d s2= segments[second];
-	std::cout << "s2 owner: " << s2.Owner() << std::endl;
 	Edge *a= dynamic_cast<Edge *>(s1.Owner());
 	Edge *b= dynamic_cast<Edge *>(s2.Owner());
-	const GeomObj3d::list_Pos3d points= s1.getIntersection(s2);
+	GeomObj3d::list_Pos3d points= s1.getIntersection(s2);
         if(!points.empty()) // Intersection exists.
 	  {
             const Pos3d &p= *points.begin();
@@ -459,24 +457,123 @@ XC::edge_intersection_pairs XC::SetEntities::getLineIntersections(void) const
 	  }
 	else
 	  {
-	    std::cerr << getClassName() << "::" << __FUNCTION__
-	              << "; intersection not found." << std::endl;
+	    // Test if the problem is that one segment
+	    // almost touch the other:
+	    const double tol2= tol*tol;
+	    const Pos3d s1p1= s1.getFromPoint();
+	    const double d1= s2.dist2(s1p1);
+	    if(d1<tol2)
+	      { retval.push_back(EdgeIntersectionRef(a,b,s1p1)); }
+	    else
+	      {
+	        const Pos3d s1p2= s1.getToPoint();
+	        const double d2= s2.dist2(s1p2);
+	        if(d2<tol2)
+		  { retval.push_back(EdgeIntersectionRef(a,b,s1p2)); }
+		else
+		  {
+	            const Pos3d s2p1= s2.getFromPoint();
+	            const double d3= s1.dist2(s2p1);
+		    if(d3<tol2)
+		      { retval.push_back(EdgeIntersectionRef(a,b,s2p1)); }
+		    else
+		      {
+	                const Pos3d s2p2= s2.getToPoint();
+	                const double d4= s1.dist2(s2p2);
+		        if(d4<tol2)
+		          { retval.push_back(EdgeIntersectionRef(a,b,s2p2)); }
+			else
+			  std::cerr << getClassName() << "::" << __FUNCTION__
+	                            << "; s1= " << s1 << " s2= " << s2
+	                            << " intersection not found."
+			            << " d1= " << d1 << " d2= " << d2
+			            << " d3= " << d3 << " d4= " << d4
+				    << std::endl;
+		      }
+		  }
+	      }
 	  }
       }
     return retval;
   }
 
 //! @brief Split the lines of the set at its intersection points.
-void XC::SetEntities::splitLinesAtIntersections(void)
+void XC::SetEntities::splitLinesAtIntersections(const double &tol)
   {
-    edge_intersection_pairs intersections= getLineIntersections();
+    std::map<Edge *, std::list<Edge *> > aliases;
+    edge_intersection_pairs intersections= getLineIntersections(tol);
     for(edge_intersection_pairs::iterator i= intersections.begin();
 	i!=intersections.end();i++)
       {
 	EdgeIntersectionRef ir= *i;
 	const Pos3d p= ir.intersectionPos;
-	ir.first->splitAtPos3d(p);
-	ir.second->splitAtPos3d(p);
+	if(aliases.find(ir.first)==aliases.end()) // no aliases
+	  {
+	    Edge *newLine= ir.first->splitAtPos3d(p);
+	    if(newLine)
+	      aliases[ir.first].push_back(newLine);
+	  }
+        else // already splitted: aliases exist.
+	  {
+	    Edge *nearestAlias= ir.first;
+	    double dist2= nearestAlias->getSquaredDistanceTo(p);
+	    std::list<Edge *> edgeAliases= aliases[ir.first];
+	    for(std::list<Edge *>::iterator i= edgeAliases.begin(); i!= edgeAliases.end();i++)
+	      {
+		const double d2= (*i)->getSquaredDistanceTo(p);
+		if(d2<dist2)
+		  {
+		    nearestAlias= (*i);
+		    dist2= d2;
+		  }
+	      }
+	    Edge *newLine= nearestAlias->splitAtPos3d(p);
+	    if(newLine)
+	      aliases[ir.first].push_back(newLine);
+	  }
+	if(aliases.find(ir.second)==aliases.end()) // no aliases
+	  {
+  	    Edge *newLine= ir.second->splitAtPos3d(p);
+	    if(newLine)
+	      aliases[ir.second].push_back(newLine);
+	  }
+	else
+	  {
+	    Edge *nearestAlias= ir.second;
+	    double dist2= nearestAlias->getSquaredDistanceTo(p);
+	    std::list<Edge *> edgeAliases= aliases[ir.second];
+	    for(std::list<Edge *>::iterator i= edgeAliases.begin(); i!= edgeAliases.end();i++)
+	      {
+		const double d2= (*i)->getSquaredDistanceTo(p);
+		if(d2<dist2)
+		  {
+		    nearestAlias= (*i);
+		    dist2= d2;
+		  }
+	      }
+	    Edge *newLine= nearestAlias->splitAtPos3d(p);
+	    if(newLine)
+	      aliases[ir.second].push_back(newLine);
+	  }
+      }
+    // And for the remaining lines we use a "brute-force"
+    // algorithm.
+    for(pnt_iterator i=points.begin();i!=points.end();i++)
+      {
+	Pnt *pnt= *i;
+	const Pos3d pos= pnt->GetPos();
+        std::set<const Edge *> conn= getConnectedLines(*pnt);
+        const double tol2= tol*tol;
+        for(lin_iterator j= lines.begin();j!=lines.end();j++)
+	  {
+	    Edge *l= *j;
+	    if(conn.find(l)==conn.end()) // not already connected
+	      {
+	        const double dist2= (*j)->getSquaredDistanceTo(pos);
+		if(dist2<tol2)
+		  { l->splitAtPoint(pnt); }
+	      }
+	  }
       }
   }
 
