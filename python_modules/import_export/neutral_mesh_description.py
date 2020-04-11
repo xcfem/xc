@@ -136,6 +136,7 @@ class XCImportExportData(object):
       self.blockData.writeToXCFile(self)
     if(self.meshDesc):
       self.meshDesc.writeToXCFile(self)
+    self.outputFile.close()
 
 
 class MEDMeshData(me.MeshData):
