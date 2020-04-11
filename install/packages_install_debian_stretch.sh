@@ -87,3 +87,5 @@ apt-get clean
 # you can help us with this sending us your comments.
 # (to reconsider because we already use VTK 6 LCPT 24/09/2018)
 sudo -H pip install mayavi
+sudo -H pip install dxfgrabber
+sudo -H pip install dxfwrite
