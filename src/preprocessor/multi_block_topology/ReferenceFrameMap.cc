@@ -36,6 +36,7 @@
 
 
 #include "CartesianReferenceFrame3d.h"
+#include "boost/lexical_cast.hpp"
 
 //! @brief Constructor.
 XC::ReferenceFrameMap::ReferenceFrameMap(MultiBlockTopology *mbt)
@@ -61,3 +62,4 @@ XC::ReferenceFrame *XC::ReferenceFrameMap::New(const std::string &type)
       }
     return retval;
   }
+

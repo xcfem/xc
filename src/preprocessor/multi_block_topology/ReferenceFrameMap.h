@@ -32,7 +32,6 @@
 
 #include "preprocessor/multi_block_topology/ModelComponentContainer.h"
 #include "ReferenceFrame.h"
-#include "boost/lexical_cast.hpp"
 
 
 namespace XC {
@@ -42,14 +41,9 @@ namespace XC {
 //! @brief Reference systems container.
 class ReferenceFrameMap: public ModelComponentContainer<ReferenceFrame>
   {
-  protected:
-
-
   public:
     ReferenceFrameMap(MultiBlockTopology *mbt= nullptr);
-
     ReferenceFrame *New(const std::string &);
-
   };
 
 } //end of XC namespace
