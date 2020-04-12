@@ -65,8 +65,17 @@ XC::Element1D::Element1D(int tag, int classTag,int Nd1,int Nd2)
 void XC::Element1D::vector2dUniformLoadGlobal(const Vector &v)
   {
     const CrdTransf *crd_trf= getCoordTransf();
-    const Vector vTrf= crd_trf->getVectorLocalCoordFromGlobal(v);
-    vector2dUniformLoadLocal(vTrf);
+    // Some 1D elements like Trusses have no coordinate
+    // transformation (and don't accept body loads neither).
+    if(crd_trf)
+      {
+	const Vector vTrf= crd_trf->getVectorLocalCoordFromGlobal(v);
+	vector2dUniformLoadLocal(vTrf);
+      }
+    else
+      std::clog << getClassName() << "::" << __FUNCTION__
+		<< "; element has no coordinate transformation"
+		<< " load ignored." << std::endl;
   }
 
 void XC::Element1D::vector2dUniformLoadLocal(const Vector &v)
@@ -105,8 +114,17 @@ void XC::Element1D::vector2dUniformLoadLocal(const Vector &v)
 void XC::Element1D::vector2dPartialUniformLoadGlobal(const double &aOverL, const double &bOverL, const Vector &v)
   {
     const CrdTransf *crd_trf= getCoordTransf();
-    const Vector vTrf= crd_trf->getVectorLocalCoordFromGlobal(v);
-    vector2dPartialUniformLoadLocal(aOverL, bOverL, vTrf);
+    // Some 1D elements like Trusses have no coordinate
+    // transformation (and don't accept body loads neither).
+    if(crd_trf)
+      {
+        const Vector vTrf= crd_trf->getVectorLocalCoordFromGlobal(v);
+        vector2dPartialUniformLoadLocal(aOverL, bOverL, vTrf);
+      }
+    else
+      std::clog << getClassName() << "::" << __FUNCTION__
+		<< "; element has no coordinate transformation"
+		<< " load ignored." << std::endl;
   }
 
 void XC::Element1D::vector2dPartialUniformLoadLocal(const double &aOverL, const double &bOverL, const Vector &v)
@@ -148,8 +166,17 @@ void XC::Element1D::vector2dPointByRelDistLoadGlobal(const double &x,const Vecto
     if(sz>1)
       {
         const CrdTransf *crd_trf= getCoordTransf();
-        const Vector vTrf= crd_trf->getVectorLocalCoordFromGlobal(v);
-        vector2dPointByRelDistLoadLocal(x,vTrf);
+	// Some 1D elements like Trusses have no coordinate
+	// transformation (and don't accept loads neither).
+	if(crd_trf)
+	  {
+	    const Vector vTrf= crd_trf->getVectorLocalCoordFromGlobal(v);
+	    vector2dPointByRelDistLoadLocal(x,vTrf);
+	  }
+	else
+	  std::clog << getClassName() << "::" << __FUNCTION__
+		    << "; element has no coordinate transformation"
+		    << " load ignored." << std::endl;	
       }
     else
       std::cerr << getClassName() << __FUNCTION__
@@ -193,35 +220,64 @@ void XC::Element1D::vector2dPointByRelDistLoadLocal(const double &x,const Vector
 void XC::Element1D::vector2dPointLoadGlobal(const Vector &p,const Vector &v)
   {
     const CrdTransf *crd_trf= getCoordTransf();
-    const double x= crd_trf->getPointBasicCoordFromGlobal(p);
-    if(x<0.0 || x>1.0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; the relative distance x= "
-                << x << " obtained from point: " << p
-                << " must be between 0 and 1." << std::endl;
-    vector2dPointByRelDistLoadGlobal(x,v);
+    // Some 1D elements like Trusses have no coordinate
+    // transformation (and don't accept loads neither).
+    if(crd_trf)
+      {    
+	const double x= crd_trf->getPointBasicCoordFromGlobal(p);
+	if(x<0.0 || x>1.0)
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; the relative distance x= "
+		    << x << " obtained from point: " << p
+		    << " must be between 0 and 1." << std::endl;
+	vector2dPointByRelDistLoadGlobal(x,v);
+      }
+    else
+      std::clog << getClassName() << "::" << __FUNCTION__
+		<< "; element has no coordinate transformation"
+		<< " load ignored." << std::endl;    
   }
 
 void XC::Element1D::vector2dPointLoadLocal(const Vector &p,const Vector &v)
   {
     const CrdTransf *crd_trf= getCoordTransf();
-    const double x= crd_trf->getPointBasicCoordFromGlobal(p);
-    if(x<0.0 || x>1.0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; the relative distance x= "
-                << x << " obtained from point: " << p
-                << " must be between 0 and 1." << std::endl;
-    vector2dPointByRelDistLoadLocal(x,v);
+    // Some 1D elements like Trusses have no coordinate
+    // transformation (and don't accept loads neither).
+    if(crd_trf)
+      {        
+	const double x= crd_trf->getPointBasicCoordFromGlobal(p);
+	if(x<0.0 || x>1.0)
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; the relative distance x= "
+		    << x << " obtained from point: " << p
+		    << " must be between 0 and 1." << std::endl;
+	vector2dPointByRelDistLoadLocal(x,v);
+      }
+    else
+      std::clog << getClassName() << "::" << __FUNCTION__
+		<< "; element has no coordinate transformation"
+		<< " load ignored." << std::endl;    
   }
 
+//! @bried Defines a uniform load on the vector from a
+//! vector in global coordinates.
 void XC::Element1D::vector3dUniformLoadGlobal(const Vector &v)
   {
     const size_t sz= v.Size();
     if(sz>2)
       {
         const CrdTransf *crd_trf= getCoordTransf();
-        const Vector vTrf= crd_trf->getVectorLocalCoordFromGlobal(v);
-        vector3dUniformLoadLocal(vTrf);
+	// Some 1D elements like Trusses have no coordinate
+	// transformation (and don't accept loads neither).
+	if(crd_trf)
+	  {
+            const Vector vTrf= crd_trf->getVectorLocalCoordFromGlobal(v);
+            vector3dUniformLoadLocal(vTrf);
+	  }
+	else
+	  std::clog << getClassName() << "::" << __FUNCTION__
+                    << "; element has no coordinate transformation"
+	            << " load ignored." << std::endl;
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -264,8 +320,17 @@ void XC::Element1D::vector3dPointByRelDistLoadGlobal(const double &x,const Vecto
     if(sz>2)
       {
         const CrdTransf *crd_trf= getCoordTransf();
-        const Vector vTrf= crd_trf->getVectorLocalCoordFromGlobal(v);
-        vector3dPointByRelDistLoadLocal(x,vTrf);
+	// Some 1D elements like Trusses have no coordinate
+	// transformation (and don't accept loads neither).
+	if(crd_trf)
+	  {
+            const Vector vTrf= crd_trf->getVectorLocalCoordFromGlobal(v);
+            vector3dPointByRelDistLoadLocal(x,vTrf);
+	  }
+	else
+	  std::clog << getClassName() << "::" << __FUNCTION__
+                    << "; element has no coordinate transformation"
+	            << " load ignored." << std::endl;
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -306,25 +371,43 @@ void XC::Element1D::vector3dPointByRelDistLoadLocal(const double &x,const Vector
 void XC::Element1D::vector3dPointLoadGlobal(const Vector &p,const Vector &v)
   {
     const CrdTransf *crd_trf= getCoordTransf();
-    const double x= crd_trf->getPointBasicCoordFromGlobal(p);
-    if(x<0.0 || x>1.0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; the relative distance x= "
-                << x << " obtained from point: " << p
-                << " must be between 0 and 1." << std::endl;
-    vector3dPointByRelDistLoadGlobal(x,v);
+    // Some 1D elements like Trusses have no coordinate
+    // transformation (and don't accept loads neither).
+    if(crd_trf)
+      {
+	const double x= crd_trf->getPointBasicCoordFromGlobal(p);
+	if(x<0.0 || x>1.0)
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; the relative distance x= "
+		    << x << " obtained from point: " << p
+		    << " must be between 0 and 1." << std::endl;
+	vector3dPointByRelDistLoadGlobal(x,v);
+      }
+    else
+      std::clog << getClassName() << "::" << __FUNCTION__
+		<< "; element has no coordinate transformation"
+		<< " load ignored." << std::endl;
   }
 
 void XC::Element1D::vector3dPointLoadLocal(const Vector &p,const Vector &v)
   {
     const CrdTransf *crd_trf= getCoordTransf();
-    const double x= crd_trf->getPointBasicCoordFromGlobal(p);
-    if(x<0.0 || x>1.0)
-      std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "; the relative distance x= "
-                << x << " obtained from point: " << p
-                << " must be between 0 and 1." << std::endl;
-    vector3dPointByRelDistLoadLocal(x,v);
+    // Some 1D elements like Trusses have no coordinate
+    // transformation (and don't accept loads neither).
+    if(crd_trf)
+      {
+	const double x= crd_trf->getPointBasicCoordFromGlobal(p);
+	if(x<0.0 || x>1.0)
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; the relative distance x= "
+		    << x << " obtained from point: " << p
+		    << " must be between 0 and 1." << std::endl;
+	vector3dPointByRelDistLoadLocal(x,v);
+      }
+    else
+      std::clog << getClassName() << "::" << __FUNCTION__
+		<< "; element has no coordinate transformation"
+		<< " load ignored." << std::endl;
   }
 
 void XC::Element1D::strainLoad(const DeformationPlane &p1,const DeformationPlane &p2)
