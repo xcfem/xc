@@ -605,7 +605,16 @@ Pos3d XC::Node::getPosition3d(const Vector &v) const
 //! factor: return initPos+ factor * nodDisplacement.
 Pos2d XC::Node::getCurrentPosition2d(const double &factor) const
   {
-    const Vector fd= factor*getDisp();
+    Vector fd= factor*getDisp();
+    if(fd.isnan()) //Something went wrong.
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+	          << " displacement vector for node: "
+	          << getTag() << " is NOT VALID"
+	          << " returning original position."
+	          << std::endl;
+        fd.Zero();
+      }
     return getPosition2d(fd);
   }
 
@@ -613,7 +622,16 @@ Pos2d XC::Node::getCurrentPosition2d(const double &factor) const
 //! factor: return initPos+ factor * nodDisplacement.
 Pos3d XC::Node::getCurrentPosition3d(const double &factor) const
   {
-    const Vector fd= factor*getDisp();
+    Vector fd= factor*getDisp();
+    if(fd.isnan()) //Something went wrong.
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+	          << " displacement vector for node: "
+	          << getTag() << " is NOT VALID"
+	          << " returning original position."
+	          << std::endl;
+        fd.Zero();
+      }
     return getPosition3d(fd);
   }
 

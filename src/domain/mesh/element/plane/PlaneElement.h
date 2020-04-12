@@ -34,6 +34,7 @@
 #include "xc_utils/src/geom/d2/Polygon3d.h"
 #include "xc_utils/src/geom/d1/Segment3d.h"
 #include "xc_utils/src/geom/pos_vec/Pos3d.h"
+#include "xc_utils/src/geom/lists/utils_list_pos3d.h"
 #include "preprocessor/Preprocessor.h"
 
 #include "domain/mesh/node/Node.h"
@@ -59,6 +60,7 @@ class PlaneElement: public ElemWithMaterial<NNODES, PhysProp>
 
     virtual Polygon3d getPolygon(bool initialGeometry= true) const;
     virtual Segment3d getSide(const size_t &i,bool initialGeometry= true) const;
+    double getMaximumCornerAngle(bool initialGeometry= true) const;
     Pos3d getCenterOfMassPosition(bool initialGeometry= true) const;
     virtual double getPerimeter(bool initialGeometry= true) const;
     virtual double getArea(bool initialGeometry= true) const;
@@ -159,12 +161,36 @@ double XC::PlaneElement<NNODES, PhysProp>::getTributaryArea(const Node *nod) con
     return retval;
   }
 
+//! @brief Returns the maximum corner angle quality parameter.
+template <int NNODES,class PhysProp>
+double XC::PlaneElement<NNODES, PhysProp>::getMaximumCornerAngle(bool initialGeometry) const
+  {
+    const std::deque<Pos3d> positions= this->getPosNodes(initialGeometry);
+    return getMaxCornerAngle(positions.begin(),positions.end());
+  }
+
 //! @brief Returns the element contour as a polygon.
 template <int NNODES,class PhysProp>
 Polygon3d XC::PlaneElement<NNODES, PhysProp>::getPolygon(bool initialGeometry) const
   {
-    const std::deque<Pos3d> positions= this->getPosNodes(initialGeometry);
-    return Polygon3d(positions.begin(),positions.end());
+    const double maxAngle= getMaximumCornerAngle();
+    Polygon3d retval;
+    if(abs(maxAngle-M_PI)<1e-3)
+      {
+        std::cerr << this->getClassName() << "::" << __FUNCTION__
+                  << " element with tag: " << this->getTag()
+	          << " has maximum corner angle of "
+		  << RadToDeg(maxAngle)
+		  << " degrees (too distorted)."
+		  << " Returning empty polygon."
+		  << std::endl;
+      }
+    else
+      {
+        const std::deque<Pos3d> positions= this->getPosNodes(initialGeometry);
+        retval= Polygon3d(positions.begin(),positions.end());
+      }
+    return retval;
   }
 
 //! @brief Returns a lado of the element. 

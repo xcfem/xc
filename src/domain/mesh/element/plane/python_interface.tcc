@@ -33,6 +33,7 @@ class_<ElemWithMaterial4N_Mech2D, bases<XC::ElementBase<4> >, boost::noncopyable
 class_<PlaneElement4N_Mech2D, bases<ElemWithMaterial4N_Mech2D>, boost::noncopyable >("PlaneElement4N_Mech2D", no_init)
   .def("getPerimeter", &PlaneElement4N_Mech2D::getPerimeter, "Returns element's perimeter.")
   .def("getArea", &PlaneElement4N_Mech2D::getArea, "getArea(initialGeometry): return element's area. If initialGeometry is True the returned area corresponds to its undeformed geometry.")
+  .def("getMaximumCornerAngle", &PlaneElement4N_Mech2D::getMaximumCornerAngle, "getMaximumCornerAngle(initialGeometry): return the maximum corner angle quality parameter. If intialGeometry is True the returned value corresponds to its undeformed geometry.")
    ;
 
 class_<QuadBase4N_Mech2D, bases<PlaneElement4N_Mech2D>, boost::noncopyable >("QuadBase4N_Mech2D", no_init)
@@ -48,6 +49,7 @@ class_<ElemWithMaterial3N_Mech2D, bases<XC::ElementBase<3> >, boost::noncopyable
 class_<PlaneElement3N_Mech2D, bases<ElemWithMaterial3N_Mech2D>, boost::noncopyable >("PlaneElement3N_Mech2D", no_init)
   .def("getPerimeter", &PlaneElement3N_Mech2D::getPerimeter, "Returns element's perimeter.")
   .def("getArea", &PlaneElement3N_Mech2D::getArea, "getArea(initialGeometry): return element's area. If initialGeometry is True the returned area corresponds to its undeformed geometry.")
+  .def("getMaximumCornerAngle", &PlaneElement3N_Mech2D::getMaximumCornerAngle, "getMaximumCornerAngle(initialGeometry): return the maximum corner angle quality parameter. If intialGeometry is True the returned value corresponds to its undeformed geometry.")
    ;
 
 class_<TriBase3N_Mech2D, bases<PlaneElement3N_Mech2D>, boost::noncopyable >("TriBase3N_Mech2D", no_init)
@@ -63,6 +65,7 @@ class_<ElemWithMaterial4N_SFD, bases<XC::ElementBase<4> >, boost::noncopyable >(
 class_<PlaneElement4N_SFD, bases<ElemWithMaterial4N_SFD>, boost::noncopyable >("PlaneElement4N_SFD", no_init)
   .def("getPerimeter", &PlaneElement4N_SFD::getPerimeter, "Returns element's perimeter.")
   .def("getArea", &PlaneElement4N_SFD::getArea, "getArea(initialGeometry): return element's area. If initialGeometry is True the returned area corresponds to its undeformed geometry.")
+  .def("getMaximumCornerAngle", &PlaneElement4N_SFD::getMaximumCornerAngle, "getMaximumCornerAngle(initialGeometry): return the maximum corner angle quality parameter. If intialGeometry is True the returned value corresponds to its undeformed geometry.")
    ;
 
 class_<ElemWithMaterial9N_SFD, bases<XC::ElementBase<9> >, boost::noncopyable >("ElemWithMaterial9N_SFD", no_init)
@@ -72,6 +75,7 @@ class_<ElemWithMaterial9N_SFD, bases<XC::ElementBase<9> >, boost::noncopyable >(
 class_<PlaneElement9N_SFD, bases<ElemWithMaterial9N_SFD>, boost::noncopyable >("PlaneElement9N_SFD", no_init)
   .def("getPerimeter", &PlaneElement9N_SFD::getPerimeter, "Returns element's perimeter.")
   .def("getArea", &PlaneElement9N_SFD::getArea, "getArea(initialGeometry): return element's area. If initialGeometry is True the returned area corresponds to its undeformed geometry.")
+  .def("getMaximumCornerAngle", &PlaneElement9N_SFD::getMaximumCornerAngle, "getMaximumCornerAngle(initialGeometry): return the maximum corner angle quality parameter. If intialGeometry is True the returned value corresponds to its undeformed geometry.")
    ;
 
 
