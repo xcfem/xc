@@ -74,7 +74,7 @@ void XC::Element1D::vector2dUniformLoadGlobal(const Vector &v)
       }
     else
       std::clog << getClassName() << "::" << __FUNCTION__
-		<< "; element has no coordinate transformation"
+		<< "; WARNING element has no coordinate transformation"
 		<< " load ignored." << std::endl;
   }
 
@@ -123,7 +123,7 @@ void XC::Element1D::vector2dPartialUniformLoadGlobal(const double &aOverL, const
       }
     else
       std::clog << getClassName() << "::" << __FUNCTION__
-		<< "; element has no coordinate transformation"
+		<< "; WARNING element has no coordinate transformation"
 		<< " load ignored." << std::endl;
   }
 
@@ -175,7 +175,7 @@ void XC::Element1D::vector2dPointByRelDistLoadGlobal(const double &x,const Vecto
 	  }
 	else
 	  std::clog << getClassName() << "::" << __FUNCTION__
-		    << "; element has no coordinate transformation"
+		    << "; WARNING element has no coordinate transformation"
 		    << " load ignored." << std::endl;	
       }
     else
@@ -234,7 +234,7 @@ void XC::Element1D::vector2dPointLoadGlobal(const Vector &p,const Vector &v)
       }
     else
       std::clog << getClassName() << "::" << __FUNCTION__
-		<< "; element has no coordinate transformation"
+		<< "; WARNING element has no coordinate transformation"
 		<< " load ignored." << std::endl;    
   }
 
@@ -255,7 +255,7 @@ void XC::Element1D::vector2dPointLoadLocal(const Vector &p,const Vector &v)
       }
     else
       std::clog << getClassName() << "::" << __FUNCTION__
-		<< "; element has no coordinate transformation"
+		<< "; WARNING element has no coordinate transformation"
 		<< " load ignored." << std::endl;    
   }
 
@@ -276,7 +276,7 @@ void XC::Element1D::vector3dUniformLoadGlobal(const Vector &v)
 	  }
 	else
 	  std::clog << getClassName() << "::" << __FUNCTION__
-                    << "; element has no coordinate transformation"
+                    << "; WARNING element has no coordinate transformation"
 	            << " load ignored." << std::endl;
       }
     else
@@ -329,7 +329,7 @@ void XC::Element1D::vector3dPointByRelDistLoadGlobal(const double &x,const Vecto
 	  }
 	else
 	  std::clog << getClassName() << "::" << __FUNCTION__
-                    << "; element has no coordinate transformation"
+                    << "; WARNING element has no coordinate transformation"
 	            << " load ignored." << std::endl;
       }
     else
@@ -385,7 +385,7 @@ void XC::Element1D::vector3dPointLoadGlobal(const Vector &p,const Vector &v)
       }
     else
       std::clog << getClassName() << "::" << __FUNCTION__
-		<< "; element has no coordinate transformation"
+		<< "; WARNING element has no coordinate transformation"
 		<< " load ignored." << std::endl;
   }
 
@@ -406,7 +406,7 @@ void XC::Element1D::vector3dPointLoadLocal(const Vector &p,const Vector &v)
       }
     else
       std::clog << getClassName() << "::" << __FUNCTION__
-		<< "; element has no coordinate transformation"
+		<< "; WARNING element has no coordinate transformation"
 		<< " load ignored." << std::endl;
   }
 
