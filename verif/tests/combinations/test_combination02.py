@@ -81,8 +81,8 @@ comb= combs.newLoadCombination("COMB","1.33*A+1.5*B")
 # Solution procedure
 # Resolvemos para el caso A
 loadHandler.addToDomain("A") # Append the combination to the domain
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 
 lpA.removeFromDomain() # Quitamos la carga del domain
 
@@ -117,8 +117,8 @@ cumpleA= (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3-1.0)<1e-5)
 # Solve for combination COMB
 loadHandler.addToDomain("COMB")
 
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 
 nod2= nodes.getNode(2)
 deltax= nod2.getDisp[0]

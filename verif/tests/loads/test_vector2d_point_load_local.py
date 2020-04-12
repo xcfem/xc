@@ -87,8 +87,8 @@ lPatterns.addToDomain(lp0.name)
 
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 
 nod2= nodes.getNode(2)
 delta0= nod2.getDisp[0]

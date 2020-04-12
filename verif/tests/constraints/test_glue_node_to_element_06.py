@@ -85,11 +85,11 @@ lp0.newNodalLoad(n10.tag,xc.Vector(loadOnDOFs))
 lPatterns.addToDomain(lp0.name)
 
 # Solution
-#analisis= predefined_solutions.simple_static_linear(feProblem)
+#analysis= predefined_solutions.simple_static_linear(feProblem)
 solver= predefined_solutions.SolutionProcedure()
-analisis= solver.simpleLagrangeStaticLinear(feProblem)
-#analisis= solver.simpleTransformationStaticLinear(feProblem)
-result= analisis.analyze(1)
+analysis= solver.simpleLagrangeStaticLinear(feProblem)
+#analysis= solver.simpleTransformationStaticLinear(feProblem)
+result= analysis.analyze(1)
 
 nodes.calculateNodalReactions(False,1e-7)
 

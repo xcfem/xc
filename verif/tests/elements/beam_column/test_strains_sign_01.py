@@ -124,8 +124,8 @@ lp0.newNodalLoad(2,xc.Vector([N,0,0,0,My,Mz])) #Section's y axis is element z ax
 lPatterns.addToDomain(lp0.name)
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 
 zl.getResistingForce()
 section= zl.getSections()[0]

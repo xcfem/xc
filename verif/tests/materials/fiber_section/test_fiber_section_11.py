@@ -68,8 +68,8 @@ lPatterns.addToDomain(lp0.name)
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(feProblem)
-analOk= analisis.analyze(10)
+analysis= predefined_solutions.simple_newton_raphson(feProblem)
+analOk= analysis.analyze(10)
 
 nodes= preprocessor.getNodeHandler
 nodes.calculateNodalReactions(True,1e-7)

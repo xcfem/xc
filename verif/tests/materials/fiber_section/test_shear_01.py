@@ -108,8 +108,8 @@ lPatterns.addToDomain(lp0.name)
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(feProblem)
-analOk= analisis.analyze(10)
+analysis= predefined_solutions.simple_newton_raphson(feProblem)
+analOk= analysis.analyze(10)
 if(analOk!=0):
   print "Error!; failed to converge."
   exit()
@@ -134,7 +134,7 @@ preprocessor.resetLoadCase()
 loadHandler= preprocessor.getLoadHandler.addToDomain("1") # Añadimos la otra carga.
 
 
-analOk= analisis.analyze(10)
+analOk= analysis.analyze(10)
 if(analOk!=0):
   print "Error!; failed to converge."
   exit()
@@ -150,7 +150,7 @@ preprocessor.resetLoadCase()
 loadHandler= preprocessor.getLoadHandler.addToDomain("2") # Añadimos la otra carga.
 
 
-analOk= analisis.analyze(10)
+analOk= analysis.analyze(10)
 if(analOk!=0):
   print "Error!; failed to converge."
   exit()

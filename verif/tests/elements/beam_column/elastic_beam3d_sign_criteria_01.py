@@ -99,8 +99,8 @@ lp0.newNodalLoad(2,xc.Vector([F,0,0,0,0,0])) #Positive force along x axis
 lPatterns.addToDomain(lp0.name)
 
 # Solution 0 N
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 
 RF= elements.getElement(1).getResistingForce()
 (N1,Vy1,Vz1,T1,My1,Mz1)= getInternalForcesBeginNode(1)
@@ -128,8 +128,8 @@ lp1.newNodalLoad(2,xc.Vector([0,F,0,0,0,0])) #Positive force along y axis
 lPatterns.addToDomain("1")
 
 # Solution 1 My Vz
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 
 RF= elements.getElement(1).getResistingForce()
 (N1,Vy1,Vz1,T1,My1,Mz1)= getInternalForcesBeginNode(1)
@@ -156,8 +156,8 @@ lp2.newNodalLoad(2,xc.Vector([0,0,F,0,0,0])) #Positive force along z axis
 lPatterns.addToDomain("2")
 
 # Solution 2 Mz Vy
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 
 RF= elements.getElement(1).getResistingForce()
 (N1,Vy1,Vz1,T1,My1,Mz1)= getInternalForcesBeginNode(1)
@@ -185,8 +185,8 @@ lp3.newNodalLoad(2,xc.Vector([0,0,0,F,0,0])) #Positive moment about x axis
 lPatterns.addToDomain("3")
 
 # Solution 3 T
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 
 RF= elements.getElement(1).getResistingForce()
 (N1,Vy1,Vz1,T1,My1,Mz1)= getInternalForcesBeginNode(1)
@@ -212,8 +212,8 @@ lp4.newNodalLoad(2,xc.Vector([0,0,0,0,F,0])) #Positive moment about y axis
 lPatterns.addToDomain("4")
 
 # Solution 4 T
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 
 RF= elements.getElement(1).getResistingForce()
 (N1,Vy1,Vz1,T1,My1,Mz1)= getInternalForcesBeginNode(1)
@@ -239,8 +239,8 @@ lp5.newNodalLoad(2,xc.Vector([0,0,0,0,0,F])) #Positive moment about z axis
 lPatterns.addToDomain("5")
 
 # Solution 5 T
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 
 RF= elements.getElement(1).getResistingForce()
 (N1,Vy1,Vz1,T1,My1,Mz1)= getInternalForcesBeginNode(1)

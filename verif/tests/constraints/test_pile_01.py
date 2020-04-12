@@ -126,8 +126,8 @@ lPatterns.addToDomain(lp0.name)
 lp0.gammaF=1
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(FEcase)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(FEcase)
+result= analysis.analyze(1)
 
 nodes.calculateNodalReactions(True,1e-7)
 

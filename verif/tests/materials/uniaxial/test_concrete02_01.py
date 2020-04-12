@@ -62,7 +62,7 @@ lp0= lPatterns.newLoadPattern("default","0")
 #lPatterns.addToDomain(lp0.name)
 
 # Solution
-analisis= predefined_solutions.simple_static_modified_newton(feProblem)
+analysis= predefined_solutions.simple_static_modified_newton(feProblem)
 dom= preprocessor.getDomain
 
 strainData= [-1.55637e-3,-1.4037e-3,-1.28474e-3,-1.18796e-3,-1.09365e-3,-1.01316e-3,-0.93755e-3,-0.86304e-3,-0.796515e-3,-0.732951e-3,-0.672066e-3,-0.611906e-3,-0.556246e-3,-0.502408e-3,-0.450266e-3,-0.399699e-3,-0.3506e-3,-0.30244e-3,-0.25618e-3,-0.211025e-3,-0.166922e-3,-0.123819e-3,-0.0816646e-3,-0.0404e-3,0e-3,0.04e-3,0.06e-3,0.068e-3,0.0721905e-3]
@@ -77,7 +77,7 @@ for stress in stressInput:
   lp0.clearLoads()
   nl= lp0.newNodalLoad(2,xc.Vector([stress]))
   lPatterns.addToDomain(lp0.name)
-  result= analisis.analyze(1)
+  result= analysis.analyze(1)
   calculatedStresses.append(-elem1.getResistingForce()[0])
   calculatedStrains.append(elem1.getMaterials()[0].getStrain())
 

@@ -75,8 +75,8 @@ eleLoad.frontEndDeformationPlane= defTermica
 #We add the load case to domain.
 lPatterns.addToDomain(lp0.name)
 
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 
 elements.getElement(1).getResistingForce()
 axil1= elements.getElement(1).getN1

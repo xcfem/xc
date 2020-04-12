@@ -12,7 +12,6 @@ __email__= "l.pereztato@gmail.com"
 import xc_base
 import geom
 import xc
-from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 
@@ -76,10 +75,8 @@ lp0.newNodalLoad(n3.tag,xc.Vector([0,-F1]))
 lPatterns.addToDomain(lp0.name)
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+result= modelSpace.analyze(calculateNodalReactions= True)
 
-nodes.calculateNodalReactions(True,1e-7)
 R1= n4.getReaction[1]
 R2= n1.getReaction[1]
 

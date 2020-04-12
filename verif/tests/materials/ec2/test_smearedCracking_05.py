@@ -150,9 +150,9 @@ solution=  predefined_solutions.SolutionProcedure()
 solution.convergenceTestTol= 1e-2
 analysis= solution.simpleStaticModifiedNewton(problem)
 analOk= analysis.analyze(1)
-#analisis= predefined_solutions.simple_newton_raphson(problem)
-#analisis= predefined_solutions.simple_static_modified_newton(problem)
-#analOk= analisis.analyze(1)
+#analysis= predefined_solutions.simple_newton_raphson(problem)
+#analysis= predefined_solutions.simple_static_modified_newton(problem)
+#analOk= analysis.analyze(1)
 
 
 #printing results

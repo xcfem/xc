@@ -90,8 +90,8 @@ from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 os.system("rm -f /tmp/combinacion04.db")
 lmsg.error(fname+' test in QUARANTINE; SQLite interface debugging needed.')
 exit(-1)

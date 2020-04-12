@@ -108,11 +108,11 @@ loadHandler= preprocessor.getLoadHandler
 #We add the load case to domain.
 lPatterns.addToDomain(lp0.name)
 # Solution procedure
-analisis= predefined_solutions.simple_static_modified_newton(feProblem)
+analysis= predefined_solutions.simple_static_modified_newton(feProblem)
 feProblem.setVerbosityLevel(0) #Dont print warning messages
                             #about loads over
                             #elements with corotational formulation.
-result= analisis.analyze(10)
+result= analysis.analyze(10)
 
 execfile(pth+"/test_vector3d_uniform_load_global.py")
 feProblem.setVerbosityLevel(1) #Print warnings again 

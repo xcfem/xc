@@ -71,8 +71,8 @@ lp0.newNodalLoad(2,xc.Vector([0,-F,0,0,0,0]))
 lPatterns.addToDomain(lPattern) # Append load pattern to domain.
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(feProblem)
-result= analisis.analyze(10)
+analysis= predefined_solutions.simple_newton_raphson(feProblem)
+result= analysis.analyze(10)
 
 
 nodes.calculateNodalReactions(True,1e-7)

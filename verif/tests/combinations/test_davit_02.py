@@ -134,8 +134,8 @@ def resuelveCombEstatLin(comb):
       db.restore(tagSave)
 
     comb.addToDomain()
-    analisis= predefined_solutions.simple_static_linear(feProblem)
-    result= analisis.analyze(1)
+    analysis= predefined_solutions.simple_static_linear(feProblem)
+    result= analysis.analyze(1)
     comb.removeFromDomain()
 
 

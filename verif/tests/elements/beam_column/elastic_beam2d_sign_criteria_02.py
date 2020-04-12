@@ -99,8 +99,8 @@ eleLoad.x= xRelPtoAplic
 lPatterns.addToDomain(lp0.name)
 
 # Solution 0 N
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 
 RF= elements.getElement(1).getResistingForce()
 (N1,V1,M1)= getInternalForcesBeginNode(1)
@@ -127,8 +127,8 @@ eleLoad.x= xRelPtoAplic
 lPatterns.addToDomain("1")
 
 # Solution 1 V
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 
 RF= elements.getElement(1).getResistingForce()
 (N1,V1,M1)= getInternalForcesBeginNode(1)

@@ -105,8 +105,8 @@ el.vector2dUniformLoadLocal(xc.Vector([f,-p]))
 #We add the load case to domain.
 lPatterns.addToDomain(lp0.name)
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_newton_raphson(feProblem)
+result= analysis.analyze(1)
 
 
 nodes.calculateNodalReactions(True,1e-7) 

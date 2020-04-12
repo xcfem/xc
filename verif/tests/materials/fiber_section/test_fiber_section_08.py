@@ -80,8 +80,8 @@ lPatterns.addToDomain(lp0.name)
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(feProblem)
-analOk= analisis.analyze(1)
+analysis= predefined_solutions.simple_newton_raphson(feProblem)
+analOk= analysis.analyze(1)
 
 IEIz= 0.0
 IEIy= 0.0

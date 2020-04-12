@@ -94,8 +94,8 @@ lp0.newNodalLoad(nod2.tag,xc.Vector([0,-F,0,0,0,0]))
 #We add the load case to domain.
 lPatterns.addToDomain(lp0.name)
 # Solution procedure
-analisis= predefined_solutions.simple_static_modified_newton(feProblem)
-result= analisis.analyze(10)
+analysis= predefined_solutions.simple_static_modified_newton(feProblem)
+result= analysis.analyze(10)
 
 
 nodes= preprocessor.getNodeHandler 
@@ -106,8 +106,8 @@ delta0= nod2.getDisp[1]  # Node 2 yAxis displacement
 modelSpace.constraints.removeSPConstraint(spcTag)
 
 # Solution procedure
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 
 
 nodes.calculateNodalReactions(True,1e-7) 

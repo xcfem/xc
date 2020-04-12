@@ -95,8 +95,8 @@ feProblem.setVerbosityLevel(1) #Print warnings again
 
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 
 
 nodes.calculateNodalReactions(True,1e-7)
@@ -117,8 +117,8 @@ mesh.meltAliveNodes("congela") # Reactivate inactive nodes.
 
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 
 db.save(105)
 feProblem.clearAll()

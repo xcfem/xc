@@ -173,9 +173,9 @@ for F in Flist:
   #We add the load case to domain.
   lPatterns.addToDomain(lp0.name)           #reads load pattern "0" and adds it to the domain
   # Solve
-  #analisis= predefined_solutions.simple_newton_raphson(feProblem)
-  analisis= predefined_solutions.simple_static_modified_newton(feProblem)
-  analOk= analisis.analyze(1)
+  #analysis= predefined_solutions.simple_newton_raphson(feProblem)
+  analysis= predefined_solutions.simple_static_modified_newton(feProblem)
+  analOk= analysis.analyze(1)
   fConcrMin= setsRCEl1.concrFibers.getFiberWithMinStrain()
   epsCMin= fConcrMin.getMaterial().getStrain() # minimum strain among concrete fibers
   strain.append(epsCMin*1E3)

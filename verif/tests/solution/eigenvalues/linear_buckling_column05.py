@@ -96,8 +96,8 @@ lPatterns.addToDomain(lp0.name)
 
 
 # Solution procedure
-#analisis= predefined_solutions.simple_static_linear(feProblem)
-#result= analisis.analyze(1)
+#analysis= predefined_solutions.simple_static_linear(feProblem)
+#result= analysis.analyze(1)
 import os
 pth= os.path.dirname(__file__)
 if(not pth):

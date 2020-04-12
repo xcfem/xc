@@ -87,8 +87,8 @@ beam.createInertiaLoad(accel)
 lPatterns.addToDomain(lp0.name)
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 
 nodes.calculateNodalReactions(True,1e-7)
 R= n2.getReaction[1]

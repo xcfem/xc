@@ -90,8 +90,8 @@ eleLoad.x= 0.25
 lPatterns.addToDomain(lp0.name)
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 
 theta2= 0.0 # Rotation of the node 2
 theta2Teor= -0.08620 # Theorethical value of the rotation of the node 2

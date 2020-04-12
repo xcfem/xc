@@ -200,8 +200,8 @@ lcZbeam.newNodalLoad(3,xc.Vector([F/math.sqrt(2),-F/math.sqrt(2),0,M/math.sqrt(2
 # lPatterns.addToDomain("lcbeams")
 
 # Solution
-# analisis= predefined_solutions.simple_static_linear(feProblem)
-# result= analisis.analyze(1)
+# analysis= predefined_solutions.simple_static_linear(feProblem)
+# result= analysis.analyze(1)
 
 
 # Load combinations

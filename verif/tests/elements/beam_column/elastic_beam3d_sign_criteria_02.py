@@ -103,8 +103,8 @@ elem.vector3dPointByRelDistLoadLocal(xRelPtoAplic,xc.Vector([F,0,0]))
 lPatterns.addToDomain(lp0.name)
 
 # Solution 0 N 
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 
 RF= elements.getElement(1).getResistingForce()
 (N1,Vy1,Vz1,T1,My1,Mz1)= getInternalForcesBeginNode(1)
@@ -131,8 +131,8 @@ elem.vector3dPointByRelDistLoadLocal(xRelPtoAplic,xc.Vector([0,F,0]))
 lPatterns.addToDomain("1")
 
 # Solution 1 Mz Vy
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 
 RF= elements.getElement(1).getResistingForce()
 (N1,Vy1,Vz1,T1,My1,Mz1)= getInternalForcesBeginNode(1)
@@ -162,8 +162,8 @@ lPatterns.addToDomain("2")
 
 
 # Solution 2 My Vz
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 
 RF= elements.getElement(1).getResistingForce()
 (N1,Vy1,Vz1,T1,My1,Mz1)= getInternalForcesBeginNode(1)
@@ -192,8 +192,8 @@ elem.vector3dUniformLoadLocal(xc.Vector([0,0,F]))
 lPatterns.addToDomain("3")
 
 # Solution 3 T
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 
 RF= elements.getElement(1).getResistingForce()
 (N1,Vy1,Vz1,T1,My1,Mz1)= getInternalForcesBeginNode(1)

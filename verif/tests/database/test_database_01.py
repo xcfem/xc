@@ -72,8 +72,8 @@ lp0.newNodalLoad(2,xc.Vector([F,0,0,0,0,0]))
 lPatterns.addToDomain(lp0.name)
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 import os
 os.system("rm -f /tmp/test01.db")
 db= feProblem.newDatabase("SQLite","/tmp/test01.db")

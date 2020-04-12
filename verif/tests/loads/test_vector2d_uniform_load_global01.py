@@ -111,8 +111,8 @@ loadHandler= preprocessor.getLoadHandler
 loadHandler.addToDomain("0") # Append load pattern to domain.
 
 # Solution procedure
-analisis= predefined_solutions.simple_newton_raphson(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_newton_raphson(feProblem)
+result= analysis.analyze(1)
 
 nodes.calculateNodalReactions(True,1e-7) 
 nod2= nodes.getNode(2)

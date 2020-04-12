@@ -75,8 +75,8 @@ lp0=slm.gradient_thermal_LC(lcName='lp0', lstGradThStrnData=[imps.gradThermalStr
 loadHandler= preprocessor.getLoadHandler
 lPatterns= loadHandler.getLoadPatterns
 lPatterns.addToDomain('lp0')
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 elem1= elements.getElement(1)
 elem1.getResistingForce()
 

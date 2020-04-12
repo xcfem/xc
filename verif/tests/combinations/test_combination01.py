@@ -78,8 +78,8 @@ comb= combs.newLoadCombination("COMB","1.33*A+1.5*B")
 loadHandler.addToDomain("COMB")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 
 deltax= nodes.getNode(2).getDisp[0]
 deltay= nodes.getNode(2).getDisp[2]

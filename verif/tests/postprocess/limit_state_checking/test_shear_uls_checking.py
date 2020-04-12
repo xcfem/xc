@@ -81,8 +81,8 @@ lp0.newNodalLoad(n3.tag,xc.Vector([Fx,Fy,Fz,0,0,0]))
 lPatterns.addToDomain(lp0.getName())
 
 # # Solution
-# analisis= predefined_solutions.simple_static_linear(feProblem)
-# result= analisis.analyze(1)
+# analysis= predefined_solutions.simple_static_linear(feProblem)
+# result= analysis.analyze(1)
 
 # Load combinations
 combContainer= combs.CombContainer()

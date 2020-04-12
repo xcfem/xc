@@ -164,15 +164,15 @@ casos.addToDomain('0')
 
 # Phase 1: prestressing of tendon
 # Solution procedure
-analisis= predefined_solutions.simple_static_linear(FEcase)
-analOk= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(FEcase)
+analOk= analysis.analyze(1)
 uz_ph1=msNod.getDisp[2]
 
 # Phase 2: self weight
 loadVector=xc.Vector([0,0,-Wsw])
 for e in beamSet.getElements:
     e.vector3dUniformLoadGlobal(loadVector)
-analOk= analisis.analyze(1)
+analOk= analysis.analyze(1)
 uz_ph2=msNod.getDisp[2]
 
 # Phase 3: prestress loss in service
@@ -180,14 +180,14 @@ for e in tendonSet.getElements:
     tendonMat= e.getMaterial()
     tendonMat.prestress= fps
     e.update() #Update element state according with the new prestress
-analOk= analisis.analyze(1)
+analOk= analysis.analyze(1)
 uz_ph3=msNod.getDisp[2]
 
 # Phase 4: load in servide
 loadVector=xc.Vector([0,0,-q_service])
 for e in beamSet.getElements:
     e.vector3dUniformLoadGlobal(loadVector)
-analOk= analisis.analyze(1)
+analOk= analysis.analyze(1)
 uz_ph4=msNod.getDisp[2]
 
 ratio1=uz_ph1-uZ_prestr

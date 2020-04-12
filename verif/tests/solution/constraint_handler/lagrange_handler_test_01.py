@@ -85,8 +85,8 @@ lPatterns.addToDomain(lp0.name)
 
 # Solution procedure
 solver= predefined_solutions.SolutionProcedure()
-analisis= solver.simpleLagrangeStaticLinear(feProblem)
-result= analisis.analyze(1)
+analysis= solver.simpleLagrangeStaticLinear(feProblem)
+result= analysis.analyze(1)
 
 nodes.calculateNodalReactions(True,1e-7)
 R1= nodes.getNode(4).getReaction[1] 

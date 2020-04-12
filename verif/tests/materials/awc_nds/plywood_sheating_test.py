@@ -101,8 +101,8 @@ preprocessor.getLoadHandler.addToDomain("load")
 
 # Solution
 # Linear static analysis.
-analisis= predefined_solutions.simple_static_linear(sheathingBeam)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(sheathingBeam)
+result= analysis.analyze(1)
 
 uYMax= -1e6
 for n in infSet.getNodes:

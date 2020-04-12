@@ -116,8 +116,8 @@ for nl in nodalLoads:
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_static_linear(feProblem)
-analOk= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+analOk= analysis.analyze(1)
 
 nNodes= l2.getNumNodes
 # print "size= ",size

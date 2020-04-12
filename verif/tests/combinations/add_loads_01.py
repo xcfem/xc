@@ -78,8 +78,8 @@ lPatterns.addToDomain(lp0.name)
 lPatterns.addToDomain("1")
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 
 delta= nodes.getNode(2).getDisp[0]
 theta= nodes.getNode(2).getDisp[3]

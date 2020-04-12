@@ -12,7 +12,6 @@ __email__= "l.pereztato@gmail.com"
 import xc_base
 import geom
 import xc
-from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 import math
@@ -73,8 +72,8 @@ lp0.newNodalLoad(n2.tag,xc.Vector([0,-F]))
 lPatterns.addToDomain(lp0.name)
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+result= modelSpace.analyze(calculateNodalReactions= False)
+
 
 delta= n2.getDisp[1]
 stress= truss1.getMaterial().getStress()

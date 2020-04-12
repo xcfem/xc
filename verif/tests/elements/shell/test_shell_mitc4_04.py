@@ -100,8 +100,8 @@ lPatterns.addToDomain(lp0.name)
 
 
 # Solution procedure
-analisis= predefined_solutions.simple_static_linear(feProblem)
-analOk= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+analOk= analysis.analyze(1)
 
 node= s.getNodeIJK(1,NumDivI/2+1,NumDivJ/2+1)
 # print "Central node: ", node.tag

@@ -73,8 +73,8 @@ lp0.newNodalLoad(2,xc.Vector([F*math.sin(math.pi/4),F*math.cos(math.pi/4),0]))
 lPatterns.addToDomain(lp0.name)
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(feProblem)
-result= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+result= analysis.analyze(1)
 
 
 

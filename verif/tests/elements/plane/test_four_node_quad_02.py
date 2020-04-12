@@ -77,8 +77,8 @@ lPatterns.addToDomain(lp0.name)
 
 
 # Solution
-analisis= predefined_solutions.simple_static_linear(feProblem)
-analOk= analisis.analyze(1)
+analysis= predefined_solutions.simple_static_linear(feProblem)
+analOk= analysis.analyze(1)
 
 
 nodes.calculateNodalReactions(True,1e-7)
