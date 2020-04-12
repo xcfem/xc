@@ -59,9 +59,6 @@ lPatterns.addToDomain(lp0.name)
 # Solution
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
-
-
-
 nodeHandler.calculateNodalReactions(True,1e-7)
 
 deltax= n2.getDisp[0] 

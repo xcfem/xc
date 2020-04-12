@@ -70,9 +70,7 @@ eleLoad.transComponent= q
 lPatterns.addToDomain(lp0.name)
 
 # Solution
-analysis= predefined_solutions.simple_static_linear(feProblem)
-result= analysis.analyze(1)
-
+result= modelSpace.analyze(calculateNodalReactions= False)
 
 preprocessor.resetLoadCase()
 nodes.calculateNodalReactions(True,1e-7)

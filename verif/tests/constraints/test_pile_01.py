@@ -126,10 +126,7 @@ lPatterns.addToDomain(lp0.name)
 lp0.gammaF=1
 
 # Solution
-analysis= predefined_solutions.simple_static_linear(FEcase)
-result= analysis.analyze(1)
-
-nodes.calculateNodalReactions(True,1e-7)
+result= modelSpace.analyze(calculateNodalReactions= True)
 
 z_node_check=[-0.48,-1.44,-4.32,-12.72,-21.36,-35.28]
 ux_comp=[0.0095,0.0092,0.0075,0.002,-0.0001,0.00002]

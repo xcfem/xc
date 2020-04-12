@@ -51,9 +51,7 @@ lPatterns.addToDomain(lp0.name)
 
 
 # Solution
-analysis= predefined_solutions.simple_static_linear(feProblem)
-result= analysis.analyze(1)
-
+result= modelSpace.analyze(calculateNodalReactions= False)
 
 nodes= preprocessor.getNodeHandler
 nodes.calculateNodalReactions(True,1e-7)

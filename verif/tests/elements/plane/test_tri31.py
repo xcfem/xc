@@ -74,11 +74,7 @@ lp0.newNodalLoad(3,xc.Vector([F,0]))
 lPatterns.addToDomain(lp0.name)
 
 # Solution
-analysis= predefined_solutions.simple_static_linear(feProblem)
-analOk= analysis.analyze(1)
-
-
-nodes.calculateNodalReactions(True,1e-7)
+analOk= modelSpace.analyze(calculateNodalReactions= True)
  
 # print "reac node 1: ",reac
 R1x= n1.getReaction[0]

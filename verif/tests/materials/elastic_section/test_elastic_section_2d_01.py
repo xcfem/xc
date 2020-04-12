@@ -50,12 +50,9 @@ lp0.newNodalLoad(2,xc.Vector([0,0,loadMz]))
 lPatterns.addToDomain(lp0.name)
 
 # Solution
-analysis= predefined_solutions.simple_static_linear(feProblem)
-result= analysis.analyze(1)
+result= modelSpace.analyze(calculateNodalReactions= True)
 
 nodes= preprocessor.getNodeHandler
-nodes.calculateNodalReactions(True,1e-7)
-
 RM= nodes.getNode(1).getReaction[2] 
 
 elements= preprocessor.getElementHandler
