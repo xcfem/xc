@@ -13,6 +13,7 @@ from misc_utils import log_messages as lmsg
 import geom
 from materials import typical_materials as tm
 from postprocess import extrapolate_elem_attr
+from solution import predefined_solutions
 
 class PredefinedSpace(object):
     def __init__(self,nodes,dimSpace,numDOFs):
@@ -26,6 +27,8 @@ class PredefinedSpace(object):
         self.setPreprocessor(nodes.getPreprocessor)
         nodes.dimSpace= dimSpace
         nodes.numDOFs= numDOFs
+        self.analysis= None
+        
     def getIntForceComponentFromName(self,componentName):
         if componentName[0] in ['N','M']:
             return componentName.lower()
@@ -278,6 +281,25 @@ class PredefinedSpace(object):
         for e in xcSet.getElements:
             e.createInertiaLoad(gravityVector)
 
+    def analyze(self, numSteps= 1, calculateNodalReactions= False, includeInertia= False):
+        ''' Triggers the analysis of the model with a simple static linear
+            solution.
+
+        :param numSteps: number of analysis steps.
+        :param calculateNodalReactions: if true calculate reactions at
+                                        nodes.
+        :param includeInertia: if true calculate reactions including inertia
+                               effects.
+        '''
+        result= 0
+        problem= self.preprocessor.getProblem
+        if(not self.analysis):
+            self.analysis= predefined_solutions.simple_static_linear(problem)
+        result= self.analysis.analyze(numSteps)
+        if(calculateNodalReactions):
+            self.preprocessor.getNodeHandler.calculateNodalReactions(includeInertia,1e-7)
+        return result
+        
 
 def getModelSpace(preprocessor):
       '''Return a PredefinedSpace from the dimension of the space 
