@@ -348,10 +348,12 @@ const XC::Matrix &XC::NodePtrs::getCoordinates(void) const
 //! @brief Return the position of the i-th node.
 Pos3d XC::NodePtrs::getPosNode(const size_t &i,bool initialGeometry) const
   {
+    Pos3d retval;
     if(initialGeometry)
-      return (*this)[i]->getInitialPosition3d();
+      retval= (*this)[i]->getInitialPosition3d();
     else
-      return (*this)[i]->getCurrentPosition3d();
+      retval= (*this)[i]->getCurrentPosition3d();
+    return retval;
   }
 
 //! @brief Returns a list with the node positions.
