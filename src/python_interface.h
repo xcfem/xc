@@ -48,8 +48,7 @@
 #include "xc_utils/src/geom/pos_vec/Pos3dArray3d.h"
 #include "xc_utils/src/gnu_gts/TriangleMap.h"
 
-
-#include <domain/domain/single/SingleDomNodIter.h>
+#include "domain/domain/single/SingleDomNodIter.h"
 
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 
