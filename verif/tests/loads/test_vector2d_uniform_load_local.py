@@ -107,8 +107,6 @@ lPatterns.addToDomain(lp0.name)
 # Solution procedure
 analysis= predefined_solutions.simple_newton_raphson(feProblem)
 result= analysis.analyze(1)
-
-
 nodes.calculateNodalReactions(True,1e-7) 
 nod2= nodes.getNode(2)
 delta0= nod2.getDisp[0]  # Node 2 xAxis displacement

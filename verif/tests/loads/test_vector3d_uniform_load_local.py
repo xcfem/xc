@@ -111,8 +111,6 @@ lPatterns.addToDomain(lp0.name)
 analysis= predefined_solutions.simple_static_modified_newton(feProblem)
 result= analysis.analyze(10)
 
-
-
 nodes.calculateNodalReactions(True,1e-7) 
 nod2= nodes.getNode(2)
 delta= nod2.getDisp[0]  # Node 2 xAxis displacement

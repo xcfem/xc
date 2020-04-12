@@ -106,11 +106,7 @@ delta0= nod2.getDisp[1]  # Node 2 yAxis displacement
 modelSpace.constraints.removeSPConstraint(spcTag)
 
 # Solution procedure
-analysis= predefined_solutions.simple_static_linear(feProblem)
-result= analysis.analyze(1)
-
-
-nodes.calculateNodalReactions(True,1e-7) 
+result= modelSpace.analyze(calculateNodalReactions= True) 
 delta= nod2.getDisp[1]  # Node 2 xAxis displacement
 Ry= nod1.getReaction[1] 
 RMz= nod1.getReaction[5] 

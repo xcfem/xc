@@ -106,11 +106,7 @@ setTotal.aliveElements()
 mesh.meltAliveNodes("congela") # Reactivate inactive nodes.
 
 # Solution
-analysis= predefined_solutions.simple_static_linear(feProblem)
-result= analysis.analyze(1)
-
-
-nodes.calculateNodalReactions(True,1e-7)
+result= modelSpace.analyze(calculateNodalReactions= True)
 nod1= nodes.getNode(1)
 deltaxB1= nod1.getDisp[0] 
 deltayB1= nod1.getDisp[1] 
