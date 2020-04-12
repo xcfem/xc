@@ -275,12 +275,8 @@ class PredefinedSpace(object):
 
          :param xcSet: set with the lines to load.
         '''
-        for l in xcSet.getLines:
-            if(l.hasProp('section')):
-                section= l.getProp('section')
-                if(section):
-                    for e in l.getElements:
-                        e.vector3dUniformLoadGlobal(section.rho*gravityVector)
+        for e in xcSet.getElements:
+            e.createInertiaLoad(gravityVector)
 
 
 def getModelSpace(preprocessor):
