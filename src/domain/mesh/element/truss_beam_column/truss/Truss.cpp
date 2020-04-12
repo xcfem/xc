@@ -429,7 +429,15 @@ void XC::Truss::setRho(const double &r)
 
 //! @brief Returns the material density.
 double XC::Truss::getRho(void) const
-  { return theMaterial->getRho(); }
+  {
+    double retval= 0.0;
+    if(theMaterial)
+      { retval= theMaterial->getRho(); }
+    else
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; material not defined yet." << std::endl;
+    return retval;
+  }
 
 //! @brief Returns the mass matrix.
 const XC::Matrix &XC::Truss::getMass(void) const
