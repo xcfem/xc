@@ -81,12 +81,8 @@ lp0.newNodalLoad(7,xc.Vector([F,0,F,0,0,0]))
 lPatterns.addToDomain(lp0.name)
 
 # Solution
-analysis= predefined_solutions.simple_static_linear(feProblem)
-result= analysis.analyze(1)
+result= modelSpace.analyze(calculateNodalReactions= True)
 
-
-
-nodes.calculateNodalReactions(True,1e-7)
 nod1= nodes.getNode(1)
 deltax1= nod1.getDisp[0] 
 deltay1= nod1.getDisp[1] 
@@ -113,6 +109,7 @@ mesh.meltAliveNodes("bloquea") # Reactivate inactive nodes.
 
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
+
 nod1= nodes.getNode(1)
 deltaxB1= nod1.getDisp[0] 
 deltayB1= nod1.getDisp[1] 

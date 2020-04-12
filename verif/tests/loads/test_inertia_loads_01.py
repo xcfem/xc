@@ -87,10 +87,8 @@ beam.createInertiaLoad(accel)
 lPatterns.addToDomain(lp0.name)
 
 # Solution
-analysis= predefined_solutions.simple_static_linear(feProblem)
-result= analysis.analyze(1)
+result= modelSpace.analyze(calculateNodalReactions= True)
 
-nodes.calculateNodalReactions(True,1e-7)
 R= n2.getReaction[1]
 R_ref= 0.5*truss.sectionArea*truss.getMaterial().rho*l*9.81
 R_ref+= 0.5*beam.sectionProperties.A*truss.getMaterial().rho*l*9.81

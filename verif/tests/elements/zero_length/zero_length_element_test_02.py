@@ -72,12 +72,7 @@ lp0.newNodalLoad(2,xc.Vector([FX,FY]))
 lPatterns.addToDomain(lp0.name)
 
 # Solution
-analysis= predefined_solutions.simple_static_linear(feProblem)
-result= analysis.analyze(1)
-
-
-
-nodes.calculateNodalReactions(True,1e-7)
+result= modelSpace.analyze(calculateNodalReactions= True)
 
 nod2= nodes.getNode(2)
 deltax= nod2.getDisp[0]

@@ -85,12 +85,8 @@ lp0.newNodalLoad(nod2.tag,xc.Vector([FX,FY,FZ,MX,MY,MZ]))
 lPatterns.addToDomain(lp0.name)
 
 # Solution
-analysis= predefined_solutions.simple_static_linear(feProblem)
-result= analysis.analyze(1)
+result= modelSpace.analyze(calculateNodalReactions= True)
 
-
-
-nodes.calculateNodalReactions(True,1e-7)
 deltax= nod2.getDisp[0]
 deltay= nod2.getDisp[1]
 deltaz= nod2.getDisp[2] 

@@ -60,12 +60,7 @@ spc= constraints.newSPConstraint(2,1,0.0)
 
 
 # Solution
-analysis= predefined_solutions.simple_static_linear(feProblem)
-result= analysis.analyze(1)
-
-
-
-nodes.calculateNodalReactions(True,1e-7)
+result= modelSpace.analyze(calculateNodalReactions= True)
 
 R1= nodes.getNode(2).getReaction[0] 
 R2= nodes.getNode(1).getReaction[0] 

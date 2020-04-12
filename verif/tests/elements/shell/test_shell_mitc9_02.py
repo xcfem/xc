@@ -74,6 +74,7 @@ lPatterns.addToDomain(lp0.name)
 
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
+
 RN1= n1.getReaction[2] 
 RN2= n2.getReaction[2] 
 RN3= n3.getReaction[2] 

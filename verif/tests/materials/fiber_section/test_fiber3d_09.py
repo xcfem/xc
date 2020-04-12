@@ -116,6 +116,7 @@ lPatterns.addToDomain(lp0.name)
 
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)
+
 nod2= nodes.getNode(2)
 deltax= nod2.getDisp[0] 
 nod1= nodes.getNode(1)
