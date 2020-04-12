@@ -257,7 +257,7 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
         '''
         self.renderer= vtk.vtkRenderer()
         self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
-        if type(xcSets)==list:
+        if(type(xcSets)==list):
             for s in xcSets:
                 self.defineMeshActorsSet(s,field,defFScale,nodeSize)
                 self.displaySPconstraints(s,scaleConstr)
