@@ -22,6 +22,7 @@
 //export_preprocessor_main.cxx
 
 #include "python_interface.h"
+#include "FEProblem.h"
 
 void export_preprocessor_main(void)
   {
@@ -63,6 +64,7 @@ XC::TransfCooHandler &(XC::Preprocessor::*getTransfCooHandlerRef)(void)= &XC::Pr
 XC::MultiBlockTopology &(XC::Preprocessor::*getMultiBlockTopologyRef)(void)= &XC::Preprocessor::getMultiBlockTopology;
 XC::MapSet &(XC::Preprocessor::*getSetsRef)(void)= &XC::Preprocessor::get_sets;
 XC::Domain *(XC::Preprocessor::*getDomainRf)(void)= &XC::Preprocessor::getDomain;
+XC::FEProblem *(XC::Preprocessor::*getProblemRf)(void)= &XC::Preprocessor::getProblem;
 class_<XC::Preprocessor, bases<CommandEntity>, boost::noncopyable >("Preprocessor", no_init)
   .add_property("getNodeHandler", make_function( getNodeHandlerRef, return_internal_reference<>() ))
   .add_property("getMaterialHandler", make_function( getMaterialHandlerRef, return_internal_reference<>() ))
@@ -74,6 +76,7 @@ class_<XC::Preprocessor, bases<CommandEntity>, boost::noncopyable >("Preprocesso
   .add_property("getMultiBlockTopology", make_function( getMultiBlockTopologyRef, return_internal_reference<>() ))
   .add_property("getSets", make_function( getSetsRef, return_internal_reference<>() ))
   .add_property("getDomain", make_function( getDomainRf, return_internal_reference<>() ))
+  .add_property("getProblem", make_function( getProblemRf, return_internal_reference<>() ))
   .def("resetLoadCase",&XC::Preprocessor::resetLoadCase)
   .def("setDeadSRF",XC::Preprocessor::setDeadSRF,"Assigns Stress Reduction Factor for element deactivation.")
   ;

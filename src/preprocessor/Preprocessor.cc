@@ -114,6 +114,19 @@ XC::Preprocessor::~Preprocessor(void)
     domain= nullptr;
   }
 
+//! @brief Return a pointer to the problem that owns this preprocessor.
+XC::FEProblem *XC::Preprocessor::getProblem(void)
+  {
+    FEProblem *retval= dynamic_cast<FEProblem *>(Owner());
+    return retval;
+  }
+
+//! @brief Return a const pointer to the problem that owns this preprocessor.
+const XC::FEProblem *XC::Preprocessor::getProblem(void) const
+  {
+    Preprocessor *this_no_const= const_cast<Preprocessor *>(this);
+    return this_no_const->getProblem(); 
+  }
 
 //! @brief Assign Stress Reduction Factor for element deactivation.
 void XC::Preprocessor::setDeadSRF(const double &d)
@@ -162,7 +175,7 @@ void XC::Preprocessor::clearAll(void)
 XC::FE_Datastore *XC::Preprocessor::getDataBase(void)
   {
     FE_Datastore *retval= nullptr;
-    FEProblem *prb= dynamic_cast<FEProblem *>(Owner());
+    FEProblem *prb= getProblem();
     if(prb)
       retval= prb->getDataBase();
     return retval;

@@ -99,6 +99,9 @@ class Preprocessor: public CommandEntity, public MovableObject
     SetEstruct *busca_set_estruct(const std::string &nmb);
   public:
     Preprocessor(CommandEntity *owr,DataOutputHandler::map_output_handlers *oh= nullptr);
+    FEProblem *getProblem(void);
+    const FEProblem *getProblem(void) const;
+    
     inline Domain *getDomain(void)
       { return domain; }
     inline const Domain *getDomain(void) const
