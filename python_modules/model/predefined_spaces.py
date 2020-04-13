@@ -310,6 +310,17 @@ class PredefinedSpace(object):
             lmsg.log('Redefining analysis.')
         self.analysis= predefined_solutions.zero_energy_modes(problem)
         return self.analysis.analyze(numModes)
+    
+    def illConditioningAnalysis(self, numModes= 1):
+        ''' Perform an ill-conditioning analysis on the finite element model.
+
+        :param numModes: number of ill-conditioned modes to obtain.
+        '''
+        problem= self.preprocessor.getProblem
+        if(self.analysis):
+            lmsg.log('Redefining analysis.')
+        self.analysis= predefined_solutions.ill_conditioning_analysis(problem)
+        return self.analysis.analyze(numModes)
 
 
 def getModelSpace(preprocessor):

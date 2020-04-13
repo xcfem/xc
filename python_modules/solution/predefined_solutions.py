@@ -9,6 +9,7 @@ __email__= "l.pereztato@gmail.com, ana.ortega.ort@gmail.com"
 import xc_base
 import geom
 import xc
+from misc_utils import log_messages as lmsg
 
 class SolutionProcedure(object):
     '''
@@ -67,6 +68,26 @@ class SolutionProcedure(object):
     def clear(self):
         self.solu.clear()
 
+    def getConstraintHandler(self, cHType= None, alphaSP= 1e15, alphaMP= 1e15):
+        ''' Return the constraint handler.'''
+        cHandler= None
+        if(cHType):
+            self.cHandlerType= cHType
+        if(self.cHandlerType=='penalty'):
+            cHandler= self.sm.newConstraintHandler("penalty_constraint_handler")
+            cHandler.alphaSP= alphaSP
+            cHandler.alphaMP= alphaMP
+        elif(self.cHandlerType=='transformation'):
+            cHandler= self.sm.newConstraintHandler("transformation_constraint_handler")
+        elif(self.cHandlerType=='lagrange'):
+            self.sm.newConstraintHandler("lagrange_constraint_handler")
+        elif(self.cHandlerType=='plain'):
+            cHandler= self.sm.newConstraintHandler("plain_handler")
+        else:
+            lmsg.error('unknown constraint handler type: '+self.cHandlerType)
+        return cHandler
+            
+
     def simpleStaticLinear(self,prb):
         self.solu= prb.getSoluProc
         self.solCtrl= self.solu.getSoluControl
@@ -74,9 +95,7 @@ class SolutionProcedure(object):
         self.sm= solModels.newModelWrapper("sm")
         self.numberer= self.sm.newNumberer("default_numberer")
         self.numberer.useAlgorithm("rcm")
-        self.cHandler= self.sm.newConstraintHandler("penalty_constraint_handler")
-        self.cHandler.alphaSP= 1.0e15
-        self.cHandler.alphaMP= 1.0e15
+        self.cHandler= self.getConstraintHandler('penalty')
         analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
         self.analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
         self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("linear_soln_algo")
@@ -93,7 +112,7 @@ class SolutionProcedure(object):
         self.sm= solModels.newModelWrapper("sm")
         self.numberer= self.sm.newNumberer("default_numberer")
         self.numberer.useAlgorithm("simple")
-        self.cHandler= self.sm.newConstraintHandler("plain_handler")
+        self.cHandler= self.getConstraintHandler('plain')
         analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
         self.analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
         self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("linear_soln_algo")
@@ -110,7 +129,7 @@ class SolutionProcedure(object):
         self.sm= solModels.newModelWrapper("sm")
         self.numberer= self.sm.newNumberer("default_numberer")
         self.numberer.useAlgorithm("rcm")
-        self.cHandler= self.sm.newConstraintHandler("lagrange_constraint_handler")
+        self.cHandler= self.getConstraintHandler('lagrange')
         analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
         self.analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
         self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("linear_soln_algo")
@@ -128,7 +147,7 @@ class SolutionProcedure(object):
         self.sm= solModels.newModelWrapper("sm")
         self.numberer= self.sm.newNumberer("default_numberer")
         self.numberer.useAlgorithm("rcm")
-        self.cHandler= self.sm.newConstraintHandler("transformation_constraint_handler")
+        self.cHandler= self.getConstraintHandler('transformation')
         analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
         self.analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
         self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("linear_soln_algo")
@@ -145,7 +164,7 @@ class SolutionProcedure(object):
         self.sm= solModels.newModelWrapper("sm")
         self.numberer= self.sm.newNumberer("default_numberer")
         self.numberer.useAlgorithm("simple")
-        self.cHandler= self.sm.newConstraintHandler("plain_handler")
+        self.cHandler= self.getConstraintHandler('plain')
         analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
         self.analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
         self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("newton_raphson_soln_algo")
@@ -165,7 +184,7 @@ class SolutionProcedure(object):
         self.sm= solModels.newModelWrapper("sm")
         self.numberer= self.sm.newNumberer("default_numberer")
         self.numberer.useAlgorithm("simple")
-        self.cHandler= self.sm.newConstraintHandler("plain_handler")
+        self.cHandler= self.getConstraintHandler('plain')
         analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
         self.analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
         self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("newton_raphson_soln_algo")
@@ -185,7 +204,7 @@ class SolutionProcedure(object):
         self.sm= solModels.newModelWrapper("sm")
         self.numberer= self.sm.newNumberer("default_numberer")
         self.numberer.useAlgorithm("simple")
-        self.cHandler= self.sm.newConstraintHandler("plain_handler")
+        self.cHandler= self.getConstraintHandler('plain')
         analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
         self.analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
         self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("modified_newton_soln_algo")
@@ -205,9 +224,7 @@ class SolutionProcedure(object):
         self.sm= solModels.newModelWrapper("sm")
         self.numberer= self.sm.newNumberer("default_numberer")
         self.numberer.useAlgorithm("rcm")
-        self.cHandler= self.sm.newConstraintHandler("penalty_constraint_handler")
-        self.cHandler.alphaSP= 1.0e15
-        self.cHandler.alphaMP= 1.0e15
+        self.cHandler= self.getConstraintHandler('penalty')
         analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
         self.analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
         self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("newton_raphson_soln_algo")
@@ -228,9 +245,7 @@ class SolutionProcedure(object):
         self.sm= solModels.newModelWrapper("sm")
         self.numberer= self.sm.newNumberer("default_numberer")
         self.numberer.useAlgorithm("rcm")
-        self.cHandler= self.sm.newConstraintHandler("penalty_constraint_handler")
-        self.cHandler.alphaSP= 1.0e18
-        self.cHandler.alphaMP= 1.0e18
+        self.cHandler= self.getConstraintHandler('penalty', alphaSP= 1.0e18, alphaMP= 1.0e18)
         analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
         self.analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
         self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("newton_raphson_soln_algo")
@@ -249,7 +264,7 @@ class SolutionProcedure(object):
         self.solCtrl= self.solu.getSoluControl
         solModels= self.solCtrl.getModelWrapperContainer
         self.sm= solModels.newModelWrapper("sm")
-        self.cHandler= self.sm.newConstraintHandler("transformation_constraint_handler")
+        self.cHandler= self.getConstraintHandler('transformation')
         self.numberer= self.sm.newNumberer("default_numberer")
         self.numberer.useAlgorithm("rcm")
         analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
@@ -263,7 +278,7 @@ class SolutionProcedure(object):
         self.analysis= self.solu.newAnalysis("modal_analysis","analysisAggregation","")
         return self.analysis
     
-    def illConditioningAnalysisBase(self, prb, soePrefix= 'sym_band_eigen'):
+    def illConditioningAnalysisBase(self, prb, soePrefix= 'sym_band_eigen', shift= None):
         ''' Prepares the components of an ill-conditioning
             analysis.
         '''
@@ -271,8 +286,7 @@ class SolutionProcedure(object):
         self.solCtrl= self.solu.getSoluControl
         self.solModels= self.solCtrl.getModelWrapperContainer
         self.sm= self.solModels.newModelWrapper("sm")
-        self.cHandler= self.sm.newConstraintHandler("transformation_constraint_handler")
-
+        self.cHandler= self.getConstraintHandler('penalty')
         self.numberer= self.sm.newNumberer("default_numberer")
         self.numberer.useAlgorithm("rcm")
         self.analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
@@ -281,10 +295,13 @@ class SolutionProcedure(object):
         self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("ill-conditioning_soln_algo")
         self.integ= self.analysisAggregation.newIntegrator("ill-conditioning_integrator",xc.Vector([]))
         self.soe= self.analysisAggregation.newSystemOfEqn(soePrefix+"_soe")
+        if(shift):
+            self.soe.shift= shift
         self.solver= self.soe.newSolver(soePrefix+"_solver")
 
         self.analysis= self.solu.newAnalysis("ill-conditioning_analysis","analysisAggregation","")
         return self.analysis
+    
     def zeroEnergyModes(self, prb):
         ''' Prepares the components to obtain the zero energy modes
             of the finite element model.'''
@@ -292,12 +309,11 @@ class SolutionProcedure(object):
         # compute zero eigenvalues. XXX
         return self.illConditioningAnalysisBase(prb,soePrefix= 'sym_band_eigen')
 
-    def illConditioningAnalysis(self, prg):
+    def illConditioningAnalysis(self, prb):
         ''' Prepares the components to obtain the modes
             associated with very small eigenvalues of the
             stiffness matrix.'''
-        analysis= self.illConditioningAnalysisBase(prb,soePrefix= 'band_arpack')
-        self.soe.shift= 0.0
+        analysis= self.illConditioningAnalysisBase(prb,soePrefix= 'band_arpack', shift= 0.0)
         return analysis
 
 #Typical solution procedures.
