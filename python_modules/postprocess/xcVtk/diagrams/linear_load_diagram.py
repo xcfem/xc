@@ -4,6 +4,7 @@
 
 import geom
 import vtk
+import math
 from postprocess.xcVtk.diagrams import colored_diagram as cd
 from misc_utils import log_messages as lmsg
 
@@ -25,19 +26,27 @@ class LinearLoadDiagram(cd.ColoredDiagram):
                 eTag= tags[i]
                 if eTag in eTagsSet:
                     elem= preprocessor.getElementHandler.getElement(eTag)
+                    vJ= elem.getJVector3d(True)
+                    vK= elem.getKVector3d(True)
                     if(self.component=='axialComponent'):
-                        self.vDir= elem.getJVector3d(True)
+                        self.vDir= vJ
                         indxDiagram= self.appendDataToDiagram(elem,indxDiagram,eLoad.axialComponent,eLoad.axialComponent)
                     elif(self.component=='transComponent'):
-                        self.vDir= elem.getJVector3d(True) # initialGeometry= True  
+                        self.vDir= vJ
                         indxDiagram= self.appendDataToDiagram(elem,indxDiagram,eLoad.transComponent,eLoad.transComponent)
                     elif(self.component=='transYComponent'):
-                        self.vDir= elem.getJVector3d(True) # initialGeometry= True  
+                        self.vDir= vJ
                         indxDiagram= self.appendDataToDiagram(elem,indxDiagram,eLoad.transYComponent,eLoad.transYComponent)
                     elif(self.component=='transZComponent'):
-                        self.vDir= elem.getKVector3d(True) # initialGeometry= True  
+                        self.vDir= vK
                         indxDiagram= self.appendDataToDiagram(elem,indxDiagram,eLoad.transZComponent,eLoad.transZComponent)
-                    else:
+                    elif(self.component=='xyzComponents'):
+                        vI= elem.getIVector3d(True)
+                        v= eLoad.axialComponent*vI+eLoad.transYComponent*vJ+eLoad.transZComponent*vK
+                        self.vDir= v.normalized()
+                        value= v.getModulus()
+                        indxDiagram= self.appendDataToDiagram(elem,indxDiagram,value,value)
+                    else:    
                         lmsg.error("LinearLoadDiagram :'"+self.component+"' unknown.")        
                 eLoad= lIter.next()
 
@@ -63,6 +72,8 @@ class LinearLoadDiagram(cd.ColoredDiagram):
                         vComp=eLoad.transYComponent
                     elif(self.component=='transZComponent'):
                         vComp=eLoad.transZComponent
+                    elif(self.component=='xyzComponents'):
+                        vComp= math.sqrt(eLoad.axialComponent**2+eLoad.transYComponent**2+eLoad.transZComponent**2)
                     else:
                         lmsg.error("LinearLoadDiagram :'"+self.component+"' unknown.")
                     maxV=max(abs(vComp),maxV)
