@@ -6,7 +6,6 @@ import math
 import xc_base
 import geom
 import xc
-from solution import predefined_solutions
 from model import predefined_spaces
 from actions.basic_loads import nodal_loads
 from materials import typical_materials

@@ -17,7 +17,6 @@ FZ= 3
 import xc_base
 import geom
 import xc
-from solution import predefined_solutions
 from model import predefined_spaces
 from model.boundary_cond import spring_bound_cond as springs
 

@@ -11,7 +11,6 @@ import xc_base
 import geom
 import xc
 from model import predefined_spaces
-from solution import predefined_solutions
 from materials import typical_materials
 
 E= 2.1e9 # Young modulus of the steel.
@@ -174,7 +173,7 @@ print "ratio6= ",ratio6
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-5) & (abs(ratio5)<0.1):
+if((abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-5) & (abs(ratio5)<0.1)):
   print "test ",fname,": ok."
 else:
   lmsg.error(fname+' ERROR.')

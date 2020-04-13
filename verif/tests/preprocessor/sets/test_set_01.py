@@ -3,7 +3,6 @@
 import xc_base
 import geom
 import xc
-from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 

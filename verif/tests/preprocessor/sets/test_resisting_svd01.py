@@ -26,7 +26,6 @@ tInic= 0.75**2*fMax # Effective prestress (0.75*P0 y 25% prestress losses).
 import xc_base
 import geom
 import xc
-from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 

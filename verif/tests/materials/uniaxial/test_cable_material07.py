@@ -6,7 +6,6 @@ import xc_base
 import geom
 import xc
 from model import predefined_spaces
-from solution import predefined_solutions
 from materials import typical_materials
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"

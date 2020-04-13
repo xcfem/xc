@@ -8,7 +8,6 @@ import geom
 import xc
 
 from model import predefined_spaces
-from solution import predefined_solutions
 from materials import typical_materials
 import math
 

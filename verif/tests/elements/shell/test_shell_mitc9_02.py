@@ -20,7 +20,6 @@ import geom
 import xc
 from model import predefined_spaces
 from materials import typical_materials
-from solution import predefined_solutions
 
 v1= xc.Vector([0,1,0])
 v2= xc.Vector([0,0,1])

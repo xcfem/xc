@@ -20,7 +20,6 @@ import xc
 
 from model import predefined_spaces
 from materials import bridge_bearings
-from solution import predefined_solutions
 
 
 

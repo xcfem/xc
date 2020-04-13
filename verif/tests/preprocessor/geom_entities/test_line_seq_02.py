@@ -6,7 +6,6 @@ import geom
 import xc
 import math
 import os
-from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 

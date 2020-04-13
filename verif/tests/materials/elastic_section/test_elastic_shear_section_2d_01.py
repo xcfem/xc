@@ -7,7 +7,6 @@ import xc
 from model import predefined_spaces
 from materials import typical_materials
 from materials.sections import section_properties
-from solution import predefined_solutions
 from misc import scc2d_testing_bench
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
