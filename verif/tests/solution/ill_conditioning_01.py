@@ -35,27 +35,9 @@ spc= constraints.newSPConstraint(n2.tag,0,0.0) # Node 1,gdl 0 translation X
 spc= constraints.newSPConstraint(n2.tag,1,0.0) # Node 1,gdl 1 translation Y
 #spc= constraints.newSPConstraint(n2.tag,2,0.0) # Node 1,gdl 2 rotation.
 
-# Solution procedure
-solu= feProblem.getSoluProc
-solCtrl= solu.getSoluControl
-solModels= solCtrl.getModelWrapperContainer
-sm= solModels.newModelWrapper("sm")
-cHandler= sm.newConstraintHandler("transformation_constraint_handler")
 
-numberer= sm.newNumberer("default_numberer")
-numberer.useAlgorithm("rcm")
-analysisAggregations= solCtrl.getAnalysisAggregationContainer
-analysisAggregation= analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
-
-solAlgo= analysisAggregation.newSolutionAlgorithm("ill-conditioning_soln_algo")
-integ= analysisAggregation.newIntegrator("ill-conditioning_integrator",xc.Vector([]))
-
-soe= analysisAggregation.newSystemOfEqn("sym_band_eigen_soe")
-solver= soe.newSolver("sym_band_eigen_solver")
-
-analysis= solu.newAnalysis("ill-conditioning_analysis","analysisAggregation","")
-analOk= analysis.analyze(1)
-eig1= analysis.getEigenvalue(1)
+analOk= modelSpace.zeroEnergyModes(1)
+eig1= modelSpace.analysis.getEigenvalue(1)
 v1= n1.getEigenvector(1)
 v2= n2.getEigenvector(1)
 

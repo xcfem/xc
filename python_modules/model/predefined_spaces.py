@@ -299,7 +299,18 @@ class PredefinedSpace(object):
         if(calculateNodalReactions):
             self.preprocessor.getNodeHandler.calculateNodalReactions(includeInertia,1e-7)
         return result
-        
+
+    def zeroEnergyModes(self, numModes= 1):
+        ''' Obtains the zero energy modes of the finite element model.
+
+        :param numModes: number of zero energy modes to obtain.
+        '''
+        problem= self.preprocessor.getProblem
+        if(self.analysis):
+            lmsg.log('Redefining analysis.')
+        self.analysis= predefined_solutions.zero_energy_modes(problem)
+        return self.analysis.analyze(numModes)
+
 
 def getModelSpace(preprocessor):
       '''Return a PredefinedSpace from the dimension of the space 

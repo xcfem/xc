@@ -262,6 +262,43 @@ class SolutionProcedure(object):
         self.solver= self.soe.newSolver(solver_string)
         self.analysis= self.solu.newAnalysis("modal_analysis","analysisAggregation","")
         return self.analysis
+    
+    def illConditioningAnalysisBase(self, prb, soePrefix= 'sym_band_eigen'):
+        ''' Prepares the components of an ill-conditioning
+            analysis.
+        '''
+        self.solu= prb.getSoluProc
+        self.solCtrl= self.solu.getSoluControl
+        self.solModels= self.solCtrl.getModelWrapperContainer
+        self.sm= self.solModels.newModelWrapper("sm")
+        self.cHandler= self.sm.newConstraintHandler("transformation_constraint_handler")
+
+        self.numberer= self.sm.newNumberer("default_numberer")
+        self.numberer.useAlgorithm("rcm")
+        self.analysisAggregations= self.solCtrl.getAnalysisAggregationContainer
+        self.analysisAggregation= self.analysisAggregations.newAnalysisAggregation("analysisAggregation","sm")
+
+        self.solAlgo= self.analysisAggregation.newSolutionAlgorithm("ill-conditioning_soln_algo")
+        self.integ= self.analysisAggregation.newIntegrator("ill-conditioning_integrator",xc.Vector([]))
+        self.soe= self.analysisAggregation.newSystemOfEqn(soePrefix+"_soe")
+        self.solver= self.soe.newSolver(soePrefix+"_solver")
+
+        self.analysis= self.solu.newAnalysis("ill-conditioning_analysis","analysisAggregation","")
+        return self.analysis
+    def zeroEnergyModes(self, prb):
+        ''' Prepares the components to obtain the zero energy modes
+            of the finite element model.'''
+        # Very slow solver but apparently Arpack cannot
+        # compute zero eigenvalues. XXX
+        return self.illConditioningAnalysisBase(prb,soePrefix= 'sym_band_eigen')
+
+    def illConditioningAnalysis(self, prg):
+        ''' Prepares the components to obtain the modes
+            associated with very small eigenvalues of the
+            stiffness matrix.'''
+        analysis= self.illConditioningAnalysisBase(prb,soePrefix= 'band_arpack')
+        self.soe.shift= 0.0
+        return analysis
 
 #Typical solution procedures.
 
@@ -291,6 +328,14 @@ def penalty_newton_raphson(prb):
 def frequency_analysis(prb):
     solution= SolutionProcedure()
     return solution.frequencyAnalysis(prb)
+
+def zero_energy_modes(prb):
+    solution= SolutionProcedure()
+    return solution.zeroEnergyModes(prb)
+
+def ill_conditioning_analysis(prb):
+    solution= SolutionProcedure()
+    return solution.illConditioningAnalysis(prb)
 
 def resuelveComb(preprocessor,nmbComb,analysis,numSteps):
     preprocessor.resetLoadCase()
