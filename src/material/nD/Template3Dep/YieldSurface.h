@@ -60,7 +60,7 @@ namespace XC {
   class EPState;
   class BJtensor;
 
-//! @ingroup 3DEPMat
+//! @ingroup EPMat3D
 //!
 //! @defgroup MatNDYS Yield surface.
 //!

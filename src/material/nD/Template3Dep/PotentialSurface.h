@@ -61,7 +61,7 @@ namespace XC {
   class BJtensor;
   class EPState;
 
-//! @ingroup 3DEPMat
+//! @ingroup EPMat3D
 //!
 //! @defgroup MatPS Potential surface.
 //!

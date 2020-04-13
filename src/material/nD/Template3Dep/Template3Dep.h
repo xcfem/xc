@@ -71,9 +71,9 @@ class Tensor;
 
 //! @ingroup NDMat
 //!
-//! @defgroup 3DEPMat Three-dimensional elasto-plastic material.
+//! @defgroup EPMat3D Three-dimensional elasto-plastic material.
 //!
-//! @ingroup 3DEPMat
+//! @ingroup EPMat3D
 //!
 //! @brief The Template3Dep class is used to hold specific
 //! yield surface, potential surface, Evolution law(s)

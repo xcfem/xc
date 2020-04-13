@@ -67,7 +67,7 @@
 #define TRUE 1
 
 namespace XC {
-//! @ingroup 3DEPMat
+//! @ingroup EPMat3D
 //!
 //! @brief Base class for all elasto-plastic states.
 //! 

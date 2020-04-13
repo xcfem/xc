@@ -62,7 +62,7 @@ namespace XC {
 class EPState;
  class PotentialSurface;
 
-//! @ingroup 3DEPMat
+//! @ingroup EPMat3D
 //!
 //! @defgroup MatNDEL Evolution law.
 //!
