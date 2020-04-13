@@ -50,9 +50,9 @@ class LinearLoadDiagram(cd.ColoredDiagram):
                         indxDiagram= self.appendDataToDiagram(elem,indxDiagram,eLoad.transZComponent,eLoad.transZComponent)
                     elif(self.component=='xyzComponents'):
                         vI= elem.getIVector3d(True)
-                        localForce= eLoad.getVector3dLocalForce()
-                        v= localForce.x*vI+localForce.y*vJ+localForce.z*vK
-                        self.vDir= v.normalized()
+                        localForce= eLoad.getVector3dLocalForce() # Local components of the force.
+                        v= localForce.x*vI+localForce.y*vJ+localForce.z*vK # Global force vector.
+                        self.vDir= v.normalized() 
                         value= v.getModulus()
                         indxDiagram= self.appendDataToDiagram(elem,indxDiagram,value,value)
                     else:    
