@@ -33,7 +33,7 @@
 #ifndef ExponReducing_h
 #define ExponReducing_h
 
-#include "material/yieldSurface/plasticHardeningMaterial/PlasticHardeningMaterial.h"
+#include "PlasticHardeningMaterial.h"
 
 namespace XC {
 //! @ingroup MATYS

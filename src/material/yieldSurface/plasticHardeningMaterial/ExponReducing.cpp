@@ -24,11 +24,11 @@
 // along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 //----------------------------------------------------------------------------
-// ExponReducing.cpp: implementation of the XC::ExponReducing class.
+// ExponReducing.cpp: implementation of the ExponReducing class.
 //
 //////////////////////////////////////////////////////////////////////
 
-#include "material/yieldSurface/plasticHardeningMaterial/ExponReducing.h"
+#include "ExponReducing.h"
 #include <cstdlib>
 #include <cmath>
 
