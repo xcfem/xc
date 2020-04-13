@@ -1,6 +1,14 @@
  # -*- coding: utf-8 -*-
-
 ''' Display of loads over linear elements. '''
+
+from __future__ import print_function
+from __future__ import division
+
+__author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
+__copyright__= "Copyright 2016, LCPT, AO_O"
+__license__= "GPL"
+__version__= "3.0"
+__email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import geom
 import vtk
@@ -19,7 +27,7 @@ class LinearLoadDiagram(cd.ColoredDiagram):
         ''' Iterate over loaded elements dumping its loads into the graphic.'''
         lIter= lp.loads.getElementalLoadIter
         eLoad= lIter.next()
-        eTagsSet=self.setToDisp.getElements.getTags()
+        eTagsSet= self.setToDisp.getElements.getTags()
         while(eLoad):
             tags= eLoad.elementTags
             for i in range(0,len(tags)):
@@ -42,7 +50,8 @@ class LinearLoadDiagram(cd.ColoredDiagram):
                         indxDiagram= self.appendDataToDiagram(elem,indxDiagram,eLoad.transZComponent,eLoad.transZComponent)
                     elif(self.component=='xyzComponents'):
                         vI= elem.getIVector3d(True)
-                        v= eLoad.axialComponent*vI+eLoad.transYComponent*vJ+eLoad.transZComponent*vK
+                        localForce= eLoad.getVector3dLocalForce()
+                        v= localForce.x*vI+localForce.y*vJ+localForce.z*vK
                         self.vDir= v.normalized()
                         value= v.getModulus()
                         indxDiagram= self.appendDataToDiagram(elem,indxDiagram,value,value)
@@ -54,31 +63,34 @@ class LinearLoadDiagram(cd.ColoredDiagram):
         '''Return the maximum absolute value of the component.
         It is used for calculating auto-scale parameter
         '''
-        maxV=0
+        maxV= 0.0
         activeLoadPatterns= preprocessor.getDomain.getConstraints.getLoadPatterns
         if(len(activeLoadPatterns)<1):
             lmsg.warning('No active load patterns.')
-        for lp in activeLoadPatterns: #Iterate over loaded elements.
+        eTagsSet= self.setToDisp.getElements.getTags()
+        for lp in activeLoadPatterns: #Iterate over load patterns.
             lIter= lp.data().loads.getElementalLoadIter
             eLoad= lIter.next()
             while(eLoad):
                 tags= eLoad.elementTags
                 for i in range(0,len(tags)):
-                    if(self.component=='axialComponent'):
-                        vComp= eLoad.axialComponent
-                    elif(self.component=='transComponent'):
-                        vComp= eLoad.transComponent
-                    elif(self.component=='transYComponent'):
-                        vComp=eLoad.transYComponent
-                    elif(self.component=='transZComponent'):
-                        vComp=eLoad.transZComponent
-                    elif(self.component=='xyzComponents'):
-                        vComp= math.sqrt(eLoad.axialComponent**2+eLoad.transYComponent**2+eLoad.transZComponent**2)
-                    else:
-                        lmsg.error("LinearLoadDiagram :'"+self.component+"' unknown.")
-                    maxV=max(abs(vComp),maxV)
-                    eLoad= lIter.next()
-        return maxV  
+                    eTag= tags[i]
+                    if eTag in eTagsSet: # if element in set.
+                        if(self.component=='axialComponent'):
+                            vComp= eLoad.axialComponent
+                        elif(self.component=='transComponent'):
+                            vComp= eLoad.transComponent
+                        elif(self.component=='transYComponent'):
+                            vComp=eLoad.transYComponent
+                        elif(self.component=='transZComponent'):
+                            vComp=eLoad.transZComponent
+                        elif(self.component=='xyzComponents'):
+                            vComp= eLoad.getVector3dLocalForce().getModulus()
+                        else:
+                            lmsg.error("LinearLoadDiagram :'"+self.component+"' unknown.")
+                        maxV=max(abs(vComp),maxV)
+                eLoad= lIter.next()
+        return maxV
 
 
     def dumpLoads(self, preprocessor, indxDiagram):

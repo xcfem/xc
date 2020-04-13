@@ -57,6 +57,8 @@ class ShellMecLoad: public BidimMecLoad
     virtual const Matrix &getGlobalVectors(const Matrix &) const;
     virtual const Matrix &getGlobalForces(void) const;
     virtual const Matrix &getGlobalMoments(void) const;
+    virtual Vector3d getVector3dLocalForce(void) const;
+    virtual Vector3d getVector3dLocalMoment(void) const;
   };
 } // end of XC namespace
 

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
+''' Display nice images of the model. '''
 
 from __future__ import print_function
 import math
 
-''' Display nice images of the model. '''
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, LCPT, AO_O"

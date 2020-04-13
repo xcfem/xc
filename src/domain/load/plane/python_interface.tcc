@@ -37,6 +37,8 @@ class_<XC::ShellMecLoad, bases<XC::BidimMecLoad>, boost::noncopyable >("ShellMec
   .add_property("getMomentVectorDimension", &XC::ShellMecLoad::getMomentVectorDimension)
   .def("getLocalForce",&XC::ShellMecLoad::getLocalForce,"Returns local coordinates or force vector.")
   .def("getLocalMoment",&XC::ShellMecLoad::getLocalMoment,"Returns local coordinates of bending moment vector.")
+  .def("getVector3dLocalForce",&XC::ShellMecLoad::getVector3dLocalForce,"Returns a Vector3d with the local coordinates of the force vector.")
+  .def("getVector3dLocalMoment",&XC::ShellMecLoad::getVector3dLocalMoment,"Returns a Vector3d with the local coordinates of bending moment vector.")
   .def("getLocalForces",make_function(&XC::ShellMecLoad::getLocalForces, return_internal_reference<>() ))
   .def("getLocalMoments",make_function(&XC::ShellMecLoad::getLocalMoments, return_internal_reference<>() ))
   .def("getGlobalVectors",make_function(&XC::ShellMecLoad::getGlobalVectors, return_internal_reference<>() ))

@@ -80,6 +80,8 @@ class BeamMecLoad: public BeamLoad
     virtual const Matrix &getGlobalVectors(const Matrix &) const;
     virtual const Matrix &getGlobalForces(void) const;
     virtual const Matrix &getGlobalMoments(void) const;
+    Vector3d getVector3dLocalForce(void) const;
+    Vector3d getVector3dLocalMoment(void) const;
 
     virtual SlidingVectorsSystem3d getResultant(const Pos3d &p= Pos3d(), bool initialGeometry= true) const;
 

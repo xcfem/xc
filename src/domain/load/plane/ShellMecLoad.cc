@@ -91,6 +91,22 @@ XC::Vector XC::ShellMecLoad::getLocalMoment(void) const
     return retval;
   }
 
+//! @brief Return the local components of the
+//! force in a Vector3d. 
+Vector3d XC::ShellMecLoad::getVector3dLocalForce(void) const
+  {
+    Vector f= getLocalForce();
+    return Vector3d(f[0],f[1],f[2]);
+  }
+
+//! @brief Return the local components of the
+//! moment in a Vector3d. 
+Vector3d XC::ShellMecLoad::getVector3dLocalMoment(void) const
+  {
+    Vector m= getLocalMoment();
+    return Vector3d(m[0],m[1],m[2]);
+  }
+
 //! @brief Returns the components of the force vectors.
 const XC::Matrix &XC::ShellMecLoad::getLocalForces(void) const
   {

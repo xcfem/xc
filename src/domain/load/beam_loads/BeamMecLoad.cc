@@ -110,6 +110,34 @@ XC::Vector XC::BeamMecLoad::getLocalMoment(void) const
     return retval;
   }
 
+//! @brief Return the local components of the
+//! force in a Vector3d. 
+Vector3d XC::BeamMecLoad::getVector3dLocalForce(void) const
+  {
+    Vector f= getLocalForce();
+    Vector3d retval;
+    if(f.Size()>2)
+      retval= Vector3d(f[0],f[1],f[2]);
+    else
+      retval= Vector3d(f[0],f[1],0.0);
+    return retval;
+  }
+
+//! @brief Return the local components of the
+//! moment in a Vector3d. 
+Vector3d XC::BeamMecLoad::getVector3dLocalMoment(void) const
+  {
+    Vector m= getLocalMoment();
+    Vector3d retval;
+    if(m.Size()>2)
+      retval= Vector3d(m[0],m[1],m[2]);
+    else if(m.Size()>1)
+      retval= Vector3d(m[0],m[1],0.0);
+    else if(m.Size()>0)
+      retval= Vector3d(m[0],0.0,0.0);
+    return retval;
+  }
+
 //! @brief Returns punctual/distributed force vectors (one for each element) expressed in local coordinates.
 const XC::Matrix &XC::BeamMecLoad::getLocalForces(void) const
   {
