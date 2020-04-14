@@ -83,7 +83,7 @@
 #ifndef J2THREEDIMENSIONAL_H
 #define J2THREEDIMENSIONAL_H
 
-#include "material/nD/J2Plasticity.h"
+#include "J2Plasticity.h"
 
 namespace XC{
 //! @ingroup J2NDMat

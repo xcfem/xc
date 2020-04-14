@@ -80,7 +80,7 @@
 #ifndef J2AXISYMM_H
 #define J2AXISYMM_H
 
-#include "material/nD/J2Plasticity.h"
+#include "J2Plasticity.h"
 
 
 namespace XC{

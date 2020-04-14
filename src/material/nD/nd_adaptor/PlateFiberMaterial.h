@@ -57,10 +57,10 @@
 #ifndef PLATE_FIBER_MATERIAL_H
 #define PLATE_FIBER_MATERIAL_H
 
-#include "material/nD/NDAdaptorMaterial.h"
+#include "NDAdaptorMaterial.h"
 
 namespace XC{
-//! @ingroup NDMat
+//! @ingroup NDMatMatAdaptorGrp
 //
 //! @brief Builds a material that can be used in a plate fiber from
 //! its definition as three-dimensional material.

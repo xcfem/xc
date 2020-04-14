@@ -79,7 +79,7 @@
 //  set eta := 0 for rate independent case
 //
 
-#include <material/nD/J2Plasticity.h>
+#include "J2Plasticity.h"
 
 namespace XC{
 //! @ingroup J2NDMat

@@ -40,10 +40,8 @@ class_<XC::ElasticIsotropicMaterial, bases<XC::NDMaterial>, boost::noncopyable >
 
 //#include "FiniteDeformation/python_interface.tcc"
 
-class_<XC::J2Plasticity, bases<XC::NDMaterial>, boost::noncopyable >("J2Plasticity", no_init);
 #include "j2_plasticity/python_interface.tcc"
 
-class_<XC::NDAdaptorMaterial, bases<XC::NDMaterial>, boost::noncopyable >("NDAdaptorMaterial", no_init);
 #include "nd_adaptor/python_interface.tcc"
 
 #include "soil/python_interface.tcc"

@@ -57,10 +57,10 @@
 #define PLANE_STRESS_MATERIAL_H
 
 
-#include "material/nD/NDAdaptorMaterial.h"
+#include "NDAdaptorMaterial.h"
 
 namespace XC{
-//! @ingroup NDMat
+//! @ingroup NDMatMatAdaptorGrp
 //
 //! @brief Material for plane stress problems.
 class PlaneStressMaterial: public NDAdaptorMaterial

@@ -21,6 +21,8 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
+class_<XC::NDAdaptorMaterial, bases<XC::NDMaterial>, boost::noncopyable >("NDAdaptorMaterial", no_init);
+
 //class_<XC::BeamFiberMaterial, bases<XC::NDAdaptorMaterial>, boost::noncopyable >("BeamFiberMaterial", no_init);
 
 class_<XC::PlaneStressMaterial, bases<XC::NDAdaptorMaterial>, boost::noncopyable >("PlaneStressMaterial", no_init);
