@@ -73,9 +73,9 @@
 //
 
 
-#include <utility/matrix/Vector.h>
-#include <utility/matrix/Matrix.h>
-#include <material/nD/NDMaterial.h>
+#include "utility/matrix/Vector.h"
+#include "utility/matrix/Matrix.h"
+#include "material/nD/NDMaterial.h"
 
 
 namespace XC{
