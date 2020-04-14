@@ -30,13 +30,20 @@
 #ifndef NDAdaptorMaterial_h
 #define NDAdaptorMaterial_h
 
-#include <utility/matrix/Vector.h>
-#include <material/nD/NDMaterial.h>
+#include "utility/matrix/Vector.h"
+#include "material/nD/NDMaterial.h"
 
 namespace XC {
 //! @ingroup NDMat
+//!
+//! @defgroup NDMatAdaptorGrp ND adaptors. Wrappers that condense general nonlinear 3D materials down to various stress conditions
 //
-//! @brief ??.
+//! @ingroup NDMatMatAdaptorGrp
+//
+//! @brief Base class for ND adaptor materials.
+//!
+//! ND adaptors are wrappers that condense general nonlinear 3D materials
+//! down to various stress conditions.
 class NDAdaptorMaterial: public NDMaterial
   {
   protected:

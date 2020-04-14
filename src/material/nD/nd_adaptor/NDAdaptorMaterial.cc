@@ -26,9 +26,9 @@
 //----------------------------------------------------------------------------
 //NDAdaptorMaterial.cc
 
-#include <material/nD/NDAdaptorMaterial.h>
+#include "NDAdaptorMaterial.h"
 #include "utility/matrix/ID.h"
-#include <material/nD/NDMaterialType.h>
+#include "material/nD/NDMaterialType.h"
 
 
 XC::NDAdaptorMaterial::NDAdaptorMaterial(int classTag, int strain_size)
