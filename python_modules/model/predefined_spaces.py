@@ -1155,7 +1155,8 @@ class StructuralMechanics3D(PredefinedSpace):
             if(xzVector):
                 trf.xzVector= xzVector
             else:
-                trf.xzVector= l.getKVector
+                v3d= l.getKVector
+                trf.xzVector= xc.Vector([v3d.x, v3d.y, v3d.z])
             elem= seedElemHandler.newElement("ElasticBeam3d",xc.ID([0,0]))
             l.genMesh(xc.meshDir.I)
         xcSet.fillDownwards()
