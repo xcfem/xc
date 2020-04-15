@@ -81,7 +81,7 @@ class EvolutionLaw_L_Eeq: public EvolutionLaw_S
     
     //~EvolutionLaw_L_Eeq() {}; 
 
-    EvolutionLaw_S *newObj();                     //create a clone of itself
+    EvolutionLaw_S *getCopy(void); //create a clone of itself
     
     //void InitVars(EPState *EPS);    // Initialize all hardening vars called only once 
     //                                // after material point is formed if necessary.

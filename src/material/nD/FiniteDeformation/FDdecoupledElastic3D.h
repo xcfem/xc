@@ -65,7 +65,8 @@ namespace XC {
 
 //! @ingroup FDNDMat
 //
-//! @brief ??.
+//! @brief Hyper-elasto-plastic elastic material for
+//! three-dimensional problems.
 class FDdecoupledElastic3D: public FiniteDeformationElastic3D
   {
   protected:

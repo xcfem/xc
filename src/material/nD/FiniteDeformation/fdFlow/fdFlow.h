@@ -67,14 +67,14 @@ namespace XC {
 //
 //! @ingroup FDFlowNDMat
 //
-//! @brief ??.
+//! @brief Base class for large deformation hyperelastic flows ??.
 class fdFlow
-{
+  {
   public:
     fdFlow();
     virtual ~fdFlow() {}; 
     
-    virtual fdFlow *newObj() = 0;   
+    virtual fdFlow *getCopy() = 0;   
 
     virtual stresstensor dFods(const stresstensor &sts, const FDEPState &fdepstate ) const = 0; 
     virtual double dFodq(const stresstensor &sts, const FDEPState &fdepstate ) const;

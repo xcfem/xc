@@ -93,7 +93,7 @@ XC::FDEPState::FDEPState ( const XC::straintensor& xFpInVar,
 }
 
 //------------------------------------------------------------------------------
-XC::FDEPState *XC::FDEPState::newObj ()
+XC::FDEPState *XC::FDEPState::getCopy(void)
   { return new FDEPState(*this); }
 
 //------------------------------------------------------------------------------

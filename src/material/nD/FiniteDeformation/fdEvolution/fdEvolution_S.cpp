@@ -55,11 +55,8 @@
 
 #include "material/nD/FiniteDeformation/fdEvolution/fdEvolution_S.h"
 
-XC::fdEvolution_S * XC::fdEvolution_S::newObj() 
-{   
-    fdEvolution_S *newEL = new fdEvolution_S( *this );    
-    return newEL;
-}
+XC::fdEvolution_S * XC::fdEvolution_S::getCopy(void) 
+  { return new fdEvolution_S(*this); }
 
 double XC::fdEvolution_S::HModulus(const XC::stresstensor &sts, const XC::FDEPState &fdepstate) const
 {

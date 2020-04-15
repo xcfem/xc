@@ -65,7 +65,7 @@ XC::fdFlowVM::fdFlowVM(double Y0_in) :Y0(Y0_in)
 }
 
 //--------------------------------------------------------------------
-XC::fdFlow * XC::fdFlowVM::newObj()
+XC::fdFlow * XC::fdFlowVM::getCopy(void)
 {
      fdFlow *newfdyd = new fdFlowVM(Y0);
      return newfdyd;

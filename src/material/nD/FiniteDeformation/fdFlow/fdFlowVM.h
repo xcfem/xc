@@ -59,16 +59,16 @@
 namespace XC {
 //! @ingroup FDFlowNDMat
 //
-//! @brief ??.
+//! @brief Large deformation hyperelastic Von-Mises flow ??.
 class fdFlowVM: public fdFlow
-{
+  {
   private:
     double Y0;
   public:
     fdFlowVM(double Y0_in);
     // virtual ~fdFlowVM() {}; 
     
-    fdFlow *newObj();   
+    fdFlow *getCopy(void);   
 
     stresstensor dFods(const stresstensor &sts, const FDEPState &fdepstate ) const ; 
     double dFodq(const stresstensor &sts, const FDEPState &fdepstate ) const;	    

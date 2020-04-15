@@ -77,7 +77,7 @@ XC::EvolutionLaw_NL_Eeq::EvolutionLaw_NL_Eeq(const EvolutionLaw_NL_Eeq &NLE )
 //================================================================================
 //  Create a clone of itself 
 //================================================================================
-XC::EvolutionLaw_S* XC::EvolutionLaw_NL_Eeq::newObj(void)
+XC::EvolutionLaw_S* XC::EvolutionLaw_NL_Eeq::getCopy(void)
   { return new EvolutionLaw_NL_Eeq(*this); }
 
 

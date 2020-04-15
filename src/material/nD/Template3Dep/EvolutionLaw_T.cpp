@@ -67,13 +67,11 @@
 //================================================================================
 //  Create a clone of itself 
 //================================================================================
-XC::EvolutionLaw_T * XC::EvolutionLaw_T::newObj() {
-    
+XC::EvolutionLaw_T * XC::EvolutionLaw_T::getCopy(void)
+  {
     EvolutionLaw_T *newEL = new EvolutionLaw_T( *this );
-    
     return newEL;
-
-}
+  }
 
 //================================================================================
 // Evaluating h_ ( for the evaluation of Kp )

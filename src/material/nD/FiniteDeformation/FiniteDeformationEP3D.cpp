@@ -101,7 +101,7 @@ XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag,
       }
 
     if(fdy_in)
-      fdy = fdy_in->newObj();
+      fdy = fdy_in->getCopy();
     else
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -110,7 +110,7 @@ XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag,
       }
 
     if(fdf_in)
-      fdf = fdf_in->newObj();
+      fdf = fdf_in->getCopy();
     else {
       std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; failed to construct the fdFlow\n";
@@ -118,12 +118,12 @@ XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag,
     }
 
     if(fdEvolutionS_in)
-      fdEvolutionS = fdEvolutionS_in->newObj();
+      fdEvolutionS = fdEvolutionS_in->getCopy();
     else
       fdEvolutionS = 0;
 
     if(fdEvolutionT_in)
-      fdEvolutionT = fdEvolutionT_in->newObj();
+      fdEvolutionT = fdEvolutionT_in->getCopy();
     else
       fdEvolutionT = 0;
 
@@ -149,7 +149,7 @@ XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag,
     }
 
     if(fdy_in)
-      fdy = fdy_in->newObj();
+      fdy = fdy_in->getCopy();
     else {
       std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; failed to construct the fdYield.\n";
@@ -157,7 +157,7 @@ XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag,
     }
 
     if(fdf_in)
-      fdf = fdf_in->newObj();
+      fdf = fdf_in->getCopy();
     else {
       std::cerr << getClassName() << "::" << __FUNCTION__
                 << "; failed to construct the fdFlow.\n";
@@ -165,7 +165,7 @@ XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag,
     }
 
     if(fdEvolutionS_in)
-      fdEvolutionS = fdEvolutionS_in->newObj();
+      fdEvolutionS = fdEvolutionS_in->getCopy();
     else
       fdEvolutionS = 0;
 
@@ -194,7 +194,7 @@ XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag,
       }
 
     if(fdy_in)
-      fdy = fdy_in->newObj();
+      fdy = fdy_in->getCopy();
     else
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -203,7 +203,7 @@ XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag,
       }
 
     if(fdf_in)
-      fdf = fdf_in->newObj();
+      fdf = fdf_in->getCopy();
     else
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -214,7 +214,7 @@ XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag,
     fdEvolutionS = 0;
 
     if(fdEvolutionT_in)
-      fdEvolutionT = fdEvolutionT_in->newObj();
+      fdEvolutionT = fdEvolutionT_in->getCopy();
     else
       fdEvolutionT = 0;
 
@@ -240,7 +240,7 @@ XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag,
       }
 
     if(fdy_in)
-      fdy = fdy_in->newObj();
+      fdy = fdy_in->getCopy();
     else
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -249,7 +249,7 @@ XC::FiniteDeformationEP3D::FiniteDeformationEP3D(int tag,
       }
 
     if(fdf_in)
-      fdf = fdf_in->newObj();
+      fdf = fdf_in->getCopy();
     else
       {
         std::cerr << getClassName() << "::" << __FUNCTION__

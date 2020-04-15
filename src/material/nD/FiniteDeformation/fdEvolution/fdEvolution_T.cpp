@@ -57,7 +57,7 @@
 
 using namespace XC;
 
- XC::fdEvolution_T * XC::fdEvolution_T::newObj() 
+ XC::fdEvolution_T * XC::fdEvolution_T::getCopy(void) 
 {   
     fdEvolution_T *newEL = new fdEvolution_T( *this );    
     return newEL;

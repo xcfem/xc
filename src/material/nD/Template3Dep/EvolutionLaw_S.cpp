@@ -67,7 +67,8 @@
 //================================================================================
 //  Create a clone of itself 
 //================================================================================
-XC::EvolutionLaw_S * XC::EvolutionLaw_S::newObj() {
+XC::EvolutionLaw_S * XC::EvolutionLaw_S::getCopy(void)
+  {
     
     EvolutionLaw_S *newEL = new EvolutionLaw_S( *this );
     

@@ -284,7 +284,7 @@ class EPState
             int                 NTensorp,
             const stresstensor *Tensorp );
 
-    EPState *newObj();                 //create a clone of itself
+    EPState *getCopy(void); //create a clone of itself
     EPState( const EPState &rhs );     // Copy constructor    
     const EPState &operator=(const EPState &rhs );  //Overloading assignment
 

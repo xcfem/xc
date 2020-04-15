@@ -76,17 +76,13 @@ XC::EvolutionLaw_L_Eeq::EvolutionLaw_L_Eeq(const EvolutionLaw_L_Eeq &LE )
 }
 
 
-//================================================================================
-//  Create a clone of itself 
-//================================================================================
-// Alpha machine has problem on this
-//EvolutionLaw_L_Eeq * XC::EvolutionLaw_L_Eeq::newObj() {
-XC::EvolutionLaw_S * XC::EvolutionLaw_L_Eeq::newObj() 
-{    
+//! @brief Virtual constructor.
+XC::EvolutionLaw_S * XC::EvolutionLaw_L_Eeq::getCopy(void) 
+  {    
     EvolutionLaw_S *newEL = new EvolutionLaw_L_Eeq( *this );
     
     return newEL;
-}
+  }
 
 ////================================================================================
 ////  Initialize some  vars in XC::EPState				        

@@ -90,22 +90,22 @@ void XC::Template3Dep::allocELS(EvolutionLaw_S   *ELS1_,
     freeELS();
     // Evolution laws
     if( ELS1_ )
-       ELS1 = ELS1_->newObj();
+       ELS1 = ELS1_->getCopy();
     else
        ELS1= nullptr;
 
     if( ELS2_ )
-       ELS2 = ELS2_->newObj();
+       ELS2 = ELS2_->getCopy();
     else
        ELS2= nullptr;
 
     if( ELS3_ )
-       ELS3 = ELS3_->newObj();
+       ELS3 = ELS3_->getCopy();
     else
        ELS3= nullptr;
 
     if( ELS4_ )
-       ELS4 = ELS4_->newObj();
+       ELS4 = ELS4_->getCopy();
     else
        ELS4= nullptr;
 
@@ -148,22 +148,22 @@ void XC::Template3Dep::allocELT(EvolutionLaw_T   *ELT1_,
   {
     freeELT();
     if( ELT1_ )
-       ELT1 = ELT1_->newObj();
+       ELT1 = ELT1_->getCopy();
     else
        ELT1= nullptr;
 
     if( ELT2_ )
-       ELT2 = ELT2_->newObj();
+       ELT2 = ELT2_->getCopy();
     else
        ELT2= nullptr;
 
     if( ELT3_ )
-       ELT3 = ELT3_->newObj();
+       ELT3 = ELT3_->getCopy();
     else
        ELT3= nullptr;
 
     if( ELT4_ )
-       ELT4 = ELT4_->newObj();
+       ELT4 = ELT4_->getCopy();
     else
        ELT4= nullptr;
   }
@@ -221,7 +221,7 @@ void XC::Template3Dep::alloc( NDMaterial &theElMat,
       }
 
     if( YS_ )
-       YS = YS_->newObj();
+       YS = YS_->getCopy();
     else
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -230,7 +230,7 @@ void XC::Template3Dep::alloc( NDMaterial &theElMat,
       }
 
     if( PS_ )
-       PS = PS_->newObj();
+       PS = PS_->getCopy();
     else
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -239,7 +239,7 @@ void XC::Template3Dep::alloc( NDMaterial &theElMat,
       }
 
     if( EPS_ )
-       EPS = EPS_->newObj();
+       EPS = EPS_->getCopy();
     else
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -1095,7 +1095,7 @@ XC::Template3Dep::Print(std::ostream &s, int flag) const
 void XC::Template3Dep::setEPS( EPState & rval)
 {
     //EPState eps = rval; older buggy one
-    //EPS = rval.newObj();
+    //EPS = rval.getCopy();
 /*
 //EPS->setEo(rval.getEo());
 EPS->setE(rval.getE());
@@ -3310,7 +3310,7 @@ double XC::Template3Dep::func(const XC::stresstensor & start_stress,
                           double alfa )
 {
 
-   //EPState *tempEPS = getEPS()->newObj();
+   //EPState *tempEPS = getEPS()->getCopy();
    EPState tempEPS( (*this->getEPS()) );
    XC::stresstensor delta_stress = end_stress - start_stress;
    XC::stresstensor intersection_stress = start_stress + delta_stress*alfa;

@@ -66,10 +66,11 @@ XC::ManzariDafaliasYieldSurface::ManzariDafaliasYieldSurface( )  { }
 
 
 //================================================================================
-//create a colne of itself
+//create a clone of itself
 //================================================================================
 
-XC::YieldSurface * XC::ManzariDafaliasYieldSurface::newObj() {  
+XC::YieldSurface * XC::ManzariDafaliasYieldSurface::getCopy(void)
+  {  
 
      YieldSurface  *newYieldSurface = new ManzariDafaliasYieldSurface();
      return newYieldSurface;

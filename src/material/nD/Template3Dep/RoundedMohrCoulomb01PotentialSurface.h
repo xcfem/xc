@@ -75,9 +75,9 @@ namespace XC {
 class RoundedMohrCoulomb01PotentialSurface: public PotentialSurface
   {
   public:
-    RoundedMohrCoulomb01PotentialSurface( ){ };   // Default constructor
+    RoundedMohrCoulomb01PotentialSurface( ){ }; // Default constructor
     ~RoundedMohrCoulomb01PotentialSurface() { }; //Not all virtual functions  redefined
-    PotentialSurface *newObj(); //create a colne of itself
+    PotentialSurface *getCopy(); //create a clone of itself
 
     BJtensor dQods(const EPState *EPS  ) const;
     BJtensor d2Qods2(const EPState *EPS) const;

@@ -72,7 +72,7 @@ class YieldSurface
   public:
     YieldSurface(void){} //Normal Constructor
     inline virtual ~YieldSurface(void){} 
-    virtual YieldSurface *newObj(void)= 0;  //create a clone of itself
+    virtual YieldSurface *getCopy(void)= 0; //create a clone of itself
   
     virtual double f( const EPState *EPS ) const = 0;	 //pure virtual func
     virtual BJtensor dFods( const EPState *EPS ) const = 0;  //pure virtual func

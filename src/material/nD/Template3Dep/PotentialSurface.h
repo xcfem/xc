@@ -75,7 +75,7 @@ namespace XC {
 class PotentialSurface
   {
   public:
-    virtual PotentialSurface *newObj()  = 0;  //create a colne of itself
+    virtual PotentialSurface *getCopy(void)= 0; // create a clone of itself
     virtual ~PotentialSurface() {};	      // Codewizard requires virtual destructor
     double  q() const { return 0.0; }; // Codewizard does not like function defined in class definition
     virtual BJtensor dQods(const EPState *EPS ) const =  0;  //pure virtual func

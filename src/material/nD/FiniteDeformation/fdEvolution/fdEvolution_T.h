@@ -59,15 +59,14 @@
 namespace XC {
 //! @ingroup FDEVNDMat
 //
-//! @brief ??.
+//! @brief Hyper-elasto-plastic tensorial evolution law.
 class fdEvolution_T
   {
   public:
-    
-    fdEvolution_T() {};
+    fdEvolution_T(void) {};
     virtual ~fdEvolution_T() {};
 
-    virtual fdEvolution_T *newObj();
+    virtual fdEvolution_T *getCopy(void);
     
     // Derivative of stress like hardening variable to strain like variable
     virtual BJtensor HModulus(const stresstensor &sts, const FDEPState &fdepstate) const;  

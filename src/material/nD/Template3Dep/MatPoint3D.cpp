@@ -84,7 +84,7 @@ XC::MatPoint3D::MatPoint3D(short int INr_direction_point_number,
     set_weights(r_weight,s_weight,t_weight);
 
     //if( eps ) {
-    //    gpEPS = eps->newObj();  // Elasto-plastic 3D
+    //    gpEPS = eps->getCopy();  // Elasto-plastic 3D
     //}
     //else
     //    gpEPS = 0;
@@ -127,7 +127,7 @@ XC::MatPoint3D::~MatPoint3D(void)
 //    this->tw = 0;
 //        
 //    if( eps )
-//        gpEPS = eps->newObj();
+//        gpEPS = eps->getCopy();
 //    else
 //        //gpEPS = new EPState();  //otherwise use default EPState __Zhaohui 09-30-2000
 //        gpEPS = 0;  //otherwise use default XC::EPState __Zhaohui 09-30-2000
@@ -160,7 +160,7 @@ void XC::MatPoint3D::Initialize( short int INr_direction_point_number,
     set_weights(r_weight,s_weight,t_weight);
 
     //if(EPS)
-    //   this->gpEPS = EPS->newObj();
+    //   this->gpEPS = EPS->getCopy();
     //else
     //   this->gpEPS = 0;
 
@@ -223,7 +223,7 @@ double XC::MatPoint3D::t_weight() const
 //void XC::MatPoint3D::setEPS(EPState *eps) {
 //
 //    if( eps )
-//        gpEPS = eps->newObj();
+//        gpEPS = eps->getCopy();
 //    else
 //        gpEPS = 0;
 //        //std::clog << "MatPoint3D::setEPS  No initial values for XC::EPState, using default";

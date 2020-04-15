@@ -83,7 +83,7 @@ class EvolutionLaw_NL_Eij: public EvolutionLaw_T
                          
     EvolutionLaw_NL_Eij(const EvolutionLaw_NL_Eij &LEL );   // Copy constructor
     
-    EvolutionLaw_T *newObj();                     //create a colne of itself
+    EvolutionLaw_T *getCopy(void); // create a clone of itself
     
     //void InitVars(EPState *EPS);    // Initialize all hardening vars called only once 
     //                                // after material point is formed if necessary.

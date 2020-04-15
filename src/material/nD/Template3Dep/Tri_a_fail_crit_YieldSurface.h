@@ -78,9 +78,9 @@ class TriFCYieldSurface: public YieldSurface
      double el; 
      double c;
   public:
-    YieldSurface *newObj();  //create a clone of itself
+    YieldSurface *getCopy(void); //create a clone of itself
     
-    TriFCYieldSurface (double fc, double ft, double e, double coh );   // Default constructor
+    TriFCYieldSurface (double fc, double ft, double e, double coh ); // Default constructor
 
      
 

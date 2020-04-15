@@ -73,7 +73,7 @@
 //create a clone of itself
 //================================================================================
 
-XC::PotentialSurface * XC::RoundedMohrCoulomb01PotentialSurface::newObj()
+XC::PotentialSurface * XC::RoundedMohrCoulomb01PotentialSurface::getCopy(void)
   {
     PotentialSurface  *newYieldSurface = new RoundedMohrCoulomb01PotentialSurface();
     return newYieldSurface;

@@ -101,7 +101,7 @@ XC::fdYieldDP::fdYieldDP(double FricAngle_in, double Cohesion_in, int ConeIndex_
 }
 
 //--------------------------------------------------------------------
- XC::fdYield * XC::fdYieldDP::newObj()
+ XC::fdYield * XC::fdYieldDP::getCopy(void)
 {
     fdYield *newfdyd = new fdYieldDP(FricAngle, Cohesion, ConeIndex);
     return newfdyd;

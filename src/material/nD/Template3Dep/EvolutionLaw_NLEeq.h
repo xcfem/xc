@@ -86,7 +86,7 @@ class EvolutionLaw_NL_Eeq: public EvolutionLaw_S
                          
     EvolutionLaw_NL_Eeq(const EvolutionLaw_NL_Eeq &NLEL );   // Copy constructor
     
-    EvolutionLaw_S *newObj();                     //create a colne of itself
+    EvolutionLaw_S *getCopy(void); // create a clone of itself
     
     //void InitVars(EPState *EPS);    // Initialize all hardening vars called only once 
     //                                // after material point is formed if necessary.

@@ -82,7 +82,7 @@ class DruckerPragerPotentialSurface: public PotentialSurface
     DruckerPragerPotentialSurface( double a2d = 0.0 ) : alfa2(a2d) {}   // Default constructor
     virtual ~DruckerPragerPotentialSurface() { }; //Virtual functions not all redefined
     DruckerPragerPotentialSurface( const DruckerPragerPotentialSurface &); //Copy constructor
-    PotentialSurface *newObj();              //create a colne of itself
+    PotentialSurface *getCopy(void); // create a clone of itself
     double getalfa2() const;
 
     BJtensor dQods(const EPState *EPS) const;

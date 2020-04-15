@@ -68,10 +68,11 @@ XC::ManzariDafaliasPotentialSurface01::ManzariDafaliasPotentialSurface01(double 
 
 
 //================================================================================
-//create a colne of itself
+//create a clone of itself
 //================================================================================
 
-XC::PotentialSurface * XC::ManzariDafaliasPotentialSurface01::newObj() {  
+XC::PotentialSurface * XC::ManzariDafaliasPotentialSurface01::getCopy(void)
+  {  
 
      PotentialSurface  *newPotentialSurface = new ManzariDafaliasPotentialSurface01(Pc);
      return newPotentialSurface;

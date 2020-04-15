@@ -59,7 +59,7 @@
 namespace XC {
 //! @ingroup FDFlowNDMat
 //
-//! @brief ??.
+//! @brief Large deformation hyperelastic Drucker-Prager flow ??.
 class fdFlowDP: public fdFlow
   {
   private:
@@ -72,7 +72,7 @@ class fdFlowDP: public fdFlow
     fdFlowDP(double DilatedAngle_in, double Cohesion_in, int ConeIndex_in = 0);
     // virtual ~fdFlowDP() {}; 
     
-    fdFlow *newObj();   
+    fdFlow *getCopy(void);   
 
     stresstensor dFods(const stresstensor &sts, const FDEPState &fdepstate ) const ; 
     double dFodq(const stresstensor &sts, const FDEPState &fdepstate ) const;	    

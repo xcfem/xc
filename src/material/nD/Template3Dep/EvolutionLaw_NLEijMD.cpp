@@ -118,18 +118,9 @@ XC::EvolutionLaw_NL_EijMD::EvolutionLaw_NL_EijMD(const EvolutionLaw_NL_EijMD &MD
 }
 
 
-//================================================================================
-//  Create a clone of itself 
-//================================================================================
-//EvolutionLaw_NL_EijMD * XC::EvolutionLaw_NL_EijMD::newObj() {
-XC::EvolutionLaw_T *XC::EvolutionLaw_NL_EijMD::newObj() {
-    
-    //EvolutionLaw_T *newEL = new EvolutionLaw_NL_EijMD( *this );
-    EvolutionLaw_T *newEL = new EvolutionLaw_NL_EijMD( *this );
-    
-    return newEL;
-
-}
+//! @brief Virtual constructor.
+XC::EvolutionLaw_T *XC::EvolutionLaw_NL_EijMD::getCopy(void)
+  { return new EvolutionLaw_NL_EijMD( *this ); }
     
 //================================================================================
 // Evaluating h_s = h * b_ij = h * (alpha_ij_theta_b - alpha_ij) (For the evaluation of Kp)

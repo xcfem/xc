@@ -77,18 +77,9 @@ XC::EvolutionLaw_NL_Ep::EvolutionLaw_NL_Ep(const EvolutionLaw_NL_Ep &LE )
     this->kappa  = LE.getkappa();
 }
 
-
-//================================================================================
-//  Create a clone of itself 
-//================================================================================
-// Alpha machine has problem on this
-//EvolutionLaw_NL_Ep * XC::EvolutionLaw_NL_Ep::newObj() {
-XC::EvolutionLaw_S * XC::EvolutionLaw_NL_Ep::newObj() 
-{    
-    EvolutionLaw_S *newEL = new EvolutionLaw_NL_Ep( *this );
-    
-    return newEL;
-}
+//! @brief Virtual constructor.
+XC::EvolutionLaw_S * XC::EvolutionLaw_NL_Ep::getCopy(void) 
+  { return new EvolutionLaw_NL_Ep(*this); }
 
 ////================================================================================
 ////  Initialize some  vars in XC::EPState				        

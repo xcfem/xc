@@ -67,10 +67,11 @@ XC::CamClayYieldSurface::CamClayYieldSurface(double Mp )
 
 
 //================================================================================
-//create a colne of itself
+//create a clone of itself
 //================================================================================
 
-XC::YieldSurface *XC::CamClayYieldSurface::newObj() {  
+XC::YieldSurface *XC::CamClayYieldSurface::getCopy(void)
+  {  
 
      YieldSurface  *newYieldSurface = new CamClayYieldSurface(M);
      return newYieldSurface;

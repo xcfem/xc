@@ -62,9 +62,9 @@ namespace XC {
 class ManzariDafaliasYieldSurface: public YieldSurface
   {
   public:
-    YieldSurface *newObj();                  //create a colne of itself
-    ManzariDafaliasYieldSurface();                          // Default constructor
-    //ManzariDafaliasYieldSurface(const ManzariDafaliasYieldSurface &);  // Default constructor
+    YieldSurface *getCopy(void); // create a clone of itself
+    ManzariDafaliasYieldSurface(); // Default constructor
+    //ManzariDafaliasYieldSurface(const ManzariDafaliasYieldSurface &); // Default constructor
 
     double f(const EPState *EPS) const;
     BJtensor dFods(const EPState *EPS) const;

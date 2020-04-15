@@ -73,8 +73,8 @@ class ManzariDafaliasPotentialSurface01: public PotentialSurface
     double Pc;
 
   public:
-    PotentialSurface *newObj();  //create a colne of itself
-    ManzariDafaliasPotentialSurface01(double pc);        // Default constructor
+    PotentialSurface *getCopy(void); // create a clone of itself
+    ManzariDafaliasPotentialSurface01(double pc); // Default constructor
 
     BJtensor dQods(const EPState *EPS) const; 
     BJtensor d2Qods2(const EPState *EPS) const ;   

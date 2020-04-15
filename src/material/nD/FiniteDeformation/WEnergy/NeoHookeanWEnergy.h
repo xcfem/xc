@@ -64,7 +64,7 @@
 namespace XC {
 //! @ingroup FDNDMat
 //
-//! @brief ??.
+//! @brief Large deformation hyperelastic neo-hookean material ??.
 class NeoHookeanWEnergy: public WEnergy
   {
   private:

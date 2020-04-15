@@ -70,8 +70,8 @@ namespace XC {
 class ManzariDafaliasPotentialSurface: public PotentialSurface
   {
   public:
-    PotentialSurface *newObj();  //create a colne of itself
-    ManzariDafaliasPotentialSurface();        // Default constructor
+    PotentialSurface *getCopy(); // create a clone of itself
+    ManzariDafaliasPotentialSurface(); // Default constructor
 
     tensor dQods(const EPState *EPS) const; 
     tensor d2Qods2(const EPState *EPS) const ;   

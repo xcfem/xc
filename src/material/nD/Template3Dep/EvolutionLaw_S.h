@@ -75,7 +75,7 @@ class EvolutionLaw_S
     
     EvolutionLaw_S(void){} //Normal Constructor
     virtual ~EvolutionLaw_S(void){}
-    virtual EvolutionLaw_S *newObj();  //create a colne of itself
+    virtual EvolutionLaw_S *getCopy(void); // create a clone of itself
 
     // Not necessary since the increment of internal var can be evalulated in constitutive driver!
     //virtual void UpdateVar( EPState *EPS, double dlamda ) = 0; // Evolve only one internal variable

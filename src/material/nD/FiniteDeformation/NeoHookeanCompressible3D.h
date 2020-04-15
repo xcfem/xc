@@ -61,7 +61,8 @@
 namespace XC {
 //! @ingroup FDNDMat
 //
-//! @brief ??.
+//! @brief Large deformation hyperelastic neo-hookean compressible
+//! material for three-dimensional problems.
 class NeoHookeanCompressible3D: public FiniteDeformationElastic3D
   {
   private:

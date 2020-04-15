@@ -60,7 +60,7 @@
 namespace XC {
 //! @ingroup FDNDMat
 //
-//! @brief ??.
+//! @brief Large deformation hyperelasticit Ogden-Simo material ??.
 class OgdenSimoWEnergy: public OgdenWEnergyBase
   {
   private:

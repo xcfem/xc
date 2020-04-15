@@ -62,7 +62,7 @@
 namespace XC {
 //! @ingroup FDNDMat
 //
-//! @brief ??.
+//! @brief Large deformation hyperelastic Simo-Pister material ??.
 class SimoPisterWEnergy: public WEnergy
   {
   private:

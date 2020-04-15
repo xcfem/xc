@@ -59,9 +59,9 @@
 namespace XC {
 //! @ingroup FDYieldNDMat
 //
-//! @brief ??.
+//! @brief Large deformation hyperelastic Drucker-Prager yield.
 class fdYieldDP: public fdYield
-{
+  {
   private:
     double FricAngle;
     double Cohesion;
@@ -72,7 +72,7 @@ class fdYieldDP: public fdYield
     fdYieldDP(double FricAngle_in, double Cohesion_in, int ConeIndex_in = 0);
     // virtual ~fdYieldDP() {}; 
     
-    fdYield *newObj();   
+    fdYield *getCopy(void);   
 
     int getNumRank();
     double getTolerance();

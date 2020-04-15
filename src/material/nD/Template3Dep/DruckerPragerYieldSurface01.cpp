@@ -67,15 +67,14 @@ XC::DruckerPragerYieldSurface01::DruckerPragerYieldSurface01(double pc)
 
 
 //================================================================================
-//create a colne of itself
+//create a clone of itself
 //================================================================================
 
-XC::YieldSurface * XC::DruckerPragerYieldSurface01::newObj() {  
-
+XC::YieldSurface * XC::DruckerPragerYieldSurface01::getCopy(void)
+  {  
      YieldSurface  *newYieldSurface = new DruckerPragerYieldSurface01( Pc );
      return newYieldSurface;
-
-}
+  }
 
 //================================================================================
 // Copy constrstructor

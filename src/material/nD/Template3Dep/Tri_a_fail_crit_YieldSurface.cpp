@@ -76,7 +76,7 @@ XC::TriFCYieldSurface::TriFCYieldSurface (double fc, double ft, double e, double
 
 
 //! @brief create a clone of itself
-XC::YieldSurface * XC::TriFCYieldSurface::newObj() 
+XC::YieldSurface * XC::TriFCYieldSurface::getCopy(void) 
   {  
     return new TriFCYieldSurface(*this);
   }

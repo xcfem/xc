@@ -66,9 +66,9 @@ class DruckerPragerYieldSurface01: public YieldSurface
     double Pc;
 
   public:
-    YieldSurface *newObj();                  //create a colne of itself
-    DruckerPragerYieldSurface01(double pc);             // Default constructor
-    //DruckerPragerYieldSurface01(const DruckerPragerYieldSurface01 &);  // Default constructor
+    YieldSurface *getCopy(void); // create a clone of itself
+    DruckerPragerYieldSurface01(double pc); // Default constructor
+    //DruckerPragerYieldSurface01(const DruckerPragerYieldSurface01 &); // Default constructor
 
     double f(const EPState *EPS) const;
     BJtensor dFods(const EPState *EPS) const;

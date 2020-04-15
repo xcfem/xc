@@ -63,8 +63,8 @@ namespace XC {
 class VonMisesYieldSurface: public YieldSurface
   {
   public:
-    // Create a colne of itself
-    YieldSurface *newObj();  
+    // Create a clone of itself
+    YieldSurface *getCopy(void);  
 
     // Default constructor
     VonMisesYieldSurface ( ) {}     

@@ -76,7 +76,7 @@ namespace XC {
 class RoundedMohrCoulomb01YieldSurface: public YieldSurface
   {
   public:
-    YieldSurface *newObj();  //create a clone of itself
+    YieldSurface *getCopy(void); //create a clone of itself
     
     RoundedMohrCoulomb01YieldSurface ( ) {}    // Default constructor
     virtual ~RoundedMohrCoulomb01YieldSurface() {}     // Destructor

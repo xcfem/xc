@@ -61,10 +61,10 @@ XC::CamClayPotentialSurface::CamClayPotentialSurface(double Mp )
 
 
 //================================================================================
-//create a colne of itself
+//create a clone of itself
 //================================================================================
 
-XC::PotentialSurface *XC::CamClayPotentialSurface::newObj()
+XC::PotentialSurface *XC::CamClayPotentialSurface::getCopy(void)
   {  
     PotentialSurface  *newYieldSurface = new CamClayPotentialSurface(M);
     return newYieldSurface;

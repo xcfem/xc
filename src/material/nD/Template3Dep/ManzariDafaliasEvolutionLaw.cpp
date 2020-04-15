@@ -85,13 +85,8 @@ XC::ManzariDafaliasEvolutionLaw::ManzariDafaliasEvolutionLaw(const ManzariDafali
 //================================================================================
 //  Create a clone of itself 
 //================================================================================
-XC::ManzariDafaliasEvolutionLaw *XC::ManzariDafaliasEvolutionLaw::newObj() {
-    
-    ManzariDafaliasEvolutionLaw *newEL = new ManzariDafaliasEvolutionLaw( *this );
-    
-    return newEL;
-
-}
+XC::ManzariDafaliasEvolutionLaw *XC::ManzariDafaliasEvolutionLaw::getCopy(void)
+  { return new ManzariDafaliasEvolutionLaw(*this); }
 
 //================================================================================
 //  Initialize some  vars in XC::EPState				        

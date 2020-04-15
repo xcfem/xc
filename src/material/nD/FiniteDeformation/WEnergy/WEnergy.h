@@ -68,7 +68,7 @@ class WEnergy
     WEnergy(void);
     virtual ~WEnergy(void)
       {}
-    virtual WEnergy *getCopy(void)const =0; //newObj()
+    virtual WEnergy *getCopy(void) const =0; //newObj()
 
     virtual const  double wE(const double &, const Vector &) ;
     virtual const Vector disowOdlambda(const Vector &) ;

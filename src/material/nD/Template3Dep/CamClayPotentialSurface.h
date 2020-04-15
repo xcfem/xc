@@ -67,8 +67,8 @@ class CamClayPotentialSurface: public PotentialSurface
     double M;//!< the slope of critical state line
 
   public:
-    PotentialSurface *newObj();                  //create a colne of itself
-    CamClayPotentialSurface(double Mp = 1.2);        // Default constructor
+    PotentialSurface *getCopy(void); // create a clone of itself
+    CamClayPotentialSurface(double Mp = 1.2); // Default constructor
 
     BJtensor dQods(const EPState *EPS) const;
     BJtensor d2Qods2(const EPState *EPS) const;

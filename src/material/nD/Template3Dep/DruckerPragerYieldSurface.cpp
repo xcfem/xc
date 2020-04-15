@@ -68,19 +68,12 @@
 //
 //}
 
-//================================================================================
-//create a colne of itself
-//================================================================================
-
-//alpha machines complains on this
-//DruckerPragerYieldSurface * XC::DruckerPragerYieldSurface::newObj() {  
-
-XC::YieldSurface * XC::DruckerPragerYieldSurface::newObj() {  
-
+//! @brief Virtual constructor.
+XC::YieldSurface * XC::DruckerPragerYieldSurface::getCopy(void)
+  {
      YieldSurface  *newYieldSurface = new DruckerPragerYieldSurface();
      return newYieldSurface;
-
-}
+  }
 
 //================================================================================
 //  Yield criterion evaluation function F(EPState)

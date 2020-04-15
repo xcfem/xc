@@ -467,7 +467,8 @@ XC::EPState::EPState( )
 //create a clone of itself
 //================================================================================
 
-XC::EPState* XC::EPState::newObj() {
+XC::EPState* XC::EPState::getCopy(void)
+  {
 
 //ZC05/2004      EPState * eps = new  EPState(this->getEo(),
 //ZC05/2004                 this->getE(),

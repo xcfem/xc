@@ -64,11 +64,11 @@ XC::fdYieldVM::fdYieldVM(double Y0_in) :Y0(Y0_in)
 }
 
 //--------------------------------------------------------------------
- XC::fdYield * XC::fdYieldVM::newObj()
-{
+XC::fdYield * XC::fdYieldVM::getCopy(void)
+  {
     fdYield *newfdyd = new fdYieldVM(Y0);
     return newfdyd;
-}
+  }
 
 int XC::fdYieldVM::getNumRank()
 {

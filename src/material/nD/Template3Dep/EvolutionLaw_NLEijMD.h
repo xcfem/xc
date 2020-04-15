@@ -126,8 +126,7 @@ class EvolutionLaw_NL_EijMD: public EvolutionLaw_T
     EvolutionLaw_NL_EijMD(const EvolutionLaw_NL_EijMD &LEL );   
     
     //create a clone of itself
-    //EvolutionLaw_T *newObj();
-    EvolutionLaw_T *newObj();
+    EvolutionLaw_T *getCopy(void);
     	  
     //double h( EPState *EPS,  double norm_dQods);     // Evaluating hardening function h
     BJtensor h_t( EPState *EPS, PotentialSurface *PS);    // Evaluating hardening function h

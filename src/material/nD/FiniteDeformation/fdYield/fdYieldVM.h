@@ -59,16 +59,16 @@
 namespace XC {
 //! @ingroup FDYieldNDMat
 //
-//! @brief ??.
+//! @brief Large deformation hyperelastic Von-Mises yield.
 class fdYieldVM: public fdYield
-{
+  {
   private:
     double Y0;
   public:
     fdYieldVM(double Y0_in);
     // virtual ~fdYieldVM() {}; 
     
-    fdYield *newObj();   
+    fdYield *getCopy(void);   
 
     int getNumRank();
     double getTolerance();

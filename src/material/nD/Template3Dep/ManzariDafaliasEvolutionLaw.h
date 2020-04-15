@@ -120,7 +120,7 @@ class ManzariDafaliasEvolutionLaw: public EvolutionLaw_S
     
     ManzariDafaliasEvolutionLaw(const ManzariDafaliasEvolutionLaw &MDE );   // Copy constructor
     
-    ManzariDafaliasEvolutionLaw *newObj();                     //create a colne of itself
+    ManzariDafaliasEvolutionLaw *getCopy(void); // create a clone of itself
     
     void InitVars(EPState *EPS);    // Initialize all hardening vars called only once 
                                     // after material point is formed!

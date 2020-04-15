@@ -59,7 +59,7 @@
 namespace XC {
 //! @ingroup FDEVNDMat
 //
-//! @brief ??.
+//! @brief Hyper-elasto-plastic evolution law.
 class fdEvolution_SLS: public fdEvolution_S
 {
  private:
@@ -75,7 +75,7 @@ class fdEvolution_SLS: public fdEvolution_S
     fdEvolution_SLS(const stresstensor &sts, const FDEPState &fdepstate);
     //virtual ~fdEvolution_SLS() {};
 
-    fdEvolution_S *newObj();
+    fdEvolution_S *getCopy(void);
     
     // Derivative of stress like hardening variable to strain like variable
     double HModulus(const stresstensor &sts, const FDEPState &fdepstate) const;  

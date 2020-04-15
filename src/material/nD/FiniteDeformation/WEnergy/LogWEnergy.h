@@ -62,7 +62,7 @@
 namespace XC {
 //! @ingroup FDNDMat
 //
-//! @brief ??.
+//! @brief Large deformation hyperelastic Log material ??.
 class LogWEnergy: public WEnergy
   {
   private:

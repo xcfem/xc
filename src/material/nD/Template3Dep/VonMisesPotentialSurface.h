@@ -67,8 +67,8 @@ class VonMisesPotentialSurface: public PotentialSurface
   private:		  
   
   public:
-    PotentialSurface *newObj();  //create a colne of itself
-    VonMisesPotentialSurface ( ) {}      // Default constructor
+    PotentialSurface *getCopy(void); // create a clone of itself
+    VonMisesPotentialSurface ( ) {} // Default constructor
     //VonMisesPotentialSurface (const VonMisesPotentialSurface & );   // copy constructor
 
     BJtensor dQods(const EPState *EPS) const;

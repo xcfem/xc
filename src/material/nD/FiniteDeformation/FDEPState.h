@@ -59,7 +59,7 @@
 namespace XC {
 //! @ingroup FDNDMat
 //
-//! @brief ??.
+//! @brief Large deformation hyperelastic elasto-plastic state.
 class FDEPState
   {    
   private:
@@ -87,7 +87,7 @@ class FDEPState
               double xCommittedStrainLikeInVar,
               const stresstensor& xCommittedStressLikeKiVar,
               const straintensor& xCommittedStrainLikeKiVar);	
-    FDEPState *newObj();
+    FDEPState *getCopy(void);
     FDEPState( const FDEPState& fdeps );
     
     straintensor getFpInVar() const;

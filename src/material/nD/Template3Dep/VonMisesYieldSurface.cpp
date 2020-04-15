@@ -62,10 +62,10 @@
 //}
 
 //================================================================================
-//create a colne of itself
+//create a clone of itself
 //================================================================================
 
-XC::YieldSurface * XC::VonMisesYieldSurface::newObj()
+XC::YieldSurface *XC::VonMisesYieldSurface::getCopy(void)
   {  
 
      YieldSurface  *newYieldSurface = new VonMisesYieldSurface();

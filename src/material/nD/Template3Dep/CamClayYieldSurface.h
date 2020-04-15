@@ -66,8 +66,8 @@ class CamClayYieldSurface: public YieldSurface
   private:
     double M;	// the slope of critical state line
   public:
-    YieldSurface *newObj();                  //create a colne of itself
-    CamClayYieldSurface(double Mp = 1.2);                          // Default constructor
+    YieldSurface *getCopy(void); // create a clone of itself
+    CamClayYieldSurface(double Mp = 1.2); // Default constructor
 
     double f(const EPState *EPS) const;
     BJtensor dFods(const EPState *EPS) const;

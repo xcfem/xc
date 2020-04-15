@@ -33,7 +33,7 @@
 namespace XC {
 //! @ingroup FDNDMat
 //
-//! @brief ??.
+//! @brief Base class for large deformation hyperelasticit Ogden material ??.
 class OgdenWEnergyBase: public WEnergy
   {
   private:

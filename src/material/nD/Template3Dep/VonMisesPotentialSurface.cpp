@@ -62,15 +62,15 @@
 //}
 
 //================================================================================
-//create a colne of itself
+//create a clone of itself
 //================================================================================
 
-XC::PotentialSurface * XC::VonMisesPotentialSurface::newObj() {  
+XC::PotentialSurface * XC::VonMisesPotentialSurface::getCopy(void)
+  {  
 
      PotentialSurface  *newYieldSurface = new VonMisesPotentialSurface();
      return newYieldSurface;
-
-}
+  }
 
 
 //================================================================================

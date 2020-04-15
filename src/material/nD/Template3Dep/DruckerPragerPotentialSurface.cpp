@@ -79,10 +79,11 @@ XC::DruckerPragerPotentialSurface::DruckerPragerPotentialSurface(const DruckerPr
 
 
 //================================================================================
-//create a colne of itself
+//create a clone of itself
 //================================================================================
 
-XC::PotentialSurface * XC::DruckerPragerPotentialSurface::newObj() {  
+XC::PotentialSurface * XC::DruckerPragerPotentialSurface::getCopy(void)
+  {  
 
      PotentialSurface  *newPotentialSurface = new DruckerPragerPotentialSurface( this->getalfa2() );
      return newPotentialSurface;

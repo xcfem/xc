@@ -70,7 +70,8 @@ XC::ManzariDafaliasPotentialSurface::ManzariDafaliasPotentialSurface( ) { }
 //create a clone of itself
 //================================================================================
 
-XC::PotentialSurface * XC::ManzariDafaliasPotentialSurface::newObj() {  
+XC::PotentialSurface * XC::ManzariDafaliasPotentialSurface::getCopy(void)
+  {  
 
      PotentialSurface  *newPotentialSurface = new ManzariDafaliasPotentialSurface();
      return newPotentialSurface;

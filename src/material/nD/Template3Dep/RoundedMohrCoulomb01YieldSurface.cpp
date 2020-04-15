@@ -75,7 +75,7 @@
 //create a clone of itself
 //================================================================================
 
-XC::YieldSurface * XC::RoundedMohrCoulomb01YieldSurface::newObj() 
+XC::YieldSurface * XC::RoundedMohrCoulomb01YieldSurface::getCopy(void) 
   {  
     YieldSurface  *newYieldSurface = new RoundedMohrCoulomb01YieldSurface();
     return newYieldSurface;

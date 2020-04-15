@@ -66,14 +66,14 @@ namespace XC {
 //
 //! @ingroup FDYieldNDMat
 //
-//! @brief ??.
+//! @brief Base class for large deformation hyperelastic yield.
 class fdYield
   {
   public:
     fdYield();
     virtual ~fdYield() {}; 
     
-    virtual fdYield *newObj() = 0;   
+    virtual fdYield *getCopy(void) = 0;   
 
     virtual int getNumRank();
     virtual double getTolerance();

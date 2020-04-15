@@ -81,8 +81,8 @@ class DruckerPragerYieldSurface: public YieldSurface
   
   public:
     //alpha machines complains on this
-    //DruckerPragerYieldSurface *newObj();  //create a clone of itself  
-    YieldSurface *newObj();  //create a clone of itself
+    //DruckerPragerYieldSurface *getCopy(void); //create a clone of itself  
+    YieldSurface *getCopy(void); //create a clone of itself
     
     DruckerPragerYieldSurface(void) {}    // Default constructor
 

@@ -60,7 +60,7 @@
 namespace XC {
 //! @ingroup FDNDMat
 //
-//! @brief 3D finite deformation elastic material.
+//! @brief Base class for finite deformation elastic materials.
 class FiniteDeformationElastic3D: public FiniteDeformationMaterial
   {
   protected:
