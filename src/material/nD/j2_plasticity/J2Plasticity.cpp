@@ -718,7 +718,7 @@ int XC::J2Plasticity::getOrder(void) const
     return 0;
   }
 
-//! @brief Commit state.
+//! @brief Commit material state.
 int XC::J2Plasticity::commitState( ) 
   {
     epsilon_p_n= epsilon_p_nplus1;
@@ -726,14 +726,14 @@ int XC::J2Plasticity::commitState( )
     return 0;
   }
 
-//! @brief Revert to the last commited state
+//! @brief Revert to the last committed state
 int XC::J2Plasticity::revertToLastCommit(void) 
   { return 0; }
 
 //! @brief Revert to start.
 int XC::J2Plasticity::revertToStart( )
   {
-    this->zero( );
+    this->zero();
     return 0;
   }
 
