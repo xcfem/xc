@@ -131,9 +131,6 @@ class ShellNLDKGQ: public Shell4NBase
     // public methods for element output
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
-      
-    Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
-    int getResponse(int responseID, Information &eleInformation);
   }; 
 
 } // end of XC namespace

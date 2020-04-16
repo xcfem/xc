@@ -61,6 +61,7 @@
 #include "domain/mesh/element/plane/QuadBase4N.h"
 #include "domain/mesh/element/utils/physical_properties/SolidMech2D.h"
 #include "domain/mesh/element/utils/body_forces/BodyForces2D.h"
+#include "domain/mesh/element/ElemWithMaterial.h"
 
 namespace XC {
 class NDMaterial;
@@ -132,9 +133,6 @@ class FourNodeQuad: public QuadBase4N<SolidMech2D>
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
     void Print(std::ostream &s, int flag =0) const;
-
-    Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
-    int getResponse(int responseID, Information &eleInformation);
 
     int setParameter(const std::vector<std::string> &argv, Parameter &param);
     int updateParameter(int parameterID, Information &info);

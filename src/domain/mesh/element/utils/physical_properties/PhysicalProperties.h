@@ -35,6 +35,8 @@
 
 namespace XC {
 
+class Response;
+  
 //! @ingroup FEMisc
 //!
 //! @defgroup PhysicalProperties Classes for dealing with element's physical properties (material,...).
@@ -90,6 +92,9 @@ class PhysicalProperties: public CommandEntity, public MovableObject
     //! @brief Return the generalized strains at material points.
     inline Matrix getGeneralizedStrains(void) const
       { return theMaterial.getGeneralizedStrains(); }
+
+    int getResponse(int responseID, Information &eleInformation);
+    Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
 
     virtual void Print(std::ostream &s, int) const;
   };
@@ -175,12 +180,30 @@ int PhysicalProperties<MAT>::recvSelf(const Communicator &comm)
     return res;
   }
 
-//! @brief Sends object.
+//! @brief Obtain information from the analysis results.
+template <class MAT>
+int PhysicalProperties<MAT>::getResponse(int responseID, Information &eleInformation)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet.\n";
+    return -1;
+  }
+  
+//! @brief Material response.
+template <class MAT>
+Response *PhysicalProperties<MAT>::setResponse(const std::vector<std::string> &argv, Information &eleInformation)
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet.\n";
+    return nullptr;
+  }
+
+//! @brief Print stuff.
 template <class MAT>
 void PhysicalProperties<MAT>::Print(std::ostream &, int) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
-	      << "; not implemented.\n";
+	      << "; not implemented yet.\n";
   }  
  
 } //end of XC namespace

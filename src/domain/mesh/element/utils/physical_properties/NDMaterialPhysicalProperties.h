@@ -63,6 +63,9 @@ class NDMaterialPhysicalProperties: public PhysicalProperties<NDMaterial>
     double getRho(void) const;
     void setRho(const double &);
     Vector getRhoi(const double &rhoDefault= 0.0) const;
+    
+    int getResponse(int responseID, Information &eleInformation);
+    Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
  };
 
 } // end of XC namespace

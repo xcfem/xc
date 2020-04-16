@@ -53,6 +53,9 @@ class SectionFDPhysicalProperties: public PhysicalProperties<SectionForceDeforma
 
     bool haveRho(void) const;
     Vector getRhoi(void) const;
+    
+    int getResponse(int responseID, Information &eleInformation);
+    Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
 
     void Print(std::ostream &s, int) const;
   }; 

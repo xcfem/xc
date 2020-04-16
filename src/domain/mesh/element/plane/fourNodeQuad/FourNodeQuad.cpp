@@ -61,8 +61,6 @@
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/ID.h>
 #include <domain/domain/Domain.h>
-#include <domain/mesh/element/utils/Information.h>
-#include "utility/recorder/response/ElementResponse.h"
 
 
 #include "domain/component/Parameter.h"
@@ -593,49 +591,6 @@ void XC::FourNodeQuad::Print(std::ostream &s, int flag) const
       }
   }
 
-XC::Response *XC::FourNodeQuad::setResponse(const std::vector<std::string> &argv, Information &eleInfo)
-  {
-    if(argv[0] == "force" || argv[0] == "forces")
-      return new ElementResponse(this, 1, P);
-    else if(argv[0] == "stiff" || argv[0] == "stiffness")
-      return new ElementResponse(this, 2, K);
-    else if(argv[0] == "material" || argv[0] == "integrPoint")
-      {
-        size_t pointNum = atoi(argv[1]);
-        if(pointNum > 0 && pointNum <= physicalProperties.size())
-          return setMaterialResponse(physicalProperties[pointNum-1],argv,2,eleInfo);
-        else
-          return nullptr;
-      }
-    else if(argv[0] == "stresses")
-      { return new ElementResponse(this, 3, P); }
-    else // otherwise response quantity is unknown for the quad class
-      return nullptr;
-  }
-
-int XC::FourNodeQuad::getResponse(int responseID, Information &eleInfo)
-  {
-    if(responseID == 1)
-      { return eleInfo.setVector(this->getResistingForce()); }
-    else if(responseID == 2)
-      { return eleInfo.setMatrix(this->getTangentStiff()); }
-    else if(responseID == 3)
-      {
-        // Loop over the integration points
-        int cnt = 0;
-        for(size_t i= 0;i<physicalProperties.size(); i++)
-          {
-            // Get material stress response
-            const XC::Vector &sigma = physicalProperties[i]->getStress();
-            P(cnt) = sigma(0);
-            P(cnt+1) = sigma(1);
-            cnt += 2;
-          }
-        return eleInfo.setVector(P);
-      }
-    else
-      return -1;
-  }
 
 int XC::FourNodeQuad::setParameter(const std::vector<std::string> &argv, Parameter &param)
   {

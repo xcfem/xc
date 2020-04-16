@@ -29,6 +29,8 @@
 #include "SectionFDPhysicalProperties.h"
 #include <material/section/SectionForceDeformation.h>
 #include <domain/domain/Domain.h>
+#include "domain/mesh/element/utils/Information.h"
+#include "utility/recorder/response/ElementResponse.h"
 
 
 #include "domain/mesh/element/utils/gauss_models/GaussModel.h"
@@ -257,3 +259,71 @@ XC::Vector XC::SectionFDPhysicalProperties::getRhoi(void) const
     return retval;
   }
 
+//! @brief Obtain information from an analysis.
+int XC::SectionFDPhysicalProperties::getResponse(int responseID, Information &eleInfo)
+  {
+    int retval= -1;
+    if(responseID == 2) // stresses
+      {
+        // Loop over the integration points
+        int cnt = 0;
+	const size_t numGaussPoints= this->size();
+	if(numGaussPoints>0)
+	  {
+	    const size_t numComponents= (*this)[0]->getStressResultant().Size();
+	    static Vector tmp;
+	    tmp.resize(numGaussPoints*numComponents);
+	    for(size_t i= 0;i<numGaussPoints; i++)
+	      {
+		// Get material stress response
+		const Vector &sigma = (*this)[i]->getStressResultant();
+		for(size_t j= 0;j<numComponents;j++,cnt++)
+		  tmp(cnt)= sigma(j);
+	      }
+            retval= eleInfo.setVector(tmp);
+	  }
+      }
+    else if(responseID == 3) // strain
+      {
+        // Loop over the integration points
+        int cnt = 0;
+	const size_t numGaussPoints= this->size();
+	if(numGaussPoints>0)
+	  {
+	    const size_t numComponents= (*this)[0]->getSectionDeformation().Size();
+	    Vector tmp;
+	    tmp.resize(numGaussPoints*numComponents);
+	    for(size_t i= 0;i<numGaussPoints; i++)
+	      {
+		// Get material stress response
+		const Vector &sigma = (*this)[i]->getSectionDeformation();
+		for(size_t j= 0;j<numComponents;j++,cnt++)
+		  tmp(cnt)= sigma(j);
+	      }
+            retval= eleInfo.setVector(tmp);
+	  }
+      }
+    return retval;
+  }
+
+//! @brief Material response.
+XC::Response *XC::SectionFDPhysicalProperties::setResponse(const std::vector<std::string> &argv, Information &eleInfo)
+  {
+    Response *retval= nullptr;
+    if(argv[0] == "material" || argv[0] == "integrPoint")
+      {
+        size_t pointNum = atoi(argv[1]);
+        if(pointNum > 0 && pointNum <= this->size())
+	  {
+	    const size_t offset= 2;
+            std::vector<std::string> argvOffset(argv);
+            argvOffset.erase(argvOffset.begin(),argvOffset.begin()+offset);
+            retval= this->setResponse(argvOffset,eleInfo);
+	  }
+        else
+          retval= nullptr;
+      }
+    else // otherwise response quantity is unknown for the quad class
+      retval= nullptr;
+    return retval;
+  }

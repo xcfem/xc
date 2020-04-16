@@ -30,7 +30,9 @@
 #ifndef ElemWithMaterial_h
 #define ElemWithMaterial_h
 
-#include <domain/mesh/element/ElementBase.h>
+#include "ElementBase.h"
+#include "domain/mesh/element/utils/Information.h"
+#include "utility/recorder/response/ElementResponse.h"
 
 namespace XC {
 
@@ -67,6 +69,9 @@ class ElemWithMaterial: public ElementBase<NNODOS>
     
     virtual const Matrix &getExtrapolationMatrix(void) const;
     Matrix getExtrapolatedValues(const Matrix &) const;
+    
+    int getResponse(int responseID, Information &eleInformation);
+    Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
   };
 
 template <int NNODOS,class PhysProp>
@@ -84,7 +89,8 @@ int ElemWithMaterial<NNODOS, PhysProp>::commitState(void)
 
     if((retVal= ElementBase<NNODOS>::commitState()) != 0)
       {
-        std::cerr << "ElemWithMaterial::commitState () - failed in base class";
+        std::cerr << this->getClassName() << "::" << __FUNCTION__
+	          << "; failed in base class." << std::endl;
         return (-1);
       }
     retVal+= physicalProperties.commitState();
@@ -132,11 +138,10 @@ const Matrix &ElemWithMaterial<NNODOS, PhysProp>::getExtrapolationMatrix(void) c
 template <int NNODOS,class PhysProp>
 Matrix ElemWithMaterial<NNODOS, PhysProp>::getExtrapolatedValues(const Matrix &values) const
   { return getExtrapolationMatrix()*values; }
-
-
+  
 //! @brief Send members through the communicator argument.
 template <int NNODOS,class PhysProp>
-  int ElemWithMaterial<NNODOS, PhysProp>::sendData(Communicator &comm)
+int ElemWithMaterial<NNODOS, PhysProp>::sendData(Communicator &comm)
   {
     int res= ElementBase<NNODOS>::sendData(comm);
     res+= comm.sendMovable(physicalProperties,this->getDbTagData(),CommMetaData(7));
@@ -150,6 +155,48 @@ int ElemWithMaterial<NNODOS, PhysProp>::recvData(const Communicator &comm)
     int res= ElementBase<NNODOS>::recvData(comm);
     res+= comm.receiveMovable(physicalProperties,this->getDbTagData(),CommMetaData(7));
     return res;
+  }
+
+//! @brief Obtain information from an analysis.
+template <int NNODOS,class PhysProp>
+int ElemWithMaterial<NNODOS, PhysProp>::getResponse(int responseID, Information &eleInfo)
+  {
+    int retval= -1;
+    if(responseID == 1)
+      { retval= eleInfo.setVector(this->getResistingForce()); }
+    else if(responseID == 2)
+      { retval= eleInfo.setMatrix(this->getTangentStiff()); }
+    else if(responseID == 3)
+      { retval= physicalProperties.getResponse(responseID, eleInfo);  }
+    else if(responseID == 4)
+      { retval= physicalProperties.getResponse(responseID, eleInfo);  }
+    return retval;
+  }
+
+//! @brief element response.
+template <int NNODOS,class PhysProp>
+XC::Response *ElemWithMaterial<NNODOS, PhysProp>::setResponse(const std::vector<std::string> &argv, Information &eleInfo)
+  {
+    Response *retval= nullptr;
+    if(argv[0] == "force" || argv[0] == "forces")
+      retval= new ElementResponse(this, 1, this->getResistingForce());
+    else if(argv[0] == "stiff" || argv[0] == "stiffness")
+      retval= new ElementResponse(this, 2, this->getTangentStiff());
+    else if(argv[0] == "material"  || (argv[0]=="Material") || argv[0] == "integrPoint")
+      {
+        size_t pointNum = atoi(argv[1]);
+        if(pointNum > 0 && pointNum <= this->physicalProperties.size())
+          retval= this->setMaterialResponse(this->physicalProperties[pointNum-1],argv,2,eleInfo);
+        else
+          retval= nullptr;
+      }
+    else if(argv[0] == "stress" || argv[0] == "stresses")
+      { retval= new ElementResponse(this, 3, this->getResistingForce()); }
+    else if(argv[0] == "strain" || argv[0] == "strains")
+      { retval= new ElementResponse(this, 3, this->getResistingForce()); }
+    else // otherwise response quantity is unknown for the quad class
+      retval= nullptr;
+    return retval;
   }
 
 } //end of XC namespace

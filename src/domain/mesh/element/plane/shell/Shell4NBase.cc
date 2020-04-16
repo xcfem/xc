@@ -759,4 +759,56 @@ XC::ShellCrdTransf3dBase *XC::Shell4NBase::getCoordTransf(void)
 const XC::ShellCrdTransf3dBase *XC::Shell4NBase::getCoordTransf(void) const
   { return theCoordTransf; }
 
+//! @brief Element response.
+XC::Response *XC::Shell4NBase::setResponse(const std::vector<std::string> &argv, Information &eleInformation)
+  {
+    Response *theResponse= QuadBase4N<SectionFDPhysicalProperties>::setResponse(argv,eleInformation);
+    if(!theResponse)
+      {
+	// output.tag("ElementOutput");
+	// output.attr("eleType", "ShellNLDKGQ");
+	// output.attr("eleTag",this->getTag());
+	const int numNodes= this->getNumExternalNodes();
+	static char nodeData[32];
 
+	for(int i=0; i<numNodes; i++)
+	  {
+	    sprintf(nodeData,"node%d",i+1);
+	    //output.attr(nodeData,nodes(i));
+	  }
+
+	if((argv[0]=="force") || (argv[0]=="forces") ||
+	    (argv[0]=="globalForce") || (argv[0]=="globalForces"))
+	  {
+	    const Vector &force= this->getResistingForce();
+	    int size= force.Size();
+	    for(int i=0; i<size; i++)
+	      {
+		sprintf(nodeData,"P%d",i+1);
+		//output.tag("ResponseType",nodeData);
+	      }
+	    theResponse= new ElementResponse(this, 1, this->getResistingForce());
+	  }
+	//output.endTag();
+      }
+    return theResponse;
+  }
+
+//! @brief Obtain information from an analysis.
+int XC::Shell4NBase::getResponse(int responseID, Information &eleInfo)
+  {
+    int retval= QuadBase4N<SectionFDPhysicalProperties>::getResponse(responseID, eleInfo);
+    if(retval==-1)
+      {
+	switch (responseID)
+	  {
+	  case 1: // global forces
+	    retval= eleInfo.setVector(this->getResistingForce());
+	    break;
+	  default:
+	    retval= -1;
+	    break;
+	  }
+      }
+    return retval;
+  }

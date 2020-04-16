@@ -139,6 +139,9 @@ class Shell4NBase: public QuadBase4N<SectionFDPhysicalProperties>
     //! @brief Return initial displacements.
     inline const std::vector<Vector> &getInitDisp(void) const
       { return initDisp; }
+    
+    Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
+    int getResponse(int responseID, Information &eleInformation);
 
     void Print(std::ostream &s, int flag ) const;
   }; 

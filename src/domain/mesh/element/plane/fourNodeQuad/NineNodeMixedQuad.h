@@ -55,7 +55,7 @@
 // Plane Strain (NOT PLANE STRESS)
 //
 
-#include <domain/mesh/element/ElemWithMaterial.h>
+#include "domain/mesh/element/ElemWithMaterial.h"
 #include <utility/matrix/Vector.h>
 #include <utility/matrix/Matrix.h>
 #include "domain/mesh/element/utils/physical_properties/NDMaterialPhysicalProperties.h"
@@ -106,8 +106,7 @@ class NineNodeMixedQuad: public ElemWithMaterial<9,NDMaterialPhysicalProperties>
   protected:
     int sendData(Communicator &);
     int recvData(const Communicator &);
-  public :
-    
+  public:
     //null constructor
     NineNodeMixedQuad(void);
   
