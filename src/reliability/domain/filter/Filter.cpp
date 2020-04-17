@@ -57,10 +57,7 @@
 // Written by Terje Haukaas (haukaas@ce.berkeley.edu)
 //
 
-#include <reliability/domain/filter/Filter.h>
-#include <reliability/domain/components/ReliabilityDomainComponent.h>
+#include "Filter.h"
 
 XC::Filter::Filter(int tag, int classtag)
-:ReliabilityDomainComponent(tag,classtag) {}
-
-
+  : ReliabilityDomainComponent(tag,classtag), wn(0.0), xi(0.0) {}

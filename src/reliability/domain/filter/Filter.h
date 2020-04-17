@@ -67,16 +67,17 @@
 namespace XC {
 //! @ingroup ReliabilityAnalysis
 // 
-//! @brief ??
+//! @brief Base class for filters.
 class Filter: public ReliabilityDomainComponent
   {
   protected:
-    int tag;
+    double wn;
+    double xi;
   public:
     Filter(int tag, int classtag);
-    virtual double getAmplitude(double time) = 0;
-    virtual double getMaxAmplitude() = 0;
-    virtual double getTimeOfMaxAmplitude() = 0;
+    virtual double getAmplitude(double time) const= 0;
+    virtual double getMaxAmplitude(void) const= 0;
+    virtual double getTimeOfMaxAmplitude(void) const= 0;
 
   };
 } // end of XC namespace

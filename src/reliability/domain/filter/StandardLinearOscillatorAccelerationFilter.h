@@ -66,21 +66,17 @@
 namespace XC {
 //! @ingroup ReliabilityAnalysis
 // 
-//! @brief ??
+//! @brief Standard linear oscillator acceleration filter.
 class StandardLinearOscillatorAccelerationFilter: public Filter
-{
+  {
+  public:
+    StandardLinearOscillatorAccelerationFilter(int tag, double period, double dampingRatio);
+    double getAmplitude(double time) const;
+    double getMaxAmplitude() const;
+    double getTimeOfMaxAmplitude() const;
 
-public:
-	StandardLinearOscillatorAccelerationFilter(int tag, double period, double dampingRatio);
-	double getAmplitude(double time);
-	double getMaxAmplitude();
-	double getTimeOfMaxAmplitude();
-
-	void Print(std::ostream &s, int flag =0) const;
-private:
-	double wn;
-	double xi;
-};
+    void Print(std::ostream &s, int flag =0) const;
+  };
 } // end of XC namespace
 
 #endif

@@ -57,58 +57,45 @@
 // Written by Terje Haukaas (haukaas@ce.berkeley.edu)
 //
 
-#include <reliability/domain/filter/KooFilter.h>
-#include <reliability/domain/filter/Filter.h>
+#include "KooFilter.h"
 #include <classTags.h>
 #include <cmath>
 
 
 XC::KooFilter::KooFilter(int tag, double period, double dampingRatio)
-:Filter(tag,FILTER_standardLinearOscillator)
-{
-	double pi = 3.14159265358979;
-	wn = 2*pi/period;
-	xi = dampingRatio;
-}
-
-double
-XC::KooFilter::getAmplitude(double time)
-{
-	if (time<0.0) {
-
-		return 0.0;
-
-	}
-	else {
-
-		double mysqrt = sqrt(1.0-pow(xi,2.0));
-
-		double wd = wn * mysqrt;
-
-		double term1 = wn/mysqrt * sin(wd*time);
-
-		double term2 = 2.0*xi*wn*cos(wd*time);
-
-		double theWholeThing = -(term1+term2)*exp(-xi*wn*time);
-
-		return theWholeThing;
-	}
-}
-
-double
-XC::KooFilter::getMaxAmplitude()
-{
-	double wd = wn * sqrt(1.0-pow(xi,2.0));
-
-	double result = wd/(xi*wn*sqrt((xi*xi*wn*wn+wd*wd)/(xi*xi*wn*wn)))
-		*exp(-xi*wn*(atan(wd/(xi*wn))/wd));
-
-	return result;
-}
-
-double XC::KooFilter::getTimeOfMaxAmplitude()
+  : Filter(tag,FILTER_standardLinearOscillator)
   {
-    double wd = wn * sqrt(1.0-pow(xi,2.0));
+    const double pi= M_PI;
+    wn = 2*pi/period;
+    xi = dampingRatio;
+  }
+
+double XC::KooFilter::getAmplitude(double time) const
+  {
+    if(time<0.0)
+      { return 0.0; }
+    else
+      {
+	const double mysqrt = sqrt(1.0-pow(xi,2.0));
+	const double wd = wn * mysqrt;
+	const double term1 = wn/mysqrt * sin(wd*time);
+	const double term2 = 2.0*xi*wn*cos(wd*time);
+	const double theWholeThing = -(term1+term2)*exp(-xi*wn*time);
+	return theWholeThing;
+      }
+  }
+
+double XC::KooFilter::getMaxAmplitude(void) const
+  {
+    const double wd= wn * sqrt(1.0-pow(xi,2.0));
+    const double result= wd/(xi*wn*sqrt((xi*xi*wn*wn+wd*wd)/(xi*xi*wn*wn)))
+	    *exp(-xi*wn*(atan(wd/(xi*wn))/wd));
+    return result;
+  }
+
+double XC::KooFilter::getTimeOfMaxAmplitude(void) const
+  {
+    const double wd= wn * sqrt(1.0-pow(xi,2.0));
     return (atan(wd/(xi*wn))/wd);
   }
 

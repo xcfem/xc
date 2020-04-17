@@ -57,43 +57,45 @@
 // Written by Terje Haukaas (haukaas@ce.berkeley.edu)
 //
 
-#include <reliability/domain/filter/StandardLinearOscillatorAccelerationFilter.h>
-#include <reliability/domain/filter/Filter.h>
+#include "StandardLinearOscillatorAccelerationFilter.h"
 #include <classTags.h>
 #include <cmath>
 
 
 XC::StandardLinearOscillatorAccelerationFilter::StandardLinearOscillatorAccelerationFilter(int tag, double period, double dampingRatio)
 :Filter(tag,FILTER_standardLinearOscillator)
-{
+  {
     double pi = 3.14159265358979;
     wn = 2*pi/period;
     xi = dampingRatio;
-}
+  }
 
-double
-XC::StandardLinearOscillatorAccelerationFilter::getAmplitude(double time)
-{
-    if (time<0.0) {
-    	return 0.0;
-    }
-    else {
+double XC::StandardLinearOscillatorAccelerationFilter::getAmplitude(double time) const
+  {
+    if(time<0.0)
+      {	return 0.0; }
+    else
+      {
     	double wd = wn * sqrt(1.0-pow(xi,2.0));
     	return (  ( xi*xi*wn*wn*sin(wd*time) - 2.0*xi*wn*wd*cos(wd*time) - wd*wd*sin(wd*time) ) * exp(-xi*wn*time)  );
-    }
-}
+      }
+  }
 
-double XC::StandardLinearOscillatorAccelerationFilter::getMaxAmplitude()
+double XC::StandardLinearOscillatorAccelerationFilter::getMaxAmplitude(void) const
   {
     //const double wd = wn * sqrt(1.0-pow(xi,2.0));
-    std::cerr << "ERROR: The getMaxAmplitude() method is not implemented for acceleration filter." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; ERROR: method not implemented for acceleration filter."
+	      << std::endl;
     return 0.0;
   }
 
-double XC::StandardLinearOscillatorAccelerationFilter::getTimeOfMaxAmplitude()
+double XC::StandardLinearOscillatorAccelerationFilter::getTimeOfMaxAmplitude(void) const
   {
     //double wd = wn * sqrt(1.0-pow(xi,2.0));
-    std::cerr << "ERROR: The getTimeOfMaxAmplitude() method is not implemented for acceleration filter." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; ERROR: method not implemented for acceleration filter."
+	      << std::endl;
     return 0.0;
   }
 

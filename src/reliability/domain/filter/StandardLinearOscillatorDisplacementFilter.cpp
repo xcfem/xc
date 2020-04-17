@@ -65,42 +65,36 @@
 
 XC::StandardLinearOscillatorDisplacementFilter::StandardLinearOscillatorDisplacementFilter(int tag, double period, double dampingRatio)
 :Filter(tag,FILTER_standardLinearOscillator)
-{
-	double pi = 3.14159265358979;
-	wn = 2*pi/period;
-	xi = dampingRatio;
-}
+  {
+    double pi= M_PI;
+    wn= 2*pi/period;
+    xi= dampingRatio;
+  }
 
-double
-XC::StandardLinearOscillatorDisplacementFilter::getAmplitude(double time)
-{
-	if (time<0.0) {
-		return 0.0;
-	}
-	else {
-		double wd = wn * sqrt(1.0-pow(xi,2.0));
-		return ( sin(wd*time) * exp(-xi*wn*time)  );
-	}
-}
+double XC::StandardLinearOscillatorDisplacementFilter::getAmplitude(double time) const
+  {
+    if(time<0.0)
+      { return 0.0; }
+    else
+      {
+	double wd= wn * sqrt(1.0-pow(xi,2.0));
+	return (sin(wd*time) * exp(-xi*wn*time));
+      }
+  }
 
-double
-XC::StandardLinearOscillatorDisplacementFilter::getMaxAmplitude()
-{
-	double wd = wn * sqrt(1.0-pow(xi,2.0));
+double XC::StandardLinearOscillatorDisplacementFilter::getMaxAmplitude(void) const
+  {
+    const double wd= wn * sqrt(1.0-pow(xi,2.0));
+    const double result= wd/(xi*wn*sqrt((xi*xi*wn*wn+wd*wd)/(xi*xi*wn*wn)))
+	    *exp(-xi*wn*(atan(wd/(xi*wn))/wd));
+    return result;
+  }
 
-	double result = wd/(xi*wn*sqrt((xi*xi*wn*wn+wd*wd)/(xi*xi*wn*wn)))
-		*exp(-xi*wn*(atan(wd/(xi*wn))/wd));
-
-	return result;
-}
-
-double
-XC::StandardLinearOscillatorDisplacementFilter::getTimeOfMaxAmplitude()
-{
-	double wd = wn * sqrt(1.0-pow(xi,2.0));
-
-	return (atan(wd/(xi*wn))/wd);
-}
+double XC::StandardLinearOscillatorDisplacementFilter::getTimeOfMaxAmplitude(void) const
+  {
+    const double wd= wn * sqrt(1.0-pow(xi,2.0));
+    return (atan(wd/(xi*wn))/wd);
+  }
 
 //! @brief Print stuff.
 void XC::StandardLinearOscillatorDisplacementFilter::Print(std::ostream &s, int flag) const

@@ -65,39 +65,40 @@
 
 XC::StandardLinearOscillatorVelocityFilter::StandardLinearOscillatorVelocityFilter(int tag, double period, double dampingRatio)
 :Filter(tag,FILTER_standardLinearOscillator)
-{
-	double pi = 3.14159265358979;
-	wn = 2*pi/period;
-	xi = dampingRatio;
-}
+  {
+    double pi= M_PI;
+    wn = 2*pi/period;
+    xi = dampingRatio;
+  }
 
-double
-XC::StandardLinearOscillatorVelocityFilter::getAmplitude(double time)
-{
-	if (time<0.0) {
-		return 0.0;
-	}
-	else {
-		double wd = wn * sqrt(1.0-pow(xi,2.0));
-		return (  ( wd*cos(wd*time) - xi*wn*sin(wd*time) ) * exp(-xi*wn*time)  );
-		// Should maybe include the 1/mwd factor too
-	}
-}
+double XC::StandardLinearOscillatorVelocityFilter::getAmplitude(double time) const
+  {
+    if(time<0.0)
+      { return 0.0; }
+    else
+      {
+	const double wd = wn * sqrt(1.0-pow(xi,2.0));
+	return (  ( wd*cos(wd*time) - xi*wn*sin(wd*time) ) * exp(-xi*wn*time)  );
+	    // Should maybe include the 1/mwd factor too
+      }
+  }
 
-double XC::StandardLinearOscillatorVelocityFilter::getMaxAmplitude()
+double XC::StandardLinearOscillatorVelocityFilter::getMaxAmplitude(void) const
   {
     //double wd = wn * sqrt(1.0-pow(xi,2.0));
-
-    std::cerr << "ERROR: The getMaxAmplitude() method is not implemented for velocity filter." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; ERROR: method not implemented for velocity filter."
+	      << std::endl;
     const double result = 0.0;
     return result;
   }
 
-double XC::StandardLinearOscillatorVelocityFilter::getTimeOfMaxAmplitude()
+double XC::StandardLinearOscillatorVelocityFilter::getTimeOfMaxAmplitude(void) const
   {
     //double wd = wn * sqrt(1.0-pow(xi,2.0));
-
-    std::cerr << "ERROR: The getTimeOfMaxAmplitude() method is not implemented for velocity filter." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; ERROR: method not implemented for velocity filter."
+	      << std::endl;
     return 0.0;
   }
 

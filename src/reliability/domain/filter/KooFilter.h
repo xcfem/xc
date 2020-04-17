@@ -61,26 +61,22 @@
 #ifndef KooFilter_h
 #define KooFilter_h
 
-#include <reliability/domain/filter/Filter.h>
+#include "Filter.h"
 
 namespace XC {
 //! @ingroup ReliabilityAnalysis
 // 
-//! @brief ??
+//! @brief Koo Filter.
 class KooFilter: public Filter
   {
   public:
-	KooFilter(int tag, double period, double dampingRatio);
-	double getAmplitude(double time);
-	double getMaxAmplitude();
-	double getTimeOfMaxAmplitude();
+    KooFilter(int tag, double period, double dampingRatio);
+    double getAmplitude(double time) const;
+    double getMaxAmplitude(void) const;
+    double getTimeOfMaxAmplitude(void) const;
 
-	void Print(std::ostream &s, int flag =0) const;
-
-private:
-	double wn;
-	double xi;
-};
+    void Print(std::ostream &s, int flag =0) const;
+  };
 } // end of XC namespace
 
 #endif

@@ -66,21 +66,17 @@
 namespace XC {
 //! @ingroup ReliabilityAnalysis
 // 
-//! @brief ??
+//! @brief Standard linear oscillator displacement filter.
 class StandardLinearOscillatorDisplacementFilter: public Filter
   {
+  public:
+    StandardLinearOscillatorDisplacementFilter(int tag, double period, double dampingRatio);
+    double getAmplitude(double time) const;
+    double getMaxAmplitude(void) const;
+    double getTimeOfMaxAmplitude(void) const;
 
-public:
-	StandardLinearOscillatorDisplacementFilter(int tag, double period, double dampingRatio);
-	double getAmplitude(double time);
-	double getMaxAmplitude();
-	double getTimeOfMaxAmplitude();
-
-	void Print(std::ostream &s, int flag =0) const;
-private:
-	double wn;
-	double xi;
-};
+    void Print(std::ostream &s, int flag =0) const;
+  };
 } // end of XC namespace
 
 #endif
