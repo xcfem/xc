@@ -57,27 +57,26 @@
 
 #include <dlfcn.h>
 
-int XC::getLibraryFunction(const char *libName, const char *funcName, void **libHandle, void **funcHandle)
+//! @brief Return a pointer to the function named functName from
+//! the library named libName.
+int XC::getLibraryFunction(const std::string &libName, const std::string &funcName, void **libHandle, void **funcHandle)
   {
 
     int result = 0;
   
-    *libHandle = nullptr;
-    *funcHandle = nullptr;
+    *libHandle= nullptr;
+    *funcHandle= nullptr;
   
-    int libNameLength = strlen(libName);
-    char *localLibName = new char[libNameLength+4];
-    strcpy(localLibName, libName);
-    strcpy(&localLibName[libNameLength], ".so");
+    const std::string localLibName= libName+".so";
   
     char *error;
-    *libHandle = dlopen (localLibName, RTLD_NOW);
+    *libHandle = dlopen(localLibName.c_str(), RTLD_NOW);
     if(*libHandle != nullptr)
       {    
-        *funcHandle = dlsym(*libHandle, funcName);
+        *funcHandle = dlsym(*libHandle, funcName.c_str());
         if((error = dlerror()) != nullptr)
           {
-            std::cerr << *error;
+            std::cerr << *error << std::endl;
             result = -2;
           }
         else
@@ -85,6 +84,5 @@ int XC::getLibraryFunction(const char *libName, const char *funcName, void **lib
       }
     else
       result = -3;
-    delete [] localLibName; 
     return result;
   }

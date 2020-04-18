@@ -29,10 +29,11 @@
 #ifndef packages_h
 #define packages_h
 
+#include <string>
 
 namespace XC {
 
-int getLibraryFunction(const char *libName, const char *functName, void **libHandle, void **funcHandle);
+int getLibraryFunction(const std::string &libName, const std::string &functName, void **libHandle, void **funcHandle);
 
 } // end of XC namespace
 
