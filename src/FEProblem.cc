@@ -37,7 +37,7 @@
 #include "utility/database/FE_Datastore.h"
 
 
-#include "utility/actor/objectBroker/FEM_ObjectBrokerAllClasses.h"
+#include "utility/actor/objectBroker/FEM_ObjectBroker.h"
 #include "utility/database/FileDatastore.h"
 #include "utility/database/MySqlDatastore.h"
 #include "utility/database/BerkeleyDbDatastore.h"
@@ -48,7 +48,7 @@
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
 
-XC::FEM_ObjectBrokerAllClasses XC::FEProblem::theBroker;
+XC::FEM_ObjectBroker XC::FEProblem::theBroker;
 XC::Domain *XC::FEProblem::theActiveDomain= nullptr;
 
 //! @brief Default constructor.

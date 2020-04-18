@@ -43,7 +43,7 @@ class ID;
 
 //! @ingroup IPComm
 //!
-//! Base class for Actor and Shadow objects.
+//! @brief Base class for Actor and Shadow objects.
 class ShadowActorBase: public ObjectWithObjBroker
   {
   private:

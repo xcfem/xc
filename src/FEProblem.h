@@ -41,7 +41,7 @@
 namespace XC {
 class Domain;
 class FE_Datastore;
-class FEM_ObjectBrokerAllClasses;
+class FEM_ObjectBroker;
 
 //! @mainpage <a href="https://sites.google.com/site/xcfemanalysis/" target="_new">XC</a> Open source finite element analysis program.
 //! @author Luis C. Pérez Tato/Ana Ortega.
@@ -86,7 +86,7 @@ class FEProblem: public CommandEntity
     ProcSolu proc_solu; //!< Solution procedure.
     MapFields fields; //!< Definition of fields for results output.
     FE_Datastore *dataBase; //!< database to save states in.
-    static FEM_ObjectBrokerAllClasses theBroker;
+    static FEM_ObjectBroker theBroker;
 
   public:
     static Domain *theActiveDomain;

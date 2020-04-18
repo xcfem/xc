@@ -36,7 +36,7 @@ class FEM_ObjectBroker;
 
 //! @ingroup IPComm
 //!
-//! Base class for Actor and Shadow objects.
+//! @brief Base class for Actor and Shadow objects.
 class ObjectWithObjBroker
   {
   protected:

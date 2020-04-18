@@ -65,9 +65,9 @@ class EPState;
 //! @ingroup EPMat3D
 //!
 //! @defgroup MatNDEL Evolution law.
-//!
+//
 //! @ingroup MatNDEL
-//!
+//
 //! @brief Base class for scalar evolution laws.
 class EvolutionLaw_S
   {

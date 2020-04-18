@@ -63,6 +63,8 @@
 #define FEM_ObjectBroker_h
 
 #include "utility/actor/objectBroker/ObjectBroker.h"
+#include <string>
+
 class CommandEntity;
 
 namespace XC {
@@ -221,8 +223,9 @@ class FEM_ObjectBroker
 
     virtual Subdomain *getSubdomainPtr(int classTag);
 
+    Parameter *getParameter(int classTag);
 
-    virtual int addUniaxialMaterial(int classTag, const char *lib, const char *funcName, UniaxialMaterial *(*)(void));
+    virtual int addUniaxialMaterial(int classTag, const std::string &, const std::string &, UniaxialMaterial *(*)(void));
   };
 } // end of XC namespace
 

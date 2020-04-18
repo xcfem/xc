@@ -78,11 +78,10 @@ typedef int socket_type;
 typedef socklen_t socklen_type;
 
 inline bool startup_socket()
-{ return true; } 
+  { return true; } 
 
 inline void cleanup_socket()
-{
-}
+  {}
 
 #endif 
 

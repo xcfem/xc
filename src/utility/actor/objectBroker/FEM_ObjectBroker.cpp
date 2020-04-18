@@ -67,13 +67,13 @@
 typedef struct uniaxialPackage
   {
     int classTag;
-    char *libName;
-    char *funcName;
+    std::string libName;
+    std::string funcName;
     XC::UniaxialMaterial *(*funcPtr)(void);
     struct uniaxialPackage *next;
   } UniaxialPackage;
 
-static UniaxialPackage *theUniaxialPackage = nullptr;
+static UniaxialPackage *theUniaxialPackage= nullptr;
 
 
 
@@ -81,6 +81,8 @@ XC::FEM_ObjectBroker::FEM_ObjectBroker(void)
   :lastLinearSolver(nullptr),lastDomainSolver(nullptr)
   {}
 
+//! @brief Creates a new actor with the class tag
+//! being passed as parameter.
 XC::Actor *XC::FEM_ObjectBroker::getNewActor(int classTag, Channel *theChannel)
   {
   switch(classTag) {
@@ -99,6 +101,7 @@ XC::Actor *XC::FEM_ObjectBroker::getNewActor(int classTag, Channel *theChannel)
   }
 
 
+//! @brief Creates a new PartitionedModelBuilder de la clase cuyo tag being passed as parameter.
 XC::PartitionedModelBuilder *XC::FEM_ObjectBroker::getPtrNewPartitionedModelBuilder(Subdomain &theSubdomain,int classTag)
   {
     switch(classTag) {
@@ -117,6 +120,7 @@ XC::PartitionedModelBuilder *XC::FEM_ObjectBroker::getPtrNewPartitionedModelBuil
 }
 
 
+//! @brief Broke a GraphNumberer object from its class tag.
 XC::GraphNumberer *XC::FEM_ObjectBroker::getPtrNewGraphNumberer(int classTag)
   {
     switch(classTag)
@@ -128,13 +132,14 @@ XC::GraphNumberer *XC::FEM_ObjectBroker::getPtrNewGraphNumberer(int classTag)
       case GraphNUMBERER_TAG_SimpleNumberer:
         return new SimpleNumberer();
       default:
-        std::cerr << "ObjectBrokerAllClasses::getPtrNewGraphNumberer - ";
+        std::cerr << "FEM_ObjectBroker::getPtrNewGraphNumberer - ";
         std::cerr << " - no GraphNumberer type exists for class tag " ;
         std::cerr << classTag << std::endl;
         return nullptr;
       }
   }
 
+//! @brief Broke a Vertex object from its class tag.
 XC::Vertex *XC::FEM_ObjectBroker::getNewVertex(int classTag)
   {
     switch(classTag)
@@ -143,7 +148,7 @@ XC::Vertex *XC::FEM_ObjectBroker::getNewVertex(int classTag)
              return new Vertex();
         default:
              std::cerr << "FEM_ObjectBroker::getNewVertex - ";
-             std::cerr << " - no XC::Vertex type exists for class tag ";
+             std::cerr << " - no Vertex type exists for class tag ";
              std::cerr << classTag << std::endl;
              return nullptr;
       }
@@ -155,92 +160,83 @@ XC::Vertex *XC::FEM_ObjectBroker::getNewVertex(int classTag)
  *
  *****************************************/
 
+//! @brief Broke a Element object from its class tag.
 XC::Element *XC::FEM_ObjectBroker::getNewElement(int classTag)
   {
     switch(classTag)
       {
         case ELE_TAG_Truss:
              return new Truss();
-
         case ELE_TAG_TrussSection:
              return new TrussSection();
-
         case ELE_TAG_CorotTruss:
              return new CorotTruss();
-
         case ELE_TAG_CorotTrussSection:
              return new CorotTrussSection();
-
         case ELE_TAG_ZeroLength:
              return new ZeroLength();
         case ELE_TAG_ZeroLengthContact2D:
              return new ZeroLengthContact2D();
         case ELE_TAG_ZeroLengthSection:
              return new ZeroLengthSection();
-
+//         case ELE_TAG_ZeroLengthContact2D:
+//              return new ZeroLengthContact2D();
+//         case ELE_TAG_ZeroLengthContact3D:
+//              return new ZeroLengthContact3D();
              //case ELE_TAG_ZeroLengthND:
              //return new ZeroLengthND();
-
+        case ELE_TAG_FourNodeQuadUP:
+             return new FourNodeQuadUP();
         case ELE_TAG_FourNodeQuad:
              return new FourNodeQuad();
-
         case ELE_TAG_ElasticBeam2d:
                 return new ElasticBeam2d();
-
         case ELE_TAG_ElasticBeam3d:
                 return new ElasticBeam3d();
-
         case ELE_TAG_BeamWithHinges2d:
              return new BeamWithHinges2d();
-
         case ELE_TAG_BeamWithHinges3d:
              return new BeamWithHinges3d();
-
         case ELE_TAG_NLBeamColumn2d:
              return new NLBeamColumn2d();
-
         case ELE_TAG_NLBeamColumn3d:
              return new NLBeamColumn3d();
-
         case ELE_TAG_ForceBeamColumn2d:
              return new ForceBeamColumn2d();
-
         case ELE_TAG_ForceBeamColumn3d:
              return new ForceBeamColumn3d();
-
         case ELE_TAG_DispBeamColumn2d:
              return new DispBeamColumn2d();
-
         case ELE_TAG_DispBeamColumn3d:
              return new DispBeamColumn3d();
-
         case ELE_TAG_EnhancedQuad:
                 return new EnhancedQuad();
-
         case ELE_TAG_NineNodeMixedQuad:
                 return new NineNodeMixedQuad();
-
         case ELE_TAG_ConstantPressureVolumeQuad:
                 return new ConstantPressureVolumeQuad();
-
         case ELE_TAG_Brick:
                 return new Brick();
-
         case ELE_TAG_ShellMITC4:
                 return new ShellMITC4();
-
         case ELE_TAG_ShellMITC9:
                 return new ShellMITC9();
-
         case ELE_TAG_ShellNLDKGQ:
                 return new ShellNLDKGQ();
-
         case ELE_TAG_BbarBrick:
                 return new BbarBrick();
-
         case ELE_TAG_Joint2D:                                // Arash
                 return new Joint2D();                        // Arash
-
+        case ELE_TAG_Nine_Four_Node_QuadUP:
+            return new NineFourNodeQuadUP();
+        case ELE_TAG_BrickUP:
+            return new BrickUP();
+        case ELE_TAG_Twenty_Eight_Node_BrickUP:
+            return new TwentyEightNodeBrickUP();
+        case ELE_TAG_EightNodeBrick_u_p_U:
+            return new EightNodeBrick_u_p_U();
+        case ELE_TAG_TwentyNodeBrick_u_p_U:
+            return new TwentyNodeBrick_u_p_U();
         default:
              std::cerr << "FEM_ObjectBroker::getNewElement - ";
              std::cerr << " - no XC::Element type exists for class tag " ;
@@ -250,6 +246,7 @@ XC::Element *XC::FEM_ObjectBroker::getNewElement(int classTag)
          }
 }
 
+//! @brief Broke a node from its class tag.
 XC::Node *XC::FEM_ObjectBroker::getNewNode(int classTag)
   {
     switch(classTag)
@@ -264,6 +261,7 @@ XC::Node *XC::FEM_ObjectBroker::getNewNode(int classTag)
       }
   }
 
+//! @brief Broke a MFreedom_Constraint object from its class tag.
 XC::MFreedom_Constraint *XC::FEM_ObjectBroker::getNewMP(int classTag)
   {
     switch(classTag)
@@ -280,6 +278,7 @@ XC::MFreedom_Constraint *XC::FEM_ObjectBroker::getNewMP(int classTag)
       }
   }
 
+//! @brief Broke a MRMFreedom_Constraint object from its class tag.
 XC::MRMFreedom_Constraint *XC::FEM_ObjectBroker::getNewMRMP(int classTag)
   {
     switch(classTag)
@@ -295,6 +294,7 @@ XC::MRMFreedom_Constraint *XC::FEM_ObjectBroker::getNewMRMP(int classTag)
   }
 
 
+//! @brief Broke a SFreedom_Constraint object from its class tag.
 XC::SFreedom_Constraint *XC::FEM_ObjectBroker::getNewSP(int classTag)
   {
     switch(classTag)
@@ -316,6 +316,7 @@ XC::SFreedom_Constraint *XC::FEM_ObjectBroker::getNewSP(int classTag)
          }
   }
 
+//! @brief Broke a nodal load from its class identifier.
 XC::NodalLoad *XC::FEM_ObjectBroker::getNewNodalLoad(int classTag)
   {
     switch(classTag)
@@ -331,6 +332,7 @@ XC::NodalLoad *XC::FEM_ObjectBroker::getNewNodalLoad(int classTag)
   }
 
 
+//! @brief Broke a ElementalLoad object from its class tag.
 XC::ElementalLoad *XC::FEM_ObjectBroker::getNewElementalLoad(int classTag)
   {
     switch(classTag)
@@ -356,7 +358,7 @@ XC::ElementalLoad *XC::FEM_ObjectBroker::getNewElementalLoad(int classTag)
       case LOAD_TAG_BrickSelfWeight:
         return new BrickSelfWeight();
       default:
-        std::cerr << "FEM_ObjectBrokerAllClasses::getNewElementalLoad - ";
+        std::cerr << "FEM_ObjectBroker::getNewElementalLoad - ";
         std::cerr << " - no NodalLoad type exists for class tag ";
         std::cerr << classTag << std::endl;
         return 0;
@@ -364,6 +366,7 @@ XC::ElementalLoad *XC::FEM_ObjectBroker::getNewElementalLoad(int classTag)
     return nullptr;
   }
 
+//! @brief Broke a CrdTransf2d object from its class tag.
 XC::CrdTransf2d *XC::FEM_ObjectBroker::getNewCrdTransf2d(int classTag)
   {
     switch(classTag)
@@ -382,6 +385,7 @@ XC::CrdTransf2d *XC::FEM_ObjectBroker::getNewCrdTransf2d(int classTag)
       }
   }
 
+//! @brief Broke a CrdTransf3d object from its class tag.
 XC::CrdTransf3d *XC::FEM_ObjectBroker::getNewCrdTransf3d(int classTag)
   {
     switch(classTag)
@@ -400,6 +404,7 @@ XC::CrdTransf3d *XC::FEM_ObjectBroker::getNewCrdTransf3d(int classTag)
       }
   }
 
+//! @brief Broke a CrdTransf object from its class tag.
 XC::CrdTransf *XC::FEM_ObjectBroker::getNewCrdTransf(int classTag)
   {    
     CrdTransf *trf= nullptr;
@@ -410,6 +415,7 @@ XC::CrdTransf *XC::FEM_ObjectBroker::getNewCrdTransf(int classTag)
     return trf;
   }
 
+//! @brief Broke a ShellCrdTransf3dBase object from its class tag.
 XC::ShellCrdTransf3dBase *XC::FEM_ObjectBroker::getNewShellCrdTransf3d(int classTag)
   {
     switch(classTag)
@@ -489,6 +495,7 @@ XC::BeamIntegration *XC::FEM_ObjectBroker::getNewBeamIntegration(int classTag)
   }
 
 
+//! @brief Broke a UniaxialMaterial object from its class tag.
 XC::UniaxialMaterial *XC::FEM_ObjectBroker::getNewUniaxialMaterial(int classTag)
   {
     switch(classTag)
@@ -608,22 +615,22 @@ XC::UniaxialMaterial *XC::FEM_ObjectBroker::getNewUniaxialMaterial(int classTag)
       }
   }
 
+//! @brief Broke a SectionForceDeformation object from its class tag.
 XC::SectionForceDeformation *XC::FEM_ObjectBroker::getNewSection(int classTag)
   {
-    switch(classTag) {
-        case SEC_TAG_Elastic2d:
-             return new ElasticSection2d();
+     switch(classTag)
+      {
+      case SEC_TAG_Elastic2d:
+        return new ElasticSection2d();
+      case SEC_TAG_Elastic3d:
+        return new ElasticSection3d();
+      case SEC_TAG_Generic1d:
+        return new GenericSection1d();
 
-        case SEC_TAG_Elastic3d:
-             return new ElasticSection3d();
+      //case SEC_TAG_GenericNd:
+        //return new GenericSectionNd();
 
-        case SEC_TAG_Generic1d:
-             return new GenericSection1d();
-
-             //case SEC_TAG_GenericNd:
-             //return new GenericSectionNd();
-
-        case SEC_TAG_Aggregator:
+      case SEC_TAG_Aggregator:
              return new SectionAggregator();
 
              //case SEC_TAG_Fiber:
@@ -656,6 +663,7 @@ XC::SectionForceDeformation *XC::FEM_ObjectBroker::getNewSection(int classTag)
          }
   }
 
+//! @brief Broke a NDMaterial object from its class tag.
 XC::NDMaterial *XC::FEM_ObjectBroker::getNewNDMaterial(int classTag)
   {
   switch(classTag)
@@ -700,6 +708,7 @@ XC::NDMaterial *XC::FEM_ObjectBroker::getNewNDMaterial(int classTag)
     }
   }
 
+//! @brief Broke a Material object from its class tag.
 XC::Material *XC::FEM_ObjectBroker::getNewMaterial(int classTag)
   {
     Material *mat= nullptr;
@@ -712,6 +721,7 @@ XC::Material *XC::FEM_ObjectBroker::getNewMaterial(int classTag)
     return mat;
   }
 
+//! @brief Broke a Fiber object from its class tag.
 XC::Fiber *XC::FEM_ObjectBroker::getNewFiber(int classTag)
   {
     switch(classTag)
@@ -728,6 +738,7 @@ XC::Fiber *XC::FEM_ObjectBroker::getNewFiber(int classTag)
       }
   }
 
+//! @brief Broke a FrictionModel object from its class tag.
 XC::FrictionModel *XC::FEM_ObjectBroker::getNewFrictionModel(int classTag)
   {
     switch(classTag)
@@ -746,6 +757,7 @@ XC::FrictionModel *XC::FEM_ObjectBroker::getNewFrictionModel(int classTag)
       }
   }
 
+//! @brief Broke a Convergence test object from its class tag.
 XC::ConvergenceTest *XC::FEM_ObjectBroker::getNewConvergenceTest(CommandEntity *owr,int classTag)
   {
     switch(classTag)
@@ -764,6 +776,7 @@ XC::ConvergenceTest *XC::FEM_ObjectBroker::getNewConvergenceTest(CommandEntity *
       }
   }
 
+//! @brief Broke a NodeLocker object from its class tag.
 XC::NodeLocker *XC::FEM_ObjectBroker::getNewNodeLocker(int classTag)
   {
     switch(classTag)
@@ -778,6 +791,7 @@ XC::NodeLocker *XC::FEM_ObjectBroker::getNewNodeLocker(int classTag)
       }
   }
 
+//! @brief Broke a LoadPattern object from its class tag.
 XC::LoadPattern *XC::FEM_ObjectBroker::getNewLoadPattern(int classTag)
   {
     switch(classTag)
@@ -796,6 +810,7 @@ XC::LoadPattern *XC::FEM_ObjectBroker::getNewLoadPattern(int classTag)
       }
   }
 
+//! @brief Broke a LoadCombination object from its class tag.
 XC::LoadCombination *XC::FEM_ObjectBroker::getNewLoadCombination(int classTag)
   {
     switch(classTag)
@@ -810,6 +825,7 @@ XC::LoadCombination *XC::FEM_ObjectBroker::getNewLoadCombination(int classTag)
       }
   }
 
+//! @brief Broke a ground motion object from its class tag.
 XC::GroundMotion *XC::FEM_ObjectBroker::getNewGroundMotion(int classTag)
   {
     switch(classTag)
@@ -820,52 +836,49 @@ XC::GroundMotion *XC::FEM_ObjectBroker::getNewGroundMotion(int classTag)
           return new InterpolatedGroundMotion();
         default:
           std::cerr << "FEM_ObjectBroker::getNewGroundMotion - ";
-          std::cerr << " - no XC::Load type exists for class tag ";
+          std::cerr << " - no ground motion type exists for class tag ";
           std::cerr << classTag << std::endl;
           return nullptr;
 
       }
   }
 
+//! @brief Broke a time series object from its class tag.
 XC::TimeSeries *XC::FEM_ObjectBroker::getNewTimeSeries(int classTag)
   {
-    switch(classTag) {
+    switch(classTag)
+      {
         case TSERIES_TAG_LinearSeries:
           return new LinearSeries;
-
         case TSERIES_TAG_RectangularSeries:
           return new RectangularSeries;
-
         case TSERIES_TAG_PathTimeSeries:
           return new PathTimeSeries;
-
         case TSERIES_TAG_PathSeries:
           return new PathSeries;
-
         case TSERIES_TAG_ConstantSeries:
           return new ConstantSeries;
-
         case TSERIES_TAG_TrigSeries:
           return new TrigSeries;
-
         default:
              std::cerr << "FEM_ObjectBroker::getNewTimeSeries - ";
-             std::cerr << " - no XC::Load type exists for class tag ";
+             std::cerr << " - no time series type exists for class tag ";
              std::cerr << classTag << std::endl;
              return nullptr;
 
          }
   }
 
+//! @brief Broke a time series object from its class tag.
 XC::TimeSeriesIntegrator *XC::FEM_ObjectBroker::getNewTimeSeriesIntegrator(int classTag)
   {
-    switch(classTag) {
-    case TIMESERIES_INTEGRATOR_TAG_Trapezoidal:
+    switch(classTag)
+      {
+      case TIMESERIES_INTEGRATOR_TAG_Trapezoidal:
           return new TrapezoidalTimeSeriesIntegrator();
-
-        default:
+      default:
              std::cerr << "FEM_ObjectBroker::getNewTimeSeriesIntegrator - ";
-             std::cerr << " - no XC::Load type exists for class tag ";
+             std::cerr << " - no time series integrator exists for class tag ";
              std::cerr << classTag << std::endl;
              return nullptr;
 
@@ -873,23 +886,24 @@ XC::TimeSeriesIntegrator *XC::FEM_ObjectBroker::getNewTimeSeriesIntegrator(int c
   }
 
 
+//! @brief Broke a matrix object pointer from its class tag and its size.
 XC::Matrix *XC::FEM_ObjectBroker::getPtrNewMatrix(int classTag, int noRows, int noCols)
-{
-    switch(classTag) {
+  {
+    switch(classTag)
+      {
         case MATRIX_TAG_Matrix:
              return new Matrix(noRows,noCols);
-
-
         default:
              std::cerr << "FEM_ObjectBroker::getNewNewMatrix - ";
-             std::cerr << " - no XC::NodalLoad type exists for class tag ";
+             std::cerr << " - no matrix type exists for class tag ";
              std::cerr << classTag << std::endl;
              return nullptr;
 
          }
-}
+  }
 
 
+//! @brief Broke a vector object pointer from its class tag and its size.
 XC::Vector *XC::FEM_ObjectBroker::getPtrNewVector(int classTag, int size)
   {
     switch(classTag) {
@@ -907,9 +921,11 @@ XC::Vector *XC::FEM_ObjectBroker::getPtrNewVector(int classTag, int size)
  }
 
 
+//! @brief Broke an ID object pointer from its class tag and its size.
 XC::ID *XC::FEM_ObjectBroker::getPtrNewID(int classTag, int size)
   {
-    switch(classTag) {
+    switch(classTag)
+      {
         case ID_TAG_ID:
              return new ID(size);
 
@@ -929,6 +945,7 @@ XC::ID *XC::FEM_ObjectBroker::getPtrNewID(int classTag, int size)
  *
  *****************************************/
 
+//! @brief Broke a DataOutputHandler object from its class tag.
 XC::DataOutputHandler *XC::FEM_ObjectBroker::getPtrNewDataOutputHandler(int classTag)
   {
     switch(classTag) {
@@ -950,7 +967,7 @@ XC::DataOutputHandler *XC::FEM_ObjectBroker::getPtrNewDataOutputHandler(int clas
          }
   }
 
-//! @brief Returns an object of type Recorder.
+//! @brief Broke a recorde object from its class tag.
 XC::Recorder *XC::FEM_ObjectBroker::getPtrNewRecorder(int classTag)
   {
     switch(classTag)
@@ -966,7 +983,9 @@ XC::Recorder *XC::FEM_ObjectBroker::getPtrNewRecorder(int classTag)
 
         case RECORDER_TAGS_EnvelopeElementRecorder:
              return new EnvelopeElementRecorder();
-
+        case RECORDER_TAGS_TclFeViewer:
+          return 0;
+  //           return new TclFeViewer();
         default:
              std::cerr << "FEM_ObjectBroker::getPtrNewRecorder - ";
              std::cerr << " - no Recorder type exists for class tag ";
@@ -984,6 +1003,7 @@ XC::Recorder *XC::FEM_ObjectBroker::getPtrNewRecorder(int classTag)
  *
  *****************************************/
 
+//! @brief Broke a ConstraintHandler object from its class tag.
 XC::ConstraintHandler *XC::FEM_ObjectBroker::getNewConstraintHandler(int classTag)
   {
     switch(classTag)
@@ -1010,6 +1030,7 @@ XC::ConstraintHandler *XC::FEM_ObjectBroker::getNewConstraintHandler(int classTa
   }
 
 
+//! @brief Broke a DOF_Numberer object from its class tag.
 XC::DOF_Numberer *XC::FEM_ObjectBroker::getNewNumberer(int classTag)
   {
     switch(classTag) {
@@ -1036,6 +1057,7 @@ XC::DOF_Numberer *XC::FEM_ObjectBroker::getNewNumberer(int classTag)
   }
 
 
+//! @brief Broke a AnalysisModel object from its class tag.
 XC::AnalysisModel *XC::FEM_ObjectBroker::getNewAnalysisModel(int classTag)
   {
     switch(classTag)
@@ -1052,6 +1074,7 @@ XC::AnalysisModel *XC::FEM_ObjectBroker::getNewAnalysisModel(int classTag)
   }
 
 
+//! @brief Broke a EquiSolnAlgo object from its class tag.
 XC::EquiSolnAlgo *XC::FEM_ObjectBroker::getNewEquiSolnAlgo(int classTag)
   {
     switch(classTag) {
@@ -1085,6 +1108,7 @@ XC::EquiSolnAlgo *XC::FEM_ObjectBroker::getNewEquiSolnAlgo(int classTag)
          }
   }
 
+//! @brief Broke a LineSearch object from its class tag.
 XC::LineSearch *XC::FEM_ObjectBroker::getLineSearch(int classTag)
   {
     switch(classTag)
@@ -1101,13 +1125,14 @@ XC::LineSearch *XC::FEM_ObjectBroker::getLineSearch(int classTag)
     case  LINESEARCH_TAGS_SecantLineSearch:
       return new SecantLineSearch();
     default:
-      std::cerr << "FEM_ObjectBrokerAllClasses::getNewEquiSolnAlgo - ";
+      std::cerr << "FEM_ObjectBroker::getNewEquiSolnAlgo - ";
       std::cerr << " - no EquiSolnAlgo type exists for class tag ";
       std::cerr << classTag << std::endl;
       return 0;
     }
   }
 
+//! @brief Broke a DomainDecompAlgo object from its class tag.
 XC::DomainDecompAlgo *XC::FEM_ObjectBroker::getNewDomainDecompAlgo(int classTag)
   {
     switch(classTag) {
@@ -1124,6 +1149,7 @@ XC::DomainDecompAlgo *XC::FEM_ObjectBroker::getNewDomainDecompAlgo(int classTag)
   }
 
 
+//! @brief Broke a StaticIntegrator object from its class tag.
 XC::StaticIntegrator *XC::FEM_ObjectBroker::getNewStaticIntegrator(int classTag)
   {
     switch(classTag)
@@ -1150,6 +1176,7 @@ XC::StaticIntegrator *XC::FEM_ObjectBroker::getNewStaticIntegrator(int classTag)
   }
 
 
+//! @brief Broke a TransientIntegrator object from its class tag.
 XC::TransientIntegrator *XC::FEM_ObjectBroker::getNewTransientIntegrator(int classTag)
   {
     switch(classTag)
@@ -1173,7 +1200,7 @@ XC::TransientIntegrator *XC::FEM_ObjectBroker::getNewTransientIntegrator(int cla
           return new CentralDifferenceAlternative(nullptr);      // must recvSelf
 
         default:
-          std::cerr << "FEM_ObjectBrokerAllClasses::getNewTransientIntegrator - ";
+          std::cerr << "FEM_ObjectBroker::getNewTransientIntegrator - ";
           std::cerr << " - no TransientIntegrator type exists for class tag ";
           std::cerr << classTag << std::endl;
           return 0;
@@ -1181,6 +1208,7 @@ XC::TransientIntegrator *XC::FEM_ObjectBroker::getNewTransientIntegrator(int cla
   }
 
 
+//! @brief Broke a IncrementalIntegrator object from its class tag.
 XC::IncrementalIntegrator *XC::FEM_ObjectBroker::getNewIncrementalIntegrator(int classTag)
   {
     switch(classTag)
@@ -1208,6 +1236,7 @@ XC::IncrementalIntegrator *XC::FEM_ObjectBroker::getNewIncrementalIntegrator(int
 XC::LinearSOESolver *XC::FEM_ObjectBroker::getNewLinearSolver(void)
   { return lastLinearSolver; }
 
+//! @brief Broke a LinearSOE object from its class tag.
 XC::LinearSOE *XC::FEM_ObjectBroker::getNewLinearSOE(int classTagSOE, int classTagSolver)
   {
     LinearSOE *theSOE= nullptr;
@@ -1478,6 +1507,7 @@ XC::LinearSOE *XC::FEM_ObjectBroker::getNewLinearSOE(int classTagSOE, int classT
     }
   }
 
+//! @brief Broke an EigenSOE object from its class tag.
 XC::EigenSOE *XC::FEM_ObjectBroker::getNewEigenSOE(int classTagSOE)
   {
     EigenSOE *theSOE= nullptr;
@@ -1500,16 +1530,18 @@ XC::EigenSOE *XC::FEM_ObjectBroker::getNewEigenSOE(int classTagSOE)
           theSOE = new BandArpackppSOE(nullptr);
           break;
         default:
-          std::cerr << "FEM_ObjectBrokerAllClasses::getNewEigenSOE - ";
+          std::cerr << "FEM_ObjectBroker::getNewEigenSOE - ";
           std::cerr << " - no EigenSOE type exists for class tag ";
           std::cerr << classTagSOE << std::endl;
       }
     return theSOE;
   }
 
+//! @brief Broke a DomainSolver object from its class tag.
 XC::DomainSolver *XC::FEM_ObjectBroker::getNewDomainSolver(void)
   { return lastDomainSolver; }
 
+//! @brief Broke a LinearSOE object from its class tag.
 XC::LinearSOE *XC::FEM_ObjectBroker::getPtrNewDDLinearSOE(int classTagSOE, int classTagDDSolver)
   {
     ProfileSPDLinSubstrSolver *theProfileSPDSolver= nullptr;
@@ -1541,7 +1573,7 @@ XC::LinearSOE *XC::FEM_ObjectBroker::getPtrNewDDLinearSOE(int classTagSOE, int c
     }
   }
 
-
+//! @brief Broke a DomainDecompositionAnalysis object from its class tag.
 XC::DomainDecompositionAnalysis *XC::FEM_ObjectBroker::getNewDomainDecompAnalysis(int classTag, Subdomain &theSubdomain)
   {
     switch(classTag) {
@@ -1565,15 +1597,37 @@ XC::DomainDecompositionAnalysis *XC::FEM_ObjectBroker::getNewDomainDecompAnalysi
     }
   }
 
-
+//! @brief Broke a Subdomain object from its class tag.
 XC::Subdomain *XC::FEM_ObjectBroker::getSubdomainPtr(int classTag)
   {
     std::cerr << "FEM_ObjectBroker: NOT IMPLEMENTED YET";
     return nullptr;
   }
 
+//! @brief Broke a Parameter object from its class tag.
+XC::Parameter *XC::FEM_ObjectBroker::getParameter(int classTag)
+  {
+    Parameter *retval= nullptr;
 
-int XC::FEM_ObjectBroker::addUniaxialMaterial(int classTag, const char *lib, const char *funcName, UniaxialMaterial *(*funcPtr)(void))
+    switch(classTag)
+      {
+      case  PARAMETER_TAG_Parameter:
+	retval = new Parameter;
+	break;
+    //case PARAMETER_TAG_MaterialStageParameter:
+    //  retval = new MaterialStageParameter();
+    //  break;
+      case PARAMETER_TAG_MatParameter:
+	retval = new MatParameter();
+	break;
+      default:
+	;
+      }
+
+    return retval;
+  }
+
+int XC::FEM_ObjectBroker::addUniaxialMaterial(int classTag, const std::string &lib, const std::string &funcName, UniaxialMaterial *(*funcPtr)(void))
   {
     // check to see if it's already added
 
@@ -1581,7 +1635,7 @@ int XC::FEM_ObjectBroker::addUniaxialMaterial(int classTag, const char *lib, con
     bool found = false;
     while(matCommands != nullptr && found == false)
       {
-        if((strcmp(lib, matCommands->libName) == 0) && (strcmp(funcName, matCommands->funcName) == 0))
+        if((lib == matCommands->libName) && (funcName == matCommands->funcName))
          { return 0; }
       }
 
@@ -1594,7 +1648,9 @@ int XC::FEM_ObjectBroker::addUniaxialMaterial(int classTag, const char *lib, con
       {
         if(getLibraryFunction(lib, funcName, &libHandle, (void **)&funcPtr) != 0)
           {
-            std::cerr << "FEM_ObjectBroker::addUniaxialMaterial - could not find function\n";
+            std::cerr << "FEM_ObjectBroker::" << __FUNCTION__
+	              << "; could not find function: " << funcName
+	              << std::endl;
             return -1;
           }
       }
@@ -1603,22 +1659,19 @@ int XC::FEM_ObjectBroker::addUniaxialMaterial(int classTag, const char *lib, con
     // add the new funcPtr
     //
 
-    char *libNameCopy = new char[strlen(lib)+1];
-    char *funcNameCopy = new char[strlen(funcName)+1];
-    UniaxialPackage *theMat = new UniaxialPackage;
-    if(libNameCopy == 0 || funcNameCopy == 0 || theMat == 0)
+    std::string libNameCopy= lib;
+    std::string funcNameCopy= funcName;
+    UniaxialPackage *theMat= new UniaxialPackage;
+    if(theMat == nullptr)
       {
         std::cerr << "FEM_ObjectBroker::addUniaxialMaterial - could not add lib, out of memory\n";
         return -1;
       }
-    strcpy(libNameCopy, lib);
-    strcpy(funcNameCopy, funcName);
-
-    theMat->classTag = classTag;
-    theMat->funcName = funcNameCopy;
-    theMat->libName = libNameCopy;
-    theMat->funcPtr = funcPtr;
-    theMat->next = theUniaxialPackage;
+    theMat->classTag= classTag;
+    theMat->funcName= funcNameCopy;
+    theMat->libName= libNameCopy;
+    theMat->funcPtr= funcPtr;
+    theMat->next= theUniaxialPackage;
     theUniaxialPackage = theMat;
     return 0;
   }

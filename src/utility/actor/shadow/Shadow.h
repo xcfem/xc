@@ -79,7 +79,7 @@ class FEM_ObjectBroker;
 
 //! @ingroup IPComm
 //!
-//! Local object associated with an actor.
+//! @brief Local object associated with an actor.
 //!
 //! Object associated with an Actor object which
 //! may exist in another process. The Shadow acts like a normal object in
