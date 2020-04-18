@@ -385,4 +385,3 @@ int XC::PlaneStressMaterial::recvSelf(const Communicator &comm)
   }
  
 
-

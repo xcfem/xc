@@ -67,6 +67,8 @@ class NDAdaptorMaterial: public NDMaterial
     int commitState(void);
     int revertToLastCommit(void);
     int revertToStart(void);
+    
+    Response *setResponse(const std::vector<std::string> &, Information &);
 
     void Print(std::ostream &s, int flag) const;
 

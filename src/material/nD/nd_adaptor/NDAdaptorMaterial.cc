@@ -112,3 +112,17 @@ void XC::NDAdaptorMaterial::Print(std::ostream &s, int flag) const
 	theMaterial->Print(s, flag);
   }
 
+XC::Response *XC::NDAdaptorMaterial::setResponse(const std::vector<std::string> &argv, Information &matInformation)
+  {
+    // for strain, stress and tangent use the base class implementation
+    // so that the output will be that of the adapter
+    if((argv[0]=="Tangent") ||
+        (argv[0]=="tangent") ||
+        (argv[0]=="stress") ||
+        (argv[0]=="stresses") ||
+        (argv[0]=="strain") ||
+        (argv[0]=="strains") )
+      { return NDMaterial::setResponse(argv, matInformation); }
+    // otherwise, for other custom results, forward the call to the adaptee
+    return theMaterial->setResponse(argv, matInformation);
+  }
