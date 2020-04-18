@@ -36,7 +36,7 @@ namespace XC {
 class Matrix;
 class Vector;
 
-  m_double Vector_to_m_double(const Vector &);
+m_double Vector_to_m_double(const Vector &);
 
 } // end of XC namespace
 

@@ -55,6 +55,9 @@ class final_mapptr_derived_policies
    : public mapptr_indexing_suite<Container,
         NoProxy, final_mapptr_derived_policies<Container, NoProxy> > {};
 
+//! @ingroup Utils
+//! @brief Solution to export std::map<key, T *> to Python as iterable
+//! objects.
 template <
     class Container,
     bool NoProxy = false,

@@ -31,7 +31,8 @@
 #include "Matrix.h"
 
 
-m_double XC::Vector_to_m_double(const Vector &v)
+//! @brief Return a column matrix from the vector argument.
+m_double XC::Vector_to_m_double(const XC::Vector &v)
   {
     const size_t sz= v.Size();
     m_double retval(sz,1);
