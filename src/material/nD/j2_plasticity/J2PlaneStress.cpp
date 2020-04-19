@@ -83,9 +83,9 @@
 #include <cmath> 
 #include "material/nD/NDMaterialType.h"
 
-XC::Vector XC::J2PlaneStress::strain_vec(3) ;
-XC::Vector XC::J2PlaneStress::stress_vec(3) ;
-XC::Matrix XC::J2PlaneStress::tangent_matrix(3,3) ;
+XC::Vector XC::J2PlaneStress::strain_vec(3);
+XC::Vector XC::J2PlaneStress::stress_vec(3);
+XC::Matrix XC::J2PlaneStress::tangent_matrix(3,3);
 
 XC::J2PlaneStress:: J2PlaneStress(int tag)
   : XC::J2Plasticity(tag, ND_TAG_J2PlaneStress) 
@@ -130,7 +130,7 @@ XC::NDMaterial *XC::J2PlaneStress::getCopy(void) const
 
 //send back type of material
 const std::string &XC::J2PlaneStress::getType(void) const 
-  { return strTypePlaneStress ;}
+  { return strTypePlaneStress;}
 
 
 //send back order of strain in vector form
@@ -138,82 +138,84 @@ int XC::J2PlaneStress::getOrder( ) const
   { return 3; } 
 
 //get the strain and integrate plasticity equations
-int XC::J2PlaneStress::setTrialStrain( const XC::Vector &strain_from_element ) 
-{
-  const double tolerance = 1e-12 ;
+int XC::J2PlaneStress::setTrialStrain( const Vector &strain_from_element ) 
+  {
+    const double tolerance = 1e-12;
 
-  const int max_iterations = 25 ;
-  int iteration_counter  = 0 ;
+    const int max_iterations= 25;
+    int iteration_counter= 0;
 
-  int i, j, k, l ;
-  int ii, jj ;
+    int i, j, k, l;
 
-  double eps22  =  strain(2,2) ;
-  strain.Zero( ) ;
+    double eps22= strain(2,2);
+    strain.Zero( );
 
-  strain(0,0) =        strain_from_element(0) ;
-  strain(1,1) =        strain_from_element(1) ;
-  strain(0,1) = 0.50 * strain_from_element(2) ;
-  strain(1,0) =        strain(0,1) ;
+    strain(0,0)= strain_from_element(0);
+    strain(1,1)= strain_from_element(1);
+    strain(0,1)= 0.50 * strain_from_element(2);
+    strain(1,0)= strain(0,1);
 
-  strain(2,2) =        eps22 ; 
+    strain(2,2)= eps22; 
 
-  //enforce the plane stress condition sigma_22 = 0 
-  //solve for epsilon_22 
-  iteration_counter = 0 ;  
-  do {
+    //enforce the plane stress condition sigma_22= 0 
+    //solve for epsilon_22 
+    iteration_counter= 0;  
+    do
+      {
 
-     this->plastic_integrator( ) ;
-    
-     strain(2,2) -= stress(2,2) / tangent[2][2][2][2] ;
+       this->plastic_integrator( );
 
-     iteration_counter++ ;
-     if( iteration_counter > max_iterations ) {
-       std::cerr << "More than " << max_iterations ;
-       std::cerr << " iterations in setTrialStrain of XC::J2PlaneStress \n" ;
-       break ;
-     }// end if 
+       strain(2,2) -= stress(2,2) / tangent[2][2][2][2];
 
-  } while( fabs(stress(2,2)) > tolerance ) ;
+       iteration_counter++;
+       if(iteration_counter > max_iterations)
+	 {
+	   std::cerr << getClassName() << "::" << __FUNCTION__
+		     << "; more than " << max_iterations;
+	   std::cerr << " iterations in setTrialStrain.\n";
+	   break;
+         }// end if 
 
-  //modify tangent for plane stress 
-  for( ii = 0; ii < 3; ii++ ) {
-    for( jj = 0; jj < 3; jj++ )  {
+      }
+    while( fabs(stress(2,2)) > tolerance );
 
-          index_map( ii, i, j ) ;
-          index_map( jj, k, l ) ;
+    //modify tangent for plane stress 
+    for(int ii= 0; ii < 3; ii++ )
+      {
+        for(int jj= 0; jj < 3; jj++ )
+	  {
+	    index_map( ii, i, j );
+	    index_map( jj, k, l );
 
-          tangent[i][j][k][l] -=   tangent[i][j][2][2] 
-                                 * tangent[2][2][k][l] 
-                                 / tangent[2][2][2][2] ;
+	    tangent[i][j][k][l] -=   tangent[i][j][2][2] 
+				   * tangent[2][2][k][l] 
+				   / tangent[2][2][2][2];
 
-          //minor symmetries 
-          tangent [j][i][k][l] = tangent[i][j][k][l] ;
-          tangent [i][j][l][k] = tangent[i][j][k][l] ;
-          tangent [j][i][l][k] = tangent[i][j][k][l] ;
+	    //minor symmetries 
+	    tangent [j][i][k][l]= tangent[i][j][k][l];
+	    tangent [i][j][l][k]= tangent[i][j][k][l];
+	    tangent [j][i][l][k]= tangent[i][j][k][l];
 
-    } // end for jj
-  } // end for ii 
+          } // end for jj
+        } // end for ii 
 
-  return 0 ;
-}
+    return 0;
+  }
 
 
 //unused trial strain functions
 int XC::J2PlaneStress::setTrialStrain( const XC::Vector &v, const XC::Vector &r )
-{ 
-   return this->setTrialStrain( v ) ;
-} 
+  { return this->setTrialStrain( v ); } 
 
 int XC::J2PlaneStress::setTrialStrainIncr( const XC::Vector &v ) 
-{
-  static XC::Vector newStrain(3);
-  newStrain(0) = strain(0,0) + v(0);
-  newStrain(1) = strain(1,1) + v(1);
-  newStrain(2) = 2.0 * strain(0,1) + v(2);
+  {
+    static Vector newStrain(3);
+    newStrain(0)= strain(0,0) + v(0);
+    newStrain(1)= strain(1,1) + v(1);
+    newStrain(2)= 2.0 * strain(0,1) + v(2);
 
-  return this->setTrialStrain(newStrain);  
-}
+    return this->setTrialStrain(newStrain);  
+  }
 
 int XC::J2PlaneStress::setTrialStrainIncr( const XC::Vector &v, const XC::Vector &r ) 
 {
@@ -224,22 +226,22 @@ int XC::J2PlaneStress::setTrialStrainIncr( const XC::Vector &v, const XC::Vector
 //send back the strain
 const XC::Vector &XC::J2PlaneStress::getStrain(void) const
 {
-  strain_vec(0) =       strain(0,0) ;
-  strain_vec(1) =       strain(1,1) ;
-  strain_vec(2) = 2.0 * strain(0,1) ;
+  strain_vec(0)= strain(0,0);
+  strain_vec(1)= strain(1,1);
+  strain_vec(2)= 2.0 * strain(0,1);
 
-  return strain_vec ;
+  return strain_vec;
 } 
 
 
 //send back the stress 
 const XC::Vector &XC::J2PlaneStress::getStress(void) const
 {
-  stress_vec(0) = stress(0,0) ;
-  stress_vec(1) = stress(1,1) ;
-  stress_vec(2) = stress(0,1) ;
+  stress_vec(0)= stress(0,0);
+  stress_vec(1)= stress(1,1);
+  stress_vec(2)= stress(0,1);
 
-  return stress_vec ;
+  return stress_vec;
 }
 
 //send back the tangent 
@@ -253,20 +255,20 @@ const XC::Matrix &XC::J2PlaneStress::getTangent(void) const
   //   2           0 1  ( or 1 0 ) 
   // 
        
-  tangent_matrix(0,0) = tangent [0][0] [0][0] ;
-  tangent_matrix(1,1) = tangent [1][1] [1][1] ;
-  tangent_matrix(2,2) = tangent [0][1] [0][1] ;
+  tangent_matrix(0,0)= tangent [0][0] [0][0];
+  tangent_matrix(1,1)= tangent [1][1] [1][1];
+  tangent_matrix(2,2)= tangent [0][1] [0][1];
 
-  tangent_matrix(0,1) = tangent [0][0] [1][1] ;
-  tangent_matrix(1,0) = tangent [1][1] [0][0] ;
+  tangent_matrix(0,1)= tangent [0][0] [1][1];
+  tangent_matrix(1,0)= tangent [1][1] [0][0];
 
-  tangent_matrix(0,2) = tangent [0][0] [0][1] ;
-  tangent_matrix(2,0) = tangent [0][1] [0][0] ;
+  tangent_matrix(0,2)= tangent [0][0] [0][1];
+  tangent_matrix(2,0)= tangent [0][1] [0][0];
 
-  tangent_matrix(1,2) = tangent [1][1] [0][1] ;
-  tangent_matrix(2,1) = tangent [0][1] [1][1] ;
+  tangent_matrix(1,2)= tangent [1][1] [0][1];
+  tangent_matrix(2,1)= tangent [0][1] [1][1];
 
-  return tangent_matrix ;
+  return tangent_matrix;
 } 
 
 
@@ -283,43 +285,43 @@ const XC::Matrix &XC::J2PlaneStress::getInitialTangent(void) const
 
   this->doInitialTangent();
        
-  tangent_matrix(0,0) = initialTangent [0][0] [0][0] ;
-  tangent_matrix(1,1) = initialTangent [1][1] [1][1] ;
-  tangent_matrix(2,2) = initialTangent [0][1] [0][1] ;
+  tangent_matrix(0,0)= initialTangent [0][0] [0][0];
+  tangent_matrix(1,1)= initialTangent [1][1] [1][1];
+  tangent_matrix(2,2)= initialTangent [0][1] [0][1];
 
-  tangent_matrix(0,1) = initialTangent [0][0] [1][1] ;
-  tangent_matrix(1,0) = initialTangent [1][1] [0][0] ;
+  tangent_matrix(0,1)= initialTangent [0][0] [1][1];
+  tangent_matrix(1,0)= initialTangent [1][1] [0][0];
 
-  tangent_matrix(0,2) = initialTangent [0][0] [0][1] ;
-  tangent_matrix(2,0) = initialTangent [0][1] [0][0] ;
+  tangent_matrix(0,2)= initialTangent [0][0] [0][1];
+  tangent_matrix(2,0)= initialTangent [0][1] [0][0];
 
-  tangent_matrix(1,2) = initialTangent [1][1] [0][1] ;
-  tangent_matrix(2,1) = initialTangent [0][1] [1][1] ;
+  tangent_matrix(1,2)= initialTangent [1][1] [0][1];
+  tangent_matrix(2,1)= initialTangent [0][1] [1][1];
 
-  return tangent_matrix ;
+  return tangent_matrix;
 } 
 
 int XC::J2PlaneStress::commitState( ) 
 {
-  epsilon_p_n = epsilon_p_nplus1 ;
-  xi_n        = xi_nplus1 ;
+  epsilon_p_n= epsilon_p_nplus1;
+  xi_n= xi_nplus1;
 
-  commitEps22 =       strain(2,2);
+  commitEps22= strain(2,2);
 
   return 0;
 }
 
 int XC::J2PlaneStress::revertToLastCommit( )
  {
-   strain(2,2)  = commitEps22;
+   strain(2,2)= commitEps22;
    return 0;
   }
 
 
 int XC::J2PlaneStress::revertToStart( )
   {
-    commitEps22 = 0.0;
-    this->zero( ) ;
+    commitEps22= 0.0;
+    this->zero( );
     return 0;
   }
 
@@ -381,47 +383,47 @@ void XC::J2PlaneStress::index_map(int matrix_index, int &i, int &j )
   switch( matrix_index+1 ) { //add 1 for standard tensor indices
 
     case 1 :
-      i = 1 ; 
-      j = 1 ;
-      break ;
+      i= 1; 
+      j= 1;
+      break;
  
     case 2 :
-      i = 2 ;
-      j = 2 ; 
-      break ;
+      i= 2;
+      j= 2; 
+      break;
 
     case 3 :
-      i = 1 ;
-      j = 2 ;
-      break ;
+      i= 1;
+      j= 2;
+      break;
 
     case 4 :
-      i = 3 ;
-      j = 3 ;
-      break ;
+      i= 3;
+      j= 3;
+      break;
 
     case 5 :
-      i = 2 ;
-      j = 3 ;
-      break ;
+      i= 2;
+      j= 3;
+      break;
 
     case 6 :
-      i = 3 ;
-      j = 1 ;
-      break ;
+      i= 3;
+      j= 1;
+      break;
 
 
     default :
-      i = 1 ;
-      j = 1 ;
-      break ;
+      i= 1;
+      j= 1;
+      break;
 
   } //end switch
 
-i-- ; //subtract 1 for C-indexing
-j-- ;
+i--; //subtract 1 for C-indexing
+j--;
 
-return ; 
+return; 
 }
 
 
