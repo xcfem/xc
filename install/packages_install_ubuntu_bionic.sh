@@ -1,10 +1,10 @@
+scriptName=`basename "$0"`
 # Must run as root so that we can shutdown backuppc and mount drives
 if [ $(whoami) != "root" ]; then
     echo "You must run this script as root."
-    echo "Use 'sudo sh install_deb_packages.sh' and enter the password when prompted."
+    echo "Use 'sudo sh $scriptName' and enter the password when prompted."
     exit 1
 fi
-
 
 # verify that the user wants to continue, but do not verify if a parameter DoNotAsk was given with script start
 if [ $1 != "DoNotAsk" ]; then
@@ -75,7 +75,7 @@ packages_div="\
 sudo apt-get install -y $packages_div
 
 # free disk space by cleaning install files
-apt-get clean
+sudo apt-get clean
 
 
 # mayavi installation. Ubuntu 'mayavi' package seems to require VTK 6,
