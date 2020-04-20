@@ -127,7 +127,8 @@ class_<XC::Element1D, bases<XC::ElementBase<2> >, boost::noncopyable >("Element1
     .def("vector3dPointLoadGlobal", &XC::Element1D::vector3dPointLoadGlobal,"Element's load.")
     .def("vector3dPointLoadLocal", &XC::Element1D::vector3dPointLoadLocal,"Element's load.")
     .def("strainLoad", &XC::Element1D::strainLoad,"Element's load.")
-    .def("getCooPoints",make_function(&XC::Element1D::getCooPoints, return_internal_reference<>()) ,"Returns points over element's length.")
+    .def("getCooPoints",make_function(&XC::Element1D::getCooPoints, return_internal_reference<>()) ,"Returns points over element length.")
+    .def("getLength",&XC::Element1D::getLength, "Returns element length.")
        ;
 
 
