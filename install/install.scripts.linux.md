@@ -2,8 +2,7 @@ XC installation scripts for Linux operating system
 ==================================================
 
 ## Dependencies
-Depending on the various distribution out there we gone provide scipts to install the needed
-dependency packages needed to compile XC.
+Depending on the various distribution out there we gone provide scripts to install the needed dependency packages needed to compile XC.
 
 #### Debian Stretch 
 
