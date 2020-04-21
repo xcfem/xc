@@ -570,6 +570,9 @@ class WoodPanelSection(sp.RectangularSection):
     def __init__(self, name, b, h, shear_constant):
         super(WoodPanelSection,self).__init__(name, b, h)
         self.shearConstant= shear_constant
+    def getArealDensity(self):
+        ''' Return the mass per unit area (thickness= h).'''
+        return self.rho*self.h
     def getSpanRating(self):
         ''' Return the span rating from the panel thickness according
             to the table B of the documents:
@@ -647,8 +650,6 @@ class PlywoodPanelSection(WoodPanelSection):
     rho= 577.941243312 # density kg/m3
     def __init__(self, name, b, h, shear_constant):
         super(PlywoodPanelSection,self).__init__(name, b, h, shear_constant)
-    def getArealDensity(self):
-        return self.rho*self.h
 
 # Oriented strand board panels according to document:
 # "Panel design specification" Form No. D510C/Revised May 2012/0300
@@ -658,8 +659,6 @@ class OSBPanelSection(WoodPanelSection):
     rho= 632.62 # average density kg/m3 Table 12
     def __init__(self, name, b, h, shear_constant):
         super(OSBPanelSection,self).__init__(name, b, h, shear_constant)
-    def getArealDensity(self):
-        return self.rho*self.h
     def getFb(self, angle= math.pi/2.0):
         ''' Return the bending stress Fb or the panel according
             to the table A of the document:
@@ -849,6 +848,9 @@ class HeaderSection(sp.RectangularSection):
         self.wood= wood
         self.xc_wood_material= None
         self.xc_section= None
+    def getLinearDensity(self):
+        ''' Return the mass per unit length.'''
+        return self.rho*self.b*self.h
     def getFb(self):
         return self.getVolumeFactor()*self.wood.Fb_12
     def defXCMaterial(self):
