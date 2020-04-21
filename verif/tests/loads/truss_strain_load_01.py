@@ -68,7 +68,7 @@ lPatterns.currentTimeSeries= "ts"
 #Load case definition
 lp0= lPatterns.newLoadPattern("default","0")
 #lPatterns.currentLoadPattern= "0"
-eleLoad= lp0.newElementalLoad("truss_temp_load")
+eleLoad= lp0.newElementalLoad("truss_strain_load")
 eleLoad.elementTags= xc.ID([truss.tag])
 eleLoad.eps1= alpha*AT
 eleLoad.eps2= alpha*AT

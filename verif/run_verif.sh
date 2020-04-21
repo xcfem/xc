@@ -42,11 +42,10 @@ python tests/combinations/test_davit_02.py
 
 
 echo "$BLEU" "Elements tests." "$NORMAL"
-echo "$BLEU" "  Truss tests." "$NORMAL"
+echo "$BLEU" "  Truss element tests." "$NORMAL"
 python tests/elements/truss_test0.py
 python tests/elements/truss_test1.py
 python tests/elements/truss_test2.py
-python tests/elements/truss_temperat.py
 echo "$BLEU" "  Coordinate transformations tests." "$NORMAL"
 python tests/elements/crd_transf/test_linear_crd_transf_2d_01.py
 python tests/elements/crd_transf/test_pdelta_crd_transf_2d_01.py
@@ -332,6 +331,7 @@ python tests/loads/test_vector3d_uniform_load_local.py
 python tests/loads/test_vector3d_uniform_load_global01.py
 python tests/loads/test_vector3d_uniform_load_global02.py
 python tests/loads/test_vector3d_uniform_load_global03.py
+python tests/loads/truss_strain_load_01.py
 python tests/loads/beam_strain_load_01.py
 python tests/loads/beam_strain_load_02.py
 python tests/loads/beam_strain_load_03.py
