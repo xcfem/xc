@@ -68,9 +68,9 @@ lp0= lPatterns.newLoadPattern("default","0")
 #lPatterns.currentLoadPattern= "0"
 eleLoad= lp0.newElementalLoad("beam_strain_load")
 eleLoad.elementTags= xc.ID([1])
-defTermica= xc.DeformationPlane(alpha*AT)
-eleLoad.backEndDeformationPlane= defTermica
-eleLoad.frontEndDeformationPlane= defTermica
+thermalDeformation= xc.DeformationPlane(alpha*AT)
+eleLoad.backEndDeformationPlane= thermalDeformation
+eleLoad.frontEndDeformationPlane= thermalDeformation
 
 #We add the load case to domain.
 lPatterns.addToDomain(lp0.name)
