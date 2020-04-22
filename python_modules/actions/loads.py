@@ -356,24 +356,46 @@ class StrainLoadOnShells(object):
             eLoad.setStrainComp(2,self.DOFstrain,self.strain)
             eLoad.setStrainComp(3,self.DOFstrain,self.strain)
 
-class StrainGradientLoadOnBeams(object):
-    '''Strain load applied on the beam elements generated from
-    all the lines in the xcSet. 
+class StrainLoadOnBeams(object):
+    '''Strain load applied on the beam elements in xcSet
     '''
     def __init__(self,name, xcSet,strain):
         self.name=name
         self.xcSet=xcSet
         self.strain=strain
     
-    def appendLoadToLoadPattern(self,loadPattern):
+    def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the load pattern passed as parameter.'''
+        prep=self.xcSet.getPreprocessor
+        lcm=load_cases.LoadCaseManager(prep)
+        loadPatternName= prep.getLoadHandler.getLoadPatterns.currentLoadPattern
+        loadPattern= prep.getLoadHandler.getLoadPatterns[loadPatternName]
         pDef= xc.DeformationPlane(self.strain)
-        for l in self.xcSet.getLines:
-            for e in l.elements:
-                eLoad= loadPattern.newElementalLoad("beam_strain_load")
-                eLoad.elementTags= xc.ID([e.tag])
-                eleLoad.backEndDeformationPlane= pDef
-                eleLoad.frontEndDeformationPlane= pDef
+        for e in self.xcSet.elements:
+            eLoad= loadPattern.newElementalLoad("beam_strain_load")
+            eLoad.elementTags= xc.ID([e.tag])
+            eLoad.backEndDeformationPlane= pDef
+            eLoad.frontEndDeformationPlane= pDef
+    
+class StrainLoadOnTrusses(object):
+    '''Strain load applied on the truss elements in xcSet
+    '''
+    def __init__(self,name, xcSet,strain):
+        self.name=name
+        self.xcSet=xcSet
+        self.strain=strain
+    
+    def appendLoadToCurrentLoadPattern(self):
+        ''' Append load to the load pattern passed as parameter.'''
+        prep=self.xcSet.getPreprocessor
+        lcm=load_cases.LoadCaseManager(prep)
+        loadPatternName= prep.getLoadHandler.getLoadPatterns.currentLoadPattern
+        loadPattern= prep.getLoadHandler.getLoadPatterns[loadPatternName]
+        for e in self.xcSet.elements:
+            eLoad= loadPattern.newElementalLoad("truss_strain_load")
+            eLoad.elementTags= xc.ID([e.tag])
+            eLoad.eps1= self.strain
+            eLoad.eps2= self.strain
     
 class StrainGradientThermalLoadOnShells(imps.gradThermalStrain):
     '''Apply a thermal gradient between top and bottom faces of the shell 
