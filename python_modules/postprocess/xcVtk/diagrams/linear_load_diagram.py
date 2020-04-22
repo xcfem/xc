@@ -85,13 +85,16 @@ class LinearLoadDiagram(cd.ColoredDiagram):
                         elif(self.component=='transZComponent'):
                             vComp=eLoad.transZComponent
                         elif(self.component=='xyzComponents'):
-                            vComp= eLoad.getVector3dLocalForce().getModulus()
+                            hasLocalForce= getattr(eLoad, "getVector3dLocalForce", None)
+                            if(hasLocalForce):
+                                vComp= eLoad.getVector3dLocalForce().getModulus()
+                            else: # strain load or alike.
+                                vComp= 0.0
                         else:
                             lmsg.error("LinearLoadDiagram :'"+self.component+"' unknown.")
                         maxV=max(abs(vComp),maxV)
                 eLoad= lIter.next()
         return maxV
-
 
     def dumpLoads(self, preprocessor, indxDiagram):
         ''' Dump loads over elements.'''
