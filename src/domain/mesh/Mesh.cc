@@ -1191,30 +1191,42 @@ int XC::Mesh::calculateNodalReactions(bool inclInertia, const double &tol)
 
 //! @brief Normalize the node eigenvectors for
 //! the mode argument.
-void XC::Mesh::normalizeEigenvectors(int mode)
+double XC::Mesh::normalizeEigenvectors(int mode)
   {
     double norm= 0.0;
-    Node *theNode= nullptr;
-    NodeIter &theNodes = this->getNodes();
-    while((theNode = theNodes()) != nullptr)
+    const int numModes= getDomain()->getNumModes();
+    if(mode<numModes)
       {
-	const Vector eigenvector= theNode->getEigenvector(mode);
-        norm= std::max(norm,eigenvector.NormInf());
-      }
-    if(norm!= 0.0)
-      {
-        theNodes = this->getNodes();
+	Node *theNode= nullptr;
+	NodeIter &theNodes = this->getNodes();
 	while((theNode = theNodes()) != nullptr)
 	  {
-	    Vector eigenvector= theNode->getEigenvector(mode);
-	    eigenvector/=norm;
-	    theNode->setEigenvector(mode,eigenvector);
-
+	    const Vector eigenvector= theNode->getEigenvector(mode);
+	    norm= std::max(norm,eigenvector.NormInf());
 	  }
+	if(norm!= 0.0)
+	  {
+	    theNodes = this->getNodes();
+	    while((theNode = theNodes()) != nullptr)
+	      {
+		Vector eigenvector= theNode->getEigenvector(mode);
+		eigenvector/=norm;
+		theNode->setEigenvector(mode,eigenvector);
+
+	      }
+	  }
+	else
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; eigenvector for mode: " << mode
+		    << " has zero norm." << std::endl;
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "ERROR, zero norm." << std::endl;
+		<< "; requested mode: " << mode
+		<< " out of range: [" << 0
+		<< "," << numModes << ")"
+		<< std::endl;
+    return norm;
   }
 
 
