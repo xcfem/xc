@@ -56,7 +56,12 @@ class PredefinedSpace(object):
     def getSpaceDimension(self):
         ''' Return the dimensions of the problem space.'''
         return self.preprocessor.getNodeHandler.dimSpace
-    
+
+    def getNearestPoint(self, pos3d):
+        ''' Return the nearest point to the position
+            argument.'''
+        return self.preprocessor.getMultiBlockTopology.getPoints.getNearest(pos3d)
+        
     def setPrescribedDisplacements(self,nodeTag,prescDisplacements):
         '''Prescribe displacement for node DOFs.
 
