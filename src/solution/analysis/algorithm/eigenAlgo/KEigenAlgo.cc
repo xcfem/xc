@@ -183,6 +183,11 @@ int XC::KEigenAlgo::solveCurrentStep(int numModes)
         compute_smallest_eigenvalues();
 	eigen_to_model();
       }
+    else
+      std::clog << getClassName() << "::" << __FUNCTION__
+	        << "; condition number: " << (1.0/rcond)
+	        << " is good enough. No eigenvalues computed."
+	        << std::endl;
     return 0;
   }
 
@@ -207,7 +212,7 @@ void XC::KEigenAlgo::eigen_to_model(void)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; no eigenvalues to transfer."
 	        << std::endl;
-  }
+   }
 
 //! @brief Print the object
 void XC::KEigenAlgo::Print(std::ostream &s, int flag) const
