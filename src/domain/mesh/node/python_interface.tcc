@@ -88,7 +88,7 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   .def("getResistingSlidingVectorsSystem3d",&XC::Node::getResistingSlidingVectorsSystem3d)
 
   .def("setNumEigenvectors",&XC::Node::setNumEigenvectors,"set the number of eigenvectors for the node.")
-  .def("setEigenvector",&XC::Node::setEigenvector,"setEigenVector(mode, vector) set the igenvector for i-th mode.")
+  .def("setEigenvector",&XC::Node::setEigenvector,"setEigenvector(mode, vector) set the igenvector for i-th mode.")
   .add_property("getNumModes",&XC::Node::getNumModes,"return the number of modes for the node.")
   .def("getEigenvector",&XC::Node::getEigenvector,"getEigenvector(i) returns the eigenvector that corresponds to i-th mode.")
   .def("getNormalizedEigenvector",&XC::Node::getNormalizedEigenvector,"getNormalizedEigenvector(i) returns the eigenvector that corresponds to i-th mode.")
