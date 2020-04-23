@@ -575,47 +575,52 @@ class OutputHandler(object):
         if(setToDisplay==None):
             setToDisplay= self.modelSpace.getTotalSet()
         preprocessor= self.modelSpace.preprocessor
-        preprocessor.getDomain.getMesh.normalizeEigenvectors(1)
-        #auto-scale
-        LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to autoscale)
-        maxAbs= 0.0
-        dispPairs= list()
-        rotPairs= list()
-        threshold= LrefModSize/1000.0
-        for n in setToDisplay.nodes:
-            disp3d= n.getEigenvectorDisp3dComponents(mode)
-            rot3d= n.getEigenvectorRot3dComponents(mode)
-            modDisp3d= disp3d.getModulus()
-            if(modDisp3d>threshold):
-                p=n.getCurrentPos3d(defFScale)
-                dispPairs.append(([p.x,p.y,p.z],[disp3d.x,disp3d.y,disp3d.z]))
-            modRot3d= rot3d.getModulus()
-            if(modRot3d>threshold):
-                p=n.getCurrentPos3d(defFScale)
-                rotPairs.append(([p.x,p.y,p.z],[rot3d.x,rot3d.y,rot3d.z]))
-            modR= max(modDisp3d,modRot3d)
-            if(modR>maxAbs):
-                maxAbs=modR
-        scaleFactor= self.outputStyle.eigenvectorsScaleFactor
-        if(maxAbs > 0):
-            scaleFactor*=0.15*LrefModSize/(maxAbs)
-        #
-        if(not caption):
-          caption= 'Mode '+ str(mode) + ' eigenvectors' + ' '+setToDisplay.description
-        vFieldD= vf.VectorField(name='Deigenvectors',fUnitConv=1.0,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()) #Force
-        vFieldR= vf.VectorField(name='Reigenvectors',fUnitConv=1.0,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource())
-        vFieldD.populateFromPairList(dispPairs)
-        vFieldR.populateFromPairList(rotPairs)
-            
-        defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-        defDisplay.cameraParameters= self.getCameraParameters()
-        defDisplay.setupGrid(setToDisplay)
-        defDisplay.defineMeshScene(None,defFScale,color=setToDisplay.color)
-        if(len(dispPairs)>0):
-            vFieldD.addToDisplay(defDisplay)
-        if(len(rotPairs)>0):
-            vFieldR.addToDisplay(defDisplay,'V')
-        defDisplay.displayScene(caption,fileName)
+        domain= preprocessor.getDomain
+        numModes= domain.numModes # number of computed modes.
+        if(mode<=numModes):
+            norm= preprocessor.getDomain.getMesh.normalizeEigenvectors(mode)
+            #auto-scale
+            LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to autoscale)
+            maxAbs= 0.0
+            dispPairs= list()
+            rotPairs= list()
+            threshold= LrefModSize/1000.0
+            for n in setToDisplay.nodes:
+                disp3d= n.getEigenvectorDisp3dComponents(mode)
+                rot3d= n.getEigenvectorRot3dComponents(mode)
+                modDisp3d= disp3d.getModulus()
+                if(modDisp3d>threshold):
+                    p=n.getCurrentPos3d(defFScale)
+                    dispPairs.append(([p.x,p.y,p.z],[disp3d.x,disp3d.y,disp3d.z]))
+                modRot3d= rot3d.getModulus()
+                if(modRot3d>threshold):
+                    p=n.getCurrentPos3d(defFScale)
+                    rotPairs.append(([p.x,p.y,p.z],[rot3d.x,rot3d.y,rot3d.z]))
+                modR= max(modDisp3d,modRot3d)
+                if(modR>maxAbs):
+                    maxAbs=modR
+            scaleFactor= self.outputStyle.eigenvectorsScaleFactor
+            if(maxAbs > 0):
+                scaleFactor*=0.15*LrefModSize/(maxAbs)
+            #
+            if(not caption):
+              caption= 'Mode '+ str(mode) + ' eigenvectors' + ' '+setToDisplay.description
+            vFieldD= vf.VectorField(name='Deigenvectors',fUnitConv=1.0,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()) #Force
+            vFieldR= vf.VectorField(name='Reigenvectors',fUnitConv=1.0,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource())
+            vFieldD.populateFromPairList(dispPairs)
+            vFieldR.populateFromPairList(rotPairs)
+
+            defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
+            defDisplay.cameraParameters= self.getCameraParameters()
+            defDisplay.setupGrid(setToDisplay)
+            defDisplay.defineMeshScene(None,defFScale,color=setToDisplay.color)
+            if(len(dispPairs)>0):
+                vFieldD.addToDisplay(defDisplay)
+            if(len(rotPairs)>0):
+                vFieldR.addToDisplay(defDisplay,'V')
+            defDisplay.displayScene(caption,fileName)
+        else:
+            lmsg.error('mode: '+str(mode)+' out of range (1,'+str(numModes)+')')
         
     def displayEigenResult(self,eigenMode, setToDisplay=None,  accelMode=None, caption= '',fileName=None, defFScale= 0.0):
         '''Display the deformed shape and/or the equivalent static forces 
