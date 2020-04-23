@@ -95,7 +95,7 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   .add_property("getEigenvectors",make_function(&XC::Node::getEigenvectors,return_internal_reference<>()),"Returns all the eigenvectors for the node.")
   .add_property("getNormalizedEigenvectors",&XC::Node::getNormalizedEigenvectors,"Returns all the normalized eigenvectors for the node.")
   .def("getEigenPos2d", &XC::Node::getEigenPosition2d,"getEigenPos2d(factor, mode) returns 2D modal position of node scaled by a factor: initialPos+factor*getNormalizedEigenvector(mode).")
-  .def("getEigenPos3d", &XC::Node::getEigenPosition3d,"\n""getEigenPos3d(factor, mode) \n""Return 3D modal position of node scaled by a factor: initialPos+factor*getNormalizedEigenVector(mode).")
+  .def("getEigenPos3d", &XC::Node::getEigenPosition3d,"\n""getEigenPos3d(factor, mode) \n""Return 3D modal position of node scaled by a factor: initialPos+factor*getNormalizedEigenvector(mode).")
   .def("getEigenvectorDisp3dComponents", &XC::Node::getEigenvectorDisp3dComponents, "getEigenvectorDisp3dComponents(i) return the displacement components of the eigenvector corresponding to i-th mode at this node as a 3D vector.")
   .def("getEigenvectorRot3dComponents", &XC::Node::getEigenvectorRot3dComponents, "getEigenvectorRot3dComponents(i) return the displacement components of the eigenvector corresponding to i-th mode at this node as a 3D vector.")
   .def("getNEigenvectorDisp3dComponents", &XC::Node::getEigenvectorDisp3dComponents, "getEigenvectorDisp3dComponents(i) return the displacement components of the eigenvector corresponding to i-th mode at this node as a 3D vector.")
