@@ -38,7 +38,7 @@
 namespace XC {
 //! @ingroup MATYS
 //
-//! @brief XXX??
+//! @brief Material with plastic stiffness exponential reduction.
 class ExponReducing: public PlasticHardeningMaterial
   {
   private:

@@ -34,20 +34,20 @@
 
 #define MAT_TAG_EXPON -1
 #define DEBG 0
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
 
+//! Constructor.
 XC::ExponReducing::ExponReducing(int tag)
   :PlasticHardeningMaterial(tag,MAT_TAG_EXPON), Kp0(0.0), alpha(0.0), resFactor(0.0)
   {}
 
+//! Constructor.
 XC::ExponReducing::ExponReducing(int tag, double kp0, double alfa)
 :PlasticHardeningMaterial(tag,MAT_TAG_EXPON),
   Kp0(kp0), alpha(alfa), resFactor(0.0)
 {
 }
 
+//! Constructor.
 XC::ExponReducing::ExponReducing(int tag, double kp0, double alfa, double min_fact)
 :PlasticHardeningMaterial(tag,MAT_TAG_EXPON),
   Kp0(kp0), alpha(alfa), resFactor(min_fact)
@@ -59,43 +59,42 @@ XC::ExponReducing::ExponReducing(int tag, double kp0, double alfa, double min_fa
 //! @brief Return trial value of plastic stiffness.
 double XC::ExponReducing::getTrialPlasticStiffness(void) const
   {
-	double K ;//= Kp0*exp(-1*val_trial*alpha);
+    //K = Kp0*exp(-1*val_trial*alpha);
 
-	// if x0 and Kp0 is a const:
-	// K = Kp0(1.0  - exp(-alpha*x0 + alpha*val_trial));	
-	// K = Kp0*(1.0 - exp(-alpha + alpha*val_trial));
-	
-	// for pinching type stuff
-	K = residual*Kp0*(1 - exp(-1*alpha*val_trial));
+    // if x0 and Kp0 is a const:
+    // K = Kp0(1.0  - exp(-alpha*x0 + alpha*val_trial));	
+    // K = Kp0*(1.0 - exp(-alpha + alpha*val_trial));
 
-	if(sFactor != 1.0)
-		K = Kp0*sFactor;
-	
-	if(K < (Kp0*resFactor))
-		K = Kp0*resFactor;
+    // for pinching type stuff
+    double K= residual*Kp0*(1 - exp(-1*alpha*val_trial));
 
-//	std::cerr << "K = " << K << ", sFactor = " << sFactor << std::endl;
-	
-	if(K <0.0)
-	{
-		std::cerr << "Ri = " << val_trial << ", Factor = " << K/Kp0 << ", res_fact = " << resFactor << std::endl;
-		std::cerr << "\a";
-	}
-	
-	return K;
-}
+    if(sFactor != 1.0)
+      K= Kp0*sFactor;
 
+    if(K<(Kp0*resFactor))
+      K = Kp0*resFactor;
 
+//  std::cerr << "K = " << K << ", sFactor = " << sFactor << std::endl;
+
+    if(K <0.0)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+	          << "; Ri = " << val_trial << ", Factor = "
+		  << K/Kp0 << ", res_fact = " << resFactor << std::endl
+	          << "\a";
+      }
+    return K;
+  }
+
+//! @brief Print stuff.
 void XC::ExponReducing::Print(std::ostream &s, int flag) const
-{
-	s << "MultiLinear, Tag = " << getTag() << std::endl;
-	s << "Kp0 = " << Kp0 << std::endl;
-	s << "Alpha = " <<  alpha << std::endl;
-}
+  {
+    s << "MultiLinear, Tag = " << getTag() << std::endl;
+    s << "Kp0 = " << Kp0 << std::endl;
+    s << "Alpha = " <<  alpha << std::endl;
+  }
 
- XC::PlasticHardeningMaterial *XC::ExponReducing::getCopy(void)
-{
- 	PlasticHardeningMaterial *theMat = new ExponReducing(getTag(), Kp0, alpha, resFactor);
-    return theMat;
-}
+//! @brief Virtual constructor.
+XC::PlasticHardeningMaterial *XC::ExponReducing::getCopy(void)
+  {  return new ExponReducing(*this); }
 
