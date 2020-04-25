@@ -92,7 +92,7 @@ class fibSectFeaturesToplot(object):
         #Fiber section contour
         (y,z)=data_xcpolygon_to_pyplot(self.contour)
         ax2d.plot(y,z,'k',label='Cross-section')
-        for reinfLayer in self.fiberSection.getReinfLayers:
+        for reinfLayer in self.fiberSection.getSectionGeometry.getReinfLayers:
             bars=reinfLayer.getReinfBars
             for b in bars:
                 cent= b.getPos2d
