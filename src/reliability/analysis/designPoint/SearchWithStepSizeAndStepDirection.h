@@ -79,83 +79,77 @@ namespace XC {
   class GradGEvaluator;
 //! @ingroup ReliabilityAnalysis
 //!
-//! @brief ??
+//! @brief Design point search with step size and step direction.
 class SearchWithStepSizeAndStepDirection: public FindDesignPointAlgorithm
-{
+  {
+  private:
+    // The reliability domain and tools for the analysis
+    ReliabilityDomain *theReliabilityDomain;
+    GFunEvaluator *theGFunEvaluator;
+    GradGEvaluator *theGradGEvaluator;
+    StepSizeRule *theStepSizeRule;
+    SearchDirection *theSearchDirection;
+    ProbabilityTransformation *theProbabilityTransformation;
+    HessianApproximation *theHessianApproximation;
+    ReliabilityConvergenceCheck *theReliabilityConvergenceCheck;
 
-public:
+    // Private member functions to do the job
+    int doTheActualSearch(bool doRvProjection);
+    int doRvProjection(Vector uOld, Vector uNew);
 
-	// Constructor and destructor
-	SearchWithStepSizeAndStepDirection(
-					int passedMaxNumberOfIterations, 
-					GFunEvaluator *passedGFunEvaluator,
-					GradGEvaluator *passedGradGEvaluator,
-					StepSizeRule *passedStepSizeRule,
-					SearchDirection *passedSearchDirection,
-					ProbabilityTransformation *passedProbabilityTransformation,
-					HessianApproximation *theHessianApproximation,
-					ReliabilityConvergenceCheck *theReliabilityConvergenceCheck,
-					int printFlag,
-					const std::string &fileNamePrint,
-					Vector *startPoint);
-	
-	int findDesignPoint(ReliabilityDomain *theReliabilityDomain);
+    // Data members set when the object is created
+    int maxNumberOfIterations;
 
-	Vector get_x();
-	Vector get_u();
-	Vector get_alpha();
-	Vector get_gamma();
-	int getNumberOfSteps();
-	Vector getSecondLast_u();
-	Vector getSecondLast_alpha();
-	Vector getLastSearchDirection();
-	double getFirstGFunValue();
-	double getLastGFunValue();
-	Vector getGradientInStandardNormalSpace();
-	int    getNumberOfEvaluations();
+    // Data members where the results are to be stored
+    Vector x;
+    Vector u;
+    Vector alpha;
+    Vector gradientInStandardNormalSpace;
+    Vector gamma;
+    Vector uSecondLast;
+    Vector alphaSecondLast;
+    int i;
+    Vector searchDirection;
+    double Gfirst;
+    double Glast;
 
-protected:
+    // Data members set through the call when a job is to be done
+    Vector *startPoint;
+    Vector *designPoint_uStar;
 
-private:	
+    int printFlag;
+    std::string fileNamePrint;
+    int numberOfEvaluations;
+  public:
+    // Constructor and destructor
+    SearchWithStepSizeAndStepDirection(
+				    int passedMaxNumberOfIterations, 
+				    GFunEvaluator *passedGFunEvaluator,
+				    GradGEvaluator *passedGradGEvaluator,
+				    StepSizeRule *passedStepSizeRule,
+				    SearchDirection *passedSearchDirection,
+				    ProbabilityTransformation *passedProbabilityTransformation,
+				    HessianApproximation *theHessianApproximation,
+				    ReliabilityConvergenceCheck *theReliabilityConvergenceCheck,
+				    int printFlag,
+				    const std::string &fileNamePrint,
+				    Vector *startPoint);
 
-	// The reliability domain and tools for the analysis
-	ReliabilityDomain *theReliabilityDomain;
-	GFunEvaluator *theGFunEvaluator;
-	GradGEvaluator *theGradGEvaluator;
-	StepSizeRule *theStepSizeRule;
-	SearchDirection *theSearchDirection;
-	ProbabilityTransformation *theProbabilityTransformation;
-	HessianApproximation *theHessianApproximation;
-	ReliabilityConvergenceCheck *theReliabilityConvergenceCheck;
+    int findDesignPoint(ReliabilityDomain *theReliabilityDomain);
 
-	// Private member functions to do the job
-	int doTheActualSearch(bool doRvProjection);
-	int doRvProjection(Vector uOld, Vector uNew);
-
-	// Data members set when the object is created
-	int maxNumberOfIterations;
-
-	// Data members where the results are to be stored
-	Vector x;
-	Vector u;
-	Vector alpha;
-	Vector gradientInStandardNormalSpace;
-	Vector gamma;
-	Vector uSecondLast;
-	Vector alphaSecondLast;
-	int i;
-	Vector searchDirection;
-	double Gfirst;
-	double Glast;
-
-	// Data members set through the call when a job is to be done
-	Vector *startPoint;
-	Vector *designPoint_uStar;
-
-	int printFlag;
-	std::string fileNamePrint;
-	int numberOfEvaluations;
-};
+    const Vector &get_x(void) const;
+    const Vector &get_u(void) const;
+    const Vector &get_alpha(void) const;
+    Vector get_gamma(void) const;
+    int getNumberOfSteps(void) const;
+    const Vector &getSecondLast_u(void) const;
+    const Vector &getSecondLast_alpha(void) const;
+    const Vector &getLastSearchDirection(void) const;
+    double getFirstGFunValue(void) const;
+    double getLastGFunValue(void) const;
+    const Vector &getGradientInStandardNormalSpace(void) const;
+    int    getNumberOfEvaluations(void) const;
+  };
 } // end of XC namespace
 
 #endif

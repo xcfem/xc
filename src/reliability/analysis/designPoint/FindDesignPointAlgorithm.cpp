@@ -59,9 +59,8 @@
 
 #include <reliability/analysis/designPoint/FindDesignPointAlgorithm.h>
 
-XC::FindDesignPointAlgorithm::FindDesignPointAlgorithm()
-{
-}
+XC::FindDesignPointAlgorithm::FindDesignPointAlgorithm(void)
+  {}
 
 
 

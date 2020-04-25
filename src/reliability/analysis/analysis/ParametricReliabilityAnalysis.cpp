@@ -101,194 +101,191 @@ XC::ParametricReliabilityAnalysis::ParametricReliabilityAnalysis(ReliabilityDoma
 }
 
 
-int 
-XC::ParametricReliabilityAnalysis::analyze(void)
-{
+int XC::ParametricReliabilityAnalysis::analyze(void)
+  {
         
-        // Alert the user that the FORM analysis has started
-        std::cerr << "Fragility XC::Analysis is running ... " << std::endl;
+    // Alert the user that the FORM analysis has started
+    std::clog << "Fragility Analysis is running ... " << std::endl;
 
 
-        // The relevant commands are now, for instance, given like this
-        // performanceFunction 1 "{par_1}-{u_7_1}"
-        // runParametricReliabilityAnalysis output.out -par 1 -range 14.0 16.0 -num 10
+    // The relevant commands are now, for instance, given like this
+    // performanceFunction 1 "{par_1}-{u_7_1}"
+    // runParametricReliabilityAnalysis output.out -par 1 -range 14.0 16.0 -num 10
 
 
-        // Open output file
-        ofstream outputFile(fileName.c_str(), ios::out );
+    // Open output file
+    ofstream outputFile(fileName.c_str(), ios::out );
 
 
-        // Get number of limit-state functions
-        int numLsf = theReliabilityDomain->getNumberOfLimitStateFunctions();
+    // Get number of limit-state functions
+    int numLsf = theReliabilityDomain->getNumberOfLimitStateFunctions();
 
-        // Initial declarations
-        Vector pf(numIntervals+1);
-        Vector pdf(numIntervals+1);
-        Vector uStar, alpha;
-        double beta;
-        NormalRV aStdNormRV(1,0.0,1.0,0.0);
-        Matrix dGdPar;
-        int numPars;
-        Vector gradient;
-        double currentValue;
-        Vector currentValues(numIntervals+1);
-        int numPos;
-        ParameterPositioner *theParameterPositioner = 0;
-
-
-        // Loop over number of limit-state functions and perform FORM analysis
-        for (int lsf=1; lsf<=numLsf; lsf++ ) {
+    // Initial declarations
+    Vector pf(numIntervals+1);
+    Vector pdf(numIntervals+1);
+    Vector uStar, alpha;
+    double beta;
+    NormalRV aStdNormRV(1,0.0,1.0,0.0);
+    Matrix dGdPar;
+    int numPars;
+    Vector gradient;
+    double currentValue;
+    Vector currentValues(numIntervals+1);
+    int numPos;
+    ParameterPositioner *theParameterPositioner = 0;
 
 
-                // Inform the user which limit-state function is being evaluated
-                std::cerr << "Limit-state function number: " << lsf << std::endl;
+    // Loop over number of limit-state functions and perform FORM analysis
+    for(int lsf=1; lsf<=numLsf; lsf++ )
+      {
+	    // Inform the user which limit-state function is being evaluated
+	    std::clog << "Limit-state function number: " << lsf << std::endl;
 
 
-                // Set tag of "active" limit-state function
-                theReliabilityDomain->setTagOfActiveLimitStateFunction(lsf);
+	    // Set tag of "active" limit-state function
+	    theReliabilityDomain->setTagOfActiveLimitStateFunction(lsf);
 
 
-                // "Download" limit-state function from reliability domain
-                // fmk to Terje: you just set it so why do you need the tag again
-                //     also you can't do a redef inside a loop with the same def as loop variable!!!!
-                // => changing int lst to int newLsf in line below
-                const int newLsf= theReliabilityDomain->getTagOfActiveLimitStateFunction();
-                LimitStateFunction *theLimitStateFunction = theReliabilityDomain->getLimitStateFunctionPtr(lsf);
-                if(theLimitStateFunction == 0)
-                  {
-                    std::cerr << "ParametricReliabilityAnalysis::analyze() - could not find" << std::endl
-                              << " limit-state function with tag #" << lsf << "." << std::endl;
-                    return -1;
-                }
+	    // "Download" limit-state function from reliability domain
+	    LimitStateFunction *theLimitStateFunction= theReliabilityDomain->getLimitStateFunctionPtr(lsf);
+	    if(theLimitStateFunction==nullptr)
+	      {
+		std::cerr << "ParametricReliabilityAnalysis::analyze() - could not find" << std::endl
+			  << " limit-state function with tag #" << lsf << "." << std::endl;
+		return -1;
+	      }
 
 
-                // Print results to output file
-                outputFile << "#######################################################################" << std::endl;
-                outputFile << "#  FORM ANALYSIS RESULTS, LIMIT-STATE FUNCTION NUMBER "
-                        <<setiosflags(ios::left)<<setprecision(1)<<setw(4)<<lsf <<"            #" << std::endl;
-                outputFile << "#                                                                     #" << std::endl;
-                outputFile << "#                                                                     #" << std::endl;
-                outputFile << "#                    Failure probability     Estimated probability    #" << std::endl;
-                outputFile << "#    Parameter       estimate (fragility)     density function      #" << std::endl;
-                outputFile << "#     value               (CDF)                    (PDF)              #" << std::endl;
-                outputFile.setf(ios::scientific, ios::floatfield);
-                outputFile.flush();
+	    // Print results to output file
+	    outputFile << "#######################################################################" << std::endl;
+	    outputFile << "#  FORM ANALYSIS RESULTS, LIMIT-STATE FUNCTION NUMBER "
+		    <<setiosflags(ios::left)<<setprecision(1)<<setw(4)<<lsf <<"            #" << std::endl;
+	    outputFile << "#                                                                     #" << std::endl;
+	    outputFile << "#                                                                     #" << std::endl;
+	    outputFile << "#                    Failure probability     Estimated probability    #" << std::endl;
+	    outputFile << "#    Parameter       estimate (fragility)     density function      #" << std::endl;
+	    outputFile << "#     value               (CDF)                    (PDF)              #" << std::endl;
+	    outputFile.setf(ios::scientific, ios::floatfield);
+	    outputFile.flush();
 
 
-                // Range over parameter values
-                currentValue = first;
-                for (int counter=0; counter<(numIntervals+1); counter++) {
+	    // Range over parameter values
+	    currentValue = first;
+	    for(int counter=0; counter<(numIntervals+1); counter++)
+	      {
 
-                        currentValues(counter) = currentValue;
+		    currentValues(counter) = currentValue;
 
-                        // Detect parameter and set value, first the 
-                        // case where the parameter is represented by a 
-                        // parameterPositioner
-                        numPos = theReliabilityDomain->getNumberOfParameterPositioners();
-                        if (numPos != 0) {
-                                theParameterPositioner = theReliabilityDomain->getParameterPositionerPtr(parameterNumber);
-                                if (theParameterPositioner == 0) {
-                                        std::cerr << "XC::ParametricReliabilityAnalysis::analyze() -- The parameter number in the " << std::endl
-                                                << " fragility analysis object does not match the parameter number " << std::endl
-                                                << " being set by the parameter positioner." << std::endl;
-                                }
-                        }
-                        else {
-                                char separators[5] = "_}{";
-                                const std::string theExpression = theLimitStateFunction->getExpression();
-                                char *lsf_forTokenizing = new char[1000];
-                                strcpy(lsf_forTokenizing,theExpression.c_str());
-                                char *tokenPtr = strtok( lsf_forTokenizing, separators);
-                                while ( tokenPtr != nullptr ) {
-                                        if ( strcmp(tokenPtr, "par") == 0) {
-                                                tokenPtr = strtok( nullptr, separators);
-                                                int par = atoi( tokenPtr );
-                                                if (par==parameterNumber) {
-                                                        char tclAssignment[100];
-                                                        sprintf(tclAssignment , "set par_%d  %15.5f", parameterNumber, currentValue);
-                                                        Tcl_Eval( theTclInterp, tclAssignment);
-                                                }
-                                                else {
-                                                        std::cerr << "XC::ParametricReliabilityAnalysis::analyze() -- The parameter number " << std::endl
-                                                                << " in the limit-state function does not match the parameter " << std::endl
-                                                                << " number in the fragility analysis object." << std::endl;
-                                                }
-                                        }
-                                        tokenPtr = strtok( nullptr, separators);
-                                }
-                        }
-
-
-                        // Possibly set the parameter value in the FE domain
-                        if (theParameterPositioner != 0) {
-                                theParameterPositioner->update(currentValue);
-                        }
+		    // Detect parameter and set value, first the 
+		    // case where the parameter is represented by a 
+		    // parameterPositioner
+		    numPos = theReliabilityDomain->getNumberOfParameterPositioners();
+		    if(numPos != 0)
+		      {
+			    theParameterPositioner = theReliabilityDomain->getParameterPositionerPtr(parameterNumber);
+			    if (theParameterPositioner == nullptr)
+			      {
+				    std::cerr << "XC::ParametricReliabilityAnalysis::analyze() -- The parameter number in the " << std::endl
+					    << " fragility analysis object does not match the parameter number " << std::endl
+					    << " being set by the parameter positioner." << std::endl;
+			      }
+		      }
+		    else {
+			    char separators[5] = "_}{";
+			    const std::string theExpression = theLimitStateFunction->getExpression();
+			    char *lsf_forTokenizing = new char[1000];
+			    strcpy(lsf_forTokenizing,theExpression.c_str());
+			    char *tokenPtr = strtok( lsf_forTokenizing, separators);
+			    while ( tokenPtr != nullptr ) {
+				    if ( strcmp(tokenPtr, "par") == 0) {
+					    tokenPtr = strtok( nullptr, separators);
+					    int par = atoi( tokenPtr );
+					    if (par==parameterNumber) {
+						    char tclAssignment[100];
+						    sprintf(tclAssignment , "set par_%d  %15.5f", parameterNumber, currentValue);
+						    Tcl_Eval( theTclInterp, tclAssignment);
+					    }
+					    else {
+						    std::cerr << "ParametricReliabilityAnalysis::analyze() -- The parameter number " << std::endl
+							    << " in the limit-state function does not match the parameter " << std::endl
+							    << " number in the fragility analysis object." << std::endl;
+					    }
+				    }
+				    tokenPtr = strtok( nullptr, separators);
+			    }
+		    }
 
 
-                        // Find the design point
-                        if (theFindDesignPointAlgorithm->findDesignPoint(theReliabilityDomain) < 0){
-
-                                // Set detectable 'crazy' values when the design point wasn't found
-                                pf(counter) = -1.0;
-                                pdf(counter) = -1.0;
-                        }
-                        else
-                          {
-
-                            // Store probability of failure
-                            uStar= theFindDesignPointAlgorithm->get_u();
-                            alpha= theFindDesignPointAlgorithm->get_alpha();
-                            beta = alpha ^ uStar;
-                            pf(counter) = 1.0 - aStdNormRV.getCDFvalue(beta);
-
-                            // Compute PDF, first; derivative of lsf wrt. parameter
-                            dGdPar = theGradGEvaluator->getDgDpar();
-
-                            double thedGdPar= 0.0;
-                            // Find the right element
-                            numPars = dGdPar.noRows();
-                            for(int i=0; i<numPars; i++)
-                              {
-                                if(((int)(dGdPar(i,0))) == parameterNumber)
-                                  { thedGdPar = dGdPar(i,1); }
-                              }
-                            // Gradient of limit-state function
-                            gradient = theFindDesignPointAlgorithm->getGradientInStandardNormalSpace();
-                            // Compute PDF value
-                            pdf(counter) = fabs( aStdNormRV.getPDFvalue(-beta) / gradient.Norm() * thedGdPar );
-                          }
-
-                        currentValue = currentValue + (last-first)/numIntervals;
+		    // Possibly set the parameter value in the FE domain
+		    if (theParameterPositioner != 0) {
+			    theParameterPositioner->update(currentValue);
+		    }
 
 
-                        // Print results to output file
-                        outputFile << "#   " << setprecision(3)<<setw(11)<<currentValues(counter)<<"         ";
-                        if (pf(counter)==-1.0) {
-                                outputFile << "--failed--              ";
-                                outputFile << "--failed--            #" << std::endl;
-                        }
-                        else {
-                                outputFile <<setprecision(3)<<setw(11)<<pf(counter)<<"             ";
-                                outputFile <<setprecision(3)<<setw(11)<<pdf(counter)<<"           #" << std::endl;
-                        }
-                        outputFile.flush();
+		    // Find the design point
+		    if (theFindDesignPointAlgorithm->findDesignPoint(theReliabilityDomain) < 0){
 
-                } // Done looping over parameter range
+			    // Set detectable 'crazy' values when the design point wasn't found
+			    pf(counter) = -1.0;
+			    pdf(counter) = -1.0;
+		    }
+		    else
+		      {
+
+			// Store probability of failure
+			uStar= theFindDesignPointAlgorithm->get_u();
+			alpha= theFindDesignPointAlgorithm->get_alpha();
+			beta = alpha ^ uStar;
+			pf(counter) = 1.0 - aStdNormRV.getCDFvalue(beta);
+
+			// Compute PDF, first; derivative of lsf wrt. parameter
+			dGdPar = theGradGEvaluator->getDgDpar();
+
+			double thedGdPar= 0.0;
+			// Find the right element
+			numPars = dGdPar.noRows();
+			for(int i=0; i<numPars; i++)
+			  {
+			    if(((int)(dGdPar(i,0))) == parameterNumber)
+			      { thedGdPar = dGdPar(i,1); }
+			  }
+			// Gradient of limit-state function
+			gradient = theFindDesignPointAlgorithm->getGradientInStandardNormalSpace();
+			// Compute PDF value
+			pdf(counter) = fabs( aStdNormRV.getPDFvalue(-beta) / gradient.Norm() * thedGdPar );
+		      }
+
+		    currentValue = currentValue + (last-first)/numIntervals;
 
 
-                outputFile << "#                                                                     #" << std::endl;
-                outputFile << "#######################################################################" << std::endl << std::endl << std::endl;
+		    // Print results to output file
+		    outputFile << "#   " << setprecision(3)<<setw(11)<<currentValues(counter)<<"         ";
+		    if (pf(counter)==-1.0) {
+			    outputFile << "--failed--              ";
+			    outputFile << "--failed--            #" << std::endl;
+		    }
+		    else {
+			    outputFile <<setprecision(3)<<setw(11)<<pf(counter)<<"             ";
+			    outputFile <<setprecision(3)<<setw(11)<<pdf(counter)<<"           #" << std::endl;
+		    }
+		    outputFile.flush();
 
-        } // Done looping over limit-state functions
-                
-
-        // Print summary of results to screen (more here!!!)
-        std::cerr << "Fragility XC::Analysis completed." << std::endl;
+	    } // Done looping over parameter range
 
 
-        // Clean up
-        outputFile.close();
+	    outputFile << "#                                                                     #" << std::endl;
+	    outputFile << "#######################################################################" << std::endl << std::endl << std::endl;
 
-        return 0;
-}
+    } // Done looping over limit-state functions
+
+
+    // Print summary of results to screen (more here!!!)
+    std::clog << "Fragility XC::Analysis completed." << std::endl;
+
+
+    // Clean up
+    outputFile.close();
+
+    return 0;
+  }
 

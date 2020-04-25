@@ -68,26 +68,31 @@ namespace XC {
 
 //! @ingroup ReliabilityAnalysis
 // 
-//! @brief ??
+//! @brief Design point determination algorithm.
+//!
+//! The so-called design point is the solution of a constrained
+//! optimization problem in the outcome space of the random
+//! variables, which is commonly solved by an iterative, gradient-based
+//! search algorithm.
 class FindDesignPointAlgorithm
   {
   public:
-    FindDesignPointAlgorithm();
+    FindDesignPointAlgorithm(void);
 
     virtual int findDesignPoint(ReliabilityDomain *theReliabilityDomain) =0;
 
-    virtual Vector get_x() =0;
-    virtual Vector get_u() =0;
-    virtual Vector get_alpha() =0;
-    virtual Vector get_gamma() =0;
-    virtual int getNumberOfSteps() =0;
-    virtual Vector getSecondLast_u() =0;
-    virtual Vector getSecondLast_alpha() =0;
-    virtual Vector getLastSearchDirection() =0;
-    virtual double getFirstGFunValue() =0;
-    virtual double getLastGFunValue() =0;
-    virtual Vector getGradientInStandardNormalSpace() =0;
-    virtual int getNumberOfEvaluations() = 0;
+    virtual const Vector &get_x(void) const=0;
+    virtual const Vector &get_u(void) const=0;
+    virtual const Vector &get_alpha(void) const=0;
+    virtual Vector get_gamma(void) const=0;
+    virtual int getNumberOfSteps(void) const=0;
+    virtual const Vector &getSecondLast_u(void) const=0;
+    virtual const Vector &getSecondLast_alpha(void) const=0;
+    virtual const Vector &getLastSearchDirection(void) const=0;
+    virtual double getFirstGFunValue(void) const=0;
+    virtual double getLastGFunValue(void) const=0;
+    virtual const Vector &getGradientInStandardNormalSpace(void) const=0;
+    virtual int getNumberOfEvaluations(void) const=0;
   };
 } // end of XC namespace
 
