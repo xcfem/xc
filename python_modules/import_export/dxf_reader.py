@@ -144,7 +144,7 @@ def decompose_polyface(polyface, tol= .01):
        compose the polyface.
     '''
     # Compute the reference axis.
-    points= geom.polyPos3d()
+    points= geom.PolyPos3d()
     for face in polyface:
         for pt in face:
             points.append(geom.Pos3d(pt[0],pt[1],pt[2]))
