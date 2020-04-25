@@ -10,7 +10,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com" "ana.ortega.ort@gmail.com"
 
 import math
-import dxfgrabber
+import ezdxf
 import xc_base
 import geom
 import xc
@@ -97,10 +97,11 @@ def decompose_polyline(polyline, tol= .01):
        compose the polyline.
     '''
     retval= list()
-    if((len(polyline.points)>2) and polyline.is_closed):
+    if((len(polyline)>2) and polyline.is_closed):
         # Compute the local axis.
         points= list()
-        for pt in polyline.points:
+        for i, pt in enumerat(i,polyline.points()):
+            print(i, pt)
             points.append([pt[0],pt[1],pt[2]])            
         sisRef= get_polygon_axis(points,tol)
 
@@ -143,10 +144,12 @@ def decompose_polyface(polyface, tol= .01):
     '''Return the quadrilateral surfaces that
        compose the polyface.
     '''
+    lmsg.error('decompose_polyface needs debugging after migration to ezdxf')
     # Compute the reference axis.
     points= geom.PolyPos3d()
-    for face in polyface:
-        for pt in face:
+    for face in polyface.faces():
+        for v in face[0:3]:
+            pt= v.dxf.location
             points.append(geom.Pos3d(pt[0],pt[1],pt[2]))
     sisRef= get_polyface_points_axis(points)
 
@@ -155,9 +158,10 @@ def decompose_polyface(polyface, tol= .01):
 
     # Create polygons in local coordinates.
     polyfaces2d= list()
-    for face in polyface:
+    for face in polyface.faces():
         polygon= geom.Polygon2d()
-        for pt in face:
+        for v in face[0:3]:
+            pt= v.dxf.location
             ptLocal= sisRef.getPosLocal(geom.Pos3d(pt[0],pt[1],pt[2]))
             polygon.appendVertex(geom.Pos2d(ptLocal.x,ptLocal.y))
         polyfaces2d.append(polygon)
@@ -192,8 +196,7 @@ class DXFImport(object):
            :param getRelativeCoo: coordinate transformation to be applied to the
                                   points.
         '''
-        self.options= {"grab_blocks":True,"assure_3d_coords":True,"resolve_text_styles":True}
-        self.dxfFile= dxfgrabber.readfile(filename= dxfFileName, options= self.options)
+        self.dxfFile= ezdxf.readfile(filename= dxfFileName)
         self.tolerance= tolerance
         self.impLines= importLines
         self.impSurfaces= importSurfaces
@@ -232,9 +235,9 @@ class DXFImport(object):
         '''
         retval= []
         for layer in self.dxfFile.layers:
-            layerName= layer.name
-            if(layerToImport(layer.name,namesToImport)):
-                retval.append(layer.name)
+            layerName= layer.dxf.name
+            if(layerToImport(layerName,namesToImport)):
+                retval.append(layerName)
         if(len(retval)==0):
             lmsg.warning('No layers to import (names to import: '+str(namesToImport)+')')
         return retval
@@ -245,15 +248,15 @@ class DXFImport(object):
         retval_layers= []
         count= 0
         for obj in self.dxfFile.entities:
-            type= obj.dxftype
-            layerName= obj.layer
-            objName= obj.handle
+            type= obj.dxftype()
+            layerName= obj.dxf.layer
+            objName= obj.dxf.handle
             pointName= objName
             if(layerName in self.layersToImport):
                 if(type == 'POINT'):
                     count+= 1
                     pointName+= str(count)
-                    retval_pos.append(self.getRelativeCoo(obj.point))
+                    retval_pos.append(self.getRelativeCoo(obj.dxf.location))
                     retval_layers.append((layerName, pointName))
                 if(self.impSurfaces):
                     if(type == '3DFACE'):
@@ -262,7 +265,7 @@ class DXFImport(object):
                             pointName+= str(count)
                             retval_pos.append(self.getRelativeCoo(pt))
                             retval_layers.append((layerName, pointName))
-                    elif(type == 'POLYFACE'):
+                    elif(type == 'POLYLINE' and obj.get_mode()== 'AcDbPolyFaceMesh'): # POLYFACE
                         self.polyfaceQuads[objName]= decompose_polyface(obj, tol= self.tolerance)
                         for q in self.polyfaceQuads[objName]:
                             for pt in q:
@@ -271,7 +274,7 @@ class DXFImport(object):
                                 retval_pos.append(self.getRelativeCoo(pt))
                                 retval_layers.append((layerName, pointName))
                 if(type == 'LINE'):
-                    for pt in [obj.start,obj.end]:
+                    for pt in [obj.dxf.start,obj.dxf.end]:
                         count+= 1
                         pointName+= str(count)
                         retval_pos.append(self.getRelativeCoo(pt))
@@ -330,13 +333,13 @@ class DXFImport(object):
       ''' Import points from DXF.'''
       self.points= dict()
       for obj in self.dxfFile.entities:
-        type= obj.dxftype
-        pointName= obj.handle
-        layerName= obj.layer
+        type= obj.dxftype()
+        pointName= obj.dxf.handle
+        layerName= obj.dxf.layer
         if(layerName in self.layersToImport):
           if(type == 'POINT'):
             vertices= [-1]
-            p= self.getRelativeCoo(obj.point)
+            p= self.getRelativeCoo(obj.dxf.location)
             vertices[0]= self.getIndexNearestPoint(p)
             self.points[pointName]= vertices
             self.labelDict[pointName]= [layerName]
@@ -346,14 +349,14 @@ class DXFImport(object):
       self.lines= {}
       self.polylines= {}
       for obj in self.dxfFile.entities:
-        type= obj.dxftype
-        lineName= obj.handle
-        layerName= obj.layer
+        type= obj.dxftype()
+        lineName= obj.dxf.handle
+        layerName= obj.dxf.layer
         if(layerName in self.layersToImport):
           if(type == 'LINE'):
             vertices= [-1,-1]
-            p1= self.getRelativeCoo(obj.start)
-            p2= self.getRelativeCoo(obj.end)
+            p1= self.getRelativeCoo(obj.dxf.start)
+            p2= self.getRelativeCoo(obj.dxf.end)
             length= cdist([p1],[p2])[0][0]
             vertices[0]= self.getIndexNearestPoint(p1)
             vertices[1]= self.getIndexNearestPoint(p2)
@@ -362,6 +365,8 @@ class DXFImport(object):
             if(length>self.threshold):
               self.lines[lineName]= vertices
               self.labelDict[lineName]= [layerName]
+              if(obj.has_xdata('XC')):
+                 print(lineName+' has xdata!')
             else:
               lmsg.error('line too short: '+str(p1)+','+str(p2)+str(length))
           elif((type == 'POLYLINE') or (type == 'LWPOLYLINE')):
@@ -387,8 +392,8 @@ class DXFImport(object):
         self.facesByLayer[name]= dict()
 
       for obj in self.dxfFile.entities:
-        type= obj.dxftype
-        layerName= obj.layer
+        type= obj.dxftype()
+        layerName= obj.dxf.layer
         if(layerName in self.layersToImport):
             facesDict= self.facesByLayer[layerName]
             if(type == '3DFACE'):
@@ -397,11 +402,11 @@ class DXFImport(object):
                     p= self.getRelativeCoo(pt)
                     idx= self.getIndexNearestPoint(p)
                     vertices.append(idx)
-                self.labelDict[obj.handle]= [layerName]
-                facesDict[obj.handle]= vertices
+                self.labelDict[obj.dxf.handle]= [layerName]
+                facesDict[obj.dxf.handle]= vertices
             elif(type == 'POLYFACE'):
                 count= 0
-                for q in self.polyfaceQuads[obj.handle]:
+                for q in self.polyfaceQuads[obj.dxf.handle]:
                     vertices= list()
                     for pt in q:
                         p= self.getRelativeCoo(pt)
@@ -411,13 +416,13 @@ class DXFImport(object):
                         else:
                             lmsg.error('Point p: '+str(p)+' idx: '+str(idx)+' repeated in '+str(q)+' vertices: '+str(vertices))
                     count+= 1
-                    id= obj.handle+'_'+str(count)
+                    id= obj.dxf.handle+'_'+str(count)
                     self.labelDict[id]= [layerName]
                     facesDict[id]= vertices
             elif((type == 'POLYLINE') or (type == 'LWPOLYLINE')):
                 count= 0
                 if(self.polylinesAsSurfaces): # Import as surfaces
-                    for q in self.polylineQuads[obj.handle]:
+                    for q in self.polylineQuads[obj.dxf.handle]:
                         vertices= list()
                         for pt in q:
                             p= self.getRelativeCoo(pt)
@@ -427,7 +432,7 @@ class DXFImport(object):
                             else:
                                 lmsg.error('Point p: '+str(p)+' idx: '+str(idx)+' repeated in '+str(q)+' vertices: '+str(vertices))
                         count+= 1
-                        id= obj.handle+'_'+str(count)
+                        id= obj.dxf.handle+'_'+str(count)
                         self.labelDict[id]= [layerName]
                         facesDict[id]= vertices
             elif(type == 'LINE'):
@@ -486,18 +491,18 @@ class OldDxfReader(object):
       retval= self.pointHandler.newPntFromPos3d(pos3D)
     return retval
   def newLine(self,l):
-    start= l.start
+    start= l.dxf.start
     posStart= geom.Pos3d(start[0],start[1],start[2])
     nearestPointStart= self.pointHandler.getNearest(posStart)
-    end= l.end
+    end= l.dxf.end
     posEnd= geom.Pos3d(end[0],end[1],end[2])
     nearestPointEnd= self.pointHandler.getNearest(posEnd)
     return self.lineHandler.newLine(nearestPointStart.tag,nearestPointEnd.tag)
   def read_points(self,entities,layerName):
     retval= []
     for obj in entities:
-      if(obj.layer == layerName):
-        type= obj.dxftype
+      if(obj.dxf.layer == layerName):
+        type= obj.dxftype()
         color= obj.color
         if(type=='LINE'):
           pt= self.newKeyPoint(obj.start)
@@ -516,8 +521,8 @@ class OldDxfReader(object):
   def read_lines(self,entities,layerName):
     retval= []
     for obj in entities:
-      if(obj.layer == layerName):
-        type= obj.dxftype
+      if(obj.dxf.layer == layerName):
+        type= obj.dxftype()
         color= obj.color
         if(type=='LINE'):
           retval.append(self.newLine(obj).tag)
@@ -525,13 +530,13 @@ class OldDxfReader(object):
           pts= obj.points
           sz= len(pts)
           for i in range(0,sz):
-            l= dxfgrabber.Line()
+            l= ezdxf.Line()
             l.start= pts[i]
             l.end= pts[i+1]
             retval.append(self.newLine(l).tag)
     return retval
   def read(self,dxf_file_name,xc_preprocessor,layers):
-    self.dxf= dxfgrabber.readfile(dxf_file_name)
+    self.dxf= ezdxf.readfile(dxf_file_name)
     self.preprocessor= xc_preprocessor
     self.pointHandler= self.preprocessor.getMultiBlockTopology.getPoints
     self.lineHandler= self.preprocessor.getMultiBlockTopology.getLines
