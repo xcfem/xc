@@ -96,7 +96,7 @@ class MaterialHandler: public PrepHandler
     Material *newMaterial(const std::string &,const std::string &);
     Material &getMaterial(const std::string &);
     GeomSection *newSectionGeometry(const std::string &);
-    GeomSection &getGeomSection(const std::string &);
+    GeomSection &getSectionGeometry(const std::string &);
     InteractionDiagram *newInteractionDiagram(const std::string &);
     InteractionDiagram *calcInteractionDiagram(const std::string &,const InteractionDiagramData &diag_data);
     InteractionDiagram &getInteractionDiagram(const std::string &);

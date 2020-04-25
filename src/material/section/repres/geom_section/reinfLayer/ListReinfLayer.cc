@@ -124,7 +124,7 @@ XC::ReinfLayer *XC::ListReinfLayer::push_back(const ReinfLayer &reg)
 
 //! @brief Returns a reference to the GeomSection object
 //! that owns this one.
-const XC::GeomSection *XC::ListReinfLayer::getGeomSection(void) const
+const XC::GeomSection *XC::ListReinfLayer::getSectionGeometry(void) const
   {
     const CommandEntity *owr= Owner();
     assert(owr);

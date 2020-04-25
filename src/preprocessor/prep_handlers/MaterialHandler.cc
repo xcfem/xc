@@ -832,7 +832,7 @@ XC::Material &XC::MaterialHandler::getMaterial(const std::string &nmb)
 
 //! @brief Returns a reference to the section geometry which identifier
 //! is being passed as parameter. 
-XC::GeomSection &XC::MaterialHandler::getGeomSection(const std::string &nmb)
+XC::GeomSection &XC::MaterialHandler::getSectionGeometry(const std::string &nmb)
   {
     GeomSection *retval= find_ptr_geom_section(nmb);
     assert(retval);

@@ -92,8 +92,6 @@ class FiberSection3dBase: public FiberSectionBase
     int updateParameter(int parameterID, Information &info);
     inline virtual double getCenterOfMassZ(void) const
       { return fibers.getCenterOfMassZ(); }
-
-
   };
 
 } // end of XC namespace

@@ -66,6 +66,6 @@ class_<XC::ListReinfLayer, bases<XC::SectionMassProperties,list_ptr_reinf_layer>
   .def("newCircReinfLayer",make_function(&XC::ListReinfLayer::newCircReinfLayer,return_internal_reference<>()))
   .def("newReinfBar",make_function(&XC::ListReinfLayer::newReinfBar,return_internal_reference<>()))
   .add_property("getNumReinfBars",&XC::ListReinfLayer::getNumReinfBars,"Number of bars.")
-  .add_property("getGeomSection",make_function(&XC::ListReinfLayer::getGeomSection,return_internal_reference<>()),"Returns the GeomSection object that owns this bars.")
+  .add_property("getSectionGeometry",make_function(&XC::ListReinfLayer::getSectionGeometry,return_internal_reference<>()),"Returns the GeomSection object that owns this bars.")
   .def("getCover",&XC::ListReinfLayer::getCover,"returns concrete cover of the bars.")
   ;

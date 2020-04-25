@@ -50,17 +50,13 @@ class EntGeomSection: public NamedEntity
   private:
     GeomSection *sccGeom; //!< GeomSection.
   protected:
-    const GeomSection *getGeomSection(void) const;
-    GeomSection *getGeomSection(void);
 
   public:
     EntGeomSection(const std::string &nmb="",GeomSection *sccGeom= nullptr);
     EntGeomSection(const EntGeomSection &);
     EntGeomSection &operator=(const EntGeomSection &);
-    inline const GeomSection *GetGeomSection(void) const
-      { return getGeomSection(); }
-    inline GeomSection *GetGeomSection(void)
-      { return getGeomSection(); }
+    const GeomSection *getSectionGeometry(void) const;
+    GeomSection *getSectionGeometry(void);
     int getVtkCellType(void) const;
 
 

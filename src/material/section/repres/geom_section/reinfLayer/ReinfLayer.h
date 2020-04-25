@@ -101,7 +101,7 @@ class ReinfLayer: public DiscretBase
     void getBarrasIn(const Polygon2d &,ListReinfLayer &,bool );
     void getBarrasIn(const HalfPlane2d &,ListReinfLayer &,bool );
     
-    const GeomSection *getGeomSection(void) const;
+    const GeomSection *getSectionGeometry(void) const;
     double getCover(void) const;
     Vector getCenterOfMass(void) const;
 

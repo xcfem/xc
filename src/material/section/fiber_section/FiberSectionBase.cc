@@ -206,7 +206,7 @@ const XC::Vector &XC::FiberSectionBase::getSectionDeformation(void) const
   }
 
 //! @brief Returns a const pointer to section geometry.
-const XC::GeomSection *XC::FiberSectionBase::getGeomSection(void) const
+const XC::GeomSection *XC::FiberSectionBase::getSectionGeometry(void) const
   {
     const GeomSection *retval= nullptr;
     if(section_repres)
@@ -225,17 +225,17 @@ const XC::GeomSection *XC::FiberSectionBase::getGeomSection(void) const
   }
 
 //! @brief Returns a pointer to section geometry.
-XC::GeomSection *XC::FiberSectionBase::getGeomSection(void)
+XC::GeomSection *XC::FiberSectionBase::getSectionGeometry(void)
   {
     FiberSectionBase *this_no_const= const_cast<XC::FiberSectionBase *>(this);
-    return this_no_const->getGeomSection();
+    return this_no_const->getSectionGeometry();
   }
 
 //! @brief Returns cross section contour.
 Polygon2d XC::FiberSectionBase::getRegionsContour(void) const
   {
     Polygon2d retval;
-    const GeomSection *geom= getGeomSection();
+    const GeomSection *geom= getSectionGeometry();
     if(geom)
       retval= geom->getRegionsContour();
     return retval;
@@ -245,7 +245,7 @@ Polygon2d XC::FiberSectionBase::getRegionsContour(void) const
 double XC::FiberSectionBase::getLeverArm(void) const
   {
     double retval= 0.0;
-    const GeomSection *geom= getGeomSection();
+    const GeomSection *geom= getSectionGeometry();
     if(geom)
       retval= geom->getLeverArm(getBendingPlaneTrace());
     return retval;
@@ -256,7 +256,7 @@ double XC::FiberSectionBase::getLeverArm(void) const
 double XC::FiberSectionBase::getCompressedZoneDepth(const Line2d &r) const
   {
     double retval= 0.0;
-    const GeomSection *geom= getGeomSection();
+    const GeomSection *geom= getSectionGeometry();
     if(geom)
       {
         const HalfPlane2d comp= getCompressedHalfPlane(r);
@@ -278,7 +278,7 @@ double XC::FiberSectionBase::getCompressedZoneDepth(const Line2d &r) const
 double XC::FiberSectionBase::getCompressedZoneDepth(void) const
   {
     double retval= 0.0;
-    const GeomSection *geom= getGeomSection();
+    const GeomSection *geom= getSectionGeometry();
     if(geom)
       {
         const HalfPlane2d comp= getCompressedHalfPlane();
@@ -300,7 +300,7 @@ double XC::FiberSectionBase::getCompressedZoneDepth(void) const
 double XC::FiberSectionBase::getTensionedZoneDepth(void) const
   {
     double retval= 0.0;
-    const GeomSection *geom= getGeomSection();
+    const GeomSection *geom= getSectionGeometry();
     if(geom)
       {
         const HalfPlane2d comp= getCompressedHalfPlane();
@@ -317,7 +317,7 @@ double XC::FiberSectionBase::getTensionedZoneDepth(void) const
 double XC::FiberSectionBase::getTensionedZoneDepth(const Line2d &r) const
   {
     double retval= 0.0;
-    const GeomSection *geom= getGeomSection();
+    const GeomSection *geom= getSectionGeometry();
     if(geom)
       {
         const HalfPlane2d comp= getCompressedHalfPlane(r);
@@ -516,7 +516,7 @@ void XC::FiberSectionBase::computeCovers(const std::string &rebarSetName) const
     if(i!=fiber_sets.end())
       {
         const FiberPtrDeque &rebars= (*i).second; //Rebars.
-        const GeomSection *geom= getGeomSection();
+        const GeomSection *geom= getSectionGeometry();
         if(geom)
           rebars.computeCovers(*geom);
       }
@@ -869,7 +869,7 @@ Line2d XC::FiberSectionBase::getCompressedPlaneTrace(void) const
 double XC::FiberSectionBase::getAnchoMecanico(void) const
   {
     double retval= 0.0;
-    const GeomSection *geom= getGeomSection();
+    const GeomSection *geom= getSectionGeometry();
     if(geom)
       retval= geom->getAnchoMecanico(getBendingPlaneTrace());
     return retval;
@@ -879,7 +879,7 @@ double XC::FiberSectionBase::getAnchoMecanico(void) const
 double XC::FiberSectionBase::getCompressedStrutWidth(void) const
   {
     double retval= 0.0;
-    const GeomSection *geom= getGeomSection();
+    const GeomSection *geom= getSectionGeometry();
     if(geom)
       retval= geom->getCompressedStrutWidth(getLeverArmSegment());
     return retval;
@@ -890,7 +890,7 @@ double XC::FiberSectionBase::getCompressedStrutWidth(void) const
 double XC::FiberSectionBase::getCover(const Pos2d &p) const
   {
     double retval= 0.0;
-    const GeomSection *geom= getGeomSection();
+    const GeomSection *geom= getSectionGeometry();
     if(geom)
       retval= geom->getCover(p);
     return retval;

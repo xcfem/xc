@@ -50,7 +50,7 @@ class_<XC::MaterialHandler, bases<XC::PrepHandler>, boost::noncopyable >("Materi
   .def("materialExists",&XC::MaterialHandler::existeMaterial,"True if material is already defined.")
   .def("getName",&XC::MaterialHandler::getName,"Returns the name that corresponds to the identifier.")
   .def("newSectionGeometry", &XC::MaterialHandler::newSectionGeometry,return_internal_reference<>())
-  .def("getSectionGeometry", &XC::MaterialHandler::getGeomSection,return_internal_reference<>(),"Returns section geometry whose name is given.")
+  .def("getSectionGeometry", &XC::MaterialHandler::getSectionGeometry,return_internal_reference<>(),"Returns section geometry whose name is given.")
   .def("geomSectionExists",&XC::MaterialHandler::existeGeomSection,"True if section's shape is already defined.")
   .def("interactionDiagExists",&XC::MaterialHandler::InteractionDiagramExists,"True if intecractions diagram is already defined.")
   .def("newInteractionDiagram", &XC::MaterialHandler::newInteractionDiagram,return_internal_reference<>())

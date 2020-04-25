@@ -87,13 +87,13 @@ void XC::ReinfLayer::setNumReinfBars(int numReinfBars)
   { nReinfBars= numReinfBars; }
 
 //! @brief Returns a reference to the (GeomSection) owner object.
-const XC::GeomSection *XC::ReinfLayer::getGeomSection(void) const
+const XC::GeomSection *XC::ReinfLayer::getSectionGeometry(void) const
   {
     const CommandEntity *owr= Owner();
     assert(owr);
     const ListReinfLayer *l= dynamic_cast<const ListReinfLayer *>(owr);
     assert(l);
-    return l->getGeomSection();
+    return l->getSectionGeometry();
   }
 
 //! @brief Returns the minimum value for rebar cover.
@@ -103,7 +103,7 @@ double XC::ReinfLayer::getCover(void) const
     double retval= 0;
     if(!barras.empty())
       {
-        const GeomSection *geom= getGeomSection();
+        const GeomSection *geom= getSectionGeometry();
         if(geom)
           {
             VectorReinfBar::const_iterator i= barras.begin();

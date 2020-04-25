@@ -33,10 +33,10 @@
 #include "vtkCellType.h"
 
 //! @brief Returns a pointer to the GeomSection.
-const XC::GeomSection *XC::EntGeomSection::getGeomSection(void) const
+const XC::GeomSection *XC::EntGeomSection::getSectionGeometry(void) const
   { return sccGeom; }
 //! @brief Returns a pointer to the GeomSection.
-XC::GeomSection *XC::EntGeomSection::getGeomSection(void)
+XC::GeomSection *XC::EntGeomSection::getSectionGeometry(void)
   { return sccGeom; }
 
 //! @brief Constructor.
@@ -61,7 +61,7 @@ XC::SectionReferenceFrame *XC::EntGeomSection::SectionReferenceFrameActual(void)
   {
     SectionReferenceFrame *retval= nullptr;
     if(sccGeom)
-      retval= getGeomSection()->current_reference_system();
+      retval= getSectionGeometry()->current_reference_system();
     return retval;
   }
 
@@ -70,7 +70,7 @@ const XC::SectionReferenceFrame *XC::EntGeomSection::SectionReferenceFrameActual
   {
     const SectionReferenceFrame *retval= nullptr;
     if(sccGeom)
-      retval= getGeomSection()->current_reference_system();
+      retval= getSectionGeometry()->current_reference_system();
     return retval;
   }
 
@@ -80,7 +80,7 @@ XC::Spot *XC::EntGeomSection::BuscaSpot(const size_t &id_point)
     Spot *retval= nullptr;
     if(sccGeom)
       {
-        retval= getGeomSection()->busca_spot(id_point);
+        retval= getSectionGeometry()->busca_spot(id_point);
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -95,7 +95,7 @@ const XC::Spot *XC::EntGeomSection::BuscaSpot(const size_t &id_point) const
     const Spot *retval= nullptr;
     if(sccGeom)
       {
-        retval= getGeomSection()->busca_spot(id_point);
+        retval= getSectionGeometry()->busca_spot(id_point);
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -112,7 +112,7 @@ XC::Axis *XC::EntGeomSection::findAxis(const size_t &id_Axis)
     Axis *retval= nullptr;
     if(sccGeom)
       {
-        retval= getGeomSection()->find_axis(id_Axis);
+        retval= getSectionGeometry()->find_axis(id_Axis);
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -128,7 +128,7 @@ const XC::Axis *XC::EntGeomSection::findAxis(const size_t &id_Axis) const
     const Axis *retval= nullptr;
     if(sccGeom)
       {
-        retval= getGeomSection()->find_axis(id_Axis);
+        retval= getSectionGeometry()->find_axis(id_Axis);
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
