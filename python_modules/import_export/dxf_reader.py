@@ -364,9 +364,12 @@ class DXFImport(object):
               lmsg.error('Error in line '+lineName+' vertices are equal: '+str(vertices))
             if(length>self.threshold):
               self.lines[lineName]= vertices
-              self.labelDict[lineName]= [layerName]
+              objLabels= [layerName]
               if(obj.has_xdata('XC')):
-                 print(lineName+' has xdata!')
+                 xdata= obj.get_xdata('XC')
+                 for tag in xdata:
+                     objLabels.append(tag[1])
+              self.labelDict[lineName]= objLabels
             else:
               lmsg.error('line too short: '+str(p1)+','+str(p2)+str(length))
           elif((type == 'POLYLINE') or (type == 'LWPOLYLINE')):
