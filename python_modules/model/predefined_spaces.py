@@ -1143,19 +1143,19 @@ class StructuralMechanics3D(PredefinedSpace):
                 if(constrCond[i] <> 'free'):
                     self.constraints.newSPConstraint(n.tag,i,constrCond[i])
                     
-    def createElasticBeams(self, xcSet, section, trf, xzVector= None):
+    def createElasticBeams(self, xcSet, xcSection, trf, xzVector= None, sectionGeometry= None):
         ''' Meshes the lines of the set argument with ElasticBeam3d
             elements.
 
         :param xcSet: set with the lines to mesh.
-        :param section: section to assign to the elements.
+        :param xcSection: XC section to assign to the elements.
         :param trf: coordinate transformation to assign to the elements.
         :param xzVector: vector defining transformation XZ plane.
+        :param sectionGeometry: object that defines the geometry of the element section.
         '''
         seedElemHandler= self.preprocessor.getElementHandler.seedElemHandler
-        seedElemHandler.defaultMaterial= section.name
+        seedElemHandler.defaultMaterial= xcSection.name
         for l in xcSet.getLines:
-            l.setProp('section',section)
             vDir= l.getTang(0.0)
             if(xzVector):
                 trf.xzVector= xzVector
@@ -1164,15 +1164,19 @@ class StructuralMechanics3D(PredefinedSpace):
                 trf.xzVector= xc.Vector([v3d.x, v3d.y, v3d.z])
             elem= seedElemHandler.newElement("ElasticBeam3d",xc.ID([0,0]))
             l.genMesh(xc.meshDir.I)
+            if(sectionGeometry):
+                for e in l.getElements:
+                    e.setProp('sectionGeometry',sectionGeometry)
         xcSet.fillDownwards()
                     
-    def createTrusses(self, xcSet, material, area):
+    def createTrusses(self, xcSet, material, area, sectionGeometry= None):
         ''' Meshes the lines of the set argument with Truss
             elements.
 
         :param xcSet: set with the lines to mesh.
         :param material: material to assign to the elements.
         :param area: area to assign to the elements.
+        :param sectionGeometry: object that defines the geometry of the element section.
         '''
         seedElemHandler= self.preprocessor.getElementHandler.seedElemHandler
         seedElemHandler.defaultMaterial= material.name
@@ -1184,6 +1188,9 @@ class StructuralMechanics3D(PredefinedSpace):
             elem= seedElemHandler.newElement("Truss",xc.ID([0,0]))
             elem.sectionArea= area
             l.genMesh(xc.meshDir.I)
+            if(sectionGeometry):
+                for e in l.getElements:
+                    e.setProp('sectionGeometry',sectionGeometry)
         xcSet.fillDownwards()
                     
     def setHugeBeamBetweenNodes(self,nodeTagA, nodeTagB, nmbTransf):
