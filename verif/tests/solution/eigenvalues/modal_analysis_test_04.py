@@ -25,10 +25,10 @@ Ehorm= 200000*1e5 # Concrete elastic modulus.
 
 Bbaja= 0.45 # Columns size.
 Ibaja= 1/12.0*Bbaja**4 # Cross section moment of inertia.
-Hbaja= 4 # Altura de la planta baja.
+Hbaja= 4 # First floor height.
 B1a= 0.40 # Columns size.
 I1a= 1/12.0*B1a**4 # Cross section moment of inertia.
-H= 3 # Altura del resto de plantas.
+H= 3 # Height of the rest of the floors.
 B3a= 0.35 # Columns size.
 I3a= 1/12.0*B3a**4 # Cross section moment of inertia.
 

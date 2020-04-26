@@ -2,6 +2,10 @@
 ''' Response spectrum modal analysis test
 taken from the publication from Andrés Sáez Pérez: «Estructuras III»
  E.T.S. de Arquitectura de Sevilla (España).'''
+
+from __future__ import print_function
+from __future__ import division
+
 import xc_base
 import geom
 import xc
@@ -22,10 +26,10 @@ Ehorm= 200000*1e5 # Concrete elastic modulus.
 
 Bbaja= 0.45 # Columns size.
 Ibaja= 1/12.0*Bbaja**4 # Cross section moment of inertia.
-Hbaja= 4 # Altura de la planta baja.
+Hbaja= 4 # First floor height.
 B1a= 0.40 # Columns size.
 I1a= 1/12.0*B1a**4 # Cross section moment of inertia.
-H= 3 # Altura del resto de plantas.
+H= 3 # Height of the rest of the floors.
 B3a= 0.35 # Columns size.
 I3a= 1/12.0*B3a**4 # Cross section moment of inertia.
 
@@ -147,20 +151,20 @@ diff= distributionFactors-exampleDistribFactors
 ratio4= diff.Norm()
 
 ''' 
-print "kPlBaja= ",kPlBaja
-print "kPl1a= ",kPl1a
-print "kPl3a= ",kPl3a
-print "periods: ",periods
-print "ratio1= ",ratio1
-print "modos: ",modos
-print "diff: ",diff
-print "ratio2= ",ratio2
-print "modalParticipationFactors: ",modalParticipationFactors
-print "effectiveModalMasses: ",effectiveModalMasses
-print "totalMass: ",totalMass
-print "ratio3= ",ratio3
-print "distributionFactors: ",distributionFactors
-print "ratio4= ",ratio4
+print("kPlBaja= ",kPlBaja)
+print("kPl1a= ",kPl1a)
+print("kPl3a= ",kPl3a)
+print("periods: ",periods)
+print("ratio1= ",ratio1)
+print("modos: ",modos)
+print("diff: ",diff)
+print("ratio2= ",ratio2)
+print("modalParticipationFactors: ",modalParticipationFactors)
+print("effectiveModalMasses: ",effectiveModalMasses)
+print("totalMass: ",totalMass)
+print("ratio3= ",ratio3)
+print("distributionFactors: ",distributionFactors)
+print("ratio4= ",ratio4)
  '''
 '''
 #Display de deformed shape associated with mode 2
@@ -171,7 +175,7 @@ import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((ratio1<1e-3) & (ratio2<5e-2) & (ratio3<1e-12) & (ratio4<5e-2)):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 
