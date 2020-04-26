@@ -101,7 +101,6 @@ def decompose_polyline(polyline, tol= .01):
         # Compute the local axis.
         points= list()
         for i, pt in enumerat(i,polyline.points()):
-            print(i, pt)
             points.append([pt[0],pt[1],pt[2]])            
         sisRef= get_polygon_axis(points,tol)
 
@@ -193,7 +192,10 @@ def get_extended_data(obj, appName= 'XC'):
     xdata= obj.get_xdata('XC')
     for tag in xdata:
         if(tag[0]==1000): # string data
-            retval.append(tag[1].split(','))
+            labels= tag[1].split(',')
+            # remove leading and trailing spaces
+            labels2= [x.strip(' ') for x in labels]
+            retval.extend(labels2)
     return retval
     
 
@@ -279,7 +281,6 @@ class DXFImport(object):
                 if(type == 'POINT'):
                     count+= 1
                     pointName+= str(count)
-                    print(layerName)
                     append_point(obj.dxf.location, layerName, pointName, objLabels)
                 if(self.impSurfaces):
                     if(type == '3DFACE'):
