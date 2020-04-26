@@ -187,6 +187,16 @@ def layerToImport(layerName,namesToImport):
             return True
     return False
 
+def get_extended_data(obj, appName= 'XC'):
+    '''Extract dxf object extended data.'''
+    retval= list()
+    xdata= obj.get_xdata('XC')
+    for tag in xdata:
+        if(tag[0]==1000): # string data
+            retval.append(tag[1].split(','))
+    return retval
+    
+
 class DXFImport(object):
     '''Import DXF entities.'''
     def __init__(self,dxfFileName,layerNamesToImport, getRelativeCoo, threshold= 0.01,importLines= True, importSurfaces= True, polylinesAsSurfaces= False, tolerance= .01):
@@ -245,40 +255,50 @@ class DXFImport(object):
     def extractPoints(self):
         '''Extract the points from the entities argument.'''
         retval_pos= []
-        retval_layers= []
+        retval_labels= []
+        def append_point(pt, layerName, pointName, objLabels):
+            '''Append the point to the lists.'''
+            retval_pos.append(self.getRelativeCoo(pt))
+            # layer name as label.
+            ptLabels= [layerName]
+            # xdata as label.
+            for l in objLabels:
+                ptLabels.append(l)
+            retval_labels.append((pointName, ptLabels))
         count= 0
         for obj in self.dxfFile.entities:
             type= obj.dxftype()
             layerName= obj.dxf.layer
             objName= obj.dxf.handle
             pointName= objName
+            #xdata
+            objLabels= list()
+            if(obj.has_xdata('XC')):
+                 objLabels.extend(get_extended_data(obj))
             if(layerName in self.layersToImport):
                 if(type == 'POINT'):
                     count+= 1
                     pointName+= str(count)
-                    retval_pos.append(self.getRelativeCoo(obj.dxf.location))
-                    retval_layers.append((layerName, pointName))
+                    print(layerName)
+                    append_point(obj.dxf.location, layerName, pointName, objLabels)
                 if(self.impSurfaces):
                     if(type == '3DFACE'):
                         for pt in obj.points:
                             count+= 1
                             pointName+= str(count)
-                            retval_pos.append(self.getRelativeCoo(pt))
-                            retval_layers.append((layerName, pointName))
+                            append_point(pt, layerName, pointName, objLabels)
                     elif(type == 'POLYLINE' and obj.get_mode()== 'AcDbPolyFaceMesh'): # POLYFACE
                         self.polyfaceQuads[objName]= decompose_polyface(obj, tol= self.tolerance)
                         for q in self.polyfaceQuads[objName]:
                             for pt in q:
                                 count+= 1
                                 pointName+= str(count)
-                                retval_pos.append(self.getRelativeCoo(pt))
-                                retval_layers.append((layerName, pointName))
+                                append_point(pt, layerName, pointName, objLabels)
                 if(type == 'LINE'):
                     for pt in [obj.dxf.start,obj.dxf.end]:
                         count+= 1
                         pointName+= str(count)
-                        retval_pos.append(self.getRelativeCoo(pt))
-                        retval_layers.append((layerName, pointName))
+                        append_point(pt, layerName, pointName, objLabels)
                 elif((type == 'POLYLINE') or (type == 'LWPOLYLINE')):
                     if(self.polylinesAsSurfaces):
                         self.polylineQuads[objName]= decompose_polyline(obj, tol= self.tolerance)
@@ -286,16 +306,14 @@ class DXFImport(object):
                             for pt in q:
                                 count+= 1
                                 pointName+= str(count)
-                                retval_pos.append(self.getRelativeCoo(pt))
-                                retval_layers.append((layerName, pointName))
+                                append_point(pt, layerName, pointName, objLabels)
                     else:
                         pts= obj.points
                         for pt in pts:
                             count+= 1
                             pointName+= str(count)
-                            retval_pos.append(self.getRelativeCoo(pt))
-                            retval_layers.append((layerName, pointName))
-        return retval_pos, retval_layers
+                            append_point(pt, layerName, pointName, objLabels)
+        return retval_pos, retval_labels
 
     def selectKPoints(self):
         '''Selects the k-points to be used in the model. All the points that
@@ -304,27 +322,28 @@ class DXFImport(object):
         points, layers= self.extractPoints()
         if(len(points)>0):
             self.kPoints= [points[0]]
-            pointName= layers[0][1]
-            layerName= layers[0][0]
-            self.labelDict[pointName]= [layerName]
+            pointName= layers[0][0]
+            objLabels= layers[0][1]
+            self.labelDict[pointName]= objLabels
             indexDict= dict()
             indexDict[0]= pointName
             for p, l in zip(points, layers):
-                pointName= l[1]
-                layerName= l[0]
+                pointName= l[0]
+                objLabels= l[1]
                 indexNearestPoint= self.getIndexNearestPoint(p)
                 nearestPoint= self.kPoints[indexNearestPoint]
                 dist= cdist([p],[nearestPoint])[0][0]
-                if(dist>self.threshold):
+                if(dist>self.threshold): # new point.
                     indexNearestPoint= len(self.kPoints) # The point itself.
                     self.kPoints.append(p)
-                    self.labelDict[pointName]= [layerName]
+                    self.labelDict[pointName]= objLabels
                     indexDict[indexNearestPoint]= pointName
                 else:
                     pointName= indexDict[indexNearestPoint]
-                    layers= self.labelDict[pointName]
-                    if(not layerName in layers):
-                        layers.append(layerName)
+                    labels= self.labelDict[pointName]
+                    for l in objLabels:
+                        if(not l in labels):
+                            labels.append(l)
         else:
             lmsg.warning('No points in DXF file.')
         return indexDict
@@ -366,9 +385,7 @@ class DXFImport(object):
               self.lines[lineName]= vertices
               objLabels= [layerName]
               if(obj.has_xdata('XC')):
-                 xdata= obj.get_xdata('XC')
-                 for tag in xdata:
-                     objLabels.append(tag[1])
+                 objLabels.extend(get_extended_data(obj))
               self.labelDict[lineName]= objLabels
             else:
               lmsg.error('line too short: '+str(p1)+','+str(p2)+str(length))
