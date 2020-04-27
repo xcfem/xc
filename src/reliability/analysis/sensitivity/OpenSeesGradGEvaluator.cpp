@@ -80,75 +80,34 @@ XC::OpenSeesGradGEvaluator::OpenSeesGradGEvaluator(
 					Tcl_Interp *passedTclInterp,
 					ReliabilityDomain *passedReliabilityDomain,
 					bool PdoGradientCheck)
-:GradGEvaluator(passedReliabilityDomain, passedTclInterp)
-{
-	theReliabilityDomain = passedReliabilityDomain;
-	doGradientCheck = PdoGradientCheck;
-
-	int nrv = passedReliabilityDomain->getNumberOfRandomVariables();
-	grad_g = new Vector(nrv);
-	grad_g_matrix = 0;
-
-	DgDdispl = 0;
-}
-
-XC::OpenSeesGradGEvaluator::~OpenSeesGradGEvaluator()
-  {
-    if(grad_g != 0) 
-		delete grad_g;
-
-	if (DgDdispl != 0)
-		delete DgDdispl;
-
-	if (grad_g_matrix != 0)
-		delete grad_g_matrix;
-}
+  :GradGEvaluator(passedReliabilityDomain, passedTclInterp, PdoGradientCheck)
+    {
+      theReliabilityDomain= passedReliabilityDomain;
+      const int nrv= passedReliabilityDomain->getNumberOfRandomVariables();
+      grad_g= Vector(nrv);
+    }
 
 
-
-
- XC::Vector
-XC::OpenSeesGradGEvaluator::getGradG()
-{
-	return (*grad_g);
-}
-
-
- XC::Matrix
-XC::OpenSeesGradGEvaluator::getAllGradG()
-{
-	if (grad_g_matrix==0) {
-		Matrix dummy(1,1);
-		return dummy;
-	}
-	else {
-		return (*grad_g_matrix);
-	}
-}
-
-
-int XC::OpenSeesGradGEvaluator::computeGradG(double g, Vector passed_x)
+int XC::OpenSeesGradGEvaluator::computeGradG(double g, const Vector &passed_x)
   {
 	// Zero out the previous result matrix
-	if (DgDdispl != 0) {
-		delete DgDdispl;
-		DgDdispl = 0;
-	}
+    if(!DgDdispl.isEmpty())
+      {	DgDdispl= Matrix(); }
 
 	// Call base class method
 	computeParameterDerivatives(g);
 
 	// Initial declaractions
-	double perturbationFactor = 0.001; // (is multiplied by stdv and added to others...)
+	double perturbationFactor= 0.001; // (is multiplied by stdv and added to others...)
 	char tclAssignment[500];
-	//const char dollarSign[] = "$";
-	//const char underscore[] = "_";
-	//char lsf_expression[500] = "";
-	char separators[5] = "}{";
-	int nrv = theReliabilityDomain->getNumberOfRandomVariables();
+	//const char dollarSign[]= "$";
+	//const char underscore[]= "_";
+	//char lsf_expression[500]= "";
+	char separators[5]= "}{";
+	int nrv= theReliabilityDomain->getNumberOfRandomVariables();
 	RandomVariable *theRandomVariable;
 	char tempchar[100]="";
-	//char newSeparators[5] = "_";
+	//char newSeparators[5]= "_";
 	double g_perturbed;
 	int i;
 	double onedudx;
@@ -162,20 +121,20 @@ int XC::OpenSeesGradGEvaluator::computeGradG(double g, Vector passed_x)
 
 
 	// Initialize gradient vector
-	grad_g->Zero();
+	grad_g.Zero();
 
 
 	// "Download" limit-state function from reliability domain
-	int lsf = theReliabilityDomain->getTagOfActiveLimitStateFunction();
-	LimitStateFunction *theLimitStateFunction = 
+	int lsf= theReliabilityDomain->getTagOfActiveLimitStateFunction();
+	LimitStateFunction *theLimitStateFunction= 
 		theReliabilityDomain->getLimitStateFunctionPtr(lsf);
-	std::string theExpression = theLimitStateFunction->getExpression();
-	char *lsf_copy = new char[500];
+	std::string theExpression= theLimitStateFunction->getExpression();
+	char *lsf_copy= new char[500];
 	strcpy(lsf_copy,theExpression.c_str());
 
 
 	// Tokenize the limit-state function and COMPUTE GRADIENTS
-	char *tokenPtr = strtok( lsf_copy, separators); 
+	char *tokenPtr= strtok( lsf_copy, separators); 
 	while ( tokenPtr != nullptr ) {
 
 		strcpy(tempchar,tokenPtr);
@@ -187,13 +146,13 @@ int XC::OpenSeesGradGEvaluator::computeGradG(double g, Vector passed_x)
 			sscanf(tempchar,"x_%i",&rvNum);
 
 			// Perturb its value according to its standard deviation
-			theRandomVariable = theReliabilityDomain->getRandomVariablePtr(rvNum);
-			double stdv = theRandomVariable->getStdv();
+			theRandomVariable= theReliabilityDomain->getRandomVariablePtr(rvNum);
+			double stdv= theRandomVariable->getStdv();
 			sprintf(tclAssignment , "set x_%d  %35.20f", rvNum, (passed_x(rvNum-1)+perturbationFactor*stdv) );
 			Tcl_Eval( theTclInterp, tclAssignment);
 
 			// Evaluate limit-state function again
-			std::string theTokenizedExpression = theLimitStateFunction->getTokenizedExpression();
+			std::string theTokenizedExpression= theLimitStateFunction->getTokenizedExpression();
 			Tcl_ExprDouble( theTclInterp, theTokenizedExpression.c_str(), &g_perturbed );
 
 			// Make assignment back to its original value
@@ -201,7 +160,7 @@ int XC::OpenSeesGradGEvaluator::computeGradG(double g, Vector passed_x)
 			Tcl_Eval( theTclInterp, tclAssignment);
 
 			// Add gradient contribution
-			(*grad_g)(rvNum-1) += (g_perturbed-g)/(perturbationFactor*stdv);
+			grad_g(rvNum-1)+= (g_perturbed-g)/(perturbationFactor*stdv);
 		}
 		// If a nodal velocity is detected
 		else if ( strncmp(tokenPtr, "ud", 2) == 0) {
@@ -216,16 +175,16 @@ int XC::OpenSeesGradGEvaluator::computeGradG(double g, Vector passed_x)
 			Tcl_ExprDouble( theTclInterp, tclAssignment, &originalValue);
 
 			// Set perturbed value in the Tcl workspace
-			double newValue = originalValue*(1.0+perturbationFactor);
+			double newValue= originalValue*(1.0+perturbationFactor);
 			sprintf(tclAssignment,"set ud_%d_%d %35.20f", nodeNumber, direction, newValue);
 			Tcl_Eval( theTclInterp, tclAssignment);
 
 			// Evaluate the limit-state function again
-			std::string theTokenizedExpression = theLimitStateFunction->getTokenizedExpression();
+			std::string theTokenizedExpression= theLimitStateFunction->getTokenizedExpression();
 			Tcl_ExprDouble( theTclInterp, theTokenizedExpression.c_str(), &g_perturbed );
 
 			// Compute gradient
-			double onedgdu = (g_perturbed-g)/(originalValue*perturbationFactor);
+			double onedgdu= (g_perturbed-g)/(originalValue*perturbationFactor);
 
 			// Make assignment back to its original value
 			sprintf(tclAssignment,"set ud_%d_%d %35.20f", nodeNumber, direction, originalValue);
@@ -237,11 +196,11 @@ int XC::OpenSeesGradGEvaluator::computeGradG(double g, Vector passed_x)
 				Tcl_Eval( theTclInterp, tclAssignment);
 				sprintf(tclAssignment , "$sens ");
 				Tcl_ExprDouble( theTclInterp, tclAssignment, &onedudx );
-				dudx( (i-1) ) = onedudx;
+				dudx( (i-1) )= onedudx;
 			}
 
 			// Add gradient contribution
-			(*grad_g) += onedgdu*dudx;
+			grad_g+= onedgdu*dudx;
 
 		}
 		// If a nodal displacement is detected
@@ -257,7 +216,7 @@ int XC::OpenSeesGradGEvaluator::computeGradG(double g, Vector passed_x)
 			Tcl_ExprDouble( theTclInterp, tclAssignment, &originalValue);
 
 			// Set perturbed value in the Tcl workspace
-			double newValue = originalValue*(1.0+perturbationFactor);
+			double newValue= originalValue*(1.0+perturbationFactor);
 			sprintf(tclAssignment,"set u_%d_%d %35.20f", nodeNumber, direction, newValue);
 			Tcl_Eval( theTclInterp, tclAssignment);
 
@@ -266,29 +225,31 @@ int XC::OpenSeesGradGEvaluator::computeGradG(double g, Vector passed_x)
 			Tcl_ExprDouble( theTclInterp, theTokenizedExpression.c_str(), &g_perturbed );
 
 			// Compute gradient
-			double onedgdu = (g_perturbed-g)/(originalValue*perturbationFactor);
+			double onedgdu= (g_perturbed-g)/(originalValue*perturbationFactor);
 
 			// Store the DgDdispl in a matrix
-			if (DgDdispl == 0) {
-				DgDdispl = new Matrix(1, 3);
-				(*DgDdispl)(0,0) = (double)nodeNumber;
-				(*DgDdispl)(0,1) = (double)direction;
-				(*DgDdispl)(0,2) = onedgdu;
-			}
-			else {
-				int oldSize = DgDdispl->noRows();
-				Matrix tempMatrix = *DgDdispl;
-				delete DgDdispl;
-				DgDdispl = new Matrix(oldSize+1, 3);
-				for (i=0; i<oldSize; i++) {
-					(*DgDdispl)(i,0) = tempMatrix(i,0);
-					(*DgDdispl)(i,1) = tempMatrix(i,1);
-					(*DgDdispl)(i,2) = tempMatrix(i,2);
-				}
-				(*DgDdispl)(oldSize,0) = (double)nodeNumber;
-				(*DgDdispl)(oldSize,1) = (double)direction;
-				(*DgDdispl)(oldSize,2) = onedgdu;
-			}
+			if(DgDdispl.isEmpty())
+			  {
+			    DgDdispl= Matrix(1, 3);
+			    DgDdispl(0,0)= static_cast<double>(nodeNumber);
+			    DgDdispl(0,1)= static_cast<double>(direction);
+			    DgDdispl(0,2)= onedgdu;
+			  }
+			else
+			  {
+			    int oldSize= DgDdispl.noRows();
+			    Matrix tempMatrix= DgDdispl;
+			    DgDdispl= Matrix(oldSize+1, 3);
+			    for (i=0; i<oldSize; i++)
+			      {
+				DgDdispl(i,0)= tempMatrix(i,0);
+				DgDdispl(i,1)= tempMatrix(i,1);
+				DgDdispl(i,2)= tempMatrix(i,2);
+			      }
+			    DgDdispl(oldSize,0)= static_cast<double>(nodeNumber);
+			    DgDdispl(oldSize,1)= static_cast<double>(direction);
+			    DgDdispl(oldSize,2)= onedgdu;
+			  }
 
 
 			// Make assignment back to its original value
@@ -301,28 +262,31 @@ int XC::OpenSeesGradGEvaluator::computeGradG(double g, Vector passed_x)
 				Tcl_Eval( theTclInterp, tclAssignment);
 				sprintf(tclAssignment , "$sens ");
 				Tcl_ExprDouble( theTclInterp, tclAssignment, &onedudx );
-				dudx( (i-1) ) = onedudx;
+				dudx( (i-1) )= onedudx;
 			}
 
 			// Add gradient contribution
-			(*grad_g) += onedgdu*dudx;
+			grad_g+= onedgdu*dudx;
 
 		}
 		else if ( strncmp(tokenPtr, "rec",3) == 0) {
 		}
 
-		tokenPtr = strtok( nullptr, separators);  // read next token and go up and check the while condition again
+		tokenPtr= strtok( nullptr, separators);  // read next token and go up and check the while condition again
 	} 
 
 	delete [] lsf_copy;
 
-	if (doGradientCheck) {
+	if(doGradientCheck)
+	  {
 		char myString[100];
 		std::ofstream outputFile( "DDMgradients.out", ios::out );
 		std::cerr << std::endl;
-		for (int ddm=0; ddm<grad_g->Size(); ddm++) {
-			std::cerr << "DDM("<< (ddm+1) << ") = " << (*grad_g)(ddm) << std::endl;
-			sprintf(myString,"%20.16e ",(*grad_g)(ddm));
+		for(int ddm=0; ddm<grad_g.Size(); ddm++)
+		  {
+		    std::cerr << "DDM("<< (ddm+1) << ")= " << grad_g(ddm)
+			      << std::endl;
+			sprintf(myString,"%20.16e ",grad_g(ddm));
 			outputFile << myString << std::endl;
 		}
 		outputFile.close();
@@ -338,43 +302,37 @@ int XC::OpenSeesGradGEvaluator::computeGradG(double g, Vector passed_x)
 }
 
 
-
-int
-XC::OpenSeesGradGEvaluator::computeAllGradG(Vector gFunValues, Vector passed_x)
-{
+int XC::OpenSeesGradGEvaluator::computeAllGradG(Vector gFunValues, const Vector &passed_x)
+  {
 
 	// Allocate result matrix
 	Vector gradG(passed_x.Size());
-	if (grad_g_matrix == 0) {
-		grad_g_matrix = new Matrix(passed_x.Size(), gFunValues.Size());
-	}
-	else {
-		grad_g_matrix->Zero();
-	}
+	if(grad_g_matrix.isEmpty())
+	  {
+	    grad_g_matrix= Matrix(passed_x.Size(), gFunValues.Size());
+	  }
+	else
+	  {
+	    grad_g_matrix.Zero();
+	  }
 
 
 	// Loop over performance functions
-	for (int j=1; j<=gFunValues.Size(); j++) {
+	for (int j=1; j<=gFunValues.Size(); j++)
+	  {
 
 		// Set tag of active limit-state function
 		theReliabilityDomain->setTagOfActiveLimitStateFunction(j);
 
 		this->computeGradG(gFunValues(j-1),passed_x);
-		gradG = this->getGradG();
+		gradG= this->getGradG();
 
-		for (int i=1; i<=passed_x.Size(); i++) {
-	
-			(*grad_g_matrix)(i-1,j-1) = gradG(i-1);
-		}
+		for(int i=1; i<=passed_x.Size(); i++)
+		  { grad_g_matrix(i-1,j-1)= gradG(i-1); }
 	}
 
 	return 0;
-}
+  }
 
 
- XC::Matrix 
-XC::OpenSeesGradGEvaluator::getDgDdispl()
-{
-	return (*DgDdispl);
-}
 

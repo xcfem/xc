@@ -73,31 +73,16 @@ using std::ofstream;
 namespace XC {
 //! @ingroup ReliabilityAnalysis
 //!
-//! @brief ??
+//! @brief OpenSeees evaluator of the gradient of the limit surface.
 class OpenSeesGradGEvaluator: public GradGEvaluator
-{
-private:
-
-	Vector *grad_g;
-	Matrix *grad_g_matrix;
-	Matrix *DgDdispl;
-	bool doGradientCheck;
-
-public:
-	OpenSeesGradGEvaluator(Tcl_Interp *passedTclInterp, 
-				           ReliabilityDomain *passedReliabilityDomain,
-				           bool doGradientCheck);
-	~OpenSeesGradGEvaluator();
-
-	int		computeGradG(double gFunValue, Vector passed_x);
-	int		computeAllGradG(Vector gFunValues, Vector passed_x);
-
-	Vector	getGradG();
-	Matrix	getAllGradG();
-
-	Matrix  getDgDdispl();
-
-};
+  {
+  public:
+    OpenSeesGradGEvaluator(Tcl_Interp *passedTclInterp, 
+				       ReliabilityDomain *passedReliabilityDomain,
+				       bool doGradientCheck);
+    int	computeGradG(double gFunValue, const Vector &passed_x);
+    int	computeAllGradG(Vector gFunValues, const Vector &passed_x);
+  };
 } // end of XC namespace
 
 #endif

@@ -69,6 +69,8 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <boost/tokenizer.hpp>
+
 using std::ifstream;
 using std::ios;
 using std::setw;
@@ -83,59 +85,19 @@ XC::FiniteDifferenceGradGEvaluator::FiniteDifferenceGradGEvaluator(
 					double passedPerturbationFactor,
 					bool PdoGradientCheck,
 					bool pReComputeG)
-:GradGEvaluator(passedReliabilityDomain, passedTclInterp)
-{
-	theGFunEvaluator = passedGFunEvaluator;
-	perturbationFactor = passedPerturbationFactor;
-	doGradientCheck = PdoGradientCheck;
-	reComputeG = pReComputeG;
+  :GradGEvaluator(passedReliabilityDomain, passedTclInterp, PdoGradientCheck)
+  {
+    theGFunEvaluator = passedGFunEvaluator;
+    perturbationFactor= passedPerturbationFactor;
+    reComputeG= pReComputeG;
 
-	int nrv = passedReliabilityDomain->getNumberOfRandomVariables();
-	grad_g = new Vector(nrv);
-	grad_g_matrix = 0;
-
-	DgDdispl = 0;
-	DgDpar = 0;
-}
-
-XC::FiniteDifferenceGradGEvaluator::~FiniteDifferenceGradGEvaluator()
-{
-	delete grad_g;
-
-	if (DgDdispl != 0)
-		delete DgDdispl;
-	if (DgDpar != 0)
-		delete DgDpar;
-	if (grad_g_matrix != 0)
-		delete grad_g_matrix;
-}
+    int nrv= passedReliabilityDomain->getNumberOfRandomVariables();
+    grad_g= Vector(nrv);
+  }
 
 
-
- XC::Vector
-XC::FiniteDifferenceGradGEvaluator::getGradG()
-{
-	return (*grad_g);
-}
-
-
-
-
- XC::Matrix
-XC::FiniteDifferenceGradGEvaluator::getAllGradG()
-{
-	if (grad_g_matrix==0) {
-		Matrix dummy(1,1);
-		return dummy;
-	}
-	else {
-		return (*grad_g_matrix);
-	}
-}
-
-int
-XC::FiniteDifferenceGradGEvaluator::computeGradG(double gFunValue, Vector passed_x)
-{
+int XC::FiniteDifferenceGradGEvaluator::computeGradG(double gFunValue, const Vector &passed_x)
+  {
 	// Call base class method
 	computeParameterDerivatives(gFunValue);
 
@@ -143,24 +105,26 @@ XC::FiniteDifferenceGradGEvaluator::computeGradG(double gFunValue, Vector passed
 	// Possibly re-compute limit-state function value
 	int result;
 	if (reComputeG) {
-		result = theGFunEvaluator->runGFunAnalysis(passed_x);
+		result= theGFunEvaluator->runGFunAnalysis(passed_x);
 		if (result < 0) {
-			std::cerr << "XC::FiniteDifferenceGradGEvaluator::evaluate_grad_g() - " << std::endl
+			std::cerr << "XC::FiniteDifferenceGradGEvaluator::evaluate_grad_g() - "
+				  << std::endl
 				<< " could not run analysis to evaluate limit-state function. " << std::endl;
 			return -1;
 		}
-		result = theGFunEvaluator->evaluateG(passed_x);
+		result= theGFunEvaluator->evaluateG(passed_x);
 		if (result < 0) {
-			std::cerr << "XC::FiniteDifferenceGradGEvaluator::evaluate_grad_g() - " << std::endl
+			std::cerr << "XC::FiniteDifferenceGradGEvaluator::evaluate_grad_g() - "
+				  << std::endl
 				<< " could not tokenize limit-state function. " << std::endl;
 			return -1;
 		}
-		gFunValue = theGFunEvaluator->getG();
+		gFunValue= theGFunEvaluator->getG();
 	}
 
 
 	// Initial declarations
-	int numberOfRandomVariables = passed_x.Size();
+	int numberOfRandomVariables= passed_x.Size();
 	Vector perturbed_x(numberOfRandomVariables);
 	RandomVariable *theRandomVariable;
 	int i;
@@ -173,50 +137,54 @@ XC::FiniteDifferenceGradGEvaluator::computeGradG(double gFunValue, Vector passed
 	for ( i=0 ; i<numberOfRandomVariables ; i++ )
 	{
 		// Get random variable from domain
-		theRandomVariable = theReliabilityDomain->getRandomVariablePtr(i+1);
+		theRandomVariable= theReliabilityDomain->getRandomVariablePtr(i+1);
 
 
 		// Get the standard deviation
-		stdv = theRandomVariable->getStdv();
+		stdv= theRandomVariable->getStdv();
 
 
 		// Compute perturbation
-		h = stdv/perturbationFactor;
+		h= stdv/perturbationFactor;
 
 
 		// Compute perturbed vector of random variables realization
-		perturbed_x = passed_x;
-		perturbed_x(i) = perturbed_x(i) + h;
+		perturbed_x= passed_x;
+		perturbed_x(i)= perturbed_x(i) + h;
 
 
 		// Evaluate limit-state function
-		result = theGFunEvaluator->runGFunAnalysis(perturbed_x);
+		result= theGFunEvaluator->runGFunAnalysis(perturbed_x);
 		if (result < 0) {
-			std::cerr << "XC::FiniteDifferenceGradGEvaluator::evaluate_grad_g() - " << std::endl
+			std::cerr << "XC::FiniteDifferenceGradGEvaluator::evaluate_grad_g() - "
+				  << std::endl
 				<< " could not run analysis to evaluate limit-state function. " << std::endl;
 			return -1;
 		}
-		result = theGFunEvaluator->evaluateG(perturbed_x);
+		result= theGFunEvaluator->evaluateG(perturbed_x);
 		if (result < 0) {
-			std::cerr << "XC::FiniteDifferenceGradGEvaluator::evaluate_grad_g() - " << std::endl
+			std::cerr << "XC::FiniteDifferenceGradGEvaluator::evaluate_grad_g() - "
+				  << std::endl
 				<< " could not tokenize limit-state function. " << std::endl;
 			return -1;
 		}
-		gFunValueAStepAhead = theGFunEvaluator->getG();
+		gFunValueAStepAhead= theGFunEvaluator->getG();
 
 
 		// Compute the derivative by finite difference
-		(*grad_g)(i) = (gFunValueAStepAhead - gFunValue) / h;
+		grad_g(i)= (gFunValueAStepAhead - gFunValue) / h;
 	}
 
 
-	if (doGradientCheck) {
+	if (doGradientCheck)
+	  {
 		char myString[100];
 		ofstream outputFile( "FFDgradients.out", ios::out );
 		std::cerr << std::endl;
-		for (int ffd=0; ffd<grad_g->Size(); ffd++) {
-			std::cerr << "FFD("<< (ffd+1) << ") = " << (*grad_g)(ffd) << std::endl;
-			sprintf(myString,"%20.16e ",(*grad_g)(ffd));
+		for (int ffd=0; ffd<grad_g.Size(); ffd++)
+		  {
+			std::cerr << "FFD("<< (ffd+1) << ")= " << grad_g(ffd) << std::endl;
+			sprintf(myString,"%20.16e ",grad_g(ffd));
 			outputFile << myString << std::endl;
 		}
 		outputFile.close();
@@ -231,23 +199,19 @@ XC::FiniteDifferenceGradGEvaluator::computeGradG(double gFunValue, Vector passed
 
 
 
-int
-XC::FiniteDifferenceGradGEvaluator::computeAllGradG(Vector gFunValues, Vector passed_x)
-{
+int XC::FiniteDifferenceGradGEvaluator::computeAllGradG(Vector gFunValues, const Vector &passed_x)
+  {
 
 	// Get number of random variables and performance functions
-	int nrv = theReliabilityDomain->getNumberOfRandomVariables();
-	int lsf = theReliabilityDomain->getNumberOfLimitStateFunctions();
+	int nrv= theReliabilityDomain->getNumberOfRandomVariables();
+	int lsf= theReliabilityDomain->getNumberOfLimitStateFunctions();
 
 
 	// Allocate result matrix
-	if (grad_g_matrix == 0) {
-		grad_g_matrix = new Matrix(nrv,lsf);
-	}
-	else {
-		grad_g_matrix->Zero();
-	}
-
+	if(grad_g_matrix.isEmpty())
+	  { grad_g_matrix= Matrix(nrv,lsf); }
+	else
+	  { grad_g_matrix.Zero(); }
 
 	// Initial declarations
 	Vector perturbed_x(nrv);
@@ -263,24 +227,24 @@ XC::FiniteDifferenceGradGEvaluator::computeAllGradG(Vector gFunValues, Vector pa
 	for (int i=1; i<=nrv; i++) {
 
 		// Get random variable from domain
-		theRandomVariable = theReliabilityDomain->getRandomVariablePtr(i);
+		theRandomVariable= theReliabilityDomain->getRandomVariablePtr(i);
 
 
 		// Get the standard deviation
-		stdv = theRandomVariable->getStdv();
+		stdv= theRandomVariable->getStdv();
 
 
 		// Compute perturbation
-		h = stdv/perturbationFactor;
+		h= stdv/perturbationFactor;
 
 
 		// Compute perturbed vector of random variables realization
-		perturbed_x = passed_x;
-		perturbed_x(i-1) = perturbed_x(i-1) + h;
+		perturbed_x= passed_x;
+		perturbed_x(i-1)= perturbed_x(i-1) + h;
 
 
 		// Evaluate limit-state function
-		result = theGFunEvaluator->runGFunAnalysis(perturbed_x);
+		result= theGFunEvaluator->runGFunAnalysis(perturbed_x);
 		if (result < 0) {
 			std::cerr << "XC::FiniteDifferenceGradGEvaluator::evaluate_grad_g() - " << std::endl
 				<< " could not run analysis to evaluate limit-state function. " << std::endl;
@@ -295,16 +259,17 @@ XC::FiniteDifferenceGradGEvaluator::computeAllGradG(Vector gFunValues, Vector pa
 			theReliabilityDomain->setTagOfActiveLimitStateFunction(j);
 
 			// Limit-state function value
-			result = theGFunEvaluator->evaluateG(perturbed_x);
+			result= theGFunEvaluator->evaluateG(perturbed_x);
 			if (result < 0) {
-				std::cerr << "XC::FiniteDifferenceGradGEvaluator::evaluate_grad_g() - " << std::endl
+				std::cerr << "XC::FiniteDifferenceGradGEvaluator::evaluate_grad_g() - "
+					  << std::endl
 					<< " could not tokenize limit-state function. " << std::endl;
 				return -1;
 			}
-			gFunValueAStepAhead = theGFunEvaluator->getG();
+			gFunValueAStepAhead= theGFunEvaluator->getG();
 
 			// Compute the derivative by finite difference
-			(*grad_g_matrix)(i-1,j-1) = (gFunValueAStepAhead - gFunValues(j-1)) / h;
+			grad_g_matrix(i-1,j-1)= (gFunValueAStepAhead - gFunValues(j-1)) / h;
 
 		}
 	}
@@ -316,104 +281,101 @@ XC::FiniteDifferenceGradGEvaluator::computeAllGradG(Vector gFunValues, Vector pa
 
 
 
-XC::Matrix XC::FiniteDifferenceGradGEvaluator::getDgDdispl(void)
+const XC::Matrix &XC::FiniteDifferenceGradGEvaluator::getDgDdispl(void) const
   {
-	// This method is implemented solely for the purpose of mean 
-	// out-crossing rate analysis using "two searches". Then the 
-	// derivative of the limit-state function wrt. the displacement
-	// is needed to expand the limit-state function expression
+    // This method is implemented solely for the purpose of mean 
+    // out-crossing rate analysis using "two searches". Then the 
+    // derivative of the limit-state function wrt. the displacement
+    // is needed to expand the limit-state function expression
 
-	// Result matrix
-	Matrix *DgDdispl = 0;
-
-
-	// Initial declaractions
-	double perturbationFactor = 0.001; // (is multiplied by stdv and added to others...)
-	char tclAssignment[500];
-	const std::string dollarSign= "$";
-	const std::string underscore= "_";
-	char separators[5] = "}{";
-	char tempchar[100]="";
-	double g, g_perturbed;
-	int i;
-
-	// "Download" limit-state function from reliability domain
-	int lsf = theReliabilityDomain->getTagOfActiveLimitStateFunction();
-	LimitStateFunction *theLimitStateFunction = 
-		theReliabilityDomain->getLimitStateFunctionPtr(lsf);
-	std::string theExpression = theLimitStateFunction->getExpression();
-	char *lsf_copy = new char[500];
-	strcpy(lsf_copy,theExpression.c_str());
+    // Result matrix
+    DgDdispl= Matrix();
 
 
-	// Tokenize the limit-state function and COMPUTE GRADIENTS
-	char *tokenPtr = strtok( lsf_copy, separators); 
-	while ( tokenPtr != nullptr ) {
+    // Initial declaractions
+    double perturbationFactor= 0.001; // (is multiplied by stdv and added to others...)
+    char tclAssignment[500];
+    const std::string dollarSign= "$";
+    const std::string underscore= "_";
+    typedef boost::tokenizer<boost::char_separator<char> > tokenizer;
+    boost::char_separator<char> separators("}{");
+    std::string tempchar("");
+    double g, g_perturbed;
+    int i;
 
-		strcpy(tempchar,tokenPtr);
+    // "Download" limit-state function from reliability domain
+    int lsf= theReliabilityDomain->getTagOfActiveLimitStateFunction();
+    LimitStateFunction *theLimitStateFunction=  theReliabilityDomain->getLimitStateFunctionPtr(lsf);
+    std::string theExpression= theLimitStateFunction->getExpression();
+    // Tokenize the limit-state function and COMPUTE GRADIENTS
+    tokenizer lsf_copy(theExpression, separators);
+    std::string token;
+    for(tokenizer::const_iterator tok_iter= lsf_copy.begin();
+       tok_iter != lsf_copy.end(); ++tok_iter)
+      {
+	token= *tok_iter;
+	const char *tokenPtr= token.c_str();
+	tempchar= token;
 
-		// If a nodal displacement is detected
-		if ( strncmp(tokenPtr, "u", 1) == 0) {
+	// If a nodal displacement is detected
+	if(strncmp(tokenPtr, "u", 1) == 0)
+	  {
+	    // Get node number and dof number
+	    int nodeNumber, direction;
+	    sscanf(tempchar.c_str(),"u_%i_%i", &nodeNumber, &direction);
 
-			// Get node number and dof number
-			int nodeNumber, direction;
-			sscanf(tempchar,"u_%i_%i", &nodeNumber, &direction);
+	    // Evaluate the limit-state function again
+	    std::string theTokenizedExpression= theLimitStateFunction->getTokenizedExpression();
+	    Tcl_ExprDouble( theTclInterp, theTokenizedExpression.c_str(), &g );
 
-			// Evaluate the limit-state function again
-			std::string theTokenizedExpression = theLimitStateFunction->getTokenizedExpression();
-			Tcl_ExprDouble( theTclInterp, theTokenizedExpression.c_str(), &g );
-			
-			// Keep the original displacement value
-			double originalValue;
-			sprintf(tclAssignment,"$u_%d_%d", nodeNumber, direction);
-			Tcl_ExprDouble( theTclInterp, tclAssignment, &originalValue);
+	    // Keep the original displacement value
+	    double originalValue;
+	    sprintf(tclAssignment,"$u_%d_%d", nodeNumber, direction);
+	    Tcl_ExprDouble( theTclInterp, tclAssignment, &originalValue);
 
-			// Set perturbed value in the Tcl workspace
-			double newValue = originalValue*(1.0+perturbationFactor);
-			sprintf(tclAssignment,"set u_%d_%d %35.20f", nodeNumber, direction, newValue);
-			Tcl_Eval( theTclInterp, tclAssignment);
+	    // Set perturbed value in the Tcl workspace
+	    double newValue= originalValue*(1.0+perturbationFactor);
+	    sprintf(tclAssignment,"set u_%d_%d %35.20f", nodeNumber, direction, newValue);
+	    Tcl_Eval( theTclInterp, tclAssignment);
 
-			// Evaluate the limit-state function again
-			Tcl_ExprDouble( theTclInterp, theTokenizedExpression.c_str(), &g_perturbed );
+	    // Evaluate the limit-state function again
+	    Tcl_ExprDouble( theTclInterp, theTokenizedExpression.c_str(), &g_perturbed );
 
-			// Compute gradient
-			double onedgdu = (g_perturbed-g)/(originalValue*perturbationFactor);
+	    // Compute gradient
+	    double onedgdu= (g_perturbed-g)/(originalValue*perturbationFactor);
 
-			// Store the DgDdispl in a matrix
-			if (DgDdispl == 0) {
-				DgDdispl = new Matrix(1, 3);
-				(*DgDdispl)(0,0) = (double)nodeNumber;
-				(*DgDdispl)(0,1) = (double)direction;
-				(*DgDdispl)(0,2) = onedgdu;
-			}
-			else {
-				int oldSize = DgDdispl->noRows();
-				Matrix tempMatrix = *DgDdispl;
-				delete DgDdispl;
-				DgDdispl = new Matrix(oldSize+1, 3);
-				for (i=0; i<oldSize; i++) {
-					(*DgDdispl)(i,0) = tempMatrix(i,0);
-					(*DgDdispl)(i,1) = tempMatrix(i,1);
-					(*DgDdispl)(i,2) = tempMatrix(i,2);
-				}
-				(*DgDdispl)(oldSize,0) = (double)nodeNumber;
-				(*DgDdispl)(oldSize,1) = (double)direction;
-				(*DgDdispl)(oldSize,2) = onedgdu;
-			}
-
-
-			// Make assignment back to its original value
-			sprintf(tclAssignment,"set u_%d_%d %35.20f", nodeNumber, direction, originalValue);
-			Tcl_Eval( theTclInterp, tclAssignment);
+	    // Store the DgDdispl in a matrix
+	    if(DgDdispl.isEmpty())
+	      {
+		DgDdispl= Matrix(1, 3);
+		DgDdispl(0,0)= static_cast<double>(nodeNumber);
+		DgDdispl(0,1)= static_cast<double>(direction);
+		DgDdispl(0,2)= onedgdu;
+	      }
+	    else
+	      {
+		int oldSize= DgDdispl.noRows();
+		Matrix tempMatrix= DgDdispl;
+		DgDdispl= Matrix(oldSize+1, 3);
+		for(i=0; i<oldSize; i++)
+		  {
+		    DgDdispl(i,0)= tempMatrix(i,0);
+		    DgDdispl(i,1)= tempMatrix(i,1);
+		    DgDdispl(i,2)= tempMatrix(i,2);
+		  }
+		DgDdispl(oldSize,0)= static_cast<double>(nodeNumber);
+		DgDdispl(oldSize,1)= static_cast<double>(direction);
+		DgDdispl(oldSize,2)= onedgdu;
+	      }
 
 
-		}
+	    // Make assignment back to its original value
+	    sprintf(tclAssignment,"set u_%d_%d %35.20f", nodeNumber, direction, originalValue);
+	    Tcl_Eval( theTclInterp, tclAssignment);
+	}
 
-		tokenPtr = strtok( nullptr, separators);  // read next token and go up and check the while condition again
-	} 
+      } 
 
-	delete [] lsf_copy;
-
-	return (*DgDdispl);
-}
+    return DgDdispl;
+  }
 

@@ -75,37 +75,28 @@ namespace XC {
   class GFunEvaluator;
 //! @ingroup ReliabilityAnalysis
 //!
-//! @brief ??
+//! @brief Finite difference based evaluator of
+//! the gradient of the limit surface.
 class FiniteDifferenceGradGEvaluator: public GradGEvaluator
-{
-private:
-//	int computeDgDsomething();
+  {
+  private:
+  //	int computeDgDsomething();
+    GFunEvaluator *theGFunEvaluator;
+    double perturbationFactor;
+    bool reComputeG;
+  public:
+    FiniteDifferenceGradGEvaluator(GFunEvaluator *passedGFunEvaluator,
+			    ReliabilityDomain *passedReliabilityDomain,
+			    Tcl_Interp *passedTclInterp,
+			    double perturbationFactor,
+			    bool doGradientCheck,
+			    bool reComputeG);
 
-	Vector *grad_g;
-	Matrix *grad_g_matrix;
-	GFunEvaluator *theGFunEvaluator;
-	Matrix *DgDdispl;
-	Matrix *DgDpar;
-	double perturbationFactor;
-	bool doGradientCheck;
-	bool reComputeG;
-public:
-	FiniteDifferenceGradGEvaluator(GFunEvaluator *passedGFunEvaluator,
-				ReliabilityDomain *passedReliabilityDomain,
-				Tcl_Interp *passedTclInterp,
-				double perturbationFactor,
-				bool doGradientCheck,
-				bool reComputeG);
-	~FiniteDifferenceGradGEvaluator();
+    int computeGradG(double gFunValue, const Vector &passed_x);
+    int	computeAllGradG(Vector gFunValues, const Vector &passed_x);
 
-	int		computeGradG(double gFunValue, Vector passed_x);
-	int		computeAllGradG(Vector gFunValues, Vector passed_x);
-
-	Vector	getGradG();
-	Matrix	getAllGradG();
-
-	Matrix  getDgDdispl();
-};
+    const Matrix &getDgDdispl(void) const;
+  };
 } // end of XC namespace
 
 #endif

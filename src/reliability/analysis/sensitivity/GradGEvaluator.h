@@ -68,32 +68,38 @@
 
 namespace XC {
 
+//! @ingroup ReliabilityAnalysis
+//!
+//! @brief Base class for the evaluators of
+//! the gradient of the limit surface.
 class GradGEvaluator
   {
+  private:
+    Matrix DgDpar;
+  protected:
+    Vector grad_g;
+    Matrix grad_g_matrix;
+    mutable Matrix DgDdispl;
+    bool doGradientCheck;
+    
+    int computeParameterDerivatives(double g);
+    ReliabilityDomain *theReliabilityDomain;
+    Tcl_Interp *theTclInterp;
   public:
-	GradGEvaluator(ReliabilityDomain *theReliabilityDomain, Tcl_Interp *theTclInterp);
-	virtual ~GradGEvaluator();
+    GradGEvaluator(ReliabilityDomain *theReliabilityDomain, Tcl_Interp *theTclInterp, bool doGradientCheck);
+    virtual ~GradGEvaluator();
 
-	// Methods provided by the sub-classes
-	virtual int computeGradG(double gFunValue, Vector passed_x) =0;
-	virtual int computeAllGradG(Vector gFunValues, Vector passed_x) =0;
+    // Methods provided by the sub-classes
+    virtual int computeGradG(double gFunValue, const Vector &passed_x) =0;
+    virtual int computeAllGradG(Vector gFunValues, const Vector &passed_x) =0;
 
-	virtual Vector getGradG() =0;
-	virtual Matrix getAllGradG() =0;
+    virtual const Vector &getGradG(void) const;
+    virtual const Matrix &getAllGradG(void) const;
 
-	// Methods that are provided by sub-classes, but rather specific to FE reliability
-	virtual Matrix  getDgDdispl();
-	virtual Matrix  getDgDpar();
-
-protected:
-	int computeParameterDerivatives(double g);
-	ReliabilityDomain *theReliabilityDomain;
-	Tcl_Interp *theTclInterp;
-
-private:
-	Matrix *DgDpar;
-
-};
+    // Methods that are provided by sub-classes, but rather specific to FE reliability
+    virtual const Matrix &getDgDdispl(void) const;
+    virtual const Matrix &getDgDpar(void) const;
+  };
 } // end of XC namespace
 
 #endif
