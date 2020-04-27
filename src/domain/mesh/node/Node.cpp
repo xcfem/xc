@@ -2088,6 +2088,88 @@ SlidingVectorsSystem3d XC::Node::getResistingSlidingVectorsSystem3d(const std::s
     return retval; 
   }
 
+//! @brief Return the sum of the stiffness matrix
+//! of a subset of the connected elements.
+//!
+//! @param elements: subset of elements.
+//! @param initial: if true initial stiffness is requested, otherwise it returns the
+//!                 tangent stiffness.
+XC::Matrix XC::Node::get_element_stiff(const ElementConstPtrSet &elements, bool initial) const
+  {
+    Matrix retval(numberDOF,numberDOF);
+    if(isAlive())
+      {
+        for(std::set<ContinuaReprComponent *>::const_iterator i= connected.begin();i!=connected.end();i++)
+          if((*i)->isAlive())
+            {
+              const Element *ptrElem= dynamic_cast<const Element *>(*i);
+              if(ptrElem) // connected element.
+                {
+                  if(elements.count(ptrElem)>0)
+                    {
+		      if(initial)
+		        retval+= ptrElem->getNodeMatrixComponents(this,ptrElem->getInitialStiff());
+		      else
+		        retval+= ptrElem->getNodeMatrixComponents(this,ptrElem->getTangentStiff());
+		    }
+		}
+            }
+      }
+    return retval;
+  }
+
+//! @brief Tries to return a stiffness matrix that
+//! represent the stiffness of the constraints connected
+//! to the node. It's used in getTangentStiff and
+//! getInitialStiff methods.
+XC::Matrix XC::Node::get_constraints_stiff(void) const
+  {
+    Matrix retval(numberDOF,numberDOF);
+    const int nodeTag= getTag();
+    if(isAlive())
+      {
+        for(std::set<ContinuaReprComponent *>::const_iterator i= connected.begin();i!=connected.end();i++)
+          if((*i)->isAlive())
+            {
+	      const SFreedom_Constraint *constraint= dynamic_cast<const SFreedom_Constraint *>(*i);
+	      if(constraint)
+		{
+		  for(int i= 0;i<numberDOF;i++)
+		    {
+		      if(constraint->affectsNodeAndDOF(nodeTag, i))
+			{ retval(i,i)+= 1.0e15; } //Tries to represent the constraint stiffness.
+		    }
+		}
+	      else
+		{
+		  std::cerr << getClassName() << "::" << __FUNCTION__
+			    << "; constraint of type: " << (*i)->getClassName()
+			    << " not implemented yet." << std::endl;
+		}
+            }
+      }
+    return retval; 
+  }
+
+//! @brief Return the tangent stiffness components for a displacement
+//! in the direction argurment.
+XC::Vector XC::Node::getTangentStiff(const ElementConstPtrSet &elements,const Vector &dir) const
+  {
+    Matrix K= get_element_stiff(elements,false)+get_constraints_stiff();
+    const Vector tmp= dir.Normalized(); // make sure that it's a unit displacement.
+    return K*tmp;
+  }
+
+
+//! @brief Return the tangent stiffness components for a displacement
+//! in the direction argurment.
+XC::Vector XC::Node::getInitialStiff(const ElementConstPtrSet &elements,const Vector &dir) const
+  {
+    Matrix K= get_element_stiff(elements,true)+get_constraints_stiff();
+    const Vector tmp= dir.Normalized(); // make sure that it's a unit displacement.
+    return K*tmp;
+  }
+
 //! @brief Return the node reaction
 const XC::Vector &XC::Node::getReaction(void) const
   { return reaction; }

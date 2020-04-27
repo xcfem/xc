@@ -362,21 +362,22 @@ const XC::Matrix &XC::Truss::getInitialStiff(void) const
     const double E = theMaterial->getInitialTangent();
 
     // come back later and redo this if too slow
-    Matrix &stiff = *theMatrix;
+    Matrix &stiff= *theMatrix;
 
     int numDOF2 = numDOF/2;
     double temp;
     double EAoverL = E*A/L;
-    for(int i = 0; i < getNumDIM(); i++) {
-      for(int j = 0; j < getNumDIM(); j++) {
-        temp = cosX[i]*cosX[j]*EAoverL;
-        stiff(i,j) = temp;
-        stiff(i+numDOF2,j) = -temp;
-        stiff(i,j+numDOF2) = -temp;
-        stiff(i+numDOF2,j+numDOF2) = temp;
+    for(int i = 0; i < getNumDIM(); i++)
+      {
+	for(int j = 0; j < getNumDIM(); j++)
+	  {
+	    temp = cosX[i]*cosX[j]*EAoverL;
+	    stiff(i,j) = temp;
+	    stiff(i+numDOF2,j) = -temp;
+	    stiff(i,j+numDOF2) = -temp;
+	    stiff(i+numDOF2,j+numDOF2) = temp;
+	  }
       }
-    }
-
     if(isDead())
       (*theMatrix)*=dead_srf;
     return *theMatrix;

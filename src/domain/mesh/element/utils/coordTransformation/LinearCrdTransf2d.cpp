@@ -435,7 +435,7 @@ double XC::LinearCrdTransf2d::getd1overLdh(void)
     return 0.0;
   }
 
-
+//! @brief Return the stiffness matrix in global coordinates.
 const XC::Matrix &XC::LinearCrdTransf2d::getGlobalStiffMatrix(const XC::Matrix &kb, const XC::Vector &pb) const
   {
     const double oneOverL= 1.0/L;
@@ -547,7 +547,8 @@ const XC::Matrix &XC::LinearCrdTransf2d::getGlobalStiffMatrix(const XC::Matrix &
   }
 
 
-const XC::Matrix &XC::LinearCrdTransf2d::getInitialGlobalStiffMatrix(const XC::Matrix &kb) const
+//! @brief Return the initial stiffness matrix in global coordinates.
+const XC::Matrix &XC::LinearCrdTransf2d::getInitialGlobalStiffMatrix(const Matrix &kb) const
   {
     const double oneOverL = 1.0/L;
 

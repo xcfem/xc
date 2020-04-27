@@ -350,6 +350,30 @@ const XC::Vector &XC::Element::getResistingForceIncInertia(void) const
     return theVector;
   }
 
+//! @brief Returns the components of the matrix relative to the node.
+//!
+//! @param ptrNod: pointer to the node.
+//! @param m: matrix to extract the components from.
+XC::Matrix XC::Element::getNodeMatrixComponents(const Node *ptrNod,const Matrix &m) const
+  {
+    const int iNod= getNodePtrs().getNodeIndex(ptrNod);
+    const int ndof= getNodePtrs()[iNod]->getNumberDOF(); // number of DOFs in the node.
+    Matrix retval(ndof,ndof);
+    if(iNod>0)
+      {
+	for(int i=0;i<ndof;i++)
+	  {
+	    const int row= iNod*ndof+i;
+	    for(int j= 0;j<ndof;j++)
+	      {
+		const int col= iNod*ndof+j;
+		retval(i,j)= m(row,col);
+	      }
+	  }
+      }
+    return retval; 
+  }
+
 //! @brief Returns the generalized force of the element over the iNod-th
 //! node.
 const XC::Vector &XC::Element::getNodeResistingComponents(const size_t &iNod,const Vector &rf) const

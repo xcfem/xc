@@ -194,7 +194,8 @@ class Element: public MeshComponent
     virtual const Matrix &getInitialStiff(void) const= 0;
     virtual const Matrix &getDamp(void) const;
     virtual const Matrix &getMass(void) const;
-
+    Matrix getNodeMatrixComponents(const Node *,const Matrix &) const;
+ 
     // methods for applying loads
     virtual void zeroLoad(void);
     virtual void createInertiaLoad(const Vector &);

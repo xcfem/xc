@@ -110,6 +110,10 @@ class DqPtrsElem;
 //! retrieve these quantities.
 class Node: public MeshComponent
   {
+  public:
+    // typedefs.
+    typedef std::set<Element *> ElementPtrSet; //!< Container of element pointers.
+    typedef std::set<const Element *> ElementConstPtrSet; //!< Container of const element pointers.
   private:
     // private data associated with each node object
     int numberDOF; //!< number of DOFs at Node
@@ -144,6 +148,9 @@ class Node: public MeshComponent
     std::set<int> freeze_constraints;//!< Tags of the constraints created by freeze() method.
     const ID &get_id_constraints(void) const;
     void set_id_constraints(const ID &);
+    
+    Matrix get_element_stiff(const ElementConstPtrSet &,bool initial) const;
+    Matrix get_constraints_stiff(void) const;
 
     static DefaultTag defaultTag; //<! tag for next new node.
   protected:
@@ -152,10 +159,6 @@ class Node: public MeshComponent
     int sendData(Communicator &);
     int recvData(const Communicator &);
   public:
-    // typedefs.
-    typedef std::set<Element *> ElementPtrSet; //!< Container of element pointers.
-    typedef std::set<const Element *> ElementConstPtrSet; //!< Container of const element pointers.
-    
     // constructors
     Node(int classTag);
     Node(int tag, int classTag);
@@ -345,6 +348,8 @@ class Node: public MeshComponent
     virtual int addReactionForce(const Vector &, double factor);
     virtual int resetReactionForce(bool inclInertia);
     bool checkReactionForce(const double &) const;
+    Vector getTangentStiff(const ElementConstPtrSet &,const Vector &) const;
+    Vector getInitialStiff(const ElementConstPtrSet &,const Vector &) const;
 
     // AddingSensitivity:BEGIN /////////////////////////////////////////
     int addInertiaLoadSensitivityToUnbalance(const Vector &accel, double fact = 1.0, bool tag=false);    
