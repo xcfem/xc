@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 ''' Classes and functions for limit state checking according to Eurocode 3. '''
+from __future__ import print_function
 from __future__ import division
 
 __author__= "Luis C. Pérez Tato (LCPT) Ana Ortega (AO_O)"
@@ -179,15 +180,15 @@ def getMcr(shape,L,Mi,supportCoefs= SupportCoefficients()):
     sum1= (supportCoefs.ky/supportCoefs.kw)**2*shape.Iw()/shape.Iy()
     sum2= GIt/Mcr0
     f2= math.sqrt(sum1+sum2)
-    # print '  L= ', L
-    # print '  kyL2= ', kyL2
-    # print '  GJ= ', GIt/1e3
-    # print '  Iw= ', shape.Iw()*100**6, ' cm^6'
-    # print '  C1= ', C1
-    # print '  Mcr0=', Mcr0/1e3  
-    # print '  sum1= ', sum1
-    # print '  sum2= ', sum2
-    # print '  f2= ', f2
+    # print('  L= ', L)
+    # print('  kyL2= ', kyL2)
+    # print('  GJ= ', GIt/1e3)
+    # print('  Iw= ', shape.Iw()*100**6, ' cm^6')
+    # print('  C1= ', C1)
+    # print('  Mcr0=', Mcr0/1e3  )
+    # print('  sum1= ', sum1)
+    # print('  sum2= ', sum2)
+    # print('  f2= ', f2)
     return C1*Mcr0*f2
 
 def getLateralBucklingNonDimensionalBeamSlenderness(shape,sectionClass,L,Mi,supportCoefs= SupportCoefficients()):
