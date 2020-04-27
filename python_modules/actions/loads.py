@@ -16,6 +16,7 @@ from misc_utils import log_messages as lmsg
 import numpy as np
 from actions import load_cases
 from actions.imposed_strain import imp_strain as imps 
+from misc_utils import log_messages as lmsg
 
 class BaseVectorLoad(object):
     '''Base class for loads introduced using a load as an xcVector 
@@ -54,15 +55,23 @@ class InertialLoad(BaseVectorLoad):
 
     def appendLoadToCurrentLoadPattern(self):
         for ms in self.lstMeshSets:
+            el_group= ms.primitiveSet.elements
             if 'shell' in ms.elemType.lower():
                 loadVector= ms.matSect.getAreaDensity()*self.loadVector
-                el_group= ms.primitiveSet.elements
+                for e in el_group:
+                    e.vector3dUniformLoadGlobal(loadVector)
             elif 'beam' in ms.elemType.lower():
                 loadVector= ms.matSect.getRho()*self.loadVector
-                el_group= ms.primitiveSet.elements
-            for e in el_group:
-                e.vector3dUniformLoadGlobal(loadVector)
-                
+                for e in el_group:
+                    e.vector3dUniformLoadGlobal(loadVector)
+            elif 'truss' in ms.elemType.lower():
+                for e in el_group:
+                    e.createInertiaLoad(-self.loadVector)
+            else:
+                lmsg.warning('Inertial load not applied on ' + ms.elemType + 'elements')    
+
+
+
     def getMaxMagnitude(self):
         '''Return the maximum magnitude of the vector loads'''
         maxValue=0

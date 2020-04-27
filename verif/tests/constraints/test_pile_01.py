@@ -42,7 +42,7 @@ Fh=706.9e3
 N=-1532e3
 
 #End data
-LeqPile=round(math.pi**0.5*fiPile/2.,3)
+LeqPile=round(math.pi**0.5*fiPile/2.,3) # equivalent side of the square pile
 
 #Materials
 concrete=EHE_materials.HA30
