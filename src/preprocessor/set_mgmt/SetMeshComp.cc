@@ -384,6 +384,24 @@ SlidingVectorsSystem3d XC::SetMeshComp::getResistingSlidingVectorsSystem3d(const
     return retval;    
   }
 
+//! @brief Return the contribution of the elements
+//! to the tangent stiffness of the node argument.
+//!
+//! Each of the elements connected to the node contributes to the stiffness
+//! of the model in that node. This methods return the contribution (if any)
+//! of the elements being passed as parameter.
+XC::Matrix XC::SetMeshComp::getTangentStiff(const Node &n)
+  { return n.getTangentStiff(elements.getConstPtrSet()); }
+
+//! @brief Return the contribution of the elements
+//! to the tangent stiffness of the node argument.
+//!
+//! Each of the elements connected to the node contributes to the stiffness
+//! of the model in that node. This methods return the contribution (if any)
+//! of the elements being passed as parameter.
+XC::Matrix XC::SetMeshComp::getInitialStiff(const Node &n)
+  { return n.getInitialStiff(elements.getConstPtrSet()); }
+
 //! @brief Creates the inertia load that corresponds to the
 //! acceleration argument.
 void XC::SetMeshComp::createInertiaLoads(const Vector &accel)

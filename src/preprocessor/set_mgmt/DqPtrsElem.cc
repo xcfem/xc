@@ -224,6 +224,15 @@ std::set<int> XC::DqPtrsElem::getTags(void) const
     return retval;
   }
 
+//! @brief Returns the element pointers in a set.
+std::set<const XC::Element *>XC::DqPtrsElem::getConstPtrSet(void) const
+  {
+    std::set<const Element *> retval;
+    for(const_iterator i= begin();i!=end();i++)
+      retval.insert(*i);
+    return retval;
+  }
+
 //! @brief Returns the boundary of the element set.
 BND3d XC::DqPtrsElem::Bnd(const double &factor) const
   {

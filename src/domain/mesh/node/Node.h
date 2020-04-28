@@ -348,8 +348,8 @@ class Node: public MeshComponent
     virtual int addReactionForce(const Vector &, double factor);
     virtual int resetReactionForce(bool inclInertia);
     bool checkReactionForce(const double &) const;
-    Vector getTangentStiff(const ElementConstPtrSet &,const Vector &) const;
-    Vector getInitialStiff(const ElementConstPtrSet &,const Vector &) const;
+    Matrix getTangentStiff(const ElementConstPtrSet &) const;
+    Matrix getInitialStiff(const ElementConstPtrSet &) const;
 
     // AddingSensitivity:BEGIN /////////////////////////////////////////
     int addInertiaLoadSensitivityToUnbalance(const Vector &accel, double fact = 1.0, bool tag=false);    

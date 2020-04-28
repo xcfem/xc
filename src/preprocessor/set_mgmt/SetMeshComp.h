@@ -222,6 +222,8 @@ class SetMeshComp: public SetBase
     virtual void Transform(const size_t &indice_trf);
 
     SlidingVectorsSystem3d getResistingSlidingVectorsSystem3d(const Plane &,const Pos3d &,const double &,const bool &) const;
+    Matrix getTangentStiff(const Node &);
+    Matrix getInitialStiff(const Node &);
 
     void createInertiaLoads(const Vector &);
 

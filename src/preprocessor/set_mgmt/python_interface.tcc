@@ -127,7 +127,12 @@ class_<XC::SetMeshComp, bases<XC::SetBase>>("SetMeshComp",no_init)
   .def("getNumDeadNodes",&XC::SetMeshComp::getNumDeadNodes,"Number of inactive nodes.")
   .def("getNumLiveNodes",&XC::SetMeshComp::getNumLiveNodes,"Number of active nodes.")
   .def("transforms",transforms,"Apply transformation to set members.")
-  .def("getResistingSlidingVectorsSystem3d",&XC::SetMeshComp::getResistingSlidingVectorsSystem3d)
+
+  .def("getResistingSlidingVectorsSystem3d",&XC::SetMeshComp::getResistingSlidingVectorsSystem3d, "Return the resultant of the forces over the nodes near to the plane, of the elements behind the plane.")
+
+  .def("getTangentStiffness",&XC::SetMeshComp::getTangentStiff,"getTangentStiffness(node) return the contribution of the elements to the tangent stiffness of the node argument.")
+  .def("getInitialStiffness",&XC::Node::getInitialStiff,"getInitialStiffness(elementSet) return the contribution of the elements to the initial stiffness of the node argument.")
+
   .def("appendFromGeomEntity", &XC::SetMeshComp::appendFromGeomEntity,"Extend this set with the nodes and elements of the geometric entity being passed as parameter.")
   .def("clear",&XC::SetMeshComp::clear,"Removes all items.")
   .def("pickNodesInside",&XC::SetMeshComp::pickNodesInside,"pickNodesInside(newSetName, geomObj, tol) return a set with the nodes inside the geometric object.") 

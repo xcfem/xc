@@ -2151,24 +2151,23 @@ XC::Matrix XC::Node::get_constraints_stiff(void) const
     return retval; 
   }
 
-//! @brief Return the tangent stiffness components for a displacement
-//! in the direction argurment.
-XC::Vector XC::Node::getTangentStiff(const ElementConstPtrSet &elements,const Vector &dir) const
-  {
-    Matrix K= get_element_stiff(elements,false)+get_constraints_stiff();
-    const Vector tmp= dir.Normalized(); // make sure that it's a unit displacement.
-    return K*tmp;
-  }
+//! @brief Return the tangent stiffness contribution of the elements
+//! argument.
+//!
+//! Each of the elements connected to the node contributes to the stiffness
+//! of the model in that node. This methods return the contribution (if any)
+//! of the elements being passed as parameter.
+XC::Matrix XC::Node::getTangentStiff(const ElementConstPtrSet &elements) const
+  { return get_element_stiff(elements,false)+get_constraints_stiff(); }
 
-
-//! @brief Return the tangent stiffness components for a displacement
-//! in the direction argurment.
-XC::Vector XC::Node::getInitialStiff(const ElementConstPtrSet &elements,const Vector &dir) const
-  {
-    Matrix K= get_element_stiff(elements,true)+get_constraints_stiff();
-    const Vector tmp= dir.Normalized(); // make sure that it's a unit displacement.
-    return K*tmp;
-  }
+//! @brief Return the initial stiffness contribution of the elements
+//! argument.
+//!
+//! Each of the elements connected to the node contributes to the stiffness
+//! of the model in that node. This methods return the contribution (if any)
+//! of the elements being passed as parameter.
+XC::Matrix XC::Node::getInitialStiff(const ElementConstPtrSet &elements) const
+  { return get_element_stiff(elements,true)+get_constraints_stiff(); }
 
 //! @brief Return the node reaction
 const XC::Vector &XC::Node::getReaction(void) const

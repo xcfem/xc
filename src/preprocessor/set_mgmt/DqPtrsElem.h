@@ -61,6 +61,7 @@ class DqPtrsElem: public DqPtrsKDTree<Element,KDTreeElements>
     void alive_elements(void);
 
     std::set<int> getTags(void) const;
+    std::set<const Element *> getConstPtrSet(void) const;
 
     void calc_resisting_force(void);
 

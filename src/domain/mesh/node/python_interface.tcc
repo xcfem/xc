@@ -87,8 +87,11 @@ class_<XC::Node, XC::Node *, bases<XC::MeshComponent>, boost::noncopyable >("Nod
   .def("getResistingForce",make_function(&XC::Node::getResistingForce,return_value_policy<copy_const_reference>()))
   .def("getResistingSlidingVectorsSystem3d",&XC::Node::getResistingSlidingVectorsSystem3d)
 
+  .def("getTangentStiffness",&XC::Node::getTangentStiff,"getTangentStiffness(elementSet) return the tangent stiffness contribution of the elements argument.")
+  .def("getInitialStiffness",&XC::Node::getInitialStiff,"getInitialStiffness(elementSet) return the initial stiffness contribution of the elements argument.")
+
   .def("setNumEigenvectors",&XC::Node::setNumEigenvectors,"set the number of eigenvectors for the node.")
-  .def("setEigenvector",&XC::Node::setEigenvector,"setEigenvector(mode, vector) set the igenvector for i-th mode.")
+  .def("setEigenvector",&XC::Node::setEigenvector,"setEigenvector(mode, vector) set the eigenvector for i-th mode.")
   .add_property("getNumModes",&XC::Node::getNumModes,"return the number of modes for the node.")
   .def("getEigenvector",&XC::Node::getEigenvector,"getEigenvector(i) returns the eigenvector that corresponds to i-th mode.")
   .def("getNormalizedEigenvector",&XC::Node::getNormalizedEigenvector,"getNormalizedEigenvector(i) returns the eigenvector that corresponds to i-th mode.")
