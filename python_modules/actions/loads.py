@@ -70,8 +70,6 @@ class InertialLoad(BaseVectorLoad):
             else:
                 lmsg.warning('Inertial load not applied on ' + ms.elemType + 'elements')    
 
-
-
     def getMaxMagnitude(self):
         '''Return the maximum magnitude of the vector loads'''
         maxValue=0
@@ -109,11 +107,11 @@ class NodalLoad(BaseVectorLoad):
 
            
 class UniformLoadOnBeams(BaseVectorLoad):
-    '''Uniform load applied on the beam elements generated from
-    all the lines in the xcSet.
+    '''Uniform load applied on the beam elements in the set passed as 
+    parameter.
 
     :ivar name:       name identifying the load
-    :ivar xcSet:      set that contains the lines
+    :ivar xcSet:      set that contains the elements
     :ivar loadVector: xc.Vector with the six components of the load: 
                       xc.Vector([Fx,Fy,Fz,Mx,My,Mz]).
     :ivar refSystem: reference system in which loadVector is defined:
@@ -137,6 +135,31 @@ class UniformLoadOnBeams(BaseVectorLoad):
         '''Return the maximum magnitude of the vector loads'''
         return self.loadVector.Norm()
         
+class UniformLoadOnTrusses(BaseVectorLoad):
+    '''Uniform load applied on the truss elements elements in 
+    the set passed as parameter. Load is applied as point
+    loads in the extremities of the truss element.
+
+    :ivar name:       name identifying the load
+    :ivar xcSet:      set that contains the lines
+    :ivar loadVector: xc.Vector with the six components of the 
+                      uniform load  in global coordinates
+                      xc.Vector([Fx,Fy,Fz,Mx,My,Mz]).
+    '''
+    def __init__(self,name, xcSet, loadVector):
+        super(UniformLoadOnTrusses,self).__init__(name,loadVector)
+        self.xcSet=xcSet
+
+    def appendLoadToCurrentLoadPattern(self):
+        ''' Append load to the current load pattern.'''
+        for e in self.xcSet.elements:
+            L=e.getL(); n1=e.getNodes[0]; n2=e.getNodes[1]
+            F_nod=self.loadVector*L/2.
+            n1.newLoad(F_nod); n2.newLoad(F_nod)
+ 
+    def getMaxMagnitude(self):
+        '''Return the maximum magnitude of the vector loads'''
+        return self.loadVector.Norm()
 
 class UniformLoadOnLines(BaseVectorLoad):
     '''Uniform load applied to all the lines (not necessarily defined as lines
@@ -439,3 +462,82 @@ class StrainGradientThermalLoadOnShells(imps.gradThermalStrain):
             eLoad.setStrainComp(1,self.DOF,self.curvature)
             eLoad.setStrainComp(2,self.DOF,self.curvature)
             eLoad.setStrainComp(3,self.DOF,self.curvature)
+
+class WindLoadOnBeams(BaseVectorLoad):
+    '''Wind load applied on the beam elements in the set passed as 
+    parameter.
+
+    :ivar name:       name identifying the load
+    :ivar xcSet:      set that contains the elements
+    :ivar windParams: instance of class base_wind.windParams defining 
+                      the parameters to calculate wind pressure.
+    :ivar Cp: pressure coefficient
+    :ivar surfExpossed: surface expossed to wind per unit length 
+                        of beam
+    :ivar vDirWind: unitary xc.Vector in Wind direction (global coordinates)
+                         xc.Vector([Wx,Wy,Wz]).
+    '''
+    def __init__(self,name, xcSet, windParams,Cp,surfExpossed,vDirWind):
+        super(WindLoadOnBeams,self).__init__(name,vDirWind)
+        self.xcSet=xcSet
+        self.windParams=windParams
+        self.Cp=Cp
+        self.surfExpossed=surfExpossed
+
+
+    def appendLoadToCurrentLoadPattern(self):
+        ''' Append load to the current load pattern.'''
+        for e in self.xcSet.elements:
+            zCoo=e.getPosCentroid(True).z
+            press=self.windParams.qz(zCoo)*self.Cp*self.surfExpossed
+            e.vector3dUniformLoadGlobal(self.loadVector*press)
+            
+    def getMaxMagnitude(self):
+        '''Return the maximum magnitude of the vector loads'''
+        zMax=-1e6
+        for e in self.xcSet.elements:
+            zMax=max(zMax,e.getPosCentroid(True).z)
+        maxValue=self.windParams.qz(zCoo)*self.Cp*self.surfExpossed
+        return maxValue
+
+class WindLoadOnTrusses(BaseVectorLoad):
+    '''Wind load applied on the truss elements in the set passed as 
+    parameter.
+
+    :ivar name:       name identifying the load
+    :ivar xcSet:      set that contains the elements
+    :ivar windParams: instance of class base_wind.windParams defining 
+                      the parameters to calculate wind pressure.
+    :ivar Cp:         pressure coefficient
+    :ivar surfExpossed: surface expossed to wind per unit length 
+                        of truss
+    :ivar vDirWind: unitary xc.Vector in Wind direction (global coordinates)
+                         xc.Vector([Wx,Wy,Wz]).
+    '''
+    def __init__(self,name, xcSet, windParams,Cp,surfExpossed,vDirWind):
+        super(WindLoadOnTrusses,self).__init__(name,vDirWind)
+        self.xcSet=xcSet
+        self.windParams=windParams
+        self.Cp=Cp
+        self.surfExpossed=surfExpossed
+
+    def appendLoadToCurrentLoadPattern(self):
+        ''' Append load to the current load pattern.'''
+        for e in self.xcSet.elements:
+            L=e.getL(); n1=e.getNodes[0]; n2=e.getNodes[1]
+            zCoo=e.getPosCentroid(True).z
+            press=self.windParams.qz(zCoo)*self.Cp*self.surfExpossed
+            F_nod=self.loadVector*(L*press/2.)
+            F_nod6comp=xc.Vector([F_nod[0],F_nod[1],F_nod[2],0.,0.,0.])
+            n1.newLoad(F_nod6comp); n2.newLoad(F_nod6comp)
+
+            
+    def getMaxMagnitude(self):
+        '''Return the maximum magnitude of the vector loads'''
+        maxValue=0
+        for e in self.xcSet.elements:
+            L=e.getL();zCoo=e.getPosCentroid(True).z
+            f=abs(self.windParams.qz(zCoo)*self.Cp*self.surfExpossed*L/2.)
+            maxValue=max(maxValue,f)
+        return maxValue
+
