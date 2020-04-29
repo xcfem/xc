@@ -3,9 +3,10 @@ solu= feProblem.getSoluProc
 solCtrl= solu.getSoluControl
 solModels= solCtrl.getModelWrapperContainer
 sm= solModels.newModelWrapper("sm")
-cHandler= sm.newConstraintHandler("penalty_constraint_handler")
-cHandler.alphaSP= 1.0e15
-cHandler.alphaMP= 1.0e15
+# cHandler= sm.newConstraintHandler("penalty_constraint_handler")
+# cHandler.alphaSP= 1.0e15
+# cHandler.alphaMP= 1.0e15
+cHandler= sm.newConstraintHandler("transformation_constraint_handler")
 
 numberer= sm.newNumberer("default_numberer")
 numberer.useAlgorithm("rcm")

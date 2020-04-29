@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-''' Tomado de la figura 6.22 de "Finite Element Procedures"
-de "Klaus Jurgen Bathe". '''
+''' Taken from figure 6.22 of "Finite Element Procedures"
+ "Klaus Jurgen Bathe". '''
 import xc_base
 import geom
 import xc
