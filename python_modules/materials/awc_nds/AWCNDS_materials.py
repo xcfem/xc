@@ -327,7 +327,7 @@ class MemberBase(object):
         self.connection= connection
         
 class BeamMember(MemberBase):
-    ''' Column member according to chapter 3.3 of NDS-2018.'''
+    ''' Beam member according to chapter 3.3 of NDS-2018.'''
     def __init__(self, unbracedLength, section, connection= buckling_base.MemberConnection()):
         ''' Constructor. '''
         super(BeamMember,self).__init__(unbracedLength, section, connection)
