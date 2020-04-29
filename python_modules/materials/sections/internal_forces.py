@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Material internal forces (generalized stresses).
+'''Material internal forces (generalized stresses).'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2016, LCPT and AOO"
