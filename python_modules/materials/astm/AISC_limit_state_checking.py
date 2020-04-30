@@ -10,10 +10,11 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega@ciccp.es"
 
 import math
+import enum
 from misc_utils import log_messages as lmsg
 
 
-class SectionClasif(Enum):
+class SectionClasif(enum.IntEnum):
     '''Classification of sections for local buckling.'''
     compact= 0
     noncompact= 1
@@ -48,7 +49,7 @@ class Member(object):
         self.sectionClasif= sectionClasif
 
     def getEffectiveLengthX(self):
-        ''' Return the effective length of member for buckling 
+        ''' Return the effective length of member for torsional buckling 
             about longitudinal axis: L_cx.'''
         return self.Kx*self.unbracedLengthX
     
@@ -66,6 +67,9 @@ class Member(object):
         ''' Return the flexural buckling slenderness ratio of the member.
 
         '''
+        sc= self.section.slendernessCheck()
+        if(sc>1.01):
+            lmsg.warning('Member section has slender members. Results are not valid.')
         retval= self.getEffectiveLengthZ()/self.section.get('iz')
         return max(retval,self.getEffectiveLengthY()/self.section.get('iy'))
         
@@ -109,7 +113,7 @@ class Member(object):
         :param Fe: flexural or torsional elastic buckling stress.
         '''
         retval= 0.0
-        if(self.sectionClasif<2):
+        if(self.sectionClasif<SectionClasif.slender):
             sr= self.getFlexuralSlendernessRatio()
             E= self.section.get('E')
             Fy= self.section.steelType.fy
@@ -135,8 +139,20 @@ class Member(object):
             of the member according to equations E4-2, E4-3 and E4-4 of 
             AISC-360-16.
         '''
-        lmsg.error('Torsional and flexural-torsional elastic buckling stress of slender members not implemented yet.')
-        return 0.0
+        retval= 0.0
+        symmetry= self.section.getSymmetry()
+        Lc= self.getEffectiveLengthX()
+        if(symmetry=='double'):
+            retval= self.section.getTorsionalElasticBucklingStress(Lc)
+        elif(symmetry=='simple'):
+            Fex= self.section.getTorsionalElasticBucklingStress(Lc) # E4-7
+            Fez= getFlexuralElasticBucklingStressZ() #E4-5
+            H= self.section.getFlexuralConstant() # E4-8
+            retval= (Fex+Fez)/2/H*(1-math.sqrt(1-(4.0*Fex*Fez*H)/(Fex+Fez)**2))
+        else: # no simmetry: E4-4
+            lmsg.error('Torsional elastic buckling stress for unsymmetric members not implemented yet.')
+            
+        return retval
     
     def getTorsionalCriticalStress(self):
         ''' Return the torsional critical stress of the member according
@@ -144,7 +160,6 @@ class Member(object):
         '''
         Fe= self.getTorsionalElasticBucklingStress()
         return self.getCriticalStress(Fe)
-
     
     def getNominalCompressiveStrength(self):
         ''' Return the nominal compressive strength of the member
@@ -158,5 +173,9 @@ class Member(object):
             return self.getFlexuralCriticalStress()*Ag
         else:
             return self.getTorsionalCriticalStress()*Ag
-        
-       
+
+    def getDesignCompressiveStrength(self):
+        ''' Return the design compressive strength of the member
+            according to section E1 of AISC-360-16.
+        '''
+        return 0.9*self.getNominalCompressiveStrength()

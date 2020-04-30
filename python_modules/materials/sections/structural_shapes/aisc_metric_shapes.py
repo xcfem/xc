@@ -65,6 +65,15 @@ class WShape(structural_steel.IShape):
         less the fillet at each flange (h in AISC tables).'''
         return self.get('d')
       
+    def slendernessCheck(self):
+        ''' Verify that the section doesn't contains slender elements
+            according to table B4.1 a of AISC-360-16.'''
+        E= self.get('E')
+        Fy= self.steelType.fy
+        lambda_r= 0.56*math.sqrt(E/Fy) # Case 1
+        slendernessRatio= self.get('bSlendernessRatio')
+        return slendernessRatio/lambda_r # OK if < 1.0
+
     def getAw(self):
         ''' Return A_w according to AISC specification Section G2.1b'''
         return self.h()*self.get('tw')
@@ -97,6 +106,20 @@ class WShape(structural_steel.IShape):
         #
         Cv1= self.getWebShearStrengthCoefficient()
         return 0.6*self.steelType.fy*self.getAw()*Cv1
+    def getTorsionalElasticBucklingStress(self, Lc):
+        ''' Return the torsional or flexural-torsional elastic buckling stress
+            of the member according to equations E4-2 of AISC-360-16.
+
+        :param Lc: effective length of member for torsional buckling 
+                   about longitudinal axis.
+        '''
+        E= self.get('E')
+        G= self.get('G')
+        Cw= self.get('Cw')
+        J= self.get('It')
+        Iy= self.get('Iy')
+        Iz= self.get('Iz')
+        return (math.pi**2*E*Cw/Lc**2+G*J)/(Iy+Iz)
 
 # *************************************************************************
 # AISC C profiles.
@@ -123,6 +146,44 @@ class CShape(structural_steel.UShape):
 
         '''
         super(CShape,self).__init__(steel,name,C)
+        
+    def slendernessCheck(self):
+        ''' Verify that the section doesn't contains slender elements
+            according to table B4.1 a of AISC-360-16.'''
+        E= self.get('E')
+        Fy= self.steelType.fy
+        lambda_r= 0.56*math.sqrt(E/Fy) # Case 1
+        slendernessRatio= self.get('bSlendernessRatio')
+        return slendernessRatio/lambda_r # OK if < 1.0
+    
+    def getTorsionalElasticBucklingStress(self, Lc):
+        ''' Return the torsional or flexural-torsional elastic buckling stress
+            of the member according to equations E4-7 of AISC-360-16.
+
+        :param Lc: effective length of member for torsional buckling 
+                   about longitudinal axis.
+        '''
+        Ag= self.get('A')
+        E= self.get('E')
+        G= self.get('G')
+        Cw= self.get('Cw')
+        J= self.get('It')
+        Iy= self.get('Iy')
+        Iz= self.get('Iz')
+        z0= self.get('x')-self.get('e0')
+        # Polar radius of gyration about the shear center.
+        r02= z0**2+(Iy+Iz)/Ag # E4-9
+        return (math.pi**2*E*Cw/Lc**2+G*J)/(Ag*r02) # E4-7
+    def getFlexuralConstant(self):
+        ''' Return the flexural constant of the section according
+            to equation E4-8 of AISC-360-16..'''
+        Ag= self.get('A')
+        Iy= self.get('Iy')
+        Iz= self.get('Iz')
+        z0= self.get('x')-self.get('e0')
+        # Polar radius of gyration about the shear center.
+        r02= z0**2+(Iy+Iz)/Ag # E4-9
+        return 1-z0**2/r02
 
 # *************************************************************************
 # AISC Hollow Structural Sections.
@@ -153,6 +214,32 @@ class HSSShape(structural_steel.QHShape):
         ''' Constructor.
         '''
         super(HSSShape,self).__init__(steel,name,HSS)
+    def slendernessCheck(self):
+        ''' Verify that the section doesn't contains slender elements
+            according to table B4.1 a of AISC-360-16.'''
+        E= self.get('E')
+        Fy= self.steelType.fy
+        lambda_r= 1.4*math.sqrt(E/Fy)
+        if('h_flat' in shape): # rectangular
+            slendernessRatio= max(shape['hSlendernessRatio'],shape['bSlendernessRatio'])
+        else:
+            slendernessRatio= shape['slendernessRatio']
+        return slendernessRatio/lambda_r # OK if < 1.0
+    
+    def getTorsionalElasticBucklingStress(self, Lc):
+        ''' Return the torsional or flexural-torsional elastic buckling stress
+            of the member according to equations E4-2 of AISC-360-16.
+
+        :param Lc: effective length of member for torsional buckling 
+                   about longitudinal axis.
+        '''
+        E= self.get('E')
+        G= self.get('G')
+        Cw= self.get('C') #HSS torsional constant.
+        J= self.get('It')
+        Iy= self.get('Iy')
+        Iz= self.get('Iz')
+        return (math.pi**2*E*Cw/Lc**2+G*J)/(Iy+Iz)
 
 # Label conversion metric->US customary | US customary -> metric.
 def getUSLabel(metricLabel):

@@ -58,6 +58,11 @@ class SteelShape(sp.SectionProperties):
     #    super(SteelShape,self).__init__(name,self.shape['E'],self.shape['nu'])
         super(SteelShape,self).__init__(name)
 
+    def getSymmetry(self):
+        ''' Returns the symmetry of the shape: 
+            'double', 'simple' or 'none'.'''
+        return 'none'
+    
     def get(self,code):
         return self.shape[code]
 
@@ -381,7 +386,12 @@ class IShape(SteelShape):
         self.hiHalf= self.get('hi')/2.0 #Half section interior height.
         self.twHalf= self.get('tw')/2.0 #Half web thickness
         self.tileSize= 0.01 #Size of tiles
-        
+
+    def getSymmetry(self):
+        ''' Returns the symmetry of the shape: 
+            'double', 'simple' or 'none'.'''
+        return 'double'
+
     def b(self):
         return self.get('b')
       
@@ -474,7 +484,12 @@ class QHShape(SteelShape):
         super(QHShape,self).__init__(steel,name,table)
         self.bHalf= self.get('b')/2.0 #Half section width
         self.hHalf= self.get('h')/2.0 #Half section height
-        
+
+    def getSymmetry(self):
+        ''' Returns the symmetry of the shape: 
+            'double', 'simple' or 'none'.'''
+        return 'double'
+
     def b(self):
         return self.get('b')
       
@@ -513,7 +528,12 @@ class QHShape(SteelShape):
 class UShape(SteelShape):
     def __init__(self,steel,name,table):
         super(UShape,self).__init__(steel,name,table)
-        
+
+    def getSymmetry(self):
+        ''' Returns the symmetry of the shape: 
+            'double', 'simple' or 'none'.'''
+        return 'simple'
+
     def getRho(self):
         ''' Returns mass per unit lenght. '''
         return self.get('P')
