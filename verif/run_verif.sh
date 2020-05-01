@@ -549,7 +549,7 @@ python tests/materials/awc_nds/test_beam_stability_factor.py
 echo "$BLEU" "    ASTM/AISC tests." "$NORMAL"
 python tests/materials/astm/hss12x8_test.py
 python tests/materials/astm/hss8x8_test.py
-python tests/materials/astm/flexural_member_design_test.py
+python tests/materials/astm/flexural_member_design_test_01.py
 python tests/materials/astm/compression_member_design_test_01.py
 python tests/materials/astm/compression_member_design_test_02.py
 python tests/materials/astm/compression_member_design_test_03.py
