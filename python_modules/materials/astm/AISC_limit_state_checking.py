@@ -21,6 +21,39 @@ class SectionClasif(enum.IntEnum):
     slender= 2
     too_slender= 3
 
+
+# Unbraced segment ascii art:
+#
+#         A      B      C
+#  +------+------+------+------+ 
+#  ^                           ^
+#  0      1      2      3      4
+#
+
+class LateralTorsionalBucklingModificationFactor(object):
+    ''' Calculation of the Cb lateral-torsional buckling modification factor
+    as defined in section F1 (c) of ANSI AISC 360-16.'''
+    def __init__(self,Mi):
+        ''' Constructor.
+
+        :param Mi: bending moment list as follows:
+                   *Mi[0]: Value of moment at the back end of the unbraced segment.
+                   *Mi[1]: Value of moment at quarter point of the unbraced segment (MA in equation F1-1).
+                   *Mi[2]: Value of moment at centerline of the unbraced segment (MB in equation F1-1).
+                   *Mi[3]: Value of moment at three-quarter point of the unbraced segment (MC in equation F1-1).
+                   *Mi[4]: Value of moment at the front end of the unbraced segment.
+        '''
+        self.Mi= list()
+        for m in Mi:
+            self.Mi.append(abs(m)) # absolute value of moments.
+            
+    def getLateralTorsionalBucklingModificationFactor(self):
+        ''' Return the lateral-torsional buckling modification factor
+            according to equation F1-1 of ANSI AISC 360-16.'''
+        mMax= max(self.Mi)
+        denom= 2.5*mMax+3.0*self.Mi[1]+4.0*self.Mi[2]+3.0*self.Mi[3]
+        return 12.5*mMax/denom
+
 class Member(object):
     ''' Beam and column members according to ANSI AISC 360-16.
 
@@ -179,3 +212,16 @@ class Member(object):
             according to section E1 of AISC-360-16.
         '''
         return 0.9*self.getNominalCompressiveStrength()
+
+    def getNominalFlexuralStrength(self, Cb, majorAxis= True):
+        ''' Return the nominal compressive strength of the member
+            according to chapter F of AISC-360-16.
+        '''
+        lateralUnbracedLength= self.getEffectiveLengthX()
+        return self.section.getNominalFlexuralStrength(lateralUnbracedLength, Cb, majorAxis)
+
+    def getDesignFlexuralStrength(self, Cb, majorAxis= True):
+        ''' Return the design flexural strength of the member
+            according to section F1 of AISC-360-16.
+        '''
+        return 0.9*self.getNominalFlexuralStrength(Cb, majorAxis)

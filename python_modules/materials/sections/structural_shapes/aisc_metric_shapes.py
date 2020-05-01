@@ -45,6 +45,136 @@ for item in shapes.W:
     shape['AreaQy']= shape['A']-shape['AreaQz']
 W= shapes.W
 
+def getShapePlasticMoment(shape, majorAxis= True):
+    ''' Return the plastic moment of the shape.
+
+    :param shape: structural shape.
+    :param majorAxis: true if flexure about the major axis.
+    '''
+    Fy= shape.steelType.fy
+    if(majorAxis):
+        retval= Fy*shape.get('Wzpl')
+    else:
+        retval= Fy*shape.get('Wypl')
+
+def getShapeCompactWebAndFlangeRatio(shape, majorAxis= True):
+    ''' If web and flanges are compact according to table 4.1b of 
+        AISC-360-16 return a value less than one.
+
+    :param majorAxis: true if flexure about the major axis.
+    '''
+    return max(shape.compactWebRatio(majorAxis),shape.compactFlangeRatio(majorAxis))
+    
+def getUIShapeRts(shape, majorAxis= True):
+    ''' Return the value of rts according to equation F2-7
+        of AISC-360-16.
+
+    :param shape: I or channel structural shape.
+    :param majorAxis: true if flexure about the major axis.
+    '''
+    if(not majorAxis):
+        lmsg.error('r_{ts} coefficient not implemented for minor axis.')
+    Cw= shape.get('Cw') # Warping constant.
+    Iy= shape.get('Iy') # Moment of inertia about minor axis.
+    Sz= shape.get('Wzel') # Elastic section modulus about major axis.
+    return math.sqrt(math.sqrt(Iy*Cw)/Sz)
+
+def getUIShapeLp(shape, majorAxis= True):
+    '''Return the limiting laterally unbraced length for the limit state
+       of yielding according to equation F2-5 of AISC-360-16.
+
+    :param shape: I or channel structural shape.
+    :param majorAxis: true if flexure about the major axis.
+    '''
+    if(not majorAxis):
+        lmsg.error('L_p not implemented for minor axis.')
+    ry= shape.get('iy') # Radius of gyration about minor axis.
+    E= self.get('E') # Elastic modulus.
+    Fy= shape.steelType.fy # specified minimum yield stress
+    return 1.76*ry*math.sqrt(E/Fy)
+
+def getUIShapeLr(shape, majorAxis= True):
+    '''Return the limiting unbraced length for the limit state 
+       of inelastic lateral-torsional buckling according to
+       equation F2-6 of  AISC-360-16.
+
+    :param shape: I or channel structural shape.
+    :param majorAxis: true if flexure about the major axis.
+    '''
+    if(not majorAxis):
+        lmsg.error('L_r not implemented for minor axis.')
+    rts= shape.getRts()
+    E= self.get('E') # Elastic modulus.
+    Fy= shape.steelType.fy # specified minimum yield stress
+    Sz= shape.get('Wzel') # Elastic section modulus about major axis.
+    h0= shape.get('ho') # Distance between the flange centroids
+    J= shape.get('It') # Torsional moment of inertia
+    c= shape.getCCoefficient()
+    sqrt1= math.sqrt((J*c/Sx/h0)**2+6.76*(0.7*Fy/E)**2)
+    sqrt2= math.sqrt((J*c/Sx/h0)+sqrt1)
+    return 1.95*rts*E/0.7/Fy*sqrt2
+
+def getUIShapeCriticalStress(shape, lateralUnbracedLength, Cb, majorAxis= True):
+    '''Return the critical stress for the limit state 
+       of lateral-torsional buckling according to
+       equation F2-4 of  AISC-360-16.
+
+    :param shape: I or channel structural shape.
+    :param lateralUnbracedLength: length between points that are either 
+                                  braced against lateral displacement of
+                                  the compression flange or braced against 
+                                  twist of the cross section.
+    :param Cb: lateral-torsional buckling modification factor.
+    :param majorAxis: true if flexure about the major axis.
+    '''
+    if(not majorAxis):
+        lmsg.error('L_r not implemented for minor axis.')
+    E= self.get('E') # Elastic modulus.
+    J= shape.get('It') # Torsional moment of inertia
+    Sz= shape.get('Wzel') # Elastic section modulus about major axis.
+    h0= shape.get('ho') # Distance between the flange centroids
+    rts= shape.getRts()
+    Lb_rts2= (lateralUnbracedLength/rts)**2
+    J= shape.get('It') # Torsional moment of inertia
+    c= shape.getCCoefficient()
+    sqroot= math.sqrt(1+0.078*J*c/Sz/h0*Lb_rts2)
+    return Cb*math.pi**2*E/Lb_rts2*sqroot
+
+def getUIShapeNominalFlexuralStrength(shape, lateralUnbracedLength, Cb, majorAxis= True):
+    ''' Return the nominal flexural strength of the member
+        according to equations F2-1 to F2-3 of AISC-360-16.
+
+    :param shape: I or channel structural shape.
+    :param lateralUnbracedLength: length between points that are either 
+                                  braced against lateral displacement of
+                                  the compression flange or braced against 
+                                  twist of the cross section.
+    :param Cb: lateral-torsional buckling modification factor.
+    :param majorAxis: true if flexure about the major axis.
+    '''
+    if(not majorAxis):
+        lmsg.error('Nominal flexural strength not implemented for minor axis.')
+    compactRatio= shape.compactWebAndFlangeRatio(majorAxis)
+    if(compactRatio>1):
+        lmsg.error('Nominal flexural strength for noncompact or slender sections not implemented yet.')
+    Lb= lateralUnbracedLength
+    Mp= shape.getPlasticMoment(majorAxis) # plastic moment.
+    Mn= 0.0
+    Lp= shape.getLp(majorAxis)
+    if(Lb<Lp):
+        Mn= Mp
+    else:
+        Lr= shape.getLr(majorAxis)
+        Sz= shape.get('Wzel') # Elastic section modulus about major axis.
+        if(Lb<=Lr):
+            Fy= shape.steelType.fy # specified minimum yield stress
+            Mn= Cb*(Mp-(Mp-0.7*Fy*Sz)*((Lb-Lp)/(Lr-Lp)))
+            Mn= min(Mn,Mp)
+        else:
+            Fcr= shape.getCriticalStress(Lb, Cb, majorAxis)
+            Mn= min(Fcr*Sz, Mp)
+    return Mn
+
 class WShape(structural_steel.IShape):
     '''W shape
 
@@ -64,10 +194,64 @@ class WShape(structural_steel.IShape):
         ''' Return internal web height: clear distance between flanges
         less the fillet at each flange (h in AISC tables).'''
         return self.get('d')
-      
+
+    def compactFlangeRatio(self, majorAxis= True):
+        ''' If flanges are compact according to table 4.1b of 
+            AISC-360-16 return a value less than one.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        lambda_p= 0.38*math.sqrt(E/Fy) # Case 10 or case 13
+        slendernessRatio= self.get('bSlendernessRatio')
+        return slendernessRatio/lambda_p # if <1 then flanges are compact.
+    
+    def slenderFlangeRatio(self, majorAxis= True):
+        ''' If flanges are noncompact according to table 4.1b of 
+            AISC-360-16 return a value less than one otherwise
+            they are slender.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        lambda_r= 1.0*math.sqrt(E/Fy) # Case 10 or case 13
+        slendernessRatio= self.get('bSlendernessRatio')
+        return slendernessRatio/lambda_r # if <1 then flanges are noncompact.
+
+    def compactWebRatio(self, majorAxis= True):
+        ''' If web is compact according to case 15 of table 4.1b of 
+            AISC-360-16 return a value less than one.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        if(not majorAxis):
+            lmsg.error('compact web ratio not implemented for minor axis.')
+        lambda_p= 3.76*math.sqrt(E/Fy) # Case 15
+        slendernessRatio= self.get('hSlendernessRatio')
+        return slendernessRatio/lambda_p # if <1 then web is compact.
+
+    def slenderWebRatio(self, majorAxis= True):
+        ''' If web is noncompact according to case 15 of table 4.1b of 
+            AISC-360-16 return a value less than one, otherwise the web
+            is slender.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        if(not majorAxis):
+            lmsg.error('compact web ratio not implemented for minor axis.')
+        lambda_p= 5.70*math.sqrt(E/Fy) # Case 15
+        slendernessRatio= self.get('hSlendernessRatio')
+        return slendernessRatio/lambda_p # if <1 then web is noncompact.
+    
+    def compactWebAndFlangeRatio(shape, majorAxis= True):
+        ''' If web and flanges are compact according to table 4.1b of 
+            AISC-360-16 return a value less than one.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        return getShapeCompactWebAndFlangeRatio(self,majorAxis)
+
     def slendernessCheck(self):
         ''' Verify that the section doesn't contains slender elements
-            according to table B4.1 a of AISC-360-16.'''
+            according to table B4.1a of AISC-360-16.'''
         E= self.get('E')
         Fy= self.steelType.fy
         lambda_r= 0.56*math.sqrt(E/Fy) # Case 1
@@ -106,6 +290,7 @@ class WShape(structural_steel.IShape):
         #
         Cv1= self.getWebShearStrengthCoefficient()
         return 0.6*self.steelType.fy*self.getAw()*Cv1
+    
     def getTorsionalElasticBucklingStress(self, Lc):
         ''' Return the torsional or flexural-torsional elastic buckling stress
             of the member according to equations E4-2 of AISC-360-16.
@@ -120,7 +305,72 @@ class WShape(structural_steel.IShape):
         Iy= self.get('Iy')
         Iz= self.get('Iz')
         return (math.pi**2*E*Cw/Lc**2+G*J)/(Iy+Iz)
+    
+    def getPlasticMoment(self, majorAxis= True):
+        ''' Return the plastic moment of the section.
 
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        return getShapePlasticMoment(self,majorAxis)
+
+    def getCCoefficient(self, majorAxis= True):
+        ''' Return the c coefficient according to equation
+            F2-8a of AISC-360-16.'''
+        return 1.0
+
+    def getRts(self, majorAxis= True):
+        ''' Return the value of rts according to equation F2-7
+            of AISC-360-16.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        return getUIShapeRts(self, majorAxis)
+
+    def getLp(self, majorAxis= True):
+        ''' Return the limiting laterally unbraced length for the 
+            limit state of yielding according to
+            equation F2-5 of AISC-360-16.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        return getUIShapeLp(self, majorAxis)
+    
+    def getLr(self, majorAxis= True):
+        ''' Return the limiting unbraced length for the limit state 
+            of inelastic lateral-torsional buckling according to
+            equation F2-6 of  AISC-360-16.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        return getUIShapeLr(self, majorAxis)
+    
+    def getCriticalStress(self, lateralUnbracedLength, Cb, majorAxis= True):
+        '''Return the critical stress for the limit state 
+           of lateral-torsional buckling according to
+           equation F2-4 of  AISC-360-16.
+
+        :param majorAxis: true if flexure about the major axis.
+        :param lateralUnbracedLength: length between points that are either 
+                                      braced against lateral displacement of
+                                      the compression flange or braced against 
+                                      twist of the cross section.
+        :param Cb: lateral-torsional buckling modification factor.
+        '''
+        return getUIShapeCriticalStress(self, lateralUnbracedLength, Cb, majorAxis)
+    def getNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
+        ''' Return the nominal flexural strength of the member
+            according to equations F2-1 to F2-3 of AISC-360-16.
+
+        :param lateralUnbracedLength: length between points that are either 
+                                      braced against lateral displacement of
+                                      the compression flange or braced against 
+                                      twist of the cross section.
+        :param Cb: lateral-torsional buckling modification factor.
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        return getUIShapeNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis)
+
+ 
 # *************************************************************************
 # AISC C profiles.
 # *************************************************************************
@@ -147,6 +397,60 @@ class CShape(structural_steel.UShape):
         '''
         super(CShape,self).__init__(steel,name,C)
         
+    def compactFlangeRatio(self, majorAxis= True):
+        ''' If flanges are compact according to table 4.1b of 
+            AISC-360-16 return a value less than one.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        lambda_p= 0.38*math.sqrt(E/Fy) # Case 10 or case 13
+        slendernessRatio= self.get('bSlendernessRatio')
+        return slendernessRatio/lambda_p # if <1 then flanges are compact.
+    
+    def slenderFlangeRatio(self, majorAxis= True):
+        ''' If flanges are noncompact according to table 4.1b of 
+            AISC-360-16 return a value less than one otherwise
+            they are slender.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        lambda_r= 1.0*math.sqrt(E/Fy) # Case 10 or case 13
+        slendernessRatio= self.get('bSlendernessRatio')
+        return slendernessRatio/lambda_r # if <1 then flanges are noncompact.
+    
+    def compactWebRatio(self, majorAxis= True):
+        ''' If web is compact according to case 15 of table 4.1b of 
+            AISC-360-16 return a value less than one.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        if(not majorAxis):
+            lmsg.error('compact web ratio not implemented for minor axis.')
+        lambda_p= 3.76*math.sqrt(E/Fy) # Case 15
+        slendernessRatio= self.get('hSlendernessRatio')
+        return slendernessRatio/lambda_p # if <1 then web is compact.
+
+    def slenderWebRatio(self, majorAxis= True):
+        ''' If web is noncompact according to case 15 of table 4.1b of 
+            AISC-360-16 return a value less than one, otherwise the web
+            is slender.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        if(not majorAxis):
+            lmsg.error('compact web ratio not implemented for minor axis.')
+        lambda_p= 5.70*math.sqrt(E/Fy) # Case 15
+        slendernessRatio= self.get('hSlendernessRatio')
+        return slendernessRatio/lambda_p # if <1 then web is noncompact.
+    
+    def compactWebAndFlangeRatio(shape, majorAxis= True):
+        ''' If web and flanges are compact according to table 4.1b of 
+            AISC-360-16 return a value less than one.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        return getShapeCompactWebAndFlangeRatio(self,majorAxis)
+    
     def slendernessCheck(self):
         ''' Verify that the section doesn't contains slender elements
             according to table B4.1 a of AISC-360-16.'''
@@ -174,6 +478,7 @@ class CShape(structural_steel.UShape):
         # Polar radius of gyration about the shear center.
         r02= z0**2+(Iy+Iz)/Ag # E4-9
         return (math.pi**2*E*Cw/Lc**2+G*J)/(Ag*r02) # E4-7
+    
     def getFlexuralConstant(self):
         ''' Return the flexural constant of the section according
             to equation E4-8 of AISC-360-16..'''
@@ -184,6 +489,76 @@ class CShape(structural_steel.UShape):
         # Polar radius of gyration about the shear center.
         r02= z0**2+(Iy+Iz)/Ag # E4-9
         return 1-z0**2/r02
+    
+    def getCCoefficient(self, majorAxis= True):
+        ''' Return the c coefficient according to equation
+            F2-8b of AISC-360-16.'''
+        if(not majorAxis):
+            lmsg.error('c coefficient not implemented for minor axis.')
+        h0= self.get('ho') # Distance between the flange centroids
+        Cw= self.get('Cw') # Warping constant.
+        Iy= self.get('Iy') # Moment of inertia about minor axis.
+        return h0/2.0*math.sqrt(Iy/Cw)
+
+    def getPlasticMoment(self, majorAxis= True):
+        ''' Return the plastic moment of the section.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        return getShapePlasticMoment(self,majorAxis)
+
+    def getRts(self, majorAxis= True):
+        ''' Return the squared value of rts according to equation F2-7
+            of AISC-360-16.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        return getUIShapeRts(self, majorAxis)
+
+    def getLp(self, majorAxis= True):
+        ''' Return the limiting laterally unbraced length for the 
+            limit state of yielding according to
+            equation F2-5 of AISC-360-16.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        return getUIShapeLp(self, majorAxis)
+    
+    def getLr(self, majorAxis= True):
+        ''' Return the limiting unbraced length for the limit state 
+            of inelastic lateral-torsional buckling according to
+            equation F2-6 of  AISC-360-16.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        return getUIShapeLr(self, majorAxis)
+
+    def getCriticalStress(self, lateralUnbracedLength, Cb, majorAxis= True):
+        '''Return the critical stress for the limit state 
+           of lateral-torsional buckling according to
+           equation F2-4 of  AISC-360-16.
+
+        :param majorAxis: true if flexure about the major axis.
+        :param lateralUnbracedLength: length between points that are either 
+                                      braced against lateral displacement of
+                                      the compression flange or braced against 
+                                      twist of the cross section.
+        :param Cb: lateral-torsional buckling modification factor.
+        '''
+        return getUIShapeCriticalStress(self, lateralUnbracedLength, Cb, majorAxis)
+
+    def getNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
+        ''' Return the nominal compressive strength of the member
+            according to equations F2-1 to F2-3 of AISC-360-16.
+
+        :param lateralUnbracedLength: length between points that are either 
+                                      braced against lateral displacement of
+                                      the compression flange or braced against 
+                                      twist of the cross section.
+        :param Cb: lateral-torsional buckling modification factor.
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        return getUIShapeNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis)
 
 # *************************************************************************
 # AISC Hollow Structural Sections.
@@ -214,15 +589,114 @@ class HSSShape(structural_steel.QHShape):
         ''' Constructor.
         '''
         super(HSSShape,self).__init__(steel,name,HSS)
+
+    def isRectangular(self):
+        ''' Return true if it's a rectangular HSS section.'''
+        return ('h_flat' in shape)
+
+    def isRound(self):
+        ''' Return true if it's a rectangular HSS section.'''
+        return not self.isRectangular()
+
+    def compactFlangeRatio(self, majorAxis= True):
+        ''' If flanges are compact according to table 4.1b of 
+            AISC-360-16 return a value less than one.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        retval= 10.0
+        if(isRound):
+            slendernessRatio= shape['slendernessRatio']
+            lambda_p= 0.07*(E/Fy) # Case 20 (no square root here)
+            retval= slendernessRatio/lambda_p
+        else:
+            lambda_p= 1.12*math.sqrt(E/Fy) # Case 17
+            if(majorAxis):
+                slendernessRatio= self.get('bSlendernessRatio')
+            else:
+                slendernessRatio= self.get('hSlendernessRatio')
+            retval= slendernessRatio/lambda_p
+        return retval # if <1 then flanges are compact.
+    
+    def slenderFlangeRatio(self, majorAxis= True):
+        ''' If flanges are noncompact according to table 4.1b of 
+            AISC-360-16 return a value less than one otherwise
+            they are slender.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        retval= 10.0
+        if(isRound):
+            slendernessRatio= shape['slendernessRatio']
+            lambda_r= 0.31*(E/Fy) # Case 20 (no square root here)
+            retval= slendernessRatio/lambda_r
+        else:
+            lambda_r= 1.40*math.sqrt(E/Fy) # Case 17
+            if(majorAxis):
+                slendernessRatio= self.get('bSlendernessRatio')
+            else:
+                slendernessRatio= self.get('hSlendernessRatio')
+            retval= slendernessRatio/lambda_r
+        return retval # if <1 then flanges are compact.
+    
+    def compactWebRatio(self, majorAxis= True):
+        ''' If webs are compact according to table 4.1b of 
+            AISC-360-16 return a value less than one.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        retval= 10.0
+        if(isRound):
+            slendernessRatio= shape['slendernessRatio']
+            lambda_p= 0.07*(E/Fy) # Case 20 (no square root here)
+            retval= slendernessRatio/lambda_p
+        else:
+            lambda_p= 2.42*math.sqrt(E/Fy) # Case 19
+            if(majorAxis):
+                slendernessRatio= self.get('bSlendernessRatio')
+            else:
+                slendernessRatio= self.get('hSlendernessRatio')
+            retval= slendernessRatio/lambda_p
+        return retval # if <1 then webs are compact.
+    
+    def slenderWebRatio(self, majorAxis= True):
+        ''' If web is noncompact according to table 4.1b of 
+            AISC-360-16 return a value less than one otherwise
+            it's slender.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        retval= 10.0
+        if(isRound):
+            slendernessRatio= shape['slendernessRatio']
+            lambda_r= 0.31*(E/Fy) # Case 20 (no square root here)
+            retval= slendernessRatio/lambda_r
+        else:
+            lambda_r= 5.7*math.sqrt(E/Fy) # Case 19
+            if(majorAxis):
+                slendernessRatio= self.get('bSlendernessRatio')
+            else:
+                slendernessRatio= self.get('hSlendernessRatio')
+            retval= slendernessRatio/lambda_r
+        return retval # if <1 then webs are noncompact.
+    
+    def compactWebAndFlangeRatio(shape, majorAxis= True):
+        ''' If web and flanges are compact according to table 4.1b of 
+            AISC-360-16 return a value less than one.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        return getShapeCompactWebAndFlangeRatio(self,majorAxis)
+    
     def slendernessCheck(self):
         ''' Verify that the section doesn't contains slender elements
             according to table B4.1 a of AISC-360-16.'''
         E= self.get('E')
         Fy= self.steelType.fy
         lambda_r= 1.4*math.sqrt(E/Fy)
-        if('h_flat' in shape): # rectangular
+        if(self.isRectangular()): # rectangular
             slendernessRatio= max(shape['hSlendernessRatio'],shape['bSlendernessRatio'])
-        else:
+        else: # round
             slendernessRatio= shape['slendernessRatio']
         return slendernessRatio/lambda_r # OK if < 1.0
     
@@ -240,6 +714,27 @@ class HSSShape(structural_steel.QHShape):
         Iy= self.get('Iy')
         Iz= self.get('Iz')
         return (math.pi**2*E*Cw/Lc**2+G*J)/(Iy+Iz)
+    
+    def getPlasticMoment(self, majorAxis= True):
+        ''' Return the plastic moment of the section.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        return getShapePlasticMoment(self,majorAxis)
+    
+    def getNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
+        ''' Return the nominal flexural strength of the member
+            according to equations XXX of AISC-360-16.
+
+        :param lateralUnbracedLength: length between points that are either 
+                                      braced against lateral displacement of
+                                      the compression flange or braced against 
+                                      twist of the cross section.
+        :param Cb: lateral-torsional buckling modification factor.
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        lmsg.error('Nominal flexural strength for HSS sections not implemented yet.')
+        return 0.0
 
 # Label conversion metric->US customary | US customary -> metric.
 def getUSLabel(metricLabel):
