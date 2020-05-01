@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # COMPANION TO THE AISC STEEL CONSTRUCTION MANUAL
 # Volume 1: Design Examples
-# EXAMPLE E.1B W-SHAPE COLUMN DESIGN WITH INTERMEDIATE BRACING,
+# EXAMPLE E.9 RECTANGULAR HSS COMPRESSION MEMBER WITHOUT SLENDER ELEMENTS
 
 from __future__ import division
 from __future__ import print_function
@@ -11,10 +11,6 @@ import geom
 import xc
 from materials.astm import ASTM_materials
 from materials.astm import AISC_limit_state_checking as aisc
-from model import predefined_spaces
-from actions import load_cases
-from actions import combinations as combs
-from solution import predefined_solutions
 
 inch2meter= 0.0254
 MPa2ksi= 0.145038

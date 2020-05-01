@@ -11,10 +11,6 @@ import geom
 import xc
 from materials.astm import ASTM_materials
 from materials.astm import AISC_limit_state_checking as aisc
-from model import predefined_spaces
-from actions import load_cases
-from actions import combinations as combs
-from solution import predefined_solutions
 
 inch2meter= 0.0254
 MPa2ksi= 0.145038
