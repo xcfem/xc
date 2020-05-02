@@ -476,20 +476,21 @@ class WindLoadOnBeams(BaseVectorLoad):
                         of beam
     :ivar vDirWind: unitary xc.Vector in Wind direction (global coordinates)
                          xc.Vector([Wx,Wy,Wz]).
+    :ivar Gf: gust factor (defaults to 1.0)
     '''
-    def __init__(self,name, xcSet, windParams,Cp,surfExpossed,vDirWind):
+    def __init__(self,name, xcSet, windParams,Cp,surfExpossed,vDirWind,Gf=1.0):
         super(WindLoadOnBeams,self).__init__(name,vDirWind)
         self.xcSet=xcSet
         self.windParams=windParams
         self.Cp=Cp
         self.surfExpossed=surfExpossed
-
+        self.Gf=Gf
 
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
         for e in self.xcSet.elements:
             zCoo=e.getPosCentroid(True).z
-            press=self.windParams.qz(zCoo)*self.Cp*self.surfExpossed
+            press=self.windParams.qz(zCoo)*self.Cp*self.surfExpossed*self.Gf
             e.vector3dUniformLoadGlobal(self.loadVector*press)
             
     def getMaxMagnitude(self):
@@ -497,7 +498,7 @@ class WindLoadOnBeams(BaseVectorLoad):
         zMax=-1e6
         for e in self.xcSet.elements:
             zMax=max(zMax,e.getPosCentroid(True).z)
-        maxValue=self.windParams.qz(zCoo)*self.Cp*self.surfExpossed
+        maxValue=self.windParams.qz(zCoo)*self.Cp*self.surfExpossed*self.Gf
         return maxValue
 
 class WindLoadOnTrusses(BaseVectorLoad):
@@ -513,31 +514,32 @@ class WindLoadOnTrusses(BaseVectorLoad):
                         of truss
     :ivar vDirWind: unitary xc.Vector in Wind direction (global coordinates)
                          xc.Vector([Wx,Wy,Wz]).
+    :ivar Gf: gust factor (defaults to 1.0)
     '''
-    def __init__(self,name, xcSet, windParams,Cp,surfExpossed,vDirWind):
+    def __init__(self,name, xcSet, windParams,Cp,surfExpossed,vDirWind,Gf=1.0):
         super(WindLoadOnTrusses,self).__init__(name,vDirWind)
         self.xcSet=xcSet
         self.windParams=windParams
         self.Cp=Cp
         self.surfExpossed=surfExpossed
+        self.Gf=Gf
 
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
         for e in self.xcSet.elements:
             L=e.getL(); n1=e.getNodes[0]; n2=e.getNodes[1]
             zCoo=e.getPosCentroid(True).z
-            press=self.windParams.qz(zCoo)*self.Cp*self.surfExpossed
+            press=self.windParams.qz(zCoo)*self.Cp*self.surfExpossed*self.Gf
             F_nod=self.loadVector*(L*press/2.)
             F_nod6comp=xc.Vector([F_nod[0],F_nod[1],F_nod[2],0.,0.,0.])
             n1.newLoad(F_nod6comp); n2.newLoad(F_nod6comp)
 
-            
     def getMaxMagnitude(self):
         '''Return the maximum magnitude of the vector loads'''
         maxValue=0
         for e in self.xcSet.elements:
             L=e.getL();zCoo=e.getPosCentroid(True).z
-            f=abs(self.windParams.qz(zCoo)*self.Cp*self.surfExpossed*L/2.)
+            f=abs(self.windParams.qz(zCoo)*self.Cp*self.surfExpossed*L/2.)*self.Gf
             maxValue=max(maxValue,f)
         return maxValue
 
