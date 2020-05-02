@@ -58,6 +58,8 @@ The main capabilities of the program:
 ## Installation
 See <a href="https://github.com/xcfem/xc/blob/master/install/install.txt" target="_new">install</a>
 
+You can also find <a href="https://hub.docker.com/repository/docker/antonsurv/xcfem" target="_new">Docker images</a> created by Anton Surviyanto. The source code of the Dockerfile is <a href="https://github.com/antonsurv/docker-antonsurv-xcfem" target="_new">here</a>
+
 ## Where to start
 The programs lacks of a user manual (would you help us with that?). Anyway you can start with some simple examples you'll find <a href= "https://github.com/xcfem/xc_examples" target="_new"> here</a>.
 
