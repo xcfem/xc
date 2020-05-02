@@ -12,6 +12,7 @@ __email__= "l.pereztato@gmail.com ana.ortega@ciccp.es"
 import math
 import enum
 from misc_utils import log_messages as lmsg
+from materials import buckling_base
 
 
 class SectionClasif(enum.IntEnum):
@@ -46,7 +47,7 @@ class LateralTorsionalBucklingModificationFactor(object):
         self.Mi= list()
         for m in Mi:
             self.Mi.append(abs(m)) # absolute value of moments.
-            
+
     def getLateralTorsionalBucklingModificationFactor(self):
         ''' Return the lateral-torsional buckling modification factor
             according to equation F1-1 of ANSI AISC 360-16.'''
@@ -54,19 +55,35 @@ class LateralTorsionalBucklingModificationFactor(object):
         denom= 2.5*mMax+3.0*self.Mi[1]+4.0*self.Mi[2]+3.0*self.Mi[3]
         return 12.5*mMax/denom
 
-class Member(object):
+class Member(buckling_base.MemberBase):
     ''' Beam and column members according to ANSI AISC 360-16.
 
+    :ivar unbracedLengthX: unbraced length for torsional buckling 
+                           about the longitudinal axis.
+    :ivar unbracedLengthY: unbraced length for flexural buckling 
+                           about y-axis.
+    :ivar unbracedLengthZ: unbraced length for flexural buckling 
+                           about z-axis.
     :ivar Kx: effective length factor for torsional buckling 
               about the longitudinal axis.
     :ivar Ky: effective length factor for flexural buckling 
               about y-axis.
     :ivar Kz: effective length factor for flexural buckling 
-              about z-axis
+              about z-axis.
+    :ivar sectionClasif: classification of the section for loca
+                          buckling (defaults to compact).
     '''
-    def __init__(self, section, unbracedLengthX, unbracedLengthY= None, unbracedLengthZ= None, kx= 1.0, ky= 1.0, kz= 1.0, sectionClasif= SectionClasif.compact):
-        ''' Constructor. '''
-        self.section= section
+    def __init__(self, name, section, unbracedLengthX, unbracedLengthY= None, unbracedLengthZ= None, kx= 1.0, ky= 1.0, kz= 1.0, sectionClasif= SectionClasif.compact, lstLines=None, lstPoints=None):
+        ''' Constructor. 
+
+        :param name: object name.
+        :param ec3Shape: cross-section shape (e.g. IPNShape, IPEShape, ...)
+        :param lstLines: ordered list of lines that make up the beam 
+                        (defaults to None).
+        :param lstPoints: ordered list of points that make up the beam. 
+                          Ignored if lstLines is given (defaults to None)
+        '''
+        super(Member,self).__init__(name, section, lstLines, lstPoints)
         self.unbracedLengthX= unbracedLengthX
         if(unbracedLengthY):
             self.unbracedLengthY= unbracedLengthY
@@ -100,19 +117,19 @@ class Member(object):
         ''' Return the flexural buckling slenderness ratio of the member.
 
         '''
-        sc= self.section.slendernessCheck()
+        sc= self.shape.slendernessCheck()
         if(sc>1.01):
             lmsg.warning('Member section has slender members. Results are not valid.')
-        retval= self.getEffectiveLengthZ()/self.section.get('iz')
-        return max(retval,self.getEffectiveLengthY()/self.section.get('iy'))
+        retval= self.getEffectiveLengthZ()/self.shape.get('iz')
+        return max(retval,self.getEffectiveLengthY()/self.shape.get('iy'))
         
     def getFlexuralCriticalSlendernessRatio(self):
         ''' Return the critical value of the flexural buckling 
             slenderness ratio of the member.
         '''
         sr= self.getFlexuralSlendernessRatio()
-        E= self.section.get('E')
-        Fy= self.section.steelType.fy
+        E= self.shape.get('E')
+        Fy= self.shape.steelType.fy
         return sr/math.pi*math.sqrt(Fy/E)
 
     def getFlexuralElasticBucklingStress(self):
@@ -120,23 +137,23 @@ class Member(object):
             to equation E3-4 of AISC-360-16.
         '''
         sr= self.getFlexuralSlendernessRatio()
-        E= self.section.get('E')
+        E= self.shape.get('E')
         return math.pi**2*E/sr**2
 
     def getFlexuralElasticBucklingStressY(self):
         ''' Return the flexural elastic buckling stress of the member according
             to equation E4-5 of AISC-360-16.
         '''
-        sry= self.getEffectiveLengthY()/self.section.get('iy') # Slenderness ratio
-        E= self.section.get('E')
+        sry= self.getEffectiveLengthY()/self.shape.get('iy') # Slenderness ratio
+        E= self.shape.get('E')
         return math.pi**2*E/sry**2
 
     def getFlexuralElasticBucklingStressZ(self):
         ''' Return the flexural elastic buckling stress of the member according
             to equation E4-6 of AISC-360-16.
         '''
-        srz= self.getEffectiveLengthY()/self.section.get('iz') # Slenderness ratio
-        E= self.section.get('E')
+        srz= self.getEffectiveLengthY()/self.shape.get('iz') # Slenderness ratio
+        E= self.shape.get('E')
         return math.pi**2*E/srz**2
     
     def getCriticalStress(self, Fe):
@@ -148,8 +165,8 @@ class Member(object):
         retval= 0.0
         if(self.sectionClasif<SectionClasif.slender):
             sr= self.getFlexuralSlendernessRatio()
-            E= self.section.get('E')
-            Fy= self.section.steelType.fy
+            E= self.shape.get('E')
+            Fy= self.shape.steelType.fy
             Fratio= Fy/Fe
             thresholdA= 4.71*math.sqrt(E/Fy)
             if((sr<=thresholdA) or (Fratio<=2.25)):
@@ -173,14 +190,14 @@ class Member(object):
             AISC-360-16.
         '''
         retval= 0.0
-        symmetry= self.section.getSymmetry()
+        symmetry= self.shape.getSymmetry()
         Lc= self.getEffectiveLengthX()
         if(symmetry=='double'):
-            retval= self.section.getTorsionalElasticBucklingStress(Lc)
+            retval= self.shape.getTorsionalElasticBucklingStress(Lc)
         elif(symmetry=='simple'):
-            Fex= self.section.getTorsionalElasticBucklingStress(Lc) # E4-7
+            Fex= self.shape.getTorsionalElasticBucklingStress(Lc) # E4-7
             Fez= getFlexuralElasticBucklingStressZ() #E4-5
-            H= self.section.getFlexuralConstant() # E4-8
+            H= self.shape.getFlexuralConstant() # E4-8
             retval= (Fex+Fez)/2/H*(1-math.sqrt(1-(4.0*Fex*Fez*H)/(Fex+Fez)**2))
         else: # no simmetry: E4-4
             lmsg.error('Torsional elastic buckling stress for unsymmetric members not implemented yet.')
@@ -198,7 +215,7 @@ class Member(object):
         ''' Return the nominal compressive strength of the member
             according to equation E3-1 of AISC-360-16.
         '''
-        Ag= self.section.get('A') # Gross area of member
+        Ag= self.shape.get('A') # Gross area of member
         Lcx= self.getEffectiveLengthX() # Torsional effective length
         Lcy= self.getEffectiveLengthY() # Y bending effective length
         Lcz= self.getEffectiveLengthZ() # Z bending effective length
@@ -213,15 +230,18 @@ class Member(object):
         '''
         return 0.9*self.getNominalCompressiveStrength()
 
-    def getNominalFlexuralStrength(self, Cb, majorAxis= True):
+    def getNominalFlexuralStrength(self, majorAxis= True):
         ''' Return the nominal compressive strength of the member
             according to chapter F of AISC-360-16.
         '''
         lateralUnbracedLength= self.getEffectiveLengthX()
-        return self.section.getNominalFlexuralStrength(lateralUnbracedLength, Cb, majorAxis)
+        Mi= self.getBendingMomentsAtControlPoints()
+        mf= LateralTorsionalBucklingModificationFactor(Mi)
+        Cb= mf.getLateralTorsionalBucklingModificationFactor()
+        return self.shape.getNominalFlexuralStrength(lateralUnbracedLength, Cb, majorAxis)
 
-    def getDesignFlexuralStrength(self, Cb, majorAxis= True):
+    def getDesignFlexuralStrength(self, majorAxis= True):
         ''' Return the design flexural strength of the member
             according to section F1 of AISC-360-16.
         '''
-        return 0.9*self.getNominalFlexuralStrength(Cb, majorAxis)
+        return 0.9*self.getNominalFlexuralStrength(majorAxis)

@@ -27,7 +27,7 @@ steel.gammaM= 1.00
 ## Shape geometry
 shape= ASTM_materials.WShape(steel,'W14X90')
 ## Steel column
-column= aisc.Member(shape,30.0*foot2meter, kx= 0.5, ky= 0.5)
+column= aisc.Member('column', shape,30.0*foot2meter, kx= 0.5, ky= 0.5)
 
 ## Load.
 Pd= 840*kip2kN

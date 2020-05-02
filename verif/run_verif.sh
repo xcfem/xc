@@ -553,6 +553,7 @@ python tests/materials/astm/flexural_member_design_test_01.py
 python tests/materials/astm/compression_member_design_test_01.py
 python tests/materials/astm/compression_member_design_test_02.py
 python tests/materials/astm/compression_member_design_test_03.py
+python tests/materials/astm/shear_member_design_test.py
 
 echo "$BLEU" "  Plate and membrane materials." "$NORMAL"
 python tests/materials/test_material_elastic_membrane_plate_section_01.py

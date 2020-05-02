@@ -27,7 +27,7 @@ steel.gammaM= 1.00
 ## Shape geometry
 shape= ASTM_materials.HSSShape(steel,'HSS12X10X3/8')
 ## Steel column
-column= aisc.Member(shape,20.0*foot2meter, kx= 0.8, ky= 0.8, kz= 0.8)
+column= aisc.Member('column', shape,20.0*foot2meter, kx= 0.8, ky= 0.8, kz= 0.8)
 
 ## Load.
 Pd= 510*kip2kN

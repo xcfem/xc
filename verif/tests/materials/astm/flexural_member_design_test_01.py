@@ -11,6 +11,7 @@ import xc_base
 import geom
 import xc
 from materials.astm import ASTM_materials
+from materials.astm import AISC_limit_state_checking as aisc
 from model import predefined_spaces
 from actions import load_cases
 from actions import combinations as combs
@@ -35,8 +36,8 @@ steel= ASTM_materials.A992
 hss= ASTM_materials.WShape(steel,'W18X50')
 steel.gammaM= 1.00
 ## Profile geometry
-profile= ASTM_materials.WShape(steel,'W18X50')
-xcSection= profile.defElasticShearSection2d(preprocessor,steel)
+shape= ASTM_materials.WShape(steel,'W18X50')
+xcSection= shape.defElasticShearSection2d(preprocessor,steel)
 
 # Model geometry
 
@@ -116,13 +117,9 @@ preprocessor.resetLoadCase()
 preprocessor.getLoadHandler.addToDomain('combULS01')
 result= analysis.analyze(1)
 nodes.calculateNodalReactions(True,1e-7)
-VMax= -1e23
-VMin= -VMax
 MMax= -1e23
 MMin= -MMax
 for e in xcTotalSet.elements:
-  VMax= max(VMax,max(e.getV1, e.getV2))
-  VMin= min(VMin,min(e.getV1, e.getV2))
   MMax= max(MMax,max(e.getM1, e.getM2))
   MMin= min(MMin,min(e.getM1, e.getM2))
 MMaxRef= -(1.2*deadLoad[1]+1.6*liveLoad[1])*span**2/8.0
@@ -130,9 +127,9 @@ ratio2= abs((MMax-MMaxRef)/MMaxRef)
 
 # Because the beam is continuously braced and compact, only the
 # yielding limit state applies.
-Phi_b= 0.90 # LRFD
-Mu= Phi_b*profile.getWz()*profile.steelType.fy
-MuRef= Phi_b*421e3*kip2kN*foot2meter
+beam=  aisc.Member(l1.name, shape, unbracedLengthX= 0.5, unbracedLengthY= span, unbracedLengthZ= span, lstLines= [l1])
+Mu= beam.getDesignFlexuralStrength()
+MuRef= 0.9*421e3*kip2kN*foot2meter
 ratio3= abs((Mu-MuRef)/MuRef)
 
 '''
