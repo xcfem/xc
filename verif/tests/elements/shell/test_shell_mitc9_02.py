@@ -86,6 +86,9 @@ R= RN1+RN2+RN3+RN4+RN5+RN6+RN7+RN8
 
 ratio0= F+R
 # Symmetry
+print('', end ="") # There is something wrong with this test if this line
+                   # is deleted it triggers an
+                   # OverflowError: (34, 'Numerical result out of range')
 ratio1= (RN1-RN2)**2+(RN1-RN3)**2+(RN1-RN4)**2
 ratio2= (RN5-RN6)**2+(RN5-RN7)**2+(RN5-RN8)**2
 # Reaction values.
