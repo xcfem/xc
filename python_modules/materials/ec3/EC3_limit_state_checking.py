@@ -17,6 +17,10 @@ from postprocess import control_vars as cv
 from postprocess import limit_state_data as lsd
 
 # Lateral torsional buckling of steel beams.
+# References:
+# [1]: LATERAL-TORSIONAL BUCKLING OF STEEL BEAMS: A GENERAL EXPRESSION FOR THE MOMENT GRADIENT FACTOR
+#      Aitziber López, Danny J. Yong and Miguel A. Serna. STABILITY AND DUCTILITY OF STEEL STRUCTURES
+#      Lisbon, Portugal, September 6-8, 2006
 
 def getLateralTorsionalBucklingCurve(shape):
     ''' Returns the lateral torsional bukling curve name (a,b,c or d) depending of the type of section (rolled, welded,...). EC3 EN 1993-1-1 Table 6.4, 6.3.2.2(2).
@@ -115,7 +119,8 @@ class SupportCoefficients(object):
     self.k2= k2
     
   def getAlphaI(self):
-    ''' returns the five alpha values that are needed for C1 calculation.'''
+    ''' returns the five alpha values that are needed for C1 calculation according
+        to equation 12 of the reference [1].'''
     return [(1.0-self.k2),5*self.k1**3/self.k2**2,5*(1.0/self.k1+1.0/self.k2),5*self.k2**3/self.k1**2,(1.0-self.k1)]
 
 def getLateralBucklingIntermediateFactor(shape,sectionClass,L,Mi,supportCoefs= SupportCoefficients()):
@@ -223,11 +228,14 @@ class MomentGradientFactorC1(object):
         return retval
 
     def getA2(self):
-        ''' return the value for the A2 coefficient. '''
+        '''Return the value for the A2 coefficient according to equation 11
+           of the reference [1].'''
         return (self.Mi[0]+2*self.Mi[1]+3*self.Mi[2]+2*self.Mi[3]+self.Mi[4])/(9*self.getExtremeMoment())
 
     def getA1(self,supportCoefs):
-        ''' return the value for the A1 coefficient. 
+        '''Return the value for the A1 coefficient according to equation 10
+           of the reference [1].
+           
         :param k1: warping AND lateral bending coefficient at left end
                                    k1= 1.0 => free warping AND lateral bending
                                    k1= 0.5 => prevented warp. AND lateral bending
@@ -239,7 +247,8 @@ class MomentGradientFactorC1(object):
         return (Mmax2+ai[0]*self.Mi[0]**2+ai[1]*self.Mi[1]**2+ai[2]*self.Mi[2]**2+ai[3]*self.Mi[3]**2+ai[4]*self.Mi[4]**2)/((1+ai[0]+ai[1]+ai[2]+ai[3]+ai[4])*Mmax2)
 
     def getC1(self,supportCoefs):
-        ''' return the value for the C1 coefficient. 
+        '''Return the value for the C1 coefficient according to equation 8
+           of the reference [1]. 
 
         :param k1: warping AND lateral bending coefficient at left end
                                    k1= 1.0 => free warping AND lateral bending
@@ -247,12 +256,12 @@ class MomentGradientFactorC1(object):
         :param k2: warping AND lateral bending coefficient at right end
                                    k2= 1.0 => free warping AND lateral bending
                                    k2= 0.5 => prevented warp. AND lateral bending'''
-        k= math.sqrt(supportCoefs.k1*supportCoefs.k2)
-        rootK= math.sqrt(k)
+        k= math.sqrt(supportCoefs.k1*supportCoefs.k2) # equation 9
         A1= self.getA1(supportCoefs)
         A2= self.getA2()
+        rootK= math.sqrt(k) 
         B1= rootK*A1+((1-rootK)/2.0*A2)**2
-        return (math.sqrt(B1)+(1-rootK)/2.0*A2)/A1
+        return (math.sqrt(B1)+(1-rootK)/2.0*A2)/A1 # equation 8
 
 class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
     '''Object that controls normal stresses limit state.'''

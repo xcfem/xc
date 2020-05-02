@@ -116,13 +116,9 @@ preprocessor.resetLoadCase()
 preprocessor.getLoadHandler.addToDomain('combULS01')
 result= analysis.analyze(1)
 nodes.calculateNodalReactions(True,1e-7)
-VMax= -1e23
-VMin= -VMax
 MMax= -1e23
 MMin= -MMax
 for e in xcTotalSet.elements:
-  VMax= max(VMax,max(e.getV1, e.getV2))
-  VMin= min(VMin,min(e.getV1, e.getV2))
   MMax= max(MMax,max(e.getM1, e.getM2))
   MMin= min(MMin,min(e.getM1, e.getM2))
 MMaxRef= -(1.2*deadLoad[1]+1.6*liveLoad[1])*span**2/8.0

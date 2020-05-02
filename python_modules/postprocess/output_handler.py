@@ -17,6 +17,7 @@ from postprocess.xcVtk.fields import load_vector_field as lvf
 from postprocess.xcVtk.diagrams import control_var_diagram as cvd
 from postprocess.xcVtk.diagrams import linear_load_diagram as lld
 from postprocess.xcVtk.diagrams import node_property_diagram as npd
+from postprocess.xcVtk.diagrams import element_property_diagram as epd
 import vtk
 from postprocess import output_styles
 
@@ -141,9 +142,8 @@ class OutputHandler(object):
 #        defDisplay.displayStrongWeakAxis(setToDisplay,caption= caption, vectorScale= self.outputStyle.localAxesVectorsScaleFactor, fileName= fileName, defFScale= defFScale)
         defDisplay.displayStrongWeakAxis(setToDisplay,caption= caption, vectorScale= self.outputStyle.localAxesVectorsScaleFactor)
 
-    def displayScalarProperty(self,propToDisp, fUnitConv, unitDescription, captionText, setToDisplay, fileName=None, defFScale=0.0, rgMinMax=None):
-        '''displays the component of the displacement or rotations in the 
-        set of entities.
+    def displayScalarPropertyAtNodes(self,propToDisp, fUnitConv, unitDescription, captionText, setToDisplay, fileName=None, defFScale=0.0, rgMinMax=None):
+        '''displays the scalar property defined at the nodes of the set.
 
         :param propeToDisp: scalar property defined at nodes. 
         :param fUnitConv: conversion factor for units
@@ -199,11 +199,10 @@ class OutputHandler(object):
 
         loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
         captionText= loadCaseName+' '+itemToDisp+' '+unitDescription+' '+setToDisplay.description
-        self.displayScalarProperty(propertyName, fUnitConv= unitConversionFactor, unitDescription= unitDescription, captionText= captionText, setToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax= rgMinMax)
+        self.displayScalarPropertyAtNodes(propertyName, fUnitConv= unitConversionFactor, unitDescription= unitDescription, captionText= captionText, setToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax= rgMinMax)
 
     def displayStresses(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None):
-        '''displays the component of the displacement or rotations in the 
-        set of entities.
+        '''display the stresses on the elements.
 
         :param itemToDisp: component of the stress ('sigma_11', 'sigma_22'...)
         :param setToDisplay: set of entities to be represented.
@@ -233,11 +232,10 @@ class OutputHandler(object):
 
         loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
         captionText= loadCaseName+' '+itemToDisp+' '+unitDescription+' '+setToDisplay.description
-        self.displayScalarProperty(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
+        self.displayScalarPropertyAtNodes(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
 
     def displayStrains(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None):
-        '''displays the component of the displacement or rotations in the 
-        set of entities.
+        '''displays the strains on the elements.
 
         :param itemToDisp: component of the stress ('sigma_11', 'sigma_22'...)
         :param setToDisplay: set of entities to be represented.
@@ -267,7 +265,7 @@ class OutputHandler(object):
 
         loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
         captionText= loadCaseName+' '+itemToDisp+' '+unitDescription+' '+setToDisplay.description
-        self.displayScalarProperty(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
+        self.displayScalarPropertyAtNodes(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
 
         
     def displayReactions(self,setToDisplay=None,fileName=None,defFScale=0.0):
@@ -543,7 +541,41 @@ class OutputHandler(object):
         lmsg.warning("Auto scale not implemented yet.")
         LrefModSize= setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to autoscale)
         scaleFactor= LrefModSize/unitConversionFactor 
-        diagram= npd.NodePropertyDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDisplay],attributeName= itemToDisp)
+        diagram= npd.NodePropertyDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDisplay], attributeName= itemToDisp)
+        diagram.addDiagram()
+        defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
+        defDisplay.cameraParameters= self.getCameraParameters()
+        grid= defDisplay.setupGrid(setToDisplay)
+        defDisplay.defineMeshScene(None,defFScale,color=setToDisplay.color)
+        defDisplay.appendDiagram(diagram) #Append diagram to the scene.
+
+        loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
+        if(not caption):
+            caption= loadCaseName+' '+itemToDisp+' '+unitDescription +' '+setToDisplay.description
+        defDisplay.displayScene(caption=caption,fileName=fileName)
+
+    def displayElementValueDiagram(self, itemToDisp, setToDisplay=None,caption= None,fileName=None,defFScale=0.0):
+        '''displays the a displacement (uX,uY,...) or a property defined in nodes 
+        as a diagram over lines.
+
+        :param itemToDisp: item to display (uX,uY,...).
+        :param setToDisplay: set of entities (elements of type beam) to be 
+               represented
+        :param fileName: name of the file to plot the graphic. Defaults to None,
+                         in that case an screen display is generated
+        :param defFScale: factor to apply to current displacement of nodes 
+                  so that the display position of each node equals to
+                  the initial position plus its displacement multiplied
+                  by this factor. (Defaults to 0.0, i.e. display of 
+                  initial/undeformed shape)
+         '''
+        if(setToDisplay==None):
+            setToDisplay= self.modelSpace.getTotalSet()
+        unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
+        lmsg.warning("Auto scale not implemented yet.")
+        LrefModSize= setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to autoscale)
+        scaleFactor= LrefModSize/unitConversionFactor 
+        diagram= epd.ElementPropertyDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDisplay], propertyName= itemToDisp)
         diagram.addDiagram()
         defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
         defDisplay.cameraParameters= self.getCameraParameters()
