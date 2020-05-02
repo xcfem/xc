@@ -1070,9 +1070,24 @@ class GridModel(object):
         pntTags=[self.getPntGrid(pind).tag for pind in lstGridPnt]
         for i in range(len(pntTags)-1):
             l=lines.newLine(pntTags[i],pntTags[i+1])
-            setLin.getLines.append(l)                
+            setLin.getLines.append(l)
+            nameLin=self.gridLinName(pntTags[i],pntTags[i+1])
+            self.dicLin[nameLin]=l
         return setLin
-    
+
+    def getSetLinFromLstGridPnt(self,lstGridPnt,nameSet):
+        '''return the set of lines that joint the successive points defined 
+        in 'lstGridPnt' by their indexes in the grid.
+
+        :param lstGridPnt: list of successive points [(i1,j1,k1),(i2,j2,k2), ...]
+        :param nameSet: name of the set.
+        '''
+        setLin= self.prep.getSets.defSet(nameSet)
+        for i in range(len(lstGridPnt)-1):
+            nameLin=self.getNameGridLine((lstGridPnt[i],lstGridPnt[i+1]))
+            setLin.getLines.append(self.dicLin[nameLin])
+        return setLin
+             
     def genSetLinFromMultiLstGridPnt(self,multiLstGridPnt,nameSet):
         '''generate the set of lines that joint the successive points defined 
         in 'multiLstGridPnt' by their indexes in the grid.
@@ -1085,6 +1100,18 @@ class GridModel(object):
             setLin=self.genSetLinFromLstGridPnt(lstp,nameSet)
         return setLin
     
+    def getSetLinFromMultiLstGridPnt(self,multiLstGridPnt,nameSet):
+        '''retur the set of lines that joint the successive points defined 
+        in 'multiLstGridPnt' by their indexes in the grid.
+
+        :param multiLstGridPnt: list of lists of successive points 
+        [[(i1,j1,k1),(i2,j2,k2), ...],[],...]
+        :param nameSet: name of the set.
+        '''
+        for lstp in  multiLstGridPnt:
+            setLin=self.getSetLinFromLstGridPnt(lstp,nameSet)
+        return setLin
+    
     def genSetLinFromLstXYZPnt(self,lstXYZPnt,nameSet):
         '''generate the set of lines that joint the successive points defined 
         in 'lstXYZPnt' by their coordinates (x,y,z).
@@ -1094,6 +1121,17 @@ class GridModel(object):
         '''
         lstGridPnt=[self.getIJKfromXYZ(coord) for coord in lstXYZPnt]
         setLin=self.genSetLinFromLstGridPnt(lstGridPnt,nameSet)
+        return setLin
+    
+    def getSetLinFromLstXYZPnt(self,lstXYZPnt,nameSet):
+        '''return the set of lines that joint the successive points defined 
+        in 'lstXYZPnt' by their coordinates (x,y,z).
+
+        :param lstXYZPnt: list of successive points [(x1,y1,z1),(x2,y2,z2), ...]
+        :param nameSet: name of the set.
+        '''
+        lstGridPnt=[self.getIJKfromXYZ(coord) for coord in lstXYZPnt]
+        setLin=self.getSetLinFromLstGridPnt(lstGridPnt,nameSet)
         return setLin
     
     def genSetLinFromMultiLstXYZPnt(self,multiLstXYZPnt,nameSet):
@@ -1111,6 +1149,21 @@ class GridModel(object):
         setLin=self.genSetLinFromMultiLstGridPnt(multiLstGridPnt,nameSet)
         return setLin
     
+    def getSetLinFromMultiLstXYZPnt(self,multiLstXYZPnt,nameSet):
+        '''generate the set of lines that joint the successive points defined 
+        in 'multiLstXYZPnt' by their coordinates (x,y,z)
+
+        :param multiLstXYZPnt: list of lists of successive points 
+        [[(x1,y1,z1),(x2,y2,z2), ...],[],...]
+        :param nameSet: name of the set.
+        '''
+        multiLstGridPnt=list()
+        for xyzLst in multiLstXYZPnt:
+            indLst=[self.getIJKfromXYZ(coord) for coord in xyzLst]
+            multiLstGridPnt.append(indLst)
+        setLin=self.getSetLinFromMultiLstGridPnt(multiLstGridPnt,nameSet)
+        return setLin
+
 def getSetIntersSurf(set1,set2,nameSetInter):
     '''Return a set of surfaces intersection of those in 'set1' and 'set2'
 
