@@ -34,8 +34,8 @@ nodes= preprocessor.getNodeHandler
 steel= ASTM_materials.A992
 steel.gammaM= 1.00
 ## Profile geometry
-profile= ASTM_materials.WShape(steel,'W24X62')
-xcSection= profile.defElasticShearSection2d(preprocessor,steel)
+shape= ASTM_materials.WShape(steel,'W24X62')
+xcSection= shape.defElasticShearSection2d(preprocessor,steel)
 
 # Model geometry
 
@@ -108,21 +108,17 @@ result= analysis.analyze(1)
 nodes.calculateNodalReactions(True,1e-7)
 VMax= -1e23
 VMin= -VMax
-MMax= -1e23
-MMin= -MMax
 for e in xcTotalSet.elements:
   VMax= max(VMax,max(e.getV1, e.getV2))
   VMin= min(VMin,min(e.getV1, e.getV2))
-  MMax= max(MMax,max(e.getM1, e.getM2))
-  MMin= min(MMin,min(e.getM1, e.getM2))
 VMaxRef= -(1.2*deadLoad+1.6*liveLoad)*span/2.0
 ratio1= abs((VMax-VMaxRef)/VMaxRef)
 
-Aw= profile.getAw()
+Aw= shape.getAw()
 AwRef= 10.2*inch2meter**2
 ratio2= abs((Aw-AwRef)/AwRef)
 Phi_v= 1.0 # LRFD AISC Specification section G2.1a
-Vu= Phi_v*profile.getNominalShearStrengthWithoutTensionFieldAction()
+Vu= Phi_v*shape.getNominalShearStrengthWithoutTensionFieldAction()
 VuRef= 306e3*kip2kN
 ratio3= abs((Vu-VuRef)/VuRef)
 
@@ -131,8 +127,8 @@ ratio3= abs((Vu-VuRef)/VuRef)
 print('VMax= ',VMax/1e3,' kN /', VMax*kN2kips/1e3, 'kips')
 print('VMaxRef= ',VMaxRef/1e3,' kN /', VMaxRef*kN2kips/1e3, 'kips')
 print('ratio1= ',ratio1)
-print('d= ', profile.d()*1e3,'mm / ', profile.d()/inch2meter, 'in')
-print('tw= ', profile.get('tw')/inch2meter, 'in')
+print('d= ', shape.d()*1e3,'mm / ', shape.d()/inch2meter, 'in')
+print('tw= ', shape.get('tw')/inch2meter, 'in')
 print('Aw= ',Aw*1e4,' cm2')
 print('AwRef= ',AwRef*1e4,' cm2')
 print('ratio2= ',ratio2)

@@ -273,7 +273,7 @@ class WShape(structural_steel.IShape):
             Structural Steel Buildings, July 7, 2016 AISC"
         '''
         Cv1= 1.0
-        h_tw= self.get('d')/self.get('tw')
+        h_tw= self.get('h')/self.get('tw')
         h_tw_threshold= 2.24*math.sqrt(self.get('E')/self.steelType.fy)
         if(h_tw<h_tw_threshold):
             Cv1= 1.0;
