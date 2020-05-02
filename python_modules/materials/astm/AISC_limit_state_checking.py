@@ -47,7 +47,7 @@ class LateralTorsionalBucklingModificationFactor(object):
         self.Mi= list()
         for m in Mi:
             self.Mi.append(abs(m)) # absolute value of moments.
-            
+
     def getLateralTorsionalBucklingModificationFactor(self):
         ''' Return the lateral-torsional buckling modification factor
             according to equation F1-1 of ANSI AISC 360-16.'''
@@ -230,15 +230,18 @@ class Member(buckling_base.MemberBase):
         '''
         return 0.9*self.getNominalCompressiveStrength()
 
-    def getNominalFlexuralStrength(self, Cb, majorAxis= True):
+    def getNominalFlexuralStrength(self, majorAxis= True):
         ''' Return the nominal compressive strength of the member
             according to chapter F of AISC-360-16.
         '''
         lateralUnbracedLength= self.getEffectiveLengthX()
+        Mi= self.getBendingMomentsAtControlPoints()
+        mf= LateralTorsionalBucklingModificationFactor(Mi)
+        Cb= mf.getLateralTorsionalBucklingModificationFactor()
         return self.shape.getNominalFlexuralStrength(lateralUnbracedLength, Cb, majorAxis)
 
-    def getDesignFlexuralStrength(self, Cb, majorAxis= True):
+    def getDesignFlexuralStrength(self, majorAxis= True):
         ''' Return the design flexural strength of the member
             according to section F1 of AISC-360-16.
         '''
-        return 0.9*self.getNominalFlexuralStrength(Cb, majorAxis)
+        return 0.9*self.getNominalFlexuralStrength(majorAxis)

@@ -56,6 +56,7 @@ def getShapePlasticMoment(shape, majorAxis= True):
         retval= Fy*shape.get('Wzpl')
     else:
         retval= Fy*shape.get('Wypl')
+    return retval
 
 def getShapeCompactWebAndFlangeRatio(shape, majorAxis= True):
     ''' If web and flanges are compact according to table 4.1b of 
@@ -89,7 +90,7 @@ def getUIShapeLp(shape, majorAxis= True):
     if(not majorAxis):
         lmsg.error('L_p not implemented for minor axis.')
     ry= shape.get('iy') # Radius of gyration about minor axis.
-    E= self.get('E') # Elastic modulus.
+    E= shape.get('E') # Elastic modulus.
     Fy= shape.steelType.fy # specified minimum yield stress
     return 1.76*ry*math.sqrt(E/Fy)
 
@@ -201,6 +202,8 @@ class WShape(structural_steel.IShape):
 
         :param majorAxis: true if flexure about the major axis.
         '''
+        E= self.get('E')
+        Fy= self.steelType.fy
         lambda_p= 0.38*math.sqrt(E/Fy) # Case 10 or case 13
         slendernessRatio= self.get('bSlendernessRatio')
         return slendernessRatio/lambda_p # if <1 then flanges are compact.
@@ -212,6 +215,8 @@ class WShape(structural_steel.IShape):
 
         :param majorAxis: true if flexure about the major axis.
         '''
+        E= self.get('E')
+        Fy= self.steelType.fy
         lambda_r= 1.0*math.sqrt(E/Fy) # Case 10 or case 13
         slendernessRatio= self.get('bSlendernessRatio')
         return slendernessRatio/lambda_r # if <1 then flanges are noncompact.
@@ -224,6 +229,8 @@ class WShape(structural_steel.IShape):
         '''
         if(not majorAxis):
             lmsg.error('compact web ratio not implemented for minor axis.')
+        E= self.get('E')
+        Fy= self.steelType.fy
         lambda_p= 3.76*math.sqrt(E/Fy) # Case 15
         slendernessRatio= self.get('hSlendernessRatio')
         return slendernessRatio/lambda_p # if <1 then web is compact.
@@ -237,17 +244,19 @@ class WShape(structural_steel.IShape):
         '''
         if(not majorAxis):
             lmsg.error('compact web ratio not implemented for minor axis.')
+        E= self.get('E')
+        Fy= self.steelType.fy
         lambda_p= 5.70*math.sqrt(E/Fy) # Case 15
         slendernessRatio= self.get('hSlendernessRatio')
         return slendernessRatio/lambda_p # if <1 then web is noncompact.
     
-    def compactWebAndFlangeRatio(shape, majorAxis= True):
+    def compactWebAndFlangeRatio(self, shape, majorAxis= True):
         ''' If web and flanges are compact according to table 4.1b of 
             AISC-360-16 return a value less than one.
 
         :param majorAxis: true if flexure about the major axis.
         '''
-        return getShapeCompactWebAndFlangeRatio(self,majorAxis)
+        return getShapeCompactWebAndFlangeRatio(self, majorAxis)
 
     def slendernessCheck(self):
         ''' Verify that the section doesn't contains slender elements

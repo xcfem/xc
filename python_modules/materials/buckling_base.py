@@ -143,5 +143,20 @@ class MemberBase(object):
             elSegm= elem.getLineSegment(0)
             relDistPointInElem= (lstEqPos3d[i]-elSegm.getFromPoint()).getModulus()/elSegm.getLength()
             self.contrPnt.append((elem,relDistPointInElem))
+
+    def getBendingMomentsAtControlPoints(self):
+        ''' Return the bending moments at control points.'''
+        if not self.contrPnt:
+            self.setControlPoints()
+        sz= len(self.contrPnt)
+        Mi= list()
+        for i in range(sz):
+            e=self.contrPnt[i][0]
+            e.getResistingForce()
+            Mz1=e.getMz1  #Z bending moment at the back end of the element
+            Mz2=e.getMz2  #Z bending moment at the front end of the element
+            MzCP=Mz1+(Mz2-Mz1)*self.contrPnt[i][1] # Z bending moment at the control point
+            Mi.append(MzCP)
+        return Mi;
             
 
