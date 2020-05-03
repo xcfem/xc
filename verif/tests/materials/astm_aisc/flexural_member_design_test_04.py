@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # COMPANION TO THE AISC STEEL CONSTRUCTION MANUAL
 # Volume 1: Design Examples
-# EXAMPLE F.1-1A W-SHAPE FLEXURAL MEMBER DESIGN IN MAJOR AXIS BENDING,
+# EXAMPLE F.2-1B COMPACT CHANNEL FLEXURAL MEMBER, CONTINUOUSLY BRACED
 # CONTINUOUSLY BRACED
 
 from __future__ import division
@@ -26,22 +26,22 @@ m2Toin2= 1.0/inch2meter**2
 
 # Problem type
 steelBeam= xc.FEProblem()
-steelBeam.title= 'Example F.1-1A'
+steelBeam.title= 'Example F.2-1B'
 preprocessor= steelBeam.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
 #Materials
 ## Steel material
-steel= ASTM_materials.A992
+steel= ASTM_materials.A36
 steel.gammaM= 1.00
 ## Profile geometry
-shape= ASTM_materials.WShape(steel,'W18X50')
+shape= ASTM_materials.CShape(steel,'C15X33.9')
 xcSection= shape.defElasticShearSection2d(preprocessor,steel)
 
 # Model geometry
 
 ## Points.
-span= 35.0*foot2meter
+span= 25.0*foot2meter
 pointHandler= preprocessor.getMultiBlockTopology.getPoints
 p0= pointHandler.newPntFromPos3d(geom.Pos3d(0.0,0.0,0.0))
 p1= pointHandler.newPntFromPos3d(geom.Pos3d(span,0.0,0.0))
@@ -73,13 +73,15 @@ loadCaseNames= ['deadLoad','liveLoad']
 loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 
 ## Dead load.
-deadLoad= xc.Vector([0.0,-0.45e3*kip2kN/foot2meter, 0.0])
+DL= -0.23e3*kip2kN/foot2meter
+deadLoad= xc.Vector([0.0, DL, 0.0])
 cLC= loadCaseManager.setCurrentLoadCase('deadLoad')
 for e in xcTotalSet.elements:
   e.vector2dUniformLoadGlobal(deadLoad)
   
 ## Live load.
-liveLoad= xc.Vector([0.0,-0.75e3*kip2kN/foot2meter, 0.0])
+LL= -0.69e3*kip2kN/foot2meter
+liveLoad= xc.Vector([0.0, LL, 0.0])
 cLC= loadCaseManager.setCurrentLoadCase('liveLoad')
 for e in xcTotalSet.elements:
   e.vector2dUniformLoadGlobal(liveLoad)
@@ -107,7 +109,8 @@ midSpan1= span/2
 midPos1= geom.Pos3d(midSpan1,0.0,0.0)
 n1= l1.getNearestNode(geom.Pos3d(midSpan1,0.0,0.0))
 d1= n1.getDisp[1]
-refD1= -1.17*746/800*inch2meter
+#refD1= 5.0*LL*span**4/(384.0*shape.get('E')*shape.get('Iz'))
+refD1= -0.664*inch2meter
 ratio1= abs((refD1-d1)/refD1)
 deflection= d1/span # Deflection
 
@@ -128,11 +131,12 @@ ratio2= abs((MMax-MMaxRef)/MMaxRef)
 # yielding limit state applies.
 beam=  aisc.Member(l1.name, shape, unbracedLengthX= 0.5, unbracedLengthY= span, unbracedLengthZ= span, lstLines= [l1])
 Mu= beam.getDesignFlexuralStrength()
-MuRef= 0.9*421e3*kip2kN*foot2meter
+MuRef= 0.9*152e3*kip2kN*foot2meter
 ratio3= abs((Mu-MuRef)/MuRef)
 
 '''
-print(refD1)
+print('d1= ',d1*1e3, 'mm')
+print('refD1= ',refD1*1e3, 'mm')
 print('ratio1= ',ratio1)
 print('dY= ',d1*1e3,' mm/', d1/inch2meter,' in; ratio= L/', 1/deflection, 'L= ', span, ' m')
 print('MMaxRef= ',MMaxRef/1e3,' kN m')
@@ -146,7 +150,7 @@ print('ratio3= ',ratio3)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if(ratio1<5e-4 and ratio2<1e-7 and ratio3<5e-3):
+if(ratio1<5e-4 and ratio2<1e-7 and ratio3<1e-2):
   print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

@@ -70,7 +70,7 @@ class Member(buckling_base.MemberBase):
               about y-axis.
     :ivar Kz: effective length factor for flexural buckling 
               about z-axis.
-    :ivar sectionClasif: classification of the section for loca
+    :ivar sectionClasif: classification of the section for local
                           buckling (defaults to compact).
     '''
     def __init__(self, name, section, unbracedLengthX, unbracedLengthY= None, unbracedLengthZ= None, kx= 1.0, ky= 1.0, kz= 1.0, sectionClasif= SectionClasif.compact, lstLines=None, lstPoints=None):
@@ -230,14 +230,20 @@ class Member(buckling_base.MemberBase):
         '''
         return 0.9*self.getNominalCompressiveStrength()
 
+    def getLateralTorsionalBucklingModificationFactor(self):
+        ''' Return the lateral-torsional buckling modification factor
+            according to equation F1-1 of ANSI AISC 360-16.'''
+        Mi= self.getBendingMomentsAtControlPoints()
+        mf= LateralTorsionalBucklingModificationFactor(Mi)
+        return mf.getLateralTorsionalBucklingModificationFactor()
+
+
     def getNominalFlexuralStrength(self, majorAxis= True):
         ''' Return the nominal compressive strength of the member
             according to chapter F of AISC-360-16.
         '''
         lateralUnbracedLength= self.getEffectiveLengthX()
-        Mi= self.getBendingMomentsAtControlPoints()
-        mf= LateralTorsionalBucklingModificationFactor(Mi)
-        Cb= mf.getLateralTorsionalBucklingModificationFactor()
+        Cb= self.getLateralTorsionalBucklingModificationFactor()
         return self.shape.getNominalFlexuralStrength(lateralUnbracedLength, Cb, majorAxis)
 
     def getDesignFlexuralStrength(self, majorAxis= True):

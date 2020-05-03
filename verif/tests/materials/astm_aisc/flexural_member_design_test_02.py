@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # COMPANION TO THE AISC STEEL CONSTRUCTION MANUAL
 # Volume 1: Design Examples
-# EXAMPLE F.1-1A W-SHAPE FLEXURAL MEMBER DESIGN IN MAJOR AXIS BENDING,
-# CONTINUOUSLY BRACED
+# EXAMPLE F.1-2A W-SHAPE FLEXURAL MEMBER DESIGN IN MAJOR AXIS BENDING,
+# BRACED AT THIRD POINTS
 
 from __future__ import division
 from __future__ import print_function
@@ -26,7 +26,7 @@ m2Toin2= 1.0/inch2meter**2
 
 # Problem type
 steelBeam= xc.FEProblem()
-steelBeam.title= 'Example F.1-1A'
+steelBeam.title= 'Example F.1-2A'
 preprocessor= steelBeam.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
@@ -42,14 +42,18 @@ xcSection= shape.defElasticShearSection2d(preprocessor,steel)
 
 ## Points.
 span= 35.0*foot2meter
+unbracedLength= span/3.0 # braced at third points
 pointHandler= preprocessor.getMultiBlockTopology.getPoints
 p0= pointHandler.newPntFromPos3d(geom.Pos3d(0.0,0.0,0.0))
-p1= pointHandler.newPntFromPos3d(geom.Pos3d(span,0.0,0.0))
+p1= pointHandler.newPntFromPos3d(geom.Pos3d(unbracedLength,0.0,0.0))
+p2= pointHandler.newPntFromPos3d(geom.Pos3d(2.0*unbracedLength,0.0,0.0))
+p3= pointHandler.newPntFromPos3d(geom.Pos3d(span,0.0,0.0))
 
 ## Lines
 lineHandler= preprocessor.getMultiBlockTopology.getLines
 l1= lineHandler.newLine(p0.tag,p1.tag)
-l1.nDiv= 10
+l2= lineHandler.newLine(p1.tag,p2.tag)
+l3= lineHandler.newLine(p2.tag,p3.tag)
 
 # Mesh
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
@@ -65,7 +69,7 @@ mesh= xcTotalSet.genMesh(xc.meshDir.I)
 
 # Constraints
 modelSpace.fixNode00F(p0.getNode().tag)
-modelSpace.fixNodeF0F(p1.getNode().tag)
+modelSpace.fixNodeF0F(p3.getNode().tag)
 
 # Actions
 loadCaseManager= load_cases.LoadCaseManager(preprocessor)
@@ -100,17 +104,6 @@ combContainer.dumpCombinations(preprocessor)
 ## Linear static analysis.
 analysis= predefined_solutions.simple_static_linear(steelBeam)
 
-## Deflection linit
-preprocessor.getLoadHandler.addToDomain('combSLS01')
-result= analysis.analyze(1)
-midSpan1= span/2
-midPos1= geom.Pos3d(midSpan1,0.0,0.0)
-n1= l1.getNearestNode(geom.Pos3d(midSpan1,0.0,0.0))
-d1= n1.getDisp[1]
-refD1= -1.17*746/800*inch2meter
-ratio1= abs((refD1-d1)/refD1)
-deflection= d1/span # Deflection
-
 ## Flexural strength
 preprocessor.resetLoadCase()
 preprocessor.getLoadHandler.addToDomain('combULS01')
@@ -122,31 +115,40 @@ for e in xcTotalSet.elements:
   MMax= max(MMax,max(e.getM1, e.getM2))
   MMin= min(MMin,min(e.getM1, e.getM2))
 MMaxRef= -(1.2*deadLoad[1]+1.6*liveLoad[1])*span**2/8.0
-ratio2= abs((MMax-MMaxRef)/MMaxRef)
+ratio1= abs((MMax-MMaxRef)/MMaxRef)
 
-# Because the beam is continuously braced and compact, only the
-# yielding limit state applies.
-beam=  aisc.Member(l1.name, shape, unbracedLengthX= 0.5, unbracedLengthY= span, unbracedLengthZ= span, lstLines= [l1])
-Mu= beam.getDesignFlexuralStrength()
-MuRef= 0.9*421e3*kip2kN*foot2meter
-ratio3= abs((Mu-MuRef)/MuRef)
-
+Mp= shape.getPlasticMoment()
+Mu= Mp
+worstBeam= None
+for l in [l1,l2,l3]:
+    beam= aisc.Member(l.name, shape, unbracedLengthX= unbracedLength, unbracedLengthY= span, unbracedLengthZ= span, lstLines= [l])
+    Mui= beam.getDesignFlexuralStrength()
+    if(Mui<Mu):
+        Mu= min(Mu, Mui)
+        worstBeam= beam
+Fy= shape.steelType.fy
+Sz= shape.get('Wzel')
+Lp= shape.getLp(majorAxis= True)
+Lr= shape.getLr(majorAxis= True)
+Cb= worstBeam.getLateralTorsionalBucklingModificationFactor()
+MuRef= 0.9*Cb*(Mp-(Mp-0.7*Fy*Sz)*((unbracedLength-Lp)/(Lr-Lp)))
+ratio2= abs((Mu-MuRef)/MuRef)
+MuRefText= 0.9*339e3*kip2kN*foot2meter
+ratio3= abs((Mu-MuRefText)/MuRefText)
 '''
-print(refD1)
-print('ratio1= ',ratio1)
-print('dY= ',d1*1e3,' mm/', d1/inch2meter,' in; ratio= L/', 1/deflection, 'L= ', span, ' m')
 print('MMaxRef= ',MMaxRef/1e3,' kN m')
 print('MMax= ',MMax/1e3,' kN m')
-print('ratio2= ',ratio2)
+print('ratio1= ',ratio1)
 print('Mu= ',Mu/1e3,' kN m(',Mu/1e3*kN2kips/foot2meter,' kip-ft)')
 print('MuRef= ',MuRef/1e3,' kN m(',MuRef/1e3*kN2kips/foot2meter,' kip-ft)')
+print('ratio2= ',ratio2)
 print('ratio3= ',ratio3)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if(ratio1<5e-4 and ratio2<1e-7 and ratio3<5e-3):
+if(ratio1<1e-7 and ratio2<1e-4 and ratio3<0.05):
   print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

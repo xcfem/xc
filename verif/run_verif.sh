@@ -537,6 +537,19 @@ python tests/materials/eae/test_simple_shear_welded_web.py
 python tests/materials/eae/test_weld_bead_strength.py
 echo "$BLEU" "    SIA 263 tests." "$NORMAL"
 python tests/materials/sia263/test_coefs_fatique_SIA263.py
+echo "$BLEU" "    ASTM/AISC tests." "$NORMAL"
+python tests/materials/astm_aisc/hss12x8_test.py
+python tests/materials/astm_aisc/hss8x8_test.py
+python tests/materials/astm_aisc/flexural_member_design_test_01.py
+python tests/materials/astm_aisc/flexural_member_design_test_02.py
+python tests/materials/astm_aisc/flexural_member_design_test_03.py
+python tests/materials/astm_aisc/flexural_member_design_test_04.py
+python tests/materials/astm_aisc/compression_member_design_test_01.py
+python tests/materials/astm_aisc/compression_member_design_test_02.py
+python tests/materials/astm_aisc/compression_member_design_test_03.py
+python tests/materials/astm_aisc/shear_member_design_test.py
+
+echo "$BLEU" "  Wood sections test." "$NORMAL"
 echo "$BLEU" "    AWC NDS tests." "$NORMAL"
 python tests/materials/awc_nds/awc_nds2018_test01.py
 python tests/materials/awc_nds/rsdg_exemple_5_1.py
@@ -546,14 +559,6 @@ python tests/materials/awc_nds/southern_pine_joist_test.py
 python tests/materials/awc_nds/withdrawal_design_value_test.py
 python tests/materials/awc_nds/lateral_design_value_test.py
 python tests/materials/awc_nds/test_beam_stability_factor.py
-echo "$BLEU" "    ASTM/AISC tests." "$NORMAL"
-python tests/materials/astm_aisc/hss12x8_test.py
-python tests/materials/astm_aisc/hss8x8_test.py
-python tests/materials/astm_aisc/flexural_member_design_test_01.py
-python tests/materials/astm_aisc/compression_member_design_test_01.py
-python tests/materials/astm_aisc/compression_member_design_test_02.py
-python tests/materials/astm_aisc/compression_member_design_test_03.py
-python tests/materials/astm_aisc/shear_member_design_test.py
 
 echo "$BLEU" "  Plate and membrane materials." "$NORMAL"
 python tests/materials/test_material_elastic_membrane_plate_section_01.py
