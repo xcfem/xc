@@ -130,7 +130,7 @@ def getUIShapeCriticalStress(shape, lateralUnbracedLength, Cb, majorAxis= True):
     '''
     if(not majorAxis):
         lmsg.error('L_r not implemented for minor axis.')
-    E= self.get('E') # Elastic modulus.
+    E= shape.get('E') # Elastic modulus.
     J= shape.get('It') # Torsional moment of inertia
     Sz= shape.get('Wzel') # Elastic section modulus about major axis.
     h0= shape.get('ho') # Distance between the flange centroids
