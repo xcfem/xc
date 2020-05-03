@@ -29,6 +29,7 @@
 #ifndef sectionClassTags_h
 #define sectionClassTags_h
 
+#define SEC_TAG_Elastic1d                       1000
 #define SEC_TAG_Elastic2d                       1001
 #define SEC_TAG_Elastic3d                       1002
 #define SEC_TAG_Generic1d	                1003

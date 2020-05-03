@@ -119,6 +119,7 @@
 
 //Section
 #include "material/section/Bidirectional.h"
+#include "material/section/elastic_section/ElasticSection1d.h"
 #include "material/section/elastic_section/ElasticSection2d.h"
 #include "material/section/elastic_section/ElasticShearSection2d.h"
 #include "material/section/elastic_section/ElasticSection3d.h"
@@ -390,6 +391,8 @@ XC::Material *load_section_material(int tag_mat,const std::string &cmd,XC::Mater
     XC::Material *retval= nullptr;
     if(cmd == "bidirectional_section")
       retval= new XC::Bidirectional(tag_mat);
+    else if(cmd == "elastic_section_1d")
+      retval= new XC::ElasticSection1d(tag_mat,mhandler);
     else if(cmd == "elastic_section_2d")
       retval= new XC::ElasticSection2d(tag_mat,mhandler);
     else if(cmd == "elasticShearSection2d")

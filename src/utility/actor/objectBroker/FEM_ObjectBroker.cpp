@@ -620,6 +620,8 @@ XC::SectionForceDeformation *XC::FEM_ObjectBroker::getNewSection(int classTag)
   {
      switch(classTag)
       {
+      case SEC_TAG_Elastic1d:
+        return new ElasticSection1d();
       case SEC_TAG_Elastic2d:
         return new ElasticSection2d();
       case SEC_TAG_Elastic3d:

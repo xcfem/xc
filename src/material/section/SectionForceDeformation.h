@@ -106,7 +106,7 @@ class SectionForceDeformation: public Material
     virtual int addInitialSectionDeformation(const Vector &);
     inline void setInitialGeneralizedStrain(const Vector &iS)
       { setInitialSectionDeformation(iS); }
-    const Vector &getInitialGeneralizedStrain(void) const
+    inline const Vector &getInitialGeneralizedStrain(void) const
       { return getInitialSectionDeformation(); }
 
 

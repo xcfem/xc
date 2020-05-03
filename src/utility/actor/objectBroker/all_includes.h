@@ -65,6 +65,7 @@
 #include "material/uniaxial/drain/DrainPinch1Material.h"
 
 // Sections
+#include "material/section/elastic_section/ElasticSection1d.h"
 #include "material/section/elastic_section/ElasticSection2d.h"
 #include "material/section/elastic_section/ElasticSection3d.h"
 #include "material/section/elastic_section/ElasticShearSection2d.h"

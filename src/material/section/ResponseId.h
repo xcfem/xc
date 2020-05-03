@@ -72,6 +72,12 @@ class ResponseId: public ID
     std::string getString(void) const;
   };
 
+class RespP: public ResponseId
+  {
+  public:
+    RespP(void);
+  };
+  
 class RespPMz: public ResponseId
   {
   public:
@@ -138,6 +144,7 @@ class RespShellMaterial: public ResponseId
     RespShellMaterial(void);
   };
 
+const RespP RespElasticSection1d;
 const RespPMz RespElasticSection2d;
 const RespPMzV RespElasticShSection2d;
 const RespVyP RespBidirectional;

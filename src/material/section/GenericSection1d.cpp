@@ -73,17 +73,11 @@ XC::Vector XC::GenericSection1d::s(1);
 XC::Matrix XC::GenericSection1d::ks(1,1);
 XC::ResponseId XC::GenericSection1d::c(1);
 
-//! @brief Constructor.
-//!
-//! Constructs a GenericSection1D whose unique integer tag among
-//! SectionForceDeformation objects in the domain is given by \p tag. Obtains
-//! a copy of the UniaxialMaterial \p m via a call to getCopy().
-//! The section code is set to be \p code.
-XC::GenericSection1d::GenericSection1d(int tag, UniaxialMaterial &m, int type)
-  :PrismaticBarCrossSection(tag,SEC_TAG_Generic1d), code(type)
+//! @brief Allocates material.
+void XC::GenericSection1d::alloc(const UniaxialMaterial &m)
   {
-    theModel = m.getCopy();
-
+    free();
+    theModel= m.getCopy();
     if(!theModel)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -92,19 +86,50 @@ XC::GenericSection1d::GenericSection1d(int tag, UniaxialMaterial &m, int type)
       }
   }
 
+//! @brief Frees memory.
+void XC::GenericSection1d::free(void)
+  {
+    if(theModel)
+      delete theModel;
+    theModel= nullptr;
+  }
+//! @brief Constructor.
+//!
+//! Constructs a GenericSection1D whose unique integer tag among
+//! SectionForceDeformation objects in the domain is given by \p tag. Obtains
+//! a copy of the UniaxialMaterial \p m via a call to getCopy().
+//! The section code is set to be \p code.
+XC::GenericSection1d::GenericSection1d(int tag, UniaxialMaterial &m, int type)
+  :PrismaticBarCrossSection(tag,SEC_TAG_Generic1d), theModel(nullptr), code(type)
+  { alloc(m); }
+
 //! @brief Constructor.
 XC::GenericSection1d::GenericSection1d(int tag)
-  :PrismaticBarCrossSection(0,SEC_TAG_Generic1d), theModel(0), code(0)
+  :PrismaticBarCrossSection(tag,SEC_TAG_Generic1d), theModel(nullptr), code(0)
   {}
 
 //! @brief Constructor.
-XC::GenericSection1d::GenericSection1d()
-  :PrismaticBarCrossSection(0,SEC_TAG_Generic1d), theModel(0), code(0)
-  {}
+XC::GenericSection1d::GenericSection1d(const GenericSection1d &other)
+  :PrismaticBarCrossSection(other), theModel(nullptr), code(other.code)
+  {
+    if(other.theModel)
+      alloc(*other.theModel);
+  }
+
+XC::GenericSection1d &XC::GenericSection1d::operator=(const GenericSection1d &other)
+  {
+    PrismaticBarCrossSection::operator=(other);
+    if(other.theModel)
+      alloc(*other.theModel);
+    else
+      free();
+    return *this;
+  }
+
 
 //! @brief Destructor.
 XC::GenericSection1d::~GenericSection1d(void)
-  { if (theModel) delete theModel; }
+  { free(); }
 
 //! @brief Sets the cross-section initial strain
 //! (generalized: axial and bending).

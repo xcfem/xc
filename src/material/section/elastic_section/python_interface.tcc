@@ -26,6 +26,15 @@ class_<XC::BaseElasticSection, bases<XC::PrismaticBarCrossSection>, boost::nonco
   .def("sectionGeometry",&XC::BaseElasticSection::sectionGeometry)
   ;
 
+const XC::CrossSectionProperties1d &(XC::BaseElasticSection1d::*getCrossSectionProperties1d)(void)const= &XC::BaseElasticSection1d::getCrossSectionProperties;
+class_<XC::BaseElasticSection1d, bases<XC::BaseElasticSection>, boost::noncopyable >("BaseElasticSection1d", no_init)
+  .add_property("sectionProperties", make_function( getCrossSectionProperties1d, return_internal_reference<>() ), &XC::BaseElasticSection1d::setCrossSectionProperties,"Returns section mechanical properties (area, inertia,...)")
+  ;
+
+class_<XC::ElasticSection1d, bases<XC::BaseElasticSection1d>, boost::noncopyable >("ElasticSection1d")
+  .def("getStress", &XC::ElasticSection1d::getStress,"Material density.")
+  ;
+
 const XC::CrossSectionProperties2d &(XC::BaseElasticSection2d::*getCrossSectionProperties2d)(void)const= &XC::BaseElasticSection2d::getCrossSectionProperties;
 class_<XC::BaseElasticSection2d, bases<XC::BaseElasticSection>, boost::noncopyable >("BaseElasticSection2d", no_init)
   .add_property("sectionProperties", make_function( getCrossSectionProperties2d, return_internal_reference<>() ), &XC::BaseElasticSection2d::setCrossSectionProperties,"Returns section mechanical properties (area, inertia,...)")

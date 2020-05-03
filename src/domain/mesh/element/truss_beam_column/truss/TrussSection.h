@@ -79,7 +79,7 @@ class SectionForceDeformation;
 class TrussSection: public TrussBase
   {
   private:
-    SectionForceDeformation  *theSection;
+    SectionForceDeformation *theSection;
     double computeCurrentStrain(void) const;    
   protected:
     int sendData(Communicator &comm);

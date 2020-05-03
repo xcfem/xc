@@ -208,6 +208,24 @@ def defConcrete02(preprocessor,name,epsc0,fpc,fpcu,epscu,ratioSlope,ft,Ets):
     lmsg.warning("concrete02 compressive strength fpc is equal to crushing strength fpcu => the solver can return wrong stresses or have convergence problems ")
   return retval
 
+#Elastic section 1d.
+def defElasticSection1d(preprocessor,name,A,E,rho= 0.0):
+  '''Constructs an elastic section appropiate for 1D beam analysis.
+
+  :param preprocessor: preprocessor
+  :param name:         name identifying the section
+  :param A:            cross-sectional area of the section
+  :param E:            Young’s modulus of material
+  :param I:            second moment of area about the local z-axis
+  '''
+  materialHandler= preprocessor.getMaterialHandler
+  retval= materialHandler.newMaterial("elastic_section_1d",name)
+  retval.name= name
+  retval.sectionProperties.A= A
+  retval.sectionProperties.E= E
+  retval.sectionProperties.rho= rho
+  return retval
+
 #Elastic section 2d.
 def defElasticSection2d(preprocessor,name,A,E,I, rho= 0.0):
   '''Constructs an elastic section appropiate for 2D beam analysis.
@@ -249,6 +267,18 @@ def defElasticShearSection2d(preprocessor,name,A,E,G,I,alpha, rho= 0.0):
     retval.sectionProperties.I= I
     retval.sectionProperties.Alpha= alpha
     retval.sectionProperties.rho= rho
+    return retval
+
+def defElasticSectionFromMechProp1d(preprocessor,name,mechProp1d):
+    '''Constructs an elastic section appropiate for 1D beam analysis, 
+    taking mechanical properties of the section form a MechProp1d object.
+
+    :param preprocessor: preprocessor
+    :param name:         name identifying the section
+    :param mechProp1d:   object of type MechProp1d that contains the mechanical 
+                    properties of the section
+    '''  
+    retval= defElasticSection1d(preprocessor,name,mechProp1d.A,mechProp1d.E,rho= mechProp1d.rho)
     return retval
 
 def defElasticSectionFromMechProp2d(preprocessor,name,mechProp2d):

@@ -45,76 +45,57 @@
 **                                                                    **
 ** ****************************************************************** */
                                                                         
-// $Revision: 1.5 $
-// $Date: 2003/02/14 23:01:34 $
-// $Source: /usr/local/cvs/OpenSees/SRC/material/section/GenericSection1d.h,v $
+// $Revision: 1.6 $
+// $Date: 2003/02/14 23:01:33 $
+// $Source: /usr/local/cvs/OpenSees/SRC/material/section/fiber_section/ElasticSection1d.h,v $
                                                                         
                                                                         
-#ifndef GenericSection1d_h
-#define GenericSection1d_h
+///////////////////////////////////////////////////////
+// File:  ~/Src/element/hinge/ElasticSection1d.h
+//
+// Written by Matthew Peavy
+//
+// Written:  Feb 13, 2000
+// Debugged: Feb 14, 2000
+// Revised:  May 2000 -- MHS
+//
+//
+// Purpose:  This header file contains the prototype
+// for the ElasticSection1d class.
 
-// File: ~/material/GenericSection1d.h
-//
-// Written: MHS
-// Created: Apr 2000
-// Revision: A
-//
-// Description: This file contains the class definition for GenericSection1d.
-//
-// What: "@(#) GenericSection1d.h, revA"
+#ifndef ElasticSection1d_h
+#define ElasticSection1d_h
 
-#include <material/section/PrismaticBarCrossSection.h>
-#include <utility/matrix/Matrix.h>
+#include <material/section/elastic_section/BaseElasticSection1d.h>
 
 namespace XC {
+class Channel;
+class FEM_ObjectBroker;
 class Information;
-class UniaxialMaterial;
 
-//! @ingroup MATSCC
+//! @ingroup MATSCCElastica
 //
-//! @brief Wrapper for an uniaxial material to behave like a section material.
+//! @brief Cross section with linear elastic material
+//! for bi-dimensional problems (3 degrees of freedom in each section).
 //!
-//! Provides a wrapper around a UniaxialMaterial
-//! so that any UniaxialMaterial may be used to model section response. 
-//! The design of this class follows the Object Adapter pattern in 
-//! "Design Patterns" by Gamma et al.
-class GenericSection1d: public PrismaticBarCrossSection
+//! Provides the implementation of a section which exhibits
+//! uncoupled elastic behavior in axial, moment, and shear response.
+class ElasticSection1d: public BaseElasticSection1d
   {
-  protected:
-    UniaxialMaterial *theModel;//!< Material model.
-    int code;
-
+  private:
     static Vector s;
-    static Matrix ks;
-    static ResponseId c;
-
-    void alloc(const UniaxialMaterial &);
-    void free(void);
-    int sendData(Communicator &);
-    int recvData(const Communicator &);
   public:
-    GenericSection1d(int tag, UniaxialMaterial& m, int code);
-    GenericSection1d(int tag= 0);
-    GenericSection1d(const GenericSection1d &);
-    GenericSection1d &operator=(const GenericSection1d &);
-    ~GenericSection1d(void);
+    ElasticSection1d(int tag= 0, double E= 0.0, double A=0.0);
+    ElasticSection1d(int tag, double EA);
+    ElasticSection1d(int tag, MaterialHandler *mat_ldr= nullptr);    
 
-    int setInitialSectionDeformation(const Vector &);
-    int setTrialSectionDeformation(const Vector &);
-    void zeroInitialSectionDeformation(void);
-    const Vector &getInitialSectionDeformation(void) const;
-    const Vector &getSectionDeformation(void) const;
-
+    double getStress(void) const;
     const Vector &getStressResultant(void) const;
     const Matrix &getSectionTangent(void) const;
     const Matrix &getInitialTangent(void) const;
     const Matrix &getSectionFlexibility(void) const;
     const Matrix &getInitialFlexibility(void) const;
-    
-    int commitState(void);
-    int revertToLastCommit(void);
-    int revertToStart(void);
-    
+
     SectionForceDeformation *getCopy(void) const;
     const ResponseId &getType(void) const;
     int getOrder(void) const;
@@ -122,9 +103,9 @@ class GenericSection1d: public PrismaticBarCrossSection
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
     
-    void Print(std::ostream &s, int flag = 0) const;
+
+    void Print(std::ostream &s, int flag =0) const;
   };
 } // end of XC namespace
-
 
 #endif

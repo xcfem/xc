@@ -177,6 +177,13 @@ std::string XC::ResponseId::getString(void) const
   }
 
 //! @brief Constructor; sets the identifiers for the stiffness contribution of the material.
+XC::RespP::RespP(void)
+  : ResponseId(1)
+  {
+    (*this)(0)= SECTION_RESPONSE_P; // P is the first and only quantity
+  }
+
+//! @brief Constructor; sets the identifiers for the stiffness contribution of the material.
 XC::RespPMz::RespPMz(void)
   : ResponseId(2)
   {
