@@ -550,6 +550,7 @@ echo "$BLEU" "    ASTM/AISC tests." "$NORMAL"
 python tests/materials/astm_aisc/hss12x8_test.py
 python tests/materials/astm_aisc/hss8x8_test.py
 python tests/materials/astm_aisc/flexural_member_design_test_01.py
+python tests/materials/astm_aisc/flexural_member_design_test_02.py
 python tests/materials/astm_aisc/compression_member_design_test_01.py
 python tests/materials/astm_aisc/compression_member_design_test_02.py
 python tests/materials/astm_aisc/compression_member_design_test_03.py
