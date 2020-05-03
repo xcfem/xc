@@ -9,8 +9,8 @@ from __future__ import print_function
 import xc_base
 import geom
 import xc
-from materials.astm import ASTM_materials
-from materials.astm import AISC_limit_state_checking as aisc
+from materials.astm_aisc import ASTM_materials
+from materials.astm_aisc import AISC_limit_state_checking as aisc
 
 inch2meter= 0.0254
 MPa2ksi= 0.145038

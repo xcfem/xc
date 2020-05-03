@@ -5,7 +5,7 @@
 from __future__ import division
 from __future__ import print_function
 
-from materials.astm import ASTM_materials
+from materials.astm_aisc import ASTM_materials
 
 in2m= 0.0254
 MPa2ksi= 0.145038
