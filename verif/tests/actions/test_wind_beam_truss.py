@@ -88,7 +88,7 @@ xcDiagSteel=steel.defElasticMaterial(prep)
 
 columns_mesh=fem.LinSetToMesh(columns,column_mat,0.25,xc.Vector([1,0,0]))
 beams_mesh=fem.LinSetToMesh(beams,beam_mat,0.25,xc.Vector([0,0,1]))
-fem.multi_mesh(prep,[columns_mesh,beams_mesh])
+fem.multi_mesh(prep,[columns_mesh,beams_mesh],sectGeom='Y')  #mesh these sets and creates property 'sectionGeometry' for each element)
 
 diagonals_mesh=fem.LinSetToMesh(diagonals,xcDiagSteel,100,xc.Vector([1,0,0]),'Truss',3,None)
 diagonals_mesh.generateMesh(prep)
@@ -103,9 +103,9 @@ for n in nodBase.nodes:
     
 # Wind action
 windParams=bw.windParams(v,Kd,Kzt,I,alpha,zg)
-wind_columns=loads.WindLoadOnBeams('wind_columns',columns,windParams,Cp,column_mat.h(),xc.Vector([0,1,0]))
-wind_beams=loads.WindLoadOnBeams('wind_beams',beams,windParams,Cp,beam_mat.h(),xc.Vector([0,1,0]))
-wind_diagonals=loads.WindLoadOnTrusses('wind_diagonals',diagonals,windParams,Cp,diag_mat.h(),xc.Vector([0,1,0]))
+wind_columns=loads.WindLoadOnBeams('wind_columns',columns,windParams,Cp,xc.Vector([0,1,0]),column_mat.h())
+wind_beams=loads.WindLoadOnBeams('wind_beams',beams,windParams,Cp,xc.Vector([0,1,0]))
+wind_diagonals=loads.WindLoadOnTrusses('wind_diagonals',diagonals,windParams,Cp,xc.Vector([0,1,0]),diag_mat.h())
 
 #    ***LOAD CASES***
 LC1=lcases.LoadCase(preprocessor=prep,name="LC1",loadPType="default",timeSType="constant_ts")
