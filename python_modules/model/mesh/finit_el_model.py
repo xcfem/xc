@@ -55,13 +55,20 @@ class RawLineSetToMesh(SetToMesh):
             seedElemHandler.defaultTransformation= 'None'
         return seedElemHandler.newElement(self.elemType,xc.ID([0,0]))
 
-    def generateMesh(self, preprocessor):
-        '''Generate the mesh for the line set. '''
+    def generateMesh(self, preprocessor,sectGeom='N'):
+        '''Generate the mesh for the line set. 
+
+        :param sectGeom: ='Y' if want to create the property  'sectionGeometry'
+                  for each element (defaults to 'N')
+        '''
         elem= self.getSeedElement(preprocessor)
         for l in self.primitiveSet.getLines:
             if(self.elemSize): #If elemSize==None don't touch the number of divisions.
                 l.setElemSize(self.elemSize)
             l.genMesh(xc.meshDir.I)
+            if sectGeom[0].lower()=='y':
+                for e in l.getElements:
+                    e.setProp('sectionGeometry',self.matSect)
         self.primitiveSet.fillDownwards()
 
 def getDefaultCoordinateTransformation(preprocessor,coordTransfName,coordTransfType,vDir):
@@ -136,8 +143,12 @@ class SurfSetToMesh(SetToMesh):
         seedElemHandler.defaultMaterial= self.matSect.name
         return seedElemHandler.newElement(self.elemType,xc.ID([0,0,0,0]))
 
-    def generateMesh(self, preprocessor):
-        '''Generate the mesh for the surface set.'''
+    def generateMesh(self, preprocessor,sectGeom='N'):
+        '''Generate the mesh for the surface set.
+
+        :param sectGeom: ='Y' if want to create the property  'sectionGeometry'
+                  for each element (defaults to 'N')
+        '''
         for s in self.primitiveSet.getSurfaces:
             if(self.elemSize): #If elemSize= None don't touch the number of divisions.
                 s.setElemSizeIJ(self.elemSize,self.elemSize)
@@ -145,18 +156,23 @@ class SurfSetToMesh(SetToMesh):
         elem= self.getSeedElement(preprocessor)
         for s in self.primitiveSet.getSurfaces:
             s.genMesh(xc.meshDir.I)
+            if sectGeom[0].lower()=='y':
+                for e in s.getElements:
+                    e.setProp('sectionGeometry',self.matSect)
         self.primitiveSet.fillDownwards()
 
 
-def multi_mesh(preprocessor,lstMeshSets):
+def multi_mesh(preprocessor,lstMeshSets,sectGeom='N'):
     '''Mesh all the mesh-sets included in lstMeshSets
 
     :param preprocessor: preprocessor
     :param lstMeshSets: list of instances of classes LinSetToMesh or 
            SurfSetToMesh to be meshed
+    :param sectGeom: ='Y' if want to create the property  'sectionGeometry'
+                  for each element (defaults to 'N')
     '''
     for ms in lstMeshSets:
-        ms.generateMesh(preprocessor)
+        ms.generateMesh(preprocessor,sectGeom)
 
 def assign_ndiv_to_lines_in_set(lnSet,ndiv):
     '''Assign a number of divisions = ndiv to all the lines included 
@@ -167,28 +183,30 @@ def assign_ndiv_to_lines_in_set(lnSet,ndiv):
         l.nDiv=ndiv
     return
 
-def createBeam2Pnts(preprocessor,startPnt,endPnt,setName,matSect,elemSize,vDirLAxZ,elemType='ElasticBeam3d',dimElemSpace=3,coordTransfType='linear'):
+def createBeam2Pnts(preprocessor,startPnt,endPnt,setName,matSect,elemSize,vDirLAxZ,elemType='ElasticBeam3d',dimElemSpace=3,coordTransfType='linear',sectGeom='N'):
     '''Return a set of beam elements created from startPnt to endPnt.
     
-    :ivar preprocessor: preprocessor
-    :ivar startPnt: coordinates of first beam extremity (defined as 
+    :param preprocessor: preprocessor
+    :param startPnt: coordinates of first beam extremity (defined as 
           geom.Pos3d(x,y,z)
-    :ivar startPnt: coordinates of end beam extremity (defined as 
+    :param startPnt: coordinates of end beam extremity (defined as 
           geom.Pos3d(x,y,z)
-    :ivar setName: name of the set of entities created
-    :ivar matSect: instance of the class BeamMaterialData that defines the 
+    :param setName: name of the set of entities created
+    :param matSect: instance of the class BeamMaterialData that defines the 
           material-section to be applied to the set of lines.
-    :ivar elemSize: mean size of the elements
-    :ivar vDirLAxZ: direction vector for the element local axis Z 
+    :param elemSize: mean size of the elements
+    :param vDirLAxZ: direction vector for the element local axis Z 
           defined as xc.Vector([x,y,z]). This is the direction in which
           the Z local axis of the sections will be
           oriented (i.e. in the case of rectangular sections this Z 
           local axis of the section is parallel to the dimension
           defined as width of the rectangle)
-    :ivar dimElemSpace: dimension of the element space (defaults to 3)
-    :ivar coordTransfType: type of coordinate transformation. Available 
+    :param dimElemSpace: dimension of the element space (defaults to 3)
+    :param coordTransfType: type of coordinate transformation. Available 
                        types: 'linear', 'PDelta' and 'corot' (defaults to 
                        'linear') 
+    :param sectGeom: ='Y' if want to create the property  'sectionGeometry'
+                  for each element (defaults to 'N')
     '''
     s=preprocessor.getSets.defSet(setName)
     ext1=preprocessor.getMultiBlockTopology.getPoints.newPntFromPos3d(startPnt)
@@ -196,6 +214,6 @@ def createBeam2Pnts(preprocessor,startPnt,endPnt,setName,matSect,elemSize,vDirLA
     l=preprocessor.getMultiBlockTopology.getLines.newLine(ext1.tag,ext2.tag)
     s.getLines.append(l)
     sMesh=LinSetToMesh(s,matSect,elemSize,vDirLAxZ,elemType,dimElemSpace,coordTransfType)
-    sMesh.generateMesh(preprocessor)
+    sMesh.generateMesh(preprocessor,sectGeom)
     return s
     
