@@ -239,11 +239,19 @@ XC::DbTagData &XC::CrossSectionProperties2d::getDbTagData(void) const
 
 //! @brief Send members through the communicator argument.
 int XC::CrossSectionProperties2d::sendData(Communicator &comm)
-  { return comm.sendDoubles(g,i,alpha,getDbTagData(),CommMetaData(1)); }
+  {
+    int res= CrossSectionProperties1d::sendData(comm);
+    res+= comm.sendDoubles(g,i,alpha,getDbTagData(),CommMetaData(1));
+    return res;
+  }
 
 //! @brief Receives members through the communicator argument.
 int XC::CrossSectionProperties2d::recvData(const Communicator &comm)
-  { return comm.receiveDoubles(g,i,alpha,getDbTagData(),CommMetaData(1)); }
+  {
+    int res= CrossSectionProperties1d::recvData(comm); 
+    res+= comm.receiveDoubles(g,i,alpha,getDbTagData(),CommMetaData(1));
+    return res;
+  }
 
 //! @brief Sends object through the communicator argument.
 int XC::CrossSectionProperties2d::sendSelf(Communicator &comm)
