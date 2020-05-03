@@ -105,14 +105,14 @@ def getUIShapeLr(shape, majorAxis= True):
     if(not majorAxis):
         lmsg.error('L_r not implemented for minor axis.')
     rts= shape.getRts()
-    E= self.get('E') # Elastic modulus.
+    E= shape.get('E') # Elastic modulus.
     Fy= shape.steelType.fy # specified minimum yield stress
     Sz= shape.get('Wzel') # Elastic section modulus about major axis.
     h0= shape.get('ho') # Distance between the flange centroids
     J= shape.get('It') # Torsional moment of inertia
     c= shape.getCCoefficient()
-    sqrt1= math.sqrt((J*c/Sx/h0)**2+6.76*(0.7*Fy/E)**2)
-    sqrt2= math.sqrt((J*c/Sx/h0)+sqrt1)
+    sqrt1= math.sqrt((J*c/Sz/h0)**2+6.76*(0.7*Fy/E)**2)
+    sqrt2= math.sqrt((J*c/Sz/h0)+sqrt1)
     return 1.95*rts*E/0.7/Fy*sqrt2
 
 def getUIShapeCriticalStress(shape, lateralUnbracedLength, Cb, majorAxis= True):
