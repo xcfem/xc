@@ -35,6 +35,7 @@
 #include "xc_utils/src/geom/sis_ref/PrincipalAxesOfInertia2D.h"
 #include "material/section/repres/CrossSectionProperties3d.h"
 #include "material/section/repres/CrossSectionProperties2d.h"
+#include "material/section/repres/CrossSectionProperties1d.h"
 #include "xc_utils/src/geom/d1/Segment2d.h"
 
 //! @brief Constructor.
@@ -198,7 +199,7 @@ XC::Matrix XC::SectionMassProperties::getIHomogenizedSection(const double &E0,co
 XC::CrossSectionProperties3d XC::SectionMassProperties::getCrossSectionProperties3d(const CrossSectionProperties3d &base) const
   {
     CrossSectionProperties3d retval;
-    retval= base; //Asignamos E, G y alpha.
+    retval= base; //Assign E, G y alpha.
     retval.A()= getAreaHomogenizedSection(base.E()); 
     retval.Iy()= getIyHomogenizedSection(base.E());
     retval.Iz()= getIzHomogenizedSection(base.E());
@@ -210,9 +211,18 @@ XC::CrossSectionProperties3d XC::SectionMassProperties::getCrossSectionPropertie
 XC::CrossSectionProperties2d XC::SectionMassProperties::getCrossSectionProperties2d(const CrossSectionProperties2d &base) const
   {
     static CrossSectionProperties2d retval;
-    retval= base; //Asignamos E, G y alpha.
+    retval= base; //Assign E, G y alpha.
     retval.A()= getAreaHomogenizedSection(base.E()); 
     retval.I()= getIzHomogenizedSection(base.E());
+    return retval;
+  }
+
+//! @brief Return the 1D mass properties of the homogenized section.
+XC::CrossSectionProperties1d XC::SectionMassProperties::getCrossSectionProperties1d(const CrossSectionProperties1d &base) const
+  {
+    static CrossSectionProperties1d retval;
+    retval= base; //Assign E and rho.
+    retval.A()= getAreaHomogenizedSection(base.E()); 
     return retval;
   }
 

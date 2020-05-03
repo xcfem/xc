@@ -40,6 +40,7 @@ class Vector2d;
 namespace XC {
 class CrossSectionProperties3d;
 class CrossSectionProperties2d;
+class CrossSectionProperties1d;
 class Vector;
 class Matrix;
 
@@ -104,6 +105,7 @@ class SectionMassProperties: public CommandEntity
 
     CrossSectionProperties3d getCrossSectionProperties3d(const CrossSectionProperties3d &) const;
     CrossSectionProperties2d getCrossSectionProperties2d(const CrossSectionProperties2d &) const;
+    CrossSectionProperties1d getCrossSectionProperties1d(const CrossSectionProperties1d &) const;
 
   };
 

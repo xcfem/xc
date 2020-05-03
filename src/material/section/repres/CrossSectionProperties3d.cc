@@ -294,7 +294,7 @@ int XC::CrossSectionProperties3d::updateParameter(int parameterID, Information &
 //! of the class members.
 XC::DbTagData &XC::CrossSectionProperties3d::getDbTagData(void) const
   {
-    static DbTagData retval(2);
+    static DbTagData retval(3);
     return retval;
   }
 
@@ -302,7 +302,7 @@ XC::DbTagData &XC::CrossSectionProperties3d::getDbTagData(void) const
 int XC::CrossSectionProperties3d::sendData(Communicator &comm)
   {
     int res= CrossSectionProperties2d::sendData(comm);
-    res+= comm.sendDoubles(iy,iyz,j,getDbTagData(),CommMetaData(1));
+    res+= comm.sendDoubles(iy,iyz,j,getDbTagData(),CommMetaData(2));
     return res;
   }
 
@@ -310,7 +310,7 @@ int XC::CrossSectionProperties3d::sendData(Communicator &comm)
 int XC::CrossSectionProperties3d::recvData(const Communicator &comm)
   {
     int res= CrossSectionProperties2d::recvData(comm); 
-    res+= comm.receiveDoubles(iy,iyz,j,getDbTagData(),CommMetaData(1));
+    res+= comm.receiveDoubles(iy,iyz,j,getDbTagData(),CommMetaData(2));
     return res;
   }
 
@@ -319,7 +319,7 @@ int XC::CrossSectionProperties3d::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
     const int dataTag= getDbTag();
-    inicComm(2);
+    inicComm(3);
     int res= sendData(comm);
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
@@ -332,7 +332,7 @@ int XC::CrossSectionProperties3d::sendSelf(Communicator &comm)
 //! @brief Receives object through the communicator argument.
 int XC::CrossSectionProperties3d::recvSelf(const Communicator &comm)
   {
-    inicComm(2);
+    inicComm(3);
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 

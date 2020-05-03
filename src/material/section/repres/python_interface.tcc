@@ -21,19 +21,23 @@
 //----------------------------------------------------------------------------
 //python_interface.tcc
 
-const double &(XC::CrossSectionProperties2d::*getE)(void) const= &XC::CrossSectionProperties2d::E;
+const double &(XC::CrossSectionProperties1d::*getE)(void) const= &XC::CrossSectionProperties1d::E;
+const double &(XC::CrossSectionProperties1d::*getA)(void) const= &XC::CrossSectionProperties1d::A;
+class_<XC::CrossSectionProperties1d, bases<CommandEntity> >("CrossSectionProperties1d")
+  .add_property("E", make_function( getE, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties1d::setE,"Elastic modulus.")
+  .add_property("A", make_function( getA, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties1d::setA,"Area.")
+  .add_property("rho", &XC::CrossSectionProperties1d::getRho, &XC::CrossSectionProperties1d::setRho,"Material density.")
+  .def("EA", &XC::CrossSectionProperties1d::EA, "Tensional stiffness.")
+  .def(self_ns::str(self_ns::self))
+  ;
+
 const double &(XC::CrossSectionProperties2d::*getG)(void) const= &XC::CrossSectionProperties2d::G;
-const double &(XC::CrossSectionProperties2d::*getA)(void) const= &XC::CrossSectionProperties2d::A;
 const double &(XC::CrossSectionProperties2d::*getAlpha)(void) const= &XC::CrossSectionProperties2d::Alpha;
 const double &(XC::CrossSectionProperties2d::*getI)(void) const= &XC::CrossSectionProperties2d::I;
-class_<XC::CrossSectionProperties2d, bases<CommandEntity> >("CrossSectionProperties2d")
-  .add_property("E", make_function( getE, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties2d::setE,"Elastic modulus.")
+class_<XC::CrossSectionProperties2d, bases<XC::CrossSectionProperties1d> >("CrossSectionProperties2d")
   .add_property("G", make_function( getG, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties2d::setG,"Shear modulus.")
-  .add_property("A", make_function( getA, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties2d::setA,"Area.")
   .add_property("Alpha", make_function( getAlpha, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties2d::setAlpha,"Shear reduction factor.")
-  .add_property("rho", &XC::CrossSectionProperties2d::getRho, &XC::CrossSectionProperties2d::setRho,"Material density.")
   .add_property("I", make_function( getI, return_value_policy<return_by_value>() ), &XC::CrossSectionProperties2d::setI, "Moment of inertia.")
-  .def("EA", &XC::CrossSectionProperties2d::EA, "Tensional stiffness.")
   .def("EI", &XC::CrossSectionProperties2d::EI, "Flexural stiffness.")
   .def("setI", &XC::CrossSectionProperties2d::setI, "Set moment of inertia value.") 
   .def(self_ns::str(self_ns::self))

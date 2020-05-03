@@ -44,26 +44,12 @@ XC::Matrix XC::CrossSectionProperties2d::ks3(3,3);
 
 bool XC::CrossSectionProperties2d::check_values(void)
   {
-    bool retval= true;
-    if(e <= 0.0)
-      {
-        std::clog << getClassName() << "::" << __FUNCTION__
-		  << "; Input E <= 0.0 ... setting E to 1.0\n";
-        e= 1.0;
-        retval= false;
-      }
+    bool retval= CrossSectionProperties1d::check_values();
     if(g <= 0.0)
       {
         std::clog << getClassName() << "::" << __FUNCTION__
 		  << "; Input G <= 0.0 ... setting G to 1.0\n";
         g= 1.0;
-        retval= false;
-      }
-    if(a <= 0.0)
-      {
-        std::clog << getClassName() << "::" << __FUNCTION__
-		  << "; Input A <= 0.0 ... setting A to 1.0\n";
-        a= 1.0;
         retval= false;
       }
     if(i <= 0.0)
@@ -85,19 +71,16 @@ bool XC::CrossSectionProperties2d::check_values(void)
 
 //! @brief Constructor.
 XC::CrossSectionProperties2d::CrossSectionProperties2d(void)
-  :CommandEntity(), MovableObject(0), e(0), g(0.0) , a(0), i(0),
-   alpha(0), rho(0) {}
+  : CrossSectionProperties1d(), g(0.0) , i(0), alpha(0) {}
 
 //! @brief Constructor.
 XC::CrossSectionProperties2d::CrossSectionProperties2d(double EA_in, double EI_in)
-  : CommandEntity(), MovableObject(0), e(1.0), g(0.0), a(EA_in), i(EI_in),
-    alpha(0), rho(0)
+  : CrossSectionProperties1d(EA_in), g(0.0), i(EI_in), alpha(0)
   { check_values(); }
 
 //! @brief Constructor.
 XC::CrossSectionProperties2d::CrossSectionProperties2d(const SectionForceDeformation &section)
-  : CommandEntity(), MovableObject(0), e(1.0), g(1.0), a(0.0), i(0.0),
-    alpha(0), rho(0)
+  : CrossSectionProperties1d(section), g(1.0), i(0.0), alpha(0)
   {
     const Matrix &sectTangent= section.getInitialTangent();
     const ResponseId &sectCode= section.getType();
@@ -106,9 +89,6 @@ XC::CrossSectionProperties2d::CrossSectionProperties2d(const SectionForceDeforma
 	int code = sectCode(i);
 	switch(code)
 	  {
-	  case SECTION_RESPONSE_P:
-	    a = sectTangent(i,i);
-	    break;
 	  case SECTION_RESPONSE_MZ:
 	    i = sectTangent(i,i);
 	    break;
@@ -120,8 +100,7 @@ XC::CrossSectionProperties2d::CrossSectionProperties2d(const SectionForceDeforma
 
 //! @brief Constructor (2D cross sections).
 XC::CrossSectionProperties2d::CrossSectionProperties2d(double E_in, double A_in, double I_in, double G_in, double a, double r)
-  : CommandEntity(), MovableObject(0), e(E_in), g(G_in), a(A_in), i(I_in),
-    alpha(a), rho(r)
+  : CrossSectionProperties1d(E_in,A_in,r), g(G_in), i(I_in), alpha(a)
   { check_values(); }
 
 //! @brief Returns the angle between the principal axes and the local system.
@@ -158,8 +137,8 @@ Vector2d XC::CrossSectionProperties2d::getVDirWeakAxis(void) const
 //! @brief Returns the tangent stiffness matrix.
 const XC::Matrix &XC::CrossSectionProperties2d::getSectionTangent2x2(void) const
   {
-    ks2(0,0) = EA(); //Axial stiffness.
-    ks2(1,1) = EI(); //z bending stiffness.
+    ks2(0,0)= EA(); //Axial stiffness.
+    ks2(1,1)= EI(); //z bending stiffness.
     return ks2;
   }
 
@@ -170,8 +149,8 @@ const XC::Matrix &XC::CrossSectionProperties2d::getInitialTangent2x2(void) const
 //! @brief Returns the flexibility matrix.
 const XC::Matrix &XC::CrossSectionProperties2d::getSectionFlexibility2x2(void) const
   {
-    ks2(0,0) = 1.0/(EA());
-    ks2(1,1) = 1.0/(EI());
+    ks2(0,0)= 1.0/(EA());
+    ks2(1,1)= 1.0/(EI());
     return ks2;
   }
 
@@ -211,46 +190,42 @@ int XC::CrossSectionProperties2d::setParameter(const std::vector<std::string> &a
     if(argv.size() < 1)
       return -1;
 
-    if(argv[0] == "E")
-      {
-        param.setValue(E());
-        return param.addObject(1,scc);
-      }
-    if(argv[0] == "A")
-      {
-        param.setValue(A());
-        return param.addObject(2,scc);
-      }
     if(argv[0] == "I")
       {
         param.setValue(I());
         return param.addObject(3,scc);
       }
-    if(argv[0] == "G")
+    else if(argv[0] == "G")
       {
         param.setValue(G());
         return param.addObject(4,scc);
       }
-    if(argv[0] == "alpha")
+    else if(argv[0] == "alpha")
       {
         param.setValue(Alpha());
         return param.addObject(5,scc);
       }
+    else 
+      return CrossSectionProperties1d::setParameter(argv,param,scc);
     return -1;
   }
 
-int XC::CrossSectionProperties2d::updateParameter(int paramID, Information &info)
+int XC::CrossSectionProperties2d::updateParameter(int parameterID, Information &info)
   {
-    if(paramID == 1)
-      e= info.theDouble;
-    if(paramID == 2)
-      a= info.theDouble;
-    if(paramID == 3)
-      i= info.theDouble;
-    if(paramID == 4)
-      g= info.theDouble;
-    if(paramID == 5)
-      alpha = info.theDouble;
+     switch(parameterID)
+      {
+      case 3:
+        i= info.theDouble;
+        return 0;
+      case 4:
+        g= info.theDouble;
+        return 0;
+      case 5:
+        alpha= info.theDouble;
+        return 0;
+      default:
+        return CrossSectionProperties1d::updateParameter(parameterID,info);
+      }
     return 0;
   }
 
@@ -258,24 +233,24 @@ int XC::CrossSectionProperties2d::updateParameter(int paramID, Information &info
 //! of the class members.
 XC::DbTagData &XC::CrossSectionProperties2d::getDbTagData(void) const
   {
-    static DbTagData retval(1);
+    static DbTagData retval(2);
     return retval;
   }
 
 //! @brief Send members through the communicator argument.
 int XC::CrossSectionProperties2d::sendData(Communicator &comm)
-  { return comm.sendDoubles(e,g,a,i,alpha,rho,getDbTagData(),CommMetaData(0)); }
+  { return comm.sendDoubles(g,i,alpha,getDbTagData(),CommMetaData(1)); }
 
 //! @brief Receives members through the communicator argument.
 int XC::CrossSectionProperties2d::recvData(const Communicator &comm)
-  { return comm.receiveDoubles(e,g,a,i,alpha,rho,getDbTagData(),CommMetaData(0)); }
+  { return comm.receiveDoubles(g,i,alpha,getDbTagData(),CommMetaData(1)); }
 
 //! @brief Sends object through the communicator argument.
 int XC::CrossSectionProperties2d::sendSelf(Communicator &comm)
   {
     setDbTag(comm);
     const int dataTag= getDbTag();
-    inicComm(1);
+    inicComm(2);
     int res= sendData(comm);
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
@@ -288,7 +263,7 @@ int XC::CrossSectionProperties2d::sendSelf(Communicator &comm)
 //! @brief Receives object through the communicator argument.
 int XC::CrossSectionProperties2d::recvSelf(const Communicator &comm)
   {
-    inicComm(1);
+    inicComm(2);
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
