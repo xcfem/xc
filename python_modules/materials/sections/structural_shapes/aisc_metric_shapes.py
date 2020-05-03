@@ -412,6 +412,8 @@ class CShape(structural_steel.UShape):
 
         :param majorAxis: true if flexure about the major axis.
         '''
+        E= self.get('E')
+        Fy= self.steelType.fy
         lambda_p= 0.38*math.sqrt(E/Fy) # Case 10 or case 13
         slendernessRatio= self.get('bSlendernessRatio')
         return slendernessRatio/lambda_p # if <1 then flanges are compact.
@@ -423,6 +425,8 @@ class CShape(structural_steel.UShape):
 
         :param majorAxis: true if flexure about the major axis.
         '''
+        E= self.get('E')
+        Fy= self.steelType.fy
         lambda_r= 1.0*math.sqrt(E/Fy) # Case 10 or case 13
         slendernessRatio= self.get('bSlendernessRatio')
         return slendernessRatio/lambda_r # if <1 then flanges are noncompact.
@@ -435,6 +439,8 @@ class CShape(structural_steel.UShape):
         '''
         if(not majorAxis):
             lmsg.error('compact web ratio not implemented for minor axis.')
+        E= self.get('E')
+        Fy= self.steelType.fy
         lambda_p= 3.76*math.sqrt(E/Fy) # Case 15
         slendernessRatio= self.get('hSlendernessRatio')
         return slendernessRatio/lambda_p # if <1 then web is compact.
@@ -448,11 +454,13 @@ class CShape(structural_steel.UShape):
         '''
         if(not majorAxis):
             lmsg.error('compact web ratio not implemented for minor axis.')
+        E= self.get('E')
+        Fy= self.steelType.fy
         lambda_p= 5.70*math.sqrt(E/Fy) # Case 15
         slendernessRatio= self.get('hSlendernessRatio')
         return slendernessRatio/lambda_p # if <1 then web is noncompact.
     
-    def compactWebAndFlangeRatio(shape, majorAxis= True):
+    def compactWebAndFlangeRatio(self, majorAxis= True):
         ''' If web and flanges are compact according to table 4.1b of 
             AISC-360-16 return a value less than one.
 
@@ -614,6 +622,8 @@ class HSSShape(structural_steel.QHShape):
         :param majorAxis: true if flexure about the major axis.
         '''
         retval= 10.0
+        E= self.get('E')
+        Fy= self.steelType.fy
         if(isRound):
             slendernessRatio= shape['slendernessRatio']
             lambda_p= 0.07*(E/Fy) # Case 20 (no square root here)
@@ -635,6 +645,8 @@ class HSSShape(structural_steel.QHShape):
         :param majorAxis: true if flexure about the major axis.
         '''
         retval= 10.0
+        E= self.get('E')
+        Fy= self.steelType.fy
         if(isRound):
             slendernessRatio= shape['slendernessRatio']
             lambda_r= 0.31*(E/Fy) # Case 20 (no square root here)
@@ -655,6 +667,8 @@ class HSSShape(structural_steel.QHShape):
         :param majorAxis: true if flexure about the major axis.
         '''
         retval= 10.0
+        E= self.get('E')
+        Fy= self.steelType.fy
         if(isRound):
             slendernessRatio= shape['slendernessRatio']
             lambda_p= 0.07*(E/Fy) # Case 20 (no square root here)
@@ -676,6 +690,8 @@ class HSSShape(structural_steel.QHShape):
         :param majorAxis: true if flexure about the major axis.
         '''
         retval= 10.0
+        E= self.get('E')
+        Fy= self.steelType.fy
         if(isRound):
             slendernessRatio= shape['slendernessRatio']
             lambda_r= 0.31*(E/Fy) # Case 20 (no square root here)
