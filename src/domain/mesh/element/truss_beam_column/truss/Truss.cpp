@@ -440,7 +440,7 @@ double XC::Truss::getRho(void) const
     return retval;
   }
 
-//! @brief Returns the material density per unit length.
+//! @brief Returns the element mass per unit length.
 double XC::Truss::getLinearRho(void) const
   { return getSectionArea()*getRho(); }
 

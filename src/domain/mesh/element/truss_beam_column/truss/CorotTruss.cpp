@@ -398,7 +398,7 @@ XC::Material *XC::CorotTruss::getMaterial(void)
 double XC::CorotTruss::getRho(void) const
   { return theMaterial->getRho(); }
 
-//! @brief Returns the material density per unit length.
+//! @brief Returns the element mass per unit length.
 double XC::CorotTruss::getLinearRho(void) const
   { return getSectionArea()*getRho(); }
 

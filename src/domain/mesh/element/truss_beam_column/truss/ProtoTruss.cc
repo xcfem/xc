@@ -155,6 +155,8 @@ int XC::ProtoTruss::recvData(const Communicator &comm)
     theVector= comm.receiveVectorPtr(theVector,getDbTagData(),ArrayCommMetaData(12,13,14)); 
     return res;
   }
+
+//! @brief Returns the element mass per unit length.
 double XC::ProtoTruss::getLinearRho(void) const
   {
     std::cerr << getClassName() << "::" << __FUNCTION__
