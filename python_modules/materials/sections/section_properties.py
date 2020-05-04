@@ -183,9 +183,26 @@ class SectionProperties(object):
             lmsg.warning('Material: '+self.sectionName+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
 
+    def defElasticSection1d(self,preprocessor,material):
+        ''' Return an elastic section appropiate for truss analysis.
+
+        :param preprocessor: preprocessor object.
+        :param material:     material constitutive model 
+                             (for which E is the Young's modulus)
+        '''
+        if(not self.xc_material):
+            materialHandler= preprocessor.getMaterialHandler
+            if(materialHandler.materialExists(self.sectionName)):
+                lmsg.warning("Section: "+self.sectionName+" already defined.")
+                self.xc_material= materialHandler.getMaterial(self.sectionName)
+            else:
+                self.xc_material= typical_materials.defElasticSection1d(preprocessor,self.sectionName,self.A(),material.E, rho= material.rho*self.A())
+        else:
+            lmsg.warning('Material: '+self.sectionName+ ' already defined as:'+str(self.xc_material))
+        return self.xc_material
+    
     def defElasticSection2d(self,preprocessor,material):
-        ''' Return an elastic section appropiate for 2D beam analysis, 
-           including shear deformations
+        ''' Return an elastic section appropiate for 2D beam analysis
 
         :param preprocessor: preprocessor object.
         :param material:     material constitutive model 
