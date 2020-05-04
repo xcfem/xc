@@ -28,7 +28,7 @@
 
 #include "ProtoTruss.h"
 #include <utility/matrix/Matrix.h>
-
+#include <domain/mesh/node/Node.h>
 #include "utility/actor/actor/MatrixCommMetaData.h"
 
 // initialise the class wide variables
@@ -154,4 +154,33 @@ int XC::ProtoTruss::recvData(const Communicator &comm)
     theMatrix= comm.receiveMatrixPtr(theMatrix,getDbTagData(),MatrixCommMetaData(8,9,10,11)); 
     theVector= comm.receiveVectorPtr(theVector,getDbTagData(),ArrayCommMetaData(12,13,14)); 
     return res;
+  }
+double XC::ProtoTruss::getLinearRho(void) const
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet." << std::endl;
+    return 0.0;
+  }
+
+//! @brief Creates the inertia load that corresponds to the
+//! acceleration argument.
+void XC::ProtoTruss::createInertiaLoad(const Vector &accel)
+  {
+    const int accelSize= accel.Size();
+    const double Lo= getLength(true); // element length
+    const double rho= getLinearRho();
+    const double M= 0.5*rho*Lo;
+    const Vector load= -M*accel;
+    const int nDOF= theNodes[0]->getNumberDOF();
+    Vector nLoad(nDOF);
+    if(accelSize>nDOF)
+         std::cerr << getClassName() << "::" << __FUNCTION__
+		   << "; acceleration of incorrect size "
+		   << accelSize << " should be less than " <<  nDOF
+		   << std::endl;
+    const int sz= std::min(nDOF,accelSize);
+    for(int i= 0;i<sz;i++)
+      nLoad[i]= load[i];
+    theNodes[0]->newLoad(nLoad);
+    theNodes[1]->newLoad(nLoad);
   }

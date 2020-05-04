@@ -24,13 +24,18 @@
 class_<XC::ProtoTruss, bases<XC::Element1D>, boost::noncopyable >("ProtoTruss", no_init)
   .def("getDim", &XC::ProtoTruss::getNumDIM,"Return the dimension of the space in which the element is defined (1, 2 or 3).")
   .def("getMaterial",&XC::ProtoTruss::getMaterialRef,return_internal_reference<>(),"Returns element's material")
+  .def("createInertiaLoad", &XC::Truss::createInertiaLoad,"Create the inertia load for the given acceleration vector.")
+  .def("getN", &XC::ProtoTruss::getAxialForce,"Returns axial (N) internal force.")
+  .add_property("getN1", &XC::ProtoTruss::getAxialForce,"Returns axial (N) internal force at node 1.")
+  .add_property("getN2", &XC::ProtoTruss::getAxialForce,"Returns axial (N) internal force at node 2.")
   ;
 
 class_<XC::TrussBase, bases<XC::ProtoTruss>, boost::noncopyable >("TrussBase", no_init)
   .def("getL", &XC::TrussBase::getL, return_value_policy<copy_const_reference>(),"Return the length of the element.")
    ;
 
-class_<XC::TrussSection , bases<XC::TrussBase>, boost::noncopyable >("TrussSection", no_init);
+class_<XC::TrussSection , bases<XC::TrussBase>, boost::noncopyable >("TrussSection", no_init)
+  ;
 
 class_<XC::Spring , bases<XC::ProtoTruss>, boost::noncopyable >("Spring", no_init)
   .def("getN", &XC::Spring::getAxialForce,"Returns axial (N) internal force.")
@@ -39,10 +44,6 @@ class_<XC::Spring , bases<XC::ProtoTruss>, boost::noncopyable >("Spring", no_ini
 
 class_<XC::Truss, bases<XC::TrussBase>, boost::noncopyable >("Truss")
   .add_property("sectionArea", make_function( &XC::Truss::getSectionArea, return_value_policy<copy_const_reference>() ), &XC::Truss::setSectionArea)
-  .def("getN", &XC::Truss::getAxialForce,"Returns axial (N) internal force.")
-  .add_property("getN1", &XC::Truss::getAxialForce,"Returns axial (N) internal force at node 1.")
-  .add_property("getN2", &XC::Truss::getAxialForce,"Returns axial (N) internal force at node 2.")
-  .def("createInertiaLoad", &XC::Truss::createInertiaLoad,"Create the inertia load for the given acceleration vector.")
   .add_property("rho", &XC::Truss::getRho,&XC::Truss::setRho)
    ;
 
@@ -50,9 +51,6 @@ class_<XC::CorotTrussBase, bases<XC::ProtoTruss>, boost::noncopyable >("CorotTru
 
 class_<XC::CorotTruss, bases<XC::CorotTrussBase>, boost::noncopyable >("CorotTruss", no_init)
   .add_property("sectionArea", make_function( &XC::CorotTruss::getSectionArea, return_value_policy<copy_const_reference>() ), &XC::CorotTruss::setSectionArea)
-  .def("getN", &XC::CorotTruss::getAxialForce,"Returns N internal force.")
-  .add_property("getN1", &XC::CorotTruss::getAxialForce,"Returns axial (N) internal force at node 1.")
-  .add_property("getN2", &XC::CorotTruss::getAxialForce,"Returns axial (N) internal force at node 2.")
   ;
 
 class_<XC::CorotTrussSection , bases<XC::CorotTrussBase>, boost::noncopyable >("CorotTrussSection", no_init)

@@ -75,6 +75,11 @@ class ProtoTruss: public Element1D
     virtual Material *getMaterial(void)= 0;
     Material &getMaterialRef(void);
     virtual double getRho(void) const= 0;
+    virtual double getLinearRho(void) const;
+
+    virtual void createInertiaLoad(const Vector &);
+    
+    virtual double getAxialForce(void) const= 0;
 
     // public methods to obtain information about dof & connectivity    
     int getNumDIM(void) const;	
