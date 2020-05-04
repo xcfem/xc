@@ -23,6 +23,7 @@
 
 class_<XC::ProtoTruss, bases<XC::Element1D>, boost::noncopyable >("ProtoTruss", no_init)
   .def("getDim", &XC::ProtoTruss::getNumDIM,"Return the dimension of the space in which the element is defined (1, 2 or 3).")
+  .add_property("linearRho", &XC::ProtoTruss::getLinearRho,"Return the element mass per unit length")
   .def("getMaterial",&XC::ProtoTruss::getMaterialRef,return_internal_reference<>(),"Returns element's material")
   .def("createInertiaLoad", &XC::Truss::createInertiaLoad,"Create the inertia load for the given acceleration vector.")
   .def("getN", &XC::ProtoTruss::getAxialForce,"Returns axial (N) internal force.")
