@@ -334,6 +334,8 @@ python tests/loads/test_vector3d_uniform_load_global01.py
 python tests/loads/test_vector3d_uniform_load_global02.py
 python tests/loads/test_vector3d_uniform_load_global03.py
 python tests/loads/truss_strain_load_01.py
+python tests/loads/truss_strain_load_02.py
+python tests/loads/truss_strain_load_03.py
 python tests/loads/beam_strain_load_01.py
 python tests/loads/beam_strain_load_02.py
 python tests/loads/beam_strain_load_03.py
