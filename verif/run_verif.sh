@@ -44,9 +44,10 @@ python tests/combinations/test_davit_02.py
 
 echo "$BLEU" "Elements tests." "$NORMAL"
 echo "$BLEU" "  Truss element tests." "$NORMAL"
-python tests/elements/truss_test0.py
-python tests/elements/truss_test1.py
-python tests/elements/truss_test2.py
+python tests/elements/trusses/truss_test0.py
+python tests/elements/trusses/truss_test1.py
+python tests/elements/trusses/truss_test2.py
+python tests/elements/trusses/truss_test3.py
 echo "$BLEU" "  Coordinate transformations tests." "$NORMAL"
 python tests/elements/crd_transf/test_linear_crd_transf_2d_01.py
 python tests/elements/crd_transf/test_pdelta_crd_transf_2d_01.py
