@@ -107,7 +107,7 @@ void XC::ElasticBeam2d::set_transf(const CrdTransf *trf)
   }
 
 XC::ElasticBeam2d::ElasticBeam2d(int tag)
-  :ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d), eInic(2), alpha(0.0), d(0.0),
+  :ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d), eInit(2), alpha(0.0), d(0.0),
    q(3), theCoordTransf(nullptr), release(0)
   {
     load.reset(6);
@@ -123,7 +123,7 @@ XC::ElasticBeam2d::ElasticBeam2d(int tag)
 
 //! @brief Constructor.
 XC::ElasticBeam2d::ElasticBeam2d(int tag,const Material *m,const CrdTransf *trf)
-  :ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d,m), eInic(2), alpha(0.0), d(0.0),
+  :ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d,m), eInit(2), alpha(0.0), d(0.0),
    q(3), theCoordTransf(nullptr), release(0)
   {
     load.reset(6);
@@ -140,7 +140,7 @@ XC::ElasticBeam2d::ElasticBeam2d(int tag,const Material *m,const CrdTransf *trf)
 
 //! @brief Constructor.
 XC::ElasticBeam2d::ElasticBeam2d(int tag, double a, double e, double i, int Nd1, int Nd2, CrdTransf2d &coordTransf, double Alpha, double depth, double r, int rel)
-  : ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d,a,e,i,Nd1,Nd2), eInic(2), alpha(Alpha), d(depth), q(3), theCoordTransf(nullptr), release(rel)
+  : ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d,a,e,i,Nd1,Nd2), eInit(2), alpha(Alpha), d(depth), q(3), theCoordTransf(nullptr), release(rel)
   {
     setRho(r);
     load.reset(6);
@@ -158,7 +158,7 @@ XC::ElasticBeam2d::ElasticBeam2d(int tag, double a, double e, double i, int Nd1,
 
 //! @brief Copy constructor.
 XC::ElasticBeam2d::ElasticBeam2d(const ElasticBeam2d &other)
-  :ProtoBeam2d(other), eInic(other.eInic), alpha(other.alpha), d(other.d),
+  :ProtoBeam2d(other), eInit(other.eInit), alpha(other.alpha), d(other.d),
    q(other.q), theCoordTransf(nullptr), release(other.release)
   {
     set_transf(other.theCoordTransf);
@@ -176,7 +176,7 @@ XC::ElasticBeam2d::ElasticBeam2d(const ElasticBeam2d &other)
 XC::ElasticBeam2d &XC::ElasticBeam2d::operator=(const ElasticBeam2d &other)
   {
     ProtoBeam2d::operator=(other);
-    eInic= other.eInic;
+    eInit= other.eInit;
     alpha= other.alpha;
     d= other.d;
     q= other.q;
@@ -258,7 +258,7 @@ void XC::ElasticBeam2d::setDomain(Domain *theDomain)
 
 int XC::ElasticBeam2d::setInitialSectionDeformation(const Vector &def)
   {
-    eInic= def;
+    eInit= def;
     return 0;
   }
 
@@ -271,9 +271,9 @@ const XC::Vector &XC::ElasticBeam2d::getSectionDeformation(void) const
     // retval(1)= (dy1-dy2)/L: Rotation about z/L.
     // retval(2)= (dy1-dy2)/L: Rotation about z/L.
     retval= theCoordTransf->getBasicTrialDisp()/L;
-    retval(0)-= eInic(0);
-    retval(1)-= eInic(1);
-    retval(2)-= eInic(1);
+    retval(0)-= eInit(0);
+    retval(1)-= eInit(1);
+    retval(2)-= eInit(1);
     return retval;
   }
 
@@ -470,8 +470,7 @@ void XC::ElasticBeam2d::zeroLoad(void)
     p0[1] = 0.0;
     p0[2] = 0.0;
 
-    eInic.Zero(); //Removes also initial strains.
-    return;
+    eInit.Zero(); //Removes also initial strains.
   }
 
 int XC::ElasticBeam2d::addLoad(ElementalLoad *theLoad, double loadFactor)
@@ -639,7 +638,7 @@ int XC::ElasticBeam2d::sendData(Communicator &comm)
   {
     int res= ProtoBeam2d::sendData(comm);
     res+= sendCoordTransf(8,9,10,comm);
-    res+= comm.sendVector(eInic,getDbTagData(),CommMetaData(11));
+    res+= comm.sendVector(eInit,getDbTagData(),CommMetaData(11));
     res+= comm.sendInt(release,getDbTagData(),CommMetaData(12));
     return res;
   }
@@ -649,7 +648,7 @@ int XC::ElasticBeam2d::recvData(const Communicator &comm)
   {
     int res= ProtoBeam2d::recvData(comm);
     theCoordTransf= recvCoordTransf2d(8,9,10,comm);
-    res+= comm.receiveVector(eInic,getDbTagData(),CommMetaData(11));
+    res+= comm.receiveVector(eInit,getDbTagData(),CommMetaData(11));
     res+= comm.receiveInt(release,getDbTagData(),CommMetaData(12));
     return res;
   }

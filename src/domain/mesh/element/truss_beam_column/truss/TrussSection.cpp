@@ -69,22 +69,36 @@
 #include <utility/recorder/response/ElementResponse.h>
 #include "material/section/ResponseId.h"
 #include "utility/actor/actor/MovableVector.h"
+#include "domain/load/beam_loads/TrussStrainLoad.h"
 
 #include <cmath>
+
+void XC::TrussSection::free(void)
+  {
+    if(theSection)
+      delete theSection;
+    theSection= nullptr;
+  }
+void XC::TrussSection::alloc(const SectionForceDeformation &s)
+  {
+    free();
+    theSection= s.getCopy();
+    if(!theSection)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; FATAL - failed to get a copy of the material."
+		  << s.getTag() << std::endl;
+        exit(-1);
+      }
+  }
 
 XC::TrussSection::TrussSection(int tag, int dim, int Nd1, int Nd2, SectionForceDeformation &theSect)
   :TrussBase(ELE_TAG_TrussSection,tag,dim,Nd1,Nd2),theSection(nullptr)
   {
     // get a copy of the material and check we obtained a valid copy
-    theSection = theSect.getCopy();
-    if(!theSection)
-      {
-        std::cerr << "FATAL TrussSection::TrussSection - failed to get a copy of material " <<
-        theSect.getTag() << std::endl;
-        exit(-1);
-      }
+    alloc(theSect);
     int order = theSection->getOrder();
-    const XC::ID &code = theSection->getType();
+    const ID &code = theSection->getType();
 
     int i;
     for(i = 0; i < order; i++)
@@ -92,7 +106,8 @@ XC::TrussSection::TrussSection(int tag, int dim, int Nd1, int Nd2, SectionForceD
         break;
 
      if(i == order)
-       std::cerr << "TrussSection::TrussSection - section does not provide axial response\n";
+       std::cerr << getClassName() << "::" << __FUNCTION__
+		 << ";section does not provide axial response\n";
 
     // set node pointers to nullptr
     initialize();
@@ -101,17 +116,35 @@ XC::TrussSection::TrussSection(int tag, int dim, int Nd1, int Nd2, SectionForceD
 XC::TrussSection::TrussSection(int tag,int dim,const Material *ptr_mat)
   :TrussBase(ELE_TAG_TrussSection,tag,dim,0,0), theSection(nullptr)
   {
-    theSection= cast_material<SectionForceDeformation>(ptr_mat);
+    alloc(*cast_material<SectionForceDeformation>(ptr_mat));
     initialize();
   }
 
-// constructor:
-//   invoked by a FEM_ObjectBroker - blank object that recvSelf needs
-//   to be invoked upon
+//! @brief Default constructor.
+//! 
+//! invoked by a FEM_ObjectBroker - blank object that recvSelf needs
+//! to be invoked upon
 XC::TrussSection::TrussSection(void)
   :TrussBase(ELE_TAG_TrussSection), theSection(nullptr)
   {
     initialize();
+  }
+
+//! @brief Copy constructor.
+XC::TrussSection::TrussSection(const TrussSection &other)
+  :TrussBase(other), theSection(nullptr)
+  {
+    if(other.theSection)
+      alloc(*other.theSection);
+  }
+
+//! @brief Assignment operator.
+XC::TrussSection &XC::TrussSection::operator=(const TrussSection &other)
+  {
+    TrussBase::operator=(other);
+    if(other.theSection)
+      alloc(*other.theSection);
+    return *this;
   }
 
 //! @brief Virtual constructor.
@@ -121,10 +154,8 @@ XC::Element* XC::TrussSection::getCopy(void) const
 //  destructor
 //     delete must be invoked on any objects created by the object
 //     and on the matertial object.
-XC::TrussSection::~TrussSection()
-  {
-    if(theSection) delete theSection;
-  }
+XC::TrussSection::~TrussSection(void)
+  { free(); }
 
 // method: setDomain()
 //    to set a link to the enclosing XC::Domain and to set the node pointers.
@@ -197,8 +228,9 @@ int XC::TrussSection::commitState(void)
   {
     int retVal = 0;
     // call element commitState to do any base class stuff
-    if((retVal = this->XC::TrussBase::commitState()) != 0) {
-      std::cerr << "XC::TrussSection::commitState () - failed in base class";
+    if((retVal = this->XC::TrussBase::commitState()) != 0)
+      {
+        std::cerr << "XC::TrussSection::commitState () - failed in base class";
     }
     retVal = theSection->commitState();
     return retVal;
@@ -224,7 +256,7 @@ int XC::TrussSection::update(void)
     double strain = this->computeCurrentStrain();
 
     int order = theSection->getOrder();
-    const XC::ID &code = theSection->getType();
+    const ID &code = theSection->getType();
 
     Vector e (order);
 
@@ -246,15 +278,16 @@ const XC::Matrix &XC::TrussSection::getTangentStiff(void) const
     }
 
     int order = theSection->getOrder();
-    const XC::ID &code = theSection->getType();
+    const ID &code = theSection->getType();
 
-    const XC::Matrix &k = theSection->getSectionTangent();
+    const Matrix &k = theSection->getSectionTangent();
     double AE = 0.0;
     int i;
-    for(i = 0; i < order; i++) {
-      if(code(i) == SECTION_RESPONSE_P)
-        AE += k(i,i);
-    }
+    for(i = 0; i < order; i++)
+      {
+        if(code(i) == SECTION_RESPONSE_P)
+          AE += k(i,i);
+      }
 
     // come back later and redo this if too slow
     Matrix &stiff = *theMatrix;
@@ -279,10 +312,11 @@ const XC::Matrix &XC::TrussSection::getTangentStiff(void) const
 
 const XC::Matrix &XC::TrussSection::getInitialStiff(void) const
   {
-    if(L == 0.0) { // - problem in setDomain() no further warnings
+    if(L == 0.0)
+      { // - problem in setDomain() no further warnings
         theMatrix->Zero();
         return *theMatrix;
-    }
+      }
 
     int order = theSection->getOrder();
     const ID &code = theSection->getType();
@@ -319,13 +353,18 @@ const XC::Matrix &XC::TrussSection::getInitialStiff(void) const
 //! @brief Return the element material.
 const XC::Material *XC::TrussSection::getMaterial(void) const
   { return theSection; }
+
 //! @brief Return the element material.
 XC::Material *XC::TrussSection::getMaterial(void)
   { return theSection; }
+
 //! @brief Return the density of the section.
 double XC::TrussSection::getRho(void) const
   { return theSection->getRho(); }
 
+//! @brief Returns the material density per unit length.
+double XC::TrussSection::getLinearRho(void) const
+  { return getRho(); }
 
 //! @brief Return the element mass matrix.
 const XC::Matrix &XC::TrussSection::getMass(void) const
@@ -341,7 +380,7 @@ const XC::Matrix &XC::TrussSection::getMass(void) const
         return mass;
       }
 
-    double M = 0.5*rho*L;
+    const double M= 0.5*rho*L;
 
     int numDOF2 = numDOF/2;
     for(int i = 0; i < getNumDIM(); i++) {
@@ -354,12 +393,40 @@ const XC::Matrix &XC::TrussSection::getMass(void) const
     return mass;
   }
 
-
+//! @brief Make loads zero.
+void XC::TrussSection::zeroLoad(void)
+  {
+    TrussBase::zeroLoad();
+    Vector zero(1);
+    zero[0]= 0.0;
+    theSection->setInitialSectionDeformation(zero); //Removes initial strains.
+  }
 
 int XC::TrussSection::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
-    std::cerr << "XC::TrussSection::addLoad - load type unknown for truss with tag: " << this->getTag() << std::endl;
-    return -1;
+    if(isDead())
+      std::clog << getClassName() << "::" << __FUNCTION__
+                << "; Warning, load over inactive element: "
+                << getTag() << std::endl;
+    else
+      {
+        if(TrussStrainLoad *trsLoad= dynamic_cast<TrussStrainLoad *>(theLoad))
+          {
+            const double e1= trsLoad->E1()*loadFactor;
+            const double e2= trsLoad->E2()*loadFactor;
+            Vector ezero(1);
+	    ezero[0]= (e2+e1)/2;
+            theSection->addInitialSectionDeformation(ezero);
+          }
+        else
+          {
+            std::cerr << getClassName() << "::" << __FUNCTION__
+	              << "; load type unknown for truss with tag: "
+		      << this->getTag() << std::endl;
+            return -1;
+          }
+      }
+    return 0;
   }
 
 
@@ -371,8 +438,8 @@ int XC::TrussSection::addInertiaLoadToUnbalance(const XC::Vector &accel)
         return 0;
 
     // get R * accel from the nodes
-    const XC::Vector &Raccel1 = theNodes[0]->getRV(accel);
-    const XC::Vector &Raccel2 = theNodes[1]->getRV(accel);
+    const Vector &Raccel1 = theNodes[0]->getRV(accel);
+    const Vector &Raccel2 = theNodes[1]->getRV(accel);
 
     int nodalDOF = numDOF/2;
 
@@ -402,32 +469,36 @@ int XC::TrussSection::addInertiaLoadToUnbalance(const XC::Vector &accel)
     return 0;
   }
 
+//! @brief Return the axial internal force.
+double XC::TrussSection::getAxialForce(void) const
+  {
+    double retval= 0.0;
+    if(L!=0.0)
+      {
+	const int order= theSection->getOrder();
+	const ID &code= theSection->getType();
+
+	const Vector &s = theSection->getStressResultant();
+	for(int i = 0; i < order; i++)
+	  {
+	    if(code(i) == SECTION_RESPONSE_P)
+	      retval+= s(i);
+	  }
+      }
+    return retval;
+  }
 
 const XC::Vector &XC::TrussSection::getResistingForce(void) const
   {
-    if(L == 0.0) { // - problem in setDomain() no further warnings
-        theVector->Zero();
-        return *theVector;
-    }
-
-    int order = theSection->getOrder();
-    const XC::ID &code = theSection->getType();
-
-    const XC::Vector &s = theSection->getStressResultant();
-    double force = 0.0;
-    int i;
-    for(i = 0; i < order; i++) {
-      if(code(i) == SECTION_RESPONSE_P)
-        force += s(i);
-    }
-
-    int numDOF2 = numDOF/2;
+    const double force= getAxialForce();
+    const int numDOF2 = numDOF/2;
     double temp;
-    for(i = 0; i < getNumDIM(); i++) {
-      temp = cosX[i]*force;
-      (*theVector)(i) = -temp;
-      (*theVector)(i+numDOF2) = temp;
-    }
+    for(int i = 0; i < getNumDIM(); i++)
+      {
+        temp = cosX[i]*force;
+        (*theVector)(i) = -temp;
+        (*theVector)(i+numDOF2) = temp;
+      }
 
     // add P
     (*theVector)-= *getLoad();
@@ -468,6 +539,14 @@ const XC::Vector &XC::TrussSection::getResistingForceIncInertia(void) const
     return *theVector;
   }
 
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
+XC::DbTagData &XC::TrussSection::getDbTagData(void) const
+  {
+    static DbTagData retval(23);
+    return retval;
+  }
+
 //! @brief Send members through the communicator argument.
 int XC::TrussSection::sendData(Communicator &comm)
   {
@@ -492,7 +571,8 @@ int XC::TrussSection::sendSelf(Communicator &comm)
     const int dataTag= getDbTag(comm);
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << "TrussSection::sendSelf -- failed to send ID data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send ID data\n";
     return res;
   }
 
@@ -502,7 +582,8 @@ int XC::TrussSection::recvSelf(const Communicator &comm)
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "TrussSection::recvSelf() - failed to recv ID data";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to recv ID data";
     else
       res+= recvData(comm);
     return res;
@@ -519,27 +600,29 @@ void XC::TrussSection::Print(std::ostream &s, int flag) const
       }
     else
       {
-                strain = this->computeCurrentStrain();
+	 strain = this->computeCurrentStrain();
 
-                int order = theSection->getOrder();
-                const XC::ID &code = theSection->getType();
+	 int order = theSection->getOrder();
+	 const XC::ID &code = theSection->getType();
 
-                Vector e (order);
+	 Vector e (order);
 
-                int i;
-                for(i = 0; i < order; i++) {
-                        if(code(i) == SECTION_RESPONSE_P)
-                                e(i) = strain;
-                }
+	 int i;
+	 for(i = 0; i < order; i++)
+	   {
+		 if(code(i) == SECTION_RESPONSE_P)
+			 e(i) = strain;
+	   }
 
-                theSection->setTrialSectionDeformation(e);
+	 theSection->setTrialSectionDeformation(e);
 
-                const XC::Vector &s = theSection->getStressResultant();
-                for(i = 0; i < order; i++) {
-                        if(code(i) == SECTION_RESPONSE_P)
-                                force += s(i);
-                }
-    }
+	 const XC::Vector &s = theSection->getStressResultant();
+	 for(i = 0; i < order; i++)
+	   {
+		 if(code(i) == SECTION_RESPONSE_P)
+			 force += s(i);
+	   }
+      }
 
     double temp;
     int numDOF2 = numDOF/2;
@@ -571,16 +654,18 @@ double XC::TrussSection::computeCurrentStrain(void) const
     // NOTE method will not be called if L == 0
 
     // determine the strain
-    const XC::Vector &disp1 = theNodes[0]->getTrialDisp();
-    const XC::Vector &disp2 = theNodes[1]->getTrialDisp();
+    const Vector &disp1 = theNodes[0]->getTrialDisp();
+    const Vector &disp2 = theNodes[1]->getTrialDisp();
 
-    double dLength = 0.0;
-    for(int i=0; i<getNumDIM(); i++){
+    double dLength= 0.0;
+    for(int i=0; i<getNumDIM(); i++)
+      {
         dLength += (disp2(i)-disp1(i))*cosX[i];
-    }
+      }
 
     // this method should never be called with L == 0
-    return dLength/L;
+    dLength/=L;
+    return dLength;
   }
 
 XC::Response *XC::TrussSection::setResponse(const std::vector<std::string> &argv, Information &eleInformation)

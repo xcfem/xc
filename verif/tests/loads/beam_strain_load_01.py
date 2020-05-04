@@ -34,9 +34,8 @@ nodes= preprocessor.getNodeHandler
 # Problem type
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
 
-nodes.defaultTag= 1 #First node number.
-nodes.newNodeXY(0.0,0.0)
-nodes.newNodeXY(L,0.0)
+n1= nodes.newNodeXY(0.0,0.0)
+n2= nodes.newNodeXY(L,0.0)
 
 # Geometric transformation(s)
 lin= modelSpace.newLinearCrdTransf("lin")
@@ -49,17 +48,16 @@ elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "scc"
 elements.dimElem= 2 # Dimension of element space
-elements.defaultTag= 1 #Tag for next element.
-beam2d= elements.newElement("ElasticBeam2d",xc.ID([1,2]))
+beam2d= elements.newElement("ElasticBeam2d",xc.ID([n1.tag,n2.tag]))
     
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
-spc= constraints.newSPConstraint(1,0,0.0)
-spc= constraints.newSPConstraint(1,1,0.0)
-spc= constraints.newSPConstraint(1,2,0.0)
-spc= constraints.newSPConstraint(2,0,0.0)
-spc= constraints.newSPConstraint(2,1,0.0)
-spc= constraints.newSPConstraint(2,2,0.0)
+spc= constraints.newSPConstraint(n1.tag,0,0.0)
+spc= constraints.newSPConstraint(n1.tag,1,0.0)
+spc= constraints.newSPConstraint(n1.tag,2,0.0)
+spc= constraints.newSPConstraint(n2.tag,0,0.0)
+spc= constraints.newSPConstraint(n2.tag,1,0.0)
+spc= constraints.newSPConstraint(n2.tag,2,0.0)
 
 # Loads definition
 loadHandler= preprocessor.getLoadHandler
@@ -72,7 +70,7 @@ lPatterns.currentTimeSeries= "ts"
 lp0= lPatterns.newLoadPattern("default","0")
 #\set_current_load_pattern{"0"}
 eleLoad= lp0.newElementalLoad("beam_strain_load")
-eleLoad.elementTags= xc.ID([1])
+eleLoad.elementTags= xc.ID([beam2d.tag])
 thermalDeformation= xc.DeformationPlane(alpha*AT)
 eleLoad.backEndDeformationPlane= thermalDeformation
 eleLoad.frontEndDeformationPlane= thermalDeformation
@@ -80,12 +78,11 @@ eleLoad.frontEndDeformationPlane= thermalDeformation
 #We add the load case to domain.
 lPatterns.addToDomain(lp0.name)
 
-analysis= predefined_solutions.simple_static_linear(feProblem)
-result= analysis.analyze(1)
+result= modelSpace.analyze(calculateNodalReactions= False)
 
-elements.getElement(1).getResistingForce()
-axil1= elements.getElement(1).getN1
-axil2= elements.getElement(1).getN2
+beam2d.getResistingForce()
+axil1= beam2d.getN1
+axil2= beam2d.getN2
 
 N= (-E*A*alpha*AT)
 ratio= ((axil2-N)/N)

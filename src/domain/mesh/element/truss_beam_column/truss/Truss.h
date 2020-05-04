@@ -128,8 +128,7 @@ class Truss: public TrussBase
       { return A; }
     inline void setSectionArea(const double &a)
       { A= a; }
-    inline double getLinearRho(void) const
-      { return getSectionArea()*getRho(); }
+    double getLinearRho(void) const;
 
     // public methods to obtain stiffness, mass, damping and residual information    
     const Matrix &getKi(void);
@@ -139,7 +138,6 @@ class Truss: public TrussBase
     const Matrix &getMass(void) const; 
 
     void zeroLoad(void);	
-    virtual void createInertiaLoad(const Vector &);
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
 

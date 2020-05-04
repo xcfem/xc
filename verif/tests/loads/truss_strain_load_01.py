@@ -44,7 +44,6 @@ elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
 elements= preprocessor.getElementHandler
 elements.defaultMaterial= "elast"
 elements.dimElem= 2 # Dimension of element space
-elements.defaultTag= 1 #Tag for the next element.
 truss= elements.newElement("Truss",xc.ID([nod1.tag,nod2.tag]))
 truss.sectionArea= A
 
@@ -75,16 +74,14 @@ eleLoad.eps2= alpha*AT
 #We add the load case to domain.
 lPatterns.addToDomain(lp0.name)
 
-analysis= predefined_solutions.simple_static_linear(feProblem)
-result= analysis.analyze(1)
+result= modelSpace.analyze(calculateNodalReactions= False)
 
 
 elements= preprocessor.getElementHandler
 
-elem1= elements.getElement(1)
-elem1.getResistingForce()
+truss.getResistingForce()
 N= (-E*A*alpha*AT)
-ratio= ((elem1.getN()-N)/N)
+ratio= ((truss.getN()-N)/N)
 
 # print "ratio= ",ratio
 

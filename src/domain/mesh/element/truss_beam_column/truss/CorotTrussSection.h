@@ -74,6 +74,8 @@ class CorotTrussSection: public CorotTrussBase
   {
   private:
     SectionForceDeformation *theSection;  // pointer to a material
+    void alloc(const SectionForceDeformation &);
+    void free(void);
   public:
     CorotTrussSection(int tag, int dim,int Nd1, int Nd2, SectionForceDeformation &theMaterial);
     CorotTrussSection(int tag,int dimension,const Material *ptr_mat);
@@ -94,15 +96,18 @@ class CorotTrussSection: public CorotTrussBase
     const Material *getMaterial(void) const;
     Material *getMaterial(void);
     virtual double getRho(void) const;
+    double getLinearRho(void) const;
 
     // public methods to obtain stiffness, mass, damping and residual information    
     const Matrix &getTangentStiff(void) const;
     const Matrix &getInitialStiff(void) const;
     const Matrix &getMass(void) const;
 
+    void zeroLoad(void);
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
 
+    double getAxialForce(void) const;
     const Vector &getResistingForce(void) const;
     const Vector &getResistingForceIncInertia(void) const;            
 

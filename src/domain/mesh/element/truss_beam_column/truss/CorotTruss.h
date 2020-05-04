@@ -101,6 +101,7 @@ class CorotTruss: public CorotTrussBase
     const Material *getMaterial(void) const;
     Material *getMaterial(void);
     virtual double getRho(void) const;
+    double getLinearRho(void) const;
     inline const double &getSectionArea(void) const
       { return A; }
     inline void setSectionArea(const double &a)

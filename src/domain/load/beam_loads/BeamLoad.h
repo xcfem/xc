@@ -42,8 +42,6 @@ class CrossSectionProperties3d;
 //! @brief Load over beam elements.
 class BeamLoad: public ElementBodyLoad
   {
-  protected:
-
   public:
     BeamLoad(int tag, int classTag,const ID &theElementTags);
     BeamLoad(int tag, int classTag);

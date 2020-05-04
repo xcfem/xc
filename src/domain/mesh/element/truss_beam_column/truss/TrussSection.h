@@ -80,14 +80,20 @@ class TrussSection: public TrussBase
   {
   private:
     SectionForceDeformation *theSection;
+    
+    void alloc(const SectionForceDeformation &);
+    void free(void);
     double computeCurrentStrain(void) const;    
   protected:
+    DbTagData &getDbTagData(void) const;
     int sendData(Communicator &comm);
     int recvData(const Communicator &comm);
   public:
     TrussSection(int tag, int dimension, int Nd1, int Nd2, SectionForceDeformation &theSection);
     TrussSection(int tag,int dimension,const Material *ptr_mat);    
-    TrussSection(void);    
+    TrussSection(void);
+    TrussSection(const TrussSection &);
+    TrussSection &operator=(const TrussSection &);
     Element *getCopy(void) const;
     ~TrussSection(void);
 
@@ -103,17 +109,20 @@ class TrussSection: public TrussBase
     const Material *getMaterial(void) const;
     Material *getMaterial(void);
     virtual double getRho(void) const;
+    double getLinearRho(void) const;
 
     // public methods to obtain stiffness, mass, damping and residual information    
     const Matrix &getTangentStiff(void) const;
     const Matrix &getInitialStiff(void) const;
     const Matrix &getMass(void) const;
 
+    void zeroLoad(void);
     int addLoad(ElementalLoad *theLoad, double loadFactor);
     int addInertiaLoadToUnbalance(const Vector &accel);
 
+    double getAxialForce(void) const;
     const Vector &getResistingForce(void) const;
-    const Vector &getResistingForceIncInertia(void) const;            
+    const Vector &getResistingForceIncInertia(void) const;
 
     // public methods for element output
     int sendSelf(Communicator &);

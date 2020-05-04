@@ -67,6 +67,26 @@
 
 #include <utility/recorder/response/ElementResponse.h>
 #include "material/section/ResponseId.h"
+#include "domain/load/beam_loads/TrussStrainLoad.h"
+
+void XC::CorotTrussSection::free(void)
+  {
+    if(theSection)
+      delete theSection;
+    theSection= nullptr;
+  }
+void XC::CorotTrussSection::alloc(const SectionForceDeformation &s)
+  {
+    free();
+    theSection= s.getCopy();
+    if(!theSection)
+      {
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; FATAL - failed to get a copy of the material."
+		  << s.getTag() << std::endl;
+        exit(-1);
+      }
+  }
 
 // constructor:
 //  responsible for allocating the necessary space needed by each object
@@ -75,15 +95,7 @@ XC::CorotTrussSection::CorotTrussSection(int tag, int dim,int Nd1, int Nd2, Sect
   :CorotTrussBase(tag,ELE_TAG_CorotTrussSection,dim,Nd1,Nd2), theSection(nullptr)
   {
     // get a copy of the material and check we obtained a valid copy
-    theSection = theSec.getCopy();
-    if(!theSection)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "FATAL element " << tag
-		  << " failed to get a copy of material with tag "
-		  << theSec.getTag() << std::endl;
-        exit(-1);
-      }
+    alloc(theSec);
   }
 
 
@@ -91,7 +103,7 @@ XC::CorotTrussSection::CorotTrussSection(int tag, int dim,int Nd1, int Nd2, Sect
 XC::CorotTrussSection::CorotTrussSection(int tag,int dim,const Material *ptr_mat)
   :CorotTrussBase(tag,ELE_TAG_CorotTrussSection,dim,0,0), theSection(nullptr)
   {
-    theSection= cast_material<SectionForceDeformation>(ptr_mat);
+    alloc(*cast_material<SectionForceDeformation>(ptr_mat));
   }
 
 // constructor:
@@ -106,17 +118,15 @@ XC::CorotTrussSection::CorotTrussSection(const CorotTrussSection &other)
   : CorotTrussBase(other), theSection(nullptr)
   {
     if(other.theSection)
-      theSection= other.theSection->getCopy();
+      alloc(*other.theSection);
   }
 
 //! @brief Assignment operator.
 XC::CorotTrussSection &XC::CorotTrussSection::operator=(const CorotTrussSection &other)
   {
     CorotTrussBase::operator=(other);
-    if(theSection) delete theSection;
-    theSection= nullptr;
     if(other.theSection)
-      theSection= other.theSection->getCopy();
+      alloc(*other.theSection);
     return *this;
   }
 
@@ -128,12 +138,7 @@ XC::Element* XC::CorotTrussSection::getCopy(void) const
 //     delete must be invoked on any objects created by the object
 //     and on the matertial object.
 XC::CorotTrussSection::~CorotTrussSection(void)
-{
-  // invoke the destructor on any objects created by the object
-  // that the object still holds a pointer to
-  if(theSection != 0)
-    delete theSection;
-}
+  { free(); }
 
 // method: setDomain()
 //    to set a link to the enclosing XC::Domain and to set the node pointers.
@@ -424,6 +429,12 @@ XC::Material *XC::CorotTrussSection::getMaterial(void)
 double XC::CorotTrussSection::getRho(void) const
   { return theSection->getRho(); }
 
+//! @brief Returns the material density per unit length.
+double XC::CorotTrussSection::getLinearRho(void) const
+  { return getRho(); }
+
+
+
 const XC::Matrix &XC::CorotTrussSection::getMass(void) const
   {
     Matrix &Mass = *theMatrix;
@@ -434,68 +445,103 @@ const XC::Matrix &XC::CorotTrussSection::getMass(void) const
     if(Lo == 0.0 || rho == 0.0)
         return Mass;
 
-    double M = 0.5*rho*Lo;
+    const double M= 0.5*rho*Lo;
     int numDOF2 = numDOF/2;
-    for(int i = 0; i < getNumDIM(); i++) {
-        Mass(i,i)                 = M;
-        Mass(i+numDOF2,i+numDOF2) = M;
-    }
+    for(int i = 0; i < getNumDIM(); i++)
+      {
+        Mass(i,i)= M;
+        Mass(i+numDOF2,i+numDOF2)= M;
+      }
 
     if(isDead())
       (*theMatrix)*=dead_srf;
     return *theMatrix;
   }
 
+//! @brief Make loads zero.
+void XC::CorotTrussSection::zeroLoad(void)
+  {
+    CorotTrussBase::zeroLoad();
+    Vector zero(1);
+    zero[0]= 0.0;
+    theSection->setInitialSectionDeformation(zero); //Removes initial strains.
+  }
+
 int XC::CorotTrussSection::addLoad(ElementalLoad *theLoad, double loadFactor)
-{
-  std::cerr << "XC::CorotTrussSection::addLoad - load type unknown for truss with tag: " <<  this->getTag() << std::endl;
-  return -1;
-}
+  {
+    if(isDead())
+      std::clog << getClassName() << "::" << __FUNCTION__
+                << "; Warning, load over inactive element: "
+                << getTag() << std::endl;
+    else
+      {
+        if(TrussStrainLoad *trsLoad= dynamic_cast<TrussStrainLoad *>(theLoad))
+          {
+            const double e1= trsLoad->E1()*loadFactor;
+            const double e2= trsLoad->E2()*loadFactor;
+            Vector ezero(1);
+	    ezero[0]= (e2+e1)/2;
+            theSection->addInitialSectionDeformation(ezero);
+          }
+        else
+          {
+            std::cerr << getClassName() << "::" << __FUNCTION__
+	              << "; load type unknown for truss with tag: "
+		      << this->getTag() << std::endl;
+            return -1;
+          }
+      }
+    return 0;
+  }
 
 int XC::CorotTrussSection::addInertiaLoadToUnbalance(const XC::Vector &accel)
-{
-        return 0;
-}
+  {
+    return 0;
+  }
+//! @brief Return the axial internal force.
+double XC::CorotTrussSection::getAxialForce(void) const
+  {
+    double retval= 0.0;
+    const int order= theSection->getOrder();
+    const ID &code= theSection->getType();
+    const Vector &s= theSection->getStressResultant();
+    for(int i = 0;i<order;i++)
+      {
+	if(code(i) == SECTION_RESPONSE_P)
+	  retval+= s(i);
+      }
+    return retval;
+  }
 
+//! @brief Return the element resisting force.
 const XC::Vector &XC::CorotTrussSection::getResistingForce(void) const
   {
-        int order = theSection->getOrder();
-        const ID &code = theSection->getType();
-        const Vector &s  = theSection->getStressResultant();
+    const double SA= getAxialForce()/Ln;
 
-        double SA = 0.0;
+    static Vector ql(3);
 
-        int i;
-        for(i = 0; i < order; i++) {
-                if(code(i) == SECTION_RESPONSE_P)
-                        SA += s(i);
-        }
+    ql(0) = d21[0]*SA;
+    ql(1) = d21[1]*SA;
+    ql(2) = d21[2]*SA;
 
-        SA /= Ln;
-
-    static XC::Vector ql(3);
-
-        ql(0) = d21[0]*SA;
-        ql(1) = d21[1]*SA;
-        ql(2) = d21[2]*SA;
-
-    static XC::Vector qg(3);
+    static Vector qg(3);
     qg.addMatrixTransposeVector(0.0, R, ql, 1.0);
 
-    Vector &P = *theVector;
+    Vector &P= *theVector;
     P.Zero();
 
     // Copy forces into appropriate places
     int numDOF2 = numDOF/2;
-    for(i = 0; i < getNumDIM(); i++) {
+    for(int i = 0; i < getNumDIM(); i++)
+      {
         P(i)         = -qg(i);
         P(i+numDOF2) =  qg(i);
-    }
+      }
 
     if(isDead())
       (*theVector)*=dead_srf;
     return *theVector;
-}
+  }
 
 const XC::Vector &XC::CorotTrussSection::getResistingForceIncInertia(void) const
   {

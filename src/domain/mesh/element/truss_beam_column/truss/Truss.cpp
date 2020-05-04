@@ -440,6 +440,10 @@ double XC::Truss::getRho(void) const
     return retval;
   }
 
+//! @brief Returns the material density per unit length.
+double XC::Truss::getLinearRho(void) const
+  { return getSectionArea()*getRho(); }
+
 //! @brief Returns the mass matrix.
 const XC::Matrix &XC::Truss::getMass(void) const
   {
@@ -474,32 +478,12 @@ void XC::Truss::zeroLoad(void)
     return;
   }
 
-//! @brief Creates the inertia load that corresponds to the
-//! acceleration argument.
-void XC::Truss::createInertiaLoad(const Vector &accel)
-  {
-    const int accelSize= accel.Size();
-    const Vector load= -0.5*accel*getLinearRho()*L;
-    const int nDOF= theNodes[0]->getNumberDOF();
-    Vector nLoad(nDOF);
-    if(accelSize>nDOF)
-         std::cerr << getClassName() << "::" << __FUNCTION__
-		   << "; acceleration of incorrect size "
-		   << accelSize << " should be less than " <<  nDOF
-		   << std::endl;
-    const int sz= std::min(nDOF,accelSize);
-    for(int i= 0;i<sz;i++)
-      nLoad[i]= load[i];
-    theNodes[0]->newLoad(nLoad);
-    theNodes[1]->newLoad(nLoad);
-  }
-
 //! @brief Adds a load.
 int XC::Truss::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
-      std::cerr << getClassName() << "::" << __FUNCTION__
-                << "; load over inactive element: "
+      std::clog << getClassName() << "::" << __FUNCTION__
+                << "; Warning, load over inactive element: "
                 << getTag() << std::endl;
     else
       {
@@ -807,6 +791,7 @@ void XC::Truss::Print(std::ostream &s, int flag) const
        }
   }
 
+//! @brief Return the axial internal force.
 double XC::Truss::getAxialForce(void) const
   { return A*theMaterial->getStress(); }
 

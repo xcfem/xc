@@ -79,7 +79,7 @@ class CrossSectionProperties3d;
 class ElasticBeam2d: public ProtoBeam2d
   {
   private:
-    Vector eInic; //!< Section initial deformations
+    Vector eInit; //!< Section initial deformations
     double alpha;
     double d; //!< Section depth.
 
@@ -113,7 +113,7 @@ class ElasticBeam2d: public ProtoBeam2d
 
     int setInitialSectionDeformation(const Vector&);
     inline const Vector &getInitialSectionDeformation(void) const
-      { return eInic; }
+      { return eInit; }
     const Vector &getSectionDeformation(void) const;
 
     void setDomain(Domain *theDomain);
@@ -134,9 +134,9 @@ class ElasticBeam2d: public ProtoBeam2d
     void setDepth(const double &h)
       { d= h; } 
     const Vector &getInitialStrain(void) const
-      { return eInic; }
+      { return eInit; }
     void setInitialStrain(const Vector &e)
-      { eInic= e; }
+      { eInit= e; }
     
     int update(void);
     const Matrix &getTangentStiff(void) const;

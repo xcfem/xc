@@ -393,9 +393,14 @@ const XC::Material *XC::CorotTruss::getMaterial(void) const
   { return theMaterial; }
 XC::Material *XC::CorotTruss::getMaterial(void)
   { return theMaterial; }
+
 //! @brief Return the material density.
 double XC::CorotTruss::getRho(void) const
   { return theMaterial->getRho(); }
+
+//! @brief Returns the material density per unit length.
+double XC::CorotTruss::getLinearRho(void) const
+  { return getSectionArea()*getRho(); }
 
 const XC::Matrix &XC::CorotTruss::getMass(void) const
   {
