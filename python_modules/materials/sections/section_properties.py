@@ -201,7 +201,7 @@ class SectionProperties(object):
             lmsg.warning('Material: '+self.sectionName+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
     
-    def defElasticSection2d(self,preprocessor,material):
+    def defElasticSection2d(self,preprocessor,material, majorAxis= True):
         ''' Return an elastic section appropiate for 2D beam analysis
 
         :param preprocessor: preprocessor object.
@@ -214,12 +214,15 @@ class SectionProperties(object):
                 lmsg.warning("Section: "+self.sectionName+" already defined.")
                 self.xc_material= materialHandler.getMaterial(self.sectionName)
             else:
-                self.xc_material= typical_materials.defElasticSection2d(preprocessor,self.sectionName,self.A(),material.E,self.Iz(), rho= material.rho*self.A())
+                I= self.Iz();
+                if(not majorAxis):
+                    I= self.Iy()
+                self.xc_material= typical_materials.defElasticSection2d(preprocessor,self.sectionName,self.A(),material.E,I, rho= material.rho*self.A())
         else:
             lmsg.warning('Material: '+self.sectionName+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
     
-    def defElasticShearSection2d(self,preprocessor,material):
+    def defElasticShearSection2d(self,preprocessor,material, majorAxis= True):
         '''elastic section appropiate for 2D beam analysis, including shear deformations
 
         :param  preprocessor: preprocessor object.
@@ -232,7 +235,10 @@ class SectionProperties(object):
                 lmsg.warning("Section: "+self.sectionName+" already defined.")
                 self.xc_material= materialHandler.getMaterial(self.sectionName)
             else:
-                self.xc_material= typical_materials.defElasticShearSection2d(preprocessor,self.sectionName,self.A(),material.E,material.G(),self.Iz(),self.alphaY(), rho= material.rho*self.A())
+                I= self.Iz();
+                if(not majorAxis):
+                    I= self.Iy()
+                self.xc_material= typical_materials.defElasticShearSection2d(preprocessor,self.sectionName,self.A(),material.E,material.G(),I,self.alphaY(), rho= material.rho*self.A())
         else:
             lmsg.warning('Material: '+self.sectionName+' already defined as:'+str(self.xc_material))
         return self.xc_material

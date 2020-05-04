@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 # COMPANION TO THE AISC STEEL CONSTRUCTION MANUAL
 # Volume 1: Design Examples
-# EXAMPLE F.3B W-SHAPE FLEXURAL MEMBER WITH NONCOMPACT FLANGES IN STRONG-
-# AXIS BENDING
+# EXAMPLE F.5 I-SHAPED FLEXURAL MEMBER IN MINOR-AXIS BENDING.
 
 from __future__ import division
 from __future__ import print_function
@@ -26,7 +25,7 @@ m2Toin2= 1.0/inch2meter**2
 
 # Problem type
 steelBeam= xc.FEProblem()
-steelBeam.title= 'Example F.1-1A'
+steelBeam.title= 'Example F.5'
 preprocessor= steelBeam.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
@@ -35,13 +34,13 @@ nodes= preprocessor.getNodeHandler
 steel= ASTM_materials.A992
 steel.gammaM= 1.00
 ## Profile geometry
-shape= ASTM_materials.WShape(steel,'W21X48')
-xcSection= shape.defElasticSection2d(preprocessor,steel)
+shape= ASTM_materials.WShape(steel,'W12X58')
+xcSection= shape.defElasticShearSection2d(preprocessor,steel, majorAxis= False)
 
 # Model geometry
 
 ## Points.
-span= 40.0*foot2meter
+span= 15.0*foot2meter
 pointHandler= preprocessor.getMultiBlockTopology.getPoints
 p0= pointHandler.newPntFromPos3d(geom.Pos3d(0.0,0.0,0.0))
 p1= pointHandler.newPntFromPos3d(geom.Pos3d(span,0.0,0.0))
@@ -49,7 +48,7 @@ p1= pointHandler.newPntFromPos3d(geom.Pos3d(span,0.0,0.0))
 ## Lines
 lineHandler= preprocessor.getMultiBlockTopology.getLines
 l1= lineHandler.newLine(p0.tag,p1.tag)
-l1.nDiv= 3*4 # so we have nodes under the punctual loads.
+l1.nDiv= 10 
 
 # Mesh
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
@@ -73,24 +72,22 @@ loadCaseNames= ['deadLoad','liveLoad']
 loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 
 ## Dead load.
-deadLoad= xc.Vector([0.0,-0.05e3*kip2kN/foot2meter, 0.0])
+deadLoad= xc.Vector([0.0,-0.667e3*kip2kN/foot2meter, 0.0])
 cLC= loadCaseManager.setCurrentLoadCase('deadLoad')
 for e in xcTotalSet.elements:
   e.vector2dUniformLoadGlobal(deadLoad)
   
 ## Live load.
-PL= -18.0e3*kip2kN
+liveLoad= xc.Vector([0.0,-2e3*kip2kN/foot2meter, 0.0])
 cLC= loadCaseManager.setCurrentLoadCase('liveLoad')
-n1= xcTotalSet.nodes.getNearestNode(geom.Pos3d(span/3.0,0,0))
-n1.newLoad(xc.Vector([0.0,PL,0.0]))
-n2= xcTotalSet.nodes.getNearestNode(geom.Pos3d(2.0*span/3.0,0,0))
-n2.newLoad(xc.Vector([0.0,PL,0.0]))
+for e in xcTotalSet.elements:
+  e.vector2dUniformLoadGlobal(liveLoad)
 
 ## Load combinations
 combContainer= combs.CombContainer()
 
 ### Serviceability limit states.
-combContainer.SLS.qp.add('combSLS01', '1.0*deadLoad+1.0*liveLoad')
+combContainer.SLS.qp.add('combSLS01', '1.0*liveLoad')
 
 ### Ultimate limit state.
 combContainer.ULS.perm.add('combULS01','1.2*deadLoad+1.6*liveLoad')
@@ -110,8 +107,8 @@ midPos1= geom.Pos3d(midSpan1,0.0,0.0)
 n1= l1.getNearestNode(geom.Pos3d(midSpan1,0.0,0.0))
 d1= n1.getDisp[1]
 E= shape.get('E')
-Iz= shape.get('Iz')
-refD1= (5.0*deadLoad[1]*span**4/384.0+PL*span**3/28.0)/E/Iz
+Iy= shape.get('Iy') # minor axis
+refD1= (5.0*liveLoad[1]*span**4/384.0)/E/Iy
 ratio1= abs((refD1-d1)/refD1)
 deflection= d1/span # Deflection
 
@@ -125,21 +122,21 @@ MMin= -MMax
 for e in xcTotalSet.elements:
   MMax= max(MMax,max(e.getM1, e.getM2))
   MMin= min(MMin,min(e.getM1, e.getM2))
-MMaxRef= -1.2*deadLoad[1]*span**2/8.0-1.6*PL*span/3.0
+MMaxRef= -1.2*deadLoad[1]*span**2/8.0-1.6*liveLoad[1]*span**2/8.0
 ratio2= abs((MMax-MMaxRef)/MMaxRef)
 
 # Because the beam is continuously braced and compact, only the
 # yielding limit state applies.
-beam= aisc.Member(l1.name, shape, unbracedLengthX= 0.5, unbracedLengthY= span, unbracedLengthZ= span, lstLines= [l1])
-Mu= beam.getDesignFlexuralStrength()
-MuRef= 542.055862328e3
-MuRefText= 0.9*442e3*kip2kN*foot2meter
+beam=  aisc.Member(l1.name, shape, unbracedLengthX= l1.getLength(), unbracedLengthY= l1.getLength(), unbracedLengthZ= l1.getLength(), lstLines= [l1])
+Mu= beam.getDesignFlexuralStrength(majorAxis= False)
+MuRef= 165.4965e3
+MuRefText= 0.9*136e3*kip2kN*foot2meter
 ratio3= abs((Mu-MuRef)/MuRef)
 ratio4= abs((Mu-MuRefText)/MuRefText)
 
 '''
 print('span= ', span, ' m(',span/foot2meter,' ft)')
-print('Iz= ', Iz, ' m4(',Iz/inch2meter**4,' in4)')
+print('Iy= ', Iy, ' m4(',Iy/inch2meter**4,' in4)')
 print('E= ', E/1e9, ' GPa(',E/1e6*MPa2ksi,' ksi)')
 print('refD1= ', refD1*1e3, ' mm(',refD1/inch2meter,' in)')
 print('d1= ', d1*1e3, ' mm(',d1/inch2meter,' in)')
@@ -150,6 +147,7 @@ print('MMax= ',MMax/1e3,' kN m')
 print('ratio2= ',ratio2)
 print('Mu= ',Mu/1e3,' kN m(',Mu/1e3*kN2kips/foot2meter,' kip-ft)')
 print('MuRef= ',MuRef/1e3,' kN m(',MuRef/1e3*kN2kips/foot2meter,' kip-ft)')
+print('MuRefText= ',MuRefText/1e3,' kN m(',MuRefText/1e3*kN2kips/foot2meter,' kip-ft)')
 print('ratio3= ',ratio3)
 print('ratio4= ',ratio4)
 '''
@@ -157,7 +155,7 @@ print('ratio4= ',ratio4)
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if(ratio1<5e-2 and ratio2<1e-7 and ratio3<1e-5 and ratio4<.01):
+if(ratio1<6e-2 and ratio2<1e-7 and ratio3<1e-5 and ratio4<.01):
   print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

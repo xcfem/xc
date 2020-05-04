@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 # Test from Ansys manual VM2
 
+from __future__ import division
+from __future__ import print_function
+
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2015, LCPT and AO_O"
 __license__= "GPL"
@@ -94,24 +97,30 @@ result= analysis.analyze(1)
 nodes= preprocessor.getNodeHandler
 nod3= nodes.getNode(3)
 delta= nod3.getDisp[1] 
+deltaRef=.182
 
 elements= preprocessor.getElementHandler
 
 elem2= elements.getElement(2)
 elem2.getResistingForce()
 sigma= elem2.getN2/elem2.sectionProperties.A+elem2.getM2/elem2.sectionProperties.I*elem2.h/2.0
+sigmaRef= -11400
 
 
+ratio1= abs(delta-deltaRef)/deltaRef
+ratio2= abs(sigma-sigmaRef)/sigmaRef
 
-# print{delta print (sigma)
-
-ratio1= (delta/0.182)
-ratio2= (sigma/(-11400))
+'''
+print('deltaRef= ', deltaRef)
+print('delta= ', delta)
+print('ratio1= ',ratio1)
+print('ratio2= ',ratio2)
+'''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1-1.0)<3e-3 and abs(ratio2-1.0)<1e-3):
-  print "test ",fname,": ok."
+if (abs(ratio1)<3e-3 and abs(ratio2)<1e-3):
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

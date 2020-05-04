@@ -56,7 +56,7 @@ def getShapePlasticMoment(shape, majorAxis= True):
     if(majorAxis):
         retval= Fy*shape.get('Wzpl')
     else:
-        retval= Fy*shape.get('Wypl')
+        retval= min(Fy*shape.get('Wypl'), 1.6*Fy*shape.get('Wyel')) # equation F6-1
     return retval
 
 def getShapeCompactWebAndFlangeRatio(shape, majorAxis= True):
@@ -144,18 +144,20 @@ def getUIShapeCriticalStress(shape, lateralUnbracedLength, Cb, majorAxis= True):
     :param Cb: lateral-torsional buckling modification factor.
     :param majorAxis: true if flexure about the major axis.
     '''
-    if(not majorAxis):
-        lmsg.error(__name__+': L_r not implemented for minor axis.')
     E= shape.get('E') # Elastic modulus.
-    J= shape.get('It') # Torsional moment of inertia
-    Sz= shape.get('Wzel') # Elastic section modulus about major axis.
-    h0= shape.get('ho') # Distance between the flange centroids
-    rts= shape.getRts()
-    Lb_rts2= (lateralUnbracedLength/rts)**2
-    J= shape.get('It') # Torsional moment of inertia
-    c= shape.getCCoefficient()
-    sqroot= math.sqrt(1+0.078*J*c/Sz/h0*Lb_rts2)
-    return Cb*math.pi**2*E/Lb_rts2*sqroot
+    if(not majorAxis):
+        b_tf= 2.0*shape.get('bSlendernessRatio') # see lambda expression in F6. 
+        return 0.69*E/b_tf**2 # equation F6-4
+    else:
+        J= shape.get('It') # Torsional moment of inertia
+        Sz= shape.get('Wzel') # Elastic section modulus about major axis.
+        h0= shape.get('ho') # Distance between the flange centroids
+        rts= shape.getRts()
+        Lb_rts2= (lateralUnbracedLength/rts)**2
+        J= shape.get('It') # Torsional moment of inertia
+        c= shape.getCCoefficient()
+        sqroot= math.sqrt(1+0.078*J*c/Sz/h0*Lb_rts2)
+        return Cb*math.pi**2*E/Lb_rts2*sqroot
 
 def getUIShapeNominalFlexuralStrength(shape, lateralUnbracedLength, Cb, majorAxis= True):
     ''' Return the nominal flexural strength of the member
@@ -169,40 +171,54 @@ def getUIShapeNominalFlexuralStrength(shape, lateralUnbracedLength, Cb, majorAxi
     :param Cb: lateral-torsional buckling modification factor.
     :param majorAxis: true if flexure about the major axis.
     '''
-    if(not majorAxis):
-        lmsg.error(__name__+': Nominal flexural strength not implemented for minor axis.')
-    compactRatio= shape.compactWebAndFlangeRatio(majorAxis)
     Mn= 0.0
     Mp= shape.getPlasticMoment(majorAxis) # plastic moment.
-    Fy= shape.steelType.fy # specified minimum yield stress
-    Sz= shape.get('Wzel') # Elastic section modulus about major axis.
-    if(compactRatio<=1.0): # flange and web are compact.
-        Lb= lateralUnbracedLength
-        Lp= shape.getLp(majorAxis)
-        if(Lb<Lp): # equation F2-1 applies
-            Mn= Mp
-        else:
-            Lr= shape.getLr(majorAxis)
-            if(Lb<=Lr): # equation F2-2 applies
-                Mn= Cb*(Mp-(Mp-0.7*Fy*Sz)*((Lb-Lp)/(Lr-Lp)))
-                Mn= min(Mn,Mp)
-            else: # equation F2-3 applies
-                Fcr= shape.getCriticalStress(Lb, Cb, majorAxis)
-                Mn= min(Fcr*Sz, Mp)
-    else: # flange or web or both are not compact.
-        compactWeb= shape.compactWebRatio(majorAxis)
-        if(compactWeb<=1.0): # web is compact.
+    if(not majorAxis): # section F6
+        compactFlanges= shape.compactFlangeRatio(majorAxis)
+        if(compactFlanges<=1.0): # flanges are compact.
+            Mn= Mp # equation F6-1
+        else: 
             slenderFlanges= shape.slenderFlangeRatio(majorAxis)
-            lmbd= shape.get('bSlendernessRatio')
-            if(slenderFlanges<=1.0): # flanges are noncompact -> equation F3-1 applies.
+            if(slenderFlanges<=1.0): # flanges are noncompact -> equation F6-2 applies.
+                lmbd= 2.0*shape.get('bSlendernessRatio') # see lambda expression in F6. 
                 lmbd_pf= shape.getLambdaPFlange()
                 lmbd_rf= shape.getLambdaRFlange()
-                Mn= Mp-(Mp-0.7*Fy*Sz)*((lmbd-lmbd_pf)/(lmbd_rf-lmbd_pf)) # equation F3-1
-            else: # flanges are slender -> equation F3-2 applies.
-                kc= max(min(4.0/math.sqrt(shape.get('hSlendernessRatio')),0.76),0.35)
-                Mn= 0.9*shape.get('E')*kc*Sz/lmbd**2 # equation F3-2
-        else: # web is not compact.
-            lmsg.error(__name__+': nominal flexural strength for noncompact web sections not implemented yet.')
+                Mn= Mp-(Mp-0.7*Fy*Sy)*((lmbd-lmbd_pf)/(lmbd_rf-lmbd_pf)) # equation F6-2
+            else: # slender flanges.
+                Sy= shape.get('Wyel') # Elastic section modulus about minor axis.
+                Fcr= shape.getCriticalStress(None, None, majorAxis)
+                Mn= Fcr*Sy # equation F6-3
+    else:
+        compactRatio= shape.compactWebAndFlangeRatio(majorAxis)
+        Fy= shape.steelType.fy # specified minimum yield stress
+        Sz= shape.get('Wzel') # Elastic section modulus about major axis.
+        if(compactRatio<=1.0): # flange and web are compact.
+            Lb= lateralUnbracedLength
+            Lp= shape.getLp(majorAxis)
+            if(Lb<Lp): # equation F2-1 applies
+                Mn= Mp
+            else:
+                Lr= shape.getLr(majorAxis)
+                if(Lb<=Lr): # equation F2-2 applies
+                    Mn= Cb*(Mp-(Mp-0.7*Fy*Sz)*((Lb-Lp)/(Lr-Lp)))
+                    Mn= min(Mn,Mp)
+                else: # equation F2-3 applies
+                    Fcr= shape.getCriticalStress(Lb, Cb, majorAxis)
+                    Mn= min(Fcr*Sz, Mp)
+        else: # flange or web or both are not compact.
+            compactWeb= shape.compactWebRatio(majorAxis)
+            if(compactWeb<=1.0): # web is compact.
+                slenderFlanges= shape.slenderFlangeRatio(majorAxis)
+                lmbd= shape.get('bSlendernessRatio')
+                if(slenderFlanges<=1.0): # flanges are noncompact -> equation F3-1 applies.
+                    lmbd_pf= shape.getLambdaPFlange()
+                    lmbd_rf= shape.getLambdaRFlange()
+                    Mn= Mp-(Mp-0.7*Fy*Sz)*((lmbd-lmbd_pf)/(lmbd_rf-lmbd_pf)) # equation F3-1
+                else: # flanges are slender -> equation F3-2 applies.
+                    kc= max(min(4.0/math.sqrt(shape.get('hSlendernessRatio')),0.76),0.35)
+                    Mn= 0.9*shape.get('E')*kc*Sz/lmbd**2 # equation F3-2
+            else: # web is not compact. To implement from sections F4 and F5
+                lmsg.error(__name__+': nominal flexural strength for noncompact web sections not implemented yet.')
     return Mn
 
 class WShape(structural_steel.IShape):
