@@ -2,7 +2,6 @@
 # COMPANION TO THE AISC STEEL CONSTRUCTION MANUAL
 # Volume 1: Design Examples
 # EXAMPLE F.2-1B COMPACT CHANNEL FLEXURAL MEMBER, CONTINUOUSLY BRACED
-# CONTINUOUSLY BRACED
 
 from __future__ import division
 from __future__ import print_function

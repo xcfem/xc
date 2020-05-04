@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # COMPANION TO THE AISC STEEL CONSTRUCTION MANUAL
 # Volume 1: Design Examples
-# EXAMPLE F.1-3B W-SHAPE FLEXURAL MEMBER DESIGN IN STRONG-AXIS BENDING,
-# BRACED AT MIDSPAN
+# EXAMPLE F.2-2B COMPACT CHANNEL FLEXURAL MEMBER WITH BRACING AT ENDS AND
+# FIFTH POINTS.
 
 from __future__ import division
 from __future__ import print_function
@@ -26,33 +26,38 @@ m2Toin2= 1.0/inch2meter**2
 
 # Problem type
 steelBeam= xc.FEProblem()
-steelBeam.title= 'Example F.1-3B'
+steelBeam.title= 'Example F.2-2B'
 preprocessor= steelBeam.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
 #Materials
 ## Steel material
-steel= ASTM_materials.A992
+steel= ASTM_materials.A36
 steel.gammaM= 1.00
 ## Profile geometry
-shape= ASTM_materials.WShape(steel,'W18X50')
+shape= ASTM_materials.CShape(steel,'C15X33.9')
 xcSection= shape.defElasticShearSection2d(preprocessor,steel)
 
 # Model geometry
 
 ## Points.
-span= 35.0*foot2meter
-unbracedLength= span/2.0 # braced at midspan
+span= 25.0*foot2meter
+unbracedLength= span/5.0 # braced at fifth points
 pointHandler= preprocessor.getMultiBlockTopology.getPoints
-p0= pointHandler.newPntFromPos3d(geom.Pos3d(0.0,0.0,0.0))
-p1= pointHandler.newPntFromPos3d(geom.Pos3d(unbracedLength,0.0,0.0))
-p2= pointHandler.newPntFromPos3d(geom.Pos3d(span,0.0,0.0))
-
+points= list()
+for i in range(0,6):
+    x= i*unbracedLength
+    points.append(pointHandler.newPntFromPos3d(geom.Pos3d(x,0.0,0.0)))
 
 ## Lines
+lines= list()
 lineHandler= preprocessor.getMultiBlockTopology.getLines
-l1= lineHandler.newLine(p0.tag,p1.tag)
-l2= lineHandler.newLine(p1.tag,p2.tag)
+pA= points[0]
+for p in points[1:]:
+    pB= p
+    lines.append(lineHandler.newLine(pA.tag,pB.tag))
+    pA= pB
+
 
 # Mesh
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
@@ -67,8 +72,8 @@ xcTotalSet= preprocessor.getSets.getSet('total')
 mesh= xcTotalSet.genMesh(xc.meshDir.I)
 
 # Constraints
-modelSpace.fixNode00F(p0.getNode().tag)
-modelSpace.fixNodeF0F(p2.getNode().tag)
+modelSpace.fixNode00F(points[0].getNode().tag)
+modelSpace.fixNodeF0F(points[-1].getNode().tag)
 
 # Actions
 loadCaseManager= load_cases.LoadCaseManager(preprocessor)
@@ -76,16 +81,18 @@ loadCaseNames= ['deadLoad','liveLoad']
 loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 
 ## Dead load.
-deadLoad= xc.Vector([0.0,-0.45e3*kip2kN/foot2meter, 0.0])
+DL= -0.23e3*kip2kN/foot2meter
+deadLoad= xc.Vector([0.0, DL, 0.0])
 cLC= loadCaseManager.setCurrentLoadCase('deadLoad')
 for e in xcTotalSet.elements:
-  e.vector2dUniformLoadGlobal(deadLoad)
+    e.vector2dUniformLoadGlobal(deadLoad)
   
 ## Live load.
-liveLoad= xc.Vector([0.0,-0.75e3*kip2kN/foot2meter, 0.0])
+LL= -0.69e3*kip2kN/foot2meter
+liveLoad= xc.Vector([0.0, LL, 0.0])
 cLC= loadCaseManager.setCurrentLoadCase('liveLoad')
 for e in xcTotalSet.elements:
-  e.vector2dUniformLoadGlobal(liveLoad)
+    e.vector2dUniformLoadGlobal(liveLoad)
 
 ## Load combinations
 combContainer= combs.CombContainer()
@@ -111,41 +118,36 @@ nodes.calculateNodalReactions(True,1e-7)
 MMax= -1e23
 MMin= -MMax
 for e in xcTotalSet.elements:
-  MMax= max(MMax,max(e.getM1, e.getM2))
-  MMin= min(MMin,min(e.getM1, e.getM2))
+    MMax= max(MMax,max(e.getM1, e.getM2))
+    MMin= min(MMin,min(e.getM1, e.getM2))
 MMaxRef= -(1.2*deadLoad[1]+1.6*liveLoad[1])*span**2/8.0
 ratio1= abs((MMax-MMaxRef)/MMaxRef)
 
 Mp= shape.getPlasticMoment()
 Mu= Mp
 worstBeam= None
-for l in [l1,l2]:
-    beam= aisc.Member(l.name, shape, unbracedLengthX= l.getLength(), unbracedLengthY= span, unbracedLengthZ= span, lstLines= [l])
+for l in lines:
+    beam=  aisc.Member(l.name, shape, unbracedLengthX= l.getLength(), unbracedLengthY= span, unbracedLengthZ= span, lstLines= [l])
     Mui= beam.getDesignFlexuralStrength()
     if(Mui<Mu):
         Mu= min(Mu, Mui)
         worstBeam= beam
-Fcr= 310.972508052e6
-Sz= shape.get('Wzel')
-MuRef= 0.9*Fcr*Sz
+MuRef= 0.9*146e3*kip2kN*foot2meter
 ratio2= abs((Mu-MuRef)/MuRef)
-MuRefText= 0.9*320e3*kip2kN*foot2meter
-ratio3= abs((Mu-MuRefText)/MuRefText)
 
 '''
 print('MMaxRef= ',MMaxRef/1e3,' kN m')
 print('MMax= ',MMax/1e3,' kN m')
-print('ratio1= ',ratio1)
+print('ratio2= ',ratio1)
 print('Mu= ',Mu/1e3,' kN m(',Mu/1e3*kN2kips/foot2meter,' kip-ft)')
 print('MuRef= ',MuRef/1e3,' kN m(',MuRef/1e3*kN2kips/foot2meter,' kip-ft)')
-print('ratio2= ',ratio2)
-print('ratio3= ',ratio3)
+print('ratio3= ',ratio2)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if(ratio1<1e-7 and ratio2<1e-4 and ratio3<0.05):
+if(ratio1<1e-7 and ratio2<1e-2):
   print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

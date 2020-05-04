@@ -25,6 +25,7 @@ import math
 import aisc_shapes_dictionaries as shapes
 import aisc_shapes_labels as labels
 from materials.sections import structural_steel
+from misc_utils import log_messages as lmsg
 
 # Shear areas.
 
@@ -74,11 +75,26 @@ def getUIShapeRts(shape, majorAxis= True):
     :param majorAxis: true if flexure about the major axis.
     '''
     if(not majorAxis):
-        lmsg.error('r_{ts} coefficient not implemented for minor axis.')
+        lmsg.error(__name__+': r_{ts} coefficient not implemented for minor axis.')
     Cw= shape.get('Cw') # Warping constant.
     Iy= shape.get('Iy') # Moment of inertia about minor axis.
     Sz= shape.get('Wzel') # Elastic section modulus about major axis.
     return math.sqrt(math.sqrt(Iy*Cw)/Sz)
+
+def getUIShapeLambdaPFlange(shape):
+    '''Return he limiting slenderness for a compact flange, 
+       defined in Table B4.1b of AISC-360-16.'''
+    E= shape.get('E')
+    Fy= shape.steelType.fy
+    return 0.38*math.sqrt(E/Fy) # Case 10 or case 13
+
+def getUIShapeLambdaRFlange(shape):
+    '''Return he limiting slenderness for a noncompact flange, 
+       defined in Table B4.1b of AISC-360-16.'''
+    E= shape.get('E')
+    Fy= shape.steelType.fy
+    return 1.0*math.sqrt(E/Fy) # Case 10 or case 13
+
 
 def getUIShapeLp(shape, majorAxis= True):
     '''Return the limiting laterally unbraced length for the limit state
@@ -88,7 +104,7 @@ def getUIShapeLp(shape, majorAxis= True):
     :param majorAxis: true if flexure about the major axis.
     '''
     if(not majorAxis):
-        lmsg.error('L_p not implemented for minor axis.')
+        lmsg.error(__name__+': L_p not implemented for minor axis.')
     ry= shape.get('iy') # Radius of gyration about minor axis.
     E= shape.get('E') # Elastic modulus.
     Fy= shape.steelType.fy # specified minimum yield stress
@@ -103,7 +119,7 @@ def getUIShapeLr(shape, majorAxis= True):
     :param majorAxis: true if flexure about the major axis.
     '''
     if(not majorAxis):
-        lmsg.error('L_r not implemented for minor axis.')
+        lmsg.error(__name__+': L_r not implemented for minor axis.')
     rts= shape.getRts()
     E= shape.get('E') # Elastic modulus.
     Fy= shape.steelType.fy # specified minimum yield stress
@@ -129,7 +145,7 @@ def getUIShapeCriticalStress(shape, lateralUnbracedLength, Cb, majorAxis= True):
     :param majorAxis: true if flexure about the major axis.
     '''
     if(not majorAxis):
-        lmsg.error('L_r not implemented for minor axis.')
+        lmsg.error(__name__+': L_r not implemented for minor axis.')
     E= shape.get('E') # Elastic modulus.
     J= shape.get('It') # Torsional moment of inertia
     Sz= shape.get('Wzel') # Elastic section modulus about major axis.
@@ -143,7 +159,7 @@ def getUIShapeCriticalStress(shape, lateralUnbracedLength, Cb, majorAxis= True):
 
 def getUIShapeNominalFlexuralStrength(shape, lateralUnbracedLength, Cb, majorAxis= True):
     ''' Return the nominal flexural strength of the member
-        according to equations F2-1 to F2-3 of AISC-360-16.
+        according to equations F2-1 to F2-3 or F3-1 to F3-2 of AISC-360-16.
 
     :param shape: I or channel structural shape.
     :param lateralUnbracedLength: length between points that are either 
@@ -154,26 +170,39 @@ def getUIShapeNominalFlexuralStrength(shape, lateralUnbracedLength, Cb, majorAxi
     :param majorAxis: true if flexure about the major axis.
     '''
     if(not majorAxis):
-        lmsg.error('Nominal flexural strength not implemented for minor axis.')
+        lmsg.error(__name__+': Nominal flexural strength not implemented for minor axis.')
     compactRatio= shape.compactWebAndFlangeRatio(majorAxis)
-    if(compactRatio>1):
-        lmsg.error('Nominal flexural strength for noncompact or slender sections not implemented yet.')
-    Lb= lateralUnbracedLength
-    Mp= shape.getPlasticMoment(majorAxis) # plastic moment.
     Mn= 0.0
-    Lp= shape.getLp(majorAxis)
-    if(Lb<Lp):
-        Mn= Mp
-    else:
-        Lr= shape.getLr(majorAxis)
-        Sz= shape.get('Wzel') # Elastic section modulus about major axis.
-        if(Lb<=Lr):
-            Fy= shape.steelType.fy # specified minimum yield stress
-            Mn= Cb*(Mp-(Mp-0.7*Fy*Sz)*((Lb-Lp)/(Lr-Lp)))
-            Mn= min(Mn,Mp)
+    Mp= shape.getPlasticMoment(majorAxis) # plastic moment.
+    Fy= shape.steelType.fy # specified minimum yield stress
+    Sz= shape.get('Wzel') # Elastic section modulus about major axis.
+    if(compactRatio<=1.0): # flange and web are compact.
+        Lb= lateralUnbracedLength
+        Lp= shape.getLp(majorAxis)
+        if(Lb<Lp): # equation F2-1 applies
+            Mn= Mp
         else:
-            Fcr= shape.getCriticalStress(Lb, Cb, majorAxis)
-            Mn= min(Fcr*Sz, Mp)
+            Lr= shape.getLr(majorAxis)
+            if(Lb<=Lr): # equation F2-2 applies
+                Mn= Cb*(Mp-(Mp-0.7*Fy*Sz)*((Lb-Lp)/(Lr-Lp)))
+                Mn= min(Mn,Mp)
+            else: # equation F2-3 applies
+                Fcr= shape.getCriticalStress(Lb, Cb, majorAxis)
+                Mn= min(Fcr*Sz, Mp)
+    else: # flange or web or both are not compact.
+        compactWeb= shape.compactWebRatio(majorAxis)
+        if(compactWeb<=1.0): # web is compact.
+            slenderFlanges= shape.slenderFlangeRatio(majorAxis)
+            lmbd= shape.get('bSlendernessRatio')
+            if(slenderFlanges<=1.0): # flanges are noncompact -> equation F3-1 applies.
+                lmbd_pf= shape.getLambdaPFlange()
+                lmbd_rf= shape.getLambdaRFlange()
+                Mn= Mp-(Mp-0.7*Fy*Sz)*((lmbd-lmbd_pf)/(lmbd_rf-lmbd_pf)) # equation F3-1
+            else: # flanges are slender -> equation F3-2 applies.
+                kc= max(min(4.0/math.sqrt(shape.get('hSlendernessRatio')),0.76),0.35)
+                Mn= 0.9*shape.get('E')*kc*Sz/lmbd**2 # equation F3-2
+        else: # web is not compact.
+            lmsg.error(__name__+': nominal flexural strength for noncompact web sections not implemented yet.')
     return Mn
 
 class WShape(structural_steel.IShape):
@@ -196,15 +225,23 @@ class WShape(structural_steel.IShape):
         less the fillet at each flange (h in AISC tables).'''
         return self.get('d')
 
+    def getLambdaPFlange(self):
+        '''Return he limiting slenderness for a compact flange, 
+           defined in Table B4.1b of AISC-360-16.'''
+        return getUIShapeLambdaPFlange(self)
+
+    def getLambdaRFlange(self):
+        '''Return he limiting slenderness for a noncompact flange, 
+           defined in Table B4.1b of AISC-360-16.'''
+        return getUIShapeLambdaRFlange(self)
+
     def compactFlangeRatio(self, majorAxis= True):
         ''' If flanges are compact according to table 4.1b of 
             AISC-360-16 return a value less than one.
 
         :param majorAxis: true if flexure about the major axis.
         '''
-        E= self.get('E')
-        Fy= self.steelType.fy
-        lambda_p= 0.38*math.sqrt(E/Fy) # Case 10 or case 13
+        lambda_p= self.getLambdaPFlange()
         slendernessRatio= self.get('bSlendernessRatio')
         return slendernessRatio/lambda_p # if <1 then flanges are compact.
     
@@ -215,9 +252,7 @@ class WShape(structural_steel.IShape):
 
         :param majorAxis: true if flexure about the major axis.
         '''
-        E= self.get('E')
-        Fy= self.steelType.fy
-        lambda_r= 1.0*math.sqrt(E/Fy) # Case 10 or case 13
+        lambda_r= self.getLambdaRFlange()
         slendernessRatio= self.get('bSlendernessRatio')
         return slendernessRatio/lambda_r # if <1 then flanges are noncompact.
 
@@ -228,7 +263,7 @@ class WShape(structural_steel.IShape):
         :param majorAxis: true if flexure about the major axis.
         '''
         if(not majorAxis):
-            lmsg.error('compact web ratio not implemented for minor axis.')
+            lmsg.error(__name__+': compact web ratio not implemented for minor axis.')
         E= self.get('E')
         Fy= self.steelType.fy
         lambda_p= 3.76*math.sqrt(E/Fy) # Case 15
@@ -243,7 +278,7 @@ class WShape(structural_steel.IShape):
         :param majorAxis: true if flexure about the major axis.
         '''
         if(not majorAxis):
-            lmsg.error('compact web ratio not implemented for minor axis.')
+            lmsg.error(__name__+': compact web ratio not implemented for minor axis.')
         E= self.get('E')
         Fy= self.steelType.fy
         lambda_p= 5.70*math.sqrt(E/Fy) # Case 15
@@ -287,7 +322,7 @@ class WShape(structural_steel.IShape):
         if(h_tw<h_tw_threshold):
             Cv1= 1.0;
         else:
-            lmsg.error('getWebShearStrengthCoefficient not implemented yet for this type of sections.')
+            lmsg.error(__name__+': getWebShearStrengthCoefficient not implemented yet for this type of sections.')
             Cv1= 0.0;
         return Cv1
           
@@ -406,15 +441,23 @@ class CShape(structural_steel.UShape):
         '''
         super(CShape,self).__init__(steel,name,C)
         
+    def getLambdaPFlange(self):
+        '''Return he limiting slenderness for a compact flange, 
+           defined in Table B4.1b of AISC-360-16.'''
+        return getUIShapeLambdaPFlange(self)
+
+    def getLambdaRFlange(self):
+        '''Return he limiting slenderness for a noncompact flange, 
+           defined in Table B4.1b of AISC-360-16.'''
+        return getUIShapeLambdaRFlange(self)
+
     def compactFlangeRatio(self, majorAxis= True):
         ''' If flanges are compact according to table 4.1b of 
             AISC-360-16 return a value less than one.
 
         :param majorAxis: true if flexure about the major axis.
         '''
-        E= self.get('E')
-        Fy= self.steelType.fy
-        lambda_p= 0.38*math.sqrt(E/Fy) # Case 10 or case 13
+        lambda_p= self.getLambdaPFlange()
         slendernessRatio= self.get('bSlendernessRatio')
         return slendernessRatio/lambda_p # if <1 then flanges are compact.
     
@@ -425,9 +468,7 @@ class CShape(structural_steel.UShape):
 
         :param majorAxis: true if flexure about the major axis.
         '''
-        E= self.get('E')
-        Fy= self.steelType.fy
-        lambda_r= 1.0*math.sqrt(E/Fy) # Case 10 or case 13
+        lambda_r= self.getLambdaRFlange()
         slendernessRatio= self.get('bSlendernessRatio')
         return slendernessRatio/lambda_r # if <1 then flanges are noncompact.
     
@@ -438,7 +479,7 @@ class CShape(structural_steel.UShape):
         :param majorAxis: true if flexure about the major axis.
         '''
         if(not majorAxis):
-            lmsg.error('compact web ratio not implemented for minor axis.')
+            lmsg.error(__name__+': compact web ratio not implemented for minor axis.')
         E= self.get('E')
         Fy= self.steelType.fy
         lambda_p= 3.76*math.sqrt(E/Fy) # Case 15
@@ -453,7 +494,7 @@ class CShape(structural_steel.UShape):
         :param majorAxis: true if flexure about the major axis.
         '''
         if(not majorAxis):
-            lmsg.error('compact web ratio not implemented for minor axis.')
+            lmsg.error(__name__+': compact web ratio not implemented for minor axis.')
         E= self.get('E')
         Fy= self.steelType.fy
         lambda_p= 5.70*math.sqrt(E/Fy) # Case 15
@@ -511,7 +552,7 @@ class CShape(structural_steel.UShape):
         ''' Return the c coefficient according to equation
             F2-8b of AISC-360-16.'''
         if(not majorAxis):
-            lmsg.error('c coefficient not implemented for minor axis.')
+            lmsg.error(__name__+': c coefficient not implemented for minor axis.')
         h0= self.get('ho') # Distance between the flange centroids
         Cw= self.get('Cw') # Warping constant.
         Iy= self.get('Iy') # Moment of inertia about minor axis.
@@ -758,7 +799,7 @@ class HSSShape(structural_steel.QHShape):
         :param Cb: lateral-torsional buckling modification factor.
         :param majorAxis: true if flexure about the major axis.
         '''
-        lmsg.error('Nominal flexural strength for HSS sections not implemented yet.')
+        lmsg.error(__name__+'; nominal flexural strength for HSS sections not implemented yet.')
         return 0.0
 
 # Label conversion metric->US customary | US customary -> metric.

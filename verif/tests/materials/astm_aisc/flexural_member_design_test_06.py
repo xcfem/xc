@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 # COMPANION TO THE AISC STEEL CONSTRUCTION MANUAL
 # Volume 1: Design Examples
-# EXAMPLE F.1-3B W-SHAPE FLEXURAL MEMBER DESIGN IN STRONG-AXIS BENDING,
-# BRACED AT MIDSPAN
+# EXAMPLE F.3B W-SHAPE FLEXURAL MEMBER WITH NONCOMPACT FLANGES IN STRONG-
+# AXIS BENDING
 
 from __future__ import division
 from __future__ import print_function
@@ -26,7 +26,7 @@ m2Toin2= 1.0/inch2meter**2
 
 # Problem type
 steelBeam= xc.FEProblem()
-steelBeam.title= 'Example F.1-3B'
+steelBeam.title= 'Example F.1-1A'
 preprocessor= steelBeam.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
@@ -35,24 +35,21 @@ nodes= preprocessor.getNodeHandler
 steel= ASTM_materials.A992
 steel.gammaM= 1.00
 ## Profile geometry
-shape= ASTM_materials.WShape(steel,'W18X50')
+shape= ASTM_materials.WShape(steel,'W21X48')
 xcSection= shape.defElasticShearSection2d(preprocessor,steel)
 
 # Model geometry
 
 ## Points.
-span= 35.0*foot2meter
-unbracedLength= span/2.0 # braced at midspan
+span= 40.0*foot2meter
 pointHandler= preprocessor.getMultiBlockTopology.getPoints
 p0= pointHandler.newPntFromPos3d(geom.Pos3d(0.0,0.0,0.0))
-p1= pointHandler.newPntFromPos3d(geom.Pos3d(unbracedLength,0.0,0.0))
-p2= pointHandler.newPntFromPos3d(geom.Pos3d(span,0.0,0.0))
-
+p1= pointHandler.newPntFromPos3d(geom.Pos3d(span,0.0,0.0))
 
 ## Lines
 lineHandler= preprocessor.getMultiBlockTopology.getLines
 l1= lineHandler.newLine(p0.tag,p1.tag)
-l2= lineHandler.newLine(p1.tag,p2.tag)
+l1.nDiv= 3*4 # so we have nodes under the punctual loads.
 
 # Mesh
 modelSpace= predefined_spaces.StructuralMechanics2D(nodes)
@@ -68,7 +65,7 @@ mesh= xcTotalSet.genMesh(xc.meshDir.I)
 
 # Constraints
 modelSpace.fixNode00F(p0.getNode().tag)
-modelSpace.fixNodeF0F(p2.getNode().tag)
+modelSpace.fixNodeF0F(p1.getNode().tag)
 
 # Actions
 loadCaseManager= load_cases.LoadCaseManager(preprocessor)
@@ -76,16 +73,18 @@ loadCaseNames= ['deadLoad','liveLoad']
 loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 
 ## Dead load.
-deadLoad= xc.Vector([0.0,-0.45e3*kip2kN/foot2meter, 0.0])
+deadLoad= xc.Vector([0.0,-0.05e3*kip2kN/foot2meter, 0.0])
 cLC= loadCaseManager.setCurrentLoadCase('deadLoad')
 for e in xcTotalSet.elements:
   e.vector2dUniformLoadGlobal(deadLoad)
   
 ## Live load.
-liveLoad= xc.Vector([0.0,-0.75e3*kip2kN/foot2meter, 0.0])
+PL= -18.0e3*kip2kN
 cLC= loadCaseManager.setCurrentLoadCase('liveLoad')
-for e in xcTotalSet.elements:
-  e.vector2dUniformLoadGlobal(liveLoad)
+n1= xcTotalSet.nodes.getNearestNode(geom.Pos3d(span/3.0,0,0))
+n1.newLoad(xc.Vector([0.0,PL,0.0]))
+n2= xcTotalSet.nodes.getNearestNode(geom.Pos3d(2.0*span/3.0,0,0))
+n2.newLoad(xc.Vector([0.0,PL,0.0]))
 
 ## Load combinations
 combContainer= combs.CombContainer()
@@ -103,6 +102,19 @@ combContainer.dumpCombinations(preprocessor)
 ## Linear static analysis.
 analysis= predefined_solutions.simple_static_linear(steelBeam)
 
+## Deflection linit
+preprocessor.getLoadHandler.addToDomain('combSLS01')
+result= analysis.analyze(1)
+midSpan1= span/2
+midPos1= geom.Pos3d(midSpan1,0.0,0.0)
+n1= l1.getNearestNode(geom.Pos3d(midSpan1,0.0,0.0))
+d1= n1.getDisp[1]
+E= shape.get('E')
+Iz= shape.get('Iz')
+refD1= (5.0*deadLoad[1]*span**4/384.0+PL*span**3/28.0)/E/Iz
+ratio1= abs((refD1-d1)/refD1)
+deflection= d1/span # Deflection
+
 ## Flexural strength
 preprocessor.resetLoadCase()
 preprocessor.getLoadHandler.addToDomain('combULS01')
@@ -113,39 +125,39 @@ MMin= -MMax
 for e in xcTotalSet.elements:
   MMax= max(MMax,max(e.getM1, e.getM2))
   MMin= min(MMin,min(e.getM1, e.getM2))
-MMaxRef= -(1.2*deadLoad[1]+1.6*liveLoad[1])*span**2/8.0
-ratio1= abs((MMax-MMaxRef)/MMaxRef)
+MMaxRef= -1.2*deadLoad[1]*span**2/8.0-1.6*PL*span/3.0
+ratio2= abs((MMax-MMaxRef)/MMaxRef)
 
-Mp= shape.getPlasticMoment()
-Mu= Mp
-worstBeam= None
-for l in [l1,l2]:
-    beam= aisc.Member(l.name, shape, unbracedLengthX= l.getLength(), unbracedLengthY= span, unbracedLengthZ= span, lstLines= [l])
-    Mui= beam.getDesignFlexuralStrength()
-    if(Mui<Mu):
-        Mu= min(Mu, Mui)
-        worstBeam= beam
-Fcr= 310.972508052e6
-Sz= shape.get('Wzel')
-MuRef= 0.9*Fcr*Sz
-ratio2= abs((Mu-MuRef)/MuRef)
-MuRefText= 0.9*320e3*kip2kN*foot2meter
-ratio3= abs((Mu-MuRefText)/MuRefText)
+# Because the beam is continuously braced and compact, only the
+# yielding limit state applies.
+beam=  aisc.Member(l1.name, shape, unbracedLengthX= 0.5, unbracedLengthY= span, unbracedLengthZ= span, lstLines= [l1])
+Mu= beam.getDesignFlexuralStrength()
+MuRef= 542.055862328e3
+MuRefText= 0.9*442e3*kip2kN*foot2meter
+ratio3= abs((Mu-MuRef)/MuRef)
+ratio4= abs((Mu-MuRefText)/MuRefText)
 
 '''
+print('span= ', span, ' m(',span/foot2meter,' ft)')
+print('Iz= ', Iz, ' m4(',Iz/inch2meter**4,' in4)')
+print('E= ', E/1e9, ' GPa(',E/1e6*MPa2ksi,' ksi)')
+print('refD1= ', refD1*1e3, ' mm(',refD1/inch2meter,' in)')
+print('d1= ', d1*1e3, ' mm(',d1/inch2meter,' in)')
+print('ratio1= ',ratio1)
+print('dY= ',d1*1e3,' mm/', d1/inch2meter,' in; ratio= L/', 1/deflection, 'L= ', span, ' m')
 print('MMaxRef= ',MMaxRef/1e3,' kN m')
 print('MMax= ',MMax/1e3,' kN m')
-print('ratio1= ',ratio1)
+print('ratio2= ',ratio2)
 print('Mu= ',Mu/1e3,' kN m(',Mu/1e3*kN2kips/foot2meter,' kip-ft)')
 print('MuRef= ',MuRef/1e3,' kN m(',MuRef/1e3*kN2kips/foot2meter,' kip-ft)')
-print('ratio2= ',ratio2)
 print('ratio3= ',ratio3)
+print('ratio4= ',ratio4)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if(ratio1<1e-7 and ratio2<1e-4 and ratio3<0.05):
+if(ratio1<5e-3 and ratio2<1e-7 and ratio3<1e-5 and ratio4<.01):
   print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
