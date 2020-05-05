@@ -221,6 +221,32 @@ def getUIShapeNominalFlexuralStrength(shape, lateralUnbracedLength, Cb, majorAxi
                 lmsg.error(__name__+': nominal flexural strength for noncompact web sections not implemented yet.')
     return Mn
 
+def getUIAw(shape):
+    '''Return the area of the web.'''
+    return shape.h()*shape.get('tw')
+
+def getUIWebPlateShearBucklingCoefficient(shape, a= 1e6):
+    '''Return the web plate shear buckling coefficient
+       according to expression G2-5 of AISC-360-16.
+
+    :param a: clear distance between transverse stiffeners
+    '''
+    h= shape.h()
+    if(a/h>3.0):
+        return 5.34
+    else:
+        denom= (a/h)**2
+        return 5.0(1.0+1.0/denom)
+    
+def getUINominalShearStrengthWithoutTensionFieldAction(shape, a= 1e6):
+    ''' Return the nominal shear strength according to equation
+        G2-1 of AISC-360-16.
+
+    :param a: clear distance between transverse stiffeners.
+    '''
+    Cv1= shape.getWebShearStrengthCoefficient(a)
+    return 0.6*shape.steelType.fy*shape.getAw()*Cv1 # equation G2-1
+
 class WShape(structural_steel.IShape):
     '''W shape
 
@@ -319,38 +345,67 @@ class WShape(structural_steel.IShape):
         return slendernessRatio/lambda_r # OK if < 1.0
 
     def getAw(self):
-        ''' Return A_w according to AISC specification Section G2.1b'''
-        return self.h()*self.get('tw')
-      
-    def getShearResistanceFactor(self):
-        ''' Return the resistance factor for shear according to
-        section G2.1a.'''
-        return 1.0
-      
-    def getWebShearStrengthCoefficient(self):
+        ''' Return the web area.'''
+        return getUIAw(self)
+            
+    def getWebPlateShearBucklingCoefficient(shape, a= 1e6):
+        '''Return the web plate shear buckling coefficient
+           according to expression G2-5 of AISC-360-16.
+
+        :param a: clear distance between transverse stiffeners.
+        '''
+        return getUIWebPlateShearBucklingCoefficient(self,a)
+    
+    def getWebShearStrengthCoefficient(self, a= 1e6):
         ''' Return the web shear stress coefficient Cv1 according
-            to equations G2-2, G2-3 and G2-4 of "Specification for 
-            Structural Steel Buildings, July 7, 2016 AISC"
+            to equations G2-2, G2-3 and G2-4 of AISC-360-16.
+
+        :param a: clear distance between transverse stiffeners.
         '''
         Cv1= 1.0
-        h_tw= self.get('h')/self.get('tw')
-        h_tw_threshold= 2.24*math.sqrt(self.get('E')/self.steelType.fy)
-        if(h_tw<h_tw_threshold):
-            Cv1= 1.0;
+        h_tw= self.get('hSlendernessRatio')
+        E_Fy= self.get('E')/self.steelType.fy
+        h_tw_threshold= 2.24*math.sqrt(E_Fy)
+        if(h_tw<=h_tw_threshold):
+            Cv1= 1.0 # equation G2-2
         else:
-            lmsg.error(__name__+': getWebShearStrengthCoefficient not implemented yet for this type of sections.')
-            Cv1= 0.0;
+            kv= self.getWebPlateShearBucklingCoefficient(a)
+            h_tw_threshold2= 1.10*math.sqrt(kv*E_Fy)
+            if(h_tw<=h_tw_threshold2):
+                Cv1= 1.0 # equation G2-3
+            else:
+                Cv1= h_tw_threshold2/h_tw  # equation G2-4
         return Cv1
           
-    def getNominalShearStrengthWithoutTensionFieldAction(self):
+    def getNominalShearStrengthWithoutTensionFieldAction(self, a= 1e6):
         ''' Return the nominal shear strength according to equation
-            2.1 of "Specification for Structural Steel Buildings,
-            July 7, 2016 AISC"
+            G2-1 of AISC-360-16.
+
+        :param a: clear distance between transverse stiffeners.
         '''
-        #
-        Cv1= self.getWebShearStrengthCoefficient()
-        return 0.6*self.steelType.fy*self.getAw()*Cv1
-    
+        return getUINominalShearStrengthWithoutTensionFieldAction(self,a)
+
+    def getShearResistanceFactor(self):
+        ''' Return the resistance factor for shear according to
+            sections G1 and G2.1(a) of AISC-360-16.
+        '''
+        retval= 0.9 # see section G1.
+        h_tw= self.get('hSlendernessRatio')
+        E_Fy= self.get('E')/self.steelType.fy
+        h_tw_threshold= 2.24*math.sqrt(E_Fy)
+        if(h_tw<=h_tw_threshold):
+            retval= 1.0 # see section G2.1(a)
+        return retval
+
+    def getDesignShearStrengthWithoutTensionFieldAction(self, a= 1e6):
+        ''' Return the design shear strength according to equation
+            section G1 of AISC-360-16.
+
+        :param a: clear distance between transverse stiffeners.
+        '''
+
+        return self.getShearResistanceFactor()*self.getNominalShearStrengthWithoutTensionFieldAction(a)
+
     def getTorsionalElasticBucklingStress(self, Lc):
         ''' Return the torsional or flexural-torsional elastic buckling stress
             of the member according to equations E4-2 of AISC-360-16.
@@ -525,6 +580,52 @@ class CShape(structural_steel.UShape):
         '''
         return getShapeCompactWebAndFlangeRatio(self,majorAxis)
     
+    def getAw(self):
+        ''' Return the web area.'''
+        return getUIAw(self)
+    
+    def getWebPlateShearBucklingCoefficient(shape, a= 1e6):
+        '''Return the web plate shear buckling coefficient
+           according to expression G2-5 of AISC-360-16.
+
+        :param a: clear distance between transverse stiffeners.
+        '''
+        return getUIWebPlateShearBucklingCoefficient(shape,a)
+    
+    def getWebShearStrengthCoefficient(self, a= 1e6):
+        ''' Return the web shear stress coefficient Cv1 according
+            to equations G2-3 and G2-4 of AISC-360-16.
+
+        :param a: clear distance between transverse stiffeners.
+        '''
+        Cv1= 1.0
+        h_tw= self.get('hSlendernessRatio')
+        E_Fy= self.get('E')/self.steelType.fy
+        kv= self.getWebPlateShearBucklingCoefficient(a)
+        h_tw_threshold2= 1.10*math.sqrt(kv*E_Fy)
+        if(h_tw<=h_tw_threshold2):
+            Cv1= 1.0 # equation G2-3
+        else:
+            Cv1= h_tw_threshold2/h_tw  # equation G2-4
+        return Cv1
+
+    def getNominalShearStrengthWithoutTensionFieldAction(self, a= 1e6):
+        ''' Return the nominal shear strength according to equation
+            G2-1 of AISC-360-16.
+
+        :param a: clear distance between transverse stiffeners.
+        '''
+        return getUINominalShearStrengthWithoutTensionFieldAction(self,a)
+    
+    def getDesignShearStrengthWithoutTensionFieldAction(self, a= 1e6):
+        ''' Return the design shear strength according to equation
+            section G1 of AISC-360-16.
+
+        :param a: clear distance between transverse stiffeners.
+        '''
+
+        return 0.9*self.getNominalShearStrengthWithoutTensionFieldAction(a)
+
     def slendernessCheck(self):
         ''' Verify that the section doesn't contains slender elements
             according to table B4.1 a of AISC-360-16.'''
@@ -633,6 +734,7 @@ class CShape(structural_steel.UShape):
         :param majorAxis: true if flexure about the major axis.
         '''
         return getUIShapeNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis)
+    
 
 # *************************************************************************
 # AISC Hollow Structural Sections.

@@ -20,6 +20,7 @@ inch2meter= 0.0254
 MPa2ksi= 0.145038
 kN2kips= 0.2248
 kip2kN= 1.0/kN2kips
+kip2N= kip2kN*1e3
 foot2meter= 0.3048
 m2Toin2= 1.0/inch2meter**2
 
@@ -31,10 +32,10 @@ nodes= preprocessor.getNodeHandler
 
 #Materials
 ## Steel material
-steel= ASTM_materials.A992
+steel= ASTM_materials.A36
 steel.gammaM= 1.00
 ## Profile geometry
-shape= ASTM_materials.WShape(steel,'W24X62')
+shape= ASTM_materials.CShape(steel,'C15X33.9')
 xcSection= shape.defElasticShearSection2d(preprocessor,steel)
 
 # Model geometry
@@ -72,14 +73,14 @@ loadCaseNames= ['deadLoad','liveLoad']
 loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 
 ## Dead load.
-deadLoad= -48.0*kip2kN*span/2.0
+deadLoad= -17.5*kip2N/span*2.0
 deadLoadVector= xc.Vector([0.0,deadLoad, 0.0])
 cLC= loadCaseManager.setCurrentLoadCase('deadLoad')
 for e in xcTotalSet.elements:
     e.vector2dUniformLoadGlobal(deadLoadVector)
   
 ## Live load.
-liveLoad= -145.0*kip2kN*span/2.0
+liveLoad= -52.5*kip2N/span*2.0
 liveLoadVector= xc.Vector([0.0,liveLoad, 0.0])
 cLC= loadCaseManager.setCurrentLoadCase('liveLoad')
 for e in xcTotalSet.elements:
@@ -115,32 +116,32 @@ VMaxRef= -(1.2*deadLoad+1.6*liveLoad)*span/2.0
 ratio1= abs((VMax-VMaxRef)/VMaxRef)
 
 Aw= shape.getAw()
-AwRef= 10.2*inch2meter**2
+AwRef= 6*inch2meter**2
 ratio2= abs((Aw-AwRef)/AwRef)
-Phi_v= 1.0 # LRFD AISC Specification section G2.1a
-Vu= Phi_v*shape.getNominalShearStrengthWithoutTensionFieldAction()
-VuRef= 306e3*kip2kN
-ratio3= abs((Vu-VuRef)/VuRef)
+Vu= shape.getDesignShearStrengthWithoutTensionFieldAction()
+VuRef= 0.9*0.6*shape.steelType.fy*Aw*1.0
+VuRefText= 0.9*130e3*kip2kN
+ratio3= abs((Vu-VuRefText)/VuRefText)
 
 
 '''
-print('VMax= ',VMax/1e3,' kN /', VMax*kN2kips/1e3, 'kips')
-print('VMaxRef= ',VMaxRef/1e3,' kN /', VMaxRef*kN2kips/1e3, 'kips')
+print('VMax= ',VMax/1e3,' kN (', VMax*kN2kips/1e3, 'kips)')
+print('VMaxRef= ',VMaxRef/1e3,' kN (', VMaxRef*kN2kips/1e3, 'kips)')
 print('ratio1= ',ratio1)
-print('d= ', shape.d()*1e3,'mm / ', shape.d()/inch2meter, 'in')
 print('tw= ', shape.get('tw')/inch2meter, 'in')
 print('Aw= ',Aw*1e4,' cm2')
 print('AwRef= ',AwRef*1e4,' cm2')
 print('ratio2= ',ratio2)
-print('Vu= ',Vu/1e3,' kN m')
-print('VuRef= ',VuRef/1e3,' kN m')
+print('Vu= ',Vu/1e3,' kN', Vu*kN2kips/1e3, 'kips)')
+print('VuRef= ',VuRef/1e3,' kN', VuRef*kN2kips/1e3, 'kips)')
+print('VuRefText= ',VuRefText/1e3,' kN', VuRefText*kN2kips/1e3, 'kips)')
 print('ratio3= ',ratio3)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if(ratio1<5e-4 and ratio2<5e-3 and ratio3<5e-3):
+if(ratio1<5e-4 and ratio2<5e-3 and ratio3<1e-2):
   print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
