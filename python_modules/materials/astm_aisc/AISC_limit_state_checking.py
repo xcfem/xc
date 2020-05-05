@@ -26,10 +26,12 @@ class SectionClasif(enum.IntEnum):
 # Unbraced segment ascii art:
 #
 #         A      B      C
-#  +------+------+------+------+ 
+#  x------+------+------+------x 
 #  ^                           ^
 #  0      1      2      3      4
 #
+# x: brace for lateral buckling
+# +: control point.
 
 class LateralTorsionalBucklingModificationFactor(object):
     ''' Calculation of the Cb lateral-torsional buckling modification factor
