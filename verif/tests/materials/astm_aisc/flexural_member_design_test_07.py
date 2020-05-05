@@ -125,8 +125,6 @@ for e in xcTotalSet.elements:
 MMaxRef= -1.2*deadLoad[1]*span**2/8.0-1.6*liveLoad[1]*span**2/8.0
 ratio2= abs((MMax-MMaxRef)/MMaxRef)
 
-# Because the beam is continuously braced and compact, only the
-# yielding limit state applies.
 beam=  aisc.Member(l1.name, shape, unbracedLengthX= l1.getLength(), unbracedLengthY= l1.getLength(), unbracedLengthZ= l1.getLength(), lstLines= [l1])
 Mu= beam.getDesignFlexuralStrength(majorAxis= False)
 MuRef= 165.4965e3
