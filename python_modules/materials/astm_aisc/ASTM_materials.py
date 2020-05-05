@@ -83,118 +83,8 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
         ASTMShape.__init__(self, name)
         aisc_metric_shapes.HSSShape.__init__(self,steel,name)
         
-    def getLimitingWidthToThicknessRatio(self):
-        ''' Return the Limiting Width-to-Thickness Ratio 
-        according to table B4.1A of AISC-360-16.
-        '''
-        return 1.4*math.sqrt(self.steelType.E/self.steelType.fy)
     
-    def getBClassification(self):
-        ''' Return the classification for local buckling of the
-            "b" wall of the section according to table B4.1a
-            of AISC 360-16.
-        '''
-        retval= 'nonslender'
-        bSlendernessRatio= self.get('bSlendernessRatio')
-        lambda_r= self.getLimitingWidthToThicknessRatio()
-        if(bSlendernessRatio>lambda_r):
-            retval= 'slender'
-        return retval
     
-    def getHClassification(self):
-        ''' Return the classification for local buckling of the
-            "h" wall of the section according to table B4.1a
-            of AISC 360-16.
-        '''
-        retval= 'nonslender'
-        hSlendernessRatio= self.get('hSlendernessRatio')
-        lambda_r= self.getLimitingWidthToThicknessRatio()
-        if(hSlendernessRatio>lambda_r):
-            retval= 'slender'
-        return retval
-    
-    def getClassification(self):
-        ''' Return the classification for local buckling of the
-            section according to table B4.1a of AISC 360-16.
-        '''
-        retval= 'nonslender'
-        if((self.getHClassification()=='slender') or (self.getBClassification()=='slender')):
-            retval= 'slender'
-        return retval
-    
-    def getReducedEffectiveH(self):
-        '''Return the reduced effective width corresponding
-           to the "h" walls of the shape.'''
-        rt= math.sqrt(self.steelType.E/self.steelType.fy) #Simplification
-        h_t= self.get('hSlendernessRatio')
-        t= self.get('t')
-        retval= 1.92*t*rt*(1.0-0.38/h_t*rt)
-        retval= min(retval,self.get('h'))
-        return retval
-    
-    def getReducedEffectiveB(self):
-        '''Return the reduced effective width corresponding
-           to the "b" walls of the shape.'''
-        rt= math.sqrt(self.steelType.E/self.steelType.fy) #Simplification
-        b_t= self.get('bSlendernessRatio')
-        t= self.get('t')
-        retval= 1.92*t*rt*(1.0-0.38/b_t*rt)
-        retval= min(retval,self.get('b'))
-        return retval
-    
-    def getEffectiveArea(self):
-        '''Return the effective area.'''
-        retval= self.get('A')
-        clasif= self.getClassification()
-        if(clasif == 'slender'):
-            t= self.get('t')
-            h_ineff= self.get('h_flat')-self.getReducedEffectiveH()
-            retval-= 2.0*h_ineff*t
-            b_ineff= self.get('b_flat')-self.getReducedEffectiveB()
-            retval-= 2.0*b_ineff*t
-        return retval
-    
-    def getLambdaP(self):
-        ''' Return the limiting Width-to-Thickness Ratio (compact/noncompact)
-            according to table B4.1b of AISC 360-16.
-        '''
-        return 1.12*math.sqrt(self.steelType.E/self.steelType.fy)
-    
-    def getLambdaR(self):
-        ''' Return the limiting Width-to-Thickness Ratio (compact/noncompact)
-            according to table B4.1b of AISC 360-16.
-        '''
-        return 1.40*math.sqrt(self.steelType.E/self.steelType.fy)
-    
-    def getBFlexureClassification(self):
-        ''' Return the classification for local buckling of the
-            "b" wall of the section according to table B4.1b
-            of AISC 360-16.
-        '''
-        retval= 'compact'
-        bSlendernessRatio= self.get('bSlendernessRatio')
-        lambda_P= self.getLambdaP()
-        lambda_R= self.getLambdaR()
-        if(bSlendernessRatio>lambda_P):
-            retval= 'noncompact'
-        elif(bSlendernessRatio>lambda_R):
-            retval= 'slender'
-        return retval
-    
-    def getHFlexureClassification(self):
-        ''' Return the classification for local buckling of the
-            "h" wall of the section according to table B4.1b
-            of AISC 360-16.
-        '''
-        retval= 'compact'
-        hSlendernessRatio= self.get('hSlendernessRatio')
-        lambda_P= self.getLambdaP()
-        lambda_R= self.getLambdaR()
-        if(hSlendernessRatio>lambda_P):
-            retval= 'noncompact'
-        elif(hSlendernessRatio>lambda_R):
-            retval= 'slender'
-        return retval
     
     def getZYieldingFlexuralStrength(self):
         ''' Return the plastic moment of the
@@ -203,7 +93,8 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
     
     def getZFlangeLocalBucklingFlexuralStrength(self):
         ''' Return the maximum flexural strength
-            due to flange local buckling.'''
+            due to flange local buckling according to
+            equations F7-1 to F7-3.'''
         classif= self.getHFlexureClassification()
         Mp= self.getZYieldingFlexuralStrength()
         retval= 0.0
@@ -241,7 +132,7 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
     def getZLimitingLaterallyUnbracedLengthForYielding(self):
         ''' Return the limiting laterally unbraced length 
             for the limit state of yielding according
-            to expression FT-12 of AISC 360-16.
+            to expression F7-12 of AISC 360-16.
         '''
         retval= 0.13*self.steelType.E*self.get('iy')
         retval*= math.sqrt(self.get('It')*self.get('A'))
@@ -252,7 +143,7 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
     def getZLimitingLaterallyUnbracedLengthForInelasticBuckling(self):
         ''' Return the limiting laterally unbraced length 
             for the limit state of inelastic lateral torsional
-            buckling according to expression FT-13 of AISC 360-16.
+            buckling according to expression F7-13 of AISC 360-16.
         '''
         retval= 2.0*self.steelType.E*self.get('iy')
         retval*= math.sqrt(self.get('It')*self.get('A'))
