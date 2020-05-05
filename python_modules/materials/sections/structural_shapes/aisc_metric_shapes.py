@@ -970,7 +970,6 @@ class HSSShape(structural_steel.QHShape):
             b= self.get('h')
         return self.Ieff/(b-self.y_eff)
                    
-
     def getFlangeLocalBucklingLimit(self, majorAxis= True):
         ''' Return the limit for nominal flexural strenght for square of
             rectangular HSS sections due to flange buckling according 
@@ -1115,7 +1114,7 @@ class HSSShape(structural_steel.QHShape):
                 Mn= Mp
                 Mnf= self.getFlangeLocalBucklingLimit(majorAxis)
                 Mn= min(Mn,Mnf)
-                Mnw= self.getWebLocalBucklingLimit(majorAxis)
+                Mnw= self.getWebLocalBucklingLimit(majorAxis)                
                 Mn= min(Mn,Mnw)
                 Mlt= self.getLateralTorsionalBucklingLimit(lateralUnbracedLength, Cb, majorAxis)
                 Mn= min(Mn,Mlt)

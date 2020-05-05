@@ -253,3 +253,4 @@ class Member(buckling_base.MemberBase):
             according to section F1 of AISC-360-16.
         '''
         return 0.9*self.getNominalFlexuralStrength(majorAxis)
+        
