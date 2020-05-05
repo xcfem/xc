@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # COMPANION TO THE AISC STEEL CONSTRUCTION MANUAL
 # Volume 1: Design Examples
-# EXAMPLE F.7B HSS FLEXURAL MEMBER WITH NONCOMPACT FLANGES
+# EXAMPLE F.8B HSS FLEXURAL MEMBER WITH SLENDER FLANGES
 
 from __future__ import division
 from __future__ import print_function
@@ -26,7 +26,7 @@ m2Toin2= 1.0/inch2meter**2
 
 # Problem type
 steelBeam= xc.FEProblem()
-steelBeam.title= 'Example F.7B'
+steelBeam.title= 'Example F.8B'
 preprocessor= steelBeam.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
@@ -35,7 +35,7 @@ nodes= preprocessor.getNodeHandler
 steel= ASTM_materials.A500
 steel.gammaM= 1.00
 ## Profile geometry
-shape= ASTM_materials.HSSShape(steel,'HSS10X6X3/16')
+shape= ASTM_materials.HSSShape(steel,'HSS8X8X3/16')
 xcSection= shape.defElasticShearSection2d(preprocessor,steel)
 
 # Model geometry
@@ -73,13 +73,13 @@ loadCaseNames= ['deadLoad','liveLoad']
 loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 
 ## Dead load.
-deadLoad= xc.Vector([0.0,-0.15e3*kip2kN/foot2meter, 0.0])
+deadLoad= xc.Vector([0.0,-0.125e3*kip2kN/foot2meter, 0.0])
 cLC= loadCaseManager.setCurrentLoadCase('deadLoad')
 for e in xcTotalSet.elements:
     e.vector2dUniformLoadGlobal(deadLoad)
   
 ## Live load.
-liveLoad= xc.Vector([0.0,-0.4e3*kip2kN/foot2meter, 0.0])
+liveLoad= xc.Vector([0.0,-0.375e3*kip2kN/foot2meter, 0.0])
 cLC= loadCaseManager.setCurrentLoadCase('liveLoad')
 for e in xcTotalSet.elements:
     e.vector2dUniformLoadGlobal(liveLoad)
@@ -133,16 +133,14 @@ beam= aisc.Member(l1.name, shape, unbracedLengthX= uLx, unbracedLengthY= span, u
 Mu= beam.getDesignFlexuralStrength()
 Fy= shape.steelType.fy
 E= shape.get('E')
-Mn= 92.925e3-(92.925e3-Fy*0.000244)*(3.57*31.5*math.sqrt(Fy/E)-4.0)
-MuRef= 0.9*Mn
-MuRefText= 0.9*63.3e3*kip2kN*foot2meter
+MuRef= 0.9*47.2e3*kip2kN*foot2meter
 ratio3= abs((Mu-MuRef)/MuRef)
-ratio4= abs((Mu-MuRefText)/MuRefText)
 
 '''
 print('nDiv= ', l1.nDiv)
 print('span= ', span, ' m(',span/foot2meter,' ft)')
 print('Iz= ', Iz, ' m4(',Iz/inch2meter**4,' in4)')
+print('Ieff: ', shape.Ieff, ' m4(', shape.Ieff/(inch2meter**4), ' in4)')
 print('E= ', E/1e9, ' GPa(',E/1e6*MPa2ksi,' ksi)')
 print('refD1= ', refD1*1e3, ' mm(',refD1/inch2meter,' in)')
 print('d1= ', d1*1e3, ' mm(',d1/inch2meter,' in)')
@@ -152,17 +150,14 @@ print('MMaxRef= ',MMaxRef/1e3,' kN m')
 print('MMax= ',MMax/1e3,' kN m')
 print('ratio2= ',ratio2)
 print('Mu= ',Mu/1e3,' kN m(',Mu/1e3*kN2kips/foot2meter,' kip-ft)')
-print('Mn= ',Mn/1e3,' kN m(',Mn/1e3*kN2kips/foot2meter,' kip-ft)')
 print('MuRef= ',MuRef/1e3,' kN m(',MuRef/1e3*kN2kips/foot2meter,' kip-ft)')
 print('ratio3= ',ratio3)
-print('MuRefText= ',MuRefText/1e3,' kN m(',MuRefText/1e3*kN2kips/foot2meter,' kip-ft)')
-print('ratio4= ',ratio4)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if(ratio1<6e-2 and ratio2<1e-7 and ratio3<1e-5 and ratio4<3e-2):
+if(ratio1<6e-2 and ratio2<1e-7 and ratio3<2e-2):
   print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
