@@ -996,8 +996,103 @@ class HSSShape(structural_steel.QHShape):
             else:
                 Se= self.getEffectiveSectionModulus(majorAxis)
                 Mn= Se*Fy # equation F7-3
-        return Mn        
+        return Mn
     
+    def getWebLocalBucklingLimit(self, majorAxis= True):
+        ''' Return the limit for nominal flexural strenght for square of
+            rectangular HSS sections due to web buckling according 
+            to section F7.3 of AISC-360-16.
+
+        :param majorAxis: true if flexure about the major axis.'''
+        Mp= self.getPlasticMoment(majorAxis)
+        Mn= 0.0
+        compactWebs= self.compactWebRatio(majorAxis)
+        if(compactWebs<=1.0):
+            Mn= Mp # equation F7-1
+        else:
+            Fy= self.steelType.fy
+            slenderWebs= self.slenderWebRatio(majorAxis)
+            if(slenderWebs<1.0): # webs are noncompact.
+                E= self.get('E')
+                S= self.get('Wzel') # Elastic section modulus about major axis.
+                lmbd= self.get('bSlendernessRatio') # major axis slenderness ratio.
+                if(not majorAxis):
+                    S= self.get('Wyel') # Elastic section modulus about minor axis.
+                    lmbd= self.get('hSlendernessRatio') # minor axis slenderness ratio.
+                Mn= min(Mp-(Mp-Fy*S)*(0.305*lmbd*math.sqrt(Fy/E)-0.738),Mp) # equation F7-6
+            else:
+                lmsg.error(__name__+": something went wrong: there are no HSS with slender webs.")
+                Mn= 0.0
+        return Mn
+    
+    def getLimitingLaterallyUnbracedLengthForYielding(self, majorAxis= True):
+        ''' Return the limiting laterally unbraced length 
+            for the limit state of yielding according
+            to expression F7-12 of AISC 360-16.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        ry= self.get('iy')
+        if(not majorAxis):
+            ry= self.get('iz')
+        retval= 0.13*self.steelType.E*ry
+        retval*= math.sqrt(self.get('It')*self.get('A'))
+        Mp= self.getPlasticMoment(majorAxis)
+        retval/=Mp
+        return retval
+    
+    def getLimitingLaterallyUnbracedLengthForInelasticBuckling(self, majorAxis= True):
+        ''' Return the limiting laterally unbraced length 
+            for the limit state of inelastic lateral torsional
+            buckling according to expression F7-13 of AISC 360-16.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        ry= self.get('iy')
+        if(not majorAxis):
+            ry= self.get('iz')
+        retval= 2.0*self.steelType.E*ry
+        retval*= math.sqrt(self.get('It')*self.get('A'))
+        M= 0.7*self.steelType.fy*self.get('Wyel')
+        retval/=M
+        return retval
+    
+    def getLateralTorsionalBucklingLimit(self, Lb, Cb, majorAxis= True):
+        ''' Return the maximum flexural strength
+        due to lateral-torsional buckling according to
+        expressions F7-10 to F7-11 of AISC 360-16
+
+        :param Lb: Length between points that are either braced 
+                   against lateral displacement of compression 
+                   flange or braced against twist of the cross section.
+        :param Cb: lateral-torsional buckling modification factor Cb
+                   for non uniform moment diagrams when both ends of the 
+                   segment are braced according to expression 
+                   F1-1 of AISC 360-16.
+        '''
+        Mp= self.getPlasticMoment(majorAxis)
+        Lp= self.getLimitingLaterallyUnbracedLengthForYielding(majorAxis)
+        retval= 0.0
+        if(Lb<=Lp): #No lateral-torsional buckling.
+            retval= Mp
+        else: #Lb>Lp
+            Lr= self.getLimitingLaterallyUnbracedLengthForInelasticBuckling(majorAxis)
+            if(Lb<Lr): # equation F7-10
+                Sx= self.get('Wyel')
+                if(not majorAxis):
+                    Sx= self.get('Wzel')
+                retval= Mp-(Mp-0.7*self.steelType.fy*Sx)*(Lb-Lp)/(Lr-Lp) 
+                retval*= Cb
+                retval= min(Mp,retval)
+            else: #Lb>Lp  equation F7-11
+                retval= 2.0*self.steelType.E*Cb
+                retval*= math.sqrt(self.get('It')*self.get('A'))
+                ry= self.get('iy')
+                if(not majorAxis):
+                    ry= self.get('iz')
+                retval/= (Lb/ry)
+        return retval
+
     def getNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
         ''' Return the nominal flexural strength of the member
             according to equations F7-1 to F7-13 and F8-1 to F8-4 
@@ -1012,15 +1107,21 @@ class HSSShape(structural_steel.QHShape):
         '''
         Mp= self.getPlasticMoment(majorAxis)
         Mn= 0.0
-        lmsg.error(__name__+'; nominal flexural strength for HSS sections not implemented yet.')
         if(self.isRectangular()): # rectangular section -> F7
             compactSection= self.compactWebAndFlangeRatio(majorAxis)
             if(compactSection<=1.0):
                 Mn= Mp # equation F7-1
             else:
-                Mn= 0.0
+                Mn= Mp
+                Mnf= self.getFlangeLocalBucklingLimit(majorAxis)
+                Mn= min(Mn,Mnf)
+                Mnw= self.getWebLocalBucklingLimit(majorAxis)
+                Mn= min(Mn,Mnw)
+                Mlt= self.getLateralTorsionalBucklingLimit(lateralUnbracedLength, Cb, majorAxis)
+                Mn= min(Mn,Mlt)
         else: # circular section -> F8
             Mn= 0.0
+            lmsg.error(__name__+'; nominal flexural strength for circular HSS sections not implemented yet.')
         return Mn
 
 # Label conversion metric->US customary | US customary -> metric.
