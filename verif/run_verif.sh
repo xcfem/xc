@@ -559,7 +559,8 @@ python tests/materials/astm_aisc/flexural_member_design_test_10.py
 python tests/materials/astm_aisc/compression_member_design_test_01.py
 python tests/materials/astm_aisc/compression_member_design_test_02.py
 python tests/materials/astm_aisc/compression_member_design_test_03.py
-python tests/materials/astm_aisc/shear_member_design_test.py
+python tests/materials/astm_aisc/shear_member_design_test_01.py
+python tests/materials/astm_aisc/shear_member_design_test_02.py
 
 echo "$BLEU" "  Wood sections test." "$NORMAL"
 echo "$BLEU" "    AWC NDS tests." "$NORMAL"
