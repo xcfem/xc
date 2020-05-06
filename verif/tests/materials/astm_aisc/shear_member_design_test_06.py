@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # COMPANION TO THE AISC STEEL CONSTRUCTION MANUAL
 # Volume 1: Design Examples
-# EXAMPLE G.1A W-SHAPE IN STRONG AXIS SHEAR
+# EXAMPLE G.7 SINGLY SYMMETRIC SHAPE IN WEAK AXIS SHEAR
 
 from __future__ import division
 from __future__ import print_function
@@ -25,16 +25,16 @@ m2Toin2= 1.0/inch2meter**2
 
 # Problem type
 steelBeam= xc.FEProblem()
-steelBeam.title= 'Example G.1A'
+steelBeam.title= 'Example G.7'
 preprocessor= steelBeam.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
 #Materials
 ## Steel material
-steel= ASTM_materials.A992
+steel= ASTM_materials.A36
 steel.gammaM= 1.00
 ## Profile geometry
-shape= ASTM_materials.WShape(steel,'W24X62')
+shape= ASTM_materials.CShape(steel,'C9X20')
 xcSection= shape.defElasticShearSection2d(preprocessor,steel)
 
 # Model geometry
@@ -72,14 +72,14 @@ loadCaseNames= ['deadLoad','liveLoad']
 loadCaseManager.defineSimpleLoadCases(loadCaseNames)
 
 ## Dead load.
-deadLoad= -48.0e3*kip2kN/span*2
+deadLoad= -5.0e3*kip2kN/span*2
 deadLoadVector= xc.Vector([0.0,deadLoad, 0.0])
 cLC= loadCaseManager.setCurrentLoadCase('deadLoad')
 for e in xcTotalSet.elements:
     e.vector2dUniformLoadGlobal(deadLoadVector)
   
 ## Live load.
-liveLoad= -145.0e3*kip2kN/span*2
+liveLoad= -15.0e3*kip2kN/span*2
 liveLoadVector= xc.Vector([0.0,liveLoad, 0.0])
 cLC= loadCaseManager.setCurrentLoadCase('liveLoad')
 for e in xcTotalSet.elements:
@@ -114,12 +114,14 @@ for e in xcTotalSet.elements:
 VMaxRef= -(1.2*deadLoad+1.6*liveLoad)*span/2.0
 ratio1= abs((VMax-VMaxRef)/VMaxRef)
 
-Aw= shape.getAw()
-AwRef= 10.2*inch2meter**2
+Aw= shape.getAw(majorAxis= False)
+AwRef= 2.19*inch2meter**2
 ratio2= abs((Aw-AwRef)/AwRef)
-Vu= shape.getDesignShearStrengthWithoutTensionFieldAction()
-VuRef= 306e3*kip2kN
+Vu= shape.getDesignShearStrengthWithoutTensionFieldAction(majorAxis= False)
+VuRef= 0.9*0.6*shape.steelType.fy*Aw*1.0
 ratio3= abs((Vu-VuRef)/VuRef)
+VuRefText= 0.9*47.3e3*kip2kN
+ratio4= abs((Vu-VuRefText)/VuRefText)
 
 
 '''
@@ -133,12 +135,14 @@ print('ratio2= ',ratio2)
 print('Vu= ',Vu/1e3,' kN m')
 print('VuRef= ',VuRef/1e3,' kN m')
 print('ratio3= ',ratio3)
+print('VuRefText= ',VuRefText/1e3,' kN m')
+print('ratio4= ',ratio4)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if(ratio1<5e-4 and ratio2<5e-3 and ratio3<5e-3):
+if(ratio1<5e-4 and ratio2<5e-3 and ratio3<1e-8 and ratio4<1e-2):
   print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
