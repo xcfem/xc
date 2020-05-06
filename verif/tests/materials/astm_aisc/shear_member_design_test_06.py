@@ -11,6 +11,7 @@ import xc_base
 import geom
 import xc
 from materials.astm_aisc import ASTM_materials
+from materials.astm_aisc import AISC_limit_state_checking as aisc
 from model import predefined_spaces
 from actions import load_cases
 from actions import combinations as combs
@@ -114,10 +115,12 @@ for e in xcTotalSet.elements:
 VMaxRef= -(1.2*deadLoad+1.6*liveLoad)*span/2.0
 ratio1= abs((VMax-VMaxRef)/VMaxRef)
 
-Aw= shape.getAw(majorAxis= False)
+member= aisc.Member('member', shape,unbracedLengthX= span)
+
+Aw= member.shape.getAw(majorAxis= False)
 AwRef= 2.19*inch2meter**2
 ratio2= abs((Aw-AwRef)/AwRef)
-Vu= shape.getDesignShearStrengthWithoutTensionFieldAction(majorAxis= False)
+Vu= member.getDesignShearStrength(majorAxis= False)
 VuRef= 0.9*0.6*shape.steelType.fy*Aw*1.0
 ratio3= abs((Vu-VuRef)/VuRef)
 VuRefText= 0.9*47.3e3*kip2kN
