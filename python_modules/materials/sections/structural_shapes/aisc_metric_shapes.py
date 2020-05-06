@@ -46,6 +46,14 @@ for item in shapes.W:
     shape['AreaQy']= shape['A']-shape['AreaQz']
 W= shapes.W
 
+def getShapePlasticAxialNoad(shape):
+    ''' Return the plastic axial load of the shape.
+
+    :param shape: structural shape.
+    :param majorAxis: true if flexure about the major axis.
+    '''
+    return shape.steelType.fy*shape.get('A')
+
 def getShapePlasticMoment(shape, majorAxis= True):
     ''' Return the plastic moment of the shape.
 
@@ -451,6 +459,14 @@ class WShape(structural_steel.IShape):
             rf= self.getShearResistanceFactor()
         return rf*self.getNominalShearStrengthWithoutTensionFieldAction(a, majorAxis)
 
+    def getDesignShearStrength(self, a= 1e6, majorAxis= True):
+        ''' Return the design shear strength according to equation
+            section G1 of AISC-360-16.
+
+        :param a: clear distance between transverse stiffeners.
+        '''
+        return self.getDesignShearStrengthWithoutTensionFieldAction(a,majorAxis)
+
     def getTorsionalElasticBucklingStress(self, Lc):
         ''' Return the torsional or flexural-torsional elastic buckling stress
             of the member according to equations E4-2 of AISC-360-16.
@@ -465,6 +481,10 @@ class WShape(structural_steel.IShape):
         Iy= self.get('Iy')
         Iz= self.get('Iz')
         return (math.pi**2*E*Cw/Lc**2+G*J)/(Iy+Iz)
+    
+    def getPlasticAxialLoad(self):
+        ''' Return the plastic axial load of the section.'''
+        return getShapePlasticAxialLoad(self)
     
     def getPlasticMoment(self, majorAxis= True):
         ''' Return the plastic moment of the section.
@@ -529,6 +549,19 @@ class WShape(structural_steel.IShape):
         :param majorAxis: true if flexure about the major axis.
         '''
         return getUIShapeNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis)
+    
+    def getDesignFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
+        ''' Return the design flexural strength of the section
+            according to section F1 of AISC-360-16.
+
+        :param lateralUnbracedLength: length between points that are either 
+                                      braced against lateral displacement of
+                                      the compression flange or braced against 
+                                      twist of the cross section.
+        :param Cb: lateral-torsional buckling modification factor.
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        return 0.9*self.getNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis)
 
  
 # *************************************************************************
@@ -681,6 +714,14 @@ class CShape(structural_steel.UShape):
         '''
 
         return 0.9*self.getNominalShearStrengthWithoutTensionFieldAction(a, majorAxis)
+    
+    def getDesignShearStrength(self, a= 1e6, majorAxis= True):
+        ''' Return the design shear strength according to equation
+            section G1 of AISC-360-16.
+
+        :param a: clear distance between transverse stiffeners.
+        '''
+        return self.getDesignShearStrengthWithoutTensionFieldAction(a,majorAxis)
 
     def slendernessCheck(self):
         ''' Verify that the section doesn't contains slender elements
@@ -731,6 +772,10 @@ class CShape(structural_steel.UShape):
         Iy= self.get('Iy') # Moment of inertia about minor axis.
         return h0/2.0*math.sqrt(Iy/Cw)
 
+    def getPlasticAxialLoad(self):
+        ''' Return the plastic axial load of the section.'''
+        return getShapePlasticAxialLoad(self)
+    
     def getPlasticMoment(self, majorAxis= True):
         ''' Return the plastic moment of the section.
 
@@ -790,6 +835,19 @@ class CShape(structural_steel.UShape):
         :param majorAxis: true if flexure about the major axis.
         '''
         return getUIShapeNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis)
+    
+    def getDesignFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
+        ''' Return the design flexural strength of the section
+            according to section F1 of AISC-360-16.
+
+        :param lateralUnbracedLength: length between points that are either 
+                                      braced against lateral displacement of
+                                      the compression flange or braced against 
+                                      twist of the cross section.
+        :param Cb: lateral-torsional buckling modification factor.
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        return 0.9*self.getNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis)
     
 
 # *************************************************************************
@@ -1053,6 +1111,10 @@ class HSSShape(structural_steel.QHShape):
         Iz= self.get('Iz')
         return (math.pi**2*E*Cw/Lc**2+G*J)/(Iy+Iz)
     
+    def getPlasticAxialLoad(self):
+        ''' Return the plastic axial load of the section.'''
+        return getShapePlasticAxialLoad(self)
+    
     def getPlasticMoment(self, majorAxis= True):
         ''' Return the plastic moment of the section.
 
@@ -1291,6 +1353,19 @@ class HSSShape(structural_steel.QHShape):
             Mlt= self.getLateralTorsionalBucklingLimit(lateralUnbracedLength, Cb, majorAxis)
             Mn= min(Mn,Mlt)
         return Mn
+    
+    def getDesignFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
+        ''' Return the design flexural strength of the section
+            according to section F1 of AISC-360-16.
+
+        :param lateralUnbracedLength: length between points that are either 
+                                      braced against lateral displacement of
+                                      the compression flange or braced against 
+                                      twist of the cross section.
+        :param Cb: lateral-torsional buckling modification factor.
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        return 0.9*self.getNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis)
 
 for item in shapes.CHSS:
     shape= shapes.CHSS[item]
@@ -1387,9 +1462,12 @@ class CHSSShape(structural_steel.CHShape):
         Fcr= min(Fcr,0.6*Fy)
         return Fcr*self.getAw()/2.0
 
-    def getDesignShearStrength(self):
+    def getDesignShearStrength(self, majorAxis= True):
         ''' Return the design shear strength according to equation
             section G1 of AISC-360-16.
+
+        :param majorAxis: dummy argument needed for compatibility with
+                          the other shapes.
         '''
         return 0.9*self.getNominalShearStrength()
     
@@ -1417,6 +1495,10 @@ class CHSSShape(structural_steel.CHShape):
         Iz= self.get('Iz')
         return (math.pi**2*E*Cw/Lc**2+G*J)/(Iy+Iz)
     
+    def getPlasticAxialLoad(self):
+        ''' Return the plastic axial load of the section.'''
+        return getShapePlasticAxialLoad(self)
+    
     def getPlasticMoment(self):
         ''' Return the plastic moment of the section.
 
@@ -1431,6 +1513,19 @@ class CHSSShape(structural_steel.CHShape):
         Mn= 0.0
         lmsg.error(__name__+'; nominal flexural strength for circular HSS sections not implemented yet.')
         return Mn
+    
+    def getDesignFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
+        ''' Return the design flexural strength of the section
+            according to section F1 of AISC-360-16.
+
+        :param lateralUnbracedLength: length between points that are either 
+                                      braced against lateral displacement of
+                                      the compression flange or braced against 
+                                      twist of the cross section.
+        :param Cb: lateral-torsional buckling modification factor.
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        return 0.9*self.getNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis)
 
     
 # Label conversion metric->US customary | US customary -> metric.

@@ -43,6 +43,51 @@ class ASTMShape(object):
          Constructor.
        '''
        self.name=name
+
+    def getDesignTensileStrength(self, Ae= None):
+        ''' Return the tensile strength of the section according
+            to section D2 fo AISC-360-16.
+
+        :param Ae: effective net area according to section D3.
+        '''
+        Ag= self.get('A')
+        retval= 0.9*self.steelType.fy*Ag
+        if(not Ae):
+            Ae= Ag
+        retval= min(retval,0.75*self.steelType.fu*Ae)
+        
+    def getReferenceFlexuralStrength(self):
+        ''' Return the flexural strength of the section without
+            take in to account the lateral buckling effect.'''
+        return self.getDesignFlexuralStrength(lateralUnbracedLength= 1.0, Cb= 1.0, majorAxis= True)
+       
+    def getBiaxialBendingEfficiency(self,sectionClass,Nd,Myd,Mzd,Vyd= 0.0, chiN=1.0, chiLT=1.0):
+        '''Return biaxial bending efficiency according to section H1
+           of AISC-360-16.
+
+           sectionClass: dummy argument needed for compatibility with other codes.
+           chiN: axial load reduction reduction factor (default= 1.0).
+           chiLT: lateral buckling reduction factor (default= 1.0).
+        '''
+        ratioN= 0.0
+        if(Nd<0): # compression
+            NcRd= chiN*self.getPlasticAxialLoad() # available axial strength.
+            ratioN=  abs(Nd)/NcRd
+        else:
+            NcRd= self.getDesignTensileStrength() # available axial strength.
+            ratioN= Nd/NcRd
+        McRdy= self.getDesignFlexuralStrength(None, None, majorAxis= False) # available flexural strength minor axis.
+        McRdz= self.getReferenceFlexuralStrength() # reference flexural strength major axis.
+        # MvRdz= self.getMvRdz(sectionClass,Vyd)
+        MvRdz= McRdz
+        MbRdz= chiLT*MvRdz # available flexural strength major axis.
+        ratioMz= abs(Mzd)/MbRdz
+        ratioMy= abs(Myd)/McRdy
+        if(ratioN>=0.2):
+            CF= ratioN+8.0/9.0*(ratioMz+ratioMy) # equation H1-1a
+        else:
+            CF= ratioN/2.0+(ratioMz+ratioMy) # equation H1-1b
+        return (CF,NcRd,McRdy,McRdz,MvRdz,MbRdz)
        
 from materials.sections.structural_shapes import aisc_metric_shapes
 

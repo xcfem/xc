@@ -232,6 +232,13 @@ class Member(buckling_base.MemberBase):
         '''
         return 0.9*self.getNominalCompressiveStrength()
 
+    def getCompressiveStrengthReductionFactor(self):
+        ''' Return the reduction factor of the compressive strength 
+            of the member with respect to the plastic axial load of
+            its section.
+        '''
+        return self.getDesignCompressiveStrength()/self.shape.getPlasticAxialLoad()
+
     def getLateralTorsionalBucklingModificationFactor(self):
         ''' Return the lateral-torsional buckling modification factor
             according to equation F1-1 of ANSI AISC 360-16.'''
@@ -250,7 +257,19 @@ class Member(buckling_base.MemberBase):
 
     def getDesignFlexuralStrength(self, majorAxis= True):
         ''' Return the design flexural strength of the member
-            according to section F1 of AISC-360-16.
+            according to section F of AISC-360-16.
         '''
         return 0.9*self.getNominalFlexuralStrength(majorAxis)
         
+    def getFlexuralStrengthReductionFactor(self):
+        ''' Return the reduction factor of the compressive strength 
+            of the member with respect to the plastic axial load of
+            its section.
+        '''
+        return self.getDesignFlexuralStrength()/self.shape.getReferenceFlexuralStrength()
+
+    def getDesignShearStrength(self, majorAxis= True):
+        ''' Return the design shear strength of the member
+            according to section G of AISC-360-16.
+        '''
+        return self.shape.getDesignShearStrength(majorAxis= majorAxis)
