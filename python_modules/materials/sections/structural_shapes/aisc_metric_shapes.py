@@ -753,6 +753,7 @@ for item in shapes.HSS:
         shape['Avz']= tmp
     shape['AreaQz']= shape['Avz']
     shape['AreaQy']= shape['Avy']
+    
 HSS= shapes.HSS
 
 class HSSShape(structural_steel.QHShape):
@@ -766,17 +767,9 @@ class HSSShape(structural_steel.QHShape):
         '''
         super(HSSShape,self).__init__(steel,name,HSS)
 
-    def isRectangular(self):
-        ''' Return true if it's a rectangular HSS section.'''
-        return ('h_flat' in self.shape)
-
-    def isRound(self):
-        ''' Return true if it's a rectangular HSS section.'''
-        return not self.isRectangular()
-    
     def getLimitingWidthToThicknessRatio(self):
         ''' Return the Limiting Width-to-Thickness Ratio 
-        according to table B4.1A of AISC-360-16.
+        according to table B4.1a of AISC-360-16.
         '''
         return 1.4*math.sqrt(self.steelType.E/self.steelType.fy)
 
@@ -866,17 +859,12 @@ class HSSShape(structural_steel.QHShape):
         retval= 10.0
         E= self.get('E')
         Fy= self.steelType.fy
-        if(self.isRound()):
-            slendernessRatio= self.get('slendernessRatio')
-            lambda_p= 0.07*(E/Fy) # Case 20 (no square root here)
-            retval= slendernessRatio/lambda_p
+        lambda_p= 1.12*math.sqrt(E/Fy) # Case 17
+        if(majorAxis):
+            slendernessRatio= self.get('bSlendernessRatio')
         else:
-            lambda_p= 1.12*math.sqrt(E/Fy) # Case 17
-            if(majorAxis):
-                slendernessRatio= self.get('bSlendernessRatio')
-            else:
-                slendernessRatio= self.get('hSlendernessRatio')
-            retval= slendernessRatio/lambda_p
+            slendernessRatio= self.get('hSlendernessRatio')
+        retval= slendernessRatio/lambda_p
         return retval # if <1 then flanges are compact.
     
     def slenderFlangeRatio(self, majorAxis= True):
@@ -889,17 +877,12 @@ class HSSShape(structural_steel.QHShape):
         retval= 10.0
         E= self.get('E')
         Fy= self.steelType.fy
-        if(self.isRound()):
-            slendernessRatio= self.get('slendernessRatio')
-            lambda_r= 0.31*(E/Fy) # Case 20 (no square root here)
-            retval= slendernessRatio/lambda_r
+        lambda_r= 1.40*math.sqrt(E/Fy) # Case 17
+        if(majorAxis):
+            slendernessRatio= self.get('bSlendernessRatio')
         else:
-            lambda_r= 1.40*math.sqrt(E/Fy) # Case 17
-            if(majorAxis):
-                slendernessRatio= self.get('bSlendernessRatio')
-            else:
-                slendernessRatio= self.get('hSlendernessRatio')
-            retval= slendernessRatio/lambda_r
+            slendernessRatio= self.get('hSlendernessRatio')
+        retval= slendernessRatio/lambda_r
         return retval # if <1 then flanges are compact.
     
     def compactWebRatio(self, majorAxis= True):
@@ -911,17 +894,12 @@ class HSSShape(structural_steel.QHShape):
         retval= 10.0
         E= self.get('E')
         Fy= self.steelType.fy
-        if(self.isRound()):
-            slendernessRatio= self.get('slendernessRatio')
-            lambda_p= 0.07*(E/Fy) # Case 20 (no square root here)
-            retval= slendernessRatio/lambda_p
+        lambda_p= 2.42*math.sqrt(E/Fy) # Case 19
+        if(majorAxis):
+            slendernessRatio= self.get('bSlendernessRatio')
         else:
-            lambda_p= 2.42*math.sqrt(E/Fy) # Case 19
-            if(majorAxis):
-                slendernessRatio= self.get('bSlendernessRatio')
-            else:
-                slendernessRatio= self.get('hSlendernessRatio')
-            retval= slendernessRatio/lambda_p
+            slendernessRatio= self.get('hSlendernessRatio')
+        retval= slendernessRatio/lambda_p
         return retval # if <1 then webs are compact.
     
     def slenderWebRatio(self, majorAxis= True):
@@ -934,17 +912,12 @@ class HSSShape(structural_steel.QHShape):
         retval= 10.0
         E= self.get('E')
         Fy= self.steelType.fy
-        if(self.isRound()):
-            slendernessRatio= self.get('slendernessRatio')
-            lambda_r= 0.31*(E/Fy) # Case 20 (no square root here)
-            retval= slendernessRatio/lambda_r
+        lambda_r= 5.7*math.sqrt(E/Fy) # Case 19
+        if(majorAxis):
+            slendernessRatio= self.get('bSlendernessRatio')
         else:
-            lambda_r= 5.7*math.sqrt(E/Fy) # Case 19
-            if(majorAxis):
-                slendernessRatio= self.get('bSlendernessRatio')
-            else:
-                slendernessRatio= self.get('hSlendernessRatio')
-            retval= slendernessRatio/lambda_r
+            slendernessRatio= self.get('hSlendernessRatio')
+        retval= slendernessRatio/lambda_r
         return retval # if <1 then webs are noncompact.
     
     def compactWebAndFlangeRatio(self, majorAxis= True):
@@ -956,7 +929,7 @@ class HSSShape(structural_steel.QHShape):
         return getShapeCompactWebAndFlangeRatio(self,majorAxis)
     
     def getAw(self, majorAxis= True):
-        ''' Return the web area.'''
+        ''' Return area for shear strength calculation.'''
         t= self.get('t')
         if(majorAxis): # see equation G4-1
             h= self.get('h_flat')
@@ -989,10 +962,11 @@ class HSSShape(structural_steel.QHShape):
                 Cv2= 1.51*kv*E/h_t**2/Fy  # equation G2-11
         return Cv2
     
-    def getNominalShearStrength(self, majorAxis= True):
-        ''' Return the nominal shear strength according to equation
-            G4-1 of AISC-360-16.
+    def getNominalShearStrength(self, Lv= 1e6, majorAxis= True):
+        ''' Return the nominal shear strength according to equations
+            G4-1 and G6-1 of AISC-360-16.
 
+        :param Lv: distance from maximum to zero shear force.
         :param majorAxis: true if flexure about the major axis.
         '''
         Fy= self.steelType.fy
@@ -1002,7 +976,8 @@ class HSSShape(structural_steel.QHShape):
         else:
             Cv2= self.getWebShearStrengthCoefficient(kv= 1.2, majorAxis= majorAxis)
             return 0.6*Fy*self.getAw(majorAxis)*Cv2 # eauation G6-1
-        
+
+
     def getDesignShearStrength(self, majorAxis= True):
         ''' Return the design shear strength according to equation
             section G1 of AISC-360-16.
@@ -1018,10 +993,7 @@ class HSSShape(structural_steel.QHShape):
         E= self.get('E')
         Fy= self.steelType.fy
         lambda_r= 1.4*math.sqrt(E/Fy)
-        if(self.isRectangular()): # rectangular
-            slendernessRatio= max(self.get('hSlendernessRatio'),self.get('bSlendernessRatio'))
-        else: # round
-            slendernessRatio= self.get('slendernessRatio')
+        slendernessRatio= max(self.get('hSlendernessRatio'),self.get('bSlendernessRatio'))
         return slendernessRatio/lambda_r # OK if < 1.0
     
     def getTorsionalElasticBucklingStress(self, Lc):
@@ -1253,8 +1225,7 @@ class HSSShape(structural_steel.QHShape):
 
     def getNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
         ''' Return the nominal flexural strength of the member
-            according to equations F7-1 to F7-13 and F8-1 to F8-4 
-            of AISC-360-16.
+            according to equations F7-1 to F7-13 of AISC-360-16.
 
         :param lateralUnbracedLength: length between points that are either 
                                       braced against lateral displacement of
@@ -1265,23 +1236,161 @@ class HSSShape(structural_steel.QHShape):
         '''
         Mp= self.getPlasticMoment(majorAxis)
         Mn= 0.0
-        if(self.isRectangular()): # rectangular section -> F7
-            compactSection= self.compactWebAndFlangeRatio(majorAxis)
-            if(compactSection<=1.0):
-                Mn= Mp # equation F7-1
-            else:
-                Mn= Mp
-                Mnf= self.getFlangeLocalBucklingLimit(majorAxis)
-                Mn= min(Mn,Mnf)
-                Mnw= self.getWebLocalBucklingLimit(majorAxis)                
-                Mn= min(Mn,Mnw)
-                Mlt= self.getLateralTorsionalBucklingLimit(lateralUnbracedLength, Cb, majorAxis)
-                Mn= min(Mn,Mlt)
-        else: # circular section -> F8
-            Mn= 0.0
-            lmsg.error(__name__+'; nominal flexural strength for circular HSS sections not implemented yet.')
+
+        compactSection= self.compactWebAndFlangeRatio(majorAxis)
+        if(compactSection<=1.0):
+            Mn= Mp # equation F7-1
+        else:
+            Mn= Mp
+            Mnf= self.getFlangeLocalBucklingLimit(majorAxis)
+            Mn= min(Mn,Mnf)
+            Mnw= self.getWebLocalBucklingLimit(majorAxis)                
+            Mn= min(Mn,Mnw)
+            Mlt= self.getLateralTorsionalBucklingLimit(lateralUnbracedLength, Cb, majorAxis)
+            Mn= min(Mn,Mlt)
         return Mn
 
+for item in shapes.CHSS:
+    shape= shapes.CHSS[item]
+    shape['alpha']= 5/12.0
+    shape['G']= shape['E']/(2*(1+shape['nu']))
+    tmp= math.pi*(shape['OD']-shape['t'])/2.0*shape['t']
+    shape['Avy']= tmp
+    shape['Avz']= tmp
+    shape['AreaQz']= shape['Avz']
+    shape['AreaQy']= shape['Avy']
+
+CHSS= shapes.CHSS
+
+class CHSSShape(structural_steel.CHShape):
+    ''' Circular hollow structural section.
+
+    :ivar steel: steel material.
+    :ivar name: shape name (i.e. HSS16.000X0.375).
+    '''
+    def __init__(self,steel,name):
+        ''' Constructor.
+        '''
+        super(CHSSShape,self).__init__(steel,name,CHSS)
+
+    def getLimitingWidthToThicknessRatio(self):
+        ''' Return the Limiting Width-to-Thickness Ratio 
+        according to table B4.1A of AISC-360-16.
+        '''
+        return 1.4*math.sqrt(self.steelType.E/self.steelType.fy)
+
+    def getLambdaP(self):
+        ''' Return the limiting Width-to-Thickness Ratio (compact/noncompact)
+            according to table B4.1b of AISC 360-16.
+        '''
+        return 1.12*math.sqrt(self.steelType.E/self.steelType.fy)
+    
+    def getLambdaR(self):
+        ''' Return the limiting Width-to-Thickness Ratio (compact/noncompact)
+            according to table B4.1b of AISC 360-16.
+        '''
+        return 1.40*math.sqrt(self.steelType.E/self.steelType.fy)
+    
+
+    # Bending
+    def compactRatio(self):
+        ''' If section is compact according to case
+            20 (round HSS sections subject to flexure) of
+            table B4.1b of AISC-360-16 return a value 
+            less than one.
+
+        '''
+        retval= 10.0
+        E= self.get('E')
+        Fy= self.steelType.fy
+        slendernessRatio= self.get('slendernessRatio')
+        lambda_p= 0.07*(E/Fy) # Case 20 (no square root here)
+        retval= slendernessRatio/lambda_p
+        return retval # if <1 then section is compact.
+    
+    def slenderRatio(self):
+        ''' If section is noncompact according to table B4.1b of 
+            AISC-360-16 return a value less than one otherwise
+            they are slender.
+
+        '''
+        retval= 10.0
+        E= self.get('E')
+        Fy= self.steelType.fy
+        slendernessRatio= self.get('slendernessRatio')
+        lambda_r= 0.31*(E/Fy) # Case 20 (no square root here)
+        retval= slendernessRatio/lambda_r
+        return retval # if <1 then flanges are compact.
+    
+    def getAw(self):
+        ''' Return area for shear strenght calculation.'''
+        return self.get('A')
+    
+    def getNominalShearStrength(self, Lv= None):
+        ''' Return the nominal shear strength according to equations
+            G4-1 and G5-1, G5-2a and G5-2b of AISC-360-16.
+
+        :param Lv: distance from maximum to zero shear force.
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        Fy= self.steelType.fy
+
+        E= self.get('E')
+        D= self.get('OD')
+        slendernessRatio= self.get('slendernessRatio')
+        Fcr= 0.0
+        if(Lv):
+           Fcr= 1.6*E/math.sqrt(Lv/D)/math.pow(slendernessRatio,5.0/4.0) # equation G5-2a
+        Fcr= max(Fcr, 0.78*E/math.pow(slendernessRatio,3.0/2.0)) # equation G-2b
+        Fcr= min(Fcr,0.6*Fy)
+        return Fcr*self.getAw()/2.0
+
+    def getDesignShearStrength(self):
+        ''' Return the design shear strength according to equation
+            section G1 of AISC-360-16.
+        '''
+        return 0.9*self.getNominalShearStrength()
+    
+    def slendernessCheck(self):
+        ''' Verify that the section doesn't contains slender elements
+            according to case 9 of table B4.1a of AISC-360-16.'''
+        E= self.get('E')
+        Fy= self.steelType.fy
+        lambda_r= 0.11*(E/Fy)
+        slendernessRatio= self.get('slendernessRatio')
+        return slendernessRatio/lambda_r # nonslender if < 1.0
+    
+    def getTorsionalElasticBucklingStress(self, Lc):
+        ''' Return the torsional or flexural-torsional elastic buckling stress
+            of the member according to equations E4-2 of AISC-360-16.
+
+        :param Lc: effective length of member for torsional buckling 
+                   about longitudinal axis.
+        '''
+        E= self.get('E')
+        G= self.get('G')
+        Cw= self.get('C') #HSS torsional constant.
+        J= self.get('It')
+        Iy= self.get('Iy')
+        Iz= self.get('Iz')
+        return (math.pi**2*E*Cw/Lc**2+G*J)/(Iy+Iz)
+    
+    def getPlasticMoment(self):
+        ''' Return the plastic moment of the section.
+
+        '''
+        return getShapePlasticMoment(self)
+
+    def getNominalFlexuralStrength(self):
+        ''' Return the nominal flexural strength of the member
+            according to equations F7-1 to F7-13 and F8-1 to F8-4 
+            of AISC-360-16.
+        '''
+        Mn= 0.0
+        lmsg.error(__name__+'; nominal flexural strength for circular HSS sections not implemented yet.')
+        return Mn
+
+    
 # Label conversion metric->US customary | US customary -> metric.
 def getUSLabel(metricLabel):
     '''Return the US customary label from the metric one.'''

@@ -108,11 +108,13 @@ sheet_columns['T']= 'FH' # Distance between web toes of fillets at top and botto
 sheet_columns['WGi']= 'FI' # The workable gage for the inner fastener holes in the flange that provides for entering and tightening clearances and edge distance and spacing requirements. The actual size, combination, and orientation of fastener components should be compared with the geometry of the cross section to ensure compatibility. See AISC Manual Part 1 for additional information, in. (mm)
 sheet_columns['WGo']= 'FJ' # The bolt spacing between inner and outer fastener holes when the workable gage is compatible with four holes across the flange. See AISC Manual Part 1 for additional information, in. (mm)
 
-def getDictName(shapeType):
+def getDictName(shapeType, isRoundHSS):
     ''' Return the dictionary name from the shape type.'''
     retval= shapeType
     if(shapeType=='2L'):
         retval= 'TwoL'
+    if(shapeType=='HSS' and isRoundHSS):
+        retval= 'CHSS'
     return retval
 
 def writeVariable(row, variableName, key,unitConv= ''):
@@ -122,13 +124,24 @@ def writeVariable(row, variableName, key,unitConv= ''):
     if(value!=u'\u2013'):
         out.write("\'"+key+"\':"+str(value)+unitConv+", ")
 
+def isRoundHSS(row):
+    retval= False
+    col= column_index_from_string(sheet_columns['OD'])-1
+    value= row[col].value
+    if(value!=u'\u2013'):
+        name= row[0].value
+        if(name=='HSS'):
+            retval= True
+    return retval
+
 createdDictionaries= list()
 
 def writeShape(out, row):
     ''' Write shape record from row data.'''
     shapetype= row[0].value
     if(shapetype):
-        dictName= getDictName(shapetype)
+        round= isRoundHSS(row)
+        dictName= getDictName(shapetype, round)
         if(dictName not in createdDictionaries):
             out.write(dictName+"= dict()\n")
             createdDictionaries.append(dictName)

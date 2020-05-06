@@ -524,7 +524,22 @@ class QHShape(SteelShape):
         c=self.b()-2*self.t()-2*self.get('e')
         t=self.t()
         return c/t
-        
+
+class CHShape(SteelShape):
+    '''Circular hollow shape''' 
+    def __init__(self,steel,name,table):
+        super(CHShape,self).__init__(steel,name,table)
+
+    def getSymmetry(self):
+        ''' Returns the symmetry of the shape: 
+            'double', 'simple' or 'none'.'''
+        return 'double'
+
+    def getRho(self):
+        ''' Returns mass per unit lenght. '''
+        return self.get('P')
+
+    
 class UShape(SteelShape):
     def __init__(self,steel,name,table):
         super(UShape,self).__init__(steel,name,table)

@@ -37,7 +37,7 @@ A500= ASTMSteel(315e6,400e6,1.0)
 A307= ASTMSteel(245e6,390e6,1.0)
 
 class ASTMShape(object):
-    """Steel shape with ASTM verification routines."""
+    """Steel shape with ASTM/AISC verification routines."""
     def __init__(self, name):
        '''
          Constructor.
@@ -47,7 +47,7 @@ class ASTMShape(object):
 from materials.sections.structural_shapes import aisc_metric_shapes
 
 class WShape(ASTMShape,aisc_metric_shapes.WShape):
-    """W shape with ASTM verification routines.
+    """W shape with ASTM/AISC verification routines.
 
     :ivar steel: steel material (i.e. A36).
     :ivar name: shape name (i.e. W40X431)
@@ -72,7 +72,7 @@ class CShape(ASTMShape,aisc_metric_shapes.CShape):
         aisc_metric_shapes.CShape.__init__(self,steel,name)
 
 class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
-    """HSS shape with ASTM verification routines.
+    """Rectangular HSS shape with ASTM/AISC verification routines.
 
     :ivar steel: steel material (i.e. A36).
     :ivar name: shape name (i.e. HSS2X2X_250).
@@ -82,7 +82,19 @@ class HSSShape(ASTMShape,aisc_metric_shapes.HSSShape):
         '''
         ASTMShape.__init__(self, name)
         aisc_metric_shapes.HSSShape.__init__(self,steel,name)
-        
+
+class CHSSShape(ASTMShape,aisc_metric_shapes.CHSSShape):
+    """Circular HSS shape with ASTM/AISC verification routines.
+
+    :ivar steel: steel material (i.e. A36).
+    :ivar name: shape name (i.e. HSS16.000X0.375).
+    """
+    def __init__(self,steel,name):
+        ''' Constructor.
+        '''
+        ASTMShape.__init__(self, name)
+        aisc_metric_shapes.CHSSShape.__init__(self,steel,name)
+
  
 class BendingState(object):
     ''' Bending moments along the member.
