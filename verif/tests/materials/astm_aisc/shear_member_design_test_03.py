@@ -120,8 +120,9 @@ AwRef= 3.46*inch2meter**2
 ratio2= abs((Aw-AwRef)/AwRef)
 Vu= shape.getDesignShearStrength()
 VuRef= 0.9*0.6*shape.steelType.fy*Aw*1.0
+ratio3= abs((Vu-VuRef)/VuRef)
 VuRefText= 0.9*95.5e3*kip2kN
-ratio3= abs((Vu-VuRefText)/VuRefText)
+ratio4= abs((Vu-VuRefText)/VuRefText)
 
 
 '''
@@ -134,14 +135,15 @@ print('AwRef= ',AwRef*1e4,' cm2')
 print('ratio2= ',ratio2)
 print('Vu= ',Vu/1e3,' kN', Vu*kN2kips/1e3, 'kips)')
 print('VuRef= ',VuRef/1e3,' kN', VuRef*kN2kips/1e3, 'kips)')
-print('VuRefText= ',VuRefText/1e3,' kN', VuRefText*kN2kips/1e3, 'kips)')
 print('ratio3= ',ratio3)
+print('VuRefText= ',VuRefText/1e3,' kN', VuRefText*kN2kips/1e3, 'kips)')
+print('ratio4= ',ratio4)
 '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if(ratio1<5e-4 and ratio2<1e-3 and ratio3<1e-2):
+if(ratio1<5e-4 and ratio2<1e-3 and ratio3<1e-5 and ratio3<1e-2):
   print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
