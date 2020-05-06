@@ -955,6 +955,63 @@ class HSSShape(structural_steel.QHShape):
         '''
         return getShapeCompactWebAndFlangeRatio(self,majorAxis)
     
+    def getAw(self, majorAxis= True):
+        ''' Return the web area.'''
+        t= self.get('t')
+        if(majorAxis): # see equation G4-1
+            h= self.get('h_flat')
+            return 2.0*h*t
+        else: # see equation G6-1
+            b= self.get('b_flat')
+            return b*t
+    
+    def getWebShearStrengthCoefficient(self, kv, majorAxis= True):
+        ''' Return the web shear stress coefficient Cv2 according
+            to section G4 of AISC-360-16.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        Cv2= 1.0
+        h_t= self.get('hSlendernessRatio')
+        if(not majorAxis):
+            h_t= self.get('bSlendernessRatio')
+        E= self.get('E')
+        Fy= self.steelType.fy
+        sqrtkvE_Fy= math.sqrt(kv*E/Fy)
+        h_t_threshold= 1.10*sqrtkvE_Fy
+        if(h_t<=h_t_threshold):
+            Cv2= 1.0 # equation G2-9
+        else:
+            h_t_threshold2= 1.37*sqrtkvE_Fy
+            if(h_t<=h_t_threshold2):
+                Cv2= h_t_threshold2/h_t # equation G2-10
+            else:
+                Cv2= 1.51*kv*E/h_t**2/Fy  # equation G2-11
+        return Cv2
+    
+    def getNominalShearStrength(self, majorAxis= True):
+        ''' Return the nominal shear strength according to equation
+            G4-1 of AISC-360-16.
+
+        :param majorAxis: true if flexure about the major axis.
+        '''
+        Fy= self.steelType.fy
+        if(majorAxis):
+            Cv2= self.getWebShearStrengthCoefficient(kv= 5, majorAxis= majorAxis)
+            return 0.6*Fy*self.getAw(majorAxis)*Cv2 # equation G4-1
+        else:
+            Cv2= self.getWebShearStrengthCoefficient(kv= 1.2, majorAxis= majorAxis)
+            return 0.6*Fy*self.getAw(majorAxis)*Cv2 # eauation G6-1
+        
+    def getDesignShearStrength(self, majorAxis= True):
+        ''' Return the design shear strength according to equation
+            section G1 of AISC-360-16.
+
+        :param a: clear distance between transverse stiffeners.
+        '''
+
+        return 0.9*self.getNominalShearStrength(majorAxis)
+    
     def slendernessCheck(self):
         ''' Verify that the section doesn't contains slender elements
             according to table B4.1 a of AISC-360-16.'''
