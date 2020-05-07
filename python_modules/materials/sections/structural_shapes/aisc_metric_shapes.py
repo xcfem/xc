@@ -46,7 +46,7 @@ for item in shapes.W:
     shape['AreaQy']= shape['A']-shape['AreaQz']
 W= shapes.W
 
-def getShapePlasticAxialNoad(shape):
+def getShapePlasticAxialLoad(shape):
     ''' Return the plastic axial load of the shape.
 
     :param shape: structural shape.
@@ -561,7 +561,7 @@ class WShape(structural_steel.IShape):
         :param Cb: lateral-torsional buckling modification factor.
         :param majorAxis: true if flexure about the major axis.
         '''
-        return 0.9*self.getNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis)
+        return 0.9*self.getNominalFlexuralStrength(lateralUnbracedLength, Cb, majorAxis)
 
  
 # *************************************************************************
@@ -824,7 +824,7 @@ class CShape(structural_steel.UShape):
         return getUIShapeCriticalStress(self, lateralUnbracedLength, Cb, majorAxis)
 
     def getNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
-        ''' Return the nominal compressive strength of the member
+        ''' Return the nominal flexural strength of the member
             according to equations F2-1 to F2-3 of AISC-360-16.
 
         :param lateralUnbracedLength: length between points that are either 
