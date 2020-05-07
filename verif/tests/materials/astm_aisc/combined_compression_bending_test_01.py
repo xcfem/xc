@@ -41,7 +41,7 @@ CF= column.getBiaxialBendingEfficiency(Nd= Pd, Myd= Myd, Mzd= Mzd)
 NcRd= CF[1] # available axial strength.
 NcRdRef= 1130*kip2N
 McRdy= CF[2] # available flexural strength minor axis.
-McRdz= CF[3] # available flexural strength minor axis.
+McRdz= CF[3] # available flexural strength major axis.
 ratio1= abs(CF[0]-0.9233821660167778)/0.9233821660167778
 ratio2= abs(NcRd-5059.76358542e3)/5059.763585423e3
 ratio3= abs(McRdy-425.385e3)/425.385e3
