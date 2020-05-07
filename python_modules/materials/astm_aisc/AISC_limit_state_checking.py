@@ -146,20 +146,19 @@ class Member(buckling_base.MemberBase):
         mf= LateralTorsionalBucklingModificationFactor(Mi)
         return mf.getLateralTorsionalBucklingModificationFactor()
 
-
     def getNominalFlexuralStrength(self, majorAxis= True):
         ''' Return the nominal compressive strength of the member
             according to chapter F of AISC-360-16.
         '''
         lateralUnbracedLength= self.getEffectiveLengthX()
-        Cb= 2.27 # equal end moments of the same sign
+        Cb= 1.0 # conservative value
         if(self.Cb):
             Cb= self.Cb
         else:
             if(self.lstLines or self.lstPoints):
                 Cb= self.getLateralTorsionalBucklingModificationFactor()
             else:
-                lmsg.error('Can\'t compute lateral-torsional buckling modification factor, taken as 2.27')
+                lmsg.error('Can\'t compute lateral-torsional buckling modification factor, taken as: '+str(Cb))
         return self.shape.getNominalFlexuralStrength(lateralUnbracedLength, Cb, majorAxis)
 
     def getDesignFlexuralStrength(self, majorAxis= True):

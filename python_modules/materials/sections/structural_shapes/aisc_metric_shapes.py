@@ -135,8 +135,9 @@ def getUIShapeLr(shape, majorAxis= True):
     h0= shape.get('ho') # Distance between the flange centroids
     J= shape.get('It') # Torsional moment of inertia
     c= shape.getCCoefficient()
-    sqrt1= math.sqrt((J*c/Sz/h0)**2+6.76*(0.7*Fy/E)**2)
-    sqrt2= math.sqrt((J*c/Sz/h0)+sqrt1)
+    JcQ= J*c/Sz/h0
+    sqrt1= math.sqrt((JcQ)**2+6.76*(0.7*Fy/E)**2)
+    sqrt2= math.sqrt((JcQ)+sqrt1)
     return 1.95*rts*E/0.7/Fy*sqrt2
 
 def getUIShapeCriticalStressF(shape, lateralUnbracedLength, Cb, majorAxis= True):
