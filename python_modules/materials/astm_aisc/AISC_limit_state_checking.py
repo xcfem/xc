@@ -67,15 +67,17 @@ class Member(buckling_base.MemberBase):
     :ivar sectionClassif: classification of the section for local
                           buckling (defaults to compact).
     '''
-    def __init__(self, name, section, unbracedLengthX, unbracedLengthY= None, unbracedLengthZ= None, kx= 1.0, ky= 1.0, kz= 1.0, sectionClassif= astm.SectionClassif.compact, lstLines=None, lstPoints=None):
+    def __init__(self, name, section, unbracedLengthX, unbracedLengthY= None, unbracedLengthZ= None, kx= 1.0, ky= 1.0, kz= 1.0, sectionClassif= astm.SectionClassif.compact, Cb= None, lstLines=None, lstPoints=None):
         ''' Constructor. 
 
         :param name: object name.
         :param ec3Shape: cross-section shape (e.g. IPNShape, IPEShape, ...)
-        :param lstLines: ordered list of lines that make up the beam 
-                        (defaults to None).
+        :param Cb: lateral-torsional buckling modification factor
+                   (defaults to None).
+        :param lstLines: ordered list of lines that make up the beam. 
+                         Ignored if Cb is given (defaults to None).
         :param lstPoints: ordered list of points that make up the beam. 
-                          Ignored if lstLines is given (defaults to None)
+                          Ignored if Cb or lstLines is given (defaults to None)
         '''
         super(Member,self).__init__(name, section, lstLines, lstPoints)
         self.unbracedLengthX= unbracedLengthX
@@ -91,6 +93,10 @@ class Member(buckling_base.MemberBase):
         self.Ky= ky
         self.Kz= kz
         self.sectionClassif= sectionClassif
+        self.Cb= Cb
+        if(self.Cb):
+            if(lstLines or lstPoints):
+                lmsg.error('lateral-torsional buckling modification factor was specified, computation from finite element model will not be performed.')
 
     def getEffectiveLengthX(self):
         ''' Return the effective length of member for torsional buckling 
@@ -146,7 +152,14 @@ class Member(buckling_base.MemberBase):
             according to chapter F of AISC-360-16.
         '''
         lateralUnbracedLength= self.getEffectiveLengthX()
-        Cb= self.getLateralTorsionalBucklingModificationFactor()
+        Cb= 2.27 # equal end moments of the same sign
+        if(self.Cb):
+            Cb= self.Cb
+        else:
+            if(self.lstLines or self.lstPoints):
+                Cb= self.getLateralTorsionalBucklingModificationFactor()
+            else:
+                lmsg.error('Can\'t compute lateral-torsional buckling modification factor, taken as 2.27')
         return self.shape.getNominalFlexuralStrength(lateralUnbracedLength, Cb, majorAxis)
 
     def getDesignFlexuralStrength(self, majorAxis= True):
