@@ -139,7 +139,7 @@ def getUIShapeLr(shape, majorAxis= True):
     sqrt2= math.sqrt((J*c/Sz/h0)+sqrt1)
     return 1.95*rts*E/0.7/Fy*sqrt2
 
-def getUIShapeCriticalStress(shape, lateralUnbracedLength, Cb, majorAxis= True):
+def getUIShapeCriticalStressF(shape, lateralUnbracedLength, Cb, majorAxis= True):
     '''Return the critical stress for the limit state 
        of lateral-torsional buckling according to
        equation F2-4 of  AISC-360-16.
@@ -194,7 +194,7 @@ def getUIShapeNominalFlexuralStrength(shape, lateralUnbracedLength, Cb, majorAxi
                 Mn= Mp-(Mp-0.7*Fy*Sy)*((lmbd-lmbd_pf)/(lmbd_rf-lmbd_pf)) # equation F6-2
             else: # slender flanges.
                 Sy= shape.get('Wyel') # Elastic section modulus about minor axis.
-                Fcr= shape.getCriticalStress(None, None, majorAxis)
+                Fcr= shape.getCriticalStressF(None, None, majorAxis)
                 Mn= Fcr*Sy # equation F6-3
     else:
         compactRatio= shape.compactWebAndFlangeRatio(majorAxis)
@@ -211,7 +211,7 @@ def getUIShapeNominalFlexuralStrength(shape, lateralUnbracedLength, Cb, majorAxi
                     Mn= Cb*(Mp-(Mp-0.7*Fy*Sz)*((Lb-Lp)/(Lr-Lp)))
                     Mn= min(Mn,Mp)
                 else: # equation F2-3 applies
-                    Fcr= shape.getCriticalStress(Lb, Cb, majorAxis)
+                    Fcr= shape.getCriticalStressF(Lb, Cb, majorAxis)
                     Mn= min(Fcr*Sz, Mp)
         else: # flange or web or both are not compact.
             compactWeb= shape.compactWebRatio(majorAxis)
@@ -287,6 +287,28 @@ def getUINominalShearStrengthWithoutTensionFieldAction(shape, a= 1e6, majorAxis=
         Cv2= shape.getWebShearBucklingStrengthCoefficient(kv= 1.2, majorAxis= majorAxis)
         Fy= shape.steelType.fy
         return 0.6*Fy*shape.getAw(majorAxis)*Cv2 # eauation G6-1
+
+def getShapeTorsionalElasticBucklingStress(shape, effectiveLengthX):
+    ''' Return the torsional or flexural-torsional elastic buckling stress
+        of the member according to equations E4-2, E4-3 and E4-4 of 
+        AISC-360-16.
+
+        :param effectiveLengthX: effective length of member (torsion).
+    '''
+    retval= 0.0
+    symmetry= shape.getSymmetry()
+    Lc= shape.getEffectiveLengthX()
+    if(symmetry=='double'):
+        retval= shape.getTorsionalElasticBucklingStress(Lc)
+    elif(symmetry=='simple'):
+        Fex= shape.getTorsionalElasticBucklingStress(Lc) # E4-7
+        Fey= getFlexuralElasticBucklingStressY() #E4-6
+        H= shape.getFlexuralConstant() # E4-8
+        retval= (Fey+Fex)/2/H*(1-math.sqrt(1-(4.0*Fey*Fex*H)/(Fey+Fex)**2))
+    else: # no simmetry: E4-4
+        lmsg.error('Torsional elastic buckling stress for unsymmetric members not implemented yet.')
+
+    return retval
 
 class WShape(structural_steel.IShape):
     '''W shape
@@ -524,7 +546,7 @@ class WShape(structural_steel.IShape):
         '''
         return getUIShapeLr(self, majorAxis)
     
-    def getCriticalStress(self, lateralUnbracedLength, Cb, majorAxis= True):
+    def getCriticalStressF(self, lateralUnbracedLength, Cb, majorAxis= True):
         '''Return the critical stress for the limit state 
            of lateral-torsional buckling according to
            equation F2-4 of  AISC-360-16.
@@ -536,7 +558,7 @@ class WShape(structural_steel.IShape):
                                       twist of the cross section.
         :param Cb: lateral-torsional buckling modification factor.
         '''
-        return getUIShapeCriticalStress(self, lateralUnbracedLength, Cb, majorAxis)
+        return getUIShapeCriticalStressF(self, lateralUnbracedLength, Cb, majorAxis)
     def getNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
         ''' Return the nominal flexural strength of the member
             according to equations F2-1 to F2-3 of AISC-360-16.
@@ -809,7 +831,7 @@ class CShape(structural_steel.UShape):
         '''
         return getUIShapeLr(self, majorAxis)
 
-    def getCriticalStress(self, lateralUnbracedLength, Cb, majorAxis= True):
+    def getCriticalStressF(self, lateralUnbracedLength, Cb, majorAxis= True):
         '''Return the critical stress for the limit state 
            of lateral-torsional buckling according to
            equation F2-4 of  AISC-360-16.
@@ -821,7 +843,7 @@ class CShape(structural_steel.UShape):
                                       twist of the cross section.
         :param Cb: lateral-torsional buckling modification factor.
         '''
-        return getUIShapeCriticalStress(self, lateralUnbracedLength, Cb, majorAxis)
+        return getUIShapeCriticalStressF(self, lateralUnbracedLength, Cb, majorAxis)
 
     def getNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
         ''' Return the nominal flexural strength of the member
@@ -1145,8 +1167,8 @@ class HSSShape(structural_steel.QHShape):
     def getEffectiveArea(self):
         '''Return the effective area.'''
         retval= self.get('A')
-        clasif= self.getClassification()
-        if(clasif == 'slender'):
+        classif= self.getClassification()
+        if(classif == 'slender'):
             t= self.get('t')
             h_ineff= self.get('h_flat')-self.getReducedEffectiveH()
             retval-= 2.0*h_ineff*t
