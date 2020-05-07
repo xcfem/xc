@@ -30,7 +30,7 @@ shape= ASTM_materials.WShape(steel,'W14X90')
 column= aisc.Member('column', shape,30.0*foot2meter, kx= 0.5, ky= 0.5)
 
 ## Load.
-Pd= 840*kip2kN
+Pd= 840e3*kip2kN
 
 ## Compressive strength
 Pu= column.getDesignCompressiveStrength()
