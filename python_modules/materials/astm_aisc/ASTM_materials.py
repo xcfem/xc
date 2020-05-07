@@ -14,6 +14,7 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import math
+import enum
 from materials import steel_base
 from misc_utils import log_messages as lmsg
 from materials import buckling_base
@@ -35,6 +36,13 @@ A53= ASTMSteel(240e6,414e6,1.0)
 A992= ASTMSteel(345e6,450e6,1.0)
 A500= ASTMSteel(315e6,400e6,1.0)
 A307= ASTMSteel(245e6,390e6,1.0)
+
+class SectionClassif(enum.IntEnum):
+    '''Classification of sections for local buckling.'''
+    compact= 0
+    noncompact= 1
+    slender= 2
+    too_slender= 3
 
 class ASTMShape(object):
     """Steel shape with ASTM/AISC verification routines."""
@@ -106,27 +114,118 @@ class ASTMShape(object):
             sr= effectiveLengthZ/self.shape.get('iz') # Slenderness ratio for eq. E4-5
         else:
             sr= effectiveLengthY/self.shape.get('iy') # Slenderness ratio for eq. E4-6
-        E= self.shape.get('E')
+        E= self.get('E')
         return math.pi**2*E/sr**2
+    
+    def getCriticalStressE(self, effectiveLengthY, effectiveLengthZ, sectionClassif, Fe):
+        ''' Return the critical stress of the member according
+            to equations E3-2 and E3-3 of AISC-360-16.
 
+        :param effectiveLengthY: effective length of member (minor axis).
+        :param effectiveLegnthZ: effective length of member (major axis).
+        :param sectionClassif: section classification compact, noncompact, slender or too slender.
+        :param Fe: flexural or torsional elastic buckling stress.
+        '''
+        retval= 0.0
+        if(sectionClassif<SectionClassif.slender):
+            sr= self.getFlexuralSlendernessRatio(effectiveLengthY, effectiveLengthZ)
+            E= self.get('E')
+            Fy= self.steelType.fy
+            Fratio= Fy/Fe
+            thresholdA= 4.71*math.sqrt(E/Fy)
+            if((sr<=thresholdA) or (Fratio<=2.25)):
+                retval= math.pow(0.658,Fratio)*Fy # (E3-2)
+            else:
+                retval= 0.877*Fe
+        else:
+            lmsg.error('Critical stress of slender members not implemented yet.')
+        return retval
+    
+    def getFlexuralCriticalStress(self, effectiveLengthY, effectiveLengthZ, sectionClassif):
+        ''' Return the flexural critical stress of the member according
+            to equations E3-2 and E3-3 of AISC-360-16.
+
+        :param effectiveLengthY: effective length of member (minor axis).
+        :param effectiveLegnthZ: effective length of member (major axis).
+        :param sectionClassif: section classification compact, noncompact, slender or too slender.
+        '''
+        Fe= self.getFlexuralElasticBucklingStress(effectiveLengthY, effectiveLengthZ)
+        return self.getCriticalStressE(effectiveLengthY, effectiveLengthZ, sectionClassif,Fe)
+    
+    def getTorsionalElasticBucklingStress(self, effectiveLengthX):
+        ''' Return the torsional or flexural-torsional elastic buckling stress
+            of the member according to equations E4-2, E4-3 and E4-4 of 
+            AISC-360-16.
+
+        :param effectiveLengthX: effective length of member (torsion).
+        '''
+        return getShapeTorsionalElasticBucklingStress(self, effectiveLengthX)
+    
+    def getTorsionalCriticalStress(self, effectiveLengthX, effectiveLengthY, effectiveLengthZ, sectionClassif):
+        ''' Return the torsional critical stress of the member according
+            to equations E4-2, E4-3 and E4-4 of AISC-360-16.
+
+        :param effectiveLengthX: effective length of member (torsion).
+        :param effectiveLengthY: effective length of member (minor axis).
+        :param effectiveLegnthZ: effective length of member (major axis).
+        :param sectionClassif: section classification compact, noncompact, slender or too slender.
+        '''
+        Fe= self.getTorsionalElasticBucklingStress(effectiveLengthX)
+        return self.getCriticalStressE(effectiveLengthY= effectiveLengthY, effectiveLengthZ= effectiveLengthZ, sectionClassif= sectionClassif, Fe= Fe)
+
+    def getNominalCompressiveStrength(self, effectiveLengthX, effectiveLengthY, effectiveLengthZ, sectionClassif):
+        ''' Return the nominal compressive strength of the member
+            according to equation E3-1 of AISC-360-16.
+
+        :param effectiveLengthX: effective length of member (torsion).
+        :param effectiveLengthY: effective length of member (minor axis).
+        :param effectiveLegnthZ: effective length of member (major axis).
+        :param sectionClassif: section classification compact, noncompact, slender or too slender.
+        '''
+        Ag= self.shape.get('A') # Gross area of member
+        retval= 0.0
+        if(effectiveLengthX<= max(effectiveLengthY,effectiveLengthZ)):
+            retval= self.getFlexuralCriticalStress(effectiveLengthY, effectiveLengthZ, sectionClassif)*Ag
+        else:
+            retval= self.getTorsionalCriticalStress(effectiveLengthX, effectiveLengthY, effectiveLengthZ, sectionClassif)*Ag
+        return retval
+    
+    def getDesignCompressiveStrength(self, effectiveLengthX, effectiveLengthY, effectiveLengthZ, sectionClassif):
+        ''' Return the design compressive strength of the member
+            according to section E1 of AISC-360-16.
+
+        :param effectiveLengthX: effective length of member (torsion).
+        :param effectiveLengthY: effective length of member (minor axis).
+        :param effectiveLegnthZ: effective length of member (major axis).
+        :param sectionClassif: section classification compact, noncompact, slender or too slender.
+        '''
+        return 0.9*self.getNominalCompressiveStrength(effectiveLengthX, effectiveLengthY, effectiveLengthZ, sectionClassif)
+    
+    def getReferenceCompressiveStrength(self, sectionClassif):
+        ''' Return the flexural strength of the section without
+            take in to account the lateral buckling effect.
+
+        :param sectionClassif: section classification compact, noncompact, slender or too slender.
+        '''
+        return self.getDesignCompressiveStrength(effectiveLengthX= 0.1, effectiveLengthY= 0.1, effectiveLengthZ= 0.1,sectionClassif= sectionClassif)
     # Bending 
     def getReferenceFlexuralStrength(self):
         ''' Return the flexural strength of the section without
             take in to account the lateral buckling effect.'''
-        return self.getDesignFlexuralStrength(lateralUnbracedLength= 1.0, Cb= 1.0, majorAxis= True)
+        return self.getDesignFlexuralStrength(lateralUnbracedLength= 0.1, Cb= 1.0, majorAxis= True)
 
     # Combined internal forces
-    def getBiaxialBendingEfficiency(self,sectionClass,Nd,Myd,Mzd,Vyd= 0.0, chiN=1.0, chiLT=1.0):
+    def getBiaxialBendingEfficiency(self,sectionClassif,Nd,Myd,Mzd,Vyd= 0.0, chiN=1.0, chiLT=1.0):
         '''Return biaxial bending efficiency according to section H1
            of AISC-360-16.
 
-           sectionClass: dummy argument needed for compatibility with other codes.
-           chiN: axial load reduction reduction factor (default= 1.0).
-           chiLT: lateral buckling reduction factor (default= 1.0).
+           :param sectionClassif: section classification compact, noncompact, slender or too slender.
+           :param chiN: axial load reduction reduction factor (default= 1.0).
+           :param chiLT: lateral buckling reduction factor (default= 1.0).
         '''
         ratioN= 0.0
         if(Nd<0): # compression
-            NcRd= chiN*self.getPlasticAxialLoad() # available axial strength.
+            NcRd= chiN*self.getReferenceCompressiveStrength(sectionClassif) # available axial strength.
             ratioN=  abs(Nd)/NcRd
         else:
             NcRd= self.getDesignTensileStrength() # available axial strength.
@@ -259,7 +358,7 @@ class MemberConnection(buckling_base.MemberConnection):
         else:
             return bendingState.getLateralTorsionalBucklingModificationFactor()
 
-class Member(object):
+class ConnectedMember(object):
     """C shape with ASTM 3 verification routines."""
     def __init__(self,shape,connection):
         ''' Constructor.

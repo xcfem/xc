@@ -10,17 +10,9 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega@ciccp.es"
 
 import math
-import enum
 from misc_utils import log_messages as lmsg
 from materials import buckling_base
-
-
-class SectionClasif(enum.IntEnum):
-    '''Classification of sections for local buckling.'''
-    compact= 0
-    noncompact= 1
-    slender= 2
-    too_slender= 3
+import ASTM_materials as astm
 
 
 # Unbraced segment ascii art:
@@ -72,10 +64,10 @@ class Member(buckling_base.MemberBase):
               about y-axis.
     :ivar Kz: effective length factor for flexural buckling 
               about z-axis.
-    :ivar sectionClasif: classification of the section for local
+    :ivar sectionClassif: classification of the section for local
                           buckling (defaults to compact).
     '''
-    def __init__(self, name, section, unbracedLengthX, unbracedLengthY= None, unbracedLengthZ= None, kx= 1.0, ky= 1.0, kz= 1.0, sectionClasif= SectionClasif.compact, lstLines=None, lstPoints=None):
+    def __init__(self, name, section, unbracedLengthX, unbracedLengthY= None, unbracedLengthZ= None, kx= 1.0, ky= 1.0, kz= 1.0, sectionClassif= astm.SectionClassif.compact, lstLines=None, lstPoints=None):
         ''' Constructor. 
 
         :param name: object name.
@@ -98,7 +90,7 @@ class Member(buckling_base.MemberBase):
         self.Kx= kx
         self.Ky= ky
         self.Kz= kz
-        self.sectionClasif= sectionClasif
+        self.sectionClassif= sectionClassif
 
     def getEffectiveLengthX(self):
         ''' Return the effective length of member for torsional buckling 
@@ -114,119 +106,32 @@ class Member(buckling_base.MemberBase):
         ''' Return the effective length of member for buckling 
             about y axis: L_cy.'''
         return self.Kz*self.unbracedLengthZ
-
-    def getFlexuralSlendernessRatio(self):
-        ''' Return the flexural buckling slenderness ratio of the member.
-
-        '''
-        return self.shape.getFlexuralSlendernessRatio(effectiveLengthY= self.getEffectiveLengthY(), effectiveLengthZ= self.getEffectiveLengthZ())
-        
-    def getFlexuralCriticalSlendernessRatio(self):
-        ''' Return the critical value of the flexural buckling 
-            slenderness ratio of the member.
-        '''
-        return self.shape.getFlexuralCriticalSlendernessRatio(effectiveLengthY= self.getEffectiveLengthY(), effectiveLengthZ= self.getEffectiveLengthZ())
-
-    def getFlexuralElasticBucklingStress(self):
-        ''' Return the flexural elastic buckling stress of the member according
-            to equation E3-4 of AISC-360-16.
-        '''
-        return self.shape.getFlexuralElasticBucklingStress(effectiveLengthY= self.getEffectiveLengthY(), effectiveLengthZ= self.getEffectiveLengthZ())
-
-    def getFlexuralElasticBucklingStressY(self):
-        ''' Return the flexural elastic buckling stress of the member according
-            to equation E4-5 of AISC-360-16.
-        '''
-        return self.shape.getFlexuralElasticBucklingStressOnAxis(effectiveLengthY= self.getEffectiveLengthY(), effectiveLengthZ= self.getEffectiveLengthZ(), majorAxis= False)
-
-    def getFlexuralElasticBucklingStressZ(self):
-        ''' Return the flexural elastic buckling stress of the member according
-            to equation E4-6 of AISC-360-16.
-        '''
-        return self.shape.getFlexuralElasticBucklingStressOnAxis(effectiveLengthY= self.getEffectiveLengthY(), effectiveLengthZ= self.getEffectiveLengthZ(), majorAxis= True)
-    
-    def getCriticalStress(self, Fe):
-        ''' Return the critical stress of the member according
-            to equations E3-2 and E3-3 of AISC-360-16.
-
-        :param Fe: flexural or torsional elastic buckling stress.
-        '''
-        retval= 0.0
-        if(self.sectionClasif<SectionClasif.slender):
-            sr= self.getFlexuralSlendernessRatio()
-            E= self.shape.get('E')
-            Fy= self.shape.steelType.fy
-            Fratio= Fy/Fe
-            thresholdA= 4.71*math.sqrt(E/Fy)
-            if((sr<=thresholdA) or (Fratio<=2.25)):
-                retval= math.pow(0.658,Fratio)*Fy # (E3-2)
-            else:
-                retval= 0.877*Fe
-        else:
-            lmsg.error('Critical stress of slender members not implemented yet.')
-        return retval
-    
-    def getFlexuralCriticalStress(self):
-        ''' Return the flexural critical stress of the member according
-            to equations E3-2 and E3-3 of AISC-360-16.
-        '''
-        Fe= self.getFlexuralElasticBucklingStress()
-        return self.getCriticalStress(Fe)
-
-    def getTorsionalElasticBucklingStress(self):
-        ''' Return the torsional or flexural-torsional elastic buckling stress
-            of the member according to equations E4-2, E4-3 and E4-4 of 
-            AISC-360-16.
-        '''
-        retval= 0.0
-        symmetry= self.shape.getSymmetry()
-        Lc= self.getEffectiveLengthX()
-        if(symmetry=='double'):
-            retval= self.shape.getTorsionalElasticBucklingStress(Lc)
-        elif(symmetry=='simple'):
-            Fex= self.shape.getTorsionalElasticBucklingStress(Lc) # E4-7
-            Fey= getFlexuralElasticBucklingStressY() #E4-6
-            H= self.shape.getFlexuralConstant() # E4-8
-            retval= (Fey+Fex)/2/H*(1-math.sqrt(1-(4.0*Fey*Fex*H)/(Fey+Fex)**2))
-        else: # no simmetry: E4-4
-            lmsg.error('Torsional elastic buckling stress for unsymmetric members not implemented yet.')
-            
-        return retval
-    
-    def getTorsionalCriticalStress(self):
-        ''' Return the torsional critical stress of the member according
-            to equations E4-2, E4-3 and E4-4 of AISC-360-16.
-        '''
-        Fe= self.getTorsionalElasticBucklingStress()
-        return self.getCriticalStress(Fe)
     
     def getNominalCompressiveStrength(self):
         ''' Return the nominal compressive strength of the member
             according to equation E3-1 of AISC-360-16.
         '''
-        Ag= self.shape.get('A') # Gross area of member
-        Lcx= self.getEffectiveLengthX() # Torsional effective length
-        Lcy= self.getEffectiveLengthY() # Y bending effective length
-        Lcz= self.getEffectiveLengthZ() # Z bending effective length
-        retval= 0.0
-        if(Lcx<= max(Lcy,Lcz)):
-            retval= self.getFlexuralCriticalStress()*Ag
-        else:
-            retval= self.getTorsionalCriticalStress()*Ag
-        return retval
+        return self.shape.getNominalCompressiveStrength(effectiveLengthX= self.getEffectiveLengthX(), effectiveLengthY= self.getEffectiveLengthY(), effectiveLengthZ= self.getEffectiveLengthZ(), sectionClassif= self.sectionClassif)
 
     def getDesignCompressiveStrength(self):
         ''' Return the design compressive strength of the member
             according to section E1 of AISC-360-16.
         '''
-        return 0.9*self.getNominalCompressiveStrength()
+        return self.shape.getDesignCompressiveStrength(effectiveLengthX= self.getEffectiveLengthX(), effectiveLengthY= self.getEffectiveLengthY(), effectiveLengthZ= self.getEffectiveLengthZ(), sectionClassif= self.sectionClassif)
 
+    def getCompressiveStrengthReductionFactor(self):
+        ''' Return the reduction factor of the compressive strength 
+            of the member with respect to the reference compressive strength
+            of its section.
+        '''
+        return self.getDesignFlexuralStrength()/self.shape.getReferenceFlexuralStrength()
+    
     def getCompressiveStrengthReductionFactor(self):
         ''' Return the reduction factor of the compressive strength 
             of the member with respect to the plastic axial load of
             its section.
         '''
-        return self.getDesignCompressiveStrength()/self.shape.getPlasticAxialLoad()
+        return self.getDesignCompressiveStrength()/self.shape.getReferenceCompressiveStrength(sectionClassif= self.sectionClassif)
 
     def getLateralTorsionalBucklingModificationFactor(self):
         ''' Return the lateral-torsional buckling modification factor
@@ -251,9 +156,9 @@ class Member(buckling_base.MemberBase):
         return 0.9*self.getNominalFlexuralStrength(majorAxis)
         
     def getFlexuralStrengthReductionFactor(self):
-        ''' Return the reduction factor of the compressive strength 
-            of the member with respect to the plastic axial load of
-            its section.
+        ''' Return the reduction factor of the flexural strength 
+            of the member with respect to the reference flexural strength 
+            of its section.
         '''
         return self.getDesignFlexuralStrength()/self.shape.getReferenceFlexuralStrength()
 
@@ -272,10 +177,10 @@ class Member(buckling_base.MemberBase):
            Mzd: bending moment about strong axis (required flexural strength).
         '''
         # Compute axial load reduction factor.
-        lrfN= 1.0
+        lrfN= self.getCompressiveStrengthReductionFactor()
 
         # Compute lateral buckling reduction factor.
-        lrfLT= 1.0
+        lrfLT= self.getFlexuralStrengthReductionFactor()
 
-        return self.shape.getBiaxialBendingEfficiency(sectionClass= None, Nd= Nd, Myd= Myd, Mzd= Mzd, Vyd= 0.0, chiN= lrfN, chiLT= lrfLT)
+        return self.shape.getBiaxialBendingEfficiency(sectionClassif= self.sectionClassif, Nd= Nd, Myd= Myd, Mzd= Mzd, Vyd= 0.0, chiN= lrfN, chiLT= lrfLT)
  
