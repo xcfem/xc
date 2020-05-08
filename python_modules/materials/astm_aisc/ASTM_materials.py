@@ -14,10 +14,10 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import math
-import enum
 from materials import steel_base
 from misc_utils import log_messages as lmsg
 from materials import buckling_base
+import AISC_limit_state_checking as aisc
 
 class ASTMSteel(steel_base.BasicSteel):
     '''ASTM structural steel.
@@ -36,13 +36,6 @@ A53= ASTMSteel(240e6,414e6,1.0)
 A992= ASTMSteel(345e6,450e6,1.0)
 A500= ASTMSteel(315e6,400e6,1.0)
 A307= ASTMSteel(245e6,390e6,1.0)
-
-class SectionClassif(enum.IntEnum):
-    '''Classification of sections for local buckling.'''
-    compact= 0
-    noncompact= 1
-    slender= 2
-    too_slender= 3
 
 class ASTMShape(object):
     """Steel shape with ASTM/AISC verification routines."""
@@ -127,7 +120,7 @@ class ASTMShape(object):
         :param Fe: flexural or torsional elastic buckling stress.
         '''
         retval= 0.0
-        if(sectionClassif<SectionClassif.slender):
+        if(sectionClassif<aisc.SectionClassif.slender):
             sr= self.getFlexuralSlendernessRatio(effectiveLengthY, effectiveLengthZ)
             E= self.get('E')
             Fy= self.steelType.fy

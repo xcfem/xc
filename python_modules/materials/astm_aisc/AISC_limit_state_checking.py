@@ -9,11 +9,18 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega@ciccp.es"
 
+import enum
 import math
 from misc_utils import log_messages as lmsg
 from materials import buckling_base
-import ASTM_materials as astm
+from materials import limit_state_checking_base as lsc
 
+class SectionClassif(enum.IntEnum):
+    '''Classification of sections for local buckling.'''
+    compact= 0
+    noncompact= 1
+    slender= 2
+    too_slender= 3
 
 # Unbraced segment ascii art:
 #
@@ -67,7 +74,7 @@ class Member(buckling_base.MemberBase):
     :ivar sectionClassif: classification of the section for local
                           buckling (defaults to compact).
     '''
-    def __init__(self, name, section, unbracedLengthX, unbracedLengthY= None, unbracedLengthZ= None, kx= 1.0, ky= 1.0, kz= 1.0, sectionClassif= astm.SectionClassif.compact, Cb= None, lstLines=None, lstPoints=None):
+    def __init__(self, name, section, unbracedLengthX, unbracedLengthY= None, unbracedLengthZ= None, kx= 1.0, ky= 1.0, kz= 1.0, sectionClassif= SectionClassif.compact, Cb= None, lstLines=None, lstPoints=None):
         ''' Constructor. 
 
         :param name: object name.
@@ -196,3 +203,39 @@ class Member(buckling_base.MemberBase):
 
         return self.shape.getBiaxialBendingEfficiency(sectionClassif= self.sectionClassif, Nd= Nd, Myd= Myd, Mzd= Mzd, Vyd= 0.0, chiN= lrfN, chiLT= lrfLT)
  
+class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
+    '''Object that controls normal stresses limit state.'''
+
+    def __init__(self,limitStateLabel):
+        super(BiaxialBendingNormalStressController,self).__init__(limitStateLabel)
+
+    def initControlVars(self,setCalc):
+        '''Initialize control variables over elements.
+
+        :param setCalc: set of elements to which define control variables
+        '''
+        for e in setCalc.elements:
+            e.setProp(self.limitStateLabel+'Sect1',cv.AISCBiaxialBendingControlVars())
+            e.setProp(self.limitStateLabel+'Sect2',cv.AISCBiaxialBendingControlVars())
+
+    def checkSetFromIntForcFile(self,intForcCombFileName,setCalc=None):
+        '''Launch checking.
+
+        :param intForcCombFileName: name of the file to read the internal 
+               force results
+        :param setCalc: set of elements to check
+        '''
+        intForcItems=lsd.readIntForcesFile(intForcCombFileName,setCalc)
+        internalForcesValues= intForcItems[2]
+        for e in setCalc.elements:
+            sh= e.getProp('crossSection')
+            sc= e.getProp('sectionClass')
+            elIntForc= internalForcesValues[e.tag]
+            for lf in elIntForc:
+                CFtmp,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp= sh.getBiaxialBendingEfficiency(sc,lf.N,lf.My,lf.Mz,lf.Vy,lf.chiN, lf.chiLT)
+                if lf.idSection == 0:
+                    if(CFtmp>e.getProp(self.limitStateLabel+'Sect1').CF):
+                        e.setProp(self.limitStateLabel+'Sect1',cv.AISCBiaxialBendingControlVars('Sects1',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp,lf.chiLT, lf.chiN))
+                else:
+                    if(CFtmp>e.getProp(self.limitStateLabel+'Sect2').CF):
+                        e.setProp(self.limitStateLabel+'Sect2',cv.AISCBiaxialBendingControlVars('Sects2',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp,lf.chiLT, lf.chiN))
