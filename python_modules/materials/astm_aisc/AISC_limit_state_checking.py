@@ -14,6 +14,9 @@ import math
 from misc_utils import log_messages as lmsg
 from materials import buckling_base
 from materials import limit_state_checking_base as lsc
+from postprocess import control_vars as cv
+from postprocess import limit_state_data as lsd
+import xc
 
 class SectionClassif(enum.IntEnum):
     '''Classification of sections for local buckling.'''
@@ -202,7 +205,37 @@ class Member(buckling_base.MemberBase):
         lrfLT= self.getFlexuralStrengthReductionFactor()
 
         return self.shape.getBiaxialBendingEfficiency(sectionClassif= self.sectionClassif, Nd= Nd, Myd= Myd, Mzd= Mzd, Vyd= 0.0, chiN= lrfN, chiLT= lrfLT)
- 
+    
+    def updateReductionFactors(self):
+        '''Update the value of the appropriate reduction factors.'''
+        chiN= self.getCompressiveStrengthReductionFactor()
+        chiLT= self.getFlexuralStrengthReductionFactor()
+        for e in self.elemSet:
+             e.setProp('chiLT',chiLT) # flexural strength reduction factor.
+             e.setProp('chiN',chiN) # compressive strength reduction factor.
+
+    def installULSControlRecorder(self,recorderType, chiN= 1.0, chiLT=1.0):
+        '''Install recorder for verification of ULS criterion.'''
+        prep= self.getPreprocessor()
+        nodes= prep.getNodeHandler
+        domain= prep.getDomain
+        recorder= domain.newRecorder(recorderType,None)
+        if(not self.elemSet):
+            self.createElementSet()
+        eleTags= list()
+        for e in self.elemSet:
+            eleTags.append(e.tag)
+            e.setProp('ULSControlRecorder',recorder)
+        idEleTags= xc.ID(eleTags)
+        recorder.setElements(idEleTags)
+        self.shape.setupULSControlVars(self.elemSet,self.sectionClassif,chiN= chiN, chiLT= chiLT)
+        if(nodes.numDOFs==3):
+            recorder.callbackRecord= controlULSCriterion2D()
+        else:
+            recorder.callbackRecord= controlULSCriterion()
+#        recorder.callbackRestart= "print \"Restart method called.\"" #20181121
+        return recorder
+
 class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
     '''Object that controls normal stresses limit state.'''
 
@@ -239,3 +272,21 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
                 else:
                     if(CFtmp>e.getProp(self.limitStateLabel+'Sect2').CF):
                         e.setProp(self.limitStateLabel+'Sect2',cv.AISCBiaxialBendingControlVars('Sects2',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp,lf.chiLT, lf.chiN))
+
+def controlULSCriterion():
+  return '''recorder= self.getProp('ULSControlRecorder')
+nmbComb= recorder.getCurrentCombinationName
+self.getResistingForce()
+crossSection= self.getProp('crossSection')
+crossSection.checkBiaxialBendingForElement(self,nmbComb)
+crossSection.checkYShearForElement(self,nmbComb)
+crossSection.checkZShearForElement(self,nmbComb)'''
+
+def controlULSCriterion2D():
+  return '''recorder= self.getProp('ULSControlRecorder')
+nmbComb= recorder.getCurrentCombinationName
+self.getResistingForce()
+crossSection= self.getProp('crossSection')
+crossSection.checkUniaxialBendingForElement(self,nmbComb)
+crossSection.checkYShearForElement(self,nmbComb)'''
+

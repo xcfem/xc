@@ -207,6 +207,22 @@ class ASTMShape(object):
             take in to account the lateral buckling effect.'''
         return self.getDesignFlexuralStrength(lateralUnbracedLength= 0.1, Cb= 1.0, majorAxis= True)
 
+    # Shear
+    def getYShearEfficiency(self, sectionClass, Vy):
+        '''Return major axis shear efficiency according to AISC-360-16.
+
+           :param sectionClass: dummy argument used for compatibility.
+        '''
+        return Vy/self.getDesignShearStrength(majorAxis= True)
+    
+    def getZShearEfficiency(self, sectionClass, Vz):
+        '''Return major axis shear efficiency according to AISC-360-16.
+
+           :param sectionClass: dummy argument used for compatibility.
+        '''
+        return Vz/self.getDesignShearStrength(majorAxis= False)
+        
+
     # Combined internal forces
     def getBiaxialBendingEfficiency(self,sectionClassif,Nd,Myd,Mzd,Vyd= 0.0, chiN=1.0, chiLT=1.0):
         '''Return biaxial bending efficiency according to section H1
@@ -235,7 +251,17 @@ class ASTMShape(object):
         else:
             CF= ratioN/2.0+(ratioMz+ratioMy) # equation H1-1b
         return (CF,NcRd,McRdy,McRdz,MvRdz,MbRdz)
-       
+
+    def setupULSControlVars(self,elems,sectionClass= 1, chiN=1.0, chiLT=1.0):
+        '''For each element creates the variables
+           needed to check ultimate limit state criterion to be satisfied.'''
+        super(ASTMShape,self).setupULSControlVars(elems)
+        for e in elems:
+            e.setProp('sectionClass',sectionClass) #Cross section class.
+            e.setProp('chiLT',chiLT) #Lateral torsional buckling reduction factor.
+            e.setProp('chiN',chiN) # Axial strength reduction factor.
+            e.setProp('crossSection',self)
+            
 from materials.sections.structural_shapes import aisc_metric_shapes
 
 class WShape(ASTMShape,aisc_metric_shapes.WShape):
