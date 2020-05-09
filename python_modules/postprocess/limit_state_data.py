@@ -58,7 +58,7 @@ class LimitStateData(object):
     def getInternalForcesFileName(self):
         '''Return the file name to read: combination name, element number and 
         internal forces.'''
-        return self.envConfig.projectDirTree.getInternalForcesResultsPath()+'intForce_'+ self.label +'.csv'
+        return self.envConfig.projectDirTree.getInternalForcesResultsPath()+'intForce_'+ self.label +'.json'
     
     def getDisplacementsFileName(self):
         '''Return the file name to read: combination name, node number and 
