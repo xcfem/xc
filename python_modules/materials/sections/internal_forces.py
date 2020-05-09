@@ -88,7 +88,7 @@ class CrossSectionInternalForces:
     return retval
   
   def setFromDict(self,dct):
-    '''Sets the internal forces from a CSV string.'''
+    '''Sets the internal forces from the dictionary argument.'''
     self.N= dct['N']
     self.Vy= dct['Vy']
     self.Vz= dct['Vz']
@@ -197,7 +197,7 @@ class ShellMaterialInternalForces:
     return retval
   
   def setFromDict(self,dct):
-    '''Sets the internal forces from a CSV string.'''
+    '''Sets the internal forces from the dictionary argument.'''
     self.n1= dct['n1']
     self.n2= dct['n2']
     self.n12= dct['n12']
