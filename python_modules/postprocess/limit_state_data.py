@@ -34,14 +34,14 @@ class VerifOutVars(object):
            existing file of results (defaults to 'N')
     :param listFile: 'Yes','Y','y',.., if latex listing file of results 
            is desired to be generated (defaults to 'N')
-    :param calcMeanCF: 'Yes','Y','y',.., if mean capacity factor is desired
-           to be calculated (defaults to 'N')
+    :param calcMeanCF: 'Yes','Y','y',.., if average capacity factor is
+           meant to be calculated (defaults to 'N')
     '''
     def __init__(self,setCalc=None,appendToResFile='N',listFile='N',calcMeanCF='N'):
         self.setCalc=setCalc
         self.appendToResFile=appendToResFile
         self.listFile=listFile
-        self.calcMeanCF=calcMeanCF
+        self.calcMeanCF= calcMeanCF
 
 class LimitStateData(object):
     envConfig= None
