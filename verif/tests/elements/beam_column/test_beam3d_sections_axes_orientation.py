@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import division
+from __future__ import print_function
+
 __author__= "Ana Ortega (AO_O), Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2016, AO_O, LCPT"
 __license__= "GPL"
@@ -231,33 +234,29 @@ elements= FEcheckedModel.getPreprocessor.getSets.getSet('total').getElements
 # Elements of the phantom model (ordered by the number of the section)
 # associated with each of the beam elements
 FMeBx=minq.get_attached_PhModElems(elemTag=beam3dX.tag,setElPhMod=elements)
-#print FMeBx[0].tag,FMeBx[1].tag
+#print(FMeBx[0].tag,FMeBx[1].tag)
 FMeBy=minq.get_attached_PhModElems(elemTag=beam3dY.tag,setElPhMod=elements)
-#print FMeBy[0].tag,FMeBy[1].tag
+#print(FMeBy[0].tag,FMeBy[1].tag)
 FMeBz=minq.get_attached_PhModElems(elemTag=beam3dZ.tag,setElPhMod=elements)
-#print FMeBz[0].tag,FMeBz[1].tag
+#print(FMeBz[0].tag,FMeBz[1].tag)
 
 #checks
-f= open("/tmp/intForce_ULS_normalStressesResistance.csv","r")
-matIntForc=np.array(6*[np.array([0,0,0])]) #array to which import the resulting
+matIntForc=np.array(6*[np.array([0.0,0.0,0.0])]) #array to which import the resulting
                                            #[Fx,Fy,Fz] expressed in the element
                                            #local axes for the two sections of
                                            #each element
-internalForcesListing= csv.reader(f)
-internalForcesListing.next()
-for lst in internalForcesListing:
-  if (len(lst)>0): #lst: list of internal forces for each combination and
-                   #element
-    nrow=2*(int(lst[1])-1)+int(lst[2])  #lst[1]= number of element, lst[2]=number of
-                              #section (0 o 1)
-    matIntForc[nrow]=np.array([float(lst[3]),float(lst[4]),float(lst[5])]) #[Fx,Fy,Fz]
-    
-f.close()
-
+internalForces= lsd.readIntForcesDict("/tmp/intForce_ULS_normalStressesResistance.csv")
+internalForcesValues= internalForces[2]
+for key in internalForcesValues.keys():
+    intForces= internalForcesValues[key]
+    for f in intForces:
+        nrow=2*(int(f.tagElem)-1)+int(f.idSection)
+        matIntForc[nrow]= np.array([float(f.N),float(f.Vy),float(f.Vz)]) #[Fx,Fy,Fz]
+        
 #We'll check the result of applying the coord. matrix to the vector of forces
 #applied in the GCS is equal to the internal forces read from the file
 #Local axes beam3dX 
-lAxBeamX=matrix_utils.matrixToNumpyArray(beam3dX.getLocalAxes(True))
+lAxBeamX= matrix_utils.matrixToNumpyArray(beam3dX.getLocalAxes(True))
 #Loads [Fx,Fy,Fz] applied on the element (GCS)
 FbeamXGCS=np.array([0,0,F])
 #internal forces read from the results file for elem1, section1
@@ -333,13 +332,11 @@ result= 0.0
 for r in ratios:
   result+= r*r
 result= math.sqrt(result)
-# print 'ratios= ',ratios
-# print 'result= ',result
 feProblem.errFileName= "cerr" # Display errors if any.
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (result<1e-10):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

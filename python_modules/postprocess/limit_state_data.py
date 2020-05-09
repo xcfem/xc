@@ -16,7 +16,7 @@ from materials.sections import internal_forces
 from collections import defaultdict
 import csv
 from postprocess import control_vars as cv
-
+import json
 
 def defaultAnalysis(feProb,steps= 1):
     '''Default analysis procedure for saveAll method.'''
@@ -99,19 +99,14 @@ class LimitStateData(object):
         elemSet= setCalc.elements
         nodSet= setCalc.nodes
         self.envConfig.projectDirTree.createTree()
-        fNameInfForc= self.getInternalForcesFileName()
+        fNameIntForc= self.getInternalForcesFileName()
         fNameDispl= self.getDisplacementsFileName()
-        os.system("rm -f " + fNameInfForc) #Clear obsolete files.
+        os.system("rm -f " + fNameIntForc) #Clear obsolete files.
         os.system("rm -f " + fNameDispl)
-        fIntF= open(fNameInfForc,"a")
         fDisp= open(fNameDispl,"a")
-        if lstSteelBeams:
-            fIntF.write(" Comb. , Elem. , Sect. , N , Vy , Vz , T , My , Mz ,chiLT\n")
-        else:
-            fIntF.write(" Comb. , Elem. , Sect. , N , Vy , Vz , T , My , Mz \n")
         fDisp.write(" Comb. , Node , Ux , Uy , Uz , ROTx , ROTy , ROTz \n")
-        fIntF.close()
         fDisp.close()
+        internalForcesDict= dict()
         for key in loadCombinations.getKeys():
             comb= loadCombinations[key]
             feProblem.getPreprocessor.resetLoadCase()
@@ -120,15 +115,16 @@ class LimitStateData(object):
             result= analysisToPerform(feProblem)
             if lstSteelBeams:
                 for sb in lstSteelBeams:
-                    sb.updateLateralBucklingReductionFactor()
+                    sb.updateReductionFactors()
             #Writing results.
-            fIntF= open(fNameInfForc,"a")
             fDisp= open(fNameDispl,"a")
-            eif.exportInternalForces(comb.getName,elemSet,fIntF)
+            internalForcesDict.update(eif.getInternalForcesDict(comb.getName,elemSet))
             edisp.exportDisplacements(comb.getName,nodSet,fDisp)
-            fIntF.close()
             fDisp.close()
             comb.removeFromDomain() #Remove combination from the model.
+        with open(fNameIntForc, 'w') as outfile:
+            json.dump(internalForcesDict, outfile)
+        outfile.close()
 #20181117
     def runChecking(self,outputCfg):
         '''This method reads, for the elements in setCalc,  the internal 
@@ -347,7 +343,7 @@ shearResistance= ShearResistanceRCLimitStateData()
 fatigueResistance= FatigueResistanceRCLimitStateData()
 
 
-def readIntForcesFile(intForcCombFileName,setCalc=None):
+def readIntForcesDict(intForcCombFileName,setCalc=None):
     '''Extracts element and combination identifiers from the internal
     forces listing file. Return elementTags, idCombs and 
     internal-forces values
@@ -359,6 +355,71 @@ def readIntForcesFile(intForcCombFileName,setCalc=None):
                     means that all the elements in the file of internal forces
                     results are analyzed) 
     '''
+    elementTags= set()
+    idCombs= set()
+    with open(intForcCombFileName) as json_file:
+        combInternalForcesDict= json.load(json_file)
+    json_file.close()
+    
+    internalForcesValues= defaultdict(list)
+    
+    if(not setCalc):
+        for comb in combInternalForcesDict.keys():
+            idComb= str(comb)
+            idCombs.add(idComb)
+            elements= combInternalForcesDict[comb]
+            for elemId in elements.keys():
+                tagElem= eval(elemId)
+                elementData= elements[elemId]
+                elementType= elementData['type']
+                internalForces= elementData['internalForces']
+                for k in internalForces.keys():
+                    idSection= eval(k)
+                    elementTags.add(tagElem)
+                    crossSectionInternalForces= internal_forces.CrossSectionInternalForces()
+                    forces= internalForces[k]
+                    crossSectionInternalForces.setFromDict(forces)
+                    crossSectionInternalForces.idComb= idComb
+                    crossSectionInternalForces.tagElem= tagElem
+                    crossSectionInternalForces.idSection= idSection
+                    internalForcesValues[tagElem].append(crossSectionInternalForces)
+    else:
+        setElTags=setCalc.getElementTags()
+        for idComb in combInternalForcesDict.keys():
+            idCombs.add(idComb)
+            elements= combInternalForcesDict[idComb]
+            for elemId in elements.keys():
+                tagElem= eval(elemId)
+                if(tagElem in setElTags):
+                    elementData= elements[elemId]
+                    elementType= elementData['type']
+                    internalForces= elementData['internalForces']
+                    for k in internalForces.keys():
+                        idSection= eval(k)
+                        elementTags.add(tagElem)
+                        crossSectionInternalForces= internal_forces.CrossSectionInternalForces()
+                        forces= internalForces[k]
+                        crossSectionInternalForces.setFromDict(forces)
+                        crossSectionInternalForces.idComb= idComb
+                        crossSectionInternalForces.tagElem= tagElem
+                        crossSectionInternalForces.idSection= idSection
+                        internalForcesValues[tagElem].append(crossSectionInternalForces)
+    return (elementTags,idCombs,internalForcesValues)
+
+def oldReadIntForcesFile(intForcCombFileName,setCalc=None):
+    '''Extracts element and combination identifiers from the internal
+    forces listing file. Return elementTags, idCombs and 
+    internal-forces values
+    
+    :param   intForcCombFileName: name of the file containing the internal
+                                  forces obtained for each element for 
+                                  the combinations analyzed
+    :param setCalc: set of elements to be analyzed (defaults to None which 
+                    means that all the elements in the file of internal forces
+                    results are analyzed) 
+    '''
+    errMsg= 'oldReadIntForcesFile will be deprecated soon.'
+    #lmsg.error(errMsg)
     elementTags= set()
     idCombs= set()
     f= open(intForcCombFileName,"r")
@@ -398,6 +459,27 @@ def readIntForcesFile(intForcCombFileName,setCalc=None):
                     internalForcesValues[tagElem].append(crossSectionInternalForces)
     f.close()
     return (elementTags,idCombs,internalForcesValues)
+
+def readIntForcesFile(intForcCombFileName,setCalc=None):
+    '''Extracts element and combination identifiers from the internal
+    forces listing file. Return elementTags, idCombs and 
+    internal-forces values
+    
+    :param   intForcCombFileName: name of the file containing the internal
+                                  forces obtained for each element for 
+                                  the combinations analyzed
+    :param setCalc: set of elements to be analyzed (defaults to None which 
+                    means that all the elements in the file of internal forces
+                    results are analyzed) 
+    '''
+    f= open(intForcCombFileName,"r")
+    c= f.read(1)
+    if(c=='{'):
+        return readIntForcesDict(intForcCombFileName,setCalc)
+    else:
+        return oldReadIntForcesFile(intForcCombFileName,setCalc)
+    f.close()
+
 
 def string_el_max_axial_force(element,section,setName,combName,axialForc):
     retval='preprocessor.getElementHandler.getElement('+str(element)+').setProp("maxAxialForceSect'+str(section)+'",AxialForceControlVars('+'idSection= "' + setName + 'Sects'+str(section)+'"' + ', combName= "' + combName +'", N= ' + str(axialForc) + ')) \n'
