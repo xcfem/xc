@@ -273,6 +273,42 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
                     if(CFtmp>e.getProp(self.limitStateLabel+'Sect2').CF):
                         e.setProp(self.limitStateLabel+'Sect2',cv.AISCBiaxialBendingControlVars('Sects2',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp,lf.chiLT, lf.chiN))
 
+class ShearController(lsc.LimitStateControllerBase):
+    '''Object that controls shear limit state.'''
+
+    def __init__(self,limitStateLabel):
+        super(ShearController,self).__init__(limitStateLabel)
+
+    def initControlVars(self,setCalc):
+        '''Initialize control variables over elements.
+
+        :param setCalc: set of elements to which define control variables
+        '''
+        for e in setCalc.elements:
+            e.setProp(self.limitStateLabel+'Sect1',cv.ShearYControlVars())
+            e.setProp(self.limitStateLabel+'Sect2',cv.ShearYControlVars())
+
+    def checkSetFromIntForcFile(self,intForcCombFileName,setCalc=None):
+        '''Launch checking.
+
+        :param setCalc: set of elements to check
+        '''
+        intForcItems=lsd.readIntForcesFile(intForcCombFileName,setCalc)
+        internalForcesValues=intForcItems[2]
+        for e in setCalc.elements:
+            sh=e.getProp('crossSection')
+            sc=e.getProp('sectionClass')
+            elIntForc=internalForcesValues[e.tag]
+            for lf in elIntForc:
+                CFtmp= sh.getYShearEfficiency(sc,lf.Vy)
+                if lf.idSection == 0:
+                    if (CFtmp>e.getProp(self.limitStateLabel+'Sect1').CF):
+                        e.setProp(self.limitStateLabel+'Sect1',cv.ShearYControlVars('Sects1',lf.idComb,CFtmp,lf.Vy))
+                else:
+                    if (CFtmp>e.getProp(self.limitStateLabel+'Sect2').CF):
+                        e.setProp(self.limitStateLabel+'Sect2',cv.ShearYControlVars('Sects2',lf.idComb,CFtmp,lf.Vy))
+
+                        
 def controlULSCriterion():
   return '''recorder= self.getProp('ULSControlRecorder')
 nmbComb= recorder.getCurrentCombinationName
