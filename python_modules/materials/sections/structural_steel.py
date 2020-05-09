@@ -377,6 +377,23 @@ class SteelShape(sp.SectionProperties):
             fcv[1]= FCV2
             elem.setProp("HIPCPV2",nmbComb)
         elem.setProp("FCVCP",fcv)
+        
+    def checkZShearForElement(self,elem,nmbComb):
+        '''Called in every commit to z shear criterion.'''
+        elem.getResistingForce()
+        sectionClass= elem.getProp('sectionClass')
+        Vz1= elem.getVz1
+        FCV1= self.getZShearEfficiency(sectionClass,Vz1)
+        Vz2= elem.getVz2
+        FCV2= self.getZShearEfficiency(sectionClass,Vz2)
+        fcv= elem.getProp("FCVCP")
+        if(FCV1 > fcv[0]):
+            fcv[0]= FCV1
+            elem.setProp("HIPCPV1",nmbComb)
+        if(FCV2 > fcv[1]):
+            fcv[1]= FCV2
+            elem.setProp("HIPCPV2",nmbComb)
+        elem.setProp("FCVCP",fcv)
 
 class IShape(SteelShape):
     def __init__(self,steel,name,table):
