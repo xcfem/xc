@@ -65,6 +65,9 @@ class EC3Beam(buckling_base.MemberBase):
         chiLT= self.getLateralBucklingReductionFactor()
         for e in self.elemSet:
              e.setProp('chiLT',chiLT) #Lateral torsional buckling reduction factor.
+    def updateReductionFactors(self):
+        '''Update the value of the appropriate reduction factors.'''
+        self.updateLateralBucklingReductionFactor()
 
     def installULSControlRecorder(self,recorderType, chiLT=1.0):
         '''Install recorder for verification of ULS criterion.'''
