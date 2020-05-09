@@ -136,6 +136,8 @@ beam=  aisc.Member(l1.name, shape, unbracedLengthX= 0.5, unbracedLengthY= span, 
 Mu= beam.getDesignFlexuralStrength()
 MuRef= 0.9*421e3*kip2kN*foot2meter
 ratio3= abs((Mu-MuRef)/MuRef)
+CF= MMax/Mu
+
 
 '''
 print(refD1)
@@ -147,6 +149,7 @@ print('ratio2= ',ratio2)
 print('Mu= ',Mu/1e3,' kN m(',Mu/1e3*kN2kips/foot2meter,' kip-ft)')
 print('MuRef= ',MuRef/1e3,' kN m(',MuRef/1e3*kN2kips/foot2meter,' kip-ft)')
 print('ratio3= ',ratio3)
+print('CF=', CF)
 '''
 
 import os
