@@ -669,6 +669,7 @@ python tests/postprocess/limit_state_checking/test_shear_uls_checking_aci.py
 python tests/postprocess/limit_state_checking/test_shear_uls_checking_ehe08.py
 echo "$BLEU" "    AISC limit state checking." "$NORMAL"
 python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_01.py
+python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_02.py
 
 #VTK tests
 ##python tests/vtk/dibuja_edges.py
