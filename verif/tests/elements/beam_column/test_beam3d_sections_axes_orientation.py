@@ -245,7 +245,7 @@ matIntForc=np.array(6*[np.array([0.0,0.0,0.0])]) #array to which import the resu
                                            #[Fx,Fy,Fz] expressed in the element
                                            #local axes for the two sections of
                                            #each element
-internalForces= lsd.readIntForcesDict("/tmp/intForce_ULS_normalStressesResistance.csv")
+internalForces= lsd.readIntForcesDict("/tmp/intForce_ULS_normalStressesResistance.json")
 internalForcesValues= internalForces[2]
 for key in internalForcesValues.keys():
     intForces= internalForcesValues[key]
