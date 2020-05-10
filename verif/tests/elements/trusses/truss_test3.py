@@ -48,9 +48,7 @@ elements= preprocessor.getElementHandler
 elements.dimElem= 2 #Bidimensional space.
 elements.defaultMaterial= "section"
 truss1= elements.newElement("TrussSection",xc.ID([n1.tag,n2.tag]))
-#truss1.sectionArea= A
 truss2= elements.newElement("TrussSection",xc.ID([n2.tag,n3.tag]))
-#truss2.sectionArea= A
 
 constraints= preprocessor.getBoundaryCondHandler
 #Zero movement for node 1.
