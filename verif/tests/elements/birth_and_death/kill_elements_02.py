@@ -62,7 +62,7 @@ setTotal= preprocessor.getSets.getSet("total")
 setTotal.killElements() # deactivate the elements
 
 mesh= feProblem.getDomain.getMesh
-mesh.setDeadSRF(0.0)
+mesh.setDeadSRF(0.0) # set stress reduction factor for element deactivation.
 mesh.freezeDeadNodes('locked') # Constraint inactive nodes.
 
 
