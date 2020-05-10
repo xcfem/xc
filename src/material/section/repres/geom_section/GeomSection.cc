@@ -112,7 +112,7 @@ const XC::SectionReferenceFrame *XC::GeomSection::get_reference_system(const siz
   }
 
 //! @brief Returns a pointer to the point identified by the argument.
-XC::Spot *XC::GeomSection::busca_spot(const size_t &id)
+XC::Spot *XC::GeomSection::find_spot(const size_t &id)
   {
     Spot *retval= nullptr;
     lst_spots::iterator i= spots.find(id);
@@ -122,7 +122,7 @@ XC::Spot *XC::GeomSection::busca_spot(const size_t &id)
   }
 
 //! @brief Returns a pointer to the point identified by the argument.
-const XC::Spot *XC::GeomSection::busca_spot(const size_t &id) const
+const XC::Spot *XC::GeomSection::find_spot(const size_t &id) const
   {
     Spot *retval= nullptr;
     lst_spots::const_iterator i= spots.find(id);
@@ -174,7 +174,7 @@ XC::SectionReferenceFrame *XC::GeomSection::createReferenceFrame(const std::stri
 //! @brief Creates a new point.
 XC::Spot *XC::GeomSection::creaSpot(const Pos2d &p)
   {
-    Spot *retval= busca_spot(tag_spot);
+    Spot *retval= find_spot(tag_spot);
     if(!retval) //New point.
       {
         retval= new Spot("p"+boost::lexical_cast<std::string>(tag_spot),this);
@@ -223,8 +223,8 @@ XC::Segment *XC::GeomSection::newSegment(size_t p1,size_t p2)
 double XC::GeomSection::DistSpots(const size_t &i,const size_t &j) const
   {
     double retval(-1.0);
-    const Spot *pA= busca_spot(i);
-    const Spot *pB= busca_spot(j);
+    const Spot *pA= find_spot(i);
+    const Spot *pB= find_spot(j);
     if(!pA)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; point: " << i << " not found. " << std::endl;

@@ -105,8 +105,8 @@ class GeomSection: public SectionMassProperties
       { return tag_spot; }
     void setTagSpot(int i)
       { tag_spot= i; }
-    Spot *busca_spot(const size_t &);
-    const Spot *busca_spot(const size_t &) const;
+    Spot *find_spot(const size_t &);
+    const Spot *find_spot(const size_t &) const;
     Spot *creaSpot(const Pos2d &);
     Spot *newSpot(const Pos2d &);
 

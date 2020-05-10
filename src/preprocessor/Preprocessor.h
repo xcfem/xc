@@ -96,7 +96,7 @@ class Preprocessor: public CommandEntity, public MovableObject
     void updateSets(Element *);
     void updateSets(Constraint *);
 
-    SetEstruct *busca_set_estruct(const std::string &nmb);
+    SetEstruct *find_struct_set(const std::string &nmb);
   public:
     Preprocessor(CommandEntity *owr,DataOutputHandler::map_output_handlers *oh= nullptr);
     FEProblem *getProblem(void);

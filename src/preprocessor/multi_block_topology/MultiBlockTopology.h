@@ -90,7 +90,7 @@ class MultiBlockTopology: public PreprocessorContainer, public MovableObject
 
   protected:
 
-    SetEstruct *busca_set_estruct(const UniformGridMap::Indice &nmb);
+    SetEstruct *find_struct_set(const UniformGridMap::Indice &nmb);
   public:
     //! @brief Constructor.
     MultiBlockTopology(Preprocessor *mod= nullptr);

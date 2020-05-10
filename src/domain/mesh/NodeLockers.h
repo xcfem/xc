@@ -47,8 +47,8 @@ class NodeLockers: public CommandEntity, public MovableObject
     std::string code; //!< Pattern identifier for the new constraints.
   protected:
     friend class Mesh;
-    NodeLocker *busca_node_locker(const std::string &);
-    const NodeLocker *busca_node_locker(const std::string &) const;
+    NodeLocker *find_node_locker(const std::string &);
+    const NodeLocker *find_node_locker(const std::string &) const;
     NodeLocker *newNodeLocker(const std::string &nmb);
     void borraNodeLocker(const std::string &nmb);
 

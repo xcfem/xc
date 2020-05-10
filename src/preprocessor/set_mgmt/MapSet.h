@@ -63,8 +63,8 @@ class Domain;
     Set *alloc_set(const Set &);
     SetBase *broke_set(const std::string &,const std::string &);
 
-    SetBase *busca_set(const std::string &nmb);
-    SetEstruct *busca_set_estruct(const std::string &nmb);
+    SetBase *find_set(const std::string &nmb);
+    SetEstruct *find_struct_set(const std::string &nmb);
     void setup_total(void);
     void clearSets(void);
     void clearAll(void);
@@ -111,7 +111,7 @@ class Domain;
     Set *defSet(const std::string &);
     void removeSet(const std::string &);
 
-    const SetBase *busca_set(const std::string &nmb) const;
+    const SetBase *find_set(const std::string &nmb) const;
     SetBase &getSet(const std::string &nmb);
 
     int sendSelf(Communicator &);

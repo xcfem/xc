@@ -40,7 +40,7 @@
 XC::ID XC::MapSet::setsDbTags;
 
 //! @brief Returns a pointer to the set which name is being passed as parameter.
-XC::SetBase *XC::MapSet::busca_set(const std::string &name)
+XC::SetBase *XC::MapSet::find_set(const std::string &name)
   {
     if(exists(name))
       return MapSetBase::find(name);
@@ -51,7 +51,7 @@ XC::SetBase *XC::MapSet::busca_set(const std::string &name)
   }
 
 //! @brief Returns a pointer to the set which name is being passed as parameter.
-const XC::SetBase *XC::MapSet::busca_set(const std::string &name) const
+const XC::SetBase *XC::MapSet::find_set(const std::string &name) const
   {
     const XC::SetBase *retval= MapSetBase::find(name);
     if(!retval)
@@ -68,7 +68,7 @@ const XC::SetBase *XC::MapSet::busca_set(const std::string &name) const
 //! @brief Return the set which name is being passed as parameter.
 XC::SetBase &XC::MapSet::getSet(const std::string &name)
   {
-    SetBase *retval= busca_set(name);
+    SetBase *retval= find_set(name);
     if(!retval)
       {
 	std::cerr << getClassName() << "::" << __FUNCTION__
@@ -90,7 +90,7 @@ XC::Set *XC::MapSet::create_set(const std::string &name)
 	MapSetBase::operator[](name)= tmp;
       }
     else //Set already exists
-      tmp= dynamic_cast<Set *>(busca_set(name));
+      tmp= dynamic_cast<Set *>(find_set(name));
     return tmp;
   }
 
@@ -122,7 +122,7 @@ void XC::MapSet::abre_set(const std::string &name)
                 << name << "' doesn't exists.\n";
     else //The set exists
       {
-        tmp= busca_set(name);
+        tmp= find_set(name);
         assert(tmp);
         open_sets[name]= tmp;
       }
@@ -153,7 +153,7 @@ XC::SetBase *XC::MapSet::broke_set(const std::string &name,const std::string &cl
   {
     SetBase *retval= nullptr;
     if(exists(name)) //The set exists
-      retval= busca_set(name);
+      retval= find_set(name);
     else //the set is new.
       {
         if(class_name == "XC::Set")
@@ -188,9 +188,9 @@ XC::EntMdlr *XC::MapSet::insert_ent_mdlr(EntMdlr *ent_mdlr)
   }
 
 //! @brief Returns a pointer to the set estructurado which name is being passed as parameter.
-XC::SetEstruct *XC::MapSet::busca_set_estruct(const std::string &name)
+XC::SetEstruct *XC::MapSet::find_struct_set(const std::string &name)
   {
-    SetBase *set= busca_set(name);
+    SetBase *set= find_set(name);
     SetEstruct *retval= nullptr;
     if(set)
       retval= dynamic_cast<SetEstruct *>(set);

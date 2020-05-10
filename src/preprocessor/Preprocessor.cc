@@ -134,11 +134,11 @@ void XC::Preprocessor::setDeadSRF(const double &d)
 
 //! @brief Return a pointer to the set or geometric entity with
 //! the name being passed as a parameter.
-XC::SetEstruct *XC::Preprocessor::busca_set_estruct(const std::string &nmb)
+XC::SetEstruct *XC::Preprocessor::find_struct_set(const std::string &nmb)
   {
-    SetEstruct *retval= sets.busca_set_estruct(nmb);
+    SetEstruct *retval= sets.find_struct_set(nmb);
     if(!retval)
-      retval= mbt.busca_set_estruct(boost::lexical_cast<size_t>(nmb));
+      retval= mbt.find_struct_set(boost::lexical_cast<size_t>(nmb));
     return retval;
   }
 

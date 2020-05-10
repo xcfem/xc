@@ -44,7 +44,7 @@ XC::NodeLockers::NodeLockers(Mesh *owr)
   : CommandEntity(owr), MovableObject(0),  tag(0), code("nil") {}
 
 //! @brief Returns a pointer to the blocker whose name is passed as parameter.
-XC::NodeLocker *XC::NodeLockers::busca_node_locker(const std::string &nmb)
+XC::NodeLocker *XC::NodeLockers::find_node_locker(const std::string &nmb)
   {
     NodeLocker *retval= nullptr;
     map_node_lockers::iterator i= node_lockers.find(nmb);
@@ -54,7 +54,7 @@ XC::NodeLocker *XC::NodeLockers::busca_node_locker(const std::string &nmb)
   }
 
 //! @brief Returns a pointer to the blocker whose name is passed as parameter.
-const XC::NodeLocker *XC::NodeLockers::busca_node_locker(const std::string &nmb) const
+const XC::NodeLocker *XC::NodeLockers::find_node_locker(const std::string &nmb) const
   {
     const XC::NodeLocker *retval= nullptr;
     map_node_lockers::const_iterator i= node_lockers.find(nmb);
@@ -94,7 +94,7 @@ XC::NodeLocker *XC::NodeLockers::newNodeLocker(const std::string &nmb)
     NodeLocker *retval= nullptr;
     if(!nmb.empty())
       {
-        retval= busca_node_locker(nmb);
+        retval= find_node_locker(nmb);
         if(!retval)
           {
             retval= new NodeLocker(tag);
@@ -135,7 +135,7 @@ void XC::NodeLockers::borraNodeLocker(const std::string &nmb)
 
 void XC::NodeLockers::removeFromDomain(const std::string &cod)
   {
-    NodeLocker *p= busca_node_locker(cod);
+    NodeLocker *p= find_node_locker(cod);
     if(p)
       getDomain()->removeNodeLocker(p);
     else
@@ -172,10 +172,10 @@ const std::string XC::NodeLockers::getCurrentNodeLockerId(void) const
   { return code; }
 
 XC::NodeLocker *XC::NodeLockers::getCurrentNodeLockerPtr(void)
-  { return busca_node_locker(code); }
+  { return find_node_locker(code); }
 
 const XC::NodeLocker *XC::NodeLockers::getCurrentNodeLockerPtr(void) const
-  { return busca_node_locker(code); }
+  { return find_node_locker(code); }
 
 //! @brief Returns the domain.
 XC::Domain *XC::NodeLockers::getDomain(void)

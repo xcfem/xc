@@ -80,7 +80,7 @@ XC::Spot *XC::EntGeomSection::BuscaSpot(const size_t &id_point)
     Spot *retval= nullptr;
     if(sccGeom)
       {
-        retval= getSectionGeometry()->busca_spot(id_point);
+        retval= getSectionGeometry()->find_spot(id_point);
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -95,7 +95,7 @@ const XC::Spot *XC::EntGeomSection::BuscaSpot(const size_t &id_point) const
     const Spot *retval= nullptr;
     if(sccGeom)
       {
-        retval= getSectionGeometry()->busca_spot(id_point);
+        retval= getSectionGeometry()->find_spot(id_point);
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__

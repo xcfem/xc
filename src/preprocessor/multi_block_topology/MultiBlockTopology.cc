@@ -163,7 +163,7 @@ void XC::MultiBlockTopology::conciliaNDivs(void)
   }
 
 //! @brief Search for the entity whose name is passed as a parameter.
-XC::SetEstruct *XC::MultiBlockTopology::busca_set_estruct(const UniformGridMap::Indice &id)
+XC::SetEstruct *XC::MultiBlockTopology::find_struct_set(const UniformGridMap::Indice &id)
   {
     SetEstruct *retval= points.busca(id);
     if(!retval)
