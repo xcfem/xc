@@ -39,10 +39,10 @@ class DirectionFieldData(vfd.VectorFieldData):
     self.mapper.SetColorModeToMapScalars()
     self.mapper.ScalarVisibilityOn()
     self.mapper.SetScalarRange(self.lengths.GetRange())
-    if(len(self.lenghtsName)>80):
-      self.lenghtsName= zlib.compress(self.lenghtsName)
+    if(len(self.lengthsName)>80):
+      self.lengthsName= zlib.compress(self.lengthsName)
       lmsg.log('lengthsName string compressed to avoid buffer overflow.')
-    self.mapper.SelectColorArray(self.lenghtsName)
+    self.mapper.SelectColorArray(self.lengthsName)
     self.mapper.SetLookupTable(self.lookupTable)
     return self.mapper
 

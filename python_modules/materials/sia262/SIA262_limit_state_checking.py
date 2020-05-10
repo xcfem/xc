@@ -83,7 +83,7 @@ def MinReinfAreaUnderFlexion(concrete,concreteCover,crackCRequirement,spacing,t)
   return fctd*w/sgAdm/z
 
 class RebarController(object):
-  '''Control of some parameters as development lenght 
+  '''Control of some parameters as development length 
      minimum reinforcement and so on.'''
   
   def __init__(self, crackCRequirement):

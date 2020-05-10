@@ -1229,7 +1229,7 @@ class HSSShape(structural_steel.QHShape):
         return self.Ieff/(b-self.y_eff)
                    
     def getFlangeLocalBucklingLimit(self, majorAxis= True):
-        ''' Return the limit for nominal flexural strenght for square of
+        ''' Return the limit for nominal flexural strength for square of
             rectangular HSS sections due to flange buckling according 
             to section F7.2 of AISC-360-16.
 
@@ -1256,7 +1256,7 @@ class HSSShape(structural_steel.QHShape):
         return Mn
     
     def getWebLocalBucklingLimit(self, majorAxis= True):
-        ''' Return the limit for nominal flexural strenght for square of
+        ''' Return the limit for nominal flexural strength for square of
             rectangular HSS sections due to web buckling according 
             to section F7.3 of AISC-360-16.
 
@@ -1463,7 +1463,7 @@ class CHSSShape(structural_steel.CHShape):
         return retval # if <1 then flanges are compact.
     
     def getAw(self):
-        ''' Return area for shear strenght calculation.'''
+        ''' Return area for shear strength calculation.'''
         return self.get('A')
     
     def getNominalShearStrength(self, Lv= None):

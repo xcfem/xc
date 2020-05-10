@@ -17,8 +17,8 @@ fastener= fasteners.WoodScrew(diameter= 0.19*mat.in2meter, length= 6.0*mat.in2me
 mainMemberWood= mat.Wood('Fake Douglas Fir-Larch', specificGravity= 0.55)
 sideMemberWood= mat.Wood('Fake Structural Composite Lumber', specificGravity= 0.55)
 
-Fem= mainMemberWood.getDowelBearingStrenght(fastener.D, theta= 0.0)
-Fes= sideMemberWood.getDowelBearingStrenght(fastener.D, theta= 0.0)
+Fem= mainMemberWood.getDowelBearingStrength(fastener.D, theta= 0.0)
+Fes= sideMemberWood.getDowelBearingStrength(fastener.D, theta= 0.0)
 Fyb= fastener.Fyb
 
 mainMemberThickness= 3.0*mat.in2meter

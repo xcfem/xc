@@ -1462,9 +1462,9 @@ class BlockMember(object):
 
     Parameters:
       :param a: side length.
-      :param a1: lenght of the side of the loaded area parallel to a.
+      :param a1: length of the side of the loaded area parallel to a.
       :param b: side length.
-      :param b1: lenght of the side of the loaded area parallel to b.
+      :param b1: length of the side of the loaded area parallel to b.
     '''
     self.a= a
     self.a1= a1

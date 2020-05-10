@@ -437,7 +437,7 @@ class IShape(SteelShape):
         return self.get('r')
       
     def getRho(self):
-        ''' Returns mass per unit lenght. '''
+        ''' Returns mass per unit length. '''
         return self.get('P')
       
     def getShapeRegions(self):
@@ -523,7 +523,7 @@ class QHShape(SteelShape):
         return self.h()-2*self.t()
       
     def getRho(self):
-        ''' Returns mass per unit lenght. '''
+        ''' Returns mass per unit length. '''
         return self.get('P')
 
     def widthToThicknessWeb(self):
@@ -553,7 +553,7 @@ class CHShape(SteelShape):
         return 'double'
 
     def getRho(self):
-        ''' Returns mass per unit lenght. '''
+        ''' Returns mass per unit length. '''
         return self.get('P')
 
     
@@ -567,7 +567,7 @@ class UShape(SteelShape):
         return 'simple'
 
     def getRho(self):
-        ''' Returns mass per unit lenght. '''
+        ''' Returns mass per unit length. '''
         return self.get('P')
       
     def h(self):

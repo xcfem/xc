@@ -32,7 +32,7 @@ lb2N=4.4482216
 N2lb=1/lb2N
 
 class RebarController(object):
-    '''Control of some parameters as development lenght 
+    '''Control of some parameters as development length 
        minimum reinforcement and so on.
 
        :ivar psi_t: reinforcement location factor; "concrete below" is 

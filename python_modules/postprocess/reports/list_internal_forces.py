@@ -109,7 +109,7 @@ def listaEsfuerzosTrussLineas(nmbComb, setNameLineas, fmt, fName, encab, tit):
 
 
 # Imprime los esfuerzos de los elementos contenidos en el conjunto que se pasa como parámetro.
-def listaEsfuerzosZeroLenghtSet(nmbComb, setName, fmt, fName, encab, tit):
+def listaEsfuerzosZeroLengthSet(nmbComb, setName, fmt, fName, encab, tit):
   fName.write("\\",encab,"{",tit,"}\n")
   caption= "Elementos del conjunto: "+setName
   defCampos= "|l|r|r|r|r|r|r|r|"

@@ -67,8 +67,8 @@ class Screw(object):
         :param theta_s: angle between the direction of load and the
                         direction of grain of the side member.
         '''
-        Fem= mainMemberWood.getDowelBearingStrenght(self.D, theta_m)
-        Fes= sideMemberWood.getDowelBearingStrenght(self.D, theta_s)
+        Fem= mainMemberWood.getDowelBearingStrength(self.D, theta_m)
+        Fes= sideMemberWood.getDowelBearingStrength(self.D, theta_s)
         Re= Fem/Fes
         Rt= lm/ls
         return (math.sqrt(Re+2.0*Re**2*(1+Rt+Rt**2)+Rt**2*Re**3)-Re*(1+Rt))/(1+Re)
@@ -85,8 +85,8 @@ class Screw(object):
         :param theta_s: angle between the direction of load and the
                         direction of grain of the side member.
         '''
-        Fem= mainMemberWood.getDowelBearingStrenght(self.D, theta_m)
-        Fes= sideMemberWood.getDowelBearingStrenght(self.D, theta_s)
+        Fem= mainMemberWood.getDowelBearingStrength(self.D, theta_m)
+        Fes= sideMemberWood.getDowelBearingStrength(self.D, theta_s)
         Re= Fem/Fes
         Rt= lm/ls
         D= self.getDiameterForYield()
@@ -104,8 +104,8 @@ class Screw(object):
         :param theta_s: angle between the direction of load and the
                         direction of grain of the side member.
         '''
-        Fem= mainMemberWood.getDowelBearingStrenght(self.D, theta_m)
-        Fes= sideMemberWood.getDowelBearingStrenght(self.D, theta_s)
+        Fem= mainMemberWood.getDowelBearingStrength(self.D, theta_m)
+        Fes= sideMemberWood.getDowelBearingStrength(self.D, theta_s)
         Re= Fem/Fes
         D= self.getDiameterForYield()
         return -1+math.sqrt(2.0*(1+Re)/Re+(2.0*self.Fyb*(2.0+Re)*D**2)/(3.0*Fem*ls**2))
@@ -128,12 +128,12 @@ class Screw(object):
         if(ls<0.0):
             lmsg.error('negative side member dowel bearing length: ls= '+str(ls))
         D= self.getDiameterForYield()
-        Fem= mainMemberWood.getDowelBearingStrenght(D, theta_m)
+        Fem= mainMemberWood.getDowelBearingStrength(D, theta_m)
         Rd_Im= self.getReductionTerm(theta= 0.0, yieldMode= 'Im')
         Z_Im= D*lm*Fem/Rd_Im # Eq. (12.3-1 or 12.3-7)
         retval= Z_Im
         Rd_Is= self.getReductionTerm(theta= 0.0, yieldMode= 'Is')
-        Fes= sideMemberWood.getDowelBearingStrenght(D, theta_s)
+        Fes= sideMemberWood.getDowelBearingStrength(D, theta_s)
         Z_Is= D*ls*Fes/Rd_Is # Eq. (12.3-2)
         if(doubleShear):
             Z_Is*=2.0 # Eq. (12.3-8)

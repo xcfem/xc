@@ -232,7 +232,7 @@ class Wood(object):
             self.specificGravity= specificGravity
         else:
             self.specificGravity= None
-    def getDowelBearingStrenght(self, diameter, theta):
+    def getDowelBearingStrength(self, diameter, theta):
         ''' Return the dowel bearing strength for Dowel-Type
             Fasteners in Wood Members according to Eq.
             12.3-11 and table 12.3.3 of National Design Specification of
@@ -447,7 +447,7 @@ class ColumnMember(MemberBase):
         self.unbracedLengthH= unbracedLengthH
 
     def getUnbracedLengthB(self):
-        ''' Return the B unbraced lenght.'''
+        ''' Return the B unbraced length.'''
         return self.unbracedLength
 
     def getEffectiveBucklingLengthCoefficientRecommended(self):

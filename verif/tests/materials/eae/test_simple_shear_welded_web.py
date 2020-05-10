@@ -42,7 +42,7 @@ ratio1= abs(((VRd-Vd)/VRd))
 
 '''
 print "Weld bead length l= ",l*1000,"mm \n"
-print "Maximum lenght of the weld beads lMax= ",lMax*1000," mm\n"
+print "Maximum length of the weld beads lMax= ",lMax*1000," mm\n"
 print "Fillet weld throat a= ",a*1000,"mm \n"
 print "Shear force la Vd= ",Vd/1000," kN\n"
 print "Shear resistance of the joint VRd= ",VRd/1000," kN\n"

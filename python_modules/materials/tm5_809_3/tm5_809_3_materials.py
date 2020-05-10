@@ -25,7 +25,7 @@ feet2Meter= 0.3048 # Conversion from feet to meter
 class Mortar(object):
     ''' Mortar according to TM 5-809-3.
 
-    :ivar fm: compressive strenght.
+    :ivar fm: compressive strength.
     '''
     def __init__(self,fm):
         '''

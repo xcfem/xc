@@ -42,8 +42,8 @@ class VectorFieldData(object):
       fUnitConv: unit conversion scale factor i.e. kN -> 1e-3.
     '''
     self.lengths= vtk.vtkDoubleArray()
-    self.lenghtsName= self.name+'Lengths'
-    self.lengths.SetName(self.lenghtsName)
+    self.lengthsName= self.name+'Lengths'
+    self.lengths.SetName(self.lengthsName)
     sz= self.getNumberOfTuples()
     if(sz):
       self.lengths.SetNumberOfValues(sz)
@@ -108,10 +108,10 @@ class VectorFieldData(object):
     #self.glyph.SetRange(-10, 10)    # Change these values to see effect on cone sizes
 
     # Tell glyph which attribute arrays to use for what
-    self.glyph.SetInputArrayToProcess(0,0,0,0,self.lenghtsName)	# scalars
+    self.glyph.SetInputArrayToProcess(0,0,0,0,self.lengthsName)	# scalars
     self.glyph.SetInputArrayToProcess(1,0,0,0,self.vectorsName) # vectors
     # self.glyph.SetInputArrayToProcess(2,0,0,0,'nothing')	# normals
-    #self.glyph.SetInputArrayToProcess(3,0,0,0,self.lenghtsName) # colors
+    #self.glyph.SetInputArrayToProcess(3,0,0,0,self.lengthsName) # colors
 
     # Calling update because I'm going to use the scalar range to set the color map range
     self.glyph.Update()

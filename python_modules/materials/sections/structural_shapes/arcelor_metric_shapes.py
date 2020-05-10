@@ -1296,14 +1296,14 @@ class AUShape(structural_steel.SteelShape):
     def __init__(self,steel,name):
         super(AUShape,self).__init__(steel,name,AU)
     def getRho(self):
-        ''' Returns mass per unit lenght. '''
+        ''' Returns mass per unit length. '''
         return self.get('P')
 
 class CHSShape(structural_steel.SteelShape):
     def __init__(self,steel,name):
         super(CHSShape,self).__init__(steel,name,CHS)
     def getRho(self):
-        ''' Returns mass per unit lenght. '''
+        ''' Returns mass per unit length. '''
         return self.get('P')
     def alphaY(self):
         '''Return shear shape factor with respect to local y-axis'''

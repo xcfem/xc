@@ -19,8 +19,8 @@ class WheelLoad(object):
     
     :ivar position: position of the wheel
     :ivar load: load
-    :ivar lx: lenght wheel in transversal direction 
-    :ivar ly: lenght wheel in longitudinal direction 
+    :ivar lx: length wheel in transversal direction 
+    :ivar ly: length wheel in longitudinal direction 
     '''
     def __init__(self,pos,ld,lx=0,ly=0):
        self.position= pos

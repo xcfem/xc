@@ -229,7 +229,7 @@ def shearResistanceWithoutLeverArm(As, fuk):
 
 def shearResistanceGroupWithoutLeverArm(As, fuk, nr):
     '''
-    Shear strenght of a bolt group according to clause 5.2.3.2 a) of EOTA TR029.
+    Shear strength of a bolt group according to clause 5.2.3.2 a) of EOTA TR029.
      As: stressed cross section of steel.
      fuk: characteristic steel ultimate tensile strength (nominal value).
      n: number of anchors in a group.

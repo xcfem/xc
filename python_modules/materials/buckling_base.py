@@ -98,7 +98,7 @@ class MemberBase(object):
 
     def createElementSet(self):
         '''Create the attributes 'length' and 'elemSet' that 
-        represent the lenght of the beam and the set of elements included in it.'''
+        represent the length of the beam and the set of elements included in it.'''
         prep=self.getPreprocessor()
         if self.lstLines:
             lstLn= self.lstLines
@@ -131,7 +131,7 @@ class MemberBase(object):
         element of the beam nearest to one control-point and the relative 
         distance from this control point to the first node of the element.
         The method also creates the attributes 'length' and 'elemSet' that 
-        represent the lenght of the beam and the set of elements included in it.
+        represent the length of the beam and the set of elements included in it.
         '''
         pol= self.createElementSet()
         

@@ -31,9 +31,9 @@ class VectorField(fb.FieldBase):
         self.mapper.SetScalarModeToUsePointFieldData()
         self.mapper.SetColorModeToMapScalars()
         self.mapper.ScalarVisibilityOn()
-        #self.mapper.SetScalarRange(self.glyph.GetOutputDataObject(0).GetPointData().GetArray(self.lenghtsName).GetRange())
+        #self.mapper.SetScalarRange(self.glyph.GetOutputDataObject(0).GetPointData().GetArray(self.lengthsName).GetRange())
         self.mapper.SetScalarRange(self.data.lengths.GetRange())
-        self.mapper.SelectColorArray(self.data.lenghtsName)
+        self.mapper.SelectColorArray(self.data.lengthsName)
         self.creaLookUpTable()
         self.mapper.SetLookupTable(self.lookUpTable)
         return self.mapper

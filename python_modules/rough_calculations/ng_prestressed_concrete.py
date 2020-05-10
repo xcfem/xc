@@ -61,7 +61,7 @@ def loss_friction(s,sigma_p_0,alpha_unit,mu,unint_dev):
 
     :param s: cable length from start to section considered
     :param sigma_p_0: initial stress in tendon
-    :param alpha_unit: mean angular deviation per unit lenght. 
+    :param alpha_unit: mean angular deviation per unit length. 
         E.g.\: Assimilating the parabolic profile of the cable to a 
         circular profile the angular deviation is constant in the beam length 
         and can be expressed as\: 8*eccentricity_mid_span/Lbeam**2

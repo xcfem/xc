@@ -99,7 +99,7 @@ class PrestressTendon(object):
         return lseq
 
     def getCumLength(self):
-        '''Return for each point in fineCoordMtr the cumulative lenght of 
+        '''Return for each point in fineCoordMtr the cumulative length of 
         tendon from its starting point
         '''
         length_sequence=self.getLengthSequence()
@@ -107,7 +107,7 @@ class PrestressTendon(object):
 
 
     def getReverseCumLength(self):
-        '''Return for each point in fineCoordMtr the cumulative lenght of 
+        '''Return for each point in fineCoordMtr the cumulative length of 
         tendon from its ending point
         '''
         lseq=self.getLengthSequence()
