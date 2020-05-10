@@ -26,20 +26,21 @@ feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 nodes= preprocessor.getNodeHandler
 
+# Materials definition
+sectionProperties= xc.CrossSectionProperties1d()
+sectionProperties.A= A; sectionProperties.E= E;
+section= typical_materials.defElasticSectionFromMechProp1d(preprocessor, "section", sectionProperties)
+
 # Mesh
 modelSpace= predefined_spaces.SolidMechanics2D(nodes)
 n1= nodes.newNodeXY(0,0)
 n2= nodes.newNodeXY(l,0)
 
-elast= typical_materials.defElasticMaterial(preprocessor, "elast",E)
-
 elements= preprocessor.getElementHandler
 elements.dimElem= 2 #Bars defined in a two dimensional space.
-elements.defaultMaterial= "elast"
-trussA= elements.newElement("Truss",xc.ID([n1.tag,n2.tag]))
-trussA.sectionArea= A
-trussB= elements.newElement("Truss",xc.ID([n1.tag,n2.tag]))
-trussB.sectionArea= A
+elements.defaultMaterial= "section"
+trussA= elements.newElement("TrussSection",xc.ID([n1.tag,n2.tag]))
+trussB= elements.newElement("TrussSection",xc.ID([n1.tag,n2.tag]))
 
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
