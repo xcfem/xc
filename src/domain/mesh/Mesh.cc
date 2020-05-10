@@ -503,11 +503,13 @@ const XC::Node *XC::Mesh::getNearestNode(const Pos3d &p) const
 
 //! @brief Freezes inactive nodes (prescribes zero displacement for all DOFs
 //! on inactive nodes).
-void XC::Mesh::freeze_dead_nodes(const std::string &nmbLocker)
+//!
+//! @param lockerName: name for the locker that will prevent the dead nodes to move.
+void XC::Mesh::freeze_dead_nodes(const std::string &lockerName)
   {
-    NodeLocker *locker= lockers.busca_node_locker(nmbLocker);
+    NodeLocker *locker= lockers.find_node_locker(lockerName);
     if(!locker) //New case.
-      locker= lockers.newNodeLocker(nmbLocker);
+      locker= lockers.newNodeLocker(lockerName);
     if(locker)
       {
         NodeIter &theNodeIter= getNodes();
@@ -519,14 +521,16 @@ void XC::Mesh::freeze_dead_nodes(const std::string &nmbLocker)
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; can't find locker: '"
-		<< nmbLocker << "'\n";
+		<< lockerName << "'\n";
   }
 
 //! @brief Clears the constraints over activated nodes 
 //! previously created by the freeze method.
-void XC::Mesh::melt_alive_nodes(const std::string &nmbLocker)
+//!
+//! @param lockerName: name for the locker that will prevent the dead nodes to move.
+void XC::Mesh::melt_alive_nodes(const std::string &lockerName)
   {
-    NodeLocker *locker= lockers.busca_node_locker(nmbLocker);
+    NodeLocker *locker= lockers.find_node_locker(lockerName);
     if(locker)
       {
         getDomain()->removeNodeLocker(locker); 
@@ -534,12 +538,12 @@ void XC::Mesh::melt_alive_nodes(const std::string &nmbLocker)
         Node *nodPtr= nullptr;
         while((nodPtr = theNodeIter()) != nullptr)
           nodPtr->melt_if_alive(locker);
-        lockers.borraNodeLocker(nmbLocker);
+        lockers.borraNodeLocker(lockerName);
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; can't find locker: '"
-		<< nmbLocker << "'\n";
+		<< lockerName << "'\n";
   }
 
 //! @brief Returns the number of elements.
