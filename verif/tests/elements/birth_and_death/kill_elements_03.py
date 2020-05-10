@@ -83,11 +83,7 @@ ratio4= (NB_I-halfF)/halfF
 
 toKill= preprocessor.getSets.defSet("to_kill")
 toKill.getElements.append(trussB)
-toKill.killElements() # deactivate B truss
-
-mesh= feProblem.getDomain.getMesh
-mesh.setDeadSRF(0.0)
-mesh.freezeDeadNodes('locked') # Constraint inactive nodes.
+modelSpace.deactivateElements(toKill)
 
 # Solve with dead element.
 result= modelSpace.analyze(calculateNodalReactions= True)
@@ -103,7 +99,7 @@ ratio5= (ux_II-ux_refII)/ux_refII
 ratio6= (R1_II+F)/F
 ratio7= (R2_II)
 ratio8= (NA_II-F)/F
-ratio9= (NB_II)
+ratio9= (NB_II)/F
 
 ratios= [ratio0,ratio1,ratio2,ratio3,ratio4,ratio5,ratio6,ratio7,ratio8,ratio9]
 
@@ -112,6 +108,7 @@ for r in ratios:
     error+= r**2
 error= math.sqrt(error)
 
+'''
 print("ux_I= ",ux_I)
 print("ux_refI= ",ux_refI)
 print("ratio0= ",ratio0)
@@ -136,12 +133,11 @@ print("NB_II= ",NB_II)
 print("ratio9= ",ratio9)
 print("error= ",error)
 '''
-'''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if error<1e-7:
+if error<1e-5:
   print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

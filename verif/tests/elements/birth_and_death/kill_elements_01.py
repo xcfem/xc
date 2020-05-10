@@ -63,11 +63,7 @@ spc= constraints.newSPConstraint(n4.tag,2,0.0)
 
 
 setTotal= preprocessor.getSets.getSet("total")
-setTotal.killElements() # deactivate the elements
-
-mesh= feProblem.getDomain.getMesh
-mesh.setDeadSRF(0.0)
-mesh.freezeDeadNodes('frozen')
+modelSpace.deactivateElements(setTotal)
 
 
 # Loads definition
@@ -95,9 +91,8 @@ deltay2= n2.getDisp[1]
 R1= n1.getReaction[0] 
 R2= n2.getReaction[0] 
 
-
-setTotal.aliveElements()
-mesh.meltAliveNodes('frozen') # Reactivate inactive nodes.
+# Return elements to life.
+modelSpace.activateElements(setTotal)
 
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)

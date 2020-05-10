@@ -59,12 +59,7 @@ modelSpace.fixNode000_000(n8.tag)
 
 
 setTotal= preprocessor.getSets.getSet("total")
-setTotal.killElements() # deactivate the elements
-
-mesh= feProblem.getDomain.getMesh
-mesh.setDeadSRF(0.0) # set stress reduction factor for element deactivation.
-mesh.freezeDeadNodes('locked') # Constraint inactive nodes.
-
+modelSpace.deactivateElements(setTotal)
 
 # Loads definition
 loadHandler= preprocessor.getLoadHandler
@@ -99,11 +94,8 @@ deltaz3= n3.getDisp[2]
 R1= n1.getReaction[0] 
 R2= n2.getReaction[0] 
 
-
-
 # print("Revive.\n")
-setTotal.aliveElements()
-mesh.meltAliveNodes('locked') # Reactivate inactive nodes.
+modelSpace.activateElements(setTotal)
 
 # Solution
 result= modelSpace.analyze(calculateNodalReactions= True)

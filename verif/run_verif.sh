@@ -178,6 +178,7 @@ python tests/elements/test_pot_bearing_03.py
 echo "$BLEU" "    Element birth and death tests." "$NORMAL"
 python tests/elements/birth_and_death/kill_elements_01.py
 python tests/elements/birth_and_death/kill_elements_02.py
+python tests/elements/birth_and_death/kill_elements_03.py
 
 echo "$BLEU" "Solver tests." "$NORMAL"
 python tests/solution/superlu_solver_test_01.py

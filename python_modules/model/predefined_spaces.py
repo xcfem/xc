@@ -327,6 +327,30 @@ class PredefinedSpace(object):
         self.analysis= predefined_solutions.ill_conditioning_analysis(problem)
         return self.analysis.analyze(numModes)
 
+    def deactivateElements(self, elemSet, srf= 1e-6):
+        ''' Deactivate the nodes on the set argument.
+
+        :param elemSet: set of elements to be deactivated.
+        :param srf: stress reduction factor for element deactivation.
+        '''
+        elemSet.killElements()
+        mesh= self.preprocessor.getDomain.getMesh
+        mesh.setDeadSRF(srf) # set stress reduction factor for
+                             # element deactivation.
+        lockerName= elemSet.name+'_locker'
+        mesh.freezeDeadNodes(lockerName)
+
+    def activateElements(self, elemSet):
+        ''' Deactivate the nodes on the set argument.
+
+        :param elemSet: set of elements to be deactivated.
+        :param srf: stress reduction factor for element deactivation.
+        '''
+        elemSet.aliveElements()
+        mesh= self.preprocessor.getDomain.getMesh
+        lockerName= elemSet.name+'_locker'
+        mesh.meltAliveNodes(lockerName)
+
 
 def getModelSpace(preprocessor):
       '''Return a PredefinedSpace from the dimension of the space 
