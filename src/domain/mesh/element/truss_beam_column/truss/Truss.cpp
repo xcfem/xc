@@ -685,7 +685,7 @@ const XC::Vector &XC::Truss::getResistingForceIncInertia(void) const
           (*theVector) += this->getRayleighDampingForces();
       }
     if(isDead())
-      (*theVector)*=dead_srf; //XXX Se aplica 2 veces sobre getResistingForce: arreglar.
+      (*theVector)*=dead_srf; //XXX It's applied 2 times on getResistingForce: fix it.
     return *theVector;
   }
 
@@ -780,7 +780,7 @@ void XC::Truss::Print(std::ostream &s, int flag) const
               }
             s << " \n\t unbalanced load: " << *theVector;
           }
-        s << " \t XC::Material: " << *theMaterial;
+        s << " \t Material: " << *theMaterial;
         s << std::endl;
       }
     else
@@ -793,15 +793,20 @@ void XC::Truss::Print(std::ostream &s, int flag) const
 
 //! @brief Return the axial internal force.
 double XC::Truss::getAxialForce(void) const
-  { return A*theMaterial->getStress(); }
+  {
+    double stress= theMaterial->getStress();
+    if(isDead())
+      stress*=dead_srf;
+    return A*stress;
+  }
 
 double XC::Truss::computeCurrentStrain(void) const
   {
     // NOTE method will not be called if L == 0
 
     // determine the strain
-    const XC::Vector &disp1 = theNodes[0]->getTrialDisp();
-    const XC::Vector &disp2 = theNodes[1]->getTrialDisp();
+    const Vector &disp1 = theNodes[0]->getTrialDisp();
+    const Vector &disp2 = theNodes[1]->getTrialDisp();
 
     double dLength = 0.0;
     for(int i = 0; i < getNumDIM(); i++)

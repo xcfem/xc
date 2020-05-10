@@ -494,10 +494,12 @@ int XC::CorotTrussSection::addLoad(ElementalLoad *theLoad, double loadFactor)
     return 0;
   }
 
-int XC::CorotTrussSection::addInertiaLoadToUnbalance(const XC::Vector &accel)
+//! @brief Add inertia load to the out of balance vector.
+int XC::CorotTrussSection::addInertiaLoadToUnbalance(const Vector &accel)
   {
     return 0;
   }
+
 //! @brief Return the axial internal force.
 double XC::CorotTrussSection::getAxialForce(void) const
   {
@@ -510,6 +512,8 @@ double XC::CorotTrussSection::getAxialForce(void) const
 	if(code(i) == SECTION_RESPONSE_P)
 	  retval+= s(i);
       }
+    if(isDead())
+      retval*=dead_srf;
     return retval;
   }
 
@@ -551,8 +555,8 @@ const XC::Vector &XC::CorotTrussSection::getResistingForceIncInertia(void) const
     const double rho= getRho();
     if(rho != 0.0) {
 
-      const XC::Vector &accel1 = theNodes[0]->getTrialAccel();
-      const XC::Vector &accel2 = theNodes[1]->getTrialAccel();
+      const Vector &accel1 = theNodes[0]->getTrialAccel();
+      const Vector &accel2 = theNodes[1]->getTrialAccel();
 
       double M = 0.5*rho*Lo;
       int numDOF2 = numDOF/2;

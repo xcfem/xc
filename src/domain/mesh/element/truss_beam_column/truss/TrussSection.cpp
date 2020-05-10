@@ -485,9 +485,12 @@ double XC::TrussSection::getAxialForce(void) const
 	      retval+= s(i);
 	  }
       }
+    if(isDead())
+      retval*=dead_srf;
     return retval;
   }
 
+//! @brief Return the element resisting force.
 const XC::Vector &XC::TrussSection::getResistingForce(void) const
   {
     const double force= getAxialForce();

@@ -465,7 +465,12 @@ int XC::CorotTruss::addInertiaLoadToUnbalance(const XC::Vector &accel)
   { return 0; }
 
 double XC::CorotTruss::getAxialForce(void) const
-  { return A*theMaterial->getStress(); }
+  {
+    double stress= theMaterial->getStress();
+    if(isDead())
+      stress*=dead_srf;
+    return A*stress;
+  }
 
 const XC::Vector &XC::CorotTruss::getResistingForce(void) const
   {
