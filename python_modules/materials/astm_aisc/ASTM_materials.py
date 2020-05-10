@@ -14,10 +14,10 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 
 import math
-import enum
 from materials import steel_base
 from misc_utils import log_messages as lmsg
 from materials import buckling_base
+import AISC_limit_state_checking as aisc
 
 class ASTMSteel(steel_base.BasicSteel):
     '''ASTM structural steel.
@@ -36,13 +36,6 @@ A53= ASTMSteel(240e6,414e6,1.0)
 A992= ASTMSteel(345e6,450e6,1.0)
 A500= ASTMSteel(315e6,400e6,1.0)
 A307= ASTMSteel(245e6,390e6,1.0)
-
-class SectionClassif(enum.IntEnum):
-    '''Classification of sections for local buckling.'''
-    compact= 0
-    noncompact= 1
-    slender= 2
-    too_slender= 3
 
 class ASTMShape(object):
     """Steel shape with ASTM/AISC verification routines."""
@@ -127,7 +120,7 @@ class ASTMShape(object):
         :param Fe: flexural or torsional elastic buckling stress.
         '''
         retval= 0.0
-        if(sectionClassif<SectionClassif.slender):
+        if(sectionClassif<aisc.SectionClassif.slender):
             sr= self.getFlexuralSlendernessRatio(effectiveLengthY, effectiveLengthZ)
             E= self.get('E')
             Fy= self.steelType.fy
@@ -214,6 +207,22 @@ class ASTMShape(object):
             take in to account the lateral buckling effect.'''
         return self.getDesignFlexuralStrength(lateralUnbracedLength= 0.1, Cb= 1.0, majorAxis= True)
 
+    # Shear
+    def getYShearEfficiency(self, sectionClass, Vy):
+        '''Return major axis shear efficiency according to AISC-360-16.
+
+           :param sectionClass: dummy argument used for compatibility.
+        '''
+        return Vy/self.getDesignShearStrength(majorAxis= True)
+    
+    def getZShearEfficiency(self, sectionClass, Vz):
+        '''Return major axis shear efficiency according to AISC-360-16.
+
+           :param sectionClass: dummy argument used for compatibility.
+        '''
+        return Vz/self.getDesignShearStrength(majorAxis= False)
+        
+
     # Combined internal forces
     def getBiaxialBendingEfficiency(self,sectionClassif,Nd,Myd,Mzd,Vyd= 0.0, chiN=1.0, chiLT=1.0):
         '''Return biaxial bending efficiency according to section H1
@@ -242,7 +251,17 @@ class ASTMShape(object):
         else:
             CF= ratioN/2.0+(ratioMz+ratioMy) # equation H1-1b
         return (CF,NcRd,McRdy,McRdz,MvRdz,MbRdz)
-       
+
+    def setupULSControlVars(self,elems,sectionClass= 1, chiN=1.0, chiLT=1.0):
+        '''For each element creates the variables
+           needed to check ultimate limit state criterion to be satisfied.'''
+        super(ASTMShape,self).setupULSControlVars(elems)
+        for e in elems:
+            e.setProp('sectionClass',sectionClass) #Cross section class.
+            e.setProp('chiLT',chiLT) #Lateral torsional buckling reduction factor.
+            e.setProp('chiN',chiN) # Axial strength reduction factor.
+            e.setProp('crossSection',self)
+            
 from materials.sections.structural_shapes import aisc_metric_shapes
 
 class WShape(ASTMShape,aisc_metric_shapes.WShape):

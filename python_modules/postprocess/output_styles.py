@@ -125,6 +125,9 @@ class OutputStyle(object):
         elif(itemToDisp.startswith('epsilon_')):
             fConvUnits= 1.0
             unitDescription= '-'
+        elif(itemToDisp.startswith('chi')): # strength reduction factors
+            fConvUnits= 1.0
+            unitDescription= '-'
         else:
             fConvUnits= self.getForceUnitsScaleFactor()
             unitDescription= self.getForceUnitsDescription()

@@ -16,27 +16,27 @@ from postprocess.xcVtk.fields import vtk_lut_field
 class ColoredDiagram(vtk_lut_field.LUTField):
   ''' Colored diagram of a function over a linear domain (set of 1D 
       elements for example). '''
-  def __init__(self,scale,fUnitConv):
+  def __init__(self,scaleFactor,fUnitConv):
     super(ColoredDiagram,self).__init__(fUnitConv)
     self.vDir= [0,0,1]
-    self.escala= scale
+    self.scaleFactor= scaleFactor
     self.diagram= None
     self.points= None
-    self.escalares= None
+    self.scalars= None
     self.cells= None
 
   def creaEstrucDatosDiagrama(self):
     # Crea las estructuras de datos necesarias para crear el diagrama.
     self.initializeMinMax()
     self.points= vtk.vtkPoints()
-    self.escalares= vtk.vtkDoubleArray()
+    self.scalars= vtk.vtkDoubleArray()
     self.cells= vtk.vtkCellArray()
 
   def resetEstrucDatosDiagrama(self):
     #«Resetea» las estructuras de datos necesarias para crear el diagrama.
     self.initializeMinMax()
     self.points.reset()
-    self.escalares.reset()
+    self.scalars.reset()
     self.cells.reset()
 
 
@@ -53,16 +53,16 @@ class ColoredDiagram(vtk_lut_field.LUTField):
 
     self.updateMinMax(valOrg)
     self.updateMinMax(valDest)
-    org2= org+(valOrg*self.escala)*self.vDir
-    dest2= dest+(valDest*self.escala)*self.vDir
+    org2= org+(valOrg*self.scaleFactor)*self.vDir
+    dest2= dest+(valDest*self.scaleFactor)*self.vDir
     self.points.InsertPoint(offset,org.x,org.y,org.z)
     self.points.InsertPoint(offset+1,org2.x,org2.y,org2.z)
     self.points.InsertPoint(offset+2,dest2.x,dest2.y,dest2.z)
     self.points.InsertPoint(offset+3,dest.x,dest.y,dest.z)
-    self.escalares.InsertValue(offset,valOrg)
-    self.escalares.InsertValue(offset+1,valOrg)
-    self.escalares.InsertValue(offset+2,valDest)
-    self.escalares.InsertValue(offset+3,valDest)
+    self.scalars.InsertValue(offset,valOrg)
+    self.scalars.InsertValue(offset+1,valOrg)
+    self.scalars.InsertValue(offset+2,valDest)
+    self.scalars.InsertValue(offset+3,valDest)
     #self.cells.InsertNextCell([offset,offset+1,offset+2,offset+3])
     self.cells.InsertNextCell(4)
     self.cells.InsertCellPoint(offset)
@@ -101,8 +101,8 @@ class ColoredDiagram(vtk_lut_field.LUTField):
     '''
     self.updateMinMax(valOrg)
     self.updateMinMax(valDest)
-    org2= org+(valOrg*self.escala)*self.vDir
-    dest2= dest+(valDest*self.escala)*self.vDir
+    org2= org+(valOrg*self.scaleFactor)*self.vDir
+    dest2= dest+(valDest*self.scaleFactor)*self.vDir
     ptoRaiz= self.getRaizTramoDiagrama(org,valOrg,dest,valDest)
         
     self.points.InsertPoint(offset,org.x,org.y,org.z)
@@ -111,11 +111,11 @@ class ColoredDiagram(vtk_lut_field.LUTField):
     self.points.InsertPoint(offset+3,dest.x,dest.y,dest.z)
     self.points.InsertPoint(offset+4,dest2.x,dest2.y,dest2.z)
 
-    self.escalares.InsertValue(offset,valOrg)
-    self.escalares.InsertValue(offset+1,valOrg)
-    self.escalares.InsertValue(offset+2,0)
-    self.escalares.InsertValue(offset+3,valDest)
-    self.escalares.InsertValue(offset+4,valDest)
+    self.scalars.InsertValue(offset,valOrg)
+    self.scalars.InsertValue(offset+1,valOrg)
+    self.scalars.InsertValue(offset+2,0)
+    self.scalars.InsertValue(offset+3,valDest)
+    self.scalars.InsertValue(offset+4,valDest)
 
     #self.cells.InsertNextCell([offset,offset+2,offset+1])
     self.cells.InsertNextCell(3)
@@ -154,7 +154,7 @@ class ColoredDiagram(vtk_lut_field.LUTField):
     self.diagram= vtk.vtkPolyData()
     self.diagram.SetPoints(self.points)
     point_data= self.diagram.GetPointData()
-    point_data.SetScalars(self.escalares)
+    point_data.SetScalars(self.scalars)
     self.diagram.SetPolys(self.cells)
 
     self.mapper= vtk.vtkPolyDataMapper()

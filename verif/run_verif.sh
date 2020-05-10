@@ -663,10 +663,17 @@ python tests/rough_calculations/test_hypar.py
 echo "$BLEU" "Verifiying routines for post processing." "$NORMAL"
 python tests/postprocess/test_export_shell_internal_forces.py
 echo "$BLEU" "  limit state checking." "$NORMAL"
-python tests/postprocess/limit_state_checking/test_shell_normal_stresses_uls_checking.py
-python tests/postprocess/limit_state_checking/test_shear_uls_checking.py
-python tests/postprocess/limit_state_checking/test_shear_uls_checking_aci.py
-python tests/postprocess/limit_state_checking/test_shear_uls_checking_ehe08.py
+echo "$BLEU" "    SIA 262 limit state checking." "$NORMAL"
+python tests/postprocess/limit_state_checking/sia262/test_shell_normal_stresses_uls_checking.py
+echo "$BLEU" "    ACI limit state checking." "$NORMAL"
+python tests/postprocess/limit_state_checking/aci/test_shear_uls_checking_aci.py
+echo "$BLEU" "    EHE limit state checking." "$NORMAL"
+python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking.py
+python tests/postprocess/limit_state_checking/ehe08/test_shear_uls_checking_ehe08.py
+echo "$BLEU" "    AISC limit state checking." "$NORMAL"
+python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_01.py
+python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_02.py
+python tests/postprocess/limit_state_checking/aisc/test_uls_checking_aisc_03.py
 
 #VTK tests
 ##python tests/vtk/dibuja_edges.py

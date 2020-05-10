@@ -9,11 +9,21 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega@ciccp.es"
 
+import enum
 import math
 from misc_utils import log_messages as lmsg
 from materials import buckling_base
-import ASTM_materials as astm
+from materials import limit_state_checking_base as lsc
+from postprocess import control_vars as cv
+from postprocess import limit_state_data as lsd
+import xc
 
+class SectionClassif(enum.IntEnum):
+    '''Classification of sections for local buckling.'''
+    compact= 0
+    noncompact= 1
+    slender= 2
+    too_slender= 3
 
 # Unbraced segment ascii art:
 #
@@ -67,7 +77,7 @@ class Member(buckling_base.MemberBase):
     :ivar sectionClassif: classification of the section for local
                           buckling (defaults to compact).
     '''
-    def __init__(self, name, section, unbracedLengthX, unbracedLengthY= None, unbracedLengthZ= None, kx= 1.0, ky= 1.0, kz= 1.0, sectionClassif= astm.SectionClassif.compact, Cb= None, lstLines=None, lstPoints=None):
+    def __init__(self, name, section, unbracedLengthX, unbracedLengthY= None, unbracedLengthZ= None, kx= 1.0, ky= 1.0, kz= 1.0, sectionClassif= SectionClassif.compact, Cb= None, lstLines=None, lstPoints=None):
         ''' Constructor. 
 
         :param name: object name.
@@ -195,4 +205,124 @@ class Member(buckling_base.MemberBase):
         lrfLT= self.getFlexuralStrengthReductionFactor()
 
         return self.shape.getBiaxialBendingEfficiency(sectionClassif= self.sectionClassif, Nd= Nd, Myd= Myd, Mzd= Mzd, Vyd= 0.0, chiN= lrfN, chiLT= lrfLT)
- 
+    
+    def updateReductionFactors(self):
+        '''Update the value of the appropriate reduction factors.'''
+        chiN= self.getCompressiveStrengthReductionFactor()
+        chiLT= self.getFlexuralStrengthReductionFactor()
+        for e in self.elemSet:
+             e.setProp('chiLT',chiLT) # flexural strength reduction factor.
+             e.setProp('chiN',chiN) # compressive strength reduction factor.
+
+    def installULSControlRecorder(self,recorderType, chiN= 1.0, chiLT=1.0):
+        '''Install recorder for verification of ULS criterion.'''
+        prep= self.getPreprocessor()
+        nodes= prep.getNodeHandler
+        domain= prep.getDomain
+        recorder= domain.newRecorder(recorderType,None)
+        if(not self.elemSet):
+            self.createElementSet()
+        eleTags= list()
+        for e in self.elemSet:
+            eleTags.append(e.tag)
+            e.setProp('ULSControlRecorder',recorder)
+        idEleTags= xc.ID(eleTags)
+        recorder.setElements(idEleTags)
+        self.shape.setupULSControlVars(self.elemSet,self.sectionClassif,chiN= chiN, chiLT= chiLT)
+        if(nodes.numDOFs==3):
+            recorder.callbackRecord= controlULSCriterion2D()
+        else:
+            recorder.callbackRecord= controlULSCriterion()
+#        recorder.callbackRestart= "print \"Restart method called.\"" #20181121
+        return recorder
+
+class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
+    '''Object that controls normal stresses limit state.'''
+
+    def __init__(self,limitStateLabel):
+        super(BiaxialBendingNormalStressController,self).__init__(limitStateLabel)
+
+    def initControlVars(self,setCalc):
+        '''Initialize control variables over elements.
+
+        :param setCalc: set of elements to which define control variables
+        '''
+        for e in setCalc.elements:
+            e.setProp(self.limitStateLabel+'Sect1',cv.AISCBiaxialBendingControlVars())
+            e.setProp(self.limitStateLabel+'Sect2',cv.AISCBiaxialBendingControlVars())
+
+    def checkSetFromIntForcFile(self,intForcCombFileName,setCalc=None):
+        '''Launch checking.
+
+        :param intForcCombFileName: name of the file to read the internal 
+               force results
+        :param setCalc: set of elements to check
+        '''
+        intForcItems=lsd.readIntForcesFile(intForcCombFileName,setCalc)
+        internalForcesValues= intForcItems[2]
+        for e in setCalc.elements:
+            sh= e.getProp('crossSection')
+            sc= e.getProp('sectionClass')
+            elIntForc= internalForcesValues[e.tag]
+            for lf in elIntForc:
+                CFtmp,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp= sh.getBiaxialBendingEfficiency(sc,lf.N,lf.My,lf.Mz,lf.Vy,lf.chiN, lf.chiLT)
+                if lf.idSection == 0:
+                    if(CFtmp>e.getProp(self.limitStateLabel+'Sect1').CF):
+                        e.setProp(self.limitStateLabel+'Sect1',cv.AISCBiaxialBendingControlVars('Sects1',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp,lf.chiLT, lf.chiN))
+                else:
+                    if(CFtmp>e.getProp(self.limitStateLabel+'Sect2').CF):
+                        e.setProp(self.limitStateLabel+'Sect2',cv.AISCBiaxialBendingControlVars('Sects2',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp,lf.chiLT, lf.chiN))
+
+class ShearController(lsc.LimitStateControllerBase):
+    '''Object that controls shear limit state.'''
+
+    def __init__(self,limitStateLabel):
+        super(ShearController,self).__init__(limitStateLabel)
+
+    def initControlVars(self,setCalc):
+        '''Initialize control variables over elements.
+
+        :param setCalc: set of elements to which define control variables
+        '''
+        for e in setCalc.elements:
+            e.setProp(self.limitStateLabel+'Sect1',cv.ShearYControlVars())
+            e.setProp(self.limitStateLabel+'Sect2',cv.ShearYControlVars())
+
+    def checkSetFromIntForcFile(self,intForcCombFileName,setCalc=None):
+        '''Launch checking.
+
+        :param setCalc: set of elements to check
+        '''
+        intForcItems=lsd.readIntForcesFile(intForcCombFileName,setCalc)
+        internalForcesValues=intForcItems[2]
+        for e in setCalc.elements:
+            sh=e.getProp('crossSection')
+            sc=e.getProp('sectionClass')
+            elIntForc=internalForcesValues[e.tag]
+            for lf in elIntForc:
+                CFtmp= sh.getYShearEfficiency(sc,lf.Vy)
+                if lf.idSection == 0:
+                    if (CFtmp>e.getProp(self.limitStateLabel+'Sect1').CF):
+                        e.setProp(self.limitStateLabel+'Sect1',cv.ShearYControlVars('Sects1',lf.idComb,CFtmp,lf.Vy))
+                else:
+                    if (CFtmp>e.getProp(self.limitStateLabel+'Sect2').CF):
+                        e.setProp(self.limitStateLabel+'Sect2',cv.ShearYControlVars('Sects2',lf.idComb,CFtmp,lf.Vy))
+
+                        
+def controlULSCriterion():
+  return '''recorder= self.getProp('ULSControlRecorder')
+nmbComb= recorder.getCurrentCombinationName
+self.getResistingForce()
+crossSection= self.getProp('crossSection')
+crossSection.checkBiaxialBendingForElement(self,nmbComb)
+crossSection.checkYShearForElement(self,nmbComb)
+crossSection.checkZShearForElement(self,nmbComb)'''
+
+def controlULSCriterion2D():
+  return '''recorder= self.getProp('ULSControlRecorder')
+nmbComb= recorder.getCurrentCombinationName
+self.getResistingForce()
+crossSection= self.getProp('crossSection')
+crossSection.checkUniaxialBendingForElement(self,nmbComb)
+crossSection.checkYShearForElement(self,nmbComb)'''
+

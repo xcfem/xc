@@ -8,6 +8,7 @@ __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
 import math
+from misc_utils import log_messages as lmsg
 
 class CrossSectionInternalForces:
   def __init__(self,N= 0.0,Vy= 0.0,Vz= 0.0,T= 0.0,My= 0.0,Mz= 0.0):
@@ -79,15 +80,37 @@ class CrossSectionInternalForces:
     retval+= self.Mz*self.Mz
     return retval
   
+  def getDict(self):
+    '''returns a dictionary whith the values of the internal forces.'''
+    retval= dict()
+    retval['N']= self.N; retval['Vy']= self.Vy; retval['Vz']= self.Vz
+    retval['T']= self.T; retval['My']= self.My; retval['Mz']= self.Mz
+    return retval
+  
+  def setFromDict(self,dct):
+    '''Sets the internal forces from the dictionary argument.'''
+    self.N= dct['N']
+    self.Vy= dct['Vy']
+    self.Vz= dct['Vz']
+    self.T= dct['T']
+    self.My= dct['My']
+    self.Mz= dct['Mz']
+    if('chiLT' in dct.keys()):
+        self.chiLT= dct['chiLT']
+    if('chiN' in dct.keys()):
+        self.chiN= dct['chiN']
+      
   def getCSVString(self):
     '''returns a comma separated values string that represents the
        internal forces.'''
+    lmsg.log('DEPRECATED')
     retval= str(self.N)+", "+str(self.Vy)+", "+str(self.Vz)+", "
     retval+= str(self.T)+", "+str(self.My)+", "+str(self.Mz)
     return retval
 
   def setFromCSVString(self,csvStr,offset):
     '''Sets the internal forces from a CSV string.'''
+    #lmsg.log('DEPRECATED')
     self.N= eval(csvStr[0+offset])
     self.Vy= eval(csvStr[1+offset])
     self.Vz= eval(csvStr[2+offset])
@@ -102,7 +125,7 @@ class CrossSectionInternalForces:
     return [self.N,self.Vy,self.Vz,self.T,self.My,self.Mz]
 
   def __str__(self):
-    return self.getCSVString()
+    return str(self.getDict())
 
 def transformInternalForces(iForces,theta):
   '''Computes internal forces in a system rotated theta
@@ -140,34 +163,55 @@ class ShellMaterialInternalForces:
     self.q23= q23
 
   def setFromAverageInShellElement(self,element,fConv= 1.0):
-    '''Extracts the average internal forces from the element.'''
-    element.getResistingForce()
-    physProp= element.getPhysicalProperties
-    self.n1= physProp.getMeanGeneralizedStressByName("n1")*fConv
-    self.n2= physProp.getMeanGeneralizedStressByName("n2")*fConv
-    self.n12= physProp.getMeanGeneralizedStressByName("n12")*fConv
-    self.m1= physProp.getMeanGeneralizedStressByName("m1")*fConv
-    self.m2= physProp.getMeanGeneralizedStressByName("m2")*fConv
-    self.m12= physProp.getMeanGeneralizedStressByName("m12")*fConv
-    self.q13= physProp.getMeanGeneralizedStressByName("q13")*fConv
-    self.q23= physProp.getMeanGeneralizedStressByName("q23")*fConv
-    if(element.hasProp('theta')):
-      theta= element.getProp('theta')
-      self.transform(theta)
+      '''Extracts the average internal forces from the element.'''
+      element.getResistingForce()
+      physProp= element.getPhysicalProperties
+      self.n1= physProp.getMeanGeneralizedStressByName("n1")*fConv
+      self.n2= physProp.getMeanGeneralizedStressByName("n2")*fConv
+      self.n12= physProp.getMeanGeneralizedStressByName("n12")*fConv
+      self.m1= physProp.getMeanGeneralizedStressByName("m1")*fConv
+      self.m2= physProp.getMeanGeneralizedStressByName("m2")*fConv
+      self.m12= physProp.getMeanGeneralizedStressByName("m12")*fConv
+      self.q13= physProp.getMeanGeneralizedStressByName("q13")*fConv
+      self.q23= physProp.getMeanGeneralizedStressByName("q23")*fConv
+      if(element.hasProp('theta')):
+          theta= element.getProp('theta')
+          self.transform(theta)
    
   def transform(self,theta):
-    '''Calculates the components for a reference system rotated 
-       the angle being passed as parameter.'''
-    N= transformInternalForces([self.n1,self.n2,self.n12],theta)
-    self.n1= N[0]; self.n2= N[1]; self.n12= N[2]
-    M= transformInternalForces([self.m1,self.m2,self.m12],theta)
-    self.m1= M[0]; self.m2= M[1]; self.m12= M[2]
-    Q= transformInternalForces([self.q13,self.q23,0.0],theta)
-    self.q13= Q[0]; self.q23= Q[1]
+      '''Calculates the components for a reference system rotated 
+         the angle being passed as parameter.'''
+      N= transformInternalForces([self.n1,self.n2,self.n12],theta)
+      self.n1= N[0]; self.n2= N[1]; self.n12= N[2]
+      M= transformInternalForces([self.m1,self.m2,self.m12],theta)
+      self.m1= M[0]; self.m2= M[1]; self.m12= M[2]
+      Q= transformInternalForces([self.q13,self.q23,0.0],theta)
+      self.q13= Q[0]; self.q23= Q[1]
 
+  def getDict(self):
+    '''returns a dictionary whith the values of the internal forces.'''
+    retval= dict()
+    retval['n1']= self.n1; retval['n2']= self.n2; retval['n12']= self.n12
+    retval['m1']= self.m1; retval['m2']= self.m2; retval['m12']= self.m12
+    retval['q13']= self.q13; retval['q23']= self.q23
+    return retval
+  
+  def setFromDict(self,dct):
+    '''Sets the internal forces from the dictionary argument.'''
+    self.n1= dct['n1']
+    self.n2= dct['n2']
+    self.n12= dct['n12']
+    self.m1= dct['m1']
+    self.m2= dct['m2']
+    self.m12= dct['m12']
+    self.q13= dct['q13']
+    self.q23= dct['q23']
+
+    
   def getCSVString(self):
     '''returns a comma separated values string that represents the
        internal forces.'''
+    lmsg.log('DEPRECATED')
     retval= str(self.n1)+", "+str(self.n2)+", "+str(self.n12)+", "
     retval+= str(self.m1)+", "+str(self.m2)+", "+str(self.m12)+", "
     retval+= str(self.q13)+", "+str(self.q23)
@@ -175,6 +219,7 @@ class ShellMaterialInternalForces:
 
   def setFromCSVString(self,csvStr,offset):
     '''Sets the internal forces from a CSV string.'''
+    #lmsg.log('DEPRECATED')
     self.n1= eval(csvStr[0+offset])
     self.n2= eval(csvStr[1+offset])
     self.n12= eval(csvStr[2+offset])

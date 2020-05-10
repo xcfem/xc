@@ -572,9 +572,7 @@ class OutputHandler(object):
         if(setToDisplay==None):
             setToDisplay= self.modelSpace.getTotalSet()
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
-        lmsg.warning("Auto scale not implemented yet.")
-        LrefModSize= setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to autoscale)
-        scaleFactor= LrefModSize/unitConversionFactor 
+        scaleFactor= 1.0
         diagram= epd.ElementPropertyDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDisplay], propertyName= itemToDisp)
         diagram.addDiagram()
         defDisplay= vtk_FE_graphic.RecordDefDisplayEF()

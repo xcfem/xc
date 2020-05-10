@@ -433,13 +433,12 @@ class SSBiaxialBendingControlVars(BiaxialBendingControlVars):
     :ivar N:        axial force (defaults to 0.0)
     :ivar My:       bending moment about Y (weak) axis (defaults to 0.0)
     :ivar Mz:       bending moment about Z (strong) axis (defaults to 0.0)
-    :ivar Ncrd:     design resistance to axial compression
-    :ivar McRdy:    design moment resistance about Y (weak) axis
-    :ivar McRdz:    design moment resistance about Z (strong) axis
-    :ivar MvRdz:    reduced design moment resistance about Z (strong) axis for shear interaction
-    :ivar MbRdz:    reduced design moment resistance about Z (strong) axis for lateral-torsional bucking
+    :ivar Ncrd:     design strength to axial compression
+    :ivar McRdy:    design moment strength about Y (weak) axis
+    :ivar McRdz:    design moment strength about Z (strong) axis
+    :ivar MvRdz:    reduced design moment strength about Z (strong) axis for shear interaction
+    :ivar MbRdz:    reduced design moment strength about Z (strong) axis for lateral-torsional bucking
     :ivar chiLT:    reduction factor for lateral-torsional buckling (defaults to 1)
-
     '''
     def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0,Mz= 0.0,Ncrd=0.0,McRdy=0.0,McRdz=0.0,MvRdz=0.0,MbRdz=0.0,chiLT=1.0):
         super(SSBiaxialBendingControlVars,self).__init__(idSection,combName,CF,N,My,Mz)
@@ -467,7 +466,30 @@ class SSBiaxialBendingControlVars(BiaxialBendingControlVars):
         retval+= ',MbRdz= ' + str(self.MbRdz*factor)
         retval+= ',chiLT= ' + str(self.chiLT)
         return retval
-    
+
+class AISCBiaxialBendingControlVars(SSBiaxialBendingControlVars):
+    '''Control variables for biaxial bending normal stresses LS 
+    verification in steel-shape elements according to AISC.
+
+    :ivar chiN:    reduction factor for compressive strength (defaults to 1)
+    '''
+    def __init__(self,idSection= 'nil',combName= 'nil',CF= -1.0,N= 0.0,My= 0.0,Mz= 0.0,Ncrd=0.0,McRdy=0.0,McRdz=0.0,MvRdz=0.0,MbRdz=0.0, chiLT=1.0, chiN= 1.0):
+        super(AISCBiaxialBendingControlVars,self).__init__(idSection,combName,CF,N,My,Mz,Ncrd=Ncrd,McRdy=McRdy,McRdz=McRdz,MvRdz=MvRdz,MbRdz=MbRdz, chiLT=chiLT)
+        self.chiN=chiN
+        
+    def getLaTeXFields(self,factor= 1e-3):
+        ''' Returns a string with the intermediate fields of the LaTeX string.
+
+        :param factor: factor for units (default 1e-3 -> kN)'''
+        retval= super(SSBiaxialBendingControlVars,self).getLaTeXFields(factor)+" & "+fmt.Esf.format(self.chiN)
+        return retval
+
+    def getStrArguments(self,factor):
+        '''Returns a string for a 'copy' (kind of) constructor.'''
+        retval= super(SSBiaxialBendingControlVars,self).getStrArguments(factor)
+        retval+= ',chiN= ' + str(self.chiN)
+        return retval
+
     
 class RCShearControlVars(BiaxialBendingControlVars):
     '''Control variables for shear limit state verification in reinforced concrete elements.
@@ -482,9 +504,9 @@ class RCShearControlVars(BiaxialBendingControlVars):
     :ivar Vy:       shear force parallel to the y axis
     :ivar Vz:       shear force parallel to the z axis
     :ivar theta:    angle between the concrete compression struts and the beam axis
-    :ivar Vcu:      Vcu component of the shear resistance (defined in the codes)
-    :ivar Vsu:      Vsu component of the shear resistance (defined in the codes)
-    :ivar Vu:       shear resistance
+    :ivar Vcu:      Vcu component of the shear strength (defined in the codes)
+    :ivar Vsu:      Vsu component of the shear strength (defined in the codes)
+    :ivar Vu:       shear strength
 
     '''
     def __init__(self,idSection=-1,combName= 'nil',CF= -1.0,N= 0.0, My= 0.0, Mz= 0.0, Mu= 0.0, Vy= 0.0, Vz= 0.0, theta= 0.0, Vcu= 0.0, Vsu= 0.0, Vu= 0.0):
@@ -493,9 +515,9 @@ class RCShearControlVars(BiaxialBendingControlVars):
         self.Vy= Vy #Shear parallel to the y axis.
         self.Vz= Vz #Shear parallel to the z axis.
         self.theta= theta #Strut angle.
-        self.Vcu= Vcu #Vcu component of the shear resistance (defined in the codes).
-        self.Vsu= Vsu #Vsu component of the shear resistance (defined in the codes).
-        self.Vu= Vu # Shear resistance.
+        self.Vcu= Vcu #Vcu component of the shear strength (defined in the codes).
+        self.Vsu= Vsu #Vsu component of the shear strength (defined in the codes).
+        self.Vu= Vu # Shear strength.
 
     def getLaTeXFields(self,factor= 1e-3):
         ''' Returns a string with the intermediate fields of the LaTeX string.

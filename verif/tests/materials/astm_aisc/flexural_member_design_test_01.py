@@ -7,6 +7,12 @@
 from __future__ import division
 from __future__ import print_function
 
+__author__= "Ana Ortega (AO_O) and Luis C. Pérez Tato (LCPT)"
+__copyright__= "Copyright 2020, AO_O and LCPT"
+__license__= "GPL"
+__version__= "3.0"
+__email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
+
 import xc_base
 import geom
 import xc
@@ -130,6 +136,8 @@ beam=  aisc.Member(l1.name, shape, unbracedLengthX= 0.5, unbracedLengthY= span, 
 Mu= beam.getDesignFlexuralStrength()
 MuRef= 0.9*421e3*kip2kN*foot2meter
 ratio3= abs((Mu-MuRef)/MuRef)
+CF= MMax/Mu
+
 
 '''
 print(refD1)
@@ -141,6 +149,7 @@ print('ratio2= ',ratio2)
 print('Mu= ',Mu/1e3,' kN m(',Mu/1e3*kN2kips/foot2meter,' kip-ft)')
 print('MuRef= ',MuRef/1e3,' kN m(',MuRef/1e3*kN2kips/foot2meter,' kip-ft)')
 print('ratio3= ',ratio3)
+print('CF=', CF)
 '''
 
 import os

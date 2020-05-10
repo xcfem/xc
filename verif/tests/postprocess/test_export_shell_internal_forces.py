@@ -28,6 +28,7 @@ from solution import predefined_solutions
 from model import predefined_spaces
 from materials import typical_materials
 from materials.sections import internal_forces
+import json
 
 # Problem type
 feProblem= xc.FEProblem()
@@ -105,39 +106,49 @@ f1= preprocessor.getSets.getSet("f1")
 from postprocess.reports import export_internal_forces
 setTotal= preprocessor.getSets["total"]
 fName= "/tmp/test_export_shell_internal_forces.txt"
-f= open(fName,"w")
-export_internal_forces.exportInternalForces("test",setTotal.getElements,f)
-f.close()
+internalForcesDict=  export_internal_forces.getInternalForcesDict("test",setTotal.getElements)
+with open(fName, 'w') as outfile:
+    json.dump(internalForcesDict, outfile)
 
+average= [internal_forces.CrossSectionInternalForces(),internal_forces.CrossSectionInternalForces()]
+nCols= len(average)
 
-mean= [internal_forces.CrossSectionInternalForces(),internal_forces.CrossSectionInternalForces()]
-nCols= len(mean)
+with open(fName) as json_file:
+    combInternalForcesDict= json.load(json_file)
+json_file.close()
+
 nRows= 0
-import csv
-cr = csv.reader(open(fName,"rb"))
-for row in cr:
-  nRows+= 1
-  sectionIndex= eval(row[2])
-  mean[sectionIndex]+= internal_forces.CrossSectionInternalForces(eval(row[3]),eval(row[4]),eval(row[5]),eval(row[6]),eval(row[7]),eval(row[8]))
+for key in combInternalForcesDict.keys():
+    elements= combInternalForcesDict[key]
+    for elemId in elements.keys():
+        elementData= elements[elemId]
+        internalForces= elementData['internalForces']
+        for k in internalForces.keys():
+            nRows+= 1
+            sectionIndex= eval(k)
+            crossSectionInternalForces= internal_forces.CrossSectionInternalForces()
+            forces= internalForces[k]
+            crossSectionInternalForces.setFromDict(forces)
+            average[sectionIndex]+= crossSectionInternalForces
 
-for m in mean:
+for m in average:
   m*= 1.0/nRows
 
-meanRef= [internal_forces.CrossSectionInternalForces(0.0, -1.4141789118e-08, 0.0, 0.0, -0.377847769601, 0.0),internal_forces.CrossSectionInternalForces(0.0, 3.746624204e-08, 0.0, 0.0, -1.6862614343, 0.0)]
-#internal_forces.ShellMaterialInternalForces(0.0,0.0,0.0,-0.755991356310675,-2.4972837939920614,-1.4220260169048315e-13, -3.033006243120112e-08).getWoodArmer()
+averageRef= [internal_forces.CrossSectionInternalForces(0.0, -1.4141789118e-08, 0.0, 0.0, -0.377847769601, 0.0),internal_forces.CrossSectionInternalForces(0.0, 3.746624204e-08, 0.0, 0.0, -1.6862614343, 0.0)]
 
 ratio1= 0.0
 for i in range(0,2):
-  ratio1+= (meanRef[i]-mean[i]).getModulus()
+  ratio1+= (averageRef[i]-average[i]).getModulus()
 
-
-# print "mean[0]= ", mean[0]
-# print "meanRef[0]= ", meanRef[0]
-# print "diff[0]= ", mean[0]-meanRef[0]
-# print "mean[1]= ", mean[1]
-# print "meanRef[1]= ", meanRef[1]
-# print "diff[1]= ", mean[1]-meanRef[1]
-# print "ratio1= ",ratio1
+'''
+print "average[0]= ", average[0]
+print "averageRef[0]= ", averageRef[0]
+print "diff[0]= ", average[0]-averageRef[0]
+print "average[1]= ", average[1]
+print "averageRef[1]= ", averageRef[1]
+print "diff[1]= ", average[1]-averageRef[1]
+print "ratio1= ",ratio1
+'''
 
 import os
 from misc_utils import log_messages as lmsg

@@ -165,14 +165,14 @@ class PhantomModel(object):
         #Load case definition
         mapCombs= {}
         for comb in self.idCombs:
-          mapCombs[comb]= casos.newLoadPattern("default",comb)
+            mapCombs[comb]= casos.newLoadPattern("default",comb)
 
         for key in self.internalForcesValues:
-          internalForcesElem= self.internalForcesValues[key]
-          for iforce in internalForcesElem:
-            lp= mapCombs[iforce.idComb]
-            nodeTag= self.tagsNodesToLoad[iforce.tagElem][iforce.idSection]
-            lp.newNodalLoad(nodeTag,xc.Vector(iforce.getComponents()))
+            internalForcesElem= self.internalForcesValues[key]
+            for iforce in internalForcesElem:
+                lp= mapCombs[iforce.idComb]
+                nodeTag= self.tagsNodesToLoad[iforce.tagElem][iforce.idSection]
+                lp.newNodalLoad(nodeTag,xc.Vector(iforce.getComponents()))
 
     def build(self,intForcCombFileName,controller,setCalc=None):
         '''Builds the phantom model from the data read from the file.
