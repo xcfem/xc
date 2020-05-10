@@ -238,10 +238,10 @@ int XC::beam2d02::addInertiaLoadToUnbalance(const XC::Vector &accel)
 const XC::Vector &XC::beam2d02::getResistingForce(void) const
   {
     // compute the residual Res = k*uTrial
-    const XC::Vector &v = theCoordTransf->getBasicTrialDisp();
+    const Vector &v = theCoordTransf->getBasicTrialDisp();
     q.addMatrixVector(0.0,Kd,v,1.0);
 
-    static XC::Vector uniLoad(2);
+    static Vector uniLoad(2);
 
     rForce = theCoordTransf->getGlobalResistingForce(q, uniLoad);
 
