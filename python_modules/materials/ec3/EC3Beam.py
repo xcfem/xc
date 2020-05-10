@@ -24,7 +24,8 @@ class EC3Beam(buckling_base.MemberBase):
           (defaults to 1).
     :ivar supportCoefs: instance of EC3_limit_state_checking.SupportCoefficients
           that wraps the support coefficients: ky, kw, k1 and k2. where ky is 
-          the lateral bending coefficient, kw the warping coefficient,  k1 and            the warping AND lateral bending coefficients at first and last ends 
+          the lateral bending coefficient, kw the warping coefficient,  k1 and
+          the warping AND lateral bending coefficients at first and last ends 
           respectively (1.0 => free,  0.5 => prevented). 
           (Defaults to ky= 1.0, kw= 1.0, k1= 1.0, k2= 1.0)
     :ivar typo: 'rolled' or 'welded' (defaults to rolled)

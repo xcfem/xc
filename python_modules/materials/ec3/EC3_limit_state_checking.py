@@ -338,7 +338,7 @@ class ShearController(lsc.LimitStateControllerBase):
 
 
 # Routines to install in recorder  to execute in every commit to check
-# eurocode 3 criterions.
+# eurocode-3 criterions.
 
 def controlBiaxialBendingEfficiency():
   '''Code to execute in every commit to check stress criterion (bars in 3D problems).'''
