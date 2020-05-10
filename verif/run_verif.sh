@@ -63,8 +63,6 @@ python tests/elements/crd_transf/test_element_axis_03.py
 python tests/elements/crd_transf/test_element_point_01.py
 python tests/elements/crd_transf/test_crd_transf2d_01.py
 python tests/elements/crd_transf/test_crd_transf3d_01.py
-python tests/elements/crd_transf/test_pdelta_01.py
-python tests/elements/crd_transf/test_pdelta_02.py
 echo "$BLEU" "  Beam column tests." "$NORMAL"
 echo "$BLEU" "    Elastic beam-column 2D tests." "$NORMAL"
 python tests/elements/beam_column/elastic_beam2d_sign_criteria_01.py
@@ -216,6 +214,11 @@ python tests/solution/eigenvalues/modal_analysis_test_04.py
 python tests/solution/eigenvalues/modal_analysis_test_05.py
 python tests/solution/eigenvalues/test_cqc_01.py
 python tests/solution/eigenvalues/test_band_arpackpp_solver_01.py
+
+## Eigenvalues.
+echo "$BLEU" "  PDelta solution tests." "$NORMAL"
+python tests/solution/p_delta/test_pdelta_01.py
+python tests/solution/p_delta/test_pdelta_02.py
 
 ## Time history.
 echo "$BLEU" "  Time history solution tests." "$NORMAL"
