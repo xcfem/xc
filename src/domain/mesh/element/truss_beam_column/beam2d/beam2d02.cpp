@@ -118,8 +118,8 @@ void XC::beam2d02::setDomain(Domain *theDomain)
 
     // determine length and direction cosines
     double dx,dy;
-    const XC::Vector &end1Crd = theNodes[0]->getCrds();
-    const XC::Vector &end2Crd = theNodes[1]->getCrds();
+    const Vector &end1Crd = theNodes[0]->getCrds();
+    const Vector &end2Crd = theNodes[1]->getCrds();
 
     dx = end2Crd(0)-end1Crd(0);
     dy = end2Crd(1)-end1Crd(1);
