@@ -117,7 +117,8 @@ void XC::NormalRV::Print(std::ostream &s, int flag) const
 
 double XC::NormalRV::getPDFvalue(double rvValue)
   {
-    return 1 / sqrt ( 2.0 * M_PI ) * exp ( - 0.5 * pow ( ( ( rvValue - mju ) / sigma ), 2.0 ) );
+    const double oneOverSigmaRootTwoPi = 1.0/(sigma * sqrt(2.0*M_PI));
+    return oneOverSigmaRootTwoPi*exp(-0.5*pow(((rvValue - mju)/sigma),2.0));
   }
 
 
