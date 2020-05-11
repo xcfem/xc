@@ -13,7 +13,6 @@ __email__= " ana.Ortega.Ort@gmail.com, l.pereztato@gmail.com"
 import vtk
 from misc_utils import log_messages as lmsg
 from postprocess.xcVtk.fields import vector_field_data as vfd
-import zlib
 
 class DirectionFieldData(vfd.VectorFieldData):
   '''Directions (modulus doesn't matters) Vectors defined at points.'''
@@ -39,9 +38,6 @@ class DirectionFieldData(vfd.VectorFieldData):
     self.mapper.SetColorModeToMapScalars()
     self.mapper.ScalarVisibilityOn()
     self.mapper.SetScalarRange(self.lengths.GetRange())
-    if(len(self.lengthsName)>80):
-      self.lengthsName= zlib.compress(self.lengthsName)
-      lmsg.log('lengthsName string compressed to avoid buffer overflow.')
     self.mapper.SelectColorArray(self.lengthsName)
     self.mapper.SetLookupTable(self.lookupTable)
     return self.mapper

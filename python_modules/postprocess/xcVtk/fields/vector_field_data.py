@@ -10,6 +10,7 @@ __email__= "l.pereztato@ciccp.es, ana.ortega@ciccp.es "
 '''Data to represent field vector in VTK.'''
 
 import math
+import zlib
 import vtk
 from misc_utils import log_messages as lmsg
 from postprocess.xcVtk.fields import field_base as fb
@@ -35,86 +36,99 @@ class VectorFieldData(object):
   def getNumberOfTuples(self):
     return self.vectors.GetNumberOfTuples()
 
+  def getLengthsName(self):
+      '''Return a suitable name for the vtkDoubleArray
+         object that contains the vector lengths.'''
+      retval= self.name
+      if(len(retval)>=70):
+          lmsg.log('lengthsName string compressed to avoid buffer overflow.')
+          retval= zlib.compress(retval)
+          if(len(retval)>=70):
+              lmsg.log('lengthsName string truncated to avoid buffer overflow.')
+              retval= retval[:70]
+      retval+= 'Lengths'
+      return retval
+
   def calculateLengths(self,fUnitConv= 1.0):
-    '''
-    Lengths of the vectors.
-    Parameters:
-      fUnitConv: unit conversion scale factor i.e. kN -> 1e-3.
-    '''
-    self.lengths= vtk.vtkDoubleArray()
-    self.lengthsName= self.name+'Lengths'
-    self.lengths.SetName(self.lengthsName)
-    sz= self.getNumberOfTuples()
-    if(sz):
-      self.lengths.SetNumberOfValues(sz)
-      for i in range(0,sz):
-        v= self.vectors.GetTuple(i)
-        l= math.sqrt(v[0]*v[0]+v[1]*v[1]+v[2]*v[2])*fUnitConv
-        self.lengths.SetValue(i,l)
-    else:
-      lmsg.warning('VectorFieldData.calculateLengths: no vectors defined.')
-    return self.lengths
+      '''
+      Lengths of the vectors.
+
+      :param  fUnitConv: unit conversion scale factor i.e. kN -> 1e-3.
+      '''
+      self.lengths= vtk.vtkDoubleArray()
+      self.lengthsName= self.getLengthsName()
+      self.lengths.SetName(self.lengthsName)
+      sz= self.getNumberOfTuples()
+      if(sz):
+        self.lengths.SetNumberOfValues(sz)
+        for i in range(0,sz):
+          v= self.vectors.GetTuple(i)
+          l= math.sqrt(v[0]*v[0]+v[1]*v[1]+v[2]*v[2])*fUnitConv
+          self.lengths.SetValue(i,l)
+      else:
+        lmsg.warning('VectorFieldData.calculateLengths: no vectors defined.')
+      return self.lengths
 
   def insertNextVector(self,vx,vy,vz):
-    self.vectors.InsertNextTuple3(vx,vy,vz)
+      self.vectors.InsertNextTuple3(vx,vy,vz)
   
   def insertNextPair(self,px,py,pz,vx,vy,vz,fUnitConv= 1.0,pushing= False):
-    '''Inserts a point in the collection.
-       Parameters:
-         px,py,pz: coordinates of the point.
-         vx,vy,vz: coordinates of the vector.
-         pushing: true: arrow ends in the point.
-                  false: arrow starts in the point.
-    '''
-    factor= fUnitConv*self.scaleFactor
-    if(pushing):
-      self.points.InsertNextPoint(px-vx*factor,py-vy*factor,pz-vz*factor)
-    else:
-      self.points.InsertNextPoint(px,py,pz)
+      '''Inserts a point in the collection.
+         Parameters:
+           px,py,pz: coordinates of the point.
+           vx,vy,vz: coordinates of the vector.
+           pushing: true: arrow ends in the point.
+                    false: arrow starts in the point.
+      '''
+      factor= fUnitConv*self.scaleFactor
+      if(pushing):
+        self.points.InsertNextPoint(px-vx*factor,py-vy*factor,pz-vz*factor)
+      else:
+        self.points.InsertNextPoint(px,py,pz)
 
   def getPolydata(self,fUnitConv= 1.0):
-    retval= vtk.vtkPolyData()
-    retval.SetPoints(self.points)
-    sz= self.getNumberOfTuples()
-    if(sz>0):
-      retval.GetPointData().AddArray(self.vectors)
-      self.calculateLengths(fUnitConv)
-      retval.GetPointData().AddArray(self.lengths)
-    else:
-      lmsg.warning('VectorFieldData.getPolydata: no vectors.')
-    return retval
+      retval= vtk.vtkPolyData()
+      retval.SetPoints(self.points)
+      sz= self.getNumberOfTuples()
+      if(sz>0):
+        retval.GetPointData().AddArray(self.vectors)
+        self.calculateLengths(fUnitConv)
+        retval.GetPointData().AddArray(self.lengths)
+      else:
+        lmsg.warning('VectorFieldData.getPolydata: no vectors.')
+      return retval
 
   def setupGlyph(self,fUnitConv= 1.0,symType=vtk.vtkArrowSource()):
-    self.polydata= self.getPolydata(fUnitConv)
-    # Generate the arrow for the glyphs
-    self.glyph = vtk.vtkGlyph3D()
-    self.glyph.SetInputData(self.polydata)
-    self.glyph.SetSourceConnection(symType.GetOutputPort())
-    self.glyph.ScalingOn()
-    self.glyph.SetScaleModeToScaleByScalar()
-    self.glyph.SetVectorModeToUseVector()
-    self.glyph.OrientOn()
-    # Tell the filter to "clamp" the scalar range
-    #self.glyph.ClampingOn()  
-    # Set the overall (multiplicative) scaling factor
-    self.glyph.SetScaleFactor(self.scaleFactor)
+      self.polydata= self.getPolydata(fUnitConv)
+      # Generate the arrow for the glyphs
+      self.glyph = vtk.vtkGlyph3D()
+      self.glyph.SetInputData(self.polydata)
+      self.glyph.SetSourceConnection(symType.GetOutputPort())
+      self.glyph.ScalingOn()
+      self.glyph.SetScaleModeToScaleByScalar()
+      self.glyph.SetVectorModeToUseVector()
+      self.glyph.OrientOn()
+      # Tell the filter to "clamp" the scalar range
+      #self.glyph.ClampingOn()  
+      # Set the overall (multiplicative) scaling factor
+      self.glyph.SetScaleFactor(self.scaleFactor)
 
-    # Set the Range to "clamp" the data to 
-    #   -- see equations above for nonintuitive definition of "clamping"
-    # The fact that I'm setting the minimum value of the range below
-    #   the minimum of my data (real min=0.0) with the equations above
-    #   forces a minimum non-zero glyph size.
+      # Set the Range to "clamp" the data to 
+      #   -- see equations above for nonintuitive definition of "clamping"
+      # The fact that I'm setting the minimum value of the range below
+      #   the minimum of my data (real min=0.0) with the equations above
+      #   forces a minimum non-zero glyph size.
 
-    #self.glyph.SetRange(-10, 10)    # Change these values to see effect on cone sizes
+      #self.glyph.SetRange(-10, 10)    # Change these values to see effect on cone sizes
 
-    # Tell glyph which attribute arrays to use for what
-    self.glyph.SetInputArrayToProcess(0,0,0,0,self.lengthsName)	# scalars
-    self.glyph.SetInputArrayToProcess(1,0,0,0,self.vectorsName) # vectors
-    # self.glyph.SetInputArrayToProcess(2,0,0,0,'nothing')	# normals
-    #self.glyph.SetInputArrayToProcess(3,0,0,0,self.lengthsName) # colors
+      # Tell glyph which attribute arrays to use for what
+      self.glyph.SetInputArrayToProcess(0,0,0,0,self.lengthsName)	# scalars
+      self.glyph.SetInputArrayToProcess(1,0,0,0,self.vectorsName) # vectors
+      # self.glyph.SetInputArrayToProcess(2,0,0,0,'nothing')	# normals
+      #self.glyph.SetInputArrayToProcess(3,0,0,0,self.lengthsName) # colors
 
-    # Calling update because I'm going to use the scalar range to set the color map range
-    self.glyph.Update()
+      # Calling update because I'm going to use the scalar range to set the color map range
+      self.glyph.Update()
 
 
 
