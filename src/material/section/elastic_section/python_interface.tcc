@@ -32,7 +32,7 @@ class_<XC::BaseElasticSection1d, bases<XC::BaseElasticSection>, boost::noncopyab
   ;
 
 class_<XC::ElasticSection1d, bases<XC::BaseElasticSection1d>, boost::noncopyable >("ElasticSection1d")
-  .def("getStress", &XC::ElasticSection1d::getStress,"Material density.")
+  .def("getStress", &XC::ElasticSection1d::getStress,"Material stress.")
   ;
 
 const XC::CrossSectionProperties2d &(XC::BaseElasticSection2d::*getCrossSectionProperties2d)(void)const= &XC::BaseElasticSection2d::getCrossSectionProperties;
