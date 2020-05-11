@@ -68,8 +68,6 @@ class ProtoTruss: public Element1D
 
   public:
     ProtoTruss(int tag, int classTag,int Nd1,int Nd2,int ndof,int dimSpace);
-    ProtoTruss(const ProtoTruss &);
-    ProtoTruss &operator=(const ProtoTruss &);
 
     virtual const Material *getMaterial(void) const= 0;
     virtual Material *getMaterial(void)= 0;
