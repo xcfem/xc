@@ -282,34 +282,36 @@ int XC::CorotTrussSection::update(void)
 
            // Update offsets in basic system due to nodal displacements
         int i;
-    for(i = 0; i < getNumDIM(); i++) {
+    for(i = 0; i < getNumDIM(); i++)
+      {
         d21[0] += R(0,i)*(end2Disp(i)-end1Disp(i));
         d21[1] += R(1,i)*(end2Disp(i)-end1Disp(i));
         d21[2] += R(2,i)*(end2Disp(i)-end1Disp(i));
-    }
+      }
 
-        // Compute new length
-        Ln = d21[0]*d21[0] + d21[1]*d21[1] + d21[2]*d21[2];
-        Ln = sqrt(Ln);
+    // Compute new length
+    Ln = d21[0]*d21[0] + d21[1]*d21[1] + d21[2]*d21[2];
+    Ln = sqrt(Ln);
 
-        // Compute engineering strain
-        double strain = (Ln-Lo)/Lo;
+    // Compute engineering strain
+    double strain = (Ln-Lo)/Lo;
 
-        int order = theSection->getOrder();
-        const XC::ID &code = theSection->getType();
+    int order= theSection->getOrder();
+    const ID &code = theSection->getType();
 
-        static double data[10];
-        Vector e(data, order);
-        for(i = 0; i < order; i++) {
-                if(code(i) == SECTION_RESPONSE_P)
-                        e(i) = strain;
-                else
-                        e(i) = 0.0;
-        }
+    static double data[10];
+    Vector e(data, order);
+    for(i = 0; i < order; i++)
+      {
+	if(code(i) == SECTION_RESPONSE_P)
+	  e(i)= strain;
+	else
+	  e(i)= 0.0;
+      }
 
-        // Set material trial strain
-        return theSection->setTrialSectionDeformation(e);
-}
+    // Set material trial strain
+    return theSection->setTrialSectionDeformation(e);
+  }
 
 const XC::Matrix &XC::CorotTrussSection::getTangentStiff(void) const
   {
