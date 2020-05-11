@@ -55,9 +55,12 @@ class LateralTorsionalBucklingModificationFactor(object):
     def getLateralTorsionalBucklingModificationFactor(self):
         ''' Return the lateral-torsional buckling modification factor
             according to equation F1-1 of ANSI AISC 360-16.'''
+        retval= 0.0
         mMax= max(self.Mi)
-        denom= 2.5*mMax+3.0*self.Mi[1]+4.0*self.Mi[2]+3.0*self.Mi[3]
-        return 12.5*mMax/denom
+        if(mMax>0.0):
+            denom= 2.5*mMax+3.0*self.Mi[1]+4.0*self.Mi[2]+3.0*self.Mi[3]
+            retval= 12.5*mMax/denom
+        return retval
 
 class Member(buckling_base.MemberBase):
     ''' Beam and column members according to ANSI AISC 360-16.

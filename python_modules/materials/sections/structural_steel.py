@@ -342,14 +342,26 @@ class SteelShape(sp.SectionProperties):
         sectionClass= elem.getProp('sectionClass')
         chiLT= elem.getProp('chiLT')
         N1= elem.getN1
-        My1= elem.getMy1
-        Mz1= elem.getMz1
-        Vy1= elem.getVy1
+        My1= 0.0
+        if(hasattr(elem,'getMy1')):
+            My1= elem.getMy1
+        Mz1= 0.0
+        if(hasattr(elem,'getMz1')):
+            Mz1= elem.getMz1
+        Vy1= 0.0
+        if(hasattr(elem,'getVy1')):
+            Vy1= elem.getVy1
         FCTN1= self.getBiaxialBendingEfficiency(sectionClass,N1,My1,Mz1,Vy1,chiLT)
         N2= elem.getN2
-        My2= elem.getMy2
-        Mz2= elem.getMz2
-        Vy2= elem.getVy2
+        My2= 0.0
+        if(hasattr(elem,'getMy2')):
+            My2= elem.getMy2
+        Mz2= 0.0
+        if(hasattr(elem,'getMz2')):
+            Mz2= elem.getMz2
+        Vy2= 0.0
+        if(hasattr(elem,'getVy2')):
+            Vy2= elem.getVy2
         FCTN2= self.getBiaxialBendingEfficiency(sectionClass,N2,My2,Mz2,Vy2,chiLT)
         fctn= elem.getProp("FCTNCP")
         if(FCTN1 > fctn[0]):
@@ -365,9 +377,13 @@ class SteelShape(sp.SectionProperties):
         '''Called in every commit to y shear criterion.'''
         elem.getResistingForce()
         sectionClass= elem.getProp('sectionClass')
-        Vy1= elem.getVy1
+        Vy1= 0.0
+        if(hasattr(elem,'getVy1')):
+            Vy1= elem.getVy1
         FCV1= self.getYShearEfficiency(sectionClass,Vy1)
-        Vy2= elem.getVy2
+        Vy2= 0.0
+        if(hasattr(elem,'getVy2')):
+            Vy2= elem.getVy2
         FCV2= self.getYShearEfficiency(sectionClass,Vy2)
         fcv= elem.getProp("FCVCP")
         if(FCV1 > fcv[0]):
@@ -382,9 +398,13 @@ class SteelShape(sp.SectionProperties):
         '''Called in every commit to z shear criterion.'''
         elem.getResistingForce()
         sectionClass= elem.getProp('sectionClass')
-        Vz1= elem.getVz1
+        Vz1= 0.0
+        if(hasattr(elem,'getVz1')):
+            Vz1= elem.getVz1
         FCV1= self.getZShearEfficiency(sectionClass,Vz1)
-        Vz2= elem.getVz2
+        Vz2= 0.0
+        if(hasattr(elem,'getVz2')):
+            Vz2= elem.getVz2
         FCV2= self.getZShearEfficiency(sectionClass,Vz2)
         fcv= elem.getProp("FCVCP")
         if(FCV1 > fcv[0]):

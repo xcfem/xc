@@ -153,8 +153,12 @@ class MemberBase(object):
         for i in range(sz):
             e=self.contrPnt[i][0]
             e.getResistingForce()
-            Mz1=e.getMz1  #Z bending moment at the back end of the element
-            Mz2=e.getMz2  #Z bending moment at the front end of the element
+            Mz1= 0.0
+            if(hasattr(e,'getMz1')):
+               Mz1= e.getMz1  #Z bending moment at the back end of the element
+            Mz2= 0.0
+            if(hasattr(e,'getMz2')):
+               Mz2= e.getMz2  #Z bending moment at the front end of the element
             MzCP=Mz1+(Mz2-Mz1)*self.contrPnt[i][1] # Z bending moment at the control point
             Mi.append(MzCP)
         return Mi;

@@ -1388,7 +1388,7 @@ class HSSShape(structural_steel.QHShape):
         :param Cb: lateral-torsional buckling modification factor.
         :param majorAxis: true if flexure about the major axis.
         '''
-        return 0.9*self.getNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis)
+        return 0.9*self.getNominalFlexuralStrength(lateralUnbracedLength, Cb, majorAxis)
 
 for item in shapes.CHSS:
     shape= shapes.CHSS[item]
@@ -1528,10 +1528,17 @@ class CHSSShape(structural_steel.CHShape):
         '''
         return getShapePlasticMoment(self)
 
-    def getNominalFlexuralStrength(self):
+    def getNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis= True):
         ''' Return the nominal flexural strength of the member
             according to equations F7-1 to F7-13 and F8-1 to F8-4 
             of AISC-360-16.
+
+        :param lateralUnbracedLength: length between points that are either 
+                                      braced against lateral displacement of
+                                      the compression flange or braced against 
+                                      twist of the cross section.
+        :param Cb: lateral-torsional buckling modification factor.
+        :param majorAxis: true if flexure about the major axis.
         '''
         Mn= 0.0
         lmsg.error(__name__+'; nominal flexural strength for circular HSS sections not implemented yet.')
@@ -1548,7 +1555,7 @@ class CHSSShape(structural_steel.CHShape):
         :param Cb: lateral-torsional buckling modification factor.
         :param majorAxis: true if flexure about the major axis.
         '''
-        return 0.9*self.getNominalFlexuralStrength(self, lateralUnbracedLength, Cb, majorAxis)
+        return 0.9*self.getNominalFlexuralStrength(lateralUnbracedLength, Cb, majorAxis)
 
     
 # Label conversion metric->US customary | US customary -> metric.
