@@ -9,19 +9,19 @@ import xc
 from postprocess import output_styles
 from postprocess import limit_state_data as lsd
 
-def findWorkingDirectory(fName= 'env_config.py'):
+def findWorkingDirectory(fNameMark= 'env_config.py'):
     '''Search upwards to find the directory where the file
        argument is.
 
-    fName: name of the file that marks the working directory
-           of the project.
+    :param fNameMark: name of the file that marks the working directory
+                      of the project.
     '''
     current_working_dir= os.getcwd()
     working_dir= current_working_dir
     while True:
         file_list = os.listdir(working_dir)
         parent_dir = os.path.dirname(working_dir)
-        if fName in file_list:
+        if fNameMark in file_list:
             break
         else:
             if working_dir == parent_dir: #if dir is root dir
@@ -43,8 +43,12 @@ class ProjectDirTree(object):
        :ivar annexPath: full path of the directory where to place graphic and 
                      text files for the generation of the annex
     '''
-    def __init__(self,intForcPath,verifPath,annexPath):
+    def __init__(self,intForcPath,verifPath,annexPath, fNameMark= 'env_config.py'):
         '''
+        Constructor.
+
+        :param fNameMark: name of the file that marks the working directory
+               of the project.
         :param intForcPath: full path of the directory where results of 
                       internal forces are placed.
         :param verifPath: full path of the directory where results of 
@@ -55,7 +59,7 @@ class ProjectDirTree(object):
         '''
         #default names of files with data for FE model generation, results of
         #limit state verifications, ..
-        self.workingDirectory= findWorkingDirectory()
+        self.workingDirectory= findWorkingDirectory(fNameMark)
         self.intForcPath= intForcPath
         self.verifPath= verifPath
         self.annexPath= annexPath
