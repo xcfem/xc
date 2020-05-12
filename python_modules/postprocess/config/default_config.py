@@ -159,8 +159,10 @@ class EnvConfig(output_styles.OutputStyle):
 
        :ivar grWidth: size of the graphics to be included in the annex          
     '''
-    def __init__(self,language,intForcPath= 'results/internalForces/',verifPath= 'results/verifications/',annexPath= 'annex/',grWidth='120mm'):
+    def __init__(self,language,intForcPath= 'results/internalForces/',verifPath= 'results/verifications/',annexPath= 'annex/', grWidth='120mm', fNameMark= 'env_config.py'):
         '''
+        Constructor.
+
         :param language: english, spanish, french 
         :param intForcPath: full path of the directory where results of 
                       internal forces are placed.
@@ -169,7 +171,8 @@ class EnvConfig(output_styles.OutputStyle):
         :param annexPath: full path of the directory where to place graphic and 
                       text files for the generation of the annex
         :param grWidth: size of the graphics to be included in the annex
-                            
+        :param fNameMark: name of the file that marks the working directory
+               of the project.                            
         '''
         super(EnvConfig,self).__init__(language= language)
         #default names of files with data for FE model generation, results of
