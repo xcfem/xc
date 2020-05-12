@@ -90,7 +90,7 @@ totalSet= preprocessor.getSets.getSet('total')
 cfg=default_config.EnvConfig(language='en',intForcPath= '',verifPath= '',annexPath= 'annex/',grWidth='120mm')
 cfg.projectDirTree.workingDirectory= '/tmp/'
 lsd.LimitStateData.envConfig= cfg
-lsd.shearResistance.saveAll(feProblem,combContainer,totalSet) 
+lsd.shearResistance.saveAll(combContainer,totalSet) 
 
 # Define available sections for the elements (spatial distribution of RC sections).
 # It refers to the reinforced concrete sections associated with the element

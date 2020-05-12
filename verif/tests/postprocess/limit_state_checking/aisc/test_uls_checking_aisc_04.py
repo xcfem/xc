@@ -128,7 +128,7 @@ for m in aiscMembers:
     
 ## Compute internal forces for each combination
 for ls in limitStates:
-    ls.saveAll(steelBeam,combContainer,xcTotalSet,lstSteelBeams=aiscMembers)
+    ls.saveAll(combContainer,xcTotalSet,lstSteelBeams=aiscMembers)
 
 
 outCfg= lsd.VerifOutVars(setCalc=xcTotalSet, appendToResFile='Y', listFile='N', calcMeanCF='Y')

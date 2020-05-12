@@ -78,10 +78,9 @@ class LimitStateData(object):
         with open(name + '.pkl', 'r') as f:
             return pickle.load(f)
         
-    def saveAll(self,feProblem,combContainer,setCalc,fConvIntForc= 1.0,analysisToPerform= defaultAnalysis,lstSteelBeams=None):
+    def saveAll(self,combContainer,setCalc,fConvIntForc= 1.0,analysisToPerform= defaultAnalysis,lstSteelBeams=None):
         '''Write internal forces, displacements, .., for each combination
 
-        :param feProblem: XC finite element problem to deal with.
         :param setCalc: set of entities for which the verification is 
                           going to be performed
         :param fConvIntForc: conversion factor between the unit of force 
@@ -90,8 +89,10 @@ class LimitStateData(object):
                                (The use of this factor won't be allowed in future versions)
         :param lstSteelBeams: list of steel beams to analyze (defaults to None)
         '''
+        preprocessor= setCalc.getPreprocessor
+        feProblem= preprocessor.getProblem
         if fConvIntForc != 1.0:
-          lmsg.warning('fConvIntForc= ' + fConvIntForc + 'conversion factor between units is DEPRECATED' )
+            lmsg.warning('fConvIntForc= ' + fConvIntForc + 'conversion factor between units is DEPRECATED' )
         preprocessor= feProblem.getPreprocessor
         loadCombinations= preprocessor.getLoadHandler.getLoadCombinations
         #Putting combinations inside XC.

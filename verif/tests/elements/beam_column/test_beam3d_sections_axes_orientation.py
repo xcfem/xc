@@ -214,7 +214,7 @@ totalSet= preprocessor.getSets.getSet('total')
 cfg=default_config.EnvConfig(language='en',intForcPath= '',verifPath= '',annexPath= 'annex/',grWidth='120mm')
 cfg.projectDirTree.workingDirectory= '/tmp/'
 lsd.LimitStateData.envConfig= cfg
-lsd.normalStressesResistance.saveAll(feProblem,combContainer,totalSet) 
+lsd.normalStressesResistance.saveAll(combContainer,totalSet) 
 
 # Spatial distribution of reinforced concrete sections.
 reinfConcreteSectionDistribution.assign(elemSet=totalSet.getElements,setRCSects=beamRCsect)
