@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import division
+from __future__ import print_function
 
 import os
 import xc_base
@@ -7,15 +9,19 @@ import xc
 from postprocess import output_styles
 from postprocess import limit_state_data as lsd
 
-def findWorkingDirectory():
+def findWorkingDirectory(fName= 'env_config.py'):
     '''Search upwards to find the directory where the file
-       env_config.py is.'''
-    working_dir= os.getcwd()
-    file_name= 'env_config.py'
+       argument is.
+
+    fName: name of the file that marks the working directory
+           of the project.
+    '''
+    current_working_dir= os.getcwd()
+    working_dir= current_working_dir
     while True:
         file_list = os.listdir(working_dir)
         parent_dir = os.path.dirname(working_dir)
-        if file_name in file_list:
+        if fName in file_list:
             break
         else:
             if working_dir == parent_dir: #if dir is root dir
@@ -23,6 +29,8 @@ def findWorkingDirectory():
                 break
             else:
                 working_dir = parent_dir
+    if(not working_dir):
+        working_dir= current_working_dir
     return working_dir
 
 class ProjectDirTree(object):
