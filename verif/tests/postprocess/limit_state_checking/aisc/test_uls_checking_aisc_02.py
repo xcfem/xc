@@ -117,7 +117,6 @@ xcTotalSet= modelSpace.getTotalSet()
 fname= os.path.basename(__file__)
 cfg=default_config.EnvConfig(language='en',intForcPath= 'results/internalForces/',verifPath= 'results/verifications/',annexPath= 'annex/',grWidth='120mm')
 cfg.projectDirTree.workingDirectory= '/tmp/'+os.path.splitext(fname)[0]
-cfg.projectDirTree.createTree()
 lsd.LimitStateData.envConfig= cfg
 
 ## Set combinations to compute.

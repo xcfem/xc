@@ -94,7 +94,7 @@ limit_state_data.shearResistance.controller.verbose= False # Don't display log m
 limit_state_data.shearResistance.controller.analysisToPerform=custom_newton_raphson
 cfg=default_config.EnvConfig(language='en',intForcPath= 'results/internalForces/',verifPath= 'results/verifications/',annexPath= 'annex/',grWidth='120mm')
 cfg.projectDirTree.workingDirectory= '/tmp/'+os.path.splitext(fname)[0]
-cfg.projectDirTree.createTree()
+cfg.projectDirTree.createTree() # To allow copying existing internal force data into.
 limit_state_data.LimitStateData.envConfig= cfg
 shutil.copy(pth+'/intForce_ULS_shearResistance.csv',limit_state_data.shearResistance.getInternalForcesFileName())
 #limit_state_data.LimitStateData.internal_forces_results_directory= pth+'/'
