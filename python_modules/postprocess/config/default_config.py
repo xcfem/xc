@@ -147,7 +147,7 @@ class EnvConfig(output_styles.OutputStyle):
 
        :ivar grWidth: size of the graphics to be included in the annex          
     '''
-    def __init__(self,language,intForcPath,verifPath,annexPath,grWidth='120mm'):
+    def __init__(self,language,intForcPath= 'results/internalForces/',verifPath= 'results/verifications/',annexPath= 'annex/',grWidth='120mm'):
         '''
         :param language: english, spanish, french 
         :param intForcPath: full path of the directory where results of 
@@ -162,7 +162,7 @@ class EnvConfig(output_styles.OutputStyle):
         super(EnvConfig,self).__init__(language= language)
         #default names of files with data for FE model generation, results of
         #limit state verifications, ..
-        self.projectDirTree= ProjectDirTree(intForcPath,verifPath,annexPath)
+        self.projectDirTree= ProjectDirTree(intForcPath= intForcPath,verifPath= verifPath,annexPath= annexPath)
 
         lsd.LimitStateData.internal_forces_results_directory= intForcPath
         lsd.LimitStateData.check_results_directory= verifPath
