@@ -77,6 +77,15 @@ class LimitStateData(object):
         '''Read a Python object from a pickle file.'''
         with open(name + '.pkl', 'r') as f:
             return pickle.load(f)
+
+    def getLastCalculationTime(self):
+        ''' Return the time of last modification of the internal
+           forces file.'''
+        fNameIntForc= self.getInternalForcesFileName()
+        retval= None
+        if(os.path.exists(fNameIntForc)):
+            retval= os.path.getmtime(fNameIntForc)
+        return retval
         
     def saveAll(self,combContainer,setCalc,fConvIntForc= 1.0,analysisToPerform= defaultAnalysis,lstSteelBeams=None):
         '''Write internal forces, displacements, .., for each combination
