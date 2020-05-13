@@ -182,24 +182,25 @@ def getUIShapeNominalFlexuralStrength(shape, lateralUnbracedLength, Cb, majorAxi
     '''
     Mn= 0.0
     Mp= shape.getPlasticMoment(majorAxis) # plastic moment.
+    Fy= shape.steelType.fy # specified minimum yield stress
     if(not majorAxis): # section F6
         compactFlanges= shape.compactFlangeRatio(majorAxis)
         if(compactFlanges<=1.0): # flanges are compact.
             Mn= Mp # equation F6-1
         else: 
             slenderFlanges= shape.slenderFlangeRatio(majorAxis)
+            Sy= shape.get('Wyel') # Elastic section modulus about minor axis.
             if(slenderFlanges<=1.0): # flanges are noncompact -> equation F6-2 applies.
                 lmbd= 2.0*shape.get('bSlendernessRatio') # see lambda expression in F6. 
                 lmbd_pf= shape.getLambdaPFlange()
                 lmbd_rf= shape.getLambdaRFlange()
                 Mn= Mp-(Mp-0.7*Fy*Sy)*((lmbd-lmbd_pf)/(lmbd_rf-lmbd_pf)) # equation F6-2
             else: # slender flanges.
-                Sy= shape.get('Wyel') # Elastic section modulus about minor axis.
+
                 Fcr= shape.getCriticalStressF(None, None, majorAxis)
                 Mn= Fcr*Sy # equation F6-3
     else:
         compactRatio= shape.compactWebAndFlangeRatio(majorAxis)
-        Fy= shape.steelType.fy # specified minimum yield stress
         Sz= shape.get('Wzel') # Elastic section modulus about major axis.
         if(compactRatio<=1.0): # flange and web are compact.
             Lb= lateralUnbracedLength
