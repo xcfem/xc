@@ -47,6 +47,8 @@ class ControlVarDiagram(cd.ColoredDiagram):
                'T'
         '''
         # default values
+        value1= 0.0
+        value2= 0.0
         elemVDir= elem.getJVector3d(True) #initialGeometry= True
         if self.attributeName <> "intForce":
             attributeNameSect1= self.attributeName + 'Sect1' # Values in the start node.
@@ -73,23 +75,28 @@ class ControlVarDiagram(cd.ColoredDiagram):
                 value2= None
         else:
             if(self.component == 'N'):
-              value1=elem.getN1
-              value2=elem.getN2
+                value1=elem.getN1
+                value2=elem.getN2
             elif((self.component == 'Qy') or (self.component == 'Vy')):
-              value1=elem.getVy1
-              value2=elem.getVy2
+                if(hasattr(elem,'getVy1')):
+                    value1=elem.getVy1
+                    value2=elem.getVy2
             elif((self.component == 'Qz') or (self.component == 'Vz')):
-              value1=elem.getVz1
-              value2=elem.getVz2
-            elif(self.component == 'My'):
-              value1=elem.getMy1
-              value2=elem.getMy2
-            elif(self.component == 'Mz'):
-              value1=elem.getMz1
-              value2=elem.getMz2
+                if(hasattr(elem,'getVz1')):
+                    value1=elem.getVz1
+                    value2=elem.getVz2
             elif(self.component == 'T'):
-              value1=elem.getT1
-              value2=elem.getT2
+                if(hasattr(elem,'getT1')):
+                    value1=elem.getT1
+                    value2=elem.getT2
+            elif(self.component == 'My'):
+                if(hasattr(elem,'getMy1')):
+                    value1=elem.getMy1
+                    value2=elem.getMy2
+            elif(self.component == 'Mz'):
+                if(hasattr(elem,'getMz1')):
+                    value1=elem.getMz1
+                    value2=elem.getMz2
         if((self.component == 'Qy') or (self.component == 'Vy')):
             elemVDir= elem.getJVector3d(True) # initialGeometry= True 
         elif((self.component == 'Qz') or (self.component == 'Vz')):
