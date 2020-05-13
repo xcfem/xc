@@ -136,7 +136,7 @@ class OutputHandler(object):
         if(setToDisplay==None):
             setToDisplay= self.modelSpace.getTotalSet()
         if(caption==None):
-            caption= setToDisplay.name+' set; strong and weak axis'
+            caption= setToDisplay.name+' set; strong [red] and weak [blue] axes'
         defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
         defDisplay.cameraParameters= self.getCameraParameters()
 #        defDisplay.displayStrongWeakAxis(setToDisplay,caption= caption, vectorScale= self.outputStyle.localAxesVectorsScaleFactor, fileName= fileName, defFScale= defFScale)

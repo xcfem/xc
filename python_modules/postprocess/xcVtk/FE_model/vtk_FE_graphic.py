@@ -216,7 +216,7 @@ class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
         vField.addToDisplay(self)
         self.displayScene(caption)
 
-    def displayStrongWeakAxis(self,setToDisplay,caption= 'strong and weak axis', vectorScale=1.0):
+    def displayStrongWeakAxis(self,setToDisplay,caption= 'strong [red] and weak [blue] axes', vectorScale=1.0):
         '''vector field display of the loads applied to the chosen set of elements in the load case passed as parameter
 
         :param setToDisplay:   set of elements to be displayed (defaults to total set)
