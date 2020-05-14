@@ -90,7 +90,7 @@ Vector3d XC::Line::getJVector(void) const
     if(d<1e-12) // parallel to z axis.
       {
 	const Vector3d J(0.0,1.0,0.0); //Global Y.
-        Vector3d retval= J.getCross(i);
+        retval= J.getCross(i);
       }
     retval.Normalize();
     return retval;

@@ -1180,7 +1180,6 @@ class StructuralMechanics3D(PredefinedSpace):
         seedElemHandler= self.preprocessor.getElementHandler.seedElemHandler
         seedElemHandler.defaultMaterial= xcSection.name
         for l in xcSet.getLines:
-            vDir= l.getTang(0.0)
             if(xzVector):
                 trf.xzVector= xzVector
             else:
