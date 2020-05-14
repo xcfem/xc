@@ -244,7 +244,7 @@ class PredefinedSpace(object):
         '''Return the set that contains all the defined
            entities.'''
         return self.preprocessor.getSets.getSet("total")
-
+    
     def removeAllLoadPatternsFromDomain(self):
         ''' Remove all load patterns from domain.'''
         self.preprocessor.getDomain.removeAllLoadPatterns()
@@ -328,7 +328,7 @@ class PredefinedSpace(object):
         return self.analysis.analyze(numModes)
 
     def deactivateElements(self, elemSet, srf= 1e-6):
-        ''' Deactivate the nodes on the set argument.
+        ''' Deactivate the elements on the set argument.
 
         :param elemSet: set of elements to be deactivated.
         :param srf: stress reduction factor for element deactivation.
@@ -341,7 +341,7 @@ class PredefinedSpace(object):
         mesh.freezeDeadNodes(lockerName)
 
     def activateElements(self, elemSet):
-        ''' Deactivate the nodes on the set argument.
+        ''' Activate the (previoulsy deactivated) elements on the set argument.
 
         :param elemSet: set of elements to be deactivated.
         :param srf: stress reduction factor for element deactivation.
@@ -818,7 +818,6 @@ class SolidMechanics3D(PredefinedSpace):
         :param propToDefine: name of the property to define at the nodes.
         '''
         extrapolate_elem_attr.extrapolate_elem_data_to_nodes(setToCompute.getElements,propToDefine,self.getStrainsAtNodes, initialValue= xc.Vector([0.0,0.0,0.0,0.0,0.0,0.0]))
-
 
 def gdls_elasticidad3D(nodes):
     '''Defines the dimension of the space: nodes by three coordinates (x,y,z) 

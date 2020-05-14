@@ -237,7 +237,7 @@ class OutputHandler(object):
     def displayStrains(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None):
         '''displays the strains on the elements.
 
-        :param itemToDisp: component of the stress ('sigma_11', 'sigma_22'...)
+        :param itemToDisp: component of the stress ('eps_11', 'eps_22'...)
         :param setToDisplay: set of entities to be represented.
         :param fileName: name of the file to plot the graphic. Defaults to 
                     None, in that case an screen display is generated
