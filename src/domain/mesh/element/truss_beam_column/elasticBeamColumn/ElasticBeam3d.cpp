@@ -92,12 +92,14 @@ void XC::ElasticBeam3d::set_transf(const CrdTransf *trf)
           theCoordTransf = tmp->getCopy();
         else
           {
-            std::cerr << "ElasticBeam3d::ElasticBeam3d -- failed to get copy of coordinate transformation\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+	              << "; failed to get copy of coordinate transformation.\n";
             exit(-1);
           }
       }
     else
-      std::cerr << "ElasticBeam3d::set_transf; pointer to coordinate transformation is null." << std::endl;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "ElasticBeam3d::set_transf; pointer to coordinate transformation is null." << std::endl;
   }
 
 //! @brief Default constructor.
@@ -164,7 +166,8 @@ XC::ElasticBeam3d::ElasticBeam3d(int tag, int Nd1, int Nd2, SectionForceDeformat
 
     if(ctes_scc.J()==0.0)
       {
-        std::cerr << "XC::ElasticBeam3d::ElasticBeam3d -- no torsion in section -- setting GJ = 1.0e10\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; no torsion in section -- setting GJ = 1.0e10\n";
         ctes_scc.J() = 1.0e10;
       }
 
@@ -172,7 +175,8 @@ XC::ElasticBeam3d::ElasticBeam3d(int tag, int Nd1, int Nd2, SectionForceDeformat
 
     if(!theCoordTransf)
       {
-        std::cerr << "XC::ElasticBeam3d::ElasticBeam3d -- failed to get copy of coordinate transformation\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed to get copy of coordinate transformation\n";
         exit(-1);
       }
 
@@ -246,7 +250,8 @@ void XC::ElasticBeam3d::setDomain(Domain *theDomain)
 
     if(theCoordTransf->initialize(theNodes[0], theNodes[1]) != 0)
       {
-        std::cerr << "XC::ElasticBeam3d::setDomain -- Error initializing coordinate transformation\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; error initializing coordinate transformation\n";
         exit(-1);
       }
 
@@ -254,7 +259,8 @@ void XC::ElasticBeam3d::setDomain(Domain *theDomain)
 
     if(L == 0.0)
       {
-        std::cerr << "XC::ElasticBeam3d::setDomain -- Element has zero length\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; element has zero length\n";
         exit(-1);
       }
   }
@@ -292,7 +298,8 @@ int XC::ElasticBeam3d::commitState(void)
     int retVal = 0;
     // call element commitState to do any base class stuff
     if((retVal = this->XC::Element::commitState()) != 0)
-      { std::cerr << "XC::ElasticBeam3d::commitState () - failed in base class"; }
+      { std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed in base class."; }
     retVal += theCoordTransf->commitState();
     return retVal;
   }
@@ -316,7 +323,8 @@ const XC::Matrix &XC::ElasticBeam3d::getTangentStiff(void) const
     const double eiyz= ctes_scc.EIyz();
     const double eimax= std::max(ctes_scc.EIz(),ctes_scc.EIy());
     if(std::abs(eiyz/eimax)>1e-5) //Product of inertia not null.
-      std::cerr << "ElasticBeam3d::getTangentStiff; this element must not"
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; this element must not"
                 << " be used with section that have a non-zero"
                 << " product of inertia."
                 << std::endl;
@@ -441,7 +449,7 @@ void XC::ElasticBeam3d::zeroLoad(void)
 int XC::ElasticBeam3d::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
-      std::cerr << getClassName() 
+      std::cerr << getClassName() << "::" << __FUNCTION__ 
                 << "; load over inactive element: "
                 << getTag()  
                 << std::endl;
@@ -465,7 +473,8 @@ int XC::ElasticBeam3d::addLoad(ElementalLoad *theLoad, double loadFactor)
           }
         else
           {
-            std::cerr << "XC::ElasticBeam3d::addLoad()  -- load type unknown for element with tag: " << this->getTag() << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; load type unknown for element with tag: " << this->getTag() << std::endl;
             return -1;
           }
       }
@@ -484,7 +493,8 @@ int XC::ElasticBeam3d::addInertiaLoadToUnbalance(const XC::Vector &accel)
 
     if(6 != Raccel1.Size() || 6 != Raccel2.Size())
       {
-        std::cerr << "XC::ElasticBeam3d::addInertiaLoadToUnbalance matrix and vector sizes are incompatible\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; matrix and vector sizes are incompatible.\n";
         return -1;
       }
 
@@ -667,7 +677,8 @@ int XC::ElasticBeam3d::sendSelf(Communicator &comm)
     const int dataTag= getDbTag();
     res= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "ElasticBeam3d::sendSelf -- could not send data Vector\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "ElasticBeam3d::sendSelf -- could not send data Vector\n";
     return res;
   }
 
@@ -678,7 +689,8 @@ int XC::ElasticBeam3d::recvSelf(const Communicator &comm)
     const int dataTag= getDbTag();
     int res = comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "ElasticBeam3d::recvSelf() - failed to send ID data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "ElasticBeam3d::recvSelf() - failed to send ID data\n";
     else
       res+= recvData(comm);
     return res;
