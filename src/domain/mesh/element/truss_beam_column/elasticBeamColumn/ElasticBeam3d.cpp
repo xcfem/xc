@@ -134,34 +134,8 @@ XC::ElasticBeam3d::ElasticBeam3d(int tag, int Nd1, int Nd2, SectionForceDeformat
     if(section)
       {
         sectionTag= section->getTag();
-        ctes_scc.E() = 1.0;
-        ctes_scc.G() = 1.0;
-        ctes_scc.J() = 0.0;
+	ctes_scc= CrossSectionProperties3d(*section);
         ctes_scc.setRho(r);
-
-        const Matrix &sectTangent = section->getSectionTangent();
-        const ID &sectCode = section->getType();
-        for(int i=0; i<sectCode.Size(); i++)
-          {
-            int code = sectCode(i);
-            switch(code)
-              {
-              case SECTION_RESPONSE_P:
-                ctes_scc.A() = sectTangent(i,i);
-                break;
-              case SECTION_RESPONSE_MZ:
-                ctes_scc.Iz() = sectTangent(i,i);
-                break;
-              case SECTION_RESPONSE_MY:
-                ctes_scc.Iy() = sectTangent(i,i);
-                break;
-              case SECTION_RESPONSE_T:
-                ctes_scc.J() = sectTangent(i,i);
-                break;
-              default:
-                break;
-              }
-          }
       }
 
     if(ctes_scc.J()==0.0)
