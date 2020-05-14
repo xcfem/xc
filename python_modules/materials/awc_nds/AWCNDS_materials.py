@@ -933,7 +933,7 @@ class DimensionLumberSection(sp.RectangularSection):
         self.wood= woodMaterial
         self.xc_section= None
     def getFb(self):
-        return self.wood.Fb(self.h)
+        return self.wood.getFb(self.h)
     def defElasticShearSection2d(self, preprocessor):
         mat= self.wood.defXCMaterial()
         self.xc_section= super(DimensionLumberSection,self).defElasticShearSection2d(preprocessor,mat)
