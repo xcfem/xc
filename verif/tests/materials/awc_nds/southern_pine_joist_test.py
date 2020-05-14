@@ -25,7 +25,7 @@ designLoad= 77.3*pound2Newton/foot2meter # Design load
 designMoment= designLoad*span**2/8.0
 
 wood= dimensional_lumber.SouthernPineWood(name='SouthernPine', grade= 'no_2', sub_grade= '')
-joist= mat.DimensionLumberSection(name= '2x10',b= 1.5*inch2meter, h= 9.25*inch2meter, woodMaterial= wood)
+joist= mat.DimensionLumberSection(name= '2x10', woodMaterial= wood)
 
 S= joist.Wzel() # Section modulus
 I= joist.Iz() # Moment of inertia
@@ -38,9 +38,9 @@ beam= sb.SimpleBeam(E,I,span)
 delta= beam.getDeflectionUnderUniformLoad(designLoad,beam.l/2.0)
 
 
-ratio1= (Fb-5.50088235294e6)/5.50088235294e6
+ratio1= (Fb-5.5e6)/5.5e6
 ratio2= (Fv-1.2e6)/1.2e6
-ratio3= (delta-20.801166868e-3)/20.801166868e-3
+ratio3= (delta-20.8425973321e-3)/20.8425973321e-3
 
 '''
 print('b= ', joist.b*1000, 'mm (',joist.b/inch2meter,'in)')
@@ -58,7 +58,7 @@ print('ratio3= ',ratio3)
 
 import os
 fname= os.path.basename(__file__)
-if(abs(ratio1)<1e-12 and abs(ratio2)<1e-12 and abs(ratio3)<1e-12):
+if(abs(ratio1)<1e-12 and abs(ratio2)<1e-12 and abs(ratio3)<1e-11):
   print("test ",fname,": ok.")
 else:
   print("test ",fname,": ERROR.")

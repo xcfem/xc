@@ -24,7 +24,7 @@ psiToPa= 6894.76
 # Douglas Fir-Larch Select structural.
 wood= dimensional_lumber.DouglasFirLarchWood(grade= 'structural')
 
-beamSection= AWCNDS_materials.DimensionLumberSection("DouglasFirLarch",b=3.5*inchToMeter,h=15.25*inchToMeter, woodMaterial= wood)
+beamSection= AWCNDS_materials.CustomLumberSection("DouglasFirLarch",b=3.5*inchToMeter,h=15.25*inchToMeter, woodMaterial= wood)
 
 length= 20.0*footToMeter
 beam= AWCNDS_materials.BeamMember(unbracedLength= length, section= beamSection)

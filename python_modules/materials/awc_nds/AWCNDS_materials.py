@@ -924,12 +924,11 @@ class LVL_2900Fb2E_HeaderSection(LVLHeaderSection):
     def __init__(self, name, b, h, Ms, Vs, linearDensity):
         super(LVL_2900Fb2E_HeaderSection,self).__init__(name,b,h, Ms, Vs, linearDensity, wood= LVL_2900Fb2E())
 
-
-class DimensionLumberSection(sp.RectangularSection):
-    ''' Section of a dimension lumber member.'''
+class CustomLumberSection(sp.RectangularSection):
+    ''' Section of a lumber member with custom dimensions.'''
     def __init__(self, name, b, h, woodMaterial):
         '''Constructor.'''
-        super(DimensionLumberSection,self).__init__(name, b, h)
+        super(CustomLumberSection,self).__init__(name, b, h)
         self.wood= woodMaterial
         self.xc_section= None
     def getFb(self):
@@ -985,3 +984,52 @@ class DimensionLumberSection(sp.RectangularSection):
     def getEminAdj(self):
         ''' Return the adjusted value of Emin.'''
         return self.wood.getEminAdj()
+
+dimensionLumberSizes= dict()
+dimensionLumberSizes['1x2']= (19e-3, 38e-3)
+dimensionLumberSizes['1x3']= (19e-3, 64e-3)
+dimensionLumberSizes['1x4']= (19e-3, 89e-3)
+dimensionLumberSizes['1x5']= (19e-3, 114e-3)
+dimensionLumberSizes['1x6']= (19e-3, 140e-3)
+dimensionLumberSizes['1x8']= (19e-3, 184e-3)
+dimensionLumberSizes['1x10']= (19e-3, 235e-3)
+dimensionLumberSizes['1x12']= (19e-3, 286e-3)
+dimensionLumberSizes['2x2']= (38e-3, 38e-3)
+dimensionLumberSizes['2x3']= (38e-3, 64e-3)
+dimensionLumberSizes['2x4']= (38e-3, 89e-3)
+dimensionLumberSizes['2x6']= (38e-3, 140e-3)
+dimensionLumberSizes['2x8']= (38e-3, 184e-3)
+dimensionLumberSizes['2x10']= (38e-3, 235e-3)
+dimensionLumberSizes['2x12']= (38e-3, 286e-3)
+dimensionLumberSizes['4x4']= (89e-3, 89e-3)
+dimensionLumberSizes['4x6']= (89e-3, 140e-3)
+dimensionLumberSizes['6x6']= (140e-3, 140e-3)
+dimensionLumberSizes['2x1']= (38e-3, 19e-3)
+dimensionLumberSizes['3x1']= (64e-3, 19e-3)
+dimensionLumberSizes['4x1']= (89e-3, 19e-3)
+dimensionLumberSizes['5x1']= (114e-3, 19e-3)
+dimensionLumberSizes['6x1']= (140e-3, 19e-3)
+dimensionLumberSizes['8x1']= (184e-3, 19e-3)
+dimensionLumberSizes['10x1']= (235e-3, 19e-3)
+dimensionLumberSizes['12x1']= (286e-3, 19e-3)
+dimensionLumberSizes['3x2']= (64e-3, 38e-3)
+dimensionLumberSizes['4x2']= (89e-3, 38e-3)
+dimensionLumberSizes['6x2']= (140e-3, 38e-3)
+dimensionLumberSizes['8x2']= (184e-3, 38e-3)
+dimensionLumberSizes['10x2']= (235e-3, 38e-3)
+dimensionLumberSizes['12x2']= (286e-3, 38e-3)
+dimensionLumberSizes['6x4']= (140e-3, 89e-3)
+
+class DimensionLumberSection(CustomLumberSection):
+    ''' Section of a dimension lumber member.'''
+    def __init__(self, name, woodMaterial):
+        '''Constructor.'''
+        b= 0.0
+        h= 0.0
+        if(name in dimensionLumberSizes.keys()):
+            size= dimensionLumberSizes[name]
+            b= size[0]
+            h= size[1]
+        else:
+            lmsg.error('section: \''+name+'\' doesn\'t exists.')
+        super(DimensionLumberSection,self).__init__(name, b, h, woodMaterial)
