@@ -153,6 +153,11 @@ sympy-plots-for-*.tex/
 # xindy
 *.xdy
 
+# Emacs
+\#*\#
+*~
+.\#*
+
 # WinEdt
 *.bak
 *.sav
