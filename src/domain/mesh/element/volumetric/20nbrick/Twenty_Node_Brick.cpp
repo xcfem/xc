@@ -213,7 +213,7 @@ void XC::Twenty_Node_Brick::Print(std::ostream &s, int flag) const
 }
 
 int
-XC::Twenty_Node_Brick::update()
+XC::Twenty_Node_Brick::update(void)
 {
         int i, j;
         static double u[3][20];

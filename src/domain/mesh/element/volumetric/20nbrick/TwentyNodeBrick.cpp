@@ -4439,7 +4439,7 @@ double XC::TwentyNodeBrick::get_Gauss_p_w(short order, short point_numb)
   }
 
 
-int XC::TwentyNodeBrick::update() //Added by Guanzhou, May 7 2004
+int XC::TwentyNodeBrick::update(void) //Added by Guanzhou, May 7 2004
   {
     double r  = 0.0;
     double s  = 0.0;

@@ -4923,7 +4923,7 @@ double XC::TwentySevenNodeBrick::get_Gauss_p_w(short order, short point_numb)
     return Gauss_weights[order][point_numb];
   }
 
-int XC::TwentySevenNodeBrick::update()  //Guanzhou added May 6, 2004
+int XC::TwentySevenNodeBrick::update(void)  //Guanzhou added May 6, 2004
   {
     double r  = 0.0;
     // double rw = 0.0;

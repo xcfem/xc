@@ -252,7 +252,7 @@ void  XC::TwentyEightNodeBrickUP::Print( std::ostream &s, int flag ) const
 }
 
 int
-XC::TwentyEightNodeBrickUP::update()
+XC::TwentyEightNodeBrickUP::update(void)
   {
         int i, j;
         static double u[3][20];
