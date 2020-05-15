@@ -107,9 +107,9 @@ const XC::Vector &XC::BaseElasticSection::getSectionDeformation(void) const
 int XC::BaseElasticSection::sendData(Communicator &comm)
   {
     int res= PrismaticBarCrossSection::sendData(comm);
-    res+= comm.sendVector(eTrial,getDbTagData(),CommMetaData(5));
-    res+= comm.sendVector(eInic,getDbTagData(),CommMetaData(6));
-    res+= comm.sendVector(eCommit,getDbTagData(),CommMetaData(7));
+    res+= comm.sendVector(eTrial,getDbTagData(),CommMetaData(3));
+    res+= comm.sendVector(eInic,getDbTagData(),CommMetaData(4));
+    res+= comm.sendVector(eCommit,getDbTagData(),CommMetaData(5));
     return res;
   }
 
@@ -117,9 +117,9 @@ int XC::BaseElasticSection::sendData(Communicator &comm)
 int XC::BaseElasticSection::recvData(const Communicator &comm)
   {
     int res= PrismaticBarCrossSection::recvData(comm);
-    res+= comm.receiveVector(eTrial,getDbTagData(),CommMetaData(5));
-    res+= comm.receiveVector(eInic,getDbTagData(),CommMetaData(6));
-    res+= comm.receiveVector(eCommit,getDbTagData(),CommMetaData(7));
+    res+= comm.receiveVector(eTrial,getDbTagData(),CommMetaData(3));
+    res+= comm.receiveVector(eInic,getDbTagData(),CommMetaData(4));
+    res+= comm.receiveVector(eCommit,getDbTagData(),CommMetaData(5));
     return res;
   }
 

@@ -94,8 +94,8 @@ const XC::Matrix &XC::beam3d01::getStiff(void) const
         const Node *end2Ptr= theNodes[1];
 
         double dx,dy,dz;
-        const XC::Vector &end1Crd = end1Ptr->getCrds();
-        const XC::Vector &end2Crd = end2Ptr->getCrds();
+        const Vector &end1Crd = end1Ptr->getCrds();
+        const Vector &end2Crd = end2Ptr->getCrds();
 
         dx = end2Crd(0)-end1Crd(0);
         dy = end2Crd(1)-end1Crd(1);
@@ -111,11 +111,12 @@ const XC::Matrix &XC::beam3d01::getStiff(void) const
             return k;
           }
 
-        const double EA = ctes_scc.EA()/L;
-        const double twoE = 2*ctes_scc.E()/L;
-        const double fourE = 4*ctes_scc.E()/L;
-        const double twelveE = 12*ctes_scc.E()/L3;
-        const double sixE = 6*ctes_scc.E()/L2;
+	const CrossSectionProperties3d &sprop= getSectionProperties();
+        const double EA = sprop.EA()/L;
+        const double twoE = 2*sprop.E()/L;
+        const double fourE = 4*sprop.E()/L;
+        const double twelveE = 12*sprop.E()/L3;
+        const double sixE = 6*sprop.E()/L2;
 
         if(dy == 0.0 && dz == 0.0 && dx > 0.0 && theta == 90)
           {
@@ -123,164 +124,164 @@ const XC::Matrix &XC::beam3d01::getStiff(void) const
             k(0,0) = EA;
             k(6,0) = -EA;
 
-            k(1,1) = twelveE*ctes_scc.Iz();
-            k(5,1) = sixE*ctes_scc.Iz();
-            k(7,1) = -twelveE*ctes_scc.Iz();
-            k(11,1) = sixE*ctes_scc.Iz();
+            k(1,1) = twelveE*sprop.Iz();
+            k(5,1) = sixE*sprop.Iz();
+            k(7,1) = -twelveE*sprop.Iz();
+            k(11,1) = sixE*sprop.Iz();
 
-            k(2,2) = twelveE*ctes_scc.Iy();
-            k(4,2) = -sixE*ctes_scc.Iy();
-            k(8,2) = -twelveE*ctes_scc.Iy();
-            k(10,2) = -sixE*ctes_scc.Iy();
+            k(2,2) = twelveE*sprop.Iy();
+            k(4,2) = -sixE*sprop.Iy();
+            k(8,2) = -twelveE*sprop.Iy();
+            k(10,2) = -sixE*sprop.Iy();
 
-            k(3,3) = ctes_scc.GJ()/L;
-            k(9,3) = -ctes_scc.GJ()/L;
+            k(3,3) = sprop.GJ()/L;
+            k(9,3) = -sprop.GJ()/L;
 
-            k(2,4) = -sixE*ctes_scc.Iy();
-            k(4,4) = fourE*ctes_scc.Iy();
-            k(8,4) = sixE*ctes_scc.Iy();
-            k(10,4) = twoE*ctes_scc.Iy();
+            k(2,4) = -sixE*sprop.Iy();
+            k(4,4) = fourE*sprop.Iy();
+            k(8,4) = sixE*sprop.Iy();
+            k(10,4) = twoE*sprop.Iy();
 
-            k(1,5) = sixE*ctes_scc.Iz();
-            k(5,5) = fourE*ctes_scc.Iz();
-            k(7,5) = -sixE*ctes_scc.Iz();
-            k(11,5) = twoE*ctes_scc.Iz();
+            k(1,5) = sixE*sprop.Iz();
+            k(5,5) = fourE*sprop.Iz();
+            k(7,5) = -sixE*sprop.Iz();
+            k(11,5) = twoE*sprop.Iz();
 
             k(0,6) = -EA;
             k(6,6) = EA;
 
-            k(1,7) = -twelveE*ctes_scc.Iz();
-            k(5,7) = -sixE*ctes_scc.Iz();
-            k(7,7) = twelveE*ctes_scc.Iz();
-            k(11,7) = -sixE*ctes_scc.Iz();
+            k(1,7) = -twelveE*sprop.Iz();
+            k(5,7) = -sixE*sprop.Iz();
+            k(7,7) = twelveE*sprop.Iz();
+            k(11,7) = -sixE*sprop.Iz();
 
-            k(2,8) = -twelveE*ctes_scc.Iy();
-            k(4,8) = sixE*ctes_scc.Iy();
-            k(8,8) = twelveE*ctes_scc.Iy();
-            k(10,8) = sixE*ctes_scc.Iy();
+            k(2,8) = -twelveE*sprop.Iy();
+            k(4,8) = sixE*sprop.Iy();
+            k(8,8) = twelveE*sprop.Iy();
+            k(10,8) = sixE*sprop.Iy();
 
-            k(3,9) = -ctes_scc.GJ()/L;
-            k(9,9) = ctes_scc.GJ()/L;
+            k(3,9) = -sprop.GJ()/L;
+            k(9,9) = sprop.GJ()/L;
 
-            k(2,10) = -sixE*ctes_scc.Iy();
-            k(4,10) = twoE*ctes_scc.Iy();
-            k(8,10) = sixE*ctes_scc.Iy();
-            k(10,10) = fourE*ctes_scc.Iy();
+            k(2,10) = -sixE*sprop.Iy();
+            k(4,10) = twoE*sprop.Iy();
+            k(8,10) = sixE*sprop.Iy();
+            k(10,10) = fourE*sprop.Iy();
 
-            k(1,11) = sixE*ctes_scc.Iz();
-            k(5,11) = twoE*ctes_scc.Iz();
-            k(7,11) = -sixE*ctes_scc.Iz();
-            k(11,11) = fourE*ctes_scc.Iz();
+            k(1,11) = sixE*sprop.Iz();
+            k(5,11) = twoE*sprop.Iz();
+            k(7,11) = -sixE*sprop.Iz();
+            k(11,11) = fourE*sprop.Iz();
           }
         else
           if(dx == 0.0 && dz == 0.0 && dy > 0.0 && theta == 90)
             {
-              k(0,0) = twelveE*ctes_scc.Iz();
-              k(5,0) = -sixE*ctes_scc.Iz();
-              k(6,0) = -twelveE*ctes_scc.Iz();
-              k(11,0) = -sixE*ctes_scc.Iz();
+              k(0,0) = twelveE*sprop.Iz();
+              k(5,0) = -sixE*sprop.Iz();
+              k(6,0) = -twelveE*sprop.Iz();
+              k(11,0) = -sixE*sprop.Iz();
 
               k(1,1) = EA;
               k(7,1) = -EA;
 
-              k(2,2) = twelveE*ctes_scc.Iy();
-              k(3,2) = sixE*ctes_scc.Iy();
-              k(8,2) = -twelveE*ctes_scc.Iy();
-              k(9,2) = sixE*ctes_scc.Iy();
+              k(2,2) = twelveE*sprop.Iy();
+              k(3,2) = sixE*sprop.Iy();
+              k(8,2) = -twelveE*sprop.Iy();
+              k(9,2) = sixE*sprop.Iy();
 
-              k(2,3) = sixE*ctes_scc.Iy();
-              k(3,3) = fourE*ctes_scc.Iy();
-              k(8,3) = -sixE*ctes_scc.Iy();
-              k(9,3) = twoE*ctes_scc.Iy();
+              k(2,3) = sixE*sprop.Iy();
+              k(3,3) = fourE*sprop.Iy();
+              k(8,3) = -sixE*sprop.Iy();
+              k(9,3) = twoE*sprop.Iy();
 
-              k(4,4) = ctes_scc.GJ()/L;
-              k(10,4) = -ctes_scc.GJ()/L;
+              k(4,4) = sprop.GJ()/L;
+              k(10,4) = -sprop.GJ()/L;
 
-              k(0,5) = -sixE*ctes_scc.Iz();
-              k(5,5) = fourE*ctes_scc.Iz();
-              k(6,5) = sixE*ctes_scc.Iz();
-              k(11,5) = twoE*ctes_scc.Iz();
+              k(0,5) = -sixE*sprop.Iz();
+              k(5,5) = fourE*sprop.Iz();
+              k(6,5) = sixE*sprop.Iz();
+              k(11,5) = twoE*sprop.Iz();
 
-              k(0,6) = -twelveE*ctes_scc.Iz();
-              k(5,6) = sixE*ctes_scc.Iz();
-              k(6,6) = twelveE*ctes_scc.Iz();
-              k(11,6) = sixE*ctes_scc.Iz();
+              k(0,6) = -twelveE*sprop.Iz();
+              k(5,6) = sixE*sprop.Iz();
+              k(6,6) = twelveE*sprop.Iz();
+              k(11,6) = sixE*sprop.Iz();
 
               k(1,7) = -EA;
               k(7,7) = EA;
 
-              k(2,8) = -twelveE*ctes_scc.Iy();
-              k(3,8) = -sixE*ctes_scc.Iy();
-              k(8,8) = twelveE*ctes_scc.Iy();
-              k(9,8) = -sixE*ctes_scc.Iy();
+              k(2,8) = -twelveE*sprop.Iy();
+              k(3,8) = -sixE*sprop.Iy();
+              k(8,8) = twelveE*sprop.Iy();
+              k(9,8) = -sixE*sprop.Iy();
 
-              k(2,9) = sixE*ctes_scc.Iy();
-              k(3,9) = twoE*ctes_scc.Iy();
-              k(8,9) = -sixE*ctes_scc.Iy();
-              k(9,9) = fourE*ctes_scc.Iy();
+              k(2,9) = sixE*sprop.Iy();
+              k(3,9) = twoE*sprop.Iy();
+              k(8,9) = -sixE*sprop.Iy();
+              k(9,9) = fourE*sprop.Iy();
 
-              k(4,10) = -ctes_scc.GJ()/L;
-              k(10,10) = ctes_scc.GJ()/L;
+              k(4,10) = -sprop.GJ()/L;
+              k(10,10) = sprop.GJ()/L;
 
-              k(0,11) = -sixE*ctes_scc.Iz();
-              k(5,11) = twoE*ctes_scc.Iz();
-              k(6,11) = sixE*ctes_scc.Iz();
-              k(11,11) = fourE*ctes_scc.Iz();
+              k(0,11) = -sixE*sprop.Iz();
+              k(5,11) = twoE*sprop.Iz();
+              k(6,11) = sixE*sprop.Iz();
+              k(11,11) = fourE*sprop.Iz();
             }
           else
             if(dx == 0.0 && dy == 0.0 && dz > 0.0 && theta == 90)
               { // local y of columns in x dirn, local z in y dirn
-                k(0,0) = twelveE*ctes_scc.Iz();
-                k(4,0) = sixE*ctes_scc.Iz();
-                k(6,0) = -twelveE*ctes_scc.Iz();
-                k(10,0) = sixE*ctes_scc.Iz();
+                k(0,0) = twelveE*sprop.Iz();
+                k(4,0) = sixE*sprop.Iz();
+                k(6,0) = -twelveE*sprop.Iz();
+                k(10,0) = sixE*sprop.Iz();
 
-                k(1,1) = twelveE*ctes_scc.Iy();
-                k(3,1) = -sixE*ctes_scc.Iy();
-                k(7,1) = -twelveE*ctes_scc.Iy();
-                k(9,1) = -sixE*ctes_scc.Iy();
+                k(1,1) = twelveE*sprop.Iy();
+                k(3,1) = -sixE*sprop.Iy();
+                k(7,1) = -twelveE*sprop.Iy();
+                k(9,1) = -sixE*sprop.Iy();
 
                 k(2,2) = EA;
                 k(8,2) = -EA;
 
-                k(1,3) = -sixE*ctes_scc.Iy();
-                k(3,3) = fourE*ctes_scc.Iy();
-                k(7,3) = sixE*ctes_scc.Iy();
-                k(9,3) = twoE*ctes_scc.Iy();
+                k(1,3) = -sixE*sprop.Iy();
+                k(3,3) = fourE*sprop.Iy();
+                k(7,3) = sixE*sprop.Iy();
+                k(9,3) = twoE*sprop.Iy();
 
-                k(0,4) = sixE*ctes_scc.Iz();
-                k(4,4) = fourE*ctes_scc.Iz();
-                k(6,4) = -sixE*ctes_scc.Iz();
-                k(10,4) = twoE*ctes_scc.Iz();
+                k(0,4) = sixE*sprop.Iz();
+                k(4,4) = fourE*sprop.Iz();
+                k(6,4) = -sixE*sprop.Iz();
+                k(10,4) = twoE*sprop.Iz();
 
-                k(5,5) = ctes_scc.GJ()/L;
-                k(11,5) = -ctes_scc.GJ()/L;
+                k(5,5) = sprop.GJ()/L;
+                k(11,5) = -sprop.GJ()/L;
 
-                k(0,6) = -twelveE*ctes_scc.Iz();
-                k(4,6) = -sixE*ctes_scc.Iz();
-                k(6,6) = twelveE*ctes_scc.Iz();
-                k(10,6) = -sixE*ctes_scc.Iz();
+                k(0,6) = -twelveE*sprop.Iz();
+                k(4,6) = -sixE*sprop.Iz();
+                k(6,6) = twelveE*sprop.Iz();
+                k(10,6) = -sixE*sprop.Iz();
 
-                k(1,7) = -twelveE*ctes_scc.Iy();
-                k(3,7) = sixE*ctes_scc.Iy();
-                k(7,7) = twelveE*ctes_scc.Iy();
-                k(9,7) = sixE*ctes_scc.Iy();
+                k(1,7) = -twelveE*sprop.Iy();
+                k(3,7) = sixE*sprop.Iy();
+                k(7,7) = twelveE*sprop.Iy();
+                k(9,7) = sixE*sprop.Iy();
 
                 k(2,8) = -EA;
                 k(8,8) = EA;
 
-                k(1,9) = -sixE*ctes_scc.Iy();
-                k(3,9) = twoE*ctes_scc.Iy();
-                k(7,9) = sixE*ctes_scc.Iy();
-                k(9,9) = fourE*ctes_scc.Iy();
+                k(1,9) = -sixE*sprop.Iy();
+                k(3,9) = twoE*sprop.Iy();
+                k(7,9) = sixE*sprop.Iy();
+                k(9,9) = fourE*sprop.Iy();
 
-                k(0,10) = sixE*ctes_scc.Iz();
-                k(4,10) = twoE*ctes_scc.Iz();
-                k(6,10) = -sixE*ctes_scc.Iz();
-                k(10,10) = fourE*ctes_scc.Iz();
+                k(0,10) = sixE*sprop.Iz();
+                k(4,10) = twoE*sprop.Iz();
+                k(6,10) = -sixE*sprop.Iz();
+                k(10,10) = fourE*sprop.Iz();
 
-                k(5,11) = -ctes_scc.GJ()/L;
-                k(11,11) = ctes_scc.GJ()/L;
+                k(5,11) = -sprop.GJ()/L;
+                k(11,11) = sprop.GJ()/L;
               }
             else
               {

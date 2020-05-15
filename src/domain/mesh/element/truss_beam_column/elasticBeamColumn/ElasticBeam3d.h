@@ -79,7 +79,6 @@ class SectionForceDeformation;
 class ElasticBeam3d: public ProtoBeam3d
   {
   private:
-    Vector eInic; //!< section initial deformations
     int sectionTag;
     mutable EsfBeamColumn3d q;
     FVectorBeamColumn3d q0;  //!< Fixed end forces in basic system (no torsion)
@@ -108,26 +107,18 @@ class ElasticBeam3d: public ProtoBeam3d
     Element *getCopy(void) const;
     ~ElasticBeam3d(void);
 
-    int setInitialSectionDeformation(const Vector&);
-    inline const Vector &getInitialSectionDeformation(void) const
-      { return eInic; }
-    const Vector &getSectionDeformation(void) const;
+    const Vector &computeCurrentStrain(void) const;
 
     void setDomain(Domain *theDomain);
     
     virtual CrdTransf *getCoordTransf(void);
     virtual const CrdTransf *getCoordTransf(void) const;
 
+    virtual int update(void);
     int commitState(void);
     int revertToLastCommit(void);
     int revertToStart(void);
 
-    const Vector &getInitialStrain(void) const
-      { return eInic; }
-    void setInitialStrain(const Vector &e)
-      { eInic= e; }
-    
-    int update(void);
     const Matrix &getTangentStiff(void) const;
     const Matrix &getInitialStiff(void) const;
     const Matrix &getMass(void) const;    

@@ -158,11 +158,15 @@ XC::DbTagData &XC::CrossSectionProperties1d::getDbTagData(void) const
 
 //! @brief Send members through the communicator argument.
 int XC::CrossSectionProperties1d::sendData(Communicator &comm)
-  { return comm.sendDoubles(e,a,rho,getDbTagData(),CommMetaData(0)); }
+  {
+    return comm.sendDoubles(e,a,rho,getDbTagData(),CommMetaData(0)); }
 
 //! @brief Receives members through the communicator argument.
 int XC::CrossSectionProperties1d::recvData(const Communicator &comm)
-  { return comm.receiveDoubles(e,a,rho,getDbTagData(),CommMetaData(0)); }
+  {
+    int retval= comm.receiveDoubles(e,a,rho,getDbTagData(),CommMetaData(0));
+    return retval;
+  }
 
 //! @brief Sends object through the communicator argument.
 int XC::CrossSectionProperties1d::sendSelf(Communicator &comm)

@@ -31,7 +31,7 @@
 #define ProtoBeam3d_h
 
 #include "domain/mesh/element/Element1D.h"
-#include "material/section/repres/CrossSectionProperties3d.h"
+#include "domain/mesh/element/utils/physical_properties/ElasticSection3dPhysicalProperties.h"
 
 namespace XC {
 //! @ingroup BeamColumnElemGrp
@@ -39,8 +39,10 @@ namespace XC {
 //! @brief Base class for 3D beams.
 class ProtoBeam3d: public Element1D
   {
+  public:
+    typedef ElasticSection3dPhysicalProperties PhysProp;
   protected:
-    CrossSectionProperties3d ctes_scc; //Section mechanical properties E,A,Iy,...
+    PhysProp physicalProperties; //!< pointers to the material objects and physical properties.
     int sendData(Communicator &);
     int recvData(const Communicator &);
     void set_material(const Material *m);
@@ -50,18 +52,39 @@ class ProtoBeam3d: public Element1D
     ProtoBeam3d(int tag, int class_tag, int Nd1, int Nd2);
     ProtoBeam3d(int tag, int class_tag, double A, double E, double G, double Jx, double Iy, double Iz, int Nd1, int Nd2);
     int getNumDOF(void) const;
-    inline CrossSectionProperties3d getSectionProperties(void) const
-      { return ctes_scc; }
-    void setSectionProperties(const CrossSectionProperties3d &ctes)
-      { ctes_scc= ctes; }
     
-    inline double getRho(void) const
-      { return ctes_scc.getRho(); }
-    inline void setRho(const double &r)
-      { ctes_scc.setRho(r); }
-    inline double getLinearRho(void) const
-      { return getRho()*ctes_scc.A(); }
+    const CrossSectionProperties3d &getSectionProperties(void) const;
+    CrossSectionProperties3d &getSectionProperties(void);
+    void setSectionProperties(const CrossSectionProperties3d &);  
+    double getRho(void) const;
+    void setRho(const double &);
+    double getLinearRho(void) const;
+    
+    inline PhysProp &getPhysicalProperties(void)
+      { return physicalProperties; }
+    inline const PhysProp &getPhysicalProperties(void) const
+      { return physicalProperties; }
+    void setPhysicalProperties(const PhysProp &);
+    inline virtual std::set<std::string> getMaterialNames(void) const
+      { return physicalProperties.getMaterialNames(); }
 
+    int setInitialSectionDeformation(const Vector &);
+    inline const Vector &getInitialSectionDeformation(void) const
+      { return (*physicalProperties[0]).getInitialSectionDeformation(); }
+    virtual const Vector &computeCurrentStrain(void) const;
+    const Vector &getSectionDeformation(void) const;
+    inline const Vector &getInitialStrain(void) const
+      { return (*physicalProperties[0]).getInitialSectionDeformation(); }
+    inline void setInitialStrain(const Vector &e)
+      { (*physicalProperties[0]).setInitialSectionDeformation(e); }
+
+    
+    virtual int update(void);
+    int commitState(void);
+    int revertToLastCommit(void);
+    int revertToStart(void);
+
+    void zeroLoad(void);	
     virtual void createInertiaLoad(const Vector &);
 
     Vector getVDirStrongAxisLocalCoord(void) const;

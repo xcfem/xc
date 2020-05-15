@@ -62,12 +62,14 @@ class BaseElasticSection: public PrismaticBarCrossSection
 
     virtual void sectionGeometry(const std::string &)= 0;
 
-    int setInitialSectionDeformation(const Vector&);
     int setTrialSectionDeformation(const Vector&);
-    void zeroInitialSectionDeformation(void)
-      { eInic.Zero(); }
+    inline Vector &getTrialSectionDeformation(void)
+      { return eTrial; }
+    int setInitialSectionDeformation(const Vector&);
     inline const Vector &getInitialSectionDeformation(void) const
       { return eInic; }
+    void zeroInitialSectionDeformation(void)
+      { eInic.Zero(); }
     const Vector &getSectionDeformation(void) const;
     virtual double getRho(void) const= 0;
     virtual void setRho(const double &)= 0;

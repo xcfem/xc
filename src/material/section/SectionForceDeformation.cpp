@@ -62,7 +62,6 @@
 #include <material/section/SectionForceDeformation.h>
 #include <domain/mesh/element/utils/Information.h>
 #include <domain/mesh/element/truss_beam_column/nonlinearBeamColumn/matrixutil/MatrixUtil.h>
-#include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
 #include <utility/recorder/response/MaterialResponse.h>
 #include <deque>
@@ -83,32 +82,7 @@ const XC::Matrix *ptr_initial_tangent= nullptr;
 //! @param classTag: object class identifier.
 //! @param mat_ldr: model wide material objects manager.
 XC::SectionForceDeformation::SectionForceDeformation(int tag, int classTag,MaterialHandler *mat_ldr)
-  : Material(tag,classTag), fDefault(nullptr), material_handler(mat_ldr) {}
-
-//! @brief Copy constructor.
-XC::SectionForceDeformation::SectionForceDeformation(const SectionForceDeformation &other)
-  : Material(other), fDefault(nullptr), material_handler(other.material_handler)
-  {
-    if(other.fDefault)
-      fDefault= new Matrix(*other.fDefault);
-  }
-
-//! @brief Assignment operator.
-XC::SectionForceDeformation &XC::SectionForceDeformation::operator=(const SectionForceDeformation &other)
-  {
-    Material::operator=(other);
-    if(fDefault) delete fDefault;
-    if(other.fDefault) fDefault= new Matrix(*other.fDefault);
-    material_handler= other.material_handler;
-    return *this;
-  }
-
-//! @brief Destructor.
-XC::SectionForceDeformation::~SectionForceDeformation(void)
-  {
-    if(fDefault) delete fDefault;
-    fDefault= nullptr;
-  }
+  : Material(tag,classTag), material_handler(mat_ldr) {}
 
 //! @brief Comma separated internal forces names to with the section contributes with stiffness.
 std::string XC::SectionForceDeformation::getTypeString(void) const
@@ -130,69 +104,53 @@ int XC::SectionForceDeformation::addInitialSectionDeformation(const Vector &def)
 //! subclasses to suit specific SectionForceDeformation implementations.
 const XC::Matrix &XC::SectionForceDeformation::getSectionFlexibility(void) const
   {
-    int order = this->getOrder();
-  
-    if(!fDefault)
-      {                
-        fDefault= new Matrix(order,order);
-        if(!fDefault)
-          {
-            std::cerr << "SectionForceDeformation::getSectionFlexibility -- failed to allocate flexibility matrix\n";
-             exit(-1);
-           }
-      }
-    const Matrix &k = this->getSectionTangent();
+    const int order= this->getOrder();
+    fDefault.resize(order,order);
+
+    const Matrix &k= this->getSectionTangent();
     switch(order)
       {
       case 1:
         if(k(0,0) != 0.0)
-          (*fDefault)(0,0) = 1.0/k(0,0);
+          fDefault(0,0)= 1.0/k(0,0);
         break;
       case 2:
-        invert2by2Matrix(k,*fDefault);
+        invert2by2Matrix(k,fDefault);
         break;
       case 3:
-        invert3by3Matrix(k,*fDefault);
+        invert3by3Matrix(k,fDefault);
         break;
       default:
-        invertMatrix(order,k,*fDefault);
+        invertMatrix(order,k,fDefault);
         break;
       }
-    return *fDefault;
+    return fDefault;
   }
 
 //! @brief Returns the initial flexibility matrix of the section.
 const XC::Matrix &XC::SectionForceDeformation::getInitialFlexibility(void) const
   {
-    int order = this->getOrder();
-    if(!fDefault)
-      {                
-        fDefault = new Matrix(order,order);
-        if(fDefault == 0)
-          {
-            std::cerr << "XC::SectionForceDeformation::getInitialFlexibility -- failed to allocate flexibility matrix\n";
-            exit(-1);
-          }
-      }
-    const Matrix &k = this->getInitialTangent();
+    const int order= this->getOrder();
+    fDefault.resize(order,order);
+    const Matrix &k= this->getInitialTangent();
   
     switch(order)
       {
       case 1:
         if(k(0,0) != 0.0)
-          (*fDefault)(0,0) = 1.0/k(0,0);
+          fDefault(0,0)= 1.0/k(0,0);
         break;
       case 2:
-        invert2by2Matrix(k,*fDefault);
+        invert2by2Matrix(k,fDefault);
         break;
       case 3:
-        invert3by3Matrix(k,*fDefault);
+        invert3by3Matrix(k,fDefault);
         break;
       default:
-        invertMatrix(order,k,*fDefault);
+        invertMatrix(order,k,fDefault);
         break;
       }
-    return *fDefault;
+    return fDefault;
   }
 
 //! @brief Returns the density (mass per unit length/area/volume)
@@ -209,13 +167,13 @@ XC::SectionForceDeformation::setResponse(const std::vector<std::string> &argv, I
     if ((strcmp(argv[0],"deformations") ==0) || 
         (strcmp(argv[0],"deformation") ==0)) {
 
-        XC::Vector *theVector = new Vector(this->getOrder());
+        XC::Vector *theVector= new Vector(this->getOrder());
         if (theVector == 0) {
             std::cerr << "WARNING XC::SectionForceDeformation::setResponse() - out of memory\n";
             return -1;
         } 
-        sectInfo.theVector = theVector;
-        sectInfo.theType = VectorType;        
+        sectInfo.theVector= theVector;
+        sectInfo.theType= VectorType;        
         return 1;
     } 
 
@@ -223,27 +181,27 @@ XC::SectionForceDeformation::setResponse(const std::vector<std::string> &argv, I
     else if ((strcmp(argv[0],"forces") ==0) ||
              (strcmp(argv[0],"force") ==0)) {
 
-        XC::Vector *theVector = new Vector(this->getOrder());
+        XC::Vector *theVector= new Vector(this->getOrder());
         if (theVector == 0) {
             std::cerr << "WARNING XC::SectionForceDeformation::setResponse() - out of memory\n";
             return -1;
         } 
-        sectInfo.theVector = theVector;
-        sectInfo.theType = VectorType;        
+        sectInfo.theVector= theVector;
+        sectInfo.theType= VectorType;        
         return 2;
     } 
 
         // tangent stiffness
         else if (argv[0] == "stiff" ||
                 argv[0] == "stiffness") {
-                int order = this->getOrder();
-                XC::Matrix *newMatrix = new Matrix(order,order);
+                const int order= this->getOrder();
+                XC::Matrix *newMatrix= new Matrix(order,order);
                 if (newMatrix == 0) {
                         std::cerr << "WARNING XC::SectionForceDeformation::setResponse() - out of memory\n";
                         return -1;
                 } 
-                sectInfo.theMatrix = newMatrix;
-                sectInfo.theType = MatrixType;        
+                sectInfo.theMatrix= newMatrix;
+                sectInfo.theType= MatrixType;        
                 return 3;
         }
 
@@ -286,13 +244,13 @@ int XC::SectionForceDeformation::getResponse(int responseID, Information &secInf
       case 4:
         {
           Vector &theVec= *(secInfo.theVector);
-          const Vector &e = this->getSectionDeformation();
-          const Vector &s = this->getStressResultant();
-          int order = this->getOrder();
-          for(int i = 0; i < order; i++)
+          const Vector &e= this->getSectionDeformation();
+          const Vector &s= this->getStressResultant();
+          const int order= this->getOrder();
+          for(int i= 0; i < order; i++)
             {
-              theVec(i) = e(i);
-              theVec(i+order) = s(i);
+              theVec(i)= e(i);
+              theVec(i+order)= s(i);
             }
           return secInfo.setVector(theVec);
         }
@@ -371,9 +329,9 @@ double XC::SectionForceDeformation::getSectionDeformationByName(const std::strin
       retval= getSectionDeformation(MEMBRANE_RESPONSE_n1);
     else if(cod == "defn2")
       retval= getSectionDeformation(MEMBRANE_RESPONSE_n2);
-    else if(cod == "defm1") //Bending around the 1 axis.
+    else if(cod == "defm1") // Bending around the 1 axis.
       retval= getSectionDeformation(PLATE_RESPONSE_m1);
-    else if(cod == "defm2") //Bending around the 2 axis.
+    else if(cod == "defm2") // Bending around the 2 axis.
       retval= getSectionDeformation(PLATE_RESPONSE_m2);
     else if(cod == "defq13")
       retval= getSectionDeformation(PLATE_RESPONSE_q13);
@@ -383,11 +341,11 @@ double XC::SectionForceDeformation::getSectionDeformationByName(const std::strin
       retval= getSectionDeformation(PLATE_RESPONSE_m12);
     else if(cod == "defn12")
       retval= getSectionDeformation(MEMBRANE_RESPONSE_n12);
-    else if(cod == "defP" || cod == "defN") //Axial force (prismatic bar).
+    else if(cod == "defP" || cod == "defN") // Axial force (prismatic bar).
       retval= getSectionDeformation(SECTION_RESPONSE_P);
-    else if(cod == "defMz") //Giro around the axis z.
+    else if(cod == "defMz") // Rotation around the axis z.
       retval= getSectionDeformation(SECTION_RESPONSE_MZ);
-    else if(cod == "defMy") //Giro around the axis y.
+    else if(cod == "defMy") // Rotation around the axis y.
       retval= getSectionDeformation(SECTION_RESPONSE_MY);
     else if(cod == "defVz")
       retval= getSectionDeformation(SECTION_RESPONSE_VZ);
@@ -404,17 +362,17 @@ double XC::SectionForceDeformation::getSectionDeformationByName(const std::strin
 //! @brief Send object members through the communicator argument.
 int XC::SectionForceDeformation::sendData(Communicator &comm)
   {
-    setDbTagDataPos(0,getTag());
-    int res= comm.sendMatrixPtr(fDefault,getDbTagData(),MatrixCommMetaData(1,2,3,4));
+    setDbTagDataPos(1,getTag());
+    int res= comm.sendMatrix(fDefault,getDbTagData(),CommMetaData(2));
     return res;
   }
 
 //! @brief Receives object members through the communicator argument.
 int XC::SectionForceDeformation::recvData(const Communicator &comm)
   {
-    setTag(getDbTagDataPos(0));
-    fDefault= comm.receiveMatrixPtr(fDefault,getDbTagData(),MatrixCommMetaData(1,2,3,4));
-    return 0;
+    setTag(getDbTagDataPos(1));
+    int res= comm.receiveMatrix(fDefault,getDbTagData(),CommMetaData(2));
+    return res;
   }
 
 // AddingSensitivity:BEGIN ////////////////////////////////////////
@@ -447,64 +405,32 @@ const XC::Matrix &XC::SectionForceDeformation::getSectionTangentSensitivity(int 
 
 const XC::Matrix &XC::SectionForceDeformation::getSectionFlexibilitySensitivity(int gradIndex)
   {
-  int order = this->getOrder();
-  
-  if (fDefault == 0) {		
-    fDefault = new Matrix(order,order);
-    if (fDefault == 0) {
-      std::cerr << getClassName() << "::" << __FUNCTION__
-	        << "; failed to allocate matrix\n";
-      exit(-1);
-    }
+    const int order= this->getOrder();
+    fDefault.resize(order,order);
+ 
+    const Matrix &dksdh= this->getSectionTangentSensitivity(gradIndex);
+    const Matrix &fs= this->getSectionFlexibility();
+    fDefault= (fs * dksdh * fs) * -1;
+
+    return fDefault;
   }
-
-  const Matrix &dksdh = this->getSectionTangentSensitivity(gradIndex);
-  
-  const Matrix &fs = this->getSectionFlexibility();
-
-  *fDefault = (fs * dksdh * fs) * -1;
-
-  return *fDefault;
-}
 
 const XC::Matrix &XC::SectionForceDeformation::getInitialTangentSensitivity(int gradIndex)
   {
-    int order = this->getOrder();
-
-    if (fDefault == 0) {		
-      fDefault = new Matrix(order,order);
-      if (fDefault == 0) {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; failed to allocate matrix\n";
-	exit(-1);
-      }
-    }
-
-    fDefault->Zero();
-
-    return *fDefault;
+    const int order= this->getOrder();
+    fDefault.resize(order,order);
+    fDefault.Zero();
+    return fDefault;
   }
 
 const XC::Matrix &XC::SectionForceDeformation::getInitialFlexibilitySensitivity(int gradIndex)
   {
-    int order = this->getOrder();
-
-    if (fDefault == 0) {		
-      fDefault = new Matrix(order,order);
-      if (fDefault == 0) {
-	std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; failed to allocate matrix\n";
-	exit(-1);
-      }
-    }
-
-    const Matrix &dksdh = this->getInitialTangentSensitivity(gradIndex);
-
-    const Matrix &fs = this->getInitialFlexibility();
-
-    *fDefault = (fs * dksdh * fs) * -1;
-
-    return *fDefault;
+    const int order= this->getOrder();
+    fDefault.resize(order,order);
+    const Matrix &dksdh= this->getInitialTangentSensitivity(gradIndex);
+    const Matrix &fs= this->getInitialFlexibility();
+    fDefault= (fs * dksdh * fs) * -1;
+    return fDefault;
   }
 
 double XC::SectionForceDeformation::getRhoSensitivity(int gradNumber)

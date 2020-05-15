@@ -82,8 +82,6 @@ class ElasticSection3d: public BaseElasticSection3d
   {
   private:   
     static Vector s;
-  protected:
-
   public:
     ElasticSection3d(int tag, MaterialHandler *mat_ldr= nullptr, const CrossSectionProperties3d &ctes= CrossSectionProperties3d());
     ElasticSection3d(int tag, double E, double A, double Iz, double Iy, double G, double J);
@@ -100,6 +98,7 @@ class ElasticSection3d: public BaseElasticSection3d
     const ResponseId &getType(void) const;
     int getOrder(void) const;
     
+    virtual DbTagData &getDbTagData(void) const;
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);
     

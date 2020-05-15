@@ -104,22 +104,22 @@ void XC::ElasticBeam3d::set_transf(const CrdTransf *trf)
 
 //! @brief Default constructor.
 XC::ElasticBeam3d::ElasticBeam3d(int tag)
-  :ProtoBeam3d(tag,ELE_TAG_ElasticBeam3d), eInic(3),
-   sectionTag(0), q(), q0(), p0(), theCoordTransf(0)
+  :ProtoBeam3d(tag,ELE_TAG_ElasticBeam3d), sectionTag(0),
+   q(), q0(), p0(), theCoordTransf(nullptr)
   { load.reset(12); }
 
 //! @brief Constructor.
 XC::ElasticBeam3d::ElasticBeam3d(int tag,const Material *m,const CrdTransf *trf)
-  :ProtoBeam3d(tag,ELE_TAG_ElasticBeam3d,m), eInic(3),
-   sectionTag(0), q(), q0(), p0(), theCoordTransf(nullptr)
+  : ProtoBeam3d(tag,ELE_TAG_ElasticBeam3d,m), sectionTag(0),
+   q(), q0(), p0(), theCoordTransf(nullptr)
   { load.reset(12); set_transf(trf); }
 
 //! @brief Constructor.
 XC::ElasticBeam3d::ElasticBeam3d(int tag, double a, double e, double g,
                              double jx, double iy, double iz, int Nd1, int Nd2,
                              CrdTransf3d &coordTransf, double r, int sectTag)
-  :ProtoBeam3d(tag,ELE_TAG_ElasticBeam3d,a,e,g,jx,iy,iz,Nd1,Nd2), eInic(3),
-   sectionTag(sectTag), q(), q0(), p0(), theCoordTransf(0)
+  :ProtoBeam3d(tag,ELE_TAG_ElasticBeam3d,a,e,g,jx,iy,iz,Nd1,Nd2), sectionTag(sectTag),
+   q(), q0(), p0(), theCoordTransf(nullptr)
   {
     setRho(r);
     load.reset(12);
@@ -128,31 +128,25 @@ XC::ElasticBeam3d::ElasticBeam3d(int tag, double a, double e, double g,
 
 //! @brief Constructor.
 XC::ElasticBeam3d::ElasticBeam3d(int tag, int Nd1, int Nd2, SectionForceDeformation *section,CrdTransf3d &coordTransf, double r)
-  :ProtoBeam3d(tag,ELE_TAG_ElasticBeam3d,Nd1,Nd2), eInic(3), q(), theCoordTransf(0)
+  :ProtoBeam3d(tag,ELE_TAG_ElasticBeam3d,Nd1,Nd2), q(), theCoordTransf(nullptr)
   {
     load.reset(12);
     if(section)
       {
         sectionTag= section->getTag();
-	ctes_scc= CrossSectionProperties3d(*section);
-        ctes_scc.setRho(r);
+	setSectionProperties(CrossSectionProperties3d(*section));
+        setRho(r);
       }
 
-    if(ctes_scc.J()==0.0)
+    CrossSectionProperties3d &sprop= getSectionProperties();
+    if(sprop.J()==0.0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; no torsion in section -- setting GJ = 1.0e10\n";
-        ctes_scc.J() = 1.0e10;
+        sprop.J() = 1.0e10;
       }
 
-    theCoordTransf = coordTransf.getCopy();
-
-    if(!theCoordTransf)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; failed to get copy of coordinate transformation\n";
-        exit(-1);
-      }
+    set_transf(&coordTransf);
 
     q0.zero();
     p0.zero();
@@ -160,8 +154,7 @@ XC::ElasticBeam3d::ElasticBeam3d(int tag, int Nd1, int Nd2, SectionForceDeformat
 
 //! @brief Copy constructor.
 XC::ElasticBeam3d::ElasticBeam3d(const XC::ElasticBeam3d &other)
-  :ProtoBeam3d(other), eInic(other.eInic),
-   sectionTag(other.sectionTag), q(other.q), theCoordTransf(nullptr)
+  :ProtoBeam3d(other), sectionTag(other.sectionTag), q(other.q), theCoordTransf(nullptr)
   {
     set_transf(other.theCoordTransf);
 
@@ -173,7 +166,6 @@ XC::ElasticBeam3d::ElasticBeam3d(const XC::ElasticBeam3d &other)
 XC::ElasticBeam3d &XC::ElasticBeam3d::operator=(const XC::ElasticBeam3d &other)
   {
     ProtoBeam3d::operator=(other);
-    eInic= other.eInic;
     sectionTag= other.sectionTag;
     q= other.q;
     set_transf(other.theCoordTransf);
@@ -239,63 +231,61 @@ void XC::ElasticBeam3d::setDomain(Domain *theDomain)
       }
   }
 
-int XC::ElasticBeam3d::setInitialSectionDeformation(const Vector &def)
-  {
-    eInic= def;
-    return 0;
-  }
-
-//! @brief Return the section generalized strain.
-const XC::Vector &XC::ElasticBeam3d::getSectionDeformation(void) const
+//! @brief Compute the current strain.
+const XC::Vector &XC::ElasticBeam3d::computeCurrentStrain(void) const
   {
     static Vector retval(5);
     theCoordTransf->update();
-    const double L = theCoordTransf->getInitialLength();
-    // retval(0)= dx2-dx1: Element elongation/L.
-    // retval(1)= (dy1-dy2)/L+gz1: Rotation about z/L.
-    // retval(2)= (dy1-dy2)/L+gz2: Rotation about z/L.
-    // retval(3)= (dz2-dz1)/L+gy1: Rotation about y/L.
-    // retval(4)= (dz2-dz1)/L+gy2: Rotation about y/L.
-    // retval(5)= dx2-dx1: Element twist/L.
+    const double L= theCoordTransf->getInitialLength();
     retval= theCoordTransf->getBasicTrialDisp()/L;
-    retval(0)-= eInic(0);
-    retval(1)-= eInic(1);
-    retval(2)-= eInic(1);
-    retval(1)-= eInic(2);
-    retval(2)-= eInic(2);
     return retval;
   }
 
+//! @brief Update element state.
+int XC::ElasticBeam3d::update(void)
+  {
+    int retval= ProtoBeam3d::update();
+    retval+= theCoordTransf->update();
+    return retval;
+  }
 
+//! @brief Commit the element state.
 int XC::ElasticBeam3d::commitState(void)
   {
     int retVal = 0;
     // call element commitState to do any base class stuff
-    if((retVal = this->XC::Element::commitState()) != 0)
+    if((retVal = this->ProtoBeam3d::commitState()) != 0)
       { std::cerr << getClassName() << "::" << __FUNCTION__
 		  << "; failed in base class."; }
     retVal += theCoordTransf->commitState();
     return retVal;
   }
 
+//! @brief Revert the element to the its last commited state.
 int XC::ElasticBeam3d::revertToLastCommit()
-  { return theCoordTransf->revertToLastCommit(); }
+  {
+    int retval= ProtoBeam3d::revertToLastCommit();
+    retval+= theCoordTransf->revertToLastCommit();
+    return retval;
+  }
 
+//! @brief Revert the the element to the its start state.
 int XC::ElasticBeam3d::revertToStart()
-  { return theCoordTransf->revertToStart(); }
-
-int XC::ElasticBeam3d::update(void)
-  { return theCoordTransf->update(); }
+  {
+    int retval= ProtoBeam3d::revertToStart();
+    retval+= theCoordTransf->revertToStart();
+    return retval;
+  }
 
 //! @brief Return the tangent stiffness matrix in global coordinates.
 const XC::Matrix &XC::ElasticBeam3d::getTangentStiff(void) const
   {
     const Vector &v= getSectionDeformation();
-
     //Ignore sections with product moment
     //of inertia not zero.
-    const double eiyz= ctes_scc.EIyz();
-    const double eimax= std::max(ctes_scc.EIz(),ctes_scc.EIy());
+    const CrossSectionProperties3d &sprop= getSectionProperties();
+    const double eiyz= sprop.EIyz();
+    const double eimax= std::max(sprop.EIz(),sprop.EIy());
     if(std::abs(eiyz/eimax)>1e-5) //Product of inertia not null.
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; this element must not"
@@ -303,13 +293,13 @@ const XC::Matrix &XC::ElasticBeam3d::getTangentStiff(void) const
                 << " product of inertia."
                 << std::endl;
 
-    const double E= ctes_scc.E();
-    const double EA= ctes_scc.A()*E; // EA
-    const double EIz2= 2.0*ctes_scc.Iz()*E; // 2EIz
+    const double E= sprop.E();
+    const double EA= sprop.A()*E; // EA
+    const double EIz2= 2.0*sprop.Iz()*E; // 2EIz
     const double EIz4= 2.0*EIz2; // 4EIz
-    const double EIy2= 2.0*ctes_scc.Iy()*E; // 2EIy
+    const double EIy2= 2.0*sprop.Iy()*E; // 2EIy
     const double EIy4= 2.0*EIy2; // 4EIy
-    const double GJ= ctes_scc.GJ(); // GJ
+    const double GJ= sprop.GJ(); // GJ
 
     //Element internal forces due to the actions of the domain on its nodes.
     q.N()= EA*v(0); //axial force in the element.
@@ -346,8 +336,9 @@ const XC::Matrix &XC::ElasticBeam3d::getInitialStiff(void) const
   {
     //Ignore sections with product moment
     //of inertia not zero.
-    const double eiyz= ctes_scc.EIyz();
-    const double eimax= std::max(ctes_scc.EIz(),ctes_scc.EIy());
+    const CrossSectionProperties3d &sprop= getSectionProperties();
+    const double eiyz= sprop.EIyz();
+    const double eimax= std::max(sprop.EIz(),sprop.EIy());
     if(std::abs(eiyz/eimax)>1e-5) //Product of inertia not null.
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; this element must not"
@@ -357,13 +348,13 @@ const XC::Matrix &XC::ElasticBeam3d::getInitialStiff(void) const
 
     const double L = theCoordTransf->getInitialLength();
     const double oneOverL = 1.0/L;
-    const double EoverL   = ctes_scc.E()*oneOverL;
-    const double EAoverL  = ctes_scc.A()*EoverL; // EA/L
-    const double EIzoverL2 = 2.0*ctes_scc.Iz()*EoverL; // 2EIz/L
+    const double EoverL   = sprop.E()*oneOverL;
+    const double EAoverL  = sprop.A()*EoverL; // EA/L
+    const double EIzoverL2 = 2.0*sprop.Iz()*EoverL; // 2EIz/L
     const double EIzoverL4 = 2.0*EIzoverL2; // 4EIz/L
-    const double EIyoverL2 = 2.0*ctes_scc.Iy()*EoverL; // 2EIy/L
+    const double EIyoverL2 = 2.0*sprop.Iy()*EoverL; // 2EIy/L
     const double EIyoverL4 = 2.0*EIyoverL2; // 4EIy/L
-    const double GJoverL = ctes_scc.GJ()*oneOverL; // GJ/L
+    const double GJoverL = sprop.GJ()*oneOverL; // GJ/L
 
     kb(0,0) = EAoverL;
     kb(1,1) = kb(2,2) = EIzoverL4;
@@ -416,7 +407,6 @@ void XC::ElasticBeam3d::zeroLoad(void)
     ProtoBeam3d::zeroLoad();
     q0.zero();
     p0.zero();
-    eInic.Zero(); //Removes also initial strains.
     return;
   }
 
@@ -524,14 +514,14 @@ const XC::Vector &XC::ElasticBeam3d::getResistingForceIncInertia(void) const
 const XC::Vector &XC::ElasticBeam3d::getResistingForce(void) const
   {
     const Vector &v= getSectionDeformation();
-
-    const double E= ctes_scc.E();
-    const double EA= ctes_scc.A()*E; // EA
-    const double EIz2= 2.0*ctes_scc.Iz()*E; // 2EIz
+    const CrossSectionProperties3d &sprop= getSectionProperties();
+    const double E= sprop.E();
+    const double EA= sprop.A()*E; // EA
+    const double EIz2= 2.0*sprop.Iz()*E; // 2EIz
     const double EIz4= 2.0*EIz2; // 4EIz
-    const double EIy2= 2.0*ctes_scc.Iy()*E; // 2EIy
+    const double EIy2= 2.0*sprop.Iy()*E; // 2EIy
     const double EIy4= 2.0*EIy2; // 4EIy
-    const double GJ= ctes_scc.GJ(); // GJ
+    const double GJ= sprop.GJ(); // GJ
 
     //Element internal forces due to the actions of the structure over its nodes.
     q.N()= EA*v(0); //axial force in the element.
@@ -620,7 +610,7 @@ int XC::ElasticBeam3d::sendData(Communicator &comm)
     DbTagData &dt= getDbTagData();
     int res= ProtoBeam3d::sendData(comm);
     res+= sendCoordTransf(8,9,10,comm);
-    res+= comm.sendVector(eInic,dt,CommMetaData(11));
+    //res+= comm.sendVector(eInic,dt,CommMetaData(11));
     res+= comm.sendInt(sectionTag,dt,CommMetaData(12));
     res+= sendEsfBeamColumn3d(q,13,dt,comm);
     res+= p0.sendData(comm,dt,CommMetaData(14));
@@ -634,7 +624,7 @@ int XC::ElasticBeam3d::recvData(const Communicator &comm)
     DbTagData &dt= getDbTagData();
     int res= ProtoBeam3d::recvData(comm);
     theCoordTransf= recvCoordTransf3d(8,9,10,comm);
-    res+= comm.receiveVector(eInic,dt,CommMetaData(11));
+    //res+= comm.receiveVector(eInic,dt,CommMetaData(11));
     res+= comm.receiveInt(sectionTag,dt,CommMetaData(12));
     res+= receiveEsfBeamColumn3d(q,13,dt,comm);
     res+= p0.receiveData(comm,dt,CommMetaData(14));
@@ -652,7 +642,7 @@ int XC::ElasticBeam3d::sendSelf(Communicator &comm)
     res= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "ElasticBeam3d::sendSelf -- could not send data Vector\n";
+		<< "; could not send data Vector\n";
     return res;
   }
 
@@ -664,7 +654,7 @@ int XC::ElasticBeam3d::recvSelf(const Communicator &comm)
     int res = comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
-		<< "ElasticBeam3d::recvSelf() - failed to send ID data\n";
+		<< "; failed to send ID data\n";
     else
       res+= recvData(comm);
     return res;

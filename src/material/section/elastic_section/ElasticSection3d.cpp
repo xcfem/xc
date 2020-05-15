@@ -197,15 +197,24 @@ const XC::ResponseId &XC::ElasticSection3d::getType(void) const
 int XC::ElasticSection3d::getOrder(void) const
   { return 4; }
 
+//! @brief Returns a vector to store the dbTags
+//! of the class members.
+XC::DbTagData &XC::ElasticSection3d::getDbTagData(void) const
+  {
+    static DbTagData retval(7);
+    return retval;
+  }
+
 //! @brief Sends object through the communicator argument.
 int XC::ElasticSection3d::sendSelf(Communicator &comm)
   {
+    const DbTagData &dbTagData= getDbTagData();
     setDbTag(comm);
     const int dataTag= getDbTag();
-    inicComm(3);
+    inicComm(dbTagData.Size());
     int res= sendData(comm);
 
-    res+= comm.sendIdData(getDbTagData(),dataTag);
+    res+= comm.sendIdData(dbTagData,dataTag);
     if(res < 0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; failed to send data\n";
@@ -215,9 +224,10 @@ int XC::ElasticSection3d::sendSelf(Communicator &comm)
 //! @brief Receives object through the communicator argument.
 int XC::ElasticSection3d::recvSelf(const Communicator &comm)
   {
-    inicComm(3);
+    DbTagData &dbTagData= getDbTagData();
+    inicComm(dbTagData.Size());
     const int dataTag= getDbTag();
-    int res= comm.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(dbTagData,dataTag);
 
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__

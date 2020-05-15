@@ -231,7 +231,7 @@ int XC::DispBeamColumn3d::update(void)
     for(size_t i = 0; i < numSections; i++)
       {
         int order= theSections[i]->getOrder();
-        const XC::ID &code = theSections[i]->getType();
+        const ID &code = theSections[i]->getType();
 
         Vector e(workArea, order);
 

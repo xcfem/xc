@@ -105,15 +105,17 @@ void XC::beam3d02::setDomain(Domain *theDomain)
         exit(-1);
       }
 
-    EA = ctes_scc.EA()/L;
-    twoE = 2*ctes_scc.E()/L;
-    fourE = 4*ctes_scc.E()/L;
-    twelveE = 12*ctes_scc.E()/L3;
-    sixE = 6*ctes_scc.E()/L2;
+    const CrossSectionProperties3d &sprop= getSectionProperties();
+    EA = sprop.EA()/L;
+    twoE = 2*sprop.E()/L;
+    fourE = 4*sprop.E()/L;
+    twelveE = 12*sprop.E()/L3;
+    sixE = 6*sprop.E()/L2;
   }
 
 const XC::Matrix &XC::beam3d02::getStiff(void) const
   {
+    const CrossSectionProperties3d &sprop= getSectionProperties();
     if(dy == 0.0 && dz == 0.0 && dx > 0.0 && theta == 90)
       {
         k(0,0) = EA;
@@ -128,11 +130,12 @@ const XC::Matrix &XC::beam3d02::getStiff(void) const
         k(9,0) = 0;
         k(10,0) = 0;
         k(11,0) = 0;
+	
 
-        k(1,1) = twelveE*ctes_scc.Iz();
-        k(5,1) = sixE*ctes_scc.Iz();
-        k(7,1) = -twelveE*ctes_scc.Iz();
-        k(11,1) = sixE*ctes_scc.Iz();
+        k(1,1) = twelveE*sprop.Iz();
+        k(5,1) = sixE*sprop.Iz();
+        k(7,1) = -twelveE*sprop.Iz();
+        k(11,1) = sixE*sprop.Iz();
         k(0,1) = 0;
         k(2,1) = 0;
         k(3,1) = 0;
@@ -142,10 +145,10 @@ const XC::Matrix &XC::beam3d02::getStiff(void) const
         k(9,1) = 0;
         k(10,1) = 0;
 
-            k(2,2) = twelveE*ctes_scc.Iy();
-            k(4,2) = -sixE*ctes_scc.Iy();
-            k(8,2) = -twelveE*ctes_scc.Iy();
-            k(10,2) = -sixE*ctes_scc.Iy();
+            k(2,2) = twelveE*sprop.Iy();
+            k(4,2) = -sixE*sprop.Iy();
+            k(8,2) = -twelveE*sprop.Iy();
+            k(10,2) = -sixE*sprop.Iy();
             k(0,2) = 0;
             k(1,2) = 0;
             k(3,2) = 0;
@@ -155,8 +158,8 @@ const XC::Matrix &XC::beam3d02::getStiff(void) const
             k(9,2) = 0;
             k(11,2) = 0;
 
-            k(3,3) = ctes_scc.GJ()/L;
-            k(9,3) = -ctes_scc.GJ()/L;
+            k(3,3) = sprop.GJ()/L;
+            k(9,3) = -sprop.GJ()/L;
             k(0,3) = 0;
             k(1,3) = 0;
             k(2,3) = 0;
@@ -168,10 +171,10 @@ const XC::Matrix &XC::beam3d02::getStiff(void) const
             k(10,3) = 0;
             k(11,3) = 0;
 
-            k(2,4) = -sixE*ctes_scc.Iy();
-            k(4,4) = fourE*ctes_scc.Iy();
-            k(8,4) = sixE*ctes_scc.Iy();
-            k(10,4) = twoE*ctes_scc.Iy();
+            k(2,4) = -sixE*sprop.Iy();
+            k(4,4) = fourE*sprop.Iy();
+            k(8,4) = sixE*sprop.Iy();
+            k(10,4) = twoE*sprop.Iy();
             k(0,4) = 0;
             k(1,4) = 0;
             k(3,4) = 0;
@@ -181,10 +184,10 @@ const XC::Matrix &XC::beam3d02::getStiff(void) const
             k(9,4) = 0;
             k(11,4) = 0;
 
-            k(1,5) = sixE*ctes_scc.Iz();
-            k(5,5) = fourE*ctes_scc.Iz();
-            k(7,5) = -sixE*ctes_scc.Iz();
-            k(11,5) = twoE*ctes_scc.Iz();
+            k(1,5) = sixE*sprop.Iz();
+            k(5,5) = fourE*sprop.Iz();
+            k(7,5) = -sixE*sprop.Iz();
+            k(11,5) = twoE*sprop.Iz();
             k(0,5) = 0;
             k(2,5) = 0;
             k(3,5) = 0;
@@ -207,10 +210,10 @@ const XC::Matrix &XC::beam3d02::getStiff(void) const
             k(10,6) = 0;
             k(11,6) = 0;
 
-            k(1,7) = -twelveE*ctes_scc.Iz();
-            k(5,7) = -sixE*ctes_scc.Iz();
-            k(7,7) = twelveE*ctes_scc.Iz();
-            k(11,7) = -sixE*ctes_scc.Iz();
+            k(1,7) = -twelveE*sprop.Iz();
+            k(5,7) = -sixE*sprop.Iz();
+            k(7,7) = twelveE*sprop.Iz();
+            k(11,7) = -sixE*sprop.Iz();
             k(0,7) = 0;
             k(2,7) = 0;
             k(3,7) = 0;
@@ -220,10 +223,10 @@ const XC::Matrix &XC::beam3d02::getStiff(void) const
             k(9,7) = 0;
             k(10,7) = 0;
 
-            k(2,8) = -twelveE*ctes_scc.Iy();
-            k(4,8) = sixE*ctes_scc.Iy();
-            k(8,8) = twelveE*ctes_scc.Iy();
-            k(10,8) = sixE*ctes_scc.Iy();
+            k(2,8) = -twelveE*sprop.Iy();
+            k(4,8) = sixE*sprop.Iy();
+            k(8,8) = twelveE*sprop.Iy();
+            k(10,8) = sixE*sprop.Iy();
             k(0,8) = 0;
             k(1,8) = 0;
             k(3,8) = 0;
@@ -233,8 +236,8 @@ const XC::Matrix &XC::beam3d02::getStiff(void) const
             k(9,8) = 0;
             k(11,8) = 0;
 
-            k(3,9) = -ctes_scc.GJ()/L;
-            k(9,9) = ctes_scc.GJ()/L;
+            k(3,9) = -sprop.GJ()/L;
+            k(9,9) = sprop.GJ()/L;
             k(0,9) = 0;
             k(1,9) = 0;
             k(2,9) = 0;
@@ -246,10 +249,10 @@ const XC::Matrix &XC::beam3d02::getStiff(void) const
             k(10,9) = 0;
             k(11,9) = 0;
 
-            k(2,10) = -sixE*ctes_scc.Iy();
-            k(4,10) = twoE*ctes_scc.Iy();
-            k(8,10) = sixE*ctes_scc.Iy();
-            k(10,10) = fourE*ctes_scc.Iy();
+            k(2,10) = -sixE*sprop.Iy();
+            k(4,10) = twoE*sprop.Iy();
+            k(8,10) = sixE*sprop.Iy();
+            k(10,10) = fourE*sprop.Iy();
             k(0,10) = 0;
             k(1,10) = 0;
             k(3,10) = 0;
@@ -259,10 +262,10 @@ const XC::Matrix &XC::beam3d02::getStiff(void) const
             k(9,10) = 0;
             k(11,10) = 0;
 
-            k(1,11) = sixE*ctes_scc.Iz();
-            k(5,11) = twoE*ctes_scc.Iz();
-            k(7,11) = -sixE*ctes_scc.Iz();
-            k(11,11) = fourE*ctes_scc.Iz();
+            k(1,11) = sixE*sprop.Iz();
+            k(5,11) = twoE*sprop.Iz();
+            k(7,11) = -sixE*sprop.Iz();
+            k(11,11) = fourE*sprop.Iz();
             k(0,11) = 0;
             k(2,11) = 0;
             k(3,11) = 0;
@@ -273,12 +276,13 @@ const XC::Matrix &XC::beam3d02::getStiff(void) const
             k(10,11) = 0;
         }
 
-        else if(dx == 0.0 && dz == 0.0 && dy > 0.0 && theta == 90) {
+        else if(dx == 0.0 && dz == 0.0 && dy > 0.0 && theta == 90)
+	  {
 
-            k(0,0) = twelveE*ctes_scc.Iz();
-            k(5,0) = -sixE*ctes_scc.Iz();
-            k(6,0) = -twelveE*ctes_scc.Iz();
-            k(11,0) = -sixE*ctes_scc.Iz();
+            k(0,0) = twelveE*sprop.Iz();
+            k(5,0) = -sixE*sprop.Iz();
+            k(6,0) = -twelveE*sprop.Iz();
+            k(11,0) = -sixE*sprop.Iz();
             k(1,0) = 0;
             k(2,0) = 0;
             k(3,0) = 0;
@@ -301,10 +305,10 @@ const XC::Matrix &XC::beam3d02::getStiff(void) const
             k(10,1) = 0;
             k(11,1) = 0;
 
-            k(2,2) = twelveE*ctes_scc.Iy();
-            k(3,2) = sixE*ctes_scc.Iy();
-            k(8,2) = -twelveE*ctes_scc.Iy();
-            k(9,2) = sixE*ctes_scc.Iy();
+            k(2,2) = twelveE*sprop.Iy();
+            k(3,2) = sixE*sprop.Iy();
+            k(8,2) = -twelveE*sprop.Iy();
+            k(9,2) = sixE*sprop.Iy();
             k(0,2) = 0;
             k(1,2) = 0;
             k(4,2) = 0;
@@ -314,10 +318,10 @@ const XC::Matrix &XC::beam3d02::getStiff(void) const
             k(10,2) = 0;
             k(11,2) = 0;
 
-            k(2,3) = sixE*ctes_scc.Iy();
-            k(3,3) = fourE*ctes_scc.Iy();
-            k(8,3) = -sixE*ctes_scc.Iy();
-            k(9,3) = twoE*ctes_scc.Iy();
+            k(2,3) = sixE*sprop.Iy();
+            k(3,3) = fourE*sprop.Iy();
+            k(8,3) = -sixE*sprop.Iy();
+            k(9,3) = twoE*sprop.Iy();
             k(0,3) = 0;
             k(1,3) = 0;
             k(4,3) = 0;
@@ -327,8 +331,8 @@ const XC::Matrix &XC::beam3d02::getStiff(void) const
             k(10,3) = 0;
             k(11,3) = 0;
 
-            k(4,4) = ctes_scc.GJ()/L;
-            k(10,4) = -ctes_scc.GJ()/L;
+            k(4,4) = sprop.GJ()/L;
+            k(10,4) = -sprop.GJ()/L;
             k(0,4) = 0;
             k(1,4) = 0;
             k(2,4) = 0;
@@ -340,10 +344,10 @@ const XC::Matrix &XC::beam3d02::getStiff(void) const
             k(9,4) = 0;
             k(11,4) = 0;
 
-            k(0,5) = -sixE*ctes_scc.Iz();
-            k(5,5) = fourE*ctes_scc.Iz();
-            k(6,5) = sixE*ctes_scc.Iz();
-            k(11,5) = twoE*ctes_scc.Iz();
+            k(0,5) = -sixE*sprop.Iz();
+            k(5,5) = fourE*sprop.Iz();
+            k(6,5) = sixE*sprop.Iz();
+            k(11,5) = twoE*sprop.Iz();
             k(1,5) = 0;
             k(2,5) = 0;
             k(3,5) = 0;
@@ -353,10 +357,10 @@ const XC::Matrix &XC::beam3d02::getStiff(void) const
             k(9,5) = 0;
             k(10,5) = 0;
 
-            k(0,6) = -twelveE*ctes_scc.Iz();
-            k(5,6) = sixE*ctes_scc.Iz();
-            k(6,6) = twelveE*ctes_scc.Iz();
-            k(11,6) = sixE*ctes_scc.Iz();
+            k(0,6) = -twelveE*sprop.Iz();
+            k(5,6) = sixE*sprop.Iz();
+            k(6,6) = twelveE*sprop.Iz();
+            k(11,6) = sixE*sprop.Iz();
             k(1,6) = 0;
             k(2,6) = 0;
             k(3,6) = 0;
@@ -379,10 +383,10 @@ const XC::Matrix &XC::beam3d02::getStiff(void) const
             k(10,7) = 0;
             k(11,7) = 0;
 
-            k(2,8) = -twelveE*ctes_scc.Iy();
-            k(3,8) = -sixE*ctes_scc.Iy();
-            k(8,8) = twelveE*ctes_scc.Iy();
-            k(9,8) = -sixE*ctes_scc.Iy();
+            k(2,8) = -twelveE*sprop.Iy();
+            k(3,8) = -sixE*sprop.Iy();
+            k(8,8) = twelveE*sprop.Iy();
+            k(9,8) = -sixE*sprop.Iy();
             k(0,8) = 0;
             k(1,8) = 0;
             k(4,8) = 0;
@@ -392,10 +396,10 @@ const XC::Matrix &XC::beam3d02::getStiff(void) const
             k(10,8) = 0;
             k(11,8) = 0;
 
-            k(2,9) = sixE*ctes_scc.Iy();
-            k(3,9) = twoE*ctes_scc.Iy();
-            k(8,9) = -sixE*ctes_scc.Iy();
-            k(9,9) = fourE*ctes_scc.Iy();
+            k(2,9) = sixE*sprop.Iy();
+            k(3,9) = twoE*sprop.Iy();
+            k(8,9) = -sixE*sprop.Iy();
+            k(9,9) = fourE*sprop.Iy();
             k(0,9) = 0;
             k(1,9) = 0;
             k(4,9) = 0;
@@ -405,8 +409,8 @@ const XC::Matrix &XC::beam3d02::getStiff(void) const
             k(10,9) = 0;
             k(11,9) = 0;
 
-            k(4,10) = -ctes_scc.GJ()/L;
-            k(10,10) = ctes_scc.GJ()/L;
+            k(4,10) = -sprop.GJ()/L;
+            k(10,10) = sprop.GJ()/L;
             k(0,10) = 0;
             k(1,10) = 0;
             k(2,10) = 0;
@@ -418,10 +422,10 @@ const XC::Matrix &XC::beam3d02::getStiff(void) const
             k(9,10) = 0;
             k(11,10) = 0;
 
-            k(0,11) = -sixE*ctes_scc.Iz();
-            k(5,11) = twoE*ctes_scc.Iz();
-            k(6,11) = sixE*ctes_scc.Iz();
-            k(11,11) = fourE*ctes_scc.Iz();
+            k(0,11) = -sixE*sprop.Iz();
+            k(5,11) = twoE*sprop.Iz();
+            k(6,11) = sixE*sprop.Iz();
+            k(11,11) = fourE*sprop.Iz();
             k(1,11) = 0;
             k(2,11) = 0;
             k(3,11) = 0;
@@ -435,57 +439,57 @@ const XC::Matrix &XC::beam3d02::getStiff(void) const
         else if(dx == 0.0 && dy == 0.0 && dz > 0.0 && theta == 90) {
             // local y of columns in x dirn, local z in y dirn
             k.Zero();
-            k(0,0) = twelveE*ctes_scc.Iz();
-            k(4,0) = sixE*ctes_scc.Iz();
-            k(6,0) = -twelveE*ctes_scc.Iz();
-            k(10,0) = sixE*ctes_scc.Iz();
+            k(0,0) = twelveE*sprop.Iz();
+            k(4,0) = sixE*sprop.Iz();
+            k(6,0) = -twelveE*sprop.Iz();
+            k(10,0) = sixE*sprop.Iz();
 
-            k(1,1) = twelveE*ctes_scc.Iy();
-            k(3,1) = -sixE*ctes_scc.Iy();
-            k(7,1) = -twelveE*ctes_scc.Iy();
-            k(9,1) = -sixE*ctes_scc.Iy();
+            k(1,1) = twelveE*sprop.Iy();
+            k(3,1) = -sixE*sprop.Iy();
+            k(7,1) = -twelveE*sprop.Iy();
+            k(9,1) = -sixE*sprop.Iy();
 
             k(2,2) = EA;
             k(8,2) = -EA;
 
-            k(1,3) = -sixE*ctes_scc.Iy();
-            k(3,3) = fourE*ctes_scc.Iy();
-            k(7,3) = sixE*ctes_scc.Iy();
-            k(9,3) = twoE*ctes_scc.Iy();
+            k(1,3) = -sixE*sprop.Iy();
+            k(3,3) = fourE*sprop.Iy();
+            k(7,3) = sixE*sprop.Iy();
+            k(9,3) = twoE*sprop.Iy();
 
-            k(0,4) = sixE*ctes_scc.Iz();
-            k(4,4) = fourE*ctes_scc.Iz();
-            k(6,4) = -sixE*ctes_scc.Iz();
-            k(10,4) = twoE*ctes_scc.Iz();
+            k(0,4) = sixE*sprop.Iz();
+            k(4,4) = fourE*sprop.Iz();
+            k(6,4) = -sixE*sprop.Iz();
+            k(10,4) = twoE*sprop.Iz();
 
-            k(5,5) = ctes_scc.GJ()/L;
-            k(11,5) = -ctes_scc.GJ()/L;
+            k(5,5) = sprop.GJ()/L;
+            k(11,5) = -sprop.GJ()/L;
 
-            k(0,6) = -twelveE*ctes_scc.Iz();
-            k(4,6) = -sixE*ctes_scc.Iz();
-            k(6,6) = twelveE*ctes_scc.Iz();
-            k(10,6) = -sixE*ctes_scc.Iz();
+            k(0,6) = -twelveE*sprop.Iz();
+            k(4,6) = -sixE*sprop.Iz();
+            k(6,6) = twelveE*sprop.Iz();
+            k(10,6) = -sixE*sprop.Iz();
 
-            k(1,7) = -twelveE*ctes_scc.Iy();
-            k(3,7) = sixE*ctes_scc.Iy();
-            k(7,7) = twelveE*ctes_scc.Iy();
-            k(9,7) = sixE*ctes_scc.Iy();
+            k(1,7) = -twelveE*sprop.Iy();
+            k(3,7) = sixE*sprop.Iy();
+            k(7,7) = twelveE*sprop.Iy();
+            k(9,7) = sixE*sprop.Iy();
 
             k(2,8) = -EA;
             k(8,8) = EA;
 
-            k(1,9) = -sixE*ctes_scc.Iy();
-            k(3,9) = twoE*ctes_scc.Iy();
-            k(7,9) = sixE*ctes_scc.Iy();
-            k(9,9) = fourE*ctes_scc.Iy();
+            k(1,9) = -sixE*sprop.Iy();
+            k(3,9) = twoE*sprop.Iy();
+            k(7,9) = sixE*sprop.Iy();
+            k(9,9) = fourE*sprop.Iy();
 
-            k(0,10) = sixE*ctes_scc.Iz();
-            k(4,10) = twoE*ctes_scc.Iz();
-            k(6,10) = -sixE*ctes_scc.Iz();
-            k(10,10) = fourE*ctes_scc.Iz();
+            k(0,10) = sixE*sprop.Iz();
+            k(4,10) = twoE*sprop.Iz();
+            k(6,10) = -sixE*sprop.Iz();
+            k(10,10) = fourE*sprop.Iz();
 
-            k(5,11) = -ctes_scc.GJ()/L;
-            k(11,11) = ctes_scc.GJ()/L;
+            k(5,11) = -sprop.GJ()/L;
+            k(11,11) = sprop.GJ()/L;
         }
 
         else {

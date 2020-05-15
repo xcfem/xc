@@ -448,7 +448,7 @@ const XC::Matrix &XC::BeamWithHinges3d::getInitialStiff(void) const
   // calculate element stiffness matrix
   static Matrix kbInit(6,6);
     if(f.Solve(Iden,kbInit) < 0)
-      std::cerr << "XC::BeamWithHinges3d::update() -- could not invert flexibility\n";
+      std::cerr << "XC::BeamWithHinges3d::update(void) -- could not invert flexibility\n";
     static Matrix K;
     K= theCoordTransf->getInitialGlobalStiffMatrix(kbInit);
     if(isDead())
@@ -1088,7 +1088,7 @@ int XC::BeamWithHinges3d::update(void)
 
     // calculate element stiffness matrix
     if(f.Solve(Iden,kb) < 0)
-      std::cerr << "XC::BeamWithHinges3d::update() -- could not invert flexibility\n";
+      std::cerr << "XC::BeamWithHinges3d::update(void) -- could not invert flexibility\n";
 
     // dv = v - vr;
     dv = v;

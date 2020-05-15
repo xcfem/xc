@@ -67,6 +67,7 @@
 // What: "@(#) SectionForceDeformation.h, revA"
 
 #include "material/Material.h"
+#include "utility/matrix/Matrix.h"
 
 namespace XC {
 
@@ -87,16 +88,14 @@ class MaterialHandler;
 class SectionForceDeformation: public Material
   {
   protected:
-    mutable Matrix *fDefault; //!< Default flexibility matrix.
+    mutable Matrix fDefault; //!< Default flexibility matrix.
     MaterialHandler *material_handler; //!< Material definition handler (search,...).
 
     int sendData(Communicator &comm);
     int recvData(const Communicator &comm);
   public:
     SectionForceDeformation(int tag,int classTag,MaterialHandler *mat_ldr= nullptr);
-    SectionForceDeformation(const SectionForceDeformation &);
-    SectionForceDeformation &operator=(const SectionForceDeformation &);
-    virtual ~SectionForceDeformation(void);
+    inline virtual ~SectionForceDeformation(void) {}
 
     inline MaterialHandler *getMaterialHandler(void)
       { return material_handler; }

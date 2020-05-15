@@ -112,7 +112,7 @@ MaterialVector<MAT>::MaterialVector(const size_t &nMat,const MAT *matModel)
       {
         for(iterator i= mat_vector::begin();i!=mat_vector::end();i++)
           {
-            (*i)= matModel->getCopy();
+            (*i)= dynamic_cast<MAT *>(matModel->getCopy());
             if(!(*i))
               std::cerr << getClassName() << "::" << __FUNCTION__
 		        << "; failed allocate material model pointer\n";
@@ -131,7 +131,7 @@ void MaterialVector<MAT>::alloc(const std::vector<MAT *> &mats)
       {
         if(mats[i])
           {
-            (*this)[i]= mats[i]->getCopy();
+            (*this)[i]= dynamic_cast<MAT *>(mats[i]->getCopy());
             if(!(*this)[i])
               std::cerr << getClassName() << "::" << __FUNCTION__
 		        << "; failed allocate material model pointer\n";
@@ -502,14 +502,14 @@ int MaterialVector<MAT>::sendData(Communicator &comm)
 template <class MAT>
 int MaterialVector<MAT>::recvData(const Communicator &comm)
   {
-    const int flag = getDbTagDataPos(0);
+    const int flag= getDbTagDataPos(0);
     int res= 0;
     if(flag!=0)
       {
         const size_t nMat= this->size();
         DbTagData cpMat(nMat*3);
         res+= cpMat.receive(getDbTagData(),comm,CommMetaData(1));
-
+	clear_materials(); // erase existing materials if any.
         for(size_t i= 0;i<nMat;i++)
           {
             const BrokedPtrCommMetaData meta(i,i+nMat,i+2*nMat);
