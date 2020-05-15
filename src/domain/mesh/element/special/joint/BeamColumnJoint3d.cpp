@@ -225,7 +225,7 @@ int XC::BeamColumnJoint3d::revertToStart()
   }
 
 //! @brief Update joint state.
-int XC::BeamColumnJoint3d::update()
+int XC::BeamColumnJoint3d::update(void)
   {
     Vector Ue(28);
     Ue.Zero();

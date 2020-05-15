@@ -137,7 +137,7 @@ void XC::Tri31::setDomain(Domain *theDomain)
 
 
 
-int XC::Tri31::update()
+int XC::Tri31::update(void)
   {
     const Vector &disp1 = theNodes[0]->getTrialDisp();
     const Vector &disp2 = theNodes[1]->getTrialDisp();

@@ -127,28 +127,26 @@ double displ = -1*disp(2);
 }
 
 int XC::Inelastic2DYS02::update(void)
-{
-int res = this->XC::InelasticYS2DGNL::update();
+  {
+    int res = this->XC::InelasticYS2DGNL::update();
 
-	// get x-axis for the cModel
-	// using max natural deformation
-	this->getTrialNaturalDisp(disp);
-double displ = -1*disp(2);
-	if(fabs(disp(5)) > fabs(displ))
-		displ = -1*disp(5);
-	// displ(2, 5) will have the same sign
-	// for double curvature
-double fcurr = eleForce(4);
+    // get x-axis for the cModel
+    // using max natural deformation
+    this->getTrialNaturalDisp(disp);
+    double displ = -1*disp(2);
+    if(fabs(disp(5)) > fabs(displ))
+	    displ = -1*disp(5);
+    // displ(2, 5) will have the same sign
+    // for double curvature
+    double fcurr = eleForce(4);
 	
-bool yield = false;
-	if(end1Plastify || end2Plastify)
-		yield = true;
+    bool yield = false;
+    if(end1Plastify || end2Plastify)
+	    yield = true;
 
-	cModel->update(fcurr, displ, yield);
-
-	return res;
-
-}
+    cModel->update(fcurr, displ, yield);
+    return res;
+  }
 
 void XC::Inelastic2DYS02::getLocalStiff(Matrix &K) const
 {

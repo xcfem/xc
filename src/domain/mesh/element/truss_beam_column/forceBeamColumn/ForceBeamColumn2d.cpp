@@ -548,7 +548,7 @@ int XC::ForceBeamColumn2d::update(void)
     
                         if(theSections[i]->setTrialSectionDeformation(section_matrices.getVsSubdivide()[i]) < 0)
                           {
-                            std::cerr << "ForceBeamColumn2d::update() - section failed in setTrial\n";
+                            std::cerr << "ForceBeamColumn2d::update(void) - section failed in setTrial\n";
                             return -1;
                           }
     
@@ -661,7 +661,7 @@ int XC::ForceBeamColumn2d::update(void)
                     // calculate element stiffness matrix
                     // invert3by3Matrix(f, kv);
                     if(f.Solve(I, kvTrial) < 0)
-                      std::cerr << "ForceBeamColumn2d::update() -- could not invert flexibility\n";
+                      std::cerr << "ForceBeamColumn2d::update(void) -- could not invert flexibility\n";
     
                     // dv = vin + dvTrial  - vr
                     dv= vin;

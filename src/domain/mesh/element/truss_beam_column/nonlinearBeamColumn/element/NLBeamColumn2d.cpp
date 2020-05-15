@@ -400,7 +400,7 @@ const XC::Matrix &XC::NLBeamColumn2d::getInitialStiff(void) const
 
 /********* NEWTON , SUBDIVIDE AND INITIAL ITERATIONS ********************
  */
-int XC::NLBeamColumn2d::update()
+int XC::NLBeamColumn2d::update(void)
   {
     // if have completed a recvSelf() - do a revertToLastCommit
     // to get Ssr, etc. set correctly

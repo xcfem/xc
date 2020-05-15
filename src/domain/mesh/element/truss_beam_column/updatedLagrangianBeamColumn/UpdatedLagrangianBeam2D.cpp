@@ -160,7 +160,7 @@ void XC::UpdatedLagrangianBeam2D::setDomain(Domain *theDomain)
   }//setDomain
 
 
-int XC::UpdatedLagrangianBeam2D::update()
+int XC::UpdatedLagrangianBeam2D::update(void)
 {
         return 0;
 }

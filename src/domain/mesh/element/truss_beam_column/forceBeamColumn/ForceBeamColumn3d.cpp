@@ -546,7 +546,7 @@ int XC::ForceBeamColumn3d::update(void)
 
                         if(theSections[i]->setTrialSectionDeformation(section_matrices.getVsSubdivide()[i]) < 0)
                           {
-                            std::cerr << "ForceBeamColumn3d::update() - section failed in setTrial\n";
+                            std::cerr << "ForceBeamColumn3d::update(void) - section failed in setTrial\n";
                             return -1;
                           }
 
@@ -717,7 +717,7 @@ int XC::ForceBeamColumn3d::update(void)
                    // FRANK
                    //          if(f.SolveSVD(I, kvTrial, 1.0e-12) < 0)
                    if(f.Solve(I, kvTrial) < 0)
-                     std::cerr << "ForceBeamColumn3d::update() -- could not invert flexibility.\n";
+                     std::cerr << "ForceBeamColumn3d::update(void) -- could not invert flexibility.\n";
 
                    // dv = vin + dvTrial  - vr
                    dv= vin;
