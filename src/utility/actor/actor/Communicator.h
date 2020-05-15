@@ -258,7 +258,7 @@ MAT *Communicator::getBrokedMaterial(MAT* &ptr,DbTagData &dbTagData, const Broke
               {
                 delete tmp;
                 std::cerr << "Communicator::getBrokedMaterial "
-                          << " el material es de clase inadecuada."
+                          << " wrong material class."
                           << std::endl;
               }
           }
