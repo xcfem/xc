@@ -70,8 +70,8 @@
 //! domain is given by \p tag, and whose class identifier is given
 //! by \p classTag. These integers are passed to the TaggedObject and
 //! MovableObject class constructors.
-XC::Material::Material(int tag, int clasTag)
-  :TaggedObject(tag), MovableObject(clasTag) {}
+XC::Material::Material(int tag, int classTag)
+  :TaggedObject(tag), MovableObject(classTag) {}
 
 //! @brief Returns (if possible) a pointer to the material handler (owner).
 const XC::MaterialHandler *XC::Material::getMaterialHandler(void) const
