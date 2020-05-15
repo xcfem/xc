@@ -616,7 +616,7 @@ void XC::ShellMITC9::formResidAndTangent(int tang_flag) const
 	      epsDrill +=  BdrillJ[p]*ul(p);
 	  } // end for j
       //send the strain to the material 
-	success= const_cast<SectionForceDeformation *>(physicalProperties[i])->setTrialSectionDeformation( strain );
+      success= const_cast<SectionForceDeformation *>(physicalProperties[i])->setTrialSectionDeformation(strain);
       //compute the stress
       stress= physicalProperties[i]->getStressResultant();
       //drilling "stress" 
