@@ -47,8 +47,8 @@ void XC::FrictionElementBase::alloc_friction_model(const FrictionModel &thefrnmd
     theFrnMdl = thefrnmdl.getCopy();
     if(!theFrnMdl)
       {
-	std::cerr << "FrictionElementBase::FrictionElementBase() - "
-		  << "failed to get copy of the friction model.\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed to get copy of the friction model.\n";
 	exit(-1);
       }
   }
@@ -113,7 +113,8 @@ XC::FrictionElementBase::~FrictionElementBase()
 int XC::FrictionElementBase::sendData(Communicator &comm)
   {
     int res= Element0D::sendData(comm);
-    std::cerr<< "FrictionElementBase::sendData incomplete (materials and friction model undefined)." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; incomplete (materials and friction model undefined)." << std::endl;
     res+= comm.sendDoubles(uy,mass,tol,L,getDbTagData(),CommMetaData(9));
     res+= comm.sendVector(x,getDbTagData(),CommMetaData(10));
     res+= comm.sendVector(y,getDbTagData(),CommMetaData(11));
@@ -131,7 +132,8 @@ int XC::FrictionElementBase::sendData(Communicator &comm)
 int XC::FrictionElementBase::recvData(const Communicator &comm)
   {
     int res= Element0D::recvData(comm);
-    std::cerr<< "FrictionElementBase::recvData incomplete (materials and friction model undefined)." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; incomplete (materials and friction model undefined)." << std::endl;
     res+= comm.receiveDoubles(uy,mass,tol,L,getDbTagData(),CommMetaData(9));
     res+= comm.receiveVector(x,getDbTagData(),CommMetaData(10));
     res+= comm.receiveVector(y,getDbTagData(),CommMetaData(11));

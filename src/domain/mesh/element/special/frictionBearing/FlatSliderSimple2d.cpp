@@ -88,14 +88,14 @@ void XC::FlatSliderSimple2d::setDomain(Domain *theDomain)
     // if differing dof at the ends - print a warning message
     if(dofNd1 != 3)
       {
-	std::cerr << "FlatSliderSimple2d::setDomain() - node 1: "
-		<< " has incorrect number of DOF (not 3)\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		   << "; node 1: has incorrect number of DOF (not 3)\n";
 	return;
       }
     if(dofNd2 != 3)
       {
-	std::cerr << "FlatSliderSimple2d::setDomain() - node 2: "
-		<< " has incorrect number of DOF (not 3)\n";
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; node 2: has incorrect number of DOF (not 3)\n";
 	return;
       }
 	
@@ -150,7 +150,7 @@ int XC::FlatSliderSimple2d::revertToStart()
   }
 
 
-int XC::FlatSliderSimple2d::update()
+int XC::FlatSliderSimple2d::update(void)
 {
     // get global trial displacements and velocities
     const Vector &dsp1 = theNodes[0]->getTrialDisp();
@@ -237,7 +237,8 @@ int XC::FlatSliderSimple2d::update()
     
     // issue warning if iteration did not converge
     if (iter >= maxIter)  {
-        std::cerr << "WARNING: XC::FlatSliderSimple2d::update() - did not find the shear force after "
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING: did not find the shear force after "
             << iter << " iterations and norm: " << fabs(qb(1)-qb1Old) << std::endl;
         return -1;
     }
@@ -309,13 +310,13 @@ const XC::Matrix &XC::FlatSliderSimple2d::getMass()
 }
 
 int XC::FlatSliderSimple2d::addLoad(ElementalLoad *theLoad, double loadFactor)
-{  
-	std::cerr <<"XC::FlatSliderSimple2d::addLoad() - "
-		<< "load type unknown for element: "
+  {  
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  <<"; load type unknown for element: "
 		<< this->getTag() << std::endl;
 
 	return -1;
-}
+  }
 
 
 int XC::FlatSliderSimple2d::addInertiaLoadToUnbalance(const Vector &accel)
@@ -330,8 +331,8 @@ int XC::FlatSliderSimple2d::addInertiaLoadToUnbalance(const Vector &accel)
 	const Vector &Raccel2 = theNodes[1]->getRV(accel);
 	
 	if (3 != Raccel1.Size() || 3 != Raccel2.Size())  {
-		std::cerr << "XC::FlatSliderSimple2d::addInertiaLoadToUnbalance() - "
-			<< "matrix and vector sizes are incompatible\n";
+		std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; matrix and vector sizes are incompatible\n";
 		return -1;
 	}
     
@@ -421,7 +422,8 @@ int XC::FlatSliderSimple2d::sendSelf(Communicator &comm)
     const int dataTag= getDbTag();
     res += comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << "ZeroLength::sendSelf -- failed to send ID data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send ID data.\n";
     return res;
   }
 
@@ -433,7 +435,8 @@ int XC::FlatSliderSimple2d::recvSelf(const Communicator &comm)
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "ZeroLength::recvSelf -- failed to receive ID data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ID data.\n";
     else
       res+= recvData(comm);
     return res;
@@ -585,7 +588,7 @@ int XC::FlatSliderSimple2d::getResponse(int responseID, Information &eleInfo)
 
 
 // establish the external nodes and set up the transformation matrix for orientation
-void XC::FlatSliderSimple2d::setUp()
+void XC::FlatSliderSimple2d::setUp(void)
 {
     const Vector &end1Crd = theNodes[0]->getCrds();
     const Vector &end2Crd = theNodes[1]->getCrds();	
@@ -599,16 +602,16 @@ void XC::FlatSliderSimple2d::setUp()
             y.resize(3);
             y(0) = -x(1);  y(1) = x(0);  y(2) = 0.0;
         } else  {
-            std::cerr << "WARNING XC::FlatSliderSimple2d::setUp() - " 
-                << "element: " << this->getTag() << std::endl
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING element: " << this->getTag() << std::endl
                 << "ignoring nodes and using specified "
                 << "local x vector to determine orientation\n";
         }
     }
     // check that vectors for orientation are of correct size
     if (x.Size() != 3 || y.Size() != 3)  {
-        std::cerr << "XC::FlatSliderSimple2d::setUp() - "
-            << "element: " << this->getTag() << std::endl
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; element: " << this->getTag() << std::endl
             << "incorrect dimension of orientation vectors\n";
         exit(-1);
     }
@@ -632,8 +635,8 @@ void XC::FlatSliderSimple2d::setUp()
     
     // check valid x and y vectors, i.e. not parallel and of zero length
     if (xn == 0 || yn == 0 || zn == 0)  {
-        std::cerr << "XC::FlatSliderSimple2d::setUp() - "
-            << "element: " << this->getTag() << std::endl
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; element: " << this->getTag() << std::endl
             << "invalid orientation vectors\n";
         exit(-1);
     }

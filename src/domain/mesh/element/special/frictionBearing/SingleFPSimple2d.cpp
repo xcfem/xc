@@ -80,12 +80,14 @@ void XC::SingleFPSimple2d::setDomain(Domain *theDomain)
 	
 	// if differing dof at the ends - print a warning message
     if(dofNd1 != 3)  {
-		std::cerr << "SingleFPSimple2d::setDomain() - node 1: "
+		std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; node 1: "
 			<< " has incorrect number of DOF (not 3)\n";
 		return;
     }
     if (dofNd2 != 3)  {
-		std::cerr << "SingleFPSimple2d::setDomain() - node 2: "
+		std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "SingleFPSimple2d::setDomain() - node 2: "
 			<< " has incorrect number of DOF (not 3)\n";
 		return;
     }
@@ -142,7 +144,7 @@ int XC::SingleFPSimple2d::revertToStart()
   }
 
 
-int XC::SingleFPSimple2d::update()
+int XC::SingleFPSimple2d::update(void)
   {
     // get global trial displacements and velocities
     const Vector &dsp1 = theNodes[0]->getTrialDisp();
@@ -231,8 +233,11 @@ int XC::SingleFPSimple2d::update()
     
     // issue warning if iteration did not converge
     if (iter >= maxIter)  {
-        std::cerr << "WARNING: SingleFPSimple2d::update() - did not find the shear force after "
-            << iter << " iterations and norm: " << fabs(qb(1)-qb1Old) << std::endl;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "WARNING: did not find the shear force after "
+                  << iter
+		  << " iterations and norm: "
+		  << fabs(qb(1)-qb1Old) << std::endl;
         return -1;
     }
     
@@ -305,8 +310,8 @@ const XC::Matrix& XC::SingleFPSimple2d::getMass(void)
 
 int XC::SingleFPSimple2d::addLoad(ElementalLoad *theLoad, double loadFactor)
 {  
-	std::cerr <<"SingleFPSimple2d::addLoad() - "
-		<< "load type unknown for element: "
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  <<"; load type unknown for element: "
 		<< this->getTag() << std::endl;
 
 	return -1;
@@ -325,8 +330,8 @@ int XC::SingleFPSimple2d::addInertiaLoadToUnbalance(const Vector &accel)
 	const Vector &Raccel2 = theNodes[1]->getRV(accel);
 	
 	if (3 != Raccel1.Size() || 3 != Raccel2.Size())  {
-		std::cerr << "SingleFPSimple2d::addInertiaLoadToUnbalance() - "
-			<< "matrix and vector sizes are incompatible\n";
+		std::cerr << getClassName() << "::" << __FUNCTION__
+			  << "; matrix and vector sizes are incompatible\n";
 		return -1;
 	}
 
@@ -415,7 +420,8 @@ int XC::SingleFPSimple2d::sendSelf(Communicator &comm)
     const int dataTag= getDbTag();
     res += comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << "ZeroLength::sendSelf -- failed to send ID data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send ID data\n";
     return res;
   }
 
@@ -427,7 +433,8 @@ int XC::SingleFPSimple2d::recvSelf(const Communicator &comm)
     const int dataTag= getDbTag();
     int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "ZeroLength::recvSelf -- failed to receive ID data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ID data\n";
     else
       res+= recvData(comm);
     return res;
@@ -593,16 +600,16 @@ void XC::SingleFPSimple2d::setUp()
             y.resize(3);
             y(0) = -x(1);  y(1) = x(0);  y(2) = 0.0;
         } else  {
-            std::cerr << "WARNING SingleFPSimple2d::setUp() - " 
-                << "element: " << this->getTag() << std::endl
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; WARNING element: " << this->getTag() << std::endl
                 << "ignoring nodes and using specified "
                 << "local x vector to determine orientation\n";
         }
     }
     // check that vectors for orientation are of correct size
     if (x.Size() != 3 || y.Size() != 3)  {
-        std::cerr << "SingleFPSimple2d::setUp() - "
-            << "element: " << this->getTag() << std::endl
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; element: " << this->getTag() << std::endl
             << "incorrect dimension of orientation vectors\n";
         exit(-1);
     }
@@ -626,8 +633,8 @@ void XC::SingleFPSimple2d::setUp()
     
     // check valid x and y vectors, i.e. not parallel and of zero length
     if (xn == 0 || yn == 0 || zn == 0)  {
-        std::cerr << "SingleFPSimple2d::setUp() - "
-            << "element: " << this->getTag() << std::endl
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; element: " << this->getTag() << std::endl
             << "invalid orientation vectors\n";
         exit(-1);
     }
