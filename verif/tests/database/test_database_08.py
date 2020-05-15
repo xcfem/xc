@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
-# home made test
 '''Save and restore methods verification.'''
+
+from __future__ import division
+from __future__ import print_function
+
 
 import xc_base
 import geom
@@ -76,6 +79,7 @@ lPatterns.addToDomain(lp0.name)
 analysis= predefined_solutions.simple_static_linear(feProblem)
 result= analysis.analyze(1)
 
+
 import os
 os.system("rm -r -f /tmp/test08.db")
 db= feProblem.newDatabase("BerkeleyDB","/tmp/test08.db")
@@ -101,21 +105,21 @@ N1= elem1.getN1
 
 
 deltateor= (F*L/(E*A))
-ratio1= (delta/deltateor)
-ratio2= (N1/F)
+ratio1= abs(delta-deltateor)/deltateor
+ratio2= abs(N1-F)/F
 
 ''' 
-print "delta= ",delta
-print "deltateor= ",deltateor
-print "ratio1= ",ratio1
-print "N1= ",N1
-print "ratio2= ",ratio2
-   '''
+print("delta= ",delta)
+print("deltateor= ",deltateor)
+print("ratio1= ",ratio1)
+print("N1= ",N1)
+print("ratio2= ",ratio2)
+'''
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (abs(ratio1-1.0)<1e-5) & (abs(ratio2-1.0)<1e-5):
-  print "test ",fname,": ok."
+if ((ratio1<1e-6) and (ratio2<1e-5)):
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 
