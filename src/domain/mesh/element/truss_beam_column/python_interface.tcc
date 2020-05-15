@@ -33,8 +33,11 @@ class_<XC::ProtoBeam2d, bases<XC::Element1D>, boost::noncopyable >("ProtoBeam2d"
   .def("createInertiaLoad", &XC::ProtoBeam2d::createInertiaLoad,"Create the inertia load for the given acceleration vector.")
    ;
 
+XC::ElasticSection3dPhysicalProperties &(XC::ProtoBeam3d::*getElasticSection3dPhysicalProp)(void)= &XC::ProtoBeam3d::getPhysicalProperties;
+XC::CrossSectionProperties3d &(XC::ProtoBeam3d::*getCrossSectionProperties3d)(void)= &XC::ProtoBeam3d::getSectionProperties;
 class_<XC::ProtoBeam3d, bases<XC::Element1D>, boost::noncopyable >("ProtoBeam3d", no_init)
-  .add_property("sectionProperties", &XC::ProtoBeam3d::getSectionProperties, &XC::ProtoBeam3d::setSectionProperties)
+  .add_property("sectionProperties", make_function(getCrossSectionProperties3d, return_internal_reference<>()), &XC::ProtoBeam3d::setSectionProperties,"Access to section properties.")
+  .add_property("getPhysicalProperties", make_function(getElasticSection3dPhysicalProp, return_internal_reference<>() ),"Returns materials at integration points (gauss points).")
   .def("setSectionProperties",&XC::ProtoBeam3d::setSectionProperties,"Set cross section properties.")
   .def("getVDirStrongAxisLocalCoord",&XC::ProtoBeam3d::getVDirStrongAxisLocalCoord,"Returns the direction vector of element strong axis expressed in the local coordinate system.")
   .def("getVDirWeakAxisLocalCoord",&XC::ProtoBeam3d::getVDirWeakAxisLocalCoord,"Returns the direction vector of element weak axis expressed in the local coordinate system.")
