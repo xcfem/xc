@@ -618,51 +618,55 @@ XC::UniaxialMaterial *XC::FEM_ObjectBroker::getNewUniaxialMaterial(int classTag)
 //! @brief Broke a SectionForceDeformation object from its class tag.
 XC::SectionForceDeformation *XC::FEM_ObjectBroker::getNewSection(int classTag)
   {
-     switch(classTag)
+    SectionForceDeformation *retval= nullptr;
+    switch(classTag)
       {
       case SEC_TAG_Elastic1d:
-        return new ElasticSection1d();
+	retval= new ElasticSection1d();
+	break;
       case SEC_TAG_Elastic2d:
-        return new ElasticSection2d();
+	retval= new ElasticSection2d();
+	break;
       case SEC_TAG_Elastic3d:
-        return new ElasticSection3d();
+	retval= new ElasticSection3d();
+	break;
       case SEC_TAG_Generic1d:
-        return new GenericSection1d();
-
+	retval= new GenericSection1d();
+	break;
       //case SEC_TAG_GenericNd:
-        //return new GenericSectionNd();
+	//retval= new GenericSectionNd();
 
       case SEC_TAG_Aggregator:
-             return new SectionAggregator();
+	retval= new SectionAggregator();
+	break;
+      //case SEC_TAG_Fiber:
+      //retval= new FiberSection();
 
-             //case SEC_TAG_Fiber:
-             //return new FiberSection();
-
-        case SEC_TAG_FiberSection2d:
-                return new FiberSection2d();
-
-        case SEC_TAG_FiberSection3d:
-                return new FiberSection3d();
-
-        case SEC_TAG_ElasticPlateSection:
-                return new ElasticPlateSection();
-
-        case SEC_TAG_ElasticMembranePlateSection:
-                return new ElasticMembranePlateSection();
-
-        case SEC_TAG_MembranePlateFiberSection:
-                return new MembranePlateFiberSection();
-
-        case SEC_TAG_Bidirectional:
-                return new Bidirectional();
-
-        default:
-             std::cerr << "FEM_ObjectBroker::getNewSection - ";
-             std::cerr << " - no section type exists for class tag ";
-             std::cerr << classTag << std::endl;
-             return nullptr;
-
-         }
+      case SEC_TAG_FiberSection2d:
+	retval= new FiberSection2d();
+	break;
+      case SEC_TAG_FiberSection3d:
+	retval= new FiberSection3d();
+	break;
+      case SEC_TAG_ElasticPlateSection:
+	retval= new ElasticPlateSection();
+	break;
+      case SEC_TAG_ElasticMembranePlateSection:
+	retval= new ElasticMembranePlateSection();
+	break;
+      case SEC_TAG_MembranePlateFiberSection:
+	retval= new MembranePlateFiberSection();
+	break;
+      case SEC_TAG_Bidirectional:
+	retval= new Bidirectional();
+	break;
+      default:
+	   std::cerr << "FEM_ObjectBroker::getNewSection - "
+		     << " - no section type exists for class tag "
+		     << classTag << std::endl;
+	   retval= nullptr;
+      }
+    return retval;
   }
 
 //! @brief Broke a NDMaterial object from its class tag.
