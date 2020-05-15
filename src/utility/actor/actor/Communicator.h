@@ -284,7 +284,7 @@ HDL *Communicator::getBrokedDataOutputHandler(HDL* &ptr,DbTagData &dbTagData, co
             if(!ptr) delete tmp;
           }
         else
-          std::cerr << "getBrokedMaterial: "
+          std::cerr << "getBrokedDataOutputHandlerMaterial: "
                     << " broker could not create handler of class type: "
                     << classTag << std::endl;;
       }
