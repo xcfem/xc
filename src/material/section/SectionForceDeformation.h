@@ -114,7 +114,9 @@ class SectionForceDeformation: public Material
     //! a negative number if not.
     virtual int setTrialSectionDeformation(const Vector &) = 0;
     virtual const Vector &getInitialSectionDeformation(void) const= 0;
-    //! @brief Return the trial section deformation vector, \f$esec\f$.
+    //! @brief Return the trial section deformation vector, \f$e_{trial}\f$.
+    Vector getTrialSectionDeformation(void) const;
+    //! @brief Return the section deformation vector, \f$e_{trial}-e_{init}\f$.
     virtual const Vector &getSectionDeformation(void) const= 0;
     double getSectionDeformation(const int &) const;
     double getSectionDeformationByName(const std::string &) const;

@@ -259,6 +259,10 @@ int XC::SectionForceDeformation::getResponse(int responseID, Information &secInf
       }
   }
 
+//! @brief Return the section deformation vector, \f$esec\f$.
+XC::Vector XC::SectionForceDeformation::getTrialSectionDeformation(void) const
+  { return getSectionDeformation()+getInitialSectionDeformation(); }
+
 //! @brief Returns 'defID' component of the generalized strain vector.
 double XC::SectionForceDeformation::getSectionDeformation(const int &defID) const
   {
