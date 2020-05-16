@@ -31,55 +31,13 @@
 #include "domain/mesh/element/utils/Information.h"
 #include "utility/recorder/response/ElementResponse.h"
 
-
-#include "domain/mesh/element/utils/gauss_models/GaussModel.h"
-
-
-//! @brief Constructor
-XC::ElasticSection3dPhysicalProperties::ElasticSection3dPhysicalProperties(const size_t &nMat)
-  : PhysicalProperties<ElasticSection3d>(nMat,nullptr)
-  {
-    const ElasticSection3d section;
-    for(size_t i= 0;i<nMat;i++)
-      theMaterial[i]= dynamic_cast<ElasticSection3d *>(section.getCopy());
-  }
-
 //! @brief Assigns section properties for integration point i
 void XC::ElasticSection3dPhysicalProperties::set(const size_t &i, const CrossSectionProperties3d &sp)
    { theMaterial[i]->setCrossSectionProperties(sp); }
 
 
-//! @brief print out element data
-void XC::ElasticSection3dPhysicalProperties::Print(std::ostream &s, int flag ) const
-  {
-    if(flag == -1)
-      {
-        s << getClassName() 
-	  << "\t" << theMaterial.size() << "\t" << std::endl;
-      }
-    else if(flag < -1)
-      {
-        int counter= (flag + 1) * -1;
-        for(size_t i= 0;i < theMaterial.size();i++)
-          {
-            const Vector &stress= theMaterial[i]->getStressResultant();
-            s << "STRESS\t" << counter << "\t" << i << "\tTOP";
-            for(int j=0; j<6; j++)
-              s << "\t" << stress(j);
-            s << std::endl;
-          }
-      }
-    else
-      {
-        s << std::endl;
-        s << "Material Information : \n ";
-        theMaterial[0]->Print( s, flag );
-        s << std::endl;
-      }
-  }
-
 //! @brief Returns the components of the strain vector which has the code being passed as parameter.
-//! @param cod component code.
+//! @param cod: component code.
 XC::Vector XC::ElasticSection3dPhysicalProperties::getGeneralizedStressAtGaussPointsByName(const std::string &cod) const
   {
     const size_t nMat= theMaterial.size();
@@ -129,29 +87,4 @@ XC::Vector XC::ElasticSection3dPhysicalProperties::getGeneralizedStrainAtGaussPo
     return retval;
   }
 
-//! @brief check to see if have mass
-bool XC::ElasticSection3dPhysicalProperties::haveRho(void) const
-  {
-    const size_t numMaterials= theMaterial.size();
-    bool retval= false;
-    for(size_t i=0; i<numMaterials; i++)
-      {
-        if(theMaterial[i]->getRho() != 0.0)
-	  {
-	    retval= true;
-            break;
-          }
-      }
-    return retval;
-  }
-
-//! @brief Returns densities for each position.
-XC::Vector XC::ElasticSection3dPhysicalProperties::getRhoi(void) const
-  {
-    const size_t numMaterials= theMaterial.size();
-    Vector retval(numMaterials);
-    for(size_t i=0; i<numMaterials; i++)
-      retval[i]= theMaterial[i]->getRho();
-    return retval;
-  }
 

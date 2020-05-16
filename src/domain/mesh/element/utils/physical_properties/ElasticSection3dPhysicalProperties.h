@@ -30,7 +30,7 @@
 #ifndef ElasticSection3dPhysicalProperties_h
 #define ElasticSection3dPhysicalProperties_h
 
-#include "PhysicalProperties.h"
+#include "ElasticSectionPhysicalProperties.h"
 #include "material/section/elastic_section/ElasticSection3d.h"
 
 namespace XC {
@@ -38,21 +38,16 @@ namespace XC {
 //! @ingroup PhysicalProperties
 //
 //! @brief Three-dimensional elastic section physical properties.
-class ElasticSection3dPhysicalProperties: public PhysicalProperties<ElasticSection3d>
+class ElasticSection3dPhysicalProperties: public ElasticSectionPhysicalProperties<ElasticSection3d>
   {
   public:
-    ElasticSection3dPhysicalProperties(const size_t &nMat= 0);
-
+    inline ElasticSection3dPhysicalProperties(const size_t &nMat= 0)
+      : ElasticSectionPhysicalProperties<ElasticSection3d>(nMat) {}
     void set(const size_t &i, const CrossSectionProperties3d &);
 
     Vector getGeneralizedStrainAtGaussPointsByName(const std::string &) const;
     Vector getGeneralizedStressAtGaussPointsByName(const std::string &) const;
 
-
-    bool haveRho(void) const;
-    Vector getRhoi(void) const;
-    
-    void Print(std::ostream &s, int) const;
   }; 
 
 } // end of XC namespace
