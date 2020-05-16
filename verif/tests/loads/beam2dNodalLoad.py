@@ -53,10 +53,9 @@ elements= preprocessor.getElementHandler
 elements.defaultTransformation= "lin"
 elements.defaultMaterial= "scc"
 #  sintaxis: beam2d_02[<tag>] 
-elements.defaultTag= 1 #Tag for next element.
 beam2d= elements.newElement("ElasticBeam2d",xc.ID([nod1.tag,nod2.tag]))
 beam2d.sectionProperties.h= h
-    
+
 # Constraints
 constraints= preprocessor.getBoundaryCondHandler
 modelSpace.fixNode000(nod1.tag)
@@ -86,10 +85,10 @@ deltaTeor= (-P*L**3/3/E/I)
 ratio1= ((delta-deltaTeor)/deltaTeor)
 
 ''' 
-print "delta= ",delta
-print "deltaTeor= ",deltaTeor
-print "ratio1= ",ratio1
- '''
+print("delta= ",delta)
+print("deltaTeor= ",deltaTeor)
+print("ratio1= ",ratio1)
+'''
 
 import os
 from misc_utils import log_messages as lmsg

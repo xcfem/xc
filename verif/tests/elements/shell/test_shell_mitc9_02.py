@@ -21,8 +21,8 @@ import xc
 from model import predefined_spaces
 from materials import typical_materials
 
-v1= xc.Vector([0,1,0])
-v2= xc.Vector([0,0,1])
+v1= xc.Vector([0,1.0,0])
+v2= xc.Vector([0,0,1.0])
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
@@ -66,7 +66,7 @@ ts= lPatterns.newTimeSeries("constant_ts","ts")
 lPatterns.currentTimeSeries= "ts"
 #Load case definition
 lp0= lPatterns.newLoadPattern("default","0")
-F= -10*8
+F= -10*8.0
 lp0.newNodalLoad(n9.tag,xc.Vector([0,0,F,0,0,0]))
 #We add the load case to domain.
 lPatterns.addToDomain(lp0.name)
