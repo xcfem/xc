@@ -169,6 +169,12 @@ const XC::Vector &XC::ProtoBeam3d::getSectionDeformation(void) const
     static Vector retval;
     retval= computeCurrentStrain();
     const Vector &e0= getInitialSectionDeformation();
+    // retval(0)= dx2-dx1: Element elongation/L.
+    // retval(1)= (dy1-dy2)/L+gz1: Rotation about z/L.
+    // retval(2)= (dy1-dy2)/L+gz2: Rotation about z/L.
+    // retval(3)= (dz2-dz1)/L+gy1: Rotation about y/L.
+    // retval(4)= (dz2-dz1)/L+gy2: Rotation about y/L.
+    // retval(5)= dx2-dx1: Element twist/L.
     retval(0)-= e0(0);
     retval(1)-= e0(1);
     retval(2)-= e0(1);
