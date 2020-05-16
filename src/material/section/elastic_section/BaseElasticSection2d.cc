@@ -84,7 +84,7 @@ double XC::BaseElasticSection2d::getStrain(const double &y,const double &z) cons
 int XC::BaseElasticSection2d::sendData(Communicator &comm)
   {
     int res= BaseElasticSection::sendData(comm);
-    res+= comm.sendMovable(ctes_scc,getDbTagData(),CommMetaData(8));
+    res+= comm.sendMovable(ctes_scc,getDbTagData(),CommMetaData(6));
     return res;
   }
 
@@ -92,7 +92,7 @@ int XC::BaseElasticSection2d::sendData(Communicator &comm)
 int XC::BaseElasticSection2d::recvData(const Communicator &comm)
   {
     int res= BaseElasticSection::recvData(comm);
-    res+= comm.receiveMovable(ctes_scc,getDbTagData(),CommMetaData(8));
+    res+= comm.receiveMovable(ctes_scc,getDbTagData(),CommMetaData(6));
     return res;
   }
 

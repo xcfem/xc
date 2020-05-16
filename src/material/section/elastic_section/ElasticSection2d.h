@@ -100,6 +100,7 @@ class ElasticSection2d: public BaseElasticSection2d
     const ResponseId &getType(void) const;
     int getOrder(void) const;
     
+    virtual DbTagData &getDbTagData(void) const;
     int sendSelf(Communicator &);
     int recvSelf(const Communicator &);
     
