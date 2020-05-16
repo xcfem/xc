@@ -58,10 +58,9 @@
 #include "CorotTrussBase.h"
 #include <utility/matrix/Matrix.h>
 #include <utility/matrix/Vector.h>
+#include "domain/mesh/element/utils/physical_properties/SectionFDPhysicalProperties.h"
 
 namespace XC {
-class Channel;
-class SectionForceDeformation;
 
 //! @ingroup TrussElem
 //
@@ -73,17 +72,13 @@ class SectionForceDeformation;
 class CorotTrussSection: public CorotTrussBase
   {
   private:
-    SectionForceDeformation *theSection;  // pointer to a material
-    void alloc(const SectionForceDeformation &);
-    void free(void);
+    SectionFDPhysicalProperties physicalProperties;
   public:
     CorotTrussSection(int tag, int dim,int Nd1, int Nd2, SectionForceDeformation &theMaterial);
     CorotTrussSection(int tag,int dimension,const Material *ptr_mat);
-    CorotTrussSection(const CorotTrussSection &);
     CorotTrussSection(void);
-    CorotTrussSection &operator=(const CorotTrussSection &);
     Element *getCopy(void) const;
-    ~CorotTrussSection(void);
+    inline virtual ~CorotTrussSection(void) {}
 
     void setDomain(Domain *theDomain);
 

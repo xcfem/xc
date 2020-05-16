@@ -69,76 +69,30 @@
 #include "material/section/ResponseId.h"
 #include "domain/load/beam_loads/TrussStrainLoad.h"
 
-void XC::CorotTrussSection::free(void)
-  {
-    if(theSection)
-      delete theSection;
-    theSection= nullptr;
-  }
-void XC::CorotTrussSection::alloc(const SectionForceDeformation &s)
-  {
-    free();
-    theSection= s.getCopy();
-    if(!theSection)
-      {
-        std::cerr << getClassName() << "::" << __FUNCTION__
-		  << "; FATAL - failed to get a copy of the material."
-		  << s.getTag() << std::endl;
-        exit(-1);
-      }
-  }
 
 // constructor:
 //  responsible for allocating the necessary space needed by each object
 //  and storing the tags of the XC::CorotTrussSection end nodes.
 XC::CorotTrussSection::CorotTrussSection(int tag, int dim,int Nd1, int Nd2, SectionForceDeformation &theSec)
-  :CorotTrussBase(tag,ELE_TAG_CorotTrussSection,dim,Nd1,Nd2), theSection(nullptr)
-  {
-    // get a copy of the material and check we obtained a valid copy
-    alloc(theSec);
-  }
+  :CorotTrussBase(tag,ELE_TAG_CorotTrussSection,dim,Nd1,Nd2), physicalProperties(1, &theSec)
+  {}
 
 
 //! @brief Constructor.
 XC::CorotTrussSection::CorotTrussSection(int tag,int dim,const Material *ptr_mat)
-  :CorotTrussBase(tag,ELE_TAG_CorotTrussSection,dim,0,0), theSection(nullptr)
-  {
-    alloc(*cast_material<SectionForceDeformation>(ptr_mat));
-  }
+  :CorotTrussBase(tag,ELE_TAG_CorotTrussSection,dim,0,0), physicalProperties(1,ptr_mat)
+  {}
 
 // constructor:
 //   invoked by a FEM_ObjectBroker - blank object that recvSelf needs
 //   to be invoked upon
 XC::CorotTrussSection::CorotTrussSection(void)
-  :CorotTrussBase(0,ELE_TAG_CorotTrussSection,0,0,0),theSection(nullptr)
+  :CorotTrussBase(0,ELE_TAG_CorotTrussSection,0,0,0), physicalProperties(1)
   {}
-
-//! @brief Copy constructor.
-XC::CorotTrussSection::CorotTrussSection(const CorotTrussSection &other)
-  : CorotTrussBase(other), theSection(nullptr)
-  {
-    if(other.theSection)
-      alloc(*other.theSection);
-  }
-
-//! @brief Assignment operator.
-XC::CorotTrussSection &XC::CorotTrussSection::operator=(const CorotTrussSection &other)
-  {
-    CorotTrussBase::operator=(other);
-    if(other.theSection)
-      alloc(*other.theSection);
-    return *this;
-  }
 
 //! @brief Virtual constructor.
 XC::Element* XC::CorotTrussSection::getCopy(void) const
   { return new CorotTrussSection(*this); }
-
-//  destructor
-//     delete must be invoked on any objects created by the object
-//     and on the matertial object.
-XC::CorotTrussSection::~CorotTrussSection(void)
-  { free(); }
 
 // method: setDomain()
 //    to set a link to the enclosing XC::Domain and to set the node pointers.
@@ -241,16 +195,16 @@ void XC::CorotTrussSection::setDomain(Domain *theDomain)
 }
 
 //! @brief Commit element state.
-int XC::CorotTrussSection::commitState()
+int XC::CorotTrussSection::commitState(void)
   {
     int retVal = 0;
     // call element commitState to do any base class stuff
-    if((retVal = this->XC::Element::commitState()) != 0)
+    if((retVal = this->CorotTrussBase::commitState()) != 0)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
 	          << "; failed in base class." << std::endl;
       }
-    retVal = theSection->commitState();
+    retVal+= physicalProperties.commitState();
     return retVal;
   }
 
@@ -258,14 +212,14 @@ int XC::CorotTrussSection::commitState()
 int XC::CorotTrussSection::revertToLastCommit()
   {
     // Revert the material
-    return theSection->revertToLastCommit();
+    return physicalProperties.revertToLastCommit();
   }
 
 //! @brief Revert the element to its initial state.
 int XC::CorotTrussSection::revertToStart()
   {
     // Revert the material to start
-    return theSection->revertToStart();
+    return physicalProperties.revertToStart();
   }
 
 //! @brief Update element state.
@@ -294,8 +248,9 @@ int XC::CorotTrussSection::update(void)
     Ln = sqrt(Ln);
 
     // Compute engineering strain
-    double strain = (Ln-Lo)/Lo;
+    const double strain = (Ln-Lo)/Lo;
 
+    SectionForceDeformation *theSection= physicalProperties[0];
     int order= theSection->getOrder();
     const ID &code = theSection->getType();
 
@@ -320,6 +275,7 @@ const XC::Matrix &XC::CorotTrussSection::getTangentStiff(void) const
     // Material stiffness
     //
     // Get material tangent
+    const SectionForceDeformation *theSection= physicalProperties[0];
     int order = theSection->getOrder();
     const ID &code = theSection->getType();
 
@@ -384,6 +340,7 @@ const XC::Matrix &XC::CorotTrussSection::getInitialStiff(void) const
     // Material stiffness
     //
     // Get material tangent
+    const SectionForceDeformation *theSection= physicalProperties[0];
     int order = theSection->getOrder();
     const ID &code = theSection->getType();
 
@@ -423,13 +380,13 @@ const XC::Matrix &XC::CorotTrussSection::getInitialStiff(void) const
 }
 
 const XC::Material *XC::CorotTrussSection::getMaterial(void) const
-  { return theSection; }
+  { return physicalProperties[0]; }
 XC::Material *XC::CorotTrussSection::getMaterial(void)
-  { return theSection; }
+  { return physicalProperties[0]; }
 
 //! @brief Return the density of the section.
 double XC::CorotTrussSection::getRho(void) const
-  { return theSection->getRho(); }
+  { return physicalProperties[0]->getRho(); }
 
 //! @brief Returns the element mass per unit length.
 double XC::CorotTrussSection::getLinearRho(void) const
@@ -464,9 +421,7 @@ const XC::Matrix &XC::CorotTrussSection::getMass(void) const
 void XC::CorotTrussSection::zeroLoad(void)
   {
     CorotTrussBase::zeroLoad();
-    Vector zero(1);
-    zero[0]= 0.0;
-    theSection->setInitialSectionDeformation(zero); //Removes initial strains.
+    (*physicalProperties[0]).zeroInitialSectionDeformation(); //Removes also initial strains.
   }
 
 int XC::CorotTrussSection::addLoad(ElementalLoad *theLoad, double loadFactor)
@@ -483,7 +438,7 @@ int XC::CorotTrussSection::addLoad(ElementalLoad *theLoad, double loadFactor)
             const double e2= trsLoad->E2()*loadFactor;
             Vector ezero(1);
 	    ezero[0]= (e2+e1)/2;
-            theSection->addInitialSectionDeformation(ezero);
+            physicalProperties[0]->addInitialSectionDeformation(ezero);
           }
         else
           {
@@ -506,6 +461,7 @@ int XC::CorotTrussSection::addInertiaLoadToUnbalance(const Vector &accel)
 double XC::CorotTrussSection::getAxialForce(void) const
   {
     double retval= 0.0;
+    const SectionForceDeformation *theSection= physicalProperties[0];
     const int order= theSection->getOrder();
     const ID &code= theSection->getType();
     const Vector &s= theSection->getStressResultant();
@@ -585,24 +541,25 @@ int XC::CorotTrussSection::recvSelf(const Communicator &comm)
 
 void XC::CorotTrussSection::Print(std::ostream &s, int flag) const
   {
-        s << "\nCorotTrussSection, tag: " << this->getTag() << std::endl;
-        s << "\tConnected Nodes: " << theNodes;
-        s << "\tUndeformed Length: " << Lo << std::endl;
-        s << "\tCurrent Length: " << Ln << std::endl;
-        s << "\tRotation matrix: " << std::endl;
+    s << "\nCorotTrussSection, tag: " << this->getTag() << std::endl;
+    s << "\tConnected Nodes: " << theNodes;
+    s << "\tUndeformed Length: " << Lo << std::endl;
+    s << "\tCurrent Length: " << Ln << std::endl;
+    s << "\tRotation matrix: " << std::endl;
 
-        if(theSection)
-          {
-            s << "\tSection, tag: " << theSection->getTag() << std::endl;
-            theSection->Print(s,flag);
-          }
+    const SectionForceDeformation *theSection= physicalProperties[0];
+    if(theSection)
+      {
+	s << "\tSection, tag: " << theSection->getTag() << std::endl;
+	theSection->Print(s,flag);
+      }
   }
 
 XC::Response *XC::CorotTrussSection::setResponse(const std::vector<std::string> &argv, Information &eleInfo)
   {
     // a material quantity
     if(argv[0] == "section")
-      return setMaterialResponse(theSection,argv,1,eleInfo);
+      return physicalProperties.setResponse(argv,eleInfo);
     else
       return 0;
   }

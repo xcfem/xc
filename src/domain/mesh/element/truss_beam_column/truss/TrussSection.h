@@ -71,8 +71,6 @@
 #include "domain/mesh/element/utils/physical_properties/SectionFDPhysicalProperties.h"
 
 namespace XC {
-class Channel;
-class SectionForceDeformation;
 
 //! @ingroup TrussElem
 //
