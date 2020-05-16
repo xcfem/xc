@@ -41,6 +41,25 @@ XC::SectionFDPhysicalProperties::SectionFDPhysicalProperties(const size_t &nMat,
   : PhysicalProperties<SectionForceDeformation>(nMat,ptr_mat)
   { }
 
+XC::SectionFDPhysicalProperties::SectionFDPhysicalProperties(const size_t &nMat,const Material *ptr)
+  : PhysicalProperties<SectionForceDeformation>(nMat,nullptr)
+  {
+    if(ptr)
+      {
+	const SectionForceDeformation *tmp= dynamic_cast<const SectionForceDeformation *>(ptr);
+	if(tmp)
+	  {
+	    for(size_t i= 0;i<nMat;i++)
+	      theMaterial[i]= tmp->getCopy();
+	  }
+	else
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << " material argument class : "
+	            << ptr->getClassName()
+	            << " is not valid." << std::endl;
+      }
+  }
+
 
 //! @brief print out element data
 void XC::SectionFDPhysicalProperties::Print(std::ostream &s, int flag ) const
@@ -92,7 +111,8 @@ double XC::SectionFDPhysicalProperties::getMeanInternalForce(const std::string &
     else if(cod == "q23")
       retval= theMaterial.getMeanGeneralizedStress(PLATE_RESPONSE_q23);
     else
-      std::cerr << "Unknown internal force: '"
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; unknown internal force: '"
                 << cod << "'\n";
     return retval;
   }
@@ -118,7 +138,8 @@ double XC::SectionFDPhysicalProperties::getMeanInternalDeformation(const std::st
     else if(cod == "q23")
       retval= theMaterial.getMeanGeneralizedStrain(PLATE_RESPONSE_q23);
     else
-      std::cerr << "Unknown internal deformation: '"
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< " unknown internal deformation: '"
                 << cod << "'\n";
     return retval;
   }

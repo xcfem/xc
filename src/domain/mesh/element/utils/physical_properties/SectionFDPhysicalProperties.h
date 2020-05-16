@@ -42,6 +42,7 @@ class SectionFDPhysicalProperties: public PhysicalProperties<SectionForceDeforma
   {
   public:
     SectionFDPhysicalProperties(const size_t &nMat= 0,const SectionForceDeformation *ptr_mat= nullptr); 
+    SectionFDPhysicalProperties(const size_t &nMat,const Material *); 
 
     double getMeanInternalForce(const std::string &) const;
     double getMeanInternalDeformation(const std::string &) const;

@@ -68,6 +68,7 @@
 
 #include "TrussBase.h"
 #include <utility/matrix/Matrix.h>
+#include "domain/mesh/element/utils/physical_properties/SectionFDPhysicalProperties.h"
 
 namespace XC {
 class Channel;
@@ -79,23 +80,19 @@ class SectionForceDeformation;
 class TrussSection: public TrussBase
   {
   private:
-    SectionForceDeformation *theSection;
+    SectionFDPhysicalProperties physicalProperties;
     
-    void alloc(const SectionForceDeformation &);
-    void free(void);
     double computeCurrentStrain(void) const;    
   protected:
     DbTagData &getDbTagData(void) const;
     int sendData(Communicator &comm);
     int recvData(const Communicator &comm);
   public:
-    TrussSection(int tag, int dimension, int Nd1, int Nd2, SectionForceDeformation &theSection);
+    TrussSection(int tag, int dimension, int Nd1, int Nd2, SectionForceDeformation &);
     TrussSection(int tag,int dimension,const Material *ptr_mat);    
     TrussSection(void);
-    TrussSection(const TrussSection &);
-    TrussSection &operator=(const TrussSection &);
     Element *getCopy(void) const;
-    ~TrussSection(void);
+    inline virtual ~TrussSection(void) {}
 
     // public methods to obtain information about dof & connectivity    
     void setDomain(Domain *theDomain);
