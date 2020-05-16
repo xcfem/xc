@@ -60,7 +60,7 @@ XC::Matrix  XC::ShellMITC9::mass(54,54);
 
 //! @brief null constructor
 XC::ShellMITC9::ShellMITC9(void)
-  :QuadBase9N<SectionFDPhysicalProperties>( 0, ELE_TAG_ShellMITC9, SectionFDPhysicalProperties(9,nullptr)), Ktt(0.0),theCoordTransf() {}
+  :QuadBase9N<SectionFDPhysicalProperties>( 0, ELE_TAG_ShellMITC9, SectionFDPhysicalProperties(9)), Ktt(0.0),theCoordTransf() {}
 
 //! @brief Return the Gauss points of the element.
 const XC::GaussModel &XC::ShellMITC9::getGaussModel(void) const

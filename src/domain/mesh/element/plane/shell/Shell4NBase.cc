@@ -104,7 +104,7 @@ void XC::Shell4NBase::alloc(const ShellCrdTransf3dBase *crdTransf)
 
 //! @brief Constructor
 XC::Shell4NBase::Shell4NBase(int classTag, const ShellCrdTransf3dBase *crdTransf)
-  : QuadBase4N<SectionFDPhysicalProperties>(0,classTag,SectionFDPhysicalProperties(4,nullptr)), theCoordTransf(nullptr), applyLoad(0), initDisp(4,Vector(6))
+  : QuadBase4N<SectionFDPhysicalProperties>(0,classTag,SectionFDPhysicalProperties(4)), theCoordTransf(nullptr), applyLoad(0), initDisp(4,Vector(6))
   {
     alloc(crdTransf);
     appliedB[0]= 0.0;
