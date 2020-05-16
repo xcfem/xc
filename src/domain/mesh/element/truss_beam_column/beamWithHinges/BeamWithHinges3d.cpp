@@ -157,7 +157,8 @@ void XC::BeamWithHinges3d::setDomain(Domain *theDomain)
         const double L= theCoordTransf->getInitialLength();
         if(L == 0.0)
           {
-            std::cerr << "XC::BeamWithHinges3d::setDomain() -- element has zero length\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; element has zero length\n";
             exit(-1);
           }
 
@@ -178,7 +179,8 @@ int XC::BeamWithHinges3d::commitState(void)
     // call element commitState to do any base class stuff
     if((err = this->XC::BeamColumnWithSectionFDTrf3d::commitState()) != 0)
       {
-        std::cerr << "XC::BeamWithHinges3d::commitState () - failed in base class\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; failed in base class\n";
       }
 
     err+= theCoordTransf->commitState();
@@ -448,7 +450,8 @@ const XC::Matrix &XC::BeamWithHinges3d::getInitialStiff(void) const
   // calculate element stiffness matrix
   static Matrix kbInit(6,6);
     if(f.Solve(Iden,kbInit) < 0)
-      std::cerr << "XC::BeamWithHinges3d::update(void) -- could not invert flexibility\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; could not invert flexibility\n";
     static Matrix K;
     K= theCoordTransf->getInitialGlobalStiffMatrix(kbInit);
     if(isDead())
@@ -484,8 +487,8 @@ void XC::BeamWithHinges3d::zeroLoad(void)
 int XC::BeamWithHinges3d::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
     if(isDead())
-      std::cerr << getClassName() 
-                << "; load over inactive element: "
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; load over inactive element: "
                 << getTag() << std::endl;
     else
       {
@@ -505,7 +508,8 @@ int XC::BeamWithHinges3d::addLoad(ElementalLoad *theLoad, double loadFactor)
               {
                 applied_sf = new Matrix(6,2);
                 if(!applied_sf)
-                  std::cerr << "XC::BeamWithHinges3d::addLoad() -- out of memory\n";
+                  std::cerr << getClassName() << "::" << __FUNCTION__
+			    << "; out of memory\n";
               }
             (*applied_sf)+= beamMecLoad->getAppliedSectionForces(L,xi_pt,loadFactor); // Accumulate applied section forces due to element loads
             beamMecLoad->addReactionsInBasicSystem(L,loadFactor,p0); // Accumulate reactions in basic system
@@ -513,7 +517,9 @@ int XC::BeamWithHinges3d::addLoad(ElementalLoad *theLoad, double loadFactor)
           }
         else
           {
-            std::cerr << "XC::BeamWithHinges3d::addLoad() -- load type unknown for element with tag: " << this->getTag() << std::endl;
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; load type unknown for element with tag: "
+		      << this->getTag() << std::endl;
             return -1;
           }
       }
@@ -656,7 +662,8 @@ int XC::BeamWithHinges3d::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data\n";
     return res;
   }
 
@@ -668,13 +675,15 @@ int XC::BeamWithHinges3d::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }
@@ -728,7 +737,8 @@ void XC::BeamWithHinges3d::checkNodePtrs(Domain *theDomain)
     int dofNd2 = theNodes[1]->getNumberDOF();
     if((dofNd1 != 6) || (dofNd2 != 6))
       {
-        std::cerr << "XC::BeamWithHinges3d::setNodePtrs() -- nodal dof is not three\n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; nodal dof is not three\n";
         exit(-1);
       }
   }
@@ -1088,7 +1098,8 @@ int XC::BeamWithHinges3d::update(void)
 
     // calculate element stiffness matrix
     if(f.Solve(Iden,kb) < 0)
-      std::cerr << "XC::BeamWithHinges3d::update(void) -- could not invert flexibility\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; could not invert flexibility\n";
 
     // dv = v - vr;
     dv = v;

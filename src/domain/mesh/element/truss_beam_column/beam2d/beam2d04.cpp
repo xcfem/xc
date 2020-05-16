@@ -120,19 +120,21 @@ void XC::beam2d04::formVar(void) const
         double L2 = L*L;
         double L3 = L*L*L;
         if(L == 0.0) {
-            std::cerr << "Element: " << this->getTag();
-            std::cerr << " XC::beam2d04::formVar: 0 length\n";
+            std::cerr << getClassName() << "::" << __FUNCTION__
+		      << "; element: " << this->getTag();
+            std::cerr << ": 0 length\n";
             exit(-1);
         }
 
         cs = dx/L;
         sn = dy/L;
 
-        oneEA = ctes_scc.EA()/L;
-        twoEI = 2*ctes_scc.EI()/L;
-        fourEI = 4*ctes_scc.EI()/L;
-        twelveEI = 12*ctes_scc.EI()/L3;
-        sixEI = 6*ctes_scc.EI()/L2;
+        const CrossSectionProperties2d &sprop= getSectionProperties();
+        oneEA = sprop.EA()/L;
+        twoEI = 2*sprop.EI()/L;
+        fourEI = 4*sprop.EI()/L;
+        twelveEI = 12*sprop.EI()/L3;
+        sixEI = 6*sprop.EI()/L2;
     }
     isStiffFormed = 1;
   }
@@ -244,7 +246,8 @@ const XC::Matrix &XC::beam2d04::getStiff(void) const
         k(5,5) = fourEI;
     }
     else {
-        std::cerr << "XC::beam2d04::getStiff - more WORK \n";
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; more WORK \n";
         exit(0);
     }
 
@@ -257,7 +260,8 @@ const XC::Matrix &XC::beam2d04::getStiff(void) const
 
 int XC::beam2d04::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
-    std::cerr << "XC::beam2d04::addLoad() - beam " << this->getTag()
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; beam " << this->getTag()
            << ", load type unknown\n";
     return -1;
   }
@@ -292,8 +296,8 @@ const XC::Vector &XC::beam2d04::getResistingForce(void) const
     Node *end1Ptr = theDomain->getNode(Nd1);
     Node *end2Ptr = theDomain->getNode(Nd2);
 
-    const XC::Vector &end1Disp = end1Ptr->getTrialDisp();
-    const XC::Vector &end2Disp = end2Ptr->getTrialDisp();
+    const Vector &end1Disp = end1Ptr->getTrialDisp();
+    const Vector &end2Disp = end2Ptr->getTrialDisp();
     rForce(0) = end1Disp(0);
     rForce(1) = end1Disp(1);
     rForce(2) = end1Disp(2);
@@ -334,7 +338,8 @@ int XC::beam2d04::sendSelf(Communicator &comm)
 
     res+= comm.sendIdData(getDbTagData(),dataTag);
     if(res < 0)
-      std::cerr << getClassName() << "sendSelf() - failed to send data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send data\n";
     return res;
   }
 
@@ -345,13 +350,15 @@ int XC::beam2d04::recvSelf(const Communicator &comm)
     int res= comm.receiveIdData(getDbTagData(),dataTag);
 
     if(res<0)
-      std::cerr << getClassName() << "::recvSelf - failed to receive ids.\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to receive ids.\n";
     else
       {
         setTag(getDbTagDataPos(0));
         res+= recvData(comm);
         if(res<0)
-          std::cerr << getClassName() << "::recvSelf - failed to receive data.\n";
+          std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; failed to receive data.\n";
       }
     return res;
   }

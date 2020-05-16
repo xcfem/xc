@@ -91,7 +91,7 @@ void XC::ElasticBeam2d::set_transf(const CrdTransf *trf)
       {
         const CrdTransf2d *tmp= dynamic_cast<const CrdTransf2d *>(trf);
         if(tmp)
-          theCoordTransf = tmp->getCopy();
+          theCoordTransf= tmp->getCopy();
         else
           {
             std::cerr << getClassName() << "::" << __FUNCTION__
@@ -106,90 +106,60 @@ void XC::ElasticBeam2d::set_transf(const CrdTransf *trf)
 		<< std::endl;
   }
 
-XC::ElasticBeam2d::ElasticBeam2d(int tag)
-  :ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d), eInit(2), alpha(0.0), d(0.0),
-   q(3), theCoordTransf(nullptr), release(0)
+void XC::ElasticBeam2d::init(void)
   {
     load.reset(6);
-    q0[0] = 0.0;
-    q0[1] = 0.0;
-    q0[2] = 0.0;
-
-    p0[0] = 0.0;
-    p0[1] = 0.0;
-    p0[2] = 0.0;
-
+    q0.zero();
+    p0.zero();
   }
+
+XC::ElasticBeam2d::ElasticBeam2d(int tag)
+  :ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d), alpha(0.0), d(0.0),
+   q(3), theCoordTransf(nullptr), release(0)
+  { init(); }
 
 //! @brief Constructor.
 XC::ElasticBeam2d::ElasticBeam2d(int tag,const Material *m,const CrdTransf *trf)
-  :ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d,m), eInit(2), alpha(0.0), d(0.0),
+  :ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d,m), alpha(0.0), d(0.0),
    q(3), theCoordTransf(nullptr), release(0)
   {
-    load.reset(6);
-    q0[0] = 0.0;
-    q0[1] = 0.0;
-    q0[2] = 0.0;
-
-    p0[0] = 0.0;
-    p0[1] = 0.0;
-    p0[2] = 0.0;
-
+    init();
     set_transf(trf);
   }
 
 //! @brief Constructor.
 XC::ElasticBeam2d::ElasticBeam2d(int tag, double a, double e, double i, int Nd1, int Nd2, CrdTransf2d &coordTransf, double Alpha, double depth, double r, int rel)
-  : ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d,a,e,i,Nd1,Nd2), eInit(2), alpha(Alpha), d(depth), q(3), theCoordTransf(nullptr), release(rel)
+  : ProtoBeam2d(tag,ELE_TAG_ElasticBeam2d,a,e,i,Nd1,Nd2), alpha(Alpha),
+    d(depth), q(3), theCoordTransf(nullptr), release(rel)
   {
     setRho(r);
-    load.reset(6);
+    init();
     set_transf(&coordTransf);
-
-    q0[0] = 0.0;
-    q0[1] = 0.0;
-    q0[2] = 0.0;
-
-    p0[0] = 0.0;
-    p0[1] = 0.0;
-    p0[2] = 0.0;
-
   }
 
 //! @brief Copy constructor.
 XC::ElasticBeam2d::ElasticBeam2d(const ElasticBeam2d &other)
-  :ProtoBeam2d(other), eInit(other.eInit), alpha(other.alpha), d(other.d),
+  :ProtoBeam2d(other), alpha(other.alpha), d(other.d),
    q(other.q), theCoordTransf(nullptr), release(other.release)
   {
     set_transf(other.theCoordTransf);
 
-    q0[0] = other.q0[0];
-    q0[1] = other.q0[1];
-    q0[2] = other.q0[2];
-
-    p0[0] = other.p0[0];
-    p0[1] = other.p0[1];
-    p0[2] = other.p0[2];
+    q0= other.q0;
+    p0= other.p0;
   }
 
 //! @brief Assignment operator.
 XC::ElasticBeam2d &XC::ElasticBeam2d::operator=(const ElasticBeam2d &other)
   {
     ProtoBeam2d::operator=(other);
-    eInit= other.eInit;
     alpha= other.alpha;
     d= other.d;
     q= other.q;
     set_transf(other.theCoordTransf);
     release= other.release;
 
-    q0[0] = other.q0[0];
-    q0[1] = other.q0[1];
-    q0[2] = other.q0[2];
-
-    p0[0] = other.p0[0];
-    p0[1] = other.p0[1];
-    p0[2] = other.p0[2];
+    q0= other.q0;
+    p0= other.p0;
     return *this;
   }
 
@@ -215,7 +185,7 @@ void XC::ElasticBeam2d::setDomain(Domain *theDomain)
     ProtoBeam2d::setDomain(theDomain);
 
 
-    const int dofNd1 = theNodes[0]->getNumberDOF();
+    const int dofNd1= theNodes[0]->getNumberDOF();
     if(dofNd1 != 3)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -225,7 +195,7 @@ void XC::ElasticBeam2d::setDomain(Domain *theDomain)
         exit(-1);
       }
 
-    const int dofNd2 = theNodes[1]->getNumberDOF();
+    const int dofNd2= theNodes[1]->getNumberDOF();
     if(dofNd2 != 3)
       {
         std::cerr << getClassName() << "::" << __FUNCTION__
@@ -256,46 +226,52 @@ void XC::ElasticBeam2d::setDomain(Domain *theDomain)
 		<< std::endl;
    }
 
-int XC::ElasticBeam2d::setInitialSectionDeformation(const Vector &def)
-  {
-    eInit= def;
-    return 0;
-  }
-
-const XC::Vector &XC::ElasticBeam2d::getSectionDeformation(void) const
+//! @brief Compute the current strain.
+const XC::Vector &XC::ElasticBeam2d::computeCurrentStrain(void) const
   {
     static Vector retval(3);
     theCoordTransf->update();
-    const double L = theCoordTransf->getInitialLength();
-    // retval(0)= (dx2-dx1)/L: Element elongation/L.
-    // retval(1)= (dy1-dy2)/L: Rotation about z/L.
-    // retval(2)= (dy1-dy2)/L: Rotation about z/L.
+    const double L= theCoordTransf->getInitialLength();
     retval= theCoordTransf->getBasicTrialDisp()/L;
-    retval(0)-= eInit(0);
-    retval(1)-= eInit(1);
-    retval(2)-= eInit(1);
     return retval;
   }
 
+//! @brief Update element state.
+int XC::ElasticBeam2d::update(void)
+  {
+    int retval= ProtoBeam2d::update();
+    retval+= theCoordTransf->update();
+    return retval;
+  }
+
+//! @brief Commit the element state.
 int XC::ElasticBeam2d::commitState(void)
   {
-    int retVal= XC::Element::commitState();
+    int retVal= ProtoBeam2d::commitState();
     // call element commitState to do any base class stuff
     if(retVal!=0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed in base class.";
-    retVal += theCoordTransf->commitState();
+    retVal+= theCoordTransf->commitState();
     return retVal;
   }
 
-int XC::ElasticBeam2d::revertToLastCommit()
-  { return theCoordTransf->revertToLastCommit(); }
+//! @brief Revert the element to its last commited state.
+int XC::ElasticBeam2d::revertToLastCommit(void)
+  {
+    int retval= ProtoBeam2d::revertToLastCommit();
+    retval+= theCoordTransf->revertToLastCommit();
+    return retval;
+  }
 
+//! @brief Revert the element state to the start.
 int XC::ElasticBeam2d::revertToStart()
-  { return theCoordTransf->revertToStart(); }
+  {
+    int retval= ProtoBeam2d::revertToStart();
+    retval+= theCoordTransf->revertToStart();
+    return retval;
+  }
 
-int XC::ElasticBeam2d::update(void)
-  { return theCoordTransf->update(); }
 
 //! @brief Returns the direction vector of element strong axis
 //! expressed in the global coordinate system.
@@ -345,16 +321,17 @@ const XC::Matrix &XC::ElasticBeam2d::getTangentStiff(void) const
     const Vector &v= getSectionDeformation();
     const double L= theCoordTransf->getInitialLength();
 
-    const double EA= ctes_scc.EA(); // EA
-    const double EI2= 2.0*ctes_scc.EI(); // 2EI
-    const double EI3= 3.0*ctes_scc.EI(); // 3EI
+    const CrossSectionProperties2d &sprop= getSectionProperties();
+    const double EA= sprop.EA(); // EA
+    const double EI2= 2.0*sprop.EI(); // 2EI
+    const double EI3= 3.0*sprop.EI(); // 3EI
     const double EI4= 2.0*EI2; // 4EI
     const double EAoverL= EA/L;	// EA/L
     const double EIoverL2= EI2/L; // 2EI/L
     const double EIoverL4= EI4/L; // 4EI/L
     const double EIoverL3= EI3/L;
 
-    // determine q = kv + q0
+    // determine q= kv + q0
     q(0)= EA*v(0);
     kb(0,0)= EAoverL;
     if(release==0)
@@ -378,8 +355,8 @@ const XC::Matrix &XC::ElasticBeam2d::getTangentStiff(void) const
       }
     else if(release==3)
       { // release both I and J
-	q(1) = 0.0;
-	q(2) = 0.0;
+	q(1)= 0.0;
+	q(2)= 0.0;
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -400,13 +377,14 @@ const XC::Matrix &XC::ElasticBeam2d::getTangentStiff(void) const
 //! @brief Return initial stiffness matrix.
 const XC::Matrix &XC::ElasticBeam2d::getInitialStiff(void) const
   {
-    const double L = theCoordTransf->getInitialLength();
-    const double EoverL= ctes_scc.E()/L;
-    const double EAoverL= ctes_scc.A()*EoverL; // EA/L
-    const double EIoverL2= 2.0*ctes_scc.I()*EoverL; // 2EI/L
+    const double L= theCoordTransf->getInitialLength();
+    const CrossSectionProperties2d &sprop= getSectionProperties();
+    const double EoverL= sprop.E()/L;
+    const double EAoverL= sprop.A()*EoverL; // EA/L
+    const double EIoverL2= 2.0*sprop.I()*EoverL; // 2EI/L
     const double EIoverL4= 2.0*EIoverL2; // 4EI/L
 
-    kb(0,0) = EAoverL;
+    kb(0,0)= EAoverL;
     if(release==0)
       {
         kb(1,1)= kb(2,2)= EIoverL4;
@@ -414,11 +392,11 @@ const XC::Matrix &XC::ElasticBeam2d::getInitialStiff(void) const
       }
     else if(release==1)
       { // release I
-        kb(2,2) = 3.0*ctes_scc.I()*EoverL;
+        kb(2,2)= 3.0*sprop.I()*EoverL;
       }
     else if(release==2)
       { // release J
-        kb(1,1) = 3.0*ctes_scc.I()*EoverL;
+        kb(1,1)= 3.0*sprop.I()*EoverL;
       }
     else if(release==3)
       {}
@@ -441,8 +419,8 @@ const XC::Matrix &XC::ElasticBeam2d::getMass(void) const
     const double rho= getRho();
     if(rho>0.0)
       {
-        const double L = theCoordTransf->getInitialLength();
-        const double m = 0.5*rho*L;
+        const double L= theCoordTransf->getInitialLength();
+        const double m= 0.5*rho*L;
         const double mpeq= m*1.0e-10;
 
         K(0,0)= m;
@@ -461,16 +439,8 @@ const XC::Matrix &XC::ElasticBeam2d::getMass(void) const
 void XC::ElasticBeam2d::zeroLoad(void)
   {
     ProtoBeam2d::zeroLoad();
-
-    q0[0] = 0.0;
-    q0[1] = 0.0;
-    q0[2] = 0.0;
-
-    p0[0] = 0.0;
-    p0[1] = 0.0;
-    p0[2] = 0.0;
-
-    eInit.Zero(); //Removes also initial strains.
+    q0.zero();
+    p0.zero();
   }
 
 int XC::ElasticBeam2d::addLoad(ElementalLoad *theLoad, double loadFactor)
@@ -482,7 +452,7 @@ int XC::ElasticBeam2d::addLoad(ElementalLoad *theLoad, double loadFactor)
                 << std::endl;
     else
       {
-        const double L = theCoordTransf->getInitialLength();
+        const double L= theCoordTransf->getInitialLength();
         if(const BeamMecLoad *beamMecLoad= dynamic_cast<const BeamMecLoad *>(theLoad))
           {
             beamMecLoad->addReactionsInBasicSystem(L,loadFactor,p0); // Accumulate reactions in basic system
@@ -515,8 +485,8 @@ int XC::ElasticBeam2d::addInertiaLoadToUnbalance(const XC::Vector &accel)
     if(rho!=0.0)
       {
         // Get R * accel from the nodes
-        const Vector &Raccel1 = theNodes[0]->getRV(accel);
-        const Vector &Raccel2 = theNodes[1]->getRV(accel);
+        const Vector &Raccel1= theNodes[0]->getRV(accel);
+        const Vector &Raccel2= theNodes[1]->getRV(accel);
 
         if(3 != Raccel1.Size() || 3 != Raccel2.Size())
           {
@@ -527,8 +497,8 @@ int XC::ElasticBeam2d::addInertiaLoadToUnbalance(const XC::Vector &accel)
 
         // Want to add ( - fact * M R * accel ) to unbalance
         // Take advantage of lumped mass matrix
-        const double L = theCoordTransf->getInitialLength();
-        const double m = 0.5*rho*L;
+        const double L= theCoordTransf->getInitialLength();
+        const double m= 0.5*rho*L;
 
         load(0)-= m * Raccel1(0);
         load(1)-= m * Raccel1(1);
@@ -546,13 +516,14 @@ const XC::Vector &XC::ElasticBeam2d::getResistingForce(void) const
     
     const Vector &v= getSectionDeformation();
 
-    const double EA= ctes_scc.EA(); // EA
-    const double EI2= 2.0*ctes_scc.EI(); // 2EI
+    const CrossSectionProperties2d &sprop= getSectionProperties();
+    const double EA= sprop.EA(); // EA
+    const double EI2= 2.0*sprop.EI(); // 2EI
     const double EI4= 2.0*EI2; // 4EI
 
 
-    // determine q = kv + q0
-    q(0) = EA*v(0);
+    // determine q= kv + q0
+    q(0)= EA*v(0);
     if(release==0)
       {
         q(1)= EI4*v(1) + EI2*v(2);
@@ -561,17 +532,17 @@ const XC::Vector &XC::ElasticBeam2d::getResistingForce(void) const
     else if(release==1)
       {
         q(1)= 0.0;
-        q(2)= 3.0*ctes_scc.EI()*v(2);
+        q(2)= 3.0*sprop.EI()*v(2);
       }
     else if(release==2)
       {
-        q(1)= 3.0*ctes_scc.EI()*v(1);
+        q(1)= 3.0*sprop.EI()*v(1);
         q(2)= 0.0;
       }
     else if(release==3)
       {
-        q(1) = 0.0;
-        q(2) = 0.0;
+        q(1)= 0.0;
+        q(2)= 0.0;
       }
     else
       std::cerr << getClassName() << "::" << __FUNCTION__
@@ -587,7 +558,7 @@ const XC::Vector &XC::ElasticBeam2d::getResistingForce(void) const
 
     P= theCoordTransf->getGlobalResistingForce(q, p0Vec);
 
-    // P = P - load;
+    // P= P - load;
     P.addVector(1.0, load, -1.0);
 
     if(isDead())
@@ -607,11 +578,11 @@ const XC::Vector &XC::ElasticBeam2d::getResistingForceIncInertia(void) const
     const double rho= getRho();
     if(rho!=0.0)
       {
-        const Vector &accel1 = theNodes[0]->getTrialAccel();
-        const Vector &accel2 = theNodes[1]->getTrialAccel();
+        const Vector &accel1= theNodes[0]->getTrialAccel();
+        const Vector &accel2= theNodes[1]->getTrialAccel();
 
-        const double L = theCoordTransf->getInitialLength();
-        const double m = 0.5*rho*L;
+        const double L= theCoordTransf->getInitialLength();
+        const double m= 0.5*rho*L;
 
         P(0) += m * accel1(0);
         P(1) += m * accel1(1);
@@ -638,7 +609,7 @@ int XC::ElasticBeam2d::sendData(Communicator &comm)
   {
     int res= ProtoBeam2d::sendData(comm);
     res+= sendCoordTransf(8,9,10,comm);
-    res+= comm.sendVector(eInit,getDbTagData(),CommMetaData(11));
+    //res+= comm.sendVector(eInit,getDbTagData(),CommMetaData(11));
     res+= comm.sendInt(release,getDbTagData(),CommMetaData(12));
     return res;
   }
@@ -648,7 +619,7 @@ int XC::ElasticBeam2d::recvData(const Communicator &comm)
   {
     int res= ProtoBeam2d::recvData(comm);
     theCoordTransf= recvCoordTransf2d(8,9,10,comm);
-    res+= comm.receiveVector(eInit,getDbTagData(),CommMetaData(11));
+    //res+= comm.receiveVector(eInit,getDbTagData(),CommMetaData(11));
     res+= comm.receiveInt(release,getDbTagData(),CommMetaData(12));
     return res;
   }
@@ -670,7 +641,7 @@ int XC::ElasticBeam2d::recvSelf(const Communicator &comm)
   {
     const int dataTag= getDbTag();
     inicComm(13);
-    int res = comm.receiveIdData(getDbTagData(),dataTag);
+    int res= comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
       std::cerr << getClassName() << "::" << __FUNCTION__
 		<< "; failed to receive ID data.\n";
@@ -683,7 +654,7 @@ void XC::ElasticBeam2d::Print(std::ostream &s, int flag) const
   {
     if(flag==-1)
       {
-        int eleTag = this->getTag();
+        int eleTag= this->getTag();
         s << "EL_BEAM\t" << eleTag << "\t";
         s << 0 << "\t" << 0 << "\t" << theNodes.getTagNode(0) << "\t" << theNodes.getTagNode(1) ;
         s << "0\t0.0000000\n";
@@ -696,11 +667,11 @@ void XC::ElasticBeam2d::Print(std::ostream &s, int flag) const
         s << "\tCoordTransf: " << theCoordTransf->getTag() << std::endl;
         s << "\tmass density:  " << getRho() << std::endl;
         s << "\trelease code:  " << release << std::endl;
-        const double P  = q(0);
-        const double M1 = q(1);
-        const double M2 = q(2);
-        const double L = theCoordTransf->getInitialLength();
-        const double V = (M1+M2)/L;
+        const double P = q(0);
+        const double M1= q(1);
+        const double M2= q(2);
+        const double L= theCoordTransf->getInitialLength();
+        const double V= (M1+M2)/L;
         s << "\tEnd 1 Forces (P V M): " << -P+p0[0]
           << " " << V+p0[1] << " " << M1 << std::endl;
         s << "\tEnd 2 Forces (P V M): " << P
@@ -731,7 +702,7 @@ XC::Response *XC::ElasticBeam2d::setResponse(const std::vector<std::string> &arg
 int XC::ElasticBeam2d::getResponse(int responseID, Information &eleInfo)
   {
     double N, M1, M2, V;
-    double L = theCoordTransf->getInitialLength();
+    double L= theCoordTransf->getInitialLength();
 
     switch(responseID)
       {
@@ -741,18 +712,18 @@ int XC::ElasticBeam2d::getResponse(int responseID, Information &eleInfo)
         return eleInfo.setVector(this->getResistingForce());
       case 3: // local forces
         // Axial
-        N = q(0);
-        P(3) =  N;
-        P(0) = -N+p0[0];
+        N= q(0);
+        P(3)=  N;
+        P(0)= -N+p0[0];
         // Moment
-        M1 = q(1);
-        M2 = q(2);
-        P(2) = M1;
-        P(5) = M2;
+        M1= q(1);
+        M2= q(2);
+        P(2)= M1;
+        P(5)= M2;
         // Shear
-        V = (M1+M2)/L;
-        P(1) =  V+p0[1];
-        P(4) = -V+p0[2];
+        V= (M1+M2)/L;
+        P(1)=  V+p0[1];
+        P(4)= -V+p0[2];
         return eleInfo.setVector(P);
       default:
         return -1;
@@ -764,24 +735,25 @@ int XC::ElasticBeam2d::setParameter(const std::vector<std::string> &argv, Parame
     const size_t argc= argv.size();
     if(argc > 0)
       {
-	if(argv[0]=="E") // E of the beam interior
+        const CrossSectionProperties2d &sprop= getSectionProperties();
+        if(argv[0]=="E") // E of the beam interior
 	  {
-	    param.setValue(ctes_scc.E());
+	    param.setValue(sprop.E());
 	    return param.addObject(1, this);
 	  }
 	else if(argv[0]=="A") // A of the beam interior
 	  {
-	    param.setValue(ctes_scc.A());
+	    param.setValue(sprop.A());
 	    return param.addObject(2, this);
 	  }
 	else if(argv[0]=="I") // I of the beam interior
 	  {
-	    param.setValue(ctes_scc.I());
+	    param.setValue(sprop.I());
 	    return param.addObject(3, this);
 	  }
 	else if(argv[0]=="rho") // rho of the beam interior
 	  {
-	    param.setValue(ctes_scc.getRho());
+	    param.setValue(sprop.getRho());
 	    return param.addObject(4, this);
 	  }
 	else if(argv[0]=="release") // rho of the beam interior
@@ -800,12 +772,12 @@ int XC::ElasticBeam2d::updateParameter(int parameterID, Information &info)
       case -1:
         return -1;
       case 5:
-	release = static_cast<int>(info.theDouble);
+	release= static_cast<int>(info.theDouble);
 	if(release < 0 || release > 3)
-	  release = 0;
+	  release= 0;
 	  return 0;				
       default:
-        return ctes_scc.updateParameter(parameterID,info);
+        return getSectionProperties().updateParameter(parameterID,info);
       }
   }
 

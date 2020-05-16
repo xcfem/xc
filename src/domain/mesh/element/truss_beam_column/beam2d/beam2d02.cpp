@@ -110,9 +110,11 @@ void XC::beam2d02::setDomain(Domain *theDomain)
     int dofNd1 = theNodes[0]->getNumberDOF();
     int dofNd2 = theNodes[1]->getNumberDOF();
     if(dofNd1 != 3 && dofNd2 != 3) {
-        std::cerr << "WARNING XC::beam2d02::setDomain(): node " << Nd1;
-        std::cerr << " and/or node " << Nd2 << " have/has incorrect number ";
-        std::cerr << "of dof's at end for beam\n " << *this;
+      std::cerr << getClassName() << "::" << __FUNCTION__
+	        << "; WARNING node " << Nd1
+		<< " and/or node " << Nd2
+		<< " have/has incorrect number "
+		<< "of dof's at end for beam\n " << *this;
         return;
     }
 
@@ -127,16 +129,17 @@ void XC::beam2d02::setDomain(Domain *theDomain)
     L = sqrt(dx*dx + dy*dy);
     if(L == 0.0)
       {
-        std::cerr << "WARNING XC::beam2d02::setDomain(): beam " << this->getTag();
-        std::cerr << " has zero length for beam\n" << *this;
+        std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING beam " << this->getTag()
+		  << " has zero length for beam.\n" << *this;
         return;
       }
-
-    Kd(0,0) = ctes_scc.EA()/L;
+    const CrossSectionProperties2d &sprop= getSectionProperties();
+    Kd(0,0) = sprop.EA()/L;
     Kd(0,1) = 0.0;
     Kd(0,2) = 0.0;
 
-    const double EIL= ctes_scc.EI()/L;
+    const double EIL= sprop.EI()/L;
     Kd(1,0) = 0.0;
     Kd(1,1) = 4.0*EIL;
     Kd(1,2) = 2.0*EIL;
@@ -149,7 +152,7 @@ void XC::beam2d02::setDomain(Domain *theDomain)
     sn = dy/L;
 
     // set the mass variable equal to 1/2 the mass of the beam = 0.5 * rho*A*L
-    M = 0.5*M*ctes_scc.A()*L;
+    M = 0.5*M*sprop.A()*L;
   }
 
 
@@ -159,7 +162,8 @@ int XC::beam2d02::commitState()
 
     // call element commitState to do any base class stuff
     if((retVal = this->XC::Element::commitState()) != 0) {
-      std::cerr << "XC::beam2d02::commitState () - failed in base class";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed in base class";
     }
 
     retVal = theCoordTransf->commitState();
@@ -208,7 +212,8 @@ const XC::Matrix &XC::beam2d02::getMass(void) const
 
 int XC::beam2d02::addLoad(ElementalLoad *theLoad, double loadFactor)
   {
-    std::cerr << "XC::beam2d02::addLoad() - beam " << this->getTag()
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; beam " << this->getTag()
            << ", does not handle ele loads\n";
     return -1;
   }
@@ -304,7 +309,8 @@ int XC::beam2d02::sendSelf(Communicator &comm)
     const int dataTag= getDbTag();
     res= comm.sendIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "beam2d02::sendSelf -- could not send data Vector\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; could not send data Vector\n";
     return res;
   }
 
@@ -315,7 +321,8 @@ int XC::beam2d02::recvSelf(const Communicator &comm)
     const int dataTag= getDbTag();
     int res = comm.receiveIdData(getDbTagData(),dataTag);
     if(res<0)
-      std::cerr << "beam2d02::recvSelf() - failed to send ID data\n";
+      std::cerr << getClassName() << "::" << __FUNCTION__
+		<< "; failed to send ID data.\n";
     else
       res+= recvData(comm);
     return res;
@@ -329,7 +336,7 @@ void XC::beam2d02::Print(std::ostream &s, int flag) const
     s << "Element: " << this->getTag();
     s << " type: beam2d02  iNode: " << theNodes.getTagNode(0);
     s << " jNode: " << theNodes.getTagNode(1);
-    s << " section : " << ctes_scc << std::endl;
+    s << " section : " << getSectionProperties() << std::endl;
     s << " resisting Force: " << rForce;
   }
 

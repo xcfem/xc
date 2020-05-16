@@ -79,7 +79,6 @@ class CrossSectionProperties3d;
 class ElasticBeam2d: public ProtoBeam2d
   {
   private:
-    Vector eInit; //!< Section initial deformations
     double alpha;
     double d; //!< Section depth.
 
@@ -95,6 +94,7 @@ class ElasticBeam2d: public ProtoBeam2d
     int release; //< moment release 0=none, 1=I, 2=J, 3=I,J
 
     void set_transf(const CrdTransf *trf);
+    void init(void);
   protected:
     DbTagData &getDbTagData(void) const;
     int sendData(Communicator &comm);
@@ -111,11 +111,8 @@ class ElasticBeam2d: public ProtoBeam2d
     Element *getCopy(void) const;
     ~ElasticBeam2d(void);
 
-    int setInitialSectionDeformation(const Vector&);
-    inline const Vector &getInitialSectionDeformation(void) const
-      { return eInit; }
-    const Vector &getSectionDeformation(void) const;
-
+    const Vector &computeCurrentStrain(void) const;
+    
     void setDomain(Domain *theDomain);
     
     virtual CrdTransf *getCoordTransf(void);
@@ -125,6 +122,7 @@ class ElasticBeam2d: public ProtoBeam2d
     inline void setReleaseCode(const int &rc)
       { release= rc; }
 
+    virtual int update(void);
     int commitState(void);
     int revertToLastCommit(void);        
     int revertToStart(void);
@@ -133,12 +131,7 @@ class ElasticBeam2d: public ProtoBeam2d
       { return d; }
     void setDepth(const double &h)
       { d= h; } 
-    const Vector &getInitialStrain(void) const
-      { return eInit; }
-    void setInitialStrain(const Vector &e)
-      { eInit= e; }
-    
-    int update(void);
+
     const Matrix &getTangentStiff(void) const;
     const Matrix &getInitialStiff(void) const;
     const Matrix &getMass(void) const;
