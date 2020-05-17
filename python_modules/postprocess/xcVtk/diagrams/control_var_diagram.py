@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-
 ''' Display of diagrams (forces, moments, ...) on linear elements'''
+
+from __future__ import division
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) , Ana Ortega (AO_O) "
 __copyright__= "Copyright 2016, LCPT, AO_O"
@@ -74,29 +76,9 @@ class ControlVarDiagram(cd.ColoredDiagram):
                 value1= None
                 value2= None
         else:
-            if(self.component == 'N'):
-                value1=elem.getN1
-                value2=elem.getN2
-            elif((self.component == 'Qy') or (self.component == 'Vy')):
-                if(hasattr(elem,'getVy1')):
-                    value1=elem.getVy1
-                    value2=elem.getVy2
-            elif((self.component == 'Qz') or (self.component == 'Vz')):
-                if(hasattr(elem,'getVz1')):
-                    value1=elem.getVz1
-                    value2=elem.getVz2
-            elif(self.component == 'T'):
-                if(hasattr(elem,'getT1')):
-                    value1=elem.getT1
-                    value2=elem.getT2
-            elif(self.component == 'My'):
-                if(hasattr(elem,'getMy1')):
-                    value1=elem.getMy1
-                    value2=elem.getMy2
-            elif(self.component == 'Mz'):
-                if(hasattr(elem,'getMz1')):
-                    value1=elem.getMz1
-                    value2=elem.getMz2
+            values= elem.getValuesAtNodes(self.component)
+            if(len(values)>1): # component found.
+                value1= values[0]; value2= values[1]
         if((self.component == 'Qy') or (self.component == 'Vy')):
             elemVDir= elem.getJVector3d(True) # initialGeometry= True 
         elif((self.component == 'Qz') or (self.component == 'Vz')):
