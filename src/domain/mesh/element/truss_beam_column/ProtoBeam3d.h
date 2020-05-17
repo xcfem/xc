@@ -91,6 +91,8 @@ class ProtoBeam3d: public Element1D
     Vector getVDirWeakAxisLocalCoord(void) const;
     double getStrongAxisAngle(void) const;
     double getWeakAxisAngle(void) const;
+    
+    boost::python::list getValuesAtNodes(const std::string &) const;
   };
 } // end of XC namespace
 

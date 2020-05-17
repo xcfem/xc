@@ -1142,6 +1142,37 @@ boost::python::list XC::Element::getMaterialNamesPy(void) const
     return retval;
   }
 
+//! @brief Return a python list with the values of the argument property
+//! at element nodes.
+//!
+//! When the property requested its located at the integration point this
+//! function is responsible of the extrapolation of values from
+//! Gauss points to nodes.
+boost::python::list XC::Element::getValuesAtNodes(const std::string &code) const
+  {
+    boost::python::list retval;
+    const int nNodes= getNumExternalNodes();
+    if(code=="length")
+      {
+	const double L= getLength();
+	for(int i= 0;i<nNodes;i++)
+	  retval.append(L);
+      }
+    else if(code=="area")
+      {
+	const double A= getArea();
+	for(int i= 0;i<nNodes;i++)
+	  retval.append(A);
+      }
+    else if(code=="volume")
+      {
+	const double V= getVolume();
+	for(int i= 0;i<nNodes;i++)
+	  retval.append(V);
+      }
+    return retval;
+  }
+
 //! @brief Sends object members through the communicator argument.
 int XC::Element::sendData(Communicator &comm)
   {

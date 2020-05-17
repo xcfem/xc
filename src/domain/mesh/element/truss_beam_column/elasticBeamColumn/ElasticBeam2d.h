@@ -151,25 +151,25 @@ class ElasticBeam2d: public ProtoBeam2d
     
     void Print(std::ostream &s, int flag = 0) const;
     //! @brief Internal shear force in the middle of the element.
-    inline double getV(void) 
+    inline double getV(void) const
       { return (q(1)+q(2))/theCoordTransf->getInitialLength(); }
     //! @brief Internal shear force at the back end.   
-    inline double getV1(void)
+    inline double getV1(void) const
       { return -getV()-p0[1]; }
     //! @brief Internal shear force at the front end.   
-    inline double getV2(void) 
+    inline double getV2(void) const
       { return -getV()+p0[2]; }
     //! @brief Internal axial force at the back end.   
-    inline double getN1(void)
+    inline double getN1(void) const
       { return q(0)-p0[0]; }
     //! @brief Internal axial force at the front end.   
-    inline double getN2(void)
+    inline double getN2(void) const
       { return q(0); }
     //! @brief Internal bending moment at the back end.   
-    inline double getM1(void)
+    inline double getM1(void) const
       { return -q(1); }
     //! @brief Internal bending moment at the front end.   
-    inline double getM2(void)
+    inline double getM2(void) const
       { return q(2); }
 
 
@@ -179,6 +179,7 @@ class ElasticBeam2d: public ProtoBeam2d
     int setParameter(const std::vector<std::string> &argv, Parameter &param);
     int updateParameter(int parameterID, Information &info);
 
+    boost::python::list getValuesAtNodes(const std::string &) const;
   };
 } // end of XC namespace
 

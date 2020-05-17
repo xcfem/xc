@@ -140,151 +140,153 @@ class ElasticBeam3d: public ProtoBeam3d
 
     //! @brief Axial force which acts over the element in his back end.
     //! Warning! call "calc_resisting_force" before calling this method.
-    inline double getAN1(void)
+    inline double getAN1(void) const
       {
         return q.AN1()+p0[0];
       }
     //! @brief Axial force which acts over the element in his front end.
     //! Warning! call "calc_resisting_force" before calling this method.
-    inline double getAN2(void) 
+    inline double getAN2(void) const
       {
         return q.AN2();
       }
     //! @brief Internal axial force at the back end.   
     //! Warning! call "calc_resisting_force" before calling this method.
-    inline double getN1(void)
+    inline double getN1(void) const
       { 
         return -q.AN1()-p0[0];
       }
     //! @brief Internal axial force at the front end.   
     //! Warning! call "calc_resisting_force" before calling this method.
-    inline double getN2(void)
+    inline double getN2(void) const
       {
         return q.AN2();
       }
     //! @brief Internal axial force at the middle of the element.
     //! Warning! call "calc_resisting_force" before calling this method.
-    inline double getN(void) //Mean axial force.
+    inline double getN(void) const //Mean axial force.
       {
         return (-q.AN1()-p0[0]+q.AN2())/2.0;
       }
     //! @brief Moment about z axis that is applied over the bar in its back end.
     //! Warning! call "calc_resisting_force" before calling this method.
-    inline double getAMz1(void)
+    inline double getAMz1(void) const
       {
         return q.Mz1(); 
       }
     //! @brief Moment about z axis applied over the bar in its front end.
     //! Warning! call "calc_resisting_force" before calling this method.
-    inline double getAMz2(void)
+    inline double getAMz2(void) const
       {
         return q.Mz2();
       }
     //! @brief Internal bending moment about z axis at the back end.
     //! Warning! call "calc_resisting_force" before calling this method.
-    inline double getMz1(void)
+    inline double getMz1(void) const
       {
         return -q.Mz1();
       }
     //! @brief Internal bending moment about z axis at the front end.
     //! Warning! call "calc_resisting_force" before calling this method.
-    inline double getMz2(void)
+    inline double getMz2(void) const
       {
         return q.Mz2();
       }
     //! @brief Internal shear force in the middle of the element.
     //! Warning! call "calc_resisting_force" before calling this method.
-    inline double getVy(void)
+    inline double getVy(void) const
       {
         return q.Vy(theCoordTransf->getInitialLength()); //Shear along y.
       }
     //! @brief y shear drived over the bar in its back end.
     //! Warning! call "calc_resisting_force" before calling this method.
-    inline double getAVy1(void)
+    inline double getAVy1(void) const
       {
         return q.Vy(theCoordTransf->getInitialLength())+p0[1];
       }
     //! @brief y shear drived over the bar in its front end.
     //! Warning! call "calc_resisting_force" before calling this method.
-    inline double getAVy2(void)
+    inline double getAVy2(void) const
       {
         return -q.Vy(theCoordTransf->getInitialLength())+p0[2]; 
       }
     //! @brief Internal y shear force at the back end.
     //! Warning! call "calc_resisting_force" before calling this method.
-    inline double getVy1(void)
+    inline double getVy1(void) const
       {
         return -q.Vy(theCoordTransf->getInitialLength())-p0[1]; 
       }
     //! @brief Internal y shear force at the front end.
     //! Warning! call "calc_resisting_force" before calling this method.
-    inline double getVy2(void)
+    inline double getVy2(void) const
       {
         return p0[2]-q.Vy(theCoordTransf->getInitialLength());
       }
     //! @brief Internal z shear force in the middle of the element.
     //! Warning! call "calc_resisting_force" before calling this method.
-    inline double getVz(void)
+    inline double getVz(void) const
       {
         return q.Vz(theCoordTransf->getInitialLength());
       }
     //! @brief z shear drived over the bar in its back end.
     //! Warning! call "calc_resisting_force" before calling this method.
-    inline double getAVz1(void)
+    inline double getAVz1(void) const
       {
         return q.Vz(theCoordTransf->getInitialLength())+p0[3]; 
       }
     //! @brief z shear drived over the bar in its front end.
     //! Warning! call "calc_resisting_force" before calling this method.
-    inline double getAVz2(void)
+    inline double getAVz2(void) const
       {
         return -q.Vz(theCoordTransf->getInitialLength())+p0[4]; 
       }
     //! @brief Internal z shear force at the back end.
     //! Warning! call "calc_resisting_force" before calling this method.
-    inline double getVz1(void)
+    inline double getVz1(void) const
       {
         return -q.Vz(theCoordTransf->getInitialLength())-p0[3];
       }
     //! @brief Internal z shear force at the front end.
     //! Warning! call "calc_resisting_force" before calling this method.
-    inline double getVz2(void)
+    inline double getVz2(void) const
       {
         return p0[4]-q.Vz(theCoordTransf->getInitialLength());
       }
     //! @brief Internal bending moment about y axis at the back end.   
     //! Warning! call "calc_resisting_force" before calling this method.
-    inline double getMy1(void)
+    inline double getMy1(void) const
       {
         return -q.My1();
       }
     //! @brief Internal bending moment about y axis at the front end.   
     //! Warning! call "calc_resisting_force" before calling this method.
-    inline double getMy2(void)
+    inline double getMy2(void) const
       {
         return q.My2();
       }
     //! @brief Internal torsional force in the middle of the element.   
     //! Warning! call "calc_resisting_force" before calling this method.
-    inline double getT(void)
+    inline double getT(void) const
       {
         return q.T();
       }
     //! @brief Internal torsional force at the back end.   
     //! Warning! call "calc_resisting_force" before calling this method.
-    inline double getT1(void)
+    inline double getT1(void) const
       {
         return -q.T1(); //+p0[0];
       }
     //! @brief Internal torsional force at the front end.
     //! Warning! call "calc_resisting_force" before calling this method.
-    inline double getT2(void)
+    inline double getT2(void) const
       {
         return q.T2();
       }
 
     Response *setResponse(const std::vector<std::string> &argv, Information &info);
     int getResponse(int responseID, Information &info);
+    
+    boost::python::list getValuesAtNodes(const std::string &) const;
   };
 } // end of XC namespace
 

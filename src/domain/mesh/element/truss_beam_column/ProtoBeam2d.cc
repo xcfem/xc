@@ -227,3 +227,24 @@ void XC::ProtoBeam2d::createInertiaLoad(const Vector &accel)
     const Vector load= -accel*getLinearRho();
     vector2dUniformLoadGlobal(load);
   }
+
+//! @brief Return a python list with the values of the argument property
+//! at element nodes.
+//!
+//! When the property requested its located at the integration point this
+//! function is responsible of the extrapolation of values from
+//! Gauss points to nodes.
+boost::python::list XC::ProtoBeam2d::getValuesAtNodes(const std::string &code) const
+  {
+    boost::python::list retval;
+    const int nNodes= getNumExternalNodes();
+    if(code=="rho")
+      {
+	const double r= getRho();
+	for(int i= 0;i<nNodes;i++)
+	  retval.append(r);
+      }
+    else
+      retval= Element1D::getValuesAtNodes(code); 
+    return retval;
+  }

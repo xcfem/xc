@@ -95,20 +95,21 @@ class NLForceBeamColumn2dBase: public BeamColumnWithSectionFDTrf2d
 
     const Vector &getResistingForce(void) const;
 
-    inline double getV(void) //Shear force in the middle.
+    inline double getV(void) const //Shear force in the middle.
       { return (Secommit(1)+Secommit(2))/theCoordTransf->getInitialLength(); }
-    inline double getV1(void) //Shear force in the back end.
+    inline double getV1(void) const //Shear force in the back end.
       { return  (Secommit(1)+Secommit(2))/theCoordTransf->getInitialLength()+p0[1]; }
-    inline double getV2(void) //Shear force in the front end.
+    inline double getV2(void) const //Shear force in the front end.
       { return -(Secommit(1)+Secommit(2))/theCoordTransf->getInitialLength()+p0[2]; }
-    inline double getN1(void) //Axial force.
+    inline double getN1(void) const //Axial force.
       { return -Secommit(0)+p0[0]; }
-    inline double getN2(void)
+    inline double getN2(void) const
       { return Secommit(0); }
-    inline double getM1(void)
+    inline double getM1(void) const
       { return Secommit(1); }
-    inline double getM2(void)
+    inline double getM2(void) const
       { return Secommit(2); }
+    boost::python::list getValuesAtNodes(const std::string &) const;
   };
 } // end of XC namespace
 

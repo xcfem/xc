@@ -170,6 +170,8 @@ class Element: public MeshComponent
     virtual void setIdNodes(const ID &inodes);
     void setDomain(Domain *theDomain);
 
+    
+
     // methods dealing with committed state and update
     virtual int commitState(void);
     //! @brief Revert to the last committed state.
@@ -302,7 +304,7 @@ class Element: public MeshComponent
     virtual std::set<std::string> getMaterialNames(void) const;
     boost::python::list getMaterialNamesPy(void) const;
 
-    
+    virtual boost::python::list getValuesAtNodes(const std::string &) const;
 
     std::set<SetBase *> get_sets(void) const;
     void add_to_sets(std::set<SetBase *> &);
