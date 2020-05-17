@@ -4,6 +4,10 @@
    DEFINED IN control_vars.py 
    THIS FILE MUST DISSAPEAR.'''
 
+from __future__ import division
+from __future__ import print_function
+
+
 __author__= "Luis C. Pérez Tato (LCPT)"
 __copyright__= "Copyright 2014 LCPT"
 __license__= "GPL"
@@ -118,12 +122,20 @@ def defVarsEnvelopeInternalForcesBeamElems(elems):
 def updateEnvelopeInternalForcesBeamElem2D(beamElem2D):
     '''Update values for extreme values of internal forces in 2D elements.'''
     beamElem2D.getResistingForce()
-    N1= beamElem2D.getN1
-    M1= beamElem2D.getM1
-    V1= beamElem2D.getV1
-    N2= beamElem2D.getN2
-    M2= beamElem2D.getM2
-    V2= beamElem2D.getV2
+    N1= 0.0; M1= 0.0; V1= 0.0
+    N2= 0.0; M2= 0.0; V2= 0.0
+    axialForces= beamElem2D.getValuesAtNodes('N')
+    if(len(axialForces)>1): # 'N' found.
+        N1= axialForces[0]
+        N2= axialForces[1]
+    bending= beamElem2D.getValuesAtNodes('M')
+    if(len(bending)>1): # 'M' found.
+        M1= bending[0]
+        M2= bending[1]
+    shear= beamElem2D.getValuesAtNodes('V')
+    if(len(shear)>1): # 'V' found.
+        V1= shear[0]
+        V2= shear[1]
     maxN= beamElem2D.getProp('N+') # [back node value, front node value]
     maxM= beamElem2D.getProp('Mz+')
     maxV= beamElem2D.getProp('Vy+')
@@ -165,26 +177,28 @@ def updateEnvelopeInternalForcesBeamElem2D(beamElem2D):
 def updateEnvelopeInternalForcesBeamElem(beamElem):
     '''Update values for extreme values of internal forces.'''
     beamElem.getResistingForce()
-    N1= beamElem.getN1
-    My1= 0.0
-    if(hasattr(beamElem,'getMy1')):
-        My1= beamElem.getMy1
-    Mz1= 0.0
-    if(hasattr(beamElem,'getMz1')):
-        Mz1= beamElem.getMz1
-    Vy1= 0.0
-    if(hasattr(beamElem,'getVy1')):
-        Vy1= beamElem.getVy1
-    N2= beamElem.getN2
-    My2= 0.0
-    if(hasattr(beamElem,'getMy2')):
-        My2= beamElem.getMy2
-    Mz2= 0.0
-    if(hasattr(beamElem,'getMz2')):
-        Mz2= beamElem.getMz2
-    Vy2= 0.0
-    if(hasattr(beamElem,'getVy2')):
-        Vy2= beamElem.getVy2
+    N1= 0.0; My1= 0.0; Mz1= 0.0; Vy1= 0.0; Vz1= 0.0
+    N2= 0.0; My2= 0.0; Mz2= 0.0; Vy2= 0.0; Vz2= 0.0
+    axialForces= beamElem.getValuesAtNodes('N')
+    if(len(axialForces)>1): # 'N' found.
+        N1= axialForces[0]
+        N2= axialForces[1]
+    bendingY= beamElem.getValuesAtNodes('My')
+    if(len(bendingY)>1): # 'My' found.
+        My1= bendingY[0]
+        My2= bendingY[1]
+    bendingZ= beamElem.getValuesAtNodes('Mz')
+    if(len(bendingZ)>1): # 'Mz' found.
+        Mz1= bendingZ[0]
+        Mz2= bendingZ[1]
+    shearY= beamElem.getValuesAtNodes('Vy')
+    if(len(shearY)>1): # 'Vy' found.
+        Vy1= shearY[0]
+        Vy2= shearY[1]
+    shearZ= beamElem.getValuesAtNodes('Vz')
+    if(len(shearZ)>1): # 'Vz' found.
+        Vz1= shearZ[0]
+        Vz2= shearZ[1]
     maxN= beamElem.getProp('N+') # [back node value, front node value]
     maxMy= beamElem.getProp('My+')
     maxMz= beamElem.getProp('Mz+')
