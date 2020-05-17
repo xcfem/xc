@@ -185,7 +185,7 @@ boost::python::list XC::NLForceBeamColumn2dBase::getValuesAtNodes(const std::str
 	retval.append(getM1());
 	retval.append(getM2());
       }
-    else if((code=="V") || (code=="Vy"))
+    else if((code=="V") || (code=="Vy") || (code=="Q") || (code=="Qy"))
       {
 	retval.append(getV1());
 	retval.append(getV2());

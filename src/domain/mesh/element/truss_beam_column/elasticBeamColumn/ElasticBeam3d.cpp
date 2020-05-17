@@ -807,12 +807,12 @@ boost::python::list XC::ElasticBeam3d::getValuesAtNodes(const std::string &code)
 	retval.append(getN1());
 	retval.append(getN2());
       }
-    else if(code=="Vy")
+    else if(code=="Vy" || code=="Qy")
       {
 	retval.append(getVy1());
 	retval.append(getVy2());
       }
-    else if(code=="Vz")
+    else if(code=="Vz" || code=="Qz")
       {
 	retval.append(getVz1());
 	retval.append(getVz2());
