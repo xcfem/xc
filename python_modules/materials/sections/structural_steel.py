@@ -318,13 +318,21 @@ class SteelShape(sp.SectionProperties):
         elem.getResistingForce()
         sectionClass= elem.getProp('sectionClass')
         chiLT= elem.getProp('chiLT')
-        N1= elem.getN1
-        M1= elem.getM1
-        V1= elem.getV1
+        N1= 0.0; M1= 0.0; V1= 0.0
+        N2= 0.0; M2= 0.0; V2= 0.0
+        axialForces= elem.getValuesAtNodes('N')
+        if(len(axialForces)>1): # 'N' found.
+            N1= axialForces[0]
+            N2= axialForces[1]
+        bending= elem.getValuesAtNodes('M')
+        if(len(bending)>1): # 'M' found.
+            M1= bending[0]
+            M2= bending[1]
+        shear= elem.getValuesAtNodes('V')
+        if(len(shear)>1): # 'V' found.
+            V1= shear[0]
+            V2= shear[1]
         FCTN1= self.getZBendingEfficiency(sectionClass,M1,V1,chiLT)
-        N2= elem.getN2
-        M2= elem.getM2
-        V2= elem.getV2
         FCTN2= self.getZBendingEfficiency(sectionClass,M2,V2,chiLT)
         fctn= elem.getProp("FCTNCP")
         if(FCTN1 > fctn[0]):
@@ -341,27 +349,25 @@ class SteelShape(sp.SectionProperties):
         elem.getResistingForce()
         sectionClass= elem.getProp('sectionClass')
         chiLT= elem.getProp('chiLT')
-        N1= elem.getN1
-        My1= 0.0
-        if(hasattr(elem,'getMy1')):
-            My1= elem.getMy1
-        Mz1= 0.0
-        if(hasattr(elem,'getMz1')):
-            Mz1= elem.getMz1
-        Vy1= 0.0
-        if(hasattr(elem,'getVy1')):
-            Vy1= elem.getVy1
+        N1= 0.0; My1= 0.0; Mz1= 0.0; Vy1= 0.0;
+        N2= 0.0; My2= 0.0; Mz2= 0.0; Vy2= 0.0;
+        axialForces= elem.getValuesAtNodes('N')
+        if(len(axialForces)>1): # 'N' found.
+            N1= axialForces[0]
+            N2= axialForces[1]
+        bendingY= elem.getValuesAtNodes('My')
+        if(len(bendingY)>1): # 'My' found.
+            My1= bendingY[0]
+            My2= bendingY[1]
+        bendingZ= elem.getValuesAtNodes('Mz')
+        if(len(bendingZ)>1): # 'Mz' found.
+            Mz1= bendingZ[0]
+            Mz2= bendingZ[1]
+        shearY= elem.getValuesAtNodes('Vy')
+        if(len(shearY)>1): # 'Vy' found.
+            Vy1= shearY[0]
+            Vy2= shearY[1]
         FCTN1= self.getBiaxialBendingEfficiency(sectionClass,N1,My1,Mz1,Vy1,chiLT)
-        N2= elem.getN2
-        My2= 0.0
-        if(hasattr(elem,'getMy2')):
-            My2= elem.getMy2
-        Mz2= 0.0
-        if(hasattr(elem,'getMz2')):
-            Mz2= elem.getMz2
-        Vy2= 0.0
-        if(hasattr(elem,'getVy2')):
-            Vy2= elem.getVy2
         FCTN2= self.getBiaxialBendingEfficiency(sectionClass,N2,My2,Mz2,Vy2,chiLT)
         fctn= elem.getProp("FCTNCP")
         if(FCTN1 > fctn[0]):
@@ -378,12 +384,12 @@ class SteelShape(sp.SectionProperties):
         elem.getResistingForce()
         sectionClass= elem.getProp('sectionClass')
         Vy1= 0.0
-        if(hasattr(elem,'getVy1')):
-            Vy1= elem.getVy1
-        FCV1= self.getYShearEfficiency(sectionClass,Vy1)
         Vy2= 0.0
-        if(hasattr(elem,'getVy2')):
-            Vy2= elem.getVy2
+        shearY= elem.getValuesAtNodes('Vy')
+        if(len(shearY)>1): # 'Vy' found.
+            Vy1= shearY[0]
+            Vy2= shearY[1]
+        FCV1= self.getYShearEfficiency(sectionClass,Vy1)
         FCV2= self.getYShearEfficiency(sectionClass,Vy2)
         fcv= elem.getProp("FCVCP")
         if(FCV1 > fcv[0]):
@@ -399,12 +405,12 @@ class SteelShape(sp.SectionProperties):
         elem.getResistingForce()
         sectionClass= elem.getProp('sectionClass')
         Vz1= 0.0
-        if(hasattr(elem,'getVz1')):
-            Vz1= elem.getVz1
-        FCV1= self.getZShearEfficiency(sectionClass,Vz1)
         Vz2= 0.0
-        if(hasattr(elem,'getVz2')):
-            Vz2= elem.getVz2
+        shearZ= elem.getValuesAtNodes('Vz')
+        if(len(shearZ)>1): # 'Vz' found.
+            Vz1= shearZ[0]
+            Vz2= shearZ[1]
+        FCV1= self.getZShearEfficiency(sectionClass,Vz1)
         FCV2= self.getZShearEfficiency(sectionClass,Vz2)
         fcv= elem.getProp("FCVCP")
         if(FCV1 > fcv[0]):
