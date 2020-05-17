@@ -351,6 +351,22 @@ class PredefinedSpace(object):
         lockerName= elemSet.name+'_locker'
         mesh.meltAliveNodes(lockerName)
 
+    def getValuesAtNodes(self, element, code):
+        ''' Return the values corresponding to code at each of the element nodes.
+
+         :param element: element which the stresses at its nodes will be calculated.
+         :param code: magnitude to return (stress, strain,...).
+        '''
+        return element.getValuesAtNodes(code)
+    
+    def computeValuesAtNodes(self, setToCompute, propToDefine= 'stress'):
+        ''' Extrapolate the stresses to the nodes of the set argument and
+            stores them in the property "propToDefine".
+
+        :param setToDefine: set of elements to be processed.
+        :param propToDefine: name of the property to define at the nodes.
+        '''
+        extrapolate_elem_attr.extrapolate_elem_data_to_nodes(setToCompute.getElements,propToDefine,self.getValuesAtNodes, argument= propToDefine, initialValue= xc.Vector([0.0,0.0,0.0,0.0,0.0,0.0]))
 
 def getModelSpace(preprocessor):
       '''Return a PredefinedSpace from the dimension of the space 
@@ -784,23 +800,6 @@ class SolidMechanics3D(PredefinedSpace):
         DOFtoConstr=[i for i in range(len(DOFpatclean)) if DOFpatclean[i]=='0']
         for nc in DOFtoConstr:
             self.constraints.newSPConstraint(nodeTag,nc,0.0)
-
-    def getValuesAtNodes(self, element, code):
-        ''' Return the values corresponding to code at each of the element nodes.
-
-         :param element: element which the stresses at its nodes will be calculated.
-         :param code: magnitude to return (stress, strain,...).
-        '''
-        return element.getValuesAtNodes(code)
-    
-    def computeValuesAtNodes(self, setToCompute, propToDefine= 'stress'):
-        ''' Extrapolate the stresses to the nodes of the set argument and
-            stores them in the property "propToDefine".
-
-        :param setToDefine: set of elements to be processed.
-        :param propToDefine: name of the property to define at the nodes.
-        '''
-        extrapolate_elem_attr.extrapolate_elem_data_to_nodes(setToCompute.getElements,propToDefine,self.getValuesAtNodes, argument= propToDefine, initialValue= xc.Vector([0.0,0.0,0.0,0.0,0.0,0.0]))
 
 def gdls_elasticidad3D(nodes):
     '''Defines the dimension of the space: nodes by three coordinates (x,y,z) 
