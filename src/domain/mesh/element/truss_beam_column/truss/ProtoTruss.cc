@@ -171,6 +171,14 @@ void XC::ProtoTruss::createInertiaLoad(const Vector &accel)
     theNodes[1]->newLoad(nLoad);
   }
 
+//! @brief Return the element initial strain.
+double XC::ProtoTruss::getInitialStrain(void) const
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
+    return 0.0;
+  }
+
 //! @brief Return a python list with the values of the argument property
 //! at element nodes.
 //!
@@ -180,11 +188,52 @@ void XC::ProtoTruss::createInertiaLoad(const Vector &accel)
 boost::python::list XC::ProtoTruss::getValuesAtNodes(const std::string &code) const
   {
     boost::python::list retval;
-    if(code=="N")
+    if(code=="rho")
+      {
+	const double r= getRho();
+        retval.append(r);
+        retval.append(r);
+      }
+    else if(code=="N")
       {
 	const double N= getAxialForce();
 	retval.append(N);
 	retval.append(N);
+      }
+    else if(code=="initial_strain")
+      {
+	const double value= getInitialStrain();
+	Vector initialStrain(1);
+	initialStrain[0]= value;
+        retval.append(initialStrain);
+        retval.append(initialStrain);
+      }
+    else if(code.rfind("e0")==0) // initial strain component (translation)
+      {
+	const double initialStrain= getInitialStrain();
+	const char axis= code.back();
+	double value= 0.0;
+	if(axis=='x')
+	  value= initialStrain;
+	else if(axis=='y') // 1D element no shear.
+	  value= 0.0;
+	else if(axis=='z') // 1D element no shear.
+	  value= 0.0;
+	if((axis=='x') || (axis=='y') || (axis=='z'))
+	  {
+            retval.append(value);
+            retval.append(value);
+	  }
+      }
+    else if(code.rfind("k0")==0) // initial strain component (rotation)
+      {
+	// 1D element: no rotations.
+	const char axis= code.back();
+	if((axis=='x') || (axis=='y') || (axis=='z'))
+	  {
+            retval.append(0.0);
+            retval.append(0.0);
+	  }
       }
     else
       retval= Element1D::getValuesAtNodes(code); 

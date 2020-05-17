@@ -800,6 +800,12 @@ double XC::Truss::getAxialForce(void) const
     return A*stress;
   }
 
+//! @brief Return the element initial strain.
+double XC::Truss::getInitialStrain(void) const
+  {
+    return theMaterial->getInitialStrain();
+  }
+
 double XC::Truss::computeCurrentStrain(void) const
   {
     // NOTE method will not be called if L == 0

@@ -244,6 +244,51 @@ boost::python::list XC::ProtoBeam2d::getValuesAtNodes(const std::string &code) c
 	for(int i= 0;i<nNodes;i++)
 	  retval.append(r);
       }
+    else if(code=="strain")
+      {
+	std::clog << getClassName() << "::" << __FUNCTION__
+	          << "; the strain value correspond to the"
+	          << " average on the element." << std::endl;
+	const Vector strain= getSectionDeformation();
+	for(int i= 0;i<nNodes;i++)
+	  retval.append(strain);
+      }
+    else if(code=="initial_strain")
+      {
+	const Vector initialStrain= getInitialSectionDeformation();
+	for(int i= 0;i<nNodes;i++)
+	  retval.append(initialStrain);
+      }
+    else if(code.rfind("e0")==0) // initial strain component (translation)
+      {
+	const Vector initialStrain= getInitialSectionDeformation();
+	const char axis= code.back();
+	double value= 0.0;
+	if(axis=='x')
+	  value= initialStrain[0];
+	else if(axis=='y')
+	  value= initialStrain[1];
+	else if(axis=='z') // 2D element no shear on Z.
+	  value= 0.0;
+	if((axis=='x') || (axis=='y') || (axis=='z'))
+	  for(int i= 0;i<nNodes;i++)
+	    retval.append(value);
+      }
+    else if(code.rfind("k0")==0) // initial strain component (rotation)
+      {
+	const Vector initialStrain= getInitialSectionDeformation();
+	const char axis= code.back();
+	double value= 0.0;
+	if(axis=='x') // 2D element no torsion.
+	  value= 0.0;
+	else if(axis=='y') // 2D element no bending on Y.
+	  value= 0.0;
+	else if(axis=='z')
+	  value= initialStrain[2];
+	if((axis=='x') || (axis=='y') || (axis=='z'))
+	  for(int i= 0;i<nNodes;i++)
+	    retval.append(value);
+      }
     else
       retval= Element1D::getValuesAtNodes(code); 
     return retval;

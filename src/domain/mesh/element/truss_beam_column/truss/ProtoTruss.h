@@ -78,6 +78,7 @@ class ProtoTruss: public Element1D
     virtual void createInertiaLoad(const Vector &);
     
     virtual double getAxialForce(void) const= 0;
+    virtual double getInitialStrain(void) const;
 
     // public methods to obtain information about dof & connectivity    
     int getNumDIM(void) const;	

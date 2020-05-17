@@ -119,6 +119,7 @@ class CorotTruss: public CorotTrussBase
     double getAxialForce(void) const;
     const Vector &getResistingForce(void) const;
     const Vector &getResistingForceIncInertia(void) const;            
+    double getInitialStrain(void) const;
 
     // public methods for element output
     int sendSelf(Communicator &);

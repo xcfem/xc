@@ -451,6 +451,22 @@ double XC::TrussSection::getAxialForce(void) const
     return retval;
   }
 
+//! @brief Return the element initial strain.
+double XC::TrussSection::getInitialStrain(void) const
+  {
+    double retval= 0.0;
+    const SectionForceDeformation *theSection= physicalProperties[0];
+    const int order= theSection->getOrder();
+    const ID &code= theSection->getType();
+    const Vector &s= theSection->getInitialSectionDeformation();
+    for(int i = 0;i<order;i++)
+      {
+	if(code(i) == SECTION_RESPONSE_P)
+	  retval+= s(i);
+      }
+    return retval;
+  }
+
 //! @brief Return the element resisting force.
 const XC::Vector &XC::TrussSection::getResistingForce(void) const
   {

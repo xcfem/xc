@@ -472,6 +472,12 @@ double XC::CorotTruss::getAxialForce(void) const
     return A*stress;
   }
 
+//! @brief Return the element initial strain.
+double XC::CorotTruss::getInitialStrain(void) const
+  {
+    return theMaterial->getInitialStrain();
+  }
+
 const XC::Vector &XC::CorotTruss::getResistingForce(void) const
   {
     // Get material stress
