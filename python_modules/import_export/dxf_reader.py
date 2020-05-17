@@ -378,6 +378,17 @@ class DXFImport(object):
             p1= self.getRelativeCoo(obj.dxf.start)
             p2= self.getRelativeCoo(obj.dxf.end)
             length= cdist([p1],[p2])[0][0]
+            # Try to have all lines with the
+            # same orientation.
+            if(p1[0]>p2[0]): # x1<x2
+                p1, p2= p2, p1 # swap
+            elif(abs(p1[0]-p2[0])<length/1e4): # x1==x2
+                if(p1[1]>p2[1]):
+                    p1, p2= p2, p1 # swap
+                elif(abs(p1[1]-p2[1])<length/1e4): # y1==y2
+                    if(p1[2]>p2[2]):
+                        p1, p2= p2, p1 # swap
+            # end orientation.
             vertices[0]= self.getIndexNearestPoint(p1)
             vertices[1]= self.getIndexNearestPoint(p2)
             if(vertices[0]==vertices[1]):
