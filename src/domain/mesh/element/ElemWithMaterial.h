@@ -72,6 +72,7 @@ class ElemWithMaterial: public ElementBase<NNODOS>
     
     int getResponse(int responseID, Information &eleInformation);
     Response *setResponse(const std::vector<std::string> &argv, Information &eleInformation);
+    boost::python::list getValuesAtNodes(const std::string &) const;
   };
 
 template <int NNODOS,class PhysProp>
@@ -138,6 +139,43 @@ const Matrix &ElemWithMaterial<NNODOS, PhysProp>::getExtrapolationMatrix(void) c
 template <int NNODOS,class PhysProp>
 Matrix ElemWithMaterial<NNODOS, PhysProp>::getExtrapolatedValues(const Matrix &values) const
   { return getExtrapolationMatrix()*values; }
+  
+//! @brief Return a python list with the values of the argument property
+//! at element nodes.
+//!
+//! When the property requested its located at the integration point this
+//! function is responsible of the extrapolation of values from
+//! Gauss points to nodes.
+template <int NNODOS,class PhysProp>
+boost::python::list ElemWithMaterial<NNODOS, PhysProp>::getValuesAtNodes(const std::string &code) const
+  {
+    boost::python::list retval;
+    if(code=="strain")
+      {
+	const Matrix elementStrains= physicalProperties.getMaterialsVector().getGeneralizedStrains();
+	const Matrix strainsAtNodes= getExtrapolatedValues(elementStrains);
+	const size_t nRows= strainsAtNodes.noRows();
+	for(size_t i= 0;i<nRows;i++)
+	  {
+	    Vector strainAtNode= strainsAtNodes.getRow(i);
+	    retval.append(strainAtNode);
+	  }
+      }
+    else if(code=="stress")
+      {
+	const Matrix elementStresses= physicalProperties.getMaterialsVector().getGeneralizedStresses();
+	const Matrix stressesAtNodes= getExtrapolatedValues(elementStresses);
+	const size_t nRows= stressesAtNodes.noRows();
+	for(size_t i= 0;i<nRows;i++)
+	  {
+	    Vector stressAtNode= stressesAtNodes.getRow(i);
+	    retval.append(stressAtNode);
+	  }
+      }
+    else
+      retval= ElementBase<NNODOS>::getValuesAtNodes(code); 
+    return retval;
+  }
   
 //! @brief Send members through the communicator argument.
 template <int NNODOS,class PhysProp>

@@ -222,7 +222,7 @@ class OutputHandler(object):
         # Define the property at nodes.
         if(setToDisplay==None):
             setToDisplay= self.modelSpace.getTotalSet()
-        self.modelSpace.computeStressesAtNodes(setToDisplay)
+        self.modelSpace.computeValuesAtNodes(setToDisplay, propToDefine= 'stress')
         propertyName= 'stress'+itemToDisp
         vCompStress= self.modelSpace.getStressComponentFromName(itemToDisp)
         nodSet= setToDisplay.nodes
@@ -255,7 +255,7 @@ class OutputHandler(object):
         # Define the property at nodes.
         if(setToDisplay==None):
             setToDisplay= self.modelSpace.getTotalSet()
-        self.modelSpace.computeStrainsAtNodes(setToDisplay)
+        self.modelSpace.computeValuesAtNodes(setToDisplay, propToDefine= 'strain')
         propertyName= 'strain'+itemToDisp
         vCompStrain= self.modelSpace.getStrainComponentFromName(itemToDisp)
         nodSet= setToDisplay.nodes

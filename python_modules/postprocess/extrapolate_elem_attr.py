@@ -106,17 +106,13 @@ def extrapolate_elem_data_to_nodes(elemSet,attributeName, function, argument= No
         elemNodes= e.getNodes
         value= None
         if(argument):
-            value= function(e, argument)
+            values= function(e, argument)
         else:
-            value= function(e)
+            values= function(e)
         sz= len(elemNodes)
         for i in range(0,sz):
             n= elemNodes[i]
-            valueAtNode= None
-            if(hasattr(value,'getRow')): # Matrix
-                valueAtNode= value.getRow(i)
-            else: # Vector or list
-                valueAtNode= value[i]
+            valueAtNode= values[i]
             if(valueAtNode):
                 oldValue= n.getProp(attributeName)
                 n.setProp(attributeName,oldValue+valueAtNode)
