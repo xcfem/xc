@@ -82,6 +82,8 @@ class ProtoTruss: public Element1D
     // public methods to obtain information about dof & connectivity    
     int getNumDIM(void) const;	
     int getNumDOF(void) const;
+    
+    boost::python::list getValuesAtNodes(const std::string &) const;
   };
 
 } //end of XC namespace

@@ -170,3 +170,23 @@ void XC::ProtoTruss::createInertiaLoad(const Vector &accel)
     theNodes[0]->newLoad(nLoad);
     theNodes[1]->newLoad(nLoad);
   }
+
+//! @brief Return a python list with the values of the argument property
+//! at element nodes.
+//!
+//! When the property requested its located at the integration point this
+//! function is responsible of the extrapolation of values from
+//! Gauss points to nodes.
+boost::python::list XC::ProtoTruss::getValuesAtNodes(const std::string &code) const
+  {
+    boost::python::list retval;
+    if(code=="N")
+      {
+	const double N= getAxialForce();
+	retval.append(N);
+	retval.append(N);
+      }
+    else
+      retval= Element1D::getValuesAtNodes(code); 
+    return retval;
+  }
