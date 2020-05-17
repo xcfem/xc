@@ -36,6 +36,11 @@ class OutputHandler(object):
         '''
         self.modelSpace= modelSpace
         self.outputStyle= outputStyle
+
+    def getCaptionText(self, itemToDisp, unitDescription, setToDisplay):
+        ''' Return the text to use in the image caption.'''
+        loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
+        return loadCaseName+' '+itemToDisp+' '+unitDescription+' '+setToDisplay.description
         
     def getDefaultCameraParameters(self):
         '''Return the default camera parameters.'''
@@ -197,8 +202,7 @@ class OutputHandler(object):
             n.setProp(propertyName,n.getDisp[vCompDisp])
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
 
-        loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
-        captionText= loadCaseName+' '+itemToDisp+' '+unitDescription+' '+setToDisplay.description
+        captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
         self.displayScalarPropertyAtNodes(propertyName, fUnitConv= unitConversionFactor, unitDescription= unitDescription, captionText= captionText, setToDisplay= setToDisplay, fileName= fileName, defFScale= defFScale, rgMinMax= rgMinMax)
 
     def displayStresses(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None):
@@ -230,8 +234,7 @@ class OutputHandler(object):
             n.setProp(propertyName,n.getProp('stress')[vCompStress])
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
 
-        loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
-        captionText= loadCaseName+' '+itemToDisp+' '+unitDescription+' '+setToDisplay.description
+        captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
         self.displayScalarPropertyAtNodes(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
 
     def displayStrains(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None):
@@ -263,8 +266,7 @@ class OutputHandler(object):
             n.setProp(propertyName,n.getProp('strain')[vCompStrain])
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
 
-        loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
-        captionText= loadCaseName+' '+itemToDisp+' '+unitDescription+' '+setToDisplay.description
+        captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
         self.displayScalarPropertyAtNodes(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
 
         
@@ -310,8 +312,7 @@ class OutputHandler(object):
         if(maxAbs>0):
             scaleFactor*=0.15*LrefModSize/(maxAbs*unitConversionFactor)
 
-        loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
-        captionText= loadCaseName+' Reactions'+ ' '+unitDescription +' '+ setToDisplay.description
+        captionText= self.getCaptionText('Reactions', unitDescription, setToDisplay)
         vFieldF= vf.VectorField(name='Freact',fUnitConv=unitConversionFactor,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()) # Force
         vFieldM= vf.VectorField(name='Mreact',fUnitConv=unitConversionFactor,scaleFactor=scaleFactor,showPushing= True,symType=vtk.vtkArrowSource()) # Moment
         vFieldF.populateFromPairList(forcePairs)
@@ -330,7 +331,7 @@ class OutputHandler(object):
     def displayDiagram(attributeName,component, setToDispRes,setDisp,caption,scaleFactor= 1.0, fileName= None, defFScale= 0.0):
         '''Auxiliary function to display results on linear elements.
 
-        :param attributeName:attribute name(e.g. 'ULS_normalStressesResistance')
+        :param attributeName: attribute name(e.g. 'ULS_normalStressesResistance')
         :param component:    result item to display (e.g. 'N', 'My', ...)
         :param setToDispRes: set of linear elements to which display results
         :param setToDisplay:      set of elements (any type) to be depicted
@@ -380,8 +381,7 @@ class OutputHandler(object):
         maxAbs=diagAux.getMaxAbsComp()
         if maxAbs > 0:
             scaleFactor*=0.15*LrefModSize/(maxAbs*unitConversionFactor)
-        loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
-        captionText= loadCaseName+' '+itemToDisp+' '+unitDescription +' '+setToDisplay.description
+        captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
         diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDisplay],attributeName= "intForce",component= itemToDisp)
         diagram.addDiagram()
         defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
@@ -430,8 +430,7 @@ class OutputHandler(object):
             field= fields.ExtrapolatedProperty(propName,"getProp",setToDisplay,fUnitConv= unitConversionFactor,rgMinMax=rgMinMax)
             defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
             defDisplay.cameraParameters= self.getCameraParameters()
-            loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
-            captionText= loadCaseName+' '+itemToDisp+' '+unitDescription +' '+setToDisplay.description
+            captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
             field.display(defDisplay=defDisplay,caption= captionText,fileName=fileName, defFScale=defFScale)
             
     def displayLoadVectors(self, setToDisplay= None, caption= None, fileName= None, defFScale= 0.0):
