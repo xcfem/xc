@@ -139,8 +139,15 @@ void XC::TrussBase::setup_L_cos_dir(void)
       }
   }
 
-//! @brief Return the length of the element.
+//! @brief Return the length of the element (for internal use).
 const double &XC::TrussBase::getL(void) const
+  { return L; }
+
+//! @brief Return the length of the element.
+//!
+//! @param initialGeometry: if true returns the undeformed
+//! length of the element.
+double XC::TrussBase::getLength(bool initialGeometry) const
   { return L; }
 
 //! @brief Send members through the communicator argument.

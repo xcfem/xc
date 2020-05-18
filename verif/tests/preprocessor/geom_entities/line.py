@@ -74,8 +74,8 @@ testOK= True
 eIter= mesh.getElementIter
 elem= eIter.next()
 while not(elem is None):
-#  print elem.tag," nod. I: ",elem.getNodes[0].tag," nod. J: ",elem.getNodes[1].tag," L= ",elem.getL()
-  ratio1= (lteor - elem.getL())/lteor
+#  print elem.tag," nod. I: ",elem.getNodes[0].tag," nod. J: ",elem.getNodes[1].tag," L= ",elem.getLength(True)
+  ratio1= (lteor - elem.getLength(True))/lteor
   testOK= testOK and (ratio1<1e-12)
   elem= eIter.next()
 

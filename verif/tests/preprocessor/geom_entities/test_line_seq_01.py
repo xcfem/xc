@@ -65,8 +65,8 @@ ratio1= 0.0
 vteor2= (CooMax/NumDiv)**2
 lteor= math.sqrt(3*vteor2)
 for e in elements:
-  #print "  elem: ",tag," nod. I: ",nod[0].tag," nod. J: ",nod[1].tag," L= ",e.getL()
-  ratio1+= (e.getL()-lteor)/lteor
+  #print "  elem: ",tag," nod. I: ",nod[0].tag," nod. J: ",nod[1].tag," L= ",e.getLength(True)
+  ratio1+= (e.getLength(True)-lteor)/lteor
 
 
 

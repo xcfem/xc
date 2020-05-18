@@ -61,7 +61,7 @@ lteor= math.sqrt(3*vteor2)
 for e in elements:
   # print "  elem: ",tag," nod. I: ",nod[0].tag," nod. J: ",nod[1].tag," L= ",length
   # print "lteor: ",(lteor)
-  ratio1= (lteor/e.getL())
+  ratio1= (lteor/e.getLength(True))
   cumple= (abs(ratio1-1.0)<1e-5) & (cumple) 
   # print "cumple: ",(cumple)
 

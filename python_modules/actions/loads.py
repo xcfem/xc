@@ -153,7 +153,7 @@ class UniformLoadOnTrusses(BaseVectorLoad):
     def appendLoadToCurrentLoadPattern(self):
         ''' Append load to the current load pattern.'''
         for e in self.xcSet.elements:
-            L=e.getL(); n1=e.getNodes[0]; n2=e.getNodes[1]
+            L= e.getLength(True); n1=e.getNodes[0]; n2=e.getNodes[1]
             F_nod=self.loadVector*L/2.
             n1.newLoad(F_nod); n2.newLoad(F_nod)
  
@@ -539,7 +539,7 @@ class WindLoadOnTrusses(BaseVectorLoad):
         ''' Append load to the current load pattern.'''
         if self.surfExpossed:
             for e in self.xcSet.elements:
-                L=e.getL(); n1=e.getNodes[0]; n2=e.getNodes[1]
+                L=e.getLength(True); n1=e.getNodes[0]; n2=e.getNodes[1]
                 zCoo=e.getPosCentroid(True).z
                 press=self.windParams.qz(zCoo)*self.Cp*self.surfExpossed*self.Gf
                 F_nod=self.loadVector*(L*press/2.)
@@ -547,7 +547,7 @@ class WindLoadOnTrusses(BaseVectorLoad):
                 n1.newLoad(F_nod6comp); n2.newLoad(F_nod6comp)
         else:
             for e in self.xcSet.elements:
-                L=e.getL(); n1=e.getNodes[0]; n2=e.getNodes[1]
+                L=e.getLength(True); n1=e.getNodes[0]; n2=e.getNodes[1]
                 zCoo=e.getPosCentroid(True).z
                 press=self.windParams.qz(zCoo)*self.Cp*e.getProp('sectionGeometry').h()*self.Gf
                 F_nod=self.loadVector*(L*press/2.)
@@ -560,12 +560,12 @@ class WindLoadOnTrusses(BaseVectorLoad):
         maxValue=0
         if self.surfExpossed:
             for e in self.xcSet.elements:
-                L=e.getL();zCoo=e.getPosCentroid(True).z
+                L=e.getLength(True); zCoo=e.getPosCentroid(True).z
                 f=abs(self.windParams.qz(zCoo)*self.Cp*self.surfExpossed*L/2.)*self.Gf
                 maxValue=max(maxValue,f)
         else:
             for e in self.xcSet.elements:
-                L=e.getL();zCoo=e.getPosCentroid(True).z
+                L=e.getLength(True); zCoo=e.getPosCentroid(True).z
                 f=abs(self.windParams.qz(zCoo)*self.Cp*e.getProp('sectionGeometry').h()*L/2.)*self.Gf
                 maxValue=max(maxValue,f)
                 

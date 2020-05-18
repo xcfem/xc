@@ -92,7 +92,7 @@ lteor= math.sqrt(3*vteor2)
 for e in elements:
   # print "  elem: ",tag," nod. I: ",nod[0].tag," nod. J: ",nod[1].tag," L= ",length
 # print "lteor: ",(lteor)
-  ratio1= (e.getL()-lteor)/lteor
+  ratio1= (e.getLength(True)-lteor)/lteor
 
 ratio2= (nnodPline-(NumDiv+1))
 ratio3= (nelemPline-NumDiv)

@@ -56,6 +56,7 @@ class CorotTrussBase: public ProtoTruss
     CorotTrussBase &operator=(const CorotTrussBase &);
     const double &getLo(void) const;
     const double &getLn(void) const;
+    double getLength(bool initialGeometry= true) const;
   };
 } // end of XC namespace
 

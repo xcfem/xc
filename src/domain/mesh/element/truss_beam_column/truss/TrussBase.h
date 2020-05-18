@@ -63,6 +63,7 @@ class TrussBase: public ProtoTruss
       { return &load; }
     Vector *getLoad(void)
       { return &load; }
+    double getLength(bool initialGeometry= true) const;
     const double &getL(void) const;
   };
 } // end of XC namespace

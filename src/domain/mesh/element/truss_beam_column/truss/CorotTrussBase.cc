@@ -65,6 +65,18 @@ const double &XC::CorotTrussBase::getLo(void) const
 const double &XC::CorotTrussBase::getLn(void) const
   { return Ln; }
 
+//! @brief Return the length of the element.
+//!
+//! @param initialGeometry: if true returns the undeformed
+//! length of the element.
+double XC::CorotTrussBase::getLength(bool initialGeometry) const
+  {
+    double retval= Lo;
+    if(!initialGeometry)
+      retval= Ln;
+    return retval;
+  }
+
 //! @brief Send members through the communicator argument.
 int XC::CorotTrussBase::sendData(Communicator &comm)
   {
