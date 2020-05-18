@@ -213,7 +213,7 @@ class ASTMShape(object):
 
            :param sectionClass: dummy argument used for compatibility.
         '''
-        return Vy/self.getDesignShearStrength(majorAxis= True)
+        return abs(Vy)/self.getDesignShearStrength(majorAxis= True)
     
     def getZShearEfficiency(self, sectionClass, Vz):
         '''Return major axis shear efficiency according to AISC-360-16.

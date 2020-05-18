@@ -145,8 +145,8 @@ limitState=lsd.shearResistance
 limitState.controller= aisc.ShearController(limitState.label)
 average= limitState.runChecking(outCfg)
 
-ratio= ((average[0]-0.094843795314638324)/0.094843795314638324)**2
-ratio+= ((average[1]+0.094843795314657059)/0.094843795314657059)**2
+ratio= ((average[0]-0.47421897657321965)/0.47421897657321965)**2
+ratio+= ((average[1]-0.47421897657322309)/0.47421897657322309)**2
 ratio= math.sqrt(ratio)
 
 '''
