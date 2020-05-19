@@ -220,6 +220,7 @@ class DXFImport(object):
             self.getRelativeCoo= getRelativeCoo
             self.threshold= threshold
             self.labelDict= {}
+            self.importGroups();
             self.kPointsNames= self.selectKPoints()
             self.importPoints()
             if(self.impLines):
@@ -238,6 +239,19 @@ class DXFImport(object):
 
     def getNearestPoint(self, pt):
         return self.kPoints[self.getIndexNearestPoint(pt)]
+
+    def importGroups(self):
+        ''' Import the DXF groups on the file.'''
+        self.groups= self.dxfFile.groups
+        self.entitiesGroups= dict()
+        for g in self.groups:
+            groupName= g[0]
+            grp= g[1]
+            for h in grp.handles():
+                if h in self.entitiesGroups:
+                    self.entitiesGroups[h].append(groupName)
+                else:
+                    self.entitiesGroups[h]= [groupName]
 
     def getLayersToImport(self, namesToImport):
         '''Return the layers names that will be imported according to the
@@ -273,10 +287,13 @@ class DXFImport(object):
             layerName= obj.dxf.layer
             objName= obj.dxf.handle
             pointName= objName
-            #xdata
+            # xdata
             objLabels= list()
             if(obj.has_xdata('XC')):
-                 objLabels.extend(get_extended_data(obj))
+                objLabels.extend(get_extended_data(obj))
+            # groups
+            if(objName in self.entitiesGroups):
+                objLabels.extend(self.entitiesGroups[objName])
             if(layerName in self.layersToImport):
                 if(type == 'POINT'):
                     count+= 1
@@ -350,72 +367,83 @@ class DXFImport(object):
         return indexDict
 
     def importPoints(self):
-      ''' Import points from DXF.'''
-      self.points= dict()
-      for obj in self.dxfFile.entities:
-        type= obj.dxftype()
-        pointName= obj.dxf.handle
-        layerName= obj.dxf.layer
-        if(layerName in self.layersToImport):
-          if(type == 'POINT'):
-            vertices= [-1]
-            p= self.getRelativeCoo(obj.dxf.location)
-            vertices[0]= self.getIndexNearestPoint(p)
-            self.points[pointName]= vertices
-            self.labelDict[pointName]= [layerName]
+        ''' Import points from DXF.'''
+        self.points= dict()
+        for obj in self.dxfFile.entities:
+            type= obj.dxftype()
+            pointName= obj.dxf.handle
+            layerName= obj.dxf.layer
+            if(layerName in self.layersToImport):
+                if(type == 'POINT'):
+                    vertices= [-1]
+                    p= self.getRelativeCoo(obj.dxf.location)
+                    vertices[0]= self.getIndexNearestPoint(p)
+                    self.points[pointName]= vertices
+                    self.labelDict[pointName]= [layerName]
 
     def importLines(self):
-      ''' Import lines from DXF.'''
-      self.lines= {}
-      self.polylines= {}
-      for obj in self.dxfFile.entities:
-        type= obj.dxftype()
-        lineName= obj.dxf.handle
-        layerName= obj.dxf.layer
-        if(layerName in self.layersToImport):
-          if(type == 'LINE'):
-            vertices= [-1,-1]
-            p1= self.getRelativeCoo(obj.dxf.start)
-            p2= self.getRelativeCoo(obj.dxf.end)
-            length= cdist([p1],[p2])[0][0]
-            # Try to have all lines with the
-            # same orientation.
-            if(p1[0]>p2[0]): # x1<x2
-                p1, p2= p2, p1 # swap
-            elif(abs(p1[0]-p2[0])<length/1e4): # x1==x2
-                if(p1[1]>p2[1]):
-                    p1, p2= p2, p1 # swap
-                elif(abs(p1[1]-p2[1])<length/1e4): # y1==y2
-                    if(p1[2]>p2[2]):
+        ''' Import lines from DXF.'''
+        self.lines= {}
+        self.polylines= {}
+        for obj in self.dxfFile.entities:
+            type= obj.dxftype()
+            lineName= obj.dxf.handle
+            layerName= obj.dxf.layer
+            if(layerName in self.layersToImport):
+                if(type == 'LINE'):
+                    vertices= [-1,-1]
+                    p1= self.getRelativeCoo(obj.dxf.start)
+                    p2= self.getRelativeCoo(obj.dxf.end)
+                    length= cdist([p1],[p2])[0][0]
+                    # Try to have all lines with the
+                    # same orientation.
+                    if(p1[0]>p2[0]): # x1<x2
                         p1, p2= p2, p1 # swap
-            # end orientation.
-            vertices[0]= self.getIndexNearestPoint(p1)
-            vertices[1]= self.getIndexNearestPoint(p2)
-            if(vertices[0]==vertices[1]):
-              lmsg.error('Error in line '+lineName+' vertices are equal: '+str(vertices))
-            if(length>self.threshold):
-              self.lines[lineName]= vertices
-              objLabels= [layerName]
-              if(obj.has_xdata('XC')):
-                 objLabels.extend(get_extended_data(obj))
-              self.labelDict[lineName]= objLabels
-            else:
-              lmsg.error('line too short: '+str(p1)+','+str(p2)+str(length))
-          elif((type == 'POLYLINE') or (type == 'LWPOLYLINE')):
-              if(not self.polylinesAsSurfaces): # Import as lines
-                  vertices= list()
-                  for p in obj.points:
-                    rCoo= self.getRelativeCoo(p)
-                    vertices.append(self.getIndexNearestPoint(rCoo))
-                  v1= vertices[0]
-                  for v2 in vertices[1:]:
-                      if(vertices[0]==vertices[1]):
-                          lmsg.error('Error in line '+lineName+' vertices are equal: '+str(vertices))
-                      else:
-                          name= lineName+str(v1)+str(v2)
-                          self.lines[name]= [v1,v2]
-                          self.labelDict[name]= [layerName]
-                      v1= v2
+                    elif(abs(p1[0]-p2[0])<length/1e4): # x1==x2
+                        if(p1[1]>p2[1]):
+                            p1, p2= p2, p1 # swap
+                        elif(abs(p1[1]-p2[1])<length/1e4): # y1==y2
+                            if(p1[2]>p2[2]):
+                                p1, p2= p2, p1 # swap
+                    # end orientation.
+                    vertices[0]= self.getIndexNearestPoint(p1)
+                    vertices[1]= self.getIndexNearestPoint(p2)
+                    if(vertices[0]==vertices[1]):
+                        lmsg.error('Error in line '+lineName+' vertices are equal: '+str(vertices))
+                    if(length>self.threshold):
+                        self.lines[lineName]= vertices
+                        objLabels= [layerName]
+                        # xdata
+                        if(obj.has_xdata('XC')):
+                            objLabels.extend(get_extended_data(obj))
+                        # groups
+                        if(lineName in self.entitiesGroups):
+                            objLabels.extend(self.entitiesGroups[lineName])
+                        self.labelDict[lineName]= objLabels
+                    else:
+                        lmsg.error('line too short: '+str(p1)+','+str(p2)+str(length))
+                elif((type == 'POLYLINE') or (type == 'LWPOLYLINE')):
+                    if(not self.polylinesAsSurfaces): # Import as lines
+                        vertices= list()
+                        for p in obj.points:
+                            rCoo= self.getRelativeCoo(p)
+                            vertices.append(self.getIndexNearestPoint(rCoo))
+                        v1= vertices[0]
+                        for v2 in vertices[1:]:
+                            if(vertices[0]==vertices[1]):
+                                lmsg.error('Error in line '+lineName+' vertices are equal: '+str(vertices))
+                            else:
+                                name= lineName+str(v1)+str(v2)
+                                self.lines[name]= [v1,v2]
+                                objLabels= [layerName]
+                                # xdata
+                                if(obj.has_xdata('XC')):
+                                    objLabels.extend(get_extended_data(obj))
+                                # groups
+                                if(lineName in self.entitiesGroups):
+                                    objLabels.extend(self.entitiesGroups[lineName])
+                                self.labelDict[name]= objLabels
+                            v1= v2
 
     def importFaces(self):
       ''' Import 3D faces from DXF.'''
