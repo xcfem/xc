@@ -42,7 +42,7 @@ xcBlocksFileName= baseName+'_blocks'
 pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
-dxfFilePath= pth+'/../../aux/'+dxfFName
+dxfFilePath= pth+'/../../aux/dxf/'+dxfFName
 ieData= importMultiBlockTopology(dxfFileName= dxfFilePath, outputFileName= xcBlocksFileName, layerNamesToImport= ['0*'], getRelativeCoo= getRelativeCooFunc)
 
 FEcase= xc.FEProblem()
