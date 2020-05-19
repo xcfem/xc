@@ -96,7 +96,7 @@ class ProjectDirTree(object):
     def getVerifShearFile(self):
         return self.getFullVerifPath()+'verifRsl_shearULS.py'
     def getReportShearFile(self):
-        return self.getFullGraphicsPath()+'report_shearULS.tex'
+        return self.getFullReportPath()+'report_shearULS.tex'
     def getReportShearGrPath(self):
         return self.getFullGraphicsPath()+'shearULS/'
 
