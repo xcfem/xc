@@ -377,8 +377,8 @@ def checksReports(limitStateLabel,setsShEl,argsShEl,capTexts,pathGr,texReportFil
                        as instances of utils_display.setToDisplay and the 
                        possible views are: 'XYZPos','XNeg','XPos','YNeg','YPos',
                        'ZNeg','ZPos'  (defaults to 'XYZPos')
-    :param argsShEl:   Ordered list of lists [arguments, scale to represent the 
-                       argument] to be included in the report for beam elements
+    :param argsBmElScale:   Ordered list of lists [arguments, scale to represent the 
+                            argument] to be included in the report for beam elements
     '''
     report=open(texReportFile,'w')    #report latex file
     dfDisp= vtk_FE_graphic.RecordDefDisplayEF()
