@@ -319,8 +319,11 @@ class RecordDefDisplay(object):
 
     w2if = vtk.vtkWindowToImageFilter()
     w2if.SetInput(self.renWin)
-    w2if.SetScale(1) # image quality
     w2if.ReadFrontBufferOff(); #Read from the front buffer.
+    if(hasattr(w2if,'SetScale')):
+        w2if.SetScale(1) # image quality
+    else:
+        w2if.SetMagnification(1) # image quality
     w2if.Update()
     writer= vtk.vtkJPEGWriter()
     writer.SetFileName(fileName)

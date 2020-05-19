@@ -330,10 +330,11 @@ class RecordLoadCaseDisp(RecordDisp):
               epsFileName= grfname+'.eps'
               im= Image.open(jpegFileName)
               im.save(epsFileName)
-              if 'u' in arg:
-                  unDesc=cfg.getDisplacementUnitsDescription()
-              else:
-                  unDesc=cfg.getRotationUnitsDescription()
+              unitConversionFactor, unDesc= cfg.outputStyle.getUnitParameters(arg)
+              # if 'u' in arg:
+              #     unDesc=cfg.getDisplacementUnitsDescription()
+              # else:
+              #     unDesc=cfg.getRotationUnitsDescription()
               capt=self.getDescription() + '. ' + st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + unDesc
               insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=cfg.grWidth,capText=capt)
       #Internal forces displays on sets of «shell» elements
@@ -361,7 +362,7 @@ class RecordLoadCaseDisp(RecordDisp):
       texFile.write('\\clearpage\n')
 
 
-def checksReports(limitStateLabel,setsShEl,argsShEl,capTexts,pathGr,texReportFile,grWdt,setsBmElView=[],argsBmElScale=[]):
+def checksReports(limitStateLabel,setsShEl,argsShEl,cfg,setsBmElView=[],argsBmElScale=[]):
     '''Create a LaTeX report including the desired graphical results obtained
      in the verification of a limit state.
 
@@ -371,10 +372,7 @@ def checksReports(limitStateLabel,setsShEl,argsShEl,capTexts,pathGr,texReportFil
                        to be included in the report
     :param argsShEl:   Ordered list of arguments to be included in the report   
                        for shell elements
-    :param capTexts:  dictionary from wich to read the texts for captions
-    :param pathGr:     width to be applied to graphics 
-    :param texReportFile: laTex file where to include the graphics
-    :param grWdt:      width of the graphics for the tex file
+    :param cfg:        instance of EnvConfig class with config parameters
     :param setsBmView: Ordered list of lists [set of beam elements, view to 
                        represent this set] to be included in the report. 
                        The sets have been defined in model_data.py 
@@ -384,37 +382,39 @@ def checksReports(limitStateLabel,setsShEl,argsShEl,capTexts,pathGr,texReportFil
     :param argsBmElScale:   Ordered list of lists [arguments, scale to represent the 
                             argument] to be included in the report for beam elements
     '''
+    texReportFile= cfg.projectDirTree.getReportNormStrFile()
     report=open(texReportFile,'w')    #report latex file
     dfDisp= vtk_FE_graphic.RecordDefDisplayEF()
+    pathGr= cfg.projectDirTree.getReportNormStrGrPath()
     for st in setsShEl:
         for arg in argsShEl:
             attributeName= limitStateLabel + 'Sect1'
             field= fields.getScalarFieldFromControlVar(attributeName,arg,st,None,1.0,None)
-            capt=capTexts[limitStateLabel] + '. '+ st.description.capitalize() + ', ' + capTexts[arg] + ', ' + 'section 1'
+            capt=cfg.capTexts[limitStateLabel] + '. '+ st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + 'section 1'
             grFileNm=pathGr+st.name+arg+'Sect1'
             field.display(defDisplay=dfDisp,caption=capt,fileName=grFileNm+'.jpg')
-            insertGrInTex(texFile=report,grFileNm=grFileNm,grWdt=grWdt,capText=capt)
+            insertGrInTex(texFile=report,grFileNm=grFileNm,grWdt=cfg.grWidth,capText=capt)
 
             attributeName= limitStateLabel + 'Sect2'
             field= fields.getScalarFieldFromControlVar(attributeName,arg,st,None,1.0,None)
-            capt=capTexts[limitStateLabel] + '. '+ st.description.capitalize() + ', ' + capTexts[arg] + ', ' + 'section 2'
+            capt=cfg.capTexts[limitStateLabel] + '. '+ st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + 'section 2'
             grFileNm=pathGr+st.name+arg+'Sect2'
             field.display(defDisplay=dfDisp,caption=capt,fileName=grFileNm+'.jpg')
-            insertGrInTex(texFile=report,grFileNm=grFileNm,grWdt=grWdt,capText=capt)
+            insertGrInTex(texFile=report,grFileNm=grFileNm,grWdt=cfg.grWidth,capText=capt)
     for stV in setsBmElView:
         for argS in argsBmElScale:
-            diagram= cvd.ControlVarDiagram(scaleFactor=argS[1],fUnitConv=1,sets=[stV[0]],attributeName= limitStateLabel,component= argS[0])
+            unitConversionFactor, unDesc= cfg.getUnitParameters(argS[0])
+            diagram= cvd.ControlVarDiagram(scaleFactor=argS[1],fUnitConv=unitConversionFactor,sets=[stV[0]],attributeName= limitStateLabel,component= argS[0])
             diagram.addDiagram()
             dfDisp.cameraParameters= vtk_graphic_base.CameraParameters(stV[1])
             dfDisp.setupGrid(stV[0])
             dfDisp.defineMeshScene(None)
             dfDisp.appendDiagram(diagram)
-            capt= capTexts[limitStateLabel]  + '. '+ stV[0].description.capitalize() + ', ' + capTexts[argS[0]] 
+            capt= cfg.capTexts[limitStateLabel]  + '. '+ stV[0].description.capitalize() + ', ' + cfg.capTexts[argS[0]] 
             grFileNm=pathGr+stV[0].name+argS[0]
             dfDisp.displayScene(caption=capt,fileName=grFileNm+'.jpg')
-            insertGrInTex(texFile=report,grFileNm=grFileNm,grWdt=grWdt,capText=capt)
+            insertGrInTex(texFile=report,grFileNm=grFileNm,grWdt=cfg.grWidth,capText=capt)
     report.close()
-    return
 
 def insertGrInTex(texFile,grFileNm,grWdt,capText,labl=''):
     '''Include a graphic in a LaTeX file.

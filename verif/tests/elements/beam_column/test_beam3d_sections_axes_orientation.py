@@ -314,13 +314,13 @@ ratio2=(Rsec2beamX-Rsec2beamY).sum()+(Rsec2beamX-Rsec2beamZ).sum()+(Rsec2beamY-R
 #Check the internal forces written in the checking file
 execfile('/tmp/resVerif.py')
 
-sec1MzTeor=(M+F*Lbeam)*1e-3 # expressed in mkN
+sec1MzTeor=(M+F*Lbeam) # expressed in mkN
 sec1beamXMz=preprocessor.getElementHandler.getElement(1).getProp("ULS_normalStressesResistanceSect1").Mz
 sec1beamYMz=preprocessor.getElementHandler.getElement(2).getProp("ULS_normalStressesResistanceSect1").Mz
 sec1beamZMz=preprocessor.getElementHandler.getElement(3).getProp("ULS_normalStressesResistanceSect1").Mz
 ratio3=(sec1beamXMz-sec1MzTeor)+(sec1beamYMz-sec1MzTeor)+(sec1beamZMz-sec1MzTeor)
 
-sec2MzTeor=M*1e-3 # expressed in mkN
+sec2MzTeor=M # expressed in mkN
 sec2beamXMz=preprocessor.getElementHandler.getElement(1).getProp("ULS_normalStressesResistanceSect2").Mz
 sec2beamYMz=preprocessor.getElementHandler.getElement(2).getProp("ULS_normalStressesResistanceSect2").Mz
 sec2beamZMz=preprocessor.getElementHandler.getElement(3).getProp("ULS_normalStressesResistanceSect2").Mz

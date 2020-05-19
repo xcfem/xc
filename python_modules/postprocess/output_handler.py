@@ -713,6 +713,7 @@ class OutputHandler(object):
         LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to autoscale)
         lstArgVal=[e.getProp(attributeName+'Sect1')(itemToDisp) for e in beamSetDispRes.elements]
         unitConversionFactor, unitDescription= self.outputStyle.getUnitParameters(itemToDisp)
+        print('unit conversion factor: ', unitConversionFactor)
         scaleFactor= 1.0
         maxAbs=max(abs(max(lstArgVal)),abs(min(lstArgVal)))
         if(maxAbs>0):

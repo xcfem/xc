@@ -83,32 +83,30 @@ class ControlVarsBase(object):
       retval.append("detab,"+str(eTag)+",CF" +axis+","+str(self.getCF())+"\n")
       return retval
 
-    def getStrArguments(self,factor):
+    def getStrArguments(self):
       '''Returns a string for a 'copy' (kind of) constructor.
 
-      :param factor: factor for units (default 1e-3 -> kN)
       '''
       retval= 'combName= "' + self.combName 
       retval+= '", CF=' + str(self.getCF())
       return retval
 
-    def getStrConstructor(self,factor= 1e-3):
+    def getStrConstructor(self):
       retval= self.__class__.__name__ 
-      retval+= '(' + self.getStrArguments(factor) + ')'
+      retval+= '(' + self.getStrArguments() + ')'
       return retval
 
-    def strElementProp(self,eTag,nmbProp,factor= 1e-3):
+    def strElementProp(self,eTag,nmbProp):
       '''Writes a string that will serve to read the element property from a file.
 
       :param eTag:    element identifier.
       :param nmbProp: name of the element property
-      :param factor:  factor for units (default 1e-3 -> kN)
       '''
       retval= 'preprocessor.getElementHandler.getElement('
       retval+= str(eTag)
       retval+= ").setProp("
       retval+= '"' + nmbProp + '"'
-      retval+= ',' + self.getStrConstructor(factor)
+      retval+= ',' + self.getStrConstructor()
       retval+= ")\n"
       return retval
 
@@ -143,11 +141,11 @@ class NMy(ControlVarsBase):
       retval.append("detab,"+str(eTag)+",My" +axis+","+str(self.My*factor)+"\n")
       return retval
 
-    def getStrArguments(self,factor):
+    def getStrArguments(self):
       '''Returns a string for a 'copy' (kind of) constructor.'''
-      retval= super(NMy,self).getStrArguments(factor)
-      retval+= ',N= ' + str(self.N*factor) 
-      retval+= ',My= ' + str(self.My*factor)
+      retval= super(NMy,self).getStrArguments()
+      retval+= ',N= ' + str(self.N) 
+      retval+= ',My= ' + str(self.My)
       return retval
 
 class NMyMz(NMy):
@@ -180,10 +178,10 @@ class NMyMz(NMy):
       retval.append("detab,"+str(eTag)+",Mz" +axis+","+str(self.Mz*factor)+"\n")
       return retval
 
-    def getStrArguments(self,factor):
+    def getStrArguments(self):
       '''Returns a string for a 'copy' (kind of) constructor.'''
-      retval= super(NMyMz,self).getStrArguments(factor)
-      retval+= ',Mz= ' + str(self.Mz*factor)
+      retval= super(NMyMz,self).getStrArguments()
+      retval+= ',Mz= ' + str(self.Mz)
       return retval
 
 
@@ -231,10 +229,10 @@ class ShVy(ControlVarsBase):
         retval.append("detab,"+str(eTag)+",Vy" +axis+","+str(self.Vy*factor)+"\n")
         return retval
 
-    def getStrArguments(self,factor):
+    def getStrArguments(self):
         '''Returns a string for a 'copy' (kind of) constructor.'''
-        retval= super(ShVy,self).getStrArguments(factor)
-        retval+= ',Vy= ' + str(self.Vy*factor)
+        retval= super(ShVy,self).getStrArguments()
+        retval+= ',Vy= ' + str(self.Vy)
         return retval
 
 class CFVy(ShVy):
@@ -271,13 +269,11 @@ class ShearYControlVars(CFVy):
         retval+= super(ShearYControlVars,self).getLaTeXFields(factor)
         return retval
 
-    def getStrArguments(self,factor):
+    def getStrArguments(self):
         '''Returns a string for a 'copy' (kind of) constructor.
-
-        :param factor: factor for units (default 1e-3 -> kN)
         '''
         retval= 'idSection= "' + self.idSection +'", ' 
-        retval+= super(ShearYControlVars,self).getStrArguments(factor)
+        retval+= super(ShearYControlVars,self).getStrArguments()
         return retval
 
 class UniaxialBendingControlVars(CFNMy):
@@ -301,13 +297,11 @@ class UniaxialBendingControlVars(CFNMy):
         retval+= super(UniaxialBendingControlVars,self).getLaTeXFields(factor)
         return retval
 
-    def getStrArguments(self,factor):
+    def getStrArguments(self):
         '''Returns a string for a 'copy' (kind of) constructor.
-
-        :param factor: factor for units (default 1e-3 -> kN)
         '''
         retval= 'idSection= "' + self.idSection +'", ' 
-        retval+= super(UniaxialBendingControlVars,self).getStrArguments(factor)
+        retval+= super(UniaxialBendingControlVars,self).getStrArguments()
         return retval
 
 class CFNMyMz(CFNMy):
@@ -340,10 +334,10 @@ class CFNMyMz(CFNMy):
         retval.append("detab,"+str(eTag)+",Mz" +axis+","+str(self.Mz*factor)+"\n")
         return retval
 
-    def getStrArguments(self,factor):
+    def getStrArguments(self):
         '''Returns a string for a 'copy' (kind of) constructor.'''
-        retval= super(CFNMyMz,self).getStrArguments(factor)
-        retval+= ',Mz= ' + str(self.Mz*factor)
+        retval= super(CFNMyMz,self).getStrArguments()
+        retval+= ',Mz= ' + str(self.Mz)
         return retval
 
 class AxialForceControlVars(ControlVarsBase):
@@ -377,11 +371,11 @@ class AxialForceControlVars(ControlVarsBase):
       retval.append("detab,"+str(eTag)+",N" +axis+","+str(self.N*factor)+"\n")
       return retval
 
-    def getStrArguments(self,factor):
+    def getStrArguments(self):
       '''Returns a string for a 'copy' (kind of) constructor.'''
       retval= 'idSection= "' + self.idSection +'", ' 
-      retval+= super(AxialForceControlVars,self).getStrArguments(factor)
-      retval+= ',N= ' + str(self.N*factor) 
+      retval+= super(AxialForceControlVars,self).getStrArguments()
+      retval+= ',N= ' + str(self.N) 
       return retval
 
         
@@ -417,10 +411,10 @@ class BiaxialBendingControlVars(UniaxialBendingControlVars):
         retval.append("detab,"+str(eTag)+",Mz" +axis+","+str(self.Mz*factor)+"\n")
         return retval
 
-    def getStrArguments(self,factor):
+    def getStrArguments(self):
         '''Returns a string for a 'copy' (kind of) constructor.'''
-        retval= super(BiaxialBendingControlVars,self).getStrArguments(factor)
-        retval+= ',Mz= ' + str(self.Mz*factor)
+        retval= super(BiaxialBendingControlVars,self).getStrArguments()
+        retval+= ',Mz= ' + str(self.Mz)
         return retval
 
 class SSBiaxialBendingControlVars(BiaxialBendingControlVars):
@@ -456,14 +450,14 @@ class SSBiaxialBendingControlVars(BiaxialBendingControlVars):
         retval= super(SSBiaxialBendingControlVars,self).getLaTeXFields(factor)+" & "+fmt.Esf.format(self.Ncrd*factor)+" & "+fmt.Esf.format(self.McRdy*factor)+" & "+fmt.Esf.format(self.McRdz*factor)+" & "+fmt.Esf.format(self.MvRdz*factor)+" & "+fmt.Esf.format(self.MbRdz*factor)+" & "+fmt.Esf.format(self.chiLT)
         return retval
 
-    def getStrArguments(self,factor):
+    def getStrArguments(self):
         '''Returns a string for a 'copy' (kind of) constructor.'''
-        retval= super(SSBiaxialBendingControlVars,self).getStrArguments(factor)
-        retval+= ',Ncrd= ' + str(self.Ncrd*factor)
-        retval+= ',McRdy= ' + str(self.McRdy*factor)
-        retval+= ',McRdz= ' + str(self.McRdz*factor)
-        retval+= ',MvRdz= ' + str(self.MvRdz*factor)
-        retval+= ',MbRdz= ' + str(self.MbRdz*factor)
+        retval= super(SSBiaxialBendingControlVars,self).getStrArguments()
+        retval+= ',Ncrd= ' + str(self.Ncrd)
+        retval+= ',McRdy= ' + str(self.McRdy)
+        retval+= ',McRdz= ' + str(self.McRdz)
+        retval+= ',MvRdz= ' + str(self.MvRdz)
+        retval+= ',MbRdz= ' + str(self.MbRdz)
         retval+= ',chiLT= ' + str(self.chiLT)
         return retval
 
@@ -484,10 +478,11 @@ class AISCBiaxialBendingControlVars(SSBiaxialBendingControlVars):
         retval= super(SSBiaxialBendingControlVars,self).getLaTeXFields(factor)+" & "+fmt.Esf.format(self.chiN)
         return retval
 
-    def getStrArguments(self,factor):
+    def getStrArguments(self):
         '''Returns a string for a 'copy' (kind of) constructor.'''
-        retval= super(SSBiaxialBendingControlVars,self).getStrArguments(factor)
+        retval= super(SSBiaxialBendingControlVars,self).getStrArguments()
         retval+= ',chiN= ' + str(self.chiN)
+        retval+= ',chiLT= ' + str(self.chiLT)
         return retval
 
     
@@ -541,16 +536,16 @@ class RCShearControlVars(BiaxialBendingControlVars):
         retval.append("detab,"+str(eTag)+",Vu" +axis+","+str(self.Vu*factor)+"\n")
         return retval
 
-    def getStrArguments(self,factor):
+    def getStrArguments(self):
         '''Returns a string for a 'copy' (kind of) constructor.'''
-        retval= super(RCShearControlVars,self).getStrArguments(factor)
-        retval+= ',Mu= ' + str(self.Mu*factor)
-        retval+= ',Vy= ' + str(self.Vy*factor)
-        retval+= ',Vz= ' + str(self.Vz*factor)
+        retval= super(RCShearControlVars,self).getStrArguments()
+        retval+= ',Mu= ' + str(self.Mu)
+        retval+= ',Vy= ' + str(self.Vy)
+        retval+= ',Vz= ' + str(self.Vz)
         retval+= ',theta= ' + str(self.theta)
-        retval+= ',Vcu= ' + str(self.Vcu*factor)
-        retval+= ',Vsu= ' + str(self.Vsu*factor)
-        retval+= ',Vu= ' + str(self.Vu*factor)
+        retval+= ',Vcu= ' + str(self.Vcu)
+        retval+= ',Vsu= ' + str(self.Vsu)
+        retval+= ',Vu= ' + str(self.Vu)
         return retval
 
 class CrackControlBaseVars(CFNMyMz):
@@ -585,10 +580,10 @@ class CrackControlBaseVars(CFNMyMz):
         retval.append("detab,"+str(eTag)+",steelStress" +axis+","+str(self.steelStress*factor)+"\n")
         return retval
 
-    def getStrArguments(self,factor):
+    def getStrArguments(self):
         '''Returns a string for a 'copy' (kind of) constructor.'''
-        retval= super(CrackControlBaseVars,self).getStrArguments(factor)
-        retval+= ',steelStress= ' + str(self.steelStress*factor*factor)
+        retval= super(CrackControlBaseVars,self).getStrArguments()
+        retval+= ',steelStress= ' + str(self.steelStress)
         return retval
 
 
@@ -629,11 +624,11 @@ class CrackControlVars(ControlVarsBase):
         retval+= self.crackControlVarsNeg.getLaTeXFields()
         return retval
 
-    def getStrArguments(self,factor):
+    def getStrArguments(self):
         '''Returns a string for a 'copy' (kind of) constructor.'''
         retval= 'idSection= "' + self.idSection + '"' 
-        retval+= ', crackControlBaseVarsPos= ' + self.crackControlVarsPos.getStrConstructor(factor)
-        retval+= ', crackControlBaseVarsNeg= ' + self.crackControlVarsNeg.getStrConstructor(factor)
+        retval+= ', crackControlBaseVarsPos= ' + self.crackControlVarsPos.getStrConstructor()
+        retval+= ', crackControlBaseVarsNeg= ' + self.crackControlVarsNeg.getStrConstructor()
         return retval
 
 class RCCrackStraightControlVars(NMyMz):
@@ -664,9 +659,9 @@ class RCCrackStraightControlVars(NMyMz):
         retval= super(NMyMz,self).getLaTeXFields(factor)+' & '+fmt.Esf.format(self.s_rmax)+' & '+fmt.Esf.format(self.eps_sm)+' & '+fmt.Esf.format(self.wk)
         return retval
 
-    def getStrArguments(self,factor):
+    def getStrArguments(self):
         '''Returns a string for a 'copy' (kind of) constructor.'''
-        retval= super(RCCrackStraightControlVars,self).getStrArguments(factor)
+        retval= super(RCCrackStraightControlVars,self).getStrArguments()
         retval+= ',s_rmax= ' + str(self.s_rmax)
         retval+= ',eps_sm= ' + str(self.eps_sm)
         retval+= ',wk= ' + str(self.wk)
@@ -714,13 +709,13 @@ class FatigueControlBaseVars(NMyMz):
         retval.append("detab,"+str(eTag)+",concreteStress" +axis+","+str(self.concreteStress*factor*factor)+"\n")
         return retval
 
-    def getStrArguments(self,factor):
+    def getStrArguments(self):
         '''Returns a string for a 'copy' (kind of) constructor.'''
-        retval= super(FatigueControlBaseVars,self).getStrArguments(factor)
-        retval+= ',Vy= ' + str(self.Vy*factor)
-        retval+= ',negSteelStress= ' + str(self.negSteelStress*factor*factor)
-        retval+= ',posSteelStress= ' + str(self.posSteelStress*factor*factor)
-        retval+= ',concreteStress= ' + str(self.concreteStress*factor*factor)
+        retval= super(FatigueControlBaseVars,self).getStrArguments()
+        retval+= ',Vy= ' + str(self.Vy)
+        retval+= ',negSteelStress= ' + str(self.negSteelStress)
+        retval+= ',posSteelStress= ' + str(self.posSteelStress)
+        retval+= ',concreteStress= ' + str(self.concreteStress)
         return retval
 
 class FatigueControlVars(ControlVarsBase):
@@ -798,17 +793,17 @@ class FatigueControlVars(ControlVarsBase):
         retval+= fmt.Esf.format(self.Vu*factor)
         return retval
 
-    def getStrArguments(self,factor):
+    def getStrArguments(self):
         '''Returns a string for a 'copy' (kind of) constructor.'''
         retval= 'idSection= "' + self.idSection + '"' 
-        retval+= ', controlBaseVars0= ' + self.state0.getStrConstructor(factor)
-        retval+= ', controlBaseVars1= ' + self.state1.getStrConstructor(factor)
-        retval+= ', concreteLimitStress= ' + str(self.concreteLimitStress*factor*factor)
+        retval+= ', controlBaseVars0= ' + self.state0.getStrConstructor()
+        retval+= ', controlBaseVars1= ' + self.state1.getStrConstructor()
+        retval+= ', concreteLimitStress= ' + str(self.concreteLimitStress)
         retval+= ', concreteBendingCF= ' + str(self.concreteBendingCF)
-        retval+= ', shearLimit= ' + str(self.shearLimit*factor)
+        retval+= ', shearLimit= ' + str(self.shearLimit)
         retval+= ', concreteShearCF= ' + str(self.concreteShearCF)
-        retval+= ', Mu= ' + str(self.Mu*factor)
-        retval+= ', Vu= ' + str(self.Vu*factor)
+        retval+= ', Mu= ' + str(self.Mu)
+        retval+= ', Vu= ' + str(self.Vu)
         return retval
   
 
@@ -835,9 +830,9 @@ def writeControlVarsFromPhantomElements(controlVarName,preprocessor,outputFileNa
         controlVar= e.getProp(controlVarName)
         outStr= controlVar.getLaTeXString(eTag,1e-3)
         if(e.getProp("dir")==1):
-            xcOutput.write(controlVar.strElementProp(eTag,controlVarName+'Sect1',1e-3))
+            xcOutput.write(controlVar.strElementProp(eTag,controlVarName+'Sect1'))
         else:
-            xcOutput.write(controlVar.strElementProp(eTag,controlVarName+'Sect2',1e-3))
+            xcOutput.write(controlVar.strElementProp(eTag,controlVarName+'Sect2'))
     xcOutput.close()
     if outputCfg.listFile.lower()[0]=='y':
         if outputCfg.appendToResFile.lower()[0]=='y':
@@ -898,8 +893,8 @@ def writeControlVarsFromElements(controlVarName,preprocessor,outputFileName,outp
     for e in elems:
         controlVar1= e.getProp(controlVarName+'Sect1')
         controlVar2= e.getProp(controlVarName+'Sect2')
-        xcOutput.write(controlVar1.strElementProp(e.tag,controlVarName+'Sect1',1e-3))
-        xcOutput.write(controlVar2.strElementProp(e.tag,controlVarName+'Sect2',1e-3))
+        xcOutput.write(controlVar1.strElementProp(e.tag,controlVarName+'Sect1'))
+        xcOutput.write(controlVar2.strElementProp(e.tag,controlVarName+'Sect2'))
     xcOutput.close()
     if outputCfg.listFile.lower()[0]=='y':
         if outputCfg.appendToResFile.lower()[0]=='y':
