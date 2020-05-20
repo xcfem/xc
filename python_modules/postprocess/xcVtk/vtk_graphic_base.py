@@ -323,7 +323,7 @@ class RecordDefDisplay(object):
     if(hasattr(w2if,'SetScale')):
         w2if.SetScale(1) # image quality
     else:
-        w2if.SetMagnification(1) # image quality
+        w2if.SetMagnification(1) # image quality (apparently deprecated in recent versions of VTL -LCPT 20/05/2020-)
     w2if.Update()
     writer= vtk.vtkJPEGWriter()
     writer.SetFileName(fileName)
