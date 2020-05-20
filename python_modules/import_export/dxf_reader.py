@@ -301,7 +301,8 @@ class DXFImport(object):
                     append_point(obj.dxf.location, layerName, pointName, objLabels)
                 if(self.impSurfaces):
                     if(type == '3DFACE'):
-                        for pt in obj.points:
+                        objPoints= [obj.dxf.vtx0, obj.dxf.vtx1, obj.dxf.vtx2, obj.dxf.vtx3]
+                        for pt in objPoints:
                             count+= 1
                             pointName+= str(count)
                             append_point(pt, layerName, pointName, objLabels)
@@ -458,7 +459,8 @@ class DXFImport(object):
             facesDict= self.facesByLayer[layerName]
             if(type == '3DFACE'):
                 vertices= list()
-                for pt in obj.points:
+                objPoints= [obj.dxf.vtx0, obj.dxf.vtx1, obj.dxf.vtx2, obj.dxf.vtx3]
+                for pt in objPoints:
                     p= self.getRelativeCoo(pt)
                     idx= self.getIndexNearestPoint(p)
                     vertices.append(idx)
