@@ -153,7 +153,7 @@ python tests/elements/shell/test_shell_mitc4_28.py
 python tests/elements/shell/test_shell_mitc9_01.py
 python tests/elements/shell/test_shell_mitc9_02.py
 python tests/elements/shell/test_shell_mitc9_03.py
-python tests/elements/shell/test_area_tributaria_01.py
+python tests/elements/shell/test_tributary_area_01.py
 python tests/elements/shell/test_shell_mitc4_natural_coordinates_01.py
 python tests/elements/shell/test_transformInternalForces.py
 
