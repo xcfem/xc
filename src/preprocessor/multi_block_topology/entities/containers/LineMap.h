@@ -74,6 +74,8 @@ class LineMap: public EntityMap<Edge>
     DividedLine *newDividedLine(const size_t &, const size_t &);
     CircularArc *newCircleArc(const size_t &, const size_t &, const size_t &);
     CmbEdge *newLineSequence(void);
+    
+    double getAverageLength(void) const;
   };
 
 //! @brief Creates a new line.

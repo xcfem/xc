@@ -57,6 +57,7 @@ class BodyMap: public EntityMap<Body>
     Body *New(void);
 
     Block *newBlockPts(const size_t &, const size_t &,const size_t &,const size_t &,const size_t &, const size_t &,const size_t &,const size_t &);
+    double getAverageVolume(void) const;
   };
 
 

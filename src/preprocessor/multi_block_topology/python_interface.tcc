@@ -69,6 +69,7 @@ class_<XC::MultiBlockTopology, bases<XC::PreprocessorContainer>, boost::noncopya
   .add_property("getUniformGrids", make_function( getUniformGridsRef, return_internal_reference<>() ))
   .def("conciliaNDivs", &XC::MultiBlockTopology::conciliaNDivs)
   .def("getLineWithEndPoints",make_function( getLineWithEndPoints, return_internal_reference<>() ))
+  .def("getAverageSize", &XC::MultiBlockTopology::getAverageSize, "Return the average size of the geometric entities.")
    ;
 
 

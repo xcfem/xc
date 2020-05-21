@@ -147,7 +147,6 @@ void XC::DqPtrsElem::numera(void)
 double XC::DqPtrsElem::getAverageSize(bool initialGeometry) const
   {
     double retval= 0.0;
-    size_t count= 0;
     int dim= 0;
     double fictitiousLength= 0.0;
     for(const_iterator i= begin();i!=end();i++)
@@ -164,7 +163,6 @@ double XC::DqPtrsElem::getAverageSize(bool initialGeometry) const
 	    else if(dim==3)
 	      fictitiousLength= pow(ptr->getVolume(initialGeometry),1.0/3.0);
 	    retval+= fictitiousLength;
-	    count++;
 	  }
       }
     retval/=(size());

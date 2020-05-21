@@ -190,6 +190,7 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     bool In(const UniformGrid *) const;
 
     BND3d Bnd(void) const;
+    double getAverageSize(void) const;
     SetEntities pickEntitiesInside(const GeomObj3d &, const double &tol= 0.0) const;
 
     void fillUpwards(const SetMeshComp &);

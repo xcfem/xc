@@ -226,6 +226,7 @@ class_<XC::SetEntities, bases<XC::PreprocessorContainer> >("SetEntities",no_init
   .def("fillUpwards", &XC::SetEntities::fillUpwards,"add entities upwards.")
   .def("fillDownwards", &XC::SetEntities::fillDownwards,"add entities downwards.")
   .def("splitLinesAtIntersections",&XC::SetEntities::splitLinesAtIntersections,"divide the lines of the set at intersection points.")
+  .def("getAverageSize",&XC::SetEntities::getAverageSize,"Return the average length of the entities.")
   ;
 
 XC::SetEntities &(XC::Set::*getEntities)(void)= &XC::Set::getEntities;

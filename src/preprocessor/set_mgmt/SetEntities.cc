@@ -640,6 +640,41 @@ BND3d XC::SetEntities::Bnd(void) const
     return retval;
   }
 
+//! @brief Return the average size of the geometric entities.
+double XC::SetEntities::getAverageSize(void) const
+  {
+    double retval= 0.0;
+    const size_t numEdges= lines.size();
+    if(numEdges>0)
+      {
+	for(lst_line_pointers::const_iterator i= lines.begin();i!=lines.end();i++)
+	  {
+	    const Edge &line= **i;
+	    retval+= line.getLength();
+	  }
+      }
+    const size_t numFaces= surfaces.size();
+    if(numFaces>0)
+      {
+	for(lst_surface_ptrs::const_iterator i= surfaces.begin();i!=surfaces.end();i++)
+	  {
+	    const double area= (*i)->getArea();
+            retval+= sqrt(area);
+	  }
+      }
+    const size_t numBodies= bodies.size();
+    if(numBodies>0)
+      {
+	for(lst_body_pointers::const_iterator i= bodies.begin();i!=bodies.end();i++)
+	  {
+	    const double volume= (*i)->getVolume();
+            retval+= pow(volume,1.0/3.0);
+	  }
+      }
+    retval/=(numEdges+numFaces+numBodies);
+    return retval;
+  }
+
 //! @brief Return a new set that contains the bodies that lie insiof the
 //! geometric object.
 //!

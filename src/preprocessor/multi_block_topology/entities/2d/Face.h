@@ -73,6 +73,7 @@ class Face: public CmbEdge
       { return getNumberOfEdges(); }
     virtual const Pnt *getVertex(const size_t &i) const;
     Polyline3d getContour(void) const;
+    double getArea(void) const;
     //! @brief Return the bodies that touch this surface (neighbors).
     const std::set<const Body *> &getConnectedBodies(void) const
       { return bodies_surf; }

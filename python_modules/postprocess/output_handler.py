@@ -60,7 +60,7 @@ class OutputHandler(object):
         return self.outputStyle.cameraParameters
         
             
-    def displayBlocks(self, setToDisplay= None, caption= None, fileName=None, defFScale= 0.0):
+    def displayBlocks(self, setToDisplay= None, caption= None, fileName=None):
         '''Display the blocks (points, lines, surfaces and volumes)
            of the set.
 
@@ -68,11 +68,6 @@ class OutputHandler(object):
            :param caption: title of the graphic.
            :param fileName: name of the file to plot the graphic. Defaults to 
                        None, in that case an screen display is generated
-           :param defFScale: factor to apply to current displacement of nodes 
-                   so that the display position of each node equals to
-                   the initial position plus its displacement multiplied
-                   by this factor. (Defaults to 0.0, i.e. display of 
-                   initial/undeformed shape)
         '''
         if(setToDisplay==None):
             setToDisplay= self.modelSpace.getTotalSet()

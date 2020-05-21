@@ -106,6 +106,7 @@ class Body: public EntMdlr
     //! @brief Return the object dimension.
     inline virtual unsigned short int GetDimension(void) const
       { return 3; }
+    
     //! @brief Return the number of lines in the object.
     virtual size_t getNumberOfLines(void) const= 0;
     //! @brief Return the number of vertices in the object.
@@ -118,6 +119,7 @@ class Body: public EntMdlr
     virtual const Pnt *getVertex(const size_t &i) const= 0;
     std::vector<int> getIndicesVertices(void) const;
     virtual BND3d Bnd(void) const;
+    virtual double getVolume(void) const;
     bool In(const GeomObj3d &, const double &tol= 0.0) const;
     bool Out(const GeomObj3d &, const double &tol= 0.0) const;
 

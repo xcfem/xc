@@ -69,6 +69,7 @@ class_<XC::LineMap, bases<map_edges>, boost::noncopyable >("LineMap", no_init)
    .def("newCircleArc", &XC::LineMap::newCircleArc, return_internal_reference<>(),"Creates a circle arc.")
    .def("newLineSequence", &XC::LineMap::newLineSequence, return_internal_reference<>(),"Creates a line sequence (polyline).")
    .def("get", &XC::LineMap::get, return_internal_reference<>(),"Return the i-th line.")
+  .def("getAverageLength",&XC::LineMap::getAverageLength,"Return the average length of the lines.")
    ;
 
 typedef XC::ModelComponentContainer<XC::Face> map_cm_faces;
@@ -91,6 +92,7 @@ class_<XC::SurfaceMap, bases<map_faces>, boost::noncopyable >("SurfaceMap", no_i
    .def("get", &XC::SurfaceMap::get, return_internal_reference<>(),"Return the i-th face.")
    .def("conciliaNDivs", &XC::SurfaceMap::conciliaNDivs)
    .def("checkNDivs",&XC::SurfaceMap::checkNDivs,"Check the number of divisions.")
+  .def("getAverageArea",&XC::SurfaceMap::getAverageArea,"Return the average area of the surfaces.")
    ;
 
 typedef XC::ModelComponentContainer<XC::Body> map_cm_bodies;
@@ -111,6 +113,7 @@ class_<XC::BodyMap, bases<map_bodies>, boost::noncopyable >("MapBodies", no_init
    .def("get", &XC::BodyMap::get, return_internal_reference<>(),"Return the i-th face.")
    .def("conciliaNDivs", &XC::BodyMap::conciliaNDivs)
    .def("checkNDivs",&XC::BodyMap::checkNDivs,"Check the number of divisions.")
+  .def("getAverageVolume",&XC::BodyMap::getAverageVolume,"Return the average volume of the bodies.")
    ;
 
 typedef XC::ModelComponentContainer<XC::UniformGrid> map_cm_ugrids;

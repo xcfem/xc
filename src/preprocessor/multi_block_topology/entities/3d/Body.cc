@@ -251,6 +251,13 @@ BND3d XC::Body::Bnd(void) const
     return retval;
   }
 
+//! @brief Returns the object volume
+double XC::Body::getVolume(void) const
+  {
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented yet." << std::endl;
+    return 0.0;
+  }
 //! @brief Returns true if this object lies inside the
 //! geometric object.
 bool XC::Body::In(const GeomObj3d &geomObj, const double &tol) const

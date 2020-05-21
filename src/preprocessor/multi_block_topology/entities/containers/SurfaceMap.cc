@@ -171,3 +171,13 @@ XC::QuadSurface *XC::SurfaceMap::newQuadSurfaceGridPoints(const boost::python::l
     updateGraph(*retval);
     return retval;
   }
+
+//! @brief Return the average area of the surfaces.
+double XC::SurfaceMap::getAverageArea(void) const
+  {
+    double retval= 0.0;
+    for(const_iterator i= begin();i!=end();i++)
+      retval+= (*i).second->getArea();
+    retval/=(size());
+    return retval;
+  }

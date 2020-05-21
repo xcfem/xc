@@ -25,23 +25,27 @@ class RecordDefDisplayCAD(vtk_graphic_base.RecordDefDisplay):
         self.gridRecord.uGrid.name= setToDraw.name+'_grid'
         numKPts= setToDraw.getPoints.size
         if(numKPts>0):
-          cad_mesh.VtkCargaMalla(self.gridRecord)
-          self.renderer= vtk.vtkRenderer()
-          self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
-          cad_mesh.VtkDefineActorKPoint(self.gridRecord,self.renderer,0.02)
-          cad_mesh.VtkDefineActorCells(self.gridRecord,self.renderer,"wireframe")
-          # Draw lines local axes.
-          lineAxesField= lavf.LinesLocalAxesVectorField(setToDraw.name+'_lineLocalAxes',1)
-          lineAxesField.dumpVectors(setToDraw)
-          lineAxesField.addToDisplay(self)
-          # Draw quad surfaces local axes.
-          surfAxesField= lavf.QuadSurfacesLocalAxesVectorField(setToDraw.name+'_surfLocalAxes',1)
-          surfAxesField.dumpVectors(setToDraw)
-          surfAxesField.addToDisplay(self)
-          #End of the experiment
-          self.renderer.ResetCamera()
+            cad_mesh.VtkCargaMalla(self.gridRecord)
+            self.renderer= vtk.vtkRenderer()
+            self.renderer.SetBackground(self.bgRComp,self.bgGComp,self.bgBComp)
+            cad_mesh.VtkDefineActorKPoint(self.gridRecord,self.renderer,0.02)
+            cad_mesh.VtkDefineActorCells(self.gridRecord,self.renderer,"wireframe")
+
+            # Draw local axes.
+            avgSize= setToDraw.getEntities.getAverageSize()
+            vectorScale= avgSize/4.0
+            ## Draw lines local axes.
+            lineAxesField= lavf.LinesLocalAxesVectorField(setToDraw.name+'_lineLocalAxes', scaleFactor= vectorScale)
+            lineAxesField.dumpVectors(setToDraw)
+            lineAxesField.addToDisplay(self)
+            ## Draw quad surfaces local axes.
+            surfAxesField= lavf.QuadSurfacesLocalAxesVectorField(setToDraw.name+'_surfLocalAxes', scaleFactor= vectorScale)
+            surfAxesField.dumpVectors(setToDraw)
+            surfAxesField.addToDisplay(self)
+            
+            self.renderer.ResetCamera()
         else:
-          lmsg.warning("Error when drawing set: '"+setToDraw.name+"' it has not key points so I can't get set geometry (use fillDownwards?)")
+            lmsg.warning("Error when drawing set: '"+setToDraw.name+"' it has not key points so I can't get set geometry (use fillDownwards?)")
 
         #Implementar dibujo de etiquetas.
         # if(entToLabel=="cells"):

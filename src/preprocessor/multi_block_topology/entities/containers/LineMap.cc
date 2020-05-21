@@ -249,3 +249,14 @@ XC::Edge *XC::LineMap::createCopy(const Edge *l)
       }
     return retval;
   }
+
+
+//! @brief Return the average length of the surfaces.
+double XC::LineMap::getAverageLength(void) const
+  {
+    double retval= 0.0;
+    for(const_iterator i= begin();i!=end();i++)
+      retval+= (*i).second->getLength();
+    retval/=(size());
+    return retval;
+  }

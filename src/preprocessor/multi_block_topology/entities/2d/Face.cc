@@ -30,6 +30,7 @@
 #include "xc_utils/src/geom/pos_vec/Vector3d.h"
 #include "xc_utils/src/geom/d3/BND3d.h"
 #include "xc_utils/src/geom/d1/Polyline3d.h"
+#include "xc_utils/src/geom/d2/Triangle3d.h"
 
 #include "domain/mesh/node/Node.h"
 #include "domain/mesh/element/Element.h"
@@ -165,6 +166,25 @@ const XC::Pnt *XC::Face::getVertex(const size_t &i) const
 //! @brief Returns the contour of the face as a 3D polyline.
 Polyline3d XC::Face::getContour(void) const
   { return getPolyline(); }
+
+//! @brief Returns the face area.
+double XC::Face::getArea(void) const
+  {
+    double retval= 0.0;
+    //Simple trick for convex surfaces.
+    Polyline3d contour= getContour();
+    const Pos3d o= contour.getCenterOfMass();
+    const size_t ns= contour.getNumSegments();
+    for(size_t i=1;i<=ns;i++)
+      {
+	const Segment3d s= contour.getSegment(i);
+	const Pos3d p1= s.getFromPoint();
+	const Pos3d p2= s.getToPoint();
+	const Triangle3d t(o,p1,p2);
+	retval+= t.getArea();
+      }
+    return retval;
+  }
 
 //! @brief Return the surfaces that touch the line.
 std::set<const XC::Face *> XC::getConnectedSurfaces(const Edge &p)

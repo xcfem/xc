@@ -88,3 +88,13 @@ XC::Block *XC::BodyMap::newBlockPts(const size_t &id_p1, const size_t &id_p2, co
     retval->setPoints(tmp);
     return retval;
   }
+
+//! @brief Return the average volume of the bodies.
+double XC::BodyMap::getAverageVolume(void) const
+  {
+    double retval= 0.0;
+    for(const_iterator i= begin();i!=end();i++)
+      retval+= (*i).second->getVolume();
+    retval/=(size());
+    return retval;
+  }

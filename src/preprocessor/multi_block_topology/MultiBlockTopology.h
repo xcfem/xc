@@ -89,7 +89,6 @@ class MultiBlockTopology: public PreprocessorContainer, public MovableObject
     Framework3d framework3d; //!< Three-dimensional framework container.
 
   protected:
-
     SetEstruct *find_struct_set(const UniformGridMap::Indice &nmb);
   public:
     //! @brief Constructor.
@@ -143,6 +142,8 @@ class MultiBlockTopology: public PreprocessorContainer, public MovableObject
     inline UniformGridMap &getUniformGrids(void)
       { return unif_grid; }
     
+    double getAverageSize(void) const;
+
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);
   };

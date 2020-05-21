@@ -187,6 +187,25 @@ void XC::MultiBlockTopology::clearAll(void)
     points.clearAll();
   }
 
+double XC::MultiBlockTopology::getAverageSize(void) const
+  {
+    double retval= edges.getAverageLength();
+    const size_t numFaces= faces.size();
+    if(numFaces>0)
+      {
+        const double area= faces.getAverageArea();
+        retval+= sqrt(area);
+      }
+    const size_t numBodies= bodies.size();
+    if(numBodies>0)
+      {
+        const double volume= bodies.getAverageVolume();
+        retval+= pow(volume,1.0/3.0);
+      }
+    retval/=3.0;
+    return retval;
+  }
+
 XC::MultiBlockTopology::~MultiBlockTopology(void)
   { clearAll(); }
 

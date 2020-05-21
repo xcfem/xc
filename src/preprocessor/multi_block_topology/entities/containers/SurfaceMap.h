@@ -114,6 +114,7 @@ class SurfaceMap: public EntityMap<Face>
     QuadSurface *newQuadSurfacePts(const size_t &, const size_t &,const size_t &,const size_t &);
     QuadSurface *newQuadSurfaceLines(const size_t &, const size_t &,const size_t &,const size_t &);
     QuadSurface *newQuadSurfaceGridPoints(const boost::python::list &);
+    double getAverageArea(void) const;
   };
 
 
