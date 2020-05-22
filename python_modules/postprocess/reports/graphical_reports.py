@@ -382,10 +382,10 @@ def checksReports(limitStateLabel,setsShEl,argsShEl,cfg,setsBmElView=[],argsBmEl
     :param argsBmElScale:   Ordered list of lists [arguments, scale to represent the 
                             argument] to be included in the report for beam elements
     '''
-    texReportFile= cfg.projectDirTree.getReportNormStrFile()
+    texReportFile= cfg.projectDirTree.getReportFile(limitStateLabel)
     report=open(texReportFile,'w')    #report latex file
     dfDisp= vtk_FE_graphic.RecordDefDisplayEF()
-    pathGr= cfg.projectDirTree.getReportNormStrGrPath()
+    pathGr= cfg.projectDirTree.getReportGrPath(limitStateLabel)
     for st in setsShEl:
         for arg in argsShEl:
             attributeName= limitStateLabel + 'Sect1'

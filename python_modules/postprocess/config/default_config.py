@@ -87,40 +87,128 @@ class ProjectDirTree(object):
         return self.getFullGraphicsPath()+'loads/'
     
     def getVerifNormStrFile(self):
+        ''' Return the path of the normal stresses verification
+            results file.'''
         return self.getFullVerifPath()+'verifRsl_normStrsULS.py'    
     def getReportNormStrFile(self):
+        ''' Return the path of the normal stresses verification
+            report file.'''
         return self.getFullReportPath()+'report_normStrsULS.tex'
     def getReportNormStrGrPath(self):
+        ''' Return the path for the normal stresses verification
+            graphics files.'''
         return self.getFullGraphicsPath()+'normStrsULS/'
         
     def getVerifShearFile(self):
+        ''' Return the path of the shear verification
+            results file.'''
         return self.getFullVerifPath()+'verifRsl_shearULS.py'
     def getReportShearFile(self):
+        ''' Return the path of the shear verification
+            report file.'''
         return self.getFullReportPath()+'report_shearULS.tex'
     def getReportShearGrPath(self):
+        ''' Return the path for the shear verification
+            graphics files.'''
         return self.getFullGraphicsPath()+'shearULS/'
 
     def getVerifCrackFreqFile(self):
+        ''' Return the path of the crack verification
+            results file (frequent loads).'''
         return self.getFullVerifPath()+'verifRsl_crackingSLS_freq.py'
     def getReportCrackFreqFile(self):
+        ''' Return the path of the crack verification
+            report file (frequent loads).'''
         return self.getFullReportPath()+'report_crackingSLS_freq.tex'
     def getReportCrackFreqGrPath(self):
+        ''' Return the path for the crack verification
+            graphics files (frequent loads).'''
         return self.getFullGraphicsPath()+'crackingSLS_freq/' 
         
     def getVerifCrackQpermFile(self):
+        ''' Return the path of the crack verification
+            results file (quasi-permanent loads).'''
         return self.getFullVerifPath()+'verifRsl_crackingSLS_qperm.py'
     def getReportCrackQpermFile(self):
+        ''' Return the path of the crack verification
+            report file (quasi-permanent loads).'''
         return self.getFullReportPath()+'report_crackingSLS_qperm.tex'
     def getReportCrackQpermGrPath(self):
+        ''' Return the path for the crack verification
+            graphics files (quasi-permanent loads).'''
         return self.getFullGraphicsPath()+'crackingSLS_qperm/' 
         
     def getVerifFatigueFile(self):
+        ''' Return the path of the fatigue verification
+            results file.'''
         return self.getFullVerifPath()+'verifRsl_fatigueULS.py'
     def getReportFatigueFile(self):
+        ''' Return the path of the fatigue verification
+            report file.'''
         return self.getFullReportPath()+'report_fatigueStrsULS.tex' 
     def getReportFatigueGrPath(self):
+        ''' Return the path for the fatigue verification
+            graphics files.'''
         return self.getFullGraphicsPath()+'fatigueStrsULS/'
 
+    def getVerifFile(self, limitStateLabel):
+        '''Return the path of the verification results file
+           for the limit state argument.
+
+           :param limitStateLabel: label identifying the limit state.
+        '''
+        if(limitStateLabel=='ULS_normalStressesResistance'):
+            return self.getVerifNormStrFile()
+        elif(limitStateLabel=='ULS_shearResistance'):
+            return self.getVerifShearFile()
+        elif(limitStateLabel=='SLS_frequentLoadsCrackControl'):
+            return self.getVerifCrackFreqFile()
+        elif(limitStateLabel=='SLS_quasiPermanentLoadsLoadsCrackControl'):
+            return self.getVerifCrackQpermFile()
+        elif(limitStateLabel=='ULS_fatigueResistance'):
+            return self.getVerifFatigueFile()
+        else:
+            lmsg.error('Label: '+limitStateLabel+' unknown.')
+            return None
+    def getReportFile(self, limitStateLabel):
+        ''' Return the path of the verification report file
+            for the limit state argument.
+
+           :param limitStateLabel: label identifying the limit state.
+        '''
+        if(limitStateLabel=='ULS_normalStressesResistance'):
+            return self.getReportNormStrFile()
+        elif(limitStateLabel=='ULS_shearResistance'):
+            return self.getReportShearFile()
+        elif(limitStateLabel=='SLS_frequentLoadsCrackControl'):
+            return self.getReportCrackFreqFile()
+        elif(limitStateLabel=='SLS_quasiPermanentLoadsLoadsCrackControl'):
+            return self.getReportCrackQpermFile()
+        elif(limitStateLabel=='ULS_fatigueResistance'):
+            return self.getReportFatigueFile()
+        else:
+            lmsg.error('Label: '+limitStateLabel+' unknown.')
+            return None
+    def getReportGrPath(self, limitStateLabel):
+        ''' Return the path for the verification graphics files
+            for the limit state argument.
+
+           :param limitStateLabel: label identifying the limit state.
+        '''
+        if(limitStateLabel=='ULS_normalStressesResistance'):
+            return self.getReportNormStrGrPath()
+        elif(limitStateLabel=='ULS_shearResistance'):
+            return self.getReportShearGrPath()
+        elif(limitStateLabel=='SLS_frequentLoadsCrackControl'):
+            return self.getReportCrackFreqGrPath()
+        elif(limitStateLabel=='SLS_quasiPermanentLoadsLoadsCrackControl'):
+            return self.getReportCrackQpermGrPath()
+        elif(limitStateLabel=='ULS_fatigueResistance'):
+            return self.getReportFatigueGrPath()
+        else:
+            lmsg.error('Label: '+limitStateLabel+' unknown.')
+            return None
+    
     def getReportSimplLCFile(self):
         return self.getFullReportPath()+'report_resSimplLC.tex'
     def getReportSimplLCGrPath(self):
