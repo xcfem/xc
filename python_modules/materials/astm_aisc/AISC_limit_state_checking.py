@@ -251,8 +251,8 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
         :param setCalc: set of elements to which define control variables
         '''
         for e in setCalc.elements:
-            e.setProp(self.limitStateLabel+'Sect1',cv.AISCBiaxialBendingControlVars())
-            e.setProp(self.limitStateLabel+'Sect2',cv.AISCBiaxialBendingControlVars())
+            e.setProp(self.limitStateLabel+'Sect1',cv.AISCBiaxialBendingControlVars(idSection= 'Sect1'))
+            e.setProp(self.limitStateLabel+'Sect2',cv.AISCBiaxialBendingControlVars(idSection= 'Sect2'))
 
     def checkSetFromIntForcFile(self,intForcCombFileName,setCalc=None):
         '''Launch checking.
@@ -267,14 +267,18 @@ class BiaxialBendingNormalStressController(lsc.LimitStateControllerBase):
             sh= e.getProp('crossSection')
             sc= e.getProp('sectionClass')
             elIntForc= internalForcesValues[e.tag]
+            if(len(elIntForc)==0):
+                lmsg.warning('No internal forces for element: '+str(e.tag)+' of type: '+e.type())
             for lf in elIntForc:
                 CFtmp,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp= sh.getBiaxialBendingEfficiency(sc,lf.N,lf.My,lf.Mz,lf.Vy,lf.chiN, lf.chiLT)
                 if lf.idSection == 0:
-                    if(CFtmp>e.getProp(self.limitStateLabel+'Sect1').CF):
-                        e.setProp(self.limitStateLabel+'Sect1',cv.AISCBiaxialBendingControlVars('Sects1',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp,lf.chiLT, lf.chiN))
+                    label= self.limitStateLabel+'Sect1'
+                    if(CFtmp>e.getProp(label).CF):
+                        e.setProp(label,cv.AISCBiaxialBendingControlVars('Sect1',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp,lf.chiLT, lf.chiN))
                 else:
-                    if(CFtmp>e.getProp(self.limitStateLabel+'Sect2').CF):
-                        e.setProp(self.limitStateLabel+'Sect2',cv.AISCBiaxialBendingControlVars('Sects2',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp,lf.chiLT, lf.chiN))
+                    label= self.limitStateLabel+'Sect2'
+                    if(CFtmp>e.getProp(label).CF):
+                        e.setProp(label,cv.AISCBiaxialBendingControlVars('Sect2',lf.idComb,CFtmp,lf.N,lf.My,lf.Mz,NcRdtmp,McRdytmp,McRdztmp,MvRdztmp,MbRdztmp,lf.chiLT, lf.chiN))
 
 class ShearController(lsc.LimitStateControllerBase):
     '''Object that controls shear limit state.'''
@@ -302,6 +306,8 @@ class ShearController(lsc.LimitStateControllerBase):
             sh=e.getProp('crossSection')
             sc=e.getProp('sectionClass')
             elIntForc=internalForcesValues[e.tag]
+            if(len(elIntForc)==0):
+                lmsg.warning('No internal forces for element: '+str(e.tag)+' of type: '+e.type())
             for lf in elIntForc:
                 CFtmp= sh.getYShearEfficiency(sc,lf.Vy)
                 if lf.idSection == 0:
