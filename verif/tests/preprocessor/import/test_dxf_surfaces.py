@@ -1,0 +1,58 @@
+# -*- coding: utf-8 -*-
+from __future__ import division
+from __future__ import print_function
+
+import os
+from import_export import dxf_reader
+from import_export import neutral_mesh_description as nmd
+import xc_base
+import geom
+import xc
+
+layerNamesToImport= ['xc_*']
+
+def getRelativeCoo(pt):
+  return [pt[0],pt[1],pt[2]] #No modification.
+
+pth= os.path.dirname(__file__)
+if(not pth):
+  pth= "."
+dxfFilePath= pth+'/../../aux/dxf/knife_plate.dxf' 
+dxfImport= dxf_reader.DXFImport(dxfFilePath, layerNamesToImport,getRelativeCoo, importLines= False, polylinesAsSurfaces= True, threshold= 0.001, tolerance= .001)
+
+#Block topology
+blocks= dxfImport.exportBlockTopology('test')
+
+fileName= '/tmp/knife_plate_model_blocks'
+ieData= nmd.XCImportExportData()
+ieData.outputFileName= fileName
+ieData.problemName= 'FEcase'
+ieData.blockData= blocks
+
+ieData.writeToXCFile()
+
+FEcase= xc.FEProblem()
+FEcase.title= 'Knife plate model'
+execfile('/tmp/knife_plate_model_blocks.py')
+
+xcTotalSet= preprocessor.getSets.getSet('total')
+
+numSurfaces= len(xcTotalSet.getSurfaces)
+avgSize= xcTotalSet.getEntities.getAverageSize()
+
+ratio1= numSurfaces-42
+ratio2= abs(avgSize-0.0384251796329)/0.0384251796329
+
+'''
+print(numSurfaces)
+print(avgSize)
+print(ratio2)
+'''
+
+from misc_utils import log_messages as lmsg
+fname= os.path.basename(__file__)
+if(ratio1==0 and ratio2<1e-11):
+  print("test ",fname,": ok.")
+else:
+  lmsg.error(fname+' ERROR.')
+
