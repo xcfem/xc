@@ -90,24 +90,8 @@ Entity *EntityMap<Entity>::getNearest(const Pos3d &p)
 template <class Entity>
 const Entity *EntityMap<Entity>::getNearest(const Pos3d &p) const
   {
-    const Entity *retval= nullptr;
-    if(!this->empty())
-      {
-	const_iterator i= this->begin();
-        double d2= (*i).second->getSquaredDistanceTo(p);
-        retval= (*i).second; i++;
-        double tmp;
-        for(;i!=this->end();i++)
-          {
-            tmp= (*i).second->getSquaredDistanceTo(p);
-            if(tmp<d2)
-              {
-                d2= tmp;
-                retval= (*i).second;
-              }
-          }
-      }
-    return retval;
+    EntityMap<Entity> *this_no_const= const_cast<EntityMap<Entity> *>(this);
+    return this_no_const->getNearest(p);
   }
 
 //!  @brief Set indices to the objects to allow its use in VTK.

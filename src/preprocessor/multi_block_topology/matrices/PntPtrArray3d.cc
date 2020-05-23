@@ -141,14 +141,14 @@ XC::MultiBlockTopology *XC::PntPtrArray3d::getMultiBlockTopology(void)
     return retval;
   }
 
-//! @brief Return the point closest to the one being passed as parameter.
+//! @brief Return the point closest to the position argument.
 const XC::Pnt *XC::PntPtrArray3d::getNearestPnt(const Pos3d &p) const
   {
     PntPtrArray3d *this_no_const= const_cast<PntPtrArray3d *>(this);
     return this_no_const->getNearestPnt(p);
   }
 
-//! @brief Return the point closest to the one being passed as parameter.
+//! @brief Return the point closest to the position argument.
 XC::Pnt *XC::PntPtrArray3d::getNearestPnt(const Pos3d &p)
   {
     Pnt *retval= nullptr, *ptrPnt= nullptr;

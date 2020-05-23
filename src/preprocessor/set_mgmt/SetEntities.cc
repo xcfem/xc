@@ -425,6 +425,16 @@ XC::SetEntities XC::SetEntities::pickPointsInside(const GeomObj3d &geomObj, cons
     return retval;
   }
 
+
+//! @brief Return the point closest to the position argument.
+XC::Pnt *XC::SetEntities::getNearestPoint(const Pos3d &p)
+  { return points.getNearest(p); }
+
+//! @brief Return the point closest to the position argument.
+const XC::Pnt *XC::SetEntities::getNearestPoint(const Pos3d &p) const
+  { return points.getNearest(p); }
+
+
 //! @brief Returns true if the edge belongs to the set.
 bool XC::SetEntities::In(const Edge *e) const
   { return lines.in(e); }

@@ -160,13 +160,15 @@ class_<dq_ptrs_pnt, bases<CommandEntity>, boost::noncopyable >("dq_ptrs_pnt",no_
   .def("clear",&dq_ptrs_pnt::clear,"Removes all items.")
    ;
 
+XC::Pnt *(XC::SetEntities::lst_ptr_points::*getNearestPnt)(const Pos3d &)= &XC::SetEntities::lst_ptr_points::getNearest;
 class_<XC::SetEntities::lst_ptr_points, bases<dq_ptrs_pnt>>("lstPnts",no_init)
-  .def("append", &XC::SetEntities::lst_ptr_points::push_back,"Appends a point at the end of the list.")
+  .def("append", &XC::SetEntities::lst_ptr_points::push_back,"Append a point at the end of the list.")
   .def("pushFront", &XC::SetEntities::lst_ptr_points::push_front,"Push point at the beginning of the list.")
-  .add_property("size", &XC::SetEntities::lst_ptr_points::size, "Returns list size.")
-  .def("__len__",&XC::SetEntities::lst_ptr_points::size, "Returns list size.")
+  .add_property("size", &XC::SetEntities::lst_ptr_points::size, "Return list size.")
+  .def("__len__",&XC::SetEntities::lst_ptr_points::size, "Return list size.")
   .def("pickPointsInside",&XC::SetEntities::lst_ptr_points::pickEntitiesInside,"pickPointsInside(geomObj,tol) return the nodes inside the geometric object.") 
-  .def("getBnd", &XC::SetEntities::lst_ptr_points::Bnd, "Returns points boundary.")
+  .def("getBnd", &XC::SetEntities::lst_ptr_points::Bnd, "Return points boundary.")
+  .def("getNearest",make_function(getNearestPnt, return_internal_reference<>() ),"Return the nearest point to the position argument.")
    ;
 
 typedef XC::DqPtrs<XC::Edge> dq_line_ptrs;
@@ -221,12 +223,14 @@ class_<XC::SetEntities::lst_body_pointers, bases<dq_body_ptrs> >("lstBodies",no_
   .def("getBnd", &XC::SetEntities::lst_body_pointers::Bnd, "Returns bodies boundary.")
    ;
 
+XC::Pnt *(XC::SetEntities::*getNearestPoint)(const Pos3d &)= &XC::SetEntities::getNearestPoint;
 class_<XC::SetEntities, bases<XC::PreprocessorContainer> >("SetEntities",no_init)
   .def("getBnd", &XC::SetEntities::Bnd, "return entities boundary.")
   .def("fillUpwards", &XC::SetEntities::fillUpwards,"add entities upwards.")
   .def("fillDownwards", &XC::SetEntities::fillDownwards,"add entities downwards.")
   .def("splitLinesAtIntersections",&XC::SetEntities::splitLinesAtIntersections,"divide the lines of the set at intersection points.")
   .def("getAverageSize",&XC::SetEntities::getAverageSize,"Return the average length of the entities.")
+  .def("getNearestPoint",make_function(getNearestPoint, return_internal_reference<>() ),"Return the nearest point to the position argument.")
   ;
 
 XC::SetEntities &(XC::Set::*getEntities)(void)= &XC::Set::getEntities;

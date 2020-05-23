@@ -140,6 +140,9 @@ class SetEntities: public PreprocessorContainer, public MovableObject
     void sel_points_lista(const ID &);
     bool In(const Pnt *) const;
     SetEntities pickPointsInside(const GeomObj3d &, const double &tol= 0.0) const;
+    Pnt *getNearestPoint(const Pos3d &);
+    const Pnt *getNearestPoint(const Pos3d &) const;
+
 
     //! @brief Return a const reference to the line container.
     virtual const lst_line_pointers &getLines(void) const
