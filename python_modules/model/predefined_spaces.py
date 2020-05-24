@@ -1159,7 +1159,8 @@ class StructuralMechanics3D(PredefinedSpace):
         :param sectionGeometry: object that defines the geometry of the element section.
         '''
         seedElemHandler= self.preprocessor.getElementHandler.seedElemHandler
-        seedElemHandler.defaultMaterial= xcSection.name
+        print('*** here: ', xcSection)
+        seedElemHandler.defaultMaterial= xcSection.getName()
         for l in xcSet.getLines:
             if(xzVector):
                 trf.xzVector= xzVector
