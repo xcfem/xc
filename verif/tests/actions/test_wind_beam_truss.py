@@ -76,9 +76,9 @@ steel=EC3_materials.S235JR
 steel.gammaM=1.0
 steel_prop=tm.MaterialData(name='steel',E=steel.E,nu=steel.nu,rho=steel.rho)
 column_mat=EC3_materials.HEShape(steel,'HE_140_B')
-column_mat.defElasticShearSection3d(prep,steel)
+column_mat.defElasticShearSection3d(prep)
 beam_mat=EC3_materials.UPNShape(steel,'UPN_80')
-beam_mat.defElasticShearSection3d(prep,steel)
+beam_mat.defElasticShearSection3d(prep)
 diag_mat=EC3_materials.SHSShape(steel,'SHS50x50x2_5')
 xcDiagSteel=steel.defElasticMaterial(prep)
 

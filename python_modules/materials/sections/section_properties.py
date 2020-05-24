@@ -148,7 +148,7 @@ class SectionProperties(object):
       '''
       return 2*self.getPlasticSectionModulusZ()*fy
 
-    def defElasticSection3d(self,preprocessor,material):
+    def defElasticSection3d(self, preprocessor, material):
         ''' Return an elastic section appropiate for 3D beam analysis
 
         :param  preprocessor: preprocessor object.
@@ -165,7 +165,7 @@ class SectionProperties(object):
             lmsg.warning('Material: '+self.sectionName+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
     
-    def defElasticShearSection3d(self,preprocessor,material):
+    def defElasticShearSection3d(self, preprocessor, material):
         '''elastic section appropiate for 3D beam analysis, including shear 
            deformations
 
@@ -183,7 +183,7 @@ class SectionProperties(object):
             lmsg.warning('Material: '+self.sectionName+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
 
-    def defElasticSection1d(self,preprocessor,material):
+    def defElasticSection1d(self, preprocessor, material):
         ''' Return an elastic section appropiate for truss analysis.
 
         :param preprocessor: preprocessor object.
@@ -201,7 +201,7 @@ class SectionProperties(object):
             lmsg.warning('Material: '+self.sectionName+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
     
-    def defElasticSection2d(self,preprocessor,material, majorAxis= True):
+    def defElasticSection2d(self, preprocessor, material, majorAxis= True):
         ''' Return an elastic section appropiate for 2D beam analysis
 
         :param preprocessor: preprocessor object.
@@ -222,7 +222,7 @@ class SectionProperties(object):
             lmsg.warning('Material: '+self.sectionName+ ' already defined as:'+str(self.xc_material))
         return self.xc_material
     
-    def defElasticShearSection2d(self,preprocessor,material, majorAxis= True):
+    def defElasticShearSection2d(self, preprocessor, material, majorAxis= True):
         '''elastic section appropiate for 2D beam analysis, including shear deformations
 
         :param  preprocessor: preprocessor object.
@@ -243,7 +243,7 @@ class SectionProperties(object):
             lmsg.warning('Material: '+self.sectionName+' already defined as:'+str(self.xc_material))
         return self.xc_material
     
-    def getCrossSectionProperties2D(self,material):
+    def getCrossSectionProperties2D(self, material):
       '''Return a CrossSectionProperties object with the
          2D properties of the section.'''
       retval= xc.CrossSectionProperties2d()

@@ -420,6 +420,48 @@ class SteelShape(sp.SectionProperties):
             fcv[1]= FCV2
             elem.setProp("HIPCPV2",nmbComb)
         elem.setProp("FCVCP",fcv)
+        
+    def defElasticSection3d(self,preprocessor):
+        ''' Return an elastic section appropiate for 3D beam analysis
+
+        :param  preprocessor: preprocessor object.
+        '''
+        return super(SteelShape,self).defElasticSection3d(preprocessor, self.steelType)
+    
+    def defElasticShearSection3d(self,preprocessor):
+        '''elastic section appropiate for 3D beam analysis, including shear 
+           deformations
+
+        :param  preprocessor: preprocessor object.
+        '''
+        return super(SteelShape,self).defElasticShearSection3d(preprocessor, self.steelType)
+
+    def defElasticSection1d(self,preprocessor):
+        ''' Return an elastic section appropiate for truss analysis.
+
+        :param preprocessor: preprocessor object.
+        '''
+        return super(SteelShape,self).defElasticSection1d(preprocessor, self.steelType)
+    
+    def defElasticSection2d(self,preprocessor, majorAxis= True):
+        ''' Return an elastic section appropiate for 2D beam analysis
+
+        :param preprocessor: preprocessor object.
+        '''
+        return super(SteelShape,self).defElasticSection2d(preprocessor, material= self.steelType, majorAxis= majorAxis)
+    
+    def defElasticShearSection2d(self,preprocessor, majorAxis= True):
+        '''elastic section appropiate for 2D beam analysis, including shear deformations
+
+        :param  preprocessor: preprocessor object.
+        '''
+        return super(SteelShape,self).defElasticShearSection2d(preprocessor, material= self.steelType, majorAxis= majorAxis)
+    
+    def getCrossSectionProperties2D(self):
+        '''Return a CrossSectionProperties object with the
+         2D properties of the section.'''
+        return super(SteelShape,self).getCrossSectionProperties2D(preprocessor, material= self.steelType)
+        
 
 class IShape(SteelShape):
     def __init__(self,steel,name,table):

@@ -43,7 +43,7 @@ steel= ASTM_materials.A36
 steel.gammaM= 1.00
 ## Profile geometry
 shape= ASTM_materials.CShape(steel,'C15X33.9')
-xcSection= shape.defElasticShearSection2d(preprocessor,steel)
+xcSection= shape.defElasticShearSection2d(preprocessor)
 
 # Model geometry
 

@@ -44,7 +44,7 @@ steel= ASTM_materials.A992
 steel.gammaM= 1.00
 ## Profile geometry
 shape= ASTM_materials.WShape(steel,'W24X62')
-xcSection= shape.defElasticShearSection3d(preprocessor,steel)
+xcSection= shape.defElasticShearSection3d(preprocessor)
 
 # Model geometry
 

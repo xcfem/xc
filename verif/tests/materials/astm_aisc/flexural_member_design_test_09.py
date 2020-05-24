@@ -42,7 +42,7 @@ steel= ASTM_materials.A500
 steel.gammaM= 1.00
 ## Profile geometry
 shape= ASTM_materials.HSSShape(steel,'HSS10X6X3/16')
-xcSection= shape.defElasticShearSection2d(preprocessor,steel)
+xcSection= shape.defElasticShearSection2d(preprocessor)
 
 # Model geometry
 
