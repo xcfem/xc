@@ -289,24 +289,29 @@ class RecordLoadCaseDisp(RecordDisp):
       preprocessor=FEcase.getPreprocessor
       labl=self.loadCaseName
       lcs=QGrph.LoadCaseResults(FEcase)
+      modelSpace= predefined_spaces.getModelSpaceFromPreprocessor(preprocessor)
+      modelSpace.removeAllLoadPatternsFromDomain()
+      modelSpace.addNewLoadCaseToDomain(self.loadCaseName,self.loadCaseExpr)
       for st in self.setsToDispLoads:
           grfname=pathGr+self.loadCaseName+st.name
-          capt= self.getDescription() + ', ' + st.description + ', '  + self.unitsLoads
+          capt= self.getDescription() + ' pattern. ' + st.description + ', '  + self.unitsLoads
           jpegFileName= grfname+'.jpg'
           lcs.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)
           epsFileName= grfname+'.eps'
           im= Image.open(jpegFileName)
           im.save(epsFileName)
-          insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=cfg.grWidth,capText=capt,labl=labl) 
-      for st in self.setsToDispBeamLoads:
-          grfname=pathGr+self.loadCaseName+st.name
-          capt=self.getDescription() + ', ' + st.description + ', '  + self.unitsLoads
-          jpegFileName= grfname+'.jpg'
-          lcs.displayLoads(elLoadComp=self.compElLoad,setToDisplay=st,caption= capt,fileName=jpegFileName)
-          epsFileName= grfname+'.eps'
-          im= Image.open(jpegFileName)
-          im.save(epsFileName)
-          insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=cfg.grWidth,capText=capt,labl=labl) 
+          insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
+
+    # for st in self.setsToDispBeamLoads:
+    #       grfname=pathGr+self.loadCaseName+st.name
+    #       capt=self.getDescription() + ', ' + st.description + ', '  + self.unitsLoads
+    #       jpegFileName= grfname+'.jpg'
+    #       lcs.displayLoads(elLoadComp=self.compElLoad,setToDisplay=st,caption= capt,fileName=jpegFileName)
+    #       epsFileName= grfname+'.eps'
+    #       im= Image.open(jpegFileName)
+    #       im.save(epsFileName)
+    #       insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=cfg.grWidth,capText=capt,labl=labl) 
+
 
   def simplLCReports(self,FEproblem,pathGr,texFile,cfg):
       '''Creates the graphics files of displacements and internal forces 
