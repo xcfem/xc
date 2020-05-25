@@ -368,6 +368,14 @@ class PredefinedSpace(object):
         '''
         extrapolate_elem_attr.extrapolate_elem_data_to_nodes(setToCompute.getElements,propToDefine,self.getValuesAtNodes, argument= propToDefine, initialValue= xc.Vector([0.0,0.0,0.0,0.0,0.0,0.0]))
 
+    def getDisplacementFileHeader(self):
+        ''' Return the string header for the file with the displacements.'''
+        retval= ' Comb., Node'
+        dispLabels= self.getDisplacementComponentsLabels()
+        for dl in dispLabels:
+            retval+= ', '+dl
+        return retval
+
 def getModelSpace(preprocessor):
       '''Return a PredefinedSpace from the dimension of the space 
        and the number of DOFs for each node obtained from the preprocessor.
@@ -378,7 +386,6 @@ def getModelSpace(preprocessor):
       dimSpace= nodes.dimSpace
       numDOFs= nodes.numDOFs
       return PredefinedSpace(nodes,dimSpace,numDOFs)
-  
 
 class SolidMechanics2D(PredefinedSpace):
     def __init__(self,nodes):
@@ -396,6 +403,11 @@ class SolidMechanics2D(PredefinedSpace):
         self.sigma_11= 0 # Stress components
         self.sigma_22= 1
         self.sigma_12= 2
+
+    def getDisplacementComponentsLabels(self):
+        ''' Return a list with the labels of the
+            displacement components.'''
+        return ['uX', 'uY']
         
     def getDispComponentFromName(self,compName):
         '''Return the component index from the
@@ -575,6 +587,11 @@ class StructuralMechanics2D(StructuralMechanics):
         self.N= 0 # generalized stress components; axial,
         self.M= 1 # bending,
         self.Q= 2 # shear.
+
+    def getDisplacementComponentsLabels(self):
+        ''' Return a list with the labels of the
+            displacement components.'''
+        return ['uX', 'uY', 'rotZ']
         
     def getDispComponentFromName(self,compName):
         '''Return the component index from the
@@ -756,6 +773,10 @@ class SolidMechanics3D(PredefinedSpace):
         self.sigma_23= 4
         self.sigma_13= 5
 
+    def getDisplacementComponentsLabels(self):
+        ''' Return a list with the labels of the
+            displacement components.'''
+        return ['uX', 'uY', 'uZ']
         
     def getDispComponentFromName(self,compName):
         '''Return the component index from the
@@ -893,6 +914,11 @@ class StructuralMechanics3D(StructuralMechanics):
         self.Vz= 4 # shear along z-axis.
         self.T= 5 # torsion along x-axis.
         
+    def getDisplacementComponentsLabels(self):
+        ''' Return a list with the labels of the
+            displacement components.'''
+        return ['uX', 'uY', 'uZ', 'rotX', 'rotY', 'rotZ']
+    
     def getDispComponentFromName(self,compName):
         '''Return the component index from the
            displacement name.'''

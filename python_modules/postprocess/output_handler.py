@@ -263,7 +263,6 @@ class OutputHandler(object):
 
         captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
         self.displayScalarPropertyAtNodes(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
-
         
     def displayReactions(self,setToDisplay=None,fileName=None,defFScale=0.0):
         ''' Display reactions.
