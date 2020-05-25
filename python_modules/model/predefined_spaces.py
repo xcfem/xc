@@ -368,6 +368,14 @@ class PredefinedSpace(object):
         '''
         extrapolate_elem_attr.extrapolate_elem_data_to_nodes(setToCompute.getElements,propToDefine,self.getValuesAtNodes, argument= propToDefine, initialValue= xc.Vector([0.0,0.0,0.0,0.0,0.0,0.0]))
 
+    def getDisplacementFileHeader(self):
+        ''' Return the string header for the file with the displacements.'''
+        retval= ' Comb., Node'
+        dispLabels= self.getDisplacementComponentsLabels()
+        for dl in dispLabels:
+            retval+= ', '+dl
+        return retval
+
 def getModelSpace(preprocessor):
       '''Return a PredefinedSpace from the dimension of the space 
        and the number of DOFs for each node obtained from the preprocessor.
@@ -378,7 +386,6 @@ def getModelSpace(preprocessor):
       dimSpace= nodes.dimSpace
       numDOFs= nodes.numDOFs
       return PredefinedSpace(nodes,dimSpace,numDOFs)
-  
 
 class SolidMechanics2D(PredefinedSpace):
     def __init__(self,nodes):
@@ -396,6 +403,11 @@ class SolidMechanics2D(PredefinedSpace):
         self.sigma_11= 0 # Stress components
         self.sigma_22= 1
         self.sigma_12= 2
+
+    def getDisplacementComponentsLabels(self):
+        ''' Return a list with the labels of the
+            displacement components.'''
+        return ['uX', 'uY']
         
     def getDispComponentFromName(self,compName):
         '''Return the component index from the
@@ -483,7 +495,82 @@ def gdls_elasticidad2D(nodes):
     lmsg.warning('gdls_elasticidad2D DEPRECATED; use SolidMechanics2D.')
     return SolidMechanics2D(nodes)
 
-class StructuralMechanics2D(PredefinedSpace):
+class StructuralMechanics(PredefinedSpace):
+    '''Structural mechanics finite element problem.'''
+    def __init__(self,nodes,dimSpace,numDOFs):
+        '''Defines the dimension of the space: nodes by two coordinates (x,y) 
+         and three DOF for each node (Ux,Uy,theta)
+
+         :param nodes: preprocessor nodes handler
+         :param dimSpace: dimension of the space (1, 2 or 3)
+         :param numDOFs: number of degrees of freedom for each node.
+        '''
+        super(StructuralMechanics,self).__init__(nodes,dimSpace,numDOFs)
+            
+    def createTrusses(self, xcSet, material, area, sectionGeometry= None, corotational= False):
+        ''' Meshes the lines of the set argument with Truss
+            elements.
+
+        :param xcSet: set with the lines to mesh.
+        :param material: material to assign to the elements.
+        :param area: area to assign to the elements.
+        :param sectionGeometry: object that defines the geometry of the element section.
+        :param corotational: if true, use corotational formulation.
+        '''
+        elementType= 'Truss'
+        if(corotational):
+            elementType= 'CorotTruss'
+        numDOFs= self.preprocessor.getNodeHandler.numDOFs
+        dimElem= self.preprocessor.getNodeHandler.dimSpace
+        seedElemHandler= self.preprocessor.getElementHandler.seedElemHandler
+        seedElemHandler.defaultMaterial= material.name
+        seedElemHandler.dimElem= dimElem
+        for l in xcSet.getLines:
+            l.nDiv= 1
+            l.setProp('material',material)
+            l.setProp('area',area)
+            elem= seedElemHandler.newElement(elementType,xc.ID([0,0]))
+            elem.sectionArea= area
+            l.genMesh(xc.meshDir.I)
+            if(sectionGeometry):
+                for e in l.getElements:
+                    e.setProp('sectionGeometry',sectionGeometry)
+        xcSet.fillDownwards()
+
+    def createElasticBeams(self, xcSet, xcSection, trf, xzVector= None, sectionGeometry= None):
+        ''' Meshes the lines of the set argument with ElasticBeam3d
+            elements.
+
+        :param xcSet: set with the lines to mesh.
+        :param xcSection: XC section to assign to the elements.
+        :param trf: coordinate transformation to assign to the elements.
+        :param xzVector: vector defining transformation XZ plane.
+        :param sectionGeometry: object that defines the geometry of the element section.
+        '''
+        numDOFs= self.preprocessor.getNodeHandler.numDOFs
+        if(numDOFs==3):
+            elementType= 'ElasticBeam2d'
+        elif(numDOFs==6):
+            elementType= 'ElasticBeam3d'
+        else:
+            lmsg.error('Something went wrong; numDOFs= '+str(numDOFs))
+        seedElemHandler= self.preprocessor.getElementHandler.seedElemHandler
+        seedElemHandler.defaultMaterial= xcSection.getName()
+        for l in xcSet.getLines:
+            if(xzVector):
+                trf.xzVector= xzVector
+            else:
+                v3d= l.getKVector
+                trf.xzVector= xc.Vector([v3d.x, v3d.y, v3d.z])
+            elem= seedElemHandler.newElement(elementType,xc.ID([0,0]))
+            l.genMesh(xc.meshDir.I)
+            if(sectionGeometry):
+                for e in l.getElements:
+                    e.setProp('sectionGeometry',sectionGeometry)
+        xcSet.fillDownwards()
+
+        
+class StructuralMechanics2D(StructuralMechanics):
     def __init__(self,nodes):
         '''Defines the dimension of the space: nodes by two coordinates (x,y) 
          and three DOF for each node (Ux,Uy,theta)
@@ -500,6 +587,11 @@ class StructuralMechanics2D(PredefinedSpace):
         self.N= 0 # generalized stress components; axial,
         self.M= 1 # bending,
         self.Q= 2 # shear.
+
+    def getDisplacementComponentsLabels(self):
+        ''' Return a list with the labels of the
+            displacement components.'''
+        return ['uX', 'uY', 'rotZ']
         
     def getDispComponentFromName(self,compName):
         '''Return the component index from the
@@ -637,26 +729,6 @@ class StructuralMechanics2D(PredefinedSpace):
             nodeTag= line.getNodeI(i).tag
             self.fixNode000(nodeTag)
             
-    def createTrusses(self, xcSet, material, area):
-        ''' Meshes the lines of the set argument with Truss
-            elements.
-
-        :param xcSet: set with the lines to mesh.
-        :param material: material to assign to the elements.
-        :param area: area to assign to the elements.
-        '''
-        seedElemHandler= self.preprocessor.getElementHandler.seedElemHandler
-        seedElemHandler.defaultMaterial= material.name
-        seedElemHandler.dimElem= 2
-        for l in xcSet.getLines:
-            l.nDiv= 1
-            l.setProp('material',material)
-            l.setProp('area',area)
-            elem= seedElemHandler.newElement("Truss",xc.ID([0,0]))
-            elem.sectionArea= area
-            l.genMesh(xc.meshDir.I)
-        xcSet.fillDownwards()
-            
 
 def getStructuralMechanics2DSpace(preprocessor):
     '''Return a PredefinedSpace from the dimension of the space 
@@ -701,6 +773,10 @@ class SolidMechanics3D(PredefinedSpace):
         self.sigma_23= 4
         self.sigma_13= 5
 
+    def getDisplacementComponentsLabels(self):
+        ''' Return a list with the labels of the
+            displacement components.'''
+        return ['uX', 'uY', 'uZ']
         
     def getDispComponentFromName(self,compName):
         '''Return the component index from the
@@ -811,7 +887,7 @@ def gdls_elasticidad3D(nodes):
     return SolidMechanics3D(nodes)
 
 
-class StructuralMechanics3D(PredefinedSpace):
+class StructuralMechanics3D(StructuralMechanics):
     def __init__(self,nodes):
         '''Define the dimension of the space: nodes by three coordinates (x,y,z) 
         and six DOF for each node (Ux,Uy,Uz,thetaX,thetaY,thetaZ)
@@ -838,6 +914,11 @@ class StructuralMechanics3D(PredefinedSpace):
         self.Vz= 4 # shear along z-axis.
         self.T= 5 # torsion along x-axis.
         
+    def getDisplacementComponentsLabels(self):
+        ''' Return a list with the labels of the
+            displacement components.'''
+        return ['uX', 'uY', 'uZ', 'rotX', 'rotY', 'rotZ']
+    
     def getDispComponentFromName(self,compName):
         '''Return the component index from the
            displacement name.'''
@@ -1148,54 +1229,6 @@ class StructuralMechanics3D(PredefinedSpace):
                 if(constrCond[i] <> 'free'):
                     self.constraints.newSPConstraint(n.tag,i,constrCond[i])
                     
-    def createElasticBeams(self, xcSet, xcSection, trf, xzVector= None, sectionGeometry= None):
-        ''' Meshes the lines of the set argument with ElasticBeam3d
-            elements.
-
-        :param xcSet: set with the lines to mesh.
-        :param xcSection: XC section to assign to the elements.
-        :param trf: coordinate transformation to assign to the elements.
-        :param xzVector: vector defining transformation XZ plane.
-        :param sectionGeometry: object that defines the geometry of the element section.
-        '''
-        seedElemHandler= self.preprocessor.getElementHandler.seedElemHandler
-        seedElemHandler.defaultMaterial= xcSection.getName()
-        for l in xcSet.getLines:
-            if(xzVector):
-                trf.xzVector= xzVector
-            else:
-                v3d= l.getKVector
-                trf.xzVector= xc.Vector([v3d.x, v3d.y, v3d.z])
-            elem= seedElemHandler.newElement("ElasticBeam3d",xc.ID([0,0]))
-            l.genMesh(xc.meshDir.I)
-            if(sectionGeometry):
-                for e in l.getElements:
-                    e.setProp('sectionGeometry',sectionGeometry)
-        xcSet.fillDownwards()
-                    
-    def createTrusses(self, xcSet, material, area, sectionGeometry= None):
-        ''' Meshes the lines of the set argument with Truss
-            elements.
-
-        :param xcSet: set with the lines to mesh.
-        :param material: material to assign to the elements.
-        :param area: area to assign to the elements.
-        :param sectionGeometry: object that defines the geometry of the element section.
-        '''
-        seedElemHandler= self.preprocessor.getElementHandler.seedElemHandler
-        seedElemHandler.defaultMaterial= material.name
-        seedElemHandler.dimElem= 3
-        for l in xcSet.getLines:
-            l.nDiv= 1
-            l.setProp('material',material)
-            l.setProp('area',area)
-            elem= seedElemHandler.newElement("Truss",xc.ID([0,0]))
-            elem.sectionArea= area
-            l.genMesh(xc.meshDir.I)
-            if(sectionGeometry):
-                for e in l.getElements:
-                    e.setProp('sectionGeometry',sectionGeometry)
-        xcSet.fillDownwards()
                     
     def setHugeBeamBetweenNodes(self,nodeTagA, nodeTagB, nmbTransf):
         '''

@@ -263,7 +263,6 @@ class OutputHandler(object):
 
         captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
         self.displayScalarPropertyAtNodes(propertyName, unitConversionFactor, unitDescription, captionText, setToDisplay, fileName, defFScale, rgMinMax)
-
         
     def displayReactions(self,setToDisplay=None,fileName=None,defFScale=0.0):
         ''' Display reactions.
@@ -716,9 +715,9 @@ class OutputHandler(object):
             setToDisplay= beamSetDispRes
         if not caption:
             if hasattr(beamSetDispRes,'description'):
-                descrSet=beamSetDispRes.description.capitalize()
-            else:
-                descrSet=''
+                descrSet= beamSetDispRes.description.capitalize()
+            if(len(descrSet)==0): # No description provided.
+                descrSet= beamSetDispRes.name
             caption= attributeName + ', ' + itemToDisp +' '+unitDescription+ '. '+ descrSet
         diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[beamSetDispRes],attributeName= attributeName,component= itemToDisp)
         diagram.addDiagram()

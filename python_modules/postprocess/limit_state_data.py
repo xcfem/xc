@@ -10,7 +10,6 @@ import pickle
 import os
 from solution import predefined_solutions
 from postprocess.reports import export_internal_forces as eif
-from postprocess.reports import export_displacements as edisp
 from misc_utils import log_messages as lmsg
 from materials.sections import internal_forces
 from collections import defaultdict
@@ -86,6 +85,36 @@ class LimitStateData(object):
         if(os.path.exists(fNameIntForc)):
             retval= os.path.getmtime(fNameIntForc)
         return retval
+
+    def createOutputFiles(self):
+        ''' Create the internal forces and displacement output files.'''
+        self.envConfig.projectDirTree.createTree()
+        self.fNameIntForc= self.getInternalForcesFileName()
+        self.fNameDispl= self.getDisplacementsFileName()
+        os.system("rm -f " + self.fNameIntForc) #Clear obsolete files.
+        os.system("rm -f " + self.fNameDispl)
+        fDisp= open(self.fNameDispl,"w")
+        fDisp.write('Comb., Node, uX, uY, uZ, rotX, rotY , rotZ\n')
+        fDisp.close()
+
+    def writeDisplacements(self, combNm, nodSet):
+        '''Writes the resuls of displacements in a load combination 
+           and set of nodes given as parameters 
+
+        :param combNM: name of the load combination
+        :param nodSet: set of nodes
+        '''
+        fDisp= open(self.fNameDispl,"a")
+        for n in nodSet:
+            strDisp= str(n.getDisp).rstrip().replace(' ',', ') #displacement vector [ux,uy,uz,rotx,roty,rotz]
+            fDisp.write(combNm+", "+str(n.tag)+", " + strDisp+'\n')
+        fDisp.close()
+
+    def writeInternalForces(self, internalForcesDict):
+        '''Write the internal forces results.'''
+        with open(self.fNameIntForc, 'w') as outfile:
+            json.dump(internalForcesDict, outfile)
+        outfile.close()
         
     def saveAll(self,combContainer,setCalc,fConvIntForc= 1.0,analysisToPerform= defaultAnalysis,lstSteelBeams=None):
         '''Write internal forces, displacements, .., for each combination
@@ -108,14 +137,7 @@ class LimitStateData(object):
         loadCombinations= self.dumpCombinations(combContainer,loadCombinations)
         elemSet= setCalc.elements
         nodSet= setCalc.nodes
-        self.envConfig.projectDirTree.createTree()
-        fNameIntForc= self.getInternalForcesFileName()
-        fNameDispl= self.getDisplacementsFileName()
-        os.system("rm -f " + fNameIntForc) #Clear obsolete files.
-        os.system("rm -f " + fNameDispl)
-        fDisp= open(fNameDispl,"a")
-        fDisp.write(" Comb. , Node , Ux , Uy , Uz , ROTx , ROTy , ROTz \n")
-        fDisp.close()
+        self.createOutputFiles()
         internalForcesDict= dict()
         for key in loadCombinations.getKeys():
             comb= loadCombinations[key]
@@ -127,14 +149,10 @@ class LimitStateData(object):
                 for sb in lstSteelBeams:
                     sb.updateReductionFactors()
             #Writing results.
-            fDisp= open(fNameDispl,"a")
             internalForcesDict.update(eif.getInternalForcesDict(comb.getName,elemSet))
-            edisp.exportDisplacements(comb.getName,nodSet,fDisp)
-            fDisp.close()
+            self.writeDisplacements(comb.getName,nodSet)
             comb.removeFromDomain() #Remove combination from the model.
-        with open(fNameIntForc, 'w') as outfile:
-            json.dump(internalForcesDict, outfile)
-        outfile.close()
+        self.writeInternalForces(internalForcesDict)
 #20181117
     def runChecking(self,outputCfg):
         '''This method reads, for the elements in setCalc,  the internal 
