@@ -165,7 +165,7 @@ class PhantomModel(object):
         #Load case definition
         mapCombs= {}
         for comb in self.idCombs:
-            mapCombs[comb]= casos.newLoadPattern("default",comb)
+            mapCombs[comb]= casos.newLoadPattern("default",str(comb))
 
         for key in self.internalForcesValues:
             internalForcesElem= self.internalForcesValues[key]
