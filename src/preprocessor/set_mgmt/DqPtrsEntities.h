@@ -66,6 +66,7 @@ class DqPtrsEntities: public DqPtrs<T>
     void intersect(const DqPtrsEntities<T> &other);
 
     T *searchName(const std::string &nmb);
+    T *findTag(const size_t &);
     T *getNearest(const Pos3d &p);
     const T *getNearest(const Pos3d &p) const;
     DqPtrsEntities<T> pickEntitiesInside(const GeomObj3d &, const double &tol= 0.0) const;
@@ -81,7 +82,16 @@ T *DqPtrsEntities<T>::searchName(const std::string &nmb)
       if((*i)->getName()==nmb) return *i;
     return nullptr;
   }
-
+  
+//! @brief Returns a pointer to the object identified by the tag argument.
+template <class T>
+T *DqPtrsEntities<T>::findTag(const size_t &tag)
+  {
+    for(const_iterator i= this->begin();i!=this->end();i++)
+      if((*i)->getTag()==tag) return *i;
+    return nullptr;
+  }
+  
 //! @brief Returns the object closest to the position being passed as parameter.
 template <class T>
 T *DqPtrsEntities<T>::getNearest(const Pos3d &p)

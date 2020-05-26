@@ -157,6 +157,7 @@ class_<dq_ptrs_pnt, bases<CommandEntity>, boost::noncopyable >("dq_ptrs_pnt",no_
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_pnt::indBegin, &dq_ptrs_pnt::indEnd))
   .def("at",make_function(&dq_ptrs_pnt::get, return_internal_reference<>() ), "Access specified point with bounds checking.")
   .def("__getitem__",make_function(&dq_ptrs_pnt::get, return_internal_reference<>() ), "Access specified point with bounds checking.")
+  .def("findTag",make_function(&dq_ptrs_pnt::findTag, return_internal_reference<>() ),"Returns the point identified by the tag argument.")
   .def("clear",&dq_ptrs_pnt::clear,"Removes all items.")
    ;
 
@@ -169,6 +170,7 @@ class_<XC::SetEntities::lst_ptr_points, bases<dq_ptrs_pnt>>("lstPnts",no_init)
   .def("pickPointsInside",&XC::SetEntities::lst_ptr_points::pickEntitiesInside,"pickPointsInside(geomObj,tol) return the nodes inside the geometric object.") 
   .def("getBnd", &XC::SetEntities::lst_ptr_points::Bnd, "Return points boundary.")
   .def("getNearest",make_function(getNearestPnt, return_internal_reference<>() ),"Return the nearest point to the position argument.")
+  .def("findTag",make_function(&XC::SetEntities::lst_ptr_points::findTag, return_internal_reference<>() ),"Returns the point identified by the tag argument.")
    ;
 
 typedef XC::DqPtrs<XC::Edge> dq_line_ptrs;
@@ -179,6 +181,7 @@ class_<dq_line_ptrs, bases<CommandEntity>, boost::noncopyable >("dq_line_ptrs",n
   .def("__len__",&dq_line_ptrs::size, "Return container size.")
   .def("at",make_function(&dq_line_ptrs::get, return_internal_reference<>() ), "Access specified line with bounds checking.")
   .def("__getitem__",make_function(&dq_line_ptrs::get, return_internal_reference<>() ), "Access specified line with bounds checking.")
+  .def("findTag",make_function(&dq_line_ptrs::findTag, return_internal_reference<>() ),"Returns the edge identified by the tag argument.")
   .def("clear",&dq_line_ptrs::clear,"Removes all items.")
    ;
 
@@ -187,6 +190,7 @@ class_<XC::SetEntities::lst_line_pointers, bases<dq_line_ptrs>>("lstLines",no_in
   .def("pushFront", &XC::SetEntities::lst_line_pointers::push_front,"Push line at the beginning of the list.")
   .def("pickLinesInside",&XC::SetEntities::lst_line_pointers::pickEntitiesInside,"pickLinesInside(geomObj,tol) return the nodes inside the geometric object.") 
   .def("getBnd", &XC::SetEntities::lst_line_pointers::Bnd, "Returns lines boundary.")
+  .def("findTag",make_function(&XC::SetEntities::lst_line_pointers::findTag, return_internal_reference<>() ),"Returns the line identified by the tag argument.")
    ;
 
 typedef XC::DqPtrs<XC::Face> dq_ptrs_surfaces;
@@ -194,6 +198,7 @@ class_<dq_ptrs_surfaces, bases<CommandEntity>, boost::noncopyable >("dq_ptrs_sur
   .def("__iter__", range<return_internal_reference<> >(&dq_ptrs_surfaces::indBegin, &dq_ptrs_surfaces::indEnd))
   .def("at",make_function(&dq_ptrs_surfaces::get, return_internal_reference<>() ), "Access specified surface with bounds checking.")
   .def("__getitem__",make_function(&dq_ptrs_surfaces::get, return_internal_reference<>() ), "Access specified surface with bounds checking.")
+  .def("findTag",make_function(&dq_ptrs_surfaces::findTag, return_internal_reference<>() ),"Returns the surface identified by the tag argument.")
   .def("clear",&dq_ptrs_surfaces::clear,"Removes all items.")
    ;
 
@@ -204,6 +209,7 @@ class_<XC::SetEntities::lst_surface_ptrs, bases<dq_ptrs_surfaces> >("lstSurfaces
   .def("__len__",&XC::SetEntities::lst_surface_ptrs::size, "Returns list size.")
   .def("pickSurfacesInside",&XC::SetEntities::lst_surface_ptrs::pickEntitiesInside,"pickSurfacesInside(geomObj,tol) return the nodes inside the geometric object.") 
   .def("getBnd", &XC::SetEntities::lst_surface_ptrs::Bnd, "Returns surfaces boundary.")
+  .def("findTag",make_function(&XC::SetEntities::lst_surface_ptrs::findTag, return_internal_reference<>() ),"Returns the surface identified by the tag argument.")
    ;
 
 typedef XC::DqPtrs<XC::Body> dq_body_ptrs;
@@ -211,6 +217,7 @@ class_<dq_body_ptrs, bases<CommandEntity>, boost::noncopyable >("dq_body_ptrs",n
   .def("__iter__", range<return_internal_reference<> >(&dq_body_ptrs::indBegin, &dq_body_ptrs::indEnd))
   .def("at",make_function(&dq_body_ptrs::get, return_internal_reference<>() ), "Access specified body with bounds checking.")
   .def("__getitem__",make_function(&dq_body_ptrs::get, return_internal_reference<>() ), "Access specified body with bounds checking.")
+  .def("findTag",make_function(&dq_body_ptrs::findTag, return_internal_reference<>() ),"Returns the body identified by the tag argument.")
   .def("clear",&dq_body_ptrs::clear,"Removes all items.")
    ;
 
@@ -221,6 +228,7 @@ class_<XC::SetEntities::lst_body_pointers, bases<dq_body_ptrs> >("lstBodies",no_
   .def("__len__",&XC::SetEntities::lst_body_pointers::size, "Returns list size.")
   .def("pickBodiesInside",&XC::SetEntities::lst_body_pointers::pickEntitiesInside,"pickBodiesInside(geomObj,tol) return the nodes inside the geometric object.") 
   .def("getBnd", &XC::SetEntities::lst_body_pointers::Bnd, "Returns bodies boundary.")
+  .def("findTag",make_function(&XC::SetEntities::lst_body_pointers::findTag, return_internal_reference<>() ),"Returns the body identified by the tag argument.")
    ;
 
 XC::Pnt *(XC::SetEntities::*getNearestPoint)(const Pos3d &)= &XC::SetEntities::getNearestPoint;

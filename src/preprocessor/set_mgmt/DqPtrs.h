@@ -98,6 +98,7 @@ class DqPtrs: public CommandEntity, protected std::deque<T *>
     //void sort_on_prop(const std::string &cod,const bool &ascending= true);
 
     const ID &getTags(void) const;
+    T *findTag(const size_t &);
     template <class InputIterator>
     void insert(iterator pos, InputIterator f, InputIterator l)
       { lst_ptr::insert(pos,f,l); }
@@ -267,7 +268,17 @@ const ID &DqPtrs<T>::getTags(void) const
       }
     return retval;
   }
+  
+//! @brief Returns a pointer to the object identified by the tag argument.
+template <class T>
+T *DqPtrs<T>::findTag(const size_t &tag)
+  {
+    for(const_iterator i= this->begin();i!=this->end();i++)
+      if((*i)->getTag()==tag) return *i;
+    return nullptr;
+  }
 
+  
 //! @brief Sends the dbTags of the sets trough the communicator argument.
 template <class T>
 int DqPtrs<T>::sendTags(int posSz,int posDbTag,DbTagData &dt,Communicator &comm)
