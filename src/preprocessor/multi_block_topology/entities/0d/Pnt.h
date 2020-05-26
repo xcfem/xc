@@ -92,6 +92,8 @@ class Pnt: public EntMdlr
     //! @brief Return the list of the lines that begin or end at the point.
     const std::set<const Edge *> &getConnectedEdges(void) const
       { return lines_pt; }
+    boost::python::list getConnectedEdgesTags(void) const;
+
     //! @brief Return the number of connected edges.
     const size_t getNLines(void) const
       { return getConnectedEdges().size(); }

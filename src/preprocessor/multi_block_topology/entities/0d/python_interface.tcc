@@ -29,4 +29,5 @@ class_<XC::Pnt, XC::Pnt *, bases<XC::EntMdlr>, boost::noncopyable >("Pnt", no_in
   .add_property("getTagNode",&XC::Pnt::getTagNode,"Returns node's tag.")
   .def("getNode",make_function(getNodePnt, return_internal_reference<>() ),"Returns point's node.")
   .add_property("getNLines",&XC::Pnt::getNLines,"Returns number of lines that touch the point.")
+  .add_property("getConnectedEdgesTags",&XC::Pnt::getConnectedEdgesTags,"Returns the lines connected to the point.")
    ;

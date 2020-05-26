@@ -94,6 +94,21 @@ void XC::Pnt::update_topology(void)
 BND3d XC::Pnt::Bnd(void) const
   { return BND3d(p,p);  }
 
+boost::python::list XC::Pnt::getConnectedEdgesTags(void) const
+  {
+    boost::python::list retval;
+    if(!lines_pt.empty())
+      {
+        std::set<const Edge *>::const_iterator i= lines_pt.begin();
+        for(;i!=lines_pt.end();i++)
+          {
+            const Edge *l= *i;
+            retval.append(l->getTag());
+          }
+      }
+    return retval;
+  }
+
 //! @brief Return the lines that start o finish in this point.
 std::set<const XC::Edge *> XC::Pnt::getEdgesThatEndOnThisPoint(void) const
   {
