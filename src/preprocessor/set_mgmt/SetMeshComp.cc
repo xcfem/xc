@@ -479,8 +479,11 @@ void XC::SetMeshComp::fillDownwards(void)
 //! or more of the objects that already are in the set.
 void XC::SetMeshComp::fillUpwards(void)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; implementation pending." << std::endl;
+    const size_t numNodes= nodes.size();
+    const size_t numElements= elements.size();
+    if((numNodes>0) || (numElements>0))
+      std::cerr << getClassName() << "::" << __FUNCTION__
+                << "; implementation pending." << std::endl;
   }
 
 //! @brief Select the nodes identified by the tags being passed as parameters.

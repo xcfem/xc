@@ -238,8 +238,6 @@ void XC::SetEntities::fillDownwards(SetMeshComp &mc)
 //! to one or more of the objects that already make part of the set.
 void XC::SetEntities::fillUpwards(const SetMeshComp &mc)
   {
-    std::cerr << getClassName() << "::" << __FUNCTION__
-              << "; work in progress." << std::endl;
     for(pnt_iterator i=points.begin();i!=points.end();i++)
       {
         std::set<const Edge *> ll= getConnectedLines(**i);
@@ -251,11 +249,12 @@ void XC::SetEntities::fillUpwards(const SetMeshComp &mc)
         lst_surface_ptrs ss(getConnectedSurfaces(**i));
         surfaces.insert_unique(surfaces.end(),ss.begin(),ss.end());
       }
-//     for(lst_surfaces::iterator i=surfaces.begin();i!=surfaces.end();i++)
-//       {
-//         lst_bodies bb= getConnectedBodies(**i);
-//         bodies.insert_unique(bodies.end(),bb.begin(),bb.end());
-//       }
+    for(lst_surface_ptrs::const_iterator i= surfaces.begin();i!=surfaces.end();i++)
+      {
+        const std::set<const Body *> &cb= (*i)->getConnectedBodies();
+        for(std::set<const Body *>::const_iterator j= cb.begin();j!=cb.end();j++)
+          bodies.push_back(const_cast<Body *>(*j));
+      }
   }
 
 //! @brief Moves the objects of the set.
