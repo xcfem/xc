@@ -447,7 +447,8 @@ XC::edge_intersection_pairs XC::SetEntities::getLineIntersections(const double &
       {
 	const Edge &line= **i;
 	const std::deque<Segment3d> edgeSegments= line.getSegments();
-	segments.insert(segments.end(), edgeSegments.begin(),edgeSegments.end());     }
+	segments.insert(segments.end(), edgeSegments.begin(),edgeSegments.end());
+      }
     int_pair_deque intersections= getIntersections(segments);
     for(int_pair_deque::const_iterator i= intersections.begin();i!=intersections.end();i++)
       {
