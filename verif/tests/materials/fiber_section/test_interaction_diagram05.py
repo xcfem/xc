@@ -21,20 +21,21 @@ import math
 radius= 0.75/2.0 # Cross-section radius expressed in meters.
 rebarDiam= 20e-3 # Bar diameter expressed in meters.
 cover= 0.06+12e-3+rebarDiam/2.0 # Concrete cover expressed in meters.
-areaFi20= math.pi*(rebarDiam/2.0)**2 # Rebar area expressed in square meters.
+rebarArea= math.pi*(rebarDiam/2.0)**2 # Rebar area expressed in square meters.
 
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 # Materials definition
 concr= EHE_materials.HA30
-concr.alfacc=0.85    #f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)
+concr.alfacc=0.85 #f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)
 steel= EHE_materials.B500S
 concrDiagram= concr.defDiagD(preprocessor)
 Ec= concrDiagram.getTangent
 steelDiagram= steel.defDiagD(preprocessor)
 Es= steelDiagram.getTangent
 
+# Concrete region
 pileGeometry= preprocessor.getMaterialHandler.newSectionGeometry("pileGeometry")
 regions= pileGeometry.getRegions
 concrete= regions.newCircularRegion(concrDiagram.name)
@@ -45,26 +46,30 @@ concrete.intRad= 0.0
 concrete.initAngle= 0.0
 concrete.finalAngle= 2*math.pi
 
+# Reinforcement
 reinforcement= pileGeometry.getReinfLayers
-reinforcement= reinforcement.newCircReinfLayer(steel.nmbDiagD)
+reinforcement= reinforcement.newCircReinfLayer(steelDiagram.name)
 reinforcement.numReinfBars= 14
-reinforcement.barArea= areaFi20
+reinforcement.barArea= rebarArea
 reinforcement.initAngle= 0.0
 reinforcement.finalAngle= 2*math.pi
 reinforcement.radius= concrete.extRad-cover
 
+# Fiber section definition
 materialHandler= preprocessor.getMaterialHandler
 secHA= materialHandler.newMaterial("fiber_section_3d","secHA")
 fiberSectionRepr= secHA.getFiberSectionRepr()
 fiberSectionRepr.setGeomNamed("pileGeometry")
 secHA.setupFibers()
-fibras= secHA.getFibers()
+fibers= secHA.getFibers()
 
+# Create interaction diagram.
 param= xc.InteractionDiagramParameters()
-param.concreteTag= EHE_materials.HA30.matTagD
-param.reinforcementTag= steel.matTagD
-diagIntsecHA= materialHandler.calcInteractionDiagram("secHA",param)
+param.concreteTag= concrDiagram.tag
+param.reinforcementTag= steelDiagram.tag
+diagIntsecHA= materialHandler.calcInteractionDiagram(secHA.name,param)
 
+# Compute capacity factors.
 fc1= diagIntsecHA.getCapacityFactor(geom.Pos3d(1850e3,0,0))
 fc2= diagIntsecHA.getCapacityFactor(geom.Pos3d(-152e3,530e3,0))
 fc3= diagIntsecHA.getCapacityFactor(geom.Pos3d(-152e3,0,590e3))
