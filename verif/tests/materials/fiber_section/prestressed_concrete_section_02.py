@@ -6,7 +6,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com ana.ortega.ort@gmal.com"
 
-areaCordones= 140e-6 # Strands area expressed in square meters.
+strandsArea= 140e-6 # Strands area expressed in square meters.
 areaFiLong= 0.5e-4 # Fi8 longitudinal reinforcement area expressed in square meters.
 def gmSecHP02(nmbGeomSecc,concrDiagName,reinfSteelDiagramName,prestressingSteelDiagramName):
   # Concrete
@@ -57,25 +57,25 @@ def gmSecHP02(nmbGeomSecc,concrDiagName,reinfSteelDiagramName,prestressingSteelD
   # active reinforcement
   rebarLayer= reinforcement.newStraightReinfLayer(prestressingSteelDiagramName)
   rebarLayer.numReinfBars= 13 # Bottom flange; bottom active reinforcement.
-  rebarLayer.barArea= areaCordones
+  rebarLayer.barArea= strandsArea
   rebarLayer.p1= geom.Pos2d(-0.773,-0.31) 
   rebarLayer.p2= geom.Pos2d(-0.773,0.31)
 
   rebarLayer= reinforcement.newStraightReinfLayer(prestressingSteelDiagramName)
   rebarLayer.numReinfBars= 13 # Bottom flange; intermediate active reinforcement.
-  rebarLayer.barArea= areaCordones
+  rebarLayer.barArea= strandsArea
   rebarLayer.p1= geom.Pos2d(-0.713,-0.31) 
   rebarLayer.p2= geom.Pos2d(-0.713,0.31)
 
   rebarLayer= reinforcement.newStraightReinfLayer(prestressingSteelDiagramName)
   rebarLayer.numReinfBars= 7
-  rebarLayer.barArea= areaCordones
+  rebarLayer.barArea= strandsArea
   rebarLayer.p1= geom.Pos2d(-0.653,-0.155) # Bottom flange; top active reinforcement.
   rebarLayer.p2= geom.Pos2d(-0.653,0.155)
 
   rebarLayer= reinforcement.newStraightReinfLayer(prestressingSteelDiagramName)
   rebarLayer.numReinfBars= 3
-  rebarLayer.barArea= areaCordones
+  rebarLayer.barArea= strandsArea
   rebarLayer.p1= geom.Pos2d(0.797,-0.478) # Top flange; active reinforcement.
   rebarLayer.p2= geom.Pos2d(0.797,0.478)
 

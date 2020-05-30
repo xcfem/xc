@@ -422,8 +422,8 @@ python tests/materials/geom_section/test_segment_01.py
 python tests/materials/geom_section/test_circular_region_01.py
 python tests/materials/geom_section/test_quad_region_01.py
 python tests/materials/geom_section/test_quad_region_02.py
-python tests/materials/geom_section/test_rg_arco_corona_circular_01.py
-python tests/materials/geom_section/test_rg_arco_corona_circular_02.py
+python tests/materials/geom_section/test_annular_sector_rg_01.py
+python tests/materials/geom_section/test_annular_sector_rg_02.py
 python tests/materials/geom_section/test_mass_properties_01.py
 python tests/materials/geom_section/test_mass_properties_02.py
 python tests/materials/geom_section/test_mass_properties_03.py

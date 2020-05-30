@@ -9,7 +9,7 @@ __email__= "l.pereztato@gmail.com"
 width= 0.2 # Section width expressed in meters.
 depth= 0.4 # Section width expressed in meters.
 cover= 0.05 # Concrete cover expressed in meters.
-areaCordones= 140e-6 # Área de los cordones expressed in square meters.
+strandsArea= 140e-6 # Área de los cordones expressed in square meters.
 
 def gmSecHP01(nmbGeomSecc,concrDiagName,prestressingSteelDiagramName):
   # Concrete
@@ -24,13 +24,13 @@ def gmSecHP01(nmbGeomSecc,concrDiagName,prestressingSteelDiagramName):
   reinforcement= geomSecc.getReinfLayers
   reinforcementInf= reinforcement.newStraightReinfLayer(prestressingSteelDiagramName)
   reinforcementInf.numReinfBars= 2
-  reinforcementInf.barArea= areaCordones
+  reinforcementInf.barArea= strandsArea
   reinforcementInf.p1= geom.Pos2d(cover-depth/2.0,cover-width/2.0)
   reinforcementInf.p2= geom.Pos2d(cover-depth/2.0,width/2.0-cover)
   reinforcementSup= reinforcement.newStraightReinfLayer(prestressingSteelDiagramName)
   reinforcementSup.numReinfBars= 2
   reinforcementSup.barDiam= 16e-3
-  reinforcementSup.barArea= areaCordones
+  reinforcementSup.barArea= strandsArea
   reinforcementSup.p1= geom.Pos2d(depth/2.0-cover,cover-width/2.0)
   reinforcementSup.p2= geom.Pos2d(depth/2.0-cover,width/2.0-cover)
   return geomSecc

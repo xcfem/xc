@@ -13,7 +13,7 @@ depth= 0.4, # Section depth expressed in meters.
 cover= 0.05, # Concrete cover expressed in meters.
 nIJ= 11, # Number of division in the IJ direction.
 nJK= 11, # Number of division in the JK direction.
-areaCordones= 140e-6, # Strands area expressed in square meters.
+strandsArea= 140e-6, # Strands area expressed in square meters.
 diamBarra= 16e-3, # Diameter of the bars expressed in meters.
 areaBarra= 2.01e-4 # Rebars area expressed in square meters.
   )

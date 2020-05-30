@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import division
+from __future__ import print_function
+
 import xc_base
 import geom
 import xc
@@ -17,25 +20,17 @@ cos45= math.cos(math.radians(45))
 sin45= cos45
 
 feProblem= xc.FEProblem()
-preprocessor=  feProblem.getPreprocessor
+preprocessor= feProblem.getPreprocessor
 
 points= preprocessor.getMultiBlockTopology.getPoints
-pt= points.newPntIDPos3d(1,geom.Pos3d(R,0.0,0.0))
-points.newPntFromPos3d(geom.Pos3d((R*cos45),(R*sin45),0.0))
-points.newPntFromPos3d(geom.Pos3d(0.0,R,0.0))
+ptA= points.newPntFromPos3d(geom.Pos3d(R,0.0,0.0))
+ptB= points.newPntFromPos3d(geom.Pos3d((R*cos45),(R*sin45),0.0))
+ptC= points.newPntFromPos3d(geom.Pos3d(0.0,R,0.0))
 
 lines= preprocessor.getMultiBlockTopology.getLines
-lines.defaultTag= 1
-l= lines.newCircleArc(1,2,3)
+l= lines.newCircleArc(ptA.tag,ptB.tag,ptC.tag)
 angc= l.getAngle()
 length= l.getLength()
-
-        # \arco_circunf[1]
-        #   {
-        #     \p1{1} \p2{3} \p3{2}
-        #     angc= getAngComp
-        #     length= length
-        #   }
 
 
 angteor= math.pi/2.0
@@ -43,15 +38,15 @@ ratio1= (angteor/angc)
 lteor= 2*math.pi*R/4.0
 ratio2= (lteor/length)
 
-# print "Included angle: ",math.degrees(angc)
-# print "theoretical included angle: ",math.degrees(angteor)
-# print "Arc length: ",length
-# print "Theorethical length: ",lteor
+# print("Included angle: ",math.degrees(angc))
+# print("theoretical included angle: ",math.degrees(angteor))
+# print("Arc length: ",length)
+# print("Theorethical length: ",lteor)
 
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1-1.0)<1e-5) and (abs(ratio2-1.0)<1e-5):
-  print "test ",fname,": ok."
+  print("test "+fname+": ok.")
 else:
   lmsg.error(fname+' ERROR.')
 
