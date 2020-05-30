@@ -514,6 +514,7 @@ python tests/materials/ec2/test_smearedCracking_03.py
 python tests/materials/ec2/test_smearedCracking_04.py
 python tests/materials/ec2/test_smearedCracking_05.py
 python tests/materials/ec2/test_smearedCracking_06.py
+python tests/materials/ec2/test_ec2_interaction_diagram.py
 echo "$BLEU" "    SIA 262 tests." "$NORMAL"
 python tests/materials/sia262/sia262_concrete_01.py
 python tests/materials/sia262/shear_01.py
