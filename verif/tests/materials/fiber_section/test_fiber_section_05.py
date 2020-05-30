@@ -38,14 +38,14 @@ pth= os.path.dirname(__file__)
 if(not pth):
   pth= "."
 #print "pth= ", pth
-execfile(pth+"/geomSeccBarras.py")
+execfile(pth+"/barsSectionGeometry.py")
 
-secBarras= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","secBarras")
-fiberSectionRepr= secBarras.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed("geomSecBarras")
-secBarras.setupFibers()
+barsSection= preprocessor.getMaterialHandler.newMaterial("fiber_section_3d","barsSection")
+fiberSectionRepr= barsSection.getFiberSectionRepr()
+fiberSectionRepr.setGeomNamed("barsSectionGeometry")
+barsSection.setupFibers()
 
-scc3d_testing_bench.sectionModel(preprocessor, "secBarras")
+scc3d_testing_bench.sectionModel(preprocessor, "barsSection")
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)

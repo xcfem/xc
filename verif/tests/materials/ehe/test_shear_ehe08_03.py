@@ -17,8 +17,8 @@ __email__= "l.pereztato@gmail.com"
 
 gammas= 1.15 #Partial safety factor for steel.
 
-numBarrasEstribo= 4
-areaShReinfBranchsEstribo= numBarrasEstribo*EHE_materials.Fi6
+stirrupRebarNumber= 4
+areaShReinfBranchsEstribo= stirrupRebarNumber*EHE_materials.Fi6
 sepEstribos= 0.2
 AsTrsv= areaShReinfBranchsEstribo/sepEstribos
 z= 0.9*0.55

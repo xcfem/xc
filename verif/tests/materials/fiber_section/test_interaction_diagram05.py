@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 ''' Checks the computation of the interaction diagram.
-   Home made. '''
+   Home made test.'''
 from __future__ import division
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AOO)"
 __copyright__= "Copyright 2015, LCPT and AOO"
@@ -74,20 +75,20 @@ ratio3= abs(fc3-1.0)
 ratio4= abs(fc4-1.0)
 
 ''' 
-print "fc1= ",fc1
-print "ratio1= ",ratio1
-print "fc2= ",fc2
-print "ratio2= ",ratio2
-print "fc3= ",fc3
-print "ratio3= ",ratio3
-print "fc4= ",fc4
-print "ratio4= ",ratio4
+print("fc1= ",fc1)
+print("ratio1= ",ratio1)
+print("fc2= ",fc2)
+print("ratio2= ",ratio2)
+print("fc3= ",fc3)
+print("ratio3= ",ratio3)
+print("fc4= ",fc4)
+print("ratio4= ",ratio4)
  '''
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if((abs(ratio1)<1e-2) & (abs(ratio2)<1e-2) & (abs(ratio3)<1e-2) & (abs(ratio4)<1e-2)):
-  print "test ",fname,": ok."
+  print("test "+fname+": ok.")
 else:
   lmsg.error(fname+' ERROR.')

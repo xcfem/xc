@@ -28,16 +28,16 @@ __email__= "l.pereztato@gmail.com"
 width= 0.3 # Section width expressed in meters.
 depth= 0.4 # Section depth expressed in meters.
 cover= 0.05 # Concrete cover expressed in meters.
-areaBarra=4e-4
+rebarArea=4e-4
 
 NDato= -400e3 # Axial force for shear checking.
 MyDato= 1e5 # Bending moment for shear checking.
 MzDato= 1e3 # Bending moment for shear checking.
 
-numBarras= 3
+numOfRebars= 3
 
 ''' 
-print "numBarras= ",numBarras
+print "numOfRebars= ",numOfRebars
    '''
 
 feProblem= xc.FEProblem()
@@ -62,13 +62,13 @@ rg.pMin= geom.Pos2d(-width/2.0,-depth/2.0)
 rg.pMax= geom.Pos2d(width/2.0,depth/2.0)
 reinforcement= geomSecHA.getReinfLayers
 reinforcementInf= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
-reinforcementInf.numReinfBars= numBarras
-reinforcementInf.barArea= areaBarra
+reinforcementInf.numReinfBars= numOfRebars
+reinforcementInf.barArea= rebarArea
 reinforcementInf.p1= geom.Pos2d(cover-width/2.0,cover-depth/2.0) # bottom layer.
 reinforcementInf.p2= geom.Pos2d(width/2.0-cover,cover-depth/2.0)
 reinforcementSup= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
-reinforcementSup.numReinfBars= numBarras
-reinforcementSup.barArea= areaBarra
+reinforcementSup.numReinfBars= numOfRebars
+reinforcementSup.barArea= rebarArea
 reinforcementSup.p1= geom.Pos2d(cover-width/2.0,depth/2.0-cover) # top layer.
 reinforcementSup.p2= geom.Pos2d(width/2.0-cover,depth/2.0-cover)
 

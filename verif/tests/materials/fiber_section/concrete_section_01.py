@@ -14,8 +14,8 @@ cover= 0.05, # Concrete cover expressed in meters.
 nIJ= 11, # Number of division in the IJ direction.
 nJK= 11, # Number of division in the JK direction.
 strandsArea= 140e-6, # Strands area expressed in square meters.
-diamBarra= 16e-3, # Diameter of the bars expressed in meters.
-areaBarra= 2.01e-4 # Rebars area expressed in square meters.
+rebarDiameter= 16e-3, # Diameter of the bars expressed in meters.
+rebarArea= 2.01e-4 # Rebars area expressed in square meters.
   )
 
 def gmSecHA01(nmbGeomSecc,defSec,concrDiagName,reinfSteelDiagramName):
@@ -30,13 +30,13 @@ def gmSecHA01(nmbGeomSecc,defSec,concrDiagName,reinfSteelDiagramName):
   reinforcementInf= reinforcement.newStraightReinfLayer(reinfSteelDiagramName)
   reinforcementInf.numReinfBars= 2
   reinforcementInf.barDiam= 16e-3
-  reinforcementInf.barArea= defSec['areaBarra']
+  reinforcementInf.barArea= defSec['rebarArea']
   reinforcementInf.p1= geom.Pos2d(defSec['cover']-defSec['depth']/2.0,defSec['cover']-defSec['width']/2.0) # bottom layer.
   reinforcementInf.p2= geom.Pos2d(defSec['cover']-defSec['depth']/2.0,defSec['width']/2.0-defSec['cover'])
   reinforcementSup= reinforcement.newStraightReinfLayer(reinfSteelDiagramName)
   reinforcementSup.numReinfBars= 2
   reinforcementSup.barDiam= 16e-3
-  reinforcementSup.barArea= defSec['areaBarra']
+  reinforcementSup.barArea= defSec['rebarArea']
   reinforcementSup.p1= geom.Pos2d(defSec['depth']/2.0-defSec['cover'],defSec['cover']-defSec['width']/2.0) # top layer.
   reinforcementSup.p2= geom.Pos2d(defSec['depth']/2.0-defSec['cover'],defSec['width']/2.0-defSec['cover'])
   return geomSecc

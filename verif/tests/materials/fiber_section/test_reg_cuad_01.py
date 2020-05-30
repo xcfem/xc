@@ -50,13 +50,13 @@ steelRegion.pMin= geom.Pos2d(y0-y1,z0-z1)
 steelRegion.pMax= geom.Pos2d(y0+y1,z0+z1)
 
 '''
-print "num. regions: ",numRegions
-print "num. capas armado: ",numReinfLayers 
-print "num. barras armado: ",getNumReinfBars
-print "num. teselas: ",numCells
+print "num. of regions: ",numRegions
+print "num. of reinforcement layers: ",numReinfLayers 
+print "num. of reinforcement bars: ",getNumReinfBars
+print "num. of cells: ",numCells
 for_each_region
   print "  REGION "
-  print "num. teselas: ",numCells
+  print "num. cells: ",numCells
 '''
            
 materialHandler= preprocessor.getMaterialHandler

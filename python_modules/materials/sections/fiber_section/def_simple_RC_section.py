@@ -104,7 +104,7 @@ class MainReinfLayer(object):
             self.reinfLayer= reinforcement.newStraightReinfLayer(nmbDiagram)
             self.reinfLayer.codigo= code
             self.reinfLayer.numReinfBars= self.nRebars
-            #print "reinforcement ", cod, " num. barras: ", self.reinfLayer.numReinfBars
+            #print "reinforcement ", cod, " num. of bars: ", self.reinfLayer.numReinfBars
             self.reinfLayer.barDiameter= self.rebarsDiam
             self.reinfLayer.barArea= self.areaRebar
             #print "reinforcement", cod, " bar area= ", self.reinfLayer.barArea*1e6, " mm2"

@@ -98,8 +98,8 @@ elements= preprocessor.getElementHandler
 elem1= elements.getElement(1)
 
 elem1.getResistingForce()
-N1= elem1.getN1 # Axil en el extremo dorsal de la barra
-N2= elem1.getN2 # Axil en el extremo frontal de la barra
+N1= elem1.getN1 # Axial force at the back end.
+N2= elem1.getN2 # Axial force at the front end.
 
 
 

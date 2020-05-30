@@ -20,8 +20,8 @@ __email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
 def plotReinforcement(reinforcement, ctx):
     '''draw section rebars in a postcript file.'''
     for reinfLayer in reinforcement:
-        barras= reinfLayer.getReinfBars
-        for b in barras:
+        rebars= reinfLayer.getReinfBars
+        for b in rebars:
             ptPlot= b.getPos2d
             rPlot= b.diameter/2.0
             labelPlot= str(int(round(b.diameter*1e3)))

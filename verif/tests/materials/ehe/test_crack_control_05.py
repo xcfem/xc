@@ -31,13 +31,13 @@ MyDato= -67*9810*width # Bending moment force for crack control checking.
 MzDato= 0 # Bending moment force for crack control checking.
 
 rebarsSpacing= 0.15
-numBarras= int(math.floor(width/rebarsSpacing))
-offsetBarras= ((width-(numBarras-1)*rebarsSpacing)/2.0)
+numOfRebars= int(math.floor(width/rebarsSpacing))
+rebarsOffset= ((width-(numOfRebars-1)*rebarsSpacing)/2.0)
 
 ''' 
 print "rebarsSpacing= ",rebarsSpacing
-print "numBarras= ",numBarras
-print "offsetBarras= ",offsetBarras
+print "numOfRebars= ",numOfRebars
+print "rebarsOffset= ",rebarsOffset
    '''
 
 feProblem= xc.FEProblem()
@@ -55,15 +55,15 @@ concrete.pMin= geom.Pos2d(-width/2.0,-depth/2.0)
 concrete.pMax= geom.Pos2d(width/2.0,depth/2.0)
 reinforcement= geomSecHA.getReinfLayers
 reinforcementInf= reinforcement.newStraightReinfLayer(EHE_materials.B400S.nmbDiagK)
-reinforcementInf.numReinfBars= numBarras
+reinforcementInf.numReinfBars= numOfRebars
 reinforcementInf.barArea= areaFi25
-reinforcementInf.p1= geom.Pos2d(offsetBarras-width/2.0,cover-depth/2.0)
-reinforcementInf.p2= geom.Pos2d(width/2.0-offsetBarras,cover-depth/2.0)
+reinforcementInf.p1= geom.Pos2d(rebarsOffset-width/2.0,cover-depth/2.0)
+reinforcementInf.p2= geom.Pos2d(width/2.0-rebarsOffset,cover-depth/2.0)
 reinforcementSup= reinforcement.newStraightReinfLayer(EHE_materials.B400S.nmbDiagK)
-reinforcementSup.numReinfBars= numBarras
+reinforcementSup.numReinfBars= numOfRebars
 reinforcementSup.barArea= areaFi10
-reinforcementSup.p1= geom.Pos2d(offsetBarras-width/2.0,depth/2.0-cover)
-reinforcementSup.p2= geom.Pos2d(width/2.0-offsetBarras,depth/2.0-cover)
+reinforcementSup.p1= geom.Pos2d(rebarsOffset-width/2.0,depth/2.0-cover)
+reinforcementSup.p2= geom.Pos2d(width/2.0-rebarsOffset,depth/2.0-cover)
 
 materialHandler= preprocessor.getMaterialHandler
 secHA= materialHandler.newMaterial("fiber_section_3d","secHA")

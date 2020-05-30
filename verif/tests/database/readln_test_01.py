@@ -20,7 +20,7 @@ dbName= "/tmp/pilares.db"
 tbName= "esfPilares"
 os.system("rm -f " + dbName)
 sqlite_macros.SQLTcreaDBase(dbName)
-import_Ansys_beam_intforces.ansysToEsfBarra(fNameIn,dbName,tbName)
+import_Ansys_beam_intforces.ansysToBarInternalForces(fNameIn,dbName,tbName)
 
 idElem= 0.0
 nmbAccion= ""

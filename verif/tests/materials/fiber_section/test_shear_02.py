@@ -37,8 +37,8 @@ MzDato= 0        # Moment value when checking shear.
 VDato= 125e3     # Shear value.
 
 # Longitudinal reinforcement
-areaBarra= EHE_materials.Fi20
-numBarras= 3
+rebarArea= EHE_materials.Fi20
+numOfRebars= 3
 
 # Transverse reinforcement
 diamATrsv= 6e-3
@@ -73,13 +73,13 @@ rg.pMin= geom.Pos2d(-width/2.0,-depth/2.0)
 rg.pMax= geom.Pos2d(width/2.0,depth/2.0)
 reinforcement= geomSecHA.getReinfLayers
 reinforcementInf= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
-reinforcementInf.numReinfBars= numBarras
-reinforcementInf.barArea= areaBarra
+reinforcementInf.numReinfBars= numOfRebars
+reinforcementInf.barArea= rebarArea
 reinforcementInf.p1= geom.Pos2d(cover-width/2.0,cover-depth/2.0) # bottom layer.
 reinforcementInf.p2= geom.Pos2d(width/2.0-cover,cover-depth/2.0)
 reinforcementSup= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
-reinforcementSup.numReinfBars= numBarras
-reinforcementSup.barArea= areaBarra
+reinforcementSup.numReinfBars= numOfRebars
+reinforcementSup.barArea= rebarArea
 reinforcementSup.p1= geom.Pos2d(cover-width/2.0,depth/2.0-cover) # top layer.
 reinforcementSup.p2= geom.Pos2d(width/2.0-cover,depth/2.0-cover)
 

@@ -88,8 +88,8 @@ delta= nod2.getDisp[0]  # Node 2 xAxis displacement
 elements= preprocessor.getElementHandler
 elem1= elements.getElement(1)
 elem1.getResistingForce()
-N1= elem1.getN1 # Axil en el extremo dorsal de la barra
-N2= elem1.getN2 # Axil en el extremo frontal de la barra
+N1= elem1.getN1 # axial force at the back end.
+N2= elem1.getN2 # axial force at the front end.
 
 
 

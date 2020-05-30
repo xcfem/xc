@@ -35,14 +35,14 @@ NDato= 0 # Axial force for crack control checking.
 MyDato= -195.3*9810 # Bending moment force for crack control checking.
 MzDato= 0 # Bending moment force for crack control checking.
 
-numBarras= 16
-rebarsSpacing= ((width-2*cover)/(numBarras-1))
-offsetBarras= ((width-(numBarras-1)*rebarsSpacing)/2)
+numOfRebars= 16
+rebarsSpacing= ((width-2*cover)/(numOfRebars-1))
+rebarsOffset= ((width-(numOfRebars-1)*rebarsSpacing)/2)
 
 ''' 
 print "rebarsSpacing= ",rebarsSpacing
-print "numBarras= ",numBarras
-print "offsetBarras= ",offsetBarras
+print "numOfRebars= ",numOfRebars
+print "rebarsOffset= ",rebarsOffset
    '''
 
 feProblem= xc.FEProblem()
@@ -60,12 +60,12 @@ concrete.pMin= geom.Pos2d(-width/2.0,-depth/2.0)
 concrete.pMax= geom.Pos2d(width/2.0,depth/2.0)
 reinforcement= geomSecHA.getReinfLayers
 reinforcementA= reinforcement.newStraightReinfLayer(EHE_materials.B400S.nmbDiagK)
-reinforcementA.numReinfBars= numBarras/2
+reinforcementA.numReinfBars= numOfRebars/2
 reinforcementA.barArea= areaFi20
 reinforcementA.p1= geom.Pos2d(cover-width/2.0,cover-depth/2.0)
 reinforcementA.p2= geom.Pos2d(width/2.0-cover-rebarsSpacing,cover-depth/2.0)
 reinforcementB= reinforcement.newStraightReinfLayer(EHE_materials.B400S.nmbDiagK)
-reinforcementB.numReinfBars= numBarras/2
+reinforcementB.numReinfBars= numOfRebars/2
 reinforcementB.barArea= areaFi32
 reinforcementB.p1= geom.Pos2d(cover+rebarsSpacing-width/2.0,cover-depth/2.0)
 reinforcementB.p2= geom.Pos2d(width/2.0-cover,cover-depth/2.0)
