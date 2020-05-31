@@ -36,7 +36,7 @@ concrete.alfacc=0.85    # f_maxd= 0.85*fcd concrete long term compressive streng
 
 reinfSteel= EHE_materials.B500S
 
-sccData=def_simple_RC_section.RecordRCSimpleSection()
+sccData=def_simple_RC_section.RCSimpleSection()
 sccData.sectionName= "sccData"
 sccData.sectionDescr= "Prueba."
 sccData.concrType= concrete

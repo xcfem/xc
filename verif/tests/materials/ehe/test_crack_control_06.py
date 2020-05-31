@@ -19,7 +19,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-datosScc1LosC= def_simple_RC_section.RecordRCSimpleSection()
+datosScc1LosC= def_simple_RC_section.RCSimpleSection()
 datosScc1LosC.sectionName= "secHA1LosC"
 datosScc1LosC.sectionDescr= "Losa. Central portion. Section normal to X axis."
 datosScc1LosC.concrType= EHE_materials.HA25

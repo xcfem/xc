@@ -32,7 +32,7 @@ nlegs_m=3 # number of legs on each direction
 diam_cercos=12
 sep_long=250
 pierStirrups=[diam_cercos,nlegs_m,sep_long]
-piersRCSects=rcs.RecordRCSlabBeamSection(name='piersRCSects',sectionDescr='piers',concrType=concrete, reinfSteelType=reinfSteel,width=lRectEqPier,depth=lRectEqPier,elemSetName='piers')
+piersRCSects=rcs.RCSlabBeamSection(name='piersRCSects',sectionDescr='piers',concrType=concrete, reinfSteelType=reinfSteel,width=lRectEqPier,depth=lRectEqPier,elemSetName='piers')
 
 piersRCSects.dir1PositvRebarRows=[rcs.rebLayer_mm(pierLongReinf[0],pierLongReinf[1],nomCover)]
 piersRCSects.dir1NegatvRebarRows=[rcs.rebLayer_mm(pierLongReinf[0],pierLongReinf[1],nomCover)]

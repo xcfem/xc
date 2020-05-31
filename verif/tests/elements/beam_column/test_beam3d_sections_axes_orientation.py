@@ -86,11 +86,11 @@ sections= reinfConcreteSectionDistribution.sectionDefinition #creates an RC sect
 fi10s75r30=def_simple_RC_section.MainReinfLayer(rebarsDiam=10e-3,areaRebar= areaFi10,rebarsSpacing=0.075,width=0.25,nominalCover=0.030)
 fi16s75r30=def_simple_RC_section.MainReinfLayer(rebarsDiam=16e-3,areaRebar= areaFi16,rebarsSpacing=0.075,width=0.25,nominalCover=0.030)
 
-#instances of def_simple_RC_section.RecordRCSlabBeamSection that defines the
+#instances of def_simple_RC_section.RCSlabBeamSection that defines the
 #variables that make up THE TWO reinforced concrete sections in the two
 #reinforcement directions of a slab or the front and back ending sections
 #of a beam element
-beamRCsect=def_simple_RC_section.RecordRCSlabBeamSection(name='beamRCsect',sectionDescr='beam section',concrType=concrete, reinfSteelType=reinfSteel,width=wbeam,depth=hbeam)
+beamRCsect=def_simple_RC_section.RCSlabBeamSection(name='beamRCsect',sectionDescr='beam section',concrType=concrete, reinfSteelType=reinfSteel,width=wbeam,depth=hbeam)
 beamRCsect.dir1PositvRebarRows=[fi10s75r30]
 beamRCsect.dir1NegatvRebarRows=[fi16s75r30]
 beamRCsect.dir2PositvRebarRows=[fi10s75r30]

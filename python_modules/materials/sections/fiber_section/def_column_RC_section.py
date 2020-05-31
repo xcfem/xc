@@ -34,7 +34,7 @@ class ColumnMainReinforcement(object):
         self.areaRebarDepth= EHE_materials.Fi10 
 
 
-class RecordRCColumnSection(def_simple_RC_section.BasicRecordRectangularRCSection):
+class RCColumnSection(def_simple_RC_section.BasicRectangularRCSection):
     '''Definition of the variables that make up a reinforced concrete section 
     with reinforcement symmetric in both directions (as usual in columns)
 
@@ -64,7 +64,7 @@ class RecordRCColumnSection(def_simple_RC_section.BasicRecordRectangularRCSectio
     '''
 
     def __init__(self):
-      super(RecordRCColumnSection,self).__init__()
+      super(RCColumnSection,self).__init__()
       self.mainBars= ColumnMainReinforcement()
 
     def defGeomRCColumnSection(self,matDiagType):
