@@ -18,32 +18,33 @@ from misc_utils import log_messages as lmsg
 import shutil
 
 
-diamPilas=1.0
-lRectEqPila=round(math.pi**0.5*diamPilas/2.,3)
+piersDiameter=1.0
+# Equivalent rectangular section
+lRectEqPier=round(math.pi**0.5*piersDiameter/2.,3)
 concrete=EHE_materials.HA30
 reinfSteel= EHE_materials.B500S
-rnom=35 #recubrimiento nominal 
+nomCover=35 # nominal cover 
 
-#   ***Armadura  pilas***
-#Armadura longitudinal en cada cara de la pila
-lnPil=[16,50]  #armadura longitudinal en cada cara de la pila
-# Cercos
-nramas_m=3  #nº de ramas en cada dirección
+#   *** Pier reinforcement ***
+pierLongReinf=[16,50]  # Longitudinal reinforcement on each side of the pile.
+# Stirrups
+nlegs_m=3 # number of legs on each direction
 diam_cercos=12
 sep_long=250
-cercosPil=[diam_cercos,nramas_m,sep_long]
-pilasRCSects=rcs.RecordRCSlabBeamSection(name='pilasRCSects',sectionDescr='pilas',concrType=concrete, reinfSteelType=reinfSteel,width=lRectEqPila,depth=lRectEqPila,elemSetName='pilas')
+pierStirrups=[diam_cercos,nlegs_m,sep_long]
+piersRCSects=rcs.RecordRCSlabBeamSection(name='piersRCSects',sectionDescr='piers',concrType=concrete, reinfSteelType=reinfSteel,width=lRectEqPier,depth=lRectEqPier,elemSetName='piers')
 
-pilasRCSects.dir1PositvRebarRows=[rcs.rebLayer_mm(lnPil[0],lnPil[1],rnom)]
-pilasRCSects.dir1NegatvRebarRows=[rcs.rebLayer_mm(lnPil[0],lnPil[1],rnom)]
-pilasRCSects.dir2PositvRebarRows=[rcs.rebLayer_mm(lnPil[0],lnPil[1],rnom)]
-pilasRCSects.dir2NegatvRebarRows=[rcs.rebLayer_mm(lnPil[0],lnPil[1],rnom)]
+piersRCSects.dir1PositvRebarRows=[rcs.rebLayer_mm(pierLongReinf[0],pierLongReinf[1],nomCover)]
+piersRCSects.dir1NegatvRebarRows=[rcs.rebLayer_mm(pierLongReinf[0],pierLongReinf[1],nomCover)]
+piersRCSects.dir2PositvRebarRows=[rcs.rebLayer_mm(pierLongReinf[0],pierLongReinf[1],nomCover)]
+piersRCSects.dir2NegatvRebarRows=[rcs.rebLayer_mm(pierLongReinf[0],pierLongReinf[1],nomCover)]
 
-pilasRCSects.dir1ShReinfZ=rcs.RecordShearReinforcement(familyName= "sh",nShReinfBranches=cercosPil[1],areaShReinfBranch= math.pi*(cercosPil[0]*1e-3)**2/4.,shReinfSpacing=cercosPil[2]*1e-3,angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
-pilasRCSects.dir2ShReinfZ=rcs.RecordShearReinforcement(familyName= "sh",nShReinfBranches=cercosPil[1],areaShReinfBranch= math.pi*(cercosPil[0]*1e-3)**2/4.,shReinfSpacing=cercosPil[2]*1e-3,angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
+# Shear reinforcement.
+piersRCSects.dir1ShReinfZ=rcs.RecordShearReinforcement(familyName= "sh",nShReinfBranches=pierStirrups[1],areaShReinfBranch= math.pi*(pierStirrups[0]*1e-3)**2/4.,shReinfSpacing=pierStirrups[2]*1e-3,angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
+piersRCSects.dir2ShReinfZ=rcs.RecordShearReinforcement(familyName= "sh",nShReinfBranches=pierStirrups[1],areaShReinfBranch= math.pi*(pierStirrups[0]*1e-3)**2/4.,shReinfSpacing=pierStirrups[2]*1e-3,angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
 
-pilasRCSects.dir1ShReinfY=rcs.RecordShearReinforcement(familyName= "sh",nShReinfBranches=cercosPil[1],areaShReinfBranch= math.pi*(cercosPil[0]*1e-3)**2/4.,shReinfSpacing=cercosPil[2]*1e-3,angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
-pilasRCSects.dir2ShReinfY=rcs.RecordShearReinforcement(familyName= "sh",nShReinfBranches=cercosPil[1],areaShReinfBranch= math.pi*(cercosPil[0]*1e-3)**2/4.,shReinfSpacing=cercosPil[2]*1e-3,angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
+piersRCSects.dir1ShReinfY=rcs.RecordShearReinforcement(familyName= "sh",nShReinfBranches=pierStirrups[1],areaShReinfBranch= math.pi*(pierStirrups[0]*1e-3)**2/4.,shReinfSpacing=pierStirrups[2]*1e-3,angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
+piersRCSects.dir2ShReinfY=rcs.RecordShearReinforcement(familyName= "sh",nShReinfBranches=pierStirrups[1],areaShReinfBranch= math.pi*(pierStirrups[0]*1e-3)**2/4.,shReinfSpacing=pierStirrups[2]*1e-3,angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
 
 # All this is made only to allow the
 # creation of the RCMaterialDistribution
@@ -67,12 +68,12 @@ fakeElementSet= xcTotalSet.getElements
 # end of the fake stuff.
 
     
-#Store the section in the structure that the "phantom model" uses
+# Store the section in the structure that the "phantom model" uses
 reinfConcreteSectionDistribution= RC_material_distribution.RCMaterialDistribution()
 sections= reinfConcreteSectionDistribution.sectionDefinition #sections container
-pilasRCSects.creaTwoSections()    
-sections.append(pilasRCSects)
-reinfConcreteSectionDistribution.assign(fakeElementSet,setRCSects=pilasRCSects)
+piersRCSects.creaTwoSections()    
+sections.append(piersRCSects)
+reinfConcreteSectionDistribution.assign(fakeElementSet,setRCSects=piersRCSects)
 
 feProblem.clearAll() #Erase all the fake stuff
 
