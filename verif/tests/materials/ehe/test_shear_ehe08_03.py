@@ -15,7 +15,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-gammas= 1.15 #Partial safety factor for steel.
+gammas= 1.15 # Partial safety factor for steel.
 
 stirrupRebarNumber= 4
 areaShReinfBranchsEstribo= stirrupRebarNumber*EHE_materials.Fi6

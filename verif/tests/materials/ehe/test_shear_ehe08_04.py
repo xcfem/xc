@@ -16,24 +16,24 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-#Partial safety factors.
+# Partial safety factors.
 gammaC= 1.5
 
-#All values are fictional, they are used only to check
+# All values are fictional, they are used only to check
 #   that the expression is written correctly.
 
 Nd= 0
-Md= 0 #Absolute value of the design bending moment.
-Vd= 0 #Absolute value of effective design shear (clause 42.2.2).
-Td= 0 #Torque design value.
-z= 10 #Lever arm.
-AsPas= 1/4 #Area of passive longitudinal reinforcement anchored at a distance greater than the effective depth of the section.
-AsAct= 1/8 #Area of active (prestressed) longitudinal reinforcement anchored at a distance greater than the effective depth of the section.
-Es= 1000 #Elastic modulus of the steel de la reinforcement pasiva (AQUI FICTICIO).
-Ep= 2000 #Elastic modulus of the steel de la reinforcement activa (AQUI FICTICIO).
-Fp= 0 #Prestressing force in the cross-section (positive if in tension).
-Ae= 0.01 #Area enclosed by the mid-line of the effective hollow area.
-ue= 1 #Perimeter of the mid-line of the effective hollow area.
+Md= 0 # Absolute value of the design bending moment.
+Vd= 0 # Absolute value of effective design shear (clause 42.2.2).
+Td= 0 # Torque design value.
+z= 10 # Lever arm.
+AsPas= 1/4 # Area of passive longitudinal reinforcement anchored at a distance greater than the effective depth of the section.
+AsAct= 1/8 # Area of active (prestressed) longitudinal reinforcement anchored at a distance greater than the effective depth of the section.
+Es= 1000 # Elastic modulus of the steel de la reinforcement pasiva (AQUI FICTICIO).
+Ep= 2000 # Elastic modulus of the steel de la reinforcement activa (AQUI FICTICIO).
+Fp= 0 # Prestressing force in the cross-section (positive if in tension).
+Ae= 0.01 # Area enclosed by the mid-line of the effective hollow area.
+ue= 1 # Perimeter of the mid-line of the effective hollow area.
 
 Md= 10
 epsilonX01= EHE_limit_state_checking.getEpsilonXEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue)

@@ -16,20 +16,20 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-Nd= 1224e3 #Design axial internal force.
-Md= 0 #Bending moment design value
-Vd= 125e3 #Effective design shear (clause 42.2.2).
-Td= 0 #Torque design value.
-d= 0.55 #Effective depth.
-z= 0.9*d #Lever arm.
+Nd= 1224e3 # Design axial internal force.
+Md= 0 # Bending moment design value
+Vd= 125e3 # Effective design shear (clause 42.2.2).
+Td= 0 # Torque design value.
+d= 0.55 # Effective depth.
+z= 0.9*d # Lever arm.
 Asl= 9.425e-4
-AsAct= 0 #reinforcement area activa
-AsTrsv= math.pi*(6e-3/2)**2*4/0.2 #reinforcement area transversal
-Es= 200e9 #Elastic modulus of the steel de la reinforcement pasiva.
-Ep= Es #Elastic modulus of the steel de la reinforcement activa.
-Fp= 0 #Prestressing force on the cross-section (positive if in tension).
-Ae= 0.01 #Area enclosed by the mid-line of the effective hollow area.
-ue= 1 #Perimeter of the mid-line of the effective hollow area.
+AsAct= 0 # reinforcement area activa
+AsTrsv= math.pi*(6e-3/2)**2*4/0.2 # reinforcement area transversal
+Es= 200e9 # Elastic modulus of the steel de la reinforcement pasiva.
+Ep= Es # Elastic modulus of the steel de la reinforcement activa.
+Fp= 0 # Prestressing force on the cross-section (positive if in tension).
+Ae= 0.01 # Area enclosed by the mid-line of the effective hollow area.
+ue= 1 # Perimeter of the mid-line of the effective hollow area.
 epsilonX= EHE_limit_state_checking.getEpsilonXEHE08(Nd,Md,Vd,Td,z,Asl,AsAct,Es,Ep,Fp,Ae,ue)
 gammaC= 1.5
 gammaS= 1.15
@@ -52,18 +52,18 @@ ratio2= abs(Vcu-82.607e3)/82.607e3
 ratio3= abs(Vu1-1320e3)/1320e3
 ratio4= abs(Vsu-111.966e3)/111.966e3
 
-
-##print "Fcv= ",Fcv/1e6," MPa"
-##print "thetaE= ",math.degrees(thetaE)," grados"
-##print "beta= ",beta
-##print "Vcu= ",Vcu/1e3," kN"
-##print "Vsu= ",Vsu/1e3," kN"
-##print "Vu1= ",Vu1/1e3," kN"
-##print "ratio1= ",ratio1
-##print "ratio2= ",ratio2
-##print "ratio3= ",ratio3
-##print "ratio4= ",ratio4
-  
+'''
+print "Fcv= ",Fcv/1e6," MPa"
+print "thetaE= ",math.degrees(thetaE)," grados"
+print "beta= ",beta
+print "Vcu= ",Vcu/1e3," kN"
+print "Vsu= ",Vsu/1e3," kN"
+print "Vu1= ",Vu1/1e3," kN"
+print "ratio1= ",ratio1
+print "ratio2= ",ratio2
+print "ratio3= ",ratio3
+print "ratio4= ",ratio4
+'''
 
 import os
 from misc_utils import log_messages as lmsg

@@ -42,16 +42,17 @@ ratio3= abs((Vu2Min-349302)/349302)
 ratio4= abs((Vu2A-Vu2NoFis)/Vu2NoFis)
 ratio5= abs((Vu2B-Vu2SiFis)/Vu2SiFis)
 
-
-# print "fctd= ",fctd/1e6," MPa"
-# print "Vu2NoFis= ",Vu2NoFis/1e3," kN"
-# print "Vu2SiFis= ",Vu2SiFis/1e3," kN"
-# print "Vu2Min= ",Vu2Min/1e3," kN"
-# print "ratio1= ",ratio1
-# print "ratio2= ",ratio2
-# print "ratio3= ",ratio3
-# print "ratio4= ",ratio4
-# print "ratio5= ",ratio5
+'''
+print "fctd= ",fctd/1e6," MPa"
+print "Vu2NoFis= ",Vu2NoFis/1e3," kN"
+print "Vu2SiFis= ",Vu2SiFis/1e3," kN"
+print "Vu2Min= ",Vu2Min/1e3," kN"
+print "ratio1= ",ratio1
+print "ratio2= ",ratio2
+print "ratio3= ",ratio3
+print "ratio4= ",ratio4
+print "ratio5= ",ratio5
+'''
 
 import os
 from misc_utils import log_messages as lmsg
