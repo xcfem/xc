@@ -28,10 +28,11 @@ fyd= 500e6/gammas
 Vsu= EHE_limit_state_checking.getVsuEHE08(z,alpha,theta,AsTrsv,fyd)
 ratio1= abs(Vsu-111.966e3)/111.966e3
 
-##print "areaShReinfBranchsEstribo= ",AsTrsv*1e4," cm2"
-##print "Vsu= ",Vsu/1e3," kN"
-##print "ratio1= ",ratio1," kN"
-  
+'''
+print "areaShReinfBranchsEstribo= ",AsTrsv*1e4," cm2"
+print "Vsu= ",Vsu/1e3," kN"
+print "ratio1= ",ratio1," kN"
+'''  
 
 import os
 from misc_utils import log_messages as lmsg

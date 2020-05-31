@@ -47,9 +47,10 @@ def getVu1(fcd, Nd, Ac, b0, d, alpha, theta):
     :param Ac: concrete section total area.
     :param b0: net width of the element according to clause 40.3.5.
     :param d: effective depth.
-    :param alpha: angle between the shear rebars and the member axis (figure 44.2.3.1.a EHE).
-    :param theta: angle between the concrete compressed struts and the member axis (figure 44.2.3.1.a EHE).
-
+    :param alpha: angle between the shear rebars and the member 
+                  axis (figure 44.2.3.1.a EHE).
+    :param theta: angle between the concrete compressed struts and the member 
+                  axis (figure 44.2.3.1.a EHE).
     '''
     f1cd= 0.6*fcd
     sgpcd= (Nd/Ac)
