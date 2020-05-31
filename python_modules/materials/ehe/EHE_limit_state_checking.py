@@ -914,8 +914,8 @@ class ShearController(lscb.ShearControllerBase):
             scc= e.getSection()
             idSection= e.getProp("idSection")
             section= scc.getProp("datosSecc")
-            concreteCode= section.concrType
-            reinforcementCode= section.reinfSteelType
+            concreteCode= section.fiberSectionParameters.concrType
+            reinforcementCode= section.fiberSectionParameters.reinfSteelType
             self.AsTrsv= section.shReinfY.getAs()
             self.alpha= section.shReinfY.angAlphaShReinf
             self.theta= section.shReinfY.angThetaConcrStruts

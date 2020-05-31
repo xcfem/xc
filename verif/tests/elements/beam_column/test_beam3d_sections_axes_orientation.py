@@ -151,7 +151,7 @@ JElem= beamRCsect.lstRCSects[0].getJTorsion()
 # Iy:           second moment of area about the local y-axis 
 # J:            torsional moment of inertia of the section
 
-scc= typical_materials.defElasticSection3d(preprocessor=preprocessor, name="scc",A=beamRCsect.lstRCSects[0].getAc(),E=beamRCsect.lstRCSects[0].concrType.Ecm(),G=beamRCsect.lstRCSects[0].concrType.Gcm(),Iz=IzElem,Iy=IyElem,J=JElem)
+scc= typical_materials.defElasticSection3d(preprocessor=preprocessor, name="scc",A=beamRCsect.lstRCSects[0].getAc(),E=beamRCsect.lstRCSects[0].fiberSectionParameters.concrType.Ecm(),G=beamRCsect.lstRCSects[0].fiberSectionParameters.concrType.Gcm(),Iz=IzElem,Iy=IyElem,J=JElem)
 
 
 # Elements definition

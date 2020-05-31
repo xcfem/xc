@@ -29,150 +29,150 @@ class RCMaterialDistribution(object):
     mapSectionsFileName= './mapSectionsReinforcement.pkl'
 
     def __init__(self):
-      '''Constructor.
+        '''Constructor.
 
-      '''
-      # sectionDefinition: Container with the section definitions 
-      #                   (see RC_sections_container module).
-      self.sectionDefinition= sc.SectionContainer()
-      # sectionDistribution: dictionary that stores a section name(s)
-      #                      for each element number. This way it defines
-      #                      a spatial distribution of the sections over
-      #                      the structure.
-      self.sectionDistribution= element_section_map.ElementSectionMap()
-      self.elementSetNames= list() #Elements sets with an assigned section.
+        '''
+        # sectionDefinition: Container with the section definitions 
+        #                   (see RC_sections_container module).
+        self.sectionDefinition= sc.SectionContainer()
+        # sectionDistribution: dictionary that stores a section name(s)
+        #                      for each element number. This way it defines
+        #                      a spatial distribution of the sections over
+        #                      the structure.
+        self.sectionDistribution= element_section_map.ElementSectionMap()
+        self.elementSetNames= list() #Elements sets with an assigned section.
 
     def assign(self,elemSet,setRCSects):
-      '''Assigns the sections names: setRCSectsName+'1', setRCSectsName+'2', ...
-         to the elements of the set.
+        '''Assigns the sections names: setRCSectsName+'1', setRCSectsName+'2', ...
+           to the elements of the set.
 
-         :param elemSet: set of elements that receive the section name property.
-         :param setRCSects: RC section definition, name, concrete type,
-                            rebar positions,...
-      '''
-      self.sectionDistribution.assign(elemSet,setRCSects)
-      self.elementSetNames.append(elemSet.owner.name)
+           :param elemSet: set of elements that receive the section name property.
+           :param setRCSects: RC section definition, name, concrete type,
+                              rebar positions,...
+        '''
+        self.sectionDistribution.assign(elemSet,setRCSects)
+        self.elementSetNames.append(elemSet.owner.name)
 
     def getElementSet(self,preprocessor):
-      '''Returns an XC set that contains all the elements with an
-         assigned section.'''
-      retvalName= ''
-      for name in self.elementSetNames:
-          retvalName+= '|'+name
-      retval= preprocessor.getSets.defSet(retvalName)
-      sets= list()
-      for name in self.elementSetNames:
-          sets.append(preprocessor.getSets.getSet(name))
-      sUtils.append_sets(retval,sets)
-      return retval
+        '''Returns an XC set that contains all the elements with an
+           assigned section.'''
+        retvalName= ''
+        for name in self.elementSetNames:
+            retvalName+= '|'+name
+        retval= preprocessor.getSets.defSet(retvalName)
+        sets= list()
+        for name in self.elementSetNames:
+            sets.append(preprocessor.getSets.getSet(name))
+        sUtils.append_sets(retval,sets)
+        return retval
 
     def getSectionNamesForElement(self,tagElem):
-      '''Returns the section names for the element which tag is being passed
-         as a parameter.'''
-      if tagElem in self.sectionDistribution.keys():
-          return self.sectionDistribution[tagElem]
-      else:
-          lmsg.error("RCMaterialDistribution::getSectionNamesForElement; element with tag: "+str(tagElem)+" not found.")
-          return None
+        '''Returns the section names for the element which tag is being passed
+           as a parameter.'''
+        if tagElem in self.sectionDistribution.keys():
+            return self.sectionDistribution[tagElem]
+        else:
+            lmsg.error("RCMaterialDistribution::getSectionNamesForElement; element with tag: "+str(tagElem)+" not found.")
+            return None
 
     def getSectionDefinition(self,sectionName):
-      '''Returns the section definition which has the name being passed
-         as a parameter.''' 
-      return self.sectionDefinition[sectionName]
+        '''Returns the section definition which has the name being passed
+           as a parameter.''' 
+        return self.sectionDefinition[sectionName]
 
     def getSectionDefinitionsForElement(self,tagElem):
-      '''Returns the section names for the element which tag is being passed
-         as a parameter.'''
-      retval= []
-      sectionNames= self.getSectionNamesForElement(tagElem)
-      if(sectionNames):
-          for s in sectionNames:
-              retval.append(self.sectionDefinition.mapSections[s])
-      else:
-          lmsg.error("section names for element with tag: "+str(tagElem)+" not found.")
-      return retval
+        '''Returns the section names for the element which tag is being passed
+           as a parameter.'''
+        retval= []
+        sectionNames= self.getSectionNamesForElement(tagElem)
+        if(sectionNames):
+            for s in sectionNames:
+                retval.append(self.sectionDefinition.mapSections[s])
+        else:
+            lmsg.error("section names for element with tag: "+str(tagElem)+" not found.")
+        return retval
 
     def dump(self):
-      '''Writes this object in a pickle file.'''
-      with open(self.mapSectionsFileName, 'wb') as f:
-          pickle.dump(self, f, pickle.HIGHEST_PROTOCOL)
+        '''Writes this object in a pickle file.'''
+        with open(self.mapSectionsFileName, 'wb') as f:
+            pickle.dump(self, f, pickle.HIGHEST_PROTOCOL)
 
     def load(self):
-      '''Reads this object from a pickle file.'''
-      with open(self.mapSectionsFileName, 'rb') as f:
-          self.sectionDistribution= pickle.load(f)
-          self.sectionDefinition= pickle.load(f)
-      f.close()
+        '''Reads this object from a pickle file.'''
+        with open(self.mapSectionsFileName, 'rb') as f:
+            self.sectionDistribution= pickle.load(f)
+            self.sectionDefinition= pickle.load(f)
+        f.close()
 
     def runChecking(self,limitStateData,matDiagType,threeDim= True,outputCfg= lsd.VerifOutVars()):
-      '''Creates the phantom model and runs the verification on it.
+        '''Creates the phantom model and runs the verification on it.
 
-      :param limitStateData: object that contains the name of the file
-                             containing the internal forces 
-                             obtained for each element 
-                             for the combinations analyzed and the
-                             controller to use for the checking.
-      :param matDiagType: type of the material diagram (d: design, 
-             k: characteristic).
-      :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
-             false if it's 2D (Fx,Fy,Mz).
-      :param outputCfg: instance of class 'VerifOutVars' which defines the 
-                 variables that control the output of the checking (set of 
-                 elements to be analyzed, append or not the results to a file,
-                 generation or not of lists, ...)
-      '''
-      feProblem= xc.FEProblem()
-      preprocessor= feProblem.getPreprocessor
-      if 'straight' in str(limitStateData.controller).lower():
-           for s in self.sectionDefinition.sections:
-               s.concrType.initTensStiff='Y'
-      self.sectionDefinition.createRCsections(preprocessor,matDiagType) #creates
-                        #for each element in the container the fiber sections
-                        #(RCsimpleSections) associated with it.
-      if(threeDim):
-          self.sectionDefinition.calcInteractionDiagrams(preprocessor,matDiagType)
-      else:
-          self.sectionDefinition.calcInteractionDiagrams(preprocessor,matDiagType,'NMy')
-      limitStateData.controller.analysis= limitStateData.controller.analysisToPerform(feProblem)
-      phantomModel= phm.PhantomModel(preprocessor,self)
-      result= phantomModel.runChecking(limitStateData,outputCfg)
-      return (feProblem, result)
+        :param limitStateData: object that contains the name of the file
+                               containing the internal forces 
+                               obtained for each element 
+                               for the combinations analyzed and the
+                               controller to use for the checking.
+        :param matDiagType: type of the material diagram (d: design, 
+               k: characteristic).
+        :param threeDim: true if it's 3D (Fx,Fy,Fz,Mx,My,Mz) 
+               false if it's 2D (Fx,Fy,Mz).
+        :param outputCfg: instance of class 'VerifOutVars' which defines the 
+                   variables that control the output of the checking (set of 
+                   elements to be analyzed, append or not the results to a file,
+                   generation or not of lists, ...)
+        '''
+        feProblem= xc.FEProblem()
+        preprocessor= feProblem.getPreprocessor
+        if 'straight' in str(limitStateData.controller).lower():
+             for s in self.sectionDefinition.sections:
+                 s.fiberSectionParameters.concrType.initTensStiff='Y'
+        self.sectionDefinition.createRCsections(preprocessor,matDiagType) #creates
+                          #for each element in the container the fiber sections
+                          #(RCsimpleSections) associated with it.
+        if(threeDim):
+            self.sectionDefinition.calcInteractionDiagrams(preprocessor,matDiagType)
+        else:
+            self.sectionDefinition.calcInteractionDiagrams(preprocessor,matDiagType,'NMy')
+        limitStateData.controller.analysis= limitStateData.controller.analysisToPerform(feProblem)
+        phantomModel= phm.PhantomModel(preprocessor,self)
+        result= phantomModel.runChecking(limitStateData,outputCfg)
+        return (feProblem, result)
 
     def internalForcesVerification3D(self,limitStateData,matDiagType,outputCfg):
-      '''Limit state verification based on internal force (Fx,Fy,Fz,Mx,My,Mz) values.
+        '''Limit state verification based on internal force (Fx,Fy,Fz,Mx,My,Mz) values.
 
-      :param limitStateData: object that contains the name of the file
-                             containing the internal forces 
-                             obtained for each element 
-                             for the combinations analyzed and the
-                             controller to use for the checking.
-      :param matDiagType: type of the material diagram (d: design, k: characteristic).
-      :param outputCfg: instance of class 'VerifOutVars' which defines the 
-                 variables that control the output of the checking (set of 
-                 elements to be analyzed, append or not the results to a file,
-                 generation or not of lists, ...)
-      '''
-      (tmp, retval)= self.runChecking(limitStateData, matDiagType,True,outputCfg)
-      tmp.clearAll() #Free memory.
-      return retval
+        :param limitStateData: object that contains the name of the file
+                               containing the internal forces 
+                               obtained for each element 
+                               for the combinations analyzed and the
+                               controller to use for the checking.
+        :param matDiagType: type of the material diagram (d: design, k: characteristic).
+        :param outputCfg: instance of class 'VerifOutVars' which defines the 
+                   variables that control the output of the checking (set of 
+                   elements to be analyzed, append or not the results to a file,
+                   generation or not of lists, ...)
+        '''
+        (tmp, retval)= self.runChecking(limitStateData, matDiagType,True,outputCfg)
+        tmp.clearAll() #Free memory.
+        return retval
 
     def internalForcesVerification2D(self,limitStateData, matDiagType,setCalc=None):
-      '''Limit state verification based on internal force (Fx,Fy,Mz) values.
+        '''Limit state verification based on internal force (Fx,Fy,Mz) values.
 
-      :param limitStateData: object that contains the name of the file
-                             containing the internal forces 
-                             obtained for each element 
-                             for the combinations analyzed and the
-                             controller to use for the checking.
-      :param matDiagType: type of the material diagram (d: design, 
-             k: characteristic).
-      :param setCalc: set of elements to be analyzed (defaults to None which 
-                      means that all the elements in the file of internal forces
-                      results are analyzed) 
-      '''
-      (tmp, retval)= self.runChecking(limitStateData,outputFileName, matDiagType,False,setCalc)
-      tmp.clearAll() #Free memory.
-      return retval
+        :param limitStateData: object that contains the name of the file
+                               containing the internal forces 
+                               obtained for each element 
+                               for the combinations analyzed and the
+                               controller to use for the checking.
+        :param matDiagType: type of the material diagram (d: design, 
+               k: characteristic).
+        :param setCalc: set of elements to be analyzed (defaults to None which 
+                        means that all the elements in the file of internal forces
+                        results are analyzed) 
+        '''
+        (tmp, retval)= self.runChecking(limitStateData,outputFileName, matDiagType,False,setCalc)
+        tmp.clearAll() #Free memory.
+        return retval
 
 
 def loadRCMaterialDistribution():

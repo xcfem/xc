@@ -31,10 +31,10 @@ datosScc1LosC.sectionName= "secHA1LosC"
 datosScc1LosC.sectionDescr= "Deck. Central portion. Section normal to X axis."
 concr= EHE_materials.HA30
 concr.alfacc=0.85 #f_maxd= 0.85*fcd
-datosScc1LosC.concrType= concr
+datosScc1LosC.fiberSectionParameters.concrType= concr
 datosScc1LosC.h= 0.35
 datosScc1LosC.b= 1.0001
-datosScc1LosC.reinfSteelType= EHE_materials.B500S
+datosScc1LosC.fiberSectionParameters.reinfSteelType= EHE_materials.B500S
 negRebRow=def_simple_RC_section.MainReinfLayer(nRebars=2,rebarsDiam=10e-10,width=datosScc1LosC.b)
 #negRebRow=def_simple_RC_section.MainReinfLayer()
 #negRebRow=def_simple_RC_section.MainReinfLayer(rebarsDiam=10e-3,areaRebar= EHE_materials.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03)

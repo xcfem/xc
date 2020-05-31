@@ -39,10 +39,10 @@ reinfSteel= EHE_materials.B500S
 sccData=def_simple_RC_section.RCSimpleSection()
 sccData.sectionName= "sccData"
 sccData.sectionDescr= "Prueba."
-sccData.concrType= concrete
+sccData.fiberSectionParameters.concrType= concrete
 sccData.h= 0.5
 sccData.b= 1.0
-sccData.reinfSteelType= reinfSteel
+sccData.fiberSectionParameters.reinfSteelType= reinfSteel
 sccData.negatvRebarRows=[def_simple_RC_section.MainReinfLayer(rebarsDiam=40e-3,areaRebar= areaFi40,rebarsSpacing=0.15,width=1.0,nominalCover=0.25-0.19)]
 sccData.positvRebarRows=[def_simple_RC_section.MainReinfLayer(rebarsDiam=6e-3,areaRebar= areaFi6,rebarsSpacing=0.15,width=1.0,nominalCover=0.25-0.19)]
 #sccData.setMainReinfNeg(40e-3,areaFi40,0.15,0.25-0.19)

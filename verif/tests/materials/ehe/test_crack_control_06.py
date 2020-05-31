@@ -22,10 +22,10 @@ __email__= "l.pereztato@gmail.com"
 datosScc1LosC= def_simple_RC_section.RCSimpleSection()
 datosScc1LosC.sectionName= "secHA1LosC"
 datosScc1LosC.sectionDescr= "Losa. Central portion. Section normal to X axis."
-datosScc1LosC.concrType= EHE_materials.HA25
+datosScc1LosC.fiberSectionParameters.concrType= EHE_materials.HA25
 datosScc1LosC.depth= 0.25
 datosScc1LosC.width= 1.0
-datosScc1LosC.reinfSteelType= EHE_materials.B500S
+datosScc1LosC.fiberSectionParameters.reinfSteelType= EHE_materials.B500S
 rebNeg=def_simple_RC_section.MainReinfLayer(nRebars= 5, areaRebar= EHE_materials.Fi10,nominalCover=0.025+0.010,width=0.999)
 datosScc1LosC.negatvRebarRows=[rebNeg]
 rebPos=def_simple_RC_section.MainReinfLayer(nRebars= 5, areaRebar= EHE_materials.Fi10,nominalCover=0.025,width=0.999)

@@ -154,8 +154,8 @@ class ShearController(lsc.ShearControllerBase):
     def __init__(self,limitStateLabel):
         super(ShearController,self).__init__(limitStateLabel)
     def setSection(self,rcSection):
-        self.concrete= rcSection.concrType #Fix
-        self.steel= rcSection.reinfSteelType
+        self.concrete= rcSection.fiberSectionParameters.concrType #Fix
+        self.steel= rcSection.fiberSectionParameters.reinfSteelType
         self.width= rcSection.b
         self.effectiveDepth= 0.9*rcSection.h
         self.mechanicLeverArm= 0.9*self.effectiveDepth #Enhance

@@ -40,16 +40,11 @@ class RCColumnSection(def_simple_RC_section.BasicRectangularRCSection):
 
     :ivar sectionName:     name identifying the section
     :ivar sectionDescr:    section description
-    :ivar concrType:       type of concrete (e.g. EHE_materials.HA25)     
-    :ivar concrDiagName:   name identifying the characteristic stress-strain diagram of the concrete material
     :ivar depth:           cross-section depth
     :ivar width:           cross-section width
     :ivar nDivIJ:          number of cells in IJ (width) direction
     :ivar nDivJK:          number of cells in JK  (height) direction
     :ivar fiberSectionRepr:
-    :ivar reinfSteelType:  type of reinforcement steel
-    :ivar reinfDiagName:   name identifying the characteristic stress-strain diagram
-                       of the reinforcing steel material
     :ivar shReinfZ:        record of type.defRCSimpleSection.RecordShearReinforcement()
                         defining the shear reinforcement in Z direction
     :ivar shReinfY:        record of type.defRCSimpleSection.RecordShearReinforcement()
