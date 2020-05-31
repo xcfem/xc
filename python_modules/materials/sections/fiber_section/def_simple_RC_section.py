@@ -114,10 +114,10 @@ class MainReinfLayer(object):
             return self.reinfLayer
     
 
-class BasicRecordRCSection(section_properties.RectangularSection):
+class BasicRecordRectangularRCSection(section_properties.RectangularSection):
     '''
-    This class is used to define the basic variables that make up a reinforced 
-    concrete section.
+    This class is used to define the basic variables that make up a rectangular
+    reinforced concrete section.
 
     :ivar sectionName:     name identifying the section
     :ivar sectionDescr:    section description
@@ -138,7 +138,7 @@ class BasicRecordRCSection(section_properties.RectangularSection):
                            defining the shear reinforcement in Y direction
     '''
     def __init__(self,name= 'noName', width=0.25,depth=0.25,concrType=None,reinfSteelType=None):
-        super(BasicRecordRCSection,self).__init__(name,width,depth)
+        super(BasicRecordRectangularRCSection,self).__init__(name,width,depth)
         self.sectionDescr= "Text describing the position of the section in the structure."
         self.concrType= concrType
         self.concrDiagName= None
@@ -217,7 +217,7 @@ class BasicRecordRCSection(section_properties.RectangularSection):
         rg.pMax= geom.Pos2d(self.b/2,self.h/2)
 
 
-class RecordRCSimpleSection(BasicRecordRCSection):
+class RecordRCSimpleSection(BasicRecordRectangularRCSection):
     '''
     This class is used to define the variables that make up a reinforced 
     concrete section with top and bottom reinforcement layers.
