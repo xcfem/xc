@@ -39,12 +39,12 @@ negRebRow=def_simple_RC_section.MainReinfLayer(nRebars=2,rebarsDiam=10e-10,width
 #negRebRow=def_simple_RC_section.MainReinfLayer()
 #negRebRow=def_simple_RC_section.MainReinfLayer(rebarsDiam=10e-3,areaRebar= EHE_materials.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03)
 #negRebRow.setUp(nRebars=0,rebarsDiam=0.0,areaRebar=0.0,width=datosScc1LosC.b,cover=0.1)
-datosScc1LosC.negatvRebarRows=[negRebRow]
+datosScc1LosC.negatvRebarRows= def_simple_RC_section.LongReinfLayers([negRebRow])
 posRebRow=def_simple_RC_section.MainReinfLayer(nRebars=6,rebarsDiam=26e-3,areaRebar=(areaFi22+areaFi26)/2.0,width=datosScc1LosC.b,nominalCover=0.05,nominalLatCover=0.08333-26e-3/2.)
 #posRebRow=def_simple_RC_section.MainReinfLayer()
 #posRebRow=def_simple_RC_section.MainReinfLayer(rebarsDiam=10e-3,areaRebar= EHE_materials.Fi10,rebarsSpacing=0.2,width=1.0,nominalCover=0.03)
 #posRebRow.setUp(nRebars=6,rebarsDiam=26e-3,areaRebar=(areaFi22+areaFi26)/2.0,width=datosScc1LosC.b,cover=0.05+0.026/2.0)
-datosScc1LosC.positvRebarRows=[posRebRow]
+datosScc1LosC.positvRebarRows= def_simple_RC_section.LongReinfLayers([posRebRow])
 
 #datosScc1LosC.negatvRebars.setUp(0,0.0,0.0,datosScc1LosC.b,0.1)
 #datosScc1LosC.positvRebars.setUp(6,26e-3,(areaFi22+areaFi26)/2.0,datosScc1LosC.b,0.05+0.026/2.0)

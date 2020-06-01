@@ -34,10 +34,10 @@ sep_long=250
 pierStirrups=[diam_cercos,nlegs_m,sep_long]
 piersRCSects=rcs.RCSlabBeamSection(name='piersRCSects',sectionDescr='piers',concrType=concrete, reinfSteelType=reinfSteel,width=lRectEqPier,depth=lRectEqPier,elemSetName='piers')
 
-piersRCSects.dir1PositvRebarRows=[rcs.rebLayer_mm(pierLongReinf[0],pierLongReinf[1],nomCover)]
-piersRCSects.dir1NegatvRebarRows=[rcs.rebLayer_mm(pierLongReinf[0],pierLongReinf[1],nomCover)]
-piersRCSects.dir2PositvRebarRows=[rcs.rebLayer_mm(pierLongReinf[0],pierLongReinf[1],nomCover)]
-piersRCSects.dir2NegatvRebarRows=[rcs.rebLayer_mm(pierLongReinf[0],pierLongReinf[1],nomCover)]
+piersRCSects.dir1PositvRebarRows= rcs.LongReinfLayers([rcs.rebLayer_mm(pierLongReinf[0],pierLongReinf[1],nomCover)])
+piersRCSects.dir1NegatvRebarRows= rcs.LongReinfLayers([rcs.rebLayer_mm(pierLongReinf[0],pierLongReinf[1],nomCover)])
+piersRCSects.dir2PositvRebarRows= rcs.LongReinfLayers([rcs.rebLayer_mm(pierLongReinf[0],pierLongReinf[1],nomCover)])
+piersRCSects.dir2NegatvRebarRows= rcs.LongReinfLayers([rcs.rebLayer_mm(pierLongReinf[0],pierLongReinf[1],nomCover)])
 
 # Shear reinforcement.
 piersRCSects.dir1ShReinfZ=rcs.RecordShearReinforcement(familyName= "sh",nShReinfBranches=pierStirrups[1],areaShReinfBranch= math.pi*(pierStirrups[0]*1e-3)**2/4.,shReinfSpacing=pierStirrups[2]*1e-3,angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)

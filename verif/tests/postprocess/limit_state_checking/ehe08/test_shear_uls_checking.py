@@ -115,10 +115,10 @@ reinfLayer= def_simple_RC_section.MainReinfLayer(rebarsDiam= barDiameter,areaReb
 #of a beam element
 reinfSteel= EHE_materials.B500S
 beamRCsect= def_simple_RC_section.RCSlabBeamSection(name='beamRCsect',sectionDescr='beam section',concrType=concr, reinfSteelType=reinfSteel,width= sectionGeometry.b,depth= sectionGeometry.h)
-beamRCsect.dir1PositvRebarRows=[reinfLayer]
-beamRCsect.dir1NegatvRebarRows=[reinfLayer]
-beamRCsect.dir2PositvRebarRows=[reinfLayer]
-beamRCsect.dir2NegatvRebarRows=[reinfLayer]
+beamRCsect.dir1PositvRebarRows= def_simple_RC_section.LongReinfLayers([reinfLayer])
+beamRCsect.dir1NegatvRebarRows= def_simple_RC_section.LongReinfLayers([reinfLayer])
+beamRCsect.dir2PositvRebarRows= def_simple_RC_section.LongReinfLayers([reinfLayer])
+beamRCsect.dir2NegatvRebarRows= def_simple_RC_section.LongReinfLayers([reinfLayer])
 beamRCsect.creaTwoSections()
 sections.append(beamRCsect)
 

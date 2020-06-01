@@ -253,6 +253,77 @@ class BasicRectangularRCSection(section_properties.RectangularSection):
         rg.pMin= geom.Pos2d(-self.b/2,-self.h/2)
         rg.pMax= geom.Pos2d(self.b/2,self.h/2)
 
+class LongReinfLayers(object):
+    ''' Layers of longitudinal reinforcement.'''
+    def __init__(self, lst= None):
+        ''' Constructor.'''
+        if(lst):
+            self.rebarRows= lst  # list of MainReinfLayer data
+        else:
+            self.rebarRows= list()
+        self.reinfLayers=[]  # list of XC::StraightReinfLayer created.
+    
+    def getAsRows(self):
+        '''Returns a list with the cross-sectional area of the rebars in each row.'''
+        retval=[]
+        for rbRow in self.rebarRows:
+            retval.append(rbRow.getAs())
+        return retval
+       
+    def getAs(self):
+        '''returns the cross-sectional area of the rebars.'''
+        return sum(self.getAsRows())
+    
+    def getRowsCGcover(self):
+        '''returns the distance from the center of gravity of the rebars
+        to the face of the section 
+        '''
+        retval=0
+        for rbRow in self.rebarRows:
+            retval+= rbRow.getAs()*rbRow.cover
+        retval/= self.getAs()
+        return retval
+
+    def getSpacings(self):
+        '''returns a list with the distance between bars for each row of bars.'''
+        retval=[]
+        for rbRow in self.rebarRows:
+            retval.append(rbRow.rebarsSpacing)
+        return retval
+    
+    def getDiameters(self):
+        '''returns a list with the bar diameter for each row of bars in local 
+        positive face.'''
+        retval=[]
+        for rbRow in self.rebarRows:
+            retval.append(rbRow.rebarsDiam)
+        return retval
+    
+    def getNBar(self):
+        '''returns a list with the number of bars for each row.'''
+        retval=[]
+        for rbRow in self.rebarRows:
+            retval.append(rbRow.nRebars)
+        return retval
+
+    def getCover(self):
+        '''returns a list with the cover of bars for each row of bars.'''
+        retval=[]
+        for rbRow in self.rebarRows:
+            retval.append(rbRow.cover)
+        return retval
+    
+    def getLatCover(self):
+        '''returns a list with the lateral cover of bars for each row of bars.'''
+        retval=[]
+        for rbRow in self.rebarRows:
+            retval.append(rbRow.coverLat)
+        return retval
+
+    def centerRebars(self, b):
+        '''centers in the width of the section the rebars.''' 
+        for rbRow in self.rebarRows:
+            rbRow.centerRebars(b)
 
 class RCSimpleSection(BasicRectangularRCSection):
     '''
@@ -274,38 +345,27 @@ class RCSimpleSection(BasicRectangularRCSection):
 
         # Longitudinal reinforcement
         self.coverMin= 0.0 
-        self.positvRebarRows= []  #list of MainReinfLayer data (positive face)
-        self.negatvRebarRows= [] #list of MainReinfLayer data (negative face)
-        self.posReinfLayers=[]  #list of xc.StraightReinfLayer created (positive face)
-        self.negReinfLayers=[]  #list of xc.StraightReinfLayer created (negative face)
+        self.positvRebarRows= LongReinfLayers()  #list of MainReinfLayer data (positive face)
+        self.negatvRebarRows= LongReinfLayers() #list of MainReinfLayer data (negative face)
 
     def getAsPosRows(self):
         '''returns a list with the cross-sectional area of the rebars in each row of the positive face'''
-        retval=[]
-        for rbRow in self.positvRebarRows:
-            retval.append(rbRow.getAs())
-        return retval
+        return self.positvRebarRows.getAsRows()
 
     def getAsNegRows(self):
         '''returns a list with the cross-sectional area of the rebars in each row 
            of the negative face'''
-        retval=[]
-        for rbRow in self.negatvRebarRows:
-           retval.append(rbRow.getAs())
-        return retval
+        return self.negatvRebarRows.getAsRows()
 
     def getAsPos(self):
         '''returns the cross-sectional area of the rebars in the positive face'''
-        return sum(self.getAsPosRows())
+        return self.positvRebarRows.getAs()
 
     def getPosRowsCGcover(self):
         '''returns the distance from the center of gravity of the positive rebars
         to the positive face of the section 
         '''
-        retval=0
-        for rbRow in self.positvRebarRows:
-            retval+=rbRow.getAs()*rbRow.cover
-        return retval/self.getAsPos()
+        return self.positvRebarRows.getRowsCGcover()
 
     def getYAsPos(self):
         '''returns the local Y coordinate of the center of gravity of the rebars
@@ -315,16 +375,13 @@ class RCSimpleSection(BasicRectangularRCSection):
 
     def getAsNeg(self):
         '''returns the cross-sectional area of the rebars in the negative face'''
-        return sum(self.getAsNegRows())
+        return self.negatvRebarRows.getAs()
 
     def getNegRowsCGcover(self):
         '''returns the distance from the center of gravity of the negative rebars
         to the negative face of the section 
         '''
-        retval=0
-        for rbRow in self.negatvRebarRows:
-            retval+=rbRow.getAs()*rbRow.cover
-        return retval/self.getAsNeg()
+        return self.negatvRebarRows.getRowsCGcover()
 
     def getYAsNeg(self):
         '''returns the local Y coordinate of the center of gravity of the rebars
@@ -360,91 +417,59 @@ class RCSimpleSection(BasicRectangularRCSection):
     def getSPos(self):
         '''returns a list with the distance between bars for each row of bars in 
         local positive face.'''
-        retval=[]
-        for rbRow in self.positvRebarRows:
-            retval.append(rbRow.rebarsSpacing)
-        return retval
+        return self.positvRebarRows.getSpacings()
 
     def getSNeg(self):
         '''returns a list with the distance between bars for each row of bars in local negative face.'''
-        retval=[]
-        for rbRow in self.negatvRebarRows:
-            retval.append(rbRow.rebarsSpacing)
-        return retval
+        return self.negatvRebarRows.getSpacings()
 
     def getDiamPos(self):
         '''returns a list with the bar diameter for each row of bars in local 
         positive face.'''
-        retval=[]
-        for rbRow in self.positvRebarRows:
-            retval.append(rbRow.rebarsDiam)
-        return retval
+        return self.positvRebarRows.getDiameters()
 
     def getDiamNeg(self):
         '''returns a list with the bar diameter for each row of bars in local 
         negative face.'''
-        retval=[]
-        for rbRow in self.negatvRebarRows:
-            retval.append(rbRow.rebarsDiam)
-        return retval
+        return self.negatvRebarRows.getDiameters()
 
     def getNBarPos(self):
         '''returns a list with the number of bars for each row of bars in local 
         positive face.'''
-        retval=[]
-        for rbRow in self.positvRebarRows:
-            retval.append(rbRow.nRebars)
-        return retval
+        return self.positvRebarRows.getNBar()
 
     def getNBarNeg(self):
         '''returns a list with the number of bars for each row of bars in local 
         negative face.'''
-        retval=[]
-        for rbRow in self.negatvRebarRows:
-            retval.append(rbRow.nRebars)
-        return retval
+        return self.negatvRebarRows.getNBar()
 
     def getCoverPos(self):
         '''returns a list with the cover of bars for each row of bars in local 
         positive face.'''
-        retval=[]
-        for rbRow in self.positvRebarRows:
-            retval.append(rbRow.cover)
-        return retval
+        return self.positvRebarRows.getCover()
 
     def getCoverNeg(self):
-      '''returns a list with the cover of bars for each row of bars in local 
-      negative face.'''
-      retval=[]
-      for rbRow in self.negatvRebarRows:
-        retval.append(rbRow.cover)
-      return retval
+        '''returns a list with the cover of bars for each row of bars in local 
+        negative face.'''
+        return self.negatvRebarRows.getCover()
 
     def getLatCoverPos(self):
         '''returns a list with the lateral cover of bars for each row of bars in local positive face.'''
-        retval=[]
-        for rbRow in self.positvRebarRows:
-            retval.append(rbRow.coverLat)
-        return retval
+        return self.positvRebarRows.getLatCover()
 
     def getLatCoverNeg(self):
         '''returns a list with the lateral cover of bars for each row of bars in 
         local negative face.'''
-        retval=[]
-        for rbRow in self.negatvRebarRows:
-            retval.append(rbRow.coverLat)
-        return retval
+        return self.negatvRebarRows.getLatCover()
 
     def centerRebarsPos(self):
         '''centers in the width of the section the rebars placed in the positive face''' 
-        for rbRow in self.positvRebarRows:
-            rbRow.centerRebars(self.b)
+        return self.positvRebarRows.centerRebars(self.b)
 
     def centerRebarsNeg(self):
         '''centers in the width of the section the rebars placed in the negative 
         face''' 
-        for rbRow in self.negatvRebarRows:
-            rbRow.centerRebars(self.b)
+        return self.negatRebarRows.centerRebars(self.b)
 
     def defSectionGeometry(self,preprocessor,matDiagType):
         '''
@@ -458,17 +483,17 @@ class RCSimpleSection(BasicRectangularRCSection):
         geomSection= preprocessor.getMaterialHandler.newSectionGeometry(self.gmSectionName())
         self.defConcreteRegion(geomSection)
         reinforcement= geomSection.getReinfLayers
-        for rbRow in self.negatvRebarRows:
+        for rbRow in self.negatvRebarRows.rebarRows:
             y= -self.h/2.0+rbRow.cover
             #print "y neg.= ", y, " m"
             p1= geom.Pos2d(-self.b/2+rbRow.coverLat,y)
             p2= geom.Pos2d(self.b/2-rbRow.coverLat,y)
-            self.negReinfLayers.append(rbRow.defReinfLayer(reinforcement,"neg",self.fiberSectionParameters.reinfDiagName,p1,p2))
-        for rbRow in self.positvRebarRows:
+            self.negatvRebarRows.reinfLayers.append(rbRow.defReinfLayer(reinforcement,"neg",self.fiberSectionParameters.reinfDiagName,p1,p2))
+        for rbRow in self.positvRebarRows.rebarRows:
             y= self.h/2.0-rbRow.cover
             p1= geom.Pos2d(-self.b/2+rbRow.coverLat,y)
             p2= geom.Pos2d(self.b/2-rbRow.coverLat,y)
-            self.posReinfLayers.append(rbRow.defReinfLayer(reinforcement,"pos",self.fiberSectionParameters.reinfDiagName,p1,p2))
+            self.positvRebarRows.reinfLayers.append(rbRow.defReinfLayer(reinforcement,"pos",self.fiberSectionParameters.reinfDiagName,p1,p2))
         self.coverMin= min(min(self.getCoverPos()),min(self.getCoverNeg()),min(self.getLatCoverPos()),min(self.getLatCoverNeg()))
 
     def getRespT(self,preprocessor,JTorsion):
@@ -685,10 +710,10 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
         self.depth=depth
         self.width=width
         self.elemSetName=elemSetName
-        self.dir1PositvRebarRows=[]
-        self.dir1NegatvRebarRows=[]
-        self.dir2PositvRebarRows=[]
-        self.dir2NegatvRebarRows=[]
+        self.dir1PositvRebarRows= []
+        self.dir1NegatvRebarRows= []
+        self.dir2PositvRebarRows= []
+        self.dir2NegatvRebarRows= []
         self.dir1ShReinfY= RecordShearReinforcement()
         self.dir1ShReinfZ= RecordShearReinforcement()
         self.dir2ShReinfY= RecordShearReinforcement()
@@ -716,8 +741,8 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
         sect.h= self.depth
         sect.b= self.width
         sect.fiberSectionParameters.reinfSteelType= self.reinfSteelType
-        sect.positvRebarRows=posReb
-        sect.negatvRebarRows=negReb
+        sect.positvRebarRows= posReb
+        sect.negatvRebarRows= negReb
         sect.shReinfY=YShReinf
         sect.shReinfZ=ZShReinf
         self.append_section(sect)
