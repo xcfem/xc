@@ -236,6 +236,21 @@ class Nail(DowelFastener):
             and the side members for double shear connection according
             to clause 12.1.6.4 of NDS-2018.'''
         return 6.0*self.D
+
+#Nail_2D= Nail(diameter= 0.072*mat.in2meter, length= 1*mat.in2meter)
+#Nail_2D= Nail(diameter= 0.083*mat.in2meter, length= 1*mat.in2meter)
+#Nail_3D= Nail(diameter= 0.083*mat.in2meter, length= 1.25*mat.in2meter)
+Nail_4D= Nail(diameter= 0.109*mat.in2meter, length= 1.5*mat.in2meter)
+Nail_5D= Nail(diameter= 0.109*mat.in2meter, length= 1.75*mat.in2meter)
+Nail_6D= Nail(diameter= 0.12*mat.in2meter, length= 2*mat.in2meter)
+Nail_8D= Nail(diameter= 0.134*mat.in2meter, length= 2.5*mat.in2meter)
+Nail_10D= Nail(diameter= 0.148*mat.in2meter, length= 3*mat.in2meter)
+Nail_12D= Nail(diameter= 0.148*mat.in2meter, length= 3.25*mat.in2meter)
+Nail_16D= Nail(diameter= 0.165*mat.in2meter, length= 3.5*mat.in2meter)
+Nail_20D= Nail(diameter= 0.203*mat.in2meter, length= 4*mat.in2meter)
+Nail_30D= Nail(diameter= 0.22*mat.in2meter, length= 4.5*mat.in2meter)
+Nail_40D= Nail(diameter= 0.238*mat.in2meter, length= 5*mat.in2meter)
+Nail_60D= Nail(diameter= 0.238*mat.in2meter, length= 6*mat.in2meter)
     
 class Screw(DowelFastener):
     ''' Screw as defined in NDS-2018.'''
