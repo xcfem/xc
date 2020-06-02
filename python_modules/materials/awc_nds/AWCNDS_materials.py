@@ -232,7 +232,7 @@ class Wood(object):
             self.specificGravity= specificGravity
         else:
             self.specificGravity= None
-    def getDowelBearingStrength(self, diameter, theta):
+    def getDowelBearingStrength(self, diameter, theta, endGrain= False):
         ''' Return the dowel bearing strength for Dowel-Type
             Fasteners in Wood Members according to Eq.
             12.3-11 and table 12.3.3 of National Design Specification of
@@ -241,15 +241,21 @@ class Wood(object):
         :param diameter: diameter of the dowel-type fastener. 
         :param theta: angle between the direction of load and the
                       direction of grain (longitudinal axis of member).
+        :param endGrain: true for dowel-type fasteners with D > 1/4" that are 
+                         inserted into the end grain of the main member, 
+                         with the fastener axis parallel to the wood fibers.
+                         See clause 12.3.3.4 of NDS.
         '''
         retval= 0.0
         if(diameter<0.25*in2meter):
             retval= 16600.0*pow(self.specificGravity,1.84)
         else:
-            Fe_parallel= 11200*self.specificGravity
-            Fe_perp= 6100.0*pow(self.specificGravity,1.84)/math.sqrt(diameter
-)
-            retval= Fe_parallel*Fe_perp/(Fe_parallel*math.sin(theta)**2+Fe_perp*math.cos(theta)**2)
+            Fe_perp= 6100.0*pow(self.specificGravity,1.84)/math.sqrt(diameter)
+            if(endGrain):
+                retval= Fe_perp
+            else:
+                Fe_parallel= 11200*self.specificGravity
+                retval= Fe_parallel*Fe_perp/(Fe_parallel*math.sin(theta)**2+Fe_perp*math.cos(theta)**2)
         retval*= psi2Pa
         return retval
 

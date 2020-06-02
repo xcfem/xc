@@ -63,7 +63,7 @@ class DowelFastener(object):
             expressions accorcing to clause 12.3.7 of NDS-2018.'''
         return self.D
 
-    def getK1(self,mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s):
+    def getK1(self,mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s, endGrain= False):
         ''' Return the k1 factor according to table
             12.3.1B of NDS-2018.
 
@@ -75,13 +75,17 @@ class DowelFastener(object):
                         direction of grain of the main member.
         :param theta_s: angle between the direction of load and the
                         direction of grain of the side member.
+        :param endGrain: true for dowel-type fasteners with D > 1/4" that are 
+                         inserted into the end grain of the main member, 
+                         with the fastener axis parallel to the wood fibers.
+                         See clause 12.3.3.4 of NDS.
         '''
-        Fem= mainMemberWood.getDowelBearingStrength(self.D, theta_m)
+        Fem= mainMemberWood.getDowelBearingStrength(self.D, theta_m, endGrain)
         Fes= sideMemberWood.getDowelBearingStrength(self.D, theta_s)
         Re= Fem/Fes
         Rt= lm/ls
         return (math.sqrt(Re+2.0*Re**2*(1+Rt+Rt**2)+Rt**2*Re**3)-Re*(1+Rt))/(1+Re)
-    def getK2(self,mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s):
+    def getK2(self,mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s, endGrain= False):
         ''' Return the k2 factor according to table
             12.3.1B of NDS-2018.
 
@@ -93,14 +97,18 @@ class DowelFastener(object):
                         direction of grain of the main member.
         :param theta_s: angle between the direction of load and the
                         direction of grain of the side member.
+        :param endGrain: true for dowel-type fasteners with D > 1/4" that are 
+                         inserted into the end grain of the main member, 
+                         with the fastener axis parallel to the wood fibers.
+                         See clause 12.3.3.4 of NDS.
         '''
-        Fem= mainMemberWood.getDowelBearingStrength(self.D, theta_m)
+        Fem= mainMemberWood.getDowelBearingStrength(self.D, theta_m, endGrain)
         Fes= sideMemberWood.getDowelBearingStrength(self.D, theta_s)
         Re= Fem/Fes
         Rt= lm/ls
         D= self.getDiameterForYield()
         return -1+math.sqrt(2.0*(1+Re)+(2.0*self.Fyb*(2.0+Re)*D**2)/(3.0*Fem*lm**2))
-    def getK3(self,mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s):
+    def getK3(self,mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s, endGrain= False):
         ''' Return the k3 factor according to table
             12.3.1B of NDS-2018.
 
@@ -112,13 +120,17 @@ class DowelFastener(object):
                         direction of grain of the main member.
         :param theta_s: angle between the direction of load and the
                         direction of grain of the side member.
+        :param endGrain: true for dowel-type fasteners with D > 1/4" that are 
+                         inserted into the end grain of the main member, 
+                         with the fastener axis parallel to the wood fibers.
+                         See clause 12.3.3.4 of NDS.
         '''
-        Fem= mainMemberWood.getDowelBearingStrength(self.D, theta_m)
+        Fem= mainMemberWood.getDowelBearingStrength(self.D, theta_m, endGrain)
         Fes= sideMemberWood.getDowelBearingStrength(self.D, theta_s)
         Re= Fem/Fes
         D= self.getDiameterForYield()
         return -1+math.sqrt(2.0*(1+Re)/Re+(2.0*self.Fyb*(2.0+Re)*D**2)/(3.0*Fem*ls**2))
-    def getYieldLimit(self, mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s, doubleShear= False):
+    def getYieldLimit(self, mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s, doubleShear= False, endGrain= False):
         ''' Return the yield limit according to table
             12.3.1B of NDS-2018.
 
@@ -131,13 +143,17 @@ class DowelFastener(object):
         :param theta_s: angle between the direction of load and the
                         direction of grain of the side member.
         :param doubleShear: double shear plane in connection.
+        :param endGrain: true for dowel-type fasteners with D > 1/4" that are 
+                         inserted into the end grain of the main member, 
+                         with the fastener axis parallel to the wood fibers.
+                         See clause 12.3.3.4 of NDS.
         '''
         if(lm<0.0):
             lmsg.error('negative main member dowel bearing length: lm= '+str(lm))
         if(ls<0.0):
             lmsg.error('negative side member dowel bearing length: ls= '+str(ls))
         D= self.getDiameterForYield()
-        Fem= mainMemberWood.getDowelBearingStrength(D, theta_m)
+        Fem= mainMemberWood.getDowelBearingStrength(D, theta_m, endGrain)
         Rd_Im= self.getReductionTerm(theta= 0.0, yieldMode= 'Im')
         Z_Im= D*lm*Fem/Rd_Im # Eq. (12.3-1 or 12.3-7)
         retval= Z_Im
@@ -148,16 +164,16 @@ class DowelFastener(object):
             Z_Is*=2.0 # Eq. (12.3-8)
         retval= min(retval,Z_Is)
         Rd_II= self.getReductionTerm(theta= 0.0, yieldMode= 'II')
-        k1= self.getK1(mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s)
+        k1= self.getK1(mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s, endGrain)
         Z_II= k1*D*ls*Fes/Rd_II # Eq. (12.3-3)
         retval= min(retval,Z_II)
         Rd_IIIm= self.getReductionTerm(theta= 0.0, yieldMode= 'IIIm')
-        k2= self.getK2(mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s)
+        k2= self.getK2(mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s, endGrain)
         Re= Fem/Fes
         Z_IIIm= k2*D*lm*Fem/(1+2.0*Re)/Rd_IIIm # Eq. (12.3-4)
         retval= min(retval,Z_IIIm)
         Rd_IIIs= self.getReductionTerm(theta= 0.0, yieldMode= 'IIIs')
-        k3= self.getK3(mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s)
+        k3= self.getK3(mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s, endGrain)
         Z_IIIs= k3*D*ls*Fem/(2+Re)/Rd_IIIs # Eq. (12.3-5)
         if(doubleShear):
             Z_IIIs*=2.0 # Eq. (12.3-9)
