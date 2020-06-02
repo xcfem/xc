@@ -10,22 +10,29 @@ import math
 from materials.awc_nds import AWCNDS_materials as mat
 from misc_utils import log_messages as lmsg
 
-class Screw(object):
-    ''' Screw as defined in NDS-2018.'''
-    def __init__(self, diameter, length, tip, rootDiameter, bendingYieldStrength= 45e3*mat.psi2Pa):
+class DowelFastener(object):
+    ''' Dowel-Type fastener as defined in chapter 12 of NDS-2018.'''
+    def __init__(self, diameter, length, tip, bendingYieldStrength):
         ''' Constructor.
  
         :param diameter: fastener diameter.
         :param length: fastener length.
-        :param rootDiameter: root diameter.
+        :param tip: fastener tapered tip length.
         :param bendingYieldStrength: fastener bending yield strength (see
                                      table I1 NDS-2018).
         '''
         self.D= diameter
         self.L= length
         self.tip= tip
-        self.rootDiameter= rootDiameter
         self.Fyb= bendingYieldStrength
+        
+    def getPenetration(self, sideMemberThickness):
+        ''' Return the dowel penetration in the main member.
+
+        :param sideMemberThickness: side member thickness.
+        '''
+        return self.L-sideMemberThickness-self.tip
+        
     def getReductionTerm(self, theta, yieldMode):
         ''' Return the reduction term Rd according to table
             12.3.1B of NDS-2018.
@@ -50,10 +57,12 @@ class Screw(object):
                 return 3.2*k_theta
             else:
                 lmsg.error('Unknown yield mode: \''+yieldMode+'\'')
+                
     def getDiameterForYield(self):
         ''' Return the diamterer to use in the k1, k2 and k3
             expressions accorcing to clause 12.3.7 of NDS-2018.'''
         return self.D
+
     def getK1(self,mainMemberWood, sideMemberWood, lm, ls, theta_m, theta_s):
         ''' Return the k1 factor according to table
             12.3.1B of NDS-2018.
@@ -160,14 +169,88 @@ class Screw(object):
         retval= min(retval,Z_IV)
         return retval
 
+    
+class Nail(DowelFastener):
+    ''' Nail as defined in NDS-2018.'''
+    def __init__(self, diameter, length, hardenedSteel= False):
+        ''' Constructor.
+ 
+        :param rootDiameter: root diameter.
+        '''
+        Fyb= 100e3*mat.psi2Pa
+        if(not hardenedSteel):
+            if(diameter<2.5146e-3):
+                lmsg.error('Nail diameter too small.')
+            elif(diameter<=3.6068e-3):
+                Fyb*=1.0
+            elif(diameter<=4.4958e-3):
+                Fyb*=0.9
+            elif(diameter<=5.9944e-3):
+                Fyb*=0.8
+            elif(diameter<=6.9342e-3):
+                Fyb*=0.7
+            elif(diameter<=8.7376e-3):
+                Fyb*= 0.6
+            elif(diameter<=9.525e-3):
+                Fyb*= 0.45
+            else:
+                lmsg.error('Nail diameter too big.')
+                Fyb*= 0.01
+        else: # Hardened steel
+            if(diameter<3.048e-3):
+                lmsg.error('Nail diameter too small.')
+            elif(diameter<=3.6068e-3):
+                Fyb*=1.3
+            elif(diameter<=4.8768e-3):
+                Fyb*=1.15
+            elif(diameter<=5.2578e-3):
+                Fyb*=1.0
+            else:
+                lmsg.error('Nail diameter too big.')
+                Fyb*= 0.01
+        super(Nail,self).__init__(diameter, length, tip= 2.0*diameter,  bendingYieldStrength= Fyb)
+        
+    def getReferenceWithdrawal(self, G):
+        ''' Return reference withdrawal design value according
+            to equation 12.2-3 of NDS-2018.
+ 
+        :param G: specific gravity of wood.
+        '''
+        return 1380.0*mat.pound2N/mat.in2meter*math.pow(G,5/2.0)*self.D/mat.in2meter
+
+    def getDesignWithdrawal(self,G, sideMemberThickness):
+        ''' Return the withdrawal design value based on main
+            member penetration.
+
+        :param G: specific gravity of wood.
+        :param sideMemberThickness: side member thickness.
+        '''
+        W= self.getReferenceWithdrawal(G)
+        pt= self.L - sideMemberThickness
+        return self.getReferenceWithdrawal(G)*pt
+    
+    def getMinPenetration(self):
+        ''' Return the minimum length of nail pentration, p_min,
+            including the length of the tapered tip where part of the 
+            penetration into the main member for single shear connections
+            and the side members for double shear connection according
+            to clause 12.1.6.4 of NDS-2018.'''
+        return 6.0*self.D
+    
+class Screw(DowelFastener):
+    ''' Screw as defined in NDS-2018.'''
+    def __init__(self, diameter, length, tip, rootDiameter, bendingYieldStrength= 45e3*mat.psi2Pa):
+        ''' Constructor.
+ 
+        :param rootDiameter: root diameter.
+        '''
+        super(Screw,self).__init__(diameter, length, tip, bendingYieldStrength)
+        self.rootDiameter= rootDiameter
 
 class LagScrew(Screw):
     ''' Lag screw as defined in NDS-2018.'''
     def __init__(self, diameter, length, tip, rootDiameter, bendingYieldStrength= 45e3*mat.psi2Pa):
-        ''' Constructor.
-
-        :param tip: fastener tapered tip length.
-        '''
+        ''' Constructor. '''
         super(LagScrew,self).__init__(diameter, length, tip, rootDiameter, bendingYieldStrength)
     def getReferenceWithdrawal(self, G):
         ''' Return reference withdrawal design value according
@@ -176,12 +259,7 @@ class LagScrew(Screw):
         :param G: specific gravity of wood.
         '''
         return 1800.0*mat.pound2N/mat.in2meter*math.pow(G,1.5)*pow((self.D/mat.in2meter),3.0/4.0)
-    def getScrewPenetration(self, sideMemberThickness):
-        ''' Return the screw penetration in the main member.
-
-        :param sideMemberThickness: side member thickness.
-        '''
-        return self.L-sideMemberThickness-self.tip
+    
     def getDesignWithdrawal(self,G, sideMemberThickness, endGrainFactor= 0.75):
         ''' Return the withdrawal design value based on main
             member penetration.
@@ -192,10 +270,11 @@ class LagScrew(Screw):
                               in withdrawal from end grain (see section
                               12.2 of NDS-2018.'''
         W= self.getReferenceWithdrawal(G)
-        pt= self.getScrewPenetration(sideMemberThickness)
-        return self.getReferenceWithdrawal(G)*endGrainFactor*self.getScrewPenetration(sideMemberThickness)
+        pt= self.getPenetration(sideMemberThickness)
+        return self.getReferenceWithdrawal(G)*endGrainFactor*pt
+    
     def getMinPenetration(self):
-        ''' Return the inimum length of lag screw pentration, p_min,
+        ''' Return the minimum length of lag screw pentration, p_min,
             including the length of the tapered tip where part of the 
             penetration into the main member for single shear connections
             and the side members for double shear connection according
@@ -225,6 +304,7 @@ class WoodScrew(Screw):
             and the side members for double shear connection according
             to clause 12.1.5.6 of NDS-2018.'''
         return 6.0*self.D
+    
     def getDiameterForYield(self):
         ''' Return the diameter to use in the k1, k2 and k3
             expressions accorcing to clause 12.3.7 of NDS-2018.'''

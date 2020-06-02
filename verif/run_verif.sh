@@ -587,8 +587,10 @@ python tests/materials/awc_nds/rsdg_exemple_5_1.py
 python tests/materials/awc_nds/plywood_sheating_test.py
 python tests/materials/awc_nds/southern_pine_joist_test.py
 python tests/materials/awc_nds/southern_pine_joist_test.py
-python tests/materials/awc_nds/withdrawal_design_value_test.py
-python tests/materials/awc_nds/lateral_design_value_test.py
+python tests/materials/awc_nds/withdrawal_design_value_test_01.py
+python tests/materials/awc_nds/withdrawal_design_value_test_02.py
+python tests/materials/awc_nds/lateral_design_value_test_01.py
+python tests/materials/awc_nds/lateral_design_value_test_02.py
 python tests/materials/awc_nds/test_beam_stability_factor.py
 
 echo "$BLEU" "  Plate and membrane materials." "$NORMAL"

@@ -14,7 +14,7 @@ inch2meter= 0.0254
 fastener= fasteners.LagScrew(diameter= 0.5*inch2meter, length= 4.0*inch2meter, tip= .3125*inch2meter, rootDiameter= 0.265*mat.in2meter) 
 G= sg.specificGravity['Southern Pine'] # Specific gravity
 sideMemberThickness= 1.5*inch2meter # Side member thickness
-screwPenetration= fastener.getScrewPenetration(sideMemberThickness) # Screw penetration into main member.
+screwPenetration= fastener.getPenetration(sideMemberThickness) # Screw penetration into main member.
 W= fastener.getReferenceWithdrawal(G)
 Wd= fastener.getDesignWithdrawal(G,sideMemberThickness,endGrainFactor= 1.0)
 ratio1= abs(Wd-4.2479398904e3)/4.2479398904e3
