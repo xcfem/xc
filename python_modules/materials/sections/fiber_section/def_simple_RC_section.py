@@ -128,7 +128,11 @@ class LongReinfLayers(object):
     def __getitem__(self, index):
         '''Return the i-th reinforcement row.'''
         return self.rebarRows[index]
-      
+
+    def __len__(self):
+        '''Return the number of reinforcement rows.'''
+        return len(self.rebarRows)
+
     def append(self, rebarRow):
         ''' Append a reinforcement row to the list.'''
         self.rebarRows.append(rebarRow)
