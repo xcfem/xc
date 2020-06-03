@@ -125,6 +125,10 @@ class LongReinfLayers(object):
             self.rebarRows= list()
         self.reinfLayers= list()  # list of XC::StraightReinfLayer created.
 
+    def __getitem__(self, index):
+        '''Return the i-th reinforcement row.'''
+        return self.rebarRows[index]
+      
     def append(self, rebarRow):
         ''' Append a reinforcement row to the list.'''
         self.rebarRows.append(rebarRow)
