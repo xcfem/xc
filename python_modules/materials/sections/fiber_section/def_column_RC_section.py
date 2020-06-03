@@ -91,3 +91,26 @@ class RCRectangularColumnSection(def_simple_RC_section.BasicRectangularRCSection
         self.reinforcementCDer.p1= geom.Pos2d(width/2-cover,-depth/2+cover+rebarsSpacingCanto) # Right side reinforcement.
         self.reinforcementCDer.p2= geom.Pos2d(width/2-cover,depth/2-cover-rebarsSpacingCanto)
 
+class RCCircularSection(RCSectionBase, section_properties.CircularSection):
+    '''
+    Base class for rectangular reinforced concrete sections.
+
+    :ivar sectionName: name identifying the section
+    :ivar shReinf:  record of type ShearReinforcement
+                    defining the shear reinforcement.
+    '''
+    def __init__(self,name= 'noName', Rext= 0.25, Rint= 0.0, concrType=None, reinfSteelType=None):
+        ''' Constructor.
+
+        :param name: name of the section.
+        :param Rext: external radius (defaults to 0.25).
+        :param Rint: internal radius (defaults to 0.0).
+        :param concrType: type of concrete (e.g. EHE_materials.HA25)     
+        :param reinfSteelType: type of reinforcement steel.
+        '''
+        RCSectionBase.__init__(self,concrType= concrType,reinfSteelType= reinfSteelType, nIJ= 10, nJK= 10)
+        section_properties.CircularSection.__init__(self,name,width,depth)
+
+        # Transverse reinforcement (z direction)
+        self.shReinf= ShearReinforcement()
+        self.shReinf.familyName= "V"
