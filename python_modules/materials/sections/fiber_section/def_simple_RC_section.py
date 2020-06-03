@@ -18,6 +18,8 @@ from materials.sections import stress_calc as sc
 import sys
 from misc_utils import log_messages as lmsg
 
+# Classes defining reinforcement.
+
 class ShearReinforcement(object):
     ''' Definition of the variables that make up a family of shear 
     reinforcing bars
@@ -113,6 +115,106 @@ class MainReinfLayer(object):
             self.reinfLayer.p2= p2
             return self.reinfLayer
     
+class LongReinfLayers(object):
+    ''' Layers of longitudinal reinforcement.'''
+    def __init__(self, lst= None):
+        ''' Constructor.'''
+        if(lst):
+            self.rebarRows= lst  # list of MainReinfLayer data
+        else:
+            self.rebarRows= list()
+        self.reinfLayers= list()  # list of XC::StraightReinfLayer created.
+
+    def append(self, rebarRow):
+        ''' Append a reinforcement row to the list.'''
+        self.rebarRows.append(rebarRow)
+        
+    def getAsRows(self):
+        '''Returns a list with the cross-sectional area of the rebars in each row.'''
+        retval=[]
+        for rbRow in self.rebarRows:
+            retval.append(rbRow.getAs())
+        return retval
+       
+    def getAs(self):
+        '''returns the cross-sectional area of the rebars.'''
+        return sum(self.getAsRows())
+    
+    def getRowsCGcover(self):
+        '''returns the distance from the center of gravity of the rebars
+        to the face of the section 
+        '''
+        retval=0
+        for rbRow in self.rebarRows:
+            retval+= rbRow.getAs()*rbRow.cover
+        retval/= self.getAs()
+        return retval
+
+    def getSpacings(self):
+        '''returns a list with the distance between bars for each row of bars.'''
+        retval=[]
+        for rbRow in self.rebarRows:
+            retval.append(rbRow.rebarsSpacing)
+        return retval
+    
+    def getDiameters(self):
+        '''returns a list with the bar diameter for each row of bars in local 
+        positive face.'''
+        retval=[]
+        for rbRow in self.rebarRows:
+            retval.append(rbRow.rebarsDiam)
+        return retval
+    
+    def getNBar(self):
+        '''returns a list with the number of bars for each row.'''
+        retval=[]
+        for rbRow in self.rebarRows:
+            retval.append(rbRow.nRebars)
+        return retval
+
+    def getCover(self):
+        '''returns a list with the cover of bars for each row of bars.'''
+        retval=[]
+        for rbRow in self.rebarRows:
+            retval.append(rbRow.cover)
+        return retval
+    
+    def getLatCover(self):
+        '''returns a list with the lateral cover of bars for each row of bars.'''
+        retval=[]
+        for rbRow in self.rebarRows:
+            retval.append(rbRow.coverLat)
+        return retval
+
+    def centerRebars(self, b):
+        '''centers in the width of the section the rebars.''' 
+        for rbRow in self.rebarRows:
+            rbRow.centerRebars(b)
+
+def rebLayer_mm(fi,s,c):
+    '''Defines a layer of main reinforcement bars, given the spacement.
+
+    :param fi: bar diameter [mm]
+    :param s: spacing [mm]
+    :param c: cover [mm]
+    '''
+    return MainReinfLayer(rebarsDiam=fi*1e-3,areaRebar= math.pi*(fi*1e-3)**2/4.0,rebarsSpacing=s*1e-3,width=1.0,nominalCover=c*1e-3)
+
+def rebLayerByNumFi_mm(n,fi,c,latC,L):
+    '''Defines a layer of  main reinforcement bars with a fixed number of rebars. Spacing is calculated
+    so that the rebars (and two lateral covers) are inserted in the length L passed as parameter.
+
+    :param n: number of rebars
+    :param fi: bar diameter [mm]
+    :param c: nominal cover [mm]
+    :param latC: nominal lateral cover [mm]
+    :param L: length where the n rebars and two lateral covers are inserted [mm]
+    '''
+    rl=MainReinfLayer(rebarsDiam=fi*1e-3,areaRebar= math.pi*(fi*1e-3)**2/4.0,nRebars=n,width=L*1e-3,nominalCover=c*1e-3,nominalLatCover=latC*1e-3)
+    return rl
+
+# Reinforced concrete.
+
 class RCFiberSectionParameters(object):
     '''
     Parameters needed to create a reinforced concrete fiber section.
@@ -197,7 +299,7 @@ class BasicRectangularRCSection(section_properties.RectangularSection):
     '''
     def __init__(self,name= 'noName', width=0.25,depth=0.25,concrType=None,reinfSteelType=None):
         super(BasicRectangularRCSection,self).__init__(name,width,depth)
-        self.sectionDescr= "Text describing the position of the section in the structure."
+        self.sectionDescr= "Text describing the role/position of the section in the structure."
         self.fiberSectionParameters= RCFiberSectionParameters(concrType= concrType, reinfSteelType= reinfSteelType, nDivIJ= 10, nDivJK= 10)
 
         # Transverse reinforcement (z direction)
@@ -275,77 +377,6 @@ class BasicRectangularRCSection(section_properties.RectangularSection):
         self.fs.setProp('sectionData',self)
 
 
-class LongReinfLayers(object):
-    ''' Layers of longitudinal reinforcement.'''
-    def __init__(self, lst= None):
-        ''' Constructor.'''
-        if(lst):
-            self.rebarRows= lst  # list of MainReinfLayer data
-        else:
-            self.rebarRows= list()
-        self.reinfLayers=[]  # list of XC::StraightReinfLayer created.
-    
-    def getAsRows(self):
-        '''Returns a list with the cross-sectional area of the rebars in each row.'''
-        retval=[]
-        for rbRow in self.rebarRows:
-            retval.append(rbRow.getAs())
-        return retval
-       
-    def getAs(self):
-        '''returns the cross-sectional area of the rebars.'''
-        return sum(self.getAsRows())
-    
-    def getRowsCGcover(self):
-        '''returns the distance from the center of gravity of the rebars
-        to the face of the section 
-        '''
-        retval=0
-        for rbRow in self.rebarRows:
-            retval+= rbRow.getAs()*rbRow.cover
-        retval/= self.getAs()
-        return retval
-
-    def getSpacings(self):
-        '''returns a list with the distance between bars for each row of bars.'''
-        retval=[]
-        for rbRow in self.rebarRows:
-            retval.append(rbRow.rebarsSpacing)
-        return retval
-    
-    def getDiameters(self):
-        '''returns a list with the bar diameter for each row of bars in local 
-        positive face.'''
-        retval=[]
-        for rbRow in self.rebarRows:
-            retval.append(rbRow.rebarsDiam)
-        return retval
-    
-    def getNBar(self):
-        '''returns a list with the number of bars for each row.'''
-        retval=[]
-        for rbRow in self.rebarRows:
-            retval.append(rbRow.nRebars)
-        return retval
-
-    def getCover(self):
-        '''returns a list with the cover of bars for each row of bars.'''
-        retval=[]
-        for rbRow in self.rebarRows:
-            retval.append(rbRow.cover)
-        return retval
-    
-    def getLatCover(self):
-        '''returns a list with the lateral cover of bars for each row of bars.'''
-        retval=[]
-        for rbRow in self.rebarRows:
-            retval.append(rbRow.coverLat)
-        return retval
-
-    def centerRebars(self, b):
-        '''centers in the width of the section the rebars.''' 
-        for rbRow in self.rebarRows:
-            rbRow.centerRebars(b)
 
 class RCRectangularSection(BasicRectangularRCSection):
     '''
@@ -881,24 +912,3 @@ def loadMainRefPropertyIntoElements(elemSet, sectionContainer, code):
             sys.stderr.write("element: "+ str(e.tag) + " section undefined.\n")
             e.setProp(code,0.0)
 
-def rebLayer_mm(fi,s,c):
-    '''Defines a layer of main reinforcement bars, given the spacement.
-
-    :param fi: bar diameter [mm]
-    :param s: spacing [mm]
-    :param c: cover [mm]
-    '''
-    return MainReinfLayer(rebarsDiam=fi*1e-3,areaRebar= math.pi*(fi*1e-3)**2/4.0,rebarsSpacing=s*1e-3,width=1.0,nominalCover=c*1e-3)
-
-def rebLayerByNumFi_mm(n,fi,c,latC,L):
-    '''Defines a layer of  main reinforcement bars with a fixed number of rebars. Spacing is calculated
-    so that the rebars (and two lateral covers) are inserted in the length L passed as parameter.
-
-    :param n: number of rebars
-    :param fi: bar diameter [mm]
-    :param c: nominal cover [mm]
-    :param latC: nominal lateral cover [mm]
-    :param L: length where the n rebars and two lateral covers are inserted [mm]
-    '''
-    rl=MainReinfLayer(rebarsDiam=fi*1e-3,areaRebar= math.pi*(fi*1e-3)**2/4.0,nRebars=n,width=L*1e-3,nominalCover=c*1e-3,nominalLatCover=latC*1e-3)
-    return rl
