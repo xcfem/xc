@@ -224,6 +224,17 @@ class BasicRectangularRCSection(section_properties.RectangularSection):
         ''' returns a name to identify the shear Z response of the section'''
         return self.sectionName+"RespVz"
 
+    def getRespT(self,preprocessor,JTorsion):
+        '''Material for modeling torsional response of section'''
+        return typical_materials.defElasticMaterial(preprocessor,self.respTName(),self.fiberSectionParameters.concrType.Gcm()*JTorsion) # Torsional response of the section.
+
+    def getRespVy(self,preprocessor):
+        '''Material for modeling Y shear response of section'''
+        return typical_materials.defElasticMaterial(preprocessor,self.respVyName(),5/6.0*self.b*self.h*self.fiberSectionParameters.concrType.Gcm())
+
+    def getRespVz(self,preprocessor):
+        '''Material for modeling z shear response of section'''
+        return typical_materials.defElasticMaterial(preprocessor,self.respVzName(),5/6.0*self.b*self.h*self.fiberSectionParameters.concrType.Gcm())
     def getConcreteDiagram(self,preprocessor):
         ''' Return the concrete stress-strain diagram.'''
         return self.fiberSectionParameters.getConcreteDiagram(preprocessor)
@@ -251,6 +262,18 @@ class BasicRectangularRCSection(section_properties.RectangularSection):
         rg.nDivJK= self.fiberSectionParameters.nDivJK
         rg.pMin= geom.Pos2d(-self.b/2,-self.h/2)
         rg.pMax= geom.Pos2d(self.b/2,self.h/2)
+
+    def defFiberSection(self,preprocessor):
+        '''Define fiber section from geometry data.'''
+        self.fs= preprocessor.getMaterialHandler.newMaterial("fiberSectionShear3d",self.sectionName)
+        self.fiberSectionRepr= self.fs.getFiberSectionRepr()
+        self.fiberSectionRepr.setGeomNamed(self.gmSectionName())
+        self.fs.setupFibers()
+        self.fs.setRespVyByName(self.respVyName())
+        self.fs.setRespVzByName(self.respVzName())
+        self.fs.setRespTByName(self.respTName())
+        self.fs.setProp('sectionData',self)
+
 
 class LongReinfLayers(object):
     ''' Layers of longitudinal reinforcement.'''
@@ -464,7 +487,6 @@ class RCRectangularSection(BasicRectangularRCSection):
     def defSectionGeometry(self,preprocessor,matDiagType):
         '''
         Definition of a reinforced concrete geometric section 
-        with one row of rebars in the top face and another one in the bottom face
 
         :ivar matDiagType: type of stress-strain diagram 
                      ("k" for characteristic diagram, "d" for design diagram)
@@ -485,28 +507,6 @@ class RCRectangularSection(BasicRectangularRCSection):
             p2= geom.Pos2d(self.b/2-rbRow.coverLat,y)
             self.positvRebarRows.reinfLayers.append(rbRow.defReinfLayer(reinforcement,"pos",self.fiberSectionParameters.reinfDiagName,p1,p2))
         self.coverMin= min(min(self.getCoverPos()),min(self.getCoverNeg()),min(self.getLatCoverPos()),min(self.getLatCoverNeg()))
-
-    def getRespT(self,preprocessor,JTorsion):
-        '''Material for modeling torsional response of section'''
-        return typical_materials.defElasticMaterial(preprocessor,self.respTName(),self.fiberSectionParameters.concrType.Gcm()*JTorsion) # Torsional response of the section.
-
-    def getRespVy(self,preprocessor):
-        '''Material for modeling Y shear response of section'''
-        return typical_materials.defElasticMaterial(preprocessor,self.respVyName(),5/6.0*self.b*self.h*self.fiberSectionParameters.concrType.Gcm())
-
-    def getRespVz(self,preprocessor):
-        '''Material for modeling z shear response of section'''
-        return typical_materials.defElasticMaterial(preprocessor,self.respVzName(),5/6.0*self.b*self.h*self.fiberSectionParameters.concrType.Gcm())
-
-    def defFiberSection(self,preprocessor):
-        self.fs= preprocessor.getMaterialHandler.newMaterial("fiberSectionShear3d",self.sectionName)
-        self.fiberSectionRepr= self.fs.getFiberSectionRepr()
-        self.fiberSectionRepr.setGeomNamed(self.gmSectionName())
-        self.fs.setupFibers()
-        self.fs.setRespVyByName(self.respVyName())
-        self.fs.setRespVzByName(self.respVzName())
-        self.fs.setRespTByName(self.respTName())
-        self.fs.setProp("datosSecc",self)
 
     def defRCRectangularSection(self, preprocessor,matDiagType):
         '''
@@ -567,7 +567,7 @@ class setRCSections2SetElVerif(object):
 
     ''' 
     def __init__(self,name):
-        self.lstRCSects=[]
+        self.lstRCSects= list()
         self.name=name
 
     def append_section(self,RCSimplSect):
@@ -595,7 +595,6 @@ class setRCSections2SetElVerif(object):
 
          :param sectNmb: integer number identifying the section 
                          (1 correponds to the section stored in  lstRCSects[0] ...)
-
         '''
         return self.lstRCSects[sectNmb-1].getAsNeg()
 
@@ -604,7 +603,6 @@ class setRCSections2SetElVerif(object):
 
          :param sectNmb: integer number identifying the section 
                          (1 correponds to the section stored in  lstRCSects[0] ...)
-
         '''
         return self.lstRCSects[sectNmb-1].getAsPos()
 
@@ -613,7 +611,6 @@ class setRCSections2SetElVerif(object):
 
           :param sectNmb: integer number identifying the section 
                          (1 correponds to the section stored in  lstRCSects[0] ...)
-
         '''
         return self.lstRCSects[sectNmb-1].getSPos()
 
@@ -622,7 +619,6 @@ class setRCSections2SetElVerif(object):
 
          :param sectNmb: integer number identifying the section 
                          (1 correponds to the section stored in  lstRCSects[0] ...)
-
         '''
         return self.lstRCSects[sectNmb-1].getSNeg()
 
@@ -639,7 +635,6 @@ class setRCSections2SetElVerif(object):
 
          :param sectNmb: integer number identifying the section 
                          (1 correponds to the section stored in  lstRCSects[0] ...)
-
         '''
         return self.lstRCSects[sectNmb-1].getDiamPos()
 
@@ -694,11 +689,11 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
     def __init__(self,name,sectionDescr,concrType,reinfSteelType,depth,width=1.0,elemSetName='total'):
         super(RCSlabBeamSection,self).__init__(name)
         self.name=name
-        self.sectionDescr=sectionDescr
-        self.concrType=concrType
-        self.reinfSteelType=reinfSteelType
-        self.depth=depth
-        self.width=width
+        self.sectionDescr= sectionDescr
+        self.concrType= concrType
+        self.reinfSteelType= reinfSteelType
+        self.depth= depth
+        self.width= width
         self.elemSetName=elemSetName
         self.dir1PositvRebarRows= []
         self.dir1NegatvRebarRows= []
