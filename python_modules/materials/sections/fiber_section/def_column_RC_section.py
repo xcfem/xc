@@ -96,6 +96,7 @@ class RCCircularSection(RCSectionBase, section_properties.CircularSection):
     Base class for rectangular reinforced concrete sections.
 
     :ivar sectionName: name identifying the section
+    :ivar mainReinf: layers of main reinforcement.
     :ivar shReinf:  record of type ShearReinforcement
                     defining the shear reinforcement.
     '''
@@ -111,6 +112,9 @@ class RCCircularSection(RCSectionBase, section_properties.CircularSection):
         RCSectionBase.__init__(self,concrType= concrType,reinfSteelType= reinfSteelType, nIJ= 10, nJK= 10)
         section_properties.CircularSection.__init__(self,name,width,depth)
 
-        # Transverse reinforcement (z direction)
+        # Longitudinal reinforcement.
+        self.mainReinf= LongReinfLayers()  #list of ReinfRow data (positive face)
+        
+        # Transverse reinforcement.
         self.shReinf= ShearReinforcement()
         self.shReinf.familyName= "V"

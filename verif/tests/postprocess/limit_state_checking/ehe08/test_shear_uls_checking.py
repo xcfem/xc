@@ -102,12 +102,12 @@ reinfConcreteSectionDistribution= RC_material_distribution.RCMaterialDistributio
 sections= reinfConcreteSectionDistribution.sectionDefinition #creates an RC sections container
 
 #Generic layers (rows of rebars). Other instance variables that we can define
-#for MainReinfLayers are coverLat and nRebars.If we define nRebars that
+#for ReinfRows are coverLat and nRebars.If we define nRebars that
 #value overrides the rebarsSpacing
 barArea= 4e-4
 barDiameter= math.sqrt(barArea)/math.pi
 
-reinfLayer= def_simple_RC_section.MainReinfLayer(rebarsDiam= barDiameter,areaRebar= barArea,rebarsSpacing=0.075,width=0.25,nominalCover=0.050)
+reinfLayer= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameter,areaRebar= barArea,rebarsSpacing=0.075,width=0.25,nominalCover=0.050)
 
 #instances of def_simple_RC_section.RCSlabBeamSection that defines the
 #variables that make up THE TWO reinforced concrete sections in the two

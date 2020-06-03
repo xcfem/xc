@@ -49,7 +49,7 @@ class ShearReinforcement(object):
         return self.nShReinfBranches*self.areaShReinfBranch/self.shReinfSpacing
 
 
-class MainReinfLayer(object):
+class ReinfRow(object):
     ''' Definition of the variables that make up a family (row) of main 
     (longitudinal) reinforcing bars.
 
@@ -120,7 +120,7 @@ class LongReinfLayers(object):
     def __init__(self, lst= None):
         ''' Constructor.'''
         if(lst):
-            self.rebarRows= lst  # list of MainReinfLayer data
+            self.rebarRows= lst  # list of ReinfRow data
         else:
             self.rebarRows= list()
         self.reinfLayers= list()  # list of XC::StraightReinfLayer created.
@@ -206,7 +206,7 @@ def rebLayer_mm(fi,s,c):
     :param s: spacing [mm]
     :param c: cover [mm]
     '''
-    return MainReinfLayer(rebarsDiam=fi*1e-3,areaRebar= math.pi*(fi*1e-3)**2/4.0,rebarsSpacing=s*1e-3,width=1.0,nominalCover=c*1e-3)
+    return ReinfRow(rebarsDiam=fi*1e-3,areaRebar= math.pi*(fi*1e-3)**2/4.0,rebarsSpacing=s*1e-3,width=1.0,nominalCover=c*1e-3)
 
 def rebLayerByNumFi_mm(n,fi,c,latC,L):
     '''Defines a layer of  main reinforcement bars with a fixed number of rebars. Spacing is calculated
@@ -218,7 +218,7 @@ def rebLayerByNumFi_mm(n,fi,c,latC,L):
     :param latC: nominal lateral cover [mm]
     :param L: length where the n rebars and two lateral covers are inserted [mm]
     '''
-    rl=MainReinfLayer(rebarsDiam=fi*1e-3,areaRebar= math.pi*(fi*1e-3)**2/4.0,nRebars=n,width=L*1e-3,nominalCover=c*1e-3,nominalLatCover=latC*1e-3)
+    rl=ReinfRow(rebarsDiam=fi*1e-3,areaRebar= math.pi*(fi*1e-3)**2/4.0,nRebars=n,width=L*1e-3,nominalCover=c*1e-3,nominalLatCover=latC*1e-3)
     return rl
 
 # Reinforced concrete.
@@ -462,8 +462,8 @@ class RCRectangularSection(BasicRectangularRCSection):
 
         # Longitudinal reinforcement
         self.coverMin= 0.0 
-        self.positvRebarRows= LongReinfLayers()  #list of MainReinfLayer data (positive face)
-        self.negatvRebarRows= LongReinfLayers() #list of MainReinfLayer data (negative face)
+        self.positvRebarRows= LongReinfLayers()  #list of ReinfRow data (positive face)
+        self.negatvRebarRows= LongReinfLayers() #list of ReinfRow data (negative face)
 
     def getAsPos(self):
         '''returns the cross-sectional area of the rebars in the positive face.'''
@@ -738,13 +738,13 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
     :ivar depth:           cross-section depth
     :ivar width:           cross-section width (defaults to 1.0)
     :ivar dir1PositvRebarRows: layers of main rebars in direction 1 in the local 
-                          positive face of the section (list of MainReinfLayer)
+                          positive face of the section (list of ReinfRow)
     :ivar dir1NegatvRebarRows: layers of main rebars in direction 1 in the local 
-                          negative face of the section (list of MainReinfLayer)
+                          negative face of the section (list of ReinfRow)
     :ivar dir2PositvRebarRows: layers of main rebars in direction 2 in the local 
-                          positive face of the section (list of MainReinfLayer)
+                          positive face of the section (list of ReinfRow)
     :ivar dir2NegatvRebarRows: layers of main rebars in direction 2 in the local 
-                          negative face of the section (list of MainReinfLayer)
+                          negative face of the section (list of ReinfRow)
     :ivar dir1ShReinfY: instance of class ShearReinforcement that represents  
                         the Y shear reinforcement in section 1
     :ivar dir1ShReinfZ: instance of class ShearReinforcement that represents                      
