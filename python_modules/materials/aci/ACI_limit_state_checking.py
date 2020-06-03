@@ -230,7 +230,7 @@ class ShearController(lsc.ShearControllerBase):
             e.getResistingForce()
             scc= e.getSection()
             idSection= e.getProp("idSection")
-            section= scc.getProp("datosSecc")
+            section= scc.getProp('sectionData')
             self.setSection(section)
             NTmp= scc.getStressResultantComponent("N")
             VuTmp= self.calcVu(NTmp) 

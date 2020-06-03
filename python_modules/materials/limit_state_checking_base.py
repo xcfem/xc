@@ -52,7 +52,7 @@ class fibSectLSProperties(object):
     '''
     def __init__(self,sct):
         self.sct=sct
-        self.sctProp=sct.getProp("datosSecc")
+        self.sctProp=sct.getProp('sectionData')
         self.concrTagK= self.sctProp.fiberSectionParameters.concrType.matTagK
         self.rsteelTagK= self.sctProp.fiberSectionParameters.reinfSteelType.matTagK
         self.concrName= str(self.sctProp.fiberSectionParameters.concrType)

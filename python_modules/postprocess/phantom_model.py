@@ -96,7 +96,7 @@ class PhantomModel(object):
         phantomElement.setProp("idSection", sectionName) #Section to check
         phantomElement.setProp("dir",sectionIndex) #Section index in the element.
         scc= phantomElement.getSection()
-        scc.setProp("datosSecc", sectionDefinition) #Section definition
+        scc.setProp('sectionData', sectionDefinition) #Section definition
         phantomElement.setProp("diagInt",interactionDiagram)
         return phantomElement
 

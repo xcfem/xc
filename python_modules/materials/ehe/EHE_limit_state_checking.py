@@ -913,7 +913,7 @@ class ShearController(lscb.ShearControllerBase):
             R=e.getResistingForce()
             scc= e.getSection()
             idSection= e.getProp("idSection")
-            section= scc.getProp("datosSecc")
+            section= scc.getProp('sectionData')
             concreteCode= section.fiberSectionParameters.concrType
             reinforcementCode= section.fiberSectionParameters.reinfSteelType
             self.AsTrsv= section.shReinfY.getAs()

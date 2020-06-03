@@ -251,7 +251,7 @@ class ShearController(lsc.ShearControllerBase):
           e.getResistingForce()
           scc= e.getSection()
           idSection= e.getProp("idSection")
-          section= scc.getProp("datosSecc")
+          section= scc.getProp('sectionData')
           self.setSection(section)
           AsTrsv= section.shReinfY.getAs()
           alpha= section.shReinfY.angAlphaShReinf
@@ -299,7 +299,7 @@ class CrackControlSIA262(lsc.CrackControlBaseParameters):
         self.limitStress= limitStress #Limit value for rebar stresses.
     def calcRebarStress(self, scc):
         '''Returns average stress in rebars.'''
-        section= scc.getProp("datosSecc")
+        section= scc.getProp('sectionData')
         concreteTag= section.fiberSectionParameters.concrType.matTagK
         reinfMatTag= section.fiberSectionParameters.reinfSteelType.matTagK
         if(not scc.hasProp("rcSets")):
@@ -357,7 +357,7 @@ class CrackControlSIA262PlanB(CrackControlSIA262):
       Ntmp= scc.getStressResultantComponent("N")
       MyTmp= scc.getStressResultantComponent("My")
       MzTmp= scc.getStressResultantComponent("Mz")
-      datosScc= scc.getProp("datosSecc")
+      datosScc= scc.getProp('sectionData')
       stressCalc= datosScc.getStressCalculator()
       stressCalc.solve(Ntmp, MyTmp)
       sigma_sPos= stressCalc.sgs
@@ -536,7 +536,7 @@ class FatigueController(lsc.LimitStateControllerBase):
             Mz= scc.getStressResultantComponent("Mz")
             Vy= scc.getStressResultantComponent("Vy")
             Vz= scc.getStressResultantComponent("Vz")
-            datosScc= scc.getProp("datosSecc")
+            datosScc= scc.getProp('sectionData')
             stressCalc= datosScc.getStressCalculator()
             stressCalc.solve(N, My)
             sigma_sPos= stressCalc.sgs
@@ -555,7 +555,7 @@ class FatigueController(lsc.LimitStateControllerBase):
                 controlVars.concreteBendingCF= controlVars.getConcreteMinStress()/controlVars.concreteLimitStress
 
                 #print("concreteBendingCF= ",controlVars.concreteBendingCF)
-                section= scc.getProp("datosSecc")
+                section= scc.getProp('sectionData')
                 concreteSectionShearParams= ShearController(self.limitStateLabel)
                 concreteSectionShearParams.setSection(section)
                 posEsf= geom.Pos3d(N,My,Mz)
