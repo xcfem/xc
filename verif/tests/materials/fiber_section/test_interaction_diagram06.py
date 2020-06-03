@@ -36,7 +36,7 @@ concrete.alfacc=0.85    # f_maxd= 0.85*fcd concrete long term compressive streng
 
 reinfSteel= EHE_materials.B500S
 
-sccData=def_simple_RC_section.RCSimpleSection()
+sccData=def_simple_RC_section.RCRectangularSection()
 sccData.sectionName= "sccData"
 sccData.sectionDescr= "Prueba."
 sccData.fiberSectionParameters.concrType= concrete
@@ -54,7 +54,7 @@ feProblem.logFileName= "/tmp/erase.log" # Don't print warnings.
 feProblem.errFileName= "/tmp/erase.err" # Don't print errors.
 
 preprocessor=  feProblem.getPreprocessor
-sccData.defRCSimpleSection(preprocessor, 'd')
+sccData.defRCRectangularSection(preprocessor, 'd')
 param= xc.InteractionDiagramParameters()
 diag= sccData.defInteractionDiagramNMy(preprocessor)
 #from materials.sections.fiber_section import plotSectionGeometry as pg

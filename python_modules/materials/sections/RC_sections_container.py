@@ -58,7 +58,7 @@ class SectionContainer(object):
         '''
         for s in self.sections:
           for i in range(len(s.lstRCSects)):
-            s.lstRCSects[i].defRCSimpleSection(preprocessor,matDiagType)
+            s.lstRCSects[i].defRCRectangularSection(preprocessor,matDiagType)
 
 
     def calcInteractionDiagrams(self,preprocessor,matDiagType, diagramType= 'NMyMz'):
@@ -73,7 +73,7 @@ class SectionContainer(object):
         self.mapInteractionDiagrams= {}
         for s in self.sections:
           for i in range(len(s.lstRCSects)):
-    #        s.lstRCSects[i].defRCSimpleSection(preprocessor,matDiagType)
+    #        s.lstRCSects[i].defRCRectangularSection(preprocessor,matDiagType)
             diag= None
             if(diagramType=='NMyMz'):
               diag= s.lstRCSects[i].defInteractionDiagram(preprocessor)

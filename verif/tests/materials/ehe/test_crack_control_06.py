@@ -19,7 +19,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@gmail.com"
 
-datosScc1LosC= def_simple_RC_section.RCSimpleSection()
+datosScc1LosC= def_simple_RC_section.RCRectangularSection()
 datosScc1LosC.sectionName= "secHA1LosC"
 datosScc1LosC.sectionDescr= "Losa. Central portion. Section normal to X axis."
 datosScc1LosC.fiberSectionParameters.concrType= EHE_materials.HA25
@@ -50,7 +50,7 @@ concreteMatTag= EHE_materials.HA25.defDiagK(preprocessor)
 reinfSteelMaterialTag= EHE_materials.B500S.defDiagK(preprocessor)
 
 
-datosScc1LosC.defRCSimpleSection(preprocessor, "k")
+datosScc1LosC.defRCRectangularSection(preprocessor, "k")
 
 scc3d_testing_bench.sectionModel(preprocessor, datosScc1LosC.sectionName)
 

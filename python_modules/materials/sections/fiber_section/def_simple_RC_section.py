@@ -181,8 +181,7 @@ class RCFiberSectionParameters(object):
 
 class BasicRectangularRCSection(section_properties.RectangularSection):
     '''
-    This class is used to define the basic variables that make up a rectangular
-    reinforced concrete section.
+    Base class for rectangular reinforcec concrete sections.
 
     :ivar sectionName:     name identifying the section
     :ivar sectionDescr:    section description
@@ -190,10 +189,10 @@ class BasicRectangularRCSection(section_properties.RectangularSection):
                                   concrete fiber section.
     :ivar fiberSectionRepr: fiber model of the section.
     :ivar shReinfZ:        record of type 
-                           defRCSimpleSection.ShearReinforcement()
+                           defRCRectangularSection.ShearReinforcement()
                            defining the shear reinforcement in Z direction
     :ivar shReinfY:        record of type 
-                           defRCSimpleSection.ShearReinforcement()
+                           defRCRectangularSection.ShearReinforcement()
                            defining the shear reinforcement in Y direction
     '''
     def __init__(self,name= 'noName', width=0.25,depth=0.25,concrType=None,reinfSteelType=None):
@@ -325,7 +324,7 @@ class LongReinfLayers(object):
         for rbRow in self.rebarRows:
             rbRow.centerRebars(b)
 
-class RCSimpleSection(BasicRectangularRCSection):
+class RCRectangularSection(BasicRectangularRCSection):
     '''
     This class is used to define the variables that make up a reinforced 
     concrete section with top and bottom reinforcement layers.
@@ -341,21 +340,12 @@ class RCSimpleSection(BasicRectangularRCSection):
                            the section
     '''
     def __init__(self,name= 'noName', width=0.25,depth=0.25,concrType=None,reinfSteelType=None):
-        super(RCSimpleSection,self).__init__(name,width,depth,concrType,reinfSteelType)
+        super(RCRectangularSection,self).__init__(name,width,depth,concrType,reinfSteelType)
 
         # Longitudinal reinforcement
         self.coverMin= 0.0 
         self.positvRebarRows= LongReinfLayers()  #list of MainReinfLayer data (positive face)
         self.negatvRebarRows= LongReinfLayers() #list of MainReinfLayer data (negative face)
-
-    def getAsPosRows(self):
-        '''returns a list with the cross-sectional area of the rebars in each row of the positive face'''
-        return self.positvRebarRows.getAsRows()
-
-    def getAsNegRows(self):
-        '''returns a list with the cross-sectional area of the rebars in each row 
-           of the negative face'''
-        return self.negatvRebarRows.getAsRows()
 
     def getAsPos(self):
         '''returns the cross-sectional area of the rebars in the positive face'''
@@ -518,7 +508,7 @@ class RCSimpleSection(BasicRectangularRCSection):
         self.fs.setRespTByName(self.respTName())
         self.fs.setProp("datosSecc",self)
 
-    def defRCSimpleSection(self, preprocessor,matDiagType):
+    def defRCRectangularSection(self, preprocessor,matDiagType):
         '''
         Definition of a reinforced concrete section with several
         top and bottom reinforcement layers.
@@ -571,7 +561,7 @@ class setRCSections2SetElVerif(object):
     :ivar name:       name given to the list of reinforced concrete sections
     :ivar lstRCSects: list of reinforced concrete fiber-sections that will be 
                       associated to a set of elements in order to carry out their LS verifications.
-                      The items of the list are instances of the object *RCSimpleSection*
+                      The items of the list are instances of the object *RCRectangularSection*
                       lstRCSects[0]=section in 1 direction
                       lstRCSects[1]=section in 2 direction ...
 
@@ -720,7 +710,7 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
         self.dir2ShReinfZ= ShearReinforcement()
 
     def creaTwoSections(self):
-        '''create the fiber sections of type 'RCSimpleSection' that represent     the reinforced concrete fiber section to be used for the checking in the 
+        '''create the fiber sections of type 'RCRectangularSection' that represent     the reinforced concrete fiber section to be used for the checking in the 
         directions 1 and 2. These sections are also added to the attribute 
         'lstRCSects' that contains the list of sections.
         '''
@@ -730,11 +720,11 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
         self.creaSingleSection(dirNmb=2,posReb=self.dir2PositvRebarRows,negReb=self.dir2NegatvRebarRows,YShReinf=self.dir2ShReinfY,ZShReinf=self.dir2ShReinfZ)
 
     def creaSingleSection(self,dirNmb,posReb,negReb,YShReinf,ZShReinf):
-        '''create the fiber section of type 'RCSimpleSection' that represents     the reinforced concrete fiber section to be used for the checking in the 
+        '''create the fiber section of type 'RCRectangularSection' that represents     the reinforced concrete fiber section to be used for the checking in the 
         direction passed as parameter 'dirNmb' (1 or 2). This section is also
         added to the attribute 'lstRCSects' that contains the list of sections.
         '''
-        sect= RCSimpleSection()
+        sect= RCRectangularSection()
         sect.sectionName= self.name + str(dirNmb)
         sect.sectionDescr= self.sectionDescr + ". "+str(dirNmb) + " direction."
         sect.fiberSectionParameters.concrType= self.concrType

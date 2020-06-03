@@ -26,7 +26,7 @@ __email__= "l.pereztato@gmail.com"
 areaFi22= SIA262_materials.section_barres_courantes[22e-3]
 areaFi26= SIA262_materials.section_barres_courantes[26e-3]
 
-datosScc1LosC= def_simple_RC_section.RCSimpleSection()
+datosScc1LosC= def_simple_RC_section.RCRectangularSection()
 datosScc1LosC.sectionName= "secHA1LosC"
 datosScc1LosC.sectionDescr= "Deck. Central portion. Section normal to X axis."
 concr= EHE_materials.HA30
@@ -61,7 +61,7 @@ preprocessor=  feProblem.getPreprocessor
 # reinfSteelMaterialTag= EHE_materials.B500S.defDiagK(preprocessor)
 
 
-datosScc1LosC.defRCSimpleSection(preprocessor, "k")
+datosScc1LosC.defRCRectangularSection(preprocessor, "k")
 
 scc3d_testing_bench.sectionModel(preprocessor, datosScc1LosC.sectionName)
 
