@@ -104,9 +104,9 @@ class SectionInfo(object):
         self.width=width
         self.depth=depth
         self.JTorsion=self.scc.getJTorsion()
-        self.shReinfY=sHAs.RecordShearReinforcement()
+        self.shReinfY=sHAs.ShearReinforcement()
         self.shReinfY.familyName= "Vy"
-        self.shReinfZ= sHAs.RecordShearReinforcement()
+        self.shReinfZ= sHAs.ShearReinforcement()
         self.shReinfZ.familyName= "Vz"
         self.Ec= self.concrete.Ecm()
         self.Es= self.rfSteel.Es

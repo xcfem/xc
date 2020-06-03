@@ -18,7 +18,7 @@ from materials.sections import stress_calc as sc
 import sys
 from misc_utils import log_messages as lmsg
 
-class RecordShearReinforcement(object):
+class ShearReinforcement(object):
     ''' Definition of the variables that make up a family of shear 
     reinforcing bars
 
@@ -190,10 +190,10 @@ class BasicRectangularRCSection(section_properties.RectangularSection):
                                   concrete fiber section.
     :ivar fiberSectionRepr: fiber model of the section.
     :ivar shReinfZ:        record of type 
-                           defRCSimpleSection.RecordShearReinforcement()
+                           defRCSimpleSection.ShearReinforcement()
                            defining the shear reinforcement in Z direction
     :ivar shReinfY:        record of type 
-                           defRCSimpleSection.RecordShearReinforcement()
+                           defRCSimpleSection.ShearReinforcement()
                            defining the shear reinforcement in Y direction
     '''
     def __init__(self,name= 'noName', width=0.25,depth=0.25,concrType=None,reinfSteelType=None):
@@ -202,11 +202,11 @@ class BasicRectangularRCSection(section_properties.RectangularSection):
         self.fiberSectionParameters= RCFiberSectionParameters(concrType= concrType, reinfSteelType= reinfSteelType, nDivIJ= 10, nDivJK= 10)
 
         # Transverse reinforcement (z direction)
-        self.shReinfZ= RecordShearReinforcement()
+        self.shReinfZ= ShearReinforcement()
         self.shReinfZ.familyName= "Vz"
 
         # Transverse reinforcement (y direction)
-        self.shReinfY= RecordShearReinforcement()
+        self.shReinfY= ShearReinforcement()
         self.shReinfY.familyName= "Vy"
 
     def gmSectionName(self):
@@ -689,13 +689,13 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
                           positive face of the section (list of MainReinfLayer)
     :ivar dir2NegatvRebarRows: layers of main rebars in direction 2 in the local 
                           negative face of the section (list of MainReinfLayer)
-    :ivar dir1ShReinfY: instance of class RecordShearReinforcement that represents  
+    :ivar dir1ShReinfY: instance of class ShearReinforcement that represents  
                         the Y shear reinforcement in section 1
-    :ivar dir1ShReinfZ: instance of class RecordShearReinforcement that represents                      
+    :ivar dir1ShReinfZ: instance of class ShearReinforcement that represents                      
                         the Z shear reinforcement in section 1
-    :ivar dir2ShReinfY: instance of class RecordShearReinforcement that represents
+    :ivar dir2ShReinfY: instance of class ShearReinforcement that represents
                         the Y shear reinforcement in section 2
-    :ivar dir2ShReinfZ: instance of class RecordShearReinforcement that represents
+    :ivar dir2ShReinfZ: instance of class ShearReinforcement that represents
                         the Z shear reinforcement in section 2
     :ivar elemSetName: name of the set with the elements to which to assign the 
           section (defaults to 'total'). 
@@ -714,10 +714,10 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
         self.dir1NegatvRebarRows= []
         self.dir2PositvRebarRows= []
         self.dir2NegatvRebarRows= []
-        self.dir1ShReinfY= RecordShearReinforcement()
-        self.dir1ShReinfZ= RecordShearReinforcement()
-        self.dir2ShReinfY= RecordShearReinforcement()
-        self.dir2ShReinfZ= RecordShearReinforcement()
+        self.dir1ShReinfY= ShearReinforcement()
+        self.dir1ShReinfZ= ShearReinforcement()
+        self.dir2ShReinfY= ShearReinforcement()
+        self.dir2ShReinfZ= ShearReinforcement()
 
     def creaTwoSections(self):
         '''create the fiber sections of type 'RCSimpleSection' that represent     the reinforced concrete fiber section to be used for the checking in the 

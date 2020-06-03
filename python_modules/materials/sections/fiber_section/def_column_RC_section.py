@@ -45,9 +45,9 @@ class RCColumnSection(def_simple_RC_section.BasicRectangularRCSection):
     :ivar nDivIJ:          number of cells in IJ (width) direction
     :ivar nDivJK:          number of cells in JK  (height) direction
     :ivar fiberSectionRepr:
-    :ivar shReinfZ:        record of type.defRCSimpleSection.RecordShearReinforcement()
+    :ivar shReinfZ:        record of type.defRCSimpleSection.ShearReinforcement()
                         defining the shear reinforcement in Z direction
-    :ivar shReinfY:        record of type.defRCSimpleSection.RecordShearReinforcement()
+    :ivar shReinfY:        record of type.defRCSimpleSection.ShearReinforcement()
                        defining the shear reinforcement in Y direction
     :ivar cover:          concrete clear cover of main reinforcement
     :ivar nRebarsWidth:   number of rebars in the width direction of the 
