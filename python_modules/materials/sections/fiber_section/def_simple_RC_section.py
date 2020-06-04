@@ -459,7 +459,7 @@ class RCSectionBase(object):
         return preprocessor.getMaterialHandler.calcInteractionDiagramNMy(self.sectionName,self.fiberSectionParameters.idParams)
 
     def defInteractionDiagramNMz(self,preprocessor):
-        'Defines N-My interaction diagram.'
+        'Defines N-Mz interaction diagram.'
         if(not self.fiberSectionRepr):
             lmsg.error("defInteractionDiagramNMz: fiber section representation for section: "+ self.sectionName + ";  not defined yet; use defRCSection method.\n")
         self.defInteractionDiagramParameters(preprocessor)
