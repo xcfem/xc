@@ -178,7 +178,7 @@ class LongReinfLayers(object):
         '''Return the minimum value of the cover.'''
         retval=0.0
         if(len(self.rebarRows)>0):
-            retval= rbRow.cover
+            retval= self.rebarRows[0].cover
             for rbRow in self.rebarRows[1:]:
                 retval= min(retval,rbRow.cover)
         return retval
@@ -256,15 +256,18 @@ class LongReinfLayers(object):
         :param diagramName: name of the strain-stress diagram of the steel.
         :param points: end points for each row.
         '''
-        if(not anglePairs):
-            for rbRow in self.rebarRows:
-                layer= rbRow.defCircularLayer(reinforcement,code,diagramName,extRad)
-                self.reinfLayers.append(layer)
+        if(len(self.rebarRows)>0):
+            if(not anglePairs):
+                for rbRow in self.rebarRows:
+                    layer= rbRow.defCircularLayer(reinforcement,code,diagramName,extRad)
+                    self.reinfLayers.append(layer)
+            else:
+                for rbRow, angles in zip(self.rebarRows, anglePairs):
+                    initAngle= anglePairs[0]; finalAngle= anglePairs[1]
+                    layer= rbRow.defCircularLayer(reinforcement,code,diagramName, extRad, initAngle, finalAngle)
+                    self.reinfLayers.append(layer)
         else:
-            for rbRow, angles in zip(self.rebarRows, anglePairs):
-                initAngle= anglePairs[0]; finalAngle= anglePairs[1]
-                layer= rbRow.defCircularLayer(reinforcement,code,diagramName, extRad, initAngle, finalAngle)
-                self.reinfLayers.append(layer)
+            lmsg.warning('No longitudinal reinforcement.')
 
 def rebLayer_mm(fi,s,c):
     '''Defines a layer of main reinforcement bars, given the spacement.
