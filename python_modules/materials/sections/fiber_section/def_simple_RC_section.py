@@ -173,7 +173,16 @@ class LongReinfLayers(object):
     def getAs(self):
         '''returns the cross-sectional area of the rebars.'''
         return sum(self.getAsRows())
-    
+
+    def getMinCover(self):
+        '''Return the minimum value of the cover.'''
+        retval=0.0
+        if(len(self.rebarRows)>0):
+            retval= rbRow.cover
+            for rbRow in self.rebarRows[1:]:
+                retval= min(retval,rbRow.cover)
+        return retval
+        
     def getRowsCGcover(self):
         '''returns the distance from the center of gravity of the rebars
         to the face of the section 
@@ -302,6 +311,14 @@ class RCFiberSectionParameters(object):
         self.reinfDiagName= None # Name of the uniaxial material
         self.nDivIJ= nDivIJ
         self.nDivJK= nDivJK
+
+    def nDivCirc(self):
+        '''Alias for nDivIJ when defining circular sections.'''
+        return self.nDivIJ
+    
+    def nDivRad(self):
+        '''Alias for nDivJK when defining circular sections.'''
+        return self.nDivJK
 
     def getConcreteDiagram(self,preprocessor):
         return preprocessor.getMaterialHandler.getMaterial(self.concrDiagName)

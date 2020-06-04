@@ -10,9 +10,10 @@ __email__= "l.pereztato@gmail.com" "ana.Ortega.Ort@gmail.com"
 Definition of the variables that make up a reinforced concrete section 
 with reinforcement symmetric in both directions (as usual in columns)
 '''
-
+import math
 from materials.ehe import EHE_materials
 from materials.sections.fiber_section import def_simple_RC_section
+from materials.sections import section_properties
 
 class ColumnMainReinforcement(object):
     ''' Main (longitudinal) rebars of a column.
@@ -91,7 +92,7 @@ class RCRectangularColumnSection(def_simple_RC_section.BasicRectangularRCSection
         self.reinforcementCDer.p1= geom.Pos2d(width/2-cover,-depth/2+cover+rebarsSpacingCanto) # Right side reinforcement.
         self.reinforcementCDer.p2= geom.Pos2d(width/2-cover,depth/2-cover-rebarsSpacingCanto)
 
-class RCCircularSection(RCSectionBase, section_properties.CircularSection):
+class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.CircularSection):
     '''
     Base class for rectangular reinforced concrete sections.
 
@@ -109,15 +110,25 @@ class RCCircularSection(RCSectionBase, section_properties.CircularSection):
         :param concrType: type of concrete (e.g. EHE_materials.HA25)     
         :param reinfSteelType: type of reinforcement steel.
         '''
-        RCSectionBase.__init__(self,concrType= concrType,reinfSteelType= reinfSteelType, nIJ= 10, nJK= 10)
+        def_simple_RC_section.RCSectionBase.__init__(self,concrType= concrType,reinfSteelType= reinfSteelType, nIJ= 20, nJK= 5)
         section_properties.CircularSection.__init__(self,name,Rint= Rint,Rext= Rext)
 
         # Longitudinal reinforcement.
-        self.mainReinf= LongReinfLayers()  #list of ReinfRow data (positive face)
+        self.mainReinf= def_simple_RC_section.LongReinfLayers()  #list of ReinfRow data (positive face)
         
         # Transverse reinforcement.
-        self.shReinf= ShearReinforcement()
+        self.shReinf= def_simple_RC_section.ShearReinforcement()
         self.shReinf.familyName= "V"
+        
+    def defConcreteRegion(self,geomSection):
+        regions= geomSection.getRegions
+        rg= regions.newCircularRegion(self.fiberSectionParameters.concrDiagName)
+        rg.nDivCirc= self.fiberSectionParameters.nDivCirc()
+        rg.nDivRad= self.fiberSectionParameters.nDivRad()
+        rg.extRad= self.Rext
+        rg.intRad= self.Rint
+        rg.initAngle= 0.0
+        rg.finalAngle= 2*math.pi
         
     def defSectionGeometry(self,preprocessor,matDiagType):
         '''
