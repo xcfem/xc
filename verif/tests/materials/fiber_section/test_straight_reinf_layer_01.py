@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+from __future__ import division
+
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (A_OO)"
 __copyright__= "Copyright 2015, LCPT and AO_O"
 __license__= "GPL"
@@ -75,7 +78,7 @@ fibers= quadFibers.getFibers()
 
 '''
 for_each_fiber
-  print "fiber: ",tag, " mat. tag:", getMaterial.tag
+  print("fiber: ",tag, " mat. tag:", getMaterial.tag)
 '''
 
 
@@ -132,7 +135,7 @@ centerOfMassY= fibers.getCenterOfMassY()
 
 avgStrain= 0.0
 for f in fibers:
-# print "fiber: ",tag, " strain: ", getMaterial.strain
+# print("fiber: ",tag, " strain: ", getMaterial.strain)
    avgStrain+= f.getMaterial().getStrain()
 avgStrain/= nfib
 
@@ -150,26 +153,26 @@ ratio8= ((E*deltax)-F)/F
 ratio9= (avgStrain-deltax)/deltax
 
 ''' 
-print "R= ",R
-print "dx= ",deltax
-print "ratio1= ",(ratio1)
-print "ratio2= ",(ratio2)
-print "ratio3= ",(ratio3)
-print "ratio4= ",(ratio4)
-print "Iz= ",Iz
-print "izTeor= ",izTeor
-print "ratio5= ",(ratio5)
-print "Iy= ",Iy
-print "iyTeor= ",iyTeor
-print "ratio6= ",(ratio6)
-print "ratio7= ",(ratio7)
-print "ratio8= ",(ratio8)
-print "ratio9= ",(ratio9)
+print("R= ",R)
+print("dx= ",deltax)
+print("ratio1= ",ratio1)
+print("ratio2= ",ratio2)
+print("ratio3= ",ratio3)
+print("ratio4= ",ratio4)
+print("Iz= ",Iz)
+print("izTeor= ",izTeor)
+print("ratio5= ",ratio5)
+print("Iy= ",Iy)
+print("iyTeor= ",iyTeor)
+print("ratio6= ",ratio6)
+print("ratio7= ",ratio7)
+print("ratio8= ",ratio8)
+print("ratio9= ",ratio9)
    '''
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-5) & (abs(ratio3)<1e-5) & (abs(ratio4)<1e-5) & (abs(ratio5)<1e-5) & (abs(ratio6)<1e-5) & (abs(ratio7)<1e-5) & (abs(ratio8)<1e-5) & (abs(ratio9)<1e-5) :
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
