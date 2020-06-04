@@ -54,7 +54,7 @@ feProblem.logFileName= "/tmp/erase.log" # Don't print warnings.
 feProblem.errFileName= "/tmp/erase.err" # Don't print errors.
 
 preprocessor=  feProblem.getPreprocessor
-sccData.defRCRectangularSection(preprocessor, 'd')
+sccData.defRCSection(preprocessor, 'd')
 param= xc.InteractionDiagramParameters()
 diag= sccData.defInteractionDiagramNMy(preprocessor)
 #from materials.sections.fiber_section import plotSectionGeometry as pg

@@ -147,6 +147,30 @@ class SectionProperties(object):
          whenever the rectangular section is homogeneous).
       '''
       return 2*self.getPlasticSectionModulusZ()*fy
+  
+    def respTName(self):
+        ''' returns a name to identify the torsional response of the section'''
+        return self.sectionName+"RespT"
+    
+    def respVyName(self):
+        ''' returns a name to identify the shear Y response of the section'''
+        return self.sectionName+"RespVy"
+
+    def respVzName(self):
+        ''' returns a name to identify the shear Z response of the section'''
+        return self.sectionName+"RespVz"
+  
+    def getRespT(self,preprocessor, G):
+        '''return an elastic material for modeling torsional response of section'''
+        return typical_materials.defElasticMaterial(preprocessor,self.respTName(),self.getTorsionalStiffness(G)) # Torsional response of the section.
+    
+    def getRespVy(self, preprocessor, G):
+        ''' return an elastic material for modeling Y shear response of section'''
+        return typical_materials.defElasticMaterial(preprocessor, self.respVyName(), self.getShearStiffnessY(G))
+
+    def getRespVz(self, preprocessor, G):
+        '''Material for modeling Z shear response of section'''
+        return typical_materials.defElasticMaterial(preprocessor, self.respVzName(), self.getShearStiffnessZ(G))
 
     def defElasticSection3d(self, preprocessor, material):
         ''' Return an elastic section appropiate for 3D beam analysis
@@ -395,6 +419,18 @@ class RectangularSection(SectionProperties):
         retval= alphaJT*self.b*pow(self.h,3)
       return retval
   
+    def getTorsionalStiffness(self, G):
+        '''Return the torsional stiffness of the section.'''
+        return G*self.getJTorsion()
+    
+    def getShearStiffnessY(self, G):
+        '''Return the shear stiffness of the section.'''
+        return 5.0/6.0*G*self.A()
+    
+    def getShearStiffnessZ(self, G):
+        '''Return the shear stiffness of the section.'''
+        return 5.0/6.0*G*self.A()
+    
     def getRegion(self,gm,nmbMat):
       '''generation of a quadrilateral region from the section 
       geometry (sizes and number of divisions for the cells)
@@ -419,41 +455,59 @@ class CircularSection(SectionProperties):
      '''
     r= 0.0 # radius.
     def __init__(self,name,Rext,Rint=0):
-      super(CircularSection,self).__init__(name)
-      self.Rext= Rext
-      self.Rint=Rint
+        super(CircularSection,self).__init__(name)
+        self.Rext= Rext
+        self.Rint=Rint
       
     def A(self):
-      '''Return cross-sectional area of the section'''
-      return math.pi*(self.Rext*self.Rext-self.Rint*self.Rint)
+        '''Return cross-sectional area of the section'''
+        return math.pi*(self.Rext*self.Rext-self.Rint*self.Rint)
   
     def Iy(self):
-      '''Return second moment of area about the local y-axis'''
-      return 1.0/4.0*math.pi*(self.Rext**4-self.Rint**4)
+        '''Return second moment of area about the local y-axis'''
+        return 1.0/4.0*math.pi*(self.Rext**4-self.Rint**4)
   
     def Iz(self):
-      '''Return second moment of area about the local z-axis'''
-      return self.Iy()
+        '''Return second moment of area about the local z-axis'''
+        return self.Iy()
   
     def J(self):
-      '''Return torsional constant of the section'''
-      return 2*self.Iy()
+        '''Return torsional constant of the section'''
+        return 2*self.Iy()
   
     def alphaY(self):
-      '''Return distorsion coefficient with respect to local Y axis
-         (see Oñate, Cálculo de estructuras por el MEF page 122)
-       '''
-      if self.Rint==0:
-        alpha=6.0/7.0
-      else:
-        c=self.Rint/self.Rext
-        K=c/(1+c**2)
-        alpha=6/(7+20*K**2)
-      return alpha
+        '''Return distorsion coefficient with respect to local Y axis
+           (see Oñate, Cálculo de estructuras por el MEF page 122)
+         '''
+        if self.Rint==0:
+          alpha=6.0/7.0
+        else:
+          c=self.Rint/self.Rext
+          K=c/(1+c**2)
+          alpha=6/(7+20*K**2)
+        return alpha
   
     def alphaZ(self):
-      '''Return distorsion coefficient with respect to local Z axis'''
-      return self.alphaY()
+        '''Return distorsion coefficient with respect to local Z axis.'''
+        return self.alphaY()
+
+    def getTorsionalStiffness(self, G):
+        '''Return the torsional stiffness of the section.'''
+        return G*self.J()
+    
+    def getShearStiffnessY(self, G):
+        '''Return the shear stiffness of the section.'''
+        retval= 0.0
+        if(self.Rint==0):
+            retval= 32.0/37.0*G*self.A()
+        else:
+            lmsg.error('getShearStiffness for tubes not implemented yet.')
+        return retval
+    
+    def getShearStiffnessZ(self, G):
+        '''Return the shear stiffness of the section.'''
+        return self.getShearStiffnessY(G)
+        
 
 class GenericSection(SectionProperties):
     '''Mechanical properties of generic section 

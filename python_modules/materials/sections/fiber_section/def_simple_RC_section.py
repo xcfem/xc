@@ -383,23 +383,12 @@ class RCSectionBase(object):
         '''
         self.sectionDescr= 'Text describing the role/position of the section in the structure.'
         self.fiberSectionParameters= RCFiberSectionParameters(concrType= concrType, reinfSteelType= reinfSteelType, nDivIJ= nIJ, nDivJK= nJK)
+        self.fiberSectionRepr= None
 
     def gmSectionName(self):
         ''' returns the name of the geometric section'''
         return "geom"+self.sectionName
-      
-    def respTName(self):
-        ''' returns a name to identify the torsional response of the section'''
-        return self.sectionName+"RespT"
-      
-    def respVyName(self):
-        ''' returns a name to identify the shear Y response of the section'''
-        return self.sectionName+"RespVy"
-
-    def respVzName(self):
-        ''' returns a name to identify the shear Z response of the section'''
-        return self.sectionName+"RespVz"
-    
+                
     def getConcreteDiagram(self,preprocessor):
         ''' Return the concrete stress-strain diagram.'''
         return self.fiberSectionParameters.getConcreteDiagram(preprocessor)
@@ -420,6 +409,12 @@ class RCSectionBase(object):
         '''
         return self.fiberSectionParameters.defDiagrams(preprocessor, matDiagType)
 
+    def defShearResponse(self, preprocessor):
+        ''' Define the shear/torsional response of the section.'''
+        self.respT= self.getRespT(preprocessor) # Torsional response of the section.
+        self.respVy= self.getRespVy(preprocessor)
+        self.respVz= self.getRespVz(preprocessor)
+
     def defFiberSection(self,preprocessor):
         '''Define fiber section from geometry data.'''
         self.fs= preprocessor.getMaterialHandler.newMaterial("fiberSectionShear3d",self.sectionName)
@@ -431,6 +426,17 @@ class RCSectionBase(object):
         self.fs.setRespTByName(self.respTName())
         self.fs.setProp('sectionData',self)
         
+    def defRCSection(self, preprocessor,matDiagType):
+        '''
+        Definition of an XC reinforced concrete section.
+
+        :param matDiagType: type of stress-strain diagram 
+                    ("k" for characteristic diagram, "d" for design diagram)
+         '''
+        self.defShearResponse(preprocessor)
+        self.defSectionGeometry(preprocessor,matDiagType)
+        self.defFiberSection(preprocessor)
+        
     def defInteractionDiagramParameters(self, preprocessor):
         ''' parameters for interaction diagrams. '''
         return self.fiberSectionParameters.defInteractionDiagramParameters(preprocessor)
@@ -438,21 +444,21 @@ class RCSectionBase(object):
     def defInteractionDiagram(self,preprocessor):
         'Defines 3D interaction diagram.'
         if(not self.fiberSectionRepr):
-            lmsg.error("defInteractionDiagram: fiber section representation for section: "+ self.sectionName + ";  not defined use defFiberSection.\n")
+            lmsg.error("defInteractionDiagram: fiber section representation for section: "+ self.sectionName + ";  not defined yet; use defRCSection method.\n")
         self.defInteractionDiagramParameters(preprocessor)
         return preprocessor.getMaterialHandler.calcInteractionDiagram(self.sectionName,self.fiberSectionParameters.idParams)
 
     def defInteractionDiagramNMy(self,preprocessor):
         'Defines N-My interaction diagram.'
         if(not self.fiberSectionRepr):
-            lmsg.error("defInteractionDiagramNMy: fiber section representation for section: "+ self.sectionName + ";  not defined use defFiberSection.\n")
+            lmsg.error("defInteractionDiagramNMy: fiber section representation for section: "+ self.sectionName + ";  not defined yet; use defRCSection method.\n")
         self.defInteractionDiagramParameters(preprocessor)
         return preprocessor.getMaterialHandler.calcInteractionDiagramNMy(self.sectionName,self.fiberSectionParameters.idParams)
 
     def defInteractionDiagramNMz(self,preprocessor):
         'Defines N-My interaction diagram.'
         if(not self.fiberSectionRepr):
-            lmsg.error("defInteractionDiagramNMz: fiber section representation for section: "+ self.sectionName + ";  not defined use defFiberSection.\n")
+            lmsg.error("defInteractionDiagramNMz: fiber section representation for section: "+ self.sectionName + ";  not defined yet; use defRCSection method.\n")
         self.defInteractionDiagramParameters(preprocessor)
         return preprocessor.getMaterialHandler.calcInteractionDiagramNMz(self.sectionName,self.fiberSectionParameters.idParams)
 
@@ -461,11 +467,9 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
     Base class for rectangular reinforced concrete sections.
 
     :ivar sectionName:     name identifying the section
-    :ivar shReinfZ:        record of type 
-                           defRCRectangularSection.ShearReinforcement()
+    :ivar shReinfZ:        record of type ShearReinforcement
                            defining the shear reinforcement in Z direction
-    :ivar shReinfY:        record of type 
-                           defRCRectangularSection.ShearReinforcement()
+    :ivar shReinfY:        record of type ShearReinforcement
                            defining the shear reinforcement in Y direction
     '''
     def __init__(self,name= 'noName', width=0.25,depth=0.25,concrType=None,reinfSteelType=None):
@@ -488,17 +492,17 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         self.shReinfY= ShearReinforcement()
         self.shReinfY.familyName= "Vy"
 
-    def getRespT(self,preprocessor,JTorsion):
+    def getRespT(self,preprocessor):
         '''Material for modeling torsional response of section'''
-        return typical_materials.defElasticMaterial(preprocessor,self.respTName(),self.fiberSectionParameters.concrType.Gcm()*JTorsion) # Torsional response of the section.
+        return section_properties.RectangularSection.getRespT(self,preprocessor,self.fiberSectionParameters.concrType.Gcm()) # Torsional response of the section.
 
     def getRespVy(self,preprocessor):
         '''Material for modeling Y shear response of section'''
-        return typical_materials.defElasticMaterial(preprocessor,self.respVyName(),5/6.0*self.b*self.h*self.fiberSectionParameters.concrType.Gcm())
+        return section_properties.RectangularSection.getRespVy(self,preprocessor,self.fiberSectionParameters.concrType.Gcm())
 
     def getRespVz(self,preprocessor):
-        '''Material for modeling z shear response of section'''
-        return typical_materials.defElasticMaterial(preprocessor,self.respVzName(),5/6.0*self.b*self.h*self.fiberSectionParameters.concrType.Gcm())
+        '''Material for modeling Z shear response of section'''
+        return section_properties.RectangularSection.getRespVz(self,preprocessor,self.fiberSectionParameters.concrType.Gcm())
 
     def defConcreteRegion(self,geomSection):
         regions= geomSection.getRegions
@@ -516,7 +520,6 @@ class RCRectangularSection(BasicRectangularRCSection):
 
     :ivar sectionName:     name identifying the section
     :ivar sectionDescr:    section description
-    :ivar fiberSectionRepr: fiber model of the section
     :ivar coverMin:        minimum value of end or clear concrete cover of main 
                            bars from both the positive and negative faces
     :ivar negatvRebarRows: layers of main rebars in the local negative face of 
@@ -681,22 +684,6 @@ class RCRectangularSection(BasicRectangularRCSection):
             posPoints.append((p1,p2))
         self.positvRebarRows.defStraightLayers(reinforcement,"pos",self.fiberSectionParameters.reinfDiagName,posPoints)
         self.coverMin= min(min(self.getCoverPos()),min(self.getCoverNeg()),min(self.getLatCoverPos()),min(self.getLatCoverNeg()))
-
-    def defRCRectangularSection(self, preprocessor,matDiagType):
-        '''
-        Definition of a reinforced concrete section with several
-        top and bottom reinforcement layers.
-
-        :param matDiagType: type of stress-strain diagram 
-                    ("k" for characteristic diagram, "d" for design diagram)
-         '''
-        self.JTorsion= self.getJTorsion()
-        self.respT= self.getRespT(preprocessor,self.JTorsion) # Torsional response of the section.
-        self.respVy= self.getRespVy(preprocessor)
-        self.respVz= self.getRespVz(preprocessor)
-        self.defSectionGeometry(preprocessor,matDiagType)
-        self.defFiberSection(preprocessor)
-
 
     def getStressCalculator(self):
         Ec= self.fiberSectionParameters.concrType.Ecm()

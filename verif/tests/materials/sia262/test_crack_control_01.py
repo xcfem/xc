@@ -61,7 +61,7 @@ preprocessor=  feProblem.getPreprocessor
 # reinfSteelMaterialTag= EHE_materials.B500S.defDiagK(preprocessor)
 
 
-datosScc1LosC.defRCRectangularSection(preprocessor, "k")
+datosScc1LosC.defRCSection(preprocessor, "k")
 
 scc3d_testing_bench.sectionModel(preprocessor, datosScc1LosC.sectionName)
 
