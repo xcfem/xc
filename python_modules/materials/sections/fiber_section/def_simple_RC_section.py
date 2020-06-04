@@ -98,22 +98,48 @@ class ReinfRow(object):
         '''center the row of rebars in the width of the section'''
         self.coverLat= (width-(self.nRebars-1)*self.rebarsSpacing)/2.0
 
-    def defReinfLayer(self,reinforcement,code,nmbDiagram,p1,p2):
-        '''Definition of a reinforcement layer in the fiber section model 
+    def defStraightLayer(self,reinforcement,code,diagramName,p1,p2):
+        '''Definition of a straight reinforcement layer in the XC section geometry object 
         between the 2d positions p1 and p2.
+
+        :param reinforcement: XC section geometry reinforcement.
+        :param code: identifier for the layer.
+        :param diagramName: name of the strain-stress diagram of the steel.
+        :param p1: first point of the layer.
+        :param p2: last point of the layer.
         '''
         if(self.nRebars>0):
-            self.reinfLayer= reinforcement.newStraightReinfLayer(nmbDiagram)
-            self.reinfLayer.codigo= code
+            self.reinfLayer= reinforcement.newStraightReinfLayer(diagramName)
+            self.reinfLayer.code= code
             self.reinfLayer.numReinfBars= self.nRebars
-            #print "reinforcement ", cod, " num. of bars: ", self.reinfLayer.numReinfBars
             self.reinfLayer.barDiameter= self.rebarsDiam
             self.reinfLayer.barArea= self.areaRebar
-            #print "reinforcement", cod, " bar area= ", self.reinfLayer.barArea*1e6, " mm2"
-            #print "reinforcement", cod, " bar diam: ", self.rebarsDiam*1e3, " mm"
             self.reinfLayer.p1= p1
             self.reinfLayer.p2= p2
             return self.reinfLayer
+        
+    def defCircularLayer(self,reinforcement, code, diagramName, extRad, initAngle= 0.0, finalAngle= 2*math.pi):
+        '''Definition of a circular reinforcement layer in the XC section geometry object 
+        between the angle arguments.
+
+        :param reinforcement: XC section geometry reinforcement.
+        :param code: identifier for the layer.
+        :param diagramName: name of the strain-stress diagram of the steel.
+        :param extRad: concrete external radius. 
+        :param initAngle: initial angle.
+        :param finalAngle: final angle.
+        '''
+        if(self.nRebars>0):
+            self.reinfLayer= reinforcement.newCircReinfLayer(diagramName)
+            self.reinfLayer.code= code
+            self.reinfLayer.numReinfBars= self.nRebars
+            self.reinfLayer.barDiameter= self.rebarsDiam
+            self.reinfLayer.barArea= self.areaRebar
+            self.reinfLayer.initAngle= initAngle
+            self.reinfLayer.finalAngle= finalAngle
+            self.reinfLayer.radius= extRad-self.cover
+            return self.reinfLayer
+
     
 class LongReinfLayers(object):
     ''' Layers of longitudinal reinforcement.'''
@@ -198,6 +224,38 @@ class LongReinfLayers(object):
         '''centers in the width of the section the rebars.''' 
         for rbRow in self.rebarRows:
             rbRow.centerRebars(b)
+            
+    def defStraightLayers(self, reinforcement, code, diagramName, pointPairs):
+        '''
+        Definition of the reinforcement layers
+
+        :param reinforcement: XC section reinforcement.
+        :param code: identifier for the layer.
+        :param diagramName: name of the strain-stress diagram of the steel.
+        :param pointPairs: end points for each row.
+        '''
+        for rbRow, pts in zip(self.rebarRows, pointPairs):
+            p1= pts[0]; p2= pts[1]
+            self.reinfLayers.append(rbRow.defStraightLayer(reinforcement,code,diagramName,p1,p2))
+            
+    def defCircularLayers(self, reinforcement, code, diagramName, extRad, anglePairs= None):
+        '''
+        Definition of the reinforcement layers
+
+        :param reinforcement: XC section reinforcement.
+        :param code: identifier for the layer.
+        :param diagramName: name of the strain-stress diagram of the steel.
+        :param points: end points for each row.
+        '''
+        if(not anglePairs):
+            for rbRow in self.rebarRows:
+                layer= rbRow.defCircularLayer(reinforcement,code,diagramName,extRad)
+                self.reinfLayers.append(layer)
+        else:
+            for rbRow, angles in zip(self.rebarRows, anglePairs):
+                initAngle= anglePairs[0]; finalAngle= anglePairs[1]
+                layer= rbRow.defCircularLayer(reinforcement,code,diagramName, extRad, initAngle, finalAngle)
+                self.reinfLayers.append(layer)
 
 def rebLayer_mm(fi,s,c):
     '''Defines a layer of main reinforcement bars, given the spacement.
@@ -581,26 +639,30 @@ class RCRectangularSection(BasicRectangularRCSection):
 
     def defSectionGeometry(self,preprocessor,matDiagType):
         '''
-        Definition of a reinforced concrete geometric section 
+        Define the XC section geometry object for a reinforced concrete section 
 
-        :ivar matDiagType: type of stress-strain diagram 
+        :param matDiagType: type of stress-strain diagram 
                      ("k" for characteristic diagram, "d" for design diagram)
         '''
         self.defDiagrams(preprocessor,matDiagType)
         geomSection= preprocessor.getMaterialHandler.newSectionGeometry(self.gmSectionName())
         self.defConcreteRegion(geomSection)
         reinforcement= geomSection.getReinfLayers
+        negPoints= list()
         for rbRow in self.negatvRebarRows.rebarRows:
             y= -self.h/2.0+rbRow.cover
             #print "y neg.= ", y, " m"
             p1= geom.Pos2d(-self.b/2+rbRow.coverLat,y)
             p2= geom.Pos2d(self.b/2-rbRow.coverLat,y)
-            self.negatvRebarRows.reinfLayers.append(rbRow.defReinfLayer(reinforcement,"neg",self.fiberSectionParameters.reinfDiagName,p1,p2))
+            negPoints.append((p1,p2))
+        self.negatvRebarRows.defStraightLayers(reinforcement,"neg",self.fiberSectionParameters.reinfDiagName,negPoints)
+        posPoints= list()
         for rbRow in self.positvRebarRows.rebarRows:
             y= self.h/2.0-rbRow.cover
             p1= geom.Pos2d(-self.b/2+rbRow.coverLat,y)
             p2= geom.Pos2d(self.b/2-rbRow.coverLat,y)
-            self.positvRebarRows.reinfLayers.append(rbRow.defReinfLayer(reinforcement,"pos",self.fiberSectionParameters.reinfDiagName,p1,p2))
+            posPoints.append((p1,p2))
+        self.positvRebarRows.defStraightLayers(reinforcement,"pos",self.fiberSectionParameters.reinfDiagName,posPoints)
         self.coverMin= min(min(self.getCoverPos()),min(self.getCoverNeg()),min(self.getLatCoverPos()),min(self.getLatCoverNeg()))
 
     def defRCRectangularSection(self, preprocessor,matDiagType):
@@ -786,7 +848,8 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
         self.creaSingleSection(dirNmb=2,posReb=self.dir2PositvRebarRows,negReb=self.dir2NegatvRebarRows,YShReinf=self.dir2ShReinfY,ZShReinf=self.dir2ShReinfZ)
 
     def creaSingleSection(self,dirNmb,posReb,negReb,YShReinf,ZShReinf):
-        '''create the fiber section of type 'RCRectangularSection' that represents     the reinforced concrete fiber section to be used for the checking in the 
+        '''create the fiber section of type 'RCRectangularSection' that represents 
+        the reinforced concrete fiber section to be used for the checking in the 
         direction passed as parameter 'dirNmb' (1 or 2). This section is also
         added to the attribute 'lstRCSects' that contains the list of sections.
         '''

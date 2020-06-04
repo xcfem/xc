@@ -62,14 +62,14 @@ class RCRectangularColumnSection(def_simple_RC_section.BasicRectangularRCSection
         p2= geom.Pos2d(width/2-cover,-depth/2+cover)
 
         self.reinforcementInf= reinforcement.newStraightReinfLayer(reinfDiagName)
-        self.reinforcementInf.codigo= "infWidth"
+        self.reinforcementInf.code= "infWidth"
         self.reinforcementInf.numReinfBars= self.mainBars.nRebarsWidth
         self.reinforcementInf.barArea= self.mainBars.areaRebarWidth
         self.reinforcementInf.p1= geom.Pos2d(-width/2+cover,-depth/2+cover) # bottom layer (side -).
         self.reinforcementInf.p2= geom.Pos2d(width/2-cover,-depth/2+cover)
 
         self.reinforcementSup= reinforcement.newStraightReinfLayer(reinfDiagName)
-        self.reinforcementSup.codigo= "supWidth"
+        self.reinforcementSup.code= "supWidth"
         self.reinforcementSup.numReinfBars= self.mainBars.nRebarsWidth
         self.reinforcementSup.barArea= self.mainBars.areaRebarWidth
         self.reinforcementSup.p1= geom.Pos2d(-width/2+cover,depth/2+cover) # top layer (side +).
@@ -78,14 +78,14 @@ class RCRectangularColumnSection(def_simple_RC_section.BasicRectangularRCSection
         rebarsSpacingCanto= (depth-2*cover)/(nRebarsDepth+1)
 
         self.reinforcementCIzq= reinforcement.newStraightReinfLayer(reinfDiagName)
-        self.reinforcementCIzq.codigo= "leftDepth"
+        self.reinforcementCIzq.code= "leftDepth"
         self.reinforcementCIzq.numReinfBars= self.mainBars.nRebarsDepth
         self.reinforcementCIzq.barArea= self.mainBars.areaRebarDepth
         self.reinforcementCIzq.p1= geom.Pos2d(-width/2+cover,-depth/2+cover+rebarsSpacingCanto) # Left side reinforcement.
         self.reinforcementCIzq.p2= geom.Pos2d(-width/2+cover,depth/2-cover-rebarsSpacingCanto)
 
         self.reinforcementCDer= reinforcement.newStraightReinfLayer(reinfDiagName)
-        self.reinforcementCDer.codigo= "rightDepth"
+        self.reinforcementCDer.code= "rightDepth"
         self.reinforcementCDer.numReinfBars= self.mainBars.nRebarsDepth
         self.reinforcementCDer.barArea= self.mainBars.areaRebarDepth
         self.reinforcementCDer.p1= geom.Pos2d(width/2-cover,-depth/2+cover+rebarsSpacingCanto) # Right side reinforcement.
@@ -110,7 +110,7 @@ class RCCircularSection(RCSectionBase, section_properties.CircularSection):
         :param reinfSteelType: type of reinforcement steel.
         '''
         RCSectionBase.__init__(self,concrType= concrType,reinfSteelType= reinfSteelType, nIJ= 10, nJK= 10)
-        section_properties.CircularSection.__init__(self,name,width,depth)
+        section_properties.CircularSection.__init__(self,name,Rint= Rint,Rext= Rext)
 
         # Longitudinal reinforcement.
         self.mainReinf= LongReinfLayers()  #list of ReinfRow data (positive face)
@@ -118,3 +118,18 @@ class RCCircularSection(RCSectionBase, section_properties.CircularSection):
         # Transverse reinforcement.
         self.shReinf= ShearReinforcement()
         self.shReinf.familyName= "V"
+        
+    def defSectionGeometry(self,preprocessor,matDiagType):
+        '''
+        Define the XC section geometry object for this reinforced concrete section 
+
+        :param matDiagType: type of stress-strain diagram 
+                     ("k" for characteristic diagram, "d" for design diagram)
+        '''
+        self.defDiagrams(preprocessor,matDiagType)
+        geomSection= preprocessor.getMaterialHandler.newSectionGeometry(self.gmSectionName())
+        self.defConcreteRegion(geomSection)
+        reinforcement= geomSection.getReinfLayers
+        self.mainReinf.defCircularLayers(reinforcement, "reinf", self.fiberSectionParameters.reinfDiagName, self.Rext)
+
+        self.coverMin= self.mainReinf.getMinCover()
