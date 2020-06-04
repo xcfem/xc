@@ -31,7 +31,7 @@ sUtils.append_sets(s3,[s1,s2])
 sz= s3.getPoints.size
 
 #for p in pnts:
-#  print codigo
+#  print code
 
 #print "sz= ", sz
 

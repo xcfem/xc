@@ -36,7 +36,7 @@ s5= s1*s2
 sz5= s5.getPoints.size
 
 #for p in pnts:
-#  print codigo
+#  print code
 
 #print "sz= ", sz
 

@@ -43,7 +43,7 @@ setTotal.transforms(transl)
 pnts
 
 for_each
-  { print codigo,",",pos.x,",",pos.y,",",pos.z } 
+  { print code,",",pos.x,",",pos.y,",",pos.z } 
 '''
 
 

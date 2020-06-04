@@ -32,7 +32,7 @@ dist= sectionGeometryTest.distSpots(1,2)
 ''' 
              \for_each_spot
 
-                 print codigo,",",pos.x,",",pos.y
+                 print code,",",pos.x,",",pos.y
 '''
 ratio1= ((xA-x1)/xA)
 ratio2= ((yA-y1)/yA)
