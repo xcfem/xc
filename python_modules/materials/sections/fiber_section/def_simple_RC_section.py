@@ -13,7 +13,6 @@ import xc
 from materials.sections import section_properties
 from materials import typical_materials
 import math
-from materials.ehe import EHE_materials
 from materials.sections import stress_calc as sc
 import sys
 from misc_utils import log_messages as lmsg
@@ -495,6 +494,14 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
         self.shReinfY= ShearReinforcement()
         self.shReinfY.familyName= "Vy"
 
+    def getShearReinfY(self):
+        '''Return the shear reinforcement for Vy.'''
+        return self.shReinfY
+
+    def getShearReinfZ(self):
+        '''Return the shear reinforcement for Vz.'''
+        return self.shReinfZ
+    
     def getRespT(self,preprocessor):
         '''Material for modeling torsional response of section'''
         return section_properties.RectangularSection.getRespT(self,preprocessor,self.fiberSectionParameters.concrType.Gcm()) # Torsional response of the section.
@@ -523,7 +530,7 @@ class RCRectangularSection(BasicRectangularRCSection):
 
     :ivar sectionName:     name identifying the section
     :ivar sectionDescr:    section description
-    :ivar coverMin:        minimum value of end or clear concrete cover of main 
+    :ivar minCover:        minimum value of end or clear concrete cover of main 
                            bars from both the positive and negative faces
     :ivar negatvRebarRows: layers of main rebars in the local negative face of 
                            the section
@@ -542,7 +549,7 @@ class RCRectangularSection(BasicRectangularRCSection):
         super(RCRectangularSection,self).__init__(name,width,depth,concrType,reinfSteelType)
 
         # Longitudinal reinforcement
-        self.coverMin= 0.0 
+        self.minCover= 0.0 
         self.positvRebarRows= LongReinfLayers()  #list of ReinfRow data (positive face)
         self.negatvRebarRows= LongReinfLayers() #list of ReinfRow data (negative face)
 
@@ -660,6 +667,10 @@ class RCRectangularSection(BasicRectangularRCSection):
         face''' 
         return self.negatRebarRows.centerRebars(self.b)
 
+    def getMinCover(self):
+        ''' return the minimal cover of the reinforcement.'''
+        return min(min(self.getCoverPos()),min(self.getCoverNeg()),min(self.getLatCoverPos()),min(self.getLatCoverNeg()))
+
     def defSectionGeometry(self,preprocessor,matDiagType):
         '''
         Define the XC section geometry object for a reinforced concrete section 
@@ -686,8 +697,12 @@ class RCRectangularSection(BasicRectangularRCSection):
             p2= geom.Pos2d(self.b/2-rbRow.coverLat,y)
             posPoints.append((p1,p2))
         self.positvRebarRows.defStraightLayers(reinforcement,"pos",self.fiberSectionParameters.reinfDiagName,posPoints)
-        self.coverMin= min(min(self.getCoverPos()),min(self.getCoverNeg()),min(self.getLatCoverPos()),min(self.getLatCoverNeg()))
+        self.minCover= self.getMinCover()
 
+    def getTorsionalThickness(self):
+        '''Return the section thickness for torsion.'''
+        return min(self.b,self.h)/2.0
+    
     def getStressCalculator(self):
         Ec= self.fiberSectionParameters.concrType.Ecm()
         Es= self.fiberSectionParameters.reinfSteelType.Es
@@ -869,8 +884,8 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
         sect.fiberSectionParameters.reinfSteelType= self.reinfSteelType
         sect.positvRebarRows= posReb
         sect.negatvRebarRows= negReb
-        sect.shReinfY=YShReinf
-        sect.shReinfZ=ZShReinf
+        sect.shReinfY= YShReinf
+        sect.shReinfZ= ZShReinf
         self.append_section(sect)
         return
 

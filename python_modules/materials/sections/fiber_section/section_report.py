@@ -104,7 +104,7 @@ class SectionInfo(object):
         self.width=width
         self.depth=depth
         self.JTorsion=self.scc.getJTorsion()
-        self.shReinfY=sHAs.ShearReinforcement()
+        self.shReinfY= sHAs.ShearReinforcement()
         self.shReinfY.familyName= "Vy"
         self.shReinfZ= sHAs.ShearReinforcement()
         self.shReinfZ.familyName= "Vz"
@@ -207,8 +207,8 @@ class SectionInfo(object):
         fileHandler.write('\\begin{tabular}{cccccccc}\n')
         fileHandler.write('Id & N$^o$ branch & $\\phi$ & area & spac. & area/m & $\\alpha$ & $\\beta$\\\\\n')
         fileHandler.write(' &  & $(mm)$ & $(cm^2)$ & $(cm)$ & $(cm^2/m)$ & $( \\degree)$ & $( \\degree)$\\\\\n')
-        writeShearReinforcement(self.shReinfZ,fileHandler,self.width)
-        writeShearReinforcement(self.shReinfY,fileHandler,self.depth)
+        writeShearReinforcement(self.getShearReinfY(), fileHandler,self.width)
+        writeShearReinforcement(self.getShearReinfY(), fileHandler,self.depth)
         fileHandler.write('\\end{tabular} \\\\\n')
         fileHandler.write('\\hline\n')
         fileHandler.write('\\end{tabular}\n')
@@ -236,5 +236,5 @@ class SectionInfoHASimple(SectionInfo):
         width=sectHASimple.b
         depth=sectHASimple.h
         super(SectionInfoHASimple,self).__init__(preprocessor,sectName,sectDescr,concrete,rfSteel,concrDiag,rfStDiag,geomSection,width,depth)
-        self.shReinfZ=sectHASimple.shReinfZ
-        self.shReinfY=sectHASimple.shReinfY
+        self.shReinfZ= sectHASimple.getShearReinfZ()
+        self.shReinfY= sectHASimple.getShearReinfY()

@@ -90,15 +90,12 @@ lp0.newNodalLoad(2,xc.Vector([NDato,0,VDato,0,MyDato,MzDato]))
 #We add the load case to domain.
 lPatterns.addToDomain(lp0.name)
 
-
 # Solution procedure
 analysis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analysis.analyze(10)
 
-
 shearController= EHE_limit_state_checking.ShearController('ULS_shear')
-secHAParamsTorsion= EHE_limit_state_checking.computeEffectiveHollowSectionParameters(section.geomSection,depth/2.0,cover)
-
+secHAParamsTorsion= EHE_limit_state_checking.computeEffectiveHollowSectionParametersRCSection(section)
 
 elements= preprocessor.getElementHandler
 scc= elements.getElement(1).getSection()

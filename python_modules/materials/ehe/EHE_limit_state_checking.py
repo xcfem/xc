@@ -894,9 +894,10 @@ class ShearController(lscb.ShearControllerBase):
         section= sct.getProp('sectionData')
         concreteCode= section.fiberSectionParameters.concrType
         reinforcementCode= section.fiberSectionParameters.reinfSteelType
-        self.AsTrsv= section.shReinfY.getAs()
-        self.alpha= section.shReinfY.angAlphaShReinf
-        self.theta= section.shReinfY.angThetaConcrStruts
+        shReinf= section.getShearReinfY()
+        self.AsTrsv= shReinf.getAs()
+        self.alpha= shReinf.angAlphaShReinf
+        self.theta= shReinf.angThetaConcrStruts
         NTmp= sct.getStressResultantComponent("N")
         MyTmp= sct.getStressResultantComponent("My")
         MzTmp= sct.getStressResultantComponent("Mz")
@@ -1267,8 +1268,8 @@ class TorsionParameters(object):
         self.c= 0.0  # Covering of longitudinal reinforcements.
 
         self.crossSectionContour= geom.Polygon2d()  # Cross section contour.
-        self.lineaMedia=  geom.Polygon2d() # Polygon defined by the midline of the effective hollow section.
-        self.lineaInt=  geom.Polygon2d() # Polygon defined by the interior contour of the effective hollow section.
+        self.midLine=  geom.Polygon2d() # Polygon defined by the midline of the effective hollow section.
+        self.intLine=  geom.Polygon2d() # Polygon defined by the interior contour of the effective hollow section.
         self.effectiveHollowSection= geom.PolygonWithHoles2d() # Effective hollow section contour
     def A(self):
         '''Return the area of the transverse section inscribed in the 
@@ -1287,32 +1288,42 @@ class TorsionParameters(object):
         '''Return the area enclosed by the middle line of the design 
            effective hollow section
         '''
-        return self.lineaMedia.getArea()
+        return self.midLine.getArea()
     def ue(self):
         '''Return the perimeter of the middle line in the design effective 
            hollow section Ae.
         '''
-        return self.lineaMedia.getPerimeter()
+        return self.midLine.getPerimeter()
 
 def computeEffectiveHollowSectionParameters(sectionGeometry, h0, c):
-    '''Computes the parameter for torsion analysis of an
-     effective hollow section. Not valid if for non-convex sections.
+    '''Computes the parameters for torsion analysis of an
+     effective hollow section according to clause 45.2.1
+     of EHE-08. Not valid if for non-convex sections.
 
     :param sectionGeometry: section geometry.
-    :param h0: real thickness of the section wall.
-    :param c: cover of the longitudinal reinforcement.
+    :param h0: actual thickness of the wall for hollow sections.
+    :param c: cover of longitudinal reinforcement.
     '''
     retval= TorsionParameters()
     retval.h0= h0
     retval.c= c
     retval.crossSectionContour= sectionGeometry.getRegionsContour()
-    he= retval.he()
-    retval.lineaMedia= retval.crossSectionContour.offset(-he/2)
-    retval.lineaInt= retval.crossSectionContour.offset(-he)
+    he= retval.he() # effective thickness.
+    retval.midLine= retval.crossSectionContour.offset(-he/2) # mid-line
+    retval.intLine= retval.crossSectionContour.offset(-he) # internal line
     retval.effectiveHollowSection.contour(retval.crossSectionContour)
-    retval.effectiveHollowSection.addHole(retval.lineaInt)
+    retval.effectiveHollowSection.addHole(retval.intLine)
     return retval
 
+def computeEffectiveHollowSectionParametersRCSection(rcSection):
+    '''Computes the parameters for torsion analysis of an
+     effective hollow section according to clause 45.2.1
+     of EHE-08.
+
+    :param rcSection: reinforced concrete section
+    '''
+    h0= rcSection.getTorsionalThickness()
+    return computeEffectiveHollowSectionParameters(rcSection.geomSection,h0,rcSection.minCover)
 
 class ColumnReinforcementRatios(object):
     def __init__(self,Ac,fcd,fyd):

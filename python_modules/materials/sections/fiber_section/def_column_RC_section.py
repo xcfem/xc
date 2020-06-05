@@ -55,8 +55,8 @@ class RCRectangularColumnSection(def_simple_RC_section.BasicRectangularRCSection
         '''
         self.defDiagrams(preprocessor,matDiagType)
 
-        geomSection= preprocessor.getMaterialHandler.newSectionGeometry(self.gmSectionName())
-        self.defConcreteRegion(geomSection)
+        self.geomSection= preprocessor.getMaterialHandler.newSectionGeometry(self.gmSectionName())
+        self.defConcreteRegion(self.geomSection)
 
         reinforcement= sectionGeom.getReinfLayers
         p1= geom.Pos2d(-width/2+cover,-depth/2+cover) # bottom layer (side -).
@@ -120,6 +120,14 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
         self.shReinf= def_simple_RC_section.ShearReinforcement()
         self.shReinf.familyName= "V"
         
+    def getShearReinfY(self):
+        '''Return the shear reinforcement for Vy.'''
+        return self.shReinf
+
+    def getShearReinfZ(self):
+        '''Return the shear reinforcement for Vz.'''
+        return self.shReinf
+    
     def getRespT(self,preprocessor):
         '''Material for modeling torsional response of section'''
         return section_properties.CircularSection.getRespT(self,preprocessor,self.fiberSectionParameters.concrType.Gcm()) # Torsional response of the section.
@@ -141,6 +149,10 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
         rg.intRad= self.Rint
         rg.initAngle= 0.0
         rg.finalAngle= 2*math.pi
+
+    def getMinCover(self):
+        ''' return the minimal cover of the reinforcement.'''
+        return self.mainReinf.getMinCover()
         
     def defSectionGeometry(self,preprocessor,matDiagType):
         '''
@@ -150,9 +162,14 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
                      ("k" for characteristic diagram, "d" for design diagram)
         '''
         self.defDiagrams(preprocessor,matDiagType)
-        geomSection= preprocessor.getMaterialHandler.newSectionGeometry(self.gmSectionName())
-        self.defConcreteRegion(geomSection)
-        reinforcement= geomSection.getReinfLayers
+        self.geomSection= preprocessor.getMaterialHandler.newSectionGeometry(self.gmSectionName())
+        self.defConcreteRegion(self.geomSection)
+        reinforcement= self.geomSection.getReinfLayers
         self.mainReinf.defCircularLayers(reinforcement, "reinf", self.fiberSectionParameters.reinfDiagName, self.Rext)
 
-        self.coverMin= self.mainReinf.getMinCover()
+        self.minCover= self.getMinCover()
+
+    def getTorsionalThickness(self):
+        '''Return the section thickness for torsion.'''
+        return section_properties.CircularSection.getThickness(self)
+        

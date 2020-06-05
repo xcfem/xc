@@ -202,8 +202,9 @@ class ShearController(lsc.ShearControllerBase):
         self.width= rcSection.b
         self.effectiveDepth= 0.9* rcSection.h
         self.mechanicLeverArm= 0.9*self.effectiveDepth #Mejorar
-        self.AsTrsv= rcSection.shReinfZ.getAs()
-        self.s= rcSection.shReinfZ.shReinfSpacing
+        shReinf= rcSection.getShearReinfZ()
+        self.AsTrsv= shReinf.getAs()
+        self.s= shReinf.shReinfSpacing
         self.Vcu= 0.0 # Concrete contribution to the shear strength.
         self.Vsu= 0.0 # Rebar contribution to the shear strength.
 
@@ -253,9 +254,10 @@ class ShearController(lsc.ShearControllerBase):
           idSection= e.getProp("idSection")
           section= scc.getProp('sectionData')
           self.setSection(section)
-          AsTrsv= section.shReinfY.getAs()
-          alpha= section.shReinfY.angAlphaShReinf
-          theta= section.shReinfY.angThetaConcrStruts
+          shReinf= section.getShearReinfY()
+          AsTrsv= shReinf.getAs()
+          alpha= shReinf.angAlphaShReinf
+          theta= shReinf.angThetaConcrStruts
 
           VuTmp= section.getRoughVcuEstimation() 
           NTmp= scc.getStressResultantComponent("N")

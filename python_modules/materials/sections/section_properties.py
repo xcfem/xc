@@ -462,6 +462,10 @@ class CircularSection(SectionProperties):
     def A(self):
         '''Return cross-sectional area of the section'''
         return math.pi*(self.Rext*self.Rext-self.Rint*self.Rint)
+
+    def getThickness(self):
+        '''Return the section thickness.'''
+        return self.Rext-self.Rint
   
     def Iy(self):
         '''Return second moment of area about the local y-axis'''

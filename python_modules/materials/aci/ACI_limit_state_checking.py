@@ -152,15 +152,18 @@ def V_max(concrete,Nd,b,d):
 class ShearController(lsc.ShearControllerBase):
     '''Object that controls shear limit state according to ACI 318.'''
     def __init__(self,limitStateLabel):
+        ''' Constructor.'''
         super(ShearController,self).__init__(limitStateLabel)
+        
     def setSection(self,rcSection):
         self.concrete= rcSection.fiberSectionParameters.concrType #Fix
         self.steel= rcSection.fiberSectionParameters.reinfSteelType
         self.width= rcSection.b
         self.effectiveDepth= 0.9*rcSection.h
-        self.mechanicLeverArm= 0.9*self.effectiveDepth #Enhance
-        self.AsTrsv= rcSection.shReinfY.getAs()
-        self.s= rcSection.shReinfY.shReinfSpacing
+        self.mechanicLeverArm= 0.9*self.effectiveDepth # Enhance
+        shReinf= rcSection.getShearReinfY()
+        self.AsTrsv= shReinf.getAs()
+        self.s= shReinf.shReinfSpacing
         self.Vc= 0.0 # Concrete contribution to the shear strength.
         self.Vu= 0.0 # Ultimate shear strength.
         
