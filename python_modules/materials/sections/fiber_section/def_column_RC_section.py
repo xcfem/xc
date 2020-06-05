@@ -120,6 +120,10 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
         self.shReinf= def_simple_RC_section.ShearReinforcement()
         self.shReinf.familyName= "V"
         
+    def isCircular(self):
+        ''' Return true if it's a circular section.'''
+        return True
+    
     def getShearReinfY(self):
         '''Return the shear reinforcement for Vy.'''
         return self.shReinf

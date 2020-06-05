@@ -25,7 +25,7 @@ z= 0.9*0.55
 alpha= math.pi/2
 theta= math.pi/4
 fyd= 500e6/gammas
-Vsu= EHE_limit_state_checking.getVsuEHE08(z,alpha,theta,AsTrsv,fyd)
+Vsu= EHE_limit_state_checking.getVsuEHE08(z,alpha,theta,AsTrsv,fyd, circular= False)
 ratio1= abs(Vsu-111.966e3)/111.966e3
 
 '''

@@ -43,9 +43,6 @@ Pyz= steelRegion.getPyz()
 
 G= geomTuberia.getCenterOfMassHomogenizedSection(Es)
 
-
-
-
 areaTeor= math.pi*(RExt**2-radius**2)
 ratio1= ((area-areaTeor)/areaTeor)
 ITeor= math.pi/4*(RExt**4-radius**4)

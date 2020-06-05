@@ -438,6 +438,10 @@ class RCSectionBase(object):
         self.defShearResponse(preprocessor)
         self.defSectionGeometry(preprocessor,matDiagType)
         self.defFiberSection(preprocessor)
+
+    def isCircular(self):
+        ''' Return true if it's a circular section.'''
+        return False
         
     def defInteractionDiagramParameters(self, preprocessor):
         ''' parameters for interaction diagrams. '''

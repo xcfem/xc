@@ -61,6 +61,9 @@ class CircularSectRegion: public QuadCellRegion
     void setCenterPosition(const Vector &);
     void setCenterPos(const Pos2d &);
     Pos2d getCenterPos(void) const;
+    //! @brief Return true if it's a hollow section.
+    inline bool isHollow(void) const
+      { return intRad>0.0; }
     //! @brief Returns internal radius.
     inline double getInteriorRadius(void) const
       { return intRad; }
@@ -73,6 +76,9 @@ class CircularSectRegion: public QuadCellRegion
     //! @brief Returns final angle.
     inline double getFinalAngle(void) const
       { return finalAng; }
+    //! @brief Return the angle covered by the region.
+    inline double getIncludedAngle(void) const
+      { return finalAng-initAng; }
     //! @brief Sets internal radius.
     void setInteriorRadius(const double &d)
       { intRad= d; }

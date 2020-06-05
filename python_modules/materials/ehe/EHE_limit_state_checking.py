@@ -478,7 +478,7 @@ def getVu2EHE08NoAt(M,Mfis,fcv,fck,gammaC,I,S,alphaL,Ncd,Ac,b0,d,AsPas,AsAct):
         retval=getVu2EHE08NoAtSiFis(fck,fcdTmp,1.5,Ncd,Ac,b0,d,AsPas,AsAct)
     return retval
 
-def getVsuEHE08(z,alpha,theta,AsTrsv,fyd):
+def getVsuEHE08(z,alpha,theta,AsTrsv,fyd, circular):
     '''getVsuEHE08(z,alpha,theta,AsTrsv,fyd)  [units: N, m, rad]
     Return the value of Vsu (contribution of the web’s transverse 
     reinforcement to shear strength) for members WITH shear reinforcement,
@@ -491,9 +491,15 @@ def getVsuEHE08(z,alpha,theta,AsTrsv,fyd):
     :param AsTrsv: transverse reinforcement area which contribution will 
                    be computed.
     :param fyd: design yield strength of the transverse reinforcement.
+    :param circular: if true we reduce the efectiveness of the shear 
+                     reinforcement due to the transverse inclination of its
+                     elements.
     '''
-    fyalphad=min(fyd,400e6)
-    return z*math.sin(alpha)*(1/math.tan(alpha)+1/math.tan(theta))*AsTrsv*fyalphad
+    fyalphad= min(fyd,400e6) # comment to clause 40.2 EHE
+    retval= z*math.sin(alpha)*(1/math.tan(alpha)+1/math.tan(theta))*AsTrsv*fyalphad
+    if(circular):
+        retval*= 0.85
+    return retval
 
 def getEpsilonXEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue):
     '''getEpsilonXEHE08(Nd,Md,Vd,Td,z,AsPas,AsAct,Es,Ep,Fp,Ae,ue) [units: N, m, rad]
@@ -624,7 +630,7 @@ def getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep
 
 
   
-def getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue):
+def getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue, circular= False):
     '''getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue) [units: N, m, rad]. 
      Return the value of Vu2 (shear strength at failure due to tensile force in the web)
      for members WITH shear reinforcement, according to clause 
@@ -659,9 +665,11 @@ def getVu2EHE08SiAt(fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, 
     :param Fp: Prestressing force on the section (positive if in tension).
     :param Ae: Area enclosed by the middle line of the effective hollow section.
     :param ue: Perimeter of the middle line of the effective hollow section.
-
+    :param circular: if true we reduce the efectiveness of the shear 
+                     reinforcement due to the transverse inclination of its
+                     elements.
     '''
-    return getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue)+getVsuEHE08(z,alpha,theta,AsTrsv,fyd)
+    return getVcuEHE08(fcv,fcd,gammaC,Ncd,Ac,b0,d,AsPas,AsAct,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue)+getVsuEHE08(z,alpha,theta,AsTrsv,fyd, circular)
 
   
 def getVuEHE08SiAt(fck,fcv,fcd,fyd,gammaC,Ncd,Ac,b0,d,z,AsPas,AsAct,AsTrsv, alpha, theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue):
@@ -745,72 +753,72 @@ class ShearController(lscb.ShearControllerBase):
         self.Vu= 0.0 # Shear strength at failure.
 
     def extractFiberData(self, scc, concrete, reinfSteel):
-      ''' Extract basic parameters from the fiber model of the section
+        ''' Extract basic parameters from the fiber model of the section
 
-       :param scc: fiber model of the section.
-       :param concrete: parameters to modelize concrete.
-       :param reinfSteel: parameters to modelize reinforcement steel.
-      '''
-      self.concreteMatTag= concrete.matTagD
-      self.fckH= abs(concrete.fck)
-      self.fcdH= abs(concrete.fcd())
-      self.fctdH= concrete.fctd()
-      self.gammaC= concrete.gmmC
-      self.reinfSteelMaterialTag= reinfSteel.matTagD
-      self.fydS= reinfSteel.fyd()
-      if(not scc.hasProp("rcSets")):
-          scc.setProp("rcSets", fiber_sets.fiberSectionSetupRC3Sets(scc,self.concreteMatTag,self.concreteFibersSetName,self.reinfSteelMaterialTag,self.rebarFibersSetName))
-      return scc.getProp("rcSets")
+         :param scc: fiber model of the section.
+         :param concrete: parameters to modelize concrete.
+         :param reinfSteel: parameters to modelize reinforcement steel.
+        '''
+        self.concreteMatTag= concrete.matTagD
+        self.fckH= abs(concrete.fck)
+        self.fcdH= abs(concrete.fcd())
+        self.fctdH= concrete.fctd()
+        self.gammaC= concrete.gmmC
+        self.reinfSteelMaterialTag= reinfSteel.matTagD
+        self.fydS= reinfSteel.fyd()
+        if(not scc.hasProp("rcSets")):
+            scc.setProp("rcSets", fiber_sets.fiberSectionSetupRC3Sets(scc,self.concreteMatTag,self.concreteFibersSetName,self.reinfSteelMaterialTag,self.rebarFibersSetName))
+        return scc.getProp("rcSets")
 
     def calcVuEHE08NoAt(self, scc, concrete, reinfSteel):
-      ''' Compute the shear strength at failure without shear reinforcement
-       according to clause 44.2.3.2.1 of EHE-08.
-       XXX Presstressing contribution not implemented yet.
+        ''' Compute the shear strength at failure without shear reinforcement
+         according to clause 44.2.3.2.1 of EHE-08.
+         XXX Presstressing contribution not implemented yet.
 
-       :param scc: fiber model of the section.
-       :param reinfSteelMaterialTag: reinforcement steel material identifier.
-       :param concrete: parameters to modelize concrete.
-       :param reinfSteel: parameters to modelize reinforcement steel.
-      '''
-      rcSets= self.extractFiberData(scc,concrete,reinfSteel)
-      concrFibers= rcSets.concrFibers.fSet
-      self.concreteArea= rcSets.getConcreteArea(1)
-      if(self.concreteArea<1e-6):
-          errMsg= "concrete area too smail; Ac= " + str(self.concreteArea) + " m2\n"
-          lmsg.error(errMsg)
-      else:
-          reinfFibers= rcSets.reinfFibers.fSet
-          tensionedReinforcement= rcSets.tensionFibers
-          self.isBending= scc.isSubjectedToBending(0.1)
-          self.tensionedRebars.number= rcSets.getNumTensionRebars()
-          self.E0= rcSets.getConcreteInitialTangent()
-          if(self.isBending):
-              self.eps1= rcSets.getMaxConcreteStrain()
-              self.concreteAxialForce= rcSets.getConcreteCompression()
-              self.strutWidth= scc.getCompressedStrutWidth() # b0
-              if((self.E0*self.eps1)<self.fctdH): # Non cracked section
-                  self.I= scc.getHomogenizedI(self.E0)
-                  self.S= scc.getSPosHomogeneizada(self.E0)
-                  self.Vu2= getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.strutWidth,self.alphaL,self.concreteAxialForce,self.concreteArea)
-              else: # Cracked section
-                self.effectiveDepth= scc.getEffectiveDepth() # d
-                if(self.tensionedRebars.number>0):
-                    self.tensionedRebarsArea= tensionedReinforcement.getArea(1)
-                else:
-                    self.tensionedRebarsArea= 0.0
-                self.Vu2= getVu2EHE08NoAtSiFis(self.fckH,self.fcdH,self.gammaC,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.effectiveDepth,self.tensionedRebarsArea,0.0)
-              self.Vsu= 0.0
-              self.Vu1= -1.0
-          else: # Uncracked section
-              axes= scc.getInternalForcesAxes()
-              self.I= scc.getFibers().getHomogenizedSectionIRelToLine(self.E0,axes)
-              self.S= scc.getFibers().getSPosHomogenizedSection(self.E0,geom.HalfPlane2d(axes))
-              self.strutWidth= scc.getCompressedStrutWidth() # b0
-              self.Vu2= getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.strutWidth,self.alphaL,self.concreteAxialForce,self.concreteArea)
-          self.Vcu= self.Vu2
-          self.Vu= self.Vu2
+         :param scc: fiber model of the section.
+         :param reinfSteelMaterialTag: reinforcement steel material identifier.
+         :param concrete: parameters to modelize concrete.
+         :param reinfSteel: parameters to modelize reinforcement steel.
+        '''
+        rcSets= self.extractFiberData(scc,concrete,reinfSteel)
+        concrFibers= rcSets.concrFibers.fSet
+        self.concreteArea= rcSets.getConcreteArea(1)
+        if(self.concreteArea<1e-6):
+            errMsg= "concrete area too small; Ac= " + str(self.concreteArea) + " m2\n"
+            lmsg.error(errMsg)
+        else:
+            reinfFibers= rcSets.reinfFibers.fSet
+            tensionedReinforcement= rcSets.tensionFibers
+            self.isBending= scc.isSubjectedToBending(0.1)
+            self.tensionedRebars.number= rcSets.getNumTensionRebars()
+            self.E0= rcSets.getConcreteInitialTangent()
+            if(self.isBending):
+                self.eps1= rcSets.getMaxConcreteStrain()
+                self.concreteAxialForce= rcSets.getConcreteCompression()
+                self.strutWidth= scc.getCompressedStrutWidth() # b0
+                if((self.E0*self.eps1)<self.fctdH): # Non cracked section
+                    self.I= scc.getHomogenizedI(self.E0)
+                    self.S= scc.getSPosHomogeneizada(self.E0)
+                    self.Vu2= getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.strutWidth,self.alphaL,self.concreteAxialForce,self.concreteArea)
+                else: # Cracked section
+                  self.effectiveDepth= scc.getEffectiveDepth() # d
+                  if(self.tensionedRebars.number>0):
+                      self.tensionedRebarsArea= tensionedReinforcement.getArea(1)
+                  else:
+                      self.tensionedRebarsArea= 0.0
+                  self.Vu2= getVu2EHE08NoAtSiFis(self.fckH,self.fcdH,self.gammaC,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.effectiveDepth,self.tensionedRebarsArea,0.0)
+                self.Vsu= 0.0
+                self.Vu1= -1.0
+            else: # Uncracked section
+                axes= scc.getInternalForcesAxes()
+                self.I= scc.getFibers().getHomogenizedSectionIRelToLine(self.E0,axes)
+                self.S= scc.getFibers().getSPosHomogenizedSection(self.E0,geom.HalfPlane2d(axes))
+                self.strutWidth= scc.getCompressedStrutWidth() # b0
+                self.Vu2= getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.strutWidth,self.alphaL,self.concreteAxialForce,self.concreteArea)
+            self.Vcu= self.Vu2
+            self.Vu= self.Vu2
 
-    def calcVuEHE08SiAt(self, scc, torsionParameters, concrete, reinfSteel, Nd, Md, Vd, Td):
+    def calcVuEHE08SiAt(self, scc, torsionParameters, concrete, reinfSteel, Nd, Md, Vd, Td, circular= False):
         ''' Compute the shear strength at failure WITH shear reinforcement.
          XXX Presstressing contribution not implemented yet.
 
@@ -823,13 +831,17 @@ class ShearController(lscb.ShearControllerBase):
          :param Nd: Design value of axial force (here positive if in tension)
          :param Md: Absolute value of design value of bending moment.
          :param Vd: Absolute value of effective design shear (clause 42.2.2).
-         :param Td: design value of torsional moment. '''
+         :param Td: design value of torsional moment.
+         :param circular: if true we reduce the efectiveness of the shear 
+                          reinforcement due to the transverse inclination of
+                          its elements.
+        '''
         if(torsionParameters):
             self.VuAe= torsionParameters.Ae()
             self.Vuue= torsionParameters.ue()
         else: # XXX Ignore torsional deformation.
             self.VuAe= 1.0
-            self.Vuue= 0.0      
+            self.Vuue= 0.0
 
         rcSets= self.extractFiberData(scc,concrete,reinfSteel)
 
@@ -841,7 +853,7 @@ class ShearController(lscb.ShearControllerBase):
         self.tensionedRebars.number= rcSets.getNumTensionRebars()
         self.concreteArea= rcSets.getConcreteArea(1)
         if(self.concreteArea<1e-6):
-            errMsg= "concrete area too smail; Ac= " + str(self.concreteArea) + " m2\n"
+            errMsg= "concrete area too small; Ac= " + str(self.concreteArea) + " m2\n"
             lmsg.error(errMsg)
         else:
             self.E0= concrFibers[0].getMaterial().getInitialTangent()
@@ -859,7 +871,7 @@ class ShearController(lscb.ShearControllerBase):
                     self.tensionedRebars.area= 0.0
                 self.thetaFisuras= getCrackAngleEHE08(Nd,Md,Vd,Td,self.mechanicLeverArm,self.tensionedRebars.area,0.0,self.reinforcementElasticModulus,0.0,0.0,self.VuAe,self.Vuue)
                 self.Vcu= getVcuEHE08(self.fckH,self.fcdH,self.gammaC,self.concreteAxialForce,self.concreteArea,self.strutWidth,self.effectiveDepth,self.mechanicLeverArm,self.tensionedRebars.area,0.0,self.theta,Nd,Md,Vd,Td,self.reinforcementElasticModulus,0.0,0.0,self.VuAe,self.Vuue)
-                self.Vsu= getVsuEHE08(self.mechanicLeverArm,self.alpha,self.theta,self.AsTrsv,self.fydS)
+                self.Vsu= getVsuEHE08(self.mechanicLeverArm,self.alpha,self.theta,self.AsTrsv,self.fydS, circular)
                 self.Vu2= self.Vcu+self.Vsu
             else: # Uncracked section
                 # I (LCPT) don't find an expression for this case in EHE
@@ -871,7 +883,7 @@ class ShearController(lscb.ShearControllerBase):
                 self.Vu2= getVu2EHE08NoAtNoFis(self.fctdH,self.I,self.S,self.strutWidth,self.alphaL,self.concreteAxialForce,self.concreteArea)
             self.Vu= min(self.Vu1,self.Vu2)
 
-    def calcVuEHE08(self, scc, torsionParameters, concrete, reinfSteel, Nd, Md, Vd, Td):
+    def calcVuEHE08(self, scc, torsionParameters, concrete, reinfSteel, Nd, Md, Vd, Td, circular= False):
         '''  Compute the shear strength at failure.
          XXX Presstressing contribution not implemented yet.
 
@@ -883,11 +895,15 @@ class ShearController(lscb.ShearControllerBase):
          :param Nd: Design value of axial force (positive if in tension)
          :param Md: Absolute value of design value of bending moment.
          :param Vd: Absolute value of effective design shear (clause 42.2.2).
-         :param Td: design value of torsional moment.'''
+         :param Td: design value of torsional moment.
+         :param circular: if true we reduce the efectiveness of the shear 
+                          reinforcement due to the transverse inclination of
+                          its elements.
+        '''
         if(self.AsTrsv==0):
             self.calcVuEHE08NoAt(scc,concrete,reinfSteel)
         else:
-            self.calcVuEHE08SiAt(scc,torsionParameters,concrete,reinfSteel,Nd,Md,Vd,Td)
+            self.calcVuEHE08SiAt(scc,torsionParameters,concrete,reinfSteel,Nd,Md,Vd,Td, circular)
 
     def checkSection(self, sct, secHAParamsTorsion= None):
         ''' Check shear on the section argument.'''
@@ -895,6 +911,7 @@ class ShearController(lscb.ShearControllerBase):
         concreteCode= section.fiberSectionParameters.concrType
         reinforcementCode= section.fiberSectionParameters.reinfSteelType
         shReinf= section.getShearReinfY()
+        circular= section.isCircular()
         self.AsTrsv= shReinf.getAs()
         self.alpha= shReinf.angAlphaShReinf
         self.theta= shReinf.angThetaConcrStruts
@@ -909,23 +926,23 @@ class ShearController(lscb.ShearControllerBase):
         #Searching for the best theta angle (concrete strut inclination).
         #We calculate Vu for several values of theta and chose the highest Vu with its associated theta
         thetaVuTmp=list()
-        self.calcVuEHE08(sct,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp)
+        self.calcVuEHE08(sct,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp, circular)
         thetaVuTmp.append([self.theta,self.Vu])
         if(self.Vu<VTmp):
             self.theta= max(self.thetaMin,min(self.thetaMax,self.thetaFisuras))
-            self.calcVuEHE08(sct,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp)
+            self.calcVuEHE08(sct,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp, circular)
             thetaVuTmp.append([self.theta,self.Vu])
         if(self.Vu<VTmp):
             self.theta= (self.thetaMin+self.thetaMax)/2.0
-            self.calcVuEHE08(sct,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp)
+            self.calcVuEHE08(sct,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp, circular)
             thetaVuTmp.append([self.theta,self.Vu])
         if(self.Vu<VTmp):
             self.theta= 0.95*self.thetaMax
-            self.calcVuEHE08(sct,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp)
+            self.calcVuEHE08(sct,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp, circular)
             thetaVuTmp.append([self.theta,self.Vu])
         if(self.Vu<VTmp):
             self.theta= 1.05*self.thetaMin
-            self.calcVuEHE08(sct,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp)
+            self.calcVuEHE08(sct,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp, circular)
             thetaVuTmp.append([self.theta,self.Vu])
         self.theta,self.Vu=max(thetaVuTmp, key=lambda item: item[1])
         VuTmp= self.Vu

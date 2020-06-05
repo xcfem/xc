@@ -46,7 +46,7 @@ alpha= math.radians(90)
 beta= EHE_limit_state_checking.getBetaVcuEHE08(theta,thetaE)
 Vcu= EHE_limit_state_checking.getVcuEHE08(fck,fcd,gammaC,0,Ac,0.4,d,z,Asl,0.0,theta,Nd,Md,Vd,Td,Es,Ep,Fp,Ae,ue)
 Vu1= EHE_limit_state_checking.getVu1EHE08(fck,fcd,0,Ac,0.4,d,alpha,theta)
-Vsu= EHE_limit_state_checking.getVsuEHE08(z,alpha,theta,AsTrsv,fyd)
+Vsu= EHE_limit_state_checking.getVsuEHE08(z,alpha,theta,AsTrsv,fyd, circular= False)
 ratio1= abs(Fcv-0.375e6)/0.375e6
 ratio2= abs(Vcu-82.607e3)/82.607e3
 ratio3= abs(Vu1-1320e3)/1320e3

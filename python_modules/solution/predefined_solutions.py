@@ -324,12 +324,14 @@ def simple_static_linear(prb):
     return solution.simpleStaticLinear(prb)
 
 #Linear static analysis.
-def simple_newton_raphson(prb):
+def simple_newton_raphson(prb, mxNumIter= 10):
     solution= SolutionProcedure()
+    solution.maxNumIter= mxNumIter
     return solution.simpleNewtonRaphson(prb)
 
-def simple_newton_raphson_band_gen(prb):
+def simple_newton_raphson_band_gen(prb, mxNumIter= 10):
     solution= SolutionProcedure()
+    solution.maxNumIter= mxNumIter
     return solution.simpleNewtonRaphsonBandGen(prb)
 
 def simple_static_modified_newton(prb):

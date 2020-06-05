@@ -43,7 +43,7 @@ const int Y= 0, Z=1; //Index of Y and Z components.
 
 //! @brief Default constructor.
 XC::CircularSectRegion::CircularSectRegion(Material *mat)
-  : QuadCellRegion(mat), centerPosit(2),intRad(0.0), extRad(0.0), initAng(0.0), finalAng(360.0)
+  : QuadCellRegion(mat), centerPosit(2),intRad(0.0), extRad(0.0), initAng(0.0), finalAng(2*M_PI)
   {}
 
 
@@ -56,7 +56,7 @@ XC::CircularSectRegion::CircularSectRegion(Material *mat, int numSubdivCircunf, 
   {}
 
 void XC::CircularSectRegion::setCenterPosition(const Vector &centerPosition)
-  { centerPosit = centerPosition; }
+  { centerPosit= centerPosition; }
 
 void XC::CircularSectRegion::setCenterPos(const Pos2d &p)
   {
@@ -69,26 +69,26 @@ Pos2d XC::CircularSectRegion::getCenterPos(void) const
 
 void XC::CircularSectRegion::setRadii(double internRadius, double externRadius)
   {
-    intRad = internRadius;
-    extRad = externRadius;
+    intRad= internRadius;
+    extRad= externRadius;
   }
 
 void XC::CircularSectRegion::setAngles(double initialAngle, double finalAngle)
   {
-    initAng  = initialAngle;
-    finalAng = finalAngle;
+    initAng= initialAngle;
+    finalAng= finalAngle;
   }
 
 void XC::CircularSectRegion::getRadii(double &internRadius, double &externRadius) const
   {
-    internRadius = intRad;
-    externRadius = extRad;
+    internRadius= intRad;
+    externRadius= extRad;
   }
 
 void XC::CircularSectRegion::getAngles(double &initialAngle, double &finalAngle) const
   {
-    initialAngle = initAng;
-    finalAngle   = finalAng;
+    initialAngle= initAng;
+    finalAngle  = finalAng;
   }
 
 const XC::Matrix &XC::CircularSectRegion::getVertCoords(void) const
@@ -139,7 +139,23 @@ const XC::Vector &XC::CircularSectRegion::getCenterPosition(void) const
 
 //! @brief Returns a polygon inscribed in the annulus sector.
 Polygon2d XC::CircularSectRegion::getPolygon(void) const
-  { return getSector().getPolygon2d(nDivCirc()); }
+  {
+    Polygon2d retval;
+    if(!isHollow())
+      {
+	const double angle= getIncludedAngle();
+	if(abs(angle-2.0*M_PI)<1e-3)
+          {
+	    Circle2d circle(getCenterPos(),extRad);
+	    retval= circle.getInscribedPolygon(nDivCirc()+1);
+	  }
+	else
+          retval= getSector().getPolygon2d(nDivCirc());
+      }
+    else
+      retval= getSector().getPolygon2d(nDivCirc());
+    return retval;
+  }
 
 AnnulusSector2d &XC::CircularSectRegion::getSector(void) const
   {
@@ -160,7 +176,7 @@ const XC::VectorCells &XC::CircularSectRegion::getCells(void) const
     if(nDivRad() > 0  && nDivCirc() > 0)
       {
         getMesh();
-        int numCells  = this->getNumCells();
+        int numCells= this->getNumCells();
 
         cells.resize(numCells);
 

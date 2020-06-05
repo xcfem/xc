@@ -502,6 +502,7 @@ python tests/materials/ehe/test_shear_stress_joints_01.py
 python tests/materials/ehe/test_shear_stress_joints_02.py
 python tests/materials/ehe/test_fiber_section_shear_01.py
 python tests/materials/ehe/test_fiber_section_shear_02.py
+python tests/materials/ehe/test_fiber_section_shear_03.py
 echo "$BLEU" "    Misc. (EHE-08)." "$NORMAL"
 python tests/materials/ehe/test_concrete_corbel_ehe.py
 echo "$BLEU" "    EC2 tests." "$NORMAL"
