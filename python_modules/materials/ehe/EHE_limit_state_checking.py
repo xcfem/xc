@@ -889,6 +889,50 @@ class ShearController(lscb.ShearControllerBase):
         else:
             self.calcVuEHE08SiAt(scc,torsionParameters,concrete,reinfSteel,Nd,Md,Vd,Td)
 
+    def checkSection(self, sct, secHAParamsTorsion= None):
+        ''' Check shear on the section argument.'''
+        section= sct.getProp('sectionData')
+        concreteCode= section.fiberSectionParameters.concrType
+        reinforcementCode= section.fiberSectionParameters.reinfSteelType
+        self.AsTrsv= section.shReinfY.getAs()
+        self.alpha= section.shReinfY.angAlphaShReinf
+        self.theta= section.shReinfY.angThetaConcrStruts
+        NTmp= sct.getStressResultantComponent("N")
+        MyTmp= sct.getStressResultantComponent("My")
+        MzTmp= sct.getStressResultantComponent("Mz")
+        MTmp= math.sqrt((MyTmp)**2+(MzTmp)**2)
+        VyTmp= sct.getStressResultantComponent("Vy")
+        VzTmp= sct.getStressResultantComponent("Vz")
+        VTmp= math.sqrt((VyTmp)**2+(VzTmp)**2)
+        TTmp= sct.getStressResultantComponent("Mx")
+        #Searching for the best theta angle (concrete strut inclination).
+        #We calculate Vu for several values of theta and chose the highest Vu with its associated theta
+        thetaVuTmp=list()
+        self.calcVuEHE08(sct,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp)
+        thetaVuTmp.append([self.theta,self.Vu])
+        if(self.Vu<VTmp):
+            self.theta= max(self.thetaMin,min(self.thetaMax,self.thetaFisuras))
+            self.calcVuEHE08(sct,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp)
+            thetaVuTmp.append([self.theta,self.Vu])
+        if(self.Vu<VTmp):
+            self.theta= (self.thetaMin+self.thetaMax)/2.0
+            self.calcVuEHE08(sct,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp)
+            thetaVuTmp.append([self.theta,self.Vu])
+        if(self.Vu<VTmp):
+            self.theta= 0.95*self.thetaMax
+            self.calcVuEHE08(sct,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp)
+            thetaVuTmp.append([self.theta,self.Vu])
+        if(self.Vu<VTmp):
+            self.theta= 1.05*self.thetaMin
+            self.calcVuEHE08(sct,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp)
+            thetaVuTmp.append([self.theta,self.Vu])
+        self.theta,self.Vu=max(thetaVuTmp, key=lambda item: item[1])
+        VuTmp= self.Vu
+        if(VuTmp!=0.0):
+            FCtmp= VTmp/VuTmp
+        else:
+            FCtmp= 1e99
+        return FCtmp, VuTmp, NTmp, VyTmp, VzTmp, TTmp, MyTmp, MzTmp 
 
     def check(self,elements,combName):
         ''' For each element in the set 'elements' passed as first parameter
@@ -913,52 +957,7 @@ class ShearController(lscb.ShearControllerBase):
             R=e.getResistingForce()
             scc= e.getSection()
             idSection= e.getProp("idSection")
-            section= scc.getProp('sectionData')
-            concreteCode= section.fiberSectionParameters.concrType
-            reinforcementCode= section.fiberSectionParameters.reinfSteelType
-            self.AsTrsv= section.shReinfY.getAs()
-            self.alpha= section.shReinfY.angAlphaShReinf
-            self.theta= section.shReinfY.angThetaConcrStruts
-            NTmp= scc.getStressResultantComponent("N")
-            MyTmp= scc.getStressResultantComponent("My")
-            MzTmp= scc.getStressResultantComponent("Mz")
-            MTmp= math.sqrt((MyTmp)**2+(MzTmp)**2)
-            VyTmp= scc.getStressResultantComponent("Vy")
-            VzTmp= scc.getStressResultantComponent("Vz")
-            VTmp= math.sqrt((VyTmp)**2+(VzTmp)**2)
-            TTmp= scc.getStressResultantComponent("Mx")
-            #Searching for the best theta angle (concrete strut inclination).
-            #We calculate Vu for several values of theta and chose the highest Vu with its associated theta
-      #      print('\n VTmp=',VTmp)
-            thetaVuTmp=list()
-            self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp)
-            thetaVuTmp.append([self.theta,self.Vu])
-            if(self.Vu<VTmp):
-                self.theta= max(self.thetaMin,min(self.thetaMax,self.thetaFisuras))
-                self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp)
-                thetaVuTmp.append([self.theta,self.Vu])
-            if(self.Vu<VTmp):
-                self.theta= (self.thetaMin+self.thetaMax)/2.0
-                self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp)
-                thetaVuTmp.append([self.theta,self.Vu])
-            if(self.Vu<VTmp):
-                self.theta= 0.95*self.thetaMax
-                self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp)
-                thetaVuTmp.append([self.theta,self.Vu])
-            if(self.Vu<VTmp):
-                self.theta= 1.05*self.thetaMin
-                self.calcVuEHE08(scc,secHAParamsTorsion,concreteCode,reinforcementCode,NTmp,MTmp,VTmp,TTmp)
-                thetaVuTmp.append([self.theta,self.Vu])
-            self.theta,self.Vu=max(thetaVuTmp, key=lambda item: item[1])
-      #      print('thetaFisuras=',self.thetaFisuras)
-      #      print('theta=',self.theta)
-      #      print('Vu=', self.Vu)
-            VuTmp= self.Vu
-            if(VuTmp!=0.0):
-                FCtmp= VTmp/VuTmp
-            else:
-                FCtmp= 1e99
-      #      print('FCtmp=', FCtmp)
+            FCtmp, VuTmp, NTmp, VyTmp, VzTmp, TTmp, MyTmp, MzTmp= self.checkSection(scc, secHAParamsTorsion)
             Mu= 0.0 #Apparently EHE doesn't use Mu
             if(FCtmp>=e.getProp(self.limitStateLabel).CF):
                 e.setProp(self.limitStateLabel,cv.RCShearControlVars(idSection,combName,FCtmp,NTmp,MyTmp,MzTmp,Mu,VyTmp,VzTmp,self.theta,self.Vcu,self.Vsu,VuTmp)) # Worst case

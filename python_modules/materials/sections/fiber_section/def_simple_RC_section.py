@@ -668,9 +668,9 @@ class RCRectangularSection(BasicRectangularRCSection):
                      ("k" for characteristic diagram, "d" for design diagram)
         '''
         self.defDiagrams(preprocessor,matDiagType)
-        geomSection= preprocessor.getMaterialHandler.newSectionGeometry(self.gmSectionName())
-        self.defConcreteRegion(geomSection)
-        reinforcement= geomSection.getReinfLayers
+        self.geomSection= preprocessor.getMaterialHandler.newSectionGeometry(self.gmSectionName())
+        self.defConcreteRegion(self.geomSection)
+        reinforcement= self.geomSection.getReinfLayers
         negPoints= list()
         for rbRow in self.negatvRebarRows.rebarRows:
             y= -self.h/2.0+rbRow.cover

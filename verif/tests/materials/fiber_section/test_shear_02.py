@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-from __future__ import division
 ''' Test for checking the shear-strength verificacion of a reinforced concrete section.
    Some comparison values are obtained from example ER-CA-02 of
    www.areadecalculo.com. Calculation is carried on according to EHE-08 standard. '''
 
+from __future__ import division
+from __future__ import print_function
 
 import xc_base
 import geom
@@ -11,9 +12,11 @@ import xc
 from misc import scc3d_testing_bench
 from solution import predefined_solutions
 from model import predefined_spaces
+from materials.sections.fiber_section import def_simple_RC_section
 
 from materials.ehe import EHE_materials
 from materials.ehe import EHE_limit_state_checking
+
 from materials import typical_materials
 
 import math
@@ -38,11 +41,15 @@ VDato= 125e3     # Shear value.
 
 # Longitudinal reinforcement
 rebarArea= EHE_materials.Fi20
+rebarDiam= 20e-3
 numOfRebars= 3
+lowerRow= def_simple_RC_section.ReinfRow(areaRebar= rebarArea, width= width, nRebars= numOfRebars, nominalCover= cover-rebarDiam/2.0, nominalLatCover= cover-rebarDiam/2.0)
+upperRow= def_simple_RC_section.ReinfRow(areaRebar= rebarArea, width= width, nRebars= numOfRebars, nominalCover= cover-rebarDiam/2.0, nominalLatCover= cover-rebarDiam/2.0)
 
 # Transverse reinforcement
 diamATrsv= 6e-3
 numRamas= 4
+shearReinf= def_simple_RC_section.ShearReinforcement(familyName= "sh",nShReinfBranches= numRamas, areaShReinfBranch= EHE_materials.Fi6, shReinfSpacing= 0.2, angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
 
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
@@ -51,47 +58,18 @@ materialHandler= preprocessor.getMaterialHandler
 
 # Materials definition
 concr= EHE_materials.HA30
-concr.alfacc=0.85    # f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)
-concrMatTag30= concr.defDiagD(preprocessor)
+concr.alfacc= 0.85 # f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)
 B500S= EHE_materials.B500S
-tagB500S= B500S.defDiagD(preprocessor)
-
-respT= typical_materials.defElasticMaterial(preprocessor, "respT",1e10) # Torsion response.
-respVy= typical_materials.defElasticMaterial(preprocessor, "respVy",1e6) # Shear response in y direction.
-respVz= typical_materials.defElasticMaterial(preprocessor, "respVz",1e3) # Shear response in y direction.
-
 
 # Section geometry
-# setting up
-geomSecHA= preprocessor.getMaterialHandler.newSectionGeometry("geomSecHA")
-regions= geomSecHA.getRegions
-#filling with regions
-rg= regions.newQuadRegion(concr.nmbDiagD)  #the name assigned to the region is the string concr.nmbDiagD
-rg.nDivIJ= 10
-rg.nDivJK= 10
-rg.pMin= geom.Pos2d(-width/2.0,-depth/2.0)
-rg.pMax= geom.Pos2d(width/2.0,depth/2.0)
-reinforcement= geomSecHA.getReinfLayers
-reinforcementInf= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
-reinforcementInf.numReinfBars= numOfRebars
-reinforcementInf.barArea= rebarArea
-reinforcementInf.p1= geom.Pos2d(cover-width/2.0,cover-depth/2.0) # bottom layer.
-reinforcementInf.p2= geom.Pos2d(width/2.0-cover,cover-depth/2.0)
-reinforcementSup= reinforcement.newStraightReinfLayer(EHE_materials.B500S.nmbDiagD)
-reinforcementSup.numReinfBars= numOfRebars
-reinforcementSup.barArea= rebarArea
-reinforcementSup.p1= geom.Pos2d(cover-width/2.0,depth/2.0-cover) # top layer.
-reinforcementSup.p2= geom.Pos2d(width/2.0-cover,depth/2.0-cover)
+section= def_simple_RC_section.RCRectangularSection(name='test', width= width, depth= depth, concrType= concr, reinfSteelType= B500S)
+section.positvRebarRows= def_simple_RC_section.LongReinfLayers([lowerRow])
+section.negatvRebarRows= def_simple_RC_section.LongReinfLayers([upperRow])
+section.shReinfY= shearReinf
 
-secHA= materialHandler.newMaterial("fiberSectionShear3d","secHA")
-fiberSectionRepr= secHA.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed("geomSecHA")
-secHA.setupFibers()
-secHA.setRespVyByName("respVy")
-secHA.setRespVzByName("respVz")
-secHA.setRespTByName("respT")
+section.defRCSection(preprocessor,matDiagType= 'd')
 
-scc3d_testing_bench.sectionModel(preprocessor, "secHA")
+scc3d_testing_bench.sectionModel(preprocessor, section.sectionName)
 
 # Constraints
 modelSpace= predefined_spaces.getStructuralMechanics3DSpace(preprocessor)
@@ -118,55 +96,37 @@ analysis= predefined_solutions.simple_newton_raphson(feProblem)
 analOk= analysis.analyze(10)
 
 
-concreteSectionShearParams= EHE_limit_state_checking.ShearController('ULS_shear')
-
-concreteSectionShearParams.AsTrsv= EHE_materials.Fi6*numRamas/0.2 # reinforcement area transversal
-concreteSectionShearParams.theta= math.radians(45)
-concreteSectionShearParams.alpha= math.radians(90)
-
-
-secHAParamsTorsion= EHE_limit_state_checking.computeEffectiveHollowSectionParameters(geomSecHA,depth/2.0,cover)
+shearController= EHE_limit_state_checking.ShearController('ULS_shear')
+secHAParamsTorsion= EHE_limit_state_checking.computeEffectiveHollowSectionParameters(section.geomSection,depth/2.0,cover)
 
 
 elements= preprocessor.getElementHandler
-ele1= elements.getElement(1)
-scc= ele1.getSection()
-N= scc.getStressResultantComponent("N")
-My= scc.getStressResultantComponent("My")
-Vy= scc.getStressResultantComponent("Vy")
-Mz= scc.getStressResultantComponent("Mz")
-Vz= scc.getStressResultantComponent("Vz")
-NTmp= N
-MTmp= math.sqrt((My)**2+(Mz)**2)
-VTmp= math.sqrt((Vy)**2+(Vz)**2)
-TTmp= scc.getStressResultantComponent("Mx")
-concreteSectionShearParams.calcVuEHE08(scc,secHAParamsTorsion,concr,B500S,NTmp,MTmp,VTmp,TTmp)
+scc= elements.getElement(1).getSection()
+shearCF= shearController.checkSection(scc,secHAParamsTorsion)
 
-
-
-Vu1A= concreteSectionShearParams.Vu1
+Vu1A= shearController.Vu1
 Vu1ATeor= 1.32e6
-VcuA= concreteSectionShearParams.Vcu
+VcuA= shearController.Vcu
 VcuATeor= 82.607e3
-VsuA= concreteSectionShearParams.Vsu
-Vu2A= concreteSectionShearParams.Vu2
+VsuA= shearController.Vsu
+Vu2A= shearController.Vu2
 
-ratio1= ((Vu1A-Vu1ATeor)/Vu1ATeor)   #high, to be controlled later
+ratio1= ((Vu1A-Vu1ATeor)/Vu1ATeor)
 ratio2= ((VcuA-VcuATeor)/VcuATeor)
 ratio3= ((VsuA-111.966e3)/111.966e3)
 ratio4= ((Vu2A-194.574e3)/194.574e3)
 
 '''
-print "Vu1A= ",Vu1A/1e3," kN"
-print "Vu1ATeor= ",Vu1ATeor/1e3," kN"
-print "ratio1= ",ratio1
-print "VcuA= ",VcuA/1e3," kN"
-print "VcuATeor= ",VcuATeor/1e3," kN"
-print "ratio2= ",ratio2
-print "VsuA= ",VsuA/1e3," kN"
-print "Vu2A= ",Vu2A/1e3," kN"
-print "ratio3= ",ratio3
-print "ratio4= ",ratio4
+print("Vu1A= ",Vu1A/1e3," kN")
+print("Vu1ATeor= ",Vu1ATeor/1e3," kN")
+print("ratio1= ",ratio1)
+print("VcuA= ",VcuA/1e3," kN")
+print("VcuATeor= ",VcuATeor/1e3," kN")
+print("ratio2= ",ratio2)
+print("VsuA= ",VsuA/1e3," kN")
+print("Vu2A= ",Vu2A/1e3," kN")
+print("ratio3= ",ratio3)
+print("ratio4= ",ratio4)
 '''
 
 import os
@@ -174,6 +134,6 @@ from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
 #if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-4) & (abs(ratio3)<1e-4) & (abs(ratio4)<1e-4):
 if (abs(ratio1)<0.1) & (abs(ratio2)<1e-4) & (abs(ratio3)<1e-4) & (abs(ratio4)<1e-4):
-  print "test ",fname,": ok."
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
