@@ -2,6 +2,10 @@
 ''' Test for checking the shear-strength verificacion of a circular
     reinforced concrete section.
 
+    Results are compared with those of the PhD thesis:
+    "Efectos de los esfuerzos cortantes biaxiales en la respuesta sísmica de
+     columnas de hormigón armado" by Edison Osorio Bustamante. Barcelona
+     november 2012. Universitat Politècnica de Catalunya. Table 5-11 
 '''
 
 from __future__ import division
@@ -79,7 +83,8 @@ modelSpace.fixNode000_000(1)
 
 # Loads definition
 Nd= -550e3 # Axial force when checking shear.
-Myd= 190e3# 223.1e3 # Y bending moment when checking shear.
+Myd= 190e3# 223.1e3 # Y bending moment when checking shear. Reduced
+          # to achieve convergence.
 Mzd= 0.0 # Z bending moment value when checking shear.
 Vd= 148.7e3 # Shear value.
 
