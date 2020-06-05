@@ -16,11 +16,14 @@ import geom
 import xc
 
 from materials.ehe import EHE_materials
+from materials.sections.fiber_section import def_simple_RC_section
+from materials.sections.fiber_section import def_column_RC_section
 import math
 
 radius= 0.75/2.0 # Cross-section radius expressed in meters.
 rebarDiam= 20e-3 # Bar diameter expressed in meters.
-cover= 0.06+12e-3+rebarDiam/2.0 # Concrete cover expressed in meters.
+nCover= 0.06+12e-3
+cover= nCover+rebarDiam/2.0 # Concrete cover expressed in meters.
 rebarArea= math.pi*(rebarDiam/2.0)**2 # Rebar area expressed in square meters.
 
 
@@ -30,44 +33,13 @@ preprocessor=  feProblem.getPreprocessor
 concr= EHE_materials.HA30
 concr.alfacc=0.85 #f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)
 steel= EHE_materials.B500S
-concrDiagram= concr.defDiagD(preprocessor)
-Ec= concrDiagram.getTangent
-steelDiagram= steel.defDiagD(preprocessor)
-Es= steelDiagram.getTangent
+section= def_column_RC_section.RCCircularSection(name='test',Rext= radius, concrType=concr, reinfSteelType= steel)
 
-# Concrete region
-pileGeometry= preprocessor.getMaterialHandler.newSectionGeometry("pileGeometry")
-regions= pileGeometry.getRegions
-concrete= regions.newCircularRegion(concrDiagram.name)
-concrete.nDivCirc= 20
-concrete.nDivRad= 5
-concrete.extRad= radius
-concrete.intRad= 0.0
-concrete.initAngle= 0.0
-concrete.finalAngle= 2*math.pi
+section.mainReinf= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam= rebarDiam, nRebars=14, width= 2*math.pi*(radius-cover), nominalCover= nCover)])
 
-# Reinforcement
-reinforcement= pileGeometry.getReinfLayers
-reinforcement= reinforcement.newCircReinfLayer(steelDiagram.name)
-reinforcement.numReinfBars= 14
-reinforcement.barArea= rebarArea
-reinforcement.initAngle= 0.0
-reinforcement.finalAngle= 2*math.pi
-reinforcement.radius= concrete.extRad-cover
+section.defRCSection(preprocessor,matDiagType= 'd')
 
-# Fiber section definition
-materialHandler= preprocessor.getMaterialHandler
-secHA= materialHandler.newMaterial("fiber_section_3d","secHA")
-fiberSectionRepr= secHA.getFiberSectionRepr()
-fiberSectionRepr.setGeomNamed("pileGeometry")
-secHA.setupFibers()
-fibers= secHA.getFibers()
-
-# Create interaction diagram.
-param= xc.InteractionDiagramParameters()
-param.concreteTag= concrDiagram.tag
-param.reinforcementTag= steelDiagram.tag
-diagIntsecHA= materialHandler.calcInteractionDiagram(secHA.name,param)
+diagIntsecHA= section.defInteractionDiagram(preprocessor)
 
 # Compute capacity factors.
 fc1= diagIntsecHA.getCapacityFactor(geom.Pos3d(1850e3,0,0))
