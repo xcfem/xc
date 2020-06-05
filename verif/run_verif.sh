@@ -481,8 +481,6 @@ python tests/materials/fiber_section/test_interaction_diagram03.py
 python tests/materials/fiber_section/test_interaction_diagram04.py
 python tests/materials/fiber_section/test_interaction_diagram05.py
 python tests/materials/fiber_section/test_interaction_diagram06.py
-python tests/materials/fiber_section/test_shear_01.py
-python tests/materials/fiber_section/test_shear_02.py
 python tests/materials/fiber_section/plastic_hinge_on_IPE200.py
 echo "$BLEU" "  RC sections test." "$NORMAL"
 python tests/materials/ehe/test_Ecm_concrete.py
@@ -502,6 +500,8 @@ python tests/materials/ehe/test_shear_ehe08_04.py
 python tests/materials/ehe/test_shear_ehe08_05.py
 python tests/materials/ehe/test_shear_stress_joints_01.py
 python tests/materials/ehe/test_shear_stress_joints_02.py
+python tests/materials/ehe/test_fiber_section_shear_01.py
+python tests/materials/ehe/test_fiber_section_shear_02.py
 echo "$BLEU" "    Misc. (EHE-08)." "$NORMAL"
 python tests/materials/ehe/test_concrete_corbel_ehe.py
 echo "$BLEU" "    EC2 tests." "$NORMAL"
