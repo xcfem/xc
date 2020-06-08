@@ -61,6 +61,16 @@ class ReinfRow(object):
     :ivar nominalLatCover: nominal lateral cover (only considered if nRebars is defined, defaults to 0.03)
     '''
     def __init__(self,rebarsDiam=None,areaRebar= None,rebarsSpacing=None,nRebars=None,width=1.0,nominalCover=0.03,nominalLatCover=0.03):
+        ''' Constructor.
+
+            :param rebarsDiam:    diameter of the bars (if omitted, the diameter is calculated from the rebar area) 
+            :param areaRebar:     cross-sectional area of the bar (if omitted, the area is calculated from the rebar diameter)
+            :param rebarsSpacing: spacing between bars (not considered if nRebars is defined)
+            :param nRebars:  number of rebars to be placed in the row (>1)
+            :param width: width of the cross-section (defautls to 1 m)
+            :param nominalCover:  nominal cover (defaults to 0.03m)
+            :param nominalLatCover: nominal lateral cover (only considered if nRebars is defined, defaults to 0.03)
+        '''
         if rebarsDiam:
             self.rebarsDiam= rebarsDiam
         elif areaRebar:
@@ -76,8 +86,8 @@ class ReinfRow(object):
             lmsg.warning('You must define either the diameter or the area of rebars')
         if nRebars:
             self.nRebars= nRebars
-            if width==1.0:
-                lmsg.warning('Spacing is calculated using a section width = 1 m')
+            # if width==1.0:
+            #     lmsg.warning('Spacing is calculated using a section width = 1 m')
             self.rebarsSpacing= (width-2*nominalLatCover-self.rebarsDiam)/(nRebars-1)
         elif rebarsSpacing:
             self.rebarsSpacing= rebarsSpacing
@@ -175,7 +185,7 @@ class LongReinfLayers(object):
 
     def getMinCover(self):
         '''Return the minimum value of the cover.'''
-        retval=0.0
+        retval= 1e6
         if(len(self.rebarRows)>0):
             retval= self.rebarRows[0].cover
             for rbRow in self.rebarRows[1:]:
@@ -673,7 +683,20 @@ class RCRectangularSection(BasicRectangularRCSection):
 
     def getMinCover(self):
         ''' return the minimal cover of the reinforcement.'''
-        return min(min(self.getCoverPos()),min(self.getCoverNeg()),min(self.getLatCoverPos()),min(self.getLatCoverNeg()))
+        retval= 1e6
+        posCover= self.getCoverPos()
+        if(len(posCover)>0):
+            retval= min(retval, min(posCover))
+        negCover= self.getCoverNeg()
+        if(len(negCover)>0):
+            retval= min(retval, min(negCover))
+        latPosCover= self.getLatCoverPos()
+        if(len(latPosCover)>0):
+            retval= min(retval, min(latPosCover))
+        latNegCover= self.getLatCoverNeg()
+        if(len(latNegCover)>0):
+            retval= min(retval, min(latNegCover))
+        return retval
 
     def defSectionGeometry(self,preprocessor,matDiagType):
         '''

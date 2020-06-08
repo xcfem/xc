@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 ''' Base classes for limit state control.'''
 
+from __future__ import division
+from __future__ import print_function
+
 __author__= "Luis C. Pérez Tato (LCPT) & Ana Ortega (AO_O)"
 __copyright__= "Copyright 2017,LCPT AO_O"
 __license__= "GPL"
@@ -79,18 +82,18 @@ class fibSectLSProperties(object):
         self.spacing= self.tensSetFb.getAverageDistanceBetweenFibers()
         nmbFi=self.tensSetFb.getNumFibers()
         '''
-        print 'x= ',self.x
-        print 'd= ',self.d
-        print 'h= ',self.h
-        print 'As= ',self.As
-        print 'eps1= ', self.eps1
-        print 'eps2= ',self.eps2
+        print('x= ',self.x)
+        print('d= ',self.d)
+        print('h= ',self.h)
+        print('As= ',self.As)
+        print('eps1= ', self.eps1)
+        print('eps2= ',self.eps2)
         '''
         self.sct.computeSpacement('tensSetFb')
         self.spacing= self.tensSetFb.getAverageDistanceBetweenFibers()
         nmbFi=self.tensSetFb.getNumFibers()
         '''
-        print 'nmbFI= ', nmbFi
+        print('nmbFI= ', nmbFi)
         '''
         if nmbFi>0:
             self.fiEqu=math.sqrt(4/math.pi*self.As/nmbFi)
@@ -130,7 +133,7 @@ class TensionedRebarsProperties(TensionedRebarsBasicProperties):
         self.yCentroid= None
         self.zCentroid= None
         self.cover= None #Cover of tensioned rebars.
-        self.effectiveArea= None #Area of concrete of the cover zone, (see figure 49.2.4.b of EHE-08)
+        #self.effectiveArea= None #Area of concrete of the cover zone, (see figure 49.2.4.b of EHE-08)
                                  # in which the tension bars effectively influence the crack opening.
     def setup(self,tensionedReinforcement):
         '''Get the parameter values from the fiber set.
@@ -148,12 +151,12 @@ class TensionedRebarsProperties(TensionedRebarsBasicProperties):
 
  
     def printParams(self):
-        print "Number of tensioned bars: ",self.number,"\n"
-        print "Spacement of tensioned bars; s= ",self.spacing," m\n"
-        print "Area of tensioned bars; As= ",self.area*1e4," cm2\n"
-        print "Centroid of tensioned bars; COG= (",self.yCentroid,",",self.zCentroid,") m\n"
-        print "Tensioned rebars average stress: ",self.averageStress/1e6," MPa\n"
-        print "Effective area; AcEf= ",self.effectiveArea*1e4," cm2\n"
+        print("Number of tensioned bars: ",self.number,"")
+        print("Spacement of tensioned bars; s= ",self.spacing," m")
+        print("Area of tensioned bars; As= ",self.area*1e4," cm2")
+        print("Centroid of tensioned bars; COG= (",self.yCentroid,",",self.zCentroid,") m")
+        print("Tensioned rebars average stress: ",self.averageStress/1e6," MPa")
+        #print("Effective area; AcEf= ",self.effectiveArea*1e4," cm2")
 
 class CrackControlBaseParameters(LimitStateControllerBase):
     '''
@@ -168,7 +171,7 @@ class CrackControlBaseParameters(LimitStateControllerBase):
 
     def printParams(self):
         # Prints the section crack control parameters.
-        print "Clase esfuerzo: ",self.claseEsfuerzo,"\n"
+        print("Clase esfuerzo: ",self.claseEsfuerzo)
         self.tensionedRebars.printParams()
 
 class BiaxialBendingNormalStressControllerBase(LimitStateControllerBase):

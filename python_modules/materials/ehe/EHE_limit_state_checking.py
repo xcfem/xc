@@ -1148,17 +1148,19 @@ class CrackControl(lscb.CrackControlBaseParameters):
     def printParams(self):
         ''' Prints crack control parameters.'''
         self.tensionedRebars.printParams()    
-        print("Maximum concrete strain in the cracked section inside the tensioned zone; eps1= ",self.eps1*1e3," per mil.\n")
-        print("Minimum concrete strain in the cracked section inside the tensioned zone; eps2= ",self.eps2*1e3," per mil.\n")
-        print("Effect of the tension diagram; k1= ",self.k1,"\n")
-        print("Mechanic depth; h= ",self.depthMecanico," m\n")
-        print("Lever arm; z= ",self.mechanicLeverArm," m\n")
-        print("Mechanical width; b= ",self.widthMecanico," m\n")
-        print("Aspect ratio; r= ",self.aspectRatio,"\n")
-        print("Maximum depth for effective area; hEfMax= ",self.hEfMax," m\n")
-        print("Average tensile strength of the concrete; fctm= ",self.fctmFis/1e6," MPa\n")
-        print("Concrete tangent stiffness; E0= ",self.E0/1e9," GPa\n")
-        print("Characteristic crack opening; Wk= ",self.Wk*1e3," mm\n")
+        print("Gross effective area: ",self.grossEffectiveArea*1e4," cm2")
+        print("Net effective area: ",self.netEffectiveArea*1e4," cm2")
+        print("Maximum concrete strain in the cracked section inside the tensioned zone; eps1= ",self.eps1*1e3," per mil.")
+        print("Minimum concrete strain in the cracked section inside the tensioned zone; eps2= ",self.eps2*1e3," per mil.")
+        print("Effect of the tension diagram; k1= ",self.k1,"")
+        print("Mechanic depth; h= ",self.depthMecanico," m")
+        print("Lever arm; z= ",self.mechanicLeverArm," m")
+        print("Mechanical width; b= ",self.widthMecanico," m")
+        print("Aspect ratio; r= ",self.aspectRatio,"")
+        print("Maximum depth for effective area; hEfMax= ",self.hEfMax," m")
+        print("Average tensile strength of the concrete; fctm= ",self.fctmFis/1e6," MPa")
+        print("Concrete tangent stiffness; E0= ",self.E0/1e9," GPa")
+        print("Characteristic crack opening; Wk= ",self.Wk*1e3," mm")
 
     def computeWkOnBars(self,tensionedReinforcement):
         '''Compute the characteristic crack opening on each bar and return
@@ -1234,7 +1236,7 @@ class CrackControl(lscb.CrackControlBaseParameters):
     def check(self,elements,combName):
         ''' Crack control of concrete sections.'''
         if(self.verbose):
-            lmsg.log("Postprocessing combination: "+combName+"\n")
+            lmsg.log("Postprocessing combination: "+combName+"")
 
         defParamsFisuracion("secHAParamsFisuracion")
         materialHandler= preprocessor.getMaterialHandler
@@ -1261,20 +1263,20 @@ class CrackControl(lscb.CrackControlBaseParameters):
 
 def printRebarCrackControlParameters():
     '''Prints crack control parameters of a bar.'''
-    print("\niRebar= ",iRebar,"\n")
-    print("Effective area Acef= ",rebarEffConcArea*1e4," cm2\n")
-    print("Bar area As= ",rebarArea*1e4," cm2\n")
-    print("Bar position: (",rebar_y,",",rebar_z,")\n")
-    print("Bar cover c= ",rebarCover," m\n")
-    print("Bar diameter fi= ",rebarDiameter,"\n")
-    print("Bar stress= ",rebarStress/1e6," MPa\n")
-    print("Bar stress_SR= ",rebarSigmaSR/1e6," MPa\n")
-    print("Bar spacement s= ",rebarSpacing," m\n")
-    print("k1= ",k1,"\n")
-    print("rebarCrackMeanSep= ",rebarCrackMeanSep," m\n")
-    print("Maximum bar elongation: ",maxBarElongation*1e3," por mil.\n")
-    print("Average bar elongation: ",averageBarElongation*1e3," por mil.\n")
-    print("Characteristic crack width= ",rebarWk*1e3," mm\n\n")
+    print("\niRebar= ",iRebar,"")
+    print("Effective area Acef= ",rebarEffConcArea*1e4," cm2")
+    print("Bar area As= ",rebarArea*1e4," cm2")
+    print("Bar position: (",rebar_y,",",rebar_z,")")
+    print("Bar cover c= ",rebarCover," m")
+    print("Bar diameter fi= ",rebarDiameter,"")
+    print("Bar stress= ",rebarStress/1e6," MPa")
+    print("Bar stress_SR= ",rebarSigmaSR/1e6," MPa")
+    print("Bar spacement s= ",rebarSpacing," m")
+    print("k1= ",k1,"")
+    print("rebarCrackMeanSep= ",rebarCrackMeanSep," m")
+    print("Maximum bar elongation: ",maxBarElongation*1e3," por mil.")
+    print("Average bar elongation: ",averageBarElongation*1e3," por mil.")
+    print("Characteristic crack width= ",rebarWk*1e3," mm\n")
 
 
 class TorsionParameters(object):
