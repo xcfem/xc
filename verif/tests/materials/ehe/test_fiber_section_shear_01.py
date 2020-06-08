@@ -45,8 +45,6 @@ upperRow= def_simple_RC_section.ReinfRow(areaRebar= rebarArea, width= width, nRe
 feProblem= xc.FEProblem()
 preprocessor=  feProblem.getPreprocessor
 # Materials definition
-materialHandler= preprocessor.getMaterialHandler
-
 concr= EHE_materials.HA25
 concr.alfacc=0.85    #f_maxd= 0.85*fcd concrete long term compressive strength factor (normally alfacc=1)
 steel= EHE_materials.B500S
@@ -58,8 +56,6 @@ section.negatvRebarRows= def_simple_RC_section.LongReinfLayers([upperRow])
 #section.shReinfY= shearReinf
 
 section.defRCSection(preprocessor,matDiagType= 'd')
-
-
 scc3d_testing_bench.sectionModel(preprocessor, section.sectionName)
 
 
