@@ -36,8 +36,8 @@ if(not pth):
 fNameB= pth+"/dibuja_edges.verif.tiff"
 
 from postprocess.xcVtk.CAD_model import vtk_CAD_graphic
-defDisplay= vtk_graphic_cad.RecordDefDisplayCAD()
-defDisplay.plotMultiBlockModel(preprocessor, "total",None,fName)
+displaySettings= vtk_graphic_cad.DisplaySettingsBlockTopo()
+displaySettings.plotMultiBlockModel(preprocessor, "total",None,fName)
 
 ratio1= xc_base.compare_images(fName,fNameB)
 

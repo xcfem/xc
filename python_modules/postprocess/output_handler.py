@@ -73,9 +73,9 @@ class OutputHandler(object):
             setToDisplay= self.modelSpace.getTotalSet()
         if(caption==None):
             caption= setToDisplay.name+' set; blocks'
-        defDisplay= vtk_CAD_graphic.RecordDefDisplayCAD()
-        defDisplay.cameraParameters= self.getCameraParameters()
-        defDisplay.displayBlocks(setToDisplay,caption= caption, fileName= fileName)
+        displaySettings= vtk_CAD_graphic.DisplaySettingsBlockTopo()
+        displaySettings.cameraParameters= self.getCameraParameters()
+        displaySettings.displayBlocks(setToDisplay,caption= caption, fileName= fileName)
         
     def displayFEMesh(self, setsToDisplay= None, caption= None, fileName= None, defFScale= 0.0):
         '''Display the mesh (nodes, elements and constraints)
@@ -95,9 +95,9 @@ class OutputHandler(object):
             setsToDisplay= [self.modelSpace.getTotalSet()]
         if(caption==None):
             caption= 'mesh'
-        defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-        defDisplay.cameraParameters= self.getCameraParameters()
-        defDisplay.displayMesh(xcSets=setsToDisplay,caption= caption, scaleConstr= self.outputStyle.constraintsScaleFactor, fileName= fileName, defFScale= defFScale)
+        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
+        displaySettings.cameraParameters= self.getCameraParameters()
+        displaySettings.displayMesh(xcSets=setsToDisplay,caption= caption, scaleConstr= self.outputStyle.constraintsScaleFactor, fileName= fileName, defFScale= defFScale)
 
     def displayLocalAxes(self, setToDisplay= None, caption= None, fileName=None, defFScale= 0.0):
         '''Display the local axes of the elements contained in the set.
@@ -116,9 +116,9 @@ class OutputHandler(object):
             setToDisplay= self.modelSpace.getTotalSet()
         if(caption==None):
             caption= setToDisplay.name+' set; local axes'
-        defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-        defDisplay.cameraParameters= self.getCameraParameters()
-        defDisplay.displayLocalAxes(setToDisplay,caption= caption, vectorScale= self.outputStyle.localAxesVectorsScaleFactor, fileName= fileName, defFScale= defFScale)
+        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
+        displaySettings.cameraParameters= self.getCameraParameters()
+        displaySettings.displayLocalAxes(setToDisplay,caption= caption, vectorScale= self.outputStyle.localAxesVectorsScaleFactor, fileName= fileName, defFScale= defFScale)
 
     def displayStrongWeakAxis(self, setToDisplay= None, caption= None, fileName=None, defFScale= 0.0):
         '''Display the local axes of the elements contained in the set.
@@ -137,10 +137,10 @@ class OutputHandler(object):
             setToDisplay= self.modelSpace.getTotalSet()
         if(caption==None):
             caption= setToDisplay.name+' set; strong [red] and weak [blue] axes'
-        defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-        defDisplay.cameraParameters= self.getCameraParameters()
-#        defDisplay.displayStrongWeakAxis(setToDisplay,caption= caption, vectorScale= self.outputStyle.localAxesVectorsScaleFactor, fileName= fileName, defFScale= defFScale)
-        defDisplay.displayStrongWeakAxis(setToDisplay,caption= caption, vectorScale= self.outputStyle.localAxesVectorsScaleFactor)
+        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
+        displaySettings.cameraParameters= self.getCameraParameters()
+#        displaySettings.displayStrongWeakAxis(setToDisplay,caption= caption, vectorScale= self.outputStyle.localAxesVectorsScaleFactor, fileName= fileName, defFScale= defFScale)
+        displaySettings.displayStrongWeakAxis(setToDisplay,caption= caption, vectorScale= self.outputStyle.localAxesVectorsScaleFactor)
 
     def displayScalarPropertyAtNodes(self,propToDisp, fUnitConv, unitDescription, captionText, setToDisplay, fileName=None, defFScale=0.0, rgMinMax=None):
         '''displays the scalar property defined at the nodes of the set.
@@ -163,9 +163,9 @@ class OutputHandler(object):
 
         '''
         field= fields.ScalarField(name=propToDisp,functionName="getProp",component=None,fUnitConv= fUnitConv,rgMinMax=rgMinMax)
-        defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-        defDisplay.cameraParameters= self.getCameraParameters()
-        defDisplay.displayMesh(xcSets=setToDisplay,field=field, diagrams= None, caption= captionText, fileName=fileName, defFScale=defFScale)
+        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
+        displaySettings.cameraParameters= self.getCameraParameters()
+        displaySettings.displayMesh(xcSets=setToDisplay,field=field, diagrams= None, caption= captionText, fileName=fileName, defFScale=defFScale)
 
     def displayDispRot(self,itemToDisp, setToDisplay=None, fileName=None,defFScale=0.0, rgMinMax=None):
         '''displays the component of the displacement or rotations in the 
@@ -312,15 +312,15 @@ class OutputHandler(object):
         vFieldF.populateFromPairList(forcePairs)
         vFieldM.populateFromPairList(momentPairs)
 
-        defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-        defDisplay.cameraParameters= self.getCameraParameters()
-        defDisplay.setupGrid(setToDisplay)
-        defDisplay.defineMeshScene(None,defFScale,color= setToDisplay.color)
+        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
+        displaySettings.cameraParameters= self.getCameraParameters()
+        displaySettings.setupGrid(setToDisplay)
+        displaySettings.defineMeshScene(None,defFScale,color= setToDisplay.color)
         if(len(forcePairs)>0):
-            vFieldF.addToDisplay(defDisplay)
+            vFieldF.addToDisplay(displaySettings)
         if(len(momentPairs)>0):
-            vFieldM.addToDisplay(defDisplay,'V')
-        defDisplay.displayScene(captionText,fileName)
+            vFieldM.addToDisplay(displaySettings,'V')
+        displaySettings.displayScene(captionText,fileName)
         
     def displayDiagram(attributeName,component, setToDispRes,setDisp,caption,scaleFactor= 1.0, fileName= None, defFScale= 0.0):
         '''Auxiliary function to display results on linear elements.
@@ -341,12 +341,12 @@ class OutputHandler(object):
         '''
         diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDispRes],attributeName= attributeName,component= component)
         diagram.addDiagram()
-        defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-        defDisplay.cameraParameters=cameraParameters
-        defDisplay.setupGrid(setToDisplay)
-        defDisplay.defineMeshScene(None,defFScale,color=setToDisplay.color)
-        defDisplay.appendDiagram(diagram) #Append diagram to the scene.
-        defDisplay.displayScene(caption=caption,fileName=fileName)
+        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
+        displaySettings.cameraParameters=cameraParameters
+        displaySettings.setupGrid(setToDisplay)
+        displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
+        displaySettings.appendDiagram(diagram) #Append diagram to the scene.
+        displaySettings.displayScene(caption=caption,fileName=fileName)
 
     def displayIntForcDiag(self,itemToDisp, setToDisplay=None,fileName=None,defFScale=0.0):
         '''displays the component of internal forces in the set of entities as a 
@@ -378,12 +378,12 @@ class OutputHandler(object):
         captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
         diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDisplay],attributeName= "intForce",component= itemToDisp)
         diagram.addDiagram()
-        defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-        defDisplay.cameraParameters= self.getCameraParameters()
-        defDisplay.setupGrid(setToDisplay)
-        defDisplay.defineMeshScene(None,defFScale,color= setToDisplay.color)
-        defDisplay.appendDiagram(diagram) #Append diagram to the scene.
-        defDisplay.displayScene(caption= captionText,fileName= fileName)
+        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
+        displaySettings.cameraParameters= self.getCameraParameters()
+        displaySettings.setupGrid(setToDisplay)
+        displaySettings.defineMeshScene(None,defFScale,color= setToDisplay.color)
+        displaySettings.appendDiagram(diagram) #Append diagram to the scene.
+        displaySettings.displayScene(caption= captionText,fileName= fileName)
         
     def displayIntForc(self,itemToDisp, setToDisplay=None,fileName=None,defFScale=0.0, rgMinMax=None):
         '''displays the component of internal forces in the 
@@ -422,10 +422,10 @@ class OutputHandler(object):
             unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
             unitDescription= self.outputStyle.getForceUnitsDescription()
             field= fields.ExtrapolatedProperty(propName,"getProp",setToDisplay,fUnitConv= unitConversionFactor,rgMinMax=rgMinMax)
-            defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-            defDisplay.cameraParameters= self.getCameraParameters()
+            displaySettings= vtk_FE_graphic.DisplaySettingsFE()
+            displaySettings.cameraParameters= self.getCameraParameters()
             captionText= self.getCaptionText(itemToDisp, unitDescription, setToDisplay)
-            field.display(defDisplay=defDisplay,caption= captionText,fileName=fileName, defFScale=defFScale)
+            field.display(displaySettings=displaySettings,caption= captionText,fileName=fileName, defFScale=defFScale)
             
     def displayLoadVectors(self, setToDisplay= None, caption= None, fileName= None, defFScale= 0.0):
         '''Displays load vectors on the set argument.
@@ -454,14 +454,14 @@ class OutputHandler(object):
         vectorScale= self.outputStyle.loadVectorsScaleFactor*LrefModSize/10.
         vField= lvf.LoadVectorField(loadCaseName,setToDisplay,unitConversionFactor,vectorScale)
         vField.multiplyByElementArea= self.outputStyle.multLoadsByElemArea
-        defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-        defDisplay.cameraParameters= self.getCameraParameters()
-        defDisplay.setupGrid(setToDisplay)
+        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
+        displaySettings.cameraParameters= self.getCameraParameters()
+        displaySettings.setupGrid(setToDisplay)
         vField.dumpVectors(preprocessor,defFScale)
-        defDisplay.defineMeshScene(None,defFScale,color=setToDisplay.color) 
-        vField.addToDisplay(defDisplay)
-        defDisplay.displayScene(caption,fileName)
-        return defDisplay
+        displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color) 
+        vField.addToDisplay(displaySettings)
+        displaySettings.displayScene(caption,fileName)
+        return displaySettings
         
     def displayLoads(self,  setToDisplay=None,elLoadComp='xyzComponents',fUnitConv=1,caption= None,fileName=None,defFScale=0.0):
         '''Display the loads applied on beam elements and nodes for a given load case
@@ -488,10 +488,10 @@ class OutputHandler(object):
         unitConversionFactor= self.outputStyle.getForceUnitsScaleFactor()
         unitDescription= self.outputStyle.getForceUnitsDescription()
         preprocessor= setToDisplay.getPreprocessor
-        defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-        defDisplay.cameraParameters= self.getCameraParameters()
-        grid= defDisplay.setupGrid(setToDisplay)
-        defDisplay.defineMeshScene(None,defFScale,color=setToDisplay.color)
+        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
+        displaySettings.cameraParameters= self.getCameraParameters()
+        grid= displaySettings.setupGrid(setToDisplay)
+        displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
         # auto-scaling parameters
         LrefModSize=setToDisplay.getBnd(1.0).diagonal.getModulus() #representative length of set size (to auto-scale)
         elLoadScaleF= self.outputStyle.loadDiagramsScaleFactor
@@ -503,15 +503,15 @@ class OutputHandler(object):
             diagram= lld.LinearLoadDiagram(setToDisp=setToDisplay,scale=elLoadScaleF,fUnitConv= unitConversionFactor,component=elLoadComp)
             diagram.addDiagram(preprocessor)
             if diagram.isValid():
-                defDisplay.appendDiagram(diagram)
+                displaySettings.appendDiagram(diagram)
         # nodal loads
         vField= lvf.LoadVectorField(loadPatternName=loadCaseName,setToDisp=setToDisplay,fUnitConv= unitConversionFactor,scaleFactor=self.outputStyle.loadVectorsScaleFactor,showPushing= self.outputStyle.showLoadsPushing)
         count=vField.dumpNodalLoads(preprocessor,defFScale=defFScale)
         if(count >0):
-            vField.addToDisplay(defDisplay,orientation= self.outputStyle.nodalLoadBarOrientation)
+            vField.addToDisplay(displaySettings,orientation= self.outputStyle.nodalLoadBarOrientation)
         if(not caption):
           caption= 'load case: ' + loadCaseName +' '+elLoadComp + ', set: ' + setToDisplay.name + ', '  + unitDescription
-        defDisplay.displayScene(caption=caption,fileName=fileName)
+        displaySettings.displayScene(caption=caption,fileName=fileName)
         
     def displayNodeValueDiagram(self, itemToDisp, setToDisplay=None,caption= None,fileName=None,defFScale=0.0):
         '''displays the a displacement (uX,uY,...) or a property defined in nodes 
@@ -536,16 +536,16 @@ class OutputHandler(object):
         scaleFactor= LrefModSize/unitConversionFactor 
         diagram= npd.NodePropertyDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDisplay], attributeName= itemToDisp)
         diagram.addDiagram()
-        defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-        defDisplay.cameraParameters= self.getCameraParameters()
-        grid= defDisplay.setupGrid(setToDisplay)
-        defDisplay.defineMeshScene(None,defFScale,color=setToDisplay.color)
-        defDisplay.appendDiagram(diagram) #Append diagram to the scene.
+        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
+        displaySettings.cameraParameters= self.getCameraParameters()
+        grid= displaySettings.setupGrid(setToDisplay)
+        displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
+        displaySettings.appendDiagram(diagram) #Append diagram to the scene.
 
         loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
         if(not caption):
             caption= loadCaseName+' '+itemToDisp+' '+unitDescription +' '+setToDisplay.description
-        defDisplay.displayScene(caption=caption,fileName=fileName)
+        displaySettings.displayScene(caption=caption,fileName=fileName)
 
     def displayElementValueDiagram(self, itemToDisp, setToDisplay=None,caption= None,fileName=None,defFScale=0.0):
         '''displays the a displacement (uX,uY,...) or a property defined in nodes 
@@ -568,16 +568,16 @@ class OutputHandler(object):
         scaleFactor= 1.0
         diagram= epd.ElementPropertyDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[setToDisplay], propertyName= itemToDisp)
         diagram.addDiagram()
-        defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-        defDisplay.cameraParameters= self.getCameraParameters()
-        grid= defDisplay.setupGrid(setToDisplay)
-        defDisplay.defineMeshScene(None,defFScale,color=setToDisplay.color)
-        defDisplay.appendDiagram(diagram) #Append diagram to the scene.
+        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
+        displaySettings.cameraParameters= self.getCameraParameters()
+        grid= displaySettings.setupGrid(setToDisplay)
+        displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
+        displaySettings.appendDiagram(diagram) #Append diagram to the scene.
 
         loadCaseName= self.modelSpace.preprocessor.getDomain.currentCombinationName
         if(not caption):
             caption= loadCaseName+' '+itemToDisp+' '+unitDescription +' '+setToDisplay.description
-        defDisplay.displayScene(caption=caption,fileName=fileName)
+        displaySettings.displayScene(caption=caption,fileName=fileName)
 
     def displayEigenvectors(self, mode= 1, setToDisplay=None, caption= None, fileName=None,defFScale=0.0):
         '''Displays the computed eigenvectors on the set argument.
@@ -633,15 +633,15 @@ class OutputHandler(object):
             vFieldD.populateFromPairList(dispPairs)
             vFieldR.populateFromPairList(rotPairs)
 
-            defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-            defDisplay.cameraParameters= self.getCameraParameters()
-            defDisplay.setupGrid(setToDisplay)
-            defDisplay.defineMeshScene(None,defFScale,color=setToDisplay.color)
+            displaySettings= vtk_FE_graphic.DisplaySettingsFE()
+            displaySettings.cameraParameters= self.getCameraParameters()
+            displaySettings.setupGrid(setToDisplay)
+            displaySettings.defineMeshScene(None,defFScale,color=setToDisplay.color)
             if(len(dispPairs)>0):
-                vFieldD.addToDisplay(defDisplay)
+                vFieldD.addToDisplay(displaySettings)
             if(len(rotPairs)>0):
-                vFieldR.addToDisplay(defDisplay,'V')
-            defDisplay.displayScene(caption,fileName)
+                vFieldR.addToDisplay(displaySettings,'V')
+            displaySettings.displayScene(caption,fileName)
         else:
             lmsg.error('mode: '+str(mode)+' out of range (1,'+str(numModes)+')')
         
@@ -668,10 +668,10 @@ class OutputHandler(object):
         if((equLoadVctScale!=0.0) and accelMode==None):
             lmsg.warning("Can't display equivalent static loads. Parameter accelMode should not be null ")
             equLoadVctScale=None
-        defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-        defDisplay.setupGrid(setToDisplay)
-        defDisplay.cameraParameters= self.getCameraParameters()
-        defDisplay.defineMeshScene(None,defFScale,eigenMode,color=setToDisplay.color)
+        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
+        displaySettings.setupGrid(setToDisplay)
+        displaySettings.cameraParameters= self.getCameraParameters()
+        displaySettings.defineMeshScene(None,defFScale,eigenMode,color=setToDisplay.color)
         unitsScale= 1.0
         if equLoadVctScale not in [None,0]:
             vField=vf.VectorField(name='modo'+str(eigenMode),fUnitConv=unitsScale,scaleFactor=equLoadVctScale,showPushing= True)
@@ -680,9 +680,9 @@ class OutputHandler(object):
                 pos= n.getEigenPos3d(defFScale,eigenMode)
                 vEqLoad=n.getEquivalentStaticLoad(eigenMode,accelMode)
                 vField.data.insertNextPair(pos.x,pos.y,pos.z,vEqLoad[0],vEqLoad[1],vEqLoad[2],unitsScale,pushing= True)
-            vField.addToDisplay(defDisplay)
-        defDisplay.displayScene(caption,fileName)
-        return defDisplay
+            vField.addToDisplay(displaySettings)
+        displaySettings.displayScene(caption,fileName)
+        return displaySettings
 
     def displayBeamResult(self,attributeName,itemToDisp,beamSetDispRes,setToDisplay=None,caption=None,fileName=None,defFScale=0.0):
         '''display results for beam elements from a limit state verification file.
@@ -721,12 +721,12 @@ class OutputHandler(object):
             caption= attributeName + ', ' + itemToDisp +' '+unitDescription+ '. '+ descrSet
         diagram= cvd.ControlVarDiagram(scaleFactor= scaleFactor,fUnitConv= unitConversionFactor,sets=[beamSetDispRes],attributeName= attributeName,component= itemToDisp)
         diagram.addDiagram()
-        defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-        defDisplay.cameraParameters= self.getCameraParameters()
-        defDisplay.setupGrid(setToDisplay)
-        defDisplay.defineMeshScene(None,defFScale,color= setToDisplay.color)
-        defDisplay.appendDiagram(diagram) #Append diagram to the scene.
-        defDisplay.displayScene(caption= caption,fileName= fileName)
+        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
+        displaySettings.cameraParameters= self.getCameraParameters()
+        displaySettings.setupGrid(setToDisplay)
+        displaySettings.defineMeshScene(None,defFScale,color= setToDisplay.color)
+        displaySettings.appendDiagram(diagram) #Append diagram to the scene.
+        displaySettings.displayScene(caption= caption,fileName= fileName)
         
     def displayEigenvectorsOnSets(self, eigenMode, setsToDisplay, fileName=None,defFScale=0.0):
         '''displays the reactions as vector on affected nodes
@@ -765,8 +765,8 @@ class OutputHandler(object):
         '''
         if(setToDisplay==None):
             setToDisplay= self.modelSpace.getTotalSet()
-        defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-        defDisplay.cameraParameters= self.getCameraParameters()
+        displaySettings= vtk_FE_graphic.DisplaySettingsFE()
+        displaySettings.cameraParameters= self.getCameraParameters()
         attributeName= limitStateLabel + 'Sect1'   #Normal stresses limit state direction 1.
         fUnitConv, unitDescription= self.outputStyle.getUnitParameters(argument)
 
@@ -774,8 +774,8 @@ class OutputHandler(object):
         captionTexts= self.outputStyle.getCaptionTextsDict()
         sectDescr= self.outputStyle.directionDescription
         captionBaseText= captionTexts[limitStateLabel] + ', ' + captionTexts[argument] + unitDescription + '. '+ setToDisplay.description.capitalize()
-        field.display(defDisplay,caption=  captionBaseText + ', ' + sectDescr[0], fileName= fileName, defFScale= defFScale)
+        field.display(displaySettings,caption=  captionBaseText + ', ' + sectDescr[0], fileName= fileName, defFScale= defFScale)
 
         attributeName= limitStateLabel + 'Sect2'   #Normal stresses limit state direction 2
         field= fields.getScalarFieldFromControlVar(attributeName,argument,setToDisplay,component,fUnitConv,rgMinMax)
-        field.display(defDisplay,caption= captionBaseText + ', ' + sectDescr[1], fileName= fileName, defFScale= defFScale)
+        field.display(displaySettings,caption= captionBaseText + ', ' + sectDescr[1], fileName= fileName, defFScale= defFScale)

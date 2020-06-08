@@ -67,9 +67,9 @@ columns.description='Columns'
 
 # Plot
 # from postprocess.xcVtk.CAD_model import vtk_CAD_graphic
-# defDisplay= vtk_CAD_graphic.RecordDefDisplayCAD()
+# displaySettings= vtk_CAD_graphic.DisplaySettingsBlockTopo()
 # totalSet= prep.getSets.getSet('total')
-# defDisplay.displayBlocks(xcSet=totalSet,fName= None,caption= 'Model grid')
+# displaySettings.displayBlocks(xcSet=totalSet,fName= None,caption= 'Model grid')
 
 
 #                         *** MATERIALS (constitutive models) *** 

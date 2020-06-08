@@ -98,8 +98,8 @@ springSet.fillDownwards()
 allSets=pile+springSet
 '''
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
-defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-defDisplay.displayMesh(xcSets=allSets,fName= None,caption='Mesh',nodeSize=0.5,scaleConstr=0.10)
+displaySettings= vtk_FE_graphic.DisplaySettingsFE()
+displaySettings.displayMesh(xcSets=allSets,fName= None,caption='Mesh',nodeSize=0.5,scaleConstr=0.10)
 '''
 pTop=gridGeom.getPntXYZ((0,0,0))
 nTop=pTop.getNode()

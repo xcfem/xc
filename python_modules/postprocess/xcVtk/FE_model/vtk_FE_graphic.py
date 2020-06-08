@@ -21,11 +21,12 @@ from postprocess.xcVtk.fields import local_axes_vector_field as lavf
 import random as rd 
 import xc
 
-class RecordDefDisplayEF(vtk_graphic_base.RecordDefDisplay):
-    ''' Define the parameters to configure the output device.
+class DisplaySettingsFE(vtk_graphic_base.DisplaySettings):
+    ''' Define the parameters to configure the output for
+        displaying the finite element mesh.
     '''
     def __init__(self):
-        super(RecordDefDisplayEF,self).__init__()
+        super(DisplaySettingsFE,self).__init__()
         self.nodes= None
         self.gridMapper= None
         

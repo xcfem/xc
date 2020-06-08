@@ -147,8 +147,8 @@ msNod=beamSet.getNodes.getNearestNode(geom.Pos3d(0,span/2.,0))
 '''
 #Plot
 from postprocess.xcVtk.FE_model import vtk_FE_graphic
-defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
-defDisplay.displayMesh(xcSets=[beamSet,tendonSet],fName= None,caption='Mesh',nodeSize=0.0010,scaleConstr=0.30)
+displaySettings= vtk_FE_graphic.DisplaySettingsFE()
+displaySettings.displayMesh(xcSets=[beamSet,tendonSet],fName= None,caption='Mesh',nodeSize=0.0010,scaleConstr=0.30)
 '''
 # Loads definition
 cargas= prep.getLoadHandler

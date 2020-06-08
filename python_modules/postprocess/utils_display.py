@@ -101,15 +101,15 @@ class SlideDefinition(FigureBase):
         for d in self.diagrams:
             d.addDiagram()
 
-    def genGraphicFile(self,preprocessor,defDisplay, xcSet, nmbFichGraf):
+    def genGraphicFile(self,preprocessor,displaySettings, xcSet, nmbFichGraf):
         jpegName= nmbFichGraf+".jpeg"
         epsName= nmbFichGraf+".eps"
         self.setupDiagrams()
-        defDisplay.cameraParameters= self.cameraParameters
+        displaySettings.cameraParameters= self.cameraParameters
         if(self.field):
-            self.field.plot(preprocessor, defDisplay,fileName)
+            self.field.plot(preprocessor, displaySettings,fileName)
         else:
-            defDisplay.displayMesh(xcSet,None,self.diagrams,jpegName,self.getCaption())
+            displaySettings.displayMesh(xcSet,None,self.diagrams,jpegName,self.getCaption())
         os.system("convert "+ jpegName + " " + epsName)
   
 
@@ -136,20 +136,20 @@ class FigureDefinition(SlideDefinition):
         self.field= fields.getScalarFieldFromControlVar(attributeName=self.attributeName,argument=self.argument,xcSet=xcSet,component=None,fUnitConv=1.0,rgMinMax=None)
         print '********** Exits FigureDefinition::defField; limit state: ', self.limitStateLabel, ' attributeName= ', self.attributeName, ' xcSet.name= ', xcSet.name
 
-    def genGraphicFile(self,defDisplay, xcSet, nmbFichGraf):
+    def genGraphicFile(self,displaySettings, xcSet, nmbFichGraf):
         jpegName= nmbFichGraf+".jpeg"
         epsName= nmbFichGraf+".eps"
         self.defField(xcSet)
-        self.field.plot(defDisplay,jpegName,self.getCaption())
+        self.field.plot(displaySettings,jpegName,self.getCaption())
         os.system("convert "+ jpegName + " " + epsName)
  
 class TakePhotos(object):
     '''Generation of bitmaps with analysis and design results.'''
     
     def __init__(self,xcSet):
-        self.defDisplay= None
+        self.displaySettings= None
         self.xcSet= xcSet
-        self.defDisplay= vtk_FE_graphic.RecordDefDisplayEF()
+        self.displaySettings= vtk_FE_graphic.DisplaySettingsFE()
         self.pthGraphOutput= '/tmp/'  #Directory to put the graphics in.
         self.pthTextOutput= '/tmp/'  #Directory to put the texts in.
         self.fichLatexFigs= None #Latex file to include figures.
@@ -178,7 +178,7 @@ class TakePhotos(object):
         self.fichLatexList.write('\\begin{itemize}\n' )
         for figDef in figDefinitionList:
             bitmapFilename= self.pthGraphOutput+figDef.getFileName()
-            figDef.genGraphicFile(self.defDisplay, self.xcSet,bitmapFilename)
+            figDef.genGraphicFile(self.displaySettings, self.xcSet,bitmapFilename)
             conta+= 1
             self.insertFigureLatex(figDef,conta,bitmapFilename,"fg_"+figDef.getFileName())
         self.fichLatexFigs.close()

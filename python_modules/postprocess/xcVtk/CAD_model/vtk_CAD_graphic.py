@@ -15,7 +15,7 @@ from postprocess.xcVtk import vtk_graphic_base
 from misc_utils import log_messages as lmsg
 from postprocess.xcVtk.fields import local_axes_vector_field as lavf
 
-class RecordDefDisplayCAD(vtk_graphic_base.RecordDefDisplay):
+class DisplaySettingsBlockTopo(vtk_graphic_base.DisplaySettings):
     ''' Define graphic output.'''
     def defineMeshScene(self):
         ''' Define mesh scene on ouput display.'''

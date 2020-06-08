@@ -389,7 +389,7 @@ def checksReports(limitStateLabel,setsShEl,argsShEl,cfg,setsBmElView=[],argsBmEl
     '''
     texReportFile= cfg.projectDirTree.getReportFile(limitStateLabel)
     report=open(texReportFile,'w')    #report latex file
-    dfDisp= vtk_FE_graphic.RecordDefDisplayEF()
+    dfDisp= vtk_FE_graphic.DisplaySettingsFE()
     pathGr= cfg.projectDirTree.getReportGrPath(limitStateLabel)
     for st in setsShEl:
         for arg in argsShEl:
@@ -397,14 +397,14 @@ def checksReports(limitStateLabel,setsShEl,argsShEl,cfg,setsBmElView=[],argsBmEl
             field= fields.getScalarFieldFromControlVar(attributeName,arg,st,None,1.0,None)
             capt=cfg.capTexts[limitStateLabel] + '. '+ st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + 'section 1'
             grFileNm=pathGr+st.name+arg+'Sect1'
-            field.display(defDisplay=dfDisp,caption=capt,fileName=grFileNm+'.jpg')
+            field.display(displaySettings=dfDisp,caption=capt,fileName=grFileNm+'.jpg')
             insertGrInTex(texFile=report,grFileNm=grFileNm,grWdt=cfg.grWidth,capText=capt)
 
             attributeName= limitStateLabel + 'Sect2'
             field= fields.getScalarFieldFromControlVar(attributeName,arg,st,None,1.0,None)
             capt=cfg.capTexts[limitStateLabel] + '. '+ st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + 'section 2'
             grFileNm=pathGr+st.name+arg+'Sect2'
-            field.display(defDisplay=dfDisp,caption=capt,fileName=grFileNm+'.jpg')
+            field.display(displaySettings=dfDisp,caption=capt,fileName=grFileNm+'.jpg')
             insertGrInTex(texFile=report,grFileNm=grFileNm,grWdt=cfg.grWidth,capText=capt)
     for stV in setsBmElView:
         for argS in argsBmElScale:
