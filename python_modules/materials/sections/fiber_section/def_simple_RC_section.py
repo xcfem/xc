@@ -7,6 +7,7 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
 
+import copy
 import xc_base
 import geom
 import xc
@@ -735,26 +736,92 @@ class RCRectangularSection(BasicRectangularRCSection):
         Es= self.fiberSectionParameters.reinfSteelType.Es
         return sc.StressCalc(self.b,self.h,self.getPosRowsCGcover(),self.getNegRowsCGcover(),self.getAsPos(),self.getAsNeg(),Ec,Es)
 
-class setRCSections2SetElVerif(object):
-    '''This class defines the set of reinforced concrete sections that are going 
+    
+class ElementSections(object):
+    '''This class defines the list of reinforced concrete sections that are going 
     to be associated to a set of elements in order to carry out the verifications 
     of the limit states.
 
     :ivar name:       name given to the list of reinforced concrete sections
     :ivar lstRCSects: list of reinforced concrete fiber-sections that will be 
-                      associated to a set of elements in order to carry out their LS verifications.
-                      The items of the list are instances of the object *RCRectangularSection*
-                      lstRCSects[0]=section in 1 direction
-                      lstRCSects[1]=section in 2 direction ...
+                      associated to a set of elements in order to carry out 
+                      their LS verifications. The items of the list are 
+                      instances of the objects derived from *RCSectionBase*
+
+                      The sections are ordered by integration point and then 
+                      by direction. For example for an element with three integration
+                      point and two directions the order is as follows:
+                       
+                      lstRCSects[0]= integration point 1, direction 1
+                      lstRCSects[1]= integration point 1, direction 2
+                      lstRCSects[2]= integration point 2, direction 1
+                      lstRCSects[3]= integration point 2, direction 2
+                      lstRCSects[4]= integration point 3, direction 1
+                      lstRCSects[5]= integration point 3, direction 2                      
     ''' 
     def __init__(self,name):
-        '''Constructor.'''
-        self.lstRCSects= list()
+        '''Constructor.
+
+        :param name: name given to the list of reinforced concrete sections
+        '''
         self.name=name
+        self.lstRCSects= list()
 
     def append_section(self,RCSimplSect):
         self.lstRCSects.append(RCSimplSect)
         return
+
+    def createSections(self, seedSections, directions= [1, 2], gaussPoints= [1]):
+        '''create the fiber sections that represent the material to be used 
+        for the checking on each integration point and/or each direction. These
+        sections are also added to the attribute 'lstRCSects' that contains 
+        the list of sections.
+        '''
+        i= 0
+        ngp= len(gaussPoints)
+        ndir= len(directions)
+        if(ngp>1 and ndir>1):
+            for gp in gaussPoints:
+                for d in directions:
+                    self.creaSingleSection(seedSections[i], direction= d, gaussPnt= gp)
+                    i+= 1
+        elif(ndir>0): # ngp==1
+            for d in directions:
+                self.creaSingleSection(seedSections[i], direction= d, gaussPnt= None)
+                i+= 1
+        elif(ngp>0): # ndir==1
+            for gp in gaussPoints:
+                self.creaSingleSection(seedSections[i], direction= None, gaussPnt= gp)
+                i+= 1
+            
+    def creaSingleSection(self, seedSection, direction, gaussPnt):
+        '''create a copy of the section argument for the gauss points and
+           the direction arguments.
+        '''
+        sect= copy.copy(seedSection)
+        directionText= ''
+        if(direction):
+            directionText= str(direction)
+            sect.sectionName+= directionText 
+            sect.sectionDescr+= ". "+ directionText + " direction."
+        ipText= ''
+        if(gaussPnt):
+            ipText= str(gaussPnt)
+            sect.sectionName+= '_' + ipText
+            sect.sectionDescr+= ' ' + ipText + " integration point."
+        self.append_section(sect)
+    
+class setRCSections2SetElVerif(ElementSections):
+    '''This class is an specialization of ElemenSections for rectangular
+       sections. The items of the list are instances of the object *RCRectangularSection*
+    ''' 
+    def __init__(self,name):
+        '''Constructor.
+
+
+        :param name: name given to the list of reinforced concrete sections
+        '''
+        super(setRCSections2SetElVerif,self).__init__(name)
 
     def setShearReinf(self,sectNmb,nShReinfBranches,areaShReinfBranch,spacing):
         '''sets parameters of the shear reinforcement of the simple section 
@@ -887,24 +954,22 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
         self.dir2ShReinfZ= ShearReinforcement()
 
     def creaTwoSections(self):
-        '''create the fiber sections of type 'RCRectangularSection' that represent     the reinforced concrete fiber section to be used for the checking in the 
-        directions 1 and 2. These sections are also added to the attribute 
-        'lstRCSects' that contains the list of sections.
+        '''create the fiber sections of type 'RCRectangularSection' that represent
+        the reinforced concrete fiber section to be used for the checking on each
+        integration point and/or each direction. These sections are also added to
+        the attribute 'lstRCSects' that contains the list of sections.
         '''
         #section 1
-        self.creaSingleSection(dirNmb=1,posReb=self.dir1PositvRebarRows,negReb=self.dir1NegatvRebarRows,YShReinf=self.dir1ShReinfY,ZShReinf=self.dir1ShReinfZ)
-        #section 2
-        self.creaSingleSection(dirNmb=2,posReb=self.dir2PositvRebarRows,negReb=self.dir2NegatvRebarRows,YShReinf=self.dir2ShReinfY,ZShReinf=self.dir2ShReinfZ)
+        seedSection1= self.getSeedSection(posReb=self.dir1PositvRebarRows,negReb=self.dir1NegatvRebarRows,YShReinf=self.dir1ShReinfY,ZShReinf=self.dir1ShReinfZ)
+        seedSection2= self.getSeedSection(posReb=self.dir2PositvRebarRows,negReb=self.dir2NegatvRebarRows,YShReinf=self.dir2ShReinfY,ZShReinf=self.dir2ShReinfZ)
+        self.createSections([seedSection1,seedSection2], directions= [1,2], gaussPoints= [1])
 
-    def creaSingleSection(self,dirNmb,posReb,negReb,YShReinf,ZShReinf):
-        '''create the fiber section of type 'RCRectangularSection' that represents 
-        the reinforced concrete fiber section to be used for the checking in the 
-        direction passed as parameter 'dirNmb' (1 or 2). This section is also
-        added to the attribute 'lstRCSects' that contains the list of sections.
-        '''
+    def getSeedSection(self, posReb,negReb,YShReinf,ZShReinf):
+        ''' Return the seed section to use with createSingleSection
+            method.'''
         sect= RCRectangularSection()
-        sect.sectionName= self.name + str(dirNmb)
-        sect.sectionDescr= self.sectionDescr + ". "+str(dirNmb) + " direction."
+        sect.sectionName= self.name
+        sect.sectionDescr= self.sectionDescr
         sect.fiberSectionParameters.concrType= self.concrType
         sect.h= self.depth
         sect.b= self.width
@@ -913,8 +978,7 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
         sect.negatvRebarRows= negReb
         sect.shReinfY= YShReinf
         sect.shReinfZ= ZShReinf
-        self.append_section(sect)
-        return
+        return sect
 
     def setShearReinfD2(self,nShReinfBranches,areaShReinfBranch,spacing):
         self.lstRCSects[1].shReinfZ.nShReinfBranches= nShReinfBranches
