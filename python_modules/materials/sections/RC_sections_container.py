@@ -34,8 +34,7 @@ class SectionContainer(object):
     def append(self, RCSections):
         self.sections.append(RCSections)
         for i in range(len(RCSections.lstRCSects)):
-          self.mapSections[RCSections.lstRCSects[i].sectionName]= RCSections.lstRCSects[i]
-        return
+            self.mapSections[RCSections.lstRCSects[i].sectionName]= RCSections.lstRCSects[i]
 
     def search(self,nmb):
         ''' Return section named nmb (if founded) '''
