@@ -492,6 +492,7 @@ python tests/materials/ehe/test_crack_control_03.py
 python tests/materials/ehe/test_crack_control_04.py
 python tests/materials/ehe/test_crack_control_05.py
 python tests/materials/ehe/test_crack_control_06.py
+python tests/materials/ehe/test_crack_control_07.py
 echo "$BLEU" "    Shear resistance determination tests (EHE-08)." "$NORMAL"
 python tests/materials/ehe/test_shear_ehe08_01.py
 python tests/materials/ehe/test_shear_ehe08_02.py
