@@ -129,24 +129,24 @@ Vu2= shearController.Vu2
 Vu= shearController.Vu
 VuRef= 176.7e3
 
-ratio2= ((Vcu-VcuRef)/VcuRef)
-ratio3= ((Vsu-VsuRef)/VsuRef)
-ratio4= ((Vu-VuRef)/VuRef)
+ratio1= ((Vcu-VcuRef)/VcuRef)
+ratio2= ((Vsu-VsuRef)/VsuRef)
+ratio3= ((Vu-VuRef)/VuRef)
 
 '''
 print("Vcu= ",Vcu/1e3," kN")
 print("VcuRef= ",VcuRef/1e3," kN")
-print("ratio2= ",ratio2)
+print("ratio1= ",ratio2)
 print("Vsu= ",Vsu/1e3," kN")
 print("VsuRef= ",VsuRef/1e3," kN")
-print("ratio3= ",ratio3)
+print("ratio2= ",ratio3)
 print("Vu= ",Vu/1e3," kN")
 print("VuRef= ",VuRef/1e3," kN")
-print("ratio4= ",ratio4)
+print("ratio3= ",ratio4)
 '''
 
-#if (abs(ratio1)<1e-5) & (abs(ratio2)<1e-4) & (abs(ratio3)<1e-4) & (abs(ratio4)<1e-4):
-if ((abs(ratio2)<0.1) & (abs(ratio3)<0.1) & (abs(ratio4)<0.01)):
+
+if ((abs(ratio1)<0.1) & (abs(ratio2)<0.1) & (abs(ratio3)<0.01)):
   print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')

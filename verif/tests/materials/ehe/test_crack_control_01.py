@@ -75,9 +75,8 @@ analOk= analysis.analyze(10)
 secHAParamsFis= EHE_limit_state_checking.CrackControl('SLS_crack')
 
 elements= preprocessor.getElementHandler
-ele1= elements.getElement(1)
-scc= ele1.getSection()
-secHAParamsFis.computeWk(scc,EHE_materials.HA25.matTagK,EHE_materials.B500S.matTagK,EHE_materials.HA25.fctm())
+scc= elements.getElement(1).getSection()
+secHAParamsFis.computeWk(scc,concr.matTagK,steel.matTagK,concr.fctm())
 
 ratio1= ((secHAParamsFis.Wk-0.226243929766e-3)/0.226243929766e-3)
 ratio2= ((secHAParamsFis.Wk-0.21e-3)/0.21e-3)
