@@ -46,6 +46,7 @@ class_<XC::Fiber,XC::Fiber*, bases<XC::TaggedObject>, boost::noncopyable >("Fibe
 
   .def("getArea",&XC::Fiber::getArea,"Return the area of the fiber.")
   .def("getStrain",&XC::Fiber::getStrain,"Returns fiber strain.")
+  .def("getStress",&XC::Fiber::getStress,"Returns fiber strain.")
   .def("getForce",&XC::Fiber::getForce,"Returns fiber internal force.")
   .def("getMz",&XC::Fiber::getMz)
   .def("getMy",&XC::Fiber::getMy)

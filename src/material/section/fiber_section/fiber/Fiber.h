@@ -132,6 +132,7 @@ class Fiber: public TaggedObject, public MovableObject
     //! @brief Return the area of the fiber.
     virtual double getArea(void) const=0;
     double getStrain(void) const;
+    double getStress(void) const;
     double getForce(void) const;
     double getMz(const double &y0= 0.0) const;
     double getMy(const double &z0= 0.0) const;

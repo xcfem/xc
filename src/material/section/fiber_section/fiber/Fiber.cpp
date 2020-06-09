@@ -90,6 +90,15 @@ double XC::Fiber::getForce(void) const
 double XC::Fiber::getStrain(void) const
   { return getMaterial()->getStrain(); }
 
+//! @brief Returns fiber stress.
+double XC::Fiber::getStress(void) const
+  { 
+    double retval= 0.0;
+    if(isAlive())
+      retval= getMaterial()->getStress();
+    return retval;
+  }
+
 //! @brief Returns fiber position.
 Pos2d XC::Fiber::getPos(void) const
   { return Pos2d(getLocY(),getLocZ()); }
