@@ -777,6 +777,8 @@ class ElementSections(object):
         sections are also added to the attribute 'lstRCSects' that contains 
         the list of sections.
         '''
+        if(len(self.lstRCSects)>0):
+            lmsg.warning('Sections already created.')
         i= 0
         ngp= len(gaussPoints)
         ndir= len(directions)
@@ -953,16 +955,15 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
         self.dir2ShReinfY= ShearReinforcement()
         self.dir2ShReinfZ= ShearReinforcement()
 
-    def creaTwoSections(self):
+    def createSections(self):
         '''create the fiber sections of type 'RCRectangularSection' that represent
         the reinforced concrete fiber section to be used for the checking on each
         integration point and/or each direction. These sections are also added to
         the attribute 'lstRCSects' that contains the list of sections.
         '''
-        #section 1
         seedSection1= self.getSeedSection(posReb=self.dir1PositvRebarRows,negReb=self.dir1NegatvRebarRows,YShReinf=self.dir1ShReinfY,ZShReinf=self.dir1ShReinfZ)
         seedSection2= self.getSeedSection(posReb=self.dir2PositvRebarRows,negReb=self.dir2NegatvRebarRows,YShReinf=self.dir2ShReinfY,ZShReinf=self.dir2ShReinfZ)
-        self.createSections([seedSection1,seedSection2], directions= [1,2], gaussPoints= [1])
+        super(RCSlabBeamSection,self).createSections([seedSection1,seedSection2], directions= [1,2], gaussPoints= [1])
 
     def getSeedSection(self, posReb,negReb,YShReinf,ZShReinf):
         ''' Return the seed section to use with createSingleSection

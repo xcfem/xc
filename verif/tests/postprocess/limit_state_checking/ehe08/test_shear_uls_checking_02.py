@@ -75,7 +75,6 @@ fakeElementSet= xcTotalSet.getElements
 # Store the section in the structure that the "phantom model" uses
 reinfConcreteSectionDistribution= RC_material_distribution.RCMaterialDistribution()
 sections= reinfConcreteSectionDistribution.sectionDefinition #sections container
-piersRCSects.creaTwoSections()    
 sections.append(piersRCSects)
 reinfConcreteSectionDistribution.assign(fakeElementSet,setRCSects=piersRCSects)
 

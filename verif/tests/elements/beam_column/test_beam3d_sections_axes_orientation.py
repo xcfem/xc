@@ -95,7 +95,6 @@ beamRCsect.dir1PositvRebarRows= def_simple_RC_section.LongReinfLayers([fi10s75r3
 beamRCsect.dir1NegatvRebarRows= def_simple_RC_section.LongReinfLayers([fi16s75r30])
 beamRCsect.dir2PositvRebarRows= def_simple_RC_section.LongReinfLayers([fi10s75r30])
 beamRCsect.dir2NegatvRebarRows= def_simple_RC_section.LongReinfLayers([fi16s75r30])
-beamRCsect.creaTwoSections()
 sections.append(beamRCsect)
 
 feProblem= xc.FEProblem()

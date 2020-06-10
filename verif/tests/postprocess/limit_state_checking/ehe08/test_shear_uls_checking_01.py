@@ -118,7 +118,6 @@ beamRCsect.dir1PositvRebarRows= def_simple_RC_section.LongReinfLayers([reinfLaye
 beamRCsect.dir1NegatvRebarRows= def_simple_RC_section.LongReinfLayers([reinfLayer])
 beamRCsect.dir2PositvRebarRows= def_simple_RC_section.LongReinfLayers([reinfLayer])
 beamRCsect.dir2NegatvRebarRows= def_simple_RC_section.LongReinfLayers([reinfLayer])
-beamRCsect.creaTwoSections()
 sections.append(beamRCsect)
 
 # Spatial distribution of reinforced concrete

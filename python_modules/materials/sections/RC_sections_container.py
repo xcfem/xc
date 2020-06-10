@@ -31,10 +31,11 @@ class SectionContainer(object):
                              # section definition.
         self.mapInteractionDiagrams= None
 
-    def append(self, RCSections):
-        self.sections.append(RCSections)
-        for i in range(len(RCSections.lstRCSects)):
-            self.mapSections[RCSections.lstRCSects[i].sectionName]= RCSections.lstRCSects[i]
+    def append(self, rcSections):
+        rcSections.createSections()
+        self.sections.append(rcSections)
+        for i in range(len(rcSections.lstRCSects)):
+            self.mapSections[rcSections.lstRCSects[i].sectionName]= rcSections.lstRCSects[i]
 
     def search(self,nmb):
         ''' Return section named nmb (if founded) '''
