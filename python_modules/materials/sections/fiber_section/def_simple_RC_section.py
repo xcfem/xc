@@ -767,6 +767,10 @@ class ElementSections(object):
         '''Constructor.
 
         :param name: name given to the list of reinforced concrete sections
+        :param directions: list of the directions to consider for each integration
+                          point.
+        :param gaussPoints: list of the integration points to consider for each
+                           element.
         '''
         self.name=name
         self.directions= directions
@@ -828,6 +832,10 @@ class setRCSections2SetElVerif(ElementSections):
 
 
         :param name: name given to the list of reinforced concrete sections
+        :param directions: list of the directions to consider for each integration
+                          point.
+        :param gaussPoints: list of the integration points to consider for each
+                           element.
         '''
         super(setRCSections2SetElVerif,self).__init__(name, directions, gaussPoints)
 
