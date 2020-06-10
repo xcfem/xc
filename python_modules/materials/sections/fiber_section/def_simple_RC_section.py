@@ -743,6 +743,10 @@ class ElementSections(object):
     of the limit states.
 
     :ivar name:       name given to the list of reinforced concrete sections
+    :ivar directions: list of the directions to consider for each integration
+                      point.
+    :ivar gaussPoints: list of the integration points to consider for each
+                       element.
     :ivar lstRCSects: list of reinforced concrete fiber-sections that will be 
                       associated to a set of elements in order to carry out 
                       their LS verifications. The items of the list are 
@@ -759,19 +763,21 @@ class ElementSections(object):
                       lstRCSects[4]= integration point 3, direction 1
                       lstRCSects[5]= integration point 3, direction 2                      
     ''' 
-    def __init__(self,name):
+    def __init__(self,name, directions= [1, 2], gaussPoints= [1]):
         '''Constructor.
 
         :param name: name given to the list of reinforced concrete sections
         '''
         self.name=name
+        self.directions= directions
+        self.gaussPoints= gaussPoints
         self.lstRCSects= list()
 
     def append_section(self,RCSimplSect):
         self.lstRCSects.append(RCSimplSect)
         return
 
-    def createSections(self, seedSections, directions= [1, 2], gaussPoints= [1]):
+    def createSections(self, seedSections):
         '''create the fiber sections that represent the material to be used 
         for the checking on each integration point and/or each direction. These
         sections are also added to the attribute 'lstRCSects' that contains 
@@ -780,19 +786,19 @@ class ElementSections(object):
         if(len(self.lstRCSects)>0):
             lmsg.warning('Sections already created.')
         i= 0
-        ngp= len(gaussPoints)
-        ndir= len(directions)
+        ngp= len(self.gaussPoints)
+        ndir= len(self.directions)
         if(ngp>1 and ndir>1):
-            for gp in gaussPoints:
-                for d in directions:
+            for gp in self.gaussPoints:
+                for d in self.directions:
                     self.creaSingleSection(seedSections[i], direction= d, gaussPnt= gp)
                     i+= 1
         elif(ndir>0): # ngp==1
-            for d in directions:
+            for d in self.directions:
                 self.creaSingleSection(seedSections[i], direction= d, gaussPnt= None)
                 i+= 1
         elif(ngp>0): # ndir==1
-            for gp in gaussPoints:
+            for gp in self.gaussPoints:
                 self.creaSingleSection(seedSections[i], direction= None, gaussPnt= gp)
                 i+= 1
             
@@ -817,13 +823,13 @@ class setRCSections2SetElVerif(ElementSections):
     '''This class is an specialization of ElemenSections for rectangular
        sections. The items of the list are instances of the object *RCRectangularSection*
     ''' 
-    def __init__(self,name):
+    def __init__(self,name, directions, gaussPoints):
         '''Constructor.
 
 
         :param name: name given to the list of reinforced concrete sections
         '''
-        super(setRCSections2SetElVerif,self).__init__(name)
+        super(setRCSections2SetElVerif,self).__init__(name, directions, gaussPoints)
 
     def setShearReinf(self,sectNmb,nShReinfBranches,areaShReinfBranch,spacing):
         '''sets parameters of the shear reinforcement of the simple section 
@@ -938,7 +944,7 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
 
     '''
     def __init__(self,name,sectionDescr,concrType,reinfSteelType,depth,width=1.0,elemSetName='total'):
-        super(RCSlabBeamSection,self).__init__(name)
+        super(RCSlabBeamSection,self).__init__(name, directions= [1,2], gaussPoints= [1])
         self.name=name
         self.sectionDescr= sectionDescr
         self.concrType= concrType
@@ -963,7 +969,7 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
         '''
         seedSection1= self.getSeedSection(posReb=self.dir1PositvRebarRows,negReb=self.dir1NegatvRebarRows,YShReinf=self.dir1ShReinfY,ZShReinf=self.dir1ShReinfZ)
         seedSection2= self.getSeedSection(posReb=self.dir2PositvRebarRows,negReb=self.dir2NegatvRebarRows,YShReinf=self.dir2ShReinfY,ZShReinf=self.dir2ShReinfZ)
-        super(RCSlabBeamSection,self).createSections([seedSection1,seedSection2], directions= [1,2], gaussPoints= [1])
+        super(RCSlabBeamSection,self).createSections([seedSection1,seedSection2])
 
     def getSeedSection(self, posReb,negReb,YShReinf,ZShReinf):
         ''' Return the seed section to use with createSingleSection
