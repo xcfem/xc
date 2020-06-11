@@ -763,8 +763,10 @@ class ElementSections(object):
                       lstRCSects[3]= integration point 2, direction 2
                       lstRCSects[4]= integration point 3, direction 1
                       lstRCSects[5]= integration point 3, direction 2                      
+    :ivar elemSetName: name of the set with the elements to which to assign the 
+          section (defaults to 'total'). 
     ''' 
-    def __init__(self,name, directions= [1, 2], gaussPoints= [1]):
+    def __init__(self,name, directions= [1, 2], gaussPoints= [1], elemSetName= 'total'):
         '''Constructor.
 
         :param name: name given to the list of reinforced concrete sections
@@ -772,11 +774,14 @@ class ElementSections(object):
                           point.
         :param gaussPoints: list of the integration points to consider for each
                            element.
+        :param elemSetName: name of the set with the elements to which to assign the 
+                            section (defaults to 'total'). 
         '''
         self.name=name
         self.directions= directions
         self.gaussPoints= gaussPoints
         self.lstRCSects= list()
+        self.elemSetName= elemSetName
 
     def append_section(self,RCSimplSect):
         self.lstRCSects.append(RCSimplSect)
@@ -830,7 +835,7 @@ class setRCSections2SetElVerif(ElementSections):
     '''This class is an specialization of ElemenSections for rectangular
        sections. The items of the list are instances of the object *RCRectangularSection*
     ''' 
-    def __init__(self,name, directions, gaussPoints):
+    def __init__(self,name, directions, gaussPoints, elemSetName= 'total'):
         '''Constructor.
 
 
@@ -839,8 +844,10 @@ class setRCSections2SetElVerif(ElementSections):
                           point.
         :param gaussPoints: list of the integration points to consider for each
                            element.
+        :param elemSetName: name of the set with the elements to which to assign the 
+                            section (defaults to 'total'). 
         '''
-        super(setRCSections2SetElVerif,self).__init__(name, directions, gaussPoints)
+        super(setRCSections2SetElVerif,self).__init__(name, directions, gaussPoints, elemSetName)
 
     def setShearReinf(self,sectNmb,nShReinfBranches,areaShReinfBranch,spacing):
         '''sets parameters of the shear reinforcement of the simple section 
@@ -927,8 +934,6 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
     reinforced concrete sections that define the two reinforcement directions
     of a slab or the front and back ending sections of a beam element
 
-    :ivar name:    basic name to form the RC sections in direction 1 (name+'1') 
-               and direction 2(name+'1') 
     :ivar sectionDescr:    section description
     :ivar concrType:       type of concrete (e.g. EHE_materials.HA25)     
     :ivar reinfSteelType:  type of reinforcement steel
@@ -950,19 +955,27 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
                         the Y shear reinforcement in section 2
     :ivar dir2ShReinfZ: instance of class ShearReinforcement that represents
                         the Z shear reinforcement in section 2
-    :ivar elemSetName: name of the set with the elements to which to assign the 
-          section (defaults to 'total'). 
 
     '''
-    def __init__(self,name,sectionDescr,concrType,reinfSteelType,depth,width=1.0,elemSetName='total'):
-        super(RCSlabBeamSection,self).__init__(name, directions= [1,2], gaussPoints= [1])
-        self.name=name
+    def __init__(self,name,sectionDescr,concrType,reinfSteelType,depth,width=1.0, elemSetName= 'total'):
+        '''Constructor.
+
+
+        :param name: name given to the list of reinforced concrete sections
+        :param sectionDescr:    section description
+        :param concrType:       type of concrete (e.g. EHE_materials.HA25)     
+        :param reinfSteelType:  type of reinforcement steel
+        :param depth:           cross-section depth
+        :param width:           cross-section width (defaults to 1.0)
+        :param elemSetName: name of the set with the elements to which to assign the 
+                            section (defaults to 'total'). 
+        '''
+        super(RCSlabBeamSection,self).__init__(name, directions= [1,2], gaussPoints= [1], elemSetName= elemSetName)
         self.sectionDescr= sectionDescr
         self.concrType= concrType
         self.reinfSteelType= reinfSteelType
         self.depth= depth
         self.width= width
-        self.elemSetName=elemSetName
         self.dir1PositvRebarRows= []
         self.dir1NegatvRebarRows= []
         self.dir2PositvRebarRows= []
@@ -1138,7 +1151,7 @@ class RCMemberSection(ElementSections):
     '''This class is an specialization of ElemenSections for rectangular
        sections. The items of the list are instances of the object *RCRectangularSection*
     ''' 
-    def __init__(self,name, templateSections, directions= [1], gaussPoints=[1,2]):
+    def __init__(self,name, templateSections, directions= [1], gaussPoints=[1,2], elemSetName= 'total'):
         '''Constructor.
 
 
@@ -1156,11 +1169,13 @@ class RCMemberSection(ElementSections):
                                  templateSections[4]= Gauss point 3, direction 1
                                  templateSections[5]= Gauss point 3, direction 2
         :param directions: list of the directions to consider for each integration
-                          point.
+                           point (defaults to [1]).
         :param gaussPoints: list of the integration points to consider for each
-                           element.
+                           element (defaults to [1,2]).
+        :param elemSetName: name of the set with the elements to which to assign the 
+                            section (defaults to 'total'). 
         '''
-        super(RCMemberSection,self).__init__(name, directions, gaussPoints)
+        super(RCMemberSection,self).__init__(name, directions, gaussPoints, elemSetName)
         self.templateSections= templateSections
         
     def createSections(self):

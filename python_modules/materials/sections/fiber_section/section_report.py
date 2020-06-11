@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 '''section_report.py: report describing RC cross sections mechanical properties.'''
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
@@ -25,7 +24,7 @@ fmt5_2f= '{:5.2f}'
 fmt5_3f= '{:5.3f}'
 fmt6_3f= '{:6.3f}'
 
-class RecordFamMainReinforcement(object):
+class MainReinforcementLayer(object):
     '''Parameters for each layer of main reinforcement
     '''
     def __init__(self,reinfLayer):
@@ -57,7 +56,7 @@ def writeMainReinforcement(listaFamMainReinforcement, areaHorm, archTex):
     archTex.write(" &  & $(mm)$ & $(cm^2)$ & $(\\permil)$ & $(cm)$ & $(m)$ & $(m)$\\\\\n")
     for f in listaFamMainReinforcement:
         archTex.write("\hline\n")
-        RecordFamMainReinforcement(f).texWrite(archTex,areaHorm)
+        MainReinforcementLayer(f).texWrite(archTex,areaHorm)
     archTex.write("\\end{tabular} \\\\\n")
 
 def writeShearReinforcement(recordShearReinf, archTex, width):
@@ -123,7 +122,7 @@ class SectionInfo(object):
         self.cover= self.reinforcement.getCover
         self.lista_fams_reinforcement= []
         for f in self.reinforcement:
-            datosFam= RecordFamMainReinforcement(f)
+            datosFam= MainReinforcementLayer(f)
             self.lista_fams_reinforcement.append(datosFam)
         self.GH= self.geomSection.getCenterOfMassHomogenizedSection(self.tangConcr) # Center of gravity of the homogenized section
         self.AH= self.geomSection.getAreaHomogenizedSection(self.tangConcr) # Area of the homogenized section
