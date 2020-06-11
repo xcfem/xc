@@ -383,20 +383,23 @@ class RCSectionBase(object):
     '''
     Base class for reinforced concrete sections.
 
-    :ivar sectionDescr:    section description
+    :ivar sectionDescr: section description.
     :ivar fiberSectionParameters: Parameters needed to create a reinforced 
                                   concrete fiber section.
     :ivar fiberSectionRepr: fiber model of the section.
     '''
-    def __init__(self,concrType=None,reinfSteelType=None, nIJ= 10, nJK= 10):
+    def __init__(self, sectionDescr= None, concrType=None,reinfSteelType=None, nIJ= 10, nJK= 10):
         ''' Constructor.
 
+        :param sectionDescr: section description.
         :param concrType: type of concrete (e.g. EHE_materials.HA25).     
         :param reinfSteelType: type of reinforcement steel.
         :param nIJ: number of cells in IJ (width or radial) direction.
         :param nJK: number of cells in JK (height or tangential) direction.
         '''
         self.sectionDescr= 'Text describing the role/position of the section in the structure.'
+        if(sectionDescr):
+            self.sectionDescr= sectionDescr
         self.fiberSectionParameters= RCFiberSectionParameters(concrType= concrType, reinfSteelType= reinfSteelType, nDivIJ= nIJ, nDivJK= nJK)
         self.fiberSectionRepr= None
 
@@ -491,16 +494,17 @@ class BasicRectangularRCSection(RCSectionBase, section_properties.RectangularSec
     :ivar shReinfY:        record of type ShearReinforcement
                            defining the shear reinforcement in Y direction
     '''
-    def __init__(self,name= 'noName', width=0.25,depth=0.25,concrType=None,reinfSteelType=None):
+    def __init__(self,name= 'noName', sectionDescr= None, width=0.25,depth=0.25,concrType=None,reinfSteelType=None):
         ''' Constructor.
 
         :param name: name of the section     
+        :param sectionDescr: section description.
         :param width: section width.
         :param depth: section depth.
         :param concrType: type of concrete (e.g. EHE_materials.HA25)     
         :param reinfSteelType: type of reinforcement steel.
         '''
-        RCSectionBase.__init__(self,concrType= concrType,reinfSteelType= reinfSteelType, nIJ= 10, nJK= 10)
+        RCSectionBase.__init__(self, sectionDescr= sectionDescr, concrType= concrType,reinfSteelType= reinfSteelType, nIJ= 10, nJK= 10)
         section_properties.RectangularSection.__init__(self,name,width,depth)
 
         # Transverse reinforcement (z direction)
@@ -554,16 +558,17 @@ class RCRectangularSection(BasicRectangularRCSection):
     :ivar positvRebarRows: layers of main rebars in the local positive face of 
                            the section
     '''
-    def __init__(self,name= 'noName', width=0.25,depth=0.25,concrType=None,reinfSteelType=None):
+    def __init__(self,name= 'noName', sectionDescr= None, width=0.25,depth=0.25,concrType=None,reinfSteelType=None):
         ''' Constructor.
 
-        :param name: name of the section     
+        :param name: name of the section 
+        :param sectionDescr: section description.
         :param width: section width.
         :param depth: section depth.
         :param concrType: type of concrete (e.g. EHE_materials.HA25)     
         :param reinfSteelType: type of reinforcement steel.
         '''
-        super(RCRectangularSection,self).__init__(name,width,depth,concrType,reinfSteelType)
+        super(RCRectangularSection,self).__init__(name,sectionDescr,width,depth,concrType,reinfSteelType)
 
         # Longitudinal reinforcement
         self.minCover= 0.0 
@@ -961,12 +966,12 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
         '''Constructor.
 
 
-        :param name: name given to the list of reinforced concrete sections
-        :param sectionDescr:    section description
+        :param name: name given to the list of reinforced concrete sections.
+        :param sectionDescr:    section description.
         :param concrType:       type of concrete (e.g. EHE_materials.HA25)     
-        :param reinfSteelType:  type of reinforcement steel
-        :param depth:           cross-section depth
-        :param width:           cross-section width (defaults to 1.0)
+        :param reinfSteelType:  type of reinforcement steel.
+        :param depth:           cross-section depth.
+        :param width:           cross-section width (defaults to 1.0).
         :param elemSetName: name of the set with the elements to which to assign the 
                             section (defaults to 'total'). 
         '''

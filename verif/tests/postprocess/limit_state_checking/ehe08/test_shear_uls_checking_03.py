@@ -43,7 +43,7 @@ numOfRebars= int(math.ceil(math.pi*(pierDiameter-2*nomCover)/.05))
 mainReinf= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam= rebarDiam, nRebars= numOfRebars, width= math.pi*(pierDiameter-2*(nomCover+shearReinfDiam)), nominalCover= nomCover)])
 
 # Section geometry
-section= def_column_RC_section.RCCircularSection(name='test',Rext= pierDiameter/2.0, concrType=concrete, reinfSteelType= reinfSteel)
+section= def_column_RC_section.RCCircularSection(name='test', sectionDescr= 'circular section', Rext= pierDiameter/2.0, concrType=concrete, reinfSteelType= reinfSteel)
 section.mainReinf= mainReinf
 section.shReinf= shearReinf
 

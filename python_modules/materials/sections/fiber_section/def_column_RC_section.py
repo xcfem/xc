@@ -43,8 +43,8 @@ class RCRectangularColumnSection(def_simple_RC_section.BasicRectangularRCSection
                     longitudinal reinforcement.
     '''
 
-    def __init__(self):
-      super(RCColumnSection,self).__init__()
+    def __init__(self, sectionDescr= None):
+      super(RCColumnSection,self).__init__(sectionDescr= sectionDescr)
       self.mainBars= ColumnMainReinforcement()
 
     def defSectionGeometry(self,matDiagType):
@@ -101,7 +101,7 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
     :ivar shReinf:  record of type ShearReinforcement
                     defining the shear reinforcement.
     '''
-    def __init__(self,name= 'noName', Rext= 0.25, Rint= 0.0, concrType=None, reinfSteelType=None):
+    def __init__(self,name= 'noName', sectionDescr= None, Rext= 0.25, Rint= 0.0, concrType=None, reinfSteelType=None):
         ''' Constructor.
 
         :param name: name of the section.
@@ -110,7 +110,7 @@ class RCCircularSection(def_simple_RC_section.RCSectionBase, section_properties.
         :param concrType: type of concrete (e.g. EHE_materials.HA25)     
         :param reinfSteelType: type of reinforcement steel.
         '''
-        def_simple_RC_section.RCSectionBase.__init__(self,concrType= concrType,reinfSteelType= reinfSteelType, nIJ= 20, nJK= 5)
+        def_simple_RC_section.RCSectionBase.__init__(self,sectionDescr= sectionDescr, concrType= concrType,reinfSteelType= reinfSteelType, nIJ= 20, nJK= 5)
         section_properties.CircularSection.__init__(self,name,Rint= Rint,Rext= Rext)
 
         # Longitudinal reinforcement.
