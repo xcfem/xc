@@ -742,6 +742,14 @@ class RCRectangularSection(BasicRectangularRCSection):
         Es= self.fiberSectionParameters.reinfSteelType.Es
         return sc.StressCalc(self.b,self.h,self.getPosRowsCGcover(),self.getNegRowsCGcover(),self.getAsPos(),self.getAsNeg(),Ec,Es)
 
+#######################################################################
+# 20200611 LCPT
+#
+# From this point the classes used to communicate the geometry of the
+# reinforced concrete sections to the phantom model.
+#
+# Yeah, it's a mess that we need to wash up (to clean, to put in order)
+#######################################################################
     
 class ElementSections(object):
     '''This class defines the list of reinforced concrete sections that are going 
