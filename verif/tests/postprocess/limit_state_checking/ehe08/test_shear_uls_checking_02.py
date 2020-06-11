@@ -109,8 +109,8 @@ outCfg= limit_state_data.VerifOutVars(listFile='N',calcMeanCF='Y')
 
 (FEcheckedModel,meanFCs)= reinfConcreteSectionDistribution.runChecking(limit_state_data.shearResistance, matDiagType="d",threeDim= True,outputCfg=outCfg)  
 
-ratio1= (meanFCs[0]-0.51922390249173578)/0.51922390249173578
-ratio2= (meanFCs[1]-0.51808548496704088)/0.51808548496704088
+ratio1= abs(meanFCs[0]-0.51922390249173578)/0.51922390249173578
+ratio2= abs(meanFCs[1]-0.51808548496704088)/0.51808548496704088
 
 '''
 print('meanFCs= ',meanFCs)
