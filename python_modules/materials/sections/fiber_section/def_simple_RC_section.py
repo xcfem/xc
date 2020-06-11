@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
+
 from __future__ import division
+from __future__ import print_function
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
 __copyright__= "Copyright 2015, LCPT and AO_O"
@@ -713,7 +715,6 @@ class RCRectangularSection(BasicRectangularRCSection):
         negPoints= list()
         for rbRow in self.negatvRebarRows.rebarRows:
             y= -self.h/2.0+rbRow.cover
-            #print "y neg.= ", y, " m"
             p1= geom.Pos2d(-self.b/2+rbRow.coverLat,y)
             p2= geom.Pos2d(self.b/2-rbRow.coverLat,y)
             negPoints.append((p1,p2))
@@ -781,7 +782,7 @@ class ElementSections(object):
         self.lstRCSects.append(RCSimplSect)
         return
 
-    def createSections(self, seedSections):
+    def createSections(self, templateSections):
         '''create the fiber sections that represent the material to be used 
         for the checking on each integration point and/or each direction. These
         sections are also added to the attribute 'lstRCSects' that contains 
@@ -795,22 +796,22 @@ class ElementSections(object):
         if(ngp>1 and ndir>1):
             for gp in self.gaussPoints:
                 for d in self.directions:
-                    self.creaSingleSection(seedSections[i], direction= d, gaussPnt= gp)
+                    self.creaSingleSection(templateSections[i], direction= d, gaussPnt= gp)
                     i+= 1
-        elif(ndir>0): # ngp==1
+        elif(ngp==1 and ndir>0): # ngp==1
             for d in self.directions:
-                self.creaSingleSection(seedSections[i], direction= d, gaussPnt= None)
+                self.creaSingleSection(templateSections[i], direction= d, gaussPnt= None)
                 i+= 1
-        elif(ngp>0): # ndir==1
+        elif(ndir==1 and ngp>0): # ndir==1
             for gp in self.gaussPoints:
-                self.creaSingleSection(seedSections[i], direction= None, gaussPnt= gp)
+                self.creaSingleSection(templateSections[i], direction= None, gaussPnt= gp)
                 i+= 1
             
-    def creaSingleSection(self, seedSection, direction, gaussPnt):
+    def creaSingleSection(self, templateSection, direction, gaussPnt):
         '''create a copy of the section argument for the gauss points and
            the direction arguments.
         '''
-        sect= copy.copy(seedSection)
+        sect= copy.copy(templateSection)
         directionText= ''
         if(direction):
             directionText= str(direction)
@@ -819,7 +820,9 @@ class ElementSections(object):
         ipText= ''
         if(gaussPnt):
             ipText= str(gaussPnt)
-            sect.sectionName+= '_' + ipText
+            if(direction):
+                sect.sectionName+= '_'
+            sect.sectionName+= ipText
             sect.sectionDescr+= ' ' + ipText + " integration point."
         self.append_section(sect)
     
@@ -975,12 +978,12 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
         integration point and/or each direction. These sections are also added to
         the attribute 'lstRCSects' that contains the list of sections.
         '''
-        seedSection1= self.getSeedSection(posReb=self.dir1PositvRebarRows,negReb=self.dir1NegatvRebarRows,YShReinf=self.dir1ShReinfY,ZShReinf=self.dir1ShReinfZ)
-        seedSection2= self.getSeedSection(posReb=self.dir2PositvRebarRows,negReb=self.dir2NegatvRebarRows,YShReinf=self.dir2ShReinfY,ZShReinf=self.dir2ShReinfZ)
-        super(RCSlabBeamSection,self).createSections([seedSection1,seedSection2])
+        templateSection1= self.getTemplateSection(posReb=self.dir1PositvRebarRows,negReb=self.dir1NegatvRebarRows,YShReinf=self.dir1ShReinfY,ZShReinf=self.dir1ShReinfZ)
+        templateSection2= self.getTemplateSection(posReb=self.dir2PositvRebarRows,negReb=self.dir2NegatvRebarRows,YShReinf=self.dir2ShReinfY,ZShReinf=self.dir2ShReinfZ)
+        super(RCSlabBeamSection,self).createSections([templateSection1,templateSection2])
 
-    def getSeedSection(self, posReb,negReb,YShReinf,ZShReinf):
-        ''' Return the seed section to use with createSingleSection
+    def getTemplateSection(self, posReb,negReb,YShReinf,ZShReinf):
+        ''' Return the template section to use with createSingleSection
             method.'''
         sect= RCRectangularSection()
         sect.sectionName= self.name
@@ -1131,6 +1134,43 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
         elif('d' in code):
             return self.getDiam(code)
 
+class RCMemberSection(ElementSections):
+    '''This class is an specialization of ElemenSections for rectangular
+       sections. The items of the list are instances of the object *RCRectangularSection*
+    ''' 
+    def __init__(self,name, templateSections, directions= [1], gaussPoints=[1,2]):
+        '''Constructor.
+
+
+        :param name: name given to the list of reinforced concrete sections
+        :param templateSections: RCSectionBase derived objects that define the
+                                 reinforced concrete sections of the element. 
+                                 The sections must be ordered by integration 
+                                 point and then by direction. For example for 
+                                 an element with three integration point and 
+                                 two directions the order is as follows:             
+                                 templateSections[0]= Gauss point 1, direction 1
+                                 templateSections[1]= Gauss point 1, direction 2
+                                 templateSections[2]= Gauss point 2, direction 1
+                                 templateSections[3]= Gauss point 2, direction 2
+                                 templateSections[4]= Gauss point 3, direction 1
+                                 templateSections[5]= Gauss point 3, direction 2
+        :param directions: list of the directions to consider for each integration
+                          point.
+        :param gaussPoints: list of the integration points to consider for each
+                           element.
+        '''
+        super(RCMemberSection,self).__init__(name, directions, gaussPoints)
+        self.templateSections= templateSections
+        
+    def createSections(self):
+        '''create the fiber sections that represent the reinforced concrete fiber 
+        section to be used for the checking on each integration point and/or each 
+        direction. These sections are also added to the attribute 'lstRCSects' 
+        that contains the list of sections.
+        '''
+        super(RCMemberSection,self).createSections(self.templateSections)
+        
 def loadMainRefPropertyIntoElements(elemSet, sectionContainer, code):
     '''add to each element of the set the
        desired property (As1+,As1-,...,d1+,d1-,...).''' 
