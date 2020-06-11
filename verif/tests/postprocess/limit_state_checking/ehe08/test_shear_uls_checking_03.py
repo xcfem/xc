@@ -31,7 +31,7 @@ nomCover= 35e-3 # nominal cover
 
 # Pier reinforcement.
 ## Shear reinforcement
-shearReinfArea= EHE_materials.Fi6
+shearReinfArea= EHE_materials.Fi12
 shearReinfDiam= 12e-3
 nBranches= 2
 shearReinf= def_simple_RC_section.ShearReinforcement(familyName= "sh",nShReinfBranches= nBranches, areaShReinfBranch= shearReinfArea, shReinfSpacing= 0.25, angAlphaShReinf= math.pi/2.0,angThetaConcrStruts= math.pi/4.0)
@@ -109,8 +109,8 @@ outCfg= limit_state_data.VerifOutVars(listFile='N',calcMeanCF='Y')
 
 (FEcheckedModel,meanFCs)= reinfConcreteSectionDistribution.runChecking(limit_state_data.shearResistance, matDiagType="d",threeDim= True,outputCfg=outCfg)  
 
-ratio1= (meanFCs[0]-0.99995486539521827)/0.99995486539521827
-ratio2= (meanFCs[1]-0.98437406421578433)/0.98437406421578433
+ratio1= abs(meanFCs[0]-0.80132369462323072)/0.80132369462323072
+ratio2= abs(meanFCs[1]-0.80504447847657745)/0.80504447847657745
 
 '''
 print('meanFCs= ',meanFCs)
