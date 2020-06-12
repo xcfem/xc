@@ -23,6 +23,7 @@ from postprocess import limit_state_data as lsd
 from postprocess import RC_material_distribution
 from postprocess.config import default_config
 from materials.sections.fiber_section import def_simple_RC_section
+from postprocess import element_section_map
 import sys
 import logging
 
@@ -108,13 +109,13 @@ barDiameter= math.sqrt(barArea)/math.pi
 
 reinfLayer= def_simple_RC_section.ReinfRow(rebarsDiam= barDiameter,areaRebar= barArea,rebarsSpacing=0.075,width=0.25,nominalCover=0.050)
 
-#instances of def_simple_RC_section.RCSlabBeamSection that defines the
+#instances of element_section_map.RCSlabBeamSection that defines the
 #variables that make up THE TWO reinforced concrete sections in the two
 #reinforcement directions of a slab or the front and back ending sections
 #of a beam element
 reinfSteel= ACI_materials.A615G60
 reinfSteel.gammaS= 1.0/0.75
-beamRCsect= def_simple_RC_section.RCSlabBeamSection(name='beamRCsect',sectionDescr='beam section',concrType=concr, reinfSteelType=reinfSteel,width= sectionGeometry.b,depth= sectionGeometry.h)
+beamRCsect= element_section_map.RCSlabBeamSection(name='beamRCsect',sectionDescr='beam section',concrType=concr, reinfSteelType=reinfSteel,width= sectionGeometry.b,depth= sectionGeometry.h)
 beamRCsect.dir1PositvRebarRows= def_simple_RC_section.LongReinfLayers([reinfLayer])
 beamRCsect.dir1NegatvRebarRows= def_simple_RC_section.LongReinfLayers([reinfLayer])
 beamRCsect.dir2PositvRebarRows= def_simple_RC_section.LongReinfLayers([reinfLayer])

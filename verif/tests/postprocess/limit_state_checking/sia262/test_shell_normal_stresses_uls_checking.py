@@ -14,6 +14,7 @@ import geom
 import xc
 from materials.ehe import EHE_materials
 from materials.sections.fiber_section import def_simple_RC_section
+from postprocess import element_section_map
 from postprocess import RC_material_distribution
 from materials.sections import RC_sections_container as sc
 from materials.sia262 import SIA262_limit_state_checking #Change SIA262->EHE
@@ -58,7 +59,7 @@ sepL= 1.0/numReinfBarsL
 
 sections= reinfConcreteSections.sectionDefinition
 
-deckSections= def_simple_RC_section.RCSlabBeamSection("deck","RC deck.",concrete, reinfSteel,0.3)
+deckSections= element_section_map.RCSlabBeamSection("deck","RC deck.",concrete, reinfSteel,0.3)
 deckSections.dir2PositvRebarRows= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam=12e-3,areaRebar=areaFi12,rebarsSpacing=sepT,nominalCover=basicCover)])
 deckSections.dir2NegatvRebarRows= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam=12e-3,areaRebar=areaFi12,rebarsSpacing=sepT,nominalCover=basicCover)])
 deckSections.dir1PositvRebarRows= def_simple_RC_section.LongReinfLayers([def_simple_RC_section.ReinfRow(rebarsDiam=20e-3,areaRebar=areaFi20,rebarsSpacing=sepL,nominalCover=basicCover+12e-3)])

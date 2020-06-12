@@ -36,7 +36,7 @@ nlegs_m=3 # number of legs on each direction
 shearReinfDiameter=12
 shearReinfSpacing=250
 pierStirrups= [shearReinfDiameter,nlegs_m,shearReinfSpacing]
-piersRCSects= rcs.RCSlabBeamSection(name='piersRCSects',sectionDescr='piers',concrType=concrete, reinfSteelType=reinfSteel,width=lRectEqPier,depth=lRectEqPier,elemSetName='piers')
+piersRCSects= element_section_map.RCSlabBeamSection(name='piersRCSects',sectionDescr='piers',concrType=concrete, reinfSteelType=reinfSteel,width=lRectEqPier,depth=lRectEqPier,elemSetName='piers')
 
 piersRCSects.dir1PositvRebarRows= rcs.LongReinfLayers([rcs.rebLayer_mm(pierLongReinf[0],pierLongReinf[1],nomCover)])
 piersRCSects.dir1NegatvRebarRows= rcs.LongReinfLayers([rcs.rebLayer_mm(pierLongReinf[0],pierLongReinf[1],nomCover)])

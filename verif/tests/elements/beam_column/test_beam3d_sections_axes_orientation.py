@@ -36,6 +36,7 @@ import numpy as np
 import csv
 
 from materials.sections.fiber_section import def_simple_RC_section
+from postprocess import element_section_map
 from postprocess import RC_material_distribution
 from materials.sia262 import SIA262_materials
 from model import predefined_spaces
@@ -86,11 +87,11 @@ sections= reinfConcreteSectionDistribution.sectionDefinition #creates an RC sect
 fi10s75r30=def_simple_RC_section.ReinfRow(rebarsDiam=10e-3,areaRebar= areaFi10,rebarsSpacing=0.075,width=0.25,nominalCover=0.030)
 fi16s75r30=def_simple_RC_section.ReinfRow(rebarsDiam=16e-3,areaRebar= areaFi16,rebarsSpacing=0.075,width=0.25,nominalCover=0.030)
 
-#instances of def_simple_RC_section.RCSlabBeamSection that defines the
+#instances of element_section_map.RCSlabBeamSection that defines the
 #variables that make up THE TWO reinforced concrete sections in the two
 #reinforcement directions of a slab or the front and back ending sections
 #of a beam element
-beamRCsect=def_simple_RC_section.RCSlabBeamSection(name='beamRCsect',sectionDescr='beam section',concrType=concrete, reinfSteelType=reinfSteel,width=wbeam,depth=hbeam)
+beamRCsect=element_section_map.RCSlabBeamSection(name='beamRCsect',sectionDescr='beam section',concrType=concrete, reinfSteelType=reinfSteel,width=wbeam,depth=hbeam)
 beamRCsect.dir1PositvRebarRows= def_simple_RC_section.LongReinfLayers([fi10s75r30])
 beamRCsect.dir1NegatvRebarRows= def_simple_RC_section.LongReinfLayers([fi16s75r30])
 beamRCsect.dir2PositvRebarRows= def_simple_RC_section.LongReinfLayers([fi10s75r30])
