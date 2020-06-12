@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+''' Test boolean operations between sets.'''
+from __future__ import print_function
+
 CooMax= 10
 import xc_base
 import geom
@@ -22,23 +25,28 @@ s2= prep.getSets.defSet("S2")
 s3= s1+s2
 s4= s1*s2
 s5= s1-s2
+s6= s3+s4+s5
 
 name3= s3.name
 name4= s4.name
 name5= s5.name
+name6= s6.name
+
+
 '''
-print name3, name4, name5
+print(name3, name4, name5, name6)
 '''
 
 s= prep.getSets.getSet('S1')
 gs3= prep.getSets.getSet(name3)
 gs4= prep.getSets.getSet(name4)
 gs5= prep.getSets.getSet(name5)
+gs6= prep.getSets.getSet(name6)
 
 import os
 from misc_utils import log_messages as lmsg
 fname= os.path.basename(__file__)
-if (gs3.name==name3) and (gs4.name==name4) and (gs5.name==name5):
-  print "test ",fname,": ok."
+if (gs3.name==name3) and (gs4.name==name4) and (gs5.name==name5) and (gs6.name==name6):
+  print("test ",fname,": ok.")
 else:
   lmsg.error(fname+' ERROR.')
