@@ -13,15 +13,6 @@ __license__= "GPL"
 __version__= "3.0"
 __email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
 
-#######################################################################
-# 20200611 LCPT
-#
-# From this point the classes used to communicate the geometry of the
-# reinforced concrete sections to the phantom model.
-#
-# Yeah, it's a mess that we need to wash up (to clean, to put in order)
-#######################################################################
-    
 class ElementSections(object):
     '''This class defines the list of reinforced concrete sections that are going 
     to be associated to a set of elements in order to carry out the verifications 
