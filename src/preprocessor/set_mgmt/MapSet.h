@@ -46,7 +46,7 @@ class Domain;
 //! 
 //!  @brief Sets container.
 //!  
- class MapSet: public PreprocessorContainer, public MovableObject, public MapSetBase
+class MapSet: public PreprocessorContainer, public MovableObject, public MapSetBase
   {
     static ID setsDbTags;//! dbTags para the sets.
   public:

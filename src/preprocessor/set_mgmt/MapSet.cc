@@ -42,18 +42,7 @@ XC::ID XC::MapSet::setsDbTags;
 //! @brief Returns a pointer to the set which name is being passed as parameter.
 XC::SetBase *XC::MapSet::find_set(const std::string &name)
   {
-    if(exists(name))
-      return MapSetBase::find(name);
-    else if(entities.find(name)!=entities.end())
-      return entities[name];
-    else
-      return nullptr;
-  }
-
-//! @brief Returns a pointer to the set which name is being passed as parameter.
-const XC::SetBase *XC::MapSet::find_set(const std::string &name) const
-  {
-    const XC::SetBase *retval= MapSetBase::find(name);
+    XC::SetBase *retval= MapSetBase::find(name);
     if(!retval)
       {
     	map_ent_mdlr::const_iterator j= entities.find(name);
@@ -63,6 +52,13 @@ const XC::SetBase *XC::MapSet::find_set(const std::string &name) const
           retval= nullptr;
       }
     return retval;
+  }
+
+//! @brief Returns a pointer to the set which name is being passed as parameter.
+const XC::SetBase *XC::MapSet::find_set(const std::string &name) const
+  {
+    MapSet *this_no_const= const_cast<MapSet *>(this);
+    return this_no_const->find_set(name);
   }
 
 //! @brief Return the set which name is being passed as parameter.
