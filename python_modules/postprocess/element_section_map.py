@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import division
+from __future__ import print_function
+
 from misc_utils import log_messages as lmsg
 
 __author__= "Luis C. Pérez Tato (LCPT) and Ana Ortega (AO_O)"
@@ -9,33 +12,29 @@ __version__= "3.0"
 __email__= "l.pereztato@ciccp.es" "ana.Ortega@ciccp.es"
 
 class ElementSectionMap(dict):
-  '''dictionary that stores a section name(s)
-     for each element number. This way it defines
-     a spatial distribution of the sections over
-     the structure.'''
-  propName= 'sectionName'
-  def assign(self,elemSet,setRCSects):
-    '''Assigns the sections names: setRCSectsName+'1', setRCSectsName+'2', ...
-       to the elements of the set.
+    '''dictionary that stores a section name(s)
+       for each element number. This way it defines
+       a spatial distribution of the sections over
+       the structure.'''
+    propName= 'sectionName'
+    def assign(self,elemSet,setRCSects):
+        '''Assigns the sections names: setRCSectsName+'1', setRCSectsName+'2', ...
+           to the elements of the set.
 
-       :param elemSet: set of elements that receive the section name property.
-       :param setRCSects: RC section definition, name, concrete type,
-                          rebar positions,...
-    '''
-    if len(elemSet)== 0:
-        lmsg.warning("element set is empty\n")
-      
-    for e in elemSet:
-      if(not e.hasProp(self.propName)):
-        self[e.tag]=[]
-        for i in range(len(setRCSects.lstRCSects)):
-          sname=setRCSects.name+str(i+1)
-          self[e.tag].append(sname)
-        e.setProp(self.propName,setRCSects.name)
-      else:
-        lmsg.error("element: "+ str(e.tag) + " has already a section ("+e.getProp(self.propName)+")\n")
+           :param elemSet: set of elements that receive the section name property.
+           :param setRCSects: RC section definition, name, concrete type,
+                              rebar positions,...
+        '''
+        if len(elemSet)== 0:
+            lmsg.warning("element set is empty\n")
 
-def loadElementSectionMap():
-  lmsg.error('loadElementSectionMap DEPRECATED use loadRCMaterialDistribution' )
+        for e in elemSet:
+            if(not e.hasProp(self.propName)):
+                self[e.tag]= list()
+                for s in setRCSects.lstRCSects:
+                    self[e.tag].append(s.sectionName)
+                e.setProp(self.propName,setRCSects.name)
+            else:
+              lmsg.error("element: "+ str(e.tag) + " has already a section ("+e.getProp(self.propName)+")\n")
 
 
