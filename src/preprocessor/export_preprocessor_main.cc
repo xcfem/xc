@@ -34,6 +34,8 @@ void export_preprocessor_main(void)
       //.def(boost::python::map_indexing_suite<map_sets >())
       ;
     class_<XC::MapSetBase , bases<map_sets>, boost::noncopyable >("MapSetBase", no_init)
+      .def("removeSet", &XC::MapSetBase::removeSet,"Delete the set and remove it from the sets map.")
+      .def("exists",&XC::MapSetBase::exists,"Return true if the sets already exists..")
       ;
  
     XC::MapSet::const_iterator (XC::MapSet::*cBegin)(void) const= &XC::MapSet::begin;
@@ -43,8 +45,6 @@ void export_preprocessor_main(void)
       .def("__getitem__",&XC::MapSet::getSet, return_internal_reference<>())
       .def("getSet", &XC::MapSet::getSet, return_internal_reference<>(),"Returns set by name.")
       .def("defSet", &XC::MapSet::defSet, return_internal_reference<>(),"Creates a new set with the name which is passed as a parameter.")
-      .def("removeSet", &XC::MapSet::removeSet,"Delete the set and remove it from the sets map.")
-      .def("exists",&XC::MapSet::exists,"Return true if the sets already exists..")
       ;
 
 
