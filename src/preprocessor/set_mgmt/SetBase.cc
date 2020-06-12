@@ -58,6 +58,15 @@ bool XC::SetBase::operator==(const SetBase &other) const
     return retval;
   }
 
+//! @brief Set the object name.
+void XC::SetBase::setName(const std::string &newName)
+  {
+    const std::string &oldName= getName();
+    MapSet &map_set= getPreprocessor()->get_sets();
+    map_set.rename(oldName,newName);
+    EntMdlrBase::setName(newName);
+  }
+
 //! @brief Set the color of the object (red,green,blue) as
 //! integers from 0 to 255.
 void XC::SetBase::setColorComponents(const double &r, const double &g, const double &b)

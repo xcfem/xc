@@ -44,6 +44,7 @@ bool (XC::SetBase::*isFaceIn)(const XC::Face *) const= &XC::SetBase::In;
 bool (XC::SetBase::*isBodyIn)(const XC::Body *) const= &XC::SetBase::In;
 bool (XC::SetBase::*isUniformGridIn)(const XC::UniformGrid *) const= &XC::SetBase::In;
 class_<XC::SetBase, bases<XC::EntMdlrBase>, boost::noncopyable >("SetBase", no_init)
+  .add_property("name", make_function( &XC::SetBase::getName, return_value_policy<copy_const_reference>()), &XC::SetBase::setName,"returns object name.")
   .def("genMesh", &XC::SetBase::genMesh,"Triggers mesh generation.")
   .def("getNodeTags",&XC::SetBase::getNodeTags,"return set of node tags.")
   .def("getElementTags",&XC::SetBase::getElementTags,"return set of node tags.")

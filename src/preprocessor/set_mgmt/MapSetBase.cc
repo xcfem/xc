@@ -113,6 +113,20 @@ void XC::MapSetBase::removeSet(const std::string &name)
                 << name << " not found." << std::endl;
   }
 
+//! @brief Rename the set.
+void XC::MapSetBase::rename(const std::string &oldKey, const std::string &newKey)
+  {
+    const iterator it= map_sets::find(oldKey);
+    if(it != end())
+      {
+        // Swap value from oldKey to newKey, note that a default constructed value 
+        // is created by operator[] if 'm' does not contain newKey.
+        std::swap((*this)[newKey], it->second);
+        // Erase old key-value from map
+        erase(it);
+      }
+  }
+
 //! @brief Clears all defined sets.
 void XC::MapSetBase::clearSets(void)
   {
@@ -148,7 +162,7 @@ const XC::ID &XC::MapSetBase::getSetsDBTags(Communicator &comm)
   }
 
 //! @brief Return the class names of the sets.
-const std::deque<std::string> &XC::MapSetBase::getSetsNames(void)
+const std::deque<std::string> &XC::MapSetBase::getSetsNames(void) const
   {
     const int sz= size();
     if(sz>0)
@@ -166,7 +180,17 @@ const std::deque<std::string> &XC::MapSetBase::getSetsNames(void)
   }
 
 //! @brief Return the class names of the sets.
-const std::deque<std::string> &XC::MapSetBase::getSetsClassNames(void)
+boost::python::list XC::MapSetBase::getSetsNamesPy(void) const
+  {
+    boost::python::list retval;
+    const std::deque<std::string> &tmp= getSetsNames();
+    for(std::deque<std::string>::const_iterator i= tmp.begin();i!=tmp.end();i++)
+        retval.append(*i);
+    return retval;
+  }
+
+//! @brief Return the class names of the sets.
+const std::deque<std::string> &XC::MapSetBase::getSetsClassNames(void) const
   {
     const int sz= size();
     if(sz>0)

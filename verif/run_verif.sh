@@ -285,6 +285,7 @@ python tests/preprocessor/sets/test_set_01.py
 python tests/preprocessor/sets/une_sets.py
 python tests/preprocessor/sets/sets_boolean_operations_01.py
 python tests/preprocessor/sets/sets_boolean_operations_02.py
+python tests/preprocessor/sets/test_set_rename.py
 python tests/preprocessor/sets/test_resisting_svd01.py
 python tests/preprocessor/sets/test_get_contours_01.py
 python tests/preprocessor/sets/test_get_contours_02.py

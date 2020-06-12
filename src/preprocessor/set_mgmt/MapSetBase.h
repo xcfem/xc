@@ -70,8 +70,8 @@ class MapSetBase: public std::map<std::string,SetBase *>
       
     MapSetBase(const MapSetBase &);
     MapSetBase &operator=(const MapSetBase &);
-    const std::deque<std::string> &getSetsClassNames(void);
-    const std::deque<std::string> &getSetsNames(void);
+    const std::deque<std::string> &getSetsClassNames(void) const;
+    const std::deque<std::string> &getSetsNames(void) const;
     DbTagData &getDbTagData(void) const;
     const ID &getSetsDBTags(Communicator &comm);
 
@@ -83,6 +83,9 @@ class MapSetBase: public std::map<std::string,SetBase *>
 
     bool exists(const std::string &nmb) const;
     void removeSet(const std::string &);
+    void rename(const std::string &, const std::string &);
+    
+    boost::python::list getSetsNamesPy(void) const;
 
     std::set<SetBase *> get_sets(const Node *);
     std::set<SetBase *> get_sets(const Element *);

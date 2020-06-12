@@ -287,5 +287,6 @@ typedef XC::RowSet<XC::NodePtrArray3d::var_ref_k_row,XC::ElemPtrArray3d::var_ref
 class_<set_k_row, bases<XC::SetEstruct>, boost::noncopyable >("set_k_row", no_init);
 class_<XC::KRowSet, bases<set_k_row>, boost::noncopyable >("KRowSet", no_init);
 
+// XC::MapSetBase and XC::MapSet exposed in export_preprocessor_main.cc
 
 

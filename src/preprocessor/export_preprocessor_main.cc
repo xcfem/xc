@@ -36,6 +36,7 @@ void export_preprocessor_main(void)
     class_<XC::MapSetBase , bases<map_sets>, boost::noncopyable >("MapSetBase", no_init)
       .def("removeSet", &XC::MapSetBase::removeSet,"Delete the set and remove it from the sets map.")
       .def("exists",&XC::MapSetBase::exists,"Return true if the sets already exists..")
+      .def("getSetsNames",&XC::MapSetBase::getSetsNamesPy,"Returns the names of the sets.")
       ;
  
     XC::MapSet::const_iterator (XC::MapSet::*cBegin)(void) const= &XC::MapSet::begin;
