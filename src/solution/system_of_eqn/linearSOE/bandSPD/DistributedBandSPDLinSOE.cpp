@@ -102,7 +102,7 @@ int XC::DistributedBandSPDLinSOE::setSize(Graph &theGraph)
         // id containing dof tags & start id's.
 
         // from each distributed soe recv it's graph
-        // and merge them into master graph
+        // and merge them into primary graph
         getSubGraphs(theGraph);
         calcBand(theGraph);
         data(0) = size;

@@ -64,7 +64,7 @@ int XC::DistributedLinSOE::sendGraph(Graph &theGraph,ID &data)
     return res;
   }
 
-//! @brief From each distributed SOE recv it's graph and merge them into master graph.
+//! @brief From each distributed SOE recv it's graph and merge them into primary graph.
 int XC::DistributedLinSOE::getSubGraphs(Graph &theGraph)
   {
     int maxNumSubVertex = 0;
@@ -86,7 +86,7 @@ int XC::DistributedLinSOE::getSubGraphs(Graph &theGraph)
     return maxNumSubVertex;
   }
 
-//! @brief To each distributed SOE send the size data and merge them into master graph
+//! @brief To each distributed SOE send the size data and merge them into primary graph
 int XC::DistributedLinSOE::sendSizeData(const ID &data)
   {
     int res= 0;

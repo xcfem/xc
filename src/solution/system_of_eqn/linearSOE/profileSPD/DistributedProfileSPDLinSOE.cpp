@@ -124,7 +124,7 @@ int XC::DistributedProfileSPDLinSOE::setSize(Graph &theGraph)
         // id containing dof tags & start id's.
 
         // from each distributed soe recv it's graph
-        // and merge them into master graph
+        // and merge them into primary graph
 
         /* int maxNumSubVertex= */ getSubGraphs(theGraph);
 
@@ -178,7 +178,7 @@ int XC::DistributedProfileSPDLinSOE::setSize(Graph &theGraph)
     ID iLoc= getIDFromIntPtr(iDiagLoc.getDataPtr(), size);
 
     // to each distributed soe send the size data
-    // and merge them into master graph
+    // and merge them into primary graph
 
     for(size_t j=0; j<theChannels.size(); j++)
        {

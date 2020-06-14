@@ -96,13 +96,13 @@ int XC::DistributedBandGenLinSOE::setSize(Graph &theGraph)
       {
 
         // from each distributed soe recv it's graph
-        // and merge them into master graph
+        // and merge them into primary graph
 
         getSubGraphs(theGraph);
         calcBand(theGraph);
     
         // to each distributed soe send the size data
-        // and merge them into master graph
+        // and merge them into primary graph
         data(0) = size;
         data(1) = numSubD;
         data(2) = numSuperD;
