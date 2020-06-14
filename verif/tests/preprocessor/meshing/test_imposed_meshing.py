@@ -92,11 +92,11 @@ cyldeck_rg=[gm.IJKRange((0,1,lastZpos),(lastXpos,lastYpos-1,lastZpos))]
 deck2_rg=[gm.IJKRange((1,1,1),(lastXpos-1,lastYpos,1))]
 
 #Surfaces generation
-flatwall=gridGeom.genSurfMultiRegion(lstIJKRange=flatwall_rg,nameSet='flatwall')
-cylwall=gridGeom.genSurfMultiRegion(lstIJKRange=cylwall_rg,nameSet='cylwall')
-flatdeck=gridGeom.genSurfMultiRegion(lstIJKRange=flatdeck_rg,nameSet='flatdeck')
-cyldeck=gridGeom.genSurfMultiRegion(lstIJKRange=cyldeck_rg,nameSet='cyldeck')
-deck2=gridGeom.genSurfMultiRegion(lstIJKRange=deck2_rg,nameSet='deck2')
+flatwall=gridGeom.genSurfMultiRegion(lstIJKRange=flatwall_rg,setName='flatwall')
+cylwall=gridGeom.genSurfMultiRegion(lstIJKRange=cylwall_rg,setName='cylwall')
+flatdeck=gridGeom.genSurfMultiRegion(lstIJKRange=flatdeck_rg,setName='flatdeck')
+cyldeck=gridGeom.genSurfMultiRegion(lstIJKRange=cyldeck_rg,setName='cyldeck')
+deck2=gridGeom.genSurfMultiRegion(lstIJKRange=deck2_rg,setName='deck2')
 
 
 #                         *** MATERIALS *** 
@@ -110,10 +110,10 @@ deck_mat.setupElasticSection(preprocessor=prep)   #creates the section-material
 
 #                         ***FE model - MESH***
 # Fix lines' division
-st=sets.get_subset_lin_parallel_to_axis(axis='Z',fromSet=flatwall+cylwall,toSetName='st')
+st=sets.get_subset_lin_parallel_to_axis(axis='Z',fromSet= modelSpace.setSum('auto', [flatwall,cylwall]), toSetName='st')
 fem.assign_ndiv_to_lines_in_set(lnSet=st,ndiv=5)
 st.clear()
-st=sets.get_subset_lin_parallel_to_axis(axis='X',fromSet=flatwall+flatdeck,toSetName='st')
+st=sets.get_subset_lin_parallel_to_axis(axis='X',fromSet=modelSpace.setSum('auto', [flatwall,flatdeck]), toSetName='st')
 fem.assign_ndiv_to_lines_in_set(lnSet=st,ndiv=3)
 st.clear()
 st=sets.get_subset_lin_parallel_to_axis(axis='Y',fromSet=flatdeck,toSetName='st',tol=0.01)
@@ -123,7 +123,7 @@ st=sets.get_subset_lin_longer_than(Lmin=1.5,fromSet=deck2,toSetName='st')
 fem.assign_ndiv_to_lines_in_set(lnSet=st,ndiv=3)
 st.clear()
 auxrg=[gm.IJKRange((0,1,lastZpos),(1,lastYpos-1,lastZpos)),gm.IJKRange((lastXpos-1,1,lastZpos),(lastXpos,lastYpos-1,lastZpos))]
-auxSet=gridGeom.getSetSurfMultiRegion(lstIJKRange=auxrg, nameSet='auxSet')
+auxSet=gridGeom.getSetSurfMultiRegion(lstIJKRange=auxrg, setName='auxSet')
 st=sets.get_subset_lin_parallel_to_axis(axis='X',fromSet=auxSet,toSetName='st',tol=0.1)
 fem.assign_ndiv_to_lines_in_set(lnSet=st,ndiv=3)
 st.clear()

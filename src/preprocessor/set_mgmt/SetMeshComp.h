@@ -105,6 +105,10 @@ class SetMeshComp: public SetBase
     SetMeshComp &operator-=(const SetMeshComp &);
     SetMeshComp &operator*=(const SetMeshComp &);
 
+    std::string getStrName(void) const;
+    void newName(const std::string &);
+    void rename(const std::string &);
+    
     //! @brief Returns the number of nodes.
     size_t getNumberOfNodes(void) const
       { return nodes.size(); }
@@ -230,13 +234,13 @@ class SetMeshComp: public SetBase
     virtual int sendSelf(Communicator &);
     virtual int recvSelf(const Communicator &);
 
+    SetMeshComp operator+(const SetMeshComp &) const;
+    SetMeshComp operator-(const SetMeshComp &) const;
+    SetMeshComp operator*(const SetMeshComp &) const;
 
     ~SetMeshComp(void);
   };
 
-SetMeshComp operator+(const SetMeshComp &,const SetMeshComp &);
-SetMeshComp operator-(const SetMeshComp &,const SetMeshComp &);
-SetMeshComp operator*(const SetMeshComp &,const SetMeshComp &);
 
 //!  @brief Set indices to the object to allow its use in VTK.
 template <class L>

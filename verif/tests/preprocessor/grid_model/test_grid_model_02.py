@@ -34,30 +34,30 @@ np_set02=set02.getPoints.size
 ratio2=np_set02-(6*11)
 
 #Sets of surfaces
-set03=gridModel.genSurfMultiXYZRegion(lstXYZRange=[((0,0,0),(5,5,0)),((0,5,0),(5,10,0))], nameSet='set03')
+set03=gridModel.genSurfMultiXYZRegion(lstXYZRange=[((0,0,0),(5,5,0)),((0,5,0),(5,10,0))], setName='set03')
 ns_set03=set03.getSurfaces.size
 ratio3=ns_set03-(10*5)
-set04=gridModel.genSurfOneXYZRegion(xyzRange=((0,0,0),(5,10,0)), nameSet='set04')
+set04=gridModel.genSurfOneXYZRegion(xyzRange=((0,0,0),(5,10,0)), setName='set04')
 ns_set04=set04.getSurfaces.size
 ratio4=ns_set04-(10*5)
-set05=gridModel.getSetSurfMultiXYZRegion(lstXYZRange=[((0,0,0),(5,5,0)),((0,5,0),(5,10,0))], nameSet='set05')
+set05=gridModel.getSetSurfMultiXYZRegion(lstXYZRange=[((0,0,0),(5,5,0)),((0,5,0),(5,10,0))], setName='set05')
 ns_set05=set05.getSurfaces.size
 ratio5=ns_set05-(10*5)
-set06=gridModel.getSetSurfOneXYZRegion(xyzRange=((0,0,0),(5,10,0)), nameSet='set06')
+set06=gridModel.getSetSurfOneXYZRegion(xyzRange=((0,0,0),(5,10,0)), setName='set06')
 ns_set06=set06.getSurfaces.size
 ratio6=ns_set06-(10*5)
 
 #Sets of Lines
-set07=gridModel.genLinMultiXYZRegion(lstXYZRange=[((0,0,1),(5,5,1)),((0,5,1),(5,10,1))], nameSet='set07')
+set07=gridModel.genLinMultiXYZRegion(lstXYZRange=[((0,0,1),(5,5,1)),((0,5,1),(5,10,1))], setName='set07')
 ns_set07=set07.getLines.size
 ratio7=ns_set07-(5*11+6*10)
-set08=gridModel.genLinOneXYZRegion(xyzRange=((0,0,1),(5,10,1)), nameSet='set08')
+set08=gridModel.genLinOneXYZRegion(xyzRange=((0,0,1),(5,10,1)), setName='set08')
 ns_set08=set08.getLines.size
 ratio8=ns_set08-(5*11+6*10)
-set09=gridModel.getSetLinMultiXYZRegion(lstXYZRange=[((0,0,1),(5,5,1)),((0,5,1),(5,10,1))], nameSet='set09')
+set09=gridModel.getSetLinMultiXYZRegion(lstXYZRange=[((0,0,1),(5,5,1)),((0,5,1),(5,10,1))], setName='set09')
 ns_set09=set09.getLines.size
 ratio9=ns_set09-(5*11+6*10)
-set10=gridModel.getSetLinOneXYZRegion(xyzRange=((0,0,1),(5,10,1)), nameSet='set10')
+set10=gridModel.getSetLinOneXYZRegion(xyzRange=((0,0,1),(5,10,1)), setName='set10')
 ns_set10=set10.getLines.size
 ratio10=ns_set10-(5*11+6*10)
 

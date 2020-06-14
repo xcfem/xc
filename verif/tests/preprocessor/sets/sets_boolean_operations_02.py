@@ -19,13 +19,23 @@ FEcase= xc.FEProblem()
 prep=FEcase.getPreprocessor
 
 s1= prep.getSets.defSet("S1")
-
 s2= prep.getSets.defSet("S2")
 
-s3= s1+s2
-s4= s1*s2
-s5= s1-s2
-s6= s3+s4+s5
+s3= prep.getSets.defSet("S3")
+s3+= s1
+s3+= s2
+s4= prep.getSets.defSet("S4")
+s4+= s1
+s4*= s2
+
+s5= prep.getSets.defSet("S5")
+s5+= s1
+s5-= s2
+
+s6= prep.getSets.defSet("S6")
+s6+= s3
+s6+= s4
+s6+= s5
 
 name3= s3.name
 name4= s4.name

@@ -56,7 +56,7 @@ gridGeom.movePointsRange(gm.IJKRange((0,1,0),(0,1,0)),xc.Vector([0.0,0,1.0]))
 gridGeom.movePointsRange(gm.IJKRange((0,2,0),(0,3,0)),xc.Vector([0.0,0,1.5]))
 
 beamY_rg=gm.IJKRange((0,0,0),(0,lastYpos,0))
-beamY=gridGeom.genLinOneRegion(ijkRange=beamY_rg,nameSet='beamY')
+beamY=gridGeom.genLinOneRegion(ijkRange=beamY_rg,setName='beamY')
 #                         *** MATERIALS *** 
 S235JR= EC3_materials.S235JR
 S235JR.gammaM= 1.00

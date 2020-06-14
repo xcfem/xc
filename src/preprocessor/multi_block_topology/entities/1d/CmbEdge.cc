@@ -660,7 +660,7 @@ void XC::CmbEdge::insert(Edge *l)
 			<< "; line: '" << l->getName()
 			<< "' which ends are: '" << l->P1()->getName() << "' y '"
                         << l->P2()->getName() 
-                        << "' can't connect to the combination: " << Name() 
+                        << "' can't connect to the combination: " << getName() 
 			<< "' which ends are: '" << P1()->getName() << "' y '"
                         << P2()->getName() 
                         << " because they don't have shared ends." << std::endl;

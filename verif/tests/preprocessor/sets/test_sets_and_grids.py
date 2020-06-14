@@ -54,15 +54,15 @@ wall_rg=gm.IJKRange((2,10,2),(8,10,5))
 columns_rg=gm.IJKRange((2,5,0),(8,15,4)).extractIncludedKranges(stepI=6,stepJ=10)
 
 #Surfaces' generation
-floor1=gridGeom.genSurfOneRegion(ijkRange=floor1_rg,nameSet='floor1')
+floor1=gridGeom.genSurfOneRegion(ijkRange=floor1_rg,setName='floor1')
 floor1.description='Floor 1'
-floor2=gridGeom.genSurfMultiRegion(lstIJKRange=floor2_rg,nameSet='floor2')
+floor2=gridGeom.genSurfMultiRegion(lstIJKRange=floor2_rg,setName='floor2')
 floor2.description='Floor 2'
-wall=gridGeom.genSurfOneRegion(ijkRange=wall_rg,nameSet='wall')
+wall=gridGeom.genSurfOneRegion(ijkRange=wall_rg,setName='wall')
 wall.description='Wall'
 
 #Lines' generation
-columns=gridGeom.genLinMultiRegion(lstIJKRange=columns_rg,nameSet='columns')
+columns=gridGeom.genLinMultiRegion(lstIJKRange=columns_rg,setName='columns')
 columns.description='Columns'
 
 # Plot
@@ -112,20 +112,24 @@ ratio1=(wall_nel-wall_nel_targ)+(floor1_nel-floor1_nel_targ)+(floor2_nel-floor2_
 
 # *** Boolean operations with sets
 # Union and difference
-overallSet=wall+floor1+floor2+columns
+overallSet= modelSpace.setSum('overallSet', [wall,floor1,floor2, columns])
 ratio2=overallSet.getNumElements-(wall_nel+floor1_nel+floor2_nel+columns_nel)
 
-allButWall=overallSet-wall
+allButWall= modelSpace.setSum('allButWall',[overallSet])
+allButWall-= wall
 ratio3=allButWall.getNumElements-(floor1_nel+floor2_nel+columns_nel)
 
-onlyColumns=allButWall-(floor1+floor2)
+onlyColumns= modelSpace.setSum('onlyColumns',[allButWall])
+onlyColumns-= floor1
+onlyColumns-= floor2
 ratio4=onlyColumns.getNumElements-columns_nel
 
 # Intersection
-int1=overallSet*onlyColumns
-int2=overallSet*allButWall*onlyColumns
+int1= modelSpace.setIntersection('int1', [overallSet, onlyColumns])
+int2= modelSpace.setIntersection('int2', [overallSet, allButWall, onlyColumns])
 ratio5=int1.getNumElements-int2.getNumElements
-int4=(floor1+floor2)*onlyColumns
+int4= modelSpace.setSum('int4',[floor1, floor2])
+int4*= onlyColumns
 ratio6=int4.getNumElements
 
 # **** Subsets

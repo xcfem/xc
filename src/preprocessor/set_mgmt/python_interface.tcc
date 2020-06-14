@@ -111,7 +111,9 @@ XC::DqPtrsConstraint &(XC::SetMeshComp::*GetConstraintsRef)(void)= &XC::SetMeshC
 XC::Node *(XC::SetMeshComp::*getNearestNodeSetMeshComp)(const Pos3d &)= &XC::SetMeshComp::getNearestNode;
 XC::Element *(XC::SetMeshComp::*getNearestElementSetMeshComp)(const Pos3d &)= &XC::SetMeshComp::getNearestElement;
 void (XC::SetMeshComp::*transforms)(const XC::TrfGeom &)= &XC::SetMeshComp::Transform;
-class_<XC::SetMeshComp, bases<XC::SetBase>>("SetMeshComp",no_init)
+class_<XC::SetMeshComp, XC::SetMeshComp *, bases<XC::SetBase>>("SetMeshComp",no_init)
+  .add_property("name", &XC::SetMeshComp::getStrName, &XC::SetMeshComp::newName,"get object name.")
+  .def("rename",&XC::SetMeshComp::rename,"Change the name of the set.")
   .add_property("getNodes", make_function(getNodesRef, return_internal_reference<>() ),"return the nodes of the set. DEPRECATED use nodes.")
   .add_property("getElements", make_function(getElementsRef, return_internal_reference<>() ),"return the elements of the set. DEPRECATED use elements.")
   .add_property("getConstraints", make_function(GetConstraintsRef, return_internal_reference<>() ),"return the constraints of the set.")
@@ -147,9 +149,12 @@ class_<XC::SetMeshComp, bases<XC::SetBase>>("SetMeshComp",no_init)
   .def(self += self)
   .def(self -= self)
   .def(self *= self)
-  .def(self + self)
-  .def(self - self)
-  .def(self * self)
+  // The following operators return copies of the object stored in MapSet
+  // and then the operations in those objects are lost. For now we'll
+  // leave them aside.
+  // .def(self + self)
+  // .def(self - self)
+  // .def(self * self)
   ;
 
 typedef XC::DqPtrs<XC::Pnt> dq_ptrs_pnt;
@@ -247,7 +252,7 @@ XC::SetEntities::lst_ptr_points &(XC::Set::*getPoints)(void)= &XC::Set::getPoint
 XC::SetEntities::lst_line_pointers &(XC::Set::*getLines)(void)= &XC::Set::getLines;
 XC::SetEntities::lst_surface_ptrs &(XC::Set::*getSurfaces)(void)= &XC::Set::getSurfaces;
 XC::SetEntities::lst_body_pointers &(XC::Set::*getBodies)(void)= &XC::Set::getBodies;
-class_<XC::Set, bases<XC::SetMeshComp> >("Set")
+class_<XC::Set, XC::Set *,bases<XC::SetMeshComp> >("Set")
   .add_property("description", make_function( &XC::Set::getDescription, return_value_policy<copy_const_reference>() ), &XC::Set::setDescription,"Description (string) of the set.")
   .add_property("getEntities", make_function(getEntities, return_internal_reference<>() ),"return the entities (points, lines, surfaces,...) of the set.")
   .add_property("getMeshComponents", make_function(getMeshComponents, return_internal_reference<>() ),"return the mesh components (nodes, elements,...) of the set.")
@@ -267,12 +272,14 @@ class_<XC::Set, bases<XC::SetMeshComp> >("Set")
   .def("clear",&XC::Set::clear,"Removes all items.")
   .def("getBnd", &XC::Set::Bnd, "Returns set boundary.")
   .def(self += self)
-  .def(self + self)
   .def(self -= self)
   .def(self *= self)
-  .def(self + self)
-  .def(self - self)
-  .def(self * self)
+  // The following operators return copies of the object stored in MapSet
+  // and then the operations in those objects are lost. For now we'll
+  // leave them aside.
+  // .def(self + self)
+  // .def(self - self)
+  // .def(self * self)
    ;
 
 typedef XC::RowSet<XC::NodePtrArray3d::var_ref_i_row,XC::ElemPtrArray3d::var_ref_i_row> set_i_row;

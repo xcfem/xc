@@ -43,8 +43,7 @@ bool (XC::SetBase::*isEdgeIn)(const XC::Edge *) const= &XC::SetBase::In;
 bool (XC::SetBase::*isFaceIn)(const XC::Face *) const= &XC::SetBase::In;
 bool (XC::SetBase::*isBodyIn)(const XC::Body *) const= &XC::SetBase::In;
 bool (XC::SetBase::*isUniformGridIn)(const XC::UniformGrid *) const= &XC::SetBase::In;
-class_<XC::SetBase, bases<XC::EntMdlrBase>, boost::noncopyable >("SetBase", no_init)
-  .add_property("name", make_function( &XC::SetBase::getName, return_value_policy<copy_const_reference>()), &XC::SetBase::setName,"returns object name.")
+class_<XC::SetBase, XC::SetBase *, bases<XC::EntMdlrBase>, boost::noncopyable >("SetBase", no_init)
   .def("genMesh", &XC::SetBase::genMesh,"Triggers mesh generation.")
   .def("getNodeTags",&XC::SetBase::getNodeTags,"return set of node tags.")
   .def("getElementTags",&XC::SetBase::getElementTags,"return set of node tags.")
@@ -66,7 +65,7 @@ class_<XC::SetBase, bases<XC::EntMdlrBase>, boost::noncopyable >("SetBase", no_i
   .def("createInertiaLoads", &XC::SetBase::createInertiaLoads, "Create the inertia load for the given acceleration vector.")
   ;
 
-class_<XC::SetEstruct, bases<XC::SetBase>, boost::noncopyable >("SetEstruct", no_init)
+class_<XC::SetEstruct, XC::SetEstruct *, bases<XC::SetBase>, boost::noncopyable >("SetEstruct", no_init)
   .add_property("getNumNodeLayers", &XC::SetEstruct::getNumNodeLayers,"Return the number of node layers.")
   .add_property("getNumNodeRows", &XC::SetEstruct::getNumNodeRows,"Return the number of node rows .")
   .add_property("getNumNodeColumns", &XC::SetEstruct::getNumNodeColumns,"Return the number of node columns.")

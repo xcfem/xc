@@ -237,7 +237,7 @@ XC::Edge *XC::LineMap::createCopy(const Edge *l)
         retval= dynamic_cast<Edge *>(l->getCopy());
         if(retval)
           {
-            retval->Name()= "l"+boost::lexical_cast<std::string>(getTag());
+            retval->setName("l"+boost::lexical_cast<std::string>(getTag()));
             (*this)[getTag()]= retval;
             updateSets(retval);
             tag++;

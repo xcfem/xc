@@ -98,7 +98,7 @@ XC::MapSetBase &XC::MapSetBase::operator=(const MapSetBase &other)
   }
 
 //! @brief Deletes the set and removes it from the sets map.
-void XC::MapSetBase::removeSet(const std::string &name)
+void XC::MapSetBase::remove(const std::string &name)
   {
     Set *tmp= dynamic_cast<Set *>((*this)[name]);
     if(tmp) //Set exists.
@@ -116,14 +116,32 @@ void XC::MapSetBase::removeSet(const std::string &name)
 //! @brief Rename the set.
 void XC::MapSetBase::rename(const std::string &oldKey, const std::string &newKey)
   {
-    const iterator it= map_sets::find(oldKey);
-    if(it != end())
+    if(oldKey!=newKey)
       {
-        // Swap value from oldKey to newKey, note that a default constructed value 
-        // is created by operator[] if 'm' does not contain newKey.
-        std::swap((*this)[newKey], it->second);
-        // Erase old key-value from map
-        erase(it);
+	const iterator itOld= map_sets::find(oldKey);
+	if(itOld != end())
+	  {
+	    // Swap value from oldKey to newKey.
+	    SetBase *set_ptr= itOld->second;
+	    auto const value= std::move(set_ptr);
+	    const iterator itNew= map_sets::find(newKey);
+	    if(itNew==end())
+	      {
+		// Erase old key-value from map
+		erase(itOld);
+		(*this).insert({newKey, std::move(value)});
+		set_ptr->setName(newKey);
+	      }
+	    else
+	      std::cerr << "MapSetBase::" << __FUNCTION__
+			<< " key: '" << newKey << "' already exists."
+			<< " Can't rename the set." << std::endl;
+
+	  }
+	else
+	  std::cerr << "MapSetBase::" << __FUNCTION__
+		    << " key: '" << oldKey << "' not found."
+		    << std::endl;
       }
   }
 
@@ -185,7 +203,40 @@ boost::python::list XC::MapSetBase::getSetsNamesPy(void) const
     boost::python::list retval;
     const std::deque<std::string> &tmp= getSetsNames();
     for(std::deque<std::string>::const_iterator i= tmp.begin();i!=tmp.end();i++)
-        retval.append(*i);
+      retval.append(*i);
+    return retval;
+  }
+
+//! @brief Return the map keys.
+const std::deque<std::string> &XC::MapSetBase::getKeys(void) const
+  {
+    const int sz= size();
+    if(sz>0)
+      {
+        setsClassNames.resize(sz);
+        int loc =0;
+	for(const_iterator i= begin();i!=end();i++)
+	  {
+	    const std::string &key= (*i).first;
+            setsClassNames[loc]= key;
+	    loc++;
+	    const std::string name= (*i).second->getName();
+	    if(key!=name)
+	      std::cerr << "MapSetBase::" << __FUNCTION__
+			<< " key: '" << key << "' and name: '"
+			<< name << "' doesn't match." << std::endl;
+	  }
+      }
+    return setsClassNames;
+  }
+
+//! @brief Return the map keys in a Python list.
+boost::python::list XC::MapSetBase::getKeysPy(void) const
+  {
+    boost::python::list retval;
+    const std::deque<std::string> &tmp= getKeys();
+    for(std::deque<std::string>::const_iterator i= tmp.begin();i!=tmp.end();i++)
+      retval.append(*i);
     return retval;
   }
 

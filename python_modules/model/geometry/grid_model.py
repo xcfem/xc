@@ -578,13 +578,12 @@ class GridModel(object):
         ln.nDiv=1 #initialization value
         return ln
 
-
     def appendSurfRange(self,ijkRange,setSurf,closeCyl='N'):
         '''generate the surfaces limited by a region defined by the coordinates
         that correspond to the indices in the grid 
         ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
         ijkRange.ijkMax=(indXmax,indYmax,indZmax)
-        and append them to the set named 'nameSet'.
+        and append them to the set named 'setName'.
         Add those surfaces to the dictionary dicQuadSurf.
 
         :param ijkRange: instance of IJKRange class
@@ -599,7 +598,7 @@ class GridModel(object):
             self.dicQuadSurf[nameSurf]= s
             setSurf.getSurfaces.append(s)
 
-    def genSurfOneRegion(self,ijkRange,nameSet,closeCyl='N'):
+    def genSurfOneRegion(self,ijkRange,setName,closeCyl='N'):
         '''generate the surfaces limited by a region defined by the coordinates
         that correspond to the indices in the grid 
         ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
@@ -608,30 +607,30 @@ class GridModel(object):
         Add those surfaces to the dictionary dicQuadSurf.
 
         :param ijkRange: instance of IJKRange class
-        :param nameSet: name of the set
+        :param setName: name of the set
         :param closeCyl: 'Y' to close cylinder when using cylindrical coordinate system
                         (defaults to 'N')
  
         '''
-        setSurf= self.prep.getSets.defSet(nameSet)
+        setSurf= self.prep.getSets.defSet(setName)
         self.appendSurfRange(ijkRange,setSurf,closeCyl)
         return setSurf
     
-    def genSurfOneXYZRegion(self,xyzRange,nameSet,closeCyl='N'):
+    def genSurfOneXYZRegion(self,xyzRange,setName,closeCyl='N'):
         '''generate the surfaces limited by a region defined by the coordinates
         defined in the range  xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
         Return a set with the surfaces generated.
         Add those surfaces to the dictionary dicQuadSurf.
 
         :param xyzRange: range xyz
-        :param nameSet: name of the set
+        :param setName: name of the set
         :param closeCyl: 'Y' to close cylinder when using cylindrical coordinate system
                         (defaults to 'N')
          '''
         ijkRange=self.getIJKrangeFromXYZrange(xyzRange)
-        return self.genSurfOneRegion(ijkRange,nameSet,closeCyl)
+        return self.genSurfOneRegion(ijkRange,setName,closeCyl)
 
-    def genSurfMultiRegion(self,lstIJKRange,nameSet,closeCyl='N'):
+    def genSurfMultiRegion(self,lstIJKRange,setName,closeCyl='N'):
         '''generate the surfaces limited by all the regions included in the 
         list of ijkRanges passed as parameter.
         Each region defines a volume limited by the coordinates    
@@ -642,16 +641,16 @@ class GridModel(object):
         Add those surfaces to the dictionary dicQuadSurf.
 
         :param lstIJKRange: list of instances of IJKRange class
-        :param nameSet: name of the set
+        :param setName: name of the set
         :param closeCyl: 'Y' to close cylinder when using cylindrical coordinate system
                         (defaults to 'N')
         '''
-        setSurf= self.prep.getSets.defSet(nameSet)
+        setSurf= self.prep.getSets.defSet(setName)
         for rg in lstIJKRange:
             self.appendSurfRange(rg,setSurf,closeCyl)
         return setSurf
 
-    def genSurfMultiXYZRegion(self,lstXYZRange,nameSet,closeCyl='N'):
+    def genSurfMultiXYZRegion(self,lstXYZRange,setName,closeCyl='N'):
         '''generate the surfaces limited by all the regions included in the 
         list of xyzRanges passed as parameter.
         Each region defines a volume limited by the coordinates    
@@ -660,31 +659,31 @@ class GridModel(object):
         Add those surfaces to the dictionary dicQuadSurf.
 
         :param lstXYZRange: list of ranges xyz
-        :param nameSet: name of the set
+        :param setName: name of the set
         :param closeCyl: 'Y' to close cylinder when using cylindrical coordinate system
                         (defaults to 'N')
          '''
         lstIJKRange=list()
         for rg in lstXYZRange:
             lstIJKRange.append(self.getIJKrangeFromXYZrange(rg))
-        return self.genSurfMultiRegion(lstIJKRange,nameSet,closeCyl)
+        return self.genSurfMultiRegion(lstIJKRange,setName,closeCyl)
         
-    def appendLinRange(self,ijkRange,nameSet):
+    def appendLinRange(self,ijkRange,setName):
         '''generate the lines limited by a region defined by the coordinates
         that correspond to the indices in the grid 
         ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
         ijkRange.ijkMax=(indXmax,indYmax,indZmax)
-        and append them to the set named 'nameSet'. 
+        and append them to the set named 'setName'. 
         Add those lines to the dictionary dicLin.
         '''
-        setLin= self.prep.getSets.getSet(nameSet)
+        setLin= self.prep.getSets.getSet(setName)
         nmLinInRang=self.getNmLinInRange(ijkRange)
         for nameLin in nmLinInRang:
             l=self.newGridLine(nameLin)
             self.dicLin[nameLin]=l
             setLin.getLines.append(l)
        
-    def genLinOneRegion(self,ijkRange,nameSet): 
+    def genLinOneRegion(self,ijkRange,setName): 
         '''generate the lines limited by a region defined by the coordinates
         that correspond to the indices in the grid 
         ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
@@ -692,11 +691,11 @@ class GridModel(object):
         Return a set with the lines generated.
         Add those lines to the dictionary dicLin.
         '''
-        setLin= self.prep.getSets.defSet(nameSet)
-        self.appendLinRange(ijkRange,nameSet)
+        setLin= self.prep.getSets.defSet(setName)
+        self.appendLinRange(ijkRange,setName)
         return setLin
 
-    def genLinOneXYZRegion(self,xyzRange,nameSet): 
+    def genLinOneXYZRegion(self,xyzRange,setName): 
         '''generate the lines limited by a region defined by the coordinates
         defined in range xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
         ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
@@ -705,9 +704,9 @@ class GridModel(object):
         Add those lines to the dictionary dicLin.
         '''
         ijkRange=self.getIJKrangeFromXYZrange(xyzRange)
-        return self.genLinOneRegion(ijkRange,nameSet)
+        return self.genLinOneRegion(ijkRange,setName)
         
-    def genLinMultiRegion(self,lstIJKRange,nameSet):
+    def genLinMultiRegion(self,lstIJKRange,setName):
         '''generate the lines limited by all the regions included in the 
         list of ijkRanges passed as parameter.
         Each region defines a volume limited by the coordinates    
@@ -717,12 +716,12 @@ class GridModel(object):
         Return a set with the lines generated.
         Add those lines to the dictionary dicLin.
         '''
-        setLin= self.prep.getSets.defSet(nameSet)
+        setLin= self.prep.getSets.defSet(setName)
         for rg in lstIJKRange:
-            self.appendLinRange(rg,nameSet)
+            self.appendLinRange(rg,setName)
         return setLin
 
-    def genLinMultiXYZRegion(self,lstXYZRange,nameSet):
+    def genLinMultiXYZRegion(self,lstXYZRange,setName):
         '''generate the lines limited by all the regions included in the 
         list of coordinate passed as parameter.
         Each region defines a volume limited by the coordinates    
@@ -733,9 +732,9 @@ class GridModel(object):
         lstIJKRange=list()
         for rg in lstXYZRange:
             lstIJKRange.append(self.getIJKrangeFromXYZrange(rg))
-        return self.genLinMultiRegion(lstIJKRange,nameSet)
+        return self.genLinMultiRegion(lstIJKRange,setName)
         
-    def getSetSurfOneRegion(self,ijkRange,nameSet,closeCyl='N'):
+    def getSetSurfOneRegion(self,ijkRange,setName,closeCyl='N'):
         '''return the set of surfaces and all the entities(lines, 
         points, elements, nodes, ...) associated 
         with them in a region limited by the coordinates
@@ -744,11 +743,11 @@ class GridModel(object):
         ijkRange.ijkMax=(indXmax,indYmax,indZmax).
 
         :param ijkRange: instance of IJKRange class
-        :param nameSet: name of the set
+        :param setName: name of the set
         :param closeCyl: 'Y' to close cylinder when using cylindrical coordinate system
                         (defaults to 'N')
         '''
-        setSurf= self.prep.getSets.defSet(nameSet)
+        setSurf= self.prep.getSets.defSet(setName)
         nmSurfinRang=self.getNmSurfInRange(ijkRange,closeCyl)
         for nameSurf in nmSurfinRang:
             if nameSurf in self.dicQuadSurf:
@@ -770,14 +769,14 @@ class GridModel(object):
         subset.fillDownwards()
         return subset
         
-    def getSetSurfOneXYZRegion(self,xyzRange,nameSet,closeCyl='N'):
+    def getSetSurfOneXYZRegion(self,xyzRange,setName,closeCyl='N'):
         '''return the set of surfaces and all the entities(lines, 
         points, elements, nodes, ...) associated 
         with them in a region limited by the coordinates
         in range xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
         '''
         ijkRange=self.getIJKrangeFromXYZrange(xyzRange)
-        return self.getSetSurfOneRegion(ijkRange,nameSet,closeCyl)
+        return self.getSetSurfOneRegion(ijkRange,setName,closeCyl)
         
     def getSubsetSurfOneXYZRegion(self,superset,xyzRange,nameSubset,closeCyl='N'):
         '''return from the set 'superset' the set of surfaces and all the entities(lines, 
@@ -792,7 +791,7 @@ class GridModel(object):
         return subset
 
     
-    def getSetSurfMultiRegion(self,lstIJKRange,nameSet,closeCyl='N'):
+    def getSetSurfMultiRegion(self,lstIJKRange,setName,closeCyl='N'):
         '''return the set of surfaces and all the entities(lines,
         points, elements, nodes, ...) associated with them in a all
         the regions  included in the list of ijkRanges passed as parameter.
@@ -802,11 +801,11 @@ class GridModel(object):
         ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
 
         :param lstIJKRange: list of instances of IJKRange class
-        :param nameSet: name of the set
+        :param setName: name of the set
         :param closeCyl: 'Y' to close cylinder when using cylindrical coordinate system
                         (defaults to 'N')
         '''
-        setSurf= self.prep.getSets.defSet(nameSet)
+        setSurf= self.prep.getSets.defSet(setName)
         for rg in lstIJKRange:
             nmSurfinRang=self.getNmSurfInRange(rg,closeCyl)
             for nameSurf in nmSurfinRang:
@@ -830,7 +829,7 @@ class GridModel(object):
         subset.fillDownwards()
         return subset
     
-    def getSetSurfMultiXYZRegion(self,lstXYZRange,nameSet,closeCyl='N'):
+    def getSetSurfMultiXYZRegion(self,lstXYZRange,setName,closeCyl='N'):
         '''return the set of surfaces and all the entities(lines,
         points, elements, nodes, ...) associated with them in a all
         the regions  included in the list of xyzRanges passed as parameter.
@@ -840,7 +839,7 @@ class GridModel(object):
         lstIJKRange=list()
         for rg in lstXYZRange:
             lstIJKRange.append(self.getIJKrangeFromXYZrange(rg))
-        return self.getSetSurfMultiRegion(lstIJKRange,nameSet,closeCyl)
+        return self.getSetSurfMultiRegion(lstIJKRange,setName,closeCyl)
         
     def getSubsetSurfMultiXYZRegion(self,superset,lstXYZRange,nameSubset,closeCyl='N'):
         '''return from the set 'superset' the set of surfaces and all the entities(lines,
@@ -855,14 +854,14 @@ class GridModel(object):
         subset.fillDownwards()
         return subset
     
-    def getSetLinOneRegion(self,ijkRange,nameSet):
+    def getSetLinOneRegion(self,ijkRange,setName):
         '''return the set of lines and all the entities(points, elements, 
         nodes, ...) associated with them in a region limited by the coordinates
         that correspond to the indices in the grid 
         ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
         ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
         '''
-        setLin= self.prep.getSets.defSet(nameSet)
+        setLin= self.prep.getSets.defSet(setName)
         nmLininRang=self.getNmLinInRange(ijkRange)
         for nameLin in nmLininRang:
             if nameLin in self.dicLin:
@@ -883,13 +882,13 @@ class GridModel(object):
         subset.fillDownwards()
         return subset
     
-    def getSetLinOneXYZRegion(self,xyzRange,nameSet):
+    def getSetLinOneXYZRegion(self,xyzRange,setName):
         '''return the set of lines and all the entities(points, elements, 
         nodes, ...) associated with them in a region limited by the coordinates
         defined in range xyzRange=((xmin,ymin,zmin),(xmax,ymax,zmax))
         '''
         ijkRange=self.getIJKrangeFromXYZrange(xyzRange)
-        return self.getSetLinOneRegion(ijkRange,nameSet)
+        return self.getSetLinOneRegion(ijkRange,setName)
 
     def getSubsetLinOneXYZRegion(self,superset,xyzRange,nameSubset):
         '''return from the set 'superset' the set of lines and all the entities(points, elements, 
@@ -902,7 +901,7 @@ class GridModel(object):
         subset.fillDownwards()
         return subset
     
-    def getSetLinMultiRegion(self,lstIJKRange,nameSet):
+    def getSetLinMultiRegion(self,lstIJKRange,setName):
         '''return the set of lines and all the entities(points, elements, 
         nodes, ...) associated with them in a all the regions  included in the 
         list of ijkRanges passed as parameter.
@@ -911,7 +910,7 @@ class GridModel(object):
         ijkRange.ijkMin=(indXmin,indYmin,indZmin) and
         ijkRange.ijkMax=(indXmax,indYmax,indZmax). 
         '''
-        setLin= self.prep.getSets.defSet(nameSet)
+        setLin= self.prep.getSets.defSet(setName)
         for rg in lstIJKRange:
             nmLininRang=self.getNmLinInRange(rg)
             for nameLin in nmLininRang:
@@ -936,7 +935,7 @@ class GridModel(object):
         subset.fillDownwards()
         return subset
     
-    def getSetLinMultiXYZRegion(self,lstXYZRange,nameSet):
+    def getSetLinMultiXYZRegion(self,lstXYZRange,setName):
         '''return the set of lines and all the entities(points, elements, 
         nodes, ...) associated with them in a all the regions  included in the 
         list of xyzRanges passed as parameter.
@@ -946,7 +945,7 @@ class GridModel(object):
         lstIJKRange=list()
         for rg in lstXYZRange:
             lstIJKRange.append(self.getIJKrangeFromXYZrange(rg))
-        return self.getSetLinMultiRegion(lstIJKRange,nameSet)
+        return self.getSetLinMultiRegion(lstIJKRange,setName)
         
     def getSubsetLinMultiXYZRegion(self,superset,lstXYZRange,nameSubset):
         '''return from the set 'superset' the set of lines and all the entities(points, elements, 
@@ -1055,17 +1054,17 @@ class GridModel(object):
             lstIJKRange.append(self.getIJKrangeFromXYZrange(rg))
         return self.getSetPntMultiRegion(lstIJKRange,setName)
 
-    def genSetLinFromLstGridPnt(self,lstGridPnt,nameSet):
+    def genSetLinFromLstGridPnt(self,lstGridPnt,setName):
         '''generate the set of lines that joint the successive points defined 
         in 'lstGridPnt' by their indexes in the grid.
 
         :param lstGridPnt: list of successive points [(i1,j1,k1),(i2,j2,k2), ...]
-        :param nameSet: name of the set.
+        :param setName: name of the set.
         '''
-        if self.prep.getSets.exists(nameSet):
-            setLin= self.prep.getSets.getSet(nameSet)
+        if self.prep.getSets.exists(setName):
+            setLin= self.prep.getSets.getSet(setName)
         else:
-            setLin= self.prep.getSets.defSet(nameSet)
+            setLin= self.prep.getSets.defSet(setName)
         lines= self.prep.getMultiBlockTopology.getLines
         pntTags=[self.getPntGrid(pind).tag for pind in lstGridPnt]
         for i in range(len(pntTags)-1):
@@ -1075,104 +1074,104 @@ class GridModel(object):
             self.dicLin[nameLin]=l
         return setLin
 
-    def getSetLinFromLstGridPnt(self,lstGridPnt,nameSet):
+    def getSetLinFromLstGridPnt(self,lstGridPnt,setName):
         '''return the set of lines that joint the successive points defined 
         in 'lstGridPnt' by their indexes in the grid.
 
         :param lstGridPnt: list of successive points [(i1,j1,k1),(i2,j2,k2), ...]
-        :param nameSet: name of the set.
+        :param setName: name of the set.
         '''
-        setLin= self.prep.getSets.defSet(nameSet)
+        setLin= self.prep.getSets.defSet(setName)
         for i in range(len(lstGridPnt)-1):
             nameLin=self.getNameGridLine((lstGridPnt[i],lstGridPnt[i+1]))
             setLin.getLines.append(self.dicLin[nameLin])
         return setLin
              
-    def genSetLinFromMultiLstGridPnt(self,multiLstGridPnt,nameSet):
+    def genSetLinFromMultiLstGridPnt(self,multiLstGridPnt,setName):
         '''generate the set of lines that joint the successive points defined 
         in 'multiLstGridPnt' by their indexes in the grid.
 
         :param multiLstGridPnt: list of lists of successive points 
         [[(i1,j1,k1),(i2,j2,k2), ...],[],...]
-        :param nameSet: name of the set.
+        :param setName: name of the set.
         '''
         for lstp in  multiLstGridPnt:
-            setLin=self.genSetLinFromLstGridPnt(lstp,nameSet)
+            setLin=self.genSetLinFromLstGridPnt(lstp,setName)
         return setLin
     
-    def getSetLinFromMultiLstGridPnt(self,multiLstGridPnt,nameSet):
+    def getSetLinFromMultiLstGridPnt(self,multiLstGridPnt,setName):
         '''retur the set of lines that joint the successive points defined 
         in 'multiLstGridPnt' by their indexes in the grid.
 
         :param multiLstGridPnt: list of lists of successive points 
         [[(i1,j1,k1),(i2,j2,k2), ...],[],...]
-        :param nameSet: name of the set.
+        :param setName: name of the set.
         '''
         for lstp in  multiLstGridPnt:
-            setLin=self.getSetLinFromLstGridPnt(lstp,nameSet)
+            setLin=self.getSetLinFromLstGridPnt(lstp,setName)
         return setLin
     
-    def genSetLinFromLstXYZPnt(self,lstXYZPnt,nameSet):
+    def genSetLinFromLstXYZPnt(self,lstXYZPnt,setName):
         '''generate the set of lines that joint the successive points defined 
         in 'lstXYZPnt' by their coordinates (x,y,z).
 
         :param lstXYZPnt: list of successive points [(x1,y1,z1),(x2,y2,z2), ...]
-        :param nameSet: name of the set.
+        :param setName: name of the set.
         '''
         lstGridPnt=[self.getIJKfromXYZ(coord) for coord in lstXYZPnt]
-        setLin=self.genSetLinFromLstGridPnt(lstGridPnt,nameSet)
+        setLin=self.genSetLinFromLstGridPnt(lstGridPnt,setName)
         return setLin
     
-    def getSetLinFromLstXYZPnt(self,lstXYZPnt,nameSet):
+    def getSetLinFromLstXYZPnt(self,lstXYZPnt,setName):
         '''return the set of lines that joint the successive points defined 
         in 'lstXYZPnt' by their coordinates (x,y,z).
 
         :param lstXYZPnt: list of successive points [(x1,y1,z1),(x2,y2,z2), ...]
-        :param nameSet: name of the set.
+        :param setName: name of the set.
         '''
         lstGridPnt=[self.getIJKfromXYZ(coord) for coord in lstXYZPnt]
-        setLin=self.getSetLinFromLstGridPnt(lstGridPnt,nameSet)
+        setLin=self.getSetLinFromLstGridPnt(lstGridPnt,setName)
         return setLin
     
-    def genSetLinFromMultiLstXYZPnt(self,multiLstXYZPnt,nameSet):
+    def genSetLinFromMultiLstXYZPnt(self,multiLstXYZPnt,setName):
         '''generate the set of lines that joint the successive points defined 
         in 'multiLstXYZPnt' by their coordinates (x,y,z)
 
         :param multiLstXYZPnt: list of lists of successive points 
         [[(x1,y1,z1),(x2,y2,z2), ...],[],...]
-        :param nameSet: name of the set.
+        :param setName: name of the set.
         '''
         multiLstGridPnt=list()
         for xyzLst in multiLstXYZPnt:
             indLst=[self.getIJKfromXYZ(coord) for coord in xyzLst]
             multiLstGridPnt.append(indLst)
-        setLin=self.genSetLinFromMultiLstGridPnt(multiLstGridPnt,nameSet)
+        setLin=self.genSetLinFromMultiLstGridPnt(multiLstGridPnt,setName)
         return setLin
     
-    def getSetLinFromMultiLstXYZPnt(self,multiLstXYZPnt,nameSet):
+    def getSetLinFromMultiLstXYZPnt(self,multiLstXYZPnt,setName):
         '''generate the set of lines that joint the successive points defined 
         in 'multiLstXYZPnt' by their coordinates (x,y,z)
 
         :param multiLstXYZPnt: list of lists of successive points 
         [[(x1,y1,z1),(x2,y2,z2), ...],[],...]
-        :param nameSet: name of the set.
+        :param setName: name of the set.
         '''
         multiLstGridPnt=list()
         for xyzLst in multiLstXYZPnt:
             indLst=[self.getIJKfromXYZ(coord) for coord in xyzLst]
             multiLstGridPnt.append(indLst)
-        setLin=self.getSetLinFromMultiLstGridPnt(multiLstGridPnt,nameSet)
+        setLin=self.getSetLinFromMultiLstGridPnt(multiLstGridPnt,setName)
         return setLin
 
-def getSetIntersSurf(set1,set2,nameSetInter):
+def getSetIntersSurf(set1,set2,setNameInter):
     '''Return a set of surfaces intersection of those in 'set1' and 'set2'
 
     :param set1, set2: sets containing surfaces to search intersection
-    :param nameSetInter: name of the set of surfaces to return
+    :param setNameInter: name of the set of surfaces to return
     '''
     prep=set1.getPreprocessor
-    if prep.getSets.exists(nameSetInter): prep.getSets.removeSet(nameSetInter) 
-    setInters=prep.getSets.defSet(nameSetInter)
+    if prep.getSets.exists(setNameInter): prep.getSets.removeSet(setNameInter) 
+    setInters=prep.getSets.defSet(setNameInter)
     surfSet1=set1.getSurfaces
     surfSet2=set2.getSurfaces
     surfSetInters=setInters.getSurfaces
@@ -1180,15 +1179,15 @@ def getSetIntersSurf(set1,set2,nameSetInter):
         if s in surfSet1: surfSetInters.append(s)
     return setInters
 
-def getSetIntersLin(set1,set2,nameSetInter):
+def getSetIntersLin(set1,set2,setNameInter):
     '''Return a set of lines intersection of those in 'set1' and 'set2'
 
     :param set1, set2: sets containing lines to search intersection
-    :param nameSetInter: name of the set of lines to return
+    :param setNameInter: name of the set of lines to return
     '''
     prep=set1.getPreprocessor
-    if prep.getSets.exists(nameSetInter): prep.getSets.removeSet(nameSetInter) 
-    setInters=prep.getSets.defSet(nameSetInter)
+    if prep.getSets.exists(setNameInter): prep.getSets.removeSet(setNameInter) 
+    setInters=prep.getSets.defSet(setNameInter)
     linSet1=set1.getLines
     linSet2=set2.getLines
     linSetInters=setInters.getLines

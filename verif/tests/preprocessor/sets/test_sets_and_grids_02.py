@@ -50,12 +50,12 @@ zList=[i for i in range(6)]
 gridGeom=gm.GridModel(prep,xList,yList,zList)
 gridGeom.generatePoints()
 
-floor1=gridGeom.genSurfOneXYZRegion(xyzRange=((2,5,2),(8,15,2)), nameSet='floor1')
+floor1=gridGeom.genSurfOneXYZRegion(xyzRange=((2,5,2),(8,15,2)), setName='floor1')
 #out.displayBlocks()
-floor2=gridGeom.genSurfOneXYZRegion(xyzRange=((0,0,4),(10,20,4)), nameSet='floor2')
+floor2=gridGeom.genSurfOneXYZRegion(xyzRange=((0,0,4),(10,20,4)), setName='floor2')
 #out.displayBlocks()
 columns_rg=gm.IJKRange((2,5,0),(8,15,4)).extractIncludedKranges(stepI=2,stepJ=3)
-columns=gridGeom.genLinMultiRegion(lstIJKRange=columns_rg,nameSet='columns')
+columns=gridGeom.genLinMultiRegion(lstIJKRange=columns_rg,setName='columns')
 #out.displayBlocks()
 #                         *** MATERIALS (constitutive models) *** 
 mat_slabs= tm.MaterialData(name='mat_slabs',E=2.55e15,nu=0.2,rho=2500)

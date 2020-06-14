@@ -14,6 +14,7 @@ import geom
 from materials import typical_materials as tm
 from postprocess import extrapolate_elem_attr
 from solution import predefined_solutions
+import uuid
 
 class PredefinedSpace(object):
     def __init__(self,nodes,dimSpace,numDOFs):
@@ -244,6 +245,37 @@ class PredefinedSpace(object):
         '''Return the set that contains all the defined
            entities.'''
         return self.preprocessor.getSets.getSet("total")
+
+    def setSum(self, setName, setsToSum):
+        ''' Return a set that contains the union of the
+            arguments.
+
+        :param setName: name of the set to create. If 'auto'
+                        then assign a random (unique) name.
+        :param setsToSum: sets to sum in a list.
+        '''
+        if(setName=='auto'):
+            setName= uuid.uuid4().hex
+        retval= self.preprocessor.getSets.defSet(setName)
+        for s in setsToSum:
+            retval+= s
+        return retval
+    
+    def setIntersection(self, setName, setsToIntersect):
+        ''' Return a set that contains the union of the
+            arguments.
+
+        :param setName: name of the set to create. If 'auto'
+                        then assign a random (unique) name.
+        :param setsToSum: sets to sum in a list.
+        '''
+        if(setName=='auto'):
+            setName= uuid.uuid4().hex
+        retval= self.preprocessor.getSets.defSet(setName)
+        retval+= setsToIntersect[0]
+        for s in setsToIntersect[1:]:
+            retval*= s
+        return retval
     
     def removeAllLoadPatternsFromDomain(self):
         ''' Remove all load patterns from domain.'''

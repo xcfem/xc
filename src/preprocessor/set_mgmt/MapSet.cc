@@ -94,12 +94,12 @@ XC::Set *XC::MapSet::create_set(const std::string &name)
 XC::Set *XC::MapSet::alloc_set(const Set &s)
   {
     const std::string &name= s.getName();
-    Set *tmp =nullptr;
+    Set *set_ptr =nullptr;
     if(exists(name))
       removeSet(name);
-    tmp= new Set(s);
-    MapSetBase::operator[](name)= tmp;
-    return tmp;
+    set_ptr= new Set(s);
+    insert({name, set_ptr});
+    return set_ptr;
   }
 
 bool XC::MapSet::is_open(const std::string &name) const
@@ -235,7 +235,7 @@ void XC::MapSet::removeSet(const std::string &name)
 	          << name << "'\n";
         cierra_set(name);
       }
-    MapSetBase::removeSet(name);
+    MapSetBase::remove(name);
   }
 
 //! @brief Clears all defined sets.

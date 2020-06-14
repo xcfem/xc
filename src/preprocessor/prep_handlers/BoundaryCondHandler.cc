@@ -85,9 +85,9 @@ XC::SFreedom_Constraint *XC::BoundaryCondHandler::newSPConstraint(const int &tag
   { return addSFreedom_Constraint(tag_nod,dofId,value); }
 
 //! @grief Appends a multi-freedom constraint to the model.
-XC::MFreedom_Constraint *XC::BoundaryCondHandler::newMPConstraint(const int &masterNode, const int &slaveNode, const ID &constrainedDOF, const ID &retainedDOF)
+XC::MFreedom_Constraint *XC::BoundaryCondHandler::newMPConstraint(const int &retainedNode, const int &constrainedNode, const ID &constrainedDOF, const ID &retainedDOF)
   {
-    MFreedom_Constraint *mp= new MFreedom_Constraint(tag_mp_constraint,masterNode,slaveNode,constrainedDOF,retainedDOF);
+    MFreedom_Constraint *mp= new MFreedom_Constraint(tag_mp_constraint,retainedNode,constrainedNode,constrainedDOF,retainedDOF);
     tag_mp_constraint++;
     if(mp)
       {
@@ -102,12 +102,12 @@ XC::MFreedom_Constraint *XC::BoundaryCondHandler::newMPConstraint(const int &mas
 
 //! @brief Imposes the same displacements on both nodes for the components
 //! specified in the argument.
-//! @param masterNode: tag of the master node.
-//! @param slaveNode: tag of the slave node.
+//! @param retainedNode: tag of the node whose response will be retained in the equations.
+//! @param constrainedNode: tag of the node whose response will be removed from the equations.
 //! @param dofs: degrees of freedom to impose the constraint on.
-XC::MFreedom_Constraint *XC::BoundaryCondHandler::newEqualDOF(const int &masterNode, const int &slaveNode, const ID &dofs)
+XC::MFreedom_Constraint *XC::BoundaryCondHandler::newEqualDOF(const int &retainedNode, const int &constrainedNode, const ID &dofs)
   {
-    EqualDOF *mp= new EqualDOF(tag_mp_constraint,masterNode,slaveNode,dofs);
+    EqualDOF *mp= new EqualDOF(tag_mp_constraint,retainedNode,constrainedNode,dofs);
     tag_mp_constraint++;
     if(mp)
       {
@@ -121,9 +121,9 @@ XC::MFreedom_Constraint *XC::BoundaryCondHandler::newEqualDOF(const int &masterN
     return mp;
   }
 
-XC::MFreedom_Constraint *XC::BoundaryCondHandler::newRigidBeam(const int &masterNode, const int &slaveNode)
+XC::MFreedom_Constraint *XC::BoundaryCondHandler::newRigidBeam(const int &retainedNode, const int &constrainedNode)
   {
-    RigidBeam *mp= new RigidBeam(tag_mp_constraint,masterNode,slaveNode);
+    RigidBeam *mp= new RigidBeam(tag_mp_constraint,retainedNode,constrainedNode);
     tag_mp_constraint++;
     if(mp)
       {
@@ -137,9 +137,9 @@ XC::MFreedom_Constraint *XC::BoundaryCondHandler::newRigidBeam(const int &master
     return mp;
   }
 
-XC::MFreedom_Constraint *XC::BoundaryCondHandler::newRigidRod(const int &masterNode, const int &slaveNode)
+XC::MFreedom_Constraint *XC::BoundaryCondHandler::newRigidRod(const int &retainedNode, const int &constrainedNode)
   {
-    RigidRod *mp= new RigidRod(tag_mp_constraint,masterNode,slaveNode);
+    RigidRod *mp= new RigidRod(tag_mp_constraint,retainedNode,constrainedNode);
     tag_mp_constraint++;
     if(mp)
       {

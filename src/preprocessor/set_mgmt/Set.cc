@@ -165,7 +165,7 @@ void XC::Set::Transform(const size_t &indice_trf)
 XC::Set *XC::Set::alloc_set(void)
   {
     MapSet &map_set= getPreprocessor()->get_sets();
-    XC::Set *retval= map_set.alloc_set(*this);
+    Set *retval= map_set.alloc_set(*this);
     if(!retval) //Can't allocate.
       std::cerr << getClassName() << "::" << __FUNCTION__
 	        << "; can't allocate this set."

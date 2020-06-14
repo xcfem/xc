@@ -47,8 +47,8 @@ gridGeom.generatePoints()
 # Ranges to be used lately
 floor1_rg=gm.IJKRange((2,5,2),(8,15,2))
 
-#Surfaces' generation
-floor1= gridGeom.genSurfOneRegion(ijkRange=floor1_rg,nameSet='floor1')
+# Surfaces' generation
+floor1= gridGeom.genSurfOneRegion(ijkRange=floor1_rg,setName='floor1')
 # for s in floor1.getSurfaces:
 #     print s.name, s.tag, s, s.getKPoints()
 

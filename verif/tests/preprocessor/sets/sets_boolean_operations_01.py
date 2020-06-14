@@ -26,13 +26,19 @@ sUtils.append_points(s1,[pt1,pt2])
 s2= preprocessor.getSets.defSet("S2")
 sUtils.append_points(s2,[pt2,pt3])
 
-s3= s1+s2
+s3= preprocessor.getSets.defSet("S3")
+s3+= s1
+s3+= s2
 sz3= s3.getPoints.size
 
-s4= s1-s2
+s4= preprocessor.getSets.defSet("S4")
+s4+= s1
+s4-= s2
 sz4= s4.getPoints.size
 
-s5= s1*s2
+s5= preprocessor.getSets.defSet("S5")
+s5+= s1
+s5*= s2
 sz5= s5.getPoints.size
 
 #for p in pnts:

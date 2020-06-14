@@ -68,25 +68,64 @@ XC::SetMeshComp &XC::SetMeshComp::operator=(const SetMeshComp &other)
 //! @brief += operator.
 XC::SetMeshComp &XC::SetMeshComp::operator+=(const SetMeshComp &other)
   {
+    const std::string oldName= getStrName();
     SetBase::operator+=(other);
     extend_lists(other);
+    MapSet &map_set= getPreprocessor()->get_sets();
+    if(map_set.exists(oldName)) // already allocated.
+      map_set.rename(oldName,getStrName());
     return *this;
   }
 
 //! @brief -= operator.
 XC::SetMeshComp &XC::SetMeshComp::operator-=(const SetMeshComp &other)
   {
+    const std::string oldName= getStrName();
     SetBase::operator-=(other);
     substract_lists(other);
+    MapSet &map_set= getPreprocessor()->get_sets();
+    if(map_set.exists(oldName)) // already allocated.
+      map_set.rename(oldName,getStrName());
     return *this;
   }
 
 //! @brief *= operator (intersection).
 XC::SetMeshComp &XC::SetMeshComp::operator*=(const SetMeshComp &other)
   {
+    const std::string oldName= getStrName();
     SetBase::operator*=(other);
     intersect_lists(other);
+    MapSet &map_set= getPreprocessor()->get_sets();
+    if(map_set.exists(oldName)) // already allocated.
+      map_set.rename(oldName,getStrName());
     return *this;
+  }
+
+//! @brief Return a copy of the object name.
+std::string XC::SetMeshComp::getStrName(void) const
+  { return EntMdlrBase::getName(); }
+
+//! @brief Set the object name.
+void XC::SetMeshComp::newName(const std::string &newName)
+  { rename(newName); }
+  
+//! @brief Rename object.
+void XC::SetMeshComp::rename(const std::string &newName)
+  {
+    const std::string oldName= getStrName();
+    if(oldName!=newName)
+      {
+        MapSet &map_set= getPreprocessor()->get_sets();
+        map_set.rename(oldName,newName);
+	if(newName!=getStrName())
+	  {
+	    std::cerr << getClassName() << "::" << __FUNCTION__
+	              << "; something went wrong, name is: "
+	              << getStrName() << " and must be: "
+	              << newName << std::endl;
+	    setName(newName);
+	  }
+      }
   }
 
 //! @brief Copy (into this set) the lists from the set being passed as parameter.
@@ -694,25 +733,25 @@ int XC::SetMeshComp::recvSelf(const Communicator &comm)
   }
 
 //! @brief Return the union of both objects.
-XC::SetMeshComp XC::operator+(const XC::SetMeshComp &a,const XC::SetMeshComp &b)
+XC::SetMeshComp XC::SetMeshComp::operator+(const SetMeshComp &b) const
   {
-    XC::SetMeshComp retval(a);
+    SetMeshComp retval(*this);
     retval+=b;
     return retval;
   }
 
 //! @brief Return the difference.
-XC::SetMeshComp XC::operator-(const XC::SetMeshComp &a,const XC::SetMeshComp &b)
+XC::SetMeshComp XC::SetMeshComp::operator-(const SetMeshComp &b) const
   {
-    XC::SetMeshComp retval(a);
+    SetMeshComp retval(*this);
     retval-=b;
     return retval;
   }
 
 //! @brief Return the intersection.
-XC::SetMeshComp XC::operator*(const XC::SetMeshComp &a,const XC::SetMeshComp &b)
+XC::SetMeshComp XC::SetMeshComp::operator*(const SetMeshComp &b) const
   {
-    XC::SetMeshComp retval(a);
+    SetMeshComp retval(*this);
     retval*=b;
     return retval;
   }
