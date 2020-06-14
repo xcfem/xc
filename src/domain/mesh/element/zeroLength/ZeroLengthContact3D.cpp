@@ -292,15 +292,14 @@ int XC::ZeroLengthContact3D::getResponse(int responseID, Information &eleInfo)
   }
 
 
-// Private methods
-// determine the slave/master pair in contact, and setup Vectors (N,T1,T2)
+//! @brief determine the constrained/retained pair in contact, and setup Vectors (N,T1,T2)
 int XC::ZeroLengthContact3D::contactDetect(void) const
- {
-   int transientgap; 
-   transientgap = 1;   // 1: transient gap; 0: dynamic gap
+   {
+     int transientgap; 
+     transientgap = 1;   // 1: transient gap; 0: dynamic gap
 
-   Vector  slaveNd;
-   Vector  masterNd;
+     Vector constrainedNd;
+     Vector retainedNd;
 
       //+--------------+-----------------+----------------+----------------+---------------+
       // NOTES: some methods to get displacements from nodes
@@ -314,22 +313,22 @@ int XC::ZeroLengthContact3D::contactDetect(void) const
           if(transientgap) 
           {  ///////////// for transient gap //////////////////////////
 
-                   slaveNd = theNodes[0]->getCrds() + theNodes[0]->getTrialDisp();
-           masterNd= theNodes[1]->getCrds() + theNodes[1]->getTrialDisp();
+                   constrainedNd = theNodes[0]->getCrds() + theNodes[0]->getTrialDisp();
+           retainedNd= theNodes[1]->getCrds() + theNodes[1]->getTrialDisp();
           }  else {
          ///////////// for dynamic gap ////////////////////////////
-              slaveNd = theNodes[0]->getCrds() + theNodes[0]->getIncrDisp();
-          masterNd= theNodes[1]->getCrds() + theNodes[1]->getIncrDisp();
+              constrainedNd = theNodes[0]->getCrds() + theNodes[0]->getIncrDisp();
+          retainedNd= theNodes[1]->getCrds() + theNodes[1]->getIncrDisp();
           }
       
-      double Xs=slaveNd(0)  - origin(0);
-      double Ys=slaveNd(1)  - origin(1);
-          double Zs=slaveNd(2);
+      double Xs=constrainedNd(0)  - origin(0);
+      double Ys=constrainedNd(1)  - origin(1);
+          double Zs=constrainedNd(2);
       double Rs=sqrt(Xs*Xs +Ys*Ys); 
 
-      double Xm=masterNd(0) - origin(0);
-          double Ym=masterNd(1) - origin(1);
-      double Zm=masterNd(2);
+      double Xm=retainedNd(0) - origin(0);
+          double Ym=retainedNd(1) - origin(1);
+      double Zm=retainedNd(2);
 
           double Rm=sqrt(Xm*Xm +Ym*Ym);
                         
@@ -373,7 +372,7 @@ int XC::ZeroLengthContact3D::contactDetect(void) const
                                 }
                         
 
-                 case 1:   // normal of master plane pointing to +X direction
+                 case 1:   // normal of primary plane pointing to +X direction
                                 if(transientgap) {
                                         gap= Xm -Xs;             // transient gap
                                 } else {
@@ -411,7 +410,7 @@ int XC::ZeroLengthContact3D::contactDetect(void) const
                                 }
                         
 
-                case 2:  // normal of master plane pointing to +Y direction
+                case 2:  // normal of primary plane pointing to +Y direction
                                 if(transientgap) {
                                         gap= Ym - Ys;            // transient gap
                                 } else {
@@ -446,15 +445,15 @@ int XC::ZeroLengthContact3D::contactDetect(void) const
                                         return 1; 
                                 }
 
-                case 3:   // normal of master plane pointing to +Z direction
-                        //          ___________ 
-            //         |           |
-                        //         |   slave   |  
-                        //         |___________| 
-                        //         |           |
-                        //         |   Master  |
-            //         |           |
-                        //          -----------
+                case 3:   // normal of primary plane pointing to +Z direction
+                        //          ________________ 
+                        //         |               |
+                        //         |   constrained |  
+                        //         |_______________| 
+                        //         |               |
+                        //         |   retained    |
+                        //         |               |
+                        //         -----------------
                         // 
                                 if(transientgap) {
                                         gap= Zm - Zs;         // transient gap
@@ -497,13 +496,13 @@ int XC::ZeroLengthContact3D::contactDetect(void) const
  }
 
 
-void  XC::ZeroLengthContact3D::formResidAndTangent( int tang_flag ) const
-{
+void XC::ZeroLengthContact3D::formResidAndTangent( int tang_flag ) const
+  {
 
-        // trial displacement vectors
-         Vector DispTrialS(3); // trial disp for slave node
-        Vector DispTrialM(3); // trial disp for master node
-        // trial frictional force vectors (in local coordinate)
+    // trial displacement vectors
+    Vector DispTrialS(3); // trial disp for constrained node
+    Vector DispTrialM(3); // trial disp for retained node
+    // trial frictional force vectors (in local coordinate)
     Vector t_trial(2);
     double TtrNorm;
 

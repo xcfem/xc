@@ -131,7 +131,7 @@ class ZeroLengthContact2D: public ZeroLengthContact
 
     // Normal and Tangental Vectors for Elemental Nodes, (4*1)
     mutable Vector T;
-    Vector ContactNormal; //!< out normal of master element
+    Vector ContactNormal; //!< out normal of primary element
     
     int contactDetect(void) const;
     void formResidAndTangent(int tang_flag ) const;

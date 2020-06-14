@@ -76,8 +76,8 @@ XC::RigidBase::RigidBase(int tag)
 //! @brief Constructor.
 //! @param tag: tag for the constraint.
 //! @param classTag: tag of the object class.
-XC::RigidBase::RigidBase(int tag,const int &masterNode, const int &slaveNode, int classTag)
-  : MFreedom_Constraint(tag,masterNode,slaveNode,classTag), nodeR(nullptr), nodeC(nullptr) {}
+XC::RigidBase::RigidBase(int tag,const int &retainedNode, const int &constrainedNode, int classTag)
+  : MFreedom_Constraint(tag,retainedNode,constrainedNode,classTag), nodeR(nullptr), nodeC(nullptr) {}
 
 //! @brief Destructor.
 XC::RigidBase::~RigidBase(void)

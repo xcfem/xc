@@ -73,7 +73,7 @@ XC::ZeroLengthContact2D::ZeroLengthContact2D(int tag,int Nd1, int Nd2,double Kno
   :ZeroLengthContact(tag,ELE_TAG_ZeroLengthContact2D,2,Nd1,Nd2,Knormal,Ktangent,frictionRatio),
    lambda(0.0), T(2*numNodes()), ContactNormal(2), stickPt(0.0), xi(0.0)
   {
-    // assign outward contact normal of master block
+    // assign outward contact normal of retained block
     ContactNormal(0) = normal(0)/normal.Norm();
     ContactNormal(1) = normal(1)/normal.Norm();
   }
@@ -330,7 +330,7 @@ int XC::ZeroLengthContact2D::getResponse(int responseID, Information &eleInfo)
   }
 
 
-//! @brief determine the slave/master pair in contact, and setup Vectors (N,T1,T2)
+//! @brief determine the constrained/retained pair in contact, and setup Vectors (N,T1,T2)
 int XC::ZeroLengthContact2D::contactDetect(void) const
   {
     //std::cerr<< this->getTag()<< " XC::ZeroLengthContact2D::contactDetect" <<std::endl;
@@ -346,26 +346,26 @@ int XC::ZeroLengthContact2D::contactDetect(void) const
 
     ////////////////////////////// for transient gap ///////////////////////////////////
     // DEFINE:
-    // gap = (U_master-U_slave) \dot (ContactNormal),
+    // gap = (U_retained-U_constrained) \dot (ContactNormal),
     // defines overlapped normal distance, always keep positive (+) when contacted
     ///*
-    const Vector &U_slave = theNodes[0]->getCrds() + theNodes[0]->getTrialDisp(); // get current trial position
-    const Vector &U_master= theNodes[1]->getCrds() + theNodes[1]->getTrialDisp();
+    const Vector &U_constrained = theNodes[0]->getCrds() + theNodes[0]->getTrialDisp(); // get current trial position
+    const Vector &U_retained= theNodes[1]->getCrds() + theNodes[1]->getTrialDisp();
     gap=0;
     for(int i=0; i<2; i++)
-      { gap+= (U_master(i)-U_slave(i))* ContactNormal(i); }
+      { gap+= (U_retained(i)-U_constrained(i))* ContactNormal(i); }
 
     //*////////////////////////////// for transient gap ///////////////////////////////
     // we have another way to define the gap, can replace previous code block if want
     /*/////////////// for dynamic gap //////////////////////
     const Vector   // get current trial incremental position
-        &U_slave = theNodes[0]->getCrds() + theNodes[0]->getIncrDisp();
+        &U_constrained = theNodes[0]->getCrds() + theNodes[0]->getIncrDisp();
     const Vector
-        &U_master= theNodes[1]->getCrds() + theNodes[1]->getIncrDisp();
+        &U_retained= theNodes[1]->getCrds() + theNodes[1]->getIncrDisp();
     gap=0;
     int i;
     for(i=0; i<2; i++)
-      { gap += (U_master(i)-U_slave(i))* ContactNormal(i); }
+      { gap += (U_retained(i)-U_constrained(i))* ContactNormal(i); }
     gap+=gap_n;
     ///////////////// for dynamic gap //////////////////////*/
 
@@ -393,8 +393,8 @@ void  XC::ZeroLengthContact2D::formResidAndTangent( int tang_flag ) const
     //std::cerr<<this->getTag()<< " XC::ZeroLengthContact2D:: formResidAndTangent()" <<std::endl;
 
     // trial displacement vectors
-    Vector DispTrialS(2); // trial disp for slave node
-    Vector DispTrialM(2); // trial disp for master node
+    Vector DispTrialS(2); // trial disp for constrained node
+    Vector DispTrialM(2); // trial disp for retained node
     // trial frictional force vectors (in local coordinate)
     double t_trial;
     double TtrNorm;
@@ -541,12 +541,12 @@ void  XC::ZeroLengthContact2D::formResidAndTangent( int tang_flag ) const
                                                       ___\/____
                                                      /         \       /\
              Rx(1)     ---\ /    (1)    \     /||\n    Note: (t,n) follows RightHand rule
-                 =shear*t  ---/ \   slave   /      ||
+                 =shear*t  ---/ \   constrained   /      ||
                                                          \_________/       ||_____\t
                                                 -----------------------*------/
                         |                      |
                         |                      |
-                                                |    (2) Master        |/---- Rx(2) = shear*(-t)
+                                                |    (2) Retained      |/---- Rx(2) = shear*(-t)
                                                 |                      |\----
                                                 ------------------------
                                   /\

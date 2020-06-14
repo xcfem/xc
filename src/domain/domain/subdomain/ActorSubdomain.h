@@ -70,8 +70,8 @@
 namespace XC {
 //! @ingroup SubDom
 //
-//! @brief Subdomain that sits on slave process. All commands from
-//! master node will be received by ActorSubdomain and ActorSubdomain
+//! @brief Subdomain that sits on secondary process. All commands from
+//! primary node will be received by ActorSubdomain and ActorSubdomain
 //! will match the command with some actions performed by Subdomain.
 class ActorSubdomain: public Subdomain, public Actor
   {

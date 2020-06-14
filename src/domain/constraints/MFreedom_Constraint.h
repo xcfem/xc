@@ -132,10 +132,10 @@ class MFreedom_Constraint: public MFreedom_ConstraintBase
     MFreedom_Constraint(int tag,int nodeRetain, int nodeConstr, Matrix &constrnt,ID &constrainedDOF,ID &retainedDOF);
 
     // methods to get information about the constraint
-    //! @brief Returns the tag of the retained (or master) node.
+    //! @brief Returns the tag of the retained (or primary) node.
     virtual inline const int &getNodeRetained(void) const
       { return retainedNodeTag; }
-    //! @brief Returns the tag of the retained (or master) node.
+    //! @brief Returns the tag of the retained (or primary) node.
     virtual inline int &getNodeRetained(void) 
       { return retainedNodeTag; }
     //! @brief Returns the number of retained nodes.

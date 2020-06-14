@@ -38,8 +38,8 @@ XC::EqualDOF::EqualDOF(int tag)
   : MFreedom_Constraint(tag) {}
 
 //! @brief Constructor.
-XC::EqualDOF::EqualDOF(int tag,const int &masterNode,const int &slaveNode,const ID &dofs)
-  : MFreedom_Constraint(tag,masterNode,slaveNode,0)
+XC::EqualDOF::EqualDOF(int tag,const int &retainedNode,const int &constrainedNode,const ID &dofs)
+  : MFreedom_Constraint(tag,retainedNode,constrainedNode,0)
   { setDofs(dofs); }
 
 //! @brief Sets retained degrees of fredom.

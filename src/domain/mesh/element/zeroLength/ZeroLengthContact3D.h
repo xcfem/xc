@@ -93,16 +93,16 @@
 
  where:
   $eleID: element ID of this contact element
-  $sNdID: slave node ID
-  $mNdID: master node ID
+  $sNdID: constrained node ID
+  $mNdID: retained node ID
   $Kn   : penalty in normal directions
   $Kt:  : penalty in tangential directions
   $c    : cohesion
   $dir  : direction of the contact (0,1,2,3)
-          0: circular contact (slave node is inside)
-                  1: out normal of master plane pointing to +X direction
-                  2: out normal of master plane pointing to +Y direction
-                  3: out normal of master plane pointing to +Z direction
+          0: circular contact (constrained node is inside)
+                  1: out normal of primary plane pointing to +X direction
+                  2: out normal of primary plane pointing to +Y direction
+                  3: out normal of primary plane pointing to +Z direction
 
  Description: This file contains the class definition for ZeroLengthContact3D.
  (1) A ZeroLengthContact3D element is defined by two nodes with the same coordinate
