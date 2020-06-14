@@ -259,6 +259,7 @@ class PredefinedSpace(object):
         retval= self.preprocessor.getSets.defSet(setName)
         for s in setsToSum:
             retval+= s
+        retval.name= setName # remove all the expressions from name.
         return retval
     
     def setIntersection(self, setName, setsToIntersect):
@@ -275,6 +276,7 @@ class PredefinedSpace(object):
         retval+= setsToIntersect[0]
         for s in setsToIntersect[1:]:
             retval*= s
+        retval.name= setName # remove all the expressions from name.
         return retval
     
     def removeAllLoadPatternsFromDomain(self):
