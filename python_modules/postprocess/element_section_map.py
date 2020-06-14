@@ -41,7 +41,7 @@ class ElementSections(object):
     :ivar elemSet: set with the elements to which to assign the section
                    (defaults to None).
     ''' 
-    def __init__(self,name,directions= [1, 2], gaussPoints= [1], elemSet=None):
+    def __init__(self,name,directions= [1, 2], gaussPoints= [1], elemSet= None):
         '''Constructor.
 
         :param name: name given to the list of reinforced concrete sections
@@ -231,7 +231,7 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
                         the Z shear reinforcement in section 2
 
     '''
-    def __init__(self,name,sectionDescr,concrType,reinfSteelType,depth,width=1.0, elemSet=None):
+    def __init__(self,name,sectionDescr,concrType,reinfSteelType,depth,width=1.0, elemSet= None):
         '''Constructor.
 
 
@@ -244,7 +244,7 @@ class RCSlabBeamSection(setRCSections2SetElVerif):
         :param elemSet:  set with the elements to which to assign the section.
                          (defaults to None)
         '''
-        super(RCSlabBeamSection,self).__init__(name,directions= [1,2], gaussPoints= [1], elemSet=None)
+        super(RCSlabBeamSection,self).__init__(name,directions= [1,2], gaussPoints= [1], elemSet= elemSet)
         self.sectionDescr= sectionDescr
         self.concrType= concrType
         self.reinfSteelType= reinfSteelType
@@ -425,7 +425,7 @@ class RCMemberSection(ElementSections):
     '''This class is an specialization of ElemenSections for rectangular
        sections. The items of the list are instances of the object *RCRectangularSection*
     ''' 
-    def __init__(self,name, templateSections, directions= [1], gaussPoints=[1,2], elemSet=None):
+    def __init__(self,name, templateSections, directions= [1], gaussPoints=[1,2], elemSet= None):
         '''Constructor.
 
 
