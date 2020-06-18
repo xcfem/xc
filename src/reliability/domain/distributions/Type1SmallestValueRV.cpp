@@ -142,8 +142,7 @@ XC::Type1SmallestValueRV::getInverseCDFvalue(double probValue)
 }
 
 
-const char *
-XC::Type1SmallestValueRV::getType()
+const std::string XC::Type1SmallestValueRV::getType(void)
 {
 	return "TYPE1SMALLESTVALUE";
 }

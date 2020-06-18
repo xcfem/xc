@@ -149,8 +149,7 @@ XC::WeibullRV::getInverseCDFvalue(double probValue)
 }
 
 
-const char *
-XC::WeibullRV::getType()
+const std::string XC::WeibullRV::getType(void)
 {
 	return "WEIBULL";
 }

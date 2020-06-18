@@ -128,8 +128,7 @@ XC::RayleighRV::getInverseCDFvalue(double probValue)
 }
 
 
-const char *
-XC::RayleighRV::getType()
+const std::string XC::RayleighRV::getType(void)
 {
 	return "RAYLEIGH";
 }

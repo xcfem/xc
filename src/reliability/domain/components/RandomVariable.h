@@ -80,11 +80,17 @@ class RandomVariable: public ReliabilityDomainComponent
   public:
     RandomVariable(int tag, int classTag);
 
+    // utility functions for gamma and beta
+    double gammaFunction(double x);
+    double incompleteGammaFunction(double a, double x);
+    double betaFunction(double passed_q, double passed_r);
+    double incompleteBetaFunction(double passed_q, double passed_r, double passed_x);
+    
     virtual void Print(std::ostream &s, int flag =0) const=0;
     virtual double getPDFvalue(double rvValue) =0;
     virtual double getCDFvalue(double rvValue) =0;
     virtual double getInverseCDFvalue(double rvValue) =0;    
-    virtual const char* getType() =0;
+    virtual const std::string getType(void) =0;
     virtual double getMean() =0;
     virtual double getStdv() =0;
     virtual double getParameter1() =0;

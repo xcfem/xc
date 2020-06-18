@@ -178,13 +178,13 @@ XC::NatafProbabilityTransformation::meanSensitivityOf_x_to_u(Vector &x, int rvNu
         Vector DzDmean(x.Size());
         NormalRV aStandardNormalRV(1,0.0,1.0,0.0); 
         RandomVariable *theRV= theReliabilityDomain->getRandomVariablePtr(rvNumber);
-        if(strcmp(theRV->getType(),"NORMAL")==0)
+        if((theRV->getType()=="NORMAL"))
           {
             //double mu= theRV->getParameter1();
             double sigma= theRV->getParameter2();
             DzDmean(rvNumber-1)= -1.0 / sigma;
           }
-        else if(strcmp(theRV->getType(),"LOGNORMAL")==0)
+        else if((theRV->getType()=="LOGNORMAL"))
           {
             //const double lambda= theRV->getParameter1();
             //const double zeta= fabs(theRV->getParameter2()); // more here for negative lognormal?
@@ -200,7 +200,7 @@ XC::NatafProbabilityTransformation::meanSensitivityOf_x_to_u(Vector &x, int rvNu
 //          double f= 1.0 / (mean*d*zeta);
 //          DzDmean(rvNumber-1)= f*(-d-e+e*z/zeta);
           }
-        else if (strcmp(theRV->getType(),"UNIFORM")==0)
+        else if ((theRV->getType()=="UNIFORM"))
           {
                 double pz= 0.39894228048*exp(-z(rvNumber-1)*z(rvNumber-1)/2.0);
                 double a= theRV->getParameter1();
@@ -267,13 +267,13 @@ XC::NatafProbabilityTransformation::stdvSensitivityOf_x_to_u(Vector &x, int rvNu
         Vector DzDstdv(x.Size());
         NormalRV aStandardNormalRV(1,0.0,1.0,0.0); 
         RandomVariable *theRV= theReliabilityDomain->getRandomVariablePtr(rvNumber);
-        if(strcmp(theRV->getType(),"NORMAL")==0)
+        if((theRV->getType()=="NORMAL"))
           {
                 double mu= theRV->getParameter1();
                 double sigma= theRV->getParameter2();
                 DzDstdv(rvNumber-1)= - (x(rvNumber-1)-mu) / (sigma*sigma);
           }
-        else if(strcmp(theRV->getType(),"LOGNORMAL")==0)
+        else if((theRV->getType()=="LOGNORMAL"))
           {
 	    //double lambda= theRV->getParameter1();
             //double zeta= fabs(theRV->getParameter2()); // more here for negative lognormal?
@@ -289,7 +289,7 @@ XC::NatafProbabilityTransformation::stdvSensitivityOf_x_to_u(Vector &x, int rvNu
 //                double f= 1.0 / (mean*d*zeta);
 //                DzDstdv(rvNumber-1)= stdv*((1.0-z/zeta)*f/mean);
         }
-        else if (strcmp(theRV->getType(),"UNIFORM")==0) {
+        else if ((theRV->getType()=="UNIFORM")) {
                 double pz= 0.39894228048*exp(-z(rvNumber-1)*z(rvNumber-1)/2.0);
                 double a= theRV->getParameter1();
                 double b= theRV->getParameter2();
@@ -469,11 +469,11 @@ XC::NatafProbabilityTransformation::getJacobian_z_x(Vector x, Vector z)
         for ( int i=0 ; i<nrv ; i++ )
         {
                 theRV= theReliabilityDomain->getRandomVariablePtr(i+1);
-                if (strcmp(theRV->getType(),"NORMAL")==0) {
+                if ((theRV->getType()=="NORMAL")) {
                         double sigma= theRV->getParameter2();
                         jacobianMatrix_z_x(i,i)= 1.0 / sigma;
                 }
-                else if (strcmp(theRV->getType(),"LOGNORMAL")==0) {
+                else if ((theRV->getType()=="LOGNORMAL")) {
                         double zeta= fabs(theRV->getParameter2());
                         if (x(i) == 0.0) {
                                 std::cerr << "XC::NatafProbabilityTransformation::getJacobian_z_x() -- Error: value " << std::endl
@@ -508,12 +508,12 @@ XC::NatafProbabilityTransformation::z_to_x(Vector z)
         for ( int i=0 ; i<nrv ; i++ )
         {
                 theRV= theReliabilityDomain->getRandomVariablePtr(i+1);
-                if (strcmp(theRV->getType(),"NORMAL")==0) {
+                if ((theRV->getType()=="NORMAL")) {
                         double mju= theRV->getParameter1();
                         double sigma= theRV->getParameter2();
                         x(i)= z(i) * sigma + mju;
                 }
-                else if (strcmp(theRV->getType(),"LOGNORMAL")==0) {
+                else if ((theRV->getType()=="LOGNORMAL")) {
                         double lambda= theRV->getParameter1();
                         double zeta= theRV->getParameter2();
                         if (zeta < 0.0) { // interpret this as negative lognormal random variable
@@ -543,12 +543,12 @@ XC::NatafProbabilityTransformation::x_to_z(Vector x)
         for ( int i=0 ; i<nrv ; i++ )
         {
                 theRV= theReliabilityDomain->getRandomVariablePtr(i+1);
-                if (strcmp(theRV->getType(),"NORMAL")==0) {
+                if ((theRV->getType()=="NORMAL")) {
                         double mju= theRV->getParameter1();
                         double sigma= theRV->getParameter2();
                         z(i)=   ( x(i) - mju ) / sigma;
                 }
-                else if (strcmp(theRV->getType(),"LOGNORMAL")==0) {
+                else if ((theRV->getType()=="LOGNORMAL")) {
                         double lambda= theRV->getParameter1();
                         double zeta= theRV->getParameter2();
                         if (zeta < 0.0) { /// interpret this as a negative lognormal random variable
@@ -610,8 +610,8 @@ void XC::NatafProbabilityTransformation::setCorrelationMatrix(int pertMeanOfThis
                 rv2Ptr= theReliabilityDomain->getRandomVariablePtr(rv2);
 
                 // Get the types of the two random variables
-                const char *typeRv1= rv1Ptr->getType();
-                const char *typeRv2= rv2Ptr->getType();
+                const std::string &typeRv1= rv1Ptr->getType();
+                const std::string &typeRv2= rv2Ptr->getType();
 
                 // Compute the coefficient of variation of the random variables
                 if (rv1Ptr->getMean() == 0.0  ||  rv2Ptr->getMean() == 0.0 ) {
@@ -624,12 +624,12 @@ void XC::NatafProbabilityTransformation::setCorrelationMatrix(int pertMeanOfThis
 
                 // Handle negative lognormal random variables
                 // (is the closed form expressions correct for these?)
-                if ( strcmp(typeRv1,"LOGNORMAL") == 0 ) {
+                if ( (typeRv1=="LOGNORMAL") ) {
                         if (cov1 < 0.0) {
                                 cov1= cov1;
                         }
                 }
-                if ( strcmp(typeRv2,"LOGNORMAL") == 0 ) {
+                if ( (typeRv2=="LOGNORMAL") ) {
                         if (cov2 < 0.0) {
                                 cov2= cov2;
                         }
@@ -659,31 +659,31 @@ void XC::NatafProbabilityTransformation::setCorrelationMatrix(int pertMeanOfThis
                 // the type of the the two involved random variables
 
                 /////////////////////////////////////////////////////////////////////////////////
-                if ( strcmp(typeRv1,"USERDEFINED") == 0  ||  strcmp(typeRv2,"USERDEFINED") == 0  ) {
+                if( (typeRv1=="USERDEFINED")  ||  (typeRv2=="USERDEFINED")  ) {
                         std::cerr << " ... modifying correlation rho("<<rv1<<","<<rv2<<") for user-defined random variable..." << std::endl;
                         newCorrelation= solveForCorrelation(rv1, rv2, correlation);
                         std::cerr << " ... computed correlation for Nataf standard normal variates: " << newCorrelation << std::endl;
                 }
-                else if ( strcmp(typeRv1,"NORMAL") == 0  &&  strcmp(typeRv2,"NORMAL") == 0  ) {
+                else if( (typeRv1=="NORMAL")  &&  (typeRv2=="NORMAL")  ) {
                         newCorrelation= correlation;
                 }
-                else if ( strcmp(typeRv1,"NORMAL") == 0  &&  strcmp(typeRv2,"LOGNORMAL") == 0  ) {
+                else if( (typeRv1=="NORMAL")  &&  (typeRv2=="LOGNORMAL")  ) {
                         double zeta2= sqrt ( log ( 1.0 + cov2 * cov2 ) );
                         newCorrelation= correlation * cov2 / zeta2;
                 }
-                else if ( strcmp(typeRv1,"NORMAL") == 0  &&  strcmp(typeRv2,"GAMMA") == 0  ) {
+                else if( (typeRv1=="NORMAL")  &&  (typeRv2=="GAMMA")  ) {
                         newCorrelation= (1.001 - 0.007 * cov2 + 0.118 * cov2 * cov2) * correlation;
                 }
-                else if ( strcmp(typeRv1,"NORMAL") == 0  &&  (strcmp(typeRv2,"EXPONENTIAL") == 0 || strcmp(typeRv2,"SHIFTEDEXPONENTIAL") == 0 ) ) {
+                else if( (typeRv1=="NORMAL") &&  ((typeRv2=="EXPONENTIAL") || (typeRv2=="SHIFTEDEXPONENTIAL") ) ) {
                         newCorrelation= 1.107 * correlation;
                 }
-                else if ( strcmp(typeRv1,"NORMAL") == 0  &&  (strcmp(typeRv2,"RAYLEIGH") == 0 || strcmp(typeRv2,"SHIFTEDRAYLEIGH") == 0 ) ) {
+                else if( (typeRv1=="NORMAL") &&  ((typeRv2=="RAYLEIGH") || (typeRv2=="SHIFTEDRAYLEIGH") ) ) {
                         newCorrelation= 1.014 * correlation;
                 }
-                else if ( strcmp(typeRv1,"NORMAL") == 0  &&  strcmp(typeRv2,"UNIFORM") == 0  ) {
+                else if( (typeRv1=="NORMAL") && (typeRv2=="UNIFORM")  ) {
                         newCorrelation= 1.023 * correlation;
                 }
-                else if ( strcmp(typeRv1,"NORMAL") == 0  &&  strcmp(typeRv2,"BETA") == 0  ) {
+                else if( (typeRv1=="NORMAL") && (typeRv2=="BETA")  ) {
                         const double ba4minus3= rv2Ptr->getParameter4() - rv2Ptr->getParameter3();
                         double u2= ( rv2Ptr->getMean() - rv2Ptr->getParameter3() ) / ba4minus3; 
                         double s2= rv2Ptr->getStdv() / ba4minus3;
@@ -691,45 +691,45 @@ void XC::NatafProbabilityTransformation::setCorrelationMatrix(int pertMeanOfThis
                                 + 0.268*s2 - 0.001*correlation*correlation
                                 + 0.178*u2*u2 - 0.679*s2*s2 - 0.003*s2*correlation)  *  correlation;
                 }
-                else if ( strcmp(typeRv1,"NORMAL") == 0  &&  (strcmp(typeRv2,"TYPE1LARGESTVALUE") == 0 || strcmp(typeRv2,"GUMBEL") == 0)  ) {
+                else if( (typeRv1=="NORMAL") &&  ((typeRv2=="TYPE1LARGESTVALUE") || (typeRv2=="GUMBEL"))  ) {
                         newCorrelation= 1.031 * correlation;
                 }
-                else if ( strcmp(typeRv1,"NORMAL") == 0  &&  strcmp(typeRv2,"TYPE1SMALLESTVALAUE") == 0  ) {
+                else if( (typeRv1=="NORMAL") && (typeRv2=="TYPE1SMALLESTVALAUE")  ) {
                         newCorrelation= 1.031 * correlation;
                 }
-                else if ( strcmp(typeRv1,"NORMAL") == 0  &&  strcmp(typeRv2,"TYPE2LARGESTVALUE") == 0  ) {
+                else if( (typeRv1=="NORMAL") && (typeRv2=="TYPE2LARGESTVALUE")  ) {
                         newCorrelation= (1.030 + 0.238*cov2 + 0.364*cov2*cov2) * correlation;
                 }
-                else if ( strcmp(typeRv1,"NORMAL") == 0  &&  (strcmp(typeRv2,"TYPE3SMALLESTVALUE") == 0 || strcmp(typeRv2,"WEIBULL") == 0) ) {
+                else if( (typeRv1=="NORMAL") &&  ((typeRv2=="TYPE3SMALLESTVALUE") || (typeRv2=="WEIBULL")) ) {
                         newCorrelation= (1.031 - 0.195*cov2 + 0.328*cov2*cov2) * correlation;
                 }
                 /////////////////////////////////////////////////////////////////////////////////
-                else if ( strcmp(typeRv1,"LOGNORMAL") == 0  &&  strcmp(typeRv2,"NORMAL") == 0  ) {
+                else if( (typeRv1=="LOGNORMAL") && (typeRv2=="NORMAL")  ) {
                         double zeta1= sqrt ( log ( 1 + pow ( cov1 , 2 ) ) );
                         newCorrelation= correlation * cov1 / zeta1;
                 }
-                else if ( strcmp(typeRv1,"LOGNORMAL") == 0  &&  strcmp(typeRv2,"LOGNORMAL") == 0  ) {
+                else if( (typeRv1=="LOGNORMAL") && (typeRv2=="LOGNORMAL")  ) {
                         double zeta1= sqrt ( log ( 1.0 + cov1*cov1 ) );
                         double zeta2= sqrt ( log ( 1.0 + cov2*cov2 ) );
                         newCorrelation= 1.0 / ( zeta1 * zeta2 ) * log ( 1 + correlation * cov1 * cov2 );
                 }
-                else if ( strcmp(typeRv1,"LOGNORMAL") == 0  &&  strcmp(typeRv2,"GAMMA") == 0  ) {
+                else if( (typeRv1=="LOGNORMAL") && (typeRv2=="GAMMA")  ) {
                         double temp= 1.001 + 0.033*correlation + 0.004*cov1 - 0.016*cov2 
                                 + 0.002*correlation*correlation + 0.223*cov1*cov1 + 0.0130*cov2*cov2;
                         newCorrelation= correlation * (temp - 0.104*correlation*cov1 + 0.029*cov1*cov2 - 0.119*correlation*cov2);
                 }
-                else if ( strcmp(typeRv1,"LOGNORMAL") == 0  &&  (strcmp(typeRv2,"EXPONENTIAL") == 0 || strcmp(typeRv2,"SHIFTEDEXPONENTIAL") == 0 ) ) {
+                else if( (typeRv1=="LOGNORMAL") &&  ((typeRv2=="EXPONENTIAL") || (typeRv2=="SHIFTEDEXPONENTIAL") ) ) {
                         newCorrelation= (1.098 + 0.003*correlation + 0.019*cov1 + 0.025*correlation*correlation
                                 + 0.303*cov1*cov1 - 0.437*correlation*cov1) * correlation;
                 }
-                else if ( strcmp(typeRv1,"LOGNORMAL") == 0  &&  (strcmp(typeRv2,"RAYLEIGH") == 0 || strcmp(typeRv2,"SHIFTEDRAYLEIGH") == 0 ) ) {
+                else if( (typeRv1=="LOGNORMAL") &&  ((typeRv2=="RAYLEIGH") || (typeRv2=="SHIFTEDRAYLEIGH") ) ) {
                         newCorrelation= (1.011 + 0.001*correlation + 0.014*cov1 + 0.004*correlation*correlation 
                                 + 0.231*cov1*cov1 - 0.130*correlation*cov1) * correlation;
                 }
-                else if ( strcmp(typeRv1,"LOGNORMAL") == 0  &&  strcmp(typeRv2,"UNIFORM") == 0  ) {
+                else if( (typeRv1=="LOGNORMAL") && (typeRv2=="UNIFORM")  ) {
                         newCorrelation= (1.019 + 0.014*cov1 + 0.010*correlation*correlation + 0.249*cov1*cov1)*correlation;
                 }
-                else if ( strcmp(typeRv1,"LOGNORMAL") == 0  &&  strcmp(typeRv2,"BETA") == 0  ) {
+                else if( (typeRv1=="LOGNORMAL") && (typeRv2=="BETA")  ) {
                         const double ba4minus3= rv2Ptr->getParameter4() - rv2Ptr->getParameter3();
                         double u2= ( rv2Ptr->getMean() - rv2Ptr->getParameter3() ) / ba4minus3; 
                         double s2= rv2Ptr->getStdv() / ba4minus3;
@@ -749,46 +749,46 @@ void XC::NatafProbabilityTransformation::setCorrelationMatrix(int pertMeanOfThis
                                 + 0.113*sp*cov1 + 1.239*correlation*us + 0.380*correlation*up;
                         newCorrelation= temp * correlation;
                 }
-                else if ( strcmp(typeRv1,"LOGNORMAL") == 0  &&  (strcmp(typeRv2,"TYPE1LARGESTVALUE") == 0 || strcmp(typeRv2,"GUMBEL") == 0)  ) {
+                else if( (typeRv1=="LOGNORMAL") &&  ((typeRv2=="TYPE1LARGESTVALUE") || (typeRv2=="GUMBEL"))  ) {
                         newCorrelation= (1.029 + 0.001*correlation + 0.014*cov1 + 0.004*correlation*correlation
                                 + 0.233*cov1*cov1 - 0.197*correlation*cov1)*correlation;
                 }
-                else if ( strcmp(typeRv1,"LOGNORMAL") == 0  &&  strcmp(typeRv2,"TYPE1SMALLESTVALAUE") == 0  ) {
+                else if( (typeRv1=="LOGNORMAL") && (typeRv2=="TYPE1SMALLESTVALAUE")  ) {
                         newCorrelation= (1.029 - 0.001*correlation + 0.014*cov1 + 0.004*correlation*correlation
                                 + 0.233*cov1*cov1 + 0.197*correlation*cov1) * correlation;
                 }
-                else if ( strcmp(typeRv1,"LOGNORMAL") == 0  &&  strcmp(typeRv2,"TYPE2LARGESTVALUE") == 0  ) {
+                else if( (typeRv1=="LOGNORMAL") && (typeRv2=="TYPE2LARGESTVALUE")  ) {
                         double temp= 1.026 + 0.082*correlation - 0.019*cov1 + 0.222*cov2 + 0.018*correlation*correlation
                                 + 0.288*cov1*cov1 + 0.379*cov2*cov2;
                         newCorrelation= (temp - 0.441*correlation*cov1 + 0.126*cov1*cov2 - 0.277*correlation*cov2);
                 }
-                else if ( strcmp(typeRv1,"LOGNORMAL") == 0  &&  (strcmp(typeRv2,"TYPE3SMALLESTVALUE") == 0 || strcmp(typeRv2,"WEIBULL") == 0) ) {
+                else if( (typeRv1=="LOGNORMAL") &&  ((typeRv2=="TYPE3SMALLESTVALUE") || (typeRv2=="WEIBULL")) ) {
                         double temp= 1.031+0.052*correlation+0.011*cov1-0.210*cov2+0.002*correlation*correlation+0.220*cov1*cov1+0.350*cov2*cov2;
                         newCorrelation= (temp+0.005*correlation*cov1+0.009*cov1*cov2-0.174*correlation*cov2)*correlation;
                 }
                 /////////////////////////////////////////////////////////////////////////////////
-                else if ( strcmp(typeRv1,"GAMMA") == 0  &&  strcmp(typeRv2,"NORMAL") == 0  ) {
+                else if( (typeRv1=="GAMMA") && (typeRv2=="NORMAL")  ) {
                         newCorrelation= (1.001 - 0.007 * cov1 + 0.118 * cov1 * cov1) * correlation;
                 }
-                else if ( strcmp(typeRv1,"GAMMA") == 0  &&  strcmp(typeRv2,"LOGNORMAL") == 0  ) {
+                else if( (typeRv1=="GAMMA") && (typeRv2=="LOGNORMAL")  ) {
                         double temp= 1.001 + 0.033*correlation + 0.004*cov2 - 0.016*cov1 
                                 + 0.002*correlation*correlation + 0.223*cov2*cov2 + 0.0130*cov1*cov1;
                         newCorrelation= correlation * (temp - 0.104*correlation*cov2 + 0.029*cov2*cov1 - 0.119*correlation*cov1);
                 }
-                else if ( strcmp(typeRv1,"GAMMA") == 0  &&  strcmp(typeRv2,"GAMMA") == 0  ) {
+                else if( (typeRv1=="GAMMA") && (typeRv2=="GAMMA")  ) {
                         double temp= 1.002+0.022*correlation-0.012*(cov1+cov2)+0.001*correlation*correlation+0.125*(cov1*cov1+cov2*cov2);
                         newCorrelation= (temp-0.077*(correlation*cov1+correlation*cov2)+0.014*cov1*cov2)*correlation;
                 }
-                else if ( strcmp(typeRv1,"GAMMA") == 0  &&  (strcmp(typeRv2,"EXPONENTIAL") == 0 || strcmp(typeRv2,"SHIFTEDEXPONENTIAL") == 0 ) ) {
+                else if( (typeRv1=="GAMMA") &&  ((typeRv2=="EXPONENTIAL") || (typeRv2=="SHIFTEDEXPONENTIAL") ) ) {
                         newCorrelation= (1.104+0.003*correlation-0.008*cov1+0.014*correlation*correlation+0.173*cov1*cov1-0.296*correlation*cov1)*correlation;
                 }
-                else if ( strcmp(typeRv1,"GAMMA") == 0  &&  (strcmp(typeRv2,"RAYLEIGH") == 0 || strcmp(typeRv2,"SHIFTEDRAYLEIGH") == 0 ) ) {
+                else if( (typeRv1=="GAMMA") &&  ((typeRv2=="RAYLEIGH") || (typeRv2=="SHIFTEDRAYLEIGH") ) ) {
                         newCorrelation= (1.014+0.001*correlation-0.007*cov1+0.002*correlation*correlation+0.126*cov1*cov1-0.090*correlation*cov1)*correlation;
                 }
-                else if ( strcmp(typeRv1,"GAMMA") == 0  &&  strcmp(typeRv2,"UNIFORM") == 0  ) {
+                else if( (typeRv1=="GAMMA") && (typeRv2=="UNIFORM")  ) {
                         newCorrelation= (1.023+0.000*correlation-0.007*cov1+0.002*correlation*correlation+0.127*cov1*cov1-0.000*correlation*cov1)*correlation;
                 }
-                else if ( strcmp(typeRv1,"GAMMA") == 0  &&  strcmp(typeRv2,"BETA") == 0  ) {
+                else if( (typeRv1=="GAMMA") && (typeRv2=="BETA")  ) {
                         const double ba4minus3= rv2Ptr->getParameter4() - rv2Ptr->getParameter3();
                         double u2= ( rv2Ptr->getMean() - rv2Ptr->getParameter3() ) / ba4minus3; 
                         double s2= rv2Ptr->getStdv() / ba4minus3;
@@ -821,41 +821,41 @@ void XC::NatafProbabilityTransformation::setCorrelationMatrix(int pertMeanOfThis
                         }
                         newCorrelation= temp*correlation;
                 }
-                else if ( strcmp(typeRv1,"GAMMA") == 0  &&  (strcmp(typeRv2,"TYPE1LARGESTVALUE") == 0 || strcmp(typeRv2,"GUMBEL") == 0)  ) {
+                else if( (typeRv1=="GAMMA") &&  ((typeRv2=="TYPE1LARGESTVALUE") || (typeRv2=="GUMBEL"))  ) {
                         newCorrelation= (1.031+0.001*correlation-0.007*cov1+0.003*correlation*correlation+0.131*cov1*cov1-0.132*correlation*cov1)*correlation;
                 }
-                else if ( strcmp(typeRv1,"GAMMA") == 0  &&  strcmp(typeRv2,"TYPE1SMALLESTVALAUE") == 0  ) {
+                else if( (typeRv1=="GAMMA") && (typeRv2=="TYPE1SMALLESTVALAUE")  ) {
                         newCorrelation= (1.031-0.001*correlation-0.007*cov1+0.003*correlation*correlation+0.131*cov1*cov1+0.132*correlation*cov1)*correlation;
                 }
-                else if ( strcmp(typeRv1,"GAMMA") == 0  &&  strcmp(typeRv2,"TYPE2LARGESTVALUE") == 0  ) {
+                else if( (typeRv1=="GAMMA") && (typeRv2=="TYPE2LARGESTVALUE")  ) {
                         double temp= 1.029+0.056*correlation-0.030*cov1+0.225*cov2+0.012*correlation*correlation+0.174*cov1*cov1+0.379*cov2*cov2;
                         newCorrelation= (temp-0.313*correlation*cov1+0.075*cov1*cov2-0.182*correlation*cov2)*correlation;
                 }
-                else if ( strcmp(typeRv1,"GAMMA") == 0  &&  (strcmp(typeRv2,"TYPE3SMALLESTVALUE") == 0 || strcmp(typeRv2,"WEIBULL") == 0) ) {
+                else if( (typeRv1=="GAMMA") &&  ((typeRv2=="TYPE3SMALLESTVALUE") || (typeRv2=="WEIBULL")) ) {
                         double temp= 1.032+0.034*correlation-0.007*cov1-0.202*cov2+0.000*correlation*correlation+0.121*cov1*cov1+0.339*cov2*cov2;
                         newCorrelation= (temp-0.006*correlation*cov1+0.003*cov1*cov2-0.111*correlation*cov2)*correlation;
                 }
                 /////////////////////////////////////////////////////////////////////////////////
-                else if ( (strcmp(typeRv2,"EXPONENTIAL") == 0 || strcmp(typeRv2,"SHIFTEDEXPONENTIAL") == 0 )  &&  strcmp(typeRv2,"NORMAL") == 0  ) {
+                else if( ( (typeRv2=="EXPONENTIAL") || (typeRv2=="SHIFTEDEXPONENTIAL") )  && (typeRv2=="NORMAL")  ) {
                         newCorrelation= 1.107 * correlation;
                 }
-                else if ( (strcmp(typeRv2,"EXPONENTIAL") == 0 || strcmp(typeRv2,"SHIFTEDEXPONENTIAL") == 0 )  &&  strcmp(typeRv2,"LOGNORMAL") == 0  ) {
+                else if( ( (typeRv2=="EXPONENTIAL") || (typeRv2=="SHIFTEDEXPONENTIAL") )  && (typeRv2=="LOGNORMAL")  ) {
                         newCorrelation= (1.098 + 0.003*correlation + 0.019*cov2 + 0.025*correlation*correlation
                                 + 0.303*cov2*cov2 - 0.437*correlation*cov2) * correlation;
                 }
-                else if ( (strcmp(typeRv2,"EXPONENTIAL") == 0 || strcmp(typeRv2,"SHIFTEDEXPONENTIAL") == 0 )  &&  strcmp(typeRv2,"GAMMA") == 0  ) {
+                else if( ( (typeRv2=="EXPONENTIAL") || (typeRv2=="SHIFTEDEXPONENTIAL") )  && (typeRv2=="GAMMA")  ) {
                         newCorrelation= (1.104+0.003*correlation-0.008*cov2+0.014*correlation*correlation+0.173*cov2*cov2-0.296*correlation*cov2)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"EXPONENTIAL") == 0 || strcmp(typeRv2,"SHIFTEDEXPONENTIAL") == 0 )  &&  (strcmp(typeRv2,"EXPONENTIAL") == 0 || strcmp(typeRv2,"SHIFTEDEXPONENTIAL") == 0 ) ) {
+                else if ( ((typeRv2=="EXPONENTIAL") || (typeRv2=="SHIFTEDEXPONENTIAL") )  &&  ((typeRv2=="EXPONENTIAL") || (typeRv2=="SHIFTEDEXPONENTIAL") ) ) {
                         newCorrelation= (1.229-0.367*correlation+0.153*correlation*correlation)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"EXPONENTIAL") == 0 || strcmp(typeRv2,"SHIFTEDEXPONENTIAL") == 0 )  &&  (strcmp(typeRv2,"RAYLEIGH") == 0 || strcmp(typeRv2,"SHIFTEDRAYLEIGH") == 0 ) ) {
+                else if ( ((typeRv2=="EXPONENTIAL") || (typeRv2=="SHIFTEDEXPONENTIAL") )  &&  ( (typeRv2=="RAYLEIGH") || (typeRv2=="SHIFTEDRAYLEIGH") ) ) {
                         newCorrelation= (1.123-0.100*correlation+0.021*correlation*correlation)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"EXPONENTIAL") == 0 || strcmp(typeRv2,"SHIFTEDEXPONENTIAL") == 0 )  &&  strcmp(typeRv2,"UNIFORM") == 0  ) {
+                else if( ( (typeRv2=="EXPONENTIAL") || (typeRv2=="SHIFTEDEXPONENTIAL") )  && (typeRv2=="UNIFORM")  ) {
                         newCorrelation= (1.133+0.029*correlation*correlation)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"EXPONENTIAL") == 0 || strcmp(typeRv2,"SHIFTEDEXPONENTIAL") == 0 )  &&  strcmp(typeRv2,"BETA") == 0  ) {
+                else if( ( (typeRv2=="EXPONENTIAL") || (typeRv2=="SHIFTEDEXPONENTIAL") )  && (typeRv2=="BETA")  ) {
                         const double ba4minus3= rv2Ptr->getParameter4() - rv2Ptr->getParameter3();
                         double u2= ( rv2Ptr->getMean() - rv2Ptr->getParameter3() ) / ba4minus3; 
                         double s2= rv2Ptr->getStdv() / ba4minus3;
@@ -869,39 +869,39 @@ void XC::NatafProbabilityTransformation::setCorrelationMatrix(int pertMeanOfThis
                                 - 19.741*ss*s2+0.135*correlation*xs+5.338*uu*s2+3.397*correlation*us;
                         newCorrelation= temp*correlation;
                 }
-                else if ( (strcmp(typeRv2,"EXPONENTIAL") == 0 || strcmp(typeRv2,"SHIFTEDEXPONENTIAL") == 0 )  &&  (strcmp(typeRv2,"TYPE1LARGESTVALUE") == 0 || strcmp(typeRv2,"GUMBEL") == 0)  ) {
+                else if ( ( (typeRv2=="EXPONENTIAL") || (typeRv2=="SHIFTEDEXPONENTIAL") )  &&  ( (typeRv2=="TYPE1LARGESTVALUE") || (typeRv2=="GUMBEL") )  ) {
                         newCorrelation= (1.142-0.154*correlation+0.031*correlation*correlation)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"EXPONENTIAL") == 0 || strcmp(typeRv2,"SHIFTEDEXPONENTIAL") == 0 )  &&  strcmp(typeRv2,"TYPE1SMALLESTVALAUE") == 0  ) {
+                else if( ( (typeRv2=="EXPONENTIAL") || (typeRv2=="SHIFTEDEXPONENTIAL") )  && (typeRv2=="TYPE1SMALLESTVALAUE")  ) {
                         newCorrelation= (1.142+0.154*correlation+0.031*correlation*correlation)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"EXPONENTIAL") == 0 || strcmp(typeRv2,"SHIFTEDEXPONENTIAL") == 0 )  &&  strcmp(typeRv2,"TYPE2LARGESTVALUE") == 0  ) {
+                else if( ( (typeRv2=="EXPONENTIAL") || (typeRv2=="SHIFTEDEXPONENTIAL") )  && (typeRv2=="TYPE2LARGESTVALUE")  ) {
                         newCorrelation= (1.109-0.152*correlation+0.361*cov2+0.130*correlation*correlation+0.455*cov2*cov2-0.728*correlation*cov2)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"EXPONENTIAL") == 0 || strcmp(typeRv2,"SHIFTEDEXPONENTIAL") == 0 )  &&  (strcmp(typeRv2,"TYPE3SMALLESTVALUE") == 0 || strcmp(typeRv2,"WEIBULL") == 0) ) {
+                else if ( ((typeRv2=="EXPONENTIAL") || (typeRv2=="SHIFTEDEXPONENTIAL") )  &&  ( (typeRv2=="TYPE3SMALLESTVALUE") ||  (typeRv2=="WEIBULL")) ) {
                         newCorrelation= (1.147+0.145*correlation-0.271*cov2+0.010*correlation*correlation+0.459*cov2*cov2-0.467*correlation*cov2)*correlation;
                 }
                 /////////////////////////////////////////////////////////////////////////////////
-                else if ( (strcmp(typeRv2,"RAYLEIGH") == 0 || strcmp(typeRv2,"SHIFTEDRAYLEIGH") == 0 )  &&  strcmp(typeRv2,"NORMAL") == 0  ) {
+                else if( ( (typeRv2=="RAYLEIGH") || (typeRv2=="SHIFTEDRAYLEIGH") )  && (typeRv2=="NORMAL")  ) {
                         newCorrelation= 1.014 * correlation;
                 }
-                else if ( (strcmp(typeRv2,"RAYLEIGH") == 0 || strcmp(typeRv2,"SHIFTEDRAYLEIGH") == 0 )  &&  strcmp(typeRv2,"LOGNORMAL") == 0  ) {
+                else if( ( (typeRv2=="RAYLEIGH") || (typeRv2=="SHIFTEDRAYLEIGH") )  && (typeRv2=="LOGNORMAL")  ) {
                         newCorrelation= (1.011 + 0.001*correlation + 0.014*cov2 + 0.004*correlation*correlation 
                                 + 0.231*cov2*cov2 - 0.130*correlation*cov2) * correlation;
                 }
-                else if ( (strcmp(typeRv2,"RAYLEIGH") == 0 || strcmp(typeRv2,"SHIFTEDRAYLEIGH") == 0 )  &&  strcmp(typeRv2,"GAMMA") == 0  ) {
+                else if( ( (typeRv2=="RAYLEIGH") || (typeRv2=="SHIFTEDRAYLEIGH") )  && (typeRv2=="GAMMA")  ) {
                         newCorrelation= (1.014+0.001*correlation-0.007*cov2+0.002*correlation*correlation+0.126*cov2*cov2-0.090*correlation*cov2)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"RAYLEIGH") == 0 || strcmp(typeRv2,"SHIFTEDRAYLEIGH") == 0 )  &&  (strcmp(typeRv2,"EXPONENTIAL") == 0 || strcmp(typeRv2,"SHIFTEDEXPONENTIAL") == 0 ) ) {
+                else if ( ( (typeRv2=="RAYLEIGH") ||  (typeRv2=="SHIFTEDRAYLEIGH") )  &&  ((typeRv2=="EXPONENTIAL") || (typeRv2=="SHIFTEDEXPONENTIAL") ) ) {
                         newCorrelation= (1.123-0.100*correlation+0.021*correlation*correlation)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"RAYLEIGH") == 0 || strcmp(typeRv2,"SHIFTEDRAYLEIGH") == 0 )  &&  (strcmp(typeRv2,"RAYLEIGH") == 0 || strcmp(typeRv2,"SHIFTEDRAYLEIGH") == 0 ) ) {
+                else if ( ( (typeRv2=="RAYLEIGH") ||  (typeRv2=="SHIFTEDRAYLEIGH") )  &&  ( (typeRv2=="RAYLEIGH") ||  (typeRv2=="SHIFTEDRAYLEIGH") ) ) {
                         newCorrelation= (1.028-0.029*correlation)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"RAYLEIGH") == 0 || strcmp(typeRv2,"SHIFTEDRAYLEIGH") == 0 )  &&  strcmp(typeRv2,"UNIFORM") == 0  ) {
+                else if( ( (typeRv2=="RAYLEIGH") || (typeRv2=="SHIFTEDRAYLEIGH") )  && (typeRv2=="UNIFORM")  ) {
                         newCorrelation= (1.038-0.008*correlation*correlation)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"RAYLEIGH") == 0 || strcmp(typeRv2,"SHIFTEDRAYLEIGH") == 0 )  &&  strcmp(typeRv2,"BETA") == 0  ) {
+                else if( ( (typeRv2=="RAYLEIGH") || (typeRv2=="SHIFTEDRAYLEIGH") )  && (typeRv2=="BETA")  ) {
                         const double ba4minus3= rv2Ptr->getParameter4() - rv2Ptr->getParameter3();
                         double u2= ( rv2Ptr->getMean() - rv2Ptr->getParameter3() ) / ba4minus3; 
                         double s2= rv2Ptr->getStdv() / ba4minus3;
@@ -909,38 +909,38 @@ void XC::NatafProbabilityTransformation::setCorrelationMatrix(int pertMeanOfThis
                                 +0.182*u2*u2-1.150*s2*s2+0.084*correlation*u2;
                         newCorrelation= temp*correlation;
                 }
-                else if ( (strcmp(typeRv2,"RAYLEIGH") == 0 || strcmp(typeRv2,"SHIFTEDRAYLEIGH") == 0 )  &&  (strcmp(typeRv2,"TYPE1LARGESTVALUE") == 0 || strcmp(typeRv2,"GUMBEL") == 0)  ) {
+                else if ( ( (typeRv2=="RAYLEIGH") ||  (typeRv2=="SHIFTEDRAYLEIGH") )  &&  ( (typeRv2=="TYPE1LARGESTVALUE") || (typeRv2=="GUMBEL"))  ) {
                         newCorrelation= (1.046-0.045*correlation+0.006*correlation*correlation)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"RAYLEIGH") == 0 || strcmp(typeRv2,"SHIFTEDRAYLEIGH") == 0 )  &&  strcmp(typeRv2,"TYPE1SMALLESTVALAUE") == 0  ) {
+                else if( ( (typeRv2=="RAYLEIGH") || (typeRv2=="SHIFTEDRAYLEIGH") )  && (typeRv2=="TYPE1SMALLESTVALAUE")  ) {
                         newCorrelation= (1.046+0.045*correlation+0.006*correlation*correlation)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"RAYLEIGH") == 0 || strcmp(typeRv2,"SHIFTEDRAYLEIGH") == 0 )  &&  strcmp(typeRv2,"TYPE2LARGESTVALUE") == 0  ) {
+                else if( ( (typeRv2=="RAYLEIGH") || (typeRv2=="SHIFTEDRAYLEIGH") )  && (typeRv2=="TYPE2LARGESTVALUE")  ) {
                         newCorrelation= (1.036-0.038*correlation+0.266*cov2+0.028*correlation*correlation+0.383*cov2*cov2-0.229*correlation*cov2)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"RAYLEIGH") == 0 || strcmp(typeRv2,"SHIFTEDRAYLEIGH") == 0 )  &&  (strcmp(typeRv2,"TYPE3SMALLESTVALUE") == 0 || strcmp(typeRv2,"WEIBULL") == 0) ) {
+                else if ( ( (typeRv2=="RAYLEIGH") ||  (typeRv2=="SHIFTEDRAYLEIGH") )  &&  ( (typeRv2=="TYPE3SMALLESTVALUE") ||  (typeRv2=="WEIBULL")) ) {
                         newCorrelation= (1.047+0.042*correlation-0.212*cov2+0.353*cov2*cov2-0.136*correlation*cov2)*correlation;
                 }
                 /////////////////////////////////////////////////////////////////////////////////
-                else if ( strcmp(typeRv1,"UNIFORM") == 0  &&  strcmp(typeRv2,"NORMAL") == 0  ) {
+                else if( (typeRv1=="UNIFORM") && (typeRv2=="NORMAL")  ) {
                         newCorrelation= 1.023 * correlation;
                 }
-                else if ( strcmp(typeRv1,"UNIFORM") == 0  &&  strcmp(typeRv2,"LOGNORMAL") == 0  ) {
+                else if( (typeRv1=="UNIFORM") && (typeRv2=="LOGNORMAL")  ) {
                         newCorrelation= (1.019 + 0.014*cov2 + 0.010*correlation*correlation + 0.249*cov2*cov2)*correlation;
                 }
-                else if ( strcmp(typeRv1,"UNIFORM") == 0  &&  strcmp(typeRv2,"GAMMA") == 0  ) {
+                else if( (typeRv1=="UNIFORM") && (typeRv2=="GAMMA")  ) {
                         newCorrelation= (1.023+0.000*correlation-0.007*cov2+0.002*correlation*correlation+0.127*cov2*cov2-0.000*correlation*cov2)*correlation;
                 }
-                else if ( strcmp(typeRv1,"UNIFORM") == 0  &&  (strcmp(typeRv2,"EXPONENTIAL") == 0 || strcmp(typeRv2,"SHIFTEDEXPONENTIAL") == 0 ) ) {
+                else if( (typeRv1=="UNIFORM") &&  ((typeRv2=="EXPONENTIAL") || (typeRv2=="SHIFTEDEXPONENTIAL") ) ) {
                         newCorrelation= (1.133+0.029*correlation*correlation)*correlation;
                 }
-                else if ( strcmp(typeRv1,"UNIFORM") == 0  &&  (strcmp(typeRv2,"RAYLEIGH") == 0 || strcmp(typeRv2,"SHIFTEDRAYLEIGH") == 0 ) ) {
+                else if( (typeRv1=="UNIFORM") &&  ((typeRv2=="RAYLEIGH") || (typeRv2=="SHIFTEDRAYLEIGH") ) ) {
                         newCorrelation= (1.038-0.008*correlation*correlation)*correlation;
                 }
-                else if ( strcmp(typeRv1,"UNIFORM") == 0  &&  strcmp(typeRv2,"UNIFORM") == 0  ) {
+                else if( (typeRv1=="UNIFORM") && (typeRv2=="UNIFORM")  ) {
                         newCorrelation= (1.047-0.047*correlation*correlation)*correlation;
                 }
-                else if ( strcmp(typeRv1,"UNIFORM") == 0  &&  strcmp(typeRv2,"BETA") == 0  ) {
+                else if( (typeRv1=="UNIFORM") && (typeRv2=="BETA")  ) {
                         const double ba4minus3= rv2Ptr->getParameter4() - rv2Ptr->getParameter3();
                         double u2= ( rv2Ptr->getMean() - rv2Ptr->getParameter3() ) / ba4minus3; 
                         double s2= rv2Ptr->getStdv() / ba4minus3;
@@ -948,20 +948,20 @@ void XC::NatafProbabilityTransformation::setCorrelationMatrix(int pertMeanOfThis
                                 +0.176*u2*u2-1.286*s2*s2-0.137*correlation*s2;
                         newCorrelation= temp * correlation;
                 }
-                else if ( strcmp(typeRv1,"UNIFORM") == 0  &&  (strcmp(typeRv2,"TYPE1LARGESTVALUE") == 0 || strcmp(typeRv2,"GUMBEL") == 0)  ) {
+                else if( (typeRv1=="UNIFORM") &&  ((typeRv2=="TYPE1LARGESTVALUE") || (typeRv2=="GUMBEL") )  ) {
                         newCorrelation= (1.055+0.015*correlation*correlation)*correlation;
                 }
-                else if ( strcmp(typeRv1,"UNIFORM") == 0  &&  strcmp(typeRv2,"TYPE1SMALLESTVALAUE") == 0  ) {
+                else if( (typeRv1=="UNIFORM") && (typeRv2=="TYPE1SMALLESTVALAUE")  ) {
                         newCorrelation= (1.055+0.015*correlation*correlation)*correlation;
                 }
-                else if ( strcmp(typeRv1,"UNIFORM") == 0  &&  strcmp(typeRv2,"TYPE2LARGESTVALUE") == 0  ) {
+                else if( (typeRv1=="UNIFORM") && (typeRv2=="TYPE2LARGESTVALUE")  ) {
                         newCorrelation= (1.033+0.305*cov2+0.074*correlation*correlation+0.405*cov2*cov2)*correlation;
                 }
-                else if ( strcmp(typeRv1,"UNIFORM") == 0  &&  (strcmp(typeRv2,"TYPE3SMALLESTVALUE") == 0 || strcmp(typeRv2,"WEIBULL") == 0) ) {
+                else if( (typeRv1=="UNIFORM") &&  ((typeRv2=="TYPE3SMALLESTVALUE") || (typeRv2=="WEIBULL") ) ) {
                         newCorrelation= (1.061-0.237*cov2-0.005*correlation*correlation+0.379*cov2*cov2)*correlation;
                 }
                 /////////////////////////////////////////////////////////////////////////////////
-                else if ( strcmp(typeRv1,"BETA") == 0  &&  strcmp(typeRv2,"NORMAL") == 0  ) {
+                else if( (typeRv1=="BETA") && (typeRv2=="NORMAL")  ) {
                         const double ba4minus3= rv1Ptr->getParameter4() - rv1Ptr->getParameter3();
                         double u1= ( rv1Ptr->getMean() - rv1Ptr->getParameter3() ) / ba4minus3; 
                         double s1= rv1Ptr->getStdv() / ba4minus3;
@@ -970,7 +970,7 @@ void XC::NatafProbabilityTransformation::setCorrelationMatrix(int pertMeanOfThis
                                 + 0.178*u1*u1 - 0.679*s1*s1 - 0.003*s1*correlation)  *  correlation;
 
                 }
-                else if ( strcmp(typeRv1,"BETA") == 0  &&  strcmp(typeRv2,"LOGNORMAL") == 0  ) {
+                else if( (typeRv1=="BETA") && (typeRv2=="LOGNORMAL")  ) {
                         const double ba4minus3= rv1Ptr->getParameter4() - rv1Ptr->getParameter3();
                         double u1= ( rv1Ptr->getMean() - rv1Ptr->getParameter3() ) / ba4minus3; 
                         double s1= rv1Ptr->getStdv() / ba4minus3;
@@ -991,7 +991,7 @@ void XC::NatafProbabilityTransformation::setCorrelationMatrix(int pertMeanOfThis
                         newCorrelation= temp * correlation;
 
                 }
-                else if ( strcmp(typeRv1,"BETA") == 0  &&  strcmp(typeRv2,"GAMMA") == 0  ) {
+                else if( (typeRv1=="BETA") && (typeRv2=="GAMMA")  ) {
                         double ba4minus32= rv2Ptr->getParameter4() - rv2Ptr->getParameter3();
                         double u2= ( rv2Ptr->getMean() - rv2Ptr->getParameter3() ) / ba4minus32; 
                         double s2= rv2Ptr->getStdv() / ba4minus32;
@@ -1028,7 +1028,7 @@ void XC::NatafProbabilityTransformation::setCorrelationMatrix(int pertMeanOfThis
                         newCorrelation= temp*correlation;
 
                 }
-                else if ( strcmp(typeRv1,"BETA") == 0  &&  (strcmp(typeRv2,"EXPONENTIAL") == 0 || strcmp(typeRv2,"SHIFTEDEXPONENTIAL") == 0 ) ) {
+                else if( (typeRv1=="BETA") &&  ((typeRv2=="EXPONENTIAL") || (typeRv2=="SHIFTEDEXPONENTIAL") ) ) {
                         const double ba4minus3= rv1Ptr->getParameter4() - rv1Ptr->getParameter3();
                         double u1= ( rv1Ptr->getMean() - rv1Ptr->getParameter3() ) / ba4minus3; 
                         double s1= rv1Ptr->getStdv() / ba4minus3;
@@ -1046,7 +1046,7 @@ void XC::NatafProbabilityTransformation::setCorrelationMatrix(int pertMeanOfThis
                         newCorrelation= temp*correlation;
 
                 }
-                else if ( strcmp(typeRv1,"BETA") == 0  &&  (strcmp(typeRv2,"RAYLEIGH") == 0 || strcmp(typeRv2,"SHIFTEDRAYLEIGH") == 0 ) ) {
+                else if( (typeRv1=="BETA") &&  ((typeRv2=="RAYLEIGH") || (typeRv2=="SHIFTEDRAYLEIGH") ) ) {
                         const double ba4minus3= rv1Ptr->getParameter4() - rv1Ptr->getParameter3();
                         double u1= ( rv1Ptr->getMean() - rv1Ptr->getParameter3() ) / ba4minus3; 
                         double s1= rv1Ptr->getStdv() / ba4minus3;
@@ -1054,7 +1054,7 @@ void XC::NatafProbabilityTransformation::setCorrelationMatrix(int pertMeanOfThis
                                 +0.182*u1*u1-1.150*s1*s1+0.084*correlation*u1;
                         newCorrelation= temp*correlation;
                 }
-                else if ( strcmp(typeRv1,"BETA") == 0  &&  strcmp(typeRv2,"UNIFORM") == 0  ) {
+                else if( (typeRv1=="BETA") && (typeRv2=="UNIFORM")  ) {
                         const double ba4minus3= rv1Ptr->getParameter4() - rv1Ptr->getParameter3();
                         double u1= ( rv1Ptr->getMean() - rv1Ptr->getParameter3() ) / ba4minus3; 
                         double s1= rv1Ptr->getStdv() / ba4minus3;
@@ -1062,7 +1062,7 @@ void XC::NatafProbabilityTransformation::setCorrelationMatrix(int pertMeanOfThis
                                 +0.176*u1*u1-1.286*s1*s1-0.137*correlation*s1;
                         newCorrelation= temp * correlation;
                 }
-                else if ( strcmp(typeRv1,"BETA") == 0  &&  strcmp(typeRv2,"BETA") == 0  ) {
+                else if( (typeRv1=="BETA") && (typeRv2=="BETA")  ) {
                         double ba1= rv1Ptr->getParameter4() - rv1Ptr->getParameter3();
                         double u1= ( rv1Ptr->getMean() - rv1Ptr->getParameter3() ) / ba1; 
                         double s1= rv1Ptr->getStdv() / ba1;
@@ -1104,7 +1104,7 @@ void XC::NatafProbabilityTransformation::setCorrelationMatrix(int pertMeanOfThis
                         }
                         newCorrelation= temp * correlation;
                 }
-                else if ( strcmp(typeRv1,"BETA") == 0  &&  (strcmp(typeRv2,"TYPE1LARGESTVALUE") == 0 || strcmp(typeRv2,"GUMBEL") == 0)  ) {
+                else if( (typeRv1=="BETA") &&  ((typeRv2=="TYPE1LARGESTVALUE") || (typeRv2=="GUMBEL") )  ) {
                         const double ba4minus3= rv1Ptr->getParameter4() - rv1Ptr->getParameter3();
                         double u1= ( rv1Ptr->getMean() - rv1Ptr->getParameter3() ) / ba4minus3; 
                         double s1= rv1Ptr->getStdv() / ba4minus3;
@@ -1112,7 +1112,7 @@ void XC::NatafProbabilityTransformation::setCorrelationMatrix(int pertMeanOfThis
                                 +0.194*u1*u1-1.134*s1*s1+0.130*correlation*u1+0.003*correlation*s1;
                         newCorrelation= temp * correlation;
                 }
-                else if ( strcmp(typeRv1,"BETA") == 0  &&  strcmp(typeRv2,"TYPE1SMALLESTVALAUE") == 0  ) {
+                else if( (typeRv1=="BETA") && (typeRv2=="TYPE1SMALLESTVALAUE")  ) {
                         const double ba4minus3= rv1Ptr->getParameter4() - rv1Ptr->getParameter3();
                         double u1= ( rv1Ptr->getMean() - rv1Ptr->getParameter3() ) / ba4minus3; 
                         double s1= rv1Ptr->getStdv() / ba4minus3;
@@ -1120,7 +1120,7 @@ void XC::NatafProbabilityTransformation::setCorrelationMatrix(int pertMeanOfThis
                                 +0.194*u1*u1-1.134*s1*s1-0.130*correlation*u1-0.003*correlation*s1;
                         newCorrelation= temp * correlation;
                 }
-                else if ( strcmp(typeRv1,"BETA") == 0  &&  strcmp(typeRv2,"TYPE2LARGESTVALUE") == 0  ) {
+                else if( (typeRv1=="BETA") && (typeRv2=="TYPE2LARGESTVALUE")  ) {
                         double ba1= rv1Ptr->getParameter4() - rv1Ptr->getParameter3();
                         double u1= ( rv1Ptr->getMean() - rv1Ptr->getParameter3() ) / ba1; 
                         double s1= rv1Ptr->getStdv() / ba1;
@@ -1141,7 +1141,7 @@ void XC::NatafProbabilityTransformation::setCorrelationMatrix(int pertMeanOfThis
                                 + 0.133*sq*cov2 + 3.488*correlation*us + 0.671*correlation*uq;
                         newCorrelation= temp * correlation;
                 }
-                else if ( strcmp(typeRv1,"BETA") == 0  &&  (strcmp(typeRv2,"TYPE3SMALLESTVALUE") == 0 || strcmp(typeRv2,"WEIBULL") == 0) ) {
+                else if( (typeRv1=="BETA") &&  ((typeRv2=="TYPE3SMALLESTVALUE") || (typeRv2=="WEIBULL") ) ) {
                         const double ba4minus3= rv1Ptr->getParameter4() - rv1Ptr->getParameter3();
                         double u1= ( rv1Ptr->getMean() - rv1Ptr->getParameter3() ) / ba4minus3; 
                         double s1= rv1Ptr->getStdv() / ba4minus3;
@@ -1151,26 +1151,26 @@ void XC::NatafProbabilityTransformation::setCorrelationMatrix(int pertMeanOfThis
                         newCorrelation= temp * correlation;
                 }
                 /////////////////////////////////////////////////////////////////////////////////
-                else if ( (strcmp(typeRv2,"TYPE1LARGESTVALUE") == 0 || strcmp(typeRv2,"GUMBEL") == 0)  &&  strcmp(typeRv2,"NORMAL") == 0  ) {
+                else if( ( (typeRv2=="TYPE1LARGESTVALUE") || (typeRv2=="GUMBEL"))  && (typeRv2=="NORMAL")  ) {
                         newCorrelation= 1.031 * correlation;
                 }
-                else if ( (strcmp(typeRv2,"TYPE1LARGESTVALUE") == 0 || strcmp(typeRv2,"GUMBEL") == 0)  &&  strcmp(typeRv2,"LOGNORMAL") == 0  ) {
+                else if( ( (typeRv2=="TYPE1LARGESTVALUE") || (typeRv2=="GUMBEL"))  && (typeRv2=="LOGNORMAL")  ) {
                         newCorrelation= (1.029 + 0.001*correlation + 0.014*cov2 + 0.004*correlation*correlation
                                 + 0.233*cov2*cov2 - 0.197*correlation*cov2)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"TYPE1LARGESTVALUE") == 0 || strcmp(typeRv2,"GUMBEL") == 0)  &&  strcmp(typeRv2,"GAMMA") == 0  ) {
+                else if( ( (typeRv2=="TYPE1LARGESTVALUE") || (typeRv2=="GUMBEL"))  && (typeRv2=="GAMMA")  ) {
                         newCorrelation= (1.031+0.001*correlation-0.007*cov2+0.003*correlation*correlation+0.131*cov2*cov2-0.132*correlation*cov2)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"TYPE1LARGESTVALUE") == 0 || strcmp(typeRv2,"GUMBEL") == 0)  &&  (strcmp(typeRv2,"EXPONENTIAL") == 0 || strcmp(typeRv2,"SHIFTEDEXPONENTIAL") == 0 ) ) {
+                else if ( ( (typeRv2=="TYPE1LARGESTVALUE") || (typeRv2=="GUMBEL"))  &&  ((typeRv2=="EXPONENTIAL") || (typeRv2=="SHIFTEDEXPONENTIAL") ) ) {
                         newCorrelation= (1.142-0.154*correlation+0.031*correlation*correlation)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"TYPE1LARGESTVALUE") == 0 || strcmp(typeRv2,"GUMBEL") == 0)  &&  (strcmp(typeRv2,"RAYLEIGH") == 0 || strcmp(typeRv2,"SHIFTEDRAYLEIGH") == 0 ) ) {
+                else if ( ( (typeRv2=="TYPE1LARGESTVALUE") || (typeRv2=="GUMBEL"))  &&  ( (typeRv2=="RAYLEIGH") ||  (typeRv2=="SHIFTEDRAYLEIGH") ) ) {
                         newCorrelation= (1.046-0.045*correlation+0.006*correlation*correlation)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"TYPE1LARGESTVALUE") == 0 || strcmp(typeRv2,"GUMBEL") == 0)  &&  strcmp(typeRv2,"UNIFORM") == 0  ) {
+                else if( ( (typeRv2=="TYPE1LARGESTVALUE") || (typeRv2=="GUMBEL"))  && (typeRv2=="UNIFORM")  ) {
                         newCorrelation= (1.055+0.015*correlation*correlation)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"TYPE1LARGESTVALUE") == 0 || strcmp(typeRv2,"GUMBEL") == 0)  &&  strcmp(typeRv2,"BETA") == 0  ) {
+                else if( ( (typeRv2=="TYPE1LARGESTVALUE") || (typeRv2=="GUMBEL"))  && (typeRv2=="BETA")  ) {
                         const double ba4minus3= rv2Ptr->getParameter4() - rv2Ptr->getParameter3();
                         double u2= ( rv2Ptr->getMean() - rv2Ptr->getParameter3() ) / ba4minus3; 
                         double s2= rv2Ptr->getStdv() / ba4minus3;
@@ -1178,39 +1178,39 @@ void XC::NatafProbabilityTransformation::setCorrelationMatrix(int pertMeanOfThis
                                 +0.194*u2*u2-1.134*s2*s2+0.130*correlation*u2+0.003*correlation*s2;
                         newCorrelation= temp * correlation;
                 }
-                else if ( (strcmp(typeRv2,"TYPE1LARGESTVALUE") == 0 || strcmp(typeRv2,"GUMBEL") == 0)  &&  (strcmp(typeRv2,"TYPE1LARGESTVALUE") == 0 || strcmp(typeRv2,"GUMBEL") == 0)  ) {
+                else if ( ( (typeRv2=="TYPE1LARGESTVALUE") || (typeRv2=="GUMBEL"))  &&  ( (typeRv2=="TYPE1LARGESTVALUE") || (typeRv2=="GUMBEL"))  ) {
                         newCorrelation= (1.064-0.069*correlation+0.005*correlation*correlation)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"TYPE1LARGESTVALUE") == 0 || strcmp(typeRv2,"GUMBEL") == 0)  &&  strcmp(typeRv2,"TYPE1SMALLESTVALAUE") == 0  ) {
+                else if( ( (typeRv2=="TYPE1LARGESTVALUE") || (typeRv2=="GUMBEL"))  && (typeRv2=="TYPE1SMALLESTVALAUE")  ) {
                         newCorrelation= (1.064+0.069*correlation+0.005*correlation*correlation)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"TYPE1LARGESTVALUE") == 0 || strcmp(typeRv2,"GUMBEL") == 0)  &&  strcmp(typeRv2,"TYPE2LARGESTVALUE") == 0  ) {
+                else if( ( (typeRv2=="TYPE1LARGESTVALUE") || (typeRv2=="GUMBEL"))  && (typeRv2=="TYPE2LARGESTVALUE")  ) {
                         newCorrelation= (1.056-0.060*correlation+0.263*cov2+0.020*correlation*correlation+0.383*cov2*cov2-0.332*correlation*cov1)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"TYPE1LARGESTVALUE") == 0 || strcmp(typeRv2,"GUMBEL") == 0)  &&  (strcmp(typeRv2,"TYPE3SMALLESTVALUE") == 0 || strcmp(typeRv2,"WEIBULL") == 0) ) {
+                else if ( ( (typeRv2=="TYPE1LARGESTVALUE") || (typeRv2=="GUMBEL"))  &&  ( (typeRv2=="TYPE3SMALLESTVALUE") ||  (typeRv2=="WEIBULL")) ) {
                         newCorrelation= (1.064+0.065*correlation-0.210*cov2+0.003*correlation*correlation+0.356*cov2*cov2-0.211*correlation*cov2)*correlation;
                 }
                 /////////////////////////////////////////////////////////////////////////////////
-                else if ( strcmp(typeRv1,"TYPE1SMALLESTVALAUE") == 0  &&  strcmp(typeRv2,"NORMAL") == 0  ) {
+                else if( (typeRv1=="TYPE1SMALLESTVALAUE") && (typeRv2=="NORMAL")  ) {
                         newCorrelation= 1.031 * correlation;
                 }
-                else if ( strcmp(typeRv1,"TYPE1SMALLESTVALAUE") == 0  &&  strcmp(typeRv2,"LOGNORMAL") == 0  ) {
+                else if( (typeRv1=="TYPE1SMALLESTVALAUE") && (typeRv2=="LOGNORMAL")  ) {
                         newCorrelation= (1.029 - 0.001*correlation + 0.014*cov2 + 0.004*correlation*correlation
                                 + 0.233*cov2*cov2 + 0.197*correlation*cov2) * correlation;
                 }
-                else if ( strcmp(typeRv1,"TYPE1SMALLESTVALAUE") == 0  &&  strcmp(typeRv2,"GAMMA") == 0  ) {
+                else if( (typeRv1=="TYPE1SMALLESTVALAUE") && (typeRv2=="GAMMA")  ) {
                         newCorrelation= (1.031-0.001*correlation-0.007*cov2+0.003*correlation*correlation+0.131*cov2*cov2+0.132*correlation*cov2)*correlation;
                 }
-                else if ( strcmp(typeRv1,"TYPE1SMALLESTVALAUE") == 0  &&  (strcmp(typeRv2,"EXPONENTIAL") == 0 || strcmp(typeRv2,"SHIFTEDEXPONENTIAL") == 0 ) ) {
+                else if( (typeRv1=="TYPE1SMALLESTVALAUE") &&  ((typeRv2=="EXPONENTIAL") || (typeRv2=="SHIFTEDEXPONENTIAL") ) ) {
                         newCorrelation= (1.142+0.154*correlation+0.031*correlation*correlation)*correlation;
                 }
-                else if ( strcmp(typeRv1,"TYPE1SMALLESTVALAUE") == 0  &&  (strcmp(typeRv2,"RAYLEIGH") == 0 || strcmp(typeRv2,"SHIFTEDRAYLEIGH") == 0 ) ) {
+                else if( (typeRv1=="TYPE1SMALLESTVALAUE") &&  ((typeRv2=="RAYLEIGH") || (typeRv2=="SHIFTEDRAYLEIGH") ) ) {
                         newCorrelation= (1.046+0.045*correlation+0.006*correlation*correlation)*correlation;
                 }
-                else if ( strcmp(typeRv1,"TYPE1SMALLESTVALAUE") == 0  &&  strcmp(typeRv2,"UNIFORM") == 0  ) {
+                else if( (typeRv1=="TYPE1SMALLESTVALAUE") && (typeRv2=="UNIFORM")  ) {
                         newCorrelation= (1.055+0.015*correlation*correlation)*correlation;
                 }
-                else if ( strcmp(typeRv1,"TYPE1SMALLESTVALAUE") == 0  &&  strcmp(typeRv2,"BETA") == 0  ) {
+                else if( (typeRv1=="TYPE1SMALLESTVALAUE") && (typeRv2=="BETA")  ) {
                         const double ba4minus3= rv2Ptr->getParameter4() - rv2Ptr->getParameter3();
                         double u2= ( rv2Ptr->getMean() - rv2Ptr->getParameter3() ) / ba4minus3; 
                         double s2= rv2Ptr->getStdv() / ba4minus3;
@@ -1218,41 +1218,41 @@ void XC::NatafProbabilityTransformation::setCorrelationMatrix(int pertMeanOfThis
                                 +0.194*u2*u2-1.134*s2*s2-0.130*correlation*u2-0.003*correlation*s2;
                         newCorrelation= temp * correlation;
                 }
-                else if ( strcmp(typeRv1,"TYPE1SMALLESTVALAUE") == 0  &&  (strcmp(typeRv2,"TYPE1LARGESTVALUE") == 0 || strcmp(typeRv2,"GUMBEL") == 0)  ) {
+                else if( (typeRv1=="TYPE1SMALLESTVALAUE") &&  ((typeRv2=="TYPE1LARGESTVALUE") || (typeRv2=="GUMBEL") )  ) {
                         newCorrelation= (1.064+0.069*correlation+0.005*correlation*correlation)*correlation;
                 }
-                else if ( strcmp(typeRv1,"TYPE1SMALLESTVALAUE") == 0  &&  strcmp(typeRv2,"TYPE1SMALLESTVALAUE") == 0  ) {
+                else if( (typeRv1=="TYPE1SMALLESTVALAUE") && (typeRv2=="TYPE1SMALLESTVALAUE")  ) {
                         newCorrelation= (1.064-0.069*correlation+0.005*correlation*correlation)*correlation;
                 }
-                else if ( strcmp(typeRv1,"TYPE1SMALLESTVALAUE") == 0  &&  strcmp(typeRv2,"TYPE2LARGESTVALUE") == 0  ) {
+                else if( (typeRv1=="TYPE1SMALLESTVALAUE") && (typeRv2=="TYPE2LARGESTVALUE")  ) {
                         newCorrelation= (1.056+0.060*correlation+0.263*cov2+0.020*correlation*correlation+0.383*cov2*cov2+0.332*correlation*cov2)*correlation;
                 }
-                else if ( strcmp(typeRv1,"TYPE1SMALLESTVALAUE") == 0  &&  (strcmp(typeRv2,"TYPE3SMALLESTVALUE") == 0 || strcmp(typeRv2,"WEIBULL") == 0) ) {
+                else if( (typeRv1=="TYPE1SMALLESTVALAUE") &&  ((typeRv2=="TYPE3SMALLESTVALUE") || (typeRv2=="WEIBULL") ) ) {
                         newCorrelation= (1.064-0.065*correlation-0.210*cov2+0.003*correlation*correlation+0.356*cov2*cov2+0.211*correlation*cov2)*correlation;
                 }
                 /////////////////////////////////////////////////////////////////////////////////
-                else if ( strcmp(typeRv1,"TYPE2LARGESTVALUE") == 0  &&  strcmp(typeRv2,"NORMAL") == 0  ) {
+                else if( (typeRv1=="TYPE2LARGESTVALUE") && (typeRv2=="NORMAL")  ) {
                         newCorrelation= (1.030 + 0.238*cov1 + 0.364*cov1*cov1) * correlation;
                 }
-                else if ( strcmp(typeRv1,"TYPE2LARGESTVALUE") == 0  &&  strcmp(typeRv2,"LOGNORMAL") == 0  ) {
+                else if( (typeRv1=="TYPE2LARGESTVALUE") && (typeRv2=="LOGNORMAL")  ) {
                         double temp= 1.026 + 0.082*correlation - 0.019*cov2 + 0.222*cov1 + 0.018*correlation*correlation
                                 + 0.288*cov2*cov2 + 0.379*cov1*cov1;
                         newCorrelation= (temp - 0.441*correlation*cov2 + 0.126*cov2*cov1 - 0.277*correlation*cov1);                
                 }
-                else if ( strcmp(typeRv1,"TYPE2LARGESTVALUE") == 0  &&  strcmp(typeRv2,"GAMMA") == 0  ) {
+                else if( (typeRv1=="TYPE2LARGESTVALUE") && (typeRv2=="GAMMA")  ) {
                         double temp= 1.029+0.056*correlation-0.030*cov2+0.225*cov1+0.012*correlation*correlation+0.174*cov2*cov2+0.379*cov1*cov1;
                         newCorrelation= (temp-0.313*correlation*cov2+0.075*cov1*cov2-0.182*correlation*cov1)*correlation;
                 }
-                else if ( strcmp(typeRv1,"TYPE2LARGESTVALUE") == 0  &&  (strcmp(typeRv2,"EXPONENTIAL") == 0 || strcmp(typeRv2,"SHIFTEDEXPONENTIAL") == 0 ) ) {
+                else if( (typeRv1=="TYPE2LARGESTVALUE") &&  ((typeRv2=="EXPONENTIAL") || (typeRv2=="SHIFTEDEXPONENTIAL") ) ) {
                         newCorrelation= (1.109-0.152*correlation+0.361*cov1+0.130*correlation*correlation+0.455*cov1*cov1-0.728*correlation*cov1)*correlation;
                 }
-                else if ( strcmp(typeRv1,"TYPE2LARGESTVALUE") == 0  &&  (strcmp(typeRv2,"RAYLEIGH") == 0 || strcmp(typeRv2,"SHIFTEDRAYLEIGH") == 0 ) ) {
+                else if( (typeRv1=="TYPE2LARGESTVALUE") &&  ((typeRv2=="RAYLEIGH") || (typeRv2=="SHIFTEDRAYLEIGH") ) ) {
                         newCorrelation= (1.036-0.038*correlation+0.266*cov1+0.028*correlation*correlation+0.383*cov1*cov1-0.229*correlation*cov1)*correlation;
                 }
-                else if ( strcmp(typeRv1,"TYPE2LARGESTVALUE") == 0  &&  strcmp(typeRv2,"UNIFORM") == 0  ) {
+                else if( (typeRv1=="TYPE2LARGESTVALUE") && (typeRv2=="UNIFORM")  ) {
                         newCorrelation= (1.033+0.305*cov1+0.074*correlation*correlation+0.405*cov1*cov1)*correlation;
                 }
-                else if ( strcmp(typeRv1,"TYPE2LARGESTVALUE") == 0  &&  strcmp(typeRv2,"BETA") == 0  ) {
+                else if( (typeRv1=="TYPE2LARGESTVALUE") && (typeRv2=="BETA")  ) {
                         double ba2= rv2Ptr->getParameter4() - rv2Ptr->getParameter3();
                         double u2= ( rv2Ptr->getMean() - rv2Ptr->getParameter3() ) / ba2; 
                         double s2= rv2Ptr->getStdv() / ba2;
@@ -1273,13 +1273,13 @@ void XC::NatafProbabilityTransformation::setCorrelationMatrix(int pertMeanOfThis
                                 + 0.133*sq*cov1 + 3.488*correlation*us + 0.671*correlation*uq;
                         newCorrelation= temp * correlation;
                 }
-                else if ( strcmp(typeRv1,"TYPE2LARGESTVALUE") == 0  &&  (strcmp(typeRv2,"TYPE1LARGESTVALUE") == 0 || strcmp(typeRv2,"GUMBEL") == 0)  ) {
+                else if( (typeRv1=="TYPE2LARGESTVALUE") &&  ((typeRv2=="TYPE1LARGESTVALUE") || (typeRv2=="GUMBEL") )  ) {
                         newCorrelation= (1.056-0.060*correlation+0.263*cov1+0.020*correlation*correlation+0.383*cov1*cov1-0.332*correlation*cov1)*correlation;
                 }
-                else if ( strcmp(typeRv1,"TYPE2LARGESTVALUE") == 0  &&  strcmp(typeRv2,"TYPE1SMALLESTVALAUE") == 0  ) {
+                else if( (typeRv1=="TYPE2LARGESTVALUE") && (typeRv2=="TYPE1SMALLESTVALAUE")  ) {
                         newCorrelation= (1.056+0.060*correlation+0.263*cov1+0.020*correlation*correlation+0.383*cov1*cov1+0.332*correlation*cov1)*correlation;
                 }
-                else if ( strcmp(typeRv1,"TYPE2LARGESTVALUE") == 0  &&  strcmp(typeRv2,"TYPE2LARGESTVALUE") == 0  ) {
+                else if( (typeRv1=="TYPE2LARGESTVALUE") && (typeRv2=="TYPE2LARGESTVALUE")  ) {
                         double rs=cov1*cov1+cov2*cov2;
                         double rc=cov1*cov1*cov1+cov2*cov2*cov2;
                         double r=cov1+cov2;
@@ -1287,32 +1287,32 @@ void XC::NatafProbabilityTransformation::setCorrelationMatrix(int pertMeanOfThis
                         double temp=1.086+0.054*correlation+0.104*r-0.055*correlation*correlation+0.662*rs-0.570*correlation*r+0.203*pq;
                         newCorrelation= (temp-0.020*correlation*correlation*correlation-0.218*rc-0.371*correlation*rs+0.257*correlation*correlation*r+0.141*pq*r)*correlation;
                 }
-                else if ( strcmp(typeRv1,"TYPE2LARGESTVALUE") == 0  &&  (strcmp(typeRv2,"TYPE3SMALLESTVALUE") == 0 || strcmp(typeRv2,"WEIBULL") == 0) ) {
+                else if( (typeRv1=="TYPE2LARGESTVALUE") &&  ((typeRv2=="TYPE3SMALLESTVALUE") || (typeRv2=="WEIBULL") ) ) {
                         double temp= 1.065+0.146*correlation+0.241*cov1-0.259*cov2+0.013*correlation*correlation+0.372*cov1*cov1+0.435*cov2*cov2;
                         newCorrelation= (temp+0.005*correlation*cov1+0.034*cov1*cov2-0.481*correlation*cov2)*correlation;
                 }
                 /////////////////////////////////////////////////////////////////////////////////
-                else if ( (strcmp(typeRv2,"TYPE3SMALLESTVALUE") == 0 || strcmp(typeRv2,"WEIBULL") == 0)  &&  strcmp(typeRv2,"NORMAL") == 0  ) {
+                else if( ( (typeRv2=="TYPE3SMALLESTVALUE") || (typeRv2=="WEIBULL"))  && (typeRv2=="NORMAL")  ) {
                         newCorrelation= (1.031 - 0.195*cov1 + 0.328*cov1*cov1) * correlation;
                 }
-                else if ( (strcmp(typeRv2,"TYPE3SMALLESTVALUE") == 0 || strcmp(typeRv2,"WEIBULL") == 0)  &&  strcmp(typeRv2,"LOGNORMAL") == 0  ) {
+                else if( ( (typeRv2=="TYPE3SMALLESTVALUE") || (typeRv2=="WEIBULL"))  && (typeRv2=="LOGNORMAL")  ) {
                         double temp= 1.031+0.052*correlation+0.011*cov2-0.210*cov1+0.002*correlation*correlation+0.220*cov2*cov2+0.350*cov1*cov1;
                         newCorrelation= (temp+0.005*correlation*cov2+0.009*cov2*cov1-0.174*correlation*cov1)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"TYPE3SMALLESTVALUE") == 0 || strcmp(typeRv2,"WEIBULL") == 0)  &&  strcmp(typeRv2,"GAMMA") == 0  ) {
+                else if( ( (typeRv2=="TYPE3SMALLESTVALUE") || (typeRv2=="WEIBULL"))  && (typeRv2=="GAMMA")  ) {
                         double temp= 1.032+0.034*correlation-0.007*cov2-0.202*cov1+0.000*correlation*correlation+0.121*cov2*cov2+0.339*cov1*cov1;
                         newCorrelation= (temp-0.006*correlation*cov2+0.003*cov2*cov1-0.111*correlation*cov1)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"TYPE3SMALLESTVALUE") == 0 || strcmp(typeRv2,"WEIBULL") == 0)  &&  (strcmp(typeRv2,"EXPONENTIAL") == 0 || strcmp(typeRv2,"SHIFTEDEXPONENTIAL") == 0 ) ) {
+                else if ( ( (typeRv2=="TYPE3SMALLESTVALUE") ||  (typeRv2=="WEIBULL"))  &&  ((typeRv2=="EXPONENTIAL") || (typeRv2=="SHIFTEDEXPONENTIAL") ) ) {
                         newCorrelation= (1.147+0.145*correlation-0.271*cov1+0.010*correlation*correlation+0.459*cov1*cov1-0.467*correlation*cov1)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"TYPE3SMALLESTVALUE") == 0 || strcmp(typeRv2,"WEIBULL") == 0)  &&  (strcmp(typeRv2,"RAYLEIGH") == 0 || strcmp(typeRv2,"SHIFTEDRAYLEIGH") == 0 ) ) {
+                else if ( ( (typeRv2=="TYPE3SMALLESTVALUE") ||  (typeRv2=="WEIBULL"))  &&  ( (typeRv2=="RAYLEIGH") ||  (typeRv2=="SHIFTEDRAYLEIGH") ) ) {
                         newCorrelation= (1.047+0.042*correlation-0.212*cov1+0.353*cov1*cov1-0.136*correlation*cov1)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"TYPE3SMALLESTVALUE") == 0 || strcmp(typeRv2,"WEIBULL") == 0)  &&  strcmp(typeRv2,"UNIFORM") == 0  ) {
+                else if( ( (typeRv2=="TYPE3SMALLESTVALUE") || (typeRv2=="WEIBULL"))  && (typeRv2=="UNIFORM")  ) {
                         newCorrelation= (1.061-0.237*cov1-0.005*correlation*correlation+0.379*cov1*cov1)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"TYPE3SMALLESTVALUE") == 0 || strcmp(typeRv2,"WEIBULL") == 0)  &&  strcmp(typeRv2,"BETA") == 0  ) {
+                else if( ( (typeRv2=="TYPE3SMALLESTVALUE") || (typeRv2=="WEIBULL"))  && (typeRv2=="BETA")  ) {
                         const double ba4minus3= rv2Ptr->getParameter4() - rv2Ptr->getParameter3();
                         double u2= ( rv2Ptr->getMean() - rv2Ptr->getParameter3() ) / ba4minus3; 
                         double s2= rv2Ptr->getStdv() / ba4minus3;
@@ -1321,22 +1321,23 @@ void XC::NatafProbabilityTransformation::setCorrelationMatrix(int pertMeanOfThis
                                 -0.004*correlation*u2-0.029*s2*cov1;
                         newCorrelation= temp * correlation;
                 }
-                else if ( (strcmp(typeRv2,"TYPE3SMALLESTVALUE") == 0 || strcmp(typeRv2,"WEIBULL") == 0)  &&  (strcmp(typeRv2,"TYPE1LARGESTVALUE") == 0 || strcmp(typeRv2,"GUMBEL") == 0)  ) {
+                else if ( ( (typeRv2=="TYPE3SMALLESTVALUE") ||  (typeRv2=="WEIBULL"))  &&  ( (typeRv2=="TYPE1LARGESTVALUE") || (typeRv2=="GUMBEL"))  ) {
                         newCorrelation= (1.064+0.065*correlation-0.210*cov1+0.003*correlation*correlation+0.356*cov1*cov1-0.211*correlation*cov1)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"TYPE3SMALLESTVALUE") == 0 || strcmp(typeRv2,"WEIBULL") == 0)  &&  strcmp(typeRv2,"TYPE1SMALLESTVALAUE") == 0  ) {
+                else if( ( (typeRv2=="TYPE3SMALLESTVALUE") || (typeRv2=="WEIBULL"))  && (typeRv2=="TYPE1SMALLESTVALAUE")  ) {
                         newCorrelation= (1.064-0.065*correlation-0.210*cov1+0.003*correlation*correlation+0.356*cov1*cov1+0.211*correlation*cov1)*correlation;
                 }
-                else if ( (strcmp(typeRv2,"TYPE3SMALLESTVALUE") == 0 || strcmp(typeRv2,"WEIBULL") == 0)  &&  strcmp(typeRv2,"TYPE2LARGESTVALUE") == 0  ) {
+                else if( ( (typeRv2=="TYPE3SMALLESTVALUE") || (typeRv2=="WEIBULL"))  && (typeRv2=="TYPE2LARGESTVALUE")  ) {
                         double temp= 1.065+0.146*correlation+0.241*cov2-0.259*cov1+0.013*correlation*correlation+0.372*cov2*cov2+0.435*cov1*cov1;
                         newCorrelation= (temp+0.005*correlation*cov2+0.034*cov1*cov2-0.481*correlation*cov1)*correlation;
                 }
 #ifndef _WIN32
                 // VC++.net has a limit of 128 on number of nested conditionals!!!!!!!!
-                else if ( (strcmp(typeRv2,"TYPE3SMALLESTVALUE") == 0 || strcmp(typeRv2,"WEIBULL") == 0)  &&  ( strcmp(typeRv2,"TYPE3SMALLESTVALUE") == 0  || strcmp(typeRv2,"WEIBULL") == 0 ) ) {
-                        double temp= 1.063-0.004*correlation-0.200*(cov1+cov2)-0.001*correlation*correlation+0.337*(cov1*cov1+cov2*cov2);
-                        newCorrelation= (temp+0.007*(correlation*cov1+correlation*cov2)-0.007*cov1*cov2)*correlation;
-                }
+                else if( ((typeRv2=="TYPE3SMALLESTVALUE") || (typeRv2=="WEIBULL"))  &&  ( (typeRv2=="TYPE3SMALLESTVALUE")  || (typeRv2=="WEIBULL") ) )
+		  {
+                    double temp= 1.063-0.004*correlation-0.200*(cov1+cov2)-0.001*correlation*correlation+0.337*(cov1*cov1+cov2*cov2);
+                    newCorrelation= (temp+0.007*(correlation*cov1+correlation*cov2)-0.007*cov1*cov2)*correlation;
+                  }
 #endif
                 /////////////////////////////////////////////////////////////////////////////////
                 else {

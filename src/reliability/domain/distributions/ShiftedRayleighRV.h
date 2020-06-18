@@ -96,9 +96,11 @@ class ShiftedRayleighRV: public RandomVariable
     double getPDFvalue(double rvValue);
     double getCDFvalue(double rvValue);
     double getInverseCDFvalue(double probValue);
-    const char * getType();
+    const std::string getType(void);
     double getMean();
     double getStdv();
+    const Vector &getParameters();
+    int setParameters(double mean, double stdv);
     double getParameter1();
     double getParameter2();
     double getParameter3();

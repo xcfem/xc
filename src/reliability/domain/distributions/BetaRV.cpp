@@ -99,11 +99,11 @@ void XC::BetaRV::Print(std::ostream &s, int flag) const
   {}
 
 
-double
-XC::BetaRV::getPDFvalue(double rvValue)
-{
+double XC::BetaRV::getPDFvalue(double rvValue)
+  {
 	double result;
-	if ( a <= rvValue && rvValue <= b ) {
+	if ( ((q<1.0 && rvValue > a) || (q >= 1.0 && rvValue >= a)) && ((r < 1.0 && rvValue < b) || (r >= 1.0 && rvValue <= b)) )
+	  {
 		double par1 = pow(rvValue-a,q-1.0);
 		double par2 = pow(b-rvValue,r-1.0);
 		double par3 = betaFunction(q,r);
@@ -117,103 +117,116 @@ XC::BetaRV::getPDFvalue(double rvValue)
 }
 
 
-double
-XC::BetaRV::getCDFvalue(double rvValue)
-{
+double XC::BetaRV::getCDFvalue(double rvValue)
+  {
+    if(rvValue <= a)
+      { return 0.0; }
+    if(rvValue >= b)
+      { return 1.0; }
 
-	double result = 0.0;
+    const double z = (rvValue - a) / (b - a);
+    const double Ix = incompleteBetaFunction(q, r, z);
+    //std::cerr << "x = " << rvValue << " z = " << z << " Ix = " << Ix;
+    return Ix;
+  }
 
-	if ( a < rvValue && rvValue < b ) {
-		// There exists no closed form expression for the Beta CDF.
-		// In this preliminary implementation of the Beta random variable,
-		// numerical integration - using Simpsons rule - is employed.
-		// The aim is to integrate the PDF from 'a' to 'rvValue'.
-		int n_2 = 100; // Half the number of intervals
-		double h = rvValue-a;
-		double fa = getPDFvalue(a);
-		double fb = getPDFvalue(rvValue);
-		double sum_fx2j = 0.0;
-		double sum_fx2j_1 = 0.0;
-		for (int j=1;  j<=n_2;  j++) {
-			sum_fx2j = sum_fx2j + getPDFvalue(   (double) (a+(j*2)*h/(2*n_2))   );
-			sum_fx2j_1 = sum_fx2j_1 + getPDFvalue(   (double)(a+(j*2-1)*h/(2*n_2))   );
-		}
-		sum_fx2j = sum_fx2j - getPDFvalue((double)(rvValue));
-		result = h/(2*n_2)/3.0*(fa + 2.0*sum_fx2j + 4.0*sum_fx2j_1 + fb);
-	}
-	else if (rvValue<=a) {
-		result = 0.0;
-	}
-	else {
-		result = 1.0;
-	}
+double XC::BetaRV::getInverseCDFvalue(double probValue)
+  {
+    double result = 0.0;
+    // Here we want to solve the nonlinear equation:
+    //         probValue = getCDFvalue(x)
+    // with respect to x. 
+    // A Newton scheme to find roots - f(x)=0 - looks something like:
+    //         x(i+1) = x(i) - f(xi)/f'(xi)
+    // In our case the function f(x) is: f(x) = probValue - getCDFvalue(x)
+    // The derivative of the function can be found approximately by a
+    // finite difference scheme where e.g. stdv/200 is used as perturbation.
 
-	return result;
-}
+    // Newton method does not converge in general starting from mean particularly when q and/or r are < 1.0
+    double tol = 1e-6;
+    double x_old = getMean();   // Start at the mean of the random variable
+    double x_new;
+    double f;
+    double df;
+    double h;
+    double perturbed_f;
+    for (int i=1;  i<=100;  i++ )  {
+
+	    // Evaluate function
+	    f = probValue - getCDFvalue(x_old);
+	    // Evaluate perturbed function
+	    h = getStdv()/200.0;
+	    perturbed_f = probValue - getCDFvalue(x_old+h);
+
+	    // Evaluate derivative of function
+	    df = ( perturbed_f - f ) / h;
+
+	    if ( fabs(df) < 1.0e-15) {
+		    /*std::cerr << "WARNING: BetaRV::getInverseCDFvalue() -- zero derivative " << " in Newton algorithm. " << std::endl;
+		    std::cerr << "Switch bisection method" << std::endl;*/
+		    // In case of zero derivative in Newton MEthod (This often happen because we went outside the boundaries)
+		    // We use slower but robust bisection method
+		    double x_A, x_B;
+		    double f_A, f_B, f_M;
+		    x_A = a;
+		    x_B = b;
+		    f_A = probValue - getCDFvalue(x_A);
+		    f_B = probValue - getCDFvalue(x_B);
+		    for (int j = 1; j <= 200; j++) {
+			    x_new = (x_A + x_B) / 2.0;
+			    f_M = probValue - getCDFvalue(x_new);
+			    if (fabs(f_M) < tol) {
+				    return x_new;
+			    }
+			    else {
+				    if (i == 200) {
+					    std::cerr << "WARNING: Did not converge to find inverse CDF!" << std::endl;
+					    return 0.0;
+				    }
+				    if (f_M * f_A < 0) {
+					    // The zero is between A and M
+					    x_B = x_new;
+					    f_B = f_M;
+				    }
+				    else {
+					    // The zero is between M and B
+					    x_A = x_new;
+					    f_A = f_M;
+				    }
+			    }
+		    }
+
+	    }
+	    else {
+
+		    // Take a Newton step
+		    x_new = x_old - f/df;
+
+		    // Check convergence; quit or continue
+		    // Changed the tolerance check because if x_new is zero it doesn't work
+		    if (fabs(probValue - getCDFvalue(x_new)) < tol) {
+			    return x_new;
+		    }
+		    else {
+			    if (i==100)
+			      {
+				std::cerr << "WARNING: Did not converge to find inverse CDF!" << std::endl;
+				    return 0.0;
+			    }
+			    else {
+				    x_old = x_new;
+			    }
+
+		    }
+	    }
+    }
+
+    return result;
+  }
 
 
-double
-XC::BetaRV::getInverseCDFvalue(double probValue)
-{
-	double result = 0.0;
-	// Here we want to solve the nonlinear equation:
-	//         probValue = getCDFvalue(x)
-	// with respect to x. 
-	// A Newton scheme to find roots - f(x)=0 - looks something like:
-	//         x(i+1) = x(i) - f(xi)/f'(xi)
-	// In our case the function f(x) is: f(x) = probValue - getCDFvalue(x)
-	// The derivative of the function can be found approximately by a
-	// finite difference scheme where e.g. stdv/200 is used as perturbation.
-	double tol = 0.000001;
-	double x_old = getMean();   // Start at the mean of the random variable
-	double x_new;
-	double f;
-	double df;
-	double h;
-	double perturbed_f;
-	for (int i=1;  i<=100;  i++ )  {
 
-		// Evaluate function
-		f = probValue - getCDFvalue(x_old);
-		// Evaluate perturbed function
-		h = getStdv()/200.0;
-		perturbed_f = probValue - getCDFvalue(x_old+h);
-
-		// Evaluate derivative of function
-		df = ( perturbed_f - f ) / h;
-
-		if ( fabs(df) < 1.0e-15) {
-			std::cerr << "WARNING: XC::BetaRV::getInverseCDFvalue() -- zero derivative " << std::endl
-				<< " in Newton algorithm. " << std::endl;
-		}
-		else {
-
-			// Take a Newton step
-			x_new = x_old - f/df;
-			
-			// Check convergence; quit or continue
-			if (fabs(1.0-fabs(x_old/x_new)) < tol) {
-				return x_new;
-			}
-			else {
-				if (i==100) {
-					std::cerr << "WARNING: Did not converge to find inverse CDF!" << std::endl;
-					return 0.0;
-				}
-				else {
-					x_old = x_new;
-				}
-			
-			}
-		}
-	}
-
-	return result;
-}
-
-
-const char *
-XC::BetaRV::getType()
+const std::string XC::BetaRV::getType(void)
 {
 	return "BETA";
 }

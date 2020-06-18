@@ -62,7 +62,7 @@
 #include <cmath>
 #include <cstring>
 #include <classTags.h>
-
+#include <utility/matrix/Vector.h>
 
 XC::ChiSquareRV::ChiSquareRV(int passedTag, 
 		 double passedMean,
@@ -130,44 +130,66 @@ XC::ChiSquareRV::getPDFvalue(double rvValue)
 	return result;
 }
 
-
-double
-XC::ChiSquareRV::getCDFvalue(double rvValue)
-{
-	double result;
-	if ( 0.0 < rvValue ) {
-		GammaRV *aGammaRV = new GammaRV(1, 0.0, 1.0, 0.0);
-		double a = aGammaRV->incompleteGammaFunction(0.5*nu,0.5*rvValue);
-		double b = aGammaRV->gammaFunction(0.5*nu);
-		result = a/b;
-		delete aGammaRV;
-	}
-	else {
-		result = 0.0;
-	}
-	return result;
-}
+double XC::ChiSquareRV::getCDFvalue(double rvValue)
+  {
+    double result;
+    if ( 0.0 < rvValue )
+      { result = incompleteGammaFunction(0.5*nu,0.5*rvValue); }
+    else
+      { result = 0.0;}
+    return result;
+  }
 
 
-double
-XC::ChiSquareRV::getInverseCDFvalue(double rvValue)
-{
-	return 0.0;
-}
+double XC::ChiSquareRV::getInverseCDFvalue(double probValue)
+  {
+    // Here we want to solve the nonlinear equation:
+    //         probValue = getCDFvalue(x)
+    // with respect to x. 
+    // A Newton scheme to find roots - f(x)=0 - looks something like:
+    //         x(i+1) = x(i) - f(xi)/f'(xi)
+    // In our case the function f(x) is: f(x) = probValue - getCDFvalue(x)
+
+    double x_old = nu;
+
+    double tol = 1.0e-7;
+    double x_new = x_old;
+    double dx = x_old;
+    int nmax = 50;
+
+    for (int i = 1; i <= nmax; i++) {
+
+	    dx = (getCDFvalue(x_new) - probValue) / getPDFvalue(x_new);
+
+	    // Take a Newton step
+	    x_new = x_old - dx;
+
+	    if (fabs(getCDFvalue(x_new) - probValue) < tol) {
+		    return x_new;
+	    }
+	    else {
+		    if (i == nmax) {
+			    std::cerr << "WARNING: ChiSquaredRV did not converge to find inverse CDF!" << std::endl;
+			    return 0.0;
+		    }
+		    else {
+			    x_old = x_new;
+		    }
+	    }
+    }
+
+    return x_new;
+  }
 
 
-const char *
-XC::ChiSquareRV::getType()
+const std::string XC::ChiSquareRV::getType(void)
 {
 	return "CHISQUARE";
 }
 
 
-double 
-XC::ChiSquareRV::getMean()
-{
-	return 2*nu;
-}
+double XC::ChiSquareRV::getMean()
+  { return nu; }
 
 
 
@@ -188,3 +210,18 @@ double XC::ChiSquareRV::getParameter1()  {return nu;}
 double XC::ChiSquareRV::getParameter2()  {std::cerr<<"No such parameter in r.v. #"<<tag<<std::endl; return 0.0;}
 double XC::ChiSquareRV::getParameter3()  {std::cerr<<"No such parameter in r.v. #"<<tag<<std::endl; return 0.0;}
 double XC::ChiSquareRV::getParameter4()  {std::cerr<<"No such parameter in r.v. #"<<tag<<std::endl; return 0.0;}
+
+//! @brief Get parameters.
+const XC::Vector &XC::ChiSquareRV::getParameters(void)
+  {
+    static Vector temp(1);
+    temp(0) = nu;
+    return temp;
+  }
+
+//! @brief Set parameters.
+int XC::ChiSquareRV::setParameters(double mean, double stdv)
+  {
+    nu = mean;
+    return 0;
+  }

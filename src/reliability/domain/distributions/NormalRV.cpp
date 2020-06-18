@@ -139,8 +139,7 @@ double XC::NormalRV::getInverseCDFvalue(double probValue)
 }
 
 
-const char *
-XC::NormalRV::getType()
+const std::string XC::NormalRV::getType(void)
 {
     return "NORMAL";
 }

@@ -142,8 +142,7 @@ XC::GumbelRV::getInverseCDFvalue(double probValue)
 }
 
 
-const char *
-XC::GumbelRV::getType()
+const std::string XC::GumbelRV::getType(void)
 {
 	return "GUMBEL";
 }

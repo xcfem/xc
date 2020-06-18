@@ -190,8 +190,7 @@ double XC::UserDefinedRV::getInverseCDFvalue(double p)
 }
 
 
-const char *
-XC::UserDefinedRV::getType()
+const std::string XC::UserDefinedRV::getType(void)
 {
     return "USERDEFINED";
 }
