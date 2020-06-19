@@ -94,7 +94,7 @@ class ExtrapolatedScalarField(ScalarField):
     super(ExtrapolatedScalarField,self).__init__(name,functionName,component,fUnitConv,rgMinMax)
     self.xcSet= xcSet
 
-  def display(self,defDisplay,caption= '',fileName= None, defFScale=0.0):
+  def display(self,displaySettings,caption= '',fileName= None, defFScale=0.0):
     '''Display the scalar field graphic.
 
       :param fileName: name of the graphic file to create (if None -> screen window).
@@ -105,7 +105,7 @@ class ExtrapolatedScalarField(ScalarField):
                   by this factor. (Defaults to 0.0, i.e. display of 
                   initial/undeformed shape)
     '''
-    defDisplay.displayMesh(xcSets= self.xcSet,field= self, diagrams= None,caption= caption, fileName= fileName, defFScale= defFScale)
+    displaySettings.displayMesh(xcSets= self.xcSet,field= self, diagrams= None,caption= caption, fileName= fileName, defFScale= defFScale)
     
 class ExtrapolatedProperty(ExtrapolatedScalarField):
   '''Scalar field defined as property value at nodes.'''
@@ -115,7 +115,7 @@ class ExtrapolatedProperty(ExtrapolatedScalarField):
   def extrapolate(self):
     extrapolate_elem_attr.extrapolate_elem_function_attr(self.xcSet.elements,self.name,"getProp", self.name)
 
-  def display(self,defDisplay,caption= '',fileName= None, defFScale=0.0):
+  def display(self,displaySettings,caption= '',fileName= None, defFScale=0.0):
     ''' Display the field.
 
        :param fileName: name of the graphic file to create (if None -> screen window).
@@ -123,7 +123,7 @@ class ExtrapolatedProperty(ExtrapolatedScalarField):
     '''
 
     self.extrapolate()
-    defDisplay.displayMesh(self.xcSet,field= self, diagrams= None, caption= caption, fileName= fileName, defFScale= defFScale)
+    displaySettings.displayMesh(self.xcSet,field= self, diagrams= None, caption= caption, fileName= fileName, defFScale= defFScale)
 
 def getScalarFieldFromControlVar(attributeName,argument,xcSet,component,fUnitConv,rgMinMax):
   '''return an scalar field that represents the control var over the 
