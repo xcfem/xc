@@ -128,8 +128,10 @@ class NDMaterial: public Material
 
     virtual const Vector &getStress(void) const;
     virtual const Vector &getStrain(void) const;
+    //! @brief Return the generalized stress.
     inline const Vector &getGeneralizedStress(void) const
       { return getStress(); }
+    //! @brief Return the generalized strain.
     inline const Vector &getGeneralizedStrain(void) const
       { return getStrain(); }
 

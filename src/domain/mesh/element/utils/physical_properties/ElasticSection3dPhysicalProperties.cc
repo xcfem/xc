@@ -37,6 +37,7 @@ void XC::ElasticSection3dPhysicalProperties::set(const size_t &i, const CrossSec
 
 
 //! @brief Returns the components of the strain vector which has the code being passed as parameter.
+//!
 //! @param cod: component code.
 XC::Vector XC::ElasticSection3dPhysicalProperties::getGeneralizedStressAtGaussPointsByName(const std::string &cod) const
   {

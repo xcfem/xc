@@ -90,7 +90,8 @@ int XC::PlasticHardeningMaterial::revertToStart (void)
 const XC::Vector &XC::PlasticHardeningMaterial::getGeneralizedStress(void) const
   {
     static Vector retval;
-    std::cerr << "PlasticHardeningMaterial::getGeneralizedStress not implemented." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << "; not implemented." << std::endl;
     return retval;
   }
 
@@ -106,14 +107,16 @@ const XC::Vector &XC::PlasticHardeningMaterial::getGeneralizedStrain(void) const
 //! @brief Set initial strain.
 void XC::PlasticHardeningMaterial::setInitialGeneralizedStrain(const Vector &)
   {
-    std::cerr << "PlasticHardeningMaterial::setInitialGeneralizedStrain not implemented." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << " not implemented." << std::endl;
   }
 
 //! @brief Adds to the initial strain.
 const XC::Vector &XC::PlasticHardeningMaterial::getInitialGeneralizedStrain(void) const
   {
     static Vector retval;
-    std::cerr << "PlasticHardeningMaterial::getInitialGeneralizedStrain not implemented." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+	      << " not implemented." << std::endl;
     return retval;
   }
 
@@ -126,7 +129,7 @@ int XC::PlasticHardeningMaterial::getResponse(int responseID, Information &matIn
 
 void XC::PlasticHardeningMaterial::Print(std::ostream &s, int flag) const
   {
-     s << "+Plastic XC::Material: " << getTag() << std::endl;
+     s << "+Plastic Material: " << getTag() << std::endl;
      s << "|  sFactor =  " << sFactor << std::endl;
      s << "|  val_hist = " << val_hist << ", val_trial = " << val_trial << std::endl;
      return;

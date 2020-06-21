@@ -134,8 +134,10 @@ class SectionForceDeformation: public Material
     virtual const Matrix &getSectionFlexibility(void) const;
     virtual const Matrix &getInitialFlexibility(void) const;
 
+    //! @brief Return generalized stress.
     inline const Vector &getGeneralizedStress(void) const
       { return getStressResultant(); }
+    //! @brief Return generalized strain.
     virtual const Vector &getGeneralizedStrain(void) const
       { return getSectionDeformation(); }
 

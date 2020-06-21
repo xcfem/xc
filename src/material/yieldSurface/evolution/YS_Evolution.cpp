@@ -68,16 +68,17 @@ XC::YS_Evolution::YS_Evolution(int tag, int classtag,
 }
 
 void XC::YS_Evolution::setInitTranslation(XC::Vector &initTranslate)
-{
-	if(initTranslate.Size() > dimension)
-	{
-	 	std::cerr << "WARNING -  newTranslate" << initTranslate << " outside the dimensions\n";
-	}
-
-	translate = initTranslate;
-	translate_hist = initTranslate;
-	translate_init = initTranslate;
-}
+  {
+    if(initTranslate.Size() > dimension)
+      {
+	std::cerr << getClassName() << "::" << __FUNCTION__
+		  << "; WARNING -  newTranslate" << initTranslate
+		  << " outside the dimensions\n";
+      }
+    translate = initTranslate;
+    translate_hist = initTranslate;
+    translate_init = initTranslate;
+  }
 
 const XC::Vector &XC::YS_Evolution::getInitTranslation(void)
 {
@@ -230,13 +231,15 @@ double XC::YS_Evolution::getTrialIsotropicFactor(int dir)
 }
 
 void XC::YS_Evolution::checkDimension(int dir)
-{
-	if(dir < 0 || dir >= dimension)
-	{
-	 	std::cerr << "WARNING - Direction " << dir << " outside the dimensions\n";
-	}
+  {
+    if(dir < 0 || dir >= dimension)
+      {
+	  std::cerr << getClassName() << "::" << __FUNCTION__
+		    << "; WARNING - Direction " << dir
+		    << " outside the dimensions\n";
+      }
 
-}
+  }
 
 void  XC::YS_Evolution::setDeformable(bool defo)
 {
@@ -246,16 +249,21 @@ void  XC::YS_Evolution::setDeformable(bool defo)
 void XC::YS_Evolution::Print(std::ostream &s, int flag) const
   { s << " YS_Evolution - tag = " << getTag() << std::endl; }
 
+//! @brief Return generalized stress.
 const XC::Vector &XC::YS_Evolution::getGeneralizedStress(void) const
   {
     static Vector retval(1);
-    std::cerr << "YS_Evolution::getGeneralizedStress not implemented." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; Not implemented." << std::endl;
     return retval;
   }
+
+//! @brief Return generalized strain.
 const XC::Vector &XC::YS_Evolution::getGeneralizedStrain(void) const
   {
     static Vector retval(1);
-    std::cerr << "YS_Evolution::getGeneralizedStrain not implemented." << std::endl;
+    std::cerr << getClassName() << "::" << __FUNCTION__
+              << "; Not implemented." << std::endl;
     return retval;
   }
 

@@ -117,6 +117,7 @@ const XC::Vector &XC::UniaxialMaterial::getGeneralizedStrain(void) const
     return retval;
   }
 
+//! @brief Return the generalized initial strain.
 const XC::Vector &XC::UniaxialMaterial::getInitialGeneralizedStrain(void) const
   {
     static Vector retval(1);
