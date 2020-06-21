@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
 
-'''Roadway traffic load model definition according to different standards.
+'''Roadway traffic load model definition according to spanish IAP standard.
 '''
 
 __author__= "Ana Ortega (AO_O) "
