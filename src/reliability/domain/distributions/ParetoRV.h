@@ -74,41 +74,35 @@ namespace XC {
 //! scientific, geophysical, actuarial, and many other types of
 //! observable phenomena.
 class ParetoRV: public RandomVariable
-{
-
-public:
-	ParetoRV(int tag, 
-			 double parameter1,
-			 double parameter2,
-			 double parameter3,
-			 double parameter4,
-			 double startValue);
-	ParetoRV(int tag, 
-			 double parameter1,
-			 double parameter2,
-			 double parameter3,
-			 double parameter4);
-	void Print(std::ostream &s, int flag =0) const;
-	double getPDFvalue(double rvValue);
-	double getCDFvalue(double rvValue);
-	double getInverseCDFvalue(double probValue);
-	const char * getType();
-	double getMean();
-	double getStdv();
-	double getParameter1();
-	double getParameter2();
-	double getParameter3();
-	double getParameter4();
-	double getStartValue();
-
-
-protected:
-
-private:
-	double k;
-	double u;
-
-};
+  {
+  private:
+    double k;
+    double u;
+  public:
+    ParetoRV(int tag, 
+		     double parameter1,
+		     double parameter2,
+		     double parameter3,
+		     double parameter4,
+		     double startValue);
+    ParetoRV(int tag, 
+		     double parameter1,
+		     double parameter2,
+		     double parameter3,
+		     double parameter4);
+    void Print(std::ostream &s, int flag =0) const;
+    double getPDFvalue(double );
+    double getCDFvalue(double );
+    double getInverseCDFvalue(double );
+    const std::string getType(void);
+    double getMean();
+    double getStdv();
+    double getParameter1();
+    double getParameter2();
+    double getParameter3();
+    double getParameter4();
+    double getStartValue();
+  };
 } // end of XC namespace
 
 #endif

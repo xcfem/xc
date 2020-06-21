@@ -138,15 +138,16 @@ XC::LaplaceRV::getCDFvalue(double rvValue)
 }
 
 
-double
-XC::LaplaceRV::getInverseCDFvalue(double rvValue)
-{
-	return 0.0;
-}
+double XC::LaplaceRV::getInverseCDFvalue(double probValue)
+  {
+    if (probValue < 0.5)
+      { return alpha + 1.0 / beta * log(2.0 * probValue); }
+    else
+      { return alpha - 1.0 / beta * log(2.0 * (1.0 - probValue)); }
+  }
 
 
-const char *
-XC::LaplaceRV::getType()
+const std::string XC::LaplaceRV::getType(void)
 {
 	return "LAPLACE";
 }

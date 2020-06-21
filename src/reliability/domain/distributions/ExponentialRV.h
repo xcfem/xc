@@ -100,7 +100,7 @@ class ExponentialRV: public RandomVariable
     double getPDFvalue(double rvValue);
     double getCDFvalue(double rvValue);
     double getInverseCDFvalue(double probValue);
-    const char *getType();
+    const std::string getType(void);
     double getMean();
     double getStdv();
     double getParameter1();

@@ -193,8 +193,7 @@ XC::GammaRV::getInverseCDFvalue(double probValue)
 }
 
 
-const char *
-XC::GammaRV::getType()
+const std::string XC::GammaRV::getType(void)
 {
         return "GAMMA";
 }

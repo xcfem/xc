@@ -262,8 +262,7 @@ XC::LognormalRV::getInverseCDFvalue(double probValue)
 }
 
 
-const char *
-XC::LognormalRV::getType()
+const std::string XC::LognormalRV::getType(void)
 {
 	return "LOGNORMAL";
 }

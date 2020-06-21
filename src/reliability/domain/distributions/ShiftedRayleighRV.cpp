@@ -58,9 +58,10 @@
 //
 
 #include <reliability/domain/distributions/ShiftedRayleighRV.h>
-#include <math.h>
+#include <cmath>
 #include <string.h>
 #include <classTags.h>
+#include <utility/matrix/Vector.h>
 
 
 XC::ShiftedRayleighRV::ShiftedRayleighRV(int passedTag, 
@@ -70,9 +71,8 @@ XC::ShiftedRayleighRV::ShiftedRayleighRV(int passedTag,
 :RandomVariable(passedTag, RANDOM_VARIABLE_shiftedrayleigh)
 {
 	tag = passedTag;
-	double pi = 3.14159265358979;
-	u = 2.0 * passedStdv / sqrt(3.0*pi+4.0);
-	x0 = passedMean + passedStdv*sqrt(pi) / sqrt(3.0*pi+4.0);
+	u = 2.0 * passedStdv / sqrt(3.0*M_PI+4.0);
+	x0 = passedMean + passedStdv*sqrt(M_PI) / sqrt(3.0*M_PI+4.0);
 	startValue = passedStartValue;
 }
 XC::ShiftedRayleighRV::ShiftedRayleighRV(int passedTag, 
@@ -92,13 +92,13 @@ XC::ShiftedRayleighRV::ShiftedRayleighRV(int passedTag,
 		 double passedMean,
 		 double passedStdv)
 :RandomVariable(passedTag, RANDOM_VARIABLE_shiftedrayleigh)
-{
+  {
 	tag = passedTag;
-	double pi = 3.14159265358979;
-	u = 2.0 * passedStdv / sqrt(3.0*pi+4.0);
-	x0 = passedMean + passedStdv*sqrt(pi) / sqrt(3.0*pi+4.0);
+	u = 2.0 * passedStdv / sqrt(3.0*M_PI+4.0);
+	x0 = passedMean + passedStdv*sqrt(M_PI) / sqrt(3.0*M_PI+4.0);
 	startValue = getMean();
-}
+  }
+
 XC::ShiftedRayleighRV::ShiftedRayleighRV(int passedTag, 
 		 double passedParameter1,
 		 double passedParameter2,
@@ -115,8 +115,7 @@ XC::ShiftedRayleighRV::ShiftedRayleighRV(int passedTag,
 
 
 
-void
-XC::ShiftedRayleighRV::Print(std::ostream &s, int flag) const
+void XC::ShiftedRayleighRV::Print(std::ostream &s, int flag) const
 {
 }
 
@@ -156,38 +155,42 @@ XC::ShiftedRayleighRV::getInverseCDFvalue(double probValue)
 }
 
 
-const char *
-XC::ShiftedRayleighRV::getType()
-{
-	return "SHIFTEDRAYLEIGH";
-}
+const std::string XC::ShiftedRayleighRV::getType(void)
+  { return "SHIFTEDRAYLEIGH"; }
 
 
-double 
-XC::ShiftedRayleighRV::getMean()
-{
-	double pi = 3.14159265358979;
-	return x0 + 0.5 * u * sqrt(pi);
-}
+double XC::ShiftedRayleighRV::getMean()
+  { return x0 + 0.5 * u * sqrt(M_PI); }
 
 
 
-double 
-XC::ShiftedRayleighRV::getStdv()
-{
-	double pi = 3.14159265358979;
-	return 0.5 * u * sqrt(4.0-pi);
-}
+double XC::ShiftedRayleighRV::getStdv()
+  { return 0.5 * u * sqrt(4.0-M_PI); }
 
 
-double 
-XC::ShiftedRayleighRV::getStartValue()
-{
-	return startValue;
-}
+double XC::ShiftedRayleighRV::getStartValue(void)
+  {  return startValue;  }
 
+//! @brief Get parameters.
+const XC::Vector &XC::ShiftedRayleighRV::getParameters(void)
+  {
+    static Vector temp(2);
+    temp(0) = u;
+    temp(1) = x0;
+    return temp;
+  }
+
+//! @brief Set parameters.
+int XC::ShiftedRayleighRV::setParameters(double mean, double stdv)
+  {
+    u = 2.0 * stdv / sqrt(4.0 - M_PI);
+    x0 = mean - stdv*sqrt(M_PI) / sqrt(4.0 - M_PI);
+
+    return 0;
+  }
 
 double XC::ShiftedRayleighRV::getParameter1()  {return u;}
 double XC::ShiftedRayleighRV::getParameter2()  {return x0;}
 double XC::ShiftedRayleighRV::getParameter3()  {std::cerr<<"No such parameter in r.v. #"<<tag<<std::endl; return 0.0;}
 double XC::ShiftedRayleighRV::getParameter4()  {std::cerr<<"No such parameter in r.v. #"<<tag<<std::endl; return 0.0;}
+

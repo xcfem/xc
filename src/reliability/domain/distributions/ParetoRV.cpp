@@ -110,8 +110,7 @@ XC::ParetoRV::getPDFvalue(double rvValue)
 }
 
 
-double
-XC::ParetoRV::getCDFvalue(double rvValue)
+double XC::ParetoRV::getCDFvalue(double rvValue)
 {
 	double result;
 	if ( u <= rvValue ) {
@@ -124,15 +123,16 @@ XC::ParetoRV::getCDFvalue(double rvValue)
 }
 
 
-double
-XC::ParetoRV::getInverseCDFvalue(double rvValue)
-{
-	return 0.0;
-}
+double XC::ParetoRV::getInverseCDFvalue(double probValue)
+  {
+    if (k <= 0) // shape should be greater than 0
+      { return 0.0; }
+    else
+      { return pow((1 - probValue) / pow(u, k), -1 / k); }
+  }
 
 
-const char *
-XC::ParetoRV::getType()
+const std::string XC::ParetoRV::getType(void)
 {
 	return "PARETO";
 }

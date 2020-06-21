@@ -151,8 +151,7 @@ XC::Type2LargestValueRV::getInverseCDFvalue(double probValue)
 }
 
 
-const char *
-XC::Type2LargestValueRV::getType()
+const std::string XC::Type2LargestValueRV::getType(void)
 {
 	return "TYPE2LARGESTVALUE";
 }

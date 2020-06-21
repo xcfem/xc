@@ -153,8 +153,7 @@ XC::UniformRV::getInverseCDFvalue(double probValue)
 }
 
 
-const char *
-XC::UniformRV::getType()
+const std::string XC::UniformRV::getType(void)
 {
 	return "UNIFORM";
 }

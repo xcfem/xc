@@ -96,12 +96,15 @@ class ChiSquareRV: public RandomVariable
 		     double parameter3,
 		     double parameter4);
     void Print(std::ostream &s, int flag =0) const;
-    double getPDFvalue(double rvValue);
-    double getCDFvalue(double rvValue);
-    double getInverseCDFvalue(double probValue);
-    const char * getType();
+    double getPDFvalue(double );
+    double getCDFvalue(double );
+    double getInverseCDFvalue(double );
+    const std::string getType(void);
     double getMean();
     double getStdv();
+    const Vector &getParameters();
+    int setParameters(double mean, double stdv);
+    
     double getParameter1();
     double getParameter2();
     double getParameter3();

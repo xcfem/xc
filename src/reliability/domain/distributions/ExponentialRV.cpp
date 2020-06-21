@@ -110,46 +110,30 @@ void XC::ExponentialRV::Print(std::ostream &s, int flag) const
 }
 
 
-double
-XC::ExponentialRV::getPDFvalue(double rvValue)
-{
-	double result;
-	if ( 0.0 < rvValue ) {
-		result = lambda * exp(-lambda * rvValue);
-	}
-	else {
-		result = 0.0;
-	}
-	return result;
-}
+double XC::ExponentialRV::getPDFvalue(double rvValue)
+  {
+    double result= 0.0;
+    if(0.0 <= rvValue )
+      { result = lambda * exp(-lambda * rvValue); }
+    return result;
+  }
 
 
-double
-XC::ExponentialRV::getCDFvalue(double rvValue)
-{
-	double result;
-	if ( 0.0 < rvValue ) {
-		result = 1 - exp(-lambda*rvValue);
-	}
-	else {
-		result = 0.0;
-	}
-	return result;
-}
+double XC::ExponentialRV::getCDFvalue(double rvValue)
+  {
+    double result= 0.0;
+    if( 0.0 <= rvValue )
+      { result = 1 - exp(-lambda*rvValue); }
+    return result;
+  }
 
 
-double
-XC::ExponentialRV::getInverseCDFvalue(double probValue)
-{
-	return -log(1.0-probValue)/lambda;
-}
+double XC::ExponentialRV::getInverseCDFvalue(double probValue)
+  {return -log(1.0-probValue)/lambda;}
 
 
-const char *
-XC::ExponentialRV::getType()
-{
-	return "EXPONENTIAL";
-}
+const std::string XC::ExponentialRV::getType(void)
+  {return "EXPONENTIAL";}
 
 
 double 

@@ -117,32 +117,22 @@ XC::ShiftedExponentialRV::Print(std::ostream &s, int flag) const
 }
 
 
-double
-XC::ShiftedExponentialRV::getPDFvalue(double rvValue)
-{
-	double result;
-	if ( x0 < rvValue ) {
-		result = lambda * exp(-lambda * (rvValue-x0));
-	}
-	else {
-		result = 0.0;
-	}
-	return result;
-}
+double XC::ShiftedExponentialRV::getPDFvalue(double rvValue)
+  {
+    double result= 0.0;
+    if(x0 <= rvValue)
+      { result = lambda * exp(-lambda * (rvValue-x0)); }
+    return result;
+  }
 
 
-double
-XC::ShiftedExponentialRV::getCDFvalue(double rvValue)
-{
-	double result;
-	if ( x0 < rvValue ) {
-		result = 1 - exp(-lambda*(rvValue-x0));
-	}
-	else {
-		result = 0.0;
-	}
-	return result;
-}
+double XC::ShiftedExponentialRV::getCDFvalue(double rvValue)
+  {
+    double result= 0.0;
+    if(x0<=rvValue)
+      { result = 1 - exp(-lambda*(rvValue-x0)); }
+    return result;
+  }
 
 
 double
@@ -152,8 +142,7 @@ XC::ShiftedExponentialRV::getInverseCDFvalue(double probValue)
 }
 
 
-const char *
-XC::ShiftedExponentialRV::getType()
+const std::string XC::ShiftedExponentialRV::getType(void)
 {
 	return "SHIFTEDEXPONENTIAL";
 }
