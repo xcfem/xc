@@ -172,6 +172,7 @@ double XC::SectionFDPhysicalProperties::getMeanGeneralizedStrainByName(const std
   }
 
 //! @brief Returns the components of the strain vector which has the code being passed as parameter.
+//!
 //! @param cod component code.
 XC::Vector XC::SectionFDPhysicalProperties::getGeneralizedStrainAtGaussPointsByName(const std::string &cod) const
   {
