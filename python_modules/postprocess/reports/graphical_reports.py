@@ -276,16 +276,17 @@ class RecordLoadCaseDisp(RecordDisp):
         retval= self.loadCaseName
       return retval
   
-  def loadReports(self,FEcase,pathGr,texFile,cfg):
+  def loadReports(self,FEcase,texFile,cfg):
       '''Creates the graphics files of loads for the load case and insert them in
       a LaTex file
 
       :param FEcase:     finite element case 
-      :param pathGr:     directory to place figures (ex: 'text/graphics/loads/')
       :param texFile:    laTex file where to include the graphics 
                          (e.g.:'text/report_loads.tex')
       :param cfg:        instance of EnvConfig class with config parameters
       '''
+      fullPath=cfg.projectDirTree.getReportLoadsGrPath()
+      rltvPath=cfg.projectDirTree.getRltvReportLoadsGrPath()
       preprocessor=FEcase.getPreprocessor
       labl=self.loadCaseName
       lcs=QGrph.LoadCaseResults(FEcase)
@@ -293,14 +294,13 @@ class RecordLoadCaseDisp(RecordDisp):
       modelSpace.removeAllLoadPatternsFromDomain()
       modelSpace.addNewLoadCaseToDomain(self.loadCaseName,self.loadCaseExpr)
       for st in self.setsToDispLoads:
-          grfname=pathGr+self.loadCaseName+st.name
-          capt= self.getDescription() + ' pattern. ' + st.description + ', '  + self.unitsLoads
-          jpegFileName= grfname+'.jpg'
-          lcs.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)
-          epsFileName= grfname+'.eps'
-          im= Image.open(jpegFileName)
-          im.save(epsFileName)
-          insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
+          fullgrfname=fullPath+self.loadCaseName+st.name
+          rltvgrfname=rltvPath+self.loadCaseName+st.name
+          capt= self.getDescription() +  st.description + ', '  + self.unitsLoads
+          jpegFileName= fullgrfname+'.jpg'
+#          lcs.displayLoads(setToDisplay=st,caption= capt,fileName= jpegFileName)  # changed 22/06/2020
+          lcs.displayLoadVectors(setToDisplay=st,caption= capt,fileName=jpegFileName)
+          insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt,labl=labl)
 
     # for st in self.setsToDispBeamLoads:
     #       grfname=pathGr+self.loadCaseName+st.name
@@ -313,44 +313,41 @@ class RecordLoadCaseDisp(RecordDisp):
     #       insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=cfg.grWidth,capText=capt,labl=labl) 
 
 
-  def simplLCReports(self,FEproblem,pathGr,texFile,cfg):
+  def simplLCReports(self,FEproblem,texFile,cfg):
       '''Creates the graphics files of displacements and internal forces 
        calculated for a simple load case and insert them in a LaTex file
 
       :param FEproblem:  finite element problem
-      :param pathGr:     directory to place figures (ex: 'text/graphics/loads/')
       :param texFile:    laTex file where to include the graphics 
                          (e.g.:'text/report_loads.tex')
       :param cfg:        instance of EnvConfig class with config parameters
       '''
+      fullPath=cfg.projectDirTree.getReportSimplLCGrPath()
+      rltvPath=cfg.projectDirTree.getRltvReportSimplLCGrPath()
       lcs=QGrph.LoadCaseResults(FEproblem,self.loadCaseName,self.loadCaseExpr)
       #solve for load case
       lcs.solve()
       #Displacements and rotations displays
       for st in self.setsToDispDspRot:
           for arg in self.listDspRot:
-              grfname=pathGr+self.loadCaseName+st.name+arg
-              jpegFileName= grfname+'.jpg'
+              fullgrfname=fullPath+self.loadCaseName+st.name+arg
+              rltvgrfname=rltvPath+self.loadCaseName+st.name+arg
+              jpegFileName= fullgrfname+'.jpg'
               lcs.displayDispRot(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
-              epsFileName= grfname+'.eps'
-              im= Image.open(jpegFileName)
-              im.save(epsFileName)
-              unitConversionFactor, unDesc= cfg.outputStyle.getUnitParameters(arg)
-              # if 'u' in arg:
+#              unitConversionFactor, unDesc= cfg.outputStyle.getUnitParameters(arg)
+              unitConversionFactor, unDesc= cfg.getUnitParameters(arg)
+               # if 'u' in arg:
               #     unDesc=cfg.getDisplacementUnitsDescription()
               # else:
               #     unDesc=cfg.getRotationUnitsDescription()
               capt=self.getDescription() + '. ' + st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + unDesc
-              insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=cfg.grWidth,capText=capt)
+              insertGrInTex(texFile=texFile,grFileNm=rltvgrfname,grWdt=cfg.grWidth,capText=capt)
       #Internal forces displays on sets of «shell» elements
       for st in self.setsToDispIntForc:
           for arg in self.listIntForc:
               grfname=pathGr+self.loadCaseName+st.name+arg
               jpegFileName= grfname+'.jpg'
               lcs.displayIntForc(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
-              epsFileName= grfname+'.eps'
-              im= Image.open(jpegFileName)
-              im.save(epsFileName)
               capt= self.getDescription() + '. ' + st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + cfg.getForceUnitsDescription()
               insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=cfg.grWidth,capText=capt)
       #Internal forces displays on sets of «beam» elements
@@ -359,9 +356,6 @@ class RecordLoadCaseDisp(RecordDisp):
               grfname=pathGr+self.loadCaseName+st.name+arg
               jpegFileName= grfname+'.jpg'
               lcs.displayIntForcDiag(itemToDisp=arg,setToDisplay=st,fileName= jpegFileName)
-              epsFileName= grfname+'.eps'
-              im= Image.open(jpegFileName)
-              im.save(epsFileName)
               capt=self.getDescription() + '. ' + st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + cfg.getForceUnitsDescription()
               insertGrInTex(texFile=texFile,grFileNm=grfname,grWdt=cfg.grWidth,capText=capt)
       texFile.write('\\clearpage\n')
@@ -390,22 +384,26 @@ def checksReports(limitStateLabel,setsShEl,argsShEl,cfg,setsBmElView=[],argsBmEl
     texReportFile= cfg.projectDirTree.getReportFile(limitStateLabel)
     report=open(texReportFile,'w')    #report latex file
     dfDisp= vtk_FE_graphic.DisplaySettingsFE()
-    pathGr= cfg.projectDirTree.getReportGrPath(limitStateLabel)
+    fullPath= cfg.projectDirTree.getReportGrPath(limitStateLabel)
+    rltvPath= cfg.projectDirTree.getReportRltvGrPath(limitStateLabel)
+
     for st in setsShEl:
         for arg in argsShEl:
             attributeName= limitStateLabel + 'Sect1'
             field= fields.getScalarFieldFromControlVar(attributeName,arg,st,None,1.0,None)
             capt=cfg.capTexts[limitStateLabel] + '. '+ st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + 'section 1'
-            grFileNm=pathGr+st.name+arg+'Sect1'
-            field.display(displaySettings=dfDisp,caption=capt,fileName=grFileNm+'.jpg')
-            insertGrInTex(texFile=report,grFileNm=grFileNm,grWdt=cfg.grWidth,capText=capt)
+            fullgrFileNm=fullPath+st.name+arg+'Sect1'
+            rltvgrFileNm=rltvPath+st.name+arg+'Sect1'
+            field.display(displaySettings=dfDisp,caption=capt,fileName=fullgrFileNm+'.jpg')
+            insertGrInTex(texFile=report,grFileNm=rltvgrFileNm,grWdt=cfg.grWidth,capText=capt)
 
             attributeName= limitStateLabel + 'Sect2'
             field= fields.getScalarFieldFromControlVar(attributeName,arg,st,None,1.0,None)
             capt=cfg.capTexts[limitStateLabel] + '. '+ st.description.capitalize() + ', ' + cfg.capTexts[arg] + ', ' + 'section 2'
-            grFileNm=pathGr+st.name+arg+'Sect2'
-            field.display(displaySettings=dfDisp,caption=capt,fileName=grFileNm+'.jpg')
-            insertGrInTex(texFile=report,grFileNm=grFileNm,grWdt=cfg.grWidth,capText=capt)
+            fullgrFileNm=fullPath+st.name+arg+'Sect2'
+            rltvgrFileNm=rltvPath+st.name+arg+'Sect2'
+            field.display(displaySettings=dfDisp,caption=capt,fileName=fullgrFileNm+'.jpg')
+            insertGrInTex(texFile=report,grFileNm=rltvgrFileNm,grWdt=cfg.grWidth,capText=capt)
     for stV in setsBmElView:
         for argS in argsBmElScale:
             unitConversionFactor, unDesc= cfg.getUnitParameters(argS[0])
@@ -416,9 +414,10 @@ def checksReports(limitStateLabel,setsShEl,argsShEl,cfg,setsBmElView=[],argsBmEl
             dfDisp.defineMeshScene(None)
             dfDisp.appendDiagram(diagram)
             capt= cfg.capTexts[limitStateLabel]  + '. '+ stV[0].description.capitalize() + ', ' + cfg.capTexts[argS[0]] 
-            grFileNm=pathGr+stV[0].name+argS[0]
-            dfDisp.displayScene(caption=capt,fileName=grFileNm+'.jpg')
-            insertGrInTex(texFile=report,grFileNm=grFileNm,grWdt=cfg.grWidth,capText=capt)
+            fullgrFileNm=fullPath+stV[0].name+argS[0]
+            rltvgrFileNm=rltvPath+stV[0].name+argS[0]
+            dfDisp.displayScene(caption=capt,fileName=fullgrFileNm+'.jpg')
+            insertGrInTex(texFile=report,grFileNm=rltvgrFileNm,grWdt=cfg.grWidth,capText=capt)
     report.close()
 
 def insertGrInTex(texFile,grFileNm,grWdt,capText,labl=''):

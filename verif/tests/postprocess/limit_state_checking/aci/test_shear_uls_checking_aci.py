@@ -88,7 +88,7 @@ lPatterns.addToDomain(lp0.getName())
 combContainer= combs.CombContainer()
 combContainer.ULS.perm.add('allLoads', '1.0*lp0')
 totalSet= preprocessor.getSets.getSet('total')
-cfg=default_config.EnvConfig(language='en',intForcPath= '',verifPath= '',annexPath= 'annex/',grWidth='120mm')
+cfg=default_config.EnvConfig(language='en',intForcPath= '',verifPath= '')
 cfg.projectDirTree.workingDirectory= '/tmp/'
 lsd.LimitStateData.envConfig= cfg
 lsd.shearResistance.saveAll(combContainer,totalSet) 

@@ -36,25 +36,27 @@ def findWorkingDirectory(fNameMark= 'env_config.py'):
 class ProjectDirTree(object):
     ''' Paths to project directories.
 
-       :ivar intForcPath: full path of the directory where results of 
-                     internal forces are placed.
-       :ivar verifPath: full path of the directory where results of 
+       :ivar intForcPath: relative path from the model path of the directory where results 
+                     of internal forces are placed.
+       :ivar verifPath: relative path from the model path of the directory where results of 
                      limit state  verifications are placed
-       :ivar annexPath: full path of the directory where to place graphic and 
-                     text files for the generation of the annex
+       :ivar reportPath: relative path of the directory where calculation report 
+                     files are placed
+       :ivar resultsPath : relative path from reportPath of the directory where to place  
+                     graphic and text files to be included in the report
     '''
-    def __init__(self,intForcPath,verifPath,annexPath, fNameMark= 'env_config.py'):
+    def __init__(self,intForcPath,verifPath,reportPath,resultsPath, fNameMark= 'env_config.py'):
         '''
         Constructor.
 
-        :param fNameMark: name of the file that marks the working directory
-               of the project.
-        :param intForcPath: full path of the directory where results of 
-                      internal forces are placed.
-        :param verifPath: full path of the directory where results of 
-                      limit state  verifications are placed
-        :param annexPath: full path of the directory where to place graphic and 
-                      text files for the generation of the annex
+       :ivar intForcPath: relative path from the model path of the directory where results 
+                     of internal forces are placed.
+       :ivar verifPath: relative path from the model path of the directory where results of 
+                     limit state  verifications are placed
+       :ivar reportPath: relative path of the directory where calculation report 
+                     files are placed
+       :ivar resultsPath : relative path from reportPath of the directory where to place  
+                     graphic and text files to be included in the report
                             
         '''
         #default names of files with data for FE model generation, results of
@@ -62,7 +64,8 @@ class ProjectDirTree(object):
         self.workingDirectory= findWorkingDirectory(fNameMark)
         self.intForcPath= intForcPath
         self.verifPath= verifPath
-        self.annexPath= annexPath
+        self.reportPath= reportPath
+        self.resultsPath=resultsPath
 
     def getInternalForcesResultsPath(self):
         ''' Return the path for the files that contains
@@ -71,85 +74,136 @@ class ProjectDirTree(object):
     
     def getFullVerifPath(self):
         return self.workingDirectory+'/'+self.verifPath
+    
     def getFullReportPath(self):
-        return self.workingDirectory+'/'+self.annexPath+'text/'
+        return self.workingDirectory+'/'+self.reportPath+self.resultsPath+'text/'
+    
+    def getRltvReportPath(self):
+        return self.resultsPath+'text/'
+    
     def getFullGraphicsPath(self):
         return self.getFullReportPath()+'graphics/'
 
+    def getRltvGraphicsPath(self):
+        return self.getRltvReportPath()+'graphics/'
+
     def getReportSectionsFile(self):
         return self.getFullReportPath()+'sectReport.tex'
+    
     def getReportSectionsGrPath(self):
         return self.getFullReportPath()+'sections/'
 
+    def getRltvReportSectionsGrPath(self):
+        return self.getRltvReportPath()+'sections/'
+
     def getReportLoadsFile(self):
         return self.getFullReportPath()+'report_loads.tex'
+    
     def getReportLoadsGrPath(self):
         return self.getFullGraphicsPath()+'loads/'
+    
+    def getRltvReportLoadsGrPath(self):
+        return self.getRltvGraphicsPath()+'loads/'
     
     def getVerifNormStrFile(self):
         ''' Return the path of the normal stresses verification
             results file.'''
-        return self.getFullVerifPath()+'verifRsl_normStrsULS.py'    
+        return self.getFullVerifPath()+'verifRsl_normStrsULS.py'
+    
     def getReportNormStrFile(self):
         ''' Return the path of the normal stresses verification
             report file.'''
         return self.getFullReportPath()+'report_normStrsULS.tex'
+    
     def getReportNormStrGrPath(self):
         ''' Return the path for the normal stresses verification
             graphics files.'''
         return self.getFullGraphicsPath()+'normStrsULS/'
         
+    def getRltvReportNormStrGrPath(self):
+        ''' Return the path for the normal stresses verification
+            graphics files.'''
+        return self.getRltvGraphicsPath()+'normStrsULS/'
+
     def getVerifShearFile(self):
         ''' Return the path of the shear verification
             results file.'''
         return self.getFullVerifPath()+'verifRsl_shearULS.py'
+    
     def getReportShearFile(self):
         ''' Return the path of the shear verification
             report file.'''
         return self.getFullReportPath()+'report_shearULS.tex'
+    
     def getReportShearGrPath(self):
         ''' Return the path for the shear verification
             graphics files.'''
         return self.getFullGraphicsPath()+'shearULS/'
 
+    def getRltvReportShearGrPath(self):
+        ''' Return the path for the shear verification
+            graphics files.'''
+        return self.getRltvGraphicsPath()+'shearULS/'
+
     def getVerifCrackFreqFile(self):
         ''' Return the path of the crack verification
             results file (frequent loads).'''
         return self.getFullVerifPath()+'verifRsl_crackingSLS_freq.py'
+    
     def getReportCrackFreqFile(self):
         ''' Return the path of the crack verification
             report file (frequent loads).'''
         return self.getFullReportPath()+'report_crackingSLS_freq.tex'
+    
     def getReportCrackFreqGrPath(self):
         ''' Return the path for the crack verification
             graphics files (frequent loads).'''
         return self.getFullGraphicsPath()+'crackingSLS_freq/' 
         
+    def getRltvReportCrackFreqGrPath(self):
+        ''' Return the path for the crack verification
+            graphics files (frequent loads).'''
+        return self.getRltvGraphicsPath()+'crackingSLS_freq/' 
+        
     def getVerifCrackQpermFile(self):
         ''' Return the path of the crack verification
             results file (quasi-permanent loads).'''
         return self.getFullVerifPath()+'verifRsl_crackingSLS_qperm.py'
+    
     def getReportCrackQpermFile(self):
         ''' Return the path of the crack verification
             report file (quasi-permanent loads).'''
         return self.getFullReportPath()+'report_crackingSLS_qperm.tex'
+    
     def getReportCrackQpermGrPath(self):
         ''' Return the path for the crack verification
             graphics files (quasi-permanent loads).'''
         return self.getFullGraphicsPath()+'crackingSLS_qperm/' 
         
+    def getRltvReportCrackQpermGrPath(self):
+        ''' Return the path for the crack verification
+            graphics files (quasi-permanent loads).'''
+        return self.getRltvGraphicsPath()+'crackingSLS_qperm/' 
+        
     def getVerifFatigueFile(self):
         ''' Return the path of the fatigue verification
             results file.'''
         return self.getFullVerifPath()+'verifRsl_fatigueULS.py'
+    
     def getReportFatigueFile(self):
         ''' Return the path of the fatigue verification
             report file.'''
-        return self.getFullReportPath()+'report_fatigueStrsULS.tex' 
+        return self.getFullReportPath()+'report_fatigueStrsULS.tex'
+    
     def getReportFatigueGrPath(self):
         ''' Return the path for the fatigue verification
             graphics files.'''
         return self.getFullGraphicsPath()+'fatigueStrsULS/'
+
+    def getRltvReportFatigueGrPath(self):
+        ''' Return the path for the fatigue verification
+            graphics files.'''
+        return self.getRltvGraphicsPath()+'fatigueStrsULS/'
 
     def getVerifFile(self, limitStateLabel):
         '''Return the path of the verification results file
@@ -170,6 +224,7 @@ class ProjectDirTree(object):
         else:
             lmsg.error('Label: '+limitStateLabel+' unknown.')
             return None
+        
     def getReportFile(self, limitStateLabel):
         ''' Return the path of the verification report file
             for the limit state argument.
@@ -189,8 +244,9 @@ class ProjectDirTree(object):
         else:
             lmsg.error('Label: '+limitStateLabel+' unknown.')
             return None
+        
     def getReportGrPath(self, limitStateLabel):
-        ''' Return the path for the verification graphics files
+        ''' Return the full path for the verification graphics files
             for the limit state argument.
 
            :param limitStateLabel: label identifying the limit state.
@@ -209,10 +265,34 @@ class ProjectDirTree(object):
             lmsg.error('Label: '+limitStateLabel+' unknown.')
             return None
     
+    def getReportRltvGrPath(self, limitStateLabel):
+        ''' Return the relative path for the verification graphics files
+            for the limit state argument.
+
+           :param limitStateLabel: label identifying the limit state.
+        '''
+        if(limitStateLabel=='ULS_normalStressesResistance'):
+            return self.getRltvReportNormStrGrPath()
+        elif(limitStateLabel=='ULS_shearResistance'):
+            return self.getRltvReportShearGrPath()
+        elif(limitStateLabel=='SLS_frequentLoadsCrackControl'):
+            return self.getRltvReportCrackFreqGrPath()
+        elif(limitStateLabel=='SLS_quasiPermanentLoadsLoadsCrackControl'):
+            return self.getRltvReportCrackQpermGrPath()
+        elif(limitStateLabel=='ULS_fatigueResistance'):
+            return self.getRltvReportFatigueGrPath()
+        else:
+            lmsg.error('Label: '+limitStateLabel+' unknown.')
+            return None
+    
     def getReportSimplLCFile(self):
         return self.getFullReportPath()+'report_resSimplLC.tex'
+    
     def getReportSimplLCGrPath(self):
         return self.getFullGraphicsPath()+'resSimplLC/'
+
+    def getRltvReportSimplLCGrPath(self):
+        return self.getRltvGraphicsPath()+'resSimplLC/'
 
     def getPathList(self):
         ''' Create the project directory tree.'''
@@ -247,7 +327,7 @@ class EnvConfig(output_styles.OutputStyle):
 
        :ivar grWidth: size of the graphics to be included in the annex          
     '''
-    def __init__(self,language,intForcPath= 'results/internalForces/',verifPath= 'results/verifications/',annexPath= 'annex/', grWidth='120mm', fNameMark= 'env_config.py'):
+    def __init__(self,language,intForcPath= 'results/internalForces/',verifPath= 'results/verifications/',reportPath='./',resultsPath= 'annex/', grWidth='\linewith', fNameMark= 'env_config.py'):
         '''
         Constructor.
 
@@ -256,8 +336,10 @@ class EnvConfig(output_styles.OutputStyle):
                       internal forces are placed.
         :param verifPath: full path of the directory where results of 
                       limit state  verifications are placed
-        :param annexPath: full path of the directory where to place graphic and 
-                      text files for the generation of the annex
+        :param reportPath: relative path of the directory where calculation report 
+                     files are placed
+        :param resultsPath : relative path from reportPath of the directory where to place  
+                     graphic and text files to be included in the report
         :param grWidth: size of the graphics to be included in the annex
         :param fNameMark: name of the file that marks the working directory
                of the project.                            
@@ -265,7 +347,7 @@ class EnvConfig(output_styles.OutputStyle):
         super(EnvConfig,self).__init__(language= language)
         #default names of files with data for FE model generation, results of
         #limit state verifications, ..
-        self.projectDirTree= ProjectDirTree(intForcPath= intForcPath,verifPath= verifPath,annexPath= annexPath)
+        self.projectDirTree= ProjectDirTree(intForcPath= intForcPath,verifPath= verifPath,reportPath=reportPath,resultsPath=resultsPath)
 
         lsd.LimitStateData.internal_forces_results_directory= intForcPath
         lsd.LimitStateData.check_results_directory= verifPath
