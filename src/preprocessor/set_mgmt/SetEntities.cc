@@ -219,7 +219,7 @@ void XC::SetEntities::fillDownwards(SetMeshComp &mc)
       {
         //Points.
         const size_t nv= (*i)->getNumberOfVertices();
-        for(register size_t j=1;j<=nv;j++)
+        for( size_t j=1;j<=nv;j++)
           points.push_back(const_cast<Pnt *>((*i)->getVertex(j)));
 
         //Elements.

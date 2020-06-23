@@ -245,7 +245,7 @@ const XC::Vector &XC::CrdTransf2d::getBasicTrialDisp(void) const
     const Vector &disp2 = nodeJPtr->getTrialDisp();
     
     static double ug[6];
-    for(register int i= 0;i<3;i++)
+    for(int i= 0;i<3;i++)
       {
         ug[i]   = disp1(i);
         ug[i+3] = disp2(i);
@@ -253,13 +253,13 @@ const XC::Vector &XC::CrdTransf2d::getBasicTrialDisp(void) const
     
     if(!nodeIInitialDisp.empty())
       {
-        for(register int j=0;j<3;j++)
+        for(int j=0;j<3;j++)
           ug[j]-= nodeIInitialDisp[j];
       }
     
     if(!nodeJInitialDisp.empty())
       {
-        for(register int j=0;j<3;j++)
+        for(int j=0;j<3;j++)
           ug[j+3]-= nodeJInitialDisp[j];
       }
     
@@ -298,7 +298,7 @@ const XC::Vector &XC::CrdTransf2d::getBasicIncrDisp(void) const
     const Vector &disp2 = nodeJPtr->getIncrDisp();
     
     static double dug[6];
-    for(register int i= 0;i<3;i++)
+    for(int i= 0;i<3;i++)
       {
         dug[i]   = disp1(i);
         dug[i+3] = disp2(i);
@@ -335,7 +335,7 @@ const XC::Vector &XC::CrdTransf2d::getBasicIncrDeltaDisp(void) const
     const Vector &disp2 = nodeJPtr->getIncrDeltaDisp();
     
     static double Dug[6];
-    for(register int i = 0; i < 3; i++)
+    for(int i = 0; i < 3; i++)
       {
         Dug[i]   = disp1(i);
         Dug[i+3] = disp2(i);

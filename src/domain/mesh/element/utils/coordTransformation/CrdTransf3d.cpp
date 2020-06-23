@@ -79,8 +79,8 @@ XC::Vector XC::CrdTransf3d::vectorCoo(3);
 //! @brief Set the vector that defines the local XZ plane.
 void XC::CrdTransf3d::set_xz_vector(const XC::Vector &vecInLocXZPlane)
   {
-    for(register int i = 0; i < 2; i++)
-      for(register int j = 0; j < 3; j++)
+    for(int i = 0; i < 2; i++)
+      for(int j = 0; j < 3; j++)
         R(i,j) = 0.0;
     R(2,0) = vecInLocXZPlane(0);
     R(2,1) = vecInLocXZPlane(1);
@@ -100,7 +100,7 @@ XC::Vector XC::CrdTransf3d::get_xz_vector(void) const
 //! brief Rellena el vector de displacement globales of the nodes.
 void XC::CrdTransf3d::inic_ug(const Vector &d1,const Vector &d2,double *ug)
   {
-    for(register int i=0;i<6;i++) //Displacement obtained from analysis.
+    for(int i=0;i<6;i++) //Displacement obtained from analysis.
       {
         ug[i]   = d1(i); //Back end node.
         ug[i+6] = d2(i); //Front end node.

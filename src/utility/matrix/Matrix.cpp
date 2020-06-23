@@ -1447,8 +1447,8 @@ XC::Matrix XC::m_double_to_matrix(const m_double &m)
     const size_t fls= m.getNumberOfRows();
     const size_t cls= m.getNumberOfColumns();
     Matrix retval(fls,cls);
-    for(register size_t i=1;i<=fls;i++)
-      for(register size_t j=1;j<=cls;j++)
+    for( size_t i=1;i<=fls;i++)
+      for( size_t j=1;j<=cls;j++)
         retval(i-1,j-1)= m(i,j);
     return retval;
   }
@@ -1459,8 +1459,8 @@ m_double XC::matrix_to_m_double(const Matrix &m)
     const size_t fls= m.noRows();
     const size_t cls= m.noCols();
     m_double retval(fls,cls,0.0);
-    for(register size_t i=0;i<fls;i++)
-      for(register size_t j=0;j<cls;j++)
+    for( size_t i=0;i<fls;i++)
+      for( size_t j=0;j<cls;j++)
         retval(i+1,j+1)= m(i,j);
     return retval;
   }
@@ -1555,8 +1555,8 @@ int XC::Matrix::Assemble(const Matrix &V, int init_row, int init_col, double fac
 XC::Matrix XC::Matrix::getTrn(void) const
   {
     Matrix retval(numCols,numRows);
-    for(register int i=0;i<numRows;i++)
-      for(register int j=0;j<numCols;j++)
+    for(int i=0;i<numRows;i++)
+      for(int j=0;j<numCols;j++)
         retval(j,i)= (*this)(i,j);
     return retval;
   }
@@ -1670,7 +1670,7 @@ XC::Matrix XC::identity(const Matrix &m)
 double XC::Matrix::rowSum(int i) const
   {
     double sumaf= (*this)(i,0);
-    for(register int j=1;j<this->noCols();j++)
+    for(int j=1;j<this->noCols();j++)
       sumaf+= (*this)(i,j);
     return sumaf;
   }
@@ -1679,7 +1679,7 @@ double XC::Matrix::rowSum(int i) const
 double XC::Matrix::columnSum(int j) const
   {
     double sumac= (*this)(0,j);
-    for(register int i=1;i<this->noRows();i++)
+    for(int i=1;i<this->noRows();i++)
       sumac+= (*this)(i,j);
     return sumac;
   }
@@ -1715,7 +1715,7 @@ double XC::Matrix::Norm(void) const
 double XC::Matrix::rowNorm(void) const
   {
     double maximo= rowSum(0);
-    for(register int i=1;i<this->noRows();i++) maximo= std::max(maximo,rowSum(i));
+    for(int i=1;i<this->noRows();i++) maximo= std::max(maximo,rowSum(i));
     return maximo;
   }
 
@@ -1724,7 +1724,7 @@ double XC::Matrix::rowNorm(void) const
 double XC::Matrix::columnNorm(void) const
   {
     double maximo= columnSum(0);
-    for(register int j=1;j<this->noCols();j++) maximo= std::max(maximo,columnSum(j));
+    for(int j=1;j<this->noCols();j++) maximo= std::max(maximo,columnSum(j));
     return maximo;
   }
 

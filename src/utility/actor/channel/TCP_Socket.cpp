@@ -747,8 +747,8 @@ char *XC::TCP_Socket::addToProgram(void)
 //	error, -2 otherwise. The internet address is returned in IntAddr
 
 static int GetHostAddr(char *host, char *IntAddr)
-{
-    register struct hostent *hostptr;
+  {
+    struct hostent *hostptr;
 
     if ( (hostptr = gethostbyname(host)) == nullptr) 
 	return (-1);
@@ -761,7 +761,7 @@ static int GetHostAddr(char *host, char *IntAddr)
       default:
 	return (-2);
     }
-}
+  }
 
     
 /*

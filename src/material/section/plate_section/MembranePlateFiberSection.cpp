@@ -153,7 +153,7 @@ const XC::ResponseId &XC::MembranePlateFiberSection::getType(void) const
 int XC::MembranePlateFiberSection::commitState(void) 
   {
     int success = 0;
-    for(register int i= 0; i < 5; i++ )
+    for(int i= 0; i < 5; i++ )
       success += theFibers[i]->commitState( );
     return success;
   }
@@ -286,7 +286,7 @@ const XC::Matrix &XC::MembranePlateFiberSection::getSectionTangent(void) const
     double z, weight;
     tangent.Zero( );
 
-    for(register int i = 0; i < 5; i++)
+    for(int i = 0; i < 5; i++)
       {
         z = ( 0.5*h ) * sg[i];
         weight = (0.5*h) * wg[i];

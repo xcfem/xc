@@ -278,7 +278,7 @@ int XC::SectionAggregator::setInitialSectionDeformation(const Vector &def)
       {
         theSectionOrder= theSection->getOrder();
         Vector v(workArea, theSectionOrder);
-        for(register int i= 0;i<theSectionOrder;i++)
+        for(int i= 0;i<theSectionOrder;i++)
           v(i)= def(i);
         ret= theSection->setInitialSectionDeformation(v);
       }
@@ -296,7 +296,7 @@ int XC::SectionAggregator::setTrialSectionDeformation(const Vector &def)
       {
         theSectionOrder= theSection->getOrder();
         Vector v(workArea, theSectionOrder);
-        for(register int i= 0;i<theSectionOrder;i++)
+        for(int i= 0;i<theSectionOrder;i++)
           v(i)= def(i);
         ret= theSection->setTrialSectionDeformation(v);
       }
@@ -330,7 +330,7 @@ const XC::Vector &XC::SectionAggregator::getInitialSectionDeformation(void) cons
       {
         const Vector &eSec= theSection->getInitialSectionDeformation();
         theSectionOrder= theSection->getOrder();
-        for(register int i= 0; i < theSectionOrder; i++)
+        for(int i= 0; i < theSectionOrder; i++)
           defzero(i)= eSec(i);
       }
     theAdditions.getInitialStrain(defzero,theSectionOrder);
@@ -345,7 +345,7 @@ const XC::Vector &XC::SectionAggregator::getSectionDeformation(void) const
       {
         const Vector &eSec= theSection->getSectionDeformation();
         theSectionOrder= theSection->getOrder();
-        for(register int i= 0; i < theSectionOrder; i++)
+        for(int i= 0; i < theSectionOrder; i++)
           def(i)= eSec(i);
       }
     theAdditions.getStrain(def,theSectionOrder);
@@ -367,8 +367,8 @@ const XC::Matrix &XC::SectionAggregator::getSectionTangent(void) const
         const XC::Matrix &kSec= theSection->getSectionTangent();
         theSectionOrder= theSection->getOrder();
 
-        for(register int i= 0; i < theSectionOrder; i++)
-          for(register int j= 0; j < theSectionOrder; j++)
+        for(int i= 0; i < theSectionOrder; i++)
+          for(int j= 0; j < theSectionOrder; j++)
             ks(i,j)= kSec(i,j);
       }
     theAdditions.getTangent(ks,theSectionOrder);
@@ -387,8 +387,8 @@ const XC::Matrix &XC::SectionAggregator::getInitialTangent(void) const
       {
         const Matrix &kSec= theSection->getInitialTangent();
         theSectionOrder= theSection->getOrder();
-        for(register int i= 0; i < theSectionOrder; i++)
-          for(register int j= 0; j < theSectionOrder; j++)
+        for(int i= 0; i < theSectionOrder; i++)
+          for(int j= 0; j < theSectionOrder; j++)
             ks(i,j)= kSec(i,j);
       }
     theAdditions.getInitialTangent(ks,theSectionOrder);
@@ -406,8 +406,8 @@ const XC::Matrix &XC::SectionAggregator::getSectionFlexibility(void) const
       {
         const XC::Matrix &fSec= theSection->getSectionFlexibility();
         theSectionOrder= theSection->getOrder();
-        for(register int i= 0; i < theSectionOrder; i++)
-          for(register int j= 0; j < theSectionOrder; j++)
+        for(int i= 0; i < theSectionOrder; i++)
+          for(int j= 0; j < theSectionOrder; j++)
             fs(i,j)= fSec(i,j);
       }
     theAdditions.getFlexibility(fs,theSectionOrder);
@@ -426,8 +426,8 @@ const XC::Matrix &XC::SectionAggregator::getInitialFlexibility(void) const
       {
         const Matrix &fSec= theSection->getInitialFlexibility();
         theSectionOrder= theSection->getOrder();
-        for(register int i= 0;i<theSectionOrder;i++)
-          for(register int j= 0;j<theSectionOrder;j++)
+        for(int i= 0;i<theSectionOrder;i++)
+          for(int j= 0;j<theSectionOrder;j++)
             fs(i,j)= fSec(i,j);
       }
     theAdditions.getInitialFlexibility(fs,theSectionOrder);
@@ -443,7 +443,7 @@ const XC::Vector &XC::SectionAggregator::getStressResultant(void) const
       {
         const Vector &sSec= theSection->getStressResultant();
         theSectionOrder= theSection->getOrder();
-        for(register int i= 0; i < theSectionOrder; i++)
+        for(int i= 0; i < theSectionOrder; i++)
           s(i)= sSec(i);
       }
     theAdditions.getStress(s,theSectionOrder);
@@ -458,7 +458,7 @@ const XC::ResponseId &XC::SectionAggregator::getType(void) const
       {
         const XC::ResponseId &secType= theSection->getType();
         theSectionOrder= theSection->getOrder();
-        for(register int i= 0; i < theSectionOrder; i++)
+        for(int i= 0; i < theSectionOrder; i++)
           theCode(i)= secType(i);
       }
     theAdditions.getType(theCode,theSectionOrder);

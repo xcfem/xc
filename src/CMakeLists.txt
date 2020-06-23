@@ -121,7 +121,7 @@ INCLUDE_DIRECTORIES(${LIBXC_SOURCE_DIR})
 # For DEBUG
 #ADD_DEFINITIONS(-Wall -O0 -frounding-math -g)
 # For RELEASE
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 ${CMAKE_CXX_FLAGS_RELEASE} -Wall -march=native -pedantic -fPIC -Wno-unused-but-set-variable")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++17 ${CMAKE_CXX_FLAGS_RELEASE} -Wall -march=native -pedantic -fPIC -Wno-unused-but-set-variable")
 set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fPIC")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")

@@ -128,7 +128,7 @@ DqPtrsKDTree<T,KDTree> &DqPtrsKDTree<T,KDTree>::operator=(const DqPtrsKDTree &ot
 template <class T,class KDTree>
 void DqPtrsKDTree<T,KDTree>::extend(const DqPtrsKDTree &other)
   {
-    for(register DqPtrsKDTree<T,KDTree>::const_iterator i= other.begin();i!=other.end();i++)
+    for( DqPtrsKDTree<T,KDTree>::const_iterator i= other.begin();i!=other.end();i++)
       push_back(*i);
   }
 //! @brief += operator.

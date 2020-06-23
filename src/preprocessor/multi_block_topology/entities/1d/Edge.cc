@@ -631,8 +631,8 @@ void XC::Edge::create_nodes(void)
                 const size_t begin_row= (end_row == 1 ? 1 : 2);
                 const size_t end_column= std::max(cols-1,size_t(1));
                 const size_t begin_column= (end_column == 1 ? 1 : 2);
-                for(register size_t j= begin_row;j<=end_row;j++)
-                  for(register size_t k= begin_column;k<=end_column;k++)
+                for( size_t j= begin_row;j<=end_row;j++)
+                  for( size_t k= begin_column;k<=end_column;k++)
                     create_node(positions(j,k),1,j,k);
               }
           }

@@ -71,7 +71,7 @@ XC::SeriesMaterial::SeriesMaterial(int tag,const DqUniaxialMaterial &theMaterial
    stress(theMaterialModels.size()), flex(theMaterialModels.size()), strain(theMaterialModels.size()), initialFlag(false)
   {
     const size_t numMaterials= theMaterialModels.size();
-    for(register size_t i = 0; i < numMaterials; i++)
+    for( size_t i = 0; i < numMaterials; i++)
       {
         strain[i] = 0.0;
         stress[i] = 0.0;

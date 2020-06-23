@@ -173,7 +173,7 @@ DqPtrs<T> &DqPtrs<T>::operator+=(const DqPtrs &other)
 template <class T>
 void DqPtrs<T>::extend(const DqPtrs &other)
   {
-    for(register const_iterator i= other.begin();i!=other.end();i++)
+    for( const_iterator i= other.begin();i!=other.end();i++)
       push_back(*i);
   }
 

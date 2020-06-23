@@ -308,7 +308,7 @@ std::vector<int> XC::id_to_std_vector(const IntPtrWrapper &v)
   {
     const size_t sz= v.Size();
     std::vector<int> retval(sz,0);
-    for(register size_t i=0;i<sz;i++)
+    for( size_t i=0;i<sz;i++)
       retval[i]= v(i);
     return retval;
   }

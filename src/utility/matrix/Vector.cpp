@@ -125,7 +125,7 @@ XC::Vector::Vector(const int &szt, const double &value)
   : sz(0), theData(nullptr), fromFree(0)
   {
     alloc(szt);
-    for(register int i=0; i<sz; i++)
+    for(int i=0; i<sz; i++)
       theData[i]= value;
   }
 
@@ -135,7 +135,7 @@ XC::Vector::Vector(const std::vector<double> &v)
   {
     alloc(v.size());
     // copy the components
-    for(register int i=0; i<sz; i++)
+    for(int i=0; i<sz; i++)
       theData[i]= v[i];
   }
 
@@ -198,7 +198,7 @@ XC::Vector::Vector(const Vector &other)
   {
     alloc(other.sz);
     // copy the component data
-    for(register int i=0; i<sz; i++)
+    for(int i=0; i<sz; i++)
       theData[i]= other.theData[i];
   }
 
@@ -273,7 +273,7 @@ int XC::Vector::Assemble(const XC::Vector &V, const ID &l, double fact )
   {
     int result= 0;
     int pos;
-    for(register int i=0; i<l.Size(); i++)
+    for(int i=0; i<l.Size(); i++)
       {
         pos= l(i);
         if(pos<0)
@@ -301,14 +301,14 @@ int XC::Vector::Assemble(const XC::Vector &V, const ID &l, double fact )
 int XC::Vector::Normalize(void)
   {
     double length= 0.0;
-    for(register int i=0; i<sz; i++)
+    for(int i=0; i<sz; i++)
       length += theData[i] * theData[i];
     length= sqrt(length);
   
     if(length == 0.0) 
       return -1;
     length= 1.0/length;
-    for(register int j=0; j<sz; j++)
+    for(int j=0; j<sz; j++)
       theData[j]*= length;
     return 0;
   }
@@ -323,7 +323,7 @@ int XC::Vector::NormalizeInf(void)
       retval= -1;
     else
       {
-        for(register int j=0; j<sz; j++)
+        for(int j=0; j<sz; j++)
           theData[j]/= norma;
       }
     return 0;
@@ -385,16 +385,16 @@ int XC::Vector::addVector(double thisFact, const Vector &other, double otherFact
         double *otherDataPtr= other.theData;
         if(otherFact == 1.0)
           { // no point doing a multiplication if otherFact == 1.0
-            for(register int i=0; i<sz; i++) 
+            for(int i=0; i<sz; i++) 
 	      *dataPtr++ += *otherDataPtr++;
           }
         else if(otherFact == -1.0)
           { // no point doing a multiplication if otherFact == 1.0
-            for(register int i=0; i<sz; i++) 
+            for(int i=0; i<sz; i++) 
   	    *dataPtr++ -= *otherDataPtr++;
           }
         else 
-          for(register int i=0; i<sz; i++) 
+          for(int i=0; i<sz; i++) 
   	    *dataPtr++ += *otherDataPtr++ * otherFact;
       } 
     else if(thisFact == 0.0)
@@ -404,16 +404,16 @@ int XC::Vector::addVector(double thisFact, const Vector &other, double otherFact
         double *otherDataPtr= other.theData;
         if(otherFact == 1.0)
           { // no point doing a multiplication if otherFact == 1.0
-            for(register int i=0; i<sz; i++) 
+            for(int i=0; i<sz; i++) 
   	    *dataPtr++= *otherDataPtr++;
           }
         else if(otherFact == -1.0)
           { // no point doing a multiplication if otherFact == 1.0
-            for(register int i=0; i<sz; i++) 
+            for(int i=0; i<sz; i++) 
   	    *dataPtr++= *otherDataPtr++;
           }
         else 
-          for(register int i=0; i<sz; i++) 
+          for(int i=0; i<sz; i++) 
   	    *dataPtr++= *otherDataPtr++ * otherFact;
       }
     else
@@ -423,7 +423,7 @@ int XC::Vector::addVector(double thisFact, const Vector &other, double otherFact
         double *otherDataPtr= other.theData;
         if(otherFact == 1.0)
           { // no point doing a multiplication if otherFact == 1.0
-            for(register int i=0; i<sz; i++)
+            for(int i=0; i<sz; i++)
               {
   	        double value= *dataPtr * thisFact + *otherDataPtr++;
   	        *dataPtr++= value;
@@ -431,14 +431,14 @@ int XC::Vector::addVector(double thisFact, const Vector &other, double otherFact
           }
         else if(otherFact == -1.0)
           { // no point doing a multiplication if otherFact == 1.0
-            for(register int i=0; i<sz; i++)
+            for(int i=0; i<sz; i++)
               {
   	        double value= *dataPtr * thisFact - *otherDataPtr++;
   	        *dataPtr++= value;
               }
           }
         else 
-          for(register int i=0; i<sz; i++)
+          for(int i=0; i<sz; i++)
             {
               double value= *dataPtr * thisFact + *otherDataPtr++ * otherFact;
   	      *dataPtr++= value;
@@ -785,7 +785,7 @@ double XC::Vector::pNorm(int p) const
   
     if(p>0)
       {
-        for(register int i=0; i<sz; i++)
+        for(int i=0; i<sz; i++)
           {
             const double data= fabs(theData[i]);
             value+= pow(data,p);
@@ -794,7 +794,7 @@ double XC::Vector::pNorm(int p) const
       }
     else
       {
-        for(register int i=0; i<sz; i++)
+        for(int i=0; i<sz; i++)
           {
             const double data= fabs(theData[i]);
             value= (data>value) ? data : value;
@@ -1176,7 +1176,7 @@ double XC::Vector::operator^(const XC::Vector &V) const
     double result= 0.0;
     double *dataThis= theData;
     double *dataV= V.theData;
-    for(register int i=0; i<sz; i++)
+    for(int i=0; i<sz; i++)
       result+= *dataThis++ * *dataV++;
     return result;
   }
@@ -1307,7 +1307,7 @@ int XC::Vector::Extract(const Vector &V, int init_pos, double fact)
   
     if((init_pos >= 0) && (final_pos < V.sz))
       {
-        for(register int j=0; j<sz; j++) 
+        for(int j=0; j<sz; j++) 
           (*this)(j)= V(cur_pos++)*fact;
       }
     else 
@@ -1354,7 +1354,7 @@ std::vector<double> XC::vector_to_std_vector(const XC::Vector &v)
   {
     const size_t sz= v.Size();
     std::vector<double> retval(sz,0.0);
-    for(register size_t i=0;i<sz;i++)
+    for( size_t i=0;i<sz;i++)
       retval[i]= v[i];
     return retval;
   }
@@ -1364,7 +1364,7 @@ m_double XC::vector_to_m_double(const XC::Vector &v)
   {
     const size_t fls= v.Size();
     m_double retval(fls,1,0.0);
-    for(register size_t i=0;i<fls;i++)
+    for( size_t i=0;i<fls;i++)
       retval(i+1,1)= v(i);
     return retval;
   }
@@ -1375,7 +1375,7 @@ m_double XC::vector_to_m_double(const XC::Vector &v)
 //     std::vector<double> tmp= create_vector_double(str);
 //     const int nc=tmp.size(); //Number of values.
 //     resize(nc);
-//     for(register int i= 0;i<nc;i++)
+//     for(int i= 0;i<nc;i++)
 //       theData[i]= tmp[i];
 //   }
 

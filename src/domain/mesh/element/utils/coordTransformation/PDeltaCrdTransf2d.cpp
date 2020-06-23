@@ -115,7 +115,7 @@ int XC::PDeltaCrdTransf2d::update(void)
     
     if(!nodeIInitialDisp.empty())
       {
-        for(register int j=0; j<3; j++)
+        for(int j=0; j<3; j++)
           nodeIDisp(j)-= nodeIInitialDisp[j];
       }
     

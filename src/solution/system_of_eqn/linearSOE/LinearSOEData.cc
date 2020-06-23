@@ -242,7 +242,7 @@ XC::Vector &XC::LinearSOEData::getB(void)
 double XC::LinearSOEData::normRHS(void) const
   {
     double norm= 0.0;
-    for(register int i=0; i<size; i++)
+    for(int i=0; i<size; i++)
       {
 	const double &Yi= B[i];
 	norm+= Yi*Yi;

@@ -280,7 +280,7 @@ double XC::GeomSection::getLeverArm(const Line2d &PFtrace) const
     HalfPlane2d sp(PFtrace.Perpendicular(C));
     const size_t num_vertices= contour.GetNumVertices();
     double d= 0.0,dpos= 0.0,dneg=0.0;    
-    for(register size_t i=1;i<=num_vertices;i++)
+    for( size_t i=1;i<=num_vertices;i++)
       {
         d= sp.DistSigno(contour.Vertice(i));
         if(d<dneg) dneg= d;
@@ -298,7 +298,7 @@ double XC::GeomSection::getCompressedZoneDepth(const HalfPlane2d &sp_compression
     Polygon2d contour= getRegionsContour();
     const size_t num_vertices= contour.GetNumVertices();
     double d= 0.0,dneg= 0.0;    
-    for(register size_t i=1;i<=num_vertices;i++)
+    for( size_t i=1;i<=num_vertices;i++)
       {
         d= sp_compressions.DistSigno(contour.Vertice(i));
         if(d<dneg) dneg= d;
@@ -314,7 +314,7 @@ double XC::GeomSection::getTensionedZoneDepth(const HalfPlane2d &sp_compressions
     Polygon2d contour= getRegionsContour();
     const size_t num_vertices= contour.GetNumVertices();
     double d= 0.0,dpos=0.0;    
-    for(register size_t i=1;i<=num_vertices;i++)
+    for( size_t i=1;i<=num_vertices;i++)
       {
         d= sp_compressions.DistSigno(contour.Vertice(i));
         if(d>dpos) dpos= d;
@@ -365,7 +365,7 @@ double XC::GeomSection::getAnchoMecanico(const Line2d &bending_plane_trace) cons
     double d= 0.0,dmax= 0.0;
     Line2d perp;
     Segment2d ancho;
-    for(register size_t i=1;i<=num_vertices;i++)
+    for( size_t i=1;i<=num_vertices;i++)
       {
         perp= bending_plane_trace.Perpendicular(contour.Vertice(i));
         ancho= contour.Clip(perp);
@@ -390,7 +390,7 @@ double XC::GeomSection::getCompressedStrutWidth(const Segment2d &lever_arm) cons
     double b2= std::min(dist2(p,ancho.getFromPoint()),dist2(p,ancho.getToPoint()));
     double bmin2= b2;
     bool intersecaBrazo= false;
-    for(register size_t i=1;i<=num_vertices;i++)
+    for( size_t i=1;i<=num_vertices;i++)
       {
         perp= lever_arm.Perpendicular(contour.Vertice(i));
         intersecaBrazo= lever_arm.intersects(perp);

@@ -145,7 +145,7 @@ const XC::Vector &XC::DeformationPlane::getDeformation(const size_t &order,const
     retval.resize(order);
     retval.Zero();
     const Vector &tmp= getDeformation();
-    for(register size_t i= 0;i<order;i++)
+    for( size_t i= 0;i<order;i++)
       {
         if(code(i) == SECTION_RESPONSE_P)
           retval[i]+= tmp(0);

@@ -62,7 +62,7 @@ void XC::FiberContainer::copy_fibers(const FiberContainer &other)
     if(numFibers)
       {
         allocFibers(numFibers);
-        for(register size_t i= 0;i<numFibers;i++)
+        for( size_t i= 0;i<numFibers;i++)
 	  {
             (*this)[i]= other[i]->getCopy();
 	    if((*this)[i]==nullptr)
@@ -79,7 +79,7 @@ void XC::FiberContainer::copy_fibers(const FiberContainer &other)
 void XC::FiberContainer::free_mem(void)
   {
     const size_t numFibers= getNumFibers();
-    for(register size_t i= 0;i<numFibers;i++)
+    for( size_t i= 0;i<numFibers;i++)
       if((*this)[i])
         {
           delete (*this)[i];

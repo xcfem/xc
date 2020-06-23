@@ -144,9 +144,9 @@ void XC::SetEstruct::add_elements(const ElemPtrArray3d &elements)
     if(n_layers<1) return;
     const size_t numberOfRows= elements(1).getNumberOfRows();
     const size_t cols= elements(1).getNumberOfColumns();
-    for(register size_t i= 1;i<=n_layers;i++)
-      for(register size_t j= 1;j<=numberOfRows;j++)
-        for(register size_t k= 1;k<=cols;k++)
+    for( size_t i= 1;i<=n_layers;i++)
+      for( size_t j= 1;j<=numberOfRows;j++)
+        for( size_t k= 1;k<=cols;k++)
           getPreprocessor()->getElementHandler().Add(elements(i,j,k));
   }
 
